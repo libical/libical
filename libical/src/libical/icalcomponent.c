@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.46 2002-10-09 20:09:28 acampi Exp $
+  $Id: icalcomponent.c,v 1.47 2002-10-09 20:13:09 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -82,7 +82,7 @@ static void icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
 							 icalproperty *tzid_prop,
 							 const char *tzid,
 							 icalarray *tzids_to_rename);
-static int icalcomponent_get_tzid_prefix_len (const char *tzid);
+static unsigned int icalcomponent_get_tzid_prefix_len (const char *tzid);
 static void icalcomponent_rename_tzids(icalcomponent* comp,
 				       icalarray* rename_table);
 static void icalcomponent_rename_tzids_callback(icalparameter *param,
@@ -2188,7 +2188,8 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
 					     const char *tzid,
 					     icalarray *tzids_to_rename)
 {
-  int tzid_len, i, suffix, max_suffix = 0, num_elements;
+  int i, suffix, max_suffix = 0, num_elements;
+  unsigned int tzid_len;
   char *tzid_copy, *new_tzid, suffix_buf[32];
 
   /* Find the length of the TZID without any trailing digits. */
@@ -2205,7 +2206,7 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
   for (i = 0; i < num_elements; i++) {
     icaltimezone *zone;
     char *existing_tzid, *existing_tzid_copy;
-    int existing_tzid_len;
+    unsigned int existing_tzid_len;
 
     zone = icalarray_element_at (comp->timezones, i);
     existing_tzid = icaltimezone_get_tzid (zone);
@@ -2260,7 +2261,7 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
 
 
 /* Returns the length of the TZID, without any trailing digits. */
-static int icalcomponent_get_tzid_prefix_len (const char *tzid)
+static unsigned int icalcomponent_get_tzid_prefix_len (const char *tzid)
 {
   int len;
   const char *p;
