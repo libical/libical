@@ -58,3 +58,12 @@ Jeff Mace <jhm18@psu.edu> for finding bugs in gauges.
 John Gray <gray@agora-net.com> for routing memory leaks, porting to
 WIN32, and taking over leadership of the project.
 
+Andrea Campi <a.campi@inet.it> for miscellaneous updates and beginning
+of Doxygen documentation.
+
+Paul Lindner <plindner@cp.net> for several contributions, including
+C++ binding, reentrant parser, thread safe memory allocator, and a
+lot of documentation.
+
+Mark Tearle <mtearle@tearle.com> for keeping the Python bindings up
+to date.
