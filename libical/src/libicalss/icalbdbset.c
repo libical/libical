@@ -39,7 +39,7 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b);
 
 static DB_ENV *ICAL_DB_ENV = 0;
 
-// Initialize the db environment
+/* Initialize the db environment */
 
 int icalbdbset_init(char *db_env_dir) {
   int ret;
