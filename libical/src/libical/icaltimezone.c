@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.15 2002-06-28 08:38:31 acampi Exp $
+ $Id: icaltimezone.c,v 1.16 2002-06-28 11:14:25 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -189,7 +189,7 @@ static char* icaltimezone_load_get_line_fn	(char		*s,
 static void  format_utc_offset			(int		 utc_offset,
 						 char		*buffer);
 
-static char* get_zone_directory();
+static char* get_zone_directory(void);
 
 
 /** Creates a new icaltimezone. */
@@ -1644,7 +1644,7 @@ format_utc_offset			(int		 utc_offset,
     sprintf (buffer, "%s%02i%02i%02i", sign, hours, minutes, seconds);
 }
 
-static char* get_zone_directory()
+static char* get_zone_directory(void)
 {
 	return zone_files_directory == NULL ? ZONEINFO_DIRECTORY : zone_files_directory;
 }
