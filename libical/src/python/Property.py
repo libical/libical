@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.2 2001-03-05 18:30:40 ebusboom Exp $
+#  $Id: Property.py,v 1.3 2001-03-11 00:49:16 plewis Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -66,7 +66,7 @@ class Property:
         assert(type == None or isinstance(type,StringType))
 
         self._ref = None
-
+        
         if ref != None:
             self._ref = ref
         elif type != None:
@@ -623,11 +623,16 @@ class Attendee(Property):
     address is the CAL-ADDRESS (string) of the Attendee 
     """
 
-    def __init__(self, arg):
+    def __init__(self, arg={}):
         
         assert(isinstance(arg,DictType))
+
+        ref = None
         
-        Property.__init__(self,ref=arg['ref'])
+        if arg!={}:
+            ref = arg['ref']
+
+        Property.__init__(self,type='ATTENDEE',ref=ref)
         
     def _doParam(self, parameter, v):
         if v!=None:
@@ -650,23 +655,23 @@ class Attendee(Property):
 
 class Organizer(Property):
     """Class for Organizer property.
-
-    Usage:
-    Organizer([dict])
-
-    Where dict is an optional dictionary with keys of 'value': CAL-ADDRESS
-    string and any parameter: parameter_value entries.  'name' and 'value_type'
-    entries in dict are ignored and automatically set with the appropriate
-    values.
     """
 
-    def __init__(self, dict={}):
-        param_t = ( 'CN', 'DIR', 'SENT-BY', 'LANGUAGE' )
-        for param in param_t:
-            self[param] = None
-        Property.__init__(self, dict)
-        Property.name(self, 'ORGANIZER')
-        Property.value_type(self, 'CAL-ADDRESS')
+    def __init__(self, arg={}):
+
+        assert(isinstance(arg, DictType))
+        
+        ref = None
+        if arg != {}:
+            ref = arg['ref']
+        Property.__init__(self, type='ORGANIZER', ref=ref)
+       
+##         param_t = ( 'CN', 'DIR', 'SENT-BY', 'LANGUAGE' )
+##         for param in param_t:
+##             self[param] = None
+##         if value != None:
+##             self.value(value)
+
 
     def _doParam(self, parameter, v):
         if v!=None:
