@@ -1,1 +1,1 @@
-SUBDIRS = libical libicalss libicalvcal test
+SUBDIRS = libical libicalss libicalvcal python test
