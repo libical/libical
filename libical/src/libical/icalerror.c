@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.11 2002-06-03 17:02:13 acampi Exp $
+  $Id: icalerror.c,v 1.12 2002-07-21 09:50:53 lindner Exp $
   $Locker:  $
     
 
@@ -29,12 +29,51 @@
 #include "config.h"
 #endif
 
-#include <string.h>		/* for strcmp */
-#include "icalerror.h"
+include <string.h>		/* for strcmp */
+include "icalerror.h"
 
-icalerrorenum icalerrno;
+#ifdef HAVE_PTHREAD
+#include <pthread.h>
 
-int foo;
+static pthread_key_t  icalerrno_key;
+static pthread_once_t icalerrno_key_once = PTHREAD_ONCE_INIT;
+
+static void icalerrno_destroy(void* buf) {
+  pthread_setspecific(icalerrno_key, NULL);
+}
+
+static void icalerrno_key_alloc(void) {
+  pthread_key_create(&icalerrno_key, NULL);
+}
+
+icalerrorenum *icalerrno_return(void) {
+  icalerrorenum *errno;
+
+  pthread_once(&icalerrno_key_once, icalerrno_key_alloc);
+  
+  errno = pthread_getspecific(icalerrno_key);
+
+  if (!errno) {
+    errno = malloc(sizeof(icalerrorenum));
+    pthread_setspecific(icalerrno_key, errno);
+    *errno = ICAL_NO_ERROR;
+  }
+  return errno;
+}
+
+#else
+
+static icalerrorenum icalerrno_storage = ICAL_NO_ERROR;
+
+icalerrorenum *icalerrno_return(void) {
+   return &icalerrno_storage;
+}
+
+#endif
+
+
+static int foo;
+
 void icalerror_stop_here(void)
 {
     foo++; /* Keep optimizers from removing routine */
