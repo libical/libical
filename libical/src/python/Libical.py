@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.py,v 1.18 2001-04-11 04:45:29 ebusboom Exp $
+#  $Id: Libical.py,v 1.19 2002-06-03 13:25:28 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -33,3 +33,4 @@ from Duration import Duration
 from Attendee import Attendee, Organizer
 from DerivedProperties import RDate, Trigger,Recurrence_Id, Attach 
 from Store import Store, FileStore
+from Gauge import Gauge

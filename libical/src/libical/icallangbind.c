@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.17 2002-05-24 10:54:10 acampi Exp $
+  $Id: icallangbind.c,v 1.18 2002-06-03 13:25:28 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -272,6 +272,7 @@ int icallangbind_string_to_open_flag(const char* str)
     if (strcmp(str,"r") == 0) {return O_RDONLY;}
     else if (strcmp(str,"r+") == 0) {return O_RDWR;}
     else if (strcmp(str,"w") == 0) {return O_WRONLY;}
+    else if (strcmp(str,"w+") == 0) {return O_RDWR|O_CREAT;}
     else if (strcmp(str,"a") == 0) {return O_WRONLY|O_APPEND;}
     else return -1;
 }

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.14 2001-04-11 04:45:29 ebusboom Exp $
+#  $Id: test.py,v 1.15 2002-06-03 13:25:28 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -147,7 +147,6 @@ def test_period():
 
     print p
     
-
     assert(str(p) == 'FREEBUSY:19970101T180000Z/19970101T233000Z')
 
     print p.start()
@@ -384,6 +383,138 @@ def test_derivedprop():
         assert(0)
     except: pass
 
+def test_gauge():
+    print "------------ Gauge -----------------"
+    event = Event()
+
+    event.method('REQUEST')
+    event.version('2.0')
+    event.created("20010313T123000Z")
+    event.organizer("MAILTO:j_doe@nowhere.com")
+    org = event.organizer()
+    org.cn('Jane Doe')
+    event.dtstart("20010401T183000Z")
+    dtend = Time('20010401T190000Z', 'DTEND')
+    event.dtend(dtend)
+    event.description("A short description.")
+    event.status('TeNtAtIvE')
+    
+    print event.as_ical_string()
+
+    gauge = Gauge(sql="SELECT * FROM VEVENT WHERE DTSTART > '20010401T180000Z'")
+
+    assert(gauge.compare(event) == 1)
+
+    gauge = Gauge(sql="SELECT * FROM VEVENT WHERE DTSTART > '20010401T190000Z'")
+
+    assert(gauge.compare(event) == 0)
+
+def do_test_store(storeobj=None, *args):
+    assert(storeobj != None)
+    store = storeobj(*args)
+    assert(store != None)
+
+    print ">------------ ",
+    print store.__class__,
+    print "Store -----------------"
+
+
+    # create fileset
+
+    event = Event()
+
+    event.method('REQUEST')
+    event.version('2.0')
+    event.created("20010313T123000Z")
+    event.organizer("MAILTO:j_doe@nowhere.com")
+    event.dtstart("20010401T183000Z")
+    event.duration('PT3H')
+
+    event.description("A short description.")
+
+    # for i = 1 to 10
+    #  copy event
+    #  munge uid and increment month
+    for i in range(1,11):
+	newevent = event.clone()
+	newevent.uid("%d@localhost" % (i,))
+	newevent.dtstart().month( newevent.dtstart().month() + i )
+
+	#print ne
+	store.add_component(newevent)
+
+    # commit
+    store.commit()
+    assert(store.count_components("VCALENDAR") == 10)
+    # free
+    del(store)
+
+    # open again
+    store = storeobj(*args)
+    # assert count of components = 10
+    assert(store.count_components("VCALENDAR") == 10)
+
+    # print them out
+    # fetch by uid
+    n7 = store.fetch("7@localhost")
+    print n7
+    # fetch by match
+
+    n7m = store.fetchMatch(n7)
+    assert(str(n7) == str(n7m))
+
+    # modify in memory
+    n7.uid("42@localhost")
+    del(store)
+    del(n7)
+
+    store = storeobj(*args)
+    assert(store.fetch("42@localhost") == None)
+    n7 = store.fetch("7@localhost")
+    n7.uid("42@localhost")
+    store.mark()
+    store.commit()
+    del(store)
+    store = storeobj(*args)
+    assert(store.fetch("7@localhost") == None)
+
+    # fetch by gauge
+
+    gauge = Gauge(sql="SELECT * FROM VEVENT WHERE DTSTART > '20010601T000000Z' AND DTSTART < '20010901T000000Z'")
+
+    store.select(gauge)
+
+    count = 0
+
+    c = store.first_component()
+    while c != None:
+	    print c.uid()
+	    print c.dtstart()
+	    print
+	    count = count + 1
+	    c = store.next_component()
+
+    store.clearSelect()
+
+    assert(count == 3)
+
+    # remove all of them
+    c = store.first_component()
+    while c != None:
+	    print c.uid()
+	    store.remove_component(c)
+	    c = store.first_component()
+
+    assert(store.count_components("VCALENDAR") == 0)
+    store.commit()
+    assert(store.count_components("VCALENDAR") == 0)
+    # print them out
+    # assert count of components = 0
+
+
+def test_store():
+    print "------------ Store -----------------"
+    do_test_store(FileStore,"filesetout.ics", "w+")
 
 def run_tests():
     test_property()
@@ -401,6 +532,11 @@ def run_tests():
     test_event()
 
     #test_attach()
+
+    test_gauge()
+    
+    test_store()
+
 
 
 

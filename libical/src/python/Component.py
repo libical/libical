@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.9 2001-04-23 16:52:54 ebusboom Exp $
+#  $Id: Component.py,v 1.10 2002-06-03 13:25:28 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -208,6 +208,46 @@ class Component:
 
         return icalcomponent_as_ical_string(self._ref)
 
+    def ref(self):
+	""" Return the internal reference to the libical icalproperty """
+	return self._ref
+
+def CloneComponent(c):
+    "Clones a string or C icalcomponent into the right component object."
+
+    wasStr=0 # Were we passed a string or an icalcomponent?
+
+    if isinstance(c, Component):
+        comp = icalparser_parse_string(c.as_ical_string())
+    elif isinstance (c, StringType) and  string.find(c,"icalcomponent") == -1:
+        comp = icalparser_parse_string(c)
+    else:
+        comp = c
+
+    if comp == None or comp == WrapperNULL:
+        raise ValueError("Expected a libical reference or an iCal string")
+
+    kind = icalcomponent_isa(comp)
+    kindStr = icalcomponent_kind_to_string(kind)
+
+    if kindStr == 'VCALENDAR':
+	inner = icalcomponent_get_inner(comp) 
+    	kind = icalcomponent_isa(inner)
+    	kindStr = icalcomponent_kind_to_string(kind)
+    
+    if kindStr == 'VEVENT':
+        newComp = Event(comp)
+    elif kindStr == 'VTODO':
+        newComp = Todo(comp)
+    elif kindStr == 'VJOURNAL':
+        newComp = Journal(comp)
+    else:
+        newComp = Component(comp)
+
+    # I don't think I need to free the component created when passed a string,
+    # as it wasn't created with a _new function.
+
+    return newComp
 
 
 def NewComponent(c):
@@ -298,6 +338,8 @@ class GenericComponent(Component):
                     if property_obj == Time:
                         p = Time(value, name)
                         ## p.value_type(value_type)
+                    elif property_obj == Duration:
+                        p = Duration(value)
                     else:
                         p = property_obj()
                         ## p.value_type(value_type)
@@ -337,6 +379,10 @@ class GenericComponent(Component):
         return self._singular_property("VERSION", "TEXT", v)
 
     # The remaining properties are all in the inner component
+
+    def clone(self):
+        "Returns a copy of the object."
+        return CloneComponent(self)
 
     def class_prop(self, v=None):  # Class is a reserved word
         "Sets or returns the value of the CLASS property."
@@ -582,10 +628,6 @@ class Event(GenericComponent):
         "Returns the type of component for the object."
         return "VEVENT"
 
-    def clone(self):
-        "Returns a copy of the object."
-        return Event(self.asIcalString())
-
     def dtend(self, v=None):
         """Sets or returns the value of the DTEND property.
 
@@ -618,7 +660,7 @@ class Event(GenericComponent):
         """
 
         if v != None:
-            dtend = self.properites('DTEND')
+            dtend = self.properties('DTEND')
             for d in dtend:
                 self.remove_property(d)  # Clear DTEND properties
         return self._singular_property("DURATION", "DURATION", v, Duration)
@@ -689,10 +731,6 @@ class Todo(GenericComponent):
         "Returns the type of component for the object."
         return "VTODO"
 
-    def clone(self):
-        "Returns a copy of the object."
-        return Todo(self.asIcalString())
-
     def completed(self, value=None):
         return self._singular_property('COMPLETED', 'DATE-TIME', value, Time)
 
@@ -746,10 +784,6 @@ class Journal(GenericComponent):
     def component_type(self):
         "Returns the type of component for the object."
         return "VJOURNAL"
-
-    def clone(self):
-        "Returns a copy of the object."
-        return Journal(self.asIcalString())
 
     def status(self, v=None):
         if v!=None:

@@ -135,8 +135,10 @@ int icallangbind_access_array(int* array, int index);
 
 
 
+/* int icalrecur_expand_recurrence(char* rule, int start, 
+				int count, int* array);*/
 int icalrecur_expand_recurrence(char* rule, int start, 
-				int count, int* array);
+				int count, time_t* array);
 
 
 /* Iterate through properties and components using strings for the kind */
@@ -179,7 +181,7 @@ struct icaltimetype
 
 	int is_date; /* 1 -> interpret this as date. */
    
-	const char* zone; /*Ptr to Olsen placename. Libical does not own mem*/
+	const icaltimezone *zone; /*Ptr to Olsen placename. Libical does not own mem*/
 };	
 
 
@@ -189,7 +191,7 @@ struct icaltimetype icaltime_from_timet(int v, int is_date);
 /* Return the time as seconds past the UNIX epoch */
 /* Normally, this returns a time_t, but SWIG tries to turn that type
    into a pointer */
-int icaltime_as_timet(struct icaltimetype);
+int icaltime_as_timet(struct icaltimetype tt);
 
 /* Return a string represention of the time, in RFC2445 format. The
    string is owned by libical */
@@ -318,7 +320,7 @@ icalerrorenum icalfileset_remove_component(icalfileset* cluster,
 					   icalcomponent* child);
 
 int icalfileset_count_components(icalfileset* cluster,
-				 icalcomponent_kind kind);
+				 int kind);
 
 /* Restrict the component returned by icalfileset_first, _next to those
    that pass the gauge. _clear removes the gauge */
@@ -346,3 +348,23 @@ icalcomponent* icalfileset_get_next_component(icalfileset* cluster);
    not be using this. */
 
 icalcomponent* icalfileset_get_component(icalfileset* cluster);
+
+/***********************************************************************
+  Gauge Routines
+***********************************************************************/
+
+icalgauge* icalgauge_new_from_sql(char* sql);
+
+void icalgauge_free(icalgauge* gauge);
+
+/* Pending Implementation */
+/* char* icalgauge_as_sql(icalcomponent* gauge); */
+
+/* Return true if comp matches the gauge. The component must be in
+   cannonical form -- a VCALENDAR with one VEVENT, VTODO or VJOURNAL
+   sub component */
+int icalgauge_compare(icalgauge* g, icalcomponent* comp);
+
+/* Clone the component, but only return the properties specified in
+   the gauge */
+/* icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp); */
