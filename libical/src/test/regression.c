@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.38 2001-12-22 17:04:35 gray-john Exp $
+  $Id: regression.c,v 1.39 2002-05-09 14:51:42 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1596,8 +1596,9 @@ char ictt_str[1024];
 char* ictt_as_string(struct icaltimetype t)
 {
 
-    sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d%s",t.year,t.month,t.day,
-	    t.hour,t.minute,t.second,t.is_utc?" Z":"");
+    sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d%s %s",t.year,t.month,t.day,
+	    t.hour,t.minute,t.second,t.is_utc?" Z":"",
+	icaltimezone_get_tzid((icaltimezone *)t.zone));	/* HACK */
 
     return ictt_str;
 }
@@ -1660,15 +1661,72 @@ void test_dtstart(){
 
 void do_test_time(char* zone)
 {
-    struct icaltimetype ictt, icttutc, icttutczone, icttdayl, 
+    struct icaltimetype ictt, icttutc, icttzone, icttutczone, icttdayl, 
 	icttla, icttny,icttphoenix, icttlocal, icttnorm;
     time_t tt,tt2, tt_p200;
     int offset_la, offset_tz;
     icalvalue *v;
     short day_of_week,start_day_of_week, day_of_year;
-	icaltimezone* lazone;
+    icaltimezone *azone, *lazone, *utczone;
 
     icalerror_errors_are_fatal = 0;
+
+    azone = icaltimezone_get_builtin_timezone(zone);
+    utczone = icaltimezone_get_utc_timezone();
+
+    /* Test new API */
+    printf("\n---> From time_t \n");
+    tt = time(NULL);
+    printf("Orig        : %s\n",ical_timet_string(tt));
+
+    printf("\nicaltime_from_timet(tt,0) (DEPRECATED)\n");
+    ictt = icaltime_from_timet(tt, 0);
+
+    printf("As UTC      : %s\n", ictt_as_string(ictt));
+
+    printf("\nicaltime_from_timet_with_zone(tt,0,NULL)\n");
+    ictt = icaltime_from_timet_with_zone(tt, 0, NULL);
+    printf("Floating    : %s\n", ictt_as_string(ictt));
+
+    printf("\nicaltime_from_timet_with_zone(tt,0,zone)\n");
+    ictt = icaltime_from_timet_with_zone(tt, 0, azone);
+    printf("As zone      : %s\n", ictt_as_string(ictt));
+
+    printf("\nicaltime_from_timet_with_zone(tt,0,utc)\n");
+    ictt = icaltime_from_timet_with_zone(tt, 0, utczone);
+    printf("As UTC      : %s\n", ictt_as_string(ictt));
+
+    printf("\n---> Convert from floating \n");
+    ictt = icaltime_from_timet_with_zone(tt, 0, NULL);
+    icttutc = icaltime_convert_to_zone(ictt, utczone);
+    printf("To UTC      : %s\n", ictt_as_string(icttutc));
+    icttzone = icaltime_convert_to_zone(ictt, azone);
+    printf("To zone      : %s\n", ictt_as_string(icttzone));
+    tt2 = icaltime_as_timet(icttzone);
+
+    printf("\n---> Convert from UTC \n");
+    ictt = icaltime_from_timet_with_zone(tt, 0, utczone);
+    icttutc = icaltime_convert_to_zone(ictt, utczone);
+    printf("To UTC      : %s\n", ictt_as_string(icttutc));
+    icttzone = icaltime_convert_to_zone(ictt, azone);
+    printf("To zone      : %s\n", ictt_as_string(icttzone));
+    tt2 = icaltime_as_timet(icttzone);
+    printf("No conversion: %s\n", ical_timet_string(tt2));
+    tt2 = icaltime_as_timet_with_zone(icttzone, utczone);
+    printf("Back to UTC  : %s\n", ical_timet_string(tt2));
+    assert(tt==tt2);
+
+    printf("\n---> Convert from zone \n");
+    ictt = icaltime_from_timet_with_zone(tt, 0, azone);
+    icttzone = icaltime_convert_to_zone(ictt, azone);
+    printf("To zone      : %s\n", ictt_as_string(icttzone));
+    icttutc = icaltime_convert_to_zone(ictt, utczone);
+    printf("To UTC      : %s\n", ictt_as_string(icttutc));
+    tt2 = icaltime_as_timet(icttutc);
+    printf("No conversion: %s\n", ical_timet_string(tt2));
+    tt2 = icaltime_as_timet_with_zone(icttutc, azone);
+    printf("Back to zone  : %s\n", ical_timet_string(tt2));
+    assert(tt==tt2);
 
     ictt = icaltime_from_string("20001103T183030Z");
 
@@ -1676,9 +1734,6 @@ void do_test_time(char* zone)
 
     assert(tt==973276230); /* Fri Nov  3 10:30:30 PST 2000 in PST 
                                Fri Nov  3 18:30:30 PST 2000 in UTC */
-    
-    offset_la = icaltime_utc_offset(ictt,"America/Los_Angeles");
-    offset_tz = icaltime_utc_offset(ictt, zone);
 
     printf(" Normalize \n");
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
@@ -1698,21 +1753,22 @@ void do_test_time(char* zone)
     printf("20001103T183030Z        : %s\n",ictt_as_string(ictt));
     assert(tt2 == tt);
 
-    icttlocal = icaltime_from_string("20001103T183030");
+    icttlocal = icaltime_convert_to_zone(ictt, azone);
     tt2 = icaltime_as_timet(icttlocal);
     printf("20001103T183030  (timet): %s\n",ical_timet_string(tt2));
     printf("20001103T183030         : %s\n",ictt_as_string(icttlocal));
+
+    offset_tz = -icaltimezone_get_utc_offset_of_utc_time(azone, &ictt, 0); /* FIXME */
+    printf("offset_tz               : %d\n",offset_tz);
     assert(tt-tt2 == offset_tz);
 
-    printf("\n From time_t \n");
-
-    printf("Orig        : %s\n",ical_timet_string(tt));
-    printf("As utc      : %s\n", ictt_as_string(ictt));
-
-    icttlocal = icaltime_as_zone(ictt,zone);
+    /* FIXME with the new API, it's not very useful */
+    icttlocal = ictt;
+    icaltimezone_convert_time(&icttlocal,
+	icaltimezone_get_utc_timezone(),
+	icaltimezone_get_builtin_timezone(zone));
     printf("As local    : %s\n", ictt_as_string(icttlocal));
     
-
     printf("\n Convert to and from lib c \n");
 
     printf("System time is: %s\n",ical_timet_string(tt));
@@ -1756,29 +1812,29 @@ void do_test_time(char* zone)
     assert(start_day_of_week == 303 );
 
     printf("\n TimeZone Conversions \n");
-
-	lazone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
+/*
 	icttla = ictt;
 	icaltimezone_convert_time(&icttla,
 						 icaltimezone_get_utc_timezone(),
 						 lazone);
+*/
 
-
-    icttla = icaltime_as_zone(ictt,"America/Los_Angeles");
+    icttla = icaltime_convert_to_zone(ictt,
+	icaltimezone_get_builtin_timezone("America/Los_Angeles"));
     assert(icttla.hour == 10);
 
-    icttutc = icaltime_as_utc(icttla,"America/Los_Angeles");
+    icttutc = icaltime_convert_to_zone(icttla,
+	icaltimezone_get_utc_timezone());
     assert(icaltime_compare(icttla,
 			 icaltime_from_string("20001103T103030"))==0);
 
-    icttutczone = icaltime_as_zone(ictt,"Etc/GMT0");
-    icttutczone.is_utc = 1;
-    assert(icaltime_compare(icttutc, icttutczone) == 0); 
     assert(icaltime_compare(icttutc, ictt) == 0); 
 
-    icttny  = icaltime_as_zone(ictt,"America/New_York");
+    icttny  = icaltime_convert_to_zone(ictt,
+	icaltimezone_get_builtin_timezone("America/New_York"));
 
-    icttphoenix = icaltime_as_zone(ictt,"America/Phoenix");
+    icttphoenix = icaltime_convert_to_zone(ictt,
+	icaltimezone_get_builtin_timezone("America/Phoenix"));
 
     printf("Orig (ctime): %s\n", ical_timet_string(tt) );
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
@@ -1795,34 +1851,38 @@ void do_test_time(char* zone)
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
     printf("NY          : %s\n", ictt_as_string(icttny));
 
-    assert(strcmp(ictt_as_string(icttny),"2000-11-03 13:30:30")==0);
+    assert(strncmp(ictt_as_string(icttny),"2000-11-03 13:30:30",19)==0);
 
     tt_p200 = tt +  200 * 24 * 60 * 60 ; /* Add 200 days */
 
-    icttdayl = icaltime_from_timet(tt_p200,0);    
-    icttny = icaltime_as_zone(icttdayl,"America/New_York");
+    icttdayl = icaltime_from_timet_with_zone(tt_p200,0,
+	icaltimezone_get_utc_timezone());
+    icttny = icaltime_convert_to_zone(icttdayl,
+	icaltimezone_get_builtin_timezone("America/New_York"));
     
     printf("Orig +200d  : %s\n", ical_timet_string(tt_p200) );
     printf("NY+200D     : %s\n", ictt_as_string(icttny));
 
-    assert(strcmp(ictt_as_string(icttny),"2001-05-22 14:30:30")==0);
+    assert(strncmp(ictt_as_string(icttny),"2001-05-22 14:30:30",19)==0);
 
     /* Daylight savings test for Los Angeles */
 
-    icttla  = icaltime_as_zone(ictt,"America/Los_Angeles");
+    icttla = icaltime_convert_to_zone(ictt,
+	icaltimezone_get_builtin_timezone("America/Los_Angeles"));
 
     printf("\nOrig (ctime): %s\n", ical_timet_string(tt) );
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
     printf("LA          : %s\n", ictt_as_string(icttla));
 
-    assert(strcmp(ictt_as_string(icttla),"2000-11-03 10:30:30")==0);
+    assert(strncmp(ictt_as_string(icttla),"2000-11-03 10:30:30",19)==0);
     
-    icttla = icaltime_as_zone(icttdayl,"America/Los_Angeles");
+    icttla = icaltime_convert_to_zone(icttdayl,
+	icaltimezone_get_builtin_timezone("America/Los_Angeles"));
     
     printf("Orig +200d  : %s\n", ical_timet_string(tt_p200) );
     printf("LA+200D     : %s\n", ictt_as_string(icttla));
 
-    assert(strcmp(ictt_as_string(icttla),"2001-05-22 11:30:30")==0);
+    assert(strncmp(ictt_as_string(icttla),"2001-05-22 11:30:30",19)==0);
 
     icalerror_errors_are_fatal = 1;
 }
@@ -1994,11 +2054,11 @@ void test_time()
 
 	printf(" ######### Timezone: %s ############\n",zones[i]);
         
-        old_tz = set_tz(zones[i]);
+        /* old_tz = set_tz(zones[i]); */
 	
 	do_test_time(zones[i]);
 
-        unset_tz(old_tz);
+        /* unset_tz(old_tz); */
 
     } 
 
@@ -2057,10 +2117,6 @@ void print_span(int c, struct icaltime_span span ){
 
 }
 
-struct icaltimetype icaltime_as_local(struct icaltimetype tt) {
-    return  icaltime_as_zone(tt,0);
-}
-
 void test_span()
 {
     time_t tm1 = 973378800; /*Sat Nov  4 23:00:00 UTC 2000,
@@ -2069,7 +2125,8 @@ void test_span()
 			      Sat Nov  4 16:00:00 PST 2000 */
     struct icaldurationtype dur;
     struct icaltime_span span;
-    icalcomponent *c; 
+    icalcomponent *c;
+    icaltimezone *azone, *bzone; 
 
     memset(&dur,0,sizeof(dur));
     dur.minutes = 30;
@@ -2078,15 +2135,17 @@ void test_span()
     span.end = tm2;
     print_span(0,span);
 
+    azone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
+
     /* Specify save timezone as in commend above */
     c = 
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_vanew_dtstart(
-		    icaltime_as_local(icaltime_from_timet(tm1,0)),
+		    icaltime_from_timet_with_zone(tm1,0,azone),
 		    icalparameter_new_tzid("America/Los_Angeles"),0),
 		icalproperty_vanew_dtend(
-		    icaltime_as_local(icaltime_from_timet(tm2,0)),
+		    icaltime_from_timet_with_zone(tm2,0,azone),
 		    icalparameter_new_tzid("America/Los_Angeles"),0),
 	    0
 	    );
@@ -2114,15 +2173,17 @@ void test_span()
 
     icalcomponent_free(c);
 
+    azone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
+
     /* Specify different timezone */
     c = 
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_vanew_dtstart(
-		    icaltime_as_local(icaltime_from_timet(tm1,0)),
+		    icaltime_from_timet_with_zone(tm1,0,azone),
 		    icalparameter_new_tzid("America/New_York"),0),
 		icalproperty_vanew_dtend(
-		    icaltime_as_local(icaltime_from_timet(tm2,0)),
+		    icaltime_from_timet_with_zone(tm2,0,azone),
 		    icalparameter_new_tzid("America/New_York"),0),
 	    0
 	    );
@@ -2131,16 +2192,18 @@ void test_span()
 
     icalcomponent_free(c);
 
+    azone = icaltimezone_get_builtin_timezone("America/New_York");
+    bzone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
 
     /* Specify different timezone for start and end*/
     c = 
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_vanew_dtstart(
-		    icaltime_as_local(icaltime_from_timet(tm1,0)),
+		    icaltime_from_timet_with_zone(tm1,0,azone),
 		    icalparameter_new_tzid("America/New_York"),0),
 		icalproperty_vanew_dtend(
-		    icaltime_as_local(icaltime_from_timet(tm2,0)),
+		    icaltime_from_timet_with_zone(tm2,0,bzone),
 		    icalparameter_new_tzid("America/Los_Angeles"),0),
 	    0
 	    );
@@ -2149,12 +2212,13 @@ void test_span()
 
     icalcomponent_free(c);
 
+    azone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
     /* Use Duration */
     c = 
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_vanew_dtstart(
-		    icaltime_as_local(icaltime_from_timet(tm1,0)),
+		    icaltime_from_timet_with_zone(tm1,0,azone),
 		    icalparameter_new_tzid("America/Los_Angeles"),0),
 	    icalproperty_new_duration(dur),
 
@@ -2172,9 +2236,13 @@ void test_span()
     c = 
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
-		icalproperty_vanew_dtstart(icaltime_from_timet(tm1,0),
+		icalproperty_vanew_dtstart(
+		    icaltime_from_timet_with_zone(tm1,0,
+			icaltimezone_get_utc_timezone()),
 		    icalparameter_new_tzid("America/New_York"),0),
-		icalproperty_vanew_dtend(icaltime_from_timet(tm2,0),
+		icalproperty_vanew_dtend(
+		    icaltime_from_timet_with_zone(tm2,0,
+			icaltimezone_get_utc_timezone()),
 		    icalparameter_new_tzid("America/New_York"),0),
 	    0
 	    );
@@ -2243,6 +2311,19 @@ void test_overlaps()
 
 #endif 
 
+}
+
+char* icaltime_as_ctime(struct icaltimetype t)
+{
+    time_t tt;
+    char ctime_str[32];
+ 
+    tt = icaltime_as_timet(t);
+    sprintf(ctime_str,"%s",ctime(&tt));
+
+    ctime_str[strlen(ctime_str)-1] = 0;
+
+    return ctime_str;
 }
 
 void test_fblist()
@@ -2681,7 +2762,17 @@ void test_gauge_sql() {
 
     icalgauge *g;
     char* str;
+
+    str= "SELECT * FROM VEVENT WHERE SUMMARY='Prova'";
+
+    printf("\n%s\n",str);
+
+    g = icalgauge_new_from_sql(str);
     
+    icalgauge_dump(g);
+
+    icalgauge_free(g);
+
     str= "SELECT DTSTART,DTEND,COMMENT FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5";
 
     printf("\n%s\n",str);
@@ -2692,7 +2783,8 @@ void test_gauge_sql() {
 
     icalgauge_free(g);
 
-    str="SELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'";
+
+    str="SELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'\0\0";
 
     printf("\n%s\n",str);
 
@@ -2702,7 +2794,7 @@ void test_gauge_sql() {
 
     icalgauge_free(g);
 
-    str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
+    str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'\0\0";
 
     printf("\n%s\n",str);
 
@@ -2712,17 +2804,7 @@ void test_gauge_sql() {
 
     icalgauge_free(g);
 
-    str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
-
-    printf("\n%s\n",str);
-
-    g = icalgauge_new_from_sql(str);
-    
-    icalgauge_dump(g);
-
-    icalgauge_free(g);
-
-    str="SELECT * FROM VEVENT WHERE LOCATION == '104 Forum'";
+    str="SELECT * FROM VEVENT WHERE LOCATION == '104 Forum'\0\0";
 
     printf("\n%s\n",str);
 
