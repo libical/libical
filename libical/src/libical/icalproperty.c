@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.26 2002-07-04 10:25:28 acampi Exp $
+  $Id: icalproperty.c,v 1.27 2002-07-09 18:16:47 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -91,16 +91,15 @@ void icalproperty_add_parameters(icalproperty* prop, va_list args)
 }
 
 
-struct icalproperty_impl*
+icalproperty*
 icalproperty_new_impl (icalproperty_kind kind)
 {
-    struct icalproperty_impl* prop;
+    icalproperty* prop;
 
     if (!icalproperty_kind_is_valid(kind))
       return NULL;
 
-    if ( ( prop = (struct icalproperty_impl*)
-	   malloc(sizeof(struct icalproperty_impl))) == 0) {
+    if ( ( prop = (icalproperty*) malloc(sizeof(icalproperty))) == 0) {
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
 	return 0;
     }
@@ -132,7 +131,7 @@ icalproperty_new (icalproperty_kind kind)
 icalproperty*
 icalproperty_new_clone(icalproperty* old)
 {
-    struct icalproperty_impl *new = icalproperty_new_impl(old->kind);
+    icalproperty *new = icalproperty_new_impl(old->kind);
     pvl_elem p;
 
     icalerror_check_arg_rz((old!=0),"old");
