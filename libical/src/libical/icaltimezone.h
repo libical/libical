@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.h,v 1.6 2002-10-09 22:27:39 acampi Exp $
+ $Id: icaltimezone.h,v 1.7 2002-11-03 21:37:14 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -77,7 +77,7 @@ icaltimezone* icaltimezone_get_builtin_timezone_from_tzid (const char *tzid);
 icaltimezone* icaltimezone_get_utc_timezone	(void);
 
 /** Returns the TZID of a timezone. */
-char*	icaltimezone_get_tzid			(icaltimezone	*zone);
+char*	icaltimezone_get_tzid			(const icaltimezone	*zone);
 
 /** Returns the city name of a timezone. */
 char*	icaltimezone_get_location		(icaltimezone	*zone);
@@ -108,8 +108,8 @@ int	icaltimezone_set_component		(icaltimezone	*zone,
  */
 
 void	icaltimezone_convert_time		(struct icaltimetype *tt,
-						 icaltimezone	*from_zone,
-						 icaltimezone	*to_zone);
+						 const icaltimezone	*from_zone,
+						 const icaltimezone	*to_zone);
 
 
 /**

@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.21 2002-10-09 22:19:10 acampi Exp $
+ $Id: icaltimezone.c,v 1.22 2002-11-03 21:37:14 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -740,8 +740,8 @@ icaltimezone_compare_change_fn		(const void	*elem1,
 
 void
 icaltimezone_convert_time		(struct icaltimetype *tt,
-					 icaltimezone	*from_zone,
-					 icaltimezone	*to_zone)
+					 const icaltimezone	*from_zone,
+					 const icaltimezone	*to_zone)
 {
     int utc_offset, is_daylight;
 
@@ -1122,7 +1122,7 @@ icaltimezone_adjust_change		(icaltimezonechange *tt,
 
 
 char*
-icaltimezone_get_tzid			(icaltimezone	*zone)
+icaltimezone_get_tzid			(const icaltimezone	*zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
     if (!zone)
