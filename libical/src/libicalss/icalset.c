@@ -12,7 +12,7 @@
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalset.c,v 1.8 2002-06-27 12:35:12 acampi Exp $
+ $Id: icalset.c,v 1.9 2002-06-27 14:53:54 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -51,6 +51,7 @@
 
 static icalset icalset_dirset_init = {
     ICAL_DIR_SET,
+    sizeof(icaldirset),
     NULL,
     icaldirset_init,
     icaldirset_free,
@@ -77,6 +78,7 @@ static icalset icalset_dirset_init = {
 
 static icalset icalset_fileset_init = {
     ICAL_FILE_SET,
+    sizeof(icalfileset),
     NULL,
     icalfileset_init,
     icalfileset_free,
@@ -103,6 +105,7 @@ static icalset icalset_fileset_init = {
 #ifdef WITH_BDB4
 static icalset icalset_bdbset_init = {
     ICAL_BDB_SET,
+    sizeof(icalbdb4set),
     NULL,
     icalbdbset_init,
     icalbdbset_free,
@@ -127,9 +130,59 @@ static icalset icalset_bdbset_init = {
 };
 #endif
 
+/* #define _DLOPEN_TEST */
+#ifdef _DLOPEN_TEST
+static int	icalset_init_done = 0;
+static pvl_list icalset_kinds = 0;
+
+void icalset_init(void) {
+
+	assert(icalset_kinds == 0);
+	icalset_kinds = pvl_newlist();
+
+	pvl_push(icalset_kinds, &icalset_fileset_init);
+	pvl_push(icalset_kinds, &icalset_dirset_init);
+#ifdef WITH_BDB4
+	pvl_push(icalset_kinds, &icalset_bdb4set_init);
+#endif
+	icalset_init_done++;
+}
+#endif
+
 icalset* icalset_new(icalset_kind kind, const char* dsn, void* options) {
   icalset* data = NULL;
 
+#ifdef _DLOPEN_TEST
+    pvl_elem	e;
+    icalset    *impl;
+
+    if (!icalset_init_done)
+	icalset_init();
+
+    for(e = pvl_head(icalset_kinds); e!=0; e = pvl_next(e)) {
+	impl = (icalset*)pvl_data(e);
+	if (impl->kind == kind)
+	    break;
+    }
+    if (e == 0) {
+	icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
+	return(NULL);
+    }
+
+    data = (icalset*)malloc(impl->size);
+    if (data == 0) {
+	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+	errno = ENOMEM;
+	return 0;
+    }
+
+    /* The first member of the derived class must be an icalset. */
+    memset(data,0,impl->size);
+    /* *data = *impl; */
+    memcpy(data, impl, sizeof(icalset));
+
+    data->dsn     = strdup(dsn);
+#else
   switch(kind) {
   case ICAL_FILE_SET:
     data = (icalset*) malloc(sizeof(icalfileset));
@@ -176,6 +229,7 @@ icalset* icalset_new(icalset_kind kind, const char* dsn, void* options) {
   }
   data->kind    = kind;
   data->dsn     = strdup(dsn);
+#endif
 
   /** call the implementation specific initializer **/
   data = data->init(data, dsn, options);

@@ -11,7 +11,7 @@
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalset.h,v 1.8 2002-06-27 02:30:59 acampi Exp $
+ $Id: icalset.h,v 1.9 2002-06-27 14:53:54 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -66,6 +66,7 @@ typedef struct icalsetiter
 
 struct icalset_impl {
         icalset_kind kind;
+	int size;
         char *dsn;
         icalset* (*init)(icalset* set, const char *dsn, void *options);
 	void (*free)(icalset* set);
