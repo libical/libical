@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.22 2001-12-12 18:03:25 ebusboom Exp $
+  $Id: icalrecur.c,v 1.23 2001-12-12 18:35:50 ebusboom Exp $
   $Locker:  $
     
 
@@ -1783,10 +1783,10 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
         
     case 0: {
         /* FREQ=YEARLY; */
-        short doy = icaltime_day_of_year(impl->dtstart) + 
-            icaltime_is_leap_year(impl->last.year);
+        struct icaltimetype t = impl->dtstart;
+        t.year = impl->last.year;
         
-        impl->days[days_index++] = doy;
+        impl->days[days_index++] = icaltime_day_of_year(t);
   
         break;
     }
