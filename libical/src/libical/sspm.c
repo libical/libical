@@ -3,7 +3,7 @@
   FILE: sspm.c Parse Mime
   CREATOR: eric 25 June 2000
   
-  $Id: sspm.c,v 1.4 2001-12-22 17:04:33 gray-john Exp $
+  $Id: sspm.c,v 1.5 2002-06-11 12:41:04 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -90,7 +90,7 @@ char* sspm_strdup(char* str){
 }
 
 
-struct  major_content_type_map 
+static struct  major_content_type_map 
 {
 	enum sspm_major_type type;
 	char* str;
@@ -109,7 +109,7 @@ struct  major_content_type_map
     {SSPM_UNKNOWN_MAJOR_TYPE,"" },
 };
 
-struct  minor_content_type_map 
+static struct  minor_content_type_map 
 {
 	enum sspm_minor_type type;
 	char* str;
@@ -238,7 +238,7 @@ char* sspm_value(char* line)
 
 }
 
-char *mime_headers[] = {
+static char *mime_headers[] = {
     "Content-Type",
     "Content-Transfer-Encoding",
     "Content-Disposition",
@@ -363,7 +363,7 @@ enum line_type {
 };
 
 
-enum line_type get_line_type(char* line){
+static enum line_type get_line_type(char* line){
 
     if (line == 0){
 	return EMPTY;
@@ -387,7 +387,7 @@ enum line_type get_line_type(char* line){
 }
 
 
-struct sspm_action_map get_action(struct mime_impl *impl,
+static struct sspm_action_map get_action(struct mime_impl *impl,
 				  enum sspm_major_type major,
 				  enum sspm_minor_type minor)
 {
