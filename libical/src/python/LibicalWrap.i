@@ -199,19 +199,6 @@ char* icaltime_as_ical_string(struct icaltimetype tt);
 struct icaltimetype icaltime_from_string(const char* str);
 
 /* Routines for handling timezones */
-/* Return the offset of the named zone as seconds. tt is a time
-   indicating the date for which you want the offset */
-int icaltime_utc_offset(struct icaltimetype tt, const char* tzid);
-
-/* convert tt, of timezone tzid, into a utc time. Does nothing if the
-   time is already UTC.  */
-struct icaltimetype icaltime_as_utc(struct icaltimetype tt,
-				    const char* tzid);
-
-/* convert tt, a time in UTC, into a time in timezone tzid */
-struct icaltimetype icaltime_as_zone(struct icaltimetype tt,
-				     const char* tzid);
-
 /* Return a null time, which indicates no time has been set. This time represent the beginning of the epoch */
 struct icaltimetype icaltime_null_time(void);
 
@@ -242,9 +229,6 @@ short icaltime_day_of_week(struct icaltimetype t);
 /* Return the day of the year for the Sunday of the week that the
    given time is within. */
 short icaltime_start_doy_of_week(struct icaltimetype t);
-
-/* Return a string with the time represented in the same format as ctime(). THe string is owned by libical */
-char* icaltime_as_ctime(struct icaltimetype);
 
 /* Return the week number for the week the given time is within */
 short icaltime_week_number(struct icaltimetype t);
