@@ -252,7 +252,7 @@ char* icalrestriction_no_dtend(icalrestriction_property_record *rec,
 			       icalcomponent* comp, 
 			       icalproperty* prop){
 
-    if( !icalcomponent_get_first_property(comp,ICAL_DTEND_PROPERTY)){
+    if( icalcomponent_get_first_property(comp,ICAL_DTEND_PROPERTY)){
 
 	return "Failed iTIP restrictions. The component must not have both DURATION and DTEND";
 
