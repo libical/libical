@@ -117,12 +117,6 @@ $ICAL_USAGE_ERROR = ICAL_USAGE_ERROR
 
 $ICAL_NO_ERROR = ICAL_NO_ERROR
         [ Constant: int  ]
-
-$ICAL_MULTIPLEINCLUSION_ERROR = ICAL_MULTIPLEINCLUSION_ERROR
-        [ Constant: int  ]
-
-$ICAL_TIMEDOUT_ERROR = ICAL_TIMEDOUT_ERROR
-        [ Constant: int  ]
         Used for problems in input to icalerror_strerror() 
 
 $ICAL_UNKNOWN_ERROR = ICAL_UNKNOWN_ERROR

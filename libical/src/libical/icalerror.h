@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.8 2001-03-17 16:47:02 ebusboom Exp $
+  $Id: icalerror.h,v 1.9 2001-04-02 18:17:40 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -47,6 +47,7 @@ typedef enum icalerrorenum {
     
     ICAL_BADARG_ERROR,
     ICAL_NEWFAILED_ERROR,
+    ICAL_ALLOCATION_ERROR,
     ICAL_MALFORMEDDATA_ERROR, 
     ICAL_PARSE_ERROR,
     ICAL_INTERNAL_ERROR, /* Like assert --internal consist. prob */

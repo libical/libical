@@ -62,7 +62,7 @@ extern "C" {
 
 
 /*****************************************************************************
- * $Header: /tmp/freeassociation-cvsbackup/libical/src/Net-ICal-Libical/netical_wrap.c,v 1.5 2001-03-02 19:50:31 ebusboom Exp $
+ * $Header: /tmp/freeassociation-cvsbackup/libical/src/Net-ICal-Libical/netical_wrap.c,v 1.6 2001-04-02 18:17:40 ebusboom Exp $
  *
  * perl5ptr.swg
  *
@@ -2883,8 +2883,6 @@ XS(_wrap_perl5_Net__ICal__Libical_var_init) {
     swig_setiv("ICAL_ALLOCATION_ERROR", (long) ICAL_ALLOCATION_ERROR);
     swig_setiv("ICAL_USAGE_ERROR", (long) ICAL_USAGE_ERROR);
     swig_setiv("ICAL_NO_ERROR", (long) ICAL_NO_ERROR);
-    swig_setiv("ICAL_MULTIPLEINCLUSION_ERROR", (long) ICAL_MULTIPLEINCLUSION_ERROR);
-    swig_setiv("ICAL_TIMEDOUT_ERROR", (long) ICAL_TIMEDOUT_ERROR);
     swig_setiv("ICAL_UNKNOWN_ERROR", (long) ICAL_UNKNOWN_ERROR);
     swig_setiv("ICAL_ERROR_FATAL", (long) ICAL_ERROR_FATAL);
     swig_setiv("ICAL_ERROR_NONFATAL", (long) ICAL_ERROR_NONFATAL);

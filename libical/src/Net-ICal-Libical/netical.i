@@ -111,8 +111,6 @@ typedef enum icalerrorenum {
     ICAL_ALLOCATION_ERROR,
     ICAL_USAGE_ERROR,
     ICAL_NO_ERROR,
-    ICAL_MULTIPLEINCLUSION_ERROR,
-    ICAL_TIMEDOUT_ERROR,
     ICAL_UNKNOWN_ERROR /* Used for problems in input to icalerror_strerror()*/
 
 } icalerrorenum;
