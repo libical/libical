@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalderivedvalue.c.in,v 1.8 2002-06-03 17:01:07 acampi Exp $
+  $Id: icalderivedvalue.c.in,v 1.9 2002-06-04 13:25:11 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -92,12 +92,10 @@ icalvalue* icalvalue_new_x (const char* v){
    icalvalue_set_x((icalvalue*)impl,v);
    return (icalvalue*)impl;
 }
-void icalvalue_set_x(icalvalue* value, const char* v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
+void icalvalue_set_x(icalvalue* impl, const char* v) {
+    icalerror_check_arg_rv( (impl!=0),"value");
     icalerror_check_arg_rv( (v!=0),"v");
 
-    impl = (struct icalvalue_impl*)value;
     if(impl->x_value!=0) {free((void*)impl->x_value);}
 
     impl->x_value = icalmemory_strdup(v);
@@ -111,7 +109,7 @@ const char* icalvalue_get_x(icalvalue* value) {
 
     icalerror_check_arg( (value!=0),"value");
     icalerror_check_value_type(value, ICAL_X_VALUE);
-    return ((struct icalvalue_impl*)value)->x_value;
+    return value->x_value;
 }
 
 /* Recur is a special case, so it is not auto generated. */
@@ -126,14 +124,10 @@ icalvalue_new_recur (struct icalrecurrencetype v)
 }
 
 void
-icalvalue_set_recur(icalvalue* value, struct icalrecurrencetype v)
+icalvalue_set_recur(icalvalue* impl, struct icalrecurrencetype v)
 {
-    struct icalvalue_impl* impl; 
-    
-    icalerror_check_arg_rv( (value!=0),"value");
+    icalerror_check_arg_rv( (impl!=0),"value");
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
-
-    impl = (struct icalvalue_impl*)value;
 
     if (impl->data.v_recur != 0){
 	free(impl->data.v_recur);
@@ -157,7 +151,7 @@ icalvalue_get_recur(icalvalue* value)
     icalerror_check_arg( (value!=0),"value");
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
   
-    return *(((struct icalvalue_impl*)value)->data.v_recur);
+    return *(value->data.v_recur);
 }
 
 
@@ -176,30 +170,24 @@ icalvalue_new_trigger (struct icaltriggertype v)
 void
 icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v)
 {
-    struct icalvalue_impl* impl; 
-    
     icalerror_check_arg_rv( (value!=0),"value");
     
-    impl = (struct icalvalue_impl*)value;
-
    if(!icaltime_is_null_time(v.time)){
-       icalvalue_set_datetime((icalvalue*)impl,v.time);
-       impl->kind = ICAL_DATETIME_VALUE;
+       icalvalue_set_datetime(value,v.time);
+       value->kind = ICAL_DATETIME_VALUE;
    } else {
-       icalvalue_set_duration((icalvalue*)impl,v.duration);
-       impl->kind = ICAL_DURATION_VALUE;
+       icalvalue_set_duration(value,v.duration);
+       value->kind = ICAL_DURATION_VALUE;
    }
-
 }
 
 struct icaltriggertype
-icalvalue_get_trigger(icalvalue* value)
+icalvalue_get_trigger(icalvalue* impl)
 {
-    struct icalvalue_impl *impl = (struct icalvalue_impl*)value;
     struct icaltriggertype tr;
 
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_arg( (impl!=0),"value");
+    icalerror_check_arg( (impl!=0),"value");
 
     if(impl->kind == ICAL_DATETIME_VALUE){
 	 tr.duration = icaldurationtype_from_int(0);
@@ -223,17 +211,15 @@ icalvalue_new_datetimeperiod (struct icaldatetimeperiodtype v)
 {
    struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_DATETIMEPERIOD_VALUE);
 
-   icalvalue_set_datetimeperiod((icalvalue*)impl,v);
+   icalvalue_set_datetimeperiod(impl,v);
 
    return (icalvalue*)impl;
 }
 
 void
-icalvalue_set_datetimeperiod(icalvalue* value, struct icaldatetimeperiodtype v)
+icalvalue_set_datetimeperiod(icalvalue* impl, struct icaldatetimeperiodtype v)
 {
-    struct icalvalue_impl* impl = (struct icalvalue_impl*)value;
-    
-    icalerror_check_arg_rv( (value!=0),"value");
+    icalerror_check_arg_rv( (impl!=0),"value");
     
     icalerror_check_value_type(value, ICAL_DATETIMEPERIOD_VALUE);
 
@@ -257,12 +243,11 @@ icalvalue_set_datetimeperiod(icalvalue* value, struct icaldatetimeperiodtype v)
 }
 
 struct icaldatetimeperiodtype
-icalvalue_get_datetimeperiod(icalvalue* value)
+icalvalue_get_datetimeperiod(icalvalue* impl)
 {
   struct icaldatetimeperiodtype dtp;
   
-  struct icalvalue_impl* impl = (struct icalvalue_impl*)value;
-  icalerror_check_arg( (value!=0),"value");
+  icalerror_check_arg( (impl!=0),"value");
   icalerror_check_value_type(value, ICAL_DATETIMEPERIOD_VALUE);
   
   if(impl->kind == ICAL_DATETIME_VALUE){
@@ -321,14 +306,10 @@ icalvalue_set_attach (icalvalue *value, icalattach *attach)
 icalattach *
 icalvalue_get_attach (icalvalue *value)
 {
-    struct icalvalue_impl *impl;
-
     icalerror_check_arg_rz ((value != NULL), "value");
     icalerror_check_value_type (value, ICAL_ATTACH_VALUE);
     
-    impl = (struct icalvalue_impl *) value;
-
-    return impl->data.v_attach;
+    return value->data.v_attach;
 }
 
 
