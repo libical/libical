@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.24 2002-11-03 21:49:33 acampi Exp $
+ $Id: icaltimezone.c,v 1.25 2002-11-03 21:59:50 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -447,12 +447,8 @@ icaltimezone_ensure_coverage		(icaltimezone	*zone,
 	icaltimezone_load_builtin_timezone (zone);
 
     if (icaltimezone_minimum_expansion_year == -1) {
-	struct tm *tmp_tm;
-	time_t t;
-
-	t = time (NULL);
-	tmp_tm = localtime (&t);
-	icaltimezone_minimum_expansion_year = tmp_tm->tm_year + 1900;
+	icaltimetype today = icaltime_today();
+	icaltimezone_minimum_expansion_year = today.year;
     }
 
     changes_end_year = end_year;
