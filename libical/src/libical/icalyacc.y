@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalyacc.y,v 1.6 2001-05-04 17:59:17 ebusboom Exp $
+  $Id: icalyacc.y,v 1.7 2001-05-04 17:59:59 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -372,9 +372,6 @@ utcoffset_value:
 
 	| plusminus INTNUMBER INTNUMBER INTNUMBER
 	{
-            int h = $2;
-            int m = $3;
-            int s = $4;
 	    icalparser_yy_value = icalvalue_new_utcoffset(utcsign * (($2*3600) + ($3*60) +($4)));
   	}
 
