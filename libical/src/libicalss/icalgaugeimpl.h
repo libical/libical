@@ -4,7 +4,7 @@
  CREATOR: eric 09 Aug 2000
 
 
- $Id: icalgaugeimpl.h,v 1.4 2002-06-28 09:39:09 acampi Exp $
+ $Id: icalgaugeimpl.h,v 1.5 2002-06-28 10:10:47 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -32,6 +32,7 @@ typedef enum icalgaugecompare {
     ICALGAUGECOMPARE_GREATEREQUAL=ICAL_XLICCOMPARETYPE_GREATEREQUAL,
     ICALGAUGECOMPARE_NOTEQUAL=ICAL_XLICCOMPARETYPE_NOTEQUAL,
     ICALGAUGECOMPARE_REGEX=ICAL_XLICCOMPARETYPE_REGEX,
+    ICALGAUGECOMPARE_ISNULL=ICAL_XLICCOMPARETYPE_ISNULL,
     ICALGAUGECOMPARE_NONE=0
 } icalgaugecompare;
 

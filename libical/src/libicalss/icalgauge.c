@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalgauge.c,v 1.10 2002-06-27 02:30:59 acampi Exp $
+ $Id: icalgauge.c,v 1.11 2002-06-28 10:10:47 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -348,6 +348,9 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 	    return 0;
 	}
 
+        if (w->compare == ICALGAUGECOMPARE_ISNULL)
+	    v = icalvalue_new(vk);
+        else
 	v = icalvalue_new_from_string(vk,w->value);
 
 	if (v == 0){
@@ -376,7 +379,7 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
             if (w->prop == ICAL_DTSTART_PROPERTY || 
                 w->prop == ICAL_DTEND_PROPERTY || 
                 w->prop == ICAL_DUE_PROPERTY){
-                /* needs to use recurrence-id to do comparison */
+	        /** needs to use recurrence-id to do comparison */
                 compare_recur = 1;
             } 
 
@@ -384,13 +387,18 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 
 
 	this_clause = 0;
-	local_pass = 0;
+	local_pass = (w->compare == ICALGAUGECOMPARE_ISNULL) ? 1 : 0;
 
 	for(prop = icalcomponent_get_first_property(sub_comp,w->prop);
 	    prop != 0;
 	    prop = icalcomponent_get_next_property(sub_comp,w->prop)){
 	    icalvalue* prop_value;
 	    icalgaugecompare relation;
+
+            if (w->compare == ICALGAUGECOMPARE_ISNULL) {
+                local_pass = 0;
+                break;
+            }
 
             if (compare_recur) {
                 icalproperty *p = icalcomponent_get_first_property(sub_comp, ICAL_RECURRENCEID_PROPERTY);   
@@ -399,7 +407,6 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
             else /* prop value from this component */
 	    prop_value = icalproperty_get_value(prop);
 
-            /* compare prop value with the input value */
 	    relation = (icalgaugecompare)icalvalue_compare(prop_value,v);
 	    
 	    if (relation  == w->compare){ 
