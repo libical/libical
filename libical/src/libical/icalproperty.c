@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.11 2001-04-11 16:08:36 ebusboom Exp $
+  $Id: icalproperty.c,v 1.12 2001-05-21 05:43:09 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -85,7 +85,7 @@ void icalproperty_add_parameters(struct icalproperty_impl *prop,va_list args)
 	    icalproperty_add_parameter((icalproperty*)impl,
 				       (icalparameter*)vp);
 	} else {
-	    assert(0);
+	    icalerror_set_errno(ICAL_BADARG_ERROR);
 	}
 
     }

@@ -52,3 +52,5 @@ Hubert V <hubertv@bigfoot.com> for checking and analyzing the output
 of the recurrence rule system.
 
 Jonathan Yue <jonathan.yue@cp.net> for  icalproperty_get_name()
+
+Jeff Mace <jhm18@psu.edu> for finding bugs in gauges. 

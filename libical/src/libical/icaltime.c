@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.14 2001-05-11 00:28:56 ebusboom Exp $
+  $Id: icaltime.c,v 1.15 2001-05-21 05:43:09 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -127,7 +127,7 @@ void unset_tz(struct set_tz_save savetz)
 
     if(orig_tzid!=0){	
 	size_t tmp_sz =strlen(orig_tzid)+4; 
-	char* orig_env_str = (char*)malloc(tmp_sz);
+	char* orig_env_str = (char*)icalmemory_tmp_buffer(tmp_sz);
 
 	if(orig_env_str == 0){
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -140,7 +140,6 @@ void unset_tz(struct set_tz_save savetz)
 	putenv(orig_env_str);
 
 	free(orig_tzid);
-        free(orig_env_str);
     } else {
 	putenv("TZ"); /* Delete from environment */
     } 

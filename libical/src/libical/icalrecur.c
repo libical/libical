@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.13 2001-05-04 20:13:26 ebusboom Exp $
+  $Id: icalrecur.c,v 1.14 2001-05-21 05:43:09 ebusboom Exp $
   $Locker:  $
     
 
@@ -1616,7 +1616,7 @@ int next_week(struct icalrecur_iterator_impl* impl)
   
 }
 
-
+/* Expand the BYDAY rule part and return a pointer to a newly allocated list of days. */
 pvl_list expand_by_day(struct icalrecur_iterator_impl* impl,short year)
 {
     /* Try to calculate each of the occurrences. */
@@ -1649,7 +1649,9 @@ pvl_list expand_by_day(struct icalrecur_iterator_impl* impl,short year)
         short pos =  icalrecurrencetype_day_position(BYDAYPTR[i]);
         
         if(pos == 0){
-            /* add all of the days of the year with this day-of-week*/
+            /* The day was specified without a position -- it is just
+               a bare day of the week ( BYDAY=SU) so add all of the
+               days of the year with this day-of-week*/
             int week;
             for(week = 0; week < 52 ; week ++){
                 short doy = start_doy + (week * 7) + dow-1;
@@ -1818,6 +1820,8 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
             impl->days[days_index++] = day;
         }
 
+        pvl_free(days);
+
         break;
     }
 
@@ -1859,7 +1863,30 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
 
     case (1<<BY_DAY) + (1<<BY_MONTH_DAY) : {
         /*FREQ=YEARLY; BYDAY=TH,20MO,-10FR; BYMONTHDAY=1,15*/
-        icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
+
+        int days_index = 0;
+        pvl_elem itr;
+        pvl_list days = expand_by_day(impl,year);
+
+        for(itr=pvl_head(days);itr!=0;itr=pvl_next(itr)){
+            short day = (short)(int)pvl_data(itr);
+            struct icaltimetype tt; 
+            short i,j;
+            
+            tt = icaltime_from_day_of_year(day,year);
+            
+            for(j = 0; BYMDPTR[j]!=ICAL_RECURRENCE_ARRAY_MAX; j++){
+                    short mday = BYMDPTR[j];
+                    
+                    if(tt.day == mday){
+                        impl->days[days_index++] = day;
+                    }
+            }
+            
+        }
+
+        pvl_free(days);
+       
         break;
     }
 
@@ -1890,6 +1917,8 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
 
         }
 
+        pvl_free(days);
+
        break;
 
     }
@@ -1917,6 +1946,8 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
             }
                     
         }
+
+        pvl_free(days);
         break;
     }
 

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.29 2001-05-07 16:49:18 ebusboom Exp $
+  $Id: regression.c,v 1.30 2001-05-21 05:43:09 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1779,25 +1779,25 @@ void test_iterators()
     c= icalcomponent_vanew(
 	ICAL_VCALENDAR_COMPONENT,
 	icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-			    icalproperty_vanew_version("1"),0),
+			    icalproperty_new_version("1"),0),
 	icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-			    icalproperty_vanew_version("2"),0),
+			    icalproperty_new_version("2"),0),
 	icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-			    icalproperty_vanew_version("3"),0),
+			    icalproperty_new_version("3"),0),
 	icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-			    icalproperty_vanew_version("4"),0),
+			    icalproperty_new_version("4"),0),
 	icalcomponent_vanew(ICAL_VTODO_COMPONENT,
-			    icalproperty_vanew_version("5"),0),
+			    icalproperty_new_version("5"),0),
 	icalcomponent_vanew(ICAL_VJOURNAL_COMPONENT,
-			    icalproperty_vanew_version("6"),0),
+			    icalproperty_new_version("6"),0),
 	icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-			    icalproperty_vanew_version("7"),0),
+			    icalproperty_new_version("7"),0),
 	icalcomponent_vanew(ICAL_VJOURNAL_COMPONENT,
-			    icalproperty_vanew_version("8"),0),
+			    icalproperty_new_version("8"),0),
 	icalcomponent_vanew(ICAL_VJOURNAL_COMPONENT,
-			    icalproperty_vanew_version("9"),0),
+			    icalproperty_new_version("9"),0),
 	icalcomponent_vanew(ICAL_VJOURNAL_COMPONENT,
-			    icalproperty_vanew_version("10"),0),
+			    icalproperty_new_version("10"),0),
 	0);
    
     printf("1: ");
@@ -1927,7 +1927,7 @@ void test_time()
 
     stm = *(localtime(&tt));
 
-     orig_month = stm.tm_mon;
+    orig_month = stm.tm_mon;
 
     do_test_time(0);
 
