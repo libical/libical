@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.30 2002-07-21 09:33:43 lindner Exp $
+  $Id: icalproperty.c,v 1.31 2002-08-07 17:05:07 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -678,6 +678,7 @@ icalproperty_remove_parameter_by_kind(icalproperty* prop, icalparameter_kind kin
 	icalparameter* param = (icalparameter *)pvl_data (p);
         if (icalparameter_isa(param) == kind) {
             pvl_remove (prop->parameters, p);
+	    icalparameter_free(param);
             break;
         }
     }                       
