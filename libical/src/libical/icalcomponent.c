@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.54 2003-02-17 17:30:57 acampi Exp $
+  $Id: icalcomponent.c,v 1.55 2003-02-17 18:12:27 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1526,7 +1526,7 @@ icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
 	icaltimezone   *tz = NULL;
 
 	for (c = comp; c != NULL; c = icalcomponent_get_parent(c)) {
-	    tz = icalcomponent_get_timezone(comp, tzid);
+	    tz = icalcomponent_get_timezone(c, tzid);
 	    if (tz != NULL)
 		break;
 	}
