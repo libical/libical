@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Time.py,v 1.2 2002-07-08 17:56:11 acampi Exp $
+#  $Id: Time.py,v 1.3 2002-07-12 08:02:46 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -27,7 +27,7 @@
 
 from LibicalWrap import *
 from Property import Property
-from types import DictType, StringType, IntType
+from types import DictType, StringType, IntType, FloatType
 from Duration import Duration
 
 class Time(Property):

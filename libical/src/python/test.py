@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.20 2002-07-12 07:59:15 acampi Exp $
+#  $Id: test.py,v 1.21 2002-07-12 08:02:46 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -164,6 +164,13 @@ def test_time():
     assert(isinstance(t2,Time))
     assert(t2.hour() == 11)
 
+    # test int args
+    t = Time(2)
+    print t
+ 
+    # test float args
+    t = Time(2.5)
+    print t
 
 def test_period():    
 
