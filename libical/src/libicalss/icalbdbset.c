@@ -39,7 +39,7 @@ icalbdbset_options icalbdbset_options_default = {ICALBDB_EVENTS, DB_BTREE, 0644,
 
 static DB_ENV *ICAL_DB_ENV = 0;
 
-/* Initialize the db environment */
+/** Initialize the db environment */
 
 int icalbdbset_init_dbenv(char *db_env_dir) {
   int ret;
@@ -711,10 +711,12 @@ icalerrorenum icalbdbset_commit(icalset *set) {
 	  free(more_mem);
 	  more_mem = NULL;
   }
-/*  if ((ret = dbcp->c_close(dbcp)) != 0) {
-//     char *foo = db_strerror(ret);
-//     abort();
-*/  }
+#if 0
+  if ((ret = dbcp->c_close(dbcp)) != 0) {
+     char *foo = db_strerror(ret);
+     abort();
+  }
+#endif
 
   /* this is weird..  does it really hold everything? */
 
@@ -1235,7 +1237,7 @@ icalcomponent* icalbdbsetiter_to_next(icalset *set, icalsetiter* i)
         rrule = icalcomponent_get_first_property(c, ICAL_RRULE_PROPERTY);
         g = icalgauge_get_expand(i->gauge);
 
-        /*a recurring component with expand query */
+        /* a recurring component with expand query */
         if (rrule != 0
             && g == 1) {
 

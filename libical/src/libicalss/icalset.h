@@ -1,17 +1,20 @@
 /* -*- Mode: C -*- */
-/*======================================================================
- FILE: icalset.h
- CREATOR: eric 28 November 1999
+/**
+ @file icalset.h
+ @author eric 28 November 1999
 
  Icalset is the "base class" for representations of a collection of
  iCal components. Derived classes (actually delegatees) include:
  
-    icalfileset   Store componetns in a single file
+    icalfileset   Store components in a single file
     icaldirset    Store components in multiple files in a directory
+    icalbdbset    Store components in a Berkeley DB File
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
+**/
 
- $Id: icalset.h,v 1.11 2002-06-28 09:39:44 acampi Exp $
+/*
+ $Id: icalset.h,v 1.12 2002-07-10 09:37:26 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -102,7 +105,7 @@ int icalset_register_class(icalset *set);
  *  @param dsn      Data Source Name - usually a pathname or DB handle
  *  @param options  Any implementation specific options
  *
- *  @ret   A valid icalset reference or NULL if error.
+ *  @return         A valid icalset reference or NULL if error.
  * 
  *  This creates any of the icalset types available.
  */
@@ -121,9 +124,11 @@ void icalset_free(icalset* set);
 
 const char* icalset_path(icalset* set);
 
-/* Mark the cluster as changed, so it will be written to disk when it
-   is freed. Commit writes to disk immediately*/
+/** Mark the cluster as changed, so it will be written to disk when it
+    is freed. **/
 void icalset_mark(icalset* set);
+
+/** Write changes to disk immediately */
 icalerrorenum icalset_commit(icalset* set); 
 
 icalerrorenum icalset_add_component(icalset* set, icalcomponent* comp);
@@ -132,40 +137,43 @@ icalerrorenum icalset_remove_component(icalset* set, icalcomponent* comp);
 int icalset_count_components(icalset* set,
 			     icalcomponent_kind kind);
 
-/* Restrict the component returned by icalset_first, _next to those
-   that pass the gauge. _clear removes the gauge. */
+/** Restrict the component returned by icalset_first, _next to those
+    that pass the gauge. */
 icalerrorenum icalset_select(icalset* set, icalgauge* gauge);
+
+/** Clears the gauge defined by icalset_select() */
 void icalset_clear_select(icalset* set);
 
-/* Get a component by uid */
+/** Get a component by uid */
 icalcomponent* icalset_fetch(icalset* set, const char* uid);
+
 int icalset_has_uid(icalset* set, const char* uid);
 icalcomponent* icalset_fetch_match(icalset* set, icalcomponent *c);
 
-/* Modify components according to the MODIFY method of CAP. Works on
+/** Modify components according to the MODIFY method of CAP. Works on
    the currently selected components. */
 icalerrorenum icalset_modify(icalset* set, icalcomponent *oldc,
 			       icalcomponent *newc);
 
-/* Iterate through the components. If a guage has been defined, these
+/** Iterate through the components. If a guage has been defined, these
    will skip over components that do not pass the gauge */
 
 icalcomponent* icalset_get_current_component(icalset* set);
 icalcomponent* icalset_get_first_component(icalset* set);
 icalcomponent* icalset_get_next_component(icalset* set);
 
-/* External Iterator with gauge - for thread safety */
+/** External Iterator with gauge - for thread safety */
 extern icalsetiter icalsetiter_null;
 
 icalsetiter icalset_begin_component(icalset* set,
 				 icalcomponent_kind kind, icalgauge* gauge);
 
-/* Default _next, _prior, _deref for subclasses that use single cluster */
+/** Default _next, _prior, _deref for subclasses that use single cluster */
 icalcomponent* icalsetiter_next(icalsetiter* i);
 icalcomponent* icalsetiter_prior(icalsetiter* i);
 icalcomponent* icalsetiter_deref(icalsetiter* i);
 
-/* for subclasses that use multiple clusters that require specialized cluster traversal */
+/** for subclasses that use multiple clusters that require specialized cluster traversal */
 icalcomponent* icalsetiter_to_next(icalset* set, icalsetiter* i);
 icalcomponent* icalsetiter_to_prior(icalset* set, icalsetiter* i);
 
