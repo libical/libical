@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.29 2002-05-20 17:23:49 acampi Exp $
+  $Id: icaltime.c,v 1.30 2002-05-20 17:32:01 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -144,39 +144,11 @@ static time_t make_time(struct tm *tm, int tzm)
  * always be converted to a local time with an appropriate call to
  * icaltime_convert_to_zone().
  */
-#if 0
-struct icaltimetype 
-icaltime_from_timet(time_t tm, int is_date)
-{
-    struct icaltimetype tt = icaltime_null_time();
-    struct tm t;
-
-    gmtime_r(&tm, &t);
-     
-    if(is_date == 0){ 
-	tt.second = t.tm_sec;
-	tt.minute = t.tm_min;
-	tt.hour = t.tm_hour;
-    } else {
-	tt.second = tt.minute =tt.hour = 0 ;
-    }
-
-    tt.day = t.tm_mday;
-    tt.month = t.tm_mon + 1;
-    tt.year = t.tm_year+ 1900;
-    
-    tt.is_utc = 1;
-    tt.is_date = is_date; 
-
-    return tt;
-}
-#else
 struct icaltimetype 
 icaltime_from_timet(const time_t tm, const int is_date)
 {
 	return icaltime_from_timet_with_zone(tm, is_date, 0);
 }
-#endif
 
 
 /**	@brief Constructor.
@@ -259,57 +231,6 @@ struct icaltimetype icaltime_today(void)
 
 /**	@brief	Return the time as seconds past the UNIX epoch
  */
-#if 0
-time_t icaltime_as_timet(struct icaltimetype tt)
-{
-    struct tm stm;
-    time_t t;
-#ifdef WIN32
-    TIME_ZONE_INFORMATION tz;
-    char * szZone;
-    icaltimezone* zone;
-    int offset_tt;
-#endif
-    memset(&stm,0,sizeof( struct tm));
-
-    if(icaltime_is_null_time(tt)) {
-	return 0;
-    }
-
-	tt = icaltime_normalize(tt);
-    stm.tm_sec = tt.second;
-    stm.tm_min = tt.minute;
-    stm.tm_hour = tt.hour;
-    stm.tm_mday = tt.day;
-    stm.tm_mon = tt.month-1;
-    stm.tm_year = tt.year-1900;
-    stm.tm_isdst = -1;
-
-    if(tt.is_utc == 1 || tt.is_date == 1){
-        t = make_time(&stm, 0);	/* FIXME */
-    } else {
-	t = mktime(&stm);
-#ifdef WIN32
-	/* Arg, mktime on Win32 always returns the time is localtime
-           zone, so we'll figure out what time we are looking for and adjust it */
-        
-	szZone = getenv("TZ");
-	if ( szZone != NULL && strlen(szZone) != 0 ){
-            GetTimeZoneInformation(&tz);
-            zone = icaltimezone_get_builtin_timezone(szZone);
-            offset_tt = icaltimezone_get_utc_offset_of_utc_time	(zone,
-                                                                 &tt,
-                                                                 NULL);		
-            t += -offset_tt - tz.Bias*60;
-        }
-        
-#endif
-    }
-
-    return t;
-
-}
-#else
 time_t icaltime_as_timet(const struct icaltimetype tt)
 {
     struct tm stm;
@@ -336,7 +257,6 @@ time_t icaltime_as_timet(const struct icaltimetype tt)
     return t;
 
 }
-#endif
 
 /**	@brief	Return the time as seconds past the UNIX epoch, using the
  *	given timezone.
@@ -482,26 +402,6 @@ struct icaltimetype icaltime_from_string(const char* str)
 }
 #endif
 
-#if 0
-char ctime_str[32];
-/**	@brief Deprecated
- *
- *	This method is deprecated and shouldn't be used in new software.
- *	Use icaltime_as_timet_with_zone(struct icaltimetype, icaltimezone *)
- *	instead, then appropriate calls to strftime(3).
- */
-char* icaltime_as_ctime(struct icaltimetype t)
-{
-    time_t tt;
- 
-    tt = icaltime_as_timet(t);
-    sprintf(ctime_str,"%s",ctime(&tt));
-
-    ctime_str[strlen(ctime_str)-1] = 0;
-
-    return ctime_str;
-}
-#endif
 
 /* Returns whether the specified year is a leap year. Year is the normal year,
    e.g. 2001. */
