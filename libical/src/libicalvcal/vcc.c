@@ -1,5 +1,5 @@
 /* A Bison parser, made from vcc.y
-   by GNU bison 1.34.  */
+   by GNU bison 1.35.  */
 
 #define YYBISON 1  /* Identify Bison output.  */
 
@@ -204,6 +204,7 @@ typedef union {
     VObject *vobj;
     } yystype;
 # define YYSTYPE yystype
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -389,7 +390,7 @@ static const short yycheck[] =
       -1,    41,    11,    57,    23
 };
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
-#line 3 "/usr/local/share/bison/bison.simple"
+#line 3 "/usr/share/bison/bison.simple"
 
 /* Skeleton output parser for bison,
 
@@ -457,6 +458,12 @@ static const short yycheck[] =
 #  define YYSTACK_ALLOC malloc
 #  define YYSTACK_FREE free
 # endif
+#endif /* ! defined (yyoverflow) || defined (YYERROR_VERBOSE) */
+
+
+#if (! defined (yyoverflow) \
+     && (! defined (__cplusplus) \
+	 || (YYLTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -483,24 +490,41 @@ union yyalloc
       + YYSTACK_GAP_MAX)
 # endif
 
-/* Relocate the TYPE STACK from its old location to the new one.  The
+/* Copy COUNT objects from FROM to TO.  The source and destination do
+   not overlap.  */
+# ifndef YYCOPY
+#  if 1 < __GNUC__
+#   define YYCOPY(To, From, Count) \
+      __builtin_memcpy (To, From, (Count) * sizeof (*(From)))
+#  else
+#   define YYCOPY(To, From, Count)		\
+      do					\
+	{					\
+	  register YYSIZE_T yyi;		\
+	  for (yyi = 0; yyi < (Count); yyi++)	\
+	    (To)[yyi] = (From)[yyi];		\
+	}					\
+      while (0)
+#  endif
+# endif
+
+/* Relocate STACK from its old location to the new one.  The
    local variables YYSIZE and YYSTACKSIZE give the old and new number of
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Type, Stack)					\
+# define YYSTACK_RELOCATE(Stack)					\
     do									\
       {									\
 	YYSIZE_T yynewbytes;						\
-	yymemcpy ((char *) yyptr, (char *) (Stack),			\
-		  yysize * (YYSIZE_T) sizeof (Type));			\
+	YYCOPY (&yyptr->Stack, Stack, yysize);				\
 	Stack = &yyptr->Stack;						\
-	yynewbytes = yystacksize * sizeof (Type) + YYSTACK_GAP_MAX;	\
+	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAX;	\
 	yyptr += yynewbytes / sizeof (*yyptr);				\
       }									\
     while (0)
 
-#endif /* ! defined (yyoverflow) || defined (YYERROR_VERBOSE) */
+#endif
 
 
 #if ! defined (YYSIZE_T) && defined (__SIZE_TYPE__)
@@ -627,33 +651,6 @@ int yydebug;
 # define YYMAXDEPTH 10000
 #endif
 
-#if ! defined (yyoverflow) && ! defined (yymemcpy)
-# if __GNUC__ > 1		/* GNU C and GNU C++ define this.  */
-#  define yymemcpy __builtin_memcpy
-# else				/* not GNU C or C++ */
-
-/* This is the most reliable way to avoid incompatibilities
-   in available built-in functions on various systems.  */
-static void
-#  if defined (__STDC__) || defined (__cplusplus)
-yymemcpy (char *yyto, const char *yyfrom, YYSIZE_T yycount)
-#  else
-yymemcpy (yyto, yyfrom, yycount)
-     char *yyto;
-     const char *yyfrom;
-     YYSIZE_T yycount;
-#  endif
-{
-  register const char *yyf = yyfrom;
-  register char *yyt = yyto;
-  register YYSIZE_T yyi = yycount;
-
-  while (yyi-- != 0)
-    *yyt++ = *yyf++;
-}
-# endif
-#endif
-
 #ifdef YYERROR_VERBOSE
 
 # ifndef yystrlen
@@ -706,7 +703,7 @@ yystpcpy (yydest, yysrc)
 # endif
 #endif
 
-#line 319 "/usr/local/share/bison/bison.simple"
+#line 315 "/usr/share/bison/bison.simple"
 
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
@@ -896,6 +893,9 @@ yyparse (YYPARSE_PARAM_ARG)
 	yyvs = yyvs1;
       }
 #else /* no yyoverflow */
+# ifndef YYSTACK_RELOCATE
+      goto yyoverflowlab;
+# else
       /* Extend the stack our own way.  */
       if (yystacksize >= YYMAXDEPTH)
 	goto yyoverflowlab;
@@ -909,15 +909,16 @@ yyparse (YYPARSE_PARAM_ARG)
 	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
 	if (! yyptr)
 	  goto yyoverflowlab;
-	YYSTACK_RELOCATE (short, yyss);
-	YYSTACK_RELOCATE (YYSTYPE, yyvs);
+	YYSTACK_RELOCATE (yyss);
+	YYSTACK_RELOCATE (yyvs);
 # if YYLSP_NEEDED
-	YYSTACK_RELOCATE (YYLTYPE, yyls);
+	YYSTACK_RELOCATE (yyls);
 # endif
 # undef YYSTACK_RELOCATE
 	if (yyss1 != yyssa)
 	  YYSTACK_FREE (yyss1);
       }
+# endif
 #endif /* no yyoverflow */
 
       yyssp = yyss + yysize - 1;
@@ -1256,7 +1257,7 @@ case 46:
     break;
 }
 
-#line 705 "/usr/local/share/bison/bison.simple"
+#line 705 "/usr/share/bison/bison.simple"
 
 
   yyvsp -= yylen;
