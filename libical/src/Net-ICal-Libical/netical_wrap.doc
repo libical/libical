@@ -63,6 +63,12 @@ icalcomponent_isa(component);
 icalrestriction_check(comp);
         [ returns int  ]
 
+icalproperty_string_to_kind(string);
+        [ returns int  ]
+
+icalproperty_new(kind);
+        [ returns icalproperty * ]
+
 icalproperty_new_from_string(str);
         [ returns icalproperty * ]
 
@@ -72,8 +78,14 @@ icalproperty_as_ical_string(prop);
 icalproperty_set_parameter_from_string(prop,name,value);
         [ returns void  ]
 
-icalproperty_set_value_from_string(prop,value);
+icalproperty_set_value_from_string(prop,value,kind);
         [ returns void  ]
+
+icalproperty_get_value_as_string(prop);
+        [ returns char * ]
+
+icalproperty_get_parameter_as_string(prop,name);
+        [ returns char * ]
 
 icalproperty_get_parent(property);
         [ returns icalcomponent * ]

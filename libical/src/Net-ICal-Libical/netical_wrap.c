@@ -62,7 +62,7 @@ extern "C" {
 
 
 /*****************************************************************************
- * $Header: /tmp/freeassociation-cvsbackup/libical/src/Net-ICal-Libical/netical_wrap.c,v 1.4 2001-02-28 07:36:43 ebusboom Exp $
+ * $Header: /tmp/freeassociation-cvsbackup/libical/src/Net-ICal-Libical/netical_wrap.c,v 1.5 2001-03-02 19:50:31 ebusboom Exp $
  *
  * perl5ptr.swg
  *
@@ -888,6 +888,40 @@ XS(_wrap_icalrestriction_check) {
     XSRETURN(argvi);
 }
 
+XS(_wrap_icalproperty_string_to_kind) {
+
+    int  _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_string_to_kind(string);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (int )icalproperty_string_to_kind(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_new) {
+
+    icalproperty * _result;
+    int  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_new(kind);");
+    _arg0 = (int )SvIV(ST(0));
+    _result = (icalproperty *)icalproperty_new(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
 XS(_wrap_icalproperty_new_from_string) {
 
     icalproperty * _result;
@@ -950,18 +984,62 @@ XS(_wrap_icalproperty_set_value_from_string) {
 
     icalproperty * _arg0;
     char * _arg1;
+    char * _arg2;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalproperty_set_value_from_string(prop,value);");
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: icalproperty_set_value_from_string(prop,value,kind);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
         croak("Type error in argument 1 of icalproperty_set_value_from_string. Expected icalpropertyPtr.");
         XSRETURN(1);
     }
     _arg1 = (char *) SvPV(ST(1),na);
-    icalproperty_set_value_from_string(_arg0,_arg1);
+    _arg2 = (char *) SvPV(ST(2),na);
+    icalproperty_set_value_from_string(_arg0,_arg1,_arg2);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_value_as_string) {
+
+    char * _result;
+    icalproperty * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_get_value_as_string(prop);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_value_as_string. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalproperty_get_value_as_string(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_parameter_as_string) {
+
+    char * _result;
+    icalproperty * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_get_parameter_as_string(prop,name);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_parameter_as_string. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    _result = (char *)icalproperty_get_parameter_as_string(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
@@ -2843,10 +2921,14 @@ XS(boot_Net__ICal__Libical) {
 	 newXS("Net::ICal::Libical::icalcomponent_get_parent", _wrap_icalcomponent_get_parent, file);
 	 newXS("Net::ICal::Libical::icalcomponent_isa", _wrap_icalcomponent_isa, file);
 	 newXS("Net::ICal::Libical::icalrestriction_check", _wrap_icalrestriction_check, file);
+	 newXS("Net::ICal::Libical::icalproperty_string_to_kind", _wrap_icalproperty_string_to_kind, file);
+	 newXS("Net::ICal::Libical::icalproperty_new", _wrap_icalproperty_new, file);
 	 newXS("Net::ICal::Libical::icalproperty_new_from_string", _wrap_icalproperty_new_from_string, file);
 	 newXS("Net::ICal::Libical::icalproperty_as_ical_string", _wrap_icalproperty_as_ical_string, file);
 	 newXS("Net::ICal::Libical::icalproperty_set_parameter_from_string", _wrap_icalproperty_set_parameter_from_string, file);
 	 newXS("Net::ICal::Libical::icalproperty_set_value_from_string", _wrap_icalproperty_set_value_from_string, file);
+	 newXS("Net::ICal::Libical::icalproperty_get_value_as_string", _wrap_icalproperty_get_value_as_string, file);
+	 newXS("Net::ICal::Libical::icalproperty_get_parameter_as_string", _wrap_icalproperty_get_parameter_as_string, file);
 	 newXS("Net::ICal::Libical::icalproperty_get_parent", _wrap_icalproperty_get_parent, file);
 	 newXS("Net::ICal::Libical::icalerror_set_error_state", _wrap_icalerror_set_error_state, file);
 	 newXS("Net::ICal::Libical::icalerror_get_error_state", _wrap_icalerror_get_error_state, file);

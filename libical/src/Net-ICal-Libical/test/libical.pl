@@ -90,5 +90,5 @@ END:VEVENT
 
 EOM
 
-Component::test()
+
 
