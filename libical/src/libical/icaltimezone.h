@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.h,v 1.4 2002-06-07 13:50:07 acampi Exp $
+ $Id: icaltimezone.h,v 1.5 2002-06-27 00:31:52 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -52,6 +52,9 @@ void icaltimezone_free				(icaltimezone *zone,
 /**
  * @par Accessing timezones.
  */
+
+/** Free any builtin timezone information **/
+void icaltimezone_free_builtin_timezones(void);
 
 /** Returns the array of builtin icaltimezones. */
 icalarray* icaltimezone_get_builtin_timezones	(void);
