@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.23 2002-05-09 13:42:09 acampi Exp $
+  $Id: icalcomponent.c,v 1.24 2002-05-10 15:35:49 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -756,6 +756,9 @@ icalcomponent* icalcomponent_get_first_real_component(icalcomponent *c)
 
 #ifdef BEN
 
+/**
+ *	FIXME This is not a good API and should go away
+ */
 time_t icalcomponent_convert_time(icalproperty *p)
 {
     struct icaltimetype sict;
@@ -1316,136 +1319,193 @@ icalproperty_method icalcomponent_get_method(icalcomponent* comp)
     prop = icalcomponent_get_first_property(inner, p_kind);
  
 
-
+/**	@brief Set DTSTART property to given icaltime
+ *
+ *	This method respects the icaltime type (DATE vs DATE-TIME) and
+ *	timezone (or lack thereof).
+ */
 void icalcomponent_set_dtstart(icalcomponent* comp, struct icaltimetype v)
 {
+    char *tzid;
     ICALSETUPSET(ICAL_DTSTART_PROPERTY);
 
     if (prop == 0){
 	prop = icalproperty_new_dtstart(v);
 	icalcomponent_add_property(inner, prop);
+    } else {
+	icalproperty_remove_parameter(prop, ICAL_TZID_PARAMETER);
     }
     
     icalproperty_set_dtstart(prop,v);
 
+    if ((tzid = icaltime_get_tzid(v)) != NULL) {
+	icalproperty_add_parameter(prop, icalparameter_new_tzid(tzid));
+    }
 }
 
+/**	@brief Get a DATE or DATE-TIME property as an icaltime
+ *
+ *	If the property is a DATE-TIME with a timezone parameter and a
+ *	corresponding VTIMEZONE is present in the component, the
+ *	returned component will already be in the correct timezone;
+ *	otherwise the caller is responsible for converting it.
+ *
+ *	FIXME this is useless until we can flag the failure
+ */
+static struct icaltimetype
+icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
 
+    icalparameter      *param;
+    struct icaltimetype	ret;
+    const char	       *tzid;
+    icaltimezone       *tz;
+
+    ret = icalvalue_get_datetime(icalproperty_get_value(prop));
+
+    if ((param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER))
+	!= NULL) {
+	const char     *tzid = icalparameter_get_tzid(param);
+	icaltimezone   *tz;
+
+	if ((tz = icalcomponent_get_timezone(comp, tzid)) != NULL) {
+	    icaltime_set_timezone(&ret, tz);
+	}
+    }
+
+    return ret;
+}
+
+/**	@brief Get DTSTART property as an icaltime
+ *
+ *	If DTSTART is a DATE-TIME with a timezone parameter and a
+ *	corresponding VTIMEZONE is present in the component, the
+ *	returned component will already be in the correct timezone;
+ *	otherwise the caller is responsible for converting it.
+ *
+ *	FIXME this is useless until we can flag the failure
+ */
 struct icaltimetype icalcomponent_get_dtstart(icalcomponent* comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp); 
-    icalproperty *prop 
-	= icalcomponent_get_first_property(inner,ICAL_DTSTART_PROPERTY);
+    icalproperty *prop;
 
+    prop = icalcomponent_get_first_property(inner,ICAL_DTSTART_PROPERTY);
     if (prop == 0){
 	return icaltime_null_time();
     }
-    
-    return icalproperty_get_dtstart(prop);
+
+    return icalcomponent_get_datetime(comp, prop);
 }
 
-
+/**	@brief Get DTEND property as an icaltime
+ *
+ *	If a DTEND property is not present but a DURATION is, we use
+ *	that to determine the proper end.
+ *
+ *	If DTSTART is a DATE-TIME with a timezone parameter and a
+ *	corresponding VTIMEZONE is present in the component, the
+ *	returned component will already be in the correct timezone;
+ *	otherwise the caller is responsible for converting it.
+ *
+ *	FIXME this is useless until we can flag the failure
+ */
 struct icaltimetype icalcomponent_get_dtend(icalcomponent* comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp); 
-
     icalproperty *end_prop 
 	= icalcomponent_get_first_property(inner,ICAL_DTEND_PROPERTY);
-
     icalproperty *dur_prop 
 	= icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+    struct icaltimetype	ret = icaltime_null_time();
 
-
-    if( end_prop == 0 && dur_prop == 0){
-	return icaltime_null_time();
-    } else if ( end_prop != 0) {
-	return icalproperty_get_dtend(end_prop);
+    if ( end_prop != 0) {
+	ret = icalcomponent_get_datetime(comp, end_prop);
     } else if ( dur_prop != 0) { 
-	
+
 	struct icaltimetype start = 
 	    icalcomponent_get_dtstart(inner);
 	struct icaldurationtype duration = 
 	    icalproperty_get_duration(dur_prop);
-	
+
 	struct icaltimetype end = icaltime_add(start,duration);
 
-	return end;
-
-    } else {
-	/* Error, both duration and dtend have been specified */
-	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-	return icaltime_null_time();
-
+	ret = end;
     }
-    
+
+    return ret;
 }
 
-
+/**	@brief Set DTEND property to given icaltime
+ *
+ *	This method respects the icaltime type (DATE vs DATE-TIME) and
+ *	timezone (or lack thereof).
+ *
+ *	This also checks that a DURATION property isn't already there,
+ *	and returns an error if it is. It's the caller's responsibility
+ *	to remove it.
+ */
 void icalcomponent_set_dtend(icalcomponent* comp, struct icaltimetype v)
 {
-    icalcomponent *inner = icalcomponent_get_inner(comp); 
+    icalproperty *dur_prop;
+    char *tzid;
+    ICALSETUPSET(ICAL_DTEND_PROPERTY);
 
-    icalproperty *end_prop 
-	= icalcomponent_get_first_property(inner,ICAL_DTEND_PROPERTY);
-
-    icalproperty *dur_prop 
-	= icalcomponent_get_first_property(inner,ICAL_DURATION_PROPERTY);
-
-
-    if( end_prop == 0 && dur_prop == 0){
-	end_prop = icalproperty_new_dtend(v);
-	icalcomponent_add_property(inner,end_prop);
-    } else if ( end_prop != 0) {
-	icalproperty_set_dtend(end_prop,v);
-    } else if ( dur_prop != 0) { 
-	struct icaltimetype start = 
-	    icalcomponent_get_dtstart(inner);
-
-	struct icaltimetype end = 
-	    icalcomponent_get_dtend(inner);
-
-	struct icaldurationtype dur 
-	    = icaltime_subtract(end,start);
-
-	icalproperty_set_duration(dur_prop,dur);
-
-    } else {
+    dur_prop = icalcomponent_get_first_property(inner,ICAL_DURATION_PROPERTY);
+    if (prop != 0 && dur_prop != 0) {
 	/* Error, both duration and dtend have been specified */
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+	return;
+    }
+
+    if (prop == 0) {
+	prop = icalproperty_new_dtend(v);
+	icalcomponent_add_property(inner, prop);
+    } else {
+	icalproperty_remove_parameter(prop, ICAL_TZID_PARAMETER);
+    }
+
+    icalproperty_set_dtend(prop,v);
+
+    if ((tzid = icaltime_get_tzid(v)) != NULL) {
+	icalproperty_add_parameter(prop, icalparameter_new_tzid(tzid));
     }
 }
 
+/**	@brief Set DURATION property to given icalduration
+ *
+ *	This method respects the icaltime type (DATE vs DATE-TIME) and
+ *	timezone (or lack thereof).
+ *
+ *	This also checks that a DTEND property isn't already there,
+ *	and returns an error if it is. It's the caller's responsibility
+ *	to remove it.
+ */
 void icalcomponent_set_duration(icalcomponent* comp, 
 				struct icaldurationtype v)
 {
-    icalcomponent *inner = icalcomponent_get_inner(comp); 
+    icalproperty *end_prop;
+    ICALSETUPSET(ICAL_DURATION_PROPERTY);
 
-    icalproperty *end_prop 
-	= icalcomponent_get_first_property(inner,ICAL_DTEND_PROPERTY);
-
-    icalproperty *dur_prop 
-	= icalcomponent_get_first_property(inner,ICAL_DURATION_PROPERTY);
-
-
-    if( end_prop == 0 && dur_prop == 0){
-	dur_prop = icalproperty_new_duration(v);
-	icalcomponent_add_property(inner, dur_prop);
-    } else if ( end_prop != 0) {
-	struct icaltimetype start = 
-	    icalcomponent_get_dtstart(inner);
-	
-	struct icaltimetype new_end = icaltime_add(start,v);
-
-	icalproperty_set_dtend(end_prop,new_end);
-
-    } else if ( dur_prop != 0) { 
-	icalproperty_set_duration(dur_prop,v);
-    } else {
+    end_prop = icalcomponent_get_first_property(inner,ICAL_DTEND_PROPERTY);
+    if (end_prop != 0 && prop != 0) {
 	/* Error, both duration and dtend have been specified */
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+	return;
+    }
+
+    if (prop == 0) {
+	prop = icalproperty_new_duration(v);
+	icalcomponent_add_property(inner, prop);
+    } else {
+	icalproperty_set_duration(prop,v);
     }
 }
 
+/**	@brief Get DURATION property as an icalduration
+ *
+ *	If a DURATION property is not present but a DTEND is, we use
+ *	that to determine the proper end.
+ */
 struct icaldurationtype icalcomponent_get_duration(icalcomponent* comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp); 
@@ -1456,12 +1516,10 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent* comp)
     icalproperty *dur_prop 
 	= icalcomponent_get_first_property(inner,ICAL_DURATION_PROPERTY);
 
-    struct icaldurationtype null_duration;
-    memset(&null_duration,0,sizeof(struct icaldurationtype));
+    struct icaldurationtype ret = icaldurationtype_null_duration();
 
-
-    if( end_prop == 0 && dur_prop == 0){
-	return null_duration;
+    if ( dur_prop != 0) { 
+	ret = icalproperty_get_duration(dur_prop);
     } else if ( end_prop != 0) {
 	/**
 	 * FIXME
@@ -1473,14 +1531,10 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent* comp)
 	struct icaltimetype end = 
 	    icalcomponent_get_dtend(inner);
 
-	return icaltime_subtract(end, start);
-    } else if ( dur_prop != 0) { 
-	return icalproperty_get_duration(dur_prop);
-    } else {
-	/* Error, both duration and dtend have been specified */
-	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-	return null_duration;
+	ret = icaltime_subtract(end, start);
     }
+
+    return ret;
 }
 
 void icalcomponent_set_dtstamp(icalcomponent* comp, struct icaltimetype v)

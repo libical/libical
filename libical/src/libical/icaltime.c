@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.26 2002-05-09 13:42:09 acampi Exp $
+  $Id: icaltime.c,v 1.27 2002-05-10 15:35:49 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -987,4 +987,49 @@ struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
 	}
 
 	return ret;
+}
+
+icaltimezone *
+icaltime_get_timezone(const struct icaltimetype t) {
+
+	return t.zone;
+}
+
+char *
+icaltime_get_tzid(const struct icaltimetype t) {
+
+	if (t.zone != NULL) {
+		/* FIXME */
+		return icaltimezone_get_tzid((icaltimezone *)t.zone);
+	} else {
+		return NULL;
+	}
+}
+
+/**	@brief Set the timezone
+ *
+ *	Force the icaltime to be interpreted relative to another timezone.
+ *	If you need to do timezone conversion, applying offset adjustments,
+ *	then you should use icaltime_convert_to_timezone instead.
+ */
+struct icaltimetype
+icaltime_set_timezone(struct icaltimetype *t, const icaltimezone *zone) {
+
+	/* If it's a date do nothing */
+	if (t->is_date) {
+		return *t;
+	}
+
+	if (t->zone == zone) {
+		return *t;
+	}
+
+	t->zone = zone;
+	if (zone == icaltimezone_get_utc_timezone()) {
+		t->is_utc = 1;
+	} else {
+		t->is_utc = 0;
+	}
+
+	return *t;
 }

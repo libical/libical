@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.11 2002-05-09 13:42:09 acampi Exp $
+ $Id: icaltime.h,v 1.12 2002-05-10 15:35:49 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -58,16 +58,21 @@
  *
  *	Accessor methods include:
  *
+ *	- icaltime_get_timezone(struct icaltimetype t)
+ *	- icaltime_get_tzid(struct icaltimetype t)
+ *	- icaltime_set_timezone(struct icaltimetype t, const icaltimezone *zone)
+ *	- icaltime_day_of_year(struct icaltimetype t)
+ *	- icaltime_day_of_week(struct icaltimetype t)
+ *	- icaltime_start_doy_of_week(struct icaltimetype t)
+ *	- icaltime_week_number(struct icaltimetype t)
+ *
+ *	Query methods include:
+ *
  *	- icaltime_is_null_time(struct icaltimetype t)
  *	- icaltime_is_valid_time(struct icaltimetype t)
  *	- icaltime_is_date(struct icaltimetype t)
  *	- icaltime_is_utc(struct icaltimetype t)
  *	- icaltime_is_floating(struct icaltimetype t)
- *	- icaltime_get_zone(struct icaltimetype t)
- *	- icaltime_day_of_year(struct icaltimetype t)
- *	- icaltime_day_of_week(struct icaltimetype t)
- *	- icaltime_start_doy_of_week(struct icaltimetype t)
- *	- icaltime_week_number(struct icaltimetype t)
  *
  *	Modify, compare and utility methods include:
  *
@@ -168,6 +173,29 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
    string is owned by libical */
 char* icaltime_as_ical_string(const struct icaltimetype tt);
 
+/** @brief Return the timezone */
+icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
+
+/** @brief Return the tzid, or NULL for a floating time */
+char *icaltime_get_tzid(const struct icaltimetype t);
+
+/** @brief Set the timezone */
+struct icaltimetype icaltime_set_timezone(struct icaltimetype *t,
+	const icaltimezone *zone);
+
+/* Return the day of the year of the given time */
+short icaltime_day_of_year(const struct icaltimetype t);
+
+/* Return the day of the week of the given time. Sunday is 1 */
+short icaltime_day_of_week(const struct icaltimetype t);
+
+/* Return the day of the year for the Sunday of the week that the
+   given time is within. */
+short icaltime_start_doy_of_week(const struct icaltimetype t);
+
+/* Return the week number for the week the given time is within */
+short icaltime_week_number(const struct icaltimetype t);
+
 /* Return true of the time is null. */
 int icaltime_is_null_time(const struct icaltimetype t);
 
@@ -184,19 +212,6 @@ int icaltime_is_utc(const struct icaltimetype t);
 
 /** @brief Returns true if time is a floating time */
 int icaltime_is_floating(const struct icaltimetype t);
-
-/* Return the day of the year of the given time */
-short icaltime_day_of_year(const struct icaltimetype t);
-
-/* Return the day of the week of the given time. Sunday is 1 */
-short icaltime_day_of_week(const struct icaltimetype t);
-
-/* Return the day of the year for the Sunday of the week that the
-   given time is within. */
-short icaltime_start_doy_of_week(const struct icaltimetype t);
-
-/* Return the week number for the week the given time is within */
-short icaltime_week_number(const struct icaltimetype t);
 
 /* Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
 int icaltime_compare(const struct icaltimetype a,
