@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.43 2002-05-28 14:08:01 acampi Exp $
+  $Id: regression.c,v 1.44 2002-05-28 15:48:03 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1823,18 +1823,6 @@ void test_overlaps()
 
 }
 
-char* icaltime_as_ctime(struct icaltimetype t)
-{
-    time_t tt;
-    char ctime_str[32];
- 
-    tt = icaltime_as_timet(t);
-    sprintf(ctime_str,"%s",ctime(&tt));
-
-    ctime_str[strlen(ctime_str)-1] = 0;
-
-    return ctime_str;
-}
 
 void test_fblist()
 {

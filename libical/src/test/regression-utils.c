@@ -22,3 +22,12 @@ const char* ictt_as_string(struct icaltimetype t)
     return ictt_str;
 }
 
+char* icaltime_as_ctime(struct icaltimetype t)
+{
+    time_t tt;
+ 
+    tt = icaltime_as_timet(t);
+    sprintf(ictt_str,"%s",ctime(&tt));
+
+    return ctime_str;
+}
