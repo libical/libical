@@ -3,7 +3,7 @@
   FILE: sspm.c Parse Mime
   CREATOR: eric 25 June 2000
   
-  $Id: sspm.c,v 1.3 2001-12-06 19:58:50 gray-john Exp $
+  $Id: sspm.c,v 1.4 2001-12-22 17:04:33 gray-john Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License

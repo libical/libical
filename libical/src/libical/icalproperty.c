@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.13 2001-12-06 19:56:04 gray-john Exp $
+  $Id: icalproperty.c,v 1.14 2001-12-22 17:04:33 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

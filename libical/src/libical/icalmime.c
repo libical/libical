@@ -4,7 +4,7 @@
  CREATOR: eric 26 July 2000
 
 
- $Id: icalmime.c,v 1.4 2001-12-06 19:54:19 gray-john Exp $
+ $Id: icalmime.c,v 1.5 2001-12-22 17:04:33 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

@@ -4,9 +4,9 @@
   CREATOR: eric 16 May 2000
   
 <<<<<<< icalrecur.c
-  $Id: icalrecur.c,v 1.27 2001-12-18 04:10:29 ebusboom Exp $
+  $Id: icalrecur.c,v 1.28 2001-12-22 17:04:33 gray-john Exp $
 =======
-  $Id: icalrecur.c,v 1.27 2001-12-18 04:10:29 ebusboom Exp $
+  $Id: icalrecur.c,v 1.28 2001-12-22 17:04:33 gray-john Exp $
 >>>>>>> 1.26
   $Locker:  $
     

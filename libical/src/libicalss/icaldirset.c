@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.6 2001-12-06 20:00:23 gray-john Exp $
+    $Id: icaldirset.c,v 1.7 2001-12-22 17:04:35 gray-john Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.37 2001-12-16 18:26:44 gray-john Exp $
+  $Id: regression.c,v 1.38 2001-12-22 17:04:35 gray-john Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
