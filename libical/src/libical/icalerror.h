@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.10 2001-06-22 15:57:26 ebusboom Exp $
+  $Id: icalerror.h,v 1.11 2001-12-12 01:25:54 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -101,6 +101,8 @@ if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || \
    icalerror_warn(icalerror_strerror(x)); \
    assert(0); \
 } 
+#else
+void icalerror_set_errno(icalerrorenum x); 
 #endif
 
 #ifdef ICAL_ERRORS_ARE_FATAL

@@ -1,3 +1,20 @@
+2001-12-11  Eric Busboom  <eric@softwarestudio.org>
+
+	* icaltime.c Fixed icaltime_from_day_of_year to correctly handle 
+	negative and over-range day-of-years
+
+	* icaltime.c collected all instances of leap year code into
+	icaltime_is_leap_year
+
+	* icaltime.c icaltime_day_of_year. Changed an assert into code
+	that advances the year when the day of year is lager than the
+	number of days in the given year
+
+	* icalerrno.c,h Added the function version
+	icalerror_set_errno. Only the define verson existed.
+
+	* icaltime.c Moved all of the getenv/putenv operations into icaltimegm()
+	
 2001-06-29  Eric Busboom  <eric@softwarestudio.org>
 
 	* icalderivedproperties.h,c Changed the signature if the CLASS

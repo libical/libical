@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.19 2001-12-10 18:54:00 ebusboom Exp $
+  $Id: icalrecur.c,v 1.20 2001-12-12 01:25:54 ebusboom Exp $
   $Locker:  $
     
 
@@ -1388,17 +1388,21 @@ int next_weekday_by_week(struct icalrecur_iterator_impl* impl)
       start_of_week = icaltime_start_doy_of_week(impl->last);
       
       dow--; /*Sun is 1, not 0 */
+      
+      if(dow+start_of_week <1){
+          /* The selected date is in the previous year. */
+          if(!end_of_data){    
+              continue;
+          }
+      } 
 
-      if(dow+start_of_week <1 && !end_of_data){
-	  /* The selected date is in the previous year. */
-	  continue;
-      }
-
+  
       next = icaltime_from_day_of_year(start_of_week + dow,impl->last.year);
-
+      
       impl->last.day =  next.day;
       impl->last.month =  next.month;
       impl->last.year =  next.year;
+  
   
       return end_of_data;
   }
@@ -1932,7 +1936,7 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
         for(itr=pvl_head(days);itr!=0;itr=pvl_next(itr)){
             short day = (short)(int)pvl_data(itr);
             struct icaltimetype tt; 
-            short i,j;
+            short j;
             
             tt = icaltime_from_day_of_year(day,year);
             

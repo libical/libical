@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.20 2001-12-10 18:54:00 ebusboom Exp $
+  $Id: icaltime.c,v 1.21 2001-12-12 01:25:54 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -35,14 +35,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
 #ifdef ICAL_NO_LIBICAL
 #define icalerror_set_errno(x)
 #define  icalerror_check_arg_rv(x,y)
 #define  icalerror_check_arg_re(x,y,z)
-#else
+#endif
+*/
+
 #include "icalerror.h"
 #include "icalmemory.h"
-#endif
 
 #include "icaltimezone.h"
 
@@ -181,15 +183,12 @@ time_t icaltimegm(struct tm* stm)
 /* Get the offset for a named timezone. */
 int icaltime_utc_offset(struct icaltimetype ictt, const char* tzid)
 {
-    time_t off;
     icaltimezone *utc_zone, *local_zone;
     struct tm gtm;
     struct set_tz_save old_tz; 
-    int is_daylight;
-
 
     time_t tt = icaltime_as_timet(ictt);
-    time_t offset_tt, offset;
+    time_t offset_tt;
 
     local_zone =  icaltimezone_get_builtin_timezone(tzid);
     utc_zone = icaltimezone_get_utc_timezone ();
@@ -402,7 +401,6 @@ time_t icaltime_as_timet_with_zone(struct icaltimetype tt, icaltimezone *zone)
     icaltimezone *utc_zone;
     struct tm stm;
     time_t t;
-    struct set_tz_save old_tz;
 
     utc_zone = icaltimezone_get_utc_timezone ();
 
@@ -527,39 +525,33 @@ char* icaltime_as_ctime(struct icaltimetype t)
     return ctime_str;
 }
 
+/* Returns whether the specified year is a leap year. Year is the normal year,
+   e.g. 2001. */
+int
+icaltime_is_leap_year (int year)
+{
+
+    if (year <= 1752)
+        return (year % 4 == 0);
+    else
+        return ( (year % 4==0) && (year % 100 !=0 )) || (year % 400 == 0);
+}
 
 short days_in_month[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
 
 short icaltime_days_in_month(short month,short year)
 {
 
-    int is_leap =0;
     int days = days_in_month[month];
 
     assert(month > 0);
     assert(month <= 12);
 
-    if( (year % 4 == 0 && year % 100 != 0) ||
-	year % 400 == 0){
-	is_leap =1;
-    }
-
     if( month == 2){
-	days += is_leap;
+	days += icaltime_is_leap_year(year);
     }
 
     return days;
-}
-
-/* Returns whether the specified year is a leap year. Year is the normal year,
-   e.g. 2001. */
-int
-icaltime_is_leap_year (int year)
-{
-  if (year <= 1752)
-    return !(year % 4);
-  else
-    return (!(year % 4) && (year % 100)) || !(year % 400);
 }
 
 /* 1-> Sunday, 7->Saturday */
@@ -583,6 +575,7 @@ short icaltime_day_of_week(struct icaltimetype t){
    FIXME: Doesn't take into account different week start days. */
 short icaltime_start_doy_of_week(struct icaltimetype t){
     struct tm stm;
+    int start;
 
     stm.tm_year = t.year - 1900;
     stm.tm_mon = t.month - 1;
@@ -599,24 +592,21 @@ short icaltime_start_doy_of_week(struct icaltimetype t){
     
     mktime (&stm);
 
+
     /* If we are still in the same year as the original date, we just return
        the day of the year. */
     if (t.year - 1900 == stm.tm_year){
-	return stm.tm_yday+1;
+	start = stm.tm_yday+1;
     } else {
 	/* return negative to indicate that start of week is in
            previous year. */
-	int is_leap = 0;
-	int year = stm.tm_year;
 
-	if( (year % 4 == 0 && year % 100 != 0) ||
-	    year % 400 == 0){
-	    is_leap =1;
-	}
+	int is_leap = icaltime_is_leap_year(stm.tm_year+1900);
 
-	return (stm.tm_yday+1)-(365+is_leap);
+	start = (stm.tm_yday+1)-(365+is_leap);
     }
-    
+
+    return start;
 }
 
 /* FIXME: Doesn't take into account the start day of the week. strftime assumes
@@ -644,6 +634,7 @@ short icaltime_week_number(struct icaltimetype ictt)
     return week_no;
 }
 
+/* The first array is for non-leap years, the seoncd for leap years*/
 static const short days_in_year[2][13] = 
 { /* jan feb mar apr may  jun  jul  aug  sep  oct  nov  dec */
   {  0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 }, 
@@ -652,27 +643,33 @@ static const short days_in_year[2][13] =
 
 /* Returns the day of the year, counting from 1 (Jan 1st). */
 short icaltime_day_of_year(struct icaltimetype t){
-  int is_leap = 0;
+  int is_leap = icaltime_is_leap_year (t.year);
 
-  if (icaltime_is_leap_year (t.year))
-    is_leap = 1;
-    
   return days_in_year[is_leap][t.month - 1] + t.day;
 }
-
 
 /* Jan 1 is day #1, not 0 */
 struct icaltimetype icaltime_from_day_of_year(short doy,  short year)
 {
-    struct icaltimetype tt = { 0 };
-    int is_leap = 0, month;
+    struct icaltimetype tt={0};
+    int is_leap;
+    int month;
+
+    is_leap = icaltime_is_leap_year(year);
+
+    /* Zero and neg numbers represent days  of the previous year */
+    if(doy <1){
+        year--;
+        is_leap = icaltime_is_leap_year(year);
+        doy +=  days_in_year[is_leap][12];
+    } else if(doy > days_in_year[is_leap][12]){
+        /* Move on to the next year*/
+        is_leap = icaltime_is_leap_year(year);
+        doy -=  days_in_year[is_leap][12];
+        year++;
+    }
 
     tt.year = year;
-    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
-	is_leap = 1;
-
-    assert(doy > 0);
-    assert(doy <= days_in_year[is_leap][12]);
 
     for (month = 11; month >= 0; month--) {
       if (doy > days_in_year[is_leap][month]) {
