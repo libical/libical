@@ -1,3 +1,28 @@
+#======================================================================
+#  FILE: Makefile.am
+#  CREATOR: eric 
+#  
+#  $Id: Makefile.am,v 1.14 2001-02-22 19:22:55 ebusboom Exp $
+#
+#
+# (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of either: 
+#
+#    The LGPL as published by the Free Software Foundation, version
+#    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+#
+#  Or:
+#
+#    The Mozilla Public License Version 1.0. You may obtain a copy of
+#    the License at http://www.mozilla.org/MPL/
+#
+#  The original code is icalcomponent.c
+#
+#======================================================================
+
+
 DESIGNDATA = $(top_srcdir)/design-data
 ICALSCRIPTS = $(top_srcdir)/scripts
 
@@ -31,6 +56,8 @@ libical_la_SOURCES =		\
 	icalparameter.h		\
 	icalparser.c		\
 	icalparser.h		\
+	icalderivedproperty.c	\
+	icalderivedproperty.h	\
 	icalproperty.c		\
 	icalproperty.h		\
 	icalrecur.c		\
@@ -73,6 +100,7 @@ COMBINEDHEADERS =					\
 	$(top_srcdir)/src/libical/icalrecur.h		\
 	icalvalue.h					\
 	icalparameter.h					\
+	icalderivedproperty.h				\
 	icalproperty.h					\
 	$(top_srcdir)/src/libical/pvl.h			\
 	$(top_srcdir)/src/libical/icalcomponent.h	\
@@ -88,8 +116,8 @@ BUILT_SOURCES =			\
 	ical.h			\
 	icalparameter.c		\
 	icalparameter.h		\
-	icalproperty.c		\
-	icalproperty.h		\
+	icalderivedproperty.c	\
+	icalderivedproperty.h	\
 	icalrestriction.c	\
 	icalvalue.c		\
 	icalvalue.h
@@ -121,21 +149,21 @@ icalparameter.c: $(PARAMETERDEPS) icalparameter.h
 
 PROPERTYDEPS =					\
 	$(ICALSCRIPTS)/mkderivedproperties.pl	\
-	$(DESIGNDATA)/prop-to-value.txt		\
+	$(DESIGNDATA)/properties.csv		\
 	$(DESIGNDATA)/value-types.csv		\
-	icalproperty.c.in			\
-	icalproperty.h.in
+	icalderivedproperty.c.in		\
+	icalderivedproperty.h.in
 
 
-icalproperty.h: $(PROPERTYDEPS)
+icalderivedproperty.h: $(PROPERTYDEPS)
 	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedproperties.pl \
-		-i $(srcdir)/icalproperty.h.in -h $(DESIGNDATA)/prop-to-value.txt \
-		${DESIGNDATA}/value-types.csv > icalproperty.h 
+		-i $(srcdir)/icalderivedproperty.h.in -h $(DESIGNDATA)/properties.csv\
+		${DESIGNDATA}/value-types.csv > icalderivedproperty.h 
 
-icalproperty.c: $(PROPERTYDEPS) icalproperty.h 
+icalderivedproperty.c: $(PROPERTYDEPS) icalproperty.h 
 	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedproperties.pl \
-		-i $(srcdir)/icalproperty.c.in -c $(DESIGNDATA)/prop-to-value.txt \
-		${DESIGNDATA}/value-types.csv > icalproperty.c
+		-i $(srcdir)/icalderivedproperty.c.in -c $(DESIGNDATA)/properties.csv \
+		${DESIGNDATA}/value-types.csv > icalderivedproperty.c
 
 # restrictions
 
@@ -172,8 +200,8 @@ CONFIG_CLEAN_FILES = y.output
 CLEANFILES += $(BUILT_SOURCES)
 
 EXTRA_DIST =			\
-	icalparameter.c.in	\
-	icalparameter.h.in	\
+	icalderivedparameter.c.in \
+	icalderivedparameter.h.in \
 	icalproperty.c.in	\
 	icalproperty.h.in	\
 	icalrestriction.c.in	\
