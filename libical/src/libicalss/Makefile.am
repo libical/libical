@@ -93,12 +93,12 @@ icalss.h: $(COMBINEDHEADERS)
 	echo 'extern "C" {'               >> icalss.h
 	echo '#endif'                     >> icalss.h
 	echo '/*'                         >> icalss.h
-	echo ' $$Id: Makefile.am,v 1.18 2002-10-30 19:52:58 acampi Exp $$'                    >> icalss.h
+	echo ' $$''Id''$$'                >> icalss.h
 	echo '*/'                         >> icalss.h
 	cat $(COMBINEDHEADERS)				\
 	| egrep -v "#include.*\"ical"			\
 	| egrep -v "#include.*\"pvl\.h\""		\
-	| egrep -v "\$$(Id|Locker): .+\$$" >> icalss.h
+	| egrep -v '\$$(Id|Locker): .+\$$'>> icalss.h
 	echo '#ifdef __cplusplus'         >> icalss.h
 	echo '};'                         >> icalss.h
 	echo '#endif'                     >> icalss.h
