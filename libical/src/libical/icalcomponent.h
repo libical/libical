@@ -242,13 +242,19 @@ void icalcomponent_add_attendee(icalcomponent *comp,
 
 int icalcomponent_remove_attendee(icalcomponent *comp, char* cuid);
 
-/* Get the Nth attendee. Out of range indices return an attendee
+void icalcomponent_set_sequence(icalcomponent* comp, int v);
+int icalcomponent_get_sequence(icalcomponent* comp);
+
+void icalcomponent_set_status(icalcomponent* comp, int v);
+int icalcomponent_get_status(icalcomponent* comp);
+
+
+/** Get the Nth attendee. Out of range indices return an attendee
    with cuid == 0 */
 struct icalattendeetype icalcomponent_get_attendee(icalcomponent *comp,
   int index);
 
-/**
-    Calls the given function for each TZID parameter found in the
+/** Calls the given function for each TZID parameter found in the
     component, and any subcomponents. */
 void icalcomponent_foreach_tzid(icalcomponent* comp,
 				void (*callback)(icalparameter *param, void *data),
@@ -258,6 +264,18 @@ void icalcomponent_foreach_tzid(icalcomponent* comp,
     TZID, or NULL if it can't be found. */
 icaltimezone* icalcomponent_get_timezone(icalcomponent* comp,
 					 const char *tzid);
+
+int icalproperty_recurrence_is_excluded(icalcomponent *comp,
+                                       struct icaltimetype *dtstart,
+                                       struct icaltimetype *recurtime); 
+
+void icalcomponent_foreach_recurrence(icalcomponent* comp,
+				      struct icaltimetype start,
+				      struct icaltimetype end,
+			void (*callback)(icalcomponent *comp, 
+                                         struct icaltime_span *span, 
+                                         void *data),
+			      void *callback_data);
 
 
 /*************** Type Specific routines ***************/
