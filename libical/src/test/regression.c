@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.53 2002-06-27 01:12:09 acampi Exp $
+  $Id: regression.c,v 1.54 2002-06-28 10:53:45 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -29,6 +29,7 @@
 
 #include "ical.h"
 #include "icalss.h"
+#include "icalvcal.h"
 
 #include "regression.h"
 
@@ -50,8 +51,6 @@
 typedef int pid_t;
 #endif
 
-extern int VERBOSE;
-
 
 /* For GNU libc, strcmp appears to be a macro, so using strcmp in
  assert results in incomprehansible assertion messages. This
@@ -64,7 +63,7 @@ int regrstrcmp(const char* a, const char* b){
 /* This example creates and minipulates the ical object that appears
  * in rfc 2445, page 137 */
 
-char str[] = "BEGIN:VCALENDAR\
+static char str[] = "BEGIN:VCALENDAR\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\
 VERSION:2.0\
 BEGIN:VTIMEZONE\
@@ -110,7 +109,7 @@ END:VCALENDAR";
 
 /* Return a list of all attendees who are required. */
    
-char** get_required_attendees(icalcomponent* event)
+static char** get_required_attendees(icalcomponent* event)
 {
     icalproperty* p;
     icalparameter* parameter;
@@ -122,7 +121,7 @@ char** get_required_attendees(icalcomponent* event)
     attendees = malloc(max * (sizeof (char *)));
 
     ok("event is non null", (event != 0));
-    assert(icalcomponent_isa(event) == ICAL_VEVENT_COMPONENT);
+    int_is("event is a VEVENT", icalcomponent_isa(event), ICAL_VEVENT_COMPONENT);
     
     for(
 	p = icalcomponent_get_first_property(event,ICAL_ATTENDEE_PROPERTY);
@@ -150,7 +149,7 @@ char** get_required_attendees(icalcomponent* event)
 /* If an attendee has a PARTSTAT of NEEDSACTION or has no PARTSTAT
    parameter, change it to TENTATIVE. */
    
-void update_attendees(icalcomponent* event)
+static void update_attendees(icalcomponent* event)
 {
     icalproperty* p;
     icalparameter* parameter;
@@ -602,15 +601,14 @@ void test_memory()
 }
 
 
-void test_store()
+void test_dirset()
 {
-
     icalcomponent *c;
     icalgauge *gauge;
     icalerrorenum error;
     icalcomponent *next, *itr;
-    icalfileset* cluster;
-    icaldirset *s, *s2;
+    icalset* cluster;
+    icalset *s, *s2;
     struct icalperiodtype rtime;
     int i;
     int count = 0;
@@ -656,7 +654,6 @@ void test_store()
 		continue;
 	    }
 
-	    assert(itr != 0);
 	    
 	    /* Change the dtstart and dtend times in the component
                pointed to by Itr*/
@@ -697,7 +694,7 @@ void test_store()
 	}
     }
     
-    gauge = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE VEVENT.SUMMARY = 'Submit Income Taxes' OR VEVENT.SUMMARY = 'Bastille Day Party'");
+    gauge = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE VEVENT.SUMMARY = 'Submit Income Taxes' OR VEVENT.SUMMARY = 'Bastille Day Party'", 0);
 
     icaldirset_select(s,gauge);
 
@@ -887,8 +884,8 @@ void test_restriction()
 void test_calendar()
 {
     icalcomponent *comp;
-    icalfileset *c;
-    icaldirset *s;
+    icalset *c;
+    icalset *s;
     icalcalendar* calendar;
     icalerrorenum error;
     struct icaltimetype atime = icaltime_from_timet( time(0),0);
@@ -922,13 +919,13 @@ void test_calendar()
 
     error = icaldirset_add_component(s,comp);
     
-    assert(error == ICAL_NO_ERROR);
+    ok("Adding Component to dirset", (error == ICAL_NO_ERROR));
 
     c = icalcalendar_get_properties(calendar);
 
     error = icalfileset_add_component(c,icalcomponent_new_clone(comp));
 
-    assert(error == ICAL_NO_ERROR);
+    ok("Adding Clone Component to dirset", (error == ICAL_NO_ERROR));
 
     icalcalendar_free(calendar);
 
@@ -995,15 +992,17 @@ void test_expand_recurrence(){
 
     time_t arr[10];
     time_t now = 931057385;
-    int i;
+    int i, numfound = 0;
     icalrecur_expand_recurrence( "FREQ=MONTHLY;BYDAY=MO,WE", now,
                                  5, arr );
 
     if (VERBOSE) printf("Start %s",ctime(&now) );
+
     for (i=0; i<5; i++) {
+      numfound++;
       if (VERBOSE) printf("i=%d  %s\n", i, ctime(&arr[i]) );
     }
-    
+    int_is("Get an array of 5 items", numfound, 5);
 }
 
 
@@ -1349,13 +1348,14 @@ void test_dtstart(){
 
 void do_test_time(char* zone)
 {
-    struct icaltimetype ictt, icttutc, icttzone, icttutczone, icttdayl, 
+    struct icaltimetype ictt, icttutc, icttzone, icttdayl, 
 	icttla, icttny,icttphoenix, icttlocal, icttnorm;
     time_t tt,tt2, tt_p200;
-    int offset_la, offset_tz;
+    int offset_tz;
     icalvalue *v;
     short day_of_week,start_day_of_week, day_of_year;
-    icaltimezone *azone, *lazone, *utczone;
+    icaltimezone *azone, *utczone;
+    char msg[256];
 
     icalerror_errors_are_fatal = 0;
 
@@ -1363,57 +1363,91 @@ void do_test_time(char* zone)
     utczone = icaltimezone_get_utc_timezone();
 
     /* Test new API */
-    printf("\n---> From time_t \n");
-    tt = time(NULL);
-    printf("Orig        : %s\n",ical_timet_string(tt));
+    if (VERBOSE) printf("\n---> From time_t \n");
 
-    printf("\nicaltime_from_timet(tt,0) (DEPRECATED)\n");
+    tt = 1025127869;		/* stick with a constant... */
+
+    if (VERBOSE) printf("Orig        : %s\n",ical_timet_string(tt));
+    if (VERBOSE) printf("\nicaltime_from_timet(tt,0) (DEPRECATED)\n");
+
     ictt = icaltime_from_timet(tt, 0);
 
-    printf("As UTC      : %s\n", ictt_as_string(ictt));
+    is("icaltime_from_timet(1025127869) as UTC", ictt_as_string(ictt),
+       "2002-06-26 21:44:29 (floating)");
 
-    printf("\nicaltime_from_timet_with_zone(tt,0,NULL)\n");
     ictt = icaltime_from_timet_with_zone(tt, 0, NULL);
-    printf("Floating    : %s\n", ictt_as_string(ictt));
+    is("Floating time from time_t",
+       ictt_as_string(ictt), "2002-06-26 21:44:29 (floating)");
 
-    printf("\nicaltime_from_timet_with_zone(tt,0,zone)\n");
     ictt = icaltime_from_timet_with_zone(tt, 0, azone);
-    printf("As zone      : %s\n", ictt_as_string(ictt));
+    ok("icaltime_from_timet_with_zone(tt,0,zone) as zone", 
+       strncmp(ictt_as_string(ictt), "2002-06-26 21:44:29", 19)==0);
 
-    printf("\nicaltime_from_timet_with_zone(tt,0,utc)\n");
     ictt = icaltime_from_timet_with_zone(tt, 0, utczone);
-    printf("As UTC      : %s\n", ictt_as_string(ictt));
 
-    printf("\n---> Convert from floating \n");
+    is("icaltime_from_timet_with_zone(tt,0,utc)", ictt_as_string(ictt),
+       "2002-06-26 21:44:29 Z UTC");
+
+    if (VERBOSE) printf("\n---> Convert from floating \n");
+
     ictt = icaltime_from_timet_with_zone(tt, 0, NULL);
     icttutc = icaltime_convert_to_zone(ictt, utczone);
-    printf("To UTC      : %s\n", ictt_as_string(icttutc));
+
+    is("Convert from floating to UTC",
+       ictt_as_string(icttutc),
+       "2002-06-26 21:44:29 Z UTC");
+	   
     icttzone = icaltime_convert_to_zone(ictt, azone);
-    printf("To zone      : %s\n", ictt_as_string(icttzone));
+
+    ok("Convert from floating to zone",
+       (strncmp(ictt_as_string(icttzone), "2002-06-26 21:44:29", 19)==0));
+
     tt2 = icaltime_as_timet(icttzone);
 
-    printf("\n---> Convert from UTC \n");
+    if (VERBOSE) printf("\n---> Convert from UTC \n");
+
     ictt = icaltime_from_timet_with_zone(tt, 0, utczone);
     icttutc = icaltime_convert_to_zone(ictt, utczone);
-    printf("To UTC      : %s\n", ictt_as_string(icttutc));
+
+    is("Convert from UTC to UTC",
+       ictt_as_string(icttutc),
+       "2002-06-26 21:44:29 Z UTC");
+
     icttzone = icaltime_convert_to_zone(ictt, azone);
-    printf("To zone      : %s\n", ictt_as_string(icttzone));
+
+    ok("Convert from UTC to zone (test year/mon only..)",
+       (strncmp(ictt_as_string(icttzone), "2002-06-26 21:44:29", 7)==0));
+
     tt2 = icaltime_as_timet(icttzone);
-    printf("No conversion: %s\n", ical_timet_string(tt2));
+
+    if (VERBOSE) printf("No conversion: %s\n", ical_timet_string(tt2));
+
+    ok("No conversion at all (test year/mon only)",
+       (strncmp(ical_timet_string(tt2), "2002-06-26 21:44:29 Z",7) == 0));
+
     tt2 = icaltime_as_timet_with_zone(icttzone, utczone);
-    printf("Back to UTC  : %s\n", ical_timet_string(tt2));
+    if (VERBOSE) printf("Back to UTC  : %s\n", ical_timet_string(tt2));
 
     ok("test time conversion routines",(tt==tt2));
 
-    printf("\n---> Convert from zone \n");
+    if (VERBOSE) printf("\n---> Convert from zone \n");
     ictt = icaltime_from_timet_with_zone(tt, 0, azone);
     icttzone = icaltime_convert_to_zone(ictt, azone);
+
+    if (VERBOSE)
     printf("To zone      : %s\n", ictt_as_string(icttzone));
     icttutc = icaltime_convert_to_zone(ictt, utczone);
+
+    if (VERBOSE)
     printf("To UTC      : %s\n", ictt_as_string(icttutc));
     tt2 = icaltime_as_timet(icttutc);
+
+    if (VERBOSE)
     printf("No conversion: %s\n", ical_timet_string(tt2));
+
     tt2 = icaltime_as_timet_with_zone(icttutc, azone);
+
+    if (VERBOSE)
     printf("Back to zone  : %s\n", ical_timet_string(tt2));
 
     ok("test time conversion, round 2", (tt==tt2));
@@ -1426,8 +1460,10 @@ void do_test_time(char* zone)
     /* Fri Nov  3 10:30:30 PST 2000 in PST 
        Fri Nov  3 18:30:30 PST 2000 in UTC */
     
+    if (VERBOSE) {
     printf(" Normalize \n");
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
+    }
     icttnorm = ictt;
     icttnorm.second -= 60 * 60 * 24 * 5;
     icttnorm = icaltime_normalize(icttnorm);
@@ -1435,8 +1471,10 @@ void do_test_time(char* zone)
     icttnorm.day += 60;
     icttnorm = icaltime_normalize(icttnorm);
     printf("+60 d       : %s\n", ictt_as_string(icttnorm));
+
     /** add test case here.. **/
 
+    if (VERBOSE) 
     printf("\n As time_t \n");
 
     tt2 = icaltime_as_timet(ictt);
@@ -1462,49 +1500,57 @@ void do_test_time(char* zone)
 	icaltimezone_get_builtin_timezone(zone));
     printf("As local    : %s\n", ictt_as_string(icttlocal));
 
-    printf("\n Convert to and from lib c \n");
+    if (VERBOSE) printf("\n Convert to and from lib c \n");
 
-    printf("System time is: %s\n",ical_timet_string(tt));
+    if (VERBOSE) printf("System time is: %s\n",ical_timet_string(tt));
 
     v = icalvalue_new_datetime(ictt);
 
+    if (VERBOSE) 
     printf("System time from libical: %s\n",icalvalue_as_ical_string(v));
 
 	icalvalue_free(v);
 
     tt2 = icaltime_as_timet(ictt);
+
+    if (VERBOSE)
     printf("Converted back to libc: %s\n",ical_timet_string(tt2));
     
-    printf("\n Incrementing time  \n");
+    if (VERBOSE) printf("\n Incrementing time  \n");
 
     icttnorm = ictt;
 
     icttnorm.year++;
     tt2 = icaltime_as_timet(icttnorm);
+    if (VERBOSE)
     printf("Add a year: %s\n",ical_timet_string(tt2));
 
     icttnorm.month+=13;
     tt2 = icaltime_as_timet(icttnorm);
+    if (VERBOSE)
     printf("Add 13 months: %s\n",ical_timet_string(tt2));
 
     icttnorm.second+=90;
     tt2 = icaltime_as_timet(icttnorm);
+    if (VERBOSE)
     printf("Add 90 seconds: %s\n",ical_timet_string(tt2));
 
-    printf("\n Day Of week \n");
+    if (VERBOSE) printf("\n Day Of week \n");
 
     day_of_week = icaltime_day_of_week(ictt);
     start_day_of_week = icaltime_start_doy_of_week(ictt);
     day_of_year = icaltime_day_of_year(ictt);
 
+    sprintf(msg, "Testing day of week %d", day_of_week);
+    int_is(msg, day_of_week, 6);
 
-    printf("Today is day of week %d, day of year %d\n",day_of_week,day_of_year);
-    printf("Week started n doy of %d\n",start_day_of_week);
-    assert(day_of_week == 6);
-    assert(day_of_year == 308);
-    assert(start_day_of_week == 303 );
+    sprintf(msg, "Testing day of year %d",day_of_year);
+    int_is(msg, day_of_year, 308);
 
-    printf("\n TimeZone Conversions \n");
+    sprintf(msg, "Week started on doy of %d", start_day_of_week);
+    int_is(msg, start_day_of_week , 303);
+
+    if (VERBOSE) printf("\n TimeZone Conversions \n");
 
 /*
     icttla = ictt;
@@ -1515,14 +1561,14 @@ void do_test_time(char* zone)
     icttla = icaltime_convert_to_zone(ictt,
 	icaltimezone_get_builtin_timezone("America/Los_Angeles"));
 
-    assert(icttla.hour == 10);
+    int_is("Converted hour in America/Los_Angeles is 10", icttla.hour, 10);
 
-    icttutc = icaltime_convert_to_zone(icttla,
-	icaltimezone_get_utc_timezone());
-    assert(icaltime_compare(icttla,
-			 icaltime_from_string("20001103T103030"))==0);
+    icttutc = icaltime_convert_to_zone(icttla,icaltimezone_get_utc_timezone());
 
-    assert(icaltime_compare(icttutc, ictt) == 0); 
+    ok("America/Los_Angeles local time is 2000-11-03 10:30:30",
+       (icaltime_compare(icttla,icaltime_from_string("20001103T103030"))==0));
+
+    ok("Test conversion back to UTC",(icaltime_compare(icttutc, ictt) == 0)); 
 
     icttny  = icaltime_convert_to_zone(ictt,
 	icaltimezone_get_builtin_timezone("America/New_York"));
@@ -1530,22 +1576,27 @@ void do_test_time(char* zone)
     icttphoenix = icaltime_convert_to_zone(ictt,
 	icaltimezone_get_builtin_timezone("America/Phoenix"));
 
+    if (VERBOSE) {
     printf("Orig (ctime): %s\n", ical_timet_string(tt) );
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
     printf("UTC         : %s\n", ictt_as_string(icttutc));
     printf("Los Angeles : %s\n", ictt_as_string(icttla));
     printf("Phoenix     : %s\n", ictt_as_string(icttphoenix));
     printf("New York    : %s\n", ictt_as_string(icttny));
-
+    }
+    /** @todo Check results for Phoenix here?... **/
 
     /* Daylight savings test for New York */
+    if (VERBOSE) {
     printf("\n Daylight Savings \n");
 
     printf("Orig (ctime): %s\n", ical_timet_string(tt) );
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
     printf("NY          : %s\n", ictt_as_string(icttny));
+    }
 
-    assert(strncmp(ictt_as_string(icttny),"2000-11-03 13:30:30",19)==0);
+    ok("Converted time in zone America/New_York is 2000-11-03 13:30:30",
+       (strncmp(ictt_as_string(icttny),"2000-11-03 13:30:30",19)==0));
 
     tt_p200 = tt +  200 * 24 * 60 * 60 ; /* Add 200 days */
 
@@ -1554,29 +1605,41 @@ void do_test_time(char* zone)
     icttny = icaltime_convert_to_zone(icttdayl,
 	icaltimezone_get_builtin_timezone("America/New_York"));
 
+    if (VERBOSE) {
     printf("Orig +200d  : %s\n", ical_timet_string(tt_p200) );
     printf("NY+200D     : %s\n", ictt_as_string(icttny));
+    }
 
-    assert(strncmp(ictt_as_string(icttny),"2001-05-22 14:30:30",19)==0);
+    ok("Converted time +200d in zone America/New_York is 2001-05-22 14:30:30",
+       (strncmp(ictt_as_string(icttny),"2001-05-22 14:30:30",19)==0));
+
 
     /* Daylight savings test for Los Angeles */
 
     icttla = icaltime_convert_to_zone(ictt,
 	icaltimezone_get_builtin_timezone("America/Los_Angeles"));
 
+    if (VERBOSE) {
     printf("\nOrig (ctime): %s\n", ical_timet_string(tt) );
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
     printf("LA          : %s\n", ictt_as_string(icttla));
+    }
 
-    assert(strncmp(ictt_as_string(icttla),"2000-11-03 10:30:30",19)==0);
+    ok("Converted time in zone America/Los_Angeles is 2000-11-03 10:30:30",
+       (strncmp(ictt_as_string(icttla),"2000-11-03 10:30:30",19)==0));
+
     
     icttla = icaltime_convert_to_zone(icttdayl,
 	icaltimezone_get_builtin_timezone("America/Los_Angeles"));
 
+    if (VERBOSE) {
     printf("Orig +200d  : %s\n", ical_timet_string(tt_p200) );
     printf("LA+200D     : %s\n", ictt_as_string(icttla));
+    }
 
-    assert(strncmp(ictt_as_string(icttla),"2001-05-22 11:30:30",19)==0);
+    ok("Converted time +200d in zone America/Los_Angeles is 2001-05-22 11:30:30",
+       (strncmp(ictt_as_string(icttla),"2001-05-22 11:30:30",19)==0));
+
 
     icalerror_errors_are_fatal = 1;
 }
@@ -1729,9 +1792,9 @@ void test_time()
 
     do_test_time(0);
 
-    for(i = 0; zones[i] != 0; i++){
+    for(i = 0; zones[i] != NULL; i++){
 
-	printf(" ######### Timezone: %s ############\n",zones[i]);
+      if (VERBOSE) printf(" ######### Timezone: %s ############\n",zones[i]);
         
 	do_test_time(zones[i]);
 
@@ -1794,7 +1857,7 @@ void test_overlaps()
 	);
 
     cset =  icalclassify_find_overlaps(set,c);
-    ok("TODO find overlaps 1", cset != NULL);
+    ok("TODO find overlaps 1", (cset != NULL));
 
     if (VERBOSE && cset) printf("%s\n",icalcomponent_as_ical_string(cset));
 
@@ -1826,13 +1889,16 @@ void test_overlaps()
 
 void test_fblist()
 {
-    icalspanlist *sl;
+    icalspanlist *sl, *new_sl;
     icalset* set = icalset_new_file("../../test-data/spanlist.ics");
     struct icalperiodtype period;
+    icalcomponent *comp;
+    int * foo;
+    int i;
 
     sl = icalspanlist_new(set,
-		     icaltime_from_string("19970324T120000Z"),
-		     icaltime_from_string("19990424T020000Z"));
+		     icaltime_from_string("19980101T000000Z"),
+		     icaltime_from_string("19980108T000000Z"));
 		
     ok("open ../../test-data/spanlist.ics", (set!=NULL));
     assert(set!=NULL);
@@ -1852,7 +1918,50 @@ void test_fblist()
 								  "b@foo.com")
 					));
 
+    foo = icalspanlist_as_freebusy_matrix(sl,3600);
+    
+    for (i=0; foo[i] != -1; i++); /* find number entries */
+
+    int_is("Calculating freebusy hourly matrix", i, (7*24));
+
+    if (VERBOSE) {
+      for (i=0; foo[i] != -1; i++) {
+	printf("%d", foo[i]);
+	if ((i % 24) == 23)
+	  printf("\n");
+      }
+      printf("\n\n");
+    }
+
+
+    free(foo);
+
+    foo = icalspanlist_as_freebusy_matrix(sl,3600*24);
+
+    ok("Calculating daily freebusy matrix", (foo!=NULL));
+
+    {
+      char out_str[80] = "";
+      char *strp = out_str;
+
+      for (i=0; foo[i]!=-1; i++){
+	sprintf(strp, "%d", foo[i]);
+	strp++;
+      }
+      is("Checking freebusy validity", out_str, "1121110");
+    }
+    if (VERBOSE) {
+      for (i=0; foo[i] != -1; i++) {
+	printf("%d", foo[i]);
+	if ((i % 7) == 6)
+	  printf("\n");
+      }
+      printf("\n\n");
+    }
+    free(foo);
+
     icalspanlist_free(sl);
+
 
     if (VERBOSE) printf("Unrestricted spanlist\n");
 
@@ -1869,18 +1978,30 @@ void test_fblist()
 				      icaltime_from_string("19970801T120000Z"));
 
 
-    is("Next Free time start 19980101T010000", icaltime_as_ical_string(period.start), "19980101T010000");
-    is("Next Free time end   19980102T010000", icaltime_as_ical_string(period.end), "19980102T010000");
+    is("Next Free time start 19980101T010000", 
+       icaltime_as_ical_string(period.start),
+       "19980101T010000");
 
-    if (VERBOSE) printf("%s\n",
-	   icalcomponent_as_ical_string(icalspanlist_as_vfreebusy(sl,
-								  "a@foo.com",
-								  "b@foo.com")
-					));
+    is("Next Free time end   19980102T010000", 
+       icaltime_as_ical_string(period.end), 
+       "19980102T010000");
 
-    icalspanlist_free(sl);
+    comp = icalspanlist_as_vfreebusy(sl, "a@foo.com", "b@foo.com");
+
+    ok("Calculating VFREEBUSY component", (comp != NULL));
+    if (VERBOSE) printf("%s\n", icalcomponent_as_ical_string(comp));
+
+    new_sl = icalspanlist_from_vfreebusy(comp);
+
+    ok("Calculating spanlist from generated VFREEBUSY component", 
+       (new_sl != NULL));
+
+    if (VERBOSE) icalspanlist_dump(new_sl);
+
+    if (sl) icalspanlist_free(sl);
+    if (new_sl) icalspanlist_free(new_sl);
+
     icalset_free(set);
-
 }
 
 
@@ -2120,8 +2241,6 @@ void test_start_of_week()
     int dow, doy,start_dow;
 
     do{
-        struct tm stm;
-        
         tt1 = icaltime_normalize(tt1);
 
         doy = icaltime_start_doy_of_week(tt1);
@@ -2152,7 +2271,6 @@ void test_start_of_week()
 void test_doy()
 {
     struct icaltimetype tt1, tt2;
-    int year, month;
     short doy,doy2;
     char msg[128];
 
@@ -2310,7 +2428,7 @@ void test_gauge_sql() {
     
     str= "SELECT DTSTART,DTEND,COMMENT FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=NULL));
     if (VERBOSE) icalgauge_dump(g);
 
@@ -2318,7 +2436,7 @@ void test_gauge_sql() {
 
     str="SELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=NULL));
     if (VERBOSE) icalgauge_dump(g);
 
@@ -2326,7 +2444,7 @@ void test_gauge_sql() {
 
     str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=NULL));    
     if (VERBOSE) icalgauge_dump(g);
 
@@ -2334,7 +2452,7 @@ void test_gauge_sql() {
 
     str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=NULL));    
     if (VERBOSE) icalgauge_dump(g);
 
@@ -2342,7 +2460,7 @@ void test_gauge_sql() {
 
     str="SELECT * FROM VEVENT WHERE LOCATION == '104 Forum'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=NULL));    
     if (VERBOSE) icalgauge_dump(g);
 
@@ -2363,7 +2481,7 @@ void test_gauge_compare() {
 		      icaltime_from_string("20000101T000002")),0),0);
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'");
+	"SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'", (c!=0 && g!=0));
     assert(c!=0);
@@ -2375,7 +2493,7 @@ void test_gauge_compare() {
 
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'");
+	"SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'\n", (g!=0));
 
@@ -2385,7 +2503,7 @@ void test_gauge_compare() {
     icalgauge_free(g);
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART != '20000101T000003'");
+	"SELECT * FROM VEVENT WHERE DTSTART != '20000101T000003'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART != '20000101T000003'\n", (c!=0 && g!=0));
 
@@ -2399,7 +2517,7 @@ void test_gauge_compare() {
     /* Less than */
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART < '20000101T000003'");
+	"SELECT * FROM VEVENT WHERE DTSTART < '20000101T000003'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART < '20000101T000003'", (c!=0 && g!=0));
 
@@ -2409,7 +2527,7 @@ void test_gauge_compare() {
     icalgauge_free(g);
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'");
+	"SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'\n", (g!=0));
 
@@ -2422,7 +2540,7 @@ void test_gauge_compare() {
     /* Greater than */
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART > '20000101T000001'");
+	"SELECT * FROM VEVENT WHERE DTSTART > '20000101T000001'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART > '20000101T000001'\n", (g!=0));
 
@@ -2433,7 +2551,7 @@ void test_gauge_compare() {
     icalgauge_free(g);
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'");
+	"SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'\n", (g!=0));
 
@@ -2448,7 +2566,7 @@ void test_gauge_compare() {
     /* Greater than or Equal to */
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000002'");
+	"SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000002'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000002'\n", (g!=0));
 
@@ -2458,7 +2576,7 @@ void test_gauge_compare() {
     icalgauge_free(g);
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'");
+	"SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'\n", (g!=0));
 
@@ -2470,7 +2588,7 @@ void test_gauge_compare() {
     /* Less than or Equal to */
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000002'");
+	"SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000002'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000002'\n", (g!=0));
 
@@ -2481,7 +2599,7 @@ void test_gauge_compare() {
     icalgauge_free(g);
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'");
+	"SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'", 0);
 
     ok("SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'\n", (g!=0));
 
@@ -2502,7 +2620,7 @@ void test_gauge_compare() {
 
     str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000103T000000'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 1);
 
@@ -2510,7 +2628,7 @@ void test_gauge_compare() {
 
     str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 0);
 
@@ -2518,7 +2636,7 @@ void test_gauge_compare() {
 
     str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' or DTSTART < '20000102T000000'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 1);
 
@@ -2536,7 +2654,7 @@ void test_gauge_compare() {
 
     str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000103T000000'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 1);
 
@@ -2544,7 +2662,7 @@ void test_gauge_compare() {
 
     str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 0);
 
@@ -2552,7 +2670,7 @@ void test_gauge_compare() {
 
     str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' or DTSTART < '20000102T000000'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 1);
 
@@ -2582,38 +2700,38 @@ void test_gauge_compare() {
     
     str = "SELECT * FROM VEVENT WHERE VALARM.DTSTART = '20000101T120000'";
 
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 1);
 
     icalgauge_free(g);
 
     g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE COMMENT = 'foo'");
+	"SELECT * FROM VEVENT WHERE COMMENT = 'foo'", 0);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo'";
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 1);
 
     icalgauge_free(g);
 	
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo' AND  VALARM.DTSTART = '20000101T120000'";
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 1);
 
     icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'bar' AND  VALARM.DTSTART = '20000101T120000'";
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 0);
 
     icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'bar' or  VALARM.DTSTART = '20000101T120000'";
-    g = icalgauge_new_from_sql(str);
+    g = icalgauge_new_from_sql(str, 0);
     ok(str, (g!=0));
     int_is("compare",icalgauge_compare(g,c), 1);
 
@@ -2649,13 +2767,13 @@ icalcomponent* make_component(int i){
 }
 void test_fileset()
 {
-    icalfileset *fs;
+    icalset *fs;
     icalcomponent *c;
     int i;
     int comp_count = 0;
     char *path = "test_fileset.ics";
     icalgauge  *g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE DTSTART > '20000103T120000Z' AND DTSTART <= '20000106T120000Z'");
+	"SELECT * FROM VEVENT WHERE DTSTART > '20000103T120000Z' AND DTSTART <= '20000106T120000Z'", 0);
 
     ok("icalgauge_new_from_sql()", (g!=NULL));
 
@@ -2729,13 +2847,11 @@ void test_file_locks()
 #ifndef WIN32
     pid_t pid;
     char *path = "test_fileset_locktest.ics";
-    icalfileset *fs;
+    icalset *fs;
     icalcomponent *c, *c2;
     struct icaldurationtype d;
     int i;
     int final,sec;
-
-    icalfileset_safe_saves = 1;
 
     icalerror_clear_errno();
 
@@ -3202,7 +3318,7 @@ void test_langbind()
     is ("Set attendee parameter",
 	icalproperty_as_ical_string(p),
 	"ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL:MAILTO:\n"
-" employee-A@host.com\n");
+	" employee-A@host.com\n");
  
     icalproperty_set_value_from_string(p,"mary@foo.org","TEXT");
 
@@ -3339,7 +3455,6 @@ void test_utcoffset()
 
 void test_attach()
 {
-    icalvalue *v;
     icalcomponent *c;
 
     static const char test_icalcomp_str[] =
@@ -3355,6 +3470,25 @@ void test_attach()
 }
 
 
+void test_vcal(void)
+{
+  VObject *vcal = 0;
+  icalcomponent *comp;
+  char* file = "../../test-data/user-cal.vcf";
+
+  vcal = Parse_MIME_FromFileName(file);
+    
+  ok("Parsing ../../test-data/user-cal.vcf", (vcal != 0));
+
+  comp = icalvcal_convert(vcal);
+
+  ok("Converting to ical component", (comp != 0));
+  
+  if (VERBOSE && comp)
+    printf("%s\n",icalcomponent_as_ical_string(comp));
+    
+}
+
 int main(int argc, char *argv[])
 {
     int c;
@@ -3363,7 +3497,6 @@ int main(int argc, char *argv[])
     int errflg=0;
     char* program_name = strrchr(argv[0],'/');
     int do_test = 0;
-    int i;
     int do_header = 0;
 
     set_zone_directory("../../zoneinfo");
@@ -3373,13 +3506,16 @@ int main(int argc, char *argv[])
 
 
 #ifndef WIN32
-    while ((c = getopt(argc, argv, "lv")) != -1) {
+    while ((c = getopt(argc, argv, "lvq")) != -1) {
       switch (c) {
       case 'v': {
 	VERBOSE = 1;
 	break;
       }
-
+      case 'q': {
+	QUIET = 1;
+	break;
+      }
       case 'l': {
 	do_header = 1;;
       }
@@ -3410,24 +3546,18 @@ int main(int argc, char *argv[])
     test_run("Test Recurring Events File", test_recur_file, do_test, do_header);
     test_run("Test parameter bug", test_recur_parameter_bug, do_test, do_header);
     test_run("Test Array Expansion", test_expand_recurrence, do_test, do_header);
-    test_run("Test FBlist", test_fblist, do_test, do_header);
+    test_run("Test Free/Busy lists", test_fblist, do_test, do_header);
     test_run("Test Overlaps", test_overlaps, do_test, do_header);
     
     test_run("Test Span", test_icalcomponent_get_span, do_test, do_header);
-#ifndef _AIX
     test_run("Test Gauge SQL", test_gauge_sql, do_test, do_header);
     test_run("Test Gauge Compare", test_gauge_compare, do_test, do_header);
     test_run("Test File Set", test_fileset, do_test, do_header);
-#endif
+    test_run("Test File Set (Extended)", test_fileset_extended, do_test, do_header);
+    test_run("Test Dir Set", test_dirset, do_test, do_header);
+    test_run("Test Dir Set (Extended)", test_dirset_extended, do_test, do_header);
     
-    /*
-      File locking is currently broken
-    if(tfile ==1 || tfile == 3){
-	printf("\n------------Test File Locks--------------\n");
-	test_file_locks, do_test, do_header);
-    }
-    */
-    
+    test_run("Test File Locks", test_file_locks, do_test, do_header);
     test_run("Test X Props and Params", test_x, do_test, do_header);
     test_run("Test Trigger", test_trigger, do_test, do_header);
     test_run("Test Restriction", test_restriction, do_test, do_header);
@@ -3455,9 +3585,20 @@ int main(int argc, char *argv[])
     test_run("Test Memory", test_memory, do_test, do_header);
     test_run("Test Attachment", test_attach, do_test, do_header);
     test_run("Test icalcalendar", test_calendar, do_test, do_header);
-#ifndef _AIX
-    test_run("Test Storage", test_store, do_test, do_header);
+    test_run("Test Dirset", test_dirset, do_test, do_header);
+    test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
+
+    /** OPTIONAL TESTS go here... **/
+
+#ifdef WITH_CXX
+    test_run("Test C++ API", test_cxx, do_test, do_header);
 #endif
+
+#ifdef WITH_BDB
+    test_run("Test BDB Set", test_bdbset, do_test, do_header);
+#endif
+
+
     icaltimezone_free_builtin_timezones();
     icalmemory_free_ring();
     free_zone_directory();

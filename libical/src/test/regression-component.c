@@ -8,7 +8,6 @@ void create_simple_component(void)
 {
 
     icalcomponent* calendar;
-    struct icalperiodtype rtime;
     icalproperty *version, *bogus;
       
     /* Create calendar and add properties */
@@ -81,7 +80,6 @@ void create_new_component()
     struct icaldatetimeperiodtype rtime;
     icalproperty* property;
     char *calendar_as_string;
-    int diff;
 
     rtime.period.start = icaltime_from_timet( 1023398689,0);
     rtime.period.end = icaltime_from_timet( 1023409689,0);
@@ -273,9 +271,10 @@ void create_new_component()
     icalcomponent_add_component(calendar,event);
     
     calendar_as_string = icalcomponent_as_ical_string(calendar);
-    diff = strcmp(create_new_component_str, calendar_as_string);
-    ok("build large, complex component", 
-       (diff==0));
+
+    is("build large, complex component", 
+       calendar_as_string,
+       create_new_component_str);
 
     if (VERBOSE && calendar)
       printf("%s\n",icalcomponent_as_ical_string(calendar));
@@ -374,7 +373,7 @@ void create_new_component_with_va_args()
 }
 
 static void print_span(int c, struct icaltime_span span ){
-  printf("span-->%d, %d\n", span.start, span.end);
+  printf("span-->%d, %d\n", (int)span.start, (int)span.end);
     if (span.start == 0)
 	printf("#%02d start: (empty)\n",c);
     else 

@@ -4,6 +4,8 @@
 #include <string.h>	/* strcmp() */
 
 static char ictt_str[1024];
+int VERBOSE = 0;
+int QUIET = 0;
 
 const char* ical_timet_string(const time_t t)
 {
@@ -46,17 +48,24 @@ char* icaltime_as_ctime(struct icaltimetype t)
 static int die_on_errors = 0;
 static int testnumber    = 0;
 static int failed        = 0;
+static int current_set   = 0;
+
+static struct {int set; int test;} failed_tests[1024];
 
 void die_on_errors_set(int val) {
   die_on_errors = 1;
 }
 
-void _ok(const char* test_name, int success, char *file, int linenum, char *test) {
+void _ok(char* test_name, int success, char *file, int linenum, char *test) {
   testnumber++;
 
+  if (!QUIET || (QUIET && !success))
   printf("%sok %d - %s\n", (success)?"" : "not ", testnumber, test_name);
   if (!success) {
+    failed_tests[failed].set  = current_set;
+    failed_tests[failed].test = testnumber;
     failed++;
+
     printf("# test failed: \"%s\"\n", test);
     printf("#          at: %s:%-d\n", file, linenum);
   }
@@ -66,7 +75,7 @@ void _ok(const char* test_name, int success, char *file, int linenum, char *test
   }
 }
 
-void _is(const char* test_name, const char* str1, const char* str2, char *file, int linenum) {
+void _is(char* test_name, const char* str1, const char* str2, char *file, int linenum) {
   int diff;
   
   if (str1 == NULL || str2 == NULL) {
@@ -75,13 +84,13 @@ void _is(const char* test_name, const char* str1, const char* str2, char *file, 
     diff = strcmp(str1, str2);
   }
 
-  if (!test_name) test_name = str2;
+  if (!test_name) test_name = "()";
 
   _ok(test_name, (diff==0), file, linenum, "");
   
   if (diff) {
-    printf("#      got:\n%s\n", str1);
-    printf("# expected:\n%s\n", str2);
+    printf("#      got: %s\n", str1 ? str1 : "(null)");
+    printf("# expected: %s\n", str2 ? str2 : "(null)");
   }
 }
 
@@ -95,30 +104,47 @@ void _int_is(char* test_name, int i1, int i2, char *file, int linenum) {
 }
 
 
-int VERBOSE = 0;
-
 void verbose(int newval) {
   VERBOSE = newval;
 }
 
 void test_start(int numtests) {
   if (numtests) {
+    if (!QUIET)
     printf("1..%-d\n", numtests);
   } else {
+    if (!QUIET)
     printf("1..\n");
   }
 }
 
 void test_header(char *header, int set) {
+  if (!QUIET)
   printf("########## %-40s (%d) ##########\n", header, set);
+  current_set = set;
 }
 
 void test_end(void) {
   int pct;
 
   if (failed) {
+    int i, oldset = 0;
+    
     pct = ((testnumber - failed)*100)/testnumber;
     printf("\n        Failed %d/%d tests, %2d%% okay\n", failed, testnumber, pct);
+    printf("\n        Failed tests:\n          ");
+    for (i = 0; i < failed; i++) {
+      int this_set = failed_tests[i].set;
+      char *prefix = "";
+      if (this_set != oldset) {
+	prefix = "\n          ";
+	oldset = this_set;
+      }
+      
+      printf("%s%d/%d ", prefix, this_set, failed_tests[i].test);
+    }
+    printf("\n");
+      
   } else {
     printf("\n        All Tests Successful.\n");
   }
@@ -136,6 +162,7 @@ void test_run(char *test_name,
   
   if (!headeronly && (do_test==0 || do_test == test_set)) {
     (*test_fcn)();
+    if (!QUIET)
     printf("\n");
   }
   test_set++;

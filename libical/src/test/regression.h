@@ -1,3 +1,9 @@
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+extern int VERBOSE;
+extern int QUIET;
 
 /* regression-component.c */
 void create_new_component(void);
@@ -12,9 +18,18 @@ void test_classify(void);
 /* regression-recur.c */
 void test_recur_file(void);
 
+/* regression-cxx.c */
+void test_cxx(void);
+
+/* regression-storage.c */
+void test_fileset_extended(void);
+void test_dirset_extended(void);
+void test_bdbset(void);
+
 /* regression-utils.c */
 const char* ical_timet_string(const time_t t);
 const char* ictt_as_string(struct icaltimetype t);
+char* icaltime_as_ctime(struct icaltimetype t);
 
 
 void _ok(char*name, int result, char*file, int linenum, char *test);
@@ -32,3 +47,7 @@ void test_run(char *test_name,
 
 
 
+
+#ifdef  __cplusplus
+}
+#endif
