@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.3 2001-03-11 00:49:16 plewis Exp $
+#  $Id: Property.py,v 1.4 2001-03-27 04:12:40 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -122,7 +122,7 @@ class Property:
             
             if kind != None:
                 # Get the default kind of value for this property 
-                default_kind = icalenum_value_kind_to_string(icalenum_property_kind_to_value_kind(icalenum_string_to_property_kind(self.name())))
+                default_kind = icalvalue_kind_to_string(icalproperty_kind_to_value_kind(icalproperty_string_to_kind(self.name())))
 
                 if(kind != default_kind):
                     self.__setitem__('VALUE',kind)

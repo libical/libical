@@ -39,7 +39,7 @@ typedef void icalproperty;
 icalcomponent* icalparser_parse_string(char* str);
 
 
-icalcomponent* icalcomponent_new(icalcomponent_kind kind);
+icalcomponent* icalcomponent_new(int kind);
 icalcomponent* icalcomponent_new_clone(icalcomponent* component);
 icalcomponent* icalcomponent_new_from_string(char* str);
 
@@ -53,16 +53,16 @@ void icalcomponent_convert_errors(icalcomponent* component);
 icalproperty* icalcomponent_get_current_property(icalcomponent* component);
 
 icalproperty* icalcomponent_get_first_property(icalcomponent* component,
-					      icalproperty_kind kind);
+					      int kind);
 icalproperty* icalcomponent_get_next_property(icalcomponent* component,
-					      icalproperty_kind kind);
+					      int kind);
 
 icalcomponent* icalcomponent_get_current_component (icalcomponent* component);
 
 icalcomponent* icalcomponent_get_first_component(icalcomponent* component,
-					      icalcomponent_kind kind);
+					      int kind);
 icalcomponent* icalcomponent_get_next_component(icalcomponent* component,
-					      icalcomponent_kind kind);
+					      int kind);
 
 void icalcomponent_add_property(icalcomponent* component,
 				icalproperty* property);
@@ -72,14 +72,10 @@ void icalcomponent_remove_property(icalcomponent* component,
 
 
 icalcomponent* icalcomponent_get_parent(icalcomponent* component);
-
-icalcomponent_kind icalcomponent_isa(icalcomponent* component);
+int icalcomponent_isa(icalcomponent* component);
 
 int icalrestriction_check(icalcomponent* comp);
 
-
-/* actually returns icalproperty_kind */
-int icalproperty_string_to_kind(const char* string); 
 
 /* actually takes icalproperty_kind */
 icalproperty* icalproperty_new(int kind);
@@ -104,20 +100,18 @@ void icalerror_restore(const char* error, int es);
 char* icalerror_perror();
 void icalerror_clear_errno(void);
 
-const char* icalproperty_kind_to_string(icalproperty_kind kind);
-icalproperty_kind icalproperty_string_to_kind(const char* string);
+const char* icalproperty_kind_to_string(int kind);
+int icalproperty_string_to_kind(const char* string);
+int icalproperty_kind_to_value_kind(int kind);
 
-const char* icalvalue_kind_to_string(icalvalue_kind kind);
-icalvalue_kind icalvalue_string_to_kind(const char* str);
+const char* icalvalue_kind_to_string(int kind);
+int icalvalue_string_to_kind(const char* str);
 
-const char* icalparameter_kind_to_string(icalparameter_kind kind);
-icalparameter_kind icalparameter_string_to_kind(const char* string);
+const char* icalparameter_kind_to_string(int kind);
+int icalparameter_string_to_kind(const char* string);
 
-const char* icalenum_component_kind_to_string(icalcomponent_kind kind);
-icalcomponent_kind icalenum_string_to_component_kind(const char* string);
-
-icalvalue_kind icalenum_property_kind_to_value_kind(icalproperty_kind kind);
-
+const char* icalenum_component_kind_to_string(int kind);
+int  icalenum_string_to_component_kind(const char* string);
 
 int* icallangbind_new_array(int size);
 void icallangbind_free_array(int* array);

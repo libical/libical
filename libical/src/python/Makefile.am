@@ -30,5 +30,12 @@ EXTRA_DIST = 		\
 Libical.py 		\
 LibicalWrap.i 		\
 python-binding.txt 	\
-test.py
+test.py			\
+Collection.py		\
+Component.py		\
+DerivedProperties.py	\
+Property.py		\
+Store.py  		\
+ChangeLog
+
 
