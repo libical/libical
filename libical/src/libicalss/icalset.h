@@ -14,7 +14,7 @@
 **/
 
 /*
- $Id: icalset.h,v 1.12 2002-07-10 09:37:26 acampi Exp $
+ $Id: icalset.h,v 1.13 2002-09-26 22:25:12 lindner Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -64,6 +64,7 @@ typedef struct icalsetiter
 	icalgauge* gauge;
         icalrecur_iterator* ritr; /*the last iterator*/
         icalcomponent* last_component; /*the pending recurring component to be processed  */
+	const char* tzid; /* the calendar's timezone id */
 } icalsetiter;
 
 struct icalset_impl {
