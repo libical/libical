@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.14 2001-02-28 16:19:34 ebusboom Exp $
+  $Id: regression.c,v 1.15 2001-03-08 06:22:20 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -3139,7 +3139,7 @@ void test_langbind()
     printf("%s\n",icalproperty_as_ical_string(p));
         
 
-    icalproperty_set_value_from_string(p,"mary@foo.org");
+    icalproperty_set_value_from_string(p,"mary@foo.org","TEXT");
 
     printf("%s\n",icalproperty_as_ical_string(p));
 
