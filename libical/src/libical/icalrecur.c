@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.43 2002-11-04 01:31:20 acampi Exp $
+  $Id: icalrecur.c,v 1.44 2002-11-04 01:35:05 acampi Exp $
   $Locker:  $
     
 
@@ -738,8 +738,6 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 {
     icalrecur_iterator* impl;
     icalrecurrencetype_frequency freq;
-
-    short days_in_month;
 
     if ( ( impl = (icalrecur_iterator*)
 	   malloc(sizeof(icalrecur_iterator))) == 0) {
