@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.43 2004-02-20 09:21:05 acampi Exp $
+  $Id: icalparser.c,v 1.44 2004-02-20 09:42:31 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
