@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.30 2002-07-10 10:08:05 acampi Exp $
+#  $Id: Makefile.am,v 1.31 2002-09-26 23:09:20 lindner Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -28,7 +28,7 @@ ICALSCRIPTS = $(top_srcdir)/scripts
 
 if WITH_CXX
 cxx_lib=libical_cxx.la
-cxx_headers=vcomponent.h icalparameter_cxx.h icalproperty_cxx.h icalvalue_cxx.h
+cxx_headers=vcomponent.h icalparameter_cxx.h icalproperty_cxx.h icalvalue_cxx.h icptrholder.h
 else
 cxx_lib=
 cxx_headers=
@@ -116,7 +116,8 @@ libical_cxx_la_SOURCES =	\
 	icalparameter_cxx.h	\
 	icalparameter_cxx.cpp	\
 	icalvalue_cxx.h		\
-	icalvalue_cxx.cpp
+	icalvalue_cxx.cpp       \
+	icptrholder.h
 endif
 
 libicalincludedir = $(includedir)
