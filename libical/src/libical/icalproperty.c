@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.23 2002-06-13 18:03:33 acampi Exp $
+  $Id: icalproperty.c,v 1.24 2002-06-27 00:16:02 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -533,8 +533,11 @@ icalproperty_set_parameter (icalproperty* prop,icalparameter* parameter)
     icalerror_check_arg_rv( (parameter!=0),"parameter");
 
     kind = icalparameter_isa(parameter);
-
-    icalproperty_remove_parameter(prop,parameter);
+    if (kind != ICAL_X_PARAMETER)
+      icalproperty_remove_parameter_by_kind(prop,kind);
+    else
+      icalproperty_remove_parameter_by_name(prop, 
+					    icalparameter_get_xname(parameter));
 
     icalproperty_add_parameter(prop,parameter);
 }
@@ -620,8 +623,98 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
 
 }
 
+/** @see icalproperty_remove_parameter_by_kind() 
+ *
+ * DEPRECATED in favor of icalproperty_remove_parameter_by_kind()
+ */
+
 void
-icalproperty_remove_parameter (icalproperty* prop, icalparameter* parameter)
+icalproperty_remove_parameter(icalproperty* prop, icalparameter_kind kind)
+{
+  icalproperty_remove_parameter_by_kind(prop, kind);
+}
+
+
+/** @brief Remove all parameters with the specified kind.
+ *
+ *  @param prop   A valid icalproperty.
+ *  @param kind   The kind to remove (ex. ICAL_TZID_PARAMETER)
+ *
+ *  See icalproperty_remove_parameter_by_name() and
+ *  icalproperty_remove_parameter_by_ref() for alternate ways of
+ *  removing parameters
+ */
+
+void
+icalproperty_remove_parameter_by_kind(icalproperty* prop, icalparameter_kind kind)
+{
+    pvl_elem p;     
+
+    icalerror_check_arg_rv((prop!=0),"prop");
+    
+    for(p=pvl_head(prop->parameters);p != 0; p = pvl_next(p)){
+	icalparameter* param = (icalparameter *)pvl_data (p);
+        if (icalparameter_isa(param) == kind) {
+            pvl_remove (prop->parameters, p);
+            break;
+        }
+    }                       
+}
+
+
+/** @brief Remove all parameters with the specified name.
+ *
+ *  @param prop   A valid icalproperty.
+ *  @param name   The name of the parameter to remove
+ *
+ *  This function removes paramters with the given name.  The name
+ *  corresponds to either a built-in name (TZID, etc.) or the name of
+ *  an extended parameter (X-FOO)
+ *
+ *  See icalproperty_remove_parameter_by_kind() and
+ *  icalproperty_remove_parameter_by_ref() for alternate ways of removing
+ *  parameters
+ */
+
+
+void
+icalproperty_remove_parameter_by_name(icalproperty* prop, const char *name)
+{
+    pvl_elem p;     
+
+    icalerror_check_arg_rv((prop!=0),"prop");
+    
+    for(p=pvl_head(prop->parameters);p != 0; p = pvl_next(p)){
+	icalparameter* param = (icalparameter *)pvl_data (p);
+	const char * kind_string;
+
+	if (icalparameter_isa(param) == ICAL_X_PARAMETER)
+	  kind_string = icalparameter_get_xname(param);
+	else
+	  kind_string = icalparameter_kind_to_string(icalparameter_isa(param));
+
+	if (!kind_string)
+	  continue;
+
+        if (0 == strcmp(kind_string, name)) {
+            pvl_remove (prop->parameters, p);
+            break;
+        }
+    }                       
+}
+
+
+/** @brief Remove the specified parameter reference from the property.
+ *
+ *  @param prop   A valid icalproperty.
+ *  @param name   A reference to a specific icalparameter.
+ *
+ *  This function removes the specified parameter reference from the
+ *  property.
+ */
+
+void
+icalproperty_remove_parameter_by_ref(icalproperty* prop, icalparameter* parameter)
 {
     pvl_elem p;
     icalparameter_kind kind;
