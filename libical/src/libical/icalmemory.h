@@ -4,7 +4,7 @@
  CREATOR: eric 30 June 1999
 
 
- $Id: icalmemory.h,v 1.2 2001-04-01 20:08:19 ebusboom Exp $
+ $Id: icalmemory.h,v 1.3 2001-12-06 19:52:43 gray-john Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -26,8 +26,11 @@
 #ifndef ICALMEMORY_H
 #define ICALMEMORY_H
 
+#ifndef WIN32
 #include <sys/types.h> /* for size_t */
-
+#else
+#include <stddef.h>
+#endif
 
 /* Tmp buffers are managed by ical. References can be returned to the
    caller, although the caller will not own the memory. */

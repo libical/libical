@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.14 2001-04-12 18:33:36 ebusboom Exp $
+  $Id: icallangbind.c,v 1.15 2001-12-06 19:52:37 gray-john Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -24,6 +24,11 @@
 #include "icalmemory.h"
 #include <malloc.h>
 #include <string.h>
+
+#ifdef WIN32
+#define snprintf      _snprintf
+#define strcasecmp    stricmp
+#endif
 
 int* icallangbind_new_array(int size){
     int* p = (int*)malloc(size*sizeof(int));

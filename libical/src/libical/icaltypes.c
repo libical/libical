@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.5 2001-06-22 15:57:26 ebusboom Exp $
+  $Id: icaltypes.c,v 1.6 2001-12-06 19:58:20 gray-john Exp $
   $Locker:  $
     
 
@@ -34,6 +34,11 @@
 #include <errno.h> /* for errno */
 #include <string.h> /* for icalmemory_strdup */
 #include <assert.h>
+
+#ifdef WIN32
+#define snprintf      _snprintf
+#define strcasecmp    stricmp
+#endif
 
 #define TEMP_MAX 1024
 

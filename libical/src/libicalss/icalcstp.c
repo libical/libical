@@ -3,7 +3,7 @@
     FILE: icalcstps.c
     CREATOR: ebusboom 23 Jun 2000
   
-    $Id: icalcstp.c,v 1.5 2001-02-22 19:38:49 ebusboom Exp $
+    $Id: icalcstp.c,v 1.6 2001-12-06 19:59:26 gray-john Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -31,8 +31,10 @@
 #include "pvl.h" 
 
 #include <sys/types.h> /* For send(), others */
+#ifndef WIN32
 #include <sys/socket.h>  /* For send(), others. */
 #include <unistd.h> /* For alarm */
+#endif
 #include <errno.h>
 #include <stdlib.h> /* for malloc */
 #include <string.h>

@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.17 2001-11-14 07:07:22 benjaminlee Exp $
+  $Id: icalparser.c,v 1.18 2001-12-06 19:55:51 gray-john Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -51,6 +51,11 @@
 #include <string.h> /* For strncpy & size_t */
 #include <stdio.h> /* For FILE and fgets and sprintf */
 #include <stdlib.h> /* for free */
+
+#ifdef WIN32
+#define snprintf      _snprintf
+#define strcasecmp    stricmp
+#endif
 
 
 extern icalvalue* icalparser_yy_value;

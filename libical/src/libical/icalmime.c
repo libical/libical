@@ -4,7 +4,7 @@
  CREATOR: eric 26 July 2000
 
 
- $Id: icalmime.c,v 1.3 2001-04-01 20:08:19 ebusboom Exp $
+ $Id: icalmime.c,v 1.4 2001-12-06 19:54:19 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -38,6 +38,10 @@
 #include "dmalloc.h"
 #endif
 
+#ifdef WIN32
+#define snprintf      _snprintf
+#define strcasecmp    stricmp
+#endif
 
 /* These *_part routines are called by the MIME parser via the
    local_action_map */

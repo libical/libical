@@ -3,7 +3,7 @@
   FILE: sspm.c Parse Mime
   CREATOR: eric 25 June 2000
   
-  $Id: sspm.c,v 1.2 2001-02-09 17:44:01 ebusboom Exp $
+  $Id: sspm.c,v 1.3 2001-12-06 19:58:50 gray-john Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -43,6 +43,11 @@
 
 #ifdef DMALLOC
 #include "dmalloc.h"
+#endif
+
+#ifdef WIN32
+#define snprintf      _snprintf
+#define strcasecmp    stricmp
 #endif
 
 #define TMP_BUF_SIZE 1024

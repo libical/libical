@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.16 2001-11-14 07:07:22 benjaminlee Exp $
+  $Id: icalrecur.c,v 1.17 2001-12-06 19:56:52 gray-john Exp $
   $Locker:  $
     
 
@@ -170,6 +170,9 @@ const char* icalrecur_weekday_to_string(icalrecurrencetype_weekday kind);
 icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
 
 
+#ifdef WIN32
+void increment_year(struct icalrecur_iterator_impl* impl, int inc);
+#endif
 
 /*********************** Rule parsing routines ************************/
 

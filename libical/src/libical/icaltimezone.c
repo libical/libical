@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.c,v 1.1 2001-11-14 07:07:22 benjaminlee Exp $
+ $Id: icaltimezone.c,v 1.2 2001-12-06 19:58:00 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -36,6 +36,11 @@
 #include "icalparser.h"
 #include "icaltimezone.h"
 
+#ifdef WIN32
+#define snprintf _snprintf
+#define PACKAGE_DATA_DIR "C:/Projects/libical/libical/libical"
+#endif
+
 /* This is the toplevel directory where the timezone data is installed in. */
 #define ZONEINFO_DIRECTORY	PACKAGE_DATA_DIR "/zoneinfo"
 
@@ -54,7 +59,6 @@
 /* This is the maximum year we will expand to. time_t values only go up to
    somewhere around 2037. */
 #define ICALTIMEZONE_MAX_YEAR		2035
-
 
 struct _icaltimezone {
     /* The unique ID of this timezone,
@@ -100,7 +104,6 @@ struct _icaltimezone {
        to convert from local time to UTC. */
     icalarray		*changes;
 };
-
 
 typedef struct _icaltimezonechange	icaltimezonechange;
 
@@ -1370,6 +1373,7 @@ icaltimezone_parse_zone_tab		(void)
     int latitude_degrees, latitude_minutes, latitude_seconds;
     int longitude_degrees, longitude_minutes, longitude_seconds;
     icaltimezone zone;
+	char *p;
 
     icalerror_assert (builtin_timezones == NULL,
 		      "Parsing zones.tab file multiple times");
@@ -1466,7 +1470,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone	*zone)
 
     snprintf (filename, filename_len, "%s/%s.ics", ZONEINFO_DIRECTORY,
 	      zone->location);
-	
+
     fp = fopen (filename, "r");
     free (filename);
     if (!fp) {

@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.17 2001-11-14 07:07:22 benjaminlee Exp $
+  $Id: icaltime.c,v 1.18 2001-12-06 19:57:47 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -45,6 +45,13 @@
 #endif
 
 #include "icaltimezone.h"
+
+#ifdef WIN32
+#include <Windows.h>
+
+#define snprintf      _snprintf
+#define strcasecmp    stricmp
+#endif
 
 
 struct icaltimetype 
@@ -217,6 +224,12 @@ time_t icaltime_as_timet(struct icaltimetype tt)
 {
     struct tm stm;
     time_t t;
+#ifdef WIN32
+	TIME_ZONE_INFORMATION tz;
+	char * szZone;
+	icaltimezone* zone;
+	int offset_tt;
+#endif
 
     memset(&stm,0,sizeof( struct tm));
 
@@ -233,11 +246,42 @@ time_t icaltime_as_timet(struct icaltimetype tt)
     stm.tm_isdst = -1;
 
     if(tt.is_utc == 1 || tt.is_date == 1){
+#ifndef WIN32
 	struct set_tz_save old_tz = set_tz("UTC");
 	t = mktime(&stm);
 	unset_tz(old_tz);
+#else
+	t = mktime(&stm);
+
+	GetTimeZoneInformation(&tz);
+
+	t -= tz.Bias*60;
+#endif
     } else {
 	t = mktime(&stm);
+#ifdef WIN32
+	/* Arg, mktime on Win32 always returns the time is localtime
+	  zone, so we'll figure out what time we are looking for and adjust it */
+
+	szZone = getenv("TZ");
+
+	if ( szZone != NULL && strlen(szZone) != 0 )
+	{
+		GetTimeZoneInformation(&tz);
+
+
+		zone = icaltimezone_get_builtin_timezone(szZone);
+
+
+		offset_tt = icaltimezone_get_utc_offset_of_utc_time	(zone,
+							 &tt,
+							 NULL);
+		
+		t += -offset_tt - tz.Bias*60;
+
+	}
+
+#endif
     }
 
     return t;
@@ -354,13 +398,14 @@ struct icaltimetype icaltime_as_zone(struct icaltimetype tt,const char* tzid)
    indicating the date for which you want the offset */
 int icaltime_utc_offset(struct icaltimetype ictt, const char* tzid)
 {
-
-    time_t tt = icaltime_as_timet(ictt);
     time_t offset_tt, offset;
+#ifndef WIN32
+ 	time_t tt = icaltime_as_timet(ictt);
     struct tm gtm;
     struct set_tz_save old_tz; 
 
 	int is_daylight;
+
 
 #ifndef NO_WARN_DEPRECATED
 	fprintf(stderr, "%s: %d: WARNING: icaltime_utc_offset is deprecated\n", __FILE__, __LINE__);
@@ -368,7 +413,7 @@ int icaltime_utc_offset(struct icaltimetype ictt, const char* tzid)
 	/* This function, combined with the set_tz/unset_tz calls in regression.c
 	makes for very convoluted behaviour (due to the setting of the tz environment variable)
 	arrghgh, at least this is what I think: benjaminlee */
-	
+
     if(tzid != 0){
 	old_tz = set_tz(tzid);
     }
@@ -398,7 +443,32 @@ int icaltime_utc_offset(struct icaltimetype ictt, const char* tzid)
 #endif	
 	assert(offset == tt-offset_tt);
 #endif
+
     return tt-offset_tt;
+#else
+	int is_daylight;
+
+	if ( tzid == 0 )
+	{
+		TIME_ZONE_INFORMATION tz;
+
+		GetTimeZoneInformation(&tz);
+
+		return -tz.Bias*60;
+	}
+	else
+	{
+		icaltimezone* zone = icaltimezone_get_builtin_timezone(tzid);
+
+
+		offset_tt = icaltimezone_get_utc_offset_of_utc_time	(zone,
+							 &ictt,
+							 &is_daylight);
+		
+		return offset_tt;
+	}
+#endif
+
 }
 
 /* end WARNING !! DEPRECATED !! functions *****
@@ -463,7 +533,7 @@ struct icaltimetype icaltime_from_string(const char* str)
 }
 #endif
 
-char ctime_str[20];
+char ctime_str[32];
 char* icaltime_as_ctime(struct icaltimetype t)
 {
     time_t tt;

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.32 2001-11-14 07:07:23 benjaminlee Exp $
+  $Id: regression.c,v 1.33 2001-12-06 20:02:55 gray-john Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -35,11 +35,14 @@
 #include <stdlib.h> /* for malloc */
 #include <stdio.h> /* for printf */
 #include <time.h> /* for time() */
+#ifndef WIN32
 #include <unistd.h> /* for unlink, fork */
 #include <sys/wait.h> /* For waitpid */
-#include <sys/types.h> /* For wait pid */
 #include <sys/time.h> /* for select */
-
+#else
+#include <Windows.h>
+#endif
+#include <sys/types.h> /* For wait pid */
 
 /* For GNU libc, strcmp appears to be a macro, so using strcmp in
  assert results in incomprehansible assertion messages. This
@@ -1620,6 +1623,7 @@ void do_test_time(char* zone)
     int offset_la, offset_tz;
     icalvalue *v;
     short day_of_week,start_day_of_week, day_of_year;
+	icaltimezone* lazone;
 
     icalerror_errors_are_fatal = 0;
 
@@ -1707,6 +1711,13 @@ void do_test_time(char* zone)
     assert(start_day_of_week == 303 );
 
     printf("\n TimeZone Conversions \n");
+
+	lazone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
+	icttla = ictt;
+	icaltimezone_convert_time(&icttla,
+						 icaltimezone_get_utc_timezone(),
+						 lazone);
+
 
     icttla = icaltime_as_zone(ictt,"America/Los_Angeles");
     assert(icttla.hour == 10);
@@ -2940,18 +2951,22 @@ void test_fileset()
 
 void microsleep(int us)
 {
+#ifndef WIN32
     struct timeval tv;
 
     tv.tv_sec = 0;
     tv.tv_usec = us;
 
     select(0,0,0,0,&tv);
-
+#else
+	Sleep(us);
+#endif
 }
 
 
 void test_file_locks()
 {
+#ifndef WIN32
     pid_t pid;
     char *path = "test_fileset_locktest.ics";
     icalfileset *fs;
@@ -3087,6 +3102,7 @@ void test_file_locks()
 
     
     assert(sec == final);
+#endif
 }
 
 void test_action()
@@ -3503,10 +3519,13 @@ int main(int argc, char *argv[])
     int ttime=0, trecur=0,tspan=0, tmisc=0, tgauge = 0, tfile = 0,
         tbasic = 0;
 
+	putenv("TZ=");
+
     if(argc==1) {
 	ttime = trecur = tspan = tmisc = tgauge = tfile = tbasic = 1;
     }
 
+#ifndef WIN32
     while ((c = getopt(argc, argv, "t:s:r:m:g:f:b:")) != -1) {
 	switch (c) {
 
@@ -3559,8 +3578,8 @@ int main(int argc, char *argv[])
 	    }
 	    
 	}
-	
     } 
+#endif
 
 
     if(ttime==1 || ttime==2){

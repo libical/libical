@@ -3,7 +3,7 @@
   FILE: icalarray.c
   CREATOR: Damon Chaplin 07 March 2001
   
-  $Id: icalarray.c,v 1.1 2001-11-14 07:07:22 benjaminlee Exp $
+  $Id: icalarray.c,v 1.2 2001-12-06 19:52:32 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2001, Ximian, Inc.
@@ -75,7 +75,7 @@ icalarray_append		(icalarray	*array,
     if (array->num_elements >= array->space_allocated)
 	icalarray_expand (array, 1);
 
-    memcpy (array->data + array->num_elements * array->element_size, element,
+    memcpy ((char *)(array->data) + ( array->num_elements * array->element_size ), element,
 	    array->element_size);
     array->num_elements++;
 }
@@ -88,7 +88,7 @@ icalarray_element_at		(icalarray	*array,
     assert (position >= 0);
     assert (position < array->num_elements);
 
-    return array->data + position * array->element_size;
+    return (char *)(array->data) + (position * array->element_size);
 }
 
 
@@ -102,11 +102,11 @@ icalarray_remove_element_at	(icalarray	*array,
     assert (position >= 0);
     assert (position < array->num_elements);
 
-    dest = array->data + position * array->element_size;
+    dest = (char *)array->data + (position * array->element_size);
     elements_to_move = array->num_elements - position - 1;
 
     if (elements_to_move > 0)
-	memmove (dest, dest + array->element_size,
+	memmove (dest, (char *)dest + array->element_size,
 		 elements_to_move * array->element_size);
 
     array->num_elements--;

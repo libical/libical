@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalfileset.h,v 1.5 2001-02-09 17:53:40 ebusboom Exp $
+ $Id: icalfileset.h,v 1.6 2001-12-06 20:01:44 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -35,6 +35,10 @@
 #include <sys/types.h> /* For open() flags and mode */
 #include <sys/stat.h> /* For open() flags and mode */
 #include <fcntl.h> /* For open() flags and mode */
+
+#ifdef WIN32
+#define mode_t int
+#endif
 
 extern int icalfileset_safe_saves;
 
