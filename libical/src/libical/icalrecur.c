@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.48 2002-11-04 14:04:08 acampi Exp $
+  $Id: icalrecur.c,v 1.49 2002-11-05 13:36:40 acampi Exp $
   $Locker:  $
     
 
@@ -1877,7 +1877,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
 
 
         for(i=pvl_head(days);i!=0;i=pvl_next(i)){
-            short day = (short)pvl_data(i);
+            short day = (short)(intptr_t)pvl_data(i);
             impl->days[days_index++] = day;
         }
 
@@ -1952,7 +1952,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
         pvl_list days = expand_by_day(impl,year);
 
         for(itr=pvl_head(days);itr!=0;itr=pvl_next(itr)){
-            short day = (short)pvl_data(itr);
+            short day = (short)(intptr_t)pvl_data(itr);
             struct icaltimetype tt; 
             
             tt = icaltime_from_day_of_year(day,year);
@@ -1979,7 +1979,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
         pvl_list days = expand_by_day(impl,year);
 
         for(itr=pvl_head(days);itr!=0;itr=pvl_next(itr)){
-            short day = (short)pvl_data(itr);
+            short day = (short)(intptr_t)pvl_data(itr);
             struct icaltimetype tt; 
             int i;
             
@@ -2011,7 +2011,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
         pvl_list days = expand_by_day(impl,year);
 
         for(itr=pvl_head(days);itr!=0;itr=pvl_next(itr)){
-            short day = (short)pvl_data(itr);
+            short day = (short)(intptr_t)pvl_data(itr);
             struct icaltimetype tt; 
             int i;
             
