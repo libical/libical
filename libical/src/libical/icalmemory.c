@@ -3,7 +3,7 @@
   FILE: icalmemory.c
   CREATOR: eric 30 June 1999
   
-  $Id: icalmemory.c,v 1.4 2002-05-20 17:23:49 acampi Exp $
+  $Id: icalmemory.c,v 1.5 2002-06-03 17:03:33 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -108,7 +108,7 @@ static buffer_ring * buffer_ring_new(void) {
 	}
 	br->pos = 0;
         return(br);
-    }
+}
 
 
 #ifdef USE_PTHREAD
@@ -197,7 +197,7 @@ void icalmemory_free_ring_byval(buffer_ring *br) {
     }
     }
    free(br);
-   }
+}
 
 void icalmemory_free_ring()
 {
