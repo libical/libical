@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.11 2001-12-22 17:04:33 gray-john Exp $
+  $Id: icalvalue.c,v 1.12 2002-04-18 15:28:21 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -462,6 +462,15 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
             break;
 
         }
+
+    case ICAL_X_VALUE:
+        {
+            char* dequoted_str = icalmemory_strdup_and_dequote(str);
+            value = icalvalue_new_x(dequoted_str);
+            free(dequoted_str);
+        }
+        break;
+
     default:
         {
             
