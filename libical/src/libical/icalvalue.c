@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.35 2002-10-09 22:57:13 acampi Exp $
+  $Id: icalvalue.c,v 1.36 2002-10-09 22:59:28 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1278,7 +1278,7 @@ icalproperty* icalvalue_get_parent(icalvalue* value)
 int icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBufferLen)
 {
     char   *ptr;
-    const icalvalue *value = 0;
+    icalvalue *value = 0;
 
     if ((szText == 0) || (szEncText == 0))
         return 0;
@@ -1294,17 +1294,14 @@ int icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBu
     
     if ((int)strlen(ptr) >= nMaxBufferLen)
         {
-            icalvalue_free ((icalvalue*)value);
-            value = 0;
+            icalvalue_free (value);
             return 0;
         }
-    
+
     strcpy(szEncText, ptr);
-    
+
     icalvalue_free ((icalvalue*)value);
-    
-    value = 0;
-    
+
     return 1;
 }
 
