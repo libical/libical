@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.35 2002-08-07 18:50:56 acampi Exp $
+  $Id: icalparser.c,v 1.36 2002-08-08 00:26:31 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -55,9 +55,11 @@
 
 #ifdef HAVE_WCTYPE_H
 # include <wctype.h>
-# ifndef HAVE_ISWSPACE			/* Some systems have an imcomplete
-#  define iswspace        isspace	 * implementation on wctype (FreeBSD,
-# endif					 * Darwin). Cope with that. */
+/* Some systems have an imcomplete implementation on wctype (FreeBSD,
+ * Darwin). Cope with that. */
+# ifndef HAVE_ISWSPACE
+#  define iswspace        isspace
+# endif
 #else
 # ifndef HAVE_ISWSPACE
 #  define iswspace        isspace
