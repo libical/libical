@@ -93,7 +93,6 @@ int icalcomponent_isa(icalcomponent* component);
 
 int icalrestriction_check(icalcomponent* comp);
 
-
 /* actually takes icalproperty_kind */
 icalproperty* icalproperty_new(int kind);
 
@@ -138,6 +137,8 @@ void icalerror_clear_errno(void);
 const char* icalvalue_kind_to_string(int kind);
 int icalvalue_string_to_kind(const char* str);
 
+char* icalparameter_as_ical_string(icalparameter* parameter);
+
 const char* icalparameter_kind_to_string(int kind);
 int icalparameter_string_to_kind(const char* string);
 
@@ -153,7 +154,7 @@ int icalrecur_expand_recurrence(char* rule, int start,
 				int count, time_t* array);
 
 
-/* Iterate through properties and components using strings for the kind */
+/* Iterate through properties, components and parameters using strings for the kind */
 icalproperty* icallangbind_get_first_property(icalcomponent *c,
                                               const char* prop);
 
@@ -165,6 +166,10 @@ icalcomponent* icallangbind_get_first_component(icalcomponent *c,
 
 icalcomponent* icallangbind_get_next_component(icalcomponent *c,
                                               const char* comp);
+
+icalparameter* icallangbind_get_first_parameter(icalproperty *prop);
+
+icalparameter* icallangbind_get_next_parameter(icalproperty *prop);
 
 
 /* Return a string that can be evaluated in perl or python to

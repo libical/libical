@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.11 2002-07-09 18:14:36 acampi Exp $
+#  $Id: Property.py,v 1.12 2002-07-12 07:59:15 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -28,7 +28,7 @@
 from LibicalWrap import *
 import re
 import base64
-from string import index, upper
+from string import index, upper, split
 from types import StringType
 
 #def icalerror_supress(arg): 
@@ -160,20 +160,21 @@ class Property:
         return icalproperty_get_value_as_string(self._ref)
 
     def parameters(self):
+        """
+	Return a list of parameters
+        """
 
-        d_string = icallangbind_property_eval_string(self._ref,":")
-        dict = eval(d_string)
+        params = [] 
 
-        desc_keys = ('name', 'value', 'value_type', 'pid', 'ref', 'deleted' )
-        
-        def foo(k,d=dict):
-            if d.has_key(k): del d[k]
+	p = icallangbind_get_first_parameter(self._ref) 
+	
+	while p != None:
+		kv = split(icalparameter_as_ical_string(p),'=',2)
+		params.append(kv[0])
+		p = icallangbind_get_next_parameter(self._ref)
 
-        map( foo, desc_keys)
-        
-        return filter(lambda p, s=self: s[p] != None, dict.keys())
+	return params
 
-                    
     def as_ical_string(self):
         "Return the property in iCalendar text format."
         return icalproperty_as_ical_string(self._ref)

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.18 2002-06-03 13:25:28 acampi Exp $
+  $Id: icallangbind.c,v 1.19 2002-07-12 07:59:14 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -43,9 +43,25 @@ int icallangbind_access_array(int* array, int index) {
     return array[index];
 }                    
 
+/* Iterators to fetch parameters given property */
 
+icalparameter* icallangbind_get_first_parameter(icalproperty *prop)
 
-/* LIke icalcomponent_get_first_component, buut takes a string for the
+{
+    icalparameter_kind kind = ICAL_ANY_PARAMETER;
+    
+    return icalproperty_get_first_parameter(prop,kind);
+}
+
+icalparameter* icallangbind_get_next_parameter(icalproperty *prop)
+{
+    icalparameter_kind kind = ICAL_ANY_PARAMETER;
+    
+    return icalproperty_get_next_parameter(prop,kind);
+}
+		                                              
+
+/* Like icalcomponent_get_first_component, but takes a string for the
    kind and can iterate over X properties as if each X name was a
    seperate kind */
 icalproperty* icallangbind_get_first_property(icalcomponent *c,

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.10 2002-06-03 13:25:28 acampi Exp $
+#  $Id: Component.py,v 1.11 2002-07-12 07:59:15 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -71,11 +71,16 @@ class Component:
         if(p == None or p== WrapperNULL):
             return None;
 
-        d_string = icallangbind_property_eval_string(p,":")
+	d = {}
+	d['value'] = icalproperty_get_value_as_string(p)
+	d['name'] = icalproperty_get_name(p)
 
-        d = eval(d_string)
+	propkind = icalproperty_string_to_kind(d['name'])
+	kind = icalproperty_kind_to_value_kind(propkind)
+	d['value_type'] = icalvalue_kind_to_string(kind)
         d['ref'] = p
-        
+
+
         if not self.cached_props.has_key(p):
             
             if d['value_type'] == 'DATE-TIME' or d['value_type'] == 'DATE':
@@ -770,7 +775,6 @@ class Todo(GenericComponent):
 
     def resources():
         pass
-    
 
 class Journal(GenericComponent):
     "The iCalendar JOURNAL component."

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.19 2002-07-09 18:14:36 acampi Exp $
+#  $Id: test.py,v 1.20 2002-07-12 07:59:15 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -65,7 +65,11 @@ def test_property():
     p = Property(ref=icalprop)
 
     print p.name()
-    print p.parameters()
+    print
+    print "Parameters:"
+    for param in p.parameters():
+	    print "  ", param, " = ", p[param]
+    print
     print p['ROLE']
     
     p['ROLE'] = 'INDIVIDUAL'
@@ -75,6 +79,8 @@ def test_property():
     p['ROLE'] = 'GROFROMBLATZ'
 
     print p['ROLE']
+
+    print
 
     p['X-MAN-FAVOURITE'] = 'Wolverine'
     p['X-FILES-FAVOURITE'] = 'Mulder'
