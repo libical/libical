@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.22 2002-11-03 21:37:14 acampi Exp $
+ $Id: icaltimezone.c,v 1.23 2002-11-03 21:42:43 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1661,7 +1661,7 @@ void set_zone_directory(char *path)
 	}
 }
 
-void free_zone_directory()
+void free_zone_directory(void)
 {
 	if ( zone_files_directory != NULL )
 	{
