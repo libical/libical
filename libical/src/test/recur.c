@@ -25,7 +25,6 @@
 
   ======================================================================*/
 
-#include "ical.h"
 #include <assert.h>
 #include <string.h> /* for strdup */
 #include <stdlib.h> /* for malloc */
@@ -35,9 +34,9 @@
 #ifndef WIN32
 #include <unistd.h> /* for alarm */
 #endif
-#include "icalmemory.h"
-#include "icaldirset.h"
-#include "icalfileset.h"
+
+#include "ical.h"
+#include "icalss.h"
 
 #ifdef WIN32
 #define snprintf	_snprintf
@@ -60,8 +59,8 @@ static void recur_callback(icalcomponent *comp,
 
 int main(int argc, char *argv[])
 {
-    icalfileset *cin;
-    struct icaltimetype start, next;
+    icalset *cin;
+    struct icaltimetype next;
     icalcomponent *itr;
     icalproperty *desc, *dtstart, *rrule;
     struct icalrecurrencetype recur;

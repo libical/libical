@@ -3,7 +3,7 @@
   FILE: regression-classify.c
   CREATOR: eric 11 February 2000
   
-  $Id: regression-classify.c,v 1.1 2002-06-11 19:54:09 acampi Exp $
+  $Id: regression-classify.c,v 1.2 2002-06-28 10:45:12 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -25,11 +25,13 @@
 
  ======================================================================*/
 #include <stdio.h> /* for printf */
-#include "ical.h"
 #include <errno.h>
 #include <string.h> /* For strerror */
+
+#include "ical.h"
 #include "icalss.h"
 #include "regression.h"
+
 extern int VERBOSE;
 
 /* Get a note about the purpose of the property*/

@@ -3,7 +3,7 @@
   FILE: findobj.c
   CREATOR: eric 11 February 2000
   
-  $Id: findobj.c,v 1.1.1.1 2001-01-02 07:33:05 ebusboom Exp $
+  $Id: findobj.c,v 1.2 2002-06-28 10:45:12 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -26,12 +26,11 @@
  ======================================================================*/
 
 #include <stdio.h> /* for printf */
-#include "ical.h"
-#include "icalcalendar.h"
-#include "icaldirset.h"
 #include <errno.h>
 #include <string.h> /* For strerror */
-#include "icalrestriction.h"
+
+#include "ical.h"
+#include "icalss.h"
 
 /* This program finds an object stored in a calendar */
 

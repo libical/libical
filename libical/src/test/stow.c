@@ -3,7 +3,7 @@
   FILE: stow.c
   CREATOR: eric 29 April 2000
   
-  $Id: stow.c,v 1.5 2001-04-16 21:04:20 ebusboom Exp $
+  $Id: stow.c,v 1.6 2002-06-28 10:45:12 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -39,9 +39,7 @@
 #include <ctype.h> /* for tolower */
 
 #include "ical.h"
-#include "icalcalendar.h"
-#include "icalfileset.h"
-#include "icalmime.h"
+#include "icalss.h"
 
 char* program_name;
 #define TMPSIZE 2048
@@ -180,7 +178,7 @@ icalcomponent* get_first_real_component(icalcomponent *comp)
 
 
 
-char* make_mime(char* to, const char* from, const char* subject, 
+char* make_mime(const char* to, const char* from, const char* subject, 
 		const char* text_message, const char* method, 
 		const char* ical_message)
 {
@@ -696,7 +694,7 @@ void store_component(icalcomponent *comp, struct options_struct *opt)
 
 
     if(opt->storage == STORE_IN_FILE){
-	icalfileset *fs = icalfileset_new(opt->output_file);
+	icalset *fs = icalfileset_new(opt->output_file);
 
 	if (fs == 0){
 	    fprintf(stderr,

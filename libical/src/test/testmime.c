@@ -3,7 +3,7 @@
   FILE: 
   CREATOR: eric 25 June 2000
   
-  $Id: testmime.c,v 1.2 2002-06-11 19:44:56 acampi Exp $
+  $Id: testmime.c,v 1.3 2002-06-28 10:45:12 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -34,8 +34,7 @@
  ======================================================================*/
 
 #include "ical.h"
-#include "sspm.h"
-#include "icalmime.h"
+
 #include <stdlib.h> /* For rand */
 #include <string.h> /* for strrchr, strdup*/
 #include <unistd.h>   /* for getopt */

@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.13 2002-06-03 17:19:36 acampi Exp $
+  $Id: copycluster.c,v 1.14 2002-06-28 10:45:12 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -26,15 +26,14 @@
  ======================================================================*/
 
 #include <stdio.h> /* for printf */
-#include "ical.h"
-#include "icalss.h"
-#include "icalfileset.h"
 #include <errno.h>
 #include <string.h> /* For strerror */
 #include <signal.h> /* for signal */
 #include <unistd.h> /* for alarm */
 #include <stdlib.h> /* for exit */
-#include "icalrestriction.h"
+
+#include "ical.h"
+#include "icalss.h"
 
 static void sig_alrm(int i){
     fprintf(stderr,"Could not get lock on file\n");
@@ -49,7 +48,7 @@ void usage(char* arg0) {
 
 int main(int c, char *argv[]){
 
-    icalfileset *clusterin, *clusterout;
+    icalset *clusterin, *clusterout;
     icalcomponent *itr;
     int count=0;
     int tostdout = 0;

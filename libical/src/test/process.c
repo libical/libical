@@ -3,7 +3,7 @@
   FILE: process.c
   CREATOR: eric 11 February 2000
   
-  $Id: process.c,v 1.6 2002-06-04 14:39:13 acampi Exp $
+  $Id: process.c,v 1.7 2002-06-28 10:45:12 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -22,12 +22,12 @@
  ======================================================================*/
 
 #include <stdio.h> /* for printf */
-#include "ical.h"
-#include "icalss.h"
 #include <errno.h>
 #include <string.h> /* For strerror */
 #include <stdlib.h> /* for free */
 
+#include "ical.h"
+#include "icalss.h"
 
 void send_message(icalcomponent *reply,const char* this_user)
 {
