@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.24 2002-05-21 10:31:29 acampi Exp $
+  $Id: icalparser.c,v 1.25 2002-05-28 09:33:55 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -149,25 +149,23 @@ char* icalparser_get_next_char(char c, char *str, int qm)
 {
     int quote_mode = 0;
     char* p;
-    
 
     for(p=str; *p!=0; p++){
-	    if (qm == 1) {
-	if ( quote_mode == 0 && *p=='"' && *(p-1) != '\\' ){
-	    quote_mode =1;
-	    continue;
-	}
-
-	if ( quote_mode == 1 && *p=='"' && *(p-1) != '\\' ){
-	    quote_mode =0;
-	    continue;
-	}
+	if (qm == 1) {
+	    if ( quote_mode == 0 && *p=='"' && *(p-1) != '\\' ){
+		quote_mode =1;
+		continue;
 	    }
 
+	    if ( quote_mode == 1 && *p=='"' && *(p-1) != '\\' ){
+		quote_mode =0;
+		continue;
+	    }
+	}
+           
 	if (quote_mode == 0 &&  *p== c  && *(p-1) != '\\' ){
 	    return p;
 	}
-
     }
 
     return 0;
