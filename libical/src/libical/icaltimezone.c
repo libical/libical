@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.17 2002-10-09 22:08:14 acampi Exp $
+ $Id: icaltimezone.c,v 1.18 2002-10-09 22:10:18 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -333,7 +333,7 @@ icaltimezone_get_tznames_from_vtimezone (icalcomponent *component)
     struct icaldatetimeperiodtype rdate;
     const char *current_tzname;
     const char *standard_tzname = NULL, *daylight_tzname = NULL;
-    struct icaltimetype standard_max_date = 0, daylight_max_date = 0;
+    struct icaltimetype standard_max_date, daylight_max_date;
     struct icaltimetype current_max_date;
 
     /* Step through the STANDARD & DAYLIGHT subcomponents. */
