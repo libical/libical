@@ -57,6 +57,7 @@ src/libical/Makefile
 src/libical/icalversion.h
 src/libicalss/Makefile
 src/libicalvcal/Makefile
+src/python/Makefile
 src/test/Makefile
 test-data/Makefile
 ])

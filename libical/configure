@@ -2396,6 +2396,7 @@ src/libical/Makefile
 src/libical/icalversion.h
 src/libicalss/Makefile
 src/libicalvcal/Makefile
+src/python/Makefile
 src/test/Makefile
 test-data/Makefile
  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
@@ -2516,6 +2517,7 @@ src/libical/Makefile
 src/libical/icalversion.h
 src/libicalss/Makefile
 src/libicalvcal/Makefile
+src/python/Makefile
 src/test/Makefile
 test-data/Makefile
 "}
