@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.26 2001-05-04 17:54:02 ebusboom Exp $
+  $Id: regression.c,v 1.27 2001-05-04 19:59:53 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1909,61 +1909,16 @@ void test_iterators()
     printf("\n");
 }
 
-
-
-char* test_set_tz(const char* tzid)
-{
-    char *tzstr = 0;
-    char *tmp;
-
-   /* Put the new time zone into the environment */
-    if(getenv("TZ") != 0){
-	tzstr = (char*)icalmemory_strdup(getenv("TZ"));
-
-	if(tzstr == 0){
-	    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-	    return 0;
-	}
-    }
-
-    tmp = (char*)malloc(1024);
-
-    if(tmp == 0){
-	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-	return 0;
-    }
-
-    snprintf(tmp,1024,"TZ=%s",tzid);
-
-    /* HACK. In some libc versions, putenv gives the string to the
-       system and in some it gives a copy, so the following might be a
-       memory leak. THe linux man page says that glibc2.1.2 take
-       ownership ( no leak) while BSD4.4 uses a copy ( A leak ) */
-    putenv(tmp); 
-
-    return tzstr; /* This will be zero if the TZ env var was not set */
-}
-
-void test_unset_tz(char* tzstr)
-{
-    /* restore the original environment */
-
-    if(tzstr!=0){
-	char temp[1024];
-	snprintf(temp,1024,"TZ=%s",tzstr);
-	putenv(temp);
-	free(tzstr);
-    } else {
-	putenv("TZ"); /* Delete from environment */
-    } 
-}
+struct set_tz_save {char* orig_tzid; char* new_env_str;};
+struct set_tz_save set_tz(const char* tzid);
+void unset_tz(struct set_tz_save savetz);
 
 
 void test_time()
 {
     char  zones[6][40] = { "America/Los_Angeles","America/New_York","Europe/London","Asia/Shanghai", ""};
     int i;
-    char* old_tz;
+    struct set_tz_save old_tz;
     int orig_month;
     time_t tt;
     struct tm stm;
@@ -1976,21 +1931,17 @@ void test_time()
 
     do_test_time(0);
 
-    old_tz = test_set_tz(zones[0]);
-
     for(i = 0; zones[i][0] != 0; i++){
 
-	if(zones[i][0] != 0){
-	    test_set_tz(zones[i]);
-	}
-	
 	printf(" ######### Timezone: %s ############\n",zones[i]);
+        
+        old_tz = set_tz(zones[i]);
 	
 	do_test_time(zones[i]);
 
-    } 
+        unset_tz(old_tz);
 
-    test_unset_tz(old_tz);
+    } 
 
 }
 
@@ -2472,7 +2423,28 @@ char* ical_strstr(const char *haystack, const char *needle){
 void test_doy()
 {
     struct icaltimetype tt1, tt2;
-    short doy;
+    int year, month;
+    short doy,doy2;
+
+    tt1 = icaltime_from_string("19300101");
+
+    do{      
+        if(doy == 1){
+            putc('.',stdout);
+            fflush(stdout);
+        }
+
+        doy = icaltime_day_of_year(tt1);
+        tt2 = icaltime_from_day_of_year(doy,tt1.year);
+        doy2 = icaltime_day_of_year(tt2);
+
+        assert(doy2 == doy);
+        assert(icaltime_compare(tt1,tt2) == 0);
+
+        tt1.day+=1;
+        tt1 = icaltime_normalize(tt1);
+        
+    } while(tt1.year < 1940);
 
     tt1 = icaltime_from_string("19950301");
     doy = icaltime_day_of_year(tt1);
@@ -2496,7 +2468,6 @@ void test_doy()
     assert(doy == 60);
 
 }
-
 
 void test_x(){
 

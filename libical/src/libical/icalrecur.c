@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.10 2001-04-01 20:08:19 ebusboom Exp $
+  $Id: icalrecur.c,v 1.11 2001-05-04 20:00:09 ebusboom Exp $
   $Locker:  $
     
 
@@ -1673,7 +1673,7 @@ pvl_list expand_by_day(struct icalrecur_iterator_impl* impl,short year)
             pvl_push(days_list,(void*)(first+  (pos-1) * 7));
             
         } else { /* pos < 0 */ 
-            assert(0);
+            icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
         }
     }
 
@@ -1692,6 +1692,8 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
     struct icaltimetype t;
     int flags;
 
+    t = icaltime_null_time();
+
 #define HBD(x) has_by_data(impl,x)
 
     t.is_date = 1; /* Needed to make day_of_year routines work property */
@@ -1705,12 +1707,12 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
         (HBD(BY_MONTH) ? 1<<BY_MONTH : 0) + 
         (HBD(BY_YEAR_DAY) ? 1<<BY_YEAR_DAY : 0);
 
-
+    
     switch(flags) {
-
+        
     case 0: {
         /* FREQ=YEARLY; */
-
+        
         break;
     }
     case 1<<BY_MONTH: {
@@ -1736,7 +1738,21 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
 
     case 1<<BY_MONTH_DAY:  {
         /* FREQ=YEARLY; BYMONTHDAY=1,15*/
-        assert(0);
+        for(k=0;impl->by_ptrs[BY_MONTH_DAY][k]!=ICAL_RECURRENCE_ARRAY_MAX;k++)
+            {
+                short month_day = impl->by_ptrs[BY_MONTH_DAY][k];
+                short doy;
+
+                t = impl->dtstart;
+		t.day = month_day;
+		t.year = year;
+		t.is_date = 1;
+
+		doy = icaltime_day_of_year(t);
+
+		impl->days[days_index++] = doy;
+
+            }
         break;
     }
 
@@ -1784,7 +1800,7 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
 
     case (1<<BY_WEEK_NO) + (1<<BY_MONTH_DAY): {
         /*FREQ=YEARLY; WEEKNO=20,50; BYMONTH= 6,11 */
-        assert(0);
+        icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
         break;
     }
 
@@ -1841,7 +1857,7 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
 
     case (1<<BY_DAY) + (1<<BY_MONTH_DAY) : {
         /*FREQ=YEARLY; BYDAY=TH,20MO,-10FR; BYMONTHDAY=1,15*/
-        assert(0);
+        icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
         break;
     }
 
@@ -1904,7 +1920,7 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
 
     case (1<<BY_DAY) + (1<<BY_WEEK_NO) + (1<<BY_MONTH_DAY): {
         /*FREQ=YEARLY; BYDAY=TH,20MO,-10FR;  WEEKNO=20,50; BYMONTHDAY=1,15*/
-        assert(0);
+        icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
         break;
     }
 
@@ -1917,7 +1933,7 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
     }
 
     default: {
-        assert(0);
+        icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
         break;
     }
 
