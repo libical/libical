@@ -2,7 +2,7 @@
 extern "C" {
 #endif
 /*
- $Id: icalss.h,v 1.23 2002-10-31 00:05:20 acampi Exp $
+ $Id: icalss.h,v 1.24 2002-12-05 13:40:02 acampi Exp $
 */
 /* -*- Mode: C -*- */
 /*======================================================================
@@ -336,8 +336,6 @@ icalcomponent* icalcluster_get_next_component(icalcluster* cluster);
 #ifdef WIN32
 #define mode_t int
 #endif
-
-extern int icalfileset_safe_saves;
 
 typedef struct icalfileset_impl icalfileset;
 

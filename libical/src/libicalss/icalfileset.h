@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalfileset.h,v 1.11 2002-06-28 10:15:39 acampi Exp $
+ $Id: icalfileset.h,v 1.12 2002-12-05 13:40:02 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -40,8 +40,6 @@
 #ifdef WIN32
 #define mode_t int
 #endif
-
-extern int icalfileset_safe_saves;
 
 typedef struct icalfileset_impl icalfileset;
 
