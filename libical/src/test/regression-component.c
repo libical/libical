@@ -41,15 +41,15 @@ static char* create_new_component_str =
 "BEGIN:DAYLIGHT\n"
 "DTSTART:20020606T212449\n"
 "RDATE;VALUE=PERIOD:20020606T212449/20020607T012809\n"
-"TZOFFSETFROM:-0000\n"
-"TZOFFSETTO:-0000\n"
+"TZOFFSETFROM:-0500\n"
+"TZOFFSETTO:-0400\n"
 "TZNAME:EST\n"
 "END:DAYLIGHT\n"
 "BEGIN:STANDARD\n"
 "DTSTART:20020606T212449\n"
 "RDATE;VALUE=PERIOD:20020606T212449/20020607T012809\n"
-"TZOFFSETFROM:-0000\n"
-"TZOFFSETTO:-0000\n"
+"TZOFFSETFROM:-0400\n"
+"TZOFFSETTO:-0500\n"
 "TZNAME:EST\n"
 "END:STANDARD\n"
 "END:VTIMEZONE\n"
@@ -126,12 +126,12 @@ void create_new_component()
 	    
     icalcomponent_add_property(
 	tzc, 
-	icalproperty_new_tzoffsetfrom(-4.0)
+	icalproperty_new_tzoffsetfrom(-5*3600)
 	);
 
     icalcomponent_add_property(
 	tzc, 
-	icalproperty_new_tzoffsetto(-5.0)
+	icalproperty_new_tzoffsetto(-4*3600)
 	);
 
     icalcomponent_add_property(
@@ -158,12 +158,12 @@ void create_new_component()
 	    
     icalcomponent_add_property(
 	tzc, 
-	icalproperty_new_tzoffsetfrom(-4.0)
+	icalproperty_new_tzoffsetfrom(-4*3600)
 	);
 
     icalcomponent_add_property(
 	tzc, 
-	icalproperty_new_tzoffsetto(-5.0)
+	icalproperty_new_tzoffsetto(-5*3600)
 	);
 
     icalcomponent_add_property(
