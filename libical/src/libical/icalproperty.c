@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.35 2004-03-17 19:06:50 acampi Exp $
+  $Id: icalproperty.c,v 1.36 2004-09-03 07:46:10 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -196,13 +196,19 @@ icalproperty* icalproperty_new_from_string(const char* str)
     icalcomponent *comp;
     int errors  = 0;
 
+#ifdef ICAL_UNIX_NEWLINE
+    char newline[] = "\n";
+#else
+    char newline[] = "\r\n";
+#endif
+
     icalerror_check_arg_rz( (str!=0),"str");
 
     /* Is this a HACK or a crafty reuse of code? */
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "BEGIN:VCALENDAR\n");
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "\n");    
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);    
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:VCALENDAR\n");
 
     comp = icalparser_parse_string(buf);
@@ -450,7 +456,12 @@ icalproperty_as_ical_string (icalproperty* prop)
     char *out_buf;
     const char* kind_string = 0;
 
+#ifdef ICAL_UNIX_NEWLINE
     char newline[] = "\n";
+#else
+    char newline[] = "\r\n";
+#endif
+
 
     
     icalerror_check_arg_rz( (prop!=0),"prop");
