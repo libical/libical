@@ -3,7 +3,7 @@
   FILE: icalenum.c
   CREATOR: eric 29 April 1999
   
-  $Id: icalenums.c,v 1.4 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: icalenums.c,v 1.5 2001-02-09 17:44:01 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -276,10 +276,11 @@ const char* icalenum_value_kind_to_string(icalvalue_kind kind)
 
 icalvalue_kind icalenum_value_kind_by_prop(icalproperty_kind kind)
 {
+    icalvalue_kind value_kind;
     fprintf(stderr,"icalenum_value_kind_by_prop is not implemented\n");
     assert(0) ;
-    kind = ICAL_NO_VALUE;
-    return ICAL_NO_VALUE;
+    value_kind = ICAL_NO_VALUE;
+    return value_kind;
 }
 
 

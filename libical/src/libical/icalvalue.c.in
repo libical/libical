@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c.in,v 1.6 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: icalvalue.c.in,v 1.7 2001-02-09 17:44:01 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -430,37 +430,73 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	{
 	    struct icaltimetype tt;
 	    tt = icaltime_from_string(str);
-	    value = icalvalue_new_time(tt);
+            if(!icaltime_is_null_time(tt))
+                value = icalvalue_new_time(tt);
 	    break;
 	}
 	case ICAL_DATE_VALUE:
 	{
 	    struct icaltimetype tt;
 	    tt = icaltime_from_string(str);
-	    value = icalvalue_new_date(tt);
+            if(!icaltime_is_null_time(tt))
+                value = icalvalue_new_date(tt);
 	    break;
 	}
 	case ICAL_DATETIME_VALUE:
 	{
 	    struct icaltimetype tt;
 	    tt = icaltime_from_string(str);
-	    value = icalvalue_new_datetime(tt);
+            if(!icaltime_is_null_time(tt))
+                value = icalvalue_new_datetime(tt);
 	    break;
 	}
 	case ICAL_DATETIMEDATE_VALUE:
 	{
 	    struct icaltimetype tt;
 	    tt = icaltime_from_string(str);
-	    value = icalvalue_new_datetimedate(tt);
+            if(!icaltime_is_null_time(tt))
+                value = icalvalue_new_datetimedate(tt);
 	    break;
 	}
 
 	case ICAL_DATETIMEPERIOD_VALUE:
+	{
+	    struct icaltimetype tt;
+            struct icalperiodtype p;
+            tt = icaltime_from_string(str);
+            p = icalperiodtype_from_string(str);
+
+            if(!icaltime_is_null_time(tt)){
+                value = icalvalue_new_datetime(tt);
+            } else if (!icalperiodtype_is_null_period(p)){
+                value = icalvalue_new_period(p);
+            }            
+
+            break;
+	}
+
         case ICAL_DURATION_VALUE:
+	{
+            struct icaldurationtype dur = icaldurationtype_from_string(str);
+            
+            if(icaldurationtype_is_null_duration(dur)){
+                value = 0;
+            } else {
+                value = icalvalue_new_duration(dur);
+            }
+
+	    break;
+	}
+
          case ICAL_PERIOD_VALUE:
 	{
-	    value = icalparser_parse_value(kind,str,error);
-	    break;
+          struct icalperiodtype p;
+          p = icalperiodtype_from_string(str);  
+
+          if(!icalperiodtype_is_null_period(p)){
+              value = icalvalue_new_period(p);
+          }
+
 	}
 	
         case ICAL_TRIGGER_VALUE:
@@ -927,8 +963,7 @@ char* icalvalue_geo_as_ical_string(icalvalue* value) {
     return str;
 }
 
-char* icalvalue_datetimeperiod_as_ical_string(icalvalue* value) {
-    struct icalvalue_impl* impl = (struct icalvalue_impl*)value;
+const char* icalvalue_datetimeperiod_as_ical_string(icalvalue* value) {
     struct icaldatetimeperiodtype dtp = icalvalue_get_datetimeperiod(value);
 
     icalerror_check_arg_rz( (value!=0),"value");
@@ -952,7 +987,6 @@ const char* icalvalue_period_as_ical_string(icalvalue* value) {
 char* icalvalue_trigger_as_ical_string(icalvalue* value) {
 
     struct icaltriggertype data;
-    char* str;
 
     icalerror_check_arg_rz( (value!=0),"value");
     data = icalvalue_get_trigger(value);

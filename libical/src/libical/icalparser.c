@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.6 2001-02-08 03:00:42 ebusboom Exp $
+  $Id: icalparser.c,v 1.7 2001-02-09 17:44:01 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -778,7 +778,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 	    if (name == 0){
 		/* 'tail' defined above */
-		insert_error(tail, str, "Can't parse parameter name",
+		insert_error(tail, str, "Cant parse parameter name",
 			     ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
 		tail = 0;
 		break;
@@ -800,7 +800,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    } else {
 		/* Error. Failed to parse the parameter*/
 		/* 'tail' defined above */
-		insert_error(tail, str, "Can't parse parameter name",
+		insert_error(tail, str, "Cant parse parameter name",
 			     ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
 		tail = 0;
 		impl->state = ICALPARSER_ERROR;
@@ -809,7 +809,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 	    if (param == 0){
 		/* 'tail' defined above */
-		insert_error(tail,str,"Can't parse parameter value",
+		insert_error(tail,str,"Cant parse parameter value",
 			     ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR);
 		    
 		tail = 0;
@@ -891,7 +891,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		icalproperty_kind prop_kind = icalproperty_isa(prop);
 		icalcomponent* tail = pvl_data(pvl_tail(impl->components));
 
-		sprintf(temp,"Can't parse as %s value in %s property. Removing entire property",
+		sprintf(temp,"Cant parse as %s value in %s property. Removing entire property",
 			icalenum_value_kind_to_string(value_kind),
 			icalenum_property_kind_to_string(prop_kind));
 
