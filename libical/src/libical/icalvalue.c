@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.38 2005-01-24 13:08:37 acampi Exp $
+  $Id: icalvalue.c,v 1.39 2005-01-24 13:10:47 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -416,10 +416,8 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	    /* HACK */
             
 	    if (error != 0){
-		char temp[TMP_BUF_SIZE];
-		strcpy(temp,"GEO Values are not implemented"); 
 		*error = icalproperty_vanew_xlicerror( 
-		    temp, 
+		    "GEO Values are not implemented",
 		    icalparameter_new_xlicerrortype( 
 			ICAL_XLICERRORTYPE_VALUEPARSEERROR), 
 		    0); 
@@ -646,8 +644,8 @@ static char* icalvalue_binary_as_ical_string(const icalvalue* value) {
 
     data = icalvalue_get_binary(value);
 
-    str = (char*)icalmemory_tmp_buffer(60);
-    strcpy(str,"icalvalue_binary_as_ical_string is not implemented yet");
+    str = icalmemory_tmp_copy(
+            "icalvalue_binary_as_ical_string is not implemented yet");
 
     return str;
 }
