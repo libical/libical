@@ -1,5 +1,8 @@
 #include "ical.h"
 
+#include <stdlib.h>	/* abort() */
+#include <string.h>	/* strcmp() */
+
 static char ictt_str[1024];
 
 const char* ical_timet_string(const time_t t)
@@ -17,9 +20,12 @@ const char* ictt_as_string(struct icaltimetype t)
 {
     const char *zone = icaltimezone_get_tzid((icaltimezone *)t.zone);
 
-    sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d%s %s",
+    if (icaltime_is_utc(t))
+	sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02dZ");
+    else
+	sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d %s",
 	t.year,t.month,t.day, t.hour,t.minute,t.second,
-	t.is_utc?" Z":"", zone == NULL? "(floating)": zone);
+	zone == NULL? "(floating)": zone);
 
     return ictt_str;
 }
@@ -44,7 +50,7 @@ void die_on_errors_set(int val) {
   die_on_errors = 1;
 }
 
-void _ok(char* test_name, int success, char *file, int linenum, char *test) {
+void _ok(const char* test_name, int success, char *file, int linenum, char *test) {
   testnumber++;
 
   printf("%sok %d - %s\n", (success)?"" : "not ", testnumber, test_name);
@@ -59,7 +65,7 @@ void _ok(char* test_name, int success, char *file, int linenum, char *test) {
   }
 }
 
-void _is(char* test_name, const char* str1, const char* str2, char *file, int linenum) {
+void _is(const char* test_name, const char* str1, const char* str2, char *file, int linenum) {
   int diff;
   
   if (str1 == NULL || str2 == NULL) {
@@ -73,8 +79,8 @@ void _is(char* test_name, const char* str1, const char* str2, char *file, int li
   _ok(test_name, (diff==0), file, linenum, "");
   
   if (diff) {
-    printf("#      got: %s\n", str1);
-    printf("# expected: %s\n", str2);
+    printf("#      got:\n%s\n", str1);
+    printf("# expected:\n%s\n", str2);
   }
 }
 
