@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.21 2002-05-29 13:52:52 acampi Exp $
+  $Id: icalfileset.c,v 1.22 2002-06-03 13:24:36 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -513,9 +513,9 @@ int icalfileset_count_components(icalfileset *cluster,
     return icalcomponent_count_components(impl->cluster,kind);
 }
 
-icalerrorenum icalfileset_select(icalfileset* set, icalgauge* gauge)
+icalerrorenum icalfileset_select(icalfileset* store, icalgauge* gauge)
 {
-    struct icalfileset_impl* impl = (struct icalfileset_impl*)set;
+    struct icalfileset_impl* impl = (struct icalfileset_impl*)store;
 
     icalerror_check_arg_re(gauge!=0,"guage",ICAL_BADARG_ERROR);
 
@@ -524,9 +524,9 @@ icalerrorenum icalfileset_select(icalfileset* set, icalgauge* gauge)
     return ICAL_NO_ERROR;
 }
 
-void icalfileset_clear(icalfileset* gauge)
+void icalfileset_clear(icalfileset* store)
 {
-    struct icalfileset_impl* impl = (struct icalfileset_impl*)gauge;
+    struct icalfileset_impl* impl = (struct icalfileset_impl*)store;
     
     impl->gauge = 0;
 
