@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.42 2002-10-30 23:08:17 acampi Exp $
+  $Id: icalrecur.c,v 1.43 2002-11-04 01:31:20 acampi Exp $
   $Locker:  $
     
 
@@ -517,8 +517,8 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 		i< limit  && array[i] != ICAL_RECURRENCE_ARRAY_MAX;
 		i++){
 		if (j == 3) { /* BYDAY */
-		    short dow = icalrecurrencetype_day_day_of_week(array[i]);
-		    const char *daystr = icalrecur_weekday_to_string(dow);
+		    const char *daystr = icalrecur_weekday_to_string(
+			icalrecurrencetype_day_day_of_week(array[i]));
 		    short pos;
 
 		    pos = icalrecurrencetype_day_position(array[i]);  
@@ -1158,14 +1158,14 @@ void test_increment()
 static short next_second(icalrecur_iterator* impl)
 {
 
-  short has_by_data = (impl->by_ptrs[BY_SECOND][0]!=ICAL_RECURRENCE_ARRAY_MAX);
+  short has_by_second = (impl->by_ptrs[BY_SECOND][0]!=ICAL_RECURRENCE_ARRAY_MAX);
   short this_frequency = (impl->rule.freq == ICAL_SECONDLY_RECURRENCE);
 
   short end_of_data = 0;
 
-  assert(has_by_data || this_frequency);
+  assert(has_by_second || this_frequency);
 
-  if(  has_by_data ){
+  if(  has_by_second ){
       /* Ignore the frequency and use the byrule data */
 
       impl->by_indices[BY_SECOND]++;
@@ -1182,7 +1182,7 @@ static short next_second(icalrecur_iterator* impl)
 	  impl->by_ptrs[BY_SECOND][impl->by_indices[BY_SECOND]];
       
       
-  } else if( !has_by_data &&  this_frequency ){
+  } else if( !has_by_second &&  this_frequency ){
       /* Compute the next value from the last time and the frequency interval*/
       increment_second(impl, impl->rule.interval);
 
@@ -1191,7 +1191,7 @@ static short next_second(icalrecur_iterator* impl)
   /* If we have gone through all of the seconds on the BY list, then we
      need to move to the next minute */
 
-  if(has_by_data && end_of_data && this_frequency ){
+  if(has_by_second && end_of_data && this_frequency ){
       increment_minute(impl,1);
   }
 
@@ -1202,19 +1202,19 @@ static short next_second(icalrecur_iterator* impl)
 static int next_minute(icalrecur_iterator* impl)
 {
 
-  short has_by_data = (impl->by_ptrs[BY_MINUTE][0]!=ICAL_RECURRENCE_ARRAY_MAX);
+  short has_by_minute = (impl->by_ptrs[BY_MINUTE][0]!=ICAL_RECURRENCE_ARRAY_MAX);
   short this_frequency = (impl->rule.freq == ICAL_MINUTELY_RECURRENCE);
 
   short end_of_data = 0;
 
-  assert(has_by_data || this_frequency);
+  assert(has_by_minute || this_frequency);
 
 
   if (next_second(impl) == 0){
       return 0;
   }
 
-  if(  has_by_data ){
+  if(  has_by_minute ){
       /* Ignore the frequency and use the byrule data */
 
       impl->by_indices[BY_MINUTE]++;
@@ -1230,7 +1230,7 @@ static int next_minute(icalrecur_iterator* impl)
       impl->last.minute = 
 	  impl->by_ptrs[BY_MINUTE][impl->by_indices[BY_MINUTE]];
 
-  } else if( !has_by_data &&  this_frequency ){
+  } else if( !has_by_minute &&  this_frequency ){
       /* Compute the next value from the last time and the frequency interval*/
       increment_minute(impl,impl->rule.interval);
   } 
@@ -1238,7 +1238,7 @@ static int next_minute(icalrecur_iterator* impl)
 /* If we have gone through all of the minutes on the BY list, then we
      need to move to the next hour */
 
-  if(has_by_data && end_of_data && this_frequency ){
+  if(has_by_minute && end_of_data && this_frequency ){
       increment_hour(impl,1);
   }
 
@@ -1248,18 +1248,18 @@ static int next_minute(icalrecur_iterator* impl)
 static int next_hour(icalrecur_iterator* impl)
 {
 
-  short has_by_data = (impl->by_ptrs[BY_HOUR][0]!=ICAL_RECURRENCE_ARRAY_MAX);
+  short has_by_hour = (impl->by_ptrs[BY_HOUR][0]!=ICAL_RECURRENCE_ARRAY_MAX);
   short this_frequency = (impl->rule.freq == ICAL_HOURLY_RECURRENCE);
 
   short end_of_data = 0;
 
-  assert(has_by_data || this_frequency);
+  assert(has_by_hour || this_frequency);
 
   if (next_minute(impl) == 0){
       return 0;
   }
 
-  if(  has_by_data ){
+  if(  has_by_hour ){
       /* Ignore the frequency and use the byrule data */
 
       impl->by_indices[BY_HOUR]++;
@@ -1274,7 +1274,7 @@ static int next_hour(icalrecur_iterator* impl)
       impl->last.hour = 
 	  impl->by_ptrs[BY_HOUR][impl->by_indices[BY_HOUR]];
 
-  } else if( !has_by_data &&  this_frequency ){
+  } else if( !has_by_hour &&  this_frequency ){
       /* Compute the next value from the last time and the frequency interval*/
       increment_hour(impl,impl->rule.interval);
 
@@ -1283,7 +1283,7 @@ static int next_hour(icalrecur_iterator* impl)
   /* If we have gone through all of the hours on the BY list, then we
      need to move to the next day */
 
-  if(has_by_data && end_of_data && this_frequency ){
+  if(has_by_hour && end_of_data && this_frequency ){
       increment_monthday(impl,1);
   }
 
@@ -1294,10 +1294,10 @@ static int next_hour(icalrecur_iterator* impl)
 static int next_day(icalrecur_iterator* impl)
 {
 
-  short has_by_data = (impl->by_ptrs[BY_DAY][0]!=ICAL_RECURRENCE_ARRAY_MAX);
+  short has_by_day = (impl->by_ptrs[BY_DAY][0]!=ICAL_RECURRENCE_ARRAY_MAX);
   short this_frequency = (impl->rule.freq == ICAL_DAILY_RECURRENCE);
 
-  assert(has_by_data || this_frequency);
+  assert(has_by_day || this_frequency);
 
   if (next_hour(impl) == 0){
       return 0;
@@ -1322,11 +1322,11 @@ static int next_day(icalrecur_iterator* impl)
 static int next_yearday(icalrecur_iterator* impl)
 {
 
-  short has_by_data = (impl->by_ptrs[BY_YEAR_DAY][0]!=ICAL_RECURRENCE_ARRAY_MAX);
+  short has_by_yearday = (impl->by_ptrs[BY_YEAR_DAY][0]!=ICAL_RECURRENCE_ARRAY_MAX);
 
   short end_of_data = 0;
 
-  assert(has_by_data );
+  assert(has_by_yearday );
 
   if (next_hour(impl) == 0){
       return 0;
@@ -1344,7 +1344,7 @@ static int next_yearday(icalrecur_iterator* impl)
   impl->last.day = 
       impl->by_ptrs[BY_YEAR_DAY][impl->by_indices[BY_YEAR_DAY]];
   
-  if(has_by_data && end_of_data){
+  if(has_by_yearday && end_of_data){
       increment_year(impl,1);
   }
 
@@ -1581,7 +1581,7 @@ static int next_weekday_by_week(icalrecur_iterator* impl)
 
   /* If we get here, we need to step to tne next day */
 
-  while(1) {
+  for (;;) {
       struct icaltimetype tt = icaltime_null_time();
       BYDAYIDX++; /* Look at next elem in BYDAY array */
       
@@ -1756,13 +1756,10 @@ static int expand_year_days(icalrecur_iterator* impl,short year)
     struct icaltimetype t;
     int flags;
 
-    t = icaltime_null_time();
+    t = icaltime_null_date();
 
 #define HBD(x) has_by_data(impl,x)
 
-    t.is_date = 1; /* Needed to make day_of_year routines work property */
-
-    memset(&t,0,sizeof(t));
     memset(impl->days,ICAL_RECURRENCE_ARRAY_MAX_BYTE,sizeof(impl->days));
     
     /* The flags and the following switch statement select which code
@@ -1780,7 +1777,7 @@ static int expand_year_days(icalrecur_iterator* impl,short year)
         
     case 0: {
         /* FREQ=YEARLY; */
-        struct icaltimetype t = impl->dtstart;
+        t = impl->dtstart;
         t.year = impl->last.year;
         
         impl->days[days_index++] = icaltime_day_of_year(t);
@@ -1791,7 +1788,6 @@ static int expand_year_days(icalrecur_iterator* impl,short year)
         /* FREQ=YEARLY; BYMONTH=3,11*/
 	
         for(j=0;impl->by_ptrs[BY_MONTH][j]!=ICAL_RECURRENCE_ARRAY_MAX;j++){
-	    struct icaltimetype t;
 	    short month = impl->by_ptrs[BY_MONTH][j];	    
             short doy;
 
@@ -1856,7 +1852,6 @@ static int expand_year_days(icalrecur_iterator* impl,short year)
     case 1<<BY_WEEK_NO: {
         /* FREQ=YEARLY; BYWEEKNO=20,50 */
 
-	struct icaltimetype t;
 	short dow;
 
 	t.day = impl->dtstart.day;
@@ -1880,7 +1875,6 @@ static int expand_year_days(icalrecur_iterator* impl,short year)
 
     case 1<<BY_DAY: {
         /*FREQ=YEARLY; BYDAY=TH,20MO,-10FR*/
-        int days_index = 0;
         pvl_elem i;
         pvl_list days = expand_by_day(impl,year);
 
@@ -1904,8 +1898,6 @@ static int expand_year_days(icalrecur_iterator* impl,short year)
 	    short days_in_month = icaltime_days_in_month(month,year);
 	    short first_dow, last_dow, doy_offset;
             
-	    struct icaltimetype t;
-	    memset(&t,0,sizeof(struct icaltimetype));
 	    t.year = year;
 	    t.month = month;
 	    t.day = 1;
@@ -1959,14 +1951,12 @@ static int expand_year_days(icalrecur_iterator* impl,short year)
     case (1<<BY_DAY) + (1<<BY_MONTH_DAY) : {
         /*FREQ=YEARLY; BYDAY=TH,20MO,-10FR; BYMONTHDAY=1,15*/
 
-        int days_index = 0;
         pvl_elem itr;
         pvl_list days = expand_by_day(impl,year);
 
         for(itr=pvl_head(days);itr!=0;itr=pvl_next(itr)){
             short day = (short)(int)pvl_data(itr);
             struct icaltimetype tt; 
-            short j;
             
             tt = icaltime_from_day_of_year(day,year);
             
@@ -1995,7 +1985,7 @@ static int expand_year_days(icalrecur_iterator* impl,short year)
         for(itr=pvl_head(days);itr!=0;itr=pvl_next(itr)){
             short day = (short)(int)pvl_data(itr);
             struct icaltimetype tt; 
-            short i,j;
+            short i;
             
             tt = icaltime_from_day_of_year(day,year);
             
@@ -2021,7 +2011,6 @@ static int expand_year_days(icalrecur_iterator* impl,short year)
     case (1<<BY_DAY) + (1<<BY_WEEK_NO) : {
         /*FREQ=YEARLY; BYDAY=TH,20MO,-10FR;  WEEKNO=20,50*/
        
-        int days_index = 0;
         pvl_elem itr;
         pvl_list days = expand_by_day(impl,year);
 
@@ -2054,8 +2043,7 @@ static int expand_year_days(icalrecur_iterator* impl,short year)
 
     case 1<<BY_YEAR_DAY: {
 	for(j=0;impl->by_ptrs[BY_YEAR_DAY][j]!=ICAL_RECURRENCE_ARRAY_MAX;j++){
-	    short doy = impl->by_ptrs[BY_YEAR_DAY][j];
-	    impl->days[days_index++] = doy;
+	    impl->days[days_index++] = impl->by_ptrs[BY_YEAR_DAY][j];
         }
         break;
     }
