@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.29 2002-10-09 17:13:25 acampi Exp $
+  $Id: icalfileset.c,v 1.30 2002-12-05 13:45:19 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -354,19 +354,6 @@ icalerrorenum icalfileset_commit(icalset* set)
 	return ICAL_NO_ERROR;
     }
     
-    if (fset->options.safe_saves == 1) {
-#ifndef WIN32
-	snprintf(tmp,ICAL_PATH_MAX,"cp '%s' '%s.bak'",fset->path, fset->path);
-#else
-	snprintf(tmp,ICAL_PATH_MAX,"copy %s %s.bak", fset->path, fset->path);
-#endif
-	
-	if(system(tmp) < 0){
-	    icalerror_set_errno(ICAL_FILE_ERROR);
-	    return ICAL_FILE_ERROR;
-	}
-    }
-
     if(lseek(fset->fd, 0, SEEK_SET) < 0){
 	icalerror_set_errno(ICAL_FILE_ERROR);
 	return ICAL_FILE_ERROR;

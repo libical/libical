@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalfileset.h,v 1.12 2002-12-05 13:40:02 acampi Exp $
+ $Id: icalfileset.h,v 1.13 2002-12-05 13:45:20 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -120,7 +120,6 @@ icalcomponent* icalfileset_get_component(icalset* cluster);
 typedef struct icalfileset_options {
   int          flags;		/**< flags for open() O_RDONLY, etc  */
   mode_t       mode;		/**< file mode */
-  int          safe_saves;	/**< to lock or not */
   icalcluster  *cluster;	/**< use this cluster to initialize data */
 } icalfileset_options;
 
