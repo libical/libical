@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.39 2002-11-22 19:45:38 acampi Exp $
+  $Id: icalparser.c,v 1.40 2002-11-22 19:55:51 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -52,6 +52,10 @@
 
 #include "icalmemory.h"
 #include "icalparser.h"
+
+#ifdef WIN32
+#define HAVE_CTYPE_H
+#endif
 
 #ifdef HAVE_WCTYPE_H
 #include <wctype.h>
