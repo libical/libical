@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.11 2001-03-31 17:10:26 ebusboom Exp $
+  $Id: icallangbind.c,v 1.12 2001-03-31 17:41:57 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 

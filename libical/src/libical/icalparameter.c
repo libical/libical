@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c,v 1.3 2001-03-31 17:10:26 ebusboom Exp $
+  $Id: icalparameter.c,v 1.4 2001-03-31 17:41:57 ebusboom Exp $
   $Locker:  $
     
 
