@@ -267,7 +267,21 @@ char* icalrestriction_no_duration(icalrestriction_property_record *rec,
     /* _no_dtend takes care of this one */
     return 0;    
 }                                     
+char* icalrestriction_must_be_email(
+    icalrestriction_property_record *rec,
+    icalcomponent* comp, 
+    icalproperty* prop)
+{
+    icalproperty_status stat = icalproperty_get_action(prop);
 
+    if( !( stat == ICAL_ACTION_EMAIL)){
+
+	return "Failed iTIP restrictions for ACTION property. Value must be EMAIL.";
+
+    }
+
+    return 0;    
+}
 
 int icalrestriction_check_component(icalproperty_method method,
 				    icalcomponent* comp)
