@@ -21,7 +21,7 @@
 	* src/libical/icalderivedproperty.c.in
 	* src/libical/icalproperty.c
 	* src/libical/icalproperty.h: Added a check for valid property kind
-	before instancing it.
+	before instancing a new one.
 
 	* src/libical/icalvalue.c: Fixed icalvalue_new_clone to properly clone
 	X- properties.
@@ -78,7 +78,7 @@
 	* src/libical/icalderivedvalue.c.in
 	* src/libical/icalvalue.c
 	* src/libical/icalvalue.h: Added a check for valid value kind before
-	instancing it.
+	instancing a new one.
 	Obtained from: Paul Lindner
 
 	* src/libical/icalproperty.c
