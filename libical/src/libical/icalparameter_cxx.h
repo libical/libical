@@ -16,6 +16,8 @@ extern "C" {
 #include "ical.h"
 };
 
+#include "icptrholder.h"
+
 typedef	char* string; // Will use the string library from STL
 
 class ICalParameter {
@@ -35,6 +37,10 @@ public:
 	ICalParameter(icalparameter_kind kind) throw(icalerrorenum);
 
 	operator icalparameter*() { return imp; }
+
+	void detach() {
+	    imp = NULL;
+	}
 
 public:
 	string as_ical_string() throw(icalerrorenum);

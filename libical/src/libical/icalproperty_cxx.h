@@ -12,6 +12,7 @@
 #define ICALPROPERTY_CXX_H
 
 #include "ical.h"
+#include "icptrholder.h"
 
 typedef	char* string; // Will use the string library from STL
 
@@ -32,6 +33,10 @@ public:
 
 	operator icalproperty*() {return imp;}
         int operator==(ICalProperty& rhs);
+
+	void detach() {
+	    imp = NULL;
+	}
 
 public:
 	string as_ical_string();
@@ -354,5 +359,7 @@ public:
 private:
   icalproperty* imp; /**< The actual C based icalproperty */
 };
+
+typedef ICPointerHolder<ICalProperty> ICalPropertyTmpPtr;   /* see icptrholder.h for comments */
 
 #endif /* ICalProperty_H */

@@ -139,6 +139,8 @@ void VComponent::add_property(ICalProperty* property){
 }
 void VComponent::remove_property(ICalProperty* property){
 	icalcomponent_remove_property(imp, *property);
+	icalproperty_free(*property);
+        property->detach();		// set imp to null, it's free already.
 }
 int VComponent::count_properties(icalproperty_kind kind){
 	return icalcomponent_count_properties(imp, kind);
@@ -390,7 +392,6 @@ void VComponent::set_recurrenceid(struct icaltimetype v){
 	icalcomponent_set_recurrenceid(imp, v);
 }
 
-#if 0
 struct icalorganizertype VComponent::get_organizer(){
 	return icalcomponent_get_organizer(imp);
 }
@@ -404,7 +405,6 @@ void VComponent::add_attendee(struct icalattendeetype attendee){
 void VComponent::remove_attendee(string cuid){
 	icalcomponent_remove_attendee(imp, cuid);
 }
-#endif
 
 int VComponent::get_sequence(){
         return (int)icalcomponent_get_sequence(imp);
@@ -420,12 +420,11 @@ void VComponent::set_status(int v){
         icalcomponent_set_status(imp, v);
 }
 
-#if 0
+
 /* Get the Nth attendee. Out of range indices return an attendee with cuid == 0 */
 struct icalattendeetype VComponent::get_attendee(int index){
 	return icalcomponent_get_attendee(imp, index);
 }
-#endif
 
 /* For VCOMPONENT: Return a reference to the first VEVENT, VTODO, or VJOURNAL */
 VComponent* VComponent::get_first_real_component(){
@@ -452,7 +451,6 @@ void VComponent::set_parent(VComponent *parent){
 	icalcomponent_set_parent(imp, *parent);
 }
 
-/* todo: only implemented ignoreValue = true */
 /* ignoreValue means remove properties even if the data doesn't match */
 bool VComponent::remove(VComponent& fromVC, bool ignoreValue){
 
@@ -460,13 +458,14 @@ bool VComponent::remove(VComponent& fromVC, bool ignoreValue){
     if (this->isa() != fromVC.isa()) return false;
 
     /* properties first */
-    ICalProperty* propToBeRemoved;
+    ICalPropertyTmpPtr propToBeRemoved;
     for (propToBeRemoved=fromVC.get_first_property(ICAL_ANY_PROPERTY); propToBeRemoved != NULL;
          propToBeRemoved=fromVC.get_next_property(ICAL_ANY_PROPERTY)) {
 
         /* loop through properties from this component */
-        ICalProperty* next = NULL;    
-        for (ICalProperty* p=this->get_first_property(propToBeRemoved->isa()); p!=NULL; p=next) {
+        ICalPropertyTmpPtr next;
+        ICalPropertyTmpPtr p;
+        for (p=this->get_first_property(propToBeRemoved->isa()); p != NULL; p=next) {
             next = this->get_next_property(propToBeRemoved->isa());
             if (ignoreValue)
                  this->remove_property(p);
@@ -479,27 +478,27 @@ bool VComponent::remove(VComponent& fromVC, bool ignoreValue){
         }
     }
 
-    /* components next */
-    VComponent* comp;
+    /* components next - should remove by UID */
+    VComponentTmpPtr comp;
     for (comp=fromVC.get_first_component(ICAL_ANY_COMPONENT); comp != NULL;
          comp=fromVC.get_next_component(ICAL_ANY_COMPONENT)) {
-        VComponent* nextc = NULL;
-        for (VComponent* c=this->get_first_component(comp->isa()); c!=NULL; c=nextc) {
-            nextc = this->get_next_component(comp->isa());
-            if (ignoreValue) {
+        const char* fromCompUid = comp->get_uid();
+        VComponentTmpPtr c;
+        for (c=this->get_first_component(comp->isa()); c != NULL;
+             c=this->get_next_component(comp->isa())) {
+            const char* thisCompUid = c->get_uid();
+            if (strcmp(fromCompUid, thisCompUid) == 0) {
                 // recursively go down the components
-                if (c->remove(*comp, ignoreValue)) {
+                c->remove(*comp, ignoreValue);
                     // if all properties are removed and there is no sub-components, then
                     // remove this compoent
                     if ((c->count_properties(ICAL_ANY_PROPERTY) == 0) &&
                         (c->count_components(ICAL_ANY_COMPONENT) == 0)) {
                         this->remove_component(c);
                     }
+                break;
                 }
             }
-            else
-                return false;
-        }
     }
     
     return true;
@@ -513,10 +512,11 @@ bool VComponent::update(VComponent& fromC, bool removeMissing){
     if (this->isa() != fromC.isa()) return false;
 
     /* property first */
-    ICalProperty* prop;
+    ICalPropertyTmpPtr prop;
     for (prop=fromC.get_first_property(ICAL_ANY_PROPERTY); prop != NULL;
     	 prop=fromC.get_next_property(ICAL_ANY_PROPERTY)) {
-        ICalProperty* thisProp = this->get_first_property(prop->isa());
+        ICalPropertyTmpPtr thisProp;
+	thisProp = this->get_first_property(prop->isa());
     	if (thisProp == NULL) {
             thisProp = new ICalProperty(prop->isa());
             this->add_property(thisProp);
@@ -526,10 +526,11 @@ bool VComponent::update(VComponent& fromC, bool removeMissing){
     }
 
     /* recursively updating sub-components */
-    VComponent* comp;
+    VComponentTmpPtr comp;
     for (comp=fromC.get_first_component(ICAL_ANY_COMPONENT); comp != NULL;
          comp=fromC.get_next_component(ICAL_ANY_COMPONENT)) {
-        VComponent* thisComp = this->get_first_component(comp->isa());
+        VComponentTmpPtr thisComp;
+        thisComp = this->get_first_component(comp->isa());
         if (thisComp == NULL) {
             thisComp = new VComponent(comp->isa());
             this->add_component(thisComp);
@@ -545,7 +546,7 @@ bool VComponent::add(VComponent& fromC){
 	if (this->isa() != fromC.isa()) return false;
 
 	/* properties first */
-	ICalProperty* prop;
+    ICalPropertyTmpPtr prop;
 	for (prop=fromC.get_first_property(ICAL_ANY_PROPERTY); prop != NULL;
 		 prop=fromC.get_next_property(ICAL_ANY_PROPERTY)) {
 		/* clone another property */
@@ -555,7 +556,7 @@ bool VComponent::add(VComponent& fromC){
 
 	/* sub-components next */
 	bool err = false;
-	VComponent* comp;
+    VComponentTmpPtr comp;
 	for (comp=fromC.get_first_component(ICAL_ANY_COMPONENT); comp != NULL;
 		 comp=fromC.get_next_component(ICAL_ANY_COMPONENT)) {
 		VComponent *c = new VComponent(comp->isa());
@@ -682,7 +683,7 @@ VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *tr)
   struct icaltimetype tt;
   ICalParameter *related_param;
 
-  ICalProperty *trigger_prop = this->get_first_property(ICAL_TRIGGER_PROPERTY);
+  ICalPropertyTmpPtr trigger_prop = this->get_first_property(ICAL_TRIGGER_PROPERTY);
 
   // all VALARMs must have a TRIGGER
   if (trigger_prop == NULL)  

@@ -12,6 +12,8 @@ extern "C" {
 #include "ical.h"
 };
                           
+#include "icptrholder.h"
+                          
 typedef	char* string; // Will use the string library from STL
 
 class ICalValue {
@@ -26,6 +28,10 @@ public:
 	ICalValue(icalvalue_kind kind, string  str)  throw(icalerrorenum);
 
 	operator icalvalue* () { return imp; }
+
+	void detach() {
+	    imp = NULL;
+	}
 
 public:
 	string as_ical_string();
@@ -138,5 +144,8 @@ public:
 private:
 	icalvalue* imp;
 };
+
+
+typedef ICPointerHolder<ICalValue> ICalValueTmpPtr;    /* see icptrholder.h for comments */
 
 #endif /*ICALVALUE_H*/

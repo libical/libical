@@ -42,13 +42,16 @@ ICalProperty& ICalProperty::operator=(const ICalProperty& v) throw(icalerrorenum
 	return *this;
 }
 ICalProperty::~ICalProperty(){
-	icalproperty_free(imp);
+	if (imp != NULL) icalproperty_free(imp);
 }
+
 ICalProperty::ICalProperty(icalproperty* v) : imp(v) {
 }
+
 ICalProperty::ICalProperty(string str){
 	imp = icalproperty_new_from_string(str);
 }
+
 ICalProperty::ICalProperty(icalproperty_kind kind){
 	imp = icalproperty_new(kind);
 }

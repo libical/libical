@@ -29,8 +29,9 @@ ICalValue& ICalValue::operator=(const ICalValue& v) throw(icalerrorenum) {
 
 	return *this;
 }
+
 ICalValue::~ICalValue(){
-	icalvalue_free(imp);
+	if (imp != NULL) icalvalue_free(imp);
 }
 
 ICalValue::ICalValue(icalvalue* v) throw(icalerrorenum) : imp(v){

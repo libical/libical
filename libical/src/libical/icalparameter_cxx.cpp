@@ -38,8 +38,9 @@ ICalParameter& ICalParameter::operator=(const ICalParameter& v)  throw(icalerror
     
 	return *this;
 }
+
 ICalParameter::~ICalParameter(){
-	icalparameter_free(imp);
+	if (imp != NULL) icalparameter_free(imp);
 }
 
 ICalParameter::ICalParameter(icalparameter* v) throw(icalerrorenum) : imp(v){

@@ -12,6 +12,7 @@
 #define VCOMPONENT_H
 
 #include "ical.h"
+#include "icptrholder.h"
 
 typedef	char* string; // Will use the string library from STL
 
@@ -39,6 +40,12 @@ public:
 	operator icalcomponent* () { return imp; }
 
 	void new_from_string(string str);
+
+	// detach imp to this object. use with caution. it would cause
+	// memory leak if you are not careful.
+	void detach() {
+	    imp = NULL;
+	}
 
 public:
 	string as_ical_string() throw (icalerrorenum);
@@ -153,13 +160,13 @@ public:
 	struct icaltimetype get_recurrenceid();
 	void set_recurrenceid(struct icaltimetype v);
 
-#if 0
+
 	struct icalorganizertype get_organizer();
 	void set_organizer(struct icalorganizertype org);
 
+
 	void add_attendee(struct icalattendeetype attendee);
 	void remove_attendee(string cuid);
-#endif
 
         int get_sequence();
         void set_sequence(int v);
@@ -167,13 +174,12 @@ public:
         int get_status();
         void set_status(int v);
 
-#if 0
+
 	/**
 	 * Get the Nth attendee. Out of range indices return an
 	 * attendee with cuid == 0
 	*/
 	struct icalattendeetype get_attendee(int index);
-#endif
 
 public:
 	/**
