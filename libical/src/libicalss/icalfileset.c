@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.27 2002-06-28 10:56:44 acampi Exp $
+  $Id: icalfileset.c,v 1.28 2002-08-07 17:17:14 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -117,7 +117,8 @@ icalset* icalfileset_init(icalset *set, const char* path, void* options_in)
 #ifndef WIN32
   fset->fd = open(fset->path, flags, mode);
 #else
-  fset->fd = sopen(fset->path,flags, _SH_DENYWR, _S_IREAD | _S_IWRITE);
+  fset->fd = open(fset->path, flags, mode);
+  /* fset->fd = sopen(fset->path,flags, _SH_DENYWR, _S_IREAD | _S_IWRITE); */
 #endif
     
   if (fset->fd < 0){
@@ -272,6 +273,11 @@ void icalfileset_free(icalset* set)
 	icalfileset_commit(set);
 	icalcomponent_free(fset->cluster);
 	fset->cluster=0;
+    }
+
+    if (fset->gauge != 0){
+	icalgauge_free(fset->gauge);
+	fset->gauge=0;
     }
 
     if(fset->fd > 0){
