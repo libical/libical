@@ -12,7 +12,7 @@
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalset.c,v 1.11 2002-06-27 16:54:01 acampi Exp $
+ $Id: icalset.c,v 1.12 2002-06-28 12:59:25 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -47,6 +47,13 @@
 #ifdef WITH_BDB4
 #include "icalbdbset.h"
 #include "icalbdbsetimpl.h"
+#endif
+
+#define _DLOPEN_TEST
+#ifdef _DLOPEN_TEST
+#include <sys/types.h>
+#include <dlfcn.h>
+#include <dirent.h>
 #endif
 
 static icalset icalset_dirset_init = {
@@ -130,10 +137,74 @@ static icalset icalset_bdbset_init = {
 };
 #endif
 
-/* #define _DLOPEN_TEST */
 #ifdef _DLOPEN_TEST
 static int	icalset_init_done = 0;
 static pvl_list icalset_kinds = 0;
+
+typedef icalset *(*fptr)(void);
+
+/**
+ * Try to load the file and register any icalset found within.
+ */
+static int load(const char *file) {
+
+        void           *modh;
+        fptr            inith;
+	icalset	       *icalset_init_ptr;
+
+        if ((modh = dlopen(file, RTLD_NOW)) == 0) {
+                perror("dlopen");
+                return 0;
+        }
+
+        if ((inith = (fptr)dlsym(modh, "InitModule")) == 0) {
+                perror("dlsym");
+                return 0;
+        }
+
+        while ((icalset_init_ptr = ((inith)())) != 0) {
+		pvl_push(icalset_kinds, &icalset_init_ptr);
+        }
+
+        return 1;
+}
+
+/**
+ * Look in the given directory for files called mod_*.o and try to
+ * load them.
+ */
+int icalset_loaddir(const char *path) {
+        DIR             *d;
+        struct dirent   *dp;
+        char            buf[PATH_MAX],
+                       *bufptr;
+        int             tot = 0;
+
+        strcpy(buf, path);
+        bufptr = buf + strlen(buf);
+
+        if (*(bufptr-1) != '/')
+                *bufptr++ = '/';
+
+        if ((d = opendir(path)) == 0) {
+                perror("opendir");
+                return 0;
+        }
+
+        while ((dp = readdir(d)) != 0) {
+                if (strncmp(dp->d_name, "mod_", 4)) continue;
+
+                strcpy(bufptr, dp->d_name);
+
+                load(buf);
+                tot++;
+        }
+        (void)closedir(d);
+
+        return 1;
+}
+
+int icalset_register_class(icalset *set);
 
 static void icalset_init(void) {
     assert(icalset_kinds == 0);
@@ -144,6 +215,11 @@ static void icalset_init(void) {
 #ifdef WITH_BDB4
     pvl_push(icalset_kinds, &icalset_bdb4set_init);
 #endif
+
+#ifdef EXT_PATH
+    icalset_loaddir(EXT_PATH);
+#endif
+
     icalset_init_done++;
 }
 
