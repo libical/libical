@@ -4,7 +4,7 @@
   FILE: icalderivedproperty.c
   CREATOR: eric 15 Feb 2001
   
-  $Id: icalderivedproperty.c.in,v 1.12 2002-10-09 23:55:53 acampi Exp $
+  $Id: icalderivedproperty.c.in,v 1.13 2002-10-10 00:05:37 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -276,7 +276,7 @@ icalproperty_status icalenum_string_to_status(const char* str)
          i != ICAL_STATUS_NONE-ICALPROPERTY_FIRST_ENUM;
          i++) {
 	if ( strcmp(enum_map[i].str, str) == 0) {
-	    return (icalproperty_method)enum_map[i].prop_enum;
+	    return (icalproperty_status)enum_map[i].prop_enum;
 	}
     }
 
