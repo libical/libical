@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.16 2002-06-11 19:07:36 acampi Exp $
+ $Id: icaltime.h,v 1.17 2002-06-27 00:04:08 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -108,6 +108,7 @@ struct icaltime_span {
 	int is_busy; /* 1->busy time, 0-> free time */
 };
 
+typedef struct icaltime_span icaltime_span;
 
 /*
  *	FIXME
@@ -249,4 +250,17 @@ struct icaltime_span icaltime_span_new(struct icaltimetype dtstart,
 				       struct icaltimetype dtend,
 				       int is_busy);
 
+/** @brief Returns true if the two spans overlap **/
+int icaltime_span_overlaps(icaltime_span *s1, 
+			   icaltime_span *s2);
+
+/** @brief Returns true if the span is totally within the containing
+ *  span 
+ */
+int icaltime_span_contains(icaltime_span *s,
+			   icaltime_span *container);
+
+
 #endif /* !ICALTIME_H */
+
+

@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.33 2002-06-11 19:07:35 acampi Exp $
+  $Id: icaltime.c,v 1.34 2002-06-27 00:04:08 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -968,14 +968,20 @@ icaltime_set_timezone(struct icaltimetype *t, const icaltimezone *zone) {
 /**
  *  @brief builds an icaltimespan given a start time, end time and busy value.
  *
+ *  @param dtstart   The beginning time of the span, can be a date-time
+ *                   or just a date.
+ *  @param dtend     The end time of the span.
+ *  @param is_busy   A boolean value, 0/1.
+ *  @ret             A span using the supplied values.
+ *
  *  returned span contains times specified in UTC.
  */
 
-struct icaltime_span icaltime_span_new(struct icaltimetype dtstart,
+icaltime_span icaltime_span_new(struct icaltimetype dtstart,
 				       struct icaltimetype dtend,
 				       int    is_busy)
 {
-  struct icaltime_span span;
+  icaltime_span span;
 
   span.is_busy = is_busy;
 
@@ -1002,3 +1008,51 @@ struct icaltime_span icaltime_span_new(struct icaltimetype dtstart,
   return span;
 }
 
+
+/** @brief Returns true if the two spans overlap
+ *
+ *  @param s1         1st span to test
+ *  @param s2         2nd span to test
+ *  @ret              boolean value
+ *
+ *  The result is calculated by testing if the start time of s1 is contained
+ *  by the s2 span, or if the end time of s1 is contained by the s2 span.
+ *  Also returns true if the spans are equal.
+ *
+ *  Note, this will return false if the spans are adjacent.
+ */
+
+int icaltime_span_overlaps(icaltime_span *s1, 
+			   icaltime_span *s2)
+{
+  if (s1->start > s2->start && s1->start < s2->end)
+    return 1;
+
+  if (s1->end > s2->start && s1->end < s2->end)
+    return 1;
+
+  if (s1->start == s2->start && s1->end == s2->end)
+    return 1;
+  
+  return 0;
+}
+
+/** @brief Returns true if the span is totally within the containing
+ *  span
+ *
+ *  @param s          The span to test for.
+ *  @param container  The span to test against.
+ *  @ret              boolean value.
+ *
+ */
+
+int icaltime_span_contains(icaltime_span *s,
+			   icaltime_span *container)
+{
+
+  if ((s->start >= container->start && s->start < container->end) &&
+      (s->end   <= container->end   && s->end   > container->start))
+    return 1;
+  
+  return 0;
+}
