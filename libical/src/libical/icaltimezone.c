@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.27 2002-11-03 22:33:53 acampi Exp $
+ $Id: icaltimezone.c,v 1.28 2002-11-03 23:17:34 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1027,7 +1027,7 @@ icaltimezone_find_nearby_change		(icaltimezone		*zone,
     upper = zone->changes->num_elements;
 
     while (lower < upper) {
-	middle = (lower + upper) >> 1;
+	middle = (lower + upper) / 2;
 	zone_change = icalarray_element_at (zone->changes, middle);
 	cmp = icaltimezone_compare_change_fn (change, zone_change);
 	if (cmp == 0)
