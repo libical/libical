@@ -1,5 +1,11 @@
 2001-02-09  JP Rosevear  <jpr@ximian.com>
 
+	* src/libical/Makefile.am: Correct typo
+
+	* Removal of more auto generated files
+	
+2001-02-09  JP Rosevear  <jpr@ximian.com>
+
 	* Removal of various auto generated files
 	
 2001-02-09  JP Rosevear  <jpr@ximian.com>

@@ -132,7 +132,7 @@ icalproperty.h: $(PROPERTYDEPS)
 
 icalproperty.c: $(PROPERTYDEPS) icalproperty.h 
 	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedproperties.pl \
-		-i ($srcdir)/icalproperty.c.in -c $(DESIGNDATA)/prop-to-value.txt \
+		-i $(srcdir)/icalproperty.c.in -c $(DESIGNDATA)/prop-to-value.txt \
 		${DESIGNDATA}/value-types.csv > icalproperty.c
 
 # restrictions
