@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.34 2002-10-09 22:53:29 acampi Exp $
+  $Id: icalvalue.c,v 1.35 2002-10-09 22:57:13 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1077,6 +1077,11 @@ static int icalvalue_is_time(const icalvalue* a) {
 
 }
 
+/*
+ * In case of error, this function returns 0. This is partly bogus, as 0 is
+ * not part of the returned enum.
+ * FIXME We should probably add an error value to the enum.
+ */
 icalparameter_xliccomparetype
 icalvalue_compare(const icalvalue* a, const icalvalue *b)
 {
@@ -1234,7 +1239,7 @@ icalvalue_compare(const icalvalue* a, const icalvalue *b)
 	default:
 	{
 	    icalerror_warn("Comparison not implemented for value type");
-	    return ICAL_XLICCOMPARETYPE_REGEX+1; /* HACK */
+	    return 0;
 	}
     }   
 
