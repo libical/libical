@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.62 2002-11-21 09:56:36 acampi Exp $
+  $Id: icaltime.c,v 1.63 2003-01-15 22:53:05 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -751,8 +751,12 @@ icaltime_adjust(struct icaltimetype *tt, const int days, const int hours,
 	const int minutes, const int seconds) {
 
     int second, minute, hour, day;
-    int minutes_overflow, hours_overflow, days_overflow, years_overflow;
+    int minutes_overflow, hours_overflow, days_overflow = 0, years_overflow;
     int days_in_month;
+
+    /* If we are passed a date make sure to ignore hour minute and second */
+    if (tt->is_date)
+	goto IS_DATE;
 
     /* Add on the seconds. */
     second = tt->second + seconds;
@@ -781,6 +785,7 @@ icaltime_adjust(struct icaltimetype *tt, const int days, const int hours,
 	days_overflow--;
     }
 
+IS_DATE:
     /* Normalize the month. We do this before handling the day since we may
        need to know what month it is to get the number of days in it.
        Note that months are 1 to 12, so we have to be a bit careful. */
