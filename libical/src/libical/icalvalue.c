@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.26 2002-06-28 09:30:17 acampi Exp $
+  $Id: icalvalue.c,v 1.27 2002-07-04 09:52:17 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -150,6 +150,19 @@ icalvalue* icalvalue_new_clone(const icalvalue* old) {
 		memcpy(	new->data.v_recur, old->data.v_recur,
 			sizeof(struct icalrecurrencetype));	
 	    }
+	    break;
+	}
+
+	case ICAL_X_VALUE: 
+	{
+	    if (old->x_value != 0) {
+		new->x_value=icalmemory_strdup(old->x_value);
+
+		if (new->x_value == 0) {
+		    return 0;
+		}
+	    }
+
 	    break;
 	}
 
