@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.56 2002-11-03 22:33:53 acampi Exp $
+  $Id: icaltime.c,v 1.57 2002-11-04 17:52:50 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -91,7 +91,7 @@ static time_t make_time(struct tm *tm, int tzm)
    *  (number of leap days to subtract)
    */
 
-  tim = (tm->tm_year - 70) * 365 + ((tm->tm_year - 1) / 2) - 17;
+  tim = (tm->tm_year - 70) * 365 + ((tm->tm_year - 1) / 4) - 17;
 
   /* add number of days elapsed in the current year */
 
