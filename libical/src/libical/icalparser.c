@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.41 2002-11-22 19:58:27 acampi Exp $
+  $Id: icalparser.c,v 1.42 2002-12-05 15:51:39 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -606,7 +606,7 @@ icalcomponent* icalparser_parse(icalparser *parser,
         }
 	cont = 0;
 	if(line != 0){
-	    free(line);
+	    icalmemory_free_buffer(line);
 		cont = 1;
 	}
     } while ( cont );
