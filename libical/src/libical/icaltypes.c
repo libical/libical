@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.11 2002-07-23 00:37:32 lindner Exp $
+  $Id: icaltypes.c,v 1.12 2002-08-09 14:28:16 lindner Exp $
   $Locker:  $
     
 
@@ -109,7 +109,7 @@ struct icalreqstattype icalreqstattype_from_string(const char* str)
 {
   const char *p1,*p2;
   struct icalreqstattype stat;
-  short major, minor;
+  short major=0, minor=0;
 
   icalerror_check_arg((str != 0),"str");
 
