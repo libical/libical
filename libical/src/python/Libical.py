@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+5#!/usr/bin/env python 
 # -*- Mode: python -*-
 #======================================================================
 # FILE: Libical.py
@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.py,v 1.12 2001-02-28 17:36:07 ebusboom Exp $
+#  $Id: Libical.py,v 1.13 2001-03-01 01:15:58 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -29,6 +29,7 @@
 from LibicalWrap import *
 from types import *
 from string import upper, join
+import regsub
 import base64
 
 
@@ -43,128 +44,119 @@ class Property:
     In addition, parameter:parameter value entries may be included.
     """
 
+    def __init__(self, type = None, ref = None):
 
 
-    def __init__(self, dict):
-        # TEMP_NOTE: I have split the singular dict into two separate ones.
-        
-        # Object descriptive & value data stored in self.desc
-        # Properties are stored in self.parameters
-        self.desc = {}
-        self.parameters = {}
-  
-        desc_keys = ('name', 'value', 'value_type', 'pid', 'ref', 'deleted' )
+        assert(ref == None or isinstance(ref,StringType))
+        assert(type == None or isinstance(type,StringType))
 
-        self.desc['deleted'] = 0;
+
+        if ref != None:
+            self._ref = ref
+        elif type != None:
+            kind  = icalproperty_string_to_kind(type)
+            self._ref = icalproperty_new(kind)
+
+
+        assert (self._ref != 'NULL')
+            
+        self._deleted = 0;
+
+
         # Initialize all of the required keys
-        for key in desc_keys:
-            self.desc[key] = None
-
-        for key in dict.keys():
-            if key in desc_keys:
-                self.desc[key]=dict[key]
-            else:
-                self[key]=dict[key]
 
 
     def __del__(self):
 
-        self.desc['deleted'] = 1;
+        self._deleted = 1;
 
-        if not self.desc['deleted'] and \
+        if not self._deleted and \
            self.ref() and \
            icalproperty_get_parent(self.ref()) == 'NULL':
             
             icalproperty_free(self.ref())
             
-
     def name(self,v=None):
         """ Return the name of the property """
-        if(v != None):
-            self.desc['name'] = v
+        str = icalproperty_as_ical_string(self._ref)
 
-        return self.desc['name']
+        idx = str.index('\n')
+
+        return str[:idx]
 
     def ref(self,v=None):
         """ Return the internal reference to the libical icalproperty """
         if(v != None):
-            self.desc['ref'] = v
 
-        return self.desc['ref']
+            if not self._deleted and self._ref and \
+               icalproperty_get_parent(self._ref) == 'NULL':
+                
+                icalproperty_free(self._ref)
 
-    def value_type(self,v=None):
-        """ Return the RFC2445 name of the value """
-        if(v != None):
-            self.desc['value_type'] = v
+            self._ref = v
 
-        return self.desc['value_type']
+        return self._ref
 
-    def value(self,v=None):
+
+    def value(self,v=None, kind = None):
         """ Return the RFC2445 representation of the value """
+
         if(v != None):
-            self.desc['value'] = v
-
-        return self.desc['value']
-
-    def getAllParameters(self):
-        """Returns a list containing all the set parameters (not values).
-
-        Only paramters whose values are not None are returned (i.e. if
-        a value is None, the parameter value is assumed to be unset).
-        """
-        return filter(lambda p, s=self: s[p] != None, self.parameters.keys())
-
-    def _update_value(self):
-        """
-        A virtual method that creates the dict entry value from another
-        representation of the property
-        """
-        
-        if self.ref():
-            icalproperty_set_value_from_string(self.ref(),self.desc['value'])
             
-    def asIcalString(self):
-        " "
+            if kind != None:
+                self.__setitem__('VALUE',kind)
+                vt = kind
+            elif self.__getitem__('VALUE'):
+                vt = self.__getitem__('VALUE')
+            else:
+                vt = 'NO' # Use the kind of the existing value
 
-        return str(self)
+            icalproperty_set_value_from_string(self._ref,v,vt)
+
+
+        return icalproperty_get_value_as_string(self._ref)
+
+    def parameters(self):
+
+        d_string = icallangbind_property_eval_string(self._ref,":")
+        dict = eval(d_string)
+
+        desc_keys = ('name', 'value', 'value_type', 'pid', 'ref', 'deleted' )
+        
+        def foo(k,d=dict):
+            if d.has_key(k): del d[k]
+
+        map( foo, desc_keys)
+        
+        return filter(lambda p, s=self: s[p] != None, dict.keys())
+
+                    
+    def as_ical_string(self):
+
+        return icalproperty_as_ical_string(self._ref)
 
     def __getitem__(self,key):
         """ Return property values by name """
         key = upper(key)
-        if self.parameters.has_key(key):
-            return self.parameters[key]
-        else:
-            return None
+
+        str = icalproperty_get_parameter_as_string(self._ref,key)
+
+        if(str == 'NULL'): return None
+
+        return str
 
     def __setitem__(self,key,value):
         """ Set Property Values by Name """
         key = upper(key)
-        self.parameters[key] = value
 
-        return self.parameters[key]
+        icalproperty_set_parameter_from_string(self._ref,key,value)
+
+        return self.__getitem__(key)
 
     def __str__(self):
-        outS = "%s" % self.name()              # Add the name
-        for param in self.getAllParameters():  # Add parameters (if any)
-            outS = "%s;%s=" % (outS, param )
-            
-            paramValues = self[param]
-            # Check for mutiple parameter values
-            if isinstance(paramValues, ListType) or \
-               isinstance(paramValues, TupleType):
-                outS="%s%s" % (outS, str(paramValues[0]))
-                for val in paramValues[1:]:       # add comma separated values
-                    outS="%s,%s" % (outS, str(val))
-            # Handle single parameter values
-            else:        
-                outS = "%s%s" % (outS, str(paramValues))
-                
-        outS = "%s:%s" % (outS, str(self.value())) # Add Property value
 
-        # No folding done here. The unfolded string is neded for
-        # testing equality and converting to a libical icalproperty
-        
-        return outS
+        str = self.as_ical_string()
+        return regsub.gsub('\r?\n ?','',str)
 
     def __cmp__(self, other):
         s_str = str(self)
@@ -172,9 +164,36 @@ class Property:
 
         return cmp(s_str,o_str)
 
+def test_property():
+
+    print "--------------------------- Test Property ----------------------"
+
+
+    icalprop = icalproperty_new_from_string("ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com")
+
+    print icalproperty_as_ical_string(icalprop)
+
+    p = Property(ref=icalprop)
+
+    print p.name()
+    print p.parameters()
+    print p['ROLE']
+    
+    p['ROLE'] = 'INDIVIDUAL'
+
+    print p['ROLE']
+
+    print p.value()
+    p.value("mailto:Bob@bob.com")
+    print p.value()
+
+
+    print p.as_ical_string()
+
+
 class Time(Property):
     """ Represent iCalendar DATE, TIME and DATE-TIME """
-    def __init__(self, value):
+    def __init__(self, arg, name="DTSTART"):
         """ 
         Create a new Time from a string or number of seconds past the 
         POSIX epoch
@@ -183,42 +202,32 @@ class Time(Property):
         Time(8349873494)          Construct from seconds past POSIX epoch
         
         """
-        Property.__init__(self, {})
 
-        if isinstance(value, DictType):
+        if isinstance(arg, DictType):
             # Dictionary -- used for creating from Component
-            Property.__init__(self, value)
-            self.tt = icaltime_from_string(self.desc['value'])
-        elif isinstance(value, StringType):
-            # Create from an iCal string
-            self.tt = icaltime_from_string(value)
-        elif isinstance(value, IntType) or   \
-             isinstance(value, FloatType): 
-            # Create from seconds past the POSIX epoch
-            self.tt = icaltime_from_timet(int(value),0)
-        elif isinstance(value, Time):
-            # Copy an instance
-            self.tt = value.tt
+            self.tt = icaltime_from_string(arg['value'])
+            Property.__init__(self, ref=arg['ref'])
         else:
-            self.tt = icaltime_null_time()
+            if isinstance(arg, StringType):
+                # Create from an iCal string
+                self.tt = icaltime_from_string(arg)
+            elif isinstance(arg, IntType) or   \
+                 isinstance(arg, FloatType): 
+                # Create from seconds past the POSIX epoch
+                self.tt = icaltime_from_timet(int(arg),0)
+            elif isinstance(arg, Time):
+                # Copy an instance
+                self.tt = arg.tt
+            else:
+                self.tt = icaltime_null_time()
 
-
-
+            Property.__init__(self,type=name)
 
         self._update_value()
 
     def _update_value(self):
-        """Updates value and value_type based on the (internal) self.tt."""
-
-        if(self.is_date()):
-            self.value_type('DATE')
-        else:
-            self.value_type('DATE-TIME')
-
         self.tt = icaltime_normalize(self.tt)
-        self.desc['value'] = icaltime_as_ical_string(self.tt)
-
-        Property._update_value(self)
+        self.value(icaltime_as_ical_string(self.tt))
 
     def valid(self):
         " Return true if this is a valid time "
@@ -248,7 +257,9 @@ class Time(Property):
 
     def timezone(self,v=None):
         """ Return or set the timezone string for this time """
+
         if (v != None):
+            assert(isinstance(v,StringType) )
             self['TZID'] = v
         return  self['TZID']
 
@@ -295,30 +306,22 @@ class Time(Property):
 
         return icaltimetype_year_get(self.tt)
 
-    def value(self, v=None):
-        """Get or set the time using a RFC2445 time string."""
-        # We need to ensure self.tt always matches value, because many
-        # methods use self.tt
-        if v!= None:
-            self.tt = icaltime_from_string(v)
-            self._update_value()
 
-        return self.desc['value']
 
     def __add__(self,o):
 
-        other = Duration(o)      
+        other = Duration(o,"DURATION")      
 
         if not other.valid():
-            return Duration()
+            return Duration(0,"DURATION")
   
         seconds = self.utc_seconds() + other.seconds()
     
-        new = Time(seconds)
-        new.timezone(self.timezone)
+        new = Time(seconds,self.name())
+        new.timezone(self.timezone())
         new.is_utc(self.is_utc())
 
-        return Time(seconds)
+        return new
 
     def __radd_(self,o):
         return self.__add__(o)
@@ -348,7 +351,7 @@ def test_time():
 
     print"-------------------Test Time  --------------------------------"
 
-    t = Time("19970325T123010Z")
+    t = Time("19970325T123010Z",'DTSTART')
     
     assert(t.year() == 1997)
     assert(t.month() == 3)
@@ -362,8 +365,8 @@ def test_time():
     print t
 
     t.timezone("America/Los_Angeles")
-    assert(str(t)=='None;TZID=America/Los_Angeles:19970325T123010Z')
-    t.name("DTSTART")
+    print str(t)
+    assert(str(t)=='DTSTART;TZID=America/Los_Angeles:19970325T123010Z')
 
     t.second(t.second()+80)
 
@@ -372,7 +375,7 @@ def test_time():
     assert(t.minute() == 31)
     assert(t.second() == 30)
 
-    d = Duration(3600)
+    d = Duration(3600,"DURATION")
     t2 = t + d
 
     print t2
@@ -391,7 +394,7 @@ class Duration(Property):
 
     """
 
-    def __init__(self, value):
+    def __init__(self, arg, name="DURATION"):
         """
         Create a new duration from an RFC2445 string or number of seconds.
         Construct the duration from an iCalendar string or a number of seconds.
@@ -400,26 +403,26 @@ class Duration(Property):
         Duration(3660)             Construct from seconds 
         """ 
 
-        Property.__init__(self, {})
-        
-        if isinstance(value, DictType):
-            Property.__init__(self, value)
-            self.dur = icaldurationtype_from_string(self.desc['value'])
-        elif isinstance(value, StringType):
-            self.dur = icaldurationtype_from_string(value)
-        elif isinstance(value, IntType): 
-            self.dur = icaldurationtype_from_int(value)
-        elif isinstance(value,Duration):
-            self.dur = value.dur
+        if isinstance(arg, DictType):
+            self.dur = icaldurationtype_from_string(arg['value'])
+            Property.__init__(self,ref=arg['ref'])
         else:
-            self.dur = icaldurationtype_null_duration()
+            if isinstance(arg, StringType):
+                self.dur = icaldurationtype_from_string(arg)
+            elif isinstance(arg, IntType): 
+                self.dur = icaldurationtype_from_int(arg)
+            elif isinstance(arg,Duration):
+                self.dur = arg.dur
+            else:
+                self.dur = icaldurationtype_null_duration()
+
+            Property.__init__(self,type=name)
 
         self._update_value()
 
     def _update_value(self):
-        self.desc['value'] = icaldurationtype_as_ical_string(self.dur)
+        self.value(icaldurationtype_as_ical_string(self.dur))
 
-        Property._update_value(self)
 
     def valid(self):
         "Return true if this is a valid duration"
@@ -433,28 +436,24 @@ class Duration(Property):
             self.dict['value'] = icaltimedurationtype_as_ical_string(self.dur)
         return icaldurationtype_as_int(self.dur)
 
-    def value(self, v=None):
-        "Return or set duration using iCalendar duration string."
-        if v!=None:
-            self.dur = icaldurationtype_from_string(v)
-            self._update_value()
-            
-        return self.desc['value']
 
 class Period(Property):
     """Represent a span of time"""
-    def __init__(self,value):
+    def __init__(self,arg,name='FREEBUSY'):
         """ """
 
-        Property.__init__(self, {})
+        Property.__init__(self, type = name)
 
-        if isinstance(value, DictType):
-            Property.__init__(self, value)
-            self.pt = icalperiodtype_from_string(self.desc['value'])
-        elif isinstance(value, StringType):
-            self.pt = icalperiodtype_from_string(value)
+        if isinstance(arg, DictType):
+            self.pt = icalperiodtype_from_string(arg['value'])
+            Property.__init__(self, ref=arg['ref'])
         else:
-            self.pt = icalperiodtype_null_period()
+            if isinstance(arg, StringType):
+                self.pt = icalperiodtype_from_string(arg)
+            else:
+                self.pt = icalperiodtype_null_period()
+
+            Property.__init__(self,type=name)
 
         self._update_value()
 
@@ -471,9 +470,8 @@ class Period(Property):
         return 0
 
     def _update_value(self):
-        self.desc['value'] = icalperiodtype_as_ical_string(self.pt)
+        self.value(icalperiodtype_as_ical_string(self.pt))
 
-        Property._update_value(self)
 
     def valid(self):
         "Return true if this is a valid period"
@@ -491,14 +489,17 @@ class Period(Property):
             if isinstance(t,Time):
                 t = v
             elif isinstance(t,StringType) or isinstnace(t,IntType):
-                t = Time(v)
+                t = Time(v,"DTSTART")
             else:
                 raise TypeError
 
             icalperiodtype_start_set(self.pt,t.tt)
+
+            self._update_value()
                 
         
-        return Time(icaltime_as_timet(icalperiodtype_start_get(self.pt)))
+        return Time(icaltime_as_timet(icalperiodtype_start_get(self.pt)),
+                    "DTSTART")
 
     def end(self,v=None):
         """
@@ -526,18 +527,21 @@ class Period(Property):
             else:
                 icalperiodtype_end_set(self.pt,t.tt)
                 
+            self._update_value()
+
         if(self._end_is_time()):
-            rt = Time(icaltime_as_timet(icalperiodtype_end_get(self.pt)))
+            rt = Time(icaltime_as_timet(icalperiodtype_end_get(self.pt)),
+                      'DTEND')
             rt.timezone(self.timezone())
             return rt
         elif(self._end_is_duration()):
             start = icaltime_as_timet(icalperiodtype_start_get(self.pt))
             dur = icaldurationtype_as_int(icalperiodtype_duration_get(self.pt))
-            rt = Time(start+dur)
+            rt = Time(start+dur,'DTEND')
             rt.timezone(self.timezone())
             return rt
         else:
-            return Time()
+            return Time({},'DTEND')
 
 
 
@@ -572,14 +576,14 @@ class Period(Property):
             start =icaltime_as_timet(icalperiodtype_start_get(self.pt))
             end = icaltime_as_timet(icalperiodtype_end_get(self.pt))
 
-            return Duration(end-start)
+            return Duration(end-start,"DURATION")
 
         elif(self._end_is_duration()):
             dur = icaldurationtype_as_int(
                 icalperiodtype_duration_get(self.pt))
-            return Duration(dur)
+            return Duration(dur,"DURATION")
         else:
-            return Duration()
+            return Duration(o,"DURATION")
 
 
     def timezone(self,v=None):
@@ -598,29 +602,29 @@ def test_period():
 
     print p
     
-    assert(str(p) == 'None:19970101T180000Z/19970101T233000Z')
+    assert(str(p) == 'FREEBUSY:19970101T180000Z/19970101T233000Z')
 
     print p.start()
-    assert(str(p.start()) == 'None:19970101T180000Z')
+    assert(str(p.start()) == 'DTSTART:19970101T180000Z')
 
     print p.end()
-    assert(str(p.end()) == 'None:19970101T233000Z')
+    assert(str(p.end()) == 'DTEND:19970101T233000Z')
 
     print p.duration()
-    assert(str(p.duration()) == 'None:PT5H30M')
+    assert(str(p.duration()) == 'DURATION:PT5H30M')
 
     p = Period("19970101T180000Z/PT5H30M")
 
     print p
 
     print p.start()
-    assert(str(p.start()) == 'None:19970101T180000Z')
+    assert(str(p.start()) == 'DTSTART:19970101T180000Z')
 
     print p.end()
-    assert(str(p.end()) == 'None:19970101T233000Z')
+    assert(str(p.end()) == 'DTEND:19970101T233000Z')
 
     print p.duration()
-    assert(str(p.duration()) == 'None:PT5H30M')
+    assert(str(p.duration()) == 'DURATION:PT5H30M')
 
 class Attendee(Property):
     """Class for Attendee properties.
@@ -637,32 +641,16 @@ class Attendee(Property):
     address is the CAL-ADDRESS (string) of the Attendee 
     """
 
-    def __init__(self, arg=None):
-        if isinstance(arg, DictType):
-            Property.__init__(self, arg)
-        else:
-            Property.__init__(self, {})
-            self.value(arg)
-        param_t = ('CUTYPE', 'MEMBER', 'ROLE', 'PARTSTAT', 'RSVP',
-                   'DELEGATED-TO', 'DELEGATED-FROM', 'SENT-BY', 'CN', 'DIR',
-                   'LANGUAGE' )
-        for param in param_t:
-            self[param] = None
-        Property.name(self, 'ATTENDEE')
-        Property.value_type(self, 'CAL-ADDRESS')
+    def __init__(self, arg):
+        
+        assert(isinstance(arg,DictType))
+        
+        Property.__init__(self,ref=arg['ref'])
         
     def _doParam(self, parameter, v):
         if v!=None:
             self[parameter]=v
         return self[parameter]
-
-    def name(self):
-        "Return the name of the property."
-        return self.desc['name']
-
-    def value_type(self):
-        "Return the value type of the property."
-        return self.desc['value_type']
 
     # Methods for accessing enumerated parameters
     def cn(self, v=None): self._doParam('CN', v)
@@ -709,7 +697,7 @@ class Organizer(Property):
 
     def value_type(self):
         "Return the value type of the property."
-        return self.desc['value_type']
+        return self._desc['value_type']
 
     # Methods for accessing enumerated parameters
     def cn(self, v=None): self._doParam('CN', v)
@@ -787,7 +775,7 @@ class Attach(Property):
         "Returns or sets the value of the property."
         if v != None:
             if isinstance(v, StringType):  # Is a URI
-                self.desc['value']=v
+                self._desc['value']=v
                 Property.value_type(self, 'URI')
             else:
                 try:
@@ -795,10 +783,10 @@ class Attach(Property):
                 except:
                     raise TypeError,"%s must be a URL string or file-ish type"\
                           % str(v)
-                self.desc['value'] = base64.encodestring(tempStr)
+                self._desc['value'] = base64.encodestring(tempStr)
                 Property.value_type(self, 'BINARY')
         else:
-            return self.desc['value']
+            return self._desc['value']
 
     def name(self):
         "Returns the name of the property."
@@ -813,6 +801,23 @@ class Attach(Property):
             self['FMTTYPE']=v
         else:
             return self['FMTTYPE']
+
+def test_attach():
+
+    file = open('littlefile.txt')
+    attachProp = Attach(file)
+    file.close()
+    attachProp.fmttype('text/ascii')
+    print "\n" + attachProp.name()
+    print attachProp.value_type()
+    print attachProp.fmttype()
+    attachProp['fmttype']=None
+    print "Calling value()"
+    print attachProp.value()
+    print "Calling asIcalString()"
+    print attachProp.as_ical_string()
+
+
 
 class Collection:
     """A group of components that can be modified somewhat like a list.
@@ -880,7 +885,7 @@ class Component:
             icalcomponent_free(self.comp_p)
             self.comp_p = None
 
-    def _parseComponentString(self, comp_str):
+    def _parse_component_string(self, comp_str):
         comp = icalparser_parse_string(comp_str)
         #c = icallangbind_get_first_component(comp, 'ANY')
         print icalcomponent_as_ical_string(comp)
@@ -890,7 +895,7 @@ class Component:
         #print comp
         #print icalenum_property_kind_to_string(anyKind)
         p = icalcomponent_get_first_property(comp, anyProperty)
-        print p
+
         while p!='NULL':
             p_dict = icallangbind_property_eval_string(p,":")
             print "p_dict = ", p_dict
@@ -906,25 +911,7 @@ class Component:
             self.addComponent(NewComponent(c))
             c = icallangbind_get_next_component(comp, 'ANY')
             
-
-    def _addPropertyFromDict(self, prop_dict):
-        name = prop_dict['name']
-        if name == 'DURATION':
-            self.addProperty(Duration(prop_dict))
-        elif name == 'PERIOD':
-            self.addProperty(Period(prop_dict))
-        elif name == 'ATTENDEE':
-            self.addProperty(Attendee(prop_dict))
-        elif name == 'ORGANIZER':
-            self.addProperty(Organizer(prop_dict))
-        elif name == 'RECURRENCE-ID':
-            self.addProperty(Recuurence_Id(prop_dict))
-        elif name == 'ATTACH':
-            self.addProperty(Attach(prop_dict))
-        elif prop_dict['value_type'] == 'DATE-TIME':
-            self.addProperty(Time(prop_dict))
-        else:
-            self.addProperty(Property(prop_dict))
+        
         
     def properties(self,type='ANY'): 
         """  
@@ -939,15 +926,12 @@ class Component:
         while p !='NULL':
             d_string = icallangbind_property_eval_string(p,":")
             d = eval(d_string)
+            d['ref'] = p
 
-            if self.cached_props.has_key(p):
-                prop = self.cached_props[p]
+            if not self.cached_props.has_key(p):
 
-            else:
-                d['ref'] = p
-                
                 if d['value_type'] == 'DATE-TIME' or d['value_type'] == 'DATE':
-                    prop = Time(d)
+                    prop = Time(d,)
                 elif d['value_type'] == 'PERIOD':
                     prop = Period(d)
                 elif d['value_type'] == 'DURATION':
@@ -957,9 +941,12 @@ class Component:
                 elif d['name'] == 'ATTENDEE':
                     prop = Attendee(d)
                 else:
-                    prop = Property(d)
-
+                    print "Unknown property type",d['name']
+                    
+                    
                 self.cached_props[p] = prop
+
+            prop =  self.cached_props[p]
 
             props.append(prop)
 
@@ -1038,7 +1025,7 @@ class Component:
         return icalcomponent_as_ical_string(self.comp_p)
 
 
-def test_component1():
+def test_component():
 
     print "------------------- Test Component ----------------------"
 
@@ -1061,7 +1048,8 @@ END:VEVENT"""
     
     props = c.properties()
     
-    for p in props: print p.asIcalString()
+    for p in props: 
+        print p.as_ical_string()
         
     dtstart = c.properties('DTSTART')[0]
         
@@ -1094,27 +1082,6 @@ END:VEVENT"""
     
     assert(dtstart1 == dtstart2)
 
-def test_component():
-
-    print "______________________________ test destructor _________________"
-
-    comp_str = """
-BEGIN:VEVENT
-ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com
-COMMENT: When in the course of writting comments and nonsense text\, it 
- becomes necessary to insert a newline
-DTSTART:19972512T120000
-DTSTART:19970101T120000Z
-DTSTART:19970101
-DURATION:P3DT4H25M
-FREEBUSY:19970101T120000/19970101T120000
-FREEBUSY:19970101T120000/PT3H
-FREEBUSY:19970101T120000/PT3H
-END:VEVENT"""
-
-    c = Component(comp_str);
-    
-    dtstart = c.properties('DTSTART')
 
 def NewComponent(comp):
     "Converts a string or C icalcomponent into the right component object."

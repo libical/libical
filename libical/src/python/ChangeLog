@@ -1,5 +1,10 @@
 2001-02-28  Eric Busboom  <eric@softwarestudio.org>
 
+	* Property Remove most internal data. The property now work
+ 	alsmost entirely off of the icalproperty that it holds a reference
+ 	to. Made changes in all derived Properties to accomodate the
+ 	change.
+
 	* Property Added __del__ 
 
 	* Component Component.properties() now caches properties that it
