@@ -4,7 +4,7 @@
   FILE: icalderivedproperty.c
   CREATOR: eric 15 Feb 2001
   
-  $Id: icalderivedproperty.c.in,v 1.9 2002-07-04 10:25:28 acampi Exp $
+  $Id: icalderivedproperty.c.in,v 1.10 2002-08-08 00:00:39 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -121,7 +121,7 @@ icalproperty_kind icalproperty_string_to_kind(const char* string)
 }
 
 
-icalvalue_kind icalproperty_value_kind_to_kind(icalvalue_kind kind)
+icalproperty_kind icalproperty_value_kind_to_kind(icalvalue_kind kind)
 {
     int i;
 
