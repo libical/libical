@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.36 2002-10-09 22:59:28 acampi Exp $
+  $Id: icalvalue.c,v 1.37 2003-01-16 01:14:21 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -352,6 +352,16 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 
     case ICAL_CLASS_VALUE:
         value = icalvalue_new_enum(kind, (int)ICAL_CLASS_X,str);
+        break;
+
+    case ICAL_CMD_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_CMD_X,str);
+        break;
+    case ICAL_QUERYLEVEL_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_QUERYLEVEL_X,str);
+        break;
+    case ICAL_CARLEVEL_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_CARLEVEL_X,str);
         break;
 
 
@@ -1014,6 +1024,9 @@ icalvalue_as_ical_string(const icalvalue* value)
         return icalreqstattype_as_string(value->data.v_requeststatus);
         
     case ICAL_ACTION_VALUE:
+    case ICAL_CMD_VALUE:
+    case ICAL_QUERYLEVEL_VALUE:
+    case ICAL_CARLEVEL_VALUE:
     case ICAL_METHOD_VALUE:
     case ICAL_STATUS_VALUE:
     case ICAL_TRANSP_VALUE:
