@@ -1,6 +1,6 @@
 
-TODOs for libical-0.16
----------------------
+TODOs for libical
+-----------------
 
 libical treats properties with multiple values incorrecty -- it always
 seperates multiple values into multiple properties. This is not
