@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.12 2001-05-04 20:01:54 ebusboom Exp $
+  $Id: icalrecur.c,v 1.13 2001-05-04 20:13:26 ebusboom Exp $
   $Locker:  $
     
 
