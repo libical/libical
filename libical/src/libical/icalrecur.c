@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.50 2002-11-06 11:42:46 acampi Exp $
+  $Id: icalrecur.c,v 1.51 2002-11-21 10:05:34 acampi Exp $
   $Locker:  $
     
 
@@ -136,6 +136,12 @@
 
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
+#endif
+
+#ifndef HAVE_INTPTR_T
+#ifdef WIN32
+typedef long intptr_t;
+#endif
 #endif
 
 #include "icalrecur.h"
