@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.32 2002-10-09 23:14:44 acampi Exp $
+#  $Id: Makefile.am,v 1.33 2002-10-30 19:52:57 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -168,10 +168,14 @@ ical.h: $(COMBINEDHEADERS)
 	echo '#ifdef __cplusplus'         >  ical.h
 	echo 'extern "C" {'               >> ical.h
 	echo '#endif'                     >> ical.h
+	echo '/*'                         >> ical.h
+	echo ' $$Id: Makefile.am,v 1.33 2002-10-30 19:52:57 acampi Exp $$'                    >> ical.h
+	echo '*/'                         >> ical.h
 	cat $(COMBINEDHEADERS)				\
 	| egrep -v "#include.*\"ical"			\
 	| egrep -v "#include.*\"config"			\
-	| egrep -v "#include.*\"pvl\.h\"" >> ical.h
+	| egrep -v "#include.*\"pvl\.h\""		\
+	| egrep -v "\$$(Id|Locker): .+\$$" >> icalss.h
 	echo '#ifdef __cplusplus'         >> ical.h
 	echo '};'                         >> ical.h
 	echo '#endif'                     >> ical.h
