@@ -12,18 +12,33 @@ use POSIX;
 
 
   my $comp_str=<<EOM;
+BEGIN:VCALENDAR
+METHOD
+ :PUBLISH
+PRODID
+ :-//ACME/DesktopCalendar//EN
+VERSION
+ :2.0
 BEGIN:VEVENT
-ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A\@host.com
-ORGANIZER:mailto:a\@example.com
-DTSTAMP:19970612T190000Z
-DTSTART:19970701T210000Z
-DTEND:19970701T230000Z
-SEQUENCE:1
-DURATION:P3DT4H50M36S
-UID:0981234-1234234-23\@example.com
-SUMMARY:ST. PAUL SAINTS -VS- DULUTH-SUPERIOR DUKES
+ORGANIZER
+ :mailto:a\@example.com
+ATTENDEE
+ ;RSVP=TRUE
+ ;ROLE=REQ-PARTICIPANT
+ ;CUTYPE=GROUP
+ :MAILTO:employee-A\@host.com
+DTSTART
+ :19970701T200000Z
+DURATION
+ :P3DT4H50M36S
+DTSTAMP
+ :19970611T190000Z
+SUMMARY
+ :ST. PAUL SAINTS -VS- DULUTH-SUPERIOR DUKES
+UID
+ :0981234-1234234-23\@example.com
 END:VEVENT
-
+END:VCALENDAR         
 EOM
   
 my $c;
@@ -38,11 +53,13 @@ foreach $p (@props) {
   
 }
 
+$inner = ($c->components())[0];
+
 print "\n";
 
 print " -------- Attendee \n";
 
-$p = ($c->properties('ATTENDEE'))[0];
+$p = ($inner->properties('ATTENDEE'))[0];
 
 print $p->as_ical_string(),"\n";
 
@@ -56,7 +73,7 @@ print $p->as_ical_string(),"\n";
 
 print " -------- DTSTART \n";
 
-$p = ($c->properties('DTSTART'))[0];
+$p = ($inner->properties('DTSTART'))[0];
 
 print $p->as_ical_string()."\n";
 print $p->as_ical_string()."\n";
@@ -74,7 +91,7 @@ print $p->as_ical_string()."\n";
 
 print "----------- DURATION \n";
 
-$p = ($c->properties('DURATION'))[0];
+$p = ($inner->properties('DURATION'))[0];
 
 print $p->as_ical_string()."\n";
 
