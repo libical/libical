@@ -144,13 +144,13 @@ icalcomponent* icalcompiter_deref(icalcompiter* i);
 /* Working with embedded error properties */
 int icalcomponent_check_restrictions(icalcomponent* comp);
 
-/**Count embedded errors*/
+/** Count embedded errors. */
 int icalcomponent_count_errors(icalcomponent* component);
 
 /** Remove all X-LIC-ERROR properties*/
 void icalcomponent_strip_errors(icalcomponent* component);
 
-/* Convert some X-LIC-ERROR properties into RETURN-STATUS properties*/
+/** Convert some X-LIC-ERROR properties into RETURN-STATUS properties*/
 void icalcomponent_convert_errors(icalcomponent* component);
 
 /* Internal operations. They are private, and you should not be using them. */
@@ -242,14 +242,14 @@ struct icalattendeetype icalcomponent_get_attendee(icalcomponent *comp,
   int index);
 
 /**
-   Calls the given function for each TZID parameter found in the component,
-   and any subcomponents. */
+    Calls the given function for each TZID parameter found in the
+    component, and any subcomponents. */
 void icalcomponent_foreach_tzid(icalcomponent* comp,
 				void (*callback)(icalparameter *param, void *data),
 				void *callback_data);
 
-/** Returns the icaltimezone in the component corresponding to the TZID, or NULL
-   if it can't be found. */
+/** Returns the icaltimezone in the component corresponding to the
+    TZID, or NULL if it can't be found. */
 icaltimezone* icalcomponent_get_timezone(icalcomponent* comp,
 					 const char *tzid);
 
