@@ -3,7 +3,7 @@
     FILE: icalmessage.c
     CREATOR: ebusboom 07 Nov 2000
   
-    $Id: icalmessage.c,v 1.2 2001-04-11 04:45:28 ebusboom Exp $
+    $Id: icalmessage.c,v 1.3 2002-05-28 15:01:59 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -230,11 +230,11 @@ icalcomponent* icalmessage_new_counterpropose_reply(icalcomponent* oldc,
     icalerror_check_arg_rz(oldc,"oldc");
     icalerror_check_arg_rz(newc,"newc");
     
-    reply = icalcomponent_new_clone(newc);
+    reply = icalcomponent_new_reply_base(newc,user,msg);
 
     icalcomponent_set_method(reply,ICAL_METHOD_COUNTER);
 
-    return newc;
+    return reply;
 
 }
 
