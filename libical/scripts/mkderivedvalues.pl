@@ -24,11 +24,18 @@ if ($opt_i) {
   open(IN,$opt_i) || die "Can't open input file $opt_i";
   
   while(<IN>){
-    print;
-  }    
+    if (/<insert_code_here>/){
+      insert_code();
+    } else {
+      print;
+   }
+
+
+  }
 }
 
-
+sub insert_code
+{
  # Map type names to the value in the icalvalue_impl data union */
 
 %union_map = (
@@ -122,7 +129,8 @@ if($opt_c){
 
   # print out the value to string map
 
-  print "static struct icalvalue_kind_map value_map[]={\n"; 
+  my $count = scalar(keys %h);
+  print "static struct icalvalue_kind_map value_map[$count]={\n"; 
 
   foreach $value  (keys %h) {
 
@@ -220,6 +228,5 @@ if ($opt_h){
     print "#endif /*ICALVALUE_H*/\n";
   }
   
-  
-  __END__
-  
+
+}

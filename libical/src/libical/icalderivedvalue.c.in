@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalderivedvalue.c.in,v 1.5 2001-04-01 20:08:19 ebusboom Exp $
+  $Id: icalderivedvalue.c.in,v 1.6 2002-05-27 20:55:36 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -60,7 +60,7 @@ struct icalvalue_kind_map {
 	char name[20];
 };
 
-extern struct icalvalue_kind_map value_map[]; 
+<insert_code_here>
 
 const char* icalvalue_kind_to_string(icalvalue_kind kind)
 {

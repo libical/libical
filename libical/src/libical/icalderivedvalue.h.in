@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalderivedvalue.h.in,v 1.6 2002-05-21 10:31:29 acampi Exp $
+  $Id: icalderivedvalue.h.in,v 1.7 2002-05-27 20:55:36 ebusboom Exp $
   $Locker:  $
 
   
@@ -57,4 +57,4 @@ struct icaldatetimeperiodtype icalvalue_get_datetimeperiod(icalvalue* value);
 
 void icalvalue_reset_kind(icalvalue* value);
 
-/* Everything below this line is machine generated. Do not edit. */
+<insert_code_here>

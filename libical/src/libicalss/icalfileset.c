@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.17 2002-04-12 20:12:02 gray-john Exp $
+  $Id: icalfileset.c,v 1.18 2002-05-27 20:55:36 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -141,8 +141,8 @@ icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
     if(cluster_file_size > 0 ){
 	icalerrorenum error;
 	if((error = icalfileset_read_file(impl,mode))!= ICAL_NO_ERROR){
-	    icalfileset_free(impl);
-	    return 0;
+	    /*icalfileset_free(impl);
+              return 0;*/
 	}
     }
  
@@ -194,7 +194,7 @@ icalerrorenum icalfileset_read_file(icalfileset* cluster,mode_t mode)
 
     if (impl->cluster == 0 || icalerrno != ICAL_NO_ERROR){
 	icalerror_set_errno(ICAL_PARSE_ERROR);
-	return ICAL_PARSE_ERROR;
+	/*return ICAL_PARSE_ERROR;*/
     }
   
     if (icalcomponent_isa(impl->cluster) != ICAL_XROOT_COMPONENT){

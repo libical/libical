@@ -3,7 +3,7 @@
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalderivedproperty.h.in,v 1.5 2002-05-21 10:31:29 acampi Exp $
+  $Id: icalderivedproperty.h.in,v 1.6 2002-05-27 20:55:36 ebusboom Exp $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
@@ -19,5 +19,4 @@
 
 typedef struct icalproperty_impl icalproperty;
 
-
-/* Everything below this line is machine generated. Do not edit. */
+<insert_code_here>

@@ -23,17 +23,14 @@ if ($opt_i) {
 
   while(<IN>){
 
-    if (/Do not edit/){
-      last;
-    }
-
-    print;
-
+    if (/<insert_code_here>/){
+      insert_code();
+    } else {
+      print;
+   }
+ 
   }    
-
-    print "/* Everything below this line is machine generated. Do not edit. */\n";
-
-
+ 
 }
 
 sub fudge_data {
@@ -58,12 +55,19 @@ sub fudge_data {
 
 }  
 
+sub insert_code {
+
 # Create the property map data
 if($opt_c){
 
-  print "static struct icalproperty_map property_map[] = {\n";
+
+  my @props = sort keys %propmap;
+  my $count = scalar(@props);
   
-  foreach $prop (sort keys %propmap) {
+
+  print "static struct icalproperty_map property_map[$count] = {\n";
+  
+  foreach $prop (@props) {
     
     next if !$prop;
     
@@ -81,10 +85,9 @@ if($opt_c){
   
   print "{ICAL_${uc}_PROPERTY,\"\",ICAL_NO_VALUE}};\n\n";
 
-
-  print "static struct icalproperty_enum_map enum_map[] = {\n";
-
   $idx = 10000;
+  $count = 1;
+  my $out = "";
 
   foreach $value (sort keys %valuemap) {
     
@@ -111,14 +114,20 @@ if($opt_c){
 	  $str = "";
 	}
 
-	print "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce},\"$str\" }, /*$idx*/\n";
+	$out.="    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce},\"$str\" }, /*$idx*/\n";
 
 	$idx++;
+	$count++;
       }
       
     }
   }
+
+  $count++;
+  print "static struct icalproperty_enum_map enum_map[$count] = {\n";
+  print $out;
   print "    {ICAL_NO_PROPERTY,0,\"\"}\n};\n\n";
+  
 
 
 }
@@ -246,3 +255,4 @@ if ($opt_h){
 print "\n\n#endif /*ICALPROPERTY_H*/\n"
 }
 
+}

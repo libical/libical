@@ -18,27 +18,24 @@ if ($opt_i) {
   open(IN,$opt_i) || die "Can't open input file $opt_i";
 
   while(<IN>){
-
-    if (/Do not edit/){
-      last;
-    }
-
-    print;
+    if (/<insert_code_here>/){
+      insert_code();
+    } else {
+      print;
+   }
 
   }    
 
   if($opt_p){
-    print "# Everything below this line is machine generated. Do not edit. \n";
+     print "# Everything below this line is machine generated. Do not edit. \n";
   } else {
     print "/* Everything below this line is machine generated. Do not edit. */\n";
   }
 
 }
 
-
-# Write parameter string map
-if ($opt_c){
-}
+sub insert_code
+{
 
 # Write parameter enumerations and datatypes
 
@@ -108,21 +105,28 @@ if($opt_h){
 
 if ($opt_c){
 
-  # Create the icalparameter_value to icalvalue_kind conversion table
-  print "struct  icalparameter_value_kind_map value_kind_map[] = {\n";
   
+  # Create the icalparameter_value to icalvalue_kind conversion table
+  my $count = 0;
+  my $out;
+
   foreach $enum (@{$params{'VALUE'}->{'enums'}}){
     next if $enum eq 'NO' or $enum eq 'ERROR';
     $uc = join("",map {uc(lc($_));}  split(/-/,$enum));    
-    print "    {ICAL_VALUE_${uc},ICAL_${uc}_VALUE},\n";
+    $out.="    {ICAL_VALUE_${uc},ICAL_${uc}_VALUE},\n";
+    $count++;
   }
-  
+
+  $count+=2;
+  print "struct  icalparameter_value_kind_map value_kind_map[$count] = {\n";
+  print $out;
   print "    {ICAL_VALUE_X,ICAL_X_VALUE},\n";
   print "    {ICAL_VALUE_NONE,ICAL_NO_VALUE}\n};\n\n";
   
   #Create the parameter Name map
-  print "static struct icalparameter_kind_map parameter_map[] = { \n";
 
+  $out="";
+  $count=0;
   foreach $param (sort keys %params) {
     
     next if !$param;
@@ -132,18 +136,18 @@ if ($opt_c){
     my $lc = join("",map {lc($_);}  split(/-/,$param));    
     my $uc = join("",map {uc(lc($_));}  split(/-/,$param));    
 
-
-    print "    {ICAL_${uc}_PARAMETER,\"$param\"},\n";
+    $count++;
+    $out.="    {ICAL_${uc}_PARAMETER,\"$param\"},\n";
 
   }
-
+  $count+=1;
+  print "static struct icalparameter_kind_map parameter_map[$count] = { \n";
+  print $out;
   print "    { ICAL_NO_PARAMETER, \"\"}\n};\n\n";
   
   # Create the parameter value map
-
-  print "static struct icalparameter_map icalparameter_map[] = {\n";
-  print "{ICAL_ANY_PARAMETER,0,\"\"},\n";
-
+  $out ="";
+  $count=0;
   foreach $param (sort keys %params) {
     
     next if !$param;
@@ -159,12 +163,17 @@ if ($opt_c){
       foreach $e (@enums){
 	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));    
 
-	print "    {ICAL_${uc}_PARAMETER,ICAL_${uc}_${uce},\"$e\"},\n";
+	$count++;
+	$out.="    {ICAL_${uc}_PARAMETER,ICAL_${uc}_${uce},\"$e\"},\n";
       }
 
     }
   }
 
+  $count+=3;
+  print "static struct icalparameter_map icalparameter_map[] = {\n";
+  print "{ICAL_ANY_PARAMETER,0,\"\"},\n";
+  print $out;
   print "    {ICAL_NO_PARAMETER,0,\"\"}};\n\n";
 
 }
@@ -318,4 +327,6 @@ print <<EOM;
 #endif /*ICALPARAMETER_H*/
 
 EOM
+}
+
 }

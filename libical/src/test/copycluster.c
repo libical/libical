@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.10 2001-06-22 16:04:21 ebusboom Exp $
+  $Id: copycluster.c,v 1.11 2002-05-27 20:55:36 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -81,8 +81,7 @@ int main(int c, char *argv[]){
 
     if (!tostdout){
         alarm(10);
-	clusterout = icalfileset_new(argv[2]);
-        alarm(0);
+	clusterout = icalfileset_new(argv[2]);        alarm(0);
 	if (clusterout == 0){
 	    printf("Could not open output cluster \"%s\"\n",argv[2]);
 	    exit(1);
