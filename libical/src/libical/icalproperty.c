@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.9 2001-04-01 20:08:19 ebusboom Exp $
+  $Id: icalproperty.c,v 1.10 2001-04-11 04:45:28 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -172,7 +172,7 @@ icalproperty_new_clone(icalproperty* prop)
 
 }
 
-icalproperty* icalproperty_new_from_string(char* str)
+icalproperty* icalproperty_new_from_string(const char* str)
 {
 
     size_t buf_size = 1024;
@@ -263,7 +263,7 @@ icalproperty_free (icalproperty* prop)
 }
 
 
-char*
+const char*
 icalproperty_as_ical_string (icalproperty* prop)
 {   
     icalparameter *param;
@@ -712,7 +712,7 @@ const char* icalproperty_get_value_as_string(icalproperty* prop)
 }
 
 
-void icalproperty_set_x_name(icalproperty* prop, char* name)
+void icalproperty_set_x_name(icalproperty* prop, const char* name)
 {
     struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
 
@@ -731,7 +731,7 @@ void icalproperty_set_x_name(icalproperty* prop, char* name)
 
 }
                               
-char* icalproperty_get_x_name(icalproperty* prop){
+const char* icalproperty_get_x_name(icalproperty* prop){
 
     struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
 

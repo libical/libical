@@ -104,8 +104,8 @@ struct icalreqstattype {
 	const char* debug;
 };
 
-struct icalreqstattype icalreqstattype_from_string(char* str);
-char* icalreqstattype_as_string(struct icalreqstattype);
+struct icalreqstattype icalreqstattype_from_string(const char* str);
+const char* icalreqstattype_as_string(struct icalreqstattype);
 
 
 

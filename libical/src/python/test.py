@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.13 2001-04-03 15:18:42 ebusboom Exp $
+#  $Id: test.py,v 1.14 2001-04-11 04:45:29 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -72,6 +72,10 @@ def test_property():
 
     print p['ROLE']
 
+    p['ROLE'] = 'GROFROMBLATZ'
+
+    print p['ROLE']
+
     print p.value()
     p.value("mailto:Bob@bob.com")
     print p.value()
@@ -85,6 +89,13 @@ def test_property():
         pass
     else:
         assert(0)
+
+
+    assert(test_enum('METHOD','PUBLISH'))
+    assert(not test_enum('METHOD','FOO'))
+
+    assert(test_enum('ACTION','AUDIO'))
+    assert(not test_enum('ACTION','OPAQUE'))
 
 def test_time():
     "Test routine"
@@ -228,14 +239,14 @@ def test_component():
     print "------------------- Test Component ----------------------"
 
 
-    c = Component(comp_str);
+    c = NewComponent(comp_str);
 
     props = c.properties()
     
     for p in props: 
         print p.as_ical_string()
     
-    inner = c.components('VEVENT')[0]
+    inner = c.components()[0]
 
     print inner
     print type(inner)
@@ -297,16 +308,23 @@ def test_component():
 
     print inner.as_ical_string()
 
+    
+
 
 def test_event():
     print "------------ Event Class ----------------------"
+
     event = Event()
+
+    event.method('REQUEST')
+    event.version('2.0')
+
     event.created("20010313T123000Z")
     print "created =", event.created()
     assert (event.created() == Time("20010313T123000Z"))
 
     event.organizer("MAILTO:j_doe@nowhere.com")
-    org = event.properties('ORGANIZER')[0]
+    org = event.organizer()
     print org.cn()
     org.cn('Jane Doe')
     assert (isinstance(org, Organizer))
@@ -326,11 +344,11 @@ def test_event():
     att.value('jsmith@nothere.com')
     event.attendees(('ef_hutton@listenup.com', att))
 
-    event.description("A short description.  Longer ones break things. Really. What does it break. The code is supposed to handle realy long lines, longer, in fact, than any sane person would create except by writting a random text generator or by excerpting text from a less sane person.")
+    event.description("A short description.  Longer ones break things. Really. What does it break. The code is supposed to handle realy long lines, longer, in fact, than any sane person would create except by writting a random text generator or by excerpting text from a less sane person. Actually, it did \"break\" and I had to remove an \n assert to fix it.")
     event.status('TeNtAtIvE')
     
     print event.as_ical_string()
-    
+
     
 def test_derivedprop():
     

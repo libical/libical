@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.6 2001-04-01 20:08:19 ebusboom Exp $
+  $Id: icalproperty.h,v 1.7 2001-04-11 04:45:28 ebusboom Exp $
   $Locker:  $
 
   
@@ -47,9 +47,9 @@ icalproperty* icalproperty_new(icalproperty_kind kind);
 
 icalproperty* icalproperty_new_clone(icalproperty * prop);
 
-icalproperty* icalproperty_new_from_string(char* str);
+icalproperty* icalproperty_new_from_string(const char* str);
 
-char* icalproperty_as_ical_string(icalproperty* prop);
+const char* icalproperty_as_ical_string(icalproperty* prop);
 
 void  icalproperty_free(icalproperty* prop);
 
@@ -82,12 +82,12 @@ const char* icalproperty_get_value_as_string(icalproperty* prop);
 
 /* Deal with X properties */
 
-void icalproperty_set_x_name(icalproperty* prop, char* name);
-char* icalproperty_get_x_name(icalproperty* prop);
+void icalproperty_set_x_name(icalproperty* prop, const char* name);
+const char* icalproperty_get_x_name(icalproperty* prop);
 
 /* Return the name of the property -- the type name converted to a
    string, or the value of _get_x_name if the type is and X property */
-char* icalproperty_get_name (icalproperty* prop);
+const char* icalproperty_get_name (icalproperty* prop);
 
 icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
 

@@ -3,7 +3,7 @@
   FILE: process.c
   CREATOR: eric 11 February 2000
   
-  $Id: process.c,v 1.3 2001-01-09 18:58:25 ebusboom Exp $
+  $Id: process.c,v 1.4 2001-04-11 04:45:29 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -28,49 +28,6 @@
 #include <string.h> /* For strerror */
 #include <stdlib.h> /* for free */
 
-struct class_map {
-	ical_class class;
-	char *str;
-} class_map[] = {
-    {ICAL_NO_CLASS,"No class"},
-    {ICAL_PUBLISH_NEW_CLASS,"New Publish"},
-    {ICAL_PUBLISH_UPDATE_CLASS,"New Publish"},
-    {ICAL_REQUEST_NEW_CLASS,"New request"},
-    {ICAL_REQUEST_UPDATE_CLASS,"Update"},
-    {ICAL_REQUEST_RESCHEDULE_CLASS,"Reschedule"},
-    {ICAL_REQUEST_DELEGATE_CLASS,"Delegate"},
-    {ICAL_REQUEST_NEW_ORGANIZER_CLASS,"New Organizer"},
-    {ICAL_REQUEST_FORWARD_CLASS,"Forward"},
-    {ICAL_REQUEST_STATUS_CLASS,"Status request"},
-    {ICAL_REPLY_ACCEPT_CLASS,"Accept reply"},
-    {ICAL_REPLY_DECLINE_CLASS,"Decline reply"},
-    {ICAL_REPLY_CRASHER_ACCEPT_CLASS,"Crasher's accept reply"},
-    {ICAL_REPLY_CRASHER_DECLINE_CLASS,"Crasher's decline reply"},
-    {ICAL_ADD_INSTANCE_CLASS,"Add instance"},
-    {ICAL_CANCEL_EVENT_CLASS,"Cancel event"},
-    {ICAL_CANCEL_INSTANCE_CLASS,"Cancel instance"},
-    {ICAL_CANCEL_ALL_CLASS,"Cancel all instances"},
-    {ICAL_REFRESH_CLASS,"Refresh"},
-    {ICAL_COUNTER_CLASS,"Counter"},
-    {ICAL_DECLINECOUNTER_CLASS,"Decline counter"},
-    {ICAL_MALFORMED_CLASS,"Malformed"}, 
-    {ICAL_OBSOLETE_CLASS,"Obsolete"},
-    {ICAL_MISSEQUENCED_CLASS,"Missequenced"},
-    {ICAL_UNKNOWN_CLASS,"Unknown"}
-};
-
-char* find_class_string(ical_class class)
-{
-    int i; 
-
-    for (i = 0;class_map[i].class != ICAL_UNKNOWN_CLASS;i++){
-	if (class_map[i].class == class){
-	    return class_map[i].str;
-	}
-    }
-
-    return "Unknown";
-}
 
 void send_message(icalcomponent *reply,const char* this_user)
 {
@@ -130,7 +87,7 @@ int main(int argc, char* argv[])
 
 	class = icalclassify(c,match,this_user);
 
-	class_string = find_class_string(class);
+	class_string = icalclassify_class_to_string(class);
 
 	/* Print out the notes associated with the incoming component
            and the matched component in the */

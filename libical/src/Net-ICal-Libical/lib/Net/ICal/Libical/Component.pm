@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.pm,v 1.3 2001-03-03 05:44:03 ebusboom Exp $
+#  $Id: Component.pm,v 1.4 2001-04-11 04:45:28 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, eric@softwarestudio.org
@@ -35,6 +35,16 @@ sub new{
   $self->{'comp_p'} = Net::ICal::Libical::icalparser_parse_string($ical_str);
 
   die "Can't parse string into component" if !$self->{'comp_p'};
+
+  bless $self, $class;
+}
+
+sub new_from_ref {
+  my $class = shift;
+  my $r = shift;
+  my $self = {};
+
+  $self->{'comp_p'} = $r;
 
   bless $self, $class;
 }
@@ -121,6 +131,34 @@ sub remove_property {
 # If $p->{'ref'} is set, then remove the property with
 # icalcomponent_remove_property() }
 }
+
+# Return an array of all components of the given type
+sub components {
+
+  my $self = shift;
+  my $comp_name = shift;
+  
+  my @comps;
+  
+  if(!$comp_name){
+    $comp_name = 'ANY';
+  }
+
+  my $c = $self->{'comp_p'};
+  my $p; 
+
+  for($p = Net::ICal::Libical::icallangbind_get_first_component($c,$comp_name);
+     $p;
+     $p = Net::ICal::Libical::icallangbind_get_next_component($c,$comp_name)){
+    
+    push(@comps, Net::ICal::Libical::Component->new_from_ref($p));
+
+  }
+
+  return @comps;
+  
+}
+
 
 sub add_component {}
 

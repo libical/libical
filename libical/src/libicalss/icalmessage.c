@@ -3,7 +3,7 @@
     FILE: icalmessage.c
     CREATOR: ebusboom 07 Nov 2000
   
-    $Id: icalmessage.c,v 1.1.1.1 2001-01-02 07:33:05 ebusboom Exp $
+    $Id: icalmessage.c,v 1.2 2001-04-11 04:45:28 ebusboom Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -353,10 +353,7 @@ icalcomponent* icalmessage_new_error_reply(icalcomponent* c,
 	rs.debug = debug;
 	
 	icalcomponent_add_property(inner, 
-				   icalproperty_new_requeststatus(
-				       icalreqstattype_as_string(rs)
-				       ) 
-	    );
+				   icalproperty_new_requeststatus(rs));
     } else { /*  code == ICAL_UNKNOWN_STATUS */ 
 
 	/* Copy all of the request status properties */

@@ -4,7 +4,7 @@
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalclassify.h,v 1.1.1.1 2001-01-02 07:33:05 ebusboom Exp $
+ $Id: icalclassify.h,v 1.2 2001-04-11 04:45:28 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -45,6 +45,7 @@ typedef enum icalclass {
     ICAL_REQUEST_FREEBUSY_CLASS,
     ICAL_REPLY_ACCEPT_CLASS,
     ICAL_REPLY_DECLINE_CLASS,
+    ICAL_REPLY_DELEGATE_CLASS,
     ICAL_REPLY_CRASHER_ACCEPT_CLASS,
     ICAL_REPLY_CRASHER_DECLINE_CLASS,
     ICAL_ADD_INSTANCE_CLASS,
@@ -64,6 +65,9 @@ ical_class icalclassify(icalcomponent* c,icalcomponent* match,
 			      const char* user);
 
 icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp);
+
+char* icalclassify_class_to_string(ical_class class);
+
 
 #endif /* ICALCLASSIFY_H*/
 

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.6 2001-04-03 15:18:42 ebusboom Exp $
+#  $Id: Property.py,v 1.7 2001-04-11 04:45:29 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -40,6 +40,19 @@ from types import StringType
 def error_type():
     error = icalerror_perror()
     return error[:index(error,':')]
+
+def test_enum(prop,enum):
+
+    kind =  icalproperty_string_to_kind(prop)
+    e = icalproperty_string_to_enum(enum)
+    
+    t = icalproperty_enum_belongs_to_property(kind,e)      
+
+    if t == 1:
+        return 1
+    
+    return None
+
 
 class Property:
     """ Represent any iCalendar Property.
@@ -162,7 +175,7 @@ class Property:
 
                     
     def as_ical_string(self):
-        
+        "Return the property in iCalendar text format."
         return icalproperty_as_ical_string(self._ref)
 
     def __getitem__(self,key):

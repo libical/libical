@@ -10,13 +10,11 @@
 "PERIOD","(a)struct icalperiodtype","Period","unitary",
 "RECUR","(m)struct icalrecurrencetype","RecurrenceSet","unitary",
 "TEXT","(a)const char*","string","unitary",
-"TIME","(a)struct icaltimetype","Time","unitary",
 "URI","(a)const char*","string","unitary",
 "UTC-OFFSET","(a)int","integer","unitary",
 "QUERY","(a)const char*","string","unitary",
 "#Non-standard multi-valued types",,,,
 "ATTACH","(a)struct icalattachtype","none","URI;BINARY",
-"DATE-TIME-DATE","(a)struct icaltimetype","none","DATE-TIME;DATE",
 "DATE-TIME-PERIOD","(m)struct icaldatetimeperiodtype","none","DATE-TIME;PERIOD",
 "TRIGGER","(m)struct icaltriggertype","string","DURATION;DATE-TIME",
 "#Non-standard property enumeration types",,,,
@@ -26,6 +24,7 @@
 "TRANSP","(a)enum icalproperty_transp","string","unitary","OPAQUE;TRANSPARENT"
 "CLASS","(a)enum icalproperty_class","string","unitary","PUBLIC;PRIVATE;CONFIDENTIAL"
 "#Other non-standard",,,,
+"REQUEST-STATUS","(a)struct icalreqstattype","string","unitary"
 "GEO","(a)struct icalgeotype","tuple","unitary",
 "STRING","(a)const char*","string","unitary",
 "X","(m)const char*","string","unitary",
