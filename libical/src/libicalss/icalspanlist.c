@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.7 2002-06-27 02:30:59 acampi Exp $
+    $Id: icalspanlist.c,v 1.8 2002-06-28 09:40:55 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -28,7 +28,7 @@
 
 #include "ical.h"
 #include "icalspanlist.h"
-#include "pvl.h" 
+
 #include <stdlib.h> /* for free and malloc */
 #include <string.h>
 
@@ -102,7 +102,7 @@ icalspanlist* icalspanlist_new(icalset *set,
     pvl_elem itr;
     icalcomponent *c,*inner;
     icalcomponent_kind kind, inner_kind;
-    struct icalspanlist_impl *sl; 
+    icalspanlist *sl; 
     struct icaltime_span *freetime;
 
     if ( ( sl = (struct icalspanlist_impl*)
