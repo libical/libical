@@ -290,7 +290,6 @@ int icalrestriction_check_component(icalproperty_method method,
     icalcomponent_kind comp_kind;
     icalrestriction_kind restr;
     icalrestriction_property_record *prop_record;
-    icalrestriction_component_record *comp_record;
     char* funcr = 0;
     icalproperty *prop;
 
