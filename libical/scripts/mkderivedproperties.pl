@@ -131,6 +131,6 @@ $type icalproperty_get_${lc}(icalproperty* prop);";
 
 if ($opt_h){
 
-print "\n\n#endif /*ICALPROPERTY_H*/"
+print "\n\n#endif /*ICALPROPERTY_H*/\n"
 }
 

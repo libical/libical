@@ -118,7 +118,7 @@ void icalvalue_set_${lc}(icalvalue* value, ${type} v);\n\n";
   
   
 if ($opt_h){
-    print "#endif /*ICALVALUE_H*/";
+    print "#endif /*ICALVALUE_H*/\n";
   }
   
   
