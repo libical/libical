@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.20 2002-08-07 17:15:03 acampi Exp $
+    $Id: icaldirset.c,v 1.21 2004-05-10 23:06:35 acampi Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -30,11 +30,11 @@
    @file   icaldirset.c
  
    @brief  icaldirset manages a database of ical components and offers
-  interfaces for reading, writting and searching for components.
+  interfaces for reading, writing and searching for components.
 
   icaldirset groups components in to clusters based on their DTSTAMP
   time -- all components that start in the same month are grouped
-  together in a single file. All files in a sotre are kept in a single
+  together in a single file. All files in a store are kept in a single
   directory. 
 
   The primary interfaces are icaldirset__get_first_component and
