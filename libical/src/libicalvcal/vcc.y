@@ -441,14 +441,10 @@ static void enterValues(const char *value)
 	       using ';' to separate the values. */
 	    if (vObjectUStringZValue(curProp)) {
 		p1 = fakeCString(vObjectUStringZValue(curProp));
-		p2 = malloc((strlen(p1)+strlen(value)+1));
-		strcpy(p2, p1);
+		i = strlen(p1)+strlen(value)+2;
+		p2 = malloc(i);
+		snprintf(p2,i,"%s;%s",p1,value);
 		deleteStr(p1);
-
-		i = strlen(p2);
-		p2[i] = ';';
-		p2[i+1] = '\0';
-		p2 = strcat(p2, value);
 		p3 = (wchar_t *) vObjectUStringZValue(curProp);
 		free(p3);
 		setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
