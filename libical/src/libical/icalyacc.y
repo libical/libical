@@ -1,12 +1,14 @@
+%pure_parser
+
 %{
 /* -*- Mode: C -*-
   ======================================================================
-  FILE: icalitip.y
+  FILE: icalyacc.y
   CREATOR: eric 10 June 1999
   
   DESCRIPTION:
   
-  $Id: icalyacc.y,v 1.9 2002-05-28 09:35:18 acampi Exp $
+  $Id: icalyacc.y,v 1.10 2002-06-07 12:51:17 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -35,22 +37,16 @@
 #include "icaltimezone.h"
 #include "pvl.h"
 
-icalvalue *icalparser_yy_value; /* Current Value */
+#define YYPARSE_PARAM yy_globals
+#define YYLEX_PARAM yy_globals
+#define YY_EXTRA_TYPE ical_yyparams*
+
+  /* ick...*/
+#define yyextra ((ical_yyparams*)ical_yyget_extra(yy_globals))
 
 void ical_yyerror(char* s);
 void icalparser_clear_flex_input();  
 int ical_yy_lex(void);
-
-/* Globals for UTCOFFSET values */
-int utc; 
-int utc_b; 
-int utcsign;
-
-/* Globals for DURATION values */
-struct icaldurationtype duration;
-
-/* Globals for TRIGGER values */
-struct icaltriggertype trigger;
 
 void copy_list(short* array, size_t size);
 void add_prop(icalproperty_kind);
@@ -60,9 +56,6 @@ void set_value_type(icalvalue_kind kind);
 void set_parser_value_state();
 struct icaltimetype fill_datetime(struct icaltimetype *, char* d, char* t, int utc);
 void ical_yy_error(char *s); /* Don't know why I need this.... */
-int yylex(void); /* Or this. */
-
-
 
 /* Set the state of the lexer so it will interpret values ( iCAL
    VALUEs, that is, ) correctly. */
@@ -182,37 +175,41 @@ value:
 	| period_value
         | utcoffset_value
         | error { 
-                  icalparser_yy_value = 0;
-		  icalparser_clear_flex_input();
+                  yyextra->value = 0;
                   yyclearin;
                   }
+	;
 
 
 date_value: DIGITS
         {
 	    struct icaltimetype stm = icaltime_null_date();
 	    stm = fill_datetime(&stm, $1, 0, 0);
-	    icalparser_yy_value = icalvalue_new_date(stm);
+	    yyextra->value = icalvalue_new_date(stm);
 	}
+	;
 
 utc_char: 
-	/*empty*/  {utc = 0;}
-	| UTC_CHAR {utc = 1;}
+	/*empty*/  {yyextra->utc = 0;}
+	| UTC_CHAR {yyextra->utc = 1;}
+	;
 
 /* This is used in the period_value, where there may be two utc characters per rule. */
 utc_char_b: 
-	/*empty*/  {utc_b = 0;}
-	| UTC_CHAR {utc_b = 1;}
+	/*empty*/  {yyextra->utc_b = 0;}
+	| UTC_CHAR {yyextra->utc_b = 1;}
+	;
 
 datetime_value: 
 	DIGITS TIME_CHAR DIGITS utc_char
         {
 	    struct  icaltimetype stm = icaltime_null_time();
-	    stm = fill_datetime(&stm, $1, $3, utc);
+	    stm = fill_datetime(&stm, $1, $3, yyextra->utc);
 
-	    icalparser_yy_value = 
+	    yyextra->value = 
 		icalvalue_new_datetime(stm);
 	}
+	;
 
 
 /* Duration */
@@ -220,11 +217,13 @@ datetime_value:
 
 dur_date: dur_day
 	| dur_day dur_time
+	;
 
 dur_week: DIGITS 'W'
 	{
-	    duration.weeks = atoi($1);
+	    yyextra->duration.weeks = atoi($1);
 	}
+	;
 
 dur_time: TIME_CHAR dur_hour 
 	{
@@ -235,63 +234,70 @@ dur_time: TIME_CHAR dur_hour
 	| TIME_CHAR dur_second
 	{
 	}
+	;
 
 dur_hour: DIGITS 'H'
 	{
-	    duration.hours = atoi($1);
+	    yyextra->duration.hours = atoi($1);
 	}
 	| DIGITS 'H' dur_minute
 	{
-	    duration.hours = atoi($1);
+	    yyextra->duration.hours = atoi($1);
 	}
+	;
 
 dur_minute: DIGITS 'M'
 	{
-	    duration.minutes = atoi($1);
+	    yyextra->duration.minutes = atoi($1);
 	}
 	| DIGITS 'M' dur_second
 	{
-	    duration.minutes = atoi($1);
+	    yyextra->duration.minutes = atoi($1);
 	}
+	;
 
 dur_second: DIGITS 'S'
 	{
-	    duration.seconds = atoi($1);
+	    yyextra->duration.seconds = atoi($1);
 	}
+	;
 
 dur_day: DIGITS 'D'
 	{
-	    duration.days = atoi($1);
+	    yyextra->duration.days = atoi($1);
 	}
+	;
 
 dur_prefix: /* empty */
 	{
-	    duration.is_neg = 0;
+	    yyextra->duration.is_neg = 0;
 	} 
 	| '+'
 	{
-	    duration.is_neg = 0;
+	    yyextra->duration.is_neg = 0;
 	}
 	| '-'
 	{ 
-	    duration.is_neg = 1;
+	  yyextra->duration.is_neg = 1;
 	}
+	;
 
 duration_value: dur_prefix 'P' dur_date
 	{ 
-	    icalparser_yy_value = icalvalue_new_duration(duration); 
-	    memset(&duration,0, sizeof(duration));
+	    yyextra->value = icalvalue_new_duration(yyextra->duration); 
+	    memset(&yyextra->duration,0, sizeof(struct icaldurationtype));
 	}
 	| dur_prefix 'P' dur_time
 	{ 
-	    icalparser_yy_value = icalvalue_new_duration(duration); 
-	    memset(&duration,0, sizeof(duration));
+	    yyextra->value = icalvalue_new_duration(yyextra->duration); 
+	    memset(&yyextra->duration,0, sizeof(struct icaldurationtype));
 	}
 	| dur_prefix 'P' dur_week
 	{ 
-	    icalparser_yy_value = icalvalue_new_duration(duration); 
-	    memset(&duration,0, sizeof(duration));
+	    yyextra->value = icalvalue_new_duration(yyextra->duration); 
+	    memset(&yyextra->duration,0, sizeof(struct icaldurationtype));
 	}
+	;
 
 
 /* Period */
@@ -301,10 +307,10 @@ period_value:  DIGITS TIME_CHAR DIGITS utc_char '/'  DIGITS TIME_CHAR DIGITS utc
             struct icalperiodtype p;
 
 	    p.start = icaltime_null_time();
-	    p.start = fill_datetime(&p.start, $1, $3, utc);
+	    p.start = fill_datetime(&p.start, $1, $3, yyextra->utc);
 
 	    p.end = icaltime_null_time();
-	    p.end = fill_datetime(&p.end, $6,$8, utc_b);
+	    p.end = fill_datetime(&p.end, $6,$8, yyextra->utc_b);
 		
 	    p.duration.days = -1;
 	    p.duration.weeks = -1;
@@ -312,49 +318,49 @@ period_value:  DIGITS TIME_CHAR DIGITS utc_char '/'  DIGITS TIME_CHAR DIGITS utc
 	    p.duration.minutes = -1;
 	    p.duration.seconds = -1;
 
-	    icalparser_yy_value = icalvalue_new_period(p);
+	    yyextra->value = icalvalue_new_period(p);
 	}
 	| DIGITS TIME_CHAR DIGITS utc_char '/'  duration_value
 	{
             struct icalperiodtype p;
-
+	    
 	    p.start = icaltime_null_time();	  
-	    p.start = fill_datetime(&p.start, $1,$3, utc);
+	    p.start = fill_datetime(&p.start, $1,$3, yyextra->utc);
 
 	    p.end = icaltime_null_time();	  
 
 	    /* The duration_value rule setes the global 'duration'
                variable, but it also creates a new value in
-               icalparser_yy_value. So, free that, then copy
+               yyextra->value. So, free that, then copy
                'duration' into the icalperiodtype struct. */
 
-	    p.duration = icalvalue_get_duration(icalparser_yy_value);
-	    icalvalue_free(icalparser_yy_value);
-	    icalparser_yy_value = 0;
+	    p.duration = icalvalue_get_duration(yyextra->value);
+	    icalvalue_free(yyextra->value);
+	    yyextra->value = 0;
 
-	    icalparser_yy_value = icalvalue_new_period(p);
+	    yyextra->value = icalvalue_new_period(p);
 
 	}
-
-
-
+	;
 
 
 /* UTC Offset */
 
-plusminus: '+' { utcsign = 1; }
-	| '-' { utcsign = -1; }
+plusminus: '+' { yyextra->utcsign = 1; }
+	| '-' { yyextra->utcsign = -1; }
+	;
 
 utcoffset_value: 
 	plusminus INTNUMBER INTNUMBER
 	{
-	    icalparser_yy_value = icalvalue_new_utcoffset( utcsign * (($2*3600) + ($3*60)) );
+	    yyextra->value = icalvalue_new_utcoffset( yyextra->utcsign * (($2*3600) + ($3*60)) );
   	}
 
 	| plusminus INTNUMBER INTNUMBER INTNUMBER
 	{
-	    icalparser_yy_value = icalvalue_new_utcoffset(utcsign * (($2*3600) + ($3*60) +($4)));
+	    yyextra->value = icalvalue_new_utcoffset(yyextra->utcsign * (($2*3600) + ($3*60) +($4)));
   	}
+	;
 
 %%
 

@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.22 2002-05-28 15:47:05 acampi Exp $
+#  $Id: Makefile.am,v 1.23 2002-06-07 12:51:17 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -32,8 +32,8 @@ noinst_LTLIBRARIES = libical-static.la
 libical_static_la_SOURCES = $(libical_la_SOURCES)
 libical_static_la_LDFLAGS = --all-static
 
-YFLAGS = -d -v -t -pical_yy
-LFLAGS = -Pical_yy
+AM_YFLAGS = -d -v -t -pical_yy
+AM_LFLAGS = -Pical_yy
 LEX_OUTPUT_ROOT = lex.ical_yy
 
 CPPFLAGS = -DPACKAGE_DATA_DIR=\""$(datadir)/$(PACKAGE)"\"
@@ -50,6 +50,20 @@ INCLUDES =			\
 
 libical_la_LDFLAGS = -version-info 0:0:0
 
+if DEV
+libical_la_DEVSOURCES = icallexer.l icalyacc.y
+.l.c:
+	$(SHELL) $(YLWRAP) $< $(LEX_OUTPUT_ROOT).c $@ -- $(LEXCOMPILE)
+.y.c:
+	$(SHELL) $(YLWRAP) $< y.tab.c $@ y.tab.h $*.h -- $(YACCCOMPILE)
+else
+libical_la_DEVSOURCES = icallexer.c icalyacc.c
+.l.c:
+	@echo Nothing
+.y.c:
+	@echo Nothing
+endif
+
 libical_la_SOURCES =		\
 	$(BUILT_SOURCES)	\
 	icalarray.c		\
@@ -64,7 +78,6 @@ libical_la_SOURCES =		\
 	icalenums.h		\
 	icalerror.c		\
 	icalerror.h		\
-	icallexer.l		\
 	icalmemory.c		\
 	icalmemory.h		\
 	icalmime.c		\
@@ -93,7 +106,6 @@ libical_la_SOURCES =		\
 	icalvalue.h		\
 	icalvalueimpl.h		\
 	icalyacc.h		\
-	icalyacc.y		\
 	pvl.c			\
 	pvl.h			\
 	sspm.c			\
@@ -102,7 +114,8 @@ libical_la_SOURCES =		\
 	icallangbind.h		\
 	icallangbind.c \
 	caldate.c \
-	astime.h
+	astime.h \
+	$(libical_la_DEVSOURCES)
 
 libicalincludedir = $(includedir)
 

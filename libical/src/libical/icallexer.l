@@ -1,3 +1,4 @@
+%option reentrant-bison
 %{
 /* -*- Mode: C -*-
   ======================================================================
@@ -6,7 +7,7 @@
   
   DESCRIPTION:
   
-  $Id: icallexer.l,v 1.3 2001-11-14 07:07:22 benjaminlee Exp $
+  $Id: icallexer.l,v 1.4 2002-06-07 12:51:17 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -36,32 +37,19 @@
 
 #include <string.h> /* For strdup() */
 
-int icalparser_flex_input(char* buf, int max_size);
-void icalparser_clear_flex_input(void);
-
+#undef YYPURE
+#define YYPURE
 
 #define ICAL_MAX_STR_CONST 1024
-
-#undef YY_INPUT
-#define YY_INPUT(b,r,ms) ( r= icalparser_flex_input(b,ms))
-#undef yywrap
 
 #undef YY_FATAL_ERROR
 #define YY_FATAL_ERROR(msg) ical_yyerror(msg)
 
-icalvalue_kind value_kind=ICAL_NO_VALUE;
-void set_parser_value_state(icalvalue_kind kind);
+
+void set_parser_value_state(icalvalue_kind kind, yyscan_t);
 extern int yydebug; 
 
 void ical_yyerror(char *s);
-
-void init_str_buf(void);
-
-int last_state;
-
-char *str_buf;
-char *str_buf_p;
-size_t buf_sz; /* = ICAL_MAX_STR_CONST;*/
 
 %}
 
@@ -81,10 +69,11 @@ digit		[0-9]
 %array /* Make yytext an array. Slow, but handy. HACK */
 
 %option caseless
+%option noyywrap
 
 %s quoted_string
 %s binary_value boolean_value uri_value time_value duration_value number_value period_value recur_value text_value utcoffset_value
-%s enum_param_value string_param_value stringlist_param_value keyword line_start component seperator parameter end_of_value paramtext
+%s enum_param_value string_param_value stringlist_param_value keyword line_start component separator parameter end_of_value paramtext
 
 
 
@@ -96,7 +85,7 @@ digit		[0-9]
 
 
 <time_value>{
-{digit}+		 { ical_yylval.v_string =icalmemory_tmp_copy(yytext) ;
+{digit}+		 { yylvalp->v_string = icalmemory_tmp_copy(yytext) ;
                            return DIGITS; }
 T			 { return TIME_CHAR; }
 Z			 { return UTC_CHAR; }
@@ -108,7 +97,7 @@ Z			 { return UTC_CHAR; }
 <utcoffset_value>{
 {crlf}                   { return EOL;}
 \-|\+			 { return yytext[0]; }
-{digit}{digit}		 { ical_yylval.v_int=atoi(yytext); return INTNUMBER; }
+{digit}{digit}		 { yylvalp->v_int=atoi(yytext); return INTNUMBER; }
 
 }
 
@@ -118,20 +107,16 @@ Z			 { return UTC_CHAR; }
 
 }
 
-<seperator>{
-,       { BEGIN(last_state); return COMMA; } 
+<separator>{
+  /* this was originally BEGIN(last_state), but that variable was 
+     never set..  this should be equivilent *crosses fingers* */
+,       { BEGIN(INITIAL); return COMMA; } 
 }
 
 
 %% 
 
-int yywrap()
-{
-     return 1;
-}
-
-
-void set_parser_value_state(icalvalue_kind kind)
+void set_parser_value_state(icalvalue_kind kind, yyscan_t yy_globals)
 {
 
     switch (kind){
@@ -149,14 +134,5 @@ void set_parser_value_state(icalvalue_kind kind)
 	   assert(1==0);
 	}
     }
-}
-
-void init_str_buf(void)
-{
-   str_buf = icalmemory_tmp_buffer(ICAL_MAX_STR_CONST);
-   str_buf_p = str_buf;
-   buf_sz = ICAL_MAX_STR_CONST;
-
-
 }
 

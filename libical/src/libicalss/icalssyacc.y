@@ -1,3 +1,5 @@
+%pure_parser
+
 %{
 /* -*- Mode: C -*-
   ======================================================================
@@ -6,7 +8,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.y,v 1.3 2001-05-04 17:54:02 ebusboom Exp $
+  $Id: icalssyacc.y,v 1.4 2002-06-07 12:51:17 acampi Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -26,7 +28,7 @@
  Code is Eric Busboom
 
   ======================================================================*/
-
+/*#define YYDEBUG 1*/
 #include <stdlib.h>
 #include <string.h> /* for strdup() */
 #include <limits.h> /* for SHRT_MAX*/
@@ -36,7 +38,13 @@
 #include "icalgaugeimpl.h"
 
 
-extern struct icalgauge_impl *icalss_yy_gauge;
+#define YYPARSE_PARAM yy_globals
+#define YYLEX_PARAM yy_globals
+#define YY_EXTRA_TYPE  icalgauge_impl*
+  /* ick...*/
+#define yyextra ((struct icalgauge_impl*)ssget_extra(yy_globals))
+
+/* extern struct  icalgauge_impl *icalss_yy_gauge;*/
 
 void ssyacc_add_where(struct icalgauge_impl* impl, char* prop, 
 	icalgaugecompare compare , char* value);
@@ -44,8 +52,6 @@ void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
 void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
 void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
 void sserror(char *s); /* Don't know why I need this.... */
-
-extern char* sstext;
 
 %}
 
@@ -61,38 +67,39 @@ extern char* sstext;
 %%
 
 query_min: SELECT select_list FROM from_list WHERE where_list
+	   | SELECT select_list FROM from_list
 	   | error { 
-		 icalparser_clear_flex_input();
                  yyclearin;
+		 YYABORT;
            }	
 	   ;	
 
 select_list:
-	STRING {ssyacc_add_select(icalss_yy_gauge,$1);}
-	| select_list COMMA STRING {ssyacc_add_select(icalss_yy_gauge,$3);}
+	STRING {ssyacc_add_select(yyextra,$1);}
+	| select_list COMMA STRING {ssyacc_add_select(yyextra,$3);}
 	;
 
 
 from_list:
-	STRING {ssyacc_add_from(icalss_yy_gauge,$1);}
-	| from_list COMMA STRING {ssyacc_add_from(icalss_yy_gauge,$3);}
+	STRING {ssyacc_add_from(yyextra,$1);}
+	| from_list COMMA STRING {ssyacc_add_from(yyextra,$3);}
 	;
 
 where_clause:
 	/* Empty */
-	| STRING EQUALS STRING {ssyacc_add_where(icalss_yy_gauge,$1,ICALGAUGECOMPARE_EQUAL,$3); }
+	| STRING EQUALS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_EQUAL,$3); }
 	
-	| STRING NOTEQUALS STRING {ssyacc_add_where(icalss_yy_gauge,$1,ICALGAUGECOMPARE_NOTEQUAL,$3); }
-	| STRING LESS STRING {ssyacc_add_where(icalss_yy_gauge,$1,ICALGAUGECOMPARE_LESS,$3); }
-	| STRING GREATER STRING {ssyacc_add_where(icalss_yy_gauge,$1,ICALGAUGECOMPARE_GREATER,$3); }
-	| STRING LESSEQUALS STRING {ssyacc_add_where(icalss_yy_gauge,$1,ICALGAUGECOMPARE_LESSEQUAL,$3); }
-	| STRING GREATEREQUALS STRING {ssyacc_add_where(icalss_yy_gauge,$1,ICALGAUGECOMPARE_GREATEREQUAL,$3); }
+	| STRING NOTEQUALS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_NOTEQUAL,$3); }
+	| STRING LESS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_LESS,$3); }
+	| STRING GREATER STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_GREATER,$3); }
+	| STRING LESSEQUALS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_LESSEQUAL,$3); }
+	| STRING GREATEREQUALS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_GREATEREQUAL,$3); }
 	;
 
 where_list:
-	where_clause {set_logic(icalss_yy_gauge,ICALGAUGELOGIC_NONE);}
-	| where_list AND where_clause {set_logic(icalss_yy_gauge,ICALGAUGELOGIC_AND);} 
-	| where_list OR where_clause {set_logic(icalss_yy_gauge,ICALGAUGELOGIC_OR);}
+	where_clause {set_logic(yyextra,ICALGAUGELOGIC_NONE);}
+	| where_list AND where_clause {set_logic(yyextra,ICALGAUGELOGIC_AND);} 
+	| where_list OR where_clause {set_logic(yyextra,ICALGAUGELOGIC_OR);}
 	;
 
 
@@ -217,9 +224,9 @@ void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
     
 
     if(where->prop == ICAL_NO_PROPERTY){
-	icalgauge_free(where);
-	icalerror_set_errno(ICAL_BADARG_ERROR);
-	return;
+      free(where);
+      icalerror_set_errno(ICAL_BADARG_ERROR);
+      return;
     }
 
     pvl_push(impl->select,where);
@@ -241,5 +248,6 @@ void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
 
 
 void sserror(char *s){
-    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+  fprintf(stderr,"Parse error \'%s\'\n", s);
+  icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 }

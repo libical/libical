@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalgauge.c,v 1.8 2002-05-29 13:42:55 acampi Exp $
+ $Id: icalgauge.c,v 1.9 2002-06-07 12:51:17 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -31,15 +31,17 @@
 #include "icalgaugeimpl.h"
 #include <stdlib.h>
 
-extern char* input_buffer;
-extern char* input_buffer_p;
-int ssparse(void);
+#include "icalssyacc.h"
 
-struct icalgauge_impl *icalss_yy_gauge;
+typedef void* yyscan_t;
+
+int ssparse(yyscan_t );
+
 
 icalgauge* icalgauge_new_from_sql(char* sql)
 {
     struct icalgauge_impl *impl;
+    yyscan_t yy_globals = NULL;
 
     int r;
     
@@ -53,12 +55,22 @@ icalgauge* icalgauge_new_from_sql(char* sql)
     impl->from = pvl_newlist();
     impl->where = pvl_newlist();
 
-    icalss_yy_gauge = impl;
+    sslex_init(&yy_globals);
 
-    input_buffer_p = input_buffer = sql;
-    r = ssparse();
+    ssset_extra(impl, yy_globals);
 
-    return impl;
+    ss_scan_string(sql, yy_globals);
+
+    r = ssparse(yy_globals);
+    sslex_destroy(yy_globals);
+
+	if (r == 0) {
+	    return impl;
+	}
+	else {
+		 icalgauge_free(impl);
+	 	 return NULL;
+	}
 }
 
 

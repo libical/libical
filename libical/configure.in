@@ -18,6 +18,18 @@ AM_PROG_LIBTOOL
 
 AC_SUBST(AR)
 
+AC_ARG_WITH(devel, [  --with-devel            add developement options],
+[case $with_devel in  
+    yes)	echo 'Setting up for developement: -Wall, flex, bison'
+		echo '** Note that you will need flex 2.5.7 or higher'
+		DEV="yes"
+		;;
+    no)		;;
+    *)		echo "Ignoring unknown argument to --with-devel: $with_devel"
+		;;
+esac])
+AM_CONDITIONAL(DEV, test x$DEV = xyes)
+
 AC_CHECK_PROGS(AR, ar aal, ar)
 AC_CHECK_PROGS(PERL, perl5 perl)  
 

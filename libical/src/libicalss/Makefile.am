@@ -1,7 +1,7 @@
 lib_LTLIBRARIES = libicalss.la
 
-YFLAGS =-d -v -p ss
-LFLAGS = -Pss 
+AM_YFLAGS =-d -v -p ss
+AM_LFLAGS = -Pss 
 LEX_OUTPUT_ROOT = lex.ss
 
 all: icalss.h
@@ -13,6 +13,12 @@ INCLUDES =			\
 	-I$(top_builddir)/src/libical
 
 libicalss_la_LDFLAGS = -version-info 0:0:0
+
+if DEV
+libicalss_la_DEVSOURCES = icalsslexer.l icalssyacc.y
+else
+libicalss_la_DEVSOURCES = icalsslexer.c icalssyacc.c
+endif
 
 libicalss_la_SOURCES =		\
 	icalcalendar.h		\
@@ -31,13 +37,12 @@ libicalss_la_SOURCES =		\
 	icalfilesetimpl.h	\
 	icalset.c		\
 	icalset.h		\
-	icalsslexer.l		\
 	icalssyacc.h		\
-	icalssyacc.y		\
 	icalspanlist.c		\
 	icalspanlist.h		\
 	icalmessage.c		\
-	icalmessage.h
+	icalmessage.h		\
+	$(libicalss_la_DEVSOURCES)
 
 libicalssincludedir = $(includedir)
 
