@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.13 2002-07-15 09:51:44 acampi Exp $
+#  $Id: Component.py,v 1.14 2002-10-24 13:40:40 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -392,7 +392,7 @@ class GenericComponent(Component):
     def class_prop(self, v=None):  # Class is a reserved word
         "Sets or returns the value of the CLASS property."
         if v!=None:
-            v = upper(v)
+            v = string.upper(v)
         return self._singular_property('CLASS', 'TEXT', v)
 
     def created(self, v=None):
@@ -755,7 +755,7 @@ class Todo(GenericComponent):
 
     def status(self, value=None):
         if value!=None:
-            value=upper(value)
+            value=string.upper(value)
         ok_values = ('NEEDS-ACTION', 'COMPLETED', 'IN-PROCESS', 'CANCELLED')
         return self._singular_property('STATUS', 'TEXT', value,
                                        enumerated_values=ok_values)
@@ -792,7 +792,7 @@ class Journal(GenericComponent):
 
     def status(self, v=None):
         if v!=None:
-            v = upper(v)
+            v = string.upper(v)
         ok_values=('DRAFT', 'FINAL', 'CANCELLED')
         return self._singular_property('STATUS', 'TEXT', v,
                                        enumerated_values=ok_values)
