@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.21 2002-10-09 22:27:39 acampi Exp $
+ $Id: icaltime.h,v 1.22 2002-10-31 16:37:51 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -47,8 +47,8 @@
  *	- icaltime_from_timet_with_zone(time_t tm, int is_date,
  *		icaltimezone *zone)
  * 	- icaltime_from_string_with_zone(const char* str, icaltimezone *zone)
- *	- icaltime_from_day_of_year(short doy,  short year)
- *	- icaltime_from_week_number(short week_number, short year)
+ *	- icaltime_from_day_of_year(int doy,  int year)
+ *	- icaltime_from_week_number(int week_number, int year)
  *
  *	italtimetype objects can be converted to different formats:
  *
@@ -165,13 +165,13 @@ struct icaltimetype icaltime_from_string_with_zone(const char* str,
 	const icaltimezone *zone);
 
 /** Create a new time, given a day of year and a year. */
-struct icaltimetype icaltime_from_day_of_year(const short doy,
-	const short year);
+struct icaltimetype icaltime_from_day_of_year(const int doy,
+	const int year);
 
 /**	@brief Contructor (TODO).
  * Create a new time from a weeknumber and a year. */
-struct icaltimetype icaltime_from_week_number(const short week_number,
-	const short year);
+struct icaltimetype icaltime_from_week_number(const int week_number,
+	const int year);
 
 /** Return the time as seconds past the UNIX epoch */
 time_t icaltime_as_timet(const struct icaltimetype);
@@ -195,17 +195,17 @@ struct icaltimetype icaltime_set_timezone(struct icaltimetype *t,
 	const icaltimezone *zone);
 
 /** Return the day of the year of the given time */
-short icaltime_day_of_year(const struct icaltimetype t);
+int icaltime_day_of_year(const struct icaltimetype t);
 
 /** Return the day of the week of the given time. Sunday is 1 */
-short icaltime_day_of_week(const struct icaltimetype t);
+int icaltime_day_of_week(const struct icaltimetype t);
 
 /** Return the day of the year for the Sunday of the week that the
    given time is within. */
-short icaltime_start_doy_of_week(const struct icaltimetype t);
+int icaltime_start_doy_of_week(const struct icaltimetype t);
 
 /** Return the week number for the week the given time is within */
-short icaltime_week_number(const struct icaltimetype t);
+int icaltime_week_number(const struct icaltimetype t);
 
 /** Return true of the time is null. */
 int icaltime_is_null_time(const struct icaltimetype t);
@@ -249,7 +249,7 @@ struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
 	const icaltimezone *zone);
 
 /** Return the number of days in the given month */
-short icaltime_days_in_month(const short month, const short year);
+int icaltime_days_in_month(const int month, const int year);
 
 
 /** @brief calculate an icaltimespan given a start and end time. */
