@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.32 2002-11-03 23:55:39 acampi Exp $
+ $Id: icaltimezone.c,v 1.33 2002-11-03 23:59:11 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -775,6 +775,9 @@ icaltimezone_get_utc_offset		(icaltimezone	*zone,
     int change_num, step, utc_offset_change, cmp;
     int change_num_to_use;
     int want_daylight;
+
+    if (tt == NULL)
+	return 0;
 
     if (is_daylight)
 	*is_daylight = 0;
