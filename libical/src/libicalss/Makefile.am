@@ -18,6 +18,8 @@ libicalss_la_SOURCES =		\
 	icalcalendar.h		\
 	icalclassify.c		\
 	icalclassify.h		\
+	icalcluster.c		\
+	icalcluster.h		\
 	icalgauge.c		\
 	icalgauge.h		\
 	icalgaugeimpl.h		\
@@ -48,6 +50,7 @@ libicalssincludedir = $(includedir)
 COMBINEDHEADERS = \
         $(srcdir)/icalgauge.h \
         $(srcdir)/icalset.h \
+        $(srcdir)/icalcluster.h \
         $(srcdir)/icalfileset.h \
         $(srcdir)/icaldirset.h \
         $(srcdir)/icalcalendar.h  \
