@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.19 2002-06-28 10:15:39 acampi Exp $
+    $Id: icaldirset.c,v 1.20 2002-08-07 17:15:03 acampi Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -298,8 +298,6 @@ void icaldirset_free(icalset* s)
 
   dset->directory_iterator = 0;
   dset->first_component = 0;
-
-  free(dset);
 }
 
 
@@ -783,7 +781,6 @@ icalcomponent* icaldirset_get_next_component(icalset* set)
 icalsetiter icaldirset_begin_component(icalset* set, icalcomponent_kind kind, icalgauge* gauge)
 {
     icalsetiter itr = icalsetiter_null;
-    pvl_elem    i;
     icaldirset *fset = (icaldirset*) set;
 
     icalerror_check_arg_re((fset!=0), "set", icalsetiter_null);
