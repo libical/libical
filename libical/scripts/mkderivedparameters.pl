@@ -195,7 +195,7 @@ foreach $param  (keys %params){
 
   if ($type=~/char/ ) {
 
-     $charorenum = "    icalerror_check_arg_rz( (param!=0), \"param\");\n    return ($type)((struct icalparameter_impl*)param)->string;";
+     $charorenum = "    icalerror_check_arg_rz( (param!=0), \"param\");\n    return param->string;";
     
      $set_code = "((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);";
 
@@ -204,9 +204,9 @@ foreach $param  (keys %params){
 
   } else {
 
-    $xrange ="     if ( ((struct icalparameter_impl*)param)->string != 0){\n        return ICAL_${uc}_X;\n        }\n" if !exists $no_xname{$uc};
+    $xrange ="     if (param->string != 0){\n        return ICAL_${uc}_X;\n        }\n" if !exists $no_xname{$uc};
     
-    $charorenum= "icalerror_check_arg( (param!=0), \"param\");\n$xrange\nreturn ($type)((struct icalparameter_impl*)param)->data;";
+    $charorenum= "icalerror_check_arg( (param!=0), \"param\");\n$xrange\nreturn ($type)(param->data);";
      
     $pointer_check = "icalerror_check_arg_rz(v >= ICAL_${uc}_X,\"v\");\n    icalerror_check_arg_rz(v < ICAL_${uc}_NONE,\"v\");";
 
