@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.11 2002-07-12 07:59:15 acampi Exp $
+#  $Id: Component.py,v 1.12 2002-07-15 08:43:04 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -544,8 +544,7 @@ class GenericComponent(Component):
                     else:                            # Use existing object
                         new_prop = v
                 else:                  # Generic properties
-                    new_prop= Property() 
-                    new_prop.name(name)
+                    new_prop=Property(name) 
                     # new_prop.value_type(value_type)
                     new_prop.value(v)
                     
@@ -618,7 +617,9 @@ class GenericComponent(Component):
         "Sets or returns a Collectoin of RELATED-TO properties."
         return self._multiple_properties('RELATED-TO', 'TEXT', value)
 
-
+    def x_properties(self, name, value=None):
+        "Sets or returns a Collectoin of X- properties."
+        return self._multiple_properties(name, 'TEXT', value)
 
 class Event(GenericComponent):
     "The iCalendar Event object."

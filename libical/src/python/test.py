@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.21 2002-07-12 08:02:46 acampi Exp $
+#  $Id: test.py,v 1.22 2002-07-15 08:43:04 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -387,6 +387,8 @@ def test_event():
     att = Attendee()
     att.value('jsmith@nothere.com')
     event.attendees(('ef_hutton@listenup.com', att))
+    
+    event.x_properties('X-TEST',('foo', 'bar'))
 
     event.description("A short description.  Longer ones break things. Really. What does it break. The code is supposed to handle realy long lines, longer, in fact, than any sane person would create except by writting a random text generator or by excerpting text from a less sane person. Actually, it did \"break\" and I had to remove an \n assert to fix it.")
     event.status('TeNtAtIvE')
