@@ -15,9 +15,11 @@ const char* ical_timet_string(const time_t t)
 
 const char* ictt_as_string(struct icaltimetype t)
 {
-    sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d%s %s",t.year,t.month,t.day,
-	    t.hour,t.minute,t.second,t.is_utc?" Z":"",
-	icaltimezone_get_tzid((icaltimezone *)t.zone));	/* HACK */
+    const char *zone = icaltimezone_get_tzid((icaltimezone *)t.zone);
+
+    sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d%s %s",
+	t.year,t.month,t.day, t.hour,t.minute,t.second,
+	t.is_utc?" Z":"", zone == NULL? "(floating)": zone);
 
     return ictt_str;
 }
