@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.49 2002-10-24 13:47:46 acampi Exp $
+  $Id: icalcomponent.c,v 1.50 2002-10-24 13:50:34 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1956,7 +1956,7 @@ int icalcomponent_get_sequence(icalcomponent* comp){
 }
 
 
-void icalcomponent_set_status(icalcomponent* comp, int v)
+void icalcomponent_set_status(icalcomponent* comp, enum icalproperty_status v)
 {
     ICALSETUPSET(ICAL_STATUS_PROPERTY);
 
@@ -1968,7 +1968,7 @@ void icalcomponent_set_status(icalcomponent* comp, int v)
     icalproperty_set_status(prop,v);
 
 }
-int icalcomponent_get_status(icalcomponent* comp){
+enum icalproperty_status icalcomponent_get_status(icalcomponent* comp){
     icalcomponent *inner;
     icalproperty *prop;
     icalerror_check_arg_rz(comp!=0,"comp");

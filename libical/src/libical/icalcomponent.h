@@ -237,8 +237,8 @@ const char* icalcomponent_get_location(icalcomponent* comp);
 void icalcomponent_set_sequence(icalcomponent* comp, int v);
 int icalcomponent_get_sequence(icalcomponent* comp);
 
-void icalcomponent_set_status(icalcomponent* comp, int v);
-int icalcomponent_get_status(icalcomponent* comp);
+void icalcomponent_set_status(icalcomponent* comp, enum icalproperty_status v);
+enum icalproperty_status icalcomponent_get_status(icalcomponent* comp);
 
 
 /** Calls the given function for each TZID parameter found in the
