@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.35 2002-06-28 09:30:15 acampi Exp $
+  $Id: icalcomponent.c,v 1.36 2002-07-09 19:18:00 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -119,6 +119,9 @@ static icalcomponent*
 icalcomponent_new_impl (icalcomponent_kind kind)
 {
     struct icalcomponent_impl* comp;
+
+    if (!icalcomponent_kind_is_valid(kind))
+	return NULL;
 
     if ( ( comp = (struct icalcomponent_impl*)
 	   malloc(sizeof(struct icalcomponent_impl))) == 0) {
@@ -1271,6 +1274,16 @@ static struct icalcomponent_kind_map component_map[] =
 };
 
 
+int icalcomponent_kind_is_valid(const icalcomponent_kind kind)
+{
+    int i = 0;
+    do {
+      if (component_map[i].kind == kind)
+	return 1;
+    } while (component_map[i++].kind != ICAL_NO_COMPONENT);
+
+    return 0;
+}
 
 const char* icalcomponent_kind_to_string(icalcomponent_kind kind)
 {

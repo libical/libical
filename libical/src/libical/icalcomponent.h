@@ -161,6 +161,8 @@ void icalcomponent_set_parent(icalcomponent* component,
 
 /* Kind conversion routiens */
 
+int icalcomponent_kind_is_valid(const icalcomponent_kind kind);
+
 icalcomponent_kind icalcomponent_string_to_kind(const char* string);
 
 const char* icalcomponent_kind_to_string(icalcomponent_kind kind);
