@@ -1,9 +1,15 @@
 
+lib_LTLIBRARIES = libLibicalWrap.la
+
+libLibicalWrap_la_SOURCES = LibicalWrap.c
+
 EXTRA_DIST = \
 Libical.py \
 LibicalWrap.i \
 python-binding.txt \
 test.py
+
+CLEANFILES = LibicalWrap.c LibicalWrap_wrap.doc  Libical.pyc LibicalWrap.so
 
 PYTHONINC = /usr/local/include/python2.0
 PYTHONLIB = /usr/local/lib/python2.0/config
@@ -17,17 +23,15 @@ INCLUDES =			\
 	-I$(PYTHONINC) \
 	-I$(PYTHONLIB) 
 
+LDADD =  ../libical/libical.la 
 
-all: LibicalWrap.so 
+all: LibicalWrap.so
 
-# Yeah, I should be using libtool and automake here, but I am too lazy
-# to try to figure it out.
+LibicalWrap.c:  LibicalWrap.i
+	swig -python  -o LibicalWrap.c LibicalWrap.i 
 
-LibicalWrap_wrap.c:  LibicalWrap.i
-	swig -python LibicalWrap.i   
-
-LibicalWrap_wrap.o: LibicalWrap_wrap.c
-	$(CC) -c LibicalWrap_wrap.c -DHAVE_CONFIG_H $(INCLUDES)
-
-LibicalWrap.so: LibicalWrap_wrap.o
-	ld -shared LibicalWrap_wrap.o -L../libical/.libs -lical -o LibicalWrap.so
+# This part should be done with libtool, but I don't know how to do
+# it. Libtool needs to generate a shared library in this directory
+# regardless of the value of AM_DISABLE_SHARED
+LibicalWrap.so:
+	ld -shared -o LibicalWrap.so LibicalWrap.o ../libical/.libs/libical.a 

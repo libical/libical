@@ -124,30 +124,59 @@ class Time(Property):
 
 
 class Duration(Property):
+    """ Represent a length of time, like 3 minutes, or 6 days, 20 seconds."""
 
     def __init__(self,dict):
+        """Create a new duration from an RFC2445 string or number of seconds."""
         Property.__init__(self,dict)
 
     def seconds(self,v=None):
-        pass
+        """Return duration in seconds"""
+        if(v != None):
+            icaltimetype_year_set(self.tt,v)
+            self.dict['value'] = icaltime_as_ical_string(self.tt)
+        return icaltimetype_year_get(self.tt)
 
 
 
 class Period(Property):
-
+    """Represent a span of time"""
     def __init__(self,dict):
+        """ """
         Property.__init__(self,dict)
 
 
     def start(self,v=None):
-        pass
+        """
+        Return or set start time of the period. The start time may be
+        expressed as an RFC2445 format string or an instance of Time.
+        The return value is an instance of Time
+        """
+
+        if(v != None):
+            pass
+        return 
 
     def end(self,v=None):
-        pass
+        """
+        Return or set end time of the period. The end time may be
+        expressed as an RFC2445 format string or an instance of Time.
+        The return value is an instance of Time
+        """        
+        if(v != None):
+            pass
+        return 
 
     def duration(self,v=None):
-        pass
+        """
+        Return or set the duration of the period. The duration may be
+        expressed as an RFC2445 format string or an instance of Duration.
+        The return value is an instance of Duration
+        """        
 
+        if(v != None):
+            pass
+        return 
 
 
 class Component:
@@ -163,14 +192,18 @@ class Component:
 
             self.comp_p = 'NULL'
 
-    def properties(self,type='ANY'):
+    def properties(self,type='ANY'): 
+        """  
+        Return a list of Property instances, each representing a
+        property of the type 'type.'
+        """
 
         props = []
 
         p = icallangbind_get_first_property(self.comp_p,type)
         while p != 'NULL':
             d_string = icallangbind_property_eval_string(p,":")
-            print d_string
+
             d = eval(d_string)
 
             p = icallangbind_get_next_property(self.comp_p,type)

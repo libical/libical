@@ -3,7 +3,7 @@
   FILE: icalenum.c
   CREATOR: eric 29 April 1999
   
-  $Id: icalenums.c,v 1.5 2001-02-09 17:44:01 ebusboom Exp $
+  $Id: icalenums.c,v 1.6 2001-02-12 07:46:51 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -593,7 +593,7 @@ struct {icalproperty_status status; const char* str;} status_map[] = {
     {ICAL_STATUS_TENTATIVE,"TENTATIVE"},
     {ICAL_STATUS_CONFIRMED,"CONFIRMED"},
     {ICAL_STATUS_NEEDSACTION,"NEEDS-ACTION"},
-    {ICAL_STATUS_COMPLETED,"COMPLETED"},
+    {ICAL_STATUS_CANCELLED,"CANCELLED"},
     {ICAL_STATUS_INPROCESS,"IN-PROCESS"},
     {ICAL_STATUS_DRAFT,"DRAFT"},
     {ICAL_STATUS_FINAL,"FINAL"},

@@ -1,3 +1,8 @@
+2001-02-11  Eric Busboom  <eric@softwarestudio.org>
+
+	* src/python/Makefile.am Tweaked makefile to use automake more,
+ 	but it stil isn't quie right.
+
 2001-02-09  JP Rosevear  <jpr@ximian.com>
 
 	* Shush cvs

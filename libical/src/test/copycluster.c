@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.5 2001-02-09 17:53:40 ebusboom Exp $
+  $Id: copycluster.c,v 1.6 2001-02-12 07:46:51 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -96,13 +96,6 @@ int main(int c, char *argv[]){
 	if (itr != 0){
 
 	    if(tostdout){
-                icalcomponent *inner = icalcomponent_get_inner(itr);
-                icalproperty *p;
-                for(p = icalcomponent_get_first_property(inner,ICAL_ANY_PROPERTY);
-                    p != 0;
-                    p = icalcomponent_get_next_property(inner,ICAL_ANY_PROPERTY)){
-                    printf("%s\n",icallangbind_property_eval_string(p,";"));
-                }
 
 		printf("--------------\n%s\n",icalcomponent_as_ical_string(itr));
 

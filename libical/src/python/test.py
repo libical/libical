@@ -23,8 +23,7 @@ c = Component(comp_str);
 
 for p in c.properties():
 
-    print p.name()
-    print p.value()
+    print p.name(), p.value()
 
 dtstart = c.properties('DTSTART')[0]
 

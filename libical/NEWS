@@ -1,3 +1,20 @@
+Version 0.23, 15 Feb 01 ( cvs tag libical-0-23)
+----------------------------------------------
+
+JP Rosevear worked on the build system some more; now checking out the
+code from cvs should give to a complete but minimal distribution,
+without any of the autognerated files.
+
+addedd a file src/libical/icllangbind.c that has some functions to
+make it easier to bind libical to other languages.
+
+Added a python binding to src/python
+
+Move the perl binding from an external distribution into Net-ICal-Libical
+
+Improved the recurrence code with the help of Hubert V's testing. 
+
+
 Version 0.22, 15 Jan 01 ( cvs tag libical-0-22)
 ----------------------------------------------
 
