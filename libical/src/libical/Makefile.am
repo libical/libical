@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.16 2001-03-27 01:38:56 ebusboom Exp $
+#  $Id: Makefile.am,v 1.17 2001-06-22 16:28:44 ebusboom Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -99,6 +99,7 @@ libicalinclude_HEADERS =  ical.h
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering. It
 # is required to make the combined header ical.h properly
 COMBINEDHEADERS =					\
+        $(top_builddir)/config.h                        \
 	$(top_builddir)/src/libical/icalversion.h	\
 	$(top_srcdir)/src/libical/icaltime.h		\
 	$(top_srcdir)/src/libical/icalduration.h	\
@@ -136,6 +137,7 @@ BUILT_SOURCES =			\
 ical.h: $(COMBINEDHEADERS)
 	cat $(COMBINEDHEADERS)				\
 	| egrep -v "#include.*\"ical"			\
+	| egrep -v "#include.*\"config"			\
 	| egrep -v "#include.*\"pvl\.h\"" > ical.h
 
 icallexer.c : icalyacc.h
