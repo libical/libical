@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.7 2002-06-26 22:26:07 ebusboom Exp $
+  $Id: icalduration.c,v 1.8 2002-06-26 22:51:15 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -51,25 +51,23 @@
 /* From Seth Alves,  <alves@hungry.com>   */
 struct icaldurationtype icaldurationtype_from_int(int t)
 {
-        struct icaldurationtype dur;
-        int used = 0;
+    struct icaldurationtype dur = icaldurationtype_null_duration();
+    int used = 0;
 
-        dur = icaldurationtype_null_duration();
+    if(t < 0){
+	dur.is_neg = 1;
+	t = -t;
+    }
 
-        if(t < 0){
-            dur.is_neg = 1;
-            t = -t;
-        }
-
-        dur.days = (t-used) / (60 * 60 * 24);
-        used += dur.days * (60 * 60 * 24);
-        dur.hours = (t - used) / (60 * 60);
-        used += dur.hours * (60 * 60);
-        dur.minutes = (t - used) / (60);
-        used += dur.minutes * (60);
-        dur.seconds = (t - used);
+    dur.days = (t-used) / (60 * 60 * 24);
+    used += dur.days * (60 * 60 * 24);
+    dur.hours = (t - used) / (60 * 60);
+    used += dur.hours * (60 * 60);
+    dur.minutes = (t - used) / (60);
+    used += dur.minutes * (60);
+    dur.seconds = (t - used);
  
-        return dur;
+    return dur;
 }
 
 #ifndef ICAL_NO_LIBICAL
