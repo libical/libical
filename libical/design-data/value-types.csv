@@ -14,7 +14,7 @@
 "UTC-OFFSET","(a)int","integer","unitary",
 "QUERY","(a)const char*","string","unitary",
 "#Non-standard multi-valued types",,,,
-"ATTACH","(a)struct icalattachtype","none","URI;BINARY",
+"ATTACH","(m)icalattach *","none","URI;BINARY",
 "DATE-TIME-PERIOD","(m)struct icaldatetimeperiodtype","none","DATE-TIME;PERIOD",
 "TRIGGER","(m)struct icaltriggertype","string","DURATION;DATE-TIME",
 "#Non-standard property enumeration types",,,,
