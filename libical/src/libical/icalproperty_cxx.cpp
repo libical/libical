@@ -55,6 +55,14 @@ int ICalProperty::isa_property(void* property){
 	return icalproperty_isa_property(property);
 }
 
+int ICalProperty::operator==(ICalProperty& rhs){
+	icalparameter_xliccomparetype  result;
+	ICalValue*  thisPropValue = this->get_value();
+	ICalValue*  rhsPropValue  = rhs.get_value();
+	result = icalvalue_compare((icalvalue*)*thisPropValue, (icalvalue*)*rhsPropValue);
+	return (result ==  ICAL_XLICCOMPARETYPE_EQUAL);
+}
+
 void ICalProperty::add_parameter(ICalParameter& parameter){
 	icalproperty_add_parameter(imp, parameter);
 }
@@ -67,8 +75,8 @@ void ICalProperty::set_parameter_from_string(string name, string val){
 string ICalProperty::get_parameter_as_string(string name){
 	return (string)icalproperty_get_parameter_as_string(imp, name);
 }
-void ICalProperty::remove_parameter(icalparameter *param){
-	icalproperty_remove_parameter(imp, param);
+void ICalProperty::remove_parameter(icalparameter_kind kind){
+	icalproperty_remove_parameter(imp, kind);
 }
 int ICalProperty::count_parameters(){
 	return icalproperty_count_parameters(imp);

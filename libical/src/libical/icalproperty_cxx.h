@@ -30,6 +30,7 @@ public:
 	ICalProperty(icalproperty_kind kind, string str);
 
 	operator icalproperty*() {return imp;}
+        int operator==(ICalProperty& rhs);
 
 public:
 	string as_ical_string();
@@ -40,7 +41,7 @@ public:
 	void set_parameter(ICalParameter& parameter);
 	void set_parameter_from_string(string name, string val);
 	string get_parameter_as_string(string name);
-	void remove_parameter(icalparameter *param);
+	void remove_parameter(icalparameter_kind kind);
 	int count_parameters();
 
 	/* Iterate through the parameters */
