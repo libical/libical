@@ -20,7 +20,12 @@ typedef int  (*icalcap_msg_handler)(const icalcap_message *msg);
  */
 void		icalcap_free(icalcap *cap);
 int		icalcap_stop(icalcap *cap);
+const char     *icalcap_get_authname(const icalcap *cap);
+int		icalcap_set_authname(icalcap *cap, const char *authname);
 const char     *icalcap_get_username(const icalcap *cap);
+int		icalcap_set_username(icalcap *cap, const char *username);
+void	       *icalcap_get_data(const icalcap *cap);
+int		icalcap_set_data(icalcap *cap, void *data);
 
 /*
  * icalcap_message member functions

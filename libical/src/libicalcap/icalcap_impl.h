@@ -12,8 +12,9 @@
 
 struct _icalcap {
 	RRCAP	       *chan;
-	const char     *username,
+	char	       *username,
 		       *authname;
+	void	       *data;
 };
 
 struct _icalerror {

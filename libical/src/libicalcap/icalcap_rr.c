@@ -16,9 +16,12 @@
 #include "icalcap_session_impl.h"
 #include "icalcap_server_impl.h"
 
+
 icalcomponent *icalcap_component_new_from_string(const char *data);
 
-static int	default_msg_handler(RRCAP *cap, RRFrame *frame, GError **error);
+static int	default_msg_handler(RRCAP *cap,
+				    RRFrame *frame,
+				    GError **error);
 static void	client_final_handler(RRCAP *cap);
 
 /**
@@ -28,12 +31,6 @@ void
 icalcap_free_rr(icalcap *cap) {
 
 	g_return_if_fail(cap);
-
-	if (cap->username)
-		free(cap->username);
-
-	if (cap->authname)
-		free(cap->authname);
 
 	g_free(cap);
 }
@@ -62,13 +59,15 @@ icalcap_session_new_rr(void) {
 	sess->profreg = rr_profile_registry_new();
 	rr_profile_registry_add_profile(sess->profreg, RR_TYPE_CAP, NULL);
 	rr_profile_registry_add_profile(sess->profreg, RR_TYPE_TLS, NULL);
-  	rr_profile_registry_add_profile(sess->profreg, RR_TYPE_SASL_DIGEST_MD5, NULL);
+  	rr_profile_registry_add_profile(sess->profreg,
+		RR_TYPE_SASL_DIGEST_MD5, NULL);
 
 	return sess;
 }
 
 int
-icalcap_session_connect_rr(icalcap_session *sess, const char *hostname, const int port) {
+icalcap_session_connect_rr(icalcap_session *sess,
+				const char *hostname, const int port) {
 
 	GError	       *error = NULL;
 
@@ -78,7 +77,8 @@ icalcap_session_connect_rr(icalcap_session *sess, const char *hostname, const in
 	}
 
 	/* Create a connection object */
-	sess->connection = rr_tcp_connection_new(sess->profreg, hostname, port, &error);
+	sess->connection = rr_tcp_connection_new(sess->profreg,
+						hostname, port, &error);
 	if (sess->connection == NULL) {
 		/* FIXME return the error */
 		return FALSE;
@@ -88,8 +88,8 @@ icalcap_session_connect_rr(icalcap_session *sess, const char *hostname, const in
 }
 
 int
-icalcap_session_login_rr(icalcap_session *sess, const char *username, const char *authname,
-			const char *password) {
+icalcap_session_login_rr(icalcap_session *sess,
+	const char *username, const char *authname, const char *password) {
 
 	/* assert cap != NULL */
 	GError	*error = NULL;
@@ -109,7 +109,8 @@ icalcap_session_login_rr(icalcap_session *sess, const char *username, const char
 }
 
 icalcap *
-icalcap_session_start_rr(const icalcap_session *sess, icalcap_msg_handler handler) {
+icalcap_session_start_rr(const icalcap_session *sess,
+					icalcap_msg_handler handler) {
 
 	/* assert sess != NULL */
 	icalcap	       *cap;
@@ -122,11 +123,14 @@ icalcap_session_start_rr(const icalcap_session *sess, icalcap_msg_handler handle
 	}
 
 	if (handler != NULL) {
-		rr_cap_config_set_msg_handler(sess->cfg, default_msg_handler, (void *)handler);
-		/* FIXME rr_cap_config_set_final_handler(cfg, client_final_handler); */
+		rr_cap_config_set_msg_handler(sess->cfg,
+				default_msg_handler, (void *)handler);
+		/* FIXME rr_cap_config_set_final_handler(cfg,
+		   				client_final_handler); */
 	}
 
-	if ((channel = rr_cap_client_start(sess->connection, sess->cfg, &error)) == NULL) {
+	channel = rr_cap_client_start(sess->connection, sess->cfg, &error);
+	if (channel == NULL) {
 		/* FIXME return the error */
 		goto FAILED;
 	}
@@ -170,12 +174,14 @@ icalcap_session_disconnect_rr(icalcap_session *sess) {
 	}
 
 	sess->connection = NULL;
-	g_free(sess);
 
-	if (!rr_exit(&error)) {
-		/* FIXME return the error */
-		return 0;
-	}
+	/* free the profile registry */
+	g_object_unref(G_OBJECT(sess->profreg));
+
+	/* free the configuration objects */
+	rr_cap_config_destroy(sess->cfg);
+
+	g_free(sess);
 
 	return 1;
 }
@@ -183,6 +189,16 @@ icalcap_session_disconnect_rr(icalcap_session *sess) {
 /**
  * Implementation of functions in icalcap_server
  */
+
+static int
+server_authz_handler(RRSASL *sasl,
+		const gchar *auth, const gchar *user, gpointer user_data) {
+
+	icalcap_auth_handler	func;
+
+	func = (icalcap_auth_handler)user_data;
+	return func(auth, user);
+}
 
 /**
  * If the user properly authenticated (via SASL), initialize the channel
@@ -194,7 +210,7 @@ server_init_handler(RRCAP *chan, const gchar *piggyback, GError **error) {
 	icalcap		       *cap;
 	RRConnection	       *connection;
 
-	icalcap_auth_handler	func;
+	icalcap_init_handler	func;
 	const gchar	       *username, *authname;
 	int			rc;
 
@@ -215,10 +231,10 @@ server_init_handler(RRCAP *chan, const gchar *piggyback, GError **error) {
 	cap->chan = chan;
 	chan->hl = cap;
 
-	cap->username = strdup(username);
-	cap->authname = strdup(authname);
+	icalcap_set_username(cap, username);
+	icalcap_set_authname(cap, authname);
 
-	func = (icalcap_auth_handler)chan->cfg->server_init_data;
+	func = (icalcap_init_handler)chan->cfg->server_init_data;
 	return func(cap, piggyback);
 }
 
@@ -249,8 +265,14 @@ server_frame_handler(RRCAP *cap, RRFrame *frame, GError **error)
 static void
 server_final_handler(RRCAP *cap)
 {
+	icalcap_final_handler	func;
+
 	g_return_if_fail(cap);
 	g_return_if_fail(RR_CAP(cap));
+
+	func = (icalcap_final_handler)cap->cfg->final_handler_data;
+	if (func != NULL)
+		func(cap->hl);
 
 	if (cap->hl != NULL) {
 		icalcap_free(cap->hl);
@@ -262,8 +284,11 @@ server_final_handler(RRCAP *cap)
  * FIXME Do we want to pass argc and argv in?
  */
 icalcap_server *
-icalcap_server_new_rr(icalcap_auth_handler auth_cb, icalcap_chanup_handler chanup_cb,
-								icalcap_msg_handler msg_cb) {
+icalcap_server_new_rr(icalcap_auth_handler	auth_cb,
+			icalcap_init_handler	init_cb,
+			icalcap_chanup_handler	chanup_cb,
+			icalcap_msg_handler	msg_cb,
+			icalcap_final_handler	final_cb) {
 
 	icalcap_server *serv;
 	GError	       *error = NULL;
@@ -282,28 +307,38 @@ icalcap_server_new_rr(icalcap_auth_handler auth_cb, icalcap_chanup_handler chanu
 	serv->cfg = rr_cap_config_new();
 	rr_cap_config_set_msg_handler(serv->cfg, NULL, (void *)msg_cb);
 	rr_cap_config_set_frame_handler(serv->cfg, server_frame_handler);
-	rr_cap_config_set_final_handler(serv->cfg, server_final_handler);
-	rr_cap_config_set_server_init_handler(serv->cfg, server_init_handler, (void *)auth_cb);
+	rr_cap_config_set_final_handler(serv->cfg, server_final_handler,
+			(void *)final_cb);
+	rr_cap_config_set_server_init_handler(serv->cfg,
+			server_init_handler, (void *)init_cb);
 	rr_cap_config_set_server_confirmation_handler(serv->cfg,
-						server_confirmation_handler, (void *)chanup_cb);
+			server_confirmation_handler, (void *)chanup_cb);
+
+	/* Configure the SASL layer */
+	serv->sasl_cfg = rr_sasl_config_new();
+	rr_sasl_config_set_authorize_cb(serv->sasl_cfg,
+			server_authz_handler, (void *)auth_cb);
 
 	/* Tell roadrunner which profiles we want to support */
 	serv->profreg = rr_profile_registry_new();
 	rr_profile_registry_add_profile(serv->profreg, RR_TYPE_CAP, serv->cfg);
 	rr_profile_registry_add_profile(serv->profreg, RR_TYPE_TLS, NULL);
-  	rr_profile_registry_add_profile(serv->profreg, RR_TYPE_SASL_DIGEST_MD5, NULL);
+  	rr_profile_registry_add_profile(serv->profreg,
+			RR_TYPE_SASL_DIGEST_MD5, serv->sasl_cfg);
 
 	return serv;
 }
 
 int
-icalcap_server_listen_rr(icalcap_server *serv, const char *hostname, const int port) {
+icalcap_server_listen_rr(icalcap_server *serv,
+				const char *hostname, const int port) {
 
 	GError	       *error = NULL;
 	g_return_val_if_fail(serv, FALSE);
 
 	/* Create a listener object */
-	serv->listener = rr_tcp_listener_new(serv->profreg, hostname, port, &error);
+	serv->listener = rr_tcp_listener_new(serv->profreg,
+			hostname, port, &error);
 	if (serv->listener == NULL) {
 		/* FIXME return the error */
 		return FALSE;
@@ -327,7 +362,7 @@ icalcap_server_run_rr(const icalcap_server *serv) {
 }
 
 int
-icalcap_server_shutdown_rr(icalcap_server *serv) {
+icalcap_server_unlisten_rr(icalcap_server *serv) {
 
 	/* assert cap != NULL */
 	GError	*error = NULL;
@@ -338,7 +373,26 @@ icalcap_server_shutdown_rr(icalcap_server *serv) {
 	}
 
 	serv->listener = NULL;
+
+	return 1;
+}
+
+
+int
+icalcap_server_shutdown_rr(icalcap_server *serv) {
+
+	GError	*error = NULL;
+
+	/* free the profile registry */
+	g_object_unref(G_OBJECT(serv->profreg));
+
+	/* free the configuration objects */
+	rr_sasl_config_destroy(serv->sasl_cfg);
+	rr_cap_config_destroy(serv->cfg);
+
 	g_free(serv);
+
+	rr_exit(&error);
 
 	return 1;
 }
@@ -351,7 +405,8 @@ icalcap_server_shutdown_rr(icalcap_server *serv) {
  * Internal constructor
  */
 static struct _icalcap_message_rr *
-_icalcap_message_new_from_component_rr(const icalcap *cap, int type, icalcomponent *comp) {
+_icalcap_message_new_from_component_rr(const icalcap *cap,
+					int type, icalcomponent *comp) {
 
 	struct _icalcap_message_rr	*ret;
 
@@ -369,7 +424,8 @@ _icalcap_message_new_from_component_rr(const icalcap *cap, int type, icalcompone
 }
 
 static icalcap_message *
-_icalcap_message_new_from_frame_rr(const icalcap *cap, int type, RRFrame *frame) {
+_icalcap_message_new_from_frame_rr(const icalcap *cap,
+						int type, RRFrame *frame) {
 
 	struct _icalcap_message_rr	*ret;
 
@@ -382,7 +438,8 @@ _icalcap_message_new_from_frame_rr(const icalcap *cap, int type, RRFrame *frame)
 	ret->type	= type;
 	ret->frame	= frame;
 
-	ret->comp	= icalcap_component_new_from_string(ret->frame->payload);
+	ret->comp	= icalcap_component_new_from_string(
+							ret->frame->payload);
 
 	return (icalcap_message *)ret;
 }
@@ -398,23 +455,27 @@ icalcap_message_new_rr(const icalcap *cap, const icalcomponent *comp) {
 		return NULL;
 	}
 
-	ret = _icalcap_message_new_from_component_rr(cap, ICALCAP_MESSAGE_CMD, NULL);
+	ret = _icalcap_message_new_from_component_rr(cap,
+						ICALCAP_MESSAGE_CMD, NULL);
 
 	str = g_strdup_printf("%s\n\n%s",
 		"Content-Type: text/calendar",
 		icalcomponent_as_ical_string(comp));
 
-	ret->msg	= rr_message_static_new(RR_FRAME_TYPE_MSG, str, strlen(str), TRUE);
+	ret->msg = rr_message_static_new(RR_FRAME_TYPE_MSG,
+						str, strlen(str), TRUE);
 
 	return (icalcap_message *)ret;
 }
 
 /*
- * This method and its implementation are critical. It has the responsibility for
- * serializing the component. The tricky part is that we have a options for encoding XROOT.
+ * This method and its implementation are critical. It has the responsibility
+ * for serializing the component. The tricky part is that we have a options
+ * for encoding XROOT.
  */
 icalcap_message *
-icalcap_message_new_reply_rr(const icalcap_message *orig, const icalcomponent *comp) {
+icalcap_message_new_reply_rr(const icalcap_message *orig,
+						const icalcomponent *comp) {
 
 	struct _icalcap_message_rr     *in, *ret;
 	icalcomponent		       *cc;
@@ -425,7 +486,8 @@ icalcap_message_new_reply_rr(const icalcap_message *orig, const icalcomponent *c
 		return NULL;
 	}
 
-	ret = _icalcap_message_new_from_component_rr(in->cap, ICALCAP_MESSAGE_REPLY, NULL);
+	ret = _icalcap_message_new_from_component_rr(in->cap,
+						ICALCAP_MESSAGE_REPLY, NULL);
 
 	/* FIXME */
 	if (icalcomponent_isa(comp) != ICAL_XROOT_COMPONENT)
@@ -442,7 +504,8 @@ icalcap_message_new_reply_rr(const icalcap_message *orig, const icalcomponent *c
 		g_string_append(str, icalcomponent_as_ical_string(cc));
 	}
 
-	ret->msg	= rr_message_static_new(RR_FRAME_TYPE_RPY, str->str, strlen(str->str), TRUE);
+	ret->msg = rr_message_static_new(RR_FRAME_TYPE_RPY,
+					str->str, strlen(str->str), TRUE);
 	/* FIXME this should now be ok but if change the API we need to change */
 	ret->msg->msgno = in->frame->msgno;
 
@@ -461,7 +524,7 @@ icalcap_message_free_rr(icalcap_message *in) {
 	}
 
 	if (capmsg->msg != NULL) {
-		g_free(capmsg->msg);
+		g_object_unref(G_OBJECT(capmsg->msg));
 	}
 
 	g_free(capmsg);
@@ -470,11 +533,14 @@ icalcap_message_free_rr(icalcap_message *in) {
 int
 icalcap_message_send_reply_rr(icalcap_message *in) {
 
-	struct _icalcap_message_rr     *capmsg = (struct _icalcap_message_rr *)in;
+	struct _icalcap_message_rr     *capmsg =
+					(struct _icalcap_message_rr *)in;
 	GError			       *error = NULL;
 	int				rc;
 
-	if ((rc = rr_channel_send_message(RR_CHANNEL(capmsg->cap->chan), capmsg->msg, &error)) == 0)
+	rc = rr_channel_send_message(RR_CHANNEL(capmsg->cap->chan),
+							capmsg->msg, &error);
+	if (rc == 0)
 		g_message("error = %s", error->message);
 	/* FIXME handle error */
 
@@ -486,7 +552,8 @@ icalcap_message_send_reply_rr(icalcap_message *in) {
 icalcomponent *
 icalcap_message_sync_send_rr(icalcap_message *in, int timeout) {
 
-	struct _icalcap_message_rr     *capmsg = (struct _icalcap_message_rr *)in;
+	struct _icalcap_message_rr     *capmsg =
+					(struct _icalcap_message_rr *)in;
 	icalcomponent		       *comp, *ret;
 
 	gchar			       *str2;
@@ -494,7 +561,8 @@ icalcap_message_sync_send_rr(icalcap_message *in, int timeout) {
 	int				rc;
 
 	/* FIXME */
-	rc = rr_cap_cmd(capmsg->cap->chan, capmsg->msg, 3 * timeout, &str2, &error);
+	rc = rr_cap_cmd(capmsg->cap->chan, capmsg->msg, 3 * timeout,
+							&str2, &error);
 	capmsg->msg = NULL;
 	if (rc == 0) {
 		g_message("error = %s", error->message);
@@ -518,7 +586,7 @@ icalcap_message_sync_send_rr(icalcap_message *in, int timeout) {
  * FIXME We assume we can safely create an icalcap_message derived object
  * without calls to the base object
  */
-int
+static int
 default_msg_handler(RRCAP *cap, RRFrame *frame, GError **error) {
 
 	icalcap_msg_handler	func;
@@ -531,14 +599,17 @@ default_msg_handler(RRCAP *cap, RRFrame *frame, GError **error) {
 
 	func = (icalcap_msg_handler)cap->cfg->msg_handler_data;
 
-	msg = _icalcap_message_new_from_frame_rr(cap->hl, ICALCAP_MESSAGE_CMD, frame);
-	if (msg == NULL) {
+	msg = _icalcap_message_new_from_frame_rr(cap->hl,
+						ICALCAP_MESSAGE_CMD, frame);
+	if (msg == NULL || msg->comp == NULL) {
 		/* FIXME */
 		g_message("error");
 		return FALSE;
 	}
 
-	ret = func(msg);
+	if (func)
+		ret = func(msg);
+
 	icalcap_message_free(msg);
 
 	return ret;

@@ -6,11 +6,13 @@
 
 
 icalcap_server *
-icalcap_server_new(icalcap_auth_handler auth_cb, icalcap_chanup_handler chanup_cb,
-	icalcap_msg_handler msg_cb) {
+icalcap_server_new(icalcap_auth_handler auth_cb, icalcap_init_handler init_cb,
+	icalcap_chanup_handler chanup_cb, icalcap_msg_handler msg_cb,
+	icalcap_final_handler final_cb) {
 
 #ifdef WITH_RR
-	return icalcap_server_new_rr(auth_cb, chanup_cb, msg_cb);
+	return icalcap_server_new_rr(auth_cb, init_cb, chanup_cb, msg_cb,
+			final_cb);
 #else
 	return NULL;
 #endif
@@ -41,6 +43,15 @@ icalcap_server_run(const icalcap_server *cap) {
 #endif
 }
 
+int
+icalcap_server_unlisten(icalcap_server *cap) {
+
+#ifdef WITH_RR
+	return icalcap_server_unlisten_rr(cap);
+#else
+	return 0;
+#endif
+}
 int
 icalcap_server_shutdown(icalcap_server *cap) {
 
