@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.48 2002-10-09 20:29:53 acampi Exp $
+  $Id: icalcomponent.c,v 1.49 2002-10-24 13:47:46 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -72,7 +72,6 @@ void icalproperty_set_parent(icalproperty* property,
 icalcomponent* icalproperty_get_parent(icalproperty* property);
 void icalcomponent_add_children(icalcomponent *impl,va_list args);
 static icalcomponent* icalcomponent_new_impl (icalcomponent_kind kind);
-static int icalcomponent_property_sorter(void *a, void *b);
 
 static void icalcomponent_merge_vtimezone (icalcomponent *comp,
 					   icalcomponent *vtimezone,
@@ -392,21 +391,6 @@ icalcomponent_isa_component (void* component)
 
 }
 
-static int icalcomponent_property_sorter(void *a, void *b)
-{
-    icalproperty_kind kinda, kindb;
-    const char *ksa, *ksb;
-
-    kinda = icalproperty_isa((icalproperty*)a);
-    kindb = icalproperty_isa((icalproperty*)b);
-
-    ksa = icalproperty_kind_to_string(kinda);
-    ksb = icalproperty_kind_to_string(kindb);
-
-    return strcmp(ksa,ksb);
-}
-
-
 void
 icalcomponent_add_property (icalcomponent* component, icalproperty* property)
 {
@@ -417,13 +401,7 @@ icalcomponent_add_property (icalcomponent* component, icalproperty* property)
 
     icalproperty_set_parent(property,component);
 
-#ifdef ICAL_INSERT_ORDERED
-    pvl_insert_ordered(component->properties,
-		       icalcomponent_property_sorter,property);
-#else
     pvl_push(component->properties,property);
-#endif
-
 }
 
 
