@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.5 2001-02-06 19:43:23 ebusboom Exp $
+  $Id: icalrecur.c,v 1.6 2001-02-10 01:23:01 jproseve Exp $
   $Locker:  $
     
 
@@ -281,9 +281,12 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
     icalrecurrencetype_weekday wd;
     short *array = parser->rt.by_day;
     char* end;
+    char* vals_copy;
 
-    end = (char*)vals+strlen(vals);
-    n = vals;
+    vals_copy = strdup(vals);
+
+    end = (char*)vals_copy+strlen(vals_copy);
+    n = vals_copy;
 
     while(n != 0){
 	
@@ -326,6 +329,8 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 	array[i] =  ICAL_RECURRENCE_ARRAY_MAX;
 
     }
+
+    free(vals_copy);
 
 }
 

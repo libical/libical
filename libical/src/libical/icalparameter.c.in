@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c.in,v 1.4 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: icalparameter.c.in,v 1.5 2001-02-10 01:23:01 jproseve Exp $
   $Locker:  $
     
 
@@ -154,7 +154,7 @@ struct param_string_map {
     {ICAL_FBTYPE_PARAMETER,ICAL_FBTYPE_BUSY,"BUSY"},
     {ICAL_FBTYPE_PARAMETER,ICAL_FBTYPE_BUSYUNAVAILABLE,"BUSYUNAVAILABLE"},
     {ICAL_FBTYPE_PARAMETER,ICAL_FBTYPE_BUSYTENTATIVE,"BUSYTENTATIVE"},
-    {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_NEEDSACTION,"NEEDSACTION"},
+    {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_NEEDSACTION,"NEEDS-ACTION"},
     {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_ACCEPTED,"ACCEPTED"},
     {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_DECLINED,"DECLINED"},
     {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_TENTATIVE,"TENTATIVE"},
@@ -429,7 +429,7 @@ icalparameter* icalparameter_new_from_string(icalparameter_kind kind, char* val)
 	}
 	case ICAL_PARTSTAT_PARAMETER:
 	{
-	    if(strcmp(val,"NEEDSACTION") == 0){ 
+	    if(strcmp(val,"NEEDS-ACTION") == 0){ 
 		param = icalparameter_new_partstat(ICAL_PARTSTAT_NEEDSACTION);
 	    }
 	    else if(strcmp(val,"ACCEPTED") == 0){ 
@@ -829,7 +829,7 @@ icalparameter_as_ical_string (icalparameter* parameter)
 	{
 	    switch (impl->data.v_partstat) {
 		case ICAL_PARTSTAT_NEEDSACTION: {
-		    strcpy(tend,"NEEDSACTION");break;
+		    strcpy(tend,"NEEDS-ACTION");break;
 		}
 		case ICAL_PARTSTAT_ACCEPTED: {
 		    strcpy(tend,"ACCEPTED");break;

@@ -7,8 +7,6 @@ YFLAGS = -d -v -t -pical_yy
 LFLAGS = -Pical_yy
 LEX_OUTPUT_ROOT = lex.ical_yy
 
-all: ical.h
-
 INCLUDES =			\
 	-I$(top_builddir)	\
 	-I$(top_srcdir)/src	\
@@ -68,25 +66,24 @@ libicalinclude_HEADERS =  ical.h
 COMBINEDHEADERS =					\
 	$(top_builddir)/src/libical/icalversion.h	\
 	$(top_srcdir)/src/libical/icaltime.h		\
-	$(top_srcdir)/src/libical/icalduration.h	\
-	$(top_srcdir)/src/libical/icalperiod.h		\
 	$(top_srcdir)/src/libical/icalenums.h		\
 	$(top_srcdir)/src/libical/icaltypes.h		\
 	$(top_srcdir)/src/libical/icalrecur.h		\
-	$(top_srcdir)/src/libical/icalvalue.h		\
-	$(top_srcdir)/src/libical/icalparameter.h	\
-	$(top_srcdir)/src/libical/icalproperty.h	\
+	icalvalue.h					\
+	icalparameter.h					\
+	icalproperty.h					\
 	$(top_srcdir)/src/libical/pvl.h			\
 	$(top_srcdir)/src/libical/icalcomponent.h	\
 	$(top_srcdir)/src/libical/icalparser.h		\
 	$(top_srcdir)/src/libical/icalmemory.h		\
 	$(top_srcdir)/src/libical/icalerror.h		\
-	$(top_srcdir)/src/libical/icalrestriction.h	\
+	icalrestriction.h				\
 	$(top_srcdir)/src/libical/sspm.h		\
 	$(top_srcdir)/src/libical/icalmime.h 		\
 	$(top_srcdir)/src/libical/icallangbind.h	
 
 BUILT_SOURCES =			\
+	ical.h			\
 	icalparameter.c		\
 	icalparameter.h		\
 	icalproperty.c		\
@@ -95,7 +92,7 @@ BUILT_SOURCES =			\
 	icalvalue.c		\
 	icalvalue.h
 
-ical.h: $(COMBINEDHEADERS) $(BUILT_SOURCES)
+ical.h: $(COMBINEDHEADERS)
 	cat $(COMBINEDHEADERS)				\
 	| egrep -v "#include.*\"ical"			\
 	| egrep -v "#include.*\"pvl\.h\"" > ical.h
@@ -112,10 +109,10 @@ PARAMETERDEPS =	\
 	icalparameter.h.in
 
 icalparameter.h: $(PARAMETERDEPS) 
-	$(PERL) $(ICALSCRIPTS)/mkderivedparameters.pl -i icalparameter.h.in -h $(DESIGNDATA)/param-c-types.txt > icalparameter.h 
+	$(PERL) $(ICALSCRIPTS)/mkderivedparameters.pl -i $(srcdir)/icalparameter.h.in -h $(DESIGNDATA)/param-c-types.txt > icalparameter.h 
 
 icalparameter.c: $(PARAMETERDEPS) icalparameter.h
-	$(PERL) $(ICALSCRIPTS)/mkderivedparameters.pl -i icalparameter.c.in -c $(DESIGNDATA)/param-c-types.txt > icalparameter.c
+	$(PERL) $(ICALSCRIPTS)/mkderivedparameters.pl -i $(srcdir)/icalparameter.c.in -c $(DESIGNDATA)/param-c-types.txt > icalparameter.c
 
 
 # properties
@@ -130,12 +127,12 @@ PROPERTYDEPS =					\
 
 icalproperty.h: $(PROPERTYDEPS)
 	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedproperties.pl \
-		-i icalproperty.h.in -h $(DESIGNDATA)/prop-to-value.txt \
+		-i $(srcdir)/icalproperty.h.in -h $(DESIGNDATA)/prop-to-value.txt \
 		${DESIGNDATA}/value-types.csv > icalproperty.h 
 
 icalproperty.c: $(PROPERTYDEPS) icalproperty.h 
 	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedproperties.pl \
-		-i icalproperty.c.in -c $(DESIGNDATA)/prop-to-value.txt \
+		-i ($srcdir)/icalproperty.c.in -c $(DESIGNDATA)/prop-to-value.txt \
 		${DESIGNDATA}/value-types.csv > icalproperty.c
 
 # restrictions
@@ -146,7 +143,7 @@ RESTRICTIONDEPS =				\
 	icalrestriction.c.in
 
 icalrestriction.c: $(RESTRICTIONDEPS)
-	$(PERL) $(ICALSCRIPTS)/mkrestrictiontable.pl  -i icalrestriction.c.in \
+	$(PERL) $(ICALSCRIPTS)/mkrestrictiontable.pl  -i $(srcdir)/icalrestriction.c.in \
 		$(DESIGNDATA)/restrictions.csv > icalrestriction.c
 
 # values
@@ -159,11 +156,11 @@ VALUEDEPS =					\
 
 icalvalue.h: $(VALUEDEPS)
 	$(PERL) -I$(ICALSCRIPTS)  $(ICALSCRIPTS)/mkderivedvalues.pl \
-	         -i icalvalue.h.in -h $(DESIGNDATA)/value-types.csv > icalvalue.h
+	         -i $(srcdir)/icalvalue.h.in -h $(DESIGNDATA)/value-types.csv > icalvalue.h
 
 icalvalue.c: $(VALUEDEPS) icalvalue.h
 	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedvalues.pl \
-		-i icalvalue.c.in -c $(DESIGNDATA)/value-types.csv > icalvalue.c
+		-i $(srcdir)/icalvalue.c.in -c $(DESIGNDATA)/value-types.csv > icalvalue.c
 
 
 
