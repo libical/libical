@@ -190,8 +190,9 @@ icalproperty* icalproperty_new_${lc}($type v) {
 
 EOM
     # Allow EXDATEs to take DATE values easily.
-    if ($lc eq "exdate") {
- print<<EOM;
+    if ($lc eq "dtstart" || $lc eq "dtend" || $lc eq "due" ||$lc eq "exdate"
+	|| $lc eq "recurrenceid") {
+	print<<EOM;
 void icalproperty_set_${lc}(icalproperty* prop, $type v){
     icalvalue *value;
     $set_pointer_check
