@@ -1,9 +1,10 @@
-/* -*- Mode: C -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* vi:set ts=4 sts=4 sw=4 expandtab : */
 /*======================================================================
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.30 2002-08-08 16:48:29 lindner Exp $
+  $Id: icalvalue.c,v 1.31 2002-09-26 22:12:26 lindner Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -460,7 +461,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	{
             struct icaldurationtype dur = icaldurationtype_from_string(str);
             
-            if(!icaldurationtype_is_null_duration(dur)){
+            if (!icaldurationtype_is_bad_duration(dur)) {    /* failed to parse */
                 value = icalvalue_new_duration(dur);
             }
             
@@ -481,7 +482,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
     case ICAL_TRIGGER_VALUE:
 	{
 	    struct icaltriggertype tr = icaltriggertype_from_string(str);
-            if (!icaltriggertype_is_null_trigger(tr)){
+            if (!icaltriggertype_is_bad_trigger(tr)) {
                 value = icalvalue_new_trigger(tr);
             }
 	    break;
@@ -1084,6 +1085,22 @@ icalvalue_compare(const icalvalue* a, const icalvalue *b)
     switch (icalvalue_isa(a)){
 
 	case ICAL_ATTACH_VALUE:
+	{
+	    if (icalattach_get_is_url(a->data.v_attach) &&
+	        icalattach_get_is_url(b->data.v_attach)) {
+		if (strcasecmp(icalattach_get_url(a->data.v_attach),
+			       icalattach_get_url(b->data.v_attach)) == 0)
+		    return ICAL_XLICCOMPARETYPE_EQUAL;
+		else
+		    return ICAL_XLICCOMPARETYPE_NOTEQUAL;
+	    }
+	    else {
+	        if (a->data.v_attach == b->data.v_attach)
+		    return ICAL_XLICCOMPARETYPE_EQUAL;
+	        else
+		    return ICAL_XLICCOMPARETYPE_NOTEQUAL;
+	    }
+	}
         case ICAL_BINARY_VALUE:
 	{
 	    if (a->data.v_attach == b->data.v_attach)
@@ -1147,6 +1164,7 @@ icalvalue_compare(const icalvalue* a, const icalvalue *b)
 	case ICAL_DATETIME_VALUE:
 	case ICAL_DATETIMEPERIOD_VALUE:
 	case ICAL_QUERY_VALUE:
+	case ICAL_RECUR_VALUE:
 	{
 	    int r;
 
@@ -1184,9 +1202,26 @@ icalvalue_compare(const icalvalue* a, const icalvalue *b)
 
 	}
 
+	case ICAL_TRANSP_VALUE:
+	{
+	    if (icalvalue_get_transp(a) == icalvalue_get_transp(b)){
+		return ICAL_XLICCOMPARETYPE_EQUAL;
+	    } else {
+		return ICAL_XLICCOMPARETYPE_NOTEQUAL;
+	    }
+	}
+
+	case ICAL_ACTION_VALUE:
+        {
+	    if (icalvalue_get_action(a) == icalvalue_get_action(b)){
+		return ICAL_XLICCOMPARETYPE_EQUAL;
+	    } else {
+		return ICAL_XLICCOMPARETYPE_NOTEQUAL;
+	    }
+        }
+
 	case ICAL_PERIOD_VALUE:
 	case ICAL_GEO_VALUE:
-	case ICAL_RECUR_VALUE:
 	case ICAL_NO_VALUE:
 	default:
 	{
