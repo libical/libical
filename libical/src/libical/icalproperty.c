@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.19 2002-06-04 14:07:09 acampi Exp $
+  $Id: icalproperty.c,v 1.20 2002-06-07 13:14:00 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -556,12 +556,16 @@ void icalproperty_set_parameter_from_string(icalproperty* prop,
         icalerror_set_errno(ICAL_BADARG_ERROR);
         return;
     }
-
+    
     param  = icalparameter_new_from_value_string(kind,value);
 
     if (param == 0){
         icalerror_set_errno(ICAL_BADARG_ERROR);
         return;
+    }
+
+    if(kind == ICAL_X_PARAMETER){
+	icalparameter_set_xname(param, name);
     }
 
     icalproperty_set_parameter(prop,param);
@@ -585,12 +589,23 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
         /* icalenum_string_to_parameter_kind will set icalerrno */
         return 0;
     }
+    
+    for(param = icalproperty_get_first_parameter(prop,kind); 
+	    param != 0; 
+	    param = icalproperty_get_next_parameter(prop,kind)) {
+	    if (kind != ICAL_X_PARAMETER) {
+		    break;
+	    }
 
-    param = icalproperty_get_first_parameter(prop,kind);
+	    if (strcmp(icalparameter_get_xname(param),name)==0) {
+		    break;
+	    }		
+    }
 
     if (param == 0){
         return 0;
     }
+
 
     str = icalparameter_as_ical_string(param);
 
