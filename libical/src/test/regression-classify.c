@@ -3,7 +3,7 @@
   FILE: regression-classify.c
   CREATOR: eric 11 February 2000
   
-  $Id: regression-classify.c,v 1.2 2002-06-28 10:45:12 acampi Exp $
+  $Id: regression-classify.c,v 1.3 2002-08-07 17:18:13 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -178,6 +178,9 @@ Classification: %s\n\n",
                i,this_note,get_note(match),
                icalproperty_enum_to_string(class));	
     }
+
+	icalset_free(incoming);
+	icalset_free(cal);
 
 }
 
