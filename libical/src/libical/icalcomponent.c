@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.33 2002-06-27 00:11:45 acampi Exp $
+  $Id: icalcomponent.c,v 1.34 2002-06-28 08:52:59 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -924,6 +924,8 @@ static int icalcomponent_is_busy(icalcomponent *comp) {
       return (1);
     case ICAL_TRANSP_TRANSPARENT:
     case ICAL_TRANSP_TRANSPARENTNOCONFLICT:
+      return(0);
+    default:
       return(0);
     }
   }
