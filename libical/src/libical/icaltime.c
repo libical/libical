@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.13 2001-05-04 20:00:09 ebusboom Exp $
+  $Id: icaltime.c,v 1.14 2001-05-11 00:28:56 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -140,6 +140,7 @@ void unset_tz(struct set_tz_save savetz)
 	putenv(orig_env_str);
 
 	free(orig_tzid);
+        free(orig_env_str);
     } else {
 	putenv("TZ"); /* Delete from environment */
     } 
