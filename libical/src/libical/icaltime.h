@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.7 2001-02-06 19:43:23 ebusboom Exp $
+ $Id: icaltime.h,v 1.8 2001-03-26 07:03:00 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -113,7 +113,7 @@ short icaltime_day_of_year(struct icaltimetype t);
 /* Create a new time, given a day of year and a year. */
 struct icaltimetype icaltime_from_day_of_year(short doy,  short year);
 
-/* Return the day of the week of the given time. Sunday is 0 */
+/* Return the day of the week of the given time. Sunday is 1 */
 short icaltime_day_of_week(struct icaltimetype t);
 
 /* Return the day of the year for the Sunday of the week that the

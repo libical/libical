@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.6 2001-02-12 07:46:51 ebusboom Exp $
+  $Id: copycluster.c,v 1.7 2001-03-26 07:03:00 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -91,7 +91,9 @@ int main(int c, char *argv[]){
 	 itr != 0;
 	 itr = icalset_get_next_component(clusterin)){
 
+        icalerror_set_error_state(ICAL_BADARG_ERROR, ICAL_ERROR_NONFATAL);
 	icalrestriction_check(itr);
+        icalerror_set_error_state(ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT);
 
 	if (itr != 0){
 

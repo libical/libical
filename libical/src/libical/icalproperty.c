@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.6 2001-03-17 16:47:03 ebusboom Exp $
+  $Id: icalproperty.c,v 1.7 2001-03-26 07:03:00 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -119,8 +119,6 @@ icalproperty_new_impl (icalproperty_kind kind)
 icalproperty*
 icalproperty_new (icalproperty_kind kind)
 {
-    icalproperty *prop;
-
     if(kind == ICAL_NO_PROPERTY){
         return 0;
     }
@@ -483,7 +481,14 @@ void icalproperty_set_parameter_from_string(icalproperty* prop,
     icalerror_check_arg_rv( (name!=0),"name");
     icalerror_check_arg_rv( (value!=0),"value");
     
-    param  = icalparameter_new_from_string(value);
+    kind = icalparameter_string_to_kind(name);
+
+    if(kind == ICAL_NO_PARAMETER){
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
+
+    param  = icalparameter_new_from_value_string(kind,value);
 
     if (param == 0){
         icalerror_set_errno(ICAL_BADARG_ERROR);

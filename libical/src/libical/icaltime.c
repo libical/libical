@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.10 2001-02-22 05:03:56 ebusboom Exp $
+  $Id: icaltime.c,v 1.11 2001-03-26 07:03:00 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -405,7 +405,7 @@ short icaltime_day_of_week(struct icaltimetype t){
     return tm->tm_wday+1;
 }
 
-/* Day of the week that the year starts on */
+/* Day of the year that the first day of the week (Sunday) is on  */
 short icaltime_start_doy_of_week(struct icaltimetype t){
     time_t tt = icaltime_as_timet(t);
     time_t start_tt;
@@ -442,7 +442,6 @@ short icaltime_week_number(struct icaltimetype ictt)
     char str[5];
     time_t t = icaltime_as_timet(ictt);
     int week_no;
-    
 
     strftime(str,5,"%V", gmtime(&t));
 

@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 	exit(1);
     }
 
-    alarm(30); /* to get file lock */
+    alarm(300); /* to get file lock */
     cin = icalfileset_new(file);
     alarm(0);
     
@@ -92,6 +92,8 @@ int main(int argc, char *argv[])
 	    continue;
 	}
 
+	printf("\n\n#### %s\n",icalproperty_get_description(desc));
+	printf("#### %s\n",icalvalue_as_ical_string(icalproperty_get_value(rrule)));
 	recur = icalproperty_get_rrule(rrule);
 	start = icalproperty_get_dtstart(dtstart);
 	
@@ -99,8 +101,6 @@ int main(int argc, char *argv[])
 	
 	tt = icaltime_as_timet(start);
 
-	printf("\n\n#### %s\n",icalproperty_get_description(desc));
-	printf("#### %s\n",icalvalue_as_ical_string(icalproperty_get_value(rrule)));
 	printf("#### %s\n",ctime(&tt ));
 
 	for(ritr = icalrecur_iterator_new(recur,start),

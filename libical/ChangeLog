@@ -1,3 +1,9 @@
+2001-03-25  Eric Busboom  <eric@softwarestudio.org>
+
+	* icalrecur.c Many changes to get YEARLY rules working and fix
+ 	other errors. Recurrences are stil broken, but more types of rue
+ 	now work.
+
 2001-03-16  Eric Busboom  <eric@softwarestudio.org>
 
 	* icalparameter.c Changed icalparameter_new_from_string() to

@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.9 2001-03-17 16:47:02 ebusboom Exp $
+  $Id: icalparser.c,v 1.10 2001-03-26 07:03:00 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -66,17 +66,19 @@ char* icalparser_get_param_name(char* line, char **end);
 
 struct icalparser_impl 
 {
-	int buffer_full;
-	size_t tmp_buf_size; 
-	char temp[TMP_BUF_SIZE];
-	icalcomponent *root_component;
-	int version; 
-	int level;
-	int lineno;
-	icalparser_state state;
-	pvl_list components;
-
-	void *line_gen_data;
+    int buffer_full; /* flag indicates that temp is smaller that 
+                        data being read into it*/
+    int continuation_line; /* last line read was a continuation line */
+    size_t tmp_buf_size; 
+    char temp[TMP_BUF_SIZE];
+    icalcomponent *root_component;
+    int version; 
+    int level;
+    int lineno;
+    icalparser_state state;
+    pvl_list components;
+    
+    void *line_gen_data;
     
 };
 
@@ -410,9 +412,20 @@ char* icalparser_get_line(icalparser *parser,
     line_p = line = icalmemory_new_buffer(buf_size);
     line[0] = '\0';
    
+    /* Read lines by calling line_gen_func and putting the data into
+       impl->temp. If the line is a continuation line ( begins with a
+       space after a newline ) then append the data onto line and read
+       again. Otherwise, exit the loop. */
+
     while(1) {
 
-	/* The buffer is not clear, so transfer the data in it to the
+        /* The first part of the loop deals with the temp buffer,
+           which was read on he last pass through the loop. The
+           routine is split like this because it has to read lone line
+           ahead to determine if a line is a continuation line. */
+
+
+	/* The tmp buffer is not clear, so transfer the data in it to the
 	   output. This may be left over from a previous call */
 	if (impl->temp[0] != '\0' ) {
 
@@ -420,19 +433,37 @@ char* icalparser_get_line(icalparser *parser,
                mark the buffer as full. The means we will do another
                read later, because the line is not finished */
 	    if (impl->temp[impl->tmp_buf_size-1] == 0 &&
-		impl->temp[impl->tmp_buf_size-2] != '\n'){
+		impl->temp[impl->tmp_buf_size-2] != '\n'&& 
+                impl->temp[impl->tmp_buf_size-2] != 0 ){
 		impl->buffer_full = 1;
 	    } else {
 		impl->buffer_full = 0;
 	    }
 
 	    /* Copy the temp to the output and clear the temp buffer. */
-	    icalmemory_append_string(&line,&line_p,&buf_size,impl->temp);     
-	    impl->temp[0] = '\0' ;
+            if(impl->continuation_line==1){
+                /* back up the pointer to erase the continuation characters */
+                impl->continuation_line = 0;
+                line_p--;
+                
+                if ( *(line_p-1) == '\r'){
+                    line_p--;
+                }
+                
+                /* copy one space up to eliminate the leading space*/
+                icalmemory_append_string(&line,&line_p,&buf_size,
+                                         impl->temp+1);
+
+            } else {
+                icalmemory_append_string(&line,&line_p,&buf_size,impl->temp);
+            }
+
+            impl->temp[0] = '\0' ;
 	}
 	
 	impl->temp[impl->tmp_buf_size-1] = 1; /* Mark end of buffer */
 
+        /****** Here is where the routine gets string data ******************/
 	if ((*line_gen_func)(impl->temp,impl->tmp_buf_size,impl->line_gen_data)
 	    ==0){/* Get more data */
 
@@ -459,17 +490,7 @@ char* icalparser_get_line(icalparser *parser,
 
 	if  ( line_p > line+1 && *(line_p-1) == '\n' && impl->temp[0] == ' ') {
 
-	    /* back up the pointer to erase the continuation characters */
-	    line_p--;
-
-	    if ( *(line_p-1) == '\r'){
-		line_p--;
-	    }
-
-	    /* shift the temp buffer down to eliminate the leading space*/
-	    memmove(&(impl->temp[0]),&(impl->temp[1]),impl->tmp_buf_size);
-
-	    impl->temp[impl->tmp_buf_size-1] = impl->temp[impl->tmp_buf_size-2];
+            impl->continuation_line = 1;
 
 	} else if ( impl->buffer_full == 1 ) {
 	    
