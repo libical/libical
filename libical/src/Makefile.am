@@ -4,5 +4,10 @@ else
 PYTHON_DIR = 
 endif
 
-# SUBDIRS = libical libicalss libicalvcal # $(PYTHON_DIR) test test-ss
-SUBDIRS = libical libicalss libicalvcal $(PYTHON_DIR) test
+if WITH_JAVA
+JAVA_DIR = java
+else
+JAVA_DIR = 
+endif
+
+SUBDIRS = libical libicalss libicalvcal $(PYTHON_DIR) $(JAVA_DIR) test
