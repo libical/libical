@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: usecases.c,v 1.1.1.1 2001-01-02 07:33:17 ebusboom Exp $
+  $Id: usecases.c,v 1.2 2002-06-28 10:55:15 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -33,7 +33,6 @@
 #include <stdlib.h> /* for malloc */
 #include <stdio.h> /* for printf */
 #include <time.h> /* for time() */
-#include "icalmemory.h"
 
 char str[] = "BEGIN:VCALENDAR\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\

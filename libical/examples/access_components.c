@@ -7,7 +7,6 @@
 #include <stdlib.h> /* for malloc */
 #include <stdio.h> /* for printf */
 #include <time.h> /* for time() */
-#include "icalmemory.h"
 
 void do_something(icalcomponent *c);
 
