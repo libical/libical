@@ -3,7 +3,7 @@
   FILE: icalmemory.c
   CREATOR: eric 30 June 1999
   
-  $Id: icalmemory.c,v 1.2 2001-12-10 01:28:42 gray-john Exp $
+  $Id: icalmemory.c,v 1.3 2002-05-10 17:12:50 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -60,43 +60,106 @@
 #include <stdlib.h> /* for malloc, realloc */
 #include <string.h> /* for memset(), strdup */
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+#include <pthread.h>
+
 #define BUFFER_RING_SIZE 2500
 #define MIN_BUFFER_SIZE 200
 
-void icalmemory_free_tmp_buffer (void* buf);
-
 
 /* HACK. Not threadsafe */
-void* buffer_ring[BUFFER_RING_SIZE];
-int buffer_pos = -1;
-int initialized = 0;
+
+typedef struct {
+	int pos;
+	void *ring[BUFFER_RING_SIZE];
+} buffer_ring;
+
+void icalmemory_free_tmp_buffer (void* buf);
+void icalmemory_free_ring_byval(buffer_ring *br);
+
+static buffer_ring* global_buffer_ring = 0;
+
+#ifdef USE_PTHREAD
+static pthread_key_t  ring_key;
+static pthread_once_t ring_key_once = PTHREAD_ONCE_INIT;
+
+static void ring_destroy(void * buf) {
+    icalmemory_free_ring_byval((buffer_ring *) buf);
+	pthread_setspecific(ring_key, NULL);
+}
+
+static void ring_key_alloc() {  
+    pthread_key_create(&ring_key, ring_destroy);
+}
+#endif
+
+
+static buffer_ring * buffer_ring_new(void) {
+	buffer_ring *br;
+	int i;
+
+	br = (buffer_ring *)malloc(sizeof(buffer_ring));
+
+	for(i=0; i<BUFFER_RING_SIZE; i++){
+	    br->ring[i]  = 0;
+	}
+	br->pos = 0;
+        return(br);
+    }
+
+
+#ifdef USE_PTHREAD
+static buffer_ring* get_buffer_ring_pthread(void) {
+    buffer_ring *br;
+
+    pthread_once(&ring_key_once, ring_key_alloc);
+
+    br = pthread_getspecific(ring_key);
+
+    if (!br) {
+	br = buffer_ring_new();
+	pthread_setspecific(ring_key, buffer_ring_new());
+    }
+    return(br);
+}
+#endif
+
+/* get buffer ring via a single global for a non-threaded program */
+static buffer_ring* get_buffer_ring_global(void) {
+    if (global_buffer_ring == 0) {
+	global_buffer_ring = buffer_ring_new();
+    }
+    return(global_buffer_ring);
+}
+
+static buffer_ring *get_buffer_ring(void) {
+#ifdef USE_PTHREAD
+	return(get_buffer_ring_pthread());
+#else
+	return get_buffer_ring_global();
+#endif
+}
 
 /* Add an existing buffer to the buffer ring */
 void  icalmemory_add_tmp_buffer(void* buf)
 {
-    /* I don't think I need this -- I think static arrays are
-       initialized to 0 as a standard part of C, but I am not sure. */
-    if (initialized == 0){
-	int i;
-	for(i=0; i<BUFFER_RING_SIZE; i++){
-	    buffer_ring[i]  = 0;
-	}
-	initialized = 1;
-    }
+    buffer_ring *br = get_buffer_ring();
+
 
     /* Wrap around the ring */
-    if(++buffer_pos == BUFFER_RING_SIZE){
-	buffer_pos = 0;
+    if(++(br->pos) == BUFFER_RING_SIZE){
+	br->pos = 0;
     }
 
     /* Free buffers as their slots are overwritten */
-    if ( buffer_ring[buffer_pos] != 0){
-	free( buffer_ring[buffer_pos]);
-	buffer_ring[buffer_pos] = 0;
+    if ( br->ring[br->pos] != 0){
+	free( br->ring[br->pos]);
     }
 
     /* Assign the buffer to a slot */
-    buffer_ring[buffer_pos] = buf; 
+    br->ring[br->pos] = buf; 
 }
 
 /* Create a new temporary buffer on the ring. Libical owns these and
@@ -124,19 +187,23 @@ icalmemory_tmp_buffer (size_t size)
     return buf;
 }
 
-void icalmemory_free_ring()
-{
-	
+/* get rid of this buffer ring */
+void icalmemory_free_ring_byval(buffer_ring *br) {
    int i;
    for(i=0; i<BUFFER_RING_SIZE; i++){
-    if ( buffer_ring[i] != 0){
-       free( buffer_ring[i]);
+    if ( br->ring[i] != 0){
+       free( br->ring[i]);
     }
-    buffer_ring[i]  = 0;
+    }
+   free(br);
    }
 
-   initialized = 1;
+void icalmemory_free_ring()
+{
+   buffer_ring *br;
+   br = get_buffer_ring();
 
+   icalmemory_free_ring_byval(br);
 }
 
 
