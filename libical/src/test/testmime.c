@@ -3,7 +3,7 @@
   FILE: 
   CREATOR: eric 25 June 2000
   
-  $Id: testmime.c,v 1.1.1.1 2001-01-02 07:33:06 ebusboom Exp $
+  $Id: testmime.c,v 1.2 2002-06-11 19:44:56 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -265,7 +265,7 @@ int main(int argc, char* argv[]) {
 	    d.pos = 0;
 	    d.str = buf;
 
-	    c = icalmime_parse(string_line_generator,&d);
+	    c = icalmime_parse(icalparser_string_line_generator,&d);
 
 	    printf("%s\n",icalcomponent_as_ical_string(c));
 
