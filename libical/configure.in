@@ -13,11 +13,6 @@ AM_PROG_LEX
 AC_PROG_LN_S
 AC_PROG_INSTALL
 
-dnl Remove this line to enable shared libraries, or use 
-dnl configure --enable-shared
-AM_DISABLE_SHARED
-
-
 dnl Initialize libtool
 AM_PROG_LIBTOOL
 
@@ -45,6 +40,50 @@ AC_STRUCT_TM
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS(strdup)
+
+dnl **************************************************
+dnl * Check for Python
+dnl **************************************************
+python_val=false
+AC_ARG_ENABLE(python-bindings, 
+[  --enable-python-bindings=[yes/no] Enable python bindings],,enable_python_bindings=yes)
+if test "x$enable_python_bindings" = "xyes"; then
+	python_val=true
+else
+	python_val=false
+fi
+
+if $python_val; then
+	AC_CHECK_PROG(python_val, python, true, false)
+fi          
+if $python_val; then
+	AC_CHECK_PROG(python_val, swig, true, false)
+fi
+
+if $python_val; then
+	  PY_PREFIX=`python -c 'import sys ; print sys.prefix'`
+	  PY_EXEC_PREFIX=`python -c 'import sys ; print sys.exec_prefix'`
+	  changequote(<<, >>)dnl
+	  PY_VERSION=`python -c 'import sys ; print sys.version[0:3]'`
+	  changequote([, ])dnl
+	  if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
+		  PY_LIBS="python$PY_VERSION"
+		  PY_LIB_LOC="-L$PY_EXEC_PREFIX/lib/python$PY_VERSION/config"
+		  PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION"
+		  PY_MAKEFILE="$PY_EXEC_PREFIX/lib/python$PY_VERSION/config/Makefile"
+		  PY_LOCALMODLIBS=`sed -n -e 's/^LOCALMODLIBS=\(.*\)/\1/p' $PY_MAKEFILE`
+		  PY_BASEMODLIBS=`sed -n -e 's/^BASEMODLIBS=\(.*\)/\1/p' $PY_MAKEFILE`
+		  PY_OTHER_LIBS=`sed -n -e 's/^LIBS=\(.*\)/\1/p' $PY_MAKEFILE`
+		  PY_EXTRA_LIBS="$PY_LOCALMODLIBS $PY_BASEMODLIBS $PY_OTHER_LIBS"
+		  AC_SUBST(PY_LIBS)
+		  AC_SUBST(PY_LIB_LOC)
+		  AC_SUBST(PY_CFLAGS)
+		  AC_SUBST(PY_EXTRA_LIBS)
+	  else
+		  python_val=false
+	  fi
+fi
+AM_CONDITIONAL(WITH_PYTHON, $python_val)
 
 AC_OUTPUT([
 Makefile

@@ -4,3 +4,6 @@ Makefile.in
 .libs
 *.lo
 *.la
+LibicalWrap.c
+LibicalWrap_wrap.doc
+config.c
