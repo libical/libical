@@ -5,11 +5,6 @@
   
   DESCRIPTION:
 
-  Test program for expanding recurrences. Run as:
-
-     ./recur ../../test-data/recur.txt
-
-  
   (C) COPYRIGHT 1999 Eric Busboom 
   http://www.softwarestudio.org
 
@@ -25,19 +20,20 @@
 
   ======================================================================*/
 
-#include "ical.h"
 #include <assert.h>
 #include <string.h> /* for strdup */
 #include <stdlib.h> /* for malloc */
-#include <stdio.h> /* for printf */
-#include <time.h> /* for time() */
+#include <stdio.h>  /* for printf */
+#include <time.h>   /* for time() */
 #include <signal.h> /* for signal */
 #ifndef WIN32
 #include <unistd.h> /* for alarm */
 #endif
 
+#include "ical.h"
 #include "icalss.h"
 #include "regression.h"
+
 extern int VERBOSE;
 
 #ifdef WIN32
@@ -51,27 +47,58 @@ static void sig_alrm(int i){
     exit(1);
 }
 
+/* Get the expected result about the purpose of the property*/
+
+static int get_expected_numevents(icalcomponent *c)
+{
+    icalproperty *p;
+    const char* note = 0;
+    int num_events = 0;
+
+    if(c != 0){
+        for(p = icalcomponent_get_first_property(c,ICAL_X_PROPERTY);
+            p!= 0;
+            p = icalcomponent_get_next_property(c,ICAL_X_PROPERTY)){
+            if(strcmp(icalproperty_get_x_name(p),"X-EXPECT-NUMEVENTS")==0){
+	      note = icalproperty_get_x(p);
+            }
+        }
+    } 
+    
+    if(note != 0){
+      num_events = atoi(note);
+    }
+    
+    
+    return num_events;
+}
+
+
+
 static void recur_callback(icalcomponent *comp,
 			   struct icaltime_span *span,
 			   void *data)
 {
-  if (VERBOSE) {
-    printf("cb: %s", ctime(&span->start));
-    printf("    %s\n", ctime(&span->end));
-  }
+  int *num_recurs = data;
 
+  if (VERBOSE) {
+    printf("recur: %s", ctime(&span->start));
+    printf("       %s", ctime(&span->end));
+  }
+  *num_recurs = *num_recurs + 1;
 }
 
 void test_recur_file()
 {
-    icalfileset *cin = 0;
-    struct icaltimetype start, next;
+    icalset *cin = 0;
+    struct icaltimetype next;
     icalcomponent *itr;
     icalproperty *desc, *dtstart, *rrule;
     struct icalrecurrencetype recur;
     icalrecur_iterator* ritr;
     time_t tt;
     char* file; 
+    int num_recurs_found = 0;
 	
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 	
@@ -97,31 +124,37 @@ void test_recur_file()
 	itr != 0;
 	itr = icalfileset_get_next_component(cin)){
       int badcomp = 0;
+      int expected_events = 0;
+      char msg[128];
 
-      struct icaltimetype start = icaltime_from_timet(1,0);
-      struct icaltimetype end = icaltime_today();
-      
-      
+
+      struct icaltimetype start = icaltime_null_time();
+      struct icaltimetype startmin = icaltime_from_timet(1,0);
+      struct icaltimetype endmax = icaltime_null_time();
+      const char *desc_str = "malformed component";
+
       desc = icalcomponent_get_first_property(itr,ICAL_DESCRIPTION_PROPERTY);
       dtstart = icalcomponent_get_first_property(itr,ICAL_DTSTART_PROPERTY);
       rrule = icalcomponent_get_first_property(itr,ICAL_RRULE_PROPERTY);
+      if (desc) {
+	desc_str = icalproperty_get_description(desc);
+      }
       
-      ok("check for malformed component", !(desc == 0 || dtstart == 0 || rrule == 0));
+      ok((char*)desc_str, !(desc == 0 || dtstart == 0 || rrule == 0));
 
       if (desc == 0 || dtstart == 0 || rrule == 0) {
 	badcomp = 1;
 	if (VERBOSE) {
 	  printf("\n******** Error in input component ********\n");
-	  printf("The following component is malformed:\n %s\n",
-		 icalcomponent_as_ical_string(itr));
+	  printf("The following component is malformed:\n %s\n", desc_str);
 	}
 	continue;
       }
-      
       if (VERBOSE) {
-	printf("\n\n#### %s\n",icalproperty_get_description(desc));
+	printf("\n\n#### %s\n",desc_str);
 	printf("#### %s\n",icalvalue_as_ical_string(icalproperty_get_value(rrule)));
       }
+      
       recur = icalproperty_get_rrule(rrule);
       start = icalproperty_get_dtstart(dtstart);
       
@@ -145,14 +178,17 @@ void test_recur_file()
 	  printf("  %s",ctime(&tt ));		
 	
       }
+
       icalrecur_iterator_free(ritr);
+      num_recurs_found = 0;
+      expected_events = get_expected_numevents(itr);
+
+      icalcomponent_foreach_recurrence(itr, startmin, endmax, 
+				       recur_callback, &num_recurs_found);
       
-      icalcomponent_foreach_recurrence(itr, start, end, 
-				       recur_callback, NULL);
-      
-      
+      sprintf(msg,"   expecting total of %d events", expected_events);
+      int_is(msg, num_recurs_found, expected_events);
     }
     
     icalfileset_free(cin);
-    
 }
