@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.15 2001-03-17 16:47:02 ebusboom Exp $
+#  $Id: Makefile.am,v 1.16 2001-03-27 01:38:56 ebusboom Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -41,6 +41,8 @@ INCLUDES =			\
 libical_la_LDFLAGS = -version-info 0:0:0
 
 libical_la_SOURCES =		\
+	icalattendee.h		\
+	icalattendee.c		\
 	icalcomponent.c		\
 	icalcomponent.h		\
 	icalenums.c		\
@@ -54,6 +56,7 @@ libical_la_SOURCES =		\
 	icalmime.h		\
 	icalparameter.c		\
 	icalparameter.h		\
+	icalparameterimpl.h	\
 	icalderivedparameter.c	\
 	icalderivedparameter.h	\
 	icalparser.c		\
@@ -76,6 +79,7 @@ libical_la_SOURCES =		\
 	icaltypes.h		\
 	icalvalue.c		\
 	icalvalue.h		\
+	icalvalueimpl.h		\
 	icalderivedvalue.c	\
 	icalderivedvalue.h	\
 	icalyacc.h		\

@@ -1,18 +1,52 @@
-Version 0.23, 15 Feb 01 ( cvs tag libical-0-23)
-----------------------------------------------
+Version 0.23, 26 Mar 01 ( cvs tag libical-0-23 )
+------------------------------------------------
 
-JP Rosevear worked on the build system some more; now checking out the
-code from cvs should give to a complete but minimal distribution,
-without any of the autognerated files.
+**** Incompatibilities with previous versions ****
 
-addedd a file src/libical/icllangbind.c that has some functions to
-make it easier to bind libical to other languages.
+icalparameter_new_rsvp
+icalparameter_get_rsvp
+icalparameter_set_rsvp
 
-Added a python binding to src/python
+	These routines now take and return ICAL_RSVP_TRUE and
+	ICAL_RSVP_FALSE instead of 0 and 1
+	
+icalenum_*_to_*
 
-Move the perl binding from an external distribution into Net-ICal-Libical
+	These routines have been moved to icalproperty, icalparameter
+	or icalvalue
 
-Improved the recurrence code with the help of Hubert V's testing. 
+
+
+Python interface: An alpha level python interface is available in
+src/python.
+
+Perl interface: A pre-alpha level interface is available in
+src/Net-ICal-Libical
+
+Code Autogeneration: Converted all of the important files in
+design-data/ to .csv files and improved the code that is generated
+from them. Now all of the enumerations for property, parameters and
+values are generated from thes files, as are the string
+representations for the enumerations. You can add a new property or
+parameter to the system simply by adding a line to the appropriate
+file in design-data/
+
+Recurrences: Improved the recurrence code by fixing bugs in MONTHLY
+recurrences and completely re-implementing expand_year_days() for
+YEARLY recurrences. Hubert V's aided in testing. 
+
+Build system: JP Rosevear made several improvements to the build
+system. Now checking out the code from cvs should give to a complete
+but minimal distribution, without any of the autognerated files.
+
+Interface changes: Nearly all of the icalenum routines for converting
+between strings and enumerations have been moved out of icalenum into
+icalproperty, icalparameter and icalvalue. This means that their names
+have changed, although #defines have been added to icalenum.h to map
+back to the old names.
+ 
+Added src/libical/icllangbind.c that has some functions to make it
+easier to bind libical to other languages.
 
 
 Version 0.22, 15 Jan 01 ( cvs tag libical-0-22)

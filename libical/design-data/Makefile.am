@@ -1,9 +1,6 @@
 EXTRA_DIST =\
- components.txt \
- param-c-types.txt \
- params-in-prop.txt \
- prop-to-value.txt \
- property-tokens.txt \
+ properties.csv \
+ parameters.csv \
  restrictions.csv \
  status.txt \
  value-types.csv
