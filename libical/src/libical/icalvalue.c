@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.29 2002-08-08 00:06:24 acampi Exp $
+  $Id: icalvalue.c,v 1.30 2002-08-08 16:48:29 lindner Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1227,6 +1227,38 @@ icalproperty* icalvalue_get_parent(icalvalue* value)
 }
 
 
+int icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBufferLen)
+{
+    char   *ptr;
+    const icalvalue *value = 0;
+
+    if ((szText == 0) || (szEncText == 0))
+        return 0;
+   
+    value = icalvalue_new_from_string(ICAL_STRING_VALUE, szText);
+    
+    if (value == 0)
+        return 0;
+    
+    ptr = icalvalue_text_as_ical_string(value);
+    if (ptr == 0)
+        return 0;
+    
+    if ((int)strlen(ptr) >= nMaxBufferLen)
+        {
+            icalvalue_free ((icalvalue*)value);
+            value = 0;
+            return 0;
+        }
+    
+    strcpy(szEncText, ptr);
+    
+    icalvalue_free ((icalvalue*)value);
+    
+    value = 0;
+    
+    return 1;
+}
 
 /* The remaining interfaces are 'new', 'set' and 'get' for each of the value
    types */
