@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.46 2002-11-04 01:44:32 acampi Exp $
+  $Id: icalrecur.c,v 1.47 2002-11-04 01:45:16 acampi Exp $
   $Locker:  $
     
 
@@ -1974,7 +1974,6 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
     case (1<<BY_DAY) + (1<<BY_MONTH_DAY) + (1<<BY_MONTH): {
         /*FREQ=YEARLY; BYDAY=TH,20MO,-10FR; BYMONTHDAY=10; MYMONTH=6,11*/
 
-        int days_index = 0;
         pvl_elem itr;
         pvl_list days = expand_by_day(impl,year);
 
