@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.19 2002-10-09 22:12:28 acampi Exp $
+ $Id: icaltimezone.c,v 1.20 2002-10-09 22:13:29 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -410,7 +410,7 @@ icaltimezone_get_tznames_from_vtimezone (icalcomponent *component)
     /* If both standard and daylight TZNAMEs were found, if they are the same
        we return just one, else we format them like "EST/EDT". */
     if (standard_tzname && daylight_tzname) {
-	int standard_len, daylight_len;
+	unsigned int standard_len, daylight_len;
 	char *tznames;
 
 	if (!strcmp (standard_tzname, daylight_tzname))
