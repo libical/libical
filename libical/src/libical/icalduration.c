@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.12 2002-06-26 23:09:24 acampi Exp $
+  $Id: icalduration.c,v 1.13 2002-06-27 01:16:59 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -61,7 +61,7 @@ struct icaldurationtype icaldurationtype_from_int(int t)
 	t = -t;
     }
 
-    if (t % (60 * 60 * 24 * 7 == 0)) {
+    if (t % (60 * 60 * 24 * 7) == 0) {
 	dur.weeks = t / (60 * 60 * 24 * 7);
     } else {
 	used += dur.weeks * (60 * 60 * 24 * 7);
