@@ -1,3 +1,19 @@
+2001-03-05  Eric Busboom  <eric@softwarestudio.org>
+
+	* Property.py Added a lot of exception code to signal failure to
+ 	create a Property.
+
+	* DerivedProperties.py Added derived property classes for RDATE
+ 	and TRIGGER, two properties that can have one of two value types. 
+
+
+2001-03-04  Eric Busboom  <eric@softwarestudio.org>
+
+	* Property.pm Added Property.ConstructorFailedError exception
+
+	* Component.pm fixed bug in Collection.__setslice__. "," used
+ 	instead of ":"
+
 2001-03-28  Patrick Lewis <plewis@inetarena.com>
 	
 	* Split Libical.py file into Component.py, Property.py, Collection.py, 

@@ -99,40 +99,17 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
 
 icalcomponent* icalproperty_get_parent(icalproperty* property);
 
-typedef enum icalerrorenum {
-    
-    ICAL_BADARG_ERROR,
-    ICAL_NEWFAILED_ERROR,
-    ICAL_MALFORMEDDATA_ERROR, 
-    ICAL_PARSE_ERROR,
-    ICAL_INTERNAL_ERROR, /* Like assert --internal consist. prob */
-    ICAL_FILE_ERROR,
-    ICAL_ALLOCATION_ERROR,
-    ICAL_USAGE_ERROR,
-    ICAL_NO_ERROR,
-    ICAL_MULTIPLEINCLUSION_ERROR,
-    ICAL_TIMEDOUT_ERROR,
-    ICAL_UNKNOWN_ERROR /* Used for problems in input to icalerror_strerror()*/
-
-} icalerrorenum;
-
-/* Make an individual error fatal or non-fatal. */
-typedef enum icalererorstate { 
-    ICAL_ERROR_FATAL,     /* Not fata */
-    ICAL_ERROR_NONFATAL,  /* Fatal */
-    ICAL_ERROR_DEFAULT,   /* Use the value of icalerror_errors_are_fatal*/
-    ICAL_ERROR_UNKNOWN    /* Asked state for an unknown error type */
-} icalerrorstate ;
-
-void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
-icalerrorstate icalerror_get_error_state( icalerrorenum error);
-
+int icalerror_supress(const char* error);
+void icalerror_restore(const char* error, int es);
+char* icalerror_perror();
+void icalerror_clear_errno(void);
 
 const char* icalenum_property_kind_to_string(icalproperty_kind kind);
 icalproperty_kind icalenum_string_to_property_kind(const char* string);
 
 const char* icalenum_value_kind_to_string(icalvalue_kind kind);
 /*icalvalue_kind icalenum_value_kind_by_prop(icalproperty_kind kind);*/
+icalvalue_kind icalenum_string_to_value_kind(const char* str);
 
 const char* icalenum_parameter_kind_to_string(icalparameter_kind kind);
 icalparameter_kind icalenum_string_to_parameter_kind(const char* string);

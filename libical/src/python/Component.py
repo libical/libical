@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.1 2001-03-04 18:47:30 plewis Exp $
+#  $Id: Component.py,v 1.2 2001-03-05 18:30:40 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -28,55 +28,29 @@
 from LibicalWrap import *
 from types import *
 from Property import *
+from Collection import *
 
 class Component:
 
     def __init__(self,str=None):
-        self.comp_p = None
+        self._ref = None
         if str != None:
-            self.comp_p = icalparser_parse_string(str)
+            self._ref = icalparser_parse_string(str)
         else:
-            self.comp_p = icalparser_parse_string('')
+            self._ref = icalparser_parse_string('')
        
         self.cached_props = {}
 
     def __del__(self):
-        if self.comp_p != None and \
-           icalcomponent_get_parent(self.comp_p) != None:
+        if self._ref != None and \
+           icalcomponent_get_parent(self._ref) != None:
 
             for k in self.cached_props.keys():
                 del self.cached_props[k]
             
-            icalcomponent_free(self.comp_p)
-            self.comp_p = None
+            icalcomponent_free(self._ref)
+            self._ref = None
 
-    def _parse_component_string(self, comp_str):
-        comp = icalparser_parse_string(comp_str)
-        #c = icallangbind_get_first_component(comp, 'ANY')
-        print icalcomponent_as_ical_string(comp)
-
-        # Parse properties for this component
-        anyProperty = icalenum_string_to_property_kind('ICAL_ANY_PROPERTY')
-        #print comp
-        #print icalenum_property_kind_to_string(anyKind)
-        p = icalcomponent_get_first_property(comp, anyProperty)
-
-        while p!='NULL':
-            p_dict = icallangbind_property_eval_string(p,":")
-            print "p_dict = ", p_dict
-            if p_dict==None: p_dict="{'name':'X-DUM', 'value':'Err', 'value_type':'TEXT'}"
-            p_dict = eval(p_dict)
-            print p_dict
-            self._addPropertyFromDict(p_dict)
-            p = icalcomponent_get_next_property(comp, anyProperty)
-
-        # Get remaining components
-        c = icallangbind_get_first_component(comp, 'ANY')
-        while c!='NULL':
-            self.addComponent(NewComponent(c))
-            c = icallangbind_get_next_component(comp, 'ANY')
-            
-        
         
     def properties(self,type='ANY'): 
         """  
@@ -86,7 +60,7 @@ class Component:
 
         props = []
 
-        p = icallangbind_get_first_property(self.comp_p,type)
+        p = icallangbind_get_first_property(self._ref,type)
 
         while p !='NULL':
             d_string = icallangbind_property_eval_string(p,":")
@@ -106,7 +80,7 @@ class Component:
                 elif d['name'] == 'ATTENDEE':
                     prop = Attendee(d)
                 else:
-                    print "Unknown property type",d['name']
+                    prop=Property(ref=p)
                     
                     
                 self.cached_props[p] = prop
@@ -115,26 +89,11 @@ class Component:
 
             props.append(prop)
 
-            p = icallangbind_get_next_property(self.comp_p,type)
+            p = icallangbind_get_next_property(self._ref,type)
 
-        return props
+        return Collection(self,props);
  
-    def addPropertyFromString(self, propertyStr):
-        """
-        Add a Property instance to the component. 
-        """
-
-        p = icalproperty_new_from_string(propertyStr);
-
-        if(p == None):
-            # Error, failed to create property
-            raise ValueError, "unable to create a new property."
-        else:
-            p_dict = icallangbind_property_eval_string(p, ":")
-            p_dict = eval(p_dict)
-            self._addPropertyFromDict(p_dict)
-
-    def addProperty(self, prop):
+    def add_property(self, prop):
         "Adds the property object to the component."
         
         if not isinstance(prop,Property):
@@ -152,44 +111,40 @@ class Component:
             prop.ref(prop_p)
 
         if icalproperty_get_parent(prop_p)=='NULL':
-            icalcomponent_add_property(self.comp_p, prop_p)
-        elif  icalproperty_get_parent(prop_p) != self.comp_p:
+            icalcomponent_add_property(self._ref, prop_p)
+        elif  icalproperty_get_parent(prop_p) != self._ref:
             raise "Property is already a child of another component"
 
 
-    def removeProperty(self,prop):
+    def remove_property(self,prop):
 
-        if prop.ref() and self.cached_props.kas_key(prop.ref()):
-            del self.cached_props[prop.ref]
-        
-        # More to Come...
+        if prop.ref() and self.cached_props.has_key(prop.ref()):
 
-        pass
+            del self.cached_props[prop.ref()]
+            icalcomponent_remove_property(self._ref,prop.ref())
 
-    def removeProperties(self, type):
-        """Remove all properties with the name equal to the argument name.
+    def components(self,type='ANY'):        
+        comps = []
 
-        Passing "ANY" as the type will remove all Properties.
-        """
-        to_remvoe = self.properties(type)
-        for p in to_remove:
-            self.removeProperty(p)
+        return comps
 
-    def addComponent(self, componentObj):
+    def add_component(self, componentObj):
         "Adds a child component."
         pass
         
-    def components(self,type='ANY'):        
-        props = []
 
-        return props
+    def remove_component(self, component):
+        "Removes a child component"
+        pass
+
+    def as_ical_string(self):
+        return self.__str__()
 
     def __str__(self):
 
-        return icalcomponent_as_ical_string(self.comp_p)
+        return icalcomponent_as_ical_string(self._ref)
 
-    def remove_component(self, component):
-        pass
+
 
 def NewComponent(comp):
     "Converts a string or C icalcomponent into the right component object."
@@ -248,7 +203,7 @@ class GenericComponent(Component):
                 p = Property(name)
                 p.value_type(value_type)
                 p.value(value)
-                self.addProperty(Property(dict))
+                self.add_property(Property(dict))
             elif len(curr_properties) == 1:
                 curr_properties[0].value(value)
             else:
@@ -285,7 +240,7 @@ class GenericComponent(Component):
            isinstance(value, FloatType):
             v = Time(v)
         if isinstance(value, Time):
-            self.removeProperties('CREATED')
+            self.remove_properties('CREATED')
             self.addProperty(v)
         elif v==None:
             self._singlularProperty("CREATED", "DATE-TIME", v)

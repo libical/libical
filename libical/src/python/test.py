@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.9 2001-03-04 18:47:30 plewis Exp $
+#  $Id: test.py,v 1.10 2001-03-05 18:30:40 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -26,6 +26,24 @@
 #======================================================================
 
 from Libical import *
+
+def error_type():
+    error = icalerror_perror()
+    return error[:index(error,':')]
+
+comp_str = """
+BEGIN:VEVENT
+ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com
+COMMENT: When in the course of writting comments and nonsense text\, it 
+ becomes necessary to insert a newline
+DTSTART:19972512T120000
+DTSTART:19970101T120000Z
+DTSTART:19970101
+DURATION:P3DT4H25M
+FREEBUSY:19970101T120000/19970101T120000
+FREEBUSY:19970101T120000/PT3H
+FREEBUSY:19970101T120000/PT3H
+END:VEVENT"""
 
 
 def test_property():
@@ -53,6 +71,13 @@ def test_property():
 
 
     print p.as_ical_string()
+
+    try:
+        p = Property()
+    except Property.ConstructorFailedError:
+        pass
+    else:
+        assert(0)
 
 def test_time():
     "Test routine"
@@ -104,6 +129,7 @@ def test_period():
 
     print p
     
+
     assert(str(p) == 'FREEBUSY:19970101T180000Z/19970101T233000Z')
 
     print p.start()
@@ -114,9 +140,9 @@ def test_period():
 
     print p.duration()
     assert(str(p.duration()) == 'DURATION:PT5H30M')
+    p = None
 
     p = Period("19970101T180000Z/PT5H30M")
-
     print p
 
     print p.start()
@@ -127,6 +153,51 @@ def test_period():
 
     print p.duration()
     assert(str(p.duration()) == 'DURATION:PT5H30M')
+
+
+def test_duration():
+
+    print "-------------- Test Duration ----------------"
+
+    # Ical string
+
+    d = Duration("P3DT4H25M")
+
+    print str(d)
+
+    assert(str(d) == "DURATION:P3DT4H25M")
+
+    print d.seconds()
+
+    assert(d.seconds() == 275100)
+
+    # seconds
+
+    d = Duration(-275100)
+           
+    print str(d)
+
+    assert(str(d) == "DURATION:-P3DT4H25M")
+
+    print d.seconds()
+
+    assert(d.seconds() == -275100)
+
+    #error
+
+    try:
+        d = Duration("P10WT7M")
+        print str(d)
+        assert(0)
+    except: pass
+
+    try:
+        d = Duration("Pgiberish")
+        print str(d)
+        assert(0)
+    except:
+        pass
+
 
 
 def test_attach():
@@ -148,20 +219,6 @@ def test_attach():
 def test_component():
 
     print "------------------- Test Component ----------------------"
-
-    comp_str = """
-BEGIN:VEVENT
-ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com
-COMMENT: When in the course of writting comments and nonsense text\, it 
- becomes necessary to insert a newline
-DTSTART:19972512T120000
-DTSTART:19970101T120000Z
-DTSTART:19970101
-DURATION:P3DT4H25M
-FREEBUSY:19970101T120000/19970101T120000
-FREEBUSY:19970101T120000/PT3H
-FREEBUSY:19970101T120000/PT3H
-END:VEVENT"""
 
 
     c = Component(comp_str);
@@ -190,7 +247,7 @@ END:VEVENT"""
     t = Time("20011111T123030")
     t.name('DTEND')
 
-    c.addProperty(t)
+    c.add_property(t)
 
 
     print c
@@ -203,7 +260,59 @@ END:VEVENT"""
     assert(dtstart1 == dtstart2)
 
 
-if __name__ == "__main__":
+    p = Property(type="SUMMARY");
+    p.value("This is a summary")
+
+    c.properties().append(p)
+
+    print c.as_ical_string()
+
+    p = c.properties("SUMMARY")[0]
+    assert(p!=None);
+    print str(p)
+    assert(str(p) == "SUMMARY:This is a summary")
+
+    c.properties()[:] = [p]
+
+    print c.as_ical_string()
+    
+    
+def test_derivedprop():
+    
+    print "------------ Derived Properties -----------------"
+    
+    p = RDate("20011111T123030")
+
+    print str(p)
+
+
+    p = RDate("19970101T120000/19970101T123000")
+
+    print str(p)
+
+    try:
+        p = RDate("P3DT4H25M")
+        print str(p)
+        assert(0)
+    except: pass
+
+    
+    p = Trigger("P3DT4H25M")
+
+    print str(p)
+
+    p = Trigger("20011111T123030")
+
+    print str(p)
+
+    try:
+        p = Trigger("19970101T120000/19970101T123000")
+        print str(p)
+        assert(0)
+    except: pass
+
+
+def run_tests():
     test_property()
 
     test_time()
@@ -212,6 +321,14 @@ if __name__ == "__main__":
 
     test_component()
 
+    test_duration()
+
+    test_derivedprop()
+
     #test_attach()
 
+
+
+if __name__ == "__main__":
+    run_tests()
 

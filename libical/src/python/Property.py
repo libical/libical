@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.1 2001-03-04 18:47:30 plewis Exp $
+#  $Id: Property.py,v 1.2 2001-03-05 18:30:40 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -31,6 +31,15 @@ import regsub
 import base64
 from string import index, upper
 
+#def icalerror_supress(arg): 
+#    pass
+
+#def icalerror_restore(a,b):
+#    pass
+
+def error_type():
+    error = icalerror_perror()
+    return error[:index(error,':')]
 
 class Property:
     """ Represent any iCalendar Property.
@@ -43,12 +52,20 @@ class Property:
     In addition, parameter:parameter value entries may be included.
     """
 
+    class ConstructorFailedError(Exception):
+        "Failed to construct a property"
+
+    class UpdateFailedError(Exception):
+        "Failed to update the value of a property"
+        
+
     def __init__(self, type = None, ref = None):
 
 
         assert(ref == None or isinstance(ref,StringType))
         assert(type == None or isinstance(type,StringType))
 
+        self._ref = None
 
         if ref != None:
             self._ref = ref
@@ -57,7 +74,8 @@ class Property:
             self._ref = icalproperty_new(kind)
 
 
-        assert (self._ref != 'NULL')
+        if self._ref == None or self._ref == 'NULL':
+            raise Property.ConstructorFailedError("Failed to construct Property")
             
         self._deleted = 0;
 
@@ -103,15 +121,29 @@ class Property:
         if(v != None):
             
             if kind != None:
-                self.__setitem__('VALUE',kind)
+                # Get the default kind of value for this property 
+                default_kind = icalenum_value_kind_to_string(icalenum_property_kind_to_value_kind(icalenum_string_to_property_kind(self.name())))
+
+                if(kind != default_kind):
+                    self.__setitem__('VALUE',kind)
                 vt = kind
             elif self.__getitem__('VALUE'):
                 vt = self.__getitem__('VALUE')
             else:
                 vt = 'NO' # Use the kind of the existing value
 
-            icalproperty_set_value_from_string(self._ref,v,vt)
 
+            icalerror_clear_errno()
+
+            #e1=icalerror_supress("MALFORMEDDATA")
+            icalproperty_set_value_from_string(self._ref,v,vt)
+            #icalerror_restore("MALFORMEDDATA",e1)
+
+            if error_type() != "NO":
+                raise Property.UpdateFailedError(error_type())
+
+            s = icalproperty_get_value_as_string(self._ref)
+            assert(s == v)
 
         return icalproperty_get_value_as_string(self._ref)
 
@@ -131,7 +163,7 @@ class Property:
 
                     
     def as_ical_string(self):
-
+        
         return icalproperty_as_ical_string(self._ref)
 
     def __getitem__(self,key):
@@ -175,6 +207,8 @@ class Time(Property):
         Time(8349873494)          Construct from seconds past POSIX epoch
         
         """
+        e1=icalerror_supress("MALFORMEDDATA")
+        e2=icalerror_supress("BADARG")
 
         if isinstance(arg, DictType):
             # Dictionary -- used for creating from Component
@@ -196,11 +230,20 @@ class Time(Property):
 
             Property.__init__(self,type=name)
 
-        self._update_value()
+        icalerror_restore("MALFORMEDDATA",e1)
+        icalerror_restore("BADARG",e2)
+
+        if icaltime_is_null_time(self.tt):
+            raise Property.ConstructorFailedError("Failed to construct a Time")
+
+        try:
+            self._update_value()
+        except Property.UpdateFailedError:
+            raise Property.ConstructorFailedError("Failed to construct a Time")
 
     def _update_value(self):
         self.tt = icaltime_normalize(self.tt)
-        self.value(icaltime_as_ical_string(self.tt))
+        self.value(icaltime_as_ical_string(self.tt),"DATE-TIME")
 
     def valid(self):
         " Return true if this is a valid time "
@@ -334,7 +377,12 @@ class Duration(Property):
         Duration(3660)             Construct from seconds 
         """ 
 
+        self.dur = None
+
+        e=icalerror_supress("MALFORMEDDATA")
+
         if isinstance(arg, DictType):
+            
             self.dur = icaldurationtype_from_string(arg['value'])
             Property.__init__(self,ref=arg['ref'])
         else:
@@ -349,11 +397,19 @@ class Duration(Property):
 
             Property.__init__(self,type=name)
 
-        self._update_value()
+        icalerror_restore("MALFORMEDDATA",e)
+
+        if self.dur == None or icaldurationtype_is_null_duration(self.dur):
+            raise Property.ConstructorFailedError("Failed to construct Duration from " +str(arg))
+
+        try:
+            self._update_value()
+        except Property.UpdateFailedError:
+            raise Property.ConstructorFailedError("Failed to construct Duration from  " + str(arg))
 
     def _update_value(self):
-        self.value(icaldurationtype_as_ical_string(self.dur))
-
+        
+        self.value(icaldurationtype_as_ical_string(self.dur),"DURATION")
 
     def valid(self):
         "Return true if this is a valid duration"
@@ -375,18 +431,42 @@ class Period(Property):
 
         Property.__init__(self, type = name)
 
+        self.pt=None
+        
+        #icalerror_clear_errno()
+        e1=icalerror_supress("MALFORMEDDATA")
+        e2=icalerror_supress("BADARG")
+
         if isinstance(arg, DictType):
+            
+
+            es=icalerror_supress("MALFORMEDDATA")
             self.pt = icalperiodtype_from_string(arg['value'])
+            icalerror_restore("MALFORMEDDATA",es)
+
             Property.__init__(self, ref=arg['ref'])
         else:
             if isinstance(arg, StringType):
+
                 self.pt = icalperiodtype_from_string(arg)
+
             else:
                 self.pt = icalperiodtype_null_period()
 
             Property.__init__(self,type=name)
+                
+        icalerror_restore("MALFORMEDDATA",e1)
+        icalerror_restore("BADARG",e2)
 
-        self._update_value()
+
+        if self.pt == None or icalperiodtype_is_null_period(self.pt):
+            raise Property.ConstructorFailedError("Failed to construct Period")
+
+        
+        try:
+            self._update_value()
+        except Property.UpdateFailedError:
+            raise Property.ConstructorFailedError("Failed to construct Period")
 
     def _end_is_duration(self):        
         dur = icalperiodtype_duration_get(self.pt)
@@ -401,7 +481,8 @@ class Period(Property):
         return 0
 
     def _update_value(self):
-        self.value(icalperiodtype_as_ical_string(self.pt))
+
+        self.value(icalperiodtype_as_ical_string(self.pt),"PERIOD")
 
 
     def valid(self):
@@ -419,7 +500,7 @@ class Period(Property):
         if(v != None):
             if isinstance(t,Time):
                 t = v
-            elif isinstance(t,StringType) or isinstnace(t,IntType):
+            elif isinstance(t,StringType) or isinstance(t,IntType):
                 t = Time(v,"DTSTART")
             else:
                 raise TypeError
@@ -494,7 +575,6 @@ class Period(Property):
             else:
                 raise TypeError
 
-
             if(self._end_is_time()):
                 start = icaltime_as_timet(icalperiodtype_start_get(self.pt))
                 end = start + d.seconds()
@@ -507,14 +587,19 @@ class Period(Property):
             start =icaltime_as_timet(icalperiodtype_start_get(self.pt))
             end = icaltime_as_timet(icalperiodtype_end_get(self.pt))
 
+            print "End is time " + str(end-start)
+
             return Duration(end-start,"DURATION")
 
         elif(self._end_is_duration()):
             dur = icaldurationtype_as_int(
                 icalperiodtype_duration_get(self.pt))
+
             return Duration(dur,"DURATION")
         else:
-            return Duration(o,"DURATION")
+
+
+            return Duration(0,"DURATION")
 
 
     def timezone(self,v=None):

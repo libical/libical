@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.py,v 1.14 2001-03-04 18:47:30 plewis Exp $
+#  $Id: Libical.py,v 1.15 2001-03-05 18:30:40 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -33,5 +33,7 @@ from Component import Component, NewComponent, Event, Todo, Journal
 # Will eventually remove Time for real Property events
 from Property import Property, Time, Duration, Period, Attendee, Organizer, \
      Recurrence_Id, Attach, RecurrenceSet
+
+from DerivedProperties import *
 
 from Store import Store, FileStore

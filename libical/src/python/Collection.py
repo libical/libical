@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Collection.py,v 1.1 2001-03-04 18:47:30 plewis Exp $
+#  $Id: Collection.py,v 1.2 2001-03-05 18:30:40 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -24,6 +24,8 @@
 #    The Mozilla Public License Version 1.0. You may obtain a copy of
 #    the License at http://www.mozilla.org/MPL/
 #======================================================================
+
+from types import *
 
 class Collection:
     """A group of components that can be modified somewhat like a list.
@@ -44,23 +46,29 @@ class Collection:
         return Collection(self._component, self._properties[beg:end])
 
     def __setslice__(self, beg, end, sequence):
-        oldProps = self._properties[beg, end]
+
+        if  not isinstance(sequence,ListType):
+            raise TypeError, "must assign list (not instance) to slice"
+
+        oldProps = self._properties[beg:end]
+
         for p in oldProps:
-            self._component.removeProperty(p)
-        self._properties.__setslice__(beg, end, sequence)
+            self._component.remove_property(p)
+
+        self._properties[beg:end] = sequence
         for p in sequence:
-            self._component.addProperty(p)
+            self._component.add_property(p)
             
     def __getitem__(self, i):
         return self._properties[i]
 
     def __setitem__(self, i, prop):
-        self._component.removeProperty(self._properties[i])
-        self._component.addProperty(prop)
+        self._component.remove_property(self._properties[i])
+        self._component.add_property(prop)
         self._properties[i]=prop
 
     def __delitem__(self, i):
-        self._component.removeProperty(self._properties[i])
+        self._component.remove_property(self._properties[i])
         del self._properties[i]
 
     def __len__(self):
@@ -68,7 +76,7 @@ class Collection:
             
     def append(self, property):
         self._properties.append(property)
-        self._component.addProperty(property)
+        self._component.add_property(property)
 
 class ComponentCollection:
     
@@ -92,7 +100,7 @@ class ComponentCollection:
 
     def __setitem__(self, i, prop):
         self._parent.remove_component(self._components[i])
-        self._parent.addProperty(prop)
+        self._parent.add_property(prop)
         self._components[i]=prop
 
     def __delitem__(self, i):
