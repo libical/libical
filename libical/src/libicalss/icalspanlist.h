@@ -4,7 +4,7 @@
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalspanlist.h,v 1.5 2002-06-28 10:06:15 acampi Exp $
+ $Id: icalspanlist.h,v 1.6 2002-06-28 10:15:39 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -47,24 +47,25 @@ icalspanlist* icalspanlist_new(icalset *set,
  */
 void icalspanlist_free(icalspanlist* spl);
 
+/* Unimplemented functions */
 icalcomponent* icalspanlist_make_free_list(icalspanlist* sl);
 icalcomponent* icalspanlist_make_busy_list(icalspanlist* sl);
 
-/**
- * Get first free or busy time after time t. all times are in UTC 
- */
+/** Get first next free time after time t. all times are in UTC. */
 struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
 						struct icaltimetype t);
+/** Get first next busy time after time t. all times are in UTC. */
 struct icalperiodtype icalspanlist_next_busy_time(icalspanlist* sl,
 						struct icaltimetype t);
 
 void icalspanlist_dump(icalspanlist* s);
 
-/** @brief Return a valid VFREEBUSY component for this span
- */
+/** @brief Return a valid VFREEBUSY component for this span */
 icalcomponent *icalspanlist_as_vfreebusy(icalspanlist* s_in,
 					 const char* organizer,
 					 const char* attendee);
+
+/** @brief Return an integer matrix of total events per delta_t timespan */
 int *icalspanlist_as_freebusy_matrix(icalspanlist* span, int delta_t);
 
 /** @brief Construct an icalspanlist from a VFREEBUSY component */

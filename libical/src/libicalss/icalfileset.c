@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.25 2002-06-28 09:37:48 acampi Exp $
+  $Id: icalfileset.c,v 1.26 2002-06-28 10:15:39 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -883,7 +883,7 @@ icalcomponent* icalfilesetiter_to_next(icalset* set, icalsetiter* i)
         rrule = icalcomponent_get_first_property(c, ICAL_RRULE_PROPERTY);
         g = icalgauge_get_expand(i->gauge);
 
-        /*a recurring component with expand query */
+        /* a recurring component with expand query */
         if (rrule != 0
             && g == 1) {
 

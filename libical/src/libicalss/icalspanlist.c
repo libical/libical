@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.9 2002-06-28 10:04:45 acampi Exp $
+    $Id: icalspanlist.c,v 1.10 2002-06-28 10:15:39 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -40,6 +40,11 @@ struct icalspanlist_impl {
 
 /** @brief Internal comparison function for two spans
  *
+ *  @param  a   a spanlist.
+ *  @param  b   another spanlist.
+ *
+ *  @return     -1, 0, 1 depending on the comparison of the start times.
+ *
  * Used to insert spans into the tree in sorted order.
  */
 
@@ -60,6 +65,13 @@ static int compare_span(void* a, void* b)
 
 /** @brief callback function for collecting spanlists of a
  *         series of events.
+ *
+ *  @param   comp  A valid icalcomponent.
+ *  @param   span  The span to insert into data.
+ *  @param   data  The actual spanlist to insert into
+ *
+ *  This callback is used by icalcomponent_foreach_recurrence()
+ *  to build up a spanlist.
  */
 
 static void icalspanlist_new_callback(icalcomponent *comp,
@@ -89,6 +101,8 @@ static void icalspanlist_new_callback(icalcomponent *comp,
  *  @param set    A valid icalset containing VEVENTS
  *  @param start  The free list starts at this date/time
  *  @param end    The free list ends at this date/time
+ *
+ *  @return        A spanlist corresponding to the VEVENTS
  *
  * Given a set of components,  a start time and an end time
  * return a spanlist that contains the free/busy times.
@@ -231,8 +245,9 @@ void icalspanlist_free(icalspanlist* s)
     free(s);
 }
 
-/** @brief (Debug) print out spanlist to stdout
- *  @param sl A valid icalspanlist
+
+/** @brief (Debug) print out spanlist to stdout.
+ *  @param sl A valid icalspanlist.
  */
 
 void icalspanlist_dump(icalspanlist* sl){
@@ -255,7 +270,10 @@ icalcomponent* icalspanlist_make_free_list(icalspanlist* sl);
 icalcomponent* icalspanlist_make_busy_list(icalspanlist* sl);
 
 
-/** @brief Find next free time span
+/** @brief Find next free time span in a spanlist.
+ *
+ *  @param  sl     The spanlist to search.
+ *  @param  t      The time to start looking.
  *
  *  Given a spanlist and a time, find the next period of time
  *  that is free
@@ -338,7 +356,7 @@ struct icalperiodtype icalspanlist_next_busy_time(icalspanlist* sl,
  *  @param sl        A valid icalspanlist
  *  @param delta_t   The time slice to divide by, in seconds.  Default 3600.
  *  
- *  @ret A pointer to an array of integers containing the number of
+ *  @return A pointer to an array of integers containing the number of
  *       busy events in each delta_t time period.  The final entry 
  *       contains the value -1.
  *
@@ -422,6 +440,8 @@ int* icalspanlist_as_freebusy_matrix(icalspanlist* sl, int delta_t) {
  *   @param sl         A valid icalspanlist, from icalspanlist_new()
  *   @param organizer  The organizer specified as MAILTO:user@domain
  *   @param attendee   The attendee specified as MAILTO:user@domain
+ *
+ *   @return            A valid icalcomponent or NULL.
  *
  * This function returns a VFREEBUSY component for the given spanlist.
  * The start time is mapped to DTSTART, the end time to DTEND.

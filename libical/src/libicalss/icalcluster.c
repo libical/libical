@@ -3,7 +3,7 @@
   FILE: icalcluster.c
   CREATOR: acampi 13 March 2002
   
-  $Id: icalcluster.c,v 1.2 2002-06-27 02:30:58 acampi Exp $
+  $Id: icalcluster.c,v 1.3 2002-06-28 10:15:39 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2002, Eric Busboom, http://www.softwarestudio.org
@@ -85,7 +85,8 @@ icalcluster * icalcluster_new_impl(void) {
 
 /**
  * Create a cluster with a key/value pair.
- * FIXME always do a deep copy
+ *
+ * @todo Always do a deep copy.
  */
 
 icalcluster * icalcluster_new(const char* key, icalcomponent *data) {

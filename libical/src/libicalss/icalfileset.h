@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalfileset.h,v 1.10 2002-06-28 09:38:35 acampi Exp $
+ $Id: icalfileset.h,v 1.11 2002-06-28 10:15:39 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -114,7 +114,7 @@ icalcomponent* icalfileset_form_a_matched_recurrence_component(icalsetiter* itr)
 icalcomponent* icalfileset_get_component(icalset* cluster);
 
 /** 
- * @brief options for opening an icalfileset
+ * @brief options for opening an icalfileset.
  *
  * These options should be passed to the icalset_new() function
  */
