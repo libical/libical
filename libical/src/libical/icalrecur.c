@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.39 2002-07-23 13:49:42 lindner Exp $
+  $Id: icalrecur.c,v 1.40 2002-09-26 22:13:34 lindner Exp $
   $Locker:  $
     
 
@@ -151,6 +151,10 @@
 #include <stddef.h> /* For offsetof() macro */
 
 #include "pvl.h"
+
+/** This is the last year we will go up to, since 32-bit time_t values
+   only go up to the start of 2038. */
+#define MAX_TIME_T_YEAR	2037
 
 #define TEMP_MAX 1024
 
