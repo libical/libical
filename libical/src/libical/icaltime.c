@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.30 2002-05-20 17:32:01 acampi Exp $
+  $Id: icaltime.c,v 1.31 2002-06-03 17:14:20 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -34,6 +34,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 #define JDAY
 
@@ -302,7 +303,7 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype _tt,
  * Return a string represention of the time, in RFC2445 format. The
  * string is owned by libical
  */
-char* icaltime_as_ical_string(const struct icaltimetype tt)
+const char* icaltime_as_ical_string(const struct icaltimetype tt)
 {
     size_t size = 17;
     char* buf = icalmemory_new_buffer(size);

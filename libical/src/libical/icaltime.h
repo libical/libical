@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.13 2002-05-10 17:03:05 acampi Exp $
+ $Id: icaltime.h,v 1.14 2002-06-03 17:14:20 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -175,7 +175,7 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
 
 /* Return a string represention of the time, in RFC2445 format. The
    string is owned by libical */
-char* icaltime_as_ical_string(const struct icaltimetype tt);
+const char* icaltime_as_ical_string(const struct icaltimetype tt);
 
 /** @brief Return the timezone */
 const icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
