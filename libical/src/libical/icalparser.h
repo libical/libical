@@ -3,7 +3,7 @@
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalparser.h,v 1.5 2002-06-07 12:51:17 acampi Exp $
+  $Id: icalparser.h,v 1.6 2002-06-11 12:32:17 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -91,7 +91,7 @@ icalvalue*  icalparser_parse_value(icalvalue_kind kind,
 /** Given a line generator function, return a single iCal content line.*/
 char* icalparser_get_line(icalparser* parser, char* (*line_gen_func)(char *s, size_t size, void *d));
 
-char* string_line_generator(char *out, size_t buf_size, void *d);
+char* icalparser_string_line_generator(char *out, size_t buf_size, void *d);
 
 /**
  * This structure holds the flex/bison parser state..  Needed to support

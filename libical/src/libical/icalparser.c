@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.27 2002-06-07 12:51:17 acampi Exp $
+  $Id: icalparser.c,v 1.28 2002-06-11 12:32:17 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -175,8 +175,9 @@ char* icalparser_get_next_char(char c, char *str, int qm)
     return 0;
 }
 
-/* make a new tmp buffer out of a substring */
-char* make_segment(char* start, char* end)
+
+/** make a new tmp buffer out of a substring */
+static char* make_segment(char* start, char* end)
 {
     char *buf, *tmp;
     size_t size = (size_t)end - (size_t)start;
@@ -195,10 +196,10 @@ char* make_segment(char* start, char* end)
 	}
     
     return buf;
-    
 }
 
-/* Call the flex/bison parser to parse a complex value */
+
+/** Call the flex/bison parser to parse a complex value */
 
 icalvalue*  icalparser_parse_value(icalvalue_kind kind,
                                    const char* str, icalcomponent** error)
@@ -263,9 +264,9 @@ char* icalparser_get_prop_name(char* line, char** end)
     return str;
 }
 
+
 char* icalparser_get_param_name(char* line, char **end)
 {
-    
     char* next; 
     char *str;
 
@@ -288,12 +289,11 @@ char* icalparser_get_param_name(char* line, char **end)
     }
 
     return str;
-   
 }
+
 
 char* icalparser_get_next_paramvalue(char* line, char **end)
 {
-    
     char* next; 
     char *str;
 
@@ -310,10 +310,11 @@ char* icalparser_get_next_paramvalue(char* line, char **end)
 	*end = next+1;
 	return str;
     }
-   
 }
 
-/* A property may have multiple values, if the values are seperated by
+
+/**
+   A property may have multiple values, if the values are seperated by
    commas in the content line. This routine will look for the next
    comma after line and will set the next place to start searching in
    end. */
@@ -419,9 +420,11 @@ char* icalparser_get_next_parameter(char* line,char** end)
     }
 }
 
-/* Get a single property line, from the property name through the
-   final new line, and include any continuation lines */
 
+/**
+ * Get a single property line, from the property name through the
+ * final new line, and include any continuation lines
+ */
 char* icalparser_get_line(icalparser *parser,
                           char* (*line_gen_func)(char *s, size_t size, void *d))
 {
@@ -546,7 +549,7 @@ char* icalparser_get_line(icalparser *parser,
 
 }
 
-void insert_error(icalcomponent* comp, char* text, 
+static void insert_error(icalcomponent* comp, char* text, 
 		  char* message, icalparameter_xlicerrortype type)
 {
     char temp[1024];
@@ -565,7 +568,8 @@ void insert_error(icalcomponent* comp, char* text,
 	     0));   
 }
 
-int line_is_blank(char* line){
+
+static int line_is_blank(char* line){
     int i=0;
 
     for(i=0; *(line+i)!=0; i++){
@@ -1073,7 +1077,8 @@ struct slg_data {
 	const char* str;
 };
 
-char* string_line_generator(char *out, size_t buf_size, void *d)
+
+char* icalparser_string_line_generator(char *out, size_t buf_size, void *d)
 {
     char *n;
     size_t size;
@@ -1127,7 +1132,7 @@ icalcomponent* icalparser_parse_string(const char* str)
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_NONFATAL);
 
-    c = icalparser_parse(p,string_line_generator);
+    c = icalparser_parse(p,icalparser_string_line_generator);
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,es);
 
