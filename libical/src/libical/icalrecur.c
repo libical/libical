@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.60 2004-05-10 22:47:28 acampi Exp $
+  $Id: icalrecur.c,v 1.61 2005-01-24 12:53:54 acampi Exp $
   $Locker:  $
     
 
@@ -537,13 +537,13 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
     }
 
     if(recur->count != 0){
-	sprintf(temp,"%d",recur->count);
+	snprintf(temp,sizeof(temp),"%d",recur->count);
 	icalmemory_append_string(&str,&str_p,&buf_sz,";COUNT=");
 	icalmemory_append_string(&str,&str_p,&buf_sz, temp);
     }
 
     if(recur->interval != 0){
-	sprintf(temp,"%d",recur->interval);
+	snprintf(temp,sizeof(temp),"%d",recur->interval);
 	icalmemory_append_string(&str,&str_p,&buf_sz,";INTERVAL=");
 	icalmemory_append_string(&str,&str_p,&buf_sz, temp);
     }
@@ -570,12 +570,12 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 		    if (pos == 0)
 			icalmemory_append_string(&str,&str_p,&buf_sz,daystr);
 		    else {
-			sprintf(temp,"%d%s",pos,daystr);
+			snprintf(temp,sizeof(temp),"%d%s",pos,daystr);
 			icalmemory_append_string(&str,&str_p,&buf_sz,temp);
 		    }                  
 		    
 		} else {
-		    sprintf(temp,"%d",array[i]);
+		    snprintf(temp,sizeof(temp),"%d",array[i]);
 		    icalmemory_append_string(&str,&str_p,&buf_sz, temp);
 		}
 		
