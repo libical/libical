@@ -3,7 +3,7 @@
   FILE: icalattach.c
   CREATOR: acampi 28 May 02
   
-  $Id: icalattach.c,v 1.1 2002-05-28 14:08:00 acampi Exp $
+  $Id: icalattach.c,v 1.2 2002-10-09 19:54:59 acampi Exp $
   $Locker:  $
     
 
@@ -63,7 +63,7 @@ icalattach_new_from_url (const char *url)
 }
 
 icalattach *
-icalattach_new_from_data (const unsigned char *data, icalattach_free_fn_t free_fn,
+icalattach_new_from_data (unsigned char *data, icalattach_free_fn_t free_fn,
 			  void *free_fn_data)
 {
     icalattach *attach;
@@ -77,7 +77,7 @@ icalattach_new_from_data (const unsigned char *data, icalattach_free_fn_t free_f
 
     attach->refcount = 1;
     attach->is_url = 0;
-    attach->u.data.data = (unsigned char *) data;
+    attach->u.data.data = data;
     attach->u.data.free_fn = free_fn;
     attach->u.data.free_fn_data = free_fn_data;
 
