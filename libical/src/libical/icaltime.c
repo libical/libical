@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.54 2002-10-31 16:37:52 acampi Exp $
+  $Id: icaltime.c,v 1.55 2002-11-03 21:39:18 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -837,10 +837,7 @@ struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
 
 	/* If it's a floating time we don't want to adjust the time */
 	if (tt.zone != NULL) {
-		/* HACK */
-		icaltimezone_convert_time(&ret,
-			(icaltimezone *)tt.zone,
-			(icaltimezone *)zone);
+		icaltimezone_convert_time(&ret, tt.zone, zone);
 	}
 
 	ret.zone = zone;
@@ -863,8 +860,7 @@ char *
 icaltime_get_tzid(const struct icaltimetype t) {
 
 	if (t.zone != NULL) {
-		/* FIXME */
-		return icaltimezone_get_tzid((icaltimezone *)t.zone);
+		return icaltimezone_get_tzid(t.zone);
 	} else {
 		return NULL;
 	}
