@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalfileset.h,v 1.6 2001-12-06 20:01:44 gray-john Exp $
+ $Id: icalfileset.h,v 1.7 2002-03-16 15:53:30 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -52,6 +52,9 @@ typedef void icalfileset;
 
 
 icalfileset* icalfileset_new(const char* path);
+icalfileset* icalfileset_new_reader(const char* path);
+icalfileset* icalfileset_new_writer(const char* path);
+
 
 /* Like _new, but takes open() flags for opening the file */
 icalfileset* icalfileset_new_open(const char* path, 

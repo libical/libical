@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.12 2002-01-02 16:27:56 gray-john Exp $
+  $Id: icalfileset.c,v 1.13 2002-03-16 15:53:30 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -87,6 +87,18 @@ icalfileset* icalfileset_new(const char* path)
 {
     return icalfileset_new_open(path, O_RDWR|O_CREAT, 0664);
 }
+
+icalfileset* icalfileset_new_reader(const char* path)
+{
+    return icalfileset_new_open(path, O_RDONLY, 0644);
+}
+
+icalfileset* icalfileset_new_writer(const char* path)
+{
+    return icalfileset_new_open(path, O_WRONLY|O_CREAT|O_TRUNC, 0664);
+}
+
+icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 
 icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 {
