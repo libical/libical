@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.18 2002-06-28 09:30:17 acampi Exp $
+ $Id: icaltime.h,v 1.19 2002-06-28 10:35:19 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -133,6 +133,8 @@ struct icaltimetype
    
 	const icaltimezone *zone;	/**< timezone */
 };	
+
+typedef struct icaltimetype icaltimetype;
 
 /** Return a null time, which indicates no time has been set. 
     This time represent the beginning of the epoch */
