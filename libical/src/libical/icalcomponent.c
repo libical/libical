@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.44 2002-10-09 16:26:21 acampi Exp $
+  $Id: icalcomponent.c,v 1.45 2002-10-09 16:31:54 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -931,7 +931,6 @@ static int icalcomponent_is_busy(icalcomponent *comp) {
       ret = 0;
       break;
     default:
-      /** shouldn't need this... **/
       ret = 0;
       break;
     }
