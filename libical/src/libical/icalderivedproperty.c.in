@@ -4,7 +4,7 @@
   FILE: icalderivedproperty.c
   CREATOR: eric 15 Feb 2001
   
-  $Id: icalderivedproperty.c.in,v 1.11 2002-08-08 00:06:24 acampi Exp $
+  $Id: icalderivedproperty.c.in,v 1.12 2002-10-09 23:55:53 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -131,7 +131,7 @@ icalproperty_kind icalproperty_value_kind_to_kind(icalvalue_kind kind)
 	}
     }
 
-    return ICAL_NO_VALUE;
+    return ICAL_NO_PROPERTY;
 }
 
 
