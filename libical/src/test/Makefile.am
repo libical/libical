@@ -20,7 +20,7 @@ noinst_PROGRAMS = copycluster regression parser stow recur testmime testvcal pro
 
 LDADD =  ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a $(bdb4_libs)
 
-LIBS = -lpthread 
+LIBS = @PTHREAD_LIBS@
 
 INCLUDES = 				\
        -I. 				\

@@ -137,14 +137,24 @@ dnl Replace `main' with a function in -lical:
 dnl AC_CHECK_LIB(ical, main)
 
 dnl Check if this system can use pthreads
+dnl HACK to support FreeBSD 4.x pthread
 
-AC_CHECK_LIB(pthread,pthread_create,have_pthread=yes)
-if test "x$have_pthread" = xyes; then
-   AC_DEFINE(HAVE_PTHREAD, ,[Define if we have pthread.])
-fi
+case "${host}" in 
+        *-*-freebsdelf4.4 | *-*-freebsdelf4.5 | *-*-freebsdelf4.6 )
+		AC_MSG_RESULT(checking for pthread_create in -lpthread... -pthread (FreeBSD 4.x style))
+		AC_DEFINE(HAVE_PTHREAD, ,[Define if we have pthread.])
+		PTHREAD_LIBS=-pthread;;
+
+	*)
+	AC_CHECK_LIB(pthread,pthread_create,have_pthread=yes)
+	if test "x$have_pthread" = xyes; then
+	   AC_DEFINE(HAVE_PTHREAD, ,[Define if we have pthread.])
+	   PTHREAD_LIBS=-lpthread
+	fi;;
+esac
 
 AM_CONDITIONAL(HAVE_PTHREAD, test "$have_pthread" = "yes")
-
+AC_SUBST(PTHREAD_LIBS)
 
 dnl Checks for header files.
 AC_HEADER_STDC
