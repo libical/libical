@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.16 2002-08-08 00:00:39 acampi Exp $
+  $Id: icalproperty.h,v 1.17 2002-08-08 00:06:24 acampi Exp $
   $Locker:  $
 
   
@@ -121,6 +121,7 @@ const char* icalproperty_method_to_string(icalproperty_method method);
 
 const char* icalproperty_enum_to_string(int e);
 int icalproperty_string_to_enum(const char* str);
+int icalproperty_kind_and_string_to_enum(const int kind, const char* str);
 
 const char* icalproperty_status_to_string(icalproperty_status);
 icalproperty_status icalproperty_string_to_status(const char* string);

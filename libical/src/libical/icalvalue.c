@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.28 2002-07-23 00:37:32 lindner Exp $
+  $Id: icalvalue.c,v 1.29 2002-08-08 00:06:24 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -261,7 +261,7 @@ static char* icalmemory_strdup_and_dequote(const char* str)
 static
 icalvalue* icalvalue_new_enum(icalvalue_kind kind, int x_type, const char* str)
 {
-    int e = icalproperty_string_to_enum(str);
+    int e = icalproperty_kind_and_string_to_enum(kind, str);
     struct icalvalue_impl *value; 
 
     if(e != 0 && icalproperty_enum_belongs_to_property(
