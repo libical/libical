@@ -8,7 +8,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.y,v 1.5 2002-06-27 02:30:59 acampi Exp $
+  $Id: icalssyacc.y,v 1.6 2002-06-28 10:09:05 acampi Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -33,7 +33,6 @@
 #include <string.h> /* for strdup() */
 #include <limits.h> /* for SHRT_MAX*/
 #include "ical.h"
-#include "pvl.h"
 #include "icalgauge.h"
 #include "icalgaugeimpl.h"
 
@@ -46,7 +45,7 @@
 
 
 static void ssyacc_add_where(struct icalgauge_impl* impl, char* prop, 
-	icalgaugecompare compare , char* value);
+			icalgaugecompare compare , char* value);
 static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
 static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
 static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
@@ -61,7 +60,7 @@ void sserror(char *s); /* Don't know why I need this.... */
 
 %token <v_string> STRING
 %token SELECT FROM WHERE COMMA QUOTE EQUALS NOTEQUALS  LESS GREATER LESSEQUALS
-%token GREATEREQUALS AND OR EOL END
+%token GREATEREQUALS AND OR EOL END IS SQLNULL
 
 %%
 
@@ -87,7 +86,7 @@ from_list:
 where_clause:
 	/* Empty */
 	| STRING EQUALS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_EQUAL,$3); }
-	
+	| STRING IS SQLNULL {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_ISNULL,""); }
 	| STRING NOTEQUALS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_NOTEQUAL,$3); }
 	| STRING LESS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_LESS,$3); }
 	| STRING GREATER STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_GREATER,$3); }

@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalsslexer.l,v 1.5 2002-06-07 12:51:17 acampi Exp $
+  $Id: icalsslexer.l,v 1.6 2002-06-28 10:09:05 acampi Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -82,6 +82,8 @@ WHERE			{ return WHERE; }
 ">=" 			{ return GREATEREQUALS; }
 AND 			{ return AND; }
 OR			{ return OR; }
+IS			{ return IS; }
+NULL			{ return SQLNULL; }
 \'                      { return QUOTE; }
 [ \t\n\r]+ ;			
 ;			{ return EOL; }
