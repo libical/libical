@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.7 2001-12-22 17:04:33 gray-john Exp $
+  $Id: icaltypes.c,v 1.8 2002-05-28 14:08:00 acampi Exp $
   $Locker:  $
     
 
@@ -42,116 +42,6 @@
 
 #define TEMP_MAX 1024
 
-void*
-icalattachtype_get_data (struct icalattachtype* type);
-
-struct icalattachtype*
-icalattachtype_new()
-{
-    struct icalattachtype* v;
-
-    if ( ( v = (struct icalattachtype*)
-	   malloc(sizeof(struct icalattachtype))) == 0) {
-	errno = ENOMEM;
-	return 0;
-    }
-
-    v->refcount = 1;
-
-    v->binary = 0;
-    v->owns_binary = 0;
-
-    v->base64 = 0;
-    v->owns_base64 = 0;
-
-    v->url = 0; 
-
-    return v;
-}
-
-
-void
-icalattachtype_free(struct icalattachtype* v)
-{
-    icalerror_check_arg( (v!=0),"v");
-    
-    v->refcount--;
-
-    if (v->refcount <= 0){
-	
-	if (v->base64 != 0 && v->owns_base64 != 0){
-	    free(v->base64);
-	}
-
-	if (v->binary != 0 && v->owns_binary != 0){
-	    free(v->binary);
-	}
-	
-	if (v->url != 0){
-	    free(v->url);
-	}
-
-	free(v);
-    }
-}
-
-void  icalattachtype_add_reference(struct icalattachtype* v)
-{
-    icalerror_check_arg( (v!=0),"v");
-    v->refcount++;
-}
-
-void icalattachtype_set_url(struct icalattachtype* v, char* url)
-{
-    icalerror_check_arg( (v!=0),"v");
-
-    if (v->url != 0){
-	free (v->url);
-    }
-
-    v->url = icalmemory_strdup(url);
-
-    /* HACK This routine should do something if icalmemory_strdup returns NULL */
-
-}
-
-char* icalattachtype_get_url(struct icalattachtype* v)
-{
-    icalerror_check_arg( (v!=0),"v");
-    return v->url;
-}
-
-void icalattachtype_set_base64(struct icalattachtype* v, char* base64,
-				int owns)
-{
-    icalerror_check_arg( (v!=0),"v");
-
-    v->base64 = base64;
-    v->owns_base64 = !(owns != 0 );
-    
-}
-
-char* icalattachtype_get_base64(struct icalattachtype* v)
-{
-    icalerror_check_arg( (v!=0),"v");
-    return v->base64;
-}
-
-void icalattachtype_set_binary(struct icalattachtype* v, char* binary,
-				int owns)
-{
-    icalerror_check_arg( (v!=0),"v");
-
-    v->binary = binary;
-    v->owns_binary = !(owns != 0 );
-
-}
-
-void* icalattachtype_get_binary(struct icalattachtype* v)
-{
-    icalerror_check_arg( (v!=0),"v");
-    return v->binary;
-}
 
 int icaltriggertype_is_null_trigger(struct icaltriggertype tr)
 {

@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalderivedvalue.c.in,v 1.6 2002-05-27 20:55:36 ebusboom Exp $
+  $Id: icalderivedvalue.c.in,v 1.7 2002-05-28 14:08:00 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -285,6 +285,55 @@ icalvalue_get_datetimeperiod(icalvalue* value)
 }
 
 
+
+icalvalue *
+icalvalue_new_attach (icalattach *attach)
+{
+    struct icalvalue_impl *impl;
+
+    icalerror_check_arg_rz ((attach != NULL), "attach");
+
+    impl = icalvalue_new_impl (ICAL_ATTACH_VALUE);
+    if (!impl) {
+	errno = ENOMEM;
+	return NULL;
+    }
+
+    icalvalue_set_attach ((icalvalue *) impl, attach);
+    return (icalvalue *) impl;
+}
+
+void
+icalvalue_set_attach (icalvalue *value, icalattach *attach)
+{
+    struct icalvalue_impl *impl;
+ 
+    icalerror_check_arg_rv ((value != NULL), "value");
+    icalerror_check_value_type (value, ICAL_ATTACH_VALUE);
+    icalerror_check_arg_rv ((attach != NULL), "attach");
+  
+    impl = (struct icalvalue_impl *) value;
+ 
+    icalattach_ref (attach);
+
+    if (impl->data.v_attach)
+	icalattach_unref (impl->data.v_attach);
+  
+    impl->data.v_attach = attach;
+}
+
+icalattach *
+icalvalue_get_attach (icalvalue *value)
+{
+    struct icalvalue_impl *impl;
+
+    icalerror_check_arg_rz ((value != NULL), "value");
+    icalerror_check_value_type (value, ICAL_ATTACH_VALUE);
+    
+    impl = (struct icalvalue_impl *) value;
+
+    return impl->data.v_attach;
+}
 
 
 

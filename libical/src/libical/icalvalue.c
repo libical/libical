@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.15 2002-05-24 16:03:37 acampi Exp $
+  $Id: icalvalue.c,v 1.16 2002-05-28 14:08:00 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -107,13 +107,18 @@ icalvalue* icalvalue_new_clone(icalvalue* old) {
     new->size = old->size;
 
     switch (new->kind){
-
-	/* The contents of the attach value may or may not be owned by the 
-	 * library. */
 	case ICAL_ATTACH_VALUE: 
 	case ICAL_BINARY_VALUE: 
 	{
-	    /* HACK ugh. I don't feel like implementing this */
+	    /* Hmm.  We just ref the attach value, which may not be the right
+	     * thing to do.  We cannot quite copy the data, anyways, since we
+	     * don't know how long it is.
+	     */
+	    new->data.v_attach = old->data.v_attach;
+	    if (new->data.v_attach)
+		icalattach_ref (new->data.v_attach);
+
+	    break;
 	}
 	case ICAL_STRING_VALUE:
 	case ICAL_TEXT_VALUE:
@@ -272,7 +277,19 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
     switch (kind){
 	
     case ICAL_ATTACH_VALUE:
-    case ICAL_BINARY_VALUE:	
+	{
+	    icalattach *attach;
+
+	    attach = icalattach_new_from_url (str);
+	    if (!attach)
+		break;
+
+	    value = icalvalue_new_attach (attach);
+	    icalattach_unref (attach);
+	    break;
+	}
+
+    case ICAL_BINARY_VALUE:
     case ICAL_BOOLEAN_VALUE:
         {
             /* HACK */
@@ -532,7 +549,12 @@ icalvalue_free (icalvalue* v)
     switch (v->kind){
 	case ICAL_BINARY_VALUE: 
 	case ICAL_ATTACH_VALUE: {
-	    /* HACK ugh. This will be tough to implement */
+	    if (v->data.v_attach) {
+		icalattach_unref (v->data.v_attach);
+		v->data.v_attach = NULL;
+	    }
+
+	    break;
 	}
 	case ICAL_TEXT_VALUE:
 	case ICAL_CALADDRESS_VALUE:
@@ -752,27 +774,25 @@ char* icalvalue_text_as_ical_string(icalvalue* value) {
 }
 
 
-char* icalvalue_attach_as_ical_string(icalvalue* value) {
-
-    struct icalattachtype a;
+char*
+icalvalue_attach_as_ical_string(icalvalue* value)
+{
+    icalattach *a;
     char * str;
 
     icalerror_check_arg_rz( (value!=0),"value");
 
     a = icalvalue_get_attach(value);
 
-    if (a.binary != 0) {
-	return  icalvalue_binary_as_ical_string(value);
-    } else if (a.base64 != 0) {
-	str = (char*)icalmemory_tmp_buffer(strlen(a.base64)+1);
-	strcpy(str,a.base64);
+    if (icalattach_get_is_url (a)) {
+	const char *url;
+
+	url = icalattach_get_url (a);
+	str = icalmemory_tmp_buffer (strlen (url) + 1);
+	strcpy (str, url);
 	return str;
-    } else if (a.url != 0){
-	return icalvalue_string_as_ical_string(value);
-    } else {
-	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-	return 0;
-    }
+    } else
+	return icalvalue_binary_as_ical_string (value);
 }
 
 
@@ -790,7 +810,7 @@ void print_time_to_string(char* str,  struct icaltimetype *data)
 {
     char temp[20];
 
-    if (data->is_utc == 1){
+    if (icaltime_is_utc(*data)){
 	sprintf(temp,"%02d%02d%02dZ",data->hour,data->minute,data->second);
     } else {
 	sprintf(temp,"%02d%02d%02d",data->hour,data->minute,data->second);
@@ -1057,7 +1077,13 @@ icalvalue_compare(icalvalue* a, icalvalue *b)
     switch (icalvalue_isa(a)){
 
 	case ICAL_ATTACH_VALUE:
-	case ICAL_BINARY_VALUE:
+        case ICAL_BINARY_VALUE:
+	{
+	    if (a->data.v_attach == b->data.v_attach)
+		return ICAL_XLICCOMPARETYPE_EQUAL;
+	    else
+		return ICAL_XLICCOMPARETYPE_NOTEQUAL;
+	}
 
 	case ICAL_BOOLEAN_VALUE:
 	{

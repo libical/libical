@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.42 2002-05-28 13:14:07 acampi Exp $
+  $Id: regression.c,v 1.43 2002-05-28 14:08:01 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -3278,6 +3278,26 @@ void test_utcoffset()
 	icalproperty_free(p);
 }
 
+void test_attach()
+{
+    icalvalue *v;
+    icalcomponent *c;
+
+    static const char test_icalcomp_str[] =
+"BEGIN:VEVENT\n"
+"ATTACH:CID:jsmith.part3.960817T083000.xyzMain@host1.com\n"
+"ATTACH:FMTTYPE=application/postscript;ftp://xyzCorp.com/pub/reports/r-960812.ps\n"
+"END:VEVENT\n";
+
+    c = icalparser_parse_string ((char *) test_icalcomp_str);
+    if (!c) {
+	fprintf (stderr, "main(): could not parse the component\n");
+	exit (EXIT_FAILURE);
+    }
+
+    printf("%s",icalcomponent_as_ical_string(c));
+}
+
 int main(int argc, char *argv[])
 {
     int c;
@@ -3566,6 +3586,9 @@ int main(int argc, char *argv[])
 
 	printf("\n------------Test Memory---------------\n");
 	test_memory();
+
+	printf("\n------------Test Attachment---------------\n");
+	test_attach();
     }
 
 

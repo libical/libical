@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalueimpl.h,v 1.4 2002-04-01 22:08:45 gray-john Exp $
+  $Id: icalvalueimpl.h,v 1.5 2002-05-28 14:08:00 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -35,6 +35,8 @@
 #define ICALVALUEIMPL_H
 
 #include "icalenums.h"
+#include "icalproperty.h"
+#include "icalderivedvalue.h"
 
 
 struct icalvalue_impl {
@@ -46,7 +48,7 @@ struct icalvalue_impl {
     char* x_value;
 
     union data {
-	struct icalattachtype v_attach;		
+	icalattach *v_attach;		
 	/* void *v_binary; */ /* use v_attach */
 	const char *v_string;
 	/*char *v_text;*/
