@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.63 2003-01-15 22:53:05 acampi Exp $
+  $Id: icaltime.c,v 1.64 2003-02-17 11:34:13 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -237,6 +237,12 @@ struct icaltimetype icaltime_today(void)
 }
 
 /**	@brief	Return the time as seconds past the UNIX epoch
+ *
+ *	While this function is not currently deprecated, it probably won't do
+ *	what you expect, unless you know what you're doing. In particular, you
+ *	should only pass an icaltime in UTC, since no conversion is done. Even
+ *	in that case, it's probably better to just use
+ *	icaltime_as_timet_with_zone().
  */
 time_t icaltime_as_timet(const struct icaltimetype tt)
 {
@@ -251,9 +257,14 @@ time_t icaltime_as_timet(const struct icaltimetype tt)
     /* Copy the icaltimetype to a struct tm. */
     memset (&stm, 0, sizeof (struct tm));
 
-    stm.tm_sec = tt.second;
-    stm.tm_min = tt.minute;
-    stm.tm_hour = tt.hour;
+    if (icaltime_is_date(tt)) {
+	stm.tm_sec = stm.tm_min = stm.tm_hour = 0;
+    } else {
+	stm.tm_sec = tt.second;
+	stm.tm_min = tt.minute;
+	stm.tm_hour = tt.hour;
+    }
+
     stm.tm_mday = tt.day;
     stm.tm_mon = tt.month-1;
     stm.tm_year = tt.year-1900;
@@ -292,9 +303,14 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype _tt,
     /* Copy the icaltimetype to a struct tm. */
     memset (&stm, 0, sizeof (struct tm));
 
-    stm.tm_sec = tt.second;
-    stm.tm_min = tt.minute;
-    stm.tm_hour = tt.hour;
+    if (icaltime_is_date(tt)) {
+	stm.tm_sec = stm.tm_min = stm.tm_hour = 0;
+    } else {
+	stm.tm_sec = tt.second;
+	stm.tm_min = tt.minute;
+	stm.tm_hour = tt.hour;
+    }
+
     stm.tm_mday = tt.day;
     stm.tm_mon = tt.month-1;
     stm.tm_year = tt.year-1900;
