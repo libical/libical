@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.25 2002-04-01 22:08:45 gray-john Exp $
+  $Id: icaltime.c,v 1.26 2002-05-09 13:42:09 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -61,249 +61,90 @@
 #define strcasecmp    stricmp
 #endif
 
-
-/**********************************************************************
- * Deprecated TIme functions
- * The following four routines are required under UNIX systems to account for the lack 
- * of two time routines, a version of mktime() that operates in UTC ( the inverse of 
- * gmtime() ), and a routine to get the UTC offset for a particular timezone. 
- ***********************************************************************/
-
-
-/* Structure used by set_tz to hold an old value of TZ, and the new
-   value, which is in memory we will have to free in unset_tz */
-struct set_tz_save {char* orig_tzid; char* new_env_str;};
-
-/* Structure used by set_tz to hold an old value of TZ, and the new
-   value, which is in memory we will have to free in unset_tz */
-/* This will hold the last "TZ=XXX" string we used with putenv(). After we
-   call putenv() again to set a new TZ string, we can free the previous one.
-   As far as I know, no libc implementations actually free the memory used in
-   the environment variables (how could they know if it is a static string or
-   a malloc'ed string?), so we have to free it ourselves. */
-
-struct set_tz_save saved_tz;
-
-
-/* Temporarily change the TZ environmental variable. */
-struct set_tz_save set_tz(const char* tzid)
+/*
+ *  Function to convert a struct tm time specification
+ *  to an ANSI time_t using the specified time zone.
+ *  This is different from the standard mktime() function
+ *  in that we dont want the automatic adjustments for
+ *  local daylight savings time applied to the result.
+ *  This function expects well-formed input.
+ */
+static time_t make_time(struct tm *tm, int tzm)
 {
+  time_t tim;
 
-    char *orig_tzid = 0;
-    char *new_env_str;
-    struct set_tz_save savetz;
-    size_t tmp_sz; 
+  static int days[] = { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 };
 
-    savetz.orig_tzid = 0;
-    savetz.new_env_str = 0;
+  /* check that year specification within range */
 
-    if(getenv("TZ") != 0){
-	orig_tzid = (char*)icalmemory_strdup(getenv("TZ"));
+  if (tm->tm_year < 70 || tm->tm_year > 138)
+    return((time_t) -1);
 
-	if(orig_tzid == 0){
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-			free(orig_tzid);
-	    return savetz;
-	}
-    }
+  /* check for upper bound of Jan 17, 2038 (to avoid possibility of
+     32-bit arithmetic overflow) */
+  
+  if (tm->tm_year == 138) {
+    if (tm->tm_mon > 0)
+      return((time_t) -1);
+    else if (tm->tm_mday > 17)
+      return((time_t) -1);
+  }
 
-    tmp_sz =strlen(tzid)+4; 
-    new_env_str = (char*)malloc(tmp_sz);
+  /*
+   *  calculate elapsed days since start of the epoch (midnight Jan
+   *  1st, 1970 UTC) 17 = number of leap years between 1900 and 1970
+   *  (number of leap days to subtract)
+   */
 
-    if(new_env_str == 0){
-        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-	return savetz;
-    }
-    
-    /* Copy the TZid into a string with the form that putenv expects. */
-    strcpy(new_env_str,"TZ=");
-    strcpy(new_env_str+3,tzid);
+  tim = (tm->tm_year - 70) * 365 + ((tm->tm_year - 1) >> 2) - 17;
 
-    putenv(new_env_str); 
+  /* add number of days elapsed in the current year */
 
-    /* Old value of TZ and the string we will have to free later */
-    savetz.orig_tzid = orig_tzid;
-    savetz.new_env_str = new_env_str;
+  tim += days[tm->tm_mon];
 
-    return savetz;
+  /* check and adjust for leap years (the leap year check only valid
+     during the 32-bit era */
+
+  if ((tm->tm_year & 3) == 0 && tm->tm_mon > 1)
+    tim += 1;
+
+  /* elapsed days to current date */
+
+  tim += tm->tm_mday;
+
+
+  /* calculate elapsed hours since start of the epoch */
+
+  tim = tim * 24 + tm->tm_hour;
+
+  /* calculate elapsed minutes since start of the epoch */
+
+  tim = tim * 60 + tm->tm_min;
+  
+  /* adjust per time zone specification */
+  
+  tim -= tzm;
+  
+  /* calculate elapsed seconds since start of the epoch */
+  
+  tim = tim * 60 + tm->tm_sec;
+  
+  /* return number of seconds since start of the epoch */
+  
+  return(tim);
 }
 
-void unset_tz(struct set_tz_save savetz)
-{
-    /* restore the original TZ environment */
-
-    char* orig_tzid = savetz.orig_tzid;
-
-    if(orig_tzid!=0){	
-	size_t tmp_sz =strlen(orig_tzid)+4; 
-	char* orig_env_str = (char*)icalmemory_tmp_buffer(tmp_sz);
-
-	if(orig_env_str == 0){
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            return;
-	}
-	
-	strcpy(orig_env_str,"TZ=");
-	strcpy(orig_env_str+3,orig_tzid);
-
-	putenv(orig_env_str);
-
-	free(orig_tzid);
-    } else {
-	putenv("TZ="); /* Delete from environment */
-    } 
-
-    if(savetz.new_env_str != 0){
-	free(savetz.new_env_str);
-    }
-}
-
-/* A UTC version of mktime() */
-time_t icaltimegm(struct tm* stm)
-{
-
-    time_t t;
-#ifndef WIN32
-    struct set_tz_save old_tz = set_tz("UTC");
-    t = mktime(stm);
-    unset_tz(old_tz);
-    return t;
-#else
-    TIME_ZONE_INFORMATION tz;
-    char * szZone;
-    icaltimezone* zone;
-    int offset_tt;
-    
-    t = mktime(stm);
-    
-    GetTimeZoneInformation(&tz);
-    
-    t -= tz.Bias*60;
-
-    return t;
-#endif
-
-
-}
-
-/* Get the offset for a named timezone. */
-int icaltime_utc_offset(struct icaltimetype ictt, const char* tzid)
-{
-    time_t offset_tt;
-#ifndef WIN32
-    icaltimezone *utc_zone, *local_zone;
-    struct tm gtm;
-    struct set_tz_save old_tz; 
-
-    time_t tt = icaltime_as_timet(ictt);
-
-    local_zone =  icaltimezone_get_builtin_timezone(tzid);
-    utc_zone = icaltimezone_get_utc_timezone ();
-
-    icaltimezone_get_utc_offset(local_zone, &ictt, &ictt.is_daylight);
-
-
-#ifndef NO_WARN_DEPRECATED
-	fprintf(stderr, "%s: %d: WARNING: icaltime_utc_offset is deprecated\n", __FILE__, __LINE__);
-#endif	
-	/* This function, combined with the set_tz/unset_tz calls in regression.c
-	makes for very convoluted behaviour (due to the setting of the tz environment variable)
-	arrghgh, at least this is what I think: benjaminlee */
-	
-    if(tzid != 0){
-	old_tz = set_tz(tzid);
-    }
- 
-    /* Mis-interpret a UTC broken out time as local time */
-    gtm = *(gmtime(&tt));
-    gtm.tm_isdst = localtime(&tt)->tm_isdst;    
-    offset_tt = mktime(&gtm);
-
-    if(tzid != 0){
-	unset_tz(old_tz);
-    }
-
+/**	@brief Constructor (deprecated).
+ *
+ * Convert seconds past UNIX epoch to a timetype.
+ *
+ * This constructor is deprecated and shouldn't be used in new software.
+ * Use icaltime_from_timet_with_zone(time_t, int, icaltimezone *) instead.
+ * In the meantime, calls to this method return a floating time, which can
+ * always be converted to a local time with an appropriate call to
+ * icaltime_convert_to_zone().
+ */
 #if 0
-#ifndef NO_WARN_DEPRECATED
-	fprintf(stderr, "%s: %d: WARNING: offset %d tt-offset_tt %d\n", __FILE__, __LINE__, offset, tt-offset_tt);
-#endif	
-	assert(offset == tt-offset_tt);
-#endif
-    return tt-offset_tt;
-#else
-	int is_daylight;
-
-	if ( tzid == 0 )
-	{
-		TIME_ZONE_INFORMATION tz;
-
-		GetTimeZoneInformation(&tz);
-
-		return -tz.Bias*60;
-	}
-	else
-	{
-		icaltimezone* zone = icaltimezone_get_builtin_timezone(tzid);
-
-
-		offset_tt = icaltimezone_get_utc_offset_of_utc_time     (zone,
-											   &ictt,
-											   &is_daylight);
-
-		return offset_tt;
-	}
-#endif
-}
-
-/***********************************************************************/
-
-
-/***********************************************************************
- * Old conversion routines that use a string to represent the timezone 
- ***********************************************************************/
-
-/* convert tt, of timezone tzid, into a utc time */
-struct icaltimetype icaltime_as_utc(struct icaltimetype tt,const char* tzid)
-{
-    int tzid_offset;
-
-    if(tt.is_utc == 1 || tt.is_date == 1){
-	return tt;
-    }
-
-    tzid_offset = icaltime_utc_offset(tt,tzid);
-
-    tt.second -= tzid_offset;
-
-    tt.is_utc = 1;
-
-#ifndef NO_WARN_DEPRECATED
-	fprintf(stderr, "%s: %d: WARNING: icaltime_as_utc is deprecated: '%s'\n", __FILE__, __LINE__, tzid);
-#endif	
-    return icaltime_normalize(tt);
-}
-
-/* convert tt, a time in UTC, into a time in timezone tzid */
-struct icaltimetype icaltime_as_zone(struct icaltimetype tt,const char* tzid)
-{
-    int tzid_offset;
-
-    tzid_offset = icaltime_utc_offset(tt,tzid);
-
-    tt.second += tzid_offset;
-
-    tt.is_utc = 0;
-
-#ifndef NO_WARN_DEPRECATED
-	fprintf(stderr, "%s: %d: WARNING: icaltime_as_zone is deprecated: '%s'\n", __FILE__, __LINE__, tzid);
-#endif	
-    return icaltime_normalize(tt);
-
-}
-
-/* **********************************************************************/
-
-
 struct icaltimetype 
 icaltime_from_timet(time_t tm, int is_date)
 {
@@ -329,59 +170,96 @@ icaltime_from_timet(time_t tm, int is_date)
 
     return tt;
 }
-
+#else
 struct icaltimetype 
-icaltime_from_timet_with_zone(time_t tm, int is_date, icaltimezone *zone)
+icaltime_from_timet(const time_t tm, const int is_date)
 {
-    struct icaltimetype tt;
+	return icaltime_from_timet_with_zone(tm, is_date, 0);
+}
+#endif
+
+
+/**	@brief Constructor.
+ *
+ *	@param tm The time
+ *	@param is_date Boolean: 1 means we should treat tm as a DATE
+ *	@param zone The timezone tm is in, NULL means to treat tm as a
+ *		floating time
+ *
+ *	Return a new icaltime instance, initialized to the given time
+ *	expressed as seconds past UNIX epoch, optionally using the given
+ *	timezone.
+ *
+ *	If the caller specifies the is_date param as TRUE, the returned
+ *	object is of DATE type, otherwise the input is meant to be of
+ *	DATE-TIME type.
+ *	If the zone is not specified (NULL zone param) the time is taken
+ *	to be floating, that is, valid in any timezone. Note that, in
+ *	addition to the uses specified in [RFC2445], this can be used
+ *	when doing simple math on couples of times.
+ *	If the zone is specified (UTC or otherwise), it's stored in the
+ *	object and it's used as the native timezone for this object.
+ *	This means that the caller can convert this time to a different
+ *	target timezone with no need to store the source timezone.
+ *
+ */
+struct icaltimetype 
+icaltime_from_timet_with_zone(const time_t tm, const int is_date,
+	const icaltimezone *zone)
+{
+    struct icaltimetype tt = icaltime_null_time();
     struct tm t;
     icaltimezone *utc_zone;
 
-    utc_zone = icaltimezone_get_utc_timezone ();
-
-    /* Convert the time_t to a struct tm in UTC time. We can trust gmtime
-       for this. */
+    /* Convert the time_t to a struct tm. We can trust gmtime for this. */
     t = *(gmtime(&tm));
      
     tt.year   = t.tm_year + 1900;
     tt.month  = t.tm_mon + 1;
     tt.day    = t.tm_mday;
 
-    tt.is_utc = (zone == utc_zone) ? 1 : 0;
-    tt.is_date = is_date; 
-    tt.is_daylight = 0;
-    tt.zone = NULL;
-
     if (is_date) { 
-	/* We don't convert DATE values between timezones. */
-	tt.hour   = 0;
-	tt.minute = 0;
-	tt.second = 0;
-    } else {
-	tt.hour   = t.tm_hour;
-	tt.minute = t.tm_min;
-	tt.second = t.tm_sec;
-
-	/* Use our timezone functions to convert to the required timezone. */
-	icaltimezone_convert_time (&tt, utc_zone, zone);
+    	tt.is_date = 1;
+	return tt;
     }
+
+    tt.hour   = t.tm_hour;
+    tt.minute = t.tm_min;
+    tt.second = t.tm_sec;
+
+    /* If it's a floating time, we don't do any conversion. */
+    if (zone == NULL) {
+	return tt;
+    }
+
+    utc_zone = icaltimezone_get_utc_timezone ();
+    tt.is_utc = (zone == utc_zone) ? 1 : 0;
+    tt.zone = zone;
 
     return tt;
 }
 
-/* Returns the current time in the given timezone, as an icaltimetype. */
-struct icaltimetype icaltime_current_time_with_zone(icaltimezone *zone)
+/**	@brief Convenience constructor.
+ * 
+ * Returns the current time in the given timezone, as an icaltimetype.
+ */
+struct icaltimetype icaltime_current_time_with_zone(const icaltimezone *zone)
 {
     return icaltime_from_timet_with_zone (time (NULL), 0, zone);
 }
 
-/* Returns the current day as an icaltimetype, with is_date set. */
+/**	@brief Convenience constructor.
+ * 
+ * Returns the current day as an icaltimetype, with is_date set.
+ */
 struct icaltimetype icaltime_today(void)
 {
     return icaltime_from_timet_with_zone (time (NULL), 1, NULL);
 }
 
-
+/**	@brief	Return the time as seconds past the UNIX epoch
+ */
+#if 0
 time_t icaltime_as_timet(struct icaltimetype tt)
 {
     struct tm stm;
@@ -398,6 +276,7 @@ time_t icaltime_as_timet(struct icaltimetype tt)
 	return 0;
     }
 
+	tt = icaltime_normalize(tt);
     stm.tm_sec = tt.second;
     stm.tm_min = tt.minute;
     stm.tm_hour = tt.hour;
@@ -407,7 +286,7 @@ time_t icaltime_as_timet(struct icaltimetype tt)
     stm.tm_isdst = -1;
 
     if(tt.is_utc == 1 || tt.is_date == 1){
-        t = icaltimegm(&stm);
+        t = make_time(&stm, 0);	/* FIXME */
     } else {
 	t = mktime(&stm);
 #ifdef WIN32
@@ -430,23 +309,16 @@ time_t icaltime_as_timet(struct icaltimetype tt)
     return t;
 
 }
-
-time_t icaltime_as_timet_with_zone(struct icaltimetype tt, icaltimezone *zone)
+#else
+time_t icaltime_as_timet(const struct icaltimetype tt)
 {
-    icaltimezone *utc_zone;
     struct tm stm;
     time_t t;
-
-    utc_zone = icaltimezone_get_utc_timezone ();
 
     /* If the time is the special null time, return 0. */
     if (icaltime_is_null_time(tt)) {
 	return 0;
     }
-
-    /* Use our timezone functions to convert to UTC. */
-    if (!tt.is_date)
-	icaltimezone_convert_time (&tt, zone, utc_zone);
 
     /* Copy the icaltimetype to a struct tm. */
     memset (&stm, 0, sizeof (struct tm));
@@ -459,12 +331,58 @@ time_t icaltime_as_timet_with_zone(struct icaltimetype tt, icaltimezone *zone)
     stm.tm_year = tt.year-1900;
     stm.tm_isdst = -1;
 
-    t = icaltimegm(&stm);   
+    t = make_time(&stm, 0);
+
+    return t;
+
+}
+#endif
+
+/**	@brief	Return the time as seconds past the UNIX epoch, using the
+ *	given timezone.
+ *
+ *	This convenience method combines a call to icaltime_convert() with
+ *	a call to icaltime_as_timet().
+ *	If the input timezone is null, no conversion is done; that is, the
+ *	time is simply returned as time_t in its native timezone.
+ */
+time_t icaltime_as_timet_with_zone(const struct icaltimetype _tt,
+	const icaltimezone *zone)
+{
+    struct icaltimetype tt = _tt;
+    struct tm stm;
+    time_t t;
+
+    /* If the time is the special null time, return 0. */
+    if (icaltime_is_null_time(tt)) {
+	return 0;
+    }
+
+    if (zone != NULL) {
+	tt = icaltime_convert_to_zone(_tt, zone);
+    }
+
+    /* Copy the icaltimetype to a struct tm. */
+    memset (&stm, 0, sizeof (struct tm));
+
+    stm.tm_sec = tt.second;
+    stm.tm_min = tt.minute;
+    stm.tm_hour = tt.hour;
+    stm.tm_mday = tt.day;
+    stm.tm_mon = tt.month-1;
+    stm.tm_year = tt.year-1900;
+    stm.tm_isdst = -1;
+
+    t = make_time(&stm, 0);
 
     return t;
 }
 
-char* icaltime_as_ical_string(struct icaltimetype tt)
+/**
+ * Return a string represention of the time, in RFC2445 format. The
+ * string is owned by libical
+ */
+char* icaltime_as_ical_string(const struct icaltimetype tt)
 {
     size_t size = 17;
     char* buf = icalmemory_new_buffer(size);
@@ -488,18 +406,34 @@ char* icaltime_as_ical_string(struct icaltimetype tt)
 
 }
 
-/* Normalize the icaltime, so that all fields are within the normal range. */
-
-struct icaltimetype icaltime_normalize(struct icaltimetype tt)
+/**
+ *	Reset all of the time components to be in their normal ranges. For
+ *	instance, given a time with minutes=70, the minutes will be reduces
+ *	to 10, and the hour incremented. This allows the caller to do
+ *	arithmetic on times without worrying about overflow or
+ *	underflow.
+ *
+ *	Implementation note: we call icaltime_adjust() with no adjustment.
+ */
+struct icaltimetype icaltime_normalize(const struct icaltimetype tt)
 {
-  icaltime_adjust (&tt, 0, 0, 0, 0);
-    return tt;
+	struct icaltimetype ret = tt;
+	icaltime_adjust(&ret, 0, 0, 0, 0);
+	return ret;
 }
 
 
 #ifndef ICAL_NO_LIBICAL
 #include "icalvalue.h"
 
+/**	@brief Contructor.
+ * 
+ * Create a time from an ISO format string.
+ *
+ * If the given string specifies a DATE-TIME not in UTC, there is no way to
+ * know if this is a floating time or really refers to a timezone. We should
+ * probably add a new constructor: icaltime_from_string_with_zone() FIXME
+ */
 struct icaltimetype icaltime_from_string(const char* str)
 {
     struct icaltimetype tt = icaltime_null_time();
@@ -514,6 +448,7 @@ struct icaltimetype icaltime_from_string(const char* str)
 	tt.is_date = 0;
     } else if (size == 16) { /* UTC time, ends in 'Z'*/
 	tt.is_utc = 1;
+	tt.zone = icaltimezone_get_utc_timezone();
 	tt.is_date = 0;
 
 	if(str[15] != 'Z'){
@@ -547,7 +482,14 @@ struct icaltimetype icaltime_from_string(const char* str)
 }
 #endif
 
+#if 0
 char ctime_str[32];
+/**	@brief Deprecated
+ *
+ *	This method is deprecated and shouldn't be used in new software.
+ *	Use icaltime_as_timet_with_zone(struct icaltimetype, icaltimezone *)
+ *	instead, then appropriate calls to strftime(3).
+ */
 char* icaltime_as_ctime(struct icaltimetype t)
 {
     time_t tt;
@@ -559,11 +501,12 @@ char* icaltime_as_ctime(struct icaltimetype t)
 
     return ctime_str;
 }
+#endif
 
 /* Returns whether the specified year is a leap year. Year is the normal year,
    e.g. 2001. */
 int
-icaltime_is_leap_year (int year)
+icaltime_is_leap_year (const int year)
 {
 
     if (year <= 1752)
@@ -574,7 +517,7 @@ icaltime_is_leap_year (int year)
 
 short days_in_month[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
 
-short icaltime_days_in_month(short month,short year)
+short icaltime_days_in_month(const short month, const short year)
 {
 
     int days = days_in_month[month];
@@ -590,7 +533,7 @@ short icaltime_days_in_month(short month,short year)
 }
 
 /* 1-> Sunday, 7->Saturday */
-short icaltime_day_of_week(struct icaltimetype t){
+short icaltime_day_of_week(const struct icaltimetype t){
 #ifndef JDAY 
 	struct tm stm;
 
@@ -625,7 +568,7 @@ short icaltime_day_of_week(struct icaltimetype t){
 
 /* Day of the year that the first day of the week (Sunday) is on.
    FIXME: Doesn't take into account different week start days. */
-short icaltime_start_doy_of_week(struct icaltimetype t){
+short icaltime_start_doy_of_week(const struct icaltimetype t){
 #ifndef JDAY
     struct tm stm;
     int start;
@@ -681,7 +624,7 @@ short icaltime_start_doy_of_week(struct icaltimetype t){
 
 /* FIXME: Doesn't take into account the start day of the week. strftime assumes
    that weeks start on Monday. */
-short icaltime_week_number(struct icaltimetype ictt)
+short icaltime_week_number(const struct icaltimetype ictt)
 {
 #ifndef JDAY
     struct tm stm;
@@ -729,19 +672,29 @@ static const short days_in_year[2][13] =
   {  0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
 };
 
-/* Returns the day of the year, counting from 1 (Jan 1st). */
-short icaltime_day_of_year(struct icaltimetype t){
+/**
+ *	Returns the day of the year, counting from 1 (Jan 1st).
+ */
+short icaltime_day_of_year(const struct icaltimetype t){
   int is_leap = icaltime_is_leap_year (t.year);
 
   return days_in_year[is_leap][t.month - 1] + t.day;
 }
 
+/**	@brief Contructor.
+ *
+ *	Create a new time, given a day of year and a year.
+ */
 /* Jan 1 is day #1, not 0 */
-struct icaltimetype icaltime_from_day_of_year(short doy,  short year)
+struct icaltimetype icaltime_from_day_of_year(const short _doy, const short _year)
 {
     struct icaltimetype tt={0};
     int is_leap;
     int month;
+    int doy = _doy;
+    int year = _year;
+
+    tt.is_date = 1;
 
     is_leap = icaltime_is_leap_year(year);
 
@@ -769,9 +722,15 @@ struct icaltimetype icaltime_from_day_of_year(short doy,  short year)
 
     /* Shouldn't reach here. */
     assert (0);
+    return tt;
 }
 
-struct icaltimetype icaltime_null_time()
+/**	@brief Constructor.
+ *
+ *	Return a null time, which indicates no time has been set.
+ *	This time represent the beginning of the epoch.
+ */
+struct icaltimetype icaltime_null_time(void)
 {
     struct icaltimetype t;
     memset(&t,0,sizeof(struct icaltimetype));
@@ -780,7 +739,12 @@ struct icaltimetype icaltime_null_time()
 }
 
 
-int icaltime_is_valid_time(struct icaltimetype t){
+/**
+ *	Returns false if the time is clearly invalid, but is not null. This
+ *	is usually the result of creating a new time type buy not clearing
+ *	it, or setting one of the flags to an illegal value.
+ */
+int icaltime_is_valid_time(const struct icaltimetype t){
     if(t.is_utc > 1 || t.is_utc < 0 ||
        t.year < 0 || t.year > 3000 ||
        t.is_date > 1 || t.is_date < 0){
@@ -791,7 +755,19 @@ int icaltime_is_valid_time(struct icaltimetype t){
 
 }
 
-int icaltime_is_null_time(struct icaltimetype t)
+/**	@brief Returns true if time is relative to UTC zone
+ *
+ *	FIXME We should only check the zone
+ */
+int icaltime_is_utc(const struct icaltimetype t) {
+
+	return t.is_utc;
+}
+
+/**
+ *	Return true if the time is null.
+ */
+int icaltime_is_null_time(const struct icaltimetype t)
 {
     if (t.second +t.minute+t.hour+t.day+t.month+t.year == 0){
 	return 1;
@@ -801,7 +777,13 @@ int icaltime_is_null_time(struct icaltimetype t)
 
 }
 
-int icaltime_compare(struct icaltimetype a, struct icaltimetype b)
+/**
+ *	Return -1, 0, or 1 to indicate that a<b, a==b or a>b.
+ *
+ *	FIXME This is completely broken unless both times happen to be in
+ *	the same timezone, or both floating.
+ */
+int icaltime_compare(const struct icaltimetype a, const struct icaltimetype b)
 {
     int retval;
 
@@ -841,8 +823,11 @@ int icaltime_compare(struct icaltimetype a, struct icaltimetype b)
     return retval;
 }
 
+/**
+ *	like icaltime_compare, but only use the date parts.
+ */
 int
-icaltime_compare_date_only (struct icaltimetype a, struct icaltimetype b)
+icaltime_compare_date_only(const struct icaltimetype a, const struct icaltimetype b)
 {
     int retval;
 
@@ -876,16 +861,16 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
 
 
 
-/* Adds (or subtracts) a time from a icaltimetype.
-   NOTE: This function is exactly the same as icaltimezone_adjust_change()
-   except for the type of the first parameter. */
+/**	@brief Internal, shouldn't be part of the public API
+ *
+ *	Adds (or subtracts) a time from a icaltimetype.
+ *	NOTE: This function is exactly the same as icaltimezone_adjust_change()
+ *	except for the type of the first parameter.
+ */
 void
-icaltime_adjust				(struct icaltimetype	*tt,
-					 int		 days,
-					 int		 hours,
-					 int		 minutes,
-					 int		 seconds)
-{
+icaltime_adjust(struct icaltimetype *tt, const int days, const int hours,
+	const int minutes, const int seconds) {
+
     int second, minute, hour, day;
     int minutes_overflow, hours_overflow, days_overflow, years_overflow;
     int days_in_month;
@@ -960,4 +945,46 @@ icaltime_adjust				(struct icaltimetype	*tt,
 	}
     }
     tt->day = day;
+}
+
+/**	@brief Convert time to a given timezone
+ *
+ *	Convert a time from its native timezone to a given timezone.
+ *
+ *	If tt is a date, the returned time is an exact
+ *	copy of the input. If it's a floating time, the returned object
+ *	represents the same time translated to the given timezone.
+ *	Otherwise the time will be converted to the new
+ *	time zone, and its native timezone set to the right timezone.
+ */
+struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
+	const icaltimezone *zone) {
+
+	struct icaltimetype ret = tt;
+
+	/* If it's a date do nothing */
+	if (tt.is_date) {
+		return ret;
+	}
+
+	if (tt.zone == zone) {
+		return ret;
+	}
+
+	/* If it's a floating time we don't want to adjust the time */
+	if (tt.zone != NULL) {
+		/* HACK */
+		icaltimezone_convert_time(&ret,
+			(icaltimezone *)tt.zone,
+			(icaltimezone *)zone);
+	}
+
+	ret.zone = zone;
+	if (zone == icaltimezone_get_utc_timezone()) {
+		ret.is_utc = 1;
+	} else {
+		ret.is_utc = 0;
+	}
+
+	return ret;
 }

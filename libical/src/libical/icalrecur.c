@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.30 2002-04-25 23:43:01 acampi Exp $
+  $Id: icalrecur.c,v 1.31 2002-05-09 13:42:09 acampi Exp $
   $Locker:  $
     
 
@@ -1119,40 +1119,6 @@ void increment_second(struct icalrecur_iterator_impl* impl, int inc)
 	increment_minute(impl, minutes);
     }                 
 }
-
-#if 0
-#include "ical.h"
-void test_increment()
-{
-    struct icalrecur_iterator_impl impl;
-
-    impl.last =  icaltime_from_string("20000101T000000Z");
-
-    printf("Orig: %s\n",icaltime_as_ctime(impl.last));
-    
-    increment_second(&impl,5);
-    printf("+ 5 sec    : %s\n",icaltime_as_ctime(impl.last));
-
-    increment_second(&impl,355);
-    printf("+ 355 sec  : %s\n",icaltime_as_ctime(impl.last));
-
-    increment_minute(&impl,5);
-    printf("+ 5 min    : %s\n",icaltime_as_ctime(impl.last));
-
-    increment_minute(&impl,360);
-    printf("+ 360 min  : %s\n",icaltime_as_ctime(impl.last));
-    increment_hour(&impl,5);
-    printf("+ 5 hours  : %s\n",icaltime_as_ctime(impl.last));
-    increment_hour(&impl,43);
-    printf("+ 43 hours : %s\n",icaltime_as_ctime(impl.last));
-    increment_monthday(&impl,3);
-    printf("+ 3 days   : %s\n",icaltime_as_ctime(impl.last));
-    increment_monthday(&impl,600);
-    printf("+ 600 days  : %s\n",icaltime_as_ctime(impl.last));
-	
-}
-
-#endif 
 
 short next_second(struct icalrecur_iterator_impl* impl)
 {
@@ -2382,7 +2348,7 @@ int icalrecur_expand_recurrence(char* rule, time_t start,
 
     memset(array, 0, count*sizeof(time_t));
 
-    icstart = icaltime_from_timet(start,0);
+    icstart = icaltime_from_timet_with_zone(start,0,0);
 
     recur = icalrecurrencetype_from_string(rule);
 

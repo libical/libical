@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.22 2002-05-03 14:57:23 acampi Exp $
+  $Id: icalcomponent.c,v 1.23 2002-05-09 13:42:09 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -762,20 +762,18 @@ time_t icalcomponent_convert_time(icalproperty *p)
     time_t convt;
     icalproperty *tzp;
         
+    sict = icalvalue_get_datetime(
+	icalproperty_get_value(p));
 
-    /* Though it says _dtstart, it will work for dtend too */
-    sict = icalproperty_get_dtstart(p);
+    tzp = icalproperty_get_first_parameter(p, ICAL_TZID_PARAMETER);
 
-    tzp = icalproperty_get_first_parameter(p,ICAL_TZID_PARAMETER);
-
-    if (sict.is_utc == 1 && tzp != 0){
+    if (icaltime_is_utc(sict) && tzp != 0){
 	icalerror_warn("icalcomponent_get_span: component has a UTC DTSTART with a timezone specified ");
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	return 0; 
     }
 
-    if(sict.is_utc == 1){
-	/* _as_timet will use gmtime() to do the conversion */
+    if (icaltime_is_utc(sict)) {
 	convt = icaltime_as_timet(sict);
 
 #ifdef TEST_CONVERT_TIME
@@ -783,32 +781,13 @@ time_t icalcomponent_convert_time(icalproperty *p)
 	       icalproperty_as_ical_string(p), ctime(&convt));
 #endif
 
-    } else if (sict.is_utc == 0 && tzp == 0 ) { 	/* not utc and no zone info */
+    } else if (!icaltime_is_utc(sict) && tzp == 0 ) {
+	/* not utc and no zone info, so it's floating time, which by definition
+	 * means it's already correct for whatever timezone we are in.
+	 */
 	time_t offset;
 
-	/* _as_timet will use localtime() to do the conversion */
 	convt = icaltime_as_timet(sict);
-	
-	/* offset = icaltime_utc_offset(sict,0); */
-	
-	/* benjaminlee: this replaces the line above
-	maybe it can be changed to something better? */
-	
-	{
-#ifdef __sgi
-		tzset();
-		offset = daylight ? altzone : timezone;
-#else
-
-		struct tm *tmp_tm;
-		time_t t;
-
-		t = time(NULL);
-	 	offset = localtime(&t)->tm_gmtoff;
-#endif
-	}
-
-	convt += offset;
 
 #ifdef TEST_CONVERT_TIME
 	printf("convert time: use as_timet and adjust:\n %s\n %s",
@@ -817,15 +796,9 @@ time_t icalcomponent_convert_time(icalproperty *p)
     } else {
 	/* Convert the local time in the timezone (from tzp) to UTC*/
 	const char* mytimezone = icalparameter_get_tzid(tzp);
-	
-	icaltimezone_convert_time (&sict, 
-			icaltimezone_get_builtin_timezone(mytimezone),
-			icaltimezone_get_utc_timezone()
-			);
-	
-	sict.is_utc = 1;
 
-	convt = icaltime_as_timet(sict);
+	convt = icaltime_as_timet_with_zone(sict,
+		icaltimezone_get_builtin_timezone(tzp));
 
 #ifdef TEST_CONVERT_TIME
 	printf("convert time: use _as_utc:\n %s\n %s",
@@ -1490,15 +1463,17 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent* comp)
     if( end_prop == 0 && dur_prop == 0){
 	return null_duration;
     } else if ( end_prop != 0) {
+	/**
+	 * FIXME
+	 * We assume DTSTART and DTEND are not in different time zones.
+	 * Does the standard actually guarantee this?
+	 */
 	struct icaltimetype start = 
 	    icalcomponent_get_dtstart(inner);
-	time_t startt = icaltime_as_timet(start);
-
 	struct icaltimetype end = 
 	    icalcomponent_get_dtend(inner);
-	time_t endt = icaltime_as_timet(end);
-	
-	return icaldurationtype_from_int(endt-startt);
+
+	return icaltime_subtract(end, start);
     } else if ( dur_prop != 0) { 
 	return icalproperty_get_duration(dur_prop);
     } else {
