@@ -13,7 +13,8 @@ INCLUDES = 				\
        -I$(srcdir)/../libicalss           
 
 copycluster_SOURCES = copycluster.c
-regression_SOURCES = regression.c regression-component.c regression-utils.c
+regression_SOURCES = regression.c regression-component.c regression-classify.c regression-utils.c\
+		     regression-recur.c
 parser_SOURCES = icaltestparser.c
 storage_SOURCES = storage.c
 stow_SOURCES = stow.c
@@ -21,4 +22,3 @@ testvcal_SOURCES = testvcal.c
 recur_SOURCES = recur.c 
 testmime_SOURCES = testmime.c
 process_SOURCES = process.c
-testclassify_SOURCES = testclassify.c

@@ -2,53 +2,91 @@
 #include "regression.h"
 
 #include <string.h>
+extern int VERBOSE;
 
-icalcomponent* create_simple_component()
+void create_simple_component(void)
 {
 
     icalcomponent* calendar;
     struct icalperiodtype rtime;
-
-    rtime.start = icaltime_from_timet( time(0),0);
-    rtime.end = icaltime_from_timet( time(0),0);
-
-    rtime.end.hour++;
-
-
-
+    icalproperty *version, *bogus;
+      
     /* Create calendar and add properties */
     calendar = icalcomponent_new(ICAL_VCALENDAR_COMPONENT);
 
-    
+    ok("create vcalendar component", (calendar!=NULL));
+
     icalcomponent_add_property(
 	calendar,
 	icalproperty_new_version("2.0")
 	);
+    
+    version = icalcomponent_get_first_property(calendar,ICAL_VERSION_PROPERTY);
+    ok("version property added", (version!=NULL));
 
-    printf("%s\n",icalcomponent_as_ical_string(calendar));
- 
-    return calendar;
-	   
+    bogus = icalcomponent_get_first_property(calendar,ICAL_DTSTART_PROPERTY);
+    ok("bogus dtstart not found", (bogus == NULL));
+
+    if (VERBOSE && calendar)
+      printf("%s\n",icalcomponent_as_ical_string(calendar));
 }
 
-/* Create a new component */
-icalcomponent* create_new_component()
-{
 
+static char* create_new_component_str = 
+"BEGIN:VCALENDAR\n"
+"VERSION:2.0\n"
+"PRODID:-//RDU Software//NONSGML HandCal//EN\n"
+"BEGIN:VTIMEZONE\n"
+"TZID:America/New_York\n"
+"BEGIN:DAYLIGHT\n"
+"DTSTART:20020606T212449\n"
+"RDATE;VALUE=PERIOD:20020606T212449/20020607T012809\n"
+"TZOFFSETFROM:-0000\n"
+"TZOFFSETTO:-0000\n"
+"TZNAME:EST\n"
+"END:DAYLIGHT\n"
+"BEGIN:STANDARD\n"
+"DTSTART:20020606T212449\n"
+"RDATE;VALUE=PERIOD:20020606T212449/20020607T012809\n"
+"TZOFFSETFROM:-0000\n"
+"TZOFFSETTO:-0000\n"
+"TZNAME:EST\n"
+"END:STANDARD\n"
+"END:VTIMEZONE\n"
+"BEGIN:VEVENT\n"
+"DTSTAMP:20020606T212449\n"
+"UID:guid-1.host1.com\n"
+"ORGANIZER;ROLE=CHAIR:mrbig@host.com\n"
+"ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE;CUTYPE=GROUP:employee-A@host.com\n"
+"DESCRIPTION:Project XYZ Review Meeting\n"
+"CATEGORIES:MEETING\n"
+"CLASS:PRIVATE\n"
+"CREATED:20020606T212449\n"
+"SUMMARY:XYZ Project Review\n"
+"DTSTART;TZID=America/New_York:20020606T212449\n"
+"DTEND;TZID=America/New_York:20020606T212449\n"
+"LOCATION:1CP Conference Room 4350\n"
+"END:VEVENT\n"
+"END:VCALENDAR\n";
+
+
+/* Create a new component */
+void create_new_component()
+{
     icalcomponent* calendar;
     icalcomponent* timezone;
     icalcomponent* tzc;
     icalcomponent* event;
-    struct icaltimetype atime = icaltime_from_timet( time(0),0);
+    struct icaltimetype atime = icaltime_from_timet( 1023398689, 0);
     struct icaldatetimeperiodtype rtime;
     icalproperty* property;
+    char *calendar_as_string;
+    int diff;
 
-    rtime.period.start = icaltime_from_timet( time(0),0);
-    rtime.period.end = icaltime_from_timet( time(0),0);
+    rtime.period.start = icaltime_from_timet( 1023398689,0);
+    rtime.period.end = icaltime_from_timet( 1023409689,0);
     rtime.period.end.hour++;
     rtime.time = icaltime_null_time();
-
-
 
     /* Create calendar and add properties */
     calendar = icalcomponent_new(ICAL_VCALENDAR_COMPONENT);
@@ -233,17 +271,24 @@ icalcomponent* create_new_component()
 	);
 
     icalcomponent_add_component(calendar,event);
+    
+    calendar_as_string = icalcomponent_as_ical_string(calendar);
+    diff = strcmp(create_new_component_str, calendar_as_string);
+    ok("build large, complex component", 
+       (diff==0));
 
-    printf("%s\n",icalcomponent_as_ical_string(calendar));
+    if (VERBOSE && calendar)
+      printf("%s\n",icalcomponent_as_ical_string(calendar));
 
-    icalcomponent_free(calendar);
 
-    return 0;
+    if (calendar)
+      icalcomponent_free(calendar);
+
 }
 
 /* Create a new component, using the va_args list */
 
-icalcomponent* create_new_component_with_va_args()
+void create_new_component_with_va_args()
 {
 
     icalcomponent* calendar;
@@ -319,17 +364,17 @@ icalcomponent* create_new_component_with_va_args()
 		),
 	    0
 	    );
-	
-    printf("%s\n",icalcomponent_as_ical_string(calendar));
-    
+
+    ok("creating a complex vcalendar", (calendar != NULL));
+    if (VERBOSE && calendar)
+      printf("%s\n",icalcomponent_as_ical_string(calendar));
 
     icalcomponent_free(calendar);
 
-    return 0;
 }
 
 static void print_span(int c, struct icaltime_span span ){
-
+  printf("span-->%d, %d\n", span.start, span.end);
     if (span.start == 0)
 	printf("#%02d start: (empty)\n",c);
     else 
@@ -362,7 +407,7 @@ void test_icalcomponent_get_span()
      */
     span.start = tm1;
     span.end = tm2;
-    print_span(tnum++,span);
+    if (VERBOSE) print_span(tnum++,span);
 
     /** test 1
      *	We specify times in a timezone, the returned span is in UTC
@@ -380,8 +425,8 @@ void test_icalcomponent_get_span()
 	    );
 
     span = icalcomponent_get_span(c);
-    print_span(tnum++,span);
-
+    if (VERBOSE) print_span(tnum++,span);
+    int_is("America/Los_Angeles", span.start, 973407600);
     icalcomponent_free(c);
 
     /** test 2
@@ -396,7 +441,8 @@ void test_icalcomponent_get_span()
 	    );
 
     span = icalcomponent_get_span(c);
-    print_span(tnum++,span);
+    if (VERBOSE) print_span(tnum++,span);
+    int_is("floating time", span.start, tm1);
 
     icalcomponent_free(c);
 
@@ -416,7 +462,8 @@ void test_icalcomponent_get_span()
 	    );
 
     span = icalcomponent_get_span(c);
-    print_span(tnum++,span);
+    if (VERBOSE) print_span(tnum++,span);
+    int_is("America/New_York", span.start, 973396800);
 
     icalcomponent_free(c);
 
@@ -438,8 +485,9 @@ void test_icalcomponent_get_span()
 	    );
 
     span = icalcomponent_get_span(c);
-    print_span(tnum++,span);
-
+    if (VERBOSE) print_span(tnum++,span);
+    int_is("America/New_York", span.start, 973396800);
+    
     icalcomponent_free(c);
 
     /** test 5
@@ -460,7 +508,8 @@ void test_icalcomponent_get_span()
 	    );
 
     span = icalcomponent_get_span(c);
-    print_span(tnum++,span);
+    if (VERBOSE) print_span(tnum++,span);
+    int_is("America/Los_Angeles w/ duration", span.end, 973409400);
 
     icalcomponent_free(c);
 
@@ -475,8 +524,8 @@ void test_icalcomponent_get_span()
 	    );
 
     span = icalcomponent_get_span(c);
-    print_span(tnum++,span);
-
+    if (VERBOSE) print_span(tnum++,span);
+    int_is("null span", span.start, 0);
     icalcomponent_free(c);
 
     /** test 7
@@ -490,8 +539,8 @@ void test_icalcomponent_get_span()
 	    );
 
     span = icalcomponent_get_span(c);
-    print_span(tnum++,span);
-
+    if (VERBOSE) print_span(tnum++,span);
+    int_is("UTC", span.start, 973296000);
     icalcomponent_free(c);
 
     /** test 8
@@ -505,7 +554,8 @@ void test_icalcomponent_get_span()
 	    );
 
     span = icalcomponent_get_span(c);
-    print_span(tnum++,span);
+    int_is("UTC #2", span.start, 973296000);
+    if (VERBOSE) print_span(tnum++,span);
 
     icalcomponent_free(c);
 
@@ -519,7 +569,8 @@ void test_icalcomponent_get_span()
 	    );
 
     span = icalcomponent_get_span(c);
-    print_span(tnum++,span);
+    if (VERBOSE) print_span(tnum++,span);
+    int_is("start date only", span.end, 973382399);
 
     icalcomponent_free(c);
 
