@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.27 2002-06-26 22:26:07 ebusboom Exp $
+#  $Id: Makefile.am,v 1.28 2002-06-26 23:26:27 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -28,8 +28,10 @@ ICALSCRIPTS = $(top_srcdir)/scripts
 
 if WITH_CXX
 cxx_lib=libical_cxx.la
+cxx_headers=vcomponent.h icalparameter_cxx.h icalproperty_cxx.h icalvalue_cxx.h
 else
 cxx_lib=
+cxx_headers=
 endif
 
 lib_LTLIBRARIES = libical.la $(cxx_lib)
@@ -123,7 +125,7 @@ endif
 
 libicalincludedir = $(includedir)
 
-libicalinclude_HEADERS = ical.h icalmemory.h icalerror.h
+libicalinclude_HEADERS = ical.h icalmemory.h icalerror.h $(cxx_headers)
 
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering. It
 # is required to make the combined header ical.h properly
