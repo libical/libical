@@ -95,10 +95,12 @@ int ICalProperty::count_parameters(){
 
 /** Iterate through the parameters */
 ICalParameter* ICalProperty::get_first_parameter(icalparameter_kind kind){
-	return new ICalParameter(icalproperty_get_first_parameter(imp, kind));
+	icalparameter* p = icalproperty_get_first_parameter(imp, kind);
+	return (p != NULL)? new ICalParameter(p): NULL;
 }
 ICalParameter* ICalProperty::get_next_parameter(icalparameter_kind kind){
-	return new ICalParameter(icalproperty_get_next_parameter(imp, kind));
+	icalparameter* p = icalproperty_get_next_parameter(imp, kind);
+	return (p != NULL)? new ICalParameter(p): NULL;
 }
 
 /** Access the value of the property */
