@@ -33,7 +33,10 @@
  *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  *	THE POSSIBILITY OF SUCH DAMAGE. 
  */
-/*
+
+#include "astime.h"	/*	time structures	*/
+
+/**
  *	caldat computes the day of the week, the day of the year
  *	the gregorian (or julian) calendar date and the universal
  *	time from the julian decimal date.
@@ -51,8 +54,6 @@
  *	50 Year canon of solar eclipses: 1986-2035
  *
  */
-
-#include "astime.h"	/*	time structures	*/
 
 long caldat( date )
 struct ut_instant * date;
@@ -108,9 +109,9 @@ struct ut_instant * date;
 			- (((date->month + 9) / 12) << 1)
 			+ date->day - 30;
 	return( date->year );
-}	/*	end of	 long caldat( date )	*/
+}
 
-/*
+/**
  *	juldat computes the julian decimal date (j_date) from
  *	the gregorian (or Julian) calendar date.
  *	for astronomical purposes, The Gregorian calendar reform occurred

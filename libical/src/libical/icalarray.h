@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 07 March 2001
 
 
- $Id: icalarray.h,v 1.1 2001-11-14 07:07:22 benjaminlee Exp $
+ $Id: icalarray.h,v 1.2 2002-06-07 13:50:07 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Ximian, Inc.
@@ -27,9 +27,11 @@
 #ifndef ICALARRAY_H
 #define ICALARRAY_H
 
-/* An array of arbitrarily-sized elements which grows dynamically as elements
-   are added. */
-
+/** @file icalarray.h 
+ *
+ *  @brief An array of arbitrarily-sized elements which grows
+ *  dynamically as elements are added. 
+ */
 
 typedef struct _icalarray icalarray;
 struct _icalarray {

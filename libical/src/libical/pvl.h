@@ -13,26 +13,26 @@
 typedef struct pvl_list_t* pvl_list;
 typedef struct pvl_elem_t* pvl_elem;
 
-/*
-  struct pvl_elem_t
+/**
+ * This type is private. Always use pvl_elem instead. The struct would
+ * not even appear in this header except to make code in the USE_MACROS
+ * blocks work
+ */
 
-  This type is private. Always use pvl_elem instead. The struct would
-  not even appear in this header except to make code in the USE_MACROS
-  blocks work
-
-  */
 typedef struct pvl_elem_t
 {
-	int MAGIC;			/* Magic Identifier */
-	void *d;			/* Pointer to data user is storing */
-	struct pvl_elem_t *next;	/* Next element */
-	struct pvl_elem_t *prior;	/* prior element */
+	int MAGIC;			/**< Magic Identifier */
+	void *d;			/**< Pointer to data user is storing */
+	struct pvl_elem_t *next;	/**< Next element */
+	struct pvl_elem_t *prior;	/**< Prior element */
 } pvl_elem_t;
 
 
 
-/* This global is incremented for each call to pvl_new_element(); it gives each
- * list a unique identifer */
+/**
+ * This global is incremented for each call to pvl_new_element(); it gives each
+ * list a unique identifer 
+ */
 
 extern int  pvl_elem_count;
 extern int  pvl_list_count;
@@ -81,8 +81,11 @@ typedef int (*pvl_findf)(void* a, void* b); /*a is list elem, b is other data*/
 pvl_elem pvl_find(pvl_list l,pvl_findf f,void* v);
 pvl_elem pvl_find_next(pvl_list l,pvl_findf f,void* v);
 
-/* Pass each element in the list to a function */
-typedef void (*pvl_applyf)(void* a, void* b); /*a is list elem, b is other data*/
+/**
+ * Pass each element in the list to a function
+ * a is list elem, b is other data
+ */
+typedef void (*pvl_applyf)(void* a, void* b); 
 void pvl_apply(pvl_list l,pvl_applyf f, void *v);
 
 

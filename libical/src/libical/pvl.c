@@ -15,9 +15,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-
-
-/*
+/**
   struct pvl_list_t
 
   The list structure. This is the hanlde for the entire list 
@@ -28,35 +26,30 @@
 
 typedef struct pvl_list_t
 {
-	int MAGIC;		        /* Magic Identifier */
-	struct pvl_elem_t *head;	/* Head of list */
-	struct pvl_elem_t *tail;	/* Tail of list */
-	int count;			/* Number of items in the list */
-	struct pvl_elem_t *p;		/* Pointer used for iterators */
+	int MAGIC;		        /**< Magic Identifier */
+	struct pvl_elem_t *head;	/**< Head of list */
+	struct pvl_elem_t *tail;	/**< Tail of list */
+	int count;			/**< Number of items in the list */
+	struct pvl_elem_t *p;		/**< Pointer used for iterators */
 } pvl_list_t;
 
 
 
 
-/* This global is incremented for each call to pvl_new_element(); it gives each
- * list a unique identifer */
+/**
+ * This global is incremented for each call to pvl_new_element(); it gives each
+ * list a unique identifer 
+ */
 
 int pvl_elem_count = 0;
 int pvl_list_count = 0;
 
 
-/*----------------------------------------------------------------------
-  Function: pvl_list pvl_newlist()
- 
-  Purpose:
-
-  Creates a new list, clears the pointers and assigns a magic number
-
-  Returns:
-
-  Pointer to the new list
-  0 if there is no available memory. 
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Creates a new list, clears the pointers and assigns a magic number
+ * 
+ * @return  Pointer to the new list, 0 if there is no available memory. 
+ */
 
 pvl_list 
 pvl_newlist()
@@ -89,32 +82,23 @@ pvl_free(pvl_list l)
    free(L);
 }
 
-/*----------------------------------------------------------------------
-  Function: pvl_new_element(void *d, struct pvl_elem_t *next,struct pvl_elem_t *prior)
- 
-  Purpose:
-  Creates a new list element, assigns a magic number, and assigns 
-  the next and previous pointers. 
-
-  Passing in the next and previous points may seem odd, but it allos the user
-  to set them while keeping the internal data hidden. In nearly all cases, 
-  the user is the pvl library itself. 
-
-  Parameters:
-
-  d	The data item to be stored in the list
-  next  Pointer value to assign to the member "next"
-  prior Pointer value to assign to the member "prior"
-
-  Returns:
-  
-  A pointer to the new element.
-  0 if there is no memory available. 
-
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Creates a new list element, assigns a magic number, and assigns 
+ * the next and previous pointers. 
+ * 
+ * Passing in the next and previous points may seem odd, but it allos the user
+ * to set them while keeping the internal data hidden. In nearly all cases, 
+ * the user is the pvl library itself. 
+ *
+ * @param d	The data item to be stored in the list
+ * @param next  Pointer value to assign to the member "next"
+ * @param prior Pointer value to assign to the member "prior"
+ *
+ * @return A pointer to the new element, 0 if there is no memory available. 
+ */
 
 pvl_elem 
-pvl_new_element(void *d, pvl_elem next,pvl_elem prior)
+pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
 {
     struct pvl_elem_t *E;
 
@@ -132,20 +116,12 @@ pvl_new_element(void *d, pvl_elem next,pvl_elem prior)
     return (pvl_elem)E;
 }
 
-/*----------------------------------------------------------------------
-  Function: pvl_unshift(pvl_list l,void *d)
- 
-  Purpose:
-
-  Add a new element to the from of the list
-
-  Parameters:
-
-  l	The list to add the item to 
-  d	Pointer to the item to add
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Add a new element to the from of the list
+ *
+ * @param L	The list to add the item to 
+ * @param d	Pointer to the item to add
+ */
 
 void 
 pvl_unshift(pvl_list L,void *d)
@@ -171,19 +147,13 @@ pvl_unshift(pvl_list L,void *d)
     L->count++;
 }
 
-/*----------------------------------------------------------------------
-  Function: pvl_shift(pvl_list l)
- 
-  Purpose:
-
-  Remove an element from the front of the list 
-
-  Parameters:
-
-  l	The list to operate on
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Remove an element from the front of the list 
+ *
+ * @param L	The list to operate on
+ *
+ * @return the entry on the front of the list 
+ */
 
 void* 
 pvl_shift(pvl_list L)
@@ -197,20 +167,13 @@ pvl_shift(pvl_list L)
 
 }
 
-/*----------------------------------------------------------------------
-  Function: void  pvl_push(pvl_list l,void *d)
-
-  Purpose:
-
-  Add a new item to the tail of the list
-
-  Paramters:
-
-  l	The list to operate on
-  d	Pointer to the item to add
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Add a new item to the tail of the list
+ *
+ * @param L	The list to operate on
+ * @param d	Pointer to the item to add
+ *
+ */
 
 void 
 pvl_push(pvl_list L,void *d)
@@ -238,19 +201,11 @@ pvl_push(pvl_list L,void *d)
 
 }
 
-/*----------------------------------------------------------------------
-  Function: void*  pvl_pop(pvl_list l)
-
-  Purpose:
-
-  Remove an element from the tail of the list 
-
-  Paramters:
-
-  l	The list to operate on
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Remove an element from the tail of the list 
+ *
+ * @param L	The list to operate on
+ */
 
 void* 
 pvl_pop(pvl_list L)
@@ -265,23 +220,14 @@ pvl_pop(pvl_list L)
 }
 
 
-/*----------------------------------------------------------------------
-  Function: void pvl_insert_ordered(pvl_list l,pvl_comparef f,void *d)
-
-  Purpose:
-  
-  Add a new item to a list that is ordered by a comparison function. 
-  This routine assumes that the list is properly ordered. 
-
-  l	The list to operate on
-  f	Pointer to a comparison function
-  d     Pointer to data to pass to the comparison function
-
-  Returns:
-
-  void
-
-  *----------------------------------------------------------------------*/
+/**
+ * Add a new item to a list that is ordered by a comparison function. 
+ * This routine assumes that the list is properly ordered. 
+ *
+ * @param L	The list to operate on
+ * @param f	Pointer to a comparison function
+ * @param d     Pointer to data to pass to the comparison function
+ */
 
 void 
 pvl_insert_ordered(pvl_list L,pvl_comparef f,void *d)
@@ -331,24 +277,12 @@ pvl_insert_ordered(pvl_list L,pvl_comparef f,void *d)
 
 }
 
-/*----------------------------------------------------------------------
-  Function: void  pvl_insert_after(pvl_list l,pvl_elem p,void *d)
-
-  Purpose:
-
-  Add a new item after the referenced element. 
-
-  Parameters:
-
-  l	The list to operate on 
-  p	The list element to add the item after
-  d	Pointer to the item to add. 
-
-  Returns:
-
-  void
-
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Add a new item after the referenced element. 
+ * @param L	The list to operate on 
+ * @param P	The list element to add the item after
+ * @param d	Pointer to the item to add. 
+ */
 
 void 
 pvl_insert_after(pvl_list L,pvl_elem P,void *d)
@@ -377,21 +311,13 @@ pvl_insert_after(pvl_list L,pvl_elem P,void *d)
     }
 }
 
-/*----------------------------------------------------------------------
-  Function: void pvl_insert_before(pvl_list l,pvl_elem p,void *d)
-
-  Purpose:
-
-  Add an item after a referenced item
-
-  Parameters:
-
-  l	The list to operate on
-  p	The list element to add the item before
-  d	Pointer to the data to be added. 
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Add an item after a referenced item
+ *
+ * @param L	The list to operate on
+ * @param P	The list element to add the item before
+ * @param d	Pointer to the data to be added. 
+ */
 
 void 
 pvl_insert_before(pvl_list L,pvl_elem P,void *d)
@@ -420,23 +346,15 @@ pvl_insert_before(pvl_list L,pvl_elem P,void *d)
     }
 }
 
-/*----------------------------------------------------------------------
-  Function: void pvl_remove(pvl_list l,pvl_elem e)
- 
-  Purpose:
-
-  Remove the referenced item from the list
-
-  This routine will free the element, but not the data item that the
-  element contains. 
-
-  Parameters:
-
-  l	The list to operate on
-  e	The element to remove. 
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Remove the referenced item from the list.
+ *
+ * This routine will free the element, but not the data item that the
+ * element contains. 
+ *
+ * @param L	The list to operate on
+ * @param E	The element to remove. 
+ */
 
 void* 
 pvl_remove(pvl_list L,pvl_elem E)
@@ -489,28 +407,19 @@ pvl_remove(pvl_list L,pvl_elem E)
 
 }
 
-/*----------------------------------------------------------------------
-  Function: pvl_elem pvl_find(pvl_list l,pvl_findf f,void* v)
-
-  Purpose:
-
-  Return a pointer to data that satisfies a function
-
-  This routine will interate through the entire list and call the
-  find function for each item. It will break and return a pointer to the
-  data that causes the find function to return 1.
-
-  Parameters:
-
-  l	The list to operate on
-  f	Pointer to the find function
-  v	Pointer to constant data to pass into the function
-
-  Returns:
-
-  Pointer to the element that the find function found. 
-
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Return a pointer to data that satisfies a function.
+ *
+ * This routine will interate through the entire list and call the
+ * find function for each item. It will break and return a pointer to the
+ * data that causes the find function to return 1.
+ *
+ * @param l	The list to operate on
+ * @param f	Pointer to the find function
+ * @param v	Pointer to constant data to pass into the function
+ * 
+ * @return Pointer to the element that the find function found. 
+ */
 
 pvl_elem
 pvl_find(pvl_list l,pvl_findf f,void* v)
@@ -530,25 +439,17 @@ pvl_find(pvl_list l,pvl_findf f,void* v)
     return 0;
 
 }
-/*----------------------------------------------------------------------
-  Function: void*  pvl_find_next(pvl_list l,pvl_findf f,void* v)
 
-  Purpose:
-
-  Like pvl_find(), but continues the search where the last find() or
-  find_next() left off
-
-  Parameters:
-
-  l	The list to operate on
-  f	Pointer to the find function
-  v	Pointer to constant data to pass into the function
-
-  Returns:
-
-  Pointer to the element that the find function found. 
-
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Like pvl_find(), but continues the search where the last find() or
+ * find_next() left off.
+ *
+ * @param l	The list to operate on
+ * @param f	Pointer to the find function
+ * @param v	Pointer to constant data to pass into the function
+ * 
+ * @return Pointer to the element that the find function found. 
+ */
 
 pvl_elem
 pvl_find_next(pvl_list l,pvl_findf f,void* v)
@@ -570,17 +471,10 @@ pvl_find_next(pvl_list l,pvl_findf f,void* v)
 
 }
 
-/*----------------------------------------------------------------------
-  Function: void pvl_clear(pvl_list l)
-
-  Purpose:
-  
-  Remove the all the elements in the list. The does not free the data items
-  the elements hold. 
-
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Remove the all the elements in the list. The does not free
+ * the data items the elements hold.
+ */
 
 void 
 pvl_clear(pvl_list l)
@@ -600,15 +494,10 @@ pvl_clear(pvl_list l)
     }
 }
 
-/*----------------------------------------------------------------------
-  Function: int pvl_count(pvl_list l)
 
-  Purpose:
-
-  Returns the number of items in the list. 
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Returns the number of items in the list. 
+ */
 
 int 
 pvl_count(pvl_list L)
@@ -617,14 +506,9 @@ pvl_count(pvl_list L)
 }
 
 
-/*----------------------------------------------------------------------
-  Function: pvl_elem  pvl_next(pvl_elem e)
- 
-  Purpose: 
-  Returns a pointer to the given element 
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Returns a pointer to the given element 
+ */
 
 pvl_elem 
 pvl_next(pvl_elem E)
@@ -636,15 +520,10 @@ pvl_next(pvl_elem E)
     return (pvl_elem)E->next;
 }
 
-/*----------------------------------------------------------------------
-  Function: pvl_elem  pvl_prior(pvl_elem e)
 
-  Purpose:
-
-  Returns a pointer to the element previous to the element given. 
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Returns a pointer to the element previous to the element given. 
+ */
 
 pvl_elem 
 pvl_prior(pvl_elem E)
@@ -652,45 +531,25 @@ pvl_prior(pvl_elem E)
     return (pvl_elem)E->prior;
 }
 
-/*----------------------------------------------------------------------
-  Function: pvl_elem  pvl_head(pvl_list l )
- 
-  Purpose:
-  
-  Returns a pointer to the first item in the list. 
 
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Returns a pointer to the first item in the list. 
+ */
+
 pvl_elem 
 pvl_head(pvl_list L )
 {
     return (pvl_elem)L->head;
 }
 
-/*----------------------------------------------------------------------
-  Function: pvl_elem  pvl_tail(pvl_list l)
- 
-  Purpose:
-
-  Returns a pointer to the last item in the list. 
-
-  Returns:
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Returns a pointer to the last item in the list. 
+ */
 pvl_elem 
 pvl_tail(pvl_list L)
 {
     return (pvl_elem)L->tail;
 }
-
-/*----------------------------------------------------------------------
-  Function:
- 
-
-  Purpose:
-
-
-  Returns:
-  *----------------------------------------------------------------------*/
 
 #ifndef PVL_USE_MACROS
 void* 
@@ -704,23 +563,13 @@ pvl_data(pvl_elem E)
 }
 #endif
 
-/*----------------------------------------------------------------------
-  Function: void  pvl_apply(pvl_list l,pvl_applyf f, void *v)
- 
-  Purpose:
-
-  Call a function for every item in the list. 
-
-  Paramters: 
-
-  l	The list to operate on
-  f	Pointer to the function to call
-  v	Data to pass to the function on every iteration
-
-  Returns:
-
-  void
-  *----------------------------------------------------------------------*/
+/**
+ * @brief Call a function for every item in the list. 
+ *
+ * @param l	The list to operate on
+ * @param f	Pointer to the function to call
+ * @param v	Data to pass to the function on every iteration
+ */
 
 void 
 pvl_apply(pvl_list l,pvl_applyf f, void *v)
