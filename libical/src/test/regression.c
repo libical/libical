@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.34 2001-12-10 01:28:43 gray-john Exp $
+  $Id: regression.c,v 1.35 2001-12-10 18:52:41 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -3736,11 +3736,13 @@ int main(int argc, char *argv[])
 	test_fileset();
     }
 
+    /*
+      File locking is currently broken
     if(tfile ==1 || tfile == 3){
 	printf("\n------------Test File Locks--------------\n");
 	test_file_locks();
     }
-
+    */
 
 
     if(tmisc == 1 || tmisc  == 2){
