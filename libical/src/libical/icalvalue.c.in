@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c.in,v 1.8 2001-02-12 07:46:51 ebusboom Exp $
+  $Id: icalvalue.c.in,v 1.9 2001-03-08 06:12:11 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1293,7 +1293,7 @@ icalvalue_set_recur(icalvalue* value, struct icalrecurrencetype v)
     impl->data.v_recur = malloc(sizeof(struct icalrecurrencetype));
 
     if (impl->data.v_recur == 0){
-	icalerror_set_errno(ICAL_ALLOCATION_ERROR);
+	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
 	return;
     } else {
 	memcpy(impl->data.v_recur, &v, sizeof(struct icalrecurrencetype));
