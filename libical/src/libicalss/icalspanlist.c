@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.12 2002-10-30 23:35:08 acampi Exp $
+    $Id: icalspanlist.c,v 1.13 2002-10-30 23:41:47 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -306,7 +306,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
             of the span if it is free */
 	 period.start =  t;
 
-	 if (s->is_busy == 0){
+	 if (s->is_busy == 1){
 	     period.end =  icaltime_from_timet(s->start,0);
 	 } else {
 	     period.end =  icaltime_from_timet(s->end,0);
