@@ -110,7 +110,7 @@ foreach $prop (sort keys %propmap) {
 
   next if !$prop;
 
-  next if $prop eq 'NO';
+  next if $prop eq 'NO' or $prop eq 'ANY';
 
   my ($uc,$lc,$lcvalue,$ucvalue,$type) = fudge_data($prop);
 

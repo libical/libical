@@ -3,7 +3,7 @@
   FILE: icalenum.c
   CREATOR: eric 29 April 1999
   
-  $Id: icalenums.c,v 1.7 2001-02-22 05:03:56 ebusboom Exp $
+  $Id: icalenums.c,v 1.8 2001-02-28 16:19:34 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -100,6 +100,7 @@ icalparameter_kind icalenum_string_to_parameter_kind(const char* string)
     }
 
     for (i=0; parameter_map[i].kind  != ICAL_NO_PARAMETER; i++) {
+
 	if (strcmp(parameter_map[i].name, string) == 0) {
 	    return parameter_map[i].kind;
 	}

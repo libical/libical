@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.13 2001-02-27 03:39:41 ebusboom Exp $
+  $Id: regression.c,v 1.14 2001-02-28 16:19:34 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2919,7 +2919,7 @@ void test_trigger()
     str = icalproperty_as_ical_string(p);
     
     printf("%s\n",str);
-    assert(ttstrcmp("TRIGGER\n :P3DT3H50M45S\n",str) == 0);
+    assert(ttstrcmp("TRIGGER\n ;VALUE=DURATION\n :P3DT3H50M45S\n",str) == 0);
     icalproperty_free(p);
 
     /* TRIGGER, as a DATETIME, VALUE=DATETIME*/
@@ -3014,7 +3014,7 @@ void test_rdate()
     p = icalproperty_new_rdate(dtp);
     str = icalproperty_as_ical_string(p);
     printf("%s\n",str);
-    assert(ttstrcmp("RDATE\n :19970101T120000\n",str) == 0);
+    assert(ttstrcmp("RDATE\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
     icalproperty_free(p); 
 
 
@@ -3122,13 +3122,15 @@ void test_langbind()
 
 
     for(
-	p = icalcomponent_get_first_property(inner,ICAL_ANY_PROPERTY);
+	p = icallangbind_get_first_property(inner,"ANY");
 	p != 0;
-	p = icalcomponent_get_next_property(inner,ICAL_ANY_PROPERTY)
+	p = icallangbind_get_next_property(inner,"ANY")
 	) { 
 
 	printf("%s\n",icallangbind_property_eval_string(p,":"));
     }
+
+
 
     p = icalcomponent_get_first_property(inner,ICAL_ATTENDEE_PROPERTY);
 

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.7 2001-02-22 05:03:56 ebusboom Exp $
+  $Id: icallangbind.c,v 1.8 2001-02-28 16:19:34 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -43,7 +43,7 @@ int icallangbind_access_array(int* array, int index) {
 icalproperty* icallangbind_get_first_property(icalcomponent *c,
                                               const char* prop)
 {
-    icalproperty_kind kind = icalenum_string_to_property_kind(prop);
+    icalproperty_kind kind = icalproperty_string_to_kind(prop);
     icalproperty *p;
 
     if (kind == ICAL_NO_PROPERTY){
