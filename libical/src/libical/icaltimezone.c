@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.33 2002-11-03 23:59:11 acampi Exp $
+ $Id: icaltimezone.c,v 1.34 2002-11-04 00:01:21 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -761,8 +761,9 @@ icaltimezone_convert_time		(struct icaltimetype *tt,
 
 
 
-
-/** Calculates the UTC offset of a given local time in the given
+/** @deprecated This API wasn't updated when we changed icaltimetype to contain its own
+    timezone. Also, this takes a pointer instead of the struct. */
+/* Calculates the UTC offset of a given local time in the given
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in
    daylight-savings time. */
@@ -916,6 +917,8 @@ icaltimezone_get_utc_offset		(icaltimezone	*zone,
 }
 
 
+/** @deprecated This API wasn't updated when we changed icaltimetype to contain its own
+    timezone. Also, this takes a pointer instead of the struct. */
 /** Calculates the UTC offset of a given UTC time in the given
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in
