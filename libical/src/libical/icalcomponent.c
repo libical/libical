@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.51 2003-01-16 01:11:33 acampi Exp $
+  $Id: icalcomponent.c,v 1.52 2003-02-17 15:47:16 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1015,15 +1015,16 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
 
     struct icalrecurrencetype recur = icalproperty_get_rrule(rrule);
     icalrecur_iterator *rrule_itr  = icalrecur_iterator_new(recur, dtstart);
-    struct icaltimetype rrule_time = icalrecur_iterator_next(rrule_itr);
-    /** note that icalrecur_iterator_next always returns dtstart
-	the first time.. **/
+    struct icaltimetype rrule_time;
     
     while (1) {
       rrule_time = icalrecur_iterator_next(rrule_itr);
 
       if (icaltime_is_null_time(rrule_time)) 
 	break;
+
+      if (!icaltime_compare(rrule_time, dtstart))
+	continue;
 
       dur = icaltime_subtract(rrule_time, dtstart);
 
