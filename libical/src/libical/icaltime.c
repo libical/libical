@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.23 2001-12-16 18:26:44 gray-john Exp $
+  $Id: icaltime.c,v 1.24 2001-12-21 16:19:01 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -716,6 +716,7 @@ short icaltime_week_number(struct icaltimetype ictt)
     jt.i_second = 0;
 
 	juldat(&jt);
+	caldat(&jt);
 
 	return (jt.day_of_year - jt.weekday) / 7;
 #endif
