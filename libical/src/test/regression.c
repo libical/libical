@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.61 2002-08-09 14:26:40 lindner Exp $
+  $Id: regression.c,v 1.62 2002-10-30 21:34:21 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1614,7 +1614,7 @@ void do_test_time(char* zone)
     icttutc = icaltime_convert_to_zone(icttla,icaltimezone_get_utc_timezone());
 
     ok("America/Los_Angeles local time is 2000-11-03 10:30:30",
-       (icaltime_compare(icttla,icaltime_from_string("20001103T103030"))==0));
+       (strncmp(ictt_as_string(icttla), "2000-11-03 10:30:30", 19)==0));
 
     ok("Test conversion back to UTC",(icaltime_compare(icttutc, ictt) == 0)); 
 
