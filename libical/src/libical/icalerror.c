@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.13 2002-07-21 14:58:17 lindner Exp $
+  $Id: icalerror.c,v 1.14 2002-08-07 17:43:59 acampi Exp $
   $Locker:  $
     
 
@@ -47,18 +47,18 @@ static void icalerrno_key_alloc(void) {
 }
 
 icalerrorenum *icalerrno_return(void) {
-  icalerrorenum *errno;
+  icalerrorenum *_errno;
 
   pthread_once(&icalerrno_key_once, icalerrno_key_alloc);
   
-  errno = pthread_getspecific(icalerrno_key);
+  _errno = pthread_getspecific(icalerrno_key);
 
-  if (!errno) {
-    errno = malloc(sizeof(icalerrorenum));
-    pthread_setspecific(icalerrno_key, errno);
-    *errno = ICAL_NO_ERROR;
+  if (!_errno) {
+    _errno = malloc(sizeof(icalerrorenum));
+    pthread_setspecific(icalerrno_key, _errno);
+    *_errno = ICAL_NO_ERROR;
   }
-  return errno;
+  return _errno;
 }
 
 #else
