@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.8 2001-02-06 19:43:23 ebusboom Exp $
+  $Id: icaltime.c,v 1.9 2001-02-09 23:57:50 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -74,9 +74,11 @@ icaltime_from_timet(time_t tm, int is_date)
     return tt;
 }
 
-
+/* Structure used by set_tz to hold an old value of TZ, and the new
+   value, which is in memory we will have to free in unset_tz */
 struct set_tz_save {char* orig_tzid; char* new_env_str;};
 
+/* Temporarily change the TZ environmental variable. */
 struct set_tz_save set_tz(const char* tzid)
 {
 
@@ -92,6 +94,7 @@ struct set_tz_save set_tz(const char* tzid)
 	orig_tzid = (char*)strdup(getenv("TZ"));
 
 	if(orig_tzid == 0){
+            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
 	    return savetz;
 	}
     }
@@ -100,14 +103,17 @@ struct set_tz_save set_tz(const char* tzid)
     new_env_str = (char*)malloc(tmp_sz);
 
     if(new_env_str == 0){
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
 	return savetz;
     }
-
+    
+    /* Copy the TZid into a string with the form that putenv expects. */
     strcpy(new_env_str,"TZ=");
     strcpy(new_env_str+3,tzid);
 
     putenv(new_env_str); 
 
+    /* Old value of TZ and the string we will have to free later */
     savetz.orig_tzid = orig_tzid;
     savetz.new_env_str = new_env_str;
 
@@ -116,7 +122,7 @@ struct set_tz_save set_tz(const char* tzid)
 
 void unset_tz(struct set_tz_save savetz)
 {
-    /* restore the original environment */
+    /* restore the original TZ environment */
 
     char* orig_tzid = savetz.orig_tzid;
     char* new_tzstr = getenv("TZ");
@@ -126,7 +132,8 @@ void unset_tz(struct set_tz_save savetz)
 	char* orig_env_str = (char*)malloc(tmp_sz);
 
 	if(orig_env_str == 0){
-
+            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+            return;
 	}
 	
 	strcpy(orig_env_str,"TZ=");
