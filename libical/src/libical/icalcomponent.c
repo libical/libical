@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.50 2002-10-24 13:50:34 acampi Exp $
+  $Id: icalcomponent.c,v 1.51 2003-01-16 01:11:33 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -689,6 +689,7 @@ icalcomponent* icalcomponent_get_first_real_component(icalcomponent *c)
 	   kind == ICAL_VJOURNAL_COMPONENT ||
 	   kind == ICAL_VFREEBUSY_COMPONENT ||
 	   kind == ICAL_VQUERY_COMPONENT ||
+	   kind == ICAL_VREPLY_COMPONENT ||
 	   kind == ICAL_VAGENDA_COMPONENT){
 	    return comp;
 	}
@@ -1254,9 +1255,10 @@ static struct icalcomponent_kind_map component_map[] =
     { ICAL_VSCHEDULE_COMPONENT, "SCHEDULE" },
 
     /* CAP components */
-    { ICAL_VQUERY_COMPONENT, "VQUERY" },  
     { ICAL_VCAR_COMPONENT, "VCAR" },  
     { ICAL_VCOMMAND_COMPONENT, "VCOMMAND" },  
+    { ICAL_VQUERY_COMPONENT, "VQUERY" },  
+    { ICAL_VREPLY_COMPONENT, "VREPLY" },  
 
     /* libical private components */
     { ICAL_XLICINVALID_COMPONENT, "X-LIC-UNKNOWN" },  
@@ -2032,6 +2034,10 @@ icalcomponent* icalcomponent_new_vagenda()
 icalcomponent* icalcomponent_new_vquery()
 {
     return icalcomponent_new(ICAL_VQUERY_COMPONENT);
+}
+icalcomponent* icalcomponent_new_vreply()
+{
+    return icalcomponent_new(ICAL_VREPLY_COMPONENT);
 }
 
 /*
