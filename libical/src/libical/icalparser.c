@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.36 2002-08-08 00:26:31 acampi Exp $
+  $Id: icalparser.c,v 1.37 2002-10-09 20:54:18 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -613,7 +613,6 @@ icalcomponent* icalparser_parse(icalparser *parser,
 icalcomponent* icalparser_add_line(icalparser* parser,
                                        char* line)
 { 
-    char *p; 
     char *str;
     char *end;
     int vcount = 0;
@@ -792,7 +791,6 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     /* Now, add any parameters to the last property */
 
-    p = 0;
     while(1) {
 
 	if (*(end-1) == ':'){
