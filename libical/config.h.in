@@ -35,6 +35,9 @@
 /* Define if you have the <assert.h> header file.  */
 #undef HAVE_ASSERT_H
 
+/* Define if you have the <dlfcn.h> header file.  */
+#undef HAVE_DLFCN_H
+
 /* Define if you have the <sys/types.h> header file.  */
 #undef HAVE_SYS_TYPES_H
 
@@ -47,3 +50,5 @@
 /* Version number of package */
 #undef VERSION
 
+/* Define if you have pthread.h and the pthread library */
+#undef HAVE_PTHREAD
