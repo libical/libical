@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.20 2002-05-29 13:42:55 acampi Exp $
+  $Id: icalfileset.c,v 1.21 2002-05-29 13:52:52 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -65,7 +65,7 @@ int icalfileset_filesize(icalfileset* cluster);
 
 icalerrorenum icalfileset_create_cluster(const char *path);
 
-icalfileset* icalfileset_new_impl()
+icalfileset* icalfileset_new_impl(void)
 {
     struct icalfileset_impl* impl;
   
@@ -102,10 +102,7 @@ icalfileset* icalfileset_new_writer(const char* path)
 icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 {
     struct icalfileset_impl *impl = icalfileset_new_impl(); 
-    struct icaltimetype tt;
     off_t cluster_file_size;
-
-    memset(&tt,0,sizeof(struct icaltimetype));
 
     icalerror_clear_errno();
     icalerror_check_arg_rz( (path!=0), "path");
@@ -244,7 +241,6 @@ char* icalfileset_read_from_file(char *s, size_t size, void *d)
 
 icalerrorenum icalfileset_read_file(icalfileset* cluster,mode_t mode)
 {
-
     icalparser *parser;
   
     struct icalfileset_impl *impl = (struct icalfileset_impl*)cluster;
@@ -274,14 +270,11 @@ icalerrorenum icalfileset_read_file(icalfileset* cluster,mode_t mode)
 int icalfileset_filesize(icalfileset* cluster)
 {
     struct icalfileset_impl *impl = (struct icalfileset_impl*)cluster;
-    int cluster_file_size;
     struct stat sbuf;
 
     if (stat(impl->path,&sbuf) != 0){
-	
 	/* A file by the given name does not exist, or there was
 	   another error */
-	cluster_file_size = 0;
 	if (errno == ENOENT) {
 	    /* It was because the file does not exist */
 	    return 0;

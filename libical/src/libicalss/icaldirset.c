@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.12 2002-05-29 13:42:55 acampi Exp $
+    $Id: icaldirset.c,v 1.13 2002-05-29 13:50:59 acampi Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -94,7 +94,7 @@
 #define S_ISREG(mode)    _S_ISTYPE((mode), _S_IFREG)
 #endif
 
-struct icaldirset_impl* icaldirset_new_impl()
+struct icaldirset_impl* icaldirset_new_impl(void)
 {
     struct icaldirset_impl* impl;
 
@@ -311,6 +311,7 @@ icaldirset* icaldirset_new_reader(const char* dir)
     struct stat sbuf;
 
     if (impl == 0){
+	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
 	return 0;
     }
 
@@ -329,13 +330,6 @@ icaldirset* icaldirset_new_reader(const char* dir)
 
     icaldirset_lock(dir);
 
-    impl = icaldirset_new_impl();
-
-    if (impl ==0){
-	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-	return 0;
-    }
-    
     impl->directory = pvl_newlist();
     impl->directory_iterator = 0;
     impl->dir = (char*)strdup(dir);
@@ -504,7 +498,7 @@ void icaldirset_add_uid(icaldirset* store, icalcomponent* comp)
 
 /* This assumes that the top level component is a VCALENDAR, and there
    is an inner component of type VEVENT, VTODO or VJOURNAL. The inner
-   component must have a DTAMP property */
+   component must have a DTSTAMP property */
 
 icalerrorenum icaldirset_add_component(icaldirset* store, icalcomponent* comp)
 {
@@ -520,8 +514,6 @@ icalerrorenum icaldirset_add_component(icaldirset* store, icalcomponent* comp)
     icalerror_check_arg_rz( (store!=0), "store");
     icalerror_check_arg_rz( (comp!=0), "comp");
 
-    errno = 0;
-    
     icaldirset_add_uid(store,comp);
 
     /* Determine which cluster this object belongs in. This is a HACK */
@@ -893,10 +885,3 @@ icalcomponent* icaldirset_get_next_component(icaldirset* store)
 
     return 0; /* Should never get here */
 }
-
-   
-
-
-
-
-	
