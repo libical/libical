@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.47 2002-10-09 20:13:09 acampi Exp $
+  $Id: icalcomponent.c,v 1.48 2002-10-09 20:29:53 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -366,7 +366,7 @@ icalcomponent_is_valid (icalcomponent* component)
 icalcomponent_kind
 icalcomponent_isa (const icalcomponent* component)
 {
-   icalerror_check_arg_rz( (component!=0), "component");
+   icalerror_check_arg_rx( (component!=0), "component", ICAL_NO_COMPONENT);
 
    if(component != 0)
    {
