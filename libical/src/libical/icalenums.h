@@ -364,6 +364,7 @@ icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
 /*icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);*/
 #define icalenum_property_kind_to_value_kind(x) icalproperty_kind_to_value_kind(x)
 
+icalvalue_kind icalenum_string_to_value_kind(const char* str);
 const char* icalenum_value_kind_to_string(icalvalue_kind kind);
 
 const char* icalenum_parameter_kind_to_string(icalparameter_kind kind);

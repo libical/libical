@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.5 2001-02-27 03:39:41 ebusboom Exp $
+  $Id: icalerror.c,v 1.6 2001-03-08 05:52:34 ebusboom Exp $
   $Locker:  $
     
 
@@ -59,7 +59,7 @@ int icalerror_errors_are_fatal = 1;
 int icalerror_errors_are_fatal = 0;
 #endif
 
-struct icalerror_state { 
+struct icalerror_state {
     icalerrorenum error;
     icalerrorstate state; 
 };
@@ -72,15 +72,82 @@ struct icalerror_state error_state_map[] =
     { ICAL_PARSE_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_INTERNAL_ERROR,ICAL_ERROR_DEFAULT}, 
     { ICAL_FILE_ERROR,ICAL_ERROR_DEFAULT},
-    { ICAL_ALLOCATION_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_USAGE_ERROR,ICAL_ERROR_DEFAULT},
-    { ICAL_MULTIPLEINCLUSION_ERROR,ICAL_ERROR_DEFAULT},
-    { ICAL_TIMEDOUT_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_UNIMPLEMENTED_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_UNKNOWN_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_NO_ERROR,ICAL_ERROR_DEFAULT}
 
 };
+
+struct icalerror_string_map {
+    const char* str;
+    icalerrorenum error;
+    char name[160];
+};
+
+static struct icalerror_string_map string_map[] = 
+{
+    {"BADARG",ICAL_BADARG_ERROR,"BADARG: Bad argument to function"},
+    { "NEWFAILED",ICAL_NEWFAILED_ERROR,"NEWFAILED: Failed to create a new object via a *_new() routine"},
+    {"MALFORMEDDATA",ICAL_MALFORMEDDATA_ERROR,"MALFORMEDDATA: An input string was not correctly formed or a component has missing or extra properties"},
+    { "PARSE",ICAL_PARSE_ERROR,"PARSE: Failed to parse a part of an iCal component"},
+    {"INTERNAL",ICAL_INTERNAL_ERROR,"INTERNAL: Random internal error. This indicates an error in the library code, not an error in use"}, 
+    { "FILE",ICAL_FILE_ERROR,"FILE: An operation on a file failed. Check errno for more detail."},
+    { "USAGE",ICAL_USAGE_ERROR,"USAGE: Failed to propertyl sequence calls to a set of interfaces"},
+    { "UNIMPLEMENTED",ICAL_UNIMPLEMENTED_ERROR,"UNIMPLEMENTED: This feature has not been implemented"},
+    { "NO",ICAL_NO_ERROR,"NO: No error"},
+    {"UNKNOWN",ICAL_UNKNOWN_ERROR,"UNKNOWN: Unknown error type -- icalerror_strerror() was probably given bad input"}
+};
+
+
+icalerrorenum icalerror_error_from_string(const char* str){
+ 
+    icalerrorenum e;
+    int i = 0;
+
+    for( i = 0; string_map[i].error != ICAL_NO_ERROR; i++){
+        if (strcmp(string_map[i].str,str) == 0){
+            e = string_map[i].error;
+        }
+    }
+
+    return e;
+}
+
+icalerrorstate icalerror_supress(const char* error){
+
+    icalerrorenum e = icalerror_error_from_string(error);
+    icalerrorstate es;
+
+     if (e == ICAL_NO_ERROR){
+        return ICAL_ERROR_UNKNOWN;
+    }
+
+
+    es = icalerror_get_error_state(e);
+    icalerror_set_error_state(e,ICAL_ERROR_NONFATAL);
+
+    return es;
+}
+
+char* icalerror_perror()
+{
+    return icalerror_strerror(icalerrno);
+}
+
+void icalerror_restore(const char* error, icalerrorstate es){
+
+
+    icalerrorenum e = icalerror_error_from_string(error);
+
+    if (e == ICAL_NO_ERROR){
+        return ICAL_ERROR_UNKNOWN;
+    }
+
+    icalerror_set_error_state(e,es);
+}
+
+
 
 void icalerror_set_error_state( icalerrorenum error, 
 				icalerrorstate state)
@@ -108,47 +175,6 @@ icalerrorstate icalerror_get_error_state( icalerrorenum error)
 }
 
 
-void icalerror_set_errno(icalerrorenum e) {
-
-    icalerrorstate es;
-
-    icalerrno = e;
-    es =  icalerror_get_error_state(e);
-
-    icalerror_stop_here();
-
-    if( (es == ICAL_ERROR_FATAL) ||
-	(es == ICAL_ERROR_DEFAULT && icalerror_errors_are_fatal == 1)){
-	
-	fprintf(stderr,"libical: icalerrno_set_error: %s\n",icalerror_strerror(e));
-#ifdef NDEBUG
-	icalerror_crash_here();
-#else
-	assert(0);
-#endif 
-    }
-}
-
-
-struct icalerror_string_map {
-	icalerrorenum error;
-	char name[160];
-};
-
-static struct icalerror_string_map string_map[] = 
-{
-    {ICAL_BADARG_ERROR,"Bad argument to function"},
-    {ICAL_NEWFAILED_ERROR,"Failed to create a new object via a *_new() routine"},
-    {ICAL_MALFORMEDDATA_ERROR,"An input string was not correctly formed or a component has missing or extra properties"},
-    {ICAL_PARSE_ERROR,"Failed to parse a part of an iCal component"},
-    {ICAL_INTERNAL_ERROR,"Random internal error. This indicates an error in the library code, not an error in use"}, 
-    {ICAL_FILE_ERROR,"An operation on a file failed. Check errno for more detail."},
-    {ICAL_ALLOCATION_ERROR,"Failed to allocate memory"},
-    {ICAL_USAGE_ERROR,"Failed to propertyl sequence calls to a set of interfaces"},
-    {ICAL_UNIMPLEMENTED_ERROR,"This feature has not been implemented"},
-    {ICAL_NO_ERROR,"No error"},
-    {ICAL_UNKNOWN_ERROR,"Unknown error type -- icalerror_strerror() was probably given bad input"}
-};
 
 
 char* icalerror_strerror(icalerrorenum e) {

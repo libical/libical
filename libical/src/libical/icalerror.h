@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.6 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: icalerror.h,v 1.7 2001-03-08 05:52:34 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -43,6 +43,63 @@ void icalerror_stop_here(void);
 
 void icalerror_crash_here(void);
 
+typedef enum icalerrorenum {
+    
+    ICAL_BADARG_ERROR,
+    ICAL_NEWFAILED_ERROR,
+    ICAL_MALFORMEDDATA_ERROR, 
+    ICAL_PARSE_ERROR,
+    ICAL_INTERNAL_ERROR, /* Like assert --internal consist. prob */
+    ICAL_FILE_ERROR,
+    ICAL_USAGE_ERROR,
+    ICAL_UNIMPLEMENTED_ERROR,
+    ICAL_UNKNOWN_ERROR, /* Used for problems in input to icalerror_strerror()*/
+    ICAL_NO_ERROR
+
+} icalerrorenum;
+
+/* The libical error enumeration, like errno*/
+extern icalerrorenum icalerrno;
+
+/* If true, libicl aborts after a call to icalerror_set_error*/
+extern int icalerror_errors_are_fatal;
+
+/* Warning messages */
+
+#ifdef __GNUC__ca
+#define icalerror_warn(message) {fprintf(stderr,"%s(), %s:%d: %s\n",__FUNCTION__,__FILE__,__LINE__,message);}
+#else /* __GNU_C__ */
+#define icalerror_warn(message) {fprintf(stderr,"%s:%d: %s\n",__FILE__,__LINE__,message);}
+#endif /* __GNU_C__ */
+
+
+void icalerror_clear_errno(void);
+void _icalerror_set_errno(icalerrorenum);
+
+/* Make an individual error fatal or non-fatal. */
+typedef enum icalerrorstate { 
+    ICAL_ERROR_FATAL,     /* Not fata */
+    ICAL_ERROR_NONFATAL,  /* Fatal */
+    ICAL_ERROR_DEFAULT,   /* Use the value of icalerror_errors_are_fatal*/
+    ICAL_ERROR_UNKNOWN    /* Asked state for an unknown error type */
+} icalerrorstate ;
+
+char* icalerror_strerror(icalerrorenum e);
+char* icalerror_perror();
+void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
+icalerrorstate icalerror_get_error_state( icalerrorenum error);
+
+
+#define icalerror_set_errno(x) \
+icalerrno = x; \
+if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || \
+   (icalerror_get_error_state(x)==ICAL_ERROR_DEFAULT && \
+    icalerror_errors_are_fatal == 1 )){ \
+   icalerror_warn(icalerror_strerror(x)); \
+   assert(0); \
+} 
+
+
 #ifdef ICAL_ERRORS_ARE_FATAL
 #undef NDEBUG
 #endif
@@ -69,64 +126,21 @@ void icalerror_crash_here(void);
 #define icalerror_check_arg(test,arg) if(!(test)) { icalerror_set_errno(ICAL_BADARG_ERROR); }
 
 /* Check & return void if check fails*/
-#define icalerror_check_arg_rv(test,arg) if(!(test)) { icalerror_set_errno(ICAL_BADARG_ERROR); return; }
+#define icalerror_check_arg_rv(test,arg) if(!(test)) {icalerror_set_errno(ICAL_BADARG_ERROR); return; }
 
 /* Check & return 0 if check fails*/
-#define icalerror_check_arg_rz(test,arg) if(!(test)) {icalerror_set_errno(ICAL_BADARG_ERROR); return 0;}
+#define icalerror_check_arg_rz(test,arg) if(!(test)) { icalerror_set_errno(ICAL_BADARG_ERROR); return 0;}
 
 /* Check & return an error if check fails*/
-#define icalerror_check_arg_re(test,arg,error) if(!(test)) {icalerror_stop_here(); return error;}
-
-
-/* Warning messages */
-
-#ifdef __GNUC__
-#define icalerror_warn(message) {fprintf(stderr,"%s(), %s:%d: %s\n",__FUNCTION__,__FILE__,__LINE__,message);}
-#else /* __GNU_C__ */
-#define icalerror_warn(message) {fprintf(stderr,"%s:%d: %s\n",__FILE__,__LINE__,message);}
-#endif /* __GNU_C__ */
+#define icalerror_check_arg_re(test,arg,error) if(!(test)) { icalerror_stop_here(); assert(0); return error;}
 
 
 
-typedef enum icalerrorenum {
-    
-    ICAL_BADARG_ERROR,
-    ICAL_NEWFAILED_ERROR,
-    ICAL_MALFORMEDDATA_ERROR, 
-    ICAL_PARSE_ERROR,
-    ICAL_INTERNAL_ERROR, /* Like assert --internal consist. prob */
-    ICAL_FILE_ERROR,
-    ICAL_ALLOCATION_ERROR,
-    ICAL_USAGE_ERROR,
-    ICAL_NO_ERROR,
-    ICAL_MULTIPLEINCLUSION_ERROR,
-    ICAL_TIMEDOUT_ERROR,
-    ICAL_UNIMPLEMENTED_ERROR,
-    ICAL_UNKNOWN_ERROR /* Used for problems in input to icalerror_strerror()*/
+/* String interfaces to set an error to NONFATAL and restore it to its
+   original value */
 
-} icalerrorenum;
-
-/* The libical error enumeration, like errno*/
-extern icalerrorenum icalerrno;
-
-/* If true, libicl aborts after a call to icalerror_set_error*/
-extern int icalerror_errors_are_fatal;
-
-void icalerror_clear_errno(void);
-void icalerror_set_errno(icalerrorenum);
-
-/* Make an individual error fatal or non-fatal. */
-typedef enum icalerrorstate { 
-    ICAL_ERROR_FATAL,     /* Not fata */
-    ICAL_ERROR_NONFATAL,  /* Fatal */
-    ICAL_ERROR_DEFAULT,   /* Use the value of icalerror_errors_are_fatal*/
-    ICAL_ERROR_UNKNOWN    /* Asked state for an unknown error type */
-} icalerrorstate ;
-
-void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
-icalerrorstate icalerror_get_error_state( icalerrorenum error);
-
-char* icalerror_strerror(icalerrorenum e);
+icalerrorstate icalerror_supress(const char* error);
+void icalerror_restore(const char* error, icalerrorstate es);
 
 
 #endif /* !ICALERROR_H */

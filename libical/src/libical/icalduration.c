@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.1 2001-02-09 17:45:38 ebusboom Exp $
+  $Id: icalduration.c,v 1.2 2001-03-08 05:52:34 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -53,7 +53,14 @@ struct icaldurationtype icaldurationtype_from_int(int t)
 {
         struct icaldurationtype dur;
         int used = 0;
- 
+
+        dur = icaldurationtype_null_duration();
+
+        if(t < 0){
+            dur.is_neg = 1;
+            t = -t;
+        }
+
         dur.weeks = (t - used) / (60 * 60 * 24 * 7);
         used += dur.weeks * (60 * 60 * 24 * 7);
         dur.days = (t - used) / (60 * 60 * 24);
@@ -64,8 +71,6 @@ struct icaldurationtype icaldurationtype_from_int(int t)
         used += dur.minutes * (60);
         dur.seconds = (t - used);
  
-	dur.is_neg = t<0? 1 : 0;
-
         return dur;
 }
 

@@ -3,7 +3,7 @@
   FILE: icalperiod.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalperiod.c,v 1.2 2001-02-22 05:03:56 ebusboom Exp $
+  $Id: icalperiod.c,v 1.3 2001-03-08 05:52:34 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -54,7 +54,12 @@ struct icalperiodtype icalperiodtype_from_string (const char* str)
     struct icalperiodtype p, null_p;
     char *s = strdup(str);
     char *start, *end = s;
-    int old_ieaf = icalerror_errors_are_fatal;
+    icalerrorstate es;
+
+    /* Errors are normally generated in the following code, so save
+       the error state for resoration later */
+
+    icalerrorenum e = icalerrno;
 
     p.start = p.end = icaltime_null_time();
     p.duration = icaldurationtype_from_int(0);
@@ -74,10 +79,14 @@ struct icalperiodtype icalperiodtype_from_string (const char* str)
     p.start = icaltime_from_string(start);
 
     if (icaltime_is_null_time(p.start)) goto error;
-	
-    icalerror_errors_are_fatal = 0;
+
+    es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_NONFATAL);
+
     p.end = icaltime_from_string(end);
-    icalerror_errors_are_fatal = old_ieaf;
+
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,es);
+    
 
     if (icaltime_is_null_time(p.end)){
 
@@ -85,6 +94,8 @@ struct icalperiodtype icalperiodtype_from_string (const char* str)
 
 	if(icaldurationtype_as_int(p.duration) == 0) goto error;
     } 
+
+    icalerrno = e;
 
     return p;
 

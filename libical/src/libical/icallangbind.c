@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.8 2001-02-28 16:19:34 ebusboom Exp $
+  $Id: icallangbind.c,v 1.9 2001-03-08 05:52:34 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -144,18 +144,19 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
 
     value = icalproperty_get_value(prop);
 
-
     APPENDS(" 'name' ");
     APPENDS(sep);
     APPENDC('\'');
     APPENDS(icalenum_property_kind_to_string(icalproperty_isa(prop)));
     APPENDC('\'');
 
-    APPENDS(", 'value_type' ");
-    APPENDS(sep);
-    APPENDC('\'');
-    APPENDS(icalenum_value_kind_to_string(icalvalue_isa(value)));
-    APPENDC('\'');
+    if(value){
+        APPENDS(", 'value_type' ");
+        APPENDS(sep);
+        APPENDC('\'');
+        APPENDS(icalenum_value_kind_to_string(icalvalue_isa(value)));
+        APPENDC('\'');
+    }
 
     APPENDS(", 'pid' ");
     APPENDS(sep);
@@ -164,26 +165,22 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
     APPENDS(tmp);
     APPENDC('\'');
 
-    switch (icalvalue_isa(value)){
-	
-    case ICAL_ATTACH_VALUE:
-    case ICAL_BINARY_VALUE: {
-	/* Not implemented */
-	icalerror_set_errno(ICAL_INTERNAL_ERROR);
-	break;
-    }
 
-    case ICAL_NO_VALUE:
-	{
-	    icalerror_set_errno(ICAL_INTERNAL_ERROR);
-	    
-	}
-        
-    default: 
+    if(value){
+        switch (icalvalue_isa(value)){
+	
+        case ICAL_ATTACH_VALUE:
+        case ICAL_BINARY_VALUE: 
+        case ICAL_NO_VALUE: {
+            icalerror_set_errno(ICAL_INTERNAL_ERROR);
+            break;
+        }
+
+        default: 
         {
             const char* str = icalvalue_as_ical_string(value);
             char* copy = (char*) malloc(strlen(str)+1);
-
+            
             const char *i;
             char *j;
 
@@ -191,33 +188,29 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
                 icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                 break; 
             }
-
-
             /* Remove any newlines */
-
+                
             for(j=copy, i = str; *i != 0; j++,i++){
                 if(*i=='\n'){
                     i++;
-                }
-
+                }   
                 *j = *i;
             }
-            
+                
             *j = 0;
-
-
+                
             APPENDS(", 'value'");
             APPENDS(sep);
             APPENDC('\'');
             APPENDS(copy);
             APPENDC('\'');
-
+            
             free(copy);
             break;
 
         }
+        }
     }
-	
 
     /* Add Parameters */
 
@@ -269,3 +262,6 @@ icalproperty* icallangbind_property_new_from_string(const char* str)
 {
 
 }
+
+
+

@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.4 2001-02-27 03:39:41 ebusboom Exp $
+  $Id: icalproperty.c,v 1.5 2001-03-08 05:52:34 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -482,18 +482,55 @@ void icalproperty_set_parameter_from_string(icalproperty* prop,
     kind = icalenum_string_to_parameter_kind(name);
 
     if(kind == ICAL_NO_PROPERTY){
-        /* icalenum_string_to_parameter_kind will set icalerrno */
+        icalerror_set_errno(ICAL_BADARG_ERROR);
         return;
     }
 
     param  = icalparameter_new_from_string(kind, value);
 
     if (param == 0){
-        /* icalparameter_new_from_string will set errno */
+        icalerror_set_errno(ICAL_BADARG_ERROR);
         return;
     }
 
     icalproperty_set_parameter(prop,param);
+
+}
+
+const char* icalproperty_get_parameter_as_string(icalproperty* prop,
+                                                 const char* name)
+{
+    icalparameter_kind kind;
+    icalparameter *param;
+    char* str;
+    char* pv;
+
+    icalerror_check_arg_rz( (prop!=0),"prop");
+    icalerror_check_arg_rz( (name!=0),"name");
+    
+    kind = icalenum_string_to_parameter_kind(name);
+
+    if(kind == ICAL_NO_PROPERTY){
+        /* icalenum_string_to_parameter_kind will set icalerrno */
+        return 0;
+    }
+
+    param = icalproperty_get_first_parameter(prop,kind);
+
+    if (param == 0){
+        return 0;
+    }
+
+    str = icalparameter_as_ical_string(param);
+
+    pv = strchr(str,'=');
+
+    if(pv == 0){
+        icalerror_set_errno(ICAL_INTERNAL_ERROR);
+        return 0;
+    }
+
+    return pv+1;
 
 }
 
@@ -604,6 +641,49 @@ icalproperty_set_value (icalproperty* prop, icalvalue* value)
 }
 
 
+void icalproperty_set_value_from_string(icalproperty* prop,const char* str,
+                                        const char* type)
+{
+    icalvalue *oval,*nval;
+    icalvalue_kind kind = ICAL_NO_VALUE;
+
+    icalerror_check_arg_rv( (prop!=0),"prop"); 
+    icalerror_check_arg_rv( (str!=0),"str");
+    icalerror_check_arg_rv( (type!=0),"type");
+   
+    if(strcmp(type,"NO")==0){
+        /* Get the type from the value the property already has, if it exists */
+        oval = icalproperty_get_value(prop);
+        if(oval != 0){
+            /* Use the existing value kind */
+            kind  = icalvalue_isa(oval);
+        } else {   
+            /* Use the default kind for the property */
+            kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
+        }
+    } else {
+        /* Use the given kind string */
+        kind = icalenum_string_to_value_kind(type);
+    }
+
+    if(kind == ICAL_NO_VALUE){
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return;
+    }
+
+    nval = icalvalue_new_from_string(kind, str);
+
+    if(nval == 0){
+        /* icalvalue_new_from_string sets errno */
+        assert(icalerrno != ICAL_NO_ERROR);
+        return;
+    }
+
+    icalproperty_set_value(prop,nval);
+
+
+}
+
 icalvalue*
 icalproperty_get_value (icalproperty* prop)
 {
@@ -614,34 +694,19 @@ icalproperty_get_value (icalproperty* prop)
     return p->value;
 }
 
-
-void icalproperty_set_value_from_string(icalproperty* prop,const char* str)
+const char* icalproperty_get_value_as_string(icalproperty* prop)
 {
-    icalvalue *oval,*nval;
-    icalvalue_kind kind;
-
-    icalerror_check_arg_rv( (prop!=0),"prop"); 
-    icalerror_check_arg_rv( (str!=0),"str");
-   
-    oval = icalproperty_get_value(prop);
-
-    if(oval == 0){
-        icalerror_set_errno(ICAL_BADARG_ERROR);
-        return;
-    }
-
-    kind = icalvalue_isa(oval);
-
-    nval = icalvalue_new_from_string(kind, str);
-
-    if(nval == 0){
-        /*icalvalue_new_from_string will set icalerrno */
-        return ;
-    }
-
-    icalproperty_set_value(prop,nval);
+    icalvalue *value;
     
+    struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
+    
+    icalerror_check_arg_rz( (prop!=0),"prop");
+
+    value = impl->value; 
+
+    return icalvalue_as_ical_string(value);
 }
+
 
 void icalproperty_set_x_name(icalproperty* prop, char* name)
 {
@@ -657,7 +722,7 @@ void icalproperty_set_x_name(icalproperty* prop, char* name)
     impl->x_name = icalmemory_strdup(name);
 
     if(impl->x_name == 0){
-	icalerror_set_errno(ICAL_ALLOCATION_ERROR);
+	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
     }
 
 }

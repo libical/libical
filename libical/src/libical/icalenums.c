@@ -3,7 +3,7 @@
   FILE: icalenum.c
   CREATOR: eric 29 April 1999
   
-  $Id: icalenums.c,v 1.8 2001-02-28 16:19:34 ebusboom Exp $
+  $Id: icalenums.c,v 1.9 2001-03-08 05:52:34 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -156,6 +156,20 @@ const char* icalenum_value_kind_to_string(icalvalue_kind kind)
     }
 
     return 0;
+
+}
+
+icalvalue_kind icalenum_string_to_value_kind(const char* str)
+{
+    int i;
+
+    for (i=0; value_map[i].kind != ICAL_NO_VALUE; i++) {
+	if (strcmp(value_map[i].name,str) == 0) {
+	    return value_map[i].kind;
+	}
+    }
+
+    return  value_map[i].kind;
 
 }
 
