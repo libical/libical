@@ -1,0 +1,89 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/libical/ical.h)
+AM_INIT_AUTOMAKE(libical,0.21a) 
+AM_CONFIG_HEADER(config.h)
+
+dnl  Initialize maintainer mode
+AM_MAINTAINER_MODE
+
+dnl Checks for programs.
+AC_PROG_YACC
+AC_PROG_CC
+AM_PROG_LEX
+AC_PROG_LN_S
+AC_PROG_INSTALL
+
+dnl Remove this line to enable shared libraries
+AM_DISABLE_SHARED
+
+
+dnl Initialize libtool
+AM_PROG_LIBTOOL
+
+AC_SUBST(AR)
+
+AC_CHECK_PROGS(AR, ar aal, ar)
+AC_CHECK_PROGS(PERL, perl5 perl)  
+
+AC_DEFINE(ICAL_ERRORS_ARE_FATAL,1)
+AC_DEFINE(ICAL_SAFESAVES,1)
+AC_DEFINE(ICAL_UNIX_NEWLINE,1)
+
+dnl Checks for libraries.
+dnl Replace `main' with a function in -lical:
+dnl AC_CHECK_LIB(ical, main)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(time.h sys/types.h assert.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_SIZE_T
+AC_STRUCT_TM
+
+
+AC_CACHE_CHECK(for timezone variable, ac_cv_var_timezone,
+        AC_TRY_COMPILE([
+                #include <time.h>
+        ], [
+                timezone = 1;
+        ], ac_cv_var_timezone=yes, ac_cv_var_timezone=no))
+if test $ac_cv_var_timezone = yes; then
+        AC_DEFINE(HAVE_TIMEZONE)
+else
+        AC_CACHE_CHECK(for tm_gmtoff in struct tm, ac_cv_struct_tm_gmtoff,
+                AC_TRY_COMPILE([
+                        #include <time.h>
+                        ], [
+                        struct tm tm;
+                        tm.tm_gmtoff = 1;
+                        ], ac_cv_struct_tm_gmtoff=yes, ac_cv_struct_tm_gmtoff=no
+))
+        if test $ac_cv_struct_tm_gmtoff = yes; then
+                AC_DEFINE(HAVE_TM_GMTOFF)
+        else
+                AC_ERROR(unable to find a way to determine timezone)
+        fi
+fi                
+
+
+
+dnl Checks for library functions.
+AC_CHECK_FUNCS(strdup)
+
+AC_OUTPUT([
+Makefile
+design-data/Makefile
+doc/Makefile
+examples/Makefile
+scripts/Makefile
+src/Makefile
+src/libical/Makefile
+src/libical/icalversion.h
+src/libicalss/Makefile
+src/libicalvcal/Makefile
+src/test/Makefile
+test-data/Makefile
+])
+

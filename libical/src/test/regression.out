@@ -1,0 +1,431 @@
+
+------------Test strings---------------
+foo\;bar\;bats
+foo\;b\nar\;ba\tts
+
+------------Test recur---------------
+FREQ=DAILY;COUNT=5;BYDAY=MO,TU,WE,TH,FR
+FREQ=YEARLY;UNTIL=12345600T123456;BYSETPOS=-1,2
+FREQ=YEARLY;UNTIL=12345600T123456;INTERVAL=2;BYMINUTE=30;BYHOUR=8,9;BYDAY=SU;BYMONTH=1
+FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR
+FREQ=WEEKLY;INTERVAL=20;BYDAY=TU
+
+------------Test duration---------------
+PT8H30M
+19971015T050000Z/PT8H30M
+19971015T050000Z/19971015T060000Z
+
+------------Test Restriction---------------
+#### 0 ####
+BEGIN:VCALENDAR
+VERSION
+ :2.0
+PRODID
+ :-//RDU Software//NONSGML HandCal//EN
+METHOD
+ :CANCEL
+BEGIN:VTIMEZONE
+TZID
+ :US_Eastern
+BEGIN:DAYLIGHT
+DTSTART
+ :20000303T065738Z
+RDATE
+ :20000303T065738Z/20000303T075738Z
+TZOFFSETFROM
+ :-000004
+TZOFFSETTO
+ :-000005
+TZNAME
+ :EST
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART
+ :20000303T065738Z
+RDATE
+ :20000303T065738Z/20000303T075738Z
+TZOFFSETFROM
+ :-000005
+TZOFFSETTO
+ :-000004
+TZNAME
+ :EST
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP
+ :20000303T065738Z
+UID
+ :guid-1.host1.com
+ORGANIZER
+ ;ROLE=CHAIR
+ :mrbig@host.com
+ATTENDEE
+ ;ROLE=REQ-PARTICIPANT
+ ;RSVP=TRUE
+ ;CUTYPE=GROUP
+ :employee-A@host.com
+DESCRIPTION
+ :Project XYZ Review Meeting
+CATEGORIES
+ :MEETING
+CLASS
+ :PUBLIC
+CREATED
+ :20000303T065738Z
+SUMMARY
+ :XYZ Project Review
+DTSTART
+ ;TZID=US-Eastern
+ :20000303T065738Z
+DTEND
+ ;TZID=US-Eastern
+ :20000303T065738Z
+LOCATION
+ :1CP Conference Room 4350
+X-LIC-ERROR
+ ;X-LIC-ERRORTYPE=INVALID_ITIP
+ :Failed iTIP restrictions for property SEQUENCE. Expected 1 instances 
+ of the property and got 0
+END:VEVENT
+END:VCALENDAR
+
+
+------------Test Compare---------------
+0
+-1
+1
+0
+-1
+1
+BEGIN:VCALENDAR
+BEGIN:VEVENT
+COMMENT
+ ;X-LIC-COMPARETYPE=EQUAL
+ :Comment
+END:VEVENT
+END:VCALENDAR
+1
+
+------------Test Memory---------------
+1: 0x807d938 1) When in the Course of human events,  
+2: 0x807dd40 2) it becomes necessary for one people to dissolve the political bands which have connected them with another, 
+3: 0x807e148 3) and to assume among the powers of the earth, 
+4: 0x807e550 4) the separate and equal station to which the Laws of Nature and of Nature's God entitle them, 
+5: 0x807ec88 5) a decent respect to the opinions of mankind requires that they 
+6: 0x807f090 6) should declare the causes which impel them to the separation. 
+7: 0x807f498 7) We hold these truths to be self-evident, 
+8: 0x807f8a0 8) that all men are created equal, 
+Final: 1) When in the Course of human events, 2) it becomes necessary for one people to dissolve the political bands which have connected them with another, 3) and to assume among the powers of the earth, 4) the separate and equal station to which the Laws of Nature and of Nature's God entitle them, 5) a decent respect to the opinions of mankind requires that they 6) should declare the causes which impel them to the separation. 7) We hold these truths to be self-evident, 8) that all men are created equal, 
+Final buffer size: 806
+Char-by-Char buffer: abcdefghijabcdefghij¹
+
+------------Test Values---------------
+caladdress 1: cap://value/1
+caladdress 2: cap://value/2
+String: cap://value/2
+Clone: cap://value/2
+caladdress 1: 1
+caladdress 2: 2
+String: 2
+Clone: 2
+date 1: 20000303
+date 2: 20000303
+Clone: 20000303
+Invalid type: 0x807d2c8
+
+------------Test Parameters-----------
+Common Name: A Common Name
+As String: CN=A Common Name
+
+------------Test Properties-----------
+Prop parameter: A Common Name 1
+Prop parameter: A Common Name 2
+Prop parameter: A Common Name 3
+Prop parameter: A Common Name 4
+Prop value: Another Comment
+As iCAL string:
+ COMMENT
+ ;CN=A Common Name 1
+ ;CN=A Common Name 2
+ ;CN=A Common Name 3
+ ;CN=A Common Name 4
+ :Another Comment
+
+Clone:
+ COMMENT
+ ;CN=A Common Name 1
+ ;CN=A Common Name 2
+ ;CN=A Common Name 3
+ ;CN=A Common Name 4
+ :Another Comment
+
+Invalid type: 0x807d598
+
+------------Test Components ----------
+Original Component:
+BEGIN:VCALENDAR
+VERSION
+ :2.0
+PRODID
+ :-//RDU Software//NONSGML HandCal//EN
+COMMENT
+ ;CN=A Common Name 1
+ :A Comment
+BEGIN:VEVENT
+VERSION
+ :2.0
+DESCRIPTION
+ :This is an event
+COMMENT
+ ;CN=A Common Name 1
+ ;CN=A Common Name 2
+ ;CN=A Common Name 3
+ ;CN=A Common Name 4
+ :Another Comment
+X-LIC-ERROR
+ ;X-LIC-ERRORTYPE=COMPONENT_PARSE_ERROR
+ :This is only a test
+END:VEVENT
+END:VCALENDAR
+
+
+Child Component:
+BEGIN:VEVENT
+VERSION
+ :2.0
+DESCRIPTION
+ :This is an event
+COMMENT
+ ;CN=A Common Name 1
+ ;CN=A Common Name 2
+ ;CN=A Common Name 3
+ ;CN=A Common Name 4
+ :Another Comment
+X-LIC-ERROR
+ ;X-LIC-ERRORTYPE=COMPONENT_PARSE_ERROR
+ :This is only a test
+END:VEVENT
+
+
+
+------------Create Components --------
+BEGIN:VCALENDAR
+VERSION
+ :2.0
+PRODID
+ :-//RDU Software//NONSGML HandCal//EN
+BEGIN:VTIMEZONE
+TZID
+ :US_Eastern
+BEGIN:DAYLIGHT
+DTSTART
+ :20000303T065738Z
+RDATE
+ :20000303T065738Z/20000303T075738Z
+TZOFFSETFROM
+ :-000004
+TZOFFSETTO
+ :-000005
+TZNAME
+ :EST
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART
+ :20000303T065738Z
+RDATE
+ :20000303T065738Z/20000303T075738Z
+TZOFFSETFROM
+ :-000004
+TZOFFSETTO
+ :-000005
+TZNAME
+ :EST
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP
+ :20000303T065738Z
+UID
+ :guid-1.host1.com
+ORGANIZER
+ ;ROLE=CHAIR
+ :mrbig@host.com
+ATTENDEE
+ ;ROLE=REQ-PARTICIPANT
+ ;RSVP=TRUE
+ ;CUTYPE=GROUP
+ :employee-A@host.com
+DESCRIPTION
+ :Project XYZ Review Meeting
+CATEGORIES
+ :MEETING
+CLASS
+ :PUBLIC
+CREATED
+ :20000303T065738Z
+SUMMARY
+ :XYZ Project Review
+DTSTART
+ ;TZID=US-Eastern
+ :20000303T065738Z
+DTEND
+ ;TZID=US-Eastern
+ :20000303T065738Z
+LOCATION
+ :1CP Conference Room 4350
+END:VEVENT
+END:VCALENDAR
+
+
+------------Test Parser---------------
+BEGIN:VCALENDAR
+PRODID
+ :\"-//RDU Software//NONSGML HandCal//EN\"
+VERSION
+ :2.0
+BEGIN:VTIMEZONE
+TZID
+ :US-Eastern
+BEGIN:STANDARD
+DTSTART
+ :19981025T020000
+RDATE
+ :19981025T020000
+TZOFFSETFROM
+ :-040000
+TZOFFSETTO
+ :-050000
+TZNAME
+ :EST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART
+ :19990404T020000
+RDATE
+ :19990404T020000
+TZOFFSETFROM
+ :-050000
+TZOFFSETTO
+ :-040000
+TZNAME
+ :EDT
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP
+ :19980309T231000Z
+UID
+ :guid-1.host1.com
+ORGANIZER
+ ;ROLE=CHAIR
+ :MAILTO:mrbig@host.com
+ATTENDEE
+ ;RSVP=TRUE
+ ;ROLE=REQ-PARTICIPANT
+ ;CUTYPE=GROUP
+ :MAILTO:employee-A@host.com
+DESCRIPTION
+ :Project XYZ Review Meeting
+CATEGORIES
+ :MEETING
+CLASS
+ :PUBLIC
+CREATED
+ :19980309T130000Z
+SUMMARY
+ :XYZ Project Review
+DTSTART
+ ;TZID=US-Eastern
+ :19980312T083000
+DTEND
+ ;TZID=US-Eastern
+ :19980312T093000
+LOCATION
+ :1CP Conference Room 4350
+END:VEVENT
+BEGIN:X-LIC-UNKNOWN
+X-LIC-ERROR
+ ;X-LIC-ERRORTYPE=COMPONENT_PARSE_ERROR
+ :Parse error in component name: 'BOOGA'
+DTSTAMP
+ :19980309T231000Z
+X-LIC-FOO
+ :Booga
+X-LIC-ERROR
+ ;X-LIC-ERRORTYPE=PROPERTY_PARSE_ERROR
+ :Parse error in property name: 'DTSTOMP'
+UID
+ :guid-1.host1.com
+END:X-LIC-UNKNOWN
+END:VCALENDAR
+
+
+----- Create Components with vaargs ---
+BEGIN:VCALENDAR
+VERSION
+ :2.0
+PRODID
+ :-//RDU Software//NONSGML HandCal//EN
+BEGIN:VTIMEZONE
+TZID
+ :US_Eastern
+BEGIN:DAYLIGHT
+DTSTART
+ :20000303T065738Z
+RDATE
+ :20000303T065738Z/20000303T075738Z
+TZOFFSETFROM
+ :-000004
+TZOFFSETTO
+ :-000005
+TZNAME
+ :EST
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART
+ :20000303T065738Z
+RDATE
+ :20000303T065738Z/20000303T075738Z
+TZOFFSETFROM
+ :-000005
+TZOFFSETTO
+ :-000004
+TZNAME
+ :EST
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP
+ :20000303T065738Z
+UID
+ :guid-1.host1.com
+ORGANIZER
+ ;ROLE=CHAIR
+ :mrbig@host.com
+ATTENDEE
+ ;ROLE=REQ-PARTICIPANT
+ ;RSVP=TRUE
+ ;CUTYPE=GROUP
+ :employee-A@host.com
+DESCRIPTION
+ :Project XYZ Review Meeting
+CATEGORIES
+ :MEETING
+CLASS
+ :PUBLIC
+CREATED
+ :20000303T065738Z
+SUMMARY
+ :XYZ Project Review
+DTSTART
+ ;TZID=US-Eastern
+ :20000303T065738Z
+DTEND
+ ;TZID=US-Eastern
+ :20000303T065738Z
+LOCATION
+ :1CP Conference Room 4350
+END:VEVENT
+END:VCALENDAR
+

@@ -1,0 +1,57 @@
+/* -*- Mode: C -*-
+  ======================================================================
+  FILE: icalderivedproperties.{c,h}
+  CREATOR: eric 09 May 1999
+  
+  $Id: icalproperty.h.in,v 1.1.1.1 2001-01-02 07:33:00 ebusboom Exp $
+    
+ (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ ======================================================================*/
+
+
+#ifndef ICALPROPERTY_H
+#define ICALPROPERTY_H
+
+#include <time.h>
+#include "icalparameter.h"
+#include "icalvalue.h"  
+#include "icalrecur.h"
+
+typedef void icalproperty;
+
+icalproperty* icalproperty_new(icalproperty_kind kind);
+
+icalproperty* icalproperty_new_clone(icalproperty * prop);
+
+icalproperty* icalproperty_new_from_string(char* str);
+
+char* icalproperty_as_ical_string(icalproperty* prop);
+
+void  icalproperty_free(icalproperty* prop);
+
+icalproperty_kind icalproperty_isa(icalproperty* property);
+int icalproperty_isa_property(void* property);
+
+void icalproperty_add_parameter(icalproperty* prop,icalparameter* parameter);
+void icalproperty_set_parameter(icalproperty* prop,icalparameter* parameter);
+
+void icalproperty_remove_parameter(icalproperty* prop,
+				   icalparameter_kind kind);
+
+int icalproperty_count_parameters(icalproperty* prop);
+
+/* Iterate through the parameters */
+icalparameter* icalproperty_get_first_parameter(icalproperty* prop,
+						icalparameter_kind kind);
+icalparameter* icalproperty_get_next_parameter(icalproperty* prop,
+						icalparameter_kind kind);
+/* Access the value of the property */
+void icalproperty_set_value(icalproperty* prop, icalvalue* value);
+icalvalue* icalproperty_get_value(icalproperty* prop);
+
+/* Deal with X properties */
+
+void icalproperty_set_x_name(icalproperty* prop, char* name);
+char* icalproperty_get_x_name(icalproperty* prop);
+
+/* Everything below this line is machine generated. Do not edit. */

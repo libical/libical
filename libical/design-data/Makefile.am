@@ -1,0 +1,10 @@
+EXTRA_DIST =\
+ components.txt \
+ param-c-types.txt \
+ params-in-prop.txt \
+ prop-to-value.txt \
+ property-tokens.txt \
+ restrictions.csv \
+ status.txt \
+ value-c-types.txt \
+ value-mem-semantics.txt \

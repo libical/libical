@@ -1,0 +1,23 @@
+ATTACH			std		struct icalattachtype	# Non-std
+BINARY			std		const char*
+BOOLEAN			std		int
+CAL-ADDRESS		std		const char*
+DATE			std		struct icaltimetype
+DATE-TIME		std		struct icaltimetype
+DATE-TIME-DATE		std		struct icaltimetype	# Non-std
+DATE-TIME-PERIOD	std		struct icalperiodtype	# Non-std
+DURATION		std		struct icaldurationtype
+FLOAT			std		float
+GEO			std		struct icalgeotype	# Non-std
+INTEGER			std		int
+METHOD			std		icalproperty_method	# Non-std
+PERIOD			std		struct icalperiodtype
+RECUR			special		struct icalrecurrencetype
+STRING			std		const char*			# Non-std
+TEXT			std		const char*
+TIME			std		struct icaltimetype
+TRIGGER			std		union icaltriggertype	# Non-std
+URI			std		const char*
+UTC-OFFSET		std		int
+QUERY			std		const char*
+STATUS			std		icalproperty_status	#Non-std
