@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.36 2004-09-03 07:46:10 acampi Exp $
+  $Id: icalproperty.c,v 1.37 2004-09-07 10:31:01 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -343,6 +343,12 @@ fold_property_line (char *text)
     int len, chars_left, first_line;
     char ch;
 
+#ifdef ICAL_UNIX_NEWLINE
+    char newline[] = "\n";
+#else
+    char newline[] = "\r\n";
+#endif
+
     /* Start with a buffer twice the size of our property line, so we almost
        certainly won't overflow it. */
     len = strlen (text);
@@ -364,7 +370,8 @@ fold_property_line (char *text)
 	/* If this isn't the first line, we need to output a newline and space
 	   first. */
 	if (!first_line) {
-	    icalmemory_append_string (&buf, &buf_ptr, &buf_size, "\n ");
+	    icalmemory_append_string (&buf, &buf_ptr, &buf_size, newline);
+	    icalmemory_append_string (&buf, &buf_ptr, &buf_size, " ");
 	}
 	first_line = 0;
 
