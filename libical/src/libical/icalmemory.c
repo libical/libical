@@ -3,7 +3,7 @@
   FILE: icalmemory.c
   CREATOR: eric 30 June 1999
   
-  $Id: icalmemory.c,v 1.3 2002-05-10 17:12:50 acampi Exp $
+  $Id: icalmemory.c,v 1.4 2002-05-20 17:23:49 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -63,7 +63,6 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
-#include <pthread.h>
 
 #define BUFFER_RING_SIZE 2500
 #define MIN_BUFFER_SIZE 200
@@ -82,6 +81,8 @@ void icalmemory_free_ring_byval(buffer_ring *br);
 static buffer_ring* global_buffer_ring = 0;
 
 #ifdef USE_PTHREAD
+#include <pthread.h>
+
 static pthread_key_t  ring_key;
 static pthread_once_t ring_key_once = PTHREAD_ONCE_INIT;
 

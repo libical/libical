@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.28 2002-05-10 17:03:05 acampi Exp $
+  $Id: icaltime.c,v 1.29 2002-05-20 17:23:49 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -151,7 +151,7 @@ icaltime_from_timet(time_t tm, int is_date)
     struct icaltimetype tt = icaltime_null_time();
     struct tm t;
 
-    t = *(gmtime(&tm));
+    gmtime_r(&tm, &t);
      
     if(is_date == 0){ 
 	tt.second = t.tm_sec;
@@ -212,7 +212,7 @@ icaltime_from_timet_with_zone(const time_t tm, const int is_date,
     icaltimezone *utc_zone;
 
     /* Convert the time_t to a struct tm. We can trust gmtime for this. */
-    t = *(gmtime(&tm));
+    gmtime_r(&tm, &t);
      
     tt.year   = t.tm_year + 1900;
     tt.month  = t.tm_mon + 1;
@@ -665,7 +665,7 @@ short icaltime_week_number(const struct icaltimetype ictt)
 #endif
 }
 
-/* The first array is for non-leap years, the seoncd for leap years*/
+/* The first array is for non-leap years, the second for leap years*/
 static const short days_in_year[2][13] = 
 { /* jan feb mar apr may  jun  jul  aug  sep  oct  nov  dec */
   {  0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 }, 

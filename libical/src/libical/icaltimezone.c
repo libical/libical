@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.c,v 1.8 2002-04-18 15:33:50 gray-john Exp $
+ $Id: icaltimezone.c,v 1.9 2002-05-20 17:23:49 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -287,7 +287,6 @@ icaltimezone_get_location_from_vtimezone (icalcomponent *component)
     icalproperty *prop;
     const char *location;
     const char *name;
-    int found_location = 0;
 
     prop = icalcomponent_get_first_property (component,
 					     ICAL_LOCATION_PROPERTY);
