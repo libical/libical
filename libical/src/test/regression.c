@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.60 2002-08-08 15:01:26 acampi Exp $
+  $Id: regression.c,v 1.61 2002-08-09 14:26:40 lindner Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -375,6 +375,7 @@ void test_utf8()
 
     is("icalproperty_as_ical_string()",
        icalproperty_as_ical_string(prop), test_ical_str_good);
+    icalproperty_free(prop);
 }
 
 
@@ -1169,13 +1170,14 @@ void test_duration()
     /* Test conversion of bad input */
 
     d = icaldurationtype_from_int(1314000);
-    if (VERBOSE) printf("%s %d\n",icaldurationtype_as_ical_string(d),d);
+    if (VERBOSE) printf("%s %d\n",icaldurationtype_as_ical_string(d),
+			icaldurationtype_as_int(d));
     is("1314000", icaldurationtype_as_ical_string(d), "P15DT5H");
 
     d = icaldurationtype_from_string("P2W1DT5H");
-    if (VERBOSE) printf("%s %d\n",icaldurationtype_as_ical_string(d),d);
+    if (VERBOSE) printf("%s %d\n",icaldurationtype_as_ical_string(d),
+			icaldurationtype_as_int(d));
     int_is("P15DT5H", icaldurationtype_as_int(d), 0);
-
 
     d = icaldurationtype_from_string("P-2DT8H30M");
     if (VERBOSE) printf("%s\n",icaldurationtype_as_ical_string(d));
@@ -1500,10 +1502,14 @@ void do_test_time(char* zone)
     icttnorm = ictt;
     icttnorm.second -= 60 * 60 * 24 * 5;
     icttnorm = icaltime_normalize(icttnorm);
-    printf("-5d in sec  : %s\n", ictt_as_string(icttnorm));
+
+    if (VERBOSE) 
+      printf("-5d in sec  : %s\n", ictt_as_string(icttnorm));
     icttnorm.day += 60;
     icttnorm = icaltime_normalize(icttnorm);
-    printf("+60 d       : %s\n", ictt_as_string(icttnorm));
+
+    if (VERBOSE) 
+      printf("+60 d       : %s\n", ictt_as_string(icttnorm));
 
     /** add test case here.. **/
 
@@ -1511,19 +1517,26 @@ void do_test_time(char* zone)
     printf("\n As time_t \n");
 
     tt2 = icaltime_as_timet(ictt);
-    printf("20001103T183030Z (timet): %s\n",ical_timet_string(tt2));
-    printf("20001103T183030Z        : %s\n",ictt_as_string(ictt));
+
+    if (VERBOSE) {
+      printf("20001103T183030Z (timet): %s\n",ical_timet_string(tt2));
+      printf("20001103T183030Z        : %s\n",ictt_as_string(ictt));
+    }
 
     /** this test is bogus **/
     ok("test normalization", (tt2 == tt));
 
     icttlocal = icaltime_convert_to_zone(ictt, azone);
     tt2 = icaltime_as_timet(icttlocal);
-    printf("20001103T183030  (timet): %s\n",ical_timet_string(tt2));
-    printf("20001103T183030         : %s\n",ictt_as_string(icttlocal));
+    if (VERBOSE) {
+      printf("20001103T183030  (timet): %s\n",ical_timet_string(tt2));
+      printf("20001103T183030         : %s\n",ictt_as_string(icttlocal));
+    }
 
     offset_tz = -icaltimezone_get_utc_offset_of_utc_time(azone, &ictt, 0); /* FIXME */
-    printf("offset_tz               : %d\n",offset_tz);
+    if (VERBOSE)
+      printf("offset_tz               : %d\n",offset_tz);
+
     ok("test utc offset", (tt-tt2 == offset_tz));
 
     /* FIXME with the new API, it's not very useful */
@@ -1531,7 +1544,9 @@ void do_test_time(char* zone)
     icaltimezone_convert_time(&icttlocal,
 	icaltimezone_get_utc_timezone(),
 	icaltimezone_get_builtin_timezone(zone));
-    printf("As local    : %s\n", ictt_as_string(icttlocal));
+
+    if (VERBOSE)
+      printf("As local    : %s\n", ictt_as_string(icttlocal));
 
     if (VERBOSE) printf("\n Convert to and from lib c \n");
 
@@ -1540,9 +1555,9 @@ void do_test_time(char* zone)
     v = icalvalue_new_datetime(ictt);
 
     if (VERBOSE) 
-    printf("System time from libical: %s\n",icalvalue_as_ical_string(v));
+      printf("System time from libical: %s\n",icalvalue_as_ical_string(v));
 
-	icalvalue_free(v);
+    icalvalue_free(v);
 
     tt2 = icaltime_as_timet(ictt);
 
@@ -1860,8 +1875,6 @@ icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp);
 
 void test_overlaps()
 {
-
-
     icalcomponent *cset,*c;
     icalset *set;
     time_t tm1 = 973378800; /*Sat Nov  4 23:00:00 UTC 2000,
@@ -1885,6 +1898,10 @@ void test_overlaps()
 
     if (VERBOSE && cset) printf("%s\n",icalcomponent_as_ical_string(cset));
 
+    if (cset) icalcomponent_free(cset);
+    if (c)    icalcomponent_free(c);
+
+
     c = icalcomponent_vanew(
 	ICAL_VEVENT_COMPONENT,
 	icalproperty_vanew_dtstart(icaltime_from_timet(tm1-hh,0),0),
@@ -1897,6 +1914,9 @@ void test_overlaps()
     ok("TODO find overlaps 1", cset != NULL);
     if (VERBOSE && cset) printf("%s\n",icalcomponent_as_ical_string(cset));
 
+    if (cset) icalcomponent_free(cset);
+    if (c)    icalcomponent_free(c);
+
     c = icalcomponent_vanew(
 	ICAL_VEVENT_COMPONENT,
 	icalproperty_vanew_dtstart(icaltime_from_timet(tm1+5*hh,0),0),
@@ -1908,7 +1928,9 @@ void test_overlaps()
     ok("TODO find overlaps 1", cset != NULL);
     if (VERBOSE && cset) printf("%s\n",icalcomponent_as_ical_string(cset));
 
-    icalset_free(set);
+    if (set)  icalset_free(set);
+    if (cset) icalcomponent_free(cset);
+    if (c)    icalcomponent_free(c);
 }
 
 
@@ -2026,6 +2048,7 @@ void test_fblist()
 
     if (sl) icalspanlist_free(sl);
     if (new_sl) icalspanlist_free(new_sl);
+    if (comp) icalcomponent_free(comp);
 
     icalset_free(set);
 }
@@ -2731,9 +2754,6 @@ void test_gauge_compare() {
     int_is("compare",icalgauge_compare(g,c), 1);
 
     icalgauge_free(g);
-
-    g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE COMMENT = 'foo'", 0);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo'";
     g = icalgauge_new_from_sql(str, 0);
@@ -3516,7 +3536,7 @@ void test_vcal(void)
     printf("%s\n",icalcomponent_as_ical_string(comp));
 
   if (comp) icalcomponent_free(comp);
-    
+  if (vcal) deleteVObject(vcal);
 }
 
 int main(int argc, char *argv[])

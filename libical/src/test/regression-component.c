@@ -28,6 +28,8 @@ void create_simple_component(void)
 
     if (VERBOSE && calendar)
       printf("%s\n",icalcomponent_as_ical_string(calendar));
+
+    icalcomponent_free(calendar);
 }
 
 
