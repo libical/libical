@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.41 2002-10-30 21:22:04 acampi Exp $
+  $Id: icalrecur.c,v 1.42 2002-10-30 23:08:17 acampi Exp $
   $Locker:  $
     
 
@@ -2142,19 +2142,19 @@ static int check_contract_restriction(icalrecur_iterator* impl,
 static int check_contracting_rules(icalrecur_iterator* impl)
 {
 
-    int day_of_week=0;
-    int week_no=0;
-    int year_day=0;
+    short day_of_week = icaltime_day_of_week(impl->last);
+    short week_no = icaltime_week_number(impl->last);
+    short year_day = icaltime_day_of_year(impl->last);
 
     if (
 	check_contract_restriction(impl,BY_SECOND, (short)impl->last.second) &&
 	check_contract_restriction(impl,BY_MINUTE, (short)impl->last.minute) &&
 	check_contract_restriction(impl,BY_HOUR, (short)impl->last.hour) &&
-	check_contract_restriction(impl,BY_DAY, (short)day_of_week) &&
-	check_contract_restriction(impl,BY_WEEK_NO, (short)week_no) &&
+	check_contract_restriction(impl,BY_DAY, day_of_week) &&
+	check_contract_restriction(impl,BY_WEEK_NO, week_no) &&
 	check_contract_restriction(impl,BY_MONTH_DAY, (short)impl->last.day) &&
 	check_contract_restriction(impl,BY_MONTH, (short)impl->last.month) &&
-	check_contract_restriction(impl,BY_YEAR_DAY, (short)year_day) )
+	check_contract_restriction(impl,BY_YEAR_DAY, year_day) )
     {
 
 	return 1;
