@@ -128,7 +128,7 @@ src/test
  
 \layout Section
 
-Building the Library
+Building nas Installing the Library
 \layout Standard
 
 Libical uses autoconf to generate makefiles.
@@ -142,6 +142,53 @@ Libical uses autoconf to generate makefiles.
 
 For a more complete guide to building the library, see the README file in
  the distribution.
+ 
+\layout Standard
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+make install
+\begin_inset Quotes erd
+\end_inset 
+
+ will install the libraries and header files for three modules: libical,
+ libicalss.
+ and libicalvcal.
+ If you build shared objects, then these files will be installed: 
+\layout Itemize
+
+ical.h
+\layout Itemize
+
+libical.a
+\layout Itemize
+
+libical.so
+\layout Itemize
+
+icalss.h
+\layout Itemize
+
+libicalss.a
+\layout Itemize
+
+libicalss.so
+\layout Itemize
+
+icalvcal.h
+\layout Itemize
+
+libicalvcal.a
+\layout Itemize
+
+libicalvcal.so
+\layout Standard
+
+The header files ical.h and icalss.h are combined header files, generated
+ by concatenating together all of the header files in src/libical and src/libica
+lss respectively.
  
 \layout Section
 
@@ -277,21 +324,49 @@ END:VCALENDAR
 Note that components can be nested; this example has both a VCALENDAR and
  a VEVENT component, one nested inside the other.
  
+\layout Standard
+
+The main goal of Libical is to offer a structured, type-safe to create,
+ access and manipulate components and their properties, values and parameters.
+ 
 \layout Subsection
 
 Core iCal classes
 \layout Standard
 
 Libical is an object-based, data-oriented library.
+ There are no real-objects, but the way the routines are named and organized
+ results in the same sort of encapsulations and abstraction that are major
+ features of Object-Orieted languages.
  Nearly all of the routines in the library are associated with an opaque
  data types and perform some operation on that data type.
- Although the library does not actually have classes, we will use those
- terms since the behavior of these associations of data and routines is
- very similar to a class.
+ For instnace, a Property is declared as:
+\layout LyX-Code
+
+icalproperty *prop;
+\layout Standard
+
+Icalproperty is typedef'd to void, so the only way to manipulate it is through
+ the accessor routines, all of which have a form similar to:
+\layout LyX-Code
+
+char* icalproperty_as_ical_string(icalproperty* prop);
+\layout Standard
+
+That is, the name of the 'class' is the first word in the routine name,
+ and the first parameter is a pointer to the 'object.'
+\layout Standard
+
+Although the library does not actually have classes, we will use those terms
+ since the behavior of these associations of data and routines is very similar
+ to a class.
  
 \layout Subsubsection
 
 Properties
+\layout LyX-Code
+
+icalproperty *prop;
 \layout Standard
 
 Properties are represented with the icalproperty class and its many 
@@ -318,6 +393,9 @@ derived
 \layout Subsubsection
 
 Components 
+\layout LyX-Code
+
+icalcomponent *comp;
 \layout Standard
 
 In libical, components are represented with the icalcomponent class.
@@ -325,6 +403,9 @@ In libical, components are represented with the icalcomponent class.
 \layout Subsubsection
 
 Values 
+\layout LyX-Code
+
+icalvalue *value;
 \layout Standard
 
 Values are represented in a similar way to properties; a base class and
@@ -339,10 +420,15 @@ derived
  classes.
  A value is essentially a abstract handle on a single fundamental type,
  a structure or a union.
+ You probably will never use a value directly, since for most operations
+ you can get to its data through the property that holds it.
  
 \layout Subsubsection
 
 Parameters 
+\layout LyX-Code
+
+icalparameter *param;
 \layout Standard
 
 Parameters are represetned in a similar way to properties, except that they
@@ -360,7 +446,7 @@ In addition to the core iCal classes, libical has many other types, structures,
 Enumerations and types
 \layout Standard
 
-Libical is strongly typed, soo every component, property, parameter, and
+Libical is strongly typed, so every component, property, parameter, and
  value type has an enumeration, and some have an associated structure or
  union.
  
@@ -513,11 +599,7 @@ It is natural to have interfaces that would return the value of a property,
  So, in libical, properties that can have multiple types are given a single
  type that is the union of their RFC2445 types.
  For instance, in libical, the value of the TRIGGER property resolves to
- 
-\noun on 
-struct icaltriggertype
-\noun default 
-.
+ struct icaltriggertype.
  This type is a union of a DURATION and a DATE-TIME.
  
 \layout Subsection
@@ -562,10 +644,20 @@ Using libical
 Creating Components 
 \layout Standard
 
-There are three ways to create components in Libical: creating individual
- objects and assembling them, building entire objects in massive vaargs
- calls, and parsing a text file containing iCalendar data.
- 
+There are three ways to create components in Libical: 
+\layout Itemize
+
+Create individual components, properties and parameters and assemble them
+ into structures
+\layout Itemize
+
+Build complete components with nested vaargs calls
+\layout Itemize
+
+Parse bits of text
+\layout Itemize
+
+Parse entire files
 \layout Subsubsection
 
 Constructor Interfaces 
@@ -587,19 +679,25 @@ icalparameter *param;
 struct icaltimetype atime;
 \layout LyX-Code
 
+\layout LyX-Code
+
 event = icalcomponent_new(ICAL_VEVENT_COMPONENT);
 \layout LyX-Code
 
-prop = icalproperty_new_dtstamp(atime) ;
+prop = icalproperty_new_dtstamp(atime); 
 \layout LyX-Code
 
 icalcomponent_add_property(event, prop);
+\layout LyX-Code
+
 \layout LyX-Code
 
 prop = icalproperty_new_uid(''guid-1.host1.com'') );
 \layout LyX-Code
 
 icalcomponent_add_property(event,prop);
+\layout LyX-Code
+
 \layout LyX-Code
 
 prop=icalproperty_new_organizer(''mrbig@host.com''); 
@@ -609,6 +707,8 @@ param = icalparameter_new_role(ICAL_ROLE_CHAIR)
 \layout LyX-Code
 
 icalproperty_add_parameter(prop, param);
+\layout LyX-Code
+
 \layout LyX-Code
 
 icalcomponent_add_property(event,prop);
@@ -769,7 +869,28 @@ new
  
 \layout Subsubsection
 
-Parsing Text Files 
+Parsing Text
+\layout Standard
+
+Several routines are available for generating objects from text.
+ For properties, use:
+\layout LyX-Code
+
+icalproperty* p;
+\layout LyX-Code
+
+p = icalproperty_new_from_string("DTSTART:19970101T120000Z
+\backslash 
+n");
+\layout Standard
+
+For parameters, use:
+\layout LyX-Code
+
+icalparameter *param
+\layout LyX-Code
+
+param = icalparameter_new_from_string("PARTSTAT=ACCEPTED");
 \layout Standard
 
 The final way to create components will probably be the most common; you
@@ -777,14 +898,15 @@ The final way to create components will probably be the most common; you
  If you have the string in memory, use
 \layout LyX-Code
 
-icalcomponent* icalparser_parse_string(char* str);
+icalcomponent* icalcomponent_new_from_string(char* str);
 \layout Standard
 
-If the string contains only one component, the parser will return the component
+If the string contains only one component, the routine will return the component
  in libical form.
  If the string contains multiple components, the multiple components will
  be returned as the children of an ICAL_XROOT_COMPONENT component.
- 
+ This routine is identical to ( and actually uses ) icalparser_parse_string(char
+* str).
 \layout Standard
 
 Parsing a whole string may seem wasteful if you want to pull a large component
@@ -932,7 +1054,7 @@ Accessing Components
 
 Given a reference to a component, you probably will want to access the propertie
 s, parameters and values inside.
- Libical interfaces let you find sub-component, add and remove sub-components,
+ Libical interfaces let you find sub-components, add and remove sub-components,
  and do the same three operations on properties.
  
 \layout Subsubsection
@@ -1497,7 +1619,6 @@ struct icaltimetype icaltime_from_string(const char* str);
 struct icaltimetype icaltime_from_timet(time_t v, int is_date);
 \layout LyX-Code
 
-struct icaltimetype icaltime_from_int(int v, int is_date, int is_utc);
 \layout Standard
 
 Icaltime_from_string takes any RFC2445 compliant time string: 
@@ -1512,12 +1633,6 @@ Icaltime_from_timet takes a timet value, representing seconds past the POSIX
  minuts and seconds ) is always 00:00:00.
  Dates act differently in sorting an comparision, and they have a different
  string representation in RFC2445.
- 
-\layout Standard
-
-The icaltime_from_int is like icaltime_from_timet, but with an arbitrary
- epoch.
- This routine was a mistake and is deprecated.
  
 \layout Subsubsection
 
@@ -2460,49 +2575,4 @@ HACK.
 \end_inset 
 
 
-\layout Section
-
-Library Reference
-\layout Subsection
-
-Manipulating struct icaltimetype
-\layout Subsubsection
-
-Struct icaltimetype
-\layout LyX-Code
-
-struct icaltimetype
-\layout LyX-Code
-
-{
-\layout LyX-Code
-
-       int year;
-\layout LyX-Code
-
-        int month;
-\layout LyX-Code
-
-        int day;
-\layout LyX-Code
-
-        int hour;
-\layout LyX-Code
-
-        int minute;
-\layout LyX-Code
-
-        int second;
-\layout LyX-Code
-
-         int is_utc; 
-\layout LyX-Code
-
-        int is_date;
-\layout LyX-Code
-
-        const char* zone;
-\layout LyX-Code
-
-};
 \the_end

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.py,v 1.15 2001-03-05 18:30:40 ebusboom Exp $
+#  $Id: Libical.py,v 1.16 2001-04-01 20:08:19 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -34,6 +34,6 @@ from Component import Component, NewComponent, Event, Todo, Journal
 from Property import Property, Time, Duration, Period, Attendee, Organizer, \
      Recurrence_Id, Attach, RecurrenceSet
 
-from DerivedProperties import *
+from DerivedProperties import RDate, Trigger
 
 from Store import Store, FileStore

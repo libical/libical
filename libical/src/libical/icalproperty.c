@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.8 2001-03-26 19:17:28 ebusboom Exp $
+  $Id: icalproperty.c,v 1.9 2001-04-01 20:08:19 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -70,11 +70,13 @@ struct icalproperty_impl
 	icalcomponent *parent;
 };
 
-void icalproperty_add_parameters(struct icalproperty_impl *impl,va_list args)
+void icalproperty_add_parameters(struct icalproperty_impl *prop,va_list args)
 {
 
     void* vp;
-    
+
+    struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
+  
     while((vp = va_arg(args, void*)) != 0) {
 
 	if (icalvalue_isa_value(vp) != 0 ){

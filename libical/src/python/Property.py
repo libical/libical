@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.4 2001-03-27 04:12:40 ebusboom Exp $
+#  $Id: Property.py,v 1.5 2001-04-01 20:08:19 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -526,7 +526,7 @@ class Period(Property):
             
             if isinstance(t,Time):
                 t = v
-            elif isinstance(t,StringType) or isinstnace(t,IntType):
+            elif isinstance(t,StringType) or isinstance(t,IntType):
                 t = Time(v)
             else:
                 raise TypeError

@@ -4,7 +4,7 @@
  CREATOR: eric 30 June 1999
 
 
- $Id: icalmemory.h,v 1.1.1.1 2001-01-02 07:32:59 ebusboom Exp $
+ $Id: icalmemory.h,v 1.2 2001-04-01 20:08:19 ebusboom Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -70,7 +70,8 @@ void icalmemory_append_string(char** buf, char** pos, size_t* buf_size,
 void icalmemory_append_char(char** buf, char** pos, size_t* buf_size, 
 			      char ch);
 
-/* A wrapper around strdup */
+/* A wrapper around strdup. Partly to trap calls to strdup, partly
+   because in -ansi, gcc on Red Hat claims that strudup is undeclared */
 char* icalmemory_strdup(const char *s);
 
 #endif /* !ICALMEMORY_H */

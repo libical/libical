@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.2 2001-01-23 07:03:17 ebusboom Exp $
+    $Id: icalclassify.c,v 1.3 2001-04-01 20:08:19 ebusboom Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -117,7 +117,7 @@ icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp)
 
 
 
-icalparameter_partstat icalclassify_find_attendee(icalcomponent *c, 
+icalproperty* icalclassify_find_attendee(icalcomponent *c, 
 						  const char* attendee)
 {
     icalproperty *p;
@@ -133,22 +133,17 @@ icalparameter_partstat icalclassify_find_attendee(icalcomponent *c,
 	    = icalclassify_lowercase(icalproperty_get_attendee(p));
 	char* this_upn = strchr(this_attendee,':');
 
+        if(this_upn == 0){
+            continue;
+        } 
+
 	if(strcmp(this_upn,upn)==0){
-
-	    icalparameter *param = icalproperty_get_first_parameter(p,
-					    ICAL_PARTSTAT_PARAMETER);
-	    if (param != 0){
-		free(lattendee);
-		free((void*)this_attendee);
-		return icalparameter_get_partstat(param);
-	    }
-
+            return p;
 	}
 
     }
 
-    free(lattendee);
-    return ICAL_PARTSTAT_NONE;
+    return 0;
 
 }
 
@@ -453,12 +448,12 @@ int icalclassify_reply_accept(
     struct icalclassify_parts *match, 
     const char* user)
 {
-    icalparameter_partstat partstat;
+    icalproperty* attendee;
     icalclassify_pre;
 
-    partstat = icalclassify_find_attendee(match->c,comp->reply_attendee);
+    attendee = icalclassify_find_attendee(match->c,comp->reply_attendee);
 
-    if(partstat != ICAL_PARTSTAT_NONE &&
+    if(attendee != 0&&
        comp->reply_partstat == ICAL_PARTSTAT_ACCEPTED){
 	rtrn = 1;
     }
@@ -470,13 +465,13 @@ int icalclassify_reply_decline(
     struct icalclassify_parts *match, 
     const char* user)
 {
-    icalparameter_partstat partstat;
+    icalproperty* attendee;
     icalclassify_pre;
 
+    attendee = icalclassify_find_attendee(match->c,comp->reply_attendee);
 
-    partstat = icalclassify_find_attendee(match->c,comp->reply_attendee);
 
-    if(partstat != ICAL_PARTSTAT_NONE &&
+    if( attendee != 0 &&
        comp->reply_partstat == ICAL_PARTSTAT_DECLINED){
 	rtrn = 1;
     }
@@ -487,13 +482,12 @@ int icalclassify_reply_crasher_accept(
     struct icalclassify_parts *match, 
     const char* user)
 {
-    icalparameter_partstat partstat;
+    icalproperty* attendee;
     icalclassify_pre;
 
+    attendee= icalclassify_find_attendee(match->c,comp->reply_attendee);
 
-    partstat = icalclassify_find_attendee(match->c,comp->reply_attendee);
-
-    if(partstat == ICAL_PARTSTAT_NONE &&
+    if(attendee == 0 &&
        comp->reply_partstat == ICAL_PARTSTAT_ACCEPTED){
 	rtrn = 1;
     }
@@ -505,12 +499,13 @@ int icalclassify_reply_crasher_decline(
     const char* user)
 {
     icalparameter_partstat partstat;
+    icalproperty* attendee;
     icalclassify_pre;
 
 
-    partstat = icalclassify_find_attendee(match->c,comp->reply_attendee);
+    attendee = icalclassify_find_attendee(match->c,comp->reply_attendee);
 
-    if(partstat == ICAL_PARTSTAT_NONE &&
+    if(attendee == 0 &&
        comp->reply_partstat == ICAL_PARTSTAT_DECLINED){
 	rtrn = 1;
     }

@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalderivedvalue.c.in,v 1.4 2001-03-31 17:41:57 ebusboom Exp $
+  $Id: icalderivedvalue.c.in,v 1.5 2001-04-01 20:08:19 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -47,27 +47,20 @@
 #include <stdlib.h> /* for atoi and atof */
 #include <limits.h> /* for SHRT_MAX */         
 
-#if _MAC_OS_
-#include "icalmemory_strdup.h"
-#endif
-
-#ifdef ICAL_NO_EMPTY_ARRAY_DECL
-#define ICAL_ARRAY_DECL_SIZE 1
-#else 
-#define ICAL_ARRAY_DECL_SIZE 
-#endif
 
 
 #define TMP_BUF_SIZE 1024
 
 struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind);
 
+/* This map associates each of the value types with its string
+   representation */
 struct icalvalue_kind_map {
 	icalvalue_kind kind;
 	char name[20];
 };
 
-static struct icalvalue_kind_map value_map[ICAL_ARRAY_DECL_SIZE]; 
+extern struct icalvalue_kind_map value_map[]; 
 
 const char* icalvalue_kind_to_string(icalvalue_kind kind)
 {
@@ -111,7 +104,7 @@ void icalvalue_set_x(icalvalue* value, const char* v) {
     impl = (struct icalvalue_impl*)value;
     if(impl->x_value!=0) {free((void*)impl->x_value);}
 
-    impl->x_value = strdup(v);
+    impl->x_value = icalmemory_strdup(v);
 
     if (impl->x_value == 0){
       errno = ENOMEM;

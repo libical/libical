@@ -3,7 +3,7 @@
   FILE: icalperiod.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalperiod.c,v 1.3 2001-03-08 05:52:34 ebusboom Exp $
+  $Id: icalperiod.c,v 1.4 2001-04-01 20:08:19 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -52,7 +52,7 @@ struct icalperiodtype icalperiodtype_from_string (const char* str)
 {
     
     struct icalperiodtype p, null_p;
-    char *s = strdup(str);
+    char *s = icalmemory_strdup(str);
     char *start, *end = s;
     icalerrorstate es;
 

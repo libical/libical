@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.11 2001-03-31 17:41:57 ebusboom Exp $
+  $Id: icalcomponent.c,v 1.12 2001-04-01 20:08:19 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -35,6 +35,7 @@
 #include "icaltime.h"
 #include "icalduration.h"
 #include "icalperiod.h"
+#include "icalparser.h"
 
 #include <stdlib.h>  /* for malloc */
 #include <stdarg.h> /* for va_list, etc */
@@ -137,17 +138,7 @@ icalcomponent_vanew (icalcomponent_kind kind, ...)
 
 icalcomponent* icalcomponent_new_from_string(char* str)
 {
-    icalcomponent_kind kind;
-
-    icalerror_check_arg_rz( (str!=0), "str");
-
-    kind = icalenum_string_to_component_kind(str);
-
-    if (kind == ICAL_NO_COMPONENT){
-	return 0;
-    }
-    
-    return icalcomponent_new(kind);
+    return icalparser_parse_string(str);
 }
 
 icalcomponent* icalcomponent_new_clone(icalcomponent* component)

@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.12 2001-03-31 17:41:57 ebusboom Exp $
+  $Id: icalparser.c,v 1.13 2001-04-01 20:08:19 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -673,11 +673,21 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     if(strcmp(str,"BEGIN") == 0){
 	icalcomponent *c;
+        icalcomponent_kind comp_kind;
 
 	impl->level++;
 	str = icalparser_get_next_value(end,&end, value_kind);
 	    
-	c  = icalcomponent_new_from_string(str);
+
+        comp_kind = icalenum_string_to_component_kind(str);
+
+        if (comp_kind == ICAL_NO_COMPONENT){
+	    c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);
+	    insert_error(c,str,"Parse error in component name",
+			 ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
+        }
+
+	c  =  icalcomponent_new(comp_kind);
 
 	if (c == 0){
 	    c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);
@@ -756,6 +766,10 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     if (prop != 0){
 	icalcomponent *tail = pvl_data(pvl_tail(impl->components));
+
+        if(prop_kind==ICAL_X_PROPERTY){
+            icalproperty_set_x_name(prop,str);
+        }
 
 	icalcomponent_add_property(tail, prop);
 

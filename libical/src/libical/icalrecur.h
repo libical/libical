@@ -17,6 +17,34 @@
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
+How to use: 
+
+1) Get a rule and a start time from a component
+        icalproperty rrule;
+        struct icalrecurrencetype recur;
+        struct icaltimetype dtstart;
+
+	rrule = icalcomponent_get_first_property(comp,ICAL_RRULE_PROPERTY);
+	recur = icalproperty_get_rrule(rrule);
+	start = icalproperty_get_dtstart(dtstart);
+
+Or, just make them up: 
+        recur = icalrecurrencetype_from_string("FREQ=YEARLY;BYDAY=SU,WE");
+        dtstart = icaltime_from_string("19970101T123000")
+
+2) Create an iterator
+        icalrecur_iterator* ritr;
+        ritr = icalrecur_iterator_new(recur,start);
+
+3) Iterator over the occurrences
+        struct icaltimetype next;
+        while (next = icalrecur_iterator_next(ritr) 
+               && !icaltime_is_null_time(next){
+                Do something with next
+        }
+
+Note that that the time returned by icalrecur_iterator_next is in
+whatever timezone that dtstart is in.
 
 ======================================================================*/
 
@@ -62,11 +90,7 @@ enum {
     ICAL_RECURRENCE_ARRAY_MAX = 0x7f7f,
     ICAL_RECURRENCE_ARRAY_MAX_BYTE = 0x7f
 };
-    
-const char* icalrecur_recurrence_to_string(icalrecurrencetype_frequency kind);
-icalrecurrencetype_frequency icalrecur_string_to_recurrence(const char* str);
-const char* icalrecur_weekday_to_string(icalrecurrencetype_weekday kind);
-icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
+
 
 
 /********************** Recurrence type routines **************/
@@ -84,6 +108,7 @@ icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
 #define ICAL_BY_MONTH_SIZE 13
 #define ICAL_BY_SETPOS_SIZE 367
 
+/* Main struct for holding digested recurrence rules */
 struct icalrecurrencetype 
 {
 	icalrecurrencetype_frequency freq;
@@ -131,32 +156,28 @@ enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day);
 /* 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc */
 short icalrecurrencetype_day_position(short day);
 
-/* Return the next occurance of 'r' after the time specified by 'after' */
-struct icaltimetype icalrecurrencetype_next_occurance(
-    struct icalrecurrencetype *r,
-    struct icaltimetype *after);
-
-
-
-typedef void icalrecur_iterator;
-void icalrecurrencetype_test();
 
 /***********************************************************************
  * Recurrance rule parser
 **********************************************************************/
 
+/* Convert between strings ans recurrencetype structures. */
 struct icalrecurrencetype icalrecurrencetype_from_string(const char* str);
 char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
 
 
-/********** recurrence routines ********************/
+/********** recurrence iteration routines ********************/
 
-icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule, struct icaltimetype dtstart);
+typedef void icalrecur_iterator;
 
+/* Create a new recurrence rule iterator */
+icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule, 
+                                           struct icaltimetype dtstart);
+
+/* Get the next occurrence from an iterator */
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator*);
 
-int icalrecur_iterator_count(icalrecur_iterator*);
-
+/* Free the iterator */
 void icalrecur_iterator_free(icalrecur_iterator*);
 
 /* Fills array up with at most 'count' time_t values, each

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.4 2001-03-14 07:31:05 ebusboom Exp $
+#  $Id: Component.py,v 1.5 2001-04-01 20:08:19 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -32,13 +32,17 @@ from Collection import *
 
 class Component:
 
-    def __init__(self,str=None, component_kind="ANY"):
-        self._ref = None
-        if str != None:
-            self._ref = icalparser_parse_string(str)
+    def __init__(self,str=None, component_kind="ANY", ref=None):
+
+        if ref != None: 
+            self._ref = ref
         else:
-            kind = icalenum_string_to_component_kind(component_kind)
-            self._ref = icalcomponent_new(kind)
+            self._ref = None
+            if str != None:
+                self._ref = icalparser_parse_string(str)
+            else:
+                kind = icalenum_string_to_component_kind(component_kind)
+                self._ref = icalcomponent_new(kind)
        
         self.cached_props = {}
 

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.19 2001-03-31 17:10:26 ebusboom Exp $
+  $Id: regression.c,v 1.20 2001-04-01 20:08:19 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1241,6 +1241,23 @@ void test_recur()
 /*    test_increment();*/
 
 }
+
+void test_expand_recurrence(){
+
+    time_t arr[10];
+    time_t now = 931057385;
+    int i;
+    icalrecur_expand_recurrence( "FREQ=MONTHLY;BYDAY=MO,WE", now,
+                                 5, arr );
+
+    printf("Start %s",ctime(&now) );
+    for (i=0; i<5; i++)
+        {
+            printf("i=%d  %s\n", i, ctime(&arr[i]) );
+        }
+            
+}
+
 
 
 enum byrule {
@@ -3271,11 +3288,59 @@ void test_property_parse()
 }
 
 
+void test_value_parameter() 
+{
+
+    icalcomponent *c;
+    icalproperty *p;
+    icalparameter *param;
+    
+    static const char test_icalcomp_str[] =
+"BEGIN:VEVENT\n"
+"DTSTART;VALUE=DATE-TIME:19971123T123000\n"
+"DTSTART;VALUE=DATE:19971123\n"
+"DTSTART;VALUE=FOO:19971123T123000\n"
+"END:VEVENT\n";
+     
+    c = icalparser_parse_string ((char *) test_icalcomp_str);
+    if (!c) {
+	fprintf (stderr, "main(): could not parse the component\n");
+	exit (EXIT_FAILURE);
+    }
+
+    printf("%s",icalcomponent_as_ical_string(c));
+
+    p = icalcomponent_get_first_property(c,ICAL_DTSTART_PROPERTY);
+    param = icalproperty_get_first_parameter(p,ICAL_VALUE_PARAMETER);
+    assert(icalparameter_get_value(param) == ICAL_VALUE_DATETIME);
+
+    p = icalcomponent_get_next_property(c,ICAL_DTSTART_PROPERTY);
+    param = icalproperty_get_first_parameter(p,ICAL_VALUE_PARAMETER);
+    assert(icalparameter_get_value(param) == ICAL_VALUE_DATE);
+
+}
+
+
+void test_x_property() 
+{
+    icalproperty *p;
+    
+    p= icalproperty_new_from_string(
+       "X-LIC-PROPERTY: This is a note");
+
+    printf("%s\n",icalproperty_as_ical_string(p));
+
+    assert(icalproperty_isa(p) == ICAL_X_PROPERTY);
+    assert(regrstrcmp(icalproperty_get_x_name(p),"X-LIC-PROPERTY")==0);
+    assert(regrstrcmp(icalproperty_get_x(p)," This is a note")==0);
+
+}
+
 int main(int argc, char *argv[])
 {
     int c;
     extern char *optarg;
-    extern int optind, optopt;
+    extern int optopt;
     int errflg=0;
     char* program_name = strrchr(argv[0],'/');
     int ttime=0, trecur=0,tspan=0, tmisc=0, tgauge = 0, tfile = 0,
@@ -3384,6 +3449,13 @@ int main(int argc, char *argv[])
 	test_recur_parameter_bug();
     }
 
+    if(trecur==1 || trecur==5){
+	printf("\n------------Test Array Expansion---------\n");
+	test_expand_recurrence();
+    }
+
+    
+
 
     if(tspan==1 || tspan==2){
 	printf("\n------------Test FBlist------------\n");
@@ -3460,6 +3532,16 @@ int main(int argc, char *argv[])
     if(tmisc == 1 || tmisc  == 8){
 	printf("\n------------Test Action ------------------\n");
 	test_action();
+    }
+
+    if(tmisc == 1 || tmisc  == 9){
+	printf("\n------------Test Value Parameter ------------------\n");
+	test_value_parameter();
+    }
+
+    if(tmisc == 1 || tmisc  == 10){
+	printf("\n------------Test X property ------------------\n");
+	test_x_property();
     }
 
 

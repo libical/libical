@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c,v 1.4 2001-03-31 17:41:57 ebusboom Exp $
+  $Id: icalparameter.c,v 1.5 2001-04-01 20:08:19 ebusboom Exp $
   $Locker:  $
     
 
@@ -160,7 +160,7 @@ icalparameter* icalparameter_new_from_string(const char *str)
 
     icalerror_check_arg_rz(str != 0,"str");
 
-    cpy = strdup(str);
+    cpy = icalmemory_strdup(str);
 
     if (cpy == 0){
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);

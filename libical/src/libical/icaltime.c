@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.11 2001-03-26 07:03:00 ebusboom Exp $
+  $Id: icaltime.c,v 1.12 2001-04-01 20:08:19 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -90,7 +90,7 @@ struct set_tz_save set_tz(const char* tzid)
     savetz.new_env_str = 0;
 
     if(getenv("TZ") != 0){
-	orig_tzid = (char*)strdup(getenv("TZ"));
+	orig_tzid = (char*)icalmemory_strdup(getenv("TZ"));
 
 	if(orig_tzid == 0){
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);

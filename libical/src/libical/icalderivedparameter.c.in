@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalderivedparameter.c.in,v 1.4 2001-03-31 17:41:57 ebusboom Exp $
+  $Id: icalderivedparameter.c.in,v 1.5 2001-04-01 20:08:19 ebusboom Exp $
   $Locker:  $
     
 
@@ -43,22 +43,19 @@
 #include <errno.h>
 #include <string.h> /* for memset() */
 
-#ifdef ICAL_NO_EMPTY_ARRAY_DECL
-#define ICAL_ARRAY_DECL_SIZE 1
-#else 
-#define ICAL_ARRAY_DECL_SIZE 
-#endif
-
+icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
 
 struct icalparameter_impl* icalparameter_new_impl(icalparameter_kind kind);
 
+/* This map associates each of the parameters with the string
+   representation of the paramter's name */
 struct icalparameter_kind_map {
     icalparameter_kind kind;
-    char name[20];
+    char *name;
     
 };
 
-static struct icalparameter_kind_map parameter_map[ICAL_ARRAY_DECL_SIZE];
+extern  struct icalparameter_kind_map parameter_map[];
 
 
 const char* icalparameter_kind_to_string(icalparameter_kind kind)
@@ -97,13 +94,15 @@ icalparameter_kind icalparameter_string_to_kind(const char* string)
     return ICAL_NO_PARAMETER;
 }
 
+/* This map associates the enumerations for the VALUE parameter with
+   the kinds of VALUEs. */
 
 struct icalparameter_value_kind_map {
     icalparameter_value value; 
     icalvalue_kind kind; 
 };
 
-static struct icalparameter_value_kind_map value_kind_map[ICAL_ARRAY_DECL_SIZE];
+extern struct icalparameter_value_kind_map value_kind_map[];
 
 
 icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value)
@@ -121,6 +120,8 @@ icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value)
 }
 
 
+/* This map associates the parameter enumerations with a specific parameter and the string representation of the enumeration */
+
 struct icalparameter_map {
     icalparameter_kind kind;
     int enumeration;
@@ -128,7 +129,8 @@ struct icalparameter_map {
 };
 
 
-static struct icalparameter_map icalparameter_map[ICAL_ARRAY_DECL_SIZE];
+extern struct icalparameter_map icalparameter_map[];
+
 
 const char* icalparameter_enum_to_string(int e) 
 {
@@ -196,7 +198,7 @@ icalparameter* icalparameter_new_from_value_string(icalparameter_kind kind,const
  
         /* If the kind was not found, then it must be a string type */
         
-        ((struct icalparameter_impl*)param)->string = strdup(val);
+        ((struct icalparameter_impl*)param)->string = icalmemory_strdup(val);
 
     }
 

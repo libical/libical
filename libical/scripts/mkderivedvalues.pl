@@ -156,7 +156,7 @@ foreach $value  (keys %h) {
   my $assign;
   
   if ($type =~ /char/){
-    $assign = "strdup(v);\n\n    if (impl->data.v_string == 0){\n      errno = ENOMEM;\n    }\n";
+    $assign = "icalmemory_strdup(v);\n\n    if (impl->data.v_string == 0){\n      errno = ENOMEM;\n    }\n";
   } else {
     $assign = "v;";
   }

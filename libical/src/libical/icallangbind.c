@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.12 2001-03-31 17:41:57 ebusboom Exp $
+  $Id: icallangbind.c,v 1.13 2001-04-01 20:08:19 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -260,4 +260,13 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
 
 }
 
+#include "fcntl.h"
+int icallangbind_string_to_open_flag(const char* str)
+{
+    if (strcmp(str,"r") == 0) {return O_RDONLY;}
+    else if (strcmp(str,"r+") == 0) {return O_RDWR;}
+    else if (strcmp(str,"w") == 0) {return O_WRONLY;}
+    else if (strcmp(str,"a") == 0) {return O_WRONLY|O_APPEND;}
+    else return -1;
+}
 

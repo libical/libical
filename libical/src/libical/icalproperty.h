@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.5 2001-03-31 17:10:26 ebusboom Exp $
+  $Id: icalproperty.h,v 1.6 2001-04-01 20:08:19 ebusboom Exp $
   $Locker:  $
 
   
@@ -31,6 +31,8 @@
 #define ICALPROPERTY_H
 
 #include <time.h>
+
+
 #include "icalderivedparameter.h"
 
 #include "icalvalue.h"  
@@ -87,6 +89,7 @@ char* icalproperty_get_x_name(icalproperty* prop);
    string, or the value of _get_x_name if the type is and X property */
 char* icalproperty_get_name (icalproperty* prop);
 
+icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
 
 /* Convert kinds to string and get default value type */
 

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: DerivedProperties.py,v 1.2 2001-03-05 18:39:36 ebusboom Exp $
+#  $Id: DerivedProperties.py,v 1.3 2001-04-01 20:08:19 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -25,7 +25,7 @@
 #    the License at http://www.mozilla.org/MPL/
 #======================================================================
 
-from Property import *
+from Property import Time, Period, Duration
 
 def RDate(arg):
 

@@ -27,11 +27,15 @@
 
 %{
 #include "ical.h"
+#include "icalss.h"
 
 #include <sys/types.h> /* for size_t */
 #include <time.h>
 
 %}
+
+
+#include "fcntl.h" /* For Open flags */
 
 typedef void icalcomponent;
 typedef void icalproperty;
@@ -116,6 +120,9 @@ int  icalenum_string_to_component_kind(const char* string);
 int* icallangbind_new_array(int size);
 void icallangbind_free_array(int* array);
 int icallangbind_access_array(int* array, int index);
+
+
+
 int icalrecur_expand_recurrence(char* rule, int start, 
 				int count, int* array);
 
@@ -139,6 +146,8 @@ icalcomponent* icallangbind_get_next_component(icalcomponent *c,
    parameters. Sep is the hash seperation string, "=>" for perl and
    ":" for python */
 const char* icallangbind_property_eval_string(icalproperty* prop, char* sep);
+
+int icallangbind_string_to_open_flag(const char* str);
 
 /***********************************************************************
  Time routines 
@@ -286,3 +295,58 @@ struct icalperiodtype icalperiodtype_null_period();
 int icalperiodtype_is_null_period(struct icalperiodtype p);
 int icalperiodtype_is_valid_period(struct icalperiodtype p);
 
+
+/***********************************************************************
+  Storage Routines
+***********************************************************************/
+
+icalfileset* icalfileset_new(const char* path);
+
+/* Like _new, but takes open() flags for opening the file */
+icalfileset* icalfileset_new_open(const char* path, 
+				  int flags, int mode);
+
+void icalfileset_free(icalfileset* cluster);
+
+const char* icalfileset_path(icalfileset* cluster);
+
+/* Mark the cluster as changed, so it will be written to disk when it
+   is freed. Commit writes to disk immediately. */
+void icalfileset_mark(icalfileset* cluster);
+icalerrorenum icalfileset_commit(icalfileset* cluster); 
+
+icalerrorenum icalfileset_add_component(icalfileset* cluster,
+					icalcomponent* child);
+
+icalerrorenum icalfileset_remove_component(icalfileset* cluster,
+					   icalcomponent* child);
+
+int icalfileset_count_components(icalfileset* cluster,
+				 icalcomponent_kind kind);
+
+/* Restrict the component returned by icalfileset_first, _next to those
+   that pass the gauge. _clear removes the gauge */
+icalerrorenum icalfileset_select(icalfileset* store, icalgauge* gauge);
+void icalfileset_clear(icalfileset* store);
+
+/* Get and search for a component by uid */
+icalcomponent* icalfileset_fetch(icalfileset* cluster, const char* uid);
+int icalfileset_has_uid(icalfileset* cluster, const char* uid);
+icalcomponent* icalfileset_fetch_match(icalfileset* set, icalcomponent *c);
+
+
+/* Modify components according to the MODIFY method of CAP. Works on
+   the currently selected components. */
+icalerrorenum icalfileset_modify(icalfileset* store, icalcomponent *oldcomp,
+			       icalcomponent *newcomp);
+
+/* Iterate through components. If a guage has been defined, these
+   will skip over components that do not pass the gauge */
+
+icalcomponent* icalfileset_get_current_component (icalfileset* cluster);
+icalcomponent* icalfileset_get_first_component(icalfileset* cluster);
+icalcomponent* icalfileset_get_next_component(icalfileset* cluster);
+/* Return a reference to the internal component. You probably should
+   not be using this. */
+
+icalcomponent* icalfileset_get_component(icalfileset* cluster);

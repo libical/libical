@@ -113,7 +113,8 @@ if ($opt_c){
   
   foreach $enum (@{$params{'VALUE'}->{'enums'}}){
     next if $enum eq 'NO' or $enum eq 'ERROR';
-    print "    {ICAL_VALUE_${enum},ICAL_${enum}_VALUE},\n";
+    $uc = join("",map {uc(lc($_));}  split(/-/,$enum));    
+    print "    {ICAL_VALUE_${uc},ICAL_${uc}_VALUE},\n";
   }
   
   print "    {ICAL_VALUE_X,ICAL_X_VALUE},\n";
@@ -187,7 +188,7 @@ foreach $param  (keys %params){
 
      $charorenum = "    icalerror_check_arg_rz( (param!=0), \"param\");\n    return ($type)((struct icalparameter_impl*)param)->string;";
     
-     $set_code = "((struct icalparameter_impl*)param)->string = strdup(v);";
+     $set_code = "((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);";
 
      $pointer_check = "icalerror_check_arg_rz( (v!=0),\"v\");"; 
      $pointer_check_v = "icalerror_check_arg_rv( (v!=0),\"v\");"; 

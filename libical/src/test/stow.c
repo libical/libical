@@ -3,7 +3,7 @@
   FILE: stow.c
   CREATOR: eric 29 April 2000
   
-  $Id: stow.c,v 1.2 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: stow.c,v 1.3 2001-04-01 20:08:19 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -48,6 +48,10 @@ char* program_name;
 #define SENDMAIL "/usr/lib/sendmail -t"
 
 void usage(char *message);
+
+#ifndef PATH_MAX
+#define PATH_MAX 256 /* HACK */
+#endif
 
 
 enum options {
@@ -485,7 +489,7 @@ void usage(char *message)
     fprintf(stderr,"Usage: %s [-emdcn] [-i inputfile] [-o outputfile] [-u calid]\n",program_name);
     fprintf(stderr,"-e\tInput data is encapsulated in a MIME Message \n\
 -m\tInput is raw iCal \n\
--i\tSpecify input file. Otherwise, input comed from stdin\n\
+-i\tSpecify input file. Otherwise, input comes from stdin\n\
 -o\tSpecify file to save incoming message to\n\
 -d\tSpecify database to send data to\n\
 -u\tSet the calid to store the data to\n\

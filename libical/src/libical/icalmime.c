@@ -4,7 +4,7 @@
  CREATOR: eric 26 July 2000
 
 
- $Id: icalmime.c,v 1.2 2001-01-12 21:22:20 ebusboom Exp $
+ $Id: icalmime.c,v 1.3 2001-04-01 20:08:19 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -370,7 +370,7 @@ int icalmime_test(char* (*get_string)(char *s, size_t size, void *d),
    for(i = 0; i <NUM_PARTS && parts[i].header.major != SSPM_NO_MAJOR_TYPE ; 
        i++){
        if(parts[i].header.minor == SSPM_CALENDAR_MINOR_TYPE){
-	   parts[i].data = strdup(
+	   parts[i].data = icalmemory_strdup(
 	       icalcomponent_as_ical_string((icalcomponent*)parts[i].data));
        }
    }

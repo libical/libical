@@ -1,3 +1,16 @@
+2001-04-01  Eric Busboom  <eric@softwarestudio.org>
+
+	* icalcomponent.h Changed meaning of
+ 	icalcomponent_new_from_string. It used to create a new component
+ 	given the text name of the component type to create. Now it calls
+ 	icalparser_parse_string to create a new component from the
+ 	complete iCalendar text representation of the component.
+
+2001-03-31  Eric Busboom  <eric@softwarestudio.org>
+
+	* icalvalue Changed ACTION properties to take an ACTION value
+ 	instead of TEXT. The ACTION value is enumerated.
+
 2001-03-26  Eric Busboom  <eric@softwarestudio.org>
 
 	* icalparameter.h icalparameter_rsvp_* routines now take, return

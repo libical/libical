@@ -9,9 +9,11 @@ INCLUDES =				\
 	-I$(top_builddir)/src		\
 	-I$(top_srcdir)/src/libical	\
 	-I$(srcdir)/libical     	\
+	-I$(top_srcdir)/src/libicalss	\
+	-I$(srcdir)/libicalss     	\
 	$(PY_CFLAGS) 	
 
-LDADD =  ../libical/libical.la 
+LDADD =  ../libical/libical.la ../libicalss/libicalss.la
 
 all: LibicalWrap.so
 
@@ -22,7 +24,7 @@ LibicalWrap.c:  LibicalWrap.i
 # it. Libtool needs to generate a shared library in this directory
 # regardless of the value of AM_DISABLE_SHARED
 LibicalWrap.so: LibicalWrap.c 
-	ld -shared -o LibicalWrap.so LibicalWrap.o ../libical/.libs/libical.a 
+	ld -shared -o LibicalWrap.so LibicalWrap.o ../libical/.libs/libical.a  ../libicalss/.libs/libicalss.a 
 
 CLEANFILES = LibicalWrap.c LibicalWrap_wrap.doc  Libical.pyc LibicalWrap.so
 
