@@ -12,7 +12,7 @@
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalset.c,v 1.13 2002-06-28 15:11:26 acampi Exp $
+ $Id: icalset.c,v 1.14 2002-07-10 09:29:59 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -112,7 +112,7 @@ static icalset icalset_fileset_init = {
 #ifdef WITH_BDB4
 static icalset icalset_bdbset_init = {
     ICAL_BDB_SET,
-    sizeof(icalbdb4set),
+    sizeof(icalbdbset),
     NULL,
     icalbdbset_init,
     icalbdbset_free,
