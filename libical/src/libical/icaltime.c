@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.21 2001-12-12 01:25:54 ebusboom Exp $
+  $Id: icaltime.c,v 1.22 2001-12-12 02:14:35 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -156,8 +156,8 @@ void unset_tz(struct set_tz_save savetz)
 time_t icaltimegm(struct tm* stm)
 {
 
-#ifndef WIN32
     time_t t;
+#ifndef WIN32
     struct set_tz_save old_tz = set_tz("UTC");
     t = mktime(stm);
     unset_tz(old_tz);
@@ -356,7 +356,12 @@ time_t icaltime_as_timet(struct icaltimetype tt)
 {
     struct tm stm;
     time_t t;
-
+#ifdef WIN32
+    TIME_ZONE_INFORMATION tz;
+    char * szZone;
+    icaltimezone* zone;
+    int offset_tt;
+#endif
     memset(&stm,0,sizeof( struct tm));
 
     if(icaltime_is_null_time(tt)) {
