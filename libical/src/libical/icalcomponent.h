@@ -159,7 +159,7 @@ icalcomponent* icalcomponent_get_parent(icalcomponent* component);
 void icalcomponent_set_parent(icalcomponent* component, 
 			      icalcomponent* parent);
 
-/* Kind conversion routiens */
+/* Kind conversion routines */
 
 int icalcomponent_kind_is_valid(const icalcomponent_kind kind);
 
