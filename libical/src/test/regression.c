@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.35 2001-12-10 18:52:41 ebusboom Exp $
+  $Id: regression.c,v 1.36 2001-12-12 21:42:15 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2484,6 +2484,43 @@ char* ical_strstr(const char *haystack, const char *needle){
     return strstr(haystack,needle);
 }
 
+void test_start_of_week()
+{
+    struct icaltimetype tt2;
+    struct icaltimetype tt1 = icaltime_from_string("19900110");
+    int dow, doy,start_dow;
+
+    do{
+        struct tm stm;
+        
+        tt1 = icaltime_normalize(tt1);
+
+        doy = icaltime_start_doy_of_week(tt1);
+        dow = icaltime_day_of_week(tt1);
+
+        tt2 = icaltime_from_day_of_year(doy,tt1.year);
+        start_dow = icaltime_day_of_week(tt2);
+
+        if(start_dow != 1){ /* Sunday is 1 */
+            printf("failed: Start of week (%s) is not a Sunday \n for %s (doy=%d,dow=%d)\n",ictt_as_string(tt2), ictt_as_string(tt1),dow,start_dow);
+        }
+
+
+        assert(start_dow == 1);
+
+        if(doy == 1){
+            putc('.',stdout);
+            fflush(stdout);
+        }
+
+
+        tt1.day+=1;
+        
+    } while(tt1.year < 2010);
+
+    printf("\n");
+}
+
 void test_doy()
 {
     struct icaltimetype tt1, tt2;
@@ -2492,7 +2529,47 @@ void test_doy()
 
 	doy = -1;
 
-    tt1 = icaltime_from_string("19300101");
+    tt1 = icaltime_from_string("19900101");
+
+    printf("Test icaltime_day_of_year() agreement with mktime\n");
+
+    do{
+        struct tm stm;
+
+        tt1 = icaltime_normalize(tt1);
+
+        stm.tm_sec = tt1.second;
+        stm.tm_min = tt1.minute;
+        stm.tm_hour = tt1.hour;
+        stm.tm_mday = tt1.day;
+        stm.tm_mon = tt1.month-1;
+        stm.tm_year = tt1.year-1900;
+        stm.tm_isdst = -1;
+
+        mktime(&stm);
+
+        doy = icaltime_day_of_year(tt1);
+
+        if(doy == 1){
+            putc('.',stdout);
+            fflush(stdout);
+        }
+
+        doy2 = stm.tm_yday+1;
+
+        if(doy != doy2){
+            printf("Failed for %s (%d,%d)\n",ictt_as_string(tt1),doy,doy2);
+        }
+
+        assert(doy == doy2);
+
+        tt1.day+=1;
+        
+    } while(tt1.year < 2010);
+
+    printf("\nTest icaltime_day_of_year() agreement with icaltime_from_day_of_year()\n");
+
+    tt1 = icaltime_from_string("19900101");
 
     do{      
         if(doy == 1){
@@ -2510,7 +2587,10 @@ void test_doy()
         tt1.day+=1;
         tt1 = icaltime_normalize(tt1);
         
-    } while(tt1.year < 1940);
+    } while(tt1.year < 2010);
+
+    printf("\n");
+
 
     tt1 = icaltime_from_string("19950301");
     doy = icaltime_day_of_year(tt1);
@@ -3665,7 +3745,7 @@ int main(int argc, char *argv[])
 	printf("\n------------Test day of year---------\n");
 	test_doy();
     }
-	    
+
     if(ttime==1 || ttime==5){
 	printf("\n------------Test duration---------------\n");
 	test_duration();
@@ -3681,6 +3761,11 @@ int main(int argc, char *argv[])
         test_dtstart();
     }
 	
+    if(ttime==1 || ttime==8){
+	printf("\n------------Test day of year of week start----\n");
+	test_start_of_week();
+    }
+	    
 
 	    
     if(trecur==1 || trecur==2){
@@ -3859,6 +3944,9 @@ int main(int argc, char *argv[])
 	printf("\n------------Test Memory---------------\n");
 	test_memory();
     }
+
+
+    printf("-------------- Tests complete -----------\n");
 
 	icaltimezone_free_builtin_timezones();
 
