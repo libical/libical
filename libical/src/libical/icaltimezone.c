@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.c,v 1.5 2001-12-22 17:04:33 gray-john Exp $
+ $Id: icaltimezone.c,v 1.6 2001-12-22 18:54:02 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1226,12 +1226,15 @@ icaltimezone_array_free			(icalarray	*timezones)
     icaltimezone *zone;
     int i;
 
-    for (i = 0; i < timezones->num_elements; i++) {
-	zone = icalarray_element_at (timezones, i);
-	icaltimezone_free (zone, 0);
-    }
+	if ( timezones )
+	{
+		for (i = 0; i < timezones->num_elements; i++) {
+		zone = icalarray_element_at (timezones, i);
+		icaltimezone_free (zone, 0);
+		}
 
-    icalarray_free (timezones);
+		icalarray_free (timezones);
+	}
 }
 
 

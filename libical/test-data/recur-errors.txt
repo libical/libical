@@ -1,14 +1,5 @@
 BEGIN:VEVENT
 DESCRIPTION
- :Repeat every tuesday and wednesday starting 2 April 2002
-RRULE
- :FREQ=WEEKLY;INTERVAL=1;COUNT=6;BYDAY=TU,WE
-DTSTART
- :20020402T114500
-END:VEVENT
-
-BEGIN:VEVENT
-DESCRIPTION
  :An example where the days generated makes a difference because of 
  WKST:
 DTSTART
