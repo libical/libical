@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.18 2002-04-01 22:08:45 gray-john Exp $
+  $Id: icalcomponent.c,v 1.19 2002-04-03 20:45:47 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -791,11 +791,17 @@ time_t icalcomponent_convert_time(icalproperty *p)
 	maybe it can be changed to something better? */
 	
 	{
+#ifdef __sgi
+		tzset();
+		offset = daylight ? altzone : timezone;
+#else
+
 		struct tm *tmp_tm;
 		time_t t;
 
 		t = time(NULL);
 	 	offset = localtime(&t)->tm_gmtoff;
+#endif
 	}
 
 	convt += offset;
