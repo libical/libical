@@ -224,7 +224,7 @@ void icalproperty_set_${lc}(icalproperty* prop, $type v){
 EOM
 	}
 	print<<EOM;
-$type icalproperty_get_${lc}(icalproperty* prop){
+$type icalproperty_get_${lc}(const icalproperty* prop){
     icalerror_check_arg( (prop!=0),"prop");
     return icalvalue_get_${lcvalue}(icalproperty_get_value(prop));
 }
@@ -236,7 +236,7 @@ EOM
 /* $prop */\
 icalproperty* icalproperty_new_${lc}($type v);\
 void icalproperty_set_${lc}(icalproperty* prop, $type v);\
-$type icalproperty_get_${lc}(icalproperty* prop);";
+$type icalproperty_get_${lc}(const icalproperty* prop);";
   
 
 if ($include_vanew){

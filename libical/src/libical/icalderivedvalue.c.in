@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalderivedvalue.c.in,v 1.9 2002-06-04 13:25:11 acampi Exp $
+  $Id: icalderivedvalue.c.in,v 1.10 2002-06-04 14:07:09 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -58,7 +58,7 @@ struct icalvalue_kind_map {
 
 <insert_code_here>
 
-const char* icalvalue_kind_to_string(icalvalue_kind kind)
+const char* icalvalue_kind_to_string(const icalvalue_kind kind)
 {
     int i;
 
@@ -105,7 +105,7 @@ void icalvalue_set_x(icalvalue* impl, const char* v) {
     }
  
  }
-const char* icalvalue_get_x(icalvalue* value) {
+const char* icalvalue_get_x(const icalvalue* value) {
 
     icalerror_check_arg( (value!=0),"value");
     icalerror_check_value_type(value, ICAL_X_VALUE);
@@ -146,7 +146,7 @@ icalvalue_set_recur(icalvalue* impl, struct icalrecurrencetype v)
 }
 
 struct icalrecurrencetype
-icalvalue_get_recur(icalvalue* value)
+icalvalue_get_recur(const icalvalue* value)
 {
     icalerror_check_arg( (value!=0),"value");
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
@@ -182,7 +182,7 @@ icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v)
 }
 
 struct icaltriggertype
-icalvalue_get_trigger(icalvalue* impl)
+icalvalue_get_trigger(const icalvalue* impl)
 {
     struct icaltriggertype tr;
 
@@ -243,7 +243,7 @@ icalvalue_set_datetimeperiod(icalvalue* impl, struct icaldatetimeperiodtype v)
 }
 
 struct icaldatetimeperiodtype
-icalvalue_get_datetimeperiod(icalvalue* impl)
+icalvalue_get_datetimeperiod(const icalvalue* impl)
 {
   struct icaldatetimeperiodtype dtp;
   
@@ -304,7 +304,7 @@ icalvalue_set_attach (icalvalue *value, icalattach *attach)
 }
 
 icalattach *
-icalvalue_get_attach (icalvalue *value)
+icalvalue_get_attach (const icalvalue *value)
 {
     icalerror_check_arg_rz ((value != NULL), "value");
     icalerror_check_value_type (value, ICAL_ATTACH_VALUE);

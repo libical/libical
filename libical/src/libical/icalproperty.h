@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.8 2002-05-21 10:31:29 acampi Exp $
+  $Id: icalproperty.h,v 1.9 2002-06-04 14:07:09 acampi Exp $
   $Locker:  $
 
   
@@ -66,7 +66,7 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
 void icalproperty_remove_parameter(icalproperty* prop,
 				   icalparameter_kind kind);
 
-int icalproperty_count_parameters(icalproperty* prop);
+int icalproperty_count_parameters(const icalproperty* prop);
 
 /* Iterate through the parameters */
 icalparameter* icalproperty_get_first_parameter(icalproperty* prop,
@@ -77,8 +77,8 @@ icalparameter* icalproperty_get_next_parameter(icalproperty* prop,
 void icalproperty_set_value(icalproperty* prop, icalvalue* value);
 void icalproperty_set_value_from_string(icalproperty* prop,const char* value, const char* kind);
 
-icalvalue* icalproperty_get_value(icalproperty* prop);
-const char* icalproperty_get_value_as_string(icalproperty* prop);
+icalvalue* icalproperty_get_value(const icalproperty* prop);
+const char* icalproperty_get_value_as_string(const icalproperty* prop);
 
 /* Deal with X properties */
 
@@ -87,7 +87,7 @@ const char* icalproperty_get_x_name(icalproperty* prop);
 
 /* Return the name of the property -- the type name converted to a
    string, or the value of _get_x_name if the type is and X property */
-const char* icalproperty_get_name (icalproperty* prop);
+const char* icalproperty_get_name (const icalproperty* prop);
 
 icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
 

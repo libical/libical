@@ -206,7 +206,7 @@ void icalvalue_set_${lc}(icalvalue* value, $type v) {\
     impl->data.v_$union_data = $assign \n\
     icalvalue_reset_kind(impl);\n}\n";
 
-    print "$type\ icalvalue_get_${lc}(icalvalue* value)\ {\n\
+    print "$type\ icalvalue_get_${lc}(const icalvalue* value)\ {\n\
     icalerror_check_arg( (value!=0),\"value\");\
     icalerror_check_value_type(value, ICAL_${uc}_VALUE);\
     return ((struct icalvalue_impl*)value)->data.v_${union_data};\n}\n";
@@ -216,7 +216,7 @@ void icalvalue_set_${lc}(icalvalue* value, $type v) {\
     
     print "\n /* $value */ \
 icalvalue* icalvalue_new_${lc}($type v); \
-$type icalvalue_get_${lc}(icalvalue* value); \
+$type icalvalue_get_${lc}(const icalvalue* value); \
 void icalvalue_set_${lc}(icalvalue* value, ${type} v);\n\n";
 
   } 

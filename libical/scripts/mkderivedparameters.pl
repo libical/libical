@@ -241,7 +241,7 @@ icalparameter* icalparameter_new_${lc}($type v)
    return (icalparameter*) impl;
 }
 
-${type} icalparameter_get_${lc}(icalparameter* param)
+${type} icalparameter_get_${lc}(const icalparameter* param)
 {
    icalerror_clear_errno();
 $charorenum
@@ -263,7 +263,7 @@ EOM
   print <<EOM;
 /* $param */
 icalparameter* icalparameter_new_${lc}($type v);
-${type} icalparameter_get_${lc}(icalparameter* value);
+${type} icalparameter_get_${lc}(const icalparameter* value);
 void icalparameter_set_${lc}(icalparameter* value, ${type} v);
 
 EOM

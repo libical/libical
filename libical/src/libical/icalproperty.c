@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.18 2002-06-03 17:10:37 acampi Exp $
+  $Id: icalproperty.c,v 1.19 2002-06-04 14:07:09 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -624,7 +624,7 @@ icalproperty_remove_parameter (icalproperty* prop, icalparameter_kind kind)
 
 
 int
-icalproperty_count_parameters (icalproperty* prop)
+icalproperty_count_parameters (const icalproperty* prop)
 {
     if(prop != 0){
 	return pvl_count(prop->parameters);
@@ -747,14 +747,14 @@ void icalproperty_set_value_from_string(icalproperty* prop,const char* str,
 }
 
 icalvalue*
-icalproperty_get_value (icalproperty* prop)
+icalproperty_get_value(const icalproperty* prop)
 {
     icalerror_check_arg_rz( (prop!=0),"prop");
     
     return prop->value;
 }
 
-const char* icalproperty_get_value_as_string(icalproperty* prop)
+const char* icalproperty_get_value_as_string(const icalproperty* prop)
 {
     icalvalue *value;
     
@@ -791,7 +791,7 @@ const char* icalproperty_get_x_name(icalproperty* prop){
 
 
 /* From Jonathan Yue <jonathan.yue@cp.net>    */
-const char* icalproperty_get_name(icalproperty* prop)
+const char* icalproperty_get_name(const icalproperty* prop)
 {
 
     const char* property_name = 0;
@@ -835,7 +835,7 @@ void icalproperty_set_parent(icalproperty* property,
     property->parent = component;
 }
 
-icalcomponent* icalproperty_get_parent(icalproperty* property)
+icalcomponent* icalproperty_get_parent(const icalproperty* property)
 {
     icalerror_check_arg_rz( (property!=0),"property");
 
