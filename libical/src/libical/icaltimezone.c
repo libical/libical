@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.c,v 1.3 2001-12-10 01:28:42 gray-john Exp $
+ $Id: icaltimezone.c,v 1.4 2001-12-16 18:26:44 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -135,7 +135,7 @@ icalarray *builtin_timezones = NULL;
 /* This is the special UTC timezone, which isn't in builtin_timezones. */
 icaltimezone utc_timezone = { 0 };
 
-
+static char* zone_files_directory = NULL;
 
 static void  icaltimezone_reset			(icaltimezone   *zone);
 static char* icaltimezone_get_location_from_vtimezone (icalcomponent *component);
@@ -182,6 +182,8 @@ static char* icaltimezone_load_get_line_fn	(char		*s,
 
 static void  format_utc_offset			(int		 utc_offset,
 						 char		*buffer);
+
+static char* get_zone_directory();
 
 
 /* Creates a new icaltimezone. */
@@ -1388,7 +1390,7 @@ icaltimezone_parse_zone_tab		(void)
 
     builtin_timezones = icalarray_new (sizeof (icaltimezone), 32);
 
-    filename_len = strlen (ZONEINFO_DIRECTORY) + strlen (ZONES_TAB_FILENAME)
+    filename_len = strlen (get_zone_directory()) + strlen (ZONES_TAB_FILENAME)
 	+ 2;
 
     filename = (char*) malloc (filename_len);
@@ -1397,7 +1399,7 @@ icaltimezone_parse_zone_tab		(void)
 	return;
     }
 
-    snprintf (filename, filename_len, "%s/%s", ZONEINFO_DIRECTORY,
+    snprintf (filename, filename_len, "%s/%s", get_zone_directory(),
 	      ZONES_TAB_FILENAME);
 
     fp = fopen (filename, "r");
@@ -1468,7 +1470,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone	*zone)
     if (!zone->location || !zone->location[0])
 	return;
 
-    filename_len = strlen (ZONEINFO_DIRECTORY) + strlen (zone->location) + 6;
+    filename_len = strlen (get_zone_directory()) + strlen (zone->location) + 6;
 
     filename = (char*) malloc (filename_len);
     if (!filename) {
@@ -1476,7 +1478,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone	*zone)
 	return;
     }
 
-    snprintf (filename, filename_len, "%s/%s.ics", ZONEINFO_DIRECTORY,
+    snprintf (filename, filename_len, "%s/%s.ics", get_zone_directory(),
 	      zone->location);
 
     fp = fopen (filename, "r");
@@ -1619,4 +1621,26 @@ format_utc_offset			(int		 utc_offset,
     sprintf (buffer, "%s%02i%02i", sign, hours, minutes);
   else
     sprintf (buffer, "%s%02i%02i%02i", sign, hours, minutes, seconds);
+}
+
+static char* get_zone_directory()
+{
+	return zone_files_directory == NULL ? ZONEINFO_DIRECTORY : zone_files_directory;
+}
+
+void set_zone_directory(char *path)
+{
+	zone_files_directory = malloc(strlen(path)+1);
+	if ( zone_files_directory != NULL )
+	{
+		strcpy(zone_files_directory,path);
+	}
+}
+
+void free_zone_directory()
+{
+	if ( zone_files_directory != NULL )
+	{
+		free(zone_files_directory);
+	}
 }

@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.25 2001-12-12 22:02:19 ebusboom Exp $
+  $Id: icalrecur.c,v 1.26 2001-12-16 18:26:44 gray-john Exp $
   $Locker:  $
     
 
@@ -769,7 +769,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     impl->by_ptrs[BY_SECOND]=impl->rule.by_second;
     impl->by_ptrs[BY_SET_POS]=impl->rule.by_set_pos;
 
-    memset(impl->orig_data,0,9);
+    memset(impl->orig_data,0,9*sizeof(short));
 
     /* Note which by rules had data in them when the iterator was
        created. We can't use the actuall by_x arrays, because the

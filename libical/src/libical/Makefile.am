@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.19 2001-11-14 07:07:22 benjaminlee Exp $
+#  $Id: Makefile.am,v 1.20 2001-12-16 18:26:44 gray-john Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -98,7 +98,9 @@ libical_la_SOURCES =		\
 	sspm.h			\
 	vsnprintf.c		\
 	icallangbind.h		\
-	icallangbind.c
+	icallangbind.c \
+	caldate.c \
+	astime.h
 
 libicalincludedir = $(includedir)
 

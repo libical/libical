@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.36 2001-12-12 21:42:15 ebusboom Exp $
+  $Id: regression.c,v 1.37 2001-12-16 18:26:44 gray-john Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -3667,6 +3667,8 @@ int main(int argc, char *argv[])
     int ttime=0, trecur=0,tspan=0, tmisc=0, tgauge = 0, tfile = 0,
         tbasic = 0;
 
+	set_zone_directory("../../zoneinfo");
+
 	putenv("TZ=");
 
     if(argc==1) {
@@ -3951,6 +3953,8 @@ int main(int argc, char *argv[])
 	icaltimezone_free_builtin_timezones();
 
 	icalmemory_free_ring();
+
+	free_zone_directory();
 
     return 0;
 }
