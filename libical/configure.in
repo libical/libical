@@ -20,49 +20,53 @@ AC_SUBST(AR)
 
 dnl *** bdb4 support
 
+AC_MSG_CHECKING(for Berkeley DB4 support)
 AC_ARG_WITH(bdb4, [  --with-bdb4             Add support for Berkeley DB 4.0],
 [case $with_bdb4 in  
-    yes)	echo 'Adding Berkeley DB support'
+    yes)	AC_MSG_RESULT(yes)
+		AC_MSG_RESULT(  Adding Berkeley DB support)
 		WITH_BDB4="yes"
 		;;
-    no)		;;
-    *)		echo "Ignoring unknown argument to --with-bdb4: $with_bdb4"
+    no)		AC_MSG_RESULT(no)
+		;;
+    *)		AC_MSG_RESULT(no)
+		AC_MSG_RESULT(Ignoring unknown argument to --with-bdb4: $with_bdb4)
 		;;
 esac])
 
 if test x$WITH_BDB4 = xyes; then
   AC_ARG_WITH(bdb4_dir, [  --with-bdb4-dir=PATH    Use PATH as location of BerkeleyDB 4.0],
-   BDB_DIR=$withval,
-   BDB_DIR=/usr/local/BerkeleyDB.4.0
+     BDB_DIR=$withval,
+     BDB_DIR=/usr/local/BerkeleyDB.4.0
   )
 
-  echo -n "Berkeley DB include files live in... "
+  AC_MSG_CHECKING(for Berkeley DB include files)
   if test -f $BDB_DIR/include/db.h; then
    BDB_DIR_INCLUDE=$BDB_DIR/include
-   echo $BDB_DIR_INCLUDE
+   AC_MSG_RESULT($BDB_DIR_INCLUDE)
   else
     if test -f $BDB_DIR/include/db4/db.h; then
      BDB_DIR_INCLUDE=$BDB_DIR/include/db4
-     echo $BDB_DIR_INCLUDE
+     AC_MSG_RESULT($BDB_DIR_INCLUDE)
     else
      WITH_BDB4="no"
-     echo "not found!"
+     AC_MSG_RESULT(not found!)
     fi
   fi
 
-  echo -n "Berkeley DB libraries... "
+  AC_MSG_CHECKING(for Berkeley DB libraries)
   if test -f $BDB_DIR/lib/libdb-4.0.la; then
    BDB_DIR_LIB=$BDB_DIR/lib
    BDB_LIB=libdb-4.0.la
-   echo "$BDB_DIR_LIB $BDB_LIB"
+   AC_MSG_RESULT($BDB_DIR_LIB $BDB_LIB)
   else
     if test -f $BDB_DIR/lib/libdb4.la; then
      BDB_DIR_LIB=$BDB_DIR/lib
      BDB_LIB=libdb4.la
-     echo "$BDB_DIR_LIB $BDB_LIB"
+     AC_MSG_RESULT($BDB_DIR_LIB $BDB_LIB)
     else
      WITH_BDB4="no"
-     echo "not found!"
+     AC_MSG_RESULT(not found!)
     fi
   fi
 
@@ -78,20 +82,41 @@ AM_CONDITIONAL(WITH_BDB4, test x$WITH_BDB4 = xyes)
 
 dnl *** Yacc/Bison support
 
-AC_ARG_WITH(devel, [  --with-devel            Add developement options],
+AC_MSG_CHECKING(whether to support development)
+AC_ARG_WITH(devel, [  --with-devel            Add development options],
 [case $with_devel in  
-    yes)	echo 'Setting up for developement: -Wall, flex, bison'
-		echo '** Note that you will need flex 2.5.7 or higher'
-		DEV="yes"
+    yes)	DEV="yes"
+		AC_MSG_RESULT(yes)
+		AC_MSG_RESULT(Setting up for development: -Wall, flex, bison)
+		AC_MSG_RESULT(** Note that you will need flex 2.5.7 or higher)
 		;;
-    no)		;;
-    *)		echo "Ignoring unknown argument to --with-devel: $with_devel"
+    no)		AC_MSG_RESULT(no)
+		;;
+    *)		AC_MSG_RESULT(no)
+		AC_MSG_RESULT(Ignoring unknown argument to --with-devel: $with_devel)
 		;;
 esac])
 AM_CONDITIONAL(DEV, test x$DEV = xyes)
 
 AC_CHECK_PROGS(AR, ar aal, ar)
 AC_CHECK_PROGS(PERL, perl5 perl)  
+
+AC_MSG_CHECKING(whether to define _REENTRANT)
+AC_ARG_ENABLE(reentrant, [  --enable-reentrant      define _REENTRANT to enable reentrant system calls],
+[ case "${enableval}" in
+  no)
+    AC_MSG_RESULT(no)
+    ac_cv_reentrant=no
+    ;;
+  *) 
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(ICAL_REENTRANT) [CFLAGS="$CFLAGS -D_REENTRANT"]
+    ac_cv_reentrant=yes
+    ;;
+  esac ],
+  AC_MSG_RESULT(no)
+)
+
 
 dnl **************************************************
 dnl test/regression.c (and maybe others) needs this defined
