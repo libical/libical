@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.2 2001-03-08 05:52:34 ebusboom Exp $
+  $Id: icalduration.c,v 1.3 2002-05-03 14:46:22 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -250,7 +250,7 @@ char* icaldurationtype_as_ical_string(struct icaldurationtype d)
 	    
 	}
     } else {
-	icalmemory_append_string(&buf, &buf_ptr, &buf_size, "PTS0");
+	icalmemory_append_string(&buf, &buf_ptr, &buf_size, "PT0S");
     }
  
     output_line = icalmemory_tmp_copy(buf);
