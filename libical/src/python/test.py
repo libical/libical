@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.18 2002-07-08 17:56:11 acampi Exp $
+#  $Id: test.py,v 1.19 2002-07-09 18:14:36 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -327,9 +327,21 @@ def test_component():
 
     print inner.as_ical_string()
 
+    # test sequence 
+    event = Event()
+
+    try:
+       event.sequence("foo")
+    except TypeError:
+       pass
+
+    event.sequence(-1)
+    print event.sequence()
+
+    event.sequence(1)
+    event.sequence(88)
+    print event.sequence()
     
-
-
 def test_event():
     print "------------ Event Class ----------------------"
 

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.10 2002-07-08 17:56:11 acampi Exp $
+#  $Id: Property.py,v 1.11 2002-07-09 18:14:36 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -149,7 +149,7 @@ class Property:
 
             #e1=icalerror_supress("MALFORMEDDATA")
 
-            icalproperty_set_value_from_string(self._ref,v,vt)
+            icalproperty_set_value_from_string(self._ref,str(v),vt)
             #icalerror_restore("MALFORMEDDATA",e1)
 
             if error_type() != "NO":
