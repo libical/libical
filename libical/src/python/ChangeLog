@@ -1,3 +1,7 @@
+2001-03-13  Eric Busboom  <eric@softwarestudio.org>
+
+	* Component.py Added Component.property()
+
 2001-03-10  Patrick Lewis <plewis@inetarena.com>
 
 	* Added __str__ method to Collection.Collection
