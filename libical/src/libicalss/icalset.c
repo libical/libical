@@ -12,7 +12,7 @@
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalset.c,v 1.9 2002-06-27 14:53:54 acampi Exp $
+ $Id: icalset.c,v 1.10 2002-06-27 16:46:59 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -136,21 +136,20 @@ static int	icalset_init_done = 0;
 static pvl_list icalset_kinds = 0;
 
 void icalset_init(void) {
+    assert(icalset_kinds == 0);
+    icalset_kinds = pvl_newlist();
 
-	assert(icalset_kinds == 0);
-	icalset_kinds = pvl_newlist();
-
-	pvl_push(icalset_kinds, &icalset_fileset_init);
-	pvl_push(icalset_kinds, &icalset_dirset_init);
+    pvl_push(icalset_kinds, &icalset_fileset_init);
+    pvl_push(icalset_kinds, &icalset_dirset_init);
 #ifdef WITH_BDB4
-	pvl_push(icalset_kinds, &icalset_bdb4set_init);
+    pvl_push(icalset_kinds, &icalset_bdb4set_init);
 #endif
-	icalset_init_done++;
+    icalset_init_done++;
 }
 #endif
 
 icalset* icalset_new(icalset_kind kind, const char* dsn, void* options) {
-  icalset* data = NULL;
+    icalset* data = NULL;
 
 #ifdef _DLOPEN_TEST
     pvl_elem	e;
