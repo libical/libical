@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.3 2001-01-05 01:56:57 ebusboom Exp $
+  $Id: regression.c,v 1.4 2001-01-12 21:22:20 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -35,6 +35,10 @@
 #include <stdlib.h> /* for malloc */
 #include <stdio.h> /* for printf */
 #include <time.h> /* for time() */
+#include <unistd.h> /* for unlink, fork */
+#include <sys/wait.h> /* For waitpid */
+#include <sys/types.h> /* For wait pid */
+#include <sys/time.h> /* for select */
 
 
 /* This example creates and minipulates the ical object that appears
@@ -2527,6 +2531,8 @@ void test_fileset()
 	"SELECT * FROM VEVENT WHERE DTSTART > '20000103T120000Z' AND DTSTART <= '20000106T120000Z'");
 
 
+    unlink(path);
+
     fs = icalfileset_new(path);
     
     assert(fs != 0);
@@ -2537,6 +2543,10 @@ void test_fileset()
     }
 
     icalfileset_commit(fs);
+
+    icalfileset_free(fs);
+    fs = icalfileset_new(path);
+
 
     printf("== No Selections \n");
 
@@ -2562,9 +2572,156 @@ void test_fileset()
 
     icalfileset_free(fs);
     
-    unlink(path);
+}
+
+void microsleep(int us)
+{
+    struct timeval tv;
+
+    tv.tv_sec = 0;
+    tv.tv_usec = us;
+
+    select(0,0,0,0,&tv);
 
 }
+
+
+void test_file_locks()
+{
+    pid_t pid;
+    char *path = "test_fileset_locktest.ics";
+    icalfileset *fs;
+    icalcomponent *c, *c2;
+    struct icaldurationtype d;
+    int i;
+    int final,sec;
+
+    icalfileset_safe_saves = 0;
+
+    unlink(path);
+
+    icalerror_clear_errno();
+    fs = icalfileset_new(path);
+    c = make_component(0);
+
+    d = icaldurationtype_from_int(1);
+
+    icalcomponent_set_duration(c,d);
+
+    icalfileset_add_component(fs,c);
+
+    c2 = icalcomponent_new_clone(c);
+
+    icalfileset_add_component(fs,c2);
+
+    icalfileset_commit(fs);
+
+    icalfileset_free(fs);
+
+    assert(icalerrno == ICAL_NO_ERROR);
+
+    pid = fork();
+
+    assert(pid >= 0);
+
+    if(pid == 0){
+	/*child*/
+	int i;
+
+	exit(0);
+	
+	for(i = 0; i< 50; i++){
+	    fs = icalfileset_new(path);
+
+	    printf("P1.");
+
+	    assert(fs != 0);
+
+	    c = icalfileset_get_first_component(fs);
+
+	    assert(c!=0);
+	    
+	    d = icalcomponent_get_duration(c);
+	    d = icaldurationtype_from_int(icaldurationtype_as_int(d)+1);
+	    
+	    icalcomponent_set_duration(c,d);
+	    
+	    c2 = icalcomponent_new_clone(c);
+	    
+	    icalcomponent_set_summary(c2,"Process 1");
+
+	    icalfileset_add_component(fs,c2);
+
+	    icalfileset_free(fs);
+
+	    printf("P1\n");
+
+	    microsleep(5);
+
+
+	}
+
+	exit(0);
+
+    } else {
+	/* parent */
+	int i;
+	
+	for(i = 0; i< 50; i++){
+	    fs = icalfileset_new(path);
+
+	    printf("P2.");
+
+	    assert(fs != 0);
+
+	    c = icalfileset_get_first_component(fs);
+	    
+	    assert(c!=0);
+
+	    d = icalcomponent_get_duration(c);
+	    d = icaldurationtype_from_int(icaldurationtype_as_int(d)+1);
+	    
+	    icalcomponent_set_duration(c,d);
+	    
+	    c2 = icalcomponent_new_clone(c);
+ 	    
+	    icalcomponent_set_summary(c2,"Process 2");
+
+	    icalfileset_add_component(fs,c2);
+
+	    icalfileset_free(fs);
+
+	    printf("P2\n");
+
+	    microsleep(5);
+
+	}
+    }
+
+    assert(waitpid(pid,0,0)==pid);
+	
+
+    fs = icalfileset_new(path);
+    
+    i=1;
+
+    c = icalfileset_get_first_component(fs);
+    final = icaldurationtype_as_int(icalcomponent_get_duration(c));
+    for (c = icalfileset_get_next_component(fs);
+	 c != 0;
+	 c = icalfileset_get_next_component(fs)){
+	struct icaldurationtype d = icalcomponent_get_duration(c);
+	sec = icaldurationtype_as_int(d);
+
+	printf("%d %d\n",i,sec);
+	assert(i == sec);
+	i++;
+    }
+
+    
+    assert(sec == final);
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -2692,6 +2849,12 @@ int main(int argc, char *argv[])
 	printf("\n------------Test File Set--------------\n");
 	test_fileset();
     }
+
+    if(tfile ==1 || tfile == 3){
+	printf("\n------------Test File Set--------------\n");
+	test_file_locks();
+    }
+
 
 
     if(tmisc == 1 || tmisc  == 2){

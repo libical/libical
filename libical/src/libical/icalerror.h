@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.1.1.1 2001-01-02 07:32:59 ebusboom Exp $
+  $Id: icalerror.h,v 1.2 2001-01-12 21:22:20 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -132,7 +132,7 @@ typedef enum icalerrorenum {
 } icalerrorenum;
 
 extern icalerrorenum icalerrno;
-
+extern int icalerror_errors_are_fatal;
 
 void icalerror_clear_errno(void);
 void icalerror_set_errno(icalerrorenum);

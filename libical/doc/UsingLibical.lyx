@@ -1852,63 +1852,38 @@ void test_fileset()
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- icalfileset *fs;
+    icalfileset *fs;
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- icalcomponent *c;
+    icalcomponent *c;
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- int i;
+    int i;
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- char *path = "test_fileset.ics";
+    char *path = "test_fileset.ics";
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- icalgauge\SpecialChar ~
- *g = icalgauge_new_from_sql(
+    icalgauge  *g = icalgauge_new_from_sql(
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-"SELECT * FROM VEVENT WHERE DTSTART > '20000103T120000Z' AND DTSTART <=
- '20000106T120000Z'");
+        "SELECT * FROM VEVENT WHERE DTSTART > '20000103T120000Z' AND DTSTART
+ <= '20000106T120000Z'");
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-
+ 
 \layout Verbatim
 
     
@@ -1926,48 +1901,26 @@ for (i = 0; i!= 10; i++){
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-c = make_component(i);
+        c = make_component(i);
 \latex default 
  /* Make a new component where DTSTART has month of i */
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-icalfileset_add_component(fs,c);
+        icalfileset_add_component(fs,c);
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- }
+    }
 \layout Verbatim
 
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- icalfileset_commit(fs);
+    icalfileset_commit(fs);
 \latex default 
  /* Write to disk */
 \layout Verbatim
@@ -1976,94 +1929,51 @@ icalfileset_add_component(fs,c);
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- icalfileset_select(fs,g);
+    icalfileset_select(fs,g);
 \latex default 
  /* Set the gauge to filter components */
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-
+ 
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- for (c = icalfileset_get_first_component(fs);
+    for (c = icalfileset_get_first_component(fs);
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- c != 0;
+         c != 0;
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- c = icalfileset_get_next_component(fs)){
+         c = icalfileset_get_next_component(fs)){
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-struct icaltimetype t = icalcomponent_get_dtstart(c);
+        struct icaltimetype t = icalcomponent_get_dtstart(c);
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-
+ 
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
-printf("%s
+        printf("%s
 \backslash 
 n",icaltime_as_ctime(t));
 \layout Verbatim
 
 
 \latex no_latex 
-\SpecialChar ~
-\SpecialChar ~
-\SpecialChar ~
- }
+    }
 \layout Verbatim
 
     
@@ -2156,7 +2066,47 @@ Most routines will set the global error value icalerrno on errors.
 lerror.h.
  If the routine returns an enum icalerrorenum, then the return value will
  be the same as icalerrno.
- You can use icalerror_strerror() to get a string that describes the error
+ You can use icalerror_strerror() to get a string that describes the error.
+ The enumerations are:
+\layout Itemize
+
+ICAL_BADARG_ERROR -- One of the argument to a routine was bad.
+ Typically for a null pointer.
+ 
+\layout Itemize
+
+ICAL_NEWFAILED_ERROR -- A new() or malloc() failed
+\layout Itemize
+
+ICAL_MALFORMEDDATA_ERROR -- An input string was not in the correct format
+\layout Itemize
+
+ICAL_PARSE_ERROR -- The parser failed to parse an incomming component
+\layout Itemize
+
+ICAL_INTERNAL_ERROR -- Largely equivalent to an assert
+\layout Itemize
+
+ICAL_FILE_ERROR -- A file operation failed.
+ Check errno for more detail.
+\layout Itemize
+
+ICAL_ALLOCATION_ERROR -- ?
+\layout Itemize
+
+ICAL_USAGE_ERROR -- ?
+\layout Itemize
+
+ICAL_NO_ERROR -- No error
+\layout Itemize
+
+ICAL_MULTIPLEINCLUSION_ERROR -- ?
+\layout Itemize
+
+ICAL_TIMEDOUT_ERROR -- For CSTP and acquiring locks
+\layout Itemize
+
+ICAL_UNKNOWN_ERROR -- ?
 \layout Subsubsection
 
 X-LIC-ERROR and X-LIC-INVALID-COMPONENT
@@ -2307,6 +2257,20 @@ Icalcomponent_convert_errors() converts some of the error properties in
  As of libical version0.18, this routine only convert *PARSEERROR errors
  and it always generates a 3.x ( failure ) code.
  This makes it more of a good idea than a really useful bit of code.
+ 
+\layout Subsubsection
+
+ICAL_ERRORS_ARE_FATAL and icalerror_errors_are_fatal
+\layout Standard
+
+If the global variable icalerror_errors_are_fatal is set to 1, then any
+ error condition will cause the program to abort.
+ The abort occurs in icalerror_set_errno(), and is done with an assert(0)
+ if NDEBUG is undefined, and with icalerror_crash_here if NDEBUG is defined.
+ The default value of icalerror_errors_are_fatal is 1 when ICAL_ERRORS_ARE_FATAL
+ is defined, and 0 otherwise.
+ Since ICAL_ERRORS_ARE_FATAL is defined by default, icalerror_errors_are_fatal
+ is also defined by default.
  
 \layout Subsection
 

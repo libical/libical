@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
+  $Id: icalcomponent.c,v 1.3 2001-01-12 21:22:20 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1241,7 +1241,7 @@ void icalcomponent_set_duration(icalcomponent* comp,
 	icalproperty_set_dtend(end_prop,new_end);
 
     } else if ( dur_prop != 0) { 
-	icalproperty_set_duration(end_prop,v);
+	icalproperty_set_duration(dur_prop,v);
     } else {
 	/* Error, both duration and dtend have been specified */
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
@@ -1342,8 +1342,34 @@ struct icaltimetype icalcomponent_get_dtstamp(icalcomponent* comp)
 }
 
 
-void icalcomponent_set_summary(icalcomponent* comp, const char* v);
-const char* icalcomponent_get_summary(icalcomponent* comp);
+void icalcomponent_set_summary(icalcomponent* comp, const char* v)
+{
+    icalcomponent *inner = icalcomponent_get_inner(comp); 
+    icalproperty *prop 
+	= icalcomponent_get_first_property(inner, ICAL_SUMMARY_PROPERTY);
+
+    if (prop == 0){
+	prop = icalproperty_new_summary(v);
+	icalcomponent_add_property(inner, prop);
+    }
+    
+    icalproperty_set_summary(prop,v);
+}
+
+
+const char* icalcomponent_get_summary(icalcomponent* comp)
+{
+    icalcomponent *inner = icalcomponent_get_inner(comp); 
+    icalproperty *prop 
+	= icalcomponent_get_first_property(inner,ICAL_SUMMARY_PROPERTY);
+
+    if (prop == 0){
+	return 0;
+    }
+    
+    return icalproperty_get_summary(prop);
+
+}
 
 void icalcomponent_set_comment(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_comment(icalcomponent* comp);

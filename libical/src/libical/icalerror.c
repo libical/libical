@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.1.1.1 2001-01-02 07:32:59 ebusboom Exp $
+  $Id: icalerror.c,v 1.2 2001-01-12 21:22:20 ebusboom Exp $
   $Locker:  $
     
 
@@ -53,20 +53,29 @@ void icalerror_clear_errno() {
     icalerrno = ICAL_NO_ERROR;
 }
 
+#ifdef ICAL_ERRORS_ARE_FATAL
+int icalerror_errors_are_fatal = 1;
+#else
+int icalerror_errors_are_fatal = 0;
+#endif
+
 void icalerror_set_errno(icalerrorenum e) {
 
-#ifdef ICAL_ERRORS_ARE_FATAL
-    fprintf(stderr,"libical: icalerrno_set_error: %s\n",icalerror_strerror(e));
+   
+    icalerrno = e;
+    icalerror_stop_here();
+
+    if(icalerror_errors_are_fatal == 1){
+
+	fprintf(stderr,"libical: icalerrno_set_error: %s\n",icalerror_strerror(e));
 #ifdef NDEBUG
 	icalerror_crash_here();
 #else
 	assert(0);
 #endif 
+    }
 
-#endif
 
-    icalerror_stop_here();
-    icalerrno = e;
 }
 
 
@@ -80,7 +89,7 @@ static struct icalerror_string_map string_map[] =
     {ICAL_BADARG_ERROR,"Bad argument to function"},
     {ICAL_NEWFAILED_ERROR,"Failed to create a new object via a *_new() routine"},
     {ICAL_MALFORMEDDATA_ERROR,"An input string was not correctly formed or a component has missing or extra properties"},
-    {ICAL_PARSE_ERROR,"Failed to parse a part of an iCal componet"},
+    {ICAL_PARSE_ERROR,"Failed to parse a part of an iCal component"},
     {ICAL_INTERNAL_ERROR,"Random internal error. This indicates an error in the library code, not an error in use"}, 
     {ICAL_FILE_ERROR,"An operation on a file failed. Check errno for more detail."},
     {ICAL_ALLOCATION_ERROR,"Failed to allocate memory"},

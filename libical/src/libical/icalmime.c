@@ -4,7 +4,7 @@
  CREATOR: eric 26 July 2000
 
 
- $Id: icalmime.c,v 1.1.1.1 2001-01-02 07:33:02 ebusboom Exp $
+ $Id: icalmime.c,v 1.2 2001-01-12 21:22:20 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -32,6 +32,7 @@
 #include "sspm.h"
 #include "stdlib.h"
 #include <string.h> /* For strdup */
+#include <stdio.h> /* for snprintf*/
 
 #ifdef DMALLOC
 #include "dmalloc.h"

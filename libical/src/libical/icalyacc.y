@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalyacc.y,v 1.1.1.1 2001-01-02 07:33:00 ebusboom Exp $
+  $Id: icalyacc.y,v 1.2 2001-01-12 21:22:20 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -48,14 +48,7 @@ int utcsign;
 /* Globals for DURATION values */
 struct icaldurationtype duration;
 
-/* Globals for RECUR values */
-struct icalrecurrencetype recur;
-short skiplist[367];
-short skippos;
-int dow_pos;
-
 void copy_list(short* array, size_t size);
-void clear_recur();
 void add_prop(icalproperty_kind);
 void icalparser_fill_date(struct tm* t, char* dstr);
 void icalparser_fill_time(struct tm* t, char* tstr);
@@ -185,7 +178,6 @@ value:
 	| datetime_value
 	| duration_value
 	| period_value
-	| recur_value
         | utcoffset_value
         | error { 
                   icalparser_yy_value = 0;
@@ -370,85 +362,6 @@ period_value:  DIGITS TIME_CHAR DIGITS utc_char '/'  DIGITS TIME_CHAR DIGITS utc
 
 
 
-/* Recur */
-
-recur_start:
-	FREQ EQUALS SECONDLY {clear_recur();recur.freq = ICAL_SECONDLY_RECURRENCE;}
-        | FREQ EQUALS MINUTELY {clear_recur();recur.freq = ICAL_MINUTELY_RECURRENCE;}
-	| FREQ EQUALS HOURLY {clear_recur();recur.freq = ICAL_HOURLY_RECURRENCE;}
-	| FREQ EQUALS DAILY {clear_recur();recur.freq = ICAL_DAILY_RECURRENCE;}
-	| FREQ EQUALS WEEKLY {clear_recur();recur.freq = ICAL_WEEKLY_RECURRENCE;}
-	| FREQ EQUALS MONTHLY {clear_recur();recur.freq = ICAL_MONTHLY_RECURRENCE;}
-	| FREQ EQUALS YEARLY {clear_recur();recur.freq = ICAL_YEARLY_RECURRENCE;}
-	;
-
-
-weekday:
-	SU { skiplist[skippos]=ICAL_SUNDAY_WEEKDAY; }
-        | MO { skiplist[skippos]=ICAL_MONDAY_WEEKDAY; }
-	| TU { skiplist[skippos]=ICAL_TUESDAY_WEEKDAY; }
-	| WE { skiplist[skippos]=ICAL_WEDNESDAY_WEEKDAY; }
-	| TH { skiplist[skippos]=ICAL_THURSDAY_WEEKDAY; }
-	| FR { skiplist[skippos]=ICAL_FRIDAY_WEEKDAY; } 
-	| SA { skiplist[skippos]=ICAL_SATURDAY_WEEKDAY; }
-	;
-
-/* HACK. The skippos has only 8 positions, but the spec permits any number */
-
-weekday_list:
-	weekday {if( skippos<8) skippos++;}
-	| DIGITS weekday { dow_pos = atoi($1);  
-	           skiplist[skippos] += 8*dow_pos; if( skippos<8) skippos++; } 
-	| MINUS DIGITS weekday { dow_pos = atoi($2);  
-	           skiplist[skippos] -= 8*dow_pos; if( skippos<8) skippos++; } 
-	| weekday_list COMMA weekday {if( skippos<8) skippos++;};
-	| weekday_list COMMA DIGITS weekday { dow_pos = atoi($3); 
-	           skiplist[skippos] += 8*dow_pos;if( skippos<8) skippos++;} 
-	| weekday_list COMMA MINUS DIGITS weekday { dow_pos = atoi($4); 
-	           skiplist[skippos] -= 8*dow_pos;if( skippos<8) skippos++;} 
-	
-
-recur_list: 
-	DIGITS { skiplist[skippos] = atoi($1); skippos++;}
-        | recur_list COMMA DIGITS { skiplist[skippos] = atoi($3); if (skippos<367) skippos++;}
-	;
-
-recur_skip:
-	INTERVAL EQUALS DIGITS {recur.interval = atoi($3);}
-	| WKST EQUALS SU {recur.week_start = ICAL_SUNDAY_WEEKDAY;}
-	| WKST EQUALS MO {recur.week_start = ICAL_MONDAY_WEEKDAY;}
-	| WKST EQUALS TU {recur.week_start = ICAL_TUESDAY_WEEKDAY;}
-	| WKST EQUALS WE {recur.week_start = ICAL_WEDNESDAY_WEEKDAY;}
-	| WKST EQUALS TH {recur.week_start = ICAL_THURSDAY_WEEKDAY;}
-	| WKST EQUALS FR {recur.week_start = ICAL_FRIDAY_WEEKDAY;}
-	| WKST EQUALS SA {recur.week_start = ICAL_SATURDAY_WEEKDAY;}
-	| BYSECOND EQUALS recur_list{copy_list(recur.by_second,60);}
-	| BYMINUTE EQUALS recur_list{copy_list(recur.by_minute,60);}
-	| BYHOUR EQUALS recur_list{copy_list(recur.by_hour,24);}
-	| BYDAY EQUALS weekday_list{copy_list(recur.by_day,7);}
-	| BYMONTH EQUALS recur_list{copy_list(recur.by_month,12);}
-	| BYMONTHDAY EQUALS recur_list{copy_list(recur.by_month_day,31);}
-	| BYYEARDAY EQUALS recur_list{copy_list(recur.by_year_day,366);}
-	| BYWEEKNO EQUALS recur_list{copy_list(recur.by_week_no,53);}
-	| BYSETPOS EQUALS recur_list{copy_list(recur.by_set_pos,366);}
-	| UNTIL EQUALS datetime_value
-           { recur.until = icalvalue_get_datetime(icalparser_yy_value);
-	   icalvalue_free(icalparser_yy_value); icalparser_yy_value=0;}
-	| UNTIL EQUALS date_value 
-           { recur.until = icalvalue_get_date(icalparser_yy_value);
-	   icalvalue_free(icalparser_yy_value); icalparser_yy_value=0;}
-	| COUNT EQUALS DIGITS
-           { recur.count = atoi($3); }
-	;
-
-recur_skip_list:
-	/* empty */
-	| recur_skip_list SEMICOLON recur_skip
-
-recur_value: 
-	recur_start recur_skip_list
-	  { icalparser_yy_value = icalvalue_new_recur(recur); }
-
 
 
 /* UTC Offset */
@@ -467,25 +380,7 @@ utcoffset_value:
 	    icalparser_yy_value = icalvalue_new_utcoffset(utcsign * ($2*3600) + ($3*60) +($4));
   	}
 
-
-
 %%
-
-
-void clear_recur()
-{   
-    memset(&skiplist, ICAL_RECURRENCE_ARRAY_MAX_BYTE, sizeof(skiplist));
-    skippos = 0;
-
-    icalrecurrencetype_clear(&recur);
-}
-
-void copy_list(short* array, size_t size)
-{ 
-	memcpy(array, skiplist, size*sizeof(short));
-	memset(&skiplist,ICAL_RECURRENCE_ARRAY_MAX_BYTE, sizeof(skiplist));
-	skippos = 0;
-}
 
 struct icaltimetype fill_datetime(char* datestr, char* timestr)
 {
