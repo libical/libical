@@ -32,6 +32,7 @@ Libical.py 		\
 LibicalWrap.i 		\
 python-binding.txt 	\
 test.py			\
+Attendee.py 		\
 Collection.py		\
 Component.py		\
 DerivedProperties.py	\
