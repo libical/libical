@@ -180,6 +180,7 @@ icalproperty* icalproperty_vanew_${lc}($type v, ...){
 EOM
 }
 	print<<EOM;
+
 /* $prop */
 icalproperty* icalproperty_new_${lc}($type v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_${uc}_PROPERTY);   $pointer_check
