@@ -2,7 +2,7 @@
   FILE: icalcalendar.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalcalendar.c,v 1.3 2002-06-27 02:30:58 acampi Exp $
+  $Id: icalcalendar.c,v 1.4 2002-06-28 12:24:38 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -53,7 +53,7 @@ struct icalcalendar_impl
 	icalset* incoming;
 };
 
-struct icalcalendar_impl* icalcalendar_new_impl()
+struct icalcalendar_impl* icalcalendar_new_impl(void)
 {
     struct icalcalendar_impl* impl;
 
