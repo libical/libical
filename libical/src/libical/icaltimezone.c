@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.18 2002-10-09 22:10:18 acampi Exp $
+ $Id: icaltimezone.c,v 1.19 2002-10-09 22:12:28 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -335,6 +335,9 @@ icaltimezone_get_tznames_from_vtimezone (icalcomponent *component)
     const char *standard_tzname = NULL, *daylight_tzname = NULL;
     struct icaltimetype standard_max_date, daylight_max_date;
     struct icaltimetype current_max_date;
+
+    standard_max_date = icaltime_null_time();
+    daylight_max_date = icaltime_null_time();
 
     /* Step through the STANDARD & DAYLIGHT subcomponents. */
     comp = icalcomponent_get_first_component (component, ICAL_ANY_COMPONENT);
