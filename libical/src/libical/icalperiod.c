@@ -3,7 +3,7 @@
   FILE: icalperiod.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalperiod.c,v 1.10 2002-06-28 11:14:25 acampi Exp $
+  $Id: icalperiod.c,v 1.11 2002-10-30 21:22:03 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -36,14 +36,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef ICAL_NO_LIBICAL
-#define icalerror_set_errno(x)
-#define  icalerror_check_arg_rv(x,y)
-#define  icalerror_check_arg_re(x,y,z)
-#else
 #include "icalerror.h"
 #include "icalmemory.h"
-#endif
 
 
 

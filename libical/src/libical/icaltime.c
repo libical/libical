@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.47 2002-10-09 22:00:43 acampi Exp $
+  $Id: icaltime.c,v 1.48 2002-10-30 21:22:04 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -38,18 +38,11 @@
 
 #include "astime.h"		/* Julian data handling routines */
 
-/*
-#ifdef ICAL_NO_LIBICAL
-#define icalerror_set_errno(x)
-#define  icalerror_check_arg_rv(x,y)
-#define  icalerror_check_arg_re(x,y,z)
-#endif
-*/
-
 #include "icalerror.h"
 #include "icalmemory.h"
 
 #include "icaltimezone.h"
+#include "icalvalue.h"
 
 #ifdef WIN32
 #include <Windows.h>
@@ -354,8 +347,6 @@ struct icaltimetype icaltime_normalize(const struct icaltimetype tt)
 }
 
 
-#ifndef ICAL_NO_LIBICAL
-#include "icalvalue.h"
 
 /**	@brief Contructor.
  * 
@@ -412,7 +403,6 @@ struct icaltimetype icaltime_from_string(const char* str)
 
     return tt;    
 }
-#endif
 
 
 /* Returns whether the specified year is a leap year. Year is the normal year,

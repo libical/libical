@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.40 2002-09-26 22:13:34 lindner Exp $
+  $Id: icalrecur.c,v 1.41 2002-10-30 21:22:04 acampi Exp $
   $Locker:  $
     
 
@@ -136,13 +136,8 @@
 
 #include "icalrecur.h"
 
-#ifdef ICAL_NO_LIBICAL
-#define icalerror_set_errno(x)
-#define  icalerror_check_arg_rv(x,y)
-#else
 #include "icalerror.h"
 #include "icalmemory.h"
-#endif
 
 #include <stdlib.h> /* for malloc */
 #include <errno.h> /* for errno */
@@ -448,8 +443,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 
 }
 
-#ifndef ICAL_NO_LIBICAL
-
 static struct { char* str;size_t offset; short limit;  } recurmap[] = 
 {
     {";BYSECOND=",offsetof(struct icalrecurrencetype,by_second),60},
@@ -552,8 +545,6 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 
     return  str;
 }
-#endif
-
 
 
 /************************* occurrence iteration routiens ******************/

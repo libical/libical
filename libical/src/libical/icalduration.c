@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.15 2002-10-09 20:43:19 acampi Exp $
+  $Id: icalduration.c,v 1.16 2002-10-30 21:22:03 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -36,14 +36,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef ICAL_NO_LIBICAL
-#define icalerror_set_errno(x)
-#define  icalerror_check_arg_rv(x,y)
-#define  icalerror_check_arg_re(x,y,z)
-#else
 #include "icalerror.h"
 #include "icalmemory.h"
-#endif
+#include "icalvalue.h"
 
 
 
@@ -77,8 +72,6 @@ struct icaldurationtype icaldurationtype_from_int(int t)
     return dur;
 }
 
-#ifndef ICAL_NO_LIBICAL
-#include "icalvalue.h"
 struct icaldurationtype icaldurationtype_from_string(const char* str)
 {
 
@@ -261,8 +254,6 @@ char* icaldurationtype_as_ical_string(struct icaldurationtype d)
     return output_line;
     
 }
-
-#endif
 
 
 /* From Russel Steinthal */
