@@ -21,7 +21,8 @@ const char* ictt_as_string(struct icaltimetype t)
     const char *zone = icaltimezone_get_tzid((icaltimezone *)t.zone);
 
     if (icaltime_is_utc(t))
-	sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02dZ");
+	sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d Z UTC",
+	t.year,t.month,t.day, t.hour,t.minute,t.second);
     else
 	sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d %s",
 	t.year,t.month,t.day, t.hour,t.minute,t.second,
