@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.28 2002-05-28 12:56:38 acampi Exp $
+  $Id: icalcomponent.c,v 1.29 2002-06-11 08:21:20 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -58,7 +58,7 @@ struct icalcomponent_impl
 	pvl_elem component_iterator;
 	icalcomponent* parent;
 
-	/* An array of icaltimezone structs. We use this so we can do fast
+	/** An array of icaltimezone structs. We use this so we can do fast
 	   lookup of timezones using binary searches. timezones_sorted is
 	   set to 0 whenever we add a timezone, so we remember to sort the
 	   array before doing a binary search. */
@@ -72,7 +72,7 @@ void icalproperty_set_parent(icalproperty* property,
 icalcomponent* icalproperty_get_parent(icalproperty* property);
 void icalcomponent_add_children(struct icalcomponent_impl *impl,va_list args);
 static icalcomponent* icalcomponent_new_impl (icalcomponent_kind kind);
-int icalcomponent_property_sorter(void *a, void *b);
+static int icalcomponent_property_sorter(void *a, void *b);
 
 static void icalcomponent_merge_vtimezone (icalcomponent *comp,
 					   icalcomponent *vtimezone,
@@ -368,9 +368,9 @@ icalcomponent_is_valid (icalcomponent* component)
 
 
 icalcomponent_kind
-icalcomponent_isa (icalcomponent* component)
+icalcomponent_isa (const icalcomponent* component)
 {
-    icalerror_check_arg_rz( (component!=0), "component");
+   icalerror_check_arg_rz( (component!=0), "component");
 
    if(component != 0)
    {
@@ -396,7 +396,7 @@ icalcomponent_isa_component (void* component)
 
 }
 
-int icalcomponent_property_sorter(void *a, void *b)
+static int icalcomponent_property_sorter(void *a, void *b)
 {
     icalproperty_kind kinda, kindb;
     const char *ksa, *ksb;
@@ -1692,9 +1692,12 @@ icalcomponent* icalcomponent_new_xdaylight()
  * Timezone stuff.
  */
 
-/* This takes 2 VCALENDAR components and merges the second one into the first,
-   resolving any problems with conflicting TZIDs. comp_to_merge will no
-   longer exist after calling this function. */
+
+/**
+ *  This takes 2 VCALENDAR components and merges the second one into the first,
+ *  resolving any problems with conflicting TZIDs. comp_to_merge will no
+ *  longer exist after calling this function.
+ */
 void icalcomponent_merge_component(icalcomponent* comp,
 				   icalcomponent* comp_to_merge)
 {
@@ -1905,9 +1908,11 @@ static int icalcomponent_get_tzid_prefix_len (const char *tzid)
 }
 
 
-/* Renames all references to the given TZIDs to a new name. rename_table
-   contains pairs of strings - a current TZID, and the new TZID to rename it
-   to. */
+/**
+ * Renames all references to the given TZIDs to a new name. rename_table
+ * contains pairs of strings - a current TZID, and the new TZID to rename it
+ * to.
+ */
 static void icalcomponent_rename_tzids(icalcomponent* comp,
 				       icalarray* rename_table)
 {
@@ -1937,7 +1942,9 @@ static void icalcomponent_rename_tzids_callback(icalparameter *param, void *data
 }
 
 
-/* Calls the given function for each TZID parameter found in the component. */
+/**
+ * Calls the given function for each TZID parameter found in the component.
+ */
 void icalcomponent_foreach_tzid(icalcomponent* comp,
 				void (*callback)(icalparameter *param, void *data),
 				void *callback_data)
@@ -1975,8 +1982,10 @@ void icalcomponent_foreach_tzid(icalcomponent* comp,
 
 
 
-/* Returns the icaltimezone from the component corresponding to the given
-   TZID, or NULL if the component does not have a corresponding VTIMEZONE. */
+/**
+ *  Returns the icaltimezone from the component corresponding to the given
+ *  TZID, or NULL if the component does not have a corresponding VTIMEZONE.
+ */
 icaltimezone* icalcomponent_get_timezone(icalcomponent* comp, const char *tzid)
 {
     icaltimezone *zone;
@@ -2013,7 +2022,9 @@ icaltimezone* icalcomponent_get_timezone(icalcomponent* comp, const char *tzid)
 }
 
 
-/* A function to compare 2 icaltimezone elements, used for qsort(). */
+/**
+ * A function to compare 2 icaltimezone elements, used for qsort().
+ */
 static int icalcomponent_compare_timezone_fn	(const void	*elem1,
 						 const void	*elem2)
 {
@@ -2030,8 +2041,10 @@ static int icalcomponent_compare_timezone_fn	(const void	*elem1,
 }
 
 
-/* Compares 2 VTIMEZONE components to see if they match, ignoring their TZIDs.
-   It returns 1 if they match, 0 if they don't, or -1 on error. */
+/**
+ * Compares 2 VTIMEZONE components to see if they match, ignoring their TZIDs.
+ * It returns 1 if they match, 0 if they don't, or -1 on error.
+ */
 static int icalcomponent_compare_vtimezones (icalcomponent	*vtimezone1,
 					     icalcomponent	*vtimezone2)
 {

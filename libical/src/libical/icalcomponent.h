@@ -59,7 +59,7 @@ char* icalcomponent_as_ical_string(icalcomponent* component);
 
 int icalcomponent_is_valid(icalcomponent* component);
 
-icalcomponent_kind icalcomponent_isa(icalcomponent* component);
+icalcomponent_kind icalcomponent_isa(const icalcomponent* component);
 
 int icalcomponent_isa_component (void* component);
 
@@ -105,7 +105,8 @@ void icalcomponent_remove_component(icalcomponent* parent,
 int icalcomponent_count_components(icalcomponent* component,
 				   icalcomponent_kind kind);
 
-/* This takes 2 VCALENDAR components and merges the second one into the first,
+/**
+   This takes 2 VCALENDAR components and merges the second one into the first,
    resolving any problems with conflicting TZIDs. comp_to_merge will no
    longer exist after calling this function. */
 void icalcomponent_merge_component(icalcomponent* comp,
@@ -143,10 +144,10 @@ icalcomponent* icalcompiter_deref(icalcompiter* i);
 /* Working with embedded error properties */
 int icalcomponent_check_restrictions(icalcomponent* comp);
 
-/*Count embedded errors*/
+/**Count embedded errors*/
 int icalcomponent_count_errors(icalcomponent* component);
 
-/* Remove all X-LIC-ERROR properties*/
+/** Remove all X-LIC-ERROR properties*/
 void icalcomponent_strip_errors(icalcomponent* component);
 
 /* Convert some X-LIC-ERROR properties into RETURN-STATUS properties*/
@@ -170,11 +171,11 @@ If the code was in an OO language, the remaining routines would be
 members of classes derived from icalcomponent. Don't call them on the
 wrong component subtypes. */
 
-/* For VCOMPONENT: Return a reference to the first VEVENT, VTODO or
+/** For VCOMPONENT: Return a reference to the first VEVENT, VTODO or
    VJOURNAL */
 icalcomponent* icalcomponent_get_first_real_component(icalcomponent *c);
 
-/* For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the start and end
+/** For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the start and end
    times of an event in UTC */
 struct icaltime_span icalcomponent_get_span(icalcomponent* comp);
 
@@ -240,13 +241,14 @@ int icalcomponent_remove_attendee(icalcomponent *comp, char* cuid);
 struct icalattendeetype icalcomponent_get_attendee(icalcomponent *comp,
   int index);
 
-/* Calls the given function for each TZID parameter found in the component,
+/**
+   Calls the given function for each TZID parameter found in the component,
    and any subcomponents. */
 void icalcomponent_foreach_tzid(icalcomponent* comp,
 				void (*callback)(icalparameter *param, void *data),
 				void *callback_data);
 
-/* Returns the icaltimezone in the component corresponding to the TZID, or NULL
+/** Returns the icaltimezone in the component corresponding to the TZID, or NULL
    if it can't be found. */
 icaltimezone* icalcomponent_get_timezone(icalcomponent* comp,
 					 const char *tzid);
