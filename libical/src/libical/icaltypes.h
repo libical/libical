@@ -55,6 +55,7 @@ struct icaltriggertype icaltriggertype_from_int(const int reltime);
 struct icaltriggertype icaltriggertype_from_string(const char* str);
 
 int icaltriggertype_is_null_trigger(struct icaltriggertype tr);
+int icaltriggertype_is_bad_trigger(struct icaltriggertype tr);
 
 /* struct icalreqstattype. This struct contains two string pointers,
 but don't try to free either of them. The "desc" string is a pointer
