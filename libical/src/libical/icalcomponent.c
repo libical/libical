@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.41 2002-08-09 14:45:12 lindner Exp $
+  $Id: icalcomponent.c,v 1.42 2002-09-26 22:03:02 lindner Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -908,6 +908,8 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 
 static int icalcomponent_is_busy(icalcomponent *comp) {
   icalproperty *transp;
+  enum icalproperty_status status;
+  int ret = 1;
 
   /** @todo check access control here, converting busy->free if the
      permissions do not allow access... */
@@ -922,15 +924,25 @@ static int icalcomponent_is_busy(icalcomponent *comp) {
     case ICAL_TRANSP_OPAQUE:
     case ICAL_TRANSP_OPAQUENOCONFLICT:
     case ICAL_TRANSP_NONE:
-      return (1);
+      ret = 1;
     case ICAL_TRANSP_TRANSPARENT:
     case ICAL_TRANSP_TRANSPARENTNOCONFLICT:
-      return(0);
+      ret = 0;
     default:
-      return(0);
+      /** shouldn't need this... **/
+      ret = 0;
     }
   }
-  return(1);
+  status = icalcomponent_get_status(comp);
+  if (ret && status) {
+     switch (status) {
+     case ICAL_STATUS_CANCELLED:
+     case ICAL_STATUS_TENTATIVE:
+        ret = 0;
+    default:
+    }
+  }
+  return(0);
 }
 
 
