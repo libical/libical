@@ -34,6 +34,12 @@ print dtstart
 
 print dtstart.day(), dtstart.month(), dtstart.year(), dtstart.value()
 
+attendee = c.properties('ATTENDEE')[0]
+
+print attendee
+
+test_time()
+
 file = open('littlefile.txt')
 attachProp = Attach(file)
 file.close()

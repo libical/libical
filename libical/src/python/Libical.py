@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 
-# $Id: Libical.py,v 1.5 2001-02-23 05:23:47 plewis Exp $
+# $Id: Libical.py,v 1.6 2001-02-26 05:58:31 ebusboom Exp $
 
 from LibicalWrap import *
 from types import *
@@ -18,6 +18,8 @@ class Property:
     In addition, parameter:parameter value entries may be included.
     """
 
+
+
     def __init__(self, dict):
         # TEMP_NOTE: I have split the singular dict into two separate ones.
         
@@ -25,7 +27,13 @@ class Property:
         # Properties are stored in self.parameters
         self.desc = {}
         self.parameters = {}
+  
         desc_keys = ('name', 'value', 'value_type', 'pid')
+
+        # Initialize all of the required keys
+        for key in desc_keys:
+            self.desc[key] = None
+
         for key in dict.keys():
             if key in desc_keys:
                 self.desc[key]=dict[key]
@@ -61,7 +69,7 @@ class Property:
         """
         return filter(lambda p, s=self: s[p] != None, self.parameters.keys())
 
-    def update_value():
+    def _update_value():
         """
         A virtual method that creates the dict entry value from another
         representation of the property
@@ -112,20 +120,21 @@ class Property:
 ##             for chop in range(75, len(outS), 74): #74 chars because of space
 ##                 outL.append(outS[chop:chop+74])
 ##             outS = join(outL, "\r\n ")         
-        return "%s%s" % (outS, "\r\n")            # insert final CRLF
+        # return "%s%s" % (outS, "\r\n")            # insert final CRLF
+
+        return outS
 
 class Time(Property):
     """ Represent iCalendar DATE, TIME and DATE-TIME """
     def __init__(self, value):
         """ 
-        Create a new Time from a string or unmber of seconds past the 
+        Create a new Time from a string or number of seconds past the 
         POSIX epoch
 
         Time("19970325T123000Z")  Construct from an iCalendar string
         Time(8349873494)          Construct from seconds past POSIX epoch
         
         """
-        
         Property.__init__(self, {})
 
         if isinstance(value, DictType):
@@ -139,97 +148,87 @@ class Time(Property):
         else:
             self.tt = icaltime_null_time()
 
-        self.update_value()
+        self._update_value()
 
-    def update_value(self):
+    def _update_value(self):
         """Updates value and value_type based on the (internal) self.tt."""
-        # Is this an internal function only?
-        # Should it be _update_value?
-        self.desc['value'] = icaltime_as_ical_string(self.tt)
 
-        # Set value_type appropriately
-        # Ok, this may be a little quirky to handle this here, but update_value
-        # is called every time the value is changed, and the behavior is
-        # documented.
-        # The alternative is to declare an update_value_type()
-        # function, and make sure that is called every time the value is
-        # changed.
-        t = self.value()
-        if len(t) <= 7:
-            self.value_type('TIME')
-        elif len(t) == 8:
+        if(self.is_date()):
             self.value_type('DATE')
         else:
             self.value_type('DATE-TIME')
+
+        self.tt = icaltime_normalize(self.tt)
+        self.desc['value'] = icaltime_as_ical_string(self.tt)
+
 
     def utc_seconds(self,v=None):
         """ Return or set time in seconds past POSIX epoch"""
         if (v!=None):
             self.tt = icaltime_from_timet(v,0)
-            self.update_value()
+            self._update_value()
         return icaltime_as_timet(self.tt)
 
     def is_utc(self,v=None):
         """ Return or set boolean indicating if time is in UTC """
         if(v != None):
             icaltimetype_is_utc_set(self.tt,v)
-            self.update_value()
+            self._update_value()
         return icaltimetype_is_utc_get(self.tt)
 
     def is_date(self,v=None):
         """ Return or set boolean indicating if time is actually a date """
         if(v != None):
             icaltimetype_is_date_set(self.tt,v)
-            self.update_value()
+            self._update_value()
         return icaltimetype_is_date_get(self.tt)
 
     def timezone(self,v=None):
         """ Return or set the timezone string for this time """
         if (v != None):
             self['TZID'] = v
-            self.update_value()  #Is this necessary?
         return  self['TZID']
 
     def second(self,v=None):
         """ Get or set the seconds component of this time """
         if(v != None):
             icaltimetype_second_set(self.tt,v)
-            self.update_value()
+            self._update_value()
         return icaltimetype_second_get(self.tt)
 
     def minute(self,v=None):
         """ Get or set the minute component of this time """
         if(v != None):
             icaltimetype_minute_set(self.tt,v)
-            self.update_value()
+            self._update_value()
         return icaltimetype_minute_get(self.tt)
 
     def hour(self,v=None):
         """ Get or set the hour component of this time """
         if(v != None):
             icaltimetype_hour_set(self.tt,v)
-            self.update_value()
+            self._update_value()
         return icaltimetype_hour_get(self.tt)
 
     def day(self,v=None):
         """ Get or set the month day component of this time """
         if(v != None):
             icaltimetype_day_set(self.tt,v)
-            self.update_value()
+            self._update_value()
         return icaltimetype_day_get(self.tt)
 
     def month(self,v=None):
         """ Get or set the month component of this time. January is month 1 """
         if(v != None):
             icaltimetype_month_set(self.tt,v)
-            self.update_value()
+            self._update_value()
         return icaltimetype_month_get(self.tt)
 
     def year(self,v=None):
         """ Get or set the year component of this time """
         if(v != None):
             icaltimetype_year_set(self.tt,v)
-            self.update_value()
+            self._update_value()
 
         return icaltimetype_year_get(self.tt)
 
@@ -239,8 +238,36 @@ class Time(Property):
         # methods use self.tt
         if v!= None:
             self.tt = icaltime_from_string(v)
-            self.update_value()
+            self._update_value()
+
         return self.desc['value']
+
+
+def test_time():
+    "Test routine"
+    t = Time("19970325T123010Z")
+    
+    assert(t.year() == 1997)
+    assert(t.month() == 3)
+    assert(t.day() == 25)
+    assert(t.hour() == 12)
+    assert(t.minute() == 30)
+    assert(t.second() == 10)
+    assert(t.is_utc())
+    assert(not t.is_date())
+    
+    print t
+
+    t.timezone("America/Los_Angeles")
+    assert(str(t)=='None;TZID=America/Los_Angeles:19970325T123010Z')
+    t.name("DTSTART")
+
+    t.second(t.second()+80)
+
+    print t
+
+    assert(t.minute() == 31)
+    assert(t.second() == 30)
 
 
 class Duration(Property):
@@ -273,9 +300,9 @@ class Duration(Property):
 
         Property.name(self, 'DURATION')
         Property.value_type(self, 'DURATION')
-        self.update_value()
+        self._update_value()
 
-    def update_value(self):
+    def _update_value(self):
         self.desc['value'] = icaldurationtype_as_ical_string(self.dur)
 
     def seconds(self,v=None):
@@ -289,7 +316,7 @@ class Duration(Property):
         "Return or set duration using iCalendar duration string."
         if v!=None:
             self.dur = icaldurationtype_from_string(v)
-            self.update_value()
+            self._update_value()
             
         return self.desc['value']
 
