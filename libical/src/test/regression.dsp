@@ -39,18 +39,17 @@ RSC=rc.exe
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
-# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "..\libical" /I "..\libical\autogenex" /I "..\libicalss" /I "..\libicalss\autogenex" /I "..\libicalvcal" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "../libical" /I "../libicalss" /I "../libicalvcal" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libical.lib libicalss.lib libicalvcal.lib /nologo /subsystem:console /machine:I386 /libpath:"../libical/Release" /libpath:"../libicalss/Release" /libpath:"../libicalvcal/Release"
 
 !ELSEIF  "$(CFG)" == "regression - Win32 Debug"
 
@@ -65,16 +64,16 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /MDd /I "..\libical" /I "..\libical\autogenex" /I "..\libicalss" /I "..\\libicalvcal" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "YY_NO_UNISTD_H" /FR
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ  /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "../libical" /I "../libicalss" /I "../libicalvcal" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ  /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libical.lib libicalss.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"..\libical\Debug" /libpath:"..\libicalss\Debug"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libical.lib libicalss.lib libicalvcal.lib /nologo /subsystem:console /profile /debug /machine:I386 /libpath:"../libical/Debug" /libpath:"../libicalss/Debug" /libpath:"../libicalvcal/Debug"
 
 !ENDIF 
 
@@ -88,69 +87,35 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=".\regression-classify.c"
-DEP_CPP_REGRE=\
-	".\regression.h"\
-	
-NODEP_CPP_REGRE=\
-	".\ical.h"\
-	".\icalss.h"\
-	
 # End Source File
 # Begin Source File
 
 SOURCE=".\regression-component.c"
-DEP_CPP_REGRES=\
-	".\regression.h"\
-	
-NODEP_CPP_REGRES=\
-	".\ical.h"\
-	
 # End Source File
 # Begin Source File
 
 SOURCE=".\regression-recur.c"
-DEP_CPP_REGRESS=\
-	".\regression.h"\
-	
-NODEP_CPP_REGRESS=\
-	".\ical.h"\
-	".\icalss.h"\
-	
 # End Source File
 # Begin Source File
 
 SOURCE=".\regression-storage.c"
-DEP_CPP_REGRESSI=\
-	".\regression.h"\
-	
-NODEP_CPP_REGRESSI=\
-	".\ical.h"\
-	".\icalss.h"\
-	
 # End Source File
 # Begin Source File
 
 SOURCE=".\regression-utils.c"
-NODEP_CPP_REGRESSIO=\
-	".\ical.h"\
-	
 # End Source File
 # Begin Source File
 
 SOURCE=.\regression.c
-DEP_CPP_REGRESSION=\
-	".\regression.h"\
-	
-NODEP_CPP_REGRESSION=\
-	".\ical.h"\
-	".\icalss.h"\
-	".\icalvcal.h"\
-	
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\regression.h
+# End Source File
 # End Group
 # Begin Group "Resource Files"
 

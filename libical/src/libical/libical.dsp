@@ -101,27 +101,111 @@ SOURCE=icalcomponent.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\autogenex\icalderivedparameter.c
+SOURCE=.\icalderivedparameter.c
 # End Source File
 # Begin Source File
 
 SOURCE=icalderivedparameter.c.in
+
+!IF  "$(CFG)" == "libical - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+USERDEP__ICALD="../../scripts/mkderivedparameters.pl"	"../../design-data/parameters.csv"	
+# Begin Custom Build
+InputPath=icalderivedparameter.c.in
+InputName=icalderivedparameter.c
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedparameters.pl -i $(InputName).in -c ../../design-data/parameters.csv > $(InputName)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libical - Win32 Debug"
+
+USERDEP__ICALD="../../scripts/mkderivedparameters.pl"	"../../design-data/parameters.csv"	
+# Begin Custom Build
+InputPath=icalderivedparameter.c.in
+InputName=icalderivedparameter.c
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedparameters.pl -i $(InputName).in -c ../../design-data/parameters.csv > $(InputName)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\autogenex\icalderivedproperty.c
+SOURCE=.\icalderivedproperty.c
 # End Source File
 # Begin Source File
 
 SOURCE=icalderivedproperty.c.in
+
+!IF  "$(CFG)" == "libical - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+USERDEP__ICALDE="../../scripts/mkderivedproperties.pl"	"../../design-data/properties.csv"	"../../design-data/value-types.csv"	
+# Begin Custom Build
+InputPath=icalderivedproperty.c.in
+InputName=icalderivedproperty.c
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedproperties.pl -i $(InputName).in -c ../../design-data/properties.csv ../../design-data/value-types.csv > $(InputName)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libical - Win32 Debug"
+
+USERDEP__ICALDE="../../scripts/mkderivedproperties.pl"	"../../design-data/properties.csv"	"../../design-data/value-types.csv"	
+# Begin Custom Build
+InputPath=icalderivedproperty.c.in
+InputName=icalderivedproperty.c
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedproperties.pl -i $(InputName).in -c ../../design-data/properties.csv ../../design-data/value-types.csv > $(InputName)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\autogenex\icalderivedvalue.c
+SOURCE=.\icalderivedvalue.c
 # End Source File
 # Begin Source File
 
 SOURCE=icalderivedvalue.c.in
+
+!IF  "$(CFG)" == "libical - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+USERDEP__ICALDER="../../scripts/mkderivedvalues.pl"	"../../design-data/value-types.csv"	
+# Begin Custom Build
+InputPath=icalderivedvalue.c.in
+InputName=icalderivedvalue.c
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedvalues.pl -i $(InputName).in -c ../../design-data/value-types.csv > $(InputName)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libical - Win32 Debug"
+
+USERDEP__ICALDER="../../scripts/mkderivedvalues.pl"	"../../design-data/value-types.csv"	
+# Begin Custom Build
+InputPath=icalderivedvalue.c.in
+InputName=icalderivedvalue.c
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedvalues.pl -i $(InputName).in -c ../../design-data/value-types.csv > $(InputName)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -169,11 +253,40 @@ SOURCE=icalrecur.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\autogenex\icalrestriction.c
+SOURCE=.\icalrestriction.c
 # End Source File
 # Begin Source File
 
 SOURCE=icalrestriction.c.in
+
+!IF  "$(CFG)" == "libical - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+USERDEP__ICALR="../../scripts/mkrestrictiontable.pl"	"../../design-data/restrictions.csv"	
+# Begin Custom Build
+InputPath=icalrestriction.c.in
+InputName=icalrestriction.c
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkrestrictiontable.pl -i $(InputName).in ../../design-data/restrictions.csv > $(InputName)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libical - Win32 Debug"
+
+# PROP Ignore_Default_Tool 1
+USERDEP__ICALR="../../scripts/mkrestrictiontable.pl"	"../../design-data/restrictions.csv"	
+# Begin Custom Build
+InputPath=icalrestriction.c.in
+InputName=icalrestriction.c
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkrestrictiontable.pl -i $(InputName).in ../../design-data/restrictions.csv > $(InputName)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -209,7 +322,33 @@ SOURCE=.\astime.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\autogenex\ical.h
+SOURCE=.\ical.h
+
+!IF  "$(CFG)" == "libical - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+USERDEP__ICAL_="icalversion.h"	"icaltime.h"	"icalduration.h"	"icalperiod.h"	"icalenums.h"	"icaltypes.h"	"icalrecur.h"	"icalattach.h"	"icalderivedvalue.h"	"icalderivedparameter.h"	"icalvalue.h"	"icalparameter.h"	"icalderivedproperty.h"	"icalproperty.h"	"pvl.h"	"icalarray.h"	"icalcomponent.h"	"icaltimezone.h"	"icalparser.h"	"icalmemory.h"	"icalerror.h"	"icalrestriction.h"	"sspm.h"	"icalmime.h"	"icallangbind.h"	
+# Begin Custom Build
+InputPath=.\ical.h
+
+"ical.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	sh ../../scripts/mkinclude.sh -o ical.h -e "#include.*\"ical" -e "#include.*\"config" -e "#include.*\"pvl\.h\"" -e '\$$(Id|Locker): .+\$$' icalversion.h icaltime.h icalduration.h icalperiod.h icalenums.h icaltypes.h icalrecur.h icalattach.h icalderivedvalue.h icalderivedparameter.h icalvalue.h icalparameter.h icalderivedproperty.h icalproperty.h pvl.h icalarray.h icalcomponent.h icaltimezone.h icalparser.h icalmemory.h icalerror.h icalrestriction.h sspm.h icalmime.h icallangbind.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libical - Win32 Debug"
+
+USERDEP__ICAL_="icalversion.h"	"icaltime.h"	"icalduration.h"	"icalperiod.h"	"icalenums.h"	"icaltypes.h"	"icalrecur.h"	"icalattach.h"	"icalderivedvalue.h"	"icalderivedparameter.h"	"icalvalue.h"	"icalparameter.h"	"icalderivedproperty.h"	"icalproperty.h"	"pvl.h"	"icalarray.h"	"icalcomponent.h"	"icaltimezone.h"	"icalparser.h"	"icalmemory.h"	"icalerror.h"	"icalrestriction.h"	"sspm.h"	"icalmime.h"	"icallangbind.h"	
+# Begin Custom Build
+InputPath=.\ical.h
+
+"ical.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	sh ../../scripts/mkinclude.sh -o ical.h -e "#include.*\"ical" -e "#include.*\"config" -e "#include.*\"pvl\.h\"" -e '\$$(Id|Locker): .+\$$' icalversion.h icaltime.h icalduration.h icalperiod.h icalenums.h icaltypes.h icalrecur.h icalattach.h icalderivedvalue.h icalderivedparameter.h icalvalue.h icalparameter.h icalderivedproperty.h icalproperty.h pvl.h icalarray.h icalcomponent.h icaltimezone.h icalparser.h icalmemory.h icalerror.h icalrestriction.h sspm.h icalmime.h icallangbind.h
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -217,31 +356,123 @@ SOURCE=.\icalarray.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\icalattach.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\icalattachimpl.h
+# End Source File
+# Begin Source File
+
 SOURCE=icalcomponent.h
 # End Source File
 # Begin Source File
 
-SOURCE=icalderivedparameter.h
+SOURCE=.\icalderivedparameter.h
 # End Source File
 # Begin Source File
 
 SOURCE=icalderivedparameter.h.in
+
+!IF  "$(CFG)" == "libical - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+USERDEP__ICALDERI="../../scripts/mkderivedparameters.pl"	"../../design-data/parameters.csv"	
+# Begin Custom Build
+InputPath=icalderivedparameter.h.in
+InputName=icalderivedparameter.h
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedparameters.pl -i $(InputName).in -h ../../design-data/parameters.csv > $(InputName)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libical - Win32 Debug"
+
+USERDEP__ICALDERI="../../scripts/mkderivedparameters.pl"	"../../design-data/parameters.csv"	
+# Begin Custom Build
+InputPath=icalderivedparameter.h.in
+InputName=icalderivedparameter.h
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedparameters.pl -i $(InputName).in -h ../../design-data/parameters.csv > $(InputName)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
-SOURCE=icalderivedproperty.h
+SOURCE=.\icalderivedproperty.h
 # End Source File
 # Begin Source File
 
 SOURCE=icalderivedproperty.h.in
+
+!IF  "$(CFG)" == "libical - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+USERDEP__ICALDERIV="../../scripts/mkderivedproperties.pl"	"../../design-data/properties.csv"	"../../design-data/value-types.csv"	
+# Begin Custom Build
+InputPath=icalderivedproperty.h.in
+InputName=icalderivedproperty.h
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedproperties.pl -i $(InputName).in -h ../../design-data/properties.csv ../../design-data/value-types.csv > $(InputName)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libical - Win32 Debug"
+
+USERDEP__ICALDERIV="../../scripts/mkderivedproperties.pl"	"../../design-data/properties.csv"	"../../design-data/value-types.csv"	
+# Begin Custom Build
+InputPath=icalderivedproperty.h.in
+InputName=icalderivedproperty.h
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedproperties.pl -i $(InputName).in -h ../../design-data/properties.csv ../../design-data/value-types.csv > $(InputName)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
-SOURCE=icalderivedvalue.h
+SOURCE=.\icalderivedvalue.h
 # End Source File
 # Begin Source File
 
 SOURCE=icalderivedvalue.h.in
+
+!IF  "$(CFG)" == "libical - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+USERDEP__ICALDERIVE="../../scripts/mkderivedvalues.pl"	"../../design-data/value-types.csv"	
+# Begin Custom Build
+InputPath=icalderivedvalue.h.in
+InputName=icalderivedvalue.h
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedvalues.pl -i $(InputName).in -h ../../design-data/value-types.csv > $(InputName)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libical - Win32 Debug"
+
+USERDEP__ICALDERIVE="../../scripts/mkderivedvalues.pl"	"../../design-data/value-types.csv"	
+# Begin Custom Build
+InputPath=icalderivedvalue.h.in
+InputName=icalderivedvalue.h
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	perl -I ../../scripts ../../scripts/mkderivedvalues.pl -i $(InputName).in -h ../../design-data/value-types.csv > $(InputName)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -317,7 +548,38 @@ SOURCE=icalvalueimpl.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\icalversion.h
+# End Source File
+# Begin Source File
+
 SOURCE=icalversion.h.in
+
+!IF  "$(CFG)" == "libical - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build
+InputPath=icalversion.h.in
+InputName=icalversion.h
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	sed -e "s/@VERSION@/0.24/g" -e "s/@PACKAGE@/libical/g" $(InputName).in > $(InputName)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libical - Win32 Debug"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build
+InputPath=icalversion.h.in
+InputName=icalversion.h
+
+"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	sed -e "s/@VERSION@/0.24/g" -e "s/@PACKAGE@/libical/g" $(InputName).in > $(InputName)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
