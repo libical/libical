@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.55 2003-02-17 18:12:27 acampi Exp $
+  $Id: icalcomponent.c,v 1.56 2004-03-17 18:34:07 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -504,6 +504,51 @@ icalcomponent_get_next_property (icalcomponent* c, icalproperty_kind kind)
        icalproperty *p =  (icalproperty*) pvl_data(c->property_iterator);
 	   
        if (icalproperty_isa(p) == kind || kind == ICAL_ANY_PROPERTY) {
+	   
+	   return p;
+       }
+   }
+
+   return 0;
+}
+
+icalproperty*
+icalcomponent_get_first_x_property (icalcomponent* c, const char *name)
+{
+   icalerror_check_arg_rz( (c!=0),"component");
+  
+   for( c->property_iterator = pvl_head(c->properties);
+	c->property_iterator != 0;
+	c->property_iterator = pvl_next(c->property_iterator)) {
+	    
+       icalproperty *p =  (icalproperty*) pvl_data(c->property_iterator);
+	
+	   if (icalproperty_isa(p) == ICAL_X_PROPERTY &&
+		!strcmp(icalproperty_get_x_name(p), name)) {
+	       
+	       return p;
+	   }
+   }
+   return 0;
+}
+
+icalproperty*
+icalcomponent_get_next_x_property (icalcomponent* c, const char *name)
+{
+   icalerror_check_arg_rz( (c!=0),"component");
+
+   if (c->property_iterator == 0){
+       return 0;
+   }
+
+   for( c->property_iterator = pvl_next(c->property_iterator);
+	c->property_iterator != 0;
+	c->property_iterator = pvl_next(c->property_iterator)) {
+	    
+       icalproperty *p =  (icalproperty*) pvl_data(c->property_iterator);
+	   
+       if (icalproperty_isa(p) == ICAL_X_PROPERTY &&
+		!strcmp(icalproperty_get_x_name(p), name)) {
 	   
 	   return p;
        }
