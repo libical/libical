@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.14 2002-06-04 14:22:01 acampi Exp $
+    $Id: icaldirset.c,v 1.15 2002-06-04 14:26:03 acampi Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -352,7 +352,7 @@ void icaldirset_free(icaldirset* s)
     }
 
     if(impl->gauge !=0){
-	icalcomponent_free(impl->gauge);
+	icalgauge_free(impl->gauge);
     }
 
     if(impl->cluster !=0){
@@ -664,8 +664,8 @@ icalcomponent* icaldirset_fetch_match(icaldirset* set, icalcomponent *c)
 
 icalcomponent* icaldirset_fetch(icaldirset* store, const char* uid)
 {
-    icalcomponent *gauge;
-    icalcomponent *old_gauge;
+    icalgauge *gauge;
+    icalgauge *old_gauge;
     icalcomponent *c;
     struct icaldirset_impl *impl = (struct icaldirset_impl*)store;
 
@@ -692,7 +692,7 @@ icalcomponent* icaldirset_fetch(icaldirset* store, const char* uid)
 
     impl->gauge = old_gauge;
 
-    icalcomponent_free(gauge);
+    icalgauge_free(gauge);
 
     return c;
 }
