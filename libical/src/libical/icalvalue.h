@@ -4,10 +4,8 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalvalue.h,v 1.5 2002-06-27 00:22:09 acampi Exp $
+  $Id: icalvalue.h,v 1.6 2002-06-28 09:30:17 acampi Exp $
   $Locker:  $
-
-  
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 

@@ -1,9 +1,12 @@
-/* -*- Mode: C -*- */
-/*======================================================================
- FILE: icalproperty_cxx.h
- CREATOR: fnguyen 12/10/01
- (C) COPYRIGHT 2001, Critical Path
-======================================================================*/
+/* -*- Mode: C++ -*- */
+
+/**
+ * @file    icalproperty_cxx.h
+ * @author  fnguyen (12/10/01)
+ * @brief   Definition of C++ Wrapper for icalproperty.c
+ *
+ * (C) COPYRIGHT 2001, Critical Path
+ */
 
 #ifndef ICALPROPERTY_CXX_H
 #define ICALPROPERTY_CXX_H
@@ -44,19 +47,20 @@ public:
 	void remove_parameter(icalparameter_kind kind);
 	int count_parameters();
 
-	/* Iterate through the parameters */
+	/** Iterate through the parameters */
 	ICalParameter* get_first_parameter(icalparameter_kind kind);
 	ICalParameter* get_next_parameter(icalparameter_kind kind);
 
-	/* Access the value of the property */
+	/** Access the value of the property */
 	void set_value(const ICalValue& val);
 	void set_value_from_string(string val, string kind);
 
 	ICalValue* get_value();
 	string get_value_as_string();
 
-	/* Return the name of the property -- the type name converted to a
-       string, or the value of get_x_name if the type is X property
+	/** Return the name of the property -- the type name converted
+	 *  to a string, or the value of get_x_name if the type is X
+	 *  property
 	*/
 	string get_name();
 
@@ -346,7 +350,7 @@ public:
 	string get_xlicmimeoptinfo();
 
 private:
-	icalproperty* imp;
+  icalproperty* imp; /**< The actual C based icalproperty */
 };
 
 #endif /* ICalProperty_H */

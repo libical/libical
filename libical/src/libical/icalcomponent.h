@@ -32,10 +32,11 @@
 
 typedef struct icalcomponent_impl icalcomponent;
 
-/* An opaque struct representing a timezone. We declare this here to avoid
-   a circular dependancy. */
 #ifndef ICALTIMEONE_DEFINED
 #define ICALTIMEONE_DEFINED
+/** @brief An opaque struct representing a timezone.  
+ * We declare this here to avoid a circular dependancy. 
+ */
 typedef struct _icaltimezone		icaltimezone;
 #endif
 

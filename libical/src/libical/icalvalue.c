@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.25 2002-06-27 00:42:02 acampi Exp $
+  $Id: icalvalue.c,v 1.26 2002-06-28 09:30:17 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -327,10 +327,8 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
         break;
 
     case ICAL_QUERY_VALUE:
-	{
 	    value = icalvalue_new_query(str);
 	    break;
-	}
 
     case ICAL_CLASS_VALUE:
         value = icalvalue_new_enum(kind, ICAL_CLASS_X,str);
@@ -338,16 +336,12 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 
 
     case ICAL_INTEGER_VALUE:
-	{
 	    value = icalvalue_new_integer(atoi(str));
 	    break;
-	}
 
     case ICAL_FLOAT_VALUE:
-        {
 	    value = icalvalue_new_float(atof(str));
 	    break;
-	}
 
     case ICAL_UTCOFFSET_VALUE:
 	{
@@ -376,25 +370,18 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	}
         
     case ICAL_STRING_VALUE:
-	{
 	    value = icalvalue_new_string(str);
 	    break;
-	}
         
     case ICAL_CALADDRESS_VALUE:
-	{
 	    value = icalvalue_new_caladdress(str);
 	    break;
-	}
         
     case ICAL_URI_VALUE:
-	{
 	    value = icalvalue_new_uri(str);
 	    break;
-	}
         
     case ICAL_GEO_VALUE:
-	{
 	    value = 0;
 	    /* HACK */
             
@@ -411,7 +398,6 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	    /*icalerror_warn("Parsing GEO properties is unimplmeneted");*/
 
 	    break;
-	}
         
     case ICAL_RECUR_VALUE:
 	{
@@ -508,7 +494,6 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 
     default:
         {
-            
             if (error != 0 ){
 		char temp[TMP_BUF_SIZE];
                 
@@ -703,13 +688,13 @@ static char* icalvalue_recur_as_ical_string(const icalvalue* value)
     return icalrecurrencetype_as_string(recur);
 }
 
-/* FIXME This is not RFC2445 compliant.
+ /* @todo This is not RFC2445 compliant.
  * The RFC only allows:
  * TSAFE-CHAR = %x20-21 / %x23-2B / %x2D-39 / %x3C-5B / %x5D-7E / NON-US-ASCII
  * As such, \t\r\b\f are not allowed, not even escaped
  */
-static char* icalvalue_text_as_ical_string(const icalvalue* value) {
 
+static char* icalvalue_text_as_ical_string(const icalvalue* value) {
     char *str;
     char *str_p;
     char *rtrn;
@@ -1199,7 +1184,10 @@ icalvalue_compare(const icalvalue* a, const icalvalue *b)
 
 }
 
-/* Examine the value and possiby chage the kind to agree with the value */
+/** Examine the value and possibly change the kind to agree with the
+ *  value 
+ */
+
 void icalvalue_reset_kind(icalvalue* value)
 {
     if( (value->kind==ICAL_DATETIME_VALUE || value->kind==ICAL_DATE_VALUE )&&

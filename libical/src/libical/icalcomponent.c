@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.34 2002-06-28 08:52:59 acampi Exp $
+  $Id: icalcomponent.c,v 1.35 2002-06-28 09:30:15 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -830,7 +830,7 @@ icaltime_span icalcomponent_get_span(icalcomponent* comp)
  * @param dtstart    The base dtstart value for this component.
  * @param recurtime  The time to test against.
  *
- * @ret true if the recurrence value is excluded, false otherwise.
+ * @return true if the recurrence value is excluded, false otherwise.
  *
  * This function decides if a specific recurrence value is
  * excluded by EXRULE or EXDATE properties.
@@ -902,13 +902,13 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
  *
  * @param comp   A valid icalcomponent.
  *
- * @ret   1 if the event is a busy item, 0 if it is not.
+ * @return 1 if the event is a busy item, 0 if it is not.
  */
 
 static int icalcomponent_is_busy(icalcomponent *comp) {
   icalproperty *transp;
 
-  /* TODO check access control here, converting busy->free if the
+  /** @todo check access control here, converting busy->free if the
      permissions do not allow access... */
 
   /* Is this a busy time?  Check the TRANSP property */
@@ -1056,7 +1056,8 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
 
     /** RDATES can specify raw datetimes, periods, or dates.
 	we only support raw datetimes for now.. 
-        TODO add support for other types **/
+
+        @todo Add support for other types **/
     
     if (icaltime_is_null_time(rdate_period.time)) 
       continue;

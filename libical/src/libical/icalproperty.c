@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.24 2002-06-27 00:16:02 acampi Exp $
+  $Id: icalproperty.c,v 1.25 2002-06-28 09:30:15 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -286,11 +286,12 @@ get_next_line_start (char *line_start, int chars_left)
 }
 
 
-/* This splits the property into lines less than 75 octects long (as specified
-   in RFC2445). It tries to split after a ';' if it can.
-   It returns a tmp buffer.
-   NOTE: I'm not sure if it matters if we split a line in the middle of a
-   UTF-8 character. It probably won't look nice in a text editor. */
+/** This splits the property into lines less than 75 octects long (as
+ *  specified in RFC2445). It tries to split after a ';' if it can.
+ *  It returns a tmp buffer.  NOTE: I'm not sure if it matters if we
+ *  split a line in the middle of a UTF-8 character. It probably won't
+ *  look nice in a text editor. 
+ */
 static char*
 fold_property_line (char *text)
 {
@@ -625,7 +626,8 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
 
 /** @see icalproperty_remove_parameter_by_kind() 
  *
- * DEPRECATED in favor of icalproperty_remove_parameter_by_kind()
+ *  @deprecated Please use icalproperty_remove_parameter_by_kind()
+ *              instead.
  */
 
 void
@@ -707,7 +709,7 @@ icalproperty_remove_parameter_by_name(icalproperty* prop, const char *name)
 /** @brief Remove the specified parameter reference from the property.
  *
  *  @param prop   A valid icalproperty.
- *  @param name   A reference to a specific icalparameter.
+ *  @param parameter   A reference to a specific icalparameter.
  *
  *  This function removes the specified parameter reference from the
  *  property.

@@ -1,9 +1,13 @@
-/* -*- Mode: C -*- */
-/*======================================================================
- FILE: icalparameter_cxx.cpp
- CREATOR: fnguyen 12/21/01
- (C) COPYRIGHT 2001, Critical Path
-======================================================================*/
+/* -*- Mode: C++ -*- */
+
+/**
+ * @file    icalparameter_cxx.cpp
+ * @author  fnguyen (12/10/01)
+ * @brief   Implementation of C++ Wrapper for icalparameter.c
+ *
+ * (C) COPYRIGHT 2001, Critical Path
+ */
+
 #ifndef ICALPARAMETER_CXX_H
 #include "icalparameter_cxx.h"
 #endif
@@ -36,7 +40,9 @@ ICalParameter::~ICalParameter(){
 
 ICalParameter::ICalParameter(icalparameter* v) : imp(v){
 }
-ICalParameter::ICalParameter(string str){ // Create from string of form "PARAMNAME=VALUE"
+
+/// Create from string of form "PARAMNAME=VALUE"
+ICalParameter::ICalParameter(string str){ 
 	imp = icalparameter_new_from_string(str);
 }
 ICalParameter::ICalParameter(icalparameter_kind kind, string  str){ // Create from just the value, the part after the "="

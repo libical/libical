@@ -1,9 +1,13 @@
-/* -*- Mode: C -*- */
-/*======================================================================
- FILE: icalproperty_cxx.cpp
- CREATOR: fnguyen 12/10/01
- (C) COPYRIGHT 2001, Critical Path
-======================================================================*/
+/* -*- Mode: C++ -*- */
+
+/**
+ * @file    icalproperty_cxx.cpp
+ * @author  fnguyen (12/10/01)
+ * @brief   Implementation of C++ Wrapper for icalproperty.c
+ *
+ * (C) COPYRIGHT 2001, Critical Path
+ */
+
 
 #ifndef ICALPROPERTY_CXX_H
 #include "icalproperty_cxx.h"
@@ -82,7 +86,7 @@ int ICalProperty::count_parameters(){
 	return icalproperty_count_parameters(imp);
 }
 
-/* Iterate through the parameters */
+/** Iterate through the parameters */
 ICalParameter* ICalProperty::get_first_parameter(icalparameter_kind kind){
 	return new ICalParameter(icalproperty_get_first_parameter(imp, kind));
 }
@@ -90,7 +94,7 @@ ICalParameter* ICalProperty::get_next_parameter(icalparameter_kind kind){
 	return new ICalParameter(icalproperty_get_next_parameter(imp, kind));
 }
 
-/* Access the value of the property */
+/** Access the value of the property */
 void ICalProperty::set_value(const ICalValue& val){
 	icalproperty_set_value(imp, (ICalValue&)val);
 }
@@ -105,9 +109,9 @@ string ICalProperty::get_value_as_string(){
 	return (string)icalproperty_get_value_as_string(imp);
 }
 
-/* Return the name of the property -- the type name converted to a
-   string, or the value of get_x_name if the type is X property
-*/
+/** Return the name of the property -- the type name converted to a
+ *  string, or the value of get_x_name if the type is X property
+ */
 string ICalProperty::get_name(){
 	return (string)icalproperty_get_name(imp);
 }

@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.17 2002-06-27 00:04:08 acampi Exp $
+ $Id: icaltime.h,v 1.18 2002-06-28 09:30:17 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -103,9 +103,9 @@ typedef struct _icaltimezone		icaltimezone;
 
 /** icaltime_span is returned by icalcomponent_get_span() */
 struct icaltime_span {
-	time_t start; /* in UTC */
-	time_t end; /* in UTC */
-	int is_busy; /* 1->busy time, 0-> free time */
+	time_t start;   /**< in UTC */
+	time_t end;     /**< in UTC */
+	int is_busy;    /**< 1->busy time, 0-> free time */
 };
 
 typedef struct icaltime_span icaltime_span;

@@ -3,7 +3,7 @@
   FILE: icalarray.c
   CREATOR: Damon Chaplin 07 March 2001
   
-  $Id: icalarray.c,v 1.4 2002-05-21 10:31:29 acampi Exp $
+  $Id: icalarray.c,v 1.5 2002-06-28 09:30:15 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2001, Ximian, Inc.
@@ -21,6 +21,12 @@
 
 
  ======================================================================*/
+
+/** @file icalarray.c
+ *
+ *  @brief An array of arbitrarily-sized elements which grows
+ *  dynamically as elements are added. 
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

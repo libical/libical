@@ -1,9 +1,12 @@
-/* -*- Mode: C -*- */
-/*======================================================================
- FILE: vcomponent.h
- CREATOR: fnguyen 12/05/01
- (C) COPYRIGHT 2001, Critical Path
-======================================================================*/
+/* -*- Mode: C++ -*- */
+
+/**
+ * @file    vcomponent.h
+ * @author  fnguyen (12/10/01)
+ * @brief   C++ classes for the icalcomponent wrapper (VToDo VEvent, etc..).
+ *
+ * (C) COPYRIGHT 2001, Critical Path
+ */
 
 #ifndef VCOMPONENT_H
 #define VCOMPONENT_H
@@ -13,6 +16,14 @@
 typedef	char* string; // Will use the string library from STL
 
 class ICalProperty;
+
+/**
+ * @class VComponent
+ * @brief A class wrapping the libical icalcomponent functions
+ *
+ * @exception icalerrorenum   Any errors generated in libical are
+ *                            propogated via this exception type.
+ */
 
 class VComponent {
 public:
@@ -40,12 +51,12 @@ public:
 	void remove_property(ICalProperty* property);
 	int count_properties(icalproperty_kind kind);
 
-	/// Iterate through the properties
+	// Iterate through the properties
 	ICalProperty* get_current_property();
 	ICalProperty* get_first_property(icalproperty_kind kind);
 	ICalProperty* get_next_property(icalproperty_kind kind);
 
-	/// Working with components
+	// Working with components
 
 	/**
 	 *  Return the first VEVENT, VTODO or VJOURNAL sub-component if
@@ -59,11 +70,11 @@ public:
 	int count_components(icalcomponent_kind kind);
 
 	/**
-	   Iteration Routines. There are two forms of iterators,
-	   internal and external. The internal ones came first, and
-	   are almost completely sufficient, but they fail badly when
-	   you want to construct a loop that removes components from
-	   the container.
+	 * Iteration Routines. There are two forms of iterators,
+	 * internal and external. The internal ones came first, and
+	 * are almost completely sufficient, but they fail badly when
+	 * you want to construct a loop that removes components from
+	 * the container.
 	*/
 
 	/// Iterate through components
@@ -95,14 +106,15 @@ public:
 	struct icaltimetype get_dtstart();
 	void set_dtstart(struct icaltimetype v);
 
-	/** For the icalcomponent routines only, dtend and duration are tied
-	   together. If you call the set routine for one and the other exists,
-	   the routine will calculate the change to the other. That is, if
-	   there is a DTEND and you call set_duration, the routine will modify
-	   DTEND to be the sum of DTSTART and the duration. If you call a get
-	   routine for one and the other exists, the routine will calculate
-	   the return value. If you call a set routine and neither exists, the
-	   routine will create the apropriate property 
+	/** For the icalcomponent routines only, dtend and duration
+	 *  are tied together. If you call the set routine for one and
+	 *  the other exists, the routine will calculate the change to
+	 *  the other. That is, if there is a DTEND and you call
+	 *  set_duration, the routine will modify DTEND to be the sum
+	 *  of DTSTART and the duration. If you call a get routine for
+	 *  one and the other exists, the routine will calculate the
+	 *  return value. If you call a set routine and neither
+	 *  exists, the routine will create the apropriate property
 	*/
 
 	struct icaltimetype get_dtend();
@@ -157,20 +169,22 @@ public:
 
 
 	/**
-	   Get the Nth attendee. Out of range indices return an
-	   attendee with cuid == 0 
+	 * Get the Nth attendee. Out of range indices return an
+	 * attendee with cuid == 0
 	*/
 	struct icalattendeetype get_attendee(int index);
 
 public:
 	/**
-	   For VCOMPONENT: Return a reference to the first VEVENT,
-	   VTODO, or VJOURNAL 
+	 * For VCOMPONENT: Return a reference to the first VEVENT,
+	 * VTODO, or VJOURNAL
 	*/
 	VComponent* get_first_real_component();
 
-	/** For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the
-	   start and end times of an event in UTC */
+	/** 
+	 * For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the
+	 * start and end times of an event in UTC 
+	 */
 	virtual struct icaltime_span get_span();
 
         int recurrence_is_excluded(struct icaltimetype *dtstart,
@@ -277,9 +291,10 @@ public:
 	VAlarm(string str);
 
 	/**
-	   compute the absolute trigger time for this alarm. trigger
-	   may be related to the containing component c.  the result
-	   is populated in tr->time */
+	 *  compute the absolute trigger time for this alarm. trigger
+	 *  may be related to the containing component c.  the result
+	 *  is populated in tr->time
+	 */
 	icalrequeststatus getTriggerTime(VComponent &c, struct icaltriggertype *tr);
 };
 

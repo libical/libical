@@ -1,9 +1,13 @@
-/* -*- Mode: C -*- */
-/*======================================================================
- FILE: icalparameter_cxx.h
- CREATOR: fnguyen 12/13/01
- (C) COPYRIGHT 2001, Critical Path
-======================================================================*/
+/* -*- Mode: C++ -*- */
+
+/**
+ * @file    icalparameter_cxx.h
+ * @author  fnguyen (12/10/01)
+ * @brief   Definition of C++ Wrapper for icalparameter.c
+ *
+ * (C) COPYRIGHT 2001, Critical Path
+ */
+
 
 #ifndef ICALPARAMETER_CXX_H
 #define ICALPARAMETER_CXX_H

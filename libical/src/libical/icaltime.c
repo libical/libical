@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.34 2002-06-27 00:04:08 acampi Exp $
+  $Id: icaltime.c,v 1.35 2002-06-28 09:30:16 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -139,12 +139,13 @@ static time_t make_time(struct tm *tm, int tzm)
  *
  * Convert seconds past UNIX epoch to a timetype.
  *
- * This constructor is deprecated and shouldn't be used in new software.
- * Use icaltime_from_timet_with_zone(time_t, int, icaltimezone *) instead.
- * In the meantime, calls to this method return a floating time, which can
- * always be converted to a local time with an appropriate call to
- * icaltime_convert_to_zone().
+ * @deprecated This constructor is deprecated and shouldn't be used in
+ *   new software.  Use icaltime_from_timet_with_zone(time_t, int,
+ *   icaltimezone *) instead.  In the meantime, calls to this method
+ *   return a floating time, which can always be converted to a local
+ *   time with an appropriate call to icaltime_convert_to_zone().
  */
+
 struct icaltimetype 
 icaltime_from_timet(const time_t tm, const int is_date)
 {
@@ -351,9 +352,10 @@ struct icaltimetype icaltime_normalize(const struct icaltimetype tt)
  * 
  * Create a time from an ISO format string.
  *
- * If the given string specifies a DATE-TIME not in UTC, there is no way to
- * know if this is a floating time or really refers to a timezone. We should
- * probably add a new constructor: icaltime_from_string_with_zone() FIXME
+ * @todo If the given string specifies a DATE-TIME not in UTC, there
+ *       is no way to know if this is a floating time or really refers to a
+ *       timezone. We should probably add a new constructor:
+ *       icaltime_from_string_with_zone()
  */
 struct icaltimetype icaltime_from_string(const char* str)
 {
@@ -467,8 +469,10 @@ short icaltime_day_of_week(const struct icaltimetype t){
 #endif
 }
 
-/* Day of the year that the first day of the week (Sunday) is on.
-   FIXME: Doesn't take into account different week start days. */
+/** Day of the year that the first day of the week (Sunday) is on.
+ * 
+ *  @todo Doesn't take into account different week start days. 
+ */
 short icaltime_start_doy_of_week(const struct icaltimetype t){
 #ifndef JDAY
     struct tm stm;
@@ -523,8 +527,10 @@ short icaltime_start_doy_of_week(const struct icaltimetype t){
 #endif
 }
 
-/* FIXME: Doesn't take into account the start day of the week. strftime assumes
-   that weeks start on Monday. */
+/** 
+ * @todo Doesn't take into account the start day of the
+ * week. strftime assumes that weeks start on Monday. 
+ */
 short icaltime_week_number(const struct icaltimetype ictt)
 {
 #ifndef JDAY
@@ -687,7 +693,7 @@ int icaltime_is_date(const struct icaltimetype t) {
 
 /**	@brief Returns true if time is relative to UTC zone
  *
- *	FIXME We should only check the zone
+ *	@todo  We should only check the zone
  */
 int icaltime_is_utc(const struct icaltimetype t) {
 
@@ -710,7 +716,7 @@ int icaltime_is_null_time(const struct icaltimetype t)
 /**
  *	Return -1, 0, or 1 to indicate that a<b, a==b or a>b.
  *
- *	FIXME This is completely broken unless both times happen to be in
+ *	@todo This is completely broken unless both times happen to be in
  *	the same timezone, or both floating.
  */
 int icaltime_compare(const struct icaltimetype a, const struct icaltimetype b)
@@ -972,7 +978,7 @@ icaltime_set_timezone(struct icaltimetype *t, const icaltimezone *zone) {
  *                   or just a date.
  *  @param dtend     The end time of the span.
  *  @param is_busy   A boolean value, 0/1.
- *  @ret             A span using the supplied values.
+ *  @return          A span using the supplied values.
  *
  *  returned span contains times specified in UTC.
  */
@@ -1013,7 +1019,7 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart,
  *
  *  @param s1         1st span to test
  *  @param s2         2nd span to test
- *  @ret              boolean value
+ *  @return           boolean value
  *
  *  The result is calculated by testing if the start time of s1 is contained
  *  by the s2 span, or if the end time of s1 is contained by the s2 span.
@@ -1042,7 +1048,7 @@ int icaltime_span_overlaps(icaltime_span *s1,
  *
  *  @param s          The span to test for.
  *  @param container  The span to test against.
- *  @ret              boolean value.
+ *  @return           boolean value.
  *
  */
 

@@ -4,7 +4,7 @@
  CREATOR: eric 26 Jan 2001
 
 
- $Id: icalperiod.h,v 1.2 2001-02-22 05:03:56 ebusboom Exp $
+ $Id: icalperiod.h,v 1.3 2002-06-28 09:30:15 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -42,12 +42,12 @@ struct icalperiodtype
 struct icalperiodtype icalperiodtype_from_string (const char* str);
 
 const char* icalperiodtype_as_ical_string(struct icalperiodtype p);
+
 struct icalperiodtype icalperiodtype_null_period();
+
 int icalperiodtype_is_null_period(struct icalperiodtype p);
+
 int icalperiodtype_is_valid_period(struct icalperiodtype p);
-
-
-
 
 #endif /* !ICALTIME_H */
 

@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.11 2001-12-12 01:25:54 ebusboom Exp $
+  $Id: icalerror.h,v 1.12 2002-06-28 09:30:15 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -61,10 +61,18 @@ typedef enum icalerrorenum {
 
 } icalerrorenum;
 
-/* The libical error enumeration, like errno*/
+/** The libical error enumeration, like errno
+ *
+ *  @todo Need to make this a thread-specific variable...
+ */
+
 extern icalerrorenum icalerrno;
 
-/* If true, libicl aborts after a call to icalerror_set_error*/
+/** If true, libicl aborts after a call to icalerror_set_error
+ *
+ *  @warning NOT THREAD SAFE -- recommended that you do not change
+ *           this in a multithreaded program.
+ */
 extern int icalerror_errors_are_fatal;
 
 /* Warning messages */
