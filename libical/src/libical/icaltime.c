@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.45 2002-10-09 21:55:26 acampi Exp $
+  $Id: icaltime.c,v 1.46 2002-10-09 21:57:57 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -558,12 +558,10 @@ struct icaltimetype icaltime_from_day_of_year(const short _doy, const short _yea
       if (doy > days_in_year[is_leap][month]) {
 	tt.month = month + 1;
 	tt.day = doy - days_in_year[is_leap][month];
-	return tt;
+	break;
       }
     }
 
-    /* Shouldn't reach here. */
-    assert (0);
     return tt;
 }
 
