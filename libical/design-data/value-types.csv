@@ -1,0 +1,24 @@
+#Name,C type& gen flag,C++,Perl,Python,,
+ATTACH,(a)struct icalattachtype,struct icalattachtype,none,none,URI;BINARY,# Non-std
+BINARY,(a)const char*,const char*,string,file,unitary,
+BOOLEAN,(a)int,int,string,integer,unitary,
+CAL-ADDRESS,(a)const char*,const char*,string,string,unitary,
+DATE,(a)struct icaltimetype,struct icaltimetype,Time,Time,unitary,
+DATE-TIME,(a)struct icaltimetype,struct icaltimetype,Time,Time,unitary,
+DATE-TIME-DATE,(a)struct icaltimetype,struct icaltimetype,none,none,DATE-TIME;DATE,# Non-std
+DATE-TIME-PERIOD,(m)struct icaldatetimeperiodtype,struct icalperiodtype,none,none,DATE-TIME;PERIOD,# Non-std
+DURATION,(a)struct icaldurationtype,struct icaldurationtype,Duration,Duration,unitary,
+FLOAT,(a)float,float,string,float,unitary,
+GEO,(a)struct icalgeotype,struct icalgeotype,string,tuple,unitary,# Non-std
+INTEGER,(a)int,int,string,integer,unitary,
+METHOD,(a)icalproperty_method,icalproperty_method,string,string,unitary,# Non-std
+PERIOD,(a)struct icalperiodtype,struct icalperiodtype,Period,Period,unitary,
+RECUR,(m)struct icalrecurrencetype,struct icalrecurrencetype,RecurrenceSet,RecurrenceSet,unitary,
+STRING,(a)const char*,const char*,string,string,unitary,# Non-std
+TEXT,(a)const char*,const char*,string,string,unitary,
+TIME,(a)struct icaltimetype,struct icaltimetype,Time,Time,unitary,
+TRIGGER,(m)struct icaltriggertype,union icaltriggertype,string,string,DURATION;DATE-TIME,# Non-std
+URI,(a)const char*,const char*,string,string,unitary,
+UTC-OFFSET,(a)int,int,string,integer,unitary,
+QUERY,(a)const char*,const char*,string,string,unitary,
+STATUS,(a)icalproperty_status,,string,string,unitary,# Non-std
