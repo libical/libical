@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.34 2002-10-30 20:08:32 acampi Exp $
+#  $Id: Makefile.am,v 1.35 2002-11-05 14:59:21 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -60,6 +60,7 @@ libical_la_SOURCES =		\
 	icalarray.c		\
 	icalarray.h		\
 	icalattach.h		\
+	icalattachimpl.h	\
 	icalattach.c		\
 	icalcomponent.c		\
 	icalcomponent.h		\

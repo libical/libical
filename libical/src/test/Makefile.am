@@ -36,11 +36,15 @@ INCLUDES = 				\
 
 TESTS=regression
 copycluster_SOURCES = copycluster.c
-regression_SOURCES = regression.c regression-component.c regression-classify.c\
-			regression-utils.c\
-			regression-recur.c\
-			regression-storage.c\
-			$(regression_cxx)
+regression_SOURCES = 		\
+	regression.c		\
+	regression.h		\
+	regression-component.c	\
+	regression-classify.c	\
+	regression-utils.c	\
+	regression-recur.c	\
+	regression-storage.c	\
+	$(regression_cxx)
 
 parser_SOURCES = icaltestparser.c
 stow_SOURCES = stow.c

@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.20 2002-10-30 20:10:35 acampi Exp $
+#  $Id: Makefile.am,v 1.21 2002-11-05 14:59:22 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -79,6 +79,7 @@ libicalss_la_SOURCES =		\
 	icalclassify.h		\
 	icalcluster.c		\
 	icalcluster.h		\
+	icalclusterimpl.h	\
 	icalgauge.c		\
 	icalgauge.h		\
 	icalgaugeimpl.h		\
