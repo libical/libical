@@ -3,7 +3,7 @@
     FILE: icalcstps.c
     CREATOR: ebusboom 23 Jun 2000
   
-    $Id: icalcstpclient.c,v 1.2 2001-02-22 19:38:49 ebusboom Exp $
+    $Id: icalcstpclient.c,v 1.3 2001-02-22 19:42:52 ebusboom Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -263,7 +263,7 @@ icalerrorenum icalcstpc_capability(icalcstpc* cstp)
     
     command_str = icalcstp_command_to_string(impl->command);
 
-    sz = strlen(command_str) + strlen(mechanism) + strlen(data) + 4;
+    sz = strlen(command_str);
     
     if((error=icalcstpclient_setup_output(cstp,sz)) != ICAL_NO_ERROR){
         return error;
