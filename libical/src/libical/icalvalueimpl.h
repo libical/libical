@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalueimpl.h,v 1.1 2001-03-17 16:47:03 ebusboom Exp $
+  $Id: icalvalueimpl.h,v 1.2 2001-03-31 17:10:26 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -43,7 +43,8 @@ struct icalvalue_impl {
     char id[5];
     int size;
     icalproperty* parent;
-    
+    const char* x_value;
+
     union data {
 	struct icalattachtype v_attach;		
 	/* void *v_binary; */ /* use v_attach */
@@ -74,10 +75,16 @@ struct icalvalue_impl {
 	
 	struct icalrecurrencetype *v_recur;
 	struct icaltriggertype v_trigger;
+
+        int v_enum;
+        /* v_enum takes care of several enumerated types including: 
 	icalproperty_method v_method;
 	icalproperty_status v_status;
+        icalproperty_action v_action;
         icalproperty_class v_class;
 	icalproperty_transp v_transp;
+        */
+
     } data;
 };
 

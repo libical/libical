@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.10 2001-03-26 07:03:00 ebusboom Exp $
+  $Id: icalparser.c,v 1.11 2001-03-31 17:10:26 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -43,6 +43,7 @@
 #include "icalmemory.h"
 #include "icalerror.h"
 #include "icalvalue.h"
+#include "icalderivedparameter.h"
 #include "icalparameter.h"
 #include "icalproperty.h"
 #include "icalcomponent.h"

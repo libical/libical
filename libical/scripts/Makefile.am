@@ -5,4 +5,5 @@ mkderivedproperties.pl \
 mkderivedvalues.pl \
 mkparameterrestrictions.pl \
 mkrestrictionrecords.pl \
-mkrestrictiontable.pl
+mkrestrictiontable.pl \
+readvaluesfile.pl 

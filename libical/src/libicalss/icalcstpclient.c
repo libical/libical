@@ -3,7 +3,7 @@
     FILE: icalcstps.c
     CREATOR: ebusboom 23 Jun 2000
   
-    $Id: icalcstpclient.c,v 1.3 2001-02-22 19:42:52 ebusboom Exp $
+    $Id: icalcstpclient.c,v 1.4 2001-03-31 17:10:26 ebusboom Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -167,7 +167,7 @@ int icalcstpc_next_input(icalcstpc* cstp, char* line)
         break;
     }
     default:
-
+        break;
     }
 }
 

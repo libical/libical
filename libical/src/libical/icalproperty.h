@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.4 2001-03-17 16:47:03 ebusboom Exp $
+  $Id: icalproperty.h,v 1.5 2001-03-31 17:10:26 ebusboom Exp $
   $Locker:  $
 
   
@@ -91,6 +91,7 @@ char* icalproperty_get_name (icalproperty* prop);
 /* Convert kinds to string and get default value type */
 
 icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);
+icalvalue_kind icalproperty_value_kind_to_kind(icalvalue_kind kind);
 const char* icalproperty_kind_to_string(icalproperty_kind kind);
 icalproperty_kind icalproperty_string_to_kind(const char* string);
 
@@ -98,8 +99,15 @@ icalproperty_method icalproperty_string_to_method(const char* str);
 const char* icalproperty_method_to_string(icalproperty_method method);
 
 
+const char* icalproperty_enum_to_string(int e);
+int icalproperty_string_to_enum(const char* str);
+
 const char* icalproperty_status_to_string(icalproperty_status);
 icalproperty_status icalproperty_string_to_status(const char* string);
+
+int icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e);
+
+
 
 
 #endif /*ICALPROPERTY_H*/

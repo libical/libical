@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c,v 1.2 2001-03-26 19:17:28 ebusboom Exp $
+  $Id: icalparameter.c,v 1.3 2001-03-31 17:10:26 ebusboom Exp $
   $Locker:  $
     
 
@@ -247,7 +247,7 @@ icalparameter_as_ical_string (icalparameter* parameter)
     if(impl->string !=0){
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, impl->string); 
     } else if (impl->data != 0){
-        char* str = icalparameter_enum_to_string(impl->data);
+        const char* str = icalparameter_enum_to_string(impl->data);
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str); 
     } else {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);

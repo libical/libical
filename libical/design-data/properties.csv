@@ -1,6 +1,6 @@
 ,,
 "#Property Name","libical Value type","iCalendar default value"
-"ACTION","TEXT","TEXT"
+"ACTION","ACTION","ACTION"
 "ATTACH","ATTACH","URI"
 "ATTENDEE","CAL-ADDRESS","CAL-ADDRESS"
 "CALSCALE","TEXT","TEXT"

@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.9 2001-03-26 19:17:28 ebusboom Exp $
+  $Id: icalcomponent.c,v 1.10 2001-03-31 17:10:26 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1473,6 +1473,10 @@ icalcomponent* icalcomponent_new_vtodo()
 icalcomponent* icalcomponent_new_vjournal()
 {
     return icalcomponent_new(ICAL_VJOURNAL_COMPONENT);
+}
+icalcomponent* icalcomponent_new_valarm()
+{
+    return icalcomponent_new(ICAL_VALARM_COMPONENT);
 }
 icalcomponent* icalcomponent_new_vfreebusy()
 {

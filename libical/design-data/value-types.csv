@@ -21,6 +21,7 @@
 "TRIGGER","(m)struct icaltriggertype","string","DURATION;DATE-TIME",
 "#Non-standard property enumeration types",,,,
 "METHOD","(a)enum icalproperty_method","string","unitary","PUBLISH;REQUEST;REPLY;ADD;CANCEL;REFRESH;COUNTER;DECLINECOUNTER;CREATE;READ;RESPONSE;MOVE;MODIFY;GENERATEUID;DELETE"
+"ACTION","(a)enum icalproperty_action","string","unitary","AUDIO;DISPLAY;EMAIL;PROCEDURE"
 "STATUS","(a)enum icalproperty_status","string","unitary","TENTATIVE;CONFIRMED;COMPLETED;NEEDS-ACTION;CANCELLED;IN-PROCESS;DRAFT;FINAL"
 "TRANSP","(a)enum icalproperty_transp","string","unitary","OPAQUE;TRANSPARENT"
 "CLASS","(a)enum icalproperty_class","string","unitary","PUBLIC;PRIVATE;CONFIDENTIAL"

@@ -226,6 +226,7 @@ icalcomponent* icalcomponent_new_vcalendar();
 icalcomponent* icalcomponent_new_vevent();
 icalcomponent* icalcomponent_new_vtodo();
 icalcomponent* icalcomponent_new_vjournal();
+icalcomponent* icalcomponent_new_valarm();
 icalcomponent* icalcomponent_new_vfreebusy();
 icalcomponent* icalcomponent_new_vtimezone();
 icalcomponent* icalcomponent_new_xstandard();

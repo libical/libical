@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.18 2001-03-27 05:02:09 ebusboom Exp $
+  $Id: regression.c,v 1.19 2001-03-31 17:10:26 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2928,7 +2928,49 @@ void test_file_locks()
     assert(sec == final);
 }
 
+void test_action()
+{
+    icalcomponent *c;
+    icalproperty *p;
+    
+    static const char test_icalcomp_str[] =
+"BEGIN:VEVENT\n"
+"ACTION:EMAIL\n"
+"ACTION:PROCEDURE\n"
+"ACTION:AUDIO\n"
+"ACTION:FUBAR\n"
+"END:VEVENT\r\n";
 
+     
+    c = icalparser_parse_string ((char *) test_icalcomp_str);
+    if (!c) {
+	fprintf (stderr, "main(): could not parse the component\n");
+	exit (EXIT_FAILURE);
+    }
+    
+    printf("%s\n\n",icalcomponent_as_ical_string(c));
+
+    p = icalcomponent_get_first_property(c,ICAL_ACTION_PROPERTY);
+
+    assert(icalproperty_get_action(p) == ICAL_ACTION_EMAIL);
+
+    p = icalcomponent_get_next_property(c,ICAL_ACTION_PROPERTY);
+
+    assert(icalproperty_get_action(p) == ICAL_ACTION_PROCEDURE);
+
+    p = icalcomponent_get_next_property(c,ICAL_ACTION_PROPERTY);
+
+    assert(icalproperty_get_action(p) == ICAL_ACTION_AUDIO);
+
+    p = icalcomponent_get_next_property(c,ICAL_ACTION_PROPERTY);
+
+    assert(icalproperty_get_action(p) == ICAL_ACTION_X);
+    assert(regrstrcmp(icalvalue_get_x(icalproperty_get_value(p)), "FUBAR"));
+
+
+}
+
+        
 
 void test_trigger()
 {
@@ -2963,7 +3005,7 @@ void test_trigger()
 	if(!icaltime_is_null_time(tr.time)){
 	    printf("value=DATE-TIME:%s\n", icaltime_as_ical_string(tr.time));
 	} else {
-	    printf("value=DURATION:%s\n", icaldurationtype_as_ical_string(tr.duration));
+	    printf("value=DURATION:%s\n", icaldurationtype_as_ical_string(tr.duration)==0);
 	}   
     }
 
@@ -3402,7 +3444,6 @@ int main(int argc, char *argv[])
 	test_rdate();
     }
 
-
     if(tmisc == 1 || tmisc  == 6){
 
 	printf("\n------------Test language binding---------------\n");
@@ -3415,6 +3456,12 @@ int main(int argc, char *argv[])
 	printf("\n------------Test property parser---------------\n");
 	test_property_parse();
     }
+
+    if(tmisc == 1 || tmisc  == 8){
+	printf("\n------------Test Action ------------------\n");
+	test_action();
+    }
+
 
     if(tbasic == 1 || tbasic  == 2){
 	printf("\n------------Test Values---------------\n");

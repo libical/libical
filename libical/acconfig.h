@@ -14,3 +14,7 @@
  
 /* Define if your libc defines a struct tm containing a "tm_gmtoff" member */  
 #undef HAVE_TM_GMTOFF
+
+/* Define to 1 if your compile does not like lines like: struct
+   something foo[]*/
+#undef ICAL_NO_EMPTY_ARRAY_DECL

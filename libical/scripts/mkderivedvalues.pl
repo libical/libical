@@ -44,7 +44,8 @@ if ($opt_i) {
 	      URI=>'string',
 	      UTCOFFSET=>'int',
 	      QUERY=>'string',
-	      BINARY=>'string'
+	      BINARY=>'string',
+	      X=>'string'
 	     );
 
 
@@ -111,6 +112,31 @@ if($opt_h){
       print "\n} $c_type;\n\n";
     }
   }
+
+  print "#define ICALPROPERTY_LAST_ENUM $idx\n\n";
+
+}
+
+
+if($opt_c){
+
+  # print out the value to string map
+
+  print "static struct icalvalue_kind_map value_map[]={\n"; 
+
+  foreach $value  (keys %h) {
+
+    $idx++;
+    my $ucv = join("",map {uc(lc($_));}  split(/-/,$value));
+    
+    next if $value eq "NO";
+    
+    print "    {ICAL_${ucv}_VALUE,\"$value\"},\n";
+  }
+
+    
+  print "    {ICAL_NO_VALUE,\"\"}\n};";
+
 }
 
 
@@ -137,7 +163,10 @@ foreach $value  (keys %h) {
   
   my $union_data;
   
-  if (exists $union_map{$uc} ){
+  if(@{$h{$value}->{'enums'}}){
+    $union_data = 'enum';
+
+  } elsif (exists $union_map{$uc} ){
     $union_data=$union_map{$uc};
   } else {
     $union_data = $lc;
@@ -164,6 +193,7 @@ void icalvalue_set_${lc}(icalvalue* value, $type v) {\
       print "    if(impl->data.v_${union_data}!=0) {free((void*)impl->data.v_${union_data});}\n";
     }
     
+
     print "\n    impl->data.v_$union_data = $assign \n }\n";
 
     print "$type\ icalvalue_get_${lc}(icalvalue* value)\ {\n\
