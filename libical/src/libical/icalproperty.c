@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.32 2002-10-09 21:22:05 acampi Exp $
+  $Id: icalproperty.c,v 1.33 2002-10-09 23:49:28 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -467,8 +467,8 @@ icalproperty_as_ical_string (icalproperty* prop)
 	param != 0; 
 	param = icalproperty_get_next_parameter(prop,ICAL_ANY_PARAMETER)) {
 
-	kind_string = icalparameter_as_ical_string(param); 
 	icalparameter_kind kind = icalparameter_isa(param);
+	kind_string = icalparameter_as_ical_string(param); 
 
 	if(kind==ICAL_VALUE_PARAMETER){
 	    continue;
