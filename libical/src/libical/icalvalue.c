@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.20 2002-06-13 10:08:24 acampi Exp $
+  $Id: icalvalue.c,v 1.21 2002-06-13 10:12:13 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -685,6 +685,11 @@ static char* icalvalue_recur_as_ical_string(const icalvalue* value)
     return icalrecurrencetype_as_string(recur);
 }
 
+/* FIXME This is not RFC2445 compliant.
+ * The RFC only allows:
+ * TSAFE-CHAR = %x20-21 / %x23-2B / %x2D-39 / %x3C-5B / %x5D-7E / NON-US-ASCII
+ * As such, \t\r\b\f are not allowed, not even escaped
+ */
 static char* icalvalue_text_as_ical_string(const icalvalue* value) {
 
     char *str;
@@ -692,9 +697,6 @@ static char* icalvalue_text_as_ical_string(const icalvalue* value) {
     char *rtrn;
     const char *p;
     size_t buf_sz;
-    int line_length;
-
-    line_length = 0;
 
     buf_sz = strlen(value->data.v_string)+1;
 
@@ -709,28 +711,23 @@ static char* icalvalue_text_as_ical_string(const icalvalue* value) {
 	switch(*p){
 	    case '\n': {
 		icalmemory_append_string(&str,&str_p,&buf_sz,"\\n");
-		line_length+=3;
 		break;
 	    }
 
 	    case '\t': {
 		icalmemory_append_string(&str,&str_p,&buf_sz,"\\t");
-		line_length+=3;
 		break;
 	    }
 	    case '\r': {
 		icalmemory_append_string(&str,&str_p,&buf_sz,"\\r");
-		line_length+=3;
 		break;
 	    }
 	    case '\b': {
 		icalmemory_append_string(&str,&str_p,&buf_sz,"\\b");
-		line_length+=3;
 		break;
 	    }
 	    case '\f': {
 		icalmemory_append_string(&str,&str_p,&buf_sz,"\\f");
-		line_length+=3;
 		break;
 	    }
 
@@ -740,32 +737,13 @@ static char* icalvalue_text_as_ical_string(const icalvalue* value) {
 	    case '\\':{
 		icalmemory_append_char(&str,&str_p,&buf_sz,'\\');
 		icalmemory_append_char(&str,&str_p,&buf_sz,*p);
-		line_length+=3;
 		break;
 	    }
 
 	    default: {
 		icalmemory_append_char(&str,&str_p,&buf_sz,*p);
-		line_length++;
 	    }
 	}
-
-
-	/* We don't do folding here any more. We do it in
-	   icalproperty_as_ical_string(). */
-#if 0
-	if (line_length > 65 && *p == ' '){
-	    icalmemory_append_string(&str,&str_p,&buf_sz,"\n ");
-	    line_length=0;
-	}
-
-
-	if (line_length > 75){
-	    icalmemory_append_string(&str,&str_p,&buf_sz,"\n ");
-	    line_length=0;
-	}
-#endif
-
     }
 
     /* Assume the last character is not a '\0' and add one. We could
