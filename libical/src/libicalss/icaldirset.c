@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.8 2002-03-16 15:53:29 gray-john Exp $
+    $Id: icaldirset.c,v 1.9 2002-05-28 15:05:15 acampi Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -499,7 +499,7 @@ void icaldirset_add_uid(icaldirset* store, icaldirset* comp)
    is an inner component of type VEVENT, VTODO or VJOURNAL. The inner
    component must have a DTAMP property */
 
-icalerrorenum icaldirset_add_component(icaldirset* store, icaldirset* comp)
+icalerrorenum icaldirset_add_component(icaldirset* store, icalcomponent* comp)
 {
     struct icaldirset_impl *impl;
     char clustername[ICAL_PATH_MAX];
@@ -593,7 +593,7 @@ icalerrorenum icaldirset_add_component(icaldirset* store, icaldirset* comp)
    "friend" of icalfileset, and breaks its encapsulation. It was
    either do it this way, or add several layers of interfaces that had
    no other use.  */
-icalerrorenum icaldirset_remove_component(icaldirset* store, icaldirset* comp)
+icalerrorenum icaldirset_remove_component(icaldirset* store, icalcomponent* comp)
 {
     struct icaldirset_impl *impl = (struct icaldirset_impl*)store;
 

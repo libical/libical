@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.20 2001-12-16 18:26:44 gray-john Exp $
+#  $Id: Makefile.am,v 1.21 2002-05-28 15:05:15 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -117,6 +117,7 @@ COMBINEDHEADERS =					\
 	$(top_srcdir)/src/libical/icalenums.h		\
 	$(top_srcdir)/src/libical/icaltypes.h		\
 	$(top_srcdir)/src/libical/icalrecur.h		\
+	$(top_srcdir)/src/libical/icalattach.h		\
 	icalderivedvalue.h				\
 	icalderivedparameter.h				\
 	$(top_srcdir)/src/libical/icalvalue.h		\
