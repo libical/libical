@@ -18,3 +18,11 @@ icalvalue.c
 icalparameter.h
 icalparameter.c
 icalrestriction.c
+icalderivedparameter.c
+icalderivedparameter.h
+icalderivedproperty.c
+icalderivedproperty.h
+icalderivedvalue.c
+icalderivedvalue.h
+icallexer.c
+y.output
