@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "icalparameter_cxx.h"
 #include "icalproperty_cxx.h"
 #include "vcomponent.h"
 #include "regression.h"
@@ -97,32 +98,31 @@ void test_cxx(void)
     }
 
     VCalendar* cal = new VCalendar();
-    VAgenda* agenda = new VAgenda();
+    VAgenda* vAgenda = new VAgenda();
 
     ok("Create a new VCalendar object", (cal != 0));
-    ok("Create a new VAgenda object", (agenda != 0));
+    ok("Create a new VAgenda object", (vAgenda != 0));
 
     ICalProperty* prop = new ICalProperty(ICAL_OWNER_PROPERTY);
     prop->set_owner("fred@flintstone.net");
-    agenda->add_property(prop);
+    vAgenda->add_property(prop);
 
     prop = new ICalProperty(ICAL_SUMMARY_PROPERTY);
     prop->set_summary("CPMain");
-    agenda->add_property(prop);
+    vAgenda->add_property(prop);
 
     prop = new ICalProperty(ICAL_TZID_PROPERTY);
     prop->set_tzid("America/Los_Angeles");
-    agenda->add_property(prop);
+    vAgenda->add_property(prop);
 
-    cal->add_component(agenda);
+    cal->add_component(vAgenda);
 
     ok("Complex VCALENDAR/VAGENDA", (cal->as_ical_string() != 0));
 
     if (VERBOSE)
-      printf("agenda: %s\n", cal->as_ical_string());
+      printf("vAgenda: %s\n", cal->as_ical_string());
 
     int caughtException = 0;
-
     try {
       string foo = "HFHFHFHF";
       VComponent v = VComponent(foo);

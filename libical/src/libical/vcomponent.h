@@ -27,21 +27,21 @@ class ICalProperty;
 
 class VComponent {
 public:
-	VComponent();
-	VComponent(const VComponent&);
-	VComponent& operator=(const VComponent&);
+	VComponent()                             throw (icalerrorenum);
+	VComponent(const VComponent&)            throw (icalerrorenum);
+	VComponent& operator=(const VComponent&) throw (icalerrorenum);
 	virtual ~VComponent();
 
-	VComponent(icalcomponent* v);
-	VComponent(string str);
-	VComponent(icalcomponent_kind kind);
+	VComponent(icalcomponent* v)        throw (icalerrorenum);
+	VComponent(string str)              throw (icalerrorenum);
+	VComponent(icalcomponent_kind kind) throw (icalerrorenum);;
 
 	operator icalcomponent* () { return imp; }
 
 	void new_from_string(string str);
 
 public:
-	string as_ical_string();
+	string as_ical_string() throw (icalerrorenum);
 	bool is_valid();
 	icalcomponent_kind isa();
 	int isa_component(void* component);

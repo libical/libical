@@ -23,16 +23,20 @@
 
 ICalProperty::ICalProperty() : imp(icalproperty_new(ICAL_ANY_PROPERTY)){
 }
-ICalProperty::ICalProperty(const ICalProperty& v){
+
+ICalProperty::ICalProperty(const ICalProperty& v) throw(icalerrorenum){
 	imp = icalproperty_new_clone(v.imp);
+	if (!imp) throw icalerrno;
 }
-ICalProperty& ICalProperty::operator=(const ICalProperty& v){
+
+ICalProperty& ICalProperty::operator=(const ICalProperty& v) throw(icalerrorenum) {
 	if (this == &v) return *this;
 
 	if (imp != NULL)
 	{
 		icalproperty_free(imp);
 		imp = icalproperty_new_clone(v.imp);
+		if (!imp) throw icalerrno;
 	}
 
 	return *this;

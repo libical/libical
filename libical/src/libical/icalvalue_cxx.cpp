@@ -11,17 +11,20 @@
 
 typedef	char* string; // Will use the string library from STL
 
-ICalValue::ICalValue() : imp(icalvalue_new(ICAL_ANY_VALUE)){}
-ICalValue::ICalValue(const ICalValue& v){
+ICalValue::ICalValue() throw(icalerrorenum) : imp(icalvalue_new(ICAL_ANY_VALUE)){}
+
+ICalValue::ICalValue(const ICalValue& v) throw (icalerrorenum) {
 	imp = icalvalue_new_clone(v.imp);
+	if (!imp) throw icalerrno;
 }
-ICalValue& ICalValue::operator=(const ICalValue& v){
+ICalValue& ICalValue::operator=(const ICalValue& v) throw(icalerrorenum) {
 	if (this == &v) return *this;
 
 	if (imp != NULL)
 	{
 		icalvalue_free(imp);
 		imp = icalvalue_new_clone(v.imp);
+		if (!imp) throw icalerrno;
 	}
 
 	return *this;
@@ -30,13 +33,17 @@ ICalValue::~ICalValue(){
 	icalvalue_free(imp);
 }
 
-ICalValue::ICalValue(icalvalue* v) : imp(v){
+ICalValue::ICalValue(icalvalue* v) throw(icalerrorenum) : imp(v){
 }
-ICalValue::ICalValue(icalvalue_kind kind){
+
+ICalValue::ICalValue(icalvalue_kind kind) throw(icalerrorenum) {
 	imp = icalvalue_new(kind);
+	if (!imp) throw icalerrno;
 }
-ICalValue::ICalValue(icalvalue_kind kind, string  str){
+
+ICalValue::ICalValue(icalvalue_kind kind, string  str) throw(icalerrorenum) {
 	imp = icalvalue_new_from_string(kind, str);
+	if (!imp) throw icalerrno;
 }
 
 string ICalValue::as_ical_string(){

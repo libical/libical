@@ -18,18 +18,22 @@
 
 typedef	char* string; // Will use the string library from STL
 
-ICalParameter::ICalParameter() : imp(icalparameter_new(ICAL_ANY_PARAMETER)){
+ICalParameter::ICalParameter() throw(icalerrorenum) : imp(icalparameter_new(ICAL_ANY_PARAMETER)){
 }
-ICalParameter::ICalParameter(const ICalParameter& v){
+
+ICalParameter::ICalParameter(const ICalParameter& v) throw(icalerrorenum) {
 	imp = icalparameter_new_clone(v.imp);
+	if (!imp) throw icalerrno;
 }
-ICalParameter& ICalParameter::operator=(const ICalParameter& v){
+
+ICalParameter& ICalParameter::operator=(const ICalParameter& v)  throw(icalerrorenum) {
 	if (this == &v) return *this;
 
 	if (imp != NULL)
 	{
 		icalparameter_free(imp);
 		imp = icalparameter_new_clone(v.imp);
+		if (!imp) throw icalerrno;
 	}
     
 	return *this;
@@ -38,23 +42,34 @@ ICalParameter::~ICalParameter(){
 	icalparameter_free(imp);
 }
 
-ICalParameter::ICalParameter(icalparameter* v) : imp(v){
+ICalParameter::ICalParameter(icalparameter* v) throw(icalerrorenum) : imp(v){
 }
 
 /// Create from string of form "PARAMNAME=VALUE"
-ICalParameter::ICalParameter(string str){ 
+ICalParameter::ICalParameter(string str) throw(icalerrorenum) { 
 	imp = icalparameter_new_from_string(str);
-}
-ICalParameter::ICalParameter(icalparameter_kind kind, string  str){ // Create from just the value, the part after the "="
-	imp = icalparameter_new_from_value_string(kind, str);
-}
-ICalParameter::ICalParameter(icalparameter_kind kind){
-	imp = icalparameter_new(kind);
+	if (!imp) throw icalerrno;
 }
 
-string ICalParameter::as_ical_string(){
-	return icalparameter_as_ical_string(imp);
+/// Create from just the value, the part after the "="
+ICalParameter::ICalParameter(icalparameter_kind kind, string  str) throw(icalerrorenum) { 
+	imp = icalparameter_new_from_value_string(kind, str);
+	if (!imp) throw icalerrno;
 }
+
+ICalParameter::ICalParameter(icalparameter_kind kind) throw(icalerrorenum) {
+	imp = icalparameter_new(kind);
+	if (!imp) throw icalerrno;
+}
+
+string ICalParameter::as_ical_string() throw(icalerrorenum) {
+  char *str = icalparameter_as_ical_string(imp);
+
+  if (!str) throw icalerrno;
+
+  return str;
+}
+
 bool ICalParameter::is_valid(){
 	if (imp == NULL) return false;
 	return (icalparameter_isa_parameter((void*)imp) ? true : false);

@@ -11,9 +11,7 @@
 #ifndef ICALPROPERTY_CXX_H
 #define ICALPROPERTY_CXX_H
 
-extern "C" {
 #include "ical.h"
-};
 
 typedef	char* string; // Will use the string library from STL
 
@@ -23,8 +21,8 @@ class ICalValue;
 class ICalProperty {
 public:
 	ICalProperty();
-	ICalProperty(const ICalProperty&);
-	ICalProperty& operator=(const ICalProperty&);
+	ICalProperty(const ICalProperty&) throw(icalerrorenum);
+	ICalProperty& operator=(const ICalProperty&) throw(icalerrorenum);
 	~ICalProperty();
 
 	ICalProperty(icalproperty* v);
@@ -172,6 +170,10 @@ public:
 	/* GEO */
 	void set_geo(struct icalgeotype val);
 	struct icalgeotype get_geo();
+
+	/* GRANT */
+	void set_grant(string val);
+	string get_grant();
 
 	/* LAST-MODIFIED */
 	void set_lastmodified(struct icaltimetype val);

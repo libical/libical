@@ -7,7 +7,7 @@
     @param end     Designated end of the spanlist
 */
 
-ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end)
+ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) throw(icalerrorenum)
 {
   data = icalspanlist_new(set, start, end);
   if (!data) throw icalerrno;
@@ -18,7 +18,7 @@ ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end)
     @param comp  A valid icalcomponent with a VFREEBUSY section
 */
 
-ICalSpanList::ICalSpanList(icalcomponent *comp)
+ICalSpanList::ICalSpanList(icalcomponent *comp) throw(icalerrorenum)
 {
   data = icalspanlist_from_vfreebusy(comp);
   if (!data) throw icalerrno;
@@ -27,7 +27,7 @@ ICalSpanList::ICalSpanList(icalcomponent *comp)
 /** @brief Constructor
     @param comp  A valid VComponent with a VFREEBUSY section
 */
-ICalSpanList::ICalSpanList(VComponent &comp)
+ICalSpanList::ICalSpanList(VComponent &comp) throw(icalerrorenum)
 {
   data = icalspanlist_from_vfreebusy((icalcomponent*) comp);
   if (!data) throw icalerrno;
@@ -47,7 +47,8 @@ ICalSpanList::~ICalSpanList() {
  */
 
 VComponent*
-ICalSpanList::get_vfreebusy(const char *organizer, const char *attendee) {
+ICalSpanList::get_vfreebusy(const char *organizer, const char *attendee) throw(icalerrorenum)
+{
   icalcomponent *comp;
   VComponent    *vcomp;
 
@@ -73,7 +74,7 @@ ICalSpanList::get_vfreebusy(const char *organizer, const char *attendee) {
  * @see icalspanlist_as_freebusy_matrix()
  */
 
-std::vector<int> ICalSpanList::as_vector(int delta_t)
+std::vector<int> ICalSpanList::as_vector(int delta_t) throw(icalerrorenum)
 {
   int *matrix;
   int i = 0;

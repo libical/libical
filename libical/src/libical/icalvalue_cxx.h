@@ -16,14 +16,14 @@ typedef	char* string; // Will use the string library from STL
 
 class ICalValue {
 public:
-	ICalValue();
-	ICalValue(const ICalValue&);
-	ICalValue& operator=(const ICalValue&);
+	ICalValue()                                  throw(icalerrorenum);
+	ICalValue(const ICalValue&)                  throw(icalerrorenum);
+	ICalValue& operator=(const ICalValue&)       throw(icalerrorenum);
 	~ICalValue();
 
-	ICalValue(icalvalue*);
-	ICalValue(icalvalue_kind kind);
-	ICalValue(icalvalue_kind kind, string  str);
+	ICalValue(icalvalue*)                        throw(icalerrorenum);
+	ICalValue(icalvalue_kind kind)               throw(icalerrorenum);
+	ICalValue(icalvalue_kind kind, string  str)  throw(icalerrorenum);
 
 	operator icalvalue* () { return imp; }
 

@@ -26,23 +26,22 @@
 
 #include <exception>
 
-VComponent::VComponent() : imp(icalcomponent_new(ICAL_ANY_COMPONENT)){
+VComponent::VComponent() throw(icalerrorenum) : imp(icalcomponent_new(ICAL_ANY_COMPONENT)) {
 }
-VComponent::VComponent(const VComponent& v){
+VComponent::VComponent(const VComponent& v) throw(icalerrorenum) {
   imp = icalcomponent_new_clone(v.imp);
   if (!imp) throw icalerrno;
 }
 
-VComponent& VComponent::operator=(const VComponent& v){
+VComponent& VComponent::operator=(const VComponent& v) throw(icalerrorenum) {
 	if (this == &v) return *this;
 
 	if (imp != NULL)
 	{
 		icalcomponent_free(imp);
 		imp = icalcomponent_new_clone(v.imp);
-	}
-
 	if (!imp) throw icalerrno;
+	}
 
 	return *this;
 }
@@ -52,7 +51,7 @@ VComponent::~VComponent(){
 	   icalcomponent_free(imp);
 }
 
-VComponent::VComponent(icalcomponent* v) : imp(v){
+VComponent::VComponent(icalcomponent* v) throw (icalerrorenum) : imp(v){
 }
 
 /* char* returned is in the ring buffer. caller doesn't have to free it */
@@ -91,7 +90,7 @@ char* VComponent::quote_ical_string(char *str){
  *            Catch this error if you 
  * 
  */
-VComponent::VComponent(string str){
+VComponent::VComponent(string str)  throw (icalerrorenum) {
 	// Fix for BUG #15647, but breaks fix for BUG #15596.  Attempting a UI fix for cal-4.0.
 	//char* quoted_str = quote_ical_string((char *)str);
 	//imp = icalcomponent_new_from_string(quoted_str);
@@ -100,16 +99,19 @@ VComponent::VComponent(string str){
 	if (!imp) throw icalerrno;
 }
 
-VComponent::VComponent(icalcomponent_kind kind){
+VComponent::VComponent(icalcomponent_kind kind)  throw(icalerrorenum) {
   imp = icalcomponent_new(kind);
 
   if (!imp) throw icalerrno;
 }
 
 
-string VComponent::as_ical_string(){
+string VComponent::as_ical_string()  throw(icalerrorenum) {
   char *str = icalcomponent_as_ical_string(imp);
+
   if (!str) throw icalerrno;
+
+  return(str);
 }
 
 
@@ -120,7 +122,6 @@ bool VComponent::is_valid(){
 
 icalcomponent_kind VComponent::isa(){
 	return icalcomponent_isa(imp);
-	if (!imp) throw icalerrno;
 }
 
 int VComponent::isa_component(void* component){
@@ -576,6 +577,9 @@ VCalendar::~VCalendar(){}
 VCalendar::VCalendar(icalcomponent* v) : VComponent(v){}
 VCalendar::VCalendar(string str) : VComponent(str){}
 
+
+/* VEvent */
+
 VEvent::VEvent() : VComponent(icalcomponent_new_vevent()){}
 VEvent::VEvent(const VEvent& v) : VComponent(v) {}
 VEvent& VEvent::operator=(const VEvent& v){
@@ -588,6 +592,9 @@ VEvent::~VEvent(){}
 
 VEvent::VEvent(icalcomponent* v) : VComponent(v){}
 VEvent::VEvent(string str) : VComponent(str){}
+
+
+/* VTodo */
 
 VToDo::VToDo() : VComponent(icalcomponent_new_vtodo()){}
 VToDo::VToDo(const VToDo& v) : VComponent(v) {}
@@ -602,6 +609,9 @@ VToDo::~VToDo(){}
 VToDo::VToDo(icalcomponent* v) : VComponent(v){}
 VToDo::VToDo(string str) : VComponent(str){}
 
+
+/* VAgenda */
+
 VAgenda::VAgenda() : VComponent(icalcomponent_new_vagenda()){}
 VAgenda::VAgenda(const VAgenda& v) : VComponent(v) {}
 VAgenda& VAgenda::operator=(const VAgenda& v){
@@ -614,6 +624,9 @@ VAgenda::~VAgenda(){}
 
 VAgenda::VAgenda(icalcomponent* v) : VComponent(v){}
 VAgenda::VAgenda(string str) : VComponent(str){}
+
+
+/* VQuery */
 
 VQuery::VQuery() : VComponent(icalcomponent_new_vquery()){}
 VQuery::VQuery(const VQuery& v) : VComponent(v) {}
@@ -628,6 +641,9 @@ VQuery::~VQuery(){}
 VQuery::VQuery(icalcomponent* v) : VComponent(v){}
 VQuery::VQuery(string str) : VComponent(str){}
 
+
+/* VJournal */
+
 VJournal::VJournal() : VComponent(icalcomponent_new_vjournal()){}
 VJournal::VJournal(const VJournal& v) : VComponent(v) {}
 VJournal& VJournal::operator=(const VJournal& v){
@@ -640,6 +656,9 @@ VJournal::~VJournal(){}
 
 VJournal::VJournal(icalcomponent* v) : VComponent(v){}
 VJournal::VJournal(string str) : VComponent(str){}
+
+
+/* VAlarm */
 
 VAlarm::VAlarm() : VComponent(icalcomponent_new_valarm()){}
 VAlarm::VAlarm(const VAlarm& v) : VComponent(v) {}
@@ -749,6 +768,9 @@ VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *tr)
   return ICAL_2_0_SUCCESS_STATUS;
 }
 
+
+/* VFreeBusy */
+
 VFreeBusy::VFreeBusy() : VComponent(icalcomponent_new_vfreebusy()){}
 VFreeBusy::VFreeBusy(const VFreeBusy& v) : VComponent(v) {}
 VFreeBusy& VFreeBusy::operator=(const VFreeBusy& v){
@@ -761,6 +783,9 @@ VFreeBusy::~VFreeBusy(){}
 
 VFreeBusy::VFreeBusy(icalcomponent* v) : VComponent(v){}
 VFreeBusy::VFreeBusy(string str) : VComponent(str){}
+
+
+/* VTimezone */
 
 VTimezone::VTimezone() : VComponent(icalcomponent_new_vtimezone()){}
 VTimezone::VTimezone(const VTimezone& v) : VComponent(v) {}
@@ -775,6 +800,9 @@ VTimezone::~VTimezone(){}
 VTimezone::VTimezone(icalcomponent* v) : VComponent(v){}
 VTimezone::VTimezone(string str) : VComponent(str){}
 
+
+/* XStandard */
+
 XStandard::XStandard() : VComponent(icalcomponent_new_xstandard()){}
 XStandard::XStandard(const XStandard& v) : VComponent(v) {}
 XStandard& XStandard::operator=(const XStandard& v){
@@ -787,6 +815,9 @@ XStandard::~XStandard(){}
 
 XStandard::XStandard(icalcomponent* v) : VComponent(v){}
 XStandard::XStandard(string str) : VComponent(str){}
+
+
+/* XDaylight */
 
 XDaylight::XDaylight() : VComponent(icalcomponent_new_xdaylight()){}
 XDaylight::XDaylight(const XDaylight& v) : VComponent(v) {}

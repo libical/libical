@@ -20,20 +20,24 @@ typedef	char* string; // Will use the string library from STL
 
 class ICalParameter {
 public:
-	ICalParameter();
-	ICalParameter(const ICalParameter&);
-	ICalParameter& operator=(const ICalParameter&);
+	ICalParameter() throw(icalerrorenum);
+	ICalParameter(const ICalParameter&) throw(icalerrorenum);
+	ICalParameter& operator=(const ICalParameter&) throw(icalerrorenum);
 	~ICalParameter();
 
-	ICalParameter(icalparameter* v);
-	ICalParameter(string str); // Create from string of form "PARAMNAME=VALUE"
-	ICalParameter(icalparameter_kind kind, string  str); // Create from just the value, the part after the "="
-	ICalParameter(icalparameter_kind kind);
+	ICalParameter(icalparameter* v)  throw(icalerrorenum);
+
+        // Create from string of form "PARAMNAME=VALUE"
+	ICalParameter(string str) throw(icalerrorenum);
+
+        // Create from just the value, the part after the "="
+	ICalParameter(icalparameter_kind kind, string  str) throw(icalerrorenum); 
+	ICalParameter(icalparameter_kind kind) throw(icalerrorenum);
 
 	operator icalparameter*() { return imp; }
 
 public:
-	string as_ical_string();
+	string as_ical_string() throw(icalerrorenum);
 	bool is_valid();
 	icalparameter_kind isa( );
 	int isa_parameter(void* param);
