@@ -272,9 +272,9 @@ pvl_insert_ordered(pvl_list L,pvl_comparef f,void *d)
     }
 
     /* badness, choke */
-
+#ifndef lint
     assert(0);
-
+#endif
 }
 
 /**
