@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.11 2001-03-11 00:48:03 plewis Exp $
+#  $Id: test.py,v 1.12 2001-03-14 07:31:05 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -254,10 +254,13 @@ def test_component():
 
     dtstart1 = c.properties('DTSTART')[0]
     dtstart2 = c.properties('DTSTART')[0]
+    dtstart3 = c.property('DTSTART')
 
     assert(dtstart1 is dtstart2)
-    
     assert(dtstart1 == dtstart2)
+
+    assert(dtstart1 is dtstart3)
+    assert(dtstart1 == dtstart3)
 
 
     p = Property(type="SUMMARY");
@@ -275,6 +278,7 @@ def test_component():
     c.properties()[:] = [p]
 
     print c.as_ical_string()
+
 
 def test_event():
     print "------------ Event Class ----------------------"

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.3 2001-03-11 00:51:21 plewis Exp $
+#  $Id: Component.py,v 1.4 2001-03-14 07:31:05 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -52,7 +52,42 @@ class Component:
             icalcomponent_free(self._ref)
             self._ref = None
 
+    def _prop_from_ref(self,p):
+
+        d_string = icallangbind_property_eval_string(p,":")
+        d = eval(d_string)
+        d['ref'] = p
         
+        if not self.cached_props.has_key(p):
+            
+            if d['value_type'] == 'DATE-TIME' or d['value_type'] == 'DATE':
+                prop = Time(d,)
+            elif d['value_type'] == 'PERIOD':
+                prop = Period(d)
+            elif d['value_type'] == 'DURATION':
+                prop = Duration(d)
+            elif d['name'] == 'ATTACH':
+                prop = Attach(d)
+            elif d['name'] == 'ATTENDEE':
+                prop = Attendee(d)
+            elif d['name'] == 'ORGANIZER':
+                prop = Organizer(d)
+            else:
+                prop=Property(ref=p)
+                
+            self.cached_props[p] = prop
+
+    def property(self, type):
+
+       p = icallangbind_get_first_property(self._ref,type) 
+
+       if p !='NULL':
+           self._prop_from_ref(p)
+           prop =  self.cached_props[p]
+           return prop
+       else :    
+           return None
+
     def properties(self,type='ANY'): 
         """  
         Return a list of Property instances, each representing a
@@ -64,34 +99,9 @@ class Component:
         p = icallangbind_get_first_property(self._ref,type)
 
         while p !='NULL':
-            d_string = icallangbind_property_eval_string(p,":")
-            d = eval(d_string)
-            d['ref'] = p
-            
-            if not self.cached_props.has_key(p):
-
-                if d['value_type'] == 'DATE-TIME' or d['value_type'] == 'DATE':
-                    prop = Time(d,)
-                elif d['value_type'] == 'PERIOD':
-                    prop = Period(d)
-                elif d['value_type'] == 'DURATION':
-                    prop = Duration(d)
-                elif d['name'] == 'ATTACH':
-                    prop = Attach(d)
-                elif d['name'] == 'ATTENDEE':
-                    prop = Attendee(d)
-                elif d['name'] == 'ORGANIZER':
-                    prop = Organizer(d)
-                else:
-                    prop=Property(ref=p)
-                    
-                    
-                self.cached_props[p] = prop
-
+            self._prop_from_ref(p)
             prop =  self.cached_props[p]
-            
             props.append(prop)
-
             p = icallangbind_get_next_property(self._ref,type)
 
         return Collection(self,props)
