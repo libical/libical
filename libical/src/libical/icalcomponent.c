@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.39 2002-08-07 17:02:51 acampi Exp $
+  $Id: icalcomponent.c,v 1.40 2002-08-08 16:46:39 lindner Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -861,7 +861,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 	 
     struct icaltimetype exdatetime = icalproperty_get_exdate(exdate);
 
-    if (icaltime_compare(*recurtime, exdatetime) == 0) {
+    if (icaltime_compare_with_zone(*recurtime, exdatetime) == 0) {
       /** MATCHED **/
       return 1;
     }
@@ -883,7 +883,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
       if (icaltime_is_null_time(exrule_time))
 	break;
 
-      result = icaltime_compare(*recurtime, exrule_time);
+      result = icaltime_compare_with_zone(*recurtime, exrule_time);
       if (result == 0) {
 	icalrecur_iterator_free(exrule_itr);
 	return 1; /** MATCH **/
@@ -1325,6 +1325,7 @@ icalcomponent_begin_component(icalcomponent* component,icalcomponent_kind kind)
     pvl_elem i;
 
     itr.kind = kind;
+    itr.iter = NULL;
 
     icalerror_check_arg_re( (component!=0),"component",icalcompiter_null);
 
@@ -1851,7 +1852,7 @@ struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent* comp)
         return icaltime_null_time();
     }
 
-    prop= icalcomponent_get_first_property(inner,ICAL_UID_PROPERTY);
+    prop= icalcomponent_get_first_property(inner, ICAL_RECURRENCEID_PROPERTY);
 
     if (prop == 0){
         return icaltime_null_time();
