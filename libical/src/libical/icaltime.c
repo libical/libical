@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.1.1.1 2001-01-02 07:33:02 ebusboom Exp $
+  $Id: icaltime.c,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -542,9 +542,9 @@ icalperiodtype_end (struct icalperiodtype period);
 
 
 /* From Russel Steinthal */
-time_t icaldurationtype_as_timet(struct icaldurationtype dur)
+int icaldurationtype_as_int(struct icaldurationtype dur)
 {
-        return (time_t) (dur.seconds +
+        return (int) (dur.seconds +
                          (60 * dur.minutes) +
                          (60 * 60 * dur.hours) +
                          (60 * 60 * 24 * dur.days) +
@@ -552,10 +552,10 @@ time_t icaldurationtype_as_timet(struct icaldurationtype dur)
 } 
 
 /* From Seth Alves,  <alves@hungry.com>   */
-struct icaldurationtype icaldurationtype_from_timet(time_t t)
+struct icaldurationtype icaldurationtype_from_int(int t)
 {
         struct icaldurationtype dur;
-        time_t used = 0;
+        int used = 0;
  
         dur.weeks = (t - used) / (60 * 60 * 24 * 7);
         used += dur.weeks * (60 * 60 * 24 * 7);
@@ -592,7 +592,7 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
 struct icaltimetype  icaltime_add(struct icaltimetype t,
 				  struct icaldurationtype  d)
 {
-    time_t dt = icaldurationtype_as_timet(d);
+    int dt = icaldurationtype_as_int(d);
 
     t.second += dt;
 
@@ -608,7 +608,7 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
     time_t t1t = icaltime_as_timet(t1);
     time_t t2t = icaltime_as_timet(t2);
 
-    return icaldurationtype_from_timet(t1t-t2t);
+    return icaldurationtype_from_int(t1t-t2t);
 
 
 }

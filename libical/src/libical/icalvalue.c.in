@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c.in,v 1.1.1.1 2001-01-02 07:33:01 ebusboom Exp $
+  $Id: icalvalue.c.in,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1141,6 +1141,20 @@ icalvalue_isa_value (void* value)
 }
 
 
+int icalvalue_is_time(icalvalue* a) {
+    icalvalue_kind kind = icalvalue_isa(a);
+
+    if(kind == ICAL_DATETIMEDATE_VALUE ||
+       kind == ICAL_DATETIME_VALUE ||
+       kind == ICAL_DATE_VALUE ||
+       kind == ICAL_TIME_VALUE ){
+	return 1;
+    }
+
+    return 0;
+
+}
+
 icalparameter_xliccomparetype
 icalvalue_compare(icalvalue* a, icalvalue *b)
 {
@@ -1151,7 +1165,8 @@ icalvalue_compare(icalvalue* a, icalvalue *b)
     icalerror_check_arg_rz( (b!=0), "b");
 
     /* Not the same type; they can only be unequal */
-    if (icalvalue_isa(a) != icalvalue_isa(b)){
+    if( ! (icalvalue_is_time(a) && icalvalue_is_time(b)) &&
+	icalvalue_isa(a) != icalvalue_isa(b)){
 	return ICAL_XLICCOMPARETYPE_NOTEQUAL;
     }
 
@@ -1192,6 +1207,21 @@ icalvalue_compare(icalvalue* a, icalvalue *b)
 	    }
 	}
 
+	case ICAL_DURATION_VALUE: 
+	{
+	    int a = icaldurationtype_as_int(impla->data.v_duration);
+	    int b = icaldurationtype_as_int(implb->data.v_duration);
+
+	    if (a > b){
+		return ICAL_XLICCOMPARETYPE_GREATER;
+	    } else if (a < b){
+		return ICAL_XLICCOMPARETYPE_LESS;
+	    } else {
+		return ICAL_XLICCOMPARETYPE_EQUAL;
+	    }
+	}	    
+
+
 	case ICAL_TEXT_VALUE:
 	case ICAL_URI_VALUE:
 	case ICAL_CALADDRESS_VALUE:
@@ -1199,7 +1229,6 @@ icalvalue_compare(icalvalue* a, icalvalue *b)
 	case ICAL_DATE_VALUE:
 	case ICAL_DATETIME_VALUE:
 	case ICAL_DATETIMEDATE_VALUE:
-	case ICAL_DURATION_VALUE: /* HACK. Not correct for DURATION */
 	case ICAL_TIME_VALUE:
 	case ICAL_DATETIMEPERIOD_VALUE:
 	{
@@ -1213,7 +1242,7 @@ icalvalue_compare(icalvalue* a, icalvalue *b)
 	    } else if (r < 0){
 		return ICAL_XLICCOMPARETYPE_LESS;
 	    } else {
-		return 0;
+		return ICAL_XLICCOMPARETYPE_EQUAL;
 	    }
 
 		

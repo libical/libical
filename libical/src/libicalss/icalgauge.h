@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalgauge.h,v 1.1.1.1 2001-01-02 07:33:03 ebusboom Exp $
+ $Id: icalgauge.h,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -37,9 +37,15 @@ void icalgauge_free(icalgauge* gauge);
 
 char* icalgauge_as_sql(icalcomponent* gauge);
 
-void icalguage_dump(icalcomponent* gauge);
+void icalgauge_dump(icalcomponent* gauge);
 
-int icalgauge_compare(icalcomponent* comp, icalcomponent* gaugecontainer);
+/* Return true is comp matches the gauge. The component must be in
+   cannonical form -- a VCALENDAR with one VEVENT, VTODO or VJOURNAL
+   sub component */
+int icalgauge_compare(icalgauge* g, icalcomponent* comp);
 
+/* Clone the component, but only return the properties specified in
+   the gauge */
+icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
 
 #endif /* ICALGAUGE_H*/

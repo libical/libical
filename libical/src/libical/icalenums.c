@@ -3,7 +3,7 @@
   FILE: icalenum.c
   CREATOR: eric 29 April 1999
   
-  $Id: icalenums.c,v 1.1.1.1 2001-01-02 07:32:59 ebusboom Exp $
+  $Id: icalenums.c,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -42,6 +42,7 @@ struct icalproperty_kind_map {
 
 static struct icalproperty_kind_map property_map[] = 
 {
+    { ICAL_ANY_PROPERTY, "ANY"},
     { ICAL_ACTION_PROPERTY, "ACTION"},
     { ICAL_ATTACH_PROPERTY, "ATTACH"},
     { ICAL_ATTENDEE_PROPERTY, "ATTENDEE"},

@@ -3,7 +3,7 @@
   FILE: process.c
   CREATOR: eric 11 February 2000
   
-  $Id: process.c,v 1.1.1.1 2001-01-02 07:33:06 ebusboom Exp $
+  $Id: process.c,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -110,7 +110,6 @@ int main(int argc, char* argv[])
 	ical_class class;
 	icalcomponent *match;
 	icalcomponent *inner; 
-	icalcomponent *p;
 	icalcomponent *reply = 0;
 
 	assert(c!=0);

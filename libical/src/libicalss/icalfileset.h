@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalfileset.h,v 1.1.1.1 2001-01-02 07:33:04 ebusboom Exp $
+ $Id: icalfileset.h,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -30,6 +30,7 @@
 #define ICALFILESET_H
 
 #include "ical.h"
+#include "icalgauge.h";
 #include <sys/types.h> /* For open() flags and mode */
 #include <sys/stat.h> /* For open() flags and mode */
 #include <fcntl.h> /* For open() flags and mode */
@@ -48,6 +49,7 @@ icalfileset* icalfileset_new(const char* path);
 /* Like _new, but takes open() flags for opening the file */
 icalfileset* icalfileset_new_open(const char* path, 
 				  int flags, mode_t mode);
+
 void icalfileset_free(icalfileset* cluster);
 
 const char* icalfileset_path(icalfileset* cluster);
@@ -68,7 +70,7 @@ int icalfileset_count_components(icalfileset* cluster,
 
 /* Restrict the component returned by icalfileset_first, _next to those
    that pass the gauge. _clear removes the gauge */
-icalerrorenum icalfileset_select(icalfileset* store, icalcomponent* gauge);
+icalerrorenum icalfileset_select(icalfileset* store, icalgauge* gauge);
 void icalfileset_clear(icalfileset* store);
 
 /* Get and search for a component by uid */

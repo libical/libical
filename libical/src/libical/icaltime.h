@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.1.1.1 2001-01-02 07:33:02 ebusboom Exp $
+ $Id: icaltime.h,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -125,9 +125,9 @@ struct icaldurationtype
 	unsigned int seconds;
 };
 
-struct icaldurationtype icaldurationtype_from_timet(time_t t);
+struct icaldurationtype icaldurationtype_from_int(int t);
 struct icaldurationtype icaldurationtype_from_string(const char*);
-time_t icaldurationtype_as_timet(struct icaldurationtype duration);
+int icaldurationtype_as_int(struct icaldurationtype duration);
 
 
 struct icalperiodtype 

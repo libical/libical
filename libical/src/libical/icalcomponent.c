@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+  $Id: icalcomponent.c,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -837,7 +837,7 @@ struct icaltime_span icalcomponent_get_span(icalcomponent* comp)
 	
 	dur = icalproperty_get_duration(duration);
 
-	durt = icaldurationtype_as_timet(dur);
+	durt = icaldurationtype_as_int(dur);
 	span.end = span.start+durt;
     }
 
@@ -1273,7 +1273,7 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent* comp)
 	    icalcomponent_get_dtend(inner);
 	time_t endt = icaltime_as_timet(end);
 	
-	return icaldurationtype_from_timet(endt-startt);
+	return icaldurationtype_from_int(endt-startt);
     } else if ( dur_prop != 0) { 
 	return icalproperty_get_duration(dur_prop);
     } else {
@@ -1282,8 +1282,6 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent* comp)
 	return null_duration;
     }
 }
-
-
 
 void icalcomponent_set_method(icalcomponent* comp, icalproperty_method method)
 {

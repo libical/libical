@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.1.1.1 2001-01-02 07:33:06 ebusboom Exp $
+  $Id: regression.c,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -946,7 +946,6 @@ int test_store()
 int test_compare()
 {
     icalvalue *v1, *v2;
-    icalcomponent *c, *gauge;
 
     v1 = icalvalue_new_caladdress("cap://value/1");
     v2 = icalvalue_new_clone(v1);
@@ -977,30 +976,6 @@ int test_compare()
     v2 = icalvalue_new_integer(5);
 
     printf("%d\n",icalvalue_compare(v1,v2));
-
-
-    gauge = 
-	icalcomponent_vanew(
-	    ICAL_VCALENDAR_COMPONENT,
-	    icalcomponent_vanew(
-		ICAL_VEVENT_COMPONENT,  
-		icalproperty_vanew_comment(
-		    "Comment",
-		    icalparameter_new_xliccomparetype(ICAL_XLICCOMPARETYPE_EQUAL),
-		    0),
-		0),
-	    0);
-
-    c =	icalcomponent_vanew(
-		ICAL_VEVENT_COMPONENT,  
-		icalproperty_vanew_comment(
-		    "Comment",
-		    0),
-		0);
-
-    printf("%s",icalcomponent_as_ical_string(gauge));
-		
-    printf("%d\n",icalgauge_test(c,gauge));
 
     return 0;
 }
@@ -2053,7 +2028,7 @@ void test_convenience(){
     printf("** 1 DTSTART and DTEND **\n%s\n\n",
 	   icalcomponent_as_ical_string(c));
 
-    duration = icaldurationtype_as_timet(icalcomponent_get_duration(c))/60;
+    duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
     printf("Start: %s\n",ictt_as_string(icalcomponent_get_dtstart(c)));
     printf("End:   %s\n",ictt_as_string(icalcomponent_get_dtend(c)));
@@ -2074,7 +2049,7 @@ void test_convenience(){
     printf("\n** 2 DTSTART and DURATION **\n%s\n\n",
 	   icalcomponent_as_ical_string(c));
 
-    duration = icaldurationtype_as_timet(icalcomponent_get_duration(c))/60;
+    duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
     printf("Start: %s\n",ictt_as_string(icalcomponent_get_dtstart(c)));
     printf("End:   %s\n",ictt_as_string(icalcomponent_get_dtend(c)));
@@ -2097,7 +2072,7 @@ void test_convenience(){
     printf("** 3 DTSTART and DTEND, Set DURATION **\n%s\n\n",
 	   icalcomponent_as_ical_string(c));
 
-    duration = icaldurationtype_as_timet(icalcomponent_get_duration(c))/60;
+    duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
     printf("Start: %s\n",ictt_as_string(icalcomponent_get_dtstart(c)));
     printf("End:   %s\n",ictt_as_string(icalcomponent_get_dtend(c)));
@@ -2120,7 +2095,7 @@ void test_convenience(){
     printf("\n** 4 DTSTART and DURATION, set DTEND **\n%s\n\n",
 	   icalcomponent_as_ical_string(c));
 
-    duration = icaldurationtype_as_timet(icalcomponent_get_duration(c))/60;
+    duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
     printf("Start: %s\n",ictt_as_string(icalcomponent_get_dtstart(c)));
     printf("End:   %s\n",ictt_as_string(icalcomponent_get_dtend(c)));
@@ -2143,7 +2118,7 @@ void test_convenience(){
 	   icalcomponent_as_ical_string(c));
 
 
-    duration = icaldurationtype_as_timet(icalcomponent_get_duration(c))/60;
+    duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
     printf("Start: %s\n",ictt_as_string(icalcomponent_get_dtstart(c)));
     printf("End:   %s\n",ictt_as_string(icalcomponent_get_dtend(c)));
@@ -2167,7 +2142,7 @@ void test_convenience(){
 	   icalcomponent_as_ical_string(c));
 
 
-    duration = icaldurationtype_as_timet(icalcomponent_get_duration(c))/60;
+    duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
     printf("Start: %s\n",ictt_as_string(icalcomponent_get_dtstart(c)));
     printf("End:   %s\n",ictt_as_string(icalcomponent_get_dtend(c)));
@@ -2298,28 +2273,225 @@ void test_x(){
 
 }
 
-void test_gauge() {
+void test_gauge_sql() {
 
 
-    struct icalgauge_impl
-    {
-	    icalcomponent* select;
-	    icalcomponent* from;
-	    icalcomponent* where;
-	    
-    };
+    icalgauge *g;
+    
+    printf("\nSELECT DTSTART,DTEND,COMMENT FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5\n");
 
-    struct icalgauge_impl *g;
+    g = icalgauge_new_from_sql("SELECT DTSTART,DTEND,COMMENT FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5");
     
-    g = icalgauge_new_from_sql("SELECT DTSTART,DTEND FROM VEVENT,VTODO WHERE SUMMARY = 'Bongoa' AND SEQUENCE < 5");
+    icalgauge_dump(g);
+
+    icalgauge_free(g);
+
+    printf("\nSELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'\n");
+
+    g = icalgauge_new_from_sql("SELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'");
     
-    printf("Select: %s\n",icalcomponent_as_ical_string(g->select));
-    printf("From: %s\n",icalcomponent_as_ical_string(g->from));
-    printf("Where: %s\n",icalcomponent_as_ical_string(g->where));
-    
+    icalgauge_dump(g);
+
+    icalgauge_free(g);
 
 }
 
+void test_gauge_compare() {
+
+    icalgauge *g;
+    icalcomponent *c;
+
+    /* Equality */
+
+    c =  icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
+	      icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+		  icalproperty_new_dtstart(
+		      icaltime_from_string("20000101T000002")),0),0);
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'\n");
+    assert(c!=0);
+    assert(g!=0);
+
+    assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'\n");
+
+    assert(g!=0);
+    assert(icalgauge_compare(g,c) == 0);
+
+    icalgauge_free(g);
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART != '20000101T000003'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART != '20000101T000003'\n");
+
+
+    assert(g!=0);
+    assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+
+    /* Less than */
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART < '20000101T000003'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART < '20000101T000003'\n");
+
+    assert(icalgauge_compare(g,c) == 1);
+
+    assert(g!=0);
+    icalgauge_free(g);
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'\n");
+
+
+    assert(g!=0);
+    assert(icalgauge_compare(g,c) == 0);
+
+    icalgauge_free(g);
+
+    /* Greater than */
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART > '20000101T000001'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART > '20000101T000001'\n");
+
+
+    assert(g!=0);
+    assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'\n");
+
+
+    assert(g!=0);
+    assert(icalgauge_compare(g,c) == 0);
+
+    icalgauge_free(g);
+
+
+    /* Greater than or Equal to */
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000002'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000002'\n");
+
+
+    assert(g!=0);
+    assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'\n");
+
+
+    assert(g!=0);
+    assert(icalgauge_compare(g,c) == 0);
+
+    icalgauge_free(g);
+
+    /* Less than or Equal to */
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000002'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000002'\n");
+
+
+    assert(g!=0);
+    assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'");
+
+    printf("SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'\n");
+
+
+    assert(g!=0);
+    assert(icalgauge_compare(g,c) == 0);
+
+    icalgauge_free(g);
+
+    icalcomponent_free(c);
+
+
+    /* Complex comparisions */
+
+    c =  icalcomponent_vanew(
+	ICAL_VCALENDAR_COMPONENT,
+	icalproperty_new_method(ICAL_METHOD_REQUEST),
+	icalcomponent_vanew(
+	    ICAL_VEVENT_COMPONENT,
+	    icalproperty_new_dtstart(
+		icaltime_from_string("20000101T000002")),
+	    icalproperty_new_comment("foo"),
+	    icalcomponent_vanew(
+		ICAL_VALARM_COMPONENT,
+		icalproperty_new_dtstart(
+		    icaltime_from_string("20000101T120000")),
+		
+		0),
+	    0),
+	0);
+    
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE VALARM.DTSTART = '20000101T120000'");
+
+    printf("SELECT * FROM VEVENT WHERE VALARM.DTSTART = '20000101T120000'\n");
+
+    assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE COMMENT = 'foo'");
+
+    printf("SELECT * FROM VEVENT WHERE COMMENT = 'foo'\n");
+
+    assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE COMMENT = 'foo' AND  VALARM.DTSTART = '20000101T120000'");
+
+    printf("SELECT * FROM VEVENT WHERE COMMENT = 'foo' AND  VALARM.DTSTART = '20000101T120000'\n");
+
+    assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+    icalcomponent_free(c);
+    
+}
 
 int main(int argc, char *argv[])
 {
@@ -2331,10 +2503,10 @@ int main(int argc, char *argv[])
     int ttime=0, trecur=0,tspan=0, tmisc=0, tgauge = 0;
 
     if(argc==1) {
-	ttime = trecur = tspan = tmisc = 1;
+	ttime = trecur = tspan = tmisc = tgauge =1;
     }
 
-    while ((c = getopt(argc, argv, "t:s:r:m:g")) != -1) {
+    while ((c = getopt(argc, argv, "t:s:r:m:g:")) != -1) {
 	switch (c) {
 
 	    case 't': {
@@ -2360,7 +2532,7 @@ int main(int argc, char *argv[])
 	    
 
 	    case 'g': {
-		tgauge = 1;
+		tgauge = atoi(optarg);
 		break;
 	    }
 	    
@@ -2428,21 +2600,21 @@ int main(int argc, char *argv[])
 	test_span();
     }
 
-    if(tgauge == 1){
-	printf("\n------------Test Gauge----------------\n");
-	test_gauge();
+    if(tgauge == 1 || tgauge == 2){
+	printf("\n------------Test Gauge SQL----------------\n");
+	test_gauge_sql();
     }	
+
+    if(tgauge == 1 || tgauge == 3){
+	printf("\n------------Test Gauge Compare--------------\n");
+	test_gauge_compare();
+    }	
+
 
     if(tmisc == 1 || tmisc  == 2){
 	printf("\n------------Test X Props and Params--------\n");
 	test_x();
     }
-
-    if(tmisc == 1 || tmisc  == 3){
-	printf("\n------------Test Gauge ---------------------\n");
-	test_gauge();
-    }
-
 
 
     if(tmisc == 1){

@@ -16,16 +16,17 @@
 #define	FROM	259
 #define	WHERE	260
 #define	COMMA	261
-#define	EQUALS	262
-#define	NOTEQUALS	263
-#define	LESS	264
-#define	GREATER	265
-#define	LESSEQUALS	266
-#define	GREATEREQUALS	267
-#define	AND	268
-#define	OR	269
-#define	EOL	270
-#define	END	271
+#define	QUOTE	262
+#define	EQUALS	263
+#define	NOTEQUALS	264
+#define	LESS	265
+#define	GREATER	266
+#define	LESSEQUALS	267
+#define	GREATEREQUALS	268
+#define	AND	269
+#define	OR	270
+#define	EOL	271
+#define	END	272
 
 #line 1 "icalssyacc.y"
 
@@ -36,7 +37,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.c,v 1.1.1.1 2001-01-02 07:33:04 ebusboom Exp $
+  $Id: icalssyacc.c,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -62,6 +63,7 @@
 #include <limits.h> /* for SHRT_MAX*/
 #include "ical.h"
 #include "pvl.h"
+#include "icalgauge.h"
 #include "icalgaugeimpl.h"
 
 
@@ -71,13 +73,13 @@ void ssyacc_add_where(struct icalgauge_impl* impl, char* prop,
 	icalgaugecompare compare , char* value);
 void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
 void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
-void move_where(int w);
+void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
 void sserror(char *s); /* Don't know why I need this.... */
 
 
 
 
-#line 51 "icalssyacc.y"
+#line 52 "icalssyacc.y"
 typedef union {
 	char* v_string;
 } YYSTYPE;
@@ -93,9 +95,9 @@ typedef union {
 
 #define	YYFINAL		34
 #define	YYFLAG		-32768
-#define	YYNTBASE	18
+#define	YYNTBASE	19
 
-#define YYTRANSLATE(x) ((unsigned)(x) <= 271 ? yytranslate[x] : 23)
+#define YYTRANSLATE(x) ((unsigned)(x) <= 272 ? yytranslate[x] : 24)
 
 static const char yytranslate[] = {     0,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -125,7 +127,7 @@ static const char yytranslate[] = {     0,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
      2,     2,     2,     2,     2,     1,     3,     4,     5,     6,
      7,     8,     9,    10,    11,    12,    13,    14,    15,    16,
-    17
+    17,    18
 };
 
 #if YYDEBUG != 0
@@ -135,20 +137,20 @@ static const short yyprhs[] = {     0,
 };
 
 static const short yyrhs[] = {     4,
-    19,     5,    20,     6,    22,     0,     1,     0,     3,     0,
-    19,     7,     3,     0,     3,     0,    20,     7,     3,     0,
-     0,     3,     8,     3,     0,     3,     9,     3,     0,     3,
-    10,     3,     0,     3,    11,     3,     0,     3,    12,     3,
-     0,     3,    13,     3,     0,    21,     0,    22,    14,    21,
-     0,    22,    15,    21,     0
+    20,     5,    21,     6,    23,     0,     1,     0,     3,     0,
+    20,     7,     3,     0,     3,     0,    21,     7,     3,     0,
+     0,     3,     9,     3,     0,     3,    10,     3,     0,     3,
+    11,     3,     0,     3,    12,     3,     0,     3,    13,     3,
+     0,     3,    14,     3,     0,    22,     0,    23,    15,    22,
+     0,    23,    16,    22,     0
 };
 
 #endif
 
 #if YYDEBUG != 0
 static const short yyrline[] = { 0,
-    62,    63,    69,    71,    75,    77,    80,    82,    84,    85,
-    86,    87,    88,    91,    93,    94
+    63,    64,    70,    72,    76,    78,    81,    83,    85,    86,
+    87,    88,    89,    92,    94,    95
 };
 #endif
 
@@ -156,15 +158,15 @@ static const short yyrline[] = { 0,
 #if YYDEBUG != 0 || defined (YYERROR_VERBOSE)
 
 static const char * const yytname[] = {   "$","error","$undefined.","STRING",
-"SELECT","FROM","WHERE","COMMA","EQUALS","NOTEQUALS","LESS","GREATER","LESSEQUALS",
-"GREATEREQUALS","AND","OR","EOL","END","query_min","select_list","from_list",
-"where_clause","where_list", NULL
+"SELECT","FROM","WHERE","COMMA","QUOTE","EQUALS","NOTEQUALS","LESS","GREATER",
+"LESSEQUALS","GREATEREQUALS","AND","OR","EOL","END","query_min","select_list",
+"from_list","where_clause","where_list", NULL
 };
 #endif
 
 static const short yyr1[] = {     0,
-    18,    18,    19,    19,    20,    20,    21,    21,    21,    21,
-    21,    21,    21,    22,    22,    22
+    19,    19,    20,    20,    21,    21,    22,    22,    22,    22,
+    22,    22,    22,    23,    23,    23
 };
 
 static const short yyr2[] = {     0,
@@ -185,7 +187,7 @@ static const short yydefgoto[] = {    32,
 
 static const short yypact[] = {     5,
 -32768,     4,-32768,     3,     8,    15,-32768,     6,-32768,    16,
-    17,    -8,-32768,     0,-32768,    18,    19,    20,    21,    22,
+    17,    -9,-32768,    -1,-32768,    18,    19,    20,    21,    22,
     23,    16,    16,-32768,-32768,-32768,-32768,-32768,-32768,-32768,
 -32768,    27,    28,-32768
 };
@@ -204,9 +206,9 @@ static const short yytable[] = {    16,
     24,    25,    26,    27,    28,    29,    33,    34
 };
 
-static const short yycheck[] = {     8,
-     9,    10,    11,    12,    13,     1,     3,     5,     4,     7,
-     3,     6,     7,    14,    15,    22,    23,     3,     3,     3,
+static const short yycheck[] = {     9,
+    10,    11,    12,    13,    14,     1,     3,     5,     4,     7,
+     3,     6,     7,    15,    16,    22,    23,     3,     3,     3,
      3,     3,     3,     3,     3,     3,     0,     0
 };
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
@@ -753,63 +755,63 @@ yyreduce:
   switch (yyn) {
 
 case 2:
-#line 63 "icalssyacc.y"
+#line 64 "icalssyacc.y"
 { 
 		 icalparser_clear_flex_input();
                  yyclearin;
            ;
     break;}
 case 3:
-#line 70 "icalssyacc.y"
-{ssyacc_add_select(icalss_yy_gauge,yyvsp[0].v_string);;
-    break;}
-case 4:
 #line 71 "icalssyacc.y"
 {ssyacc_add_select(icalss_yy_gauge,yyvsp[0].v_string);;
     break;}
-case 5:
-#line 76 "icalssyacc.y"
-{ssyacc_add_from(icalss_yy_gauge,yyvsp[0].v_string);;
+case 4:
+#line 72 "icalssyacc.y"
+{ssyacc_add_select(icalss_yy_gauge,yyvsp[0].v_string);;
     break;}
-case 6:
+case 5:
 #line 77 "icalssyacc.y"
 {ssyacc_add_from(icalss_yy_gauge,yyvsp[0].v_string);;
     break;}
+case 6:
+#line 78 "icalssyacc.y"
+{ssyacc_add_from(icalss_yy_gauge,yyvsp[0].v_string);;
+    break;}
 case 8:
-#line 82 "icalssyacc.y"
+#line 83 "icalssyacc.y"
 {ssyacc_add_where(icalss_yy_gauge,yyvsp[-2].v_string,ICALGAUGECOMPARE_EQUAL,yyvsp[0].v_string); ;
     break;}
 case 9:
-#line 84 "icalssyacc.y"
+#line 85 "icalssyacc.y"
 {ssyacc_add_where(icalss_yy_gauge,yyvsp[-2].v_string,ICALGAUGECOMPARE_NOTEQUAL,yyvsp[0].v_string); ;
     break;}
 case 10:
-#line 85 "icalssyacc.y"
+#line 86 "icalssyacc.y"
 {ssyacc_add_where(icalss_yy_gauge,yyvsp[-2].v_string,ICALGAUGECOMPARE_LESS,yyvsp[0].v_string); ;
     break;}
 case 11:
-#line 86 "icalssyacc.y"
+#line 87 "icalssyacc.y"
 {ssyacc_add_where(icalss_yy_gauge,yyvsp[-2].v_string,ICALGAUGECOMPARE_GREATER,yyvsp[0].v_string); ;
     break;}
 case 12:
-#line 87 "icalssyacc.y"
+#line 88 "icalssyacc.y"
 {ssyacc_add_where(icalss_yy_gauge,yyvsp[-2].v_string,ICALGAUGECOMPARE_LESSEQUAL,yyvsp[0].v_string); ;
     break;}
 case 13:
-#line 88 "icalssyacc.y"
+#line 89 "icalssyacc.y"
 {ssyacc_add_where(icalss_yy_gauge,yyvsp[-2].v_string,ICALGAUGECOMPARE_GREATEREQUAL,yyvsp[0].v_string); ;
     break;}
 case 14:
-#line 92 "icalssyacc.y"
-{move_where(1);;
+#line 93 "icalssyacc.y"
+{set_logic(icalss_yy_gauge,ICALGAUGELOGIC_NONE);;
     break;}
 case 15:
-#line 93 "icalssyacc.y"
-{move_where(2);;
+#line 94 "icalssyacc.y"
+{set_logic(icalss_yy_gauge,ICALGAUGELOGIC_AND);;
     break;}
 case 16:
-#line 94 "icalssyacc.y"
-{move_where(3);;
+#line 95 "icalssyacc.y"
+{set_logic(icalss_yy_gauge,ICALGAUGELOGIC_OR);;
     break;}
 }
    /* the action file gets copied in in place of this dollarsign */
@@ -1033,49 +1035,84 @@ yyerrhandle:
     }
   return 1;
 }
-#line 98 "icalssyacc.y"
+#line 99 "icalssyacc.y"
 
 
-void ssyacc_add_where(struct icalgauge_impl* impl, char* prop, 
-	icalgaugecompare compare , char* value)
+void ssyacc_add_where(struct icalgauge_impl* impl, char* str1, 
+	icalgaugecompare compare , char* value_str)
 {
 
     struct icalgauge_where *where;
+    char *compstr, *propstr, *c, *s,*l;
     
     if ( (where = malloc(sizeof(struct icalgauge_where))) ==0){
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
 	return;
     }
-    
-    where->prop = icalenum_string_to_property_kind(prop);
 
-    /* HACK This does not handle the case where 'prop' has the form
-       COMPONENT.PROPERTY*/
-    if(where->prop == ICAL_NO_PROPERTY){
-	icalgauge_free(where);
-	icalerror_set_errno(ICAL_BADARG_ERROR);
-	return;
+    memset(where,0,sizeof(struct icalgauge_where));
+    where->logic = ICALGAUGELOGIC_NONE;
+    where->compare = ICALGAUGECOMPARE_NONE;
+    where->comp = ICAL_NO_COMPONENT;
+    where->prop = ICAL_NO_PROPERTY;
+
+    /* remove enclosing quotes */
+    s = value_str;
+    if(*s == '\''){
+	s++;
     }
+    l = s+strlen(s)-1;
+    if(*l == '\''){
+	*l=0;
+    }
+	
+    where->value = strdup(s);
+
+    /* Is there a period in str1 ? If so, the string specified both a
+       component and a property*/
+    if( (c = strrchr(str1,'.')) != 0){
+	compstr = str1;
+	propstr = c+1;
+	*c = '\0';
+    } else {
+	compstr = 0;
+	propstr = str1;
+    }
+
+
+    /* Handle the case where a component was specified */
+    if(compstr != 0){
+	where->comp = icalenum_string_to_component_kind(compstr);
+    } else {
+	where->comp = ICAL_NO_COMPONENT;
+    }
+
+    where->prop = icalenum_string_to_property_kind(propstr);    
 
     where->compare = compare;
 
-    where->value = strdup(value);
-
     if(where->value == 0){
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+	free(where->value);
 	return;
     }
 
     pvl_push(impl->where,where);
-
 }
+
+void set_logic(struct icalgauge_impl* impl,icalgaugelogic l)
+{
+    pvl_elem e = pvl_tail(impl->where);
+    struct icalgauge_where *where = pvl_data(e);
+
+    where->logic = l;
+   
+}
+
 
 
 void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
 {
-    icalproperty *p;
-    icalproperty_kind pkind;
-    icalcomponent_kind ckind = ICAL_NO_COMPONENT;
     char *c, *compstr, *propstr;
     struct icalgauge_where *where;
     
@@ -1086,6 +1123,10 @@ void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
     }
 
     memset(where,0,sizeof(struct icalgauge_where));
+    where->logic = ICALGAUGELOGIC_NONE;
+    where->compare = ICALGAUGECOMPARE_NONE;
+    where->comp = ICAL_NO_COMPONENT;
+    where->prop = ICAL_NO_PROPERTY;
 
     /* Is there a period in str1 ? If so, the string specified both a
        component and a property*/
@@ -1111,7 +1152,7 @@ void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
     if(strcmp("*",propstr) == 0) {
 	where->prop = ICAL_ANY_PROPERTY; 	    
     } else {
-	where->prop = icalenum_string_to_property_kind(str1);    
+	where->prop = icalenum_string_to_property_kind(propstr);    
     }
     
 
@@ -1126,7 +1167,6 @@ void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
 
 void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
 {
-    icalcomponent *c;
     icalcomponent_kind ckind;
 
     ckind = icalenum_string_to_component_kind(str1);
@@ -1139,9 +1179,6 @@ void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
 
 }
 
-void move_where(int w)
-{
-}
 
 void sserror(char *s){
     fprintf(stderr,"Parse error \'%s\'\n", s);
