@@ -4,4 +4,4 @@ else
 PYTHON_DIR = 
 endif
 
-SUBDIRS = libical libicalss libicalvcal $(PYTHON_DIR) Net-ICal-Libical test
+SUBDIRS = libical libicalss libicalvcal $(PYTHON_DIR) test
