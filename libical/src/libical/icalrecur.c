@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.35 2002-07-04 11:06:45 acampi Exp $
+  $Id: icalrecur.c,v 1.36 2002-07-11 18:23:13 lindner Exp $
   $Locker:  $
     
 
@@ -19,7 +19,11 @@
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
+*/
 
+/**
+  @file icalrecur.c
+  @brief Implementation of routines for dealing with recurring time
 
   How this code works:
 
@@ -165,6 +169,9 @@
 
 const char* icalrecur_freq_to_string(icalrecurrencetype_frequency kind);
 icalrecurrencetype_frequency icalrecur_string_to_freq(const char* str);
+
+const char* icalrecur_weekday_to_string(icalrecurrencetype_weekday kind);
+icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
 
 
 /*********************** Rule parsing routines ************************/
@@ -439,7 +446,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 
 #ifndef ICAL_NO_LIBICAL
 
-struct { char* str;size_t offset; short limit;  } recurmap[] = 
+static struct { char* str;size_t offset; short limit;  } recurmap[] = 
 {
     {";BYSECOND=",offsetof(struct icalrecurrencetype,by_second),60},
     {";BYMINUTE=",offsetof(struct icalrecurrencetype,by_minute),60},
@@ -574,14 +581,14 @@ struct icalrecur_iterator_impl {
     
     enum byrule byrule;
     short by_indices[9];
-    short orig_data[9]; /* 1 if there was data in the byrule */
+    short orig_data[9]; /**< 1 if there was data in the byrule */
     
     
-    short *by_ptrs[9]; /* Pointers into the by_* array elements of the rule */
+    short *by_ptrs[9]; /**< Pointers into the by_* array elements of the rule */
     
 };
 
-void increment_year(icalrecur_iterator* impl, int inc);
+static void increment_year(icalrecur_iterator* impl, int inc);
 
 int icalrecur_iterator_sizeof_byarray(short* byarray)
 {
@@ -602,10 +609,13 @@ enum expand_table {
     ILLEGAL=3
 };
 
-/* The split map indicates, for a particular interval, wether a BY_*
-   rule part expands the number of instances in the occcurrence set or
-   contracts it. 1=> contract, 2=>expand, and 3 means the pairing is
-   not allowed. */
+/** 
+ * The split map indicates, for a particular interval, wether a BY_*
+ * rule part expands the number of instances in the occcurrence set or
+ * contracts it. 1=> contract, 2=>expand, and 3 means the pairing is
+ * not allowed. 
+ */
+
 struct expand_split_map_struct 
 { 
 	icalrecurrencetype_frequency frequency;
@@ -616,7 +626,7 @@ struct expand_split_map_struct
 	short map[8];
 }; 
 
-struct expand_split_map_struct expand_map[] =
+static struct expand_split_map_struct expand_map[] =
 {
     {ICAL_SECONDLY_RECURRENCE,{1,1,1,1,1,1,1,1}},
     {ICAL_MINUTELY_RECURRENCE,{2,1,1,1,1,1,1,1}},
@@ -631,7 +641,8 @@ struct expand_split_map_struct expand_map[] =
 
 
 
-/* Check that the rule has only the two given interday byrule parts. */
+/** Check that the rule has only the two given interday byrule parts. */
+static
 int icalrecur_two_byrule(icalrecur_iterator* impl,
 			 enum byrule one,enum byrule two)
 {
@@ -639,7 +650,7 @@ int icalrecur_two_byrule(icalrecur_iterator* impl,
     enum byrule itr;
     int passes = 0;
 
-    memset(test_array,0,sizeof (test_array));
+    memset(test_array,0,sizeof(test_array));
 
     test_array[one] = 1;
     test_array[two] = 1;
@@ -662,8 +673,8 @@ int icalrecur_two_byrule(icalrecur_iterator* impl,
 
 } 
 
-/* Check that the rule has only the one given interdat byrule parts. */
-int icalrecur_one_byrule(icalrecur_iterator* impl,enum byrule one)
+/** Check that the rule has only the one given interdat byrule parts. */
+static int icalrecur_one_byrule(icalrecur_iterator* impl,enum byrule one)
 {
     int passes = 1;
     enum byrule itr;
@@ -679,7 +690,7 @@ int icalrecur_one_byrule(icalrecur_iterator* impl,enum byrule one)
     return passes;
 } 
 
-int count_byrules(icalrecur_iterator* impl)
+static int count_byrules(icalrecur_iterator* impl)
 {
     int count = 0;
     enum byrule itr;
@@ -694,7 +705,7 @@ int count_byrules(icalrecur_iterator* impl)
 }
 
 
-void setup_defaults(icalrecur_iterator* impl, 
+static void setup_defaults(icalrecur_iterator* impl, 
 		    enum byrule byrule, icalrecurrencetype_frequency req,
 		    short deftime, int *timepart)
 {
@@ -718,13 +729,13 @@ void setup_defaults(icalrecur_iterator* impl,
 
 }
 
-int has_by_data(icalrecur_iterator* impl, enum byrule byrule){
+static int has_by_data(icalrecur_iterator* impl, enum byrule byrule){
 
     return (impl->orig_data[byrule] == 1);
 }
 
 
-int expand_year_days(icalrecur_iterator* impl,short year);
+static int expand_year_days(icalrecur_iterator* impl,short year);
 
 
 icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule, 
@@ -992,15 +1003,15 @@ void icalrecur_iterator_free(icalrecur_iterator* i)
 
 }
 
-void increment_year(icalrecur_iterator* impl, int inc)
+static void increment_year(icalrecur_iterator* impl, int inc)
 {
     impl->last.year+=inc;
 }
 
-/* Increment month is different that the other incement_* routines --
+/** Increment month is different that the other incement_* routines --
    it figures out the interval for itself, and uses BYMONTH data if
    available. */
-void increment_month(icalrecur_iterator* impl)
+static void increment_month(icalrecur_iterator* impl)
 {
     int years;
 
@@ -1047,7 +1058,7 @@ void increment_month(icalrecur_iterator* impl)
      }
 }
 
-void increment_monthday(icalrecur_iterator* impl, int inc)
+static void increment_monthday(icalrecur_iterator* impl, int inc)
 {
     int i;
 
@@ -1066,7 +1077,7 @@ void increment_monthday(icalrecur_iterator* impl, int inc)
 }
 
 
-void increment_hour(icalrecur_iterator* impl, int inc)
+static void increment_hour(icalrecur_iterator* impl, int inc)
 {
     short days;
 
@@ -1080,7 +1091,7 @@ void increment_hour(icalrecur_iterator* impl, int inc)
     }
 }
 
-void increment_minute(icalrecur_iterator* impl, int inc)
+static void increment_minute(icalrecur_iterator* impl, int inc)
 {
     short hours;
 
@@ -1095,7 +1106,7 @@ void increment_minute(icalrecur_iterator* impl, int inc)
 
 }
 
-void increment_second(icalrecur_iterator* impl, int inc)
+static void increment_second(icalrecur_iterator* impl, int inc)
 {
     short minutes;
 
@@ -1144,7 +1155,7 @@ void test_increment()
 
 #endif 
 
-short next_second(icalrecur_iterator* impl)
+static short next_second(icalrecur_iterator* impl)
 {
 
   short has_by_data = (impl->by_ptrs[BY_SECOND][0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1188,7 +1199,7 @@ short next_second(icalrecur_iterator* impl)
 
 }
 
-int next_minute(icalrecur_iterator* impl)
+static int next_minute(icalrecur_iterator* impl)
 {
 
   short has_by_data = (impl->by_ptrs[BY_MINUTE][0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1234,7 +1245,7 @@ int next_minute(icalrecur_iterator* impl)
   return end_of_data;
 }
 
-int next_hour(icalrecur_iterator* impl)
+static int next_hour(icalrecur_iterator* impl)
 {
 
   short has_by_data = (impl->by_ptrs[BY_HOUR][0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1280,7 +1291,7 @@ int next_hour(icalrecur_iterator* impl)
 
 }
 
-int next_day(icalrecur_iterator* impl)
+static int next_day(icalrecur_iterator* impl)
 {
 
   short has_by_data = (impl->by_ptrs[BY_DAY][0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1308,7 +1319,7 @@ int next_day(icalrecur_iterator* impl)
 }
 
 
-int next_yearday(icalrecur_iterator* impl)
+static int next_yearday(icalrecur_iterator* impl)
 {
 
   short has_by_data = (impl->by_ptrs[BY_YEAR_DAY][0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1345,7 +1356,7 @@ int next_yearday(icalrecur_iterator* impl)
 /* Returns the day of the month for the current month of t that is the
    pos'th instance of the day-of-week dow */
 
-int nth_weekday(short dow, short pos, struct icaltimetype t){
+static int nth_weekday(short dow, short pos, struct icaltimetype t){
 
     short days_in_month = icaltime_days_in_month(t.month,t.year);
     short end_dow, start_dow;
@@ -1393,7 +1404,7 @@ int nth_weekday(short dow, short pos, struct icaltimetype t){
     return wd;
 }
 
-int is_day_in_byday(icalrecur_iterator* impl,struct icaltimetype tt){
+static int is_day_in_byday(icalrecur_iterator* impl,struct icaltimetype tt){
 
     int idx; 
 
@@ -1411,7 +1422,7 @@ int is_day_in_byday(icalrecur_iterator* impl,struct icaltimetype tt){
     return 0;
 }
 
-int next_month(icalrecur_iterator* impl)
+static int next_month(icalrecur_iterator* impl)
 {
     int data_valid = 1;
     
@@ -1553,7 +1564,7 @@ int next_month(icalrecur_iterator* impl)
 
 }
 
-int next_weekday_by_week(icalrecur_iterator* impl)
+static int next_weekday_by_week(icalrecur_iterator* impl)
 {
 
   short end_of_data = 0;
@@ -1610,7 +1621,7 @@ int next_weekday_by_week(icalrecur_iterator* impl)
 
 }
 
-int next_week(icalrecur_iterator* impl)
+static int next_week(icalrecur_iterator* impl)
 {
   short end_of_data = 0;
 
@@ -1660,8 +1671,8 @@ int next_week(icalrecur_iterator* impl)
   
 }
 
-/* Expand the BYDAY rule part and return a pointer to a newly allocated list of days. */
-pvl_list expand_by_day(icalrecur_iterator* impl,short year)
+/** Expand the BYDAY rule part and return a pointer to a newly allocated list of days. */
+static pvl_list expand_by_day(icalrecur_iterator* impl,short year)
 {
     /* Try to calculate each of the occurrences. */
     int i;
@@ -1738,7 +1749,7 @@ pvl_list expand_by_day(icalrecur_iterator* impl,short year)
    list all of the days of the current year that are specified in this
    rule. */
 
-int expand_year_days(icalrecur_iterator* impl,short year)
+static int expand_year_days(icalrecur_iterator* impl,short year)
 {
     int j,k;
     int days_index=0;
@@ -2060,7 +2071,7 @@ int expand_year_days(icalrecur_iterator* impl,short year)
 }                                  
 
 
-int next_year(icalrecur_iterator* impl)
+static int next_year(icalrecur_iterator* impl)
 {
     struct icaltimetype next;
 
@@ -2103,7 +2114,7 @@ int icalrecur_check_rulepart(icalrecur_iterator* impl,
     return 0;
 }
 
-int check_contract_restriction(icalrecur_iterator* impl,
+static int check_contract_restriction(icalrecur_iterator* impl,
 		      enum byrule byrule, short v)
 {
     int pass = 0;
@@ -2128,7 +2139,7 @@ int check_contract_restriction(icalrecur_iterator* impl,
 }
 
 
-int check_contracting_rules(icalrecur_iterator* impl)
+static int check_contracting_rules(icalrecur_iterator* impl)
 {
 
     int day_of_week=0;
@@ -2244,16 +2255,15 @@ void icalrecurrencetype_clear(struct icalrecurrencetype *recur)
     recur->count = 0;
 }
 
-/* The 'day' element of icalrecurrencetype_weekday is encoded to allow
-reporesentation of both the day of the week ( Monday, Tueday), but
-also the Nth day of the week ( First tuesday of the month, last
-thursday of the year) These routines decode the day values. 
-
-The day's position in the period ( Nth-ness) and the numerical value
-of the day are encoded together as: pos*7 + dow
-
-A position of 0 means 'any' or 'every'
-
+/** The 'day' element of icalrecurrencetype_weekday is encoded to
+ * allow representation of both the day of the week ( Monday, Tueday),
+ * but also the Nth day of the week ( First tuesday of the month, last
+ * thursday of the year) These routines decode the day values.
+ *
+ * The day's position in the period ( Nth-ness) and the numerical
+ * value of the day are encoded together as: pos*7 + dow
+ * 
+ * A position of 0 means 'any' or 'every'
  */
 
 enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day)
@@ -2276,7 +2286,7 @@ short icalrecurrencetype_day_position(short day)
 
 /****************** Enumeration Routines ******************/
 
-struct {icalrecurrencetype_weekday wd; const char * str; } 
+static struct {icalrecurrencetype_weekday wd; const char * str; } 
 wd_map[] = {
     {ICAL_SUNDAY_WEEKDAY,"SU"},
     {ICAL_MONDAY_WEEKDAY,"MO"},
@@ -2316,7 +2326,7 @@ icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str)
 
 
 
-struct {
+static struct {
 	icalrecurrencetype_frequency kind;
 	const char* str;
 } freq_map[] = {
@@ -2354,10 +2364,11 @@ icalrecurrencetype_frequency icalrecur_string_to_freq(const char* str)
     return ICAL_NO_RECURRENCE;
 }
 
-/* Fill an array with the 'count' number of occurrences generated by
-   the rrule. Note that the times are returned in UTC, but the times
-   are calculated in local time. YOu will have to convert the results
-   back into local time before using them. */
+/** Fill an array with the 'count' number of occurrences generated by
+ * the rrule. Note that the times are returned in UTC, but the times
+ * are calculated in local time. YOu will have to convert the results
+ * back into local time before using them.
+ */
 
 int icalrecur_expand_recurrence(char* rule, time_t start,
 				int count, time_t* array)

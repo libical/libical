@@ -19,9 +19,14 @@
 */
 
 /**
+@file icalrecur.h
+@brief Routines for dealing with recurring time
+
 How to use: 
 
 1) Get a rule and a start time from a component
+
+@code
         icalproperty rrule;
         struct icalrecurrencetype recur;
         struct icaltimetype dtstart;
@@ -29,21 +34,31 @@ How to use:
 	rrule = icalcomponent_get_first_property(comp,ICAL_RRULE_PROPERTY);
 	recur = icalproperty_get_rrule(rrule);
 	start = icalproperty_get_dtstart(dtstart);
+@endcode
 
 Or, just make them up: 
+
+@code
         recur = icalrecurrencetype_from_string("FREQ=YEARLY;BYDAY=SU,WE");
         dtstart = icaltime_from_string("19970101T123000")
+@endcode
 
 2) Create an iterator
+
+@code
         icalrecur_iterator* ritr;
         ritr = icalrecur_iterator_new(recur,start);
+@endcode
 
 3) Iterator over the occurrences
+
+@code
         struct icaltimetype next;
         while (next = icalrecur_iterator_next(ritr) 
                && !icaltime_is_null_time(next){
                 Do something with next
         }
+@endcode
 
 Note that that the time returned by icalrecur_iterator_next is in
 whatever timezone that dtstart is in.
@@ -110,7 +125,7 @@ enum {
 #define ICAL_BY_MONTH_SIZE 13
 #define ICAL_BY_SETPOS_SIZE 367
 
-/* Main struct for holding digested recurrence rules */
+/** Main struct for holding digested recurrence rules */
 struct icalrecurrencetype 
 {
 	icalrecurrencetype_frequency freq;
@@ -147,26 +162,27 @@ struct icalrecurrencetype
 
 void icalrecurrencetype_clear(struct icalrecurrencetype *r);
 
-/* The 'day' element of the by_day array is encoded to allow
-representation of both the day of the week ( Monday, Tueday), but also
-the Nth day of the week ( First tuesday of the month, last thursday of
-the year) These routines decode the day values */
+/**
+ * Array Encoding
+ *
+ * The 'day' element of the by_day array is encoded to allow
+ * representation of both the day of the week ( Monday, Tueday), but also
+ * the Nth day of the week ( First tuesday of the month, last thursday of
+ * the year) These routines decode the day values 
+ */
 
-/* 1 == Monday, etc. */
+/** 1 == Monday, etc. */
 enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day);
 
-/* 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc */
+/** 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc */
 short icalrecurrencetype_day_position(short day);
-
-const char* icalrecur_weekday_to_string(icalrecurrencetype_weekday kind);
-icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
 
 
 /***********************************************************************
  * Recurrance rule parser
 **********************************************************************/
 
-/* Convert between strings ans recurrencetype structures. */
+/** Convert between strings and recurrencetype structures. */
 struct icalrecurrencetype icalrecurrencetype_from_string(const char* str);
 char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
 
@@ -175,18 +191,20 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
 
 typedef struct icalrecur_iterator_impl  icalrecur_iterator;
 
-/* Create a new recurrence rule iterator */
+/** Create a new recurrence rule iterator */
 icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule, 
                                            struct icaltimetype dtstart);
 
-/* Get the next occurrence from an iterator */
+/** Get the next occurrence from an iterator */
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator*);
 
-/* Free the iterator */
+/** Free the iterator */
 void icalrecur_iterator_free(icalrecur_iterator*);
 
-/* Fills array up with at most 'count' time_t values, each
-   representing an occurrence time in seconds past the POSIX epoch */
+/**
+ * Fills array up with at most 'count' time_t values, each
+ *  representing an occurrence time in seconds past the POSIX epoch 
+ */
 int icalrecur_expand_recurrence(char* rule, time_t start, 
 				int count, time_t* array);
 
