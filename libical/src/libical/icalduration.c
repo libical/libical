@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.3 2002-05-03 14:46:22 acampi Exp $
+  $Id: icalduration.c,v 1.4 2002-05-03 14:47:46 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
