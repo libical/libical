@@ -3,7 +3,7 @@
   FILE: stow.c
   CREATOR: eric 29 April 2000
   
-  $Id: stow.c,v 1.4 2001-04-11 04:45:29 ebusboom Exp $
+  $Id: stow.c,v 1.5 2001-04-16 21:04:20 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -250,7 +250,7 @@ void return_failure(icalcomponent* comp,  char* message,
 {
     char* local_attendee = opt->calid;
     FILE* p;
-    char *org_addr;
+    const char *org_addr;
 
     icalcomponent  *inner = get_first_real_component(comp);
 
@@ -465,7 +465,6 @@ char* check_component(icalcomponent* comp,  icalproperty **return_status,
 		
 	if (found_attendee == 0){
 	    struct icalreqstattype rs;
-	    char* rs_string;
 	    memset(static_component_error_str,0,PATH_MAX);
 
 	    snprintf(static_component_error_str,PATH_MAX,
@@ -658,35 +657,32 @@ void get_options(int argc, char* argv[], struct options_struct *opt)
 
 	p = strrchr(facspath,'/');
 
-	if (p == 0){
-	   fprintf(stderr,"%s: Invalid calendar filename \"%s\"", 
-		    program_name,facspath);
-	   exit(1);
-	}   
-	
-	*p='\0';
-
-	type = test_file(facspath);
-
-	errno = 0;
-	if (type == NO_FILE){
-	    
-	    if(mkdir(facspath,0775) != 0){
-		fprintf(stderr,
-			"%s: Failed to create calendar directory %s: %s\n",
-			program_name,facspath, strerror(errno));
-		exit(1);
-	    } else {
-		fprintf(stderr,"%s: Creating calendar directory %s\n",
-			program_name,facspath);
-	    }
-	    
-	} else if(type==REGULAR || type == ERROR){
-	    fprintf(stderr,"%s: Cannot create calendar directory %s\n",
-		    program_name,facspath);
-	    exit(1);
-	} 		    
-    }
+        if (p != 0){
+            /* Use some other directory */
+            *p='\0';
+            
+            type = test_file(facspath);
+            
+            errno = 0;
+            if (type == NO_FILE){
+                
+                if(mkdir(facspath,0775) != 0){
+                    fprintf(stderr,
+                            "%s: Failed to create calendar directory %s: %s\n",
+                            program_name,facspath, strerror(errno));
+                    exit(1);
+                } else {
+                    fprintf(stderr,"%s: Creating calendar directory %s\n",
+                            program_name,facspath);
+                }
+                
+            } else if(type==REGULAR || type == ERROR){
+                fprintf(stderr,"%s: Cannot create calendar directory %s\n",
+                        program_name,facspath);
+                exit(1);
+            } 		    
+        }
+     }
 }
 
 char* check_options(struct options_struct *opt)

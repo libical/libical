@@ -1,4 +1,5 @@
-#ifdef __osf__
+#include "config.h"
+#ifndef HAVE_SNPRINTF
 /*
  * Revision 12: http://theos.com/~deraadt/snprintf.c
  *

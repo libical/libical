@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.7 2001-04-11 04:45:28 ebusboom Exp $
+#  $Id: Component.py,v 1.8 2001-04-16 21:04:20 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -66,7 +66,11 @@ class Component:
 
     def _prop_from_ref(self,p):
 
+        if(p == None or p== 'NULL'):
+            return None;
+
         d_string = icallangbind_property_eval_string(p,":")
+
         d = eval(d_string)
         d['ref'] = p
         

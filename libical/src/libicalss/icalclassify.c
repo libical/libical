@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.6 2001-04-12 18:33:36 ebusboom Exp $
+    $Id: icalclassify.c,v 1.7 2001-04-16 21:04:20 ebusboom Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -283,7 +283,7 @@ int icalssutil_is_rescheduled(icalcomponent* a,icalcomponent* b)
 	p1 = icalcomponent_get_first_property(i1,kind_array[i]);
 	p2 = icalcomponent_get_first_property(i2,kind_array[i]);
 	
-	if( (p1!=0)^(p1!=0) ){
+	if( (p1!=0)^(p2!=0) ){
 	    /* Return true if the property exists in one component and not
 	       the other */
 	    return 1;

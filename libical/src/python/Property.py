@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.7 2001-04-11 04:45:29 ebusboom Exp $
+#  $Id: Property.py,v 1.8 2001-04-16 21:04:20 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -109,7 +109,7 @@ class Property:
     def name(self,v=None):
         """ Return the name of the property """
         str = icalproperty_as_ical_string(self._ref)
-
+        
         idx = index(str, '\n')
 
         return str[:idx]
@@ -142,6 +142,7 @@ class Property:
                 vt = kind
             elif self.__getitem__('VALUE'):
                 vt = self.__getitem__('VALUE')
+                print "###########", self
             else:
                 vt = 'NO' # Use the kind of the existing value
 
@@ -149,6 +150,7 @@ class Property:
             icalerror_clear_errno()
 
             #e1=icalerror_supress("MALFORMEDDATA")
+
             icalproperty_set_value_from_string(self._ref,v,vt)
             #icalerror_restore("MALFORMEDDATA",e1)
 
@@ -183,7 +185,7 @@ class Property:
         key = upper(key)
 
         str = icalproperty_get_parameter_as_string(self._ref,key)
-
+        
         if(str == 'NULL'): return None
 
         return str

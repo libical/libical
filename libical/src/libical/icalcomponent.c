@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.13 2001-04-11 04:45:28 ebusboom Exp $
+  $Id: icalcomponent.c,v 1.14 2001-04-16 21:04:20 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -36,6 +36,7 @@
 #include "icalduration.h"
 #include "icalperiod.h"
 #include "icalparser.h"
+#include "icalrestriction.h"
 
 #include <stdlib.h>  /* for malloc */
 #include <stdarg.h> /* for va_list, etc */
@@ -841,6 +842,10 @@ struct icaltime_span icalcomponent_get_span(icalcomponent* comp)
 
 }
 
+int icalcomponent_check_restrictions(icalcomponent* comp){
+    icalerror_check_arg_rz(comp!=0,"comp");
+    return icalrestriction_check(comp);
+}
 
 int icalcomponent_count_errors(icalcomponent* component)
 {
@@ -1179,14 +1184,49 @@ icalcomponent* icalcomponent_get_inner(icalcomponent* comp)
     }
 }
 
+void icalcomponent_set_method(icalcomponent* comp, icalproperty_method method)
+{
+    icalproperty *prop 
+	= icalcomponent_get_first_property(comp, ICAL_METHOD_PROPERTY);
+
+
+    if (prop == 0){
+	prop = icalproperty_new_method(method);
+	icalcomponent_add_property(comp, prop);
+    }
+    
+    icalproperty_set_method(prop,method);
+
+}
+
+icalproperty_method icalcomponent_get_method(icalcomponent* comp)
+{
+    icalproperty *prop 
+	= icalcomponent_get_first_property(comp,ICAL_METHOD_PROPERTY);
+
+    if (prop == 0){
+	return ICAL_METHOD_NONE;
+    }
+    
+    return icalproperty_get_method(prop);
+}
+
+#define ICALSETUPSET(p_kind) \
+    icalcomponent *inner; \
+    icalproperty *prop; \
+    icalerror_check_arg_rv(comp!=0,"comp");\
+    inner = icalcomponent_get_inner(comp); \
+    if(inner == 0){\
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);\
+        return;\
+    }\
+    prop = icalcomponent_get_first_property(inner, p_kind);
+ 
+
 
 void icalcomponent_set_dtstart(icalcomponent* comp, struct icaltimetype v)
 {
-
-    icalcomponent *inner = icalcomponent_get_inner(comp); 
-    icalproperty *prop 
-	= icalcomponent_get_first_property(inner, ICAL_DTSTART_PROPERTY);
-
+    ICALSETUPSET(ICAL_DTSTART_PROPERTY);
 
     if (prop == 0){
 	prop = icalproperty_new_dtstart(v);
@@ -1348,40 +1388,10 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent* comp)
     }
 }
 
-void icalcomponent_set_method(icalcomponent* comp, icalproperty_method method)
-{
-    icalproperty *prop 
-	= icalcomponent_get_first_property(comp, ICAL_METHOD_PROPERTY);
-
-
-    if (prop == 0){
-	prop = icalproperty_new_method(method);
-	icalcomponent_add_property(comp, prop);
-    }
-    
-    icalproperty_set_method(prop,method);
-
-}
-
-icalproperty_method icalcomponent_get_method(icalcomponent* comp)
-{
-    icalproperty *prop 
-	= icalcomponent_get_first_property(comp,ICAL_METHOD_PROPERTY);
-
-    if (prop == 0){
-	return ICAL_METHOD_NONE;
-    }
-    
-    return icalproperty_get_method(prop);
-}
-
 void icalcomponent_set_dtstamp(icalcomponent* comp, struct icaltimetype v)
 {
 
-    icalcomponent *inner = icalcomponent_get_inner(comp); 
-    icalproperty *prop 
-	= icalcomponent_get_first_property(inner, ICAL_DTSTAMP_PROPERTY);
-
+    ICALSETUPSET(ICAL_DTSTAMP_PROPERTY);
 
     if (prop == 0){
 	prop = icalproperty_new_dtstamp(v);
@@ -1409,10 +1419,8 @@ struct icaltimetype icalcomponent_get_dtstamp(icalcomponent* comp)
 
 void icalcomponent_set_summary(icalcomponent* comp, const char* v)
 {
-    icalcomponent *inner = icalcomponent_get_inner(comp); 
-    icalproperty *prop 
-	= icalcomponent_get_first_property(inner, ICAL_SUMMARY_PROPERTY);
-
+    ICALSETUPSET(ICAL_SUMMARY_PROPERTY)
+ 
     if (prop == 0){
 	prop = icalproperty_new_summary(v);
 	icalcomponent_add_property(inner, prop);
@@ -1424,9 +1432,18 @@ void icalcomponent_set_summary(icalcomponent* comp, const char* v)
 
 const char* icalcomponent_get_summary(icalcomponent* comp)
 {
-    icalcomponent *inner = icalcomponent_get_inner(comp); 
-    icalproperty *prop 
-	= icalcomponent_get_first_property(inner,ICAL_SUMMARY_PROPERTY);
+    icalcomponent *inner;
+    icalproperty *prop;
+    icalerror_check_arg_rz(comp!=0,"comp");
+
+    inner = icalcomponent_get_inner(comp); 
+
+    if(inner == 0){
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
+    prop= icalcomponent_get_first_property(inner,ICAL_SUMMARY_PROPERTY);
 
     if (prop == 0){
 	return 0;
@@ -1436,11 +1453,72 @@ const char* icalcomponent_get_summary(icalcomponent* comp)
 
 }
 
-void icalcomponent_set_comment(icalcomponent* comp, const char* v);
-const char* icalcomponent_get_comment(icalcomponent* comp);
+void icalcomponent_set_comment(icalcomponent* comp, const char* v)
+{
+    ICALSETUPSET(ICAL_COMMENT_PROPERTY);
 
-void icalcomponent_set_uid(icalcomponent* comp, const char* v);
-const char* icalcomponent_get_uid(icalcomponent* comp);
+    if (prop == 0){
+	prop = icalproperty_new_comment(v);
+	icalcomponent_add_property(inner, prop);
+    }
+
+    icalproperty_set_summary(prop,v);
+
+}
+const char* icalcomponent_get_comment(icalcomponent* comp){
+    icalcomponent *inner;
+    icalproperty *prop;
+    icalerror_check_arg_rz(comp!=0,"comp");
+
+    inner = icalcomponent_get_inner(comp); 
+
+    if(inner == 0){
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
+    prop= icalcomponent_get_first_property(inner,ICAL_COMMENT_PROPERTY);
+
+    if (prop == 0){
+	return 0;
+    }
+    
+    return icalproperty_get_comment(prop);
+}
+
+void icalcomponent_set_uid(icalcomponent* comp, const char* v)
+{
+    ICALSETUPSET(ICAL_UID_PROPERTY);
+
+    if (prop == 0){
+	prop = icalproperty_new_comment(v);
+	icalcomponent_add_property(inner, prop);
+    }
+
+    icalproperty_set_summary(prop,v);
+
+}
+const char* icalcomponent_get_uid(icalcomponent* comp){
+    icalcomponent *inner;
+    icalproperty *prop;
+    icalerror_check_arg_rz(comp!=0,"comp");
+
+    inner = icalcomponent_get_inner(comp); 
+
+    if(inner == 0){
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
+    prop= icalcomponent_get_first_property(inner,ICAL_UID_PROPERTY);
+
+    if (prop == 0){
+	return 0;
+    }
+    
+    return icalproperty_get_uid(prop);
+}
+
 
 void icalcomponent_set_recurrenceid(icalcomponent* comp, 
 				    struct icaltimetype v);

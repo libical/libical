@@ -3,7 +3,7 @@
   FILE: testclassify.c
   CREATOR: eric 11 February 2000
   
-  $Id: testclassify.c,v 1.4 2001-04-12 18:33:15 ebusboom Exp $
+  $Id: testclassify.c,v 1.5 2001-04-16 21:04:20 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -29,8 +29,30 @@
 #include "ical.h"
 #include <errno.h>
 #include <string.h> /* For strerror */
-#include "icalset.h"
-#include "icalclassify.h"
+#include "icalss.h"
+
+/* Get a note about the purpose of the property*/
+const char* get_note(icalcomponent *c)
+{
+    icalproperty *p;
+    const char* note = 0;
+
+    if(c != 0){
+        for(p = icalcomponent_get_first_property(c,ICAL_X_PROPERTY);
+            p!= 0;
+            p = icalcomponent_get_next_property(c,ICAL_X_PROPERTY)){
+            if(strcmp(icalproperty_get_x_name(p),"X-LIC-NOTE")==0){
+            note = icalproperty_get_x(p);
+            }
+        }
+    } 
+    
+    if(note == 0){
+        note = "None";
+    }
+    
+    return note;
+}
 
 
 int main(int argc, char* argv[])
@@ -38,81 +60,66 @@ int main(int argc, char* argv[])
     icalcomponent *c;
     int i=0;
 
-    icalset* f = icalset_new_file("../../test-data/incoming.ics");
+    /* Open up the two storage files, one for the incomming components, 
+       one for the calendar */
+    icalset* incoming = icalset_new_file("../../test-data/incoming.ics");
     icalset* cal = icalset_new_file("../../test-data/calendar.ics");
 
-    assert(f!= 0);
+    assert(incoming!= 0);
     assert(cal!=0);
-	
 
-    /* Foreach incoming message */
-    for(c=icalset_get_first_component(f);c!=0;
-	c=icalset_get_next_component(f)){
+    /* Iterate through all of the incoming components */
+    for(c=icalset_get_first_component(incoming);c!=0;
+	c=icalset_get_next_component(incoming)){
 	
 	icalproperty_xlicclass class;
-	icalcomponent *match;
-	icalcomponent *inner = icalcomponent_get_first_real_component(c);
-	icalcomponent *p;
-	const char *this_uid;
-	const char *i_x_note=0;
-	const char *c_x_note=0;
+	icalcomponent *match = 0;
+        const char* this_uid;
 
 	i++;
 
-        printf("%s\n",icalcomponent_as_ical_string(c));
+        /* Check this component against the restrictions imposed by
+           iTIP. An errors will be inserted as X-LIC-ERROR properties
+           in the component. The Parser will also insert errors if it
+           cannot parse the component */
+        icalcomponent_check_restrictions(c);
 
-	if(inner == 0){
-            continue;
-	}
-
-	p = icalcomponent_get_first_property(inner,ICAL_UID_PROPERTY);
-
-        if(p != 0){
-            this_uid = icalproperty_get_uid(p);
-            /* Find a booked component that is matched to the incoming
-	   message, based on the incoming component's UID, SEQUENCE
-	   and RECURRENCE-ID*/
-            
-            match = icalset_fetch(cal,this_uid);
-        } else {
-            this_uid = 0;
-            match = 0;
+        /* If there are any errors, print out the component */
+        if(icalcomponent_count_errors(c) != 0){
+            printf("----- Component has errors ------- \n%s-----------------\n",
+                   icalcomponent_as_ical_string(c));
         }
 
+        /* Use one of the icalcomponent convenience routines to get
+           the UID. This routine will save you from having to use
+           icalcomponent_get_inner(),
+           icalcomponent_get_first_property(), checking the return
+           value, and then calling icalproperty_get_uid. There are
+           several other convenience routines for DTSTART, DTEND,
+           DURATION, SUMMARY, METHOD, and COMMENT */
+	this_uid = icalcomponent_get_uid(c);
 
+        if(this_uid != 0){
+            /* Look in the calendar for a component with the same UID
+               as the incomming component. We should reall also be
+               checking the RECURRENCE-ID. Another way to do this
+               operation is to us icalset_find_match(), which does use
+               the RECURRENCE-ID. */
+            match = icalset_fetch(cal,this_uid);
+        }
+
+        
+        /* Classify the incoming component. The third argument is the
+           calid of the user who owns the calendar. In a real program,
+           you would probably switch() on the class.*/
 	class = icalclassify(c,match,"A@example.com");
 
-	for(p = icalcomponent_get_first_property(c,ICAL_X_PROPERTY);
-	    p!= 0;
-	    p = icalcomponent_get_next_property(c,ICAL_X_PROPERTY)){
-	    if(strcmp(icalproperty_get_x_name(p),"X-LIC-NOTE")==0){
-		i_x_note = icalproperty_get_x(p);
-	    }
-	}
-
-
-	if(i_x_note == 0){
-	    i_x_note = "None";
-	}
-
-        if (match != 0){
-            for(p = icalcomponent_get_first_property(match,ICAL_X_PROPERTY);
-                p!= 0;
-                p = icalcomponent_get_next_property(match,ICAL_X_PROPERTY)){
-                
-                if(strcmp(icalproperty_get_x_name(p),"X-LIC-NOTE")==0){
-                    c_x_note = icalproperty_get_x(p);
-                }
-                
-            }
-        }
-
-	if(c_x_note == 0){
-	    c_x_note = "None";
-	}
-
-
-	printf("Test %d\nIncoming:      %s\nMatched:       %s\nClassification: %s\n\n",i,i_x_note,c_x_note,icalproperty_enum_to_string(class));	
+	printf("Test %d\n\
+Incoming:      %s\n\
+Matched:       %s\n\
+Classification: %s\n\n",
+               i,get_note(c),get_note(match),
+               icalproperty_enum_to_string(class));	
     }
 
     return 0;

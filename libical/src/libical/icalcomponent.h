@@ -121,10 +121,14 @@ icalcomponent* icalcompiter_prior(icalcompiter* i);
 icalcomponent* icalcompiter_deref(icalcompiter* i);
 
 
-
-
 /* Working with embedded error properties */
 
+
+/* Check the component against itip rules and insert error properties*/
+/* Working with embedded error properties */
+int icalcomponent_check_restrictions(icalcomponent* comp);
+
+/*Count embedded errors*/
 int icalcomponent_count_errors(icalcomponent* component);
 
 /* Remove all X-LIC-ERROR properties*/

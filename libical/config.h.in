@@ -26,6 +26,9 @@
 /* Define to terminate lines with "\n" instead of "\r\n" */
 #undef ICAL_UNIX_NEWLINE
 
+/* Define if you have the snprintf function.  */
+#undef HAVE_SNPRINTF
+
 /* Define if you have the strdup function.  */
 #undef HAVE_STRDUP
 
