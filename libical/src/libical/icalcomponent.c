@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.40 2002-08-08 16:46:39 lindner Exp $
+  $Id: icalcomponent.c,v 1.41 2002-08-09 14:45:12 lindner Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -861,7 +861,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 	 
     struct icaltimetype exdatetime = icalproperty_get_exdate(exdate);
 
-    if (icaltime_compare_with_zone(*recurtime, exdatetime) == 0) {
+    if (icaltime_compare(*recurtime, exdatetime) == 0) {
       /** MATCHED **/
       return 1;
     }
@@ -883,7 +883,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
       if (icaltime_is_null_time(exrule_time))
 	break;
 
-      result = icaltime_compare_with_zone(*recurtime, exrule_time);
+      result = icaltime_compare(*recurtime, exrule_time);
       if (result == 0) {
 	icalrecur_iterator_free(exrule_itr);
 	return 1; /** MATCH **/

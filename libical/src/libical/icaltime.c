@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.40 2002-08-08 16:44:36 lindner Exp $
+  $Id: icaltime.c,v 1.41 2002-08-09 14:45:12 lindner Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -732,24 +732,13 @@ int icaltime_is_null_time(const struct icaltimetype t)
  * 	timezone.
  */
 
-int icaltime_compare_with_zone(const struct icaltimetype a, const struct icaltimetype b) 
-{
-    struct icaltimetype a_utc, b_utc;
-    a_utc = icaltime_convert_to_zone(a, icaltimezone_get_utc_timezone());
-    b_utc = icaltime_convert_to_zone(b, icaltimezone_get_utc_timezone());
-
-    return (icaltime_compare(a_utc, b_utc));
-}
-
-/**
- *	Return -1, 0, or 1 to indicate that a<b, a==b or a>b.
- *
- *	@todo This is completely broken unless both times happen to be in
- *	the same timezone, or both floating.
- */
-int icaltime_compare(const struct icaltimetype a, const struct icaltimetype b)
+int icaltime_compare(const struct icaltimetype a, const struct icaltimetype b) 
 {
     int retval;
+
+    a = icaltime_convert_to_zone(a, icaltimezone_get_utc_timezone());
+    b = icaltime_convert_to_zone(b, icaltimezone_get_utc_timezone());
+
 
     if (a.year > b.year)
 	retval = 1;
@@ -794,6 +783,9 @@ int
 icaltime_compare_date_only(const struct icaltimetype a, const struct icaltimetype b)
 {
     int retval;
+
+    a = icaltime_convert_to_zone(a, icaltimezone_get_utc_timezone());
+    b = icaltime_convert_to_zone(b, icaltimezone_get_utc_timezone());
 
     if (a.year > b.year)
 	retval = 1;
