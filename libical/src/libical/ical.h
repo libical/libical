@@ -11,7 +11,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: ical.h,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+ $Id: ical.h,v 1.2 2001-01-02 07:49:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -878,7 +878,7 @@ int icalrecur_expand_recurrence(char* rule, time_t start,
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+  $Id: ical.h,v 1.2 2001-01-02 07:49:29 ebusboom Exp $
   $Locker:  $
 
   
@@ -1049,7 +1049,7 @@ void icalvalue_set_status(icalvalue* value, icalproperty_status v);
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+  $Id: ical.h,v 1.2 2001-01-02 07:49:29 ebusboom Exp $
   $Locker:  $
 
   
@@ -1220,7 +1220,7 @@ void icalparameter_set_xliccomparetype(icalparameter* value, icalparameter_xlicc
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+  $Id: ical.h,v 1.2 2001-01-02 07:49:29 ebusboom Exp $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
@@ -1930,7 +1930,7 @@ icalcomponent* icalcomponent_new_xdaylight();
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: ical.h,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+  $Id: ical.h,v 1.2 2001-01-02 07:49:29 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2022,7 +2022,7 @@ char* string_line_generator(char *out, size_t buf_size, void *d);
  CREATOR: eric 30 June 1999
 
 
- $Id: ical.h,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+ $Id: ical.h,v 1.2 2001-01-02 07:49:29 ebusboom Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -2100,7 +2100,7 @@ char* icalmemory_strdup(const char *s);
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+  $Id: ical.h,v 1.2 2001-01-02 07:49:29 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2246,7 +2246,7 @@ char* icalerror_strerror(icalerrorenum e);
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
   
-  $Id: ical.h,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+  $Id: ical.h,v 1.2 2001-01-02 07:49:29 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2307,7 +2307,7 @@ int icalrestriction_check(icalcomponent* comp);
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
   
-  $Id: ical.h,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+  $Id: ical.h,v 1.2 2001-01-02 07:49:29 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -2451,7 +2451,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
  CREATOR: eric 26 July 2000
 
 
- $Id: ical.h,v 1.1.1.1 2001-01-02 07:32:58 ebusboom Exp $
+ $Id: ical.h,v 1.2 2001-01-02 07:49:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
