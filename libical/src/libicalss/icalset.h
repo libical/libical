@@ -12,7 +12,7 @@
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalset.h,v 1.3 2002-03-16 15:53:30 gray-john Exp $
+ $Id: icalset.h,v 1.4 2002-05-29 12:15:22 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -91,7 +91,7 @@ int icalset_count_components(icalset* set,
 
 /* Restrict the component returned by icalset_first, _next to those
    that pass the gauge. _clear removes the gauge. */
-icalerrorenum icalset_select(icalset* set, icalcomponent* gauge);
+icalerrorenum icalset_select(icalset* set, icalgauge* gauge);
 void icalset_clear_select(icalset* set);
 
 /* Get a component by uid */

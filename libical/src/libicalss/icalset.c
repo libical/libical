@@ -12,7 +12,7 @@
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalset.c,v 1.5 2002-03-16 15:53:30 gray-john Exp $
+ $Id: icalset.c,v 1.6 2002-05-29 12:15:22 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -41,6 +41,7 @@
 #include "icaldirset.h"
 #include "icaldirsetimpl.h"
 #include <stdlib.h>
+#include <string.h>
 /*#include "icalheapset.h"*/
 /*#include "icalmysqlset.h"*/
 
@@ -55,7 +56,7 @@ struct icalset_fp {
 	icalerrorenum (*remove_component)(icalset* set, icalcomponent* comp);
 	int (*count_components)(icalset* set,
 			     icalcomponent_kind kind);
-	icalerrorenum (*select)(icalset* set, icalcomponent* gauge);
+	icalerrorenum (*select)(icalset* set, icalgauge* gauge);
 	void (*clear)(icalset* set);
 	icalcomponent* (*fetch)(icalset* set, const char* uid);
 	icalcomponent* (*fetch_match)(icalset* set, icalcomponent *comp);
@@ -350,7 +351,7 @@ int icalset_count_components(icalset* set,icalcomponent_kind kind)
     return (*(impl.fp->count_components))(impl.derived_impl,kind);
 }
 
-icalerrorenum icalset_select(icalset* set, icalcomponent* gauge)
+icalerrorenum icalset_select(icalset* set, icalgauge* gauge)
 {
     struct icalset_impl impl = icalset_get_impl(set);
     return (*(impl.fp->select))(impl.derived_impl,gauge);

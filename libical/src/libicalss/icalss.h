@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+ $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -63,7 +63,7 @@ icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+ $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -140,7 +140,7 @@ int icalset_count_components(icalset* set,
 
 /* Restrict the component returned by icalset_first, _next to those
    that pass the gauge. _clear removes the gauge. */
-icalerrorenum icalset_select(icalset* set, icalcomponent* gauge);
+icalerrorenum icalset_select(icalset* set, icalgauge* gauge);
 void icalset_clear_select(icalset* set);
 
 /* Get a component by uid */
@@ -170,7 +170,7 @@ icalcomponent* icalset_get_next_component(icalset* set);
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+ $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -279,7 +279,7 @@ icalcomponent* icalfileset_get_component(icalfileset* cluster);
  CREATOR: eric 28 November 1999
 
 
- $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+ $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -364,7 +364,7 @@ icalcomponent* icaldirset_get_next_component(icaldirset* store);
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+ $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -429,7 +429,7 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+ $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -472,7 +472,7 @@ char* icalclassify_class_to_string(icalproperty_xlicclass c);
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+ $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -524,7 +524,7 @@ void icalspanlist_dump(icalspanlist* s);
  CREATOR: eric 07 Nov 2000
 
 
- $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+ $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -593,7 +593,7 @@ icalcomponent* icalmessage_new_error_reply(icalcomponent* c,
   FILE: icalcstp.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+  $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -671,7 +671,7 @@ icalcstp_command icalcstp_string_to_command(const char* str);
   FILE: icalcstpclient.h
   CREATOR: eric 4 Feb 01
   
-  $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+  $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -769,7 +769,7 @@ icalerrorenum icalcstpc_sendata(icalcstpc* cstp, unsigned int time,
   FILE: icalcstpserver.h
   CREATOR: eric 13 Feb 01
   
-  $Id: icalss.h,v 1.17 2002-04-01 22:08:46 gray-john Exp $
+  $Id: icalss.h,v 1.18 2002-05-29 12:15:22 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

@@ -4,7 +4,7 @@
  CREATOR: eric 28 November 1999
 
 
- $Id: icaldirset.h,v 1.3 2002-05-28 14:57:27 acampi Exp $
+ $Id: icaldirset.h,v 1.4 2002-05-29 12:15:21 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -60,7 +60,7 @@ int icaldirset_count_components(icaldirset* store,
 
 /* Restrict the component returned by icaldirset_first, _next to those
    that pass the gauge. _clear removes the gauge. */
-icalerrorenum icaldirset_select(icaldirset* store, icalcomponent* gauge);
+icalerrorenum icaldirset_select(icaldirset* store, icalgauge* gauge);
 void icaldirset_clear(icaldirset* store);
 
 /* Get a component by uid */

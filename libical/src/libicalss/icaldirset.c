@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.9 2002-05-28 15:05:15 acampi Exp $
+    $Id: icaldirset.c,v 1.10 2002-05-29 12:15:20 acampi Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -721,7 +721,7 @@ int icaldirset_has_uid(icaldirset* store, const char* uid)
 }
 
 
-icalerrorenum icaldirset_select(icaldirset* store, icalcomponent* gauge)
+icalerrorenum icaldirset_select(icaldirset* store, icalgauge* gauge)
  {
     struct icaldirset_impl *impl = (struct icaldirset_impl*)store;
 
