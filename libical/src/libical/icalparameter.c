@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c,v 1.8 2002-06-28 08:26:54 acampi Exp $
+  $Id: icalparameter.c,v 1.9 2002-06-28 08:31:36 acampi Exp $
   $Locker:  $
     
 
@@ -192,6 +192,17 @@ icalparameter* icalparameter_new_from_string(const char *str)
     
 }
 
+/**
+ * Return a string representation of the parameter according to RFC2445.
+ *
+ * param	= param-name "=" param-value
+ * param-name	= iana-token / x-token
+ * param-value	= paramtext /quoted-string
+ * paramtext	= *SAFE-SHARE
+ * quoted-string= DQUOTE *QSAFE-CHARE DQUOTE
+ * QSAFE-CHAR	= any character except CTLs and DQUOTE
+ * SAFE-CHAR	= any character except CTLs, DQUOTE. ";", ":", ","
+ */
 char*
 icalparameter_as_ical_string (icalparameter* param)
 {
