@@ -67,6 +67,14 @@ struct icalgeotype
 	float lon;
 };
 
+
+struct icaldatetimeperiodtype 
+{
+	struct icaltimetype time;
+	struct icalperiodtype period;
+};
+
+
 struct icaltriggertype 
 {
 	struct icaltimetype time; 

@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c.in,v 1.2 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: icalproperty.c.in,v 1.3 2001-01-26 21:28:54 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -283,12 +283,72 @@ icalproperty_as_ical_string (icalproperty* prop)
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, property_name);
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
+
+
+    /* Determine what VALUE parameter to include. The VALUE parameters
+       are ignored in the normal parameter printing ( the block after
+       this one, so we need to do it here */
+    {
+	const char* kind_string = 0;
+
+	icalparameter *orig_val_param
+	    = icalproperty_get_first_parameter(prop,ICAL_VALUE_PARAMETER);
+
+	icalvalue *value = icalproperty_get_value(impl);
+
+	icalvalue_kind orig_kind = ICAL_NO_VALUE;
+
+	icalvalue_kind this_kind = ICAL_NO_VALUE;
+
+	icalvalue_kind default_kind 
+	    =  icalenum_property_kind_to_value_kind(impl->kind);
+
+	if(orig_val_param){
+	    orig_kind = (icalvalue_kind)icalparameter_get_value(orig_val_param);
+	}
+
+	if(value != 0){
+	    this_kind = icalvalue_isa(value);
+	}
+	
+	
+	if(this_kind == default_kind &&
+	   orig_kind != ICAL_NO_VALUE){
+	    /* The kind is the default, so it does not need to be
+               included, but do it anyway, since it was explicit in
+               the property. But, use the default, not the one
+               specified in the property */
+	    
+	    kind_string = icalenum_value_kind_to_string(default_kind);
+
+	} else if (this_kind != default_kind && this_kind !=  ICAL_NO_VALUE){
+	    /* Not the default, so it must be specified */
+	    kind_string = icalenum_value_kind_to_string(this_kind);
+	} else {
+	    /* Don'tinclude the VALUE parameter at all */
+	}
+
+	if(kind_string!=0){
+	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, " ;");
+	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "VALUE=");
+	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
+	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
+	}
+	
+
+    }
+
     /* Append parameters */
     for(param = icalproperty_get_first_parameter(prop,ICAL_ANY_PARAMETER);
 	param != 0; 
 	param = icalproperty_get_next_parameter(prop,ICAL_ANY_PARAMETER)) {
 
 	char* kind_string = icalparameter_as_ical_string(param); 
+	icalparameter_kind kind = icalparameter_isa(param);
+
+	if(kind==ICAL_VALUE_PARAMETER){
+	    continue;
+	}
 
 	if (kind_string == 0 ) {
 	    char temp[TMP_BUF_SIZE];

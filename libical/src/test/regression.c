@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.7 2001-01-23 18:11:53 ebusboom Exp $
+  $Id: regression.c,v 1.8 2001-01-26 21:28:54 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -124,13 +124,13 @@ icalcomponent* create_new_component()
     icalcomponent* tzc;
     icalcomponent* event;
     struct icaltimetype atime = icaltime_from_timet( time(0),0);
-    struct icalperiodtype rtime;
+    struct icaldatetimeperiodtype rtime;
     icalproperty* property;
 
-    rtime.start = icaltime_from_timet( time(0),0);
-    rtime.end = icaltime_from_timet( time(0),0);
-
-    rtime.end.hour++;
+    rtime.period.start = icaltime_from_timet( time(0),0);
+    rtime.period.end = icaltime_from_timet( time(0),0);
+    rtime.period.end.hour++;
+    rtime.time = icaltime_null_time();
 
 
 
@@ -333,12 +333,12 @@ icalcomponent* create_new_component_with_va_args()
 
     icalcomponent* calendar;
     struct icaltimetype atime = icaltime_from_timet( time(0),0);
-    struct icalperiodtype rtime;
+    struct icaldatetimeperiodtype rtime;
     
-    rtime.start = icaltime_from_timet( time(0),0);
-    rtime.end = icaltime_from_timet( time(0),0);
-
-    rtime.end.hour++;
+    rtime.period.start = icaltime_from_timet( time(0),0);
+    rtime.period.end = icaltime_from_timet( time(0),0);
+    rtime.period.end.hour++;
+    rtime.time = icaltime_null_time();
 
     calendar = 
 	icalcomponent_vanew(
@@ -990,12 +990,12 @@ void test_restriction()
     struct icaltimetype atime = icaltime_from_timet( time(0),0);
     int valid; 
 
-    struct icalperiodtype rtime;
+    struct icaldatetimeperiodtype rtime;
 
-    rtime.start = icaltime_from_timet( time(0),0);
-    rtime.end = icaltime_from_timet( time(0),0);
-
-    rtime.end.hour++;
+    rtime.period.start = icaltime_from_timet( time(0),0);
+    rtime.period.end = icaltime_from_timet( time(0),0);
+    rtime.period.end.hour++;
+    rtime.time = icaltime_null_time();
 
     comp = 
 	icalcomponent_vanew(
@@ -2832,21 +2832,29 @@ void test_file_locks()
     assert(sec == final);
 }
 
+/* For GNU libc, strcmp appears to be a macro, so using strcmp in assert results in incomprehansible assertion messages. This eliminates the problem */
+
+int ttstrcmp(const char* a, const char* b){
+    return strcmp(a,b);
+}
 
 void test_trigger()
 {
 
+    struct icaltriggertype tr;
+    struct icaldatetimeperiodtype dtp;
+    icalcomponent *c;
+    icalproperty *p;
+    char* str;
+    
     static const char test_icalcomp_str[] =
 "BEGIN:VEVENT\n"
 "TRIGGER;VALUE=DATE-TIME:19980403T120000\n"
 "TRIGGER:-PT15M\n"
 "TRIGGER:19980403T120000\n"
+"TRIGGER;VALUE=DURATION:-PT15M\n"
 "END:VEVENT\r\n";
   
-    icalcomponent *c;
-    icalproperty *p;
-    struct icaltriggertype tr;
-
     
     c = icalparser_parse_string ((char *) test_icalcomp_str);
     if (!c) {
@@ -2867,7 +2875,202 @@ void test_trigger()
 	    printf("value=DURATION:%s\n", icaldurationtype_as_ical_string(tr.duration));
 	}   
     }
+
+    /* Trigger, as a DATETIME */
+    tr.duration = icaldurationtype_null_duration();
+    tr.time = icaltime_from_string("19970101T120000");
+    p = icalproperty_new_trigger(tr);
+    str = icalproperty_as_ical_string(p);
+
+    printf("%s\n",str);
+    assert(ttstrcmp("TRIGGER\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    icalproperty_free(p);
+
+    /* TRIGGER, as a DURATION */
+    tr.time = icaltime_null_time();
+    tr.duration = icaldurationtype_from_string("P3DT3H50M45S");
+    p = icalproperty_new_trigger(tr);
+    str = icalproperty_as_ical_string(p);
+    
+    printf("%s\n",str);
+    assert(ttstrcmp("TRIGGER\n :P3DT3H50M45S\n",str) == 0);
+    icalproperty_free(p);
+
+    /* TRIGGER, as a DATETIME, VALUE=DATETIME*/
+    tr.duration = icaldurationtype_null_duration();
+    tr.time = icaltime_from_string("19970101T120000");
+    p = icalproperty_new_trigger(tr);
+    icalproperty_add_parameter(p,icalparameter_new_value( ICAL_VALUE_DATETIME));
+    str = icalproperty_as_ical_string(p);
+
+    printf("%s\n",str);
+    assert(ttstrcmp("TRIGGER\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    icalproperty_free(p);
+
+    /*TRIGGER, as a DURATION, VALUE=DATETIME */
+    tr.time = icaltime_null_time();
+    tr.duration = icaldurationtype_from_string("P3DT3H50M45S");
+    p = icalproperty_new_trigger(tr);
+    icalproperty_add_parameter(p,icalparameter_new_value( ICAL_VALUE_DATETIME ));
+
+    str = icalproperty_as_ical_string(p);
+    
+    printf("%s\n",str);
+    assert(ttstrcmp("TRIGGER\n ;VALUE=DURATION\n :P3DT3H50M45S\n",str) == 0);
+    icalproperty_free(p);
+
+    /* TRIGGER, as a DATETIME, VALUE=DURATION*/
+    tr.duration = icaldurationtype_null_duration();
+    tr.time = icaltime_from_string("19970101T120000");
+    p = icalproperty_new_trigger(tr);
+    icalproperty_add_parameter(p,icalparameter_new_value( ICAL_VALUE_DURATION));
+    str = icalproperty_as_ical_string(p);
+
+    printf("%s\n",str);
+    assert(ttstrcmp("TRIGGER\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    icalproperty_free(p);
+
+    /*TRIGGER, as a DURATION, VALUE=DURATION */
+    tr.time = icaltime_null_time();
+    tr.duration = icaldurationtype_from_string("P3DT3H50M45S");
+    p = icalproperty_new_trigger(tr);
+    icalproperty_add_parameter(p,icalparameter_new_value( ICAL_VALUE_DURATION));
+
+    str = icalproperty_as_ical_string(p);
+    
+    printf("%s\n",str);
+    assert(ttstrcmp("TRIGGER\n ;VALUE=DURATION\n :P3DT3H50M45S\n",str) == 0);
+    icalproperty_free(p);
+
+
+   /* TRIGGER, as a DATETIME, VALUE=BINARY  */
+    tr.duration = icaldurationtype_null_duration();
+    tr.time = icaltime_from_string("19970101T120000");
+    p = icalproperty_new_trigger(tr);
+    icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_BINARY));
+    str = icalproperty_as_ical_string(p);
+
+    printf("%s\n",str);
+    assert(ttstrcmp("TRIGGER\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    icalproperty_free(p);
+
+    /*TRIGGER, as a DURATION, VALUE=BINARY   */
+    tr.time = icaltime_null_time();
+    tr.duration = icaldurationtype_from_string("P3DT3H50M45S");
+    p = icalproperty_new_trigger(tr);
+    icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_BINARY));
+
+    str = icalproperty_as_ical_string(p);
+    
+    printf("%s\n",str);
+    assert(ttstrcmp("TRIGGER\n ;VALUE=DURATION\n :P3DT3H50M45S\n",str) == 0);
+    icalproperty_free(p);
+
+
+
 }
+
+void test_rdate()
+{
+
+    struct icaldatetimeperiodtype dtp;
+    icalproperty *p;
+    char* str;
+    struct icaltimetype time = icaltime_from_string("19970101T120000");
+    struct icalperiodtype period;
+
+    period.start = icaltime_from_string("19970101T120000");
+    period.end = icaltime_null_time();
+    period.duration = icaldurationtype_from_string("PT3H10M15S");
+
+    /* RDATE, as DATE-TIME */
+    dtp.time = icaltime_from_string("19970101T120000");
+    dtp.period = icalperiodtype_null_period();
+    p = icalproperty_new_rdate(dtp);
+    str = icalproperty_as_ical_string(p);
+    printf("%s\n",str);
+    assert(ttstrcmp("RDATE\n :19970101T120000\n",str) == 0);
+    icalproperty_free(p); 
+
+
+    /* RDATE, as PERIOD */
+    dtp.time = icaltime_null_time();
+    dtp.period = period;
+    p = icalproperty_new_rdate(dtp);
+
+    str = icalproperty_as_ical_string(p);
+    printf("%s\n",str);
+    assert(ttstrcmp("RDATE\n ;VALUE=PERIOD\n :19970101T120000/PT3H10M15S\n",str) == 0);
+    icalproperty_free(p); 
+
+    /* RDATE, as DATE-TIME, VALUE=DATE-TIME */
+    dtp.time = icaltime_from_string("19970101T120000");
+    dtp.period = icalperiodtype_null_period();
+    p = icalproperty_new_rdate(dtp);
+    icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_DATETIME));
+    str = icalproperty_as_ical_string(p);
+    printf("%s\n",str);
+    assert(ttstrcmp("RDATE\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    icalproperty_free(p); 
+
+
+    /* RDATE, as PERIOD, VALUE=DATE-TIME */
+    dtp.time = icaltime_null_time();
+    dtp.period = period;
+    p = icalproperty_new_rdate(dtp);
+    icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_DATETIME));
+    str = icalproperty_as_ical_string(p);
+    printf("%s\n",str);
+    assert(ttstrcmp("RDATE\n ;VALUE=PERIOD\n :19970101T120000/PT3H10M15S\n",str) == 0);
+    icalproperty_free(p); 
+
+
+    /* RDATE, as DATE-TIME, VALUE=PERIOD */
+    dtp.time = icaltime_from_string("19970101T120000");
+    dtp.period = icalperiodtype_null_period();
+    p = icalproperty_new_rdate(dtp);
+    icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_PERIOD));
+    str = icalproperty_as_ical_string(p);
+    printf("%s\n",str);
+    assert(ttstrcmp("RDATE\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    icalproperty_free(p); 
+
+
+    /* RDATE, as PERIOD, VALUE=PERIOD */
+    dtp.time = icaltime_null_time();
+    dtp.period = period;
+    p = icalproperty_new_rdate(dtp);
+    icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_PERIOD));
+    str = icalproperty_as_ical_string(p);
+    printf("%s\n",str);
+    assert(ttstrcmp("RDATE\n ;VALUE=PERIOD\n :19970101T120000/PT3H10M15S\n",str) == 0);
+    icalproperty_free(p); 
+
+
+    /* RDATE, as DATE-TIME, VALUE=BINARY */
+    dtp.time = icaltime_from_string("19970101T120000");
+    dtp.period = icalperiodtype_null_period();
+    p = icalproperty_new_rdate(dtp);
+    icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_BINARY));
+    str = icalproperty_as_ical_string(p);
+    printf("%s\n",str);
+    assert(ttstrcmp("RDATE\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    icalproperty_free(p); 
+
+
+    /* RDATE, as PERIOD, VALUE=BINARY */
+    dtp.time = icaltime_null_time();
+    dtp.period = period;
+    p = icalproperty_new_rdate(dtp);
+    icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_BINARY));
+    str = icalproperty_as_ical_string(p);
+    printf("%s\n",str);
+    assert(ttstrcmp("RDATE\n ;VALUE=PERIOD\n :19970101T120000/PT3H10M15S\n",str) == 0);
+    icalproperty_free(p); 
+
+
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -3024,6 +3227,17 @@ int main(int argc, char *argv[])
 	test_trigger();
     }
 
+    if(tmisc == 1 || tmisc  == 4){
+
+	printf("\n------------Test Restriction---------------\n");
+	test_restriction();
+    }
+
+    if(tmisc == 1 || tmisc  == 5){
+
+	printf("\n------------Test RDATE---------------\n");
+	test_rdate();
+    }
 
     if(tmisc == 1){
 
@@ -3038,8 +3252,6 @@ int main(int argc, char *argv[])
 	printf("\n------------Test Iterators-----------\n");
 	test_iterators();
 	
-	printf("\n------------Test Restriction---------------\n");
-	test_restriction();
 	
 	printf("\n-----------Test request status-------\n");
 	test_requeststat();

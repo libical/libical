@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.4 2001-01-24 17:14:01 ebusboom Exp $
+  $Id: icalerror.h,v 1.5 2001-01-26 21:28:54 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -65,33 +65,17 @@ void icalerror_crash_here(void);
 #endif 
 
 /* Check & abort if check fails */
-#ifdef ICAL_ERRORS_ARE_FATAL
-#define icalerror_check_arg(test,arg) icalerror_stop_here();assert(test) 
-#else
-#define icalerror_check_arg(test,arg)
-#endif
-/* Check & return void if check fails*/
+#define icalerror_check_arg(test,arg) if(!(test)) { icalerror_set_errno(ICAL_BADARG_ERROR); }
 
-#ifdef ICAL_ERRORS_ARE_FATAL
-#define icalerror_check_arg_rv(test,arg) icalerror_stop_here();assert(test);
-#else 
+/* Check & return void if check fails*/
 #define icalerror_check_arg_rv(test,arg) if(!(test)) { icalerror_set_errno(ICAL_BADARG_ERROR); return; }
-#endif
 
 /* Check & return 0 if check fails*/
-#ifdef ICAL_ERRORS_ARE_FATAL
-#define icalerror_check_arg_rz(test,arg) icalerror_stop_here();assert(test); 
-#else
 #define icalerror_check_arg_rz(test,arg) if(!(test)) {icalerror_set_errno(ICAL_BADARG_ERROR); return 0;}
-#endif
-
 
 /* Check & return an error if check fails*/
-#ifdef ICAL_ERRORS_ARE_FATAL
-#define icalerror_check_arg_re(test,arg,error) icalerror_stop_here();assert(test); 
-#else
 #define icalerror_check_arg_re(test,arg,error) if(!(test)) {icalerror_stop_here(); return error;}
-#endif
+
 
 
 /* Warning messages */

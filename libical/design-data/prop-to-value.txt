@@ -38,11 +38,11 @@ X         	     TEXT
 REQUEST-STATUS       STRING             
 ATTACH               ATTACH             # Non-std: URI or BINARY
 GEO                  GEO                # Non-std: Two FLOATS
-DTEND                DATE-TIME-DATE     # Non-std: DATE-TIME or DATE
-DUE                  DATE-TIME-DATE     # Non-std: DATE-TIME or DATE
-DTSTART              DATE-TIME-DATE     # Non-std: DATE-TIME or DATE
-RECURRENCE-ID        DATE-TIME-DATE     # Non-std: DATE-TIME or DATE
-EXDATE               DATE-TIME-DATE     # Non-std: DATE-TIME or DATE
+DTEND                DATE-TIME          # Non-std: DATE-TIME or DATE
+DUE                  DATE-TIME          # Non-std: DATE-TIME or DATE
+DTSTART              DATE-TIME          # Non-std: DATE-TIME or DATE
+RECURRENCE-ID        DATE-TIME          # Non-std: DATE-TIME or DATE
+EXDATE               DATE-TIME          # Non-std: DATE-TIME or DATE
 RDATE                DATE-TIME-PERIOD   # Non-std: DATE-TIME or DATE or PERIOD
 TRIGGER              TRIGGER            # Non-std: DURATION or DATE-TIME
 DURATION	     DURATION 

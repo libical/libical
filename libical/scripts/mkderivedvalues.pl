@@ -156,7 +156,7 @@ while(<F>)
     $union_data = $lc;
   }
 
-  if ($opt_c && $mode eq "std") {
+  if ($opt_c && $mode eq "autogen") {
 print <<EOM;
 
 icalvalue*
@@ -202,7 +202,7 @@ icalvalue_get_${lc}(icalvalue* value)
 
 EOM
 
-} elsif($opt_h) {
+} elsif($opt_h && $mode eq "autogen") {
 
   print <<EOM;
 /* $value $comment */

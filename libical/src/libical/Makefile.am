@@ -51,7 +51,9 @@ libical_la_SOURCES =		\
 	pvl.h			\
 	sspm.c			\
 	sspm.h			\
-	vsnprintf.c
+	vsnprintf.c		\
+	icallangbind.h		\
+	icallangbind.c
 
 libicalincludedir = $(includedir)
 
@@ -75,7 +77,8 @@ COMBINEDHEADERS =					\
 	$(top_srcdir)/src/libical/icalerror.h		\
 	$(top_srcdir)/src/libical/icalrestriction.h	\
 	$(top_srcdir)/src/libical/sspm.h		\
-	$(top_srcdir)/src/libical/icalmime.h 
+	$(top_srcdir)/src/libical/icalmime.h 		\
+	$(top_srcdir)/src/libical/icallangbind.h
 
 BUILT_SOURCES =			\
 	icalparameter.c		\

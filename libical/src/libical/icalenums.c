@@ -3,7 +3,7 @@
   FILE: icalenum.c
   CREATOR: eric 29 April 1999
   
-  $Id: icalenums.c,v 1.3 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: icalenums.c,v 1.4 2001-01-26 21:28:54 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -403,7 +403,7 @@ static struct icalproperty_kind_value_map propval_map[] =
     { ICAL_RECURRENCEID_PROPERTY, ICAL_DATETIME_VALUE }, 
     { ICAL_EXDATE_PROPERTY, ICAL_DATETIME_VALUE }, 
     { ICAL_RDATE_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_TRIGGER_PROPERTY, ICAL_TRIGGER_VALUE }, 
+    { ICAL_TRIGGER_PROPERTY, ICAL_DURATION_VALUE }, 
     { ICAL_DURATION_PROPERTY, ICAL_DURATION_VALUE }, 
 
     /* CAP properties */

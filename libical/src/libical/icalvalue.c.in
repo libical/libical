@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c.in,v 1.4 2001-01-23 18:11:53 ebusboom Exp $
+  $Id: icalvalue.c.in,v 1.5 2001-01-26 21:28:54 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -57,45 +57,46 @@ void print_time_to_string(char* str,  struct icaltimetype *data);
 void print_recur_to_string(char* str,  struct icaltimetype *data);
 
 struct icalvalue_impl {
-	icalvalue_kind kind;
-	char id[5];
-	int size;
-	icalproperty* parent;
+    icalvalue_kind kind; /*this is the kind that is visible from the outside*/
 
-	union data {
-		struct icalattachtype v_attach;		
-		/* void *v_binary; */ /* use v_attach */
-		const char *v_string;
-		/*char *v_text;*/
-		/*char *v_caladdress;*/
-		/*char *v_uri;*/
-		float v_float;
-		int v_int;
-		/*int v_boolean;*/
-		/*int v_integer;*/
-		struct icaldurationtype v_duration;
-		/*int v_utcoffset;*/
-
-		struct icalperiodtype v_period;
-		/*struct icalperiodtype v_datetimeperiod;*/
-		struct icalgeotype v_geo;
-		/*time_t v_time;*/
-		struct icaltimetype v_time;
-		/*struct icaltimetype v_date;*/
-		/*struct icaltimetype v_datetime;*/
-		/*struct icaltimetype v_datetimedate;*/
-
-		/* struct icalrecurrencetype was once included
-                   directly ( not referenced ) in this union, but it
-                   contributes 2000 bytes to every value, so now it is
-                   a reference*/
-
-		struct icalrecurrencetype *v_recur;
-		struct icaltriggertype v_trigger;
-		icalproperty_method v_method;
-		icalproperty_status v_status;
-
-	} data;
+    char id[5];
+    int size;
+    icalproperty* parent;
+    
+    union data {
+	struct icalattachtype v_attach;		
+	/* void *v_binary; */ /* use v_attach */
+	const char *v_string;
+	/*char *v_text;*/
+	/*char *v_caladdress;*/
+	/*char *v_uri;*/
+	float v_float;
+	int v_int;
+	/*int v_boolean;*/
+	/*int v_integer;*/
+	struct icaldurationtype v_duration;
+	/*int v_utcoffset;*/
+	
+	struct icalperiodtype v_period;
+	/*struct icalperiodtype v_datetimeperiod;*/
+	struct icalgeotype v_geo;
+	/*time_t v_time;*/
+	struct icaltimetype v_time;
+	/*struct icaltimetype v_date;*/
+	/*struct icaltimetype v_datetime;*/
+	/*struct icaltimetype v_datetimedate;*/
+	
+	/* struct icalrecurrencetype was once included
+	   directly ( not referenced ) in this union, but it
+	   contributes 2000 bytes to every value, so now it is
+	   a reference*/
+	
+	struct icalrecurrencetype *v_recur;
+	struct icaltriggertype v_trigger;
+	icalproperty_method v_method;
+	icalproperty_status v_status;
+	
+    } data;
 };
 
 struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind){
@@ -586,6 +587,7 @@ char* icalvalue_binary_as_ical_string(icalvalue* value) {
     const char* data;
     char* str;
     icalerror_check_arg_rz( (value!=0),"value");
+
     data = icalvalue_get_binary(value);
 
     str = (char*)icalmemory_tmp_buffer(60);
@@ -600,7 +602,9 @@ char* icalvalue_int_as_ical_string(icalvalue* value) {
     
     int data;
     char* str = (char*)icalmemory_tmp_buffer(MAX_INT_DIGITS); 
+
     icalerror_check_arg_rz( (value!=0),"value");
+
     data = icalvalue_get_integer(value);
 	
     snprintf(str,MAX_INT_DIGITS,"%d",data);
@@ -613,7 +617,9 @@ char* icalvalue_utcoffset_as_ical_string(icalvalue* value)
     int data,h,m,s;
     char sign;
     char* str = (char*)icalmemory_tmp_buffer(9);
+
     icalerror_check_arg_rz( (value!=0),"value");
+
     data = icalvalue_get_utcoffset(value);
 
     if (abs(data) == data){
@@ -851,8 +857,21 @@ char* icalvalue_datetime_as_ical_string(icalvalue* value) {
     
     struct icaltimetype data;
     char* str;
+    icalvalue_kind kind = icalvalue_isa(value);    
+
     icalerror_check_arg_rz( (value!=0),"value");
-    data = icalvalue_get_date(value);
+
+
+    if( !(kind == ICAL_DATETIMEDATE_VALUE ||
+	  kind == ICAL_DATE_VALUE ||
+	  kind == ICAL_DATETIME_VALUE ||
+	  kind == ICAL_TIME_VALUE))
+	{
+	    icalerror_set_errno(ICAL_BADARG_ERROR);
+	    return 0;
+	}
+
+    data = icalvalue_get_datetime(value);
 
     str = (char*)icalmemory_tmp_buffer(20);
  
@@ -909,76 +928,25 @@ char* icalvalue_geo_as_ical_string(icalvalue* value) {
 }
 
 char* icalvalue_datetimeperiod_as_ical_string(icalvalue* value) {
+    struct icalvalue_impl* impl = (struct icalvalue_impl*)value;
+    struct icaldatetimeperiodtype dtp = icalvalue_get_datetimeperiod(value);
 
-    struct icalperiodtype data;
-    char* str;
     icalerror_check_arg_rz( (value!=0),"value");
-    data = icalvalue_get_datetimeperiod(value);
 
-    str = (char*)icalmemory_tmp_buffer(60);
-
-    if( data.end.second == -1){
-	/* This is a DATE-TIME value, since there is no end value */
-	icalvalue *v= icalvalue_new_datetime(data.start);
-
-	strcpy(str,icalvalue_datetime_as_ical_string(v));
-
-	free(v);
-
+    if(!icaltime_is_null_time(dtp.time)){
+	return icaltime_as_ical_string(dtp.time);
     } else {
-	icalvalue *v1 = icalvalue_new_datetime(data.start);
-	icalvalue *v2 = icalvalue_new_datetime(data.end);
-
-	sprintf(str,"%s/%s",
-		icalvalue_datetime_as_ical_string(v1),
-		icalvalue_datetime_as_ical_string(v2)
-	    );
-
-	free(v1);
-	free(v2);
-
+	return icalperiodtype_as_ical_string(dtp.period);
     }
-
-    return str;
 }
 
 char* icalvalue_period_as_ical_string(icalvalue* value) {
-
     struct icalperiodtype data;
-    char* str;
-    icalvalue *s,*e;
-    
     icalerror_check_arg_rz( (value!=0),"value");
     data = icalvalue_get_period(value);
 
-    str = (char*)icalmemory_tmp_buffer(60);
+    return icalperiodtype_as_ical_string(data);
 
-    s = icalvalue_new_datetime(data.start);
-
-    if (data.end.second != -1){
-	/* use the end date */
-	e = icalvalue_new_datetime(data.end);
-	
-	sprintf(str,"%s/%s",
-		icalvalue_datetime_as_ical_string(s),
-		icalvalue_datetime_as_ical_string(e)
-	    );
-	
-
-    } else {
-	/* use the duration */
-	e = icalvalue_new_duration(data.duration);
-	
-	sprintf(str,"%s/%s",
-		icalvalue_datetime_as_ical_string(s),
-		icalvalue_duration_as_ical_string(e)
-	    );
-	
-    }
-
-    icalvalue_free(e);
-    icalvalue_free(s);
-    return str;
 }
 
 char* icalvalue_trigger_as_ical_string(icalvalue* value) {
@@ -1307,6 +1275,127 @@ icalvalue_get_recur(icalvalue* value)
   
     return *(((struct icalvalue_impl*)value)->data.v_recur);
 }
+
+
+
+
+icalvalue*
+icalvalue_new_trigger (struct icaltriggertype v)
+{
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_TRIGGER_VALUE);
+ 
+   icalvalue_set_trigger((icalvalue*)impl,v);
+
+   return (icalvalue*)impl;
+}
+
+void
+icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v)
+{
+    struct icalvalue_impl* impl; 
+    
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    impl = (struct icalvalue_impl*)value;
+
+   if(!icaltime_is_null_time(v.time)){
+       icalvalue_set_datetime((icalvalue*)impl,v.time);
+       impl->kind = ICAL_DATETIME_VALUE;
+   } else {
+       icalvalue_set_duration((icalvalue*)impl,v.duration);
+       impl->kind = ICAL_DURATION_VALUE;
+   }
+
+}
+
+struct icaltriggertype
+icalvalue_get_trigger(icalvalue* value)
+{
+    struct icalvalue_impl *impl = (struct icalvalue_impl*)value;
+    struct icaltriggertype tr;
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_arg( (value!=0),"value");
+
+    if(impl->kind == ICAL_DATETIME_VALUE){
+	 tr.duration = icaldurationtype_from_int(0);
+	 tr.time = impl->data.v_time;
+    } else if(impl->kind == ICAL_DURATION_VALUE){
+	tr.time = icaltime_null_time();
+	tr.duration = impl->data.v_duration;
+    } else {
+	tr.duration = icaldurationtype_from_int(0);
+	tr.time = icaltime_null_time();
+	icalerror_set_errno(ICAL_BADARG_ERROR);
+    }
+
+    return tr;
+}
+
+/* DATE-TIME-PERIOD is a special case, and is not auto generated */
+
+icalvalue*
+icalvalue_new_datetimeperiod (struct icaldatetimeperiodtype v)
+{
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_DATETIMEPERIOD_VALUE);
+
+   icalvalue_set_datetimeperiod((icalvalue*)impl,v);
+
+   return (icalvalue*)impl;
+}
+
+void
+icalvalue_set_datetimeperiod(icalvalue* value, struct icaldatetimeperiodtype v)
+{
+    struct icalvalue_impl* impl = (struct icalvalue_impl*)value;
+    
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    icalerror_check_value_type(value, ICAL_DATETIMEPERIOD_VALUE);
+
+    if(!icaltime_is_null_time(v.time)){
+	if(!icaltime_is_valid_time(v.time)){
+	    icalerror_set_errno(ICAL_BADARG_ERROR);
+	    return;
+	}
+	impl->kind = ICAL_DATETIME_VALUE;
+	icalvalue_set_datetime(impl,v.time);
+    } else if (!icalperiodtype_is_null_period(v.period)) {
+	if(!icalperiodtype_is_valid_period(v.period)){
+	    icalerror_set_errno(ICAL_BADARG_ERROR);
+	    return;
+	}
+	impl->kind = ICAL_PERIOD_VALUE;
+	icalvalue_set_period(impl,v.period);
+    } else {
+	icalerror_set_errno(ICAL_BADARG_ERROR);
+    }
+}
+
+struct icaldatetimeperiodtype
+icalvalue_get_datetimeperiod(icalvalue* value)
+{
+  struct icaldatetimeperiodtype dtp;
+  
+  struct icalvalue_impl* impl = (struct icalvalue_impl*)value;
+  icalerror_check_arg( (value!=0),"value");
+  icalerror_check_value_type(value, ICAL_DATETIMEPERIOD_VALUE);
+  
+  if(impl->kind == ICAL_DATETIME_VALUE){
+      dtp.period = icalperiodtype_null_period();
+      dtp.time = impl->data.v_time;
+  } else if(impl->kind == ICAL_PERIOD_VALUE) {
+      dtp.period = impl->data.v_period;
+      dtp.time = icaltime_null_time();
+  } else {
+      dtp.period = icalperiodtype_null_period();
+      dtp.time = icaltime_null_time();
+      icalerror_set_errno(ICAL_BADARG_ERROR);
+  }	
+
+  return dtp;
+}
+
 
 
 
