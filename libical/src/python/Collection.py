@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Collection.py,v 1.2 2001-03-05 18:30:40 ebusboom Exp $
+#  $Id: Collection.py,v 1.3 2001-03-11 00:46:57 plewis Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -73,6 +73,15 @@ class Collection:
 
     def __len__(self):
         return len(self._properties)
+
+    def __str__(self):
+        s = "[ "
+        if len(self._properties) > 0:
+            s = s + str(self._properties[0])
+            for p in self._properties[1:]:
+                s = "%s, %s" % (s, p)
+        s = s + " ]"
+        return s
             
     def append(self, property):
         self._properties.append(property)
