@@ -2,7 +2,7 @@
   FILE: icalvcal.c
   CREATOR: eric 25 May 00
   
-  $Id: icalvcal.c,v 1.1.1.1 2001-01-02 07:33:08 ebusboom Exp $
+  $Id: icalvcal.c,v 1.2 2001-03-18 07:29:54 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -153,7 +153,7 @@ static void icalvcal_traverse_objects(VObject *object,icalcomponent* last_comp,
 		snprintf(temp,1024,"%s: %s",message,name);
 		
 		error_param = icalparameter_new_xlicerrortype(
-		    ICAL_XLICERRORTYPE_UNKVCALPROP
+		    ICAL_XLICERRORTYPE_UNKNOWNVCALPROPERROR
 		    );
 
 		error_prop = icalproperty_new_xlicerror(temp);
