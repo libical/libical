@@ -3,7 +3,7 @@
     FILE: icalcstps.c
     CREATOR: ebusboom 23 Jun 2000
   
-    $Id: icalcstpclient.c,v 1.1 2001-02-22 05:04:20 ebusboom Exp $
+    $Id: icalcstpclient.c,v 1.2 2001-02-22 19:38:49 ebusboom Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -100,13 +100,23 @@ void icalcstpc_free(icalcstpc* cstpc)
     }
 }
 
-
-
 /* Get the next string to send to the server */
 char* icalcstpc_next_output(icalcstpc* cstp, char * line)
 {
+    char* out;
     struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
-    return 0;
+
+    if(impl->next_output == 0){
+        return 0;
+    }
+    
+    out = impl->next_output;
+
+    impl->next_output = 0;
+
+    icalmemory_add_tmp_buffer(out);
+
+    return out;
 }
 
 /* process the next string sent by the server */ 
@@ -119,6 +129,46 @@ int icalcstpc_next_input(icalcstpc* cstp, char* line)
         return 0;
     }
 
+    switch (impl->command){
+    case ICAL_ABORT_COMMAND:{
+        break;
+    }
+    case ICAL_AUTHENTICATE_COMMAND:{
+        break;
+    }
+    case ICAL_CAPABILITY_COMMAND:{
+        break;
+    }
+    case ICAL_CONTINUE_COMMAND:{
+        break;
+    }
+    case ICAL_CALIDEXPAND_COMMAND:{
+        break;
+    }
+    case ICAL_IDENTIFY_COMMAND:{
+        break;
+    }
+    case ICAL_DISCONNECT_COMMAND:{
+        break;
+    }
+    case ICAL_SENDDATA_COMMAND:{
+        break;
+    }
+    case ICAL_STARTTLS_COMMAND:{
+        break;
+    }
+    case ICAL_UPNEXPAND_COMMAND:{
+        break;
+    }
+    case ICAL_COMPLETE_COMMAND:{
+        break;
+    }
+    case ICAL_UNKNOWN_COMMAND:{
+        break;
+    }
+    default:
+
+    }
 }
 
 /* After icalcstpc_next_input returns a 0, there are responses
@@ -126,6 +176,7 @@ int icalcstpc_next_input(icalcstpc* cstp, char* line)
 icalcstpc_response icalcstpc_first_response(icalcstpc* cstp)
 {
     struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
+
 }
 
 
@@ -202,12 +253,23 @@ icalerrorenum icalcstpc_authenticate(icalcstpc* cstp, char* mechanism,
 icalerrorenum icalcstpc_capability(icalcstpc* cstp)
 {
     struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
+    char* command_str;
+    icalerrorenum error;
+    size_t sz;
 
-   icalerror_check_arg_re(cstp!=0,"cstp",ICAL_BADARG_ERROR);
+    icalerror_check_arg_re(cstp!=0,"cstp",ICAL_BADARG_ERROR);
+    
+    impl->command = ICAL_CAPABILITY_COMMAND;
+    
+    command_str = icalcstp_command_to_string(impl->command);
 
-   impl->command = ICAL_CAPABILITY_COMMAND;
+    sz = strlen(command_str) + strlen(mechanism) + strlen(data) + 4;
+    
+    if((error=icalcstpclient_setup_output(cstp,sz)) != ICAL_NO_ERROR){
+        return error;
+    }
 
-   return ICAL_NO_ERROR;
+    return ICAL_NO_ERROR;
 }
 
 icalerrorenum icalcstpc_calidexpand(icalcstpc* cstp,char* calid)

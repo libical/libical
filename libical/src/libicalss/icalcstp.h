@@ -3,7 +3,7 @@
   FILE: icalcstp.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalcstp.h,v 1.3 2001-02-22 05:04:20 ebusboom Exp $
+  $Id: icalcstp.h,v 1.4 2001-02-22 19:38:49 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -57,7 +57,7 @@ typedef enum icalcstp_command {
 } icalcstp_command;
 
 
-char* icalcstp_command_to_string(icalcstp_command command);
+const char* icalcstp_command_to_string(icalcstp_command command);
 icalcstp_command icalcstp_string_to_command(const char* str);
 
 #endif /* !ICALCSTP_H */
