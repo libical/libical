@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.13 2002-07-04 10:25:28 acampi Exp $
+  $Id: icalproperty.h,v 1.14 2002-07-18 12:31:27 acampi Exp $
   $Locker:  $
 
   
@@ -100,7 +100,7 @@ const char* icalproperty_get_x_name(icalproperty* prop);
  *  string, or the value of _get_x_name if the type is and X
  *  property 
  */
-const char* icalproperty_get_name (const icalproperty* prop);
+const char* icalproperty_get_property_name (const icalproperty* prop);
 
 icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
 

@@ -117,7 +117,7 @@ string ICalProperty::get_value_as_string(){
  *  string, or the value of get_x_name if the type is X property
  */
 string ICalProperty::get_name(){
-	return (string)icalproperty_get_name(imp);
+	return (string)icalproperty_get_property_name(imp);
 }
 
 /* Deal with X properties */
