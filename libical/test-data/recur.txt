@@ -25,7 +25,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Every year on the same day, forever
+ :Every year on the same day\, forever
 RRULE
  :FREQ=YEARLY;INTERVAL=1
 DTSTART
@@ -174,7 +174,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Every Day start the first day in  January, except saturday and sunday. This should be up to March.
+ :Every Day start the first day in  January\, except saturday and sunday. This should be up to March.
 RRULE
  :FREQ=DAILY;COUNT=50;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR
 DTSTART
@@ -184,7 +184,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Every Day in January, but only in Tuesday, Wednesday and Thursday 
+ :Every Day in January\, but only in Tuesday\, Wednesday and Thursday 
 RRULE
  :FREQ=DAILY;UNTIL=20020120T090000Z;INTERVAL=1;BYDAY=TU,WE,TH
 DTSTART
@@ -194,7 +194,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Every Day in January, except saturday and sunday. This is MS Outlook every weekday case.
+ :Every Day in January\, except saturday and sunday. This is MS Outlook every weekday case.
 RRULE
  :FREQ=DAILY;UNTIL=20020120T090000Z;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR;WKST=SU
 DTSTART
@@ -631,7 +631,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Every Day in January, except saturday and sunday, using 2 EXRULEs
+ :Every Day in January\, except saturday and sunday\, using 2 EXRULEs
 RRULE
  :FREQ=DAILY;INTERVAL=1;UNTIL=20020201T000000Z
 EXRULE
