@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.29 2002-11-03 23:51:55 acampi Exp $
+ $Id: icaltimezone.c,v 1.30 2002-11-03 23:53:27 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1298,7 +1298,7 @@ icaltimezone_get_builtin_timezone	(const char *location)
     upper = builtin_timezones->num_elements;
 
     while (lower < upper) {
-	middle = (lower + upper) >> 1;
+	middle = (lower + upper) / 2;
 	zone = icalarray_element_at (builtin_timezones, middle);
 	zone_location = icaltimezone_get_location (zone);
 	cmp = strcmp (location, zone_location);
