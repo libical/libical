@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.21 2002-06-13 10:12:13 acampi Exp $
+  $Id: icalvalue.c,v 1.22 2002-06-13 13:23:46 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -658,7 +658,10 @@ static char* icalvalue_utcoffset_as_ical_string(const icalvalue* value)
     m = (data - (h*3600))/ 60;
     s = (data - (h*3600) - (m*60));
 
-    sprintf(str,"%c%02d%02d%02d",sign,abs(h),abs(m),abs(s));
+    if (s > 0)
+	sprintf(str,"%c%02d%02d%02d",sign,abs(h),abs(m),abs(s));
+    else
+	sprintf(str,"%c%02d%02d",sign,abs(h),abs(m));
 
     return str;
 }
