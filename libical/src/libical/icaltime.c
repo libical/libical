@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.7 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: icaltime.c,v 1.8 2001-02-06 19:43:23 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -323,7 +323,7 @@ struct icaltimetype icaltime_from_string(const char* str)
 	}
 	    
     } else if (size == 8) { /* A DATE */
-	tt.is_utc = 0;
+	tt.is_utc = 1;
 	tt.is_date = 1;
     } else { /* error */
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
@@ -351,8 +351,10 @@ struct icaltimetype icaltime_from_string(const char* str)
 char ctime_str[20];
 char* icaltime_as_ctime(struct icaltimetype t)
 {
-    time_t tt = icaltime_as_timet(t);
-
+    time_t tt;
+    struct set_tz_save old_tz;
+ 
+    tt = icaltime_as_timet(t);
     sprintf(ctime_str,"%s",ctime(&tt));
 
     ctime_str[strlen(ctime_str)-1] = 0;
@@ -399,6 +401,7 @@ short icaltime_day_of_week(struct icaltimetype t){
     return tm->tm_wday+1;
 }
 
+/* Day of the week that the year starts on */
 short icaltime_start_doy_of_week(struct icaltimetype t){
     time_t tt = icaltime_as_timet(t);
     time_t start_tt;
@@ -430,6 +433,20 @@ short icaltime_start_doy_of_week(struct icaltimetype t){
     
 }
 
+short icaltime_week_number(struct icaltimetype ictt)
+{
+    char str[5];
+    time_t t = icaltime_as_timet(ictt);
+    int week_no;
+    
+
+    strftime(str,5,"%V", gmtime(&t));
+
+    week_no = atoi(str);
+
+    return week_no;
+
+}
 
 
 short icaltime_day_of_year(struct icaltimetype t){
@@ -451,6 +468,7 @@ struct icaltimetype icaltime_from_day_of_year(short doy,  short year)
 {
     struct tm stm; 
     time_t tt;
+    struct set_tz_save old_tz = set_tz("UTC");
 
     /* Get the time of january 1 of this year*/
     memset(&stm,0,sizeof(struct tm)); 
@@ -458,6 +476,8 @@ struct icaltimetype icaltime_from_day_of_year(short doy,  short year)
     stm.tm_mday = 1;
 
     tt = mktime(&stm);
+    unset_tz(old_tz);
+
 
     /* Now add in the days */
 

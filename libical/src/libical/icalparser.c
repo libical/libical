@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.4 2001-01-28 18:00:48 ebusboom Exp $
+  $Id: icalparser.c,v 1.5 2001-02-06 19:43:22 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -518,6 +518,20 @@ void insert_error(icalcomponent* comp, char* text,
 	     0));   
 }
 
+int line_is_blank(char* line){
+    int i=0;
+
+    for(i=0; *(line+i)!=0; i++){
+	char c = *(line+i);
+
+	if(c != ' ' && c != '\n' && c != '\t'){
+	    return 0;
+	}
+    }
+    
+    return 1;
+}
+
 icalcomponent* icalparser_parse(icalparser *parser,
 				char* (*line_gen_func)(char *s, size_t size, 
 						       void* d))
@@ -534,7 +548,7 @@ icalcomponent* icalparser_parse(icalparser *parser,
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_NONFATAL);
 
     do{
-	line = icalparser_get_line(parser, line_gen_func);
+	    line = icalparser_get_line(parser, line_gen_func);
 
 	if ((c = icalparser_add_line(parser,line)) != 0){
 
@@ -598,6 +612,10 @@ icalcomponent* icalparser_add_line(icalparser* parser,
     if (line == 0)
     {
 	impl->state = ICALPARSER_ERROR;
+	return 0;
+    }
+
+    if(line_is_blank(line) == 1){
 	return 0;
     }
 

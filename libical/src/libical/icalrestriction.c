@@ -354,7 +354,7 @@ int icalrestriction_check(icalcomponent* outer_comp)
 {
     icalcomponent_kind comp_kind;
     icalproperty_method method;
-    icalcomponent* inner_comp;
+    icalcomponent* inner_comp, *container = 0;
     icalproperty *method_prop;
     int valid;
     
@@ -364,11 +364,6 @@ int icalrestriction_check(icalcomponent* outer_comp)
     /* Get the Method value from the outer component */
 
     comp_kind = icalcomponent_isa(outer_comp);
-
-    if (comp_kind != ICAL_VCALENDAR_COMPONENT){
-	icalerror_set_errno(ICAL_BADARG_ERROR);
-	return 0;
-    }
 
     method_prop = icalcomponent_get_first_property(outer_comp,
 						   ICAL_METHOD_PROPERTY);
@@ -395,7 +390,6 @@ int icalrestriction_check(icalcomponent* outer_comp)
 	valid = valid && icalrestriction_check_component(method,inner_comp);
 
     }
-
 
     return valid;
 

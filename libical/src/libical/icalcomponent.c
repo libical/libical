@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.6 2001-01-28 18:00:48 ebusboom Exp $
+  $Id: icalcomponent.c,v 1.7 2001-02-06 19:43:22 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -159,7 +159,7 @@ icalcomponent* icalcomponent_new_clone(icalcomponent* component)
     icalcomponent *c;
     pvl_elem itr;
 
-    icalerror_check_arg_rv( (component!=0), "component");
+    icalerror_check_arg_rz( (component!=0), "component");
 
     new = icalcomponent_new_impl(old->kind);
 

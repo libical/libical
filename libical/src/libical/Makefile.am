@@ -112,32 +112,31 @@ PARAMETERDEPS =	\
 	icalparameter.h.in
 
 icalparameter.h: $(PARAMETERDEPS) 
-	$(PERL) $(ICALSCRIPTS)/mkderivedparameters.pl -i icalparameter.h.in -h $(DESIGNDATA)/param-c-types.txt > icalparameter.newh \
-	&& mv icalparameter.newh icalparameter.h 
+	$(PERL) $(ICALSCRIPTS)/mkderivedparameters.pl -i icalparameter.h.in -h $(DESIGNDATA)/param-c-types.txt > icalparameter.h 
 
 icalparameter.c: $(PARAMETERDEPS) icalparameter.h
-	$(PERL) $(ICALSCRIPTS)/mkderivedparameters.pl -i icalparameter.c.in -c $(DESIGNDATA)/param-c-types.txt > icalparameter.newc \
-	&& mv icalparameter.newc icalparameter.c
+	$(PERL) $(ICALSCRIPTS)/mkderivedparameters.pl -i icalparameter.c.in -c $(DESIGNDATA)/param-c-types.txt > icalparameter.c
+
 
 # properties
 
 PROPERTYDEPS =					\
 	$(ICALSCRIPTS)/mkderivedproperties.pl	\
 	$(DESIGNDATA)/prop-to-value.txt		\
-	$(DESIGNDATA)/value-c-types.txt		\
+	$(DESIGNDATA)/value-types.csv		\
 	icalproperty.c.in			\
 	icalproperty.h.in
 
 
 icalproperty.h: $(PROPERTYDEPS)
-	$(PERL) $(ICALSCRIPTS)/mkderivedproperties.pl -i icalproperty.h.in -h \
-		$(DESIGNDATA)/prop-to-value.txt \
-		${DESIGNDATA}/value-c-types.txt > icalproperty.h 
+	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedproperties.pl \
+		-i icalproperty.h.in -h $(DESIGNDATA)/prop-to-value.txt \
+		${DESIGNDATA}/value-types.csv > icalproperty.h 
 
 icalproperty.c: $(PROPERTYDEPS) icalproperty.h 
-	$(PERL) $(ICALSCRIPTS)/mkderivedproperties.pl -i icalproperty.c.in -c \
-		$(DESIGNDATA)/prop-to-value.txt \
-		${DESIGNDATA}/value-c-types.txt > icalproperty.c
+	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedproperties.pl \
+		-i icalproperty.c.in -c $(DESIGNDATA)/prop-to-value.txt \
+		${DESIGNDATA}/value-types.csv > icalproperty.c
 
 # restrictions
 
@@ -154,17 +153,17 @@ icalrestriction.c: $(RESTRICTIONDEPS)
 
 VALUEDEPS =					\
 	$(ICALSCRIPTS)/mkderivedvalues.pl  	\
-	$(DESIGNDATA)/value-c-types.txt		\
+	$(DESIGNDATA)/value-types.csv		\
 	icalvalue.c.in				\
 	icalvalue.h.in
 
 icalvalue.h: $(VALUEDEPS)
-	$(PERL) $(ICALSCRIPTS)/mkderivedvalues.pl -i icalvalue.h.in -h \
-		$(DESIGNDATA)/value-c-types.txt > icalvalue.h
+	$(PERL) -I$(ICALSCRIPTS)  $(ICALSCRIPTS)/mkderivedvalues.pl \
+	         -i icalvalue.h.in -h $(DESIGNDATA)/value-types.csv > icalvalue.h
 
 icalvalue.c: $(VALUEDEPS) icalvalue.h
-	$(PERL) $(ICALSCRIPTS)/mkderivedvalues.pl  -i icalvalue.c.in -c \
-		$(DESIGNDATA)/value-c-types.txt > icalvalue.c
+	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedvalues.pl \
+		-i icalvalue.c.in -c $(DESIGNDATA)/value-types.csv > icalvalue.c
 
 
 

@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.3 2001-01-28 18:00:48 ebusboom Exp $
+  $Id: copycluster.c,v 1.4 2001-02-06 19:43:23 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -31,8 +31,14 @@
 #include "icalfileset.h"
 #include <errno.h>
 #include <string.h> /* For strerror */
+#include <signal.h> /* for signal */
+#include <unistd.h> /* for alarm */
 #include "icalrestriction.h"
 
+static void sig_alrm(int i){
+    fprintf(stderr,"Could not get lock on file\n");
+    exit(1);
+}
 /* This program copies a file that holds iCal components to an other file. */
 
 
@@ -59,7 +65,12 @@ int main(int c, char *argv[]){
 
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 
+
+    signal(SIGALRM,sig_alrm);
+
+    alarm(0);
     clusterin = icalfileset_new(argv[1]);
+    alarm(0);
 
     if (clusterin == 0){
 	printf("Could not open input cluster \"%s\"",argv[1]);

@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.5 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: icalerror.h,v 1.6 2001-02-06 19:43:22 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -60,9 +60,10 @@ void icalerror_crash_here(void);
 #else /*__GNUC__*/
 #define icalerror_assert(test,message) if(!(test)){fprintf(stderr,"%s:%d: %s\n",__FILE__,__LINE__,message);icalerror_stop_here(); abort();}
 #endif /*__GNUC__*/
-#else
+
+#else /* ICAL_ERRORS_ARE_FATAL */
 #define icalerror_assert(test,message) 
-#endif 
+#endif /* ICAL_ERRORS_ARE_FATAL */
 
 /* Check & abort if check fails */
 #define icalerror_check_arg(test,arg) if(!(test)) { icalerror_set_errno(ICAL_BADARG_ERROR); }
@@ -77,18 +78,7 @@ void icalerror_crash_here(void);
 #define icalerror_check_arg_re(test,arg,error) if(!(test)) {icalerror_stop_here(); return error;}
 
 
-
 /* Warning messages */
-
-#ifdef ICAL_ERRORS_ARE_FATAL 
-
-#ifdef __GNUC__
-#define icalerror_warn(message) {fprintf(stderr,"%s(), %s:%d: %s\n",__FUNCTION__,__FILE__,__LINE__,message); abort();}
-#else /* __GNU_C__ */
-#define icalerror_warn(message) {fprintf(stderr,"%s:%d: %s\n",__FILE__,__LINE__,message); abort();}
-#endif /* __GNU_C__ */
-
-#else /*ICAL_ERRORS_ARE_FATAL */
 
 #ifdef __GNUC__
 #define icalerror_warn(message) {fprintf(stderr,"%s(), %s:%d: %s\n",__FUNCTION__,__FILE__,__LINE__,message);}
@@ -96,7 +86,7 @@ void icalerror_crash_here(void);
 #define icalerror_warn(message) {fprintf(stderr,"%s:%d: %s\n",__FILE__,__LINE__,message);}
 #endif /* __GNU_C__ */
 
-#endif /*ICAL_ERRORS_ARE_FATAL*/
+
 
 typedef enum icalerrorenum {
     
@@ -111,6 +101,7 @@ typedef enum icalerrorenum {
     ICAL_NO_ERROR,
     ICAL_MULTIPLEINCLUSION_ERROR,
     ICAL_TIMEDOUT_ERROR,
+    ICAL_UNIMPLEMENTED_ERROR,
     ICAL_UNKNOWN_ERROR /* Used for problems in input to icalerror_strerror()*/
 
 } icalerrorenum;

@@ -1,3 +1,9 @@
+2001-02-06  Eric Busboom  <eric@softwarestudio.org>
+
+	* icaltime.c Changed icaltime_from_day_of_year to run mktime in
+ 	the UTC timezone. This fixed a bug where it would return one day
+ 	eariler for some timezones.
+
 2001-01-26  Eric Busboom  <eric@softwarestudio.org>
 
 	* icalproperty.c.in Improved icalproperty_as_ical_string() to

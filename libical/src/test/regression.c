@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.8 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: regression.c,v 1.9 2001-02-06 19:43:23 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2301,6 +2301,10 @@ void test_recur_parser()
 
 }
 
+char* ical_strstr(const char *haystack, const char *needle){
+    return strstr(haystack,needle);
+}
+
 void test_doy()
 {
     struct icaltimetype tt1, tt2;
@@ -2310,17 +2314,22 @@ void test_doy()
     doy = icaltime_day_of_year(tt1);
     tt2 = icaltime_from_day_of_year(doy,1995);
     printf("%d %s %s\n",doy, icaltime_as_ctime(tt1),icaltime_as_ctime(tt2));
+    assert(tt2.day == 1 && tt2.month == 3);
+    assert(doy == 60);
 
     tt1 = icaltime_from_string("19960301");
     doy = icaltime_day_of_year(tt1);
     tt2 = icaltime_from_day_of_year(doy,1996);
     printf("%d %s %s\n",doy, icaltime_as_ctime(tt1),icaltime_as_ctime(tt2));
+    assert(tt2.day == 1 && tt2.month == 3);
+    assert(doy == 61);
 
     tt1 = icaltime_from_string("19970301");
     doy = icaltime_day_of_year(tt1);
     tt2 = icaltime_from_day_of_year(doy,1997);
     printf("%d %s %s\n",doy, icaltime_as_ctime(tt1),icaltime_as_ctime(tt2));
-
+    assert(tt2.day == 1 && tt2.month == 3);
+    assert(doy == 60);
 
 }
 
@@ -2842,7 +2851,6 @@ void test_trigger()
 {
 
     struct icaltriggertype tr;
-    struct icaldatetimeperiodtype dtp;
     icalcomponent *c;
     icalproperty *p;
     char* str;
@@ -2976,7 +2984,6 @@ void test_rdate()
     struct icaldatetimeperiodtype dtp;
     icalproperty *p;
     char* str;
-    struct icaltimetype time = icaltime_from_string("19970101T120000");
     struct icalperiodtype period;
 
     period.start = icaltime_from_string("19970101T120000");
@@ -3071,6 +3078,35 @@ void test_rdate()
 
 }
 
+
+void test_langbind()
+{
+    icalcomponent *c, *inner; 
+    icalproperty *p;
+
+    static const char test_str[] =
+"BEGIN:VEVENT\n"
+"ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com\n"
+"COMMENT: Comment\n"
+"DTSTART:19970101T120000\n"
+"DTSTART:19970101T120000Z\n"
+"DTSTART:19970101\n"
+"END:VEVENT\n";
+  
+
+    c = icalparser_parse_string(test_str);
+    inner = icalcomponent_get_inner(c);
+
+
+    for(
+	p = icalcomponent_get_first_property(inner,ICAL_ANY_PROPERTY);
+	p != 0;
+	p = icalcomponent_get_next_property(inner,ICAL_ANY_PROPERTY)
+	) { 
+
+	printf("%s\n",icallangbind_perl_eval_string(p));
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -3238,6 +3274,14 @@ int main(int argc, char *argv[])
 	printf("\n------------Test RDATE---------------\n");
 	test_rdate();
     }
+
+
+    if(tmisc == 1 || tmisc  == 6){
+
+	printf("\n------------Test language binding---------------\n");
+	test_langbind();
+    }
+
 
     if(tmisc == 1){
 

@@ -31,9 +31,16 @@
 #include <stdlib.h> /* for malloc */
 #include <stdio.h> /* for printf */
 #include <time.h> /* for time() */
+#include <signal.h> /* for signal */
+#include <unistd.h> /* for alarm */
 #include "icalmemory.h"
 #include "icaldirset.h"
 #include "icalfileset.h"
+
+static void sig_alrm(int i){
+    fprintf(stderr,"Could not get lock on file\n");
+    exit(1);
+}
 
 int main(int argc, char *argv[])
 {
@@ -46,8 +53,9 @@ int main(int argc, char *argv[])
     time_t tt;
     char* file; 
 
-    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
+
+    signal(SIGALRM,sig_alrm);
 
 
     if (argc <= 1){
@@ -59,8 +67,10 @@ int main(int argc, char *argv[])
 	exit(1);
     }
 
+    alarm(2); /* to get file lock */
     cin = icalfileset_new(file);
-
+    alarm(0);
+    
     if(cin == 0){
 	fprintf(stderr,"recur: can't open file %s\n",file);
 	exit(1);

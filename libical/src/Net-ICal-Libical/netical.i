@@ -37,25 +37,36 @@ typedef void icalproperty;
 
 icalcomponent* icalparser_parse_string(char* str);
 
+
+icalcomponent* icalcomponent_new(icalcomponent_kind kind);
+icalcomponent* icalcomponent_new_clone(icalcomponent* component);
+icalcomponent* icalcomponent_new_from_string(char* str);
+
 char* icalcomponent_as_ical_string(icalcomponent* component);
 void icalcomponent_free(icalcomponent* component);
 int icalcomponent_count_errors(icalcomponent* component);
 void icalcomponent_strip_errors(icalcomponent* component);
 void icalcomponent_convert_errors(icalcomponent* component);
 
+icalproperty* icalcomponent_get_current_property(icalcomponent* component);
+
+icalproperty* icalcomponent_get_first_property(icalcomponent* component,
+					      icalproperty_kind kind);
+icalproperty* icalcomponent_get_next_property(icalcomponent* component,
+					      icalproperty_kind kind);
+
+icalcomponent* icalcomponent_get_current_component (icalcomponent* component);
+
+icalcomponent* icalcomponent_get_first_component(icalcomponent* component,
+					      icalcomponent_kind kind);
+icalcomponent* icalcomponent_get_next_component(icalcomponent* component,
+					      icalcomponent_kind kind);
+
+icalcomponent* icalcomponent_get_parent(icalcomponent* component);
+
+icalcomponent_kind icalcomponent_isa(icalcomponent* component);
+
 int icalrestriction_check(icalcomponent* comp);
-
-
-int* icallangbind_new_array(int size);
-void icallangbind_free_array(int* array);
-int icallangbind_access_array(int* array, int index);
-int icalrecur_expand_recurrence(char* rule, int start, 
-				int count, int* array);
-
-icalproperty* icallangbind_get_property(icalcomponent *c, int n, const char* prop);
-const char* icallangbind_get_property_val(icalproperty* p);
-const char* icallangbind_get_parameter(icalproperty *p, const char* parameter);
-icalcomponent* icallangbind_get_component(icalcomponent *c, const char* comp);
 
 
 typedef enum icalerrorenum {
@@ -87,4 +98,31 @@ void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
 icalerrorstate icalerror_get_error_state( icalerrorenum error);
 
 
+const char* icalenum_property_kind_to_string(icalproperty_kind kind);
+icalproperty_kind icalenum_string_to_property_kind(const char* string);
+
+const char* icalenum_value_kind_to_string(icalvalue_kind kind);
+icalvalue_kind icalenum_value_kind_by_prop(icalproperty_kind kind);
+
+const char* icalenum_parameter_kind_to_string(icalparameter_kind kind);
+icalparameter_kind icalenum_string_to_parameter_kind(const char* string);
+
+const char* icalenum_component_kind_to_string(icalcomponent_kind kind);
+icalcomponent_kind icalenum_string_to_component_kind(const char* string);
+
+icalvalue_kind icalenum_property_kind_to_value_kind(icalproperty_kind kind);
+
+
+
+
+int* icallangbind_new_array(int size);
+void icallangbind_free_array(int* array);
+int icallangbind_access_array(int* array, int index);
+int icalrecur_expand_recurrence(char* rule, int start, 
+				int count, int* array);
+
+icalproperty* icallangbind_get_property(icalcomponent *c, int n, const char* prop);
+const char* icallangbind_get_property_val(icalproperty* p);
+const char* icallangbind_get_parameter(icalproperty *p, const char* parameter);
+icalcomponent* icallangbind_get_component(icalcomponent *c, const char* comp);
 

@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.3 2001-01-24 17:14:01 ebusboom Exp $
+  $Id: icalerror.c,v 1.4 2001-02-06 19:43:22 ebusboom Exp $
   $Locker:  $
     
 
@@ -76,6 +76,7 @@ struct icalerror_state error_state_map[] =
     { ICAL_USAGE_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_MULTIPLEINCLUSION_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_TIMEDOUT_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_UNIMPLEMENTED_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_UNKNOWN_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_NO_ERROR,ICAL_ERROR_DEFAULT}
 
@@ -144,6 +145,7 @@ static struct icalerror_string_map string_map[] =
     {ICAL_FILE_ERROR,"An operation on a file failed. Check errno for more detail."},
     {ICAL_ALLOCATION_ERROR,"Failed to allocate memory"},
     {ICAL_USAGE_ERROR,"The caller failed to properly sequence called to an object's interface"},
+    {ICAL_UNIMPLEMENTED_ERROR,"This feature has not been implemented"},
     {ICAL_NO_ERROR,"No error"},
     {ICAL_UNKNOWN_ERROR,"Unknown error type -- icalerror_strerror() was probably given bad input"}
 };

@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.6 2001-01-28 16:29:32 ebusboom Exp $
+ $Id: icaltime.h,v 1.7 2001-02-06 19:43:23 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -124,7 +124,7 @@ short icaltime_start_doy_of_week(struct icaltimetype t);
 char* icaltime_as_ctime(struct icaltimetype);
 
 /* Return the week number for the week the given time is within */
-short icaltime_week_number(short day_of_month, short month, short year);
+short icaltime_week_number(struct icaltimetype t);
 
 /* Create a new time from a weeknumber and a year. */
 struct icaltimetype icaltime_from_week_number(short week_number, short year);

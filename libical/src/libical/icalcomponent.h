@@ -75,11 +75,6 @@ icalproperty* icalcomponent_get_first_property(icalcomponent* component,
 icalproperty* icalcomponent_get_next_property(icalcomponent* component,
 					      icalproperty_kind kind);
 
-/* Return a null-terminated array of icalproperties*/
-
-icalproperty** icalcomponent_get_properties(icalcomponent* component,
-					      icalproperty_kind kind);
-
 
 /* 
  * Working with components
@@ -104,7 +99,7 @@ int icalcomponent_count_components(icalcomponent* component,
 /* Iteration Routines. There are two forms of iterators, internal and
 external. The internal ones came first, and are almost completely
 sufficient, but they fail badly when you want to construct a loop that
-removes components from the container.
+removes components from the container.*/
 
 
 /* Iterate through components */
@@ -211,11 +206,10 @@ void icalcomponent_add_attendee(icalcomponent *comp,
 
 int icalcomponent_remove_attendee(icalcomponent *comp, char* cuid);
 
-/* Get the Nth attendee. Out of range indidices return an attendee
+/* Get the Nth attendee. Out of range indices return an attendee
    with cuid == 0 */
 struct icalattendeetype icalcomponent_get_attendee(icalcomponent *comp,
 						   int index);
-
 
 
 /*************** Type Specific routines ***************/
