@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.8 2002-05-28 14:08:00 acampi Exp $
+  $Id: icaltypes.c,v 1.9 2002-06-03 17:15:32 acampi Exp $
   $Locker:  $
     
 
@@ -68,7 +68,7 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
 
     if(str == 0) goto error;
 
-    /* Surpress errors so a failure in icaltime_from_string() does not cause an abort */
+    /* Suppress errors so a failure in icaltime_from_string() does not cause an abort */
     es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_NONFATAL);
     e = icalerrno;
