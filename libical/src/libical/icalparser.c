@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.31 2002-06-28 08:54:42 acampi Exp $
+  $Id: icalparser.c,v 1.32 2002-07-18 13:37:13 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -51,17 +51,26 @@
 #include <string.h> /* For strncpy & size_t */
 #include <stdio.h> /* For FILE and fgets and sprintf */
 #include <stdlib.h> /* for free */
+
+/*
+ * This is a temporary HACK to support FreeBSD. We should really
+ * autodetect whether the target OS has wctype.h and all the functionality
+ * we need. When this happens this can go away.
+ */
+#ifndef __FreeBSD__
+#define HAVE_WCTYPE_H	1
+#endif
+
+#ifdef HAVE_WCTYPE_H
 #include <wctype.h>
+#else
+#define iswspace        isspace
+#endif
 
 #ifdef WIN32
 #define snprintf      _snprintf
 #define strcasecmp    stricmp
 #endif
-
-#ifdef __FreeBSD__
-#define iswspace        isspace
-#endif
-
 
 char* icalparser_get_next_char(char c, char *str, int qm);
 char* icalparser_get_next_parameter(char* line,char** end);
