@@ -1,3 +1,8 @@
+2001-02-27  Patrick Lewis  <plewis@inetarena.com>
+
+	* Backed out changes to Component removing comp_p; 
+	  Component.comp_p should be restored
+
 2001-02-26  Eric Busboom  <eric@softwarestudio.org>
 
 	* Period Added test routine,test_period()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 
-# $Id: Libical.py,v 1.8 2001-02-27 03:39:41 ebusboom Exp $
+# $Id: Libical.py,v 1.9 2001-02-27 14:52:13 plewis Exp $
 
 from LibicalWrap import *
 from types import *
@@ -810,22 +810,16 @@ class Collection:
         
 class Component:
 
-    def __init__(self,str=None, parent=None):
-        self._parent = parent
-        self._children = []
-        self._properties=[]
-        if str != None:
-            self._parseComponentString(str)
+    def __init__(self,str=None):
+        self.comp_p = None
+        self.comp_p = icalparser_parse_string(str)
+       
 
-#        self.comp_p = None
+    def __del__(self):
+        if self.comp_p != None and icalcomponent_get_parent(self.comp_p) != None:
+            icalcomponent_free(self.comp_p)
 
-#        self.comp_p = icalparser_parse_string(str)
-
-##     def __del__(self):
-##         if self.comp_p != None and icalcomponent_get_parent(self.comp_p) != None:
-##             icalcomponent_free(self.comp_p)
-
-##             self.comp_p = None
+            self.comp_p = None
 
     def _parseComponentString(self, comp_str):
         comp = icalparser_parse_string(comp_str)
@@ -833,10 +827,10 @@ class Component:
         print icalcomponent_as_ical_string(comp)
 
         # Parse properties for this component
-        #anyKind = icalenum_string_to_property_kind('ICAL_ANY_PROPERTY')
+        anyProperty = icalenum_string_to_property_kind('ICAL_ANY_PROPERTY')
         #print comp
         #print icalenum_property_kind_to_string(anyKind)
-        p = icallangbind_get_first_property(comp, 'ANY')
+        p = icalcomponent_get_first_property(comp, anyProperty)
         print p
         while p!='NULL':
             p_dict = icallangbind_property_eval_string(p,":")
@@ -845,7 +839,7 @@ class Component:
             p_dict = eval(p_dict)
             print p_dict
             self._addPropertyFromDict(p_dict)
-            p = icallangbind_get_next_property(comp, 'ANY')
+            p = icalcomponent_get_next_property(comp, anyProperty)
 
         # Get remaining components
         c = icallangbind_get_first_component(comp, 'ANY')
@@ -879,15 +873,17 @@ class Component:
         property of the type 'type.'
         """
 
-        if type=='ANY':
-            return self._properties[:]
-        else:
-            p_list = []
-            for p in self._properties:
-                if p.name()==type:
-                    p_list.append(p)
-            return p_list
-
+        p = icallangbind_get_first_property(self.comp_p,type)          
+        while p !='NULL':
+            #print "'%s'" % str(p)
+            d_string = icallangbind_property_eval_string(p,":")
+            #print "'%s'" % str(d_string)
+            d = eval(d_string)
+            #print d['value_type']
+            
+            p = icallangbind_get_next_property(self.comp_p,type)
+            ## TODO - Return list of properties.
+ 
     def addPropertyFromString(self, propertyStr):
         """
         Add a Property instance to the component. 
@@ -908,10 +904,7 @@ class Component:
         self._properties.append(property)
             
     def removeProperty(self,property):
-        try:
-            self._properties.remove(property)
-        except ValueError:
-            raise ValueError, "not a property in this component."
+        pass
 
     def removeProperties(self, type):
         """Remove all properties with the name equal to the argument name.
@@ -924,7 +917,7 @@ class Component:
 
     def addComponent(self, componentObj):
         "Adds a child component."
-        self._children.append(componentObj)
+        pass
         
     def components(self,type='ANY'):        
         props = []
@@ -963,18 +956,13 @@ def NewComponent(comp):
 class Event(Component):
     "The iCalendar Event object."
 
-##     def __init__(self, str=None, parent=None):
-        
-##         ## This whole block may be obsolete if the tight binding in
-##         ## Component is removed
-        
-##         if str==None:
-##             event_kind = icalenum_string_to_component_kind("VEVENT")
-##             self.comp_p = icalcomponent_new(event_kind)
-##             # TODO - implement generic_free() in LibicalWrap
-##             # generic_free(event_kind)
-##         else:
-##             self.comp_p = icalparser_parse_string(str)
+    def __init__(self, str=None, parent=None):
+                
+        if str==None:
+            event_kind = icalenum_string_to_component_kind("VEVENT")
+            self.comp_p = icalcomponent_new(event_kind)
+        else:
+            self.comp_p = icalparser_parse_string(str)
         
     def componentType(self):
         "Returns the type of component for the object."
