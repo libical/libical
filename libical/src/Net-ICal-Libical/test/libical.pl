@@ -75,4 +75,41 @@ foreach $i (@occur){
 }
 
 print "-- Interpret iCal data --\n";
-Net::ICal::Libical::parse_string($comp_str);
+
+
+my $comp_str=<<EOM;
+BEGIN:VEVENT
+ORGANIZER:mailto:a\@example.com
+DTSTAMP:19970612T190000Z
+DTSTART:19970701T210000Z
+DTEND:19970701T230000Z
+SEQUENCE:1
+UID:0981234-1234234-23\@example.com
+SUMMARY:ST. PAUL SAINTS -VS- DULUTH-SUPERIOR DUKES
+END:VEVENT
+
+EOM
+
+
+my $c = Net::ICal::Libical::icalparser_parse_string($comp_str); 
+
+my $out;
+
+die "Failed to parse component" if !$c;
+
+my $p = Net::ICal::Libical::icallangbind_get_first_property($c,'ANY');
+do {
+
+    my $d = Net::ICal::Libical::icallangbind_property_eval_string($p,"=>");
+
+    my $h = eval($d);
+    print $p,"\n";
+    print join(',',%$h),"\n";
+
+
+} while ($p = Net::ICal::Libical::icallangbind_get_next_property($c,'ANY'));
+
+
+Net::ICal::Libical::icalcomponent_free($c);
+
+

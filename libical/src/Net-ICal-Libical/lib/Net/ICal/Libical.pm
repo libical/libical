@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.pm,v 1.3 2001-02-28 07:18:41 ebusboom Exp $
+#  $Id: Libical.pm,v 1.4 2001-02-28 07:36:43 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -35,31 +35,6 @@ $VERSION = "0.01";
 
 package Net::ICal::Libical;
 
-sub parse_string {
-  my $comp_str = shift;
-
-  my $c = Net::ICal::Libical::icalparser_parse_string($comp_str); 
-  my $out;
-
-  die "Failed to parse component" if !$c;
-
-  my $r = Net::ICal::Libical::icalrestriction_check($c);
-
-  my @props = (METHOD,ORGANIZER,DTSTART,SUMMARY);
-
-  foreach $pn (@props){
-
-    my $p = Net::ICal::Libical::icallangbind_get_property($c,0,$pn);
-
-    my $v = Net::ICal::Libical::icallangbind_get_property_val($p);
-
-    print "$pn $v\n";
-  }
-
-  Net::ICal::Libical::icalcomponent_free($c);
-
-
-}
 
 
 sub validate_component {
