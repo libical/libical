@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.29 2002-06-28 10:33:50 acampi Exp $
+#  $Id: Makefile.am,v 1.30 2002-07-10 10:08:05 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -250,7 +250,7 @@ vcomponent.lo: ical.h
 # housekeeping
 CONFIG_CLEAN_FILES = y.output
 
-CLEANFILES += $(BUILT_SOURCES) $(BUILT_COMBINEDHEADERS)
+CLEANFILES = $(BUILT_SOURCES) $(BUILT_COMBINEDHEADERS)
 
 dist-hook:
 	cd $(distdir); rm -f $(BUILT_SOURCES)
