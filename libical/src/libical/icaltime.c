@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.50 2002-10-31 15:27:36 acampi Exp $
+  $Id: icaltime.c,v 1.51 2002-10-31 15:33:50 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -416,9 +416,9 @@ icaltime_is_leap_year (const int year)
         return ( (year % 4==0) && (year % 100 !=0 )) || (year % 400 == 0);
 }
 
-static int _days_in_month[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
+static short _days_in_month[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
 
-int icaltime_days_in_month(const int month, const int year)
+short icaltime_days_in_month(const short month, const short year)
 {
 
     int days = _days_in_month[month];
@@ -430,11 +430,11 @@ int icaltime_days_in_month(const int month, const int year)
 	days += icaltime_is_leap_year(year);
     }
 
-    return days;
+    return (short)days;
 }
 
 /* 1-> Sunday, 7->Saturday */
-int icaltime_day_of_week(const struct icaltimetype t){
+short icaltime_day_of_week(const struct icaltimetype t){
 	UTinstant jt;
 
 	memset(&jt,0,sizeof(UTinstant));
@@ -448,14 +448,14 @@ int icaltime_day_of_week(const struct icaltimetype t){
 
 	juldat(&jt);
 
-	return jt.weekday + 1;
+	return (short)(jt.weekday + 1);
 }
 
 /** Day of the year that the first day of the week (Sunday) is on.
  * 
  *  @todo Doesn't take into account different week start days. 
  */
-int icaltime_start_doy_of_week(const struct icaltimetype t){
+short icaltime_start_doy_of_week(const struct icaltimetype t){
 	UTinstant jt;
 
 	memset(&jt,0,sizeof(UTinstant));
@@ -470,14 +470,14 @@ int icaltime_start_doy_of_week(const struct icaltimetype t){
 	juldat(&jt);
 	caldat(&jt);
 
-	return jt.day_of_year - jt.weekday;
+	return (short)(jt.day_of_year - jt.weekday);
 }
 
 /** 
  * @todo Doesn't take into account the start day of the
  * week. strftime assumes that weeks start on Monday. 
  */
-int icaltime_week_number(const struct icaltimetype ictt)
+short icaltime_week_number(const struct icaltimetype ictt)
 {
 	UTinstant jt;
 
@@ -493,11 +493,11 @@ int icaltime_week_number(const struct icaltimetype ictt)
 	juldat(&jt);
 	caldat(&jt);
 
-	return (jt.day_of_year - jt.weekday) / 7;
+	return (short)((jt.day_of_year - jt.weekday) / 7);
 }
 
 /* The first array is for non-leap years, the second for leap years*/
-static const int days_in_year[2][13] = 
+static const short days_in_year[2][13] = 
 { /* jan feb mar apr may  jun  jul  aug  sep  oct  nov  dec */
   {  0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 }, 
   {  0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
@@ -506,10 +506,10 @@ static const int days_in_year[2][13] =
 /**
  *	Returns the day of the year, counting from 1 (Jan 1st).
  */
-int icaltime_day_of_year(const struct icaltimetype t){
+short icaltime_day_of_year(const struct icaltimetype t){
   int is_leap = icaltime_is_leap_year (t.year);
 
-  return days_in_year[is_leap][t.month - 1] + t.day;
+  return (short)(days_in_year[is_leap][t.month - 1] + t.day);
 }
 
 /**	@brief Contructor.
@@ -517,7 +517,7 @@ int icaltime_day_of_year(const struct icaltimetype t){
  *	Create a new time, given a day of year and a year.
  */
 /* Jan 1 is day #1, not 0 */
-struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
+struct icaltimetype icaltime_from_day_of_year(const short _doy, const short _year)
 {
     struct icaltimetype tt={0};
     int is_leap;
