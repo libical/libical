@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.15 2002-06-04 14:26:03 acampi Exp $
+    $Id: icaldirset.c,v 1.16 2002-06-10 13:40:07 acampi Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -502,7 +502,7 @@ icalerrorenum icaldirset_add_component(icaldirset* store, icalcomponent* comp)
 {
     struct icaldirset_impl *impl;
     char clustername[ICAL_PATH_MAX];
-    icalproperty *dt;
+    icalproperty *dt = 0;
     icalvalue *v;
     struct icaltimetype tm;
     icalerrorenum error = ICAL_NO_ERROR;
