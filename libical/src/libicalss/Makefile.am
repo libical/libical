@@ -1,3 +1,28 @@
+#======================================================================
+#  FILE: Makefile.am
+#  CREATOR: eric 
+#  
+#  $Id: Makefile.am,v 1.20 2002-10-30 20:10:35 acampi Exp $
+#
+#
+# (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of either: 
+#
+#    The LGPL as published by the Free Software Foundation, version
+#    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+#
+#  Or:
+#
+#    The Mozilla Public License Version 1.0. You may obtain a copy of
+#    the License at http://www.mozilla.org/MPL/
+#
+#  
+#
+#======================================================================
+
+
 AM_YFLAGS =-d -v -p ss
 AM_LFLAGS = -Pss 
 LEX_OUTPUT_ROOT = lex.ss
