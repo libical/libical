@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalparameter.h.in,v 1.2 2001-02-27 03:39:41 ebusboom Exp $
+  $Id: icalparameter.h,v 1.1 2001-03-17 16:47:02 ebusboom Exp $
   $Locker:  $
 
   
@@ -29,13 +29,19 @@
 #ifndef ICALPARAM_H
 #define ICALPARAM_H
 
-#include "icalenums.h"
+#include "icalderivedparameter.h"
 
-typedef void icalparameter;
+/* Declared in icalderivedparameter.h */
+/*typedef void icalparameter;*/
 
 icalparameter* icalparameter_new(icalparameter_kind kind);
 icalparameter* icalparameter_new_clone(icalparameter* p);
-icalparameter* icalparameter_new_from_string(icalparameter_kind kind, const char* value);
+
+/* Create from string of form "PARAMNAME=VALUE" */
+icalparameter* icalparameter_new_from_string(const char* value);
+
+/* Create from just the value, the part after the "=" */
+icalparameter* icalparameter_new_from_value_string(icalparameter_kind kind, const char* value);
 
 void icalparameter_free(icalparameter* parameter);
 
@@ -53,5 +59,11 @@ const char* icalparameter_get_xname(icalparameter* param);
 void icalparameter_set_xvalue (icalparameter* param, const char* v);
 const char* icalparameter_get_xvalue(icalparameter* param);
 
+/* Convert enumerations */
 
-/* Everything below this line is machine generated. Do not edit. */
+const char* icalparameter_kind_to_string(icalparameter_kind kind);
+icalparameter_kind icalparameter_string_to_kind(const char* string);
+
+
+
+#endif 

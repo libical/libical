@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.8 2001-02-22 05:03:56 ebusboom Exp $
+  $Id: icalparser.c,v 1.9 2001-03-17 16:47:02 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -728,7 +728,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
        the component */
 
     
-    prop_kind = icalenum_string_to_property_kind(str);
+    prop_kind = icalproperty_string_to_kind(str);
 
     prop = icalproperty_new(prop_kind);
 
@@ -739,9 +739,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 	/* Set the value kind for the default for this type of
 	   property. This may be re-set by a VALUE parameter */
-	value_kind = 
-	    icalenum_property_kind_to_value_kind(
-		icalproperty_isa(prop));
+	value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
 
     } else {
 	icalcomponent* tail = pvl_data(pvl_tail(impl->components));
@@ -790,7 +788,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		break;
 	    }
 
-	    kind = icalenum_string_to_parameter_kind(name);
+	    kind = icalparameter_string_to_kind(name);
 
 	    if(kind == ICAL_X_PARAMETER){
 		param = icalparameter_new(ICAL_X_PARAMETER);
@@ -802,7 +800,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 
 	    } else if (kind != ICAL_NO_PARAMETER){
-		param = icalparameter_new_from_string(kind,pvalue);
+		param = icalparameter_new_from_value_string(kind,pvalue);
 	    } else {
 		/* Error. Failed to parse the parameter*/
 		/* 'tail' defined above */
@@ -827,7 +825,9 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    if (icalparameter_isa(param)==ICAL_VALUE_PARAMETER){
 
 		value_kind = (icalvalue_kind)
-		    icalparameter_get_value(param);
+                    icalparameter_value_to_value_kind(
+                                icalparameter_get_value(param)
+                                );
 
 		if (value_kind == ICAL_NO_VALUE){
 
@@ -842,7 +842,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		    icalparameter_free(param);
 			
 		    value_kind = 
-			icalenum_property_kind_to_value_kind(
+			icalproperty_kind_to_value_kind(
 			    icalproperty_isa(prop));
 			
 		    icalparameter_free(param);
@@ -898,8 +898,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		icalcomponent* tail = pvl_data(pvl_tail(impl->components));
 
 		sprintf(temp,"Cant parse as %s value in %s property. Removing entire property",
-			icalenum_value_kind_to_string(value_kind),
-			icalenum_property_kind_to_string(prop_kind));
+			icalvalue_kind_to_string(value_kind),
+			icalproperty_kind_to_string(prop_kind));
 
 		insert_error(tail, str, temp,
 			     ICAL_XLICERRORTYPE_VALUEPARSEERROR);
@@ -926,7 +926,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		icalcomponent *tail = pvl_data(pvl_tail(impl->components));
 		
 		sprintf(temp,"No value for %s property. Removing entire property",
-			icalenum_property_kind_to_string(prop_kind));
+			icalproperty_kind_to_string(prop_kind));
 
 		insert_error(tail, str, temp,
 			     ICAL_XLICERRORTYPE_VALUEPARSEERROR);

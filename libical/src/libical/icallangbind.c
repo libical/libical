@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.9 2001-03-08 05:52:34 ebusboom Exp $
+  $Id: icallangbind.c,v 1.10 2001-03-17 16:47:02 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -18,7 +18,10 @@
 
   ======================================================================*/
 
-#include "ical.h"
+#include "icalcomponent.h"
+#include "icalproperty.h"
+#include "icalerror.h"
+#include "icalmemory.h"
 #include <malloc.h>
 #include <string.h>
 

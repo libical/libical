@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.14 2001-02-22 19:22:55 ebusboom Exp $
+#  $Id: Makefile.am,v 1.15 2001-03-17 16:47:02 ebusboom Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -54,6 +54,8 @@ libical_la_SOURCES =		\
 	icalmime.h		\
 	icalparameter.c		\
 	icalparameter.h		\
+	icalderivedparameter.c	\
+	icalderivedparameter.h	\
 	icalparser.c		\
 	icalparser.h		\
 	icalderivedproperty.c	\
@@ -74,6 +76,8 @@ libical_la_SOURCES =		\
 	icaltypes.h		\
 	icalvalue.c		\
 	icalvalue.h		\
+	icalderivedvalue.c	\
+	icalderivedvalue.h	\
 	icalyacc.h		\
 	icalyacc.y		\
 	pvl.c			\
@@ -98,10 +102,13 @@ COMBINEDHEADERS =					\
 	$(top_srcdir)/src/libical/icalenums.h		\
 	$(top_srcdir)/src/libical/icaltypes.h		\
 	$(top_srcdir)/src/libical/icalrecur.h		\
+	icalderivedvalue.h				\
+	icalderivedparameter.h				\
 	icalvalue.h					\
 	icalparameter.h					\
 	icalderivedproperty.h				\
 	icalproperty.h					\
+	$(top_srcdir)/src/libical/icalattendee.h	\
 	$(top_srcdir)/src/libical/pvl.h			\
 	$(top_srcdir)/src/libical/icalcomponent.h	\
 	$(top_srcdir)/src/libical/icalparser.h		\
@@ -114,15 +121,15 @@ COMBINEDHEADERS =					\
 
 BUILT_SOURCES =			\
 	ical.h			\
-	icalparameter.c		\
-	icalparameter.h		\
+	icalderivedparameter.c	\
+	icalderivedparameter.h	\
 	icalderivedproperty.c	\
 	icalderivedproperty.h	\
 	icalrestriction.c	\
-	icalvalue.c		\
-	icalvalue.h
+	icalderivedvalue.c	\
+	icalderivedvalue.h
 
-ical.h: $(BUILT_SOURCES)
+ical.h: $(COMBINEDHEADERS)
 	cat $(COMBINEDHEADERS)				\
 	| egrep -v "#include.*\"ical"			\
 	| egrep -v "#include.*\"pvl\.h\"" > ical.h
@@ -134,15 +141,15 @@ icallexer.c : icalyacc.h
 
 PARAMETERDEPS =	\
 	$(ICALSCRIPTS)/mkderivedparameters.pl \
-	$(DESIGNDATA)/param-c-types.txt	\
-	icalparameter.c.in \
-	icalparameter.h.in
+	$(DESIGNDATA)/parameters.csv	\
+	icalderivedparameter.c.in \
+	icalderivedparameter.h.in
 
-icalparameter.h: $(PARAMETERDEPS) 
-	$(PERL) $(ICALSCRIPTS)/mkderivedparameters.pl -i $(srcdir)/icalparameter.h.in -h $(DESIGNDATA)/param-c-types.txt > icalparameter.h 
+icalderivedparameter.h: $(PARAMETERDEPS) 
+	$(PERL) -I $(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedparameters.pl -i $(srcdir)/icalderivedparameter.h.in -h $(DESIGNDATA)/parameters.csv > icalderivedparameter.h 
 
-icalparameter.c: $(PARAMETERDEPS) icalparameter.h
-	$(PERL) $(ICALSCRIPTS)/mkderivedparameters.pl -i $(srcdir)/icalparameter.c.in -c $(DESIGNDATA)/param-c-types.txt > icalparameter.c
+icalderivedparameter.c: $(PARAMETERDEPS) icalparameter.h
+	$(PERL) -I $(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedparameters.pl -i $(srcdir)/icalderivedparameter.c.in -c $(DESIGNDATA)/parameters.csv > icalderivedparameter.c
 
 
 # properties
@@ -181,16 +188,16 @@ icalrestriction.c: $(RESTRICTIONDEPS)
 VALUEDEPS =					\
 	$(ICALSCRIPTS)/mkderivedvalues.pl  	\
 	$(DESIGNDATA)/value-types.csv		\
-	icalvalue.c.in				\
-	icalvalue.h.in
+	icalderivedvalue.c.in				\
+	icalderivedvalue.h.in
 
-icalvalue.h: $(VALUEDEPS)
+icalderivedvalue.h: $(VALUEDEPS)
 	$(PERL) -I$(ICALSCRIPTS)  $(ICALSCRIPTS)/mkderivedvalues.pl \
-	         -i $(srcdir)/icalvalue.h.in -h $(DESIGNDATA)/value-types.csv > icalvalue.h
+	         -i $(srcdir)/icalderivedvalue.h.in -h $(DESIGNDATA)/value-types.csv > icalderivedvalue.h
 
-icalvalue.c: $(VALUEDEPS) icalvalue.h
+icalderivedvalue.c: $(VALUEDEPS) icalderivedvalue.h
 	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedvalues.pl \
-		-i $(srcdir)/icalvalue.c.in -c $(DESIGNDATA)/value-types.csv > icalvalue.c
+		-i $(srcdir)/icalderivedvalue.c.in -c $(DESIGNDATA)/value-types.csv > icalderivedvalue.c
 
 
 
@@ -202,11 +209,11 @@ CLEANFILES += $(BUILT_SOURCES)
 EXTRA_DIST =			\
 	icalderivedparameter.c.in \
 	icalderivedparameter.h.in \
-	icalproperty.c.in	\
-	icalproperty.h.in	\
+	icalderivedproperty.c.in \
+	icalderivedproperty.h.in \
 	icalrestriction.c.in	\
-	icalvalue.c.in		\
-	icalvalue.h.in		\
+	icalderivedvalue.c.in	\
+	icalderivedvalue.h.in	\
 	icalversion.h.in	\
 	icallexer.c		\
 	icalyacc.c

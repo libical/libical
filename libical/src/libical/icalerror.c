@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.6 2001-03-08 05:52:34 ebusboom Exp $
+  $Id: icalerror.c,v 1.7 2001-03-17 16:47:02 ebusboom Exp $
   $Locker:  $
     
 
@@ -140,11 +140,10 @@ void icalerror_restore(const char* error, icalerrorstate es){
 
     icalerrorenum e = icalerror_error_from_string(error);
 
-    if (e == ICAL_NO_ERROR){
-        return ICAL_ERROR_UNKNOWN;
+    if (e != ICAL_NO_ERROR){
+        icalerror_set_error_state(e,es);
     }
 
-    icalerror_set_error_state(e,es);
 }
 
 

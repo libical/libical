@@ -4,7 +4,7 @@
   FILE: icalderivedproperty.c
   CREATOR: eric 15 Feb 2001
   
-  $Id: icalderivedproperty.c.in,v 1.1 2001-02-22 19:22:56 ebusboom Exp $
+  $Id: icalderivedproperty.c.in,v 1.2 2001-03-17 16:47:02 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -57,7 +57,6 @@ struct  icalproperty_map {
 
 static struct icalproperty_map property_map[];
 
-
 const char* icalproperty_kind_to_string(icalproperty_kind kind)
 {
     int i;
@@ -71,6 +70,7 @@ const char* icalproperty_kind_to_string(icalproperty_kind kind)
     return 0;
 
 }
+
 
 icalproperty_kind icalproperty_string_to_kind(const char* string)
 {
@@ -109,6 +109,74 @@ icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind)
     return ICAL_NO_VALUE;
 }
 
+
+struct icalproperty_enum_map {
+    icalproperty_kind prop;
+    int prop_enum;
+    const char* str;
+}; 
+
+static struct icalproperty_enum_map enum_map[];
+
+const char* icalproperty_method_to_string(icalproperty_method method)
+{
+    icalerror_check_arg_rz(method >= ICAL_METHOD_X,"method");
+    icalerror_check_arg_rz(method <= ICAL_METHOD_NONE,"method");
+
+    return enum_map[method-ICALPROPERTY_FIRST_ENUM].str;
+}
+
+icalproperty_method icalproperty_string_to_method(const char* str)
+{
+    int i;
+
+    icalerror_check_arg_rx(str!=0,"str",ICAL_METHOD_NONE)
+
+    while(*str == ' '){
+	str++;
+    }
+
+    for (i=ICAL_METHOD_X-ICALPROPERTY_FIRST_ENUM; 
+         i != ICAL_METHOD_NONE-ICALPROPERTY_FIRST_ENUM;
+         i++) {
+	if ( strcmp(enum_map[i].str, str) == 0) {
+	    return (icalproperty_method)enum_map[i].prop_enum;
+	}
+    }
+
+    return ICAL_METHOD_NONE;
+}
+
+
+const char* icalenum_status_to_string(icalproperty_status status)
+{
+    icalerror_check_arg_rz(status >= ICAL_STATUS_X,"status");
+    icalerror_check_arg_rz(status <= ICAL_STATUS_NONE,"status");
+
+    return enum_map[status-ICALPROPERTY_FIRST_ENUM].str;
+}
+
+icalproperty_status icalenum_string_to_status(const char* str)
+{
+    int i;
+
+    icalerror_check_arg_rx(str!=0,"str",ICAL_STATUS_NONE)
+
+    while(*str == ' '){
+	str++;
+    }
+
+    for (i=ICAL_STATUS_X-ICALPROPERTY_FIRST_ENUM; 
+         i != ICAL_STATUS_NONE-ICALPROPERTY_FIRST_ENUM;
+         i++) {
+	if ( strcmp(enum_map[i].str, str) == 0) {
+	    return (icalproperty_method)enum_map[i].prop_enum;
+	}
+    }
+
+    return ICAL_STATUS_NONE;
+
+}
 
 
 

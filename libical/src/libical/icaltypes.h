@@ -25,10 +25,11 @@
 #define ICALTYPES_H
 
 #include <time.h>
-#include "icalenums.h" /* for recurrence enums */
+#include "icalenums.h"
 #include "icaltime.h"
 #include "icalduration.h"
 #include "icalperiod.h"
+
 
 /* This type type should probably be an opaque type... */
 struct icalattachtype
@@ -106,38 +107,6 @@ struct icalreqstattype {
 struct icalreqstattype icalreqstattype_from_string(char* str);
 char* icalreqstattype_as_string(struct icalreqstattype);
 
-
-struct icalorganizertype {
-    const char* value;
-    const char* common_name;
-    const char* dir;
-    const char* sentby;
-    const char* language;
-
-};
-
-/* Create a copy of the given organizer. Libical will not own the
-   memory for the strings in the copy; the call must free them */
-struct icalorganizertype icalorganizertype_new_clone(struct icalorganizertype a);
-
-
-struct icalattendeetype {
-    const char* cuid; /* Cal user id, contents of the property value */
-    icalparameter_cutype cutype;
-    const char* member;
-    icalparameter_role role;
-    int rsvp;
-    const char* delto;
-    const char* delfrom;
-    const char* sentby;
-    const char* cn;
-    const char* dir;
-    const char* language;
-};
-
-/* Create a copy of the given attendee. Libical will not own the
-   memory for the strings in the copy; the call must free them */
-struct icalattendeetype icalattendeetype_new_clone(struct icalattendeetype a);
 
 
 struct icaltimezonephase {

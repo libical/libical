@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c.in,v 1.6 2001-02-27 03:39:41 ebusboom Exp $
+  $Id: icalparameter.c,v 1.1 2001-03-17 16:47:02 ebusboom Exp $
   $Locker:  $
     
 
@@ -36,38 +36,12 @@
 #include "icalproperty.h"
 #include "icalerror.h"
 #include "icalmemory.h"
+#include "icalparameterimpl.h"
 
 #include <stdlib.h> /* for malloc() */
 #include <errno.h>
 #include <string.h> /* for memset() */
 
-union icalparameter_impl_data {
-	int v_int;
-	int v_rsvp;
-	icalparameter_cutype v_cutype;
-	icalparameter_encoding v_encoding;
-	icalparameter_fbtype v_fbtype;
-	icalparameter_partstat v_partstat;
-	icalparameter_range v_range;
-	icalparameter_related v_related;
-	icalparameter_reltype v_reltype;
-	icalparameter_role v_role;
-	icalparameter_value v_value;
-	icalparameter_xlicerrortype v_xlicerrortype;
-	icalparameter_xliccomparetype v_xliccomparetype;
-} data;
-
-struct icalparameter_impl
-{
-	icalparameter_kind kind;
-	char id[5];
-	int size;
-	const char* string;
-	const char* x_name;
-	icalproperty* parent;
-
-	union icalparameter_impl_data data;
-};
 
 struct icalparameter_impl* icalparameter_new_impl(icalparameter_kind kind)
 {
@@ -99,6 +73,44 @@ icalparameter_new (icalparameter_kind kind)
     return (icalparameter*) v;
 
 }
+
+void
+icalparameter_free (icalparameter* parameter)
+{
+    struct icalparameter_impl * impl;
+
+    impl = (struct icalparameter_impl*)parameter;
+
+/*  HACK. This always triggers, even when parameter is non-zero
+    icalerror_check_arg_rv((parameter==0),"parameter");*/
+
+
+#ifdef ICAL_FREE_ON_LIST_IS_ERROR
+    icalerror_assert( (impl->parent ==0),"Tried to free a parameter that is still attached to a component. ");
+    
+#else
+    if(impl->parent !=0){
+	return;
+    }
+#endif
+
+    
+    if (impl->string != 0){
+	free ((void*)impl->string);
+    }
+    
+    if (impl->x_name != 0){
+	free ((void*)impl->x_name);
+    }
+    
+    memset(impl,0,sizeof(impl));
+
+    impl->parent = 0;
+    impl->id[0] = 'X';
+    free(impl);
+}
+
+
 
 icalparameter* 
 icalparameter_new_clone(icalparameter* param)
@@ -136,185 +148,53 @@ icalparameter_new_clone(icalparameter* param)
     return new;
 }
 
-#if 1
-/* The following code is meant to replace most of the case-switch
-   statements, but it is still a work in progress */
-struct param_string_map {
-	icalparameter_kind kind;
-	int val; /* Actually, union of several types of enums */
-	const char* str;
-} param_string_map[] =
+icalparameter* icalparameter_new_from_string(const char *str)
 {
-    {ICAL_CUTYPE_PARAMETER,ICAL_CUTYPE_INDIVIDUAL,"INDIVIDUAL"},
-    {ICAL_CUTYPE_PARAMETER,ICAL_CUTYPE_GROUP,"GROUP"},
-    {ICAL_CUTYPE_PARAMETER,ICAL_CUTYPE_RESOURCE,"RESOURCE"},
-    {ICAL_CUTYPE_PARAMETER,ICAL_CUTYPE_ROOM,"ROOM"},
-    {ICAL_CUTYPE_PARAMETER,ICAL_CUTYPE_UNKNOWN,"UNKNOWN"},
-    {ICAL_FBTYPE_PARAMETER,ICAL_FBTYPE_FREE,"FREE"},
-    {ICAL_FBTYPE_PARAMETER,ICAL_FBTYPE_BUSY,"BUSY"},
-    {ICAL_FBTYPE_PARAMETER,ICAL_FBTYPE_BUSYUNAVAILABLE,"BUSYUNAVAILABLE"},
-    {ICAL_FBTYPE_PARAMETER,ICAL_FBTYPE_BUSYTENTATIVE,"BUSYTENTATIVE"},
-    {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_NEEDSACTION,"NEEDS-ACTION"},
-    {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_ACCEPTED,"ACCEPTED"},
-    {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_DECLINED,"DECLINED"},
-    {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_TENTATIVE,"TENTATIVE"},
-    {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_DELEGATED,"DELEGATED"},
-    {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_COMPLETED,"COMPLETED"},
-    {ICAL_PARTSTAT_PARAMETER,ICAL_PARTSTAT_INPROCESS,"INPROCESS"},
-    {ICAL_RANGE_PARAMETER,ICAL_RANGE_THISANDPRIOR,"THISANDPRIOR"},
-    {ICAL_RANGE_PARAMETER,ICAL_RANGE_THISANDFUTURE,"THISANDFUTURE"},
-    {ICAL_RELATED_PARAMETER,ICAL_RELATED_START,"START"},
-    {ICAL_RELATED_PARAMETER,ICAL_RELATED_END,"END"},
-    {ICAL_RELTYPE_PARAMETER,ICAL_RELTYPE_PARENT,"PARENT"},
-    {ICAL_RELTYPE_PARAMETER,ICAL_RELTYPE_CHILD,"CHILD"},
-    {ICAL_RELTYPE_PARAMETER,ICAL_RELTYPE_SIBLING,"SIBLING"},
-    {ICAL_ROLE_PARAMETER,ICAL_ROLE_CHAIR,"CHAIR"},
-    {ICAL_ROLE_PARAMETER,ICAL_ROLE_REQPARTICIPANT,"REQ-PARTICIPANT"},
-    {ICAL_ROLE_PARAMETER,ICAL_ROLE_OPTPARTICIPANT,"OPT-PARTICIPANT"}, 
-    {ICAL_ROLE_PARAMETER,ICAL_ROLE_NONPARTICIPANT,"NON-PARTICIPANT"},
-    {ICAL_RSVP_PARAMETER,ICAL_RSVP_PARAMETER,"TRUE"},
-    {ICAL_RSVP_PARAMETER,ICAL_RSVP_PARAMETER,"FALSE"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_BINARY,"BINARY"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_BOOLEAN,"BOOLEAN"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_DATE,"DATE"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_DURATION,"DURATION"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_FLOAT,"FLOAT"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_INTEGER,"INTEGER"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_PERIOD,"PERIOD"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_RECUR,"RECUR"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_TEXT,"TEXT"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_TIME,"TIME"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_URI,"URI"},
-    {ICAL_VALUE_PARAMETER,ICAL_VALUE_XNAME,"ERROR"},
-    {ICAL_XLICERRORTYPE_PARAMETER,ICAL_XLICERRORTYPE_COMPONENTPARSEERROR,"COMPONENT_PARSE_ERROR"},
-    {ICAL_XLICERRORTYPE_PARAMETER,ICAL_XLICERRORTYPE_PROPERTYPARSEERROR,"PROPERTY_PARSE_ERROR"},
-    {ICAL_XLICERRORTYPE_PARAMETER,ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR,"PARAMETER_NAME_PARSE_ERROR"},
-    {ICAL_XLICERRORTYPE_PARAMETER,ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR,"PARAMETER_VALUE_PARSE_ERROR"},
-    {ICAL_XLICERRORTYPE_PARAMETER,ICAL_XLICERRORTYPE_VALUEPARSEERROR,"VALUE_PARSE_ERROR"},
-    {ICAL_XLICERRORTYPE_PARAMETER,ICAL_XLICERRORTYPE_INVALIDITIP,"INVALID_ITIP"},
-    {ICAL_XLICERRORTYPE_PARAMETER,ICAL_XLICERRORTYPE_UNKVCALPROP,"UNKNOWN_VCAL_PROP_ERROR"},
-    {ICAL_XLICERRORTYPE_PARAMETER,ICAL_XLICERRORTYPE_MIMEPARSEERROR,"MIME_PARSE_ERROR"},
-    {ICAL_XLICCOMPARETYPE_PARAMETER,ICAL_XLICCOMPARETYPE_EQUAL,"EQUAL"},
-    {ICAL_XLICCOMPARETYPE_PARAMETER,ICAL_XLICCOMPARETYPE_NOTEQUAL,"NOTEQUAL"},
-    {ICAL_XLICCOMPARETYPE_PARAMETER,ICAL_XLICCOMPARETYPE_LESS,"LESS"},
-    {ICAL_XLICCOMPARETYPE_PARAMETER,ICAL_XLICCOMPARETYPE_GREATER,"GREATER"},
-    {ICAL_XLICCOMPARETYPE_PARAMETER,ICAL_XLICCOMPARETYPE_LESSEQUAL,"LESSEQUAL"},
-    {ICAL_XLICCOMPARETYPE_PARAMETER,ICAL_XLICCOMPARETYPE_GREATEREQUAL,"GREATEREQUAL"},
-    {ICAL_XLICCOMPARETYPE_PARAMETER,ICAL_XLICCOMPARETYPE_REGEX,"REGEX"},
-    {ICAL_NO_PARAMETER,0,""},
+    char* eq;
+    char* cpy;
+    icalparameter_kind kind;
+    icalparameter *param;
 
-};
+    icalerror_check_arg_rz(str != 0,"str");
 
-void icalparameter_set_impl_data(icalparameter_kind kind, 
-				 union icalparameter_impl_data *data,
-				 int value)
-{
+    cpy = strdup(str);
 
-    switch (kind){
-	case ICAL_CUTYPE_PARAMETER:
-	    data->v_cutype=value; break;
-	case ICAL_FBTYPE_PARAMETER:
-	    data->v_fbtype=value; break;
-	case ICAL_PARTSTAT_PARAMETER:
-	    data->v_partstat=value; break;
-	case ICAL_RANGE_PARAMETER:
-	    data->v_range=value; break;
-	case ICAL_RELATED_PARAMETER:
-	    data->v_related=value; break;
-	case ICAL_RELTYPE_PARAMETER:
-	    data->v_reltype=value; break;
-	case ICAL_ROLE_PARAMETER:
-	    data->v_role=value; break;
-	case ICAL_RSVP_PARAMETER:
-	    data->v_rsvp=value; break;
-	case ICAL_VALUE_PARAMETER:
-	    data->v_value=value; break;
-	case ICAL_XLICERRORTYPE_PARAMETER:
-	   data->v_xlicerrortype=value; break;
-	case ICAL_XLICCOMPARETYPE_PARAMETER:
-	   data->v_xliccomparetype=value; break;
-	default: 
-	    break;
-    }
-}
-
-icalparameter* icalparameter_new_from_string_test(icalparameter_kind kind, const  char* val)
-{
-    int i =0;
-    icalparameter* param=0;
-
-    icalerror_check_arg_rz((val!=0),"val");
-
-    switch(kind){
-	
-	/* These are all string values parameters */
-	case ICAL_SENTBY_PARAMETER:
-	case ICAL_TZID_PARAMETER:
-	case ICAL_X_PARAMETER:
-	case ICAL_FMTTYPE_PARAMETER:
-	case ICAL_LANGUAGE_PARAMETER:
-	case ICAL_MEMBER_PARAMETER:
-	case ICAL_DELEGATEDFROM_PARAMETER:
-	case ICAL_DELEGATEDTO_PARAMETER:
-	case ICAL_DIR_PARAMETER:
-	case ICAL_ALTREP_PARAMETER:
-	case ICAL_CN_PARAMETER:
-	{
-	    struct icalparameter_impl *impl = icalparameter_new_impl(kind);
-	    if (impl == 0) {
-		return 0;
-	    }
-	    ((struct icalparameter_impl*)param)->string = 
-		icalmemory_strdup(val);
-	    
-	    return (icalparameter*) impl;
-	    
-	}
-
-	case ICAL_NO_PARAMETER:
-	case ICAL_ANY_PARAMETER:
-	{
-	}
-
-	default: {
-	    int found = 0;
-	    /* All other types are enumerated */
-	    for(i = 0; param_string_map[i].kind != ICAL_NO_PARAMETER; i++){
-
-		if(kind ==  param_string_map[i].kind &&
-		   strcmp(val,param_string_map[i].str) == 0){		    
-
-		    struct icalparameter_impl *impl = 
-			icalparameter_new_impl(kind);
-		    found = 1;
-
-		    icalparameter_set_impl_data(kind,&impl->data,
-				param_string_map[i].val);		
-
-		    return (icalparameter*)impl;
-		} 
-	    }
-	    
-	    /* Didn't find the standard enumerated type, so it must be
-               an X parameter */
-	    if (found ==0) {
-		icalparameter *param = icalparameter_new(kind);
-		
-		icalparameter_set_xvalue(param,val);
-		
-		return param;
-
-	    }	   
-	}	    
+    if (cpy == 0){
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return 0;
     }
 
-    return 0;
+    eq = strchr(cpy,'=');
+
+    if(eq == 0){
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
+    *eq = '\0';
+
+    eq++;
+
+    kind = icalparameter_string_to_kind(cpy);
+
+    if(kind == ICAL_NO_PARAMETER){
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
+    param = icalparameter_new_from_value_string(kind,eq);
+
+    if(kind == ICAL_X_PARAMETER){
+        icalparameter_set_xname(param,cpy);
+    }
+
+    free(cpy);
+
+    return param;
+    
 }
 
-#endif 
-
-
-icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char* val)
+icalparameter* icalparameter_new_from_value_string(icalparameter_kind kind,const  char* val)
 {
 
     icalparameter* param=0;
@@ -352,7 +232,7 @@ icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char
 		param = icalparameter_new_cutype(ICAL_CUTYPE_UNKNOWN);
 	    }
 	    else {
-		param = icalparameter_new_cutype(ICAL_CUTYPE_XNAME);
+		param = icalparameter_new_cutype(ICAL_CUTYPE_X);
 		icalparameter_set_xvalue(param,val);
 	    } 
 	    break;
@@ -385,7 +265,7 @@ icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char
 		param = icalparameter_new_encoding(ICAL_ENCODING_BASE64);
 	    }
 	    else {
-		param = icalparameter_new_encoding(ICAL_ENCODING_XNAME);
+		param = icalparameter_new_encoding(ICAL_ENCODING_X);
 		icalparameter_set_xvalue(param,val);
 	    } 
 	    break;
@@ -405,7 +285,7 @@ icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char
 		param = icalparameter_new_fbtype(ICAL_FBTYPE_BUSYTENTATIVE);
 	    }
 	    else {
-		param = icalparameter_new_fbtype(ICAL_FBTYPE_XNAME);
+		param = icalparameter_new_fbtype(ICAL_FBTYPE_X);
 		icalparameter_set_xvalue(param,val);
 	    } 
 	    break;
@@ -451,7 +331,7 @@ icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char
 		param = icalparameter_new_partstat(ICAL_PARTSTAT_INPROCESS);
 	    }
 	    else {
-		param = icalparameter_new_partstat(ICAL_PARTSTAT_XNAME);
+		param = icalparameter_new_partstat(ICAL_PARTSTAT_X);
 		icalparameter_set_xvalue(param,val);
 	    } 
 	    break;
@@ -490,7 +370,7 @@ icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char
 		param = icalparameter_new_reltype(ICAL_RELTYPE_SIBLING);
 	    }
 	    else {
-		param = icalparameter_new_reltype(ICAL_RELTYPE_XNAME);
+		param = icalparameter_new_reltype(ICAL_RELTYPE_X);
 		icalparameter_set_xvalue(param,val);
 	    } 
 	    break;
@@ -510,7 +390,7 @@ icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char
 		param = icalparameter_new_role(ICAL_ROLE_NONPARTICIPANT);
 	    }
 	    else {
-		param = icalparameter_new_role(ICAL_ROLE_XNAME);
+		param = icalparameter_new_role(ICAL_ROLE_X);
 		icalparameter_set_xvalue(param,val);
 	    } 
 	    break;
@@ -612,7 +492,7 @@ icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char
 		param = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_MIMEPARSEERROR);
 	    }
 	    else if(strcmp(val,"UNKNOWN_VCAL_PROP_ERROR") == 0){ 
-		param = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_UNKVCALPROP);
+		param = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_UNKNOWNVCALPROPERROR);
 	    }
 	    break;
 	}
@@ -649,8 +529,7 @@ icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char
 
 	case ICAL_X_PARAMETER:
 	{
-		param = icalparameter_new(ICAL_FBTYPE_PARAMETER);
-		icalparameter_set_xvalue(param,val);
+            param = icalparameter_new_x(val);
 	    break;
 	}
 
@@ -664,42 +543,6 @@ icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char
     }
     
     return param;
-}
-
-void
-icalparameter_free (icalparameter* parameter)
-{
-    struct icalparameter_impl * impl;
-
-    impl = (struct icalparameter_impl*)parameter;
-
-/*  HACK. This always triggers, even when parameter is non-zero
-    icalerror_check_arg_rv((parameter==0),"parameter");*/
-
-
-#ifdef ICAL_FREE_ON_LIST_IS_ERROR
-    icalerror_assert( (impl->parent ==0),"Tried to free a parameter that is still attached to a component. ");
-    
-#else
-    if(impl->parent !=0){
-	return;
-    }
-#endif
-
-    
-    if (impl->string != 0){
-	free ((void*)impl->string);
-    }
-    
-    if (impl->x_name != 0){
-	free ((void*)impl->x_name);
-    }
-    
-    memset(impl,0,sizeof(impl));
-
-    impl->parent = 0;
-    impl->id[0] = 'X';
-    free(impl);
 }
 
 
@@ -735,7 +578,7 @@ icalparameter_as_ical_string (icalparameter* parameter)
 
     } else {
 
-	kind_string = icalenum_parameter_kind_to_string(impl->kind);
+	kind_string = icalparameter_kind_to_string(impl->kind);
 	
 	if (impl->kind == ICAL_NO_PARAMETER || 
 	    impl->kind == ICAL_ANY_PARAMETER || 
@@ -772,7 +615,7 @@ icalparameter_as_ical_string (icalparameter* parameter)
 		case ICAL_CUTYPE_UNKNOWN:{
 		    strcpy(tend,"UNKNOWN");break;
 		}
-		case ICAL_CUTYPE_XNAME:{
+		case ICAL_CUTYPE_X:{
 		    if (impl->string == 0){ return no_parameter;}
 		    strcpy(tend,impl->string);break;
 		}		
@@ -814,7 +657,7 @@ icalparameter_as_ical_string (icalparameter* parameter)
 		case ICAL_FBTYPE_BUSYTENTATIVE:{
 		    strcpy(tend,"BUSYTENTATIVE");break;
 		}
-		case ICAL_FBTYPE_XNAME:{
+		case ICAL_FBTYPE_X:{
 		    if (impl->string == 0){ return no_parameter;}
 		    strcpy(tend,impl->string);break;
 		}
@@ -849,7 +692,7 @@ icalparameter_as_ical_string (icalparameter* parameter)
 		case ICAL_PARTSTAT_INPROCESS:{
 		    strcpy(tend,"INPROCESS");break;
 		}
-		case ICAL_PARTSTAT_XNAME:{
+		case ICAL_PARTSTAT_X:{
 		    if (impl->string == 0){ return no_parameter;}
 		    strcpy(tend,impl->string);break;
 		}
@@ -902,7 +745,7 @@ icalparameter_as_ical_string (icalparameter* parameter)
 		case ICAL_RELTYPE_SIBLING:{
 		    strcpy(tend,"SIBLING");break;
 		}
-		case ICAL_RELTYPE_XNAME:{
+		case ICAL_RELTYPE_X:{
 		    if (impl->string == 0){ return no_parameter;}
 		    strcpy(tend,impl->string);break;
 		}
@@ -927,7 +770,7 @@ icalparameter_as_ical_string (icalparameter* parameter)
 		case ICAL_ROLE_NONPARTICIPANT: {
 		    strcpy(tend,"NON-PARTICIPANT");break;
 		}
-		case ICAL_ROLE_XNAME:{
+		case ICAL_ROLE_X:{
 		    if (impl->string == 0){ return no_parameter;}
 		    strcpy(tend,impl->string);break;
 		}
@@ -997,7 +840,7 @@ icalparameter_as_ical_string (icalparameter* parameter)
 		case ICAL_VALUE_UTCOFFSET: {
 		    strcpy(tend,"UTC-OFFSET");break;
 		}
-		case ICAL_VALUE_XNAME: {
+		case ICAL_VALUE_X: {
 		    if (impl->string == 0){ return no_parameter;}
 		    strcpy(tend,impl->string);break;
 		}
@@ -1037,7 +880,7 @@ icalparameter_as_ical_string (icalparameter* parameter)
 		{
 		    strcpy(tend,"INVALID_ITIP");break;
 		}
-		case ICAL_XLICERRORTYPE_UNKVCALPROP:
+		case ICAL_XLICERRORTYPE_UNKNOWNVCALPROPERROR:
 		{
 		    strcpy(tend,"UNKNOWN_VCAL_PROP_ERROR");break;
 		}
@@ -1244,3 +1087,4 @@ icalproperty* icalparameter_get_parent(icalparameter* param)
 
 
 /* Everything below this line is machine generated. Do not edit. */
+/* ALTREP */

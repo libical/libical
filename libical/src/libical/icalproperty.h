@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.3 2001-03-08 05:52:34 ebusboom Exp $
+  $Id: icalproperty.h,v 1.4 2001-03-17 16:47:03 ebusboom Exp $
   $Locker:  $
 
   
@@ -31,7 +31,7 @@
 #define ICALPROPERTY_H
 
 #include <time.h>
-#include "icalparameter.h"
+#include "icalderivedparameter.h"
 
 #include "icalvalue.h"  
 #include "icalrecur.h"
@@ -93,6 +93,13 @@ char* icalproperty_get_name (icalproperty* prop);
 icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);
 const char* icalproperty_kind_to_string(icalproperty_kind kind);
 icalproperty_kind icalproperty_string_to_kind(const char* string);
+
+icalproperty_method icalproperty_string_to_method(const char* str);
+const char* icalproperty_method_to_string(icalproperty_method method);
+
+
+const char* icalproperty_status_to_string(icalproperty_status);
+icalproperty_status icalproperty_string_to_status(const char* string);
 
 
 #endif /*ICALPROPERTY_H*/

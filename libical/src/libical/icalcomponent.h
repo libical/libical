@@ -27,6 +27,7 @@
 #include "icalproperty.h"
 #include "icalvalue.h"
 #include "icalenums.h" /* defines icalcomponent_kind */
+#include "icalattendee.h"
 #include "pvl.h"
 
 typedef void icalcomponent;
@@ -198,7 +199,7 @@ struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent* comp);
 
 void icalcomponent_set_organizer(icalcomponent* comp, 
 				 struct icalorganizertype org);
-struct icalorganizertype icalcomponent_get_organizer(icalcomponent* comp);
+                                 struct icalorganizertype icalcomponent_get_organizer(icalcomponent* comp);
 
 
 void icalcomponent_add_attendee(icalcomponent *comp,
@@ -209,7 +210,7 @@ int icalcomponent_remove_attendee(icalcomponent *comp, char* cuid);
 /* Get the Nth attendee. Out of range indices return an attendee
    with cuid == 0 */
 struct icalattendeetype icalcomponent_get_attendee(icalcomponent *comp,
-						   int index);
+  int index);
 
 
 /*************** Type Specific routines ***************/

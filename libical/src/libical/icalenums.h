@@ -63,240 +63,6 @@ typedef enum icalcomponent_kind {
 
 } icalcomponent_kind;
 
-/***********************************************************************
- * Property Enumerations
- * 
- * Property enumerations have been moved to icalderivedproperty.h
-**********************************************************************/
-
-/***********************************************************************
- * Enumerations for the values of properties
- ***********************************************************************/
-
-typedef enum icalproperty_method {
-    ICAL_METHOD_PUBLISH,
-    ICAL_METHOD_REQUEST,
-    ICAL_METHOD_REPLY,
-    ICAL_METHOD_ADD,
-    ICAL_METHOD_CANCEL,
-    ICAL_METHOD_REFRESH,
-    ICAL_METHOD_COUNTER,
-    ICAL_METHOD_DECLINECOUNTER,
-    /* CAP Methods */
-    ICAL_METHOD_CREATE,
-    ICAL_METHOD_READ,
-    ICAL_METHOD_RESPONSE,
-    ICAL_METHOD_MOVE,
-    ICAL_METHOD_MODIFY,
-    ICAL_METHOD_GENERATEUID,
-    ICAL_METHOD_DELETE,
-    ICAL_METHOD_NONE
-} icalproperty_method ;
-
-typedef enum icalproperty_transp {
-    ICAL_TRANSP_OPAQUE,
-    ICAL_TRANS_TRANSPARENT
-}  icalproperty_trans;
-
-typedef enum icalproperty_calscale {
-    ICAL_CALSCALE_GREGORIAN
-} icalproperty_calscale ;
-
-
-typedef enum icalproperty_class {
-    ICAL_CLASS_PUBLIC,
-    ICAL_CLASS_PRIVATE,
-    ICAL_CLASS_CONFIDENTIAL,
-    ICAL_CLASS_XNAME
-} icalproperty_class;
-
-
-typedef enum icalproperty_status {
-    ICAL_STATUS_NONE,
-    ICAL_STATUS_TENTATIVE,
-    ICAL_STATUS_CONFIRMED,
-    ICAL_STATUS_CANCELLED, /* CANCELED? SIC from RFC*/
-    ICAL_STATUS_NEEDSACTION,
-    ICAL_STATUS_COMPLETED,
-    ICAL_STATUS_INPROCESS,
-    ICAL_STATUS_DRAFT,
-    ICAL_STATUS_FINAL
-}  icalproperty_status;
-
-typedef enum icalproperty_action {
-    ICAL_ACTION_AUDIO,
-    ICAL_ACTION_DISPLAY,
-    ICAL_ACTION_EMAIL,
-    ICAL_ACTION_PROCEDURE,
-    ICAL_ACTION_XNAME
-} icalproperty_action;
-
-/***********************************************************************
- * Value enumerations
-**********************************************************************/
-
-typedef enum icalvalue_kind {
-    ICAL_NO_VALUE,
-    ICAL_ATTACH_VALUE, /* Non-Standard*/
-    ICAL_BINARY_VALUE,
-    ICAL_BOOLEAN_VALUE,
-    ICAL_CALADDRESS_VALUE,
-    ICAL_DATE_VALUE,
-    ICAL_DATETIME_VALUE,
-    ICAL_DATETIMEDATE_VALUE, /* Non-Standard */
-    ICAL_DATETIMEPERIOD_VALUE, /* Non-Standard */
-    ICAL_DURATION_VALUE,
-    ICAL_FLOAT_VALUE,
-    ICAL_GEO_VALUE, /* Non-Standard */
-    ICAL_INTEGER_VALUE,
-    ICAL_METHOD_VALUE, /* Non-Standard */
-    ICAL_STATUS_VALUE, /* Non-Standard */
-    ICAL_PERIOD_VALUE,
-    ICAL_RECUR_VALUE,
-    ICAL_STRING_VALUE, /* Non-Standard */
-    ICAL_TEXT_VALUE,
-    ICAL_TIME_VALUE,
-    ICAL_TRIGGER_VALUE, /* Non-Standard */
-    ICAL_URI_VALUE,
-    ICAL_UTCOFFSET_VALUE,
-    ICAL_QUERY_VALUE,
-    ICAL_XNAME_VALUE
-} icalvalue_kind;
-
-
-/***********************************************************************
- * Parameter Enumerations
- **********************************************************************/
-
-
-typedef enum icalparameter_kind {
-    ICAL_NO_PARAMETER,
-    ICAL_ANY_PARAMETER,
-    ICAL_ALTREP_PARAMETER, /* DQUOTE uri DQUOTE */
-    ICAL_CN_PARAMETER, /* text */
-    ICAL_CUTYPE_PARAMETER, /*INDIVIDUAL, GROUP, RESOURCE,ROOM,UNKNOWN, x-name*/
-    ICAL_DELEGATEDFROM_PARAMETER, /* *("," DQUOTE cal-address DQUOTE) */
-    ICAL_DELEGATEDTO_PARAMETER, /*  *("," DQUOTE cal-address DQUOTE) */
-    ICAL_DIR_PARAMETER, /*  DQUOTE uri DQUOTE */
-    ICAL_ENCODING_PARAMETER, /* *BIT, BASE64, x-name */
-    ICAL_FMTTYPE_PARAMETER, /* registered MINE content type */
-    ICAL_FBTYPE_PARAMETER, /* FREE, BUSY, BUSY-UNAVAILABLE, BUSY-TENTATIVE,x-name */
-    ICAL_LANGUAGE_PARAMETER, /* text from RFC 1766 */
-    ICAL_MEMBER_PARAMETER, /*  DQUOTE cal-address DQUOTE */
-    ICAL_PARTSTAT_PARAMETER, /* NEEDS-ACTION, ACCEPTED, DECLINED, TENTATIVE, DELEGATED, x-name */
-    ICAL_RANGE_PARAMETER, /* THISANDPRIOR, THISANDFUTURE */
-    ICAL_RELATED_PARAMETER, /* START, END */
-    ICAL_RELTYPE_PARAMETER, /* PARENT, CHILD, SIBLING,x-name */
-    ICAL_ROLE_PARAMETER, /* CHAIR, REQ_PARTICIPANT, OPT_PARTICIPANT, NON_PARTICIPANT, x-name */
-    ICAL_RSVP_PARAMETER, /* TRUE. FALSE */
-    ICAL_SENTBY_PARAMETER, /*  DQUOTE uri DQUOTE */
-    ICAL_TZID_PARAMETER, /*  [tzidprefix] paramtext CRLF */
-    ICAL_VALUE_PARAMETER, /* BINARY, BOOLEAN, CAL_ADDRESS, DATE, DATE-TIME, DURATION, FLOAT, INTEGER, PERIOD, RECUR, TEXT, TIME, UTC_OFFSET, x-name */
-    ICAL_XLICERRORTYPE_PARAMETER, /*ICAL_XLICERROR_PARSE_ERROR,ICAL_XLICERROR_INVALID_ITIP*/
-    ICAL_XLICCOMPARETYPE_PARAMETER, /**/
-    ICAL_X_PARAMETER /* text */ 
-} icalparameter_kind;
-
-typedef enum icalparameter_cutype {
-    ICAL_CUTYPE_INDIVIDUAL, 
-    ICAL_CUTYPE_GROUP, 
-    ICAL_CUTYPE_RESOURCE, 
-    ICAL_CUTYPE_ROOM,
-    ICAL_CUTYPE_UNKNOWN,
-    ICAL_CUTYPE_XNAME
-} icalparameter_cutype;
-
-
-typedef enum icalparameter_encoding {
-    ICAL_ENCODING_8BIT, 
-    ICAL_ENCODING_BASE64,
-    ICAL_ENCODING_XNAME
-} icalparameter_encoding;
-
-typedef enum icalparameter_fbtype {
-    ICAL_FBTYPE_FREE, 
-    ICAL_FBTYPE_BUSY, 
-    ICAL_FBTYPE_BUSYUNAVAILABLE, 
-    ICAL_FBTYPE_BUSYTENTATIVE,
-    ICAL_FBTYPE_XNAME
-} icalparameter_fbtype;
-
-typedef enum icalparameter_partstat {
-    ICAL_PARTSTAT_NEEDSACTION, 
-    ICAL_PARTSTAT_ACCEPTED, 
-    ICAL_PARTSTAT_DECLINED, 
-    ICAL_PARTSTAT_TENTATIVE, 
-    ICAL_PARTSTAT_DELEGATED,
-    ICAL_PARTSTAT_COMPLETED,
-    ICAL_PARTSTAT_INPROCESS,
-    ICAL_PARTSTAT_XNAME,
-    ICAL_PARTSTAT_NONE
-} icalparameter_partstat;
-
-typedef enum icalparameter_range {
-    ICAL_RANGE_THISANDPRIOR, 
-    ICAL_RANGE_THISANDFUTURE
-} icalparameter_range;
-
-typedef enum icalparameter_related {
-    ICAL_RELATED_START, 
-    ICAL_RELATED_END
-} icalparameter_related;
-
-typedef enum icalparameter_reltype {
-    ICAL_RELTYPE_PARENT, 
-    ICAL_RELTYPE_CHILD,
-    ICAL_RELTYPE_SIBLING,
-    ICAL_RELTYPE_XNAME
-} icalparameter_reltype;
-
-typedef enum icalparameter_role {
-    ICAL_ROLE_CHAIR, 
-    ICAL_ROLE_REQPARTICIPANT, 
-    ICAL_ROLE_OPTPARTICIPANT, 
-    ICAL_ROLE_NONPARTICIPANT,
-    ICAL_ROLE_XNAME
-} icalparameter_role;
-
-typedef enum icalparameter_xlicerrortype {
-    ICAL_XLICERRORTYPE_COMPONENTPARSEERROR,
-    ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR,
-    ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR,
-    ICAL_XLICERRORTYPE_PROPERTYPARSEERROR,
-    ICAL_XLICERRORTYPE_VALUEPARSEERROR,
-    ICAL_XLICERRORTYPE_UNKVCALPROP,
-    ICAL_XLICERRORTYPE_INVALIDITIP,
-    ICAL_XLICERRORTYPE_MIMEPARSEERROR
-} icalparameter_xlicerrortype;
-
-typedef enum icalparameter_xliccomparetype {
-    ICAL_XLICCOMPARETYPE_EQUAL=0,
-    ICAL_XLICCOMPARETYPE_LESS=-1,
-    ICAL_XLICCOMPARETYPE_LESSEQUAL=2,
-    ICAL_XLICCOMPARETYPE_GREATER=1,
-    ICAL_XLICCOMPARETYPE_GREATEREQUAL=3,
-    ICAL_XLICCOMPARETYPE_NOTEQUAL=4,
-    ICAL_XLICCOMPARETYPE_REGEX=5
-} icalparameter_xliccomparetype;
-
-typedef enum icalparameter_value {
-    ICAL_VALUE_XNAME = ICAL_XNAME_VALUE,
-    ICAL_VALUE_BINARY = ICAL_BINARY_VALUE, 
-    ICAL_VALUE_BOOLEAN = ICAL_BOOLEAN_VALUE, 
-    ICAL_VALUE_CALADDRESS = ICAL_CALADDRESS_VALUE, 
-    ICAL_VALUE_DATE = ICAL_DATE_VALUE, 
-    ICAL_VALUE_DATETIME = ICAL_DATETIME_VALUE, 
-    ICAL_VALUE_DURATION = ICAL_DURATION_VALUE, 
-    ICAL_VALUE_FLOAT = ICAL_FLOAT_VALUE, 
-    ICAL_VALUE_INTEGER = ICAL_INTEGER_VALUE, 
-    ICAL_VALUE_PERIOD = ICAL_PERIOD_VALUE, 
-    ICAL_VALUE_RECUR = ICAL_RECUR_VALUE, 
-    ICAL_VALUE_TEXT = ICAL_TEXT_VALUE, 
-    ICAL_VALUE_TIME = ICAL_TIME_VALUE, 
-    ICAL_VALUE_UTCOFFSET = ICAL_UTCOFFSET_VALUE,
-    ICAL_VALUE_URI = ICAL_URI_VALUE,
-    ICAL_VALUE_ERROR = ICAL_NO_VALUE
-} icalparameter_value;
 
 
 /***********************************************************************
@@ -364,23 +130,29 @@ icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
 /*icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);*/
 #define icalenum_property_kind_to_value_kind(x) icalproperty_kind_to_value_kind(x)
 
-icalvalue_kind icalenum_string_to_value_kind(const char* str);
-const char* icalenum_value_kind_to_string(icalvalue_kind kind);
+/*const char* icalenum_method_to_string(icalproperty_method);*/
+#define icalenum_method_to_string(x) icalproperty_method_to_string(x)
 
-const char* icalenum_parameter_kind_to_string(icalparameter_kind kind);
-icalparameter_kind icalenum_string_to_parameter_kind(const char* string);
+/*icalproperty_method icalenum_string_to_method(const char* string);*/
+#define icalenum_string_to_method(x) icalproperty_string_to_method(x)
+
+/*const char* icalenum_status_to_string(icalproperty_status);*/
+#define icalenum_status_to_string(x) icalproperty_status_to_string(x)
+
+/*icalproperty_status icalenum_string_to_status(const char* string);*/
+#define icalenum_string_to_status(x) icalproperty_string_to_status(x)
+
+/*icalvalue_kind icalenum_string_to_value_kind(const char* str);*/
+#define icalenum_string_to_value_kind(x) icalvalue_string_to_kind(x)
+
+/*const char* icalenum_value_kind_to_string(icalvalue_kind kind);*/
+#define icalenum_value_kind_to_string(x) icalvalue_kind_to_string(x)
 
 const char* icalenum_component_kind_to_string(icalcomponent_kind kind);
 icalcomponent_kind icalenum_string_to_component_kind(const char* string);
 
 
-const char* icalenum_method_to_string(icalproperty_method);
-icalproperty_method icalenum_string_to_method(const char* string);
 
-const char* icalenum_status_to_string(icalproperty_status);
-icalproperty_status icalenum_string_to_status(const char* string);
 
 #endif /* !ICALENUMS_H */
-
-
 

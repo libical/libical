@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c.in,v 1.9 2001-03-08 06:12:11 ebusboom Exp $
+  $Id: icalvalue.c,v 1.1 2001-03-17 16:47:03 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -35,6 +35,7 @@
 #include "icalmemory.h"
 #include "icalparser.h"
 #include "icalenums.h"
+#include "icalvalueimpl.h"
 
 #include <stdlib.h> /* for malloc */
 #include <stdio.h> /* for sprintf */
@@ -56,48 +57,6 @@ void print_date_to_string(char* str,  struct icaltimetype *data);
 void print_time_to_string(char* str,  struct icaltimetype *data);
 void print_recur_to_string(char* str,  struct icaltimetype *data);
 
-struct icalvalue_impl {
-    icalvalue_kind kind; /*this is the kind that is visible from the outside*/
-
-    char id[5];
-    int size;
-    icalproperty* parent;
-    
-    union data {
-	struct icalattachtype v_attach;		
-	/* void *v_binary; */ /* use v_attach */
-	const char *v_string;
-	/*char *v_text;*/
-	/*char *v_caladdress;*/
-	/*char *v_uri;*/
-	float v_float;
-	int v_int;
-	/*int v_boolean;*/
-	/*int v_integer;*/
-	struct icaldurationtype v_duration;
-	/*int v_utcoffset;*/
-	
-	struct icalperiodtype v_period;
-	/*struct icalperiodtype v_datetimeperiod;*/
-	struct icalgeotype v_geo;
-	/*time_t v_time;*/
-	struct icaltimetype v_time;
-	/*struct icaltimetype v_date;*/
-	/*struct icaltimetype v_datetime;*/
-	/*struct icaltimetype v_datetimedate;*/
-	
-	/* struct icalrecurrencetype was once included
-	   directly ( not referenced ) in this union, but it
-	   contributes 2000 bytes to every value, so now it is
-	   a reference*/
-	
-	struct icalrecurrencetype *v_recur;
-	struct icaltriggertype v_trigger;
-	icalproperty_method v_method;
-	icalproperty_status v_status;
-	
-    } data;
-};
 
 struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind){
 
@@ -282,8 +241,6 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 			ICAL_XLICERRORTYPE_VALUEPARSEERROR), 
 		    0); 
 	    }
-
-	    icalerror_warn("Parsing ATTACH properties is unimplmeneted");
 	    break;
 	}
 

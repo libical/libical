@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.5 2001-03-08 05:52:34 ebusboom Exp $
+  $Id: icalproperty.c,v 1.6 2001-03-17 16:47:03 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -119,9 +119,13 @@ icalproperty_new_impl (icalproperty_kind kind)
 icalproperty*
 icalproperty_new (icalproperty_kind kind)
 {
-    icalproperty *prop = (icalproperty*)icalproperty_new_impl(kind);
+    icalproperty *prop;
 
-    return prop;
+    if(kind == ICAL_NO_PROPERTY){
+        return 0;
+    }
+
+    return (icalproperty*)icalproperty_new_impl(kind);
 }
 
 
@@ -289,7 +293,7 @@ icalproperty_as_ical_string (icalproperty* prop)
     if (impl->kind == ICAL_X_PROPERTY && impl->x_name != 0){
 	property_name = impl->x_name;
     } else {
-	property_name = icalenum_property_kind_to_string(impl->kind);
+	property_name = icalproperty_kind_to_string(impl->kind);
     }
 
     if (property_name == 0 ) {
@@ -321,7 +325,7 @@ icalproperty_as_ical_string (icalproperty* prop)
 	icalvalue_kind this_kind = ICAL_NO_VALUE;
 
 	icalvalue_kind default_kind 
-	    =  icalenum_property_kind_to_value_kind(impl->kind);
+	    =  icalproperty_kind_to_value_kind(impl->kind);
 
 	if(orig_val_param){
 	    orig_kind = (icalvalue_kind)icalparameter_get_value(orig_val_param);
@@ -339,11 +343,11 @@ icalproperty_as_ical_string (icalproperty* prop)
                the property. But, use the default, not the one
                specified in the property */
 	    
-	    kind_string = icalenum_value_kind_to_string(default_kind);
+	    kind_string = icalvalue_kind_to_string(default_kind);
 
 	} else if (this_kind != default_kind && this_kind !=  ICAL_NO_VALUE){
 	    /* Not the default, so it must be specified */
-	    kind_string = icalenum_value_kind_to_string(this_kind);
+	    kind_string = icalvalue_kind_to_string(this_kind);
 	} else {
 	    /* Don'tinclude the VALUE parameter at all */
 	}
@@ -479,14 +483,7 @@ void icalproperty_set_parameter_from_string(icalproperty* prop,
     icalerror_check_arg_rv( (name!=0),"name");
     icalerror_check_arg_rv( (value!=0),"value");
     
-    kind = icalenum_string_to_parameter_kind(name);
-
-    if(kind == ICAL_NO_PROPERTY){
-        icalerror_set_errno(ICAL_BADARG_ERROR);
-        return;
-    }
-
-    param  = icalparameter_new_from_string(kind, value);
+    param  = icalparameter_new_from_string(value);
 
     if (param == 0){
         icalerror_set_errno(ICAL_BADARG_ERROR);
@@ -508,7 +505,7 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
     icalerror_check_arg_rz( (prop!=0),"prop");
     icalerror_check_arg_rz( (name!=0),"name");
     
-    kind = icalenum_string_to_parameter_kind(name);
+    kind = icalparameter_string_to_kind(name);
 
     if(kind == ICAL_NO_PROPERTY){
         /* icalenum_string_to_parameter_kind will set icalerrno */
@@ -663,7 +660,7 @@ void icalproperty_set_value_from_string(icalproperty* prop,const char* str,
         }
     } else {
         /* Use the given kind string */
-        kind = icalenum_string_to_value_kind(type);
+        kind = icalvalue_string_to_value_kind(type);
     }
 
     if(kind == ICAL_NO_VALUE){
@@ -753,7 +750,7 @@ char* icalproperty_get_name (icalproperty* prop)
     if (impl->kind == ICAL_X_PROPERTY && impl->x_name != 0){
         property_name = impl->x_name;
     } else {
-        property_name = icalenum_property_kind_to_string(impl->kind);
+        property_name = icalproperty_kind_to_string(impl->kind);
     }
  
     if (property_name == 0 ) {

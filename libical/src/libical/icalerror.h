@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.7 2001-03-08 05:52:34 ebusboom Exp $
+  $Id: icalerror.h,v 1.8 2001-03-17 16:47:02 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -133,6 +133,9 @@ if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || \
 
 /* Check & return an error if check fails*/
 #define icalerror_check_arg_re(test,arg,error) if(!(test)) { icalerror_stop_here(); assert(0); return error;}
+
+/* Check & return something*/
+#define icalerror_check_arg_rx(test,arg,x) if(!(test)) { icalerror_set_errno(ICAL_BADARG_ERROR); return x;}
 
 
 
