@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.13 2002-06-11 12:36:46 acampi Exp $
+ $Id: icaltimezone.c,v 1.14 2002-06-11 12:37:17 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
