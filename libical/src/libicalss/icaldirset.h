@@ -4,7 +4,7 @@
  CREATOR: eric 28 November 1999
 
 
- $Id: icaldirset.h,v 1.4 2002-05-29 12:15:21 acampi Exp $
+ $Id: icaldirset.h,v 1.5 2002-05-29 12:37:09 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -30,6 +30,7 @@
 #define ICALDIRSET_H
 
 #include "ical.h"
+#include "icalgauge.h"
 
 /* icaldirset Routines for storing, fetching, and searching for ical
  * objects in a database */
