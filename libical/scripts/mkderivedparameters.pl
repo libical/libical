@@ -118,7 +118,7 @@ if ($opt_c){
   }
 
   $count+=2;
-  print "struct  icalparameter_value_kind_map value_kind_map[$count] = {\n";
+  print "static struct icalparameter_value_kind_map value_kind_map[$count] = {\n";
   print $out;
   print "    {ICAL_VALUE_X,ICAL_X_VALUE},\n";
   print "    {ICAL_VALUE_NONE,ICAL_NO_VALUE}\n};\n\n";
