@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.32 2002-06-11 12:33:33 acampi Exp $
+  $Id: icaltime.c,v 1.33 2002-06-11 19:07:35 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -963,3 +963,42 @@ icaltime_set_timezone(struct icaltimetype *t, const icaltimezone *zone) {
 
 	return *t;
 }
+
+
+/**
+ *  @brief builds an icaltimespan given a start time, end time and busy value.
+ *
+ *  returned span contains times specified in UTC.
+ */
+
+struct icaltime_span icaltime_span_new(struct icaltimetype dtstart,
+				       struct icaltimetype dtend,
+				       int    is_busy)
+{
+  struct icaltime_span span;
+
+  span.is_busy = is_busy;
+
+  span.start   = icaltime_as_timet_with_zone(dtstart,
+					     icaltimezone_get_utc_timezone());
+
+  if (icaltime_is_null_time(dtend)) {
+    if (!icaltime_is_date(dtstart)) {
+      /* If dtstart is a DATE-TIME and there is no DTEND nor DURATION
+	 it takes no time */
+      span.end = span.start;
+      return span;
+    } else {
+      dtend = dtstart;
+    }
+  }
+
+  span.end = icaltime_as_timet_with_zone(dtend, icaltimezone_get_utc_timezone());
+  
+  if (icaltime_is_date(dtstart)) {
+    /* no time specified, go until the end of the day..*/
+    span.end += 60*60*24 - 1;
+  }
+  return span;
+}
+

@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.15 2002-06-11 19:05:24 acampi Exp $
+ $Id: icaltime.h,v 1.16 2002-06-11 19:07:36 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -242,5 +242,11 @@ struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
 
 /** Return the number of days in the given month */
 short icaltime_days_in_month(const short month, const short year);
+
+
+/** @brief calculate an icaltimespan given a start and end time. */
+struct icaltime_span icaltime_span_new(struct icaltimetype dtstart,
+				       struct icaltimetype dtend,
+				       int is_busy);
 
 #endif /* !ICALTIME_H */
