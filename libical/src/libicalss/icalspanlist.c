@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.8 2002-06-28 09:40:55 acampi Exp $
+    $Id: icalspanlist.c,v 1.9 2002-06-28 10:04:45 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -481,4 +481,68 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist* sl,
   }
 
   return comp;
+}
+
+
+/** @brief Return a spanlist corresponding to the VFREEBUSY portion of
+ *         an icalcomponent.
+ *
+ *   @param   c        A valid icalcomponent.
+ *
+ *   @return           A valid icalspanlist or NULL if no VFREEBUSY section.
+ *
+ */
+
+
+icalspanlist *icalspanlist_from_vfreebusy(icalcomponent* comp)
+{
+  icalcomponent *inner;
+  icalproperty  *prop;
+  icalspanlist  *sl;
+
+  icalerror_check_arg_rz((comp != NULL), "comp");
+  
+  inner = icalcomponent_get_inner(comp);
+  if (!inner) return NULL;
+
+  if ( ( sl = (icalspanlist*) malloc(sizeof(icalspanlist))) == 0) {
+    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+    return 0;
+  }
+  sl->spans =  pvl_newlist();
+
+  /* cycle through each FREEBUSY property, adding to the spanlist */
+  for (prop = icalcomponent_get_first_property(inner, ICAL_FREEBUSY_PROPERTY);
+       prop != NULL;
+       prop = icalcomponent_get_next_property(inner, ICAL_FREEBUSY_PROPERTY)) {
+    icaltime_span *s = (icaltime_span *) malloc(sizeof(icaltime_span));
+    icalparameter *param;
+    struct icalperiodtype period;
+    icalparameter_fbtype fbtype;
+
+    if (s == 0) {
+      icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+      return 0;
+    }
+    
+    param = icalproperty_get_first_parameter(prop, ICAL_FBTYPE_PARAMETER);
+    fbtype = (param) ? icalparameter_get_fbtype(param) : ICAL_FBTYPE_BUSY;
+
+    switch (fbtype) {
+    case ICAL_FBTYPE_FREE:
+    case ICAL_FBTYPE_NONE:
+    case ICAL_FBTYPE_X:
+      s->is_busy = 1;
+    default:
+      s->is_busy = 0;
+    }
+    
+    period = icalproperty_get_freebusy(prop);
+    s->start = icaltime_as_timet_with_zone(period.start, icaltimezone_get_utc_timezone());
+    s->end = icaltime_as_timet_with_zone(period.end, icaltimezone_get_utc_timezone());
+;
+    pvl_insert_ordered(sl->spans, compare_span, (void*)s);
+  }
+  /** @todo calculate start/end limits.. fill in holes? **/
+  return sl;
 }
