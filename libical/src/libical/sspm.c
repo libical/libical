@@ -3,7 +3,7 @@
   FILE: sspm.c Parse Mime
   CREATOR: eric 25 June 2000
   
-  $Id: sspm.c,v 1.6 2002-11-22 20:15:18 acampi Exp $
+  $Id: sspm.c,v 1.7 2002-12-16 14:37:22 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -953,7 +953,8 @@ void sspm_read_header(struct mime_impl *impl,struct sspm_header *header)
 		
 		assert(strlen(buf) < BUF_SIZE);
 		
-		strcpy(header_lines[current_line],buf);
+		strncpy(header_lines[current_line],buf,BUF_SIZE-1);
+		header_lines[current_line][BUF_SIZE-1] = '\0';
 		
 		break;
 	    }
@@ -988,7 +989,7 @@ void sspm_read_header(struct mime_impl *impl,struct sspm_header *header)
 		
 		assert( strlen(buf_start) + strlen(last_line) < BUF_SIZE);
 		
-		strcat(last_line,buf_start);
+		strncat(last_line,buf_start,BUF_SIZE-strlen(last_line)-1);
 		
 		break;
 	    }

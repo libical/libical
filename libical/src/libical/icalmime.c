@@ -4,7 +4,7 @@
  CREATOR: eric 26 July 2000
 
 
- $Id: icalmime.c,v 1.5 2001-12-22 17:04:33 gray-john Exp $
+ $Id: icalmime.c,v 1.6 2002-12-16 14:37:20 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -209,8 +209,8 @@ icalcomponent* icalmime_parse(char* (*get_string)(char *s, size_t size,
 	}
 
 	if(parts[i].header.error!=SSPM_NO_ERROR){
-	    char *str;
-	    char* temp[256];
+	    char *str = "Unknown error";
+	    char temp[256];
 
 	    if(parts[i].header.error==SSPM_UNEXPECTED_BOUNDARY_ERROR){
 		str = "Got an unexpected boundary, possibly due to a MIME header for a MULTIPART part that is missing the Content-Type line";
@@ -231,16 +231,16 @@ line between the header and the previous boundary\?";
 	    }
 
 	    if(parts[i].header.error_text != 0){
-		snprintf((char*)temp,256,
+		snprintf(temp,sizeof(temp),
 			 "%s: %s",str,parts[i].header.error_text);
 	    } else {
-		strcpy((char*)temp,str);
+		strcpy(temp,str);
 	    }
 
 	    icalcomponent_add_property
 		(comp,
 		 icalproperty_vanew_xlicerror(
-		     (char*)temp,
+		     temp,
 		     icalparameter_new_xlicerrortype(
 			 ICAL_XLICERRORTYPE_MIMEPARSEERROR),
 		     0));  

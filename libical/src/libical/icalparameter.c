@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c,v 1.10 2002-06-28 10:26:01 acampi Exp $
+  $Id: icalparameter.c,v 1.11 2002-12-16 14:37:21 acampi Exp $
   $Locker:  $
     
 
@@ -271,9 +271,7 @@ icalparameter_as_ical_string (icalparameter* param)
     /* Now, copy the buffer to a tmp_buffer, which is safe to give to
        the caller without worring about de-allocating it. */
     
-    out_buf = icalmemory_tmp_buffer(strlen(buf));
-    strcpy(out_buf, buf);
-
+    out_buf = icalmemory_tmp_copy(buf);
     icalmemory_free_buffer(buf);
 
     return out_buf;
