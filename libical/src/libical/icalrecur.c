@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.55 2003-02-17 14:59:20 acampi Exp $
+  $Id: icalrecur.c,v 1.56 2003-02-17 15:02:24 acampi Exp $
   $Locker:  $
     
 
@@ -586,6 +586,10 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 	    }	 
 	}   
     }
+
+    sprintf(temp,"%s", icalrecur_weekday_to_string(recur->week_start));
+    icalmemory_append_string(&str,&str_p,&buf_sz,";WKST=");
+    icalmemory_append_string(&str,&str_p,&buf_sz, temp);
 
     return  str;
 }
