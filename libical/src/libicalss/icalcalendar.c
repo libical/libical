@@ -2,7 +2,7 @@
   FILE: icalcalendar.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalcalendar.c,v 1.5 2002-07-23 01:21:08 lindner Exp $
+  $Id: icalcalendar.c,v 1.6 2002-08-07 17:09:06 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -135,19 +135,19 @@ void icalcalendar_free(icalcalendar* impl)
     }
 
     if (impl->freebusy !=0){
-	impl->booked->free(impl->booked);
+	icalset_free(impl->booked);
     }
 
     if (impl->properties !=0){
-	impl->properties->free(impl->properties);
+	icalset_free(impl->properties);
     }
 
     if (impl->booked !=0){
-	impl->booked->free(impl->booked);
+	icalset_free(impl->booked);
     }
 
     if (impl->incoming !=0){
-	impl->incoming->free(impl->incoming);
+	icalset_free(impl->incoming);
     }
 
     impl->dir = 0;
