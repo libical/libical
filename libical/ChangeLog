@@ -1,3 +1,10 @@
+2002-05-09  Andrea Campi  <a.campi@inet.it>
+
+	* icaltime.c Rewrote and documented icaltime API, with the goal of
+	keeping it stable until release 1.0. Some functions and internal
+	implementation details are now declared obsolete and removed from
+	the documentation; they will be removed at a later time.
+
 2001-12-12  Eric Busboom  <eric@softwarestudio.org>
 
 	* icalrecur.c implemented recurrence rule for "FREQ=YEARLY",
