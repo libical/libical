@@ -10,6 +10,7 @@ dnl Checks for programs.
 AC_PROG_YACC
 AC_PROG_CC
 AM_PROG_LEX
+AC_PROG_CXX
 AC_PROG_LN_S
 AC_PROG_INSTALL
 
@@ -17,6 +18,21 @@ dnl Initialize libtool
 AM_PROG_LIBTOOL
 
 AC_SUBST(AR)
+
+
+AC_ARG_WITH(bdb_dir, [  --with-bdb-dir=PATH       Use PATH as location of BerkeleyDB 4.0],
+   BDB_DIR=$withval,
+   BDB_DIR=/usr/local/BerkeleyDB.4.0
+)
+
+AC_SUBST(BDB_DIR)
+
+dnl 4.0 is required...
+BDB_VERSION="4.0"
+AC_SUBST(BDB_VERSION)
+
+
+
 
 AC_ARG_WITH(devel, [  --with-devel            add developement options],
 [case $with_devel in  
