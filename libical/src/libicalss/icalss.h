@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
+ $Id: icalss.h,v 1.7 2001-02-09 17:53:40 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -63,7 +63,7 @@ icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
+ $Id: icalss.h,v 1.7 2001-02-09 17:53:40 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -87,6 +87,16 @@ icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
 
 #ifndef ICALSET_H
 #define ICALSET_H
+
+#include <limits.h> /* For PATH_MAX */
+
+#ifdef PATH_MAX
+#define ICAL_PATH_MAX PATH_MAX
+#else
+#define ICAL_PATH_MAX 1024
+#endif
+
+
 
 
 typedef void icalset;
@@ -154,7 +164,7 @@ icalcomponent* icalset_get_next_component(icalset* set);
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
+ $Id: icalss.h,v 1.7 2001-02-09 17:53:40 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -256,7 +266,7 @@ icalcomponent* icalfileset_get_component(icalfileset* cluster);
  CREATOR: eric 28 November 1999
 
 
- $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
+ $Id: icalss.h,v 1.7 2001-02-09 17:53:40 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -337,7 +347,7 @@ icalcomponent* icaldirset_get_next_component(icaldirset* store);
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
+ $Id: icalss.h,v 1.7 2001-02-09 17:53:40 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -398,37 +408,11 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
 
 /* -*- Mode: C -*- */
 /*======================================================================
- FILE: icalssutil.h
- CREATOR: eric 21 Aug 2000
-
-
- $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
- $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
-
- This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
-
-  Or:
-
-    The Mozilla Public License Version 1.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
-
-
- =========================================================================*/
-
-
-/* -*- Mode: C -*- */
-/*======================================================================
  FILE: icalclassify.h
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
+ $Id: icalss.h,v 1.7 2001-02-09 17:53:40 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -499,7 +483,7 @@ icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp);
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
+ $Id: icalss.h,v 1.7 2001-02-09 17:53:40 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -551,7 +535,7 @@ void icalspanlist_dump(icalspanlist* s);
  CREATOR: eric 07 Nov 2000
 
 
- $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
+ $Id: icalss.h,v 1.7 2001-02-09 17:53:40 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -620,7 +604,7 @@ icalcomponent* icalmessage_new_error_reply(icalcomponent* c,
   FILE: icalcstp.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
+  $Id: icalss.h,v 1.7 2001-02-09 17:53:40 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

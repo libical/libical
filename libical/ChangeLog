@@ -1,3 +1,14 @@
+2001-02-09  Eric Busboom  <eric@softwarestudio.org>
+
+	* python Added src/python directory. Inserted SWIG wrapper files,
+ 	and a simple interface to Component, Time, Duration, Period and
+ 	Store.
+
+	* icallangbind.c More experimental work
+
+	* icalduration.{c,h}, icalperiod.{c,h} Broke out period and
+ 	duration types into their own files
+
 2001-02-06  Eric Busboom  <eric@softwarestudio.org>
 
 	* icaltime.c Changed icaltime_from_day_of_year to run mktime in

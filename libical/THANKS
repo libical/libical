@@ -46,3 +46,6 @@ on Solaris.
 
 Bryan Bartone <bsb@mesasys.com> for code changes based on porting
 libical to Windows.
+
+Hubert V <hubertv@bigfoot.com> for checking and analyzing the output
+of the recurrence rule system.

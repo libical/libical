@@ -3,7 +3,7 @@
   FILE: testclassify.c
   CREATOR: eric 11 February 2000
   
-  $Id: testclassify.c,v 1.1.1.1 2001-01-02 07:33:06 ebusboom Exp $
+  $Id: testclassify.c,v 1.2 2001-02-09 17:53:40 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -31,7 +31,6 @@
 #include <string.h> /* For strerror */
 #include "icalset.h"
 #include "icalclassify.h"
-#include "icalssutil.h"
 
 
 struct class_map {

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.9 2001-02-06 19:43:23 ebusboom Exp $
+  $Id: regression.c,v 1.10 2001-02-09 17:53:40 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1336,12 +1336,28 @@ void test_period()
 {
 
     struct icalperiodtype p;
+    icalvalue *v;
 
     p = icalperiodtype_from_string("19971015T050000Z/PT8H30M");
     printf("%s\n",icalperiodtype_as_ical_string(p));
+    assert(strcmp(icalperiodtype_as_ical_string(p),
+                  "19971015T050000Z/PT8H30M") == 0);
 
     p = icalperiodtype_from_string("19971015T050000Z/19971015T060000Z");
     printf("%s\n",icalperiodtype_as_ical_string(p));
+    assert(strcmp(icalperiodtype_as_ical_string(p),
+                  "19971015T050000Z/19971015T060000Z") == 0);
+
+    p = icalperiodtype_from_string("19970101T120000/PT3H");
+    printf("%s\n",icalperiodtype_as_ical_string(p));
+    assert(strcmp(icalperiodtype_as_ical_string(p),
+                  "19970101T120000/PT3H") == 0);
+
+    v = icalvalue_new_from_string(ICAL_PERIOD_VALUE,"19970101T120000/PT3H");
+    printf("%s\n",icalvalue_as_ical_string(v));
+    assert(strcmp(icalvalue_as_ical_string(v),
+                  "19970101T120000/PT3H") == 0);
+
 
 }
 
@@ -3087,12 +3103,17 @@ void test_langbind()
     static const char test_str[] =
 "BEGIN:VEVENT\n"
 "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com\n"
-"COMMENT: Comment\n"
+"COMMENT: Comment that \n spans a line\n"
 "DTSTART:19970101T120000\n"
 "DTSTART:19970101T120000Z\n"
 "DTSTART:19970101\n"
+"DURATION:P3DT4H25M\n"
+"FREEBUSY:19970101T120000/19970101T120000\n"
+"FREEBUSY:19970101T120000/P3DT4H25M\n"
 "END:VEVENT\n";
   
+
+    printf("%s\n",test_str);
 
     c = icalparser_parse_string(test_str);
     inner = icalcomponent_get_inner(c);
@@ -3104,7 +3125,7 @@ void test_langbind()
 	p = icalcomponent_get_next_property(inner,ICAL_ANY_PROPERTY)
 	) { 
 
-	printf("%s\n",icallangbind_perl_eval_string(p));
+	printf("%s\n",icallangbind_property_eval_string(p,":"));
     }
 }
 

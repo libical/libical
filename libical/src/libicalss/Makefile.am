@@ -25,7 +25,6 @@ libicalss_la_SOURCES =		\
 	icalfilesetimpl.h	\
 	icalset.c		\
 	icalsslexer.l		\
-	icalssutil.c		\
 	icalssyacc.h		\
 	icalssyacc.y		\
 	icalspanlist.c		\
@@ -40,7 +39,6 @@ COMBINEDHEADERS = \
         icalfileset.h \
         icaldirset.h \
         icalcalendar.h  \
-        icalssutil.h \
         icalclassify.h \
 	icalspanlist.h	\
 	icalmessage.h \
