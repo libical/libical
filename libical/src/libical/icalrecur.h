@@ -63,7 +63,7 @@ Or, just make them up:
 Note that that the time returned by icalrecur_iterator_next is in
 whatever timezone that dtstart is in.
 
-======================================================================*/
+*/
 
 #ifndef ICALRECUR_H
 #define ICALRECUR_H
@@ -71,9 +71,9 @@ whatever timezone that dtstart is in.
 #include <time.h>
 #include "icaltime.h"
 
-/***********************************************************************
+/*
  * Recurrance enumerations
-**********************************************************************/
+ */
 
 typedef enum icalrecurrencetype_frequency
 {
@@ -110,7 +110,9 @@ enum {
 
 
 
-/********************** Recurrence type routines **************/
+/**
+ * Recurrence type routines
+ */
 
 /* See RFC 2445 Section 4.3.10, RECUR Value, for an explaination of
    the values and fields in struct icalrecurrencetype */
@@ -178,16 +180,14 @@ enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day);
 short icalrecurrencetype_day_position(short day);
 
 
-/***********************************************************************
- * Recurrance rule parser
-**********************************************************************/
+/** Recurrance rule parser */
 
 /** Convert between strings and recurrencetype structures. */
 struct icalrecurrencetype icalrecurrencetype_from_string(const char* str);
 char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
 
 
-/********** recurrence iteration routines ********************/
+/** Recurrence iteration routines */
 
 typedef struct icalrecur_iterator_impl  icalrecur_iterator;
 
@@ -197,6 +197,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
 /** Get the next occurrence from an iterator */
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator*);
+
+void icalrecur_iterator_decrement_count(icalrecur_iterator*);
 
 /** Free the iterator */
 void icalrecur_iterator_free(icalrecur_iterator*);
