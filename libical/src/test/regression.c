@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.28 2001-05-06 16:49:42 ebusboom Exp $
+  $Id: regression.c,v 1.29 2001-05-07 16:49:18 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2590,6 +2590,7 @@ void test_gauge_compare() {
 
     icalgauge *g;
     icalcomponent *c;
+    char* str;
 
     /* Equality */
 
@@ -2730,6 +2731,75 @@ void test_gauge_compare() {
 
     icalcomponent_free(c);
 
+    /* Combinations */
+
+    c =  icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
+	      icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+		  icalproperty_new_dtstart(
+		      icaltime_from_string("20000102T000000")),0),0);
+
+
+    str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000103T000000'";
+
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0); assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+    str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
+
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0); assert(icalgauge_compare(g,c) == 0);
+
+    icalgauge_free(g);
+
+    str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' or DTSTART < '20000102T000000'";
+
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0); assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+
+    icalcomponent_free(c);
+
+    /* Combinations, non-cannonical component */
+
+    c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+		  icalproperty_new_dtstart(
+		      icaltime_from_string("20000102T000000")),0);
+
+
+    str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000103T000000'";
+
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0); assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+    str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
+
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0); assert(icalgauge_compare(g,c) == 0);
+
+    icalgauge_free(g);
+
+    str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' or DTSTART < '20000102T000000'";
+
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0); assert(icalgauge_compare(g,c) == 1);
+
+    icalgauge_free(g);
+
+
+    icalcomponent_free(c);
+
 
     /* Complex comparisions */
 
@@ -2750,37 +2820,45 @@ void test_gauge_compare() {
 	    0),
 	0);
     
+    
+    str = "SELECT * FROM VEVENT WHERE VALARM.DTSTART = '20000101T120000'";
 
-    g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE VALARM.DTSTART = '20000101T120000'");
-
-    printf("SELECT * FROM VEVENT WHERE VALARM.DTSTART = '20000101T120000'\n");
-
-    assert(icalgauge_compare(g,c) == 1);
-
-    icalgauge_free(g);
-
-    g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE COMMENT = 'foo'");
-
-    printf("SELECT * FROM VEVENT WHERE COMMENT = 'foo'\n");
-
-    assert(icalgauge_compare(g,c) == 1);
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0);assert(icalgauge_compare(g,c) == 1);
 
     icalgauge_free(g);
 
+    str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo'";
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0);assert(icalgauge_compare(g,c) == 1);
 
-    g = icalgauge_new_from_sql(
-	"SELECT * FROM VEVENT WHERE COMMENT = 'foo' AND  VALARM.DTSTART = '20000101T120000'");
+    icalgauge_free(g);
+	
+    str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo' AND  VALARM.DTSTART = '20000101T120000'";
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0);assert(icalgauge_compare(g,c) == 1);
 
-    printf("SELECT * FROM VEVENT WHERE COMMENT = 'foo' AND  VALARM.DTSTART = '20000101T120000'\n");
+    icalgauge_free(g);
 
-    assert(icalgauge_compare(g,c) == 1);
+    str = "SELECT * FROM VEVENT WHERE COMMENT = 'bar' AND  VALARM.DTSTART = '20000101T120000'";
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0);assert(icalgauge_compare(g,c) == 0);
+
+    icalgauge_free(g);
+
+    str = "SELECT * FROM VEVENT WHERE COMMENT = 'bar' or  VALARM.DTSTART = '20000101T120000'";
+    g = icalgauge_new_from_sql(str);
+    printf("%s\n",str);
+    assert(g!=0);assert(icalgauge_compare(g,c) == 1);
 
     icalgauge_free(g);
 
     icalcomponent_free(c);
-    
+
 }
 
 icalcomponent* make_component(int i){
