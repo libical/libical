@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.25 2002-05-28 09:33:55 acampi Exp $
+  $Id: icalparser.c,v 1.26 2002-05-28 15:49:51 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -56,6 +56,11 @@
 #ifdef WIN32
 #define snprintf      _snprintf
 #define strcasecmp    stricmp
+#endif
+
+
+#ifdef __FreeBSD__
+#define iswspace        isspace
 #endif
 
 
