@@ -180,6 +180,8 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep);
 
 int icallangbind_string_to_open_flag(const char* str);
 
+const char* icallangbind_quote_as_ical(const char* str);
+
 /***********************************************************************
  Time routines 
 ***********************************************************************/

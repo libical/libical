@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.21 2002-09-26 22:13:04 lindner Exp $
+  $Id: icallangbind.c,v 1.22 2002-10-24 13:44:30 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -22,6 +22,7 @@
 #include "icalproperty.h"
 #include "icalerror.h"
 #include "icalmemory.h"
+#include "icalvalue.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -294,3 +295,18 @@ int icallangbind_string_to_open_flag(const char* str)
     else return -1;
 }
 
+
+const char* icallangbind_quote_as_ical(const char* str)
+{
+    size_t buf_size = 2 * strlen(str);
+
+    /* assume every char could be quoted */
+    char* buf = icalmemory_new_buffer(buf_size);
+    int result;
+
+    result = icalvalue_encode_ical_string(str, buf, buf_size);
+
+    icalmemory_add_tmp_buffer(buf);
+
+    return buf;
+}

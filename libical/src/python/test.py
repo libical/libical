@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.23 2002-07-15 09:51:44 acampi Exp $
+#  $Id: test.py,v 1.24 2002-10-24 13:44:31 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -113,8 +113,12 @@ def test_property():
     # X Property
     p = Property("X-COMMENT")
 
+    p.value("This is a sentence, with punctuation; indeed: it is")
+    print p
+
     p.value("This is not approved by the Ministry of Silly Walks")
     print p
+
 
     assert(test_enum('METHOD','PUBLISH'))
     assert(not test_enum('METHOD','FOO'))
@@ -389,6 +393,7 @@ def test_event():
     event.attendees(('ef_hutton@listenup.com', att))
     
     event.x_properties('X-TEST',('foo', 'bar'))
+    event.x_properties('X-TEST2',('foo, biz', 'bar, biz'))
 
     inner = event.components()[0]
     for e in inner.properties('X-TEST'):

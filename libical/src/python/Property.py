@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.12 2002-07-12 07:59:15 acampi Exp $
+#  $Id: Property.py,v 1.13 2002-10-24 13:44:30 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -148,6 +148,9 @@ class Property:
             icalerror_clear_errno()
 
             #e1=icalerror_supress("MALFORMEDDATA")
+            if (self.name().find("X-") == 0) and type(v) is StringType:
+                 v = icallangbind_quote_as_ical(v)
+                 v = icallangbind_quote_as_ical(v)
 
             icalproperty_set_value_from_string(self._ref,str(v),vt)
             #icalerror_restore("MALFORMEDDATA",e1)
