@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.10 2002-04-01 22:08:46 gray-john Exp $
+    $Id: icalclassify.c,v 1.11 2002-06-28 09:34:21 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -28,7 +28,7 @@
 
 #include "ical.h"
 #include "icalclassify.h"
-#include "icalmemory.h"
+
 #include <ctype.h>   /* For tolower() */
 #include <string.h> /* for index() */
 #include <stdlib.h> /* for malloc and free */
