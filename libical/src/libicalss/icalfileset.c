@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.26 2002-06-28 10:15:39 acampi Exp $
+  $Id: icalfileset.c,v 1.27 2002-06-28 10:56:44 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -330,12 +330,6 @@ int icalfileset_unlock(icalfileset *set)
 	return 0;
 #endif
 }
-
-#ifdef ICAL_SAFESAVES
-int icalfileset_safe_saves=1;
-#else
-int icalfileset_safe_saves=0;
-#endif
 
 icalerrorenum icalfileset_commit(icalset* set)
 {
