@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.40 2002-11-22 19:55:51 acampi Exp $
+  $Id: icalparser.c,v 1.41 2002-11-22 19:58:27 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -55,6 +55,7 @@
 
 #ifdef WIN32
 #define HAVE_CTYPE_H
+#define HAVE_ISWSPACE
 #endif
 
 #ifdef HAVE_WCTYPE_H
