@@ -1,3 +1,148 @@
+2002-06-13  Andrea Campi  <a.campi@inet.it>
+
+	* src/libical/icalvalue.c: Fixed escaping of TEXT values and
+	formatting of UTCOFFSET values to more closely match RFC2445.
+
+	* configure.in
+	* src/libical/Makefile.am
+	* src/libical/icalparameter_cxx.cpp
+	* src/libical/icalparameter_cxx.h
+	* src/libical/icalproperty_cxx.cpp
+	* src/libical/icalproperty_cxx.h
+	* src/libical/icalvalue_cxx.cpp
+	* src/libical/icalvalue_cxx.h
+	* src/libical/vcomponent.cpp
+	* src/libical/vcomponent.h
+	* src/libicalss/icalbdbset_cxx.h: Added C++ binding.
+	Obtained from: Paul Lindner
+
+	* configure.in
+	* src/libicalss/Makefile.am
+	* src/libicalss/icalbdbset.c
+	* src/libicalss/icalbdbset.h
+	* src/libicalss/icalbdbset.h
+	* src/libicalss/icalbdbsetimpl.h
+	* src/test/Makefile.am
+	* src/test/storage.c: Added BerkeleyDB 4.0 icalset implementation.
+	Obtained from: Paul Lindner
+
+2002-06-11  Andrea Campi  <a.campi@inet.it>
+
+	* src/test/Makefile.am
+	* src/test/regression-classify.c
+	* src/test/regression-component.c
+	* src/test/regression-recur.c
+	* src/test/regression-utils.c
+	* src/test/regression.c
+	* src/test/regression.h
+	* src/test/test_fileset.ics: New regression test suite
+	Obtained from: Paul Lindner
+
+	* src/libical/icalcomponent.c
+	* src/libical/icalproperty.c
+	* src/libical/icalproperty.h
+	* src/python/test.py
+	* src/test/regression.c: Improved X- parameter handling.
+	Obtained from: Mark Tearle
+
+2002-06-07  Andrea Campi  <a.campi@inet.it>
+
+	* configure.in
+	* src/libical/Makefile.am
+	* src/libical/icallexer.l
+	* src/libical/icalparser.c
+	* src/libical/icalparser.h
+	* src/libical/icalyacc.y
+	* src/libicalss/Makefile.am
+	* src/libicalss/icalgauge.c
+	* src/libicalss/icalsslexer.c
+	* src/libicalss/icalsslexer.l
+	* src/libicalss/icalssyacc.c
+	* src/libicalss/icalssyacc.h
+	* src/libicalss/icalssyacc.y: Made parser fully reentrant using
+	recent versions of flex/bison. Also committed the generated files
+	so that the library can be compiled even without those tools.
+	Obtained from: Paul Lindner
+
+	* src/python/LibicalWrap.i
+	* src/python/Property.py
+	* src/python/test.py: Support X- properties in the Python wrapper.
+	Obtained from: Mark Tearle
+
+2002-06-04  Andrea Campi  <a.campi@inet.it>
+
+	* *: Constifed a lot of functions, also made a few of them static
+	Obtained from: Paul Lindner <lindner@inuus.com>
+
+2002-06-03  Andrea Campi  <a.campi@inet.it>
+	* src/libical/icallangbind.c
+	* src/python/Component.py
+	* src/python/Gauge.py
+	* src/python/Libical.py
+	* src/python/LibicalWrap.i
+	* src/python/Store.py
+	* src/python/test.py: Fully implemented FileStore and Gauge
+	in the python bindings.
+	Obtained from: Mark Tearle <mtearle@tearle.com>
+
+2002-05-28  Andrea Campi  <a.campi@inet.it>
+
+	* src/libical/icalattach.c
+	* src/libical/icalattach.h
+	* src/libical/icalattachimpl.h
+	* src/libical/icalderivedproperty.c.in
+	* src/libical/icalderivedvalue.c.in
+	* src/libical/icalderivedvalue.h.in
+	* src/libical/icaltypes.c
+	* src/libical/icaltypes.h
+	* src/libical/icalvalue.c
+	* src/libical/icalvalueimpl.h: Changed ATTACH to be an opaque type
+
+2002-05-27  Eric Busboom  <eric@softwarestudio.org>
+
+	* scripts/mkderivedparameters.pl
+	* scripts/mkderivedproperties.pl
+	* scripts/mkderivedvalues.pl
+	* src/libical/icalderivedparameter.c.in
+	* src/libical/icalderivedparameter.h.in
+	* src/libical/icalderivedproperty.c.in
+	* src/libical/icalderivedproperty.h.in
+	* src/libical/icalderivedvalue.c.in
+	* src/libical/icalderivedvalue.h.in: changed the auto generated
+	files and scripts so that the generated code is inserted into the
+	middle of the template (.in) file, instead of the end. This means
+	we could get rid of the declaration for the maps.
+
+2002-05-27  Andrea Campi  <a.campi@inet.it>
+
+	* src/libical/icaltimezone.c: Worked around Outlook/Exchange brokenness.
+	Obtained from: evolution CVS repository
+
+2002-05-24  Andrea Campi  <a.campi@inet.it>
+
+	* src/libical/icalproperty.c: Implemented proper RFC2445 folding.
+	Obtained from: evolution CVS repository
+
+	* src/libical/icalrecur.c: Worked around Outlook/Exchange brokenness.
+	Obtained from: evolution CVS repository
+
+
+2002-05-21  Andrea Campi  <a.campi@inet.it>
+
+	* src/libical/*: Removed void * in favor of opaque typedef types.
+	This helped uncover a few bugs and made debugging easier.
+	Obtained from: Paul Lindner
+
+2002-05-10  Andrea Campi  <a.campi@inet.it>
+
+	* src/libical/icalmemory.c: Made the memory allocator threadsafe.
+	This code is currently conditional on USE_THREAD, but it might
+	become the default in the future.
+	Obtained from: Paul Lindner
+
+	* src/libical/icaltime.c: Implemented icaltime_is_date(), with the
+	intent of removing all direct accesses to is_date.
+
 2002-05-09  Andrea Campi  <a.campi@inet.it>
 
 	* icaltime.c Rewrote and documented icaltime API, with the goal of
