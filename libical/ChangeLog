@@ -1,3 +1,95 @@
+2002-07-08  Andrea Campi  <a.campi@inet.it>
+
+	* src/python/Gauge.py
+	* src/python/LibicalWrap.i
+	* src/python/Property.py
+	* src/python/Store.py
+	* src/python/Time.py
+	* src/python/python-binding.txt
+	* src/python/test.py: Updated the python bindings to match the C API
+	changes.
+	Obtained from: Mark Tearle
+
+2002-07-04  Andrea Campi  <a.campi@inet.it>
+
+	* src/libical/icalderivedproperty.c.in
+	* src/libical/icalproperty.c
+	* src/libical/icalproperty.h: Added a check for valid property kind
+	before instancing it.
+
+	* src/libical/icalvalue.c: Fixed icalvalue_new_clone to properly clone
+	X- properties.
+
+2002-06-28  Andrea Campi  <a.campi@inet.it>
+
+	* design-data/parameters.csv
+	* src/libicalss/icalgauge.c
+	* src/libicalss/icalgaugeimpl.h
+	* src/libicalss/icalsslexer.c
+	* src/libicalss/icalsslexer.l
+	* src/libicalss/icalssyacc.c
+	* src/libicalss/icalssyacc.h
+	* src/libicalss/icalssyacc.y: Added IS NULL to icalgauge
+	syntax.
+	Obtained from: Paul Lindner
+
+	* src/libical/icallexer.c
+	* src/libical/icallexer.l
+	* src/libical/icalyacc.c
+	* src/libical/icalyacc.h
+	* src/libical/icalyacc.y: Sent lex/yacc code to Attic.
+
+	* src/libical/icalparameter.c: Changed icalparameter_as_ical_string
+	to also quote the param value if it contains a , (comma), as per RFC2445.
+
+	* src/libicalss/icalset.c
+	* src/libicalss/icalset.h: Added experimental code to support
+	dynamic loading of icalset derived classes.
+
+	* src/libicalss/Makefile.am
+	* src/libicalss/icalspanlist_cxx.cpp
+	* src/libicalss/icalspanlist_cxx.h: Added C++ binding for libicalss.
+	Obtained from: Paul Lindner
+
+2002-06-28  Eric Busboom  <eric@softwarestudio.org>
+
+	* src/libical/Makefile.am
+	* src/libical/icalduration.c
+	* src/libical/icalparser.c
+	* src/libical/icalvalue.c
+	* src/libical/icalyacc.c
+	* src/libical/icalyacc.h: removed lex and yacc by writing
+	code to parse UTC-OFFSET
+
+2002-06-27  Andrea Campi  <a.campi@inet.it>
+
+	* src/libical/icalcomponent.c
+	* src/libical/icalcomponent.h: Added icalcomponent_foreach_recurrence
+	as a better way of handling recurrences; deprecated
+	icalcomponent_get_span
+	Obtained from: Paul Lindner
+
+	* src/libical/icalderivedvalue.c.in
+	* src/libical/icalvalue.c
+	* src/libical/icalvalue.h: Added a check for valid value kind before
+	instancing it.
+	Obtained from: Paul Lindner
+
+	* src/libical/icalproperty.c
+	* src/libical/icalproperty.h: Deprecated icalproperty_remove_parameter,
+	added 3 new functions to do the same in a safer way (wrt X- params).
+	Obtained from: Paul Lindner
+
+	* src/libical/icaltime.c
+	* src/libical/icaltime.h: Added functions to work with time spans.
+	Obtained from: Paul Lindner
+
+2002-06-26  Andrea Campi  <a.campi@inet.it>
+
+	* src/libical/icalduration.c: Fixed icaldurationtype_from_int to
+	generate valid RFC2445 durations (it used to mix weeks and other
+	time units).
+
 2002-06-13  Andrea Campi  <a.campi@inet.it>
 
 	* src/libical/icalvalue.c: Fixed escaping of TEXT values and
