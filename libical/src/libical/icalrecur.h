@@ -158,6 +158,9 @@ enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day);
 /* 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc */
 short icalrecurrencetype_day_position(short day);
 
+const char* icalrecur_weekday_to_string(icalrecurrencetype_weekday kind);
+icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
+
 
 /***********************************************************************
  * Recurrance rule parser

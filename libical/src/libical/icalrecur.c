@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.34 2002-05-27 14:46:56 acampi Exp $
+  $Id: icalrecur.c,v 1.35 2002-07-04 11:06:45 acampi Exp $
   $Locker:  $
     
 
@@ -165,9 +165,6 @@
 
 const char* icalrecur_freq_to_string(icalrecurrencetype_frequency kind);
 icalrecurrencetype_frequency icalrecur_string_to_freq(const char* str);
-
-const char* icalrecur_weekday_to_string(icalrecurrencetype_weekday kind);
-icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
 
 
 /*********************** Rule parsing routines ************************/
