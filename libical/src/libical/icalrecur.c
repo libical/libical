@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.24 2001-12-12 20:13:05 ebusboom Exp $
+  $Id: icalrecur.c,v 1.25 2001-12-12 22:02:19 ebusboom Exp $
   $Locker:  $
     
 
@@ -1579,6 +1579,7 @@ int next_weekday_by_week(struct icalrecur_iterator_impl* impl)
   /* If we get here, we need to step to tne next day */
 
   while(1) {
+      struct icaltimetype tt = icaltime_null_time();
       BYDAYIDX++; /* Look at next elem in BYDAY array */
       
       /* Are we at the end of the BYDAY array? */
@@ -1590,8 +1591,12 @@ int next_weekday_by_week(struct icalrecur_iterator_impl* impl)
       /* Add the day of week offset to to the start of this week, and use
 	 that to get the next day */
       /* ignore position of dow ("4FR"), only use dow ("FR")*/
-      dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[BYDAYIDX]);  
-      start_of_week = icaltime_start_doy_of_week(impl->last);
+      dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[BYDAYIDX]); 
+      tt.year = impl->last.year;
+      tt.day = impl->last.day;
+      tt.month = impl->last.month;
+
+      start_of_week = icaltime_start_doy_of_week(tt);
       
       dow--; /* Set Sunday to be 0 */
       
@@ -1655,7 +1660,7 @@ int next_week(struct icalrecur_iterator_impl* impl)
       increment_monthday(impl,7*impl->rule.interval);
   }
 
-  if( has_by_data(impl,BY_WEEK_NO) && end_of_data && this_frequency ){
+  if( has_by_data(impl,BY_WEEK_NO) && end_of_data){
       increment_year(impl,1);
   }
 
