@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.12 2002-07-21 09:50:53 lindner Exp $
+  $Id: icalerror.c,v 1.13 2002-07-21 14:58:17 lindner Exp $
   $Locker:  $
     
 
@@ -29,8 +29,8 @@
 #include "config.h"
 #endif
 
-include <string.h>		/* for strcmp */
-include "icalerror.h"
+#include <string.h>		/* for strcmp */
+#include "icalerror.h"
 
 #ifdef HAVE_PTHREAD
 #include <pthread.h>

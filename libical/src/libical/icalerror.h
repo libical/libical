@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.13 2002-07-21 09:50:53 lindner Exp $
+  $Id: icalerror.h,v 1.14 2002-07-21 14:58:17 lindner Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -59,9 +59,6 @@ typedef enum icalerrorenum {
     ICAL_UNKNOWN_ERROR  /* Used for problems in input to icalerror_strerror()*/
 
 } icalerrorenum;
-
-icalerrorenum * icalerrno_return(void);
-#define icalerrno (*(icalerrno_return()))
 
 icalerrorenum * icalerrno_return(void);
 #define icalerrno (*(icalerrno_return()))
