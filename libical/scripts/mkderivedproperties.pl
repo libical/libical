@@ -192,6 +192,10 @@ void icalproperty_set_${lc}(icalproperty* prop, $type v){
         value = icalvalue_new_datetime(v);
     icalproperty_set_value(prop,value);
 }
+$type icalproperty_get_${lc}(icalproperty* prop){
+    icalerror_check_arg( (prop!=0),"prop");
+    return icalvalue_get_${lcvalue}(icalproperty_get_value(prop));
+}
 EOM
     } else {
 	print<<EOM;
