@@ -355,7 +355,6 @@ icaltimezone* icaltimezone_get_utc_timezone	(void);
 struct icalfileset_options {
   int          flags;		/**< flags for open() O_RDONLY, etc  */
   mode_t       mode;		/**< file mode */
-  int          safe_saves;	/**< to lock or not */
   icalcluster  *cluster;	/**< use this cluster to initialize data */
 };
 
