@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.28 2002-11-03 23:17:34 acampi Exp $
+ $Id: icaltimezone.c,v 1.29 2002-11-03 23:51:55 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1118,13 +1118,13 @@ icaltimezone_adjust_change		(icaltimezonechange *tt,
 
 
 char*
-icaltimezone_get_tzid			(const icaltimezone	*zone)
+icaltimezone_get_tzid			(icaltimezone	*zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
     if (!zone)
 	return NULL;
 
-    if (!zone->component)
+    if (!zone->tzid)
 	icaltimezone_load_builtin_timezone (zone);
 
     return zone->tzid;
