@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.36 2002-07-09 19:18:00 acampi Exp $
+  $Id: icalcomponent.c,v 1.37 2002-07-11 21:49:47 lindner Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -70,7 +70,7 @@ struct icalcomponent_impl
 void icalproperty_set_parent(icalproperty* property,
 			     icalcomponent* component);
 icalcomponent* icalproperty_get_parent(icalproperty* property);
-void icalcomponent_add_children(struct icalcomponent_impl *impl,va_list args);
+void icalcomponent_add_children(icalcomponent *impl,va_list args);
 static icalcomponent* icalcomponent_new_impl (icalcomponent_kind kind);
 static int icalcomponent_property_sorter(void *a, void *b);
 
@@ -103,14 +103,10 @@ void icalcomponent_add_children(icalcomponent *impl, va_list args)
 		icalproperty_isa_property(vp) != 0 ) ;
 
 	if (icalcomponent_isa_component(vp) != 0 ){
-
-	    icalcomponent_add_component((icalcomponent*)impl,
-				       (icalcomponent*)vp);
+	  icalcomponent_add_component(impl, (icalcomponent*)vp);
 
 	} else if (icalproperty_isa_property(vp) != 0 ){
-
-	    icalcomponent_add_property((icalcomponent*)impl,
-				       (icalproperty*)vp);
+	    icalcomponent_add_property(impl, (icalproperty*)vp);
 	}
     }    
 }
@@ -118,13 +114,12 @@ void icalcomponent_add_children(icalcomponent *impl, va_list args)
 static icalcomponent*
 icalcomponent_new_impl (icalcomponent_kind kind)
 {
-    struct icalcomponent_impl* comp;
+    icalcomponent* comp;
 
     if (!icalcomponent_kind_is_valid(kind))
 	return NULL;
 
-    if ( ( comp = (struct icalcomponent_impl*)
-	   malloc(sizeof(struct icalcomponent_impl))) == 0) {
+    if ( ( comp = (icalcomponent*) malloc(sizeof(icalcomponent))) == 0) {
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
 	return 0;
     }
@@ -149,7 +144,7 @@ icalcomponent_new_impl (icalcomponent_kind kind)
 icalcomponent*
 icalcomponent_new (icalcomponent_kind kind)
 {
-   return (icalcomponent*)icalcomponent_new_impl(kind);
+   return icalcomponent_new_impl(kind);
 }
 
 /** @brief Constructor
@@ -159,7 +154,7 @@ icalcomponent_vanew (icalcomponent_kind kind, ...)
 {
    va_list args;
 
-   struct icalcomponent_impl *impl = icalcomponent_new_impl(kind);
+   icalcomponent *impl = icalcomponent_new_impl(kind);
 
     if (impl == 0){
 	return 0;
@@ -169,7 +164,7 @@ icalcomponent_vanew (icalcomponent_kind kind, ...)
    icalcomponent_add_children(impl, args);
    va_end(args);
 
-   return (icalcomponent*) impl;
+   return impl;
 }
 
 /** @brief Constructor
@@ -181,15 +176,14 @@ icalcomponent* icalcomponent_new_from_string(char* str)
 
 /** @brief Constructor
  */
-icalcomponent* icalcomponent_new_clone(icalcomponent* component)
+icalcomponent* icalcomponent_new_clone(icalcomponent* old)
 {
-    struct icalcomponent_impl *old = (struct icalcomponent_impl*)component;
-    struct icalcomponent_impl *new;
+    icalcomponent *new;
     icalproperty *p;
     icalcomponent *c;
     pvl_elem itr;
 
-    icalerror_check_arg_rz( (component!=0), "component");
+    icalerror_check_arg_rz( (old!=0), "component");
 
     new = icalcomponent_new_impl(old->kind);
 
@@ -279,14 +273,13 @@ icalcomponent_free (icalcomponent* c)
 }
 
 char*
-icalcomponent_as_ical_string (icalcomponent* component)
+icalcomponent_as_ical_string (icalcomponent* impl)
 {
    char* buf, *out_buf;
    const char* tmp_buf;
    size_t buf_size = 1024;
    char* buf_ptr = 0;
     pvl_elem itr;
-    struct icalcomponent_impl *impl = (struct icalcomponent_impl*)component;
 
 /* WIN32 automatically adds the \r, Anybody else need it?
 #ifdef ICAL_UNIX_NEWLINE    
@@ -300,14 +293,14 @@ icalcomponent_as_ical_string (icalcomponent* component)
    
    icalcomponent *c;
    icalproperty *p;
-   icalcomponent_kind kind = icalcomponent_isa(component);
+   icalcomponent_kind kind = icalcomponent_isa(impl);
 
    const char* kind_string;
 
    buf = icalmemory_new_buffer(buf_size);
    buf_ptr = buf; 
 
-   icalerror_check_arg_rz( (component!=0), "component");
+   icalerror_check_arg_rz( (impl!=0), "component");
    icalerror_check_arg_rz( (kind!=ICAL_NO_COMPONENT), "component kind is ICAL_NO_COMPONENT");
    
    kind_string  = icalcomponent_kind_to_string(kind);
@@ -387,7 +380,7 @@ icalcomponent_isa (const icalcomponent* component)
 int
 icalcomponent_isa_component (void* component)
 {
-    struct icalcomponent_impl *impl = (struct icalcomponent_impl *)component;
+    icalcomponent *impl = component;
 
     icalerror_check_arg_rz( (component!=0), "component");
 
