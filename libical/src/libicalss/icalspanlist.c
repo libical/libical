@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.10 2002-06-28 10:15:39 acampi Exp $
+    $Id: icalspanlist.c,v 1.11 2002-10-30 23:30:47 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -293,14 +293,6 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
 
      /* Is the reference time before the first span? If so, assume
         that the reference time is free */
-     itr = pvl_head(sl->spans);
-     s = (struct icaltime_span *)pvl_data(itr);
-
-     if (s == 0){
-	 /* No elements in span */
-	 return period;
-     }
-
      if(rangett <s->start ){
 	 /* End of period is start of first span if span is busy, end
             of the span if it is free */
@@ -317,6 +309,13 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
 
      /* Otherwise, find the first free span that contains the
         reference time. */
+     itr = pvl_head(sl->spans);
+     s = (struct icaltime_span *)pvl_data(itr);
+
+     if (s == 0){
+	 /* No elements in span */
+	 return period;
+     }
 
      for( itr = pvl_head(sl->spans);
 	 itr != 0;
