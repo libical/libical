@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.25 2002-06-28 09:30:15 acampi Exp $
+  $Id: icalproperty.c,v 1.26 2002-07-04 10:25:28 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -95,6 +95,9 @@ struct icalproperty_impl*
 icalproperty_new_impl (icalproperty_kind kind)
 {
     struct icalproperty_impl* prop;
+
+    if (!icalproperty_kind_is_valid(kind))
+      return NULL;
 
     if ( ( prop = (struct icalproperty_impl*)
 	   malloc(sizeof(struct icalproperty_impl))) == 0) {

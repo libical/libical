@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.12 2002-06-28 09:30:16 acampi Exp $
+  $Id: icalproperty.h,v 1.13 2002-07-04 10:25:28 acampi Exp $
   $Locker:  $
 
   
@@ -110,6 +110,9 @@ icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);
 icalvalue_kind icalproperty_value_kind_to_kind(icalvalue_kind kind);
 const char* icalproperty_kind_to_string(icalproperty_kind kind);
 icalproperty_kind icalproperty_string_to_kind(const char* string);
+
+/** Check validity of a specific icalproperty_kind **/
+int icalproperty_kind_is_valid(const icalproperty_kind kind);
 
 icalproperty_method icalproperty_string_to_method(const char* str);
 const char* icalproperty_method_to_string(icalproperty_method method);
