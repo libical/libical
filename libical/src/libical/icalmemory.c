@@ -3,7 +3,7 @@
   FILE: icalmemory.c
   CREATOR: eric 30 June 1999
   
-  $Id: icalmemory.c,v 1.8 2002-07-10 09:09:15 acampi Exp $
+  $Id: icalmemory.c,v 1.9 2002-07-10 09:11:21 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -96,7 +96,7 @@ static void ring_destroy(void * buf) {
 	pthread_setspecific(ring_key, NULL);
 }
 
-static void ring_key_alloc() {  
+static void ring_key_alloc(void) {  
     pthread_key_create(&ring_key, ring_destroy);
 }
 #endif
