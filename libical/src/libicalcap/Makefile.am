@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: acampi 
 #  
-#  $Id: Makefile.am,v 1.1 2003-01-21 00:08:12 acampi Exp $
+#  $Id: Makefile.am,v 1.2 2003-01-22 18:43:15 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2003, Andrea Campi, mailto:a.campi@inet.it
@@ -66,3 +66,12 @@ libicalcapinclude_HEADERS =	\
 	icalcap_server_impl.h	\
 	icalcap_session.h	\
 	icalcap_session_impl.h
+
+
+noinst_PROGRAMS = client
+
+LDADD =  ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a libicalcap.la $(RRCAP_LIBS)
+
+
+client_SOURCES = client.c
+
