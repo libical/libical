@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.19 2002-07-12 07:59:14 acampi Exp $
+  $Id: icallangbind.c,v 1.20 2002-07-21 15:59:20 lindner Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -61,9 +61,10 @@ icalparameter* icallangbind_get_next_parameter(icalproperty *prop)
 }
 		                                              
 
-/* Like icalcomponent_get_first_component, but takes a string for the
+/** Like icalcomponent_get_first_component(), but takes a string for the
    kind and can iterate over X properties as if each X name was a
    seperate kind */
+
 icalproperty* icallangbind_get_first_property(icalcomponent *c,
                                               const char* prop)
 {
