@@ -1,25 +1,26 @@
 if WITH_CXX
-cxx_progs=testcxx
+cxx_inc=-DWITH_CXX
 cxx_libs=../libical/.libs/libical_cxx.a
-testcxx_SOURCES = testcxx.cpp
+regression_cxx = regression-cxx.cpp
 else
-cxx_progs=
+cxx_inc=
 cxx_libs=
+regression_cxx = 
 endif
-
-
-noinst_PROGRAMS = copycluster regression parser storage stow recur testmime testvcal process $(cxx_progs)
-
-LDADD =  ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a 
-
-LIBS = -lpthread 
 
 if WITH_BDB4
-storage_CFLAGS = -DWITH_BDB4
-storage_LDADD = ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a @BDB_DIR_LIB@/@BDB_LIB@
+bdb4_inc=-DWITH_BDB -I@BDB_DIR@/include
+bdb4_libs=@BDB_DIR_LIB@/@BDB_LIB@
 else
-storage_LDADD = ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a
+bdb4_inc=
+bdb4_libs=
 endif
+
+noinst_PROGRAMS = copycluster regression parser stow recur testmime testvcal process
+
+LDADD =  ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a $(bdb4_libs)
+
+LIBS = -lpthread 
 
 INCLUDES = 				\
        -I. 				\
@@ -30,13 +31,17 @@ INCLUDES = 				\
        -I$(srcdir)/../libical 		\
        -I../libicalss 			\
        -I$(srcdir)/../libicalss         \
-       -I@BDB_DIR_INCLUDE@
+	$(cxx_inc) $(bdb4_inc)
 
+TESTS=regression
 copycluster_SOURCES = copycluster.c
-regression_SOURCES = regression.c regression-component.c regression-classify.c regression-utils.c\
-		     regression-recur.c
+regression_SOURCES = regression.c regression-component.c regression-classify.c\
+			regression-utils.c\
+			regression-recur.c\
+			regression-storage.c\
+			$(regression_cxx)
+
 parser_SOURCES = icaltestparser.c
-storage_SOURCES = storage.c
 stow_SOURCES = stow.c
 testvcal_SOURCES = testvcal.c
 recur_SOURCES = recur.c 
