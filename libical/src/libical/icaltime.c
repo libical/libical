@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.36 2002-08-07 17:06:58 acampi Exp $
+  $Id: icaltime.c,v 1.37 2002-08-07 17:29:14 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -79,6 +79,11 @@ static time_t make_time(struct tm *tm, int tzm)
   /* check that year specification within range */
 
   if (tm->tm_year < 70 || tm->tm_year > 138)
+    return((time_t) -1);
+
+  /* check that month specification within range */
+
+  if (tm->tm_mon < 0 || tm->tm_mon > 12)
     return((time_t) -1);
 
   /* check for upper bound of Jan 17, 2038 (to avoid possibility of
