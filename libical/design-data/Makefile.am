@@ -6,5 +6,4 @@ EXTRA_DIST =\
  property-tokens.txt \
  restrictions.csv \
  status.txt \
- value-types.csv \
- value-mem-semantics.txt \
+ value-types.csv
