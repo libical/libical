@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.58 2003-02-17 15:39:58 acampi Exp $
+  $Id: icalrecur.c,v 1.59 2003-02-17 17:04:21 acampi Exp $
   $Locker:  $
     
 
@@ -952,6 +952,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	   * day. This should probably be abstracted to make such assumption
 	   * more explicit. */
 	  short dow = (short)(impl->by_ptrs[BY_DAY][0]-icaltime_day_of_week(impl->last));
+	  if (dow > impl->rule.week_start-1) dow -= 7;
 	  impl->last.day += dow;
 	  impl->last = icaltime_normalize(impl->last);
       }
