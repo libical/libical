@@ -47,6 +47,11 @@ icalcomponent* icalcomponent_new(int kind);
 icalcomponent* icalcomponent_new_clone(icalcomponent* component);
 icalcomponent* icalcomponent_new_from_string(char* str);
 
+const char* icalcomponent_kind_to_string(int kind);
+int  icalcomponent_string_to_kind(const char* string);
+
+
+
 char* icalcomponent_as_ical_string(icalcomponent* component);
 
 void icalcomponent_free(icalcomponent* component);
@@ -113,9 +118,6 @@ int icalvalue_string_to_kind(const char* str);
 
 const char* icalparameter_kind_to_string(int kind);
 int icalparameter_string_to_kind(const char* string);
-
-const char* icalenum_component_kind_to_string(int kind);
-int  icalenum_string_to_component_kind(const char* string);
 
 int* icallangbind_new_array(int size);
 void icallangbind_free_array(int* array);

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.py,v 1.16 2001-04-01 20:08:19 ebusboom Exp $
+#  $Id: Libical.py,v 1.17 2001-04-03 15:18:42 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -25,15 +25,11 @@
 #    the License at http://www.mozilla.org/MPL/
 #======================================================================
 
-
-import LibicalWrap
-
 from Component import Component, NewComponent, Event, Todo, Journal
-
-# Will eventually remove Time for real Property events
-from Property import Property, Time, Duration, Period, Attendee, Organizer, \
-     Recurrence_Id, Attach, RecurrenceSet
-
-from DerivedProperties import RDate, Trigger
-
+from Property import Property, RecurrenceSet
+from Time import Time
+from Period import Period
+from Duration import Duration
+from Attendee import Attendee, Organizer
+from DerivedProperties import RDate, Trigger,Recurrence_Id, Attach 
 from Store import Store, FileStore

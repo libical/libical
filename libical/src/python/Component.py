@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.5 2001-04-01 20:08:19 ebusboom Exp $
+#  $Id: Component.py,v 1.6 2001-04-03 15:18:42 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -26,13 +26,18 @@
 #======================================================================
 
 from LibicalWrap import *
-from types import *
-from Property import *
+from types import DictType, StringType, IntType
+from Property import Property
 from Collection import *
+from Attendee import Attendee, Organizer
+from Time import Time
+from Duration import Duration
+from Period import Period
+import string
 
 class Component:
 
-    def __init__(self,str=None, component_kind="ANY", ref=None):
+    def __init__(self,str=None, kind="ANY", ref=None):
 
         if ref != None: 
             self._ref = ref
@@ -41,14 +46,18 @@ class Component:
             if str != None:
                 self._ref = icalparser_parse_string(str)
             else:
-                kind = icalenum_string_to_component_kind(component_kind)
-                self._ref = icalcomponent_new(kind)
+                int_kind = icalcomponent_string_to_kind(kind)
+                self._ref = icalcomponent_new(int_kind)
        
+        self._init()
+
+    def _init(self):
+
         self.cached_props = {}
+        self.cached_comps = {}
 
     def __del__(self):
-        if self._ref != None and \
-           icalcomponent_get_parent(self._ref) != None:
+        if self._ref != None and icalcomponent_get_parent(self._ref) != 'NULL':
 
             for k in self.cached_props.keys():
                 del self.cached_props[k]
@@ -103,7 +112,7 @@ class Component:
         p = icallangbind_get_first_property(self._ref,type)
 
         while p !='NULL':
-            self._prop_from_ref(p)
+            self._prop_from_ref(p) # Puts property in self.cached_props
             prop =  self.cached_props[p]
             props.append(prop)
             p = icallangbind_get_next_property(self._ref,type)
@@ -140,8 +149,38 @@ class Component:
             del self.cached_props[prop.ref()]
             icalcomponent_remove_property(self._ref,prop.ref())
 
+    def _comp_from_ref(self,c):
+
+        if not self.cached_comps.has_key(c):  
+
+            kind = icalcomponent_kind_to_string(icalcomponent_isa(c));
+
+            if kind == 'VEVENT':
+                comp = Event()
+            elif kind == 'VJOURNAL':
+                comp = Journal()
+            elif kind == 'VTODO':
+                comp = Todo()
+            else:
+                comp = GenericComponent()
+                comp._init()
+                
+
+            comp._ref = c
+            self.cached_comps[c] = comp
+
     def components(self,type='ANY'):        
         comps = []
+
+        kind = icalcomponent_string_to_kind(type)
+
+        c = icalcomponent_get_first_component(self._ref,kind);
+
+        while c != 'NULL':
+            self._comp_from_ref(c) #Creates comp and adds to self.cached_comps
+            comp = self.cached_comps[c]
+            comps.append(comp)
+            c = icalcomponent_get_next_component(self._ref,kind);
 
         return comps
 
@@ -198,7 +237,7 @@ class GenericComponent(Component):
 
     def __init__(self):
                 
-        # Component.__init__(self, str) # Call from subclasses
+        #Component.__init__(self, str) # Call from subclasses
         self._recurrence_set=None
 
     def _singular_property(self, name, value_type, value=None,
@@ -215,7 +254,7 @@ class GenericComponent(Component):
             if len(curr_properties) == 0:
                 return None
             elif len(curr_properties) == 1:
-                return curr_properties[0].value()
+                return curr_properties[0]
             else:
                 raise ValueError, "too many properties of type %s" % propType
 
@@ -223,7 +262,7 @@ class GenericComponent(Component):
         else:
             # Check if value is in enumerated_values
             if enumerated_values:
-                value = upper(value)
+                value = string.upper(value)
                 if value not in enumerated_values:
                     raise ValueError, "%s is not one of %s" \
                           % (value, enumerated_values)
@@ -497,8 +536,8 @@ class GenericComponent(Component):
 class Event(GenericComponent):
     "The iCalendar Event object."
 
-    def __init__(self, str=None):
-        Component.__init__(self, str, "VEVENT")
+    def __init__(self):
+        Component.__init__(self, kind="VEVENT")
         GenericComponent.__init__(self)
         
     def component_type(self):
@@ -601,6 +640,11 @@ class Event(GenericComponent):
 class Todo(GenericComponent):
     "The iCalendar TODO component."
 
+    def __init__(self):
+        Component.__init__(self, kind="VEVENT")
+        GenericComponent.__init__(self)
+
+
     def component_type(self):
         "Returns the type of component for the object."
         return "VTODO"
@@ -652,6 +696,11 @@ class Todo(GenericComponent):
 
 class Journal(GenericComponent):
     "The iCalendar JOURNAL component."
+
+    def __init__(self):
+        Component.__init__(self, kind="VEVENT")
+        GenericComponent.__init__(self)
+
 
     def component_type(self):
         "Returns the type of component for the object."
