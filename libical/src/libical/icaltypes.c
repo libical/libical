@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.9 2002-06-03 17:15:32 acampi Exp $
+  $Id: icaltypes.c,v 1.10 2002-07-04 10:28:19 acampi Exp $
   $Locker:  $
     
 
@@ -53,6 +53,16 @@ int icaltriggertype_is_null_trigger(struct icaltriggertype tr)
     return 0;
 }
     
+struct icaltriggertype icaltriggertype_from_int(const int reltime)
+{
+    struct icaltriggertype tr;
+
+    tr.time	= icaltime_null_time();
+    tr.duration = icaldurationtype_from_int(reltime);
+
+    return tr;
+}
+
 struct icaltriggertype icaltriggertype_from_string(const char* str)
 {
 

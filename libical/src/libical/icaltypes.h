@@ -51,6 +51,7 @@ struct icaltriggertype
 	struct icaldurationtype duration;
 };
 
+struct icaltriggertype icaltriggertype_from_int(const int reltime);
 struct icaltriggertype icaltriggertype_from_string(const char* str);
 
 int icaltriggertype_is_null_trigger(struct icaltriggertype tr);
