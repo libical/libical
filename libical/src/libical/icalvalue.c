@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.24 2002-06-27 00:22:09 acampi Exp $
+  $Id: icalvalue.c,v 1.25 2002-06-27 00:42:02 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1020,7 +1020,8 @@ icalvalue_as_ical_string(const icalvalue* value)
         return icalproperty_enum_to_string(value->data.v_enum);
         
     case ICAL_X_VALUE: 
-        return icalmemory_tmp_copy(value->x_value);
+	if (value->x_value != 0)
+            return icalmemory_tmp_copy(value->x_value);
 
     case ICAL_NO_VALUE:
     default:
