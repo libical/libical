@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.47 2002-11-04 01:45:16 acampi Exp $
+  $Id: icalrecur.c,v 1.48 2002-11-04 14:04:08 acampi Exp $
   $Locker:  $
     
 
@@ -249,7 +249,8 @@ void icalrecur_clause_name_and_value(struct icalrecur_parser *parser,
     *value = idx;
 }
 
-void icalrecur_add_byrules(short *array, int size, char* vals)
+void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
+			   int size, char* vals)
 {
     char *t, *n;
     int i=0;
