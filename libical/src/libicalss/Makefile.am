@@ -16,16 +16,12 @@ libicalss_la_LDFLAGS = -version-info 0:0:0
 
 if DEV
 libicalss_la_DEVSOURCES = icalsslexer.l icalssyacc.y
-.l.c:
-	$(SHELL) $(YLWRAP) $< $(LEX_OUTPUT_ROOT).c $@ -- $(LEXCOMPILE)
-.y.c:
-	$(SHELL) $(YLWRAP) $< y.tab.c $@ y.tab.h $*.h -- $(YACCCOMPILE)
+.SUFFIXES:
+.SUFFIXES: .c .l .lo .o .obj .y
 else
 libicalss_la_DEVSOURCES = icalsslexer.c icalssyacc.c
-.l.c:
-	@echo Nothing
-.y.c:
-	@echo Nothing
+.SUFFIXES:
+.SUFFIXES: .c .lo .o .obj
 endif
 
 libicalss_la_SOURCES =		\

@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.23 2002-06-07 12:51:17 acampi Exp $
+#  $Id: Makefile.am,v 1.24 2002-06-07 16:11:51 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -52,16 +52,12 @@ libical_la_LDFLAGS = -version-info 0:0:0
 
 if DEV
 libical_la_DEVSOURCES = icallexer.l icalyacc.y
-.l.c:
-	$(SHELL) $(YLWRAP) $< $(LEX_OUTPUT_ROOT).c $@ -- $(LEXCOMPILE)
-.y.c:
-	$(SHELL) $(YLWRAP) $< y.tab.c $@ y.tab.h $*.h -- $(YACCCOMPILE)
+.SUFFIXES:
+.SUFFIXES: .c .l .lo .o .obj .y
 else
 libical_la_DEVSOURCES = icallexer.c icalyacc.c
-.l.c:
-	@echo Nothing
-.y.c:
-	@echo Nothing
+.SUFFIXES:
+.SUFFIXES: .c .lo .o .obj
 endif
 
 libical_la_SOURCES =		\
