@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.22 2002-06-03 13:24:36 acampi Exp $
+  $Id: icalfileset.c,v 1.23 2002-06-03 16:19:26 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -196,6 +196,9 @@ icalcluster* icalfileset_produce_icalcluster(const char *path) {
     icalcluster *ret;
     struct icalfileset_impl *impl;
 
+    int errstate = icalerror_errors_are_fatal;
+    icalerror_errors_are_fatal = 0;
+
     file = icalfileset_new_reader(path);
 
     if (file == 0 && icalerrno == ICAL_FILE_ERROR) {
@@ -208,6 +211,7 @@ icalcluster* icalfileset_produce_icalcluster(const char *path) {
 	icalfileset_free(file);
     }
 
+    icalerror_errors_are_fatal = errstate;
     icalerror_set_errno(ICAL_NO_ERROR);
     return ret;
 }
