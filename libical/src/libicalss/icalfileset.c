@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.30 2002-12-05 13:45:19 acampi Exp $
+  $Id: icalfileset.c,v 1.31 2002-12-05 13:54:08 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -59,7 +59,7 @@
 extern int errno;
 
 /** Default options used when NULL is passed to icalset_new() **/
-icalfileset_options icalfileset_options_default = {O_RDWR|O_CREAT, 0644, 0, 0};
+icalfileset_options icalfileset_options_default = {O_RDWR|O_CREAT, 0644, 0};
 
 int icalfileset_lock(icalfileset *set);
 int icalfileset_unlock(icalfileset *set);
