@@ -140,7 +140,7 @@ dnl Check if this system can use pthreads
 dnl HACK to support FreeBSD 4.x pthread
 
 case "${host}" in 
-        *-*-freebsdelf4.4 | *-*-freebsdelf4.5 | *-*-freebsdelf4.6 )
+        *-*-freebsdelf4* )
 		AC_MSG_RESULT(checking for pthread_create in -lpthread... -pthread (FreeBSD 4.x style))
 		AC_DEFINE(HAVE_PTHREAD, ,[Define if we have pthread.])
 		PTHREAD_LIBS=-pthread;;
