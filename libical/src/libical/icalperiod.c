@@ -3,7 +3,7 @@
   FILE: icalperiod.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalperiod.c,v 1.6 2001-12-22 17:04:33 gray-john Exp $
+  $Id: icalperiod.c,v 1.7 2002-05-24 12:15:38 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -97,13 +97,14 @@ struct icalperiodtype icalperiodtype_from_string (const char* str)
 
     icalerrno = e;
 
-	free(s);
-
+    icalmemory_freebuffer (s);
     return p;
 
  error:
-	free(s);
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+
+    if (s)
+	icalmemory_freebuffer (s);
     return null_p;
 }
 
