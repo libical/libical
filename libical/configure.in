@@ -169,7 +169,7 @@ AC_TYPE_SIZE_T
 AC_STRUCT_TM
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS(iswspace strdup snprintf)
+AC_CHECK_FUNCS(gmtime_r iswspace strdup snprintf)
 
 dnl **************************************************
 dnl * Check for C++

@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.38 2002-08-07 17:30:09 acampi Exp $
+  $Id: icaltime.c,v 1.39 2002-08-08 00:48:33 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -187,17 +187,20 @@ icaltime_from_timet_with_zone(const time_t tm, const int is_date,
 	const icaltimezone *zone)
 {
     struct icaltimetype tt = icaltime_null_time();
-    struct tm t, *t_ptr;
+    struct tm t;
     icaltimezone *utc_zone;
 
     /* Convert the time_t to a struct tm. We can trust gmtime for this. */
-#ifndef _WIN32
+#ifdef HAVE_GMTIME_R
     gmtime_r(&tm, &t);
 #else
-    t_ptr = gmtime_r(&tm, &t);
-    t = *t_ptr;
+    {
+	struct tm *t_ptr;
+	t_ptr = gmtime(&tm);
+	t = *t_ptr;
+    }
 #endif
-     
+
     tt.year   = t.tm_year + 1900;
     tt.month  = t.tm_mon + 1;
     tt.day    = t.tm_mday;
