@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.12 2002-06-07 13:50:07 acampi Exp $
+ $Id: icaltimezone.c,v 1.13 2002-06-11 12:36:46 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -136,10 +136,10 @@ struct _icaltimezonechange {
 
 
 /** An array of icaltimezones for the builtin timezones. */
-icalarray *builtin_timezones = NULL;
+static icalarray *builtin_timezones = NULL;
 
 /** This is the special UTC timezone, which isn't in builtin_timezones. */
-icaltimezone utc_timezone = { 0 };
+static icaltimezone utc_timezone = { 0 };
 
 static char* zone_files_directory = NULL;
 
