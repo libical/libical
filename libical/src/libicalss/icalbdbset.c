@@ -1120,6 +1120,10 @@ icalsetiter icalbdbset_begin_component(icalset* set, icalcomponent_kind kind, ic
                 }
             }
 
+            /* if it is excluded, do next one */
+            if (icalproperty_recurrence_is_excluded(comp, &start, &next)) 
+                continue;
+
             /* add recurrence-id to the component
              * if there is a recurrence-id already, remove it, then add the new one */
             if (prop = icalcomponent_get_first_property(comp, ICAL_RECURRENCEID_PROPERTY))
@@ -1189,7 +1193,11 @@ icalcomponent* icalbdbset_form_a_matched_recurrence_component(icalsetiter* itr)
         }
     }
 
-    /* add recurrence-id to the component */
+    /* if it is excluded, return NULL to the caller */
+    if (icalproperty_recurrence_is_excluded(comp, &start, &next))
+       return NULL; 
+
+    /* add recurrence-id to the component
      * if there is a recurrence-id already, remove it, then add the new one */
     if (prop = icalcomponent_get_first_property(comp, ICAL_RECURRENCEID_PROPERTY))
         icalcomponent_remove_property(comp, prop);
@@ -1260,7 +1268,11 @@ icalcomponent* icalbdbsetiter_to_next(icalset *set, icalsetiter* i)
                 }
             }
 
-            /* add recurrence-id to the component *
+            /* if it is excluded, do next one */
+            if (icalproperty_recurrence_is_excluded(c, &start, &next))
+                continue;
+
+            /* add recurrence-id to the component
              * if there is a recurrence-id already, remove it, then add the new one */
         if (prop = icalcomponent_get_first_property(c, ICAL_RECURRENCEID_PROPERTY))
             icalcomponent_remove_property(c, prop);
