@@ -3,7 +3,7 @@
   FILE: icalmemory.c
   CREATOR: eric 30 June 1999
   
-  $Id: icalmemory.c,v 1.9 2002-07-10 09:11:21 acampi Exp $
+  $Id: icalmemory.c,v 1.10 2002-08-09 14:28:56 lindner Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -92,8 +92,8 @@ static pthread_key_t  ring_key;
 static pthread_once_t ring_key_once = PTHREAD_ONCE_INIT;
 
 static void ring_destroy(void * buf) {
-    icalmemory_free_ring_byval((buffer_ring *) buf);
-	pthread_setspecific(ring_key, NULL);
+    if (buf) icalmemory_free_ring_byval((buffer_ring *) buf);
+    pthread_setspecific(ring_key, NULL);
 }
 
 static void ring_key_alloc(void) {  
