@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.33 2002-07-23 00:37:31 lindner Exp $
+  $Id: icalparser.c,v 1.34 2002-08-07 18:04:57 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -58,14 +58,15 @@
  * autodetect whether the target OS has wctype.h and all the functionality
  * we need. When this happens this can go away.
  */
-#ifndef __FreeBSD__
-#define HAVE_WCTYPE_H	1
-#endif
 
-#ifdef HAVE_WCTYPE_H
-#include <wctype.h>
+#if defined(__FreeBSD__) || defined(__APPLE__)
+# ifdef HAVE_WCTYPE_H
+#  include <wctype.h>
+# else
+#  define iswspace        isspace
+# endif
 #else
-#define iswspace        isspace
+# define HAVE_WCTYPE_H	1
 #endif
 
 #ifdef WIN32
