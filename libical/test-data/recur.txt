@@ -1,5 +1,17 @@
 BEGIN:VEVENT
 DESCRIPTION
+ :Monday of week number 20 (where the default start of the week is Monday)\, 
+ forever:
+DTSTART
+ ;TZID=US-Eastern
+ :19970512T090000
+RRULE
+ :FREQ=YEARLY;INTERVAL=1;COUNT=10;BYDAY=MO;BYWEEKNO=20
+END:VEVENT
+
+
+BEGIN:VEVENT
+DESCRIPTION
  : Once a Year
 DTSTART
  ;TZID=US-Eastern
