@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.63 2002-10-30 23:45:50 acampi Exp $
+  $Id: regression.c,v 1.64 2003-02-17 15:26:18 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2274,11 +2274,11 @@ void test_recur_parser()
   struct icalrecurrencetype rt; 
   char *str;
 
-  str = "FREQ=YEARLY;UNTIL=20000131T090000Z;INTERVAL=1;BYDAY=-1TU,3WE,-4FR,SU,SA;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
+  str = "FREQ=YEARLY;UNTIL=20000131T090000Z;INTERVAL=1;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
   rt = icalrecurrencetype_from_string(str);
   is(str, icalrecurrencetype_as_string(&rt), str);
 
-  str = "FREQ=DAILY;COUNT=3;INTERVAL=1;BYDAY=-1TU,3WE,-4FR,SU,SA;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
+  str = "FREQ=DAILY;COUNT=3;INTERVAL=1;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
   
   rt = icalrecurrencetype_from_string(str);
   is(str, icalrecurrencetype_as_string(&rt), str);
