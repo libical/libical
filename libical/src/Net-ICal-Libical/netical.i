@@ -53,12 +53,38 @@ int icalrecur_expand_recurrence(char* rule, int start,
 				int count, int* array);
 
 icalproperty* icallangbind_get_property(icalcomponent *c, int n, const char* prop);
-
 const char* icallangbind_get_property_val(icalproperty* p);
-
 const char* icallangbind_get_parameter(icalproperty *p, const char* parameter);
-
 icalcomponent* icallangbind_get_component(icalcomponent *c, const char* comp);
+
+
+typedef enum icalerrorenum {
+    
+    ICAL_BADARG_ERROR,
+    ICAL_NEWFAILED_ERROR,
+    ICAL_MALFORMEDDATA_ERROR, 
+    ICAL_PARSE_ERROR,
+    ICAL_INTERNAL_ERROR, /* Like assert --internal consist. prob */
+    ICAL_FILE_ERROR,
+    ICAL_ALLOCATION_ERROR,
+    ICAL_USAGE_ERROR,
+    ICAL_NO_ERROR,
+    ICAL_MULTIPLEINCLUSION_ERROR,
+    ICAL_TIMEDOUT_ERROR,
+    ICAL_UNKNOWN_ERROR /* Used for problems in input to icalerror_strerror()*/
+
+} icalerrorenum;
+
+/* Make an individual error fatal or non-fatal. */
+typedef enum icalerrorstate { 
+    ICAL_ERROR_FATAL,     /* Not fata */
+    ICAL_ERROR_NONFATAL,  /* Fatal */
+    ICAL_ERROR_DEFAULT,   /* Use the value of icalerror_errors_are_fatal*/
+    ICAL_ERROR_UNKNOWN    /* Asked state for an unknown error type */
+} icalerrorstate ;
+
+void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
+icalerrorstate icalerror_get_error_state( icalerrorenum error);
 
 
 

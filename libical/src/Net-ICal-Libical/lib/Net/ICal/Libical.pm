@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.pm,v 1.1 2001-01-28 16:37:44 ebusboom Exp $
+#  $Id: Libical.pm,v 1.2 2001-01-28 18:00:48 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -40,7 +40,7 @@ package Net::ICal::Libical;
 
 sub parse_string {
   my $comp_str = shift;
- 
+
   my $c = Net::ICal::Libical::icalparser_parse_string($comp_str); 
   my $out;
 
@@ -52,14 +52,15 @@ sub parse_string {
 
   foreach $pn (@props){
 
-    my $p = Net::ICal::Libical::icalperl_get_property($c,0,$pn);
+    my $p = Net::ICal::Libical::icallangbind_get_property($c,0,$pn);
 
-    my $v = Net::ICal::Libical::icalperl_get_property_val($p);
+    my $v = Net::ICal::Libical::icallangbind_get_property_val($p);
 
     print "$pn $v\n";
   }
 
   Net::ICal::Libical::icalcomponent_free($c);
+
 
 }
 
@@ -67,6 +68,7 @@ sub parse_string {
 sub validate_component {
   my $comp_str = shift;
  
+
   my $c = Net::ICal::Libical::icalparser_parse_string($comp_str); 
   my $out;
 
@@ -77,6 +79,7 @@ sub validate_component {
   $out = Net::ICal::Libical::icalcomponent_as_ical_string($c);
 
   Net::ICal::Libical::icalcomponent_free($c);
+
 
   return $out;
 
@@ -90,20 +93,20 @@ sub generate_occurrences {
 
   my @out;
 
-  my $array = Net::ICal::Libical::new_array(25);
+  my $array = Net::ICal::Libical::icallangbind_new_array(25);
 
   Net::ICal::Libical::icalrecur_expand_recurrence($rule,$start,
 						$count,$array);
 		   
   for($i = 0; $i<$count; $i++){
-    my $t = Net::ICal::Libical::access_array($array,$i);
+    my $t = Net::ICal::Libical::icallangbind_access_array($array,$i);
     if($t != 0) {
       push(@out,$t);
     }
 
   }
 
-  Net::ICal::Libical::free_array($array);
+  Net::ICal::Libical::icallangbind_free_array($array);
 
   return @out;
 }

@@ -11,7 +11,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+ $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -156,7 +156,7 @@ short icaltime_days_in_month(short month,short year);
  CREATOR: eric 26 Jan 2001
 
 
- $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+ $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -215,7 +215,7 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
  CREATOR: eric 26 Jan 2001
 
 
- $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+ $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -816,6 +816,64 @@ struct icalreqstattype {
 struct icalreqstattype icalreqstattype_from_string(char* str);
 char* icalreqstattype_as_string(struct icalreqstattype);
 
+
+struct icalorganizertype {
+    const char* value;
+    const char* common_name;
+    const char* dir;
+    const char* sentby;
+    const char* language;
+
+};
+
+/* Create a copy of the given organizer. Libical will not own the
+   memory for the strings in the copy; the call must free them */
+struct icalorganizertype icalorganizertype_new_clone(struct icalorganizertype a);
+
+
+struct icalattendeetype {
+    const char* cuid; /* Cal user id, contents of the property value */
+    icalparameter_cutype cutype;
+    const char* member;
+    icalparameter_role role;
+    int rsvp;
+    const char* delto;
+    const char* delfrom;
+    const char* sentby;
+    const char* cn;
+    const char* dir;
+    const char* language;
+};
+
+/* Create a copy of the given attendee. Libical will not own the
+   memory for the strings in the copy; the call must free them */
+struct icalattendeetype icalattendeetype_new_clone(struct icalattendeetype a);
+
+
+struct icaltimezonephase {
+    const char* tzname;
+    int is_stdandard; /* 1 = standard tme, 0 = daylight savings time */
+    struct icaltimetype dtstart;
+    int offsetto;
+    int tzoffsetfrom;
+    const char* comment;
+    struct icaldatetimeperiodtype rdate;
+    const char* rrule;    
+};
+
+
+struct icaltimezonetype {
+    const char* tzid;
+    struct icaltimetype last_mod;
+    const char* tzurl;
+    
+    /* Array of phases. The end of the array is a phase with tzname == 0 */
+    struct icaltimezonephase *phases;
+};
+
+void icaltimezonetype_free(struct icaltimezonetype tzt);
+
+
 #endif /* !ICALTYPES_H */
 /* -*- Mode: C -*- */
 /*======================================================================
@@ -990,7 +1048,7 @@ int icalrecur_expand_recurrence(char* rule, time_t start,
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
   $Locker:  $
 
   
@@ -1162,7 +1220,7 @@ void icalvalue_set_status(icalvalue* value, icalproperty_status v);
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
   $Locker:  $
 
   
@@ -1333,7 +1391,7 @@ void icalparameter_set_xliccomparetype(icalparameter* value, icalparameter_xlicc
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
@@ -2010,15 +2068,30 @@ const char* icalcomponent_get_summary(icalcomponent* comp);
 void icalcomponent_set_comment(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_comment(icalcomponent* comp);
 
-void icalcomponent_set_organizer(icalcomponent* comp, const char* v);
-const char* icalcomponent_get_organizer(icalcomponent* comp);
-
 void icalcomponent_set_uid(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_uid(icalcomponent* comp);
 
 void icalcomponent_set_recurrenceid(icalcomponent* comp, 
 				    struct icaltimetype v);
 struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent* comp);
+
+
+void icalcomponent_set_organizer(icalcomponent* comp, 
+				 struct icalorganizertype org);
+struct icalorganizertype icalcomponent_get_organizer(icalcomponent* comp);
+
+
+void icalcomponent_add_attendee(icalcomponent *comp,
+				struct icalattendeetype attendee);
+
+int icalcomponent_remove_attendee(icalcomponent *comp, char* cuid);
+
+/* Get the Nth attendee. Out of range indidices return an attendee
+   with cuid == 0 */
+struct icalattendeetype icalcomponent_get_attendee(icalcomponent *comp,
+						   int index);
+
+
 
 /*************** Type Specific routines ***************/
 
@@ -2042,7 +2115,7 @@ icalcomponent* icalcomponent_new_xdaylight();
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2133,7 +2206,7 @@ char* string_line_generator(char *out, size_t buf_size, void *d);
  CREATOR: eric 30 June 1999
 
 
- $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+ $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -2211,7 +2284,7 @@ char* icalmemory_strdup(const char *s);
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2355,7 +2428,7 @@ char* icalerror_strerror(icalerrorenum e);
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
   
-  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2416,7 +2489,7 @@ int icalrestriction_check(icalcomponent* comp);
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
   
-  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -2560,7 +2633,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
  CREATOR: eric 26 July 2000
 
 
- $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+ $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2602,7 +2675,7 @@ char* icalmime_as_mime_string(char* component);
   
   DESCRIPTION:
   
-  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: ical.h,v 1.12 2001-01-28 18:00:48 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 

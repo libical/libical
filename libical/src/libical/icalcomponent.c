@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.5 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: icalcomponent.c,v 1.6 2001-01-28 18:00:48 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1376,9 +1376,6 @@ const char* icalcomponent_get_summary(icalcomponent* comp)
 
 void icalcomponent_set_comment(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_comment(icalcomponent* comp);
-
-void icalcomponent_set_organizer(icalcomponent* comp, const char* v);
-const char* icalcomponent_get_organizer(icalcomponent* comp);
 
 void icalcomponent_set_uid(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_uid(icalcomponent* comp);

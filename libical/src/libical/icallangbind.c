@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.1 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: icallangbind.c,v 1.2 2001-01-28 18:00:48 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -68,7 +68,7 @@ icalproperty* icallangbind_get_property(icalcomponent *c, int n, const char* pro
 		p = icalcomponent_get_next_property(comps[compno],kind)
 		){
 
-		if(strcmp(icalproperty_get_xname(p),prop) == 0){
+		if(strcmp(icalproperty_get_x_name(p),prop) == 0){
 
 		    if(propno == n ){
 			return p;

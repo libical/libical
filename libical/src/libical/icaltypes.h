@@ -158,10 +158,10 @@ struct icaltimezonetype {
     const char* tzurl;
     
     /* Array of phases. The end of the array is a phase with tzname == 0 */
-    struct *icaltimezonephase
+    struct icaltimezonephase *phases;
 };
 
-struct icaltimezonetype_free(struct icaltimezonetype tzt);
+void icaltimezonetype_free(struct icaltimezonetype tzt);
 
 
 #endif /* !ICALTYPES_H */

@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.2 2001-01-24 17:14:02 ebusboom Exp $
+  $Id: copycluster.c,v 1.3 2001-01-28 18:00:48 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -57,7 +57,6 @@ int main(int c, char *argv[]){
     }
 
 
-    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 
     clusterin = icalfileset_new(argv[1]);

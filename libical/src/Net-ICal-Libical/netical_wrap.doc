@@ -24,27 +24,87 @@ icalcomponent_convert_errors(component);
 icalrestriction_check(comp);
         [ returns int  ]
 
+icallangbind_new_array(size);
+        [ returns int * ]
+
+icallangbind_free_array(array);
+        [ returns void  ]
+
+icallangbind_access_array(array,index);
+        [ returns int  ]
+
 icalrecur_expand_recurrence(rule,start,count,array);
         [ returns int  ]
 
-new_array(size);
-        [ returns int * ]
-
-free_array(array);
-        [ returns void  ]
-
-access_array(array,index);
-        [ returns int  ]
-
-icalperl_get_property(c,n,prop);
+icallangbind_get_property(c,n,prop);
         [ returns icalproperty * ]
 
-icalperl_get_property_val(p);
+icallangbind_get_property_val(p);
         [ returns char * ]
 
-icalperl_get_parameter(p,parameter);
+icallangbind_get_parameter(p,parameter);
         [ returns char * ]
 
-icalperl_get_component(c,comp);
+icallangbind_get_component(c,comp);
         [ returns icalcomponent * ]
+
+$ICAL_BADARG_ERROR = ICAL_BADARG_ERROR
+        [ Constant: int  ]
+
+$ICAL_NEWFAILED_ERROR = ICAL_NEWFAILED_ERROR
+        [ Constant: int  ]
+
+$ICAL_MALFORMEDDATA_ERROR = ICAL_MALFORMEDDATA_ERROR
+        [ Constant: int  ]
+
+$ICAL_PARSE_ERROR = ICAL_PARSE_ERROR
+        [ Constant: int  ]
+
+$ICAL_INTERNAL_ERROR = ICAL_INTERNAL_ERROR
+        [ Constant: int  ]
+        Like assert --internal consist. prob 
+
+$ICAL_FILE_ERROR = ICAL_FILE_ERROR
+        [ Constant: int  ]
+
+$ICAL_ALLOCATION_ERROR = ICAL_ALLOCATION_ERROR
+        [ Constant: int  ]
+
+$ICAL_USAGE_ERROR = ICAL_USAGE_ERROR
+        [ Constant: int  ]
+
+$ICAL_NO_ERROR = ICAL_NO_ERROR
+        [ Constant: int  ]
+
+$ICAL_MULTIPLEINCLUSION_ERROR = ICAL_MULTIPLEINCLUSION_ERROR
+        [ Constant: int  ]
+
+$ICAL_TIMEDOUT_ERROR = ICAL_TIMEDOUT_ERROR
+        [ Constant: int  ]
+        Used for problems in input to icalerror_strerror() 
+
+$ICAL_UNKNOWN_ERROR = ICAL_UNKNOWN_ERROR
+        [ Constant: int  ]
+
+$ICAL_ERROR_FATAL = ICAL_ERROR_FATAL
+        [ Constant: int  ]
+        Not fata 
+
+$ICAL_ERROR_NONFATAL = ICAL_ERROR_NONFATAL
+        [ Constant: int  ]
+        Fatal 
+
+$ICAL_ERROR_DEFAULT = ICAL_ERROR_DEFAULT
+        [ Constant: int  ]
+        Use the value of icalerror_errors_are_fatal Asked state for an unknown
+        error type 
+
+$ICAL_ERROR_UNKNOWN = ICAL_ERROR_UNKNOWN
+        [ Constant: int  ]
+
+icalerror_set_error_state(error,icalerrorstate );
+        [ returns void  ]
+
+icalerror_get_error_state(error);
+        [ returns icalerrorstate  ]
 

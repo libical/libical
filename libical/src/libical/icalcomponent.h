@@ -193,9 +193,6 @@ const char* icalcomponent_get_summary(icalcomponent* comp);
 void icalcomponent_set_comment(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_comment(icalcomponent* comp);
 
-void icalcomponent_set_organizer(icalcomponent* comp, const char* v);
-const char* icalcomponent_get_organizer(icalcomponent* comp);
-
 void icalcomponent_set_uid(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_uid(icalcomponent* comp);
 
@@ -206,7 +203,7 @@ struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent* comp);
 
 void icalcomponent_set_organizer(icalcomponent* comp, 
 				 struct icalorganizertype org);
-struct icalorganizertype icalcomponent_get_organizer(calcomponent* comp);
+struct icalorganizertype icalcomponent_get_organizer(icalcomponent* comp);
 
 
 void icalcomponent_add_attendee(icalcomponent *comp,

@@ -1,8 +1,6 @@
 MANIFEST
-Makefile
 Makefile.PL
 lib/Net/ICal/Libical.pm
-libical.c
 netical.i
 netical_wrap.c
 netical_wrap.doc

@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.3 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: icalparser.c,v 1.4 2001-01-28 18:00:48 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -527,8 +527,11 @@ icalcomponent* icalparser_parse(icalparser *parser,
     icalcomponent *c=0; 
     icalcomponent *root=0;
     struct icalparser_impl *impl = (struct icalparser_impl*)parser;
+    icalerrorstate es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
 
     icalerror_check_arg_rz((parser !=0),"parser");
+
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_NONFATAL);
 
     do{
 	line = icalparser_get_line(parser, line_gen_func);
@@ -569,6 +572,8 @@ icalcomponent* icalparser_parse(icalparser *parser,
 	    free(line);
 	}
     } while ( line != 0);
+
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,es);
 
     return root;
 
@@ -1023,12 +1028,20 @@ icalcomponent* icalparser_parse_string(const char* str)
     struct slg_data d;
     icalparser *p;
 
+    icalerrorstate es = icalerror_get_error_state(ICAL_PARSE_ERROR);
+
     d.pos = 0;
     d.str = str;
 
     p = icalparser_new();
     icalparser_set_gen_data(p,&d);
+
+    icalerror_set_error_state(ICAL_PARSE_ERROR,ICAL_ERROR_NONFATAL);
+
     c = icalparser_parse(p,string_line_generator);
+
+    icalerror_set_error_state(ICAL_PARSE_ERROR,es);
+
     icalparser_free(p);
 
     return c;

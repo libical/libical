@@ -7,8 +7,8 @@ WriteMakefile(
 	      'VERSION_FROM' => 'lib/Net/ICal/Libical.pm',
 	      'NAME'    => 'Net::ICal::Libical',  
 	      'INC'     => '-I../libical -I ../libicalss',
-	      'LIBS'    => ['-L../libical/.lib -L../libicalss/.libs -lical -licalss -lm'],
-	      'OBJECT'  => 'libical.o netical_wrap.o',  # Object files
+	      'LIBS'    => ['-L../libical/.libs -L../libicalss/.libs -lical -licalss -lm'],
+	      'OBJECT'  => 'netical_wrap.o',  # Object files
               dist => {
                        COMPRESS     =>'gzip',
                        SUFFIX       =>'gz'

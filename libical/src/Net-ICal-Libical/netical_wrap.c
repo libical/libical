@@ -62,7 +62,7 @@ extern "C" {
 
 
 /*****************************************************************************
- * $Header: /tmp/freeassociation-cvsbackup/libical/src/Net-ICal-Libical/netical_wrap.c,v 1.1 2001-01-28 16:37:44 ebusboom Exp $
+ * $Header: /tmp/freeassociation-cvsbackup/libical/src/Net-ICal-Libical/netical_wrap.c,v 1.2 2001-01-28 18:00:47 ebusboom Exp $
  *
  * perl5ptr.swg
  *
@@ -433,20 +433,19 @@ SWIGEXPORT(void,boot_Net__ICal__Libical)(CPerl *, CV *cv);
 #include <sys/types.h> /* for size_t */
 #include <time.h>
 
+#ifndef PERL_OBJECT
+#define swig_setiv(a,b) _swig_setiv(a,b)
+static void _swig_setiv(char *name, long value) { 
+#else
+#define swig_setiv(a,b) _swig_setiv(pPerl,a,b)
+static void _swig_setiv(CPerl *pPerl, char *name, long value) { 
+#endif
+     SV *sv; 
+     sv = perl_get_sv(name,TRUE | 0x2);
+     sv_setiv(sv, (IV) value);
+     SvREADONLY_on(sv);
+}
 
-
-    int* new_array(int size){
-	int* p = malloc(size*sizeof(int));
-	return p; /* Caller handles failures */
-    }
-
-    void free_array(int* array){
-	free(array);
-    }
-
-    int access_array(int* array, int index) {
-	return array[index];
-    }
 #ifdef PERL_OBJECT
 #define MAGIC_CLASS _wrap_Net__ICal__Libical_var::
 class _wrap_Net__ICal__Libical_var : public CPerl {
@@ -594,6 +593,62 @@ XS(_wrap_icalrestriction_check) {
     XSRETURN(argvi);
 }
 
+XS(_wrap_icallangbind_new_array) {
+
+    int * _result;
+    int  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icallangbind_new_array(size);");
+    _arg0 = (int )SvIV(ST(0));
+    _result = (int *)icallangbind_new_array(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"intPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icallangbind_free_array) {
+
+    int * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icallangbind_free_array(array);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"intPtr")) {
+        croak("Type error in argument 1 of icallangbind_free_array. Expected intPtr.");
+        XSRETURN(1);
+    }
+    icallangbind_free_array(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icallangbind_access_array) {
+
+    int  _result;
+    int * _arg0;
+    int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icallangbind_access_array(array,index);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"intPtr")) {
+        croak("Type error in argument 1 of icallangbind_access_array. Expected intPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (int )SvIV(ST(1));
+    _result = (int )icallangbind_access_array(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
 XS(_wrap_icalrecur_expand_recurrence) {
 
     int  _result;
@@ -620,63 +675,7 @@ XS(_wrap_icalrecur_expand_recurrence) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_new_array) {
-
-    int * _result;
-    int  _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: new_array(size);");
-    _arg0 = (int )SvIV(ST(0));
-    _result = (int *)new_array(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"intPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_free_array) {
-
-    int * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: free_array(array);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"intPtr")) {
-        croak("Type error in argument 1 of free_array. Expected intPtr.");
-        XSRETURN(1);
-    }
-    free_array(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_access_array) {
-
-    int  _result;
-    int * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: access_array(array,index);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"intPtr")) {
-        croak("Type error in argument 1 of access_array. Expected intPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    _result = (int )access_array(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalperl_get_property) {
+XS(_wrap_icallangbind_get_property) {
 
     icalproperty * _result;
     icalcomponent * _arg0;
@@ -687,20 +686,20 @@ XS(_wrap_icalperl_get_property) {
 
     cv = cv;
     if ((items < 3) || (items > 3)) 
-        croak("Usage: icalperl_get_property(c,n,prop);");
+        croak("Usage: icallangbind_get_property(c,n,prop);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalperl_get_property. Expected icalcomponentPtr.");
+        croak("Type error in argument 1 of icallangbind_get_property. Expected icalcomponentPtr.");
         XSRETURN(1);
     }
     _arg1 = (int )SvIV(ST(1));
     _arg2 = (char *) SvPV(ST(2),na);
-    _result = (icalproperty *)icalperl_get_property(_arg0,_arg1,_arg2);
+    _result = (icalproperty *)icallangbind_get_property(_arg0,_arg1,_arg2);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalperl_get_property_val) {
+XS(_wrap_icallangbind_get_property_val) {
 
     char * _result;
     icalproperty * _arg0;
@@ -709,18 +708,18 @@ XS(_wrap_icalperl_get_property_val) {
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalperl_get_property_val(p);");
+        croak("Usage: icallangbind_get_property_val(p);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalperl_get_property_val. Expected icalpropertyPtr.");
+        croak("Type error in argument 1 of icallangbind_get_property_val. Expected icalpropertyPtr.");
         XSRETURN(1);
     }
-    _result = (char *)icalperl_get_property_val(_arg0);
+    _result = (char *)icallangbind_get_property_val(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalperl_get_parameter) {
+XS(_wrap_icallangbind_get_parameter) {
 
     char * _result;
     icalproperty * _arg0;
@@ -730,19 +729,19 @@ XS(_wrap_icalperl_get_parameter) {
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalperl_get_parameter(p,parameter);");
+        croak("Usage: icallangbind_get_parameter(p,parameter);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalperl_get_parameter. Expected icalpropertyPtr.");
+        croak("Type error in argument 1 of icallangbind_get_parameter. Expected icalpropertyPtr.");
         XSRETURN(1);
     }
     _arg1 = (char *) SvPV(ST(1),na);
-    _result = (char *)icalperl_get_parameter(_arg0,_arg1);
+    _result = (char *)icallangbind_get_parameter(_arg0,_arg1);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalperl_get_component) {
+XS(_wrap_icallangbind_get_component) {
 
     icalcomponent * _result;
     icalcomponent * _arg0;
@@ -752,15 +751,48 @@ XS(_wrap_icalperl_get_component) {
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalperl_get_component(c,comp);");
+        croak("Usage: icallangbind_get_component(c,comp);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalperl_get_component. Expected icalcomponentPtr.");
+        croak("Type error in argument 1 of icallangbind_get_component. Expected icalcomponentPtr.");
         XSRETURN(1);
     }
     _arg1 = (char *) SvPV(ST(1),na);
-    _result = (icalcomponent *)icalperl_get_component(_arg0,_arg1);
+    _result = (icalcomponent *)icallangbind_get_component(_arg0,_arg1);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalerror_set_error_state) {
+
+    icalerrorenum  _arg0;
+    icalerrorstate  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalerror_set_error_state(error,icalerrorstate );");
+    _arg0 = (icalerrorenum )SvIV(ST(0));
+    _arg1 = (icalerrorstate )SvIV(ST(1));
+    icalerror_set_error_state(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalerror_get_error_state) {
+
+    icalerrorstate  _result;
+    icalerrorenum  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalerror_get_error_state(error);");
+    _arg0 = (icalerrorenum )SvIV(ST(0));
+    _result = (icalerrorstate )icalerror_get_error_state(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
@@ -768,6 +800,22 @@ XS(_wrap_perl5_Net__ICal__Libical_var_init) {
     dXSARGS;
     SV *sv;
     cv = cv; items = items;
+    swig_setiv("ICAL_BADARG_ERROR", (long) ICAL_BADARG_ERROR);
+    swig_setiv("ICAL_NEWFAILED_ERROR", (long) ICAL_NEWFAILED_ERROR);
+    swig_setiv("ICAL_MALFORMEDDATA_ERROR", (long) ICAL_MALFORMEDDATA_ERROR);
+    swig_setiv("ICAL_PARSE_ERROR", (long) ICAL_PARSE_ERROR);
+    swig_setiv("ICAL_INTERNAL_ERROR", (long) ICAL_INTERNAL_ERROR);
+    swig_setiv("ICAL_FILE_ERROR", (long) ICAL_FILE_ERROR);
+    swig_setiv("ICAL_ALLOCATION_ERROR", (long) ICAL_ALLOCATION_ERROR);
+    swig_setiv("ICAL_USAGE_ERROR", (long) ICAL_USAGE_ERROR);
+    swig_setiv("ICAL_NO_ERROR", (long) ICAL_NO_ERROR);
+    swig_setiv("ICAL_MULTIPLEINCLUSION_ERROR", (long) ICAL_MULTIPLEINCLUSION_ERROR);
+    swig_setiv("ICAL_TIMEDOUT_ERROR", (long) ICAL_TIMEDOUT_ERROR);
+    swig_setiv("ICAL_UNKNOWN_ERROR", (long) ICAL_UNKNOWN_ERROR);
+    swig_setiv("ICAL_ERROR_FATAL", (long) ICAL_ERROR_FATAL);
+    swig_setiv("ICAL_ERROR_NONFATAL", (long) ICAL_ERROR_NONFATAL);
+    swig_setiv("ICAL_ERROR_DEFAULT", (long) ICAL_ERROR_DEFAULT);
+    swig_setiv("ICAL_ERROR_UNKNOWN", (long) ICAL_ERROR_UNKNOWN);
     XSRETURN(1);
 }
 #ifdef __cplusplus
@@ -785,14 +833,16 @@ XS(boot_Net__ICal__Libical) {
 	 newXS("Net::ICal::Libical::icalcomponent_strip_errors", _wrap_icalcomponent_strip_errors, file);
 	 newXS("Net::ICal::Libical::icalcomponent_convert_errors", _wrap_icalcomponent_convert_errors, file);
 	 newXS("Net::ICal::Libical::icalrestriction_check", _wrap_icalrestriction_check, file);
+	 newXS("Net::ICal::Libical::icallangbind_new_array", _wrap_icallangbind_new_array, file);
+	 newXS("Net::ICal::Libical::icallangbind_free_array", _wrap_icallangbind_free_array, file);
+	 newXS("Net::ICal::Libical::icallangbind_access_array", _wrap_icallangbind_access_array, file);
 	 newXS("Net::ICal::Libical::icalrecur_expand_recurrence", _wrap_icalrecur_expand_recurrence, file);
-	 newXS("Net::ICal::Libical::new_array", _wrap_new_array, file);
-	 newXS("Net::ICal::Libical::free_array", _wrap_free_array, file);
-	 newXS("Net::ICal::Libical::access_array", _wrap_access_array, file);
-	 newXS("Net::ICal::Libical::icalperl_get_property", _wrap_icalperl_get_property, file);
-	 newXS("Net::ICal::Libical::icalperl_get_property_val", _wrap_icalperl_get_property_val, file);
-	 newXS("Net::ICal::Libical::icalperl_get_parameter", _wrap_icalperl_get_parameter, file);
-	 newXS("Net::ICal::Libical::icalperl_get_component", _wrap_icalperl_get_component, file);
+	 newXS("Net::ICal::Libical::icallangbind_get_property", _wrap_icallangbind_get_property, file);
+	 newXS("Net::ICal::Libical::icallangbind_get_property_val", _wrap_icallangbind_get_property_val, file);
+	 newXS("Net::ICal::Libical::icallangbind_get_parameter", _wrap_icallangbind_get_parameter, file);
+	 newXS("Net::ICal::Libical::icallangbind_get_component", _wrap_icallangbind_get_component, file);
+	 newXS("Net::ICal::Libical::icalerror_set_error_state", _wrap_icalerror_set_error_state, file);
+	 newXS("Net::ICal::Libical::icalerror_get_error_state", _wrap_icalerror_get_error_state, file);
 /*
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).
