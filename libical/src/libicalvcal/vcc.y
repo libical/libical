@@ -147,7 +147,8 @@ extern "C" {
     };
 #endif
 
-int yyparse();
+int yylex(void);
+int yyparse(void);
 
 enum LexMode {
 	L_NORMAL,
@@ -161,15 +162,31 @@ enum LexMode {
 	};
 
 /****  Private Forward Declarations  ****/
-static int pushVObject(const char *prop);
-static VObject* popVObject();
+static void lexClearToken(void);
+static char* lexGet1Value(void);
+static int lexGeta(void);
+static int lexGetc(void);
+static char lexGetc_(void);
+static char* lexGetDataFromBase64(void);
+static char* lexGetQuotedPrintable(void);
+static char* lexGetWord(void);
+static int lexLookahead(void);
+static char* lexLookaheadWord(void);
 static void lexPopMode(int top);
-static int lexWithinMode(enum LexMode mode);
 static void lexPushMode(enum LexMode mode);
-static void enterProps(const char *s);
+static void lexSkipLookahead(void);
+static void lexSkipLookaheadWord(void);
+static void lexSkipWhite(void);
+static char* lexStr(void);
+static int lexWithinMode(enum LexMode mode);
 static void enterAttr(const char *s1, const char *s2);
+static void enterProps(const char *s);
 static void enterValues(const char *value);
+static void finiLex(void);
 static void mime_error_(char *s);
+static VObject* Parse_MIMEHelper(void);
+static VObject* popVObject(void);
+static int pushVObject(const char *prop);
 
 %}
 
