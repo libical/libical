@@ -149,7 +149,7 @@ it.
 that the specific interface has not implemented or cannot manage
 well. 
 
-4) Cller may create a new component, using a combination of the
+4) Caller may create a new component, using a combination of the
 general and specific interfaces. The caller may send the message to
 another user via mail, or may submit it to the user's CAP server with
 the CAPStore class. 
@@ -159,7 +159,7 @@ Following are the methods in each of the classes.
 
 Component
 	Construct from string
-	output string in ical form
+	Output string in ical form
 	
 	Get a Property by type
 	Get a set of Properties by type
@@ -177,7 +177,7 @@ Component
 Event, JournalEntry, Todo
 	
 	Construct from string
-	output string in ical form
+	Output string in ical form
 
 	There are get/set accessors for every property. These are
 	listed in a later section
@@ -187,7 +187,7 @@ FreeBusy
 
 	Construct from string
 	Construct from arguments 
-	output string in ical form
+	Output string in ical form
 
 	Accessors for the following properties. See below for return
 	types for these properties:
@@ -211,7 +211,7 @@ TimezonePhase
 
 	Construct from string
 	Construct from arguments 
-	output string in ical form
+	Output string in ical form
 
 	Accessors for the following properties. See below for return
 	types for these properties:
@@ -227,7 +227,7 @@ TimeZone
 
 	Construct from string
 	Construct from arguments 
-	output string in ical form
+	Output string in ical form
 
 	Accessors for the following properties. See below for return
 	types for these properties:
@@ -243,7 +243,7 @@ Property
 	
 	Construct from string
 	Construct from arguments
-	output string in ical form
+	Output string in ical form
 
 	Dictionary access to parameters
 
@@ -253,7 +253,7 @@ Attendee
 
 	Construct from string
 	Construct from arguments
-	output string in ical form
+	Output string in ical form
 
 	Access to the following properties and parameters:
 	cuid

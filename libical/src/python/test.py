@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.17 2002-06-11 09:01:40 acampi Exp $
+#  $Id: test.py,v 1.18 2002-07-08 17:56:11 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -91,6 +91,11 @@ def test_property():
 
 
     print p.as_ical_string()
+    del p['ROLE']
+    del p['X-MAN-FAVOURITE']
+    
+    print p.as_ical_string()
+
 
     try:
         p = Property()
@@ -131,12 +136,13 @@ def test_time():
 
     t.timezone("America/Los_Angeles")
     print str(t)
-    assert(str(t)=='DTSTART;TZID=America/Los_Angeles:19970325T123010Z')
+    print t.timezone()
+    #assert(str(t)=='DTSTART;TZID=America/Los_Angeles:19970325T123010')
+    assert(str(t)=='DTSTART;TZID=/softwarestudio.org/Olson_20010626_2/America/Los_Angeles:19970325T043010')
 
     t.second(t.second()+80)
 
-    print t
-
+    t.timezone("UTC")
     assert(t.minute() == 31)
     assert(t.second() == 30)
 
@@ -528,7 +534,7 @@ def do_test_store(storeobj=None, *args):
 
 def test_store():
     print "------------ Store -----------------"
-    do_test_store(FileStore,"filesetout.ics", "w+")
+    do_test_store(FileStore,"filesetout.ics")
 
 def run_tests():
     test_property()

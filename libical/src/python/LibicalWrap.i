@@ -43,6 +43,7 @@ typedef void icalproperty;
 icalcomponent* icalparser_parse_string(char* str);
 
 
+/* actually takes icalcomponent_kind */
 icalcomponent* icalcomponent_new(int kind);
 icalcomponent* icalcomponent_new_clone(icalcomponent* component);
 icalcomponent* icalcomponent_new_from_string(char* str);
@@ -102,11 +103,14 @@ char* icalproperty_as_ical_string(icalproperty *prop);
 
 void icalproperty_set_parameter_from_string(icalproperty* prop,
                                           const char* name, const char* value);
+const char* icalproperty_get_parameter_as_string(icalproperty* prop,
+                                                 const char* name);
+void icalproperty_remove_parameter_by_name(icalproperty* prop,
+                                           const char *name);
+
 void icalproperty_set_value_from_string(icalproperty* prop,const char* value, const char * kind);
 
 const char* icalproperty_get_value_as_string(icalproperty* prop);
-const char* icalproperty_get_parameter_as_string(icalproperty* prop,
-                                                 const char* name);
 icalcomponent* icalproperty_get_parent(icalproperty* property);
 
 const char* icalproperty_kind_to_string(int kind);
@@ -184,17 +188,15 @@ struct icaltimetype
 	int hour;
 	int minute;
 	int second;
-
-	int is_utc; /* 1-> time is in UTC timezone */
-
-	int is_date; /* 1 -> interpret this as date. */
-   
-	const icaltimezone *zone; /*Ptr to Olsen placename. Libical does not own mem*/
 };	
 
 
 /* Convert seconds past UNIX epoch to a timetype*/
 struct icaltimetype icaltime_from_timet(int v, int is_date);
+
+/** Convert seconds past UNIX epoch to a timetype, using timezones. */
+struct icaltimetype icaltime_from_timet_with_zone(int tm,
+        int is_date, icaltimezone *zone);
 
 /* Return the time as seconds past the UNIX epoch */
 /* Normally, this returns a time_t, but SWIG tries to turn that type
@@ -219,6 +221,22 @@ int icaltime_is_null_time(struct icaltimetype t);
    is usually the result of creating a new time type buy not clearing
    it, or setting one of the flags to an illegal value. */
 int icaltime_is_valid_time(struct icaltimetype t);
+
+/** @brief Return the timezone */
+const icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
+
+/** @brief Return the tzid, or NULL for a floating time */
+char *icaltime_get_tzid(const struct icaltimetype t);
+
+/** @brief Set the timezone */
+struct icaltimetype icaltime_set_timezone(struct icaltimetype *t,
+        const icaltimezone *zone);
+
+/* Returns true if time is of DATE type, false if DATE-TIME */
+int icaltime_is_date(struct icaltimetype t);
+
+/* Returns true if time is relative to UTC zone */
+int icaltime_is_utc(struct icaltimetype t);
 
 /* Reset all of the time components to be in their normal ranges. For
    instance, given a time with minutes=70, the minutes will be reduces
@@ -251,6 +269,12 @@ int icaltime_compare_date_only(struct icaltimetype a, struct icaltimetype b);
 
 /* Return the number of days in the given month */
 short icaltime_days_in_month(short month,short year);
+
+/** convert tt, of timezone tzid, into a utc time. Does nothing if the
+   time is already UTC.  */
+struct icaltimetype icaltime_convert_to_zone(struct icaltimetype tt,
+           icaltimezone *zone);
+
 
 
 /***********************************************************************
@@ -301,78 +325,123 @@ struct icalperiodtype icalperiodtype_null_period();
 int icalperiodtype_is_null_period(struct icalperiodtype p);
 int icalperiodtype_is_valid_period(struct icalperiodtype p);
 
+/***********************************************************************
+ * timezone handling routines
+***********************************************************************/
+
+/** Returns a single builtin timezone, given its Olson city name. */
+icaltimezone* icaltimezone_get_builtin_timezone	(const char *location);
+
+/** Returns the UTC timezone. */
+icaltimezone* icaltimezone_get_utc_timezone	(void);
 
 /***********************************************************************
   Storage Routines
 ***********************************************************************/
 
-icalfileset* icalfileset_new(const char* path);
+/** 
+ * @brief options for opening an icalfileset.
+ *
+ * These options should be passed to the icalset_new() function
+ */
 
-/* Like _new, but takes open() flags for opening the file */
-icalfileset* icalfileset_new_open(const char* path, 
-				  int flags, int mode);
+struct icalfileset_options {
+  int          flags;		/**< flags for open() O_RDONLY, etc  */
+  mode_t       mode;		/**< file mode */
+  int          safe_saves;	/**< to lock or not */
+  icalcluster  *cluster;	/**< use this cluster to initialize data */
+};
 
-void icalfileset_free(icalfileset* cluster);
+icalset* icalfileset_new(const char* path);
+icalset* icalfileset_new_reader(const char* path);
+icalset* icalfileset_new_writer(const char* path);
 
-const char* icalfileset_path(icalfileset* cluster);
+icalset* icalfileset_init(icalset *set, const char *dsn, void* options);
+
+/* icalfileset* icalfileset_new_from_cluster(const char* path, icalcluster *cluster); */
+
+icalcluster* icalfileset_produce_icalcluster(const char *path);
+
+void icalfileset_free(icalset* cluster);
+
+const char* icalfileset_path(icalset* cluster);
 
 /* Mark the cluster as changed, so it will be written to disk when it
    is freed. Commit writes to disk immediately. */
-void icalfileset_mark(icalfileset* cluster);
-icalerrorenum icalfileset_commit(icalfileset* cluster); 
+void icalfileset_mark(icalset* set);
+icalerrorenum icalfileset_commit(icalset* set); 
 
-icalerrorenum icalfileset_add_component(icalfileset* cluster,
+icalerrorenum icalfileset_add_component(icalset* set,
 					icalcomponent* child);
 
-icalerrorenum icalfileset_remove_component(icalfileset* cluster,
+icalerrorenum icalfileset_remove_component(icalset* set,
 					   icalcomponent* child);
 
-int icalfileset_count_components(icalfileset* cluster,
+int icalfileset_count_components(icalset* set,
 				 int kind);
 
-/* Restrict the component returned by icalfileset_first, _next to those
-   that pass the gauge. _clear removes the gauge */
-icalerrorenum icalfileset_select(icalfileset* store, icalgauge* gauge);
-void icalfileset_clear(icalfileset* store);
+/**
+ * Restrict the component returned by icalfileset_first, _next to those
+ * that pass the gauge. _clear removes the gauge 
+ */
+icalerrorenum icalfileset_select(icalset* set, icalgauge* gauge);
 
-/* Get and search for a component by uid */
-icalcomponent* icalfileset_fetch(icalfileset* cluster, const char* uid);
-int icalfileset_has_uid(icalfileset* cluster, const char* uid);
-icalcomponent* icalfileset_fetch_match(icalfileset* set, icalcomponent *c);
+/** clear the gauge **/
+void icalfileset_clear(icalset* set);
+
+/** Get and search for a component by uid **/
+icalcomponent* icalfileset_fetch(icalset* set, const char* uid);
+int icalfileset_has_uid(icalset* set, const char* uid);
+icalcomponent* icalfileset_fetch_match(icalset* set, icalcomponent *c);
 
 
-/* Modify components according to the MODIFY method of CAP. Works on
-   the currently selected components. */
-icalerrorenum icalfileset_modify(icalfileset* store, icalcomponent *oldcomp,
+/**
+ *  Modify components according to the MODIFY method of CAP. Works on the
+ *  currently selected components. 
+ */
+icalerrorenum icalfileset_modify(icalset* set, 
+				 icalcomponent *oldcomp,
 			       icalcomponent *newcomp);
 
-/* Iterate through components. If a guage has been defined, these
+/* Iterate through components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
-icalcomponent* icalfileset_get_current_component (icalfileset* cluster);
-icalcomponent* icalfileset_get_first_component(icalfileset* cluster);
-icalcomponent* icalfileset_get_next_component(icalfileset* cluster);
-/* Return a reference to the internal component. You probably should
-   not be using this. */
+icalcomponent* icalfileset_get_current_component (icalset* cluster);
+icalcomponent* icalfileset_get_first_component(icalset* cluster);
+icalcomponent* icalfileset_get_next_component(icalset* cluster);
 
-icalcomponent* icalfileset_get_component(icalfileset* cluster);
+/* External iterator for thread safety */
+icalsetiter icalfileset_begin_component(icalset* set, int kind, icalgauge* gauge);
+icalcomponent * icalfilesetiter_to_next(icalset* set, icalsetiter *iter);
+icalcomponent* icalfileset_form_a_matched_recurrence_component(icalsetiter* itr);
 
 /***********************************************************************
   Gauge Routines
 ***********************************************************************/
 
-icalgauge* icalgauge_new_from_sql(char* sql);
+icalgauge* icalgauge_new_from_sql(char* sql, int expand);
+
+int icalgauge_get_expand(icalgauge* gauge);
 
 void icalgauge_free(icalgauge* gauge);
 
 /* Pending Implementation */
 /* char* icalgauge_as_sql(icalcomponent* gauge); */
 
-/* Return true if comp matches the gauge. The component must be in
-   cannonical form -- a VCALENDAR with one VEVENT, VTODO or VJOURNAL
-   sub component */
+void icalgauge_dump(icalgauge* gauge);
+
+
+/** @brief Return true if comp matches the gauge.
+ *
+ * The component must be in
+ * cannonical form -- a VCALENDAR with one VEVENT, VTODO or VJOURNAL
+ * sub component 
+ */
 int icalgauge_compare(icalgauge* g, icalcomponent* comp);
 
-/* Clone the component, but only return the properties specified in
-   the gauge */
+/* Pending Implementation */
+/** Clone the component, but only return the properties 
+ *  specified in the gauge */
 /* icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp); */
+
+

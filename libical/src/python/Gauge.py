@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Gauge.py,v 1.1 2002-06-03 13:25:28 acampi Exp $
+#  $Id: Gauge.py,v 1.2 2002-07-08 17:56:11 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -43,12 +43,12 @@ class Gauge:
     class CompareFailedError(LibicalError):
         "Failed to compare a component given Gauge "
 
-    def __init__(self,ref=None,sql=None):
+    def __init__(self,ref=None,sql=None,expand=0):
 	if ref != None:
 	    self._ref = ref
 	elif sql != None:
             s = str(sql)
-	    self._ref = icalgauge_new_from_sql(s)
+	    self._ref = icalgauge_new_from_sql(s,expand)
 	else:
 	    Gauge.ConstructorFailedError("No SQL Specified")
 

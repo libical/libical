@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.9 2002-06-07 13:15:34 acampi Exp $
+#  $Id: Property.py,v 1.10 2002-07-08 17:56:11 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -194,6 +194,13 @@ class Property:
         icalproperty_set_parameter_from_string(self._ref,key,value)
 
         return self.__getitem__(key)
+
+    def __delitem__(self,key):
+        """ Remove Property Values by Name """
+        key = upper(key)
+
+	if self.__getitem__(key):
+		icalproperty_remove_parameter_by_name(self._ref,key)
 
     def __str__(self):
 

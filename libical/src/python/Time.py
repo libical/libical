@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Time.py,v 1.1 2001-04-03 15:18:42 ebusboom Exp $
+#  $Id: Time.py,v 1.2 2002-07-08 17:56:11 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -32,7 +32,7 @@ from Duration import Duration
 
 class Time(Property):
     """ Represent iCalendar DATE, TIME and DATE-TIME """
-    def __init__(self, arg, name="DTSTART"):
+    def __init__(self, arg, name="DTSTART", zone=None):
         """ 
         Create a new Time from a string or number of seconds past the 
         POSIX epoch
@@ -55,7 +55,10 @@ class Time(Property):
             elif isinstance(arg, IntType) or   \
                  isinstance(arg, FloatType): 
                 # Create from seconds past the POSIX epoch
-                self.tt = icaltime_from_timet(int(arg),0)
+		if zone:
+                	self.tt = icaltime_from_timet_with_zone(int(arg),0,icaltimezone_get_builtin_timezone(zone))
+		else:
+                	self.tt = icaltime_from_timet_with_zone(int(arg),0,icaltimezone_get_utc_timezone())
             elif isinstance(arg, Time):
                 # Copy an instance
                 self.tt = arg.tt
@@ -86,32 +89,43 @@ class Time(Property):
     def utc_seconds(self,v=None):
         """ Return or set time in seconds past POSIX epoch"""
         if (v!=None):
-            self.tt = icaltime_from_timet(v,0)
+	    tz = icaltimezone_get_builtin_timezone(self.timezone())
+            self.tt = icaltime_from_timet_with_zone(v,0,tz)
             self._update_value()
 
         return icaltime_as_timet(self.tt)
 
-    def is_utc(self,v=None):
-        """ Return or set boolean indicating if time is in UTC """
-        if(v != None):
-            icaltimetype_is_utc_set(self.tt,v)
-            self._update_value()
-        return icaltimetype_is_utc_get(self.tt)
+    def is_utc(self):
+        """ Return a boolean indicating if time is in UTC """
+        return icaltime_is_utc(self.tt)
 
-    def is_date(self,v=None):
-        """ Return or set boolean indicating if time is actually a date """
-        if(v != None):
-            icaltimetype_is_date_set(self.tt,v)
-            self._update_value()
-        return icaltimetype_is_date_get(self.tt)
+    def is_date(self):
+        """ Return a boolean indicating if time is actually a date """
+        return icaltime_is_date(self.tt)
 
     def timezone(self,v=None):
-        """ Return or set the timezone string for this time """
+        """ Return, set (if none) or alter the timezone for this time """
+	
+	origtz = icaltime_get_tzid(self.tt)
 
-        if (v != None):
+	if (v != None):
             assert(isinstance(v,StringType) )
-            self['TZID'] = v
-        return  self['TZID']
+	    if (v == "UTC"):
+                tz = icaltimezone_get_utc_timezone()
+		del self['TZID']
+            else:
+	    	tz = icaltimezone_get_builtin_timezone(v)
+
+            if not origtz:
+	        self.tt = icaltime_set_timezone(self.tt, tz)
+            else:
+	        self.tt = icaltime_convert_to_zone(self.tt,tz)
+
+	    if (icaltime_get_tzid(self.tt) != "UTC"):
+            	self['TZID'] = icaltime_get_tzid(self.tt)
+
+        self._update_value()
+	return icaltime_get_tzid(self.tt)
 
     def second(self,v=None):
         """ Get or set the seconds component of this time """
@@ -174,9 +188,7 @@ class Time(Property):
   
         seconds = self.utc_seconds() + other.seconds()
     
-        new = Time(seconds,self.name())
-        new.timezone(self.timezone())
-        new.is_utc(self.is_utc())
+        new = Time(seconds,self.name(),self.timezone())
 
         return new
 

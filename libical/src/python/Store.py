@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Store.py,v 1.3 2002-06-03 13:25:28 acampi Exp $
+#  $Id: Store.py,v 1.4 2002-07-08 17:56:11 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -89,16 +89,9 @@ class Store:
 
 class FileStore(Store):
 
-    def __init__(self, file,flags="r",mode=0664):
-
-        _flags = icallangbind_string_to_open_flag(flags)
-
-
-        if _flags == -1:
-            raise Store.ConstructorFailedError("Illegal value for flags: "+flags)
-
+    def __init__(self, file):
         e1=icalerror_supress("FILE")
-        self._ref = icalfileset_new_open(file,_flags,mode)
+        self._ref = icalfileset_new(file)
         icalerror_restore("FILE",e1)
 
         if self._ref == None or self._ref == 'NULL':
