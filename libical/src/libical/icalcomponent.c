@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.43 2002-09-26 22:15:41 lindner Exp $
+  $Id: icalcomponent.c,v 1.44 2002-10-09 16:26:21 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -925,12 +925,15 @@ static int icalcomponent_is_busy(icalcomponent *comp) {
     case ICAL_TRANSP_OPAQUENOCONFLICT:
     case ICAL_TRANSP_NONE:
       ret = 1;
+      break;
     case ICAL_TRANSP_TRANSPARENT:
     case ICAL_TRANSP_TRANSPARENTNOCONFLICT:
       ret = 0;
+      break;
     default:
       /** shouldn't need this... **/
       ret = 0;
+      break;
     }
   }
   status = icalcomponent_get_status(comp);
@@ -939,7 +942,9 @@ static int icalcomponent_is_busy(icalcomponent *comp) {
      case ICAL_STATUS_CANCELLED:
      case ICAL_STATUS_TENTATIVE:
         ret = 0;
+	break;
     default:
+	break;
     }
   }
   return(ret);
@@ -1213,6 +1218,7 @@ void icalcomponent_convert_errors(icalcomponent* component)
 		}
 
 		default: {
+		    break;
 		}
 	    }
 	    if (rst.code != ICAL_UNKNOWN_STATUS){
