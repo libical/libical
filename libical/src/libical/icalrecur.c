@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.54 2003-02-17 14:45:04 acampi Exp $
+  $Id: icalrecur.c,v 1.55 2003-02-17 14:59:20 acampi Exp $
   $Locker:  $
     
 
@@ -306,6 +306,38 @@ void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
 
 }
 
+/*
+ * Days in the BYDAY rule are expected by the code to be sorted, and while
+ * this may be the common case, the RFC doesn't actually mandate it. This
+ * function sorts the days taking into account the first day of week.
+ */
+static void
+sort_bydayrules(struct icalrecur_parser *parser)
+{
+    short *array;
+    int week_start, one, two, i, j;
+
+    array = parser->rt.by_day;
+    week_start = parser->rt.week_start;
+
+    for (i=0;
+	 i<ICAL_BY_DAY_SIZE && array[i] != ICAL_RECURRENCE_ARRAY_MAX;
+	 i++) {
+	for (j=0; j<i; j++) {
+	    one = icalrecurrencetype_day_day_of_week(array[j]) - week_start;
+	    if (one < 0) one += 7;
+	    two = icalrecurrencetype_day_day_of_week(array[i]) - week_start;
+	    if (two < 0) two += 7;
+
+	    if (one > two) {
+		short tmp = array[j];
+		array[j] = array[i];
+		array[i] = tmp;
+	    }
+	}
+    }
+}
+
 void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 {
 
@@ -364,6 +396,7 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 
     free(vals_copy);
 
+    sort_bydayrules(parser);
 }
 
 
@@ -412,6 +445,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	    parser.rt.interval = (short)atoi(value);
 	} else if (strcmp(name,"WKST") == 0){
 	    parser.rt.week_start = icalrecur_string_to_weekday(value);
+	    sort_bydayrules(&parser);
 	} else if (strcmp(name,"BYSECOND") == 0){
 	    icalrecur_add_byrules(&parser,parser.rt.by_second,
 				  ICAL_BY_SECOND_SIZE,value);
