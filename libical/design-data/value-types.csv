@@ -1,24 +1,30 @@
-#Name,C type& gen flag,C++,Perl,Python,,
-ATTACH,(a)struct icalattachtype,struct icalattachtype,none,none,URI;BINARY,# Non-std
-BINARY,(a)const char*,const char*,string,file,unitary,
-BOOLEAN,(a)int,int,string,integer,unitary,
-CAL-ADDRESS,(a)const char*,const char*,string,string,unitary,
-DATE,(a)struct icaltimetype,struct icaltimetype,Time,Time,unitary,
-DATE-TIME,(a)struct icaltimetype,struct icaltimetype,Time,Time,unitary,
-DATE-TIME-DATE,(a)struct icaltimetype,struct icaltimetype,special,none,DATE-TIME;DATE,# Non-std
-DATE-TIME-PERIOD,(m)struct icaldatetimeperiodtype,struct icalperiodtype,special,none,DATE-TIME;PERIOD,# Non-std
-DURATION,(a)struct icaldurationtype,struct icaldurationtype,Duration,Duration,unitary,
-FLOAT,(a)float,float,string,float,unitary,
-GEO,(a)struct icalgeotype,struct icalgeotype,string,tuple,unitary,# Non-std
-INTEGER,(a)int,int,string,integer,unitary,
-METHOD,(a)icalproperty_method,icalproperty_method,string,string,unitary,# Non-std
-PERIOD,(a)struct icalperiodtype,struct icalperiodtype,Period,Period,unitary,
-RECUR,(m)struct icalrecurrencetype,struct icalrecurrencetype,strings,RecurrenceSet,unitary,
-STRING,(a)const char*,const char*,string,string,unitary,# Non-std
-TEXT,(a)const char*,const char*,string,string,unitary,
-TIME,(a)struct icaltimetype,struct icaltimetype,Time,Time,unitary,
-TRIGGER,(m)struct icaltriggertype,union icaltriggertype,special,string,DURATION;DATE-TIME,# Non-std
-URI,(a)const char*,const char*,string,string,unitary,
-UTC-OFFSET,(a)int,int,string,integer,unitary,
-QUERY,(a)const char*,const char*,string,string,unitary,
-STATUS,(a)icalproperty_status,const char*,string,string,unitary,# Non-std
+"#Name","C type& gen flag","Python","Component Values","Enum Values"
+"BINARY","(a)const char*","file","unitary",
+"BOOLEAN","(a)int","integer","unitary",
+"CAL-ADDRESS","(a)const char*","string","unitary",
+"DATE","(a)struct icaltimetype","Time","unitary",
+"DATE-TIME","(a)struct icaltimetype","Time","unitary",
+"DURATION","(a)struct icaldurationtype","Duration","unitary",
+"FLOAT","(a)float","float","unitary",
+"INTEGER","(a)int","integer","unitary",
+"PERIOD","(a)struct icalperiodtype","Period","unitary",
+"RECUR","(m)struct icalrecurrencetype","RecurrenceSet","unitary",
+"TEXT","(a)const char*","string","unitary",
+"TIME","(a)struct icaltimetype","Time","unitary",
+"URI","(a)const char*","string","unitary",
+"UTC-OFFSET","(a)int","integer","unitary",
+"QUERY","(a)const char*","string","unitary",
+"#Non-standard multi-valued types",,,,
+"ATTACH","(a)struct icalattachtype","none","URI;BINARY",
+"DATE-TIME-DATE","(a)struct icaltimetype","none","DATE-TIME;DATE",
+"DATE-TIME-PERIOD","(m)struct icaldatetimeperiodtype","none","DATE-TIME;PERIOD",
+"TRIGGER","(m)struct icaltriggertype","string","DURATION;DATE-TIME",
+"#Non-standard property enumeration types",,,,
+"METHOD","(a)enum icalproperty_method","string","unitary","PUBLISH;REQUEST;REPLY;ADD;CANCEL;REFRESH;COUNTER;DECLINECOUNTER;CREATE;READ;RESPONSE;MOVE;MODIFY;GENERATEUID;DELETE"
+"STATUS","(a)enum icalproperty_status","string","unitary","TENTATIVE;CONFIRMED;COMPLETED;NEEDS-ACTION;CANCELLED;IN-PROCESS;DRAFT;FINAL"
+"TRANSP","(a)enum icalproperty_transp","string","unitary","OPAQUE;TRANSPARENT"
+"CLASS","(a)enum icalproperty_class","string","unitary","PUBLIC;PRIVATE;CONFIDENTIAL"
+"#Other non-standard",,,,
+"GEO","(a)struct icalgeotype","tuple","unitary",
+"STRING","(a)const char*","string","unitary",
+"X","(m)const char*","string","unitary",
