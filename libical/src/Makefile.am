@@ -10,4 +10,10 @@ else
 JAVA_DIR = 
 endif
 
-SUBDIRS = libical libicalss libicalvcal $(PYTHON_DIR) $(JAVA_DIR) test
+if WITH_CAP
+LIBICALCAP_DIR = libicalcap
+else
+LIBICALCAP_DIR = 
+endif
+
+SUBDIRS = libical libicalss $(LIBICALCAP_DIR) libicalvcal $(PYTHON_DIR) $(JAVA_DIR) test
