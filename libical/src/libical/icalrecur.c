@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.23 2001-12-12 18:35:50 ebusboom Exp $
+  $Id: icalrecur.c,v 1.24 2001-12-12 20:13:05 ebusboom Exp $
   $Locker:  $
     
 
@@ -169,10 +169,6 @@ icalrecurrencetype_frequency icalrecur_string_to_freq(const char* str);
 const char* icalrecur_weekday_to_string(icalrecurrencetype_weekday kind);
 icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
 
-
-#ifdef WIN32
-void increment_year(struct icalrecur_iterator_impl* impl, int inc);
-#endif
 
 /*********************** Rule parsing routines ************************/
 
@@ -591,6 +587,8 @@ struct icalrecur_iterator_impl {
     
 };
 
+void increment_year(struct icalrecur_iterator_impl* impl, int inc);
+
 int icalrecur_iterator_sizeof_byarray(short* byarray)
 {
     int array_itr;
@@ -1004,7 +1002,6 @@ void icalrecur_iterator_free(icalrecur_iterator* i)
 
 }
 
-
 void increment_year(struct icalrecur_iterator_impl* impl, int inc)
 {
     impl->last.year+=inc;
@@ -1354,60 +1351,6 @@ int next_yearday(struct icalrecur_iterator_impl* impl)
 
 }
 
-/* This routine is only called by next_week. It is certain that BY_DAY
-has data */
-
-int next_weekday_by_week(struct icalrecur_iterator_impl* impl)
-{
-
-  short end_of_data = 0;
-  short start_of_week, dow;
-  struct icaltimetype next;
-
-  if (next_hour(impl) == 0){
-      return 0;
-  }
-
-  assert( impl->by_ptrs[BY_DAY][0]!=ICAL_RECURRENCE_ARRAY_MAX);
-
-  while(1) {
-
-      impl->by_indices[BY_DAY]++; /* Look at next elem in BYDAY array */
-      
-      /* Are we at the end of the BYDAY array? */
-      if (impl->by_ptrs[BY_DAY][impl->by_indices[BY_DAY]]
-	  ==ICAL_RECURRENCE_ARRAY_MAX){
-	  
-	  impl->by_indices[BY_DAY] = 0; /* Reset to 0 */      
-	  end_of_data = 1; /* Signal that we're at the end */
-      }
-      
-      /* Add the day of week offset to to the start of this week, and use
-	 that to get the next day */
-      dow = impl->by_ptrs[BY_DAY][impl->by_indices[BY_DAY]];  
-      start_of_week = icaltime_start_doy_of_week(impl->last);
-      
-      dow--; /*Sun is 1, not 0 */
-      
-      if(dow+start_of_week <1){
-          /* The selected date is in the previous year. */
-          if(!end_of_data){    
-              continue;
-          }
-      } 
-
-  
-      next = icaltime_from_day_of_year(start_of_week + dow,impl->last.year);
-      
-      impl->last.day =  next.day;
-      impl->last.month =  next.month;
-      impl->last.year =  next.year;
-  
-  
-      return end_of_data;
-  }
-
-}
 
 /* Returns the day of the month for the current month of t that is the
    pos'th instance of the day-of-week dow */
@@ -1620,14 +1563,61 @@ int next_month(struct icalrecur_iterator_impl* impl)
 
 }
 
+int next_weekday_by_week(struct icalrecur_iterator_impl* impl)
+{
+
+  short end_of_data = 0;
+  short start_of_week, dow;
+  struct icaltimetype next;
+
+  if (next_hour(impl) == 0){
+      return 0;
+  }
+
+  assert(has_by_data(impl,BY_DAY));
+
+  /* If we get here, we need to step to tne next day */
+
+  while(1) {
+      BYDAYIDX++; /* Look at next elem in BYDAY array */
+      
+      /* Are we at the end of the BYDAY array? */
+      if (BYDAYPTR[BYDAYIDX]==ICAL_RECURRENCE_ARRAY_MAX){
+	  BYDAYIDX = 0; /* Reset to 0 */      
+	  end_of_data = 1; /* Signal that we're at the end */
+      }
+      
+      /* Add the day of week offset to to the start of this week, and use
+	 that to get the next day */
+      /* ignore position of dow ("4FR"), only use dow ("FR")*/
+      dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[BYDAYIDX]);  
+      start_of_week = icaltime_start_doy_of_week(impl->last);
+      
+      dow--; /* Set Sunday to be 0 */
+      
+      if(dow+start_of_week <1){
+          /* The selected date is in the previous year. */
+          if(!end_of_data){    
+              continue;
+          }
+      } 
+ 
+      next = icaltime_from_day_of_year(start_of_week + dow,impl->last.year);
+      
+      impl->last.day =  next.day;
+      impl->last.month =  next.month;
+      impl->last.year =  next.year;
+
+      return end_of_data;
+  }
+
+}
 
 int next_week(struct icalrecur_iterator_impl* impl)
 {
-  short has_by_data = (impl->by_ptrs[BY_WEEK_NO][0]!=ICAL_RECURRENCE_ARRAY_MAX);
-  short this_frequency = (impl->rule.freq == ICAL_WEEKLY_RECURRENCE);
   short end_of_data = 0;
 
-  /* Increment to the next week day */
+  /* Increment to the next week day, if there is data at a level less than a week */
   if (next_weekday_by_week(impl) == 0){
       return 0; /* Have not reached end of week yet */
   }
@@ -1635,8 +1625,8 @@ int next_week(struct icalrecur_iterator_impl* impl)
   /* If we get here, we have incremented through the entire week, and
      can increment to the next week */
 
-
-  if( has_by_data){
+  if( has_by_data(impl,BY_WEEK_NO)){
+      /*FREQ=WEEKLY;BYWEEK=20*/
     /* Use the Week Number byrule data */
       int week_no;
       struct icaltimetype t;
@@ -1660,13 +1650,12 @@ int next_week(struct icalrecur_iterator_impl* impl)
 
       impl->last = icaltime_normalize(impl->last);
       
-  } else if( !has_by_data &&  this_frequency ){
-      /* If there is no BY_WEEK_NO data, just jump forward 7 days. */
+  } else {
+      /* Jump to the next week */
       increment_monthday(impl,7*impl->rule.interval);
   }
 
-
-  if(has_by_data && end_of_data && this_frequency ){
+  if( has_by_data(impl,BY_WEEK_NO) && end_of_data && this_frequency ){
       increment_year(impl,1);
   }
 
