@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.45 2002-06-03 17:24:52 acampi Exp $
+  $Id: regression.c,v 1.46 2002-06-03 17:47:22 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1837,12 +1837,6 @@ void test_fblist()
     printf("Next Free time: %s\n",icaltime_as_ctime(period.start));
     printf("                %s\n",icaltime_as_ctime(period.end));
 
-    printf("%s\n",
-	   icalcomponent_as_ical_string(icalspanlist_as_vfreebusy(sl,
-								  "a@foo.com",
-								  "b@foo.com")
-					));
-
 
     icalspanlist_free(sl);
 
@@ -1863,11 +1857,6 @@ void test_fblist()
     printf("Next Free time: %s\n",icaltime_as_ctime(period.start));
     printf("                %s\n",icaltime_as_ctime(period.end));
 
-    printf("%s\n",
-	   icalcomponent_as_ical_string(icalspanlist_as_vfreebusy(sl,
-								  "a@foo.com",
-								  "b@foo.com")
-					));
 
     icalspanlist_free(sl);
 
