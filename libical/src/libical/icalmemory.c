@@ -3,7 +3,7 @@
   FILE: icalmemory.c
   CREATOR: eric 30 June 1999
   
-  $Id: icalmemory.c,v 1.6 2002-06-11 12:15:11 acampi Exp $
+  $Id: icalmemory.c,v 1.7 2002-07-10 08:41:39 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -85,7 +85,7 @@ void icalmemory_free_ring_byval(buffer_ring *br);
 
 static buffer_ring* global_buffer_ring = 0;
 
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD
 #include <pthread.h>
 
 static pthread_key_t  ring_key;
@@ -116,7 +116,7 @@ static buffer_ring * buffer_ring_new(void) {
 }
 
 
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD
 static buffer_ring* get_buffer_ring_pthread(void) {
     buffer_ring *br;
 
@@ -141,7 +141,7 @@ static buffer_ring* get_buffer_ring_global(void) {
 }
 
 static buffer_ring *get_buffer_ring(void) {
-#ifdef USE_PTHREAD
+#ifdef HAVE_PTHREAD
 	return(get_buffer_ring_pthread());
 #else
 	return get_buffer_ring_global();

@@ -108,6 +108,16 @@ dnl Checks for libraries.
 dnl Replace `main' with a function in -lical:
 dnl AC_CHECK_LIB(ical, main)
 
+dnl Check if this system can use pthreads
+
+AC_CHECK_LIB(pthread,pthread_create,have_pthread=yes)
+if test "x$have_pthread" = xyes; then
+   AC_DEFINE(HAVE_PTHREAD, ,[Define if we have pthread.])
+fi
+
+AM_CONDITIONAL(HAVE_PTHREAD, test "$have_pthread" = "yes")
+
+
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(time.h sys/types.h assert.h)
