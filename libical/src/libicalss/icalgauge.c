@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalgauge.c,v 1.7 2001-12-22 17:04:35 gray-john Exp $
+ $Id: icalgauge.c,v 1.8 2002-05-29 13:42:55 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -344,7 +344,7 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 void icalgauge_dump(icalcomponent* gauge)
 {
 
-    pvl_elem *p;
+    pvl_elem p;
     struct icalgauge_impl *impl = (struct icalgauge_impl*)gauge;
   
   

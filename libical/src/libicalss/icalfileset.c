@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.19 2002-05-29 13:04:57 acampi Exp $
+  $Id: icalfileset.c,v 1.20 2002-05-29 13:42:55 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -549,7 +549,7 @@ icalcomponent* icalfileset_fetch(icalfileset* store,const char* uid)
 	
 		icalcomponent *this = icalcompiter_deref(&i);
 		icalcomponent *inner;
-		icalcomponent *p;
+		icalproperty *p;
 		const char *this_uid;
 
 		for(inner = icalcomponent_get_first_component(this,ICAL_ANY_COMPONENT);

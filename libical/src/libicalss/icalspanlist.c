@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.3 2001-12-22 17:04:35 gray-john Exp $
+    $Id: icalspanlist.c,v 1.4 2002-05-29 13:42:55 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -148,7 +148,7 @@ icalspanlist* icalspanlist_new(icalset *set,
 	 itr != 0;
 	 itr = pvl_next(itr))
     {
-	struct icaltime_span *s = (icalproperty*)pvl_data(itr);
+	struct icaltime_span *s = (struct icaltime_span*)pvl_data(itr);
 
 	if ((freetime=(struct icaltime_span *)
 	     malloc(sizeof(struct icaltime_span))) == 0){
@@ -227,7 +227,7 @@ void icalspanlist_dump(icalspanlist* s){
 	 itr != 0;
 	 itr = pvl_next(itr))
     {
-	struct icaltime_span *s = (icalproperty*)pvl_data(itr);
+	struct icaltime_span *s = (struct icaltime_span*)pvl_data(itr);
 	
 	printf("#%02d %d start: %s",++i,s->is_busy,ctime(&s->start));
 	printf("      end  : %s",ctime(&s->end));
@@ -254,7 +254,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
      /* Is the reference time before the first span? If so, assume
         that the reference time is free */
      itr = pvl_head(impl->spans);
-     s = (icalproperty*)pvl_data(itr);
+     s = (struct icaltime_span*)pvl_data(itr);
 
      if (s == 0){
 	 /* No elements in span */
@@ -282,7 +282,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
 	 itr != 0;
 	 itr = pvl_next(itr))
     {
-	s = (icalproperty*)pvl_data(itr);
+	s = (struct icaltime_span*)pvl_data(itr);
 
 	if(s->is_busy == 0 && s->start >= rangett && 
 	    ( rangett < s->end || s->end == s->start)){
