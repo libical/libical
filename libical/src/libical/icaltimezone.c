@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.c,v 1.9 2002-05-20 17:23:49 acampi Exp $
+ $Id: icaltimezone.c,v 1.10 2002-05-27 14:50:39 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -391,6 +391,11 @@ icaltimezone_get_tznames_from_vtimezone (icalcomponent *component)
         comp = icalcomponent_get_next_component (component,
 						 ICAL_ANY_COMPONENT);
     }
+
+    /* Outlook (2000) places "Standard Time" and "Daylight Time" in the TZNAME
+       strings, which is totally useless. So we return NULL in that case. */
+    if (standard_tzname && !strcmp (standard_tzname, "Standard Time"))
+	return NULL;
 
     /* If both standard and daylight TZNAMEs were found, if they are the same
        we return just one, else we format them like "EST/EDT". */
