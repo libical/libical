@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.57 2002-11-04 17:52:50 acampi Exp $
+  $Id: icaltime.c,v 1.58 2002-11-04 19:02:14 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -661,6 +661,21 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
     else if (a.day < b.day)
 	retval = -1;
 
+    /* if both are dates, we are done */
+    if (a.is_date && b.is_date)
+	return retval;
+
+    /* else, if we already found a difference, we are done */
+    else if (retval != 0)
+	return retval;
+
+    /* else, if only one is a date (and we already know the date part is equal),
+       then the other is greater */
+    else if (b.is_date)
+	retval = 1;
+    else if (a.is_date)
+	retval = -1;
+
     else if (a.hour > b.hour)
 	retval = 1;
     else if (a.hour < b.hour)
@@ -675,9 +690,6 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
 	retval = 1;
     else if (a.second < b.second)
 	retval = -1;
-
-    else
-	retval = 0;
 
     return retval;
 }
