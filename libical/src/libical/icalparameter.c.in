@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c.in,v 1.1.1.1 2001-01-02 07:33:02 ebusboom Exp $
+  $Id: icalparameter.c.in,v 1.2 2001-01-05 01:56:56 ebusboom Exp $
   $Locker:  $
     
 
@@ -233,7 +233,7 @@ void icalparameter_set_impl_data(icalparameter_kind kind,
 	   data->v_xlicerrortype=value; break;
 	case ICAL_XLICCOMPARETYPE_PARAMETER:
 	   data->v_xliccomparetype=value; break;
-	default:
+	default: {}
     }
 }
 

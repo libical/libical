@@ -17,12 +17,12 @@ libicalss_la_LDFLAGS = -version-info 0:0:0
 
 libicalss_la_SOURCES =		\
 	icalclassify.c		\
+	icalgauge.c		\
+	icalgaugeimpl.h		\
 	icaldirset.c		\
 	icaldirsetimpl.h	\
 	icalfileset.c		\
 	icalfilesetimpl.h	\
-	icalgauge.c		\
-	icalgaugeimpl.h		\
 	icalset.c		\
 	icalsslexer.l		\
 	icalssutil.c		\
@@ -35,11 +35,11 @@ libicalss_la_SOURCES =		\
 libicalssincludedir = $(includedir)
 
 COMBINEDHEADERS = \
+        icalgauge.h \
         icalset.h \
         icalfileset.h \
         icaldirset.h \
         icalcalendar.h  \
-        icalgauge.h \
         icalssutil.h \
         icalclassify.h \
 	icalspanlist.h	\

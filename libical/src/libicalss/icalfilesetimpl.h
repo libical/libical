@@ -3,7 +3,7 @@
   FILE: icalfilesetimpl.h
   CREATOR: eric 23 December 1999
   
-  $Id: icalfilesetimpl.h,v 1.1.1.1 2001-01-02 07:33:04 ebusboom Exp $
+  $Id: icalfilesetimpl.h,v 1.2 2001-01-05 01:56:57 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -30,6 +30,8 @@
 #include "config.h"
 #endif
 
+#include "icalgauge.h"
+
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icaldirset*/
 
@@ -40,7 +42,9 @@ struct icalfileset_impl {
 	char id[5]; /*fset*/
 	char *path;
 	icalcomponent* cluster;
+	icalgauge* gauge;
 	int changed;
 	FILE* stream;
+	int fd; /* fd is the file descriptor in stream */
 };
 

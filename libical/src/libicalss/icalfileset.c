@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.1.1.1 2001-01-02 07:33:03 ebusboom Exp $
+  $Id: icalfileset.c,v 1.2 2001-01-05 01:56:57 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -31,6 +31,7 @@
 #endif
 
 #include "icalfileset.h"
+#include "icalgauge.h"
 #include <errno.h>
 #include <limits.h> /* For PATH_MAX */
 #include <sys/stat.h> /* for stat */
@@ -79,7 +80,6 @@ icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
     struct icalfileset_impl *impl = icalfileset_new_impl(); 
     struct stat sbuf;
     int createclusterfile = 0;
-    icalerrorenum error = ICAL_NO_ERROR;
     icalparser *parser;
     struct icaltimetype tt;
     off_t cluster_file_size;
@@ -93,13 +93,12 @@ icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 	return 0;
     }
 
-    /*impl->path = strdup(path); icalfileset_load does this */
     impl->changed  = 0;
 
     impl->cluster = 0;
 
-    impl->path = 0;
     impl->stream = 0;
+    impl->path = strdup(path); 
         
     /* Check if the path already exists and if it is a regular file*/
     if (stat(path,&sbuf) != 0){
@@ -129,58 +128,66 @@ icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 	}	
     }
     
+
+
     /* if cluster does not already exist, create it */
     
     if (createclusterfile == 1) {
-	error = icalfileset_create_cluster(path);
 
-	if (error != ICAL_NO_ERROR){
-	    icalerror_set_errno(error);
+	FILE* f;
+	
+	icalerror_clear_errno();
+	
+	f = fopen(path,"w");
+	
+	if (f == 0){
+	    icalerror_set_errno(ICAL_FILE_ERROR);
+	    icalfileset_free(impl);
 	    return 0;
 	}
+	
+	fclose(f);
+
+    } else if(cluster_file_size > 0){
+
+	FILE* f;
+	errno = 0;
+	f = fopen(impl->path,"r");
+	
+	if (f ==0 || errno != 0){
+	    icalerror_set_errno(ICAL_FILE_ERROR); /* Redundant, actually */
+	    icalfileset_free(impl);
+	    return 0;
+	}
+	
+	parser = icalparser_new();
+	icalparser_set_gen_data(parser,f);
+	impl->cluster = icalparser_parse(parser,read_from_file);
+	icalparser_free(parser);
+
+	if (impl->cluster == 0 || icalerrno != ICAL_NO_ERROR){
+	    icalerror_set_errno(ICAL_PARSE_ERROR);
+	    icalfileset_free(impl);
+	    return 0;
+	}
+
+	if (icalcomponent_isa(impl->cluster) != ICAL_XROOT_COMPONENT){
+	    /* The parser got a single component, so it did not put it in
+	       an XROOT. */
+	    icalcomponent *cl = impl->cluster;
+	    impl->cluster = icalcomponent_new(ICAL_XROOT_COMPONENT);
+	    icalcomponent_add_component(impl->cluster,cl);
+	}
+
+	fclose(f);
     }
 
-    impl->path = (char*)strdup(path);
-
-    errno = 0;
-    impl->stream = fopen(impl->path,"r");
-    
-    if (impl->stream ==0 || errno != 0){
-	impl->cluster = 0;
-	icalerror_set_errno(ICAL_FILE_ERROR); /* Redundant, actually */
-	return 0;
-    }
-
-    icalfileset_lock(impl);
-
-    if(cluster_file_size > 0){
-      parser = icalparser_new();
-      icalparser_set_gen_data(parser,impl->stream);
-      impl->cluster = icalparser_parse(parser,read_from_file);
-      icalparser_free(parser);
-
-      if (icalcomponent_isa(impl->cluster) != ICAL_XROOT_COMPONENT){
-        /* The parser got a single component, so it did not put it in
-           an XROOT. */
-        icalcomponent *cl = impl->cluster;
-        impl->cluster = icalcomponent_new(ICAL_XROOT_COMPONENT);
-        icalcomponent_add_component(impl->cluster,cl);
-      }
-
-    } else {
-
-      impl->cluster = icalcomponent_new(ICAL_XROOT_COMPONENT);
+    if(impl->cluster == 0){
+	impl->cluster = icalcomponent_new(ICAL_XROOT_COMPONENT);
     }      
-
-    if (impl->cluster == 0){
-	icalerror_set_errno(ICAL_PARSE_ERROR);
-	return 0;
-    }
-    
-    if (error != ICAL_NO_ERROR){
-	return 0;
-    }
-    
+	
+/*  icalfileset_lock(impl);*/
+           
     return impl;
 }
 	
@@ -202,7 +209,7 @@ void icalfileset_free(icalfileset* cluster)
     }
 
     if(impl->stream != 0){
-	icalfileset_unlock(impl);
+/*	icalfileset_unlock(impl);*/
 	fclose(impl->stream);
 	impl->stream = 0;
     }
@@ -255,33 +262,10 @@ int icalfileset_unlock(icalfileset *cluster)
 
 }
 
-icalerrorenum icalfileset_create_cluster(const char *path)
-{
-
-    FILE* f;
-
-    icalerror_clear_errno();
-
-    f = fopen(path,"w");
-
-    if (f == 0){
-	icalerror_set_errno(ICAL_FILE_ERROR);
-	return ICAL_FILE_ERROR;
-    }
-
-    
-    /* This used to write data to the file... */
-
-	    
-    fclose(f);
-
-    return ICAL_NO_ERROR;
-}
-
 icalerrorenum icalfileset_commit(icalfileset* cluster)
 {
     FILE *f;
-    char tmp[PATH_MAX]; /* HACK Buffer overflow potential */
+    char tmp[PATH_MAX]; 
     char *str;
     icalcomponent *c;
     
@@ -392,15 +376,23 @@ int icalfileset_count_components(icalfileset *cluster,
     return icalcomponent_count_components(impl->cluster,kind);
 }
 
-icalerrorenum icalfileset_select(icalfileset* cluster, icalcomponent* gauge)
+icalerrorenum icalfileset_select(icalfileset* set, icalgauge* gauge)
 {
-    assert(0); /* HACK, not implemented */
+    struct icalfileset_impl* impl = (struct icalfileset_impl*)set;
+
+    icalerror_check_arg_re(gauge!=0,"guage",ICAL_BADARG_ERROR);
+
+    impl->gauge = gauge;
+
     return ICAL_NO_ERROR;
 }
 
-void icalfileset_clear(icalfileset* cluster)
+void icalfileset_clear(icalfileset* gauge)
 {
-   assert(0); /* HACK, not implemented */
+    struct icalfileset_impl* impl = (struct icalfileset_impl*)gauge;
+    
+    impl->gauge = 0;
+
 }
 
 icalcomponent* icalfileset_fetch(icalfileset* store,const char* uid)
@@ -560,18 +552,47 @@ icalcomponent* icalfileset_get_current_component (icalfileset* cluster)
 icalcomponent* icalfileset_get_first_component(icalfileset* cluster)
 {
     struct icalfileset_impl* impl = (struct icalfileset_impl*)cluster;
+    icalcomponent *c=0;
 
     icalerror_check_arg_rz((cluster!=0),"cluster");
 
-    return icalcomponent_get_first_component(impl->cluster,ICAL_ANY_COMPONENT);
+    do {
+	if (c == 0){
+	    c = icalcomponent_get_first_component(impl->cluster,
+					      ICAL_ANY_COMPONENT);
+	} else {
+	    c = icalcomponent_get_next_component(impl->cluster,
+					      ICAL_ANY_COMPONENT);
+	}
+
+	if(c != 0 && (impl->gauge == 0 ||
+	   icalgauge_compare(impl->gauge,c) == 1)){
+	    return c;
+	}
+
+    } while(c != 0);
+	    
 }
 
 icalcomponent* icalfileset_get_next_component(icalfileset* cluster)
 {
     struct icalfileset_impl* impl = (struct icalfileset_impl*)cluster;
+    icalcomponent *c;
 
     icalerror_check_arg_rz((cluster!=0),"cluster");
+    
+    do {
+	c = icalcomponent_get_next_component(impl->cluster,
+						 ICAL_ANY_COMPONENT);
 
-    return icalcomponent_get_next_component(impl->cluster,ICAL_ANY_COMPONENT);
+	if(c != 0 && (impl->gauge == 0 ||
+		      icalgauge_compare(impl->gauge,c) == 1)){
+	    return c;
+	}
+	
+    } while(c != 0);
+    
+    
+    return 0;
 }
 

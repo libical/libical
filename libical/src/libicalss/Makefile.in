@@ -86,12 +86,12 @@ INCLUDES =  	-I$(top_builddir)		-I$(top_srcdir)/src		-I$(top_builddir)/src		-I$(
 
 libicalss_la_LDFLAGS = -version-info 0:0:0
 
-libicalss_la_SOURCES =  	icalclassify.c			icaldirset.c			icaldirsetimpl.h		icalfileset.c			icalfilesetimpl.h		icalgauge.c			icalgaugeimpl.h			icalset.c			icalsslexer.l			icalssutil.c			icalssyacc.h			icalssyacc.y			icalspanlist.c			icalmessage.c			icalcstp.c
+libicalss_la_SOURCES =  	icalclassify.c			icalgauge.c			icalgaugeimpl.h			icaldirset.c			icaldirsetimpl.h		icalfileset.c			icalfilesetimpl.h		icalset.c			icalsslexer.l			icalssutil.c			icalssyacc.h			icalssyacc.y			icalspanlist.c			icalmessage.c			icalcstp.c
 
 
 libicalssincludedir = $(includedir)
 
-COMBINEDHEADERS =          icalset.h         icalfileset.h         icaldirset.h         icalcalendar.h          icalgauge.h         icalssutil.h         icalclassify.h 	icalspanlist.h		icalmessage.h 	icalcstp.h
+COMBINEDHEADERS =          icalgauge.h         icalset.h         icalfileset.h         icaldirset.h         icalcalendar.h          icalssutil.h         icalclassify.h 	icalspanlist.h		icalmessage.h 	icalcstp.h
 
 
 libicalssinclude_HEADERS = icalss.h
@@ -109,8 +109,8 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libicalss_la_LIBADD = 
-libicalss_la_OBJECTS =  icalclassify.lo icaldirset.lo icalfileset.lo \
-icalgauge.lo icalset.lo icalsslexer.lo icalssutil.lo icalssyacc.lo \
+libicalss_la_OBJECTS =  icalclassify.lo icalgauge.lo icaldirset.lo \
+icalfileset.lo icalset.lo icalsslexer.lo icalssutil.lo icalssyacc.lo \
 icalspanlist.lo icalmessage.lo icalcstp.lo
 LEXLIB = @LEXLIB@
 CFLAGS = @CFLAGS@

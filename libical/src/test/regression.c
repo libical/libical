@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
+  $Id: regression.c,v 1.3 2001-01-05 01:56:57 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2493,6 +2493,79 @@ void test_gauge_compare() {
     
 }
 
+icalcomponent* make_component(int i){
+
+    icalcomponent *c;
+
+    struct icaltimetype t = icaltime_from_string("20000101T120000Z");
+
+    t.day += i;
+
+    icaltime_normalize(t);
+
+    c =  icalcomponent_vanew(
+	ICAL_VCALENDAR_COMPONENT,
+	icalproperty_new_method(ICAL_METHOD_REQUEST),
+	icalcomponent_vanew(
+	    ICAL_VEVENT_COMPONENT,
+	    icalproperty_new_dtstart(t),
+	    0),
+	0);
+
+    assert(c != 0);
+
+    return c;
+
+}
+void test_fileset()
+{
+    icalfileset *fs;
+    icalcomponent *c;
+    int i;
+    char *path = "test_fileset.ics";
+    icalgauge  *g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE DTSTART > '20000103T120000Z' AND DTSTART <= '20000106T120000Z'");
+
+
+    fs = icalfileset_new(path);
+    
+    assert(fs != 0);
+
+    for (i = 0; i!= 10; i++){
+	c = make_component(i);
+	icalfileset_add_component(fs,c);
+    }
+
+    icalfileset_commit(fs);
+
+    printf("== No Selections \n");
+
+    for (c = icalfileset_get_first_component(fs);
+	 c != 0;
+	 c = icalfileset_get_next_component(fs)){
+	struct icaltimetype t = icalcomponent_get_dtstart(c);
+
+	printf("%s\n",icaltime_as_ctime(t));
+    }
+
+    icalfileset_select(fs,g);
+
+    printf("\n== DTSTART > '20000103T120000Z' AND DTSTART <= '20000106T120000Z' \n");
+
+    for (c = icalfileset_get_first_component(fs);
+	 c != 0;
+	 c = icalfileset_get_next_component(fs)){
+	struct icaltimetype t = icalcomponent_get_dtstart(c);
+
+	printf("%s\n",icaltime_as_ctime(t));
+    }
+
+    icalfileset_free(fs);
+    
+    unlink(path);
+
+}
+
 int main(int argc, char *argv[])
 {
     int c;
@@ -2500,13 +2573,13 @@ int main(int argc, char *argv[])
     extern int optind, optopt;
     int errflg=0;
     char* program_name = strrchr(argv[0],'/');
-    int ttime=0, trecur=0,tspan=0, tmisc=0, tgauge = 0;
+    int ttime=0, trecur=0,tspan=0, tmisc=0, tgauge = 0, tfile = 0;
 
     if(argc==1) {
-	ttime = trecur = tspan = tmisc = tgauge =1;
+	ttime = trecur = tspan = tmisc = tgauge = tfile = 1;
     }
 
-    while ((c = getopt(argc, argv, "t:s:r:m:g:")) != -1) {
+    while ((c = getopt(argc, argv, "t:s:r:m:g:f:")) != -1) {
 	switch (c) {
 
 	    case 't': {
@@ -2533,6 +2606,11 @@ int main(int argc, char *argv[])
 
 	    case 'g': {
 		tgauge = atoi(optarg);
+		break;
+	    }
+
+	    case 'f': {
+		tfile = atoi(optarg);
 		break;
 	    }
 	    
@@ -2609,6 +2687,11 @@ int main(int argc, char *argv[])
 	printf("\n------------Test Gauge Compare--------------\n");
 	test_gauge_compare();
     }	
+
+    if(tfile ==1 || tfile == 2){
+	printf("\n------------Test File Set--------------\n");
+	test_fileset();
+    }
 
 
     if(tmisc == 1 || tmisc  == 2){
