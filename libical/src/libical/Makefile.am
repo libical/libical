@@ -66,6 +66,8 @@ libicalinclude_HEADERS =  ical.h
 COMBINEDHEADERS =					\
 	$(top_builddir)/src/libical/icalversion.h	\
 	$(top_srcdir)/src/libical/icaltime.h		\
+	$(top_srcdir)/src/libical/icalduration.h	\
+	$(top_srcdir)/src/libical/icalperiod.h		\
 	$(top_srcdir)/src/libical/icalenums.h		\
 	$(top_srcdir)/src/libical/icaltypes.h		\
 	$(top_srcdir)/src/libical/icalrecur.h		\
