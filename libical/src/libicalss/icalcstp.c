@@ -3,7 +3,7 @@
     FILE: icalcstps.c
     CREATOR: ebusboom 23 Jun 2000
   
-    $Id: icalcstp.c,v 1.1.1.1 2001-01-02 07:33:03 ebusboom Exp $
+    $Id: icalcstp.c,v 1.2 2001-01-16 06:55:09 ebusboom Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -34,6 +34,8 @@
 #include <sys/socket.h>  /* For send(), others. */
 #include <unistd.h> /* For alarm */
 #include <errno.h>
+#include <stdlib.h> /* for malloc */
+#include <string.h>
 
 enum cstps_state {
     NO_STATE,
@@ -200,25 +202,42 @@ int line_is_endofdata(char* line);
 int line_is_mime(char* line);
 
 icalerrorenum prep_abort(struct icalcstps_impl* impl, char* data)
-{}
+{
+    return ICAL_NO_ERROR;
+}
 icalerrorenum prep_authenticate(struct icalcstps_impl* impl, char* data)
-{}
+{    return ICAL_NO_ERROR;
+}
 icalerrorenum prep_capability(struct icalcstps_impl* impl, char* data)
-{}
+{    return ICAL_NO_ERROR;
+}
 icalerrorenum prep_calidexpand(struct icalcstps_impl* impl, char* data)
-{}
+{
+    return ICAL_NO_ERROR;
+}
 icalerrorenum prep_continue(struct icalcstps_impl* impl, char* data)
-{}
+{
+    return ICAL_NO_ERROR;
+}
 icalerrorenum prep_disconnect(struct icalcstps_impl* impl, char* data)
-{}
+{
+    return ICAL_NO_ERROR;
+}
 icalerrorenum prep_identify(struct icalcstps_impl* impl, char* data)
-{}
+{
+    return ICAL_NO_ERROR;
+}
 icalerrorenum prep_starttls(struct icalcstps_impl* impl, char* data)
-{}
+{
+    return ICAL_NO_ERROR;
+}
 icalerrorenum prep_upnexpand(struct icalcstps_impl* impl, char* data)
-{}
+{
+    return ICAL_NO_ERROR;
+}
 icalerrorenum prep_sendata(struct icalcstps_impl* impl, char* data)
-{}
+{    return ICAL_NO_ERROR;
+}
 
 char* icalcstps_process_incoming(icalcstps* cstp, char* input)
 {
@@ -237,7 +256,7 @@ char* icalcstps_process_incoming(icalcstps* cstp, char* input)
 	return 0;
     }
 
-    i = (char*)index(" ",input_cpy);
+    i = (char*)strstr(" ",input_cpy);
 
     cmd_or_resp = input_cpy;
 
@@ -276,7 +295,7 @@ char* icalcstps_process_incoming(icalcstps* cstp, char* input)
 	error = prep_sendata(impl,data);
     }
     
-
+    return 0;
 }
 
     /* Read data until we get a end of data marker */
@@ -318,11 +337,13 @@ void* icalcstpc_free(icalcstpc* cstpc);
 /* Get the next string to send to the server */
 char* icalcstpc_next_output(icalcstpc* cstp)
 {
+    return 0;
 }
 
 /* process the next string to send to the server */ 
 int icalcstpc_next_input(icalcstpc* cstp)
 {
+    return 0;
 }
 
 /* After icalcstpc_next_input returns a 0, there are responses
@@ -340,45 +361,54 @@ icalerrorenum icalcstpc_abort(icalcstpc* cstp)
 
     impl->next_output = "ABORT";
 
+    return ICAL_NO_ERROR;
 }
 
 icalerrorenum icalcstpc_authenticate(icalcstpc* cstp, char* mechanism, 
                                         char* data, char* f(char*))
 {
+    return ICAL_NO_ERROR;
 }
 
 icalerrorenum icalcstpc_capability(icalcstpc* cstp)
 {
-}
+    return ICAL_NO_ERROR;}
 
 icalerrorenum icalcstpc_calidexpand(icalcstpc* cstp,char* calid)
 {
+    return ICAL_NO_ERROR;
 }
 
 icalerrorenum icalcstpc_continue(icalcstpc* cstp, unsigned int time)
 {
+    return ICAL_NO_ERROR;
 }
 
 icalerrorenum icalcstpc_disconnect(icalcstpc* cstp)
 {
+    return ICAL_NO_ERROR;
 }
 
 icalerrorenum icalcstpc_identify(icalcstpc* cstp, char* id)
 {
+    return ICAL_NO_ERROR;
 }
 
 icalerrorenum icalcstpc_starttls(icalcstpc* cstp, char* command, 
                                     char* data, char * f(char*))
 {
+    return ICAL_NO_ERROR;
 }
 
 icalerrorenum icalcstpc_upnexpand(icalcstpc* cstp,char* calid)
 {
+    return ICAL_NO_ERROR;
 }
 
 icalerrorenum icalcstpc_sendata(icalcstpc* cstp, unsigned int time,
                                    icalcomponent *comp)
 {
+    return ICAL_NO_ERROR;
 }
 
 

@@ -1,3 +1,22 @@
+Version 0.22, 15 Jan 01 ( cvs tag libical-0-22)
+----------------------------------------------
+
+Many improvements to the time routines in icaltime.c. I think that
+they actually make sense now. Note that there is an interface change
+with icaltime_from_timet() -- I removed the is_utc parameter, since
+all timet values are in UTC. Use icaltime_from_int() if you really
+want the old interface
+
+Major improvements to icalfileset. icalfileset_select now works and so
+does file locking.
+
+Minor revision to the documentation, but it does include a new section
+on file storage ( icalfileset ) and time ( icaltime.c)
+
+Lots of bug fixes and small patches. 
+
+
+
 Version 0.21, 20 Nov 00 ( cvs tag libical-0-21)
 ----------------------------------------------
 

@@ -3,7 +3,7 @@
   FILE: icaltestparser.c
   CREATOR: eric 20 June 1999
   
-  $Id: icaltestparser.c,v 1.1.1.1 2001-01-02 07:33:05 ebusboom Exp $
+  $Id: icaltestparser.c,v 1.2 2001-01-16 06:55:09 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -112,7 +112,6 @@ int main(int argc, char* argv[])
 	if (c != 0){
 	    /*icalcomponent_convert_errors(c);*/
 	    printf("%s",icalcomponent_as_ical_string(c));
-	    icalparser_claim(parser);
 	    printf("\n---------------\n");
 	    icalcomponent_free(c);
 	}

@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.1.1.1 2001-01-02 07:32:59 ebusboom Exp $
+  $Id: icalparser.c,v 1.2 2001-01-16 06:55:09 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -70,7 +70,6 @@ struct icalparser_impl
 	size_t tmp_buf_size; 
 	char temp[TMP_BUF_SIZE];
 	icalcomponent *root_component;
-	icalcomponent *tail;
 	int version; 
 	int level;
 	int lineno;
@@ -526,40 +525,52 @@ icalcomponent* icalparser_parse(icalparser *parser,
 
     char* line; 
     icalcomponent *c=0; 
-    icalcomponent *root_component=0;
+    icalcomponent *root=0;
+    struct icalparser_impl *impl = (struct icalparser_impl*)parser;
 
     icalerror_check_arg_rz((parser !=0),"parser");
 
     do{
 	line = icalparser_get_line(parser, line_gen_func);
+
 	if ((c = icalparser_add_line(parser,line)) != 0){
-          if (root_component == 0){
-            /* Just one component */
-            icalparser_claim(parser);
-            root_component = c;
-          } else if(icalcomponent_isa(root_component) 
-                    != ICAL_XROOT_COMPONENT) {
-            /*Got a second component, so move the two components under
-              an XROOT container */
-            icalcomponent *tempc; 
-            tempc = icalcomponent_new(ICAL_XROOT_COMPONENT);
-            icalcomponent_add_component(tempc, root_component);
-            icalparser_claim(parser);
-            icalcomponent_add_component(tempc, c);
-            root_component = tempc;
-          } else {
-            /* Already have an XROOT container, so add the component
-               to it*/
-            icalcomponent_add_component(root_component, c);
-            icalparser_claim(parser);
-          }
+
+	    if(icalcomponent_get_parent(c) !=0){
+		/* This is bad news... assert? */
+	    }	    
+	    
+	    assert(impl->root_component == 0);
+	    assert(pvl_count(impl->components) ==0);
+
+	    if (root == 0){
+		/* Just one component */
+		root = c;
+	    } else if(icalcomponent_isa(root) != ICAL_XROOT_COMPONENT) {
+		/*Got a second component, so move the two components under
+		  an XROOT container */
+		icalcomponent *tempc = icalcomponent_new(ICAL_XROOT_COMPONENT);
+		icalcomponent_add_component(tempc, root);
+		icalcomponent_add_component(tempc, c);
+		root = tempc;
+	    } else if(icalcomponent_isa(root) == ICAL_XROOT_COMPONENT) {
+		/* Already have an XROOT container, so add the component
+		   to it*/
+		icalcomponent_add_component(root, c);
+		
+	    } else {
+		/* Badness */
+		assert(0);
+	    }
+
+	    c = 0;
+
         }
 	if(line != 0){
 	    free(line);
 	}
     } while ( line != 0);
 
-    return root_component;
+    return root;
 
 }
 
@@ -593,7 +604,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
     end = 0;
     str = icalparser_get_prop_name(line, &end);
 
-    if (str == 0){
+    if (str == 0 || strlen(str) == 0 ){
 	/* Could not get a property name */
 	icalcomponent *tail = pvl_data(pvl_tail(impl->components));
 
@@ -638,20 +649,35 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	impl->level--;
 	str = icalparser_get_next_value(end,&end, value_kind);
 
+	/* Pop last component off of list and add it to the second-to-last*/
 	impl->root_component = pvl_pop(impl->components);
 
 	tail = pvl_data(pvl_tail(impl->components));
 
 	if(tail != 0){
 	    icalcomponent_add_component(tail,impl->root_component);
-	}
+	} 
 
 	tail = 0;
 
 	/* Return the component if we are back to the 0th level */
 	if (impl->level == 0){
+	    icalcomponent *rtrn; 
+
+	    if(pvl_count(impl->components) != 0){
+	    /* There are still components on the stack -- this means
+               that one of them did not have a proper "END" */
+		pvl_push(impl->components,impl->root_component);
+		icalparser_clean(parser); /* may reset impl->root_component*/
+	    }
+
+	    assert(pvl_count(impl->components) == 0);
+
 	    impl->state = ICALPARSER_SUCCESS;
-	    return impl->root_component;
+	    rtrn = impl->root_component;
+	    impl->root_component = 0;
+	    return rtrn;
+
 	} else {
 	    impl->state = ICALPARSER_END_COMP;
 	    return 0;
@@ -893,10 +919,12 @@ icalcomponent* icalparser_add_line(icalparser* parser,
     /****************************************************************
      * End of component parsing. 
      *****************************************************************/
-    
+
     if (pvl_data(pvl_tail(impl->components)) == 0 &&
 	impl->level == 0){
+	/* HACK. Does this clause ever get executed? */
 	impl->state = ICALPARSER_SUCCESS;
+	assert(0);
 	return impl->root_component;
     } else {
 	impl->state = ICALPARSER_IN_PROGRESS;
@@ -912,29 +940,16 @@ icalparser_state icalparser_get_state(icalparser* parser)
 
 }
 
-icalcomponent* icalparser_claim(icalparser* parser)
-{
-   struct icalparser_impl* impl = (struct icalparser_impl*) parser;
-   icalcomponent *c = impl->root_component;
-
-   impl->root_component = 0;
-
-   return c;
-
-}
-
-
 icalcomponent* icalparser_clean(icalparser* parser)
 {
     struct icalparser_impl* impl = (struct icalparser_impl*) parser;
-    icalcomponent *tail = pvl_data(pvl_tail(impl->components));
+    icalcomponent *tail; 
 
     icalerror_check_arg_rz((parser != 0 ),"parser");
 
     /* We won't get a clean exit if some components did not have an
        "END" tag. Clear off any component that may be left in the list */
     
-
     while((tail=pvl_data(pvl_tail(impl->components))) != 0){
 
 	insert_error(tail," ",
@@ -946,8 +961,13 @@ icalcomponent* icalparser_clean(icalparser* parser)
 	tail=pvl_data(pvl_tail(impl->components));
 
 	if(tail != 0){
-	    icalcomponent_add_component(tail,impl->root_component);
+	    if(icalcomponent_get_parent(impl->root_component)!=0){
+		icalerror_warn("icalparser_clean is trying to attach a component for the second time");
+	    } else {
+		icalcomponent_add_component(tail,impl->root_component);
+	    }
 	}
+	    
     }
 
     return impl->root_component;

@@ -66,7 +66,6 @@ int main(int argc, char *argv[])
     for (itr = icalfileset_get_first_component(cin);
          itr != 0;
          itr = icalfileset_get_next_component(cin)){
-	int error = 0;
 
 	desc = icalcomponent_get_first_property(itr,ICAL_DESCRIPTION_PROPERTY);
 	dtstart = icalcomponent_get_first_property(itr,ICAL_DTSTART_PROPERTY);

@@ -3,7 +3,7 @@
   FILE: stow.c
   CREATOR: eric 29 April 2000
   
-  $Id: stow.c,v 1.1.1.1 2001-01-02 07:33:06 ebusboom Exp $
+  $Id: stow.c,v 1.2 2001-01-16 06:55:09 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -745,7 +745,6 @@ icalcomponent* read_nonmime_component(struct options_struct *opt)
 	comp = icalparser_add_line(parser,line);
 	
 	if (comp != 0){
-	    icalparser_claim(parser);
 	    return comp;
 	}
 	

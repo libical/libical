@@ -56,10 +56,6 @@ void parse_text(int argc, char* argv[])
 	if (c != 0){
 	    printf("%s",icalcomponent_as_ical_string(c));
 
-	    /* Tell the parser that the caller will take ownership of
-               this component */
-	    icalparser_claim(parser);
-
 	    printf("\n---------------\n");
 
 	    icalcomponent_free(c);

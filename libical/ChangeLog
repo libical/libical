@@ -1,3 +1,8 @@
+2001-01-15  Eric Busboom  <eric@softwarestudio.org>
+
+	* icalfileset.c Many improvements. File locking now works, and so
+ 	does searching with icalfileset_select()
+
 2001-01-08  Eric Busboom  <eric@softwarestudio.org>
 
 	* Makefile.am Remove spaces after -I in several 

@@ -26,7 +26,7 @@ libical_la_SOURCES =		\
 	icalerror.h		\
 	icallexer.l		\
 	icalmemory.c		\
-	icalmemory.h		\bb
+	icalmemory.h		\
 	icalmime.c		\
 	icalmime.h		\
 	icalparameter.c		\

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.4 2001-01-12 21:22:20 ebusboom Exp $
+  $Id: regression.c,v 1.5 2001-01-16 06:55:09 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2596,67 +2596,70 @@ void test_file_locks()
     int i;
     int final,sec;
 
-    icalfileset_safe_saves = 0;
+    icalfileset_safe_saves = 1;
+
+    icalerror_clear_errno();
 
     unlink(path);
 
-    icalerror_clear_errno();
     fs = icalfileset_new(path);
-    c = make_component(0);
 
-    d = icaldurationtype_from_int(1);
-
-    icalcomponent_set_duration(c,d);
-
-    icalfileset_add_component(fs,c);
-
-    c2 = icalcomponent_new_clone(c);
-
-    icalfileset_add_component(fs,c2);
-
-    icalfileset_commit(fs);
-
+    if(icalfileset_get_first_component(fs)==0){
+	c = make_component(0);
+	
+	d = icaldurationtype_from_int(1);
+	
+	icalcomponent_set_duration(c,d);
+	
+	icalfileset_add_component(fs,c);
+	
+	c2 = icalcomponent_new_clone(c);
+	
+	icalfileset_add_component(fs,c2);
+	
+	icalfileset_commit(fs);
+    }
+    
     icalfileset_free(fs);
-
+    
     assert(icalerrno == ICAL_NO_ERROR);
-
+    
     pid = fork();
-
+    
     assert(pid >= 0);
-
+    
     if(pid == 0){
 	/*child*/
 	int i;
 
-	exit(0);
-	
+	microsleep(rand()/(RAND_MAX/100));
+
 	for(i = 0; i< 50; i++){
 	    fs = icalfileset_new(path);
 
-	    printf("P1.");
 
 	    assert(fs != 0);
 
 	    c = icalfileset_get_first_component(fs);
 
 	    assert(c!=0);
-	    
+	   
 	    d = icalcomponent_get_duration(c);
 	    d = icaldurationtype_from_int(icaldurationtype_as_int(d)+1);
 	    
 	    icalcomponent_set_duration(c,d);
-	    
+	    icalcomponent_set_summary(c,"Child");	  
+  
 	    c2 = icalcomponent_new_clone(c);
-	    
-	    icalcomponent_set_summary(c2,"Process 1");
-
+	    icalcomponent_set_summary(c2,"Child");
 	    icalfileset_add_component(fs,c2);
+
+	    icalfileset_mark(fs);
+	    icalfileset_commit(fs);
 
 	    icalfileset_free(fs);
 
-	    printf("P1\n");
-
-	    microsleep(5);
+	    microsleep(rand()/(RAND_MAX/20));
 
 
 	}
@@ -2670,8 +2673,6 @@ void test_file_locks()
 	for(i = 0; i< 50; i++){
 	    fs = icalfileset_new(path);
 
-	    printf("P2.");
-
 	    assert(fs != 0);
 
 	    c = icalfileset_get_first_component(fs);
@@ -2682,18 +2683,15 @@ void test_file_locks()
 	    d = icaldurationtype_from_int(icaldurationtype_as_int(d)+1);
 	    
 	    icalcomponent_set_duration(c,d);
-	    
-	    c2 = icalcomponent_new_clone(c);
- 	    
-	    icalcomponent_set_summary(c2,"Process 2");
+	    icalcomponent_set_summary(c,"Parent");
 
+	    c2 = icalcomponent_new_clone(c);
+	    icalcomponent_set_summary(c2,"Parent");
 	    icalfileset_add_component(fs,c2);
 
+	    icalfileset_mark(fs);
+	    icalfileset_commit(fs);
 	    icalfileset_free(fs);
-
-	    printf("P2\n");
-
-	    microsleep(5);
 
 	}
     }
@@ -2713,10 +2711,12 @@ void test_file_locks()
 	struct icaldurationtype d = icalcomponent_get_duration(c);
 	sec = icaldurationtype_as_int(d);
 
-	printf("%d %d\n",i,sec);
+	/*printf("%d,%d ",i,sec);*/
 	assert(i == sec);
 	i++;
     }
+
+    printf("\nFinal: %d\n",final);
 
     
     assert(sec == final);

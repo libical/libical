@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.4 2001-01-12 21:22:20 ebusboom Exp $
+  $Id: icalfileset.c,v 1.5 2001-01-16 06:55:09 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -99,7 +99,16 @@ icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 	return 0;
     } 
 
-    /* Read in the file if it exists. Leave the descriptor open and locked */
+    impl->fd = open(impl->path,flags, mode);
+    
+    if (impl->fd < 0){
+	icalerror_set_errno(ICAL_FILE_ERROR);
+	icalfileset_free(impl);
+	return 0;
+    }
+
+    icalfileset_lock(impl);
+    
     if(cluster_file_size > 0 ){
 	icalerrorenum error;
 	if((error = icalfileset_read_file(impl,mode))!= ICAL_NO_ERROR){
@@ -108,17 +117,6 @@ icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 	}
     }
  
-    if (impl->fd == 0){
-	impl->fd = open(impl->path,flags, mode);
-	icalfileset_lock(impl);
-    }
-    
-    if (impl->fd < 0){
-	icalerror_set_errno(ICAL_FILE_ERROR);
-	icalfileset_free(impl);
-	return 0;
-    }
-    
     if(impl->cluster == 0){
 	impl->cluster = icalcomponent_new(ICAL_XROOT_COMPONENT);
     }      
@@ -129,30 +127,25 @@ icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 char* icalfileset_read_from_file(char *s, size_t size, void *d)
 {
     
-    int i;
-    int sz;
     char* p = s;
+    int fd = (int)d;
 
-    for(i=0; i<size;i++){
+    /* Simulate fgets -- read single characters and stop at '\n' */
+
+    for(p=s; p<s+size-1;p++){
 	
-	sz = read((int)d,p,1);
-
-	if(sz != 1){
-	    if(p == s){
-		return 0;
-	    } else {
+	if(read(fd,p,1) != 1 || *p=='\n'){
 		break;
-	    }
 	} 
-
-	if(*p == '\n'){
-	    break;
-	}
-	
-	p++;
     }
+
     *(++p) = '\0';
-    return s;
+    
+    if(*s == 0){
+	return 0;
+    } else {
+	return s;
+    }
 
 }
 
@@ -161,25 +154,10 @@ icalerrorenum icalfileset_read_file(icalfileset* cluster,mode_t mode)
 {
 
     icalparser *parser;
-
+    int fd;
   
     struct icalfileset_impl *impl = (struct icalfileset_impl*)cluster;
-
-
-    if(impl->fd != 0){
-	if(lseek(impl->fd,SEEK_SET,0) < 0){
-	    icalerror_set_errno(ICAL_FILE_ERROR);
-	    return ICAL_FILE_ERROR;
-	}
-    } else {
-	if ( ( impl->fd = open(impl->path,mode)) < 0){  
-	    icalerror_set_errno(ICAL_FILE_ERROR); /* Redundant, actually */
-	    return ICAL_FILE_ERROR;
-	}
-    }
-
-    icalfileset_lock(impl);
-  
+    
     parser = icalparser_new();
     icalparser_set_gen_data(parser,(void*)impl->fd);
     impl->cluster = icalparser_parse(parser,icalfileset_read_from_file);
@@ -197,9 +175,6 @@ icalerrorenum icalfileset_read_file(icalfileset* cluster,mode_t mode)
 	impl->cluster = icalcomponent_new(ICAL_XROOT_COMPONENT);
 	icalcomponent_add_component(impl->cluster,cl);
     }
-
-    
-    /*    close(impl->fd); impl->fd = 0;*/
 
     return ICAL_NO_ERROR;
 
@@ -252,15 +227,15 @@ void icalfileset_free(icalfileset* cluster)
 	impl->cluster=0;
     }
 
+    if(impl->fd > 0){
+	icalfileset_unlock(impl);
+	close(impl->fd);
+	impl->fd = -1;
+    }
+
     if(impl->path != 0){
 	free(impl->path);
 	impl->path = 0;
-    }
-
-    if(impl->fd != 0){
-	icalfileset_unlock(impl);
-	close(impl->fd);
-	impl->fd = 0;
     }
 
     free(impl);
@@ -279,15 +254,18 @@ int icalfileset_lock(icalfileset *cluster)
 {
     struct icalfileset_impl *impl = (struct icalfileset_impl*)cluster;
     struct flock lock;
+    int rtrn;
 
     icalerror_check_arg_rz((impl->fd>0),"impl->fd");
-
+    errno = 0;
     lock.l_type = F_WRLCK;     /* F_RDLCK, F_WRLCK, F_UNLCK */
     lock.l_start = 0;  /* byte offset relative to l_whence */
     lock.l_whence = SEEK_SET; /* SEEK_SET, SEEK_CUR, SEEK_END */
     lock.l_len = 0;       /* #bytes (0 means to EOF) */
 
-    return (fcntl(impl->fd, F_SETLKW, &lock)); 
+    rtrn = fcntl(impl->fd, F_SETLKW, &lock);
+
+    return rtrn;
 }
 
 int icalfileset_unlock(icalfileset *cluster)
@@ -313,8 +291,6 @@ int icalfileset_safe_saves=0;
 
 icalerrorenum icalfileset_commit(icalfileset* cluster)
 {
-    int fd;
-
     char tmp[PATH_MAX]; 
     char *str;
     icalcomponent *c;
@@ -332,18 +308,17 @@ icalerrorenum icalfileset_commit(icalfileset* cluster)
     }
     
     if(icalfileset_safe_saves == 1){
-	snprintf(tmp,PATH_MAX,"%s-tmp",impl->path);
-	if( (fd=open(tmp,O_RDWR|O_CREAT,0664)) < 0){
-	    icalerror_set_errno(ICAL_FILE_ERROR);
-	    return ICAL_FILE_ERROR;
-	}
+	snprintf(tmp,PATH_MAX,"cp %s %s.bak",impl->path,impl->path);
 	
-    } else {
-	fd = impl->fd;
-	if(lseek(fd,SEEK_SET,0) < 0){
+	if(system(tmp) < 0){
 	    icalerror_set_errno(ICAL_FILE_ERROR);
 	    return ICAL_FILE_ERROR;
 	}
+    }
+
+    if(lseek(impl->fd,SEEK_SET,0) < 0){
+	icalerror_set_errno(ICAL_FILE_ERROR);
+	return ICAL_FILE_ERROR;
     }
     
     for(c = icalcomponent_get_first_component(impl->cluster,ICAL_ANY_COMPONENT);
@@ -353,7 +328,7 @@ icalerrorenum icalfileset_commit(icalfileset* cluster)
 
 	str = icalcomponent_as_ical_string(c);
     
-	sz=write(fd,str,strlen(str));
+	sz=write(impl->fd,str,strlen(str));
 
 	if ( sz != strlen(str)){
 	    perror("write");
@@ -366,30 +341,8 @@ icalerrorenum icalfileset_commit(icalfileset* cluster)
     
     impl->changed = 0;    
 
-    if(icalfileset_safe_saves == 1){
-	
-	int old_fd = impl->fd;
-
-	impl->fd = fd;
-
-	icalfileset_lock(impl);
-
-	/* HACK. This may cause a race condition or failure if another
-           process is trying to acquire a lock between closing the old
-           file and renaming. */
-	
-	if(rename(tmp,impl->path) < 0){
-	    perror("rename");
-	    icalerror_set_errno(ICAL_FILE_ERROR);
-	    return ICAL_FILE_ERROR;
-	}
-
-	close(old_fd);
-    } else {
-
-	if(ftruncate(impl->fd,write_size) < 0){
-	    return ICAL_FILE_ERROR;
-	}
+    if(ftruncate(impl->fd,write_size) < 0){
+	return ICAL_FILE_ERROR;
     }
     
     return ICAL_NO_ERROR;

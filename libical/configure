@@ -704,7 +704,7 @@ fi
 
 PACKAGE=libical
 
-VERSION=0.21b
+VERSION=0.22
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -2238,7 +2238,7 @@ else
 #line 2239 "configure"
 #include "confdefs.h"
 
-                #include <time.h>
+#include <time.h>
         
 int main() {
 
@@ -2274,7 +2274,7 @@ else
 #line 2275 "configure"
 #include "confdefs.h"
 
-                        #include <time.h>
+#include <time.h>
                         
 int main() {
 

@@ -3,7 +3,7 @@
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalparser.h,v 1.1.1.1 2001-01-02 07:32:59 ebusboom Exp $
+  $Id: icalparser.h,v 1.2 2001-01-16 06:55:09 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -54,7 +54,6 @@ typedef enum icalparser_state {
 
 icalparser* icalparser_new(void);
 icalcomponent* icalparser_add_line(icalparser* parser, char* str );
-icalcomponent* icalparser_claim(icalparser* parser);
 icalcomponent* icalparser_clean(icalparser* parser);
 icalparser_state icalparser_get_state(icalparser* parser);
 void icalparser_free(icalparser* parser);
