@@ -547,11 +547,11 @@ string ICalProperty::get_target(){
 }
 
 /* TRANSP */
-void ICalProperty::set_transp(string val){
+void ICalProperty::set_transp(enum icalproperty_transp val){
 	icalproperty_set_transp(imp, val);
 }
-string ICalProperty::get_transp(){
-	return (string)icalproperty_get_transp(imp);
+enum icalproperty_transp ICalProperty::get_transp(){
+	return icalproperty_get_transp(imp);
 }
 
 /* TRIGGER */

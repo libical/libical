@@ -276,8 +276,8 @@ public:
 	string get_target();
 
 	/* TRANSP */
-	void set_transp(string val);
-	string get_transp();
+	void set_transp(enum icalproperty_transp val);
+	enum icalproperty_transp get_transp();
 
 	/* TRIGGER */
 	void set_trigger(struct icaltriggertype val);
