@@ -92,7 +92,8 @@ icalss.h: $(COMBINEDHEADERS)
 	echo '#ifdef __cplusplus'         >  icalss.h
 	echo 'extern "C" {'               >> icalss.h
 	echo '#endif'                     >> icalss.h
-	cat $(COMBINEDHEADERS) | egrep -v "#include.*\"ical" \
+	cat $(COMBINEDHEADERS)				\
+	| egrep -v "#include.*\"ical"			\
 	| egrep -v "#include.*\"pvl\.h\"" >> icalss.h
 	echo '#ifdef __cplusplus'         >> icalss.h
 	echo '};'                         >> icalss.h
