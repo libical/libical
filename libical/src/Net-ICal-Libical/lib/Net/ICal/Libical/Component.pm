@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.pm,v 1.1 2001-03-02 19:50:31 ebusboom Exp $
+#  $Id: Component.pm,v 1.2 2001-03-02 21:33:54 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, eric@softwarestudio.org
@@ -24,6 +24,7 @@
 
 package Net::ICal::Libical::Component;
 use Net::ICal::Libical;
+
 use strict;
 
 sub new{
@@ -76,14 +77,20 @@ sub properties{
      $p = Net::ICal::Libical::icallangbind_get_next_property($c,$prop_name)){
     
     my $d_string = Net::ICal::Libical::icallangbind_property_eval_string($p,"=>");
-    my %dict = eval($d_string);
+    my %dict = %{eval($d_string)};
     
     $dict{'ref'} = $p;
 
   # Now, look at $dict{'value_type'} or $dict{'name'} to construct a 
   # derived class of Property. I'll do this later. 
 
-    my $prop = new Net::ICal::Libical::Property(\%dict);
+    my $prop;
+
+    if($dict{'value_type'} eq 'DATE' or $dict{'value_type'} eq 'DATE-TIME'){
+      $prop = new Net::ICal::Libical::Time(\%dict);
+    } else {
+      $prop = new Net::ICal::Libical::Property(\%dict);
+    }
 
     push(@props,$prop);
 

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.pm,v 1.6 2001-03-02 19:50:31 ebusboom Exp $
+#  $Id: Libical.pm,v 1.7 2001-03-02 21:33:54 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -23,6 +23,7 @@
 
 require Net::ICal::Libical::Component;
 require Net::ICal::Libical::Property;
+require Net::ICal::Libical::Time;
 
 package Net::ICal::Libical;
 require Exporter;
@@ -54,7 +55,6 @@ sub validate_component {
   $out = Net::ICal::Libical::icalcomponent_as_ical_string($c);
 
   Net::ICal::Libical::icalcomponent_free($c);
-
 
   return $out;
 

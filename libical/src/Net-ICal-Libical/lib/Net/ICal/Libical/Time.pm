@@ -56,7 +56,7 @@ use Carp qw(confess cluck);
 use strict;
 use UNIVERSAL qw(isa);
 
-@ISA = qw(Net::ICal::LIbical::Property)
+@Net::ICal::Libical::Time::ISA = qw(Net::ICal::Libical::Property);
 
 =pod
 
@@ -83,92 +83,45 @@ Time, and the magnitude of the Daylight Savings time offset.
 
 sub new{
   my $package = shift;
-  
-  if($#_ >2){
-    return Net::ICal::Time::new_from_broken($package,@_);
-  } else {
-    return Net::ICal::Time::new_from_string($package,$_[0],$_[1]);
-  }
-}
-
-
-# Make a new Time object, given an integer like that returned by time().
-sub new_from_int {
-  my $package = shift;
-  my $int = shift;
-
-  return new_from_broken($package, gmtime($int)); 
-}
-
-
-# Make a new Time object, given an array like that returned by gmtime().
-sub new_from_broken{
-  my $package = shift;
-  my $timezone = pop;
-  my $self = {};
-
-  ($self->{SECOND}, $self->{MINUTE},$self->{HOUR},$self->{DAY},
-   $self->{MONTH},$self->{YEAR}) = @_;
-
-  $self->{TIMEZONE} = $timezone;
-  if (defined $timezone and $timezone eq 'UTC') {
-    $self->{ISUTC} = 1;
-  }
-
-  return bless($self,$package);
-
-}
-
-# Make a new Time object, given an ISO format string. 
-sub new_from_string{
-
-  my $package = shift;
   my $arg = shift;
-  my $timezone = shift;
-  my $self = {};
 
-  if($arg =~ /(\d\d\d\d)(\d\d)(\d\d)T(\d\d)(\d\d)(\d\d)(\w?)/ ){
+  my $self;
 
-    $self->{SECOND} = $6;
-    $self->{MINUTE} = $5;
-    $self->{HOUR} = $4;
-    $self->{DAY} = $3;
-    $self->{MONTH} = $2-1;
-    $self->{YEAR} = $1-1900;
-
-    $self->{ISUTC} = ($7 eq 'Z');
-    $self->{ISDATE} = 0;
+  if (ref($arg) == 'HASH'){
+    # Construct from dictionary 
+    $self = Net::ICal::Libical::Property::new($package,$arg);
+    my $val=Net::ICal::Libical::icalproperty_get_value_as_string($self->{'ref'});
+    $self->{'tt'} = Net::ICal::Libical::icaltime_from_string($val);
     
-  } elsif($arg =~ /(\d\d\d\d)(\d\d)(\d\d)/){
-
-    $self->{SECOND} = 0;
-    $self->{MINUTE} = 0;
-    $self->{HOUR} = 0;
-    $self->{DAY} = $3;
-    $self->{MONTH} = $2-1;
-    $self->{YEAR} = $1-1900;
-
-    if (defined $timezone and $timezone eq 'UTC') {
-      $self->{ISUTC} = 1;
-    } else {
-      $self->{ISUTC} = 0;
-    }
-    $self->{ISDATE} = 1;
+   return $self;
 
   } else {
-    cluck "Invalid argument Net::ICal::Time::new_from_string\n";
-    return undef;
+
+    if ($#_ = 1){
+      # iCalendar string 
+      $self = Net::ICal::Libical::Property::new($package,'DTSTART');
+      $self->{'tt'} = Net::ICal::Libical::icaltime_new_from_string($arg);
+    } else {
+      # Broken out time 
+      die;
+    }
+
+    $self->_update_value();
+    return $self;
   }
 
-  $self->{TIMEZONE} = $timezone;
-	  
-  return bless ($self,$package);
-
 }
+
 
 sub _update_value {
   my $self = shift;
-  my $self->value($self->as_ical_value);
+
+  if(!$self->{'tt'}){
+    $self->{'tt'} = Net::ICal::Libical::icaltime_null_time();
+  }
+
+  $self->value(Net::ICal::Libical::icaltime_as_ical_string($self->{'tt'}));
+
 }
   
 
@@ -184,7 +137,9 @@ Create a new copy of this time.
 sub clone {
   my $self = shift;
 
-  return bless( {%$self},ref($self));
+  bless( {%$self},ref($self));
+
+  $self->{'ref'} = Net::ICal::Libical::icalproperty_new_clone($self->{'ref'});
 
 }
 
@@ -219,10 +174,14 @@ comparisons.
 sub is_date {
   my $self = shift;
   if(@_){
-    $self->{ISDATE} = !(!($_[0])); # Convert to true or false
-  } else {
-    return  $self->{ISDATE};
-  }
+
+    # Convert to true or false
+    Net::ICal::Libical::icaltimetype_is_date_set($self->{'tt'},
+						 !(!($_[0]))); 
+  } 
+
+  return Net::ICal::Libical::icaltimetype_is_date_get($self->{'tt'});
+
 }
 
 =pod
@@ -238,6 +197,14 @@ no zone was specified.
 # XXX This needs to be defined. 
 sub timezone {
   my $self = shift;
+  my $tz = shift;
+
+  if($tz){
+    $self->set_parameter('TZID',$tz);
+  }
+
+  return $self->get_parameter('TZID');
+
 }
 
 
@@ -254,13 +221,9 @@ instance, 12:65:00 would become 13:05:00.
 sub normalize{
   my $self = shift;
   
-  my $time_t = POSIX::mktime($self->{SECOND}, $self->{MINUTE},$self->{HOUR},
-			     $self->{DAY},$self->{MONTH},$self->{YEAR});
-  
-  ($self->{SECOND}, $self->{MINUTE},$self->{HOUR},$self->{DAY},
-   $self->{MONTH},$self->{YEAR}) = localtime($time_t);
-  
-  return;
+  $self->{'tt'} = Net::ICal::Libical::icaltime_normalize($self->{'tt'});
+  $self->value(Net::ICal::Libical::icaltime_as_ical_string($self->{'tt'}));
+
 }
 
 
@@ -315,27 +278,34 @@ Accessor to the month day.  Out of range values are normalized.
 =cut
 
 sub _do_accessor {
+no strict;
   my $self = shift;
-  my $type = shift
+  my $type = shift;
   my $value = shift;
   
+  $type = lc($type);
 
   if($value){
-    $self->{$type} = $value;
+    my $set = "Net::ICal::Libical::icaltimetype_${type}_set";
+
+    &$set($self->{'tt'},$value);
     $self->normalize();
     $self->_update_value();
+
   }
 
-  return $self->{$type};
+  my $get = "Net::ICal::Libical::icaltimetype_${type}_get";
+
+  return &$get($self->{'tt'});
 }
 
 
-sub second { $s = shift; $v = shift; return $s->_do_accessor('SECOND',$v);}
-sub minute { $s = shift; $v = shift; return $s->_do_accessor('MINUTE',$v);}
-sub hour { $s = shift; $v = shift; return $s->_do_accessor('HOUR',$v);}
-sub day { $s = shift; $v = shift; return $s->_do_accessor('DAY',$v);}
-sub month { $s = shift; $v = shift; return $s->_do_accessor('MONTH',$v);}
-sub year { $s = shift; $v = shift; return $s->_do_accessor('YEAR',$v);}
+sub second {my $s = shift; my $v = shift; return $s->_do_accessor('SECOND',$v);}
+sub minute {my $s = shift; my $v = shift;return $s->_do_accessor('MINUTE',$v);}
+sub hour {my $s = shift;  my $v = shift; return $s->_do_accessor('HOUR',$v);}
+sub day {my $s = shift; my $v = shift; return $s->_do_accessor('DAY',$v);}
+sub month {my $s = shift; my $v = shift; return $s->_do_accessor('MONTH',$v);}
+sub year {my $s = shift;  my $v = shift; return $s->_do_accessor('YEAR',$v);}
 
 
 =pod
@@ -397,59 +367,7 @@ sub move_to_zone {
   confess "Not Implemented\n";
 } 
 
-=pod
 
-=head2 as_ical()
-
-Convert to an iCal format time string.
-
-=cut
-sub as_ical_value {
-  my $self = shift;
-  my $out;
-  
-  if($self->{ISDATE}){
-    $out = sprintf("%04d%02d%02d",$self->{YEAR}+1900,
-	    $self->{MONTH}+1,$self->{DAY});
-  } else {
-
-    $out = sprintf("%04d%02d%02dT%02d%02d%02d",$self->{YEAR}+1900,
-	    $self->{MONTH}+1,$self->{DAY}, $self->{HOUR},$self->{MINUTE},
-	    $self->{SECOND});
-
-    $out .= "Z" if $self->{ISUTC};
-
-  }
-
-  return $out;
-
-}
-
-=pod
-
-=head2 as_ical()
-
-Convert to an iCal format property string.
-
-=cut
-sub as_ical {
-  my $self = shift;
-  my $out;
-
-  my $value = $self->as_ical_value();
-
-  if($self->{DATE}){
-    $out = ";VALUE=DATE";
-  }
-
-  if ($self->{TIMEZONE}){
-    $out .= ";TZID=".$self->{TIMEZONE};
-  }
-    
-  $out .= ":".$value;
-  
-  return $out; 
-}
 
 =pod
 
@@ -462,9 +380,7 @@ epoch
 sub as_int {
   my $self = shift;
 
-  return timegm($self->{SECOND},$self->{MINUTE}, $self->{HOUR},$self->{DAY},
-	$self->{MONTH}, $self->{YEAR});	
-
+  return Net::ICal::Libical::icaltime_as_timet($self->{'tt'});
 }
 
 =pod
@@ -527,88 +443,5 @@ sub compare {
   
 }
 
-=pod
-
-=head2 day_of_week()
-
-Return 0-6 representing day of week of this date. Could be replaced
-with (gmtime($t->as_int()))[6]
-
-=cut
-# XXX Implement this
-sub day_of_week {
-  confess "Not Implemented";
-}
-
-=pod
-
-=head2 day_of_year()
-
-Return 1-365 representing day of year of this date. Could be replaced
-with (gmtime($t->as_int()))[7]
-
-=cut
-
-# XXX Implement this
-sub day_of_year {
-  confess "Not Implemented";
-}
-
-
-=pod
-
-=head2 start_of_week()
-
-Return the day of year of the first day (Sunday) of the week that
-this date is in
-
-=cut
-
-# XXX Implement this
-sub start_of_week {
-  confess "Not Implemented";
-}
-
-
 1; 
 
-__END__
-
-# $Log: not supported by cvs2svn $
-# Revision 1.4  2001/02/27 22:03:11  lotr
-# - set $self->{ISUTC} when the timezone argument is 'UTC'
-#   this allows test 19 to work correctly.
-# - change confess into cluck (except for the non-implemented methods)
-#   so we don't die on bad input
-# - removed the test sub and the #-------+ lines
-#
-# Revision 1.3  2001/02/08 18:54:23  lotr
-# Fix stuff so testcal.pl works
-#  - pass the actual class to _load_property instead of getting it from the
-#    ical line
-#  - change as_ical to as_ical_value in Duration and Time
-#  - make Event.pm's _create call ETJ's _create instead of new, so it works
-#    with new_from_ical (unfortunately ETJ's new never gets called now)
-#  - make Property call as_ical_value for 'ref' values
-#
-# Revision 1.2  2001/02/03 02:07:08  skud
-# Fixed these problems when running test.pl under "use strict":
-# "my" variable $d masks earlier declaration in same scope at
-# /usr/local/lib/perl5/site_perl/5.6.0/Net/ICal/Duration.pm line 290.
-# "my" variable $t masks earlier declaration in same scope at
-# /usr/local/lib/perl5/site_perl/5.6.0/Net/ICal/Time.pm line 628.
-# It was only stuff in the test() functions breaking, so no big deal.
-#
-# Revision 1.1.1.1  2001/01/31 02:17:08  ebusboom
-# Reimport of Net-ICal
-#
-# Revision 1.4  2001/01/21 19:44:38  srl
-# A few minor mods to Time.pm.
-# Re-organized POD in Duration.pm and marked sections we need to work on with
-# XXX in the comments.
-#
-# Revision 1.3  2001/01/21 19:14:05  srl
-# Reorganized and expanded POD to fall inline with the function code.
-# Added comment lines beginning with "XXX" to mark functions that need to
-# be worked on or implemented.
-#

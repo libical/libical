@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.pm,v 1.1 2001-03-02 19:50:31 ebusboom Exp $
+#  $Id: Property.pm,v 1.2 2001-03-02 21:33:54 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, eric@softwarestudio.org
@@ -40,7 +40,7 @@ sub new {
 	$self->{'ref'} = Net::ICal::Libical::icalproperty_new($kind);
   }
 
-  die if !$self->{'ref'};
+  die "Did not get icalproperty ref in Net::ICal::Libical::Property::new " if !$self->{'ref'};
   
   bless $self, $class;
 }

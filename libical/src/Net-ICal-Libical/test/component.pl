@@ -25,30 +25,47 @@ END:VEVENT
 
 EOM
   
-  my $c;
+my $c;
 
-  $c = new Net::ICal::Libical::Component($comp_str);
+$c = new Net::ICal::Libical::Component($comp_str);
 
-  my @props = $c->properties();
+my @props = $c->properties();
 
-  my $p;
-  foreach $p (@props) {
-    print $p->name()." ".$p->value()."\n";
+my $p;
+foreach $p (@props) {
+  print $p->name()." ".$p->value()."\n";
+  
+}
 
-  }
+print "\n";
 
-  print "\n";
+print " -------- Attendee \n";
 
-  $p = ($c->properties('ATTENDEE'))[0];
+$p = ($c->properties('ATTENDEE'))[0];
 
-  print $p->as_ical_string(),"\n";
+print $p->as_ical_string(),"\n";
 
-  print $p->get_parameter('ROLE'),"\n";
+print $p->get_parameter('ROLE'),"\n";
 
-  die if $p->get_parameter('ROLE') ne 'REQ-PARTICIPANT';
+die if $p->get_parameter('ROLE') ne 'REQ-PARTICIPANT';
 
-  $p->set_parameter('ROLE','INDIVIDUAL');
+$p->set_parameter('ROLE','INDIVIDUAL');
 
-  print $p->as_ical_string(),"\n";
+print $p->as_ical_string(),"\n";
+
+print " -------- DTSTART \n";
+
+$p = ($c->properties('DTSTART'))[0];
+
+print $p->as_ical_string()."\n";
+print $p->as_ical_string()."\n";
+
+print "hour: ". $p->hour()." \n";
+
+$p->hour($p->hour() - 10);
+
+print $p->hour(),"\n";
+
+print $p->as_ical_string()."\n";
 
 
