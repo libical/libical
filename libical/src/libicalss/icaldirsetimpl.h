@@ -3,7 +3,7 @@
   FILE: icaldirsetimpl.h
   CREATOR: eric 21 Aug 2000
   
-  $Id: icaldirsetimpl.h,v 1.2 2002-05-29 13:04:57 acampi Exp $
+  $Id: icaldirsetimpl.h,v 1.3 2002-06-04 14:28:36 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -41,7 +41,7 @@ struct icaldirset_impl
 {
 	char id[5]; /* "dset" */
 	char* dir;
-	icalcomponent* gauge;
+	icalgauge* gauge;
 	icalcluster* cluster;
 	int first_component;
 	pvl_list directory;
