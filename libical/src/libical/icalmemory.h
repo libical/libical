@@ -4,7 +4,7 @@
  CREATOR: eric 30 June 1999
 
 
- $Id: icalmemory.h,v 1.3 2001-12-06 19:52:43 gray-john Exp $
+ $Id: icalmemory.h,v 1.4 2002-06-11 12:15:11 acampi Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -38,11 +38,11 @@
 void* icalmemory_tmp_buffer(size_t size);
 char* icalmemory_tmp_copy(const char* str);
 
-/* Add an externally allocated buffer to the ring. */
+/** Add an externally allocated buffer to the ring. */
 void  icalmemory_add_tmp_buffer(void*);
 
 
-/* Free all memory used in the ring */
+/** Free all memory used in the ring */
 void icalmemory_free_ring(void);
 
 /* Non-tmp buffers must be freed. These are mostly wrappers around
@@ -53,7 +53,8 @@ void* icalmemory_new_buffer(size_t size);
 void* icalmemory_resize_buffer(void* buf, size_t size);
 void icalmemory_free_buffer(void* buf);
 
-/* icalmemory_append_string will copy the string 'string' to the
+/**
+   icalmemory_append_string will copy the string 'string' to the
    buffer 'buf' starting at position 'pos', reallocing 'buf' if it is
    too small. 'buf_size' is the size of 'buf' and will be changed if
    'buf' is reallocated. 'pos' will point to the last byte of the new
@@ -69,12 +70,12 @@ void icalmemory_free_buffer(void* buf);
 void icalmemory_append_string(char** buf, char** pos, size_t* buf_size, 
 			      const char* string);
 
-/*  icalmemory_append_char is similar, but is appends a character instead of a string */
+/**  icalmemory_append_char is similar, but is appends a character instead of a string */
 void icalmemory_append_char(char** buf, char** pos, size_t* buf_size, 
 			      char ch);
 
-/* A wrapper around strdup. Partly to trap calls to strdup, partly
-   because in -ansi, gcc on Red Hat claims that strudup is undeclared */
+/** A wrapper around strdup. Partly to trap calls to strdup, partly
+    because in -ansi, gcc on Red Hat claims that strdup is undeclared */
 char* icalmemory_strdup(const char *s);
 
 #endif /* !ICALMEMORY_H */

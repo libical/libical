@@ -3,7 +3,7 @@
   FILE: icalmemory.c
   CREATOR: eric 30 June 1999
   
-  $Id: icalmemory.c,v 1.5 2002-06-03 17:03:33 acampi Exp $
+  $Id: icalmemory.c,v 1.6 2002-06-11 12:15:11 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -32,7 +32,11 @@
 
  ======================================================================*/
 
-/* libical often passes strings back to the caller. To make these
+/**
+ * @file icalmemory.c
+ * @brief Common memory management routines.
+ *
+ * libical often passes strings back to the caller. To make these
  * interfaces simple, I did not want the caller to have to pass in a
  * memory buffer, but having libical pass out newly allocated memory
  * makes it difficult to de-allocate the memory.
@@ -41,7 +45,8 @@
  * out references to memory which the caller does not own, and be able
  * to de-allocate the memory later. The ring allows libical to have
  * several buffers active simultaneously, which is handy when creating
- * string representations of components. */
+ * string representations of components. 
+ */
 
 #define ICALMEMORY_C
 
@@ -143,7 +148,8 @@ static buffer_ring *get_buffer_ring(void) {
 #endif
 }
 
-/* Add an existing buffer to the buffer ring */
+
+/** Add an existing buffer to the buffer ring */
 void  icalmemory_add_tmp_buffer(void* buf)
 {
     buffer_ring *br = get_buffer_ring();
@@ -163,8 +169,12 @@ void  icalmemory_add_tmp_buffer(void* buf)
     br->ring[br->pos] = buf; 
 }
 
-/* Create a new temporary buffer on the ring. Libical owns these and
-   wil deallocate them. */
+
+/**
+ * Create a new temporary buffer on the ring. Libical owns these and
+ * will deallocate them. 
+ */
+
 void*
 icalmemory_tmp_buffer (size_t size)
 {
@@ -188,7 +198,7 @@ icalmemory_tmp_buffer (size_t size)
     return buf;
 }
 
-/* get rid of this buffer ring */
+/** get rid of this buffer ring */
 void icalmemory_free_ring_byval(buffer_ring *br) {
    int i;
    for(i=0; i<BUFFER_RING_SIZE; i++){
@@ -209,7 +219,7 @@ void icalmemory_free_ring()
 
 
 
-/* Like strdup, but the buffer is on the ring. */
+/** Like strdup, but the buffer is on the ring. */
 char*
 icalmemory_tmp_copy(const char* str)
 {
@@ -238,8 +248,10 @@ icalmemory_free_tmp_buffer (void* buf)
 }
 
 
-/* These buffer routines create memory the old fashioned way -- so the
-   caller will have to delocate the new memory */
+/*
+ * These buffer routines create memory the old fashioned way -- so the
+ * caller will have to deallocate the new memory 
+ */
 
 void* icalmemory_new_buffer(size_t size)
 {
