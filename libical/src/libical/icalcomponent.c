@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.24 2002-05-10 15:35:49 acampi Exp $
+  $Id: icalcomponent.c,v 1.25 2002-05-10 15:54:16 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1446,13 +1446,11 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent* comp)
  */
 void icalcomponent_set_dtend(icalcomponent* comp, struct icaltimetype v)
 {
-    icalproperty *dur_prop;
     char *tzid;
     ICALSETUPSET(ICAL_DTEND_PROPERTY);
 
-    dur_prop = icalcomponent_get_first_property(inner,ICAL_DURATION_PROPERTY);
-    if (prop != 0 && dur_prop != 0) {
-	/* Error, both duration and dtend have been specified */
+    if (icalcomponent_get_first_property(inner,ICAL_DURATION_PROPERTY)
+	!= NULL) {
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	return;
     }
@@ -1483,12 +1481,9 @@ void icalcomponent_set_dtend(icalcomponent* comp, struct icaltimetype v)
 void icalcomponent_set_duration(icalcomponent* comp, 
 				struct icaldurationtype v)
 {
-    icalproperty *end_prop;
     ICALSETUPSET(ICAL_DURATION_PROPERTY);
 
-    end_prop = icalcomponent_get_first_property(inner,ICAL_DTEND_PROPERTY);
-    if (end_prop != 0 && prop != 0) {
-	/* Error, both duration and dtend have been specified */
+    if (icalcomponent_get_first_property(inner,ICAL_DTEND_PROPERTY) != NULL) {
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	return;
     }
