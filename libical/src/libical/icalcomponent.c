@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.30 2002-06-11 09:01:34 acampi Exp $
+  $Id: icalcomponent.c,v 1.31 2002-06-11 14:12:15 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -713,7 +713,9 @@ icalcomponent* icalcomponent_get_first_real_component(icalcomponent *c)
 	if(kind == ICAL_VEVENT_COMPONENT ||
 	   kind == ICAL_VTODO_COMPONENT ||
 	   kind == ICAL_VJOURNAL_COMPONENT ||
-           kind == ICAL_VFREEBUSY_COMPONENT ){
+	   kind == ICAL_VFREEBUSY_COMPONENT ||
+	   kind == ICAL_VQUERY_COMPONENT ||
+	   kind == ICAL_VAGENDA_COMPONENT){
 	    return comp;
 	}
     }
@@ -981,6 +983,7 @@ static struct icalcomponent_kind_map component_map[] =
     { ICAL_VTODO_COMPONENT, "VTODO" },
     { ICAL_VJOURNAL_COMPONENT, "VJOURNAL" },
     { ICAL_VCALENDAR_COMPONENT, "VCALENDAR" },
+    { ICAL_VAGENDA_COMPONENT, "VAGENDA" },
     { ICAL_VFREEBUSY_COMPONENT, "VFREEBUSY" },
     { ICAL_VTIMEZONE_COMPONENT, "VTIMEZONE" },
     { ICAL_VALARM_COMPONENT, "VALARM" },
@@ -1695,6 +1698,14 @@ icalcomponent* icalcomponent_new_xdaylight()
 {
     return icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
 }
+icalcomponent* icalcomponent_new_vagenda()
+{
+    return icalcomponent_new(ICAL_VAGENDA_COMPONENT);
+}
+icalcomponent* icalcomponent_new_vquery()
+{
+    return icalcomponent_new(ICAL_VQUERY_COMPONENT);
+}
 
 /*
  * Timezone stuff.
@@ -2113,4 +2124,144 @@ static int icalcomponent_compare_vtimezones (icalcomponent	*vtimezone1,
     free (tzid2_copy);
 
     return (cmp == 0) ? 1 : 0;
+}
+
+
+
+
+
+
+/** 
+ * @brief set the RELCALID property of a component.
+ *
+ * @param comp    Valid calendar component.
+ * @param v       Relcalid URL value
+ */
+
+void icalcomponent_set_relcalid(icalcomponent* comp, const char* v)
+{
+  ICALSETUPSET(ICAL_RELCALID_PROPERTY);
+
+  if (prop == 0){
+    prop = icalproperty_new_relcalid(v);
+    icalcomponent_add_property(inner, prop);
+  }
+
+  icalproperty_set_relcalid(prop,v);
+
+}
+
+
+/** 
+ * @brief get the RELCALID property of a component.
+ *
+ * @param comp    Valid calendar component.
+ */
+
+const char* icalcomponent_get_relcalid(icalcomponent* comp){
+    icalcomponent *inner;
+    icalproperty *prop;
+    icalerror_check_arg_rz(comp!=0,"comp");
+
+    inner = icalcomponent_get_inner(comp);
+
+    if(inner == 0){
+        return 0;
+    }
+
+    prop= icalcomponent_get_first_property(inner,ICAL_RELCALID_PROPERTY);
+
+    if (prop == 0){
+        return 0;
+    }
+
+    return icalproperty_get_relcalid(prop);
+}
+
+
+/** @brief Return the time a TODO task is DUE.
+ *
+ *  @param comp Valid calendar component.
+ *
+ *  Uses the DUE: property if it exists, otherwise we calculate the DUE
+ *  value by adding the task's duration to the DTSTART time
+ */
+
+struct icaltimetype icalcomponent_get_due(icalcomponent* comp)
+{
+    icalcomponent *inner = icalcomponent_get_inner(comp);
+
+    icalproperty *due_prop
+        = icalcomponent_get_first_property(inner,ICAL_DUE_PROPERTY);
+
+    icalproperty *dur_prop
+        = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+
+    if( due_prop == 0 && dur_prop == 0){
+        return icaltime_null_time();
+    } else if ( due_prop != 0) {
+        return icalproperty_get_due(due_prop);
+    } else if ( dur_prop != 0) {
+
+        struct icaltimetype start =
+            icalcomponent_get_dtstart(inner);
+        struct icaldurationtype duration =
+            icalproperty_get_duration(dur_prop);
+
+        struct icaltimetype due = icaltime_add(start,duration);
+
+        return due;
+
+    } else {
+        /* Error, both duration and due have been specified */
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return icaltime_null_time();
+
+    }
+
+}
+
+/** @brief Set the due date of a VTODO task.
+ *
+ *  @param comp Valid VTODO component.
+ *  @param v    Valid due date time.
+ *
+ *  - If no duration or due properties then set the DUE property.
+ *  - If a DUE property is already set, then reset it to the value v.
+ *  - If a DURATION property is already set, then calculate the new
+ *    duration based on the supplied value of v.
+ */
+
+void icalcomponent_set_due(icalcomponent* comp, struct icaltimetype v)
+{
+    icalcomponent *inner = icalcomponent_get_inner(comp);
+
+    icalproperty *due_prop
+        = icalcomponent_get_first_property(inner,ICAL_DUE_PROPERTY);
+
+    icalproperty *dur_prop
+        = icalcomponent_get_first_property(inner,ICAL_DURATION_PROPERTY);
+
+
+    if( due_prop == 0 && dur_prop == 0){
+        due_prop = icalproperty_new_due(v);
+        icalcomponent_add_property(inner,due_prop);
+    } else if ( due_prop != 0) {
+        icalproperty_set_due(due_prop,v);
+    } else if ( dur_prop != 0) {
+        struct icaltimetype start =
+            icalcomponent_get_dtstart(inner);
+
+        struct icaltimetype due =
+            icalcomponent_get_due(inner);
+
+        struct icaldurationtype dur
+            = icaltime_subtract(due,start);
+
+        icalproperty_set_duration(dur_prop,dur);
+
+    } else {
+        /* Error, both duration and due have been specified */
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+    }
 }

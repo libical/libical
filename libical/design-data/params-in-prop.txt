@@ -53,3 +53,4 @@ MAXRESULTSSIZE       X
 QUERY                X
 QUERYNAME            X
 TARGET               X
+EXPAND               X

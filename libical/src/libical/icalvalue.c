@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.18 2002-06-04 14:07:09 acampi Exp $
+  $Id: icalvalue.c,v 1.19 2002-06-11 14:12:15 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -119,6 +119,7 @@ icalvalue* icalvalue_new_clone(const icalvalue* old) {
 
 	    break;
 	}
+	case ICAL_QUERY_VALUE:
 	case ICAL_STRING_VALUE:
 	case ICAL_TEXT_VALUE:
 	case ICAL_CALADDRESS_VALUE:
@@ -321,6 +322,13 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
     case ICAL_ACTION_VALUE:
         value = icalvalue_new_enum(kind, ICAL_ACTION_X,str);
         break;
+
+    case ICAL_QUERY_VALUE:
+	{
+	    value = icalvalue_new_query(str);
+	    break;
+	}
+
     case ICAL_CLASS_VALUE:
         value = icalvalue_new_enum(kind, ICAL_CLASS_X,str);
         break;
@@ -559,6 +567,7 @@ icalvalue_free (icalvalue* v)
 	case ICAL_TEXT_VALUE:
 	case ICAL_CALADDRESS_VALUE:
 	case ICAL_URI_VALUE:
+	case ICAL_QUERY_VALUE:
 	{
 	    if (v->data.v_string != 0) { 
 		free((void*)v->data.v_string);
@@ -968,6 +977,9 @@ icalvalue_as_ical_string(const icalvalue* value)
     case ICAL_TEXT_VALUE:
         return icalvalue_text_as_ical_string(value);
         
+    case ICAL_QUERY_VALUE:
+        return icalvalue_string_as_ical_string(value);
+        
     case ICAL_STRING_VALUE:
     case ICAL_URI_VALUE:
     case ICAL_CALADDRESS_VALUE:
@@ -1139,6 +1151,7 @@ icalvalue_compare(const icalvalue* a, const icalvalue *b)
 	case ICAL_DATE_VALUE:
 	case ICAL_DATETIME_VALUE:
 	case ICAL_DATETIMEPERIOD_VALUE:
+	case ICAL_QUERY_VALUE:
 	{
 	    int r;
 
@@ -1219,6 +1232,3 @@ icalproperty* icalvalue_get_parent(icalvalue* value)
 
 /* The remaining interfaces are 'new', 'set' and 'get' for each of the value
    types */
-
-
-/* Everything below this line is machine generated. Do not edit. */

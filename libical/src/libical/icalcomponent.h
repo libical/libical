@@ -197,6 +197,9 @@ struct icaltimetype icalcomponent_get_dtstart(icalcomponent* comp);
 struct icaltimetype icalcomponent_get_dtend(icalcomponent* comp);
 void icalcomponent_set_dtend(icalcomponent* comp, struct icaltimetype v);
 
+struct icaltimetype icalcomponent_get_due(icalcomponent* comp);
+void icalcomponent_set_due(icalcomponent* comp, struct icaltimetype v);
+
 void icalcomponent_set_duration(icalcomponent* comp, 
 				struct icaldurationtype v);
 struct icaldurationtype icalcomponent_get_duration(icalcomponent* comp);
@@ -215,6 +218,9 @@ const char* icalcomponent_get_comment(icalcomponent* comp);
 
 void icalcomponent_set_uid(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_uid(icalcomponent* comp);
+
+void icalcomponent_set_relcalid(icalcomponent* comp, const char* v);
+const char* icalcomponent_get_relcalid(icalcomponent* comp);
 
 void icalcomponent_set_recurrenceid(icalcomponent* comp, 
 				    struct icaltimetype v);
@@ -265,10 +271,7 @@ icalcomponent* icalcomponent_new_vfreebusy();
 icalcomponent* icalcomponent_new_vtimezone();
 icalcomponent* icalcomponent_new_xstandard();
 icalcomponent* icalcomponent_new_xdaylight();
-
-
+icalcomponent* icalcomponent_new_vagenda();
+icalcomponent* icalcomponent_new_vquery();
 
 #endif /* !ICALCOMPONENT_H */
-
-
-
