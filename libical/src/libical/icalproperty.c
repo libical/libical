@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.21 2002-06-11 09:01:34 acampi Exp $
+  $Id: icalproperty.c,v 1.22 2002-06-13 12:21:45 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -623,14 +623,25 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
 void
 icalproperty_remove_parameter (icalproperty* prop, icalparameter* parameter)
 {
-    pvl_elem p;     
+    pvl_elem p;
+    icalparameter_kind kind;
+    const char *name;
 
     icalerror_check_arg_rv((prop!=0),"prop");
     icalerror_check_arg_rv((parameter!=0),"parameter");
 
+    /*
+     * FIXME The check for equality depends on _get_xname() returning
+     * a meaningful value also for different parameters. It would be nice
+     * to have a better abstraction like icalparameter_equals()
+     */
+    kind = icalparameter_isa(parameter);
+    name = icalparameter_get_xname(parameter);
+
     for(p=pvl_head(prop->parameters);p != 0; p = pvl_next(p)){
 	icalparameter* p_param = (icalparameter *)pvl_data (p);
-	if (p_param == parameter) {
+	if (icalparameter_isa(p_param) == kind &&
+	    !strcmp(icalparameter_get_xname(p_param), name)) {
             pvl_remove (prop->parameters, p);
             icalparameter_free(p_param);
             break;
