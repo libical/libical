@@ -177,7 +177,7 @@ void icalrecurrencetype_clear(struct icalrecurrencetype *r);
 enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day);
 
 /** 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc */
-short icalrecurrencetype_day_position(short day);
+int icalrecurrencetype_day_position(short day);
 
 
 /** Recurrance rule parser */
