@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.59 2002-11-05 13:49:16 acampi Exp $
+  $Id: icaltime.c,v 1.60 2002-11-05 13:58:29 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -644,7 +644,7 @@ int icaltime_is_null_time(const struct icaltimetype t)
 
 int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b_in) 
 {
-    int retval;
+    int retval = 0;
     struct icaltimetype a, b;
 
     a = icaltime_convert_to_zone(a_in, icaltimezone_get_utc_timezone());
