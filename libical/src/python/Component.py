@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.8 2001-04-16 21:04:20 ebusboom Exp $
+#  $Id: Component.py,v 1.9 2001-04-23 16:52:54 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -35,13 +35,15 @@ from Duration import Duration
 from Period import Period
 import string
 
+WrapperNULL = None
+
 class Component:
 
     def __init__(self,ref=None,kind=None):
 
         if ref != None:
             self._ref = ref
-        elif type != None:
+        elif kind != None:
             self._ref = icalcomponent_new(
                 icalcomponent_string_to_kind("VCALENDAR"))
             _kind = icalcomponent_string_to_kind(kind)
@@ -56,7 +58,7 @@ class Component:
         self.cached_comps = {}
 
     def __del__(self):
-        if self._ref != None and icalcomponent_get_parent(self._ref) != 'NULL':
+        if self._ref != None and icalcomponent_get_parent(self._ref) != WrapperNULL:
 
             for k in self.cached_props.keys():
                 del self.cached_props[k]
@@ -66,7 +68,7 @@ class Component:
 
     def _prop_from_ref(self,p):
 
-        if(p == None or p== 'NULL'):
+        if(p == None or p== WrapperNULL):
             return None;
 
         d_string = icallangbind_property_eval_string(p,":")
@@ -97,7 +99,7 @@ class Component:
 
        p = icallangbind_get_first_property(self._ref,type) 
 
-       if p !='NULL':
+       if p !=WrapperNULL:
            self._prop_from_ref(p)
            prop =  self.cached_props[p]
            return prop
@@ -114,7 +116,8 @@ class Component:
 
         p = icallangbind_get_first_property(self._ref,type)
 
-        while p !='NULL':
+        while p !=WrapperNULL and p != None:
+
             self._prop_from_ref(p) # Puts property in self.cached_props
             prop =  self.cached_props[p]
             props.append(prop)
@@ -134,12 +137,12 @@ class Component:
             s = str(prop)
             prop_p = icalproperty_new_from_string(s)
 
-            if prop_p == 'NULL':
+            if prop_p == WrapperNULL:
                 raise "Bad property string: " + s
 
             prop.ref(prop_p)
 
-        if icalproperty_get_parent(prop_p)=='NULL':
+        if icalproperty_get_parent(prop_p)==WrapperNULL:
             icalcomponent_add_property(self._ref, prop_p)
         elif  icalproperty_get_parent(prop_p) != self._ref:
             raise "Property is already a child of another component"
@@ -158,7 +161,7 @@ class Component:
         kind = icalcomponent_string_to_kind(type)
         c = icalcomponent_get_first_component(self._ref,kind);
 
-        while c != 'NULL':
+        while c != WrapperNULL and c != None:
 
             if not self.cached_comps.has_key(c):              
 
@@ -174,7 +177,7 @@ class Component:
         
         inner = icalcomponent_get_inner(self._ref)
 
-        if inner == 'NULL':
+        if inner == WrapperNULL and inner != None:
             return None
 
         return NewComponent(inner)
@@ -185,7 +188,7 @@ class Component:
         if not isinstance(comp,Component):
             raise ValueError("Expected a Component")
 
-        if icalcomponent_get_parent(comp._ref) != 'NULL':
+        if icalcomponent_get_parent(comp._ref) != WrapperNULL:
            raise "Failed to add child component. Child already has a parent"; 
 
         icalcomponent_add_component(self._ref,comp._ref)
@@ -217,7 +220,7 @@ def NewComponent(c):
     else:
         comp = c
 
-    if comp == None or comp == 'NULL':
+    if comp == None or comp == WrapperNULL:
         raise ValueError("Expected a libical reference or an iCal string")
 
     kind = icalcomponent_isa(comp)

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.24 2001-04-12 18:33:15 ebusboom Exp $
+  $Id: regression.c,v 1.25 2001-04-23 16:52:54 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -584,6 +584,18 @@ void test_values()
     printf("Bad string: %p\n",v);
 
     if (v!=0) icalvalue_free(v); */
+
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
+    v = icalvalue_new_from_string(ICAL_RECUR_VALUE,"D2 #0");
+    assert(v == 0);
+
+    v = icalvalue_new_from_string(ICAL_TRIGGER_VALUE,"Gonk");
+    assert(v == 0);
+
+    v = icalvalue_new_from_string(ICAL_REQUESTSTATUS_VALUE,"Gonk");
+    assert(v == 0);
+
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT);
 
 }
 

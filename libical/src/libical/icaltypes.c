@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.3 2001-04-11 04:45:28 ebusboom Exp $
+  $Id: icaltypes.c,v 1.4 2001-04-23 16:52:54 ebusboom Exp $
   $Locker:  $
     
 
@@ -148,7 +148,16 @@ void* icalattachtype_get_binary(struct icalattachtype* v)
     return v->binary;
 }
 
+int icaltriggertype_is_null_trigger(struct icaltriggertype tr)
+{
+    if(icaltime_is_null_time(tr.time) && 
+       icaldurationtype_is_null_duration(tr.duration)){
+        return 1;
+    }
 
+    return 0;
+}
+    
 struct icaltriggertype icaltriggertype_from_string(const char* str)
 {
 

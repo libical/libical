@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.5 2001-04-12 18:33:36 ebusboom Exp $
+  $Id: icalvalue.c,v 1.6 2001-04-23 16:52:54 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -357,7 +357,9 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	{
 	    struct icalrecurrencetype rt;
 	    rt = icalrecurrencetype_from_string(str);
-	    value = icalvalue_new_recur(rt);
+            if(rt.freq != ICAL_NO_RECURRENCE){
+                value = icalvalue_new_recur(rt);
+            }
 	    break;
 	}
         
@@ -419,14 +421,18 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
     case ICAL_TRIGGER_VALUE:
 	{
 	    struct icaltriggertype tr = icaltriggertype_from_string(str);
-	    value = icalvalue_new_trigger(tr);
+            if (!icaltriggertype_is_null_trigger(tr)){
+                value = icalvalue_new_trigger(tr);
+            }
 	    break;
 	}
         
     case ICAL_REQUESTSTATUS_VALUE:
         {
             struct icalreqstattype rst = icalreqstattype_from_string(str);
-            value = icalvalue_new_requeststatus(rst);
+            if(rst.code != ICAL_UNKNOWN_STATUS){
+                value = icalvalue_new_requeststatus(rst);
+            }
             break;
 
         }
