@@ -50,7 +50,8 @@ libical_la_SOURCES =		\
 	pvl.c			\
 	pvl.h			\
 	sspm.c			\
-	sspm.h
+	sspm.h			\
+	vsnprintf.c
 
 libicalincludedir = $(includedir)
 

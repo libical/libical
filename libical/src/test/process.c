@@ -3,7 +3,7 @@
   FILE: process.c
   CREATOR: eric 11 February 2000
   
-  $Id: process.c,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
+  $Id: process.c,v 1.3 2001-01-09 18:58:25 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -19,10 +19,6 @@
  the License for the specific language governing rights and
  limitations under the License.
  
- The Original Code is eric. The Initial Developer of the Original
- Code is Eric Busboom
-
-
  ======================================================================*/
 
 #include <stdio.h> /* for printf */
@@ -240,7 +236,6 @@ int main(int argc, char* argv[])
 conflicts with this meeting. I am delegating my attendance to Bob. ");
 
 			icalset_add_component(out,reply);
-
 		      
 		    } else if (dtstart.hour%4 == 1) {
 			/* Counter propose to next available time */

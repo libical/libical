@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.2 2001-01-05 01:56:57 ebusboom Exp $
+  $Id: icalfileset.c,v 1.3 2001-01-09 18:58:25 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -59,6 +59,8 @@ icalfileset* icalfileset_new_impl()
 	return 0;
     }
 
+    memset(impl,0,sizeof(struct icalfileset_impl));
+
     strcpy(impl->id,ICALFILESET_ID);
 
     return impl;
@@ -93,11 +95,6 @@ icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 	return 0;
     }
 
-    impl->changed  = 0;
-
-    impl->cluster = 0;
-
-    impl->stream = 0;
     impl->path = strdup(path); 
         
     /* Check if the path already exists and if it is a regular file*/

@@ -1,3 +1,13 @@
+2001-01-08  Eric Busboom  <eric@softwarestudio.org>
+
+	* Makefile.am Remove spaces after -I in several 
+	Makefile.am routines. 
+
+	* icalset.c removed return statements from some void functions.
+
+	* icalparameter.c.in Added break to default: case that had no
+ 	body. Compilers on Solaris and Tru64 UNIX complained.
+
 2001-01-02  Eric Busboom  <eric@softwarestudio.org>
 
 	* icaltime.c Changed icaldurationtype_from_time and _as_timet to

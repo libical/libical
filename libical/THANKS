@@ -34,5 +34,12 @@ suggestions and a few patches.
 
 Mark D. Anderson <mda@discerning.com> for discussions and ideas. 
 
-Martin Neimeier <nei@ibn.de>   for correcting bugs in icalrecur.c
+Martin Neimeier <nei@ibn.de> for correcting bugs in icalrecur.c
 
+Tom Leitner <tom@radar.tu-graz.ac.at> For several bug fixes in
+compiling on Tru64 UNIX.
+
+Patrick Lewis <plewis@inetarena.com> for several bug reports. 
+
+Larry W. Virden <lvirden@cas.org> for several bug reports in compiling
+on Solaris.

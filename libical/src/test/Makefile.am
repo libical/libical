@@ -4,14 +4,14 @@ noinst_PROGRAMS = copycluster regression parser storage stow recur testmime test
 LDADD =  ../libicalss/libicalss.la ../libicalvcal/libicalvcal.la ../libical/libical.la 
 
 INCLUDES = \
-       -I . \
+       -I. \
        -I../libicalvcal \
-       -I $(srcdir)/../libicalvcal \
-       -I $(srcdir) \
+       -I$(srcdir)/../libicalvcal \
+       -I$(srcdir) \
        -I../libical \
-       -I $(srcdir)/../libical \
+       -I$(srcdir)/../libical \
        -I../libicalss \
-       -I $(srcdir)/../libicalss           
+       -I$(srcdir)/../libicalss           
 
 copycluster_SOURCES = copycluster.c
 regression_SOURCES = regression.c

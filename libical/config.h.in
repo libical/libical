@@ -29,8 +29,9 @@
 /* Define if your libc defines a "timezone" variable */
 #undef HAVE_TIMEZONE
 
-/* Define if your libc defines a struct tm containing a "tm_gmtoff" member */
-#undef HAVE_TM_GMTOFF      
+ 
+/* Define if your libc defines a struct tm containing a "tm_gmtoff" member */  
+#undef HAVE_TM_GMTOFF
 
 /* Define if you have the strdup function.  */
 #undef HAVE_STRDUP
