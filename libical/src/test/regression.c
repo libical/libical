@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.17 2001-03-26 19:16:48 ebusboom Exp $
+  $Id: regression.c,v 1.18 2001-03-27 05:02:09 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1560,10 +1560,10 @@ void do_test_time(char* zone)
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
     icttnorm = ictt;
     icttnorm.second -= 60 * 60 * 24 * 5;
-    icttnorm = icaltime_normalize(ictt);
+    icttnorm = icaltime_normalize(icttnorm);
     printf("-5d in sec  : %s\n", ictt_as_string(icttnorm));
     icttnorm.day += 60;
-    icttnorm = icaltime_normalize(ictt);
+    icttnorm = icaltime_normalize(icttnorm);
     printf("+60 d       : %s\n", ictt_as_string(icttnorm));
 
 
