@@ -163,6 +163,7 @@ AC_CHECK_HEADERS(assert.h pthread.h time.h sys/types.h unistd.h wctype.h)
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_SIZE_T
+AC_TYPE_MODE_T
 AC_STRUCT_TM
 
 dnl Checks for library functions.
