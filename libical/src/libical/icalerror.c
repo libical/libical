@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.16 2002-08-09 14:28:56 lindner Exp $
+  $Id: icalerror.c,v 1.17 2002-10-09 20:48:08 acampi Exp $
   $Locker:  $
     
 
@@ -210,7 +210,7 @@ void icalerror_set_error_state( icalerrorenum error,
 {
     int i;
 
-    for(i = ICAL_BADARG_ERROR; error_state_map[i].error!= ICAL_NO_ERROR;i++){
+    for(i = 0; error_state_map[i].error!= ICAL_NO_ERROR;i++){
 	if(error_state_map[i].error == error){
 	    error_state_map[i].state = state; 	
 	}
@@ -221,7 +221,7 @@ icalerrorstate icalerror_get_error_state( icalerrorenum error)
 {
     int i;
 
-    for(i = ICAL_BADARG_ERROR; error_state_map[i].error!= ICAL_NO_ERROR;i++){
+    for(i = 0; error_state_map[i].error!= ICAL_NO_ERROR;i++){
 	if(error_state_map[i].error == error){
 	    return error_state_map[i].state; 	
 	}
