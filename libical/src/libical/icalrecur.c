@@ -3,7 +3,11 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.26 2001-12-16 18:26:44 gray-john Exp $
+<<<<<<< icalrecur.c
+  $Id: icalrecur.c,v 1.27 2001-12-18 04:10:29 ebusboom Exp $
+=======
+  $Id: icalrecur.c,v 1.27 2001-12-18 04:10:29 ebusboom Exp $
+>>>>>>> 1.26
   $Locker:  $
     
 
@@ -910,7 +914,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     }
 
-    /* For YEARLY rule, begin by setting up the year days array . THey
+    /* For YEARLY rule, begin by setting up the year days array . The
        YEARLY rules work by expanding one year at a time. */
 
     if(impl->rule.freq == ICAL_YEARLY_RECURRENCE){
@@ -919,7 +923,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	for (;;) {
             expand_year_days(impl,impl->last.year);
 	    if (impl->days[0] != ICAL_RECURRENCE_ARRAY_MAX)
-	        break;
+	        break; // break when no days are expanded
 	    increment_year(impl,impl->rule.interval);
 	}
 
@@ -1574,7 +1578,9 @@ int next_weekday_by_week(struct icalrecur_iterator_impl* impl)
       return 0;
   }
 
-  assert(has_by_data(impl,BY_DAY));
+  if(!has_by_data(impl,BY_DAY)){
+      return 1;
+  }
 
   /* If we get here, we need to step to tne next day */
 
@@ -2031,8 +2037,8 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
             
             for(i = 0; BYWEEKPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++){
                     short weekno = BYWEEKPTR[i];
-                    
-                    if(weekno== icaltime_week_number(tt)){
+                    short this_weekno = icaltime_week_number(tt);
+                    if(weekno== this_weekno){
                         impl->days[days_index++] = day;
                     }
             }
