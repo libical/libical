@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.pm,v 1.4 2001-02-28 07:36:43 ebusboom Exp $
+#  $Id: Libical.pm,v 1.5 2001-02-28 15:53:24 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -87,53 +87,274 @@ sub generate_occurrences {
 # The remaining code is just the interface declarations for a complete
 # perl binding to libical. Currently, it is looking for an author....
 
-__END__
+
            
 package Property;
 
-sub new {  #(self, dict):
+sub new { 
+
+  my $class = shift;
+  my $dict = shift;
+  my $self = {};
 
   # Construct from dictionary produced by
   # icallangbind_property_eval_string(p,"=>"). The ('name', 'value',
   #'value_type', 'pid', 'ref') keys describe the property. All other
   # keys are parameters.  
 
+  $self = $dict;
+  
+  bless $self, $class;
 }
 
 
-sub name(self,v=None):
+sub DESTROY {
+  my $self = shift;
+
+  my $r = $self->{'ref'};
+
+  if($r && !Net::ICal::Libical::icalproperty_get_parent($r)){
+    Net::ICal::Libical::icalproperty_free($self->{'ref'});
+  }
+}
+
+sub name {
+  my $self = shift;
+  my $name = shift;
+
+  if($name){
+    $self->{'name'} = $name;
+  }
+
+  return $self->{'name'};
+
+}
 
 #Get/Set the internal reference to the libical icalproperty """
 sub prop_ref {
+  my $self = shift;
+  my $p_r = shift;
+
+  if($p_r){
+    $self->{'ref'} = $p_r;
+  }
+
+  return $self->{'ref'};
+  
 }
+
+
 
 #Get/Set the RFC2445 name of the value. Dict value 'value_type'
 sub value_type {
+  my $self = shift;
+  my $v_t = shift;
+
+  if($v_t){
+    $self->{'value_type'} = $v_t;
+  }
+
+  return $self->{'value_type'};
 }
 
 #Get/set the RFC2445 representation of the value. Dict value 'value'
 sub value {
+  my $self = shift;
+  my $v = shift;
+
+  if($v){
+    $self->{'value'} = $v;
+  }
+
+  return $self->{'value'};
 }
+
 
 # Called by subclasses to update the internal icalproperty
 # representation. Calls icalproperty_set_value_from_string with value
 # from dict{'value'}
 sub _update_value {
+  my $self = shift;
+
+  if ($self->{'ref'}){
+    Net::ICal::Libical::icalproperty_set_value_from_string
+    ($self->{'ref'},$self->{'value'})
+  }
 }
+
+
+# Called by subclasses to update the internal icalproperty
+# representation. Calls icalproperty_set_parameter_from_string with
+# each of the parameter values
+sub _update_parameters {
+  my $self = shift;
+
+  foreach $k (keys %$self){
+    if($k eq uc($k) ) { #Assume prop names are in uppercase
+      Net::ICal::Libical::icalproperty_set_parameter_from_string
+      ($p->{'ref'},$k,$self->{$k});
+    }
+
+}
+
 
 # Get a named parameter
 sub get_parameter{
   my $self  = shift;
   my $param_name = shift;
+  
+
+  return $self->{$param_name};
 }
+
 
 # Set the value of the named parameter
 sub set_parameter{
   my $self  = shift;
   my $param_name = shift;
   my $param_value = shift;
+
+  if($param_value){
+    $self->{$param_name} = $param_value;
+
+  }
+  return $self->{$param_name};
 }
 
+
+
+
+
+package Component;
+
+sub new{
+  my $class = shift;
+  my $ical_str = shift; # Ical data in string form
+  my $self = {};
+
+  $self->{'comp_p'} = Net::ICal::Libical::icalparser_parse_string($ical_str);
+
+  die "Can't parse string into component" if !$self->{'comp_p'};
+
+  bless $self, $class;
+}
+
+# Destroy must call icalcomponent_free() if icalcomponent_get_parent()
+# returns NULL
+sub DESTROY {
+  my $self = shift;
+  
+  my $c = $self->{'comp_p'};
+  
+  if($c && !Net::ICal::Libical::icalcomponent_get_parent($c)){
+    Net::ICal::Libical::icalcomponent_free($c);
+  }
+  
+}
+
+# Return an array of all properties of the given type
+sub properties{
+
+  my $self = shift;
+  my $prop_name = shift;
+  
+  my @props;
+  
+  if(!$prop_name){
+    $prop_name = 'ANY';
+  }
+
+  # To loop over properties
+  # $comp_p = $self->{'comp_p'}
+  # $p = icallangbind_get_first_property($comp_p,$prop_name)
+  # $p = icallangbind_get_next_property($comp_p,$prop_name)
+
+  $c = $self->{'comp_p'};
+
+  for($p = Net::ICal::Libical::icallangbind_get_first_property($c,$prop_name);
+     $p;
+     $p = Net::ICal::Libical::icallangbind_get_next_property($c,$prop_name)){
+    
+    my $d_string = Net::ICal::Libical::icallangbind_property_eval_string($p,"=>");
+    my $dict = eval($d_string);
+    
+    $dict{'ref'} = $p;
+
+  # Now, look at $dict{'value_type'} or $dict{'name'} to construct a 
+  # derived class of Property. I'll do this later. 
+
+    $prop = new Property($dict);
+
+    push(@props,$prop);
+
+  }
+
+
+  return @props;
+  
+}
+
+  
+sub add_property {
+  
+  # if there is a 'ref' key in the prop's dict, then it is owned by
+  # an icalcomponent, so dont add it again. But, you may check that
+  # it is owned by this component with:
+  # icalproperty_get_parent(p->{'ref'}') != $self->{'comp_p'}
+  
+  # If there is no 'ref' key, then create one with $p->{'ref'} =
+  # icalproperty_new_from_string($p->as_ical_string)
+  
+}
+
+sub remove_property { 
+
+# If $p->{'ref'} is set, then remove the property with
+# icalcomponent_remove_property() }
+}
+
+sub add_component {}
+
+sub as_ical_string {
+  my $self = shift;
+
+  return Net::ICal::Libical::icalcomponent_as_ical_string($self->{'comp_p'})
+}
+
+
+sub test {
+
+  my $comp_str=<<EOM;
+BEGIN:VEVENT
+ORGANIZER:mailto:a\@example.com
+DTSTAMP:19970612T190000Z
+DTSTART:19970701T210000Z
+DTEND:19970701T230000Z
+SEQUENCE:1
+UID:0981234-1234234-23\@example.com
+SUMMARY:ST. PAUL SAINTS -VS- DULUTH-SUPERIOR DUKES
+END:VEVENT
+
+EOM
+  
+  my $c;
+
+  $c = new Component($comp_str);
+
+  print $c->as_ical_string();
+
+  @props = $c->properties();
+
+  foreach $p (@props) {
+    print $p->name()." ".$p->value()."\n";
+  }
+
+}
+
+
+1;
+
+__END__
 
 #""" Represent iCalendar DATE, TIME and DATE-TIME ""
 
@@ -261,68 +482,6 @@ package Recurrence_Id;
 package Attach;
 @ISA= (Property)
         
-package Component:
-
-
-sub new{
-  my $class = shift;
-  my $ical_string = shift; # Ical data in string form
-  my $self = {}
-
-  my $self->{'comp_p'} = icalparser_parse_string(str)
-
-}
-
-# Destroy must call icalcomponent_free() if icalcomponent_get_parent()
-# returns NULL
-sub DESTROY {}
-
-# Return an array of all properties of the given type
-sub properties{
-
-  my $self = shift;
-  my $prop_name = shift;
-
-  # To loop over properties
-  # $comp_p = $self->{'comp_p'}
-  # $p = icallangbind_get_first_property($comp_p,$prop_name)
-  # $p = icallangbind_get_next_property($comp_p,$prop_name)
-
-  # To get a dictionary representation of property:
-  # $d_string = icallangbind_property_eval_string(p,":")
-  # $dict = eval($d_string)
-
-  # Property needs to know its own pointer for updates
-  # $dict{'ref'} = p
-
-  # Then, look at $dict{'value_type'} or $dict{'name'} to construct a 
-  # derived class of Property 
-}
-  
-sub add_property {
-
-    # if there is a 'ref' key in the prop's dict, then it is owned by
-    # an icalcomponent, so dont add it again. But, you may check that
-    # it is owned by this component with:
-    # icalproperty_get_parent(p->{'ref'}') != $self->{'comp_p'}
-
-    # If there is no 'ref' key, then create one with $p->{'ref'} =
-    # icalproperty_new_from_string($p->as_ical_string)
-
-  }
-
-sub remove_property { # If $p->{'ref'} is set, then remove the property
-with icalcomponent_remove_property()
-
-}
-
-
-sub add_component {}
-
-sub as_ical_string {
-  # Call icalcomponent_as_ical_string($sefl->{'comp_p'}
-
-
 package Event;
 @ISA= (Component)
 
