@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.12 2002-07-23 13:49:42 lindner Exp $
+    $Id: icalclassify.c,v 1.13 2002-08-07 17:12:06 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -712,7 +712,8 @@ icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match,
 	    icaltime_compare(comp_parts.dtstamp,match_parts.dtstamp)>0)
 	{
 	    /* comp has a smaller sequence and a later DTSTAMP */
-	    return ICAL_XLICCLASS_MISSEQUENCED;
+	    class = ICAL_XLICCLASS_MISSEQUENCED;
+	    goto CLEANUP;
 	}
 
 	if( (comp_parts.sequence<match_parts.sequence )
@@ -721,14 +722,16 @@ icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match,
 	   ( comp_parts.sequence == match_parts.sequence &&
 	     icaltime_compare(comp_parts.dtstamp,match_parts.dtstamp)<=0)){
 
-	    return ICAL_XLICCLASS_OBSOLETE;
+	    class = ICAL_XLICCLASS_OBSOLETE;
+	    goto CLEANUP;
 	}
 
     }
 
     p = icalcomponent_get_first_property(c,ICAL_METHOD_PROPERTY);
     if (p == 0) {
-	return ICAL_XLICCLASS_UNKNOWN;
+	class = ICAL_XLICCLASS_UNKNOWN;
+	goto CLEANUP;
     }
     method = icalproperty_get_method(p);
 
@@ -741,6 +744,7 @@ icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match,
 	}
     }
 
+CLEANUP:
     icalssutil_free_parts(&comp_parts); 
     icalssutil_free_parts(&match_parts);
 
