@@ -21,6 +21,7 @@ incoming.ics \
 process-incoming.ics \
 calendar.ics \
 restriction.ics \
-overlaps.ics
+overlaps.ics \
+spanlist.ics
 
 
