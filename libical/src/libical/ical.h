@@ -2,7 +2,7 @@
 #define ICAL_VERSION_H
 
 #define ICAL_PACKAGE "libical"
-#define ICAL_VERSION "0.22"
+#define ICAL_VERSION "0.22a"
 
 #endif
 /* -*- Mode: C -*- */
@@ -11,7 +11,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
+ $Id: ical.h,v 1.8 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -64,6 +64,7 @@ struct icaltimetype
 /* Convert seconds past UNIX epoch to a timetype*/
 struct icaltimetype icaltime_from_timet(time_t v, int is_date);
 time_t icaltime_as_timet(struct icaltimetype);
+char* icaltime_as_ical_string(struct icaltimetype tt);
 
 /* Like icaltime_from_timet(), except that the input may be in seconds
    past the epoch in floating time */
@@ -675,6 +676,7 @@ struct icaltriggertype
 	struct icaldurationtype duration;
 };
 
+struct icaltriggertype icaltriggertype_from_string(const char* str);
 
 /* struct icalreqstattype. This struct contains two string pointers,
 but don't try to free either of them. The "desc" string is a pointer
@@ -871,7 +873,7 @@ int icalrecur_expand_recurrence(char* rule, time_t start,
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
+  $Id: ical.h,v 1.8 2001-01-23 18:11:53 ebusboom Exp $
   $Locker:  $
 
   
@@ -1042,7 +1044,7 @@ void icalvalue_set_status(icalvalue* value, icalproperty_status v);
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
+  $Id: ical.h,v 1.8 2001-01-23 18:11:53 ebusboom Exp $
   $Locker:  $
 
   
@@ -1213,7 +1215,7 @@ void icalparameter_set_xliccomparetype(icalparameter* value, icalparameter_xlicc
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
+  $Id: ical.h,v 1.8 2001-01-23 18:11:53 ebusboom Exp $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
@@ -1923,7 +1925,7 @@ icalcomponent* icalcomponent_new_xdaylight();
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
+  $Id: ical.h,v 1.8 2001-01-23 18:11:53 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2014,7 +2016,7 @@ char* string_line_generator(char *out, size_t buf_size, void *d);
  CREATOR: eric 30 June 1999
 
 
- $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
+ $Id: ical.h,v 1.8 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -2092,7 +2094,7 @@ char* icalmemory_strdup(const char *s);
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
+  $Id: ical.h,v 1.8 2001-01-23 18:11:53 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2241,7 +2243,7 @@ char* icalerror_strerror(icalerrorenum e);
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
   
-  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
+  $Id: ical.h,v 1.8 2001-01-23 18:11:53 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2302,7 +2304,7 @@ int icalrestriction_check(icalcomponent* comp);
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
   
-  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
+  $Id: ical.h,v 1.8 2001-01-23 18:11:53 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -2446,7 +2448,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
  CREATOR: eric 26 July 2000
 
 
- $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
+ $Id: ical.h,v 1.8 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

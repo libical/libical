@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.4 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: icaltime.c,v 1.5 2001-01-23 18:11:53 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -612,6 +612,8 @@ struct icaldurationtype icaldurationtype_from_int(int t)
         used += dur.minutes * (60);
         dur.seconds = (t - used);
  
+	dur.is_neg = t<0? 1 : 0;
+
         return dur;
 }
 

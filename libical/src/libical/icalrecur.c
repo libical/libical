@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.2 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: icalrecur.c,v 1.3 2001-01-23 18:11:53 ebusboom Exp $
   $Locker:  $
     
 
@@ -300,8 +300,11 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 	} else if (*t == '+'){
 	    sign = 1;
 	    t++;
+	} else {
+	    sign = 1;
 	}
 
+	weekno = 0;
 	/* Get Optional weekno */
 	if( sscanf(t,"%d",&weekno) != 0){
 	    if (n != 0){
@@ -315,7 +318,7 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 
 	wd = icalrecur_string_to_weekday(t);
 
-	array[i++] = wd + sign*8*weekno;
+	array[i++] = sign* ((int)wd + 8*weekno);
 	array[i] =  ICAL_RECURRENCE_ARRAY_MAX;
 
     }
@@ -1823,7 +1826,11 @@ enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day)
 
 short icalrecurrencetype_day_position(short day)
 {
-    short pos = (day-icalrecurrencetype_day_day_of_week(day))/8;
+    short wd, pos;
+
+    wd = icalrecurrencetype_day_day_of_week(day);
+
+    pos = (abs(day)-wd)/8 * ((day<0)?-1:1);
 
     if(pos == 0){
 	pos = 1;

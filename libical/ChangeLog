@@ -1,3 +1,13 @@
+2001-01-23  Eric Busboom  <eric@softwarestudio.org>
+
+	* icltime.c Removed all of the _local_ routines and simplified
+ 	icaltime_utc_offset and icaltime_as_timet
+
+	* regression.c Added tests for triggers and improvements to icaltime.c
+
+	* icaltypes.c Addedd icaltriggertype_from_string and changed
+ 	icaltriggertype to be a struct
+
 2001-01-22  Eric Busboom  <eric@softwarestudio.org>
 
 	* icaltime.c implemented icaldurationtype_from_string to parse the

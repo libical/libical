@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.3 2001-01-23 07:03:17 ebusboom Exp $
+ $Id: icaltime.h,v 1.4 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -57,6 +57,7 @@ struct icaltimetype
 /* Convert seconds past UNIX epoch to a timetype*/
 struct icaltimetype icaltime_from_timet(time_t v, int is_date);
 time_t icaltime_as_timet(struct icaltimetype);
+char* icaltime_as_ical_string(struct icaltimetype tt);
 
 /* Like icaltime_from_timet(), except that the input may be in seconds
    past the epoch in floating time */

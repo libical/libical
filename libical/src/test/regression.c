@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.6 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: regression.c,v 1.7 2001-01-23 18:11:53 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2287,9 +2287,13 @@ void test_recur_parser()
 {
     struct icalrecurrencetype rt; 
 
+    printf("FREQ=YEARLY;UNTIL=20000131T090000Z;BYMONTH=1,2,3,4,8;BYYEARDAY=34,65,76,78;BYDAY=-1TU,3WE,-4FR,SU,SA\n");
+
     rt = icalrecurrencetype_from_string("FREQ=YEARLY;UNTIL=20000131T090000Z;BYMONTH=1,2,3,4,8;BYYEARDAY=34,65,76,78;BYDAY=-1TU,3WE,-4FR,SU,SA");
 
-    printf("%s\n",icalrecurrencetype_as_string(&rt));
+    printf("%s\n\n",icalrecurrencetype_as_string(&rt));
+
+    printf("FREQ=DAILY;COUNT=3;BYMONTH=1,2,3,4,8;BYYEARDAY=34,65,76,78;BYDAY=-1TU,3WE,-4FR,SU,S\n");
 
     rt = icalrecurrencetype_from_string("FREQ=DAILY;COUNT=3;BYMONTH=1,2,3,4,8;BYYEARDAY=34,65,76,78;BYDAY=-1TU,3WE,-4FR,SU,SA");
 
@@ -2796,6 +2800,9 @@ void test_file_locks()
 	    icalfileset_commit(fs);
 	    icalfileset_free(fs);
 
+	    putc('.',stdout);
+	    fflush(stdout);
+
 	}
     }
 
@@ -2853,10 +2860,13 @@ void test_trigger()
 	p != 0;
 	p = icalcomponent_get_next_property(c,ICAL_TRIGGER_PROPERTY)){
 	tr = icalproperty_get_trigger(p);
-	}
 
-    
-
+	if(!icaltime_is_null_time(tr.time)){
+	    printf("value=DATE-TIME:%s\n", icaltime_as_ical_string(tr.time));
+	} else {
+	    printf("value=DURATION:%s\n", icaldurationtype_as_ical_string(tr.duration));
+	}   
+    }
 }
 
 int main(int argc, char *argv[])
@@ -2998,7 +3008,7 @@ int main(int argc, char *argv[])
     }
 
     if(tfile ==1 || tfile == 3){
-	printf("\n------------Test File Set--------------\n");
+	printf("\n------------Test File Locks--------------\n");
 	test_file_locks();
     }
 
@@ -3011,7 +3021,7 @@ int main(int argc, char *argv[])
 
     if(tmisc == 1 || tmisc  == 3){
 	printf("\n------------Test Trigger ------------------\n");
-	/*test_trigger();*/
+	test_trigger();
     }
 
 

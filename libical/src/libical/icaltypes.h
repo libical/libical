@@ -73,6 +73,7 @@ struct icaltriggertype
 	struct icaldurationtype duration;
 };
 
+struct icaltriggertype icaltriggertype_from_string(const char* str);
 
 /* struct icalreqstattype. This struct contains two string pointers,
 but don't try to free either of them. The "desc" string is a pointer

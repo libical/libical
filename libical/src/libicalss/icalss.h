@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.5 2001-01-12 21:22:20 ebusboom Exp $
+ $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -63,7 +63,7 @@ icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalss.h,v 1.5 2001-01-12 21:22:20 ebusboom Exp $
+ $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -154,7 +154,7 @@ icalcomponent* icalset_get_next_component(icalset* set);
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.5 2001-01-12 21:22:20 ebusboom Exp $
+ $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -256,7 +256,7 @@ icalcomponent* icalfileset_get_component(icalfileset* cluster);
  CREATOR: eric 28 November 1999
 
 
- $Id: icalss.h,v 1.5 2001-01-12 21:22:20 ebusboom Exp $
+ $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -337,7 +337,7 @@ icalcomponent* icaldirset_get_next_component(icaldirset* store);
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.5 2001-01-12 21:22:20 ebusboom Exp $
+ $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -402,7 +402,7 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.5 2001-01-12 21:22:20 ebusboom Exp $
+ $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -428,7 +428,7 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.5 2001-01-12 21:22:20 ebusboom Exp $
+ $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -499,7 +499,7 @@ icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp);
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.5 2001-01-12 21:22:20 ebusboom Exp $
+ $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -551,7 +551,7 @@ void icalspanlist_dump(icalspanlist* s);
  CREATOR: eric 07 Nov 2000
 
 
- $Id: icalss.h,v 1.5 2001-01-12 21:22:20 ebusboom Exp $
+ $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -620,7 +620,7 @@ icalcomponent* icalmessage_new_error_reply(icalcomponent* c,
   FILE: icalcstp.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalss.h,v 1.5 2001-01-12 21:22:20 ebusboom Exp $
+  $Id: icalss.h,v 1.6 2001-01-23 18:11:53 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -668,9 +668,10 @@ icalcomponent* icalmessage_new_error_reply(icalcomponent* c,
 
    1) Construct a new icalcstps, bound to your code via stubs
    2) Repeat forever:
-   2a) Get string from client & give to icalcstps_next_input()
-   2b) Call icalcstps_next_output. Send string to client. 
-
+     2a) Get string from client & give to icalcstps_next_input()
+     2b) Repeat until icalcstp_next_output returns 0:
+       2b1) Call icalcstps_next_output. 
+       2b2) Send string to client.
 */
 
 
@@ -717,11 +718,11 @@ int icalcstps_next_input(icalcstps* cstp);
 /* How to use: 
 
    1) Construct a new icalcstpc
-   2) Issue a command
+   2) Issue a command by calling one of the command routines. 
    3) Repeat until both call icalcstpc_next_output and
    icalcstpc_next_input return 0:
-   3a) Call icalcstpc_next_output. Send string to server. 
-   3b) Get string from server, & give to icalcstp_next_input()
+     3a) Call icalcstpc_next_output. Send string to server. 
+     3b) Get string from server, & give to icalcstp_next_input()
    4) Iterate with icalcstpc_first_response & icalcstp_next_response to 
    get the servers responses
    5) Repeat at #2
