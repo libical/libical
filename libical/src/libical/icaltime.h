@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.9 2001-11-14 07:07:22 benjaminlee Exp $
+ $Id: icaltime.h,v 1.10 2001-12-10 18:54:00 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -97,6 +97,7 @@ int icaltime_as_int(struct icaltimetype);
 /* create a time from an ISO format string */
 struct icaltimetype icaltime_from_string(const char* str);
 
+
 /* begin WARNING !! DEPRECATED !! functions *****
 use new icaltimezone functions, see icaltimezone.h
  */
@@ -117,6 +118,8 @@ struct icaltimetype icaltime_as_zone(struct icaltimetype tt,
 
 /* end WARNING !! DEPRECATED !! functions *****
  */
+
+
 
 /* Return a null time, which indicates no time has been set. This time represent the beginning of the epoch */
 struct icaltimetype icaltime_null_time(void);

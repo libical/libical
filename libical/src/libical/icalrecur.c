@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.18 2001-12-10 01:28:42 gray-john Exp $
+  $Id: icalrecur.c,v 1.19 2001-12-10 18:54:00 ebusboom Exp $
   $Locker:  $
     
 
@@ -912,13 +912,14 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     }
 
-    /* For YEARLY rule, begin by setting up the year days array */
+    /* For YEARLY rule, begin by setting up the year days array . THey
+       YEARLY rules work by expanding one year at a time. */
 
     if(impl->rule.freq == ICAL_YEARLY_RECURRENCE){
         struct icaltimetype next;
 
 	for (;;) {
-        expand_year_days(impl,impl->last.year);
+            expand_year_days(impl,impl->last.year);
 	    if (impl->days[0] != ICAL_RECURRENCE_ARRAY_MAX)
 	        break;
 	    increment_year(impl,impl->rule.interval);
@@ -1734,6 +1735,10 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
     memset(&t,0,sizeof(t));
     memset(impl->days,ICAL_RECURRENCE_ARRAY_MAX_BYTE,sizeof(impl->days));
     
+    /* The flags and the following switch statement select which code
+       to use to expand the yers days, based on which BY-rules are
+       present. */
+
     flags = (HBD(BY_DAY) ? 1<<BY_DAY : 0) + 
         (HBD(BY_WEEK_NO) ? 1<<BY_WEEK_NO : 0) + 
         (HBD(BY_MONTH_DAY) ? 1<<BY_MONTH_DAY : 0) + 
