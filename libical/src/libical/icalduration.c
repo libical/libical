@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.16 2002-10-30 21:22:03 acampi Exp $
+  $Id: icalduration.c,v 1.17 2005-01-24 11:49:41 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -190,7 +190,7 @@ void append_duration_segment(char** buf, char** buf_ptr, size_t* buf_size,
 
     char temp[TMP_BUF_SIZE];
 
-    sprintf(temp,"%d",value);
+    snprintf(temp,sizeof(temp),"%d",value);
 
     icalmemory_append_string(buf, buf_ptr, buf_size, temp);
     icalmemory_append_string(buf, buf_ptr, buf_size, sep);
