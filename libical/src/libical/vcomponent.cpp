@@ -1,8 +1,10 @@
-/*======================================================================
- FILE: vcomponent.cpp
- CREATOR: fnguyen 12/05/01
- (C) COPYRIGHT 2001, Critical Path
-======================================================================*/
+/**
+ * @file    vcomponent.cpp
+ * @author  fnguyen (12/10/01)
+ * @brief   Implemenation of C++ Wrapper for icalcomponent.c
+ *
+ * (C) COPYRIGHT 2001, Critical Path
+ */
 
 #ifndef VCOMPONENT_H
 #include "vcomponent.h"
@@ -22,10 +24,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <exception>
+
 VComponent::VComponent() : imp(icalcomponent_new(ICAL_ANY_COMPONENT)){
 }
 VComponent::VComponent(const VComponent& v){
-	imp = icalcomponent_new_clone(v.imp);
+  imp = icalcomponent_new_clone(v.imp);
+  if (!imp) throw icalerrno;
 }
 
 VComponent& VComponent::operator=(const VComponent& v){
@@ -37,6 +42,8 @@ VComponent& VComponent::operator=(const VComponent& v){
 		imp = icalcomponent_new_clone(v.imp);
 	}
 
+	if (!imp) throw icalerrno;
+
 	return *this;
 }
 
@@ -44,12 +51,12 @@ VComponent::~VComponent(){
 	if (imp)
 	   icalcomponent_free(imp);
 }
+
 VComponent::VComponent(icalcomponent* v) : imp(v){
 }
 
 /* char* returned is in the ring buffer. caller doesn't have to free it */
 char* VComponent::quote_ical_string(char *str){
- 
     const char* p;
     size_t  buf_sz;
     buf_sz = strlen(str) * 2;	/* assume worse case scenarios. otherwise, we have to parse the string and count \ */
@@ -75,31 +82,51 @@ char* VComponent::quote_ical_string(char *str){
     return out;
 }
 
-
+/**
+ * @brief Constructor
+ * 
+ * Create a new VComponent from a string.
+ *
+ * @exception ICAL_MALFORMEDDATA_ERROR
+ *            Catch this error if you 
+ * 
+ */
 VComponent::VComponent(string str){
 	// Fix for BUG #15647, but breaks fix for BUG #15596.  Attempting a UI fix for cal-4.0.
 	//char* quoted_str = quote_ical_string((char *)str);
 	//imp = icalcomponent_new_from_string(quoted_str);
 	imp = icalcomponent_new_from_string(str);
-	//if (quoted_str) icalmemory_free_buffer(quoted_str);
+
+	if (!imp) throw icalerrno;
 }
 
 VComponent::VComponent(icalcomponent_kind kind){
-	imp = icalcomponent_new(kind);
+  imp = icalcomponent_new(kind);
+
+  if (!imp) throw icalerrno;
 }
+
+
 string VComponent::as_ical_string(){
-	return icalcomponent_as_ical_string(imp);
+  char *str = icalcomponent_as_ical_string(imp);
+  if (!str) throw icalerrno;
 }
+
+
 bool VComponent::is_valid(){
 	if (imp == NULL) return false;
 	return (icalcomponent_is_valid(imp) ? true : false);
 }
+
 icalcomponent_kind VComponent::isa(){
 	return icalcomponent_isa(imp);
+	if (!imp) throw icalerrno;
 }
+
 int VComponent::isa_component(void* component){
 	return icalcomponent_isa_component(component);
 }
+
 void VComponent::new_from_string(string str){
 	if (imp != NULL) icalcomponent_free(imp);
 	imp = icalcomponent_new_from_string(str);
@@ -121,10 +148,12 @@ ICalProperty* VComponent::get_current_property(){
 	icalproperty* t = icalcomponent_get_current_property(imp);
 	return ((t != NULL) ? new ICalProperty(t) : NULL);
 }
+
 ICalProperty* VComponent::get_first_property(icalproperty_kind kind){
 	icalproperty* t = icalcomponent_get_first_property(imp, kind);
 	return ((t != NULL) ? new ICalProperty(t) : NULL);
 }
+
 ICalProperty* VComponent::get_next_property(icalproperty_kind kind){
 	icalproperty* t = icalcomponent_get_next_property(imp, kind);
 	return ((t != NULL) ? new ICalProperty(t) : NULL);
@@ -274,9 +303,11 @@ void VComponent::set_dtstart(struct icaltimetype v){
    the return value. If you call a set routine and neither exists, the
    routine will create the apcompriate comperty.
 */
+
 struct icaltimetype VComponent::get_dtend(){
 	return icalcomponent_get_dtend(imp);
 }
+
 void VComponent::set_dtend(struct icaltimetype v){
 	icalcomponent_set_dtend(imp, v);
 }
@@ -421,88 +452,88 @@ void VComponent::set_parent(VComponent *parent){
 /* ignoreValue means remove properties even if the data doesn't match */
 bool VComponent::remove(VComponent& fromVC, bool ignoreValue){
 
-	/* the two components must be the same kind */
-	if (this->isa() != fromVC.isa()) return false;
+    /* the two components must be the same kind */
+    if (this->isa() != fromVC.isa()) return false;
 
-	/* properties first */
+    /* properties first */
     ICalProperty* propToBeRemoved;
     for (propToBeRemoved=fromVC.get_first_property(ICAL_ANY_PROPERTY); propToBeRemoved != NULL;
          propToBeRemoved=fromVC.get_next_property(ICAL_ANY_PROPERTY)) {
 
         /* loop through properties from this component */
-		ICalProperty* next = NULL;	
+        ICalProperty* next = NULL;    
         for (ICalProperty* p=this->get_first_property(propToBeRemoved->isa()); p!=NULL; p=next) {
             next = this->get_next_property(propToBeRemoved->isa());
-			if (ignoreValue)
-				this->remove_property(p);
+            if (ignoreValue)
+                 this->remove_property(p);
             else {
                  if (*p == *propToBeRemoved) {
                      this->remove_property(p);
                      break;
                  }
             }
-		}
-	}
+        }
+    }
 
-	/* components next */
-	VComponent* comp;
-	for (comp=fromVC.get_first_component(ICAL_ANY_COMPONENT); comp != NULL;
-		 comp=fromVC.get_next_component(ICAL_ANY_COMPONENT)) {
-		VComponent* nextc = NULL;
-		for (VComponent* c=this->get_first_component(comp->isa()); c!=NULL; c=nextc) {
-			nextc = this->get_next_component(comp->isa());
-			if (ignoreValue) {
-				// recursively go down the components
-				if (c->remove(*comp, ignoreValue)) {
-					// if all properties are removed and there is no sub-components, then
-					// remove this compoent
-					if ((c->count_properties(ICAL_ANY_PROPERTY) == 0) &&
-						(c->count_components(ICAL_ANY_COMPONENT) == 0)) {
-						this->remove_component(c);
-					}
-				}
-			}
-			else
-				return false;
-		}
-	}
-	
-	return true;
+    /* components next */
+    VComponent* comp;
+    for (comp=fromVC.get_first_component(ICAL_ANY_COMPONENT); comp != NULL;
+         comp=fromVC.get_next_component(ICAL_ANY_COMPONENT)) {
+        VComponent* nextc = NULL;
+        for (VComponent* c=this->get_first_component(comp->isa()); c!=NULL; c=nextc) {
+            nextc = this->get_next_component(comp->isa());
+            if (ignoreValue) {
+                // recursively go down the components
+                if (c->remove(*comp, ignoreValue)) {
+                    // if all properties are removed and there is no sub-components, then
+                    // remove this compoent
+                    if ((c->count_properties(ICAL_ANY_PROPERTY) == 0) &&
+                        (c->count_components(ICAL_ANY_COMPONENT) == 0)) {
+                        this->remove_component(c);
+                    }
+                }
+            }
+            else
+                return false;
+        }
+    }
+    
+    return true;
 }
 /* removeMissing == true: remove properties that are missing from fromC */
 /* todo: only change the first occurence of the property */
 /* todo: removeMissing is not implemented */
 bool VComponent::update(VComponent& fromC, bool removeMissing){
 
-	/* make sure they are the same kind */
-	if (this->isa() != fromC.isa()) return false;
+    /* make sure they are the same kind */
+    if (this->isa() != fromC.isa()) return false;
 
-	/* property first */
-	ICalProperty* prop;
-	for (prop=fromC.get_first_property(ICAL_ANY_PROPERTY); prop != NULL;
-		 prop=fromC.get_next_property(ICAL_ANY_PROPERTY)) {
-		ICalProperty* thisProp = this->get_first_property(prop->isa());
-		if (thisProp == NULL) {
-			thisProp = new ICalProperty(prop->isa());
-			this->add_property(thisProp);
-		}
-		ICalValue *value = new ICalValue(*(prop->get_value())); // clone the value
-		thisProp->set_value(*value);
-	}
+    /* property first */
+    ICalProperty* prop;
+    for (prop=fromC.get_first_property(ICAL_ANY_PROPERTY); prop != NULL;
+    	 prop=fromC.get_next_property(ICAL_ANY_PROPERTY)) {
+        ICalProperty* thisProp = this->get_first_property(prop->isa());
+    	if (thisProp == NULL) {
+            thisProp = new ICalProperty(prop->isa());
+            this->add_property(thisProp);
+        }
+        ICalValue *value = new ICalValue(*(prop->get_value())); // clone the value
+        thisProp->set_value(*value);
+    }
 
-	/* recursively updating sub-components */
-	VComponent* comp;
-	for (comp=fromC.get_first_component(ICAL_ANY_COMPONENT); comp != NULL;
-		 comp=fromC.get_next_component(ICAL_ANY_COMPONENT)) {
-		VComponent* thisComp = this->get_first_component(comp->isa());
-		if (thisComp == NULL) {
-			thisComp = new VComponent(comp->isa());
-			this->add_component(thisComp);
-		}
-		bool err = thisComp->update(*comp, removeMissing);
-		if (!err) return false;
-	}
-	return true;
+    /* recursively updating sub-components */
+    VComponent* comp;
+    for (comp=fromC.get_first_component(ICAL_ANY_COMPONENT); comp != NULL;
+         comp=fromC.get_next_component(ICAL_ANY_COMPONENT)) {
+        VComponent* thisComp = this->get_first_component(comp->isa());
+        if (thisComp == NULL) {
+            thisComp = new VComponent(comp->isa());
+            this->add_component(thisComp);
+        }
+        bool err = thisComp->update(*comp, removeMissing);
+        if (!err) return false;
+    }
+    return true;
 }
 /* add components and property. recursively goes down child components */
 bool VComponent::add(VComponent& fromC){
