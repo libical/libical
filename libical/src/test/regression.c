@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.50 2002-06-13 12:57:12 acampi Exp $
+  $Id: regression.c,v 1.51 2002-06-26 22:25:16 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1133,6 +1133,17 @@ void test_duration()
     int_is("P2DT8H30M", icaldurationtype_as_int(d), 203400);
 
     icalerror_errors_are_fatal = 0;
+
+    // Test conversion of bad input
+
+    d = icaldurationtype_from_int(1314000);
+    if (VERBOSE) printf("%s %d\n",icaldurationtype_as_ical_string(d),d);
+    is("1314000", icaldurationtype_as_ical_string(d), "P15DT5H");
+
+    d = icaldurationtype_from_string("P2W1DT5H");
+    if (VERBOSE) printf("%s %d\n",icaldurationtype_as_ical_string(d),d);
+    int_is("P15DT5H", icaldurationtype_as_int(d), 0);
+
 
     d = icaldurationtype_from_string("P-2DT8H30M");
     if (VERBOSE) printf("%s\n",icaldurationtype_as_ical_string(d));
