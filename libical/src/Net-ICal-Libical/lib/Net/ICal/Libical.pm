@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.pm,v 1.2 2001-01-28 18:00:48 ebusboom Exp $
+#  $Id: Libical.pm,v 1.3 2001-02-28 07:18:41 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -16,9 +16,6 @@
 # or implied warranty.  It may be used, redistributed and/or modified
 # under the same terms as perl itself. ( Either the Artistic License or the
 # GPL. ) 
-#
-# The Original Code is Parameter.pm. The Initial Developer of the Original
-# Code is Eric Busboom
 #
 #======================================================================
 
@@ -110,6 +107,403 @@ sub generate_occurrences {
 
   return @out;
 }
+
+
+# The remaining code is just the interface declarations for a complete
+# perl binding to libical. Currently, it is looking for an author....
+
+__END__
+           
+package Property;
+
+sub new {  #(self, dict):
+
+  # Construct from dictionary produced by
+  # icallangbind_property_eval_string(p,"=>"). The ('name', 'value',
+  #'value_type', 'pid', 'ref') keys describe the property. All other
+  # keys are parameters.  
+
+}
+
+
+sub name(self,v=None):
+
+#Get/Set the internal reference to the libical icalproperty """
+sub prop_ref {
+}
+
+#Get/Set the RFC2445 name of the value. Dict value 'value_type'
+sub value_type {
+}
+
+#Get/set the RFC2445 representation of the value. Dict value 'value'
+sub value {
+}
+
+# Called by subclasses to update the internal icalproperty
+# representation. Calls icalproperty_set_value_from_string with value
+# from dict{'value'}
+sub _update_value {
+}
+
+# Get a named parameter
+sub get_parameter{
+  my $self  = shift;
+  my $param_name = shift;
+}
+
+# Set the value of the named parameter
+sub set_parameter{
+  my $self  = shift;
+  my $param_name = shift;
+  my $param_value = shift;
+}
+
+
+#""" Represent iCalendar DATE, TIME and DATE-TIME ""
+
+package Time;
+@ISA = (Property);
+
+sub new {}
+
+#"""Updates value and value_type based on the (internal) self.tt."""
+sub _update_value { }
+
+# " Return true if this is a valid time "
+sub valid { }
+
+# """ Return or set time in seconds past POSIX epoch"""
+sub utc_seconds {}
+
+# """ Return or set boolean indicating if time is in UTC """ 
+sub is_utc {}
+
+# Get/Set booll indicating is time is a date
+sub is_date(self,v=None):
+
+#"" Return or set the timezone string for this time """
+sub timezone {}
+
+#"" Get or set the seconds component of this time """
+sub second {}
+sub minute {}
+sub hour {}
+sub day {}
+sub month {}
+sub year {}
+
+# How dow you over load +,- in perl?
+
+# Add duration to time = time
+sub __add__{}
+
+# Subtract time from time = duration
+# Subtract duration from time = time
+sub __sub__(self,o):
+
+
+package Duration(Property):
+@ISA = (Property);
+
+sub new {}
+sub _update_value {}
+#"Return true if this is a valid duration"
+sub valid {}
+# """Return or set duration in seconds"""
+sub seconds {}
+
+
+#"""Represent a span of time"""
+
+package Period;
+@ISA = (Property);
+
+sub new{}
+
+sub _end_is_duration {}
+sub _end_is_time {}
+sub _update_value {}
+
+#"Return true if this is a valid period"
+sub valid {}
+
+#Return or set start time of the period. The start time may be
+#expressed as an RFC2445 format string or an instance of Time.
+#The return value is an instance of Time
+sub start {}
+
+#Return or set end time of the period. The end time may be
+#expressed as an RFC2445 format string or an instance of Time.
+#The return value is an instance of Time.
+
+#If the Period has a duration set, but not an end time, this
+#method will caluculate the end time from the duration. 
+sub end {}
+
+#Return or set the duration of the period. The duration may be
+#expressed as an RFC2445 format string or an instance of Duration.
+#The return value is an instance of Duration.
+#If the period has an end time set, but not a duration, this
+#method will calculate the duration from the end time.  
+sub duration{}
+
+# Get set the timezone for the period. Basically returns self->dict{TZID}
+sub timezone(self,v=None):
+
+
+# Represents the value and all parameters of an attendee
+package Attendee(Property):
+@ISA = (Property);
+
+sub new{}
+
+# Methods for accessing enumerated parameters
+sub cn {}
+sub cutype {}
+sub dir {}
+sub delegated_from {}
+sub delegated_to {}
+sub language {}
+sub member {}
+sub partstat {}
+sub role {}
+sub rsvp {}
+sub sent_by {}
+
+
+package Organizer;
+@ISA = (Property)
+# Methods for accessing enumerated parameters
+sub cn{}
+sub dir{}
+sub language {}
+sub sent_by {}
+
+package Recurrence_Id;
+@ISA= (Property)
+
+package Attach;
+@ISA= (Property)
+        
+package Component:
+
+
+sub new{
+  my $class = shift;
+  my $ical_string = shift; # Ical data in string form
+  my $self = {}
+
+  my $self->{'comp_p'} = icalparser_parse_string(str)
+
+}
+
+# Destroy must call icalcomponent_free() if icalcomponent_get_parent()
+# returns NULL
+sub DESTROY {}
+
+# Return an array of all properties of the given type
+sub properties{
+
+  my $self = shift;
+  my $prop_name = shift;
+
+  # To loop over properties
+  # $comp_p = $self->{'comp_p'}
+  # $p = icallangbind_get_first_property($comp_p,$prop_name)
+  # $p = icallangbind_get_next_property($comp_p,$prop_name)
+
+  # To get a dictionary representation of property:
+  # $d_string = icallangbind_property_eval_string(p,":")
+  # $dict = eval($d_string)
+
+  # Property needs to know its own pointer for updates
+  # $dict{'ref'} = p
+
+  # Then, look at $dict{'value_type'} or $dict{'name'} to construct a 
+  # derived class of Property 
+}
+  
+sub add_property {
+
+    # if there is a 'ref' key in the prop's dict, then it is owned by
+    # an icalcomponent, so dont add it again. But, you may check that
+    # it is owned by this component with:
+    # icalproperty_get_parent(p->{'ref'}') != $self->{'comp_p'}
+
+    # If there is no 'ref' key, then create one with $p->{'ref'} =
+    # icalproperty_new_from_string($p->as_ical_string)
+
+  }
+
+sub remove_property { # If $p->{'ref'} is set, then remove the property
+with icalcomponent_remove_property()
+
+}
+
+
+sub add_component {}
+
+sub as_ical_string {
+  # Call icalcomponent_as_ical_string($sefl->{'comp_p'}
+
+
+package Event;
+@ISA= (Component)
+
+sub component_type {}
+
+#"Returns a copy of the object."
+sub clone {}
+
+#Sets or returns the value of the DTEND property.
+#Usage:
+#dtend(time_obj)             # Set the value using a Time object
+#dtend('19970101T123000Z')   # Set the value as an iCalendar string
+#dtend(982362522)            # Set the value using seconds (time_t)
+#dtend()                     # Return a Time
+#
+#If the dtend value is being set and duration() has a value, the
+#duration property will be removed.
+sub dtend{}
+
+#Sets or returns the value of the duration property.
+#Usage:
+#duration(dur_obj)       # Set the value using a Duration object
+#duration("P3DT12H")     # Set value as an iCalendar string
+#duration(3600)          # Set duration using seconds
+#duration()              # Return a duration
+#
+#If the duration value is being set and dtend() has a value, the dtend
+#property will be removed.
+sub duration{}
+ 
+#Sets attendees or returns a list of Attendee objects.
+sub attendees {}
+
+#Sets or gets the value of the ORGANIZER property.
+#Usage:
+#organizer(orgObj)              # Set value using an organizer object
+#organizer('MAILTO:jd@not.com') # Set value using a CAL-ADDRESS string
+#organizer()                    # Return a CAL-ADDRESS string
+sub organizer{}
+
+#"Sets or gets the SUMMARY value of the Event."
+sub summary{}
+
+#Sets or gets the UID of the Event.
+sub uid{}
+
+#Sets or gets the value for the RECURRENCE-ID property.
+#Usage:
+#Recurrence_id(recIdObj)             # Set using a Recurrence_Id object
+#Recurrence_id("19700801T133000")    # Set using an iCalendar string
+#Recurrence_id(8349873494)           # Set using seconds from epoch
+#Recurrence_id()                     # Return a Time
+sub recurrence_id{}
+
+#Sets or gets the SEQUENCE value of the Event.
+#Usage:
+#sequence(1)     # Set the value using an integer
+#sequence('2')   # Set the value using a string containing an integer
+#sequence()      # Return an integer       
+sub sequence{}
+  
+#Sets or returns the value of the LAST-MODIFIED property.
+#Usage:
+#lastmodified(time_obj)          # Set the value using a Time object
+#lastmodified('19970101T123000Z')# Set using an iCalendar string
+#lastmodified(982362522)         # Set using seconds 
+#lastmodified()                  # Return a Time
+sub lastmodified{}
+
+
+
+#Sets or returns the value of the CREATED property.
+#Usage:
+#created(time_obj)           # Set the value using a Time object
+#created('19970101T123000Z') # Set using an iCalendar string
+#created(982362522)          # Set using seconds 
+#created()                   # Return a Time
+sub created {}
+
+
+sub related_to{}
+sub comment{}
+
+"Sets or returns the value of the DESCRIPTION property."
+
+sub description {}
+
+#Sets categories or returns a list of Attendee objects.
+sub categories {}
+
+sub attach{}
+
+#Represents a set of event occurrences. This
+#package controls a component's RRULE, EXRULE, RDATE and EXDATE
+#properties and can produce from them a set of occurrences. 
+package RecurrenceSet: 
+
+
+#Include a date or rule to the set. 
+#Use date= or pass in a
+#Time instance to include a date. Included dates will add an
+#RDATE property or will remove an EXDATE property of the same
+#date.
+#Use rule= or pass in a string to include a rule. Included
+#rules with either add a RRULE property or remove an EXRULE
+#property.
+
+sub include{}
+
+#Exclude date or rule to the set. 
+#Use date= or pass in a Time instance to exclude a
+#date. Excluded dates will add an EXDATE property or will remove
+#an RDATE property of the same date.
+#Use rule= or pass in a string to exclude a rule. Excluded
+#rules with either add an EXRULE property or remove an RRULE
+#property.
+sub exclude{}
+
+#Return 'count' occurrences as a tuple of Time instances.
+sub occurrences{}
+
+package Store;
+sub new{}
+sub path{}
+sub mark{}
+sub commit{} 
+sub addComponent{}
+sub removeComponent{}
+sub countComponents{}
+sub select{}
+sub clearSelect{}
+sub fetch{}
+sub fetchMatchK{}
+sub modify{}
+sub currentComponent{}
+sub firstComponent{}
+sub nextComponent{}
+
+
+package FileStore;
+@ISA = (Store)
+sub new{}
+sub path{}
+sub mark{}
+sub commit{} 
+sub addComponent{}
+sub removeComponent{}
+sub countComponents{}
+sub select{}
+sub clearSelect{}
+sub fetch{}
+sub fetchMatchK{}
+sub modify{}
+sub currentComponent{}
+sub firstComponent{}
+sub nextComponent{}
 
 
 1;
