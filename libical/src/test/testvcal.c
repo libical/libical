@@ -3,7 +3,7 @@
   FILE: vcal.c
   CREATOR: eric 26 May 2000
   
-  $Id: testvcal.c,v 1.1.1.1 2001-01-02 07:33:06 ebusboom Exp $
+  $Id: testvcal.c,v 1.2 2001-04-02 17:16:47 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -41,8 +41,16 @@ int main(int argc, char* argv[])
 {
     VObject *vcal = 0;
     icalcomponent *comp;
+    char* file;
 
-    vcal = Parse_MIME_FromFileName(argv[1]);
+    if (argc != 2){
+        file = "../../test-data/user-cal.vcf";
+    } else {
+        file = argv[1];
+    }
+
+
+    vcal = Parse_MIME_FromFileName(file);
     
     assert(vcal != 0);
 

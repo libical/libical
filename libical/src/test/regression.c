@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.20 2001-04-01 20:08:19 ebusboom Exp $
+  $Id: regression.c,v 1.21 2001-04-02 17:16:47 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -448,7 +448,7 @@ char** get_required_attendees(icalproperty* event)
 
 	if ( icalparameter_get_role(parameter) == ICAL_ROLE_REQPARTICIPANT) 
 	{
-	    attendees[c++] = strdup(icalproperty_get_attendee(p));
+	    attendees[c++] = icalmemory_strdup(icalproperty_get_attendee(p));
 
             if (c >= max) {
                 max *= 2; 
@@ -1858,7 +1858,7 @@ char* test_set_tz(const char* tzid)
 
    /* Put the new time zone into the environment */
     if(getenv("TZ") != 0){
-	tzstr = (char*)strdup(getenv("TZ"));
+	tzstr = (char*)icalmemory_strdup(getenv("TZ"));
 
 	if(tzstr == 0){
 	    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -2982,7 +2982,7 @@ void test_action()
     p = icalcomponent_get_next_property(c,ICAL_ACTION_PROPERTY);
 
     assert(icalproperty_get_action(p) == ICAL_ACTION_X);
-    assert(regrstrcmp(icalvalue_get_x(icalproperty_get_value(p)), "FUBAR"));
+    assert(regrstrcmp(icalvalue_get_x(icalproperty_get_value(p)), "FUBAR")==0);
 
 
 }
@@ -3022,7 +3022,7 @@ void test_trigger()
 	if(!icaltime_is_null_time(tr.time)){
 	    printf("value=DATE-TIME:%s\n", icaltime_as_ical_string(tr.time));
 	} else {
-	    printf("value=DURATION:%s\n", icaldurationtype_as_ical_string(tr.duration)==0);
+	    printf("value=DURATION:%s\n", icaldurationtype_as_ical_string(tr.duration));
 	}   
     }
 

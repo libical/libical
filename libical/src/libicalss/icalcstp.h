@@ -3,7 +3,7 @@
   FILE: icalcstp.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalcstp.h,v 1.4 2001-02-22 19:38:49 ebusboom Exp $
+  $Id: icalcstp.h,v 1.5 2001-04-02 17:16:44 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -56,6 +56,19 @@ typedef enum icalcstp_command {
     ICAL_UNKNOWN_COMMAND
 } icalcstp_command;
 
+
+
+/* A statement is a combination of command or response code and a
+   component that the server and client exchage with each other. */
+struct icalcstp_statement {
+    icalcstp_command command;
+    char* str_data; /* If non-NUll use as arguments to command */
+    int int_data; /* If non-NULL use as arguments to command */
+
+    icalrequeststatus code;
+
+    icalcomponent* data;
+};
 
 const char* icalcstp_command_to_string(icalcstp_command command);
 icalcstp_command icalcstp_string_to_command(const char* str);
