@@ -256,8 +256,6 @@ server_final_handler(RRCAP *cap)
 		icalcap_free(cap->hl);
 		cap->hl = NULL;
 	}
-
-	AnyHeapSnapshot(NULL);
 }
 
 /*
