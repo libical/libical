@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 		
     }
 
-	icalfileset_free(cin);
+	icalset_free(cin);
 
 	icaltimezone_free_builtin_timezones();
 	

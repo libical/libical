@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.14 2002-06-28 10:45:12 acampi Exp $
+  $Id: copycluster.c,v 1.15 2002-07-16 10:04:08 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -120,11 +120,11 @@ int main(int c, char *argv[]){
 
     printf("Transfered %d components\n",count);
 
-    icalfileset_free(clusterin);
+    icalset_free(clusterin);
 
     if (!tostdout){
 	icalfileset_mark(clusterout);
-	icalfileset_free(clusterout);
+	icalset_free(clusterout);
     }
 
      return 0;

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.55 2002-07-04 10:13:01 acampi Exp $
+  $Id: regression.c,v 1.56 2002-07-16 10:04:08 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -726,7 +726,7 @@ void test_dirset()
     }
 
 
-    icaldirset_free(s2);
+    icalset_free(s2);
 
     for(c = icaldirset_get_first_component(s); 
 	c != 0; 
@@ -742,7 +742,7 @@ void test_dirset()
 	}
     }
 
-    icaldirset_free(s);
+    icalset_free(s);
 }
 
 
@@ -2804,7 +2804,7 @@ void test_fileset()
 
     icalfileset_commit(fs);
 
-    icalfileset_free(fs);
+    icalset_free(fs);
     /** reopen fileset.ics **/
     fs = icalfileset_new(path);
 
@@ -2834,7 +2834,7 @@ void test_fileset()
     }
     int_is("icalfileset get components with gauge",comp_count, 3);
 
-    icalfileset_free(fs);
+    icalset_free(fs);
 
 	icalgauge_free(g);
     
@@ -2888,7 +2888,7 @@ void test_file_locks()
 	icalfileset_commit(fs);
     }
     
-    icalfileset_free(fs);
+    icalset_free(fs);
     
     assert(icalerrno == ICAL_NO_ERROR);
     
@@ -2925,7 +2925,7 @@ void test_file_locks()
 	    icalfileset_mark(fs);
 	    icalfileset_commit(fs);
 
-	    icalfileset_free(fs);
+	    icalset_free(fs);
 
 	    microsleep(rand()/(RAND_MAX/20));
 
@@ -2959,7 +2959,7 @@ void test_file_locks()
 
 	    icalfileset_mark(fs);
 	    icalfileset_commit(fs);
-	    icalfileset_free(fs);
+	    icalset_free(fs);
 
 	    putc('.',stdout);
 	    fflush(stdout);

@@ -3,7 +3,7 @@
   FILE: stow.c
   CREATOR: eric 29 April 2000
   
-  $Id: stow.c,v 1.6 2002-06-28 10:45:12 acampi Exp $
+  $Id: stow.c,v 1.7 2002-07-16 10:04:08 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -720,7 +720,7 @@ void store_component(icalcomponent *comp, struct options_struct *opt)
 	    exit(1);
 	}
 	
-	icalfileset_free(fs);
+	icalset_free(fs);
 
 	return;
     } else {

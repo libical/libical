@@ -190,5 +190,5 @@ void test_recur_file()
       int_is(msg, num_recurs_found, expected_events);
     }
     
-    icalfileset_free(cin);
+    icalset_free(cin);
 }

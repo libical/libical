@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: storage.c,v 1.4 2002-06-14 09:52:57 acampi Exp $
+  $Id: storage.c,v 1.5 2002-07-16 10:04:08 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -185,7 +185,7 @@ void test_fileset()
 	icalfileset_add_component(cout,clone);
 	icalfileset_commit(cout);
 
-        icalfileset_free(cout);
+        icalset_free(cout);
 
     }
 
@@ -215,7 +215,7 @@ void test_fileset()
 
     /* Remove all of them */
 
-    icalfileset_free(cout);
+    icalset_free(cout);
 
     cout = icalfileset_new(OUTPUT_FILE);
     assert(cout != 0);
@@ -228,7 +228,7 @@ void test_fileset()
       icalfileset_remove_component(cout, itr);
     }
 
-    icalfileset_free(cout);
+    icalset_free(cout);
 
 
     /* Print them out again */
@@ -256,7 +256,7 @@ void test_fileset()
 
     }
 
-    icalfileset_free(cout);
+    icalset_free(cout);
 
 
 }
@@ -362,7 +362,7 @@ void test_bdbset()
 
       num_components = icalcomponent_count_components(clone, ICAL_ANY_COMPONENT);
 
-      icalbdbset_free(cout); 
+      icalset_free(cout); 
 
     }
 
@@ -404,7 +404,7 @@ void test_bdbset()
              icalproperty_as_ical_string(dtend));
 
       }
-      icalbdbset_free(cout);
+      icalset_free(cout);
     }
 
     /* close database */
@@ -433,7 +433,7 @@ void test_bdbset()
       }
 
       icalbdbset_commit(cout);
-      icalbdbset_free(cout);
+      icalset_free(cout);
 
     }
 
@@ -466,7 +466,7 @@ void test_bdbset()
              icalproperty_as_ical_string(dtend));
 
       }
-      icalbdbset_free(cout);
+      icalset_free(cout);
     }
 }
 
@@ -771,7 +771,7 @@ int test_dirset()
     }
 
 
-    icaldirset_free(s2);
+    icalset_free(s2);
 #endif
 
 
@@ -796,7 +796,7 @@ int test_dirset()
     }
 	
 
-    icaldirset_free(s);
+    icalset_free(s);
     return 0;
 }
 
