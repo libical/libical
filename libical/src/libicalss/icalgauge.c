@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalgauge.c,v 1.3 2001-01-23 07:03:17 ebusboom Exp $
+ $Id: icalgauge.c,v 1.4 2001-05-04 17:54:02 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -362,7 +362,7 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 
 	if(w->logic == ICALGAUGELOGIC_AND){
 	    last_clause = this_clause && last_clause;
-	} else if(w->logic == ICALGAUGELOGIC_AND) {
+	} else if(w->logic == ICALGAUGELOGIC_OR) {
 	    last_clause = this_clause || last_clause;
 	} else {
 	    last_clause = this_clause;

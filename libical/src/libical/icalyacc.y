@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalyacc.y,v 1.3 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: icalyacc.y,v 1.4 2001-05-04 17:53:01 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -367,12 +367,18 @@ plusminus: '+' { utcsign = 1; }
 utcoffset_value: 
 	plusminus INTNUMBER INTNUMBER
 	{
-	    icalparser_yy_value = icalvalue_new_utcoffset( utcsign * ($2*3600) + ($3*60) );
+            int h = $2;
+            int m = $3;
+	    icalparser_yy_value = icalvalue_new_utcoffset( utcsign * ((h*3600) + (m*60)) );
   	}
 
 	| plusminus INTNUMBER INTNUMBER INTNUMBER
 	{
-	    icalparser_yy_value = icalvalue_new_utcoffset(utcsign * ($2*3600) + ($3*60) +($4));
+            int h = $2;
+            int m = $3;
+            int s = $4;
+            printf("%d %d %d\n",h,m,s);
+	    icalparser_yy_value = icalvalue_new_utcoffset(utcsign * ((h*3600) + (m*60) +(s)));
   	}
 
 %%
