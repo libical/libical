@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.16 2002-06-07 13:15:34 acampi Exp $
+#  $Id: test.py,v 1.17 2002-06-11 09:01:40 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -77,8 +77,13 @@ def test_property():
     print p['ROLE']
 
     p['X-MAN-FAVOURITE'] = 'Wolverine'
+    p['X-FILES-FAVOURITE'] = 'Mulder'
 
     print p['X-MAN-FAVOURITE']
+
+    assert(p['X-MAN-FAVOURITE'] == 'Wolverine')
+    assert(p['X-FILES-FAVOURITE'] == 'Mulder')
+    assert(p['X-FILES-FAVOURITE'] != 'Scully')
 
     print p.value()
     p.value("mailto:Bob@bob.com")

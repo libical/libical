@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.29 2002-06-11 08:21:20 acampi Exp $
+  $Id: icalcomponent.c,v 1.30 2002-06-11 09:01:34 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1215,7 +1215,11 @@ void icalcomponent_set_dtstart(icalcomponent* comp, struct icaltimetype v)
 	prop = icalproperty_new_dtstart(v);
 	icalcomponent_add_property(inner, prop);
     } else {
-	icalproperty_remove_parameter(prop, ICAL_TZID_PARAMETER);
+	icalparameter* param = 
+		icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER);
+	if (param) {
+		icalproperty_remove_parameter(prop, param);
+	}
     }
     
     icalproperty_set_dtstart(prop,v);
@@ -1341,7 +1345,11 @@ void icalcomponent_set_dtend(icalcomponent* comp, struct icaltimetype v)
 	prop = icalproperty_new_dtend(v);
 	icalcomponent_add_property(inner, prop);
     } else {
-	icalproperty_remove_parameter(prop, ICAL_TZID_PARAMETER);
+	icalparameter* param = 
+		icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER);
+	if (param) {
+		icalproperty_remove_parameter(prop, param);
+	}
     }
 
     icalproperty_set_dtend(prop,v);

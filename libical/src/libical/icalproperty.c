@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.20 2002-06-07 13:14:00 acampi Exp $
+  $Id: icalproperty.c,v 1.21 2002-06-11 09:01:34 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -534,7 +534,7 @@ icalproperty_set_parameter (icalproperty* prop,icalparameter* parameter)
 
     kind = icalparameter_isa(parameter);
 
-    icalproperty_remove_parameter(prop,kind);
+    icalproperty_remove_parameter(prop,parameter);
 
     icalproperty_add_parameter(prop,parameter);
 }
@@ -621,20 +621,21 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
 }
 
 void
-icalproperty_remove_parameter (icalproperty* prop, icalparameter_kind kind)
+icalproperty_remove_parameter (icalproperty* prop, icalparameter* parameter)
 {
     pvl_elem p;     
 
     icalerror_check_arg_rv((prop!=0),"prop");
-    
+    icalerror_check_arg_rv((parameter!=0),"parameter");
+
     for(p=pvl_head(prop->parameters);p != 0; p = pvl_next(p)){
-	icalparameter* param = (icalparameter *)pvl_data (p);
-        if (icalparameter_isa(param) == kind) {
+	icalparameter* p_param = (icalparameter *)pvl_data (p);
+	if (p_param == parameter) {
             pvl_remove (prop->parameters, p);
-            icalparameter_free (param);
+            icalparameter_free(p_param);
             break;
-        }
-    }                       
+	} 
+    }   
 }
 
 

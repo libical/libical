@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.46 2002-06-03 17:47:22 acampi Exp $
+  $Id: regression.c,v 1.47 2002-06-11 09:01:40 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -171,7 +171,7 @@ void update_attendees(icalcomponent* event)
 
 	} else if (icalparameter_get_partstat(parameter) == ICAL_PARTSTAT_NEEDSACTION) {
 
-	    icalproperty_remove_parameter(p,ICAL_PARTSTAT_PARAMETER);
+	    icalproperty_remove_parameter(p,parameter);
 	    
 	    icalparameter_free(parameter);
 
@@ -3237,6 +3237,34 @@ void test_value_parameter()
 	icalcomponent_free(c);
 }
 
+void test_x_parameter()
+{
+    icalproperty *p;
+
+    p= icalproperty_new_from_string(
+       "COMMENT;X-DO=C;X-RE=D: This is a note");
+
+    printf("%s\n",icalproperty_as_ical_string(p));
+
+    assert(icalproperty_isa(p) == ICAL_COMMENT_PROPERTY);
+    assert(regrstrcmp(icalproperty_get_comment(p)," This is a note")==0);
+
+    icalproperty_set_parameter_from_string(p,"X-MI", "E");
+    icalproperty_set_parameter_from_string(p,"X-FA", "F");
+    icalproperty_set_parameter_from_string(p,"X-HUMOUR", "bad");
+    
+    printf("%s\n",icalproperty_as_ical_string(p));
+
+    assert(icalproperty_get_parameter_as_string(p, "X-LAUGHS") == 0);
+    assert(regrstrcmp(icalproperty_get_parameter_as_string(p, "X-DO"),"C") == 0);
+    assert(regrstrcmp(icalproperty_get_parameter_as_string(p, "X-MI"),"E") == 0);
+    assert(regrstrcmp(icalproperty_get_parameter_as_string(p, "X-MI"),"C") != 0);
+    assert(regrstrcmp(icalproperty_get_parameter_as_string(p, "X-HUMOUR"),"bad") == 0);
+
+    assert(icalproperty_count_parameters(p) == 5);
+
+    icalproperty_free(p);
+}
 
 void test_x_property() 
 {
@@ -3520,6 +3548,10 @@ int main(int argc, char *argv[])
 	test_utcoffset();
     }
 
+    if(tmisc == 1 || tmisc  == 13){
+	printf("\n------------Test X Parameter ------------------\n");
+	test_x_parameter();
+    }
 
    
 

@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.9 2002-06-04 14:07:09 acampi Exp $
+  $Id: icalproperty.h,v 1.10 2002-06-11 09:01:34 acampi Exp $
   $Locker:  $
 
   
@@ -64,7 +64,7 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
                                                  const char* name);
 
 void icalproperty_remove_parameter(icalproperty* prop,
-				   icalparameter_kind kind);
+				   icalparameter* parameter);
 
 int icalproperty_count_parameters(const icalproperty* prop);
 
