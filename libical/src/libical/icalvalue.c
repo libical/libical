@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.39 2005-01-24 13:10:47 acampi Exp $
+  $Id: icalvalue.c,v 1.40 2005-01-24 13:11:31 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -896,6 +896,8 @@ static const char* icalvalue_datetime_as_ical_string(const icalvalue* value) {
 
 }
 
+#define MAX_FLOAT_DIGITS 40
+    
 static char* icalvalue_float_as_ical_string(const icalvalue* value) {
 
     float data;
@@ -903,13 +905,15 @@ static char* icalvalue_float_as_ical_string(const icalvalue* value) {
     icalerror_check_arg_rz( (value!=0),"value");
     data = icalvalue_get_float(value);
 
-    str = (char*)icalmemory_tmp_buffer(40);
+    str = (char*)icalmemory_tmp_buffer(MAX_FLOAT_DIGITS);
 
-    snprintf(str,40,"%f",data);
+    snprintf(str,MAX_FLOAT_DIGITS,"%f",data);
 
     return str;
 }
 
+#define MAX_GEO_DIGITS 40
+    
 static char* icalvalue_geo_as_ical_string(const icalvalue* value) {
 
     struct icalgeotype data;
@@ -918,9 +922,9 @@ static char* icalvalue_geo_as_ical_string(const icalvalue* value) {
 
     data = icalvalue_get_geo(value);
 
-    str = (char*)icalmemory_tmp_buffer(80);
+    str = (char*)icalmemory_tmp_buffer(MAX_GEO_DIGITS);
 
-    snprintf(str,80,"%f;%f",data.lat,data.lon);
+    snprintf(str,MAX_GEO_DIGITS,"%f;%f",data.lat,data.lon);
 
     return str;
 }
