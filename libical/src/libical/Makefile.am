@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.28 2002-06-26 23:26:27 acampi Exp $
+#  $Id: Makefile.am,v 1.29 2002-06-28 10:33:50 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -39,10 +39,6 @@ lib_LTLIBRARIES = libical.la $(cxx_lib)
 noinst_LTLIBRARIES = libical-static.la
 libical_static_la_SOURCES = $(libical_la_SOURCES)
 libical_static_la_LDFLAGS = --all-static
-
-AM_YFLAGS = -d -v -t -pical_yy
-AM_LFLAGS = -Pical_yy
-LEX_OUTPUT_ROOT = lex.ical_yy
 
 CPPFLAGS = -DPACKAGE_DATA_DIR=\""$(datadir)/$(PACKAGE)"\"
 
