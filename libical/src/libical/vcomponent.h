@@ -151,6 +151,13 @@ public:
 	void add_attendee(struct icalattendeetype attendee);
 	void remove_attendee(string cuid);
 
+        int get_sequence();
+        void set_sequence(int v);
+
+        int get_status();
+        void set_status(int v);
+
+
 	/**
 	   Get the Nth attendee. Out of range indices return an
 	   attendee with cuid == 0 
@@ -167,6 +174,10 @@ public:
 	/** For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the
 	   start and end times of an event in UTC */
 	virtual struct icaltime_span get_span();
+
+        int recurrence_is_excluded(struct icaltimetype *dtstart,
+                                   struct icaltimetype *recurtime);
+
 
 public:
 	/**

@@ -372,6 +372,21 @@ void VComponent::remove_attendee(string cuid){
 	icalcomponent_remove_attendee(imp, cuid);
 }
 
+int VComponent::get_sequence(){
+        return (int)icalcomponent_get_sequence(imp);
+}
+void VComponent::set_sequence(int v){
+        icalcomponent_set_sequence(imp, v);
+}
+
+int VComponent::get_status(){
+        return (int)icalcomponent_get_status(imp);
+}
+void VComponent::set_status(int v){
+        icalcomponent_set_status(imp, v);
+}
+
+
 /* Get the Nth attendee. Out of range indices return an attendee with cuid == 0 */
 struct icalattendeetype VComponent::get_attendee(int index){
 	return icalcomponent_get_attendee(imp, index);
@@ -387,6 +402,12 @@ VComponent* VComponent::get_first_real_component(){
 struct icaltime_span VComponent::get_span(){
 	return icalcomponent_get_span(imp);
 }
+
+int VComponent::recurrence_is_excluded( struct icaltimetype *dtstart,
+                                       struct icaltimetype *recurtime){
+       return  icalproperty_recurrence_is_excluded(imp, dtstart, recurtime);
+}
+
 
 /* Internal operations. They are private, and you should not be using them. */
 VComponent* VComponent::get_parent() {
@@ -404,16 +425,22 @@ bool VComponent::remove(VComponent& fromVC, bool ignoreValue){
 	if (this->isa() != fromVC.isa()) return false;
 
 	/* properties first */
-	ICalProperty* prop;
-	for (prop=fromVC.get_first_property(ICAL_ANY_PROPERTY); prop != NULL;
-		 prop=fromVC.get_next_property(ICAL_ANY_PROPERTY)) {
+    ICalProperty* propToBeRemoved;
+    for (propToBeRemoved=fromVC.get_first_property(ICAL_ANY_PROPERTY); propToBeRemoved != NULL;
+         propToBeRemoved=fromVC.get_next_property(ICAL_ANY_PROPERTY)) {
+
+        /* loop through properties from this component */
 		ICalProperty* next = NULL;	
-		for (ICalProperty* p=this->get_first_property(prop->isa()); p!=NULL; p=next) {
-			next = this->get_next_property(prop->isa());
+        for (ICalProperty* p=this->get_first_property(propToBeRemoved->isa()); p!=NULL; p=next) {
+            next = this->get_next_property(propToBeRemoved->isa());
 			if (ignoreValue)
 				this->remove_property(p);
-		 	else
-				return false;
+            else {
+                 if (*p == *propToBeRemoved) {
+                     this->remove_property(p);
+                     break;
+                 }
+            }
 		}
 	}
 
@@ -630,10 +657,24 @@ VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *tr)
         if(related) {
             switch(related) {
                 case ICAL_RELATED_END:
-                    if (c.isa() == ICAL_VEVENT_COMPONENT)
+                    if (c.isa() == ICAL_VEVENT_COMPONENT) {
                         tt = c.get_dtend();
-                    else if (c.isa() == ICAL_VTODO_COMPONENT)
+
+			// If a recurrenceid exists, use that to calculate the
+			// dtend from the dtstart.
+			struct icaltimetype recur_time = c.get_recurrenceid();
+			if (!(icaltime_is_null_time(recur_time))) {
+			    struct icaldurationtype dur = icaltime_subtract(c.get_dtstart(), tt);
+			    tt = icaltime_add(recur_time, dur);
+		        } 
+		    }	
+                    else if (c.isa() == ICAL_VTODO_COMPONENT) {
                         tt = c.get_due();
+			struct icaltimetype recur_time = c.get_recurrenceid();
+			if (!(icaltime_is_null_time(recur_time))) {
+			    tt = recur_time;
+			}
+		    }
                     // @@@ TODO: if not DTEND or DUE, then DTSTART and DURATION must be present
                 break;
                 case ICAL_RELATED_START:
@@ -641,6 +682,10 @@ VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *tr)
                 case ICAL_RELATED_NONE:
                 default:
                     tt = c.get_dtstart();
+                    struct icaltimetype recur_time = c.get_recurrenceid();
+                    if (!(icaltime_is_null_time(recur_time))) {
+                        tt = recur_time;
+                    }
                 break;
             }
 
@@ -649,8 +694,13 @@ VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *tr)
     else { // no RELATED explicity specified, the default is 
            // relative to the start of an event or to-do, rfc2445
         // if no RELATED, we are forced to use dtstart for VEVENT,
-        // due for VTODO to calculate trigger time
-        if (c.isa() == ICAL_VEVENT_COMPONENT)
+        // due for VTODO to calculate trigger time. 
+	// If a recur time exists, use that. Recur time trumps dtstart or due.
+        struct icaltimetype recur_time = c.get_recurrenceid();
+	if (!(icaltime_is_null_time(recur_time))) {
+	    tt = recur_time;
+	}
+	else if (c.isa() == ICAL_VEVENT_COMPONENT)
             tt = c.get_dtstart();
         else if (c.isa() == ICAL_VTODO_COMPONENT)
             tt = c.get_due();
