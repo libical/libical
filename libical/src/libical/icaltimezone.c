@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.20 2002-10-09 22:13:29 acampi Exp $
+ $Id: icaltimezone.c,v 1.21 2002-10-09 22:19:10 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1403,7 +1403,7 @@ icaltimezone_parse_zone_tab		(void)
     FILE *fp;
     char buf[1024];  /* Used to store each line of zones.tab as it is read. */
     char location[1024]; /* Stores the city name when parsing buf. */
-    int filename_len;
+    unsigned int filename_len;
     int latitude_degrees, latitude_minutes, latitude_seconds;
     int longitude_degrees, longitude_minutes, longitude_seconds;
     icaltimezone zone;
@@ -1484,7 +1484,7 @@ static void
 icaltimezone_load_builtin_timezone	(icaltimezone	*zone)
 {
     char *filename;
-    int filename_len;
+    unsigned int filename_len;
     FILE *fp;
     icalparser *parser;
     icalcomponent *comp, *subcomp;
