@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.31 2002-09-26 22:12:26 lindner Exp $
+  $Id: icalvalue.c,v 1.32 2002-10-09 22:46:15 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -259,6 +259,12 @@ static char* icalmemory_strdup_and_dequote(const char* str)
     return out;
 }
 
+/*
+ * FIXME
+ *
+ * This is a bad API, as it forces callers to specify their own X type.
+ * This function should take care of this by itself.
+ */
 static
 icalvalue* icalvalue_new_enum(icalvalue_kind kind, int x_type, const char* str)
 {
@@ -328,16 +334,16 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
         
 
     case ICAL_TRANSP_VALUE:
-        value = icalvalue_new_enum(kind, ICAL_TRANSP_X,str);
+        value = icalvalue_new_enum(kind, (int)ICAL_TRANSP_X,str);
         break;
     case ICAL_METHOD_VALUE:
-        value = icalvalue_new_enum(kind, ICAL_METHOD_X,str);
+        value = icalvalue_new_enum(kind, (int)ICAL_METHOD_X,str);
         break;
     case ICAL_STATUS_VALUE:
-        value = icalvalue_new_enum(kind, ICAL_STATUS_X,str);
+        value = icalvalue_new_enum(kind, (int)ICAL_STATUS_X,str);
         break;
     case ICAL_ACTION_VALUE:
-        value = icalvalue_new_enum(kind, ICAL_ACTION_X,str);
+        value = icalvalue_new_enum(kind, (int)ICAL_ACTION_X,str);
         break;
 
     case ICAL_QUERY_VALUE:
@@ -345,7 +351,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	    break;
 
     case ICAL_CLASS_VALUE:
-        value = icalvalue_new_enum(kind, ICAL_CLASS_X,str);
+        value = icalvalue_new_enum(kind, (int)ICAL_CLASS_X,str);
         break;
 
 
