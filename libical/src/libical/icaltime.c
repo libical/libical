@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.27 2002-05-10 15:35:49 acampi Exp $
+  $Id: icaltime.c,v 1.28 2002-05-10 17:03:05 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -728,12 +728,34 @@ struct icaltimetype icaltime_from_day_of_year(const short _doy, const short _yea
 /**	@brief Constructor.
  *
  *	Return a null time, which indicates no time has been set.
- *	This time represent the beginning of the epoch.
+ *	This time represents the beginning of the epoch.
  */
 struct icaltimetype icaltime_null_time(void)
 {
     struct icaltimetype t;
     memset(&t,0,sizeof(struct icaltimetype));
+
+    return t;
+}
+
+/**	@brief Constructor.
+ *
+ *	Return a null date, which indicates no time has been set.
+ */
+struct icaltimetype icaltime_null_date(void)
+{
+    struct icaltimetype t;
+    memset(&t,0,sizeof(struct icaltimetype));
+
+    t.is_date = 1;
+
+    /*
+     * Init to -1 to match what icalyacc.y used to do.
+     * Does anything depend on this?
+     */
+    t.hour = -1;
+    t.minute = -1;
+    t.second = -1;
 
     return t;
 }
@@ -753,6 +775,13 @@ int icaltime_is_valid_time(const struct icaltimetype t){
 	return 1;
     }
 
+}
+
+/**	@brief Returns true if time is a DATE
+ */
+int icaltime_is_date(const struct icaltimetype t) {
+
+	return t.is_date;
 }
 
 /**	@brief Returns true if time is relative to UTC zone
@@ -989,7 +1018,7 @@ struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
 	return ret;
 }
 
-icaltimezone *
+const icaltimezone *
 icaltime_get_timezone(const struct icaltimetype t) {
 
 	return t.zone;

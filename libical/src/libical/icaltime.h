@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.12 2002-05-10 15:35:49 acampi Exp $
+ $Id: icaltime.h,v 1.13 2002-05-10 17:03:05 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -41,6 +41,7 @@
  *	There are several ways to create a new icaltimetype:
  *
  *	- icaltime_null_time()
+ *	- icaltime_null_date()
  *	- icaltime_current_time_with_zone()
  *	- icaltime_today()
  *	- icaltime_from_timet_with_zone(time_t tm, int is_date,
@@ -133,6 +134,9 @@ struct icaltimetype
 /* Return a null time, which indicates no time has been set. This time represent the beginning of the epoch */
 struct icaltimetype icaltime_null_time(void);
 
+/* Return a null date */
+struct icaltimetype icaltime_null_date(void);
+
 /* Returns the current time in the given timezone, as an icaltimetype. */
 struct icaltimetype icaltime_current_time_with_zone(const icaltimezone *zone);
 
@@ -174,7 +178,7 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
 char* icaltime_as_ical_string(const struct icaltimetype tt);
 
 /** @brief Return the timezone */
-icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
+const icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
 
 /** @brief Return the tzid, or NULL for a floating time */
 char *icaltime_get_tzid(const struct icaltimetype t);
