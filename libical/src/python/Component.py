@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.2 2001-03-05 18:30:40 ebusboom Exp $
+#  $Id: Component.py,v 1.3 2001-03-11 00:51:21 plewis Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -32,12 +32,13 @@ from Collection import *
 
 class Component:
 
-    def __init__(self,str=None):
+    def __init__(self,str=None, component_kind="ANY"):
         self._ref = None
         if str != None:
             self._ref = icalparser_parse_string(str)
         else:
-            self._ref = icalparser_parse_string('')
+            kind = icalenum_string_to_component_kind(component_kind)
+            self._ref = icalcomponent_new(kind)
        
         self.cached_props = {}
 
@@ -66,7 +67,7 @@ class Component:
             d_string = icallangbind_property_eval_string(p,":")
             d = eval(d_string)
             d['ref'] = p
-
+            
             if not self.cached_props.has_key(p):
 
                 if d['value_type'] == 'DATE-TIME' or d['value_type'] == 'DATE':
@@ -79,6 +80,8 @@ class Component:
                     prop = Attach(d)
                 elif d['name'] == 'ATTENDEE':
                     prop = Attendee(d)
+                elif d['name'] == 'ORGANIZER':
+                    prop = Organizer(d)
                 else:
                     prop=Property(ref=p)
                     
@@ -86,12 +89,12 @@ class Component:
                 self.cached_props[p] = prop
 
             prop =  self.cached_props[p]
-
+            
             props.append(prop)
 
             p = icallangbind_get_next_property(self._ref,type)
 
-        return Collection(self,props);
+        return Collection(self,props)
  
     def add_property(self, prop):
         "Adds the property object to the component."
@@ -179,18 +182,21 @@ def NewComponent(comp):
 
 class GenericComponent(Component):
 
-    def __init__(self, str=None):
+    def __init__(self):
                 
-        Component.__init__(self, str)
+        # Component.__init__(self, str) # Call from subclasses
         self._recurrence_set=None
 
-    def _singular_property(self, name, value_type, value=None):
+    def _singular_property(self, name, value_type, value=None,
+                           property_obj=None, enumerated_values=None):
         """Sets or gets the value of a method which exists once per Component.
 
         This is a constructor method for properties without a strictly defined
         object."""
-        
-        curr_properties = self.properties(propType)
+
+        curr_properties = self.properties(name)
+
+        # Get the value
         if value==None:
             if len(curr_properties) == 0:
                 return None
@@ -198,34 +204,59 @@ class GenericComponent(Component):
                 return curr_properties[0].value()
             else:
                 raise ValueError, "too many properties of type %s" % propType
+
+        # Set the value
         else:
-            if len(curr_properties) == 0:
-                p = Property(name)
-                p.value_type(value_type)
-                p.value(value)
-                self.add_property(Property(dict))
-            elif len(curr_properties) == 1:
-                curr_properties[0].value(value)
+            # Check if value is in enumerated_values
+            if enumerated_values:
+                value = upper(value)
+                if value not in enumerated_values:
+                    raise ValueError, "%s is not one of %s" \
+                          % (value, enumerated_values)
+
+            # Create the new property
+            if property_obj:
+                if not isinstance(value, property_obj):
+                    # Create a special property_obj property
+                    if property_obj == Time:
+                        p = Time(value, name)
+                        ## p.value_type(value_type)
+                    else:
+                        p = property_obj()
+                        ## p.value_type(value_type)
+                        p.value(value)
+                else:
+                    p = value # value is already a property_obj
             else:
+                # Create a generic property
+                p = Property(name)
+                ## p.value_type(value_type)
+                p.value(value)
+
+            if len(curr_properties) == 1:
+                self.remove_property(curr_properties[0])
+            elif len(curr_properties) > 1:
                 raise ValueError, "too many properties of type %s" % propType
+
+            self.add_property(p)
             
     def method(self, v=None):
         "Sets or returns the value of the METHOD property."
-        self._singular_property("METHOD", "TEXT", v)
+        return self._singular_property("METHOD", "TEXT", v)
 
     def prodid(self, v=None):
         "Sets or returns the value of the PRODID property."
-        self._singular_property("PRODID", "TEXT", v)
+        return self._singular_property("PRODID", "TEXT", v)
 
     def calscale(self, v=None):
         "Sets or returns the value of the CALSCALE property."
-        self._singular_property("CALSCALE", "TEXT", v)
+        return self._singular_property("CALSCALE", "TEXT", v)
 
     def class_prop(self, v=None):  # Class is a reserved word
         "Sets or returns the value of the CLASS property."
         if v!=None:
             v = upper(v)
-        self._singular_property('CLASS', 'TEXT', v)
+        return self._singular_property('CLASS', 'TEXT', v)
 
     def created(self, v=None):
         """Sets or returns the value of the CREATED property.
@@ -236,21 +267,11 @@ class GenericComponent(Component):
         created(982362522)          # Set using seconds 
         created()                   # Return an iCalendar string
         """
-        if isinstance(v, StringType) or  isinstance(value, IntType) or     \
-           isinstance(value, FloatType):
-            v = Time(v)
-        if isinstance(value, Time):
-            self.remove_properties('CREATED')
-            self.addProperty(v)
-        elif v==None:
-            self._singlularProperty("CREATED", "DATE-TIME", v)
-        else:
-            raise TypeError, "%s is an invalid type for CREATED property"\
-                  % str(type(v))
+        return self._singular_property("CREATED", "DATE-TIME", v, Time)
         
     def description(self, v=None):
         "Sets or returns the value of the DESCRIPTION property."
-        self._singular_property("DESCRIPTION", "TEXT", v)
+        return self._singular_property("DESCRIPTION", "TEXT", v)
 
     def dtstamp(self, v=None):
         """Sets or returns the value of the DTSTAMP property.
@@ -261,17 +282,7 @@ class GenericComponent(Component):
         dtstamp(982362522)         # Set using seconds 
         dtstamp()                  # Return an iCalendar string
         """
-        if isinstance(v, StringType) or  isinstance(value, IntType) or     \
-           isinstance(value, FloatType):
-            v = Time(v)
-        if isinstance(value, Time):
-            self.removeProperties('DTSTAMP')
-            self.addProperty(v)
-        elif v==None:
-            self._singular_property("DTSTAMP", "DATE-TIME", v)
-        else:
-            raise TypeError, "%s is an invalid type for LAST-MODIFIED property"\
-                  % str(type(v))
+        return self._singular_property("DTSTAMP", "DATE-TIME", v, Time)
 
     def dtstart(self, v=None):
         """Sets or returns the value of the DTSTART property.
@@ -282,17 +293,7 @@ class GenericComponent(Component):
         dtstart(982362522)          # Set the value using seconds (time_t)
         dtstart()                   # Return the time as an iCalendar string
         """
-        if isinstance(v, StringType) or isinstance(v, IntType) or \
-           isinstance(v, FloatType):
-            v = Time(v)
-        if isinstance(v, Time):
-            self.removeProperties("DTSTART")
-            self.addProperty(v)
-        elif v==None:
-            self._singular_property("DTSTART", "DATE-TIME", v)
-        else:
-            raise TypeError, "%s is an invalid type for DTSTART property" % \
-                  str(type(v))
+        return self._singular_property("DTSTART", "DATE-TIME", v, Time)
 
     def last_modified(self, v=None):
         """Sets or returns the value of the LAST-MODIFIED property.
@@ -303,17 +304,7 @@ class GenericComponent(Component):
         lastmodified(982362522)         # Set using seconds 
         lastmodified()                  # Return an iCalendar string
         """
-        if isinstance(v, StringType) or  isinstance(value, IntType) or     \
-           isinstance(value, FloatType):
-            v = Time(v)
-        if isinstance(value, Time):
-            self.removeProperties('LAST-MODIFIED')
-            self.addProperty(v)
-        elif v==None:
-            self._singular_property("LAST-MODIFIED", "DATE-TIME", v)
-        else:
-            raise TypeError, "%s is an invalid type for LAST-MODIFIED property"\
-                  % str(type(v))
+        return self._singular_property("LAST-MODIFIED", "DATE-TIME", v, Time)
 
     def organizer(self, v=None):
         """Sets or gets the value of the ORGANIZER property.
@@ -323,15 +314,8 @@ class GenericComponent(Component):
         organizer('MAILTO:jd@not.com') # Set value using a CAL-ADDRESS string
         organizer()                    # Return a CAL-ADDRESS string
         """
-        if isinstance(v, StringType):
-            v = Organizer({'value':v})
-        if isinstance(v, Organizer):
-            self.removeProperties('ORGANIZER')
-            self.addProperty(v)
-        elif v==None:
-            self._singular_property('ORGANIZER', 'CAL-ADDRESS', v)
-        else:
-            raise TypeError, "%s is not a string or Organizer object." % str(v)
+        return self._singular_property('ORGANIZER', 'CAL-ADDRESS', v,
+                                       Organizer)
 
     def recurrence_id(self, v=None):
         """Sets or gets the value for the RECURRENCE-ID property.
@@ -342,17 +326,8 @@ class GenericComponent(Component):
         recurrence_id(8349873494)           # Set using seconds from epoch
         recurrence_id()                     # Return an iCalendar string
         """
-        if isinstance(v, StringType) or isinstance(v, IntType) or \
-                                        isinstance(v, FloatType):
-            v = Recurrence_Id(v)
-        if isinstance(v, Recurrence_Id):
-            self.removeProperties('RECURRENCE-ID')
-            self.addProperty(v)
-        elif v==None:
-            self._singular_property('RECURRENCE-ID', 'DATE-TIME', v)
-        else:
-            raise TypeError, "%s is not a valid type for recurrence_id" % \
-                  str(v)
+        return self._singular_property('RECURRENCE-ID', 'DATE-TIME', v,
+                                       Recurrence_Id)
 
     def sequence(self, v=None):
         """Sets or gets the SEQUENCE value of the Event.
@@ -368,15 +343,15 @@ class GenericComponent(Component):
 
     def summary(self, v=None):
         "Sets or gets the SUMMARY value of the Event."
-        self._singular_property('SUMMARY', 'TEXT', v)
+        return self._singular_property('SUMMARY', 'TEXT', v)
 
     def uid(self, v=None):
         "Sets or gets the UID of the Event."
-        self._singular_property('UID', 'TEXT', v)
+        return self._singular_property('UID', 'TEXT', v)
 
     def url(self, v=None):
         """Sets or returns the URL property."""
-        self._singular_property('URL', 'URI', v)
+        return self._singular_property('URL', 'URI', v)
 
     ####
     # Not quite sure if this is how we want to handle recurrence rules, but
@@ -405,21 +380,39 @@ class GenericComponent(Component):
             return ComponentCollection(self, self.components('VALARM'))
 
     ####
-    # Methods that deal with Properties that can occur multiple times are below.
-    # They use the Collection class to return their Properties
+    # Methods that deal with Properties that can occur multiple times are
+    # below.  They use the Collection class to return their Properties.
 
-    def _multiple_properties(self, name, value_type, values):
-        "Handles generic cases for Properties that can have multiple instances."
+    def _multiple_properties(self, name, value_type, values,
+                             property_obj=None):
+        "Processes set/get for Properties that can have multiple instances."
+
+        # Set value
         if values!=None:
-            if not isinstance(value, TupleType) \
-               and not isinstance(value, ListType):
+            if not isinstance(values, TupleType) \
+               and not isinstance(values, ListType):
                 raise TypeError, "%s is not a tuple or list."
-            self.removeProperties(name)
+
+            # Delete old properties
+            for p in self.properties(name):
+                self.remove_property(p)
+                
             for v in values:
-                new_prop= Property(name)
-                new_prop.value_type(value_type)
-                new_prop.value(v)
-                self.addProperty(new_prop)
+                if property_obj:   # Specialized properties
+                    if not isinstance(v, property_obj): # Make new object
+                        new_prop = property_obj()
+                        new_prop.value(v)
+                    else:                            # Use existing object
+                        new_prop = v
+                else:                  # Generic properties
+                    new_prop= Property() 
+                    new_prop.name(name)
+                    # new_prop.value_type(value_type)
+                    new_prop.value(v)
+                    
+                self.add_property(new_prop)
+        
+        # Get value
         else:
             return Collection(self, self.properties(name))
 
@@ -429,21 +422,7 @@ class GenericComponent(Component):
         'values' can be a sequence containing URLs (strings) and/or file-ish
         objects.
         """
-        if values:
-            if not isinstance(values, TupleType) \
-               and not isinstance(values, ListType):
-                raise TypeError, "%s is not a tuple or list."
-            self.removeProperties('ATTACH')
-            for att in value:
-                if isinstance(att, StringType) or hasattr(att, 'read'):
-                    att = Attach(att)
-                if isinstance(att, Attach):
-                    self.addProperty(att)
-                else:
-                    raise TypeError, \
-                          "%s is not a string or Attach object." % str(att)
-        else:
-            return Collection(self, self.properties('ATTACH'))
+        return self._multiple_properties("ATTACH", "", value, Attach)
 
     def attendees(self, value=None):
         """Sets attendees or returns a Collection of Attendee objects.
@@ -465,21 +444,7 @@ class GenericComponent(Component):
 
         attendees().append(Attendee('MAILTO:jdoe@nothere.com'))
         """
-        if value:
-            if not isinstance(value, TupleType) \
-               and not isinstance(value, ListType):
-                raise TypeError, "%s is not a tuple or list."
-            self.removeProperties('ATTENDEE')
-            for att in value:
-                if isinstance(att, StringType):
-                    att = Attendee(att)
-                if isinstance(att, Attendee):
-                    self.addProperty(att)
-                else:
-                    raise TypeError, \
-                          "%s is not a string or Attendee object." % str(att)
-        else:
-            return Collection(self, self.properties('ATTENDEE'))
+        return self._multiple_properties("ATTENDEE", "", value, Attendee)
 
     def categories(self, value=None):
         """Sets categories or returns a Collection of CATEGORIES properties.
@@ -492,31 +457,35 @@ class GenericComponent(Component):
         categories()
 
         When setting the attendees, any previous category Properties in the
-        Event are overwritten.  If you want to add to the categories, one way to
-        do it is:
+        Event are overwritten.  If you want to add to the categories, one way
+        to do it is:
 
-        new_cat=Property("CATEGORIES")
+        new_cat=Property('CATEGORIES')
         new_cat.value_type('TEXT')
         new_cat.value('PERSONAL')
         categories().append(new_cat)
         """
-        self._multiple_properties("CATEGORIES", "TEXT", value)
+        return self._multiple_properties("CATEGORIES", "TEXT", value)
 
     def comments(self, value=None):
         "Sets or returns a Collection of COMMENT properties."
-        self._multiple_properties('COMMENT', 'TEXT', value)
+        return self._multiple_properties('COMMENT', 'TEXT', value)
 
     def contacts(self, value=None):
         "Sets or returns a Collection of CONTACT properties."
-        self._multiple_properties('CONTACT', 'TEXT', value)
+        return self._multiple_properties('CONTACT', 'TEXT', value)
 
     def related_tos(self, value=None):
         "Sets or returns a Collectoin of RELATED-TO properties."
-        self._multiple_properties('RELATED-TO', 'TEXT', value)
+        return self._multiple_properties('RELATED-TO', 'TEXT', value)
 
 
 class Event(GenericComponent):
     "The iCalendar Event object."
+
+    def __init__(self, str=None):
+        Component.__init__(self, str, "VEVENT")
+        GenericComponent.__init__(self)
         
     def component_type(self):
         "Returns the type of component for the object."
@@ -538,18 +507,11 @@ class Event(GenericComponent):
         If the dtend value is being set and duration() has a value, the
         duration property will be removed.
         """
-        if isinstance(v, StringType) or isinstance(v, IntType) \
-           or isinstance(v, FloatType):
-            v = Time(v)
-        if isinstance(v, Time):
-            self.removeProperties("DTEND")
-            self.removeProperites("DURATION") # Clear DURATION properties
-            self.addProperty(v)
-        elif v==None:
-            self._singular_property("DTEND", "DATE-TIME", v)                
-        else:
-            raise TypeError, "%s is an invalid type for DTEND property" % \
-                  str(type(v))
+        if v != None:
+            duration = self.properties('DURATION')
+            for d in duration:          # Clear DURATION properties
+                self.remove_property(d)
+        return self._singular_property("DTEND", "DATE-TIME", v, Time)
             
     def duration(self, v=None):
         """Sets or returns the value of the duration property.
@@ -564,30 +526,20 @@ class Event(GenericComponent):
         property will be removed.
         """
 
-        if isinstance(v, StringType) or isinstance(v, IntType):
-            v = Duration(v)
-        if isinstance(v, Duration):
-            self.removeProperties("DURATION")
-            self.removeProperties("DTEND")   # Clear DTEND properties
-        elif v==None:
-            self._singular_property("DURATION", "DURATION", v)
-        else:
-            raise TypeError, "%s is an invalid type for duration property" % \
-                  str(type(v))
+        if v != None:
+            dtend = self.properites('DTEND')
+            for d in dtend:
+                self.remove_property(d)  # Clear DTEND properties
+        return self._singular_property("DURATION", "DURATION", v, Duration)
 
     def status(self, v=None):
         "Sets or returns the value of the STATUS property."
 
-        if v:
-            v=upper(v)
-            # These values are only good for VEVENT components (i.e. don't copy
-            # & paste into VTODO or VJOURNAL
-            valid_values=('TENTATIVE', 'CONFIRMED', 'CANCELLED')
-            if v not in valid_values:
-                raise ValueError, "%s is not one of %s" \
-                      % (str(v), str(valid_values))
-            
-        self._singular_property("STATUS", "TEXT", v)
+        # These values are only good for VEVENT components (i.e. don't copy
+        # & paste into VTODO or VJOURNAL
+        valid_values=('TENTATIVE', 'CONFIRMED', 'CANCELLED')
+        return self._singular_property("STATUS", "TEXT", v,
+                                       enumerated_values=valid_values)
 
     def geo(self, v=None):
         """Sets or returns the value of the GEO property.
@@ -610,7 +562,7 @@ class Event(GenericComponent):
         
         if isinstance(v, ListType) or isinstance(v, TupleType):
             v = "%s;%s" % (float(v[0]), float(v[1]))
-        self._singular_property("GEO", "FLOAT", v)
+        return self._singular_property("GEO", "FLOAT", v)
 
     def geo_get_tuple(self):
         """Returns the GEO property as a tuple."""
@@ -621,17 +573,13 @@ class Event(GenericComponent):
 
     def location(self, v=None):
         """Sets or returns the LOCATION property."""
-        self._singular_property("LOCATION", "TEXT", v)
+        return self._singular_property("LOCATION", "TEXT", v)
 
     def transp(self, v=None):
         """Sets or returns the TRANSP property."""
-        if v != None:
-            ok_values = ('OPAQUE', 'TRANSPARENT')
-            v = upper(v)
-            if v not in ok_values:
-                raise ValueError, "%s is not one of %s" %\
-                      (str(v), str(ok_values))
-        self._singular_property('TRANSP', 'TEXT', v)
+        ok_values = ('OPAQUE', 'TRANSPARENT')
+        return self._singular_property('TRANSP', 'TEXT', v,
+                                       enumerated_values=ok_values)
 
     def resources(self, v=None):
         pass
@@ -648,28 +596,45 @@ class Todo(GenericComponent):
         return Todo(self.asIcalString())
 
     def completed(self, value=None):
-        pass
+        return self._singular_property('COMPLETED', 'DATE-TIME', value, Time)
 
     def geo(self, value=None):
-        pass
+        if isinstance(v, ListType) or isinstance(v, TupleType):
+            v = "%s;%s" % (float(v[0]), float(v[1]))
+        return self._singular_property("GEO", "FLOAT", value)
 
     def location(self, value=None):
-        pass
+        return self._singular_property('LOCATION', 'TEXT', value)
 
     def percent(self, value=None):
-        pass
+        if value!=None:
+            value = str(int(value))
+        return self._singular_property('PERCENT', 'INTEGER', value)
 
     def status(self, value=None):
-        pass
+        if value!=None:
+            value=upper(value)
+        ok_values = ('NEEDS-ACTION', 'COMPLETED', 'IN-PROCESS', 'CANCELLED')
+        return self._singular_property('STATUS', 'TEXT', value,
+                                       enumerated_values=ok_values)
 
     def due(self, value=None):
-        pass
+        if value != None:
+            duration = self.properties('DURATION')
+            for d in duration:
+                self.remove_property(d) # Clear DURATION properties
+        return self._singular_property('DUE', 'DATE-TIME', value, Time)
 
     def duration(self, value=None):
-        pass
+        if value != None:
+            due = self.properites('DUE')
+            for d in due:
+                self.remove_property(d)  # Clear DUE properties
+        return self._singular_property("DURATION", "DURATION", value, Duration)
 
     def resources():
         pass
+    
 
 class Journal(GenericComponent):
     "The iCalendar JOURNAL component."
@@ -681,3 +646,11 @@ class Journal(GenericComponent):
     def clone(self):
         "Returns a copy of the object."
         return Journal(self.asIcalString())
+
+    def status(self, v=None):
+        if v!=None:
+            v = upper(v)
+        ok_values=('DRAFT', 'FINAL', 'CANCELLED')
+        return self._singular_property('STATUS', 'TEXT', v,
+                                       enumerated_values=ok_values)
+        
