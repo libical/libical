@@ -25,6 +25,7 @@ Classes for python binding to libical
 	Date
 	RecurrenceSet
 
+	Timezone
 	TimezonePhase
 
 	Store

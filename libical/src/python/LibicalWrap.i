@@ -237,3 +237,53 @@ int icaltime_compare_date_only(struct icaltimetype a, struct icaltimetype b);
 
 /* Return the number of days in the given month */
 short icaltime_days_in_month(short month,short year);
+
+
+/***********************************************************************
+  Duration Routines 
+***********************************************************************/
+
+
+struct icaldurationtype
+{
+	int is_neg;
+	unsigned int days;
+	unsigned int weeks;
+	unsigned int hours;
+	unsigned int minutes;
+	unsigned int seconds;
+};
+
+struct icaldurationtype icaldurationtype_from_int(int t);
+struct icaldurationtype icaldurationtype_from_string(const char*);
+int icaldurationtype_as_int(struct icaldurationtype duration);
+char* icaldurationtype_as_ical_string(struct icaldurationtype d);
+struct icaldurationtype icaldurationtype_null_duration();
+int icaldurationtype_is_null_duration(struct icaldurationtype d);
+
+struct icaltimetype  icaltime_add(struct icaltimetype t,
+				  struct icaldurationtype  d);
+
+struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
+					   struct icaltimetype t2);
+
+
+/***********************************************************************
+  Period Routines 
+***********************************************************************/
+
+
+struct icalperiodtype 
+{
+	struct icaltimetype start;
+	struct icaltimetype end;
+	struct icaldurationtype duration;
+};
+
+struct icalperiodtype icalperiodtype_from_string (const char* str);
+
+const char* icalperiodtype_as_ical_string(struct icalperiodtype p);
+struct icalperiodtype icalperiodtype_null_period();
+int icalperiodtype_is_null_period(struct icalperiodtype p);
+int icalperiodtype_is_valid_period(struct icalperiodtype p);
+
