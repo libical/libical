@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.20 2002-04-25 23:43:01 acampi Exp $
+  $Id: icalcomponent.c,v 1.21 2002-04-29 14:59:09 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -279,11 +279,15 @@ icalcomponent_as_ical_string (icalcomponent* component)
     pvl_elem itr;
     struct icalcomponent_impl *impl = (struct icalcomponent_impl*)component;
 
+/* WIN32 automatically adds the \r, Anybody else need it?
 #ifdef ICAL_UNIX_NEWLINE    
+*/
     char newline[] = "\n";
+/*
 #else
     char newline[] = "\r\n";
 #endif
+*/
    
    icalcomponent *c;
    icalproperty *p;
