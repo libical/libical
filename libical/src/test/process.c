@@ -3,7 +3,7 @@
   FILE: process.c
   CREATOR: eric 11 February 2000
   
-  $Id: process.c,v 1.5 2001-04-12 18:33:15 ebusboom Exp $
+  $Id: process.c,v 1.6 2002-06-04 14:39:13 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 {
     icalcomponent *c, *next_c;
     int i=0;
-    char *class_string;
+    const char *class_string;
     int dont_remove;
     
     icalset* f = icalset_new_file("../../test-data/process-incoming.ics");
