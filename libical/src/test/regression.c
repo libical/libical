@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.52 2002-06-26 23:13:20 acampi Exp $
+  $Id: regression.c,v 1.53 2002-06-27 01:12:09 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -176,7 +176,7 @@ void update_attendees(icalcomponent* event)
 
 	} else if (icalparameter_get_partstat(parameter) == ICAL_PARTSTAT_NEEDSACTION) {
 
-	    icalproperty_remove_parameter(p,parameter);
+	    icalproperty_remove_parameter_by_ref(p,parameter);
 	    
 	    icalparameter_free(parameter);
 
@@ -1134,7 +1134,7 @@ void test_duration()
 
     icalerror_errors_are_fatal = 0;
 
-    // Test conversion of bad input
+    /* Test conversion of bad input */
 
     d = icaldurationtype_from_int(1314000);
     if (VERBOSE) printf("%s %d\n",icaldurationtype_as_ical_string(d),d);
