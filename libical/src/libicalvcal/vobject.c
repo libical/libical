@@ -1171,7 +1171,7 @@ static void writeQPString(OFile *fp, const char *s)
 	
 	/* escape any non ASCII characters and '=' as per rfc1521 */
 	if (*p<= 0x1f || *p >=0x7f || *p == '=' ) {
-		sprintf(buf,"=%02X",(unsigned char)*p);
+		snprintf(buf,sizeof(buf),"=%02X",(unsigned char)*p);
 		appendsOFile(fp,buf); 
 		count+=3; 
 	} else {
@@ -1204,13 +1204,13 @@ static void writeValue(OFile *fp, VObject *o, unsigned long size,int quote)
 	    }
 	case VCVT_UINT: {
 	    char buf[16];
-	    sprintf(buf,"%u", INTEGER_VALUE_OF(o));
+	    snprintf(buf,sizeof(buf),"%u", INTEGER_VALUE_OF(o));
 	    appendsOFile(fp,buf);
 	    break;
 	    }
 	case VCVT_ULONG: {
 	    char buf[16];
-	    sprintf(buf,"%lu", LONG_VALUE_OF(o));
+	    snprintf(buf,sizeof(buf),"%lu", LONG_VALUE_OF(o));
 	    appendsOFile(fp,buf);
 	    break;
 	    }

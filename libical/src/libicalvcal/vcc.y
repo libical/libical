@@ -1186,7 +1186,7 @@ static void mime_error(char *s)
     {
     char msg[256];
     if (mimeErrorHandler) {
-	sprintf(msg,"%s at line %d", s, mime_lineNum);
+	snprintf(msg,sizeof(msg),"%s at line %d", s, mime_lineNum);
 	mimeErrorHandler(msg);
 	}
     }
