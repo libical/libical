@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.28 2002-07-18 12:31:27 acampi Exp $
+  $Id: icalproperty.c,v 1.29 2002-07-19 14:47:54 lindner Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -274,8 +274,7 @@ get_next_line_start (char *line_start, int chars_left)
 
     /* Now we jump to the last possible character of the line, and step back
        trying to find a ';' ':' or ' '. If we find one, we return the character
-       after it. If not, we break at 74 chars (the 75th char is the space at
-       the start of the line). */
+       after it. */
     pos = line_start + MAX_LINE_LEN - 2;
     while (pos > line_start) {
         if (*pos == ';' || *pos == ':' || *pos == ' ') {
@@ -283,6 +282,25 @@ get_next_line_start (char *line_start, int chars_left)
 	}
 	pos--;
     }
+    /* Now try to split on a UTF-8 boundary defined as a 7-bit
+       value or as a byte with the two high-most bits set:
+       11xxxxxx.  See http://czyborra.com/utf/ */
+
+    pos = line_start + MAX_LINE_LEN - 1;
+    while (pos > line_start) {
+        /* plain ascii */
+        if ((*pos & 128) == 0)
+            return pos;
+
+        /* utf8 escape byte */
+        if ((*pos & 192) == 192)
+            return pos;
+
+        pos--;
+    }
+
+    /* Give up, just break at 74 chars (the 75th char is the space at
+       the start of the line).  */
 
     return line_start + MAX_LINE_LEN - 1;
 }

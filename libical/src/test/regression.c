@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.56 2002-07-16 10:04:08 acampi Exp $
+  $Id: regression.c,v 1.57 2002-07-19 14:47:55 lindner Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -361,6 +361,23 @@ void test_properties()
 
     if (prop!=0) icalproperty_free(prop);
 }
+
+void test_utf8()
+{
+    icalproperty *prop;
+    char *utf8text = "aáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaá";
+    char *test_ical_str_good = "DESCRIPTION:\n"
+" aáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaá\n"
+" óaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóa\n"
+" áóaáóaáóaáóaáóaáóaáóaáóaáóaá\n";
+
+    prop = icalproperty_new_description(utf8text);
+
+    is("icalproperty_as_ical_string()",
+       icalproperty_as_ical_string(prop), test_ical_str_good);
+}
+
+
 
 void test_parameters()
 {
