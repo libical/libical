@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.54 2002-06-28 10:53:45 acampi Exp $
+  $Id: regression.c,v 1.55 2002-07-04 10:13:01 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -223,6 +223,19 @@ void test_values()
 
     copy = icalvalue_new_clone(v);
     is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "2");
+
+    icalvalue_free(v);
+    icalvalue_free(copy);
+
+
+    v = icalvalue_new_x("test");
+    is("icalvalue_new_x(test)", icalvalue_get_x(v), "test");
+    icalvalue_set_x(v, "test2");
+    is("icalvalue_set_x(test2)", icalvalue_get_x(v), "test2");
+    is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "test2");
+
+    copy = icalvalue_new_clone(v);
+    is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "test2");
 
     icalvalue_free(v);
     icalvalue_free(copy);
