@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.45 2002-11-04 01:43:33 acampi Exp $
+  $Id: icalrecur.c,v 1.46 2002-11-04 01:44:32 acampi Exp $
   $Locker:  $
     
 
@@ -396,9 +396,9 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	} else if (strcmp(name,"COUNT") == 0){
 	    parser.rt.count = atoi(value);
 	} else if (strcmp(name,"UNTIL") == 0){
-	    parser.rt.until = (short)icaltime_from_string(value);
+	    parser.rt.until = icaltime_from_string(value);
 	} else if (strcmp(name,"INTERVAL") == 0){
-	    parser.rt.interval = atoi(value);
+	    parser.rt.interval = (short)atoi(value);
 	} else if (strcmp(name,"WKST") == 0){
 	    parser.rt.week_start = icalrecur_string_to_weekday(value);
 	} else if (strcmp(name,"BYSECOND") == 0){
