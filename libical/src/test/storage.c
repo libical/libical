@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: storage.c,v 1.1.1.1 2001-01-02 07:33:06 ebusboom Exp $
+  $Id: storage.c,v 1.2 2002-06-03 16:36:35 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -244,7 +244,8 @@ int test_dirset()
 
     assert(s != 0);
 
-    rtime.start = icaltime_from_timet( time(0),0);
+    rtime.start = icaltime_current_time_with_zone(
+	icaltimezone_get_utc_timezone());
 
     cluster = icalfileset_new(OUTPUT_FILE);
 
@@ -438,8 +439,8 @@ void test_calendar()
 int main(int argc, char *argv[])
 {
 
-/*    printf("\n------------Test File Set---------------\n");
-      test_fileset(); */
+    printf("\n------------Test File Set---------------\n");
+      test_fileset();
 
     printf("\n------------Test Dir Set---------------\n");
     test_dirset();
