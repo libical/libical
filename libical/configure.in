@@ -125,7 +125,7 @@ dnl * Check for C++
 dnl **************************************************
 
 AC_ARG_ENABLE(cxx, 
-[  --disable-cxx           Enable C++ bindings],,enable_cxx="yes")
+[  --enable-cxx           Enable C++ bindings],,enable_cxx="no")
 if test "x$enable_cxx" = "xyes"; then
 AC_PROG_CXX
 fi
