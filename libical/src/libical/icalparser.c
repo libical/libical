@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.46 2004-05-10 22:30:51 acampi Exp $
+  $Id: icalparser.c,v 1.47 2004-05-10 22:36:49 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -459,7 +459,8 @@ char* icalparser_get_line(icalparser *parser,
 	   begins with a ' ', then the buffer holds a continuation
 	   line, so keep reading.  */
 
-	if  ( line_p > line+1 && *(line_p-1) == '\n' && parser->temp[0] == ' ') {
+	if ( line_p > line+1 && *(line_p-1) == '\n'
+	  && (parser->temp[0] == ' ' || parser->temp[0] == '\t') ) {
 
             parser->continuation_line = 1;
 
