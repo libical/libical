@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.52 2003-02-17 14:33:44 acampi Exp $
+  $Id: icalrecur.c,v 1.53 2003-02-17 14:35:12 acampi Exp $
   $Locker:  $
     
 
@@ -1589,7 +1589,6 @@ static int next_weekday_by_week(icalrecur_iterator* impl)
   /* If we get here, we need to step to tne next day */
 
   for (;;) {
-      struct icaltimetype tt = icaltime_null_time();
       BYDAYIDX++; /* Look at next elem in BYDAY array */
       
       /* Are we at the end of the BYDAY array? */
@@ -1605,11 +1604,7 @@ static int next_weekday_by_week(icalrecur_iterator* impl)
       dow -= impl->rule.week_start; /* Set Sunday to be 0 */
       if (dow < 0) dow += 7;
 
-      tt.year = impl->last.year;
-      tt.day = impl->last.day;
-      tt.month = impl->last.month;
-
-      start_of_week = icaltime_start_doy_week(tt, impl->rule.week_start);
+      start_of_week = icaltime_start_doy_week(impl->last, impl->rule.week_start);
       
       if(dow+start_of_week <1){
           /* The selected date is in the previous year. */
