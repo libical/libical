@@ -8,9 +8,7 @@
 #ifndef VCOMPONENT_H
 #define VCOMPONENT_H
 
-extern "C" {
 #include "ical.h"
-};
 
 typedef	char* string; // Will use the string library from STL
 
