@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.16 2002-04-01 22:08:46 gray-john Exp $
+  $Id: icalfileset.c,v 1.17 2002-04-12 20:12:02 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -485,25 +485,31 @@ icalcomponent* icalfileset_fetch(icalfileset* store,const char* uid)
     for(i = icalcomponent_begin_component(impl->cluster,ICAL_ANY_COMPONENT);
 	icalcompiter_deref(&i)!= 0; icalcompiter_next(&i)){
 	
-	icalcomponent *this = icalcompiter_deref(&i);
-	icalcomponent *inner = icalcomponent_get_first_real_component(this);
-	icalcomponent *p;
-	const char *this_uid;
+		icalcomponent *this = icalcompiter_deref(&i);
+		icalcomponent *inner;
+		icalcomponent *p;
+		const char *this_uid;
 
-	if(inner != 0){
-	    p = icalcomponent_get_first_property(inner,ICAL_UID_PROPERTY);
-	    this_uid = icalproperty_get_uid(p);
+		for(inner = icalcomponent_get_first_component(this,ICAL_ANY_COMPONENT);
+			inner != 0;
+			inner = icalcomponent_get_next_component(this,ICAL_ANY_COMPONENT)){
 
-	    if(this_uid==0){
-		icalerror_warn("icalfileset_fetch found a component with no UID");
-		continue;
-	    }
+			p = icalcomponent_get_first_property(inner,ICAL_UID_PROPERTY);
+			if ( p )
+			{
+				this_uid = icalproperty_get_uid(p);
 
-	    if (strcmp(uid,this_uid)==0){
-		return this;
-	    }
+				if(this_uid==0){
+				icalerror_warn("icalfileset_fetch found a component with no UID");
+				continue;
+				}
+
+				if (strcmp(uid,this_uid)==0){
+					return this;
+				}
+			}
+		}
 	}
-    }
 
     return 0;
 }
