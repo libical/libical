@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.19 2001-12-10 01:28:42 gray-john Exp $
+  $Id: icalparser.c,v 1.20 2001-12-12 18:26:50 gray-john Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -51,6 +51,7 @@
 #include <string.h> /* For strncpy & size_t */
 #include <stdio.h> /* For FILE and fgets and sprintf */
 #include <stdlib.h> /* for free */
+#include <wctype.h>
 
 #ifdef WIN32
 #define snprintf      _snprintf
@@ -175,7 +176,7 @@ char* icalparser_get_next_char(char c, char *str, int qm)
 /* make a new tmp buffer out of a substring */
 char* make_segment(char* start, char* end)
 {
-    char *buf;
+    char *buf, *tmp;
     size_t size = (size_t)end - (size_t)start;
     
     buf = icalmemory_tmp_buffer(size+1);
@@ -183,6 +184,13 @@ char* make_segment(char* start, char* end)
 
     strncpy(buf,start,size);
     *(buf+size) = 0;
+
+	tmp = (buf+size);
+	while ( *tmp == '\0' || iswspace(*tmp) )
+	{
+		*tmp = 0;
+		tmp--;
+	}
     
     return buf;
     
@@ -532,6 +540,12 @@ char* icalparser_get_line(icalparser *parser,
     } else {
 	*(line_p) = '\0';
     }
+
+	while ( *line_p == '\0' || iswspace(*line_p) )
+	{
+		*line_p = '\0';
+		line_p--;
+	}
 
     return line;
 
