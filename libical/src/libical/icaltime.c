@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.52 2002-10-31 15:36:37 acampi Exp $
+  $Id: icaltime.c,v 1.53 2002-10-31 15:50:59 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -518,13 +518,11 @@ short icaltime_day_of_year(const struct icaltimetype t){
 /* Jan 1 is day #1, not 0 */
 struct icaltimetype icaltime_from_day_of_year(const short _doy, const short _year)
 {
-    struct icaltimetype tt={0};
+    struct icaltimetype tt = icaltime_null_date();
     int is_leap;
     int month;
     int doy = _doy;
     int year = _year;
-
-    tt.is_date = 1;
 
     is_leap = icaltime_is_leap_year(year);
 
