@@ -117,14 +117,13 @@ sub _update_value {
   my $self = shift;
 
   if(!$self->{'tt'}){
-    $self->{'tt'} = Net::ICal::Libical::icaltime_null_time();
+    die "Can't find reference to icaltimetype";
   }
 
   $self->value(Net::ICal::Libical::icaltime_as_ical_string($self->{'tt'}));
 
 }
   
-
 =pod
 
 =head2 clone()
@@ -153,8 +152,10 @@ TBD
 
 =cut
 
-# XXX This needs to be defined.
 sub is_valid{
+  my $self = shift;
+
+  return Net::ICal::Libical::icaltime_is_null_time($self->{'tt'});
   
 }
 
@@ -184,6 +185,27 @@ sub is_date {
 
 }
 
+
+=pod
+
+=head2 is_utc([true|false])
+
+Is_utc indicates if the time should be interpreted in the UTC timezone. 
+
+=cut
+
+sub is_utc {
+  my $self = shift;
+  if(@_){
+
+    # Convert to true or false
+    Net::ICal::Libical::icaltimetype_is_utc_set($self->{'tt'},
+						 !(!($_[0]))); 
+  } 
+
+  return Net::ICal::Libical::icaltimetype_is_utc_get($self->{'tt'});
+
+}
 =pod
 
 =head2 timezone
@@ -194,7 +216,6 @@ no zone was specified.
 
 =cut
 
-# XXX This needs to be defined. 
 sub timezone {
   my $self = shift;
   my $tz = shift;

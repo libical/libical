@@ -19,6 +19,7 @@ DTSTAMP:19970612T190000Z
 DTSTART:19970701T210000Z
 DTEND:19970701T230000Z
 SEQUENCE:1
+DURATION:P3DT4H50M36S
 UID:0981234-1234234-23\@example.com
 SUMMARY:ST. PAUL SAINTS -VS- DULUTH-SUPERIOR DUKES
 END:VEVENT
@@ -66,6 +67,23 @@ $p->hour($p->hour() - 10);
 
 print $p->hour(),"\n";
 
+$p->timezone('America/Los_Angeles');
+
 print $p->as_ical_string()."\n";
+
+
+print "----------- DURATION \n";
+
+$p = ($c->properties('DURATION'))[0];
+
+print $p->as_ical_string()."\n";
+
+print $p->seconds(),"\n";
+
+$p->seconds(3630);
+
+print $p->as_ical_string()."\n";
+print $p->seconds(),"\n";
+
 
 

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.pm,v 1.2 2001-03-02 21:33:54 ebusboom Exp $
+#  $Id: Component.pm,v 1.3 2001-03-03 05:44:03 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, eric@softwarestudio.org
@@ -88,7 +88,9 @@ sub properties{
 
     if($dict{'value_type'} eq 'DATE' or $dict{'value_type'} eq 'DATE-TIME'){
       $prop = new Net::ICal::Libical::Time(\%dict);
-    } else {
+    } elsif($dict{'value_type'} eq 'DURATION' ) {
+      $prop = new Net::ICal::Libical::Duration(\%dict);
+    } else  {
       $prop = new Net::ICal::Libical::Property(\%dict);
     }
 

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.pm,v 1.7 2001-03-02 21:33:54 ebusboom Exp $
+#  $Id: Libical.pm,v 1.8 2001-03-03 05:44:01 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -24,6 +24,7 @@
 require Net::ICal::Libical::Component;
 require Net::ICal::Libical::Property;
 require Net::ICal::Libical::Time;
+require Net::ICal::Libical::Duration;
 
 package Net::ICal::Libical;
 require Exporter;

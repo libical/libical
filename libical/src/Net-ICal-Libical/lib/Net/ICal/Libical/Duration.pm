@@ -28,10 +28,11 @@ calendar- and timezone-specific block of time, see Net::ICal::Period.
 
 #=============================================================================
 
-package Net::ICal::Duration;
+package Net::ICal::Libical::Duration;
+use Net::ICal::Libical::Property;
 use strict;
 use Carp;
-
+@Net::ICal::Libical::Duration::ISA = qw ( Net::ICal::Libical::Property );
 
 =head1 METHODS
 
@@ -48,52 +49,43 @@ Create a new I<Duration> from:
 =cut
 
 sub new {
-  my ($class, $value) = @_;
-  my $seconds = 0;
+  my $package = shift;
+  my $arg = shift;
+  my $self;
 
-  if ($value =~ /^[-+]?\d+$/) {
-    $seconds = int $value;
+  if (ref($arg) == 'HASH'){
+    # Construct from dictionary 
+    $self = Net::ICal::Libical::Property::new($package,$arg);
+    my $val=Net::ICal::Libical::icalproperty_get_value_as_string($self->{'ref'});
+    $self->{'dur'} = Net::ICal::Libical::icaldurationtype_from_string($val);
+    
+   return $self;
+
+  } elsif ($arg =~ /^[-+]?\d+$/){
+    # Seconds
+    $self = Net::ICal::Libical::Property::new($package,'DURATION');
+    $self->{'dur'} = Net::ICal::Libical::icaldurationtype_new_from_int($arg);
+  } elsif ($arg) {
+    # iCalendar string 
+    $self = Net::ICal::Libical::Property::new($package,'DURATION');
+    $self->{'dur'} = Net::ICal::Libical::icaldurationtype_new_from_string($arg);
   } else {
-    $seconds = _string_to_seconds($value);
+    die;
   }
+  
+  $self->_update_value();
+  return $self;
 
-  return bless \$seconds, $class;
 }
 
+sub _update_value {
+  my $self = shift;
 
-# Converts a RFC2445 DURATION format string to an integer number of
-# seconds.
+  die "Can't find internal icalduration reference" if !$self->{'dur'};
 
-sub _string_to_seconds {
-  my $str = shift;
-  my $seconds = 0;
+  $self->value(Net::ICal::Libical::icaldurationtype_as_ical_string($self->{'dur'}));
 
-  if ($str =~ /^([-+])?P(\d+)W$/) {
-    $seconds += $2 * 7*24*60*60;
-    $seconds *= -1 if defined $1 && $1 eq '-';
-  }
-  elsif ($str =~ m{
-                   ^([-+])?P(?=\d|T)
-                   (?:(\d+)D)?
-                   (?:T(?=\d)(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$
-                  }x) {
-    # Minutes should be present (maybe zero) if hours and seconds
-    carp "Bad time format: $str" if defined $3 && defined $5 && ! defined $4;
-    $seconds += $2 * 24*60*60 if $2;
-    $seconds += $3 * 60*60    if $3;
-    $seconds += $4 * 60       if $4;
-    $seconds += $5            if $5;
-    $seconds *= -1            if defined $1 && $1 eq '-';
-  }
-  else {
-    carp "Invalid duration: $str";
-  }
-
-  return $seconds;
 }
-
-
-
 =head2 clone()
 
 Return a new copy of the duration.
@@ -101,11 +93,9 @@ Return a new copy of the duration.
 =cut
 
 sub clone {
-  my $self = shift;
-  my $class = ref ($self);
-  return $class->new($$self);
+  die "Not Implemented";
+  
 }
-
 
 
 =head2 is_valid()
@@ -114,45 +104,31 @@ Determine if this is a valid duration (given criteria TBD).
 
 =cut
 
-# XXX implement this
-sub is_valid { }
+sub is_valid { 
 
+  die "Not Implemented;"
 
-
-=head2 as_int()
-
-Return the length of the duration as seconds. 
-
-=cut
-
-sub as_int { ${$_[0]} }
-
-
-
-=head2 as_ical_value()
-
-Return the duration in an RFC2445 format string.
-
-=cut
-
-sub as_ical_value {
-  my $self = shift;
-
-  my $n       = abs $$self;
-  my $days    = int $n / (60*60*24);
-  my $hours   = $n / (60*60) % 24;
-  my $minutes = $n / 60 % 60;
-  my $seconds = $n % 60;
-
-  return ($$self < 0 ? "-" : "") . "P" .
-         ($days ? "${days}D" : "") .
-         ($hours || $minutes || $seconds ? "T" : "") .
-         ($hours ? "${hours}H" : "") .
-         ($minutes || $hours && $seconds ? "${minutes}M" : "") .
-         ($seconds ? "${seconds}S" : "");
 }
 
+=head2 seconds()
 
+Set or Get the length of the duration as seconds. 
+
+=cut
+
+sub seconds {
+  my $self = shift;
+  my $seconds = shift;
+
+  if($seconds){
+    $self->{'dur'} =  
+    Net::ICal::Libical::icaldurationtype_from_int($seconds);
+    $self->_update_value();
+  }
+
+  return Net::ICal::Libical::icaldurationtype_as_int($self->{'dur'});
+
+}
 
 =head2 add($duration)
 
@@ -164,8 +140,7 @@ modify this object.
 sub add {
   my ($self, $duration) = @_;
 
-  my $class = ref ($self);
-  return $class->new($$self + $$duration);
+  return new Duration($self->seconds() + $duration->seconds());
 }
 
 
@@ -179,9 +154,7 @@ $duration. Does not modify this object.
 sub subtract {
   my ($self, $duration) = @_;
 
-  my $class = ref ($self);
-  return $class->new($$self - $$duration);
+  return new Duration($self->seconds() - $duration->seconds());
 }
-
 
 1;

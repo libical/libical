@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.pm,v 1.2 2001-03-02 21:33:54 ebusboom Exp $
+#  $Id: Property.pm,v 1.3 2001-03-03 05:44:03 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2000, Eric Busboom, eric@softwarestudio.org
@@ -24,14 +24,17 @@ use Net::ICal::Libical::Property;
 
 
 package Net::ICal::Libical::Property;
+use strict;
+
 
 sub new { 
 
   my $class = shift;
   my $arg = shift;
   my $self = {};
+  my $kind;
 
-  if(ref($arg) == HASH){
+  if(ref($arg) == 'HASH'){
   
     $self->{'ref'} = $arg->{'ref'};
 
@@ -58,6 +61,7 @@ sub DESTROY {
 
 sub name {
   my $self = shift;
+  my $str;
 
   die if !$self->{'ref'};
 
@@ -88,7 +92,8 @@ sub value {
   my $self = shift;
   my $v = shift;
   my $kind = shift;
-  
+
+  my $vt;
   if($v){
             
     if ($kind) {
@@ -117,6 +122,8 @@ sub get_parameter{
   my $self  = shift;
   my $key = shift;
 
+  die "get_parameter: missing parameter name" if !$key;
+
   $key = uc($key);
   my $ref = $self->{'ref'};
 
@@ -136,6 +143,9 @@ sub set_parameter{
   my $self  = shift;
   my $key = shift;
   my $value = shift;
+
+  die "set_parameter: missing parameter name" if !$key;
+  die "set_parameter: missing parameter value" if !$value;
 
   $key = uc($key);
   my $ref = $self->{'ref'};
