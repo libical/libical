@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.22 2002-06-13 13:23:46 acampi Exp $
+  $Id: icalvalue.c,v 1.23 2002-06-26 22:26:07 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -348,7 +348,19 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 
     case ICAL_UTCOFFSET_VALUE:
 	{
-	    value = icalparser_parse_value(kind,str,(icalcomponent**)0);
+            int t,utcoffset, hours, minutes, seconds;
+            /* treat the UTCOFSET string a a decimal number, disassemble its digits
+               and reconstruct it as sections */
+            t = strtol(str,0,10);
+            /* add phantom seconds field */
+            if(abs(t)<9999){t *= 100; }
+            hours = (t/10000);
+            minutes = (t-hours*10000)/100;
+            seconds = (t-hours*10000-minutes*100);
+            utcoffset = hours*3600+minutes*60+seconds;
+
+	    value = icalvalue_new_utcoffset(utcoffset);
+
 	    break;
 	}
         

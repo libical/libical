@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.28 2002-06-11 12:32:17 acampi Exp $
+  $Id: icalparser.c,v 1.29 2002-06-26 22:26:07 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -198,46 +198,6 @@ static char* make_segment(char* start, char* end)
     return buf;
 }
 
-
-/** Call the flex/bison parser to parse a complex value */
-
-icalvalue*  icalparser_parse_value(icalvalue_kind kind,
-                                   const char* str, icalcomponent** error)
-{
-    int r;
-    ical_yyparams icalState;
-    yyscan_t yy_globals;
-
-    ical_yylex_init(&yy_globals);
-
-    set_parser_value_state(kind, yy_globals);
-    icalState.value = 0;
-
-    ical_yyset_extra(&icalState, yy_globals);
-
-    ical_yy_scan_string(str, yy_globals);
-
-    r = ical_yyparse(yy_globals);
-    ical_yylex_destroy(yy_globals);
-
-    /* Error. Parse failed */
-
-    if( icalState.value == 0 || r != 0){
-
-	if(icalState.value !=0){
-	    icalvalue_free(icalState.value);
-	    icalState.value = 0;
-	}
-
-	return 0;
-    }
-
-    if (error != 0){
-	*error = 0;
-    }
-
-    return icalState.value;
-}
 
 char* icalparser_get_prop_name(char* line, char** end)
 {

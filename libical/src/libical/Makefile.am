@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.26 2002-06-13 15:58:41 acampi Exp $
+#  $Id: Makefile.am,v 1.27 2002-06-26 22:26:07 ebusboom Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -56,15 +56,6 @@ INCLUDES =			\
 
 libical_la_LDFLAGS = -version-info 0:0:0
 
-if DEV
-libical_la_DEVSOURCES = icallexer.l icalyacc.y
-.SUFFIXES:
-.SUFFIXES: .c .l .lo .o .obj .y
-else
-libical_la_DEVSOURCES = icallexer.c icalyacc.c
-.SUFFIXES:
-.SUFFIXES: .c .lo .o .obj
-endif
 
 libical_la_SOURCES =		\
 	$(BUILT_SOURCES)	\
@@ -107,7 +98,6 @@ libical_la_SOURCES =		\
 	icalvalue.c		\
 	icalvalue.h		\
 	icalvalueimpl.h		\
-	icalyacc.h		\
 	pvl.c			\
 	pvl.h			\
 	sspm.c			\
@@ -116,8 +106,7 @@ libical_la_SOURCES =		\
 	icallangbind.h		\
 	icallangbind.c \
 	caldate.c \
-	astime.h \
-	$(libical_la_DEVSOURCES)
+	astime.h 
 
 if WITH_CXX
 libical_cxx_la_SOURCES =	\
@@ -190,8 +179,6 @@ ical.h: $(COMBINEDHEADERS)
 	echo '#ifdef __cplusplus'         >> ical.h
 	echo '};'                         >> ical.h
 	echo '#endif'                     >> ical.h
-
-icallexer.c : icalyacc.h
 
 
 # parameters
@@ -269,7 +256,7 @@ CLEANFILES += $(BUILT_SOURCES) $(BUILT_COMBINEDHEADERS)
 
 dist-hook:
 	cd $(distdir); rm -f $(BUILT_SOURCES)
-	cd $(distdir); rm -f ical.h icalversion.h icalyacc.c icalyacc.h icallexer.c
+	cd $(distdir); rm -f ical.h icalversion.h 
 
 EXTRA_DIST =			\
 	icalderivedparameter.c.in \
@@ -279,9 +266,7 @@ EXTRA_DIST =			\
 	icalrestriction.c.in	\
 	icalderivedvalue.c.in	\
 	icalderivedvalue.h.in	\
-	icalversion.h.in	\
-	icallexer.c		\
-	icalyacc.c
+	icalversion.h.in
 
 $(srcdir)/icalattendee.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalcomponent.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
@@ -290,7 +275,6 @@ icalderivedproperty.c: icalderivedvalue.h icalderivedproperty.h icalderivedparam
 icalderivedvalue.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalduration.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icallangbind.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
-$(srcdir)/icallexer.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalmime.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalparameter.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalparser.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
@@ -298,4 +282,3 @@ $(srcdir)/icalproperty.c: icalderivedvalue.h icalderivedproperty.h icalderivedpa
 $(srcdir)/icalrestriction.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icaltime.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalvalue.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
-$(srcdir)/icalyacc.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
