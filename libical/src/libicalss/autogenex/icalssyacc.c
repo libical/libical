@@ -37,7 +37,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.c,v 1.1 2001-12-14 22:16:33 gray-john Exp $
+  $Id: icalssyacc.c,v 1.2 2002-04-23 17:16:10 gray-john Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

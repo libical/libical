@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalderivedvalue.c,v 1.1 2001-12-14 22:14:25 gray-john Exp $
+  $Id: icalderivedvalue.c,v 1.2 2002-04-23 17:14:58 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
