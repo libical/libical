@@ -29,5 +29,5 @@ char* icaltime_as_ctime(struct icaltimetype t)
     tt = icaltime_as_timet(t);
     sprintf(ictt_str,"%s",ctime(&tt));
 
-    return ctime_str;
+    return ictt_str;
 }
