@@ -25,6 +25,7 @@ libicalss_la_DEVSOURCES = icalsslexer.c icalssyacc.c
 endif
 
 libicalss_la_SOURCES =		\
+	icalcalendar.c		\
 	icalcalendar.h		\
 	icalclassify.c		\
 	icalclassify.h		\
