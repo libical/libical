@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.15 2002-03-19 14:41:28 gray-john Exp $
+  $Id: icalfileset.c,v 1.16 2002-04-01 22:08:46 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -97,8 +97,6 @@ icalfileset* icalfileset_new_writer(const char* path)
 {
     return icalfileset_new_open(path, O_WRONLY|O_CREAT|O_TRUNC, 0664);
 }
-
-icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 
 icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
 {
@@ -347,7 +345,7 @@ icalerrorenum icalfileset_commit(icalfileset* cluster)
     
     if(icalfileset_safe_saves == 1){
 #ifndef WIN32
-	snprintf(tmp,ICAL_PATH_MAX,"cp %s %s.bak",impl->path,impl->path);
+	snprintf(tmp,ICAL_PATH_MAX,"cp '%s' '%s.bak'",impl->path,impl->path);
 #else
 	snprintf(tmp,ICAL_PATH_MAX,"copy %s %s.bak",impl->path,impl->path);
 #endif

@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.9 2001-12-22 17:04:35 gray-john Exp $
+    $Id: icalclassify.c,v 1.10 2002-04-01 22:08:46 gray-john Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -145,7 +145,7 @@ icalproperty* icalclassify_find_attendee(icalcomponent *c,
 	p != 0;
 	p  = icalcomponent_get_next_property(inner,ICAL_ATTENDEE_PROPERTY))
     {
-	const char* this_attendee
+	char* this_attendee
 	    = icalclassify_lowercase(icalproperty_get_attendee(p));
 	char* this_upn = strchr(this_attendee,':');
 

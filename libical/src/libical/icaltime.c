@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.24 2001-12-21 16:19:01 gray-john Exp $
+  $Id: icaltime.c,v 1.25 2002-04-01 22:08:45 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -200,7 +200,7 @@ int icaltime_utc_offset(struct icaltimetype ictt, const char* tzid)
     local_zone =  icaltimezone_get_builtin_timezone(tzid);
     utc_zone = icaltimezone_get_utc_timezone ();
 
-    icaltimezone_get_utc_offset(local_zone, &ictt, ictt.is_daylight);
+    icaltimezone_get_utc_offset(local_zone, &ictt, &ictt.is_daylight);
 
 
 #ifndef NO_WARN_DEPRECATED

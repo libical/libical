@@ -3,7 +3,7 @@
     FILE: icalcstps.c
     CREATOR: ebusboom 23 Jun 2000
   
-    $Id: icalcstpclient.c,v 1.6 2001-12-22 17:04:35 gray-john Exp $
+    $Id: icalcstpclient.c,v 1.7 2002-04-01 22:08:46 gray-john Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -171,6 +171,7 @@ int icalcstpc_next_input(icalcstpc* cstp, char* line)
     default:
         break;
     }
+	return 0;
 }
 
 /* After icalcstpc_next_input returns a 0, there are responses
@@ -191,6 +192,7 @@ icalcstpc_response icalcstpc_next_response(icalcstpc* cstp)
 int icalcstpc_set_timeout(icalcstpc* cstp, int sec)
 {
     struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
+	return 1;
 }
 
 icalerrorenum icalcstpc_abort(icalcstpc* cstp)
@@ -228,7 +230,7 @@ icalerrorenum icalcstpc_authenticate(icalcstpc* cstp, char* mechanism,
                                         char* data, char* f(char*))
 {
    struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
-   char* command_str;
+   const char* command_str;
    icalerrorenum error;
    size_t sz;
 
@@ -255,7 +257,7 @@ icalerrorenum icalcstpc_authenticate(icalcstpc* cstp, char* mechanism,
 icalerrorenum icalcstpc_capability(icalcstpc* cstp)
 {
     struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
-    char* command_str;
+    const char* command_str;
     icalerrorenum error;
     size_t sz;
 
