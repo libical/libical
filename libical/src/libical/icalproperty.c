@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.31 2002-08-07 17:05:07 acampi Exp $
+  $Id: icalproperty.c,v 1.32 2002-10-09 21:22:05 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -366,51 +366,12 @@ fold_property_line (char *text)
 }
 
 
-const char*
-icalproperty_as_ical_string (icalproperty* prop)
-{   
-    icalparameter *param;
-
-    /* Create new buffer that we can append names, parameters and a
-       value to, and reallocate as needed. Later, this buffer will be
-       copied to a icalmemory_tmp_buffer, which is managed internally
-       by libical, so it can be given to the caller without fear of
-       the caller forgetting to free it */
-
-    const char* property_name = 0; 
-    size_t buf_size = 1024;
-    char* buf = icalmemory_new_buffer(buf_size);
-    char* buf_ptr = buf;
-    icalvalue* value;
-    char *out_buf;
-
-    char newline[] = "\n";
-
-    
-    icalerror_check_arg_rz( (prop!=0),"prop");
-
-
-    /* Append property name */
-
-    if (prop->kind == ICAL_X_PROPERTY && prop->x_name != 0){
-	property_name = prop->x_name;
-    } else {
-	property_name = icalproperty_kind_to_string(prop->kind);
-    }
-
-    if (property_name == 0 ) {
-	icalerror_warn("Got a property of an unknown kind.");
-	icalmemory_free_buffer(buf);
-	return 0;
-	
-    }
-
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, property_name);
-
-    /* Determine what VALUE parameter to include. The VALUE parameters
-       are ignored in the normal parameter printing ( the block after
-       this one, so we need to do it here */
-    {
+/* Determine what VALUE parameter to include. The VALUE parameters
+   are ignored in the normal parameter printing ( the block after
+   this one, so we need to do it here */
+static const char *
+icalproperty_get_value_kind(icalproperty *prop)
+{
 	const char* kind_string = 0;
 
 	icalparameter *orig_val_param
@@ -450,12 +411,55 @@ icalproperty_as_ical_string (icalproperty* prop)
 	    /* Don'tinclude the VALUE parameter at all */
 	}
 
-	if(kind_string!=0){
-	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, ";VALUE=");
-	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
-	}
-	
+	return kind_string;
+}
 
+const char*
+icalproperty_as_ical_string (icalproperty* prop)
+{   
+    icalparameter *param;
+
+    /* Create new buffer that we can append names, parameters and a
+       value to, and reallocate as needed. Later, this buffer will be
+       copied to a icalmemory_tmp_buffer, which is managed internally
+       by libical, so it can be given to the caller without fear of
+       the caller forgetting to free it */
+
+    const char* property_name = 0; 
+    size_t buf_size = 1024;
+    char* buf = icalmemory_new_buffer(buf_size);
+    char* buf_ptr = buf;
+    icalvalue* value;
+    char *out_buf;
+    const char* kind_string = 0;
+
+    char newline[] = "\n";
+
+    
+    icalerror_check_arg_rz( (prop!=0),"prop");
+
+
+    /* Append property name */
+
+    if (prop->kind == ICAL_X_PROPERTY && prop->x_name != 0){
+	property_name = prop->x_name;
+    } else {
+	property_name = icalproperty_kind_to_string(prop->kind);
+    }
+
+    if (property_name == 0 ) {
+	icalerror_warn("Got a property of an unknown kind.");
+	icalmemory_free_buffer(buf);
+	return 0;
+	
+    }
+
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, property_name);
+
+    kind_string = icalproperty_get_value_kind(prop);
+    if(kind_string!=0){
+	icalmemory_append_string(&buf, &buf_ptr, &buf_size, ";VALUE=");
+	icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
     }
 
     /* Append parameters */
@@ -463,7 +467,7 @@ icalproperty_as_ical_string (icalproperty* prop)
 	param != 0; 
 	param = icalproperty_get_next_parameter(prop,ICAL_ANY_PARAMETER)) {
 
-	char* kind_string = icalparameter_as_ical_string(param); 
+	kind_string = icalparameter_as_ical_string(param); 
 	icalparameter_kind kind = icalparameter_isa(param);
 
 	if(kind==ICAL_VALUE_PARAMETER){
@@ -609,7 +613,7 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
     
     kind = icalparameter_string_to_kind(name);
 
-    if(kind == ICAL_NO_PROPERTY){
+    if(kind == ICAL_NO_PARAMETER){
         /* icalenum_string_to_parameter_kind will set icalerrno */
         return 0;
     }
