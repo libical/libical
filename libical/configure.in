@@ -145,6 +145,9 @@ case "${host}" in
 		AC_DEFINE(HAVE_PTHREAD, ,[Define if we have pthread.])
 		PTHREAD_LIBS=-pthread;;
 
+        powerpc-apple-darwin* )
+		AC_MSG_RESULT(We don't know how to use threads on Mac OS X);;
+
 	*)
 	AC_CHECK_LIB(pthread,pthread_create,have_pthread=yes)
 	if test "x$have_pthread" = xyes; then
