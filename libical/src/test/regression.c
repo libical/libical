@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.62 2002-10-30 21:34:21 acampi Exp $
+  $Id: regression.c,v 1.63 2002-10-30 23:45:50 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1955,7 +1955,12 @@ void test_fblist()
     if (VERBOSE) icalspanlist_dump(sl);
 
     period= icalspanlist_next_free_time(sl,
-		    icaltime_from_string("19970801T120000Z"));
+		    icaltime_from_string("19970801T120000"));
+
+    is("Next Free time start 19970801T120000", icaltime_as_ical_string(period.start), "19970801T120000");
+    is("Next Free time end   19980101T000000", icaltime_as_ical_string(period.end), "19980101T000000");
+
+    period= icalspanlist_next_free_time(sl, period.end);
 
     is("Next Free time start 19980101T010000", icaltime_as_ical_string(period.start), "19980101T010000");
     is("Next Free time end   19980102T010000", icaltime_as_ical_string(period.end), "19980102T010000");
