@@ -1,4 +1,6 @@
-ABOUT-NLS
+*.la
+*.lo
+.libs
 Makefile
 Makefile.in
 aclocal.m4
@@ -22,5 +24,3 @@ stamp-h.in
 stamp.h
 xlibtool
 xltmain.sh
-evolution.spec
-
