@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.65 2003-02-17 14:23:16 acampi Exp $
+  $Id: icaltime.c,v 1.66 2003-02-17 15:19:14 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -488,7 +488,7 @@ int icaltime_start_doy_week(const struct icaltimetype t, int fdow){
 	juldat(&jt);
 	caldat(&jt);
 
-	delta = jt.weekday - (fdow + 1);
+	delta = jt.weekday - (fdow - 1);
 	if (delta < 0) delta += 7;
 	return jt.day_of_year - delta;
 }
