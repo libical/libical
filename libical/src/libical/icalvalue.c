@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.14 2002-05-21 10:50:04 acampi Exp $
+  $Id: icalvalue.c,v 1.15 2002-05-24 16:03:37 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -320,6 +320,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	    value = icalvalue_new_float(atof(str));
 	    break;
 	}
+
     case ICAL_UTCOFFSET_VALUE:
 	{
 	    value = icalparser_parse_value(kind,str,(icalcomponent*)0);
@@ -352,7 +353,6 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	    break;
 	}
         
-        
     case ICAL_GEO_VALUE:
 	{
 	    value = 0;
@@ -362,14 +362,14 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 		char temp[TMP_BUF_SIZE];
 		sprintf(temp,"GEO Values are not implemented"); 
 		*error = icalproperty_vanew_xlicerror( 
-                                                      temp, 
-                                                      icalparameter_new_xlicerrortype( 
-                                                                                      ICAL_XLICERRORTYPE_VALUEPARSEERROR), 
-                                                      0); 
+		    temp, 
+		    icalparameter_new_xlicerrortype( 
+			ICAL_XLICERRORTYPE_VALUEPARSEERROR), 
+		    0); 
 	    }
-            
+
 	    /*icalerror_warn("Parsing GEO properties is unimplmeneted");*/
-            
+
 	    break;
 	}
         
@@ -403,14 +403,17 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	    struct icaltimetype tt;
             struct icalperiodtype p;
             tt = icaltime_from_string(str);
-            p = icalperiodtype_from_string(str);
-            
+
             if(!icaltime_is_null_time(tt)){
-                value = icalvalue_new_datetime(tt);
-            } else if (!icalperiodtype_is_null_period(p)){
+                value = icalvalue_new_datetime(tt);		
+		break;
+            }  
+	    
+            p = icalperiodtype_from_string(str);	    
+	    if (!icalperiodtype_is_null_period(p)){
                 value = icalvalue_new_period(p);
             }            
-            
+
             break;
 	}
         
@@ -418,9 +421,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	{
             struct icaldurationtype dur = icaldurationtype_from_string(str);
             
-            if(icaldurationtype_is_null_duration(dur)){
-                value = 0;
-            } else {
+            if(!icaldurationtype_is_null_duration(dur)){
                 value = icalvalue_new_duration(dur);
             }
             
@@ -718,6 +719,10 @@ char* icalvalue_text_as_ical_string(icalvalue* value) {
 	    }
 	}
 
+
+	/* We don't do folding here any more. We do it in
+	   icalproperty_as_ical_string(). */
+#if 0
 	if (line_length > 65 && *p == ' '){
 	    icalmemory_append_string(&str,&str_p,&buf_sz,"\n ");
 	    line_length=0;
@@ -728,6 +733,7 @@ char* icalvalue_text_as_ical_string(icalvalue* value) {
 	    icalmemory_append_string(&str,&str_p,&buf_sz,"\n ");
 	    line_length=0;
 	}
+#endif
 
     }
 
@@ -823,7 +829,6 @@ void print_datetime_to_string(char* str,  struct icaltimetype *data)
     print_date_to_string(str,data);
     strcat(str,"T");
     print_time_to_string(str,data);
-
 }
 
 const char* icalvalue_datetime_as_ical_string(icalvalue* value) {
