@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.23 2002-06-26 22:26:07 ebusboom Exp $
+  $Id: icalvalue.c,v 1.24 2002-06-27 00:22:09 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -65,6 +65,9 @@ void print_time_to_string(char* str,  const struct icaltimetype *data);
 struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind){
 
     struct icalvalue_impl* v;
+
+    if (!icalvalue_kind_is_valid(kind))
+      return NULL;
 
     if ( ( v = (struct icalvalue_impl*)
 	   malloc(sizeof(struct icalvalue_impl))) == 0) {
