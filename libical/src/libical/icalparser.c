@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.44 2004-02-20 09:42:31 acampi Exp $
+  $Id: icalparser.c,v 1.45 2004-03-17 17:58:03 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -52,27 +52,6 @@
 
 #include "icalmemory.h"
 #include "icalparser.h"
-
-#ifdef WIN32
-#define HAVE_CTYPE_H
-#define HAVE_ISWSPACE
-#endif
-
-#ifdef HAVE_WCTYPE_H
-#include <wctype.h>
-#endif
-
-#ifdef HAVE_CTYPE_H
-#include <ctype.h>
-#endif
-
-#ifndef HAVE_ISWSPACE
-#ifdef HAVE_ISSPACE
-# define iswspace        isspace
-#else
-#error "You don't have isspace. Please report the error to libical@softwarestudio.org."
-#endif
-#endif
 
 #ifdef WIN32
 #define snprintf      _snprintf
@@ -190,7 +169,7 @@ char* icalparser_get_next_char(char c, char *str, int qm)
 /** make a new tmp buffer out of a substring */
 static char* make_segment(char* start, char* end)
 {
-    char *buf, *tmp;
+    char *buf;
     size_t size = (size_t)end - (size_t)start;
     
     buf = icalmemory_new_buffer(size+1);
@@ -199,13 +178,6 @@ static char* make_segment(char* start, char* end)
     strncpy(buf,start,size);
     *(buf+size) = 0;
 
-	tmp = (buf+size);
-	while ( *tmp == '\0' || iswspace(*tmp) )
-	{
-		*tmp = 0;
-		tmp--;
-	}
-    
     return buf;
 }
 
@@ -513,12 +485,6 @@ char* icalparser_get_line(icalparser *parser,
     } else {
 	*(line_p) = '\0';
     }
-
-	while ( (*line_p == '\0' || iswspace(*line_p)) && line_p > line )
-	{
-		*line_p = '\0';
-		line_p--;
-	}
 
     return line;
 

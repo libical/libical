@@ -4765,7 +4765,7 @@ done
 
 
 
-for ac_header in assert.h ctype.h pthread.h stdint.h time.h sys/types.h unistd.h wctype.h
+for ac_header in assert.h pthread.h stdint.h time.h sys/types.h unistd.h
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
 if eval "test \"\${$as_ac_Header+set}\" = set"; then
@@ -5301,7 +5301,7 @@ fi
 
 
 
-for ac_func in gmtime_r isspace iswspace strdup snprintf
+for ac_func in gmtime_r strdup snprintf
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 echo "$as_me:$LINENO: checking for $ac_func" >&5
