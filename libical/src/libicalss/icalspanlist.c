@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.4 2002-05-29 13:42:55 acampi Exp $
+    $Id: icalspanlist.c,v 1.5 2002-06-11 18:42:07 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -35,7 +35,12 @@ struct icalspanlist_impl {
 	pvl_list spans;
 };
 
-int compare_span(void* a, void* b)
+/** @brief Internal comparison function for two spans
+ *
+ * Used to insert spans into the tree in sorted order.
+ */
+
+static int compare_span(void* a, void* b)
 {
     struct icaltime_span *span_a = (struct icaltime_span *)a ;
     struct icaltime_span *span_b = (struct icaltime_span *)b ;
@@ -61,8 +66,17 @@ icalcomponent* icalspanlist_get_inner(icalcomponent* comp)
 
 void print_span(int c, struct icaltime_span span );
 
+
+/** @brief Make a free list from a set of VEVENT components.
+ *
+ *  @param set    A valid icalset containing VEVENTS
+ *  @param start  The free list starts at this date/time
+ *  @param end    The free list ends at this date/time
+ *
+ * Given a set of components,  a start time and an end time
+ * return a spanlist that contains the free/busy times.
+ */
     
-/* Make a free list from a set of component */
 icalspanlist* icalspanlist_new(icalset *set, 
 			       struct icaltimetype start,
 			       struct icaltimetype end)
@@ -200,6 +214,13 @@ icalspanlist* icalspanlist_new(icalset *set,
 
 }
 
+/** @brief Destructor.
+ *  @param s A valid icalspanlist
+ *
+ *  Free memory associated with the spanlist
+ */
+
+
 void icalspanlist_free(icalspanlist* s)
 {
     struct icaltime_span *span;
@@ -216,6 +237,9 @@ void icalspanlist_free(icalspanlist* s)
 	free(impl);
 }
 
+/** @brief (Debug) print out spanlist to stdout
+ *  @param sl A valid icalspanlist
+ */
 
 void icalspanlist_dump(icalspanlist* s){
 
@@ -237,6 +261,13 @@ void icalspanlist_dump(icalspanlist* s){
 
 icalcomponent* icalspanlist_make_free_list(icalspanlist* sl);
 icalcomponent* icalspanlist_make_busy_list(icalspanlist* sl);
+
+
+/** @brief Find next free time span
+ *
+ *  Given a spanlist and a time, find the next period of time
+ *  that is free
+ */
 
 struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
 						struct icaltimetype t)
