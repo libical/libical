@@ -115,6 +115,14 @@ int icalproperty_string_to_enum(const char* str);
 int icalproperty_enum_belongs_to_property(int kind, int e);
 int icalproperty_kind_to_value_kind(int kind);
 
+/* Deal with X properties */
+
+void icalproperty_set_x_name(icalproperty* prop, const char* name);
+const char* icalproperty_get_x_name(icalproperty* prop);
+
+/* Return the name of the property -- the type name converted to a
+   string, or the value of _get_x_name if the type is and X property */
+const char* icalproperty_get_name (const icalproperty* prop);
 
 
 int icalerror_supress(const char* error);

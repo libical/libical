@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Property.py,v 1.8 2001-04-16 21:04:20 ebusboom Exp $
+#  $Id: Property.py,v 1.9 2002-06-07 13:15:34 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -26,7 +26,7 @@
 #======================================================================
 
 from LibicalWrap import *
-import regsub
+import re
 import base64
 from string import index, upper
 from types import StringType
@@ -86,6 +86,8 @@ class Property:
             kind  = icalproperty_string_to_kind(type)
             self._ref = icalproperty_new(kind)
 
+	    if type.find("X-") == 0:
+		    icalproperty_set_x_name(self._ref, type)
 
         if self._ref == None or self._ref == 'NULL':
             raise Property.ConstructorFailedError("Failed to construct Property")
@@ -108,11 +110,7 @@ class Property:
             
     def name(self,v=None):
         """ Return the name of the property """
-        str = icalproperty_as_ical_string(self._ref)
-        
-        idx = index(str, '\n')
-
-        return str[:idx]
+        return icalproperty_get_name(self._ref)
 
     def ref(self,v=None):
         """ Return the internal reference to the libical icalproperty """
@@ -183,7 +181,6 @@ class Property:
     def __getitem__(self,key):
         """ Return property values by name """
         key = upper(key)
-
         str = icalproperty_get_parameter_as_string(self._ref,key)
         
         if(str == 'NULL'): return None
@@ -201,7 +198,7 @@ class Property:
     def __str__(self):
 
         str = self.as_ical_string()
-        return regsub.gsub('\r?\n ?','',str)
+        return re.sub('\r?\n ?','',str)
 
     def __cmp__(self, other):
         s_str = str(self)

@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.15 2002-06-03 13:25:28 acampi Exp $
+#  $Id: test.py,v 1.16 2002-06-07 13:15:34 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -76,6 +76,10 @@ def test_property():
 
     print p['ROLE']
 
+    p['X-MAN-FAVOURITE'] = 'Wolverine'
+
+    print p['X-MAN-FAVOURITE']
+
     print p.value()
     p.value("mailto:Bob@bob.com")
     print p.value()
@@ -90,6 +94,11 @@ def test_property():
     else:
         assert(0)
 
+    # X Property
+    p = Property("X-COMMENT")
+
+    p.value("This is not approved by the Ministry of Silly Walks")
+    print p
 
     assert(test_enum('METHOD','PUBLISH'))
     assert(not test_enum('METHOD','FOO'))
