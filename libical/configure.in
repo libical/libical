@@ -10,7 +10,6 @@ dnl Checks for programs.
 AC_PROG_YACC
 AC_PROG_CC
 AM_PROG_LEX
-AC_PROG_CXX
 AC_PROG_LN_S
 AC_PROG_INSTALL
 
@@ -34,7 +33,7 @@ AC_SUBST(BDB_VERSION)
 
 
 
-AC_ARG_WITH(devel, [  --with-devel            add developement options],
+AC_ARG_WITH(devel, [  --with-devel            Add developement options],
 [case $with_devel in  
     yes)	echo 'Setting up for developement: -Wall, flex, bison'
 		echo '** Note that you will need flex 2.5.7 or higher'
@@ -77,25 +76,35 @@ dnl Checks for library functions.
 AC_CHECK_FUNCS(strdup)
 
 dnl **************************************************
+dnl * Check for C++
+dnl **************************************************
+
+AC_ARG_ENABLE(cxx, 
+[  --disable-cxx           Enable C++ bindings],,enable_cxx="yes")
+if test "x$enable_cxx" = "xyes"; then
+AC_PROG_CXX
+fi
+
+AM_CONDITIONAL(WITH_CXX, test x$enable_CXX = "xyes")
+
+dnl **************************************************
 dnl * Check for Python
 dnl **************************************************
 python_val=false
-AC_ARG_ENABLE(python-bindings, 
-[  --enable-python-bindings=[yes/no] Enable python bindings],,enable_python_bindings=yes)
-if test "x$enable_python_bindings" = "xyes"; then
+AC_ARG_ENABLE(python, 
+[  --enable-python         Enable python bindings],,enable_python="no")
+
+if test "x$enable_python" = "xyes"; then
 	python_val=true
 else
 	python_val=false
 fi
 
-if $python_val; then
+if test $python_val = true; then
+        
 	AC_CHECK_PROG(python_val, python, true, false)
-fi          
-if $python_val; then
 	AC_CHECK_PROG(python_val, swig, true, false)
-fi
 
-if $python_val; then
 	  PY_PREFIX=`python -c 'import sys ; print sys.prefix'`
 	  PY_EXEC_PREFIX=`python -c 'import sys ; print sys.exec_prefix'`
 	  changequote(<<, >>)dnl
@@ -118,7 +127,7 @@ if $python_val; then
 		  python_val=false
 	  fi
 fi
-AM_CONDITIONAL(WITH_PYTHON, $python_val)
+AM_CONDITIONAL(WITH_PYTHON, test $python_val = true)
 
 AC_OUTPUT([
 Makefile

@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.25 2002-06-13 15:54:59 acampi Exp $
+#  $Id: Makefile.am,v 1.26 2002-06-13 15:58:41 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -26,7 +26,13 @@
 DESIGNDATA = $(top_srcdir)/design-data
 ICALSCRIPTS = $(top_srcdir)/scripts
 
-lib_LTLIBRARIES = libical.la libical_cxx.la
+if WITH_CXX
+cxx_lib=libical_cxx.la
+else
+cxx_lib=
+endif
+
+lib_LTLIBRARIES = libical.la $(cxx_lib)
 
 noinst_LTLIBRARIES = libical-static.la
 libical_static_la_SOURCES = $(libical_la_SOURCES)
@@ -113,6 +119,7 @@ libical_la_SOURCES =		\
 	astime.h \
 	$(libical_la_DEVSOURCES)
 
+if WITH_CXX
 libical_cxx_la_SOURCES =	\
 	$(libical_la_SOURCES)	\
 	vcomponent.h		\
@@ -123,10 +130,11 @@ libical_cxx_la_SOURCES =	\
 	icalparameter_cxx.cpp	\
 	icalvalue_cxx.h		\
 	icalvalue_cxx.cpp
+endif
 
 libicalincludedir = $(includedir)
 
-libicalinclude_HEADERS = ical.h vcomponent.h icalproperty_cxx.h icalparameter_cxx.h icalvalue_cxx.h icalmemory.h icalerror.h
+libicalinclude_HEADERS = ical.h icalmemory.h icalerror.h
 
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering. It
 # is required to make the combined header ical.h properly

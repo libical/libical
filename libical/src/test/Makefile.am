@@ -1,10 +1,20 @@
-noinst_PROGRAMS = copycluster regression parser storage stow recur testmime testvcal process testcxx
+if WITH_CXX
+cxx_progs=testcxx
+cxx_libs=../libical/.libs/libical_cxx.a
+testcxx_SOURCES = testcxx.cpp
+else
+cxx_progs=
+cxx_libs=
+endif
 
-LDADD =  ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a ../libical/.libs/libical_cxx.a ../libical/.libs/libical.a 
+
+noinst_PROGRAMS = copycluster regression parser storage stow recur testmime testvcal process $(cxx_progs)
+
+LDADD =  ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a 
 
 LIBS = -lpthread 
 
-storage_LDADD = ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a ../libical/.libs/libical_cxx.a ../libical/.libs/libical.a @BDB_DIR@/lib/libdb-4.0.la
+storage_LDADD = ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a @BDB_DIR@/lib/libdb-4.0.la
 
 INCLUDES = 				\
        -I. 				\
@@ -27,4 +37,3 @@ testvcal_SOURCES = testvcal.c
 recur_SOURCES = recur.c 
 testmime_SOURCES = testmime.c
 process_SOURCES = process.c
-testcxx_SOURCES = testcxx.cpp
