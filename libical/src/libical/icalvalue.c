@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.13 2002-05-21 10:31:29 acampi Exp $
+  $Id: icalvalue.c,v 1.14 2002-05-21 10:50:04 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1161,13 +1161,13 @@ icalvalue_compare(icalvalue* a, icalvalue *b)
 /* Examine the value and possiby chage the kind to agree with the value */
 void icalvalue_reset_kind(icalvalue* value)
 {
-    if( (impl->kind==ICAL_DATETIME_VALUE || impl->kind==ICAL_DATE_VALUE )&&
-        !icaltime_is_null_time(impl->data.v_time) ) {
+    if( (value->kind==ICAL_DATETIME_VALUE || value->kind==ICAL_DATE_VALUE )&&
+        !icaltime_is_null_time(value->data.v_time) ) {
         
         if(icaltime_is_date(value->data.v_time)){
-            impl->kind = ICAL_DATE_VALUE;
+            value->kind = ICAL_DATE_VALUE;
         } else {
-            impl->kind = ICAL_DATETIME_VALUE;
+            value->kind = ICAL_DATETIME_VALUE;
         }
     }
        
