@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 
-# $Id: Libical.py,v 1.7 2001-02-26 15:11:44 plewis Exp $
+# $Id: Libical.py,v 1.8 2001-02-27 03:39:41 ebusboom Exp $
 
 from LibicalWrap import *
 from types import *
@@ -138,15 +138,24 @@ class Time(Property):
         Property.__init__(self, {})
 
         if isinstance(value, DictType):
+            # Dictionary -- used for creating from Component
             Property.__init__(self, value)
             self.tt = icaltime_from_string(self.desc['value'])
         elif isinstance(value, StringType):
+            # Create from an iCal string
             self.tt = icaltime_from_string(value)
         elif isinstance(value, IntType) or   \
              isinstance(value, FloatType): 
-            self.tt = icaltime_from_timet(int(value))
+            # Create from seconds past the POSIX epoch
+            self.tt = icaltime_from_timet(int(value),0)
+        elif isinstance(value, Time):
+            # Copy an instance
+            self.tt = value.tt
         else:
             self.tt = icaltime_null_time()
+
+
+
 
         self._update_value()
 
@@ -161,12 +170,16 @@ class Time(Property):
         self.tt = icaltime_normalize(self.tt)
         self.desc['value'] = icaltime_as_ical_string(self.tt)
 
+    def valid(self):
+        " Return true if this is a valid time "
+        return not icaltime_is_null_time(self.tt)
 
     def utc_seconds(self,v=None):
         """ Return or set time in seconds past POSIX epoch"""
         if (v!=None):
             self.tt = icaltime_from_timet(v,0)
             self._update_value()
+
         return icaltime_as_timet(self.tt)
 
     def is_utc(self,v=None):
@@ -242,9 +255,49 @@ class Time(Property):
 
         return self.desc['value']
 
+    def __add__(self,o):
+
+        other = Duration(o)      
+
+        if not other.valid():
+            return Duration()
+  
+        seconds = self.utc_seconds() + other.seconds()
+    
+        new = Time(seconds)
+        new.timezone(self.timezone)
+        new.is_utc(self.is_utc())
+
+        return Time(seconds)
+
+    def __radd_(self,o):
+        return self.__add__(o)
+    
+
+    def __sub__(self,o):
+
+        
+        if isinstance(o,Time):
+            # Subtract a time from this time and return a duration
+            seconds = self.utc_seconds() - other.utc_seconds()
+            return Duration(seconds)
+        elif isinstance(o,Duration):
+            # Subtract a duration from this time and return a time
+            other = Duration(o)
+            if(not other.valid()):
+                return Time()
+
+            seconds = self.utc_seconds() - other.seconds()
+            return Time(seconds)
+        else:
+            raise TypeError, "subtraction with Time reqires Time or Duration"
+
 
 def test_time():
     "Test routine"
+
+    print"-------------------Test Time  --------------------------------"
+
     t = Time("19970325T123010Z")
     
     assert(t.year() == 1997)
@@ -269,6 +322,17 @@ def test_time():
     assert(t.minute() == 31)
     assert(t.second() == 30)
 
+    d = Duration(3600)
+    t2 = t + d
+
+    print t2
+    assert(t2.hour() == 13)
+
+    t2 = t - d
+
+    print t2
+    assert(isinstance(t2,Time))
+    assert(t2.hour() == 11)
 
 class Duration(Property):
     """ 
@@ -295,15 +359,20 @@ class Duration(Property):
             self.dur = icaldurationtype_from_string(value)
         elif isinstance(value, IntType): 
             self.dur = icaldurationtype_from_int(value)
+        elif isinstance(value,Duration):
+            self.dur = value.dur
         else:
             self.dur = icaldurationtype_null_duration()
 
-        Property.name(self, 'DURATION')
-        Property.value_type(self, 'DURATION')
         self._update_value()
 
     def _update_value(self):
         self.desc['value'] = icaldurationtype_as_ical_string(self.dur)
+
+    def valid(self):
+        "Return true if this is a valid duration"
+
+        return not icaldurationtype_is_null_duration(self.dur)
 
     def seconds(self,v=None):
         """Return or set duration in seconds"""
@@ -320,21 +389,42 @@ class Duration(Property):
             
         return self.desc['value']
 
-    def name(self):
-        "Return the name of the property."
-        return Property.name(self)
-
-    def value_type(self):
-        "Return the value type of the property."
-        return Property.value_type(self)
-
-
 class Period(Property):
     """Represent a span of time"""
-    def __init__(self,dict):
+    def __init__(self,value):
         """ """
-        Property.__init__(self,dict)
 
+        Property.__init__(self, {})
+
+        if isinstance(value, DictType):
+            Property.__init__(self, value)
+            self.pt = icalperiodtype_from_string(self.desc['value'])
+        elif isinstance(value, StringType):
+            self.pt = icalperiodtype_from_string(value)
+        else:
+            self.pt = icalperiodtype_null_period()
+
+        self._update_value()
+
+    def _end_is_duration(self):        
+        dur = icalperiodtype_duration_get(self.pt)
+        if not icaldurationtype_is_null_duration(dur):
+            return 1
+        return 0
+
+    def _end_is_time(self):
+        end = icalperiodtype_end_get(self.pt)
+        if not icaltime_is_null_time(end):
+            return 1
+        return 0
+
+    def _update_value(self):
+        self.desc['value'] = icalperiodtype_as_ical_string(self.pt)
+
+    def valid(self):
+        "Return true if this is a valid period"
+
+        return not icalperiodtype_is_null_period(self.dur)
 
     def start(self,v=None):
         """
@@ -344,30 +434,139 @@ class Period(Property):
         """
 
         if(v != None):
-            pass
-        return 
+            if isinstance(t,Time):
+                t = v
+            elif isinstance(t,StringType) or isinstnace(t,IntType):
+                t = Time(v)
+            else:
+                raise TypeError
+
+            icalperiodtype_start_set(self.pt,t.tt)
+                
+        
+        return Time(icaltime_as_timet(icalperiodtype_start_get(self.pt)))
 
     def end(self,v=None):
         """
         Return or set end time of the period. The end time may be
         expressed as an RFC2445 format string or an instance of Time.
-        The return value is an instance of Time
-        """        
+        The return value is an instance of Time.
+
+        If the Period has a duration set, but not an end time, this
+        method will caluculate the end time from the duration.  """
+
         if(v != None):
-            pass
-        return 
+            
+            if isinstance(t,Time):
+                t = v
+            elif isinstance(t,StringType) or isinstnace(t,IntType):
+                t = Time(v)
+            else:
+                raise TypeError
+
+            if(self._end_is_duration()):
+                start = icaltime_as_timet(icalperiodtype_start_get(self.pt))
+                dur = t.utc_seconds()-start;
+                icalperiodtype_duration_set(self.pt,
+                                            icaldurationtype_from_int(dur))
+            else:
+                icalperiodtype_end_set(self.pt,t.tt)
+                
+        if(self._end_is_time()):
+            rt = Time(icaltime_as_timet(icalperiodtype_end_get(self.pt)))
+            rt.timezone(self.timezone())
+            return rt
+        elif(self._end_is_duration()):
+            start = icaltime_as_timet(icalperiodtype_start_get(self.pt))
+            dur = icaldurationtype_as_int(icalperiodtype_duration_get(self.pt))
+            rt = Time(start+dur)
+            rt.timezone(self.timezone())
+            return rt
+        else:
+            return Time()
+
+
 
     def duration(self,v=None):
         """
         Return or set the duration of the period. The duration may be
         expressed as an RFC2445 format string or an instance of Duration.
-        The return value is an instance of Duration
-        """        
+        The return value is an instance of Duration.
+
+        If the period has an end time set, but not a duration, this
+        method will calculate the duration from the end time.  """
 
         if(v != None):
-            pass
-        return 
+            
+            if isinstance(t,Duration):
+                d = v
+            elif isinstance(t,StringType) or isinstance(t,IntType):
+                d = Duration(v)
+            else:
+                raise TypeError
 
+
+            if(self._end_is_time()):
+                start = icaltime_as_timet(icalperiodtype_start_get(self.pt))
+                end = start + d.seconds()
+
+                icalperiodtype_end_set(self.pt,icaltime_from_timet(end,0))
+            else:
+                icalperiodtype_duration_set(self.pt,d.dur)
+                
+        if(self._end_is_time()):
+            start =icaltime_as_timet(icalperiodtype_start_get(self.pt))
+            end = icaltime_as_timet(icalperiodtype_end_get(self.pt))
+
+            return Duration(end-start)
+
+        elif(self._end_is_duration()):
+            dur = icaldurationtype_as_int(
+                icalperiodtype_duration_get(self.pt))
+            return Duration(dur)
+        else:
+            return Duration()
+
+
+    def timezone(self,v=None):
+        """ Return or set the timezone string for this time """
+        if (v != None):
+            self['TZID'] = v
+        return  self['TZID']
+
+
+def test_period():
+    
+
+    print"-------------------Test Period--------------------------------"
+
+    p = Period("19970101T180000Z/19970101T233000Z")
+
+    print p
+    
+    assert(str(p) == 'None:19970101T180000Z/19970101T233000Z')
+
+    print p.start()
+    assert(str(p.start()) == 'None:19970101T180000Z')
+
+    print p.end()
+    assert(str(p.end()) == 'None:19970101T233000Z')
+
+    print p.duration()
+    assert(str(p.duration()) == 'None:PT5H30M')
+
+    p = Period("19970101T180000Z/PT5H30M")
+
+    print p
+
+    print p.start()
+    assert(str(p.start()) == 'None:19970101T180000Z')
+
+    print p.end()
+    assert(str(p.end()) == 'None:19970101T233000Z')
+
+    print p.duration()
+    assert(str(p.duration()) == 'None:PT5H30M')
 
 class Attendee(Property):
     """Class for Attendee properties.
@@ -583,7 +782,7 @@ class Collection:
         oldProps = self_properties[beg, end]
         for p in oldProps:
             self._component.removeProperty(p)
-        self._properties.__setslice__(beg, end, sequence
+        self._properties.__setslice__(beg, end, sequence)
         for p in sequence:
             self._component.addProperty(p)
             

@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.4 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: icalerror.c,v 1.5 2001-02-27 03:39:41 ebusboom Exp $
   $Locker:  $
     
 
@@ -144,7 +144,7 @@ static struct icalerror_string_map string_map[] =
     {ICAL_INTERNAL_ERROR,"Random internal error. This indicates an error in the library code, not an error in use"}, 
     {ICAL_FILE_ERROR,"An operation on a file failed. Check errno for more detail."},
     {ICAL_ALLOCATION_ERROR,"Failed to allocate memory"},
-    {ICAL_USAGE_ERROR,"The caller failed to properly sequence called to an object's interface"},
+    {ICAL_USAGE_ERROR,"Failed to propertyl sequence calls to a set of interfaces"},
     {ICAL_UNIMPLEMENTED_ERROR,"This feature has not been implemented"},
     {ICAL_NO_ERROR,"No error"},
     {ICAL_UNKNOWN_ERROR,"Unknown error type -- icalerror_strerror() was probably given bad input"}

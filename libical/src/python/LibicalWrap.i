@@ -81,6 +81,10 @@ icalproperty* icalproperty_new_from_string(char* str);
 
 char* icalproperty_as_ical_string(icalproperty *prop);
 
+void icalproperty_set_parameter_from_string(icalproperty* prop,
+                                          const char* name, const char* value);
+void icalproperty_set_value_from_string(icalproperty* prop,const char* value);
+
 typedef enum icalerrorenum {
     
     ICAL_BADARG_ERROR,
@@ -99,7 +103,7 @@ typedef enum icalerrorenum {
 } icalerrorenum;
 
 /* Make an individual error fatal or non-fatal. */
-typedef enum icalerrorstate { 
+typedef enum icalererorstate { 
     ICAL_ERROR_FATAL,     /* Not fata */
     ICAL_ERROR_NONFATAL,  /* Fatal */
     ICAL_ERROR_DEFAULT,   /* Use the value of icalerror_errors_are_fatal*/
@@ -178,7 +182,9 @@ struct icaltimetype
 struct icaltimetype icaltime_from_timet(int v, int is_date);
 
 /* Return the time as seconds past the UNIX epoch */
-time_t icaltime_as_timet(struct icaltimetype);
+/* Normally, this returns a time_t, but SWIG tries to turn that type
+   into a pointer */
+int icaltime_as_timet(struct icaltimetype);
 
 /* Return a string represention of the time, in RFC2445 format. The
    string is owned by libical */

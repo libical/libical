@@ -1,0 +1,23 @@
+2001-02-26  Eric Busboom  <eric@softwarestudio.org>
+
+	* Period Added test routine,test_period()
+
+	* Period implemented methods in period
+
+	* Time Addedd addition and subtraction operators
+
+2001-02-25  Eric Busboom  <eric@softwarestudio.org>
+
+	* Libical.py Added test routine for time, time_test()
+
+	* Libical.py Remove end of line chars ('\r\n" ) from
+ 	Property._str__. Caller should add these lines itself
+
+	* Liical.py CHanges Time._update_values to set time VALUE type
+ 	based on use of is_date, rather than length of string.
+
+	* Libical.py Removed call to _update_value in TIme::timezone
+	
+
+	* Libical.py changed update_value to _update_value
+

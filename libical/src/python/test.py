@@ -40,6 +40,8 @@ print attendee
 
 test_time()
 
+test_period()
+
 file = open('littlefile.txt')
 attachProp = Attach(file)
 file.close()
@@ -52,6 +54,5 @@ print "Calling value()"
 print attachProp.value()
 print "Calling asIcalString()"
 print attachProp.asIcalString()
-
 
 

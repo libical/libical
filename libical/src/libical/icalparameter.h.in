@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalparameter.h.in,v 1.1.1.1 2001-01-02 07:33:02 ebusboom Exp $
+  $Id: icalparameter.h.in,v 1.2 2001-02-27 03:39:41 ebusboom Exp $
   $Locker:  $
 
   
@@ -35,7 +35,7 @@ typedef void icalparameter;
 
 icalparameter* icalparameter_new(icalparameter_kind kind);
 icalparameter* icalparameter_new_clone(icalparameter* p);
-icalparameter* icalparameter_new_from_string(icalparameter_kind kind, char* value);
+icalparameter* icalparameter_new_from_string(icalparameter_kind kind, const char* value);
 
 void icalparameter_free(icalparameter* parameter);
 

@@ -1,3 +1,9 @@
+2001-02-26  Eric Busboom  <eric@softwarestudio.org>
+
+	* src/libical/icalproperty.c Added
+ 	icalproperty_set_parameter_from_string and
+ 	icalproperty_set_value_from_string to aid in binding to Python 
+
 2001-02-15  Eric Busboom  <eric@softwarestudio.org>
 
 	* design-data/prop-to-value.txt Made a new CSV file,

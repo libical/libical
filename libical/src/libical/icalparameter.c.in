@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c.in,v 1.5 2001-02-10 01:23:01 jproseve Exp $
+  $Id: icalparameter.c.in,v 1.6 2001-02-27 03:39:41 ebusboom Exp $
   $Locker:  $
     
 
@@ -238,7 +238,7 @@ void icalparameter_set_impl_data(icalparameter_kind kind,
     }
 }
 
-icalparameter* icalparameter_new_from_string_test(icalparameter_kind kind, char* val)
+icalparameter* icalparameter_new_from_string_test(icalparameter_kind kind, const  char* val)
 {
     int i =0;
     icalparameter* param=0;
@@ -314,7 +314,7 @@ icalparameter* icalparameter_new_from_string_test(icalparameter_kind kind, char*
 #endif 
 
 
-icalparameter* icalparameter_new_from_string(icalparameter_kind kind, char* val)
+icalparameter* icalparameter_new_from_string(icalparameter_kind kind,const  char* val)
 {
 
     icalparameter* param=0;

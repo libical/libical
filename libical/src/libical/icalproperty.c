@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.3 2001-02-22 05:03:56 ebusboom Exp $
+  $Id: icalproperty.c,v 1.4 2001-02-27 03:39:41 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -30,6 +30,7 @@
 #endif
 
 #include "icalproperty.h"
+#include "icalparameter.h"
 #include "icalcomponent.h"
 #include "pvl.h"
 #include "icalenums.h"
@@ -456,6 +457,9 @@ void
 icalproperty_set_parameter (icalproperty* prop,icalparameter* parameter)
 {
     icalparameter_kind kind;
+    
+    icalerror_check_arg_rv( (prop!=0),"prop");
+    icalerror_check_arg_rv( (parameter!=0),"parameter");
 
     kind = icalparameter_isa(parameter);
 
@@ -464,6 +468,34 @@ icalproperty_set_parameter (icalproperty* prop,icalparameter* parameter)
     icalproperty_add_parameter(prop,parameter);
 }
 
+void icalproperty_set_parameter_from_string(icalproperty* prop,
+                                            const char* name, const char* value)
+{
+
+    icalparameter_kind kind;
+    icalparameter *param;
+
+    icalerror_check_arg_rv( (prop!=0),"prop");
+    icalerror_check_arg_rv( (name!=0),"name");
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    kind = icalenum_string_to_parameter_kind(name);
+
+    if(kind == ICAL_NO_PROPERTY){
+        /* icalenum_string_to_parameter_kind will set icalerrno */
+        return;
+    }
+
+    param  = icalparameter_new_from_string(kind, value);
+
+    if (param == 0){
+        /* icalparameter_new_from_string will set errno */
+        return;
+    }
+
+    icalproperty_set_parameter(prop,param);
+
+}
 
 void
 icalproperty_remove_parameter (icalproperty* prop, icalparameter_kind kind)
@@ -582,6 +614,34 @@ icalproperty_get_value (icalproperty* prop)
     return p->value;
 }
 
+
+void icalproperty_set_value_from_string(icalproperty* prop,const char* str)
+{
+    icalvalue *oval,*nval;
+    icalvalue_kind kind;
+
+    icalerror_check_arg_rv( (prop!=0),"prop"); 
+    icalerror_check_arg_rv( (str!=0),"str");
+   
+    oval = icalproperty_get_value(prop);
+
+    if(oval == 0){
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
+
+    kind = icalvalue_isa(oval);
+
+    nval = icalvalue_new_from_string(kind, str);
+
+    if(nval == 0){
+        /*icalvalue_new_from_string will set icalerrno */
+        return ;
+    }
+
+    icalproperty_set_value(prop,nval);
+    
+}
 
 void icalproperty_set_x_name(icalproperty* prop, char* name)
 {
