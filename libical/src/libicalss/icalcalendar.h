@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalcalendar.h,v 1.1.1.1 2001-01-02 07:33:03 ebusboom Exp $
+ $Id: icalcalendar.h,v 1.2 2002-06-27 02:30:58 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -38,7 +38,7 @@
  * components. It also has interfaces to access the free/busy list
  * and a list of calendar properties */
 
-typedef  void icalcalendar;
+typedef struct icalcalendar_impl icalcalendar;
 
 icalcalendar* icalcalendar_new(char* dir);
 

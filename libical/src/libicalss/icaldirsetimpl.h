@@ -3,7 +3,7 @@
   FILE: icaldirsetimpl.h
   CREATOR: eric 21 Aug 2000
   
-  $Id: icaldirsetimpl.h,v 1.3 2002-06-04 14:28:36 acampi Exp $
+  $Id: icaldirsetimpl.h,v 1.4 2002-06-27 02:30:58 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -35,15 +35,14 @@
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icalset*/
 
-#define ICALDIRSET_ID "dset"
-
 struct icaldirset_impl 
 {
-	char id[5]; /* "dset" */
-	char* dir;
-	icalgauge* gauge;
-	icalcluster* cluster;
-	int first_component;
-	pvl_list directory;
-	pvl_elem directory_iterator;
+  icalset super;		/**< parent class */
+  char* dir;			/**< directory containing ics files  */
+  icaldirset_options options;	/**< copy of options passed to icalset_new() */
+  icalcluster* cluster;		/**< cluster containing data */
+  icalgauge* gauge;		/**< gauge for filtering out data  */
+  int first_component;		/**< ??? */
+  pvl_list directory;		/**< ??? */
+  pvl_elem directory_iterator;	/**< ??? */
 };

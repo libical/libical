@@ -8,7 +8,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.y,v 1.4 2002-06-07 12:51:17 acampi Exp $
+  $Id: icalssyacc.y,v 1.5 2002-06-27 02:30:59 acampi Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -44,13 +44,12 @@
   /* ick...*/
 #define yyextra ((struct icalgauge_impl*)ssget_extra(yy_globals))
 
-/* extern struct  icalgauge_impl *icalss_yy_gauge;*/
 
-void ssyacc_add_where(struct icalgauge_impl* impl, char* prop, 
+static void ssyacc_add_where(struct icalgauge_impl* impl, char* prop, 
 	icalgaugecompare compare , char* value);
-void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
-void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
-void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
+static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
+static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
+static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
 void sserror(char *s); /* Don't know why I need this.... */
 
 %}
@@ -105,7 +104,7 @@ where_list:
 
 %%
 
-void ssyacc_add_where(struct icalgauge_impl* impl, char* str1, 
+static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1, 
 	icalgaugecompare compare , char* value_str)
 {
 
@@ -167,7 +166,7 @@ void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
     pvl_push(impl->where,where);
 }
 
-void set_logic(struct icalgauge_impl* impl,icalgaugelogic l)
+static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l)
 {
     pvl_elem e = pvl_tail(impl->where);
     struct icalgauge_where *where = pvl_data(e);
@@ -178,7 +177,7 @@ void set_logic(struct icalgauge_impl* impl,icalgaugelogic l)
 
 
 
-void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
+static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
 {
     char *c, *compstr, *propstr;
     struct icalgauge_where *where;
@@ -232,7 +231,7 @@ void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
     pvl_push(impl->select,where);
 }
 
-void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
+static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
 {
     icalcomponent_kind ckind;
 

@@ -3,7 +3,7 @@
     FILE: icalmessage.c
     CREATOR: ebusboom 07 Nov 2000
   
-    $Id: icalmessage.c,v 1.4 2002-05-29 09:59:28 acampi Exp $
+    $Id: icalmessage.c,v 1.5 2002-06-27 02:30:59 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -40,7 +40,7 @@ icalcomponent* icalmessage_get_inner(icalcomponent* comp)
     }
 }
 
-char* lowercase(const char* str)
+static char* lowercase(const char* str)
 {
     char* p = 0;
     char* n = icalmemory_strdup(str);
@@ -158,8 +158,13 @@ icalcomponent *icalmessage_new_reply_base(icalcomponent* c,
 
     icalcomponent_add_property(reply,icalproperty_new_version("2.0"));
     
+#ifndef WIN32    
     sprintf(tmp,
            "-//SoftwareStudio//NONSGML %s %s //EN",PACKAGE,VERSION);
+#else
+    sprintf(tmp,
+           "-//SoftwareStudio//NONSGML %s %s //EN",ICAL_PACKAGE,ICAL_VERSION);
+#endif
     icalcomponent_add_property(reply,icalproperty_new_prodid(tmp));
 
     return reply;

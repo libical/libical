@@ -4,7 +4,7 @@
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalspanlist.h,v 1.3 2002-06-11 18:53:00 acampi Exp $
+ $Id: icalspanlist.h,v 1.4 2002-06-27 02:30:59 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -65,6 +65,7 @@ void icalspanlist_dump(icalspanlist* s);
 icalcomponent *icalspanlist_as_vfreebusy(icalspanlist* s_in,
 					 const char* organizer,
 					 const char* attendee);
+int *icalspanlist_as_freebusy_matrix(icalspanlist* span, int delta_t);
 
 #endif
 				    

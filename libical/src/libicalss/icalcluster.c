@@ -3,7 +3,7 @@
   FILE: icalcluster.c
   CREATOR: acampi 13 March 2002
   
-  $Id: icalcluster.c,v 1.1 2002-05-29 12:38:31 acampi Exp $
+  $Id: icalcluster.c,v 1.2 2002-06-27 02:30:58 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2002, Eric Busboom, http://www.softwarestudio.org
@@ -67,8 +67,7 @@
 #endif
 
 
-icalcluster *
-icalcluster_new_impl(void) {
+icalcluster * icalcluster_new_impl(void) {
 
 	struct icalcluster_impl* impl;
   
@@ -88,9 +87,8 @@ icalcluster_new_impl(void) {
  * Create a cluster with a key/value pair.
  * FIXME always do a deep copy
  */
-icalcluster *
-icalcluster_new(const char* key, const icalcomponent *data) {
 
+icalcluster * icalcluster_new(const char* key, icalcomponent *data) {
 	struct icalcluster_impl *impl = icalcluster_new_impl();
 	assert(impl->data == 0);
 
@@ -115,9 +113,8 @@ icalcluster_new(const char* key, const icalcomponent *data) {
 /**
  * Deep clone an icalcluster to a new one
  */
-icalcluster *
-icalcluster_new_clone(const icalcluster *data) {
 
+icalcluster *icalcluster_new_clone(const icalcluster *data) {
 	struct icalcluster_impl *old = (struct icalcluster_impl *)data;
 	struct icalcluster_impl *impl = icalcluster_new_impl();
 
@@ -128,11 +125,9 @@ icalcluster_new_clone(const icalcluster *data) {
 	return impl;
 }
 
-void
-icalcluster_free(icalcluster *cluster) {
 
-	struct icalcluster_impl *impl = (struct icalcluster_impl*)cluster;
-	icalerror_check_arg_rv((cluster!=0),"cluster");
+void icalcluster_free(icalcluster *impl) {
+	icalerror_check_arg_rv((impl!=0),"cluster");
 
 	if (impl->key != 0){
 		free(impl->key);
@@ -147,46 +142,37 @@ icalcluster_free(icalcluster *cluster) {
 	free(impl);
 }
 
-const char *
-icalcluster_key(icalcluster *cluster) {
 
-	struct icalcluster_impl *impl = (struct icalcluster_impl*)cluster;
-	icalerror_check_arg_rz((cluster!=0),"cluster");
+const char *icalcluster_key(icalcluster *impl) {
+	icalerror_check_arg_rz((impl!=0),"cluster");
 
 	return impl->key;
 }
 
-int
-icalcluster_is_changed(icalcluster *cluster) {
 
-	struct icalcluster_impl *impl = (struct icalcluster_impl*)cluster;
-	icalerror_check_arg_rz((cluster!=0),"cluster");
+int icalcluster_is_changed(icalcluster *impl) {
+	icalerror_check_arg_rz((impl!=0),"cluster");
 
 	return impl->changed;
 }
 
-void
-icalcluster_mark(icalcluster *cluster) {
 
-	struct icalcluster_impl *impl = (struct icalcluster_impl*)cluster;
+void icalcluster_mark(icalcluster *impl) {
 	icalerror_check_arg_rv((impl!=0),"cluster");
 
 	impl->changed = 1;
 }
 
-void
-icalcluster_commit(icalcluster *cluster) {
 
-	struct icalcluster_impl *impl = (struct icalcluster_impl*)cluster;
+void icalcluster_commit(icalcluster *impl) {
 	icalerror_check_arg_rv((impl!=0),"cluster");
 
 	impl->changed = 0;
 }
 
-icalcomponent *
-icalcluster_get_component(icalcluster *cluster) {
 
-	struct icalcluster_impl *impl = (struct icalcluster_impl*)cluster;
+icalcomponent *icalcluster_get_component(icalcluster *impl) {
+
 	icalerror_check_arg_rz((impl!=0),"cluster");
 
 	if (icalcomponent_isa(impl->data) != ICAL_XROOT_COMPONENT) {
@@ -198,66 +184,60 @@ icalcluster_get_component(icalcluster *cluster) {
 	return impl->data;
 }
 
-icalerrorenum
-icalcluster_add_component(icalcluster *cluster, icalcomponent* child) {
 
-	struct icalcluster_impl *impl = (struct icalcluster_impl*)cluster;
-	icalerror_check_arg_re((cluster!=0),"cluster", ICAL_BADARG_ERROR);
+icalerrorenum icalcluster_add_component(icalcluster *impl, icalcomponent* child) {
+
+	icalerror_check_arg_re((impl!=0),"cluster", ICAL_BADARG_ERROR);
 	icalerror_check_arg_re((child!=0),"child",ICAL_BADARG_ERROR);
 
 	icalcomponent_add_component(impl->data, child);
-	icalcluster_mark(cluster);
+	icalcluster_mark(impl);
 
 	return ICAL_NO_ERROR;
 }
 
-icalerrorenum
-icalcluster_remove_component(icalcluster *cluster, icalcomponent* child) {
 
-	struct icalcluster_impl *impl = (struct icalcluster_impl*)cluster;
-	icalerror_check_arg_re((cluster!=0),"cluster",ICAL_BADARG_ERROR);
+icalerrorenum icalcluster_remove_component(icalcluster *impl, icalcomponent* child) {
+
+	icalerror_check_arg_re((impl!=0),"cluster",ICAL_BADARG_ERROR);
 	icalerror_check_arg_re((child!=0),"child",ICAL_BADARG_ERROR);
 
 	icalcomponent_remove_component(impl->data,child);
-	icalcluster_mark(cluster);
+	icalcluster_mark(impl);
 
 	return ICAL_NO_ERROR;
 }
 
-int
-icalcluster_count_components(icalcluster *cluster, icalcomponent_kind kind) {
 
-	struct icalcluster_impl *impl = (struct icalcluster_impl*)cluster;
-	icalerror_check_arg_re((cluster!=0),"cluster",ICAL_BADARG_ERROR);
+int icalcluster_count_components(icalcluster *impl, icalcomponent_kind kind) {
+
+	icalerror_check_arg_re((impl!=0),"cluster",ICAL_BADARG_ERROR);
 
 	return icalcomponent_count_components(impl->data, kind);
 }
 
-/* Iterate through components */
-icalcomponent *
-icalcluster_get_current_component(icalcluster* cluster) {
 
-	struct icalcluster_impl* impl = (struct icalcluster_impl*)cluster;
-	icalerror_check_arg_rz((cluster!=0),"cluster");
+/** Iterate through components **/
+icalcomponent *icalcluster_get_current_component(icalcluster* impl) {
+
+	icalerror_check_arg_rz((impl!=0),"cluster");
 
 	return icalcomponent_get_current_component(impl->data);
 }
 
-icalcomponent *
-icalcluster_get_first_component(icalcluster* cluster) {
 
-	struct icalcluster_impl* impl = (struct icalcluster_impl*)cluster;
-	icalerror_check_arg_rz((cluster!=0),"cluster");
+icalcomponent *icalcluster_get_first_component(icalcluster* impl) {
+
+	icalerror_check_arg_rz((impl!=0),"cluster");
 
 	return icalcomponent_get_first_component(impl->data,
 						  ICAL_ANY_COMPONENT);
 }
 
-icalcomponent *
-icalcluster_get_next_component(icalcluster* cluster) {
 
-	struct icalcluster_impl* impl = (struct icalcluster_impl*)cluster;
-	icalerror_check_arg_rz((cluster!=0),"cluster");
+icalcomponent *icalcluster_get_next_component(icalcluster* impl) {
+
+	icalerror_check_arg_rz((impl!=0),"cluster");
     
 	return icalcomponent_get_next_component(impl->data,
 					     ICAL_ANY_COMPONENT);

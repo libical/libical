@@ -2,7 +2,7 @@
   FILE: icalcalendar.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalcalendar.c,v 1.2 2002-06-26 22:26:58 ebusboom Exp $
+  $Id: icalcalendar.c,v 1.3 2002-06-27 02:30:58 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -19,8 +19,6 @@
     the License at http://www.mozilla.org/MPL/
 
  ======================================================================*/
-
-#include "ical.h"
 
 
 #ifdef HAVE_CONFIG_H
@@ -49,8 +47,8 @@
 struct icalcalendar_impl 
 {
 	char* dir;
-	icalcomponent* freebusy;
-	icalcomponent* properties;
+	icalset* freebusy;
+	icalset* properties;
 	icalset* booked;
 	icalset* incoming;
 };
@@ -121,29 +119,26 @@ icalcalendar* icalcalendar_new(char* dir)
     return impl;
 }
 
-void icalcalendar_free(icalcalendar* calendar)
+void icalcalendar_free(icalcalendar* impl)
 {
-
-    struct icalcalendar_impl *impl = (struct icalcalendar_impl*)calendar;
-        
     if (impl->dir !=0){
 	free(impl->dir);
     }
 
     if (impl->freebusy !=0){
-	icalfileset_free(impl->freebusy);
+	impl->booked->free(impl->booked);
     }
 
     if (impl->properties !=0){
-	icalfileset_free(impl->properties);
+	impl->properties->free(impl->properties);
     }
 
     if (impl->booked !=0){
-	icaldirset_free(impl->booked);
+	impl->booked->free(impl->booked);
     }
 
     if (impl->incoming !=0){
-	icaldirset_free(impl->incoming);
+	impl->incoming->free(impl->incoming);
     }
 
     impl->dir = 0;
@@ -157,37 +152,32 @@ void icalcalendar_free(icalcalendar* calendar)
 }
 
 
-int icalcalendar_lock(icalcalendar* calendar)
+int icalcalendar_lock(icalcalendar* impl)
 {
-    struct icalcalendar_impl *impl = (struct icalcalendar_impl*)calendar;
     icalerror_check_arg_rz((impl != 0),"impl");
     return 0;
 }
 
-int icalcalendar_unlock(icalcalendar* calendar)
+int icalcalendar_unlock(icalcalendar* impl)
 {
-    struct icalcalendar_impl *impl = (struct icalcalendar_impl*)calendar;
     icalerror_check_arg_rz((impl != 0),"impl");
     return 0;
 }
 
-int icalcalendar_islocked(icalcalendar* calendar)
+int icalcalendar_islocked(icalcalendar* impl)
 {
-    struct icalcalendar_impl *impl = (struct icalcalendar_impl*)calendar;
     icalerror_check_arg_rz((impl != 0),"impl");
     return 0;
 }
 
-int icalcalendar_ownlock(icalcalendar* calendar)
+int icalcalendar_ownlock(icalcalendar* impl)
 {
-    struct icalcalendar_impl *impl = (struct icalcalendar_impl*)calendar;
     icalerror_check_arg_rz((impl != 0),"impl");
     return 0;
 }
 
-icalset* icalcalendar_get_booked(icalcalendar* calendar)
+icalset* icalcalendar_get_booked(icalcalendar* impl)
 {
-    struct icalcalendar_impl *impl = (struct icalcalendar_impl*)calendar;
     char dir[PATH_MAX];
 
     icalerror_check_arg_rz((impl != 0),"impl");
@@ -207,10 +197,9 @@ icalset* icalcalendar_get_booked(icalcalendar* calendar)
 
 }
 
-icalset* icalcalendar_get_incoming(icalcalendar* calendar)
+icalset* icalcalendar_get_incoming(icalcalendar* impl)
 {
     char path[PATH_MAX];
-    struct icalcalendar_impl *impl = (struct icalcalendar_impl*)calendar;
     icalerror_check_arg_rz((impl != 0),"impl");
 
     path[0] = '\0';
@@ -225,10 +214,9 @@ icalset* icalcalendar_get_incoming(icalcalendar* calendar)
     return impl->properties;
 }
 
-icalset* icalcalendar_get_properties(icalcalendar* calendar)
+icalset* icalcalendar_get_properties(icalcalendar* impl)
 {
     char path[PATH_MAX];
-    struct icalcalendar_impl *impl = (struct icalcalendar_impl*)calendar;
     icalerror_check_arg_rz((impl != 0),"impl");
 
     path[0] = '\0';
@@ -243,10 +231,9 @@ icalset* icalcalendar_get_properties(icalcalendar* calendar)
     return impl->properties;
 }
 
-icalset* icalcalendar_get_freebusy(icalcalendar* calendar)
+icalset* icalcalendar_get_freebusy(icalcalendar* impl)
 {
     char path[PATH_MAX];
-    struct icalcalendar_impl *impl = (struct icalcalendar_impl*)calendar;
     icalerror_check_arg_rz((impl != 0),"impl");
 
     path[0] = '\0';

@@ -4,7 +4,7 @@
   CREATOR: dml 12 December 2001
   (C) COPYRIGHT 2001, Critical Path
 
-  $Id: icalbdbsetimpl.h,v 1.1 2002-06-13 15:36:56 acampi Exp $
+  $Id: icalbdbsetimpl.h,v 1.2 2002-06-27 02:30:58 acampi Exp $
   $Locker:  $
  ======================================================================*/
 
@@ -21,11 +21,8 @@
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icaldirset*/
 
-#define ICALBDBSET_ID "bset"
-
 struct icalbdbset_impl {
-
-  char id[5]; /*bset*/
+  icalset super;		/**< parent class */
   const char *path;
   const char *subdb;
   const char *sindex;
@@ -33,6 +30,10 @@ struct icalbdbset_impl {
   void *data;
   int datasize;
   int changed;
+  int expand;
+  icalrecur_iterator *ritr; /*the last iterator*/
+  int occurrence_no; /* the last occurrence number*/
+  icalcomponent* last_component; /*the pending recurring component to be processed  */
   icalcomponent* cluster;
   icalgauge* gauge;
   DB_ENV *dbenv;

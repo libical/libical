@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalcluster.h,v 1.1 2002-05-29 12:38:31 acampi Exp $
+ $Id: icalcluster.h,v 1.2 2002-06-27 02:30:58 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -32,10 +32,9 @@
 #include "ical.h"
 #include "icalset.h"
 
-typedef void icalcluster;
+typedef struct icalcluster_impl icalcluster;
 
-icalcluster* icalcluster_new(const char *key,
-	const icalcomponent *data);
+icalcluster* icalcluster_new(const char *key, icalcomponent *data);
 icalcluster* icalcluster_new_clone(const icalcluster *cluster);
 
 void icalcluster_free(icalcluster *cluster);

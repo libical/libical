@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalfileset.h,v 1.8 2002-05-29 13:04:57 acampi Exp $
+ $Id: icalfileset.h,v 1.9 2002-06-27 02:30:58 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -43,19 +43,13 @@
 
 extern int icalfileset_safe_saves;
 
-typedef void icalfileset;
+typedef struct icalfileset_impl icalfileset;
 
+icalset* icalfileset_new(const char* path);
+icalset* icalfileset_new_reader(const char* path);
+icalset* icalfileset_new_writer(const char* path);
 
-/* icalfileset
-   icalfilesetfile
-   icalfilesetdir
-*/
-
-
-icalfileset* icalfileset_new(const char* path);
-icalfileset* icalfileset_new_reader(const char* path);
-icalfileset* icalfileset_new_writer(const char* path);
-
+icalset* icalfileset_init(icalset *set, const char *dsn, void* options);
 
 /* Like _new, but takes open() flags for opening the file */
 icalfileset* icalfileset_new_open(const char* path, 
@@ -65,51 +59,78 @@ icalfileset* icalfileset_new_from_cluster(const char* path, icalcluster *cluster
 
 icalcluster* icalfileset_produce_icalcluster(const char *path);
 
-void icalfileset_free(icalfileset* cluster);
+void icalfileset_free(icalset* cluster);
 
-const char* icalfileset_path(icalfileset* cluster);
+const char* icalfileset_path(icalset* cluster);
 
 /* Mark the cluster as changed, so it will be written to disk when it
    is freed. Commit writes to disk immediately. */
-void icalfileset_mark(icalfileset* cluster);
-icalerrorenum icalfileset_commit(icalfileset* cluster); 
+void icalfileset_mark(icalset* set);
+icalerrorenum icalfileset_commit(icalset* set); 
 
-icalerrorenum icalfileset_add_component(icalfileset* cluster,
+icalerrorenum icalfileset_add_component(icalset* set,
 					icalcomponent* child);
 
-icalerrorenum icalfileset_remove_component(icalfileset* cluster,
+icalerrorenum icalfileset_remove_component(icalset* set,
 					   icalcomponent* child);
 
-int icalfileset_count_components(icalfileset* cluster,
+int icalfileset_count_components(icalset* set,
 				 icalcomponent_kind kind);
 
-/* Restrict the component returned by icalfileset_first, _next to those
-   that pass the gauge. _clear removes the gauge */
-icalerrorenum icalfileset_select(icalfileset* store, icalgauge* gauge);
-void icalfileset_clear(icalfileset* store);
+/**
+ * Restrict the component returned by icalfileset_first, _next to those
+ * that pass the gauge. _clear removes the gauge 
+ */
+icalerrorenum icalfileset_select(icalset* set, icalgauge* gauge);
 
-/* Get and search for a component by uid */
-icalcomponent* icalfileset_fetch(icalfileset* cluster, const char* uid);
-int icalfileset_has_uid(icalfileset* cluster, const char* uid);
-icalcomponent* icalfileset_fetch_match(icalfileset* set, icalcomponent *c);
+/** clear the gauge **/
+void icalfileset_clear(icalset* set);
+
+/** Get and search for a component by uid **/
+icalcomponent* icalfileset_fetch(icalset* set, const char* uid);
+int icalfileset_has_uid(icalset* set, const char* uid);
+icalcomponent* icalfileset_fetch_match(icalset* set, icalcomponent *c);
 
 
-/* Modify components according to the MODIFY method of CAP. Works on
-   the currently selected components. */
-icalerrorenum icalfileset_modify(icalfileset* store, icalcomponent *oldcomp,
+/**
+ *  Modify components according to the MODIFY method of CAP. Works on the
+ *  currently selected components. 
+ */
+icalerrorenum icalfileset_modify(icalset* set, 
+				 icalcomponent *oldcomp,
 			       icalcomponent *newcomp);
 
-/* Iterate through components. If a guage has been defined, these
+/* Iterate through components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
-icalcomponent* icalfileset_get_current_component (icalfileset* cluster);
-icalcomponent* icalfileset_get_first_component(icalfileset* cluster);
-icalcomponent* icalfileset_get_next_component(icalfileset* cluster);
-/* Return a reference to the internal component. You probably should
+icalcomponent* icalfileset_get_current_component (icalset* cluster);
+icalcomponent* icalfileset_get_first_component(icalset* cluster);
+icalcomponent* icalfileset_get_next_component(icalset* cluster);
+
+/* External iterator for thread safety */
+icalsetiter icalfileset_begin_component(icalset* set, icalcomponent_kind kind, icalgauge* gauge);
+icalcomponent * icalfilesetiter_to_next(icalset* set, icalsetiter *iter);
+icalcomponent* icalfileset_form_a_matched_recurrence_component(icalsetiter* itr);
+
+/** Return a reference to the internal component. You probably should
    not be using this. */
 
-icalcomponent* icalfileset_get_component(icalfileset* cluster);
+icalcomponent* icalfileset_get_component(icalset* cluster);
 
+/** 
+ * @brief options for opening an icalfileset
+ *
+ * These options should be passed to the icalset_new() function
+ */
+
+typedef struct icalfileset_options {
+  int          flags;		/**< flags for open() O_RDONLY, etc  */
+  mode_t       mode;		/**< file mode */
+  int          safe_saves;	/**< to lock or not */
+  icalcluster  *cluster;	/**< use this cluster to initialize data */
+} icalfileset_options;
+
+extern icalfileset_options icalfileset_options_default;
 
 #endif /* !ICALFILESET_H */
 

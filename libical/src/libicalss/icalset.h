@@ -3,7 +3,6 @@
  FILE: icalset.h
  CREATOR: eric 28 November 1999
 
-
  Icalset is the "base class" for representations of a collection of
  iCal components. Derived classes (actually delegatees) include:
  
@@ -12,7 +11,7 @@
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
 
- $Id: icalset.h,v 1.7 2002-06-26 22:26:58 ebusboom Exp $
+ $Id: icalset.h,v 1.8 2002-06-27 02:30:59 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -40,7 +39,6 @@
 #include <limits.h> /* For PATH_MAX */
 #include "ical.h"
 #include "icalerror.h"
-
 #include "icalgauge.h"
 
 #ifdef PATH_MAX
@@ -50,20 +48,64 @@
 #endif
 
 
-
-
-typedef void icalset;
+typedef struct icalset_impl icalset;
 
 typedef enum icalset_kind {
     ICAL_FILE_SET,
     ICAL_DIR_SET,
-    ICAL_HEAP_SET,
-    ICAL_MYSQL_SET,
-    ICAL_CAP_SET
+    ICAL_BDB_SET
 } icalset_kind;
 
+typedef struct icalsetiter
+{
+	icalcompiter iter;    /* icalcomponent_kind, pvl_elem iter */
+	icalgauge* gauge;
+        icalrecur_iterator* ritr; /*the last iterator*/
+        icalcomponent* last_component; /*the pending recurring component to be processed  */
+} icalsetiter;
 
-/* Create a specific derived type of set */
+struct icalset_impl {
+        icalset_kind kind;
+        char *dsn;
+        icalset* (*init)(icalset* set, const char *dsn, void *options);
+	void (*free)(icalset* set);
+	const char* (*path)(icalset* set);
+	void (*mark)(icalset* set);
+	icalerrorenum (*commit)(icalset* set); 
+	icalerrorenum (*add_component)(icalset* set, icalcomponent* comp);
+	icalerrorenum (*remove_component)(icalset* set, icalcomponent* comp);
+	int (*count_components)(icalset* set,
+			     icalcomponent_kind kind);
+	icalerrorenum (*select)(icalset* set, icalgauge* gauge);
+	void (*clear)(icalset* set);
+	icalcomponent* (*fetch)(icalset* set, const char* uid);
+	icalcomponent* (*fetch_match)(icalset* set, icalcomponent *comp);
+	int (*has_uid)(icalset* set, const char* uid);
+	icalerrorenum (*modify)(icalset* set, icalcomponent *old,
+				     icalcomponent *newc);
+	icalcomponent* (*get_current_component)(icalset* set);	
+	icalcomponent* (*get_first_component)(icalset* set);
+	icalcomponent* (*get_next_component)(icalset* set);
+	icalsetiter (*icalset_begin_component)(icalset* set,
+					 icalcomponent_kind kind, icalgauge* gauge);
+	icalcomponent* (*icalsetiter_to_next)(icalset* set, icalsetiter* i);
+	icalcomponent* (*icalsetiter_to_prior)(icalset* set, icalsetiter* i);
+};
+
+
+/** @brief Generic icalset constructor
+ *  
+ *  @param kind     The type of icalset to create
+ *  @param dsn      Data Source Name - usually a pathname or DB handle
+ *  @param options  Any implementation specific options
+ *
+ *  @ret   A valid icalset reference or NULL if error.
+ * 
+ *  This creates any of the icalset types available.
+ */
+
+icalset* icalset_new(icalset_kind kind, const char* dsn, void* options);
+
 icalset* icalset_new_file(const char* path);
 icalset* icalset_new_file_reader(const char* path);
 icalset* icalset_new_file_writer(const char* path);
@@ -71,9 +113,6 @@ icalset* icalset_new_file_writer(const char* path);
 icalset* icalset_new_dir(const char* path);
 icalset* icalset_new_file_reader(const char* path);
 icalset* icalset_new_file_writer(const char* path);
-
-icalset* icalset_new_heap(void);
-icalset* icalset_new_mysql(const char* path);
 
 void icalset_free(icalset* set);
 
@@ -111,6 +150,21 @@ icalerrorenum icalset_modify(icalset* set, icalcomponent *oldc,
 icalcomponent* icalset_get_current_component(icalset* set);
 icalcomponent* icalset_get_first_component(icalset* set);
 icalcomponent* icalset_get_next_component(icalset* set);
+
+/* External Iterator with gauge - for thread safety */
+extern icalsetiter icalsetiter_null;
+
+icalsetiter icalset_begin_component(icalset* set,
+				 icalcomponent_kind kind, icalgauge* gauge);
+
+/* Default _next, _prior, _deref for subclasses that use single cluster */
+icalcomponent* icalsetiter_next(icalsetiter* i);
+icalcomponent* icalsetiter_prior(icalsetiter* i);
+icalcomponent* icalsetiter_deref(icalsetiter* i);
+
+/* for subclasses that use multiple clusters that require specialized cluster traversal */
+icalcomponent* icalsetiter_to_next(icalset* set, icalsetiter* i);
+icalcomponent* icalsetiter_to_prior(icalset* set, icalsetiter* i);
 
 #endif /* !ICALSET_H */
 

@@ -4,7 +4,7 @@
  CREATOR: eric 09 Aug 2000
 
 
- $Id: icalgaugeimpl.h,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
+ $Id: icalgaugeimpl.h,v 1.3 2002-06-27 02:30:59 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -54,10 +54,10 @@ struct icalgauge_where {
 
 struct icalgauge_impl
 {
-
-	pvl_list select; /*Of icalgaugecompare, using only prop and comp fields*/
-	pvl_list from; /* List of component_kinds, as integers */
-	pvl_list where; /* List of icalgaugecompare */
+	pvl_list select; /**< Of icalgaugecompare, using only prop and comp fields*/
+	pvl_list from;   /**< List of component_kinds, as integers */
+	pvl_list where;  /**< List of icalgaugecompare */
+        int      expand;
 };
 
 

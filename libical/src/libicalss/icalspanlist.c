@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.6 2002-06-11 18:53:00 acampi Exp $
+    $Id: icalspanlist.c,v 1.7 2002-06-27 02:30:59 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -58,6 +58,32 @@ static int compare_span(void* a, void* b)
 }
 
 
+/** @brief callback function for collecting spanlists of a
+ *         series of events.
+ */
+
+static void icalspanlist_new_callback(icalcomponent *comp,
+					    struct icaltime_span *span,
+					    void *data)
+{
+  icaltime_span *s;
+  icalspanlist *sl = (icalspanlist*) data;
+
+  if (span->is_busy == 0)
+    return;
+
+  if ((s=(icaltime_span *) malloc(sizeof(icaltime_span))) == 0) {
+    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+    return;
+  }
+
+  /** copy span data into allocated memory.. **/
+  *s = *span;
+  pvl_insert_ordered(sl->spans, compare_span, (void*)s);
+}
+					    
+
+
 /** @brief Make a free list from a set of VEVENT components.
  *
  *  @param set    A valid icalset containing VEVENTS
@@ -92,18 +118,12 @@ icalspanlist* icalspanlist_new(icalset *set,
     range.start = icaltime_as_timet(start);
     range.end = icaltime_as_timet(end);
 
-    /*    printf("Range start: %s",ctime(&range.start));
-	  printf("Range end  : %s",ctime(&range.end));*/
-
-
     /* Get a list of spans of busy time from the events in the set
        and order the spans based on the start time */
 
    for(c = icalset_get_first_component(set);
 	c != 0;
 	c = icalset_get_next_component(set)){
-
-       struct icaltime_span span;
 
        kind  = icalcomponent_isa(c);
        inner = icalcomponent_get_inner(c);
@@ -120,31 +140,12 @@ icalspanlist* icalspanlist_new(icalset *set,
        }
        
        icalerror_clear_errno();
-
-	span = icalcomponent_get_span(c);
-	span.is_busy = 1;
-
-	if(icalerrno != ICAL_NO_ERROR){
-	    continue;
-	}
-
-	if ((range.start < span.end && icaltime_is_null_time(end)) ||
-	    (range.start < span.end && range.end > span.start )){
-	    
-	    struct icaltime_span *s;
-
-	    if ((s=(struct icaltime_span *)
-		 malloc(sizeof(struct icaltime_span))) == 0){
-		icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-		return 0;
-	    }
-
-	    memcpy(s,&span,sizeof(span));
-		
-	    pvl_insert_ordered(sl->spans,compare_span,(void*)s);
-
-	}
-    }
+       
+       icalcomponent_foreach_recurrence(c, start, end, 
+					icalspanlist_new_callback, 
+					(void*)sl);
+       
+   }
     
     /* Now Fill in the free time spans. loop through the spans. if the
        start of the range is not within the span, create a free entry
@@ -275,7 +276,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
      /* Is the reference time before the first span? If so, assume
         that the reference time is free */
      itr = pvl_head(sl->spans);
-     s = (struct icaltime_span*)pvl_data(itr);
+     s = (struct icaltime_span *)pvl_data(itr);
 
      if (s == 0){
 	 /* No elements in span */
@@ -303,7 +304,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
 	 itr != 0;
 	 itr = pvl_next(itr))
     {
-	s = (struct icaltime_span*)pvl_data(itr);
+	s = (struct icaltime_span *)pvl_data(itr);
 
 	if(s->is_busy == 0 && s->start >= rangett && 
 	    ( rangett < s->end || s->end == s->start)){
@@ -331,7 +332,92 @@ struct icalperiodtype icalspanlist_next_busy_time(icalspanlist* sl,
 						struct icaltimetype t);
 
 
-/*** @brief Return a VFREEBUSY component for the corresponding spanlist
+/** @brief Returns an hour-by-hour array of free/busy times over a
+ *         given period.
+ *
+ *  @param sl        A valid icalspanlist
+ *  @param delta_t   The time slice to divide by, in seconds.  Default 3600.
+ *  
+ *  @ret A pointer to an array of integers containing the number of
+ *       busy events in each delta_t time period.  The final entry 
+ *       contains the value -1.
+ *
+ *  This calculation is somewhat tricky.  This is due to the fact that
+ *  the time range contains the start time, but does not contain the
+ *  end time.  To perform a proper calculation we subtract one second
+ *  off the end times to get a true containing time.
+ * 
+ *  Also note that if you supplying a spanlist that does not start or
+ *  end on a time boundary divisible by delta_t you may get results
+ *  that are not quite what you expect.
+ */
+
+int* icalspanlist_as_freebusy_matrix(icalspanlist* sl, int delta_t) {
+  pvl_elem itr;
+  int spanduration_secs;
+  int *matrix;
+  int matrix_slots;
+  time_t sl_start, sl_end;
+
+  icalerror_check_arg_rz( (sl!=0), "spanlist");
+
+  if (!delta_t)
+    delta_t = 3600;
+
+  /** calculate the start and end time as time_t **/
+  sl_start = icaltime_as_timet_with_zone(sl->start, icaltimezone_get_utc_timezone());
+  sl_end   = icaltime_as_timet_with_zone(sl->end, icaltimezone_get_utc_timezone());
+
+
+  /** insure that the time period falls on a time boundary divisable
+      by delta_t */
+
+  sl_start /= delta_t;
+  sl_start *= delta_t;
+
+  sl_end /= delta_t;
+  sl_end *= delta_t;
+
+
+  /** find the duration of this spanlist **/
+  spanduration_secs = sl_end - sl_start;
+
+
+  /** malloc our matrix, add one extra slot for a final -1 **/
+  matrix_slots = spanduration_secs/delta_t + 1;
+
+  matrix = (int*) malloc(sizeof(int) * matrix_slots);
+  if (matrix == NULL) {
+    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+    return NULL;
+  }
+  memset(matrix, 0, sizeof(int) * matrix_slots);
+  matrix[matrix_slots-1] = -1;
+
+  /* loop through each span and mark the slots in the array */
+
+  for( itr = pvl_head(sl->spans);  itr != 0;  itr = pvl_next(itr)) {
+    struct icaltime_span *s = (struct icaltime_span*)pvl_data(itr);
+    
+    if (s->is_busy == 1) {
+      int offset_start = s->start/delta_t - sl_start/delta_t;
+      int offset_end   = (s->end - 1) /delta_t  - sl_start/delta_t + 1;
+      int i;
+      
+      if (offset_end >= matrix_slots)
+	offset_end = matrix_slots - 1;
+
+      i = offset_start;
+      for (i=offset_start; i < offset_end; i++) {
+	matrix[i]++;
+      }
+    }
+  }
+  return matrix;
+}
+    
+
+/** @brief Return a VFREEBUSY component for the corresponding spanlist
  *
  *   @param sl         A valid icalspanlist, from icalspanlist_new()
  *   @param organizer  The organizer specified as MAILTO:user@domain

@@ -1,5 +1,5 @@
 /* A Bison parser, made from icalssyacc.y
-   by GNU bison 1.34.  */
+   by GNU bison 1.35.  */
 
 #define YYBISON 1  /* Identify Bison output.  */
 
@@ -36,7 +36,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.c,v 1.4 2002-06-07 12:51:17 acampi Exp $
+  $Id: icalssyacc.c,v 1.5 2002-06-27 02:30:59 acampi Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -56,7 +56,7 @@
  Code is Eric Busboom
 
   ======================================================================*/
-/*#define YYDEBUG 1*/
+#define YYDEBUG 1
 #include <stdlib.h>
 #include <string.h> /* for strdup() */
 #include <limits.h> /* for SHRT_MAX*/
@@ -72,22 +72,22 @@
   /* ick...*/
 #define yyextra ((struct icalgauge_impl*)ssget_extra(yy_globals))
 
-/* extern struct  icalgauge_impl *icalss_yy_gauge;*/
 
-void ssyacc_add_where(struct icalgauge_impl* impl, char* prop, 
+static void ssyacc_add_where(struct icalgauge_impl* impl, char* prop, 
 	icalgaugecompare compare , char* value);
-void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
-void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
-void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
+static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
+static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
+static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
 void sserror(char *s); /* Don't know why I need this.... */
 
 
-#line 58 "icalssyacc.y"
+#line 57 "icalssyacc.y"
 #ifndef YYSTYPE
 typedef union {
 	char* v_string;
 } yystype;
 # define YYSTYPE yystype
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -158,8 +158,8 @@ static const short yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined. */
 static const short yyrline[] =
 {
-       0,    69,    70,    71,    77,    79,    83,    85,    88,    90,
-      92,    93,    94,    95,    96,    99,   101,   102
+       0,    68,    69,    70,    76,    78,    82,    84,    87,    89,
+      91,    92,    93,    94,    95,    98,   100,   101
 };
 #endif
 
@@ -239,7 +239,7 @@ static const short yycheck[] =
 #define YYPURE 1
 
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
-#line 3 "/usr/local/share/bison/bison.simple"
+#line 3 "/usr/share/bison/bison.simple"
 
 /* Skeleton output parser for bison,
 
@@ -307,6 +307,12 @@ static const short yycheck[] =
 #  define YYSTACK_ALLOC malloc
 #  define YYSTACK_FREE free
 # endif
+#endif /* ! defined (yyoverflow) || defined (YYERROR_VERBOSE) */
+
+
+#if (! defined (yyoverflow) \
+     && (! defined (__cplusplus) \
+	 || (YYLTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -333,24 +339,41 @@ union yyalloc
       + YYSTACK_GAP_MAX)
 # endif
 
-/* Relocate the TYPE STACK from its old location to the new one.  The
+/* Copy COUNT objects from FROM to TO.  The source and destination do
+   not overlap.  */
+# ifndef YYCOPY
+#  if 1 < __GNUC__
+#   define YYCOPY(To, From, Count) \
+      __builtin_memcpy (To, From, (Count) * sizeof (*(From)))
+#  else
+#   define YYCOPY(To, From, Count)		\
+      do					\
+	{					\
+	  register YYSIZE_T yyi;		\
+	  for (yyi = 0; yyi < (Count); yyi++)	\
+	    (To)[yyi] = (From)[yyi];		\
+	}					\
+      while (0)
+#  endif
+# endif
+
+/* Relocate STACK from its old location to the new one.  The
    local variables YYSIZE and YYSTACKSIZE give the old and new number of
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Type, Stack)					\
+# define YYSTACK_RELOCATE(Stack)					\
     do									\
       {									\
 	YYSIZE_T yynewbytes;						\
-	yymemcpy ((char *) yyptr, (char *) (Stack),			\
-		  yysize * (YYSIZE_T) sizeof (Type));			\
+	YYCOPY (&yyptr->Stack, Stack, yysize);				\
 	Stack = &yyptr->Stack;						\
-	yynewbytes = yystacksize * sizeof (Type) + YYSTACK_GAP_MAX;	\
+	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAX;	\
 	yyptr += yynewbytes / sizeof (*yyptr);				\
       }									\
     while (0)
 
-#endif /* ! defined (yyoverflow) || defined (YYERROR_VERBOSE) */
+#endif
 
 
 #if ! defined (YYSIZE_T) && defined (__SIZE_TYPE__)
@@ -477,33 +500,6 @@ int yydebug;
 # define YYMAXDEPTH 10000
 #endif
 
-#if ! defined (yyoverflow) && ! defined (yymemcpy)
-# if __GNUC__ > 1		/* GNU C and GNU C++ define this.  */
-#  define yymemcpy __builtin_memcpy
-# else				/* not GNU C or C++ */
-
-/* This is the most reliable way to avoid incompatibilities
-   in available built-in functions on various systems.  */
-static void
-#  if defined (__STDC__) || defined (__cplusplus)
-yymemcpy (char *yyto, const char *yyfrom, YYSIZE_T yycount)
-#  else
-yymemcpy (yyto, yyfrom, yycount)
-     char *yyto;
-     const char *yyfrom;
-     YYSIZE_T yycount;
-#  endif
-{
-  register const char *yyf = yyfrom;
-  register char *yyt = yyto;
-  register YYSIZE_T yyi = yycount;
-
-  while (yyi-- != 0)
-    *yyt++ = *yyf++;
-}
-# endif
-#endif
-
 #ifdef YYERROR_VERBOSE
 
 # ifndef yystrlen
@@ -556,7 +552,7 @@ yystpcpy (yydest, yysrc)
 # endif
 #endif
 
-#line 319 "/usr/local/share/bison/bison.simple"
+#line 315 "/usr/share/bison/bison.simple"
 
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
@@ -746,6 +742,9 @@ yyparse (YYPARSE_PARAM_ARG)
 	yyvs = yyvs1;
       }
 #else /* no yyoverflow */
+# ifndef YYSTACK_RELOCATE
+      goto yyoverflowlab;
+# else
       /* Extend the stack our own way.  */
       if (yystacksize >= YYMAXDEPTH)
 	goto yyoverflowlab;
@@ -759,15 +758,16 @@ yyparse (YYPARSE_PARAM_ARG)
 	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
 	if (! yyptr)
 	  goto yyoverflowlab;
-	YYSTACK_RELOCATE (short, yyss);
-	YYSTACK_RELOCATE (YYSTYPE, yyvs);
+	YYSTACK_RELOCATE (yyss);
+	YYSTACK_RELOCATE (yyvs);
 # if YYLSP_NEEDED
-	YYSTACK_RELOCATE (YYLTYPE, yyls);
+	YYSTACK_RELOCATE (yyls);
 # endif
 # undef YYSTACK_RELOCATE
 	if (yyss1 != yyssa)
 	  YYSTACK_FREE (yyss1);
       }
+# endif
 #endif /* no yyoverflow */
 
       yyssp = yyss + yysize - 1;
@@ -946,67 +946,67 @@ yyreduce:
   switch (yyn) {
 
 case 3:
-#line 71 "icalssyacc.y"
+#line 70 "icalssyacc.y"
 { 
                  yyclearin;
 		 YYABORT;
            }
     break;
 case 4:
-#line 78 "icalssyacc.y"
+#line 77 "icalssyacc.y"
 {ssyacc_add_select(yyextra,yyvsp[0].v_string);}
     break;
 case 5:
-#line 79 "icalssyacc.y"
+#line 78 "icalssyacc.y"
 {ssyacc_add_select(yyextra,yyvsp[0].v_string);}
     break;
 case 6:
-#line 84 "icalssyacc.y"
+#line 83 "icalssyacc.y"
 {ssyacc_add_from(yyextra,yyvsp[0].v_string);}
     break;
 case 7:
-#line 85 "icalssyacc.y"
+#line 84 "icalssyacc.y"
 {ssyacc_add_from(yyextra,yyvsp[0].v_string);}
     break;
 case 9:
-#line 90 "icalssyacc.y"
+#line 89 "icalssyacc.y"
 {ssyacc_add_where(yyextra,yyvsp[-2].v_string,ICALGAUGECOMPARE_EQUAL,yyvsp[0].v_string); }
     break;
 case 10:
-#line 92 "icalssyacc.y"
+#line 91 "icalssyacc.y"
 {ssyacc_add_where(yyextra,yyvsp[-2].v_string,ICALGAUGECOMPARE_NOTEQUAL,yyvsp[0].v_string); }
     break;
 case 11:
-#line 93 "icalssyacc.y"
+#line 92 "icalssyacc.y"
 {ssyacc_add_where(yyextra,yyvsp[-2].v_string,ICALGAUGECOMPARE_LESS,yyvsp[0].v_string); }
     break;
 case 12:
-#line 94 "icalssyacc.y"
+#line 93 "icalssyacc.y"
 {ssyacc_add_where(yyextra,yyvsp[-2].v_string,ICALGAUGECOMPARE_GREATER,yyvsp[0].v_string); }
     break;
 case 13:
-#line 95 "icalssyacc.y"
+#line 94 "icalssyacc.y"
 {ssyacc_add_where(yyextra,yyvsp[-2].v_string,ICALGAUGECOMPARE_LESSEQUAL,yyvsp[0].v_string); }
     break;
 case 14:
-#line 96 "icalssyacc.y"
+#line 95 "icalssyacc.y"
 {ssyacc_add_where(yyextra,yyvsp[-2].v_string,ICALGAUGECOMPARE_GREATEREQUAL,yyvsp[0].v_string); }
     break;
 case 15:
-#line 100 "icalssyacc.y"
+#line 99 "icalssyacc.y"
 {set_logic(yyextra,ICALGAUGELOGIC_NONE);}
     break;
 case 16:
-#line 101 "icalssyacc.y"
+#line 100 "icalssyacc.y"
 {set_logic(yyextra,ICALGAUGELOGIC_AND);}
     break;
 case 17:
-#line 102 "icalssyacc.y"
+#line 101 "icalssyacc.y"
 {set_logic(yyextra,ICALGAUGELOGIC_OR);}
     break;
 }
 
-#line 705 "/usr/local/share/bison/bison.simple"
+#line 705 "/usr/share/bison/bison.simple"
 
 
   yyvsp -= yylen;
@@ -1237,10 +1237,10 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 106 "icalssyacc.y"
+#line 105 "icalssyacc.y"
 
 
-void ssyacc_add_where(struct icalgauge_impl* impl, char* str1, 
+static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1, 
 	icalgaugecompare compare , char* value_str)
 {
 
@@ -1302,7 +1302,7 @@ void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
     pvl_push(impl->where,where);
 }
 
-void set_logic(struct icalgauge_impl* impl,icalgaugelogic l)
+static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l)
 {
     pvl_elem e = pvl_tail(impl->where);
     struct icalgauge_where *where = pvl_data(e);
@@ -1313,7 +1313,7 @@ void set_logic(struct icalgauge_impl* impl,icalgaugelogic l)
 
 
 
-void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
+static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
 {
     char *c, *compstr, *propstr;
     struct icalgauge_where *where;
@@ -1367,7 +1367,7 @@ void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
     pvl_push(impl->select,where);
 }
 
-void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
+static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
 {
     icalcomponent_kind ckind;
 

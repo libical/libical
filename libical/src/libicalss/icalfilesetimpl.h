@@ -3,7 +3,7 @@
   FILE: icalfilesetimpl.h
   CREATOR: eric 23 December 1999
   
-  $Id: icalfilesetimpl.h,v 1.4 2002-06-04 14:31:55 acampi Exp $
+  $Id: icalfilesetimpl.h,v 1.5 2002-06-27 02:30:58 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -40,13 +40,14 @@
 #define ICALFILESET_ID "fset"
 
 struct icalfileset_impl {
+  icalset super;		/**< parent class */
+  char *path;			/**< pathname of file */
+  icalfileset_options options;  /**< copy of options passed to icalset_new() */
 
-  char id[5]; /*fset*/
-  char *path;
-  icalcomponent* cluster;
-  icalgauge* gauge;
-  int changed;
-  int fd; /* file descriptor */
+  icalcomponent* cluster;	/**< cluster containing data */
+  icalgauge* gauge;		/**< gauge for filtering out data */
+  int changed;			/**< boolean flag, 1 if data has changed */
+  int fd;			/**< file descriptor */
 };
 
 #endif

@@ -4,7 +4,7 @@
  CREATOR: dml 12 December 2001
  (C) COPYRIGHT 2001, Critical Path
 
- $Id: icalbdbset.h,v 1.1 2002-06-13 15:36:56 acampi Exp $
+ $Id: icalbdbset.h,v 1.2 2002-06-27 02:30:58 acampi Exp $
  $Locker:  $
 ======================================================================*/
 
@@ -16,22 +16,25 @@
 #include "icalgauge.h"
 #include <db.h>
 
-extern int icalbdbset_safe_saves;
-
 typedef struct icalbdbset_impl icalbdbset;
 
-/* sets up the db environment, should be done in parent thread.. */
-int  icalbdbset_init(char *dir);
+enum icalbdbset_subdb_type {ICALBDB_CALENDARS, ICALBDB_EVENTS, ICALBDB_TODOS, ICALBDB_REMINDERS};
+typedef enum icalbdbset_subdb_type icalbdbset_subdb_type;
+
+/** sets up the db environment, should be done in parent thread.. */
+int icalbdbset_init_dbenv(char *db_env_dir);
+
+icalset*  icalbdbset_init(icalset* set, const char *dsn, void *options);
 void icalbdbset_cleanup(void);
 void icalbdbset_checkpoint(void);
 
-/* Creates a component handle.  flags allows caller to 
+/** Creates a component handle.  flags allows caller to 
    specify if database is internally a BTREE or HASH */
-DB * icalbdbset_database_open(const char* database, 
-			      const char *subdb, 
-			      int type);
+icalset * icalbdbset_new(const char* database_filename, 
+			 icalbdbset_subdb_type subdb_type,
+			 int dbtype);
 
-DB * icalbdbset_secondary_open(DB *dbp,
+DB * icalbdbset_bdb_open_secondary(DB *dbp,
 			       const char *subdb,
 			       const char *sindex, 
 			       int (*callback) (DB *db, 
@@ -40,19 +43,9 @@ DB * icalbdbset_secondary_open(DB *dbp,
 						DBT *dbt3),
 			       int type);
 			       
-
-/* Like _new, but takes open() flags for opening the file */
-DB * icalbdbset_database_open_int(const char* path, 
-					 const char *subdb,
-					 int type,
-					 int flags, 
-					 mode_t mode);
-
-int icalbdbset_database_close(DB *dbp);
-icalbdbset* icalbdbset_new(DB *dbp, DB *sdbp, char *(*pfunc)(const DBT *dbt));
 char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc)(const DBT *dbt)) ;
 
-void icalbdbset_free(icalbdbset* cluster);
+void icalbdbset_free(icalset* set);
 
 /* cursor operations */
 int icalbdbset_acquire_cursor(DB *dbp, DBC **rdbcp);
@@ -66,43 +59,75 @@ int icalbdbset_get_key(DBC *dbcp, DBT *key, DBT *data);
 int icalbdbset_delete(DB *dbp, DBT *key);
 int icalbdbset_put(DB *dbp, DBT *key, DBT *data, int access_method);
 
-const char* icalbdbset_path(icalbdbset* cluster);
-const char* icalbdbset_subdb(icalbdbset* cluster);
+const char* icalbdbset_path(icalset* set);
+const char* icalbdbset_subdb(icalset* set);
 
-/* Mark the cluster as changed, so it will be written to disk when it
+/* Mark the set as changed, so it will be written to disk when it
    is freed. Commit writes to disk immediately. */
-void icalbdbset_mark(icalbdbset* cluster);
-icalerrorenum icalbdbset_commit(icalbdbset *cluster);
+void icalbdbset_mark(icalset* set);
+icalerrorenum icalbdbset_commit(icalset *set);
 
-icalerrorenum icalbdbset_add_component(icalbdbset* cluster,
+icalerrorenum icalbdbset_add_component(icalset* set,
 					icalcomponent* child);
 
-icalerrorenum icalbdbset_remove_component(icalbdbset* cluster,
+icalerrorenum icalbdbset_remove_component(icalset* set,
 					   icalcomponent* child);
 
-int icalbdbset_count_components(icalbdbset* cluster,
+int icalbdbset_count_components(icalset* set,
 				 icalcomponent_kind kind);
 
 /* Restrict the component returned by icalbdbset_first, _next to those
    that pass the gauge. _clear removes the gauge */
-icalerrorenum icalbdbset_select(icalbdbset* store, icalgauge* gauge);
-void icalbdbset_clear(icalbdbset* store);
+icalerrorenum icalbdbset_select(icalset* store, icalgauge* gauge);
+void icalbdbset_clear(icalset* store);
 
 /* Get and search for a component by uid */
-icalcomponent* icalbdbset_fetch(icalbdbset* cluster, icalcomponent_kind kind, const char* uid);
-int icalbdbset_has_uid(icalbdbset* cluster, const char* uid);
-icalcomponent* icalbdbset_fetch_match(icalbdbset* set, icalcomponent *c);
+icalcomponent* icalbdbset_fetch(icalset* set, icalcomponent_kind kind, const char* uid);
+int icalbdbset_has_uid(icalset* set, const char* uid);
+icalcomponent* icalbdbset_fetch_match(icalset* set, icalcomponent *c);
+
+
+icalerrorenum icalbdbset_modify(icalset* set, icalcomponent *old,
+				icalcomponent *newc);
 
 /* Iterate through components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
-icalcomponent* icalbdbset_get_current_component (icalbdbset* cluster);
-icalcomponent* icalbdbset_get_first_component(icalbdbset* cluster);
-icalcomponent* icalbdbset_get_next_component(icalbdbset* cluster);
+icalcomponent* icalbdbset_get_current_component (icalset* set);
+icalcomponent* icalbdbset_get_first_component(icalset* set);
+icalcomponent* icalbdbset_get_next_component(icalset* set);
+
+/* External iterator for thread safety */
+icalsetiter icalbdbset_begin_component(icalset* set, icalcomponent_kind kind, icalgauge* gauge);
+
+icalcomponent* icalbdbset_form_a_matched_recurrence_component(icalsetiter* itr);
+
+icalcomponent* icalbdbsetiter_to_next(icalset* set, icalsetiter* i);
+icalcomponent* icalbdbsetiter_to_prior(icalset* set, icalsetiter* i);
+
 /* Return a reference to the internal component. You probably should
    not be using this. */
 
-icalcomponent* icalbdbset_get_component(icalbdbset* cluster);
+icalcomponent* icalbdbset_get_component(icalset* set);
+
+DB_ENV *icalbdbset_get_env(void);
+
+DB* icalbdbset_bdb_open(const char* path, 
+			const char *subdb,
+			int type,
+			mode_t mode);
+
+
+typedef struct icalbdbset_options {
+  icalbdbset_subdb_type subdb;	   /**< the subdatabase to open */
+  int                   dbtype;	   /**< db_open type: DB_HASH | DB_BTREE */
+  mode_t                mode;	   /**< file mode */
+  char *(*pfunc)(const DBT *dbt);  /**< parsing function */
+  int (*callback) (DB *db,	   /**< callback for secondary db open */
+		   const DBT *dbt1, 
+		   const DBT *dbt2, 
+		   DBT *dbt3);
+} icalbdbset_options;
 
 #endif /* !ICALBDBSET_H */
 
