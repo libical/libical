@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.11 2001-05-04 20:00:09 ebusboom Exp $
+  $Id: icalrecur.c,v 1.12 2001-05-04 20:01:54 ebusboom Exp $
   $Locker:  $
     
 
@@ -1794,6 +1794,8 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
 
         dow = icaltime_day_of_week(t);
 	/* HACK Not finished */ 
+
+        icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
 	
         break;
     }

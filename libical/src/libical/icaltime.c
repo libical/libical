@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.12 2001-04-01 20:08:19 ebusboom Exp $
+  $Id: icaltime.c,v 1.13 2001-05-04 20:00:09 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -453,14 +453,15 @@ short icaltime_week_number(struct icaltimetype ictt)
 
 
 short icaltime_day_of_year(struct icaltimetype t){
-    time_t tt = icaltime_as_timet(t);
+    time_t tt;
     struct tm *stm;
+    struct set_tz_save old_tz; 
 
-    if(t.is_utc==1){
-	stm = gmtime(&tt);
-    } else {
-	stm = localtime(&tt);
-    }
+    tt =  icaltime_as_timet(t);
+
+    old_tz = set_tz("UTC");
+    stm = localtime(&tt);
+    unset_tz(old_tz);
 
     return stm->tm_yday+1;
     
@@ -471,13 +472,14 @@ struct icaltimetype icaltime_from_day_of_year(short doy,  short year)
 {
     struct tm stm; 
     time_t tt;
-    struct set_tz_save old_tz = set_tz("UTC");
+    struct set_tz_save old_tz;
 
     /* Get the time of january 1 of this year*/
     memset(&stm,0,sizeof(struct tm)); 
     stm.tm_year = year-1900;
     stm.tm_mday = 1;
 
+    old_tz = set_tz("UTC");
     tt = mktime(&stm);
     unset_tz(old_tz);
 
