@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.37 2002-07-23 00:37:32 lindner Exp $
+  $Id: icalrecur.c,v 1.38 2002-07-23 01:19:19 lindner Exp $
   $Locker:  $
     
 
@@ -867,7 +867,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
 
     setup_defaults(impl,BY_SECOND,ICAL_SECONDLY_RECURRENCE,
-		   (short)impl->dtstart.second,
+		   (short) impl->dtstart.second,
 		   &(impl->last.second));
 
     setup_defaults(impl,BY_MINUTE,ICAL_MINUTELY_RECURRENCE,
@@ -1363,7 +1363,7 @@ static int next_yearday(icalrecur_iterator* impl)
 
 static int nth_weekday(short dow, short pos, struct icaltimetype t){
 
-    short days_in_month = icaltime_days_in_month(t.month,t.year);
+    short days_in_month = icaltime_days_in_month((short)t.month,(short)t.year);
     short end_dow, start_dow;
     short wd;
 
