@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.33 2002-10-09 22:49:57 acampi Exp $
+  $Id: icalvalue.c,v 1.34 2002-10-09 22:53:29 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1027,6 +1027,8 @@ icalvalue_as_ical_string(const icalvalue* value)
     case ICAL_X_VALUE: 
 	if (value->x_value != 0)
             return icalmemory_tmp_copy(value->x_value);
+
+    /* FALLTHRU */
 
     case ICAL_NO_VALUE:
     default:
