@@ -27,6 +27,8 @@
 #include <time.h>
 #include "icalenums.h" /* for recurrence enums */
 #include "icaltime.h"
+#include "icalduration.h"
+#include "icalperiod.h"
 
 /* This type type should probably be an opaque type... */
 struct icalattachtype
@@ -103,5 +105,63 @@ struct icalreqstattype {
 
 struct icalreqstattype icalreqstattype_from_string(char* str);
 char* icalreqstattype_as_string(struct icalreqstattype);
+
+
+struct icalorganizertype {
+    const char* value;
+    const char* common_name;
+    const char* dir;
+    const char* sentby;
+    const char* language;
+
+};
+
+/* Create a copy of the given organizer. Libical will not own the
+   memory for the strings in the copy; the call must free them */
+struct icalorganizertype icalorganizertype_new_clone(struct icalorganizertype a);
+
+
+struct icalattendeetype {
+    const char* cuid; /* Cal user id, contents of the property value */
+    icalparameter_cutype cutype;
+    const char* member;
+    icalparameter_role role;
+    int rsvp;
+    const char* delto;
+    const char* delfrom;
+    const char* sentby;
+    const char* cn;
+    const char* dir;
+    const char* language;
+};
+
+/* Create a copy of the given attendee. Libical will not own the
+   memory for the strings in the copy; the call must free them */
+struct icalattendeetype icalattendeetype_new_clone(struct icalattendeetype a);
+
+
+struct icaltimezonephase {
+    const char* tzname;
+    int is_stdandard; /* 1 = standard tme, 0 = daylight savings time */
+    struct icaltimetype dtstart;
+    int offsetto;
+    int tzoffsetfrom;
+    const char* comment;
+    struct icaldatetimeperiodtype rdate;
+    const char* rrule;    
+};
+
+
+struct icaltimezonetype {
+    const char* tzid;
+    struct icaltimetype last_mod;
+    const char* tzurl;
+    
+    /* Array of phases. The end of the array is a phase with tzname == 0 */
+    struct *icaltimezonephase
+};
+
+struct icaltimezonetype_free(struct icaltimezonetype tzt);
+
 
 #endif /* !ICALTYPES_H */

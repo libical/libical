@@ -1,8 +1,8 @@
 #LyX 1.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 2.16
-\textclass linuxdoc
+\textclass article
 \language default
-\inputencoding default
+\inputencoding latin1
 \fontscheme default
 \graphics default
 \paperfontsize default
@@ -59,7 +59,7 @@ Libical implements RFC2445, RFC2446 and some of RFC2447 and the CAP draft.
 This documentation assumes that you are familiar with the iCalendar standards
  RFC2445 and RFC2446.
  these specifications are online on the CALSCH webpage at:
-\layout Verbatim
+\layout LyX-Code
 
 http://www.imc.org/ietf-calendar/
 \layout Subsection
@@ -71,16 +71,16 @@ This code is under active development.
  If you would like to contribute to the project, you can contact me, Eric
  Busboom, at eric@softwarestudio.org.
  The project has a webpage at
-\layout Verbatim
+\layout LyX-Code
 
 http://softwarestudio.org/libical/index.html 
 \layout Standard
 
 and a mailing list that you can join by sending the following mail:
-\layout Verbatim
+\layout LyX-Code
 
 To: minimalist@softwarestudio.org 
-\layout Verbatim
+\layout LyX-Code
 
 Subject: subscribe libical 
 \layout Subsection
@@ -157,7 +157,7 @@ Properties are the fundamental unit of information in iCal, and they work
  a bit like a hash entry, with a constant key and a variable value.
  Properties may also have modifiers, called parameters.
  In the iCal content line
-\layout Verbatim
+\layout LyX-Code
 
 ORGANIZER;ROLE=CHAIR:MAILTO:mrbig@host.com
 \layout Standard
@@ -215,61 +215,61 @@ END
 \added_space_bottom 0.3cm 
 When a component is sent across a network, if it is un-encrypted, it will
  look something like:
-\layout Verbatim
+\layout LyX-Code
 
 BEGIN:VCALENDAR
-\layout Verbatim
+\layout LyX-Code
 
 METHOD:REQUEST
-\layout Verbatim
+\layout LyX-Code
 
 PRODID: -//hacksw/handcal//NONSGML v1.0//EN
-\layout Verbatim
+\layout LyX-Code
 
 BEGIN:VEVENT 
-\layout Verbatim
+\layout LyX-Code
 
 DTSTAMP:19980309T231000Z 
-\layout Verbatim
+\layout LyX-Code
 
 UID:guid-1.host1.com 
-\layout Verbatim
+\layout LyX-Code
 
 ORGANIZER;ROLE=CHAIR:MAILTO:mrbig@host.com 
-\layout Verbatim
+\layout LyX-Code
 
 ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP: 
-\layout Verbatim
+\layout LyX-Code
 
   MAILTO:employee-A@host.com 
-\layout Verbatim
+\layout LyX-Code
 
 DESCRIPTION:Project XYZ Review Meeting 
-\layout Verbatim
+\layout LyX-Code
 
 CATEGORIES:MEETING 
-\layout Verbatim
+\layout LyX-Code
 
 CLASS:PUBLIC 
-\layout Verbatim
+\layout LyX-Code
 
 CREATED:19980309T130000Z 
-\layout Verbatim
+\layout LyX-Code
 
 SUMMARY:XYZ Project Review 
-\layout Verbatim
+\layout LyX-Code
 
 DTSTART;TZID=US-Eastern:19980312T083000 
-\layout Verbatim
+\layout LyX-Code
 
 DTEND;TZID=US-Eastern:19980312T093000 
-\layout Verbatim
+\layout LyX-Code
 
 LOCATION:1CP Conference Room 4350 
-\layout Verbatim
+\layout LyX-Code
 
 END:VEVENT 
-\layout Verbatim
+\layout LyX-Code
 
 END:VCALENDAR
 \layout Standard
@@ -532,16 +532,16 @@ S property can have multiple value instances.
  In libical, all properties have a single value, and multi-valued properties
  are broken down into multiple single valued properties during parsing.
  That is, an input line like, 
-\layout Verbatim
+\layout LyX-Code
 
 CATEGORIES: work, home
 \layout Standard
 
 becomes in libical's internal representation
-\layout Verbatim
+\layout LyX-Code
 
 CATEGORIES: work
-\layout Verbatim
+\layout LyX-Code
 
 CATEGORIES: home
 \layout Standard
@@ -573,43 +573,43 @@ Constructor Interfaces
 
 Using constructor interfaces, you create each of the objects separately
  and then assemble them in to components: 
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent *event;
-\layout Verbatim
+\layout LyX-Code
 
 icalproperty *prop;
-\layout Verbatim
+\layout LyX-Code
 
 icalparameter *param;
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype atime;
-\layout Verbatim
+\layout LyX-Code
 
 event = icalcomponent_new(ICAL_VEVENT_COMPONENT);
-\layout Verbatim
+\layout LyX-Code
 
 prop = icalproperty_new_dtstamp(atime) ;
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent_add_property(event, prop);
-\layout Verbatim
+\layout LyX-Code
 
 prop = icalproperty_new_uid(''guid-1.host1.com'') );
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent_add_property(event,prop);
-\layout Verbatim
+\layout LyX-Code
 
 prop=icalproperty_new_organizer(''mrbig@host.com''); 
-\layout Verbatim
+\layout LyX-Code
 
 param = icalparameter_new_role(ICAL_ROLE_CHAIR) 
-\layout Verbatim
+\layout LyX-Code
 
 icalproperty_add_parameter(prop, param);
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent_add_property(event,prop);
 \layout Standard
@@ -654,91 +654,91 @@ There is another way to create complex components, which is arguably more
  in a single block of code.
  Here is the previous examples in the vaargs style.
  
-\layout Verbatim
+\layout LyX-Code
 
     calendar = 
-\layout Verbatim
+\layout LyX-Code
 
         icalcomponent_vanew(
-\layout Verbatim
+\layout LyX-Code
 
             ICAL_VCALENDAR_COMPONENT,
-\layout Verbatim
+\layout LyX-Code
 
             icalproperty_new_version(''2.0''),
-\layout Verbatim
+\layout LyX-Code
 
             icalproperty_new_prodid(
-\layout Verbatim
+\layout LyX-Code
 
                  ''-//RDU Software//NONSGML HandCal//EN''),
-\layout Verbatim
+\layout LyX-Code
 
             icalcomponent_vanew(
-\layout Verbatim
+\layout LyX-Code
 
                 ICAL_VEVENT_COMPONENT,
-\layout Verbatim
+\layout LyX-Code
 
                 icalproperty_new_dtstamp(atime),
-\layout Verbatim
+\layout LyX-Code
 
                 icalproperty_new_uid(''guid-1.host1.com''),
-\layout Verbatim
+\layout LyX-Code
 
                 icalproperty_vanew_organizer(
-\layout Verbatim
+\layout LyX-Code
 
                     ''mrbig@host.com''),
-\layout Verbatim
+\layout LyX-Code
 
                     icalparameter_new_role(ICAL_ROLE_CHAIR),
-\layout Verbatim
+\layout LyX-Code
 
                     0
-\layout Verbatim
+\layout LyX-Code
 
                     ),
-\layout Verbatim
+\layout LyX-Code
 
                 icalproperty_vanew_attendee(
-\layout Verbatim
+\layout LyX-Code
 
                     ''employee-A@host.com'',
-\layout Verbatim
+\layout LyX-Code
 
                     icalparameter_new_role(
-\layout Verbatim
+\layout LyX-Code
 
                         ICAL_ROLE_REQPARTICIPANT),
-\layout Verbatim
+\layout LyX-Code
 
                     icalparameter_new_rsvp(1),
-\layout Verbatim
+\layout LyX-Code
 
                     icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
-\layout Verbatim
+\layout LyX-Code
 
                     0
-\layout Verbatim
+\layout LyX-Code
 
                     ),
-\layout Verbatim
+\layout LyX-Code
 
                 icalproperty_new_location(
-\layout Verbatim
+\layout LyX-Code
 
                    "1CP Conference Room 4350"),
-\layout Verbatim
+\layout LyX-Code
 
                 0
-\layout Verbatim
+\layout LyX-Code
 
                 ),
-\layout Verbatim
+\layout LyX-Code
 
             0
-\layout Verbatim
+\layout LyX-Code
 
             );
 \layout Standard
@@ -775,7 +775,7 @@ Parsing Text Files
 The final way to create components will probably be the most common; you
  can create components from RFC2445 compliant text.
  If you have the string in memory, use
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icalparser_parse_string(char* str);
 \layout Standard
@@ -791,19 +791,19 @@ Parsing a whole string may seem wasteful if you want to pull a large component
  off of the network or from a file; you may prefer to parse the component
  line by line.
  This is possible too by using:
-\layout Verbatim
+\layout LyX-Code
 
 icalparser* icalparser_new(); 
-\layout Verbatim
+\layout LyX-Code
 
 void icalparser_free(icalparser* parser);
-\layout Verbatim
+\layout LyX-Code
 
 icalparser_get_line(parser,read_stream);
-\layout Verbatim
+\layout LyX-Code
 
 icalparser_add_line(parser,line);
-\layout Verbatim
+\layout LyX-Code
 
 icalparser_set_gen_data(parser,stream)
 \layout Standard
@@ -813,74 +813,74 @@ These routines will construct a parser object to which you can add lines
  These routines work by specifing an adaptor routine to get string data
  from a source.
  For an example:
-\layout Verbatim
+\layout LyX-Code
 
 char* read_stream(char *s, size_t size, void *d) 
-\layout Verbatim
+\layout LyX-Code
 
 { 
-\layout Verbatim
+\layout LyX-Code
 
   char *c = fgets(s,size, (FILE*)d);
-\layout Verbatim
+\layout LyX-Code
 
   return c;
-\layout Verbatim
+\layout LyX-Code
 
 }
-\layout Verbatim
+\layout LyX-Code
 
 main() {
-\layout Verbatim
+\layout LyX-Code
 
   char* line; 
-\layout Verbatim
+\layout LyX-Code
 
   icalcomponent *c; 
-\layout Verbatim
+\layout LyX-Code
 
   icalparser *parser = icalparser_new();
-\layout Verbatim
+\layout LyX-Code
 
   FILE* stream = fopen(argv[1],"r");
-\layout Verbatim
+\layout LyX-Code
 
   icalparser_set_gen_data(parser,stream);
-\layout Verbatim
+\layout LyX-Code
 
   do{ 
-\layout Verbatim
+\layout LyX-Code
 
     line = icalparser_get_line(parser,read_stream); 
-\layout Verbatim
+\layout LyX-Code
 
     c = icalparser_add_line(parser,line);
-\layout Verbatim
+\layout LyX-Code
 
     if (c != 0){ 
-\layout Verbatim
+\layout LyX-Code
 
      printf("%s",icalcomponent_as_ical_string(c));     
-\layout Verbatim
+\layout LyX-Code
 
      icalparser_claim(parser); 
-\layout Verbatim
+\layout LyX-Code
 
      printf("
 \backslash 
 n---------------
 \backslash 
 n"); 
-\layout Verbatim
+\layout LyX-Code
 
      icalcomponent_free(c); 
-\layout Verbatim
+\layout LyX-Code
 
    }
-\layout Verbatim
+\layout LyX-Code
 
   } while ( line != 0);
-\layout Verbatim
+\layout LyX-Code
 
 }
 \layout Standard
@@ -908,10 +908,10 @@ Using the same mechanism, other implementations could read from memory buffers,
 
 Since the example code is a very common way to use the parser, there is
  a convenience routine;
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icalparser_parse(icalparser *parser, 
-\layout Verbatim
+\layout LyX-Code
 
                char* (*line_gen_func)(char *s, size_t size,  void* d))
 \layout Standard
@@ -941,38 +941,38 @@ Finding Components
 \layout Standard
 
 To find a sub-component of a component, use: 
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icalcomponent_get_first_component(
-\layout Verbatim
+\layout LyX-Code
 
                                    icalcomponent* component, 
-\layout Verbatim
+\layout LyX-Code
 
                                    icalcomponent_kind kind);
 \layout Standard
 
 This routine will return a reference to the first component of the type
  'kind.' The key kind values, listed in icalenums.h are: 
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_ANY_COMPONENT
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_VEVENT_COMPONENT
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_VTODO_COMPONENT
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_VJOURNAL_COMPONENT
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_VCALENDAR_COMPONENT 
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_VFREEBUSY_COMPONENT
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_VALARM_COMPONENT
 \layout Standard
@@ -992,35 +992,35 @@ Iterating Through Components
 
 Iteration requires a second routine to get the next subcomponent after the
  first:
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icalcomponent_get_next_component(
-\layout Verbatim
+\layout LyX-Code
 
                icalcomponent* component, 
-\layout Verbatim
+\layout LyX-Code
 
                icalcomponent_kind kind);
 \layout Standard
 
 With the 'first' and 'next' routines, you can create a for loop to iterate
  through all of a components subcomponents
-\layout Verbatim
+\layout LyX-Code
 
   for(c = icalcomponent_get_first_component(comp,ICAL_ANY_COMPONENT); 
-\layout Verbatim
+\layout LyX-Code
 
          c != 0; 
-\layout Verbatim
+\layout LyX-Code
 
  c = icalcomponent_get_next_component(comp,ICAL_ANY_COMPONENT))
-\layout Verbatim
+\layout LyX-Code
 
 { 
-\layout Verbatim
+\layout LyX-Code
 
       do_something(c);
-\layout Verbatim
+\layout LyX-Code
 
 }
 \layout Standard
@@ -1044,21 +1044,21 @@ The iteration model in the previous section requires the component to keep
 
 To solve this problem, there are also external iterators for components.
  The routines associated with these external iterators are: 
-\layout Verbatim
+\layout LyX-Code
 
 icalcompiter icalcomponent_begin_component(icalcomponent* component, icalcompone
 nt_kind kind);
-\layout Verbatim
+\layout LyX-Code
 
 icalcompiter icalcomponent_end_component(icalcomponent* component, icalcomponent
 _kind kind);
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icalcompiter_next(icalcompiter* i); 
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icalcompiter_prior(icalcompiter* i); 
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icalcompiter_deref(icalcompiter* i);
 \layout Standard
@@ -1078,26 +1078,26 @@ After creating an iterators, use _next_() and _prior_() to step forward
 \layout Standard
 
 Here is an example of a loop using these routines: 
-\layout Verbatim
+\layout LyX-Code
 
 for(
-\layout Verbatim
+\layout LyX-Code
 
    i = icalcomponent_begin_component(impl->cluster,ICAL_ANY_COMPONENT);
  
-\layout Verbatim
+\layout LyX-Code
 
    icalcompiter_deref(&i)!= 0; 
-\layout Verbatim
+\layout LyX-Code
 
    icalcompiter_next(&i)
-\layout Verbatim
+\layout LyX-Code
 
 ) { 
-\layout Verbatim
+\layout LyX-Code
 
       icalcomponent *this = icalcompiter_deref(&i);
-\layout Verbatim
+\layout LyX-Code
 
 }
 \layout Subsubsection
@@ -1113,26 +1113,26 @@ Removing an element from a list while iterating through the list with the
  per iteration, and you will remove only every other component.
   To avoid the problem, you will need to step the iterator ahead of the
  element you are going to remove, like this:
-\layout Verbatim
+\layout LyX-Code
 
 for(c = icalcomponent_get_first_component(parent_comp,ICAL_ANY_COMPONENT);
  
-\layout Verbatim
+\layout LyX-Code
 
        c != 0; 
-\layout Verbatim
+\layout LyX-Code
 
        c = next
-\layout Verbatim
+\layout LyX-Code
 
 {     
-\layout Verbatim
+\layout LyX-Code
 
     next = icalcomponent_get_next_component(parent_comp,ICAL_ANY_COMPONENT);
-\layout Verbatim
+\layout LyX-Code
 
     icalcomponent_remove_component(parent_comp,c); 
-\layout Verbatim
+\layout LyX-Code
 
 }
 \layout Standard
@@ -1142,29 +1142,29 @@ remove_component: if component iterator in the parent component is pointing
  to the child that will be removed, it will move the iterator to the component
  after the child.
  The following code will exploit this behavior: 
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent_get_first_component(parent_comp,ICAL_VEVENT_COMPONENT);
-\layout Verbatim
+\layout LyX-Code
 
 while((c=icalcomponent_get_current_component(c)) != 0 ){ 
-\layout Verbatim
+\layout LyX-Code
 
    if(icalcomponent_isa(c) == ICAL_VEVENT_COMPONENT){ 
-\layout Verbatim
+\layout LyX-Code
 
       icalcomponent_remove_component(parent_comp,inner);
-\layout Verbatim
+\layout LyX-Code
 
    } else { 
-\layout Verbatim
+\layout LyX-Code
 
       icalcomponent_get_next_component(parent_comp,ICAL_VEVENT_COMPONENT);
  
-\layout Verbatim
+\layout LyX-Code
 
    } 
-\layout Verbatim
+\layout LyX-Code
 
 }
 \layout Subsubsection
@@ -1175,79 +1175,79 @@ Working with properties and parameters
 Finding, iterating and removing properties works the same as it does for
  components, using the property-specific or parameter-specific interfaces:
  
-\layout Verbatim
+\layout LyX-Code
 
 icalproperty* icalcomponent_get_first_property(
-\layout Verbatim
+\layout LyX-Code
 
      icalcomponent* component, 
-\layout Verbatim
+\layout LyX-Code
 
      icalproperty_kind kind); 
-\layout Verbatim
+\layout LyX-Code
 
 icalproperty* icalcomponent_get_next_property(
-\layout Verbatim
+\layout LyX-Code
 
      icalcomponent* component, 
-\layout Verbatim
+\layout LyX-Code
 
      icalproperty_kind kind);
-\layout Verbatim
+\layout LyX-Code
 
 void icalcomponent_add_property(
-\layout Verbatim
+\layout LyX-Code
 
      icalcomponent* component, 
-\layout Verbatim
+\layout LyX-Code
 
      icalproperty* property);
-\layout Verbatim
+\layout LyX-Code
 
 void icalcomponent_remove_property(
-\layout Verbatim
+\layout LyX-Code
 
      icalcomponent* component, 
-\layout Verbatim
+\layout LyX-Code
 
      icalproperty* property);
 \layout Standard
 
 For parameters:
-\layout Verbatim
+\layout LyX-Code
 
 icalparameter* icalproperty_get_first_parameter(
-\layout Verbatim
+\layout LyX-Code
 
      icalproperty* prop, 
-\layout Verbatim
+\layout LyX-Code
 
      icalparameter_kind kind); 
-\layout Verbatim
+\layout LyX-Code
 
 icalparameter* icalproperty_get_next_parameter(
-\layout Verbatim
+\layout LyX-Code
 
      icalproperty* prop, 
-\layout Verbatim
+\layout LyX-Code
 
      icalparameter_kind kind);
-\layout Verbatim
+\layout LyX-Code
 
 void icalproperty_add_parameter(
-\layout Verbatim
+\layout LyX-Code
 
      icalproperty* prop,
-\layout Verbatim
+\layout LyX-Code
 
      icalparameter* parameter);
-\layout Verbatim
+\layout LyX-Code
 
 void icalproperty_remove_parameter(
-\layout Verbatim
+\layout LyX-Code
 
      icalproperty* prop, 
-\layout Verbatim
+\layout LyX-Code
 
      icalparameter_kind kind);
 \layout Standard
@@ -1274,10 +1274,10 @@ The most common way to work with values to is to manipulate them from they
 For each property, there are a _get_ and a _set_ routine that access the
  internal value.
  For instanace, for the UID property, the routines are: 
-\layout Verbatim
+\layout LyX-Code
 
 void icalproperty_set_uid(icalproperty* prop, const char* v)
-\layout Verbatim
+\layout LyX-Code
 
 const char* icalproperty_get_uid(icalproperty* prop)
 \layout Standard
@@ -1289,10 +1289,10 @@ For multi-valued properties, like ATTACH, the value type is usually a struct
 
 If you want to work with the underlying value object, you can get and set
  it with:
-\layout Verbatim
+\layout LyX-Code
 
 icalvalue* icalproperty_get_value (icalproperty* prop)
-\layout Verbatim
+\layout LyX-Code
 
 void icalproperty_set_value(icalproperty* prop, icalvalue* value);
 \layout Standard
@@ -1302,10 +1302,10 @@ Icalproperty_get_value() will return a reference that you can manipulate
  Most of the time, you will have to know what the type of the value is.
  For instance, if you know that the value is a DATETIME type, you can manipulate
  it with: 
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icalvalue_get_datetime(icalvalue* value); 
-\layout Verbatim
+\layout LyX-Code
 
 void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v);
 \layout Standard
@@ -1313,20 +1313,20 @@ void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v);
 When working with an extension property or value (and X-PROPERTY or a property
  that has the parameter VALUE=x-name ) the value type is always a string.
  To get and set the value, use: 
-\layout Verbatim
+\layout LyX-Code
 
 void icalproperty_set_x(icalproperty* prop, char* v); 
-\layout Verbatim
+\layout LyX-Code
 
 char* icalproperty_get_x(icalproperty* prop);
 \layout Standard
 
 All X properties have the type of ICAL_X_PROPERTY, so you will need these
  routines to get and set the name of the property:
-\layout Verbatim
+\layout LyX-Code
 
 char* icalproperty_get_x_name(icalproperty* prop)
-\layout Verbatim
+\layout LyX-Code
 
 void icalproperty_set_x_name(icalproperty* prop, char* name);
 \layout Subsubsection
@@ -1347,7 +1347,7 @@ RFC 2446 defines rules for what properties must exist in a component to
 \layout Standard
 
 Libical can check these restrictions with the routine:
-\layout Verbatim
+\layout LyX-Code
 
 int icalrestriction_check(icalcomponent* comp);
 \layout Standard
@@ -1373,16 +1373,16 @@ Converting Components to Text
 
 To create an RFC2445 compliant text representation of an object, use one
  of the *_as_ical_string() routines:
-\layout Verbatim
+\layout LyX-Code
 
 char* icalcomponent_as_ical_string (icalcomponent* component)
-\layout Verbatim
+\layout LyX-Code
 
 char* icalproperty_as_ical_string (icalproperty* property)
-\layout Verbatim
+\layout LyX-Code
 
 char* icalparameter_as_ical_string (icalparameter* parameter)
-\layout Verbatim
+\layout LyX-Code
 
 char* icalvalue_as_ical_string (icalvalue* value)
 \layout Standard
@@ -1445,31 +1445,31 @@ struct tm,
 but that structure does not differentiate between dates and times, and between
  local time and UTC.
  The libical structure is:
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype { 
-\layout Verbatim
+\layout LyX-Code
 
   int year; 
-\layout Verbatim
+\layout LyX-Code
 
   int month; 
-\layout Verbatim
+\layout LyX-Code
 
   int day; 
-\layout Verbatim
+\layout LyX-Code
 
   int hour; 
-\layout Verbatim
+\layout LyX-Code
 
   int minute; 
-\layout Verbatim
+\layout LyX-Code
 
   int second;
-\layout Verbatim
+\layout LyX-Code
 
   int is_utc; /* 1-> time is in UTC timezone */
-\layout Verbatim
+\layout LyX-Code
 
   int is_date; /* 1 -> interpret this as date.
  */ }; 
@@ -1489,19 +1489,19 @@ Creating time structures
 \layout Standard
 
 There are several ways to create a new icaltimetype structure: 
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_from_string(const char* str);
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_from_timet(time_t v, int is_date);
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_from_int(int v, int is_date, int is_utc);
 \layout Standard
 
 Icaltime_from_string takes any RFC2445 compliant time string: 
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype tt = icaltime_from_string("19970101T103000");
 \layout Standard
@@ -1526,10 +1526,10 @@ Time manipulating routines
 
 The null time value is used to indicate that the data in the structure is
  not a valid time.
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_null_time(void);
-\layout Verbatim
+\layout LyX-Code
 
 int icaltime_is_null_time(struct icaltimetype t);
 \layout Standard
@@ -1541,14 +1541,14 @@ It is sensible for the broken-out time fields to contain values that are
  The excessive values will be rolled over into the next larger field when
  the structure is normalized.
  
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_normalize(struct icaltimetype t);
 \layout Standard
 
 Normalizing allows you to do arithmetic operations on time values.
  
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype tt = icaltime_from_string(
 \begin_inset Quotes eld
@@ -1559,38 +1559,38 @@ struct icaltimetype tt = icaltime_from_string(
 \end_inset 
 
 );
-\layout Verbatim
+\layout LyX-Code
 
 tt.days +=3 
-\layout Verbatim
+\layout LyX-Code
 
 tt.second += 70;
-\layout Verbatim
+\layout LyX-Code
 
 tt = icaltime_normalize(tt);
 \layout Standard
 
 There are several routines to get the day of the week or month, etc, from
  a time structure.
-\layout Verbatim
+\layout LyX-Code
 
 short icaltime_day_of_year(struct icaltimetype t); 
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_from_day_of_year(short doy, short year);
-\layout Verbatim
+\layout LyX-Code
 
 short icaltime_day_of_week(struct icaltimetype t); 
-\layout Verbatim
+\layout LyX-Code
 
 short icaltime_start_doy_of_week(struct icaltimetype t);
-\layout Verbatim
+\layout LyX-Code
 
 short icaltime_week_number(short day_of_month, short month, short year);
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_from_week_number(short week_number, short year);
-\layout Verbatim
+\layout LyX-Code
 
 short icaltime_days_in_month(short month,short year);
 \layout Standard
@@ -1599,17 +1599,17 @@ Two routines convert time structures to and from the number of seconds since
  the POSIX epoch.
  The is_date field indicates whether or not the hour, minute and second
  fields should be used in the conversion.
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_from_timet(time_t v, int is_date); 
-\layout Verbatim
+\layout LyX-Code
 
 time_t icaltime_as_timet(struct icaltimetype);
 \layout Standard
 
 The compare routine works exactly like strcmp, but on time structures.
  
-\layout Verbatim
+\layout LyX-Code
 
 int icaltime_compare(struct icaltimetype a,struct icaltimetype b);
 \layout Standard
@@ -1641,19 +1641,19 @@ The tt parameter in the following routines indicates the date on which the
  15, but for other years March 15 may be standard time, and some years may
  have standard time all year.
  
-\layout Verbatim
+\layout LyX-Code
 
 int icaltime_utc_offset(struct icaltimetype tt, char* tzid);
-\layout Verbatim
+\layout LyX-Code
 
 int icaltime_local_utc_offset();
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_as_utc(struct icaltimetype tt,char* tzid);
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_as_zone(struct icaltimetype tt,char* tzid);
-\layout Verbatim
+\layout LyX-Code
 
 struct icaltimetype icaltime_as_local(struct icaltimetype tt);
 \layout Subsection
@@ -1678,60 +1678,60 @@ The file storage routines are organized in an inheritance heirarchy that
 \layout Standard
 
 All of the icalset derived classes have the same interface: 
-\layout Verbatim
+\layout LyX-Code
 
-\layout Verbatim
+\layout LyX-Code
 
 icaldirset* icaldirset_new(const char* path);
-\layout Verbatim
+\layout LyX-Code
 
 void icaldirset_free(icaldirset* store);
-\layout Verbatim
+\layout LyX-Code
 
 const char* icaldirset_path(icaldirset* store);
-\layout Verbatim
+\layout LyX-Code
 
 void icaldirset_mark(icaldirset* store);
-\layout Verbatim
+\layout LyX-Code
 
 icalerrorenum icaldirset_commit(icaldirset* store); 
-\layout Verbatim
+\layout LyX-Code
 
 icalerrorenum icaldirset_add_component(icaldirset* store, icalcomponent*
  comp);
-\layout Verbatim
+\layout LyX-Code
 
 icalerrorenum icaldirset_remove_component(icaldirset* store, icalcomponent*
  comp);
-\layout Verbatim
+\layout LyX-Code
 
 int icaldirset_count_components(icaldirset* store, icalcomponent_kind kind);
-\layout Verbatim
+\layout LyX-Code
 
 icalerrorenum icaldirset_select(icaldirset* store, icalcomponent* gauge);
-\layout Verbatim
+\layout LyX-Code
 
 void icaldirset_clear(icaldirset* store);
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icaldirset_fetch(icaldirset* store, const char* uid);
-\layout Verbatim
+\layout LyX-Code
 
 int icaldirset_has_uid(icaldirset* store, const char* uid);
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icaldirset_fetch_match(icaldirset* set, icalcomponent *c);
-\layout Verbatim
+\layout LyX-Code
 
 icalerrorenum icaldirset_modify(icaldirset* store, icalcomponent *oldc,
  icalcomponent *newc);
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icaldirset_get_current_component(icaldirset* store);
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icaldirset_get_first_component(icaldirset* store);
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icaldirset_get_next_component(icaldirset* store);
 \layout Subsubsection
@@ -1741,26 +1741,26 @@ Creating a new set
 
 You can create a new set from either the base class or the direved class.
  From the base class use one of:
-\layout Verbatim
+\layout LyX-Code
 
 icalset* icalset_new_file(const char* path); 
-\layout Verbatim
+\layout LyX-Code
 
 icalset* icalset_new_dir(const char* path); 
-\layout Verbatim
+\layout LyX-Code
 
 icalset* icalset_new_heap(void); 
-\layout Verbatim
+\layout LyX-Code
 
 icalset* icalset_new_mysql(const char* path);
 \layout Standard
 
 You can also create a new set based on the derived class, For instance,
  with icalfileset: 
-\layout Verbatim
+\layout LyX-Code
 
 icalfileset* icalfileset_new(const char* path);
-\layout Verbatim
+\layout LyX-Code
 
 icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode);
 \layout Standard
@@ -1786,7 +1786,7 @@ Adding, Finding and Removing Components
 \layout Standard
 
 To add components to a set, use: 
-\layout Verbatim
+\layout LyX-Code
 
 icalerrorenum icalfileset_add_component(icalfileset* cluster, icalcomponent*
  child);
@@ -1795,10 +1795,10 @@ icalerrorenum icalfileset_add_component(icalfileset* cluster, icalcomponent*
 The fileset keeps an inmemory copy of the components, and this set must
  be written back to the file ocassionally.
  There are two routines to manage this: 
-\layout Verbatim
+\layout LyX-Code
 
 void icalfileset_mark(icalfileset* cluster); 
-\layout Verbatim
+\layout LyX-Code
 
 icalerrorenum icalfileset_commit(icalfileset* cluster);
 \layout Standard
@@ -1812,13 +1812,13 @@ Icalfileset_mark indicates that the in-memory components have changed.
 \layout Standard
 
 To iterate through the components in a set, use: 
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icalfileset_get_first_component(icalfileset* cluster); 
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icalfileset_get_next_component(icalfileset* cluster);
-\layout Verbatim
+\layout LyX-Code
 
 icalcomponent* icalfileset_get_current_component (icalfileset* cluster);
   
@@ -1829,160 +1829,160 @@ These routines work like the corresponding routines from icalcomponent,
  A gauge is a test for the properties within a components; only components
  that pass the test are returned.
  A gauge can be constructed from a MINSQL string with:
-\layout Verbatim
+\layout LyX-Code
 
 icalgauge* icalgauge_new_from_sql(char* sql);
 \layout Standard
 
 Then, you can add the gauge to the set with : 
-\layout Verbatim
+\layout LyX-Code
 
 icalerrorenum icalfileset_select(icalfileset* store, icalgauge* gauge);
 \layout Standard
 
 Here is an example that puts all of these routines together: 
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
 void test_fileset()
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
 {
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
     icalfileset *fs;
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
     icalcomponent *c;
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
     int i;
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
     char *path = "test_fileset.ics";
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
     icalgauge  *g = icalgauge_new_from_sql(
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
         "SELECT * FROM VEVENT WHERE DTSTART > '20000103T120000Z' AND DTSTART
  <= '20000106T120000Z'");
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
  
-\layout Verbatim
+\layout LyX-Code
 
     
 \latex no_latex 
 fs = icalfileset_new(path);
-\layout Verbatim
+\layout LyX-Code
 
   
-\layout Verbatim
+\layout LyX-Code
 
     
 \latex no_latex 
 for (i = 0; i!= 10; i++){
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
         c = make_component(i);
 \latex default 
  /* Make a new component where DTSTART has month of i */
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
         icalfileset_add_component(fs,c);
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
     }
-\layout Verbatim
+\layout LyX-Code
 
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
     icalfileset_commit(fs);
 \latex default 
  /* Write to disk */
-\layout Verbatim
+\layout LyX-Code
 
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
     icalfileset_select(fs,g);
 \latex default 
  /* Set the gauge to filter components */
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
  
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
     for (c = icalfileset_get_first_component(fs);
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
          c != 0;
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
          c = icalfileset_get_next_component(fs)){
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
         struct icaltimetype t = icalcomponent_get_dtstart(c);
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
  
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
         printf("%s
 \backslash 
 n",icaltime_as_ctime(t));
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
     }
-\layout Verbatim
+\layout LyX-Code
 
     
 \latex no_latex 
 icalfileset_free(fs);
-\layout Verbatim
+\layout LyX-Code
 
 
 \latex no_latex 
@@ -2071,45 +2071,99 @@ lerror.h.
  be the same as icalerrno.
  You can use icalerror_strerror() to get a string that describes the error.
  The enumerations are:
-\layout Itemize
+\layout Standard
+\added_space_top 0.3cm \added_space_bottom 0.3cm \align center \LyXTable
+multicol5
+12 2 0 0 -1 -1 -1 -1
+1 1 0 0
+1 0 0 0
+1 0 0 0
+1 0 0 0
+1 0 0 0
+1 0 0 0
+1 0 0 0
+1 0 0 0
+1 0 0 0
+1 0 0 0
+1 0 0 0
+1 1 0 0
+2 1 0 "" ""
+2 1 1 "" ""
+0 8 1 0 0 0 0 "" ""
+0 8 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
+0 2 1 0 0 0 0 "" ""
 
-ICAL_BADARG_ERROR -- One of the argument to a routine was bad.
+
+\newline 
+
+\newline 
+ICAL_BADARG_ERROR
+\newline 
+One of the argument to a routine was bad.
  Typically for a null pointer.
+\newline 
+ICAL_NEWFAILED_ERROR
+\newline 
+A new() or malloc() failed
+\newline 
+ICAL_MALFORMEDDATA_ERROR
+\newline 
+An input string was not in the correct format
+\newline 
+ICAL_PARSE_ERROR
+\newline 
+the parser failed to parse an incomming component
+\newline 
+ICAL_INTERNAL_ERROR 
+\newline 
+Largely equivalent to an assert; it indicates a bug in the libical code
+\newline 
+ICAL_FILE_ERROR
+\newline 
+A file operation failed.
+ Check errno for more detai
+\newline 
+ICAL_ALLOCATION_ERROR
+\newline 
+
+\newline 
+ICAL_NO_ERROR
+\newline 
+No error has occured
+\newline 
+ICAL_TIMEDOUT_ERROR
+\newline 
+Failed to acquire a lock on a file, or the CSTP protocol timed out.
  
-\layout Itemize
+\newline 
+ICAL_MULTIPLEINCLUSION_ERROR 
+\newline 
 
-ICAL_NEWFAILED_ERROR -- A new() or malloc() failed
-\layout Itemize
+\newline 
+ICAL_UNKNOWN_ERROR
+\newline 
 
-ICAL_MALFORMEDDATA_ERROR -- An input string was not in the correct format
-\layout Itemize
-
-ICAL_PARSE_ERROR -- The parser failed to parse an incomming component
-\layout Itemize
-
-ICAL_INTERNAL_ERROR -- Largely equivalent to an assert
-\layout Itemize
-
-ICAL_FILE_ERROR -- A file operation failed.
- Check errno for more detail.
-\layout Itemize
-
-ICAL_ALLOCATION_ERROR -- ?
-\layout Itemize
-
-ICAL_USAGE_ERROR -- ?
-\layout Itemize
-
-ICAL_NO_ERROR -- No error
-\layout Itemize
-
-ICAL_MULTIPLEINCLUSION_ERROR -- ?
-\layout Itemize
-
-ICAL_TIMEDOUT_ERROR -- For CSTP and acquiring locks
-\layout Itemize
-
-ICAL_UNKNOWN_ERROR -- ?
 \layout Subsubsection
 
 X-LIC-ERROR and X-LIC-INVALID-COMPONENT
@@ -2122,12 +2176,12 @@ The library handles semantic and syntactic errors in components by inserting
  the requirements of RFC2446 ( a semantic error) the library will insert
  properties of the type X-LIC-ERROR to describe the error.
  Here is an example of the error property: 
-\layout Verbatim
+\layout LyX-Code
 
 X-LIC-ERROR;X-LIC-ERRORTYPE=INVALID_ITIP :Failed iTIP restrictions for property
  DTSTART.
  
-\layout Verbatim
+\layout LyX-Code
 
 Expected 1 instances of the property and got 0 
 \layout Standard
@@ -2139,25 +2193,20 @@ This error resulted from a call to icalrestriction_check(), which discovered
 
 There are a few routines to manipulate error properties:
 \layout Standard
-
-[ The following data is supposed to be in a table.
- It looks OK in LyX, but does not format propertly in output.
- ]
-\layout Standard
 \LyXTable
 multicol5
 10 2 0 0 -1 -1 -1 -1
 1 1 0 0
-1 0 0 0
+0 0 0 0
 0 1 1 0
-1 0 0 0
+0 0 0 0
 0 1 1 0
-1 1 0 0
+0 1 0 0
 0 1 1 0
-1 1 0 0
+0 1 0 0
 0 1 1 0
 0 1 1 0
-2 1 0 "" ""
+2 1 1 "" ""
 2 1 1 "3in" ""
 0 2 1 1 0 0 0 "" ""
 0 8 1 0 0 0 0 "" ""
@@ -2224,25 +2273,25 @@ process the component as an iTIP request.
 
 The types of errors are listed in icalerror.h.
  They are:
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_XLICERRORTYPE_COMPONENTPARSEERROR
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR 
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_XLICERRORTYPE_PROPERTYPARSEERROR
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_XLICERRORTYPE_VALUEPARSEERROR
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_XLICERRORTYPE_UNKVCALPROP
-\layout Verbatim
+\layout LyX-Code
 
 ICAL_XLICERRORTYPE_INVALIDITIP
 \layout Standard
@@ -2411,4 +2460,49 @@ HACK.
 \end_inset 
 
 
+\layout Section
+
+Library Reference
+\layout Subsection
+
+Manipulating struct icaltimetype
+\layout Subsubsection
+
+Struct icaltimetype
+\layout LyX-Code
+
+struct icaltimetype
+\layout LyX-Code
+
+{
+\layout LyX-Code
+
+       int year;
+\layout LyX-Code
+
+        int month;
+\layout LyX-Code
+
+        int day;
+\layout LyX-Code
+
+        int hour;
+\layout LyX-Code
+
+        int minute;
+\layout LyX-Code
+
+        int second;
+\layout LyX-Code
+
+         int is_utc; 
+\layout LyX-Code
+
+        int is_date;
+\layout LyX-Code
+
+        const char* zone;
+\layout LyX-Code
+
+};
 \the_end

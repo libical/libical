@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.2 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: icalparser.c,v 1.3 2001-01-28 16:29:32 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -975,8 +975,8 @@ icalcomponent* icalparser_clean(icalparser* parser)
 }
 
 struct slg_data {
-	char* pos;
-	char* str;
+	const char* pos;
+	const char* str;
 };
 
 char* string_line_generator(char *out, size_t buf_size, void *d)
@@ -1017,7 +1017,7 @@ char* string_line_generator(char *out, size_t buf_size, void *d)
     return out;    
 }
 
-icalcomponent* icalparser_parse_string(char* str)
+icalcomponent* icalparser_parse_string(const char* str)
 {
     icalcomponent *c;
     struct slg_data d;

@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.4 2001-01-23 07:03:16 ebusboom Exp $
+  $Id: icalcomponent.c,v 1.5 2001-01-28 16:29:32 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -33,6 +33,9 @@
 #include "icalmemory.h"
 #include "icalenums.h"
 #include "icaltime.h"
+#include "icaltime.h"
+#include "icalduration.h"
+#include "icalperiod.h"
 
 #include <stdlib.h>  /* for malloc */
 #include <stdarg.h> /* for va_list, etc */

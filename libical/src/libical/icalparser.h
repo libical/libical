@@ -3,7 +3,7 @@
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalparser.h,v 1.2 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: icalparser.h,v 1.3 2001-01-28 16:29:32 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -74,7 +74,7 @@ icalcomponent* icalparser_parse(icalparser *parser,
 void icalparser_set_gen_data(icalparser* parser, void* data);
 
 
-icalcomponent* icalparser_parse_string(char* str);
+icalcomponent* icalparser_parse_string(const char* str);
 
 
 /***********************************************************************

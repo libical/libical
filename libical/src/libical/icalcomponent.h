@@ -106,14 +106,6 @@ external. The internal ones came first, and are almost completely
 sufficient, but they fail badly when you want to construct a loop that
 removes components from the container.
 
-The internal iterators are deprecated. */
-
-/* Using external iterators */
-icalcompiter icalcomponent_begin_component(icalcomponent* component,
-					   icalcomponent_kind kind);
-
-icalcompiter icalcomponent_end_component(icalcomponent* component,
-					 icalcomponent_kind kind);
 
 /* Iterate through components */
 icalcomponent* icalcomponent_get_current_component (icalcomponent* component);
@@ -122,6 +114,15 @@ icalcomponent* icalcomponent_get_first_component(icalcomponent* component,
 					      icalcomponent_kind kind);
 icalcomponent* icalcomponent_get_next_component(icalcomponent* component,
 					      icalcomponent_kind kind);
+
+/* Using external iterators */
+icalcompiter icalcomponent_begin_component(icalcomponent* component,
+					   icalcomponent_kind kind);
+icalcompiter icalcomponent_end_component(icalcomponent* component,
+					 icalcomponent_kind kind);
+icalcomponent* icalcompiter_next(icalcompiter* i);
+icalcomponent* icalcompiter_prior(icalcompiter* i);
+icalcomponent* icalcompiter_deref(icalcompiter* i);
 
 
 
@@ -140,10 +141,8 @@ void icalcomponent_convert_errors(icalcomponent* component);
 icalcomponent* icalcomponent_get_parent(icalcomponent* component);
 void icalcomponent_set_parent(icalcomponent* component, 
 			      icalcomponent* parent);
-/* External component iterator */
-icalcomponent* icalcompiter_next(icalcompiter* i);
-icalcomponent* icalcompiter_prior(icalcompiter* i);
-icalcomponent* icalcompiter_deref(icalcompiter* i);
+
+
 
 /************* Derived class methods.  ****************************
 
@@ -203,6 +202,24 @@ const char* icalcomponent_get_uid(icalcomponent* comp);
 void icalcomponent_set_recurrenceid(icalcomponent* comp, 
 				    struct icaltimetype v);
 struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent* comp);
+
+
+void icalcomponent_set_organizer(icalcomponent* comp, 
+				 struct icalorganizertype org);
+struct icalorganizertype icalcomponent_get_organizer(calcomponent* comp);
+
+
+void icalcomponent_add_attendee(icalcomponent *comp,
+				struct icalattendeetype attendee);
+
+int icalcomponent_remove_attendee(icalcomponent *comp, char* cuid);
+
+/* Get the Nth attendee. Out of range indidices return an attendee
+   with cuid == 0 */
+struct icalattendeetype icalcomponent_get_attendee(icalcomponent *comp,
+						   int index);
+
+
 
 /*************** Type Specific routines ***************/
 

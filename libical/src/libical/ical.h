@@ -2,7 +2,7 @@
 #define ICAL_VERSION_H
 
 #define ICAL_PACKAGE "libical"
-#define ICAL_VERSION "0.22b"
+#define ICAL_VERSION "0.22c"
 
 #endif
 /* -*- Mode: C -*- */
@@ -11,7 +11,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: ical.h,v 1.10 2001-01-26 21:28:54 ebusboom Exp $
+ $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -45,6 +45,7 @@ struct icaltime_span {
 	int is_busy; /* 1->busy time, 0-> free time */
 };
 
+
 struct icaltimetype
 {
 	int year;
@@ -63,12 +64,19 @@ struct icaltimetype
 
 /* Convert seconds past UNIX epoch to a timetype*/
 struct icaltimetype icaltime_from_timet(time_t v, int is_date);
+
+/* Return the time as seconds past the UNIX epoch */
 time_t icaltime_as_timet(struct icaltimetype);
+
+/* Return a string represention of the time, in RFC2445 format. The
+   string is owned by libical */
 char* icaltime_as_ical_string(struct icaltimetype tt);
 
 /* Like icaltime_from_timet(), except that the input may be in seconds
-   past the epoch in floating time */
+   past the epoch in floating time. This routine is deprecated */
 struct icaltimetype icaltime_from_int(int v, int is_date, int is_utc);
+
+/* Like icaltime_as_timet, but in a floating epoch. This routine is deprecated */
 int icaltime_as_int(struct icaltimetype);
 
 /* create a time from an ISO format string */
@@ -88,32 +96,90 @@ struct icaltimetype icaltime_as_utc(struct icaltimetype tt,
 struct icaltimetype icaltime_as_zone(struct icaltimetype tt,
 				     const char* tzid);
 
-
+/* Return a null time, which indicates no time has been set. This time represent the beginning of the epoch */
 struct icaltimetype icaltime_null_time(void);
 
+/* Return true of the time is null. */
 int icaltime_is_null_time(struct icaltimetype t);
+
+/* Returns false if the time is clearly invalid, but is not null. This
+   is usually the result of creating a new time type buy not clearing
+   it, or setting one of the flags to an illegal value. */
 int icaltime_is_valid_time(struct icaltimetype t);
 
+/* Reset all of the time components to be in their normal ranges. For
+   instance, given a time with minutes=70, the minutes will be reduces
+   to 10, and the hour incremented. This allows the caller to do
+   arithmetic on times without worrying about overflow or
+   underflow. */
 struct icaltimetype icaltime_normalize(struct icaltimetype t);
 
+/* Return the day of the year of the given time */
 short icaltime_day_of_year(struct icaltimetype t);
+
+/* Create a new time, given a day of year and a year. */
 struct icaltimetype icaltime_from_day_of_year(short doy,  short year);
 
+/* Return the day of the week of the given time. Sunday is 0 */
 short icaltime_day_of_week(struct icaltimetype t);
+
+/* Return the day of the year for the Sunday of the week that the
+   given time is within. */
 short icaltime_start_doy_of_week(struct icaltimetype t);
 
+/* Return a string with the time represented in the same format as ctime(). THe string is owned by libical */
 char* icaltime_as_ctime(struct icaltimetype);
 
+/* Return the week number for the week the given time is within */
 short icaltime_week_number(short day_of_month, short month, short year);
 
+/* Create a new time from a weeknumber and a year. */
 struct icaltimetype icaltime_from_week_number(short week_number, short year);
 
+/* Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
 int icaltime_compare(struct icaltimetype a,struct icaltimetype b);
 
+/* like icaltime_compare, but only use the date parts. */
 int icaltime_compare_date_only(struct icaltimetype a, struct icaltimetype b);
 
-
+/* Return the number of days in the given month */
 short icaltime_days_in_month(short month,short year);
+
+
+#endif /* !ICALTIME_H */
+
+
+
+/* -*- Mode: C -*- */
+/*======================================================================
+ FILE: icalduration.h
+ CREATOR: eric 26 Jan 2001
+
+
+ $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+ $Locker:  $
+
+ (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of either: 
+
+    The LGPL as published by the Free Software Foundation, version
+    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+
+  Or:
+
+    The Mozilla Public License Version 1.0. You may obtain a copy of
+    the License at http://www.mozilla.org/MPL/
+
+ The Original Code is eric. The Initial Developer of the Original
+ Code is Eric Busboom
+
+
+======================================================================*/
+
+#ifndef ICALDURATION_H
+#define ICALDURATION_H
 
 
 struct icaldurationtype
@@ -133,6 +199,48 @@ char* icaldurationtype_as_ical_string(struct icaldurationtype d);
 struct icaldurationtype icaldurationtype_null_duration();
 int icaldurationtype_is_null_duration(struct icaldurationtype d);
 
+struct icaltimetype  icaltime_add(struct icaltimetype t,
+				  struct icaldurationtype  d);
+
+struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
+					   struct icaltimetype t2);
+
+#endif /* !ICALDURATION_H */
+
+
+
+/* -*- Mode: C -*- */
+/*======================================================================
+ FILE: icalperiod.h
+ CREATOR: eric 26 Jan 2001
+
+
+ $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+ $Locker:  $
+
+ (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of either: 
+
+    The LGPL as published by the Free Software Foundation, version
+    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+
+  Or:
+
+    The Mozilla Public License Version 1.0. You may obtain a copy of
+    the License at http://www.mozilla.org/MPL/
+
+ The Original Code is eric. The Initial Developer of the Original
+ Code is Eric Busboom
+
+
+======================================================================*/
+
+#ifndef ICALPERIOD_H
+#define ICALPERIOD_H
+
+
 struct icalperiodtype 
 {
 	struct icaltimetype start; /* Must be absolute */	
@@ -141,6 +249,7 @@ struct icalperiodtype
 };
 
 struct icalperiodtype icalperiodtype_from_string (const char* str);
+
 const char* icalperiodtype_as_ical_string(struct icalperiodtype p);
 struct icalperiodtype icalperiodtype_null_period();
 int icalperiodtype_is_null_period(struct icalperiodtype p);
@@ -151,11 +260,6 @@ time_t icalperiodtype_end(struct icalperiodtype period);
 
 
 
-struct icaltimetype  icaltime_add(struct icaltimetype t,
-				  struct icaldurationtype  d);
-
-struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
-					   struct icaltimetype t2);
 
 
 #endif /* !ICALTIME_H */
@@ -886,7 +990,7 @@ int icalrecur_expand_recurrence(char* rule, time_t start,
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.10 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
   $Locker:  $
 
   
@@ -1058,7 +1162,7 @@ void icalvalue_set_status(icalvalue* value, icalproperty_status v);
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.10 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
   $Locker:  $
 
   
@@ -1229,7 +1333,7 @@ void icalparameter_set_xliccomparetype(icalparameter* value, icalparameter_xlicc
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.10 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
@@ -1819,14 +1923,6 @@ external. The internal ones came first, and are almost completely
 sufficient, but they fail badly when you want to construct a loop that
 removes components from the container.
 
-The internal iterators are deprecated. */
-
-/* Using external iterators */
-icalcompiter icalcomponent_begin_component(icalcomponent* component,
-					   icalcomponent_kind kind);
-
-icalcompiter icalcomponent_end_component(icalcomponent* component,
-					 icalcomponent_kind kind);
 
 /* Iterate through components */
 icalcomponent* icalcomponent_get_current_component (icalcomponent* component);
@@ -1835,6 +1931,15 @@ icalcomponent* icalcomponent_get_first_component(icalcomponent* component,
 					      icalcomponent_kind kind);
 icalcomponent* icalcomponent_get_next_component(icalcomponent* component,
 					      icalcomponent_kind kind);
+
+/* Using external iterators */
+icalcompiter icalcomponent_begin_component(icalcomponent* component,
+					   icalcomponent_kind kind);
+icalcompiter icalcomponent_end_component(icalcomponent* component,
+					 icalcomponent_kind kind);
+icalcomponent* icalcompiter_next(icalcompiter* i);
+icalcomponent* icalcompiter_prior(icalcompiter* i);
+icalcomponent* icalcompiter_deref(icalcompiter* i);
 
 
 
@@ -1853,10 +1958,8 @@ void icalcomponent_convert_errors(icalcomponent* component);
 icalcomponent* icalcomponent_get_parent(icalcomponent* component);
 void icalcomponent_set_parent(icalcomponent* component, 
 			      icalcomponent* parent);
-/* External component iterator */
-icalcomponent* icalcompiter_next(icalcompiter* i);
-icalcomponent* icalcompiter_prior(icalcompiter* i);
-icalcomponent* icalcompiter_deref(icalcompiter* i);
+
+
 
 /************* Derived class methods.  ****************************
 
@@ -1939,7 +2042,7 @@ icalcomponent* icalcomponent_new_xdaylight();
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: ical.h,v 1.10 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2007,7 +2110,7 @@ icalcomponent* icalparser_parse(icalparser *parser,
 void icalparser_set_gen_data(icalparser* parser, void* data);
 
 
-icalcomponent* icalparser_parse_string(char* str);
+icalcomponent* icalparser_parse_string(const char* str);
 
 
 /***********************************************************************
@@ -2030,7 +2133,7 @@ char* string_line_generator(char *out, size_t buf_size, void *d);
  CREATOR: eric 30 June 1999
 
 
- $Id: ical.h,v 1.10 2001-01-26 21:28:54 ebusboom Exp $
+ $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -2108,7 +2211,7 @@ char* icalmemory_strdup(const char *s);
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.10 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2252,7 +2355,7 @@ char* icalerror_strerror(icalerrorenum e);
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
   
-  $Id: ical.h,v 1.10 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2313,7 +2416,7 @@ int icalrestriction_check(icalcomponent* comp);
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
   
-  $Id: ical.h,v 1.10 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -2457,7 +2560,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
  CREATOR: eric 26 July 2000
 
 
- $Id: ical.h,v 1.10 2001-01-26 21:28:54 ebusboom Exp $
+ $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2492,3 +2595,35 @@ char* icalmime_as_mime_string(char* component);
 
 
 
+/* -*- Mode: C -*-
+  ======================================================================
+  FILE: icallangbind.h
+  CREATOR: eric 25 jan 2001
+  
+  DESCRIPTION:
+  
+  $Id: ical.h,v 1.11 2001-01-28 16:29:32 ebusboom Exp $
+  $Locker:  $
+
+  (C) COPYRIGHT 1999 Eric Busboom 
+  http://www.softwarestudio.org
+  
+  This package is free software and is provided "as is" without
+  express or implied warranty.  It may be used, redistributed and/or
+  modified under the same terms as perl itself. ( Either the Artistic
+  License or the GPL. )
+
+  ======================================================================*/
+
+#ifndef __ICALLANGBIND_H__
+#define __ICALLANGBIND_H__
+
+int* icallangbind_new_array(int size);
+void icallangbind_free_array(int* array);
+int icallangbind_access_array(int* array, int index);
+icalproperty* icallangbind_get_property(icalcomponent *c, int n, const char* prop);
+const char* icallangbind_get_property_val(icalproperty* p);
+const char* icallangbind_get_parameter(icalproperty *p, const char* parameter);
+icalcomponent* icallangbind_get_component(icalcomponent *c, const char* comp);
+
+#endif /*__ICALLANGBIND_H__*/

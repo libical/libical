@@ -41,6 +41,10 @@ libical_la_SOURCES =		\
 	icalrestriction.h	\
 	icaltime.c		\
 	icaltime.h		\
+	icalduration.h		\
+	icalduration.c		\
+	icalperiod.h		\
+	icalperiod.c		\
 	icaltypes.c		\
 	icaltypes.h		\
 	icalvalue.c		\
@@ -64,6 +68,8 @@ libicalinclude_HEADERS =  ical.h
 COMBINEDHEADERS =					\
 	$(top_builddir)/src/libical/icalversion.h	\
 	$(top_srcdir)/src/libical/icaltime.h		\
+	$(top_srcdir)/src/libical/icalduration.h	\
+	$(top_srcdir)/src/libical/icalperiod.h		\
 	$(top_srcdir)/src/libical/icalenums.h		\
 	$(top_srcdir)/src/libical/icaltypes.h		\
 	$(top_srcdir)/src/libical/icalrecur.h		\
@@ -78,7 +84,7 @@ COMBINEDHEADERS =					\
 	$(top_srcdir)/src/libical/icalrestriction.h	\
 	$(top_srcdir)/src/libical/sspm.h		\
 	$(top_srcdir)/src/libical/icalmime.h 		\
-	$(top_srcdir)/src/libical/icallangbind.h
+	$(top_srcdir)/src/libical/icallangbind.h	
 
 BUILT_SOURCES =			\
 	icalparameter.c		\

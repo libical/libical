@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.5 2001-01-26 21:28:54 ebusboom Exp $
+ $Id: icaltime.h,v 1.6 2001-01-28 16:29:32 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -38,6 +38,7 @@ struct icaltime_span {
 	int is_busy; /* 1->busy time, 0-> free time */
 };
 
+
 struct icaltimetype
 {
 	int year;
@@ -56,12 +57,19 @@ struct icaltimetype
 
 /* Convert seconds past UNIX epoch to a timetype*/
 struct icaltimetype icaltime_from_timet(time_t v, int is_date);
+
+/* Return the time as seconds past the UNIX epoch */
 time_t icaltime_as_timet(struct icaltimetype);
+
+/* Return a string represention of the time, in RFC2445 format. The
+   string is owned by libical */
 char* icaltime_as_ical_string(struct icaltimetype tt);
 
 /* Like icaltime_from_timet(), except that the input may be in seconds
-   past the epoch in floating time */
+   past the epoch in floating time. This routine is deprecated */
 struct icaltimetype icaltime_from_int(int v, int is_date, int is_utc);
+
+/* Like icaltime_as_timet, but in a floating epoch. This routine is deprecated */
 int icaltime_as_int(struct icaltimetype);
 
 /* create a time from an ISO format string */
@@ -81,74 +89,54 @@ struct icaltimetype icaltime_as_utc(struct icaltimetype tt,
 struct icaltimetype icaltime_as_zone(struct icaltimetype tt,
 				     const char* tzid);
 
-
+/* Return a null time, which indicates no time has been set. This time represent the beginning of the epoch */
 struct icaltimetype icaltime_null_time(void);
 
+/* Return true of the time is null. */
 int icaltime_is_null_time(struct icaltimetype t);
+
+/* Returns false if the time is clearly invalid, but is not null. This
+   is usually the result of creating a new time type buy not clearing
+   it, or setting one of the flags to an illegal value. */
 int icaltime_is_valid_time(struct icaltimetype t);
 
+/* Reset all of the time components to be in their normal ranges. For
+   instance, given a time with minutes=70, the minutes will be reduces
+   to 10, and the hour incremented. This allows the caller to do
+   arithmetic on times without worrying about overflow or
+   underflow. */
 struct icaltimetype icaltime_normalize(struct icaltimetype t);
 
+/* Return the day of the year of the given time */
 short icaltime_day_of_year(struct icaltimetype t);
+
+/* Create a new time, given a day of year and a year. */
 struct icaltimetype icaltime_from_day_of_year(short doy,  short year);
 
+/* Return the day of the week of the given time. Sunday is 0 */
 short icaltime_day_of_week(struct icaltimetype t);
+
+/* Return the day of the year for the Sunday of the week that the
+   given time is within. */
 short icaltime_start_doy_of_week(struct icaltimetype t);
 
+/* Return a string with the time represented in the same format as ctime(). THe string is owned by libical */
 char* icaltime_as_ctime(struct icaltimetype);
 
+/* Return the week number for the week the given time is within */
 short icaltime_week_number(short day_of_month, short month, short year);
 
+/* Create a new time from a weeknumber and a year. */
 struct icaltimetype icaltime_from_week_number(short week_number, short year);
 
+/* Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
 int icaltime_compare(struct icaltimetype a,struct icaltimetype b);
 
+/* like icaltime_compare, but only use the date parts. */
 int icaltime_compare_date_only(struct icaltimetype a, struct icaltimetype b);
 
-
+/* Return the number of days in the given month */
 short icaltime_days_in_month(short month,short year);
-
-
-struct icaldurationtype
-{
-	int is_neg;
-	unsigned int days;
-	unsigned int weeks;
-	unsigned int hours;
-	unsigned int minutes;
-	unsigned int seconds;
-};
-
-struct icaldurationtype icaldurationtype_from_int(int t);
-struct icaldurationtype icaldurationtype_from_string(const char*);
-int icaldurationtype_as_int(struct icaldurationtype duration);
-char* icaldurationtype_as_ical_string(struct icaldurationtype d);
-struct icaldurationtype icaldurationtype_null_duration();
-int icaldurationtype_is_null_duration(struct icaldurationtype d);
-
-struct icalperiodtype 
-{
-	struct icaltimetype start; /* Must be absolute */	
-	struct icaltimetype end; /* Must be absolute */
-	struct icaldurationtype duration;
-};
-
-struct icalperiodtype icalperiodtype_from_string (const char* str);
-const char* icalperiodtype_as_ical_string(struct icalperiodtype p);
-struct icalperiodtype icalperiodtype_null_period();
-int icalperiodtype_is_null_period(struct icalperiodtype p);
-int icalperiodtype_is_valid_period(struct icalperiodtype p);
-
-time_t icalperiodtype_duration(struct icalperiodtype period);
-time_t icalperiodtype_end(struct icalperiodtype period);
-
-
-
-struct icaltimetype  icaltime_add(struct icaltimetype t,
-				  struct icaldurationtype  d);
-
-struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
-					   struct icaltimetype t2);
 
 
 #endif /* !ICALTIME_H */

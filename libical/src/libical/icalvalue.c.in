@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c.in,v 1.5 2001-01-26 21:28:54 ebusboom Exp $
+  $Id: icalvalue.c.in,v 1.6 2001-01-28 16:29:32 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -853,7 +853,7 @@ void print_datetime_to_string(char* str,  struct icaltimetype *data)
 
 }
 
-char* icalvalue_datetime_as_ical_string(icalvalue* value) {
+const char* icalvalue_datetime_as_ical_string(icalvalue* value) {
     
     struct icaltimetype data;
     char* str;
@@ -884,7 +884,7 @@ char* icalvalue_datetime_as_ical_string(icalvalue* value) {
 }
 
 
-char* icalvalue_datetimedate_as_ical_string(icalvalue* value) {
+const char* icalvalue_datetimedate_as_ical_string(icalvalue* value) {
 
     struct icaltimetype data;
     icalerror_check_arg_rz( (value!=0),"value");
@@ -940,7 +940,7 @@ char* icalvalue_datetimeperiod_as_ical_string(icalvalue* value) {
     }
 }
 
-char* icalvalue_period_as_ical_string(icalvalue* value) {
+const char* icalvalue_period_as_ical_string(icalvalue* value) {
     struct icalperiodtype data;
     icalerror_check_arg_rz( (value!=0),"value");
     data = icalvalue_get_period(value);

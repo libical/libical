@@ -857,10 +857,11 @@ struct icaltimetype {
 
   int is_date; /* 1 -> interpret this as date. */ }; 
 
-The year, month, day, hour, minute and second fields how the broken-out
-time values. The is_utc field distinguishes between times UTC and
-a local time zone. The is_date field indicates if the intra-day fields
-hold valid data. 
+The year, month, day, hour, minute and second fields hold the broken-out
+time values. The is_utc field distinguishes between times in UTC and
+a local time zone. The is_date field indicates if the time should
+be interpreted only as a date. If it is a date, the hour, minute and
+second fields are assumed to be zero, regardless of their actual vaules. 
 
 5.3.2 Creating time structures
 
@@ -878,7 +879,7 @@ struct icaltimetype tt = icaltime_from_string("19970101T103000");
 
 Icaltime_from_timet takes a timet value, representing seconds past
 the POSIX epoch, and a flag to indicate if the time is a date. Dates
-have an identical structure to a time, but they time portion ( hours,
+have an identical structure to a time, but the time portion ( hours,
 minuts and seconds ) is always 00:00:00. Dates act differently in
 sorting an comparision, and they have a different string representation
 in RFC2445. 
@@ -1207,7 +1208,34 @@ Most routines will set the global error value icalerrno on errors.
 This variable is an enumeration; permissible values can be found in
 libical/icalerror.h. If the routine returns an enum icalerrorenum,
 then the return value will be the same as icalerrno. You can use icalerror_strerror()
-to get a string that describes the error
+to get a string that describes the error. The enumerations are:
+
+* ICAL_BADARG_ERROR -- One of the argument to a routine was bad. Typically
+  for a null pointer. 
+
+* ICAL_NEWFAILED_ERROR -- A new() or malloc() failed
+
+* ICAL_MALFORMEDDATA_ERROR -- An input string was not in the correct
+  format
+
+* ICAL_PARSE_ERROR -- The parser failed to parse an incomming component
+
+* ICAL_INTERNAL_ERROR -- Largely equivalent to an assert
+
+* ICAL_FILE_ERROR -- A file operation failed. Check errno for more
+  detail.
+
+* ICAL_ALLOCATION_ERROR -- ?
+
+* ICAL_USAGE_ERROR -- ?
+
+* ICAL_NO_ERROR -- No error
+
+* ICAL_MULTIPLEINCLUSION_ERROR -- ?
+
+* ICAL_TIMEDOUT_ERROR -- For CSTP and acquiring locks
+
+* ICAL_UNKNOWN_ERROR -- ?
 
 5.6.3 X-LIC-ERROR and X-LIC-INVALID-COMPONENT
 
@@ -1284,6 +1312,16 @@ As of libical version0.18, this routine only convert *PARSEERROR errors
 and it always generates a 3.x ( failure ) code. This makes it more
 of a good idea than a really useful bit of code. 
 
+5.6.4 ICAL_ERRORS_ARE_FATAL and icalerror_errors_are_fatal
+
+If the global variable icalerror_errors_are_fatal is set to 1, then
+any error condition will cause the program to abort. The abort occurs
+in icalerror_set_errno(), and is done with an assert(0) if NDEBUG
+is undefined, and with icalerror_crash_here if NDEBUG is defined.
+The default value of icalerror_errors_are_fatal is 1 when ICAL_ERRORS_ARE_FATAL
+is defined, and 0 otherwise. Since ICAL_ERRORS_ARE_FATAL is defined
+by default, icalerror_errors_are_fatal is also defined by default. 
+
 5.7 Naming Standard
 
 Structures that you access with the "struct" keyword, such as "struct
@@ -1314,3 +1352,33 @@ are irregular.
 There are a lot of hacks in the library -- bits of code that I am not
 proud of and should probably be changed. These are marked with the
 comment string "HACK."
+
+7 Library Reference
+
+7.1 Manipulating struct icaltimetype
+
+7.1.1 Struct icaltimetype
+
+struct icaltimetype
+
+{
+
+       int year;
+
+        int month;
+
+        int day;
+
+        int hour;
+
+        int minute;
+
+        int second;
+
+         int is_utc; 
+
+        int is_date;
+
+        const char* zone;
+
+};
