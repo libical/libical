@@ -1,4 +1,13 @@
+2001-12-12  Eric Busboom  <eric@softwarestudio.org>
+
+	* icalrecur.c implemented recurrence rule for "FREQ=YEARLY",
+	with no BY rules.
+
 2001-12-11  Eric Busboom  <eric@softwarestudio.org>
+
+	* icalrecur.c Fixed bug in next_month for MONTHLY rules that have
+	only BYDAY rules. The code would miss valid dates that fell on the
+	first of the month. created new routine is_day_in_byday()
 
 	* icaltime.c Fixed icaltime_from_day_of_year to correctly handle 
 	negative and over-range day-of-years
