@@ -4,7 +4,7 @@
  CREATOR: dml 12 December 2001
  (C) COPYRIGHT 2001, Critical Path
 
- $Id: icalbdbset.h,v 1.2 2002-06-27 02:30:58 acampi Exp $
+ $Id: icalbdbset.h,v 1.3 2002-06-28 10:00:29 acampi Exp $
  $Locker:  $
 ======================================================================*/
 
@@ -32,7 +32,7 @@ void icalbdbset_checkpoint(void);
    specify if database is internally a BTREE or HASH */
 icalset * icalbdbset_new(const char* database_filename, 
 			 icalbdbset_subdb_type subdb_type,
-			 int dbtype);
+			 int dbtype, int flag);
 
 DB * icalbdbset_bdb_open_secondary(DB *dbp,
 			       const char *subdb,
@@ -115,13 +115,14 @@ DB_ENV *icalbdbset_get_env(void);
 DB* icalbdbset_bdb_open(const char* path, 
 			const char *subdb,
 			int type,
-			mode_t mode);
+			mode_t mode, int flag);
 
 
 typedef struct icalbdbset_options {
   icalbdbset_subdb_type subdb;	   /**< the subdatabase to open */
   int                   dbtype;	   /**< db_open type: DB_HASH | DB_BTREE */
   mode_t                mode;	   /**< file mode */
+  u_int32_t             flag;      /**< DB->set_flags(): DB_DUP | DB_DUPSORT */
   char *(*pfunc)(const DBT *dbt);  /**< parsing function */
   int (*callback) (DB *db,	   /**< callback for secondary db open */
 		   const DBT *dbt1, 

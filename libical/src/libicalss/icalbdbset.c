@@ -34,7 +34,7 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b);
 
     
 /** Default options used when NULL is passed to icalset_new() **/
-icalbdbset_options icalbdbset_options_default = {ICALBDB_EVENTS, DB_BTREE, 0644, NULL, NULL};
+icalbdbset_options icalbdbset_options_default = {ICALBDB_EVENTS, DB_BTREE, 0644, 0, NULL, NULL};
 
 
 static DB_ENV *ICAL_DB_ENV = 0;
@@ -147,7 +147,8 @@ icalset* icalbdbset_init(icalset* set, const char* dsn, void* options_in)
     cal_db = icalbdbset_bdb_open(set->dsn, 
 				 subdb_name, 
 				 options->dbtype, 
-				 options->mode);
+				 options->mode,
+				 options->flag);
     if (cal_db == NULL)
       return NULL;
 
@@ -166,16 +167,19 @@ icalset* icalbdbset_init(icalset* set, const char* dsn, void* options_in)
 
 
 /** open a database and return a reference to it.  Used only for
-    opening the primary index */
+    opening the primary index.
+    flag = set_flag() DUP | DUP_SORT
+ */
 
 icalset* icalbdbset_new(const char* database_filename, 
 			icalbdbset_subdb_type subdb_type,
-			int dbtype)
+			int dbtype, int flag)
 {
   icalbdbset_options options = icalbdbset_options_default;
 
   options.subdb = subdb_type;
   options.dbtype = dbtype;
+  options.flag = flag;
   
   return icalset_new(ICAL_BDB_SET, database_filename, &options);
 }
@@ -258,7 +262,8 @@ DB * icalbdbset_bdb_open_secondary(DB *dbp,
 DB* icalbdbset_bdb_open(const char* path, 
 				  const char *subdb, 
 				int dbtype, 
-				mode_t mode)
+				mode_t mode,
+				int flag)
 {
   DB *dbp, *sdbp;
   DBC *dbcp;
@@ -287,6 +292,10 @@ DB* icalbdbset_bdb_open(const char* path,
   /* set comparison function, if BTREE */
   if (dbtype == DB_BTREE)
     dbp->set_bt_compare(dbp, _compare_keys);
+
+  /* set DUP, DUPSORT */
+  if (flag != 0)
+    dbp->set_flags(dbp, flag);
 
   if ((ret = dbp->open(dbp, path, subdb, dbtype, flags, mode)) != 0) {
 	   char foo[512];
@@ -1025,87 +1034,23 @@ icalcomponent* icalbdbset_get_first_component(icalset* set)
 {
     icalbdbset *bset = (icalbdbset*)set;
     icalcomponent *c=0;
-    struct icaltimetype start, next;
-    icalproperty *dtstart, *rrule, *prop, *due;
-    struct icalrecurrencetype recur;
-    int g = 0;
 
     icalerror_check_arg_rz((bset!=0),"bset");
 
     do {
-        if (bset->occurrence_no) {
-            c = bset->last_component;
-        }
-	else if (c == 0){
+        if (c == 0)
 	    c = icalcomponent_get_first_component(bset->cluster,
 						  ICAL_ANY_COMPONENT);
-	} else {
+        else
 	    c = icalcomponent_get_next_component(bset->cluster,
 						 ICAL_ANY_COMPONENT);
-	}
 
-        if (c == 0 ) continue;
-
-        if (bset->gauge == 0) return c;
-        
-        rrule = icalcomponent_get_first_property(c, ICAL_RRULE_PROPERTY);
-        g = icalgauge_get_expand(bset->gauge);
-
-        /*a recurring component with expand query */
-        if (rrule != 0
-            && g == 1) {
-
-            recur = icalproperty_get_rrule(rrule);
-           
-            if (icalcomponent_isa(c) == ICAL_VEVENT_COMPONENT) {
-                dtstart = icalcomponent_get_first_property(c, ICAL_DTSTART_PROPERTY);
-                if (dtstart)
-                    start = icalproperty_get_dtstart(dtstart);
-            } else if (icalcomponent_isa(c) == ICAL_VTODO_COMPONENT) {
-		due = icalcomponent_get_first_property(c, ICAL_DUE_PROPERTY);
-                if (due)
-                    start = icalproperty_get_due(due);
-            }
-
-            /*@@@@ we shold probably just get the first instance here  */
-            if (bset->occurrence_no == 0) {
-                bset->occurrence_no++;
-                bset->ritr = icalrecur_iterator_new(recur, start);
-                next = icalrecur_iterator_next(bset->ritr); 
-                bset->last_component = c;
-            } 
-            else {
-                next = icalrecur_iterator_next(bset->ritr);
-                if (icaltime_is_null_time(next)){
-                    bset->occurrence_no = 0;
-                    bset->last_component = 0;
-                    icalrecur_iterator_free(bset->ritr);
-                    bset->ritr = NULL;
-                } else {
-                    bset->occurrence_no++;
-                    bset->last_component = c;
-                }
-            }           
-
-            /* add recurrence-id to the component
-             * if there is a recurrence-id already, remove it, then add the new one */
-            if (bset->occurrence_no != 0) { 
-                if ((prop = icalcomponent_get_first_property(c, ICAL_RECURRENCEID_PROPERTY)))
-                    icalcomponent_remove_property(c, prop); 
-                icalcomponent_add_property(c, icalproperty_new_recurrenceid(next));
-
-                /*@@@ inside the gauge, if it is not in the range btw DTSTART and DTEND, return 0  */
-                if (icalgauge_compare(bset->gauge,c) == 1) return c;
-            }
-         } /* if rrule */
-         else { /* not a recurring component */
 	     if(c != 0 && (bset->gauge == 0 ||
 		      icalgauge_compare(bset->gauge,c) == 1)){
 	    return c;
 	}
-	 }
 
-      } while (c!=0 || bset->occurrence_no != 0);
+      } while (c!=0);
 
     return 0;
 }
@@ -1314,13 +1259,14 @@ icalcomponent* icalbdbsetiter_to_next(icalset *set, icalsetiter* i)
                     i->last_component = c;
                 }
             }
-        }
 
-        /* add recurrence-id to the component */
-         * if there is a recurrence-id already, remove it, then add the new one */
+            /* add recurrence-id to the component *
+             * if there is a recurrence-id already, remove it, then add the new one */
         if (prop = icalcomponent_get_first_property(c, ICAL_RECURRENCEID_PROPERTY))
             icalcomponent_remove_property(c, prop);
         icalcomponent_add_property(c, icalproperty_new_recurrenceid(next));
+
+        }
 
         if(c != 0 && (i->gauge == 0 ||
                         icalgauge_compare(i->gauge, c) == 1)){
@@ -1345,74 +1291,14 @@ icalcomponent* icalbdbset_get_next_component(icalset* set)
     icalerror_check_arg_rz((bset!=0),"bset");
     
     do {
-        if (bset->occurrence_no) {
-            c = bset->last_component;
-        } else {
             c = icalcomponent_get_next_component(bset->cluster,
 					     ICAL_ANY_COMPONENT);
-        }
-
-        if (c == 0) continue;
-
-        if (bset->gauge == 0) return c;
-
-        rrule = icalcomponent_get_first_property(c, ICAL_RRULE_PROPERTY);
-        g = icalgauge_get_expand(bset->gauge);
-
-        /*a recurring component with expand query */
-        if (rrule != 0
-            && g == 1) {
-
-            recur = icalproperty_get_rrule(rrule);
-
-            if (icalcomponent_isa(c) == ICAL_VEVENT_COMPONENT) {
-                dtstart = icalcomponent_get_first_property(c, ICAL_DTSTART_PROPERTY);
-                if (dtstart)
-                    start = icalproperty_get_dtstart(dtstart);
-            } else if (icalcomponent_isa(c) == ICAL_VTODO_COMPONENT) {
-                due = icalcomponent_get_first_property(c, ICAL_DUE_PROPERTY);
-                if (due)
-                    start = icalproperty_get_due(due);
-            }
-            
-            if (bset->occurrence_no == 0) {
-                bset->ritr = icalrecur_iterator_new(recur, start);
-                bset->occurrence_no++;
-                next = icalrecur_iterator_next(bset->ritr);
-                bset->last_component = c;
-            }
-            else {
-                next = icalrecur_iterator_next(bset->ritr);
-                if (icaltime_is_null_time(next)){
-                    bset->occurrence_no = 0;
-                    bset->last_component = 0;
-                    icalrecur_iterator_free(bset->ritr);
-                    bset->ritr = NULL;
-                } else {
-                    bset->occurrence_no++;
-                    bset->last_component = c;
-                }
-	}
-	
-            /* add recurrence-id to the component  
-             * if there is a recurrence-id already, remove it, then add the new one */
-            if (bset->occurrence_no != 0) {
-                if ((prop = icalcomponent_get_first_property(c, ICAL_RECURRENCEID_PROPERTY)))
-                    icalcomponent_remove_property(c, prop);
-                icalcomponent_add_property(c, icalproperty_new_recurrenceid(next));
-    
-                /*inside the gauge, if it is not in the range btw DTSTART and DTEND, return 0 */
-                if (icalgauge_compare(bset->gauge,c) == 1) return c;
-                }
-            } /* if rrule */
-            else { /* not a recurring component, and no expand */
                 if(c != 0 && (bset->gauge == 0 ||
                     icalgauge_compare(bset->gauge,c) == 1)){
                     return c;
                 }
-            }
 
-    } while(c != 0 || bset->occurrence_no != 0);
+    } while(c != 0);
     
     return 0;
 }
