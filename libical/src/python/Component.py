@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.14 2002-10-24 13:40:40 acampi Exp $
+#  $Id: Component.py,v 1.15 2002-10-24 13:41:17 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -436,10 +436,10 @@ class GenericComponent(Component):
         """Sets or returns the value of the LAST-MODIFIED property.
 
         Usage:
-        lastmodified(time_obj)          # Set the value using a Time object
-        lastmodified('19970101T123000Z')# Set using an iCalendar string
-        lastmodified(982362522)         # Set using seconds 
-        lastmodified()                  # Return an iCalendar string
+        last_modified(time_obj)          # Set the value using a Time object
+        last_modified('19970101T123000Z')# Set using an iCalendar string
+        last_modified(982362522)         # Set using seconds 
+        last_modified()                  # Return an iCalendar string
         """
         return self._singular_property("LAST-MODIFIED", "DATE-TIME", v, Time)
 
