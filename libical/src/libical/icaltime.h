@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.22 2002-10-31 16:37:51 acampi Exp $
+ $Id: icaltime.h,v 1.23 2002-11-03 22:33:53 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -246,7 +246,7 @@ struct icaltimetype icaltime_normalize(const struct icaltimetype t);
 /** convert tt, of timezone tzid, into a utc time. Does nothing if the
    time is already UTC.  */
 struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
-	const icaltimezone *zone);
+	icaltimezone *zone);
 
 /** Return the number of days in the given month */
 int icaltime_days_in_month(const int month, const int year);

@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.h,v 1.8 2002-11-03 21:42:46 acampi Exp $
+ $Id: icaltimezone.h,v 1.9 2002-11-03 22:33:53 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -108,8 +108,8 @@ int	icaltimezone_set_component		(icaltimezone	*zone,
  */
 
 void	icaltimezone_convert_time		(struct icaltimetype *tt,
-						 const icaltimezone	*from_zone,
-						 const icaltimezone	*to_zone);
+						 icaltimezone	*from_zone,
+						 icaltimezone	*to_zone);
 
 
 /**

@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.55 2002-11-03 21:39:18 acampi Exp $
+  $Id: icaltime.c,v 1.56 2002-11-03 22:33:53 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -822,7 +822,7 @@ icaltime_adjust(struct icaltimetype *tt, const int days, const int hours,
  *	time zone, and its native timezone set to the right timezone.
  */
 struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
-	const icaltimezone *zone) {
+	icaltimezone *zone) {
 
 	struct icaltimetype ret = tt;
 
