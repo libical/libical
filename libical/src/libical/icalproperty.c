@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.29 2002-07-19 14:47:54 lindner Exp $
+  $Id: icalproperty.c,v 1.30 2002-07-21 09:33:43 lindner Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -92,7 +92,7 @@ void icalproperty_add_parameters(icalproperty* prop, va_list args)
 
 
 icalproperty*
-icalproperty_new_impl (icalproperty_kind kind)
+icalproperty_new_impl(icalproperty_kind kind)
 {
     icalproperty* prop;
 
@@ -120,7 +120,7 @@ icalproperty_new_impl (icalproperty_kind kind)
 icalproperty*
 icalproperty_new (icalproperty_kind kind)
 {
-    if(kind == ICAL_NO_PROPERTY){
+    if (kind == ICAL_NO_PROPERTY){
         return 0;
     }
 
