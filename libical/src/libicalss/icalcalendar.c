@@ -2,7 +2,7 @@
   FILE: icalcalendar.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalcalendar.c,v 1.4 2002-06-28 12:24:38 acampi Exp $
+  $Id: icalcalendar.c,v 1.5 2002-07-23 01:21:08 lindner Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -34,7 +34,16 @@
 #include <sys/stat.h> /* For mkdir, stat */
 #include <sys/types.h> /* For mkdir */
 #include <fcntl.h> /* For mkdir */
+
+#ifndef WIN32
 #include <unistd.h>  /* For mkdir, stat */    
+#endif
+
+#ifndef PATH_MAX
+#define PATH_MAX 512
+#endif
+
+
 #include <stdlib.h> /* for malloc */
 #include <string.h> /* for strcat */
 #include <errno.h>
