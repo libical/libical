@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.61 2002-11-21 09:55:33 acampi Exp $
+  $Id: icaltime.c,v 1.62 2002-11-21 09:56:36 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -374,7 +374,7 @@ struct icaltimetype icaltime_from_string(const char* str)
 	tt.is_date = 0;
     } else if (size == 16) { /* UTC time, ends in 'Z'*/
 	if(str[15] != 'Z')
-	    goto ERROR;
+	    goto FAIL;
 
 	tt.is_utc = 1;
 	tt.zone = icaltimezone_get_utc_timezone();
@@ -383,25 +383,25 @@ struct icaltimetype icaltime_from_string(const char* str)
 	tt.is_utc = 1;
 	tt.is_date = 1;
     } else { /* error */
-	goto ERROR;
+	goto FAIL;
     }
 
     if(tt.is_date == 1){
 	if (sscanf(str,"%04d%02d%02d",&tt.year,&tt.month,&tt.day) < 3)
-	    goto ERROR;
+	    goto FAIL;
     } else {
 	char tsep;
 	if (sscanf(str,"%04d%02d%02d%c%02d%02d%02d",&tt.year,&tt.month,&tt.day,
 	       &tsep,&tt.hour,&tt.minute,&tt.second) < 7)
-	    goto ERROR;
+	    goto FAIL;
 
 	if(tsep != 'T')
-	    goto ERROR;
+	    goto FAIL;
     }
 
     return tt;    
 
-ERROR:
+FAIL:
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     return icaltime_null_time();
 }
