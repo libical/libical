@@ -3,7 +3,7 @@
   FILE: sspm.c Parse Mime
   CREATOR: eric 25 June 2000
   
-  $Id: sspm.c,v 1.7 2002-12-16 14:37:22 acampi Exp $
+  $Id: sspm.c,v 1.8 2003-11-17 22:51:53 gray-john Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -424,17 +424,19 @@ static struct sspm_action_map get_action(struct mime_impl *impl,
 char* sspm_lowercase(char* str)
 {
     char* p = 0;
-    char* new = sspm_strdup(str);
+    char* ret;
 
     if(str ==0){
 	return 0;
     }
 
-    for(p = new; *p!=0; p++){
+    ret = sspm_strdup(str);
+
+    for(p = ret; *p!=0; p++){
 	*p = tolower(*p);
     }
 
-    return new;
+    return ret;
 }
 
 enum sspm_major_type sspm_find_major_content_type(char* type)

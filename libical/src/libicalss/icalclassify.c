@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.13 2002-08-07 17:12:06 acampi Exp $
+    $Id: icalclassify.c,v 1.14 2003-11-17 22:51:53 gray-john Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -53,17 +53,19 @@ struct icalclassify_parts {
 char* icalclassify_lowercase(const char* str)
 {
     char* p = 0;
-    char* new = icalmemory_strdup(str);
+    char* ret;
 
     if(str ==0){
 	return 0;
     }
 
-    for(p = new; *p!=0; p++){
+    ret = icalmemory_strdup(str);
+
+    for(p = ret; *p!=0; p++){
 	*p = tolower(*p);
     }
 
-    return new;
+    return ret;
 }
 
 /* Return a set of components that intersect in time with comp. For
