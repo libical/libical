@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.42 2002-09-01 19:12:31 gray-john Exp $
+  $Id: icaltime.c,v 1.43 2002-09-26 22:09:01 lindner Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -36,11 +36,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#define JDAY
-
-#ifdef JDAY
-#include "astime.h"
-#endif
+#include "astime.h"		/* Julian data handling routines */
 
 /*
 #ifdef ICAL_NO_LIBICAL
@@ -450,21 +446,6 @@ short icaltime_days_in_month(const short month, const short year)
 
 /* 1-> Sunday, 7->Saturday */
 short icaltime_day_of_week(const struct icaltimetype t){
-#ifndef JDAY 
-	struct tm stm;
-
-    stm.tm_year = t.year - 1900;
-    stm.tm_mon = t.month - 1;
-    stm.tm_mday = t.day;
-    stm.tm_hour = 0;
-    stm.tm_min = 0;
-    stm.tm_sec = 0;
-    stm.tm_isdst = -1;
-
-    mktime (&stm);
-
-    return stm.tm_wday + 1;
-#else /* JDAY implementation */
 	UTinstant jt;
 
 	memset(&jt,0,sizeof(UTinstant));
@@ -479,7 +460,6 @@ short icaltime_day_of_week(const struct icaltimetype t){
 	juldat(&jt);
 
 	return jt.weekday + 1;
-#endif
 }
 
 /** Day of the year that the first day of the week (Sunday) is on.
@@ -487,41 +467,6 @@ short icaltime_day_of_week(const struct icaltimetype t){
  *  @todo Doesn't take into account different week start days. 
  */
 short icaltime_start_doy_of_week(const struct icaltimetype t){
-#ifndef JDAY
-    struct tm stm;
-    int start;
-
-    stm.tm_year = t.year - 1900;
-    stm.tm_mon = t.month - 1;
-    stm.tm_mday = t.day;
-    stm.tm_hour = 0;
-    stm.tm_min = 0;
-    stm.tm_sec = 0;
-    stm.tm_isdst = -1;
-
-    mktime (&stm);
-
-    /* Move back to the start of the week. */
-    stm.tm_mday -= stm.tm_wday;
-    
-    mktime (&stm);
-
-
-    /* If we are still in the same year as the original date, we just return
-       the day of the year. */
-    if (t.year - 1900 == stm.tm_year){
-	start = stm.tm_yday+1;
-    } else {
-	/* return negative to indicate that start of week is in
-           previous year. */
-
-	int is_leap = icaltime_is_leap_year(stm.tm_year+1900);
-
-	start = (stm.tm_yday+1)-(365+is_leap);
-    }
-
-    return start;
-#else
 	UTinstant jt;
 
 	memset(&jt,0,sizeof(UTinstant));
@@ -537,7 +482,6 @@ short icaltime_start_doy_of_week(const struct icaltimetype t){
 	caldat(&jt);
 
 	return jt.day_of_year - jt.weekday;
-#endif
 }
 
 /** 
@@ -546,27 +490,6 @@ short icaltime_start_doy_of_week(const struct icaltimetype t){
  */
 short icaltime_week_number(const struct icaltimetype ictt)
 {
-#ifndef JDAY
-    struct tm stm;
-    int week_no;
-    char str[8];
-
-    stm.tm_year = ictt.year - 1900;
-    stm.tm_mon = ictt.month - 1;
-    stm.tm_mday = ictt.day;
-    stm.tm_hour = 0;
-    stm.tm_min = 0;
-    stm.tm_sec = 0;
-    stm.tm_isdst = -1;
-
-    mktime (&stm);
- 
-    strftime(str,5,"%V", &stm);
-
-    week_no = atoi(str);
-
-    return week_no;
-#else
 	UTinstant jt;
 
 	memset(&jt,0,sizeof(UTinstant));
@@ -582,7 +505,6 @@ short icaltime_week_number(const struct icaltimetype ictt)
 	caldat(&jt);
 
 	return (jt.day_of_year - jt.weekday) / 7;
-#endif
 }
 
 /* The first array is for non-leap years, the second for leap years*/
@@ -732,42 +654,42 @@ int icaltime_is_null_time(const struct icaltimetype t)
  * 	timezone.
  */
 
-int icaltime_compare(const struct icaltimetype a, const struct icaltimetype b) 
+int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b_in) 
 {
     int retval;
+    struct icaltimetype a, b;
 
-    struct icaltimetype a2 = icaltime_convert_to_zone(a, icaltimezone_get_utc_timezone());
-    struct icaltimetype b2 = icaltime_convert_to_zone(b, icaltimezone_get_utc_timezone());
+    a = icaltime_convert_to_zone(a_in, icaltimezone_get_utc_timezone());
+    b = icaltime_convert_to_zone(b_in, icaltimezone_get_utc_timezone());
 
-
-    if (a2.year > b2.year)
+    if (a.year > b.year)
 	retval = 1;
-    else if (a2.year < b2.year)
+    else if (a.year < b.year)
 	retval = -1;
 
-    else if (a2.month > b2.month)
+    else if (a.month > b.month)
 	retval = 1;
-    else if (a2.month < b2.month)
+    else if (a.month < b.month)
 	retval = -1;
 
-    else if (a2.day > b2.day)
+    else if (a.day > b.day)
 	retval = 1;
-    else if (a2.day < b2.day)
+    else if (a.day < b.day)
 	retval = -1;
 
-    else if (a2.hour > b2.hour)
+    else if (a.hour > b.hour)
 	retval = 1;
-    else if (a2.hour < b2.hour)
+    else if (a.hour < b.hour)
 	retval = -1;
 
-    else if (a2.minute > b2.minute)
+    else if (a.minute > b.minute)
 	retval = 1;
-    else if (a2.minute < b2.minute)
+    else if (a.minute < b.minute)
 	retval = -1;
 
-    else if (a2.second > b2.second)
+    else if (a.second > b.second)
 	retval = 1;
-    else if (a2.second < b2.second)
+    else if (a.second < b.second)
 	retval = -1;
 
     else
@@ -779,27 +701,29 @@ int icaltime_compare(const struct icaltimetype a, const struct icaltimetype b)
 /**
  *	like icaltime_compare, but only use the date parts.
  */
+
 int
-icaltime_compare_date_only(const struct icaltimetype a, const struct icaltimetype b)
+icaltime_compare_date_only(const struct icaltimetype a_in, const struct icaltimetype b_in)
 {
     int retval;
+    struct icaltimetype a, b;
 
-    struct icaltimetype a2 = icaltime_convert_to_zone(a, icaltimezone_get_utc_timezone());
-    struct icaltimetype b2 = icaltime_convert_to_zone(b, icaltimezone_get_utc_timezone());
+    a = icaltime_convert_to_zone(a_in, icaltimezone_get_utc_timezone());
+    b = icaltime_convert_to_zone(b_in, icaltimezone_get_utc_timezone());
 
-    if (a2.year > b2.year)
+    if (a.year > b.year)
 	retval = 1;
-    else if (a2.year < b2.year)
+    else if (a.year < b.year)
 	retval = -1;
 
-    else if (a2.month > b2.month)
+    else if (a.month > b.month)
 	retval = 1;
-    else if (a2.month < b2.month)
+    else if (a.month < b.month)
 	retval = -1;
 
-    else if (a2.day > b2.day)
+    else if (a.day > b.day)
 	retval = 1;
-    else if (a2.day < b2.day)
+    else if (a.day < b.day)
 	retval = -1;
 
     else
