@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.34 2002-08-07 18:04:57 acampi Exp $
+  $Id: icalparser.c,v 1.35 2002-08-07 18:50:56 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -53,20 +53,15 @@
 #include "icalmemory.h"
 #include "icalparser.h"
 
-/*
- * This is a temporary HACK to support FreeBSD. We should really
- * autodetect whether the target OS has wctype.h and all the functionality
- * we need. When this happens this can go away.
- */
-
-#if defined(__FreeBSD__) || defined(__APPLE__)
-# ifdef HAVE_WCTYPE_H
-#  include <wctype.h>
-# else
+#ifdef HAVE_WCTYPE_H
+# include <wctype.h>
+# ifndef HAVE_ISWSPACE			/* Some systems have an imcomplete
+#  define iswspace        isspace	 * implementation on wctype (FreeBSD,
+# endif					 * Darwin). Cope with that. */
+#else
+# ifndef HAVE_ISWSPACE
 #  define iswspace        isspace
 # endif
-#else
-# define HAVE_WCTYPE_H	1
 #endif
 
 #ifdef WIN32
