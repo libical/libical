@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalparameter.h,v 1.2 2002-05-21 10:31:29 acampi Exp $
+  $Id: icalparameter.h,v 1.3 2004-03-17 19:04:54 acampi Exp $
   $Locker:  $
 
   
@@ -35,6 +35,7 @@
 /*typedef struct icalparameter_impl icalparameter;*/
 
 icalparameter* icalparameter_new(icalparameter_kind kind);
+icalparameter* icalparameter_new_x_name(const char *name, const char *value);
 icalparameter* icalparameter_new_clone(icalparameter* p);
 
 /* Create from string of form "PARAMNAME=VALUE" */

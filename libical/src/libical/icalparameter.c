@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c,v 1.11 2002-12-16 14:37:21 acampi Exp $
+  $Id: icalparameter.c,v 1.12 2004-03-17 19:04:53 acampi Exp $
   $Locker:  $
     
 
@@ -75,6 +75,23 @@ icalparameter_new (icalparameter_kind kind)
 
     return (icalparameter*) v;
 
+}
+
+icalparameter *
+icalparameter_new_x_name(const char *name, const char *value) {
+
+	icalparameter  *ret;
+
+	if (name == NULL || value == NULL)
+		return NULL;
+
+	ret = icalparameter_new_x(value);
+	if (ret == NULL)
+		return NULL;
+
+	icalparameter_set_xname(ret, name);
+
+	return ret;	
 }
 
 void
