@@ -27,6 +27,7 @@
 "ACTIONPARAM","icalparameter_action","ASK;ABORT"
 "ID","const char*",
 "ENABLE","icalparameter_enable","TRUE;FALSE"
+"LATENCY","const char*",
 "LOCAL","icalparameter_local","TRUE;FALSE"
 "LOCALIZE","const char*",
 "OPTIONS","const char*",
