@@ -29,3 +29,7 @@
 "GEO","(a)struct icalgeotype","tuple","unitary",
 "STRING","(a)const char*","string","unitary",
 "X","(m)const char*","string","unitary",
+"#CAP enumeration types",,,,
+"CMD","(a)enum icalproperty_cmd","string","unitary","ABORT;CONTINUE;CREATE;DELETE;GENERATE-UID;GET-CAPABILITY;IDENTIFY;MODIFY;MOVE;REPLY;SEARCH;SET-LOCALE"
+"QUERY-LEVEL","(a)enum icalproperty_querylevel","string","unitary","CAL-QL-1;CAL-QL-NONE"
+"CAR-LEVEL","(a)enum icalproperty_carlevel","string","unitary","CAR-NONE;CAR-MIN;CAR-FULL-1"
