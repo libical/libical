@@ -1,5 +1,28 @@
 BEGIN:VEVENT
 DESCRIPTION
+ :Repeat every tuesday and wednesday starting Tue 2nd April 2002
+RRULE
+ :FREQ=WEEKLY;INTERVAL=1;COUNT=6;BYDAY=TU,WE
+DTSTART
+ :20020402T114500
+DTEND
+ :20020402T124500
+END:VEVENT
+
+BEGIN:VEVENT
+DESCRIPTION
+ :This freezes the icalrecur_iterator_new function
+RRULE
+ :FREQ=YEARLY;INTERVAL=1
+DTSTART
+ :19990201T172000
+DTEND
+ :19990201T182000
+END:VEVENT
+
+BEGIN:VEVENT
+DESCRIPTION
+=======
  :Monday of week number 20 (where the default start of the week is Monday)\, 
  forever:
 DTSTART
