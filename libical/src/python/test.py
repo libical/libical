@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: test.py,v 1.10 2001-03-05 18:30:40 ebusboom Exp $
+#  $Id: test.py,v 1.11 2001-03-11 00:48:03 plewis Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -275,6 +275,39 @@ def test_component():
     c.properties()[:] = [p]
 
     print c.as_ical_string()
+
+def test_event():
+    print "------------ Event Class ----------------------"
+    event = Event()
+    event.created("20010313T123000Z")
+    #print "created =", event.created()
+    assert (event.created() == "20010313T123000Z")
+
+    event.organizer("MAILTO:j_doe@nowhere.com")
+    org = event.properties('ORGANIZER')[0]
+    #print org.cn()
+    org.cn('Jane Doe')
+    assert (isinstance(org, Organizer))
+    #print "organizer =", event.organizer()
+    assert (event.organizer() == "MAILTO:j_doe@nowhere.com")
+
+    event.dtstart("20010401T183000Z")
+    #print "dtstart =", event.dtstart()
+    assert (event.dtstart()=="20010401T183000Z")
+
+    dtend = Time('20010401T190000Z', 'DTEND')
+    event.dtend(dtend)
+    assert (event.dtend()==dtend.value())
+    assert (event.dtend() == '20010401T190000Z')
+    
+    att = Attendee()
+    att.value('jsmith@nothere.com')
+    event.attendees(('ef_hutton@listenup.com', att))
+
+    event.description("A short description.  Longer ones break things.")
+    event.status('TeNtAtIvE')
+    
+    print event.as_ical_string()
     
     
 def test_derivedprop():
@@ -324,6 +357,8 @@ def run_tests():
     test_duration()
 
     test_derivedprop()
+
+    test_event()
 
     #test_attach()
 
