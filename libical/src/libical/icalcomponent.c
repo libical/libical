@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.52 2003-02-17 15:47:16 acampi Exp $
+  $Id: icalcomponent.c,v 1.53 2003-02-17 17:28:21 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1522,11 +1522,19 @@ icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
     if ((param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER))
 	!= NULL) {
 	const char     *tzid = icalparameter_get_tzid(param);
-	icaltimezone   *tz;
+	icaltimezone   *tz = NULL;
 
-	if ((tz = icalcomponent_get_timezone(comp, tzid)) != NULL) {
-	    icaltime_set_timezone(&ret, tz);
+	for (c = comp; c != NULL; c = icalcomponent_get_parent(c)) {
+	    tz = icalcomponent_get_timezone(comp, tzid);
+	    if (tz != NULL)
+		break;
 	}
+
+	if (tz == NULL)
+	    tz = icaltimezone_get_builtin_timezone(tzid);
+
+	if (tz != NULL)
+	    ret = icaltime_set_timezone(&ret, tz);
     }
 
     return ret;
