@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.17 2001-06-22 16:28:44 ebusboom Exp $
+#  $Id: Makefile.am,v 1.18 2001-06-29 15:17:16 ebusboom Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -18,7 +18,7 @@
 #    The Mozilla Public License Version 1.0. You may obtain a copy of
 #    the License at http://www.mozilla.org/MPL/
 #
-#  The original code is icalcomponent.c
+#  
 #
 #======================================================================
 

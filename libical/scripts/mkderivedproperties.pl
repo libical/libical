@@ -202,9 +202,6 @@ EOM
 
   } elsif ($opt_h) { # Generate C Header file
 
-if ($include_vanew){
-  print "icalproperty* icalproperty_vanew_${lc}($type v, ...);\n";
-}
 
  print "\
 /* $prop */\
@@ -212,6 +209,11 @@ icalproperty* icalproperty_new_${lc}($type v);\
 void icalproperty_set_${lc}(icalproperty* prop, $type v);\
 $type icalproperty_get_${lc}(icalproperty* prop);";
   
+
+if ($include_vanew){
+  print "icalproperty* icalproperty_vanew_${lc}($type v, ...);\n";
+}
+
 } 
 
 

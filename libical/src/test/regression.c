@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.30 2001-05-21 05:43:09 ebusboom Exp $
+  $Id: regression.c,v 1.31 2001-06-29 15:17:16 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -286,7 +286,7 @@ icalcomponent* create_new_component()
 
     icalcomponent_add_property(
 	event,
-	icalproperty_new_class("PUBLIC")
+	icalproperty_new_class(ICAL_CLASS_PRIVATE)
 	);
     
     icalcomponent_add_property(
@@ -394,7 +394,7 @@ icalcomponent* create_new_component_with_va_args()
 		    ),
 		icalproperty_new_description("Project XYZ Review Meeting"),
 		icalproperty_new_categories("MEETING"),
-		icalproperty_new_class("PUBLIC"),
+		icalproperty_new_class(ICAL_CLASS_PUBLIC),
 		icalproperty_new_created(atime),
 		icalproperty_new_summary("XYZ Project Review"),
 		icalproperty_vanew_dtstart(
@@ -1126,7 +1126,7 @@ void test_restriction()
 		    ),
 		icalproperty_new_description("Project XYZ Review Meeting"),
 		icalproperty_new_categories("MEETING"),
-		icalproperty_new_class("PUBLIC"),
+		icalproperty_new_class(ICAL_CLASS_PUBLIC),
 		icalproperty_new_created(atime),
 		icalproperty_new_summary("XYZ Project Review"),
                 /*		icalproperty_new_dtstart(

@@ -1,7 +1,17 @@
+2001-06-29  Eric Busboom  <eric@softwarestudio.org>
+
+	* icalderivedproperties.h,c Changed the signature if the CLASS
+	property from TEXT to CLASS. ( enum icalproperty_class) 
+
+2001-06-22  Eric Busboom  <eric@softwarestudio.org>
+
+	* icaltypes.c Fixed bug in icaltriggertype_new_from_string htat
+	caused it to fail.
+
 2001-04-12  Eric Busboom  <eric@softwarestudio.org>
 
 	* icalvalue.c Added quoting to apostrophies ("'") in text
- 	values. This is not required but the spec, but it is necessary in
+ 	values. This is not required by the spec, but it is necessary in
  	icallangbind_property_eval_string, since ' is special in both perl
  	and python.
 
