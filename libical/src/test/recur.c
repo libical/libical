@@ -49,6 +49,15 @@ static void sig_alrm(int i){
     exit(1);
 }
 
+static void recur_callback(icalcomponent *comp,
+			   struct icaltime_span *span,
+			   void *data)
+{
+  printf("cb: %s", ctime(&span->start));
+  printf("    %s\n", ctime(&span->end));
+
+}
+
 int main(int argc, char *argv[])
 {
     icalfileset *cin;
@@ -93,6 +102,11 @@ int main(int argc, char *argv[])
 	itr != 0;
 	itr = icalfileset_get_next_component(cin)){
 		
+      struct icaltimetype start = icaltime_from_timet(1,0);
+      struct icaltimetype end = icaltime_today();
+
+
+
 		desc = icalcomponent_get_first_property(itr,ICAL_DESCRIPTION_PROPERTY);
 		dtstart = icalcomponent_get_first_property(itr,ICAL_DTSTART_PROPERTY);
 		rrule = icalcomponent_get_first_property(itr,ICAL_RRULE_PROPERTY);
@@ -128,6 +142,11 @@ int main(int argc, char *argv[])
 			
 		}
 		icalrecur_iterator_free(ritr);
+
+      icalcomponent_foreach_recurrence(itr, start, end, 
+				       recur_callback, NULL);
+      
+
 		
     }
 
