@@ -1,5 +1,9 @@
 2001-02-09  JP Rosevear  <jpr@ximian.com>
 
+	* Removal of various auto generated files
+	
+2001-02-09  JP Rosevear  <jpr@ximian.com>
+
 	* src/libical/icalparameter.c.in (icalparameter_new_from_string):
 	its NEEDS-ACTION rather than NEEDSACTION
 	(icalparameter_as_ical_string): ditto
