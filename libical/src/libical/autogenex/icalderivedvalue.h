@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalderivedvalue.h,v 1.4 2002-07-23 14:32:30 lindner Exp $
+  $Id: icalderivedvalue.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
 
   
@@ -64,33 +64,33 @@ void icalvalue_reset_kind(icalvalue* value);
 
 typedef enum icalvalue_kind {
    ICAL_ANY_VALUE=5000,
-    ICAL_QUERY_VALUE=5001,
-    ICAL_TRIGGER_VALUE=5002,
-    ICAL_STATUS_VALUE=5003,
-    ICAL_TRANSP_VALUE=5004,
-    ICAL_CLASS_VALUE=5005,
-    ICAL_DATE_VALUE=5006,
-    ICAL_STRING_VALUE=5007,
-    ICAL_INTEGER_VALUE=5008,
-    ICAL_PERIOD_VALUE=5009,
+    ICAL_BOOLEAN_VALUE=5001,
+    ICAL_UTCOFFSET_VALUE=5002,
+    ICAL_XLICCLASS_VALUE=5003,
+    ICAL_RECUR_VALUE=5004,
+    ICAL_METHOD_VALUE=5005,
+    ICAL_CALADDRESS_VALUE=5006,
+    ICAL_PERIOD_VALUE=5007,
+    ICAL_STATUS_VALUE=5008,
+    ICAL_BINARY_VALUE=5009,
     ICAL_TEXT_VALUE=5010,
     ICAL_DURATION_VALUE=5011,
-    ICAL_BOOLEAN_VALUE=5012,
-    ICAL_URI_VALUE=5013,
-    ICAL_DATETIMEPERIOD_VALUE=5014,
-    ICAL_GEO_VALUE=5015,
-    ICAL_DATETIME_VALUE=5016,
-    ICAL_XLICCLASS_VALUE=5017,
-    ICAL_UTCOFFSET_VALUE=5018,
-    ICAL_ATTACH_VALUE=5019,
-    ICAL_ACTION_VALUE=5020,
-    ICAL_CALADDRESS_VALUE=5021,
+    ICAL_DATETIMEPERIOD_VALUE=5012,
+    ICAL_INTEGER_VALUE=5013,
+    ICAL_URI_VALUE=5014,
+    ICAL_TRIGGER_VALUE=5015,
+    ICAL_ATTACH_VALUE=5016,
+    ICAL_CLASS_VALUE=5017,
+    ICAL_FLOAT_VALUE=5018,
+    ICAL_QUERY_VALUE=5019,
+    ICAL_STRING_VALUE=5020,
+    ICAL_TRANSP_VALUE=5021,
     ICAL_X_VALUE=5022,
-    ICAL_FLOAT_VALUE=5023,
+    ICAL_DATETIME_VALUE=5023,
     ICAL_REQUESTSTATUS_VALUE=5024,
-    ICAL_METHOD_VALUE=5025,
-    ICAL_BINARY_VALUE=5026,
-    ICAL_RECUR_VALUE=5027,
+    ICAL_GEO_VALUE=5025,
+    ICAL_DATE_VALUE=5026,
+    ICAL_ACTION_VALUE=5027,
    ICAL_NO_VALUE=5028
 } icalvalue_kind ;
 
@@ -190,10 +190,40 @@ typedef enum icalproperty_xlicclass {
 #define ICALPROPERTY_LAST_ENUM 10073
 
 
- /* QUERY */ 
-icalvalue* icalvalue_new_query(const char* v); 
-const char* icalvalue_get_query(const icalvalue* value); 
-void icalvalue_set_query(icalvalue* value, const char* v);
+ /* BOOLEAN */ 
+icalvalue* icalvalue_new_boolean(int v); 
+int icalvalue_get_boolean(const icalvalue* value); 
+void icalvalue_set_boolean(icalvalue* value, int v);
+
+
+ /* UTC-OFFSET */ 
+icalvalue* icalvalue_new_utcoffset(int v); 
+int icalvalue_get_utcoffset(const icalvalue* value); 
+void icalvalue_set_utcoffset(icalvalue* value, int v);
+
+
+ /* X-LIC-CLASS */ 
+icalvalue* icalvalue_new_xlicclass(enum icalproperty_xlicclass v); 
+enum icalproperty_xlicclass icalvalue_get_xlicclass(const icalvalue* value); 
+void icalvalue_set_xlicclass(icalvalue* value, enum icalproperty_xlicclass v);
+
+
+ /* METHOD */ 
+icalvalue* icalvalue_new_method(enum icalproperty_method v); 
+enum icalproperty_method icalvalue_get_method(const icalvalue* value); 
+void icalvalue_set_method(icalvalue* value, enum icalproperty_method v);
+
+
+ /* CAL-ADDRESS */ 
+icalvalue* icalvalue_new_caladdress(const char* v); 
+const char* icalvalue_get_caladdress(const icalvalue* value); 
+void icalvalue_set_caladdress(icalvalue* value, const char* v);
+
+
+ /* PERIOD */ 
+icalvalue* icalvalue_new_period(struct icalperiodtype v); 
+struct icalperiodtype icalvalue_get_period(const icalvalue* value); 
+void icalvalue_set_period(icalvalue* value, struct icalperiodtype v);
 
 
  /* STATUS */ 
@@ -202,40 +232,10 @@ enum icalproperty_status icalvalue_get_status(const icalvalue* value);
 void icalvalue_set_status(icalvalue* value, enum icalproperty_status v);
 
 
- /* TRANSP */ 
-icalvalue* icalvalue_new_transp(enum icalproperty_transp v); 
-enum icalproperty_transp icalvalue_get_transp(const icalvalue* value); 
-void icalvalue_set_transp(icalvalue* value, enum icalproperty_transp v);
-
-
- /* CLASS */ 
-icalvalue* icalvalue_new_class(enum icalproperty_class v); 
-enum icalproperty_class icalvalue_get_class(const icalvalue* value); 
-void icalvalue_set_class(icalvalue* value, enum icalproperty_class v);
-
-
- /* DATE */ 
-icalvalue* icalvalue_new_date(struct icaltimetype v); 
-struct icaltimetype icalvalue_get_date(const icalvalue* value); 
-void icalvalue_set_date(icalvalue* value, struct icaltimetype v);
-
-
- /* STRING */ 
-icalvalue* icalvalue_new_string(const char* v); 
-const char* icalvalue_get_string(const icalvalue* value); 
-void icalvalue_set_string(icalvalue* value, const char* v);
-
-
- /* INTEGER */ 
-icalvalue* icalvalue_new_integer(int v); 
-int icalvalue_get_integer(const icalvalue* value); 
-void icalvalue_set_integer(icalvalue* value, int v);
-
-
- /* PERIOD */ 
-icalvalue* icalvalue_new_period(struct icalperiodtype v); 
-struct icalperiodtype icalvalue_get_period(const icalvalue* value); 
-void icalvalue_set_period(icalvalue* value, struct icalperiodtype v);
+ /* BINARY */ 
+icalvalue* icalvalue_new_binary(const char* v); 
+const char* icalvalue_get_binary(const icalvalue* value); 
+void icalvalue_set_binary(icalvalue* value, const char* v);
 
 
  /* TEXT */ 
@@ -250,10 +250,10 @@ struct icaldurationtype icalvalue_get_duration(const icalvalue* value);
 void icalvalue_set_duration(icalvalue* value, struct icaldurationtype v);
 
 
- /* BOOLEAN */ 
-icalvalue* icalvalue_new_boolean(int v); 
-int icalvalue_get_boolean(const icalvalue* value); 
-void icalvalue_set_boolean(icalvalue* value, int v);
+ /* INTEGER */ 
+icalvalue* icalvalue_new_integer(int v); 
+int icalvalue_get_integer(const icalvalue* value); 
+void icalvalue_set_integer(icalvalue* value, int v);
 
 
  /* URI */ 
@@ -262,40 +262,10 @@ const char* icalvalue_get_uri(const icalvalue* value);
 void icalvalue_set_uri(icalvalue* value, const char* v);
 
 
- /* GEO */ 
-icalvalue* icalvalue_new_geo(struct icalgeotype v); 
-struct icalgeotype icalvalue_get_geo(const icalvalue* value); 
-void icalvalue_set_geo(icalvalue* value, struct icalgeotype v);
-
-
- /* DATE-TIME */ 
-icalvalue* icalvalue_new_datetime(struct icaltimetype v); 
-struct icaltimetype icalvalue_get_datetime(const icalvalue* value); 
-void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v);
-
-
- /* X-LIC-CLASS */ 
-icalvalue* icalvalue_new_xlicclass(enum icalproperty_xlicclass v); 
-enum icalproperty_xlicclass icalvalue_get_xlicclass(const icalvalue* value); 
-void icalvalue_set_xlicclass(icalvalue* value, enum icalproperty_xlicclass v);
-
-
- /* UTC-OFFSET */ 
-icalvalue* icalvalue_new_utcoffset(int v); 
-int icalvalue_get_utcoffset(const icalvalue* value); 
-void icalvalue_set_utcoffset(icalvalue* value, int v);
-
-
- /* ACTION */ 
-icalvalue* icalvalue_new_action(enum icalproperty_action v); 
-enum icalproperty_action icalvalue_get_action(const icalvalue* value); 
-void icalvalue_set_action(icalvalue* value, enum icalproperty_action v);
-
-
- /* CAL-ADDRESS */ 
-icalvalue* icalvalue_new_caladdress(const char* v); 
-const char* icalvalue_get_caladdress(const icalvalue* value); 
-void icalvalue_set_caladdress(icalvalue* value, const char* v);
+ /* CLASS */ 
+icalvalue* icalvalue_new_class(enum icalproperty_class v); 
+enum icalproperty_class icalvalue_get_class(const icalvalue* value); 
+void icalvalue_set_class(icalvalue* value, enum icalproperty_class v);
 
 
  /* FLOAT */ 
@@ -304,21 +274,51 @@ float icalvalue_get_float(const icalvalue* value);
 void icalvalue_set_float(icalvalue* value, float v);
 
 
+ /* QUERY */ 
+icalvalue* icalvalue_new_query(const char* v); 
+const char* icalvalue_get_query(const icalvalue* value); 
+void icalvalue_set_query(icalvalue* value, const char* v);
+
+
+ /* STRING */ 
+icalvalue* icalvalue_new_string(const char* v); 
+const char* icalvalue_get_string(const icalvalue* value); 
+void icalvalue_set_string(icalvalue* value, const char* v);
+
+
+ /* TRANSP */ 
+icalvalue* icalvalue_new_transp(enum icalproperty_transp v); 
+enum icalproperty_transp icalvalue_get_transp(const icalvalue* value); 
+void icalvalue_set_transp(icalvalue* value, enum icalproperty_transp v);
+
+
+ /* DATE-TIME */ 
+icalvalue* icalvalue_new_datetime(struct icaltimetype v); 
+struct icaltimetype icalvalue_get_datetime(const icalvalue* value); 
+void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v);
+
+
  /* REQUEST-STATUS */ 
 icalvalue* icalvalue_new_requeststatus(struct icalreqstattype v); 
 struct icalreqstattype icalvalue_get_requeststatus(const icalvalue* value); 
 void icalvalue_set_requeststatus(icalvalue* value, struct icalreqstattype v);
 
 
- /* METHOD */ 
-icalvalue* icalvalue_new_method(enum icalproperty_method v); 
-enum icalproperty_method icalvalue_get_method(const icalvalue* value); 
-void icalvalue_set_method(icalvalue* value, enum icalproperty_method v);
+ /* GEO */ 
+icalvalue* icalvalue_new_geo(struct icalgeotype v); 
+struct icalgeotype icalvalue_get_geo(const icalvalue* value); 
+void icalvalue_set_geo(icalvalue* value, struct icalgeotype v);
 
 
- /* BINARY */ 
-icalvalue* icalvalue_new_binary(const char* v); 
-const char* icalvalue_get_binary(const icalvalue* value); 
-void icalvalue_set_binary(icalvalue* value, const char* v);
+ /* DATE */ 
+icalvalue* icalvalue_new_date(struct icaltimetype v); 
+struct icaltimetype icalvalue_get_date(const icalvalue* value); 
+void icalvalue_set_date(icalvalue* value, struct icaltimetype v);
+
+
+ /* ACTION */ 
+icalvalue* icalvalue_new_action(enum icalproperty_action v); 
+enum icalproperty_action icalvalue_get_action(const icalvalue* value); 
+void icalvalue_set_action(icalvalue* value, enum icalproperty_action v);
 
 #endif /*ICALVALUE_H*/

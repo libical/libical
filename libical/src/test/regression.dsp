@@ -42,7 +42,6 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD CPP /nologo /MT /W3 /GX /O2 /I "..\libical" /I "..\libical\autogenex" /I "..\libicalss" /I "..\libicalss\autogenex" /I "..\libicalvcal" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -67,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\libical" /I "..\libical\autogenex" /I "..\libicalss" /I "..\libicalss\autogenex" /I "..\libicalvcal" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "YY_NO_UNISTD_H" /FR /YX /FD /GZ /c
+# ADD CPP /MDd /I "..\libical" /I "..\libical\autogenex" /I "..\libicalss" /I "..\\libicalvcal" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "YY_NO_UNISTD_H" /FR
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -89,26 +88,64 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=".\regression-classify.c"
+DEP_CPP_REGRE=\
+	".\regression.h"\
+	
+NODEP_CPP_REGRE=\
+	".\ical.h"\
+	".\icalss.h"\
+	
 # End Source File
 # Begin Source File
 
 SOURCE=".\regression-component.c"
+DEP_CPP_REGRES=\
+	".\regression.h"\
+	
+NODEP_CPP_REGRES=\
+	".\ical.h"\
+	
 # End Source File
 # Begin Source File
 
 SOURCE=".\regression-recur.c"
+DEP_CPP_REGRESS=\
+	".\regression.h"\
+	
+NODEP_CPP_REGRESS=\
+	".\ical.h"\
+	".\icalss.h"\
+	
 # End Source File
 # Begin Source File
 
 SOURCE=".\regression-storage.c"
+DEP_CPP_REGRESSI=\
+	".\regression.h"\
+	
+NODEP_CPP_REGRESSI=\
+	".\ical.h"\
+	".\icalss.h"\
+	
 # End Source File
 # Begin Source File
 
 SOURCE=".\regression-utils.c"
+NODEP_CPP_REGRESSIO=\
+	".\ical.h"\
+	
 # End Source File
 # Begin Source File
 
 SOURCE=.\regression.c
+DEP_CPP_REGRESSION=\
+	".\regression.h"\
+	
+NODEP_CPP_REGRESSION=\
+	".\ical.h"\
+	".\icalss.h"\
+	".\icalvcal.h"\
+	
 # End Source File
 # End Group
 # Begin Group "Header Files"

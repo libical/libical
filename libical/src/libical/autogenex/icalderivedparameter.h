@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalderivedparameter.h,v 1.4 2002-07-23 14:32:30 lindner Exp $
+  $Id: icalderivedparameter.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
 
   
@@ -195,95 +195,65 @@ icalparameter* icalparameter_new_delegatedfrom(const char* v);
 const char* icalparameter_get_delegatedfrom(const icalparameter* value);
 void icalparameter_set_delegatedfrom(icalparameter* value, const char* v);
 
-/* DELEGATED-TO */
-icalparameter* icalparameter_new_delegatedto(const char* v);
-const char* icalparameter_get_delegatedto(const icalparameter* value);
-void icalparameter_set_delegatedto(icalparameter* value, const char* v);
-
-/* RANGE */
-icalparameter* icalparameter_new_range(icalparameter_range v);
-icalparameter_range icalparameter_get_range(const icalparameter* value);
-void icalparameter_set_range(icalparameter* value, icalparameter_range v);
-
-/* ENCODING */
-icalparameter* icalparameter_new_encoding(icalparameter_encoding v);
-icalparameter_encoding icalparameter_get_encoding(const icalparameter* value);
-void icalparameter_set_encoding(icalparameter* value, icalparameter_encoding v);
-
-/* RSVP */
-icalparameter* icalparameter_new_rsvp(icalparameter_rsvp v);
-icalparameter_rsvp icalparameter_get_rsvp(const icalparameter* value);
-void icalparameter_set_rsvp(icalparameter* value, icalparameter_rsvp v);
-
-/* PARTSTAT */
-icalparameter* icalparameter_new_partstat(icalparameter_partstat v);
-icalparameter_partstat icalparameter_get_partstat(const icalparameter* value);
-void icalparameter_set_partstat(icalparameter* value, icalparameter_partstat v);
-
-/* RELTYPE */
-icalparameter* icalparameter_new_reltype(icalparameter_reltype v);
-icalparameter_reltype icalparameter_get_reltype(const icalparameter* value);
-void icalparameter_set_reltype(icalparameter* value, icalparameter_reltype v);
-
-/* CUTYPE */
-icalparameter* icalparameter_new_cutype(icalparameter_cutype v);
-icalparameter_cutype icalparameter_get_cutype(const icalparameter* value);
-void icalparameter_set_cutype(icalparameter* value, icalparameter_cutype v);
-
-/* MEMBER */
-icalparameter* icalparameter_new_member(const char* v);
-const char* icalparameter_get_member(const icalparameter* value);
-void icalparameter_set_member(icalparameter* value, const char* v);
-
-/* FMTTYPE */
-icalparameter* icalparameter_new_fmttype(const char* v);
-const char* icalparameter_get_fmttype(const icalparameter* value);
-void icalparameter_set_fmttype(icalparameter* value, const char* v);
+/* RELATED */
+icalparameter* icalparameter_new_related(icalparameter_related v);
+icalparameter_related icalparameter_get_related(const icalparameter* value);
+void icalparameter_set_related(icalparameter* value, icalparameter_related v);
 
 /* SENT-BY */
 icalparameter* icalparameter_new_sentby(const char* v);
 const char* icalparameter_get_sentby(const icalparameter* value);
 void icalparameter_set_sentby(icalparameter* value, const char* v);
 
-/* VALUE */
-icalparameter* icalparameter_new_value(icalparameter_value v);
-icalparameter_value icalparameter_get_value(const icalparameter* value);
-void icalparameter_set_value(icalparameter* value, icalparameter_value v);
+/* LANGUAGE */
+icalparameter* icalparameter_new_language(const char* v);
+const char* icalparameter_get_language(const icalparameter* value);
+void icalparameter_set_language(icalparameter* value, const char* v);
+
+/* RELTYPE */
+icalparameter* icalparameter_new_reltype(icalparameter_reltype v);
+icalparameter_reltype icalparameter_get_reltype(const icalparameter* value);
+void icalparameter_set_reltype(icalparameter* value, icalparameter_reltype v);
+
+/* ENCODING */
+icalparameter* icalparameter_new_encoding(icalparameter_encoding v);
+icalparameter_encoding icalparameter_get_encoding(const icalparameter* value);
+void icalparameter_set_encoding(icalparameter* value, icalparameter_encoding v);
 
 /* ALTREP */
 icalparameter* icalparameter_new_altrep(const char* v);
 const char* icalparameter_get_altrep(const icalparameter* value);
 void icalparameter_set_altrep(icalparameter* value, const char* v);
 
-/* DIR */
-icalparameter* icalparameter_new_dir(const char* v);
-const char* icalparameter_get_dir(const icalparameter* value);
-void icalparameter_set_dir(icalparameter* value, const char* v);
+/* FMTTYPE */
+icalparameter* icalparameter_new_fmttype(const char* v);
+const char* icalparameter_get_fmttype(const icalparameter* value);
+void icalparameter_set_fmttype(icalparameter* value, const char* v);
 
-/* RELATED */
-icalparameter* icalparameter_new_related(icalparameter_related v);
-icalparameter_related icalparameter_get_related(const icalparameter* value);
-void icalparameter_set_related(icalparameter* value, icalparameter_related v);
+/* FBTYPE */
+icalparameter* icalparameter_new_fbtype(icalparameter_fbtype v);
+icalparameter_fbtype icalparameter_get_fbtype(const icalparameter* value);
+void icalparameter_set_fbtype(icalparameter* value, icalparameter_fbtype v);
+
+/* RSVP */
+icalparameter* icalparameter_new_rsvp(icalparameter_rsvp v);
+icalparameter_rsvp icalparameter_get_rsvp(const icalparameter* value);
+void icalparameter_set_rsvp(icalparameter* value, icalparameter_rsvp v);
+
+/* RANGE */
+icalparameter* icalparameter_new_range(icalparameter_range v);
+icalparameter_range icalparameter_get_range(const icalparameter* value);
+void icalparameter_set_range(icalparameter* value, icalparameter_range v);
+
+/* DELEGATED-TO */
+icalparameter* icalparameter_new_delegatedto(const char* v);
+const char* icalparameter_get_delegatedto(const icalparameter* value);
+void icalparameter_set_delegatedto(icalparameter* value, const char* v);
 
 /* CN */
 icalparameter* icalparameter_new_cn(const char* v);
 const char* icalparameter_get_cn(const icalparameter* value);
 void icalparameter_set_cn(icalparameter* value, const char* v);
-
-/* X-LIC-ERRORTYPE */
-icalparameter* icalparameter_new_xlicerrortype(icalparameter_xlicerrortype v);
-icalparameter_xlicerrortype icalparameter_get_xlicerrortype(const icalparameter* value);
-void icalparameter_set_xlicerrortype(icalparameter* value, icalparameter_xlicerrortype v);
-
-/* X */
-icalparameter* icalparameter_new_x(const char* v);
-const char* icalparameter_get_x(const icalparameter* value);
-void icalparameter_set_x(icalparameter* value, const char* v);
-
-/* LANGUAGE */
-icalparameter* icalparameter_new_language(const char* v);
-const char* icalparameter_get_language(const icalparameter* value);
-void icalparameter_set_language(icalparameter* value, const char* v);
 
 /* ROLE */
 icalparameter* icalparameter_new_role(icalparameter_role v);
@@ -295,15 +265,45 @@ icalparameter* icalparameter_new_xliccomparetype(icalparameter_xliccomparetype v
 icalparameter_xliccomparetype icalparameter_get_xliccomparetype(const icalparameter* value);
 void icalparameter_set_xliccomparetype(icalparameter* value, icalparameter_xliccomparetype v);
 
-/* FBTYPE */
-icalparameter* icalparameter_new_fbtype(icalparameter_fbtype v);
-icalparameter_fbtype icalparameter_get_fbtype(const icalparameter* value);
-void icalparameter_set_fbtype(icalparameter* value, icalparameter_fbtype v);
+/* PARTSTAT */
+icalparameter* icalparameter_new_partstat(icalparameter_partstat v);
+icalparameter_partstat icalparameter_get_partstat(const icalparameter* value);
+void icalparameter_set_partstat(icalparameter* value, icalparameter_partstat v);
+
+/* X-LIC-ERRORTYPE */
+icalparameter* icalparameter_new_xlicerrortype(icalparameter_xlicerrortype v);
+icalparameter_xlicerrortype icalparameter_get_xlicerrortype(const icalparameter* value);
+void icalparameter_set_xlicerrortype(icalparameter* value, icalparameter_xlicerrortype v);
+
+/* MEMBER */
+icalparameter* icalparameter_new_member(const char* v);
+const char* icalparameter_get_member(const icalparameter* value);
+void icalparameter_set_member(icalparameter* value, const char* v);
+
+/* X */
+icalparameter* icalparameter_new_x(const char* v);
+const char* icalparameter_get_x(const icalparameter* value);
+void icalparameter_set_x(icalparameter* value, const char* v);
+
+/* CUTYPE */
+icalparameter* icalparameter_new_cutype(icalparameter_cutype v);
+icalparameter_cutype icalparameter_get_cutype(const icalparameter* value);
+void icalparameter_set_cutype(icalparameter* value, icalparameter_cutype v);
 
 /* TZID */
 icalparameter* icalparameter_new_tzid(const char* v);
 const char* icalparameter_get_tzid(const icalparameter* value);
 void icalparameter_set_tzid(icalparameter* value, const char* v);
+
+/* VALUE */
+icalparameter* icalparameter_new_value(icalparameter_value v);
+icalparameter_value icalparameter_get_value(const icalparameter* value);
+void icalparameter_set_value(icalparameter* value, icalparameter_value v);
+
+/* DIR */
+icalparameter* icalparameter_new_dir(const char* v);
+const char* icalparameter_get_dir(const icalparameter* value);
+void icalparameter_set_dir(icalparameter* value, const char* v);
 
 #endif /*ICALPARAMETER_H*/
 

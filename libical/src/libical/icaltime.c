@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.41 2002-08-09 14:45:12 lindner Exp $
+  $Id: icaltime.c,v 1.42 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -736,38 +736,38 @@ int icaltime_compare(const struct icaltimetype a, const struct icaltimetype b)
 {
     int retval;
 
-    a = icaltime_convert_to_zone(a, icaltimezone_get_utc_timezone());
-    b = icaltime_convert_to_zone(b, icaltimezone_get_utc_timezone());
+    struct icaltimetype a2 = icaltime_convert_to_zone(a, icaltimezone_get_utc_timezone());
+    struct icaltimetype b2 = icaltime_convert_to_zone(b, icaltimezone_get_utc_timezone());
 
 
-    if (a.year > b.year)
+    if (a2.year > b2.year)
 	retval = 1;
-    else if (a.year < b.year)
+    else if (a2.year < b2.year)
 	retval = -1;
 
-    else if (a.month > b.month)
+    else if (a2.month > b2.month)
 	retval = 1;
-    else if (a.month < b.month)
+    else if (a2.month < b2.month)
 	retval = -1;
 
-    else if (a.day > b.day)
+    else if (a2.day > b2.day)
 	retval = 1;
-    else if (a.day < b.day)
+    else if (a2.day < b2.day)
 	retval = -1;
 
-    else if (a.hour > b.hour)
+    else if (a2.hour > b2.hour)
 	retval = 1;
-    else if (a.hour < b.hour)
+    else if (a2.hour < b2.hour)
 	retval = -1;
 
-    else if (a.minute > b.minute)
+    else if (a2.minute > b2.minute)
 	retval = 1;
-    else if (a.minute < b.minute)
+    else if (a2.minute < b2.minute)
 	retval = -1;
 
-    else if (a.second > b.second)
+    else if (a2.second > b2.second)
 	retval = 1;
-    else if (a.second < b.second)
+    else if (a2.second < b2.second)
 	retval = -1;
 
     else
@@ -784,22 +784,22 @@ icaltime_compare_date_only(const struct icaltimetype a, const struct icaltimetyp
 {
     int retval;
 
-    a = icaltime_convert_to_zone(a, icaltimezone_get_utc_timezone());
-    b = icaltime_convert_to_zone(b, icaltimezone_get_utc_timezone());
+    struct icaltimetype a2 = icaltime_convert_to_zone(a, icaltimezone_get_utc_timezone());
+    struct icaltimetype b2 = icaltime_convert_to_zone(b, icaltimezone_get_utc_timezone());
 
-    if (a.year > b.year)
+    if (a2.year > b2.year)
 	retval = 1;
-    else if (a.year < b.year)
+    else if (a2.year < b2.year)
 	retval = -1;
 
-    else if (a.month > b.month)
+    else if (a2.month > b2.month)
 	retval = 1;
-    else if (a.month < b.month)
+    else if (a2.month < b2.month)
 	retval = -1;
 
-    else if (a.day > b.day)
+    else if (a2.day > b2.day)
 	retval = 1;
-    else if (a.day < b.day)
+    else if (a2.day < b2.day)
 	retval = -1;
 
     else

@@ -51,9 +51,6 @@ Package=<4>
     Project_Dep_Name libical
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name libicalss
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name libicalvcal
     End Project Dependency
 }}}
@@ -72,10 +69,10 @@ Package=<4>
     Project_Dep_Name libical
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name libicalss
+    Project_Dep_Name libicalvcal
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name libicalvcal
+    Project_Dep_Name libicalss
     End Project Dependency
 }}}
 

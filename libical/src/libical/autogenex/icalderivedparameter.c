@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalderivedparameter.c,v 1.4 2002-07-23 14:32:30 lindner Exp $
+  $Id: icalderivedparameter.c,v 1.5 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
     
 
@@ -221,18 +221,19 @@ void icalparameter_set_delegatedfrom(icalparameter* param, const char* v)
    ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
 }
 
-/* DELEGATED-TO */
-icalparameter* icalparameter_new_delegatedto(const char* v)
+/* RELATED */
+icalparameter* icalparameter_new_related(icalparameter_related v)
 {
    struct icalparameter_impl *impl;
    icalerror_clear_errno();
-   icalerror_check_arg_rz( (v!=0),"v");
-   impl = icalparameter_new_impl(ICAL_DELEGATEDTO_PARAMETER);
+   icalerror_check_arg_rz(v >= ICAL_RELATED_X,"v");
+    icalerror_check_arg_rz(v < ICAL_RELATED_NONE,"v");
+   impl = icalparameter_new_impl(ICAL_RELATED_PARAMETER);
    if (impl == 0) {
       return 0;
    }
 
-   icalparameter_set_delegatedto((icalparameter*) impl,v);
+   icalparameter_set_related((icalparameter*) impl,v);
    if (icalerrno != ICAL_NO_ERROR) {
       icalparameter_free((icalparameter*) impl);
       return 0;
@@ -241,14 +242,52 @@ icalparameter* icalparameter_new_delegatedto(const char* v)
    return (icalparameter*) impl;
 }
 
-const char* icalparameter_get_delegatedto(const icalparameter* param)
+icalparameter_related icalparameter_get_related(const icalparameter* param)
+{
+   icalerror_clear_errno();
+icalerror_check_arg( (param!=0), "param");
+
+return (icalparameter_related)((struct icalparameter_impl*)param)->data;
+}
+
+void icalparameter_set_related(icalparameter* param, icalparameter_related v)
+{
+   icalerror_check_arg_rv(v >= ICAL_RELATED_X,"v");
+    icalerror_check_arg_rv(v < ICAL_RELATED_NONE,"v");
+   icalerror_check_arg_rv( (param!=0), "param");
+   icalerror_clear_errno();
+   
+   ((struct icalparameter_impl*)param)->data = (int)v;
+}
+
+/* SENT-BY */
+icalparameter* icalparameter_new_sentby(const char* v)
+{
+   struct icalparameter_impl *impl;
+   icalerror_clear_errno();
+   icalerror_check_arg_rz( (v!=0),"v");
+   impl = icalparameter_new_impl(ICAL_SENTBY_PARAMETER);
+   if (impl == 0) {
+      return 0;
+   }
+
+   icalparameter_set_sentby((icalparameter*) impl,v);
+   if (icalerrno != ICAL_NO_ERROR) {
+      icalparameter_free((icalparameter*) impl);
+      return 0;
+   }
+
+   return (icalparameter*) impl;
+}
+
+const char* icalparameter_get_sentby(const icalparameter* param)
 {
    icalerror_clear_errno();
     icalerror_check_arg_rz( (param!=0), "param");
     return (const char*)((struct icalparameter_impl*)param)->string;
 }
 
-void icalparameter_set_delegatedto(icalparameter* param, const char* v)
+void icalparameter_set_sentby(icalparameter* param, const char* v)
 {
    icalerror_check_arg_rv( (v!=0),"v");
    icalerror_check_arg_rv( (param!=0), "param");
@@ -257,19 +296,18 @@ void icalparameter_set_delegatedto(icalparameter* param, const char* v)
    ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
 }
 
-/* RANGE */
-icalparameter* icalparameter_new_range(icalparameter_range v)
+/* LANGUAGE */
+icalparameter* icalparameter_new_language(const char* v)
 {
    struct icalparameter_impl *impl;
    icalerror_clear_errno();
-   icalerror_check_arg_rz(v >= ICAL_RANGE_X,"v");
-    icalerror_check_arg_rz(v < ICAL_RANGE_NONE,"v");
-   impl = icalparameter_new_impl(ICAL_RANGE_PARAMETER);
+   icalerror_check_arg_rz( (v!=0),"v");
+   impl = icalparameter_new_impl(ICAL_LANGUAGE_PARAMETER);
    if (impl == 0) {
       return 0;
    }
 
-   icalparameter_set_range((icalparameter*) impl,v);
+   icalparameter_set_language((icalparameter*) impl,v);
    if (icalerrno != ICAL_NO_ERROR) {
       icalparameter_free((icalparameter*) impl);
       return 0;
@@ -278,18 +316,58 @@ icalparameter* icalparameter_new_range(icalparameter_range v)
    return (icalparameter*) impl;
 }
 
-icalparameter_range icalparameter_get_range(const icalparameter* param)
+const char* icalparameter_get_language(const icalparameter* param)
+{
+   icalerror_clear_errno();
+    icalerror_check_arg_rz( (param!=0), "param");
+    return (const char*)((struct icalparameter_impl*)param)->string;
+}
+
+void icalparameter_set_language(icalparameter* param, const char* v)
+{
+   icalerror_check_arg_rv( (v!=0),"v");
+   icalerror_check_arg_rv( (param!=0), "param");
+   icalerror_clear_errno();
+   
+   ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
+}
+
+/* RELTYPE */
+icalparameter* icalparameter_new_reltype(icalparameter_reltype v)
+{
+   struct icalparameter_impl *impl;
+   icalerror_clear_errno();
+   icalerror_check_arg_rz(v >= ICAL_RELTYPE_X,"v");
+    icalerror_check_arg_rz(v < ICAL_RELTYPE_NONE,"v");
+   impl = icalparameter_new_impl(ICAL_RELTYPE_PARAMETER);
+   if (impl == 0) {
+      return 0;
+   }
+
+   icalparameter_set_reltype((icalparameter*) impl,v);
+   if (icalerrno != ICAL_NO_ERROR) {
+      icalparameter_free((icalparameter*) impl);
+      return 0;
+   }
+
+   return (icalparameter*) impl;
+}
+
+icalparameter_reltype icalparameter_get_reltype(const icalparameter* param)
 {
    icalerror_clear_errno();
 icalerror_check_arg( (param!=0), "param");
+     if ( ((struct icalparameter_impl*)param)->string != 0){
+        return ICAL_RELTYPE_X;
+        }
 
-return (icalparameter_range)((struct icalparameter_impl*)param)->data;
+return (icalparameter_reltype)((struct icalparameter_impl*)param)->data;
 }
 
-void icalparameter_set_range(icalparameter* param, icalparameter_range v)
+void icalparameter_set_reltype(icalparameter* param, icalparameter_reltype v)
 {
-   icalerror_check_arg_rv(v >= ICAL_RANGE_X,"v");
-    icalerror_check_arg_rv(v < ICAL_RANGE_NONE,"v");
+   icalerror_check_arg_rv(v >= ICAL_RELTYPE_X,"v");
+    icalerror_check_arg_rv(v < ICAL_RELTYPE_NONE,"v");
    icalerror_check_arg_rv( (param!=0), "param");
    icalerror_clear_errno();
    
@@ -338,183 +416,18 @@ void icalparameter_set_encoding(icalparameter* param, icalparameter_encoding v)
    ((struct icalparameter_impl*)param)->data = (int)v;
 }
 
-/* RSVP */
-icalparameter* icalparameter_new_rsvp(icalparameter_rsvp v)
-{
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   icalerror_check_arg_rz(v >= ICAL_RSVP_X,"v");
-    icalerror_check_arg_rz(v < ICAL_RSVP_NONE,"v");
-   impl = icalparameter_new_impl(ICAL_RSVP_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
-
-   icalparameter_set_rsvp((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
-
-   return (icalparameter*) impl;
-}
-
-icalparameter_rsvp icalparameter_get_rsvp(const icalparameter* param)
-{
-   icalerror_clear_errno();
-icalerror_check_arg( (param!=0), "param");
-
-return (icalparameter_rsvp)((struct icalparameter_impl*)param)->data;
-}
-
-void icalparameter_set_rsvp(icalparameter* param, icalparameter_rsvp v)
-{
-   icalerror_check_arg_rv(v >= ICAL_RSVP_X,"v");
-    icalerror_check_arg_rv(v < ICAL_RSVP_NONE,"v");
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
-   
-   ((struct icalparameter_impl*)param)->data = (int)v;
-}
-
-/* PARTSTAT */
-icalparameter* icalparameter_new_partstat(icalparameter_partstat v)
-{
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   icalerror_check_arg_rz(v >= ICAL_PARTSTAT_X,"v");
-    icalerror_check_arg_rz(v < ICAL_PARTSTAT_NONE,"v");
-   impl = icalparameter_new_impl(ICAL_PARTSTAT_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
-
-   icalparameter_set_partstat((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
-
-   return (icalparameter*) impl;
-}
-
-icalparameter_partstat icalparameter_get_partstat(const icalparameter* param)
-{
-   icalerror_clear_errno();
-icalerror_check_arg( (param!=0), "param");
-     if ( ((struct icalparameter_impl*)param)->string != 0){
-        return ICAL_PARTSTAT_X;
-        }
-
-return (icalparameter_partstat)((struct icalparameter_impl*)param)->data;
-}
-
-void icalparameter_set_partstat(icalparameter* param, icalparameter_partstat v)
-{
-   icalerror_check_arg_rv(v >= ICAL_PARTSTAT_X,"v");
-    icalerror_check_arg_rv(v < ICAL_PARTSTAT_NONE,"v");
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
-   
-   ((struct icalparameter_impl*)param)->data = (int)v;
-}
-
-/* RELTYPE */
-icalparameter* icalparameter_new_reltype(icalparameter_reltype v)
-{
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   icalerror_check_arg_rz(v >= ICAL_RELTYPE_X,"v");
-    icalerror_check_arg_rz(v < ICAL_RELTYPE_NONE,"v");
-   impl = icalparameter_new_impl(ICAL_RELTYPE_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
-
-   icalparameter_set_reltype((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
-
-   return (icalparameter*) impl;
-}
-
-icalparameter_reltype icalparameter_get_reltype(const icalparameter* param)
-{
-   icalerror_clear_errno();
-icalerror_check_arg( (param!=0), "param");
-     if ( ((struct icalparameter_impl*)param)->string != 0){
-        return ICAL_RELTYPE_X;
-        }
-
-return (icalparameter_reltype)((struct icalparameter_impl*)param)->data;
-}
-
-void icalparameter_set_reltype(icalparameter* param, icalparameter_reltype v)
-{
-   icalerror_check_arg_rv(v >= ICAL_RELTYPE_X,"v");
-    icalerror_check_arg_rv(v < ICAL_RELTYPE_NONE,"v");
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
-   
-   ((struct icalparameter_impl*)param)->data = (int)v;
-}
-
-/* CUTYPE */
-icalparameter* icalparameter_new_cutype(icalparameter_cutype v)
-{
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   icalerror_check_arg_rz(v >= ICAL_CUTYPE_X,"v");
-    icalerror_check_arg_rz(v < ICAL_CUTYPE_NONE,"v");
-   impl = icalparameter_new_impl(ICAL_CUTYPE_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
-
-   icalparameter_set_cutype((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
-
-   return (icalparameter*) impl;
-}
-
-icalparameter_cutype icalparameter_get_cutype(const icalparameter* param)
-{
-   icalerror_clear_errno();
-icalerror_check_arg( (param!=0), "param");
-     if ( ((struct icalparameter_impl*)param)->string != 0){
-        return ICAL_CUTYPE_X;
-        }
-
-return (icalparameter_cutype)((struct icalparameter_impl*)param)->data;
-}
-
-void icalparameter_set_cutype(icalparameter* param, icalparameter_cutype v)
-{
-   icalerror_check_arg_rv(v >= ICAL_CUTYPE_X,"v");
-    icalerror_check_arg_rv(v < ICAL_CUTYPE_NONE,"v");
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
-   
-   ((struct icalparameter_impl*)param)->data = (int)v;
-}
-
-/* MEMBER */
-icalparameter* icalparameter_new_member(const char* v)
+/* ALTREP */
+icalparameter* icalparameter_new_altrep(const char* v)
 {
    struct icalparameter_impl *impl;
    icalerror_clear_errno();
    icalerror_check_arg_rz( (v!=0),"v");
-   impl = icalparameter_new_impl(ICAL_MEMBER_PARAMETER);
+   impl = icalparameter_new_impl(ICAL_ALTREP_PARAMETER);
    if (impl == 0) {
       return 0;
    }
 
-   icalparameter_set_member((icalparameter*) impl,v);
+   icalparameter_set_altrep((icalparameter*) impl,v);
    if (icalerrno != ICAL_NO_ERROR) {
       icalparameter_free((icalparameter*) impl);
       return 0;
@@ -523,14 +436,14 @@ icalparameter* icalparameter_new_member(const char* v)
    return (icalparameter*) impl;
 }
 
-const char* icalparameter_get_member(const icalparameter* param)
+const char* icalparameter_get_altrep(const icalparameter* param)
 {
    icalerror_clear_errno();
     icalerror_check_arg_rz( (param!=0), "param");
     return (const char*)((struct icalparameter_impl*)param)->string;
 }
 
-void icalparameter_set_member(icalparameter* param, const char* v)
+void icalparameter_set_altrep(icalparameter* param, const char* v)
 {
    icalerror_check_arg_rv( (v!=0),"v");
    icalerror_check_arg_rv( (param!=0), "param");
@@ -575,18 +488,19 @@ void icalparameter_set_fmttype(icalparameter* param, const char* v)
    ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
 }
 
-/* SENT-BY */
-icalparameter* icalparameter_new_sentby(const char* v)
+/* FBTYPE */
+icalparameter* icalparameter_new_fbtype(icalparameter_fbtype v)
 {
    struct icalparameter_impl *impl;
    icalerror_clear_errno();
-   icalerror_check_arg_rz( (v!=0),"v");
-   impl = icalparameter_new_impl(ICAL_SENTBY_PARAMETER);
+   icalerror_check_arg_rz(v >= ICAL_FBTYPE_X,"v");
+    icalerror_check_arg_rz(v < ICAL_FBTYPE_NONE,"v");
+   impl = icalparameter_new_impl(ICAL_FBTYPE_PARAMETER);
    if (impl == 0) {
       return 0;
    }
 
-   icalparameter_set_sentby((icalparameter*) impl,v);
+   icalparameter_set_fbtype((icalparameter*) impl,v);
    if (icalerrno != ICAL_NO_ERROR) {
       icalparameter_free((icalparameter*) impl);
       return 0;
@@ -595,76 +509,40 @@ icalparameter* icalparameter_new_sentby(const char* v)
    return (icalparameter*) impl;
 }
 
-const char* icalparameter_get_sentby(const icalparameter* param)
-{
-   icalerror_clear_errno();
-    icalerror_check_arg_rz( (param!=0), "param");
-    return (const char*)((struct icalparameter_impl*)param)->string;
-}
-
-void icalparameter_set_sentby(icalparameter* param, const char* v)
-{
-   icalerror_check_arg_rv( (v!=0),"v");
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
-   
-   ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
-}
-
-/* VALUE */
-icalparameter* icalparameter_new_value(icalparameter_value v)
-{
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   icalerror_check_arg_rz(v >= ICAL_VALUE_X,"v");
-    icalerror_check_arg_rz(v < ICAL_VALUE_NONE,"v");
-   impl = icalparameter_new_impl(ICAL_VALUE_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
-
-   icalparameter_set_value((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
-
-   return (icalparameter*) impl;
-}
-
-icalparameter_value icalparameter_get_value(const icalparameter* param)
+icalparameter_fbtype icalparameter_get_fbtype(const icalparameter* param)
 {
    icalerror_clear_errno();
 icalerror_check_arg( (param!=0), "param");
      if ( ((struct icalparameter_impl*)param)->string != 0){
-        return ICAL_VALUE_X;
+        return ICAL_FBTYPE_X;
         }
 
-return (icalparameter_value)((struct icalparameter_impl*)param)->data;
+return (icalparameter_fbtype)((struct icalparameter_impl*)param)->data;
 }
 
-void icalparameter_set_value(icalparameter* param, icalparameter_value v)
+void icalparameter_set_fbtype(icalparameter* param, icalparameter_fbtype v)
 {
-   icalerror_check_arg_rv(v >= ICAL_VALUE_X,"v");
-    icalerror_check_arg_rv(v < ICAL_VALUE_NONE,"v");
+   icalerror_check_arg_rv(v >= ICAL_FBTYPE_X,"v");
+    icalerror_check_arg_rv(v < ICAL_FBTYPE_NONE,"v");
    icalerror_check_arg_rv( (param!=0), "param");
    icalerror_clear_errno();
    
    ((struct icalparameter_impl*)param)->data = (int)v;
 }
 
-/* ALTREP */
-icalparameter* icalparameter_new_altrep(const char* v)
+/* RSVP */
+icalparameter* icalparameter_new_rsvp(icalparameter_rsvp v)
 {
    struct icalparameter_impl *impl;
    icalerror_clear_errno();
-   icalerror_check_arg_rz( (v!=0),"v");
-   impl = icalparameter_new_impl(ICAL_ALTREP_PARAMETER);
+   icalerror_check_arg_rz(v >= ICAL_RSVP_X,"v");
+    icalerror_check_arg_rz(v < ICAL_RSVP_NONE,"v");
+   impl = icalparameter_new_impl(ICAL_RSVP_PARAMETER);
    if (impl == 0) {
       return 0;
    }
 
-   icalparameter_set_altrep((icalparameter*) impl,v);
+   icalparameter_set_rsvp((icalparameter*) impl,v);
    if (icalerrno != ICAL_NO_ERROR) {
       icalparameter_free((icalparameter*) impl);
       return 0;
@@ -673,95 +551,97 @@ icalparameter* icalparameter_new_altrep(const char* v)
    return (icalparameter*) impl;
 }
 
-const char* icalparameter_get_altrep(const icalparameter* param)
-{
-   icalerror_clear_errno();
-    icalerror_check_arg_rz( (param!=0), "param");
-    return (const char*)((struct icalparameter_impl*)param)->string;
-}
-
-void icalparameter_set_altrep(icalparameter* param, const char* v)
-{
-   icalerror_check_arg_rv( (v!=0),"v");
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
-   
-   ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
-}
-
-/* DIR */
-icalparameter* icalparameter_new_dir(const char* v)
-{
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   icalerror_check_arg_rz( (v!=0),"v");
-   impl = icalparameter_new_impl(ICAL_DIR_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
-
-   icalparameter_set_dir((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
-
-   return (icalparameter*) impl;
-}
-
-const char* icalparameter_get_dir(const icalparameter* param)
-{
-   icalerror_clear_errno();
-    icalerror_check_arg_rz( (param!=0), "param");
-    return (const char*)((struct icalparameter_impl*)param)->string;
-}
-
-void icalparameter_set_dir(icalparameter* param, const char* v)
-{
-   icalerror_check_arg_rv( (v!=0),"v");
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
-   
-   ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
-}
-
-/* RELATED */
-icalparameter* icalparameter_new_related(icalparameter_related v)
-{
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   icalerror_check_arg_rz(v >= ICAL_RELATED_X,"v");
-    icalerror_check_arg_rz(v < ICAL_RELATED_NONE,"v");
-   impl = icalparameter_new_impl(ICAL_RELATED_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
-
-   icalparameter_set_related((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
-
-   return (icalparameter*) impl;
-}
-
-icalparameter_related icalparameter_get_related(const icalparameter* param)
+icalparameter_rsvp icalparameter_get_rsvp(const icalparameter* param)
 {
    icalerror_clear_errno();
 icalerror_check_arg( (param!=0), "param");
 
-return (icalparameter_related)((struct icalparameter_impl*)param)->data;
+return (icalparameter_rsvp)((struct icalparameter_impl*)param)->data;
 }
 
-void icalparameter_set_related(icalparameter* param, icalparameter_related v)
+void icalparameter_set_rsvp(icalparameter* param, icalparameter_rsvp v)
 {
-   icalerror_check_arg_rv(v >= ICAL_RELATED_X,"v");
-    icalerror_check_arg_rv(v < ICAL_RELATED_NONE,"v");
+   icalerror_check_arg_rv(v >= ICAL_RSVP_X,"v");
+    icalerror_check_arg_rv(v < ICAL_RSVP_NONE,"v");
    icalerror_check_arg_rv( (param!=0), "param");
    icalerror_clear_errno();
    
    ((struct icalparameter_impl*)param)->data = (int)v;
+}
+
+/* RANGE */
+icalparameter* icalparameter_new_range(icalparameter_range v)
+{
+   struct icalparameter_impl *impl;
+   icalerror_clear_errno();
+   icalerror_check_arg_rz(v >= ICAL_RANGE_X,"v");
+    icalerror_check_arg_rz(v < ICAL_RANGE_NONE,"v");
+   impl = icalparameter_new_impl(ICAL_RANGE_PARAMETER);
+   if (impl == 0) {
+      return 0;
+   }
+
+   icalparameter_set_range((icalparameter*) impl,v);
+   if (icalerrno != ICAL_NO_ERROR) {
+      icalparameter_free((icalparameter*) impl);
+      return 0;
+   }
+
+   return (icalparameter*) impl;
+}
+
+icalparameter_range icalparameter_get_range(const icalparameter* param)
+{
+   icalerror_clear_errno();
+icalerror_check_arg( (param!=0), "param");
+
+return (icalparameter_range)((struct icalparameter_impl*)param)->data;
+}
+
+void icalparameter_set_range(icalparameter* param, icalparameter_range v)
+{
+   icalerror_check_arg_rv(v >= ICAL_RANGE_X,"v");
+    icalerror_check_arg_rv(v < ICAL_RANGE_NONE,"v");
+   icalerror_check_arg_rv( (param!=0), "param");
+   icalerror_clear_errno();
+   
+   ((struct icalparameter_impl*)param)->data = (int)v;
+}
+
+/* DELEGATED-TO */
+icalparameter* icalparameter_new_delegatedto(const char* v)
+{
+   struct icalparameter_impl *impl;
+   icalerror_clear_errno();
+   icalerror_check_arg_rz( (v!=0),"v");
+   impl = icalparameter_new_impl(ICAL_DELEGATEDTO_PARAMETER);
+   if (impl == 0) {
+      return 0;
+   }
+
+   icalparameter_set_delegatedto((icalparameter*) impl,v);
+   if (icalerrno != ICAL_NO_ERROR) {
+      icalparameter_free((icalparameter*) impl);
+      return 0;
+   }
+
+   return (icalparameter*) impl;
+}
+
+const char* icalparameter_get_delegatedto(const icalparameter* param)
+{
+   icalerror_clear_errno();
+    icalerror_check_arg_rz( (param!=0), "param");
+    return (const char*)((struct icalparameter_impl*)param)->string;
+}
+
+void icalparameter_set_delegatedto(icalparameter* param, const char* v)
+{
+   icalerror_check_arg_rv( (v!=0),"v");
+   icalerror_check_arg_rv( (param!=0), "param");
+   icalerror_clear_errno();
+   
+   ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
 }
 
 /* CN */
@@ -792,117 +672,6 @@ const char* icalparameter_get_cn(const icalparameter* param)
 }
 
 void icalparameter_set_cn(icalparameter* param, const char* v)
-{
-   icalerror_check_arg_rv( (v!=0),"v");
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
-   
-   ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
-}
-
-/* X-LIC-ERRORTYPE */
-icalparameter* icalparameter_new_xlicerrortype(icalparameter_xlicerrortype v)
-{
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   icalerror_check_arg_rz(v >= ICAL_XLICERRORTYPE_X,"v");
-    icalerror_check_arg_rz(v < ICAL_XLICERRORTYPE_NONE,"v");
-   impl = icalparameter_new_impl(ICAL_XLICERRORTYPE_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
-
-   icalparameter_set_xlicerrortype((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
-
-   return (icalparameter*) impl;
-}
-
-icalparameter_xlicerrortype icalparameter_get_xlicerrortype(const icalparameter* param)
-{
-   icalerror_clear_errno();
-icalerror_check_arg( (param!=0), "param");
-
-return (icalparameter_xlicerrortype)((struct icalparameter_impl*)param)->data;
-}
-
-void icalparameter_set_xlicerrortype(icalparameter* param, icalparameter_xlicerrortype v)
-{
-   icalerror_check_arg_rv(v >= ICAL_XLICERRORTYPE_X,"v");
-    icalerror_check_arg_rv(v < ICAL_XLICERRORTYPE_NONE,"v");
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
-   
-   ((struct icalparameter_impl*)param)->data = (int)v;
-}
-
-/* X */
-icalparameter* icalparameter_new_x(const char* v)
-{
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   icalerror_check_arg_rz( (v!=0),"v");
-   impl = icalparameter_new_impl(ICAL_X_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
-
-   icalparameter_set_x((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
-
-   return (icalparameter*) impl;
-}
-
-const char* icalparameter_get_x(const icalparameter* param)
-{
-   icalerror_clear_errno();
-    icalerror_check_arg_rz( (param!=0), "param");
-    return (const char*)((struct icalparameter_impl*)param)->string;
-}
-
-void icalparameter_set_x(icalparameter* param, const char* v)
-{
-   icalerror_check_arg_rv( (v!=0),"v");
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
-   
-   ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
-}
-
-/* LANGUAGE */
-icalparameter* icalparameter_new_language(const char* v)
-{
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   icalerror_check_arg_rz( (v!=0),"v");
-   impl = icalparameter_new_impl(ICAL_LANGUAGE_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
-
-   icalparameter_set_language((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
-
-   return (icalparameter*) impl;
-}
-
-const char* icalparameter_get_language(const icalparameter* param)
-{
-   icalerror_clear_errno();
-    icalerror_check_arg_rz( (param!=0), "param");
-    return (const char*)((struct icalparameter_impl*)param)->string;
-}
-
-void icalparameter_set_language(icalparameter* param, const char* v)
 {
    icalerror_check_arg_rv( (v!=0),"v");
    icalerror_check_arg_rv( (param!=0), "param");
@@ -992,19 +761,19 @@ void icalparameter_set_xliccomparetype(icalparameter* param, icalparameter_xlicc
    ((struct icalparameter_impl*)param)->data = (int)v;
 }
 
-/* FBTYPE */
-icalparameter* icalparameter_new_fbtype(icalparameter_fbtype v)
+/* PARTSTAT */
+icalparameter* icalparameter_new_partstat(icalparameter_partstat v)
 {
    struct icalparameter_impl *impl;
    icalerror_clear_errno();
-   icalerror_check_arg_rz(v >= ICAL_FBTYPE_X,"v");
-    icalerror_check_arg_rz(v < ICAL_FBTYPE_NONE,"v");
-   impl = icalparameter_new_impl(ICAL_FBTYPE_PARAMETER);
+   icalerror_check_arg_rz(v >= ICAL_PARTSTAT_X,"v");
+    icalerror_check_arg_rz(v < ICAL_PARTSTAT_NONE,"v");
+   impl = icalparameter_new_impl(ICAL_PARTSTAT_PARAMETER);
    if (impl == 0) {
       return 0;
    }
 
-   icalparameter_set_fbtype((icalparameter*) impl,v);
+   icalparameter_set_partstat((icalparameter*) impl,v);
    if (icalerrno != ICAL_NO_ERROR) {
       icalparameter_free((icalparameter*) impl);
       return 0;
@@ -1013,21 +782,174 @@ icalparameter* icalparameter_new_fbtype(icalparameter_fbtype v)
    return (icalparameter*) impl;
 }
 
-icalparameter_fbtype icalparameter_get_fbtype(const icalparameter* param)
+icalparameter_partstat icalparameter_get_partstat(const icalparameter* param)
 {
    icalerror_clear_errno();
 icalerror_check_arg( (param!=0), "param");
      if ( ((struct icalparameter_impl*)param)->string != 0){
-        return ICAL_FBTYPE_X;
+        return ICAL_PARTSTAT_X;
         }
 
-return (icalparameter_fbtype)((struct icalparameter_impl*)param)->data;
+return (icalparameter_partstat)((struct icalparameter_impl*)param)->data;
 }
 
-void icalparameter_set_fbtype(icalparameter* param, icalparameter_fbtype v)
+void icalparameter_set_partstat(icalparameter* param, icalparameter_partstat v)
 {
-   icalerror_check_arg_rv(v >= ICAL_FBTYPE_X,"v");
-    icalerror_check_arg_rv(v < ICAL_FBTYPE_NONE,"v");
+   icalerror_check_arg_rv(v >= ICAL_PARTSTAT_X,"v");
+    icalerror_check_arg_rv(v < ICAL_PARTSTAT_NONE,"v");
+   icalerror_check_arg_rv( (param!=0), "param");
+   icalerror_clear_errno();
+   
+   ((struct icalparameter_impl*)param)->data = (int)v;
+}
+
+/* X-LIC-ERRORTYPE */
+icalparameter* icalparameter_new_xlicerrortype(icalparameter_xlicerrortype v)
+{
+   struct icalparameter_impl *impl;
+   icalerror_clear_errno();
+   icalerror_check_arg_rz(v >= ICAL_XLICERRORTYPE_X,"v");
+    icalerror_check_arg_rz(v < ICAL_XLICERRORTYPE_NONE,"v");
+   impl = icalparameter_new_impl(ICAL_XLICERRORTYPE_PARAMETER);
+   if (impl == 0) {
+      return 0;
+   }
+
+   icalparameter_set_xlicerrortype((icalparameter*) impl,v);
+   if (icalerrno != ICAL_NO_ERROR) {
+      icalparameter_free((icalparameter*) impl);
+      return 0;
+   }
+
+   return (icalparameter*) impl;
+}
+
+icalparameter_xlicerrortype icalparameter_get_xlicerrortype(const icalparameter* param)
+{
+   icalerror_clear_errno();
+icalerror_check_arg( (param!=0), "param");
+
+return (icalparameter_xlicerrortype)((struct icalparameter_impl*)param)->data;
+}
+
+void icalparameter_set_xlicerrortype(icalparameter* param, icalparameter_xlicerrortype v)
+{
+   icalerror_check_arg_rv(v >= ICAL_XLICERRORTYPE_X,"v");
+    icalerror_check_arg_rv(v < ICAL_XLICERRORTYPE_NONE,"v");
+   icalerror_check_arg_rv( (param!=0), "param");
+   icalerror_clear_errno();
+   
+   ((struct icalparameter_impl*)param)->data = (int)v;
+}
+
+/* MEMBER */
+icalparameter* icalparameter_new_member(const char* v)
+{
+   struct icalparameter_impl *impl;
+   icalerror_clear_errno();
+   icalerror_check_arg_rz( (v!=0),"v");
+   impl = icalparameter_new_impl(ICAL_MEMBER_PARAMETER);
+   if (impl == 0) {
+      return 0;
+   }
+
+   icalparameter_set_member((icalparameter*) impl,v);
+   if (icalerrno != ICAL_NO_ERROR) {
+      icalparameter_free((icalparameter*) impl);
+      return 0;
+   }
+
+   return (icalparameter*) impl;
+}
+
+const char* icalparameter_get_member(const icalparameter* param)
+{
+   icalerror_clear_errno();
+    icalerror_check_arg_rz( (param!=0), "param");
+    return (const char*)((struct icalparameter_impl*)param)->string;
+}
+
+void icalparameter_set_member(icalparameter* param, const char* v)
+{
+   icalerror_check_arg_rv( (v!=0),"v");
+   icalerror_check_arg_rv( (param!=0), "param");
+   icalerror_clear_errno();
+   
+   ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
+}
+
+/* X */
+icalparameter* icalparameter_new_x(const char* v)
+{
+   struct icalparameter_impl *impl;
+   icalerror_clear_errno();
+   icalerror_check_arg_rz( (v!=0),"v");
+   impl = icalparameter_new_impl(ICAL_X_PARAMETER);
+   if (impl == 0) {
+      return 0;
+   }
+
+   icalparameter_set_x((icalparameter*) impl,v);
+   if (icalerrno != ICAL_NO_ERROR) {
+      icalparameter_free((icalparameter*) impl);
+      return 0;
+   }
+
+   return (icalparameter*) impl;
+}
+
+const char* icalparameter_get_x(const icalparameter* param)
+{
+   icalerror_clear_errno();
+    icalerror_check_arg_rz( (param!=0), "param");
+    return (const char*)((struct icalparameter_impl*)param)->string;
+}
+
+void icalparameter_set_x(icalparameter* param, const char* v)
+{
+   icalerror_check_arg_rv( (v!=0),"v");
+   icalerror_check_arg_rv( (param!=0), "param");
+   icalerror_clear_errno();
+   
+   ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
+}
+
+/* CUTYPE */
+icalparameter* icalparameter_new_cutype(icalparameter_cutype v)
+{
+   struct icalparameter_impl *impl;
+   icalerror_clear_errno();
+   icalerror_check_arg_rz(v >= ICAL_CUTYPE_X,"v");
+    icalerror_check_arg_rz(v < ICAL_CUTYPE_NONE,"v");
+   impl = icalparameter_new_impl(ICAL_CUTYPE_PARAMETER);
+   if (impl == 0) {
+      return 0;
+   }
+
+   icalparameter_set_cutype((icalparameter*) impl,v);
+   if (icalerrno != ICAL_NO_ERROR) {
+      icalparameter_free((icalparameter*) impl);
+      return 0;
+   }
+
+   return (icalparameter*) impl;
+}
+
+icalparameter_cutype icalparameter_get_cutype(const icalparameter* param)
+{
+   icalerror_clear_errno();
+icalerror_check_arg( (param!=0), "param");
+     if ( ((struct icalparameter_impl*)param)->string != 0){
+        return ICAL_CUTYPE_X;
+        }
+
+return (icalparameter_cutype)((struct icalparameter_impl*)param)->data;
+}
+
+void icalparameter_set_cutype(icalparameter* param, icalparameter_cutype v)
+{
+   icalerror_check_arg_rv(v >= ICAL_CUTYPE_X,"v");
+    icalerror_check_arg_rv(v < ICAL_CUTYPE_NONE,"v");
    icalerror_check_arg_rv( (param!=0), "param");
    icalerror_clear_errno();
    
@@ -1062,6 +984,84 @@ const char* icalparameter_get_tzid(const icalparameter* param)
 }
 
 void icalparameter_set_tzid(icalparameter* param, const char* v)
+{
+   icalerror_check_arg_rv( (v!=0),"v");
+   icalerror_check_arg_rv( (param!=0), "param");
+   icalerror_clear_errno();
+   
+   ((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);
+}
+
+/* VALUE */
+icalparameter* icalparameter_new_value(icalparameter_value v)
+{
+   struct icalparameter_impl *impl;
+   icalerror_clear_errno();
+   icalerror_check_arg_rz(v >= ICAL_VALUE_X,"v");
+    icalerror_check_arg_rz(v < ICAL_VALUE_NONE,"v");
+   impl = icalparameter_new_impl(ICAL_VALUE_PARAMETER);
+   if (impl == 0) {
+      return 0;
+   }
+
+   icalparameter_set_value((icalparameter*) impl,v);
+   if (icalerrno != ICAL_NO_ERROR) {
+      icalparameter_free((icalparameter*) impl);
+      return 0;
+   }
+
+   return (icalparameter*) impl;
+}
+
+icalparameter_value icalparameter_get_value(const icalparameter* param)
+{
+   icalerror_clear_errno();
+icalerror_check_arg( (param!=0), "param");
+     if ( ((struct icalparameter_impl*)param)->string != 0){
+        return ICAL_VALUE_X;
+        }
+
+return (icalparameter_value)((struct icalparameter_impl*)param)->data;
+}
+
+void icalparameter_set_value(icalparameter* param, icalparameter_value v)
+{
+   icalerror_check_arg_rv(v >= ICAL_VALUE_X,"v");
+    icalerror_check_arg_rv(v < ICAL_VALUE_NONE,"v");
+   icalerror_check_arg_rv( (param!=0), "param");
+   icalerror_clear_errno();
+   
+   ((struct icalparameter_impl*)param)->data = (int)v;
+}
+
+/* DIR */
+icalparameter* icalparameter_new_dir(const char* v)
+{
+   struct icalparameter_impl *impl;
+   icalerror_clear_errno();
+   icalerror_check_arg_rz( (v!=0),"v");
+   impl = icalparameter_new_impl(ICAL_DIR_PARAMETER);
+   if (impl == 0) {
+      return 0;
+   }
+
+   icalparameter_set_dir((icalparameter*) impl,v);
+   if (icalerrno != ICAL_NO_ERROR) {
+      icalparameter_free((icalparameter*) impl);
+      return 0;
+   }
+
+   return (icalparameter*) impl;
+}
+
+const char* icalparameter_get_dir(const icalparameter* param)
+{
+   icalerror_clear_errno();
+    icalerror_check_arg_rz( (param!=0), "param");
+    return (const char*)((struct icalparameter_impl*)param)->string;
+}
+
+void icalparameter_set_dir(icalparameter* param, const char* v)
 {
    icalerror_check_arg_rv( (v!=0),"v");
    icalerror_check_arg_rv( (param!=0), "param");

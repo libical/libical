@@ -7,7 +7,7 @@ extern "C" {
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
+ $Id: icalss.h,v 1.22 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -35,6 +35,10 @@ extern "C" {
 /** @file icalgauge.h
  *  @brief Routines implementing a filter for ical components
  */
+
+#ifdef WIN32
+#define mode_t int
+#endif
 
 typedef struct icalgauge_impl icalgauge;
 
@@ -78,7 +82,7 @@ icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
 **/
 
 /*
- $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
+ $Id: icalss.h,v 1.22 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -249,7 +253,7 @@ icalcomponent* icalsetiter_to_prior(icalset* set, icalsetiter* i);
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
+ $Id: icalss.h,v 1.22 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -308,7 +312,7 @@ icalcomponent* icalcluster_get_next_component(icalcluster* cluster);
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
+ $Id: icalss.h,v 1.22 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -438,7 +442,7 @@ extern icalfileset_options icalfileset_options_default;
  CREATOR: eric 28 November 1999
 
 
- $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
+ $Id: icalss.h,v 1.22 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -532,7 +536,7 @@ typedef struct icaldirset_options {
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
+ $Id: icalss.h,v 1.22 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -597,7 +601,7 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
+ $Id: icalss.h,v 1.22 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -640,7 +644,7 @@ char* icalclassify_class_to_string(icalproperty_xlicclass c);
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
+ $Id: icalss.h,v 1.22 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -715,7 +719,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent* c);
  CREATOR: eric 07 Nov 2000
 
 
- $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
+ $Id: icalss.h,v 1.22 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

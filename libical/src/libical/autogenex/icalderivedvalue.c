@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalderivedvalue.c,v 1.4 2002-07-23 14:32:30 lindner Exp $
+  $Id: icalderivedvalue.c,v 1.5 2002-09-01 19:12:31 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -57,50 +57,158 @@ struct icalvalue_kind_map {
 };
 
 static struct icalvalue_kind_map value_map[28]={
-    {ICAL_QUERY_VALUE,"QUERY"},
-    {ICAL_TRIGGER_VALUE,"TRIGGER"},
-    {ICAL_STATUS_VALUE,"STATUS"},
-    {ICAL_TRANSP_VALUE,"TRANSP"},
-    {ICAL_CLASS_VALUE,"CLASS"},
-    {ICAL_DATE_VALUE,"DATE"},
-    {ICAL_STRING_VALUE,"STRING"},
-    {ICAL_INTEGER_VALUE,"INTEGER"},
+    {ICAL_BOOLEAN_VALUE,"BOOLEAN"},
+    {ICAL_UTCOFFSET_VALUE,"UTC-OFFSET"},
+    {ICAL_XLICCLASS_VALUE,"X-LIC-CLASS"},
+    {ICAL_RECUR_VALUE,"RECUR"},
+    {ICAL_METHOD_VALUE,"METHOD"},
+    {ICAL_CALADDRESS_VALUE,"CAL-ADDRESS"},
     {ICAL_PERIOD_VALUE,"PERIOD"},
+    {ICAL_STATUS_VALUE,"STATUS"},
+    {ICAL_BINARY_VALUE,"BINARY"},
     {ICAL_TEXT_VALUE,"TEXT"},
     {ICAL_DURATION_VALUE,"DURATION"},
-    {ICAL_BOOLEAN_VALUE,"BOOLEAN"},
-    {ICAL_URI_VALUE,"URI"},
     {ICAL_DATETIMEPERIOD_VALUE,"DATE-TIME-PERIOD"},
-    {ICAL_GEO_VALUE,"GEO"},
-    {ICAL_DATETIME_VALUE,"DATE-TIME"},
-    {ICAL_XLICCLASS_VALUE,"X-LIC-CLASS"},
-    {ICAL_UTCOFFSET_VALUE,"UTC-OFFSET"},
+    {ICAL_INTEGER_VALUE,"INTEGER"},
+    {ICAL_URI_VALUE,"URI"},
+    {ICAL_TRIGGER_VALUE,"TRIGGER"},
     {ICAL_ATTACH_VALUE,"ATTACH"},
-    {ICAL_ACTION_VALUE,"ACTION"},
-    {ICAL_CALADDRESS_VALUE,"CAL-ADDRESS"},
-    {ICAL_X_VALUE,"X"},
+    {ICAL_CLASS_VALUE,"CLASS"},
     {ICAL_FLOAT_VALUE,"FLOAT"},
+    {ICAL_QUERY_VALUE,"QUERY"},
+    {ICAL_STRING_VALUE,"STRING"},
+    {ICAL_TRANSP_VALUE,"TRANSP"},
+    {ICAL_X_VALUE,"X"},
+    {ICAL_DATETIME_VALUE,"DATE-TIME"},
     {ICAL_REQUESTSTATUS_VALUE,"REQUEST-STATUS"},
-    {ICAL_METHOD_VALUE,"METHOD"},
-    {ICAL_BINARY_VALUE,"BINARY"},
-    {ICAL_RECUR_VALUE,"RECUR"},
+    {ICAL_GEO_VALUE,"GEO"},
+    {ICAL_DATE_VALUE,"DATE"},
+    {ICAL_ACTION_VALUE,"ACTION"},
     {ICAL_NO_VALUE,""}
 };
 
 
-icalvalue* icalvalue_new_query (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_QUERY_VALUE);
-   icalerror_check_arg_rz( (v!=0),"v");
-
-   icalvalue_set_query((icalvalue*)impl,v);
+icalvalue* icalvalue_new_boolean (int v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_BOOLEAN_VALUE);
+   
+   icalvalue_set_boolean((icalvalue*)impl,v);
    return (icalvalue*)impl;
 }
-void icalvalue_set_query(icalvalue* value, const char* v) {
+void icalvalue_set_boolean(icalvalue* value, int v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    icalerror_check_value_type(value, ICAL_BOOLEAN_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+
+    impl->data.v_int = v; 
+
+    icalvalue_reset_kind(impl);
+}
+int icalvalue_get_boolean(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_BOOLEAN_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_int;
+}
+
+
+
+icalvalue* icalvalue_new_utcoffset (int v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_UTCOFFSET_VALUE);
+   
+   icalvalue_set_utcoffset((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_utcoffset(icalvalue* value, int v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    icalerror_check_value_type(value, ICAL_UTCOFFSET_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+
+    impl->data.v_int = v; 
+
+    icalvalue_reset_kind(impl);
+}
+int icalvalue_get_utcoffset(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_UTCOFFSET_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_int;
+}
+
+
+
+icalvalue* icalvalue_new_xlicclass (enum icalproperty_xlicclass v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_XLICCLASS_VALUE);
+   
+   icalvalue_set_xlicclass((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_xlicclass(icalvalue* value, enum icalproperty_xlicclass v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    icalerror_check_value_type(value, ICAL_XLICCLASS_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+
+    impl->data.v_enum = v; 
+
+    icalvalue_reset_kind(impl);
+}
+enum icalproperty_xlicclass icalvalue_get_xlicclass(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_XLICCLASS_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_enum;
+}
+
+
+
+icalvalue* icalvalue_new_method (enum icalproperty_method v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_METHOD_VALUE);
+   
+   icalvalue_set_method((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_method(icalvalue* value, enum icalproperty_method v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    icalerror_check_value_type(value, ICAL_METHOD_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+
+    impl->data.v_enum = v; 
+
+    icalvalue_reset_kind(impl);
+}
+enum icalproperty_method icalvalue_get_method(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_METHOD_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_enum;
+}
+
+
+
+icalvalue* icalvalue_new_caladdress (const char* v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_CALADDRESS_VALUE);
+   icalerror_check_arg_rz( (v!=0),"v");
+
+   icalvalue_set_caladdress((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_caladdress(icalvalue* value, const char* v) {
     struct icalvalue_impl* impl; 
     icalerror_check_arg_rv( (value!=0),"value");
     icalerror_check_arg_rv( (v!=0),"v");
 
-    icalerror_check_value_type(value, ICAL_QUERY_VALUE);
+    icalerror_check_value_type(value, ICAL_CALADDRESS_VALUE);
     impl = (struct icalvalue_impl*)value;
     if(impl->data.v_string!=0) {free((void*)impl->data.v_string);}
 
@@ -114,11 +222,38 @@ void icalvalue_set_query(icalvalue* value, const char* v) {
 
     icalvalue_reset_kind(impl);
 }
-const char* icalvalue_get_query(const icalvalue* value) {
+const char* icalvalue_get_caladdress(const icalvalue* value) {
 
     icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_QUERY_VALUE);
+    icalerror_check_value_type(value, ICAL_CALADDRESS_VALUE);
     return ((struct icalvalue_impl*)value)->data.v_string;
+}
+
+
+
+icalvalue* icalvalue_new_period (struct icalperiodtype v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_PERIOD_VALUE);
+   
+   icalvalue_set_period((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_period(icalvalue* value, struct icalperiodtype v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    icalerror_check_value_type(value, ICAL_PERIOD_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+
+    impl->data.v_period = v; 
+
+    icalvalue_reset_kind(impl);
+}
+struct icalperiodtype icalvalue_get_period(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_PERIOD_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_period;
 }
 
 
@@ -150,100 +285,19 @@ enum icalproperty_status icalvalue_get_status(const icalvalue* value) {
 
 
 
-icalvalue* icalvalue_new_transp (enum icalproperty_transp v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_TRANSP_VALUE);
-   
-   icalvalue_set_transp((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_transp(icalvalue* value, enum icalproperty_transp v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    
-    icalerror_check_value_type(value, ICAL_TRANSP_VALUE);
-    impl = (struct icalvalue_impl*)value;
-
-
-    impl->data.v_enum = v; 
-
-    icalvalue_reset_kind(impl);
-}
-enum icalproperty_transp icalvalue_get_transp(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_TRANSP_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_enum;
-}
-
-
-
-icalvalue* icalvalue_new_class (enum icalproperty_class v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_CLASS_VALUE);
-   
-   icalvalue_set_class((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_class(icalvalue* value, enum icalproperty_class v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    
-    icalerror_check_value_type(value, ICAL_CLASS_VALUE);
-    impl = (struct icalvalue_impl*)value;
-
-
-    impl->data.v_enum = v; 
-
-    icalvalue_reset_kind(impl);
-}
-enum icalproperty_class icalvalue_get_class(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_CLASS_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_enum;
-}
-
-
-
-icalvalue* icalvalue_new_date (struct icaltimetype v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_DATE_VALUE);
-   
-   icalvalue_set_date((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_date(icalvalue* value, struct icaltimetype v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    
-    icalerror_check_value_type(value, ICAL_DATE_VALUE);
-    impl = (struct icalvalue_impl*)value;
-
-
-    impl->data.v_time = v; 
-
-    icalvalue_reset_kind(impl);
-}
-struct icaltimetype icalvalue_get_date(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_DATE_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_time;
-}
-
-
-
-icalvalue* icalvalue_new_string (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_STRING_VALUE);
+icalvalue* icalvalue_new_binary (const char* v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_BINARY_VALUE);
    icalerror_check_arg_rz( (v!=0),"v");
 
-   icalvalue_set_string((icalvalue*)impl,v);
+   icalvalue_set_binary((icalvalue*)impl,v);
    return (icalvalue*)impl;
 }
-void icalvalue_set_string(icalvalue* value, const char* v) {
+void icalvalue_set_binary(icalvalue* value, const char* v) {
     struct icalvalue_impl* impl; 
     icalerror_check_arg_rv( (value!=0),"value");
     icalerror_check_arg_rv( (v!=0),"v");
 
-    icalerror_check_value_type(value, ICAL_STRING_VALUE);
+    icalerror_check_value_type(value, ICAL_BINARY_VALUE);
     impl = (struct icalvalue_impl*)value;
     if(impl->data.v_string!=0) {free((void*)impl->data.v_string);}
 
@@ -257,65 +311,11 @@ void icalvalue_set_string(icalvalue* value, const char* v) {
 
     icalvalue_reset_kind(impl);
 }
-const char* icalvalue_get_string(const icalvalue* value) {
+const char* icalvalue_get_binary(const icalvalue* value) {
 
     icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_STRING_VALUE);
+    icalerror_check_value_type(value, ICAL_BINARY_VALUE);
     return ((struct icalvalue_impl*)value)->data.v_string;
-}
-
-
-
-icalvalue* icalvalue_new_integer (int v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_INTEGER_VALUE);
-   
-   icalvalue_set_integer((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_integer(icalvalue* value, int v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    
-    icalerror_check_value_type(value, ICAL_INTEGER_VALUE);
-    impl = (struct icalvalue_impl*)value;
-
-
-    impl->data.v_int = v; 
-
-    icalvalue_reset_kind(impl);
-}
-int icalvalue_get_integer(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_INTEGER_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_int;
-}
-
-
-
-icalvalue* icalvalue_new_period (struct icalperiodtype v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_PERIOD_VALUE);
-   
-   icalvalue_set_period((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_period(icalvalue* value, struct icalperiodtype v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    
-    icalerror_check_value_type(value, ICAL_PERIOD_VALUE);
-    impl = (struct icalvalue_impl*)value;
-
-
-    impl->data.v_period = v; 
-
-    icalvalue_reset_kind(impl);
-}
-struct icalperiodtype icalvalue_get_period(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_PERIOD_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_period;
 }
 
 
@@ -382,17 +382,17 @@ struct icaldurationtype icalvalue_get_duration(const icalvalue* value) {
 
 
 
-icalvalue* icalvalue_new_boolean (int v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_BOOLEAN_VALUE);
+icalvalue* icalvalue_new_integer (int v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_INTEGER_VALUE);
    
-   icalvalue_set_boolean((icalvalue*)impl,v);
+   icalvalue_set_integer((icalvalue*)impl,v);
    return (icalvalue*)impl;
 }
-void icalvalue_set_boolean(icalvalue* value, int v) {
+void icalvalue_set_integer(icalvalue* value, int v) {
     struct icalvalue_impl* impl; 
     icalerror_check_arg_rv( (value!=0),"value");
     
-    icalerror_check_value_type(value, ICAL_BOOLEAN_VALUE);
+    icalerror_check_value_type(value, ICAL_INTEGER_VALUE);
     impl = (struct icalvalue_impl*)value;
 
 
@@ -400,10 +400,10 @@ void icalvalue_set_boolean(icalvalue* value, int v) {
 
     icalvalue_reset_kind(impl);
 }
-int icalvalue_get_boolean(const icalvalue* value) {
+int icalvalue_get_integer(const icalvalue* value) {
 
     icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_BOOLEAN_VALUE);
+    icalerror_check_value_type(value, ICAL_INTEGER_VALUE);
     return ((struct icalvalue_impl*)value)->data.v_int;
 }
 
@@ -444,71 +444,17 @@ const char* icalvalue_get_uri(const icalvalue* value) {
 
 
 
-icalvalue* icalvalue_new_geo (struct icalgeotype v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_GEO_VALUE);
+icalvalue* icalvalue_new_class (enum icalproperty_class v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_CLASS_VALUE);
    
-   icalvalue_set_geo((icalvalue*)impl,v);
+   icalvalue_set_class((icalvalue*)impl,v);
    return (icalvalue*)impl;
 }
-void icalvalue_set_geo(icalvalue* value, struct icalgeotype v) {
+void icalvalue_set_class(icalvalue* value, enum icalproperty_class v) {
     struct icalvalue_impl* impl; 
     icalerror_check_arg_rv( (value!=0),"value");
     
-    icalerror_check_value_type(value, ICAL_GEO_VALUE);
-    impl = (struct icalvalue_impl*)value;
-
-
-    impl->data.v_geo = v; 
-
-    icalvalue_reset_kind(impl);
-}
-struct icalgeotype icalvalue_get_geo(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_GEO_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_geo;
-}
-
-
-
-icalvalue* icalvalue_new_datetime (struct icaltimetype v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_DATETIME_VALUE);
-   
-   icalvalue_set_datetime((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    
-    icalerror_check_value_type(value, ICAL_DATETIME_VALUE);
-    impl = (struct icalvalue_impl*)value;
-
-
-    impl->data.v_time = v; 
-
-    icalvalue_reset_kind(impl);
-}
-struct icaltimetype icalvalue_get_datetime(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_DATETIME_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_time;
-}
-
-
-
-icalvalue* icalvalue_new_xlicclass (enum icalproperty_xlicclass v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_XLICCLASS_VALUE);
-   
-   icalvalue_set_xlicclass((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_xlicclass(icalvalue* value, enum icalproperty_xlicclass v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    
-    icalerror_check_value_type(value, ICAL_XLICCLASS_VALUE);
+    icalerror_check_value_type(value, ICAL_CLASS_VALUE);
     impl = (struct icalvalue_impl*)value;
 
 
@@ -516,100 +462,11 @@ void icalvalue_set_xlicclass(icalvalue* value, enum icalproperty_xlicclass v) {
 
     icalvalue_reset_kind(impl);
 }
-enum icalproperty_xlicclass icalvalue_get_xlicclass(const icalvalue* value) {
+enum icalproperty_class icalvalue_get_class(const icalvalue* value) {
 
     icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_XLICCLASS_VALUE);
+    icalerror_check_value_type(value, ICAL_CLASS_VALUE);
     return ((struct icalvalue_impl*)value)->data.v_enum;
-}
-
-
-
-icalvalue* icalvalue_new_utcoffset (int v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_UTCOFFSET_VALUE);
-   
-   icalvalue_set_utcoffset((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_utcoffset(icalvalue* value, int v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    
-    icalerror_check_value_type(value, ICAL_UTCOFFSET_VALUE);
-    impl = (struct icalvalue_impl*)value;
-
-
-    impl->data.v_int = v; 
-
-    icalvalue_reset_kind(impl);
-}
-int icalvalue_get_utcoffset(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_UTCOFFSET_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_int;
-}
-
-
-
-icalvalue* icalvalue_new_action (enum icalproperty_action v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_ACTION_VALUE);
-   
-   icalvalue_set_action((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_action(icalvalue* value, enum icalproperty_action v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    
-    icalerror_check_value_type(value, ICAL_ACTION_VALUE);
-    impl = (struct icalvalue_impl*)value;
-
-
-    impl->data.v_enum = v; 
-
-    icalvalue_reset_kind(impl);
-}
-enum icalproperty_action icalvalue_get_action(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_ACTION_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_enum;
-}
-
-
-
-icalvalue* icalvalue_new_caladdress (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_CALADDRESS_VALUE);
-   icalerror_check_arg_rz( (v!=0),"v");
-
-   icalvalue_set_caladdress((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_caladdress(icalvalue* value, const char* v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    icalerror_check_arg_rv( (v!=0),"v");
-
-    icalerror_check_value_type(value, ICAL_CALADDRESS_VALUE);
-    impl = (struct icalvalue_impl*)value;
-    if(impl->data.v_string!=0) {free((void*)impl->data.v_string);}
-
-
-    impl->data.v_string = icalmemory_strdup(v);
-
-    if (impl->data.v_string == 0){
-      errno = ENOMEM;
-    }
- 
-
-    icalvalue_reset_kind(impl);
-}
-const char* icalvalue_get_caladdress(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_CALADDRESS_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_string;
 }
 
 
@@ -641,6 +498,130 @@ float icalvalue_get_float(const icalvalue* value) {
 
 
 
+icalvalue* icalvalue_new_query (const char* v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_QUERY_VALUE);
+   icalerror_check_arg_rz( (v!=0),"v");
+
+   icalvalue_set_query((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_query(icalvalue* value, const char* v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    icalerror_check_arg_rv( (v!=0),"v");
+
+    icalerror_check_value_type(value, ICAL_QUERY_VALUE);
+    impl = (struct icalvalue_impl*)value;
+    if(impl->data.v_string!=0) {free((void*)impl->data.v_string);}
+
+
+    impl->data.v_string = icalmemory_strdup(v);
+
+    if (impl->data.v_string == 0){
+      errno = ENOMEM;
+    }
+ 
+
+    icalvalue_reset_kind(impl);
+}
+const char* icalvalue_get_query(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_QUERY_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_string;
+}
+
+
+
+icalvalue* icalvalue_new_string (const char* v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_STRING_VALUE);
+   icalerror_check_arg_rz( (v!=0),"v");
+
+   icalvalue_set_string((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_string(icalvalue* value, const char* v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    icalerror_check_arg_rv( (v!=0),"v");
+
+    icalerror_check_value_type(value, ICAL_STRING_VALUE);
+    impl = (struct icalvalue_impl*)value;
+    if(impl->data.v_string!=0) {free((void*)impl->data.v_string);}
+
+
+    impl->data.v_string = icalmemory_strdup(v);
+
+    if (impl->data.v_string == 0){
+      errno = ENOMEM;
+    }
+ 
+
+    icalvalue_reset_kind(impl);
+}
+const char* icalvalue_get_string(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_STRING_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_string;
+}
+
+
+
+icalvalue* icalvalue_new_transp (enum icalproperty_transp v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_TRANSP_VALUE);
+   
+   icalvalue_set_transp((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_transp(icalvalue* value, enum icalproperty_transp v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    icalerror_check_value_type(value, ICAL_TRANSP_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+
+    impl->data.v_enum = v; 
+
+    icalvalue_reset_kind(impl);
+}
+enum icalproperty_transp icalvalue_get_transp(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_TRANSP_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_enum;
+}
+
+
+
+icalvalue* icalvalue_new_datetime (struct icaltimetype v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_DATETIME_VALUE);
+   
+   icalvalue_set_datetime((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    icalerror_check_value_type(value, ICAL_DATETIME_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+
+    impl->data.v_time = v; 
+
+    icalvalue_reset_kind(impl);
+}
+struct icaltimetype icalvalue_get_datetime(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_DATETIME_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_time;
+}
+
+
+
 icalvalue* icalvalue_new_requeststatus (struct icalreqstattype v){
    struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_REQUESTSTATUS_VALUE);
    
@@ -668,17 +649,71 @@ struct icalreqstattype icalvalue_get_requeststatus(const icalvalue* value) {
 
 
 
-icalvalue* icalvalue_new_method (enum icalproperty_method v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_METHOD_VALUE);
+icalvalue* icalvalue_new_geo (struct icalgeotype v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_GEO_VALUE);
    
-   icalvalue_set_method((icalvalue*)impl,v);
+   icalvalue_set_geo((icalvalue*)impl,v);
    return (icalvalue*)impl;
 }
-void icalvalue_set_method(icalvalue* value, enum icalproperty_method v) {
+void icalvalue_set_geo(icalvalue* value, struct icalgeotype v) {
     struct icalvalue_impl* impl; 
     icalerror_check_arg_rv( (value!=0),"value");
     
-    icalerror_check_value_type(value, ICAL_METHOD_VALUE);
+    icalerror_check_value_type(value, ICAL_GEO_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+
+    impl->data.v_geo = v; 
+
+    icalvalue_reset_kind(impl);
+}
+struct icalgeotype icalvalue_get_geo(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_GEO_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_geo;
+}
+
+
+
+icalvalue* icalvalue_new_date (struct icaltimetype v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_DATE_VALUE);
+   
+   icalvalue_set_date((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_date(icalvalue* value, struct icaltimetype v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    icalerror_check_value_type(value, ICAL_DATE_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+
+    impl->data.v_time = v; 
+
+    icalvalue_reset_kind(impl);
+}
+struct icaltimetype icalvalue_get_date(const icalvalue* value) {
+
+    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_value_type(value, ICAL_DATE_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_time;
+}
+
+
+
+icalvalue* icalvalue_new_action (enum icalproperty_action v){
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_ACTION_VALUE);
+   
+   icalvalue_set_action((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+void icalvalue_set_action(icalvalue* value, enum icalproperty_action v) {
+    struct icalvalue_impl* impl; 
+    icalerror_check_arg_rv( (value!=0),"value");
+    
+    icalerror_check_value_type(value, ICAL_ACTION_VALUE);
     impl = (struct icalvalue_impl*)value;
 
 
@@ -686,46 +721,11 @@ void icalvalue_set_method(icalvalue* value, enum icalproperty_method v) {
 
     icalvalue_reset_kind(impl);
 }
-enum icalproperty_method icalvalue_get_method(const icalvalue* value) {
+enum icalproperty_action icalvalue_get_action(const icalvalue* value) {
 
     icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_METHOD_VALUE);
+    icalerror_check_value_type(value, ICAL_ACTION_VALUE);
     return ((struct icalvalue_impl*)value)->data.v_enum;
-}
-
-
-
-icalvalue* icalvalue_new_binary (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_BINARY_VALUE);
-   icalerror_check_arg_rz( (v!=0),"v");
-
-   icalvalue_set_binary((icalvalue*)impl,v);
-   return (icalvalue*)impl;
-}
-void icalvalue_set_binary(icalvalue* value, const char* v) {
-    struct icalvalue_impl* impl; 
-    icalerror_check_arg_rv( (value!=0),"value");
-    icalerror_check_arg_rv( (v!=0),"v");
-
-    icalerror_check_value_type(value, ICAL_BINARY_VALUE);
-    impl = (struct icalvalue_impl*)value;
-    if(impl->data.v_string!=0) {free((void*)impl->data.v_string);}
-
-
-    impl->data.v_string = icalmemory_strdup(v);
-
-    if (impl->data.v_string == 0){
-      errno = ENOMEM;
-    }
- 
-
-    icalvalue_reset_kind(impl);
-}
-const char* icalvalue_get_binary(const icalvalue* value) {
-
-    icalerror_check_arg( (value!=0),"value");
-    icalerror_check_value_type(value, ICAL_BINARY_VALUE);
-    return ((struct icalvalue_impl*)value)->data.v_string;
 }
 
 

@@ -19,19 +19,14 @@ extern "C" {
 /* Define if lex declares yytext as a char * by default, not a char[].  */
 #define YYTEXT_POINTER 1
 
-/* Define to make icalerror_* calls abort instead of internally
-   signalling an error */
-#define ICAL_ERRORS_ARE_FATAL 1
+/* Define if you have the gmtime_r function.  */
+#define HAVE_GMTIME_R 1
 
-/* Define to make icalcluster_commit() save to a temp file and mv to
-   the original file instead of writing to the orig file directly */
-#define ICAL_SAFESAVES 1
-
-/* Define to terminate lines with "\n" instead of "\r\n" */
-#define ICAL_UNIX_NEWLINE 1
+/* Define if you have the iswspace function.  */
+#define HAVE_ISWSPACE 1
 
 /* Define if you have the snprintf function.  */
-/* #undef HAVE_SNPRINTF */
+#define HAVE_SNPRINTF 1
 
 /* Define if you have the strdup function.  */
 #define HAVE_STRDUP 1
@@ -42,11 +37,20 @@ extern "C" {
 /* Define if you have the <dlfcn.h> header file.  */
 #define HAVE_DLFCN_H 1
 
+/* Define if you have the <pthread.h> header file.  */
+#define HAVE_PTHREAD_H 1
+
 /* Define if you have the <sys/types.h> header file.  */
 #define HAVE_SYS_TYPES_H 1
 
 /* Define if you have the <time.h> header file.  */
 #define HAVE_TIME_H 1
+
+/* Define if you have the <unistd.h> header file.  */
+#define HAVE_UNISTD_H 1
+
+/* Define if you have the <wctype.h> header file.  */
+#define HAVE_WCTYPE_H 1
 
 /* Name of package */
 #define PACKAGE "libical"
@@ -54,8 +58,27 @@ extern "C" {
 /* Version number of package */
 #define VERSION "0.24"
 
-/* Define if you have pthread.h and the pthread library */
+/* Define if we want _REENTRANT */
+/* #undef ICAL_REENTRANT */
+
+/* Define to make icalerror_* calls abort instead of internally signalling an error */
+#define ICAL_ERRORS_ARE_FATAL 1
+
+/* Define to 1 if you DO NOT WANT to see deprecated messages */
+#define NO_WARN_DEPRECATED 1
+
+/* Define to 1 if you DO NO WANT to see the warning messages related to ICAL_MALFORMEDDATA_ERROR and parsing .ics zoneinfo files */
+#define NO_WARN_ICAL_MALFORMEDDATA_ERROR_HACK 1
+
+/* Define to terminate lines with n instead of rn */
+#define ICAL_UNIX_NEWLINE 1
+
+/* Define if we have pthread. */
 #define HAVE_PTHREAD 
+
+/* Define if we have pthread. */
+#define HAVE_PTHREAD 
+
 #ifndef ICAL_VERSION_H
 #define ICAL_VERSION_H
 
@@ -69,7 +92,7 @@ extern "C" {
  CREATOR: eric 02 June 2000
 
 
- $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+ $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -144,6 +167,7 @@ extern "C" {
  *
  *	- icaltime_add(struct icaltimetype t, struct icaldurationtype  d)
  *	- icaltime_subtract(struct icaltimetype t1, struct icaltimetype t2)
+ *      - icaltime_compare_with_zone(struct icaltimetype a,struct icaltimetype b)
  *	- icaltime_compare(struct icaltimetype a,struct icaltimetype b)
  *	- icaltime_compare_date_only(struct icaltimetype a,
  *		struct icaltimetype b)
@@ -289,6 +313,10 @@ int icaltime_is_utc(const struct icaltimetype t);
 int icaltime_is_floating(const struct icaltimetype t);
 
 /** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
+int icaltime_compare_with_zone(const struct icaltimetype a,
+        const struct icaltimetype b);
+
+/** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
 int icaltime_compare(const struct icaltimetype a,
 	const struct icaltimetype b);
 
@@ -337,7 +365,7 @@ int icaltime_span_contains(icaltime_span *s,
  CREATOR: eric 26 Jan 2001
 
 
- $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+ $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -396,7 +424,7 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
  CREATOR: eric 26 Jan 2001
 
 
- $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+ $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -987,7 +1015,7 @@ void* icalattachtype_get_binary(struct icalattachtype* v);
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
 
   
@@ -1041,33 +1069,33 @@ void icalvalue_reset_kind(icalvalue* value);
 
 typedef enum icalvalue_kind {
    ICAL_ANY_VALUE=5000,
-    ICAL_QUERY_VALUE=5001,
-    ICAL_TRIGGER_VALUE=5002,
-    ICAL_STATUS_VALUE=5003,
-    ICAL_TRANSP_VALUE=5004,
-    ICAL_CLASS_VALUE=5005,
-    ICAL_DATE_VALUE=5006,
-    ICAL_STRING_VALUE=5007,
-    ICAL_INTEGER_VALUE=5008,
-    ICAL_PERIOD_VALUE=5009,
+    ICAL_BOOLEAN_VALUE=5001,
+    ICAL_UTCOFFSET_VALUE=5002,
+    ICAL_XLICCLASS_VALUE=5003,
+    ICAL_RECUR_VALUE=5004,
+    ICAL_METHOD_VALUE=5005,
+    ICAL_CALADDRESS_VALUE=5006,
+    ICAL_PERIOD_VALUE=5007,
+    ICAL_STATUS_VALUE=5008,
+    ICAL_BINARY_VALUE=5009,
     ICAL_TEXT_VALUE=5010,
     ICAL_DURATION_VALUE=5011,
-    ICAL_BOOLEAN_VALUE=5012,
-    ICAL_URI_VALUE=5013,
-    ICAL_DATETIMEPERIOD_VALUE=5014,
-    ICAL_GEO_VALUE=5015,
-    ICAL_DATETIME_VALUE=5016,
-    ICAL_XLICCLASS_VALUE=5017,
-    ICAL_UTCOFFSET_VALUE=5018,
-    ICAL_ATTACH_VALUE=5019,
-    ICAL_ACTION_VALUE=5020,
-    ICAL_CALADDRESS_VALUE=5021,
+    ICAL_DATETIMEPERIOD_VALUE=5012,
+    ICAL_INTEGER_VALUE=5013,
+    ICAL_URI_VALUE=5014,
+    ICAL_TRIGGER_VALUE=5015,
+    ICAL_ATTACH_VALUE=5016,
+    ICAL_CLASS_VALUE=5017,
+    ICAL_FLOAT_VALUE=5018,
+    ICAL_QUERY_VALUE=5019,
+    ICAL_STRING_VALUE=5020,
+    ICAL_TRANSP_VALUE=5021,
     ICAL_X_VALUE=5022,
-    ICAL_FLOAT_VALUE=5023,
+    ICAL_DATETIME_VALUE=5023,
     ICAL_REQUESTSTATUS_VALUE=5024,
-    ICAL_METHOD_VALUE=5025,
-    ICAL_BINARY_VALUE=5026,
-    ICAL_RECUR_VALUE=5027,
+    ICAL_GEO_VALUE=5025,
+    ICAL_DATE_VALUE=5026,
+    ICAL_ACTION_VALUE=5027,
    ICAL_NO_VALUE=5028
 } icalvalue_kind ;
 
@@ -1167,10 +1195,40 @@ typedef enum icalproperty_xlicclass {
 #define ICALPROPERTY_LAST_ENUM 10073
 
 
- /* QUERY */ 
-icalvalue* icalvalue_new_query(const char* v); 
-const char* icalvalue_get_query(const icalvalue* value); 
-void icalvalue_set_query(icalvalue* value, const char* v);
+ /* BOOLEAN */ 
+icalvalue* icalvalue_new_boolean(int v); 
+int icalvalue_get_boolean(const icalvalue* value); 
+void icalvalue_set_boolean(icalvalue* value, int v);
+
+
+ /* UTC-OFFSET */ 
+icalvalue* icalvalue_new_utcoffset(int v); 
+int icalvalue_get_utcoffset(const icalvalue* value); 
+void icalvalue_set_utcoffset(icalvalue* value, int v);
+
+
+ /* X-LIC-CLASS */ 
+icalvalue* icalvalue_new_xlicclass(enum icalproperty_xlicclass v); 
+enum icalproperty_xlicclass icalvalue_get_xlicclass(const icalvalue* value); 
+void icalvalue_set_xlicclass(icalvalue* value, enum icalproperty_xlicclass v);
+
+
+ /* METHOD */ 
+icalvalue* icalvalue_new_method(enum icalproperty_method v); 
+enum icalproperty_method icalvalue_get_method(const icalvalue* value); 
+void icalvalue_set_method(icalvalue* value, enum icalproperty_method v);
+
+
+ /* CAL-ADDRESS */ 
+icalvalue* icalvalue_new_caladdress(const char* v); 
+const char* icalvalue_get_caladdress(const icalvalue* value); 
+void icalvalue_set_caladdress(icalvalue* value, const char* v);
+
+
+ /* PERIOD */ 
+icalvalue* icalvalue_new_period(struct icalperiodtype v); 
+struct icalperiodtype icalvalue_get_period(const icalvalue* value); 
+void icalvalue_set_period(icalvalue* value, struct icalperiodtype v);
 
 
  /* STATUS */ 
@@ -1179,40 +1237,10 @@ enum icalproperty_status icalvalue_get_status(const icalvalue* value);
 void icalvalue_set_status(icalvalue* value, enum icalproperty_status v);
 
 
- /* TRANSP */ 
-icalvalue* icalvalue_new_transp(enum icalproperty_transp v); 
-enum icalproperty_transp icalvalue_get_transp(const icalvalue* value); 
-void icalvalue_set_transp(icalvalue* value, enum icalproperty_transp v);
-
-
- /* CLASS */ 
-icalvalue* icalvalue_new_class(enum icalproperty_class v); 
-enum icalproperty_class icalvalue_get_class(const icalvalue* value); 
-void icalvalue_set_class(icalvalue* value, enum icalproperty_class v);
-
-
- /* DATE */ 
-icalvalue* icalvalue_new_date(struct icaltimetype v); 
-struct icaltimetype icalvalue_get_date(const icalvalue* value); 
-void icalvalue_set_date(icalvalue* value, struct icaltimetype v);
-
-
- /* STRING */ 
-icalvalue* icalvalue_new_string(const char* v); 
-const char* icalvalue_get_string(const icalvalue* value); 
-void icalvalue_set_string(icalvalue* value, const char* v);
-
-
- /* INTEGER */ 
-icalvalue* icalvalue_new_integer(int v); 
-int icalvalue_get_integer(const icalvalue* value); 
-void icalvalue_set_integer(icalvalue* value, int v);
-
-
- /* PERIOD */ 
-icalvalue* icalvalue_new_period(struct icalperiodtype v); 
-struct icalperiodtype icalvalue_get_period(const icalvalue* value); 
-void icalvalue_set_period(icalvalue* value, struct icalperiodtype v);
+ /* BINARY */ 
+icalvalue* icalvalue_new_binary(const char* v); 
+const char* icalvalue_get_binary(const icalvalue* value); 
+void icalvalue_set_binary(icalvalue* value, const char* v);
 
 
  /* TEXT */ 
@@ -1227,10 +1255,10 @@ struct icaldurationtype icalvalue_get_duration(const icalvalue* value);
 void icalvalue_set_duration(icalvalue* value, struct icaldurationtype v);
 
 
- /* BOOLEAN */ 
-icalvalue* icalvalue_new_boolean(int v); 
-int icalvalue_get_boolean(const icalvalue* value); 
-void icalvalue_set_boolean(icalvalue* value, int v);
+ /* INTEGER */ 
+icalvalue* icalvalue_new_integer(int v); 
+int icalvalue_get_integer(const icalvalue* value); 
+void icalvalue_set_integer(icalvalue* value, int v);
 
 
  /* URI */ 
@@ -1239,40 +1267,10 @@ const char* icalvalue_get_uri(const icalvalue* value);
 void icalvalue_set_uri(icalvalue* value, const char* v);
 
 
- /* GEO */ 
-icalvalue* icalvalue_new_geo(struct icalgeotype v); 
-struct icalgeotype icalvalue_get_geo(const icalvalue* value); 
-void icalvalue_set_geo(icalvalue* value, struct icalgeotype v);
-
-
- /* DATE-TIME */ 
-icalvalue* icalvalue_new_datetime(struct icaltimetype v); 
-struct icaltimetype icalvalue_get_datetime(const icalvalue* value); 
-void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v);
-
-
- /* X-LIC-CLASS */ 
-icalvalue* icalvalue_new_xlicclass(enum icalproperty_xlicclass v); 
-enum icalproperty_xlicclass icalvalue_get_xlicclass(const icalvalue* value); 
-void icalvalue_set_xlicclass(icalvalue* value, enum icalproperty_xlicclass v);
-
-
- /* UTC-OFFSET */ 
-icalvalue* icalvalue_new_utcoffset(int v); 
-int icalvalue_get_utcoffset(const icalvalue* value); 
-void icalvalue_set_utcoffset(icalvalue* value, int v);
-
-
- /* ACTION */ 
-icalvalue* icalvalue_new_action(enum icalproperty_action v); 
-enum icalproperty_action icalvalue_get_action(const icalvalue* value); 
-void icalvalue_set_action(icalvalue* value, enum icalproperty_action v);
-
-
- /* CAL-ADDRESS */ 
-icalvalue* icalvalue_new_caladdress(const char* v); 
-const char* icalvalue_get_caladdress(const icalvalue* value); 
-void icalvalue_set_caladdress(icalvalue* value, const char* v);
+ /* CLASS */ 
+icalvalue* icalvalue_new_class(enum icalproperty_class v); 
+enum icalproperty_class icalvalue_get_class(const icalvalue* value); 
+void icalvalue_set_class(icalvalue* value, enum icalproperty_class v);
 
 
  /* FLOAT */ 
@@ -1281,22 +1279,52 @@ float icalvalue_get_float(const icalvalue* value);
 void icalvalue_set_float(icalvalue* value, float v);
 
 
+ /* QUERY */ 
+icalvalue* icalvalue_new_query(const char* v); 
+const char* icalvalue_get_query(const icalvalue* value); 
+void icalvalue_set_query(icalvalue* value, const char* v);
+
+
+ /* STRING */ 
+icalvalue* icalvalue_new_string(const char* v); 
+const char* icalvalue_get_string(const icalvalue* value); 
+void icalvalue_set_string(icalvalue* value, const char* v);
+
+
+ /* TRANSP */ 
+icalvalue* icalvalue_new_transp(enum icalproperty_transp v); 
+enum icalproperty_transp icalvalue_get_transp(const icalvalue* value); 
+void icalvalue_set_transp(icalvalue* value, enum icalproperty_transp v);
+
+
+ /* DATE-TIME */ 
+icalvalue* icalvalue_new_datetime(struct icaltimetype v); 
+struct icaltimetype icalvalue_get_datetime(const icalvalue* value); 
+void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v);
+
+
  /* REQUEST-STATUS */ 
 icalvalue* icalvalue_new_requeststatus(struct icalreqstattype v); 
 struct icalreqstattype icalvalue_get_requeststatus(const icalvalue* value); 
 void icalvalue_set_requeststatus(icalvalue* value, struct icalreqstattype v);
 
 
- /* METHOD */ 
-icalvalue* icalvalue_new_method(enum icalproperty_method v); 
-enum icalproperty_method icalvalue_get_method(const icalvalue* value); 
-void icalvalue_set_method(icalvalue* value, enum icalproperty_method v);
+ /* GEO */ 
+icalvalue* icalvalue_new_geo(struct icalgeotype v); 
+struct icalgeotype icalvalue_get_geo(const icalvalue* value); 
+void icalvalue_set_geo(icalvalue* value, struct icalgeotype v);
 
 
- /* BINARY */ 
-icalvalue* icalvalue_new_binary(const char* v); 
-const char* icalvalue_get_binary(const icalvalue* value); 
-void icalvalue_set_binary(icalvalue* value, const char* v);
+ /* DATE */ 
+icalvalue* icalvalue_new_date(struct icaltimetype v); 
+struct icaltimetype icalvalue_get_date(const icalvalue* value); 
+void icalvalue_set_date(icalvalue* value, struct icaltimetype v);
+
+
+ /* ACTION */ 
+icalvalue* icalvalue_new_action(enum icalproperty_action v); 
+enum icalproperty_action icalvalue_get_action(const icalvalue* value); 
+void icalvalue_set_action(icalvalue* value, enum icalproperty_action v);
 
 #endif /*ICALVALUE_H*/
 /* -*- Mode: C -*- */
@@ -1305,7 +1333,7 @@ void icalvalue_set_binary(icalvalue* value, const char* v);
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
 
   
@@ -1496,95 +1524,65 @@ icalparameter* icalparameter_new_delegatedfrom(const char* v);
 const char* icalparameter_get_delegatedfrom(const icalparameter* value);
 void icalparameter_set_delegatedfrom(icalparameter* value, const char* v);
 
-/* DELEGATED-TO */
-icalparameter* icalparameter_new_delegatedto(const char* v);
-const char* icalparameter_get_delegatedto(const icalparameter* value);
-void icalparameter_set_delegatedto(icalparameter* value, const char* v);
-
-/* RANGE */
-icalparameter* icalparameter_new_range(icalparameter_range v);
-icalparameter_range icalparameter_get_range(const icalparameter* value);
-void icalparameter_set_range(icalparameter* value, icalparameter_range v);
-
-/* ENCODING */
-icalparameter* icalparameter_new_encoding(icalparameter_encoding v);
-icalparameter_encoding icalparameter_get_encoding(const icalparameter* value);
-void icalparameter_set_encoding(icalparameter* value, icalparameter_encoding v);
-
-/* RSVP */
-icalparameter* icalparameter_new_rsvp(icalparameter_rsvp v);
-icalparameter_rsvp icalparameter_get_rsvp(const icalparameter* value);
-void icalparameter_set_rsvp(icalparameter* value, icalparameter_rsvp v);
-
-/* PARTSTAT */
-icalparameter* icalparameter_new_partstat(icalparameter_partstat v);
-icalparameter_partstat icalparameter_get_partstat(const icalparameter* value);
-void icalparameter_set_partstat(icalparameter* value, icalparameter_partstat v);
-
-/* RELTYPE */
-icalparameter* icalparameter_new_reltype(icalparameter_reltype v);
-icalparameter_reltype icalparameter_get_reltype(const icalparameter* value);
-void icalparameter_set_reltype(icalparameter* value, icalparameter_reltype v);
-
-/* CUTYPE */
-icalparameter* icalparameter_new_cutype(icalparameter_cutype v);
-icalparameter_cutype icalparameter_get_cutype(const icalparameter* value);
-void icalparameter_set_cutype(icalparameter* value, icalparameter_cutype v);
-
-/* MEMBER */
-icalparameter* icalparameter_new_member(const char* v);
-const char* icalparameter_get_member(const icalparameter* value);
-void icalparameter_set_member(icalparameter* value, const char* v);
-
-/* FMTTYPE */
-icalparameter* icalparameter_new_fmttype(const char* v);
-const char* icalparameter_get_fmttype(const icalparameter* value);
-void icalparameter_set_fmttype(icalparameter* value, const char* v);
+/* RELATED */
+icalparameter* icalparameter_new_related(icalparameter_related v);
+icalparameter_related icalparameter_get_related(const icalparameter* value);
+void icalparameter_set_related(icalparameter* value, icalparameter_related v);
 
 /* SENT-BY */
 icalparameter* icalparameter_new_sentby(const char* v);
 const char* icalparameter_get_sentby(const icalparameter* value);
 void icalparameter_set_sentby(icalparameter* value, const char* v);
 
-/* VALUE */
-icalparameter* icalparameter_new_value(icalparameter_value v);
-icalparameter_value icalparameter_get_value(const icalparameter* value);
-void icalparameter_set_value(icalparameter* value, icalparameter_value v);
+/* LANGUAGE */
+icalparameter* icalparameter_new_language(const char* v);
+const char* icalparameter_get_language(const icalparameter* value);
+void icalparameter_set_language(icalparameter* value, const char* v);
+
+/* RELTYPE */
+icalparameter* icalparameter_new_reltype(icalparameter_reltype v);
+icalparameter_reltype icalparameter_get_reltype(const icalparameter* value);
+void icalparameter_set_reltype(icalparameter* value, icalparameter_reltype v);
+
+/* ENCODING */
+icalparameter* icalparameter_new_encoding(icalparameter_encoding v);
+icalparameter_encoding icalparameter_get_encoding(const icalparameter* value);
+void icalparameter_set_encoding(icalparameter* value, icalparameter_encoding v);
 
 /* ALTREP */
 icalparameter* icalparameter_new_altrep(const char* v);
 const char* icalparameter_get_altrep(const icalparameter* value);
 void icalparameter_set_altrep(icalparameter* value, const char* v);
 
-/* DIR */
-icalparameter* icalparameter_new_dir(const char* v);
-const char* icalparameter_get_dir(const icalparameter* value);
-void icalparameter_set_dir(icalparameter* value, const char* v);
+/* FMTTYPE */
+icalparameter* icalparameter_new_fmttype(const char* v);
+const char* icalparameter_get_fmttype(const icalparameter* value);
+void icalparameter_set_fmttype(icalparameter* value, const char* v);
 
-/* RELATED */
-icalparameter* icalparameter_new_related(icalparameter_related v);
-icalparameter_related icalparameter_get_related(const icalparameter* value);
-void icalparameter_set_related(icalparameter* value, icalparameter_related v);
+/* FBTYPE */
+icalparameter* icalparameter_new_fbtype(icalparameter_fbtype v);
+icalparameter_fbtype icalparameter_get_fbtype(const icalparameter* value);
+void icalparameter_set_fbtype(icalparameter* value, icalparameter_fbtype v);
+
+/* RSVP */
+icalparameter* icalparameter_new_rsvp(icalparameter_rsvp v);
+icalparameter_rsvp icalparameter_get_rsvp(const icalparameter* value);
+void icalparameter_set_rsvp(icalparameter* value, icalparameter_rsvp v);
+
+/* RANGE */
+icalparameter* icalparameter_new_range(icalparameter_range v);
+icalparameter_range icalparameter_get_range(const icalparameter* value);
+void icalparameter_set_range(icalparameter* value, icalparameter_range v);
+
+/* DELEGATED-TO */
+icalparameter* icalparameter_new_delegatedto(const char* v);
+const char* icalparameter_get_delegatedto(const icalparameter* value);
+void icalparameter_set_delegatedto(icalparameter* value, const char* v);
 
 /* CN */
 icalparameter* icalparameter_new_cn(const char* v);
 const char* icalparameter_get_cn(const icalparameter* value);
 void icalparameter_set_cn(icalparameter* value, const char* v);
-
-/* X-LIC-ERRORTYPE */
-icalparameter* icalparameter_new_xlicerrortype(icalparameter_xlicerrortype v);
-icalparameter_xlicerrortype icalparameter_get_xlicerrortype(const icalparameter* value);
-void icalparameter_set_xlicerrortype(icalparameter* value, icalparameter_xlicerrortype v);
-
-/* X */
-icalparameter* icalparameter_new_x(const char* v);
-const char* icalparameter_get_x(const icalparameter* value);
-void icalparameter_set_x(icalparameter* value, const char* v);
-
-/* LANGUAGE */
-icalparameter* icalparameter_new_language(const char* v);
-const char* icalparameter_get_language(const icalparameter* value);
-void icalparameter_set_language(icalparameter* value, const char* v);
 
 /* ROLE */
 icalparameter* icalparameter_new_role(icalparameter_role v);
@@ -1596,15 +1594,45 @@ icalparameter* icalparameter_new_xliccomparetype(icalparameter_xliccomparetype v
 icalparameter_xliccomparetype icalparameter_get_xliccomparetype(const icalparameter* value);
 void icalparameter_set_xliccomparetype(icalparameter* value, icalparameter_xliccomparetype v);
 
-/* FBTYPE */
-icalparameter* icalparameter_new_fbtype(icalparameter_fbtype v);
-icalparameter_fbtype icalparameter_get_fbtype(const icalparameter* value);
-void icalparameter_set_fbtype(icalparameter* value, icalparameter_fbtype v);
+/* PARTSTAT */
+icalparameter* icalparameter_new_partstat(icalparameter_partstat v);
+icalparameter_partstat icalparameter_get_partstat(const icalparameter* value);
+void icalparameter_set_partstat(icalparameter* value, icalparameter_partstat v);
+
+/* X-LIC-ERRORTYPE */
+icalparameter* icalparameter_new_xlicerrortype(icalparameter_xlicerrortype v);
+icalparameter_xlicerrortype icalparameter_get_xlicerrortype(const icalparameter* value);
+void icalparameter_set_xlicerrortype(icalparameter* value, icalparameter_xlicerrortype v);
+
+/* MEMBER */
+icalparameter* icalparameter_new_member(const char* v);
+const char* icalparameter_get_member(const icalparameter* value);
+void icalparameter_set_member(icalparameter* value, const char* v);
+
+/* X */
+icalparameter* icalparameter_new_x(const char* v);
+const char* icalparameter_get_x(const icalparameter* value);
+void icalparameter_set_x(icalparameter* value, const char* v);
+
+/* CUTYPE */
+icalparameter* icalparameter_new_cutype(icalparameter_cutype v);
+icalparameter_cutype icalparameter_get_cutype(const icalparameter* value);
+void icalparameter_set_cutype(icalparameter* value, icalparameter_cutype v);
 
 /* TZID */
 icalparameter* icalparameter_new_tzid(const char* v);
 const char* icalparameter_get_tzid(const icalparameter* value);
 void icalparameter_set_tzid(icalparameter* value, const char* v);
+
+/* VALUE */
+icalparameter* icalparameter_new_value(icalparameter_value v);
+icalparameter_value icalparameter_get_value(const icalparameter* value);
+void icalparameter_set_value(icalparameter* value, icalparameter_value v);
+
+/* DIR */
+icalparameter* icalparameter_new_dir(const char* v);
+const char* icalparameter_get_dir(const icalparameter* value);
+void icalparameter_set_dir(icalparameter* value, const char* v);
 
 #endif /*ICALPARAMETER_H*/
 
@@ -1615,7 +1643,7 @@ void icalparameter_set_tzid(icalparameter* value, const char* v);
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1685,6 +1713,9 @@ const char* icalvalue_kind_to_string(const icalvalue_kind kind);
 /** Check validity of a specific icalvalue_kind **/
 int icalvalue_kind_is_valid(const icalvalue_kind kind);
 
+/** Encode a character string in ical format, esacpe certain characters, etc. */
+int icalvalue_encode_ical_string(const char *szText, char *szEncText, int MaxBufferLen);
+
 #endif /*ICALVALUE_H*/
 /* -*- Mode: C -*- */
 /*======================================================================
@@ -1692,7 +1723,7 @@ int icalvalue_kind_is_valid(const icalvalue_kind kind);
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
 
   
@@ -1759,7 +1790,7 @@ icalparameter_kind icalparameter_string_to_kind(const char* string);
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
@@ -2230,7 +2261,7 @@ const char* icalproperty_get_xlicmimeoptinfo(const icalproperty* prop);icalprope
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
 
   
@@ -2330,7 +2361,7 @@ icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
 /* Convert kinds to string and get default value type */
 
 icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);
-icalvalue_kind icalproperty_value_kind_to_kind(icalvalue_kind kind);
+icalproperty_kind icalproperty_value_kind_to_kind(icalvalue_kind kind);
 const char* icalproperty_kind_to_string(icalproperty_kind kind);
 icalproperty_kind icalproperty_string_to_kind(const char* string);
 
@@ -2343,6 +2374,7 @@ const char* icalproperty_method_to_string(icalproperty_method method);
 
 const char* icalproperty_enum_to_string(int e);
 int icalproperty_string_to_enum(const char* str);
+int icalproperty_kind_and_string_to_enum(const int kind, const char* str);
 
 const char* icalproperty_status_to_string(icalproperty_status);
 icalproperty_status icalproperty_string_to_status(const char* string);
@@ -2518,7 +2550,7 @@ void pvl_apply(pvl_list l,pvl_applyf f, void *v);
  CREATOR: Damon Chaplin 07 March 2001
 
 
- $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+ $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Ximian, Inc.
@@ -2874,7 +2906,7 @@ icalcomponent* icalcomponent_new_vquery();
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+ $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -3029,7 +3061,7 @@ int	icaltimezone_dump_changes		(icaltimezone	*zone,
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -3123,7 +3155,7 @@ char* icalparser_string_line_generator(char *out, size_t buf_size, void *d);
  CREATOR: eric 30 June 1999
 
 
- $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+ $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -3206,7 +3238,7 @@ char* icalmemory_strdup(const char *s);
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -3365,7 +3397,7 @@ void icalerror_restore(const char* error, icalerrorstate es);
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
   
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -3426,7 +3458,7 @@ int icalrestriction_check(icalcomponent* comp);
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
   
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -3570,7 +3602,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
  CREATOR: eric 26 July 2000
 
 
- $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+ $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -3612,7 +3644,7 @@ char* icalmime_as_mime_string(char* component);
   
   DESCRIPTION:
   
-  $Id: ical.h,v 1.4 2002-07-23 14:32:29 lindner Exp $
+  $Id: ical.h,v 1.5 2002-09-01 19:12:31 gray-john Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 

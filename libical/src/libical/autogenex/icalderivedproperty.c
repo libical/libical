@@ -4,7 +4,7 @@
   FILE: icalderivedproperty.c
   CREATOR: eric 15 Feb 2001
   
-  $Id: icalderivedproperty.c,v 1.5 2002-07-23 14:32:30 lindner Exp $
+  $Id: icalderivedproperty.c,v 1.6 2002-09-01 19:12:31 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2350,7 +2350,7 @@ icalproperty_kind icalproperty_string_to_kind(const char* string)
 }
 
 
-icalvalue_kind icalproperty_value_kind_to_kind(icalvalue_kind kind)
+icalproperty_kind icalproperty_value_kind_to_kind(icalvalue_kind kind)
 {
     int i;
 
@@ -2387,6 +2387,37 @@ const char* icalproperty_enum_to_string(int e)
     return enum_map[e-ICALPROPERTY_FIRST_ENUM].str;
 }
 
+int icalproperty_kind_and_string_to_enum(const int kind, const char* str)
+{
+    icalproperty_kind pkind;
+    int i;
+
+    icalerror_check_arg_rz(str!=0,"str")
+
+    if ((pkind = icalproperty_value_kind_to_kind(kind)) == ICAL_NO_VALUE)
+	return 0;
+
+    while(*str == ' '){
+	str++;
+    }
+
+    for (i=ICALPROPERTY_FIRST_ENUM; i != ICALPROPERTY_LAST_ENUM; i++) {
+	if (enum_map[i-ICALPROPERTY_FIRST_ENUM].prop == pkind)
+	    break;
+    }
+    if (i == ICALPROPERTY_LAST_ENUM)
+	    return 0;
+
+    for (; i != ICALPROPERTY_LAST_ENUM; i++) {
+	if ( strcmp(enum_map[i-ICALPROPERTY_FIRST_ENUM].str, str) == 0) {
+	    return enum_map[i-ICALPROPERTY_FIRST_ENUM].prop_enum;
+	}
+    }
+
+    return 0;
+}
+
+/** @deprecated please use icalproperty_kind_and_string_to_enum instead */
 int icalproperty_string_to_enum(const char* str)
 {
     int i;
