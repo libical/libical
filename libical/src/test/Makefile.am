@@ -14,7 +14,11 @@ LDADD =  ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx
 
 LIBS = -lpthread 
 
-storage_LDADD = ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a @BDB_DIR@/lib/libdb-4.0.la
+if WITH_BDB4
+storage_LDADD = ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a @BDB_DIR_LIB@/@BDB_LIB@
+else
+storage_LDADD = ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a
+endif
 
 INCLUDES = 				\
        -I. 				\
@@ -25,7 +29,7 @@ INCLUDES = 				\
        -I$(srcdir)/../libical 		\
        -I../libicalss 			\
        -I$(srcdir)/../libicalss         \
-       -I@BDB_DIR@/include 
+       -I@BDB_DIR_INCLUDE@
 
 copycluster_SOURCES = copycluster.c
 regression_SOURCES = regression.c regression-component.c regression-classify.c regression-utils.c\

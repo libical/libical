@@ -6,12 +6,23 @@ LEX_OUTPUT_ROOT = lex.ss
 
 all: icalss.h
 
+if WITH_BDB4
+BDB_INCLUDE=-I@BDB_DIR_INCLUDE@ -DWITH_BDB4
+BDB_SOURCES=icalbdbset.c icalbdbset.h icalbdbsetimpl.h
+BDB_HEADERS=$(srcdir)/icalbdbset.h
+libicalssinclude_BDBHEADERS=icalbdbset.h icalbdbsetimpl.h
+else
+BDB_INCLUDE=
+BDB_SOURCES=
+BDB_HEADERS=
+endif
+
 INCLUDES =			\
 	-I$(top_srcdir)/src	\
 	-I$(top_builddir)/src	\
 	-I$(top_srcdir)/src/libical	\
 	-I$(top_builddir)/libical \
-	-I@BDB_DIR@/include
+	$(BDB_INCLUDE)
 
 libicalss_la_LDFLAGS = -version-info 0:0:0
 
@@ -41,8 +52,6 @@ libicalss_la_SOURCES =		\
 	icalfileset.c		\
 	icalfileset.h		\
 	icalfilesetimpl.h	\
-	icalbdbset.c		\
-	icalbdbsetimpl.h	\
 	icalset.c		\
 	icalset.h		\
 	icalssyacc.h		\
@@ -50,6 +59,7 @@ libicalss_la_SOURCES =		\
 	icalspanlist.h		\
 	icalmessage.c		\
 	icalmessage.h		\
+	$(BDB_SOURCES)		\
 	$(libicalss_la_DEVSOURCES)
 
 libicalssincludedir = $(includedir)
@@ -60,7 +70,7 @@ COMBINEDHEADERS = \
         $(srcdir)/icalcluster.h \
         $(srcdir)/icalfileset.h \
         $(srcdir)/icaldirset.h \
-        $(srcdir)/icalbdbset.h \
+	$(BDB_HEADERS) \
         $(srcdir)/icalcalendar.h  \
         $(srcdir)/icalclassify.h \
 	$(srcdir)/icalspanlist.h	\
@@ -68,17 +78,11 @@ COMBINEDHEADERS = \
 
 
 icalss.h: $(COMBINEDHEADERS)
-	echo '#ifdef __cplusplus'         >  icalss.h
-	echo 'extern "C" {'               >> icalss.h
-	echo '#endif'                     >> icalss.h
 	cat $(COMBINEDHEADERS) | egrep -v "#include.*\"ical" \
-	| egrep -v "#include.*\"pvl\.h\"" >> icalss.h
-	echo '#ifdef __cplusplus'         >> ical.h
-	echo '};'                         >> ical.h
-	echo '#endif'                     >> ical.h
+	| egrep -v "#include.*\"pvl\.h\"" > icalss.h
 
 
-libicalssinclude_HEADERS = icalss.h icalbdbset.h icalbdbsetimpl.h icalcalendar.h icalclassify.h icalcluster.h icaldirset.h icaldirsetimpl.h icalfileset.h icalfilesetimpl.h icalgauge.h icalgaugeimpl.h icalmessage.h icalset.h icalspanlist.h icalssyacc.h 
+libicalssinclude_HEADERS = icalss.h
 
 CONFIG_CLEAN_FILES = y.output
 

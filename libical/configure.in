@@ -18,20 +18,65 @@ AM_PROG_LIBTOOL
 
 AC_SUBST(AR)
 
+dnl *** bdb4 support
 
-AC_ARG_WITH(bdb_dir, [  --with-bdb-dir=PATH       Use PATH as location of BerkeleyDB 4.0],
+AC_ARG_WITH(bdb4, [  --with-bdb4             Add support for Berkeley DB 4.0],
+[case $with_bdb4 in  
+    yes)	echo 'Adding Berkeley DB support'
+		WITH_BDB4="yes"
+		;;
+    no)		;;
+    *)		echo "Ignoring unknown argument to --with-devel: $with_devel"
+		;;
+esac])
+
+if test x$WITH_BDB4 = xyes; then
+  AC_ARG_WITH(bdb4_dir, [  --with-bdb4-dir=PATH    Use PATH as location of BerkeleyDB 4.0],
    BDB_DIR=$withval,
    BDB_DIR=/usr/local/BerkeleyDB.4.0
-)
+  )
 
-AC_SUBST(BDB_DIR)
+  echo -n "Berkeley DB include files live in... "
+  if test -f $BDB_DIR/include/db.h; then
+   BDB_DIR_INCLUDE=$BDB_DIR/include
+   echo $BDB_DIR_INCLUDE
+  else
+    if test -f $BDB_DIR/include/db4/db.h; then
+     BDB_DIR_INCLUDE=$BDB_DIR/include/db4
+     echo $BDB_DIR_INCLUDE
+    else
+     WITH_BDB4="no"
+     echo "not found!"
+    fi
+  fi
 
-dnl 4.0 is required...
-BDB_VERSION="4.0"
-AC_SUBST(BDB_VERSION)
+  echo -n "Berkeley DB libraries... "
+  if test -f $BDB_DIR/lib/libdb-4.0.la; then
+   BDB_DIR_LIB=$BDB_DIR/lib
+   BDB_LIB=libdb-4.0.la
+   echo "$BDB_DIR_LIB $BDB_LIB"
+  else
+    if test -f $BDB_DIR/lib/libdb4.la; then
+     BDB_DIR_LIB=$BDB_DIR/lib
+     BDB_LIB=libdb4.la
+     echo "$BDB_DIR_LIB $BDB_LIB"
+    else
+     WITH_BDB4="no"
+     echo "not found!"
+    fi
+  fi
 
+  AC_SUBST(BDB_DIR)
+  AC_SUBST(BDB_DIR_INCLUDE)
+  AC_SUBST(BDB_DIR_LIB)
+  AC_SUBST(BDB_LIB)
+  dnl 4.0 is required...
+  BDB_VERSION="4.0"
+  AC_SUBST(BDB_VERSION)
+fi
+AM_CONDITIONAL(WITH_BDB4, test x$WITH_BDB4 = xyes)
 
-
+dnl *** Yacc/Bison support
 
 AC_ARG_WITH(devel, [  --with-devel            Add developement options],
 [case $with_devel in  
