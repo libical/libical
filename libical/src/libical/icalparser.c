@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.29 2002-06-26 22:26:07 ebusboom Exp $
+  $Id: icalparser.c,v 1.30 2002-06-27 01:36:40 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -51,7 +51,6 @@
 #include <string.h> /* For strncpy & size_t */
 #include <stdio.h> /* For FILE and fgets and sprintf */
 #include <stdlib.h> /* for free */
-#include "icalyacc.h"		/* for YYSTYPE */
 #include <wctype.h>
 
 #ifdef WIN32
