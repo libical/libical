@@ -27,7 +27,6 @@
 #include "icalproperty.h"
 #include "icalvalue.h"
 #include "icalenums.h" /* defines icalcomponent_kind */
-#include "icalattendee.h"
 #include "pvl.h"
 
 typedef struct icalcomponent_impl icalcomponent;
@@ -235,27 +234,12 @@ const char* icalcomponent_get_description(icalcomponent* comp);
 void icalcomponent_set_location(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_location(icalcomponent* comp);
 
-void icalcomponent_set_organizer(icalcomponent* comp, 
-				 struct icalorganizertype org);
-struct icalorganizertype icalcomponent_get_organizer(icalcomponent* comp);
-
-
-void icalcomponent_add_attendee(icalcomponent *comp,
-				struct icalattendeetype attendee);
-
-int icalcomponent_remove_attendee(icalcomponent *comp, char* cuid);
-
 void icalcomponent_set_sequence(icalcomponent* comp, int v);
 int icalcomponent_get_sequence(icalcomponent* comp);
 
 void icalcomponent_set_status(icalcomponent* comp, int v);
 int icalcomponent_get_status(icalcomponent* comp);
 
-
-/** Get the Nth attendee. Out of range indices return an attendee
-   with cuid == 0 */
-struct icalattendeetype icalcomponent_get_attendee(icalcomponent *comp,
-  int index);
 
 /** Calls the given function for each TZID parameter found in the
     component, and any subcomponents. */

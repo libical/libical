@@ -97,10 +97,6 @@ SOURCE=.\icalattach.c
 # End Source File
 # Begin Source File
 
-SOURCE=icalattendee.c
-# End Source File
-# Begin Source File
-
 SOURCE=icalcomponent.c
 # End Source File
 # Begin Source File
@@ -218,10 +214,6 @@ SOURCE=.\autogenex\ical.h
 # Begin Source File
 
 SOURCE=.\icalarray.h
-# End Source File
-# Begin Source File
-
-SOURCE=icalattendee.h
 # End Source File
 # Begin Source File
 

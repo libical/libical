@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.31 2002-09-26 23:09:20 lindner Exp $
+#  $Id: Makefile.am,v 1.32 2002-10-09 23:14:44 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -61,8 +61,6 @@ libical_la_SOURCES =		\
 	icalarray.h		\
 	icalattach.h		\
 	icalattach.c		\
-	icalattendee.h		\
-	icalattendee.c		\
 	icalcomponent.c		\
 	icalcomponent.h		\
 	icalenums.c		\
@@ -142,7 +140,6 @@ COMBINEDHEADERS =					\
 	$(top_srcdir)/src/libical/icalparameter.h	\
 	icalderivedproperty.h				\
 	$(top_srcdir)/src/libical/icalproperty.h	\
-	$(top_srcdir)/src/libical/icalattendee.h	\
 	$(top_srcdir)/src/libical/pvl.h			\
 	$(top_srcdir)/src/libical/icalarray.h		\
 	$(top_srcdir)/src/libical/icalcomponent.h	\
@@ -267,7 +264,6 @@ EXTRA_DIST =			\
 	icalderivedvalue.h.in	\
 	icalversion.h.in
 
-$(srcdir)/icalattendee.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalcomponent.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 icalderivedparameter.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 icalderivedproperty.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h

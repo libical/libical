@@ -160,26 +160,12 @@ public:
 	struct icaltimetype get_recurrenceid();
 	void set_recurrenceid(struct icaltimetype v);
 
-
-	struct icalorganizertype get_organizer();
-	void set_organizer(struct icalorganizertype org);
-
-
-	void add_attendee(struct icalattendeetype attendee);
-	void remove_attendee(string cuid);
-
         int get_sequence();
         void set_sequence(int v);
 
         int get_status();
         void set_status(int v);
 
-
-	/**
-	 * Get the Nth attendee. Out of range indices return an
-	 * attendee with cuid == 0
-	*/
-	struct icalattendeetype get_attendee(int index);
 
 public:
 	/**
