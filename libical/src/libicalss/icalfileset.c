@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.28 2002-08-07 17:17:14 acampi Exp $
+  $Id: icalfileset.c,v 1.29 2002-10-09 17:13:25 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -411,7 +411,7 @@ void icalfileset_mark(icalset* set) {
 
 icalcomponent* icalfileset_get_component(icalset* set){
     icalfileset *fset = (icalfileset*) set;
-    icalerror_check_arg_re((set!=0),"set",ICAL_BADARG_ERROR);
+    icalerror_check_arg_rz((set!=0),"set");
 
     return fset->cluster;
 }
