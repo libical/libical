@@ -1,3 +1,27 @@
+2001-02-28  Eric Busboom  <eric@softwarestudio.org>
+
+	* Property Added __del__ 
+
+	* Component Component.properties() now caches properties that it
+ 	constructs, so two calls to properties() to that get the same
+ 	icalproperty will also get the same Property.
+
+	* Property Added Property.__cmp__ to test equality of properties
+ 	based on ical string values
+
+2001-02-27  Eric Busboom  <eric@softwarestudio.org>
+
+	* Property Added Property.ref() to set/get the reference to the
+ 	Property's internal icalproperty
+
+	* Property Property._update_value now changes the icalproperty
+ 	value if a reference has been set.
+
+	* Component re-instituted Component.properties(). The routine now
+ 	adds a 'ref' key to the dict that holds the python pointer
+ 	string. The C hex value of the pointer is in the 'pid' key
+	
+
 2001-02-27  Patrick Lewis  <plewis@inetarena.com>
 
 	* Backed out changes to Component removing comp_p; 

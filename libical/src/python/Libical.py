@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Libical.py,v 1.11 2001-02-28 16:19:34 ebusboom Exp $
+#  $Id: Libical.py,v 1.12 2001-02-28 17:36:07 ebusboom Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -31,6 +31,7 @@ from types import *
 from string import upper, join
 import base64
 
+
 class Property:
     """ Represent any iCalendar Property.
 
@@ -52,8 +53,9 @@ class Property:
         self.desc = {}
         self.parameters = {}
   
-        desc_keys = ('name', 'value', 'value_type', 'pid', 'ref')
+        desc_keys = ('name', 'value', 'value_type', 'pid', 'ref', 'deleted' )
 
+        self.desc['deleted'] = 0;
         # Initialize all of the required keys
         for key in desc_keys:
             self.desc[key] = None
@@ -63,6 +65,18 @@ class Property:
                 self.desc[key]=dict[key]
             else:
                 self[key]=dict[key]
+
+
+    def __del__(self):
+
+        self.desc['deleted'] = 1;
+
+        if not self.desc['deleted'] and \
+           self.ref() and \
+           icalproperty_get_parent(self.ref()) == 'NULL':
+            
+            icalproperty_free(self.ref())
+            
 
     def name(self,v=None):
         """ Return the name of the property """
@@ -147,16 +161,16 @@ class Property:
                 
         outS = "%s:%s" % (outS, str(self.value())) # Add Property value
 
-        # "Fold" output (Shouldn't happen at Property level, but at top
-        # component level).
-##         if len(outS) > 75:
-##             outL = [outS[0:75]]             # Chop outS into 75 char chunks
-##             for chop in range(75, len(outS), 74): #74 chars because of space
-##                 outL.append(outS[chop:chop+74])
-##             outS = join(outL, "\r\n ")         
-        # return "%s%s" % (outS, "\r\n")            # insert final CRLF
-
+        # No folding done here. The unfolded string is neded for
+        # testing equality and converting to a libical icalproperty
+        
         return outS
+
+    def __cmp__(self, other):
+        s_str = str(self)
+        o_str = str(other)
+
+        return cmp(s_str,o_str)
 
 class Time(Property):
     """ Represent iCalendar DATE, TIME and DATE-TIME """
@@ -854,12 +868,16 @@ class Component:
         self.comp_p = None
         self.comp_p = icalparser_parse_string(str)
        
-
+        self.cached_props = {}
 
     def __del__(self):
-        if self.comp_p != None and icalcomponent_get_parent(self.comp_p) != None:
-            icalcomponent_free(self.comp_p)
+        if self.comp_p != None and \
+           icalcomponent_get_parent(self.comp_p) != None:
 
+            for k in self.cached_props.keys():
+                del self.cached_props[k]
+            
+            icalcomponent_free(self.comp_p)
             self.comp_p = None
 
     def _parseComponentString(self, comp_str):
@@ -922,20 +940,26 @@ class Component:
             d_string = icallangbind_property_eval_string(p,":")
             d = eval(d_string)
 
-            d['ref'] = p
+            if self.cached_props.has_key(p):
+                prop = self.cached_props[p]
 
-            if d['value_type'] == 'DATE-TIME' or d['value_type'] == 'DATE':
-                prop = Time(d)
-            elif d['value_type'] == 'PERIOD':
-                prop = Period(d)
-            elif d['value_type'] == 'DURATION':
-                prop = Duration(d)
-            elif d['name'] == 'ATTACH':
-                prop = Attach(d)
-            elif d['name'] == 'ATTENDEE':
-                prop = Attendee(d)
             else:
-                prop = Property(d)
+                d['ref'] = p
+                
+                if d['value_type'] == 'DATE-TIME' or d['value_type'] == 'DATE':
+                    prop = Time(d)
+                elif d['value_type'] == 'PERIOD':
+                    prop = Period(d)
+                elif d['value_type'] == 'DURATION':
+                    prop = Duration(d)
+                elif d['name'] == 'ATTACH':
+                    prop = Attach(d)
+                elif d['name'] == 'ATTENDEE':
+                    prop = Attendee(d)
+                else:
+                    prop = Property(d)
+
+                self.cached_props[p] = prop
 
             props.append(prop)
 
@@ -981,7 +1005,13 @@ class Component:
             raise "Property is already a child of another component"
 
 
-    def removeProperty(self,property):
+    def removeProperty(self,prop):
+
+        if prop.ref() and self.cached_props.kas_key(prop.ref()):
+            del self.cached_props[prop.ref]
+        
+        # More to Come...
+
         pass
 
     def removeProperties(self, type):
@@ -1008,7 +1038,7 @@ class Component:
         return icalcomponent_as_ical_string(self.comp_p)
 
 
-def test_component():
+def test_component1():
 
     print "------------------- Test Component ----------------------"
 
@@ -1038,11 +1068,13 @@ END:VEVENT"""
     print dtstart
     
     print "\n Orig hour: ", dtstart.hour()
+    assert(dtstart.hour() == 12)
 
     dtstart.hour(dtstart.hour() + 5)
 
     print "\n New hour: ", dtstart.hour()
-    
+    assert(dtstart.hour() == 17)
+
     attendee = c.properties('ATTENDEE')[0]
     
     print attendee
@@ -1055,9 +1087,34 @@ END:VEVENT"""
 
     print c
 
+    dtstart1 = c.properties('DTSTART')[0]
+    dtstart2 = c.properties('DTSTART')[0]
+
+    assert(dtstart1 is dtstart2)
     
+    assert(dtstart1 == dtstart2)
 
+def test_component():
 
+    print "______________________________ test destructor _________________"
+
+    comp_str = """
+BEGIN:VEVENT
+ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com
+COMMENT: When in the course of writting comments and nonsense text\, it 
+ becomes necessary to insert a newline
+DTSTART:19972512T120000
+DTSTART:19970101T120000Z
+DTSTART:19970101
+DURATION:P3DT4H25M
+FREEBUSY:19970101T120000/19970101T120000
+FREEBUSY:19970101T120000/PT3H
+FREEBUSY:19970101T120000/PT3H
+END:VEVENT"""
+
+    c = Component(comp_str);
+    
+    dtstart = c.properties('DTSTART')
 
 def NewComponent(comp):
     "Converts a string or C icalcomponent into the right component object."
