@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.49 2002-10-31 15:26:47 acampi Exp $
+  $Id: icaltime.c,v 1.50 2002-10-31 15:27:36 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -184,8 +184,7 @@ icaltime_from_timet_with_zone(const time_t tm, const int is_date,
     gmtime_r(&tm, &t);
 #else
     {
-	struct tm *t_ptr;
-	t_ptr = gmtime(&tm);
+	struct tm *t_ptr = gmtime(&tm);
 	t = *t_ptr;
     }
 #endif
