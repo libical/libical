@@ -1,0 +1,50 @@
+netical_wrap.c
+
+[ Module : Net__ICal__Libical, Package : Net::ICal::Libical ]
+
+
+icalparser_parse_string(str);
+        [ returns icalcomponent * ]
+
+icalcomponent_as_ical_string(component);
+        [ returns char * ]
+
+icalcomponent_free(component);
+        [ returns void  ]
+
+icalcomponent_count_errors(component);
+        [ returns int  ]
+
+icalcomponent_strip_errors(component);
+        [ returns void  ]
+
+icalcomponent_convert_errors(component);
+        [ returns void  ]
+
+icalrestriction_check(comp);
+        [ returns int  ]
+
+icalrecur_expand_recurrence(rule,start,count,array);
+        [ returns int  ]
+
+new_array(size);
+        [ returns int * ]
+
+free_array(array);
+        [ returns void  ]
+
+access_array(array,index);
+        [ returns int  ]
+
+icalperl_get_property(c,n,prop);
+        [ returns icalproperty * ]
+
+icalperl_get_property_val(p);
+        [ returns char * ]
+
+icalperl_get_parameter(p,parameter);
+        [ returns char * ]
+
+icalperl_get_component(c,comp);
+        [ returns icalcomponent * ]
+
