@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.20 2001-12-12 01:25:54 ebusboom Exp $
+  $Id: icalrecur.c,v 1.21 2001-12-12 06:49:33 ebusboom Exp $
   $Locker:  $
     
 
@@ -1409,6 +1409,9 @@ int next_weekday_by_week(struct icalrecur_iterator_impl* impl)
 
 }
 
+/* Returns the day of the month for the current month of t that is the
+   pos'th instance of the day-of-week dow */
+
 int nth_weekday(short dow, short pos, struct icaltimetype t){
 
     short days_in_month = icaltime_days_in_month(t.month,t.year);
@@ -1457,6 +1460,23 @@ int nth_weekday(short dow, short pos, struct icaltimetype t){
     return wd;
 }
 
+int is_day_in_byday(struct icalrecur_iterator_impl* impl,struct icaltimetype tt){
+
+    int idx; 
+
+    for(idx = 0; BYDAYPTR[idx] != ICAL_RECURRENCE_ARRAY_MAX; idx++){
+        short dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[idx]);  
+        short pos =  icalrecurrencetype_day_position(BYDAYPTR[idx]);  
+        short this_dow = icaltime_day_of_week(tt);
+        
+        if( (pos == 0 &&  dow == this_dow ) || /* Just a dow, like "TU" or "FR" */
+            (nth_weekday(dow,pos,tt) == tt.day)){ /*pos+wod: "3FR" or -1TU" */
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 int next_month(struct icalrecur_iterator_impl* impl)
 {
@@ -1474,12 +1494,15 @@ int next_month(struct icalrecur_iterator_impl* impl)
         return data_valid; /* Signal that the data is valid */
     }
     
-    
     /* Now iterate through the occurrences within a month -- by days,
        weeks or weekdays.  */
+
+   /* 
+    * Case 1: 
+    * Rules Like: FREQ=MONTHLY;INTERVAL=1;BYDAY=FR;BYMONTHDAY=13 
+    */
     
     if(has_by_data(impl,BY_DAY) && has_by_data(impl,BY_MONTH_DAY)){
-      /* Cases like: FREQ=MONTHLY;INTERVAL=1;BYDAY=FR;BYMONTHDAY=13 */
       short day, idx,j;
       short days_in_month = icaltime_days_in_month(impl->last.month,
                                                    impl->last.year);
@@ -1517,50 +1540,56 @@ int next_month(struct icalrecur_iterator_impl* impl)
           data_valid = 0; /* signal that impl->last is invalid */
       }
 
-      
+    
+   /* 
+    * Case 2: 
+    * Rules Like: FREQ=MONTHLY;INTERVAL=1;BYDAY=FR 
+    */
+  
   }  else if(has_by_data(impl,BY_DAY)){
-      /* Cases like: FREQ=MONTHLY;INTERVAL=1;BYDAY=FR */
       /* For this case, the weekdays are relative to the
          month. BYDAY=FR -> First Friday in month, etc. */
 
-      short day, idx;
+      /* This code iterates through the remaining days in the month
+         and checks if each day is listed in the BY_DAY array. This
+         seems very inneficient, but I think it is the simplest way to
+         account for both BYDAY=1FR (First friday in month) and
+         BYDAY=FR ( every friday in month ) */
+
+      short day;
       short days_in_month = icaltime_days_in_month(impl->last.month,
                                                    impl->last.year);
-
       assert( BYDAYPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
 
-      /* Iterate through the remaining days in the month and check if
-         each day is listed in the BY_DAY array. This seems very
-         inneficient, but I think it is the simplest way to account
-         for both BYDAY=1FR (First friday in month) and BYDAY=FR (
-         every friday in month ) */
-
       for(day = impl->last.day+1; day <= days_in_month; day++){
-          for(idx = 0; BYDAYPTR[idx] != ICAL_RECURRENCE_ARRAY_MAX; idx++){
-              short dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[idx]);  
-              short pos =  icalrecurrencetype_day_position(BYDAYPTR[idx]);  
-              short this_dow;
-              
-              impl->last.day = day;
-              this_dow = icaltime_day_of_week(impl->last);
-              
-              if( (pos == 0 &&  dow == this_dow ) || 
-                  (nth_weekday(dow,pos,impl->last) == day)){
-                  goto DEND;
-              }
+          impl->last.day = day;
+          if(is_day_in_byday(impl,impl->last)){
+              data_valid = 1;
+              break;
           }
       }
-
-  DEND:
 
       if ( day > days_in_month){
           impl->last.day = 1;
           increment_month(impl);
-          data_valid = 0; /* signal that impl->last is invalid */
+
+          /* Did moving to the next month put us on a valid date? if
+             so, note that the new data is valid, if, not, mark it
+             invalid */
+
+          if(is_day_in_byday(impl,impl->last)){
+              data_valid = 1;
+          } else {
+              data_valid = 0; /* signal that impl->last is invalid */
+          }
       }
 
+     /* 
+       * Case 3
+       * Rules Like: FREQ=MONTHLY;COUNT=10;BYMONTHDAY=-3  
+       */
+
   } else if (has_by_data(impl,BY_MONTH_DAY)) {
-      /* Cases like: FREQ=MONTHLY;COUNT=10;BYMONTHDAY=-3  */
       short day;
 
       assert( BYMDPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1587,7 +1616,7 @@ int next_month(struct icalrecur_iterator_impl* impl)
       increment_month(impl);
   }
 
-  return data_valid; /* Signal that the data is valid */
+  return data_valid;
 
 }
 
