@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.32 2002-07-18 13:37:13 acampi Exp $
+  $Id: icalparser.c,v 1.33 2002-07-23 00:37:31 lindner Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -38,9 +38,7 @@
 #endif
 
 
-#include "icalparser.h"
 #include "pvl.h"
-#include "icalmemory.h"
 #include "icalerror.h"
 #include "icalvalue.h"
 #include "icalderivedparameter.h"
@@ -51,6 +49,9 @@
 #include <string.h> /* For strncpy & size_t */
 #include <stdio.h> /* For FILE and fgets and sprintf */
 #include <stdlib.h> /* for free */
+
+#include "icalmemory.h"
+#include "icalparser.h"
 
 /*
  * This is a temporary HACK to support FreeBSD. We should really

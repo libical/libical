@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.36 2002-07-11 18:23:13 lindner Exp $
+  $Id: icalrecur.c,v 1.37 2002-07-23 00:37:32 lindner Exp $
   $Locker:  $
     
 
@@ -866,19 +866,24 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
        BY_* array is empty */
 
 
-    setup_defaults(impl,BY_SECOND,ICAL_SECONDLY_RECURRENCE,impl->dtstart.second,
+    setup_defaults(impl,BY_SECOND,ICAL_SECONDLY_RECURRENCE,
+		   (short)impl->dtstart.second,
 		   &(impl->last.second));
 
-    setup_defaults(impl,BY_MINUTE,ICAL_MINUTELY_RECURRENCE,impl->dtstart.minute,
+    setup_defaults(impl,BY_MINUTE,ICAL_MINUTELY_RECURRENCE,
+		   (short) impl->dtstart.minute,
 		   &(impl->last.minute));
 
-    setup_defaults(impl,BY_HOUR,ICAL_HOURLY_RECURRENCE,impl->dtstart.hour,
+    setup_defaults(impl,BY_HOUR,ICAL_HOURLY_RECURRENCE,
+		   (short) impl->dtstart.hour,
 		   &(impl->last.hour));
 
-    setup_defaults(impl,BY_MONTH_DAY,ICAL_DAILY_RECURRENCE,impl->dtstart.day,
+    setup_defaults(impl,BY_MONTH_DAY,ICAL_DAILY_RECURRENCE,
+		   (short) impl->dtstart.day,
 		   &(impl->last.day));
 
-    setup_defaults(impl,BY_MONTH,ICAL_MONTHLY_RECURRENCE,impl->dtstart.month,
+    setup_defaults(impl,BY_MONTH,ICAL_MONTHLY_RECURRENCE,
+		   (short) impl->dtstart.month,
 		   &(impl->last.month));
 
 
@@ -922,7 +927,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
         struct icaltimetype next;
 
 	for (;;) {
-            expand_year_days(impl,impl->last.year);
+            expand_year_days(impl, (short)impl->last.year);
 	    if (impl->days[0] != ICAL_RECURRENCE_ARRAY_MAX)
 	        break; /* break when no days are expanded */
 	    increment_year(impl,impl->rule.interval);
@@ -949,7 +954,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	
 	short poscount = 0;
 	days_in_month = 
-            icaltime_days_in_month(impl->last.month, impl->last.year); 
+            icaltime_days_in_month((short)impl->last.month, (short)impl->last.year); 
 	
         if(pos >= 0){
             /* Count up from the first day pf the month to find the
@@ -1065,7 +1070,7 @@ static void increment_monthday(icalrecur_iterator* impl, int inc)
     for(i=0; i<inc; i++){
 	
 	short days_in_month = 
-	    icaltime_days_in_month(impl->last.month,impl->last.year);
+	    icaltime_days_in_month((short)impl->last.month, (short)impl->last.year);
 
 	impl->last.day++;
 	
@@ -1448,8 +1453,8 @@ static int next_month(icalrecur_iterator* impl)
     
     if(has_by_data(impl,BY_DAY) && has_by_data(impl,BY_MONTH_DAY)){
       short day, idx,j;
-      short days_in_month = icaltime_days_in_month(impl->last.month,
-                                                   impl->last.year);
+      short days_in_month = icaltime_days_in_month((short)impl->last.month,
+                                                   (short)impl->last.year);
       /* Iterate through the remaining days in the month and check if
          each day is listed in the BY_DAY array and in the BY_MONTHDAY
          array. This seems very inneficient, but I think it is the
@@ -1501,8 +1506,8 @@ static int next_month(icalrecur_iterator* impl)
          BYDAY=FR ( every friday in month ) */
 
       short day;
-      short days_in_month = icaltime_days_in_month(impl->last.month,
-                                                   impl->last.year);
+      short days_in_month = icaltime_days_in_month((short)impl->last.month,
+                                                   (short)impl->last.year);
       assert( BYDAYPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
 
       for(day = impl->last.day+1; day <= days_in_month; day++){
@@ -1550,7 +1555,7 @@ static int next_month(icalrecur_iterator* impl)
       day = BYMDPTR[BYMDIDX];
       
       if (day < 0) {
-          day = icaltime_days_in_month(impl->last.month,impl->last.year)+
+          day = icaltime_days_in_month((short)impl->last.month, (short)impl->last.year)+
               day + 1;
       }
       
@@ -2147,14 +2152,14 @@ static int check_contracting_rules(icalrecur_iterator* impl)
     int year_day=0;
 
     if (
-	check_contract_restriction(impl,BY_SECOND,impl->last.second) &&
-	check_contract_restriction(impl,BY_MINUTE,impl->last.minute) &&
-	check_contract_restriction(impl,BY_HOUR,impl->last.hour) &&
-	check_contract_restriction(impl,BY_DAY,day_of_week) &&
-	check_contract_restriction(impl,BY_WEEK_NO,week_no) &&
-	check_contract_restriction(impl,BY_MONTH_DAY,impl->last.day) &&
-	check_contract_restriction(impl,BY_MONTH,impl->last.month) &&
-	check_contract_restriction(impl,BY_YEAR_DAY,year_day) )
+	check_contract_restriction(impl,BY_SECOND, (short)impl->last.second) &&
+	check_contract_restriction(impl,BY_MINUTE, (short)impl->last.minute) &&
+	check_contract_restriction(impl,BY_HOUR, (short)impl->last.hour) &&
+	check_contract_restriction(impl,BY_DAY, (short)day_of_week) &&
+	check_contract_restriction(impl,BY_WEEK_NO, (short)week_no) &&
+	check_contract_restriction(impl,BY_MONTH_DAY, (short)impl->last.day) &&
+	check_contract_restriction(impl,BY_MONTH, (short)impl->last.month) &&
+	check_contract_restriction(impl,BY_YEAR_DAY, (short)year_day) )
     {
 
 	return 1;

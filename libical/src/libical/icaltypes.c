@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.10 2002-07-04 10:28:19 acampi Exp $
+  $Id: icaltypes.c,v 1.11 2002-07-23 00:37:32 lindner Exp $
   $Locker:  $
     
 
@@ -109,7 +109,7 @@ struct icalreqstattype icalreqstattype_from_string(const char* str)
 {
   const char *p1,*p2;
   struct icalreqstattype stat;
-  int major, minor;
+  short major, minor;
 
   icalerror_check_arg((str != 0),"str");
 
@@ -119,7 +119,7 @@ struct icalreqstattype icalreqstattype_from_string(const char* str)
 
   /* Get the status numbers */
 
-  sscanf(str, "%d.%d",&major, &minor);
+  sscanf(str, "%hd.%hd",&major, &minor);
 
   if (major <= 0 || minor < 0){
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);

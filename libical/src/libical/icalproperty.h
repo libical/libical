@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.14 2002-07-18 12:31:27 acampi Exp $
+  $Id: icalproperty.h,v 1.15 2002-07-23 00:37:32 lindner Exp $
   $Locker:  $
 
   
@@ -31,7 +31,7 @@
 #define ICALPROPERTY_H
 
 #include <time.h>
-
+#include <stdarg.h>  /* for va_... */
 
 #include "icalderivedparameter.h"
 
@@ -56,6 +56,7 @@ void  icalproperty_free(icalproperty* prop);
 icalproperty_kind icalproperty_isa(icalproperty* property);
 int icalproperty_isa_property(void* property);
 
+void icalproperty_add_parameters(struct icalproperty_impl *prop,va_list args);
 void icalproperty_add_parameter(icalproperty* prop,icalparameter* parameter);
 void icalproperty_set_parameter(icalproperty* prop,icalparameter* parameter);
 void icalproperty_set_parameter_from_string(icalproperty* prop,
