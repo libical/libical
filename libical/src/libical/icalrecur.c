@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.59 2003-02-17 17:04:21 acampi Exp $
+  $Id: icalrecur.c,v 1.60 2004-05-10 22:47:28 acampi Exp $
   $Locker:  $
     
 
@@ -767,7 +767,7 @@ static void setup_defaults(icalrecur_iterator* impl,
 	impl->by_ptrs[byrule][0] = (short)deftime;
     }
 
-    /* Initialize the first occurence */
+    /* Initialize the first occurrence */
     if( freq != req && expand_map[freq].map[byrule] != CONTRACT){
 	*timepart = impl->by_ptrs[byrule][0];
     }
@@ -906,7 +906,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     /* Rewrite some of the rules and set up defaults to make later
        processing easier. Primarily, t involves copying an element
-       from the start time into the coresponding BY_* array when the
+       from the start time into the corresponding BY_* array when the
        BY_* array is empty */
 
 
