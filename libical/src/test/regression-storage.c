@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression-storage.c,v 1.2 2002-07-16 10:04:08 acampi Exp $
+  $Id: regression-storage.c,v 1.3 2002-08-07 17:19:55 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -155,6 +155,8 @@ void test_fileset_extended(void)
     ok("Parsing str2", (c!=0));
     assert(c != 0);
 
+    icalset_free(cout);
+
     /* Add data to the file */
 
     for(month = 1; month < 10; month++){
@@ -238,11 +240,11 @@ void test_fileset_extended(void)
     while (itr != 0) {
         icalsetiter_next(&iter);
         icalfileset_remove_component(cout, itr);
+	icalcomponent_free(itr);
         itr = icalsetiter_deref(&iter);
     }
     
     icalset_free(cout);
-
 
     /* Print them out again */
 
@@ -271,6 +273,7 @@ void test_fileset_extended(void)
     }
 
     icalset_free(cout);
+    icalcomponent_free(c);
 }
 
 
@@ -796,5 +799,6 @@ void test_dirset_extended(void)
 	
 
     icalset_free(s);
+    icalset_free(cluster);
 }
 

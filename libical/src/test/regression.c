@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.58 2002-07-21 09:52:08 lindner Exp $
+  $Id: regression.c,v 1.59 2002-08-07 17:24:50 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -760,6 +760,7 @@ void test_dirset()
     }
 
     icalset_free(s);
+    icalset_free(cluster);
 }
 
 
@@ -1074,6 +1075,8 @@ void icalrecurrencetype_test()
     } while( ! icaltime_is_null_time(next));
 
     icalvalue_free(v);
+
+    icalrecur_iterator_free(itr);
  
 }
 
@@ -1913,6 +1916,8 @@ void test_overlaps()
     cset =  icalclassify_find_overlaps(set,c);
     ok("TODO find overlaps 1", cset != NULL);
     if (VERBOSE && cset) printf("%s\n",icalcomponent_as_ical_string(cset));
+
+    icalset_free(set);
 }
 
 
@@ -2853,7 +2858,7 @@ void test_fileset()
 
     icalset_free(fs);
 
-	icalgauge_free(g);
+	/*icalgauge_free(g);*/
     
 }
 
@@ -3497,6 +3502,8 @@ void test_attach()
     ok("parse simple attachment", (c != NULL));
 
     if (VERBOSE) printf("%s",icalcomponent_as_ical_string(c));
+
+    if (c) icalcomponent_free(c);
 }
 
 
@@ -3516,6 +3523,8 @@ void test_vcal(void)
   
   if (VERBOSE && comp)
     printf("%s\n",icalcomponent_as_ical_string(comp));
+
+  if (comp) icalcomponent_free(comp);
     
 }
 
