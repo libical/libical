@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalderivedvalue.c.in,v 1.7 2002-05-28 14:08:00 acampi Exp $
+  $Id: icalderivedvalue.c.in,v 1.8 2002-06-03 17:01:07 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -46,10 +46,6 @@
 #include <time.h> /* for mktime */
 #include <stdlib.h> /* for atoi and atof */
 #include <limits.h> /* for SHRT_MAX */         
-
-
-
-#define TMP_BUF_SIZE 1024
 
 struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind);
 

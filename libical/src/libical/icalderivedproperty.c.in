@@ -4,7 +4,7 @@
   FILE: icalderivedproperty.c
   CREATOR: eric 15 Feb 2001
   
-  $Id: icalderivedproperty.c.in,v 1.7 2002-05-28 14:08:00 acampi Exp $
+  $Id: icalderivedproperty.c.in,v 1.8 2002-06-03 17:00:06 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -43,8 +43,6 @@
 #include <stdio.h> /* for printf */
 #include <stdarg.h> /* for va_list, va_start, etc. */
                                                
-#define TMP_BUF_SIZE 1024
-
 struct icalproperty_impl*
 icalproperty_new_impl (icalproperty_kind kind);
 void icalproperty_add_parameters(struct icalproperty_impl *prop,va_list args);
