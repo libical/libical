@@ -1,98 +1,169 @@
 #!/usr/bin/env python 
+
+# $Id: Libical.py,v 1.5 2001-02-23 05:23:47 plewis Exp $
+
 from LibicalWrap import *
+from types import *
+from string import upper, join
+import base64
 
 class Property:
-    """ Represent any iCalendar Property """
+    """ Represent any iCalendar Property.
 
-    def __init__(self,dict):
-        self.dict = dict
+    Usage:
+    Property(dict)
+
+    Where:
+    dict is a dictionary with keys of 'name', 'value_type', and 'value'.
+    In addition, parameter:parameter value entries may be included.
+    """
+
+    def __init__(self, dict):
+        # TEMP_NOTE: I have split the singular dict into two separate ones.
+        
+        # Object descriptive & value data stored in self.desc
+        # Properties are stored in self.parameters
+        self.desc = {}
+        self.parameters = {}
+        desc_keys = ('name', 'value', 'value_type', 'pid')
+        for key in dict.keys():
+            if key in desc_keys:
+                self.desc[key]=dict[key]
+            else:
+                self[key]=dict[key]
 
     def name(self,v=None):
         """ Return the name of the property """
         if(v != None):
-            self.dict['name'] = v
+            self.desc['name'] = v
 
-        return self.dict['name']
+        return self.desc['name']
 
     def value_type(self,v=None):
         """ Return the RFC2445 name of the value """
         if(v != None):
-            self.dict['value_type'] = v
+            self.desc['value_type'] = v
 
-        return self.dict['value_type']
+        return self.desc['value_type']
 
     def value(self,v=None):
         """ Return the RFC2445 representation of the value """
         if(v != None):
-            self.dict['value'] = v
+            self.desc['value'] = v
 
-        return self.dict['value']
+        return self.desc['value']
 
+    def getAllParameters(self):
+        """Returns a list containing all the set parameters (not values).
+
+        Only paramters whose values are not None are returned (i.e. if
+        a value is None, the parameter value is assumed to be unset).
+        """
+        return filter(lambda p, s=self: s[p] != None, self.parameters.keys())
 
     def update_value():
         """
         A virtual method that creates the dict entry value from another
         representation of the property
-        """     
+        """
         pass
 
     def asIcalString(self):
         " "
-        str = self.name()
-
-        for k in self.dict.keys():
-            v = self.dict[k]
-            str = str + ";" + k + "=" + v
-
-        str = str + ":" + self.value()
-
-        return str
+        return str(self)
 
     def __getitem__(self,key):
         """ Return property values by name """
-        if self.dict.has_key(key):
-            return self.dict[key]
+        key = upper(key)
+        if self.parameters.has_key(key):
+            return self.parameters[key]
         else:
             return None
 
     def __setitem__(self,key,value):
         """ Set Property Values by Name """
-        self.dict[key] = value
+        key = upper(key)
+        self.parameters[key] = value
 
-        return self.dict[key]
+        return self.parameters[key]
 
+    def __str__(self):
+        outS = "%s" % self.name()              # Add the name
+        for param in self.getAllParameters():  # Add parameters (if any)
+            outS = "%s;%s=" % (outS, param )
+            
+            paramValues = self[param]
+            # Check for mutiple parameter values
+            if isinstance(paramValues, ListType) or \
+               isinstance(paramValues, TupleType):
+                outS="%s%s" % (outS, str(paramValues[0]))
+                for val in paramValues[1:]:       # add comma separated values
+                    outS="%s,%s" % (outS, str(val))
+            # Handle single parameter values
+            else:        
+                outS = "%s%s" % (outS, str(paramValues))
+                
+        outS = "%s:%s" % (outS, str(self.value())) # Add Property value
+
+        # "Fold" output (Shouldn't happen at Property level, but at top
+        # component level).
+##         if len(outS) > 75:
+##             outL = [outS[0:75]]             # Chop outS into 75 char chunks
+##             for chop in range(75, len(outS), 74): #74 chars because of space
+##                 outL.append(outS[chop:chop+74])
+##             outS = join(outL, "\r\n ")         
+        return "%s%s" % (outS, "\r\n")            # insert final CRLF
 
 class Time(Property):
     """ Represent iCalendar DATE, TIME and DATE-TIME """
-    def __init__(self,dict):
+    def __init__(self, value):
         """ 
         Create a new Time from a string or unmber of seconds past the 
         POSIX epoch
 
-        Time(str="19970325T123000Z")  Construct from an iCalendar string
-        Time(timet=8349873494)        Construct from seconds past POSIX epoch
+        Time("19970325T123000Z")  Construct from an iCalendar string
+        Time(8349873494)          Construct from seconds past POSIX epoch
         
         """
         
-        Property.__init__(self,dict)
+        Property.__init__(self, {})
 
-        if(dict != None):
-            Property.__init__(self,dict)
-            self.tt = icaltime_from_string(self.dict['value'])
-        elif(str != None):
-            self.tt = icaltime_from_string(str)
-        elif(seconds != None): 
-            self.tt = icaltime_from_timet(seconds)
+        if isinstance(value, DictType):
+            Property.__init__(self, value)
+            self.tt = icaltime_from_string(self.desc['value'])
+        elif isinstance(value, StringType):
+            self.tt = icaltime_from_string(value)
+        elif isinstance(value, IntType) or   \
+             isinstance(value, FloatType): 
+            self.tt = icaltime_from_timet(int(value))
         else:
             self.tt = icaltime_null_time()
 
-        self.update_value
+        self.update_value()
 
     def update_value(self):
-        self.value(icaltime_as_ical_string(self.tt))
+        """Updates value and value_type based on the (internal) self.tt."""
+        # Is this an internal function only?
+        # Should it be _update_value?
+        self.desc['value'] = icaltime_as_ical_string(self.tt)
+
+        # Set value_type appropriately
+        # Ok, this may be a little quirky to handle this here, but update_value
+        # is called every time the value is changed, and the behavior is
+        # documented.
+        # The alternative is to declare an update_value_type()
+        # function, and make sure that is called every time the value is
+        # changed.
+        t = self.value()
+        if len(t) <= 7:
+            self.value_type('TIME')
+        elif len(t) == 8:
+            self.value_type('DATE')
+        else:
+            self.value_type('DATE-TIME')
 
     def utc_seconds(self,v=None):
-        """ Return or set time in  seconds past POSIX epoch"""
+        """ Return or set time in seconds past POSIX epoch"""
         if (v!=None):
             self.tt = icaltime_from_timet(v,0)
             self.update_value()
@@ -112,13 +183,12 @@ class Time(Property):
             self.update_value()
         return icaltimetype_is_date_get(self.tt)
 
-
     def timezone(self,v=None):
         """ Return or set the timezone string for this time """
         if (v != None):
-            self.dict['TZID'] = v
-            self.update_value()
-        return  self.dict['TZID']
+            self['TZID'] = v
+            self.update_value()  #Is this necessary?
+        return  self['TZID']
 
     def second(self,v=None):
         """ Get or set the seconds component of this time """
@@ -163,6 +233,15 @@ class Time(Property):
 
         return icaltimetype_year_get(self.tt)
 
+    def value(self, v=None):
+        """Get or set the time using a RFC2445 time string."""
+        # We need to ensure self.tt always matches value, because many
+        # methods use self.tt
+        if v!= None:
+            self.tt = icaltime_from_string(v)
+            self.update_value()
+        return self.desc['value']
+
 
 class Duration(Property):
     """ 
@@ -171,37 +250,56 @@ class Duration(Property):
 
     """
 
-    def __init__(self,dict=None,str=None,seconds=None):
+    def __init__(self, value):
         """
         Create a new duration from an RFC2445 string or number of seconds.
         Construct the duration from an iCalendar string or a number of seconds.
 
-        Duration(str="P3DT2H34M45S")   Construct from an iCalendar string
-        Duration(seconds=3660)             Construct from seconds 
+        Duration("P3DT2H34M45S")   Construct from an iCalendar string
+        Duration(3660)             Construct from seconds 
         """ 
+
+        Property.__init__(self, {})
         
-        if(dict != None):
-            Property.__init__(self,dict)
-            self.dur = icaldurationtype_from_string(self.dict['value'])
-        elif(str != None):
-            self.dur = icaldurationtype_from_string(str)
-        elif(seconds != None): 
-            self.dur = icaldurationtype_from_int(seconds)
+        if isinstance(value, DictType):
+            Property.__init__(self, value)
+            self.dur = icaldurationtype_from_string(self.desc['value'])
+        elif isinstance(value, StringType):
+            self.dur = icaldurationtype_from_string(value)
+        elif isinstance(value, IntType): 
+            self.dur = icaldurationtype_from_int(value)
         else:
             self.dur = icaldurationtype_null_duration()
 
+        Property.name(self, 'DURATION')
+        Property.value_type(self, 'DURATION')
         self.update_value()
 
-
     def update_value(self):
-        self.value(icaldurationtype_as_ical_string(self.dur))
+        self.desc['value'] = icaldurationtype_as_ical_string(self.dur)
 
     def seconds(self,v=None):
         """Return or set duration in seconds"""
         if(v != None):
             self.dur = icaldurationtype_from_int(v);
             self.dict['value'] = icaltimedurationtype_as_ical_string(self.dur)
-        return icaldurationtype_as_int
+        return icaldurationtype_as_int(self.dur)
+
+    def value(self, v=None):
+        "Return or set duration using iCalendar duration string."
+        if v!=None:
+            self.dur = icaldurationtype_from_string(v)
+            self.update_value()
+            
+        return self.desc['value']
+
+    def name(self):
+        "Return the name of the property."
+        return Property.name(self)
+
+    def value_type(self):
+        "Return the value type of the property."
+        return Property.value_type(self)
 
 
 class Period(Property):
@@ -244,6 +342,192 @@ class Period(Property):
         return 
 
 
+class Attendee(Property):
+    """Class for Attendee properties.
+
+    Usage:
+    Attendee([dict])
+
+    Where Attendee is an optional dictionary with keys of
+    'value': CAL-ADDRESS string and any parameter: parameter_value entries.
+    'name' and 'value_type' entries in dict are ignored and automatically set
+    with the appropriate values.
+    """
+
+    def __init__(self, dict={}):
+        param_t = ('CUTYPE', 'MEMBER', 'ROLE', 'PARTSTAT', 'RSVP',
+                   'DELEGATED-TO', 'DELEGATED-FROM', 'SENT-BY', 'CN', 'DIR',
+                   'LANGUAGE' )
+        for param in param_t:
+            self[param] = None
+        Property.__init__(self, dict)
+        Property.name(self, 'ATTENDEE')
+        Property.value_type(self, 'CAL-ADDRESS')
+        
+    def _doParam(self, parameter, v):
+        if v!=None:
+            self[parameter]=v
+        return self[parameter]
+
+    def name(self):
+        "Return the name of the property."
+        return self.desc['name']
+
+    def value_type(self):
+        "Return the value type of the property."
+        return self.desc['value_type']
+
+    # Methods for accessing enumerated parameters
+    def cn(self, v=None): self._doParam('CN', v)
+    def cutype(self, v=None): self._doParam('CUTYPE', v)
+    def dir(self, v=None): self._doParam('DIR', v)
+    def delegated_from(self, v=None): self._doParam('DELEGATED-FROM', v)
+    def delegated_to(self, v=None): self._doParam('DELEGATED-TO', v)
+    def language(self, v=None): self._doParam('LANGUAGE', v)
+    def member(self, v=None): self._doParam('MEMBER', v)
+    def partstat(self, v=None): self._doParam('PARTSTAT', v)
+    def role(self, v=None): self._doParam('ROLE', v)
+    def rsvp(self, v=None): self._doParam('RSVP', v)
+    def sent_by(self, v=None): self._doParam('SENT-BY', v)
+
+
+class Organizer(Property):
+    """Class for Organizer property.
+
+    Usage:
+    Organizer([dict])
+
+    Where dict is an optional dictionary with keys of 'value': CAL-ADDRESS
+    string and any parameter: parameter_value entries.  'name' and 'value_type'
+    entries in dict are ignored and automatically set with the appropriate
+    values.
+    """
+
+    def __init__(self, dict={}):
+        param_t = ( 'CN', 'DIR', 'SENT-BY', 'LANGUAGE' )
+        for param in param_t:
+            self[param] = None
+        Property.__init__(self, dict)
+        Property.name(self, 'ORGANIZER')
+        Property.value_type(self, 'CAL-ADDRESS')
+
+    def _doParam(self, parameter, v):
+        if v!=None:
+            self[parameter]=v
+        return self[parameter]
+
+    def name(self):
+        "Return the name of the property."
+        return Property.name(self)
+
+    def value_type(self):
+        "Return the value type of the property."
+        return self.desc['value_type']
+
+    # Methods for accessing enumerated parameters
+    def cn(self, v=None): self._doParam('CN', v)
+    def dir(self, v=None): self._doParam('DIR', v)
+    def language(self, v=None): self._doParam('LANGUAGE', v)
+    def sent_by(self, v=None): self._doParam('SENT-BY', v)
+
+class Recurrence_Id(Time):
+    """Class for RECURRENCE-ID property.
+
+    Usage:
+    Reccurence_Id(dict)         # A normal property dictionary
+    Reccurence_Id("19960401")   # An iCalendar string
+    Reccurence_Id(8349873494)   # Seconds from epoch
+
+    If the 'dict' constructor is used, 'name' and 'value_type'
+    entries in dict are ignored and automatically set with the appropriate
+    values.
+    """
+
+    def __init__(self, dict={}):
+        Time.__init__(self, dict)
+        Property.name(self, 'RECURRENCE-ID')
+
+    def name(self):
+        return Property.name(self)
+
+    def _doParam(self, parameter, v):
+        if v!=None:
+            self[parameter]=v
+        return self[parameter]
+
+    # Enumerated parameters
+    def value_parameter(self, v=None):
+        """Sets or gets the VALUE parameter value.
+
+        The value passed should be either "DATE-TIME" or "DATE".  Setting this
+        parameter has no impact on the property's value_type.  Doing something
+        like:
+
+        rid=Recurrence_Id("19960401")    # Sets value & makes value_type="DATE"
+        rid.value_parameter("DATE-TIME") # Sets the parameter VALUE=DATE-TIME
+
+        Would be allowed (even though it is wrong), so pay attention.
+        Verifying the component will reveal the error.
+        """
+        if v!=None and v!="DATE" and v!="DATE-TIME":
+            raise ValueError, "%s is an invalid VALUE parameter value" % str(v)
+        self._doParam("VALUE", v)
+
+    def tzid(self, v=None):
+        "Sets or gets the TZID parameter value."
+        self._doParam("TZID", v)
+
+    def range_parameter(self, v=None): # 'range' is a builtin function
+        "Sets or gets the RANGE parameter value."
+        if v!=None and v!="THISANDPRIOR" and v!= "THISANDFUTURE":
+            raise ValueError, "%s is an invalid RANGE parameter value" % str(v)
+        self._doParam("RANGE", v)
+
+class Attach(Property):
+    """A class representing an ATTACH property.
+
+    Usage:
+    Attach(uriString [, parameter_dict])
+    Attach(fileObj [, parameter_dict])
+    """
+
+    def __init__(self, value=None, parameter_dict={}):
+        Property.__init__(self, parameter_dict)
+        Property.name(self, 'ATTACH')
+        self.value(value)
+
+    def value(self, v=None):
+        "Returns or sets the value of the property."
+        if v != None:
+            if isinstance(v, StringType):  # Is a URI
+                self.desc['value']=v
+                Property.value_type(self, 'URI')
+            else:
+                try:
+                    tempStr = v.read()
+                except:
+                    raise TypeError,"%s must be a URL string or file-ish type"\
+                          % str(v)
+                self.desc['value'] = base64.encodestring(tempStr)
+                Property.value_type(self, 'BINARY')
+        else:
+            return self.desc['value']
+
+    def name(self):
+        "Returns the name of the property."
+        return Property.name(self)
+
+    def value_type(self):
+        return Property.value_type(self)
+
+    def fmttype(self, v=None):
+        "Gets or sets the FMTYPE parameter."
+        if v!= None:
+            self['FMTTYPE']=v
+        else:
+            return self['FMTTYPE']
+    
+        
 class Component:
 
     def __init__(self,str):
@@ -266,11 +550,14 @@ class Component:
         props = []
 
         p = icallangbind_get_first_property(self.comp_p,type)
-        while p != None:
+        while p !='NULL':
+            #print "'%s'" % str(p)
             d_string = icallangbind_property_eval_string(p,":")
+            #print "'%s'" % str(d_string)
 
             d = eval(d_string)
 
+            #print d['value_type']
             p = icallangbind_get_next_property(self.comp_p,type)
 
             if d['value_type'] == 'DATE-TIME':
@@ -281,6 +568,7 @@ class Component:
                 props.append(Duration(d))
             else :
                 props.append(Property(d))
+            #print props
 
         return props
 
@@ -295,19 +583,337 @@ class Component:
             # Error, failed to create property
             pass
 
-        
-        
-
-
     def removeProperty(self,property):
         pass
 
+    def removeProperties(self, type):
+        """Remove all properties with the name equal to the argument name.
+
+        Passing "ANY" as the type will remove all Properties.
+        """
+        to_remvoe = self.properties(type)
+        for p in to_remove:
+            self.removeProperty(p)
+        
     def components(self,type='ANY'):        
         props = []
 
 
 
         return props
+
+    
+class Event(Component):
+    "The iCalendar Event object."
+
+    def __init__(self, str=None):
+        
+        ## This whole block may be obsolete if the tight binding in
+        ## Component is removed
+        
+        if str==None:
+            event_kind = icalenum_string_to_component_kind("VEVENT")
+            self.comp_p = icalcomponent_new(event_kind)
+            # TODO - implement generic_free() in LibicalWrap
+            # generic_free(event_kind)
+        else:
+            self.comp_p = icalparser_parse_string(str)
+        
+    def componentType(self):
+        "Returns the type of component for the object."
+        return "VEVENT"
+
+    def clone(self):
+        "Returns a copy of the object."
+        return Event(self.asIcalString())
+
+    def _singularProperty(self, name, value_type, value):
+        """Sets or gets the value of a method which exists once per Component.
+
+        This is a constructor method for properties without a strictly defined
+        object."""
+        
+        currProperties = self.properties(propType)
+        if value==None:
+            if len(currProperties) == 0:
+                return None
+            elif len(currProperties) == 1:
+                return currProperties[0].value()
+            else:
+                raise ValueError, "too many properties of type %s" % propType
+        else:
+            if len(currProperties) == 0:
+                dict = {'name': propType, 'value_type': value_type,
+                        'value': value}
+                self.addProperty(Property(dict))
+            elif len(currProperties) == 1:
+                curProperties[0].value(value)
+            else:
+                raise ValueError, "too many properties of type %s" % propType
+            
+    def method(self, v=None):
+        "Sets or returns the value of the method property."
+        self._singularProperty("METHOD", "TEXT", v)
+
+    def prodid(self, v=None):
+        "Sets or returns the value of the prodid property."
+        self._singularProperty("PRODID", "TEXT", v)
+
+    def calscale(self, v=None):
+        "Sets or returns the value of the calscale property."
+        self._singularProperty("CALSCALE", "TEXT", v)
+
+    def dtstart(self, v=None):
+        """Sets or returns the value of the DTSTART property.
+
+        Usage:
+        dtstart(time_obj)           # Set the value using a Time object
+        dtstart('19970101T123000Z') # Set the value as an iCalendar string
+        dtstart(982362522)          # Set the value using seconds (time_t)
+        dtstart()                   # Return the time as an iCalendar string
+        """
+        if isinstance(v, StringType) or isinstance(v, IntType) or \
+           isinstance(v, FloatType):
+            v = Time(v)
+        if isinstance(v, Time):
+            self.removeProperties("DTSTART")
+            self.addProperty(v)
+        elif v==None:
+            self._singularProperty("DTSTART", "DATE-TIME", v)
+        else:
+            raise TypeError, "%s is an invalid type for DTSTART property" % \
+                  str(type(v))
+
+    def dtend(self, v=None):
+        """Sets or returns the value of the DTEND property.
+
+        Usage:
+        dtend(time_obj)             # Set the value using a Time object
+        dtend('19970101T123000Z')   # Set the value as an iCalendar string
+        dtend(982362522)            # Set the value using seconds (time_t)
+        dtend()                     # Return the time as an iCalendar string
+
+        If the dtend value is being set and duration() has a value, the
+        duration property will be removed.
+        """
+        if isinstance(v, StringType) or isinstance(v, IntType) \
+           or isinstance(v, FloatType):
+            v = Time(v)
+        if isinstance(v, Time):
+            self.removeProperties("DTEND")
+            self.removeProperites("DURATION") # Clear DURATION properties
+            self.addProperty(v)
+        elif v==None:
+            self._singularProperty("DTEND", "DATE-TIME", v)                
+        else:
+            raise TypeError, "%s is an invalid type for DTEND property" % \
+                  str(type(v))
+            
+    def duration(self, v=None):
+        """Sets or returns the value of the duration property.
+
+        Usage:
+        duration(dur_obj)       # Set the value using a Duration object
+        duration("P3DT12H")     # Set value as an iCalendar string
+        duration(3600)          # Set duration using seconds
+        duration()              # Return duration as an iCalendar string
+
+        If the duration value is being set and dtend() has a value, the dtend
+        property will be removed.
+        """
+
+        if isinstance(v, StringType) or isinstance(v, IntType):
+            v = Duration(v)
+        if isinstance(v, Duration):
+            self.removeProperties("DURATION")
+            self.removeProperties("DTEND")   # Clear DTEND properties
+        elif v==None:
+            self._singularProperty("DURATION", "DURATION", v)
+        else:
+            raise TypeError, "%s is an invalid type for duration property" % \
+                  str(type(v))
+
+    def attendees(self, overwrite, *arguments):
+        """Sets attendees or returns a list of Attendee objects.
+
+        Usage:
+        # Set using Attendee objects
+        attendees(overwrite=1, attObj1, attObj2)
+        # Set using a CAL-ADDRESS string
+        attendees(1, 'MAILTO:jdoe@somewhere.com')
+        # Set using a combination of Attendee objects and strings
+        attendees(1, 'MAILTO:jdoe@somewhere.com', attObj1)
+        # Returns a list of Attendee objects
+        attendees()
+
+        When the attendees are being set, the 'overwrite' flag determines if
+        previous attendees in the Event are to be deleted.  If true, values are
+        overwritten, otherwise they remain in place. For example:
+
+        attendees(overwrite=0, attObj1)
+
+        would add the Attendee object attObj1 to the existing attendees instead
+        of overwriting.
+        """
+        if arguments:
+            if overwrite:
+                self.removeProperties('ATTENDEE')
+            for att in arguments:
+                if isinstance(att, StringType):
+                    att = Attendee(att)
+                if isinstance(att, Attendee):
+                    self.addProperty(att)
+                else:
+                    raise TypeError, \
+                          "%s is not a string or Attendee object." % str(att)
+        else:
+            return self.properties('ATTENDEE')
+
+    def organizer(self, v=None):
+        """Sets or gets the value of the ORGANIZER property.
+
+        Usage:
+        organizer(orgObj)              # Set value using an organizer object
+        organizer('MAILTO:jd@not.com') # Set value using a CAL-ADDRESS string
+        organizer()                    # Return a CAL-ADDRESS string
+        """
+        if isinstance(v, StringType):
+            v = Organizer({'value':v})
+        if isinstance(v, Organizer):
+            self.removeProperties('ORGANIZER')
+            self.addProperty(v)
+        elif v==None:
+            self._singularProperty('ORGANIZER', 'CAL-ADDRESS', v)
+        else:
+            raise TypeError, "%s is not a string or Organizer object." % str(v)
+    
+    def summary(self, v=None):
+        "Sets or gets the SUMMARY value of the Event."
+        self._singularProperty('SUMMARY', 'TEXT', v)
+
+    def uid(self, v=None):
+        "Sets or gets the UID of the Event."
+        self._singularProperty('UID', 'TEXT', v)
+
+    def recurrence_id(self, v=None):
+        """Sets or gets the value for the RECURRENCE-ID property.
+
+        Usage:
+        recurrence_id(recIdObj)             # Set using a Recurrence_Id object
+        recurrence_id("19700801T133000")    # Set using an iCalendar string
+        recurrence_id(8349873494)           # Set using seconds from epoch
+        recurrence_id()                     # Return an iCalendar string
+        """
+        if isinstance(v, StringType) or isinstance(v, IntType) or \
+                                        isinstance(v, FloatType):
+            v = Recurrence_Id(v)
+        if isinstance(v, Recurrence_Id):
+            self.removeProperties('RECURRENCE-ID')
+            self.addProperty(v)
+        elif v==None:
+            self._singularProperty('RECURRENCE-ID', 'DATE-TIME', v)
+        else:
+            raise TypeError, "%s is not a valid type for recurrence_id" % \
+                  str(v)
+
+    def sequence(self, v=None):
+        """Sets or gets the SEQUENCE value of the Event.
+
+        Usage:
+        sequence(1)     # Set the value using an integer
+        sequence('2')   # Set the value using a string containing an integer
+        sequence()      # Return an integer
+        """
+        if isinstance(v, StringType):
+            v = int(str)
+        return self._singularProperty('SEQUENCE', 'INTEGER', v)
+
+    def lastmodified(self, v=None):
+        """Sets or returns the value of the LAST-MODIFIED property.
+
+        Usage:
+        lastmodified(time_obj)          # Set the value using a Time object
+        lastmodified('19970101T123000Z')# Set using an iCalendar string
+        lastmodified(982362522)         # Set using seconds 
+        lastmodified()                  # Return an iCalendar string
+        """
+        if isinstance(v, StringType) or  isinstance(value, IntType) or     \
+           isinstance(value, FloatType):
+            v = Time(v)
+        if isinstance(value, Time):
+            self.removeProperties('LAST-MODIFIED')
+            self.addProperty(v)
+        elif v==None:
+            self._singularProperty("LAST-MODIFIED", "DATE-TIME", v)
+        else:
+            raise TypeError, "%s is an invalid type for LAST-MODIFIED property"\
+                  % str(type(v))
+
+    def created(self, v=None):
+        """Sets or returns the value of the CREATED property.
+
+        Usage:
+        created(time_obj)           # Set the value using a Time object
+        created('19970101T123000Z') # Set using an iCalendar string
+        created(982362522)          # Set using seconds 
+        created()                   # Return an iCalendar string
+        """
+        if isinstance(v, StringType) or  isinstance(value, IntType) or     \
+           isinstance(value, FloatType):
+            v = Time(v)
+        if isinstance(value, Time):
+            self.removeProperties('CREATED')
+            self.addProperty(v)
+        elif v==None:
+            self._singlularProperty("CREATED", "DATE-TIME", v)
+        else:
+            raise TypeError, "%s is an invalid type for CREATED property"\
+                  % str(type(v))
+
+    def related_to(self, v=None):
+        # Should this return a list, similar to attendees?
+        raise NotImplemented
+
+    def comment(self, v=None):
+        # Another multiple valued property
+        raise NotImplemented
+
+    def description(self, v=None):
+        "Sets or returns the value of the DESCRIPTION property."
+        self._singularProperty("DESCRIPTION", "TEXT", v)
+
+    def categories(self, overwrite, *arguments):
+        """Sets categories or returns a list of Attendee objects.
+
+        Usage:
+        # Set using string[s]
+        categories(overwrite=1, 'APPOINTMENT', 'EDUCATION')
+        # Returns a list of Category properites
+        attendees()
+
+        When the attendees are being set, the 'overwrite' flag determines if
+        previous categories in the Event are to be deleted.  If true, values
+        are overwritten, otherwise they remain in place. For example:
+
+        categoreis(0, 'PERSONAL')
+
+        would add the category object 'PERSONAL' to the existing attendees
+        instead of overwriting.
+        """
+        if arguments:
+            if overwrite:
+                self.removeProperties('CATEGORIES')
+            for c in arguments:
+                self.addProperty(Property({'name': 'CATEGORIES',
+                                           'value_type': 'TEXT',
+                                           'value': c} ))
+        else:
+            return self.properties('CATEGORIES')
+
+    def attach(self, overwrite, *arguments):
+        """Sets categories or returns a list of Attach objects.
+        """
+        pass
 
 
 class RecurrenceSet: 
@@ -354,6 +960,7 @@ class RecurrenceSet:
         """
         Return 'count' occurrences as a tuple of Time instances.
         """
+        pass
         
         
 
