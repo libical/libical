@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalgauge.c,v 1.11 2002-06-28 10:10:47 acampi Exp $
+ $Id: icalgauge.c,v 1.12 2002-07-21 17:18:15 lindner Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -348,10 +348,10 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 	    return 0;
 	}
 
-        if (w->compare == ICALGAUGECOMPARE_ISNULL)
+        if (w->compare == ICALGAUGECOMPARE_ISNULL || w->compare == ICALGAUGECOMPARE_ISNOTNULL)
 	    v = icalvalue_new(vk);
         else
-	v = icalvalue_new_from_string(vk,w->value);
+	  v = icalvalue_new_from_string(vk,w->value);
 
 	if (v == 0){
 	    /* Keep error set by icalvalue_from-string*/
@@ -397,6 +397,11 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 
             if (w->compare == ICALGAUGECOMPARE_ISNULL) {
                 local_pass = 0;
+                break;
+            }
+
+            if (w->compare == ICALGAUGECOMPARE_ISNOTNULL) {
+                local_pass = 1;
                 break;
             }
 

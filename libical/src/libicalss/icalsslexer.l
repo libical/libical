@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalsslexer.l,v 1.6 2002-06-28 10:09:05 acampi Exp $
+  $Id: icalsslexer.l,v 1.7 2002-07-21 17:18:15 lindner Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -83,12 +83,13 @@ WHERE			{ return WHERE; }
 AND 			{ return AND; }
 OR			{ return OR; }
 IS			{ return IS; }
+NOT			{ return NOT; }
 NULL			{ return SQLNULL; }
 \'                      { return QUOTE; }
 [ \t\n\r]+ ;			
 ;			{ return EOL; }
 
-\'[\@\*A-Za-z0-9\-\.\ ]+\' {
+\'[\@\*A-Za-z0-9\-\.\:\ ]+\' {
 	int c = input(yy_globals);
 	unput(c);
 	if(c!='\''){

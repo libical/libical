@@ -8,7 +8,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.y,v 1.6 2002-06-28 10:09:05 acampi Exp $
+  $Id: icalssyacc.y,v 1.7 2002-07-21 17:18:15 lindner Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -60,7 +60,7 @@ void sserror(char *s); /* Don't know why I need this.... */
 
 %token <v_string> STRING
 %token SELECT FROM WHERE COMMA QUOTE EQUALS NOTEQUALS  LESS GREATER LESSEQUALS
-%token GREATEREQUALS AND OR EOL END IS SQLNULL
+%token GREATEREQUALS AND OR EOL END IS NOT SQLNULL
 
 %%
 
@@ -87,6 +87,7 @@ where_clause:
 	/* Empty */
 	| STRING EQUALS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_EQUAL,$3); }
 	| STRING IS SQLNULL {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_ISNULL,""); }
+	| STRING IS NOT SQLNULL {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_ISNOTNULL,""); }
 	| STRING NOTEQUALS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_NOTEQUAL,$3); }
 	| STRING LESS STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_LESS,$3); }
 	| STRING GREATER STRING {ssyacc_add_where(yyextra,$1,ICALGAUGECOMPARE_GREATER,$3); }
