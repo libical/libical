@@ -11,7 +11,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: ical.h,v 1.6 2001-01-16 06:55:09 ebusboom Exp $
+ $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -77,9 +77,6 @@ struct icaltimetype icaltime_from_string(const char* str);
 /* Return the offset of the named zone as seconds. tt is a time
    indicating the date for which you want the offset */
 int icaltime_utc_offset(struct icaltimetype tt, const char* tzid);
-int icaltime_local_utc_offset();
-int icaltime_daylight_offset(struct icaltimetype tt, const char* tzid);
-int icaltime_local_daylight_offset();
 
 /* convert tt, of timezone tzid, into a utc time. Does nothing if the
    time is already UTC.  */
@@ -89,11 +86,6 @@ struct icaltimetype icaltime_as_utc(struct icaltimetype tt,
 /* convert tt, a time in UTC, into a time in timezone tzid */
 struct icaltimetype icaltime_as_zone(struct icaltimetype tt,
 				     const char* tzid);
-
-/* convert tt, a time in UTC, into a local time. This does nothing is
-   the time is not UTC*/
-struct icaltimetype icaltime_as_local(struct icaltimetype tt);
-
 
 
 struct icaltimetype icaltime_null_time(void);
@@ -135,6 +127,7 @@ struct icaldurationtype
 struct icaldurationtype icaldurationtype_from_int(int t);
 struct icaldurationtype icaldurationtype_from_string(const char*);
 int icaldurationtype_as_int(struct icaldurationtype duration);
+char* icaldurationtype_as_ical_string(struct icaldurationtype d);
 
 
 struct icalperiodtype 
@@ -143,6 +136,9 @@ struct icalperiodtype
 	struct icaltimetype end; /* Must be absolute */
 	struct icaldurationtype duration;
 };
+
+struct icalperiodtype icalperiodtype_from_string (const char* str);
+const char* icalperiodtype_as_ical_string(struct icalperiodtype p);
 
 time_t icalperiodtype_duration(struct icalperiodtype period);
 time_t icalperiodtype_end(struct icalperiodtype period);
@@ -673,14 +669,11 @@ struct icalgeotype
 	float lon;
 };
 
-					   
-
-union icaltriggertype 
+struct icaltriggertype 
 {
 	struct icaltimetype time; 
 	struct icaldurationtype duration;
 };
-
 
 
 /* struct icalreqstattype. This struct contains two string pointers,
@@ -878,7 +871,7 @@ int icalrecur_expand_recurrence(char* rule, time_t start,
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.6 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
   $Locker:  $
 
   
@@ -1018,9 +1011,9 @@ struct icaltimetype icalvalue_get_time(icalvalue* value);
 void icalvalue_set_time(icalvalue* value, struct icaltimetype v);
 
 /* TRIGGER # Non-std */
-icalvalue* icalvalue_new_trigger(union icaltriggertype v);
-union icaltriggertype icalvalue_get_trigger(icalvalue* value);
-void icalvalue_set_trigger(icalvalue* value, union icaltriggertype v);
+icalvalue* icalvalue_new_trigger(struct icaltriggertype v);
+struct icaltriggertype icalvalue_get_trigger(icalvalue* value);
+void icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v);
 
 /* URI  */
 icalvalue* icalvalue_new_uri(const char* v);
@@ -1037,7 +1030,7 @@ icalvalue* icalvalue_new_query(const char* v);
 const char* icalvalue_get_query(icalvalue* value);
 void icalvalue_set_query(icalvalue* value, const char* v);
 
-/* STATUS #Non-st */
+/* STATUS #Non-std */
 icalvalue* icalvalue_new_status(icalproperty_status v);
 icalproperty_status icalvalue_get_status(icalvalue* value);
 void icalvalue_set_status(icalvalue* value, icalproperty_status v);
@@ -1049,7 +1042,7 @@ void icalvalue_set_status(icalvalue* value, icalproperty_status v);
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.6 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
   $Locker:  $
 
   
@@ -1220,7 +1213,7 @@ void icalparameter_set_xliccomparetype(icalparameter* value, icalparameter_xlicc
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.6 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
@@ -1391,10 +1384,10 @@ void icalproperty_set_xlicerror(icalproperty* prop, const char* v);
 const char* icalproperty_get_xlicerror(icalproperty* prop);
 
 /* TRIGGER */
-icalproperty* icalproperty_new_trigger(union icaltriggertype v);
-icalproperty* icalproperty_vanew_trigger(union icaltriggertype v, ...);
-void icalproperty_set_trigger(icalproperty* prop, union icaltriggertype v);
-union icaltriggertype icalproperty_get_trigger(icalproperty* prop);
+icalproperty* icalproperty_new_trigger(struct icaltriggertype v);
+icalproperty* icalproperty_vanew_trigger(struct icaltriggertype v, ...);
+void icalproperty_set_trigger(icalproperty* prop, struct icaltriggertype v);
+struct icaltriggertype icalproperty_get_trigger(icalproperty* prop);
 
 /* CLASS */
 icalproperty* icalproperty_new_class(const char* v);
@@ -1930,7 +1923,7 @@ icalcomponent* icalcomponent_new_xdaylight();
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: ical.h,v 1.6 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2021,7 +2014,7 @@ char* string_line_generator(char *out, size_t buf_size, void *d);
  CREATOR: eric 30 June 1999
 
 
- $Id: ical.h,v 1.6 2001-01-16 06:55:09 ebusboom Exp $
+ $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -2099,7 +2092,7 @@ char* icalmemory_strdup(const char *s);
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.6 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2227,7 +2220,10 @@ typedef enum icalerrorenum {
 
 } icalerrorenum;
 
+/* The libical error enumeration, like errno*/
 extern icalerrorenum icalerrno;
+
+/* If true, libicl aborts after a call to icalerror_set_error*/
 extern int icalerror_errors_are_fatal;
 
 void icalerror_clear_errno(void);
@@ -2245,7 +2241,7 @@ char* icalerror_strerror(icalerrorenum e);
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
   
-  $Id: ical.h,v 1.6 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2306,7 +2302,7 @@ int icalrestriction_check(icalcomponent* comp);
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
   
-  $Id: ical.h,v 1.6 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -2419,7 +2415,7 @@ struct sspm_action_map {
 };
 
 char* sspm_major_type_string(enum sspm_major_type type);
-char* sspm_minor_type_string(enum sspm_major_type type);
+char* sspm_minor_type_string(enum sspm_minor_type type);
 char* sspm_encoding_string(enum sspm_encoding type);
 
 int sspm_parse_mime(struct sspm_part *parts, 
@@ -2450,7 +2446,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
  CREATOR: eric 26 July 2000
 
 
- $Id: ical.h,v 1.6 2001-01-16 06:55:09 ebusboom Exp $
+ $Id: ical.h,v 1.7 2001-01-23 07:03:16 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

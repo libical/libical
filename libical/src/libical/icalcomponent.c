@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.3 2001-01-12 21:22:20 ebusboom Exp $
+  $Id: icalcomponent.c,v 1.4 2001-01-23 07:03:16 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -715,7 +715,7 @@ time_t icalcomponent_convert_time(icalproperty *p)
 
 	/* _as_timet will use localtime() to do the conversion */
 	convt = icaltime_as_timet(sict);
-	offset = icaltime_local_utc_offset();
+	offset = icaltime_utc_offset(sict,0);
 	convt += offset;
 
 #ifdef TEST_CONVERT_TIME

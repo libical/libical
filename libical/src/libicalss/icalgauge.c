@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalgauge.c,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
+ $Id: icalgauge.c,v 1.3 2001-01-23 07:03:17 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -334,7 +334,7 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 
 	    prop_value = icalproperty_get_value(prop);
 
-	    relation = icalvalue_compare(prop_value,v);
+	    relation = (icalgaugecompare)icalvalue_compare(prop_value,v);
 	    
 	    if (relation  == w->compare){ 
 		local_pass++; 

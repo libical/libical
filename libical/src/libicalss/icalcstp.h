@@ -3,7 +3,7 @@
   FILE: icalcstp.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalcstp.h,v 1.1.1.1 2001-01-02 07:33:03 ebusboom Exp $
+  $Id: icalcstp.h,v 1.2 2001-01-23 07:03:17 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -52,9 +52,10 @@
 
    1) Construct a new icalcstps, bound to your code via stubs
    2) Repeat forever:
-   2a) Get string from client & give to icalcstps_next_input()
-   2b) Call icalcstps_next_output. Send string to client. 
-
+     2a) Get string from client & give to icalcstps_next_input()
+     2b) Repeat until icalcstp_next_output returns 0:
+       2b1) Call icalcstps_next_output. 
+       2b2) Send string to client.
 */
 
 
@@ -101,11 +102,11 @@ int icalcstps_next_input(icalcstps* cstp);
 /* How to use: 
 
    1) Construct a new icalcstpc
-   2) Issue a command
+   2) Issue a command by calling one of the command routines. 
    3) Repeat until both call icalcstpc_next_output and
    icalcstpc_next_input return 0:
-   3a) Call icalcstpc_next_output. Send string to server. 
-   3b) Get string from server, & give to icalcstp_next_input()
+     3a) Call icalcstpc_next_output. Send string to server. 
+     3b) Get string from server, & give to icalcstp_next_input()
    4) Iterate with icalcstpc_first_response & icalcstp_next_response to 
    get the servers responses
    5) Repeat at #2

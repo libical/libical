@@ -43,7 +43,7 @@ void get_required_attendees(icalcomponent* event)
 	{
 	    /* Remember, the caller does not own this string, so you
                should strdup it if you want to change it. */
-	    char *attendee = icalproperty_get_attendee(p);
+	    const char *attendee = icalproperty_get_attendee(p);
 	}
     }
 
@@ -116,9 +116,9 @@ void test_properties()
 	0); 
 
     /* Iterate through all of the parameters in the property */
-    for(param = icalproperty_get_first_parameter(prop,ICAL_ANY_PROPERTY);
+    for(param = icalproperty_get_first_parameter(prop,ICAL_ANY_PARAMETER);
 	param != 0; 
-	param = icalproperty_get_next_parameter(prop,ICAL_ANY_PROPERTY)) {
+	param = icalproperty_get_next_parameter(prop,ICAL_ANY_PARAMETER)) {
 						
 	printf("Prop parameter: %s\n",icalparameter_get_cn(param));
     }    

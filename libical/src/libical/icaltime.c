@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.3 2001-01-12 21:22:20 ebusboom Exp $
+  $Id: icaltime.c,v 1.4 2001-01-23 07:03:17 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -43,6 +43,9 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #endif
+
+
+
 
 extern long int timezone;  /* Global defined by libc */
 struct icaltimetype 
@@ -109,7 +112,9 @@ void unset_tz(char* tzstr)
     /* restore the original environment */
 
     if(tzstr!=0){
-	putenv(tzstr);
+	char temp[1024];
+	snprintf(temp,1024,"TZ=%s",tzstr);
+	putenv(temp);
 	free(tzstr);
     } else {
 	putenv("TZ"); /* Delete from environment */
@@ -119,9 +124,13 @@ void unset_tz(char* tzstr)
 time_t icaltime_as_timet(struct icaltimetype tt)
 {
     struct tm stm;
-
+    time_t t;
 
     memset(&stm,0,sizeof( struct tm));
+
+    if(icaltime_is_null_time(tt)) {
+	return 0;
+    }
 
     stm.tm_sec = tt.second;
     stm.tm_min = tt.minute;
@@ -129,18 +138,43 @@ time_t icaltime_as_timet(struct icaltimetype tt)
     stm.tm_mday = tt.day;
     stm.tm_mon = tt.month-1;
     stm.tm_year = tt.year-1900;
-    stm.tm_isdst = 0;
+    stm.tm_isdst = -1;
 
     if(tt.is_utc == 1 || tt.is_date == 1){
-	/* It would be nice to use set_tz("UTC") instead of this code
-           to make mktime operate in UTC, but that would conflict with
-           the use of set_tz in icaltime_utc_offset */
-        stm.tm_sec -= icaltime_local_utc_offset();
+	char* old_tz = set_tz("UTC");
+	t = mktime(&stm);
+	unset_tz(old_tz);
+    } else {
+	t = mktime(&stm);
     }
 
-    return mktime(&stm);
+    return t;
+
 }
 
+char* icaltime_as_ical_string(struct icaltimetype tt)
+{
+    size_t size = 17;
+    char* buf = icalmemory_new_buffer(size);
+
+    if(tt.is_date){
+	snprintf(buf, size,"%04d%02d%02d",tt.year,tt.month,tt.day);
+    } else {
+	char* fmt;
+	if(tt.is_utc){
+	    fmt = "%04d%02d%02dT%02d%02d%02dZ";
+	} else {
+	    fmt = "%04d%02d%02dT%02d%02d%02d";
+	}
+	snprintf(buf, size,fmt,tt.year,tt.month,tt.day,
+		 tt.hour,tt.minute,tt.second);
+    }
+    
+    icalmemory_add_tmp_buffer(buf);
+
+    return buf;
+
+}
 
 
 /* convert tt, of timezone tzid, into a utc time */
@@ -154,7 +188,7 @@ struct icaltimetype icaltime_as_utc(struct icaltimetype tt,const char* tzid)
 
     tzid_offset = icaltime_utc_offset(tt,tzid);
 
-    tt.second += tzid_offset;
+    tt.second -= tzid_offset;
 
     tt.is_utc = 1;
 
@@ -168,123 +202,43 @@ struct icaltimetype icaltime_as_zone(struct icaltimetype tt,const char* tzid)
 
     tzid_offset = icaltime_utc_offset(tt,tzid);
 
-    tt.second -= tzid_offset;
+    tt.second += tzid_offset;
 
     tt.is_utc = 0;
 
     return icaltime_normalize(tt);
 
-}
-
-/* Return the daylight savings offset for this zone for the given time */
-int icaltime_daylight_offset(struct icaltimetype tt, const char* tzid)
-{
-    time_t t = icaltime_as_timet(tt);
-    time_t t_l, offset;
- 
-    struct tm stm;
-
-    char* old_tz = set_tz(tzid);
-
-    stm = *(localtime(&t)); /* This sets 'timezone' */
-    offset = timezone;
-
-    stm = *(gmtime(&t)); 
-
-    stm.tm_sec -= offset; /* Convert to local time */
-
-    stm.tm_isdst = -1; /* Don't adjust time for daylight savings */
-
-    t_l = mktime(&stm);
-
-
-    unset_tz(old_tz);
-    
-    return (t - t_l);
-
-}
-
-int icaltime_local_daylight_offset()
-{
-
-    time_t t = time(0);
-    time_t t_l, offset;
-
-    struct tm stm;
-
-    stm = *(localtime(&t)); /* This sets 'timezone' */
-    offset = timezone;
-
-    stm = *(gmtime(&t)); 
-
-    stm.tm_sec -= offset; /* Convert to local time */
-
-    stm.tm_isdst = -1; /* Don't adjust time for daylight savings */
-
-    t_l = mktime(&stm);
-
-    return (t - t_l);
 }
 
 
 /* Return the offset of the named zone as seconds. tt is a time
    indicating the date for which you want the offset */
-int icaltime_utc_offset(struct icaltimetype tt, const char* tzid)
+int icaltime_utc_offset(struct icaltimetype ictt, const char* tzid)
 {
-#ifdef HAVE_TIMEZONE
-    extern long int timezone;
-#endif
-    time_t now;
-    struct tm *stm;
+
+    time_t tt = icaltime_as_timet(ictt);
+    time_t offset_tt;
+    struct tm gtm;
 
     char *tzstr = 0;
 
-    tzstr = set_tz(tzid);
+    if(tzid != 0){
+	tzstr = set_tz(tzid);
+    }
  
-    /* Get the offset */
-
-    now = icaltime_as_timet(tt);
-
-    stm = localtime(&now); /* This sets 'timezone'*/
-
-    unset_tz(tzstr);
-
-#ifdef HAVE_TIMEZONE
-    return timezone+ (- icaltime_daylight_offset(tt,tzid));;
-#else
-    return -stm->tm_gmtoff+ (- icaltime_daylight_offset(tt,tzid));;
-#endif
-}
-
-int icaltime_local_utc_offset()
-{
-    time_t now;
-    struct tm *stm;
-
-    now = time(0);
-    stm = localtime(&now); /* This sets 'timezone'*/
-
-
-#ifdef HAVE_TIMEZONE
-    return timezone + (-icaltime_local_daylight_offset());;
-#else
-    return -stm->tm_gmtoff + (-icaltime_local_daylight_offset());;
-#endif
-}
-
-
-struct icaltimetype icaltime_as_local(struct icaltimetype tt)
-{
-    if(icaltime_is_null_time(tt) || tt.is_utc == 0){
-	return tt;
+    /* Mis-interpret a UTC broken out time as local time */
+    gtm = *(gmtime(&tt));
+    gtm.tm_isdst = localtime(&tt)->tm_isdst;    
+    offset_tt = mktime(&gtm);
+    
+    if(tzid != 0){
+	unset_tz(tzstr);
     }
 
-    tt.second -= icaltime_local_utc_offset();
-
-    tt.is_utc = 0;
-
-    return icaltime_normalize(tt);
+    return tt-offset_tt;
 }
+
+
 
 /* Normalize by converting from localtime to utc and back to local
    time. This uses localtime because localtime and mktime are inverses
@@ -333,7 +287,7 @@ struct icaltimetype icaltime_from_string(const char* str)
 
     size = strlen(str);
     
-    if(size == 15) { /* Local time */
+    if(size == 15) { /* floating time */
 	tt.is_utc = 0;
 	tt.is_date = 0;
     } else if (size == 16) { /* UTC time, ends in 'Z'*/
@@ -341,6 +295,7 @@ struct icaltimetype icaltime_from_string(const char* str)
 	tt.is_date = 0;
 
 	if(str[15] != 'Z'){
+	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	    return icaltime_null_time();
 	}
 	    
@@ -348,6 +303,7 @@ struct icaltimetype icaltime_from_string(const char* str)
 	tt.is_utc = 0;
 	tt.is_date = 1;
     } else { /* error */
+	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	return icaltime_null_time();
     }
 
@@ -359,6 +315,7 @@ struct icaltimetype icaltime_from_string(const char* str)
 	       &tsep,&tt.hour,&tt.minute,&tt.second);
 
 	if(tsep != 'T'){
+	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	    return icaltime_null_time();
 	}
 
@@ -410,7 +367,11 @@ short icaltime_day_of_week(struct icaltimetype t){
     time_t tt = icaltime_as_timet(t);
     struct tm *tm;
 
-    tm = gmtime(&tt);
+    if(t.is_utc == 1){
+	tm = gmtime(&tt);
+    } else {
+	tm = localtime(&tt);
+    }
 
     return tm->tm_wday+1;
 }
@@ -452,7 +413,11 @@ short icaltime_day_of_year(struct icaltimetype t){
     time_t tt = icaltime_as_timet(t);
     struct tm *stm;
 
-    stm = gmtime(&tt);
+    if(t.is_utc==1){
+	stm = gmtime(&tt);
+    } else {
+	stm = localtime(&tt);
+    }
 
     return stm->tm_yday+1;
     
@@ -534,6 +499,83 @@ icaltime_compare_date_only (struct icaltimetype a, struct icaltimetype b)
     }
 }
 
+struct icalperiodtype icalperiodtype_from_string (const char* str)
+{
+    
+    struct icalperiodtype p, null_p;
+    char *s = strdup(str);
+    char *start, *end = s;
+    int old_ieaf = icalerror_errors_are_fatal;
+
+    p.start = p.end = icaltime_null_time();
+    p.duration = icaldurationtype_from_int(0);
+
+    null_p = p;
+
+    if(s == 0) goto error;
+
+    start = s;
+    end = strchr(s, '/');
+
+    if(end == 0) goto error;
+
+    *end = 0;
+    end++;
+
+    p.start = icaltime_from_string(start);
+
+    if (icaltime_is_null_time(p.start)) goto error;
+	
+    icalerror_errors_are_fatal = 0;
+    p.end = icaltime_from_string(end);
+    icalerror_errors_are_fatal = old_ieaf;
+
+    if (icaltime_is_null_time(p.end)){
+
+	p.duration = icaldurationtype_from_string(end);
+
+	if(icaldurationtype_as_int(p.duration) == 0) goto error;
+    } 
+
+    return p;
+
+ error:
+    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+    return null_p;
+}
+
+
+const char* icalperiodtype_as_ical_string(struct icalperiodtype p)
+{
+
+    const char* start;
+    const char* end;
+
+    char *buf;
+    size_t buf_size = 40;
+    char* buf_ptr = 0;
+
+    buf = (char*)icalmemory_new_buffer(buf_size);
+    buf_ptr = buf;
+    
+
+    start = icaltime_as_ical_string(p.start);
+
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, start); 
+
+    if(!icaltime_is_null_time(p.end)){
+	end = icaltime_as_ical_string(p.end);
+    } else {
+	end = icaldurationtype_as_ical_string(p.duration);
+    }
+
+    icalmemory_append_char(&buf, &buf_ptr, &buf_size, '/'); 
+
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, end); 
+    
+
+    return buf;
+}
 
 time_t
 icalperiodtype_duration (struct icalperiodtype period);
@@ -546,11 +588,12 @@ icalperiodtype_end (struct icalperiodtype period);
 /* From Russel Steinthal */
 int icaldurationtype_as_int(struct icaldurationtype dur)
 {
-        return (int) (dur.seconds +
-                         (60 * dur.minutes) +
-                         (60 * 60 * dur.hours) +
-                         (60 * 60 * 24 * dur.days) +
-                         (60 * 60 * 24 * 7 * dur.weeks));
+    return (int)( (dur.seconds +
+		   (60 * dur.minutes) +
+		   (60 * 60 * dur.hours) +
+		   (60 * 60 * 24 * dur.days) +
+		   (60 * 60 * 24 * 7 * dur.weeks))
+		  * (dur.is_neg==1? -1 : 1) ) ;
 } 
 
 /* From Seth Alves,  <alves@hungry.com>   */
@@ -577,16 +620,114 @@ struct icaldurationtype icaldurationtype_from_int(int t)
 struct icaldurationtype icaldurationtype_from_string(const char* str)
 {
 
-    icalvalue *v = icalvalue_new_from_string(ICAL_DURATION_VALUE,str);
+    int i;
+    int begin_flag = 0;
+    int time_flag = 0;
+    int date_flag = 0;
+    int week_flag = 0;
+    int digits=-1;
+    int scan_size = -1;
+    int size = strlen(str);
+    char p;
+    struct icaldurationtype d;
 
-    if( v !=0){
-	return icalvalue_get_duration(v);
-    } else {
-        struct icaldurationtype dur;
-	memset(&dur,0,sizeof(struct icaldurationtype));
-	return dur;
+    memset(&d, 0, sizeof(struct icaldurationtype));
+
+    for(i=0;i != size;i++){
+	p = str[i];
+	
+	switch(p) 
+	    {
+	    case '-': {
+		if(i != 0 || begin_flag == 1) goto error;
+
+		d.is_neg = 1;
+		break;
+	    }
+
+	    case 'P': {
+		if (i != 0 && i !=1 ) goto error;
+		begin_flag = 1;
+		break;
+	    }
+
+	    case 'T': {
+		time_flag = 1;
+		break;
+	    }
+
+	    case '0':
+	    case '1':
+	    case '2':
+	    case '3':
+	    case '4':
+	    case '5':
+	    case '6':
+	    case '7':
+	    case '8':
+	    case '9':
+		{ 
+		    
+		    /* HACK. Skip any more digits if the l;ast one
+                       read has not been assigned */
+		    if(digits != -1){
+			break;
+		    }
+
+		    if (begin_flag == 0) goto error;
+		    /* Get all of the digits, not one at a time */
+		    scan_size = sscanf((char*)(str+i),"%d",&digits);
+		    if(scan_size == 0) goto error;
+		    break;
+		}
+
+	    case 'H': {	
+		if (time_flag == 0||week_flag == 1||d.hours !=0||digits ==-1) 
+		    goto error;
+		d.hours = digits; digits = -1;
+		break;
+	    }
+	    case 'M': {
+		if (time_flag == 0||week_flag==1||d.minutes != 0||digits ==-1) 
+		    goto error;
+		d.minutes = digits; digits = -1;	    
+		break;
+	    }
+	    case 'S': {
+		if (time_flag == 0||week_flag==1||d.seconds!=0||digits ==-1) 
+		    goto error;
+		d.seconds = digits; digits = -1;	    
+		break;
+	    }
+	    case 'W': {
+		if (time_flag==1||date_flag==1||d.weeks!=0||digits ==-1) 
+		    goto error;
+		week_flag = 1;	
+		d.weeks = digits; digits = -1;	    
+		break;
+	    }
+	    case 'D': {
+		if (time_flag==1||week_flag==1||d.days!=0||digits ==-1) 
+		    goto error;
+		date_flag = 1;
+		d.days = digits; digits = -1;	    
+		break;
+	    }
+	    default: {
+		goto error;
+	    }
+
+	    }
     }
- 
+
+    return d;
+	
+
+ error:
+    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+    memset(&d, 0, sizeof(struct icaldurationtype));
+    return d;
+
 }
 
 #define TMP_BUF_SIZE 1024
@@ -617,7 +758,12 @@ char* icaldurationtype_as_ical_string(struct icaldurationtype d)
     seconds = icaldurationtype_as_int(d);
 
     if(seconds !=0){
-	icalmemory_append_string(&buf, &buf_ptr, &buf_size, "P");
+	
+	if(d.is_neg == 1){
+	    icalmemory_append_char(&buf, &buf_ptr, &buf_size, '-'); 
+	}
+
+	icalmemory_append_char(&buf, &buf_ptr, &buf_size, 'P');
     
 	if (d.weeks != 0 ) {
 	    append_duration_segment(&buf, &buf_ptr, &buf_size, "W", d.weeks);

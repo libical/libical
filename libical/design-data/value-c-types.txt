@@ -16,7 +16,7 @@ RECUR			special		struct icalrecurrencetype
 STRING			std		const char*			# Non-std
 TEXT			std		const char*
 TIME			std		struct icaltimetype
-TRIGGER			std		union icaltriggertype	# Non-std
+TRIGGER			std		struct icaltriggertype	# Non-std
 URI			std		const char*
 UTC-OFFSET		std		int
 QUERY			std		const char*

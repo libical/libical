@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c.in,v 1.1.1.1 2001-01-02 07:32:59 ebusboom Exp $
+  $Id: icalproperty.c.in,v 1.2 2001-01-23 07:03:17 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -376,7 +376,7 @@ icalproperty_add_parameter (icalproperty* prop,icalparameter* parameter)
 void
 icalproperty_set_parameter (icalproperty* prop,icalparameter* parameter)
 {
-    icalproperty_kind kind;
+    icalparameter_kind kind;
 
     kind = icalparameter_isa(parameter);
 

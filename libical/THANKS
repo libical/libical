@@ -43,3 +43,6 @@ Patrick Lewis <plewis@inetarena.com> for several bug reports.
 
 Larry W. Virden <lvirden@cas.org> for several bug reports in compiling
 on Solaris.
+
+Bryan Bartone <bsb@mesasys.com> for code changes based on porting
+libical to Windows.

@@ -1,3 +1,8 @@
+2001-01-22  Eric Busboom  <eric@softwarestudio.org>
+
+	* icaltime.c implemented icaldurationtype_from_string to parse the
+ 	string it self, rather than use lex/yacc
+
 2001-01-15  Eric Busboom  <eric@softwarestudio.org>
 
 	* icalfileset.c Many improvements. File locking now works, and so

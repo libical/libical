@@ -1475,10 +1475,13 @@ struct icaltimetype {
  */ }; 
 \layout Standard
 
-The year, month, day, hour, minute and second fields how the broken-out
+The year, month, day, hour, minute and second fields hold the broken-out
  time values.
- The is_utc field distinguishes between times UTC and a local time zone.
- The is_date field indicates if the intra-day fields hold valid data.
+ The is_utc field distinguishes between times in UTC and a local time zone.
+ The is_date field indicates if the time should be interpreted only as a
+ date.
+ If it is a date, the hour, minute and second fields are assumed to be zero,
+ regardless of their actual vaules.
  
 \layout Subsubsection
 
@@ -1505,7 +1508,7 @@ struct icaltimetype tt = icaltime_from_string("19970101T103000");
 
 Icaltime_from_timet takes a timet value, representing seconds past the POSIX
  epoch, and a flag to indicate if the time is a date.
- Dates have an identical structure to a time, but they time portion ( hours,
+ Dates have an identical structure to a time, but the time portion ( hours,
  minuts and seconds ) is always 00:00:00.
  Dates act differently in sorting an comparision, and they have a different
  string representation in RFC2445.

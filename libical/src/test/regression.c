@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.5 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: regression.c,v 1.6 2001-01-23 07:03:17 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1290,35 +1290,60 @@ void test_recur_parameter_bug(){
 void test_duration()
 {
 
-    icalvalue *v;
 
-    v = icalvalue_new_from_string(ICAL_DURATION_VALUE,
-				  "PT8H30M");
+    struct icaldurationtype d;
 
-    printf("%s\n",icalvalue_as_ical_string(v));
+    d = icaldurationtype_from_string("PT8H30M");
+    printf("%s\n",icaldurationtype_as_ical_string(d));
+    assert(icaldurationtype_as_int(d) == 30600);
+    
+    d = icaldurationtype_from_string("-PT8H30M");
+    printf("%s\n",icaldurationtype_as_ical_string(d));
+    assert(icaldurationtype_as_int(d) == -30600);
+
+    d = icaldurationtype_from_string("PT10H10M10S");
+    printf("%s\n",icaldurationtype_as_ical_string(d));
+    assert(icaldurationtype_as_int(d) == 36610);
+
+    d = icaldurationtype_from_string("P7W");
+    printf("%s\n",icaldurationtype_as_ical_string(d));
+    assert(icaldurationtype_as_int(d) == 4233600);
+
+    d = icaldurationtype_from_string("P2DT8H30M");
+    printf("%s\n",icaldurationtype_as_ical_string(d));
+    assert(icaldurationtype_as_int(d) == 203400);
+
+    icalerror_errors_are_fatal = 0;
+
+    d = icaldurationtype_from_string("P-2DT8H30M");
+    printf("%s\n",icaldurationtype_as_ical_string(d));
+    assert(icaldurationtype_as_int(d) == 0);
+
+    d = icaldurationtype_from_string("P7W8H");
+    printf("%s\n",icaldurationtype_as_ical_string(d));
+    assert(icaldurationtype_as_int(d) == 0);
+
+    d = icaldurationtype_from_string("T10H");
+    printf("%s\n",icaldurationtype_as_ical_string(d));
+    assert(icaldurationtype_as_int(d) == 0);
 
 
-    v = icalvalue_new_from_string(ICAL_DURATION_VALUE,
-				  "-PT8H30M");
-
-    printf("%s\n",icalvalue_as_ical_string(v));
-
-    icalvalue_free(v);
-    v = icalvalue_new_from_string(ICAL_PERIOD_VALUE,
-				  "19971015T050000Z/PT8H30M");
-
-    printf("%s\n",icalvalue_as_ical_string(v));
-
-    icalvalue_free(v);
-    v = icalvalue_new_from_string(ICAL_PERIOD_VALUE,
-				  "19971015T050000Z/19971015T060000Z");
-
-    printf("%s\n",icalvalue_as_ical_string(v));
-    icalvalue_free(v);
-
+    icalerror_errors_are_fatal = 1;
 
 }
 
+void test_period()
+{
+
+    struct icalperiodtype p;
+
+    p = icalperiodtype_from_string("19971015T050000Z/PT8H30M");
+    printf("%s\n",icalperiodtype_as_ical_string(p));
+
+    p = icalperiodtype_from_string("19971015T050000Z/19971015T060000Z");
+    printf("%s\n",icalperiodtype_as_ical_string(p));
+
+}
 
 void test_strings(){
 
@@ -1423,63 +1448,63 @@ char* ical_timet_string(time_t t)
     
 }
 
-/* This test was written in GMT-8, and it might run differently in
-   another timezone */
-
-
-
-void test_time()
+void do_test_time(char* zone)
 {
-    struct icaltimetype ictt, icttutc, icttutczone, 
-	icttla, icttny,icttphoenix;
+    struct icaltimetype ictt, icttutc, icttutczone, icttdayl, 
+	icttla, icttny,icttphoenix, icttlocal, icttnorm;
     time_t tt,tt2, tt_p200;
+    int offset_la, offset_tz;
     icalvalue *v;
     short day_of_week,start_day_of_week, day_of_year;
 
+    icalerror_errors_are_fatal = 0;
 
-    tt = 973276230; /* Fri Nov  3 10:30:30 PST 2000 in PST 
-                       Fri Nov  3 18:30:30 PST 2000 in UTC */
+    ictt = icaltime_from_string("20001103T183030Z");
+
+    tt = icaltime_as_timet(ictt);
+
+    assert(tt==973276230); /* Fri Nov  3 10:30:30 PST 2000 in PST 
+                               Fri Nov  3 18:30:30 PST 2000 in UTC */
+    
+    offset_la = icaltime_utc_offset(ictt,"America/Los_Angeles");
+    offset_tz = icaltime_utc_offset(ictt, zone);
 
     printf(" Normalize \n");
-    ictt = icaltime_from_string("20001103T183030Z");
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
-    ictt.second -= 60 * 60 * 24 * 5;
-    ictt = icaltime_normalize(ictt);
-    printf("-5d in sec  : %s\n", ictt_as_string(ictt));
-    ictt.day += 60;
-    ictt = icaltime_normalize(ictt);
-    printf("+60 d       : %s\n", ictt_as_string(ictt));
+    icttnorm = ictt;
+    icttnorm.second -= 60 * 60 * 24 * 5;
+    icttnorm = icaltime_normalize(ictt);
+    printf("-5d in sec  : %s\n", ictt_as_string(icttnorm));
+    icttnorm.day += 60;
+    icttnorm = icaltime_normalize(ictt);
+    printf("+60 d       : %s\n", ictt_as_string(icttnorm));
 
 
     printf("\n As time_t \n");
 
-    ictt = icaltime_from_string("20001103T183030Z");
     tt2 = icaltime_as_timet(ictt);
-    assert(tt2 == tt);
     printf("20001103T183030Z (timet): %s\n",ical_timet_string(tt2));
     printf("20001103T183030Z        : %s\n",ictt_as_string(ictt));
-
-    ictt = icaltime_from_string("20001103T103030");
-    tt2 = icaltime_as_timet(ictt);
     assert(tt2 == tt);
-    printf("20001103T103030  (timet): %s\n",ical_timet_string(tt2));
-    printf("20001103T103030         : %s\n",ictt_as_string(ictt));
+
+    icttlocal = icaltime_from_string("20001103T183030");
+    tt2 = icaltime_as_timet(icttlocal);
+    printf("20001103T183030  (timet): %s\n",ical_timet_string(tt2));
+    printf("20001103T183030         : %s\n",ictt_as_string(icttlocal));
+    assert(tt-tt2 == offset_tz);
 
     printf("\n From time_t \n");
 
-    ictt = icaltime_from_timet(tt,0);
     printf("Orig        : %s\n",ical_timet_string(tt));
     printf("As utc      : %s\n", ictt_as_string(ictt));
-    ictt = icaltime_from_timet(tt,0);
-    ictt = icaltime_as_local(ictt);
-    printf("As local    : %s\n", ictt_as_string(ictt));
+
+    icttlocal = icaltime_as_zone(ictt,zone);
+    printf("As local    : %s\n", ictt_as_string(icttlocal));
     
 
     printf("\n Convert to and from lib c \n");
 
     printf("System time is: %s\n",ical_timet_string(tt));
-
-    ictt = icaltime_from_timet(tt,0);
 
     v = icalvalue_new_datetime(ictt);
 
@@ -1490,19 +1515,19 @@ void test_time()
     
     printf("\n Incrementing time  \n");
 
-    ictt.year++;
-    tt2 = icaltime_as_timet(ictt);
+    icttnorm = ictt;
+
+    icttnorm.year++;
+    tt2 = icaltime_as_timet(icttnorm);
     printf("Add a year: %s\n",ical_timet_string(tt2));
 
-    ictt.month+=13;
-    tt2 = icaltime_as_timet(ictt);
+    icttnorm.month+=13;
+    tt2 = icaltime_as_timet(icttnorm);
     printf("Add 13 months: %s\n",ical_timet_string(tt2));
 
-    ictt.second+=90;
-    tt2 = icaltime_as_timet(ictt);
+    icttnorm.second+=90;
+    tt2 = icaltime_as_timet(icttnorm);
     printf("Add 90 seconds: %s\n",ical_timet_string(tt2));
-
-    ictt = icaltime_from_timet(tt,0);
 
     printf("\n Day Of week \n");
 
@@ -1510,17 +1535,17 @@ void test_time()
     start_day_of_week = icaltime_start_doy_of_week(ictt);
     day_of_year = icaltime_day_of_year(ictt);
 
+
+    printf("Today is day of week %d, day of year %d\n",day_of_week,day_of_year);
+    printf("Week started n doy of %d\n",start_day_of_week);
     assert(day_of_week == 6);
     assert(day_of_year == 308);
     assert(start_day_of_week == 303 );
-    printf("Today is day of week %d, day of year %d\n",day_of_week,day_of_year);
-    printf("Week started n doy of %d\n",start_day_of_week);
 
     printf("\n TimeZone Conversions \n");
 
-    ictt = icaltime_from_timet(tt,0);
-    
     icttla = icaltime_as_zone(ictt,"America/Los_Angeles");
+    assert(icttla.hour == 10);
 
     icttutc = icaltime_as_utc(icttla,"America/Los_Angeles");
     assert(icaltime_compare(icttla,
@@ -1549,52 +1574,37 @@ void test_time()
     printf("Orig (ctime): %s\n", ical_timet_string(tt) );
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
     printf("NY          : %s\n", ictt_as_string(icttny));
-    printf("NY Day Offs : %d\n", icaltime_daylight_offset(icttny,
-						     "America/New_York"));
 
     assert(strcmp(ictt_as_string(icttny),"2000-11-03 13:30:30")==0);
-    assert(icaltime_daylight_offset(icttny,"America/New_York") == 0);
-
 
     tt_p200 = tt +  200 * 24 * 60 * 60 ; /* Add 200 days */
 
-    ictt = icaltime_from_timet(tt_p200,0);    
-    icttny = icaltime_as_zone(ictt,"America/New_York");
+    icttdayl = icaltime_from_timet(tt_p200,0);    
+    icttny = icaltime_as_zone(icttdayl,"America/New_York");
     
     printf("Orig +200d  : %s\n", ical_timet_string(tt_p200) );
     printf("NY+200D     : %s\n", ictt_as_string(icttny));
-    printf("NY Offs     : %d\n", icaltime_daylight_offset(icttny,
-						     "America/New_York"));
 
     assert(strcmp(ictt_as_string(icttny),"2001-05-22 14:30:30")==0);
-    assert(icaltime_daylight_offset(icttny,"America/New_York") == 3600);
 
     /* Daylight savings test for Los Angeles */
 
-    ictt = icaltime_from_timet(tt,0);    
     icttla  = icaltime_as_zone(ictt,"America/Los_Angeles");
 
     printf("\nOrig (ctime): %s\n", ical_timet_string(tt) );
     printf("Orig (ical) : %s\n", ictt_as_string(ictt));
     printf("LA          : %s\n", ictt_as_string(icttla));
-    printf("LA Day Offs : %d\n", icaltime_daylight_offset(icttla,
-						     "America/Los_Angeles"));
 
     assert(strcmp(ictt_as_string(icttla),"2000-11-03 10:30:30")==0);
-    assert(icaltime_daylight_offset(icttla,"America/Los_Angeles") == 0);
-						     
     
-    ictt = icaltime_from_timet(tt_p200,0);    
-    icttla = icaltime_as_zone(ictt,"America/Los_Angeles");
+    icttla = icaltime_as_zone(icttdayl,"America/Los_Angeles");
     
     printf("Orig +200d  : %s\n", ical_timet_string(tt_p200) );
     printf("LA+200D     : %s\n", ictt_as_string(icttla));
-    printf("LA Offs     : %d\n", icaltime_daylight_offset(icttla,
-						     "America/Los_Angeles"));
 
     assert(strcmp(ictt_as_string(icttla),"2001-05-22 11:30:30")==0);
-    assert(icaltime_daylight_offset(icttla,"America/Los_Angeles") == 3600);
 
+    icalerror_errors_are_fatal = 1;
 }
 
 void test_iterators()
@@ -1736,6 +1746,91 @@ void test_iterators()
 }
 
 
+
+char* test_set_tz(const char* tzid)
+{
+    char *tzstr = 0;
+    char *tmp;
+
+   /* Put the new time zone into the environment */
+    if(getenv("TZ") != 0){
+	tzstr = (char*)strdup(getenv("TZ"));
+
+	if(tzstr == 0){
+	    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+	    return 0;
+	}
+    }
+
+    tmp = (char*)malloc(1024);
+
+    if(tmp == 0){
+	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+	return 0;
+    }
+
+    snprintf(tmp,1024,"TZ=%s",tzid);
+
+    /* HACK. In some libc versions, putenv gives the string to the
+       system and in some it gives a copy, so the following might be a
+       memory leak. THe linux man page says that glibc2.1.2 take
+       ownership ( no leak) while BSD4.4 uses a copy ( A leak ) */
+    putenv(tmp); 
+
+    return tzstr; /* This will be zero if the TZ env var was not set */
+}
+
+void test_unset_tz(char* tzstr)
+{
+    /* restore the original environment */
+
+    if(tzstr!=0){
+	char temp[1024];
+	snprintf(temp,1024,"TZ=%s",tzstr);
+	putenv(temp);
+	free(tzstr);
+    } else {
+	putenv("TZ"); /* Delete from environment */
+    } 
+}
+
+
+void test_time()
+{
+    char  zones[6][40] = { "America/Los_Angeles","America/New_York","Europe/London","Asia/Shanghai", ""};
+    int i;
+    char* old_tz;
+    int orig_month;
+    time_t tt;
+    struct tm stm;
+
+    tt = time(0);
+
+    stm = *(localtime(&tt));
+
+    orig_month = stm.tm_mon;
+
+    do_test_time(0);
+
+    old_tz = test_set_tz(zones[0]);
+
+    for(i = 0; zones[i][0] != 0; i++){
+
+	if(zones[i][0] != 0){
+	    test_set_tz(zones[i]);
+	}
+	
+	printf(" ######### Timezone: %s ############\n",zones[i]);
+	
+	do_test_time(zones[i]);
+
+    } 
+
+    test_unset_tz(old_tz);
+
+}
+
+
 void test_icalset()
 {
     icalcomponent *c; 
@@ -1782,6 +1877,10 @@ void print_span(int c, struct icaltime_span span ){
     printf("#%02d start: %s\n",c,ical_timet_string(span.start));
     printf("    end  : %s\n",ical_timet_string(span.end));
 
+}
+
+struct icaltimetype icaltime_as_local(struct icaltimetype tt) {
+    return  icaltime_as_zone(tt,0);
 }
 
 void test_span()
@@ -1975,14 +2074,14 @@ void test_fblist()
     struct icalperiodtype period;
 
     sl = icalspanlist_new(set,
-		     icaltime_from_string("19970324T1200Z"),
+		     icaltime_from_string("19970324T120000Z"),
 		     icaltime_from_string("19990424T020000Z"));
 		
     printf("Restricted spanlist\n");
     icalspanlist_dump(sl);
 
     period= icalspanlist_next_free_time(sl,
-				      icaltime_from_string("19970801T1200Z"));
+				      icaltime_from_string("19970801T120000Z"));
 
 
     printf("Next Free time: %s\n",icaltime_as_ctime(period.start));
@@ -1994,7 +2093,7 @@ void test_fblist()
     printf("Unrestricted spanlist\n");
 
     sl = icalspanlist_new(set,
-		     icaltime_from_string("19970324T1200Z"),
+		     icaltime_from_string("19970324T120000Z"),
 			  icaltime_null_time());
 		
     printf("Restricted spanlist\n");
@@ -2002,7 +2101,7 @@ void test_fblist()
     icalspanlist_dump(sl);
 
     period= icalspanlist_next_free_time(sl,
-				      icaltime_from_string("19970801T1200Z"));
+				      icaltime_from_string("19970801T120000Z"));
 
 
     printf("Next Free time: %s\n",icaltime_as_ctime(period.start));
@@ -2023,8 +2122,8 @@ void test_convenience(){
 	ICAL_VCALENDAR_COMPONENT,
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
-	    icalproperty_new_dtstart(icaltime_from_string("19970801T1200")),
-	    icalproperty_new_dtend(icaltime_from_string("19970801T1300")),
+	    icalproperty_new_dtstart(icaltime_from_string("19970801T120000")),
+	    icalproperty_new_dtend(icaltime_from_string("19970801T130000")),
 	    0
 	    ),
 	0);
@@ -2044,7 +2143,7 @@ void test_convenience(){
 	ICAL_VCALENDAR_COMPONENT,
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
-	    icalproperty_new_dtstart(icaltime_from_string("19970801T1200Z")),
+	    icalproperty_new_dtstart(icaltime_from_string("19970801T120000Z")),
 	    icalproperty_new_duration(icaldurationtype_from_string("PT1H30M")),
 	    0
 	    ),
@@ -2065,8 +2164,8 @@ void test_convenience(){
 	ICAL_VCALENDAR_COMPONENT,
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
-	    icalproperty_new_dtstart(icaltime_from_string("19970801T1200")),
-	    icalproperty_new_dtend(icaltime_from_string("19970801T1300")),
+	    icalproperty_new_dtstart(icaltime_from_string("19970801T120000")),
+	    icalproperty_new_dtend(icaltime_from_string("19970801T130000")),
 	    0
 	    ),
 	0);
@@ -2088,13 +2187,13 @@ void test_convenience(){
 	ICAL_VCALENDAR_COMPONENT,
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
-	    icalproperty_new_dtstart(icaltime_from_string("19970801T1200Z")),
+	    icalproperty_new_dtstart(icaltime_from_string("19970801T120000Z")),
 	    icalproperty_new_duration(icaldurationtype_from_string("PT1H30M")),
 	    0
 	    ),
 	0);
 
-    icalcomponent_set_dtend(c,icaltime_from_string("19970801T1330Z"));
+    icalcomponent_set_dtend(c,icaltime_from_string("19970801T133000Z"));
 
     printf("\n** 4 DTSTART and DURATION, set DTEND **\n%s\n\n",
 	   icalcomponent_as_ical_string(c));
@@ -2115,8 +2214,8 @@ void test_convenience(){
 	    ),
 	0);
 
-    icalcomponent_set_dtstart(c,icaltime_from_string("19970801T1200Z"));
-    icalcomponent_set_dtend(c,icaltime_from_string("19970801T1330Z"));
+    icalcomponent_set_dtstart(c,icaltime_from_string("19970801T120000Z"));
+    icalcomponent_set_dtend(c,icaltime_from_string("19970801T133000Z"));
 
     printf("\n** 5 Set DTSTART and DTEND **\n%s\n\n",
 	   icalcomponent_as_ical_string(c));
@@ -2139,7 +2238,7 @@ void test_convenience(){
 	0);
 
 
-    icalcomponent_set_dtstart(c,icaltime_from_string("19970801T1200Z"));
+    icalcomponent_set_dtstart(c,icaltime_from_string("19970801T120000Z"));
     icalcomponent_set_duration(c,icaldurationtype_from_string("PT1H30M"));
 
     printf("\n** 6 Set DTSTART and DURATION **\n%s\n\n",
@@ -2160,6 +2259,8 @@ void test_time_parser()
 {
     struct icaltimetype tt;
 
+    icalerror_errors_are_fatal = 0;
+
     tt = icaltime_from_string("19970101T1000");
     assert(icaltime_is_null_time(tt));
 
@@ -2177,6 +2278,8 @@ void test_time_parser()
     tt = icaltime_from_string("19970101");
     assert(!icaltime_is_null_time(tt));
     printf("%s\n",icaltime_as_ctime(tt));
+
+    icalerror_errors_are_fatal = 1;
 
 }
 
@@ -2723,6 +2826,39 @@ void test_file_locks()
 }
 
 
+void test_trigger()
+{
+
+    static const char test_icalcomp_str[] =
+"BEGIN:VEVENT\n"
+"TRIGGER;VALUE=DATE-TIME:19980403T120000\n"
+"TRIGGER:-PT15M\n"
+"TRIGGER:19980403T120000\n"
+"END:VEVENT\r\n";
+  
+    icalcomponent *c;
+    icalproperty *p;
+    struct icaltriggertype tr;
+
+    
+    c = icalparser_parse_string ((char *) test_icalcomp_str);
+    if (!c) {
+	fprintf (stderr, "main(): could not parse the component\n");
+	exit (EXIT_FAILURE);
+    }
+    
+    printf("%s\n\n",icalcomponent_as_ical_string(c));
+
+    for(p = icalcomponent_get_first_property(c,ICAL_TRIGGER_PROPERTY);
+	p != 0;
+	p = icalcomponent_get_next_property(c,ICAL_TRIGGER_PROPERTY)){
+	tr = icalproperty_get_trigger(p);
+	}
+
+    
+
+}
+
 int main(int argc, char *argv[])
 {
     int c;
@@ -2803,6 +2939,17 @@ int main(int argc, char *argv[])
 	test_doy();
     }
 	    
+    if(ttime==1 || ttime==5){
+	printf("\n------------Test duration---------------\n");
+	test_duration();
+    }	
+
+    if(ttime==1 || ttime==6){
+	printf("\n------------Test period ----------------\n");
+	test_period();
+    }	
+	
+
 	    
     if(trecur==1 || trecur==2){
 	printf("\n------------Test recur parser ----------\n");
@@ -2862,13 +3009,14 @@ int main(int argc, char *argv[])
 	test_x();
     }
 
+    if(tmisc == 1 || tmisc  == 3){
+	printf("\n------------Test Trigger ------------------\n");
+	/*test_trigger();*/
+    }
+
 
     if(tmisc == 1){
 
-	printf("\n------------Test duration---------------\n");
-	test_duration();
-	
-	
 	printf("\n------------Test Convenience ------------\n");
 	test_convenience();
 	
@@ -2883,7 +3031,7 @@ int main(int argc, char *argv[])
 	printf("\n------------Test Restriction---------------\n");
 	test_restriction();
 	
-	printf("\n------------Test request status-------\n");
+	printf("\n-----------Test request status-------\n");
 	test_requeststat();
 	
 	printf("\n------------Test strings---------------\n");

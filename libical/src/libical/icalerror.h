@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.2 2001-01-12 21:22:20 ebusboom Exp $
+  $Id: icalerror.h,v 1.3 2001-01-23 07:03:17 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -131,7 +131,10 @@ typedef enum icalerrorenum {
 
 } icalerrorenum;
 
+/* The libical error enumeration, like errno*/
 extern icalerrorenum icalerrno;
+
+/* If true, libicl aborts after a call to icalerror_set_error*/
 extern int icalerror_errors_are_fatal;
 
 void icalerror_clear_errno(void);

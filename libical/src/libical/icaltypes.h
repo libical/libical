@@ -67,14 +67,11 @@ struct icalgeotype
 	float lon;
 };
 
-					   
-
-union icaltriggertype 
+struct icaltriggertype 
 {
 	struct icaltimetype time; 
 	struct icaldurationtype duration;
 };
-
 
 
 /* struct icalreqstattype. This struct contains two string pointers,

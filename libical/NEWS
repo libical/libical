@@ -15,6 +15,12 @@ on file storage ( icalfileset ) and time ( icaltime.c)
 
 Lots of bug fixes and small patches. 
 
+I improved the regression test in src/test/regression.c. It now have
+command line switches to select specific tests ( undocumentated, of
+course ) and more of the tests include asserts, so you can just run it
+without looking at the output. If the test runs without crashing, it
+is mostly OK.
+
 
 
 Version 0.21, 20 Nov 00 ( cvs tag libical-0-21)

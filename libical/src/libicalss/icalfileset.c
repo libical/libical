@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.5 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: icalfileset.c,v 1.6 2001-01-23 07:03:17 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -212,7 +212,7 @@ int icalfileset_filesize(icalfileset* cluster)
 	}	
     }
 
-    return -1;
+    /*return -1; not reached*/
 }
 
 void icalfileset_free(icalfileset* cluster)

@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c.in,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
+  $Id: icalvalue.c.in,v 1.3 2001-01-23 07:03:17 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -91,7 +91,7 @@ struct icalvalue_impl {
                    a reference*/
 
 		struct icalrecurrencetype *v_recur;
-		union icaltriggertype v_trigger;
+		struct icaltriggertype v_trigger;
 		icalproperty_method v_method;
 		icalproperty_status v_status;
 
@@ -197,7 +197,7 @@ icalvalue* icalvalue_new_clone(icalvalue* value){
 
 char* icalmemory_strdup_and_dequote(const char* str)
 {
-    char* p;
+    const char* p;
     char* out = (char*)malloc(sizeof(char) * strlen(str) +1);
     char* pout;
 
@@ -215,8 +215,9 @@ char* icalmemory_strdup_and_dequote(const char* str)
 	    switch(*p){
 		case 0:
 		{
-		    break;
 		    *pout = '\0';
+		    break;
+
 		}
 		case 'n':
 		{
@@ -454,13 +455,16 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	}
 
 	case ICAL_DATETIMEPERIOD_VALUE:
-	case ICAL_DURATION_VALUE:
-	case ICAL_PERIOD_VALUE:
-	case ICAL_TRIGGER_VALUE:
-	{
+        case ICAL_DURATION_VALUE:
+        case ICAL_PERIOD_VALUE:
+	    {
 	    value = icalparser_parse_value(kind,str,error);
 	    break;
 	}
+	
+        case ICAL_TRIGGER_VALUE:
+	
+
 
 	default:
 	{
@@ -588,14 +592,15 @@ char* icalvalue_binary_as_ical_string(icalvalue* value) {
 }
 
 
+#define MAX_INT_DIGITS 12 /* Enough for 2^32 + sign*/ 
 char* icalvalue_int_as_ical_string(icalvalue* value) {
     
     int data;
-    char* str = (char*)icalmemory_tmp_buffer(2);
+    char* str = (char*)icalmemory_tmp_buffer(MAX_INT_DIGITS); 
     icalerror_check_arg_rz( (value!=0),"value");
     data = icalvalue_get_integer(value);
 	
-    sprintf(str,"%d",data);
+    snprintf(str,MAX_INT_DIGITS,"%d",data);
 
     return str;
 }
@@ -767,64 +772,15 @@ char* icalvalue_attach_as_ical_string(icalvalue* value) {
     }
 }
 
-void append_duration_segment(char** buf, char** buf_ptr, size_t* buf_size, 
-			     char* sep, unsigned int value) {
-
-    char temp[TMP_BUF_SIZE];
-
-    sprintf(temp,"%d",value);
-
-    icalmemory_append_string(buf, buf_ptr, buf_size, temp);
-    icalmemory_append_string(buf, buf_ptr, buf_size, sep);
-    
-}
 
 char* icalvalue_duration_as_ical_string(icalvalue* value) {
 
     struct icaldurationtype data;
-    char *buf, *output_line;
-    size_t buf_size = 256;
-    char* buf_ptr = 0;
 
     icalerror_check_arg_rz( (value!=0),"value");
     data = icalvalue_get_duration(value);
 
-    buf = (char*)icalmemory_new_buffer(buf_size);
-    buf_ptr = buf;
-    
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "P");
-    
-    
-    if (data.weeks != 0 ) {
-	append_duration_segment(&buf, &buf_ptr, &buf_size, "W", data.weeks);
-    }
-
-    if (data.days != 0 ) {
-	append_duration_segment(&buf, &buf_ptr, &buf_size, "D", data.days);
-    }
-
-    if (data.hours != 0 || data.minutes != 0 || data.seconds != 0) {
-
-	icalmemory_append_string(&buf, &buf_ptr, &buf_size, "T");
-
-	if (data.hours != 0 ) {
-	    append_duration_segment(&buf, &buf_ptr, &buf_size, "H", data.hours);
-	}
-	if (data.minutes != 0 ) {
-	    append_duration_segment(&buf, &buf_ptr, &buf_size, "M", data.minutes);
-	}
-	if (data.seconds != 0 ) {
-	    append_duration_segment(&buf, &buf_ptr, &buf_size, "S", data.seconds);
-	}
-
-    }
- 
-    output_line = icalmemory_tmp_copy(buf);
-    icalmemory_free_buffer(buf);
-
-    return output_line;
-
-    
+    return icaldurationtype_as_ical_string(data);
 }
 
 void print_time_to_string(char* str,  struct icaltimetype *data)
@@ -1024,8 +980,11 @@ char* icalvalue_period_as_ical_string(icalvalue* value) {
 
 char* icalvalue_trigger_as_ical_string(icalvalue* value) {
 
-    union icaltriggertype data;
+    struct icaltriggertype data;
     char* str;
+    icalvalue *e;
+
+
     icalerror_check_arg_rz( (value!=0),"value");
     data = icalvalue_get_trigger(value);
 

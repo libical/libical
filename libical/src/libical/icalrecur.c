@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.1.1.1 2001-01-02 07:33:02 ebusboom Exp $
+  $Id: icalrecur.c,v 1.2 2001-01-23 07:03:17 ebusboom Exp $
   $Locker:  $
     
 
@@ -139,7 +139,7 @@
 
 #include <stdlib.h> /* for malloc */
 #include <errno.h> /* for errno */
-#include <string.h> /* for strdup and index */
+#include <string.h> /* for strdup and strchr*/
 #include <assert.h>
 #include <stddef.h> /* For offsetof() macro */
 
@@ -162,7 +162,7 @@ const char* icalrecur_first_clause(struct icalrecur_parser *parser)
     char *idx;
     parser->this_clause = parser->copy;
     
-    idx = index(parser->this_clause,';');
+    idx = strchr(parser->this_clause,';');
 
     if (idx == 0){
 	parser->next_clause = 0;
@@ -187,7 +187,7 @@ const char* icalrecur_next_clause(struct icalrecur_parser *parser)
 	return 0;
     }
 
-    idx = index(parser->this_clause,';');
+    idx = strchr(parser->this_clause,';');
 
     if (idx == 0){
 	parser->next_clause = 0;
@@ -209,7 +209,7 @@ void icalrecur_clause_name_and_value(struct icalrecur_parser *parser,
 
     *name = parser->this_clause;
 
-    idx = index(parser->this_clause,'=');
+    idx = strchr(parser->this_clause,'=');
 
     if (idx == 0){
 	*name = 0;
@@ -240,7 +240,7 @@ void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
 	
 	t = n;
 
-	n = index(t,',');
+	n = strchr(t,',');
 
 	if(n != 0){
 	    *n = 0;
@@ -286,7 +286,7 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 
 	t = n;
 
-	n = index(t,',');
+	n = strchr(t,',');
 
 	if(n != 0){
 	    *n = 0;
@@ -327,13 +327,13 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 {
     struct icalrecur_parser parser;
 
-    icalerror_check_arg_re(str!=0,"str",parser.rt);
-
-    /* Set up the parser struct */
-
     memset(&parser,0,sizeof(parser));
     icalrecurrencetype_clear(&parser.rt);
 
+    icalerror_check_arg_re(str!=0,"str",parser.rt);
+
+
+    /* Set up the parser struct */
     parser.rule = str;
     parser.copy = strdup(parser.rule);
     parser.this_clause = parser.copy;
@@ -1695,7 +1695,6 @@ int check_restriction(struct icalrecur_iterator_impl* impl,
 
 int check_contracting_rules(struct icalrecur_iterator_impl* impl)
 {
-    enum byrule;
 
     int day_of_week=0;
     int week_no=0;

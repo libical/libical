@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icallexer.l,v 1.1.1.1 2001-01-02 07:32:59 ebusboom Exp $
+  $Id: icallexer.l,v 1.2 2001-01-23 07:03:17 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -100,54 +100,8 @@ digit		[0-9]
 %}
 
 
-<binary_value>{
-.*			 { ical_yylval.v_string= icalmemory_tmp_copy(yytext);  
-			   return STRING;}
-{crlf}                { return EOL;}
-
-}
-
-<boolean_value>{
-.			 { return CHARACTER; }
-{crlf}                { return EOL;}
-
-}
-
-<uri_value>{
-.*			 { ical_yylval.v_string= icalmemory_tmp_copy(yytext);  
-			   return STRING;}
-{crlf}                   { return EOL;}
-
-}
-
 
 <time_value>{
-{digit}*		 { ical_yylval.v_string= icalmemory_tmp_copy(yytext);
-                           return DIGITS; }
-T			 { return TIME_CHAR; }
-Z			 { return UTC_CHAR; }
-{crlf}                   { return EOL;}
-.			 { return CHARACTER; }
-
-}
-
-<duration_value>{
-{digit}+		 { ical_yylval.v_string =icalmemory_tmp_copy(yytext); 
-                           return DIGITS; }
-T			 { return TIME_CHAR; }
-[\+\-PTWHMSD]		 { return yytext[0]; }
-{crlf}	                 { return EOL;}
-
-}
-
-<number_value>{
-[\+\-\.0-9]+		 {  ical_yylval.v_int=atoi(yytext); return INTNUMBER; }
-{crlf}                   { return EOL;}
-.			 { return CHARACTER; }
-
-}
-
-<period_value>{
 {digit}+		 { ical_yylval.v_string =icalmemory_tmp_copy(yytext) ;
                            return DIGITS; }
 T			 { return TIME_CHAR; }
@@ -155,46 +109,6 @@ Z			 { return UTC_CHAR; }
 [\/\+\-PWHMSD]		 { return yytext[0]; }
 {crlf}                   { return EOL;}
 
-}
-
-<recur_value>{
-INTERVAL                 { return INTERVAL; }
-COUNT                    { return COUNT; }
-UNTIL                    { return UNTIL; }
-FREQ                     { return FREQ; }
-BYDAY                    { return BYDAY; }
-BYHOUR                   { return BYHOUR; }
-BYMINUTE                 { return BYMINUTE; }
-BYMONTH                  { return BYMONTH; }
-BYMONTHDAY               { return BYMONTHDAY; }
-BYSECOND                 { return BYSECOND; }
-BYSETPOS                 { return BYSETPOS; }
-BYWEEKNO                 { return BYWEEKNO; }
-BYYEARDAY                { return BYYEARDAY; }
-DAILY                    { return DAILY; }
-SECONDLY                 { return SECONDLY; }
-MINUTELY                 { return MINUTELY; }
-HOURLY                   { return HOURLY; }
-MONTHLY                  { return MONTHLY; }
-WEEKLY                   { return WEEKLY; }
-YEARLY                   { return YEARLY; }
-WKST                     { return WKST; }
-MO                       { return MO; }
-SA                       { return SA; }
-SU                       { return SU; }
-TU                       { return TU; }
-WE                       { return WE; }
-TH                       { return TH; }
-FR                       { return FR; }
-=                        { return EQUALS; }
-,                        { return COMMA; }
-;                        { return SEMICOLON; }
--                        { return MINUS; }
-[\+0-9]+		 { ical_yylval.v_string= icalmemory_tmp_copy(yytext);
-                           return DIGITS; }
-T			 { return TIME_CHAR; }
-Z			 { return UTC_CHAR; }
-{crlf}                   { return EOL;}
 }
 
 <utcoffset_value>{
@@ -228,52 +142,14 @@ void set_parser_value_state(icalvalue_kind kind)
 
     switch (kind){
 
-        case ICAL_ATTACH_VALUE:
-	case ICAL_BINARY_VALUE:
-	    {BEGIN(binary_value);break;}
-
-	case ICAL_BOOLEAN_VALUE:
-	case ICAL_INTEGER_VALUE:
-	case ICAL_FLOAT_VALUE:
-	    {BEGIN(number_value);break;}
-
 	case ICAL_UTCOFFSET_VALUE:
 	    {BEGIN(utcoffset_value);break;}
 
-	case ICAL_TEXT_VALUE:
-	    {BEGIN(text_value);
-             init_str_buf();
-             break;}
-
-	case ICAL_CALADDRESS_VALUE:
-	case ICAL_URI_VALUE:
-	    {BEGIN(uri_value);break;}
-
-	case ICAL_DATE_VALUE:
-	case ICAL_DATETIME_VALUE:
-	case ICAL_DATETIMEDATE_VALUE:
 	case ICAL_DATETIMEPERIOD_VALUE:
-	case ICAL_TIME_VALUE:
+	case ICAL_DURATION_VALUE:
+	case ICAL_PERIOD_VALUE:
 	    {BEGIN(time_value);break;}
 
-	case ICAL_DURATION_VALUE:
-             {BEGIN(duration_value);break;}
-
-	case ICAL_PERIOD_VALUE:
-            {BEGIN(period_value);break;}
-
-	case ICAL_GEO_VALUE:
-        case ICAL_QUERY_VALUE:
-	    {BEGIN(text_value);break;}
-
-	case ICAL_RECUR_VALUE:
-	    {BEGIN(recur_value);break;}
-
-	case ICAL_NO_VALUE:
-	{
-	  /* The value is probably actually a component name */
-            {BEGIN(component); break;}
-	}
 	default:
 	{
 	   assert(1==0);

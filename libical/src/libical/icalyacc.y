@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalyacc.y,v 1.2 2001-01-12 21:22:20 ebusboom Exp $
+  $Id: icalyacc.y,v 1.3 2001-01-23 07:03:17 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -47,6 +47,9 @@ int utcsign;
 
 /* Globals for DURATION values */
 struct icaldurationtype duration;
+
+/* Globals for TRIGGER values */
+struct icaltriggertype trigger;
 
 void copy_list(short* array, size_t size);
 void add_prop(icalproperty_kind);
@@ -172,9 +175,7 @@ int yylex(void); /* Or this. */
 %%
 
 value:
-       binary_value
-	| boolean_value
-	| date_value
+	date_value
 	| datetime_value
 	| duration_value
 	| period_value
@@ -185,13 +186,6 @@ value:
                   yyclearin;
                   }
 
-binary_value: "unimplemented2"
-
-boolean_value: 
-        TRUE
-	{ icalparser_yy_value = icalvalue_new_boolean(1); }
-	| FALSE		
-	{ icalparser_yy_value = icalvalue_new_boolean(0); }
 
 date_value: DIGITS
         {
@@ -361,7 +355,8 @@ period_value:  DIGITS TIME_CHAR DIGITS utc_char '/'  DIGITS TIME_CHAR DIGITS utc
 	}
 
 
-
+trigger: 
+	
 
 
 /* UTC Offset */
