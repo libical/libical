@@ -26,7 +26,7 @@ AC_ARG_WITH(bdb4, [  --with-bdb4             Add support for Berkeley DB 4.0],
 		WITH_BDB4="yes"
 		;;
     no)		;;
-    *)		echo "Ignoring unknown argument to --with-devel: $with_devel"
+    *)		echo "Ignoring unknown argument to --with-bdb4: $with_bdb4"
 		;;
 esac])
 
@@ -130,7 +130,7 @@ if test "x$enable_cxx" = "xyes"; then
 AC_PROG_CXX
 fi
 
-AM_CONDITIONAL(WITH_CXX, test x$enable_CXX = "xyes")
+AM_CONDITIONAL(WITH_CXX, test x$enable_cxx = "xyes")
 
 dnl **************************************************
 dnl * Check for Python
