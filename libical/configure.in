@@ -34,7 +34,8 @@ AC_ARG_WITH(bdb4, [  --with-bdb4             Add support for Berkeley DB 4.0],
     *)		AC_MSG_RESULT(no)
 		AC_MSG_RESULT(Ignoring unknown argument to --with-bdb4: $with_bdb4)
 		;;
-esac])
+esac],
+AC_MSG_RESULT(no))
 
 if test x$WITH_BDB4 = xyes; then
   AC_ARG_WITH(bdb4_dir, [  --with-bdb4-dir=PATH    Use PATH as location of BerkeleyDB 4.0],
@@ -97,7 +98,8 @@ AC_ARG_WITH(devel, [  --with-devel            Add development options],
     *)		AC_MSG_RESULT(no)
 		AC_MSG_RESULT(Ignoring unknown argument to --with-devel: $with_devel)
 		;;
-esac])
+esac],
+AC_MSG_RESULT(no))
 AM_CONDITIONAL(DEV, test x$DEV = xyes)
 
 AC_CHECK_PROGS(AR, ar aal, ar)
