@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.17 2002-06-03 17:08:36 acampi Exp $
+  $Id: icalproperty.c,v 1.18 2002-06-03 17:10:37 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -636,7 +636,7 @@ icalproperty_count_parameters (icalproperty* prop)
 
 
 icalparameter*
-icalproperty_get_first_parameter (icalproperty* p, icalparameter_kind kind)
+icalproperty_get_first_parameter(icalproperty* p, icalparameter_kind kind)
 {
    icalerror_check_arg_rz( (p!=0),"prop");
    
@@ -791,7 +791,7 @@ const char* icalproperty_get_x_name(icalproperty* prop){
 
 
 /* From Jonathan Yue <jonathan.yue@cp.net>    */
-const char* icalproperty_get_name (icalproperty* prop)
+const char* icalproperty_get_name(icalproperty* prop)
 {
 
     const char* property_name = 0;
