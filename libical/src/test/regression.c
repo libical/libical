@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.59 2002-08-07 17:24:50 acampi Exp $
+  $Id: regression.c,v 1.60 2002-08-08 15:01:26 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1813,15 +1813,6 @@ void test_time()
     char  *zones[6] = { "America/Los_Angeles","America/New_York","Europe/London","Asia/Shanghai", NULL};
     
     int i;
-    int orig_month;
-    time_t tt;
-    struct tm stm;
-
-    tt = time(0);
-
-    stm = *(localtime(&tt));
-
-    orig_month = stm.tm_mon;
 
     do_test_time(0);
 
