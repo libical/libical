@@ -392,6 +392,7 @@ void VComponent::set_recurrenceid(struct icaltimetype v){
 	icalcomponent_set_recurrenceid(imp, v);
 }
 
+#if 0
 struct icalorganizertype VComponent::get_organizer(){
 	return icalcomponent_get_organizer(imp);
 }
@@ -405,6 +406,7 @@ void VComponent::add_attendee(struct icalattendeetype attendee){
 void VComponent::remove_attendee(string cuid){
 	icalcomponent_remove_attendee(imp, cuid);
 }
+#endif
 
 int VComponent::get_sequence(){
         return (int)icalcomponent_get_sequence(imp);
@@ -420,11 +422,12 @@ void VComponent::set_status(int v){
         icalcomponent_set_status(imp, v);
 }
 
-
+#if 0
 /* Get the Nth attendee. Out of range indices return an attendee with cuid == 0 */
 struct icalattendeetype VComponent::get_attendee(int index){
 	return icalcomponent_get_attendee(imp, index);
 }
+#endif
 
 /* For VCOMPONENT: Return a reference to the first VEVENT, VTODO, or VJOURNAL */
 VComponent* VComponent::get_first_real_component(){

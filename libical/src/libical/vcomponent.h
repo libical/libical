@@ -349,4 +349,6 @@ public:
 	XDaylight(string str);
 };
 
+typedef ICPointerHolder<VComponent> VComponentTmpPtr; /* see icptrholder.h for comments */
+
 #endif /* VComponent_H */
