@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.45 2002-10-09 16:31:54 acampi Exp $
+  $Id: icalcomponent.c,v 1.46 2002-10-09 20:09:28 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1344,7 +1344,7 @@ icalcomponent_begin_component(icalcomponent* component,icalcomponent_kind kind)
     itr.kind = kind;
     itr.iter = NULL;
 
-    icalerror_check_arg_re( (component!=0),"component",icalcompiter_null);
+    icalerror_check_arg_re(component!=0,"component",icalcompiter_null);
 
     for( i = pvl_head(component->components); i != 0; i = pvl_next(i)) {
 	
@@ -1369,7 +1369,7 @@ icalcomponent_end_component(icalcomponent* component,icalcomponent_kind kind)
 
     itr.kind = kind;
 
-    icalerror_check_arg_re( (component!=0),"component",icalcompiter_null);
+    icalerror_check_arg_re(component!=0,"component",icalcompiter_null);
 
     for( i = pvl_tail(component->components); i != 0; i = pvl_prior(i)) {
 	
