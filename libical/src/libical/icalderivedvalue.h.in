@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalderivedvalue.h.in,v 1.5 2001-04-11 04:45:28 ebusboom Exp $
+  $Id: icalderivedvalue.h.in,v 1.6 2002-05-21 10:31:29 acampi Exp $
   $Locker:  $
 
   
@@ -35,7 +35,7 @@
 #include "icalduration.h"
 #include "icalperiod.h"
      
-typedef void icalvalue;
+typedef struct icalvalue_impl icalvalue;
 
 
 

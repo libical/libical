@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.23 2002-04-18 18:10:49 gray-john Exp $
+  $Id: icalparser.c,v 1.24 2002-05-21 10:31:29 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -221,7 +221,7 @@ void icalparser_clear_flex_input(void)
 /* Call the flex/bison parser to parse a complex value */
 
 icalvalue*  icalparser_parse_value(icalvalue_kind kind,
-                                   const char* str, icalproperty** error)
+                                   const char* str, icalcomponent** error)
 {
     int r;
     input_buffer_p = input_buffer = str;

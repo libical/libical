@@ -3,7 +3,7 @@
   FILE: icalenum.c
   CREATOR: eric 29 April 1999
   
-  $Id: icalenums.c,v 1.11 2001-03-26 19:17:28 ebusboom Exp $
+  $Id: icalenums.c,v 1.12 2002-05-21 10:31:29 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -34,9 +34,10 @@
 #include <stdio.h> /* For stderr */
 #include <string.h> /* For strncmp */
 #include <assert.h>
+#include "icalmemory.h"
 
-
-
+/*** @brief Allowed request status values
+ */
 struct {
 	 enum icalrequeststatus kind;
 	int major;
@@ -70,18 +71,25 @@ struct {
     {ICAL_3_12_UNKCOMP_STATUS, 3,12,"Unknown component or property found."},
     {ICAL_3_13_BADCOMP_STATUS, 3,13,"Unsupported component or property found"},
     {ICAL_3_14_NOCAP_STATUS, 3,14,"Unsupported capability."},
+    {ICAL_3_15_INVCOMMAND, 3,15,"Invalid command."},
     {ICAL_4_0_BUSY_STATUS, 4,0,"Event conflict. Date/time  is busy."},
+    {ICAL_4_1_STORE_ACCESS_DENIED, 4,1,"Store Access Denied."},
+    {ICAL_4_2_STORE_FAILED, 4,2,"Store Failed."},
+    {ICAL_4_3_STORE_NOT_FOUND, 4,3,"Store not found."},
     {ICAL_5_0_MAYBE_STATUS, 5,0,"Request MAY supported."},
     {ICAL_5_1_UNAVAIL_STATUS, 5,1,"Service unavailable."},
     {ICAL_5_2_NOSERVICE_STATUS, 5,2,"Invalid calendar service."},
     {ICAL_5_3_NOSCHED_STATUS, 5,3,"No scheduling support for  user."},
+    {ICAL_6_1_CONTAINER_NOT_FOUND, 6,1,"Container not found."},
+    {ICAL_9_0_UNRECOGNIZED_COMMAND, 9,0,"An unrecognized command was received."},
     {ICAL_UNKNOWN_STATUS, 0,0,"Error: Unknown request status"}
 };
 
 
+/*** @brief Return the descriptive text for a request status
+ */
 const char* icalenum_reqstat_desc(icalrequeststatus stat)
 {
-
     int i;
 
     for (i=0; request_status_map[i].kind  != ICAL_UNKNOWN_STATUS; i++) {
@@ -93,7 +101,26 @@ const char* icalenum_reqstat_desc(icalrequeststatus stat)
     return 0;
 }
 
+/*** @brief Return the code for a request status
+ */
+char* icalenum_reqstat_code(icalrequeststatus stat)
+{
+    int i, major, minor;
+    char tmpbuf[36];
 
+    for (i=0; request_status_map[i].kind  != ICAL_UNKNOWN_STATUS; i++) {
+	if ( request_status_map[i].kind ==  stat) {
+	    major = request_status_map[i].major;
+	    minor = request_status_map[i].minor;
+	    sprintf(tmpbuf, "%i.%i", major, minor);
+	    return icalmemory_tmp_copy(tmpbuf);
+	}
+    }
+    return NULL;
+}
+
+/*** @brief Return the major number for a request status
+ */
 short icalenum_reqstat_major(icalrequeststatus stat)
 {
     int i;
@@ -106,6 +133,8 @@ short icalenum_reqstat_major(icalrequeststatus stat)
     return -1;
 }
 
+/*** @brief Return the minor number for a request status
+ */
 short icalenum_reqstat_minor(icalrequeststatus stat)
 {
     int i;
@@ -119,6 +148,8 @@ short icalenum_reqstat_minor(icalrequeststatus stat)
 }
 
 
+/*** @brief Return a request status for major/minor status numbers
+ */
 icalrequeststatus icalenum_num_to_reqstat(short major, short minor)
 {
     int i;

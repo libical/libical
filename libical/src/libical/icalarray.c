@@ -3,7 +3,7 @@
   FILE: icalarray.c
   CREATOR: Damon Chaplin 07 March 2001
   
-  $Id: icalarray.c,v 1.3 2002-04-18 15:28:20 gray-john Exp $
+  $Id: icalarray.c,v 1.4 2002-05-21 10:31:29 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2001, Ximian, Inc.
@@ -36,6 +36,8 @@
 static void icalarray_expand		(icalarray	*array,
 					 int		 space_needed);
 
+/** @brief Constructor
+ */
 
 icalarray*
 icalarray_new			(int		 element_size,
@@ -58,6 +60,8 @@ icalarray_new			(int		 element_size,
     return array;
 }
 
+/** @brief Destructor
+ */
 
 void
 icalarray_free			(icalarray	*array)

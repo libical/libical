@@ -10,8 +10,8 @@
 #ifndef __PVL_H__
 #define __PVL_H__
 
-typedef void* pvl_list;
-typedef void* pvl_elem;
+typedef struct pvl_list_t* pvl_list;
+typedef struct pvl_elem_t* pvl_elem;
 
 /*
   struct pvl_elem_t

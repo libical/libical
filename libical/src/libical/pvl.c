@@ -148,9 +148,8 @@ pvl_new_element(void *d, pvl_elem next,pvl_elem prior)
   *----------------------------------------------------------------------*/
 
 void 
-pvl_unshift(pvl_list l,void *d)
+pvl_unshift(pvl_list L,void *d)
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
     struct pvl_elem_t *E = pvl_new_element(d,L->head,0);
 
     if (E->next != 0)
@@ -187,16 +186,14 @@ pvl_unshift(pvl_list l,void *d)
   *----------------------------------------------------------------------*/
 
 void* 
-pvl_shift(pvl_list l)
+pvl_shift(pvl_list L)
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
-
     if (L->head == 0)
     {
 	return 0;
     }
 
-    return pvl_remove(l,(void*)L->head);
+    return pvl_remove(L,(void*)L->head);
 
 }
 
@@ -216,9 +213,8 @@ pvl_shift(pvl_list l)
   *----------------------------------------------------------------------*/
 
 void 
-pvl_push(pvl_list l,void *d)
+pvl_push(pvl_list L,void *d)
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
     struct pvl_elem_t *E = pvl_new_element(d,0,L->tail);
 
     /* These are done in pvl_new_element
@@ -257,17 +253,14 @@ pvl_push(pvl_list l,void *d)
   *----------------------------------------------------------------------*/
 
 void* 
-pvl_pop(pvl_list l)
+pvl_pop(pvl_list L)
 {
-
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
-
     if ( L->tail == 0)
     {
 	return 0;
     }
 
-    return pvl_remove(l,(void*) L->tail);;
+    return pvl_remove(L,(void*) L->tail);;
 
 }
 
@@ -291,10 +284,8 @@ pvl_pop(pvl_list l)
   *----------------------------------------------------------------------*/
 
 void 
-pvl_insert_ordered(pvl_list l,pvl_comparef f,void *d)
+pvl_insert_ordered(pvl_list L,pvl_comparef f,void *d)
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
-
     struct pvl_elem_t *P;
 
     L->count++;
@@ -303,7 +294,7 @@ pvl_insert_ordered(pvl_list l,pvl_comparef f,void *d)
 
     if(L->head == 0)
     {
-	pvl_unshift(l,d);
+	pvl_unshift(L,d);
 	return;
     }
 
@@ -311,14 +302,14 @@ pvl_insert_ordered(pvl_list l,pvl_comparef f,void *d)
 
     if ( ((*f)(d,L->head->d)) <= 0)
     { 
-	pvl_unshift(l,d);
+	pvl_unshift(L,d);
 	return;
     }
 
     /* larger than tail, add to tail */
     if ( (*f)(d,L->tail->d) >= 0)
     { 
-	pvl_push(l,d);
+	pvl_push(L,d);
 	return;
     }
 
@@ -329,7 +320,7 @@ pvl_insert_ordered(pvl_list l,pvl_comparef f,void *d)
     {
 	if ( (*f)(P->d,d) >= 0)
 	{
-	    pvl_insert_before(l,P,d);
+	    pvl_insert_before(L,P,d);
 	    return;
 	}
     }
@@ -360,17 +351,15 @@ pvl_insert_ordered(pvl_list l,pvl_comparef f,void *d)
   *----------------------------------------------------------------------*/
 
 void 
-pvl_insert_after(pvl_list l,pvl_elem p,void *d)
+pvl_insert_after(pvl_list L,pvl_elem P,void *d)
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
-    struct pvl_elem_t *P = (struct pvl_elem_t *)p;
     struct pvl_elem_t *E = 0;
 
     L->count++;
 
     if (P == 0)
     {
-	pvl_unshift(l,d);
+	pvl_unshift(L,d);
 	return;
     }
 
@@ -405,17 +394,15 @@ pvl_insert_after(pvl_list l,pvl_elem p,void *d)
   *----------------------------------------------------------------------*/
 
 void 
-pvl_insert_before(pvl_list l,pvl_elem p,void *d)
+pvl_insert_before(pvl_list L,pvl_elem P,void *d)
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
-    struct pvl_elem_t *P = (struct pvl_elem_t *)p;
     struct pvl_elem_t *E = 0;
 
     L->count++;
 
     if (P == 0)
     {
-	pvl_unshift(l,d);
+	pvl_unshift(L,d);
 	return;
     }
 
@@ -452,10 +439,8 @@ pvl_insert_before(pvl_list l,pvl_elem p,void *d)
   *----------------------------------------------------------------------*/
 
 void* 
-pvl_remove(pvl_list l,pvl_elem e)
+pvl_remove(pvl_list L,pvl_elem E)
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
-    struct pvl_elem_t *E = (struct pvl_elem_t *)e;
     void* data;
 
     if (E == L->head)
@@ -626,10 +611,8 @@ pvl_clear(pvl_list l)
   *----------------------------------------------------------------------*/
 
 int 
-pvl_count(pvl_list l)
+pvl_count(pvl_list L)
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
-
     return L->count;
 }
 
@@ -644,10 +627,8 @@ pvl_count(pvl_list l)
   *----------------------------------------------------------------------*/
 
 pvl_elem 
-pvl_next(pvl_elem e)
+pvl_next(pvl_elem E)
 {
-    struct pvl_elem_t *E = (struct pvl_elem_t *)e;
-
     if (E == 0){
 	return 0;
     }
@@ -666,10 +647,8 @@ pvl_next(pvl_elem e)
   *----------------------------------------------------------------------*/
 
 pvl_elem 
-pvl_prior(pvl_elem e)
+pvl_prior(pvl_elem E)
 {
-    struct pvl_elem_t *E = (struct pvl_elem_t *)e;
-
     return (pvl_elem)E->prior;
 }
 
@@ -683,10 +662,8 @@ pvl_prior(pvl_elem e)
   Returns:
   *----------------------------------------------------------------------*/
 pvl_elem 
-pvl_head(pvl_list l )
+pvl_head(pvl_list L )
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
-
     return (pvl_elem)L->head;
 }
 
@@ -700,9 +677,8 @@ pvl_head(pvl_list l )
   Returns:
   *----------------------------------------------------------------------*/
 pvl_elem 
-pvl_tail(pvl_list l)
+pvl_tail(pvl_list L)
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
     return (pvl_elem)L->tail;
 }
 
@@ -718,11 +694,9 @@ pvl_tail(pvl_list l)
 
 #ifndef PVL_USE_MACROS
 void* 
-pvl_data(pvl_elem e)
+pvl_data(pvl_elem E)
 {
-    struct pvl_elem_t *E = (struct pvl_elem_t *)e;
-  
-    if ( e == 0){
+    if ( E == 0){
 	return 0;
     }
 

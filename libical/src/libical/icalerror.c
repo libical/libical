@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.9 2002-05-08 17:46:38 ebusboom Exp $
+  $Id: icalerror.c,v 1.10 2002-05-21 10:31:29 acampi Exp $
   $Locker:  $
     
 
@@ -29,6 +29,7 @@
 #include "config.h"
 #endif
 
+#include <string.h>		/* for strcmp */
 #include "icalerror.h"
 
 icalerrorenum icalerrno;

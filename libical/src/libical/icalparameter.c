@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c,v 1.6 2001-11-14 07:07:22 benjaminlee Exp $
+  $Id: icalparameter.c,v 1.7 2002-05-21 10:31:29 acampi Exp $
   $Locker:  $
     
 
@@ -78,53 +78,48 @@ icalparameter_new (icalparameter_kind kind)
 }
 
 void
-icalparameter_free (icalparameter* parameter)
+icalparameter_free (icalparameter* param)
 {
-    struct icalparameter_impl * impl;
-
-    impl = (struct icalparameter_impl*)parameter;
 
 /*  HACK. This always triggers, even when parameter is non-zero
     icalerror_check_arg_rv((parameter==0),"parameter");*/
 
 
 #ifdef ICAL_FREE_ON_LIST_IS_ERROR
-    icalerror_assert( (impl->parent ==0),"Tried to free a parameter that is still attached to a component. ");
+    icalerror_assert( (param->parent ==0),"Tried to free a parameter that is still attached to a component. ");
     
 #else
-    if(impl->parent !=0){
+    if(param->parent !=0){
 	return;
     }
 #endif
 
     
-    if (impl->string != 0){
-	free ((void*)impl->string);
+    if (param->string != 0){
+	free ((void*)param->string);
     }
     
-    if (impl->x_name != 0){
-	free ((void*)impl->x_name);
+    if (param->x_name != 0){
+	free ((void*)param->x_name);
     }
     
-    memset(impl,0,sizeof(impl));
+    memset(param,0,sizeof(param));
 
-    impl->parent = 0;
-    impl->id[0] = 'X';
-    free(impl);
+    param->parent = 0;
+    param->id[0] = 'X';
+    free(param);
 }
 
 
 
 icalparameter* 
-icalparameter_new_clone(icalparameter* param)
+icalparameter_new_clone(icalparameter* old)
 {
-    struct icalparameter_impl *old;
     struct icalparameter_impl *new;
 
-    old = (struct icalparameter_impl *)param;
     new = icalparameter_new_impl(old->kind);
 
-    icalerror_check_arg_rz((param!=0),"param");
+    icalerror_check_arg_rz((old!=0),"param");
 
     if (new == 0){
 	return 0;
@@ -198,16 +193,15 @@ icalparameter* icalparameter_new_from_string(const char *str)
 }
 
 char*
-icalparameter_as_ical_string (icalparameter* parameter)
+icalparameter_as_ical_string (icalparameter* param)
 {
-    struct icalparameter_impl* impl;
     size_t buf_size = 1024;
     char* buf; 
     char* buf_ptr;
     char *out_buf;
     const char *kind_string;
 
-    icalerror_check_arg_rz( (parameter!=0), "parameter");
+    icalerror_check_arg_rz( (param!=0), "parameter");
 
     /* Create new buffer that we can append names, parameters and a
        value to, and reallocate as needed. Later, this buffer will be
@@ -217,19 +211,18 @@ icalparameter_as_ical_string (icalparameter* parameter)
 
     buf = icalmemory_new_buffer(buf_size);
     buf_ptr = buf;
-    impl = (struct icalparameter_impl*)parameter;
 
-    if(impl->kind == ICAL_X_PARAMETER) {
+    if(param->kind == ICAL_X_PARAMETER) {
 
 	icalmemory_append_string(&buf, &buf_ptr, &buf_size, 
-				 icalparameter_get_xname(impl));
+				 icalparameter_get_xname(param));
 
     } else {
 
-	kind_string = icalparameter_kind_to_string(impl->kind);
+	kind_string = icalparameter_kind_to_string(param->kind);
 	
-	if (impl->kind == ICAL_NO_PARAMETER || 
-	    impl->kind == ICAL_ANY_PARAMETER || 
+	if (param->kind == ICAL_NO_PARAMETER || 
+	    param->kind == ICAL_ANY_PARAMETER || 
 	    kind_string == 0)
 	{
 	    icalerror_set_errno(ICAL_BADARG_ERROR);
@@ -244,20 +237,20 @@ icalparameter_as_ical_string (icalparameter* parameter)
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "=");
 
-    if(impl->string !=0){
+    if(param->string !=0){
         int qm = 0;
 
 	/* Encapsulate the property in quotes if necessary */
-	if (strchr (impl->string, ';') != 0 || strchr (impl->string, ':') != 0) {
+	if (strchr (param->string, ';') != 0 || strchr (param->string, ':') != 0) {
 		icalmemory_append_char (&buf, &buf_ptr, &buf_size, '"');
 		qm = 1;
 	}
-        icalmemory_append_string(&buf, &buf_ptr, &buf_size, impl->string); 
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, param->string); 
 	if (qm == 1) {
 		icalmemory_append_char (&buf, &buf_ptr, &buf_size, '"');
 	}
-    } else if (impl->data != 0){
-        const char* str = icalparameter_enum_to_string(impl->data);
+    } else if (param->data != 0){
+        const char* str = icalparameter_enum_to_string(param->data);
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str); 
     } else {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
@@ -288,7 +281,7 @@ icalparameter_isa (icalparameter* parameter)
 	return ICAL_NO_PARAMETER;
     }
 
-    return ((struct icalparameter_impl *)parameter)->kind;
+    return parameter->kind;
 }
 
 
@@ -312,17 +305,16 @@ icalparameter_isa_parameter (void* parameter)
 void
 icalparameter_set_xname (icalparameter* param, const char* v)
 {
-    struct icalparameter_impl *impl = (struct icalparameter_impl*)param;
     icalerror_check_arg_rv( (param!=0),"param");
     icalerror_check_arg_rv( (v!=0),"v");
 
-    if (impl->x_name != 0){
-	free((void*)impl->x_name);
+    if (param->x_name != 0){
+	free((void*)param->x_name);
     }
 
-    impl->x_name = icalmemory_strdup(v);
+    param->x_name = icalmemory_strdup(v);
 
-    if (impl->x_name == 0){
+    if (param->x_name == 0){
 	errno = ENOMEM;
     }
 
@@ -331,27 +323,24 @@ icalparameter_set_xname (icalparameter* param, const char* v)
 const char*
 icalparameter_get_xname (icalparameter* param)
 {
-    struct icalparameter_impl *impl = (struct icalparameter_impl*)param;
     icalerror_check_arg_rz( (param!=0),"param");
 
-    return impl->x_name;
+    return param->x_name;
 }
 
 void
 icalparameter_set_xvalue (icalparameter* param, const char* v)
 {
-    struct icalparameter_impl *impl = (struct icalparameter_impl*)param;
-
     icalerror_check_arg_rv( (param!=0),"param");
     icalerror_check_arg_rv( (v!=0),"v");
 
-    if (impl->string != 0){
-	free((void*)impl->string);
+    if (param->string != 0){
+	free((void*)param->string);
     }
 
-    impl->string = icalmemory_strdup(v);
+    param->string = icalmemory_strdup(v);
 
-    if (impl->string == 0){
+    if (param->string == 0){
 	errno = ENOMEM;
     }
 
@@ -360,31 +349,24 @@ icalparameter_set_xvalue (icalparameter* param, const char* v)
 const char*
 icalparameter_get_xvalue (icalparameter* param)
 {
-    struct icalparameter_impl *impl = (struct icalparameter_impl*)param;
-
     icalerror_check_arg_rz( (param!=0),"param");
 
-    return impl->string;
-
+    return param->string;
 }
 
 void icalparameter_set_parent(icalparameter* param,
 			     icalproperty* property)
 {
-    struct icalparameter_impl *impl = (struct icalparameter_impl*)param;
-
     icalerror_check_arg_rv( (param!=0),"param");
 
-    impl->parent = property;
+    param->parent = property;
 }
 
 icalproperty* icalparameter_get_parent(icalparameter* param)
 {
-    struct icalparameter_impl *impl = (struct icalparameter_impl*)param;
-
     icalerror_check_arg_rz( (param!=0),"param");
 
-    return impl->parent;
+    return param->parent;
 }
 
 

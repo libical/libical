@@ -3,7 +3,7 @@
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalparser.h,v 1.3 2001-01-28 16:29:32 ebusboom Exp $
+  $Id: icalparser.h,v 1.4 2002-05-21 10:31:29 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -33,7 +33,7 @@
 
 #include <stdio.h> /* For FILE* */
 
-typedef void* icalparser;
+typedef struct icalparser_impl icalparser;
 
 
 /***********************************************************************

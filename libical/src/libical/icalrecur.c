@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.31 2002-05-09 13:42:09 acampi Exp $
+  $Id: icalrecur.c,v 1.32 2002-05-21 10:31:29 acampi Exp $
   $Locker:  $
     
 
@@ -587,7 +587,7 @@ struct icalrecur_iterator_impl {
     
 };
 
-void increment_year(struct icalrecur_iterator_impl* impl, int inc);
+void increment_year(icalrecur_iterator* impl, int inc);
 
 int icalrecur_iterator_sizeof_byarray(short* byarray)
 {
@@ -638,7 +638,7 @@ struct expand_split_map_struct expand_map[] =
 
 
 /* Check that the rule has only the two given interday byrule parts. */
-int icalrecur_two_byrule(struct icalrecur_iterator_impl* impl,
+int icalrecur_two_byrule(icalrecur_iterator* impl,
 			 enum byrule one,enum byrule two)
 {
     short test_array[9];
@@ -669,7 +669,7 @@ int icalrecur_two_byrule(struct icalrecur_iterator_impl* impl,
 } 
 
 /* Check that the rule has only the one given interdat byrule parts. */
-int icalrecur_one_byrule(struct icalrecur_iterator_impl* impl,enum byrule one)
+int icalrecur_one_byrule(icalrecur_iterator* impl,enum byrule one)
 {
     int passes = 1;
     enum byrule itr;
@@ -685,7 +685,7 @@ int icalrecur_one_byrule(struct icalrecur_iterator_impl* impl,enum byrule one)
     return passes;
 } 
 
-int count_byrules(struct icalrecur_iterator_impl* impl)
+int count_byrules(icalrecur_iterator* impl)
 {
     int count = 0;
     enum byrule itr;
@@ -700,7 +700,7 @@ int count_byrules(struct icalrecur_iterator_impl* impl)
 }
 
 
-void setup_defaults(struct icalrecur_iterator_impl* impl, 
+void setup_defaults(icalrecur_iterator* impl, 
 		    enum byrule byrule, icalrecurrencetype_frequency req,
 		    short deftime, int *timepart)
 {
@@ -724,30 +724,30 @@ void setup_defaults(struct icalrecur_iterator_impl* impl,
 
 }
 
-int has_by_data(struct icalrecur_iterator_impl* impl, enum byrule byrule){
+int has_by_data(icalrecur_iterator* impl, enum byrule byrule){
 
     return (impl->orig_data[byrule] == 1);
 }
 
 
-int expand_year_days(struct icalrecur_iterator_impl* impl,short year);
+int expand_year_days(icalrecur_iterator* impl,short year);
 
 
 icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule, 
 					   struct icaltimetype dtstart)
 {
-    struct icalrecur_iterator_impl* impl;
+    icalrecur_iterator* impl;
     icalrecurrencetype_frequency freq;
 
     short days_in_month;
 
-    if ( ( impl = (struct icalrecur_iterator_impl *)
-	   malloc(sizeof(struct icalrecur_iterator_impl))) == 0) {
+    if ( ( impl = (icalrecur_iterator*)
+	   malloc(sizeof(icalrecur_iterator))) == 0) {
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
 	return 0;
     }
 
-    memset(impl,0,sizeof(struct icalrecur_iterator_impl));
+    memset(impl,0,sizeof(icalrecur_iterator));
 
     impl->rule = rule;
     impl->last = dtstart;
@@ -992,17 +992,13 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
 void icalrecur_iterator_free(icalrecur_iterator* i)
 {
+    icalerror_check_arg_rv((i!=0),"impl");
     
-    struct icalrecur_iterator_impl* impl = 
-	(struct icalrecur_iterator_impl*)i;
-
-    icalerror_check_arg_rv((impl!=0),"impl");
-
-    free(impl);
+    free(i);
 
 }
 
-void increment_year(struct icalrecur_iterator_impl* impl, int inc)
+void increment_year(icalrecur_iterator* impl, int inc)
 {
     impl->last.year+=inc;
 }
@@ -1010,7 +1006,7 @@ void increment_year(struct icalrecur_iterator_impl* impl, int inc)
 /* Increment month is different that the other incement_* routines --
    it figures out the interval for itself, and uses BYMONTH data if
    available. */
-void increment_month(struct icalrecur_iterator_impl* impl)
+void increment_month(icalrecur_iterator* impl)
 {
     int years;
 
@@ -1057,7 +1053,7 @@ void increment_month(struct icalrecur_iterator_impl* impl)
      }
 }
 
-void increment_monthday(struct icalrecur_iterator_impl* impl, int inc)
+void increment_monthday(icalrecur_iterator* impl, int inc)
 {
     int i;
 
@@ -1076,7 +1072,7 @@ void increment_monthday(struct icalrecur_iterator_impl* impl, int inc)
 }
 
 
-void increment_hour(struct icalrecur_iterator_impl* impl, int inc)
+void increment_hour(icalrecur_iterator* impl, int inc)
 {
     short days;
 
@@ -1090,7 +1086,7 @@ void increment_hour(struct icalrecur_iterator_impl* impl, int inc)
     }
 }
 
-void increment_minute(struct icalrecur_iterator_impl* impl, int inc)
+void increment_minute(icalrecur_iterator* impl, int inc)
 {
     short hours;
 
@@ -1105,7 +1101,7 @@ void increment_minute(struct icalrecur_iterator_impl* impl, int inc)
 
 }
 
-void increment_second(struct icalrecur_iterator_impl* impl, int inc)
+void increment_second(icalrecur_iterator* impl, int inc)
 {
     short minutes;
 
@@ -1120,7 +1116,41 @@ void increment_second(struct icalrecur_iterator_impl* impl, int inc)
     }                 
 }
 
-short next_second(struct icalrecur_iterator_impl* impl)
+#if 0
+#include "ical.h"
+void test_increment()
+{
+    icalrecur_iterator impl;
+
+    impl.last =  icaltime_from_string("20000101T000000Z");
+
+    printf("Orig: %s\n",icaltime_as_ctime(impl.last));
+    
+    increment_second(&impl,5);
+    printf("+ 5 sec    : %s\n",icaltime_as_ctime(impl.last));
+
+    increment_second(&impl,355);
+    printf("+ 355 sec  : %s\n",icaltime_as_ctime(impl.last));
+
+    increment_minute(&impl,5);
+    printf("+ 5 min    : %s\n",icaltime_as_ctime(impl.last));
+
+    increment_minute(&impl,360);
+    printf("+ 360 min  : %s\n",icaltime_as_ctime(impl.last));
+    increment_hour(&impl,5);
+    printf("+ 5 hours  : %s\n",icaltime_as_ctime(impl.last));
+    increment_hour(&impl,43);
+    printf("+ 43 hours : %s\n",icaltime_as_ctime(impl.last));
+    increment_monthday(&impl,3);
+    printf("+ 3 days   : %s\n",icaltime_as_ctime(impl.last));
+    increment_monthday(&impl,600);
+    printf("+ 600 days  : %s\n",icaltime_as_ctime(impl.last));
+	
+}
+
+#endif 
+
+short next_second(icalrecur_iterator* impl)
 {
 
   short has_by_data = (impl->by_ptrs[BY_SECOND][0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1164,7 +1194,7 @@ short next_second(struct icalrecur_iterator_impl* impl)
 
 }
 
-int next_minute(struct icalrecur_iterator_impl* impl)
+int next_minute(icalrecur_iterator* impl)
 {
 
   short has_by_data = (impl->by_ptrs[BY_MINUTE][0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1210,7 +1240,7 @@ int next_minute(struct icalrecur_iterator_impl* impl)
   return end_of_data;
 }
 
-int next_hour(struct icalrecur_iterator_impl* impl)
+int next_hour(icalrecur_iterator* impl)
 {
 
   short has_by_data = (impl->by_ptrs[BY_HOUR][0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1256,7 +1286,7 @@ int next_hour(struct icalrecur_iterator_impl* impl)
 
 }
 
-int next_day(struct icalrecur_iterator_impl* impl)
+int next_day(icalrecur_iterator* impl)
 {
 
   short has_by_data = (impl->by_ptrs[BY_DAY][0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1284,7 +1314,7 @@ int next_day(struct icalrecur_iterator_impl* impl)
 }
 
 
-int next_yearday(struct icalrecur_iterator_impl* impl)
+int next_yearday(icalrecur_iterator* impl)
 {
 
   short has_by_data = (impl->by_ptrs[BY_YEAR_DAY][0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -1369,7 +1399,7 @@ int nth_weekday(short dow, short pos, struct icaltimetype t){
     return wd;
 }
 
-int is_day_in_byday(struct icalrecur_iterator_impl* impl,struct icaltimetype tt){
+int is_day_in_byday(icalrecur_iterator* impl,struct icaltimetype tt){
 
     int idx; 
 
@@ -1387,7 +1417,7 @@ int is_day_in_byday(struct icalrecur_iterator_impl* impl,struct icaltimetype tt)
     return 0;
 }
 
-int next_month(struct icalrecur_iterator_impl* impl)
+int next_month(icalrecur_iterator* impl)
 {
     int data_valid = 1;
     
@@ -1529,7 +1559,7 @@ int next_month(struct icalrecur_iterator_impl* impl)
 
 }
 
-int next_weekday_by_week(struct icalrecur_iterator_impl* impl)
+int next_weekday_by_week(icalrecur_iterator* impl)
 {
 
   short end_of_data = 0;
@@ -1586,7 +1616,7 @@ int next_weekday_by_week(struct icalrecur_iterator_impl* impl)
 
 }
 
-int next_week(struct icalrecur_iterator_impl* impl)
+int next_week(icalrecur_iterator* impl)
 {
   short end_of_data = 0;
 
@@ -1637,7 +1667,7 @@ int next_week(struct icalrecur_iterator_impl* impl)
 }
 
 /* Expand the BYDAY rule part and return a pointer to a newly allocated list of days. */
-pvl_list expand_by_day(struct icalrecur_iterator_impl* impl,short year)
+pvl_list expand_by_day(icalrecur_iterator* impl,short year)
 {
     /* Try to calculate each of the occurrences. */
     int i;
@@ -1714,7 +1744,7 @@ pvl_list expand_by_day(struct icalrecur_iterator_impl* impl,short year)
    list all of the days of the current year that are specified in this
    rule. */
 
-int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
+int expand_year_days(icalrecur_iterator* impl,short year)
 {
     int j,k;
     int days_index=0;
@@ -2036,7 +2066,7 @@ int expand_year_days(struct icalrecur_iterator_impl* impl,short year)
 }                                  
 
 
-int next_year(struct icalrecur_iterator_impl* impl)
+int next_year(icalrecur_iterator* impl)
 {
     struct icaltimetype next;
 
@@ -2063,7 +2093,7 @@ int next_year(struct icalrecur_iterator_impl* impl)
     return 1;
 }
 
-int icalrecur_check_rulepart(struct icalrecur_iterator_impl* impl,
+int icalrecur_check_rulepart(icalrecur_iterator* impl,
 		      short v, enum byrule byrule)
 {
     int itr;
@@ -2079,7 +2109,7 @@ int icalrecur_check_rulepart(struct icalrecur_iterator_impl* impl,
     return 0;
 }
 
-int check_contract_restriction(struct icalrecur_iterator_impl* impl,
+int check_contract_restriction(icalrecur_iterator* impl,
 		      enum byrule byrule, short v)
 {
     int pass = 0;
@@ -2104,7 +2134,7 @@ int check_contract_restriction(struct icalrecur_iterator_impl* impl,
 }
 
 
-int check_contracting_rules(struct icalrecur_iterator_impl* impl)
+int check_contracting_rules(icalrecur_iterator* impl)
 {
 
     int day_of_week=0;
@@ -2128,11 +2158,9 @@ int check_contracting_rules(struct icalrecur_iterator_impl* impl)
     }
 }
 
-struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *itr)
+struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
 {
     int valid = 1;
-    struct icalrecur_iterator_impl* impl = 
-	(struct icalrecur_iterator_impl*)itr;
     
     if( (impl->rule.count!=0 &&impl->occurrence_no >= impl->rule.count) ||
        (!icaltime_is_null_time(impl->rule.until) && 

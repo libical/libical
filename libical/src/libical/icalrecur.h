@@ -16,7 +16,9 @@
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
+*/
 
+/**
 How to use: 
 
 1) Get a rule and a start time from a component
@@ -168,7 +170,7 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
 
 /********** recurrence iteration routines ********************/
 
-typedef void icalrecur_iterator;
+typedef struct icalrecur_iterator_impl  icalrecur_iterator;
 
 /* Create a new recurrence rule iterator */
 icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule, 

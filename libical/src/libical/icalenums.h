@@ -98,11 +98,17 @@ typedef enum icalrequeststatus {
     ICAL_3_12_UNKCOMP_STATUS,
     ICAL_3_13_BADCOMP_STATUS,
     ICAL_3_14_NOCAP_STATUS,
+    ICAL_3_15_INVCOMMAND,
     ICAL_4_0_BUSY_STATUS,
+    ICAL_4_1_STORE_ACCESS_DENIED,
+    ICAL_4_2_STORE_FAILED,
+    ICAL_4_3_STORE_NOT_FOUND,
     ICAL_5_0_MAYBE_STATUS,
     ICAL_5_1_UNAVAIL_STATUS,
     ICAL_5_2_NOSERVICE_STATUS,
-    ICAL_5_3_NOSCHED_STATUS
+    ICAL_5_3_NOSCHED_STATUS,
+    ICAL_6_1_CONTAINER_NOT_FOUND,
+	ICAL_9_0_UNRECOGNIZED_COMMAND
 } icalrequeststatus;
 
 
@@ -110,6 +116,7 @@ const char* icalenum_reqstat_desc(icalrequeststatus stat);
 short icalenum_reqstat_major(icalrequeststatus stat);
 short icalenum_reqstat_minor(icalrequeststatus stat);
 icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
+char* icalenum_reqstat_code(icalrequeststatus stat);
 
 /***********************************************************************
  * Conversion functions

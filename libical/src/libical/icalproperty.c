@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.14 2001-12-22 17:04:33 gray-john Exp $
+  $Id: icalproperty.c,v 1.15 2002-05-21 10:31:29 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -23,7 +23,6 @@
   The original code is icalproperty.c
 
 ======================================================================*/
-/*#line 27 "icalproperty.c.in"*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -45,8 +44,6 @@
 #include <stdio.h> /* for printf */
 #include <stdarg.h> /* for va_list, va_start, etc. */
                                                
-#define TMP_BUF_SIZE 1024
-
 #ifdef WIN32
 #define snprintf      _snprintf
 #define strcasecmp    stricmp
@@ -75,27 +72,22 @@ struct icalproperty_impl
 	icalcomponent *parent;
 };
 
-void icalproperty_add_parameters(struct icalproperty_impl *prop,va_list args)
+void icalproperty_add_parameters(icalproperty* prop, va_list args)
 {
-
     void* vp;
 
-    struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
-  
     while((vp = va_arg(args, void*)) != 0) {
 
 	if (icalvalue_isa_value(vp) != 0 ){
 	} else if (icalparameter_isa_parameter(vp) != 0 ){
 
-	    icalproperty_add_parameter((icalproperty*)impl,
+	    icalproperty_add_parameter((icalproperty*)prop,
 				       (icalparameter*)vp);
 	} else {
 	    icalerror_set_errno(ICAL_BADARG_ERROR);
 	}
 
     }
-    
-    
 }
 
 
@@ -135,13 +127,11 @@ icalproperty_new (icalproperty_kind kind)
 
 
 icalproperty*
-icalproperty_new_clone(icalproperty* prop)
+icalproperty_new_clone(icalproperty* old)
 {
-    struct icalproperty_impl *old = (struct icalproperty_impl*)prop;
     struct icalproperty_impl *new = icalproperty_new_impl(old->kind);
     pvl_elem p;
 
-    icalerror_check_arg_rz((prop!=0),"Prop");
     icalerror_check_arg_rz((old!=0),"old");
     icalerror_check_arg_rz((new!=0),"new");
 
@@ -222,15 +212,11 @@ icalproperty* icalproperty_new_from_string(const char* str)
 }
 
 void
-icalproperty_free (icalproperty* prop)
+icalproperty_free (icalproperty* p)
 {
-    struct icalproperty_impl *p;
-
     icalparameter* param;
     
-    icalerror_check_arg_rv((prop!=0),"prop");
-
-    p = (struct icalproperty_impl*)prop;
+    icalerror_check_arg_rv((p!=0),"prop");
 
 #ifdef ICAL_FREE_ON_LIST_IS_ERROR
     icalerror_assert( (p->parent ==0),"Tried to free a property that is still attached to a component. ");
@@ -288,17 +274,16 @@ icalproperty_as_ical_string (icalproperty* prop)
 
     char newline[] = "\n";
 
-    struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
     
     icalerror_check_arg_rz( (prop!=0),"prop");
 
 
     /* Append property name */
 
-    if (impl->kind == ICAL_X_PROPERTY && impl->x_name != 0){
-	property_name = impl->x_name;
+    if (prop->kind == ICAL_X_PROPERTY && prop->x_name != 0){
+	property_name = prop->x_name;
     } else {
-	property_name = icalproperty_kind_to_string(impl->kind);
+	property_name = icalproperty_kind_to_string(prop->kind);
     }
 
     if (property_name == 0 ) {
@@ -323,14 +308,14 @@ icalproperty_as_ical_string (icalproperty* prop)
 	icalparameter *orig_val_param
 	    = icalproperty_get_first_parameter(prop,ICAL_VALUE_PARAMETER);
 
-	icalvalue *value = icalproperty_get_value(impl);
+	icalvalue *value = icalproperty_get_value(prop);
 
 	icalvalue_kind orig_kind = ICAL_NO_VALUE;
 
 	icalvalue_kind this_kind = ICAL_NO_VALUE;
 
 	icalvalue_kind default_kind 
-	    =  icalproperty_kind_to_value_kind(impl->kind);
+	    =  icalproperty_kind_to_value_kind(prop->kind);
 
 	if(orig_val_param){
 	    orig_kind = (icalvalue_kind)icalparameter_get_value(orig_val_param);
@@ -380,9 +365,9 @@ icalproperty_as_ical_string (icalproperty* prop)
 	}
 
 	if (kind_string == 0 ) {
-	    char temp[TMP_BUF_SIZE];
-	    snprintf(temp, TMP_BUF_SIZE,"Got a parameter of unknown kind in %s property",property_name);
-	    icalerror_warn(temp);
+	  icalerror_warn("Got a parameter of unknown kind for the following property");
+
+	  icalerror_warn((property_name) ? property_name : "(NULL)");
 	    continue;
 	}
 
@@ -424,11 +409,9 @@ icalproperty_as_ical_string (icalproperty* prop)
 
 
 icalproperty_kind
-icalproperty_isa (icalproperty* property)
+icalproperty_isa (icalproperty* p)
 {
-    struct icalproperty_impl *p = (struct icalproperty_impl*)property;
-
-   if(property != 0){
+   if(p != 0){
        return p->kind;
    }
 
@@ -438,10 +421,9 @@ icalproperty_isa (icalproperty* property)
 int
 icalproperty_isa_property (void* property)
 {
-    struct icalproperty_impl *impl = (struct icalproperty_impl*)property;
+    icalproperty *impl = (icalproperty *) property;
 
     icalerror_check_arg_rz( (property!=0), "property");
-
     if (strcmp(impl->id,"prop") == 0) {
 	return 1;
     } else {
@@ -451,11 +433,9 @@ icalproperty_isa_property (void* property)
 
 
 void
-icalproperty_add_parameter (icalproperty* prop,icalparameter* parameter)
+icalproperty_add_parameter (icalproperty* p,icalparameter* parameter)
 {
-    struct icalproperty_impl *p = (struct icalproperty_impl*)prop;
-    
-   icalerror_check_arg_rv( (prop!=0),"prop");
+   icalerror_check_arg_rv( (p!=0),"prop");
    icalerror_check_arg_rv( (parameter!=0),"parameter");
     
    pvl_push(p->parameters, parameter);
@@ -547,14 +527,13 @@ void
 icalproperty_remove_parameter (icalproperty* prop, icalparameter_kind kind)
 {
     pvl_elem p;     
-    struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
 
     icalerror_check_arg_rv((prop!=0),"prop");
     
-    for(p=pvl_head(impl->parameters);p != 0; p = pvl_next(p)){
+    for(p=pvl_head(prop->parameters);p != 0; p = pvl_next(p)){
 	icalparameter* param = (icalparameter *)pvl_data (p);
         if (icalparameter_isa(param) == kind) {
-            pvl_remove (impl->parameters, p);
+            pvl_remove (prop->parameters, p);
             icalparameter_free (param);
             break;
         }
@@ -565,10 +544,8 @@ icalproperty_remove_parameter (icalproperty* prop, icalparameter_kind kind)
 int
 icalproperty_count_parameters (icalproperty* prop)
 {
-    struct icalproperty_impl *p = (struct icalproperty_impl*)prop;
-
     if(prop != 0){
-	return pvl_count(p->parameters);
+	return pvl_count(prop->parameters);
     }
 
     icalerror_set_errno(ICAL_USAGE_ERROR);
@@ -577,11 +554,9 @@ icalproperty_count_parameters (icalproperty* prop)
 
 
 icalparameter*
-icalproperty_get_first_parameter (icalproperty* prop, icalparameter_kind kind)
+icalproperty_get_first_parameter (icalproperty* p, icalparameter_kind kind)
 {
-   struct icalproperty_impl *p = (struct icalproperty_impl*)prop;
-
-   icalerror_check_arg_rz( (prop!=0),"prop");
+   icalerror_check_arg_rz( (p!=0),"prop");
    
    p->parameter_iterator = pvl_head(p->parameters);
 
@@ -605,11 +580,9 @@ icalproperty_get_first_parameter (icalproperty* prop, icalparameter_kind kind)
 
 
 icalparameter*
-icalproperty_get_next_parameter (icalproperty* prop, icalparameter_kind kind)
+icalproperty_get_next_parameter (icalproperty* p, icalparameter_kind kind)
 {
-    struct icalproperty_impl *p = (struct icalproperty_impl*)prop;
-    
-    icalerror_check_arg_rz( (prop!=0),"prop");
+    icalerror_check_arg_rz( (p!=0),"prop");
     
     if (p->parameter_iterator == 0) {
 	return 0;
@@ -631,11 +604,9 @@ icalproperty_get_next_parameter (icalproperty* prop, icalparameter_kind kind)
 }
 
 void
-icalproperty_set_value (icalproperty* prop, icalvalue* value)
+icalproperty_set_value (icalproperty* p, icalvalue* value)
 {
-    struct icalproperty_impl *p = (struct icalproperty_impl*)prop;
-
-    icalerror_check_arg_rv((prop !=0),"prop");
+    icalerror_check_arg_rv((p !=0),"prop");
     icalerror_check_arg_rv((value !=0),"value");
     
     if (p->value != 0){
@@ -646,7 +617,7 @@ icalproperty_set_value (icalproperty* prop, icalvalue* value)
 
     p->value = value;
     
-    icalvalue_set_parent(value,prop);
+    icalvalue_set_parent(value,p);
 }
 
 
@@ -696,22 +667,18 @@ void icalproperty_set_value_from_string(icalproperty* prop,const char* str,
 icalvalue*
 icalproperty_get_value (icalproperty* prop)
 {
-    struct icalproperty_impl *p = (struct icalproperty_impl*)prop;
-    
     icalerror_check_arg_rz( (prop!=0),"prop");
     
-    return p->value;
+    return prop->value;
 }
 
 const char* icalproperty_get_value_as_string(icalproperty* prop)
 {
     icalvalue *value;
     
-    struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
-    
     icalerror_check_arg_rz( (prop!=0),"prop");
 
-    value = impl->value; 
+    value = prop->value; 
 
     return icalvalue_as_ical_string(value);
 }
@@ -719,30 +686,25 @@ const char* icalproperty_get_value_as_string(icalproperty* prop)
 
 void icalproperty_set_x_name(icalproperty* prop, const char* name)
 {
-    struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
-
     icalerror_check_arg_rv( (name!=0),"name");
     icalerror_check_arg_rv( (prop!=0),"prop");
 
-    if (impl->x_name != 0) {
-        free(impl->x_name);
+    if (prop->x_name != 0) {
+        free(prop->x_name);
     }
 
-    impl->x_name = icalmemory_strdup(name);
+    prop->x_name = icalmemory_strdup(name);
 
-    if(impl->x_name == 0){
+    if(prop->x_name == 0){
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
     }
 
 }
                               
 const char* icalproperty_get_x_name(icalproperty* prop){
-
-    struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
-
     icalerror_check_arg_rz( (prop!=0),"prop");
 
-    return impl->x_name;
+    return prop->x_name;
 }
 
 
@@ -755,14 +717,12 @@ const char* icalproperty_get_name (icalproperty* prop)
     char* buf = icalmemory_new_buffer(buf_size);
     char* buf_ptr = buf;  
 
-    struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
-
     icalerror_check_arg_rz( (prop!=0),"prop");
  
-    if (impl->kind == ICAL_X_PROPERTY && impl->x_name != 0){
-        property_name = impl->x_name;
+    if (prop->kind == ICAL_X_PROPERTY && prop->x_name != 0){
+        property_name = prop->x_name;
     } else {
-        property_name = icalproperty_kind_to_string(impl->kind);
+        property_name = icalproperty_kind_to_string(prop->kind);
     }
  
     if (property_name == 0 ) {
@@ -788,26 +748,14 @@ const char* icalproperty_get_name (icalproperty* prop)
 void icalproperty_set_parent(icalproperty* property,
 			     icalcomponent* component)
 {
-    struct icalproperty_impl *impl = (struct icalproperty_impl*)property;
-
     icalerror_check_arg_rv( (property!=0),"property");
     
-    impl->parent = component;
+    property->parent = component;
 }
 
 icalcomponent* icalproperty_get_parent(icalproperty* property)
 {
-    struct icalproperty_impl *impl = (struct icalproperty_impl*)property;
- 
     icalerror_check_arg_rz( (property!=0),"property");
 
-    return impl->parent;
+    return property->parent;
 }
-
-
-
-
-
-
-
-/* Everything below this line is machine generated. Do not edit. */

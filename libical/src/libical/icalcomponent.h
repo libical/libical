@@ -30,7 +30,7 @@
 #include "icalattendee.h"
 #include "pvl.h"
 
-typedef void icalcomponent;
+typedef struct icalcomponent_impl icalcomponent;
 
 /* An opaque struct representing a timezone. We declare this here to avoid
    a circular dependancy. */

@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalparameter.h,v 1.1 2001-03-17 16:47:02 ebusboom Exp $
+  $Id: icalparameter.h,v 1.2 2002-05-21 10:31:29 acampi Exp $
   $Locker:  $
 
   
@@ -32,7 +32,7 @@
 #include "icalderivedparameter.h"
 
 /* Declared in icalderivedparameter.h */
-/*typedef void icalparameter;*/
+/*typedef struct icalparameter_impl icalparameter;*/
 
 icalparameter* icalparameter_new(icalparameter_kind kind);
 icalparameter* icalparameter_new_clone(icalparameter* p);

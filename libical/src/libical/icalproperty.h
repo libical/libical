@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.7 2001-04-11 04:45:28 ebusboom Exp $
+  $Id: icalproperty.h,v 1.8 2002-05-21 10:31:29 acampi Exp $
   $Locker:  $
 
   
@@ -39,7 +39,7 @@
 #include "icalrecur.h"
 
 /* Actually in icalderivedproperty.h:
-   typedef void icalproperty; */
+   typedef struct icalproperty_impl icalproperty; */
 
 #include "icalderivedproperty.h" /* To get icalproperty_kind enumerations */
 
