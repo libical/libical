@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.16 2002-05-28 14:08:00 acampi Exp $
+  $Id: icalvalue.c,v 1.17 2002-06-04 13:53:30 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -340,7 +340,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 
     case ICAL_UTCOFFSET_VALUE:
 	{
-	    value = icalparser_parse_value(kind,str,(icalcomponent*)0);
+	    value = icalparser_parse_value(kind,str,(icalcomponent**)0);
 	    break;
 	}
         
