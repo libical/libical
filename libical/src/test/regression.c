@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.11 2001-02-22 05:04:20 ebusboom Exp $
+  $Id: regression.c,v 1.12 2001-02-22 19:28:37 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2915,7 +2915,7 @@ void test_trigger()
     /* TRIGGER, as a DURATION */
     tr.time = icaltime_null_time();
     tr.duration = icaldurationtype_from_string("P3DT3H50M45S");
-   ca    p = icalproperty_new_trigger(tr);
+    p = icalproperty_new_trigger(tr);
     str = icalproperty_as_ical_string(p);
     
     printf("%s\n",str);
