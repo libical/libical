@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.17 2005-01-24 11:49:41 acampi Exp $
+  $Id: icalduration.c,v 1.18 2005-01-24 11:50:54 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -183,12 +183,11 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
     return icaldurationtype_bad_duration();
 }
 
-#define TMP_BUF_SIZE 1024
 static
 void append_duration_segment(char** buf, char** buf_ptr, size_t* buf_size, 
 			     char* sep, unsigned int value) {
 
-    char temp[TMP_BUF_SIZE];
+    char temp[32];
 
     snprintf(temp,sizeof(temp),"%d",value);
 
