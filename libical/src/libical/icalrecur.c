@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.33 2002-05-24 15:31:55 acampi Exp $
+  $Id: icalrecur.c,v 1.34 2002-05-27 14:46:56 acampi Exp $
   $Locker:  $
     
 
@@ -485,7 +485,7 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 	if (recur->until.is_date)
 	    print_date_to_string(temp,&(recur->until));
 	else
-	print_datetime_to_string(temp,&(recur->until));
+	    print_datetime_to_string(temp,&(recur->until));
 	
 	icalmemory_append_string(&str,&str_p,&buf_sz,";UNTIL=");
 	icalmemory_append_string(&str,&str_p,&buf_sz, temp);
@@ -642,7 +642,7 @@ int icalrecur_two_byrule(icalrecur_iterator* impl,
     enum byrule itr;
     int passes = 0;
 
-    memset(test_array,0,sizeof(test_array));
+    memset(test_array,0,sizeof (test_array));
 
     test_array[one] = 1;
     test_array[two] = 1;
