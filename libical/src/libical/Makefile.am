@@ -94,7 +94,7 @@ BUILT_SOURCES =			\
 	icalvalue.c		\
 	icalvalue.h
 
-ical.h: $(COMBINEDHEADERS)
+ical.h: $(BUILT_SOURCES)
 	cat $(COMBINEDHEADERS)				\
 	| egrep -v "#include.*\"ical"			\
 	| egrep -v "#include.*\"pvl\.h\"" > ical.h
@@ -169,6 +169,8 @@ icalvalue.c: $(VALUEDEPS) icalvalue.h
 # housekeeping
 CONFIG_CLEAN_FILES = y.output
 
+CLEANFILES += $(BUILT_SOURCES)
+
 EXTRA_DIST =			\
 	icalparameter.c.in	\
 	icalparameter.h.in	\
@@ -178,7 +180,6 @@ EXTRA_DIST =			\
 	icalvalue.c.in		\
 	icalvalue.h.in		\
 	icalversion.h.in	\
-	$(BUILT_SOURCES)	\
 	icallexer.c		\
 	icalyacc.c
 

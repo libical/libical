@@ -1,3 +1,7 @@
+2001-02-14  JP Rosevear  <jpr@ximian.com>
+
+	* src/libical/Makefile.am: Sigh, automake is dumber than i thought
+
 2001-02-12  JP Rosevear  <jpr@ximian.com>
 
 	* src/test/Makefile.am: link with the static versions
