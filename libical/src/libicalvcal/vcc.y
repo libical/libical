@@ -112,9 +112,6 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #endif
 
 #include <string.h>
-#ifndef __MWERKS__
-#include <malloc.h>
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -419,9 +416,31 @@ static void enterValues(const char *value)
 	}
     else {
 	if (value) {
+	    char *p1, *p2;
+	    wchar_t *p3;
+	    int i;
+
+	    /* If the property already has a string value, we append this one,
+	       using ';' to separate the values. */
+	    if (vObjectUStringZValue(curProp)) {
+		p1 = fakeCString(vObjectUStringZValue(curProp));
+		p2 = malloc((strlen(p1)+strlen(value)+1));
+		strcpy(p2, p1);
+		deleteStr(p1);
+
+		i = strlen(p2);
+		p2[i] = ';';
+		p2[i+1] = '\0';
+		p2 = strcat(p2, value);
+		p3 = (wchar_t *) vObjectUStringZValue(curProp);
+		free(p3);
+		setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
+		deleteStr(p2);
+	    } else {
 	    setVObjectUStringZValue_(curProp,fakeUnicode(value,0));
 	    }
 	}
+    }
     deleteStr(value);
     }
 

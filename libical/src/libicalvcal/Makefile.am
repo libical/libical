@@ -8,20 +8,36 @@ INCLUDES =			\
 
 libicalvcal_la_LDFLAGS = -version-info 0:0:0
 
+if DEV
+libicalvcal_la_DEVSOURCES = vcc.y
+.SUFFIXES:
+.SUFFIXES: .c .l .lo .o .obj .y
+else
+libicalvcal_la_DEVSOURCES = vcc.c
+.SUFFIXES:
+.SUFFIXES: .c .lo .o .obj
+endif
+
+
 libicalvcal_la_SOURCES =	\
-	icalvcal.c		\
-	vcc.y			\
-	vobject.c		\
-	vcaltmp.c
-
-libicalvcalincludedir = $(includedir)/libicalvcal
-
-libicalvcalinclude_HEADERS =	\
 	icalvcal.h		\
+	icalvcal.c		\
 	port.h			\
 	vcc.h			\
 	vobject.h		\
-	vcaltmp.h
+	vobject.c		\
+	vcaltmp.h		\
+	vcaltmp.c		\
+	$(libicalvcal_la_DEVSOURCES)
+
+libicalvcalincludedir = $(includedir)/libicalvcal
+
+#libicalvcalinclude_HEADERS =	\
+#	icalvcal.h		\
+#	port.h			\
+#	vcc.h			\
+#	vobject.h		\
+#	vcaltmp.h
 
 EXTRA_DIST =		\
 	README.TXT	\
