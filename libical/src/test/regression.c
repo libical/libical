@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.40 2002-05-10 16:04:44 acampi Exp $
+  $Id: regression.c,v 1.41 2002-05-24 13:32:04 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2534,8 +2534,8 @@ void test_convenience(){
 	   icalcomponent_as_ical_string(c));
 
 
-    duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
     icalcomponent_set_duration(c,icaldurationtype_from_string("PT1H30M"));
+    duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
     printf("Start: %s\n",ictt_as_string(icalcomponent_get_dtstart(c)));
     printf("End:   %s\n",ictt_as_string(icalcomponent_get_dtend(c)));
