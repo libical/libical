@@ -4,7 +4,7 @@
   CREATOR: dml 12 December 2001
   (C) COPYRIGHT 2001, Critical Path
 
-  $Id: icalbdbsetimpl.h,v 1.2 2002-06-27 02:30:58 acampi Exp $
+  $Id: icalbdbsetimpl.h,v 1.3 2002-06-28 10:01:34 acampi Exp $
   $Locker:  $
  ======================================================================*/
 
@@ -30,10 +30,6 @@ struct icalbdbset_impl {
   void *data;
   int datasize;
   int changed;
-  int expand;
-  icalrecur_iterator *ritr; /*the last iterator*/
-  int occurrence_no; /* the last occurrence number*/
-  icalcomponent* last_component; /*the pending recurring component to be processed  */
   icalcomponent* cluster;
   icalgauge* gauge;
   DB_ENV *dbenv;
