@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.3 2001-01-23 18:11:53 ebusboom Exp $
+  $Id: icalrecur.c,v 1.4 2001-01-24 17:14:01 ebusboom Exp $
   $Locker:  $
     
 
@@ -354,6 +354,12 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	char *name, *value;
 	icalrecur_clause_name_and_value(&parser,&name,&value);
 
+	if(name == 0){
+	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+	    icalrecurrencetype_clear(&parser.rt);
+	    return parser.rt;
+	}
+
 	if (strcmp(name,"FREQ") == 0){
 	    parser.rt.freq = icalrecur_string_to_recurrence(value);
 	} else if (strcmp(name,"COUNT") == 0){
@@ -391,7 +397,9 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	    icalrecur_add_byrules(&parser,parser.rt.by_set_pos,
 				  ICAL_BY_SETPOS_SIZE,value);
 	} else {
-	    /* error */
+	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+	    icalrecurrencetype_clear(&parser.rt);
+	    return parser.rt;
 	}
 	
     }

@@ -46,6 +46,10 @@ int main(int argc, char *argv[])
     time_t tt;
     char* file; 
 
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
+    icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
+
+
     if (argc <= 1){
 	file = "../../test-data/recur.txt";
     } else if (argc == 2){

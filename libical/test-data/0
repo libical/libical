@@ -1,9 +1,5 @@
 BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//hacksw/handcal//NONSGML v1.0//EN
 BEGIN:VEVENT
-DTSTART:19970714T170000Z
-DTEND:19970715T035959Z
-SUMMARY:Bastille Day Party
+SUMMARY:Bastille Day Party This option indicates that xauth should attempt to break any authority file locks before proceeding.
 END:VEVENT
 END:VCALENDAR

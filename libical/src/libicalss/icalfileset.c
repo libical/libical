@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.6 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: icalfileset.c,v 1.7 2001-01-24 17:14:02 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -135,11 +135,12 @@ char* icalfileset_read_from_file(char *s, size_t size, void *d)
     for(p=s; p<s+size-1;p++){
 	
 	if(read(fd,p,1) != 1 || *p=='\n'){
-		break;
+	    p++;
+	    break;
 	} 
     }
 
-    *(++p) = '\0';
+    *p = '\0';
     
     if(*s == 0){
 	return 0;

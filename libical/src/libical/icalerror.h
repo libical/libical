@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.3 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: icalerror.h,v 1.4 2001-01-24 17:14:01 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -139,6 +139,17 @@ extern int icalerror_errors_are_fatal;
 
 void icalerror_clear_errno(void);
 void icalerror_set_errno(icalerrorenum);
+
+/* Make an individual error fatal or non-fatal. */
+typedef enum icalerrorstate { 
+    ICAL_ERROR_FATAL,     /* Not fata */
+    ICAL_ERROR_NONFATAL,  /* Fatal */
+    ICAL_ERROR_DEFAULT,   /* Use the value of icalerror_errors_are_fatal*/
+    ICAL_ERROR_UNKNOWN    /* Asked state for an unknown error type */
+} icalerrorstate ;
+
+void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
+icalerrorstate icalerror_get_error_state( icalerrorenum error);
 
 char* icalerror_strerror(icalerrorenum e);
 

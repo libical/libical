@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.2 2001-01-12 21:22:20 ebusboom Exp $
+  $Id: icalerror.c,v 1.3 2001-01-24 17:14:01 ebusboom Exp $
   $Locker:  $
     
 
@@ -59,14 +59,66 @@ int icalerror_errors_are_fatal = 1;
 int icalerror_errors_are_fatal = 0;
 #endif
 
+struct icalerror_state { 
+    icalerrorenum error;
+    icalerrorstate state; 
+};
+
+struct icalerror_state error_state_map[] = 
+{ 
+    { ICAL_BADARG_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_NEWFAILED_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_DEFAULT}, 
+    { ICAL_PARSE_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_INTERNAL_ERROR,ICAL_ERROR_DEFAULT}, 
+    { ICAL_FILE_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_ALLOCATION_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_USAGE_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_MULTIPLEINCLUSION_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_TIMEDOUT_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_UNKNOWN_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_NO_ERROR,ICAL_ERROR_DEFAULT}
+
+};
+
+void icalerror_set_error_state( icalerrorenum error, 
+				icalerrorstate state)
+{
+    int i;
+
+    for(i = ICAL_BADARG_ERROR; error_state_map[i].error!= ICAL_NO_ERROR;i++){
+	if(error_state_map[i].error == error){
+	    error_state_map[i].state = state; 	
+	}
+    }
+}
+
+icalerrorstate icalerror_get_error_state( icalerrorenum error)
+{
+    int i;
+
+    for(i = ICAL_BADARG_ERROR; error_state_map[i].error!= ICAL_NO_ERROR;i++){
+	if(error_state_map[i].error == error){
+	    return error_state_map[i].state; 	
+	}
+    }
+
+    return ICAL_ERROR_UNKNOWN;	
+}
+
+
 void icalerror_set_errno(icalerrorenum e) {
 
-   
+    icalerrorstate es;
+
     icalerrno = e;
+    es =  icalerror_get_error_state(e);
+
     icalerror_stop_here();
 
-    if(icalerror_errors_are_fatal == 1){
-
+    if( (es == ICAL_ERROR_FATAL) ||
+	(es == ICAL_ERROR_DEFAULT && icalerror_errors_are_fatal == 1)){
+	
 	fprintf(stderr,"libical: icalerrno_set_error: %s\n",icalerror_strerror(e));
 #ifdef NDEBUG
 	icalerror_crash_here();
@@ -74,8 +126,6 @@ void icalerror_set_errno(icalerrorenum e) {
 	assert(0);
 #endif 
     }
-
-
 }
 
 
