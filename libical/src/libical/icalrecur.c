@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.32 2002-05-21 10:31:29 acampi Exp $
+  $Id: icalrecur.c,v 1.33 2002-05-24 15:31:55 acampi Exp $
   $Locker:  $
     
 
@@ -333,17 +333,14 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 	    sign = 1;
 	}
 
-	weekno = 0;
 	/* Get Optional weekno */
-	if( sscanf(t,"%d",&weekno) != 0){
-	    if (n != 0){
-		int weeknolen = (n-t)-3; /* 3 -> one for \0, 2 for day name */
-		/* could use abs(log10(weekno))+1, but that needs libm */
-		t += weeknolen;
-	    } else {
-		t = end -2;
-	    }
-	}
+	weekno = strtol(t,&t,10);
+
+	/* Outlook/Exchange generate "BYDAY=MO, FR" and "BYDAY=2 TH".
+	 * Cope with that.
+	 */
+	if (*t == ' ')
+	    t++;
 
 	wd = icalrecur_string_to_weekday(t);
 
@@ -645,7 +642,7 @@ int icalrecur_two_byrule(icalrecur_iterator* impl,
     enum byrule itr;
     int passes = 0;
 
-    memset(test_array,0,9*sizeof(short));
+    memset(test_array,0,sizeof(test_array));
 
     test_array[one] = 1;
     test_array[two] = 1;
