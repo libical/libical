@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.53 2003-02-17 14:35:12 acampi Exp $
+  $Id: icalrecur.c,v 1.54 2003-02-17 14:45:04 acampi Exp $
   $Locker:  $
     
 
@@ -906,18 +906,13 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	     monday. Otherwise, jumping to the next week ( jumping 7
 	     days ahead ) will skip over some occurrences in the
 	     second week. */
-	  
-	  /* This is probably a HACK. There should be some more
-             general way to solve this problem */
 
+	  /* This depends on impl->by_ptrs[BY_DAY] being correctly sorted by
+	   * day. This should probably be abstracted to make such assumption
+	   * more explicit. */
 	  short dow = (short)(impl->by_ptrs[BY_DAY][0]-icaltime_day_of_week(impl->last));
-
-	  if(dow < 0) {
-	      /* initial time is after first day of BY_DAY data */
-
-	      impl->last.day += dow;
-	      impl->last = icaltime_normalize(impl->last);
-	  }
+	  impl->last.day += dow;
+	  impl->last = icaltime_normalize(impl->last);
       }
       
 
