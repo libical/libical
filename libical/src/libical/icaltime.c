@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.46 2002-10-09 21:57:57 acampi Exp $
+  $Id: icaltime.c,v 1.47 2002-10-09 22:00:43 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -427,12 +427,12 @@ icaltime_is_leap_year (const int year)
         return ( (year % 4==0) && (year % 100 !=0 )) || (year % 400 == 0);
 }
 
-static short days_in_month[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
+static short _days_in_month[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
 
 short icaltime_days_in_month(const short month, const short year)
 {
 
-    int days = days_in_month[month];
+    int days = _days_in_month[month];
 
     assert(month > 0);
     assert(month <= 12);
