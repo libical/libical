@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.31 2001-06-29 15:17:16 ebusboom Exp $
+  $Id: regression.c,v 1.32 2001-11-14 07:07:23 benjaminlee Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -56,7 +56,7 @@ char str[] = "BEGIN:VCALENDAR\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\
 VERSION:2.0\
 BEGIN:VTIMEZONE\
-TZID:US-Eastern\
+TZID:America/New_York\
 BEGIN:STANDARD\
 DTSTART:19981025T020000\
 RDATE:19981025T020000\
@@ -82,8 +82,8 @@ CATEGORIES:MEETING\
 CLASS:PUBLIC\
 CREATED:19980309T130000Z\
 SUMMARY:XYZ Project Review\
-DTSTART;TZID=US-Eastern:19980312T083000\
-DTEND;TZID=US-Eastern:19980312T093000\
+DTSTART;TZID=America/New_York:19980312T083000\
+DTEND;TZID=America/New_York:19980312T093000\
 LOCATION:1CP Conference Room 4350\
 END:VEVENT\
 BEGIN:BOOGA\
@@ -162,7 +162,7 @@ icalcomponent* create_new_component()
 
     icalcomponent_add_property(
 	timezone,
-	icalproperty_new_tzid("US_Eastern")
+	icalproperty_new_tzid("America/New_York")
 	);
 
     /* Add a sub-component of the timezone */
@@ -304,7 +304,7 @@ icalcomponent* create_new_component()
     
     icalproperty_add_parameter(
 	property,
-	icalparameter_new_tzid("US-Eastern")
+	icalparameter_new_tzid("America/New_York")
 	);
 
     icalcomponent_add_property(event,property);
@@ -314,7 +314,7 @@ icalcomponent* create_new_component()
     
     icalproperty_add_parameter(
 	property,
-	icalparameter_new_tzid("US-Eastern")
+	icalparameter_new_tzid("America/New_York")
 	);
 
     icalcomponent_add_property(event,property);
@@ -355,7 +355,7 @@ icalcomponent* create_new_component_with_va_args()
 	    icalproperty_new_prodid("-//RDU Software//NONSGML HandCal//EN"),
 	    icalcomponent_vanew(
 		ICAL_VTIMEZONE_COMPONENT,
-		icalproperty_new_tzid("US_Eastern"),
+		icalproperty_new_tzid("America/New_York"),
 		icalcomponent_vanew(
 		    ICAL_XDAYLIGHT_COMPONENT,
 		    icalproperty_new_dtstart(atime),
@@ -399,12 +399,12 @@ icalcomponent* create_new_component_with_va_args()
 		icalproperty_new_summary("XYZ Project Review"),
 		icalproperty_vanew_dtstart(
 		    atime,
-		    icalparameter_new_tzid("US-Eastern"),
+		    icalparameter_new_tzid("America/New_York"),
 		    0
 		    ),
 		icalproperty_vanew_dtend(
 		    atime,
-		    icalparameter_new_tzid("US-Eastern"),
+		    icalparameter_new_tzid("America/New_York"),
 		    0
 		    ),
 		icalproperty_new_location("1CP Conference Room 4350"),
@@ -1087,7 +1087,7 @@ void test_restriction()
 	    icalproperty_new_method(ICAL_METHOD_REQUEST),
 	    icalcomponent_vanew(
 		ICAL_VTIMEZONE_COMPONENT,
-		icalproperty_new_tzid("US_Eastern"),
+		icalproperty_new_tzid("America/New_York"),
 		icalcomponent_vanew(
 		    ICAL_XDAYLIGHT_COMPONENT,
 		    icalproperty_new_dtstart(atime),
@@ -1131,12 +1131,12 @@ void test_restriction()
 		icalproperty_new_summary("XYZ Project Review"),
                 /*		icalproperty_new_dtstart(
 		    atime,
-		    icalparameter_new_tzid("US-Eastern"),
+		    icalparameter_new_tzid("America/New_York"),
 		    0
 		    ),*/
 		icalproperty_vanew_dtend(
 		    atime,
-		    icalparameter_new_tzid("US-Eastern"),
+		    icalparameter_new_tzid("America/New_York"),
 		    0
 		    ),
 		icalproperty_new_location("1CP Conference Room 4350"),
@@ -2021,10 +2021,10 @@ void test_span()
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_vanew_dtstart(
 		    icaltime_as_local(icaltime_from_timet(tm1,0)),
-		    icalparameter_new_tzid("US/Pacific"),0),
+		    icalparameter_new_tzid("America/Los_Angeles"),0),
 		icalproperty_vanew_dtend(
 		    icaltime_as_local(icaltime_from_timet(tm2,0)),
-		    icalparameter_new_tzid("US/Pacific"),0),
+		    icalparameter_new_tzid("America/Los_Angeles"),0),
 	    0
 	    );
 
@@ -2036,7 +2036,7 @@ void test_span()
 
     icalcomponent_free(c);
 
-    /* Use machine's local timezone. Same as above if run in US/Pacific */
+    /* Use machine's local timezone. Same as above if run in America/Los_Angeles */
     c = 
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
@@ -2057,10 +2057,10 @@ void test_span()
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_vanew_dtstart(
 		    icaltime_as_local(icaltime_from_timet(tm1,0)),
-		    icalparameter_new_tzid("US/Eastern"),0),
+		    icalparameter_new_tzid("America/New_York"),0),
 		icalproperty_vanew_dtend(
 		    icaltime_as_local(icaltime_from_timet(tm2,0)),
-		    icalparameter_new_tzid("US/Eastern"),0),
+		    icalparameter_new_tzid("America/New_York"),0),
 	    0
 	    );
     span = icalcomponent_get_span(c);
@@ -2075,10 +2075,10 @@ void test_span()
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_vanew_dtstart(
 		    icaltime_as_local(icaltime_from_timet(tm1,0)),
-		    icalparameter_new_tzid("US/Eastern"),0),
+		    icalparameter_new_tzid("America/New_York"),0),
 		icalproperty_vanew_dtend(
 		    icaltime_as_local(icaltime_from_timet(tm2,0)),
-		    icalparameter_new_tzid("US/Pacific"),0),
+		    icalparameter_new_tzid("America/Los_Angeles"),0),
 	    0
 	    );
     span = icalcomponent_get_span(c);
@@ -2092,7 +2092,7 @@ void test_span()
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_vanew_dtstart(
 		    icaltime_as_local(icaltime_from_timet(tm1,0)),
-		    icalparameter_new_tzid("US/Pacific"),0),
+		    icalparameter_new_tzid("America/Los_Angeles"),0),
 	    icalproperty_new_duration(dur),
 
 	    0
@@ -2110,9 +2110,9 @@ void test_span()
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_vanew_dtstart(icaltime_from_timet(tm1,0),
-		    icalparameter_new_tzid("US/Eastern"),0),
+		    icalparameter_new_tzid("America/New_York"),0),
 		icalproperty_vanew_dtend(icaltime_from_timet(tm2,0),
-		    icalparameter_new_tzid("US/Eastern"),0),
+		    icalparameter_new_tzid("America/New_York"),0),
 	    0
 	    );
 

@@ -179,8 +179,23 @@ icalproperty* icalproperty_vanew_${lc}($type v, ...){
 }
 EOM
 }
-
+    # Allow EXDATEs to take DATE values easily.
+    if ($lc eq "exdate") {
  print<<EOM;
+void icalproperty_set_${lc}(icalproperty* prop, $type v){
+    icalvalue *value;
+    $set_pointer_check
+    icalerror_check_arg_rv( (prop!=0),"prop");
+    if (v.is_date)
+        value = icalvalue_new_date(v);
+    else
+        value = icalvalue_new_datetime(v);
+    icalproperty_set_value(prop,value);
+}
+EOM
+    } else {
+	print<<EOM;
+
 /* $prop */
 icalproperty* icalproperty_new_${lc}($type v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_${uc}_PROPERTY);   $pointer_check
@@ -198,8 +213,7 @@ $type icalproperty_get_${lc}(icalproperty* prop){
     return icalvalue_get_${lcvalue}(icalproperty_get_value(prop));
 }
 EOM
-
-
+}
   } elsif ($opt_h) { # Generate C Header file
 
 

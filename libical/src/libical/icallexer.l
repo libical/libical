@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icallexer.l,v 1.2 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: icallexer.l,v 1.3 2001-11-14 07:07:22 benjaminlee Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -62,12 +62,6 @@ int last_state;
 char *str_buf;
 char *str_buf_p;
 size_t buf_sz; /* = ICAL_MAX_STR_CONST;*/
-
-/* Define routines that were not propertly defined because of the
-renaming hack applied in icalyacc.y */
-YY_BUFFER_STATE ical_yy_scan_buffer ( char *base, yy_size_t size );
-YY_BUFFER_STATE ical_yy_scan_string ( yyconst char *yy_str );
-YY_BUFFER_STATE ical_yy_scan_bytes ( yyconst char *bytes, int len );
 
 %}
 

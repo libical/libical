@@ -21,7 +21,13 @@ AC_SUBST(AR)
 AC_CHECK_PROGS(AR, ar aal, ar)
 AC_CHECK_PROGS(PERL, perl5 perl)  
 
+dnl **************************************************
+dnl test/regression.c (and maybe others) needs this defined
+dnl **************************************************
 AC_DEFINE(ICAL_ERRORS_ARE_FATAL,1)
+AC_DEFINE(NO_WARN_DEPRECATED,1)
+AC_DEFINE(NO_WARN_ICAL_MALFORMEDDATA_ERROR_HACK,1)
+
 AC_DEFINE(ICAL_SAFESAVES,1)
 AC_DEFINE(ICAL_UNIX_NEWLINE,1)
 dnl AC_DEFINE(ICAL_NO_EMPTY_ARRAY_DECL)
@@ -41,7 +47,6 @@ AC_STRUCT_TM
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS(strdup)
-AC_CHECK_FUNCS(snprintf)
 
 dnl **************************************************
 dnl * Check for Python
@@ -101,5 +106,6 @@ src/libicalvcal/Makefile
 src/python/Makefile
 src/test/Makefile
 test-data/Makefile
+zoneinfo/Makefile
 ])
 

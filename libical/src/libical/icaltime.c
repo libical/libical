@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.16 2001-06-22 15:57:26 ebusboom Exp $
+  $Id: icaltime.c,v 1.17 2001-11-14 07:07:22 benjaminlee Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -26,7 +26,7 @@
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "icaltime.h"
@@ -44,7 +44,7 @@
 #include "icalmemory.h"
 #endif
 
-
+#include "icaltimezone.h"
 
 
 struct icaltimetype 
@@ -73,9 +73,72 @@ icaltime_from_timet(time_t tm, int is_date)
     return tt;
 }
 
+struct icaltimetype 
+icaltime_from_timet_with_zone(time_t tm, int is_date, icaltimezone *zone)
+{
+    struct icaltimetype tt;
+    struct tm t;
+    icaltimezone *utc_zone;
+
+    utc_zone = icaltimezone_get_utc_timezone ();
+
+    /* Convert the time_t to a struct tm in UTC time. We can trust gmtime
+       for this. */
+    t = *(gmtime(&tm));
+     
+    tt.year   = t.tm_year + 1900;
+    tt.month  = t.tm_mon + 1;
+    tt.day    = t.tm_mday;
+
+    tt.is_utc = (zone == utc_zone) ? 1 : 0;
+    tt.is_date = is_date; 
+    tt.is_daylight = 0;
+    tt.zone = NULL;
+
+    if (is_date) { 
+	/* We don't convert DATE values between timezones. */
+	tt.hour   = 0;
+	tt.minute = 0;
+	tt.second = 0;
+    } else {
+	tt.hour   = t.tm_hour;
+	tt.minute = t.tm_min;
+	tt.second = t.tm_sec;
+
+	/* Use our timezone functions to convert to the required timezone. */
+	icaltimezone_convert_time (&tt, utc_zone, zone);
+    }
+
+    return tt;
+}
+
+/* Returns the current time in the given timezone, as an icaltimetype. */
+struct icaltimetype icaltime_current_time_with_zone(icaltimezone *zone)
+{
+    return icaltime_from_timet_with_zone (time (NULL), 0, zone);
+}
+
+/* Returns the current day as an icaltimetype, with is_date set. */
+struct icaltimetype icaltime_today(void)
+{
+    return icaltime_from_timet_with_zone (time (NULL), 1, NULL);
+}
+
+
 /* Structure used by set_tz to hold an old value of TZ, and the new
    value, which is in memory we will have to free in unset_tz */
 struct set_tz_save {char* orig_tzid; char* new_env_str;};
+
+/* Structure used by set_tz to hold an old value of TZ, and the new
+   value, which is in memory we will have to free in unset_tz */
+/* This will hold the last "TZ=XXX" string we used with putenv(). After we
+   call putenv() again to set a new TZ string, we can free the previous one.
+   As far as I know, no libc implementations actually free the memory used in
+   the environment variables (how could they know if it is a static string or
+   a malloc'ed string?), so we have to free it ourselves. */
+
+struct set_tz_save saved_tz;
+
 
 /* Temporarily change the TZ environmental variable. */
 struct set_tz_save set_tz(const char* tzid)
@@ -181,6 +244,43 @@ time_t icaltime_as_timet(struct icaltimetype tt)
 
 }
 
+time_t icaltime_as_timet_with_zone(struct icaltimetype tt, icaltimezone *zone)
+{
+    icaltimezone *utc_zone;
+    struct tm stm;
+    time_t t;
+    struct set_tz_save old_tz;
+
+    utc_zone = icaltimezone_get_utc_timezone ();
+
+    /* If the time is the special null time, return 0. */
+    if (icaltime_is_null_time(tt)) {
+	return 0;
+    }
+
+    /* Use our timezone functions to convert to UTC. */
+    if (!tt.is_date)
+	icaltimezone_convert_time (&tt, zone, utc_zone);
+
+    /* Copy the icaltimetype to a struct tm. */
+    memset (&stm, 0, sizeof (struct tm));
+
+    stm.tm_sec = tt.second;
+    stm.tm_min = tt.minute;
+    stm.tm_hour = tt.hour;
+    stm.tm_mday = tt.day;
+    stm.tm_mon = tt.month-1;
+    stm.tm_year = tt.year-1900;
+    stm.tm_isdst = -1;
+
+    /* Set TZ to UTC and use mktime to convert to a time_t. */
+    old_tz = set_tz ("UTC");
+    t = mktime (&stm);
+    unset_tz (old_tz);
+
+    return t;
+}
+
 char* icaltime_as_ical_string(struct icaltimetype tt)
 {
     size_t size = 17;
@@ -206,6 +306,10 @@ char* icaltime_as_ical_string(struct icaltimetype tt)
 }
 
 
+/* begin WARNING !! DEPRECATED !! functions *****
+use new icaltimezone functions, see icaltimezone.h
+ */
+
 /* convert tt, of timezone tzid, into a utc time */
 struct icaltimetype icaltime_as_utc(struct icaltimetype tt,const char* tzid)
 {
@@ -221,6 +325,9 @@ struct icaltimetype icaltime_as_utc(struct icaltimetype tt,const char* tzid)
 
     tt.is_utc = 1;
 
+#ifndef NO_WARN_DEPRECATED
+	fprintf(stderr, "%s: %d: WARNING: icaltime_as_utc is deprecated: '%s'\n", __FILE__, __LINE__, tzid);
+#endif	
     return icaltime_normalize(tt);
 }
 
@@ -235,6 +342,9 @@ struct icaltimetype icaltime_as_zone(struct icaltimetype tt,const char* tzid)
 
     tt.is_utc = 0;
 
+#ifndef NO_WARN_DEPRECATED
+	fprintf(stderr, "%s: %d: WARNING: icaltime_as_zone is deprecated: '%s'\n", __FILE__, __LINE__, tzid);
+#endif	
     return icaltime_normalize(tt);
 
 }
@@ -246,10 +356,19 @@ int icaltime_utc_offset(struct icaltimetype ictt, const char* tzid)
 {
 
     time_t tt = icaltime_as_timet(ictt);
-    time_t offset_tt;
+    time_t offset_tt, offset;
     struct tm gtm;
     struct set_tz_save old_tz; 
 
+	int is_daylight;
+
+#ifndef NO_WARN_DEPRECATED
+	fprintf(stderr, "%s: %d: WARNING: icaltime_utc_offset is deprecated\n", __FILE__, __LINE__);
+#endif	
+	/* This function, combined with the set_tz/unset_tz calls in regression.c
+	makes for very convoluted behaviour (due to the setting of the tz environment variable)
+	arrghgh, at least this is what I think: benjaminlee */
+	
     if(tzid != 0){
 	old_tz = set_tz(tzid);
     }
@@ -258,47 +377,38 @@ int icaltime_utc_offset(struct icaltimetype ictt, const char* tzid)
     gtm = *(gmtime(&tt));
     gtm.tm_isdst = localtime(&tt)->tm_isdst;    
     offset_tt = mktime(&gtm);
+#if 0
+/* Could this code be used as an alternative to the above? */
+	{
+		struct tm *tmp_tm;
+		time_t t;
+
+		t = time(NULL);
+	 	offset = localtime(&t)->tm_gmtoff;
+	}
+#endif
     
     if(tzid != 0){
 	unset_tz(old_tz);
     }
 
+#if 0
+#ifndef NO_WARN_DEPRECATED
+	fprintf(stderr, "%s: %d: WARNING: offset %d tt-offset_tt %d\n", __FILE__, __LINE__, offset, tt-offset_tt);
+#endif	
+	assert(offset == tt-offset_tt);
+#endif
     return tt-offset_tt;
 }
 
+/* end WARNING !! DEPRECATED !! functions *****
+ */
 
-
-/* Normalize by converting from localtime to utc and back to local
-   time. This uses localtime because localtime and mktime are inverses
-   of each other */
+/* Normalize the icaltime, so that all fields are within the normal range. */
 
 struct icaltimetype icaltime_normalize(struct icaltimetype tt)
 {
-    struct tm stm;
-    time_t tut;
-
-    memset(&stm,0,sizeof( struct tm));
-
-    stm.tm_sec = tt.second;
-    stm.tm_min = tt.minute;
-    stm.tm_hour = tt.hour;
-    stm.tm_mday = tt.day;
-    stm.tm_mon = tt.month-1;
-    stm.tm_year = tt.year-1900;
-    stm.tm_isdst = -1; /* prevents mktime from changing hour based on
-			  daylight savings */
-
-    tut = mktime(&stm);
-
-    stm = *(localtime(&tut));
-
-    tt.second = stm.tm_sec;
-    tt.minute = stm.tm_min;
-    tt.hour = stm.tm_hour;
-    tt.day = stm.tm_mday;
-    tt.month = stm.tm_mon +1;
-    tt.year = stm.tm_year+1900;
-
+  icaltime_adjust (&tt, 0, 0, 0, 0);
     return tt;
 }
 
@@ -390,106 +500,139 @@ short icaltime_days_in_month(short month,short year)
     return days;
 }
 
-/* 1-> Sunday, 7->Saturday */
-short icaltime_day_of_week(struct icaltimetype t){
-
-    time_t tt = icaltime_as_timet(t);
-    struct tm *tm;
-
-    if(t.is_utc == 1 || t.is_date == 1){
-	tm = gmtime(&tt);
-    } else {
-	tm = localtime(&tt);
-    }
-
-    return tm->tm_wday+1;
+/* Returns whether the specified year is a leap year. Year is the normal year,
+   e.g. 2001. */
+int
+icaltime_is_leap_year (int year)
+{
+  if (year <= 1752)
+    return !(year % 4);
+  else
+    return (!(year % 4) && (year % 100)) || !(year % 400);
 }
 
-/* Day of the year that the first day of the week (Sunday) is on  */
+/* 1-> Sunday, 7->Saturday */
+short icaltime_day_of_week(struct icaltimetype t){
+    struct tm stm;
+
+    stm.tm_year = t.year - 1900;
+    stm.tm_mon = t.month - 1;
+    stm.tm_mday = t.day;
+    stm.tm_hour = 0;
+    stm.tm_min = 0;
+    stm.tm_sec = 0;
+    stm.tm_isdst = -1;
+
+    mktime (&stm);
+
+    return stm.tm_wday + 1;
+}
+
+/* Day of the year that the first day of the week (Sunday) is on.
+   FIXME: Doesn't take into account different week start days. */
 short icaltime_start_doy_of_week(struct icaltimetype t){
-    time_t tt = icaltime_as_timet(t);
-    time_t start_tt;
-    struct tm *stm;
-    int syear;
+    struct tm stm;
 
-    stm = gmtime(&tt);
-    syear = stm->tm_year;
+    stm.tm_year = t.year - 1900;
+    stm.tm_mon = t.month - 1;
+    stm.tm_mday = t.day;
+    stm.tm_hour = 0;
+    stm.tm_min = 0;
+    stm.tm_sec = 0;
+    stm.tm_isdst = -1;
 
-    start_tt = tt - stm->tm_wday*(60*60*24);
+    mktime (&stm);
 
-    stm = gmtime(&start_tt);
+    /* Move back to the start of the week. */
+    stm.tm_mday -= stm.tm_wday;
     
-    if(syear == stm->tm_year){
-	return stm->tm_yday+1;
+    mktime (&stm);
+
+    /* If we are still in the same year as the original date, we just return
+       the day of the year. */
+    if (t.year - 1900 == stm.tm_year){
+	return stm.tm_yday+1;
     } else {
 	/* return negative to indicate that start of week is in
            previous year. */
 	int is_leap = 0;
-	int year = stm->tm_year;
+	int year = stm.tm_year;
 
 	if( (year % 4 == 0 && year % 100 != 0) ||
 	    year % 400 == 0){
 	    is_leap =1;
 	}
 
-	return (stm->tm_yday+1)-(365+is_leap);
+	return (stm.tm_yday+1)-(365+is_leap);
     }
     
 }
 
+/* FIXME: Doesn't take into account the start day of the week. strftime assumes
+   that weeks start on Monday. */
 short icaltime_week_number(struct icaltimetype ictt)
 {
-    char str[5];
-    time_t t = icaltime_as_timet(ictt);
+    struct tm stm;
     int week_no;
+    char str[8];
 
-    strftime(str,5,"%V", gmtime(&t));
+    stm.tm_year = ictt.year - 1900;
+    stm.tm_mon = ictt.month - 1;
+    stm.tm_mday = ictt.day;
+    stm.tm_hour = 0;
+    stm.tm_min = 0;
+    stm.tm_sec = 0;
+    stm.tm_isdst = -1;
+
+    mktime (&stm);
+ 
+    strftime(str,5,"%V", &stm);
 
     week_no = atoi(str);
 
     return week_no;
-
 }
 
+static const short days_in_year[2][13] = 
+{ /* jan feb mar apr may  jun  jul  aug  sep  oct  nov  dec */
+  {  0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 }, 
+  {  0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
+};
 
+/* Returns the day of the year, counting from 1 (Jan 1st). */
 short icaltime_day_of_year(struct icaltimetype t){
-    time_t tt;
-    struct tm *stm;
-    struct set_tz_save old_tz; 
+  int is_leap = 0;
 
-    tt =  icaltime_as_timet(t);
-
-    old_tz = set_tz("UTC");
-    stm = localtime(&tt);
-    unset_tz(old_tz);
-
-    return stm->tm_yday+1;
+  if (icaltime_is_leap_year (t.year))
+    is_leap = 1;
     
+  return days_in_year[is_leap][t.month - 1] + t.day;
 }
+
 
 /* Jan 1 is day #1, not 0 */
 struct icaltimetype icaltime_from_day_of_year(short doy,  short year)
 {
-    struct tm stm; 
-    time_t tt;
-    struct set_tz_save old_tz;
+    struct icaltimetype tt = { 0 };
+    int is_leap = 0, month;
 
-    /* Get the time of january 1 of this year*/
-    memset(&stm,0,sizeof(struct tm)); 
-    stm.tm_year = year-1900;
-    stm.tm_mday = 1;
+    tt.year = year;
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
+	is_leap = 1;
 
-    old_tz = set_tz("UTC");
-    tt = mktime(&stm);
-    unset_tz(old_tz);
+    assert(doy > 0);
+    assert(doy <= days_in_year[is_leap][12]);
 
+    for (month = 11; month >= 0; month--) {
+      if (doy > days_in_year[is_leap][month]) {
+	tt.month = month + 1;
+	tt.day = doy - days_in_year[is_leap][month];
+	return tt;
+      }
+    }
 
-    /* Now add in the days */
-
-    doy--;
-    tt += doy *60*60*24;
-
-    return icaltime_from_timet(tt, 1);
+    /* Shouldn't reach here. */
+    assert (0);
 }
 
 struct icaltimetype icaltime_null_time()
@@ -522,44 +665,71 @@ int icaltime_is_null_time(struct icaltimetype t)
 
 }
 
-int icaltime_compare(struct icaltimetype a,struct icaltimetype b)
+int icaltime_compare(struct icaltimetype a, struct icaltimetype b)
 {
-    time_t t1 = icaltime_as_timet(a);
-    time_t t2 = icaltime_as_timet(b);
+    int retval;
 
-    if (t1 > t2) { 
-	return 1; 
-    } else if (t1 < t2) { 
-	return -1;
-    } else { 
-	return 0; 
-    }
+    if (a.year > b.year)
+	retval = 1;
+    else if (a.year < b.year)
+	retval = -1;
 
+    else if (a.month > b.month)
+	retval = 1;
+    else if (a.month < b.month)
+	retval = -1;
+
+    else if (a.day > b.day)
+	retval = 1;
+    else if (a.day < b.day)
+	retval = -1;
+
+    else if (a.hour > b.hour)
+	retval = 1;
+    else if (a.hour < b.hour)
+	retval = -1;
+
+    else if (a.minute > b.minute)
+	retval = 1;
+    else if (a.minute < b.minute)
+	retval = -1;
+
+    else if (a.second > b.second)
+	retval = 1;
+    else if (a.second < b.second)
+	retval = -1;
+
+    else
+	retval = 0;
+
+    return retval;
 }
 
 int
 icaltime_compare_date_only (struct icaltimetype a, struct icaltimetype b)
 {
-    time_t t1;
-    time_t t2;
+    int retval;
 
-    if (a.year == b.year && a.month == b.month && a.day == b.day)
-        return 0;
+    if (a.year > b.year)
+	retval = 1;
+    else if (a.year < b.year)
+	retval = -1;
 
-    t1 = icaltime_as_timet (a);
-    t2 = icaltime_as_timet (b);
+    else if (a.month > b.month)
+	retval = 1;
+    else if (a.month < b.month)
+	retval = -1;
 
-    if (t1 > t2) 
-	return 1; 
-    else if (t1 < t2)
-	return -1;
-    else {
-	/* not reached */
-	assert (0);
-	return 0;
-    }
+    else if (a.day > b.day)
+	retval = 1;
+    else if (a.day < b.day)
+	retval = -1;
+
+    else
+	retval = 0;
+
+    return retval;
 }
-
 
 /* These are defined in icalduration.c:
 struct icaltimetype  icaltime_add(struct icaltimetype t,
@@ -568,3 +738,90 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
 					   struct icaltimetype t2)
 */
 
+
+
+/* Adds (or subtracts) a time from a icaltimetype.
+   NOTE: This function is exactly the same as icaltimezone_adjust_change()
+   except for the type of the first parameter. */
+void
+icaltime_adjust				(struct icaltimetype	*tt,
+					 int		 days,
+					 int		 hours,
+					 int		 minutes,
+					 int		 seconds)
+{
+    int second, minute, hour, day;
+    int minutes_overflow, hours_overflow, days_overflow, years_overflow;
+    int days_in_month;
+
+    /* Add on the seconds. */
+    second = tt->second + seconds;
+    tt->second = second % 60;
+    minutes_overflow = second / 60;
+    if (tt->second < 0) {
+	tt->second += 60;
+	minutes_overflow--;
+    }
+
+    /* Add on the minutes. */
+    minute = tt->minute + minutes + minutes_overflow;
+    tt->minute = minute % 60;
+    hours_overflow = minute / 60;
+    if (tt->minute < 0) {
+	tt->minute += 60;
+	hours_overflow--;
+    }
+
+    /* Add on the hours. */
+    hour = tt->hour + hours + hours_overflow;
+    tt->hour = hour % 24;
+    days_overflow = hour / 24;
+    if (tt->hour < 0) {
+	tt->hour += 24;
+	days_overflow--;
+    }
+
+    /* Normalize the month. We do this before handling the day since we may
+       need to know what month it is to get the number of days in it.
+       Note that months are 1 to 12, so we have to be a bit careful. */
+    if (tt->month >= 13) {
+	years_overflow = (tt->month - 1) / 12;
+	tt->year += years_overflow;
+	tt->month -= years_overflow * 12;
+    } else if (tt->month <= 0) {
+	/* 0 to -11 is -1 year out, -12 to -23 is -2 years. */
+	years_overflow = (tt->month / 12) - 1;
+	tt->year += years_overflow;
+	tt->month -= years_overflow * 12;
+    }
+
+    /* Add on the days. */
+    day = tt->day + days + days_overflow;
+    if (day > 0) {
+	for (;;) {
+	    days_in_month = icaltime_days_in_month (tt->month, tt->year);
+	    if (day <= days_in_month)
+		break;
+
+	    tt->month++;
+	    if (tt->month >= 13) {
+		tt->year++;
+		tt->month = 1;
+	    }
+
+	    day -= days_in_month;
+	}
+    } else {
+	while (day <= 0) {
+	    if (tt->month == 1) {
+		tt->year--;
+		tt->month = 12;
+	    } else {
+		tt->month--;
+	    }
+
+	    day += icaltime_days_in_month (tt->month, tt->year);
+	}
+    }
+    tt->day = day;
+}

@@ -1,9 +1,9 @@
-/* -*- Mode: C -*-
+/* -*- Mode: C; tab-width: 4; c-basic-offset: 8; -*-
   ======================================================================
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.16 2001-06-22 16:04:21 ebusboom Exp $
+  $Id: icalparser.c,v 1.17 2001-11-14 07:07:22 benjaminlee Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -57,7 +57,7 @@ extern icalvalue* icalparser_yy_value;
 void set_parser_value_state(icalvalue_kind kind);
 int ical_yyparse(void);
 
-char* icalparser_get_next_char(char c, char *str);
+char* icalparser_get_next_char(char c, char *str, int qm);
 char* icalparser_get_next_parameter(char* line,char** end);
 char* icalparser_get_next_value(char* line, char **end, icalvalue_kind kind);
 char* icalparser_get_prop_name(char* line, char** end);
@@ -139,14 +139,14 @@ icalvalue* icalvalue_new_From_string_with_error(icalvalue_kind kind,
 
 
 
-char* icalparser_get_next_char(char c, char *str)
+char* icalparser_get_next_char(char c, char *str, int qm)
 {
     int quote_mode = 0;
     char* p;
     
 
     for(p=str; *p!=0; p++){
-	
+	    if (qm == 1) {
 	if ( quote_mode == 0 && *p=='"' && *(p-1) != '\\' ){
 	    quote_mode =1;
 	    continue;
@@ -156,6 +156,7 @@ char* icalparser_get_next_char(char c, char *str)
 	    quote_mode =0;
 	    continue;
 	}
+	    }
 
 	if (quote_mode == 0 &&  *p== c  && *(p-1) != '\\' ){
 	    return p;
@@ -241,8 +242,8 @@ char* icalparser_get_prop_name(char* line, char** end)
     char* v;
     char *str;
 
-    p = icalparser_get_next_char(';',line); 
-    v = icalparser_get_next_char(':',line); 
+    p = icalparser_get_next_char(';',line,1); 
+    v = icalparser_get_next_char(':',line,1); 
     if (p== 0 && v == 0) {
 	return 0;
     }
@@ -264,9 +265,10 @@ char* icalparser_get_param_name(char* line, char **end)
 {
     
     char* next; 
+    char* quote; 
     char *str;
 
-    next = icalparser_get_next_char('=',line);
+    next = icalparser_get_next_char('=',line,1);
 
     if (next == 0) {
 	return 0;
@@ -274,6 +276,16 @@ char* icalparser_get_param_name(char* line, char **end)
 
     str = make_segment(line,next);
     *end = next+1;
+    if (**end == '"') {
+        *end = *end+1;
+	    next = icalparser_get_next_char('"',*end,0);
+	    if (next == 0) {
+		    return 0;
+	    }
+
+	    *end = make_segment(*end,next);
+    }
+
     return str;
    
 }
@@ -284,7 +296,7 @@ char* icalparser_get_next_paramvalue(char* line, char **end)
     char* next; 
     char *str;
 
-    next = icalparser_get_next_char(',',line);
+    next = icalparser_get_next_char(',',line,1);
 
     if (next == 0){
 	next = (char*)(size_t)line+(size_t)strlen(line);\
@@ -316,7 +328,7 @@ char* icalparser_get_next_value(char* line, char **end, icalvalue_kind kind)
     p = line;
     while(1){
 
-	next = icalparser_get_next_char(',',p);
+	next = icalparser_get_next_char(',',p,1);
 
 	/* Unforunately, RFC2445 says that for the RECUR value, COMMA
 	   can both seperate digits in a list, and it can seperate
@@ -377,14 +389,14 @@ char* icalparser_get_next_parameter(char* line,char** end)
     char *v;
     char *str;
 
-    v = icalparser_get_next_char(':',line); 
-    next = icalparser_get_next_char(';', line);
+    v = icalparser_get_next_char(':',line,1); 
+    next = icalparser_get_next_char(';', line,1);
     
     /* There is no ';' or, it is after the ':' that marks the beginning of
        the value */
 
     if (next == 0 || next > v) {
-	next = icalparser_get_next_char(':', line);
+	next = icalparser_get_next_char(':', line,1);
     }
 
     if (next != 0) {
