@@ -12,11 +12,18 @@
 #include "icalgauge.h"
 #include <errno.h>
 #include <sys/stat.h> /* for stat */
+
+#ifndef WIN32
 #include <unistd.h> /* for stat, getpid */
-#include <stdlib.h>
-#include <string.h>
 #include <fcntl.h> /* for fcntl */
 #include <unistd.h> /* for fcntl */
+#else
+#define	S_IRUSR	S_IREAD		/* R for owner */
+#define	S_IWUSR	S_IWRITE	/* W for owner */
+#endif
+#include <stdlib.h>
+#include <string.h>
+
 #include "icalbdbsetimpl.h"
 
 #define STRBUF_LEN 255
