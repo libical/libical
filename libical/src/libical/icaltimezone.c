@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.31 2002-11-03 23:54:31 acampi Exp $
+ $Id: icaltimezone.c,v 1.32 2002-11-03 23:55:39 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -121,16 +121,16 @@ struct _icaltimezonechange {
     /**< The offset to add to UTC, before this change, in seconds. */
 
     int		 year;		/**< Actual year, e.g. 2001. */
-    char	 month;		/**< 1 (Jan) to 12 (Dec). */
-    char	 day;
-    char	 hour;
-    char	 minute;
-    char	 second;
+    int		 month;		/**< 1 (Jan) to 12 (Dec). */
+    int		 day;
+    int		 hour;
+    int		 minute;
+    int		 second;
     /**< The time that the change came into effect, in UTC.
        Note that the prev_utc_offset applies to this local time,
        since we haven't changed to the new offset yet. */
 
-    char	 is_daylight;
+    int		 is_daylight;
     /**< Whether this is STANDARD or DAYLIGHT time. */
 };
 
