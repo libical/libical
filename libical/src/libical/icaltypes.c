@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.13 2002-09-26 22:08:02 lindner Exp $
+  $Id: icaltypes.c,v 1.14 2002-10-09 22:30:53 acampi Exp $
   $Locker:  $
     
 
@@ -109,7 +109,7 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
  error:
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,es);
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-    return tr;
+    return null_tr;
 
 }
 
