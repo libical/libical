@@ -158,7 +158,7 @@ AC_SUBST(PTHREAD_LIBS)
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(assert.h pthread.h time.h sys/types.h unistd.h wctype.h)
+AC_CHECK_HEADERS(assert.h pthread.h stdint.h time.h sys/types.h unistd.h wctype.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
