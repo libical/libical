@@ -3,7 +3,7 @@
   FILE: icalfilesetimpl.h
   CREATOR: eric 23 December 1999
   
-  $Id: icalfilesetimpl.h,v 1.3 2001-01-12 21:22:20 ebusboom Exp $
+  $Id: icalfilesetimpl.h,v 1.4 2002-06-04 14:31:55 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -25,6 +25,8 @@
 
  ======================================================================*/
 
+#ifndef ICALFILESETIMPL_H
+#define ICALFILESETIMPL_H
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,3 +49,4 @@ struct icalfileset_impl {
   int fd; /* file descriptor */
 };
 
+#endif
