@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalgauge.c,v 1.12 2002-07-21 17:18:15 lindner Exp $
+ $Id: icalgauge.c,v 1.13 2002-09-26 22:26:06 lindner Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -288,7 +288,7 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
     icalerror_check_arg_rz( (comp!=0), "comp");
     icalerror_check_arg_rz( (gauge!=0), "gauge");
     
-    if (gauge == 0) return 0;
+    if (gauge == 0 || comp == 0) return 0;
  
     inner = icalcomponent_get_first_real_component(comp);
 
