@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.10 2002-05-29 12:15:20 acampi Exp $
+    $Id: icaldirset.c,v 1.11 2002-05-29 13:04:57 acampi Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -63,6 +63,7 @@
 #include "icaldirset.h"
 #include "icalfileset.h"
 #include "icalfilesetimpl.h"
+#include "icalcluster.h"
 #include "icalgauge.h"
 
 #include <limits.h> /* For PATH_MAX */
@@ -120,15 +121,22 @@ void icaldirset_mark(icaldirset* store)
 {
     struct icaldirset_impl *impl = (struct icaldirset_impl*)store;
 
-    icalfileset_mark(impl->cluster);
+    icalcluster_mark(impl->cluster);
 }
 
 
 icalerrorenum icaldirset_commit(icaldirset* store)
 {
+    icalfileset *file;
     struct icaldirset_impl *impl = (struct icaldirset_impl*)store;
 
-    return icalfileset_commit(impl->cluster);
+    file = icalfileset_new_from_cluster(icalcluster_key(impl->cluster),
+	impl->cluster);
+	printf("impl->fd %d\n", ((struct icalfileset_impl *)file)->fd);
+    icalfileset_commit(file);
+    icalfileset_free(file);
+
+    return ICAL_NO_ERROR;
 
 }
 
@@ -356,7 +364,7 @@ void icaldirset_free(icaldirset* s)
     }
 
     if(impl->cluster !=0){
-	icalfileset_free(impl->cluster);
+	icalcluster_free(impl->cluster);
     }
 
     while(impl->directory !=0 &&  (str=pvl_pop(impl->directory)) != 0){
@@ -448,7 +456,7 @@ icalerrorenum icaldirset_next_cluster(icaldirset* store)
     if (impl->directory_iterator == 0){
 	/* There are no more clusters */
 	if(impl->cluster != 0){
-	    icalfileset_free(impl->cluster);
+	    icalcluster_free(impl->cluster);
 	    impl->cluster = 0;
 	}
 	return ICAL_NO_ERROR;
@@ -456,14 +464,13 @@ icalerrorenum icaldirset_next_cluster(icaldirset* store)
 	    
     sprintf(path,"%s/%s",impl->dir,(char*)pvl_data(impl->directory_iterator));
 
-    icalfileset_free(impl->cluster);
-
-    impl->cluster = icalfileset_new(path);
+    icalcluster_free(impl->cluster);
+    impl->cluster = icalfileset_produce_icalcluster(path);
 
     return icalerrno;
 }
 
-void icaldirset_add_uid(icaldirset* store, icaldirset* comp)
+void icaldirset_add_uid(icaldirset* store, icalcomponent* comp)
 {
     char uidstring[ICAL_PATH_MAX];
     icalproperty *uid;
@@ -562,13 +569,13 @@ icalerrorenum icaldirset_add_component(icaldirset* store, icalcomponent* comp)
     /* Load the cluster and insert the object */
 
     if(impl->cluster != 0 && 
-       strcmp(clustername,icalfileset_path(impl->cluster)) != 0 ){
-	icalfileset_free(impl->cluster);
+       strcmp(clustername,icalcluster_key(impl->cluster)) != 0 ){
+	icalcluster_free(impl->cluster);
 	impl->cluster = 0;
     }
 
     if (impl->cluster == 0){
-	impl->cluster = icalfileset_new(clustername);
+	impl->cluster = icalfileset_produce_icalcluster(clustername);
 
 	if (impl->cluster == 0){
 	    error = icalerrno;
@@ -581,26 +588,22 @@ icalerrorenum icaldirset_add_component(icaldirset* store, icalcomponent* comp)
     }
 
     /* Add the component to the cluster */
-
-    icalfileset_add_component(impl->cluster,comp);
+    icalcluster_add_component(impl->cluster,comp);
     
-    icalfileset_mark(impl->cluster);
+    /* icalcluster_mark(impl->cluster); */
 
     return ICAL_NO_ERROR;    
 }
 
 /* Remove a component in the current cluster. HACK. This routine is a
-   "friend" of icalfileset, and breaks its encapsulation. It was
+   "friend" of icalcluster, and breaks its encapsulation. It was
    either do it this way, or add several layers of interfaces that had
    no other use.  */
 icalerrorenum icaldirset_remove_component(icaldirset* store, icalcomponent* comp)
 {
     struct icaldirset_impl *impl = (struct icaldirset_impl*)store;
 
-    struct icalfileset_impl *filesetimpl = 
-	(struct icalfileset_impl*)impl->cluster;
-
-    icalcomponent *filecomp = filesetimpl->cluster;
+    icalcomponent *filecomp = icalcluster_get_component(impl->cluster);
 
     icalcompiter i;
     int found = 0;
@@ -626,17 +629,17 @@ icalerrorenum icaldirset_remove_component(icaldirset* store, icalcomponent* comp
 	return ICAL_USAGE_ERROR;
     }
 
-    icalfileset_remove_component(impl->cluster,comp);
+    icalcluster_remove_component(impl->cluster,comp);
 
-    icalfileset_mark(impl->cluster);
+    /* icalcluster_mark(impl->cluster); */
 
     /* If the removal emptied the fileset, get the next fileset */
-    if( icalfileset_count_components(impl->cluster,ICAL_ANY_COMPONENT)==0){
+    if( icalcluster_count_components(impl->cluster,ICAL_ANY_COMPONENT)==0){
 	
 	icalerrorenum error = icaldirset_next_cluster(store);
 
 	if(impl->cluster != 0 && error == ICAL_NO_ERROR){
-	    icalfileset_get_first_component(impl->cluster);
+	    icalcluster_get_first_component(impl->cluster);
 	} else {
 	    /* HACK. Not strictly correct for impl->cluster==0 */
 	    return error;
@@ -763,7 +766,11 @@ icalcomponent* icaldirset_get_current_component(icaldirset* store)
 	icaldirset_get_first_component(store);
     }
 
-    return icalfileset_get_current_component(impl->cluster);
+    if(impl->cluster == 0){
+	return 0;
+    }
+
+    return icalcluster_get_current_component(impl->cluster);
 
 }
 
@@ -793,13 +800,13 @@ icalcomponent* icaldirset_get_first_component(icaldirset* store)
     /* If the next cluster we need is different than the current cluster, 
        delete the current one and get a new one */
 
-    if(impl->cluster != 0 && strcmp(path,icalfileset_path(impl->cluster)) != 0 ){
-	icalfileset_free(impl->cluster);
+    if(impl->cluster != 0 && strcmp(path,icalcluster_key(impl->cluster)) != 0 ){
+	icalcluster_free(impl->cluster);
 	impl->cluster = 0;
     }
     
     if (impl->cluster == 0){
-	impl->cluster = icalfileset_new(path);
+	impl->cluster = icalfileset_produce_icalcluster(path);
 
 	if (impl->cluster == 0){
 	    error = icalerrno;
@@ -836,18 +843,18 @@ icalcomponent* icaldirset_get_next_component(icaldirset* store)
 
     /* Set the component iterator for the following for loop */
     if (impl->first_component == 1){
-	icalfileset_get_first_component(impl->cluster);
+	icalcluster_get_first_component(impl->cluster);
 	impl->first_component = 0;
     } else {
-	icalfileset_get_next_component(impl->cluster);
+	icalcluster_get_next_component(impl->cluster);
     }
 
 
     while(1){
 	/* Iterate through all of the objects in the cluster*/
-	for( c = icalfileset_get_current_component(impl->cluster);
+	for( c = icalcluster_get_current_component(impl->cluster);
 	     c != 0;
-	     c = icalfileset_get_next_component(impl->cluster)){
+	     c = icalcluster_get_next_component(impl->cluster)){
 	    
 	    /* If there is a gauge defined and the component does not
 	       pass the gauge, skip the rest of the loop */
@@ -857,7 +864,9 @@ icalcomponent* icaldirset_get_next_component(icaldirset* store)
 		continue;
 	    }
 #else
+	if (impl->gauge != 0) {
 	    assert(0); /* icalgauge_test needs to be fixed */
+	}
 #endif
 	    /* Either there is no gauge, or the component passed the
 	       gauge, so return it*/
@@ -874,7 +883,7 @@ icalcomponent* icaldirset_get_next_component(icaldirset* store)
 	    /* No more clusters */
 	    return 0;
 	} else {
-	    c = icalfileset_get_first_component(impl->cluster);
+	    c = icalcluster_get_first_component(impl->cluster);
 
 	    return c;
 	}

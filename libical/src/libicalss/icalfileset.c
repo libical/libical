@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.18 2002-05-27 20:55:36 ebusboom Exp $
+  $Id: icalfileset.c,v 1.19 2002-05-29 13:04:57 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -44,6 +44,7 @@
 #include <string.h>
 #include <fcntl.h> /* for fcntl */
 #include "icalfilesetimpl.h"
+#include "icalclusterimpl.h"
 
 #ifdef WIN32
 #define snprintf	_snprintf
@@ -151,6 +152,67 @@ icalfileset* icalfileset_new_open(const char* path, int flags, mode_t mode)
     }      
     
     return impl;
+}
+
+icalfileset* icalfileset_new_from_cluster(const char* path, icalcluster *cluster)
+{
+    off_t cluster_file_size;
+    struct icalfileset_impl *impl = icalfileset_new_impl(); 
+
+    icalerror_check_arg_rz( (path!=0), "path");
+    icalerror_check_arg_rz( (cluster!=0), "cluster");
+
+    if (impl == 0){
+	return 0;
+    }
+
+    impl->path = strdup(path); 
+
+    cluster_file_size = icalfileset_filesize(impl);
+        
+    if(cluster_file_size < 0){
+	icalfileset_free(impl);
+	return 0;
+    } 
+
+    impl->fd = open(impl->path,O_RDWR|O_CREAT, 0644);
+    
+    if (impl->fd < 0){
+	icalerror_set_errno(ICAL_FILE_ERROR);
+	icalfileset_free(impl);
+	return 0;
+    }
+
+#ifndef WIN32
+    icalfileset_lock(impl);
+#endif
+
+    impl->cluster = icalcomponent_new_clone(
+	icalcluster_get_component( cluster));
+    impl->changed = 1;
+
+    return impl;
+}
+
+icalcluster* icalfileset_produce_icalcluster(const char *path) {
+    icalfileset *file;
+    icalcluster *ret;
+    struct icalfileset_impl *impl;
+
+    file = icalfileset_new_reader(path);
+
+    if (file == 0 && icalerrno == ICAL_FILE_ERROR) {
+	/* file does not exist */
+	ret = icalcluster_new(path, NULL);
+    } else {
+	impl = (struct icalfileset_impl*)file;
+
+	ret = icalcluster_new(path, impl->cluster);
+	icalfileset_free(file);
+    }
+
+    icalerror_set_errno(ICAL_NO_ERROR);
+    return ret;
 }
 
 char* icalfileset_read_from_file(char *s, size_t size, void *d)

@@ -3,7 +3,7 @@
   FILE: icaldirsetimpl.h
   CREATOR: eric 21 Aug 2000
   
-  $Id: icaldirsetimpl.h,v 1.1.1.1 2001-01-02 07:33:05 ebusboom Exp $
+  $Id: icaldirsetimpl.h,v 1.2 2002-05-29 13:04:57 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -30,6 +30,8 @@
 #include "config.h"
 #endif
 
+#include "icalcluster.h"
+
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icalset*/
 
@@ -40,7 +42,7 @@ struct icaldirset_impl
 	char id[5]; /* "dset" */
 	char* dir;
 	icalcomponent* gauge;
-	icaldirset* cluster;
+	icalcluster* cluster;
 	int first_component;
 	pvl_list directory;
 	pvl_elem directory_iterator;

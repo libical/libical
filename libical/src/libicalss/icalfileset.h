@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalfileset.h,v 1.7 2002-03-16 15:53:30 gray-john Exp $
+ $Id: icalfileset.h,v 1.8 2002-05-29 13:04:57 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -31,6 +31,7 @@
 
 #include "ical.h"
 #include "icalset.h"
+#include "icalcluster.h"
 #include "icalgauge.h"
 #include <sys/types.h> /* For open() flags and mode */
 #include <sys/stat.h> /* For open() flags and mode */
@@ -59,6 +60,10 @@ icalfileset* icalfileset_new_writer(const char* path);
 /* Like _new, but takes open() flags for opening the file */
 icalfileset* icalfileset_new_open(const char* path, 
 				  int flags, mode_t mode);
+
+icalfileset* icalfileset_new_from_cluster(const char* path, icalcluster *cluster);
+
+icalcluster* icalfileset_produce_icalcluster(const char *path);
 
 void icalfileset_free(icalfileset* cluster);
 
