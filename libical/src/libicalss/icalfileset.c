@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.24 2002-06-27 02:30:58 acampi Exp $
+  $Id: icalfileset.c,v 1.25 2002-06-28 09:37:48 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -728,11 +728,10 @@ icalsetiter icalfileset_begin_component(icalset* set, icalcomponent_kind kind, i
     icalcomponent* comp = NULL;
     icalcompiter citr;
     icalfileset *fset = (icalfileset*) set;
-    struct icaltimetype start, next, end;
+    struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype recur;
     int g = 0;
-    int i = 0;
 
     icalerror_check_arg_re((set!=0), "set", icalsetiter_null);
 
@@ -808,11 +807,9 @@ icalsetiter icalfileset_begin_component(icalset* set, icalcomponent_kind kind, i
 icalcomponent* icalfileset_form_a_matched_recurrence_component(icalsetiter* itr)
 {
     icalcomponent* comp = NULL;
-    struct icaltimetype start, next, end;
+    struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype recur;
-    int g = 0;
-    int i = 0;
 
     comp = itr->last_component;
 
@@ -870,7 +867,7 @@ icalcomponent* icalfilesetiter_to_next(icalset* set, icalsetiter* i)
 
     icalcomponent* c = NULL;
     icalfileset *fset = (icalfileset*) set;
-    struct icaltimetype start, next, end;
+    struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype recur;
     int g = 0;
