@@ -4,7 +4,7 @@
  CREATOR: dml 12 December 2001
  (C) COPYRIGHT 2001, Critical Path
 
- $Id: icalbdbset.h,v 1.3 2002-06-28 10:00:29 acampi Exp $
+ $Id: icalbdbset.h,v 1.4 2002-09-26 22:24:52 lindner Exp $
  $Locker:  $
 ======================================================================*/
 
@@ -22,11 +22,12 @@ enum icalbdbset_subdb_type {ICALBDB_CALENDARS, ICALBDB_EVENTS, ICALBDB_TODOS, IC
 typedef enum icalbdbset_subdb_type icalbdbset_subdb_type;
 
 /** sets up the db environment, should be done in parent thread.. */
-int icalbdbset_init_dbenv(char *db_env_dir);
+int icalbdbset_init_dbenv(char *db_env_dir, void (*logDbFunc)(const char*, char*));
 
 icalset*  icalbdbset_init(icalset* set, const char *dsn, void *options);
-void icalbdbset_cleanup(void);
+int icalbdbset_cleanup(void);
 void icalbdbset_checkpoint(void);
+void icalbdbset_rmdbLog(void);
 
 /** Creates a component handle.  flags allows caller to 
    specify if database is internally a BTREE or HASH */
@@ -48,7 +49,7 @@ char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc)(const DBT *dbt)) ;
 void icalbdbset_free(icalset* set);
 
 /* cursor operations */
-int icalbdbset_acquire_cursor(DB *dbp, DBC **rdbcp);
+int icalbdbset_acquire_cursor(DB *dbp, DB_TXN* tid, DBC **rdbcp);
 int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, int access_method);
 int icalbdbset_cput(DBC *dbcp, DBT *key, DBT *data, int access_method);
 
@@ -58,6 +59,7 @@ int icalbdbset_get_last(DBC *dbcp, DBT *key, DBT *data);
 int icalbdbset_get_key(DBC *dbcp, DBT *key, DBT *data);
 int icalbdbset_delete(DB *dbp, DBT *key);
 int icalbdbset_put(DB *dbp, DBT *key, DBT *data, int access_method);
+int icalbdbset_get(DB *dbp, DB_TXN *tid, DBT *key, DBT *data, int flags);
 
 const char* icalbdbset_path(icalset* set);
 const char* icalbdbset_subdb(icalset* set);
@@ -90,6 +92,11 @@ icalcomponent* icalbdbset_fetch_match(icalset* set, icalcomponent *c);
 icalerrorenum icalbdbset_modify(icalset* set, icalcomponent *old,
 				icalcomponent *newc);
 
+/* cluster management functions */
+icalerrorenum  icalbdbset_set_cluster(icalset* set, icalcomponent* cluster);
+icalerrorenum  icalbdbset_free_cluster(icalset* set);
+icalcomponent* icalbdbset_get_cluster(icalset* set);
+
 /* Iterate through components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
@@ -98,7 +105,7 @@ icalcomponent* icalbdbset_get_first_component(icalset* set);
 icalcomponent* icalbdbset_get_next_component(icalset* set);
 
 /* External iterator for thread safety */
-icalsetiter icalbdbset_begin_component(icalset* set, icalcomponent_kind kind, icalgauge* gauge);
+icalsetiter icalbdbset_begin_component(icalset* set, icalcomponent_kind kind, icalgauge* gauge, const char* tzid);
 
 icalcomponent* icalbdbset_form_a_matched_recurrence_component(icalsetiter* itr);
 
@@ -111,6 +118,10 @@ icalcomponent* icalbdbsetiter_to_prior(icalset* set, icalsetiter* i);
 icalcomponent* icalbdbset_get_component(icalset* set);
 
 DB_ENV *icalbdbset_get_env(void);
+
+
+int icalbdbset_begin_transaction(DB_TXN* parent_id, DB_TXN** txnid);
+int icalbdbset_commit_transaction(DB_TXN* txnid);
 
 DB* icalbdbset_bdb_open(const char* path, 
 			const char *subdb,
