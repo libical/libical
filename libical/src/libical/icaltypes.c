@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.4 2001-04-23 16:52:54 ebusboom Exp $
+  $Id: icaltypes.c,v 1.5 2001-06-22 15:57:26 ebusboom Exp $
   $Locker:  $
     
 
@@ -163,7 +163,8 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
 
     
     struct icaltriggertype tr, null_tr;
-    int old_ieaf = icalerror_errors_are_fatal;
+    icalerrorstate es;
+    icalerrorenum e;
 
     tr.time= icaltime_null_time();
     tr.duration = icaldurationtype_from_int(0);
@@ -172,12 +173,13 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
 
     if(str == 0) goto error;
 
-
-    icalerror_errors_are_fatal = 0;
+    /* Surpress errors so a failure in icaltime_from_string() does not cause an abort */
+    es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_NONFATAL);
+    e = icalerrno;
+    icalerror_set_errno(ICAL_NO_ERROR);
 
     tr.time = icaltime_from_string(str);
-
-    icalerror_errors_are_fatal = old_ieaf;
 
     if (icaltime_is_null_time(tr.time)){
 
@@ -186,9 +188,12 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
 	if(icaldurationtype_as_int(tr.duration) == 0) goto error;
     } 
 
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,es);
+    icalerror_set_errno(e);
     return tr;
 
  error:
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,es);
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     return null_tr;
 

@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.8 2001-04-23 16:52:54 ebusboom Exp $
+  $Id: copycluster.c,v 1.9 2001-06-22 15:57:26 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -63,17 +63,19 @@ int main(int c, char *argv[]){
     }
 
 
-    icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
+    /*icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);*/
 
     signal(SIGALRM,sig_alrm);
 
-    alarm(10);
+    /*alarm(30);*/
     clusterin = icalfileset_new(argv[1]);
     alarm(0);
 
     if (clusterin == 0){
 	printf("Could not open input cluster \"%s\"\n",argv[1]);
-	       
+	if(icalerrno!= ICAL_NO_ERROR){
+          printf("Error: %s\n",icalerror_strerror(icalerrno));
+        }
 	exit(1);
     }
 

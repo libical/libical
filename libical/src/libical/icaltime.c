@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.15 2001-05-21 05:43:09 ebusboom Exp $
+  $Id: icaltime.c,v 1.16 2001-06-22 15:57:26 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -396,7 +396,7 @@ short icaltime_day_of_week(struct icaltimetype t){
     time_t tt = icaltime_as_timet(t);
     struct tm *tm;
 
-    if(t.is_utc == 1){
+    if(t.is_utc == 1 || t.is_date == 1){
 	tm = gmtime(&tt);
     } else {
 	tm = localtime(&tt);

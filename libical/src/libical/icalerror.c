@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.7 2001-03-17 16:47:02 ebusboom Exp $
+  $Id: icalerror.c,v 1.8 2001-06-22 15:57:26 ebusboom Exp $
   $Locker:  $
     
 
@@ -47,6 +47,19 @@ void icalerror_crash_here(void)
     assert( *p);
 }
 
+#ifdef ICAL_SETERROR_ISFUNC
+void icalerror_set_errno(icalerrorenum x) 
+{
+    icalerrno = x; 
+    if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || 
+       (icalerror_get_error_state(x)==ICAL_ERROR_DEFAULT && 
+        icalerror_errors_are_fatal == 1 )){ 
+        icalerror_warn(icalerror_strerror(x)); 
+        assert(0); 
+    } 
+
+}
+#endif 
 
 void icalerror_clear_errno() {
     

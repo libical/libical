@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.9 2001-04-02 18:17:40 ebusboom Exp $
+  $Id: icalerror.h,v 1.10 2001-06-22 15:57:26 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -34,6 +34,8 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#define ICAL_SETERROR_ISFUNC
 
 
 /* This routine is called before any error is triggered. It is called
@@ -90,7 +92,7 @@ char* icalerror_perror();
 void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
 icalerrorstate icalerror_get_error_state( icalerrorenum error);
 
-
+#ifndef ICAL_SETERROR_ISFUNC
 #define icalerror_set_errno(x) \
 icalerrno = x; \
 if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || \
@@ -99,7 +101,7 @@ if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || \
    icalerror_warn(icalerror_strerror(x)); \
    assert(0); \
 } 
-
+#endif
 
 #ifdef ICAL_ERRORS_ARE_FATAL
 #undef NDEBUG

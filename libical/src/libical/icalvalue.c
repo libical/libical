@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.6 2001-04-23 16:52:54 ebusboom Exp $
+  $Id: icalvalue.c,v 1.7 2001-06-22 15:57:26 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -740,7 +740,7 @@ char* icalvalue_attach_as_ical_string(icalvalue* value) {
     } else if (a.url != 0){
 	return icalvalue_string_as_ical_string(value);
     } else {
-	icalerrno = ICAL_MALFORMEDDATA_ERROR;
+	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	return 0;
     }
 }
