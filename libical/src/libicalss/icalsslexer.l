@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalsslexer.l,v 1.2 2001-01-03 06:35:15 ebusboom Exp $
+  $Id: icalsslexer.l,v 1.3 2001-05-04 17:54:02 ebusboom Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -77,6 +77,7 @@ FROM			{ return FROM; }
 WHERE			{ return WHERE; }
 ,			{ return COMMA; }
 "="  			{ return EQUALS; }
+"=="  			{ return EQUALS; }
 "!=" 			{ return NOTEQUALS; }
 "<"  			{ return LESS; }
 ">"  			{ return GREATER; }

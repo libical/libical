@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.25 2001-04-23 16:52:54 ebusboom Exp $
+  $Id: regression.c,v 1.26 2001-05-04 17:54:02 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2561,18 +2561,33 @@ void test_gauge_sql() {
 
 
     icalgauge *g;
+    char* str;
     
-    printf("\nSELECT DTSTART,DTEND,COMMENT FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5\n");
+    str= "SELECT DTSTART,DTEND,COMMENT FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5";
 
-    g = icalgauge_new_from_sql("SELECT DTSTART,DTEND,COMMENT FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5");
+    printf("\n%s\n",str);
+
+    g = icalgauge_new_from_sql(str);
     
     icalgauge_dump(g);
 
     icalgauge_free(g);
 
-    printf("\nSELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'\n");
+    str="SELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'";
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'");
+    printf("\n%s\n",str);
+
+    g = icalgauge_new_from_sql(str);
+    
+    icalgauge_dump(g);
+
+    icalgauge_free(g);
+
+    str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
+
+    printf("\n%s\n",str);
+
+    g = icalgauge_new_from_sql(str);
     
     icalgauge_dump(g);
 
@@ -3400,6 +3415,15 @@ void test_x_property()
 
 }
 
+void test_utcoffset()
+{
+    icalproperty *p;
+
+    p = icalproperty_new_from_string("TZOFFSETFROM:-001608");
+    printf("%s\n",icalproperty_as_ical_string(p));
+
+}
+
 int main(int argc, char *argv[])
 {
     int c;
@@ -3618,6 +3642,14 @@ int main(int argc, char *argv[])
 	test_requeststat();
     }
 
+
+    if(tmisc == 1 || tmisc  == 12){
+	printf("\n-----------Test UTC-OFFSET-------\n");
+	test_utcoffset();
+    }
+
+
+   
 
     if(tbasic == 1 || tbasic  == 2){
 	printf("\n------------Test Values---------------\n");

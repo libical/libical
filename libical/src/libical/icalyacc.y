@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalyacc.y,v 1.4 2001-05-04 17:53:01 ebusboom Exp $
+  $Id: icalyacc.y,v 1.5 2001-05-04 17:55:11 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -377,7 +377,6 @@ utcoffset_value:
             int h = $2;
             int m = $3;
             int s = $4;
-            printf("%d %d %d\n",h,m,s);
 	    icalparser_yy_value = icalvalue_new_utcoffset(utcsign * ((h*3600) + (m*60) +(s)));
   	}
 
