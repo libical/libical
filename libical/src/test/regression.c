@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.27 2001-05-04 19:59:53 ebusboom Exp $
+  $Id: regression.c,v 1.28 2001-05-06 16:49:42 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2555,6 +2555,26 @@ void test_gauge_sql() {
     icalgauge_free(g);
 
     str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
+
+    printf("\n%s\n",str);
+
+    g = icalgauge_new_from_sql(str);
+    
+    icalgauge_dump(g);
+
+    icalgauge_free(g);
+
+    str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
+
+    printf("\n%s\n",str);
+
+    g = icalgauge_new_from_sql(str);
+    
+    icalgauge_dump(g);
+
+    icalgauge_free(g);
+
+    str="SELECT * FROM VEVENT WHERE LOCATION == '104 Forum'";
 
     printf("\n%s\n",str);
 
