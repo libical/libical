@@ -64,6 +64,13 @@ icalcomponent* icalcomponent_get_first_component(icalcomponent* component,
 icalcomponent* icalcomponent_get_next_component(icalcomponent* component,
 					      icalcomponent_kind kind);
 
+void icalcomponent_add_property(icalcomponent* component,
+				icalproperty* property);
+
+void icalcomponent_remove_property(icalcomponent* component,
+				   icalproperty* property);
+
+
 icalcomponent* icalcomponent_get_parent(icalcomponent* component);
 
 icalcomponent_kind icalcomponent_isa(icalcomponent* component);
@@ -84,6 +91,8 @@ char* icalproperty_as_ical_string(icalproperty *prop);
 void icalproperty_set_parameter_from_string(icalproperty* prop,
                                           const char* name, const char* value);
 void icalproperty_set_value_from_string(icalproperty* prop,const char* value);
+
+icalcomponent* icalproperty_get_parent(icalproperty* property);
 
 typedef enum icalerrorenum {
     

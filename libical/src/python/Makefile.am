@@ -21,7 +21,7 @@ LibicalWrap.c:  LibicalWrap.i
 # This part should be done with libtool, but I don't know how to do
 # it. Libtool needs to generate a shared library in this directory
 # regardless of the value of AM_DISABLE_SHARED
-LibicalWrap.so:
+LibicalWrap.so: LibicalWrap.c 
 	ld -shared -o LibicalWrap.so LibicalWrap.o ../libical/.libs/libical.a 
 
 CLEANFILES = LibicalWrap.c LibicalWrap_wrap.doc  Libical.pyc LibicalWrap.so

@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 
-# $Id: Libical.py,v 1.9 2001-02-27 14:52:13 plewis Exp $
+# $Id: Libical.py,v 1.10 2001-02-27 18:41:43 ebusboom Exp $
 
 from LibicalWrap import *
 from types import *
@@ -28,7 +28,7 @@ class Property:
         self.desc = {}
         self.parameters = {}
   
-        desc_keys = ('name', 'value', 'value_type', 'pid')
+        desc_keys = ('name', 'value', 'value_type', 'pid', 'ref')
 
         # Initialize all of the required keys
         for key in desc_keys:
@@ -46,6 +46,13 @@ class Property:
             self.desc['name'] = v
 
         return self.desc['name']
+
+    def ref(self,v=None):
+        """ Return the internal reference to the libical icalproperty """
+        if(v != None):
+            self.desc['ref'] = v
+
+        return self.desc['ref']
 
     def value_type(self,v=None):
         """ Return the RFC2445 name of the value """
@@ -69,15 +76,18 @@ class Property:
         """
         return filter(lambda p, s=self: s[p] != None, self.parameters.keys())
 
-    def _update_value():
+    def _update_value(self):
         """
         A virtual method that creates the dict entry value from another
         representation of the property
         """
-        pass
-
+        
+        if self.ref():
+            icalproperty_set_value_from_string(self.ref(),self.desc['value'])
+            
     def asIcalString(self):
         " "
+
         return str(self)
 
     def __getitem__(self,key):
@@ -169,6 +179,8 @@ class Time(Property):
 
         self.tt = icaltime_normalize(self.tt)
         self.desc['value'] = icaltime_as_ical_string(self.tt)
+
+        Property._update_value(self)
 
     def valid(self):
         " Return true if this is a valid time "
@@ -369,6 +381,8 @@ class Duration(Property):
     def _update_value(self):
         self.desc['value'] = icaldurationtype_as_ical_string(self.dur)
 
+        Property._update_value(self)
+
     def valid(self):
         "Return true if this is a valid duration"
 
@@ -420,6 +434,8 @@ class Period(Property):
 
     def _update_value(self):
         self.desc['value'] = icalperiodtype_as_ical_string(self.pt)
+
+        Property._update_value(self)
 
     def valid(self):
         "Return true if this is a valid period"
@@ -585,7 +601,7 @@ class Attendee(Property):
 
     def __init__(self, arg=None):
         if isinstance(arg, DictType):
-            Property.__init__(self, dict)
+            Property.__init__(self, arg)
         else:
             Property.__init__(self, {})
             self.value(arg)
@@ -815,6 +831,7 @@ class Component:
         self.comp_p = icalparser_parse_string(str)
        
 
+
     def __del__(self):
         if self.comp_p != None and icalcomponent_get_parent(self.comp_p) != None:
             icalcomponent_free(self.comp_p)
@@ -873,16 +890,34 @@ class Component:
         property of the type 'type.'
         """
 
-        p = icallangbind_get_first_property(self.comp_p,type)          
+        props = []
+
+        p = icallangbind_get_first_property(self.comp_p,type)
+
         while p !='NULL':
-            #print "'%s'" % str(p)
             d_string = icallangbind_property_eval_string(p,":")
-            #print "'%s'" % str(d_string)
             d = eval(d_string)
-            #print d['value_type']
-            
+
+            d['ref'] = p
+
+            if d['value_type'] == 'DATE-TIME' or d['value_type'] == 'DATE':
+                prop = Time(d)
+            elif d['value_type'] == 'PERIOD':
+                prop = Period(d)
+            elif d['value_type'] == 'DURATION':
+                prop = Duration(d)
+            elif d['name'] == 'ATTACH':
+                prop = Attach(d)
+            elif d['name'] == 'ATTENDEE':
+                prop = Attendee(d)
+            else:
+                prop = Property(d)
+
+            props.append(prop)
+
             p = icallangbind_get_next_property(self.comp_p,type)
-            ## TODO - Return list of properties.
+
+        return props
  
     def addPropertyFromString(self, propertyStr):
         """
@@ -899,10 +934,29 @@ class Component:
             p_dict = eval(p_dict)
             self._addPropertyFromDict(p_dict)
 
-    def addProperty(self, property):
+    def addProperty(self, prop):
         "Adds the property object to the component."
-        self._properties.append(property)
-            
+        
+        if not isinstance(prop,Property):
+            raise TypeError
+
+        prop_p = prop.ref()
+
+        if not prop_p:
+            s = str(prop)
+            prop_p = icalproperty_new_from_string(s)
+
+            if prop_p == 'NULL':
+                raise "Bad property string: " + s
+
+            prop.ref(prop_p)
+
+        if icalproperty_get_parent(prop_p)=='NULL':
+            icalcomponent_add_property(self.comp_p, prop_p)
+        elif  icalproperty_get_parent(prop_p) != self.comp_p:
+            raise "Property is already a child of another component"
+
+
     def removeProperty(self,property):
         pass
 
@@ -922,9 +976,64 @@ class Component:
     def components(self,type='ANY'):        
         props = []
 
-
-
         return props
+
+
+    def __str__(self):
+
+        return icalcomponent_as_ical_string(self.comp_p)
+
+
+def test_component():
+
+    print "------------------- Test Component ----------------------"
+
+    comp_str = """
+BEGIN:VEVENT
+ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com
+COMMENT: When in the course of writting comments and nonsense text\, it 
+ becomes necessary to insert a newline
+DTSTART:19972512T120000
+DTSTART:19970101T120000Z
+DTSTART:19970101
+DURATION:P3DT4H25M
+FREEBUSY:19970101T120000/19970101T120000
+FREEBUSY:19970101T120000/PT3H
+FREEBUSY:19970101T120000/PT3H
+END:VEVENT"""
+
+
+    c = Component(comp_str);
+    
+    props = c.properties()
+    
+    for p in props: print p.asIcalString()
+        
+    dtstart = c.properties('DTSTART')[0]
+        
+    print dtstart
+    
+    print "\n Orig hour: ", dtstart.hour()
+
+    dtstart.hour(dtstart.hour() + 5)
+
+    print "\n New hour: ", dtstart.hour()
+    
+    attendee = c.properties('ATTENDEE')[0]
+    
+    print attendee
+
+    t = Time("20011111T123030")
+    t.name('DTEND')
+
+    c.addProperty(t)
+
+
+    print c
+
+    
+
+
 
 def NewComponent(comp):
     "Converts a string or C icalcomponent into the right component object."
