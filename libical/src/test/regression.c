@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.23 2001-04-11 16:08:37 ebusboom Exp $
+  $Id: regression.c,v 1.24 2001-04-12 18:33:15 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -3278,6 +3278,7 @@ void test_langbind()
 "BEGIN:VEVENT\n"
 "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com\n"
 "COMMENT: Comment that \n spans a line\n"
+"COMMENT: Comment with \"quotable\" \'characters\' and other \t bad magic \n things \f Yeah.\n"
 "DTSTART:19970101T120000\n"
 "DTSTART:19970101T120000Z\n"
 "DTSTART:19970101\n"
@@ -3290,6 +3291,9 @@ void test_langbind()
     printf("%s\n",test_str);
 
     c = icalparser_parse_string(test_str);
+
+    printf("-----------\n%s\n-----------\n",icalcomponent_as_ical_string(c));
+
     inner = icalcomponent_get_inner(c);
 
 

@@ -1,3 +1,10 @@
+2001-04-12  Eric Busboom  <eric@softwarestudio.org>
+
+	* icalvalue.c Added quoting to apostrophies ("'") in text
+ 	values. This is not required but the spec, but it is necessary in
+ 	icallangbind_property_eval_string, since ' is special in both perl
+ 	and python.
+
 2001-04-10  Eric Busboom  <eric@softwarestudio.org>
 
 	* icalvalue.c Added routine icalvalue_reset_kind. This routine is

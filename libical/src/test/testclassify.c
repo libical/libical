@@ -3,7 +3,7 @@
   FILE: testclassify.c
   CREATOR: eric 11 February 2000
   
-  $Id: testclassify.c,v 1.3 2001-04-11 04:45:29 ebusboom Exp $
+  $Id: testclassify.c,v 1.4 2001-04-12 18:33:15 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
     for(c=icalset_get_first_component(f);c!=0;
 	c=icalset_get_next_component(f)){
 	
-	ical_class class;
+	icalproperty_xlicclass class;
 	icalcomponent *match;
 	icalcomponent *inner = icalcomponent_get_first_real_component(c);
 	icalcomponent *p;
@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
 	}
 
 
-	printf("Test %d\nIncoming:      %s\nMatched:       %s\nClassification: %s\n\n",i,i_x_note,c_x_note,icalclassify_class_to_string(class));	
+	printf("Test %d\nIncoming:      %s\nMatched:       %s\nClassification: %s\n\n",i,i_x_note,c_x_note,icalproperty_enum_to_string(class));	
     }
 
     return 0;

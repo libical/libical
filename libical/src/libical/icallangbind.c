@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.13 2001-04-01 20:08:19 ebusboom Exp $
+  $Id: icallangbind.c,v 1.14 2001-04-12 18:33:36 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -129,6 +129,7 @@ icalcomponent* icallangbind_get_next_component(icalcomponent *c,
 
 #define APPENDC(x) icalmemory_append_char(&buf, &buf_ptr, &buf_size, x);
 
+
 const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
 {
     char tmp[25];
@@ -150,14 +151,14 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
     APPENDS(" 'name' ");
     APPENDS(sep);
     APPENDC('\'');
-    APPENDS(icalenum_property_kind_to_string(icalproperty_isa(prop)));
+    APPENDS(icalproperty_kind_to_string(icalproperty_isa(prop)));
     APPENDC('\'');
 
     if(value){
         APPENDS(", 'value_type' ");
         APPENDS(sep);
         APPENDC('\'');
-        APPENDS(icalenum_value_kind_to_string(icalvalue_isa(value)));
+        APPENDS(icalvalue_kind_to_string(icalvalue_isa(value)));
         APPENDC('\'');
     }
 
