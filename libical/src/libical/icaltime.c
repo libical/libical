@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.60 2002-11-05 13:58:29 acampi Exp $
+  $Id: icaltime.c,v 1.61 2002-11-21 09:55:33 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -218,18 +218,18 @@ icaltime_from_timet_with_zone(const time_t tm, const int is_date,
     return tt;
 }
 
-/**	@brief Convenience constructor.
+/**	@brief Constructor.
  * 
- * Returns the current time in the given timezone, as an icaltimetype.
+ * Returns an icaltimetype representing the current time in the given timezone.
  */
 struct icaltimetype icaltime_current_time_with_zone(const icaltimezone *zone)
 {
     return icaltime_from_timet_with_zone (time (NULL), 0, zone);
 }
 
-/**	@brief Convenience constructor.
+/**	@brief Constructor.
  * 
- * Returns the current day as an icaltimetype, with is_date set.
+ * Returns an icaltimetype representing the current day.
  */
 struct icaltimetype icaltime_today(void)
 {
@@ -265,11 +265,11 @@ time_t icaltime_as_timet(const struct icaltimetype tt)
 
 }
 
-/**	@brief	Return the time as seconds past the UNIX epoch, using the
+/**	Return the time as seconds past the UNIX epoch, using the
  *	given timezone.
  *
- *	This convenience method combines a call to icaltime_convert() with
- *	a call to icaltime_as_timet().
+ *	This convenience method combines a call to icaltime_convert_to_zone()
+ *	with a call to icaltime_as_timet().
  *	If the input timezone is null, no conversion is done; that is, the
  *	time is simply returned as time_t in its native timezone.
  */
@@ -557,8 +557,7 @@ struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
 
 /**	@brief Constructor.
  *
- *	Return a null time, which indicates no time has been set.
- *	This time represents the beginning of the epoch.
+ *	Return a null time, which is guaranteed not to be equal to any other time.
  */
 struct icaltimetype icaltime_null_time(void)
 {
@@ -570,7 +569,7 @@ struct icaltimetype icaltime_null_time(void)
 
 /**	@brief Constructor.
  *
- *	Return a null date, which indicates no time has been set.
+ *	Return a null date.
  */
 struct icaltimetype icaltime_null_date(void)
 {
