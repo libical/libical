@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.12 2002-08-09 14:28:16 lindner Exp $
+  $Id: icaltypes.c,v 1.13 2002-09-26 22:08:02 lindner Exp $
   $Locker:  $
     
 
@@ -53,6 +53,15 @@ int icaltriggertype_is_null_trigger(struct icaltriggertype tr)
     return 0;
 }
     
+int icaltriggertype_is_bad_trigger(struct icaltriggertype tr)
+{
+    if(icaldurationtype_is_bad_duration(tr.duration)){
+        return 1;
+    }
+
+    return 0;
+}
+
 struct icaltriggertype icaltriggertype_from_int(const int reltime)
 {
     struct icaltriggertype tr;
@@ -90,7 +99,7 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
 
 	tr.duration = icaldurationtype_from_string(str);
 
-	if(icaldurationtype_as_int(tr.duration) == 0) goto error;
+        if (icaldurationtype_is_bad_duration(tr.duration)) goto error;
     } 
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,es);
@@ -100,7 +109,7 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
  error:
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,es);
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-    return null_tr;
+    return tr;
 
 }
 
