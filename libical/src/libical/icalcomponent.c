@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.31 2002-06-11 14:12:15 acampi Exp $
+  $Id: icalcomponent.c,v 1.32 2002-06-11 18:27:28 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -46,6 +46,7 @@
 #include <assert.h>
 #include <stdio.h> /* for fprintf */
 #include <string.h> /* for strdup */
+#include <limits.h> /* for INT_MAX */
 
 struct icalcomponent_impl 
 {
@@ -816,6 +817,256 @@ struct icaltime_span icalcomponent_get_span(icalcomponent* comp)
     return span;
 
 }
+
+/**
+ * Decide if this recurrance is acceptable
+ * 
+ * @param comp       A valid icalcomponent.
+ * @param dtstart    The base dtstart value for this component.
+ * @param recurtime  The time to test against.
+ *
+ * @ret true if the recurrence value is excluded, false otherwise.
+ *
+ * This function decides if a specific recurrence value is
+ * excluded by EXRULE or EXDATE properties.
+ *
+ * It's not the most efficient code.  You might get better performance
+ * if you assume that recurtime is always increasing for each
+ * call. Then you could:
+ *
+ *   - sort the EXDATE values
+ *   - save the state of each EXRULE iterator for the next call.
+ * 
+ * In this case though you don't need to worry how you call this
+ * function.  It will always return the correct result.
+ */
+
+static int icalproperty_recurrence_is_excluded(icalcomponent *comp,
+				       struct icaltimetype *dtstart,
+				       struct icaltimetype *recurtime) {
+  icalproperty *exdate, *exrule;
+
+  if (comp == NULL || 
+      dtstart == NULL || 
+      recurtime == NULL ||
+      icaltime_is_null_time(*recurtime))
+    /* BAD DATA */
+    return 1;	
+
+  /** first test against the exdate values **/
+  for (exdate = icalcomponent_get_first_property(comp,ICAL_EXDATE_PROPERTY);
+       exdate != NULL;
+       exdate = icalcomponent_get_next_property(comp,ICAL_EXDATE_PROPERTY)) {
+	 
+    struct icaltimetype exdatetime = icalproperty_get_exdate(exdate);
+
+    if (icaltime_compare(*recurtime, exdatetime) == 0) {
+      /** MATCHED **/
+      return 1;
+    }
+  }
+
+  /** Now test against the EXRULEs **/
+  for (exrule = icalcomponent_get_first_property(comp,ICAL_EXRULE_PROPERTY);
+       exdate != NULL;
+       exdate = icalcomponent_get_next_property(comp,ICAL_EXRULE_PROPERTY)) {
+	 
+    struct icalrecurrencetype recur = icalproperty_get_exrule(exrule);
+    icalrecur_iterator *exrule_itr  = icalrecur_iterator_new(recur, *dtstart);
+    struct icaltimetype exrule_time;
+
+    while (1) {
+      int result;
+      exrule_time = icalrecur_iterator_next(exrule_itr);
+
+      if (icaltime_is_null_time(exrule_time))
+	break;
+
+      result = icaltime_compare(*recurtime, exrule_time);
+      if (result == 0) 
+	return 1; /** MATCH **/
+      if (result == 1)
+	break;    /** exrule_time > recurtime **/
+    }
+  }
+  return 0;  /** no matches **/
+}
+
+/**
+ * @brief Return the busy status based on the TRANSP property.
+ *
+ * @param comp   A valid icalcomponent.
+ *
+ * @ret   1 if the event is a busy item, 0 if it is not.
+ */
+
+static int icalcomponent_is_busy(icalcomponent *comp) {
+  icalproperty *transp;
+
+  /* TODO check access control here, converting busy->free if the
+     permissions do not allow access... */
+
+  /* Is this a busy time?  Check the TRANSP property */
+  transp = icalcomponent_get_first_property(comp, ICAL_TRANSP_PROPERTY);
+  
+  if (transp) {
+    icalvalue *transp_val = icalproperty_get_value(transp);
+
+    switch (icalvalue_get_transp(transp_val)) {
+    case ICAL_TRANSP_OPAQUE:
+    case ICAL_TRANSP_OPAQUENOCONFLICT:
+    case ICAL_TRANSP_NONE:
+      return (1);
+    case ICAL_TRANSP_TRANSPARENT:
+    case ICAL_TRANSP_TRANSPARENTNOCONFLICT:
+      return(0);
+    }
+  }
+  return(1);
+}
+
+
+
+
+/**
+ * @brief cycle through all recurrances of an event
+ *
+ * @param comp           A valid VEVENT component
+ * @param start          Ignore timespans before this
+ * @param end            Ignore timespans after this
+ * @param callback       Function called for each timespan within the range
+ * @param callback_data  Pointer passed back to the callback function
+ *
+ * This function will call the specified callback function for once
+ * for the base value of DTSTART, and foreach recurring date/time
+ * value.
+ *
+ * It will filter out events that are specified as an EXDATE or an EXRULE.
+ *
+ * @todo We do not filter out duplicate RRULES/RDATES
+ * @todo We do not handle RDATEs with explicit periods
+ */
+
+void icalcomponent_foreach_recurrence(icalcomponent* comp,
+				      struct icaltimetype start,
+				      struct icaltimetype end,
+			void (*callback)(icalcomponent *comp, 
+                                         struct icaltime_span *span, 
+                                         void *data),
+				void *callback_data)
+{
+  struct icaltimetype dtstart, dtend;
+  struct icaltime_span recurspan, basespan;
+  icalproperty *rrule, *rdate;
+  time_t startlimit, endlimit;
+  int dtduration;
+  struct icaldurationtype dur;
+  pvl_elem property_iterator;
+  icalrecur_iterator *rrule_itr=NULL;
+  
+  if (comp == NULL || callback == NULL)
+    return;
+  
+  dtstart = icalcomponent_get_dtstart(comp);
+  
+  if (icaltime_is_null_time(dtstart))
+    return;			
+
+
+  /* The end time could be specified as either a DTEND or a DURATION */
+  /* icalcomponent_get_dtend takes care of these cases. */
+  dtend = icalcomponent_get_dtend(comp);
+
+  /* Now set up the base span for this item, corresponding to the 
+     base DTSTART and DTEND */
+  basespan = icaltime_span_new(dtstart, dtend, 1);
+
+  basespan.is_busy = icalcomponent_is_busy(comp);
+
+
+  /** Calculate the ceiling and floor values.. **/
+  startlimit = icaltime_as_timet_with_zone(start, icaltimezone_get_utc_timezone());
+  if (!icaltime_is_null_time(end))
+    endlimit   = icaltime_as_timet_with_zone(end, icaltimezone_get_utc_timezone());
+  else
+    endlimit   = INT_MAX;  /* max 32 bit time_t */
+
+
+  /* Do the callback for the initial DTSTART entry */
+
+  if (!icalproperty_recurrence_is_excluded(comp, &dtstart, &dtstart)) {
+    /** call callback action **/
+    (*callback) (comp, &basespan, callback_data);
+  }
+
+  recurspan = basespan;
+  dtduration = basespan.end - basespan.start;
+  
+  /* Now cycle through the rrule entries */
+  for (rrule = icalcomponent_get_first_property(comp,ICAL_RRULE_PROPERTY);
+       rrule != NULL;
+       rrule = icalcomponent_get_next_property(comp,ICAL_RRULE_PROPERTY)) {
+
+    struct icalrecurrencetype recur = icalproperty_get_rrule(rrule);
+    icalrecur_iterator *rrule_itr  = icalrecur_iterator_new(recur, dtstart);
+    struct icaltimetype rrule_time = icalrecur_iterator_next(rrule_itr);
+    /** note that icalrecur_iterator_next always returns dtstart
+	the first time.. **/
+    
+    while (1) {
+      rrule_time = icalrecur_iterator_next(rrule_itr);
+
+      if (icaltime_is_null_time(rrule_time)) 
+	break;
+
+      dur = icaltime_subtract(rrule_time, dtstart);
+
+      recurspan.start = basespan.start + icaldurationtype_as_int(dur);
+      recurspan.end   = recurspan.start + dtduration;
+
+      /** save the iterator ICK! **/
+      property_iterator = comp->property_iterator;
+
+      if (!icalproperty_recurrence_is_excluded(comp, &dtstart, &rrule_time)) {
+	/** call callback action **/
+	(*callback) (comp, &recurspan, callback_data);
+      }
+      comp->property_iterator = property_iterator;
+    } /* end of iteration over a specific RRULE */
+  } /* end of RRULE loop */
+
+
+  /** Now process RDATE entries **/
+  for (rdate = icalcomponent_get_first_property(comp,ICAL_RDATE_PROPERTY);
+       rdate != NULL;
+       rdate = icalcomponent_get_next_property(comp,ICAL_RDATE_PROPERTY)) {
+
+    struct icaldatetimeperiodtype rdate_period = icalproperty_get_rdate(rdate);
+
+    /** RDATES can specify raw datetimes, periods, or dates.
+	we only support raw datetimes for now.. 
+        TODO add support for other types **/
+    
+    if (icaltime_is_null_time(rdate_period.time)) 
+      continue;
+
+    dur = icaltime_subtract(rdate_period.time, dtstart);
+
+    recurspan.start = basespan.start + icaldurationtype_as_int(dur);
+    recurspan.end   = recurspan.start + dtduration;
+
+    /** save the iterator ICK! **/
+    property_iterator = comp->property_iterator;
+
+    if (!icalproperty_recurrence_is_excluded(comp, &dtstart, &rdate_period.time)) {
+      /** call callback action **/
+      (*callback) (comp, &recurspan, callback_data);
+    }
+    comp->property_iterator = property_iterator;
+  }
+}
+
+
 
 int icalcomponent_check_restrictions(icalcomponent* comp){
     icalerror_check_arg_rz(comp!=0,"comp");
