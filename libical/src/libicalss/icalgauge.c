@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalgauge.c,v 1.5 2001-05-07 16:49:17 ebusboom Exp $
+ $Id: icalgauge.c,v 1.6 2001-12-10 01:28:43 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -95,6 +95,8 @@ void icalgauge_free(icalgauge* gauge)
       if(impl->from){
 	  pvl_free(impl->from);
       }
+
+	  free(impl);
       
 }
 
@@ -329,7 +331,10 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 	} else {
 	    last_clause = this_clause;
 	}
+
+	icalvalue_free(v);
     }
+
 
     return last_clause;
 

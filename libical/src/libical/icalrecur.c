@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.17 2001-12-06 19:56:52 gray-john Exp $
+  $Id: icalrecur.c,v 1.18 2001-12-10 01:28:42 gray-john Exp $
   $Locker:  $
     
 
@@ -392,6 +392,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	if(name == 0){
 	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	    icalrecurrencetype_clear(&parser.rt);
+		free(parser.copy);
 	    return parser.rt;
 	}
 
@@ -434,6 +435,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	} else {
 	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	    icalrecurrencetype_clear(&parser.rt);
+		free(parser.copy);
 	    return parser.rt;
 	}
 	
@@ -645,7 +647,7 @@ int icalrecur_two_byrule(struct icalrecur_iterator_impl* impl,
     enum byrule itr;
     int passes = 0;
 
-    memset(test_array,0,9);
+    memset(test_array,0,9*sizeof(short));
 
     test_array[one] = 1;
     test_array[two] = 1;

@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.18 2001-12-06 19:55:51 gray-john Exp $
+  $Id: icalparser.c,v 1.19 2001-12-10 01:28:42 gray-john Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -580,6 +580,7 @@ icalcomponent* icalparser_parse(icalparser *parser,
     icalcomponent *root=0;
     struct icalparser_impl *impl = (struct icalparser_impl*)parser;
     icalerrorstate es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
+	int cont;
 
     icalerror_check_arg_rz((parser !=0),"parser");
 
@@ -620,10 +621,12 @@ icalcomponent* icalparser_parse(icalparser *parser,
 	    c = 0;
 
         }
+	cont = 0;
 	if(line != 0){
 	    free(line);
+		cont = 1;
 	}
-    } while ( line != 0);
+    } while ( cont );
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,es);
 

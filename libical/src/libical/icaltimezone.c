@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.c,v 1.2 2001-12-06 19:58:00 gray-john Exp $
+ $Id: icaltimezone.c,v 1.3 2001-12-10 01:28:42 gray-john Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -38,7 +38,7 @@
 
 #ifdef WIN32
 #define snprintf _snprintf
-#define PACKAGE_DATA_DIR "C:/Projects/libical/libical/libical"
+#define PACKAGE_DATA_DIR "/Projects/libical"
 #endif
 
 /* This is the toplevel directory where the timezone data is installed in. */
@@ -218,16 +218,16 @@ static void
 icaltimezone_reset			(icaltimezone *zone)
 {
     if (zone->tzid)
-	free (zone->tzid);
+		free (zone->tzid);
     if (zone->location)
-	free (zone->location);
+		free (zone->location);
     if (zone->tznames)
-	free (zone->tznames);
+		free (zone->tznames);
     if (zone->component)
-	icalcomponent_free (zone->component);
+		icalcomponent_free (zone->component);
     if (zone->changes)
-	icalarray_free (zone->changes);
-
+		icalarray_free (zone->changes);
+	
     icaltimezone_init (zone);
 }
 
@@ -271,6 +271,7 @@ icaltimezone_get_vtimezone_properties	(icaltimezone	*zone,
 
     zone->tzid = strdup (tzid);
     zone->component = component;
+	if ( zone->location != 0 ) free ( zone->location );
     zone->location = icaltimezone_get_location_from_vtimezone (component);
     zone->tznames = icaltimezone_get_tznames_from_vtimezone (component);
 
@@ -1249,6 +1250,13 @@ icaltimezone_get_builtin_timezones	(void)
     return builtin_timezones;
 }
 
+/* Release builtin timezone memory */
+void
+icaltimezone_free_builtin_timezones(void)
+{
+	icaltimezone_array_free(builtin_timezones);
+}
+
 
 /* Returns a single builtin timezone, given its Olson city name. */
 icaltimezone*
@@ -1501,6 +1509,11 @@ icaltimezone_load_builtin_timezone	(icaltimezone	*zone)
     }
 
     icaltimezone_get_vtimezone_properties (zone, subcomp);
+
+	icalcomponent_remove_component(comp,subcomp);
+
+	icalcomponent_free(comp);
+
 }
 
 

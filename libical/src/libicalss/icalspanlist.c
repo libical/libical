@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.1.1.1 2001-01-02 07:33:05 ebusboom Exp $
+    $Id: icalspanlist.c,v 1.2 2001-12-10 01:28:43 gray-john Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -212,6 +212,8 @@ void icalspanlist_free(icalspanlist* s)
     pvl_free(impl->spans);
     
     impl->spans = 0;
+
+	free(impl);
 }
 
 

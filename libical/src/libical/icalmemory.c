@@ -3,7 +3,7 @@
   FILE: icalmemory.c
   CREATOR: eric 30 June 1999
   
-  $Id: icalmemory.c,v 1.1.1.1 2001-01-02 07:32:59 ebusboom Exp $
+  $Id: icalmemory.c,v 1.2 2001-12-10 01:28:42 gray-john Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -60,7 +60,7 @@
 #include <stdlib.h> /* for malloc, realloc */
 #include <string.h> /* for memset(), strdup */
 
-#define BUFFER_RING_SIZE 25
+#define BUFFER_RING_SIZE 2500
 #define MIN_BUFFER_SIZE 200
 
 void icalmemory_free_tmp_buffer (void* buf);

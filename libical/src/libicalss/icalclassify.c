@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.7 2001-04-16 21:04:20 ebusboom Exp $
+    $Id: icalclassify.c,v 1.8 2001-12-10 01:28:43 gray-john Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -156,10 +156,14 @@ icalproperty* icalclassify_find_attendee(icalcomponent *c,
         }
 
 	if(strcmp(this_upn,upn)==0){
+			free(lattendee);
+			free(this_attendee);
             return p;
 	}
 
+		free(this_attendee);
     }
+	free(lattendee);
 
     return 0;
 

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.33 2001-12-06 20:02:55 gray-john Exp $
+  $Id: regression.c,v 1.34 2001-12-10 01:28:43 gray-john Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -676,17 +676,25 @@ void test_parameters()
     p = icalparameter_new_from_string("PARTSTAT=ACCEPTED");
     assert(icalparameter_isa(p) == ICAL_PARTSTAT_PARAMETER);
     assert(icalparameter_get_partstat(p) == ICAL_PARTSTAT_ACCEPTED);
+ 
+	icalparameter_free(p);
 
     p = icalparameter_new_from_string("ROLE=CHAIR");
     assert(icalparameter_isa(p) == ICAL_ROLE_PARAMETER);
     assert(icalparameter_get_partstat(p) == ICAL_ROLE_CHAIR);
+ 
+	icalparameter_free(p);
 
     p = icalparameter_new_from_string("PARTSTAT=X-FOO");
     assert(icalparameter_isa(p) == ICAL_PARTSTAT_PARAMETER);
     assert(icalparameter_get_partstat(p) == ICAL_PARTSTAT_X);
+ 
+	icalparameter_free(p);
 
     p = icalparameter_new_from_string("X-PARAM=X-FOO");
     assert(icalparameter_isa(p) == ICAL_X_PARAMETER);
+ 
+	icalparameter_free(p);
 
 
     for (i=0;enums[i] != -1; i++){
@@ -869,7 +877,9 @@ void test_memory()
     printf("Char-by-Char buffer: %s\n", f);
     icalmemory_append_char(&f, &p, &bufsize, 'j');
     printf("Char-by-Char buffer: %s\n", f);
-   
+ 
+	free(f);
+  
     for(i=0; i<100; i++){
 	f = icalmemory_tmp_buffer(bufsize);
 	
@@ -878,6 +888,7 @@ void test_memory()
 	memset(f,0,bufsize);
 	sprintf(f,"%d",i);
     }
+
 }
 
 
@@ -1041,30 +1052,48 @@ int test_compare()
 
     printf("%d\n",icalvalue_compare(v1,v2));
 
+	icalvalue_free(v1);
+	icalvalue_free(v2);
+
     v1 = icalvalue_new_caladdress("A");
     v2 = icalvalue_new_caladdress("B");
 
     printf("%d\n",icalvalue_compare(v1,v2));
+
+	icalvalue_free(v1);
+	icalvalue_free(v2);
 
     v1 = icalvalue_new_caladdress("B");
     v2 = icalvalue_new_caladdress("A");
 
     printf("%d\n",icalvalue_compare(v1,v2));
 
+	icalvalue_free(v1);
+	icalvalue_free(v2);
+
     v1 = icalvalue_new_integer(5);
     v2 = icalvalue_new_integer(5);
 
     printf("%d\n",icalvalue_compare(v1,v2));
+
+	icalvalue_free(v1);
+	icalvalue_free(v2);
 
     v1 = icalvalue_new_integer(5);
     v2 = icalvalue_new_integer(10);
 
     printf("%d\n",icalvalue_compare(v1,v2));
 
+	icalvalue_free(v1);
+	icalvalue_free(v2);
+
     v1 = icalvalue_new_integer(10);
     v2 = icalvalue_new_integer(5);
 
     printf("%d\n",icalvalue_compare(v1,v2));
+
+	icalvalue_free(v1);
+	icalvalue_free(v2);
 
     return 0;
 }
@@ -1151,6 +1180,8 @@ void test_restriction()
     valid = icalrestriction_check(comp);
 
     printf("#### %d ####\n%s\n",valid, icalcomponent_as_ical_string(comp));
+
+	icalcomponent_free(comp);
 
 }
 
@@ -1326,6 +1357,8 @@ void icalrecurrencetype_test()
 	printf("%s",ctime(&tt ));		
 
     } while( ! icaltime_is_null_time(next));
+
+	icalvalue_free(v);
  
 }
 
@@ -1386,6 +1419,7 @@ void test_recur_parameter_bug(){
     
     printf("%s\n",icalrecurrencetype_as_string(&recur));
 
+	icalcomponent_free(icalcomp);
 }
 
 
@@ -1459,6 +1493,9 @@ void test_period()
     printf("%s\n",icalvalue_as_ical_string(v));
     assert(strcmp(icalvalue_as_ical_string(v),
                   "19970101T120000/PT3H") == 0);
+
+
+	icalvalue_free(v);
 
 
 }
@@ -1550,6 +1587,8 @@ void test_requeststat()
     st2 = icalreqstattype_from_string("1.");
     assert(st2.code == ICAL_UNKNOWN_STATUS);
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_DEFAULT);
+
+	icalproperty_free(p);
     
 }
 
@@ -1601,6 +1640,8 @@ void test_dtstart(){
 
     assert(tt.is_date == 0);
 
+	icalproperty_free(p);
+
     p = icalproperty_new_dtstart(tt);
 
     printf("%s\n",icalvalue_kind_to_string(icalvalue_isa(icalproperty_get_value(p))));
@@ -1610,6 +1651,8 @@ void test_dtstart(){
     assert(tt2.is_date == 0);
 
     printf("%s\n",icalproperty_as_ical_string(p));
+
+	icalproperty_free(p);
 
 
 
@@ -1677,6 +1720,8 @@ void do_test_time(char* zone)
     v = icalvalue_new_datetime(ictt);
 
     printf("System time from libical: %s\n",icalvalue_as_ical_string(v));
+
+	icalvalue_free(v);
 
     tt2 = icaltime_as_timet(ictt);
     printf("Converted back to libc: %s\n",ical_timet_string(tt2));
@@ -1850,6 +1895,7 @@ void test_iterators()
     while((inner=icalcomponent_get_current_component(c)) != 0 ){
 	if(icalcomponent_isa(inner) == ICAL_VEVENT_COMPONENT){
 	    icalcomponent_remove_component(c,inner);
+		icalcomponent_free(inner);
 	} else {
 	    icalcomponent_get_next_component(c,ICAL_VEVENT_COMPONENT);
 	}
@@ -1918,6 +1964,8 @@ void test_iterators()
     }
 
     printf("\n");
+
+	icalcomponent_free(c);
 }
 
 struct set_tz_save {char* orig_tzid; char* new_env_str;};
@@ -1980,6 +2028,9 @@ void test_icalset()
 	printf(" class %d\n",icalclassify(c,0,"user"));
 
     }
+
+	icalset_free(f);
+	icalset_free(d);
 }
 
 void test_classify()
@@ -1995,6 +2046,7 @@ void test_classify()
     
     printf("Class %d\n",icalclassify(c,match,"A@example.com"));
 
+	icalset_free(f);
    
 }
 
@@ -2236,6 +2288,7 @@ void test_fblist()
 
     icalspanlist_free(sl);
 
+	icalset_free(set);
 
 }
 
@@ -2437,6 +2490,8 @@ void test_doy()
     int year, month;
     short doy,doy2;
 
+	doy = -1;
+
     tt1 = icaltime_from_string("19300101");
 
     do{      
@@ -2536,6 +2591,8 @@ void test_x(){
     recur = icalproperty_get_rrule (prop);
     
     printf("%s\n",icalrecurrencetype_as_string(&recur));
+
+	icalcomponent_free(icalcomp);
 
 }
 
@@ -2946,6 +3003,8 @@ void test_fileset()
     }
 
     icalfileset_free(fs);
+
+	icalgauge_free(g);
     
 }
 
@@ -3144,7 +3203,7 @@ void test_action()
     assert(icalproperty_get_action(p) == ICAL_ACTION_X);
     assert(regrstrcmp(icalvalue_get_x(icalproperty_get_value(p)), "FUBAR")==0);
 
-
+	icalcomponent_free(c);
 }
 
         
@@ -3185,6 +3244,8 @@ void test_trigger()
 	    printf("value=DURATION:%s\n", icaldurationtype_as_ical_string(tr.duration));
 	}   
     }
+
+	icalcomponent_free(c);
 
     /* Trigger, as a DATETIME */
     tr.duration = icaldurationtype_null_duration();
@@ -3431,6 +3492,7 @@ void test_langbind()
 
     printf("%s\n",icalproperty_as_ical_string(p));
 
+	icalcomponent_free(c);
 }
 
 void test_property_parse()
@@ -3443,11 +3505,14 @@ void test_property_parse()
     assert (p !=  0);
     printf("%s\n",icalproperty_as_ical_string(p));
 
+	icalproperty_free(p);
 
     p= icalproperty_new_from_string("DTSTART:19970101T120000Z\n");
 
     assert (p !=  0);
     printf("%s\n",icalproperty_as_ical_string(p));
+
+	icalproperty_free(p);
 
 }
 
@@ -3482,6 +3547,7 @@ void test_value_parameter()
     param = icalproperty_get_first_parameter(p,ICAL_VALUE_PARAMETER);
     assert(icalparameter_get_value(param) == ICAL_VALUE_DATE);
 
+	icalcomponent_free(c);
 }
 
 
@@ -3498,6 +3564,7 @@ void test_x_property()
     assert(regrstrcmp(icalproperty_get_x_name(p),"X-LIC-PROPERTY")==0);
     assert(regrstrcmp(icalproperty_get_x(p)," This is a note")==0);
 
+	icalproperty_free(p);
 }
 
 void test_utcoffset()
@@ -3507,6 +3574,7 @@ void test_utcoffset()
     p = icalproperty_new_from_string("TZOFFSETFROM:-001608");
     printf("%s\n",icalproperty_as_ical_string(p));
 
+	icalproperty_free(p);
 }
 
 int main(int argc, char *argv[])
@@ -3789,6 +3857,10 @@ int main(int argc, char *argv[])
 	printf("\n------------Test Memory---------------\n");
 	test_memory();
     }
+
+	icaltimezone_free_builtin_timezones();
+
+	icalmemory_free_ring();
 
     return 0;
 }

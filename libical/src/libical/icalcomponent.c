@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.15 2001-11-14 07:07:22 benjaminlee Exp $
+  $Id: icalcomponent.c,v 1.16 2001-12-10 01:28:42 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -230,13 +230,16 @@ icalcomponent_free (icalcomponent* component)
 
     if(component != 0 ){
        
-       while( (prop=pvl_pop(c->properties)) != 0){
-	   assert(prop != 0);
-           icalproperty_set_parent(prop,0);
-	   icalproperty_free(prop);
-       }
-       
-       pvl_free(c->properties);
+		if ( c->properties != 0 )
+		{
+		   while( (prop=pvl_pop(c->properties)) != 0){
+		   assert(prop != 0);
+			   icalproperty_set_parent(prop,0);
+		   icalproperty_free(prop);
+		   }
+	        pvl_free(c->properties);
+		}
+      
 
        while( (comp=pvl_data(pvl_head(c->components))) != 0){
 	   assert(comp!=0);
@@ -743,7 +746,9 @@ icalcomponent* icalcomponent_get_first_real_component(icalcomponent *c)
     return 0;
 }
 
+#ifndef WIN32
 #define BEN
+#endif
 
 #ifdef BEN
 

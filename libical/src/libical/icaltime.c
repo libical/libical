@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.18 2001-12-06 19:57:47 gray-john Exp $
+  $Id: icaltime.c,v 1.19 2001-12-10 01:28:42 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -164,6 +164,7 @@ struct set_tz_save set_tz(const char* tzid)
 
 	if(orig_tzid == 0){
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+			free(orig_tzid);
 	    return savetz;
 	}
     }
@@ -211,7 +212,7 @@ void unset_tz(struct set_tz_save savetz)
 
 	free(orig_tzid);
     } else {
-	putenv("TZ"); /* Delete from environment */
+	putenv("TZ="); /* Delete from environment */
     } 
 
     if(savetz.new_env_str != 0){
