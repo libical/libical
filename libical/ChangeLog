@@ -1,3 +1,24 @@
+2001-03-16  Eric Busboom  <eric@softwarestudio.org>
+
+	* icalparameter.c Changed icalparameter_new_from_string() to
+ 	icalparameter_new_from_value_string(). Created new
+ 	icalparameter_new_from_string() that takes strings of
+ 	form"PARAMNAME=PARAMVALUE"
+
+	* *_XNAME changes all _XNAME enumerations to _X
+
+	* derived props, values, parameters. Seperated out derived
+ 	proeprties, parameters and values into their own files. This makes
+ 	it easier to auto generate all of the enumerations for values,
+ 	parameters and proeprties.
+
+	* icalenum.h Major changes to icalenum. Movel all of the
+ 	icalenum_* values to other modules, and changed the names. Look
+ 	for #defines in icalenum.h tying the old name to the new
+ 	name. Also moved all of the enumerations into other files.
+
+	
+	
 2001-02-26  Eric Busboom  <eric@softwarestudio.org>
 
 	* src/libical/icalproperty.c Added

@@ -47,6 +47,73 @@ if ($opt_i) {
 	      BINARY=>'string'
 	     );
 
+
+if($opt_h){
+
+  # First print out the value enumerations
+  $idx = 5000;
+  print "typedef enum icalvalue_kind {\n";
+  print "   ICAL_ANY_VALUE=$idx,\n";
+
+  foreach $value  (keys %h) {
+    
+    $idx++;
+    my $ucv = join("",map {uc(lc($_));}  split(/-/,$value));
+    
+    next if $value eq "NO";
+    
+    print "    ICAL_${ucv}_VALUE=$idx,\n";
+  }
+  
+  $idx++;
+  print "   ICAL_NO_VALUE=$idx\n} icalvalue_kind ;\n\n";
+  
+  # Now create enumerations for property values
+  $idx = 10000;
+  
+  print "#define ICALPROPERTY_FIRST_ENUM $idx\n\n";
+  
+  foreach $value (sort keys %h) {
+    
+    next if !$value;
+    
+    next if $value eq 'NO' or $prop eq 'ANY';
+
+    my $ucv = join("",map {uc(lc($_));}  split(/-/,$value));    
+    my @enums = @{$h{$value}->{'enums'}};
+
+    if(@enums){
+
+      my ($c_autogen,$c_type) = @{$h{$value}->{'C'}};
+      print "typedef $c_type {\n";
+      my $first = 1;
+
+      unshift(@enums,"X");
+
+      push(@enums,"NONE");
+
+      foreach $e (@enums) {
+	if (!$first){
+	  print ",\n";
+	} else {
+	  $first = 0;
+	}
+	
+	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));    
+	
+	print "    ICAL_${ucv}_${uce} = $idx";
+	
+	$idx++;
+      }  
+
+      $c_type =~ s/enum //;
+
+      print "\n} $c_type;\n\n";
+    }
+  }
+}
+
+
 foreach $value  (keys %h) {
 
   my $autogen = $h{$value}->{C}->[0];

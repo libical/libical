@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 	exit(1);
     }
 
-    alarm(2); /* to get file lock */
+    alarm(30); /* to get file lock */
     cin = icalfileset_new(file);
     alarm(0);
     

@@ -78,14 +78,54 @@ if($opt_c){
   my ($uc,$lc,$lcvalue,$ucvalue,$type) = fudge_data($prop);
   
   print "{ICAL_${uc}_PROPERTY,\"\",ICAL_NO_VALUE}};\n\n";
+
+
+  print "static struct icalproperty_enum_map enum_map[] = {\n";
+
+  $idx = 10000;
+
+  foreach $value (sort keys %valuemap) {
+    
+    next if !$value;    
+    next if $value eq 'NO' or $prop eq 'ANY';
+
+    my $ucv = join("",map {uc(lc($_));}  split(/-/,$value));    
+    my @enums = @{$valuemap{$value}->{'enums'}};
+
+    if(@enums){
+
+      my ($c_autogen,$c_type) = @{$valuemap{$value}->{'C'}};
+      
+      unshift(@enums,"X");
+      push(@enums,"NONE");
+
+      foreach $e (@enums) {
+
+	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));
+	
+	if($e ne "X" and $e ne "NONE"){
+	  $str = $e;
+	} else {
+	  $str = "";
+	}
+
+	print "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce},\"$str\" }, /*$idx*/\n";
+
+	$idx++;
+      }
+      
+    }
+  }
+  print "    {ICAL_NO_PROPERTY,0,\"\"}\n};\n\n";
+
+
 }
 
 
-# Create the property enumerations list
 if($opt_h){
 
+  # Create the property enumerations list
   print "typedef enum icalproperty_kind {\n    ICAL_ANY_PROPERTY = 0,\n";
-  
   foreach $prop (sort keys %propmap) {
     
     next if !$prop;
@@ -96,14 +136,11 @@ if($opt_h){
     
     print "    ICAL_${uc}_PROPERTY, \n";
     
-  }
-  
-  
-  print "    ICAL_NO_PROPERTY\n} icalproperty_kind;\n";
+  }  
+  print "    ICAL_NO_PROPERTY\n} icalproperty_kind;\n\n";
+
 
 }
-
-
 
 
 foreach $prop (sort keys %propmap) {

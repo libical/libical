@@ -12,6 +12,7 @@ sub read_values_file {
     chop; 
  
     s/#.*$//g;
+    s/\"//g;
    
     next if ! $_;
 
@@ -25,11 +26,10 @@ sub read_values_file {
     my $c_type = $c_type_str;
     $c_type =~ s/\(.\)//;
 
-    my $cpp_type =  $column[2];
-    my $perl_type =  $column[3];
-    my $python_type =  $column[4];
-    my $components = $column[5];
-    
+    my $python_type =  $column[2];
+    my $components = $column[3];
+    my $enum_values = $column[4];
+
     my @components;
     if($components ne "unitary"){
       @components = split(/;/,$components);
@@ -37,10 +37,19 @@ sub read_values_file {
       @components = ();
     }
 
+    my @enums;
+    if($enum_values) {
+      @enums  = split(/;/,$enum_values);
+
+    } else {
+      @enums = ();
+    }
+
     $h{$value_name} = { C => [$c_autogen,$c_type],
 			perl => $perl_type,
 			python => $python_type,
-			components=>[@components]
+			components=>[@components],
+			enums=>[@enums]
 		      };
   }
 
@@ -77,6 +86,45 @@ sub read_properties_file {
 
   return %h;
 }
+
+sub read_parameters_file {
+  
+  my $path = shift;
+  my %h;
+
+  open(F,$path) || die "Can't open parameters file $path";
+
+  while(<F>){
+    
+    chop; 
+ 
+    s/#.*$//g;
+    s/\"//g;
+   
+    next if ! $_;
+
+    @column = split(/\,/,$_);
+  
+    my $parameter_name = $column[0];
+
+    my $data_type = $column[1];
+    my $enum_string = $column[2];
+
+    my @enums;
+    if($enum_string){
+      @enums =  split(/;/,$enum_string);
+    }
+    
+    $h{$parameter_name} = { C => $data_type,
+			   enums => [@enums]
+			 };
+  }
+
+  close(F);
+
+  return %h;
+}
+
 
 
 1;
