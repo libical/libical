@@ -71,7 +71,7 @@ public:
 
 	/* Convert kinds to string and get default value type */
 	static icalvalue_kind kind_to_value_kind(icalproperty_kind kind);
-	static icalvalue_kind value_kind_to_kind(icalvalue_kind kind);
+	static icalproperty_kind value_kind_to_kind(icalvalue_kind kind);
 	static string kind_to_string(icalproperty_kind kind);
 	static icalproperty_kind string_to_kind(string str);
 

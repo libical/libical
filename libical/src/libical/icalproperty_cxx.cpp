@@ -136,7 +136,7 @@ icalvalue_kind ICalProperty::icalparameter_value_to_value_kind(icalparameter_val
 icalvalue_kind ICalProperty::kind_to_value_kind(icalproperty_kind kind){
 	return icalproperty_kind_to_value_kind(kind);
 }
-icalvalue_kind ICalProperty::value_kind_to_kind(icalvalue_kind kind){
+icalproperty_kind ICalProperty::value_kind_to_kind(icalvalue_kind kind){
 	return icalproperty_value_kind_to_kind(kind);
 }
 string ICalProperty::kind_to_string(icalproperty_kind kind){
