@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "./autogenex" /I "./" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "./autogenex" /I "./" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -93,6 +93,10 @@ SOURCE=.\icalarray.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\icalattach.c
+# End Source File
+# Begin Source File
+
 SOURCE=icalattendee.c
 # End Source File
 # Begin Source File
@@ -101,7 +105,7 @@ SOURCE=icalcomponent.c
 # End Source File
 # Begin Source File
 
-SOURCE=icalderivedparameter.c
+SOURCE=.\autogenex\icalderivedparameter.c
 # End Source File
 # Begin Source File
 
@@ -109,7 +113,7 @@ SOURCE=icalderivedparameter.c.in
 # End Source File
 # Begin Source File
 
-SOURCE=icalderivedproperty.c
+SOURCE=.\autogenex\icalderivedproperty.c
 # End Source File
 # Begin Source File
 
@@ -117,7 +121,7 @@ SOURCE=icalderivedproperty.c.in
 # End Source File
 # Begin Source File
 
-SOURCE=icalderivedvalue.c
+SOURCE=.\autogenex\icalderivedvalue.c
 # End Source File
 # Begin Source File
 
@@ -138,10 +142,6 @@ SOURCE=icalerror.c
 # Begin Source File
 
 SOURCE=icallangbind.c
-# End Source File
-# Begin Source File
-
-SOURCE=icallexer.c
 # End Source File
 # Begin Source File
 
@@ -173,7 +173,7 @@ SOURCE=icalrecur.c
 # End Source File
 # Begin Source File
 
-SOURCE=icalrestriction.c
+SOURCE=.\autogenex\icalrestriction.c
 # End Source File
 # Begin Source File
 
@@ -197,10 +197,6 @@ SOURCE=icalvalue.c
 # End Source File
 # Begin Source File
 
-SOURCE=icalyacc.c
-# End Source File
-# Begin Source File
-
 SOURCE=pvl.c
 # End Source File
 # Begin Source File
@@ -217,7 +213,7 @@ SOURCE=.\astime.h
 # End Source File
 # Begin Source File
 
-SOURCE=ical.h
+SOURCE=.\autogenex\ical.h
 # End Source File
 # Begin Source File
 
@@ -330,10 +326,6 @@ SOURCE=icalvalueimpl.h
 # Begin Source File
 
 SOURCE=icalversion.h.in
-# End Source File
-# Begin Source File
-
-SOURCE=icalyacc.h
 # End Source File
 # Begin Source File
 

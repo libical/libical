@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.37 2002-07-11 21:49:47 lindner Exp $
+  $Id: icalcomponent.c,v 1.38 2002-07-23 13:49:42 lindner Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1318,6 +1318,7 @@ icalcomponent_begin_component(icalcomponent* component,icalcomponent_kind kind)
     pvl_elem i;
 
     itr.kind = kind;
+    itr.iter = NULL;
 
     icalerror_check_arg_re( (component!=0),"component",icalcompiter_null);
 
