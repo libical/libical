@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.30 2002-06-27 01:36:40 acampi Exp $
+  $Id: icalparser.c,v 1.31 2002-06-28 08:54:42 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -62,10 +62,6 @@
 #define iswspace        isspace
 #endif
 
-
-typedef void* yyscan_t;
-void set_parser_value_state(icalvalue_kind kind, yyscan_t);
-int ical_yyparse(yyscan_t );
 
 char* icalparser_get_next_char(char c, char *str, int qm);
 char* icalparser_get_next_parameter(char* line,char** end);

@@ -3,7 +3,7 @@
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalparser.h,v 1.6 2002-06-11 12:32:17 acampi Exp $
+  $Id: icalparser.h,v 1.7 2002-06-28 08:55:23 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -92,22 +92,5 @@ icalvalue*  icalparser_parse_value(icalvalue_kind kind,
 char* icalparser_get_line(icalparser* parser, char* (*line_gen_func)(char *s, size_t size, void *d));
 
 char* icalparser_string_line_generator(char *out, size_t buf_size, void *d);
-
-/**
- * This structure holds the flex/bison parser state..  Needed to support
- * reentrant operation...
- */
-
-typedef struct {
-  icalvalue *value; /**< Current Value */
-
-  /* for UTCOFFSET values */
-  int utc; 
-  int utc_b; 
-  int utcsign;
-
-  struct icaldurationtype duration;  /**< for DURATION values */
-
-} ical_yyparams;
 
 #endif /* !ICALPARSE_H */
