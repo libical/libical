@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.57 2002-07-19 14:47:55 lindner Exp $
+  $Id: regression.c,v 1.58 2002-07-21 09:52:08 lindner Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -3617,6 +3617,7 @@ int main(int argc, char *argv[])
     test_run("Test icalcalendar", test_calendar, do_test, do_header);
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
+    test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
