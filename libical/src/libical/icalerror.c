@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.10 2002-05-21 10:31:29 acampi Exp $
+  $Id: icalerror.c,v 1.11 2002-06-03 17:02:13 acampi Exp $
   $Locker:  $
     
 
@@ -78,7 +78,7 @@ struct icalerror_state {
     icalerrorstate state; 
 };
 
-struct icalerror_state error_state_map[] = 
+static struct icalerror_state error_state_map[] = 
 { 
     { ICAL_BADARG_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_NEWFAILED_ERROR,ICAL_ERROR_DEFAULT},
