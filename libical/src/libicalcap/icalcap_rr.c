@@ -57,6 +57,8 @@ icalcap_session_new_rr(void) {
 
 	/* Tell roadrunner which profiles we want to support */
 	sess->profreg = rr_profile_registry_new();
+	g_object_ref(G_OBJECT(sess->profreg));
+
 	rr_profile_registry_add_profile(sess->profreg, RR_TYPE_CAP, NULL);
 	rr_profile_registry_add_profile(sess->profreg, RR_TYPE_TLS, NULL);
   	rr_profile_registry_add_profile(sess->profreg,
@@ -321,6 +323,8 @@ icalcap_server_new_rr(icalcap_auth_handler	auth_cb,
 
 	/* Tell roadrunner which profiles we want to support */
 	serv->profreg = rr_profile_registry_new();
+	g_object_ref(G_OBJECT(serv->profreg));
+
 	rr_profile_registry_add_profile(serv->profreg, RR_TYPE_CAP, serv->cfg);
 	rr_profile_registry_add_profile(serv->profreg, RR_TYPE_TLS, NULL);
   	rr_profile_registry_add_profile(serv->profreg,
