@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.8 2001-06-22 15:57:26 ebusboom Exp $
+  $Id: icalerror.c,v 1.9 2002-05-08 17:46:38 ebusboom Exp $
   $Locker:  $
     
 
@@ -81,6 +81,7 @@ struct icalerror_state error_state_map[] =
 { 
     { ICAL_BADARG_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_NEWFAILED_ERROR,ICAL_ERROR_DEFAULT},
+    { ICAL_ALLOCATION_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_DEFAULT}, 
     { ICAL_PARSE_ERROR,ICAL_ERROR_DEFAULT},
     { ICAL_INTERNAL_ERROR,ICAL_ERROR_DEFAULT}, 
@@ -102,6 +103,7 @@ static struct icalerror_string_map string_map[] =
 {
     {"BADARG",ICAL_BADARG_ERROR,"BADARG: Bad argument to function"},
     { "NEWFAILED",ICAL_NEWFAILED_ERROR,"NEWFAILED: Failed to create a new object via a *_new() routine"},
+    { "ALLOCATION",ICAL_ALLOCATION_ERROR,"ALLOCATION: Failed to allocate new memory"},
     {"MALFORMEDDATA",ICAL_MALFORMEDDATA_ERROR,"MALFORMEDDATA: An input string was not correctly formed or a component has missing or extra properties"},
     { "PARSE",ICAL_PARSE_ERROR,"PARSE: Failed to parse a part of an iCal component"},
     {"INTERNAL",ICAL_INTERNAL_ERROR,"INTERNAL: Random internal error. This indicates an error in the library code, not an error in use"}, 
