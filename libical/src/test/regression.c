@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.49 2002-06-13 12:52:19 acampi Exp $
+  $Id: regression.c,v 1.50 2002-06-13 12:57:12 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1930,10 +1930,10 @@ void test_convenience(){
 
     duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
-    ok("Start is 1997-08-01 12:00:00 (floating)",
+    is("Start is 1997-08-01 12:00:00 (floating)",
 	ictt_as_string(icalcomponent_get_dtstart(c)),
 	"1997-08-01 12:00:00 (floating)");
-    ok("End is 1997-08-01 13:00:00 (floating)",
+    is("End is 1997-08-01 13:00:00 (floating)",
 	ictt_as_string(icalcomponent_get_dtend(c)),
 	"1997-08-01 13:00:00 (floating)");
     ok("Duration is 60 m", (duration == 60));
