@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 07 March 2001
 
 
- $Id: icalarray.h,v 1.2 2002-06-07 13:50:07 acampi Exp $
+ $Id: icalarray.h,v 1.3 2002-10-09 19:50:46 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Ximian, Inc.
@@ -35,11 +35,11 @@
 
 typedef struct _icalarray icalarray;
 struct _icalarray {
-    int		 element_size;
-    int		 increment_size;
-    int		 num_elements;
-    int		 space_allocated;
-    void	*data;
+    unsigned int	 element_size;
+    unsigned int	 increment_size;
+    unsigned int	 num_elements;
+    unsigned int	 space_allocated;
+    void		*data;
 };
 
 
