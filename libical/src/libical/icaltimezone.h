@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.h,v 1.5 2002-06-27 00:31:52 acampi Exp $
+ $Id: icaltimezone.h,v 1.6 2002-10-09 22:27:39 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -35,6 +35,14 @@
 #include "icalarray.h"
 #include "icalcomponent.h"
 
+
+#ifndef ICALTIMEZONE_DEFINED
+#define ICALTIMEZONE_DEFINED
+/** @brief An opaque struct representing a timezone.  
+ * We declare this here to avoid a circular dependancy. 
+ */
+typedef struct _icaltimezone		icaltimezone;
+#endif
 
 /**
  * @par Creating/Destroying individual icaltimezones.

@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.20 2002-08-08 16:44:37 lindner Exp $
+ $Id: icaltime.h,v 1.21 2002-10-09 22:27:39 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -97,8 +97,8 @@
 
 /* An opaque struct representing a timezone. We declare this here to avoid
    a circular dependancy. */
-#ifndef ICALTIMEONE_DEFINED
-#define ICALTIMEONE_DEFINED
+#ifndef ICALTIMEZONE_DEFINED
+#define ICALTIMEZONE_DEFINED
 typedef struct _icaltimezone		icaltimezone;
 #endif
 
