@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.13 2002-06-27 01:16:59 acampi Exp $
+  $Id: icalduration.c,v 1.14 2002-09-26 22:06:01 lindner Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -187,9 +187,7 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
 
  error:
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-    memset(&d, 0, sizeof(struct icaldurationtype));
-    return d;
-
+    return icaldurationtype_bad_duration();
 }
 
 #define TMP_BUF_SIZE 1024
@@ -296,6 +294,25 @@ int icaldurationtype_is_null_duration(struct icaldurationtype d)
     }
 }
 
+/* in icalvalue_new_from_string_with_error, we should not call
+   icaldurationtype_is_null_duration() to see if there is an error
+   condition. Null duration is perfectly valid for an alarm.
+   We cannot depend on the caller to check icalerrno either,
+   following the philosophy of unix errno. we set the is_neg
+   to -1 to indicate that this is a bad duration.
+*/
+struct icaldurationtype icaldurationtype_bad_duration()
+{
+    struct icaldurationtype d;
+    memset(&d,0,sizeof(struct icaldurationtype));
+    d.is_neg = -1;
+    return d;
+}
+
+int icaldurationtype_is_bad_duration(struct icaldurationtype d)
+{
+    return (d.is_neg == -1);
+}
 
 
 struct icaltimetype  icaltime_add(struct icaltimetype t,
