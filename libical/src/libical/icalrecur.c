@@ -3,11 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-<<<<<<< icalrecur.c
-  $Id: icalrecur.c,v 1.28 2001-12-22 17:04:33 gray-john Exp $
-=======
-  $Id: icalrecur.c,v 1.28 2001-12-22 17:04:33 gray-john Exp $
->>>>>>> 1.26
+  $Id: icalrecur.c,v 1.29 2002-04-18 17:54:06 gray-john Exp $
   $Locker:  $
     
 
