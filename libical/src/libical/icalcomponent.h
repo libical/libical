@@ -206,7 +206,6 @@ icalproperty_method icalcomponent_get_method(icalcomponent* comp);
 struct icaltimetype icalcomponent_get_dtstamp(icalcomponent* comp);
 void icalcomponent_set_dtstamp(icalcomponent* comp, struct icaltimetype v);
 
-
 void icalcomponent_set_summary(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_summary(icalcomponent* comp);
 
@@ -220,10 +219,15 @@ void icalcomponent_set_recurrenceid(icalcomponent* comp,
 				    struct icaltimetype v);
 struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent* comp);
 
+void icalcomponent_set_description(icalcomponent* comp, const char* v);
+const char* icalcomponent_get_description(icalcomponent* comp);
+
+void icalcomponent_set_location(icalcomponent* comp, const char* v);
+const char* icalcomponent_get_location(icalcomponent* comp);
 
 void icalcomponent_set_organizer(icalcomponent* comp, 
 				 struct icalorganizertype org);
-                                 struct icalorganizertype icalcomponent_get_organizer(icalcomponent* comp);
+struct icalorganizertype icalcomponent_get_organizer(icalcomponent* comp);
 
 
 void icalcomponent_add_attendee(icalcomponent *comp,

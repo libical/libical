@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.21 2002-04-29 14:59:09 gray-john Exp $
+  $Id: icalcomponent.c,v 1.22 2002-05-03 14:57:23 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1639,12 +1639,107 @@ const char* icalcomponent_get_uid(icalcomponent* comp){
     return icalproperty_get_uid(prop);
 }
 
+void icalcomponent_set_recurrenceid(icalcomponent* comp, struct icaltimetype v)
+{
+    ICALSETUPSET(ICAL_RECURRENCEID_PROPERTY);
 
-void icalcomponent_set_recurrenceid(icalcomponent* comp, 
-				    struct icaltimetype v);
-struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent* comp);
+    if (prop == 0){
+        prop = icalproperty_new_recurrenceid(v);
+        icalcomponent_add_property(inner, prop);
+    }
 
+    icalproperty_set_recurrenceid(prop,v);
+}
+struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent* comp)
+{
+    icalcomponent *inner;
+    icalproperty *prop;
+    if (comp == 0) {
+	icalerror_set_errno(ICAL_BADARG_ERROR);
+        return icaltime_null_time();
+    }
 
+    inner = icalcomponent_get_inner(comp); 
+
+    if(inner == 0){
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return icaltime_null_time();
+    }
+
+    prop= icalcomponent_get_first_property(inner,ICAL_UID_PROPERTY);
+
+    if (prop == 0){
+        return icaltime_null_time();
+    }
+
+    return icalproperty_get_recurrenceid(prop);
+}
+
+void icalcomponent_set_description(icalcomponent* comp, const char* v)
+{
+    ICALSETUPSET(ICAL_DESCRIPTION_PROPERTY);
+
+    if (prop == 0){
+        prop = icalproperty_new_description(v);
+        icalcomponent_add_property(inner, prop);
+    }
+
+    icalproperty_set_description(prop,v);
+}
+const char* icalcomponent_get_description(icalcomponent* comp)
+{
+    icalcomponent *inner;
+    icalproperty *prop;
+    icalerror_check_arg_rz(comp!=0,"comp");
+
+    inner = icalcomponent_get_inner(comp); 
+
+    if(inner == 0){
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
+    prop= icalcomponent_get_first_property(inner,ICAL_DESCRIPTION_PROPERTY);
+
+    if (prop == 0){
+        return 0;
+    }
+
+    return icalproperty_get_description(prop);
+}
+
+void icalcomponent_set_location(icalcomponent* comp, const char* v)
+{
+    ICALSETUPSET(ICAL_LOCATION_PROPERTY)
+
+    if (prop == 0){
+        prop = icalproperty_new_location(v);
+        icalcomponent_add_property(inner, prop);
+    }
+
+    icalproperty_set_location(prop,v);
+}
+const char* icalcomponent_get_location(icalcomponent* comp)
+{
+    icalcomponent *inner;
+    icalproperty *prop;
+    icalerror_check_arg_rz(comp!=0,"comp");
+
+    inner = icalcomponent_get_inner(comp); 
+
+    if(inner == 0){
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
+    prop= icalcomponent_get_first_property(inner,ICAL_LOCATION_PROPERTY);
+
+    if (prop == 0){
+        return 0;
+    }
+
+    return icalproperty_get_location(prop);
+}
 
 
 icalcomponent* icalcomponent_new_vcalendar()
