@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.13 2002-03-16 15:53:30 gray-john Exp $
+  $Id: icalfileset.c,v 1.14 2002-03-18 22:34:45 gray-john Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -358,7 +358,7 @@ icalerrorenum icalfileset_commit(icalfileset* cluster)
 	}
     }
 
-    if(lseek(impl->fd,SEEK_SET,0) < 0){
+    if(lseek(impl->fd,0,SEEK_SET) < 0){
 	icalerror_set_errno(ICAL_FILE_ERROR);
 	return ICAL_FILE_ERROR;
     }
