@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.4 2002-05-03 14:47:46 acampi Exp $
+  $Id: icalduration.c,v 1.5 2002-05-24 10:47:29 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -274,7 +274,7 @@ int icaldurationtype_as_int(struct icaldurationtype dur)
 		  * (dur.is_neg==1? -1 : 1) ) ;
 } 
 
-struct icaldurationtype icaldurationtype_null_duration()
+struct icaldurationtype icaldurationtype_null_duration(void)
 {
     struct icaldurationtype d;
     

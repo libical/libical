@@ -4,7 +4,7 @@
  CREATOR: eric 26 Jan 2001
 
 
- $Id: icalduration.h,v 1.1 2001-02-09 17:44:01 ebusboom Exp $
+ $Id: icalduration.h,v 1.2 2002-05-24 10:48:57 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -45,7 +45,7 @@ struct icaldurationtype icaldurationtype_from_int(int t);
 struct icaldurationtype icaldurationtype_from_string(const char*);
 int icaldurationtype_as_int(struct icaldurationtype duration);
 char* icaldurationtype_as_ical_string(struct icaldurationtype d);
-struct icaldurationtype icaldurationtype_null_duration();
+struct icaldurationtype icaldurationtype_null_duration(void);
 int icaldurationtype_is_null_duration(struct icaldurationtype d);
 
 struct icaltimetype  icaltime_add(struct icaltimetype t,
