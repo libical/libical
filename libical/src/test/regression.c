@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.39 2002-05-09 14:51:42 acampi Exp $
+  $Id: regression.c,v 1.40 2002-05-10 16:04:44 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2377,6 +2377,7 @@ void test_convenience(){
     
     icalcomponent *c;
     int duration;
+    struct icaltimetype tt;
 
     c = icalcomponent_vanew(
 	ICAL_VCALENDAR_COMPONENT,
@@ -2420,6 +2421,7 @@ void test_convenience(){
 
     icalcomponent_free(c);
 
+    icalerror_errors_are_fatal = 0;
     c = icalcomponent_vanew(
 	ICAL_VCALENDAR_COMPONENT,
 	icalcomponent_vanew(
@@ -2465,6 +2467,8 @@ void test_convenience(){
     printf("Dur:   %d m\n",duration);
 
     icalcomponent_free(c);
+
+    icalerror_errors_are_fatal = 1;
 
     c = icalcomponent_vanew(
 	ICAL_VCALENDAR_COMPONENT,
@@ -2513,6 +2517,31 @@ void test_convenience(){
 
     icalcomponent_free(c);
 
+    c = icalcomponent_vanew(
+	ICAL_VCALENDAR_COMPONENT,
+	icalcomponent_vanew(
+	    ICAL_VEVENT_COMPONENT,
+	    0
+	    ),
+	0);
+
+    tt = icaltime_from_string("19970801T120000");
+    icaltime_set_timezone(&tt,
+	icaltimezone_get_builtin_timezone("Europe/Rome"));
+    icalcomponent_set_dtstart(c,tt);
+
+    printf("\n** 7 Set DTSTART and DURATION with timezone**\n%s\n\n",
+	   icalcomponent_as_ical_string(c));
+
+
+    duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
+    icalcomponent_set_duration(c,icaldurationtype_from_string("PT1H30M"));
+
+    printf("Start: %s\n",ictt_as_string(icalcomponent_get_dtstart(c)));
+    printf("End:   %s\n",ictt_as_string(icalcomponent_get_dtend(c)));
+    printf("Dur:   %d m\n",duration);
+
+    icalcomponent_free(c);
 }
 
 void test_time_parser()
