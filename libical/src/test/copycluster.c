@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.11 2002-05-27 20:55:36 ebusboom Exp $
+  $Id: copycluster.c,v 1.12 2002-06-03 17:19:06 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -33,6 +33,7 @@
 #include <string.h> /* For strerror */
 #include <signal.h> /* for signal */
 #include <unistd.h> /* for alarm */
+#include <stdlib.h> /* for exit */
 #include "icalrestriction.h"
 
 static void sig_alrm(int i){
@@ -81,7 +82,8 @@ int main(int c, char *argv[]){
 
     if (!tostdout){
         alarm(10);
-	clusterout = icalfileset_new(argv[2]);        alarm(0);
+	clusterout = icalfileset_new(argv[2]);
+	alarm(0);
 	if (clusterout == 0){
 	    printf("Could not open output cluster \"%s\"\n",argv[2]);
 	    exit(1);
