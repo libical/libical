@@ -4,7 +4,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.19 2002-06-28 10:35:19 acampi Exp $
+ $Id: icaltime.h,v 1.20 2002-08-08 16:44:37 lindner Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -79,6 +79,7 @@
  *
  *	- icaltime_add(struct icaltimetype t, struct icaldurationtype  d)
  *	- icaltime_subtract(struct icaltimetype t1, struct icaltimetype t2)
+ *      - icaltime_compare_with_zone(struct icaltimetype a,struct icaltimetype b)
  *	- icaltime_compare(struct icaltimetype a,struct icaltimetype b)
  *	- icaltime_compare_date_only(struct icaltimetype a,
  *		struct icaltimetype b)
@@ -222,6 +223,10 @@ int icaltime_is_utc(const struct icaltimetype t);
 
 /** @brief Returns true if time is a floating time */
 int icaltime_is_floating(const struct icaltimetype t);
+
+/** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
+int icaltime_compare_with_zone(const struct icaltimetype a,
+        const struct icaltimetype b);
 
 /** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
 int icaltime_compare(const struct icaltimetype a,

@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.39 2002-08-08 00:48:33 acampi Exp $
+  $Id: icaltime.c,v 1.40 2002-08-08 16:44:36 lindner Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -724,6 +724,21 @@ int icaltime_is_null_time(const struct icaltimetype t)
 
     return 0;
 
+}
+
+/**
+ *	Return -1, 0, or 1 to indicate that a<b, a==b, or a>b.
+ * 	This calls icaltime_compare function after converting them to the utc
+ * 	timezone.
+ */
+
+int icaltime_compare_with_zone(const struct icaltimetype a, const struct icaltimetype b) 
+{
+    struct icaltimetype a_utc, b_utc;
+    a_utc = icaltime_convert_to_zone(a, icaltimezone_get_utc_timezone());
+    b_utc = icaltime_convert_to_zone(b, icaltimezone_get_utc_timezone());
+
+    return (icaltime_compare(a_utc, b_utc));
 }
 
 /**
