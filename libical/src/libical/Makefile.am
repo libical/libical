@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.24 2002-06-07 16:11:51 acampi Exp $
+#  $Id: Makefile.am,v 1.25 2002-06-13 15:54:59 acampi Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -26,7 +26,7 @@
 DESIGNDATA = $(top_srcdir)/design-data
 ICALSCRIPTS = $(top_srcdir)/scripts
 
-lib_LTLIBRARIES = libical.la
+lib_LTLIBRARIES = libical.la libical_cxx.la
 
 noinst_LTLIBRARIES = libical-static.la
 libical_static_la_SOURCES = $(libical_la_SOURCES)
@@ -113,9 +113,20 @@ libical_la_SOURCES =		\
 	astime.h \
 	$(libical_la_DEVSOURCES)
 
+libical_cxx_la_SOURCES =	\
+	$(libical_la_SOURCES)	\
+	vcomponent.h		\
+	vcomponent.cpp		\
+	icalproperty_cxx.h	\
+	icalproperty_cxx.cpp	\
+	icalparameter_cxx.h	\
+	icalparameter_cxx.cpp	\
+	icalvalue_cxx.h		\
+	icalvalue_cxx.cpp
+
 libicalincludedir = $(includedir)
 
-libicalinclude_HEADERS =  ical.h 
+libicalinclude_HEADERS = ical.h vcomponent.h icalproperty_cxx.h icalparameter_cxx.h icalvalue_cxx.h icalmemory.h icalerror.h
 
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering. It
 # is required to make the combined header ical.h properly
@@ -161,10 +172,16 @@ BUILT_SOURCES =			\
 	icalderivedvalue.c
 
 ical.h: $(COMBINEDHEADERS)
+	echo '#ifdef __cplusplus'         >  ical.h
+	echo 'extern "C" {'               >> ical.h
+	echo '#endif'                     >> ical.h
 	cat $(COMBINEDHEADERS)				\
 	| egrep -v "#include.*\"ical"			\
 	| egrep -v "#include.*\"config"			\
-	| egrep -v "#include.*\"pvl\.h\"" > ical.h
+	| egrep -v "#include.*\"pvl\.h\"" >> ical.h
+	echo '#ifdef __cplusplus'         >> ical.h
+	echo '};'                         >> ical.h
+	echo '#endif'                     >> ical.h
 
 icallexer.c : icalyacc.h
 
@@ -230,6 +247,11 @@ icalderivedvalue.c: $(VALUEDEPS) $(BUILT_COMBINEDHEADERS)
 	$(PERL)  -I$(ICALSCRIPTS) $(ICALSCRIPTS)/mkderivedvalues.pl \
 		-i $(srcdir)/icalderivedvalue.c.in -c $(DESIGNDATA)/value-types.csv > icalderivedvalue.c
 
+# c++ needs ical.h auto-generated.
+icalparameter_cxx.lo: ical.h
+icalproperty_cxx.lo: ical.h
+icalvalue_cxx.lo: ical.h
+vcomponent.lo: ical.h
 
 
 # housekeeping
@@ -253,3 +275,19 @@ EXTRA_DIST =			\
 	icallexer.c		\
 	icalyacc.c
 
+$(srcdir)/icalattendee.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icalcomponent.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+icalderivedparameter.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+icalderivedproperty.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+icalderivedvalue.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icalduration.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icallangbind.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icallexer.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icalmime.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icalparameter.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icalparser.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icalproperty.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icalrestriction.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icaltime.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icalvalue.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+$(srcdir)/icalyacc.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
