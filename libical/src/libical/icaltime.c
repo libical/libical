@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.43 2002-09-26 22:09:01 lindner Exp $
+  $Id: icaltime.c,v 1.44 2002-09-26 23:46:00 lindner Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -967,6 +967,7 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart,
  *
  *  The result is calculated by testing if the start time of s1 is contained
  *  by the s2 span, or if the end time of s1 is contained by the s2 span.
+ *
  *  Also returns true if the spans are equal.
  *
  *  Note, this will return false if the spans are adjacent.
@@ -975,10 +976,20 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart,
 int icaltime_span_overlaps(icaltime_span *s1, 
 			   icaltime_span *s2)
 {
+  /* s1->start in s2 */
   if (s1->start > s2->start && s1->start < s2->end)
     return 1;
 
+  /* s1->end in s2 */
   if (s1->end > s2->start && s1->end < s2->end)
+    return 1;
+
+  /* s2->start in s1 */
+  if (s2->start > s1->start && s2->start < s1->end)
+    return 1;
+
+  /* s2->end in s1 */
+  if (s2->end > s1->start && s2->end < s1->end)
     return 1;
 
   if (s1->start == s2->start && s1->end == s2->end)
