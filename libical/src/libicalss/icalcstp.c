@@ -3,7 +3,7 @@
     FILE: icalcstps.c
     CREATOR: ebusboom 23 Jun 2000
   
-    $Id: icalcstp.c,v 1.7 2001-12-22 17:04:35 gray-john Exp $
+    $Id: icalcstp.c,v 1.8 2002-06-04 14:13:59 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -96,6 +96,7 @@ int icalcstp_line_is_endofdata(char* line)
 
 int icalcstp_line_is_mime(char* line)
 {
+  return 0;
 }
 
 
@@ -104,8 +105,6 @@ const char* icalcstp_command_to_string(icalcstp_command command){
     int i;
 
     for(i = 0; command_map[i].command != ICAL_UNKNOWN_COMMAND; i++){
-        size_t l = strlen(command_map[i].str);
-
         if(command_map[i].command == command){
             return command_map[i].str;
         }

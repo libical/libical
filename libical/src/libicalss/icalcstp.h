@@ -3,7 +3,7 @@
   FILE: icalcstp.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalcstp.h,v 1.5 2001-04-02 17:16:44 ebusboom Exp $
+  $Id: icalcstp.h,v 1.6 2002-06-04 14:14:41 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -72,6 +72,7 @@ struct icalcstp_statement {
 
 const char* icalcstp_command_to_string(icalcstp_command command);
 icalcstp_command icalcstp_string_to_command(const char* str);
+int icalcstp_line_is_endofdata(char* line);
 
 #endif /* !ICALCSTP_H */
 
