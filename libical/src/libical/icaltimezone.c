@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.14 2002-06-11 12:37:17 acampi Exp $
+ $Id: icaltimezone.c,v 1.15 2002-06-28 08:38:31 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1365,6 +1365,9 @@ icaltimezone_get_builtin_timezone_from_tzid (const char *tzid)
 icaltimezone*
 icaltimezone_get_utc_timezone		(void)
 {
+    if (!builtin_timezones)
+	icaltimezone_init_builtin_timezones ();
+
     return &utc_timezone;
 }
 
