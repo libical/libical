@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.14 2002-09-26 22:06:01 lindner Exp $
+  $Id: icalduration.c,v 1.15 2002-10-09 20:43:19 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -138,7 +138,7 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
 
 		    if (begin_flag == 0) goto error;
 		    /* Get all of the digits, not one at a time */
-		    scan_size = sscanf((char*)(str+i),"%d",&digits);
+		    scan_size = sscanf(&str[i],"%d",&digits);
 		    if(scan_size == 0) goto error;
 		    break;
 		}
@@ -334,7 +334,7 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
     time_t t1t = icaltime_as_timet(t1);
     time_t t2t = icaltime_as_timet(t2);
 
-    return icaldurationtype_from_int(t1t-t2t);
+    return icaldurationtype_from_int((int)(t1t-t2t));
 
 
 }
