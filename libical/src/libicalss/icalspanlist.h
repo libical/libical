@@ -4,7 +4,7 @@
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalspanlist.h,v 1.2 2002-06-11 18:50:35 acampi Exp $
+ $Id: icalspanlist.h,v 1.3 2002-06-11 18:53:00 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -28,7 +28,12 @@
 #include "ical.h"
 #include "icalset.h"
 
-typedef void icalspanlist;
+/** @file icalspanlist.h
+ *  @brief Code that supports collections of free/busy spans of time
+ */
+
+typedef struct icalspanlist_impl icalspanlist;
+
 
 /** @brief Constructor
  * Make a free list from a set of component. Start and end should be in UTC 
@@ -54,6 +59,12 @@ struct icalperiodtype icalspanlist_next_busy_time(icalspanlist* sl,
 						struct icaltimetype t);
 
 void icalspanlist_dump(icalspanlist* s);
+
+/** @brief Return a valid VFREEBUSY component for this span
+ */
+icalcomponent *icalspanlist_as_vfreebusy(icalspanlist* s_in,
+					 const char* organizer,
+					 const char* attendee);
 
 #endif
 				    

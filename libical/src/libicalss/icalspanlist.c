@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.5 2002-06-11 18:42:07 acampi Exp $
+    $Id: icalspanlist.c,v 1.6 2002-06-11 18:53:00 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -30,9 +30,12 @@
 #include "icalspanlist.h"
 #include "pvl.h" 
 #include <stdlib.h> /* for free and malloc */
+#include <string.h>
 
 struct icalspanlist_impl {
-	pvl_list spans;
+  pvl_list spans;		/**< list of icaltime_span data **/
+  struct icaltimetype start;    /**< start time of span **/
+  struct icaltimetype end;	/**< end time of span **/
 };
 
 /** @brief Internal comparison function for two spans
@@ -54,18 +57,6 @@ static int compare_span(void* a, void* b)
     }
 }
 
-icalcomponent* icalspanlist_get_inner(icalcomponent* comp)
-{
-    if (icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT){
-	return icalcomponent_get_first_real_component(comp);
-    } else {
-	return comp;
-    }
-}
-
-
-void print_span(int c, struct icaltime_span span );
-
 
 /** @brief Make a free list from a set of VEVENT components.
  *
@@ -76,7 +67,7 @@ void print_span(int c, struct icaltime_span span );
  * Given a set of components,  a start time and an end time
  * return a spanlist that contains the free/busy times.
  */
-    
+
 icalspanlist* icalspanlist_new(icalset *set, 
 			       struct icaltimetype start,
 			       struct icaltimetype end)
@@ -95,12 +86,14 @@ icalspanlist* icalspanlist_new(icalset *set,
     }
 
     sl->spans =  pvl_newlist();
+    sl->start =  start;
+    sl->end   =  end;
 
     range.start = icaltime_as_timet(start);
     range.end = icaltime_as_timet(end);
 
-    printf("Range start: %s",ctime(&range.start));
-    printf("Range end  : %s",ctime(&range.end));
+    /*    printf("Range start: %s",ctime(&range.start));
+	  printf("Range end  : %s",ctime(&range.end));*/
 
 
     /* Get a list of spans of busy time from the events in the set
@@ -192,7 +185,7 @@ icalspanlist* icalspanlist_new(icalset *set,
      if( icaltime_is_null_time(end)){
 	 struct icaltime_span* last_span;
 
-	 last_span = pvl_data(pvl_tail(sl->spans));
+	 last_span = (struct icaltime_span*)pvl_data(pvl_tail(sl->spans));
 
 	 if (last_span != 0){
 
@@ -211,7 +204,6 @@ icalspanlist* icalspanlist_new(icalset *set,
 
 
      return sl;
-
 }
 
 /** @brief Destructor.
@@ -220,31 +212,30 @@ icalspanlist* icalspanlist_new(icalset *set,
  *  Free memory associated with the spanlist
  */
 
-
 void icalspanlist_free(icalspanlist* s)
 {
     struct icaltime_span *span;
-    struct icalspanlist_impl* impl = (struct icalspanlist_impl*)s;
-    
-    while( (span=pvl_pop(impl->spans)) != 0){
+
+    if (s == NULL)
+      return;
+
+    while( (span=pvl_pop(s->spans)) != 0){
 	free(span);
     }
     
-    pvl_free(impl->spans);
+    pvl_free(s->spans);
     
-    impl->spans = 0;
+    s->spans = 0;
 
-	free(impl);
+    free(s);
 }
 
 /** @brief (Debug) print out spanlist to stdout
  *  @param sl A valid icalspanlist
  */
 
-void icalspanlist_dump(icalspanlist* s){
-
+void icalspanlist_dump(icalspanlist* sl){
      int i = 0;
-     struct icalspanlist_impl* sl = (struct icalspanlist_impl*)s;
      pvl_elem itr;
 
      for( itr = pvl_head(sl->spans);
@@ -272,7 +263,6 @@ icalcomponent* icalspanlist_make_busy_list(icalspanlist* sl);
 struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
 						struct icaltimetype t)
 {
-     struct icalspanlist_impl* impl = (struct icalspanlist_impl*)sl;
      pvl_elem itr;
      struct icalperiodtype period;
      struct icaltime_span *s;
@@ -284,7 +274,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
 
      /* Is the reference time before the first span? If so, assume
         that the reference time is free */
-     itr = pvl_head(impl->spans);
+     itr = pvl_head(sl->spans);
      s = (struct icaltime_span*)pvl_data(itr);
 
      if (s == 0){
@@ -309,7 +299,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
      /* Otherwise, find the first free span that contains the
         reference time. */
 
-     for( itr = pvl_head(impl->spans);
+     for( itr = pvl_head(sl->spans);
 	 itr != 0;
 	 itr = pvl_next(itr))
     {
@@ -340,3 +330,69 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
 struct icalperiodtype icalspanlist_next_busy_time(icalspanlist* sl,
 						struct icaltimetype t);
 
+
+/*** @brief Return a VFREEBUSY component for the corresponding spanlist
+ *
+ *   @param sl         A valid icalspanlist, from icalspanlist_new()
+ *   @param organizer  The organizer specified as MAILTO:user@domain
+ *   @param attendee   The attendee specified as MAILTO:user@domain
+ *
+ * This function returns a VFREEBUSY component for the given spanlist.
+ * The start time is mapped to DTSTART, the end time to DTEND.
+ * Each busy span is represented as a separate FREEBUSY entry.
+ * An attendee parameter is required, and organizer parameter is
+ * optional.
+ */
+
+icalcomponent *icalspanlist_as_vfreebusy(icalspanlist* sl,
+					 const char* organizer,
+					 const char* attendee) {
+  icalcomponent *comp;
+  icalproperty *p;
+  struct icaltimetype atime = icaltime_from_timet( time(0),0);
+  pvl_elem itr;
+  icaltimezone *utc_zone;
+  icalparameter *param;
+
+  if (!attendee) {
+    icalerror_set_errno(ICAL_USAGE_ERROR);
+    return 0;
+  }
+
+  utc_zone = icaltimezone_get_utc_timezone ();
+
+  comp = icalcomponent_new_vfreebusy();
+  
+  icalcomponent_add_property(comp, icalproperty_new_dtstart(sl->start));
+  icalcomponent_add_property(comp, icalproperty_new_dtend(sl->end));
+  icalcomponent_add_property(comp, icalproperty_new_dtstamp(atime));
+
+  if (organizer) {
+    icalcomponent_add_property(comp, icalproperty_new_organizer(organizer));
+  }
+  icalcomponent_add_property(comp, icalproperty_new_attendee(attendee));
+
+  /* now add the freebusy sections.. */
+
+  for( itr = pvl_head(sl->spans);  itr != 0;  itr = pvl_next(itr)) {
+    struct icalperiodtype period;
+    struct icaltime_span *s = (struct icaltime_span*)pvl_data(itr);
+
+    if (s->is_busy == 1) {
+
+      period.start = icaltime_from_timet_with_zone (s->start, 0, utc_zone);
+      period.end   = icaltime_from_timet_with_zone (s->end, 0, utc_zone);
+      period.duration = icaldurationtype_null_duration();
+
+
+      p = icalproperty_new_freebusy(period);
+      param = icalparameter_new_fbtype(ICAL_FBTYPE_BUSY);
+      icalproperty_add_parameter(p, param);
+
+      icalcomponent_add_property(comp, p);
+    }
+    
+  }
+
+  return comp;
+}
