@@ -158,7 +158,7 @@ AC_SUBST(PTHREAD_LIBS)
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(assert.h pthread.h stdint.h time.h sys/types.h unistd.h wctype.h)
+AC_CHECK_HEADERS(assert.h ctype.h pthread.h stdint.h time.h sys/types.h unistd.h wctype.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -168,7 +168,7 @@ AC_CHECK_TYPE(intptr_t)
 AC_STRUCT_TM
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS(gmtime_r iswspace strdup snprintf)
+AC_CHECK_FUNCS(gmtime_r isspace iswspace strdup snprintf)
 
 dnl **************************************************
 dnl * Check for C++
