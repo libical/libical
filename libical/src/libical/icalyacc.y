@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalyacc.y,v 1.7 2001-05-04 17:59:59 ebusboom Exp $
+  $Id: icalyacc.y,v 1.8 2002-05-24 12:25:27 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -355,8 +355,7 @@ period_value:  DIGITS TIME_CHAR DIGITS utc_char '/'  DIGITS TIME_CHAR DIGITS utc
 	}
 
 
-trigger: 
-	
+
 
 
 /* UTC Offset */
