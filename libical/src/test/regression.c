@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.16 2001-03-17 16:47:33 ebusboom Exp $
+  $Id: regression.c,v 1.17 2001-03-26 19:16:48 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -261,7 +261,7 @@ icalcomponent* create_new_component()
 
     icalproperty_add_parameter(
 	property,
-	icalparameter_new_rsvp(1)
+	icalparameter_new_rsvp(ICAL_RSVP_TRUE)
 	);
 
     icalproperty_add_parameter(
@@ -388,7 +388,7 @@ icalcomponent* create_new_component_with_va_args()
 		icalproperty_vanew_attendee(
 		    "employee-A@host.com",
 		    icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
-		    icalparameter_new_rsvp(1),
+		    icalparameter_new_rsvp(ICAL_RSVP_TRUE),
 		    icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
 		    0
 		    ),
@@ -658,9 +658,14 @@ void test_parameters()
 
     icalparameter_free(p);
 
+
     p = icalparameter_new_from_string("PARTSTAT=ACCEPTED");
     assert(icalparameter_isa(p) == ICAL_PARTSTAT_PARAMETER);
     assert(icalparameter_get_partstat(p) == ICAL_PARTSTAT_ACCEPTED);
+
+    p = icalparameter_new_from_string("ROLE=CHAIR");
+    assert(icalparameter_isa(p) == ICAL_ROLE_PARAMETER);
+    assert(icalparameter_get_partstat(p) == ICAL_ROLE_CHAIR);
 
     p = icalparameter_new_from_string("PARTSTAT=X-FOO");
     assert(icalparameter_isa(p) == ICAL_PARTSTAT_PARAMETER);
@@ -1104,7 +1109,7 @@ void test_restriction()
 		icalproperty_vanew_attendee(
 		    "employee-A@host.com",
 		    icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
-		    icalparameter_new_rsvp(1),
+		    icalparameter_new_rsvp(ICAL_RSVP_TRUE),
 		    icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
 		    0
 		    ),
@@ -1113,7 +1118,7 @@ void test_restriction()
 		icalproperty_new_class("PUBLIC"),
 		icalproperty_new_created(atime),
 		icalproperty_new_summary("XYZ Project Review"),
-/*		icalproperty_vanew_dtstart(
+                /*		icalproperty_new_dtstart(
 		    atime,
 		    icalparameter_new_tzid("US-Eastern"),
 		    0

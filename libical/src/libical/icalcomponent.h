@@ -133,11 +133,16 @@ void icalcomponent_strip_errors(icalcomponent* component);
 /* Convert some X-LIC-ERROR properties into RETURN-STATUS properties*/
 void icalcomponent_convert_errors(icalcomponent* component);
 
-/* Internal operations. You don't see these... */
+/* Internal operations. They are private, and you should not be using them. */
 icalcomponent* icalcomponent_get_parent(icalcomponent* component);
 void icalcomponent_set_parent(icalcomponent* component, 
 			      icalcomponent* parent);
 
+/* Kind conversion routiens */
+
+icalcomponent_kind icalcomponent_string_to_kind(const char* string);
+
+const char* icalcomponent_kind_to_string(icalcomponent_kind kind);
 
 
 /************* Derived class methods.  ****************************
@@ -211,6 +216,8 @@ int icalcomponent_remove_attendee(icalcomponent *comp, char* cuid);
    with cuid == 0 */
 struct icalattendeetype icalcomponent_get_attendee(icalcomponent *comp,
   int index);
+
+
 
 
 /*************** Type Specific routines ***************/

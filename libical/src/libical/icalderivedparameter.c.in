@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalderivedparameter.c.in,v 1.1 2001-03-17 16:47:02 ebusboom Exp $
+  $Id: icalderivedparameter.c.in,v 1.2 2001-03-26 19:17:28 ebusboom Exp $
   $Locker:  $
     
 
@@ -47,8 +47,9 @@
 struct icalparameter_impl* icalparameter_new_impl(icalparameter_kind kind);
 
 struct icalparameter_kind_map {
-	icalparameter_kind kind;
-	char name[20];
+    icalparameter_kind kind;
+    char name[20];
+    
 };
 
 static struct icalparameter_kind_map parameter_map[];
@@ -153,6 +154,49 @@ int icalparameter_string_to_enum(const char* str)
 
     return 0;
 }
+
+icalparameter* icalparameter_new_from_value_string(icalparameter_kind kind,const  char* val)
+{
+
+    struct icalparameter_impl* param=0;
+    int found_kind = 0;
+    int i;
+
+    icalerror_check_arg_rz((val!=0),"val");
+
+    /* Search through the parameter map to find a matching kind */
+
+    param = icalparameter_new_impl(kind);
+
+    for (i=0; icalparameter_map[i].kind != ICAL_NO_PARAMETER; i++){
+        if(kind == icalparameter_map[i].kind) {
+            found_kind = 1;
+            if(strcmp(val,icalparameter_map[i].str) == 0) {
+
+                param->data = (int)icalparameter_map[i].enumeration;
+                return param;
+            }
+        }
+    }
+    
+    if(found_kind == 1){
+        /* The kind was in the parameter map, but the string did not
+           match, so assume that it is an alternate value, like an
+           X-value.*/
+        
+        icalparameter_set_xvalue(param, val);
+
+    } else {
+ 
+        /* If the kind was not found, then it must be a string type */
+        
+        ((struct icalparameter_impl*)param)->string = strdup(val);
+
+    }
+
+   return param;
+}
+
 
 
 

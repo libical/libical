@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.7 2001-03-26 07:03:00 ebusboom Exp $
+  $Id: icalproperty.c,v 1.8 2001-03-26 19:17:28 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -665,7 +665,7 @@ void icalproperty_set_value_from_string(icalproperty* prop,const char* str,
         }
     } else {
         /* Use the given kind string */
-        kind = icalvalue_string_to_value_kind(type);
+        kind = icalvalue_string_to_kind(type);
     }
 
     if(kind == ICAL_NO_VALUE){

@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalvalue.h,v 1.1 2001-03-17 16:47:03 ebusboom Exp $
+  $Id: icalvalue.h,v 1.2 2001-03-26 19:17:28 ebusboom Exp $
   $Locker:  $
 
   
@@ -78,7 +78,7 @@ struct icaldatetimeperiodtype icalvalue_get_datetimeperiod(icalvalue* value);
 
 /* Convert enumerations */
 
-icalvalue_kind icalvalue_string_to_value_kind(const char* str);
+icalvalue_kind icalvalue_string_to_kind(const char* str);
 const char* icalvalue_kind_to_string(icalvalue_kind kind);
 
 

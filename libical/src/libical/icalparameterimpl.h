@@ -3,7 +3,7 @@
   FILE: icalparameterimpl.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameterimpl.h,v 1.1 2001-03-17 16:47:02 ebusboom Exp $
+  $Id: icalparameterimpl.h,v 1.2 2001-03-26 19:17:28 ebusboom Exp $
   $Locker:  $
     
 
@@ -36,22 +36,6 @@
 #include "icalparameter.h"
 #include "icalproperty.h"
 
-union icalparameter_impl_data {
-	int v_int;
-	int v_rsvp;
-	icalparameter_cutype v_cutype;
-	icalparameter_encoding v_encoding;
-	icalparameter_fbtype v_fbtype;
-	icalparameter_partstat v_partstat;
-	icalparameter_range v_range;
-	icalparameter_related v_related;
-	icalparameter_reltype v_reltype;
-	icalparameter_role v_role;
-	icalparameter_value v_value;
-	icalparameter_xlicerrortype v_xlicerrortype;
-	icalparameter_xliccomparetype v_xliccomparetype;
-} data;
-
 struct icalparameter_impl
 {
 	icalparameter_kind kind;
@@ -61,7 +45,7 @@ struct icalparameter_impl
 	const char* x_name;
 	icalproperty* parent;
 
-	union icalparameter_impl_data data;
+	int data;
 };
 
 

@@ -116,12 +116,10 @@ icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
 **********************************************************************/
 
 
+/* Thse routines used to be in icalenums.c, but were moved into the
+   icalproperty, icalparameter, icalvalue, or icalcomponent modules. */
 
-
-/* Thse routines used to be in icalenums.c, but were moved into
-   icalderivedproperty.c */
-
-/*const char* icalproperty_kind_to_string(icalproperty_kind kind);*/
+/* const char* icalproperty_kind_to_string(icalproperty_kind kind);*/
 #define icalenum_property_kind_to_string(x) icalproperty_kind_to_string(x)
 
 /*icalproperty_kind icalproperty_string_to_kind(const char* string)*/
@@ -148,10 +146,11 @@ icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
 /*const char* icalenum_value_kind_to_string(icalvalue_kind kind);*/
 #define icalenum_value_kind_to_string(x) icalvalue_kind_to_string(x)
 
-const char* icalenum_component_kind_to_string(icalcomponent_kind kind);
-icalcomponent_kind icalenum_string_to_component_kind(const char* string);
+/*const char* icalenum_component_kind_to_string(icalcomponent_kind kind);*/
+#define icalenum_component_kind_to_string(x) icalcomponent_kind_to_string(x)
 
-
+/*icalcomponent_kind icalenum_string_to_component_kind(const char* string);*/
+#define icalenum_string_to_component_kind(x) icalcomponent_string_to_kind(x)
 
 
 #endif /* !ICALENUMS_H */

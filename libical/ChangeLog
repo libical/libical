@@ -1,3 +1,8 @@
+2001-03-26  Eric Busboom  <eric@softwarestudio.org>
+
+	* icalparameter.h icalparameter_rsvp_* routines now take, return
+ 	ICAL_RSVP_TRUE and ICAL_RSVP_FALSE, not 0 and 1
+
 2001-03-25  Eric Busboom  <eric@softwarestudio.org>
 
 	* icalrecur.c Many changes to get YEARLY rules working and fix

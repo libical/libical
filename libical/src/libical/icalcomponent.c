@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.8 2001-03-17 16:47:02 ebusboom Exp $
+  $Id: icalcomponent.c,v 1.9 2001-03-26 19:17:28 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -997,6 +997,78 @@ void icalcomponent_set_parent(icalcomponent* component, icalcomponent* parent)
 }
 
 icalcompiter icalcompiter_null = {ICAL_NO_COMPONENT,0};
+
+
+struct icalcomponent_kind_map {
+	icalcomponent_kind kind;
+	char name[20];
+};
+
+  
+
+static struct icalcomponent_kind_map component_map[] = 
+{
+    { ICAL_VEVENT_COMPONENT, "VEVENT" },
+    { ICAL_VTODO_COMPONENT, "VTODO" },
+    { ICAL_VJOURNAL_COMPONENT, "VJOURNAL" },
+    { ICAL_VCALENDAR_COMPONENT, "VCALENDAR" },
+    { ICAL_VFREEBUSY_COMPONENT, "VFREEBUSY" },
+    { ICAL_VTIMEZONE_COMPONENT, "VTIMEZONE" },
+    { ICAL_VALARM_COMPONENT, "VALARM" },
+    { ICAL_XSTANDARD_COMPONENT, "STANDARD" }, /*These are part of RFC2445 */
+    { ICAL_XDAYLIGHT_COMPONENT, "DAYLIGHT" }, /*but are not really components*/
+    { ICAL_X_COMPONENT, "X" },
+    { ICAL_VSCHEDULE_COMPONENT, "SCHEDULE" },
+
+    /* CAP components */
+    { ICAL_VQUERY_COMPONENT, "VQUERY" },  
+    { ICAL_VCAR_COMPONENT, "VCAR" },  
+    { ICAL_VCOMMAND_COMPONENT, "VCOMMAND" },  
+
+    /* libical private components */
+    { ICAL_XLICINVALID_COMPONENT, "X-LIC-UNKNOWN" },  
+    { ICAL_XLICMIMEPART_COMPONENT, "X-LIC-MIME-PART" },  
+    { ICAL_ANY_COMPONENT, "ANY" },  
+    { ICAL_XROOT_COMPONENT, "XROOT" },  
+
+    /* End of list */
+    { ICAL_NO_COMPONENT, "" },
+};
+
+
+
+const char* icalcomponent_kind_to_string(icalcomponent_kind kind)
+{
+    int i;
+
+    for (i=0; component_map[i].kind != ICAL_NO_COMPONENT; i++) {
+	if (component_map[i].kind == kind) {
+	    return component_map[i].name;
+	}
+    }
+
+    return 0;
+
+}
+
+icalcomponent_kind icalcomponent_string_to_kind(const char* string)
+{
+    int i;
+
+    if (string ==0 ) { 
+	return ICAL_NO_COMPONENT;
+    }
+
+    for (i=0; component_map[i].kind  != ICAL_NO_COMPONENT; i++) {
+	if (strcmp(component_map[i].name, string) == 0) {
+	    return component_map[i].kind;
+	}
+    }
+
+    return ICAL_NO_COMPONENT;
+}
+
+
 
 icalcompiter 
 icalcomponent_begin_component(icalcomponent* component,icalcomponent_kind kind)

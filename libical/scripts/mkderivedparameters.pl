@@ -128,7 +128,9 @@ if ($opt_c){
     
     next if $param eq 'NO' or $prop eq 'ANY';
 
+    my $lc = join("",map {lc($_);}  split(/-/,$param));    
     my $uc = join("",map {uc(lc($_));}  split(/-/,$param));    
+
 
     print "    {ICAL_${uc}_PARAMETER,\"$param\"},\n";
 
@@ -178,39 +180,29 @@ foreach $param  (keys %params){
   my $charorenum;
   my $set_code;
   my $pointer_check;
-  my $new_pointer_check;
-  my $new_pointer_check_v;
+  my $pointer_check_v;
   my $xrange;
-
-  if ($type=~/char/){
-    $new_pointer_check = "icalerror_check_arg_rz( (v!=0),\"v\");"; 
-    $new_pointer_check_v = "icalerror_check_arg_rv( (v!=0),\"v\");"; 
-  }
-
 
   if ($type=~/char/ ) {
 
-     $charorenum = "    icalerror_check_arg_rz( (param!=0), \"param\");\n    return ((struct icalparameter_impl*)param)->string;";
+     $charorenum = "    icalerror_check_arg_rz( (param!=0), \"param\");\n    return ($type)((struct icalparameter_impl*)param)->string;";
     
-     $pointer_check = "icalerror_check_arg_rz( (v!=0),\"v\");";
+     $set_code = "((struct icalparameter_impl*)param)->string = strdup(v);";
 
-     $set_code = "((struct icalparameter_impl*)param)->string = strdup(v);"
+     $pointer_check = "icalerror_check_arg_rz( (v!=0),\"v\");"; 
+     $pointer_check_v = "icalerror_check_arg_rv( (v!=0),\"v\");"; 
 
   } else {
 
     $xrange ="     if ( ((struct icalparameter_impl*)param)->string != 0){\n        return ICAL_${uc}_X;\n        }\n" if !exists $no_xname{$uc};
-
-    $charorenum=<<EOM;
-    icalerror_check_arg( (param!=0), \"param\");
-$xrange
-    return ((struct icalparameter_impl*)param)->data.v_${lc};
-EOM
+    
+    $charorenum= "icalerror_check_arg( (param!=0), \"param\");\n$xrange\nreturn ($type)((struct icalparameter_impl*)param)->data;";
      
-     $pointer_check = "icalerror_check_arg( (v!=0),\"v\");";
+    $pointer_check = "icalerror_check_arg_rz(v >= ICAL_${uc}_X,\"v\");\n    icalerror_check_arg_rz(v < ICAL_${uc}_NONE,\"v\");";
 
-     $set_code = "((struct icalparameter_impl*)param)->data.v_${lc} = v;";
+    $pointer_check_v = "icalerror_check_arg_rv(v >= ICAL_${uc}_X,\"v\");\n    icalerror_check_arg_rv(v < ICAL_${uc}_NONE,\"v\");";
 
-    $print_code = "switch (impl->data.v_${lc}) {\ncase ICAL_${uc}_: {\n}\ncase ICAL_${uc}_X: /* Fall Through */\n}\n";
+     $set_code = "((struct icalparameter_impl*)param)->data = (int)v;";
 
    }
   
@@ -224,7 +216,7 @@ icalparameter* icalparameter_new_${lc}($type v)
 {
    struct icalparameter_impl *impl;
    icalerror_clear_errno();
-   $new_pointer_check
+   $pointer_check
    impl = icalparameter_new_impl(ICAL_${uc}_PARAMETER);
    if (impl == 0) {
       return 0;
@@ -247,7 +239,7 @@ $charorenum
 
 void icalparameter_set_${lc}(icalparameter* param, ${type} v)
 {
-   $new_pointer_check_v
+   $pointer_check_v
    icalerror_check_arg_rv( (param!=0), "param");
    icalerror_clear_errno();
    
@@ -266,20 +258,9 @@ void icalparameter_set_${lc}(icalparameter* value, ${type} v);
 
 EOM
 
-} elsif ($opt_s) {
-
-next if $type =~ /char/;
-
-print<<EOM;
-case ICAL_${uc}_PARAMETER:
-{
-  $print_code
-}
-EOM
-
 }
 
-  if ($opt_p) {
+if ($opt_p) {
     
   print <<EOM;
 
