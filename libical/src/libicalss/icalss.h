@@ -1,10 +1,13 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
 /* -*- Mode: C -*- */
 /*======================================================================
  FILE: icalgauge.h
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.20 2002-06-27 02:30:59 acampi Exp $
+ $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -60,78 +63,22 @@ icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
 
 #endif /* ICALGAUGE_H*/
 /* -*- Mode: C -*- */
-/*======================================================================
- FILE: icalcluster.h
- CREATOR: eric 23 December 1999
-
-
- $Id: icalss.h,v 1.20 2002-06-27 02:30:59 acampi Exp $
- $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
-
- This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
-
-  Or:
-
-    The Mozilla Public License Version 1.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
-
- The Original Code is eric. The Initial Developer of the Original
- Code is Eric Busboom
-
-
-======================================================================*/
-
-#ifndef ICALCLUSTER_H
-#define ICALCLUSTER_H
-
-
-typedef struct icalcluster_impl icalcluster;
-
-icalcluster* icalcluster_new(const char *key, icalcomponent *data);
-icalcluster* icalcluster_new_clone(const icalcluster *cluster);
-
-void icalcluster_free(icalcluster *cluster);
-
-const char* icalcluster_key(icalcluster *cluster);
-int icalcluster_is_changed(icalcluster *cluster);
-void icalcluster_mark(icalcluster *cluster);
-void icalcluster_commit(icalcluster *cluster);
-
-icalcomponent* icalcluster_get_component(icalcluster* cluster);
-int icalcluster_count_components(icalcluster *cluster, icalcomponent_kind kind);
-icalerrorenum icalcluster_add_component(icalcluster* cluster,
-					icalcomponent* child);
-icalerrorenum icalcluster_remove_component(icalcluster* cluster,
-					   icalcomponent* child);
-
-icalcomponent* icalcluster_get_current_component(icalcluster* cluster);
-icalcomponent* icalcluster_get_first_component(icalcluster* cluster);
-icalcomponent* icalcluster_get_next_component(icalcluster* cluster);
-
-#endif /* !ICALCLUSTER_H */
-
-
-
-/* -*- Mode: C -*- */
-/*======================================================================
- FILE: icalset.h
- CREATOR: eric 28 November 1999
+/**
+ @file icalset.h
+ @author eric 28 November 1999
 
  Icalset is the "base class" for representations of a collection of
  iCal components. Derived classes (actually delegatees) include:
  
-    icalfileset   Store componetns in a single file
+    icalfileset   Store components in a single file
     icaldirset    Store components in multiple files in a directory
+    icalbdbset    Store components in a Berkeley DB File
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database. 
+**/
 
- $Id: icalss.h,v 1.20 2002-06-27 02:30:59 acampi Exp $
+/*
+ $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -183,6 +130,7 @@ typedef struct icalsetiter
 
 struct icalset_impl {
         icalset_kind kind;
+	int size;
         char *dsn;
         icalset* (*init)(icalset* set, const char *dsn, void *options);
 	void (*free)(icalset* set);
@@ -209,6 +157,9 @@ struct icalset_impl {
 	icalcomponent* (*icalsetiter_to_prior)(icalset* set, icalsetiter* i);
 };
 
+/** @brief Register a new derived class */
+int icalset_register_class(icalset *set);
+
 
 /** @brief Generic icalset constructor
  *  
@@ -216,7 +167,7 @@ struct icalset_impl {
  *  @param dsn      Data Source Name - usually a pathname or DB handle
  *  @param options  Any implementation specific options
  *
- *  @ret   A valid icalset reference or NULL if error.
+ *  @return         A valid icalset reference or NULL if error.
  * 
  *  This creates any of the icalset types available.
  */
@@ -235,9 +186,11 @@ void icalset_free(icalset* set);
 
 const char* icalset_path(icalset* set);
 
-/* Mark the cluster as changed, so it will be written to disk when it
-   is freed. Commit writes to disk immediately*/
+/** Mark the cluster as changed, so it will be written to disk when it
+    is freed. **/
 void icalset_mark(icalset* set);
+
+/** Write changes to disk immediately */
 icalerrorenum icalset_commit(icalset* set); 
 
 icalerrorenum icalset_add_component(icalset* set, icalcomponent* comp);
@@ -246,40 +199,43 @@ icalerrorenum icalset_remove_component(icalset* set, icalcomponent* comp);
 int icalset_count_components(icalset* set,
 			     icalcomponent_kind kind);
 
-/* Restrict the component returned by icalset_first, _next to those
-   that pass the gauge. _clear removes the gauge. */
+/** Restrict the component returned by icalset_first, _next to those
+    that pass the gauge. */
 icalerrorenum icalset_select(icalset* set, icalgauge* gauge);
+
+/** Clears the gauge defined by icalset_select() */
 void icalset_clear_select(icalset* set);
 
-/* Get a component by uid */
+/** Get a component by uid */
 icalcomponent* icalset_fetch(icalset* set, const char* uid);
+
 int icalset_has_uid(icalset* set, const char* uid);
 icalcomponent* icalset_fetch_match(icalset* set, icalcomponent *c);
 
-/* Modify components according to the MODIFY method of CAP. Works on
+/** Modify components according to the MODIFY method of CAP. Works on
    the currently selected components. */
 icalerrorenum icalset_modify(icalset* set, icalcomponent *oldc,
 			       icalcomponent *newc);
 
-/* Iterate through the components. If a guage has been defined, these
+/** Iterate through the components. If a guage has been defined, these
    will skip over components that do not pass the gauge */
 
 icalcomponent* icalset_get_current_component(icalset* set);
 icalcomponent* icalset_get_first_component(icalset* set);
 icalcomponent* icalset_get_next_component(icalset* set);
 
-/* External Iterator with gauge - for thread safety */
+/** External Iterator with gauge - for thread safety */
 extern icalsetiter icalsetiter_null;
 
 icalsetiter icalset_begin_component(icalset* set,
 				 icalcomponent_kind kind, icalgauge* gauge);
 
-/* Default _next, _prior, _deref for subclasses that use single cluster */
+/** Default _next, _prior, _deref for subclasses that use single cluster */
 icalcomponent* icalsetiter_next(icalsetiter* i);
 icalcomponent* icalsetiter_prior(icalsetiter* i);
 icalcomponent* icalsetiter_deref(icalsetiter* i);
 
-/* for subclasses that use multiple clusters that require specialized cluster traversal */
+/** for subclasses that use multiple clusters that require specialized cluster traversal */
 icalcomponent* icalsetiter_to_next(icalset* set, icalsetiter* i);
 icalcomponent* icalsetiter_to_prior(icalset* set, icalsetiter* i);
 
@@ -293,7 +249,7 @@ icalcomponent* icalsetiter_to_prior(icalset* set, icalsetiter* i);
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.20 2002-06-27 02:30:59 acampi Exp $
+ $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -352,7 +308,7 @@ icalcomponent* icalcluster_get_next_component(icalcluster* cluster);
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.20 2002-06-27 02:30:59 acampi Exp $
+ $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -394,10 +350,6 @@ icalset* icalfileset_new_reader(const char* path);
 icalset* icalfileset_new_writer(const char* path);
 
 icalset* icalfileset_init(icalset *set, const char *dsn, void* options);
-
-/* Like _new, but takes open() flags for opening the file */
-icalfileset* icalfileset_new_open(const char* path, 
-				  int flags, mode_t mode);
 
 icalfileset* icalfileset_new_from_cluster(const char* path, icalcluster *cluster);
 
@@ -462,7 +414,7 @@ icalcomponent* icalfileset_form_a_matched_recurrence_component(icalsetiter* itr)
 icalcomponent* icalfileset_get_component(icalset* cluster);
 
 /** 
- * @brief options for opening an icalfileset
+ * @brief options for opening an icalfileset.
  *
  * These options should be passed to the icalset_new() function
  */
@@ -486,7 +438,7 @@ extern icalfileset_options icalfileset_options_default;
  CREATOR: eric 28 November 1999
 
 
- $Id: icalss.h,v 1.20 2002-06-27 02:30:59 acampi Exp $
+ $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -580,7 +532,7 @@ typedef struct icaldirset_options {
  CREATOR: eric 23 December 1999
 
 
- $Id: icalss.h,v 1.20 2002-06-27 02:30:59 acampi Exp $
+ $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -645,7 +597,7 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.20 2002-06-27 02:30:59 acampi Exp $
+ $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -688,7 +640,7 @@ char* icalclassify_class_to_string(icalproperty_xlicclass c);
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalss.h,v 1.20 2002-06-27 02:30:59 acampi Exp $
+ $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -729,25 +681,29 @@ icalspanlist* icalspanlist_new(icalset *set,
  */
 void icalspanlist_free(icalspanlist* spl);
 
+/* Unimplemented functions */
 icalcomponent* icalspanlist_make_free_list(icalspanlist* sl);
 icalcomponent* icalspanlist_make_busy_list(icalspanlist* sl);
 
-/**
- * Get first free or busy time after time t. all times are in UTC 
- */
+/** Get first next free time after time t. all times are in UTC. */
 struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
 						struct icaltimetype t);
+/** Get first next busy time after time t. all times are in UTC. */
 struct icalperiodtype icalspanlist_next_busy_time(icalspanlist* sl,
 						struct icaltimetype t);
 
 void icalspanlist_dump(icalspanlist* s);
 
-/** @brief Return a valid VFREEBUSY component for this span
- */
+/** @brief Return a valid VFREEBUSY component for this span */
 icalcomponent *icalspanlist_as_vfreebusy(icalspanlist* s_in,
 					 const char* organizer,
 					 const char* attendee);
+
+/** @brief Return an integer matrix of total events per delta_t timespan */
 int *icalspanlist_as_freebusy_matrix(icalspanlist* span, int delta_t);
+
+/** @brief Construct an icalspanlist from a VFREEBUSY component */
+icalspanlist *icalspanlist_from_vfreebusy(icalcomponent* c);
 
 #endif
 				    
@@ -759,7 +715,7 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist* span, int delta_t);
  CREATOR: eric 07 Nov 2000
 
 
- $Id: icalss.h,v 1.20 2002-06-27 02:30:59 acampi Exp $
+ $Id: icalss.h,v 1.21 2002-07-11 18:06:29 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -823,3 +779,6 @@ icalcomponent* icalmessage_new_error_reply(icalcomponent* c,
 
 
 #endif /* ICALMESSAGE_H*/
+#ifdef __cplusplus
+};
+#endif

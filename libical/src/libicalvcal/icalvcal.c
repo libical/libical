@@ -2,7 +2,7 @@
   FILE: icalvcal.c
   CREATOR: eric 25 May 00
   
-  $Id: icalvcal.c,v 1.5 2002-06-13 17:13:16 acampi Exp $
+  $Id: icalvcal.c,v 1.6 2002-07-11 18:06:29 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -726,7 +726,7 @@ void* transp_prop(int icaltype, VObject *object, icalcomponent *comp,
        implementation-specific. So we just check for "1" and output
        TRANSPARENT. For anything else, the default OPAQUE will be used. */
     if (!strcmp (s, "1")) {
-      prop = icalproperty_new_transp ("TRANSPARENT");
+      prop = icalproperty_new_transp (ICAL_TRANSP_TRANSPARENT);
     }
 
     if (free_string)
