@@ -2,7 +2,7 @@
   FILE: icalcalendar.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalcalendar.c,v 1.1.1.1 2001-01-02 07:33:03 ebusboom Exp $
+  $Id: icalcalendar.c,v 1.2 2002-06-26 22:26:58 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -19,6 +19,8 @@
     the License at http://www.mozilla.org/MPL/
 
  ======================================================================*/
+
+#include "ical.h"
 
 
 #ifdef HAVE_CONFIG_H

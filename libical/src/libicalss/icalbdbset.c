@@ -5,6 +5,8 @@
  ======================================================================*/
 
 
+#if 0 // Many compile errors in this file
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -1051,3 +1053,4 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
 
 
 
+#endif // #if 0
