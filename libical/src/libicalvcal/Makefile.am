@@ -10,12 +10,8 @@ libicalvcal_la_LDFLAGS = -version-info 0:0:0
 
 if DEV
 libicalvcal_la_DEVSOURCES = vcc.y
-.SUFFIXES:
-.SUFFIXES: .c .l .lo .o .obj .y
 else
 libicalvcal_la_DEVSOURCES = vcc.c
-.SUFFIXES:
-.SUFFIXES: .c .lo .o .obj
 endif
 
 

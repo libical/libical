@@ -43,12 +43,8 @@ libicalss_la_LIBADD = $(BDB_LIBFILES)
 
 if DEV
 libicalss_la_DEVSOURCES = icalsslexer.l icalssyacc.y
-.SUFFIXES:
-.SUFFIXES: .c .l .lo .o .obj .y
 else
 libicalss_la_DEVSOURCES = icalsslexer.c icalssyacc.c
-.SUFFIXES:
-.SUFFIXES: .c .lo .o .obj
 endif
 
 libicalss_la_SOURCES =		\
