@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.44 2002-09-26 23:46:00 lindner Exp $
+  $Id: icaltime.c,v 1.45 2002-10-09 21:55:26 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -441,7 +441,7 @@ short icaltime_days_in_month(const short month, const short year)
 	days += icaltime_is_leap_year(year);
     }
 
-    return days;
+    return (short)days;
 }
 
 /* 1-> Sunday, 7->Saturday */
@@ -459,7 +459,7 @@ short icaltime_day_of_week(const struct icaltimetype t){
 
 	juldat(&jt);
 
-	return jt.weekday + 1;
+	return (short)(jt.weekday + 1);
 }
 
 /** Day of the year that the first day of the week (Sunday) is on.
@@ -481,7 +481,7 @@ short icaltime_start_doy_of_week(const struct icaltimetype t){
 	juldat(&jt);
 	caldat(&jt);
 
-	return jt.day_of_year - jt.weekday;
+	return (short)(jt.day_of_year - jt.weekday);
 }
 
 /** 
@@ -504,7 +504,7 @@ short icaltime_week_number(const struct icaltimetype ictt)
 	juldat(&jt);
 	caldat(&jt);
 
-	return (jt.day_of_year - jt.weekday) / 7;
+	return (short)((jt.day_of_year - jt.weekday) / 7);
 }
 
 /* The first array is for non-leap years, the second for leap years*/
@@ -520,7 +520,7 @@ static const short days_in_year[2][13] =
 short icaltime_day_of_year(const struct icaltimetype t){
   int is_leap = icaltime_is_leap_year (t.year);
 
-  return days_in_year[is_leap][t.month - 1] + t.day;
+  return (short)(days_in_year[is_leap][t.month - 1] + t.day);
 }
 
 /**	@brief Contructor.
