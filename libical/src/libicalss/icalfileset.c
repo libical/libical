@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.8 2001-02-09 17:53:40 ebusboom Exp $
+  $Id: icalfileset.c,v 1.9 2001-02-22 05:04:20 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -154,7 +154,6 @@ icalerrorenum icalfileset_read_file(icalfileset* cluster,mode_t mode)
 {
 
     icalparser *parser;
-    int fd;
   
     struct icalfileset_impl *impl = (struct icalfileset_impl*)cluster;
     

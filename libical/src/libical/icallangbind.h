@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.h,v 1.1 2001-02-09 17:51:11 ebusboom Exp $
+  $Id: icallangbind.h,v 1.2 2001-02-22 05:03:56 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -30,5 +30,6 @@ const char* icallangbind_get_parameter(icalproperty *p, const char* parameter);
 icalcomponent* icallangbind_get_component(icalcomponent *c, const char* comp);
 
 const char* icallangbind_property_eval_string(icalproperty* prop, char* sep);
+
 
 #endif /*__ICALLANGBIND_H__*/

@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.10 2001-02-09 17:53:40 ebusboom Exp $
+  $Id: regression.c,v 1.11 2001-02-22 05:04:20 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2857,7 +2857,9 @@ void test_file_locks()
     assert(sec == final);
 }
 
-/* For GNU libc, strcmp appears to be a macro, so using strcmp in assert results in incomprehansible assertion messages. This eliminates the problem */
+/* For GNU libc, strcmp appears to be a macro, so using strcmp in
+ assert results in incomprehansible assertion messages. This
+ eliminates the problem */
 
 int ttstrcmp(const char* a, const char* b){
     return strcmp(a,b);
@@ -2913,7 +2915,7 @@ void test_trigger()
     /* TRIGGER, as a DURATION */
     tr.time = icaltime_null_time();
     tr.duration = icaldurationtype_from_string("P3DT3H50M45S");
-    p = icalproperty_new_trigger(tr);
+   ca    p = icalproperty_new_trigger(tr);
     str = icalproperty_as_ical_string(p);
     
     printf("%s\n",str);
@@ -3129,6 +3131,25 @@ void test_langbind()
     }
 }
 
+void test_property_parse()
+{
+    icalproperty *p;
+
+    p= icalproperty_new_from_string(
+                         "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com");
+
+    assert (p !=  0);
+    printf("%s\n",icalproperty_as_ical_string(p));
+
+
+    p= icalproperty_new_from_string("DTSTART:19970101T120000Z\n");
+
+    assert (p !=  0);
+    printf("%s\n",icalproperty_as_ical_string(p));
+
+}
+
+
 int main(int argc, char *argv[])
 {
     int c;
@@ -3203,7 +3224,7 @@ int main(int argc, char *argv[])
 	printf("\n------------Test time----------------\n");
 	test_time();
     }
-	    
+ 
     if(ttime==1 || ttime==4){
 	printf("\n------------Test day of year---------\n");
 	test_doy();
@@ -3301,6 +3322,13 @@ int main(int argc, char *argv[])
 
 	printf("\n------------Test language binding---------------\n");
 	test_langbind();
+    }
+
+
+    if(tmisc == 1 || tmisc  == 7){
+
+	printf("\n------------Test property parser---------------\n");
+	test_property_parse();
     }
 
 

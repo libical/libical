@@ -118,8 +118,9 @@ icalvalue_kind icalenum_property_kind_to_value_kind(icalproperty_kind kind);
 int* icallangbind_new_array(int size);
 void icallangbind_free_array(int* array);
 int icallangbind_access_array(int* array, int index);
-int icalrecur_expand_recurrence(char* rule, int start, 
+int icalrecur_expand_recurrence(char* rule, time_t start, 
 				int count, int* array);
+
 
 icalproperty* icallangbind_get_property(icalcomponent *c, int n, const char* prop);
 const char* icallangbind_get_property_val(icalproperty* p);

@@ -3,7 +3,7 @@
   FILE: icalenum.c
   CREATOR: eric 29 April 1999
   
-  $Id: icalenums.c,v 1.6 2001-02-12 07:46:51 ebusboom Exp $
+  $Id: icalenums.c,v 1.7 2001-02-22 05:03:56 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -34,122 +34,6 @@
 #include <stdio.h> /* For stderr */
 #include <string.h> /* For strncmp */
 #include <assert.h>
-
-struct icalproperty_kind_map {
-	icalproperty_kind kind;
-	const char *name;
-};
-
-static struct icalproperty_kind_map property_map[] = 
-{
-    { ICAL_ANY_PROPERTY, "ANY"},
-    { ICAL_ACTION_PROPERTY, "ACTION"},
-    { ICAL_ATTACH_PROPERTY, "ATTACH"},
-    { ICAL_ATTENDEE_PROPERTY, "ATTENDEE"},
-    { ICAL_CALSCALE_PROPERTY, "CALSCALE"},
-    { ICAL_CATEGORIES_PROPERTY, "CATEGORIES"},
-    { ICAL_CLASS_PROPERTY, "CLASS"},
-    { ICAL_COMMENT_PROPERTY, "COMMENT"},
-    { ICAL_COMPLETED_PROPERTY, "COMPLETED"},
-    { ICAL_CONTACT_PROPERTY, "CONTACT"},
-    { ICAL_CREATED_PROPERTY, "CREATED"},
-    { ICAL_DESCRIPTION_PROPERTY, "DESCRIPTION"},
-    { ICAL_DTEND_PROPERTY, "DTEND"},
-    { ICAL_DTSTAMP_PROPERTY, "DTSTAMP"},
-    { ICAL_DTSTART_PROPERTY, "DTSTART"},
-    { ICAL_DUE_PROPERTY, "DUE"},
-    { ICAL_DURATION_PROPERTY, "DURATION"},
-    { ICAL_EXDATE_PROPERTY, "EXDATE"},
-    { ICAL_EXRULE_PROPERTY, "EXRULE"},
-    { ICAL_FREEBUSY_PROPERTY, "FREEBUSY"},
-    { ICAL_GEO_PROPERTY, "GEO"},
-    { ICAL_LASTMODIFIED_PROPERTY, "LAST-MODIFIED"},
-    { ICAL_LOCATION_PROPERTY, "LOCATION"},
-    { ICAL_METHOD_PROPERTY, "METHOD"},
-    { ICAL_ORGANIZER_PROPERTY, "ORGANIZER"},
-    { ICAL_PERCENTCOMPLETE_PROPERTY, "PERCENT-COMPLETE"},
-    { ICAL_PRIORITY_PROPERTY, "PRIORITY"},
-    { ICAL_PRODID_PROPERTY, "PRODID"},
-    { ICAL_RDATE_PROPERTY, "RDATE"},
-    { ICAL_RECURRENCEID_PROPERTY, "RECURRENCE-ID"},
-    { ICAL_RELATEDTO_PROPERTY, "RELATED-TO"},
-    { ICAL_REPEAT_PROPERTY, "REPEAT"},
-    { ICAL_REQUESTSTATUS_PROPERTY, "REQUEST-STATUS"},
-    { ICAL_RESOURCES_PROPERTY, "RESOURCES"},
-    { ICAL_RRULE_PROPERTY, "RRULE"},
-    { ICAL_SEQUENCE_PROPERTY, "SEQUENCE"},
-    { ICAL_STATUS_PROPERTY, "STATUS"},
-    { ICAL_SUMMARY_PROPERTY, "SUMMARY"},
-    { ICAL_TRANSP_PROPERTY, "TRANSP"},
-    { ICAL_TRIGGER_PROPERTY, "TRIGGER"},
-    { ICAL_TZID_PROPERTY, "TZID"},
-    { ICAL_TZNAME_PROPERTY, "TZNAME"},
-    { ICAL_TZOFFSETFROM_PROPERTY, "TZOFFSETFROM"},
-    { ICAL_TZOFFSETTO_PROPERTY, "TZOFFSETTO"},
-    { ICAL_TZURL_PROPERTY, "TZURL"},
-    { ICAL_UID_PROPERTY, "UID"},
-    { ICAL_URL_PROPERTY, "URL"},
-    { ICAL_VERSION_PROPERTY, "VERSION"},
-    { ICAL_X_PROPERTY,"X_PROPERTY"},
-
-    /* CAP Object Properties */
-
-    { ICAL_SCOPE_PROPERTY, "SCOPE"},
-    { ICAL_MAXRESULTS_PROPERTY, "MAXRESULTS"},
-    { ICAL_MAXRESULTSSIZE_PROPERTY, "MAXRESULTSSIZE"},
-    { ICAL_QUERY_PROPERTY, "QUERY" },
-    { ICAL_QUERYNAME_PROPERTY, "QUERYNAME" },
-    { ICAL_TARGET_PROPERTY, "TARGET"},
-
-    /* libical private properties */
-    { ICAL_XLICERROR_PROPERTY,"X-LIC-ERROR"},
-    { ICAL_XLICMIMECONTENTTYPE_PROPERTY,"X-LIC-MIME-CONTENT-TYPE"},
-    { ICAL_XLICMIMEENCODING_PROPERTY,"X-LIC-MIME-ENCODING"},
-    { ICAL_XLICMIMEOPTINFO_PROPERTY,"X-LIC-MIME-OPT-INFO"},
-    { ICAL_XLICMIMECHARSET_PROPERTY,"X-LIC-MIME-CHARSET"},
-    { ICAL_XLICCLUSTERCOUNT_PROPERTY,"X-LIC-CLUSTERCOUNT"},
-
-    /* End of the list */
-    { ICAL_NO_PROPERTY, ""}
-};
-
-
-const char* icalenum_property_kind_to_string(icalproperty_kind kind)
-{
-    int i;
-
-    for (i=0; property_map[i].kind != ICAL_NO_PROPERTY; i++) {
-	if (property_map[i].kind == kind) {
-	    return property_map[i].name;
-	}
-    }
-
-    return 0;
-
-}
-
-icalproperty_kind icalenum_string_to_property_kind(const char* string)
-{
-    int i;
-
-    if (string ==0 ) { 
-	return ICAL_NO_PROPERTY;
-    }
-
-
-    for (i=0; property_map[i].kind  != ICAL_NO_PROPERTY; i++) {
-	if (strcmp(property_map[i].name, string) == 0) {
-	    return property_map[i].kind;
-	}
-    }
-
-    if(strncmp(string,"X-",2)==0){
-	return ICAL_X_PROPERTY;
-    }
-
-
-    return ICAL_NO_PROPERTY;
-}
 
 
 
@@ -274,16 +158,6 @@ const char* icalenum_value_kind_to_string(icalvalue_kind kind)
 
 }
 
-icalvalue_kind icalenum_value_kind_by_prop(icalproperty_kind kind)
-{
-    icalvalue_kind value_kind;
-    fprintf(stderr,"icalenum_value_kind_by_prop is not implemented\n");
-    assert(0) ;
-    value_kind = ICAL_NO_VALUE;
-    return value_kind;
-}
-
-
 struct icalcomponent_kind_map {
 	icalcomponent_kind kind;
 	char name[20];
@@ -349,94 +223,6 @@ icalcomponent_kind icalenum_string_to_component_kind(const char* string)
     }
 
     return ICAL_NO_COMPONENT;
-}
-
-struct  icalproperty_kind_value_map {
-	icalproperty_kind prop;
-	icalvalue_kind value;
-};
-
-static struct icalproperty_kind_value_map propval_map[] = 
-{
-    { ICAL_CALSCALE_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_METHOD_PROPERTY, ICAL_METHOD_VALUE }, 
-    { ICAL_PRODID_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_VERSION_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_CATEGORIES_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_CLASS_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_COMMENT_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_DESCRIPTION_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_LOCATION_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_PERCENTCOMPLETE_PROPERTY, ICAL_INTEGER_VALUE }, 
-    { ICAL_PRIORITY_PROPERTY, ICAL_INTEGER_VALUE }, 
-    { ICAL_RESOURCES_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_STATUS_PROPERTY, ICAL_STATUS_VALUE }, 
-    { ICAL_SUMMARY_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_COMPLETED_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_FREEBUSY_PROPERTY, ICAL_PERIOD_VALUE }, 
-    { ICAL_TRANSP_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_TZNAME_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_TZOFFSETFROM_PROPERTY, ICAL_UTCOFFSET_VALUE }, 
-    { ICAL_TZOFFSETTO_PROPERTY, ICAL_UTCOFFSET_VALUE }, 
-    { ICAL_TZURL_PROPERTY, ICAL_URI_VALUE }, 
-    { ICAL_TZID_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_ATTENDEE_PROPERTY, ICAL_CALADDRESS_VALUE }, 
-    { ICAL_CONTACT_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_ORGANIZER_PROPERTY, ICAL_CALADDRESS_VALUE }, 
-    { ICAL_RELATEDTO_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_URL_PROPERTY, ICAL_URI_VALUE }, 
-    { ICAL_UID_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_EXRULE_PROPERTY, ICAL_RECUR_VALUE }, 
-    { ICAL_RRULE_PROPERTY, ICAL_RECUR_VALUE }, 
-    { ICAL_ACTION_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_REPEAT_PROPERTY, ICAL_INTEGER_VALUE }, 
-    { ICAL_CREATED_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_DTSTAMP_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_LASTMODIFIED_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_SEQUENCE_PROPERTY, ICAL_INTEGER_VALUE }, 
-    { ICAL_X_PROPERTY, ICAL_TEXT_VALUE }, 
-    { ICAL_REQUESTSTATUS_PROPERTY, ICAL_STRING_VALUE }, 
-    { ICAL_ATTACH_PROPERTY, ICAL_URI_VALUE }, 
-    { ICAL_GEO_PROPERTY, ICAL_GEO_VALUE }, 
-    { ICAL_DTEND_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_DUE_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_DTSTART_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_RECURRENCEID_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_EXDATE_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_RDATE_PROPERTY, ICAL_DATETIME_VALUE }, 
-    { ICAL_TRIGGER_PROPERTY, ICAL_DURATION_VALUE }, 
-    { ICAL_DURATION_PROPERTY, ICAL_DURATION_VALUE }, 
-
-    /* CAP properties */
-    { ICAL_SCOPE_PROPERTY, ICAL_TEXT_VALUE },
-    { ICAL_MAXRESULTS_PROPERTY,  ICAL_INTEGER_VALUE},
-    { ICAL_MAXRESULTSSIZE_PROPERTY,  ICAL_INTEGER_VALUE},
-    { ICAL_QUERY_PROPERTY, ICAL_QUERY_VALUE },
-    { ICAL_QUERYNAME_PROPERTY, ICAL_TEXT_VALUE },
-    { ICAL_TARGET_PROPERTY, ICAL_CALADDRESS_VALUE },
-
-
-    /* libical private properties */
-    { ICAL_XLICERROR_PROPERTY,ICAL_TEXT_VALUE},
-    { ICAL_XLICCLUSTERCOUNT_PROPERTY,ICAL_INTEGER_VALUE},
-
-
-    /* End of list */
-    { ICAL_NO_PROPERTY, ICAL_NO_PROPERTY}
-};
-
-
-icalvalue_kind icalenum_property_kind_to_value_kind(icalproperty_kind kind)
-{
-    int i;
-
-    for (i=0; propval_map[i].value  != ICAL_NO_VALUE; i++) {
-	if ( propval_map[i].prop == kind ) {
-	    return propval_map[i].value;
-	}
-    }
-
-    return ICAL_NO_VALUE;
 }
 
 

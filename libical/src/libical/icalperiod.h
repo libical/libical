@@ -4,7 +4,7 @@
  CREATOR: eric 26 Jan 2001
 
 
- $Id: icalperiod.h,v 1.1 2001-02-09 17:44:01 ebusboom Exp $
+ $Id: icalperiod.h,v 1.2 2001-02-22 05:03:56 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -34,8 +34,8 @@
 
 struct icalperiodtype 
 {
-	struct icaltimetype start; /* Must be absolute */	
-	struct icaltimetype end; /* Must be absolute */
+	struct icaltimetype start; 
+	struct icaltimetype end; 
 	struct icaldurationtype duration;
 };
 
@@ -45,10 +45,6 @@ const char* icalperiodtype_as_ical_string(struct icalperiodtype p);
 struct icalperiodtype icalperiodtype_null_period();
 int icalperiodtype_is_null_period(struct icalperiodtype p);
 int icalperiodtype_is_valid_period(struct icalperiodtype p);
-
-time_t icalperiodtype_duration(struct icalperiodtype period);
-time_t icalperiodtype_end(struct icalperiodtype period);
-
 
 
 

@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.9 2001-02-09 23:57:50 ebusboom Exp $
+  $Id: icaltime.c,v 1.10 2001-02-22 05:03:56 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -47,7 +47,6 @@
 
 
 
-extern long int timezone;  /* Global defined by libc */
 struct icaltimetype 
 icaltime_from_timet(time_t tm, int is_date)
 {
@@ -125,7 +124,6 @@ void unset_tz(struct set_tz_save savetz)
     /* restore the original TZ environment */
 
     char* orig_tzid = savetz.orig_tzid;
-    char* new_tzstr = getenv("TZ");
 
     if(orig_tzid!=0){	
 	size_t tmp_sz =strlen(orig_tzid)+4; 
@@ -359,7 +357,6 @@ char ctime_str[20];
 char* icaltime_as_ctime(struct icaltimetype t)
 {
     time_t tt;
-    struct set_tz_save old_tz;
  
     tt = icaltime_as_timet(t);
     sprintf(ctime_str,"%s",ctime(&tt));

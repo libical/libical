@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c.in,v 1.4 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: icalproperty.c,v 1.3 2001-02-22 05:03:56 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -35,6 +35,7 @@
 #include "icalenums.h"
 #include "icalerror.h"
 #include "icalmemory.h"
+#include "icalparser.h"
 
 #include <string.h> /* For icalmemory_strdup, rindex */
 #include <assert.h>
@@ -166,30 +167,48 @@ icalproperty_new_clone(icalproperty* prop)
 
 }
 
-/* This one works a little differently from the other *_from_string
-   routines; the string input is the name of the property, not the
-   data associated with the property, as it is in
-   icalvalue_from_string. All of the parsing associated with
-   properties is driven by routines in icalparse.c */
-
 icalproperty* icalproperty_new_from_string(char* str)
 {
-    icalproperty_kind kind;
+
+    size_t buf_size = 1024;
+    char* buf = icalmemory_new_buffer(buf_size);
+    char* buf_ptr = buf;  
+    icalproperty *prop;
+    icalcomponent *comp;
+    int errors  = 0;
 
     icalerror_check_arg_rz( (str!=0),"str");
 
-    kind = icalenum_string_to_property_kind(str);
+    /* Is this a HACK or a crafty reuse of code? */
 
-    if(kind == ICAL_X_PROPERTY){
-	    icalproperty *p = icalproperty_new(ICAL_X_PROPERTY);    
-	    icalproperty_set_x_name(p,str);
-	    return p;
-    } else if (kind == ICAL_NO_PROPERTY){
-	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-	return 0;
-    } else {
-	return icalproperty_new(kind);
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "BEGIN:VCALENDAR\n");
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "\n");    
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:VCALENDAR\n");
+
+    comp = icalparser_parse_string(buf);
+
+    if(comp == 0){
+        icalerror_set_errno(ICAL_PARSE_ERROR);
+        return 0;
     }
+
+    errors = icalcomponent_count_errors(comp);
+
+    prop = icalcomponent_get_first_property(comp,ICAL_ANY_PROPERTY);
+
+    icalcomponent_remove_property(comp,prop);
+
+    icalcomponent_free(comp);
+    free(buf);
+
+    if(errors > 0){
+        icalproperty_free(prop);
+        return 0;
+    } else {
+        return prop;
+    }
+    
 }
 
 void
@@ -593,6 +612,45 @@ char* icalproperty_get_x_name(icalproperty* prop){
 }
 
 
+/* From Jonathan Yue <jonathan.yue@cp.net>    */
+char* icalproperty_get_name (icalproperty* prop)
+{
+
+    const char* property_name = 0;
+    size_t buf_size = 256;
+    char* buf = icalmemory_new_buffer(buf_size);
+    char* buf_ptr = buf;  
+
+    struct icalproperty_impl *impl = (struct icalproperty_impl*)prop;
+
+    icalerror_check_arg_rz( (prop!=0),"prop");
+ 
+    if (impl->kind == ICAL_X_PROPERTY && impl->x_name != 0){
+        property_name = impl->x_name;
+    } else {
+        property_name = icalenum_property_kind_to_string(impl->kind);
+    }
+ 
+    if (property_name == 0 ) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+
+    } else {
+        /* _append_string will automatically grow the buffer if
+           property_name is longer than the initial buffer size */
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, property_name);
+    }
+ 
+    /* Add the buffer to the temporary buffer ring -- the caller will
+       not have to free the memory. */
+    icalmemory_add_tmp_buffer(buf);
+ 
+    return buf;
+}
+                            
+
+
+
 void icalproperty_set_parent(icalproperty* property,
 			     icalcomponent* component)
 {
@@ -611,6 +669,11 @@ icalcomponent* icalproperty_get_parent(icalproperty* property)
 
     return impl->parent;
 }
+
+
+
+
+
 
 
 /* Everything below this line is machine generated. Do not edit. */

@@ -16,7 +16,6 @@ END:VEVENT"""
 
 
 
-print comp_str
 
 c = Component(comp_str);
 
@@ -24,6 +23,8 @@ c = Component(comp_str);
 for p in c.properties():
 
     print p.name(), p.value()
+
+    print p.asIcalString()
 
 dtstart = c.properties('DTSTART')[0]
 

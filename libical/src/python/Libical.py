@@ -33,9 +33,20 @@ class Property:
         """
         A virtual method that creates the dict entry value from another
         representation of the property
-        """
-        
+        """     
         pass
+
+    def asIcalString(self):
+        " "
+        str = self.name()
+
+        for k in self.dict.keys():
+            v = self.dict[k]
+            str = str + ";" + k + "=" + v
+
+        str = str + ":" + self.value()
+
+        return str
 
     def __getitem__(self,key):
         """ Return property values by name """
@@ -236,15 +247,15 @@ class Period(Property):
 class Component:
 
     def __init__(self,str):
-        self.comp_p = 'NULL'
+        self.comp_p = None
 
         self.comp_p = icalparser_parse_string(str)
 
     def __del__(self):
-        if self.comp_p != 'NULL' and icalcomponent_get_parent(self.comp_p) != 'NULL':
+        if self.comp_p != None and icalcomponent_get_parent(self.comp_p) != None:
             icalcomponent_free(self.comp_p)
 
-            self.comp_p = 'NULL'
+            self.comp_p = None
 
     def properties(self,type='ANY'): 
         """  
@@ -255,7 +266,7 @@ class Component:
         props = []
 
         p = icallangbind_get_first_property(self.comp_p,type)
-        while p != 'NULL':
+        while p != None:
             d_string = icallangbind_property_eval_string(p,":")
 
             d = eval(d_string)
@@ -274,7 +285,19 @@ class Component:
         return props
 
     def addProperty(self,property):
-        pass
+        """
+        Add a Property instance to the component. 
+        """
+
+        p = icalproperty_new_from_string();
+
+        if(p == None):
+            # Error, failed to create property
+            pass
+
+        
+        
+
 
     def removeProperty(self,property):
         pass

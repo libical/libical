@@ -1,3 +1,14 @@
+2001-02-15  Eric Busboom  <eric@softwarestudio.org>
+
+	* design-data/prop-to-value.txt Made a new CSV file,
+ 	properties.cvs That collects property-to-value and default value
+ 	information
+
+	* src/libical/icalproperty.{c,h}.in Moved auto generated code into
+ 	icalderivedproperty.{c,h} and created icalderivedproperty.{c,h}.in
+
+	
+
 2001-02-14  JP Rosevear  <jpr@ximian.com>
 
 	* src/libical/Makefile.am: Sigh, automake is dumber than i thought

@@ -70,6 +70,15 @@ icalcomponent_kind icalcomponent_isa(icalcomponent* component);
 
 int icalrestriction_check(icalcomponent* comp);
 
+
+/* This one works a little differently from the other *_from_string
+   routines; the string input is the name of the property, not the
+   data associated with the property, as it is in
+   icalvalue_from_string. All of the parsing associated with
+   properties is driven by routines in icalparse.c */
+
+icalproperty* icalproperty_new_from_string(char* str);
+
 char* icalproperty_as_ical_string(icalproperty *prop);
 
 typedef enum icalerrorenum {

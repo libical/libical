@@ -29,6 +29,10 @@ libicalss_la_SOURCES =		\
 	icalssyacc.y		\
 	icalspanlist.c		\
 	icalmessage.c		\
+	icalcstpclient.c        \
+	icalcstpclient.h        \
+	icalcstpserver.c        \
+	icalcstpserver.h 	\
 	icalcstp.c
 
 libicalssincludedir = $(includedir)
@@ -42,7 +46,10 @@ COMBINEDHEADERS = \
         icalclassify.h \
 	icalspanlist.h	\
 	icalmessage.h \
-	icalcstp.h
+	icalcstp.h \
+	icalcstpclient.h \
+	icalcstpserver.h
+
 
 icalss.h: $(COMBINEDHEADERS)
 	cat $(COMBINEDHEADERS) | egrep -v "#include.*\"ical" \

@@ -65,80 +65,9 @@ typedef enum icalcomponent_kind {
 
 /***********************************************************************
  * Property Enumerations
+ * 
+ * Property enumerations have been moved to icalderivedproperty.h
 **********************************************************************/
-
-typedef enum icalproperty_kind {
-    ICAL_ANY_PROPERTY = 0, /* This must be the first enum, for iteration */
-    ICAL_CALSCALE_PROPERTY,
-    ICAL_METHOD_PROPERTY,
-    ICAL_PRODID_PROPERTY,
-    ICAL_VERSION_PROPERTY,
-    ICAL_ATTACH_PROPERTY,
-    ICAL_CATEGORIES_PROPERTY,
-    ICAL_CLASS_PROPERTY,
-    ICAL_COMMENT_PROPERTY,
-    ICAL_DESCRIPTION_PROPERTY,
-    ICAL_GEO_PROPERTY,
-    ICAL_LOCATION_PROPERTY,
-    ICAL_PERCENTCOMPLETE_PROPERTY,
-    ICAL_PRIORITY_PROPERTY,
-    ICAL_RESOURCES_PROPERTY,
-    ICAL_STATUS_PROPERTY,
-    ICAL_SUMMARY_PROPERTY,
-    ICAL_COMPLETED_PROPERTY,
-    ICAL_DTEND_PROPERTY,
-    ICAL_DUE_PROPERTY,
-    ICAL_DTSTART_PROPERTY,
-    ICAL_DURATION_PROPERTY,
-    ICAL_FREEBUSY_PROPERTY,
-    ICAL_TRANSP_PROPERTY,
-    ICAL_TZID_PROPERTY,
-    ICAL_TZNAME_PROPERTY,
-    ICAL_TZOFFSETFROM_PROPERTY,
-    ICAL_TZOFFSETTO_PROPERTY,
-    ICAL_TZURL_PROPERTY,
-    ICAL_ATTENDEE_PROPERTY,
-    ICAL_CONTACT_PROPERTY,
-    ICAL_ORGANIZER_PROPERTY,
-    ICAL_RECURRENCEID_PROPERTY,
-    ICAL_RELATEDTO_PROPERTY,
-    ICAL_URL_PROPERTY,
-    ICAL_UID_PROPERTY,
-    ICAL_EXDATE_PROPERTY,
-    ICAL_EXRULE_PROPERTY,
-    ICAL_RDATE_PROPERTY,
-    ICAL_RRULE_PROPERTY,
-    ICAL_ACTION_PROPERTY,
-    ICAL_REPEAT_PROPERTY,
-    ICAL_TRIGGER_PROPERTY,
-    ICAL_CREATED_PROPERTY,
-    ICAL_DTSTAMP_PROPERTY,
-    ICAL_LASTMODIFIED_PROPERTY,
-    ICAL_SEQUENCE_PROPERTY,
-    ICAL_REQUESTSTATUS_PROPERTY,
-    ICAL_X_PROPERTY,
-
-    /* CAP Properties */
-    ICAL_SCOPE_PROPERTY,
-    ICAL_MAXRESULTS_PROPERTY,
-    ICAL_MAXRESULTSSIZE_PROPERTY,
-    ICAL_QUERY_PROPERTY,
-    ICAL_QUERYNAME_PROPERTY, 
-    ICAL_TARGET_PROPERTY,
-
-    /* libical private properties */
-    ICAL_XLICERROR_PROPERTY,
-    ICAL_XLICCLUSTERCOUNT_PROPERTY,
-    ICAL_XLICMIMECONTENTTYPE_PROPERTY,
-    ICAL_XLICMIMEENCODING_PROPERTY,
-    ICAL_XLICMIMECID_PROPERTY,
-    ICAL_XLICMIMEFILENAME_PROPERTY,
-    ICAL_XLICMIMECHARSET_PROPERTY,
-    ICAL_XLICMIMEOPTINFO_PROPERTY,
-
-    ICAL_NO_PROPERTY /* This must be the last enum, for iteration */
-
-} icalproperty_kind;
 
 /***********************************************************************
  * Enumerations for the values of properties
@@ -420,11 +349,22 @@ icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
  * Conversion functions
 **********************************************************************/
 
-const char* icalenum_property_kind_to_string(icalproperty_kind kind);
-icalproperty_kind icalenum_string_to_property_kind(const char* string);
+
+
+
+/* Thse routines used to be in icalenums.c, but were moved into
+   icalderivedproperty.c */
+
+/*const char* icalproperty_kind_to_string(icalproperty_kind kind);*/
+#define icalenum_property_kind_to_string(x) icalproperty_kind_to_string(x)
+
+/*icalproperty_kind icalproperty_string_to_kind(const char* string)*/
+#define icalenum_string_to_property_kind(x) icalproperty_string_to_kind(x)
+
+/*icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);*/
+#define icalenum_property_kind_to_value_kind(x) icalproperty_kind_to_value_kind(x)
 
 const char* icalenum_value_kind_to_string(icalvalue_kind kind);
-icalvalue_kind icalenum_value_kind_by_prop(icalproperty_kind kind);
 
 const char* icalenum_parameter_kind_to_string(icalparameter_kind kind);
 icalparameter_kind icalenum_string_to_parameter_kind(const char* string);
@@ -432,7 +372,6 @@ icalparameter_kind icalenum_string_to_parameter_kind(const char* string);
 const char* icalenum_component_kind_to_string(icalcomponent_kind kind);
 icalcomponent_kind icalenum_string_to_component_kind(const char* string);
 
-icalvalue_kind icalenum_property_kind_to_value_kind(icalproperty_kind kind);
 
 const char* icalenum_method_to_string(icalproperty_method);
 icalproperty_method icalenum_string_to_method(const char* string);

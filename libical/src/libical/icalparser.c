@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.7 2001-02-09 17:44:01 ebusboom Exp $
+  $Id: icalparser.c,v 1.8 2001-02-22 05:03:56 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -593,6 +593,7 @@ icalcomponent* icalparser_parse(icalparser *parser,
 
 }
 
+
 icalcomponent* icalparser_add_line(icalparser* parser,
                                        char* line)
 { 
@@ -601,6 +602,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
     char *end;
     int vcount = 0;
     icalproperty *prop;
+    icalproperty_kind prop_kind;
     icalvalue *value;
     icalvalue_kind value_kind = ICAL_NO_VALUE;
 
@@ -719,12 +721,16 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     /**********************************************************************
      * Handle property names
-     **********************************************************************/								       
+     **********************************************************************/
+								       
     /* At this point, the property name really is a property name,
        (Not a component name) so make a new property and add it to
        the component */
 
-    prop = icalproperty_new_from_string(str);
+    
+    prop_kind = icalenum_string_to_property_kind(str);
+
+    prop = icalproperty_new(prop_kind);
 
     if (prop != 0){
 	icalcomponent *tail = pvl_data(pvl_tail(impl->components));

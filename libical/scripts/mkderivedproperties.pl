@@ -5,23 +5,8 @@ require "readvaluesfile.pl";
 use Getopt::Std;
 getopts('chspmi:');
 
-# ARG 0 is prop-to-value
-open(PV,"$ARGV[0]") || die "Can't open prop to value  file $ARGV[0]:$!";
-
-
-while (<PV>){
-
-  chop;
-  my @v = split(/\s+/,$_);  
-  
-  my $prop = shift @v;
-  my $value = shift @v;
-  my $comment = join(" ",@v);
-  
-  $propmap{$prop} = $value;
-}
-
-close PV;
+# ARG 0 is properties.csv
+%propmap  = read_properties_file($ARGV[0]);
 
 # ARG 1 is value-types.txt
 %valuemap  = read_values_file($ARGV[1]);
@@ -49,18 +34,14 @@ if ($opt_i) {
 
 }
 
+sub fudge_data {
+  my $prop = shift;
 
-
-foreach $prop (keys %propmap) {
-
-  next if !$prop;
-
-  my $value = $propmap{$prop};
+  my $value = $propmap{$prop}->{'lic_value'};
 
   if (!$value){
     die "Can't find value for property \"$prop\"\n";
   }
-
   my $ucf = join("",map {ucfirst(lc($_));}  split(/-/,$prop));
   my $lc = lc($ucf);
   my $uc = uc($lc);
@@ -70,6 +51,69 @@ foreach $prop (keys %propmap) {
   my $ucvalue = uc($lcvalue);
 
   my $type = $valuemap{$value}->{C}->[1];
+
+  return ($uc,$lc,$lcvalue,$ucvalue,$type);
+
+}  
+
+# Create the property map data
+if($opt_c){
+
+  print "static struct icalproperty_map property_map[] = {\n";
+  
+  foreach $prop (sort keys %propmap) {
+    
+    next if !$prop;
+    
+    next if $prop eq 'NO';
+    
+    my ($uc,$lc,$lcvalue,$ucvalue,$type) = fudge_data($prop);
+    
+    print "{ICAL_${uc}_PROPERTY,\"$prop\",ICAL_${ucvalue}_VALUE},\n";
+    
+  }
+  
+  $prop = "NO";
+  
+  my ($uc,$lc,$lcvalue,$ucvalue,$type) = fudge_data($prop);
+  
+  print "{ICAL_${uc}_PROPERTY,\"\",ICAL_NO_VALUE}};\n\n";
+}
+
+
+# Create the property enumerations list
+if($opt_h){
+
+  print "typedef enum icalproperty_kind {\n    ICAL_ANY_PROPERTY = 0,\n";
+  
+  foreach $prop (sort keys %propmap) {
+    
+    next if !$prop;
+    
+    next if $prop eq 'NO' or $prop eq 'ANY';
+    
+    my ($uc,$lc,$lcvalue,$ucvalue,$type) = fudge_data($prop);
+    
+    print "    ICAL_${uc}_PROPERTY, \n";
+    
+  }
+  
+  
+  print "    ICAL_NO_PROPERTY\n} icalproperty_kind;\n";
+
+}
+
+
+
+
+foreach $prop (sort keys %propmap) {
+
+  next if !$prop;
+
+  next if $prop eq 'NO';
+
+  my ($uc,$lc,$lcvalue,$ucvalue,$type) = fudge_data($prop);
+
   
   my $pointer_check;
   if ($type =~ /\*/){

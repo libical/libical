@@ -6,6 +6,15 @@ netical_wrap.c
 icalparser_parse_string(str);
         [ returns icalcomponent * ]
 
+icalcomponent_new(kind);
+        [ returns icalcomponent * ]
+
+icalcomponent_new_clone(component);
+        [ returns icalcomponent * ]
+
+icalcomponent_new_from_string(str);
+        [ returns icalcomponent * ]
+
 icalcomponent_as_ical_string(component);
         [ returns char * ]
 
@@ -21,32 +30,32 @@ icalcomponent_strip_errors(component);
 icalcomponent_convert_errors(component);
         [ returns void  ]
 
-icalrestriction_check(comp);
-        [ returns int  ]
-
-icallangbind_new_array(size);
-        [ returns int * ]
-
-icallangbind_free_array(array);
-        [ returns void  ]
-
-icallangbind_access_array(array,index);
-        [ returns int  ]
-
-icalrecur_expand_recurrence(rule,start,count,array);
-        [ returns int  ]
-
-icallangbind_get_property(c,n,prop);
+icalcomponent_get_current_property(component);
         [ returns icalproperty * ]
 
-icallangbind_get_property_val(p);
-        [ returns char * ]
+icalcomponent_get_first_property(component,kind);
+        [ returns icalproperty * ]
 
-icallangbind_get_parameter(p,parameter);
-        [ returns char * ]
+icalcomponent_get_next_property(component,kind);
+        [ returns icalproperty * ]
 
-icallangbind_get_component(c,comp);
+icalcomponent_get_current_component(component);
         [ returns icalcomponent * ]
+
+icalcomponent_get_first_component(component,kind);
+        [ returns icalcomponent * ]
+
+icalcomponent_get_next_component(component,kind);
+        [ returns icalcomponent * ]
+
+icalcomponent_get_parent(component);
+        [ returns icalcomponent * ]
+
+icalcomponent_isa(component);
+        [ returns icalcomponent_kind  ]
+
+icalrestriction_check(comp);
+        [ returns int  ]
 
 $ICAL_BADARG_ERROR = ICAL_BADARG_ERROR
         [ Constant: int  ]
@@ -107,4 +116,55 @@ icalerror_set_error_state(error,icalerrorstate );
 
 icalerror_get_error_state(error);
         [ returns icalerrorstate  ]
+
+icalenum_property_kind_to_string(kind);
+        [ returns char * ]
+
+icalenum_string_to_property_kind(string);
+        [ returns icalproperty_kind  ]
+
+icalenum_value_kind_to_string(kind);
+        [ returns char * ]
+
+icalenum_value_kind_by_prop(kind);
+        [ returns icalvalue_kind  ]
+
+icalenum_parameter_kind_to_string(kind);
+        [ returns char * ]
+
+icalenum_string_to_parameter_kind(string);
+        [ returns icalparameter_kind  ]
+
+icalenum_component_kind_to_string(kind);
+        [ returns char * ]
+
+icalenum_string_to_component_kind(string);
+        [ returns icalcomponent_kind  ]
+
+icalenum_property_kind_to_value_kind(kind);
+        [ returns icalvalue_kind  ]
+
+icallangbind_new_array(size);
+        [ returns int * ]
+
+icallangbind_free_array(array);
+        [ returns void  ]
+
+icallangbind_access_array(array,index);
+        [ returns int  ]
+
+icalrecur_expand_recurrence(rule,start,count,array);
+        [ returns int  ]
+
+icallangbind_get_property(c,n,prop);
+        [ returns icalproperty * ]
+
+icallangbind_get_property_val(p);
+        [ returns char * ]
+
+icallangbind_get_parameter(p,parameter);
+        [ returns char * ]
+
+icallangbind_get_component(c,comp);
+        [ returns icalcomponent * ]
 

@@ -47,5 +47,36 @@ sub read_values_file {
   return %h;
 }
 
+sub read_properties_file {
+  
+  my $path = shift;
+  my %h;
+
+  open(F,$path) || die "Can't open properties file $path";
+
+  while(<F>){
+    
+    chop; 
+ 
+    s/#.*$//g;
+    s/\"//g;
+   
+    next if ! $_;
+
+    @column = split(/,/,$_);
+    
+    my $property_name = $column[0];
+
+    my $lic_value = $column[1];
+    my $default_value = $column[2];
+    
+    $h{$property_name} = { lic_value => $lic_value,
+			   default_value => $default_value
+			 };
+  }
+
+  return %h;
+}
+
 
 1;
