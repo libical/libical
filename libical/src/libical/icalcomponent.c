@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.38 2002-07-23 13:49:42 lindner Exp $
+  $Id: icalcomponent.c,v 1.39 2002-08-07 17:02:51 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -884,12 +884,17 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 	break;
 
       result = icaltime_compare(*recurtime, exrule_time);
-      if (result == 0) 
+      if (result == 0) {
+	icalrecur_iterator_free(exrule_itr);
 	return 1; /** MATCH **/
+      }
       if (result == 1)
 	break;    /** exrule_time > recurtime **/
     }
+
+    icalrecur_iterator_free(exrule_itr);
   }
+
   return 0;  /** no matches **/
 }
 
@@ -1040,6 +1045,8 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
       }
       comp->property_iterator = property_iterator;
     } /* end of iteration over a specific RRULE */
+
+    icalrecur_iterator_free(rrule_itr);
   } /* end of RRULE loop */
 
 
@@ -1318,7 +1325,6 @@ icalcomponent_begin_component(icalcomponent* component,icalcomponent_kind kind)
     pvl_elem i;
 
     itr.kind = kind;
-    itr.iter = NULL;
 
     icalerror_check_arg_re( (component!=0),"component",icalcompiter_null);
 
