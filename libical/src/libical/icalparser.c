@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.45 2004-03-17 17:58:03 acampi Exp $
+  $Id: icalparser.c,v 1.46 2004-05-10 22:30:51 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -94,16 +94,17 @@ icalparser* icalparser_new(void)
 	return 0;
     }
     
-    impl->root_component = 0;
-    impl->components  = pvl_newlist();  
-    impl->level = 0;
-    impl->state = ICALPARSER_SUCCESS;
-    impl->tmp_buf_size = TMP_BUF_SIZE;
     impl->buffer_full = 0;
-	impl->continuation_line = 0;
-    impl->lineno = 0;
     impl->continuation_line = 0;
-    memset(impl->temp,0, TMP_BUF_SIZE);
+    impl->tmp_buf_size = sizeof(impl->temp);
+    memset(impl->temp, 0, sizeof(impl->temp));
+    impl->root_component = 0;
+    impl->version = 0;
+    impl->level = 0;
+    impl->lineno = 0;
+    impl->state = ICALPARSER_SUCCESS;
+    impl->components  = pvl_newlist();  
+    impl->line_gen_data = 0;
 
     return (icalparser*)impl;
 }
