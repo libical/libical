@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.5 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: icalparser.c,v 1.6 2001-02-08 03:00:42 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -507,7 +507,7 @@ void insert_error(icalcomponent* comp, char* text,
     if (text == 0){
 	snprintf(temp,1024,"%s:",message);
     } else {
-	snprintf(temp,1024,"%s: \'%s\'",message,text);
+	snprintf(temp,1024,"%s: %s",message,text);
     }	
     
     icalcomponent_add_property

@@ -11,7 +11,7 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+ $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -156,7 +156,7 @@ short icaltime_days_in_month(short month,short year);
  CREATOR: eric 26 Jan 2001
 
 
- $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+ $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -215,7 +215,7 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
  CREATOR: eric 26 Jan 2001
 
 
- $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+ $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1048,7 +1048,7 @@ int icalrecur_expand_recurrence(char* rule, time_t start,
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
   $Locker:  $
 
   
@@ -1239,7 +1239,7 @@ void icalvalue_set_date(icalvalue* value, struct icaltimetype v);
   CREATOR: eric 20 March 1999
 
 
-  $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
   $Locker:  $
 
   
@@ -1410,7 +1410,7 @@ void icalparameter_set_xliccomparetype(icalparameter* value, icalparameter_xlicc
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
@@ -2072,7 +2072,7 @@ icalcomponent* icalcomponent_new_xdaylight();
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2163,7 +2163,7 @@ char* string_line_generator(char *out, size_t buf_size, void *d);
  CREATOR: eric 30 June 1999
 
 
- $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+ $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -2241,7 +2241,7 @@ char* icalmemory_strdup(const char *s);
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2376,7 +2376,7 @@ char* icalerror_strerror(icalerrorenum e);
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
   
-  $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2437,7 +2437,7 @@ int icalrestriction_check(icalcomponent* comp);
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
   
-  $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -2581,7 +2581,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
  CREATOR: eric 26 July 2000
 
 
- $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+ $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -2623,7 +2623,7 @@ char* icalmime_as_mime_string(char* component);
   
   DESCRIPTION:
   
-  $Id: ical.h,v 1.13 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: ical.h,v 1.14 2001-02-08 03:00:42 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -2646,5 +2646,7 @@ icalproperty* icallangbind_get_property(icalcomponent *c, int n, const char* pro
 const char* icallangbind_get_property_val(icalproperty* p);
 const char* icallangbind_get_parameter(icalproperty *p, const char* parameter);
 icalcomponent* icallangbind_get_component(icalcomponent *c, const char* comp);
+
+const char* icallangbind_property_eval_string(icalproperty* prop, char* sep);
 
 #endif /*__ICALLANGBIND_H__*/

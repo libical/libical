@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.3 2001-02-06 19:43:22 ebusboom Exp $
+  $Id: icallangbind.c,v 1.4 2001-02-08 03:00:42 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -169,7 +169,8 @@ icalcomponent* icallangbind_get_component(icalcomponent *c, const char* comp)
 
 #define APPENDC(x) icalmemory_append_char(&buf, &buf_ptr, &buf_size, x);
 
-char* icallangbind_append_time(char * key, struct icaltimetype ictt) 
+char* icallangbind_append_time(char * key, struct icaltimetype ictt, 
+                               const char* sep) 
 {
     size_t buf_size = 1024;
     char* buf = icalmemory_new_buffer(buf_size);
@@ -179,23 +180,27 @@ char* icallangbind_append_time(char * key, struct icaltimetype ictt)
     char tmp[25];
 
     APPENDS(", ");
+    APPENDC('\'');
     APPENDS(key);
-    APPENDS(" => ");
+    APPENDC('\'');
+    APPENDS(sep);
     
     snprintf(tmp,25,"%d",tt);
     
     APPENDS(tmp);
     
-    APPENDS(", is_utc => ");
-    
+    APPENDS(", 'is_utc'");
+    APPENDS(sep);
+
     if(ictt.is_utc == 1){
 	APPENDC('1');
     } else {
 	APPENDC('0');
     }
     
-    APPENDS(", is_date =>");
-    
+    APPENDS(", 'is_date'");
+    APPENDS(sep);
+
     if(ictt.is_date == 1){
 	APPENDC('1');
     } else {
@@ -205,7 +210,7 @@ char* icallangbind_append_time(char * key, struct icaltimetype ictt)
     return buf;
 }
 
-const char* icallangbind_perl_eval_string(icalproperty* prop)
+const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
 {
     size_t buf_size = 1024;
     char* buf = icalmemory_new_buffer(buf_size);
@@ -223,9 +228,19 @@ const char* icallangbind_perl_eval_string(icalproperty* prop)
     value = icalproperty_get_value(prop);
 
 
-    APPENDS(" name => '");
+    APPENDS(" 'name' ");
+    APPENDS(sep);
+    APPENDC('\'');
     APPENDS(icalenum_property_kind_to_string(icalproperty_isa(prop)));
     APPENDC('\'');
+
+    APPENDS(", 'value_type' ");
+    APPENDS(sep);
+    APPENDC('\'');
+    APPENDS(icalenum_value_kind_to_string(icalvalue_isa(value)));
+    APPENDC('\'');
+
+
 
     switch (icalvalue_isa(value)){
 	
@@ -249,8 +264,11 @@ const char* icallangbind_perl_eval_string(icalproperty* prop)
     case ICAL_STRING_VALUE:
     case ICAL_URI_VALUE:
     case ICAL_CALADDRESS_VALUE: {
-	APPENDS(", data => ");
+	APPENDS(", 'data'");
+        APPENDS(sep);
+        APPENDC('\'');
 	APPENDS(icalvalue_as_ical_string(value));
+        APPENDC('\'');
 	break;
 
     }
@@ -260,7 +278,7 @@ const char* icallangbind_perl_eval_string(icalproperty* prop)
     case ICAL_DATETIME_VALUE:
     case ICAL_DATETIMEDATE_VALUE: {
 	struct icaltimetype ictt = icalvalue_get_datetime(value);
-	APPENDS(icallangbind_append_time("start_seconds:", ictt))
+	APPENDS(icallangbind_append_time("start_seconds", ictt,sep))
 
 	break;
 
@@ -271,8 +289,9 @@ const char* icallangbind_perl_eval_string(icalproperty* prop)
 	int s = icaldurationtype_as_int(dur);
 	char tmp[25];
 
-	APPENDS(", duration =>");
-	
+	APPENDS(", 'duration'");
+	APPENDS(sep);
+
 	snprintf(tmp,25,"%d",s);
 
 	APPENDS(tmp);
@@ -286,19 +305,20 @@ const char* icallangbind_perl_eval_string(icalproperty* prop)
 
 	p = icalvalue_get_period(value);
 
-	APPENDS(icallangbind_append_time("start_seconds", p.start));
+	APPENDS(icallangbind_append_time("start_seconds", p.start,sep));
 				
 	if(!icaltime_is_null_time(p.end)){
 	    
-	    APPENDS(icallangbind_append_time("end_seconds", p.start));
+	    APPENDS(icallangbind_append_time("end_seconds", p.start,sep));
 
 	} else {
 	    char tmp[25];
 	    struct icaldurationtype dur = icalvalue_get_duration(value);
 	    int s = icaldurationtype_as_int(dur);
 
-	    APPENDS(", duration =>");
-	    
+	    APPENDS(", 'duration'");
+	    APPENDS(sep);
+
 	    snprintf(tmp,25,"%d",s);
 	    
 	    APPENDS(tmp);
@@ -343,9 +363,14 @@ const char* icallangbind_perl_eval_string(icalproperty* prop)
         v++;
 
         APPENDS(", ");
+        APPENDC('\'');
         APPENDS(copy);
-        APPENDS(" => ");
+        APPENDC('\'');
+        APPENDS(sep);
+        APPENDC('\'');
         APPENDS(v);        
+        APPENDC('\'');
+
         
     }
 
