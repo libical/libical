@@ -8,7 +8,7 @@
   
   DESCRIPTION:
   
-  $Id: icalyacc.y,v 1.10 2002-06-07 12:51:17 acampi Exp $
+  $Id: icalyacc.y,v 1.11 2002-06-11 12:39:30 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -54,7 +54,7 @@ void icalparser_fill_date(struct tm* t, char* dstr);
 void icalparser_fill_time(struct tm* t, char* tstr);
 void set_value_type(icalvalue_kind kind);
 void set_parser_value_state();
-struct icaltimetype fill_datetime(struct icaltimetype *, char* d, char* t, int utc);
+static struct icaltimetype fill_datetime(struct icaltimetype *, char* d, char* t, int utc);
 void ical_yy_error(char *s); /* Don't know why I need this.... */
 
 /* Set the state of the lexer so it will interpret values ( iCAL
@@ -364,7 +364,7 @@ utcoffset_value:
 
 %%
 
-struct icaltimetype fill_datetime(struct icaltimetype *stm, char* datestr, char* timestr, int utc)
+static struct icaltimetype fill_datetime(struct icaltimetype *stm, char* datestr, char* timestr, int utc)
 {
 	    if (datestr != 0){
 		sscanf(datestr,"%4d%2d%2d",&(stm->year), &(stm->month), 
