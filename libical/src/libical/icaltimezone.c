@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.c,v 1.10 2002-05-27 14:50:39 acampi Exp $
+ $Id: icaltimezone.c,v 1.11 2002-05-28 14:26:11 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -599,7 +599,7 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
 	    change.day    = rdate.time.day;
 	    /* RDATEs with a DATE value inherit the time from
 	       the DTSTART. */
-	    if (rdate.time.is_date) {
+	    if (icaltime_is_date(rdate.time)) {
 		change.hour   = dtstart.hour;
 		change.minute = dtstart.minute;
 		change.second = dtstart.second;
@@ -611,7 +611,7 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
 		/* The spec was a bit vague about whether RDATEs were in local
 		   time or UTC so we support both to be safe. So if it is in
 		   UTC we have to add the UTC offset to get a local time. */
-		if (!rdate.time.is_utc)
+		if (!icaltime_is_utc(rdate.time))
 		    icaltimezone_adjust_change (&change, 0, 0, 0,
 						-change.prev_utc_offset);
 	    }
@@ -737,7 +737,7 @@ icaltimezone_convert_time		(struct icaltimetype *tt,
 
     /* If the time is a DATE value or both timezones are the same, or we are
        converting a floating time, we don't need to do anything. */
-    if (tt->is_date || from_zone == to_zone || from_zone == NULL)
+    if (icaltime_is_date(*tt) || from_zone == to_zone || from_zone == NULL)
 	return;
 
     /* Convert the time to UTC by getting the UTC offset and subtracting it. */
