@@ -7,7 +7,7 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Component.py,v 1.12 2002-07-15 08:43:04 acampi Exp $
+#  $Id: Component.py,v 1.13 2002-07-15 09:51:44 acampi Exp $
 #  $Locker:  $
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
@@ -552,7 +552,7 @@ class GenericComponent(Component):
         
         # Get value
         else:
-            return Collection(self, self.properties(name))
+            return Collection(self, comp.properties(name))
 
     def attachments(self, values=None):
         """Sets or returns a Collection of Attach properties.
@@ -614,11 +614,11 @@ class GenericComponent(Component):
         return self._multiple_properties('CONTACT', 'TEXT', value)
 
     def related_tos(self, value=None):
-        "Sets or returns a Collectoin of RELATED-TO properties."
+        "Sets or returns a Collection of RELATED-TO properties."
         return self._multiple_properties('RELATED-TO', 'TEXT', value)
 
     def x_properties(self, name, value=None):
-        "Sets or returns a Collectoin of X- properties."
+        "Sets or returns a Collection of X- properties."
         return self._multiple_properties(name, 'TEXT', value)
 
 class Event(GenericComponent):
