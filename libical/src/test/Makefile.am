@@ -15,6 +15,7 @@ LDADD =  ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx
 LIBS = -lpthread 
 
 if WITH_BDB4
+storage_CFLAGS = -DWITH_BDB4
 storage_LDADD = ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a @BDB_DIR_LIB@/@BDB_LIB@
 else
 storage_LDADD = ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a

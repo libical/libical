@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: storage.c,v 1.3 2002-06-13 15:36:56 acampi Exp $
+  $Id: storage.c,v 1.4 2002-06-14 09:52:57 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -36,7 +36,9 @@
 #include "icalmemory.h"
 #include "icaldirset.h"
 #include "icalfileset.h"
+#ifdef WITH_BDB4
 #include "icalbdbset.h"
+#endif
 #include "icalerror.h"
 #include "icalrestriction.h"
 #include "icalcalendar.h"
@@ -66,8 +68,12 @@ struct calendar {
 };
 
 int vcalendar_init(struct calendar **cal, char *vcalendar, char *title);
+
+#ifdef WITH_BDB4
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey);
 char * parse_vcalendar(const DBT *dbt) ;
+#endif
+
 char * pack_calendar(struct calendar *cal, int size);
 struct calendar * unpack_calendar(char *str, int size);
 
@@ -264,6 +270,7 @@ void test_fileset()
    DB file), and keys for storage and retrieval.
 */
 
+#ifdef WITH_BDB4
 void test_bdbset()
 {
     icalbdbset *cout;
@@ -463,6 +470,39 @@ void test_bdbset()
     }
 }
 
+/* get_title -- extracts a secondary key (the vcalendar)
+ * from a primary key/data pair */
+
+/* just create a random title for now */
+
+int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
+{
+  icalcomponent *cl;
+  char title[255];
+
+  memset(skey, 0, sizeof(DBT)); 
+
+  cl = icalparser_parse_string((char *)pdata->data);
+  sprintf(title, "title_%s", icalcomponent_get_uid(cl));
+
+  skey->data = strdup(title);
+  skey->size = strlen(skey->data);
+  return (0); 
+}
+
+char * parse_vcalendar(const DBT *dbt) 
+{
+  char *str;
+  struct calendar *cal;
+
+  str = (char *)dbt->data;
+  cal = unpack_calendar(str, dbt->size);
+
+  return cal->vcalendar;
+}
+
+#endif
+
 
 int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title) 
 {
@@ -510,26 +550,6 @@ int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title)
   *rcal = cal;
 
   return 0;
-}
-
-/* get_title -- extracts a secondary key (the vcalendar)
- * from a primary key/data pair */
-
-/* just create a random title for now */
-
-int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
-{
-  icalcomponent *cl;
-  char title[255];
-
-  memset(skey, 0, sizeof(DBT)); 
-
-  cl = icalparser_parse_string((char *)pdata->data);
-  sprintf(title, "title_%s", icalcomponent_get_uid(cl));
-
-  skey->data = strdup(title);
-  skey->size = strlen(skey->data);
-  return (0); 
 }
 
 char * pack_calendar(struct calendar *cal, int size) 
@@ -622,17 +642,6 @@ struct calendar * unpack_calendar(char *str, int size)
 	 cal->title_size);
 
   return cal;
-}
-
-char * parse_vcalendar(const DBT *dbt) 
-{
-  char *str;
-  struct calendar *cal;
-
-  str = (char *)dbt->data;
-  cal = unpack_calendar(str, dbt->size);
-
-  return cal->vcalendar;
 }
 
 int test_dirset()
@@ -847,8 +856,10 @@ int main(int argc, char *argv[])
     printf("\n------------Test Dir Set---------------\n");
     test_dirset();
 
+#ifdef WITH_BDB4
     printf("\n------------Test BerkeleyDB Set---------------\n");
     test_bdbset();
+#endif
 
 #if 0
     printf("\n------------Test Calendar---------------\n");
