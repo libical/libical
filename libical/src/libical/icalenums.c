@@ -3,7 +3,7 @@
   FILE: icalenum.c
   CREATOR: eric 29 April 1999
   
-  $Id: icalenums.c,v 1.12 2002-05-21 10:31:29 acampi Exp $
+  $Id: icalenums.c,v 1.13 2002-06-11 12:22:25 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -38,7 +38,7 @@
 
 /*** @brief Allowed request status values
  */
-struct {
+static struct {
 	 enum icalrequeststatus kind;
 	int major;
 	int minor;
