@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.9 2001-06-22 15:57:26 ebusboom Exp $
+  $Id: copycluster.c,v 1.10 2001-06-22 16:04:21 ebusboom Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -67,7 +67,7 @@ int main(int c, char *argv[]){
 
     signal(SIGALRM,sig_alrm);
 
-    /*alarm(30);*/
+    alarm(10);
     clusterin = icalfileset_new(argv[1]);
     alarm(0);
 

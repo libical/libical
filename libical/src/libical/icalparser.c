@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.15 2001-06-22 15:57:26 ebusboom Exp $
+  $Id: icalparser.c,v 1.16 2001-06-22 16:04:21 ebusboom Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -566,7 +566,7 @@ icalcomponent* icalparser_parse(icalparser *parser,
 
     icalerror_check_arg_rz((parser !=0),"parser");
 
-    /*    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_NONFATAL);*/
+    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_NONFATAL);
 
     do{
 	    line = icalparser_get_line(parser, line_gen_func);
