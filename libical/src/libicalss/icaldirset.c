@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.13 2002-05-29 13:50:59 acampi Exp $
+    $Id: icaldirset.c,v 1.14 2002-06-04 14:22:01 acampi Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -266,12 +266,8 @@ icaldirset* icaldirset_new(const char* dir)
 
 icaldirset* icaldirset_new_writer(const char* dir)
 {
-    struct icaldirset_impl *impl = icaldirset_new_impl();
+    struct icaldirset_impl *impl;
     struct stat sbuf;
-
-    if (impl == 0){
-	return 0;
-    }
 
     icalerror_check_arg_rz( (dir!=0), "dir");
 
@@ -307,13 +303,8 @@ icaldirset* icaldirset_new_writer(const char* dir)
 
 icaldirset* icaldirset_new_reader(const char* dir)
 {
-    struct icaldirset_impl *impl = icaldirset_new_impl();
+    struct icaldirset_impl *impl;
     struct stat sbuf;
-
-    if (impl == 0){
-	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-	return 0;
-    }
 
     icalerror_check_arg_rz( (dir!=0), "dir");
 
@@ -330,6 +321,13 @@ icaldirset* icaldirset_new_reader(const char* dir)
 
     icaldirset_lock(dir);
 
+    impl = icaldirset_new_impl();
+
+    if (impl ==0){
+	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+	return 0;
+    }
+    
     impl->directory = pvl_newlist();
     impl->directory_iterator = 0;
     impl->dir = (char*)strdup(dir);
