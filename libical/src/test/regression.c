@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.44 2002-05-28 15:48:03 acampi Exp $
+  $Id: regression.c,v 1.45 2002-06-03 17:24:52 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -105,7 +105,7 @@ END:VCALENDAR";
 
 /* Return a list of all attendees who are required. */
    
-char** get_required_attendees(icalproperty* event)
+char** get_required_attendees(icalcomponent* event)
 {
     icalproperty* p;
     icalparameter* parameter;
@@ -145,7 +145,7 @@ char** get_required_attendees(icalproperty* event)
 /* If an attendee has a PARTSTAT of NEEDSACTION or has no PARTSTAT
    parameter, change it to TENTATIVE. */
    
-void update_attendees(icalproperty* event)
+void update_attendees(icalcomponent* event)
 {
     icalproperty* p;
     icalparameter* parameter;
@@ -1040,7 +1040,7 @@ void icalrecurrencetype_test()
  
 }
 
-/* From Federico Mena Quintero <federico@helixcode.com>    */
+/* From Federico Mena Quintero <federico@ximian.com>    */
 void test_recur_parameter_bug(){
 
 #ifdef HAVE_CONFIG_H
@@ -1256,7 +1256,8 @@ void test_requeststat()
     p = icalproperty_new_from_string("REQUEST-STATUS:2.1;Success but fallback taken  on one or more property  values.;booga");
 
     printf("%s\n",icalproperty_as_ical_string(p));
-    assert(regrstrcmp(icalproperty_as_ical_string(p),"REQUEST-STATUS\n :2.1;Success but fallback taken  on one or more property  values.;booga\n")==0);
+    
+    assert(regrstrcmp(icalproperty_as_ical_string(p),"REQUEST-STATUS:2.1;Success but fallback taken  on one or more property  \n values.;booga\n")==0);
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_NONFATAL);
     st2 = icalreqstattype_from_string("16.4");
@@ -1684,16 +1685,12 @@ void test_iterators()
 	icalcomponent_free(c);
 }
 
-struct set_tz_save {char* orig_tzid; char* new_env_str;};
-struct set_tz_save set_tz(const char* tzid);
-void unset_tz(struct set_tz_save savetz);
-
 
 void test_time()
 {
-    char  zones[6][40] = { "America/Los_Angeles","America/New_York","Europe/London","Asia/Shanghai", ""};
+    char  *zones[6] = { "America/Los_Angeles","America/New_York","Europe/London","Asia/Shanghai", NULL};
+    
     int i;
-    struct set_tz_save old_tz;
     int orig_month;
     time_t tt;
     struct tm stm;
@@ -1706,15 +1703,11 @@ void test_time()
 
     do_test_time(0);
 
-    for(i = 0; zones[i][0] != 0; i++){
+    for(i = 0; zones[i] != 0; i++){
 
 	printf(" ######### Timezone: %s ############\n",zones[i]);
         
-        /* old_tz = set_tz(zones[i]); */
-	
 	do_test_time(zones[i]);
-
-        /* unset_tz(old_tz); */
 
     } 
 
@@ -1844,6 +1837,12 @@ void test_fblist()
     printf("Next Free time: %s\n",icaltime_as_ctime(period.start));
     printf("                %s\n",icaltime_as_ctime(period.end));
 
+    printf("%s\n",
+	   icalcomponent_as_ical_string(icalspanlist_as_vfreebusy(sl,
+								  "a@foo.com",
+								  "b@foo.com")
+					));
+
 
     icalspanlist_free(sl);
 
@@ -1864,8 +1863,14 @@ void test_fblist()
     printf("Next Free time: %s\n",icaltime_as_ctime(period.start));
     printf("                %s\n",icaltime_as_ctime(period.end));
 
+    printf("%s\n",
+	   icalcomponent_as_ical_string(icalspanlist_as_vfreebusy(sl,
+								  "a@foo.com",
+								  "b@foo.com")
+					));
 
     icalspanlist_free(sl);
+
 
 	icalset_free(set);
 
@@ -1964,9 +1969,9 @@ void test_convenience(){
     printf("End:   %s\n",ictt_as_string(icalcomponent_get_dtend(c)));
     printf("Dur:   %d m\n",duration);
 
-    icalcomponent_free(c);
-
     icalerror_errors_are_fatal = 1;
+
+    icalcomponent_free(c);
 
     c = icalcomponent_vanew(
 	ICAL_VCALENDAR_COMPONENT,
@@ -2290,16 +2295,6 @@ void test_gauge_sql() {
     icalgauge *g;
     char* str;
 
-    str= "SELECT * FROM VEVENT WHERE SUMMARY='Prova'";
-
-    printf("\n%s\n",str);
-
-    g = icalgauge_new_from_sql(str);
-    
-    icalgauge_dump(g);
-
-    icalgauge_free(g);
-
     str= "SELECT DTSTART,DTEND,COMMENT FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5";
 
     printf("\n%s\n",str);
@@ -2310,18 +2305,7 @@ void test_gauge_sql() {
 
     icalgauge_free(g);
 
-
-    str="SELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'\0\0";
-
-    printf("\n%s\n",str);
-
-    g = icalgauge_new_from_sql(str);
-    
-    icalgauge_dump(g);
-
-    icalgauge_free(g);
-
-    str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'\0\0";
+    str="SELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'";
 
     printf("\n%s\n",str);
 
@@ -2331,7 +2315,27 @@ void test_gauge_sql() {
 
     icalgauge_free(g);
 
-    str="SELECT * FROM VEVENT WHERE LOCATION == '104 Forum'\0\0";
+    str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
+
+    printf("\n%s\n",str);
+
+    g = icalgauge_new_from_sql(str);
+    
+    icalgauge_dump(g);
+
+    icalgauge_free(g);
+
+    str="SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
+
+    printf("\n%s\n",str);
+
+    g = icalgauge_new_from_sql(str);
+    
+    icalgauge_dump(g);
+
+    icalgauge_free(g);
+
+    str="SELECT * FROM VEVENT WHERE LOCATION == '104 Forum'";
 
     printf("\n%s\n",str);
 
@@ -2585,6 +2589,11 @@ void test_gauge_compare() {
     assert(g!=0);assert(icalgauge_compare(g,c) == 1);
 
     icalgauge_free(g);
+
+    g = icalgauge_new_from_sql(
+	"SELECT * FROM VEVENT WHERE COMMENT = 'foo'");
+
+    printf("SELECT * FROM VEVENT WHERE COMMENT = 'foo'\n");
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo'";
     g = icalgauge_new_from_sql(str);
@@ -2943,7 +2952,7 @@ void test_trigger()
     str = icalproperty_as_ical_string(p);
 
     printf("%s\n",str);
-    assert(regrstrcmp("TRIGGER\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    assert(regrstrcmp("TRIGGER;VALUE=DATE-TIME:19970101T120000\n",str) == 0);
     icalproperty_free(p);
 
     /* TRIGGER, as a DURATION */
@@ -2953,7 +2962,7 @@ void test_trigger()
     str = icalproperty_as_ical_string(p);
     
     printf("%s\n",str);
-    assert(regrstrcmp("TRIGGER\n ;VALUE=DURATION\n :P3DT3H50M45S\n",str) == 0);
+    assert(regrstrcmp("TRIGGER;VALUE=DURATION:P3DT3H50M45S\n",str) == 0);
     icalproperty_free(p);
 
     /* TRIGGER, as a DATETIME, VALUE=DATETIME*/
@@ -2964,7 +2973,7 @@ void test_trigger()
     str = icalproperty_as_ical_string(p);
 
     printf("%s\n",str);
-    assert(regrstrcmp("TRIGGER\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    assert(regrstrcmp("TRIGGER;VALUE=DATE-TIME:19970101T120000\n",str) == 0);
     icalproperty_free(p);
 
     /*TRIGGER, as a DURATION, VALUE=DATETIME */
@@ -2976,7 +2985,7 @@ void test_trigger()
     str = icalproperty_as_ical_string(p);
     
     printf("%s\n",str);
-    assert(regrstrcmp("TRIGGER\n ;VALUE=DURATION\n :P3DT3H50M45S\n",str) == 0);
+    assert(regrstrcmp("TRIGGER;VALUE=DURATION:P3DT3H50M45S\n",str) == 0);
     icalproperty_free(p);
 
     /* TRIGGER, as a DATETIME, VALUE=DURATION*/
@@ -2987,7 +2996,7 @@ void test_trigger()
     str = icalproperty_as_ical_string(p);
 
     printf("%s\n",str);
-    assert(regrstrcmp("TRIGGER\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    assert(regrstrcmp("TRIGGER;VALUE=DATE-TIME:19970101T120000\n",str) == 0);
     icalproperty_free(p);
 
     /*TRIGGER, as a DURATION, VALUE=DURATION */
@@ -2999,7 +3008,7 @@ void test_trigger()
     str = icalproperty_as_ical_string(p);
     
     printf("%s\n",str);
-    assert(regrstrcmp("TRIGGER\n ;VALUE=DURATION\n :P3DT3H50M45S\n",str) == 0);
+    assert(regrstrcmp("TRIGGER;VALUE=DURATION:P3DT3H50M45S\n",str) == 0);
     icalproperty_free(p);
 
 
@@ -3011,7 +3020,7 @@ void test_trigger()
     str = icalproperty_as_ical_string(p);
 
     printf("%s\n",str);
-    assert(regrstrcmp("TRIGGER\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    assert(regrstrcmp("TRIGGER;VALUE=DATE-TIME:19970101T120000\n",str) == 0);
     icalproperty_free(p);
 
     /*TRIGGER, as a DURATION, VALUE=BINARY   */
@@ -3023,7 +3032,7 @@ void test_trigger()
     str = icalproperty_as_ical_string(p);
     
     printf("%s\n",str);
-    assert(regrstrcmp("TRIGGER\n ;VALUE=DURATION\n :P3DT3H50M45S\n",str) == 0);
+    assert(regrstrcmp("TRIGGER;VALUE=DURATION:P3DT3H50M45S\n",str) == 0);
     icalproperty_free(p);
 
 
@@ -3048,7 +3057,7 @@ void test_rdate()
     p = icalproperty_new_rdate(dtp);
     str = icalproperty_as_ical_string(p);
     printf("%s\n",str);
-    assert(regrstrcmp("RDATE\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    assert(regrstrcmp("RDATE;VALUE=DATE-TIME:19970101T120000\n",str) == 0);
     icalproperty_free(p); 
 
 
@@ -3059,7 +3068,7 @@ void test_rdate()
 
     str = icalproperty_as_ical_string(p);
     printf("%s\n",str);
-    assert(regrstrcmp("RDATE\n ;VALUE=PERIOD\n :19970101T120000/PT3H10M15S\n",str) == 0);
+    assert(regrstrcmp("RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\n",str) == 0);
     icalproperty_free(p); 
 
     /* RDATE, as DATE-TIME, VALUE=DATE-TIME */
@@ -3069,7 +3078,7 @@ void test_rdate()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_DATETIME));
     str = icalproperty_as_ical_string(p);
     printf("%s\n",str);
-    assert(regrstrcmp("RDATE\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    assert(regrstrcmp("RDATE;VALUE=DATE-TIME:19970101T120000\n",str) == 0);
     icalproperty_free(p); 
 
 
@@ -3080,7 +3089,7 @@ void test_rdate()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_DATETIME));
     str = icalproperty_as_ical_string(p);
     printf("%s\n",str);
-    assert(regrstrcmp("RDATE\n ;VALUE=PERIOD\n :19970101T120000/PT3H10M15S\n",str) == 0);
+    assert(regrstrcmp("RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\n",str) == 0);
     icalproperty_free(p); 
 
 
@@ -3091,7 +3100,7 @@ void test_rdate()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_PERIOD));
     str = icalproperty_as_ical_string(p);
     printf("%s\n",str);
-    assert(regrstrcmp("RDATE\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    assert(regrstrcmp("RDATE;VALUE=DATE-TIME:19970101T120000\n",str) == 0);
     icalproperty_free(p); 
 
 
@@ -3102,7 +3111,7 @@ void test_rdate()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_PERIOD));
     str = icalproperty_as_ical_string(p);
     printf("%s\n",str);
-    assert(regrstrcmp("RDATE\n ;VALUE=PERIOD\n :19970101T120000/PT3H10M15S\n",str) == 0);
+    assert(regrstrcmp("RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\n",str) == 0);
     icalproperty_free(p); 
 
 
@@ -3113,7 +3122,7 @@ void test_rdate()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_BINARY));
     str = icalproperty_as_ical_string(p);
     printf("%s\n",str);
-    assert(regrstrcmp("RDATE\n ;VALUE=DATE-TIME\n :19970101T120000\n",str) == 0);
+    assert(regrstrcmp("RDATE;VALUE=DATE-TIME:19970101T120000\n",str) == 0);
     icalproperty_free(p); 
 
 
@@ -3124,7 +3133,7 @@ void test_rdate()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_BINARY));
     str = icalproperty_as_ical_string(p);
     printf("%s\n",str);
-    assert(regrstrcmp("RDATE\n ;VALUE=PERIOD\n :19970101T120000/PT3H10M15S\n",str) == 0);
+    assert(regrstrcmp("RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\n",str) == 0);
     icalproperty_free(p); 
 
 
