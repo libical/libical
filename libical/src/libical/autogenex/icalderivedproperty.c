@@ -4,7 +4,7 @@
   FILE: icalderivedproperty.c
   CREATOR: eric 15 Feb 2001
   
-  $Id: icalderivedproperty.c,v 1.2 2002-04-23 17:14:58 gray-john Exp $
+  $Id: icalderivedproperty.c,v 1.3 2002-04-23 18:31:41 gray-john Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -399,7 +399,6 @@ icalproperty* icalproperty_vanew_action(enum icalproperty_action v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* ACTION */
 icalproperty* icalproperty_new_action(enum icalproperty_action v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_ACTION_PROPERTY);   
@@ -425,7 +424,6 @@ icalproperty* icalproperty_vanew_attach(struct icalattachtype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* ATTACH */
 icalproperty* icalproperty_new_attach(struct icalattachtype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_ATTACH_PROPERTY);   
@@ -452,7 +450,6 @@ icalproperty* icalproperty_vanew_attendee(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* ATTENDEE */
 icalproperty* icalproperty_new_attendee(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_ATTENDEE_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -481,7 +478,6 @@ icalproperty* icalproperty_vanew_calscale(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* CALSCALE */
 icalproperty* icalproperty_new_calscale(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_CALSCALE_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -510,7 +506,6 @@ icalproperty* icalproperty_vanew_categories(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* CATEGORIES */
 icalproperty* icalproperty_new_categories(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_CATEGORIES_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -538,7 +533,6 @@ icalproperty* icalproperty_vanew_class(enum icalproperty_class v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* CLASS */
 icalproperty* icalproperty_new_class(enum icalproperty_class v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_CLASS_PROPERTY);   
@@ -565,7 +559,6 @@ icalproperty* icalproperty_vanew_comment(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* COMMENT */
 icalproperty* icalproperty_new_comment(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_COMMENT_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -593,7 +586,6 @@ icalproperty* icalproperty_vanew_completed(struct icaltimetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* COMPLETED */
 icalproperty* icalproperty_new_completed(struct icaltimetype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_COMPLETED_PROPERTY);   
@@ -620,7 +612,6 @@ icalproperty* icalproperty_vanew_contact(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* CONTACT */
 icalproperty* icalproperty_new_contact(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_CONTACT_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -648,7 +639,6 @@ icalproperty* icalproperty_vanew_created(struct icaltimetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* CREATED */
 icalproperty* icalproperty_new_created(struct icaltimetype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_CREATED_PROPERTY);   
@@ -675,7 +665,6 @@ icalproperty* icalproperty_vanew_description(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* DESCRIPTION */
 icalproperty* icalproperty_new_description(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_DESCRIPTION_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -703,7 +692,6 @@ icalproperty* icalproperty_vanew_dtend(struct icaltimetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* DTEND */
 icalproperty* icalproperty_new_dtend(struct icaltimetype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_DTEND_PROPERTY);   
@@ -729,7 +717,6 @@ icalproperty* icalproperty_vanew_dtstamp(struct icaltimetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* DTSTAMP */
 icalproperty* icalproperty_new_dtstamp(struct icaltimetype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_DTSTAMP_PROPERTY);   
@@ -755,7 +742,6 @@ icalproperty* icalproperty_vanew_dtstart(struct icaltimetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* DTSTART */
 icalproperty* icalproperty_new_dtstart(struct icaltimetype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_DTSTART_PROPERTY);   
@@ -781,7 +767,6 @@ icalproperty* icalproperty_vanew_due(struct icaltimetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* DUE */
 icalproperty* icalproperty_new_due(struct icaltimetype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_DUE_PROPERTY);   
@@ -807,7 +792,6 @@ icalproperty* icalproperty_vanew_duration(struct icaldurationtype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* DURATION */
 icalproperty* icalproperty_new_duration(struct icaldurationtype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_DURATION_PROPERTY);   
@@ -833,6 +817,13 @@ icalproperty* icalproperty_vanew_exdate(struct icaltimetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
+/* EXDATE */
+icalproperty* icalproperty_new_exdate(struct icaltimetype v) {
+   struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_EXDATE_PROPERTY);   
+   icalproperty_set_exdate((icalproperty*)impl,v);
+   return (icalproperty*)impl;
+}
+
 void icalproperty_set_exdate(icalproperty* prop, struct icaltimetype v){
     icalvalue *value;
     
@@ -856,7 +847,6 @@ icalproperty* icalproperty_vanew_exrule(struct icalrecurrencetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* EXRULE */
 icalproperty* icalproperty_new_exrule(struct icalrecurrencetype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_EXRULE_PROPERTY);   
@@ -882,7 +872,6 @@ icalproperty* icalproperty_vanew_freebusy(struct icalperiodtype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* FREEBUSY */
 icalproperty* icalproperty_new_freebusy(struct icalperiodtype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_FREEBUSY_PROPERTY);   
@@ -908,7 +897,6 @@ icalproperty* icalproperty_vanew_geo(struct icalgeotype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* GEO */
 icalproperty* icalproperty_new_geo(struct icalgeotype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_GEO_PROPERTY);   
@@ -934,7 +922,6 @@ icalproperty* icalproperty_vanew_lastmodified(struct icaltimetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* LAST-MODIFIED */
 icalproperty* icalproperty_new_lastmodified(struct icaltimetype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_LASTMODIFIED_PROPERTY);   
@@ -961,7 +948,6 @@ icalproperty* icalproperty_vanew_location(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* LOCATION */
 icalproperty* icalproperty_new_location(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_LOCATION_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -989,7 +975,6 @@ icalproperty* icalproperty_vanew_maxresults(int v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* MAXRESULTS */
 icalproperty* icalproperty_new_maxresults(int v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_MAXRESULTS_PROPERTY);   
@@ -1015,7 +1000,6 @@ icalproperty* icalproperty_vanew_maxresultssize(int v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* MAXRESULTSSIZE */
 icalproperty* icalproperty_new_maxresultssize(int v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_MAXRESULTSSIZE_PROPERTY);   
@@ -1041,7 +1025,6 @@ icalproperty* icalproperty_vanew_method(enum icalproperty_method v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* METHOD */
 icalproperty* icalproperty_new_method(enum icalproperty_method v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_METHOD_PROPERTY);   
@@ -1068,7 +1051,6 @@ icalproperty* icalproperty_vanew_organizer(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* ORGANIZER */
 icalproperty* icalproperty_new_organizer(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_ORGANIZER_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1096,7 +1078,6 @@ icalproperty* icalproperty_vanew_percentcomplete(int v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* PERCENT-COMPLETE */
 icalproperty* icalproperty_new_percentcomplete(int v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_PERCENTCOMPLETE_PROPERTY);   
@@ -1122,7 +1103,6 @@ icalproperty* icalproperty_vanew_priority(int v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* PRIORITY */
 icalproperty* icalproperty_new_priority(int v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_PRIORITY_PROPERTY);   
@@ -1149,7 +1129,6 @@ icalproperty* icalproperty_vanew_prodid(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* PRODID */
 icalproperty* icalproperty_new_prodid(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_PRODID_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1178,7 +1157,6 @@ icalproperty* icalproperty_vanew_query(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* QUERY */
 icalproperty* icalproperty_new_query(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_QUERY_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1207,7 +1185,6 @@ icalproperty* icalproperty_vanew_queryname(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* QUERYNAME */
 icalproperty* icalproperty_new_queryname(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_QUERYNAME_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1235,7 +1212,6 @@ icalproperty* icalproperty_vanew_rdate(struct icaldatetimeperiodtype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* RDATE */
 icalproperty* icalproperty_new_rdate(struct icaldatetimeperiodtype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_RDATE_PROPERTY);   
@@ -1261,7 +1237,6 @@ icalproperty* icalproperty_vanew_recurrenceid(struct icaltimetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* RECURRENCE-ID */
 icalproperty* icalproperty_new_recurrenceid(struct icaltimetype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_RECURRENCEID_PROPERTY);   
@@ -1288,7 +1263,6 @@ icalproperty* icalproperty_vanew_relatedto(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* RELATED-TO */
 icalproperty* icalproperty_new_relatedto(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_RELATEDTO_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1316,7 +1290,6 @@ icalproperty* icalproperty_vanew_repeat(int v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* REPEAT */
 icalproperty* icalproperty_new_repeat(int v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_REPEAT_PROPERTY);   
@@ -1342,7 +1315,6 @@ icalproperty* icalproperty_vanew_requeststatus(struct icalreqstattype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* REQUEST-STATUS */
 icalproperty* icalproperty_new_requeststatus(struct icalreqstattype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_REQUESTSTATUS_PROPERTY);   
@@ -1369,7 +1341,6 @@ icalproperty* icalproperty_vanew_resources(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* RESOURCES */
 icalproperty* icalproperty_new_resources(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_RESOURCES_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1397,7 +1368,6 @@ icalproperty* icalproperty_vanew_rrule(struct icalrecurrencetype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* RRULE */
 icalproperty* icalproperty_new_rrule(struct icalrecurrencetype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_RRULE_PROPERTY);   
@@ -1424,7 +1394,6 @@ icalproperty* icalproperty_vanew_scope(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* SCOPE */
 icalproperty* icalproperty_new_scope(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_SCOPE_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1452,7 +1421,6 @@ icalproperty* icalproperty_vanew_sequence(int v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* SEQUENCE */
 icalproperty* icalproperty_new_sequence(int v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_SEQUENCE_PROPERTY);   
@@ -1478,7 +1446,6 @@ icalproperty* icalproperty_vanew_status(enum icalproperty_status v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* STATUS */
 icalproperty* icalproperty_new_status(enum icalproperty_status v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_STATUS_PROPERTY);   
@@ -1505,7 +1472,6 @@ icalproperty* icalproperty_vanew_summary(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* SUMMARY */
 icalproperty* icalproperty_new_summary(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_SUMMARY_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1534,7 +1500,6 @@ icalproperty* icalproperty_vanew_target(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* TARGET */
 icalproperty* icalproperty_new_target(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_TARGET_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1563,7 +1528,6 @@ icalproperty* icalproperty_vanew_transp(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* TRANSP */
 icalproperty* icalproperty_new_transp(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_TRANSP_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1591,7 +1555,6 @@ icalproperty* icalproperty_vanew_trigger(struct icaltriggertype v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* TRIGGER */
 icalproperty* icalproperty_new_trigger(struct icaltriggertype v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_TRIGGER_PROPERTY);   
@@ -1618,7 +1581,6 @@ icalproperty* icalproperty_vanew_tzid(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* TZID */
 icalproperty* icalproperty_new_tzid(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_TZID_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1647,7 +1609,6 @@ icalproperty* icalproperty_vanew_tzname(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* TZNAME */
 icalproperty* icalproperty_new_tzname(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_TZNAME_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1675,7 +1636,6 @@ icalproperty* icalproperty_vanew_tzoffsetfrom(int v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* TZOFFSETFROM */
 icalproperty* icalproperty_new_tzoffsetfrom(int v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_TZOFFSETFROM_PROPERTY);   
@@ -1701,7 +1661,6 @@ icalproperty* icalproperty_vanew_tzoffsetto(int v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* TZOFFSETTO */
 icalproperty* icalproperty_new_tzoffsetto(int v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_TZOFFSETTO_PROPERTY);   
@@ -1728,7 +1687,6 @@ icalproperty* icalproperty_vanew_tzurl(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* TZURL */
 icalproperty* icalproperty_new_tzurl(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_TZURL_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1757,7 +1715,6 @@ icalproperty* icalproperty_vanew_uid(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* UID */
 icalproperty* icalproperty_new_uid(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_UID_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1786,7 +1743,6 @@ icalproperty* icalproperty_vanew_url(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* URL */
 icalproperty* icalproperty_new_url(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_URL_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1815,7 +1771,6 @@ icalproperty* icalproperty_vanew_version(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* VERSION */
 icalproperty* icalproperty_new_version(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_VERSION_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1844,7 +1799,6 @@ icalproperty* icalproperty_vanew_x(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* X */
 icalproperty* icalproperty_new_x(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_X_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1872,7 +1826,6 @@ icalproperty* icalproperty_vanew_xlicclass(enum icalproperty_xlicclass v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* X-LIC-CLASS */
 icalproperty* icalproperty_new_xlicclass(enum icalproperty_xlicclass v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_XLICCLASS_PROPERTY);   
@@ -1899,7 +1852,6 @@ icalproperty* icalproperty_vanew_xlicclustercount(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* X-LIC-CLUSTERCOUNT */
 icalproperty* icalproperty_new_xlicclustercount(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_XLICCLUSTERCOUNT_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1928,7 +1880,6 @@ icalproperty* icalproperty_vanew_xlicerror(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* X-LIC-ERROR */
 icalproperty* icalproperty_new_xlicerror(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_XLICERROR_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1957,7 +1908,6 @@ icalproperty* icalproperty_vanew_xlicmimecharset(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* X-LIC-MIMECHARSET */
 icalproperty* icalproperty_new_xlicmimecharset(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_XLICMIMECHARSET_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -1986,7 +1936,6 @@ icalproperty* icalproperty_vanew_xlicmimecid(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* X-LIC-MIMECID */
 icalproperty* icalproperty_new_xlicmimecid(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_XLICMIMECID_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -2015,7 +1964,6 @@ icalproperty* icalproperty_vanew_xlicmimecontenttype(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* X-LIC-MIMECONTENTTYPE */
 icalproperty* icalproperty_new_xlicmimecontenttype(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_XLICMIMECONTENTTYPE_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -2044,7 +1992,6 @@ icalproperty* icalproperty_vanew_xlicmimeencoding(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* X-LIC-MIMEENCODING */
 icalproperty* icalproperty_new_xlicmimeencoding(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_XLICMIMEENCODING_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -2073,7 +2020,6 @@ icalproperty* icalproperty_vanew_xlicmimefilename(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* X-LIC-MIMEFILENAME */
 icalproperty* icalproperty_new_xlicmimefilename(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_XLICMIMEFILENAME_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");
@@ -2102,7 +2048,6 @@ icalproperty* icalproperty_vanew_xlicmimeoptinfo(const char* v, ...){
    va_end(args);
    return (icalproperty*)impl;
 }
-
 /* X-LIC-MIMEOPTINFO */
 icalproperty* icalproperty_new_xlicmimeoptinfo(const char* v) {
    struct icalproperty_impl *impl = icalproperty_new_impl(ICAL_XLICMIMEOPTINFO_PROPERTY);   icalerror_check_arg_rz( (v!=0),"v");

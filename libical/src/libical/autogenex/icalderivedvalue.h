@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalderivedvalue.h,v 1.2 2002-04-23 17:14:58 gray-john Exp $
+  $Id: icalderivedvalue.h,v 1.3 2002-04-23 18:31:41 gray-john Exp $
   $Locker:  $
 
   

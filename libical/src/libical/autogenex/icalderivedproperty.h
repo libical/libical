@@ -3,7 +3,7 @@
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalderivedproperty.h,v 1.2 2002-04-23 17:14:58 gray-john Exp $
+  $Id: icalderivedproperty.h,v 1.3 2002-04-23 18:31:41 gray-john Exp $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
