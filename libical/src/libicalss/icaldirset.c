@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.4 2001-02-09 17:53:40 ebusboom Exp $
+    $Id: icaldirset.c,v 1.5 2001-03-08 06:19:06 ebusboom Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -191,7 +191,7 @@ icaldirset* icaldirset_new(const char* dir)
     impl = icaldirset_new_impl();
 
     if (impl ==0){
-	icalerror_set_errno(ICAL_ALLOCATION_ERROR);
+	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
 	return 0;
     }
     
