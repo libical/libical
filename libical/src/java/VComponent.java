@@ -163,15 +163,6 @@ public class VComponent
 	public native ICalTimeType get_recurrenceid();
 	public native void set_recurrenceid(ICalTimeType v);
 
-	//public native struct icalorganizertype get_organizer();
-	//public native void set_organizer(struct icalorganizertype org);
-
-	//public native void add_attendee(struct icalattendeetype attendee);
-	//public native int remove_attendee(String cuid);
-
-	/* Get the Nth attendee. Out of range indices return an attendee with cuid == 0 */
-	//public native struct icalattendeetype get_attendee(int index);
-
 	/* For VCOMPONENT: Return a reference to the first VEVENT, VTODO, or VJOURNAL */
 	public native VComponent get_first_real_component();
 
