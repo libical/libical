@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.53 2003-02-17 17:28:21 acampi Exp $
+  $Id: icalcomponent.c,v 1.54 2003-02-17 17:30:57 acampi Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1514,6 +1514,7 @@ void icalcomponent_set_dtstart(icalcomponent* comp, struct icaltimetype v)
 static struct icaltimetype
 icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
 
+    icalcomponent      *c;
     icalparameter      *param;
     struct icaltimetype	ret;
 
