@@ -1,3 +1,18 @@
+2001-03-28  Patrick Lewis <plewis@inetarena.com>
+	
+	* Split Libical.py file into Component.py, Property.py, Collection.py, 
+	and Store.py
+
+	* Added test_* functions to test.py
+
+	* Changed component bindings to return a Collection when objects can 
+	have multiple values
+
+	* Changed Component object to allow for creation of an object without
+	an initial string
+
+	* Added Todo and Journal events
+
 2001-02-28  Eric Busboom  <eric@softwarestudio.org>
 
 	* Property Remove most internal data. The property now work
