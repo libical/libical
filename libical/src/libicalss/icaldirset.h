@@ -4,7 +4,7 @@
  CREATOR: eric 28 November 1999
 
 
- $Id: icaldirset.h,v 1.2 2002-03-16 15:53:30 gray-john Exp $
+ $Id: icaldirset.h,v 1.3 2002-05-28 14:57:27 acampi Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -73,7 +73,7 @@ icalcomponent* icaldirset_fetch_match(icaldirset* set, icalcomponent *c);
 icalerrorenum icaldirset_modify(icaldirset* store, icalcomponent *oldc,
 			       icalcomponent *newc);
 
-/* Iterate through the components. If a guage has been defined, these
+/* Iterate through the components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
 icalcomponent* icaldirset_get_current_component(icaldirset* store);
