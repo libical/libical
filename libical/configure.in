@@ -1,6 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src)
-AM_INIT_AUTOMAKE(libical,0.23a) 
+AC_CANONICAL_HOST
+
+AM_INIT_AUTOMAKE(libical,0.24) 
 AM_CONFIG_HEADER(config.h)
 
 dnl  Initialize maintainer mode
@@ -168,6 +170,43 @@ fi
 AM_CONDITIONAL(WITH_CXX, test x$enable_cxx = "xyes")
 
 dnl **************************************************
+dnl * Check for Java
+dnl **************************************************
+
+AC_ARG_ENABLE(java, 
+[  --enable-java          Enable Java bindings],,enable_java="no")
+if test "x$enable_java" = "xyes"; then
+  AC_PATH_PROG(JAR, jar, /usr/local/bin/jar, /usr/local/bin:$PATH)
+  AC_PATH_PROG(JAVA, java, /usr/local/bin/java, /usr/local/bin:$PATH)
+  AC_PATH_PROG(JAVAC, javac, /usr/local/bin/javac, /usr/local/bin:$PATH)
+  AC_PATH_PROG(JAVAH, javah, /usr/local/bin/javah, /usr/local/bin:$PATH)
+  AC_SUBST(JAR)
+  AC_SUBST(JAVA)
+  AC_SUBST(JAVAC)
+  AC_SUBST(JAVAH)
+
+  dnl truly gross
+
+  case "${host}" in
+        *-*-solaris*)   JAVA_PLATFORM="solaris" ;;
+        *-*-linux*)     JAVA_PLATFORM="linux" ;;
+        *-*-freebsd*)   JAVA_PLATFORM="bsd" ;;
+        *-*-aix*)       JAVA_PLATFORM="aix" ;;
+        *-sequent-*)    JAVA_PLATFORM="ptx" ;;
+        *-*-hpux*)      JAVA_PLATFORM="hpux" ;;
+        *-*-irix*)      JAVA_PLATFORM="irix" ;;
+        *-*-os390*)     JAVA_PLATFORM="os390" ;;
+        *-*-os400*)     JAVA_PLATFORM="os400" ;;
+        *-apple-darwin*|*-apple-rhapsody*)      JAVA_PLATFORM="darwin" ;;
+        *)              JAVA_PLATFORM="unknown" ;;
+  esac
+
+  AC_SUBST(JAVA_PLATFORM)
+fi
+
+AM_CONDITIONAL(WITH_JAVA, test x$enable_java = "xyes")
+
+dnl **************************************************
 dnl * Check for Python
 dnl **************************************************
 python_val=false
@@ -221,6 +260,7 @@ src/libical/icalversion.h
 src/libicalss/Makefile
 src/libicalvcal/Makefile
 src/python/Makefile
+src/java/Makefile
 src/test/Makefile
 test-data/Makefile
 zoneinfo/Makefile
