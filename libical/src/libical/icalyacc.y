@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalyacc.y,v 1.8 2002-05-24 12:25:27 acampi Exp $
+  $Id: icalyacc.y,v 1.9 2002-05-28 09:35:18 acampi Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h> /* for strdup() */
 #include "icalparser.h"
+#include "icaltimezone.h"
 #include "pvl.h"
 
 icalvalue *icalparser_yy_value; /* Current Value */
@@ -57,7 +58,7 @@ void icalparser_fill_date(struct tm* t, char* dstr);
 void icalparser_fill_time(struct tm* t, char* tstr);
 void set_value_type(icalvalue_kind kind);
 void set_parser_value_state();
-struct icaltimetype fill_datetime(char* d, char* t);
+struct icaltimetype fill_datetime(struct icaltimetype *, char* d, char* t, int utc);
 void ical_yy_error(char *s); /* Don't know why I need this.... */
 int yylex(void); /* Or this. */
 
@@ -150,7 +151,7 @@ int yylex(void); /* Or this. */
 %token <v_string> STRING   
 %token EOL EQUALS CHARACTER COLON COMMA SEMICOLON MINUS TIMESEPERATOR 
 
-%token TRUE FALSE
+%token YTRUE YFALSE
 
 %token FREQ BYDAY BYHOUR BYMINUTE BYMONTH BYMONTHDAY BYSECOND BYSETPOS BYWEEKNO
 %token BYYEARDAY DAILY MINUTELY MONTHLY SECONDLY WEEKLY HOURLY YEARLY
@@ -189,16 +190,8 @@ value:
 
 date_value: DIGITS
         {
-	    struct icaltimetype stm;
-
-	    stm = fill_datetime($1,0);
-
-	    stm.hour = -1;
-	    stm.minute = -1;
-	    stm.second = -1;
-	    stm.is_utc = 0;
-	    stm.is_date = 1;
-
+	    struct icaltimetype stm = icaltime_null_date();
+	    stm = fill_datetime(&stm, $1, 0, 0);
 	    icalparser_yy_value = icalvalue_new_date(stm);
 	}
 
@@ -214,10 +207,8 @@ utc_char_b:
 datetime_value: 
 	DIGITS TIME_CHAR DIGITS utc_char
         {
-	    struct  icaltimetype stm;
-	    stm = fill_datetime($1, $3);
-	    stm.is_utc = utc;
-	    stm.is_date = 0;
+	    struct  icaltimetype stm = icaltime_null_time();
+	    stm = fill_datetime(&stm, $1, $3, utc);
 
 	    icalparser_yy_value = 
 		icalvalue_new_datetime(stm);
@@ -308,15 +299,12 @@ duration_value: dur_prefix 'P' dur_date
 period_value:  DIGITS TIME_CHAR DIGITS utc_char '/'  DIGITS TIME_CHAR DIGITS utc_char_b
 	{
             struct icalperiodtype p;
-        
-	    p.start = fill_datetime($1,$3);
-	    p.start.is_utc = utc;
-	    p.start.is_date = 0;
 
+	    p.start = icaltime_null_time();
+	    p.start = fill_datetime(&p.start, $1, $3, utc);
 
-	    p.end = fill_datetime($6,$8);
-	    p.end.is_utc = utc_b;
-	    p.end.is_date = 0;
+	    p.end = icaltime_null_time();
+	    p.end = fill_datetime(&p.end, $6,$8, utc_b);
 		
 	    p.duration.days = -1;
 	    p.duration.weeks = -1;
@@ -329,18 +317,12 @@ period_value:  DIGITS TIME_CHAR DIGITS utc_char '/'  DIGITS TIME_CHAR DIGITS utc
 	| DIGITS TIME_CHAR DIGITS utc_char '/'  duration_value
 	{
             struct icalperiodtype p;
-	    
-	    p.start = fill_datetime($1,$3);
-	    p.start.is_utc = utc;
-	    p.start.is_date = 0;
 
-	    p.end.year = -1;
-	    p.end.month = -1;
-	    p.end.day = -1;
-	    p.end.hour = -1;
-	    p.end.minute = -1;
-	    p.end.second = -1;
-		   
+	    p.start = icaltime_null_time();	  
+	    p.start = fill_datetime(&p.start, $1,$3, utc);
+
+	    p.end = icaltime_null_time();	  
+
 	    /* The duration_value rule setes the global 'duration'
                variable, but it also creates a new value in
                icalparser_yy_value. So, free that, then copy
@@ -376,23 +358,24 @@ utcoffset_value:
 
 %%
 
-struct icaltimetype fill_datetime(char* datestr, char* timestr)
+struct icaltimetype fill_datetime(struct icaltimetype *stm, char* datestr, char* timestr, int utc)
 {
-	    struct icaltimetype stm;
-
-	    memset(&stm,0,sizeof(stm));
-
 	    if (datestr != 0){
-		sscanf(datestr,"%4d%2d%2d",&(stm.year), &(stm.month), 
-		       &(stm.day));
+		sscanf(datestr,"%4d%2d%2d",&(stm->year), &(stm->month), 
+		       &(stm->day));
 	    }
 
 	    if (timestr != 0){
-		sscanf(timestr,"%2d%2d%2d", &(stm.hour), &(stm.minute), 
-		       &(stm.second));
+		sscanf(timestr,"%2d%2d%2d", &(stm->hour), &(stm->minute), 
+		       &(stm->second));
 	    }
 
-	    return stm;
+	    stm->is_utc = utc;
+	    if (utc) {
+		stm->zone = icaltimezone_get_utc_timezone();
+	    }
+
+	    return *stm;
 
 }
 
