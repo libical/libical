@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.64 2003-02-17 11:34:13 acampi Exp $
+  $Id: icaltime.c,v 1.65 2003-02-17 14:23:16 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -471,11 +471,10 @@ int icaltime_day_of_week(const struct icaltimetype t){
 }
 
 /** Day of the year that the first day of the week (Sunday) is on.
- * 
- *  @todo Doesn't take into account different week start days. 
  */
-int icaltime_start_doy_of_week(const struct icaltimetype t){
+int icaltime_start_doy_week(const struct icaltimetype t, int fdow){
 	UTinstant jt;
+	int delta;
 
 	memset(&jt,0,sizeof(UTinstant));
 
@@ -489,7 +488,23 @@ int icaltime_start_doy_of_week(const struct icaltimetype t){
 	juldat(&jt);
 	caldat(&jt);
 
-	return jt.day_of_year - jt.weekday;
+	delta = jt.weekday - (fdow + 1);
+	if (delta < 0) delta += 7;
+	return jt.day_of_year - delta;
+}
+
+/** Day of the year that the first day of the week (Sunday) is on.
+ * 
+ *  @deprecated Doesn't take into account different week start days. 
+ */
+int icaltime_start_doy_of_week(const struct icaltimetype t){
+
+#ifndef NO_WARN_DEPRECATED
+    icalerror_warn("icaltime_start_doy_of_week() is DEPRECATED, use\
+	icaltime_start_doy_week() instead");
+#endif
+
+    return icaltime_start_doy_week(t, 1);
 }
 
 /** 
