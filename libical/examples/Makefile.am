@@ -1,7 +1,7 @@
 
 noinst_PROGRAMS = doesnothing
 
-doesnothing_LDADD = ../src/libical/libical.la ../src/libicalss/libicalss.la ../src/libicalvcal/libicalvcal.la
+doesnothing_LDADD = ../src/libical/libical.la ../src/libicalss/libicalss.la ../src/libicalvcal/libicalvcal.la -L@BDB_DIR@/lib -ldb
 
 LIBS = -lpthread
 
