@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.58 2002-11-04 19:02:14 acampi Exp $
+  $Id: icaltime.c,v 1.59 2002-11-05 13:49:16 acampi Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -143,6 +143,10 @@ static time_t make_time(struct tm *tm, int tzm)
 struct icaltimetype 
 icaltime_from_timet(const time_t tm, const int is_date)
 {
+#ifndef NO_WARN_DEPRECATED
+	icalerror_warn("icaltime_from_timet() is DEPRECATED, use icaltime_from_timet_with_zone() instead");
+#endif
+
 	return icaltime_from_timet_with_zone(tm, is_date, 0);
 }
 
