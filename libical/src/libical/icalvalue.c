@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.32 2002-10-09 22:46:15 acampi Exp $
+  $Id: icalvalue.c,v 1.33 2002-10-09 22:49:57 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -322,7 +322,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	    if (error != 0){
 		char temp[TMP_BUF_SIZE];
 		sprintf(temp,"%s Values are not implemented",
-                        icalparameter_kind_to_string(kind)); 
+                        icalvalue_kind_to_string(kind)); 
 		*error = icalproperty_vanew_xlicerror( 
                                    temp, 
                                    icalparameter_new_xlicerrortype( 
