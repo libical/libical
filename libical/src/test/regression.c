@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression.c,v 1.22 2001-04-11 04:45:29 ebusboom Exp $
+  $Id: regression.c,v 1.23 2001-04-11 16:08:37 ebusboom Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -1354,7 +1354,7 @@ void test_recur_parameter_bug(){
 	     p;
 	     p = icalcomponent_get_next_property (icalcomp,
 						  ICAL_XLICERROR_PROPERTY)) {
-	    char *str;
+	    const char *str;
 	    
 	    str = icalproperty_as_ical_string (p);
 	    fprintf (stderr, "error: %s\n", str);
@@ -2526,7 +2526,7 @@ void test_x(){
 	     p;
 	     p = icalcomponent_get_next_property (icalcomp,
 						  ICAL_XLICERROR_PROPERTY)) {
-	    char *str;
+	    const char *str;
 	    
 	    str = icalproperty_as_ical_string (p);
 	    fprintf (stderr, "error: %s\n", str);
@@ -3043,7 +3043,7 @@ void test_trigger()
     struct icaltriggertype tr;
     icalcomponent *c;
     icalproperty *p;
-    char* str;
+    const char* str;
     
     static const char test_icalcomp_str[] =
 "BEGIN:VEVENT\n"
@@ -3173,7 +3173,7 @@ void test_rdate()
 
     struct icaldatetimeperiodtype dtp;
     icalproperty *p;
-    char* str;
+    const char* str;
     struct icalperiodtype period;
 
     period.start = icaltime_from_string("19970101T120000");

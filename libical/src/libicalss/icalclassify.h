@@ -4,7 +4,7 @@
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalclassify.h,v 1.2 2001-04-11 04:45:28 ebusboom Exp $
+ $Id: icalclassify.h,v 1.3 2001-04-11 16:08:37 ebusboom Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -66,7 +66,7 @@ ical_class icalclassify(icalcomponent* c,icalcomponent* match,
 
 icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp);
 
-char* icalclassify_class_to_string(ical_class class);
+char* icalclassify_class_to_string(ical_class c);
 
 
 #endif /* ICALCLASSIFY_H*/

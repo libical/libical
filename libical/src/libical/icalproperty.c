@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.10 2001-04-11 04:45:28 ebusboom Exp $
+  $Id: icalproperty.c,v 1.11 2001-04-11 16:08:36 ebusboom Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -57,7 +57,7 @@ void icalparameter_set_parent(icalparameter* param,
 icalproperty* icalparameter_get_parent(icalparameter* value);
 
 
-void icalproperty_set_x_name(icalproperty* prop, char* name);
+void icalproperty_set_x_name(icalproperty* prop, const char* name);
 
 struct icalproperty_impl 
 {
@@ -742,7 +742,7 @@ const char* icalproperty_get_x_name(icalproperty* prop){
 
 
 /* From Jonathan Yue <jonathan.yue@cp.net>    */
-char* icalproperty_get_name (icalproperty* prop)
+const char* icalproperty_get_name (icalproperty* prop)
 {
 
     const char* property_name = 0;

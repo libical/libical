@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.4 2001-04-11 04:45:28 ebusboom Exp $
+    $Id: icalclassify.c,v 1.5 2001-04-11 16:08:37 ebusboom Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -777,12 +777,12 @@ struct class_map {
     {ICAL_UNKNOWN_CLASS,"Unknown"}
 };
 
-char* icalclassify_class_to_string(ical_class class)
+char* icalclassify_class_to_string(ical_class c)
 {
     int i; 
 
     for (i = 0;class_map[i].class != ICAL_UNKNOWN_CLASS;i++){
-	if (class_map[i].class == class){
+	if (class_map[i].class == c){
 	    return class_map[i].str;
 	}
     }
