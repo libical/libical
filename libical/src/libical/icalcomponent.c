@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.25 2002-05-10 15:54:16 acampi Exp $
+  $Id: icalcomponent.c,v 1.26 2002-05-10 16:28:47 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -1338,7 +1338,7 @@ void icalcomponent_set_dtstart(icalcomponent* comp, struct icaltimetype v)
     
     icalproperty_set_dtstart(prop,v);
 
-    if ((tzid = icaltime_get_tzid(v)) != NULL) {
+    if ((tzid = icaltime_get_tzid(v)) != NULL && !icaltime_is_utc(v)) {
 	icalproperty_add_parameter(prop, icalparameter_new_tzid(tzid));
     }
 }
@@ -1464,7 +1464,7 @@ void icalcomponent_set_dtend(icalcomponent* comp, struct icaltimetype v)
 
     icalproperty_set_dtend(prop,v);
 
-    if ((tzid = icaltime_get_tzid(v)) != NULL) {
+    if ((tzid = icaltime_get_tzid(v)) != NULL && !icaltime_is_utc(v)) {
 	icalproperty_add_parameter(prop, icalparameter_new_tzid(tzid));
     }
 }
