@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalproperty.h,v 1.17 2002-08-08 00:06:24 acampi Exp $
+  $Id: icalproperty.h,v 1.18 2004-03-17 19:06:50 acampi Exp $
   $Locker:  $
 
   
@@ -44,6 +44,8 @@
 #include "icalderivedproperty.h" /* To get icalproperty_kind enumerations */
 
 icalproperty* icalproperty_new(icalproperty_kind kind);
+
+icalproperty* icalproperty_new_x_name(const char *name, const char *value);
 
 icalproperty* icalproperty_new_clone(icalproperty * prop);
 
@@ -85,6 +87,11 @@ icalparameter* icalproperty_get_first_parameter(icalproperty* prop,
 						icalparameter_kind kind);
 icalparameter* icalproperty_get_next_parameter(icalproperty* prop,
 						icalparameter_kind kind);
+
+icalparameter* icalproperty_get_first_x_parameter(icalproperty* prop,
+						const char *name);
+icalparameter* icalproperty_get_next_x_parameter(icalproperty* prop,
+						const char *name);
 /* Access the value of the property */
 void icalproperty_set_value(icalproperty* prop, icalvalue* value);
 void icalproperty_set_value_from_string(icalproperty* prop,const char* value, const char* kind);

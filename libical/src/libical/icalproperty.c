@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.34 2003-01-15 23:10:37 acampi Exp $
+  $Id: icalproperty.c,v 1.35 2004-03-17 19:06:50 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -127,6 +127,23 @@ icalproperty_new (icalproperty_kind kind)
     return (icalproperty*)icalproperty_new_impl(kind);
 }
 
+
+icalproperty *
+icalproperty_new_x_name(const char *name, const char *value) {
+
+	icalproperty   *ret;
+
+	if (name == NULL || value == NULL)
+		return NULL;
+
+	ret = icalproperty_new_x(value);
+	if (ret == NULL)
+		return NULL;
+
+	icalproperty_set_x_name(ret, name);
+
+	return ret;	
+}
 
 icalproperty*
 icalproperty_new_clone(icalproperty* old)
@@ -824,6 +841,58 @@ icalproperty_get_next_parameter (icalproperty* p, icalparameter_kind kind)
 	icalparameter *param = (icalparameter*)pvl_data(p->parameter_iterator);
 	
 	if(icalparameter_isa(param) == kind || kind == ICAL_ANY_PARAMETER){
+	    return param;
+	}
+    }
+    
+    return 0;
+
+}
+
+icalparameter*
+icalproperty_get_first_x_parameter(icalproperty* p, const char *name)
+{
+   icalerror_check_arg_rz( (p!=0),"prop");
+   
+   p->parameter_iterator = pvl_head(p->parameters);
+
+   if (p->parameter_iterator == 0) {
+       return 0;
+   }
+
+   for( p->parameter_iterator = pvl_head(p->parameters);
+	p->parameter_iterator !=0;
+	p->parameter_iterator = pvl_next(p->parameter_iterator)){
+
+       icalparameter *param = (icalparameter*)pvl_data(p->parameter_iterator);
+
+       if(icalparameter_isa(param) == ICAL_X_PARAMETER &&
+	  !strcmp(icalparameter_get_xname(param), name)){
+	   return param;
+       }
+   }
+
+   return 0;
+}
+
+
+icalparameter*
+icalproperty_get_next_x_parameter (icalproperty* p, const char *name)
+{
+    icalerror_check_arg_rz( (p!=0),"prop");
+    
+    if (p->parameter_iterator == 0) {
+	return 0;
+    }
+    
+    for( p->parameter_iterator = pvl_next(p->parameter_iterator);
+	 p->parameter_iterator !=0;
+	 p->parameter_iterator = pvl_next(p->parameter_iterator)){
+	
+	icalparameter *param = (icalparameter*)pvl_data(p->parameter_iterator);
+	
+	if(icalparameter_isa(param) == ICAL_X_PARAMETER &&
+	  !strcmp(icalparameter_get_xname(param), name)){
 	    return param;
 	}
     }
