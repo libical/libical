@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.16 2002-05-24 14:47:47 acampi Exp $
+  $Id: icalproperty.c,v 1.17 2002-06-03 17:08:36 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -48,8 +48,6 @@
 #define snprintf      _snprintf
 #define strcasecmp    stricmp
 #endif
-
-#undef _STRICT_RFC2445
 
 /* Private routines for icalproperty */
 void icalvalue_set_parent(icalvalue* value,
@@ -386,15 +384,7 @@ icalproperty_as_ical_string (icalproperty* prop)
 	
     }
 
-
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, property_name);
-#ifdef _STRICT_RFC3445
-    /* Outlook doesn't like a newline here. */
-    /*icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);*/
-#else
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
-#endif
-
 
     /* Determine what VALUE parameter to include. The VALUE parameters
        are ignored in the normal parameter printing ( the block after
@@ -440,20 +430,8 @@ icalproperty_as_ical_string (icalproperty* prop)
 	}
 
 	if(kind_string!=0){
-#ifdef _STRICT_RFC3445
-	    /* We aren't outputting a newline, so we don't want a space. */
-	    /*icalmemory_append_string(&buf, &buf_ptr, &buf_size, " ;");*/
-	    /*icalmemory_append_string(&buf, &buf_ptr, &buf_size, "VALUE=");*/
 	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, ";VALUE=");
 	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
-	    /* No newline again. */
-	    /*icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);*/
-#else
-	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, " ;");
-	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "VALUE=");
-	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
-	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
-#endif
 	}
 	
 
@@ -478,23 +456,13 @@ icalproperty_as_ical_string (icalproperty* prop)
 	    continue;
 	}
 
-#ifdef _STRICT_RFC3445
 	icalmemory_append_string(&buf, &buf_ptr, &buf_size, ";");
     	icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
-#else
-	icalmemory_append_string(&buf, &buf_ptr, &buf_size, " ;");
-    	icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
-    	icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
-#endif
     }    
 
     /* Append value */
 
-#ifdef _STRICT_RFC3445
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, ":");
-#else
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, " :");
-#endif
 
     value = icalproperty_get_value(prop);
 
@@ -512,20 +480,8 @@ icalproperty_as_ical_string (icalproperty* prop)
     /* Now, copy the buffer to a tmp_buffer, which is safe to give to
        the caller without worring about de-allocating it. */
 
-#ifdef _STRICT_RFC3445
     /* We now use a function to fold the line properly every 75 characters. */
     out_buf = fold_property_line (buf);
-
-    /* This is useful for testing. It outputs the property before and after
-       folding, but only if it was changed. */
-#if 0
-    if (strcmp (buf, out_buf))
-	printf ("Property:\n%sFolded:\n%s", buf, out_buf);
-#endif
-#else
-    out_buf = icalmemory_tmp_buffer(strlen(buf)+1);
-    strcpy(out_buf, buf);
-#endif
 
     icalmemory_free_buffer(buf);
 
