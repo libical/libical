@@ -6,6 +6,7 @@ else
 cxx_inc=
 cxx_libs=
 regression_cxx = 
+CXX=@CC@
 endif
 
 if WITH_BDB4
