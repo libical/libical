@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.57 2003-02-17 15:21:58 acampi Exp $
+  $Id: icalrecur.c,v 1.58 2003-02-17 15:39:58 acampi Exp $
   $Locker:  $
     
 
@@ -983,8 +983,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     /* If this is a monthly interval with by day data, then we need to
        set the last value to the appropriate day of the month */
 
-    if(impl->rule.freq == ICAL_MONTHLY_RECURRENCE &&
-       has_by_data(impl,BY_DAY)) {
+    if(impl->rule.freq == ICAL_MONTHLY_RECURRENCE)
+	if (has_by_data(impl,BY_DAY)) {
 
 	int dow = icalrecurrencetype_day_day_of_week(
 	    impl->by_ptrs[BY_DAY][impl->by_indices[BY_DAY]]);  
@@ -1031,6 +1031,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	    return 0;
 	}
 	
+    } else if (has_by_data(impl,BY_MONTH_DAY)) {
+	impl->last = icaltime_normalize(impl->last);
     }
 
 
@@ -1578,7 +1580,7 @@ static int next_month(icalrecur_iterator* impl)
        */
 
   } else if (has_by_data(impl,BY_MONTH_DAY)) {
-      int day;
+      int day, days_in_month;
 
       assert( BYMDPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
 
@@ -1591,16 +1593,41 @@ static int next_month(icalrecur_iterator* impl)
           increment_month(impl);          
       }
       
+      days_in_month = icaltime_days_in_month(impl->last.month,
+                                                   impl->last.year);
+
       day = BYMDPTR[BYMDIDX];
       
       if (day < 0) {
           day = icaltime_days_in_month(impl->last.month, impl->last.year) + day + 1;
       }
-      
+
+      if ( day > days_in_month){
+          impl->last.day = 1;
+
+          /* Did moving to the next month put us on a valid date? if
+             so, note that the new data is valid, if, not, mark it
+             invalid */
+
+          if(is_day_in_byday(impl,impl->last)){
+              data_valid = 1;
+          } else {
+              data_valid = 0; /* signal that impl->last is invalid */
+          }
+      }
+
       impl->last.day = day;
 
   } else {
+      int days_in_month;
+
       increment_month(impl);
+
+      days_in_month = icaltime_days_in_month(impl->last.month,
+                                                   impl->last.year);
+      if (impl->last.day > days_in_month){
+          data_valid = 0; /* signal that impl->last is invalid */
+      }
   }
 
   return data_valid;
