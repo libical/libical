@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.63 2005-02-15 17:39:00 acampi Exp $
+  $Id: icalrecur.c,v 1.64 2005-08-01 15:54:20 acampi Exp $
   $Locker:  $
     
 
@@ -588,14 +588,15 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 		    icalmemory_append_char(&str,&str_p,&buf_sz,',');
 		}
 	    }	 
-	}   
+	}
     }
 
-    /* If week start is not monday (the default per RFC2445) append WKST */
-    if (recur->week_start != ICAL_MONDAY_WEEKDAY) {
+    /* Monday is the default, so no need to write that out */
+    if ( recur->week_start != ICAL_MONDAY_WEEKDAY ) {
+	const char *daystr = icalrecur_weekday_to_string(
+		icalrecurrencetype_day_day_of_week( recur->week_start ));
 	icalmemory_append_string(&str,&str_p,&buf_sz,";WKST=");
-	icalmemory_append_string(&str,&str_p,&buf_sz,
-			icalrecur_weekday_to_string(recur->week_start));
+	icalmemory_append_string(&str,&str_p,&buf_sz,daystr);
     }
 
     return  str;
