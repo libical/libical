@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.64 2005-08-01 15:54:20 acampi Exp $
+  $Id: icalrecur.c,v 1.65 2005-08-01 15:56:00 acampi Exp $
   $Locker:  $
     
 
@@ -546,7 +546,7 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 	icalmemory_append_string(&str,&str_p,&buf_sz, temp);
     }
 
-    if(recur->interval != 0){
+    if(recur->interval != 1){
 	snprintf(temp,sizeof(temp),"%d",recur->interval);
 	icalmemory_append_string(&str,&str_p,&buf_sz,";INTERVAL=");
 	icalmemory_append_string(&str,&str_p,&buf_sz, temp);
