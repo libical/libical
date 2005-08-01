@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalderivedvalue.c.in,v 1.13 2005-01-24 11:48:01 acampi Exp $
+  $Id: icalderivedvalue.c.in,v 1.14 2005-08-01 15:43:22 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -257,7 +257,7 @@ icalvalue_get_datetimeperiod(const icalvalue* impl)
   icalerror_check_arg( (impl!=0),"value");
   icalerror_check_value_type(value, ICAL_DATETIMEPERIOD_VALUE);
   
-  if(impl->kind == ICAL_DATETIME_VALUE){
+  if( impl->kind == ICAL_DATETIME_VALUE || impl->kind == ICAL_DATE_VALUE ){
       dtp.period = icalperiodtype_null_period();
       dtp.time = impl->data.v_time;
   } else if(impl->kind == ICAL_PERIOD_VALUE) {
