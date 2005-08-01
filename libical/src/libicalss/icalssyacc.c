@@ -39,7 +39,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.c,v 1.7 2002-07-21 17:18:15 lindner Exp $
+  $Id: icalssyacc.c,v 1.8 2005-08-01 15:57:46 acampi Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -261,8 +261,8 @@ static const short yycheck[] =
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.  */
+   Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */
 
 /* As a special exception, when this file is copied by Bison into a
    Bison output file, you may use that output file without restriction.
