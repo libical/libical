@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.48 2005-01-24 12:51:37 acampi Exp $
+  $Id: icalparser.c,v 1.49 2005-08-02 12:42:59 acampi Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -931,7 +931,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		icalproperty_kind prop_kind = icalproperty_isa(prop);
 		icalcomponent* tail = pvl_data(pvl_tail(parser->components));
 
-		snprintf(temp,sizeof(temp),"Cant parse as %s value in %s property. Removing entire property",
+		snprintf(temp,sizeof(temp),"Can't parse as %s value in %s property. Removing entire property",
 			icalvalue_kind_to_string(value_kind),
 			icalproperty_kind_to_string(prop_kind));
 
