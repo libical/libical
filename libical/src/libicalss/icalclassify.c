@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.14 2003-11-17 22:51:53 gray-john Exp $
+    $Id: icalclassify.c,v 1.15 2005-08-02 12:57:43 acampi Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -148,9 +148,11 @@ icalproperty* icalclassify_find_attendee(icalcomponent *c,
 	p != 0;
 	p  = icalcomponent_get_next_property(inner,ICAL_ATTENDEE_PROPERTY))
     {
+	char* this_upn;
 	char* this_attendee
 	    = icalclassify_lowercase(icalproperty_get_attendee(p));
-	char* this_upn = strchr(this_attendee,':');
+	 if ( !this_attendee ) continue;
+	 this_upn = strchr(this_attendee,':');
 
         if(this_upn == 0){
             continue;
@@ -248,15 +250,16 @@ void icalssutil_get_parts(icalcomponent* c,
 	p  = icalcomponent_get_first_property(inner,ICAL_ATTENDEE_PROPERTY);
 
 	if(p!=0){
-
+	    char *attendee = 0;
 	    param = icalproperty_get_first_parameter(p,ICAL_PARTSTAT_PARAMETER);
 	    
 	    if(param != 0){
 		parts->reply_partstat = 
 		    icalparameter_get_partstat(param);
 	    }
-	    
-	    parts->reply_attendee = strdup(icalproperty_get_attendee(p));
+	    attendee = icalproperty_get_attendee(p);
+	    if ( attendee )
+		parts->reply_attendee = strdup( attendee );
 	}
 
     }    
