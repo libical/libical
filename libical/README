@@ -1,6 +1,10 @@
 
 LIBICAL -- An implementation of basic iCAL protocols
 
+Most of the code in here was written by Eric Busboom with help from
+dozens of contributors.  It is currently (and minimally) maintained
+by Art Cancro.
+
 The code and datafiles in this distribution are licensed under the
 Mozilla Public License. See http://www.mozilla.org/NPL/MPL-1.0.html
 for a copy of the license. Alternately, you may use libical under the
@@ -26,7 +30,7 @@ This code is under active development. If you would like to contribute
 to the project, you can contact me, Eric Busboom, at
 eric@softwarestudio.org. The project has a webpage at
 
-	http://softwarestudio.org/libical/index.html 
+	http://www.softwarestudio.org/softwarestudio/app.php/libical
 
 and a mailing list that you can join by sending the following mail:
 
@@ -39,9 +43,9 @@ and a mailing list that you can join by sending the following mail:
 Building the library
 --------------------
 
-This distribution is developed on Red Hat Linux 6.0 and usually
-compiles on SunOS 5.6 and FreeBSD 2.27. I have reports of success of
-previous version on MacOS ( with CodeWarrior ) and on UnixWare, but I
+This distribution is developed on CentOS Linux and usually
+compiles on Solaris and FreeBSD.   There are reports of success of
+previous version on MacOS ( with CodeWarrior ) and on UnixWare, but we
 don't know about any other systems.
 
 The library is configured with automake. IF YOU ARE BUILDING THE
@@ -95,8 +99,3 @@ Using the Library
 
 There is rudimentary, unfinished documentation in the /doc directory,
 and annotated examples in /examples and the test code in src/test.
-
-
-
-Eric Busboom
-eric@softwarestudio.org
