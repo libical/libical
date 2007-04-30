@@ -4,7 +4,7 @@
  CREATOR: eric 30 June 1999
 
 
- $Id: icalmemory.h,v 1.4 2002-06-11 12:15:11 acampi Exp $
+ $Id: icalmemory.h,v 1.5 2007-04-30 13:57:48 artcancro Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify

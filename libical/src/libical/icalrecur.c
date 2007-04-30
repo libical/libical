@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.65 2005-08-01 15:56:00 acampi Exp $
+  $Id: icalrecur.c,v 1.66 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
 
@@ -138,12 +138,6 @@
 #include <stdint.h>
 #endif
 
-#ifndef HAVE_INTPTR_T
-#ifdef WIN32
-typedef long intptr_t;
-#endif
-#endif
-
 #include "icalrecur.h"
 
 #include "icalerror.h"
@@ -154,10 +148,6 @@ typedef long intptr_t;
 #include <string.h> /* for strdup and strchr*/
 #include <assert.h>
 #include <stddef.h> /* For offsetof() macro */
-
-#ifdef WIN32
-#define snprintf _snprintf
-#endif
 
 #include "pvl.h"
 
@@ -310,38 +300,6 @@ void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
 
 }
 
-/*
- * Days in the BYDAY rule are expected by the code to be sorted, and while
- * this may be the common case, the RFC doesn't actually mandate it. This
- * function sorts the days taking into account the first day of week.
- */
-static void
-sort_bydayrules(struct icalrecur_parser *parser)
-{
-    short *array;
-    int week_start, one, two, i, j;
-
-    array = parser->rt.by_day;
-    week_start = parser->rt.week_start;
-
-    for (i=0;
-	 i<ICAL_BY_DAY_SIZE && array[i] != ICAL_RECURRENCE_ARRAY_MAX;
-	 i++) {
-	for (j=0; j<i; j++) {
-	    one = icalrecurrencetype_day_day_of_week(array[j]) - week_start;
-	    if (one < 0) one += 7;
-	    two = icalrecurrencetype_day_day_of_week(array[i]) - week_start;
-	    if (two < 0) two += 7;
-
-	    if (one > two) {
-		short tmp = array[j];
-		array[j] = array[i];
-		array[i] = tmp;
-	    }
-	}
-    }
-}
-
 void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 {
 
@@ -400,7 +358,6 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 
     free(vals_copy);
 
-    sort_bydayrules(parser);
 }
 
 
@@ -439,41 +396,40 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	    return parser.rt;
 	}
 
-	if (strcmp(name,"FREQ") == 0){
+	if (strcasecmp(name,"FREQ") == 0){
 	    parser.rt.freq = icalrecur_string_to_freq(value);
-	} else if (strcmp(name,"COUNT") == 0){
+	} else if (strcasecmp(name,"COUNT") == 0){
 	    parser.rt.count = atoi(value);
-	} else if (strcmp(name,"UNTIL") == 0){
+	} else if (strcasecmp(name,"UNTIL") == 0){
 	    parser.rt.until = icaltime_from_string(value);
-	} else if (strcmp(name,"INTERVAL") == 0){
+	} else if (strcasecmp(name,"INTERVAL") == 0){
 	    parser.rt.interval = (short)atoi(value);
-	} else if (strcmp(name,"WKST") == 0){
+	} else if (strcasecmp(name,"WKST") == 0){
 	    parser.rt.week_start = icalrecur_string_to_weekday(value);
-	    sort_bydayrules(&parser);
-	} else if (strcmp(name,"BYSECOND") == 0){
+	} else if (strcasecmp(name,"BYSECOND") == 0){
 	    icalrecur_add_byrules(&parser,parser.rt.by_second,
 				  ICAL_BY_SECOND_SIZE,value);
-	} else if (strcmp(name,"BYMINUTE") == 0){
+	} else if (strcasecmp(name,"BYMINUTE") == 0){
 	    icalrecur_add_byrules(&parser,parser.rt.by_minute,
 				  ICAL_BY_MINUTE_SIZE,value);
-	} else if (strcmp(name,"BYHOUR") == 0){
+	} else if (strcasecmp(name,"BYHOUR") == 0){
 	    icalrecur_add_byrules(&parser,parser.rt.by_hour,
 				  ICAL_BY_HOUR_SIZE,value);
-	} else if (strcmp(name,"BYDAY") == 0){
+	} else if (strcasecmp(name,"BYDAY") == 0){
 	    icalrecur_add_bydayrules(&parser,value);
-	} else if (strcmp(name,"BYMONTHDAY") == 0){
+	} else if (strcasecmp(name,"BYMONTHDAY") == 0){
 	    icalrecur_add_byrules(&parser,parser.rt.by_month_day,
 				  ICAL_BY_MONTHDAY_SIZE,value);
-	} else if (strcmp(name,"BYYEARDAY") == 0){
+	} else if (strcasecmp(name,"BYYEARDAY") == 0){
 	    icalrecur_add_byrules(&parser,parser.rt.by_year_day,
 				  ICAL_BY_YEARDAY_SIZE,value);
-	} else if (strcmp(name,"BYWEEKNO") == 0){
+	} else if (strcasecmp(name,"BYWEEKNO") == 0){
 	    icalrecur_add_byrules(&parser,parser.rt.by_week_no,
 				  ICAL_BY_WEEKNO_SIZE,value);
-	} else if (strcmp(name,"BYMONTH") == 0){
+	} else if (strcasecmp(name,"BYMONTH") == 0){
 	    icalrecur_add_byrules(&parser,parser.rt.by_month,
 				  ICAL_BY_MONTH_SIZE,value);
-	} else if (strcmp(name,"BYSETPOS") == 0){
+	} else if (strcasecmp(name,"BYSETPOS") == 0){
 	    icalrecur_add_byrules(&parser,parser.rt.by_set_pos,
 				  ICAL_BY_SETPOS_SIZE,value);
 	} else {
@@ -952,14 +908,18 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	     monday. Otherwise, jumping to the next week ( jumping 7
 	     days ahead ) will skip over some occurrences in the
 	     second week. */
+	  
+	  /* This is probably a HACK. There should be some more
+             general way to solve this problem */
 
-	  /* This depends on impl->by_ptrs[BY_DAY] being correctly sorted by
-	   * day. This should probably be abstracted to make such assumption
-	   * more explicit. */
 	  short dow = (short)(impl->by_ptrs[BY_DAY][0]-icaltime_day_of_week(impl->last));
-	  if (dow > impl->rule.week_start-1) dow -= 7;
-	  impl->last.day += dow;
-	  impl->last = icaltime_normalize(impl->last);
+
+	  if(dow < 0) {
+	      /* initial time is after first day of BY_DAY data */
+
+	      impl->last.day += dow;
+	      impl->last = icaltime_normalize(impl->last);
+	  }
       }
       
 
@@ -989,8 +949,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     /* If this is a monthly interval with by day data, then we need to
        set the last value to the appropriate day of the month */
 
-    if(impl->rule.freq == ICAL_MONTHLY_RECURRENCE)
-	if (has_by_data(impl,BY_DAY)) {
+    if(impl->rule.freq == ICAL_MONTHLY_RECURRENCE &&
+       has_by_data(impl,BY_DAY)) {
 
 	int dow = icalrecurrencetype_day_day_of_week(
 	    impl->by_ptrs[BY_DAY][impl->by_indices[BY_DAY]]);  
@@ -1037,8 +997,6 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	    return 0;
 	}
 	
-    } else if (has_by_data(impl,BY_MONTH_DAY)) {
-	impl->last = icaltime_normalize(impl->last);
     }
 
 
@@ -1586,7 +1544,7 @@ static int next_month(icalrecur_iterator* impl)
        */
 
   } else if (has_by_data(impl,BY_MONTH_DAY)) {
-      int day, days_in_month;
+      int day;
 
       assert( BYMDPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
 
@@ -1599,41 +1557,16 @@ static int next_month(icalrecur_iterator* impl)
           increment_month(impl);          
       }
       
-      days_in_month = icaltime_days_in_month(impl->last.month,
-                                                   impl->last.year);
-
       day = BYMDPTR[BYMDIDX];
       
       if (day < 0) {
           day = icaltime_days_in_month(impl->last.month, impl->last.year) + day + 1;
       }
-
-      if ( day > days_in_month){
-          impl->last.day = 1;
-
-          /* Did moving to the next month put us on a valid date? if
-             so, note that the new data is valid, if, not, mark it
-             invalid */
-
-          if(is_day_in_byday(impl,impl->last)){
-              data_valid = 1;
-          } else {
-              data_valid = 0; /* signal that impl->last is invalid */
-          }
-      }
-
+      
       impl->last.day = day;
 
   } else {
-      int days_in_month;
-
       increment_month(impl);
-
-      days_in_month = icaltime_days_in_month(impl->last.month,
-                                                   impl->last.year);
-      if (impl->last.day > days_in_month){
-          data_valid = 0; /* signal that impl->last is invalid */
-      }
   }
 
   return data_valid;
@@ -1658,6 +1591,7 @@ static int next_weekday_by_week(icalrecur_iterator* impl)
   /* If we get here, we need to step to tne next day */
 
   for (;;) {
+      struct icaltimetype tt = icaltime_null_time();
       BYDAYIDX++; /* Look at next elem in BYDAY array */
       
       /* Are we at the end of the BYDAY array? */
@@ -1670,10 +1604,13 @@ static int next_weekday_by_week(icalrecur_iterator* impl)
 	 that to get the next day */
       /* ignore position of dow ("4FR"), only use dow ("FR")*/
       dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[BYDAYIDX]); 
-      dow -= impl->rule.week_start; /* Set Sunday to be 0 */
-      if (dow < 0) dow += 7;
+      tt.year = impl->last.year;
+      tt.day = impl->last.day;
+      tt.month = impl->last.month;
 
-      start_of_week = icaltime_start_doy_week(impl->last, impl->rule.week_start);
+      start_of_week = icaltime_start_doy_of_week(tt);
+      
+      dow--; /* Set Sunday to be 0 */
       
       if(dow+start_of_week <1){
           /* The selected date is in the previous year. */
@@ -1785,7 +1722,7 @@ static pvl_list expand_by_day(icalrecur_iterator* impl, int year)
 	    tmp_start_doy = ((dow + 7 - start_dow) % 7) + 1;
 
             for (doy = tmp_start_doy; doy <= end_year_day; doy += 7)
-                    pvl_push(days_list,(void*)(int)doy);
+                    pvl_push(days_list,(void*)(ptrdiff_t)doy);
             
         } else if ( pos > 0) {
             int first;
@@ -2375,7 +2312,7 @@ icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str)
     int i;
 
     for (i=0; wd_map[i].wd  != ICAL_NO_WEEKDAY; i++) {
-	if ( strcmp(str,wd_map[i].str) == 0){
+	if ( strcasecmp(str,wd_map[i].str) == 0){
 	    return wd_map[i].wd;
 	}
     }
@@ -2416,7 +2353,7 @@ icalrecurrencetype_frequency icalrecur_string_to_freq(const char* str)
     int i;
 
     for (i=0; freq_map[i].kind != ICAL_NO_RECURRENCE ; i++) {
-	if ( strcmp(str,freq_map[i].str) == 0){
+	if ( strcasecmp(str,freq_map[i].str) == 0){
 	    return freq_map[i].kind;
 	}
     }

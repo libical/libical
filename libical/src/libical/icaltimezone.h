@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.h,v 1.10 2002-11-03 23:51:55 acampi Exp $
+ $Id: icaltimezone.h,v 1.11 2007-04-30 13:57:48 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin

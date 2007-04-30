@@ -3,7 +3,7 @@
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
   
-  $Id: icalparser.h,v 1.7 2002-06-28 08:55:23 acampi Exp $
+  $Id: icalparser.h,v 1.8 2007-04-30 13:57:48 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

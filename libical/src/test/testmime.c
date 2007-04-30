@@ -3,7 +3,7 @@
   FILE: 
   CREATOR: eric 25 June 2000
   
-  $Id: testmime.c,v 1.3 2002-06-28 10:45:12 acampi Exp $
+  $Id: testmime.c,v 1.4 2007-04-30 13:57:49 artcancro Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License

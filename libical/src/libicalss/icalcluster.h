@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalcluster.h,v 1.2 2002-06-27 02:30:58 acampi Exp $
+ $Id: icalcluster.h,v 1.3 2007-04-30 13:57:48 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

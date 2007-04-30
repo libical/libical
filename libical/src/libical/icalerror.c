@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.17 2002-10-09 20:48:08 acampi Exp $
+  $Id: icalerror.c,v 1.18 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
 

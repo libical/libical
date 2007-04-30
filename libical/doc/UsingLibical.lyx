@@ -1001,12 +1001,6 @@ n");
    }
 \layout LyX-Code
 
-   if (line != 0)
-\layout LyX-Code
-
-     icalmemory_free_buffer(line);
-\layout LyX-Code
-
   } while ( line != 0);
 \layout LyX-Code
 

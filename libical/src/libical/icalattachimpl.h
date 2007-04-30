@@ -3,7 +3,7 @@
   FILE: icalattachimpl.h
   CREATOR: acampi 28 May 02
   
-  $Id: icalattachimpl.h,v 1.1 2002-05-28 14:08:00 acampi Exp $
+  $Id: icalattachimpl.h,v 1.2 2007-04-30 13:57:47 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Andrea Campi

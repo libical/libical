@@ -3,7 +3,7 @@
   FILE: icalparameterimpl.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameterimpl.h,v 1.2 2001-03-26 19:17:28 ebusboom Exp $
+  $Id: icalparameterimpl.h,v 1.3 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
 

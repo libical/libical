@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameter.c,v 1.12 2004-03-17 19:04:53 acampi Exp $
+  $Id: icalparameter.c,v 1.13 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
 
@@ -75,23 +75,6 @@ icalparameter_new (icalparameter_kind kind)
 
     return (icalparameter*) v;
 
-}
-
-icalparameter *
-icalparameter_new_x_name(const char *name, const char *value) {
-
-	icalparameter  *ret;
-
-	if (name == NULL || value == NULL)
-		return NULL;
-
-	ret = icalparameter_new_x(value);
-	if (ret == NULL)
-		return NULL;
-
-	icalparameter_set_xname(ret, name);
-
-	return ret;	
 }
 
 void
@@ -288,7 +271,9 @@ icalparameter_as_ical_string (icalparameter* param)
     /* Now, copy the buffer to a tmp_buffer, which is safe to give to
        the caller without worring about de-allocating it. */
     
-    out_buf = icalmemory_tmp_copy(buf);
+    out_buf = icalmemory_tmp_buffer(strlen(buf)+1);
+    strcpy(out_buf, buf);
+
     icalmemory_free_buffer(buf);
 
     return out_buf;

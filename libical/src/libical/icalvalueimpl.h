@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalueimpl.h,v 1.5 2002-05-28 14:08:00 acampi Exp $
+  $Id: icalvalueimpl.h,v 1.6 2007-04-30 13:57:48 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

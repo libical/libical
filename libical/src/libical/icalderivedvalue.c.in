@@ -3,7 +3,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalderivedvalue.c.in,v 1.14 2005-08-01 15:43:22 acampi Exp $
+  $Id: icalderivedvalue.c.in,v 1.15 2007-04-30 13:57:48 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -39,8 +39,13 @@
 #include "icalvalueimpl.h"
 
 #include <stdlib.h> /* for malloc */
+#include <stdio.h> /* for snprintf */
 #include <string.h> /* For memset, others */
+#include <stddef.h> /* For offsetof() macro */
 #include <errno.h>
+#include <time.h> /* for mktime */
+#include <stdlib.h> /* for atoi and atof */
+#include <limits.h> /* for SHRT_MAX */         
 
 struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind);
 
@@ -83,7 +88,7 @@ icalvalue_kind icalvalue_string_to_kind(const char* str)
     int i;
 
     for (i=0; value_map[i].kind != ICAL_NO_VALUE; i++) {
-	if (strcmp(value_map[i].name,str) == 0) {
+	if (strcasecmp(value_map[i].name,str) == 0) {
 	    return value_map[i].kind;
 	}
     }

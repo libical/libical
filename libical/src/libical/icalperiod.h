@@ -4,7 +4,7 @@
  CREATOR: eric 26 Jan 2001
 
 
- $Id: icalperiod.h,v 1.4 2002-06-28 11:11:24 acampi Exp $
+ $Id: icalperiod.h,v 1.5 2007-04-30 13:57:48 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

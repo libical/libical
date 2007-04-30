@@ -4,7 +4,7 @@
  CREATOR: eric 07 Nov 2000
 
 
- $Id: icalmessage.h,v 1.1.1.1 2001-01-02 07:33:05 ebusboom Exp $
+ $Id: icalmessage.h,v 1.2 2007-04-30 13:57:48 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

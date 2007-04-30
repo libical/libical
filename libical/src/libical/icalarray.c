@@ -3,7 +3,7 @@
   FILE: icalarray.c
   CREATOR: Damon Chaplin 07 March 2001
   
-  $Id: icalarray.c,v 1.5 2002-06-28 09:30:15 acampi Exp $
+  $Id: icalarray.c,v 1.6 2007-04-30 13:57:47 artcancro Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2001, Ximian, Inc.

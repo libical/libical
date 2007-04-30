@@ -3,7 +3,7 @@
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
   
-  $Id: sspm.h,v 1.2 2001-01-23 07:03:17 ebusboom Exp $
+  $Id: sspm.h,v 1.3 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License

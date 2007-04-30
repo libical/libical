@@ -4,7 +4,7 @@
  CREATOR: eric 09 Aug 2000
 
 
- $Id: icalgaugeimpl.h,v 1.6 2002-07-21 17:18:15 lindner Exp $
+ $Id: icalgaugeimpl.h,v 1.7 2007-04-30 13:57:48 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

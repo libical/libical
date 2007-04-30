@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression-storage.c,v 1.3 2002-08-07 17:19:55 acampi Exp $
+  $Id: regression-storage.c,v 1.4 2007-04-30 13:57:49 artcancro Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 

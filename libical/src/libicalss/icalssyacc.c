@@ -39,7 +39,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.c,v 1.8 2005-08-01 15:57:46 acampi Exp $
+  $Id: icalssyacc.c,v 1.9 2007-04-30 13:57:49 artcancro Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

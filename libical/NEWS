@@ -1,3 +1,15 @@
+Version 0.27, 2007-Feb-27
+-------------------------
+Merges some patches from KDE and Citadel.
+Updates timezone data to tzdata 2007c.
+
+
+Version 0.26, 2005-Sep-14
+-------------------------
+merges the libical forks from KDE, Evolution and SourceForge. Updates
+timezone data to tzdata 2005j.
+
+
 Version 0.24, XX Xxx 2002 ( cvs tag libical-0-24 )
 --------------------------------------------------
 

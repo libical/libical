@@ -13,7 +13,6 @@ sub read_values_file {
  
     s/#.*$//g;
     s/\"//g;
-    s/\r//g;
    
     next if ! $_;
 
@@ -70,7 +69,6 @@ sub read_properties_file {
  
     s/#.*$//g;
     s/\"//g;
-    s/\r//g;
    
     next if ! $_;
 
@@ -102,7 +100,6 @@ sub read_parameters_file {
  
     s/#.*$//g;
     s/\"//g;
-    s/\r//g;
    
     next if ! $_;
 

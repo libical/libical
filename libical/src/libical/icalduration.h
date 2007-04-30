@@ -4,7 +4,7 @@
  CREATOR: eric 26 Jan 2001
 
 
- $Id: icalduration.h,v 1.3 2002-09-26 22:04:56 lindner Exp $
+ $Id: icalduration.h,v 1.4 2007-04-30 13:57:48 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

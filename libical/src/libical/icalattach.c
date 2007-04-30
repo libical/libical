@@ -3,7 +3,7 @@
   FILE: icalattach.c
   CREATOR: acampi 28 May 02
   
-  $Id: icalattach.c,v 1.2 2002-10-09 19:54:59 acampi Exp $
+  $Id: icalattach.c,v 1.3 2007-04-30 13:57:47 artcancro Exp $
   $Locker:  $
     
 

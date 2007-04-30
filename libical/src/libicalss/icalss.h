@@ -2,7 +2,7 @@
 extern "C" {
 #endif
 /*
- $Id: icalss.h,v 1.25 2002-12-05 13:45:20 acampi Exp $
+ $Id: icalss.h,v 1.26 2007-04-30 13:57:48 artcancro Exp $
 */
 /* -*- Mode: C -*- */
 /*======================================================================
@@ -337,6 +337,8 @@ icalcomponent* icalcluster_get_next_component(icalcluster* cluster);
 #define mode_t int
 #endif
 
+extern int icalfileset_safe_saves;
+
 typedef struct icalfileset_impl icalfileset;
 
 icalset* icalfileset_new(const char* path);
@@ -416,6 +418,7 @@ icalcomponent* icalfileset_get_component(icalset* cluster);
 typedef struct icalfileset_options {
   int          flags;		/**< flags for open() O_RDONLY, etc  */
   mode_t       mode;		/**< file mode */
+  int          safe_saves;	/**< to lock or not */
   icalcluster  *cluster;	/**< use this cluster to initialize data */
 } icalfileset_options;
 

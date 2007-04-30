@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.34 2002-11-04 00:01:21 acampi Exp $
+ $Id: icaltimezone.c,v 1.35 2007-04-30 13:57:48 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -305,7 +305,7 @@ icaltimezone_get_location_from_vtimezone (icalcomponent *component)
     prop = icalcomponent_get_first_property (component, ICAL_X_PROPERTY);
     while (prop) {
 	name = icalproperty_get_x_name (prop);
-	if (name && !strcmp (name, "X-LIC-LOCATION")) {
+	if (name && !strcasecmp (name, "X-LIC-LOCATION")) {
 	    location = icalproperty_get_x (prop);
 	    if (location)
 		return strdup (location);
@@ -1644,9 +1644,9 @@ format_utc_offset			(int		 utc_offset,
   }
 
   if (seconds == 0)
-    sprintf (buffer, "%s%02i%02i", sign, hours, minutes);
+    snprintf (buffer, sizeof(buffer), "%s%02i%02i", sign, hours, minutes);
   else
-    sprintf (buffer, "%s%02i%02i%02i", sign, hours, minutes, seconds);
+    snprintf (buffer, sizeof(buffer), "%s%02i%02i%02i", sign, hours, minutes, seconds);
 }
 
 static char* get_zone_directory(void)

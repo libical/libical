@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.39 2004-10-27 11:57:26 acampi Exp $
+  $Id: icalproperty.c,v 1.40 2007-04-30 13:57:48 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -128,23 +128,6 @@ icalproperty_new (icalproperty_kind kind)
 }
 
 
-icalproperty *
-icalproperty_new_x_name(const char *name, const char *value) {
-
-	icalproperty   *ret;
-
-	if (name == NULL || value == NULL)
-		return NULL;
-
-	ret = icalproperty_new_x(value);
-	if (ret == NULL)
-		return NULL;
-
-	icalproperty_set_x_name(ret, name);
-
-	return ret;	
-}
-
 icalproperty*
 icalproperty_new_clone(icalproperty* old)
 {
@@ -196,22 +179,14 @@ icalproperty* icalproperty_new_from_string(const char* str)
     icalcomponent *comp;
     int errors  = 0;
 
-#ifdef ICAL_UNIX_NEWLINE
-    char newline[] = "\n";
-#else
-    char newline[] = "\r\n";
-#endif
-
     icalerror_check_arg_rz( (str!=0),"str");
 
     /* Is this a HACK or a crafty reuse of code? */
 
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "BEGIN:VCALENDAR");
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "BEGIN:VCALENDAR\n");
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:VCALENDAR");
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "\n");    
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:VCALENDAR\n");
 
     comp = icalparser_parse_string(buf);
 
@@ -345,12 +320,6 @@ fold_property_line (char *text)
     int len, chars_left, first_line;
     char ch;
 
-#ifdef ICAL_UNIX_NEWLINE
-    char newline[] = "\n";
-#else
-    char newline[] = "\r\n";
-#endif
-
     /* Start with a buffer twice the size of our property line, so we almost
        certainly won't overflow it. */
     len = strlen (text);
@@ -372,8 +341,7 @@ fold_property_line (char *text)
 	/* If this isn't the first line, we need to output a newline and space
 	   first. */
 	if (!first_line) {
-	    icalmemory_append_string (&buf, &buf_ptr, &buf_size, newline);
-	    icalmemory_append_string (&buf, &buf_ptr, &buf_size, " ");
+	    icalmemory_append_string (&buf, &buf_ptr, &buf_size, "\r\n ");
 	}
 	first_line = 0;
 
@@ -465,12 +433,7 @@ icalproperty_as_ical_string (icalproperty* prop)
     char *out_buf;
     const char* kind_string = 0;
 
-#ifdef ICAL_UNIX_NEWLINE
-    char newline[] = "\n";
-#else
     char newline[] = "\r\n";
-#endif
-
 
     
     icalerror_check_arg_rz( (prop!=0),"prop");
@@ -762,7 +725,6 @@ icalproperty_remove_parameter_by_name(icalproperty* prop, const char *name)
 
         if (0 == strcmp(kind_string, name)) {
             pvl_remove (prop->parameters, p);
-            icalparameter_free(param);
             break;
         }
     }                       
@@ -862,58 +824,6 @@ icalproperty_get_next_parameter (icalproperty* p, icalparameter_kind kind)
 	icalparameter *param = (icalparameter*)pvl_data(p->parameter_iterator);
 	
 	if(icalparameter_isa(param) == kind || kind == ICAL_ANY_PARAMETER){
-	    return param;
-	}
-    }
-    
-    return 0;
-
-}
-
-icalparameter*
-icalproperty_get_first_x_parameter(icalproperty* p, const char *name)
-{
-   icalerror_check_arg_rz( (p!=0),"prop");
-   
-   p->parameter_iterator = pvl_head(p->parameters);
-
-   if (p->parameter_iterator == 0) {
-       return 0;
-   }
-
-   for( p->parameter_iterator = pvl_head(p->parameters);
-	p->parameter_iterator !=0;
-	p->parameter_iterator = pvl_next(p->parameter_iterator)){
-
-       icalparameter *param = (icalparameter*)pvl_data(p->parameter_iterator);
-
-       if(icalparameter_isa(param) == ICAL_X_PARAMETER &&
-	  !strcmp(icalparameter_get_xname(param), name)){
-	   return param;
-       }
-   }
-
-   return 0;
-}
-
-
-icalparameter*
-icalproperty_get_next_x_parameter (icalproperty* p, const char *name)
-{
-    icalerror_check_arg_rz( (p!=0),"prop");
-    
-    if (p->parameter_iterator == 0) {
-	return 0;
-    }
-    
-    for( p->parameter_iterator = pvl_next(p->parameter_iterator);
-	 p->parameter_iterator !=0;
-	 p->parameter_iterator = pvl_next(p->parameter_iterator)){
-	
-	icalparameter *param = (icalparameter*)pvl_data(p->parameter_iterator);
-	
-	if(icalparameter_isa(param) == ICAL_X_PARAMETER &&
-	  !strcmp(icalparameter_get_xname(param), name)){
 	    return param;
 	}
     }
@@ -1026,6 +936,14 @@ const char* icalproperty_get_x_name(icalproperty* prop){
     return prop->x_name;
 }
 
+
+const char* icalproperty_get_name(const icalproperty* prop)
+{
+#ifndef NO_WARN_DEPRECATED
+	icalerror_warn("icalproperty_get_name() is DEPRECATED, please use icalproperty_get_property_name() instead.");
+#endif
+	return icalproperty_get_property_name(prop);
+}
 
 const char* icalproperty_get_property_name(const icalproperty* prop)
 {

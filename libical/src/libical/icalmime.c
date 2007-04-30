@@ -4,7 +4,7 @@
  CREATOR: eric 26 July 2000
 
 
- $Id: icalmime.c,v 1.8 2005-01-24 12:49:11 acampi Exp $
+ $Id: icalmime.c,v 1.9 2007-04-30 13:57:48 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -209,12 +209,8 @@ icalcomponent* icalmime_parse(char* (*get_string)(char *s, size_t size,
 	}
 
 	if(parts[i].header.error!=SSPM_NO_ERROR){
-	    char *str = "Unknown error";
+	    const char *str="Unknown error";
 	    char temp[256];
-
-	    if(parts[i].header.error==SSPM_MALFORMED_HEADER_ERROR){
-		str = "Malformed header, possibly due to input not in MIME format";
-	    }
 
 	    if(parts[i].header.error==SSPM_UNEXPECTED_BOUNDARY_ERROR){
 		str = "Got an unexpected boundary, possibly due to a MIME header for a MULTIPART part that is missing the Content-Type line";
@@ -235,7 +231,7 @@ line between the header and the previous boundary\?";
 	    }
 
 	    if(parts[i].header.error_text != 0){
-		snprintf(temp,sizeof(temp),
+		snprintf(temp,256,
 			 "%s: %s",str,parts[i].header.error_text);
 	    } else {
 		strcpy(temp,str);

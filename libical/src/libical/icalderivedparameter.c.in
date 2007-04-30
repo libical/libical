@@ -3,7 +3,7 @@
   FILE: icalderivedparameters.{c,h}
   CREATOR: eric 09 May 1999
   
-  $Id: icalderivedparameter.c.in,v 1.7 2004-05-10 22:05:23 acampi Exp $
+  $Id: icalderivedparameter.c.in,v 1.8 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
 
@@ -99,7 +99,7 @@ icalparameter_kind icalparameter_string_to_kind(const char* string)
 
     for (i=0; parameter_map[i].kind  != ICAL_NO_PARAMETER; i++) {
 
-	if (strcmp(parameter_map[i].name, string) == 0) {
+	if (strcasecmp(parameter_map[i].name, string) == 0) {
 	    return parameter_map[i].kind;
 	}
     }
@@ -150,7 +150,7 @@ int icalparameter_string_to_enum(const char* str)
     icalerror_check_arg_rz(str != 0,"str");
 
     for (i=0; icalparameter_map[i].kind != ICAL_NO_PARAMETER; i++){
-        if(strcmp(str,icalparameter_map[i].str) == 0) {
+        if(strcasecmp(str,icalparameter_map[i].str) == 0) {
             return icalparameter_map[i].enumeration;
         }
     }
@@ -174,7 +174,7 @@ icalparameter* icalparameter_new_from_value_string(icalparameter_kind kind,const
     for (i=0; icalparameter_map[i].kind != ICAL_NO_PARAMETER; i++){
         if(kind == icalparameter_map[i].kind) {
             found_kind = 1;
-            if(strcmp(val,icalparameter_map[i].str) == 0) {
+            if(strcasecmp(val,icalparameter_map[i].str) == 0) {
 
                 param->data = (int)icalparameter_map[i].enumeration;
                 return param;

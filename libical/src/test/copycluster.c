@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.15 2002-07-16 10:04:08 acampi Exp $
+  $Id: copycluster.c,v 1.16 2007-04-30 13:57:49 artcancro Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom

@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 07 March 2001
 
 
- $Id: icalarray.h,v 1.3 2002-10-09 19:50:46 acampi Exp $
+ $Id: icalarray.h,v 1.4 2007-04-30 13:57:47 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Ximian, Inc.

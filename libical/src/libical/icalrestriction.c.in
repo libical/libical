@@ -66,8 +66,8 @@ icalrestriction_property_record null_prop_record =   {ICAL_METHOD_NONE,ICAL_NO_C
 icalrestriction_component_record null_comp_record =   {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_COMPONENT,ICAL_RESTRICTION_UNKNOWN,0};
 
 
-/** The each row gives the result of comparing a restriction against a
-   count. The columns in each row represent 0,1,2+. '-1' indicates
+/** Each row gives the result of comparing a restriction against a count.
+   The columns in each row represent 0,1,2+. '-1' indicates
    'invalid, 'don't care' or 'needs more analysis' So, for
    ICAL_RESTRICTION_ONE, if there is 1 of a property with that
    restriction, it passes, but if there are 0 or 2+, it fails. */
@@ -224,7 +224,7 @@ char* icalrestriction_must_have_duration(icalrestriction_property_record *rec,
     
     if( !icalcomponent_get_first_property(comp,ICAL_DURATION_PROPERTY)){
 
-	return "Failed iTIP restrictions. This component must have a DURATION property";
+	return "Failed iTIP restrictions for DURATION property. This component must have a DURATION property";
 
     }
 
@@ -235,7 +235,7 @@ char* icalrestriction_must_have_repeat(icalrestriction_property_record *rec,
 				       icalproperty* prop){
     if( !icalcomponent_get_first_property(comp,ICAL_REPEAT_PROPERTY)){
 
-	return "Failed iTIP restrictions. This component must have a REPEAT property";
+	return "Failed iTIP restrictions for REPEAT property. This component must have a REPEAT property";
 
     }
 
@@ -252,9 +252,9 @@ char* icalrestriction_no_dtend(icalrestriction_property_record *rec,
 			       icalcomponent* comp, 
 			       icalproperty* prop){
 
-    if( icalcomponent_get_first_property(comp,ICAL_DTEND_PROPERTY)){
+    if( !icalcomponent_get_first_property(comp,ICAL_DTEND_PROPERTY)){
 
-	return "Failed iTIP restrictions. The component must not have both DURATION and DTEND";
+	return "Failed iTIP restrictions for DTEND property. The component must not have both DURATION and DTEND";
 
     }
 

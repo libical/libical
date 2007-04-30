@@ -130,7 +130,7 @@ if($opt_c){
   # print out the value to string map
 
   my $count = scalar(keys %h) + 1;
-  print "static struct icalvalue_kind_map value_map[$count]={\n"; 
+  print "struct icalvalue_kind_map value_map[$count]={\n"; 
 
   foreach $value  (keys %h) {
 
@@ -206,8 +206,8 @@ void icalvalue_set_${lc}(icalvalue* value, $type v) {\
     impl->data.v_$union_data = $assign \n\
     icalvalue_reset_kind(impl);\n}\n";
 
-    print "$type icalvalue_get_${lc}(const icalvalue* value) {\n";
-    if( $type =~ /^(int|const char\s?[*])$/) {
+    print "$type\ icalvalue_get_${lc}(const icalvalue* value)\ {\n";
+    if ($type =~ m/(\*|int|float)$/) {
       print "    icalerror_check_arg_rz( (value!=0),\"value\");\n";
     } else {
       print "    icalerror_check_arg( (value!=0),\"value\");\n";

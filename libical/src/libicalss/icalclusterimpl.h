@@ -3,7 +3,7 @@
   FILE: icalfilesetimpl.h
   CREATOR: eric 23 December 1999
   
-  $Id: icalclusterimpl.h,v 1.1 2002-05-29 12:38:31 acampi Exp $
+  $Id: icalclusterimpl.h,v 1.2 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

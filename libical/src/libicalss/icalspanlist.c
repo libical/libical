@@ -3,7 +3,7 @@
     FILE: icalspanlist.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalspanlist.c,v 1.13 2002-10-30 23:41:47 acampi Exp $
+    $Id: icalspanlist.c,v 1.14 2007-04-30 13:57:48 artcancro Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

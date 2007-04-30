@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.35 2002-11-05 14:59:21 acampi Exp $
+#  $Id: Makefile.am,v 1.36 2007-04-30 13:57:47 artcancro Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -26,13 +26,8 @@
 DESIGNDATA = $(top_srcdir)/design-data
 ICALSCRIPTS = $(top_srcdir)/scripts
 
-if WITH_CXX
-cxx_lib=libical_cxx.la
-cxx_headers=vcomponent.h icalparameter_cxx.h icalproperty_cxx.h icalvalue_cxx.h icptrholder.h
-else
 cxx_lib=
 cxx_headers=
-endif
 
 lib_LTLIBRARIES = libical.la $(cxx_lib)
 
@@ -52,7 +47,7 @@ INCLUDES =			\
 	-I$(top_builddir)/src	\
 	-I$(srcdir)
 
-libical_la_LDFLAGS = -version-info 0:0:0
+libical_la_LDFLAGS = -version-info 27:6:27
 
 
 libical_la_SOURCES =		\
@@ -105,23 +100,9 @@ libical_la_SOURCES =		\
 	caldate.c \
 	astime.h 
 
-if WITH_CXX
-libical_cxx_la_SOURCES =	\
-	$(libical_la_SOURCES)	\
-	vcomponent.h		\
-	vcomponent.cpp		\
-	icalproperty_cxx.h	\
-	icalproperty_cxx.cpp	\
-	icalparameter_cxx.h	\
-	icalparameter_cxx.cpp	\
-	icalvalue_cxx.h		\
-	icalvalue_cxx.cpp       \
-	icptrholder.h
-endif
-
 libicalincludedir = $(includedir)
 
-libicalinclude_HEADERS = ical.h icalmemory.h icalerror.h $(cxx_headers)
+libicalinclude_HEADERS = ical.h icalmemory.h icalerror.h
 
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering. It
 # is required to make the combined header ical.h properly

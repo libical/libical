@@ -2,7 +2,7 @@
   FILE: icalcalendar.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalcalendar.c,v 1.6 2002-08-07 17:09:06 acampi Exp $
+  $Id: icalcalendar.c,v 1.7 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

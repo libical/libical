@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.22 2005-01-24 14:00:39 acampi Exp $
+    $Id: icaldirset.c,v 1.23 2007-04-30 13:57:48 artcancro Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -34,7 +34,7 @@
 
   icaldirset groups components in to clusters based on their DTSTAMP
   time -- all components that start in the same month are grouped
-  together in a single file. All files in a store are kept in a single
+  together in a single file. All files in a sotre are kept in a single
   directory. 
 
   The primary interfaces are icaldirset__get_first_component and

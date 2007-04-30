@@ -8,7 +8,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.y,v 1.7 2002-07-21 17:18:15 lindner Exp $
+  $Id: icalssyacc.y,v 1.8 2007-04-30 13:57:49 artcancro Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

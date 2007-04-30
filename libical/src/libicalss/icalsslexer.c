@@ -556,7 +556,7 @@ char *yytext_ptr;
   
   DESCRIPTION:
   
-  $Id: icalsslexer.c,v 1.10 2002-07-21 17:18:15 lindner Exp $
+  $Id: icalsslexer.c,v 1.11 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

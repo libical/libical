@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.40 2005-01-24 13:11:31 acampi Exp $
+  $Id: icalvalue.c,v 1.41 2007-04-30 13:57:48 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -291,7 +291,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 {
 
     struct icalvalue_impl *value = 0;
-    
+
     icalerror_check_arg_rz(str!=0,"str");
 
     if (error != 0){
@@ -354,16 +354,6 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
         value = icalvalue_new_enum(kind, (int)ICAL_CLASS_X,str);
         break;
 
-    case ICAL_CMD_VALUE:
-        value = icalvalue_new_enum(kind, ICAL_CMD_X,str);
-        break;
-    case ICAL_QUERYLEVEL_VALUE:
-        value = icalvalue_new_enum(kind, ICAL_QUERYLEVEL_X,str);
-        break;
-    case ICAL_CARLEVEL_VALUE:
-        value = icalvalue_new_enum(kind, ICAL_CARLEVEL_X,str);
-        break;
-
 
     case ICAL_INTEGER_VALUE:
 	    value = icalvalue_new_integer(atoi(str));
@@ -416,8 +406,10 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	    /* HACK */
             
 	    if (error != 0){
+		char temp[TMP_BUF_SIZE];
+		strcpy(temp,"GEO Values are not implemented");
 		*error = icalproperty_vanew_xlicerror( 
-		    "GEO Values are not implemented",
+		    temp, 
 		    icalparameter_new_xlicerrortype( 
 			ICAL_XLICERRORTYPE_VALUEPARSEERROR), 
 		    0); 
@@ -644,8 +636,8 @@ static char* icalvalue_binary_as_ical_string(const icalvalue* value) {
 
     data = icalvalue_get_binary(value);
 
-    str = icalmemory_tmp_copy(
-            "icalvalue_binary_as_ical_string is not implemented yet");
+    str = (char*)icalmemory_tmp_buffer(60);
+    strcpy(str,"icalvalue_binary_as_ical_string is not implemented yet");
 
     return str;
 }
@@ -687,9 +679,9 @@ static char* icalvalue_utcoffset_as_ical_string(const icalvalue* value)
     s = (data - (h*3600) - (m*60));
 
     if (s > 0)
-	snprintf(str,9,"%c%02d%02d%02d",sign,abs(h),abs(m),abs(s));
+    snprintf(str,9,"%c%02d%02d%02d",sign,abs(h),abs(m),abs(s));
     else
-	snprintf(str,9,"%c%02d%02d",sign,abs(h),abs(m));
+    snprintf(str,9,"%c%02d%02d",sign,abs(h),abs(m));
 
     return str;
 }
@@ -829,9 +821,9 @@ void print_time_to_string(char* str, const struct icaltimetype *data)
     char temp[20];
 
     if (icaltime_is_utc(*data)){
-	snprintf(temp,sizeof(temp),"%02d%02d%02dZ",data->hour,data->minute,data->second);
+    snprintf(temp,sizeof(temp),"%02d%02d%02dZ",data->hour,data->minute,data->second);
     } else {
-	snprintf(temp,sizeof(temp),"%02d%02d%02d",data->hour,data->minute,data->second);
+    snprintf(temp,sizeof(temp),"%02d%02d%02d",data->hour,data->minute,data->second);
     }   
 
     strcat(str,temp);
@@ -865,8 +857,10 @@ static char* icalvalue_date_as_ical_string(const icalvalue* value) {
 void print_datetime_to_string(char* str,  const struct icaltimetype *data)
 {
     print_date_to_string(str,data);
-    strcat(str,"T");
-    print_time_to_string(str,data);
+    if ( !data->is_date ) {
+        strcat(str,"T");
+        print_time_to_string(str,data);
+    }
 }
 
 static const char* icalvalue_datetime_as_ical_string(const icalvalue* value) {
@@ -896,8 +890,6 @@ static const char* icalvalue_datetime_as_ical_string(const icalvalue* value) {
 
 }
 
-#define MAX_FLOAT_DIGITS 40
-    
 static char* icalvalue_float_as_ical_string(const icalvalue* value) {
 
     float data;
@@ -905,15 +897,13 @@ static char* icalvalue_float_as_ical_string(const icalvalue* value) {
     icalerror_check_arg_rz( (value!=0),"value");
     data = icalvalue_get_float(value);
 
-    str = (char*)icalmemory_tmp_buffer(MAX_FLOAT_DIGITS);
+    str = (char*)icalmemory_tmp_buffer(40);
 
-    snprintf(str,MAX_FLOAT_DIGITS,"%f",data);
+    snprintf(str,40,"%f",data);
 
     return str;
 }
 
-#define MAX_GEO_DIGITS 40
-    
 static char* icalvalue_geo_as_ical_string(const icalvalue* value) {
 
     struct icalgeotype data;
@@ -922,9 +912,9 @@ static char* icalvalue_geo_as_ical_string(const icalvalue* value) {
 
     data = icalvalue_get_geo(value);
 
-    str = (char*)icalmemory_tmp_buffer(MAX_GEO_DIGITS);
+    str = (char*)icalmemory_tmp_buffer(80);
 
-    snprintf(str,MAX_GEO_DIGITS,"%f;%f",data.lat,data.lon);
+    snprintf(str,80,"%f;%f",data.lat,data.lon);
 
     return str;
 }
@@ -1026,9 +1016,6 @@ icalvalue_as_ical_string(const icalvalue* value)
         return icalreqstattype_as_string(value->data.v_requeststatus);
         
     case ICAL_ACTION_VALUE:
-    case ICAL_CMD_VALUE:
-    case ICAL_QUERYLEVEL_VALUE:
-    case ICAL_CARLEVEL_VALUE:
     case ICAL_METHOD_VALUE:
     case ICAL_STATUS_VALUE:
     case ICAL_TRANSP_VALUE:

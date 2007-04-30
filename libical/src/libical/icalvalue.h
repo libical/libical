@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalvalue.h,v 1.7 2002-08-08 16:48:29 lindner Exp $
+  $Id: icalvalue.h,v 1.8 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

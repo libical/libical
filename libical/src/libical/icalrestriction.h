@@ -3,7 +3,7 @@
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
   
-  $Id: icalrestriction.h,v 1.1.1.1 2001-01-02 07:33:02 ebusboom Exp $
+  $Id: icalrestriction.h,v 1.2 2007-04-30 13:57:48 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

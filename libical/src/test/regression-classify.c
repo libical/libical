@@ -3,7 +3,7 @@
   FILE: regression-classify.c
   CREATOR: eric 11 February 2000
   
-  $Id: regression-classify.c,v 1.3 2002-08-07 17:18:13 acampi Exp $
+  $Id: regression-classify.c,v 1.4 2007-04-30 13:57:49 artcancro Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom

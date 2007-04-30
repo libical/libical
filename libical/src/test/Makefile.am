@@ -1,13 +1,7 @@
-if WITH_CXX
-cxx_inc=-DWITH_CXX
-cxx_libs=../libical/.libs/libical_cxx.a
-regression_cxx = regression-cxx.cpp
-else
 cxx_inc=
 cxx_libs=
 regression_cxx = 
 CXX=@CC@
-endif
 
 if WITH_BDB4
 bdb4_inc=-DWITH_BDB -I@BDB_DIR@/include
@@ -17,16 +11,14 @@ bdb4_inc=
 bdb4_libs=
 endif
 
-noinst_PROGRAMS = copycluster regression parser stow recur testmime testvcal process
+noinst_PROGRAMS = copycluster regression parser stow recur testmime process
 
-LDADD =  ../libicalss/.libs/libicalss.a ../libicalvcal/.libs/libicalvcal.a $(cxx_libs) ../libical/.libs/libical.a $(bdb4_libs)
+LDADD =  ../libicalss/.libs/libicalss.a $(cxx_libs) ../libical/.libs/libical.a $(bdb4_libs)
 
 LIBS = @PTHREAD_LIBS@
 
 INCLUDES = 				\
        -I. 				\
-       -I../libicalvcal 		\
-       -I$(srcdir)/../libicalvcal 	\
        -I$(srcdir) 			\
        -I../libical 			\
        -I$(srcdir)/../libical 		\
@@ -48,7 +40,6 @@ regression_SOURCES = 		\
 
 parser_SOURCES = icaltestparser.c
 stow_SOURCES = stow.c
-testvcal_SOURCES = testvcal.c
 recur_SOURCES = recur.c 
 testmime_SOURCES = testmime.c
 process_SOURCES = process.c

@@ -4,7 +4,7 @@
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalclassify.h,v 1.4 2001-04-12 18:33:36 ebusboom Exp $
+ $Id: icalclassify.h,v 1.5 2007-04-30 13:57:48 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org

@@ -3,7 +3,7 @@
     FILE: icalmessage.c
     CREATOR: ebusboom 07 Nov 2000
   
-    $Id: icalmessage.c,v 1.7 2005-01-24 14:02:20 acampi Exp $
+    $Id: icalmessage.c,v 1.8 2007-04-30 13:57:48 artcancro Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -115,7 +115,7 @@ icalcomponent *icalmessage_new_reply_base(icalcomponent* c,
 					    const char* msg)
 {
     icalproperty *attendee;
-    char tmp[1024];
+    char tmp[45];
 
     icalcomponent *reply = icalcomponent_vanew(
 	ICAL_VCALENDAR_COMPONENT,

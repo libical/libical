@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalduration.c,v 1.19 2005-02-15 17:38:58 acampi Exp $
+  $Id: icalduration.c,v 1.20 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -40,9 +40,7 @@
 #include "icalmemory.h"
 #include "icalvalue.h"
 
-#ifdef WIN32
-#define snprintf _snprintf
-#endif
+
 
 
 /* From Seth Alves,  <alves@hungry.com>   */
@@ -185,11 +183,12 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
     return icaldurationtype_bad_duration();
 }
 
+#define TMP_BUF_SIZE 1024
 static
 void append_duration_segment(char** buf, char** buf_ptr, size_t* buf_size, 
 			     char* sep, unsigned int value) {
 
-    char temp[32];
+    char temp[TMP_BUF_SIZE];
 
     snprintf(temp,sizeof(temp),"%d",value);
 

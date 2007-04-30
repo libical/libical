@@ -3,7 +3,7 @@
   FILE: icaltestparser.c
   CREATOR: eric 20 June 1999
   
-  $Id: icaltestparser.c,v 1.2 2001-01-16 06:55:09 ebusboom Exp $
+  $Id: icaltestparser.c,v 1.3 2007-04-30 13:57:49 artcancro Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License

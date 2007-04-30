@@ -3,7 +3,7 @@
   FILE: stow.c
   CREATOR: eric 29 April 2000
   
-  $Id: stow.c,v 1.8 2003-11-17 22:51:53 gray-john Exp $
+  $Id: stow.c,v 1.9 2007-04-30 13:57:49 artcancro Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -121,19 +121,17 @@ enum file_type test_file(char *path)
 char* lowercase(const char* str)
 {
     char* p = 0;
-    char* ret;
+    char* new = strdup(str);
 
     if(str ==0){
 	return 0;
     }
 
-    ret = strdup(str);
-
-    for(p = ret; *p!=0; p++){
+    for(p = new; *p!=0; p++){
 	*p = tolower(*p);
     }
 
-    return ret;
+    return new;
 }
 
 #if 0

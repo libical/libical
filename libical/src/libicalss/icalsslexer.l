@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalsslexer.l,v 1.7 2002-07-21 17:18:15 lindner Exp $
+  $Id: icalsslexer.l,v 1.8 2007-04-30 13:57:49 artcancro Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -57,6 +57,8 @@ digit		[0-9]
 %array /* Make yytext an array. Slow, but handy. HACK */
 
 %option caseless
+/* See http://lists.ximian.com/archives/public/evolution-hackers/2003-September/001304.html
+   if you run into problems with this option. */
 %option reentrant-bison
 
 %s sql string_value

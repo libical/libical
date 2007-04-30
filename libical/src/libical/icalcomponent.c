@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.57 2004-09-10 07:43:51 acampi Exp $
+  $Id: icalcomponent.c,v 1.58 2007-04-30 13:57:47 artcancro Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -280,11 +280,16 @@ icalcomponent_as_ical_string (icalcomponent* impl)
    char* buf_ptr = 0;
     pvl_elem itr;
 
+/* RFC 2445 explicitly says that the newline is *ALWAYS* a \r\n (CRLF)!!!! */
+char newline[] = "\r\n";
+
+/* WIN32 automatically adds the \r, Anybody else need it?
 #ifdef ICAL_UNIX_NEWLINE    
     char newline[] = "\n";
 #else
     char newline[] = "\r\n";
 #endif
+*/
    
    icalcomponent *c;
    icalproperty *p;
@@ -336,6 +341,7 @@ icalcomponent_as_ical_string (icalcomponent* impl)
    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:");
    icalmemory_append_string(&buf, &buf_ptr, &buf_size, 
 			    icalcomponent_kind_to_string(kind));
+   icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
    out_buf = icalmemory_tmp_copy(buf);
@@ -500,51 +506,6 @@ icalcomponent_get_next_property (icalcomponent* c, icalproperty_kind kind)
        icalproperty *p =  (icalproperty*) pvl_data(c->property_iterator);
 	   
        if (icalproperty_isa(p) == kind || kind == ICAL_ANY_PROPERTY) {
-	   
-	   return p;
-       }
-   }
-
-   return 0;
-}
-
-icalproperty*
-icalcomponent_get_first_x_property (icalcomponent* c, const char *name)
-{
-   icalerror_check_arg_rz( (c!=0),"component");
-  
-   for( c->property_iterator = pvl_head(c->properties);
-	c->property_iterator != 0;
-	c->property_iterator = pvl_next(c->property_iterator)) {
-	    
-       icalproperty *p =  (icalproperty*) pvl_data(c->property_iterator);
-	
-	   if (icalproperty_isa(p) == ICAL_X_PROPERTY &&
-		!strcmp(icalproperty_get_x_name(p), name)) {
-	       
-	       return p;
-	   }
-   }
-   return 0;
-}
-
-icalproperty*
-icalcomponent_get_next_x_property (icalcomponent* c, const char *name)
-{
-   icalerror_check_arg_rz( (c!=0),"component");
-
-   if (c->property_iterator == 0){
-       return 0;
-   }
-
-   for( c->property_iterator = pvl_next(c->property_iterator);
-	c->property_iterator != 0;
-	c->property_iterator = pvl_next(c->property_iterator)) {
-	    
-       icalproperty *p =  (icalproperty*) pvl_data(c->property_iterator);
-	   
-       if (icalproperty_isa(p) == ICAL_X_PROPERTY &&
-		!strcmp(icalproperty_get_x_name(p), name)) {
 	   
 	   return p;
        }
@@ -730,7 +691,6 @@ icalcomponent* icalcomponent_get_first_real_component(icalcomponent *c)
 	   kind == ICAL_VJOURNAL_COMPONENT ||
 	   kind == ICAL_VFREEBUSY_COMPONENT ||
 	   kind == ICAL_VQUERY_COMPONENT ||
-	   kind == ICAL_VREPLY_COMPONENT ||
 	   kind == ICAL_VAGENDA_COMPONENT){
 	    return comp;
 	}
@@ -1056,16 +1016,15 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
 
     struct icalrecurrencetype recur = icalproperty_get_rrule(rrule);
     icalrecur_iterator *rrule_itr  = icalrecur_iterator_new(recur, dtstart);
-    struct icaltimetype rrule_time;
+    struct icaltimetype rrule_time = icalrecur_iterator_next(rrule_itr);
+    /** note that icalrecur_iterator_next always returns dtstart
+	the first time.. **/
     
     while (1) {
       rrule_time = icalrecur_iterator_next(rrule_itr);
 
       if (icaltime_is_null_time(rrule_time)) 
 	break;
-
-      if (!icaltime_compare(rrule_time, dtstart))
-	continue;
 
       dur = icaltime_subtract(rrule_time, dtstart);
 
@@ -1297,10 +1256,9 @@ static struct icalcomponent_kind_map component_map[] =
     { ICAL_VSCHEDULE_COMPONENT, "SCHEDULE" },
 
     /* CAP components */
+    { ICAL_VQUERY_COMPONENT, "VQUERY" },  
     { ICAL_VCAR_COMPONENT, "VCAR" },  
     { ICAL_VCOMMAND_COMPONENT, "VCOMMAND" },  
-    { ICAL_VQUERY_COMPONENT, "VQUERY" },  
-    { ICAL_VREPLY_COMPONENT, "VREPLY" },  
 
     /* libical private components */
     { ICAL_XLICINVALID_COMPONENT, "X-LIC-UNKNOWN" },  
@@ -1347,7 +1305,7 @@ icalcomponent_kind icalcomponent_string_to_kind(const char* string)
     }
 
     for (i=0; component_map[i].kind  != ICAL_NO_COMPONENT; i++) {
-	if (strcmp(component_map[i].name, string) == 0) {
+	if (strcasecmp(component_map[i].name, string) == 0) {
 	    return component_map[i].kind;
 	}
     }
@@ -1555,7 +1513,6 @@ void icalcomponent_set_dtstart(icalcomponent* comp, struct icaltimetype v)
 static struct icaltimetype
 icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
 
-    icalcomponent      *c;
     icalparameter      *param;
     struct icaltimetype	ret;
 
@@ -1564,19 +1521,11 @@ icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
     if ((param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER))
 	!= NULL) {
 	const char     *tzid = icalparameter_get_tzid(param);
-	icaltimezone   *tz = NULL;
+	icaltimezone   *tz;
 
-	for (c = comp; c != NULL; c = icalcomponent_get_parent(c)) {
-	    tz = icalcomponent_get_timezone(c, tzid);
-	    if (tz != NULL)
-		break;
+	if ((tz = icalcomponent_get_timezone(comp, tzid)) != NULL) {
+	    icaltime_set_timezone(&ret, tz);
 	}
-
-	if (tz == NULL)
-	    tz = icaltimezone_get_builtin_timezone(tzid);
-
-	if (tz != NULL)
-	    ret = icaltime_set_timezone(&ret, tz);
     }
 
     return ret;
@@ -2086,10 +2035,6 @@ icalcomponent* icalcomponent_new_vquery()
 {
     return icalcomponent_new(ICAL_VQUERY_COMPONENT);
 }
-icalcomponent* icalcomponent_new_vreply()
-{
-    return icalcomponent_new(ICAL_VREPLY_COMPONENT);
-}
 
 /*
  * Timezone stuff.
@@ -2281,7 +2226,7 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
   /* We didn't find a VTIMEZONE that matched, so we have to rename the TZID,
      using the maximum numerical suffix found + 1. */
   tzid_copy = strdup (tzid);
-  sprintf (suffix_buf, "%i", max_suffix + 1);
+  snprintf (suffix_buf, sizeof(suffix_buf), "%i", max_suffix + 1);
   new_tzid = malloc (tzid_len + strlen (suffix_buf) + 1);
   if (!new_tzid || !tzid_copy) {
     icalerror_set_errno(ICAL_NEWFAILED_ERROR);

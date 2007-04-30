@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.32 2004-09-22 07:26:18 acampi Exp $
+  $Id: icalfileset.c,v 1.33 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -59,7 +59,7 @@
 extern int errno;
 
 /** Default options used when NULL is passed to icalset_new() **/
-icalfileset_options icalfileset_options_default = {O_RDWR|O_CREAT, 0644, 0};
+icalfileset_options icalfileset_options_default = {O_RDWR|O_CREAT, 0644, 0, 0};
 
 int icalfileset_lock(icalfileset *set);
 int icalfileset_unlock(icalfileset *set);
@@ -117,7 +117,7 @@ icalset* icalfileset_init(icalset *set, const char* path, void* options_in)
 #ifndef WIN32
   fset->fd = open(fset->path, flags, mode);
 #else
-  fset->fd = open(fset->path, flags | O_BINARY, mode);
+  fset->fd = open(fset->path, flags, mode);
   /* fset->fd = sopen(fset->path,flags, _SH_DENYWR, _S_IREAD | _S_IWRITE); */
 #endif
     
@@ -333,8 +333,32 @@ int icalfileset_unlock(icalfileset *set)
 
     return (fcntl(set->fd, F_UNLCK, &lock)); 
 #else
-	return 0;
+    return 0;
 #endif
+}
+
+static char * shell_quote(const char *s)
+{
+    char *result;
+    char *p;
+    p = result = malloc(strlen(s)*5+1);
+    while(*s)
+    {
+	if (*s == '\'')
+	{
+	    *p++ = '\'';
+	    *p++ = '"';
+	    *p++ = *s++;
+	    *p++ = '"';
+	    *p++ = '\'';
+	}
+	else
+	{
+	    *p++ = *s++;
+	}
+    }
+    *p = '\0';
+    return result;
 }
 
 icalerrorenum icalfileset_commit(icalset* set)
@@ -354,6 +378,21 @@ icalerrorenum icalfileset_commit(icalset* set)
 	return ICAL_NO_ERROR;
     }
     
+    if (fset->options.safe_saves == 1) {
+#ifndef WIN32
+	char *quoted_file = shell_quote(fset->path);
+	snprintf(tmp,ICAL_PATH_MAX,"cp '%s' '%s.bak'",fset->path, fset->path);
+	free(quoted_file);
+#else
+	snprintf(tmp,ICAL_PATH_MAX,"copy %s %s.bak", fset->path, fset->path);
+#endif
+
+	if(system(tmp) < 0){
+	    icalerror_set_errno(ICAL_FILE_ERROR);
+	    return ICAL_FILE_ERROR;
+	}
+    }
+
     if(lseek(fset->fd, 0, SEEK_SET) < 0){
 	icalerror_set_errno(ICAL_FILE_ERROR);
 	return ICAL_FILE_ERROR;

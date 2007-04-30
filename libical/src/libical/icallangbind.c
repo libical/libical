@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.c,v 1.22 2002-10-24 13:44:30 acampi Exp $
+  $Id: icallangbind.c,v 1.23 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -40,8 +40,8 @@ void icallangbind_free_array(int* array){
     free(array);
 }
 
-int icallangbind_access_array(int* array, int index) {
-    return array[index];
+int icallangbind_access_array(int* array, int indx) {
+    return array[indx];
 }                    
 
 /** Iterators to fetch parameters given property */

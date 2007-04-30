@@ -316,7 +316,7 @@ void create_new_component_with_va_args()
 		    icalproperty_new_tzoffsetfrom(-4.0),
 		    icalproperty_new_tzoffsetto(-5.0),
 		    icalproperty_new_tzname("EST"),
-		    0
+		    NULL
 		    ),
 		icalcomponent_vanew(
 		    ICAL_XSTANDARD_COMPONENT,
@@ -325,9 +325,9 @@ void create_new_component_with_va_args()
 		    icalproperty_new_tzoffsetfrom(-5.0),
 		    icalproperty_new_tzoffsetto(-4.0),
 		    icalproperty_new_tzname("EST"),
-		    0
+		    NULL
 		    ),
-		0
+		NULL
 		),
 	    icalcomponent_vanew(
 		ICAL_VEVENT_COMPONENT,
@@ -336,14 +336,14 @@ void create_new_component_with_va_args()
 		icalproperty_vanew_organizer(
 		    "mrbig@host.com",
 		    icalparameter_new_role(ICAL_ROLE_CHAIR),
-		    0
+		    NULL
 		    ),
 		icalproperty_vanew_attendee(
 		    "employee-A@host.com",
 		    icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
 		    icalparameter_new_rsvp(ICAL_RSVP_TRUE),
 		    icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
-		    0
+		    NULL
 		    ),
 		icalproperty_new_description("Project XYZ Review Meeting"),
 		icalproperty_new_categories("MEETING"),
@@ -353,17 +353,17 @@ void create_new_component_with_va_args()
 		icalproperty_vanew_dtstart(
 		    atime,
 		    icalparameter_new_tzid("America/New_York"),
-		    0
+		    NULL
 		    ),
 		icalproperty_vanew_dtend(
 		    atime,
 		    icalparameter_new_tzid("America/New_York"),
-		    0
+		    NULL
 		    ),
 		icalproperty_new_location("1CP Conference Room 4350"),
-		0
+		NULL
 		),
-	    0
+	    NULL
 	    );
 
     ok("creating a complex vcalendar", (calendar != NULL));

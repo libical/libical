@@ -3,7 +3,7 @@
   FILE: icalcluster.c
   CREATOR: acampi 13 March 2002
   
-  $Id: icalcluster.c,v 1.3 2002-06-28 10:15:39 acampi Exp $
+  $Id: icalcluster.c,v 1.4 2007-04-30 13:57:48 artcancro Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2002, Eric Busboom, http://www.softwarestudio.org

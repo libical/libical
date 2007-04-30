@@ -84,11 +84,6 @@ icalproperty* icalcomponent_get_first_property(icalcomponent* component,
 icalproperty* icalcomponent_get_next_property(icalcomponent* component,
 					      icalproperty_kind kind);
 
-icalproperty* icalcomponent_get_first_x_property(icalcomponent* component,
-					      const char *name);
-icalproperty* icalcomponent_get_next_x_property(icalcomponent* component,
-					      const char *name);
-
 
 /* 
  * Working with components
