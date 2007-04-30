@@ -1,0 +1,20 @@
+dnl Checks for programs.
+AC_PROG_YACC
+AM_PROG_LEX
+
+AC_CHECK_PROGS(PERL, perl5 perl)  
+
+AC_DEFINE(ICAL_SAFESAVES,1, [safe saves])
+AC_DEFINE(ICAL_UNIX_NEWLINE,1, [unix newline])
+
+AC_CHECK_HEADERS(time.h sys/types.h assert.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_SIZE_T
+AC_STRUCT_TM
+AM_PROG_LEX
+
+dnl Checks for library functions.
+AC_CHECK_FUNCS(strdup)
+
