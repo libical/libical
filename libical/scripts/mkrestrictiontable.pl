@@ -31,7 +31,7 @@ if ($opt_i) {
 }
 
 # First build the property restriction table 
-print "icalrestriction_property_record icalrestriction_property_records[] = {\n";
+print "static const icalrestriction_property_record icalrestriction_property_records[] = {\n";
 
 while(<F>)
 {
@@ -62,7 +62,7 @@ print "    {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_PROPERTY,ICAL_RESTRICTION
 
 print "};\n";
 
-print "icalrestriction_component_record icalrestriction_component_records[] = {\n";
+print "static const icalrestriction_component_record icalrestriction_component_records[] = {\n";
 
 
 # Go back through the entire file and build the component restriction table

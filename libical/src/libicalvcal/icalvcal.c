@@ -2,7 +2,7 @@
   FILE: icalvcal.c
   CREATOR: eric 25 May 00
   
-  $Id: icalvcal.c,v 1.6 2002-07-11 18:06:29 ebusboom Exp $
+  $Id: icalvcal.c,v 1.7 2007-05-25 02:57:04 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -76,7 +76,7 @@ struct conversion_table_struct {
 	int icaltype;
 };
 
-struct conversion_table_struct conversion_table[];
+static const struct conversion_table_struct conversion_table[];
 void* dc_prop(int icaltype, VObject *object, icalcomponent *comp,
 	      icalvcal_defaults *defaults);
 
@@ -191,7 +191,6 @@ static void icalvcal_traverse_objects(VObject *object,
 	   icalproperty_set_x_name(prop,name);
 	   icalcomponent_add_property(last_comp,prop);
 	} else {
-	    assert(0);
 	    return;
 	}
 
@@ -1417,7 +1416,7 @@ of the vcal properties in it. I didn't feel like re-doing the entire
 table, so you'll have to find the missing properties the hard way --
 the code will assert */
 
-struct conversion_table_struct conversion_table[] = 
+static const struct conversion_table_struct conversion_table[] = 
 {
 {VCCalProp,            COMPONENT, comp,         ICAL_VCALENDAR_COMPONENT},
 {VCTodoProp,           COMPONENT, comp,         ICAL_VTODO_COMPONENT},

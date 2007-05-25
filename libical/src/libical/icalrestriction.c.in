@@ -30,7 +30,7 @@ in machine generated code below */
 
 struct icalrestriction_property_record;
 
-typedef char* (*restriction_func)(struct icalrestriction_property_record* rec,icalcomponent* comp,icalproperty* prop);
+typedef char* (*restriction_func)(const struct icalrestriction_property_record* rec,icalcomponent* comp,icalproperty* prop);
 
 
 typedef struct icalrestriction_property_record {
@@ -50,17 +50,17 @@ typedef struct icalrestriction_component_record {
 	restriction_func function;
 } icalrestriction_component_record;
 
-icalrestriction_property_record*
+static const icalrestriction_property_record*
 icalrestriction_get_property_restriction(icalproperty_method method,
 					 icalcomponent_kind component,
 					 icalproperty_kind property);
-icalrestriction_component_record*
+static const icalrestriction_component_record*
 icalrestriction_get_component_restriction(icalproperty_method method,
 					  icalcomponent_kind component,
 					  icalcomponent_kind subcomponent);
 
-icalrestriction_component_record icalrestriction_component_records[];
-icalrestriction_property_record icalrestriction_property_records[]; 
+static const icalrestriction_component_record icalrestriction_component_records[];
+static const icalrestriction_property_record icalrestriction_property_records[]; 
 
 icalrestriction_property_record null_prop_record =   {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_PROPERTY,ICAL_RESTRICTION_UNKNOWN,0};
 icalrestriction_component_record null_comp_record =   {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_COMPONENT,ICAL_RESTRICTION_UNKNOWN,0};
@@ -84,7 +84,7 @@ char compare_map[ICAL_RESTRICTION_UNKNOWN+1][3] = {
     { 1, 1, 1} /*ICAL_RESTRICTION_UNKNOWN*/
 };
 
-char restr_string_map[ICAL_RESTRICTION_UNKNOWN+1][60] = {
+const char restr_string_map[ICAL_RESTRICTION_UNKNOWN+1][60] = {
     "unknown number",/*ICAL_RESTRICTION_NONE*/
     "0",/*ICAL_RESTRICTION_ZERO*/
     "1",/*ICAL_RESTRICTION_ONE*/
@@ -116,7 +116,7 @@ icalrestriction_compare(icalrestriction_kind restr, int count){
 /* Special case routines */
 
 char* icalrestriction_may_be_draft_final_canceled(
-    icalrestriction_property_record *rec,
+    const icalrestriction_property_record *rec,
     icalcomponent* comp, 
     icalproperty* prop)
 {
@@ -135,7 +135,7 @@ char* icalrestriction_may_be_draft_final_canceled(
 }
 
 char* icalrestriction_may_be_comp_need_process(
-    icalrestriction_property_record *rec,
+    const icalrestriction_property_record *rec,
     icalcomponent* comp, 
     icalproperty* prop)
 {
@@ -151,7 +151,7 @@ char* icalrestriction_may_be_comp_need_process(
 
     return 0;    
 }
-char* icalrestriction_may_be_tent_conf(icalrestriction_property_record *rec,
+char* icalrestriction_may_be_tent_conf(const icalrestriction_property_record *rec,
 				       icalcomponent* comp, 
 				       icalproperty* prop){
     icalproperty_status stat = icalproperty_get_status(prop);
@@ -166,7 +166,7 @@ char* icalrestriction_may_be_tent_conf(icalrestriction_property_record *rec,
     return 0;    
 }
 char* icalrestriction_may_be_tent_conf_cancel(
-    icalrestriction_property_record *rec,
+    const icalrestriction_property_record *rec,
     icalcomponent* comp, 
     icalproperty* prop)
 {
@@ -184,7 +184,7 @@ char* icalrestriction_may_be_tent_conf_cancel(
 }
 
 char* icalrestriction_must_be_cancel_if_present(
-    icalrestriction_property_record *rec,
+    const icalrestriction_property_record *rec,
     icalcomponent* comp, 
     icalproperty* prop)
 {
@@ -202,7 +202,7 @@ char* icalrestriction_must_be_cancel_if_present(
 }
 
 char* icalrestriction_must_be_canceled_no_attendee(
-    icalrestriction_property_record *rec,
+    const icalrestriction_property_record *rec,
     icalcomponent* comp, 
     icalproperty* prop)
 {
@@ -212,13 +212,13 @@ char* icalrestriction_must_be_canceled_no_attendee(
 
     return 0;    
 }
-char* icalrestriction_must_be_recurring(icalrestriction_property_record *rec,
+char* icalrestriction_must_be_recurring(const icalrestriction_property_record *rec,
 					icalcomponent* comp, 
 					icalproperty* prop){
     /* Hack */
     return 0;    
 }
-char* icalrestriction_must_have_duration(icalrestriction_property_record *rec,
+char* icalrestriction_must_have_duration(const icalrestriction_property_record *rec,
 					 icalcomponent* comp, 
 					 icalproperty* prop){
     
@@ -230,7 +230,7 @@ char* icalrestriction_must_have_duration(icalrestriction_property_record *rec,
 
     return 0;    
 }
-char* icalrestriction_must_have_repeat(icalrestriction_property_record *rec,
+char* icalrestriction_must_have_repeat(const icalrestriction_property_record *rec,
 				       icalcomponent* comp, 
 				       icalproperty* prop){
     if( !icalcomponent_get_first_property(comp,ICAL_REPEAT_PROPERTY)){
@@ -241,14 +241,14 @@ char* icalrestriction_must_have_repeat(icalrestriction_property_record *rec,
 
     return 0;    
 }
-char* icalrestriction_must_if_tz_ref(icalrestriction_property_record *rec,
+char* icalrestriction_must_if_tz_ref(const icalrestriction_property_record *rec,
 				     icalcomponent* comp, 
 				     icalproperty* prop){
 
     /* Hack */
     return 0;    
 }
-char* icalrestriction_no_dtend(icalrestriction_property_record *rec,
+char* icalrestriction_no_dtend(const icalrestriction_property_record *rec,
 			       icalcomponent* comp, 
 			       icalproperty* prop){
 
@@ -260,7 +260,7 @@ char* icalrestriction_no_dtend(icalrestriction_property_record *rec,
 
     return 0;    
 }
-char* icalrestriction_no_duration(icalrestriction_property_record *rec,
+char* icalrestriction_no_duration(const icalrestriction_property_record *rec,
 				icalcomponent* comp, 
 				  icalproperty* prop){
 
@@ -268,7 +268,7 @@ char* icalrestriction_no_duration(icalrestriction_property_record *rec,
     return 0;    
 }                                     
 char* icalrestriction_must_be_email(
-    icalrestriction_property_record *rec,
+    const icalrestriction_property_record *rec,
     icalcomponent* comp, 
     icalproperty* prop)
 {
@@ -289,8 +289,8 @@ int icalrestriction_check_component(icalproperty_method method,
     icalproperty_kind kind;
     icalcomponent_kind comp_kind;
     icalrestriction_kind restr;
-    icalrestriction_property_record *prop_record;
-    char* funcr = 0;
+    const icalrestriction_property_record *prop_record;
+    const char* funcr = 0;
     icalproperty *prop;
 
     int count;
@@ -419,7 +419,7 @@ int icalrestriction_check(icalcomponent* outer_comp)
 
 }
 
-icalrestriction_property_record*
+static const icalrestriction_property_record*
 icalrestriction_get_property_restriction(icalproperty_method method,
 					 icalcomponent_kind component,
 					 icalproperty_kind property)
@@ -441,7 +441,7 @@ icalrestriction_get_property_restriction(icalproperty_method method,
 }
 
 
-icalrestriction_component_record*
+static const icalrestriction_component_record*
 icalrestriction_get_component_restriction(icalproperty_method method,
 					  icalcomponent_kind component,
 					  icalcomponent_kind subcomponent)

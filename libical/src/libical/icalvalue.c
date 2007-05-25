@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.41 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalvalue.c,v 1.42 2007-05-25 02:57:04 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -46,6 +46,7 @@
 #include <time.h> /* for mktime */
 #include <stdlib.h> /* for atoi and atof */
 #include <limits.h> /* for SHRT_MAX */         
+#include <ctype.h> /* for isspace and isdigit */
 
 #ifdef WIN32
 #define snprintf      _snprintf

@@ -130,7 +130,7 @@ if($opt_c){
   # print out the value to string map
 
   my $count = scalar(keys %h) + 1;
-  print "struct icalvalue_kind_map value_map[$count]={\n"; 
+  print "static const struct icalvalue_kind_map value_map[$count]={\n"; 
 
   foreach $value  (keys %h) {
 

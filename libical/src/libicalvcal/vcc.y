@@ -632,7 +632,7 @@ static void lexAppendc(int c)
     /* append up to zero termination */
     if (c == 0) return;
     lexBuf.strsLen++;
-    if (lexBuf.strsLen > lexBuf.maxToken) {
+    if (lexBuf.strsLen >= lexBuf.maxToken) {
 	/* double the token string size */
 	lexBuf.maxToken <<= 1;
 	lexBuf.strs = (char*) realloc(lexBuf.strs,(size_t)lexBuf.maxToken);

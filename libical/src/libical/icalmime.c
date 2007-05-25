@@ -4,7 +4,7 @@
  CREATOR: eric 26 July 2000
 
 
- $Id: icalmime.c,v 1.9 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icalmime.c,v 1.10 2007-05-25 02:57:04 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -138,7 +138,7 @@ void icalmime_attachment_free_part(void *part)
 
 
 
-struct sspm_action_map icalmime_local_action_map[] = 
+static const struct sspm_action_map icalmime_local_action_map[] = 
 {
     {SSPM_TEXT_MAJOR_TYPE,SSPM_CALENDAR_MINOR_TYPE,icalmime_text_new_part,icalmime_text_add_line,icalmime_textcalendar_end_part,icalmime_text_free_part},
     {SSPM_TEXT_MAJOR_TYPE,SSPM_ANY_MINOR_TYPE,icalmime_text_new_part,icalmime_text_add_line,icalmime_text_end_part,icalmime_text_free_part},

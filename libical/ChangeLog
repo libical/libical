@@ -1,3 +1,24 @@
+2004-02-04  JP Rosevear <jpr@ximian.com> (merged to upstream by Ross Burton and Art Cancro)
+	* src/libicalvcal/icalvcal.c (icalvcal_traverse_objects): just
+	return on unknown property
+
+2004-08-02  Not Zed  <NotZed@Ximian.com> (merged to upstream by Ross Burton and Art Cancro)
+	* src/libicalvcal/vcc.y: re-alloc when we reach the buffer length,
+	not one past it.  Fixes an ABW.
+
+2005-09-15  Tor Lillqvist  <tml@novell.com> (merged to upstream by Ross Burton and Art Cancro)
+	* src/libical/vsnprintf.c: No reason not to include config.h also
+	on Win32.
+
+2007-05-18  Matthew Barnes  <mbarnes@redhat.com> (merged to upstream by Ross Burton and Art Cancro)
+	* src/libical/icalvalue.c: Fix implicit function declarations.
+
+2007-03-??  Art Cancro <ajc@uncensored.citadel.org>
+        * Updated tzdata in order to deal with daylight savings time changes in the US.
+
+200?-??-??  Omar Kilani (merged to upstream by Art Cancro)
+	* Merge the libical forks from KDE, Evolution, and SourceForge.
+
 2002-07-09  Andrea Campi  <a.campi@inet.it>
 
 	* src/libical/icalcomponent.c

@@ -118,7 +118,7 @@ if ($opt_c){
   }
 
   $count+=2;
-  print "struct icalparameter_value_kind_map value_kind_map[$count] = {\n";
+  print "static const struct icalparameter_value_kind_map value_kind_map[$count] = {\n";
   print $out;
   print "    {ICAL_VALUE_X,ICAL_X_VALUE},\n";
   print "    {ICAL_VALUE_NONE,ICAL_NO_VALUE}\n};\n\n";
@@ -141,7 +141,7 @@ if ($opt_c){
 
   }
   $count+=1;
-  print "struct icalparameter_kind_map parameter_map[$count] = { \n";
+  print "static const struct icalparameter_kind_map parameter_map[$count] = { \n";
   print $out;
   print "    { ICAL_NO_PARAMETER, \"\"}\n};\n\n";
   
@@ -171,7 +171,7 @@ if ($opt_c){
   }
 
   $count+=3;
-  print "struct icalparameter_map icalparameter_map[] = {\n";
+  print "static const struct icalparameter_map icalparameter_map[] = {\n";
   print "{ICAL_ANY_PARAMETER,0,\"\"},\n";
   print $out;
   print "    {ICAL_NO_PARAMETER,0,\"\"}};\n\n";

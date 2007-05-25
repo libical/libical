@@ -3,7 +3,7 @@
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalerror.h,v 1.15 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalerror.h,v 1.16 2007-05-25 02:57:04 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -90,8 +90,8 @@ typedef enum icalerrorstate {
     ICAL_ERROR_UNKNOWN    /* Asked state for an unknown error type */
 } icalerrorstate ;
 
-char* icalerror_strerror(icalerrorenum e);
-char* icalerror_perror();
+const char* icalerror_strerror(icalerrorenum e);
+const char* icalerror_perror();
 void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
 icalerrorstate icalerror_get_error_state( icalerrorenum error);
 

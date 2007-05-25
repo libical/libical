@@ -65,7 +65,7 @@ if($opt_c){
   my $count = scalar(@props);
   
 
-  print "struct icalproperty_map property_map[$count] = {\n";
+  print "static const struct icalproperty_map property_map[$count] = {\n";
   
   foreach $prop (@props) {
     
@@ -124,7 +124,7 @@ if($opt_c){
   }
 
   $count++;
-  print "struct icalproperty_enum_map enum_map[$count] = {\n";
+  print "static const struct icalproperty_enum_map enum_map[$count] = {\n";
   print $out;
   print "    {ICAL_NO_PROPERTY,0,\"\"}\n};\n\n";
   

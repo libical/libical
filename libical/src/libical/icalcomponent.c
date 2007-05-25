@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.58 2007-04-30 13:57:47 artcancro Exp $
+  $Id: icalcomponent.c,v 1.59 2007-05-25 02:57:04 artcancro Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1240,7 +1240,7 @@ struct icalcomponent_kind_map {
 
   
 
-static struct icalcomponent_kind_map component_map[] = 
+static const struct icalcomponent_kind_map component_map[] = 
 {
     { ICAL_VEVENT_COMPONENT, "VEVENT" },
     { ICAL_VTODO_COMPONENT, "VTODO" },

@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.16 2007-04-30 13:57:48 artcancro Exp $
+    $Id: icalclassify.c,v 1.17 2007-05-25 02:57:04 artcancro Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -646,7 +646,7 @@ int icalclassify_delinecounter(
     icalclassify_post
 }
 
-struct icalclassify_map {
+static const struct icalclassify_map {
 	icalproperty_method method;
 	int (*fn)(struct icalclassify_parts *comp,struct icalclassify_parts *match, const char* user);
 	icalproperty_xlicclass class;

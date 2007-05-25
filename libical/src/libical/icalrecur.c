@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.66 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalrecur.c,v 1.67 2007-05-25 02:57:04 artcancro Exp $
   $Locker:  $
     
 
@@ -633,7 +633,7 @@ struct expand_split_map_struct
 	short map[8];
 }; 
 
-static struct expand_split_map_struct expand_map[] =
+static const struct expand_split_map_struct expand_map[] =
 {
     {ICAL_SECONDLY_RECURRENCE,{1,1,1,1,1,1,1,1}},
     {ICAL_MINUTELY_RECURRENCE,{2,1,1,1,1,1,1,1}},

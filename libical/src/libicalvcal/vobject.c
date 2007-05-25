@@ -767,7 +767,7 @@ static const char *PAlarmFields[] = {
     0
     };
 
-static struct PreDefProp propNames[] = {
+static const struct PreDefProp propNames[] = {
     { VC7bitProp, 0, 0, 0 },
     { VC8bitProp, 0, 0, 0 },
     { VCAAlarmProp, 0, AAlarmFields, 0 },
@@ -930,7 +930,7 @@ static struct PreDefProp propNames[] = {
     };
 
 
-static struct PreDefProp* lookupPropInfo(const char* str)
+static const struct PreDefProp* lookupPropInfo(const char* str)
 {
     /* brute force for now, could use a hash table here. */
     int i;
@@ -1229,7 +1229,7 @@ static void writeValue(OFile *fp, VObject *o, unsigned long size,int quote)
 static void writeAttrValue(OFile *fp, VObject *o)
 {
     if (NAME_OF(o)) {
-	struct PreDefProp *pi;
+	const struct PreDefProp *pi;
 	pi = lookupPropInfo(NAME_OF(o));
 	if (pi && ((pi->flags & PD_INTERNAL) != 0)) return;
 	appendcOFile(fp,';');
@@ -1272,7 +1272,7 @@ static void writeProp(OFile *fp, VObject *o)
 {
     int isQuoted=0;
     if (NAME_OF(o)) {
-	struct PreDefProp *pi;
+	const struct PreDefProp *pi;
 	VObjectIterator t;
 	const char **fields_ = 0;
 	pi = lookupPropInfo(NAME_OF(o));
@@ -1329,7 +1329,7 @@ static void writeProp(OFile *fp, VObject *o)
 static void writeVObject_(OFile *fp, VObject *o)
 {
     if (NAME_OF(o)) {
-	struct PreDefProp *pi;
+	const struct PreDefProp *pi;
 	pi = lookupPropInfo(NAME_OF(o));
 
 	if (pi && ((pi->flags & PD_BEGIN) != 0)) {
