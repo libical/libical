@@ -4,7 +4,7 @@
  CREATOR: eric 26 July 2000
 
 
- $Id: icalmime.c,v 1.10 2007-05-25 02:57:04 artcancro Exp $
+ $Id: icalmime.c,v 1.11 2007-05-31 21:26:14 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -97,12 +97,14 @@ void* icalmime_textcalendar_end_part(void* part)
 
 void* icalmime_text_end_part(void* part)
 {
+    char *buf;
     struct text_part* impl = ( struct text_part*) part;
 
     icalmemory_add_tmp_buffer(impl->buf);
+    buf = impl->buf;
     free(impl);
 
-    return impl->buf;
+    return buf;
 }
 
 void icalmime_text_free_part(void *part)

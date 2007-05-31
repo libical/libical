@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.19 2007-05-25 02:57:04 artcancro Exp $
+  $Id: icalerror.c,v 1.20 2007-05-31 21:26:14 artcancro Exp $
   $Locker:  $
     
 
@@ -108,7 +108,7 @@ void icalerror_clear_errno() {
     icalerrno = ICAL_NO_ERROR;
 }
 
-#ifdef ICAL_ERRORS_ARE_FATAL
+#if ICAL_ERRORS_ARE_FATAL
 int icalerror_errors_are_fatal = 1;
 #else
 int icalerror_errors_are_fatal = 0;

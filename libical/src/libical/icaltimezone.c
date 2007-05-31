@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.35 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icaltimezone.c,v 1.36 2007-05-31 21:26:15 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1293,11 +1293,11 @@ icaltimezone_get_builtin_timezone	(const char *location)
     if (!location || !location[0])
 	return NULL;
 
-    if (!strcmp (location, "UTC"))
-	return &utc_timezone;
-
     if (!builtin_timezones)
 	icaltimezone_init_builtin_timezones ();
+
+    if (!strcmp (location, "UTC"))
+	return &utc_timezone;
 
     /* Do a simple binary search. */
     lower = middle = 0;

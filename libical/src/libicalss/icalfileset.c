@@ -3,7 +3,7 @@
   FILE: icalfileset.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalfileset.c,v 1.33 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalfileset.c,v 1.34 2007-05-31 21:26:15 artcancro Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -180,13 +180,13 @@ icalcluster* icalfileset_produce_icalcluster(const char *path) {
 char* icalfileset_read_from_file(char *s, size_t size, void *d)
 {
     char* p = s;
-    int fd = (int)d;
+    icalfileset *set = d;
 
     /* Simulate fgets -- read single characters and stop at '\n' */
 
     for(p=s; p<s+size-1;p++){
 	
-	if(read(fd,p,1) != 1 || *p=='\n'){
+	if(read(set->fd,p,1) != 1 || *p=='\n'){
 	    p++;
 	    break;
 	} 
@@ -209,7 +209,7 @@ icalerrorenum icalfileset_read_file(icalfileset* set,mode_t mode)
   
     parser = icalparser_new();
 
-    icalparser_set_gen_data(parser,(void*)set->fd);
+    icalparser_set_gen_data(parser, set);
     set->cluster = icalparser_parse(parser,icalfileset_read_from_file);
     icalparser_free(parser);
 
