@@ -3,7 +3,7 @@
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
   
-  $Id: sspm.h,v 1.3 2007-04-30 13:57:48 artcancro Exp $
+  $Id: sspm.h,v 1.4 2007-08-21 02:45:54 artcancro Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -121,7 +121,7 @@ char* sspm_encoding_string(enum sspm_encoding type);
 
 int sspm_parse_mime(struct sspm_part *parts, 
 		    size_t max_parts,
-		    struct sspm_action_map *actions,
+		    const struct sspm_action_map *actions,
 		    char* (*get_string)(char *s, size_t size, void* data),
 		    void *get_string_data,
 		    struct sspm_header *first_header
