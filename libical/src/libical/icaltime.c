@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.67 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icaltime.c,v 1.68 2007-11-30 22:56:49 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -644,58 +644,53 @@ int icaltime_is_null_time(const struct icaltimetype t)
 
 int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b_in) 
 {
-    int retval = 0;
     struct icaltimetype a, b;
 
     a = icaltime_convert_to_zone(a_in, icaltimezone_get_utc_timezone());
     b = icaltime_convert_to_zone(b_in, icaltimezone_get_utc_timezone());
 
     if (a.year > b.year)
-	retval = 1;
+	return 1;
     else if (a.year < b.year)
-	retval = -1;
+	return -1;
 
     else if (a.month > b.month)
-	retval = 1;
+	return 1;
     else if (a.month < b.month)
-	retval = -1;
+	return -1;
 
     else if (a.day > b.day)
-	retval = 1;
+	return 1;
     else if (a.day < b.day)
-	retval = -1;
+	return -1;
 
     /* if both are dates, we are done */
     if (a.is_date && b.is_date)
-	return retval;
-
-    /* else, if we already found a difference, we are done */
-    else if (retval != 0)
-	return retval;
+	return 0;
 
     /* else, if only one is a date (and we already know the date part is equal),
        then the other is greater */
     else if (b.is_date)
-	retval = 1;
+	return 1;
     else if (a.is_date)
-	retval = -1;
+	return -1;
 
     else if (a.hour > b.hour)
-	retval = 1;
+	return 1;
     else if (a.hour < b.hour)
-	retval = -1;
+	return -1;
 
     else if (a.minute > b.minute)
-	retval = 1;
+	return 1;
     else if (a.minute < b.minute)
-	retval = -1;
+	return -1;
 
     else if (a.second > b.second)
-	retval = 1;
+	return 1;
     else if (a.second < b.second)
-	retval = -1;
+	return -1;
 
-    return retval;
+    return 0;
 }
 
 /**
