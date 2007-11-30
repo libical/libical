@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.59 2007-05-25 02:57:04 artcancro Exp $
+  $Id: icalcomponent.c,v 1.60 2007-11-30 22:32:08 dothebart Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -281,13 +281,16 @@ icalcomponent_as_ical_string (icalcomponent* impl)
     pvl_elem itr;
 
 /* RFC 2445 explicitly says that the newline is *ALWAYS* a \r\n (CRLF)!!!! */
-char newline[] = "\r\n";
 
 /* WIN32 automatically adds the \r, Anybody else need it?
+   well, the spec says \r\n is a MUST
+
 #ifdef ICAL_UNIX_NEWLINE    
     char newline[] = "\n";
 #else
+*/
     char newline[] = "\r\n";
+/*
 #endif
 */
    
@@ -826,6 +829,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 				       struct icaltimetype *dtstart,
 				       struct icaltimetype *recurtime) {
   icalproperty *exdate, *exrule;
+  pvl_elem property_iterator = comp->property_iterator;
 
   if (comp == NULL || 
       dtstart == NULL || 
@@ -843,6 +847,8 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 
     if (icaltime_compare(*recurtime, exdatetime) == 0) {
       /** MATCHED **/
+        
+      comp->property_iterator = property_iterator;
       return 1;
     }
   }
@@ -866,6 +872,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
       result = icaltime_compare(*recurtime, exrule_time);
       if (result == 0) {
 	icalrecur_iterator_free(exrule_itr);
+        comp->property_iterator = property_iterator;
 	return 1; /** MATCH **/
       }
       if (result == 1)
@@ -874,6 +881,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 
     icalrecur_iterator_free(exrule_itr);
   }
+  comp->property_iterator = property_iterator; 
 
   return 0;  /** no matches **/
 }
