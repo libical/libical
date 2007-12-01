@@ -1,0 +1,7 @@
+usr/include
+usr/lib/libical.a
+usr/lib/libical.la
+usr/lib/libical.so
+usr/lib/libicalss.a
+usr/lib/libicalss.la
+usr/lib/libicalss.so

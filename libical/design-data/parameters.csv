@@ -6,7 +6,7 @@
 "DELEGATED-TO","const char*",
 "DIR","const char*",
 "ENCODING","icalparameter_encoding","8BIT;BASE64"
-"FBTYPE","icalparameter_fbtype","FREE;BUSY;BUSYUNAVAILABLE;BUSYTENTATIVE"
+"FBTYPE","icalparameter_fbtype","FREE;BUSY;BUSY-UNAVAILABLE;BUSY-TENTATIVE"
 "FMTTYPE","const char*",
 "LANGUAGE","const char*",
 "MEMBER","const char*",

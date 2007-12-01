@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.37 2007-05-31 20:01:21 artcancro Exp $
+#  $Id: Makefile.am,v 1.38 2007-12-01 12:17:44 dothebart Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -47,7 +47,7 @@ INCLUDES =			\
 	-I$(top_builddir)/src	\
 	-I$(srcdir)
 
-libical_la_LDFLAGS = -version-info 27:6:27
+libical_la_LDFLAGS = -version-info 30:0:30
 
 
 libical_la_SOURCES =		\
@@ -107,7 +107,6 @@ libicalinclude_HEADERS = ical.h icalmemory.h icalerror.h
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering. It
 # is required to make the combined header ical.h properly
 COMBINEDHEADERS =					\
-        $(top_builddir)/config.h                        \
 	$(top_builddir)/src/libical/icalversion.h	\
 	$(top_srcdir)/src/libical/icaltime.h		\
 	$(top_srcdir)/src/libical/icalduration.h	\
@@ -133,6 +132,11 @@ COMBINEDHEADERS =					\
 	$(top_srcdir)/src/libical/sspm.h		\
 	$(top_srcdir)/src/libical/icalmime.h 		\
 	$(top_srcdir)/src/libical/icallangbind.h	
+
+# exporting the configure stuff is probably no good idea. 
+# others use standard defines not in our namespace too.
+#        $(top_builddir)/config.h                        \
+
 
 BUILT_COMBINEDHEADERS = 	\
 	icalderivedparameter.h	\
