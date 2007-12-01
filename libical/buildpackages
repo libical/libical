@@ -51,7 +51,7 @@ case $1 in
 	    mkdir tmp
 	    cp -a libical-$LIBICAL_VERSION tmp
 	    cd tmp/libical-$LIBICAL_VERSION
-	    rm -rf `find -name .svn ` svn*tmp config.log config.status
+	    rm -rf `find -name CVS ` svn*tmp config.log config.status
 	    cd ..
 	    tar -czf libical_${LIBICAL_VERSION}.orig.tar.gz libical-${LIBICAL_VERSION}/ --exclude "debian/*"
 	    pwd
@@ -66,30 +66,17 @@ case $1 in
 	fi
 	echo "
 PKG=CSWlibical
-NAME=libical - The groupware server for Web 2.0
+NAME=libical - all you need to parse ical components.
 VERSION=${PACKAGE_VERSION}
 CATEGORY=application
-VENDOR=http://www.libical.org/  packaged for CSW by Wilfried Goesgens
-HOTLINE=https://uncensored.libical.org/ Room libical support
+VENDOR=http://freeassociation.sourceforge.net/  packaged for CSW by Wilfried Goesgens
+HOTLINE=https://uncensored.citadel.org/ Room libical support
 EMAIL=libical@outgesourced.org
 " >~/pkgs/libical
 	export LDFLAGS='-L/opt/csw/lib -L /usr/local/lib'
 	export CFLAGS='-I/opt/csw/include -I/usr/local/include  -DDISABLE_CURSES'
 	./configure \
-	    --with-db=/opt/csw/bdb44 \
-	    --with-ical=/usr/local/ \
-	    --without-curses \
-	    --with-prefix=/opt/csw/ \
-	    --with-datadir=/opt/csw/var/lib/libical \
-	    --with-sysconfdir=/opt/csw/etc/libical \
-	    --with-ssldir=/opt/csw/etc/ssl/libical/ \
-	    --with-spooldir=/opt/csw/var/spool/libical \
-	    --with-rundir=/opt/csw/var/run/libical \
-	    --with-docdir=/opt/csw/share/doc/libical-doc/ \
-	    --with-pam \
-	    --with-zlib \
-	    --with-ldap \
-	    --with-libsieve
+	    --prefix=/opt/csw/ 
 	    
 	gmake citserver aidepost msgform citmail userlist sendcommand base64 whobbs libical
 	gmake DESTDIR=$ACTUAL_DIR/cswstage install-new
@@ -98,7 +85,7 @@ EMAIL=libical@outgesourced.org
 
 	;;
     sourcedist)
-	cd ..; tar --exclude .svn --exclude "debian/*" -cvzf libical-$LIBICAL_VERSION.tgz libical-$LIBICAL_VERSION/
+	cd ..; tar --exclude CVS --exclude "debian/*" -cvzf libical-$LIBICAL_VERSION.tgz libical-$LIBICAL_VERSION/
 	;;
 	*)
 		echo "Not yet implemented. we have: debian "
