@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.36 2007-05-31 21:26:15 artcancro Exp $
+ $Id: icaltimezone.c,v 1.37 2007-12-01 11:14:00 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1475,11 +1475,19 @@ icaltimezone_parse_zone_tab		(void)
 	printf ("Found zone: %s %f %f\n",
 		location, zone.latitude, zone.longitude);
 #endif
+	free (zone.location);
     }
 
     fclose (fp);
 }
 
+void
+icaltimezone_release_zone_tab		(void)
+{
+    icalarray *mybuiltin_timezones = builtin_timezones;
+    builtin_timezones = NULL;
+    icalarray_free (mybuiltin_timezones);
+}
 
 /** Loads the builtin VTIMEZONE data for the given timezone. */
 static void

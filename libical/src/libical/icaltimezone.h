@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.h,v 1.11 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icaltimezone.h,v 1.12 2007-12-01 11:14:00 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -153,6 +153,7 @@ void set_zone_directory(char *path);
 
 /** Free memory dedicated to the zonefile directory */
 void free_zone_directory(void);
+void icaltimezone_release_zone_tab(void);
 
 /*
  * @par Debugging Output.
