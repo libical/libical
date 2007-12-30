@@ -13,3 +13,6 @@ stamp-h.in
 stamp.h
 xlibtool
 xltmain.sh
+autom4te.cache
+configure
+stamp-h1
