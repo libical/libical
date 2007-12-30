@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.37 2007-12-01 11:14:00 dothebart Exp $
+ $Id: icaltimezone.c,v 1.38 2007-12-30 05:39:25 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -48,8 +48,8 @@
 #define ZONEINFO_DIRECTORY	PACKAGE_DATA_DIR "/zoneinfo"
 
 /** The prefix we use to uniquely identify TZIDs. */
-#define TZID_PREFIX		"/softwarestudio.org/"
-#define TZID_PREFIX_LEN		20
+#define TZID_PREFIX		"/citadel.org/"
+#define TZID_PREFIX_LEN		13
 
 /** This is the filename of the file containing the city names and
     coordinates of all the builtin timezones. */
@@ -66,7 +66,7 @@
 struct _icaltimezone {
     char		*tzid;
     /**< The unique ID of this timezone,
-       e.g. "/softwarestudio.org/Olson_20010601_1/Africa/Banjul".
+       e.g. "/citadel.org/Olson_20010601_1/Africa/Banjul".
        This should only be used to identify a VTIMEZONE. It is not
        meant to be displayed to the user in any form. */
 
