@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.38 2007-12-30 05:39:25 artcancro Exp $
+ $Id: icaltimezone.c,v 1.39 2008-01-01 17:29:17 artcancro Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1475,7 +1475,6 @@ icaltimezone_parse_zone_tab		(void)
 	printf ("Found zone: %s %f %f\n",
 		location, zone.latitude, zone.longitude);
 #endif
-	free (zone.location);
     }
 
     fclose (fp);
