@@ -1,10 +1,10 @@
-libical (0.30.1-1) unstable; urgency=low
+libical (0.30-1) unstable; urgency=low
   [ Wilfried Goesgens ]
   * remove CDBS
   * merge into upstream libical
   * merge in several patches roaming arround 
 
- -- Wilfried Goesgens <citadel@outgesourced.org>  Wed, 30 Nov 2007 12:19:06 +0100
+ -- Wilfried Goesgens <w.goesgens@outgesourced.org>  Wed, 30 Nov 2007 12:19:06 +0100
 
 libical (0.26.6-1) unstable; urgency=low
 
@@ -29,5 +29,5 @@ libical (0.24-1) unstable; urgency=low
 
   * Initial release
 
- -- Wilfried Goesgens <citadel@outgesourced.org>  Fri, 22 Jul 2005 13:09:43 +0200
+ -- Wilfried Goesgens <w.goesgens@outgesourced.org>  Fri, 22 Jul 2005 13:09:43 +0200
 

@@ -1,15 +1,16 @@
 Source: libical
 Priority: optional
-Maintainer: Wilfried Goesgens <citadel@outgesourced.org>
+Maintainer: Wilfried Goesgens <w.goesgens@outgesourced.org>
 Uploaders: Fathi Boudra <fboudra@free.fr>
-Build-Depends: cdbs, debhelper (>= 5), autotools-dev
-Standards-Version: 3.7.2
+Build-Depends: debhelper (>= 5), autotools-dev
+Standards-Version: 3.7.3
 Section: libs
+Homepage: http://freeassociation.sourceforge.net/
 
 Package: libical-dev
 Section: libdevel
 Architecture: any
-Depends: libical0 (= ${Source-Version})
+Depends: libical0 (= ${binary:Version})
 Description: iCalendar library implementation in C (development)
  libical is an open source implementation of the IETF's iCalendar calendaring
  and scheduling protocols (RFC 2445, 2446, and 2447). It parses iCal components
@@ -17,8 +18,6 @@ Description: iCalendar library implementation in C (development)
  and subcomponents.
  .
  This package contains the libical development files.
- .
-  Homepage: http://freeassociation.sourceforge.net/
 
 Package: libical0
 Section: libs
@@ -32,13 +31,12 @@ Description: iCalendar library implementation in C (runtime)
  .
  This package contains the files necessary for running applications that use
  the libical library.
- .
-  Homepage: http://freeassociation.sourceforge.net/
 
 Package: libical0-dbg
 Section: libs
+Priority: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libical0 (= ${binary:Version})
 Description: iCalendar library implementation in C (runtime)
  libical is an open source implementation of the IETF's iCalendar calendaring
  and scheduling protocols (RFC 2445, 2446, and 2447). It parses iCal components
@@ -47,5 +45,4 @@ Description: iCalendar library implementation in C (runtime)
  .
  This package contains the files necessary for running and debugging 
  applications that use the libical library.
- .
-  Homepage: http://freeassociation.sourceforge.net/
+
