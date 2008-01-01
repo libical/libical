@@ -202,6 +202,7 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 EXTRA_DIST = \
 	ChangeLog \
+	COPYING \
 	README \
 	TEST \
 	TODO

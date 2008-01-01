@@ -1,6 +1,7 @@
 
 EXTRA_DIST = \
 	ChangeLog \
+	COPYING \
 	README \
 	TEST \
 	TODO

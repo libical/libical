@@ -2,11 +2,14 @@
 #
 # run me after checking Citadel out of CVS.
 #
-# $Id: bootstrap,v 1.1 2007-12-01 12:17:41 dothebart Exp $
+# $Id: bootstrap,v 1.2 2008-01-01 22:13:25 dothebart Exp $
 #
 
 # Remove any vestiges of pre-6.05 build environments
 rm -f .libs modules *.so *.lo *.la 2>/dev/null
+
+echo ... running automake ...
+automake
 
 echo ... running aclocal ...
 aclocal
