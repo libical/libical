@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.39 2008-01-01 17:29:17 artcancro Exp $
+ $Id: icaltimezone.c,v 1.40 2008-01-01 22:07:56 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -1483,8 +1483,15 @@ icaltimezone_parse_zone_tab		(void)
 void
 icaltimezone_release_zone_tab		(void)
 {
+    int i;
+    char *ch;
     icalarray *mybuiltin_timezones = builtin_timezones;
+
+    if (builtin_timezones == NULL)
+	return;
     builtin_timezones = NULL;
+    for (i = 0; i < mybuiltin_timezones->num_elements; i++)
+	free ( ((icaltimezone*)icalarray_element_at(mybuiltin_timezones, i))->location);
     icalarray_free (mybuiltin_timezones);
 }
 

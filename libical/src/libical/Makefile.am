@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.38 2007-12-01 12:17:44 dothebart Exp $
+#  $Id: Makefile.am,v 1.39 2008-01-01 22:07:56 dothebart Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -135,8 +135,7 @@ COMBINEDHEADERS =					\
 
 # exporting the configure stuff is probably no good idea. 
 # others use standard defines not in our namespace too.
-#        $(top_builddir)/config.h                        \
-
+#        $(top_builddir)/config.h                        
 
 BUILT_COMBINEDHEADERS = 	\
 	icalderivedparameter.h	\
