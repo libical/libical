@@ -30,8 +30,8 @@
 #include <unistd.h> /* for alarm */
 #endif
 
-#include "ical.h"
-#include "icalss.h"
+#include <libical/ical.h>
+#include <libicalss/icalss.h>
 #include "regression.h"
 
 extern int VERBOSE;
@@ -99,6 +99,7 @@ void test_recur_file()
     time_t tt;
     char* file; 
     int num_recurs_found = 0;
+    icalfileset_options options = {O_RDONLY, 0644, 0};
 	
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 	
@@ -107,12 +108,12 @@ void test_recur_file()
 #endif
     file = getenv("ICAL_RECUR_FILE");
     if (!file)
-      file = "../../test-data/recur.txt";
+      file = TEST_DATADIR "/recur.txt";
 	
 #ifndef WIN32
     alarm(15); /* to get file lock */
 #endif
-    cin = icalfileset_new(file);
+    cin = icalset_new(ICAL_FILE_SET, file, &options);
 #ifndef WIN32
     alarm(0);
 #endif

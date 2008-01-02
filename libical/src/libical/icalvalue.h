@@ -4,7 +4,7 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalvalue.h,v 1.8 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalvalue.h,v 1.9 2008-01-02 20:07:33 dothebart Exp $
   $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -84,5 +84,8 @@ int icalvalue_kind_is_valid(const icalvalue_kind kind);
 
 /** Encode a character string in ical format, esacpe certain characters, etc. */
 int icalvalue_encode_ical_string(const char *szText, char *szEncText, int MaxBufferLen);
+
+/** Extract the original character string encoded by the above function **/
+int icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen);
 
 #endif /*ICALVALUE_H*/

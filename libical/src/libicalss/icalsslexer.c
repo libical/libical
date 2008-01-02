@@ -501,7 +501,7 @@ char *yytext_ptr;
   
   DESCRIPTION:
   
-  $Id: icalsslexer.c,v 1.13 2007-08-21 02:45:54 artcancro Exp $
+  $Id: icalsslexer.c,v 1.14 2008-01-02 20:07:42 dothebart Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -528,16 +528,32 @@ char *yytext_ptr;
 
 #include <string.h> /* For strdup() */
 
-#undef YYPURE
-#define YYPURE
+const char* input_buffer;
+const char* input_buffer_p;
+
+#define min(a,b) ((a) < (b) ? (a) : (b))   
+
+int icalss_input(char* buf, int max_size)
+{
+    int n = min(max_size,strlen(input_buffer_p));
+
+    if (n > 0){
+	memcpy(buf, input_buffer_p, n);
+	input_buffer_p += n;
+	return n;
+    } else {
+	return 0;
+    }
+}
+
+#undef YY_INPUT
+#define YY_INPUT(b,r,ms) ( r= icalss_input(b,ms))
 
 #undef SS_FATAL_ERROR
 #define SS_FATAL_ERROR(msg) sserror(msg)
 
-/* See http://lists.ximian.com/archives/public/evolution-hackers/2003-September/001304.html
-   if you run into problems with this option. */
 
-#line 541 "icalsslexer.c"
+#line 557 "icalsslexer.c"
 
 #define INITIAL 0
 #define sql 1
@@ -664,9 +680,9 @@ static int input (void );
 #ifndef YY_DECL
 #define YY_DECL_IS_OURS 1
 
-extern int sslex (YYSTYPE * yylval_param );
+extern int sslex (void);
 
-#define YY_DECL int sslex (YYSTYPE * yylval_param )
+#define YY_DECL int sslex (void)
 #endif /* !YY_DECL */
 
 /* Code executed at the beginning of each rule, after sstext and ssleng
@@ -692,18 +708,14 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-        YYSTYPE * yylval;
-    
-#line 68 "icalsslexer.l"
+#line 83 "icalsslexer.l"
 
 
 
 
 
 
-#line 705 "icalsslexer.c"
-
-    yylval = yylval_param;
+#line 719 "icalsslexer.c"
 
 	if ( !(yy_init) )
 		{
@@ -788,109 +800,108 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 74 "icalsslexer.l"
+#line 89 "icalsslexer.l"
 { return SELECT; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 75 "icalsslexer.l"
+#line 90 "icalsslexer.l"
 { return FROM; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 76 "icalsslexer.l"
+#line 91 "icalsslexer.l"
 { return WHERE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 77 "icalsslexer.l"
+#line 92 "icalsslexer.l"
 { return COMMA; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 78 "icalsslexer.l"
+#line 93 "icalsslexer.l"
 { return EQUALS; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 79 "icalsslexer.l"
+#line 94 "icalsslexer.l"
 { return EQUALS; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 80 "icalsslexer.l"
+#line 95 "icalsslexer.l"
 { return NOTEQUALS; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 81 "icalsslexer.l"
+#line 96 "icalsslexer.l"
 { return LESS; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 82 "icalsslexer.l"
+#line 97 "icalsslexer.l"
 { return GREATER; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 83 "icalsslexer.l"
+#line 98 "icalsslexer.l"
 { return LESSEQUALS; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 84 "icalsslexer.l"
+#line 99 "icalsslexer.l"
 { return GREATEREQUALS; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 85 "icalsslexer.l"
+#line 100 "icalsslexer.l"
 { return AND; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 86 "icalsslexer.l"
+#line 101 "icalsslexer.l"
 { return OR; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 87 "icalsslexer.l"
+#line 102 "icalsslexer.l"
 { return IS; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 88 "icalsslexer.l"
+#line 103 "icalsslexer.l"
 { return NOT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 89 "icalsslexer.l"
+#line 104 "icalsslexer.l"
 { return SQLNULL; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 90 "icalsslexer.l"
+#line 105 "icalsslexer.l"
 { return QUOTE; }
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 91 "icalsslexer.l"
+#line 106 "icalsslexer.l"
 ;			
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 92 "icalsslexer.l"
+#line 107 "icalsslexer.l"
 { return EOL; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 94 "icalsslexer.l"
+#line 109 "icalsslexer.l"
 {
-	/* int c = input(yy_globals);    removed this variable, does it work? */
 	int c = input();
 	unput(c);
 	if(c!='\''){
-		yylval_param->v_string= icalmemory_tmp_copy(sstext);
+		sslval.v_string= icalmemory_tmp_copy(sstext);
 		return STRING;
 	} else {
 		/*ssmore();*/
@@ -899,23 +910,23 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 106 "icalsslexer.l"
+#line 120 "icalsslexer.l"
 {
-        yylval->v_string= icalmemory_tmp_copy(sstext);
+        sslval.v_string= icalmemory_tmp_copy(sstext);
 	return STRING; 
 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 112 "icalsslexer.l"
+#line 126 "icalsslexer.l"
 { return sstext[0]; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 114 "icalsslexer.l"
+#line 128 "icalsslexer.l"
 ECHO;
 	YY_BREAK
-#line 919 "icalsslexer.c"
+#line 930 "icalsslexer.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(sql):
 case YY_STATE_EOF(string_value):
@@ -1148,7 +1159,7 @@ static int yy_get_next_buffer (void)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			(yy_n_chars), num_to_read );
+			(yy_n_chars), (size_t) num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
 		}
@@ -1649,7 +1660,7 @@ YY_BUFFER_STATE ss_scan_buffer  (char * base, yy_size_t  size )
 
 /** Setup the input buffer state to scan a string. The next call to sslex() will
  * scan from a @e copy of @a str.
- * @param str a NUL-terminated string to scan
+ * @param yystr a NUL-terminated string to scan
  * 
  * @return the newly allocated buffer state object.
  * @note If you want to scan bytes that may contain NUL values, then use
@@ -1903,11 +1914,10 @@ void ssfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 114 "icalsslexer.l"
+#line 128 "icalsslexer.l"
 
 
 
-/* int sswrap(yyscan_t yy_globals) */
 int sswrap()
 {
      return 1;

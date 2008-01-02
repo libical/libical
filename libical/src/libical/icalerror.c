@@ -3,7 +3,7 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.20 2007-05-31 21:26:14 artcancro Exp $
+  $Id: icalerror.c,v 1.21 2008-01-02 20:07:31 dothebart Exp $
   $Locker:  $
     
 
@@ -108,7 +108,7 @@ void icalerror_clear_errno() {
     icalerrno = ICAL_NO_ERROR;
 }
 
-#if ICAL_ERRORS_ARE_FATAL
+#if ICAL_ERRORS_ARE_FATAL == 1
 int icalerror_errors_are_fatal = 1;
 #else
 int icalerror_errors_are_fatal = 0;
@@ -158,17 +158,13 @@ static const struct icalerror_string_map string_map[] =
 
 
 icalerrorenum icalerror_error_from_string(const char* str){
- 
-    icalerrorenum e;
-    int i = 0;
+    int i;
 
-    for( i = 0; string_map[i].error != ICAL_NO_ERROR; i++){
-        if (strcmp(string_map[i].str,str) == 0){
-            e = string_map[i].error;
-        }
-    }
+    for( i = 0; string_map[i].error != ICAL_UNKNOWN_ERROR; i++)
+        if (strcmp(string_map[i].str,str) == 0)
+	    break;
 
-    return e;
+    return string_map[i].error;
 }
 
 icalerrorstate icalerror_supress(const char* error){

@@ -3,7 +3,7 @@
   FILE: icaltestparser.c
   CREATOR: eric 20 June 1999
   
-  $Id: icaltestparser.c,v 1.3 2007-04-30 13:57:49 artcancro Exp $
+  $Id: icaltestparser.c,v 1.4 2008-01-02 20:07:45 dothebart Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -29,7 +29,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#include "ical.h"
+#include <libical/ical.h>
 
 #include <stdlib.h>
 

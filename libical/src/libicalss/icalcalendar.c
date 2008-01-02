@@ -2,7 +2,7 @@
   FILE: icalcalendar.c
   CREATOR: eric 23 December 1999
   
-  $Id: icalcalendar.c,v 1.7 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalcalendar.c,v 1.8 2008-01-02 20:07:39 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -47,6 +47,10 @@
 #include <stdlib.h> /* for malloc */
 #include <string.h> /* for strcat */
 #include <errno.h>
+
+#ifdef WIN32
+#define mkdir(path, mode) _mkdir(path)
+#endif
 
 #define BOOKED_DIR "booked"
 #define INCOMING_FILE "incoming.ics"

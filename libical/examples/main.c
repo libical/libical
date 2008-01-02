@@ -1,5 +1,5 @@
 /* This is just to make the code in the example directory link properly. */
-#include "ical.h"
+#include <libical/ical.h>
 
 int main()
 {

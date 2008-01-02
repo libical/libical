@@ -10,8 +10,8 @@
 
 
 extern "C" {
-#include "ical.h"
-#include "icalgauge.h"
+#include <libical/ical.h>
+#include <libicalss/icalgauge.h>
 }
 
 #include "vcomponent.h"

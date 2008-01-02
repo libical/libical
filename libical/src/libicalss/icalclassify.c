@@ -3,7 +3,7 @@
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
   
-    $Id: icalclassify.c,v 1.17 2007-05-25 02:57:04 artcancro Exp $
+    $Id: icalclassify.c,v 1.18 2008-01-02 20:07:39 dothebart Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -26,9 +26,9 @@
 #include "config.h"
 #endif
 
-#include "ical.h"
+#include <libical/ical.h>
 #include "icalclassify.h"
-#include "icalmemory.h"
+#include <libical/icalmemory.h>
 
 #include <ctype.h>   /* For tolower() */
 #include <string.h> /* for index() */
@@ -53,18 +53,17 @@ struct icalclassify_parts {
 char* icalclassify_lowercase(const char* str)
 {
     char* p = 0;
-    char *xnew;
+    char* new = icalmemory_strdup(str);
 
     if(str ==0){
 	return 0;
     }
 
-    xnew = icalmemory_strdup(str);
-    for(p = xnew; *p!=0; p++){
+    for(p = new; *p!=0; p++){
 	*p = tolower(*p);
     }
 
-    return xnew;
+    return new;
 }
 
 /* Return a set of components that intersect in time with comp. For

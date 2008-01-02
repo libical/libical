@@ -4,16 +4,16 @@
  CREATOR: dml 12 December 2001
  (C) COPYRIGHT 2001, Critical Path
 
- $Id: icalbdbset.h,v 1.4 2002-09-26 22:24:52 lindner Exp $
+ $Id: icalbdbset.h,v 1.5 2008-01-02 20:07:39 dothebart Exp $
  $Locker:  $
 ======================================================================*/
 
 #ifndef ICALBDBSET_H
 #define ICALBDBSET_H
 
-#include "ical.h"
-#include "icalset.h"
-#include "icalgauge.h"
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
+#include <libicalss/icalgauge.h>
 #include <db.h>
 
 typedef struct icalbdbset_impl icalbdbset;

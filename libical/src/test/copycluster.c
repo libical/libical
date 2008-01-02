@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.16 2007-04-30 13:57:49 artcancro Exp $
+  $Id: copycluster.c,v 1.17 2008-01-02 20:07:44 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -32,13 +32,18 @@
 #include <unistd.h> /* for alarm */
 #include <stdlib.h> /* for exit */
 
-#include "ical.h"
-#include "icalss.h"
+#include <libical/ical.h>
+#include <libicalss/icalss.h>
+
+#ifdef SIGALRM
 
 static void sig_alrm(int i){
     fprintf(stderr,"Could not get lock on file\n");
     exit(1);
 }
+
+#endif
+
 /* This program copies a file that holds iCal components to an other file. */
 
 
@@ -65,12 +70,14 @@ int main(int c, char *argv[]){
 
     /*icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);*/
 
+#ifdef SIGALRM
     signal(SIGALRM,sig_alrm);
-
     alarm(10);
+#endif
     clusterin = icalfileset_new(argv[1]);
+#ifdef SIGALRM
     alarm(0);
-
+#endif
     if (clusterin == 0){
 	printf("Could not open input cluster \"%s\"\n",argv[1]);
 	if(icalerrno!= ICAL_NO_ERROR){
@@ -80,9 +87,13 @@ int main(int c, char *argv[]){
     }
 
     if (!tostdout){
+#ifdef SIGALRM
         alarm(10);
+#endif
 	clusterout = icalfileset_new(argv[2]);
+#ifdef SIGALRM
 	alarm(0);
+#endif
 	if (clusterout == 0){
 	    printf("Could not open output cluster \"%s\"\n",argv[2]);
 	    exit(1);

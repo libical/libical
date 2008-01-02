@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.51 2007-11-30 22:32:10 dothebart Exp $
+  $Id: icalparser.c,v 1.52 2008-01-02 20:07:31 dothebart Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -53,6 +53,11 @@
 #include "icalmemory.h"
 #include "icalparser.h"
 
+#ifdef WIN32
+#define HAVE_CTYPE_H
+#define HAVE_ISWSPACE
+#endif
+
 #ifdef HAVE_WCTYPE_H
 # include <wctype.h>
 /* Some systems have an imcomplete implementation on wctype (FreeBSD,
@@ -96,6 +101,18 @@ struct icalparser_impl
     void *line_gen_data;
 
 };
+
+
+char* strstrip (char *str)
+{
+	if (!str)
+		return NULL;
+	while (*str == ' ')
+		str = str+1;
+	while (*str && str[strlen  (str)-1] == ' ')
+		str[strlen (str)-1] = 0;
+	return str;
+}
 
 
 icalparser* icalparser_new(void)
@@ -329,7 +346,7 @@ char* parser_get_next_value(char* line, char **end, icalvalue_kind kind)
 		break;
 	}
 
-	/* If the comma is preceded by a '\', then it is a literal and
+	/* If the comma is preceeded by a '\', then it is a literal and
 	   not a value seperator*/  
       
 	if ( (next!=0 && *(next-1) == '\\') ||
@@ -476,8 +493,8 @@ char* icalparser_get_line(icalparser *parser,
 	
  
 	/* If the output line ends in a '\n' and the temp buffer
-	   begins with a ' ', then the buffer holds a continuation
-	   line, so keep reading.  */
+	   begins with a ' ' or tab, then the buffer holds a continuation
+	   line, so keep reading.  RFC 2445, section 4.1 */
 
 	if  ( line_p > line+1 && *(line_p-1) == '\n'
 		  && (parser->temp[0] == ' ' || parser->temp[0] == '\t') ) {
@@ -604,7 +621,7 @@ icalcomponent* icalparser_parse(icalparser *parser,
         }
 	cont = 0;
 	if(line != 0){
-	    free(line);
+	    icalmemory_free_buffer(line);
 		cont = 1;
 	}
     } while ( cont );
@@ -818,6 +835,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	}
 
 	str = parser_get_next_parameter(end,&end);
+	str = strstrip (str);
 
 	if (str != 0){
 	    char* name;
@@ -940,6 +958,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
     vcount=0;
     while(1) {
 	str = parser_get_next_value(end,&end, value_kind);
+	str = strstrip (str);
 
 	if (str != 0){
 		

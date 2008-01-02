@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression-storage.c,v 1.4 2007-04-30 13:57:49 artcancro Exp $
+  $Id: regression-storage.c,v 1.5 2008-01-02 20:07:46 dothebart Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -27,14 +27,18 @@
     
   ======================================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <assert.h>
 #include <string.h> /* for strdup */
 #include <stdlib.h> /* for malloc */
 #include <stdio.h> /* for printf */
 #include <time.h> /* for time() */
 
-#include "ical.h"
-#include "icalss.h"
+#include <libical/ical.h>
+#include <libicalss/icalss.h>
 #include "regression.h"
 
 #define OUTPUT_FILE "filesetout.ics"

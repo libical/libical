@@ -38,8 +38,8 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 noinst_PROGRAMS = copycluster$(EXEEXT) regression$(EXEEXT) \
-	parser$(EXEEXT) stow$(EXEEXT) recur$(EXEEXT) testmime$(EXEEXT) \
-	process$(EXEEXT)
+	parser$(EXEEXT) $(am__EXEEXT_1) recur$(EXEEXT) \
+	testmime$(EXEEXT) testvcal$(EXEEXT) process$(EXEEXT)
 subdir = src/test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -49,54 +49,67 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
+@OS_WIN32_FALSE@am__EXEEXT_1 = stow$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 am_copycluster_OBJECTS = copycluster.$(OBJEXT)
 copycluster_OBJECTS = $(am_copycluster_OBJECTS)
 copycluster_LDADD = $(LDADD)
-am__DEPENDENCIES_1 =
-copycluster_DEPENDENCIES = ../libicalss/.libs/libicalss.a \
-	$(am__DEPENDENCIES_1) ../libical/.libs/libical.a \
-	$(am__DEPENDENCIES_1)
+@WITH_CXX_BINDINGS_TRUE@am__DEPENDENCIES_1 =  \
+@WITH_CXX_BINDINGS_TRUE@	../libical/libical_cxx.la
+am__DEPENDENCIES_2 =
+copycluster_DEPENDENCIES = ../libicalss/libicalss.la \
+	../libicalvcal/libicalvcal.la $(am__DEPENDENCIES_1) \
+	../libical/libical.la $(am__DEPENDENCIES_2)
 am_parser_OBJECTS = icaltestparser.$(OBJEXT)
 parser_OBJECTS = $(am_parser_OBJECTS)
 parser_LDADD = $(LDADD)
-parser_DEPENDENCIES = ../libicalss/.libs/libicalss.a \
-	$(am__DEPENDENCIES_1) ../libical/.libs/libical.a \
-	$(am__DEPENDENCIES_1)
+parser_DEPENDENCIES = ../libicalss/libicalss.la \
+	../libicalvcal/libicalvcal.la $(am__DEPENDENCIES_1) \
+	../libical/libical.la $(am__DEPENDENCIES_2)
 am_process_OBJECTS = process.$(OBJEXT)
 process_OBJECTS = $(am_process_OBJECTS)
 process_LDADD = $(LDADD)
-process_DEPENDENCIES = ../libicalss/.libs/libicalss.a \
-	$(am__DEPENDENCIES_1) ../libical/.libs/libical.a \
-	$(am__DEPENDENCIES_1)
+process_DEPENDENCIES = ../libicalss/libicalss.la \
+	../libicalvcal/libicalvcal.la $(am__DEPENDENCIES_1) \
+	../libical/libical.la $(am__DEPENDENCIES_2)
 am_recur_OBJECTS = recur.$(OBJEXT)
 recur_OBJECTS = $(am_recur_OBJECTS)
 recur_LDADD = $(LDADD)
-recur_DEPENDENCIES = ../libicalss/.libs/libicalss.a \
-	$(am__DEPENDENCIES_1) ../libical/.libs/libical.a \
-	$(am__DEPENDENCIES_1)
-am__objects_1 =
+recur_DEPENDENCIES = ../libicalss/libicalss.la \
+	../libicalvcal/libicalvcal.la $(am__DEPENDENCIES_1) \
+	../libical/libical.la $(am__DEPENDENCIES_2)
+am__regression_SOURCES_DIST = regression.c regression.h \
+	regression-component.c regression-classify.c \
+	regression-utils.c regression-recur.c regression-storage.c \
+	regression-cxx.cpp
+@WITH_CXX_BINDINGS_TRUE@am__objects_1 = regression-cxx.$(OBJEXT)
 am_regression_OBJECTS = regression.$(OBJEXT) \
 	regression-component.$(OBJEXT) regression-classify.$(OBJEXT) \
 	regression-utils.$(OBJEXT) regression-recur.$(OBJEXT) \
 	regression-storage.$(OBJEXT) $(am__objects_1)
 regression_OBJECTS = $(am_regression_OBJECTS)
 regression_LDADD = $(LDADD)
-regression_DEPENDENCIES = ../libicalss/.libs/libicalss.a \
-	$(am__DEPENDENCIES_1) ../libical/.libs/libical.a \
-	$(am__DEPENDENCIES_1)
+regression_DEPENDENCIES = ../libicalss/libicalss.la \
+	../libicalvcal/libicalvcal.la $(am__DEPENDENCIES_1) \
+	../libical/libical.la $(am__DEPENDENCIES_2)
 am_stow_OBJECTS = stow.$(OBJEXT)
 stow_OBJECTS = $(am_stow_OBJECTS)
 stow_LDADD = $(LDADD)
-stow_DEPENDENCIES = ../libicalss/.libs/libicalss.a \
-	$(am__DEPENDENCIES_1) ../libical/.libs/libical.a \
-	$(am__DEPENDENCIES_1)
+stow_DEPENDENCIES = ../libicalss/libicalss.la \
+	../libicalvcal/libicalvcal.la $(am__DEPENDENCIES_1) \
+	../libical/libical.la $(am__DEPENDENCIES_2)
 am_testmime_OBJECTS = testmime.$(OBJEXT)
 testmime_OBJECTS = $(am_testmime_OBJECTS)
 testmime_LDADD = $(LDADD)
-testmime_DEPENDENCIES = ../libicalss/.libs/libicalss.a \
-	$(am__DEPENDENCIES_1) ../libical/.libs/libical.a \
-	$(am__DEPENDENCIES_1)
+testmime_DEPENDENCIES = ../libicalss/libicalss.la \
+	../libicalvcal/libicalvcal.la $(am__DEPENDENCIES_1) \
+	../libical/libical.la $(am__DEPENDENCIES_2)
+am_testvcal_OBJECTS = testvcal.$(OBJEXT)
+testvcal_OBJECTS = $(am_testvcal_OBJECTS)
+testvcal_LDADD = $(LDADD)
+testvcal_DEPENDENCIES = ../libicalss/libicalss.la \
+	../libicalvcal/libicalvcal.la $(am__DEPENDENCIES_1) \
+	../libical/libical.la $(am__DEPENDENCIES_2)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -108,12 +121,21 @@ LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(copycluster_SOURCES) $(parser_SOURCES) $(process_SOURCES) \
 	$(recur_SOURCES) $(regression_SOURCES) $(stow_SOURCES) \
-	$(testmime_SOURCES)
+	$(testmime_SOURCES) $(testvcal_SOURCES)
 DIST_SOURCES = $(copycluster_SOURCES) $(parser_SOURCES) \
-	$(process_SOURCES) $(recur_SOURCES) $(regression_SOURCES) \
-	$(stow_SOURCES) $(testmime_SOURCES)
+	$(process_SOURCES) $(recur_SOURCES) \
+	$(am__regression_SOURCES_DIST) $(stow_SOURCES) \
+	$(testmime_SOURCES) $(testvcal_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -136,7 +158,7 @@ CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
-CXX = @CC@
+CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@
@@ -160,6 +182,11 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+JAR = @JAR@
+JAVA = @JAVA@
+JAVAC = @JAVAC@
+JAVAH = @JAVAH@
+JAVA_PLATFORM = @JAVA_PLATFORM@
 LDFLAGS = @LDFLAGS@
 LEX = @LEX@
 LEXLIB = @LEXLIB@
@@ -174,6 +201,8 @@ MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
 OBJEXT = @OBJEXT@
+OS_WIN32_FALSE = @OS_WIN32_FALSE@
+OS_WIN32_TRUE = @OS_WIN32_TRUE@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -182,8 +211,15 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PERL = @PERL@
+PKG_CONFIG = @PKG_CONFIG@
 PTHREAD_LIBS = @PTHREAD_LIBS@
+PY_CFLAGS = @PY_CFLAGS@
+PY_EXTRA_LIBS = @PY_EXTRA_LIBS@
+PY_LIBS = @PY_LIBS@
+PY_LIB_LOC = @PY_LIB_LOC@
 RANLIB = @RANLIB@
+RRCAP_CFLAGS = @RRCAP_CFLAGS@
+RRCAP_LIBS = @RRCAP_LIBS@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -191,6 +227,14 @@ STRIP = @STRIP@
 VERSION = @VERSION@
 WITH_BDB4_FALSE = @WITH_BDB4_FALSE@
 WITH_BDB4_TRUE = @WITH_BDB4_TRUE@
+WITH_CAP_FALSE = @WITH_CAP_FALSE@
+WITH_CAP_TRUE = @WITH_CAP_TRUE@
+WITH_CXX_BINDINGS_FALSE = @WITH_CXX_BINDINGS_FALSE@
+WITH_CXX_BINDINGS_TRUE = @WITH_CXX_BINDINGS_TRUE@
+WITH_JAVA_FALSE = @WITH_JAVA_FALSE@
+WITH_JAVA_TRUE = @WITH_JAVA_TRUE@
+WITH_PYTHON_FALSE = @WITH_PYTHON_FALSE@
+WITH_PYTHON_TRUE = @WITH_PYTHON_TRUE@
 YACC = @YACC@
 YFLAGS = @YFLAGS@
 ac_ct_CC = @ac_ct_CC@
@@ -236,6 +280,7 @@ pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+python_val = @python_val@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
@@ -244,21 +289,26 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-cxx_inc = 
-cxx_libs = 
-regression_cxx = 
+@WITH_CXX_BINDINGS_FALSE@cxx_inc = 
+@WITH_CXX_BINDINGS_TRUE@cxx_inc = -DWITH_CXX_BINDINGS
+@WITH_CXX_BINDINGS_FALSE@cxx_libs = 
+@WITH_CXX_BINDINGS_TRUE@cxx_libs = ../libical/libical_cxx.la
+@WITH_CXX_BINDINGS_FALSE@regression_cxx = 
+@WITH_CXX_BINDINGS_TRUE@regression_cxx = regression-cxx.cpp
+@WITH_CXX_BINDINGS_FALSE@AM_CXX = @CC@
 @WITH_BDB4_FALSE@bdb4_inc = 
 @WITH_BDB4_TRUE@bdb4_inc = -DWITH_BDB -I@BDB_DIR@/include
 @WITH_BDB4_FALSE@bdb4_libs = 
 @WITH_BDB4_TRUE@bdb4_libs = @BDB_DIR_LIB@/@BDB_LIB@
-LDADD = ../libicalss/.libs/libicalss.a $(cxx_libs) ../libical/.libs/libical.a $(bdb4_libs)
+@OS_WIN32_FALSE@STOW = stow
+LDADD = ../libicalss/libicalss.la ../libicalvcal/libicalvcal.la $(cxx_libs) ../libical/libical.la $(bdb4_libs)
 INCLUDES = \
-       -I. 				\
-       -I$(srcdir) 			\
-       -I../libical 			\
-       -I$(srcdir)/../libical 		\
-       -I../libicalss 			\
-       -I$(srcdir)/../libicalss         \
+	-I$(top_srcdir)					\
+	-I$(top_srcdir)/src				\
+	-I$(top_builddir)/src				\
+	-I$(top_srcdir)/src/libical			\
+	-I$(top_builddir)/src/libical			\
+	-DTEST_DATADIR=\"$(top_srcdir)/test-data\"	\
 	$(cxx_inc) $(bdb4_inc)
 
 TESTS = regression
@@ -275,13 +325,21 @@ regression_SOURCES = \
 
 parser_SOURCES = icaltestparser.c
 stow_SOURCES = stow.c
+testvcal_SOURCES = testvcal.c
 recur_SOURCES = recur.c 
 testmime_SOURCES = testmime.c
 process_SOURCES = process.c
+# clusterin.vcd should be a real file with data but it doesn't seem to be in cvs
+CLEANFILES = \
+	test_fileset.ics 		\
+	test_fileset_locktest.ics	\
+	filesetout.ics 			\
+	clusterin.vcd
+
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .lo .o .obj
+.SUFFIXES: .c .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -332,13 +390,16 @@ recur$(EXEEXT): $(recur_OBJECTS) $(recur_DEPENDENCIES)
 	$(LINK) $(recur_LDFLAGS) $(recur_OBJECTS) $(recur_LDADD) $(LIBS)
 regression$(EXEEXT): $(regression_OBJECTS) $(regression_DEPENDENCIES) 
 	@rm -f regression$(EXEEXT)
-	$(LINK) $(regression_LDFLAGS) $(regression_OBJECTS) $(regression_LDADD) $(LIBS)
+	$(CXXLINK) $(regression_LDFLAGS) $(regression_OBJECTS) $(regression_LDADD) $(LIBS)
 stow$(EXEEXT): $(stow_OBJECTS) $(stow_DEPENDENCIES) 
 	@rm -f stow$(EXEEXT)
 	$(LINK) $(stow_LDFLAGS) $(stow_OBJECTS) $(stow_LDADD) $(LIBS)
 testmime$(EXEEXT): $(testmime_OBJECTS) $(testmime_DEPENDENCIES) 
 	@rm -f testmime$(EXEEXT)
 	$(LINK) $(testmime_LDFLAGS) $(testmime_OBJECTS) $(testmime_LDADD) $(LIBS)
+testvcal$(EXEEXT): $(testvcal_OBJECTS) $(testvcal_DEPENDENCIES) 
+	@rm -f testvcal$(EXEEXT)
+	$(LINK) $(testvcal_LDFLAGS) $(testvcal_OBJECTS) $(testvcal_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -352,12 +413,14 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/recur.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regression-classify.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regression-component.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regression-cxx.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regression-recur.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regression-storage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regression-utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regression.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testmime.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testvcal.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -379,6 +442,27 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+.cpp.o:
+@am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
+
+.cpp.obj:
+@am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.cpp.lo:
+@am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -560,6 +644,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -569,7 +654,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-noinstPROGRAMS \
+clean-am: clean-generic clean-libtool clean-local clean-noinstPROGRAMS \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -619,8 +704,8 @@ ps-am:
 uninstall-am: uninstall-info-am
 
 .PHONY: CTAGS GTAGS all all-am check check-TESTS check-am clean \
-	clean-generic clean-libtool clean-noinstPROGRAMS ctags \
-	distclean distclean-compile distclean-generic \
+	clean-generic clean-libtool clean-local clean-noinstPROGRAMS \
+	ctags distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-exec install-exec-am install-info \
@@ -630,6 +715,9 @@ uninstall-am: uninstall-info-am
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-info-am
 
+
+clean-local:
+	rm -rf calendar
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

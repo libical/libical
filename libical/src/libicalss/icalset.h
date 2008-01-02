@@ -14,7 +14,7 @@
 **/
 
 /*
- $Id: icalset.h,v 1.14 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icalset.h,v 1.15 2008-01-02 20:07:42 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -40,8 +40,8 @@
 #define ICALSET_H
 
 #include <limits.h> /* For PATH_MAX */
-#include "ical.h"
-#include "icalgauge.h"
+#include <libical/ical.h>
+#include <libicalss/icalgauge.h>
 
 #ifdef PATH_MAX
 #define ICAL_PATH_MAX PATH_MAX

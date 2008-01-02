@@ -3,7 +3,7 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.16 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icaltypes.c,v 1.17 2008-01-02 20:07:32 dothebart Exp $
   $Locker:  $
     
 
@@ -77,7 +77,7 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
 
     
     struct icaltriggertype tr, null_tr;
-    icalerrorstate es;
+    icalerrorstate es = ICAL_ERROR_DEFAULT;
     icalerrorenum e;
 
     tr.time= icaltime_null_time();

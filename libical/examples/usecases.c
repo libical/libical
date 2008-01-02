@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: usecases.c,v 1.2 2002-06-28 10:55:15 acampi Exp $
+  $Id: usecases.c,v 1.3 2008-01-02 20:07:29 dothebart Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -27,7 +27,7 @@
     
   ======================================================================*/
 
-#include "ical.h"
+#include <libical/ical.h>
 #include <assert.h>
 #include <string.h> /* for strdup */
 #include <stdlib.h> /* for malloc */

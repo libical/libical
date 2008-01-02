@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalgauge.h,v 1.5 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icalgauge.h,v 1.6 2008-01-02 20:07:40 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -28,6 +28,8 @@
 
 #ifndef ICALGAUGE_H
 #define ICALGAUGE_H
+
+#include <libical/icalcomponent.h>
 
 /** @file icalgauge.h
  *  @brief Routines implementing a filter for ical components

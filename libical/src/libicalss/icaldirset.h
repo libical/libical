@@ -4,7 +4,7 @@
  CREATOR: eric 28 November 1999
 
 
- $Id: icaldirset.h,v 1.7 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icaldirset.h,v 1.8 2008-01-02 20:07:40 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -29,10 +29,10 @@
 #ifndef ICALDIRSET_H
 #define ICALDIRSET_H
 
-#include "ical.h"
-#include "icalset.h"
-#include "icalcluster.h"
-#include "icalgauge.h"
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
+#include <libicalss/icalcluster.h>
+#include <libicalss/icalgauge.h>
 
 /* icaldirset Routines for storing, fetching, and searching for ical
  * objects in a database */

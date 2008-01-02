@@ -206,13 +206,14 @@ void icalvalue_set_${lc}(icalvalue* value, $type v) {\
     impl->data.v_$union_data = $assign \n\
     icalvalue_reset_kind(impl);\n}\n";
 
-    print "$type\ icalvalue_get_${lc}(const icalvalue* value)\ {\n";
-    if ($type =~ m/(\*|int|float)$/) {
-      print "    icalerror_check_arg_rz( (value!=0),\"value\");\n";
-    } else {
-      print "    icalerror_check_arg( (value!=0),\"value\");\n";
+    print "$type\ icalvalue_get_${lc} (const icalvalue* value) {\n\n";
+    if( $union_data eq 'string') {
+	print "    icalerror_check_arg_rz ((value!=0),\"value\");\n";
     }
-    print "    icalerror_check_value_type(value, ICAL_${uc}_VALUE);\
+    else {
+	print "    icalerror_check_arg ((value!=0),\"value\");\n";
+    }
+    print "    icalerror_check_value_type (value, ICAL_${uc}_VALUE);\
     return ((struct icalvalue_impl*)value)->data.v_${union_data};\n}\n";
 
     

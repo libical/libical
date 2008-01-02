@@ -4,7 +4,7 @@
  CREATOR: eric 09 Aug 2000
 
 
- $Id: icalgaugeimpl.h,v 1.7 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icalgaugeimpl.h,v 1.8 2008-01-02 20:07:41 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -22,7 +22,7 @@
 
 ======================================================================*/
 
-#include "ical.h"
+#include <libical/ical.h>
 
 typedef enum icalgaugecompare {
     ICALGAUGECOMPARE_EQUAL=ICAL_XLICCOMPARETYPE_EQUAL,

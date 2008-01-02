@@ -3,7 +3,7 @@
   FILE: testclassify.c
   CREATOR: eric 11 February 2000
   
-  $Id: testclassify.c,v 1.5 2001-04-16 21:04:20 ebusboom Exp $
+  $Id: testclassify.c,v 1.6 2008-01-02 20:07:46 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -26,10 +26,10 @@
  ======================================================================*/
 
 #include <stdio.h> /* for printf */
-#include "ical.h"
+#include <libical/ical.h>
 #include <errno.h>
 #include <string.h> /* For strerror */
-#include "icalss.h"
+#include <libicalss/icalss.h>
 
 /* Get a note about the purpose of the property*/
 const char* get_note(icalcomponent *c)
@@ -62,8 +62,9 @@ int main(int argc, char* argv[])
 
     /* Open up the two storage files, one for the incomming components, 
        one for the calendar */
-    icalset* incoming = icalset_new_file("../../test-data/incoming.ics");
-    icalset* cal = icalset_new_file("../../test-data/calendar.ics");
+    icalfileset_options options = {O_RDONLY, 0644, 0};
+    icalset* incoming = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/incoming.ics", &options);
+    icalset* cal = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/calendar.ics", &options);
 
     assert(incoming!= 0);
     assert(cal!=0);

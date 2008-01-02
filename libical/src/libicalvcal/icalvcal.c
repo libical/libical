@@ -2,7 +2,7 @@
   FILE: icalvcal.c
   CREATOR: eric 25 May 00
   
-  $Id: icalvcal.c,v 1.7 2007-05-25 02:57:04 artcancro Exp $
+  $Id: icalvcal.c,v 1.8 2008-01-02 20:07:44 dothebart Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -39,8 +39,12 @@
 
   ======================================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "icalvcal.h"
-#include <string.h>   
+#include <string.h>
 
 #ifdef WIN32
 #define snprintf	_snprintf
@@ -1005,7 +1009,7 @@ static char* rrule_parse_weekly_days (char *s,
 	return NULL;
 
     for (i = 0; i < ICAL_BY_DAY_SIZE; i++) {
-	char *e;
+	char *e = s;
 	int found_day, day;
 
 	found_day = -1;
@@ -1099,7 +1103,7 @@ static char* rrule_parse_monthly_positions (char *s,
     int occurrences[ICAL_BY_DAY_SIZE];
     int found_weekdays[7] = { 0 };
     int i, num_positions, elems, month_position, day;
-    int num_weekdays, only_weekday;
+    int num_weekdays, only_weekday = 0;
     char *e;
 
     /* If we've already found an error, just return. */
@@ -1139,7 +1143,7 @@ static char* rrule_parse_monthly_positions (char *s,
 
     /* Now read the weekdays in. */
     for (;;) {
-	char *e;
+	char *e = s;
 	int found_day, day;
 
 	found_day = -1;

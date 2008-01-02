@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalcalendar.h,v 1.3 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icalcalendar.h,v 1.4 2008-01-02 20:07:39 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -29,8 +29,8 @@
 #ifndef ICALCALENDAR_H
 #define ICALCALENDAR_H
 
-#include "ical.h"
-#include "icalset.h"
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
 
 /* icalcalendar
  * Routines for storing calendar data in a file system. The calendar 

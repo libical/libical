@@ -18,7 +18,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.in,v 1.7 2008-01-01 22:07:56 dothebart Exp $
+#  $Id: Makefile.in,v 1.8 2008-01-02 20:07:30 dothebart Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -63,8 +63,9 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 subdir = src/libical
-DIST_COMMON = $(libicalinclude_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/icalversion.h.in
+DIST_COMMON = $(am__libical_include_HEADERS_DIST) \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(srcdir)/icalversion.h.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -78,7 +79,7 @@ am__vpath_adj = case $$p in \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)" \
-	"$(DESTDIR)$(libicalincludedir)"
+	"$(DESTDIR)$(libical_includedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES) $(noinst_LTLIBRARIES)
 libical_static_la_LIBADD =
@@ -88,19 +89,44 @@ am__objects_2 = $(am__objects_1) icalderivedparameter.lo \
 am__objects_3 = $(am__objects_2) icalarray.lo icalattach.lo \
 	icalcomponent.lo icalenums.lo icalerror.lo icalmemory.lo \
 	icalmime.lo icalparameter.lo icalparser.lo icalproperty.lo \
-	icalrecur.lo icaltime.lo icaltimezone.lo icalduration.lo \
-	icalperiod.lo icaltypes.lo icalvalue.lo pvl.lo sspm.lo \
-	vsnprintf.lo icallangbind.lo caldate.lo
+	icalrecur.lo icaltime.lo icaltz-util.lo icaltimezone.lo \
+	icalduration.lo icalperiod.lo icaltypes.lo icalvalue.lo pvl.lo \
+	sspm.lo vsnprintf.lo icallangbind.lo caldate.lo
 am_libical_static_la_OBJECTS = $(am__objects_3)
 libical_static_la_OBJECTS = $(am_libical_static_la_OBJECTS)
-libical_la_LIBADD =
+am__DEPENDENCIES_1 =
+libical_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_libical_la_OBJECTS = $(am__objects_2) icalarray.lo icalattach.lo \
 	icalcomponent.lo icalenums.lo icalerror.lo icalmemory.lo \
 	icalmime.lo icalparameter.lo icalparser.lo icalproperty.lo \
-	icalrecur.lo icaltime.lo icaltimezone.lo icalduration.lo \
-	icalperiod.lo icaltypes.lo icalvalue.lo pvl.lo sspm.lo \
-	vsnprintf.lo icallangbind.lo caldate.lo
+	icalrecur.lo icaltime.lo icaltz-util.lo icaltimezone.lo \
+	icalduration.lo icalperiod.lo icaltypes.lo icalvalue.lo pvl.lo \
+	sspm.lo vsnprintf.lo icallangbind.lo caldate.lo
 libical_la_OBJECTS = $(am_libical_la_OBJECTS)
+libical_cxx_la_LIBADD =
+am__libical_cxx_la_SOURCES_DIST = icalderivedparameter.h \
+	icalderivedproperty.h icalderivedvalue.h \
+	icalderivedparameter.c icalderivedproperty.c icalrestriction.c \
+	icalderivedvalue.c icalarray.c icalarray.h icalattach.h \
+	icalattachimpl.h icalattach.c icalcomponent.c icalcomponent.h \
+	icalenums.c icalenums.h icalerror.c icalerror.h icalmemory.c \
+	icalmemory.h icalmime.c icalmime.h icalparameter.c \
+	icalparameter.h icalparameterimpl.h icalparser.c icalparser.h \
+	icalproperty.c icalproperty.h icalrecur.c icalrecur.h \
+	icalrestriction.h icaltime.c icaltime.h icaltz-util.c \
+	icaltz-util.h icaltimezone.c icaltimezone.h icalduration.h \
+	icalduration.c icalperiod.h icalperiod.c icaltypes.c \
+	icaltypes.h icalvalue.c icalvalue.h icalvalueimpl.h pvl.c \
+	pvl.h sspm.c sspm.h vsnprintf.c icallangbind.h icallangbind.c \
+	caldate.c astime.h vcomponent.h vcomponent.cpp \
+	icalproperty_cxx.h icalproperty_cxx.cpp icalparameter_cxx.h \
+	icalparameter_cxx.cpp icalvalue_cxx.h icalvalue_cxx.cpp \
+	icptrholder.h
+@WITH_CXX_BINDINGS_TRUE@am_libical_cxx_la_OBJECTS = $(am__objects_3) \
+@WITH_CXX_BINDINGS_TRUE@	vcomponent.lo icalproperty_cxx.lo \
+@WITH_CXX_BINDINGS_TRUE@	icalparameter_cxx.lo icalvalue_cxx.lo
+libical_cxx_la_OBJECTS = $(am_libical_cxx_la_OBJECTS)
+@WITH_CXX_BINDINGS_TRUE@am_libical_cxx_la_rpath = -rpath $(libdir)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -112,10 +138,29 @@ LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libical_static_la_SOURCES) $(libical_la_SOURCES)
-DIST_SOURCES = $(libical_static_la_SOURCES) $(libical_la_SOURCES)
-libicalincludeHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(libicalinclude_HEADERS)
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+SOURCES = $(libical_static_la_SOURCES) $(libical_la_SOURCES) \
+	$(libical_cxx_la_SOURCES)
+DIST_SOURCES = $(libical_static_la_SOURCES) $(libical_la_SOURCES) \
+	$(am__libical_cxx_la_SOURCES_DIST)
+am__libical_include_HEADERS_DIST = ical.h icalarray.h icalattach.h \
+	icalcomponent.h icalderivedparameter.h icalderivedproperty.h \
+	icalderivedvalue.h icalduration.h icalenums.h icalerror.h \
+	icallangbind.h icalmemory.h icalmime.h icalparameter.h \
+	icalparser.h icalperiod.h icalproperty.h icalrecur.h \
+	icalrestriction.h icaltime.h icaltz-util.h icaltimezone.h \
+	icaltypes.h icalvalue.h pvl.h sspm.h vcomponent.h \
+	icalparameter_cxx.h icalproperty_cxx.h icalvalue_cxx.h \
+	icptrholder.h
+libical_includeHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(libical_include_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -162,6 +207,11 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+JAR = @JAR@
+JAVA = @JAVA@
+JAVAC = @JAVAC@
+JAVAH = @JAVAH@
+JAVA_PLATFORM = @JAVA_PLATFORM@
 LDFLAGS = @LDFLAGS@
 LEX = @LEX@
 LEXLIB = @LEXLIB@
@@ -176,6 +226,8 @@ MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
 OBJEXT = @OBJEXT@
+OS_WIN32_FALSE = @OS_WIN32_FALSE@
+OS_WIN32_TRUE = @OS_WIN32_TRUE@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -184,8 +236,15 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PERL = @PERL@
+PKG_CONFIG = @PKG_CONFIG@
 PTHREAD_LIBS = @PTHREAD_LIBS@
+PY_CFLAGS = @PY_CFLAGS@
+PY_EXTRA_LIBS = @PY_EXTRA_LIBS@
+PY_LIBS = @PY_LIBS@
+PY_LIB_LOC = @PY_LIB_LOC@
 RANLIB = @RANLIB@
+RRCAP_CFLAGS = @RRCAP_CFLAGS@
+RRCAP_LIBS = @RRCAP_LIBS@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -193,6 +252,14 @@ STRIP = @STRIP@
 VERSION = @VERSION@
 WITH_BDB4_FALSE = @WITH_BDB4_FALSE@
 WITH_BDB4_TRUE = @WITH_BDB4_TRUE@
+WITH_CAP_FALSE = @WITH_CAP_FALSE@
+WITH_CAP_TRUE = @WITH_CAP_TRUE@
+WITH_CXX_BINDINGS_FALSE = @WITH_CXX_BINDINGS_FALSE@
+WITH_CXX_BINDINGS_TRUE = @WITH_CXX_BINDINGS_TRUE@
+WITH_JAVA_FALSE = @WITH_JAVA_FALSE@
+WITH_JAVA_TRUE = @WITH_JAVA_TRUE@
+WITH_PYTHON_FALSE = @WITH_PYTHON_FALSE@
+WITH_PYTHON_TRUE = @WITH_PYTHON_TRUE@
 YACC = @YACC@
 YFLAGS = @YFLAGS@
 ac_ct_CC = @ac_ct_CC@
@@ -238,6 +305,7 @@ pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+python_val = @python_val@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
@@ -248,20 +316,27 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 DESIGNDATA = $(top_srcdir)/design-data
 ICALSCRIPTS = $(top_srcdir)/scripts
-cxx_lib = 
-cxx_headers = 
+@WITH_CXX_BINDINGS_FALSE@cxx_lib = 
+@WITH_CXX_BINDINGS_TRUE@cxx_lib = libical_cxx.la
+@WITH_CXX_BINDINGS_FALSE@cxx_headers = 
+@WITH_CXX_BINDINGS_TRUE@cxx_headers = vcomponent.h icalparameter_cxx.h icalproperty_cxx.h icalvalue_cxx.h icptrholder.h
 lib_LTLIBRARIES = libical.la $(cxx_lib)
 noinst_LTLIBRARIES = libical-static.la
 libical_static_la_SOURCES = $(libical_la_SOURCES)
 libical_static_la_LDFLAGS = --all-static
 AM_CPPFLAGS = -DPACKAGE_DATA_DIR=\""$(datadir)/$(PACKAGE)"\"
+
+# CFLAGS = -g
 INCLUDES = \
-	-I$(top_builddir)	\
-	-I$(top_srcdir)/src	\
-	-I$(top_builddir)/src	\
+	-I$(top_builddir)		\
+	-I$(top_srcdir)/src		\
+	-I$(top_builddir)/src		\
+	-I$(top_srcdir)/src/libical	\
+	-I$(top_builddir)/src/libical	\
 	-I$(srcdir)
 
 libical_la_LDFLAGS = -version-info 30:0:30
+libical_la_LIBADD = $(PTHREAD_LIBS)
 libical_la_SOURCES = \
 	$(BUILT_SOURCES)	\
 	icalarray.c		\
@@ -291,6 +366,8 @@ libical_la_SOURCES = \
 	icalrestriction.h	\
 	icaltime.c		\
 	icaltime.h		\
+	icaltz-util.c		\
+	icaltz-util.h		\
 	icaltimezone.c		\
 	icaltimezone.h		\
 	icalduration.h		\
@@ -312,12 +389,53 @@ libical_la_SOURCES = \
 	caldate.c \
 	astime.h 
 
-libicalincludedir = $(includedir)
-libicalinclude_HEADERS = ical.h icalmemory.h icalerror.h
+@WITH_CXX_BINDINGS_TRUE@libical_cxx_la_SOURCES = \
+@WITH_CXX_BINDINGS_TRUE@	$(libical_la_SOURCES)	\
+@WITH_CXX_BINDINGS_TRUE@	vcomponent.h		\
+@WITH_CXX_BINDINGS_TRUE@	vcomponent.cpp		\
+@WITH_CXX_BINDINGS_TRUE@	icalproperty_cxx.h	\
+@WITH_CXX_BINDINGS_TRUE@	icalproperty_cxx.cpp	\
+@WITH_CXX_BINDINGS_TRUE@	icalparameter_cxx.h	\
+@WITH_CXX_BINDINGS_TRUE@	icalparameter_cxx.cpp	\
+@WITH_CXX_BINDINGS_TRUE@	icalvalue_cxx.h		\
+@WITH_CXX_BINDINGS_TRUE@	icalvalue_cxx.cpp       \
+@WITH_CXX_BINDINGS_TRUE@	icptrholder.h
+
+libical_includedir = $(includedir)
+libical_include_HEADERS = \
+	ical.h			\
+	icalarray.h		\
+	icalattach.h		\
+	icalcomponent.h		\
+	icalderivedparameter.h	\
+	icalderivedproperty.h	\
+	icalderivedvalue.h	\
+	icalduration.h		\
+	icalenums.h		\
+	icalerror.h		\
+	icallangbind.h		\
+	icalmemory.h		\
+	icalmime.h		\
+	icalparameter.h		\
+	icalparser.h		\
+	icalperiod.h		\
+	icalproperty.h		\
+	icalrecur.h		\
+	icalrestriction.h	\
+	icaltime.h		\
+	icaltz-util.h		\
+	icaltimezone.h		\
+	icaltypes.h		\
+	icalvalue.h		\
+	pvl.h			\
+	sspm.h			\
+	$(cxx_headers)
+
 
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering. It
 # is required to make the combined header ical.h properly
 COMBINEDHEADERS = \
+        $(top_builddir)/config.h                        \
 	$(top_builddir)/src/libical/icalversion.h	\
 	$(top_srcdir)/src/libical/icaltime.h		\
 	$(top_srcdir)/src/libical/icalduration.h	\
@@ -410,7 +528,7 @@ all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .lo .o .obj
+.SUFFIXES: .c .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -482,6 +600,8 @@ libical-static.la: $(libical_static_la_OBJECTS) $(libical_static_la_DEPENDENCIES
 	$(LINK)  $(libical_static_la_LDFLAGS) $(libical_static_la_OBJECTS) $(libical_static_la_LIBADD) $(LIBS)
 libical.la: $(libical_la_OBJECTS) $(libical_la_DEPENDENCIES) 
 	$(LINK) -rpath $(libdir) $(libical_la_LDFLAGS) $(libical_la_OBJECTS) $(libical_la_LIBADD) $(LIBS)
+libical_cxx.la: $(libical_cxx_la_OBJECTS) $(libical_cxx_la_DEPENDENCIES) 
+	$(CXXLINK) $(am_libical_cxx_la_rpath) $(libical_cxx_la_LDFLAGS) $(libical_cxx_la_OBJECTS) $(libical_cxx_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -503,17 +623,22 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalmemory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalmime.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalparameter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalparameter_cxx.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalparser.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalperiod.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalproperty.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalproperty_cxx.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalrecur.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalrestriction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icaltime.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icaltimezone.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icaltypes.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icaltz-util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalvalue.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icalvalue_cxx.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pvl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sspm.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vcomponent.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vsnprintf.Plo@am__quote@
 
 .c.o:
@@ -537,6 +662,27 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
+.cpp.o:
+@am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
+
+.cpp.obj:
+@am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.cpp.lo:
+@am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
+
 mostlyclean-libtool:
 	-rm -f *.lo
 
@@ -546,22 +692,22 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-install-libicalincludeHEADERS: $(libicalinclude_HEADERS)
+install-libical_includeHEADERS: $(libical_include_HEADERS)
 	@$(NORMAL_INSTALL)
-	test -z "$(libicalincludedir)" || $(mkdir_p) "$(DESTDIR)$(libicalincludedir)"
-	@list='$(libicalinclude_HEADERS)'; for p in $$list; do \
+	test -z "$(libical_includedir)" || $(mkdir_p) "$(DESTDIR)$(libical_includedir)"
+	@list='$(libical_include_HEADERS)'; for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  f=$(am__strip_dir) \
-	  echo " $(libicalincludeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(libicalincludedir)/$$f'"; \
-	  $(libicalincludeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(libicalincludedir)/$$f"; \
+	  echo " $(libical_includeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(libical_includedir)/$$f'"; \
+	  $(libical_includeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(libical_includedir)/$$f"; \
 	done
 
-uninstall-libicalincludeHEADERS:
+uninstall-libical_includeHEADERS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(libicalinclude_HEADERS)'; for p in $$list; do \
+	@list='$(libical_include_HEADERS)'; for p in $$list; do \
 	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(libicalincludedir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(libicalincludedir)/$$f"; \
+	  echo " rm -f '$(DESTDIR)$(libical_includedir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(libical_includedir)/$$f"; \
 	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
@@ -647,7 +793,7 @@ check: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libicalincludedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libical_includedir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: $(BUILT_SOURCES)
@@ -698,7 +844,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-libicalincludeHEADERS
+install-data-am: install-libical_includeHEADERS
 
 install-exec-am: install-libLTLIBRARIES
 
@@ -727,7 +873,7 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
-	uninstall-libicalincludeHEADERS
+	uninstall-libical_includeHEADERS
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-libLTLIBRARIES clean-libtool clean-noinstLTLIBRARIES \
@@ -736,17 +882,13 @@ uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
 	html-am info info-am install install-am install-data \
 	install-data-am install-exec install-exec-am install-info \
 	install-info-am install-libLTLIBRARIES \
-	install-libicalincludeHEADERS install-man install-strip \
+	install-libical_includeHEADERS install-man install-strip \
 	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-info-am \
-	uninstall-libLTLIBRARIES uninstall-libicalincludeHEADERS
+	uninstall-libLTLIBRARIES uninstall-libical_includeHEADERS
 
-
-# CFLAGS = -g
-
-all: ical.h
 
 ical.h: $(COMBINEDHEADERS)
 	echo '#ifdef __cplusplus'         >  ical.h
@@ -812,7 +954,7 @@ $(srcdir)/icalmime.c: icalderivedvalue.h icalderivedproperty.h icalderivedparame
 $(srcdir)/icalparameter.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalparser.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalproperty.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
-$(srcdir)/icalrestriction.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+icalrestriction.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icaltime.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalvalue.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

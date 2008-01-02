@@ -5,7 +5,7 @@
 
   DESCRIPTION:
 
-  $Id: regression.c,v 1.65 2007-04-30 13:57:49 artcancro Exp $
+  $Id: regression.c,v 1.66 2008-01-02 20:07:46 dothebart Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom
@@ -27,9 +27,13 @@
 
   ======================================================================*/
 
-#include "ical.h"
-#include "icalss.h"
-#include "icalvcal.h"
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <libical/ical.h>
+#include <libicalss/icalss.h>
+#include <libicalvcal/icalvcal.h>
 
 #include "regression.h"
 
@@ -853,7 +857,7 @@ void test_restriction()
 		    icalproperty_new_tzoffsetfrom(-4.0),
 		    icalproperty_new_tzoffsetto(-5.0),
 		    icalproperty_new_tzname("EST"),
-		    NULL
+		    0
 		    ),
 		icalcomponent_vanew(
 		    ICAL_XSTANDARD_COMPONENT,
@@ -862,9 +866,9 @@ void test_restriction()
 		    icalproperty_new_tzoffsetfrom(-5.0),
 		    icalproperty_new_tzoffsetto(-4.0),
 		    icalproperty_new_tzname("EST"),
-		    NULL
+		    0
 		    ),
-		NULL
+		0
 		),
 	    icalcomponent_vanew(
 		ICAL_VEVENT_COMPONENT,
@@ -873,14 +877,14 @@ void test_restriction()
 		icalproperty_vanew_organizer(
 		    "mrbig@host.com",
 		    icalparameter_new_role(ICAL_ROLE_CHAIR),
-		    NULL
+		    0
 		    ),
 		icalproperty_vanew_attendee(
 		    "employee-A@host.com",
 		    icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
 		    icalparameter_new_rsvp(ICAL_RSVP_TRUE),
 		    icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
-		    NULL
+		    0
 		    ),
 		icalproperty_new_description("Project XYZ Review Meeting"),
 		icalproperty_new_categories("MEETING"),
@@ -890,17 +894,17 @@ void test_restriction()
                 /*		icalproperty_new_dtstart(
 		    atime,
 		    icalparameter_new_tzid("America/New_York"),
-		    NULL
+		    0
 		    ),*/
 		icalproperty_vanew_dtend(
 		    atime,
 		    icalparameter_new_tzid("America/New_York"),
-		    NULL
+		    0
 		    ),
 		icalproperty_new_location("1CP Conference Room 4350"),
-		NULL
+		0
 		),
-	    NULL
+	    0
 	    );
 
     valid = icalrestriction_check(comp);
@@ -939,14 +943,14 @@ void test_calendar()
 	    icalparameter_new_cn("A Common Name 2"),
 	    icalparameter_new_cn("A Common Name 3"),
 		icalparameter_new_cn("A Common Name 4"),
-	    NULL),
+	    0),
 	icalproperty_vanew_xlicerror(
 	    "This is only a test",
 	    icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
-	    NULL),
-
-	NULL),NULL);
-
+	    0),
+	
+	0),0);
+    
     s = icalcalendar_get_booked(calendar);
 
     error = icaldirset_add_component(s,comp);
@@ -1083,14 +1087,6 @@ void icalrecurrencetype_test()
 
 /* From Federico Mena Quintero <federico@ximian.com>    */
 void test_recur_parameter_bug(){
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <ical.h>
 
     static const char test_icalcomp_str[] =
 "BEGIN:VEVENT\n"
@@ -1883,8 +1879,9 @@ void test_overlaps()
 			      Sat Nov  4 16:00:00 PST 2000 */
 
     time_t hh = 1800; /* one half hour */
-
-    set = icalset_new_file("../../test-data/overlaps.ics");
+    
+    icalfileset_options options = {O_RDONLY, 0644, 0};
+    set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/overlaps.ics", &options);
 
     c = icalcomponent_vanew(
 	ICAL_VEVENT_COMPONENT,
@@ -1938,7 +1935,8 @@ void test_overlaps()
 void test_fblist()
 {
     icalspanlist *sl, *new_sl;
-    icalset* set = icalset_new_file("../../test-data/spanlist.ics");
+    icalfileset_options options = {O_RDONLY, 0644, 0};
+    icalset *set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/spanlist.ics", &options);
     struct icalperiodtype period;
     icalcomponent *comp;
     int * foo;
@@ -2274,12 +2272,12 @@ void test_recur_parser()
   struct icalrecurrencetype rt;
   char *str;
 
-  str = "FREQ=YEARLY;UNTIL=20000131T090000Z;INTERVAL=1;BYDAY=-1TU,3WE,-4FR,SU,SA;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
+  str = "FREQ=YEARLY;UNTIL=20000131T090000Z;INTERVAL=1;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
   rt = icalrecurrencetype_from_string(str);
   is(str, icalrecurrencetype_as_string(&rt), str);
 
-  str = "FREQ=DAILY;COUNT=3;INTERVAL=1;BYDAY=-1TU,3WE,-4FR,SU,SA;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
-
+  str = "FREQ=DAILY;COUNT=3;INTERVAL=1;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
+  
   rt = icalrecurrencetype_from_string(str);
   is(str, icalrecurrencetype_as_string(&rt), str);
 }
@@ -2418,14 +2416,6 @@ void test_doy()
 }
 
 void test_x(){
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <ical.h>
 
     static const char test_icalcomp_str[] =
 "BEGIN:VEVENT\r\n"
@@ -3527,11 +3517,11 @@ void test_vcal(void)
 {
   VObject *vcal = 0;
   icalcomponent *comp;
-  char* file = "../../test-data/user-cal.vcf";
+  char* file = TEST_DATADIR "/user-cal.vcf";
 
   vcal = Parse_MIME_FromFileName(file);
-
-  ok("Parsing ../../test-data/user-cal.vcf", (vcal != 0));
+    
+  ok("Parsing " TEST_DATADIR "/user-cal.vcf", (vcal != 0));
 
   comp = icalvcal_convert(vcal);
 
@@ -3645,6 +3635,10 @@ int main(int argc, char *argv[])
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
+
+#ifdef WITH_CXX_BINDINGS
+    test_run("Test C++ API", test_cxx, do_test, do_header);
+#endif
 
 #ifdef WITH_BDB
     test_run("Test BDB Set", test_bdbset, do_test, do_header);

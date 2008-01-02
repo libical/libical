@@ -3,7 +3,7 @@
   FILE: regression-classify.c
   CREATOR: eric 11 February 2000
   
-  $Id: regression-classify.c,v 1.4 2007-04-30 13:57:49 artcancro Exp $
+  $Id: regression-classify.c,v 1.5 2008-01-02 20:07:46 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -24,12 +24,17 @@
 
 
  ======================================================================*/
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h> /* for printf */
 #include <errno.h>
 #include <string.h> /* For strerror */
 
-#include "ical.h"
-#include "icalss.h"
+#include <libical/ical.h>
+#include <libicalss/icalss.h>
 #include "regression.h"
 
 extern int VERBOSE;
@@ -88,9 +93,10 @@ void test_classify(void)
     int error_count = 0;
     /* Open up the two storage files, one for the incomming components, 
        one for the calendar */
-    icalset* incoming = icalset_new_file("../../test-data/incoming.ics");
-    icalset* cal = icalset_new_file("../../test-data/calendar.ics");
-    icalset* f = icalset_new_file("../../test-data/classify.ics");
+    icalfileset_options options = {O_RDONLY, 0644, 0};
+    icalset* incoming = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/incoming.ics", &options);
+    icalset* cal = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/calendar.ics", &options);
+    icalset* f = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/classify.ics", &options);
 
     ok("opening file classify.ics", (f!=0));
     ok("opening file calendar.ics", (cal!=0));

@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalcsdb.h,v 1.1.1.1 2001-01-02 07:33:03 ebusboom Exp $
+ $Id: icalcsdb.h,v 1.2 2008-01-02 20:07:40 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -26,7 +26,7 @@
 #ifndef ICALCSDB_H
 #define ICALCSDB_H
 
-#include "ical.h"
+#include <libical/ical.h>
 
 typedef void icalcsdb;
 

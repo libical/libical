@@ -3,7 +3,7 @@
   FILE: stow.c
   CREATOR: eric 29 April 2000
   
-  $Id: stow.c,v 1.9 2007-04-30 13:57:49 artcancro Exp $
+  $Id: stow.c,v 1.10 2008-01-02 20:07:46 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -38,8 +38,8 @@
 #include <sys/types.h> /* For getpwent */
 #include <ctype.h> /* for tolower */
 
-#include "ical.h"
-#include "icalss.h"
+#include <libical/ical.h>
+#include <libicalss/icalss.h>
 
 char* program_name;
 #define TMPSIZE 2048

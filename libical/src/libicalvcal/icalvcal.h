@@ -26,7 +26,7 @@
 #ifndef ICALVCAL_H
 #define ICALVCAL_H
 
-#include "ical.h"
+#include <libical/ical.h>
 #include "vcc.h"
 
 /* These are used as default values if the values are missing in the vCalendar

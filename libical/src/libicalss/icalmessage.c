@@ -3,7 +3,7 @@
     FILE: icalmessage.c
     CREATOR: ebusboom 07 Nov 2000
   
-    $Id: icalmessage.c,v 1.8 2007-04-30 13:57:48 artcancro Exp $
+    $Id: icalmessage.c,v 1.9 2008-01-02 20:07:41 dothebart Exp $
     $Locker:  $
     
     (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -27,7 +27,7 @@
 #endif
 
 #include "icalmessage.h"
-#include "icalenums.h"
+#include <libical/icalenums.h>
 #include <ctype.h>  /* for tolower()*/
 #include <string.h> /* for strstr */
 #include <stdlib.h> /* for free(), malloc() */

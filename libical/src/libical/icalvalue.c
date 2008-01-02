@@ -4,7 +4,7 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.42 2007-05-25 02:57:04 artcancro Exp $
+  $Id: icalvalue.c,v 1.43 2008-01-02 20:07:32 dothebart Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -46,6 +46,7 @@
 #include <time.h> /* for mktime */
 #include <stdlib.h> /* for atoi and atof */
 #include <limits.h> /* for SHRT_MAX */         
+#include <locale.h>
 #include <ctype.h> /* for isspace and isdigit */
 
 #ifdef WIN32
@@ -287,6 +288,75 @@ icalvalue* icalvalue_new_enum(icalvalue_kind kind, int x_type, const char* str)
     return value;
 }
 
+/**
+ * Transforms a simple float number string into a double.
+ * The decimal separator (if any) of the double has to be '.'
+ * The code is locale *independant* and does *not* change the locale.
+ * It should be thread safe.
+ * If you want a code that that does the same job with a decimal separator
+ * dependant on the current locale, then use strtof() from libc.
+ */
+int simple_str_to_float(const char* from,
+                        float *result,
+                        char** to)
+{
+#define TMP_NUM_SIZE 100
+    char *start=NULL, *end=NULL, *cur=(char*)from ;
+    char tmp_buf[TMP_NUM_SIZE+1] ; /*hack*/
+    struct lconv *loc_data = localeconv () ;
+    int i=0 ;
+
+    /*sanity checks*/
+    if (!from || !result) {
+        return 1 ;
+    }
+
+    /*skip the white spaces at the beginning*/
+    while (cur && isspace (*cur))
+        cur++ ;
+
+    start = cur ;
+    /*
+     * copy the part that looks like a double into tmp_buf
+     * so that we can call strtof() on it.
+     * during the copy, we give ourselves a chance to convert the '.'
+     * into the decimal separator of the current locale.
+     */
+    while (cur && (isdigit (*cur) ||
+                   *cur == '.'    ||
+                   *cur == '+'    ||
+                   *cur == '-')){
+        ++cur ;
+    }
+    end = cur ;
+    if (end - start + 1> 100) {
+        /*huh hoh, number is too big. getting out*/
+        return 1 ;
+    }
+    memset(tmp_buf, 0, TMP_NUM_SIZE+1) ;
+    i=0 ;
+    /*
+     * copy the float number string into tmp_buf, and take
+     * care to have the (optional) decimal separator be the one
+     * of the current locale.
+     */
+    for (i=0 ; i < end - from ;++i) {
+        if (start[i] == '.'
+            && loc_data
+            && loc_data->decimal_point
+            && loc_data->decimal_point[0]
+            && loc_data->decimal_point[0] != '.') {
+            /*replace '.' by the digit separator of the current locale*/
+            tmp_buf[i] = loc_data->decimal_point[0] ;
+        } else {
+            tmp_buf[i] = start[i] ;
+        }
+    }
+    if (to)
+        *to = end ;
+    *result = atof(tmp_buf) ;
+    return 0 ;
+}
 
 icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* str,icalproperty** error)
 {
@@ -354,7 +424,15 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
     case ICAL_CLASS_VALUE:
         value = icalvalue_new_enum(kind, (int)ICAL_CLASS_X,str);
         break;
-
+    case ICAL_CMD_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_CMD_X,str);
+        break;
+    case ICAL_QUERYLEVEL_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_QUERYLEVEL_X,str);
+        break;
+    case ICAL_CARLEVEL_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_CARLEVEL_X,str);
+        break;
 
     case ICAL_INTEGER_VALUE:
 	    value = icalvalue_new_integer(atoi(str));
@@ -403,21 +481,51 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	    break;
         
     case ICAL_GEO_VALUE:
-	    value = 0;
-	    /* HACK */
-            
-	    if (error != 0){
-		char temp[TMP_BUF_SIZE];
-		strcpy(temp,"GEO Values are not implemented");
-		*error = icalproperty_vanew_xlicerror( 
-		    temp, 
-		    icalparameter_new_xlicerrortype( 
-			ICAL_XLICERRORTYPE_VALUEPARSEERROR), 
-		    0); 
-	    }
+    {
+        char *cur=NULL ;
+        struct icalgeotype geo = {0.0, 0.0};
+  
+        if (simple_str_to_float (str, &geo.lat, &cur)) {
+            goto geo_parsing_error ;
+        }
+  
+        /*skip white spaces*/
+        while (cur && isspace (*cur)) {
+            ++cur ;
+        }
 
-	    /*icalerror_warn("Parsing GEO properties is unimplmeneted");*/
+        /*there is a ';' between the latitude and longitude parts*/
+        if (!cur || *cur != ';') {
+            goto geo_parsing_error ;
+        }
 
+        ++cur ;
+        if (!cur)
+            goto geo_parsing_error ;
+
+        /*skip white spaces*/
+        while (cur && isspace (*cur)) {
+            ++cur ;
+        }
+
+        if (simple_str_to_float (cur, &geo.lon, &cur)) {
+            goto geo_parsing_error ;
+        }
+        value = icalvalue_new_geo (geo) ;
+        break ;
+
+geo_parsing_error:
+        if (error != 0){
+            char temp[TMP_BUF_SIZE];
+            sprintf(temp, "Could not parse %s as a %s property",
+                    str, icalvalue_kind_to_string(kind));
+            *error = icalproperty_vanew_xlicerror(
+                                   temp,
+                                   icalparameter_new_xlicerrortype(
+                                        ICAL_XLICERRORTYPE_VALUEPARSEERROR),
+                                   0);
+        }
+    }
 	    break;
         
     case ICAL_RECUR_VALUE:
@@ -638,7 +746,7 @@ static char* icalvalue_binary_as_ical_string(const icalvalue* value) {
     data = icalvalue_get_binary(value);
 
     str = (char*)icalmemory_tmp_buffer(60);
-    strcpy(str,"icalvalue_binary_as_ical_string is not implemented yet");
+    sprintf(str,"icalvalue_binary_as_ical_string is not implemented yet");
 
     return str;
 }
@@ -1017,6 +1125,9 @@ icalvalue_as_ical_string(const icalvalue* value)
         return icalreqstattype_as_string(value->data.v_requeststatus);
         
     case ICAL_ACTION_VALUE:
+    case ICAL_CMD_VALUE:
+    case ICAL_QUERYLEVEL_VALUE:
+    case ICAL_CARLEVEL_VALUE:
     case ICAL_METHOD_VALUE:
     case ICAL_STATUS_VALUE:
     case ICAL_TRANSP_VALUE:
@@ -1307,6 +1418,46 @@ int icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBu
 
     return 1;
 }
+
+int icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen)
+{
+    char *str, *str_p;
+    const char *p;
+    icalvalue *value = 0;
+    size_t buf_sz;
+
+    if ((szText == 0) || (szDecText == 0))
+        return 0;
+	
+    buf_sz = strlen(szText);
+    str_p = str = (char*)icalmemory_new_buffer(buf_sz + 1);
+
+    if (str_p == 0){
+        return 0;
+    }
+
+    for (p=szText; *p!=0; p++) {
+	if (*p == '\\') {
+	    icalmemory_append_char (&str,&str_p,&buf_sz,*(p+1));
+	    p++;
+	}	    
+	else
+            icalmemory_append_char (&str,&str_p,&buf_sz,*p);
+    }	    
+    
+    icalmemory_append_char(&str,&str_p,&buf_sz,'\0');
+
+    if ((int)strlen(str) > nMaxBufferLen) {
+    	icalmemory_free_buffer(str);	
+        return 0;
+    }
+
+    strcpy(szDecText, str);
+
+    icalmemory_free_buffer(str);	
+    return 1;
+}
+
 
 /* The remaining interfaces are 'new', 'set' and 'get' for each of the value
    types */

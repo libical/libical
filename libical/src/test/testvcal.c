@@ -3,7 +3,7 @@
   FILE: vcal.c
   CREATOR: eric 26 May 2000
   
-  $Id: testvcal.c,v 1.3 2007-04-30 13:57:49 artcancro Exp $
+  $Id: testvcal.c,v 1.4 2008-01-02 20:07:46 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -25,7 +25,7 @@
 
  ======================================================================*/
 
-#include "icalvcal.h"
+#include <libicalvcal/icalvcal.h>
 #include <stdio.h>
 
 /* Given a vCal data file as its first argument, this program will

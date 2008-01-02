@@ -1,12 +1,14 @@
 lib_LTLIBRARIES = libicalvcal.la
 
-INCLUDES =			\
-	-I$(top_builddir)	\
+INCLUDES =				\
+	-I$(top_srcdir)			\
+	-I$(top_srcdir)/src		\
+	-I$(top_builddir)/src		\
 	-I$(top_srcdir)/src/libical	\
 	-I$(top_builddir)/src/libical	\
 	-I$(top_srcdir)/src/libicalss
 
-libicalvcal_la_LDFLAGS = -version-info 0:0:0
+libicalvcal_la_LDFLAGS = -version-info 30:0:30
 
 if DEV
 libicalvcal_la_DEVSOURCES = vcc.y

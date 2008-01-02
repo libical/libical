@@ -3,7 +3,7 @@
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
   
-    $Id: icaldirset.c,v 1.23 2007-04-30 13:57:48 artcancro Exp $
+    $Id: icaldirset.c,v 1.24 2008-01-02 20:07:40 dothebart Exp $
     $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -57,7 +57,7 @@
 #endif
 
 
-#include "ical.h"
+#include <libical/ical.h>
 #include "icaldirset.h"
 #include "icaldirset.h"
 #include "icalfileset.h"

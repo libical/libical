@@ -4,7 +4,7 @@
  CREATOR: eric 07 Nov 2000
 
 
- $Id: icalmessage.h,v 1.2 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icalmessage.h,v 1.3 2008-01-02 20:07:41 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -23,7 +23,7 @@
 
  =========================================================================*/
 
-#include "ical.h"
+#include <libical/ical.h>
 
 #ifndef ICALMESSAGE_H
 #define ICALMESSAGE_H

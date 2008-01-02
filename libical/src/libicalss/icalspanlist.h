@@ -4,7 +4,7 @@
  CREATOR: eric 21 Aug 2000
 
 
- $Id: icalspanlist.h,v 1.7 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icalspanlist.h,v 1.8 2008-01-02 20:07:42 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -25,8 +25,8 @@
 #ifndef ICALSPANLIST_H
 #define ICALSPANLIST_H
 
-#include "ical.h"
-#include "icalset.h"
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
 
 /** @file icalspanlist.h
  *  @brief Code that supports collections of free/busy spans of time

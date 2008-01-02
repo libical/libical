@@ -1,6 +1,6 @@
 /* Access_component.c */
 
-#include "ical.h"
+#include <libical/ical.h>
 
 #include <assert.h>
 #include <string.h> /* for strdup */

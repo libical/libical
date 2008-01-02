@@ -4,7 +4,7 @@
   CREATOR: dml 12 December 2001
   (C) COPYRIGHT 2001, Critical Path
 
-  $Id: icalbdbsetimpl.h,v 1.3 2002-06-28 10:01:34 acampi Exp $
+  $Id: icalbdbsetimpl.h,v 1.4 2008-01-02 20:07:39 dothebart Exp $
   $Locker:  $
  ======================================================================*/
 
@@ -15,7 +15,7 @@
 #include "config.h"
 #endif
 
-#include "icalgauge.h"
+#include <libicalss/icalgauge.h>
 #include <db.h>
 
 /* This definition is in its own file so it can be kept out of the

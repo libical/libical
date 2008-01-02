@@ -4,7 +4,7 @@
  CREATOR: eric 23 December 1999
 
 
- $Id: icalfileset.h,v 1.14 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icalfileset.h,v 1.15 2008-01-02 20:07:40 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -29,10 +29,10 @@
 #ifndef ICALFILESET_H
 #define ICALFILESET_H
 
-#include "ical.h"
-#include "icalset.h"
-#include "icalcluster.h"
-#include "icalgauge.h"
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
+#include <libicalss/icalcluster.h>
+#include <libicalss/icalgauge.h>
 #include <sys/types.h> /* For open() flags and mode */
 #include <sys/stat.h> /* For open() flags and mode */
 #include <fcntl.h> /* For open() flags and mode */

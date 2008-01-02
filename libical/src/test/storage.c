@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: storage.c,v 1.5 2002-07-16 10:04:08 acampi Exp $
+  $Id: storage.c,v 1.6 2008-01-02 20:07:46 dothebart Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -27,7 +27,7 @@
     
   ======================================================================*/
 
-#include "ical.h"
+#include <libical/ical.h>
 #include <assert.h>
 #include <string.h> /* for strdup */
 #include <stdlib.h> /* for malloc */

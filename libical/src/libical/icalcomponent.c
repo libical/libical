@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.60 2007-11-30 22:32:08 dothebart Exp $
+  $Id: icalcomponent.c,v 1.61 2008-01-02 20:07:31 dothebart Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1027,6 +1027,11 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
     struct icaltimetype rrule_time = icalrecur_iterator_next(rrule_itr);
     /** note that icalrecur_iterator_next always returns dtstart
 	the first time.. **/
+/* TODO: this? or the block before? as its commented, seems to be an evo libical lack
+    struct icalrecurrencetype recur = icalproperty_get_rrule(rrule);
+    icalrecur_iterator *rrule_itr  = icalrecur_iterator_new(recur, dtstart);
+    struct icaltimetype rrule_time;
+*/
     
     while (1) {
       rrule_time = icalrecur_iterator_next(rrule_itr);
@@ -1264,9 +1269,10 @@ static const struct icalcomponent_kind_map component_map[] =
     { ICAL_VSCHEDULE_COMPONENT, "SCHEDULE" },
 
     /* CAP components */
-    { ICAL_VQUERY_COMPONENT, "VQUERY" },  
     { ICAL_VCAR_COMPONENT, "VCAR" },  
     { ICAL_VCOMMAND_COMPONENT, "VCOMMAND" },  
+    { ICAL_VQUERY_COMPONENT, "VQUERY" },  
+    { ICAL_VREPLY_COMPONENT, "VREPLY" },
 
     /* libical private components */
     { ICAL_XLICINVALID_COMPONENT, "X-LIC-UNKNOWN" },  
@@ -1538,7 +1544,37 @@ icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
 
     return ret;
 }
+/* TODO: which one is the right one? this is EDS
+static struct icaltimetype
+icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
 
+    icalcomponent      *c;
+    icalparameter      *param;
+    struct icaltimetype	ret;
+
+    ret = icalvalue_get_datetime(icalproperty_get_value(prop));
+
+    if ((param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER))
+	!= NULL) {
+	const char     *tzid = icalparameter_get_tzid(param);
+	icaltimezone   *tz = NULL;
+
+	for (c = comp; c != NULL; c = icalcomponent_get_parent(c)) {
+	    tz = icalcomponent_get_timezone(c, tzid);
+	    if (tz != NULL)
+		break;
+	}
+
+	if (tz == NULL)
+	    tz = icaltimezone_get_builtin_timezone_from_tzid(tzid);
+
+	if (tz != NULL)
+	    ret = icaltime_set_timezone(&ret, tz);
+    }
+
+    return ret;
+}
+*/
 /**	@brief Get DTSTART property as an icaltime
  *
  *	If DTSTART is a DATE-TIME with a timezone parameter and a
@@ -2042,6 +2078,10 @@ icalcomponent* icalcomponent_new_vagenda()
 icalcomponent* icalcomponent_new_vquery()
 {
     return icalcomponent_new(ICAL_VQUERY_COMPONENT);
+}
+icalcomponent* icalcomponent_new_vreply()
+{
+    return icalcomponent_new(ICAL_VREPLY_COMPONENT);
 }
 
 /*

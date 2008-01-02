@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: icallangbind.h,v 1.7 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icallangbind.h,v 1.8 2008-01-02 20:07:31 dothebart Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -23,7 +23,7 @@
 
 int* icallangbind_new_array(int size);
 void icallangbind_free_array(int* array);
-int icallangbind_access_array(int* array, int indx);
+int icallangbind_access_array(int* array, int index);
 icalproperty* icallangbind_get_property(icalcomponent *c, int n, const char* prop);
 const char* icallangbind_get_property_val(icalproperty* p);
 const char* icallangbind_get_parameter(icalproperty *p, const char* parameter);

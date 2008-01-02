@@ -15,8 +15,8 @@
 #ifndef ICALSPANLIST_CXX_H
 #define ICALSPANLIST_CXX_H
 
-#include "ical.h"
-#include "icalss.h"
+#include <libical/ical.h>
+#include <libicalss/icalss.h>
 #include "vcomponent.h"
 #include <vector>		/* For as_matrix.. */
 

@@ -3,7 +3,7 @@
   FILE: icaldirsetimpl.h
   CREATOR: eric 21 Aug 2000
   
-  $Id: icaldirsetimpl.h,v 1.5 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icaldirsetimpl.h,v 1.6 2008-01-02 20:07:40 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -30,7 +30,7 @@
 #include "config.h"
 #endif
 
-#include "icalcluster.h"
+#include <libicalss/icalcluster.h>
 
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icalset*/

@@ -3,7 +3,7 @@
   FILE: 
   CREATOR: eric 25 June 2000
   
-  $Id: testmime.c,v 1.4 2007-04-30 13:57:49 artcancro Exp $
+  $Id: testmime.c,v 1.5 2008-01-02 20:07:46 dothebart Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -33,7 +33,11 @@
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
 
-#include "ical.h"
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <libical/ical.h>
 
 #include <stdlib.h> /* For rand */
 #include <string.h> /* for strrchr, strdup*/
@@ -317,7 +321,11 @@ int main(int argc, char* argv[]) {
     }
 
     if (opt.sleep != 0){
+#ifdef WIN32
+        _sleep(opt.sleep*1000);
+#else
 	sleep(opt.sleep);
+#endif
     }
 
     if(	opt.input_file != 0){

@@ -1,15 +1,21 @@
-#include "ical.h"
+#include <libical/ical.h>
 
 #include <stdlib.h>	/* abort() */
 #include <string.h>	/* strcmp() */
 
 static char ictt_str[1024];
-int VERBOSE = 0;
+int VERBOSE = 1;
 int QUIET = 0;
 
 const char* ical_timet_string(const time_t t)
 {
-    struct tm stm = *(gmtime(&t));    
+    struct tm stm;
+    struct tm *tmp = gmtime(&t);
+
+    if (tmp)
+        stm = *tmp;
+    else
+	memset(&stm, 0, sizeof(stm));
 
     sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d Z",stm.tm_year+1900,
 	    stm.tm_mon+1,stm.tm_mday,stm.tm_hour,stm.tm_min,stm.tm_sec);

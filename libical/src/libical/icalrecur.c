@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.68 2007-05-31 21:26:14 artcancro Exp $
+  $Id: icalrecur.c,v 1.69 2008-01-02 20:07:32 dothebart Exp $
   $Locker:  $
     
 
@@ -300,6 +300,38 @@ void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
 
 }
 
+/*
+ * Days in the BYDAY rule are expected by the code to be sorted, and while
+ * this may be the common case, the RFC doesn't actually mandate it. This
+ * function sorts the days taking into account the first day of week.
+ */
+static void
+sort_bydayrules(struct icalrecur_parser *parser)
+{
+    short *array;
+    int week_start, one, two, i, j;
+
+    array = parser->rt.by_day;
+    week_start = parser->rt.week_start;
+
+    for (i=0;
+	 i<ICAL_BY_DAY_SIZE && array[i] != ICAL_RECURRENCE_ARRAY_MAX;
+	 i++) {
+	for (j=0; j<i; j++) {
+	    one = icalrecurrencetype_day_day_of_week(array[j]) - week_start;
+	    if (one < 0) one += 7;
+	    two = icalrecurrencetype_day_day_of_week(array[i]) - week_start;
+	    if (two < 0) two += 7;
+
+	    if (one > two) {
+		short tmp = array[j];
+		array[j] = array[i];
+		array[i] = tmp;
+	    }
+	}
+    }
+}
+
 void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 {
 
@@ -358,6 +390,7 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 
     free(vals_copy);
 
+    sort_bydayrules(parser);
 }
 
 
@@ -406,6 +439,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	    parser.rt.interval = (short)atoi(value);
 	} else if (strcasecmp(name,"WKST") == 0){
 	    parser.rt.week_start = icalrecur_string_to_weekday(value);
+	    sort_bydayrules(&parser);
 	} else if (strcasecmp(name,"BYSECOND") == 0){
 	    icalrecur_add_byrules(&parser,parser.rt.by_second,
 				  ICAL_BY_SECOND_SIZE,value);
@@ -908,18 +942,15 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	     monday. Otherwise, jumping to the next week ( jumping 7
 	     days ahead ) will skip over some occurrences in the
 	     second week. */
-	  
-	  /* This is probably a HACK. There should be some more
-             general way to solve this problem */
 
+	  /* This depends on impl->by_ptrs[BY_DAY] being correctly sorted by
+	   * day. This should probably be abstracted to make such assumption
+	   * more explicit. */
 	  short dow = (short)(impl->by_ptrs[BY_DAY][0]-icaltime_day_of_week(impl->last));
 
-	  if(dow < 0) {
-	      /* initial time is after first day of BY_DAY data */
-
-	      impl->last.day += dow;
-	      impl->last = icaltime_normalize(impl->last);
-	  }
+	  if (dow > impl->rule.week_start-1) dow -= 7;
+	  impl->last.day += dow;
+	  impl->last = icaltime_normalize(impl->last);
       }
       
 
@@ -949,8 +980,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     /* If this is a monthly interval with by day data, then we need to
        set the last value to the appropriate day of the month */
 
-    if(impl->rule.freq == ICAL_MONTHLY_RECURRENCE &&
-       has_by_data(impl,BY_DAY)) {
+    if(impl->rule.freq == ICAL_MONTHLY_RECURRENCE)
+	if (has_by_data(impl,BY_DAY)) {
 
 	int dow = icalrecurrencetype_day_day_of_week(
 	    impl->by_ptrs[BY_DAY][impl->by_indices[BY_DAY]]);  
@@ -997,6 +1028,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	    return 0;
 	}
 	
+    } else if (has_by_data(impl,BY_MONTH_DAY)) {
+	impl->last = icaltime_normalize(impl->last);
     }
 
 
@@ -1544,7 +1577,7 @@ static int next_month(icalrecur_iterator* impl)
        */
 
   } else if (has_by_data(impl,BY_MONTH_DAY)) {
-      int day;
+      int day, days_in_month;
 
       assert( BYMDPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
 
@@ -1557,16 +1590,41 @@ static int next_month(icalrecur_iterator* impl)
           increment_month(impl);          
       }
       
+      days_in_month = icaltime_days_in_month(impl->last.month,
+                                                   impl->last.year);
+
       day = BYMDPTR[BYMDIDX];
       
       if (day < 0) {
           day = icaltime_days_in_month(impl->last.month, impl->last.year) + day + 1;
       }
-      
+
+      if ( day > days_in_month){
+          impl->last.day = 1;
+
+          /* Did moving to the next month put us on a valid date? if
+             so, note that the new data is valid, if, not, mark it
+             invalid */
+
+          if(is_day_in_byday(impl,impl->last)){
+              data_valid = 1;
+          } else {
+              data_valid = 0; /* signal that impl->last is invalid */
+          }
+      }
+
       impl->last.day = day;
 
   } else {
+      int days_in_month;
+
       increment_month(impl);
+
+      days_in_month = icaltime_days_in_month(impl->last.month,
+                                                   impl->last.year);
+      if (impl->last.day > days_in_month){
+          data_valid = 0; /* signal that impl->last is invalid */
+      }
   }
 
   return data_valid;

@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.39 2008-01-01 22:07:56 dothebart Exp $
+#  $Id: Makefile.am,v 1.40 2008-01-02 20:07:30 dothebart Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -26,8 +26,13 @@
 DESIGNDATA = $(top_srcdir)/design-data
 ICALSCRIPTS = $(top_srcdir)/scripts
 
+if WITH_CXX_BINDINGS
+cxx_lib=libical_cxx.la
+cxx_headers=vcomponent.h icalparameter_cxx.h icalproperty_cxx.h icalvalue_cxx.h icptrholder.h
+else
 cxx_lib=
 cxx_headers=
+endif
 
 lib_LTLIBRARIES = libical.la $(cxx_lib)
 
@@ -39,16 +44,17 @@ AM_CPPFLAGS = -DPACKAGE_DATA_DIR=\""$(datadir)/$(PACKAGE)"\"
 
 # CFLAGS = -g
 
-all: ical.h
-
-INCLUDES =			\
-	-I$(top_builddir)	\
-	-I$(top_srcdir)/src	\
-	-I$(top_builddir)/src	\
+INCLUDES =				\
+	-I$(top_builddir)		\
+	-I$(top_srcdir)/src		\
+	-I$(top_builddir)/src		\
+	-I$(top_srcdir)/src/libical	\
+	-I$(top_builddir)/src/libical	\
 	-I$(srcdir)
 
 libical_la_LDFLAGS = -version-info 30:0:30
 
+libical_la_LIBADD = $(PTHREAD_LIBS)
 
 libical_la_SOURCES =		\
 	$(BUILT_SOURCES)	\
@@ -79,6 +85,8 @@ libical_la_SOURCES =		\
 	icalrestriction.h	\
 	icaltime.c		\
 	icaltime.h		\
+	icaltz-util.c		\
+	icaltz-util.h		\
 	icaltimezone.c		\
 	icaltimezone.h		\
 	icalduration.h		\
@@ -100,13 +108,55 @@ libical_la_SOURCES =		\
 	caldate.c \
 	astime.h 
 
-libicalincludedir = $(includedir)
+if WITH_CXX_BINDINGS
+libical_cxx_la_SOURCES =	\
+	$(libical_la_SOURCES)	\
+	vcomponent.h		\
+	vcomponent.cpp		\
+	icalproperty_cxx.h	\
+	icalproperty_cxx.cpp	\
+	icalparameter_cxx.h	\
+	icalparameter_cxx.cpp	\
+	icalvalue_cxx.h		\
+	icalvalue_cxx.cpp       \
+	icptrholder.h
+endif
 
-libicalinclude_HEADERS = ical.h icalmemory.h icalerror.h
+libical_includedir = $(includedir)
+
+libical_include_HEADERS = \
+	ical.h			\
+	icalarray.h		\
+	icalattach.h		\
+	icalcomponent.h		\
+	icalderivedparameter.h	\
+	icalderivedproperty.h	\
+	icalderivedvalue.h	\
+	icalduration.h		\
+	icalenums.h		\
+	icalerror.h		\
+	icallangbind.h		\
+	icalmemory.h		\
+	icalmime.h		\
+	icalparameter.h		\
+	icalparser.h		\
+	icalperiod.h		\
+	icalproperty.h		\
+	icalrecur.h		\
+	icalrestriction.h	\
+	icaltime.h		\
+	icaltz-util.h		\
+	icaltimezone.h		\
+	icaltypes.h		\
+	icalvalue.h		\
+	pvl.h			\
+	sspm.h			\
+	$(cxx_headers)
 
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering. It
 # is required to make the combined header ical.h properly
 COMBINEDHEADERS =					\
+        $(top_builddir)/config.h                        \
 	$(top_builddir)/src/libical/icalversion.h	\
 	$(top_srcdir)/src/libical/icaltime.h		\
 	$(top_srcdir)/src/libical/icalduration.h	\
@@ -263,6 +313,6 @@ $(srcdir)/icalmime.c: icalderivedvalue.h icalderivedproperty.h icalderivedparame
 $(srcdir)/icalparameter.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalparser.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalproperty.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
-$(srcdir)/icalrestriction.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
+icalrestriction.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icaltime.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h
 $(srcdir)/icalvalue.c: icalderivedvalue.h icalderivedproperty.h icalderivedparameter.h

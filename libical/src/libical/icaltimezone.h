@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
 
- $Id: icaltimezone.h,v 1.12 2007-12-01 11:14:00 dothebart Exp $
+ $Id: icaltimezone.h,v 1.13 2008-01-02 20:07:32 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -50,6 +50,7 @@ typedef struct _icaltimezone		icaltimezone;
 
 /** Creates a new icaltimezone. */
 icaltimezone *icaltimezone_new			(void);
+icaltimezone *icaltimezone_copy			(icaltimezone *originalzone);
 
 /** Frees all memory used for the icaltimezone. Set free_struct to free the
    icaltimezone struct as well. */
@@ -69,6 +70,9 @@ icalarray* icaltimezone_get_builtin_timezones	(void);
 
 /** Returns a single builtin timezone, given its Olson city name. */
 icaltimezone* icaltimezone_get_builtin_timezone	(const char *location);
+
+/** Returns a single builtin timezone, given its offset. */
+icaltimezone* icaltimezone_get_builtin_timezone_from_offset	(int offset, const char *tzname);
 
 /** Returns a single builtin timezone, given its TZID. */
 icaltimezone* icaltimezone_get_builtin_timezone_from_tzid (const char *tzid);
@@ -102,6 +106,8 @@ icalcomponent*	icaltimezone_get_component	(icaltimezone	*zone);
    no TZID was found. */
 int	icaltimezone_set_component		(icaltimezone	*zone,
 						 icalcomponent	*comp);
+
+char*   icaltimezone_get_display_name           (icaltimezone   *zone);
 
 /**
  * @par Converting times between timezones.

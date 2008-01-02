@@ -3,7 +3,7 @@
   FILE: icalfilesetimpl.h
   CREATOR: eric 23 December 1999
   
-  $Id: icalfilesetimpl.h,v 1.6 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalfilesetimpl.h,v 1.7 2008-01-02 20:07:40 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -32,7 +32,7 @@
 #include "config.h"
 #endif
 
-#include "icalgauge.h"
+#include <libicalss/icalgauge.h>
 
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icaldirset*/

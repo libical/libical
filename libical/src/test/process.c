@@ -3,7 +3,7 @@
   FILE: process.c
   CREATOR: eric 11 February 2000
   
-  $Id: process.c,v 1.8 2007-04-30 13:57:49 artcancro Exp $
+  $Id: process.c,v 1.9 2008-01-02 20:07:45 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -21,13 +21,17 @@
  
  ======================================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h> /* for printf */
 #include <errno.h>
 #include <string.h> /* For strerror */
 #include <stdlib.h> /* for free */
 
-#include "ical.h"
-#include "icalss.h"
+#include <libical/ical.h>
+#include <libicalss/icalss.h>
 
 void send_message(icalcomponent *reply,const char* this_user)
 {
@@ -43,10 +47,11 @@ int main(int argc, char* argv[])
     int i=0;
     const char *class_string;
     int dont_remove;
-    
-    icalset* f = icalset_new_file("../../test-data/process-incoming.ics");
+    icalfileset_options options = {O_RDONLY, 0644, 0};
+
+    icalset* f = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/process-incoming.ics", &options);
     icalset* trash = icalset_new_file("trash.ics");
-    icalset* cal = icalset_new_file("../../test-data/process-calendar.ics");
+    icalset* cal = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/process-calendar.ics", &options);
     icalset* out = icalset_new_file("outgoing.ics");
 
     const char* this_user = "alice@cal.softwarestudio.org";

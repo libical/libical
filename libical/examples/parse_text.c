@@ -5,7 +5,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#include "ical.h"
+#include <libical/ical.h>
 
 #include <stdlib.h>
 
