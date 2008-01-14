@@ -18,7 +18,7 @@
 #  FILE: Makefile.am
 #  CREATOR: acampi 
 #  
-#  $Id: Makefile,v 1.1 2008-01-02 20:07:33 dothebart Exp $
+#  $Id: Makefile,v 1.2 2008-01-14 00:38:23 dothebart Exp $
 #
 #
 # (C) COPYRIGHT 2003, Andrea Campi, mailto:a.campi@inet.it
@@ -133,7 +133,7 @@ BDB_LIB =
 BDB_VERSION = 
 CC = i486-linux-gnu-gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -Wall -g -O0 -ggdb -rdynamic -D_GNU_SOURCE -MD -MP 
+CFLAGS = -Wall -g -O2
 CPP = i486-linux-gnu-gcc -E
 CPPFLAGS = 
 CXX = i486-linux-gnu-g++

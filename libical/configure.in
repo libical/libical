@@ -41,6 +41,7 @@ if test "x$os_win32" = "xyes"; then
 	zoneinfo_dir="zoneinfo"
 fi
 
+
 dnl *** bdb4 support
 
 AC_MSG_CHECKING(for Berkeley DB4 support)
@@ -207,7 +208,7 @@ AC_SUBST(PTHREAD_LIBS)
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(assert.h ctype.h pthread.h stdint.h time.h sys/types.h unistd.h wctype.h)
+AC_CHECK_HEADERS(assert.h ctype.h pthread.h stdint.h time.h sys/types.h unistd.h wctype.h endian.h sys/endian.h byteswap.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

@@ -20,12 +20,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include <string.h>
 #if defined(sun) && defined(__SVR4)
 #include <sys/byteorder.h>
 #else
-#include <byteswap.h>
-#include <endian.h>
+# ifdef HAVE_BYTESWAP_H
+#  include <byteswap.h>
+# endif
+# ifdef HAVE_SYS_ENDIAN_H
+#  define bswap_32 swap32
+# endif
+# ifdef HAVE_ENDIAN_H
+#  include <endian.h>
+# endif 
+
 #endif
 #include <limits.h>
 #include <time.h>
