@@ -6,7 +6,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.y,v 1.9 2008-01-02 20:07:43 dothebart Exp $
+  $Id: icalssyacc.y,v 1.10 2008-01-14 00:35:26 dothebart Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -47,8 +47,13 @@ static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
 static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
 static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
 void sserror(char *s); /* Don't know why I need this.... */
+// TODO: older flex version produce whats here configured as OpenBSD
+// autoconf should figure out, and which flex version we should be newer than?
+#ifndef __OpenBSD__
 int sslex(void *YYPARSE_PARAM);
-
+#else
+int sslex();
+#endif
 %}
 
 %union {

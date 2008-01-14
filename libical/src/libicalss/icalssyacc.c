@@ -129,7 +129,7 @@
   
   DESCRIPTION:
   
-  $Id: icalssyacc.c,v 1.10 2008-01-02 20:07:42 dothebart Exp $
+  $Id: icalssyacc.c,v 1.11 2008-01-14 00:35:26 dothebart Exp $
   $Locker:  $
 
 (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
