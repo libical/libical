@@ -4,7 +4,7 @@
  CREATOR: Damon Chaplin 07 March 2001
 
 
- $Id: icalarray.h,v 1.4 2007-04-30 13:57:47 artcancro Exp $
+ $Id: icalarray.h,v 1.5 2008-01-15 23:17:40 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Ximian, Inc.
@@ -49,7 +49,7 @@ icalarray *icalarray_new		(int		 element_size,
 void	   icalarray_free		(icalarray	*array);
 
 void	   icalarray_append		(icalarray	*array,
-					 void		*element);
+					 const void		*element);
 void	   icalarray_remove_element_at	(icalarray	*array,
 					 int		 position);
 

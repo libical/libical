@@ -3,10 +3,11 @@
   FILE: icalperiod.c
   CREATOR: eric 02 June 2000
   
-  $Id: icalperiod.c,v 1.12 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalperiod.c,v 1.13 2008-01-15 23:17:41 dothebart Exp $
   $Locker:  $
     
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 
@@ -26,7 +27,7 @@
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "icalperiod.h"

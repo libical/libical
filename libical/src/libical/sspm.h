@@ -3,9 +3,12 @@
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
   
-  $Id: sspm.h,v 1.4 2007-08-21 02:45:54 artcancro Exp $
+  $Id: sspm.h,v 1.5 2008-01-15 23:17:43 dothebart Exp $
   $Locker:  $
-    
+
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
+
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in
  compliance with the License. You may obtain a copy of the License at
@@ -110,14 +113,14 @@ struct sspm_action_map {
 	enum sspm_minor_type minor;
 	void* (*new_part)();
 	void (*add_line)(void *part, struct sspm_header *header, 
-			 char* line, size_t size);
+			 const char* line, size_t size);
 	void* (*end_part)(void* part);
 	void (*free_part)(void *part);
 };
 
-char* sspm_major_type_string(enum sspm_major_type type);
-char* sspm_minor_type_string(enum sspm_minor_type type);
-char* sspm_encoding_string(enum sspm_encoding type);
+const char* sspm_major_type_string(enum sspm_major_type type);
+const char* sspm_minor_type_string(enum sspm_minor_type type);
+const char* sspm_encoding_string(enum sspm_encoding type);
 
 int sspm_parse_mime(struct sspm_part *parts, 
 		    size_t max_parts,
@@ -138,6 +141,6 @@ char *decode_base64(char *dest,
 
 
 int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
-		    char **output_string, char* header);
+		    char **output_string, const char* header);
 
 #endif /*SSPM_H*/

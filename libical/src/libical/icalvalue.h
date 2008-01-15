@@ -4,10 +4,11 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalvalue.h,v 1.9 2008-01-02 20:07:33 dothebart Exp $
+  $Id: icalvalue.h,v 1.10 2008-01-15 23:17:43 dothebart Exp $
   $Locker:  $
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 

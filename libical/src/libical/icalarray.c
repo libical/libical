@@ -3,7 +3,7 @@
   FILE: icalarray.c
   CREATOR: Damon Chaplin 07 March 2001
   
-  $Id: icalarray.c,v 1.6 2007-04-30 13:57:47 artcancro Exp $
+  $Id: icalarray.c,v 1.7 2008-01-15 23:17:40 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2001, Ximian, Inc.
@@ -80,7 +80,7 @@ icalarray_free			(icalarray	*array)
 
 void
 icalarray_append		(icalarray	*array,
-				 void		*element)
+				 const void		*element)
 {
     if (array->num_elements >= array->space_allocated)
 	icalarray_expand (array, 1);
@@ -96,7 +96,7 @@ icalarray_element_at		(icalarray	*array,
 				 int		 position)
 {
     assert (position >= 0);
-    assert (position < array->num_elements);
+    assert ((unsigned int)position < array->num_elements);
 
     return (char *)(array->data) + (position * array->element_size);
 }
@@ -110,7 +110,7 @@ icalarray_remove_element_at	(icalarray	*array,
     int elements_to_move;
 
     assert (position >= 0);
-    assert (position < array->num_elements);
+    assert ((unsigned int)position < array->num_elements);
 
     dest = (char *)array->data + (position * array->element_size);
     elements_to_move = array->num_elements - position - 1;
@@ -141,7 +141,7 @@ icalarray_expand		(icalarray	*array,
 
     new_space_allocated = array->space_allocated + array->increment_size;
 
-    if (space_needed > array->increment_size) 
+    if ((unsigned int)space_needed > array->increment_size)
 	new_space_allocated += space_needed;
 
 	/*
@@ -149,10 +149,10 @@ icalarray_expand		(icalarray	*array,
 			new_space_allocated * array->element_size);
 	*/
 	new_data = malloc(new_space_allocated * array->element_size);
-	memcpy(new_data,array->data,array->element_size*array->space_allocated);
-	free(array->data);
 
     if (new_data) {
+	memcpy(new_data,array->data,array->element_size*array->space_allocated);
+	free(array->data);
 	array->data = new_data;
 	array->space_allocated = new_space_allocated;
     } else {

@@ -3,7 +3,8 @@
  CREATOR: eric November, 1995
 
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 ======================================================================*/
 
 
@@ -31,7 +32,7 @@ typedef struct pvl_elem_t
 
 /**
  * This global is incremented for each call to pvl_new_element(); it gives each
- * list a unique identifer 
+ * list a unique identifer
  */
 
 extern int  pvl_elem_count;

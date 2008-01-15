@@ -4,10 +4,11 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.42 2008-01-02 20:07:31 dothebart Exp $
+  $Id: icalproperty.c,v 1.43 2008-01-15 23:17:41 dothebart Exp $
 
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 
@@ -25,7 +26,7 @@
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include "icalproperty.h"
@@ -387,15 +388,16 @@ icalproperty_get_value_kind(icalproperty *prop)
 	    =  icalproperty_kind_to_value_kind(prop->kind);
 
 	if(orig_val_param){
-	    orig_kind = (icalvalue_kind)icalparameter_get_value(orig_val_param);
+	    orig_kind = icalparameter_value_to_value_kind( icalparameter_get_value(orig_val_param) );
 	}
 
 	if(value != 0){
 	    this_kind = icalvalue_isa(value);
 	}
 	
-	
-	if(this_kind == default_kind &&
+    if ( orig_kind != ICAL_NO_VALUE ) {
+      kind_string = icalvalue_kind_to_string( orig_kind );
+    } else if(this_kind == default_kind &&
 	   orig_kind != ICAL_NO_VALUE){
 	    /* The kind is the default, so it does not need to be
                included, but do it anyway, since it was explicit in
@@ -694,7 +696,7 @@ icalproperty_remove_parameter_by_kind(icalproperty* prop, icalparameter_kind kin
  *  @param prop   A valid icalproperty.
  *  @param name   The name of the parameter to remove
  *
- *  This function removes paramters with the given name.  The name
+ *  This function removes parameters with the given name.  The name
  *  corresponds to either a built-in name (TZID, etc.) or the name of
  *  an extended parameter (X-FOO)
  *

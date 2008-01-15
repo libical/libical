@@ -3,11 +3,12 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.69 2008-01-02 20:07:32 dothebart Exp $
+  $Id: icalrecur.c,v 1.70 2008-01-15 23:17:41 dothebart Exp $
   $Locker:  $
     
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 
@@ -481,7 +482,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 
 }
 
-static struct { char* str;size_t offset; int limit;  } recurmap[] = 
+static struct { const char* str;size_t offset; int limit;  } recurmap[] = 
 {
     {";BYSECOND=",offsetof(struct icalrecurrencetype,by_second),60},
     {";BYMINUTE=",offsetof(struct icalrecurrencetype,by_minute),60},
@@ -980,8 +981,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     /* If this is a monthly interval with by day data, then we need to
        set the last value to the appropriate day of the month */
 
-    if(impl->rule.freq == ICAL_MONTHLY_RECURRENCE)
-	if (has_by_data(impl,BY_DAY)) {
+    if(impl->rule.freq == ICAL_MONTHLY_RECURRENCE &&
+       has_by_data(impl,BY_DAY)) {
 
 	int dow = icalrecurrencetype_day_day_of_week(
 	    impl->by_ptrs[BY_DAY][impl->by_indices[BY_DAY]]);  

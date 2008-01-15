@@ -4,7 +4,7 @@
  CREATOR: eric 26 July 2000
 
 
- $Id: icalmime.c,v 1.12 2008-01-02 20:07:31 dothebart Exp $
+ $Id: icalmime.c,v 1.13 2008-01-15 23:17:40 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -73,9 +73,11 @@ void* icalmime_text_new_part()
 }
 void icalmime_text_add_line(void *part, 
 			    struct sspm_header *header, 
-			    char* line, size_t size)
+			    const char* line, size_t size)
 {
     struct text_part* impl = (struct text_part*) part;
+    (void)header;
+    (void)size;
 
     icalmemory_append_string(&(impl->buf),&(impl->buf_pos),
 			     &(impl->buf_size),line);
@@ -106,7 +108,18 @@ void* icalmime_text_end_part(void* part)
 
     return buf;
 }
+/* TODO: this is the way the kde team does this:
 
+void* icalmime_text_end_part(void* part)
+{
+    struct text_part* impl = ( struct text_part*) part;
+
+    icalmemory_add_tmp_buffer(impl->buf);
+    / * What for? free(impl); * /
+
+    return impl->buf;
+}
+*/
 void icalmime_text_free_part(void *part)
 {
     part = part;
@@ -120,21 +133,23 @@ void* icalmime_attachment_new_part()
     return 0;
 }
 void icalmime_attachment_add_line(void *part, struct sspm_header *header, 
-				  char* line, size_t size)
+				  const char* line, size_t size)
 {
-    part = part;
-    header = header;
-    line = line;
-    size = size;
+    (void)part;
+    (void)header;
+    (void)line;
+    (void)size;
 }
 
 void* icalmime_attachment_end_part(void* part)
 {
+    (void)part;
     return 0;
 }
 
 void icalmime_attachment_free_part(void *part)
 {
+    (void)part;
 }
 
 
@@ -193,8 +208,8 @@ icalcomponent* icalmime_parse(char* (*get_string)(char *s, size_t size,
 
 #define TMPSZ 1024
 	char mimetype[TMPSZ];			       
-	char* major = sspm_major_type_string(parts[i].header.major);
-	char* minor = sspm_minor_type_string(parts[i].header.minor);
+	const char* major = sspm_major_type_string(parts[i].header.major);
+	const char* minor = sspm_minor_type_string(parts[i].header.minor);
 
 	if(parts[i].header.minor == SSPM_UNKNOWN_MINOR_TYPE ){
 	    assert(parts[i].header.minor_text !=0);

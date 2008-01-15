@@ -4,7 +4,7 @@
  CREATOR: acampi 28 May 02
 
 
- (C) COPYRIGHT 2002, Andrea Campi
+ (C) COPYRIGHT 2002, Andrea Campi <a.campi@inet.it>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 

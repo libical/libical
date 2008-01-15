@@ -3,11 +3,12 @@
   FILE: icalerror.c
   CREATOR: eric 16 May 1999
   
-  $Id: icalerror.c,v 1.21 2008-01-02 20:07:31 dothebart Exp $
+  $Id: icalerror.c,v 1.22 2008-01-15 23:17:40 dothebart Exp $
   $Locker:  $
     
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 

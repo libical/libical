@@ -4,10 +4,11 @@
   FILE: icalvalue.c
   CREATOR: eric 02 May 1999
   
-  $Id: icalvalue.c,v 1.43 2008-01-02 20:07:32 dothebart Exp $
+  $Id: icalvalue.c,v 1.44 2008-01-15 23:17:43 dothebart Exp $
 
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 
@@ -23,7 +24,7 @@
   The original code is icalvalue.c
 
   Contributions from:
-     Graham Davison (g.m.davison@computer.org)
+     Graham Davison <g.m.davison@computer.org>
 
 
 ======================================================================*/
@@ -385,6 +386,15 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 	}
 
     case ICAL_BINARY_VALUE:
+    {
+        icalattach *attach;
+        attach = icalattach_new_from_data ((unsigned char*)str, 0, 0);
+        if ( !attach )
+          break;
+        value = icalvalue_new_attach (attach);
+        icalattach_unref (attach);
+        break;
+    }
     case ICAL_BOOLEAN_VALUE:
         {
             /* HACK */
@@ -746,7 +756,7 @@ static char* icalvalue_binary_as_ical_string(const icalvalue* value) {
     data = icalvalue_get_binary(value);
 
     str = (char*)icalmemory_tmp_buffer(60);
-    sprintf(str,"icalvalue_binary_as_ical_string is not implemented yet");
+    snprintf(str, 60,"icalvalue_binary_as_ical_string is not implemented yet");
 
     return str;
 }
@@ -910,8 +920,14 @@ icalvalue_attach_as_ical_string(const icalvalue* value)
 	str = icalmemory_tmp_buffer (strlen (url) + 1);
 	strcpy (str, url);
 	return str;
-    } else
-	return icalvalue_binary_as_ical_string (value);
+    } else {
+/*	return icalvalue_binary_as_ical_string (value);*/
+      const char *data = 0;
+      data = (const char*)icalattach_get_data(a);
+      str = icalmemory_tmp_buffer (strlen (data) + 1);
+      strcpy (str, data);
+      return str;
+}
 }
 
 
@@ -1423,7 +1439,6 @@ int icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBu
 {
     char *str, *str_p;
     const char *p;
-    icalvalue *value = 0;
     size_t buf_sz;
 
     if ((szText == 0) || (szDecText == 0))

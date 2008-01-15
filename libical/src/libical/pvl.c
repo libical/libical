@@ -3,7 +3,8 @@
  CREATOR: eric November, 1995
 
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H

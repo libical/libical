@@ -3,10 +3,11 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.69 2008-01-02 20:07:32 dothebart Exp $
+  $Id: icaltime.c,v 1.70 2008-01-15 23:17:42 dothebart Exp $
   $Locker:  $
     
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 
@@ -66,14 +67,11 @@
     static pthread_mutex_t tzid_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
-static void release_saved_tz ();
-static char * access_saved_tz ();
-
 /*
  *  Function to convert a struct tm time specification
  *  to an ANSI time_t using the specified time zone.
  *  This is different from the standard mktime() function
- *  in that we dont want the automatic adjustments for
+ *  in that we don't want the automatic adjustments for
  *  local daylight savings time applied to the result.
  *  This function expects well-formed input.
  */
@@ -237,18 +235,18 @@ icaltime_from_timet_with_zone(const time_t tm, const int is_date,
     return tt;
 }
 
-/**	@brief Constructor.
+/**	@brief Convenience constructor.
  * 
- * Returns an icaltimetype representing the current time in the given timezone.
+ * Returns the current time in the given timezone, as an icaltimetype.
  */
 struct icaltimetype icaltime_current_time_with_zone(const icaltimezone *zone)
 {
     return icaltime_from_timet_with_zone (time (NULL), 0, zone);
 }
 
-/**	@brief Constructor.
+/**	@brief Convenience constructor.
  * 
- * Returns an icaltimetype representing the current day.
+ * Returns the current day as an icaltimetype, with is_date set.
  */
 struct icaltimetype icaltime_today(void)
 {
@@ -456,7 +454,7 @@ const char* icaltime_as_ical_string(const struct icaltimetype tt)
     if(tt.is_date){
 	snprintf(buf, size,"%04d%02d%02d",tt.year,tt.month,tt.day);
     } else {
-	char* fmt;
+	const char* fmt;
 	if(tt.is_utc){
 	    fmt = "%04d%02d%02dT%02d%02d%02dZ";
 	} else {
@@ -729,7 +727,8 @@ struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
 
 /**	@brief Constructor.
  *
- *	Return a null time, which is guaranteed not to be equal to any other time.
+ *	Return a null time, which indicates no time has been set.
+ *	This time represents the beginning of the epoch.
  */
 struct icaltimetype icaltime_null_time(void)
 {
@@ -741,7 +740,7 @@ struct icaltimetype icaltime_null_time(void)
 
 /**	@brief Constructor.
  *
- *	Return a null date.
+ *	Return a null date, which indicates no time has been set.
  */
 struct icaltimetype icaltime_null_date(void)
 {
@@ -1043,7 +1042,7 @@ icaltime_get_timezone(const struct icaltimetype t) {
 	return t.zone;
 }
 
-char *
+const char *
 icaltime_get_tzid(const struct icaltimetype t) {
 
 	if (t.zone != NULL) {

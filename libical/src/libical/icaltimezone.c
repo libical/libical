@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.41 2008-01-02 20:07:32 dothebart Exp $
+ $Id: icaltimezone.c,v 1.42 2008-01-15 23:17:42 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -154,7 +154,7 @@ static icaltimezone utc_timezone = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 static char* zone_files_directory = NULL;
 
-static void  icaltimezone_reset			(icaltimezone   *zone);
+static void  icaltimezone_reset			(icaltimezone *zone);
 static char* icaltimezone_get_location_from_vtimezone (icalcomponent *component);
 static char* icaltimezone_get_tznames_from_vtimezone (icalcomponent *component);
 static void  icaltimezone_expand_changes	(icaltimezone	*zone,
@@ -165,7 +165,7 @@ static void  icaltimezone_expand_vtimezone	(icalcomponent	*comp,
 static int   icaltimezone_compare_change_fn	(const void	*elem1,
 						 const void	*elem2);
 
-static int   icaltimezone_find_nearby_change	(icaltimezone	*zone,
+static int   icaltimezone_find_nearby_change	(icaltimezone *zone,
 						 icaltimezonechange *change);
 
 static void  icaltimezone_adjust_change		(icaltimezonechange *tt,
@@ -174,18 +174,18 @@ static void  icaltimezone_adjust_change		(icaltimezonechange *tt,
 						 int		 minutes,
 						 int		 seconds);
 
-static void  icaltimezone_init			(icaltimezone	*zone);
+static void  icaltimezone_init			(icaltimezone *zone);
 
 /** Gets the TZID, LOCATION/X-LIC-LOCATION, and TZNAME properties from the
    VTIMEZONE component and places them in the icaltimezone. It returns 1 on
    success, or 0 if the TZID can't be found. */
-static int   icaltimezone_get_vtimezone_properties (icaltimezone  *zone,
+static int   icaltimezone_get_vtimezone_properties (icaltimezone *zone,
 						    icalcomponent *component);
 
 
-static void  icaltimezone_load_builtin_timezone	(icaltimezone	*zone);
+static void  icaltimezone_load_builtin_timezone	(icaltimezone *zone);
 
-static void  icaltimezone_ensure_coverage	(icaltimezone	*zone,
+static void  icaltimezone_ensure_coverage	(icaltimezone *zone,
 						 int		 end_year);
 
 
@@ -200,7 +200,7 @@ static char* icaltimezone_load_get_line_fn	(char		*s,
 static void  format_utc_offset			(int		 utc_offset,
 						 char		*buffer);
 
-static char* get_zone_directory(void);
+static const char* get_zone_directory(void);
 
 
 /** Creates a new icaltimezone. */
@@ -292,7 +292,7 @@ icaltimezone_init			(icaltimezone	*zone)
    it expects the zone to be initialized or reset - it doesn't free
    any old values. */
 static int
-icaltimezone_get_vtimezone_properties	(icaltimezone	*zone,
+icaltimezone_get_vtimezone_properties	(icaltimezone *zone,
 					 icalcomponent	*component)
 {
     icalproperty *prop;
@@ -316,8 +316,7 @@ icaltimezone_get_vtimezone_properties	(icaltimezone	*zone,
     
     zone->tzid = strdup (tzid);
     zone->component = component;
-    if ( zone->location != 0 )
-	free ( zone->location );
+	if ( zone->location != 0 ) free ( zone->location );
     zone->location = icaltimezone_get_location_from_vtimezone (component);
     zone->tznames = icaltimezone_get_tznames_from_vtimezone (component);
 
@@ -472,7 +471,7 @@ icaltimezone_get_tznames_from_vtimezone (icalcomponent *component)
 
 
 static void
-icaltimezone_ensure_coverage		(icaltimezone	*zone,
+icaltimezone_ensure_coverage		(icaltimezone *zone,
 					 int		 end_year)
 {
     /* When we expand timezone changes we always expand at least up to this
@@ -504,7 +503,7 @@ icaltimezone_ensure_coverage		(icaltimezone	*zone,
 
 
 static void
-icaltimezone_expand_changes		(icaltimezone	*zone,
+icaltimezone_expand_changes		(icaltimezone *zone,
 					 int		 end_year)
 {
     icalarray *changes;
@@ -731,8 +730,8 @@ icaltimezone_compare_change_fn		(const void	*elem1,
     const icaltimezonechange *change1, *change2;
     int retval;
 
-    change1 = elem1;
-    change2 = elem2;
+    change1 = (const icaltimezonechange *)elem1;
+    change2 = (const icaltimezonechange *)elem2;
 
     if (change1->year < change2->year)
 	retval = -1;
@@ -774,8 +773,8 @@ icaltimezone_compare_change_fn		(const void	*elem1,
 
 void
 icaltimezone_convert_time		(struct icaltimetype *tt,
-					 icaltimezone	*from_zone,
-					 icaltimezone	*to_zone)
+					 icaltimezone *from_zone,
+					 icaltimezone *to_zone)
 {
     int utc_offset, is_daylight;
 
@@ -902,7 +901,7 @@ icaltimezone_get_utc_offset		(icaltimezone	*zone,
 	if (change_num < 0)
 	    return 0;
 
-	if (change_num >= zone->changes->num_elements)
+	if ((unsigned int)change_num >= zone->changes->num_elements)
 	    break;
 
 	zone_change = icalarray_element_at (zone->changes, change_num);
@@ -1037,7 +1036,7 @@ icaltimezone_get_utc_offset_of_utc_time	(icaltimezone	*zone,
 	if (change_num < 0)
 	    return 0;
 
-	if (change_num >= zone->changes->num_elements)
+	if ((unsigned int)change_num >= zone->changes->num_elements)
 	    break;
 
 	zone_change = icalarray_element_at (zone->changes, change_num);
@@ -1060,7 +1059,7 @@ icaltimezone_get_utc_offset_of_utc_time	(icaltimezone	*zone,
 /** Returns the index of a timezone change which is close to the time
    given in change. */
 static int
-icaltimezone_find_nearby_change		(icaltimezone		*zone,
+icaltimezone_find_nearby_change		(icaltimezone	*zone,
 					 icaltimezonechange	*change)
 {
     icaltimezonechange *zone_change;
@@ -1161,8 +1160,8 @@ icaltimezone_adjust_change		(icaltimezonechange *tt,
 }
 
 
-char*
-icaltimezone_get_tzid			(icaltimezone	*zone)
+const char*
+icaltimezone_get_tzid			(icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
     if (!zone)
@@ -1175,8 +1174,8 @@ icaltimezone_get_tzid			(icaltimezone	*zone)
 }
 
 
-char*
-icaltimezone_get_location		(icaltimezone	*zone)
+const char*
+icaltimezone_get_location		(icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
     if (!zone)
@@ -1188,8 +1187,8 @@ icaltimezone_get_location		(icaltimezone	*zone)
 }
 
 
-char*
-icaltimezone_get_tznames		(icaltimezone	*zone)
+const char*
+icaltimezone_get_tznames		(icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
     if (!zone)
@@ -1204,7 +1203,7 @@ icaltimezone_get_tznames		(icaltimezone	*zone)
 
 /** Returns the latitude of a builtin timezone. */
 double
-icaltimezone_get_latitude		(icaltimezone	*zone)
+icaltimezone_get_latitude		(icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return 0. */
     if (!zone)
@@ -1218,7 +1217,7 @@ icaltimezone_get_latitude		(icaltimezone	*zone)
 
 /** Returns the longitude of a builtin timezone. */
 double
-icaltimezone_get_longitude		(icaltimezone	*zone)
+icaltimezone_get_longitude		(icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return 0. */
     if (!zone)
@@ -1232,7 +1231,7 @@ icaltimezone_get_longitude		(icaltimezone	*zone)
 
 /** Returns the VTIMEZONE component of a timezone. */
 icalcomponent*
-icaltimezone_get_component		(icaltimezone	*zone)
+icaltimezone_get_component		(icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
     if (!zone)
@@ -1249,7 +1248,7 @@ icaltimezone_get_component		(icaltimezone	*zone)
    tzid, location & tzname fields. It returns 1 on success or 0 on
    failure, i.e.  no TZID was found. */
 int
-icaltimezone_set_component		(icaltimezone	*zone,
+icaltimezone_set_component		(icaltimezone *zone,
 					 icalcomponent	*comp)
 {
     icaltimezone_reset (zone);
@@ -1261,10 +1260,10 @@ icaltimezone_set_component		(icaltimezone	*zone,
    Olson city name, but fall back on the TZNAME, or finally the TZID. We don't
    want to use "" as it may be wrongly interpreted as a floating time.
    Do not free the returned string. */
-char*
+const char*
 icaltimezone_get_display_name		(icaltimezone	*zone)
 {
-	char *display_name;
+	const char *display_name;
 
 	display_name = icaltimezone_get_location (zone);
 	if (!display_name)
@@ -1278,7 +1277,7 @@ icaltimezone_get_display_name		(icaltimezone	*zone)
 		if (display_name
 		    && !strncmp (display_name, TZID_PREFIX, TZID_PREFIX_LEN)) {
 		    /* Get the location, which is after the 3rd '/' char. */
-		    char *p;
+		    const char *p;
 		    int num_slashes = 0;
 		    for (p = display_name; *p; p++) {
 			if (*p == '/') {
@@ -1321,7 +1320,7 @@ icaltimezone_array_free			(icalarray	*timezones)
 
 	if ( timezones )
 	{
-		for (i = 0; i < timezones->num_elements; i++) {
+	    for (i = 0; (unsigned int)i < timezones->num_elements; i++) {
 		zone = icalarray_element_at (timezones, i);
 		icaltimezone_free (zone, 0);
 		}
@@ -1363,7 +1362,7 @@ icaltimezone_get_builtin_timezone	(const char *location)
 {
     icaltimezone *zone;
     int lower;
-    char *zone_location;
+    const char *zone_location;
 
     if (!location || !location[0])
 	return NULL;
@@ -1446,9 +1445,8 @@ icaltimezone*
 icaltimezone_get_builtin_timezone_from_offset	(int offset, const char *tzname)
 {
     icaltimezone *zone=NULL;
-    int cmp, count, i;
-    char *zone_location;
-
+    int count, i;
+    
     if (!builtin_timezones)
 	icaltimezone_init_builtin_timezones ();
 
@@ -1540,7 +1538,7 @@ static void
 icaltimezone_init_builtin_timezones	(void)
 {
     /* Initialize the special UTC timezone. */
-    utc_timezone.tzid = "UTC";
+    utc_timezone.tzid = (char *)"UTC";
 
     icaltimezone_parse_zone_tab ();
 }
@@ -1575,7 +1573,6 @@ fetch_lat_long_from_string  (const char *str, int *latitude_degrees, int *latitu
 {
 	size_t len;
 	char *sptr, *lat, *lon, *loc, *temp;
-	int retval;
 
 	/* We need to parse the latitude/longitude co-ordinates and location fields  */
 	sptr = (char *) str;
@@ -1724,7 +1721,6 @@ void
 icaltimezone_release_zone_tab		(void)
 {
     int i;
-    char *ch;
     icalarray *mybuiltin_timezones = builtin_timezones;
 
     if (builtin_timezones == NULL)
@@ -1737,9 +1733,9 @@ icaltimezone_release_zone_tab		(void)
 
 /** Loads the builtin VTIMEZONE data for the given timezone. */
 static void
-icaltimezone_load_builtin_timezone	(icaltimezone	*zone)
+icaltimezone_load_builtin_timezone	(icaltimezone *zone)
 {
-    icalcomponent *comp, *subcomp;
+    icalcomponent *subcomp;
 
 	    /* If the location isn't set, it isn't a builtin timezone. */
     if (!zone->location || !zone->location[0])
@@ -1747,6 +1743,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone	*zone)
 
 #ifdef WIN32
     char *filename;
+    icalcomponent *comp;
     unsigned int filename_len;
     FILE *fp;
     icalparser *parser;
@@ -1809,7 +1806,7 @@ icaltimezone_load_get_line_fn		(char		*s,
 					 size_t		 size,
 					 void		*data)
 {
-    return fgets (s, size, (FILE*) data);
+    return fgets (s, (int)size, (FILE*) data);
 }
 
 
@@ -1835,11 +1832,11 @@ icaltimezone_load_get_line_fn		(char		*s,
  * to add to UTC to get local time.
  */
 int
-icaltimezone_dump_changes		(icaltimezone	*zone,
+icaltimezone_dump_changes		(icaltimezone *zone,
 					 int		 max_year,
 					 FILE		*fp)
 {
-    static char *months[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    static const char *months[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
 			      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
     icaltimezonechange *zone_change;
     int change_num;
@@ -1853,7 +1850,7 @@ icaltimezone_dump_changes		(icaltimezone	*zone,
 #endif
 
     change_num = 0;
-    for (change_num = 0; change_num < zone->changes->num_elements; change_num++) {
+    for (change_num = 0; (unsigned int)change_num < zone->changes->num_elements; change_num++) {
 	zone_change = icalarray_element_at (zone->changes, change_num);
 
 	if (zone_change->year > max_year)
@@ -1881,7 +1878,7 @@ static void
 format_utc_offset			(int		 utc_offset,
 					 char		*buffer)
 {
-  char *sign = "+";
+  const char *sign = "+";
   int hours, minutes, seconds;
 
   if (utc_offset < 0) {
@@ -1908,7 +1905,7 @@ format_utc_offset			(int		 utc_offset,
     snprintf (buffer, sizeof(buffer), "%s%02i%02i%02i", sign, hours, minutes, seconds);
 }
 
-static char* get_zone_directory(void)
+static const char* get_zone_directory(void)
 {
 #ifndef WIN32
 	return zone_files_directory == NULL ? ZONEINFO_DIRECTORY : zone_files_directory;

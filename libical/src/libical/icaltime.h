@@ -4,10 +4,11 @@
  CREATOR: eric 02 June 2000
 
 
- $Id: icaltime.h,v 1.27 2008-01-02 20:07:32 dothebart Exp $
+ $Id: icaltime.h,v 1.28 2008-01-15 23:17:42 dothebart Exp $
  $Locker:  $
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 
@@ -64,7 +65,7 @@
  *	- icaltime_set_timezone(struct icaltimetype t, const icaltimezone *zone)
  *	- icaltime_day_of_year(struct icaltimetype t)
  *	- icaltime_day_of_week(struct icaltimetype t)
- *	- icaltime_start_doy_week(struct icaltimetype t, int fdow)
+ *	- icaltime_start_doy_of_week(struct icaltimetype t, int fdow)
  *	- icaltime_week_number(struct icaltimetype t)
  *
  *	Query methods include:
@@ -188,7 +189,7 @@ const char* icaltime_as_ical_string(const struct icaltimetype tt);
 const icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
 
 /** @brief Return the tzid, or NULL for a floating time */
-char *icaltime_get_tzid(const struct icaltimetype t);
+const char *icaltime_get_tzid(const struct icaltimetype t);
 
 /** @brief Set the timezone */
 struct icaltimetype icaltime_set_timezone(struct icaltimetype *t,

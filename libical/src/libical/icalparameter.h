@@ -4,12 +4,13 @@
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalparameter.h,v 1.4 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalparameter.h,v 1.5 2008-01-15 23:17:40 dothebart Exp $
   $Locker:  $
 
   
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 
@@ -53,7 +54,7 @@ icalparameter_kind icalparameter_isa(icalparameter* parameter);
 
 int icalparameter_isa_parameter(void* param);
 
-/* Acess the name of an X parameer */
+/* Access the name of an X parameer */
 void icalparameter_set_xname (icalparameter* param, const char* v);
 const char* icalparameter_get_xname(icalparameter* param);
 void icalparameter_set_xvalue (icalparameter* param, const char* v);

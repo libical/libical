@@ -3,11 +3,12 @@
   FILE: icalparameterimpl.h
   CREATOR: eric 09 May 1999
   
-  $Id: icalparameterimpl.h,v 1.3 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalparameterimpl.h,v 1.4 2008-01-15 23:17:40 dothebart Exp $
   $Locker:  $
     
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 

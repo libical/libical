@@ -18,7 +18,7 @@
 #  FILE: Makefile.am
 #  CREATOR: acampi 
 #  
-#  $Id: Makefile,v 1.2 2008-01-14 00:38:23 dothebart Exp $
+#  $Id: Makefile,v 1.3 2008-01-15 23:17:43 dothebart Exp $
 #
 #
 # (C) COPYRIGHT 2003, Andrea Campi, mailto:a.campi@inet.it

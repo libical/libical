@@ -3,11 +3,12 @@
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
   
-  $Id: icaltypes.c,v 1.17 2008-01-02 20:07:32 dothebart Exp $
+  $Id: icaltypes.c,v 1.18 2008-01-15 23:17:42 dothebart Exp $
   $Locker:  $
     
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 
@@ -85,10 +86,10 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
 
     null_tr = tr;
 
-    if(str == 0) goto error;
 
     /* Suppress errors so a failure in icaltime_from_string() does not cause an abort */
     es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
+    if(str == 0) goto error;
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,ICAL_ERROR_NONFATAL);
     e = icalerrno;
     icalerror_set_errno(ICAL_NO_ERROR);

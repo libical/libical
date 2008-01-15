@@ -2,7 +2,7 @@
 extern "C" {
 #endif
 /*
- $Id: icalss.h,v 1.27 2008-01-02 20:07:42 dothebart Exp $
+ $Id: icalss.h,v 1.28 2008-01-15 23:17:43 dothebart Exp $
 */
 /* -*- Mode: C -*- */
 /*======================================================================
@@ -606,7 +606,8 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
 
 
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 

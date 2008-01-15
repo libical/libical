@@ -3,7 +3,7 @@
   FILE: icalparser.c
   CREATOR: eric 04 August 1999
   
-  $Id: icalparser.c,v 1.52 2008-01-02 20:07:31 dothebart Exp $
+  $Id: icalparser.c,v 1.53 2008-01-15 23:17:40 dothebart Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -30,7 +30,8 @@
 
   The Initial Developer of the Original Code is Eric Busboom
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -49,6 +50,7 @@
 #include <string.h> /* For strncpy & size_t */
 #include <stdio.h> /* For FILE and fgets and snprintf */
 #include <stdlib.h> /* for free */
+#include <ctype.h>
 
 #include "icalmemory.h"
 #include "icalparser.h"
@@ -66,7 +68,7 @@
 #  define iswspace        isspace
 # endif
 #else
-# ifndef HAVE_ISWSPACE
+# if !defined HAVE_ISWSPACE && !defined WIN32
 #  define iswspace        isspace
 # endif
 #endif
@@ -317,7 +319,7 @@ char* parser_get_next_value(char* line, char **end, icalvalue_kind kind)
 	next = parser_get_next_char(',',p,1);
 
 	/* Unforunately, RFC2445 says that for the RECUR value, COMMA
-	   can both seperate digits in a list, and it can seperate
+	   can both separate digits in a list, and it can separate
 	   multiple recurrence specifications. This is not a friendly
 	   part of the spec. This weirdness tries to
 	   distinguish the two uses. it is probably a HACK*/
@@ -327,7 +329,7 @@ char* parser_get_next_value(char* line, char **end, icalvalue_kind kind)
 		 (*end+length) > next+5 &&
 		 strncmp(next,"FREQ",4) == 0
 		) {
-		/* The COMMA was followed by 'FREQ', is it a real seperator*/
+		/* The COMMA was followed by 'FREQ', is it a real separator*/
 		/* Fall through */
 	    } else if (next != 0){
 		/* Not real, get the next COMMA */
@@ -346,8 +348,8 @@ char* parser_get_next_value(char* line, char **end, icalvalue_kind kind)
 		break;
 	}
 
-	/* If the comma is preceeded by a '\', then it is a literal and
-	   not a value seperator*/  
+	/* If the comma is preceded by a '\', then it is a literal and
+	   not a value separator*/  
       
 	if ( (next!=0 && *(next-1) == '\\') ||
 	     (next!=0 && *(next-3) == '\\')
@@ -535,8 +537,8 @@ char* icalparser_get_line(icalparser *parser,
 
 }
 
-static void insert_error(icalcomponent* comp, char* text, 
-		  char* message, icalparameter_xlicerrortype type)
+static void insert_error(icalcomponent* comp, const char* text,
+		  const char* message, icalparameter_xlicerrortype type)
 {
     char temp[1024];
     
@@ -828,7 +830,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
     while(1) {
 
 	if (*(end-1) == ':'){
-	    /* if the last seperator was a ":" and the value is a
+	    /* if the last separator was a ":" and the value is a
 	       URL, icalparser_get_next_parameter will find the
 	       ':' in the URL, so better break now. */
 	    break;
@@ -1073,7 +1075,7 @@ icalcomponent* icalparser_clean(icalparser* parser)
 	parser->root_component = pvl_pop(parser->components);
 	tail=pvl_data(pvl_tail(parser->components));
 
-	if(tail != 0){
+	if(tail != 0 && parser->root_component != NULL){
 	    if(icalcomponent_get_parent(parser->root_component)!=0){
 		icalerror_warn("icalparser_clean is trying to attach a component for the second time");
 	    } else {

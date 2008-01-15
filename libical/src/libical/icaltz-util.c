@@ -53,7 +53,7 @@ typedef struct
 	char	charcnt[4];			
 } tzinfo; 
 
-static r_pos [] = {1, 2, 3, -2, -1};
+static int r_pos [] = {1, 2, 3, -2, -1};
 
 static char *search_paths [] = {"/usr/share/zoneinfo","/usr/lib/zoneinfo","/etc/zoneinfo","/usr/share/lib/zoneinfo"};
 static char *zdir = NULL;
@@ -207,9 +207,10 @@ icaltzutil_fetch_timezone (const char *location)
 	FILE *f;
 	tzinfo type_cnts;
 	unsigned int num_trans, num_types, num_chars, num_leaps, num_isstd, num_isgmt;
-	time_t *transitions, trans;
+	time_t *transitions = NULL;
+	time_t trans;
 	int *trans_idx = NULL, dstidx = -1, stdidx = -1, pos, sign, zidx, zp_idx, i;
-	ttinfo *types;
+	ttinfo *types = NULL;
 	char *znames = NULL, *full_path, *tzid, *r_trans, *temp;
 	leap *leaps = NULL;
 	icalcomponent *tz_comp = NULL, *dst_comp = NULL, *std_comp = NULL;

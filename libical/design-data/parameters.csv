@@ -1,5 +1,6 @@
 "#Name ","C Type","Enumeration Values"
 "ALTREP","const char*",
+"CHARSET","const char*",
 "CN","const char*",
 "CUTYPE","icalparameter_cutype","INDIVIDUAL;GROUP;RESOURCE;ROOM;UNKNOWN"
 "DELEGATED-FROM","const char*",

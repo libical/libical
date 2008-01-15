@@ -3,7 +3,7 @@
   FILE: sspm.c Parse Mime
   CREATOR: eric 25 June 2000
   
-  $Id: sspm.c,v 1.11 2007-08-21 02:45:54 artcancro Exp $
+  $Id: sspm.c,v 1.12 2008-01-15 23:17:43 dothebart Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -30,7 +30,8 @@
 
   The Initial Developer of the Original Code is Eric Busboom
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
  ======================================================================*/
 
 #include <stdio.h>
@@ -80,7 +81,7 @@ void sspm_free_header(struct sspm_header *header);
 void* sspm_make_multipart_part(struct mime_impl *impl,struct sspm_header *header);
 void sspm_read_header(struct mime_impl *impl,struct sspm_header *header);
 
-char* sspm_strdup(char* str){
+char* sspm_strdup(const char* str){
 
     char* s;
 
@@ -92,10 +93,10 @@ char* sspm_strdup(char* str){
 
 static struct  major_content_type_map 
 {
-	enum sspm_major_type type;
-	char* str;
-	
-} major_content_type_map[]  = 
+    enum sspm_major_type type;
+    const char* str;
+
+} major_content_type_map[]  =
 {
     {SSPM_MULTIPART_MAJOR_TYPE,"multipart" },
     {SSPM_TEXT_MAJOR_TYPE,"text" },
@@ -111,8 +112,8 @@ static struct  major_content_type_map
 
 static struct  minor_content_type_map 
 {
-	enum sspm_minor_type type;
-	char* str;
+    enum sspm_minor_type type;
+    const char* str;
 
 } minor_content_type_map[]  = 
 {
@@ -131,8 +132,8 @@ static struct  minor_content_type_map
 
 
 struct encoding_map {
-	enum sspm_encoding encoding;
-	char* str;
+    enum sspm_encoding encoding;
+    const char* str;
 } sspm_encoding_map[] = 
 {
     {SSPM_NO_ENCODING,""},
@@ -146,7 +147,7 @@ struct encoding_map {
 };
 
 
-char* sspm_get_parameter(char* line, char* parameter)
+char* sspm_get_parameter(const char* line, const char* parameter)
 {
     char *p,*s,*q;
     static char name[1024];
@@ -194,7 +195,7 @@ char* sspm_get_parameter(char* line, char* parameter)
     return name;
 }
 
-char* sspm_property_name(char* line)
+char* sspm_property_name(const char* line)
 {
     static char name[1024];
     char *c = strchr(line,':');
@@ -216,7 +217,10 @@ char* sspm_value(char* line)
 
     /* Find the first colon and the next semicolon */
 
+    value[0] = 0;
     c = strchr(line,':');
+    if (!c)
+      return value;
     s = strchr(c,';');
 
     /* Skip the colon */
@@ -238,7 +242,7 @@ char* sspm_value(char* line)
 
 }
 
-static char *mime_headers[] = {
+static const char *mime_headers[] = {
     "Content-Type",
     "Content-Transfer-Encoding",
     "Content-Disposition",
@@ -253,17 +257,23 @@ void* sspm_default_new_part()
     return 0;
 }
 void sspm_default_add_line(void *part, struct sspm_header *header, 
-			   char* line, size_t size)
+			   const char* line, size_t size)
 {
+    (void)part;
+    (void)header;
+    (void)line;
+    (void)size;
 }
 
 void* sspm_default_end_part(void* part)
 {
+    (void)part;
     return 0;
 }
 
 void sspm_default_free_part(void *part)
 {
+    (void)part;
 }
 
 
@@ -479,7 +489,7 @@ enum sspm_minor_type sspm_find_minor_content_type(char* type)
     return minor_content_type_map[i].type; /* Should return SSPM_UNKNOWN_MINOR_TYPE */
 }
 
-char* sspm_major_type_string(enum sspm_major_type type)
+const char* sspm_major_type_string(enum sspm_major_type type)
 {
     int i;
 
@@ -494,7 +504,7 @@ char* sspm_major_type_string(enum sspm_major_type type)
     return major_content_type_map[i].str; /* Should return SSPM_UNKNOWN_MINOR_TYPE */
 }
 
-char* sspm_minor_type_string(enum sspm_minor_type type)
+const char* sspm_minor_type_string(enum sspm_minor_type type)
 {
     int i;
     for (i=0; minor_content_type_map[i].type !=  SSPM_UNKNOWN_MINOR_TYPE; 
@@ -508,7 +518,7 @@ char* sspm_minor_type_string(enum sspm_minor_type type)
 }
 
 
-char* sspm_encoding_string(enum sspm_encoding type)
+const char* sspm_encoding_string(enum sspm_encoding type)
 {
     int i;
     for (i=0; sspm_encoding_map[i].encoding !=  SSPM_UNKNOWN_ENCODING; 
@@ -1025,6 +1035,7 @@ int sspm_parse_mime(struct sspm_part *parts,
     struct sspm_header header;
     void *part;
     int i;
+    (void)first_header;
 
     /* Initialize all of the data */
     memset(&impl,0,sizeof(struct mime_impl));
@@ -1169,7 +1180,7 @@ char *decode_base64(char *dest,
 			     char *src,
 			     size_t *size)
 {
-    int cc;
+    int cc = 0;
     char buf[4] = {0,0,0,0};  
     int p = 0;
     int valid_data = 0;
@@ -1243,7 +1254,7 @@ struct sspm_buffer {
 	int line_pos;
 };
 
-void sspm_append_string(struct sspm_buffer* buf, char* string);
+void sspm_append_string(struct sspm_buffer* buf, const char* string);
 void sspm_write_part(struct sspm_buffer *buf,struct sspm_part *part, int *part_num);
 
 void sspm_append_hex(struct sspm_buffer* buf, char ch)
@@ -1284,7 +1295,7 @@ void sspm_append_char(struct sspm_buffer* buf, char ch)
     *(buf->pos) = 0;
 }
 /* A copy of icalmemory_append_string */
-void sspm_append_string(struct sspm_buffer* buf, char* string)
+void sspm_append_string(struct sspm_buffer* buf, const char* string)
 {
     char *new_buf;
     char *new_pos;
@@ -1414,12 +1425,12 @@ void sspm_write_base64(struct sspm_buffer *buf, char* inbuf,int size )
              
 void sspm_encode_base64(struct sspm_buffer *buf, char* data, size_t size)
 {
-
     char *p;
     char inbuf[3];
     int i = 0;
     int first = 1;
     int lpos = 0;
+    (void)size;
 
     inbuf[0] = inbuf[1] = inbuf[2]  = 0;
 
@@ -1466,8 +1477,8 @@ void sspm_write_header(struct sspm_buffer *buf,struct sspm_header *header)
     
     int i;
     char temp[TMP_BUF_SIZE];			       
-    char* major; 
-    char* minor; 
+    const char* major; 
+    const char* minor; 
     
     /* Content-type */
 
@@ -1553,6 +1564,7 @@ void sspm_write_multipart_part(struct sspm_buffer *buf,
 
 void sspm_write_part(struct sspm_buffer *buf,struct sspm_part *part,int *part_num)
 {
+    (void)part_num;
 
     /* Write header */
     sspm_write_header(buf,&(part->header));
@@ -1576,10 +1588,11 @@ void sspm_write_part(struct sspm_buffer *buf,struct sspm_part *part,int *part_nu
 }
 
 int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
-		    char **output_string, char* header)
+		    char **output_string, const char* header)
 {
     struct sspm_buffer buf;
     int part_num =0;
+    (void)num_parts;
 
     buf.buffer = malloc(4096);
     buf.pos = buf.buffer;

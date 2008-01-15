@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.61 2008-01-02 20:07:31 dothebart Exp $
+  $Id: icalcomponent.c,v 1.62 2008-01-15 23:17:40 dothebart Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -855,8 +855,8 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 
   /** Now test against the EXRULEs **/
   for (exrule = icalcomponent_get_first_property(comp,ICAL_EXRULE_PROPERTY);
-       exdate != NULL;
-       exdate = icalcomponent_get_next_property(comp,ICAL_EXRULE_PROPERTY)) {
+       exrule != NULL;
+       exrule = icalcomponent_get_next_property(comp,ICAL_EXRULE_PROPERTY)) {
 	 
     struct icalrecurrencetype recur = icalproperty_get_exrule(exrule);
     icalrecur_iterator *exrule_itr  = icalrecur_iterator_new(recur, *dtstart);
@@ -1498,7 +1498,7 @@ icalproperty_method icalcomponent_get_method(icalcomponent* comp)
  */
 void icalcomponent_set_dtstart(icalcomponent* comp, struct icaltimetype v)
 {
-    char *tzid;
+    const char *tzid;
     ICALSETUPSET(ICAL_DTSTART_PROPERTY);
 
     if (prop == 0){
@@ -1646,7 +1646,7 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent* comp)
  */
 void icalcomponent_set_dtend(icalcomponent* comp, struct icaltimetype v)
 {
-    char *tzid;
+    const char *tzid;
     ICALSETUPSET(ICAL_DTEND_PROPERTY);
 
     if (icalcomponent_get_first_property(inner,ICAL_DURATION_PROPERTY)
@@ -2099,7 +2099,7 @@ void icalcomponent_merge_component(icalcomponent* comp,
 {
   icalcomponent *subcomp, *next_subcomp;
   icalarray *tzids_to_rename;
-  int i;
+  unsigned int i;
 
   /* Check that both components are VCALENDAR components. */
   assert (icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT);
@@ -2219,6 +2219,7 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
   int i, suffix, max_suffix = 0, num_elements;
   unsigned int tzid_len;
   char *tzid_copy, *new_tzid, suffix_buf[32];
+  (void)tzid_prop; /* hack to stop unused variable warning */
 
   /* Find the length of the TZID without any trailing digits. */
   tzid_len = icalcomponent_get_tzid_prefix_len (tzid);
@@ -2233,7 +2234,8 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
   num_elements = comp->timezones ? comp->timezones->num_elements : 0;
   for (i = 0; i < num_elements; i++) {
     icaltimezone *zone;
-    char *existing_tzid, *existing_tzid_copy;
+    const char *existing_tzid;
+    const char *existing_tzid_copy;
     unsigned int existing_tzid_len;
 
     zone = icalarray_element_at (comp->timezones, i);
@@ -2330,7 +2332,7 @@ static void icalcomponent_rename_tzids_callback(icalparameter *param, void *data
 
     /* Step through the rename table to see if the current TZID matches
        any of the ones we want to rename. */
-    for (i = 0; i < rename_table->num_elements - 1; i += 2) {
+    for (i = 0; (unsigned int)i < rename_table->num_elements - 1; i += 2) {
         if (!strcmp (tzid, icalarray_element_at (rename_table, i))) {
 	    icalparameter_set_tzid (param, icalarray_element_at (rename_table, i + 1));
 	    break;
@@ -2387,7 +2389,7 @@ icaltimezone* icalcomponent_get_timezone(icalcomponent* comp, const char *tzid)
 {
     icaltimezone *zone;
     int lower, upper, middle, cmp;
-    char *zone_tzid;
+    const char *zone_tzid;
 
     if (!comp->timezones)
 	return NULL;

@@ -3,10 +3,10 @@
   FILE: icalattachimpl.h
   CREATOR: acampi 28 May 02
   
-  $Id: icalattachimpl.h,v 1.2 2007-04-30 13:57:47 artcancro Exp $
+  $Id: icalattachimpl.h,v 1.3 2008-01-15 23:17:40 dothebart Exp $
 
 
- (C) COPYRIGHT 2000, Andrea Campi
+ (C) COPYRIGHT 2000, Andrea Campi <a.campi@inet.it>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either: 

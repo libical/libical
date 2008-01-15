@@ -2,6 +2,7 @@
 #include "config.h"
 #endif
 #ifndef HAVE_SNPRINTF
+#error DO NOT USE libical version of vsnprintf.
 /*
  * Revision 12: http://theos.com/~deraadt/snprintf.c
  *

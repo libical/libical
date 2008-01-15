@@ -4,7 +4,7 @@
  CREATOR: eric 30 June 1999
 
 
- $Id: icalmemory.h,v 1.5 2007-04-30 13:57:48 artcancro Exp $
+ $Id: icalmemory.h,v 1.6 2008-01-15 23:17:40 dothebart Exp $
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,8 @@
 
  The Initial Developer of the Original Code is Eric Busboom
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 ======================================================================*/
 
 #ifndef ICALMEMORY_H
