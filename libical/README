@@ -2,8 +2,8 @@
 LIBICAL -- An implementation of basic iCAL protocols
 
 Most of the code in here was written by Eric Busboom with help from
-dozens of contributors.  It is currently (and minimally) maintained
-by Art Cancro.
+dozens of contributors.  It is currently maintained by Art Cancro
+and Wilfried Goesgens.
 
 The code and datafiles in this distribution are licensed under the
 Mozilla Public License. See http://www.mozilla.org/NPL/MPL-1.0.html
@@ -26,18 +26,8 @@ Portions of this distribution are Copyright (c) 1997 Theo de
 Raadt. See the header for src/libical/vsnprintf.c for the full
 copyright statement.
 
-This code is under active development. If you would like to contribute
-to the project, you can contact me, Eric Busboom, at
-eric@softwarestudio.org. The project has a webpage at
-
-	http://www.softwarestudio.org/softwarestudio/app.php/libical
-
-and a mailing list that you can join by sending the following mail:
-
-	------------
-	To: minimalist@softwarestudio.org
-	Subject: subscribe libical
-	------------
+If you would like to contribute to this project, please visit the
+SourceForge page: http://freeassociation.sourceforge.net
 
 
 Building the library
@@ -70,8 +60,7 @@ libraries use:
 
 
 IF YOU ARE BUILDING FROM CVS, there will be no configure file until
-you create one with autogen.sh. YOu can pass configure parameters to
-autogen.sh on the command line.
+you create one with the "bootstrap" script.
 
 The current version of libical focuses on creating and
 manipulating iCal objects. With it, you can parse text representations
@@ -80,7 +69,7 @@ parameters and values, and print the components back out as strings.
 
 
 Notes for Libical Developers
--------------------
+----------------------------
 
 If you don't want to use gcc as the compiler, and you got the sources
 from CVS, you should set the CC variable to the path to the compiler

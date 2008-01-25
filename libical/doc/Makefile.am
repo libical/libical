@@ -1,1 +1,1 @@
-EXTRA_DIST = UsingLibical.lyx UsingLibical.ps  UsingLibical.txt
+EXTRA_DIST = UsingLibical.txt

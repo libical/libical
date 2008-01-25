@@ -15,8 +15,7 @@ and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users. 
 
-Libical implements RFC2445, RFC2446 and some of RFC2447 and the CAP
-draft. 
+Libical implements RFC2445, RFC2446 and some of RFC2447.
 
 This documentation assumes that you are familiar with the iCalendar
 standards RFC2445 and RFC2446. these specifications are online on
@@ -27,24 +26,15 @@ http://www.imc.org/ietf-calendar/
 1.1 The libical project
 
 This code is under active development. If you would like to contribute
-to the project, you can contact me, Eric Busboom, at eric@softwarestudio.org.
-The project has a webpage at
-
-http://softwarestudio.org/libical/index.html 
-
-and a mailing list that you can join by sending the following mail:
-
-To: minimalist@softwarestudio.org 
-
-Subject: subscribe libical 
+to the project, visit http://freeassociation.sourceforge.net
 
 1.2 License
 
 The code and datafiles in this distribution are licensed under the
 Mozilla Public License. See http://www.mozilla.org/NPL/MPL-1.0.html
 for a copy of the license. Alternately, you may use libical under
-the terms of the GNU Library General Public License. See http://www.fsf.org/copyleft/lesser.html
-for a copy of the LGPL.
+the terms of the GNU Library General Public License. See
+http://www.fsf.org/copyleft/lesser.html for a copy of the LGPL.
 
 This dual license ensures that the library can be incorporated into
 both proprietary code and GPL'd programs, and will benefit from improvements
@@ -70,10 +60,10 @@ in the distribution.
 
 3 Structure 
 
-The iCal calendar model is based on four types of objects: components,
+The iCalendar data model is based on four types of objects: components,
 properties, values and parameters. 
 
-Properties are the fundamental unit of information in iCal, and they
+Properties are the fundamental unit of information in iCalendar, and they
 work a bit like a hash entry, with a constant key and a variable value.
 Properties may also have modifiers, called parameters. In the iCal
 content line
@@ -178,8 +168,8 @@ or union.
 3.2.2 The parser
 
 The libical parser offers a variety of ways to convert RFC2445 text
-into a libical iinsteral component structure. the parser can parse
-blocks of text as a string, or it can parse lin-by-line.
+into a libical internal component structure. the parser can parse
+blocks of text as a string, or it can parse line-by-line.
 
 3.2.3 Error objects
 
@@ -214,8 +204,8 @@ XDAYLIGHT and XSTANDARD are notable examples. These pseudo components
 group properties within the VTIMEZONE components. For instanace, the
 timezone properties associated with daylight savings time starts with
 "BEGIN:DAYLIGHT" and ends with "END:DAYLIGHT, just like other components,
-but is not defined as a component in RFC2445. ( See RFC2445, page
-61 ) In Libical,this grouping is represented by the XDAYLIGHT component.
+but is not defined as a component in RFC2445 (see RFC2445, page
+61).  In Libical,this grouping is represented by the XDAYLIGHT component.
 Standard iCAL components all start with the letter "V," while pseudo
 components start with"X."
 
@@ -265,11 +255,11 @@ CATEGORIES: work
 
 CATEGORIES: home
 
-Oddly, RFC2445 allows some multi-valued properties ( like FREEBUSY
-) to exist as both a multi-values property and as multiple single
-value properties, while others ( like CATEGORIES ) can only exist
+Oddly, RFC2445 allows some multi-valued properties (like FREEBUSY)
+to exist as both a multi-values property and as multiple single
+value properties, while others (like CATEGORIES) can only exist
 as single multi-valued properties. This makes the internal representation
-for CATEGORIES illegal. However when you convert a component to a
+for CATEGORIES illegal.  However when you convert a component to a
 string, the library will collect all of the CATEGORIES properties
 into one. 
 
@@ -973,15 +963,13 @@ struct icaltimetype icaltime_as_local(struct icaltimetype tt);
 
 The libical distribution includes a separate library, libicalss, that
 allows you to store iCal component data to disk in a variety of ways.
-This library also includes code to implement the CSTP protocol of
-CAP and has some routines for deciphering incomming messages. 
 
 The file storage routines are organized in an inheritance heirarchy
 that is rooted in icalset, with the derived class icalfileset and
 icaldirset. Icalfileset stores components to a file, while icaldirset
 stores components to multiple files, one per month based on DTSTAMP.
 Other storages classess, for storage to a heap or a mysql database
-are planned for the future. 
+for example, could be added in the future.
 
 All of the icalset derived classes have the same interface: 
 
@@ -1045,7 +1033,7 @@ icalfileset* icalfileset_new(const char* path);
 icalfileset* icalfileset_new_open(const char* path, int flags, mode_t
 mode);
 
-Icaset_new_file is identical to icalfileset_new. BOth routines will
+icalset_new_file is identical to icalfileset_new. Both routines will
 open an existing file for readinga and writing, or create a new file
 if it does not exist. Icalfilset_new_open takes the same arguments
 as the open() system routine and behaves in the same way. 
@@ -1071,7 +1059,7 @@ void icalfileset_mark(icalfileset* cluster);
 
 icalerrorenum icalfileset_commit(icalfileset* cluster);
 
-Icalfileset_mark indicates that the in-memory components have changed.
+icalfileset_mark indicates that the in-memory components have changed.
 Calling the _add_component routine will call _mark automatically,
 but you may need to call it yourself if you have made a change to
 an existing component. The _commit routine writes the data base to
@@ -1162,7 +1150,7 @@ has month of i */
 There are several other routines in the icalset interface, but they
 not fully implemented yet. 
 
-5.5 <sec:memory>Memory Management 
+5.5 Memory Management 
 
 Libical relies heavily on dynamic allocation for both the core objects
 and for the strings used to hold values. Some of this memory the library
