@@ -26,20 +26,46 @@ AC_SUBST(AR)
 dnl *** check for Win32
 
 AC_MSG_CHECKING([for Win32])
+echo "---------$host----------"
 case "$host" in
 *-mingw*)
+    use_builtin_timezone=yes
     os_win32=yes
     ;;
-*)  os_win32=no
+*linux*)
+    use_builtin_timezone=no
+    os_win32=no
+    ;;
+*)  
+    use_builtin_timezone=yes
+    os_win32=no
     ;;
 esac
+
 AC_MSG_RESULT([$os_win32])
 AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
-
 
 if test "x$os_win32" = "xyes"; then
 	zoneinfo_dir="zoneinfo"
 fi
+
+dnl should we override the system default?
+AC_ARG_WITH(builtintz, [  --with-builtintz             deliver our own zonefiles?],
+		       [if test "x$withval" = "xyes" ; then
+			     use_builtin_timezone="yes"
+			  fi
+			  if test "x$withval" = "xno" ; then
+			     use_builtin_timezone="no"
+			  fi]
+		)
+
+zoneinfodir=""
+if test "$use_builtin_timezone" = "yes"; then
+   AC_DEFINE(USE_BUILTIN_TZDATA, [], [whether we should bring our own TZ-Data])
+   zoneinfodir=zoneinfo
+fi
+AC_SUBST(ZONE_INFO, "$zoneinfodir")
+
 
 
 dnl *** bdb4 support

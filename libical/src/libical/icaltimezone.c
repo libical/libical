@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.42 2008-01-15 23:17:42 dothebart Exp $
+ $Id: icaltimezone.c,v 1.43 2008-01-26 15:54:42 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "icalproperty.h"
 #include "icalarray.h"
 #include "icalerror.h"
@@ -41,9 +42,10 @@
 #include "icaltimezone.h"
 #include "icaltz-util.h"
 
+#include <sys/stat.h>
+
 #ifdef WIN32
 #include <mbstring.h>
-#include <sys/stat.h>
 #include <windows.h>
 #define snprintf _snprintf
 /* Undef the similar macro from pthread.h, it doesn't check if
@@ -1633,7 +1635,7 @@ icaltimezone_parse_zone_tab		(void)
 
     builtin_timezones = icalarray_new (sizeof (icaltimezone), 32);
 
-#ifndef WIN32
+#ifndef USE_BUILTIN_TZDATA
     filename_len = strlen ((char *) icaltzutil_get_zone_directory()) + strlen (ZONES_TAB_SYSTEM_FILENAME)
 	+ 2;
 #else    
@@ -1646,7 +1648,7 @@ icaltimezone_parse_zone_tab		(void)
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
 	return;
     }
-#ifndef WIN32
+#ifndef USE_BUILTIN_TZDATA
     snprintf (filename, filename_len, "%s/%s", icaltzutil_get_zone_directory (),
 	      ZONES_TAB_SYSTEM_FILENAME);
 #else    
@@ -1664,7 +1666,7 @@ icaltimezone_parse_zone_tab		(void)
     while (fgets (buf, sizeof(buf), fp)) {
 	if (*buf == '#') continue;
 
-#ifdef WIN32	
+#ifdef USE_BUILTIN_TZDATA	
 	/* The format of each line is: "latitude longitude location". */
 	if (sscanf (buf, "%4d%2d%2d %4d%2d%2d %s",
 		    &latitude_degrees, &latitude_minutes,
@@ -1741,7 +1743,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
     if (!zone->location || !zone->location[0])
 	return;
 
-#ifdef WIN32
+#ifdef USE_BUILTIN_TZDATA
     char *filename;
     icalcomponent *comp;
     unsigned int filename_len;
@@ -1792,7 +1794,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
 
     icaltimezone_get_vtimezone_properties (zone, subcomp);
 
-#ifdef WIN32   
+#ifdef USE_BUILTIN_TZDATA
     icalcomponent_remove_component(comp,subcomp);
     icalcomponent_free(comp);
 #endif    
@@ -1907,12 +1909,12 @@ format_utc_offset			(int		 utc_offset,
 
 static const char* get_zone_directory(void)
 {
-#ifndef WIN32
+#ifndef USE_BUILTIN_TZDATA
 	return zone_files_directory == NULL ? ZONEINFO_DIRECTORY : zone_files_directory;
 #else
 	wchar_t wbuffer[1000];
 	char buffer[1000], zoneinfodir[1000], dirname[1000];
-	BOOL used_default;
+	int used_default;
 	static char *cache = NULL;
 	char *dirslash, *zislash;
 	struct stat st;
@@ -1927,6 +1929,7 @@ static const char* get_zone_directory(void)
 	if (!GetModuleFileNameW (NULL, wbuffer, sizeof (wbuffer) / sizeof (wbuffer[0])))
 	    return ZONEINFO_DIRECTORY;
 
+#ifdef WIN32
 	/* Convert to system codepage */
 	if (!WideCharToMultiByte (CP_ACP, 0, wbuffer, -1, buffer, sizeof (buffer),
 				  NULL, &used_default) ||
@@ -1939,7 +1942,7 @@ static const char* get_zone_directory(void)
 		used_default)
 		return ZONEINFO_DIRECTORY;
 	}
-
+#endif
 	/* Look for the zoneinfo directory somewhere in the path where
 	 * the app is installed. If the path to the app is
 	 *

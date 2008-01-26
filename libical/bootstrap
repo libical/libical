@@ -2,19 +2,24 @@
 #
 # run me after checking Citadel out of CVS.
 #
-# $Id: bootstrap,v 1.3 2008-01-26 14:36:15 dothebart Exp $
+# $Id: bootstrap,v 1.4 2008-01-26 15:54:42 dothebart Exp $
 #
 
 # Remove any vestiges of pre-6.05 build environments
 rm -f .libs modules *.so *.lo *.la 2>/dev/null
 
-libtoolize --force
-
-echo ... running automake ...
-automake
 
 echo ... running aclocal ...
 aclocal
+
+echo ... running liboolize ...
+libtoolize --force
+
+echo ... running autoheader ...
+autoheader
+
+echo ... running automake ...
+automake
 
 echo ... running autoconf ...
 autoconf
@@ -24,8 +29,6 @@ autoconf
 echo ... removing autoheader cache files ...
 rm -rf autom4te*.cache
 
-echo ... running autoheader ...
-autoheader
 
 echo
 echo This script has been tested with autoconf 2.53 and

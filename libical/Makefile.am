@@ -7,4 +7,4 @@ EXTRA_DIST = \
 	TODO
 
 SUBDIRS = design-data doc scripts test-data src examples $(zoneinfo_dir)
-DIST_SUBDIRS = design-data doc scripts test-data src examples zoneinfo
+DIST_SUBDIRS = design-data doc scripts test-data src examples @ZONE_INFO@
