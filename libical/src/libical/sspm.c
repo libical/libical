@@ -3,7 +3,7 @@
   FILE: sspm.c Parse Mime
   CREATOR: eric 25 June 2000
   
-  $Id: sspm.c,v 1.12 2008-01-15 23:17:43 dothebart Exp $
+  $Id: sspm.c,v 1.13 2008-01-28 22:34:38 artcancro Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -434,12 +434,12 @@ static struct sspm_action_map get_action(struct mime_impl *impl,
 char* sspm_lowercase(char* str)
 {
     char* p = 0;
-    char* new = sspm_strdup(str);
+    char* new;
 
     if(str ==0){
 	return 0;
     }
-
+    new = sspm_strdup(str);
     for(p = new; *p!=0; p++){
 	*p = tolower(*p);
     }
@@ -453,7 +453,7 @@ enum sspm_major_type sspm_find_major_content_type(char* type)
 
     char* ltype = sspm_lowercase(type);
 
-    for (i=0; major_content_type_map[i].type !=  SSPM_UNKNOWN_MINOR_TYPE; i++){
+    for (i=0; major_content_type_map[i].type !=  SSPM_UNKNOWN_MAJOR_TYPE; i++){
 	if(strncmp(ltype, major_content_type_map[i].str,
 		   strlen(major_content_type_map[i].str))==0){
 	    free(ltype);
@@ -1595,6 +1595,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
     (void)num_parts;
 
     buf.buffer = malloc(4096);
+    buf.buffer[0] = '\0';
     buf.pos = buf.buffer;
     buf.buf_size = 10;
     buf.line_pos = 0;
@@ -1604,7 +1605,8 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
 	sspm_append_string(&buf,header);
     }
 
-    if(buf.buffer[strlen(buf.buffer)-1] != '\n'){
+    int slen = strlen(buf.buffer);
+    if(slen > 0 && buf.buffer[slen-1] != '\n'){
 	sspm_append_char(&buf,'\n');
     }
 

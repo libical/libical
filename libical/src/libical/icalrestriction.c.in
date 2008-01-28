@@ -317,7 +317,7 @@ const char* icalrestriction_must_be_email(
     icalcomponent* comp,
     icalproperty* prop)
 {
-    icalproperty_status stat = icalproperty_get_action(prop);
+    icalproperty_action stat = icalproperty_get_action(prop);
 
     (void)rec;
     (void)comp;

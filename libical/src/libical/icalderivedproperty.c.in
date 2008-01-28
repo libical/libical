@@ -4,7 +4,7 @@
   FILE: icalderivedproperty.c
   CREATOR: eric 15 Feb 2001
   
-  $Id: icalderivedproperty.c.in,v 1.14 2007-04-30 13:57:48 artcancro Exp $
+  $Id: icalderivedproperty.c.in,v 1.15 2008-01-28 22:34:37 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -165,7 +165,7 @@ int icalproperty_kind_and_string_to_enum(const int kind, const char* str)
 
     icalerror_check_arg_rz(str!=0,"str")
 
-    if ((pkind = icalproperty_value_kind_to_kind(kind)) == ICAL_NO_VALUE)
+    if ((pkind = icalproperty_value_kind_to_kind(kind)) == ICAL_NO_PROPERTY)
 	return 0;
 
     while(*str == ' '){
