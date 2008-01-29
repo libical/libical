@@ -3,7 +3,7 @@
   FILE: icaltime.c
   CREATOR: eric 02 June 2000
   
-  $Id: icaltime.c,v 1.70 2008-01-15 23:17:42 dothebart Exp $
+  $Id: icaltime.c,v 1.71 2008-01-29 18:31:48 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
@@ -1102,7 +1102,7 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart,
   span.is_busy = is_busy;
 
   span.start   = icaltime_as_timet_with_zone(dtstart,
-					     icaltimezone_get_utc_timezone());
+		dtstart.zone ? dtstart.zone : icaltimezone_get_utc_timezone());
 
   if (icaltime_is_null_time(dtend)) {
     if (!icaltime_is_date(dtstart)) {
@@ -1115,7 +1115,8 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart,
     }
   }
 
-  span.end = icaltime_as_timet_with_zone(dtend, icaltimezone_get_utc_timezone());
+  span.end = icaltime_as_timet_with_zone(dtend, 
+		dtend.zone ? dtend.zone : icaltimezone_get_utc_timezone());
   
   if (icaltime_is_date(dtstart)) {
     /* no time specified, go until the end of the day..*/

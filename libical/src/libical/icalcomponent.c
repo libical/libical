@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.62 2008-01-15 23:17:40 dothebart Exp $
+  $Id: icalcomponent.c,v 1.63 2008-01-29 18:31:48 dothebart Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1527,27 +1527,6 @@ void icalcomponent_set_dtstart(icalcomponent* comp, struct icaltimetype v)
 static struct icaltimetype
 icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
 
-    icalparameter      *param;
-    struct icaltimetype	ret;
-
-    ret = icalvalue_get_datetime(icalproperty_get_value(prop));
-
-    if ((param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER))
-	!= NULL) {
-	const char     *tzid = icalparameter_get_tzid(param);
-	icaltimezone   *tz;
-
-	if ((tz = icalcomponent_get_timezone(comp, tzid)) != NULL) {
-	    icaltime_set_timezone(&ret, tz);
-	}
-    }
-
-    return ret;
-}
-/* TODO: which one is the right one? this is EDS
-static struct icaltimetype
-icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
-
     icalcomponent      *c;
     icalparameter      *param;
     struct icaltimetype	ret;
@@ -1574,7 +1553,7 @@ icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop) {
 
     return ret;
 }
-*/
+
 /**	@brief Get DTSTART property as an icaltime
  *
  *	If DTSTART is a DATE-TIME with a timezone parameter and a
