@@ -4,7 +4,7 @@
  CREATOR: eric 26 July 2000
 
 
- $Id: icalmime.c,v 1.13 2008-01-15 23:17:40 dothebart Exp $
+ $Id: icalmime.c,v 1.14 2008-01-29 22:25:05 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -108,18 +108,7 @@ void* icalmime_text_end_part(void* part)
 
     return buf;
 }
-/* TODO: this is the way the kde team does this:
 
-void* icalmime_text_end_part(void* part)
-{
-    struct text_part* impl = ( struct text_part*) part;
-
-    icalmemory_add_tmp_buffer(impl->buf);
-    / * What for? free(impl); * /
-
-    return impl->buf;
-}
-*/
 void icalmime_text_free_part(void *part)
 {
     part = part;
