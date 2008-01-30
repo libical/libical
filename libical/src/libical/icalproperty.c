@@ -4,7 +4,7 @@
   FILE: icalproperty.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalproperty.c,v 1.43 2008-01-15 23:17:41 dothebart Exp $
+  $Id: icalproperty.c,v 1.44 2008-01-30 20:28:42 dothebart Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
@@ -938,15 +938,6 @@ const char* icalproperty_get_x_name(icalproperty* prop){
     return prop->x_name;
 }
 
-/* TODO: WTF?
-const char* icalproperty_get_name(const icalproperty* prop)
-{
-#ifndef NO_WARN_DEPRECATED
-	icalerror_warn("icalproperty_get_name() is DEPRECATED, please use icalproperty_get_property_name() instead.");
-#endif
-	return icalproperty_get_property_name(prop);
-}
-*/
 const char* icalproperty_get_property_name(const icalproperty* prop)
 {
 

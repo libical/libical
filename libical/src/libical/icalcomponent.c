@@ -2,7 +2,7 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.63 2008-01-29 18:31:48 dothebart Exp $
+  $Id: icalcomponent.c,v 1.64 2008-01-30 20:28:42 dothebart Exp $
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -1027,12 +1027,7 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
     struct icaltimetype rrule_time = icalrecur_iterator_next(rrule_itr);
     /** note that icalrecur_iterator_next always returns dtstart
 	the first time.. **/
-/* TODO: this? or the block before? as its commented, seems to be an evo libical lack
-    struct icalrecurrencetype recur = icalproperty_get_rrule(rrule);
-    icalrecur_iterator *rrule_itr  = icalrecur_iterator_new(recur, dtstart);
-    struct icaltimetype rrule_time;
-*/
-    
+
     while (1) {
       rrule_time = icalrecur_iterator_next(rrule_itr);
 
