@@ -5,7 +5,7 @@
   
   DESCRIPTION:
   
-  $Id: regression-storage.c,v 1.5 2008-01-02 20:07:46 dothebart Exp $
+  $Id: regression-storage.c,v 1.6 2008-02-03 16:10:47 dothebart Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom 
@@ -74,7 +74,7 @@ char * parse_vcalendar(const DBT *dbt) ;
 char * pack_calendar(struct calendar *cal, int size);
 struct calendar * unpack_calendar(char *str, int size);
 #endif
-
+/*
 static char str[] = "BEGIN:VCALENDAR\n\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\n\
 VERSION:2.0\n\
@@ -116,7 +116,7 @@ DTSTOMP:19980309T231000Z\n\
 UID:guid-1.host1.com\n\
 END:BOOGA\n\
 END:VCALENDAR";
-
+*/
 char str2[] = "BEGIN:VCALENDAR\n\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\n\
 VERSION:2.0\n\

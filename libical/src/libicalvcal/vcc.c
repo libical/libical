@@ -2071,7 +2071,7 @@ static void enterProps(const char *s)
 
 static void enterAttr(const char *s1, const char *s2)
     {
-    const char *p1, *p2;
+    const char *p1, *p2 = NULL;
     p1 = lookupProp_(s1);
     if (s2) {
 	VObject *a;

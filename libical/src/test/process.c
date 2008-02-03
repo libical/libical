@@ -3,7 +3,7 @@
   FILE: process.c
   CREATOR: eric 11 February 2000
   
-  $Id: process.c,v 1.9 2008-01-02 20:07:45 dothebart Exp $
+  $Id: process.c,v 1.10 2008-02-03 16:10:46 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -43,7 +43,7 @@ void send_message(icalcomponent *reply,const char* this_user)
 
 int main(int argc, char* argv[])
 {
-    icalcomponent *c, *next_c;
+    icalcomponent *c, *next_c = NULL;
     int i=0;
     const char *class_string;
     int dont_remove;

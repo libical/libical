@@ -3,7 +3,7 @@
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
   
-  $Id: copycluster.c,v 1.17 2008-01-02 20:07:44 dothebart Exp $
+  $Id: copycluster.c,v 1.18 2008-02-03 16:10:46 dothebart Exp $
   $Locker:  $
     
  (C) COPYRIGHT 2000 Eric Busboom
@@ -53,7 +53,7 @@ void usage(char* arg0) {
 
 int main(int c, char *argv[]){
 
-    icalset *clusterin, *clusterout;
+    icalset *clusterin, *clusterout = NULL;
     icalcomponent *itr;
     int count=0;
     int tostdout = 0;

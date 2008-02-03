@@ -3,7 +3,7 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- $Id: icaltimezone.c,v 1.43 2008-01-26 15:54:42 dothebart Exp $
+ $Id: icaltimezone.c,v 1.44 2008-02-03 16:10:46 dothebart Exp $
  $Locker:  $
 
  (C) COPYRIGHT 2001, Damon Chaplin
@@ -195,15 +195,15 @@ static void  icaltimezone_init_builtin_timezones(void);
 
 static void  icaltimezone_parse_zone_tab	(void);
 
+#ifdef USE_BUILTIN_TZDATA
 static char* icaltimezone_load_get_line_fn	(char		*s,
 						 size_t		 size,
 						 void		*data);
+#endif
 
 static void  format_utc_offset			(int		 utc_offset,
 						 char		*buffer);
-
 static const char* get_zone_directory(void);
-
 
 /** Creates a new icaltimezone. */
 icaltimezone*
@@ -1802,6 +1802,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
 }
 
 
+#ifdef USE_BUILTIN_TZDATA
 /** Callback used from icalparser_parse() */
 static char *
 icaltimezone_load_get_line_fn		(char		*s,
@@ -1810,7 +1811,7 @@ icaltimezone_load_get_line_fn		(char		*s,
 {
     return fgets (s, (int)size, (FILE*) data);
 }
-
+#endif
 
 
 

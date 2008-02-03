@@ -3,7 +3,7 @@
   FILE: 
   CREATOR: eric 25 June 2000
   
-  $Id: testmime.c,v 1.5 2008-01-02 20:07:46 dothebart Exp $
+  $Id: testmime.c,v 1.6 2008-02-03 16:10:48 dothebart Exp $
   $Locker:  $
     
  The contents of this file are subject to the Mozilla Public License
@@ -222,7 +222,7 @@ int main(int argc, char* argv[]) {
 	char temp[1024];
        	char *buf;
 	int i,last;
-	int size;
+	int size = 0;
 	int non_rand;
 	int rand_lines;
 	int r;

@@ -3,7 +3,7 @@
   FILE: icalrecur.c
   CREATOR: eric 16 May 2000
   
-  $Id: icalrecur.c,v 1.70 2008-01-15 23:17:41 dothebart Exp $
+  $Id: icalrecur.c,v 1.71 2008-02-03 16:10:46 dothebart Exp $
   $Locker:  $
     
 
@@ -731,7 +731,7 @@ static int icalrecur_one_byrule(icalrecur_iterator* impl,enum byrule one)
 
     return passes;
 } 
-
+/*
 static int count_byrules(icalrecur_iterator* impl)
 {
     int count = 0;
@@ -745,7 +745,7 @@ static int count_byrules(icalrecur_iterator* impl)
 
     return count;
 }
-
+*/
 
 static void setup_defaults(icalrecur_iterator* impl, 
 		    enum byrule byrule, icalrecurrencetype_frequency req,
@@ -1362,7 +1362,7 @@ static int next_day(icalrecur_iterator* impl)
 
 }
 
-
+/*
 static int next_yearday(icalrecur_iterator* impl)
 {
 
@@ -1395,7 +1395,7 @@ static int next_yearday(icalrecur_iterator* impl)
   return end_of_data;
 
 }
-
+*/
 
 /* Returns the day of the month for the current month of t that is the
    pos'th instance of the day-of-week dow */

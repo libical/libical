@@ -2,7 +2,7 @@
   FILE: icalvcal.c
   CREATOR: eric 25 May 00
   
-  $Id: icalvcal.c,v 1.8 2008-01-02 20:07:44 dothebart Exp $
+  $Id: icalvcal.c,v 1.9 2008-02-03 16:10:46 dothebart Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -694,7 +694,7 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 void* alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
 		 icalvcal_defaults *defaults)
 {
-    icalcomponent_kind kind = (icalcomponent_kind)icaltype;
+//    icalcomponent_kind kind = (icalcomponent_kind)icaltype;
     int is_valid_alarm;
 
     icalcomponent* c = icalcomponent_new(ICAL_VALARM_COMPONENT);
@@ -1312,10 +1312,10 @@ static char* rrule_parse_yearly_days (char *s,
 void* rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 		icalvcal_defaults *defaults)
 {
-    icalproperty_kind kind = (icalproperty_kind)icaltype;
+//    icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop = NULL;
-    icalvalue *value;
-    icalvalue_kind value_kind;
+//    icalvalue *value;
+//    icalvalue_kind value_kind;
     char *s, *p, *error_message = NULL;
     const char *property_name;
     int free_string;
@@ -1394,7 +1394,8 @@ void* dc_prop(int icaltype, VObject *object, icalcomponent *comp,
     icalproperty *prop; 
     icalvalue *value;
     icalvalue_kind value_kind;
-    char *s,*t=0;
+    char *s;
+//,*t=0;
     int free_string;
 
 

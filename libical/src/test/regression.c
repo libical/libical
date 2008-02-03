@@ -5,7 +5,7 @@
 
   DESCRIPTION:
 
-  $Id: regression.c,v 1.66 2008-01-02 20:07:46 dothebart Exp $
+  $Id: regression.c,v 1.67 2008-02-03 16:10:48 dothebart Exp $
   $Locker:  $
 
   (C) COPYRIGHT 1999 Eric Busboom
@@ -66,7 +66,7 @@ int regrstrcmp(const char* a, const char* b){
 
 /* This example creates and minipulates the ical object that appears
  * in rfc 2445, page 137 */
-
+/*
 static char str[] = "BEGIN:VCALENDAR\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\
 VERSION:2.0\
@@ -108,11 +108,11 @@ DTSTOMP:19980309T231000Z\
 UID:guid-1.host1.com\
 END:BOOGA\
 END:VCALENDAR";
-
+*/
 
 
 /* Return a list of all attendees who are required. */
-
+/*
 static char** get_required_attendees(icalcomponent* event)
 {
     icalproperty* p;
@@ -149,10 +149,11 @@ static char** get_required_attendees(icalcomponent* event)
 
     return attendees;
 }
+*/
 
 /* If an attendee has a PARTSTAT of NEEDSACTION or has no PARTSTAT
    parameter, change it to TENTATIVE. */
-
+ /*
 static void update_attendees(icalcomponent* event)
 {
     icalproperty* p;
@@ -191,7 +192,7 @@ static void update_attendees(icalcomponent* event)
 
     }
 }
-
+ */
 
 void test_values()
 {
@@ -2892,7 +2893,7 @@ void test_file_locks()
     icalcomponent *c, *c2;
     struct icaldurationtype d;
     int i;
-    int final,sec;
+    int final,sec = 0;
 
     icalerror_clear_errno();
 
@@ -3540,7 +3541,7 @@ int main(int argc, char *argv[])
     extern char *optarg;
     extern int optopt;
     int errflg=0;
-    char* program_name = strrchr(argv[0],'/');
+//    char* program_name = strrchr(argv[0],'/');
     int do_test = 0;
     int do_header = 0;
 
