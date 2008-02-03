@@ -2,7 +2,7 @@
 #  FILE: Makefile.am
 #  CREATOR: eric 
 #  
-#  $Id: Makefile.am,v 1.23 2008-01-02 20:07:39 dothebart Exp $
+#  $Id: Makefile.am,v 1.24 2008-02-03 15:27:34 dothebart Exp $
 #
 #
 # (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
@@ -64,7 +64,7 @@ INCLUDES =			\
 	$(BDB_INCLUDE)
 
 libicalss_la_LDFLAGS = -version-info 30:0:30
-libicalss_la_LIBADD = $(BDB_LIBFILES)
+libicalss_la_LIBADD = $(BDB_LIBFILES) ../libical/.libs/libical.la
 
 if DEV
 libicalss_la_DEVSOURCES = icalsslexer.l icalssyacc.y

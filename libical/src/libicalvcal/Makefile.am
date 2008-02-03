@@ -9,6 +9,7 @@ INCLUDES =				\
 	-I$(top_srcdir)/src/libicalss
 
 libicalvcal_la_LDFLAGS = -version-info 30:0:30
+libicalvcal_la_LIBADD = ../libical/.libs/libical.la
 
 if DEV
 libicalvcal_la_DEVSOURCES = vcc.y
