@@ -4,3 +4,4 @@ Makefile
 *.lo
 *.la
 doesnothing
+Makefile.in
