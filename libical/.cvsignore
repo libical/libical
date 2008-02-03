@@ -17,3 +17,12 @@ xltmain.sh
 autom4te.cache
 configure
 stamp-h1
+aclocal.m4
+config.h.in
+examples/Makefile.in
+scripts/Makefile.in
+src/Makefile.in
+src/libical/Makefile.in
+src/libicalvcal/Makefile.in
+src/test/Makefile.in
+zoneinfo/Makefile.in
