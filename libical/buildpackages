@@ -49,13 +49,13 @@ case $1 in
 	    cd ..
 	    rm -rf tmp
 	    mkdir tmp
-	    cp -a libical-$LIBICAL_VERSION tmp
+	    cp -rL libical-$LIBICAL_VERSION tmp
 	    cd tmp/libical-$LIBICAL_VERSION
 	    rm -rf `find -name CVS ` `find -name .cvsignore` svn*tmp config.log config.status Makefile
 	    find -type f -exec chmod a-x {} \;
 	    chmod a+x configure
 	    cd ..
-	    tar -czf libical_${LIBICAL_VERSION}.orig.tar.gz libical-${LIBICAL_VERSION}/ --exclude "debian/*"
+	    tar -chzf libical_${LIBICAL_VERSION}.orig.tar.gz libical-${LIBICAL_VERSION}/ --exclude "debian/*"
 	    pwd
 	    cd  libical-${LIBICAL_VERSION}; debuild -S -sa -kw.goesgens@outgesourced.org
 	else
@@ -87,7 +87,7 @@ EMAIL=libical@outgesourced.org
 
 	;;
     sourcedist)
-	cd ..; tar --exclude CVS --exclude "debian/*" -cvzf libical-$LIBICAL_VERSION.tgz libical-$LIBICAL_VERSION/
+	cd ..; tar --exclude CVS --exclude "debian/*" -chvzf libical-$LIBICAL_VERSION.tgz libical-$LIBICAL_VERSION/
 	;;
 	*)
 		echo "Not yet implemented. we have: debian "
