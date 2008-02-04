@@ -51,7 +51,7 @@ case $1 in
 	    mkdir tmp
 	    cp -rL libical-$LIBICAL_VERSION tmp
 	    cd tmp/libical-$LIBICAL_VERSION
-	    rm -rf `find -name CVS ` `find -name .cvsignore` svn*tmp config.log config.status Makefile
+	    rm -rf `find -name .svn ` svn*tmp config.log config.status svn*tmp config.log config.status Makefile
 	    find -type f -exec chmod a-x {} \;
 	    chmod a+x configure
 	    cd ..
@@ -87,7 +87,7 @@ EMAIL=libical@outgesourced.org
 
 	;;
     sourcedist)
-	cd ..; tar --exclude CVS --exclude "debian/*" -chvzf libical-$LIBICAL_VERSION.tgz libical-$LIBICAL_VERSION/
+	cd ..; tar --exclude .svn --exclude "debian/*" -chvzf libical-$LIBICAL_VERSION.tgz libical-$LIBICAL_VERSION/
 	;;
 	*)
 		echo "Not yet implemented. we have: debian "
