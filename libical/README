@@ -33,10 +33,9 @@ SourceForge page: http://freeassociation.sourceforge.net
 Building the library
 --------------------
 
-This distribution is developed on CentOS Linux and usually
-compiles on Solaris and FreeBSD.   There are reports of success of
-previous version on MacOS ( with CodeWarrior ) and on UnixWare, but we
-don't know about any other systems.
+This distribution is developed on CentOS Linux and should also
+build cleanly on any unix-like system as long as it has the usual
+set of open source build tools online.
 
 The library is configured with automake. IF YOU ARE BUILDING THE
 SOURCE FROM A TARBALL, From the root directory, run
