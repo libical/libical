@@ -1744,6 +1744,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
 	return;
 
 #ifdef USE_BUILTIN_TZDATA
+    {
     char *filename;
     icalcomponent *comp;
     unsigned int filename_len;
@@ -1797,6 +1798,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
 #ifdef USE_BUILTIN_TZDATA
     icalcomponent_remove_component(comp,subcomp);
     icalcomponent_free(comp);
+    }
 #endif    
 
 }
@@ -1910,7 +1912,7 @@ format_utc_offset			(int		 utc_offset,
 
 static const char* get_zone_directory(void)
 {
-#ifndef USE_BUILTIN_TZDATA
+#ifndef WIN32
 	return zone_files_directory == NULL ? ZONEINFO_DIRECTORY : zone_files_directory;
 #else
 	wchar_t wbuffer[1000];
@@ -1930,7 +1932,6 @@ static const char* get_zone_directory(void)
 	if (!GetModuleFileNameW (NULL, wbuffer, sizeof (wbuffer) / sizeof (wbuffer[0])))
 	    return ZONEINFO_DIRECTORY;
 
-#ifdef WIN32
 	/* Convert to system codepage */
 	if (!WideCharToMultiByte (CP_ACP, 0, wbuffer, -1, buffer, sizeof (buffer),
 				  NULL, &used_default) ||
@@ -1943,7 +1944,6 @@ static const char* get_zone_directory(void)
 		used_default)
 		return ZONEINFO_DIRECTORY;
 	}
-#endif
 	/* Look for the zoneinfo directory somewhere in the path where
 	 * the app is installed. If the path to the app is
 	 *
