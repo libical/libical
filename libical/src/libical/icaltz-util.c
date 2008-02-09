@@ -22,6 +22,7 @@
 
 #include "config.h"
 #include <string.h>
+
 #if defined(sun) && defined(__SVR4)
 #include <sys/byteorder.h>
 #else
@@ -29,13 +30,18 @@
 #  include <byteswap.h>
 # endif
 # ifdef HAVE_SYS_ENDIAN_H
-#  define bswap_32 swap32
+#  include <sys/endian.h>
+#  ifdef bswap32
+#   define bswap_32 bswap32
+#  else
+#   define bswap_32 swap32
+#  endif
 # endif
 # ifdef HAVE_ENDIAN_H
 #  include <endian.h>
 # endif 
-
 #endif
+
 #include <limits.h>
 #include <time.h>
 #include <stdlib.h>
