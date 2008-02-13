@@ -204,7 +204,7 @@ static char* make_segment(char* start, char* end)
     char *buf, *tmp;
     size_t size = (size_t)end - (size_t)start;
     
-    //buf = icalmemory_tmp_buffer(size+1);
+    /*buf = icalmemory_tmp_buffer(size+1);*/
     
     buf = icalmemory_new_buffer(size+1);
 
@@ -639,6 +639,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
                                        char* line)
 { 
     char *str;
+	char *strptr;
     char *end;
     int vcount = 0;
     icalproperty *prop;
@@ -838,7 +839,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 	str = parser_get_next_parameter(end,&end);
 	str = strstrip (str);
-
+	printf("%s\n", str);
 	if (str != 0){
 	    char* name;
 	    char* pvalue;
@@ -960,6 +961,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
     vcount=0;
     while(1) {
 	str = parser_get_next_value(end,&end, value_kind);
+	strptr = str;
 	str = strstrip (str);
 
 	if (str != 0){
@@ -997,14 +999,14 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		tail = 0;
 		parser->state = ICALPARSER_ERROR;
 	
-		icalmemory_free_buffer(str), str = NULL;
+		icalmemory_free_buffer(strptr), str = NULL, strptr = NULL;
 		return 0;
 		    
 	    } else {
 		vcount++;
 		icalproperty_set_value(prop, value);
 	    }
- 	    icalmemory_free_buffer(str), str = NULL;
+ 	    icalmemory_free_buffer(strptr), str = NULL, strptr = NULL;
 
 	} else {
 	    if (vcount == 0){
