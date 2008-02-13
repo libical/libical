@@ -930,7 +930,7 @@ void sspm_read_header(struct mime_impl *impl,struct sspm_header *header)
 #define MAX_HEADER_LINES 25
 
     char *buf;
-    char header_lines[MAX_HEADER_LINES][BUF_SIZE]; /* HACK, hard limits */
+    char header_lines[MAX_HEADER_LINES][BUF_SIZE]; /* HACK, hard limits TODO*/
     int current_line = -1;
     int end = 0;
 
@@ -945,7 +945,9 @@ void sspm_read_header(struct mime_impl *impl,struct sspm_header *header)
     header->error_text = 0;
 
     /* Read all of the lines into memory */
-    while(end==0&& (buf=sspm_get_next_line(impl)) != 0){
+    while(current_line<(MAX_HEADER_LINES-2) && 
+	  (end==0) && 
+	  ((buf=sspm_get_next_line(impl)) != 0)){
 
 	enum line_type line_type = get_line_type(buf);
 	
