@@ -1592,6 +1592,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
 {
     struct sspm_buffer buf;
     int part_num =0;
+    int slen;
     (void)num_parts;
 
     buf.buffer = malloc(4096);
@@ -1605,7 +1606,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
 	sspm_append_string(&buf,header);
     }
 
-    int slen = strlen(buf.buffer);
+    slen = strlen(buf.buffer);
     if(slen > 0 && buf.buffer[slen-1] != '\n'){
 	sspm_append_char(&buf,'\n');
     }
