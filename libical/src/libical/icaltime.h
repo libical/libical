@@ -256,6 +256,11 @@ struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
 /** Return the number of days in the given month */
 int icaltime_days_in_month(const int month, const int year);
 
+/** Return whether you've specified a leapyear or not. */
+int icaltime_is_leap_year (const int year);
+
+/** Return the number of days in this year */
+int icaltime_days_in_year (const int year);
 
 /** @brief calculate an icaltimespan given a start and end time. */
 struct icaltime_span icaltime_span_new(struct icaltimetype dtstart,

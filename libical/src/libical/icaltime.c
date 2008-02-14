@@ -574,6 +574,15 @@ icaltime_is_leap_year (const int year)
         return ( (year % 4==0) && (year % 100 !=0 )) || (year % 400 == 0);
 }
 
+
+int
+ycaltime_days_in_year (const int year)
+{
+	if (icaltime_is_leap_year (year))
+		return 366;
+	else return 365;
+}
+
 static int _days_in_month[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
 
 int icaltime_days_in_month(const int month, const int year)
@@ -670,7 +679,7 @@ int icaltime_week_number(const struct icaltimetype ictt)
 }
 
 /* The first array is for non-leap years, the second for leap years*/
-static const int days_in_year[2][13] = 
+static const int days_in_year_passed_month[2][13] = 
 { /* jan feb mar apr may  jun  jul  aug  sep  oct  nov  dec */
   {  0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 }, 
   {  0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
@@ -682,7 +691,7 @@ static const int days_in_year[2][13] =
 int icaltime_day_of_year(const struct icaltimetype t){
   int is_leap = icaltime_is_leap_year (t.year);
 
-  return days_in_year[is_leap][t.month - 1] + t.day;
+  return days_in_year_passed_month[is_leap][t.month - 1] + t.day;
 }
 
 /**	@brief Contructor.
@@ -704,20 +713,20 @@ struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
     if(doy <1){
         year--;
         is_leap = icaltime_is_leap_year(year);
-        doy +=  days_in_year[is_leap][12];
-    } else if(doy > days_in_year[is_leap][12]){
+        doy +=  days_in_year_passed_month[is_leap][12];
+    } else if(doy > days_in_year_passed_month[is_leap][12]){
         /* Move on to the next year*/
         is_leap = icaltime_is_leap_year(year);
-        doy -=  days_in_year[is_leap][12];
+        doy -=  days_in_year_passed_month[is_leap][12];
         year++;
     }
 
     tt.year = year;
 
     for (month = 11; month >= 0; month--) {
-      if (doy > days_in_year[is_leap][month]) {
+      if (doy > days_in_year_passed_month[is_leap][month]) {
 	tt.month = month + 1;
-	tt.day = doy - days_in_year[is_leap][month];
+	tt.day = doy - days_in_year_passed_month[is_leap][month];
 	break;
       }
     }
