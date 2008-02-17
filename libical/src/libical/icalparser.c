@@ -212,7 +212,8 @@ static char* make_segment(char* start, char* end)
     *(buf+size) = 0;
 
 	tmp = (buf+size);
-	while ( *tmp == '\0' || iswspace(*tmp) )
+	while ((tmp >= buf) && 
+		   ((*tmp == '\0') || iswspace(*tmp)))
 	{
 		*tmp = 0;
 		tmp--;
