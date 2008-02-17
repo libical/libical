@@ -286,6 +286,7 @@ if test $python_val = true; then
 	  changequote(<<, >>)dnl
 	  PY_VERSION=`python -c 'import sys ; print sys.version[0:3]'`
 	  changequote([, ])dnl
+	  AC_CHECK_HEADER([python$PY_VERSION/Python.h],[],[AC_MSG_ERROR([Can't find python header files])])
 	  if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
 		  PY_LIBS="python$PY_VERSION"
 		  PY_LIB_LOC="-L$PY_EXEC_PREFIX/lib/python$PY_VERSION/config"
