@@ -300,6 +300,8 @@ if test $python_val = true; then
 		  AC_SUBST(PY_LIB_LOC)
 		  AC_SUBST(PY_CFLAGS)
 		  AC_SUBST(PY_EXTRA_LIBS)
+		  # SWIG needs PIC in order to work.
+		  CFLAGS="$CFLAGS -fPIC"
 	  else
 		  python_val=false
 	  fi
@@ -319,6 +321,7 @@ src/libical/icalversion.h
 src/libicalss/Makefile
 src/libicalvcal/Makefile
 src/test/Makefile
+src/python/Makefile
 test-data/Makefile
 zoneinfo/Makefile
 ])
