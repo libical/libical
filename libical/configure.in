@@ -289,9 +289,15 @@ if test $python_val = true; then
 	  AC_CHECK_HEADER([python$PY_VERSION/Python.h],[],[AC_MSG_ERROR([Can't find python header files])])
 	  if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
 		  PY_LIBS="python$PY_VERSION"
-		  PY_LIB_LOC="-L$PY_EXEC_PREFIX/lib/python$PY_VERSION/config"
+		  if test -d '$PY_EXEC_PREFIX/lib/python$PY_VERSION/config'; then		  
+		  	  PY_LIB_LOC="-L$PY_EXEC_PREFIX/lib/python$PY_VERSION/config"
+			  PY_MAKEFILE="$PY_EXEC_PREFIX/lib/python$PY_VERSION/config/Makefile"
+		  else  	  
+		  	  PY_LIB_LOC="-L$PY_EXEC_PREFIX/lib64/python$PY_VERSION/config"
+			  PY_MAKEFILE="$PY_EXEC_PREFIX/lib64/python$PY_VERSION/config/Makefile"
+		  fi
 		  PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION"
-		  PY_MAKEFILE="$PY_EXEC_PREFIX/lib/python$PY_VERSION/config/Makefile"
+		  
 		  PY_LOCALMODLIBS=`sed -n -e 's/^LOCALMODLIBS=\(.*\)/\1/p' $PY_MAKEFILE`
 		  PY_BASEMODLIBS=`sed -n -e 's/^BASEMODLIBS=\(.*\)/\1/p' $PY_MAKEFILE`
 		  PY_OTHER_LIBS=`sed -n -e 's/^LIBS=\(.*\)/\1/p' $PY_MAKEFILE`
