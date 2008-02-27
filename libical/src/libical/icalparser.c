@@ -670,7 +670,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
     end = 0;
     str = parser_get_prop_name(line, &end);
 
-    if (str == 0 || strlen(str) == 0 ){
+    if (str == 0 || *str == '\0' ){
 	/* Could not get a property name */
 	icalcomponent *tail = pvl_data(pvl_tail(parser->components));
 
@@ -681,13 +681,13 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	}
 	tail = 0;
 	parser->state = ICALPARSER_ERROR;
-	icalmemory_free_buffer(str);
+	icalmemory_free_buffer(str), str = NULL;
 	return 0; 
     }
 
     /**********************************************************************
      * Handle begin and end of components
-     **********************************************************************/								       
+     **********************************************************************/
     /* If the property name is BEGIN or END, we are actually
        starting or ending a new component */
 
@@ -696,7 +696,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	icalcomponent *c;
         icalcomponent_kind comp_kind;
 
-	icalmemory_free_buffer(str);
+	icalmemory_free_buffer(str), str = NULL;
 
 	parser->level++;
 	str = parser_get_next_value(end,&end, value_kind);
@@ -725,13 +725,13 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 	parser->state = ICALPARSER_BEGIN_COMP;
 
-	icalmemory_free_buffer(str);
+	icalmemory_free_buffer(str), str = NULL;
 	return 0;
 
     } else if (strcasecmp(str,"END") == 0 ) {
 	icalcomponent* tail;
 
-	icalmemory_free_buffer(str);
+	icalmemory_free_buffer(str), str = NULL;
 	parser->level--;
 
 	str = parser_get_next_value(end,&end, value_kind);
@@ -778,7 +778,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     if(pvl_data(pvl_tail(parser->components)) == 0){
 	parser->state = ICALPARSER_ERROR;
-	icalmemory_free_buffer(str);
+	icalmemory_free_buffer(str), str = NULL;
 	return 0;
     }
 
@@ -817,7 +817,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    
 	tail = 0;
 	parser->state = ICALPARSER_ERROR;
-	icalmemory_free_buffer(str);
+	icalmemory_free_buffer(str), str = NULL;
 	return 0;
     }
 
@@ -839,8 +839,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	}
 
 	str = parser_get_next_parameter(end,&end);
+	strptr = str;
 	str = strstrip (str);
-	printf("%s\n", str);
 	if (str != 0){
 	    char* name;
 	    char* pvalue;
@@ -896,10 +896,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		
 		icalmemory_free_buffer(buf_value), buf_value = NULL;
 		icalmemory_free_buffer(name), name = NULL;
-		icalmemory_free_buffer(str), str = NULL;
+		icalmemory_free_buffer(strptr), strptr = str = NULL;
   	  	
-		icalmemory_free_buffer(name), name = NULL;
-  	  	icalmemory_free_buffer(str), str = NULL;
 		continue;
 	    }
 
@@ -932,7 +930,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		    parser->state = ICALPARSER_ERROR;
 
 			icalmemory_free_buffer(name), name = NULL;
-			icalmemory_free_buffer(str), str = NULL;
+			icalmemory_free_buffer(strptr), strptr = str = NULL;
 		    continue;
 		} 
 	    }
@@ -941,11 +939,13 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    /* Everything is OK, so add the parameter */
 	    icalproperty_add_parameter(prop,param);
 	    tail = 0;
-		icalmemory_free_buffer(str), str = NULL;
+		icalmemory_free_buffer(strptr), strptr = str = NULL;
 
 	} else { /* if ( str != 0)  */
 	    /* If we did not get a param string, go on to looking
 	       for a value */
+			if (strptr != NULL)
+					icalmemory_free_buffer(strptr), strptr = str = NULL;
 	    break;
 	} /* if ( str != 0)  */
 
@@ -1010,6 +1010,9 @@ icalcomponent* icalparser_add_line(icalparser* parser,
  	    icalmemory_free_buffer(strptr), str = NULL, strptr = NULL;
 
 	} else {
+			if (strptr != NULL)
+					icalmemory_free_buffer(strptr), str = NULL, strptr = NULL;
+			
 	    if (vcount == 0){
 		char temp[200]; /* HACK */
 		
