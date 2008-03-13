@@ -87,7 +87,7 @@ EMAIL=libical@outgesourced.org
 
 	;;
     sourcedist)
-	cd ..; tar --exclude .svn --exclude "debian/*" -chvzf libical-$LIBICAL_VERSION.tgz libical-$LIBICAL_VERSION/
+	cd ..; tar --exclude .svn --exclude "debian/*" -chvzf libical-$LIBICAL_VERSION.tar.gz libical-$LIBICAL_VERSION/
 	;;
 	*)
 		echo "Not yet implemented. we have: debian "
