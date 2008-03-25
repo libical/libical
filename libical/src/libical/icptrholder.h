@@ -23,6 +23,17 @@
  *             for (p=component.get_first_component; p!= NULL; p=component.get_next_component) {
  *
  * (C) COPYRIGHT 2001, Critical Path
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of either: 
+
+    The LGPL as published by the Free Software Foundation, version
+    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+
+  Or:
+
+    The Mozilla Public License Version 1.0. You may obtain a copy of
+    the License at http://www.mozilla.org/MPL/
  */
 
 #ifndef __ICPTRHOLDER_H__
