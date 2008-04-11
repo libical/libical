@@ -949,9 +949,13 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	   * more explicit. */
 	  short dow = (short)(impl->by_ptrs[BY_DAY][0]-icaltime_day_of_week(impl->last));
 
-	  if (dow > impl->rule.week_start-1) dow -= 7;
-	  impl->last.day += dow;
-	  impl->last = icaltime_normalize(impl->last);
+	  if((icaltime_day_of_week(impl->last) < impl->by_ptrs[BY_DAY][0] && dow >= 0) || dow < 0)
+	  {
+		/* initial time is after first day of BY_DAY data */
+		impl->last.day += dow;
+		impl->last = icaltime_normalize(impl->last);
+	  }
+
       }
       
 
