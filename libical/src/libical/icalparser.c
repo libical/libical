@@ -884,12 +884,14 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		    icalparameter_set_xname(param,name);
 		    icalparameter_set_xvalue(param,pvalue);
 		}
-		icalmemory_free_buffer(buf_value), buf_value = NULL;
+		icalmemory_free_buffer(buf_value);
+		buf_value = NULL;
 
 	    } else if (kind != ICAL_NO_PARAMETER){
 		param = icalparameter_new_from_value_string(kind,pvalue);
 
-		icalmemory_free_buffer(buf_value), buf_value = NULL;
+		icalmemory_free_buffer(buf_value);
+		buf_value = NULL;
 
 	    } else {
 		/* Error. Failed to parse the parameter*/
@@ -909,9 +911,12 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		tail = 0;
 		parser->state = ICALPARSER_ERROR;
 		
-		icalmemory_free_buffer(buf_value), buf_value = NULL;
-		icalmemory_free_buffer(name), name = NULL;
-		icalmemory_free_buffer(strptr), strptr = str = NULL;
+		icalmemory_free_buffer(buf_value);
+		buf_value = NULL;
+		icalmemory_free_buffer(name);
+		name = NULL;
+		icalmemory_free_buffer(strptr);
+		strptr = str = NULL;
   	  	
 		continue;
 	    }
@@ -944,23 +949,27 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		    tail = 0;
 		    parser->state = ICALPARSER_ERROR;
 
-			icalmemory_free_buffer(name), name = NULL;
-			icalmemory_free_buffer(strptr), strptr = str = NULL;
+			icalmemory_free_buffer(name);
+			name = NULL;
+			icalmemory_free_buffer(strptr);
+			strptr = str = NULL;
 		    continue;
 		} 
 	    }
-		icalmemory_free_buffer(name), name = NULL;
+		icalmemory_free_buffer(name);
+		name = NULL;
 
 	    /* Everything is OK, so add the parameter */
 	    icalproperty_add_parameter(prop,param);
 	    tail = 0;
-	    icalmemory_free_buffer(strptr), strptr = str = NULL;
+	    icalmemory_free_buffer(strptr);
+	    strptr = str = NULL;
 
 	} else { /* if ( str != 0)  */
 	    /* If we did not get a param string, go on to looking for a value */
 		if (strptr != NULL) {
 			icalmemory_free_buffer(strptr);
-			 strptr = str = NULL;
+			strptr = str = NULL;
 		}
 	    break;
 	} /* if ( str != 0)  */
