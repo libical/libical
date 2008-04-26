@@ -139,6 +139,18 @@
 #include <stdint.h>
 #endif
 
+#include <limits.h>
+
+#ifndef HAVE_INTPTR_T
+#if defined (WIN32) || defined (XP_BEOS)
+typedef long intptr_t;
+#endif
+#endif
+
+#ifdef WIN32
+#define strcasecmp      stricmp
+#endif
+
 #include "icalrecur.h"
 
 #include "icalerror.h"
@@ -149,6 +161,7 @@
 #include <string.h> /* for strdup and strchr*/
 #include <assert.h>
 #include <stddef.h> /* For offsetof() macro */
+#include <inttypes.h>
 
 #include "pvl.h"
 
@@ -482,17 +495,17 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 
 }
 
-static struct { const char* str;size_t offset; int limit;  } recurmap[] = 
+static struct {const char* str;size_t offset; int limit;  } recurmap[] = 
 {
-    {";BYSECOND=",offsetof(struct icalrecurrencetype,by_second),60},
-    {";BYMINUTE=",offsetof(struct icalrecurrencetype,by_minute),60},
-    {";BYHOUR=",offsetof(struct icalrecurrencetype,by_hour),24},
-    {";BYDAY=",offsetof(struct icalrecurrencetype,by_day),7},
-    {";BYMONTHDAY=",offsetof(struct icalrecurrencetype,by_month_day),31},
-    {";BYYEARDAY=",offsetof(struct icalrecurrencetype,by_year_day),366},
-    {";BYWEEKNO=",offsetof(struct icalrecurrencetype,by_week_no),52},
-    {";BYMONTH=",offsetof(struct icalrecurrencetype,by_month),12},
-    {";BYSETPOS=",offsetof(struct icalrecurrencetype,by_set_pos),366},
+    {";BYSECOND=",offsetof(struct icalrecurrencetype,by_second),ICAL_BY_SECOND_SIZE - 1},
+    {";BYMINUTE=",offsetof(struct icalrecurrencetype,by_minute),ICAL_BY_MINUTE_SIZE - 1},
+    {";BYHOUR=",offsetof(struct icalrecurrencetype,by_hour),ICAL_BY_HOUR_SIZE - 1},
+    {";BYDAY=",offsetof(struct icalrecurrencetype,by_day),ICAL_BY_DAY_SIZE - 1},
+    {";BYMONTHDAY=",offsetof(struct icalrecurrencetype,by_month_day),ICAL_BY_MONTHDAY_SIZE - 1},
+    {";BYYEARDAY=",offsetof(struct icalrecurrencetype,by_year_day),ICAL_BY_YEARDAY_SIZE - 1},
+    {";BYWEEKNO=",offsetof(struct icalrecurrencetype,by_week_no),ICAL_BY_WEEKNO_SIZE - 1},
+    {";BYMONTH=",offsetof(struct icalrecurrencetype,by_month),ICAL_BY_MONTH_SIZE - 1},
+    {";BYSETPOS=",offsetof(struct icalrecurrencetype,by_set_pos),ICAL_BY_SETPOS_SIZE - 1},
     {0,0,0},
 };
 

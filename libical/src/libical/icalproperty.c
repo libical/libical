@@ -507,7 +507,8 @@ icalproperty_as_ical_string (icalproperty* prop)
     /* Now, copy the buffer to a tmp_buffer, which is safe to give to
        the caller without worring about de-allocating it. */
 
-    /* We now use a function to fold the line properly every 75 characters. */
+    /* We now use a function to fold the line properly every 75 characters.
+       That function also adds the newline for us. */
     out_buf = fold_property_line (buf);
 
     icalmemory_free_buffer(buf);
@@ -609,6 +610,8 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
     icalparameter *param;
     char* str;
     char* pv;
+    char* pvql;
+    char* pvqr;
 
     icalerror_check_arg_rz( (prop!=0),"prop");
     icalerror_check_arg_rz( (name!=0),"name");
@@ -646,8 +649,19 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
         return 0;
     }
 
-    return pv+1;
-
+    // see if this string is quoted, immediately return if not
+    // otherwise removed the quotes from the string.
+    ++pv;
+    pvql = strchr(pv,'"');
+    if(pvql == 0)
+        return pv;
+    pvqr = strrchr(pvql,'"');
+    if(pvqr == 0){
+        icalerror_set_errno(ICAL_INTERNAL_ERROR);
+        return 0;
+    }
+    *pvqr = '\0';
+    return pvql+1;
 }
 
 /** @see icalproperty_remove_parameter_by_kind() 

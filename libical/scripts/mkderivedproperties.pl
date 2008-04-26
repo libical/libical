@@ -223,12 +223,36 @@ void icalproperty_set_${lc}(icalproperty* prop, $type v){
 }
 EOM
 	}
+# Dirk Theisen pointed out, exdate needs to match TZID parameters in EXDATE
+    if ($lc eq "exdate") {
+	print<<EOM;
+$type icalproperty_get_${lc}(const icalproperty* prop){
+	icalerror_check_arg( (prop!=0),"prop");
+        /*
+	 * Code by dirk\@objectpark.net:
+	 * Set the time zone manually. I am really puzzled that 
+	 * it doesnot work automatically like in the other functions 
+	 * like icalproperty_get_dtstart().
+	 */
+	struct icaltimetype itt =
+		icalvalue_get_datetime(icalproperty_get_value(prop));
+	icalparameter* param = icalproperty_get_first_parameter(prop,
+								ICAL_TZID_PARAMETER);
+	const icaltimezone *zone =
+		icaltimezone_get_builtin_timezone(icalparameter_get_tzid(param));
+	if (param)
+		icaltime_set_timezone(&itt, zone);
+	return itt;
+}
+EOM
+    } else {
 	print<<EOM;
 $type icalproperty_get_${lc}(const icalproperty* prop){
     icalerror_check_arg( (prop!=0),"prop");
     return icalvalue_get_${lcvalue}(icalproperty_get_value(prop));
 }
 EOM
+    }
   } elsif ($opt_h) { # Generate C Header file
 
 

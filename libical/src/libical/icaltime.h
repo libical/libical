@@ -239,7 +239,7 @@ int icaltime_compare(const struct icaltimetype a,
 
 /** like icaltime_compare, but only use the date parts. */
 int icaltime_compare_date_only(const struct icaltimetype a,
-	const struct icaltimetype b);
+	const struct icaltimetype b, icaltimezone *tz);
 
 /** Adds or subtracts a number of days, hours, minutes and seconds. */
 void  icaltime_adjust(struct icaltimetype *tt, const int days,

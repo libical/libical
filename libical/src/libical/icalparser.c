@@ -338,6 +338,21 @@ char* parser_get_next_paramvalue(char* line, char **end)
 }
 #endif
 
+char* icalparser_get_value(char* line, char **end, icalvalue_kind kind)
+{
+    char *str;
+    size_t length = strlen(line);
+
+    if (length == 0){
+        return 0;
+    } 
+
+    *end = line+length;
+    str = make_segment(line, *end);
+
+    return str;
+}
+
 /**
    A property may have multiple values, if the values are seperated by
    commas in the content line. This routine will look for the next
@@ -926,6 +941,13 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    } else {
 		/* Error. Failed to parse the parameter*/
 		/* 'tail' defined above */
+
+                /* Change for mozilla */
+                /* have the option of being flexible towards unsupported parameters */
+                #ifndef ICAL_ERRORS_ARE_FATAL
+                continue;
+                #endif
+
 		insert_error(tail, str, "Cant parse parameter name",
 			     ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
 		tail = 0;
@@ -1016,8 +1038,33 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     vcount=0;
     while(1) {
-	str = parser_get_next_value(end, &end, value_kind);
-	strstriplt(str);
+        /* Only some properies can have multiple values. This list was taken
+           from rfc2445. Also added the x-properties, because the spec actually
+           says that commas should be escaped. For x-properties, other apps may
+           depend on that behaviour
+        */
+        switch (prop_kind) {
+            case ICAL_X_PROPERTY:
+            case ICAL_CATEGORIES_PROPERTY:
+            case ICAL_RESOURCES_PROPERTY:
+            /* Referring to RFC 2445, section 4.8.5.3 and section 4.8.5.1:
+               RDATE and EXDATE can specify a list of dates/date-times/periods.
+            */
+            case ICAL_RDATE_PROPERTY:
+            case ICAL_EXDATE_PROPERTY:
+            /* Referring to RFC 2445, section 4.8.2.6 Free/Busy Time:
+               The "FREEBUSY" property can specify more than one value, separated by
+               the COMMA character (US-ASCII decimal 44).
+            */
+            case ICAL_FREEBUSY_PROPERTY:
+                 str = parser_get_next_value(end,&end, value_kind);
+				 strstriplt (str);
+                 break;
+            default:
+                 str = icalparser_get_value(end, &end, value_kind);
+				 strstriplt (str);
+                 break;
+        }
 
 	if (str != 0){
 		

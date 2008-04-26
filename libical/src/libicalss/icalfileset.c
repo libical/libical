@@ -654,7 +654,7 @@ icalcomponent* icalfileset_fetch_match(icalset* set, icalcomponent *comp)
 icalerrorenum icalfileset_modify(icalset* set, icalcomponent *old,
 				 icalcomponent *new)
 {
-	// icalfileset *fset = (icalfileset*) set;
+	/* icalfileset *fset = (icalfileset*) set; */
 
     assert(0); /* HACK, not implemented */
     return ICAL_NO_ERROR;
@@ -894,7 +894,7 @@ icalcomponent* icalfilesetiter_to_next(icalset* set, icalsetiter* i)
 {
 
     icalcomponent* c = NULL;
-    /// icalfileset *fset = (icalfileset*) set;
+    /* icalfileset *fset = (icalfileset*) set; */
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype recur;

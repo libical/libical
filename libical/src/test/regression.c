@@ -3541,7 +3541,7 @@ int main(int argc, char *argv[])
     extern char *optarg;
     extern int optopt;
     int errflg=0;
-//    char* program_name = strrchr(argv[0],'/');
+/*    char* program_name = strrchr(argv[0],'/'); */
     int do_test = 0;
     int do_header = 0;
 

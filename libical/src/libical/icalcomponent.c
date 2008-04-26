@@ -47,6 +47,11 @@
 #include <string.h> /* for strdup */
 #include <limits.h> /* for INT_MAX */
 
+#ifdef WIN32
+#define strncasecmp      strnicmp
+#endif
+
+
 struct icalcomponent_impl 
 {
 	char id[5];
@@ -212,6 +217,19 @@ icalcomponent* icalcomponent_new_clone(icalcomponent* old)
 
 }
 
+/** @brief Constructor
+ */
+icalcomponent*
+icalcomponent_new_x (const char* x_name)
+{
+    icalcomponent* comp = icalcomponent_new_impl(ICAL_X_COMPONENT);
+    if (!comp) {
+       return 0;
+    }
+    comp->x_name = icalmemory_strdup(x_name);
+    return comp;
+}
+
 /*** @brief Destructor
  */
 void
@@ -306,7 +324,11 @@ icalcomponent_as_ical_string (icalcomponent* impl)
    icalerror_check_arg_rz( (impl!=0), "component");
    icalerror_check_arg_rz( (kind!=ICAL_NO_COMPONENT), "component kind is ICAL_NO_COMPONENT");
    
-   kind_string  = icalcomponent_kind_to_string(kind);
+   if (kind != ICAL_X_COMPONENT) {
+       kind_string  = icalcomponent_kind_to_string(kind);
+   } else {
+       kind_string = impl->x_name;
+   }
 
    icalerror_check_arg_rz( (kind_string!=0),"Unknown kind of component");
 
@@ -534,10 +556,14 @@ icalcomponent_add_component (icalcomponent* parent, icalcomponent* child)
 
     child->parent = parent;
 
-    pvl_push(parent->components,child);
+    /* Fix for Mozilla - bug 327602 */
+    if (child->kind != ICAL_VTIMEZONE_COMPONENT) {
+        pvl_push(parent->components, child);
+    } else {
+        /* VTIMEZONES should be first in the resulting VCALENDAR. */
+        pvl_unshift(parent->components, child);
 
-    /* If the new component is a VTIMEZONE, add it to our array. */
-    if (child->kind == ICAL_VTIMEZONE_COMPONENT) {
+    /* Add the VTIMEZONE to our array. */
 	/* FIXME: Currently we are also creating this array when loading in
 	   a builtin VTIMEZONE, when we don't need it. */
 	if (!parent->timezones)
@@ -1314,7 +1340,7 @@ icalcomponent_kind icalcomponent_string_to_kind(const char* string)
     }
 
     for (i=0; component_map[i].kind  != ICAL_NO_COMPONENT; i++) {
-	if (strcasecmp(component_map[i].name, string) == 0) {
+	if (strncasecmp(string, component_map[i].name, strlen(component_map[i].name)) == 0) {
 	    return component_map[i].kind;
 	}
     }

@@ -45,7 +45,11 @@
 #include <errno.h>
 #include <time.h> /* for mktime */
 #include <stdlib.h> /* for atoi and atof */
-#include <limits.h> /* for SHRT_MAX */         
+#include <limits.h> /* for SHRT_MAX */ 
+        
+#ifdef WIN32
+#define strcasecmp      stricmp
+#endif
 
 struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind);
 
