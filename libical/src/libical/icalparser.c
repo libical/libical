@@ -126,23 +126,23 @@ char* strstrip (char *str)
 /*
  * New version of strstrip() that does not move the pointer.
  */
-char *strstrip(char *buf)
+strstriplt(char *buf)
 {
 	size_t len;
 	int a;
 
 	if (buf==NULL) {
-		return NULL;
+		return;
 	}
 	if (buf[0] == 0) {
-		return buf;
+		return;
 	}
 	len = strlen(buf);
         while ((buf[0] != 0) && (isspace(buf[len - 1]))) {
                 buf[--len] = 0;
 	}
 	if (buf[0] == 0) {
-		return buf;
+		return;
 	}
 	a = 0;
         while ((buf[0]!=0) && (isspace(buf[a]))) {
@@ -151,7 +151,6 @@ char *strstrip(char *buf)
 	if (a > 0) {
                 memmove(buf, &buf[a], len - a + 1);
 	}
-	return buf;
 }
 
 
@@ -680,7 +679,6 @@ icalcomponent* icalparser_add_line(icalparser* parser,
                                        char* line)
 { 
     char *str;
-    char *strptr;		// save the original pointer so we can free it
     char *end;
     int vcount = 0;
     icalproperty *prop;
@@ -708,7 +706,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
        a component */
 
     end = 0;
-    strptr = str = parser_get_prop_name(line, &end);
+    str = parser_get_prop_name(line, &end);
 
     if (str == 0 || *str == '\0' ){
 	/* Could not get a property name */
@@ -721,9 +719,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	}
 	tail = 0;
 	parser->state = ICALPARSER_ERROR;
-	icalmemory_free_buffer(strptr);
+	icalmemory_free_buffer(str);
 	str = NULL;
-	strptr = NULL;
 	return 0; 
     }
 
@@ -738,12 +735,11 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	icalcomponent *c;
         icalcomponent_kind comp_kind;
 
-	icalmemory_free_buffer(strptr);
+	icalmemory_free_buffer(str);
 	str = NULL;
-	strptr = NULL;
 
 	parser->level++;
-	strptr = str = parser_get_next_value(end,&end, value_kind);
+	str = parser_get_next_value(end,&end, value_kind);
 	    
 
         comp_kind = icalenum_string_to_component_kind(str);
@@ -769,20 +765,18 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 	parser->state = ICALPARSER_BEGIN_COMP;
 
-	icalmemory_free_buffer(strptr);
+	icalmemory_free_buffer(str);
 	str = NULL;
-	strptr = NULL;
 	return 0;
 
     } else if (strcasecmp(str,"END") == 0 ) {
 	icalcomponent* tail;
 
-	icalmemory_free_buffer(strptr);
+	icalmemory_free_buffer(str);
 	str = NULL;
-	strptr = NULL;
 	parser->level--;
 
-	strptr = str = parser_get_next_value(end,&end, value_kind);
+	str = parser_get_next_value(end,&end, value_kind);
 
 	/* Pop last component off of list and add it to the second-to-last*/
 	parser->root_component = pvl_pop(parser->components);
@@ -794,9 +788,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	} 
 
 	tail = 0;
-	icalmemory_free_buffer(strptr);
+	icalmemory_free_buffer(str);
 	str = NULL;
-	strptr = NULL;
 
 	/* Return the component if we are back to the 0th level */
 	if (parser->level == 0){
@@ -828,9 +821,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     if(pvl_data(pvl_tail(parser->components)) == 0){
 	parser->state = ICALPARSER_ERROR;
-	icalmemory_free_buffer(strptr);
+	icalmemory_free_buffer(str);
 	str = NULL;
-	strptr = NULL;
 	return 0;
     }
 
@@ -869,15 +861,13 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    
 	tail = 0;
 	parser->state = ICALPARSER_ERROR;
-	icalmemory_free_buffer(strptr);
+	icalmemory_free_buffer(str);
 	str = NULL;
-	strptr = NULL;
 	return 0;
     }
 
-    icalmemory_free_buffer(strptr);
+    icalmemory_free_buffer(str);
     str = NULL;
-    strptr = NULL;
 
     /**********************************************************************
      * Handle parameter values
@@ -894,8 +884,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    break;
 	}
 
-	strptr = str = parser_get_next_parameter(end,&end);
-	str = strstrip (str);
+	str = parser_get_next_parameter(end,&end);
+	strstriplt(str);
 	if (str != 0){
 	    char* name;
 	    char* pvalue;
@@ -955,8 +945,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		buf_value = NULL;
 		icalmemory_free_buffer(name);
 		name = NULL;
-		icalmemory_free_buffer(strptr);
-		strptr = str = NULL;
+		icalmemory_free_buffer(str);
+		str = NULL;
   	  	
 		continue;
 	    }
@@ -991,8 +981,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 			icalmemory_free_buffer(name);
 			name = NULL;
-			icalmemory_free_buffer(strptr);
-			strptr = str = NULL;
+			icalmemory_free_buffer(str);
+			str = NULL;
 		    continue;
 		} 
 	    }
@@ -1002,14 +992,14 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    /* Everything is OK, so add the parameter */
 	    icalproperty_add_parameter(prop,param);
 	    tail = 0;
-	    icalmemory_free_buffer(strptr);
-	    strptr = str = NULL;
+	    icalmemory_free_buffer(str);
+	    str = NULL;
 
 	} else { /* if ( str != 0)  */
 	    /* If we did not get a param string, go on to looking for a value */
-		if (strptr != NULL) {
-			icalmemory_free_buffer(strptr);
-			strptr = str = NULL;
+		if (str != NULL) {
+			icalmemory_free_buffer(str);
+			str = NULL;
 		}
 	    break;
 	} /* if ( str != 0)  */
@@ -1026,8 +1016,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     vcount=0;
     while(1) {
-	strptr = str = parser_get_next_value(end,&end, value_kind);
-	str = strstrip (str);
+	str = parser_get_next_value(end, &end, value_kind);
+	strstriplt(str);
 
 	if (str != 0){
 		
@@ -1064,24 +1054,21 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		tail = 0;
 		parser->state = ICALPARSER_ERROR;
 	
-		icalmemory_free_buffer(strptr);
+		icalmemory_free_buffer(str);
 		str = NULL;
-		strptr = NULL;
 		return 0;
 		    
 	    } else {
 		vcount++;
 		icalproperty_set_value(prop, value);
 	    }
- 	    icalmemory_free_buffer(strptr);
+ 	    icalmemory_free_buffer(str);
 	    str = NULL;
-	    strptr = NULL;
 
 	} else {
-		if (strptr != NULL) {
-			icalmemory_free_buffer(strptr);
+		if (str != NULL) {
+			icalmemory_free_buffer(str);
 			str = NULL;
-			strptr = NULL;
 		}
 			
 	    if (vcount == 0){
