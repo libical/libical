@@ -105,6 +105,10 @@ struct icalparser_impl
 };
 
 
+
+/*
+ * OLD
+ *
 char* strstrip (char *str)
 {
 	if (!str)
@@ -115,6 +119,42 @@ char* strstrip (char *str)
 		str[strlen (str)-1] = 0;
 	return str;
 }
+ *
+ */
+
+
+/*
+ * New version of strstrip() that does not move the pointer.
+ */
+char *strstrip(char *buf)
+{
+	size_t len;
+	int a;
+
+	if (buf==NULL) {
+		return NULL;
+	}
+	if (buf[0] == 0) {
+		return buf;
+	}
+	len = strlen(buf);
+        while ((buf[0] != 0) && (isspace(buf[len - 1]))) {
+                buf[--len] = 0;
+	}
+	if (buf[0] == 0) {
+		return buf;
+	}
+	a = 0;
+        while ((buf[0]!=0) && (isspace(buf[a]))) {
+		a++;
+	}
+	if (a > 0) {
+                memmove(buf, &buf[a], len - a + 1);
+	}
+	return buf;
+}
+
+
 
 
 icalparser* icalparser_new(void)
