@@ -105,24 +105,6 @@ struct icalparser_impl
 };
 
 
-
-/*
- * OLD
- *
-char* strstrip (char *str)
-{
-	if (!str)
-		return NULL;
-	while (*str == ' ')
-		str = str+1;
-	while (*str && str[strlen  (str)-1] == ' ')
-		str[strlen (str)-1] = 0;
-	return str;
-}
- *
- */
-
-
 /*
  * New version of strstrip() that does not move the pointer.
  */
@@ -152,7 +134,6 @@ strstriplt(char *buf)
                 memmove(buf, &buf[a], len - a + 1);
 	}
 }
-
 
 
 
@@ -1058,11 +1039,11 @@ icalcomponent* icalparser_add_line(icalparser* parser,
             */
             case ICAL_FREEBUSY_PROPERTY:
                  str = parser_get_next_value(end,&end, value_kind);
-				 strstriplt (str);
+		 strstriplt (str);
                  break;
             default:
                  str = icalparser_get_value(end, &end, value_kind);
-				 strstriplt (str);
+		 strstriplt (str);
                  break;
         }
 
