@@ -877,7 +877,39 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
  */
 
 int
-icaltime_compare_date_only(const struct icaltimetype a_in, const struct icaltimetype b_in, icaltimezone *tz)
+icaltime_compare_date_only(const struct icaltimetype a_in, const struct icaltimetype b_in)
+{
+    int retval;
+    struct icaltimetype a, b;
+    icaltimezone *tz = icaltimezone_get_utc_timezone();
+
+    a = icaltime_convert_to_zone(a_in, tz);
+    b = icaltime_convert_to_zone(b_in, tz);
+
+    if (a.year > b.year)
+	return 1;
+    else if (a.year < b.year)
+	return -1;
+
+    if (a.month > b.month)
+	return 1;
+    else if (a.month < b.month)
+	return -1;
+
+    if (a.day > b.day)
+	return 1;
+    else if (a.day < b.day)
+	return -1;
+
+    return 0;
+}
+
+/**
+ *	like icaltime_compare, but only use the date parts; accepts timezone.
+ */
+
+int
+icaltime_compare_date_only_tz(const struct icaltimetype a_in, const struct icaltimetype b_in, icaltimezone *tz)
 {
     int retval;
     struct icaltimetype a, b;
@@ -886,24 +918,21 @@ icaltime_compare_date_only(const struct icaltimetype a_in, const struct icaltime
     b = icaltime_convert_to_zone(b_in, tz);
 
     if (a.year > b.year)
-	retval = 1;
+	return 1;
     else if (a.year < b.year)
-	retval = -1;
+	return -1;
 
-    else if (a.month > b.month)
-	retval = 1;
+    if (a.month > b.month)
+	return 1;
     else if (a.month < b.month)
-	retval = -1;
+	return -1;
 
-    else if (a.day > b.day)
-	retval = 1;
+    if (a.day > b.day)
+	return 1;
     else if (a.day < b.day)
-	retval = -1;
+	return -1;
 
-    else
-	retval = 0;
-
-    return retval;
+    return 0;
 }
 
 /* These are defined in icalduration.c:
