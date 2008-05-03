@@ -64,7 +64,7 @@ INCLUDES =			\
 	$(BDB_INCLUDE)
 
 libicalss_la_LDFLAGS = -version-info 30:0:30
-libicalss_la_LIBADD = $(BDB_LIBFILES) ../libical/.libs/libical.la
+libicalss_la_LIBADD = $(BDB_LIBFILES) 
 
 if DEV
 libicalss_la_DEVSOURCES = icalsslexer.l icalssyacc.y
