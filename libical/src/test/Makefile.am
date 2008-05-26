@@ -1,12 +1,18 @@
 if WITH_CXX_BINDINGS
 cxx_inc=-DWITH_CXX_BINDINGS
 cxx_libs=../libical/libical_cxx.la
-regression_cxx = regression-cxx.cpp
+regression_cxx_SOURCES = 		\
+	regression.c		\
+	regression.h		\
+	regression-component.c	\
+	regression-classify.c	\
+	regression-utils.c	\
+	regression-recur.c	\
+	regression-storage.c	\
+	regression-cxx.cpp
 else
 cxx_inc=
 cxx_libs=
-regression_cxx = 
-AM_CXX=@CC@
 endif
 
 if WITH_BDB4
@@ -37,8 +43,6 @@ INCLUDES = 						\
 	-DTEST_DATADIR=\"$(top_srcdir)/test-data\"	\
 	$(cxx_inc) $(bdb4_inc)
 
-TESTS=regression
-copycluster_SOURCES = copycluster.c
 regression_SOURCES = 		\
 	regression.c		\
 	regression.h		\
@@ -46,8 +50,11 @@ regression_SOURCES = 		\
 	regression-classify.c	\
 	regression-utils.c	\
 	regression-recur.c	\
-	regression-storage.c	\
-	$(regression_cxx)
+	regression-storage.c
+
+
+TESTS=regression
+copycluster_SOURCES = copycluster.c
 
 parser_SOURCES = icaltestparser.c
 stow_SOURCES = stow.c
