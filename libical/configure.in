@@ -25,8 +25,7 @@ AC_SUBST(AR)
 
 dnl *** check for Win32
 
-AC_MSG_CHECKING([for Win32])
-echo "---------$host----------"
+AC_MSG_CHECKING([whether the system provides zonefiles or we should bring our own? ])
 case "$host" in
 *-mingw*)
     use_builtin_timezone=yes
@@ -42,7 +41,13 @@ case "$host" in
     ;;
 esac
 
-AC_MSG_RESULT([$os_win32])
+if test "$use_builtin_timezone" = "no" ; then
+   	if test ! -d /usr/share/zoneinfo; then
+            use_builtin_timezone=yes
+	fi
+fi
+
+AC_MSG_RESULT([$use_builtin_timezone])
 AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
 
 if test "x$os_win32" = "xyes"; then
