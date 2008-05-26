@@ -2,7 +2,7 @@ Source: libical
 Priority: optional
 Maintainer: Wilfried Goesgens <w.goesgens@outgesourced.org>
 Uploaders: Fathi Boudra <fboudra@free.fr>
-Build-Depends: debhelper (>= 5), autotools-dev
+Build-Depends: debhelper (>= 5), autotools-dev, tzdata
 Standards-Version: 3.7.3
 Section: libs
 Homepage: http://freeassociation.sourceforge.net/
