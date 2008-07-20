@@ -55,7 +55,7 @@ case $1 in
 	    find -type f -exec chmod a-x {} \;
 	    chmod a+x configure
 	    cd ..
-	    tar -chzf libical_${LIBICAL_VERSION}.orig.tar.gz libical-${LIBICAL_VERSION}/ --exclude "debian/*"
+	    tar -chzf libical_${LIBICAL_VERSION}.orig.tar.gz libical-${LIBICAL_VERSION}/ --exclude "debian/*" --exclude "*.svn*" 
 	    pwd
 	    cd  libical-${LIBICAL_VERSION}; debuild -S -sa -kw.goesgens@outgesourced.org
 	else
@@ -87,7 +87,7 @@ EMAIL=libical@outgesourced.org
 
 	;;
     sourcedist)
-	cd ..; tar --exclude .svn --exclude "debian/*" -chvzf libical-$LIBICAL_VERSION.tar.gz libical-$LIBICAL_VERSION/
+	cd ..; tar --exclude "*.svn*" --exclude "*.dep*" --exclude "*.lib*" --exclude "*.o" --exclude "*.lo" --exclude "debian/*" -chvzf libical-$LIBICAL_VERSION.tar.gz libical-$LIBICAL_VERSION/
 	;;
 	*)
 		echo "Not yet implemented. we have: debian "
