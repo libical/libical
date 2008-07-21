@@ -30,6 +30,10 @@
 #include "config.h"
 #endif
 
+#ifdef HAVE_BACKTRACE
+#include <execinfo.h>
+#endif
+
 #include <stdlib.h>		/* for malloc() */
 #include <string.h>		/* for strcmp */
 #include "icalerror.h"
@@ -98,6 +102,7 @@ void icalerror_set_errno(icalerrorenum x)
        (icalerror_get_error_state(x)==ICAL_ERROR_DEFAULT && 
         icalerror_errors_are_fatal == 1 )){ 
         icalerror_warn(icalerror_strerror(x)); 
+	ical_bt();
         assert(0); 
     } 
 
@@ -245,4 +250,22 @@ const char* icalerror_strerror(icalerrorenum e) {
 }
 
 
+void ical_bt(void)
+{
+#ifdef HAVE_BACKTRACE
+        void *stack_frames[50];
+        size_t size, i;
+        char **strings;
+
+        size = backtrace(stack_frames, sizeof(stack_frames) / sizeof(void*));
+        strings = backtrace_symbols(stack_frames, size);
+        for (i = 0; i < size; i++) {
+                if (strings != NULL)
+                        fprintf(stderr, "%s\n", strings[i]);
+                else
+                        fprintf(stderr, "%p\n", stack_frames[i]);
+        }
+        free(strings);
+#endif
+}
 

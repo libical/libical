@@ -25,9 +25,13 @@ ifneq (,$(findstring profiling,$(DEB_BUILD_OPTIONS)))
 	PROFILE_ARGS= --with-gprof
 endif
 
+ifneq (,$(findstring backtrace,$(DEB_BUILD_OPTIONS)))
+	EXTRA_ARGS=--with-backtrace
+	BTCFLAGS=-rdynamic
+endif
+
 ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0 -ggdb -rdynamic -D_GNU_SOURCE -MD -MP -Wl,--no-undefined -Wl,--as-needed -Wall -ansi
-	EXTRA_ARGS = --with-backtrace
+	CFLAGS += -O0 -ggdb  -D_GNU_SOURCE -MD -MP -Wl,--no-undefined -Wl,--as-needed -Wall -ansi
 else
 	CFLAGS += -O2
 endif
@@ -49,7 +53,7 @@ endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
-	CFLAGS="$(CFLAGS)" ./configure \
+	CFLAGS="$(BTCFLAGS) $(CFLAGS)" ./configure \
 		--host=$(DEB_HOST_GNU_TYPE) \
 		--build=$(DEB_BUILD_GNU_TYPE) \
 		--prefix=/usr \
@@ -57,7 +61,8 @@ endif
 		--mandir="/usr/share/man" \
 		--sysconfdir=/etc \
 		--localstatedir=/var \
-		--libexecdir="/usr/lib/libical"
+		--libexecdir="/usr/lib/libical" \
+		$(EXTRA_ARGS) $(PROFILE_ARGS)
 
 
 build: build-stamp

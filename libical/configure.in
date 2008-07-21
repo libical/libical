@@ -136,6 +136,19 @@ if test x$WITH_BDB4 = xyes; then
 fi
 AM_CONDITIONAL(WITH_BDB4, test x$WITH_BDB4 = xyes)
 
+
+dnl disable backtrace if we don't want it.
+AC_ARG_WITH(backtrace, 
+		    [  --with-backtrace        enable backtrace dumps in the syslog],
+			[ if test "x$withval" != "xno" ; then
+			     CFLAGS="$CFLAGS  -rdynamic "
+			     LDFLAGS="$LDFLAGS  -rdynamic "
+			     SERVER_LDFLAGS="$SERVER_LDFLAGS  -rdynamic "
+                             AC_CHECK_FUNCS(backtrace)
+			  fi
+			]
+)
+
 dnl *** Yacc/Bison support
 
 AC_MSG_CHECKING(whether to support development)
