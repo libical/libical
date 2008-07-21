@@ -649,8 +649,10 @@ const char* icalproperty_get_parameter_as_string(icalproperty* prop,
         return 0;
     }
 
-    // see if this string is quoted, immediately return if not
-    // otherwise removed the quotes from the string.
+    /*
+     * see if this string is quoted, immediately return if not
+     * otherwise removed the quotes from the string.
+     */
     ++pv;
     pvql = strchr(pv,'"');
     if(pvql == 0)
