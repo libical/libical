@@ -35,7 +35,6 @@ cxx_headers=
 endif
 
 lib_LTLIBRARIES = libical.la $(cxx_lib)
-
 noinst_LTLIBRARIES = libical-static.la
 libical_static_la_SOURCES = $(libical_la_SOURCES)
 libical_static_la_LDFLAGS = --all-static
@@ -122,7 +121,7 @@ libical_cxx_la_SOURCES =	\
 	icptrholder.h
 endif
 
-libical_includedir = $(includedir)
+libical_includedir = $(includedir)/libical
 
 libical_include_HEADERS = \
 	ical.h			\
