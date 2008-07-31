@@ -173,7 +173,7 @@ icalcomponent_vanew (icalcomponent_kind kind, ...)
 
 /** @brief Constructor
  */
-icalcomponent* icalcomponent_new_from_string(char* str)
+icalcomponent* icalcomponent_new_from_string(const char* str)
 {
     return icalparser_parse_string(str);
 }
