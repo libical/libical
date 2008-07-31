@@ -99,7 +99,7 @@ libicalss_la_SOURCES =		\
 	$(BDB_SOURCEFILES)	\
 	$(libicalss_la_DEVSOURCES)
 
-libicalssincludedir = $(includedir)/libicalss
+libicalssincludedir = $(includedir)/libical
 
 COMBINEDHEADERS = \
         $(srcdir)/icalgauge.h \
