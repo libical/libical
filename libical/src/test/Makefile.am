@@ -40,6 +40,7 @@ INCLUDES = 						\
 	-I$(top_builddir)/src				\
 	-I$(top_srcdir)/src/libical			\
 	-I$(top_builddir)/src/libical			\
+	-I$(top_builddir)/src/libicalss			\
 	-DTEST_DATADIR=\"$(top_srcdir)/test-data\"	\
 	$(cxx_inc) $(bdb4_inc)
 

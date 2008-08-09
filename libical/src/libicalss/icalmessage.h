@@ -23,7 +23,7 @@
 
  =========================================================================*/
 
-#include <libical/ical.h>
+#include <ical.h>
 
 #ifndef ICALMESSAGE_H
 #define ICALMESSAGE_H
