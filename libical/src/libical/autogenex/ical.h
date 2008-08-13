@@ -1,3 +1,5 @@
+#ifndef LIBICAL_ICAL_H
+#define LIBICAL_ICAL_H
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -74,10 +76,10 @@ extern "C" {
 #define ICAL_UNIX_NEWLINE 1
 
 /* Define if we have pthread. */
-#define HAVE_PTHREAD 
+#define HAVE_PTHREAD
 
 /* Define if we have pthread. */
-#define HAVE_PTHREAD 
+#define HAVE_PTHREAD
 
 #ifndef ICAL_VERSION_H
 #define ICAL_VERSION_H
@@ -98,7 +100,7 @@ extern "C" {
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -217,15 +219,15 @@ struct icaltimetype
 	int is_utc;     /**< 1-> time is in UTC timezone */
 
 	int is_date;    /**< 1 -> interpret this as date. */
-   
+
 	int is_daylight; /**< 1 -> time is in daylight savings time. */
-   
+
 	const icaltimezone *zone;	/**< timezone */
-};	
+};
 
 typedef struct icaltimetype icaltimetype;
 
-/** Return a null time, which indicates no time has been set. 
+/** Return a null time, which indicates no time has been set.
     This time represent the beginning of the epoch */
 struct icaltimetype icaltime_null_time(void);
 
@@ -346,11 +348,11 @@ struct icaltime_span icaltime_span_new(struct icaltimetype dtstart,
 				       int is_busy);
 
 /** @brief Returns true if the two spans overlap **/
-int icaltime_span_overlaps(icaltime_span *s1, 
+int icaltime_span_overlaps(icaltime_span *s1,
 			   icaltime_span *s2);
 
 /** @brief Returns true if the span is totally within the containing
- *  span 
+ *  span
  */
 int icaltime_span_contains(icaltime_span *s,
 			   icaltime_span *container);
@@ -371,7 +373,7 @@ int icaltime_span_contains(icaltime_span *s,
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -430,7 +432,7 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -450,10 +452,10 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
 #define ICALPERIOD_H
 
 
-struct icalperiodtype 
+struct icalperiodtype
 {
-	struct icaltimetype start; 
-	struct icaltimetype end; 
+	struct icaltimetype start;
+	struct icaltimetype end;
 	struct icaldurationtype duration;
 };
 
@@ -476,12 +478,12 @@ int icalperiodtype_is_valid_period(struct icalperiodtype p);
 /*======================================================================
  FILE: icalenums.h
 
- 
+
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -519,7 +521,7 @@ typedef enum icalcomponent_kind {
     ICAL_VAGENDA_COMPONENT,
     ICAL_VFREEBUSY_COMPONENT,
     ICAL_VALARM_COMPONENT,
-    ICAL_XAUDIOALARM_COMPONENT,  
+    ICAL_XAUDIOALARM_COMPONENT,
     ICAL_XDISPLAYALARM_COMPONENT,
     ICAL_XEMAILALARM_COMPONENT,
     ICAL_XPROCEDUREALARM_COMPONENT,
@@ -645,7 +647,7 @@ char* icalenum_reqstat_code(icalrequeststatus stat);
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -665,23 +667,23 @@ char* icalenum_reqstat_code(icalrequeststatus stat);
 #include <time.h>
 
 
-struct icalgeotype 
+struct icalgeotype
 {
 	float lat;
 	float lon;
 };
 
 
-struct icaldatetimeperiodtype 
+struct icaldatetimeperiodtype
 {
 	struct icaltimetype time;
 	struct icalperiodtype period;
 };
 
 
-struct icaltriggertype 
+struct icaltriggertype
 {
-	struct icaltimetype time; 
+	struct icaltimetype time;
 	struct icaldurationtype duration;
 };
 
@@ -721,7 +723,7 @@ struct icaltimezonephase {
     int tzoffsetfrom;
     const char* comment;
     struct icaldatetimeperiodtype rdate;
-    const char* rrule;    
+    const char* rrule;
 };
 
 
@@ -729,7 +731,7 @@ struct icaltimezonetype {
     const char* tzid;
     struct icaltimetype last_mod;
     const char* tzurl;
-    
+
     /* Array of phases. The end of the array is a phase with tzname == 0 */
     struct icaltimezonephase *phases;
 };
@@ -747,7 +749,7 @@ void icaltimezonetype_free(struct icaltimezonetype tzt);
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -762,7 +764,7 @@ void icaltimezonetype_free(struct icaltimezonetype tzt);
 @file icalrecur.h
 @brief Routines for dealing with recurring time
 
-How to use: 
+How to use:
 
 1) Get a rule and a start time from a component
 
@@ -776,7 +778,7 @@ How to use:
 	start = icalproperty_get_dtstart(dtstart);
 @endcode
 
-Or, just make them up: 
+Or, just make them up:
 
 @code
         recur = icalrecurrencetype_from_string("FREQ=YEARLY;BYDAY=SU,WE");
@@ -794,7 +796,7 @@ Or, just make them up:
 
 @code
         struct icaltimetype next;
-        while (next = icalrecur_iterator_next(ritr) 
+        while (next = icalrecur_iterator_next(ritr)
                && !icaltime_is_null_time(next){
                 Do something with next
         }
@@ -865,24 +867,24 @@ enum {
 #define ICAL_BY_SETPOS_SIZE 367
 
 /** Main struct for holding digested recurrence rules */
-struct icalrecurrencetype 
+struct icalrecurrencetype
 {
 	icalrecurrencetype_frequency freq;
 
 
 	/* until and count are mutually exclusive. */
-       	struct icaltimetype until; 
+       	struct icaltimetype until;
 	int count;
 
 	short interval;
-	
+
 	icalrecurrencetype_weekday week_start;
-	
+
 	/* The BY* parameters can each take a list of values. Here I
 	 * assume that the list of values will not be larger than the
 	 * range of the value -- that is, the client will not name a
-	 * value more than once. 
-	 
+	 * value more than once.
+
 	 * Each of the lists is terminated with the value
 	 * ICAL_RECURRENCE_ARRAY_MAX unless the the list is full.
 	 */
@@ -907,7 +909,7 @@ void icalrecurrencetype_clear(struct icalrecurrencetype *r);
  * The 'day' element of the by_day array is encoded to allow
  * representation of both the day of the week ( Monday, Tueday), but also
  * the Nth day of the week ( First tuesday of the month, last thursday of
- * the year) These routines decode the day values 
+ * the year) These routines decode the day values
  */
 
 /** 1 == Monday, etc. */
@@ -931,7 +933,7 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
 typedef struct icalrecur_iterator_impl  icalrecur_iterator;
 
 /** Create a new recurrence rule iterator */
-icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule, 
+icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
                                            struct icaltimetype dtstart);
 
 /** Get the next occurrence from an iterator */
@@ -942,9 +944,9 @@ void icalrecur_iterator_free(icalrecur_iterator*);
 
 /**
  * Fills array up with at most 'count' time_t values, each
- *  representing an occurrence time in seconds past the POSIX epoch 
+ *  representing an occurrence time in seconds past the POSIX epoch
  */
-int icalrecur_expand_recurrence(char* rule, time_t start, 
+int icalrecur_expand_recurrence(char* rule, time_t start,
 				int count, time_t* array);
 
 
@@ -958,7 +960,7 @@ int icalrecur_expand_recurrence(char* rule, time_t start,
  (C) COPYRIGHT 2002, Andrea Campi
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -1018,12 +1020,12 @@ void* icalattachtype_get_binary(struct icalattachtype* v);
   $Id: ical.h,v 1.6 2002-10-10 00:41:34 acampi Exp $
   $Locker:  $
 
-  
+
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -1040,7 +1042,7 @@ void* icalattachtype_get_binary(struct icalattachtype* v);
 #ifndef ICALDERIVEDVALUE_H
 #define ICALDERIVEDVALUE_H
 
-     
+
 typedef struct icalvalue_impl icalvalue;
 
 
@@ -1195,135 +1197,135 @@ typedef enum icalproperty_xlicclass {
 #define ICALPROPERTY_LAST_ENUM 10073
 
 
- /* BOOLEAN */ 
-icalvalue* icalvalue_new_boolean(int v); 
-int icalvalue_get_boolean(const icalvalue* value); 
+ /* BOOLEAN */
+icalvalue* icalvalue_new_boolean(int v);
+int icalvalue_get_boolean(const icalvalue* value);
 void icalvalue_set_boolean(icalvalue* value, int v);
 
 
- /* UTC-OFFSET */ 
-icalvalue* icalvalue_new_utcoffset(int v); 
-int icalvalue_get_utcoffset(const icalvalue* value); 
+ /* UTC-OFFSET */
+icalvalue* icalvalue_new_utcoffset(int v);
+int icalvalue_get_utcoffset(const icalvalue* value);
 void icalvalue_set_utcoffset(icalvalue* value, int v);
 
 
- /* X-LIC-CLASS */ 
-icalvalue* icalvalue_new_xlicclass(enum icalproperty_xlicclass v); 
-enum icalproperty_xlicclass icalvalue_get_xlicclass(const icalvalue* value); 
+ /* X-LIC-CLASS */
+icalvalue* icalvalue_new_xlicclass(enum icalproperty_xlicclass v);
+enum icalproperty_xlicclass icalvalue_get_xlicclass(const icalvalue* value);
 void icalvalue_set_xlicclass(icalvalue* value, enum icalproperty_xlicclass v);
 
 
- /* METHOD */ 
-icalvalue* icalvalue_new_method(enum icalproperty_method v); 
-enum icalproperty_method icalvalue_get_method(const icalvalue* value); 
+ /* METHOD */
+icalvalue* icalvalue_new_method(enum icalproperty_method v);
+enum icalproperty_method icalvalue_get_method(const icalvalue* value);
 void icalvalue_set_method(icalvalue* value, enum icalproperty_method v);
 
 
- /* CAL-ADDRESS */ 
-icalvalue* icalvalue_new_caladdress(const char* v); 
-const char* icalvalue_get_caladdress(const icalvalue* value); 
+ /* CAL-ADDRESS */
+icalvalue* icalvalue_new_caladdress(const char* v);
+const char* icalvalue_get_caladdress(const icalvalue* value);
 void icalvalue_set_caladdress(icalvalue* value, const char* v);
 
 
- /* PERIOD */ 
-icalvalue* icalvalue_new_period(struct icalperiodtype v); 
-struct icalperiodtype icalvalue_get_period(const icalvalue* value); 
+ /* PERIOD */
+icalvalue* icalvalue_new_period(struct icalperiodtype v);
+struct icalperiodtype icalvalue_get_period(const icalvalue* value);
 void icalvalue_set_period(icalvalue* value, struct icalperiodtype v);
 
 
- /* STATUS */ 
-icalvalue* icalvalue_new_status(enum icalproperty_status v); 
-enum icalproperty_status icalvalue_get_status(const icalvalue* value); 
+ /* STATUS */
+icalvalue* icalvalue_new_status(enum icalproperty_status v);
+enum icalproperty_status icalvalue_get_status(const icalvalue* value);
 void icalvalue_set_status(icalvalue* value, enum icalproperty_status v);
 
 
- /* BINARY */ 
-icalvalue* icalvalue_new_binary(const char* v); 
-const char* icalvalue_get_binary(const icalvalue* value); 
+ /* BINARY */
+icalvalue* icalvalue_new_binary(const char* v);
+const char* icalvalue_get_binary(const icalvalue* value);
 void icalvalue_set_binary(icalvalue* value, const char* v);
 
 
- /* TEXT */ 
-icalvalue* icalvalue_new_text(const char* v); 
-const char* icalvalue_get_text(const icalvalue* value); 
+ /* TEXT */
+icalvalue* icalvalue_new_text(const char* v);
+const char* icalvalue_get_text(const icalvalue* value);
 void icalvalue_set_text(icalvalue* value, const char* v);
 
 
- /* DURATION */ 
-icalvalue* icalvalue_new_duration(struct icaldurationtype v); 
-struct icaldurationtype icalvalue_get_duration(const icalvalue* value); 
+ /* DURATION */
+icalvalue* icalvalue_new_duration(struct icaldurationtype v);
+struct icaldurationtype icalvalue_get_duration(const icalvalue* value);
 void icalvalue_set_duration(icalvalue* value, struct icaldurationtype v);
 
 
- /* INTEGER */ 
-icalvalue* icalvalue_new_integer(int v); 
-int icalvalue_get_integer(const icalvalue* value); 
+ /* INTEGER */
+icalvalue* icalvalue_new_integer(int v);
+int icalvalue_get_integer(const icalvalue* value);
 void icalvalue_set_integer(icalvalue* value, int v);
 
 
- /* URI */ 
-icalvalue* icalvalue_new_uri(const char* v); 
-const char* icalvalue_get_uri(const icalvalue* value); 
+ /* URI */
+icalvalue* icalvalue_new_uri(const char* v);
+const char* icalvalue_get_uri(const icalvalue* value);
 void icalvalue_set_uri(icalvalue* value, const char* v);
 
 
- /* CLASS */ 
-icalvalue* icalvalue_new_class(enum icalproperty_class v); 
-enum icalproperty_class icalvalue_get_class(const icalvalue* value); 
+ /* CLASS */
+icalvalue* icalvalue_new_class(enum icalproperty_class v);
+enum icalproperty_class icalvalue_get_class(const icalvalue* value);
 void icalvalue_set_class(icalvalue* value, enum icalproperty_class v);
 
 
- /* FLOAT */ 
-icalvalue* icalvalue_new_float(float v); 
-float icalvalue_get_float(const icalvalue* value); 
+ /* FLOAT */
+icalvalue* icalvalue_new_float(float v);
+float icalvalue_get_float(const icalvalue* value);
 void icalvalue_set_float(icalvalue* value, float v);
 
 
- /* QUERY */ 
-icalvalue* icalvalue_new_query(const char* v); 
-const char* icalvalue_get_query(const icalvalue* value); 
+ /* QUERY */
+icalvalue* icalvalue_new_query(const char* v);
+const char* icalvalue_get_query(const icalvalue* value);
 void icalvalue_set_query(icalvalue* value, const char* v);
 
 
- /* STRING */ 
-icalvalue* icalvalue_new_string(const char* v); 
-const char* icalvalue_get_string(const icalvalue* value); 
+ /* STRING */
+icalvalue* icalvalue_new_string(const char* v);
+const char* icalvalue_get_string(const icalvalue* value);
 void icalvalue_set_string(icalvalue* value, const char* v);
 
 
- /* TRANSP */ 
-icalvalue* icalvalue_new_transp(enum icalproperty_transp v); 
-enum icalproperty_transp icalvalue_get_transp(const icalvalue* value); 
+ /* TRANSP */
+icalvalue* icalvalue_new_transp(enum icalproperty_transp v);
+enum icalproperty_transp icalvalue_get_transp(const icalvalue* value);
 void icalvalue_set_transp(icalvalue* value, enum icalproperty_transp v);
 
 
- /* DATE-TIME */ 
-icalvalue* icalvalue_new_datetime(struct icaltimetype v); 
-struct icaltimetype icalvalue_get_datetime(const icalvalue* value); 
+ /* DATE-TIME */
+icalvalue* icalvalue_new_datetime(struct icaltimetype v);
+struct icaltimetype icalvalue_get_datetime(const icalvalue* value);
 void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v);
 
 
- /* REQUEST-STATUS */ 
-icalvalue* icalvalue_new_requeststatus(struct icalreqstattype v); 
-struct icalreqstattype icalvalue_get_requeststatus(const icalvalue* value); 
+ /* REQUEST-STATUS */
+icalvalue* icalvalue_new_requeststatus(struct icalreqstattype v);
+struct icalreqstattype icalvalue_get_requeststatus(const icalvalue* value);
 void icalvalue_set_requeststatus(icalvalue* value, struct icalreqstattype v);
 
 
- /* GEO */ 
-icalvalue* icalvalue_new_geo(struct icalgeotype v); 
-struct icalgeotype icalvalue_get_geo(const icalvalue* value); 
+ /* GEO */
+icalvalue* icalvalue_new_geo(struct icalgeotype v);
+struct icalgeotype icalvalue_get_geo(const icalvalue* value);
 void icalvalue_set_geo(icalvalue* value, struct icalgeotype v);
 
 
- /* DATE */ 
-icalvalue* icalvalue_new_date(struct icaltimetype v); 
-struct icaltimetype icalvalue_get_date(const icalvalue* value); 
+ /* DATE */
+icalvalue* icalvalue_new_date(struct icaltimetype v);
+struct icaltimetype icalvalue_get_date(const icalvalue* value);
 void icalvalue_set_date(icalvalue* value, struct icaltimetype v);
 
 
- /* ACTION */ 
-icalvalue* icalvalue_new_action(enum icalproperty_action v); 
-enum icalproperty_action icalvalue_get_action(const icalvalue* value); 
+ /* ACTION */
+icalvalue* icalvalue_new_action(enum icalproperty_action v);
+enum icalproperty_action icalvalue_get_action(const icalvalue* value);
 void icalvalue_set_action(icalvalue* value, enum icalproperty_action v);
 
 #endif /*ICALVALUE_H*/
@@ -1336,12 +1338,12 @@ void icalvalue_set_action(icalvalue* value, enum icalproperty_action v);
   $Id: ical.h,v 1.6 2002-10-10 00:41:34 acampi Exp $
   $Locker:  $
 
-  
+
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -1362,33 +1364,33 @@ void icalvalue_set_action(icalvalue* value, enum icalproperty_action v);
 typedef struct icalparameter_impl icalparameter;
 
 const char* icalparameter_enum_to_string(int e);
-int icalparameter_string_to_enum(const char* str); 
+int icalparameter_string_to_enum(const char* str);
 
 typedef enum icalparameter_kind {
     ICAL_ANY_PARAMETER = 0,
-    ICAL_ALTREP_PARAMETER, 
-    ICAL_CN_PARAMETER, 
-    ICAL_CUTYPE_PARAMETER, 
-    ICAL_DELEGATEDFROM_PARAMETER, 
-    ICAL_DELEGATEDTO_PARAMETER, 
-    ICAL_DIR_PARAMETER, 
-    ICAL_ENCODING_PARAMETER, 
-    ICAL_FBTYPE_PARAMETER, 
-    ICAL_FMTTYPE_PARAMETER, 
-    ICAL_LANGUAGE_PARAMETER, 
-    ICAL_MEMBER_PARAMETER, 
-    ICAL_PARTSTAT_PARAMETER, 
-    ICAL_RANGE_PARAMETER, 
-    ICAL_RELATED_PARAMETER, 
-    ICAL_RELTYPE_PARAMETER, 
-    ICAL_ROLE_PARAMETER, 
-    ICAL_RSVP_PARAMETER, 
-    ICAL_SENTBY_PARAMETER, 
-    ICAL_TZID_PARAMETER, 
-    ICAL_VALUE_PARAMETER, 
-    ICAL_X_PARAMETER, 
-    ICAL_XLICCOMPARETYPE_PARAMETER, 
-    ICAL_XLICERRORTYPE_PARAMETER, 
+    ICAL_ALTREP_PARAMETER,
+    ICAL_CN_PARAMETER,
+    ICAL_CUTYPE_PARAMETER,
+    ICAL_DELEGATEDFROM_PARAMETER,
+    ICAL_DELEGATEDTO_PARAMETER,
+    ICAL_DIR_PARAMETER,
+    ICAL_ENCODING_PARAMETER,
+    ICAL_FBTYPE_PARAMETER,
+    ICAL_FMTTYPE_PARAMETER,
+    ICAL_LANGUAGE_PARAMETER,
+    ICAL_MEMBER_PARAMETER,
+    ICAL_PARTSTAT_PARAMETER,
+    ICAL_RANGE_PARAMETER,
+    ICAL_RELATED_PARAMETER,
+    ICAL_RELTYPE_PARAMETER,
+    ICAL_ROLE_PARAMETER,
+    ICAL_RSVP_PARAMETER,
+    ICAL_SENTBY_PARAMETER,
+    ICAL_TZID_PARAMETER,
+    ICAL_VALUE_PARAMETER,
+    ICAL_X_PARAMETER,
+    ICAL_XLICCOMPARETYPE_PARAMETER,
+    ICAL_XLICERRORTYPE_PARAMETER,
     ICAL_NO_PARAMETER
 } icalparameter_kind;
 
@@ -1649,7 +1651,7 @@ void icalparameter_set_dir(icalparameter* value, const char* v);
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -1667,7 +1669,7 @@ void icalparameter_set_dir(icalparameter* value, const char* v);
 #define ICALVALUE_H
 
 #include <time.h>
-                          
+
 /* Defined in icalderivedvalue.h */
 /*typedef struct icalvalue_impl icalvalue;*/
 
@@ -1701,7 +1703,7 @@ void icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v);
 struct icaltriggertype icalvalue_get_trigger(const icalvalue* value);
 
 icalvalue* icalvalue_new_datetimeperiod (struct icaldatetimeperiodtype v);
-void icalvalue_set_datetimeperiod(icalvalue* value, 
+void icalvalue_set_datetimeperiod(icalvalue* value,
 				  struct icaldatetimeperiodtype v);
 struct icaldatetimeperiodtype icalvalue_get_datetimeperiod(const icalvalue* value);
 
@@ -1726,12 +1728,12 @@ int icalvalue_encode_ical_string(const char *szText, char *szEncText, int MaxBuf
   $Id: ical.h,v 1.6 2002-10-10 00:41:34 acampi Exp $
   $Locker:  $
 
-  
+
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -1784,14 +1786,14 @@ icalparameter_kind icalparameter_string_to_kind(const char* string);
 
 
 
-#endif 
+#endif
 /* -*- Mode: C -*-
   ======================================================================
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
-  
+
   $Id: ical.h,v 1.6 2002-10-10 00:41:34 acampi Exp $
-    
+
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
  ======================================================================*/
 
@@ -1805,80 +1807,80 @@ typedef struct icalproperty_impl icalproperty;
 
 typedef enum icalproperty_kind {
     ICAL_ANY_PROPERTY = 0,
-    ICAL_ACTION_PROPERTY, 
-    ICAL_ALLOWCONFLICT_PROPERTY, 
-    ICAL_ATTACH_PROPERTY, 
-    ICAL_ATTENDEE_PROPERTY, 
-    ICAL_CALID_PROPERTY, 
-    ICAL_CALMASTER_PROPERTY, 
-    ICAL_CALSCALE_PROPERTY, 
-    ICAL_CARID_PROPERTY, 
-    ICAL_CATEGORIES_PROPERTY, 
-    ICAL_CLASS_PROPERTY, 
-    ICAL_COMMENT_PROPERTY, 
-    ICAL_COMPLETED_PROPERTY, 
-    ICAL_CONTACT_PROPERTY, 
-    ICAL_CREATED_PROPERTY, 
-    ICAL_DECREED_PROPERTY, 
-    ICAL_DEFAULTCHARSET_PROPERTY, 
-    ICAL_DEFAULTLOCALE_PROPERTY, 
-    ICAL_DEFAULTTZID_PROPERTY, 
-    ICAL_DESCRIPTION_PROPERTY, 
-    ICAL_DTEND_PROPERTY, 
-    ICAL_DTSTAMP_PROPERTY, 
-    ICAL_DTSTART_PROPERTY, 
-    ICAL_DUE_PROPERTY, 
-    ICAL_DURATION_PROPERTY, 
-    ICAL_EXDATE_PROPERTY, 
-    ICAL_EXPAND_PROPERTY, 
-    ICAL_EXRULE_PROPERTY, 
-    ICAL_FREEBUSY_PROPERTY, 
-    ICAL_GEO_PROPERTY, 
-    ICAL_LASTMODIFIED_PROPERTY, 
-    ICAL_LOCATION_PROPERTY, 
-    ICAL_MAXRESULTS_PROPERTY, 
-    ICAL_MAXRESULTSSIZE_PROPERTY, 
-    ICAL_METHOD_PROPERTY, 
-    ICAL_ORGANIZER_PROPERTY, 
-    ICAL_OWNER_PROPERTY, 
-    ICAL_PERCENTCOMPLETE_PROPERTY, 
-    ICAL_PRIORITY_PROPERTY, 
-    ICAL_PRODID_PROPERTY, 
-    ICAL_QUERY_PROPERTY, 
-    ICAL_QUERYNAME_PROPERTY, 
-    ICAL_RDATE_PROPERTY, 
-    ICAL_RECURRENCEID_PROPERTY, 
-    ICAL_RELATEDTO_PROPERTY, 
-    ICAL_RELCALID_PROPERTY, 
-    ICAL_REPEAT_PROPERTY, 
-    ICAL_REQUESTSTATUS_PROPERTY, 
-    ICAL_RESOURCES_PROPERTY, 
-    ICAL_RRULE_PROPERTY, 
-    ICAL_SCOPE_PROPERTY, 
-    ICAL_SEQUENCE_PROPERTY, 
-    ICAL_STATUS_PROPERTY, 
-    ICAL_SUMMARY_PROPERTY, 
-    ICAL_TARGET_PROPERTY, 
-    ICAL_TRANSP_PROPERTY, 
-    ICAL_TRIGGER_PROPERTY, 
-    ICAL_TZID_PROPERTY, 
-    ICAL_TZNAME_PROPERTY, 
-    ICAL_TZOFFSETFROM_PROPERTY, 
-    ICAL_TZOFFSETTO_PROPERTY, 
-    ICAL_TZURL_PROPERTY, 
-    ICAL_UID_PROPERTY, 
-    ICAL_URL_PROPERTY, 
-    ICAL_VERSION_PROPERTY, 
-    ICAL_X_PROPERTY, 
-    ICAL_XLICCLASS_PROPERTY, 
-    ICAL_XLICCLUSTERCOUNT_PROPERTY, 
-    ICAL_XLICERROR_PROPERTY, 
-    ICAL_XLICMIMECHARSET_PROPERTY, 
-    ICAL_XLICMIMECID_PROPERTY, 
-    ICAL_XLICMIMECONTENTTYPE_PROPERTY, 
-    ICAL_XLICMIMEENCODING_PROPERTY, 
-    ICAL_XLICMIMEFILENAME_PROPERTY, 
-    ICAL_XLICMIMEOPTINFO_PROPERTY, 
+    ICAL_ACTION_PROPERTY,
+    ICAL_ALLOWCONFLICT_PROPERTY,
+    ICAL_ATTACH_PROPERTY,
+    ICAL_ATTENDEE_PROPERTY,
+    ICAL_CALID_PROPERTY,
+    ICAL_CALMASTER_PROPERTY,
+    ICAL_CALSCALE_PROPERTY,
+    ICAL_CARID_PROPERTY,
+    ICAL_CATEGORIES_PROPERTY,
+    ICAL_CLASS_PROPERTY,
+    ICAL_COMMENT_PROPERTY,
+    ICAL_COMPLETED_PROPERTY,
+    ICAL_CONTACT_PROPERTY,
+    ICAL_CREATED_PROPERTY,
+    ICAL_DECREED_PROPERTY,
+    ICAL_DEFAULTCHARSET_PROPERTY,
+    ICAL_DEFAULTLOCALE_PROPERTY,
+    ICAL_DEFAULTTZID_PROPERTY,
+    ICAL_DESCRIPTION_PROPERTY,
+    ICAL_DTEND_PROPERTY,
+    ICAL_DTSTAMP_PROPERTY,
+    ICAL_DTSTART_PROPERTY,
+    ICAL_DUE_PROPERTY,
+    ICAL_DURATION_PROPERTY,
+    ICAL_EXDATE_PROPERTY,
+    ICAL_EXPAND_PROPERTY,
+    ICAL_EXRULE_PROPERTY,
+    ICAL_FREEBUSY_PROPERTY,
+    ICAL_GEO_PROPERTY,
+    ICAL_LASTMODIFIED_PROPERTY,
+    ICAL_LOCATION_PROPERTY,
+    ICAL_MAXRESULTS_PROPERTY,
+    ICAL_MAXRESULTSSIZE_PROPERTY,
+    ICAL_METHOD_PROPERTY,
+    ICAL_ORGANIZER_PROPERTY,
+    ICAL_OWNER_PROPERTY,
+    ICAL_PERCENTCOMPLETE_PROPERTY,
+    ICAL_PRIORITY_PROPERTY,
+    ICAL_PRODID_PROPERTY,
+    ICAL_QUERY_PROPERTY,
+    ICAL_QUERYNAME_PROPERTY,
+    ICAL_RDATE_PROPERTY,
+    ICAL_RECURRENCEID_PROPERTY,
+    ICAL_RELATEDTO_PROPERTY,
+    ICAL_RELCALID_PROPERTY,
+    ICAL_REPEAT_PROPERTY,
+    ICAL_REQUESTSTATUS_PROPERTY,
+    ICAL_RESOURCES_PROPERTY,
+    ICAL_RRULE_PROPERTY,
+    ICAL_SCOPE_PROPERTY,
+    ICAL_SEQUENCE_PROPERTY,
+    ICAL_STATUS_PROPERTY,
+    ICAL_SUMMARY_PROPERTY,
+    ICAL_TARGET_PROPERTY,
+    ICAL_TRANSP_PROPERTY,
+    ICAL_TRIGGER_PROPERTY,
+    ICAL_TZID_PROPERTY,
+    ICAL_TZNAME_PROPERTY,
+    ICAL_TZOFFSETFROM_PROPERTY,
+    ICAL_TZOFFSETTO_PROPERTY,
+    ICAL_TZURL_PROPERTY,
+    ICAL_UID_PROPERTY,
+    ICAL_URL_PROPERTY,
+    ICAL_VERSION_PROPERTY,
+    ICAL_X_PROPERTY,
+    ICAL_XLICCLASS_PROPERTY,
+    ICAL_XLICCLUSTERCOUNT_PROPERTY,
+    ICAL_XLICERROR_PROPERTY,
+    ICAL_XLICMIMECHARSET_PROPERTY,
+    ICAL_XLICMIMECID_PROPERTY,
+    ICAL_XLICMIMECONTENTTYPE_PROPERTY,
+    ICAL_XLICMIMEENCODING_PROPERTY,
+    ICAL_XLICMIMEFILENAME_PROPERTY,
+    ICAL_XLICMIMEOPTINFO_PROPERTY,
     ICAL_NO_PROPERTY
 } icalproperty_kind;
 
@@ -2264,12 +2266,12 @@ const char* icalproperty_get_xlicmimeoptinfo(const icalproperty* prop);icalprope
   $Id: ical.h,v 1.6 2002-10-10 00:41:34 acampi Exp $
   $Locker:  $
 
-  
+
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -2352,7 +2354,7 @@ const char* icalproperty_get_x_name(icalproperty* prop);
 
 /** Return the name of the property -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X
- *  property 
+ *  property
  */
 const char* icalproperty_get_property_name (const icalproperty* prop);
 
@@ -2418,7 +2420,7 @@ typedef struct pvl_elem_t
 
 /**
  * This global is incremented for each call to pvl_new_element(); it gives each
- * list a unique identifer 
+ * list a unique identifer
  */
 
 extern int  pvl_elem_count;
@@ -2472,7 +2474,7 @@ pvl_elem pvl_find_next(pvl_list l,pvl_findf f,void* v);
  * Pass each element in the list to a function
  * a is list elem, b is other data
  */
-typedef void (*pvl_applyf)(void* a, void* b); 
+typedef void (*pvl_applyf)(void* a, void* b);
 void pvl_apply(pvl_list l,pvl_applyf f, void *v);
 
 
@@ -2494,7 +2496,7 @@ void pvl_apply(pvl_list l,pvl_applyf f, void *v);
  (C) COPYRIGHT 2001, Ximian, Inc.
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -2511,10 +2513,10 @@ void pvl_apply(pvl_list l,pvl_applyf f, void *v);
 #ifndef ICALARRAY_H
 #define ICALARRAY_H
 
-/** @file icalarray.h 
+/** @file icalarray.h
  *
  *  @brief An array of arbitrarily-sized elements which grows
- *  dynamically as elements are added. 
+ *  dynamically as elements are added.
  */
 
 typedef struct _icalarray icalarray;
@@ -2554,7 +2556,7 @@ void	   icalarray_sort		(icalarray	*array,
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -2576,8 +2578,8 @@ typedef struct icalcomponent_impl icalcomponent;
 
 #ifndef ICALTIMEONE_DEFINED
 #define ICALTIMEONE_DEFINED
-/** @brief An opaque struct representing a timezone.  
- * We declare this here to avoid a circular dependancy. 
+/** @brief An opaque struct representing a timezone.
+ * We declare this here to avoid a circular dependancy.
  */
 typedef struct _icaltimezone		icaltimezone;
 #endif
@@ -2606,7 +2608,7 @@ icalcomponent_kind icalcomponent_isa(const icalcomponent* component);
 
 int icalcomponent_isa_component (void* component);
 
-/* 
+/*
  * Working with properties
  */
 
@@ -2628,9 +2630,9 @@ icalproperty* icalcomponent_get_next_property(icalcomponent* component,
 					      icalproperty_kind kind);
 
 
-/* 
+/*
  * Working with components
- */ 
+ */
 
 
 /* Return the first VEVENT, VTODO or VJOURNAL sub-component of cop, or
@@ -2698,7 +2700,7 @@ void icalcomponent_convert_errors(icalcomponent* component);
 
 /* Internal operations. They are private, and you should not be using them. */
 icalcomponent* icalcomponent_get_parent(icalcomponent* component);
-void icalcomponent_set_parent(icalcomponent* component, 
+void icalcomponent_set_parent(icalcomponent* component,
 			      icalcomponent* parent);
 
 /* Kind conversion routines */
@@ -2745,7 +2747,7 @@ void icalcomponent_set_dtend(icalcomponent* comp, struct icaltimetype v);
 struct icaltimetype icalcomponent_get_due(icalcomponent* comp);
 void icalcomponent_set_due(icalcomponent* comp, struct icaltimetype v);
 
-void icalcomponent_set_duration(icalcomponent* comp, 
+void icalcomponent_set_duration(icalcomponent* comp,
 				struct icaldurationtype v);
 struct icaldurationtype icalcomponent_get_duration(icalcomponent* comp);
 
@@ -2767,7 +2769,7 @@ const char* icalcomponent_get_uid(icalcomponent* comp);
 void icalcomponent_set_relcalid(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_relcalid(icalcomponent* comp);
 
-void icalcomponent_set_recurrenceid(icalcomponent* comp, 
+void icalcomponent_set_recurrenceid(icalcomponent* comp,
 				    struct icaltimetype v);
 struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent* comp);
 
@@ -2777,7 +2779,7 @@ const char* icalcomponent_get_description(icalcomponent* comp);
 void icalcomponent_set_location(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_location(icalcomponent* comp);
 
-void icalcomponent_set_organizer(icalcomponent* comp, 
+void icalcomponent_set_organizer(icalcomponent* comp,
 				 struct icalorganizertype org);
 struct icalorganizertype icalcomponent_get_organizer(icalcomponent* comp);
 
@@ -2802,13 +2804,13 @@ icaltimezone* icalcomponent_get_timezone(icalcomponent* comp,
 
 int icalproperty_recurrence_is_excluded(icalcomponent *comp,
                                        struct icaltimetype *dtstart,
-                                       struct icaltimetype *recurtime); 
+                                       struct icaltimetype *recurtime);
 
 void icalcomponent_foreach_recurrence(icalcomponent* comp,
 				      struct icaltimetype start,
 				      struct icaltimetype end,
-			void (*callback)(icalcomponent *comp, 
-                                         struct icaltime_span *span, 
+			void (*callback)(icalcomponent *comp,
+                                         struct icaltime_span *span,
                                          void *data),
 			      void *callback_data);
 
@@ -2840,7 +2842,7 @@ icalcomponent* icalcomponent_new_vquery();
  (C) COPYRIGHT 2001, Damon Chaplin
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -2988,14 +2990,14 @@ int	icaltimezone_dump_changes		(icaltimezone	*zone,
 /*======================================================================
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
-  
+
   $Id: ical.h,v 1.6 2002-10-10 00:41:34 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -3021,8 +3023,8 @@ typedef struct icalparser_impl icalparser;
 
 /**
  * @file  icalparser.h
- * @brief Line-oriented parsing. 
- * 
+ * @brief Line-oriented parsing.
+ *
  * Create a new parser via icalparse_new_parser, then add lines one at
  * a time with icalparse_add_line(). icalparser_add_line() will return
  * non-zero when it has finished with a component.
@@ -3068,7 +3070,7 @@ icalcomponent* icalparser_parse_string(const char* str);
  ***********************************************************************/
 
 /** Use the flex/bison parser to turn a string into a value type */
-icalvalue*  icalparser_parse_value(icalvalue_kind kind, 
+icalvalue*  icalparser_parse_value(icalvalue_kind kind,
 				   const char* str, icalcomponent** errors);
 
 /** Given a line generator function, return a single iCal content line.*/
@@ -3087,7 +3089,7 @@ char* icalparser_string_line_generator(char *out, size_t buf_size, void *d);
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -3146,11 +3148,11 @@ void icalmemory_free_buffer(void* buf);
    buffer on the ring, the ring will loose track of it an you will
    have memory problems. */
 
-void icalmemory_append_string(char** buf, char** pos, size_t* buf_size, 
+void icalmemory_append_string(char** buf, char** pos, size_t* buf_size,
 			      const char* string);
 
 /**  icalmemory_append_char is similar, but is appends a character instead of a string */
-void icalmemory_append_char(char** buf, char** pos, size_t* buf_size, 
+void icalmemory_append_char(char** buf, char** pos, size_t* buf_size,
 			      char ch);
 
 /** A wrapper around strdup. Partly to trap calls to strdup, partly
@@ -3165,14 +3167,14 @@ char* icalmemory_strdup(const char *s);
 /*======================================================================
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
-  
+
   $Id: ical.h,v 1.6 2002-10-10 00:41:34 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -3208,11 +3210,11 @@ void icalerror_stop_here(void);
 void icalerror_crash_here(void);
 
 typedef enum icalerrorenum {
-    ICAL_NO_ERROR,     /* icalerrno may not be initialized - put it first so and pray that the compiler initialize things to zero */    
+    ICAL_NO_ERROR,     /* icalerrno may not be initialized - put it first so and pray that the compiler initialize things to zero */
     ICAL_BADARG_ERROR,
     ICAL_NEWFAILED_ERROR,
     ICAL_ALLOCATION_ERROR,
-    ICAL_MALFORMEDDATA_ERROR, 
+    ICAL_MALFORMEDDATA_ERROR,
     ICAL_PARSE_ERROR,
     ICAL_INTERNAL_ERROR, /* Like assert --internal consist. prob */
     ICAL_FILE_ERROR,
@@ -3245,7 +3247,7 @@ void icalerror_clear_errno(void);
 void _icalerror_set_errno(icalerrorenum);
 
 /* Make an individual error fatal or non-fatal. */
-typedef enum icalerrorstate { 
+typedef enum icalerrorstate {
     ICAL_ERROR_FATAL,     /* Not fata */
     ICAL_ERROR_NONFATAL,  /* Fatal */
     ICAL_ERROR_DEFAULT,   /* Use the value of icalerror_errors_are_fatal*/
@@ -3265,9 +3267,9 @@ if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || \
     icalerror_errors_are_fatal == 1 )){ \
    icalerror_warn(icalerror_strerror(x)); \
    assert(0); \
-} 
+}
 #else
-void icalerror_set_errno(icalerrorenum x); 
+void icalerror_set_errno(icalerrorenum x);
 #endif
 
 #ifdef ICAL_ERRORS_ARE_FATAL
@@ -3289,7 +3291,7 @@ void icalerror_set_errno(icalerrorenum x);
 #endif /*__GNUC__*/
 
 #else /* ICAL_ERRORS_ARE_FATAL */
-#define icalerror_assert(test,message) 
+#define icalerror_assert(test,message)
 #endif /* ICAL_ERRORS_ARE_FATAL */
 
 /* Check & abort if check fails */
@@ -3324,14 +3326,14 @@ void icalerror_restore(const char* error, icalerrorstate es);
 /*======================================================================
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
-  
+
   $Id: ical.h,v 1.6 2002-10-10 00:41:34 acampi Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -3366,7 +3368,7 @@ typedef enum icalrestriction_kind {
     ICAL_RESTRICTION_UNKNOWN		/* 8 */
 } icalrestriction_kind;
 
-int 
+int
 icalrestriction_compare(icalrestriction_kind restr, int count);
 
 
@@ -3385,23 +3387,23 @@ int icalrestriction_check(icalcomponent* comp);
   ======================================================================
   FILE: sspm.h Mime Parser
   CREATOR: eric 25 June 2000
-  
+
   $Id: ical.h,v 1.6 2002-10-10 00:41:34 acampi Exp $
   $Locker:  $
-    
+
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in
  compliance with the License. You may obtain a copy of the License at
  http://www.mozilla.org/MPL/
- 
+
  Software distributed under the License is distributed on an "AS IS"
  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
  the License for the specific language governing rights and
  limitations under the License.
- 
+
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -3492,7 +3494,7 @@ struct sspm_action_map {
 	enum sspm_major_type major;
 	enum sspm_minor_type minor;
 	void* (*new_part)();
-	void (*add_line)(void *part, struct sspm_header *header, 
+	void (*add_line)(void *part, struct sspm_header *header,
 			 char* line, size_t size);
 	void* (*end_part)(void* part);
 	void (*free_part)(void *part);
@@ -3502,7 +3504,7 @@ char* sspm_major_type_string(enum sspm_major_type type);
 char* sspm_minor_type_string(enum sspm_minor_type type);
 char* sspm_encoding_string(enum sspm_encoding type);
 
-int sspm_parse_mime(struct sspm_part *parts, 
+int sspm_parse_mime(struct sspm_part *parts,
 		    size_t max_parts,
 		    struct sspm_action_map *actions,
 		    char* (*get_string)(char *s, size_t size, void* data),
@@ -3512,10 +3514,10 @@ int sspm_parse_mime(struct sspm_part *parts,
 
 void sspm_free_parts(struct sspm_part *parts, size_t max_parts);
 
-char *decode_quoted_printable(char *dest, 
+char *decode_quoted_printable(char *dest,
 				       char *src,
 				       size_t *size);
-char *decode_base64(char *dest, 
+char *decode_base64(char *dest,
 			     char *src,
 			     size_t *size);
 
@@ -3536,7 +3538,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -3552,7 +3554,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
 #define ICALMIME_H
 
 
-icalcomponent* icalmime_parse(	char* (*line_gen_func)(char *s, size_t size, 
+icalcomponent* icalmime_parse(	char* (*line_gen_func)(char *s, size_t size,
 						       void *d),
 				void *data);
 
@@ -3569,15 +3571,15 @@ char* icalmime_as_mime_string(char* component);
   ======================================================================
   FILE: icallangbind.h
   CREATOR: eric 25 jan 2001
-  
+
   DESCRIPTION:
-  
+
   $Id: ical.h,v 1.6 2002-10-10 00:41:34 acampi Exp $
   $Locker:  $
 
-  (C) COPYRIGHT 1999 Eric Busboom 
+  (C) COPYRIGHT 1999 Eric Busboom
   http://www.softwarestudio.org
-  
+
   This package is free software and is provided "as is" without
   express or implied warranty.  It may be used, redistributed and/or
   modified under the same terms as perl itself. ( Either the Artistic
@@ -3619,4 +3621,5 @@ int icallangbind_string_to_open_flag(const char* str);
 #endif /*__ICALLANGBIND_H__*/
 #ifdef __cplusplus
 };
+#endif
 #endif

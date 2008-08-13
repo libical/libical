@@ -199,7 +199,9 @@ BUILT_SOURCES =			\
 	icalderivedvalue.c
 
 ical.h: $(COMBINEDHEADERS)
-	echo '#ifdef __cplusplus'         >  ical.h
+	echo '#ifndef LIBICAL_ICAL_H'     >  ical.h
+	echo '#define LIBICAL_ICAL_H'     >> ical.h
+	echo '#ifdef __cplusplus'         >> ical.h
 	echo 'extern "C" {'               >> ical.h
 	echo '#endif'                     >> ical.h
 	echo '/*'                         >> ical.h
@@ -212,6 +214,7 @@ ical.h: $(COMBINEDHEADERS)
 	| egrep -v '\$$(Id|Locker): .+\$$'>> ical.h
 	echo '#ifdef __cplusplus'         >> ical.h
 	echo '};'                         >> ical.h
+	echo '#endif'                     >> ical.h
 	echo '#endif'                     >> ical.h
 
 

@@ -122,7 +122,9 @@ libicalss_cxx_la_SOURCES =	\
 endif
 
 icalss.h: $(COMBINEDHEADERS)
-	echo '#ifdef __cplusplus'         >  icalss.h
+	echo '#ifndef LIBICAL_ICALSS_H'   >  icalss.h
+	echo '#define LIBICAL_ICALSS_H'   >> icalss.h
+	echo '#ifdef __cplusplus'         >> icalss.h
 	echo 'extern "C" {'               >> icalss.h
 	echo '#endif'                     >> icalss.h
 	echo '/*'                         >> icalss.h
@@ -134,6 +136,7 @@ icalss.h: $(COMBINEDHEADERS)
 	| egrep -v '\$$(Id|Locker): .+\$$'>> icalss.h
 	echo '#ifdef __cplusplus'         >> icalss.h
 	echo '};'                         >> icalss.h
+	echo '#endif'                     >> icalss.h
 	echo '#endif'                     >> icalss.h
 
 libicalssinclude_HEADERS = icalss.h  icalcalendar.h icalclassify.h icalcluster.h icaldirset.h icaldirsetimpl.h icalfileset.h icalfilesetimpl.h icalgauge.h icalgaugeimpl.h icalmessage.h icalset.h icalspanlist.h icalssyacc.h $(libicalssinclude_BDBHEADERS)
