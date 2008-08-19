@@ -238,10 +238,11 @@ $type icalproperty_get_${lc}(const icalproperty* prop){
 		icalvalue_get_datetime(icalproperty_get_value(prop));
 	icalparameter* param = icalproperty_get_first_parameter(prop,
 								ICAL_TZID_PARAMETER);
-	const icaltimezone *zone =
-		icaltimezone_get_builtin_timezone(icalparameter_get_tzid(param));
-	if (param)
+	if (param) {
+	        const icaltimezone *zone =
+		        icaltimezone_get_builtin_timezone(icalparameter_get_tzid(param));
 		icaltime_set_timezone(&itt, zone);
+        }
 	return itt;
 }
 EOM
