@@ -31,7 +31,7 @@ ifneq (,$(findstring backtrace,$(DEB_BUILD_OPTIONS)))
 endif
 
 ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0 -ggdb  -D_GNU_SOURCE -MD -MP -Wl,--no-undefined -Wl,--as-needed -Wall -ansi
+	CFLAGS += -O0 -ggdb  -D_GNU_SOURCE -MD -MP -Wl,--as-needed -Wall -ansi
 else
 	CFLAGS += -O2
 endif

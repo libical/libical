@@ -31,14 +31,15 @@ libicalvcal_la_SOURCES =	\
 
 libicalvcalincludedir = $(includedir)/libicalvcal
 
-#libicalvcalinclude_HEADERS =	\
-#	icalvcal.h		\
-#	port.h			\
-#	vcc.h			\
-#	vobject.h		\
-#	vcaltmp.h
+libicalvcalinclude_HEADERS =	\
+	icalvcal.h		\
+	port.h			\
+	vcc.h			\
+	vobject.h		\
+	vcaltmp.h
 
 EXTRA_DIST =		\
 	README.TXT	\
 	vcaltest.c	\
 	vctest.c
+
