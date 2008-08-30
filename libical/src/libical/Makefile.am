@@ -188,8 +188,7 @@ COMBINEDHEADERS =					\
 BUILT_COMBINEDHEADERS = 	\
 	icalderivedparameter.h	\
 	icalderivedproperty.h	\
-	icalderivedvalue.h	\
-	ical.h
+	icalderivedvalue.h
 
 BUILT_SOURCES =			\
 	$(BUILT_COMBINEDHEADERS)\
