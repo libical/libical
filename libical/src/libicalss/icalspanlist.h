@@ -25,8 +25,8 @@
 #ifndef ICALSPANLIST_H
 #define ICALSPANLIST_H
 
-#include <ical.h>
-#include <icalset.h>
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
 
 /** @file icalspanlist.h
  *  @brief Code that supports collections of free/busy spans of time

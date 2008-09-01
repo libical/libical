@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 /*
- $Id$
+ $Id: icalss.h,v 1.28 2008-01-15 23:17:43 dothebart Exp $
 */
 /* -*- Mode: C -*- */
 /*======================================================================
@@ -35,7 +35,7 @@ extern "C" {
 #ifndef ICALGAUGE_H
 #define ICALGAUGE_H
 
-#include <icalcomponent.h>
+#include <libical/icalcomponent.h>
 
 /** @file icalgauge.h
  *  @brief Routines implementing a filter for ical components
@@ -107,8 +107,8 @@ icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
 #define ICALSET_H
 
 #include <limits.h> /* For PATH_MAX */
-#include <ical.h>
-#include <icalgauge.h>
+#include <libical/ical.h>
+#include <libicalss/icalgauge.h>
 
 #ifdef PATH_MAX
 #define ICAL_PATH_MAX PATH_MAX
@@ -278,8 +278,8 @@ icalcomponent* icalsetiter_to_prior(icalset* set, icalsetiter* i);
 #ifndef ICALCLUSTER_H
 #define ICALCLUSTER_H
 
-#include <ical.h>
-#include <icalset.h>
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
 
 typedef struct icalcluster_impl icalcluster;
 
@@ -337,10 +337,10 @@ icalcomponent* icalcluster_get_next_component(icalcluster* cluster);
 #ifndef ICALFILESET_H
 #define ICALFILESET_H
 
-#include <ical.h>
-#include <icalset.h>
-#include <icalcluster.h>
-#include <icalgauge.h>
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
+#include <libicalss/icalcluster.h>
+#include <libicalss/icalgauge.h>
 #include <sys/types.h> /* For open() flags and mode */
 #include <sys/stat.h> /* For open() flags and mode */
 #include <fcntl.h> /* For open() flags and mode */
@@ -469,10 +469,10 @@ extern icalfileset_options icalfileset_options_default;
 #ifndef ICALDIRSET_H
 #define ICALDIRSET_H
 
-#include <ical.h>
-#include <icalset.h>
-#include <icalcluster.h>
-#include <icalgauge.h>
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
+#include <libicalss/icalcluster.h>
+#include <libicalss/icalgauge.h>
 
 /* icaldirset Routines for storing, fetching, and searching for ical
  * objects in a database */
@@ -565,8 +565,8 @@ typedef struct icaldirset_options {
 #ifndef ICALCALENDAR_H
 #define ICALCALENDAR_H
 
-#include <ical.h>
-#include <icalset.h>
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
 
 /* icalcalendar
  * Routines for storing calendar data in a file system. The calendar
@@ -628,9 +628,8 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
 #ifndef ICALCLASSIFY_H
 #define ICALCLASSIFY_H
 
-#include <ical.h>
-#include <icalset.h>
-#include <icalcomponent.h>
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
 
 icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match,
 			      const char* user);
@@ -671,8 +670,8 @@ char* icalclassify_class_to_string(icalproperty_xlicclass c);
 #ifndef ICALSPANLIST_H
 #define ICALSPANLIST_H
 
-#include <ical.h>
-#include <icalset.h>
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
 
 /** @file icalspanlist.h
  *  @brief Code that supports collections of free/busy spans of time
@@ -744,7 +743,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent* c);
 
  =========================================================================*/
 
-#include <ical.h>
+#include <libical/ical.h>
 
 #ifndef ICALMESSAGE_H
 #define ICALMESSAGE_H

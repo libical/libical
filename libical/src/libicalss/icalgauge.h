@@ -29,7 +29,7 @@
 #ifndef ICALGAUGE_H
 #define ICALGAUGE_H
 
-#include <icalcomponent.h>
+#include <libical/icalcomponent.h>
 
 /** @file icalgauge.h
  *  @brief Routines implementing a filter for ical components

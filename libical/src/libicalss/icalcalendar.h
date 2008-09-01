@@ -29,8 +29,8 @@
 #ifndef ICALCALENDAR_H
 #define ICALCALENDAR_H
 
-#include <ical.h>
-#include <icalset.h>
+#include <libical/ical.h>
+#include <libicalss/icalset.h>
 
 /* icalcalendar
  * Routines for storing calendar data in a file system. The calendar 
