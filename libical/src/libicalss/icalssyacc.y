@@ -41,18 +41,18 @@ extern struct icalgauge_impl *icalss_yy_gauge;
 #define YY_EXTRA_TYPE  icalgauge_impl*
 
 
+void sserror(char *s); 
+
 static void ssyacc_add_where(struct icalgauge_impl* impl, char* prop, 
 			icalgaugecompare compare , char* value);
 static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
 static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
 static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
-void sserror(char *s); 
-/* Don't know why I need this.... */
 
-/*
- * TODO: older flex version produce whats here configured as OpenBSD
- * autoconf should figure out, and which flex version we should be newer than?
- */
+/* Don't know why I need this....  */
+ 
+/* TODO: older flex version produce whats here configured as OpenBSD */
+/* autoconf should figure out, and which flex version we should be newer than? */
 #ifndef __OpenBSD__
 int sslex(void *YYPARSE_PARAM);
 #else
