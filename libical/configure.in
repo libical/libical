@@ -348,5 +348,6 @@ src/test/Makefile
 src/python/Makefile
 test-data/Makefile
 zoneinfo/Makefile
+libical.pc
 ])
 
