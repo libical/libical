@@ -29,10 +29,10 @@
 #ifndef ICALDIRSET_H
 #define ICALDIRSET_H
 
-#include <libical/ical.h>
-#include <libicalss/icalset.h>
-#include <libicalss/icalcluster.h>
-#include <libicalss/icalgauge.h>
+#include <ical.h>
+#include <icalset.h>
+#include <icalcluster.h>
+#include <icalgauge.h>
 
 /* icaldirset Routines for storing, fetching, and searching for ical
  * objects in a database */
