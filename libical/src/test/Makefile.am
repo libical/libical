@@ -28,7 +28,7 @@ else
 STOW = stow
 endif
 
-noinst_PROGRAMS = copycluster regression parser $(STOW) recur testmime testvcal process
+noinst_PROGRAMS = copycluster regression parser $(STOW) recur testmime testvcal process timezones
 
 LDADD =  ../libicalss/libicalss.la ../libicalvcal/libicalvcal.la $(cxx_libs) ../libical/libical.la $(bdb4_libs)
 
@@ -54,8 +54,11 @@ regression_SOURCES = 		\
 	regression-storage.c
 
 
-TESTS=regression
+TESTS=regression timezones
 copycluster_SOURCES = copycluster.c
+
+timezones_SOURCES = \
+	timezones.c
 
 parser_SOURCES = icaltestparser.c
 stow_SOURCES = stow.c

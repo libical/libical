@@ -206,6 +206,21 @@ icaltzutil_get_zone_directory (void)
 	return zdir;
 }
 
+/* Calculate the relative position of the week in a month from a date */
+static int
+calculate_pos (icaltimetype icaltime)
+{
+	int pos;
+
+	pos = (icaltime.day -1) / 7;
+
+	/* Check if pos 3 is the last occurence of the week day in the month */	
+	if (pos == 3 && ((icaltime.day + 7) > icaltime_days_in_month (icaltime.month, icaltime.year))) 
+		pos = 4;
+
+	return r_pos [pos];
+}
+
 icalcomponent*
 icaltzutil_fetch_timezone (const char *location)
 {
@@ -358,7 +373,7 @@ icaltzutil_fetch_timezone (const char *location)
 			icalrecurrencetype_clear (&ical_recur);
 			ical_recur.freq = ICAL_YEARLY_RECURRENCE;
 			ical_recur.by_month [0] = icaltime.month;
-			pos = r_pos [icaltime.day/7];
+			pos = calculate_pos (icaltime);
 			pos < 0 ? (sign = -1): (sign = 1);
 			ical_recur.by_day [0] = sign * ((abs (pos) * 8) + icaltime_day_of_week (icaltime));
 			icalprop = icalproperty_new_rrule (ical_recur);
@@ -396,7 +411,7 @@ icaltzutil_fetch_timezone (const char *location)
 		icalrecurrencetype_clear (&ical_recur);
 		ical_recur.freq = ICAL_YEARLY_RECURRENCE;
 		ical_recur.by_month [0] = icaltime.month;
-		pos = r_pos [icaltime.day/7];
+		pos = calculate_pos (icaltime);
 		pos < 0 ? (sign = -1): (sign = 1);
 		ical_recur.by_day [0] = sign * ((abs (pos) * 8) + icaltime_day_of_week (icaltime));
 		icalprop = icalproperty_new_rrule (ical_recur);
