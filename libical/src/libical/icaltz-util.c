@@ -350,7 +350,7 @@ icaltzutil_fetch_timezone (const char *location)
 	icalcomponent_add_property (tz_comp, icalprop);
 	
 	if (stdidx != -1) {
-		if (stdidx != 0)
+		if (num_trans != 0)
 			zidx = trans_idx [stdidx];
 		else 
 			zidx = 0;
