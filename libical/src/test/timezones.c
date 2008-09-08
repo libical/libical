@@ -20,6 +20,7 @@
 #include <libical/ical.h>
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char **argv)
 {
@@ -34,7 +35,7 @@ int main(int argc, char **argv)
     /* for all known time zones... */
     for (i = 0; i < timezones->num_elements; i++) {
         icaltimezone *zone = icalarray_element_at(timezones, i);
-        char *zone_location = icaltimezone_get_location(zone);
+        const char *zone_location = icaltimezone_get_location(zone);
         int day;
         time_t start_time;
         struct tm start_tm;
@@ -48,7 +49,7 @@ int main(int argc, char **argv)
          * select this location for glibc: needs support for TZ=<location>
          * which is not POSIX
          */
-        setenv("TZ", zone_location);
+        setenv("TZ", zone_location, 1);
         tzset();
 
         /*
