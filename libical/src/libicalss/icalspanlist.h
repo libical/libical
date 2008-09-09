@@ -25,7 +25,7 @@
 #ifndef ICALSPANLIST_H
 #define ICALSPANLIST_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 
 /** @file icalspanlist.h

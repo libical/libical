@@ -879,7 +879,6 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
 int
 icaltime_compare_date_only(const struct icaltimetype a_in, const struct icaltimetype b_in)
 {
-    int retval;
     struct icaltimetype a, b;
     icaltimezone *tz = icaltimezone_get_utc_timezone();
 
@@ -911,7 +910,6 @@ icaltime_compare_date_only(const struct icaltimetype a_in, const struct icaltime
 int
 icaltime_compare_date_only_tz(const struct icaltimetype a_in, const struct icaltimetype b_in, icaltimezone *tz)
 {
-    int retval;
     struct icaltimetype a, b;
 
     a = icaltime_convert_to_zone(a_in, tz);

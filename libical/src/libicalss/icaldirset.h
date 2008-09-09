@@ -29,7 +29,7 @@
 #ifndef ICALDIRSET_H
 #define ICALDIRSET_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 #include <icalcluster.h>
 #include <icalgauge.h>

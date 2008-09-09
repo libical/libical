@@ -16,7 +16,7 @@ extern "C" {
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either:
+ it under the terms of either: 
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -58,11 +58,11 @@ void icalgauge_dump(icalgauge* gauge);
  *
  * The component must be in
  * cannonical form -- a VCALENDAR with one VEVENT, VTODO or VJOURNAL
- * sub component
+ * sub component 
  */
 int icalgauge_compare(icalgauge* g, icalcomponent* comp);
 
-/** Clone the component, but only return the properties
+/** Clone the component, but only return the properties 
  *  specified in the gauge */
 icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
 
@@ -74,12 +74,12 @@ icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
 
  Icalset is the "base class" for representations of a collection of
  iCal components. Derived classes (actually delegatees) include:
-
+ 
     icalfileset   Store components in a single file
     icaldirset    Store components in multiple files in a directory
     icalbdbset    Store components in a Berkeley DB File
     icalheapset   Store components on the heap
-    icalmysqlset  Store components in a mysql database.
+    icalmysqlset  Store components in a mysql database. 
 **/
 
 /*
@@ -87,7 +87,7 @@ icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either:
+ it under the terms of either: 
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -107,7 +107,7 @@ icalcomponent* icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
 #define ICALSET_H
 
 #include <limits.h> /* For PATH_MAX */
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalgauge.h>
 
 #ifdef PATH_MAX
@@ -142,7 +142,7 @@ struct icalset_impl {
 	void (*free)(icalset* set);
 	const char* (*path)(icalset* set);
 	void (*mark)(icalset* set);
-	icalerrorenum (*commit)(icalset* set);
+	icalerrorenum (*commit)(icalset* set); 
 	icalerrorenum (*add_component)(icalset* set, icalcomponent* comp);
 	icalerrorenum (*remove_component)(icalset* set, icalcomponent* comp);
 	int (*count_components)(icalset* set,
@@ -154,7 +154,7 @@ struct icalset_impl {
 	int (*has_uid)(icalset* set, const char* uid);
 	icalerrorenum (*modify)(icalset* set, icalcomponent *old,
 				     icalcomponent *newc);
-	icalcomponent* (*get_current_component)(icalset* set);
+	icalcomponent* (*get_current_component)(icalset* set);	
 	icalcomponent* (*get_first_component)(icalset* set);
 	icalcomponent* (*get_next_component)(icalset* set);
 	icalsetiter (*icalset_begin_component)(icalset* set,
@@ -168,13 +168,13 @@ int icalset_register_class(icalset *set);
 
 
 /** @brief Generic icalset constructor
- *
+ *  
  *  @param kind     The type of icalset to create
  *  @param dsn      Data Source Name - usually a pathname or DB handle
  *  @param options  Any implementation specific options
  *
  *  @return         A valid icalset reference or NULL if error.
- *
+ * 
  *  This creates any of the icalset types available.
  */
 
@@ -197,7 +197,7 @@ const char* icalset_path(icalset* set);
 void icalset_mark(icalset* set);
 
 /** Write changes to disk immediately */
-icalerrorenum icalset_commit(icalset* set);
+icalerrorenum icalset_commit(icalset* set); 
 
 icalerrorenum icalset_add_component(icalset* set, icalcomponent* comp);
 icalerrorenum icalset_remove_component(icalset* set, icalcomponent* comp);
@@ -259,7 +259,7 @@ icalcomponent* icalsetiter_to_prior(icalset* set, icalsetiter* i);
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either:
+ it under the terms of either: 
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -278,7 +278,7 @@ icalcomponent* icalsetiter_to_prior(icalset* set, icalsetiter* i);
 #ifndef ICALCLUSTER_H
 #define ICALCLUSTER_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 
 typedef struct icalcluster_impl icalcluster;
@@ -318,7 +318,7 @@ icalcomponent* icalcluster_get_next_component(icalcluster* cluster);
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either:
+ it under the terms of either: 
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -337,7 +337,7 @@ icalcomponent* icalcluster_get_next_component(icalcluster* cluster);
 #ifndef ICALFILESET_H
 #define ICALFILESET_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 #include <icalcluster.h>
 #include <icalgauge.h>
@@ -370,7 +370,7 @@ const char* icalfileset_path(icalset* cluster);
 /* Mark the cluster as changed, so it will be written to disk when it
    is freed. Commit writes to disk immediately. */
 void icalfileset_mark(icalset* set);
-icalerrorenum icalfileset_commit(icalset* set);
+icalerrorenum icalfileset_commit(icalset* set); 
 
 icalerrorenum icalfileset_add_component(icalset* set,
 					icalcomponent* child);
@@ -383,7 +383,7 @@ int icalfileset_count_components(icalset* set,
 
 /**
  * Restrict the component returned by icalfileset_first, _next to those
- * that pass the gauge. _clear removes the gauge
+ * that pass the gauge. _clear removes the gauge 
  */
 icalerrorenum icalfileset_select(icalset* set, icalgauge* gauge);
 
@@ -398,9 +398,9 @@ icalcomponent* icalfileset_fetch_match(icalset* set, icalcomponent *c);
 
 /**
  *  Modify components according to the MODIFY method of CAP. Works on the
- *  currently selected components.
+ *  currently selected components. 
  */
-icalerrorenum icalfileset_modify(icalset* set,
+icalerrorenum icalfileset_modify(icalset* set, 
 				 icalcomponent *oldcomp,
 			       icalcomponent *newcomp);
 
@@ -421,7 +421,7 @@ icalcomponent* icalfileset_form_a_matched_recurrence_component(icalsetiter* itr)
 
 icalcomponent* icalfileset_get_component(icalset* cluster);
 
-/**
+/** 
  * @brief options for opening an icalfileset.
  *
  * These options should be passed to the icalset_new() function
@@ -450,7 +450,7 @@ extern icalfileset_options icalfileset_options_default;
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either:
+ it under the terms of either: 
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -469,7 +469,7 @@ extern icalfileset_options icalfileset_options_default;
 #ifndef ICALDIRSET_H
 #define ICALDIRSET_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 #include <icalcluster.h>
 #include <icalgauge.h>
@@ -546,7 +546,7 @@ typedef struct icaldirset_options {
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either:
+ it under the terms of either: 
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -565,11 +565,11 @@ typedef struct icaldirset_options {
 #ifndef ICALCALENDAR_H
 #define ICALCALENDAR_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 
 /* icalcalendar
- * Routines for storing calendar data in a file system. The calendar
+ * Routines for storing calendar data in a file system. The calendar 
  * has two icaldirsets, one for incoming components and one for booked
  * components. It also has interfaces to access the free/busy list
  * and a list of calendar properties */
@@ -612,7 +612,7 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either:
+ it under the terms of either: 
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -628,11 +628,11 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
 #ifndef ICALCLASSIFY_H
 #define ICALCLASSIFY_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 #include <icalcomponent.h>
 
-icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match,
+icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match, 
 			      const char* user);
 
 icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp);
@@ -643,7 +643,7 @@ char* icalclassify_class_to_string(icalproperty_xlicclass c);
 #endif /* ICALCLASSIFY_H*/
 
 
-
+				    
 
 
 /* -*- Mode: C -*- */
@@ -656,7 +656,7 @@ char* icalclassify_class_to_string(icalproperty_xlicclass c);
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either:
+ it under the terms of either: 
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -671,7 +671,7 @@ char* icalclassify_class_to_string(icalproperty_xlicclass c);
 #ifndef ICALSPANLIST_H
 #define ICALSPANLIST_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 
 /** @file icalspanlist.h
@@ -682,10 +682,10 @@ typedef struct icalspanlist_impl icalspanlist;
 
 
 /** @brief Constructor
- * Make a free list from a set of component. Start and end should be in UTC
+ * Make a free list from a set of component. Start and end should be in UTC 
  */
 
-icalspanlist* icalspanlist_new(icalset *set,
+icalspanlist* icalspanlist_new(icalset *set, 
 				struct icaltimetype start,
 				struct icaltimetype end);
 
@@ -718,7 +718,7 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist* span, int delta_t);
 icalspanlist *icalspanlist_from_vfreebusy(icalcomponent* c);
 
 #endif
-
+				    
 
 
 /* -*- Mode: C -*- */
@@ -731,7 +731,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent* c);
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either:
+ it under the terms of either: 
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -744,13 +744,13 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent* c);
 
  =========================================================================*/
 
-#include <ical.h>
+#include <libical/ical.h>
 
 #ifndef ICALMESSAGE_H
 #define ICALMESSAGE_H
 
 
-icalcomponent* icalmessage_new_accept_reply(icalcomponent* c,
+icalcomponent* icalmessage_new_accept_reply(icalcomponent* c, 
 					    const char* user,
 					    const char* msg);
 
@@ -791,6 +791,6 @@ icalcomponent* icalmessage_new_error_reply(icalcomponent* c,
 
 #endif /* ICALMESSAGE_H*/
 #ifdef __cplusplus
-};
+}
 #endif
 #endif

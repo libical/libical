@@ -27,7 +27,7 @@
 #ifndef ICALCLASSIFY_H
 #define ICALCLASSIFY_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 #include <icalcomponent.h>
 

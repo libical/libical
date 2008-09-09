@@ -29,7 +29,7 @@
 #ifndef ICALCALENDAR_H
 #define ICALCALENDAR_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 
 /* icalcalendar

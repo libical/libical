@@ -108,7 +108,7 @@ struct icalparser_impl
 /*
  * New version of strstrip() that does not move the pointer.
  */
-strstriplt(char *buf)
+void strstriplt(char *buf)
 {
 	size_t len;
 	int a;

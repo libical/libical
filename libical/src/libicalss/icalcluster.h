@@ -29,7 +29,7 @@
 #ifndef ICALCLUSTER_H
 #define ICALCLUSTER_H
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <icalset.h>
 
 typedef struct icalcluster_impl icalcluster;
