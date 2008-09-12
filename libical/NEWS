@@ -1,3 +1,14 @@
+Version 0.33, 2008-Sep-11
+-------------------------
+Now merging back together with the KDE-PIM fork of libical.  Thanks Allen!
+
+Please note that the correct include path for the header is now:
+#include <libical/ical.h>
+
+You can still use <ical.h> for now, but it is deprecated and you will
+receive a compiler warning.
+
+
 Version 0.30, 2008-Jan-??
 -------------------------
 Massive merges from Evolution Data Server and other sources.

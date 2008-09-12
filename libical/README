@@ -6,16 +6,15 @@ dozens of contributors.  It is currently maintained by Art Cancro
 and Wilfried Goesgens.
 
 The code and datafiles in this distribution are licensed under the
-Mozilla Public License. See http://www.mozilla.org/NPL/MPL-1.0.html
-for a copy of the license. Alternately, you may use libical under the
-terms of the GNU Library General Public License. See
+Mozilla Public License.  See http://www.mozilla.org/NPL/MPL-1.0.html
+for a copy of the license.  Alternately, you may use libical under the
+terms of the GNU Library General Public License.  See
 http://www.fsf.org/copyleft/lesser.html for a copy of the LGPL.
 
 This dual license ensures that the library can be incorporated into
 both proprietary code and GPL'd programs, and will benefit from
-improvements made by programmers in both realms. I will only accept
-changes into my version of the library if they are similarly
-dual-licensed.
+improvements made by programmers in both realms.  We will only accept
+changes into the library if they are similarly dual-licensed.
 
 Portions of this distribution are (C) Copyright 1996 Apple Computer,
 Inc., AT&T Corp., International Business Machines Corporation and
@@ -23,7 +22,7 @@ Siemens Rolm Communications Inc. See src/libicalvcal/README.TXT for
 details.
 
 Portions of this distribution are Copyright (c) 1997 Theo de
-Raadt. See the header for src/libical/vsnprintf.c for the full
+Raadt.  See the header for src/libical/vsnprintf.c for the full
 copyright statement.
 
 If you would like to contribute to this project, please visit the
@@ -58,7 +57,7 @@ libraries use:
 	./configure --enable-shared
 
 
-IF YOU ARE BUILDING FROM CVS, there will be no configure file until
+IF YOU ARE BUILDING FROM SVN, there will be no configure file until
 you create one with the "bootstrap" script.
 
 The current version of libical focuses on creating and
@@ -71,7 +70,7 @@ Notes for Libical Developers
 ----------------------------
 
 If you don't want to use gcc as the compiler, and you got the sources
-from CVS, you should set the CC variable to the path to the compiler
+from SVN, you should set the CC variable to the path to the compiler
 and run "automake --include-deps" to keep automake from using
 gcc-specific automatic dependancy tracking.
 
@@ -80,7 +79,7 @@ gcc-specific automatic dependancy tracking.
         > ./configure --prefix=/proj/local/
         > make
 
-You will not need to re-run automake unless you got the sources from CVS. 
+You will not need to re-run automake unless you got the sources from SVN. 
 
 Using the Library
 -----------------
