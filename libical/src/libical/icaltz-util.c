@@ -163,18 +163,15 @@ find_transidx (time_t *transitions, ttinfo *types, int *trans_idx, long int num_
 	idx = trans_idx [i];
 	types [idx].isdst ? (*dstidx = i) : (*stdidx = i);
 	
-	if (i >= num_trans - 1) 
-		i--;
-	else 
+	if (i < num_trans - 1) 
 		i++;
+	else 
+		return;
 
 	idx = trans_idx [i];
 	types [idx].isdst ? (*dstidx = i) : (*stdidx = i);
 
-	if (*dstidx != -1 && *stdidx != -1)
-		return;
-	else 
-		icalerror_set_errno (ICAL_MALFORMEDDATA_ERROR);
+	return;
 }
 
 

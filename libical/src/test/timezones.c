@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 
             /* only print first failed day and first day which is okay again */
             if (verbose || curr_failed != failed) {
-                printf("%s: day %03d: %s: libc %04d-%02d-%02d %02d:%02d:%02d",
+                printf("%s: day %03d: %s: libc %04d-%02d-%02d %02d:%02d:%02d dst %d",
                        zone_location,
                        day,
                        verbose ?
@@ -97,15 +97,17 @@ int main(int argc, char **argv)
                        curr_tm.tm_mday,
                        curr_tm.tm_hour,
                        curr_tm.tm_min,
-                       curr_tm.tm_sec);
+                       curr_tm.tm_sec,
+		       curr_tm.tm_isdst);
                 if (curr_failed) {
-                    printf(" != libical %04d-%02d-%02d %02d:%02d:%02d",
+                    printf(" != libical %04d-%02d-%02d %02d:%02d:%02d dst %d",
                            curr_tt.year,
                            curr_tt.month,
                            curr_tt.day,
                            curr_tt.hour,
                            curr_tt.minute,
-                           curr_tt.second);
+                           curr_tt.second,
+			   curr_tt.is_daylight);
                     ret = 1;
                 }
                 printf("\n");
