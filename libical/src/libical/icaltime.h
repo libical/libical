@@ -181,9 +181,9 @@ time_t icaltime_as_timet(const struct icaltimetype);
 time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
 	const icaltimezone *zone);
 
-/** Return a string represention of the time, in RFC2445 format. The
-   string is owned by libical */
+/** Return a string represention of the time, in RFC2445 format. */
 const char* icaltime_as_ical_string(const struct icaltimetype tt);
+char* icaltime_as_ical_string_r(const struct icaltimetype tt);
 
 /** @brief Return the timezone */
 const icaltimezone *icaltime_get_timezone(const struct icaltimetype t);

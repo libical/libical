@@ -442,11 +442,20 @@ to prevent any crashes */
     return t;
 }
 
+const char* icaltime_as_ical_string(const struct icaltimetype tt)
+{
+	char *buf;
+	buf = icaltime_as_ical_string_r(tt);
+	icalmemory_add_tmp_buffer(buf);
+	return buf;
+}
+
+
 /**
  * Return a string represention of the time, in RFC2445 format. The
  * string is owned by libical
  */
-const char* icaltime_as_ical_string(const struct icaltimetype tt)
+char* icaltime_as_ical_string_r(const struct icaltimetype tt)
 {
     size_t size = 17;
     char* buf = icalmemory_new_buffer(size);
@@ -464,11 +473,9 @@ const char* icaltime_as_ical_string(const struct icaltimetype tt)
 		 tt.hour,tt.minute,tt.second);
     }
     
-    icalmemory_add_tmp_buffer(buf);
-
     return buf;
-
 }
+
 
 /**
  *	Reset all of the time components to be in their normal ranges. For

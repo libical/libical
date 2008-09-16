@@ -52,6 +52,7 @@ void icalvalue_free(icalvalue* value);
 int icalvalue_is_valid(const icalvalue* value);
 
 const char* icalvalue_as_ical_string(const icalvalue* value);
+char* icalvalue_as_ical_string_r(const icalvalue* value);
 
 icalvalue_kind icalvalue_isa(const icalvalue* value);
 

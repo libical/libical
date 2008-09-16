@@ -515,6 +515,15 @@ void print_datetime_to_string(char* str,  struct icaltimetype *data);
 
 char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 {
+	char *buf;
+	buf = icalrecurrencetype_as_string_r(recur);
+	icalmemory_add_tmp_buffer(buf);
+	return buf;
+}
+
+
+char* icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
+{
     char* str;
     char *str_p;
     size_t buf_sz = 200;
@@ -525,7 +534,7 @@ char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 	return 0;
     }
 
-    str = (char*)icalmemory_tmp_buffer(buf_sz);
+    str = (char*)icalmemory_new_buffer(buf_sz);
     str_p = str;
 
     icalmemory_append_string(&str,&str_p,&buf_sz,"FREQ=");

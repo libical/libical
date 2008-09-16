@@ -51,6 +51,7 @@ icalproperty* icalproperty_new_clone(icalproperty * prop);
 icalproperty* icalproperty_new_from_string(const char* str);
 
 const char* icalproperty_as_ical_string(icalproperty* prop);
+char* icalproperty_as_ical_string_r(icalproperty* prop);
 
 void  icalproperty_free(icalproperty* prop);
 
@@ -63,6 +64,8 @@ void icalproperty_set_parameter(icalproperty* prop,icalparameter* parameter);
 void icalproperty_set_parameter_from_string(icalproperty* prop,
                                             const char* name, const char* value);
 const char* icalproperty_get_parameter_as_string(icalproperty* prop,
+                                                 const char* name);
+char* icalproperty_get_parameter_as_string_r(icalproperty* prop,
                                                  const char* name);
 
 void icalproperty_remove_parameter(icalproperty* prop,
@@ -92,6 +95,7 @@ void icalproperty_set_value_from_string(icalproperty* prop,const char* value, co
 
 icalvalue* icalproperty_get_value(const icalproperty* prop);
 const char* icalproperty_get_value_as_string(const icalproperty* prop);
+char* icalproperty_get_value_as_string_r(const icalproperty* prop);
 
 /* Deal with X properties */
 
@@ -103,6 +107,7 @@ const char* icalproperty_get_x_name(icalproperty* prop);
  *  property 
  */
 const char* icalproperty_get_property_name (const icalproperty* prop);
+char* icalproperty_get_property_name_r(const icalproperty* prop);
 
 icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
 
@@ -121,6 +126,7 @@ const char* icalproperty_method_to_string(icalproperty_method method);
 
 
 const char* icalproperty_enum_to_string(int e);
+const char* icalproperty_enum_to_string_r(int e);
 int icalproperty_string_to_enum(const char* str);
 int icalproperty_kind_and_string_to_enum(const int kind, const char* str);
 

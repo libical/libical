@@ -224,10 +224,7 @@ static char* make_segment(char* start, char* end)
     char *buf, *tmp;
     size_t size = (size_t)end - (size_t)start;
     
-    /*buf = icalmemory_tmp_buffer(size+1);*/
-    
     buf = icalmemory_new_buffer(size+1);
-
     strncpy(buf,start,size);
     *(buf+size) = 0;
 
@@ -883,9 +880,9 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	str = parser_get_next_parameter(end,&end);
 	strstriplt(str);
 	if (str != 0){
-	    char* name;
-	    char* pvalue;
-		char *buf_value = NULL;
+	    char* name = 0;
+	    char* pvalue = 0;
+	    char *buf_value = NULL;
         
 	    icalparameter *param = 0;
 	    icalparameter_kind kind;
@@ -933,7 +930,24 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 			     ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
 		tail = 0;
 		parser->state = ICALPARSER_ERROR;
+		/* if (pvalue) {
+			free(pvalue);
+			pvalue = 0;
+		} */
+		if (name) {
+			free(name);
+			name = 0;
+		}
 		return 0;
+	    }
+
+	    /* if (pvalue) {
+		free(pvalue);
+		pvalue = 0;
+	    } */
+	    if (name) {
+		free(name);
+		name = 0;
 	    }
 
 	    if (param == 0){

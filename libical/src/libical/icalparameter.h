@@ -47,6 +47,7 @@ icalparameter* icalparameter_new_from_value_string(icalparameter_kind kind, cons
 void icalparameter_free(icalparameter* parameter);
 
 char* icalparameter_as_ical_string(icalparameter* parameter);
+char* icalparameter_as_ical_string_r(icalparameter* parameter);
 
 int icalparameter_is_valid(icalparameter* parameter);
 

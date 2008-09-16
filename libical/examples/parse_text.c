@@ -54,7 +54,9 @@ void parse_text(int argc, char* argv[])
 
 
 	if (c != 0){
-	    printf("%s",icalcomponent_as_ical_string(c));
+	    char *temp = icalcomponent_as_ical_string_r(c);
+	    printf("%s", temp);
+	    free(temp);
 
 	    printf("\n---------------\n");
 

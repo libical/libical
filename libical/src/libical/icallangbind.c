@@ -156,8 +156,7 @@ icalcomponent* icallangbind_get_next_component(icalcomponent *c,
 
 #define APPENDC(x) icalmemory_append_char(&buf, &buf_ptr, &buf_size, x);
 
-
-const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
+char* icallangbind_property_eval_string_r(icalproperty* prop, char* sep)
 {
     char tmp[25];
     size_t buf_size = 1024;
@@ -209,7 +208,7 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
 
         default: 
         {
-            const char* str = icalvalue_as_ical_string(value);
+            char* str = icalvalue_as_ical_string_r(value);
             char* copy = (char*) malloc(strlen(str)+1);
             
             const char *i;
@@ -237,6 +236,7 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
             APPENDC('\'');
             
             free(copy);
+	    free(str);
             break;
 
         }
@@ -249,8 +249,7 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
         param != 0;
         param = icalproperty_get_next_parameter(prop,ICAL_ANY_PARAMETER)){
         
-        const char* str = icalparameter_as_ical_string(param);
-        char *copy = icalmemory_tmp_copy(str);
+        char *copy = icalparameter_as_ical_string_r(param);
         char *v;
 
         if(copy == 0){
@@ -262,6 +261,7 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
 
 
         if(v == 0){
+            free(copy);
             continue;
         }
 
@@ -277,16 +277,24 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
         APPENDC('\'');
         APPENDS(v);        
         APPENDC('\'');
-        
+	free(copy);
     }
 
 
     APPENDC('}');
 
-    icalmemory_add_tmp_buffer(buf);
     return buf;
 
 }
+
+const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
+{
+	char *buf;
+	buf = icallangbind_property_eval_string_r(prop, sep);
+	icalmemory_add_tmp_buffer(buf);
+	return buf;
+}
+
 
 #include "fcntl.h"
 int icallangbind_string_to_open_flag(const char* str)
@@ -300,7 +308,7 @@ int icallangbind_string_to_open_flag(const char* str)
 }
 
 
-const char* icallangbind_quote_as_ical(const char* str)
+char* icallangbind_quote_as_ical_r(const char* str)
 {
     size_t buf_size = 2 * strlen(str);
 
@@ -310,7 +318,15 @@ const char* icallangbind_quote_as_ical(const char* str)
 
     result = icalvalue_encode_ical_string(str, buf, buf_size);
 
-    icalmemory_add_tmp_buffer(buf);
-
     return buf;
 }
+
+
+const char* icallangbind_quote_as_ical(const char* str)
+{
+	char *buf;
+	buf = icallangbind_quote_as_ical_r(str);
+	icalmemory_add_tmp_buffer(buf);
+	return(buf);
+}
+

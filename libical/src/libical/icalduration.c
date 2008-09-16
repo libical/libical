@@ -199,8 +199,17 @@ void append_duration_segment(char** buf, char** buf_ptr, size_t* buf_size,
 
 char* icaldurationtype_as_ical_string(struct icaldurationtype d) 
 {
+	char *buf;
+	buf = icaldurationtype_as_ical_string_r(d);
+	icalmemory_add_tmp_buffer(buf);
+	return buf;
+}
 
-    char *buf, *output_line;
+
+char* icaldurationtype_as_ical_string_r(struct icaldurationtype d) 
+{
+
+    char *buf;
     size_t buf_size = 256;
     char* buf_ptr = 0;
     int seconds;
@@ -248,11 +257,7 @@ char* icaldurationtype_as_ical_string(struct icaldurationtype d)
 	icalmemory_append_string(&buf, &buf_ptr, &buf_size, "PT0S");
     }
  
-    output_line = icalmemory_tmp_copy(buf);
-    icalmemory_free_buffer(buf);
-
-    return output_line;
-    
+    return buf;
 }
 
 

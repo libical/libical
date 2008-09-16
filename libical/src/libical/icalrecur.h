@@ -187,6 +187,7 @@ icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
 /** Convert between strings and recurrencetype structures. */
 struct icalrecurrencetype icalrecurrencetype_from_string(const char* str);
 char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
+char* icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur);
 
 
 /** Recurrence iteration routines */

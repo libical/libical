@@ -289,11 +289,22 @@ icalcomponent_free (icalcomponent* c)
     }
 }
 
+
 char*
 icalcomponent_as_ical_string (icalcomponent* impl)
 {
+	char *buf;
+	buf = icalcomponent_as_ical_string_r(impl);
+	icalmemory_add_tmp_buffer(buf);
+	return buf;
+}
+
+
+char*
+icalcomponent_as_ical_string_r (icalcomponent* impl)
+{
    char* buf, *out_buf;
-   const char* tmp_buf;
+   char* tmp_buf;
    size_t buf_size = 1024;
    char* buf_ptr = 0;
     pvl_elem itr;
@@ -345,9 +356,10 @@ icalcomponent_as_ical_string (icalcomponent* impl)
 	p = (icalproperty*)pvl_data(itr);
 	
 	icalerror_assert((p!=0),"Got a null property");
-	tmp_buf = icalproperty_as_ical_string(p);
+	tmp_buf = icalproperty_as_ical_string_r(p);
 	
 	icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
+	free(tmp_buf);
     }
    
    
@@ -357,9 +369,10 @@ icalcomponent_as_ical_string (icalcomponent* impl)
    {	
        c = (icalcomponent*)pvl_data(itr);
        
-       tmp_buf = icalcomponent_as_ical_string(c);
+       tmp_buf = icalcomponent_as_ical_string_r(c);
        
        icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
+       free(tmp_buf);
        
    }
    
@@ -369,10 +382,7 @@ icalcomponent_as_ical_string (icalcomponent* impl)
    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
-   out_buf = icalmemory_tmp_copy(buf);
-   free(buf);
-
-   return out_buf;
+   return buf;
 }
 
 
@@ -2481,13 +2491,13 @@ static int icalcomponent_compare_vtimezones (icalcomponent	*vtimezone1,
     icalproperty_set_tzid (prop2, tzid1);
 
     /* Now convert both VTIMEZONEs to strings and compare them. */
-    string1 = icalcomponent_as_ical_string (vtimezone1);
+    string1 = icalcomponent_as_ical_string_r (vtimezone1);
     if (!string1) {
 	free (tzid2_copy);
 	return -1;
     }
 
-    string2 = icalcomponent_as_ical_string (vtimezone2);
+    string2 = icalcomponent_as_ical_string_r (vtimezone2);
     if (!string2) {
 	free (string1);
 	free (tzid2_copy);

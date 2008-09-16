@@ -97,17 +97,25 @@ void* icalmime_textcalendar_end_part(void* part)
 
 }
 
-void* icalmime_text_end_part(void* part)
+void* icalmime_text_end_part_r(void* part)
 {
     char *buf;
     struct text_part* impl = ( struct text_part*) part;
 
-    icalmemory_add_tmp_buffer(impl->buf);
     buf = impl->buf;
     free(impl);
 
     return buf;
 }
+
+void* icalmime_text_end_part(void* part)
+{
+	void *buf;
+	buf = icalmime_text_end_part_r(part);
+	icalmemory_add_tmp_buffer(buf);
+	return buf;
+}
+
 
 void icalmime_text_free_part(void *part)
 {
@@ -147,8 +155,8 @@ void icalmime_attachment_free_part(void *part)
 static const struct sspm_action_map icalmime_local_action_map[] = 
 {
     {SSPM_TEXT_MAJOR_TYPE,SSPM_CALENDAR_MINOR_TYPE,icalmime_text_new_part,icalmime_text_add_line,icalmime_textcalendar_end_part,icalmime_text_free_part},
-    {SSPM_TEXT_MAJOR_TYPE,SSPM_ANY_MINOR_TYPE,icalmime_text_new_part,icalmime_text_add_line,icalmime_text_end_part,icalmime_text_free_part},
-    {SSPM_TEXT_MAJOR_TYPE,SSPM_PLAIN_MINOR_TYPE,icalmime_text_new_part,icalmime_text_add_line,icalmime_text_end_part,icalmime_text_free_part},
+    {SSPM_TEXT_MAJOR_TYPE,SSPM_ANY_MINOR_TYPE,icalmime_text_new_part,icalmime_text_add_line,icalmime_text_end_part_r,icalmime_text_free_part},
+    {SSPM_TEXT_MAJOR_TYPE,SSPM_PLAIN_MINOR_TYPE,icalmime_text_new_part,icalmime_text_add_line,icalmime_text_end_part_r,icalmime_text_free_part},
     {SSPM_APPLICATION_MAJOR_TYPE,SSPM_CALENDAR_MINOR_TYPE,icalmime_attachment_new_part,icalmime_attachment_add_line,icalmime_attachment_end_part,icalmime_attachment_free_part},
     {SSPM_IMAGE_MAJOR_TYPE,SSPM_CALENDAR_MINOR_TYPE,icalmime_attachment_new_part,icalmime_attachment_add_line,icalmime_attachment_end_part,icalmime_attachment_free_part},
     {SSPM_AUDIO_MAJOR_TYPE,SSPM_CALENDAR_MINOR_TYPE,icalmime_attachment_new_part,icalmime_attachment_add_line,icalmime_attachment_end_part,icalmime_attachment_free_part},
@@ -383,8 +391,8 @@ int icalmime_test(char* (*get_string)(char *s, size_t size, void *d),
    for(i = 0; i <NUM_PARTS && parts[i].header.major != SSPM_NO_MAJOR_TYPE ; 
        i++){
        if(parts[i].header.minor == SSPM_CALENDAR_MINOR_TYPE){
-	   parts[i].data = icalmemory_strdup(
-	       icalcomponent_as_ical_string((icalcomponent*)parts[i].data));
+	   parts[i].data =
+	       icalcomponent_as_ical_string_r((icalcomponent*)parts[i].data);
        }
    }
 

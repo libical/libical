@@ -59,16 +59,21 @@ void test_values()
 {
     icalvalue *v; 
     icalvalue *copy; 
+    char *str;
 
     v = icalvalue_new_caladdress("cap://value/1");
     printf("caladdress 1: %s\n",icalvalue_get_caladdress(v));
 
     icalvalue_set_caladdress(v,"cap://value/2");
     printf("caladdress 2: %s\n",icalvalue_get_caladdress(v));
-    printf("String: %s\n",icalvalue_as_ical_string(v));
+    str = icalvalue_as_ical_string_r(v));
+    printf("String: %s\n", str);
+    free(str);
     
     copy = icalvalue_new_clone(v);
-    printf("Clone: %s\n",icalvalue_as_ical_string(v));
+    str = icalvalue_as_ical_string_r(v);
+    printf("Clone: %s\n", str);
+    free(str);
     icalvalue_free(v);
     icalvalue_free(copy);
 
@@ -78,12 +83,15 @@ void test_values()
 void test_parameters()
 {
     icalparameter *p;
+    char *str;
 
     p = icalparameter_new_cn("A Common Name");
 
     printf("Common Name: %s\n",icalparameter_get_cn(p));
 
-    printf("As String: %s\n",icalparameter_as_ical_string(p));
+    str = icalparameter_as_ical_string_r(p));
+    printf("As String: %s\n", str);
+    free(str);
 }
 
 

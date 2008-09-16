@@ -107,6 +107,15 @@ struct icalperiodtype icalperiodtype_from_string (const char* str)
 
 const char* icalperiodtype_as_ical_string(struct icalperiodtype p)
 {
+	char *buf;
+	buf = icalperiodtype_as_ical_string_r(p);
+	icalmemory_add_tmp_buffer(buf);
+	return buf;
+}
+
+
+char* icalperiodtype_as_ical_string_r(struct icalperiodtype p)
+{
 
     const char* start;
     const char* end;
@@ -119,22 +128,21 @@ const char* icalperiodtype_as_ical_string(struct icalperiodtype p)
     buf_ptr = buf;
     
 
-    start = icaltime_as_ical_string(p.start);
-
+    start = icaltime_as_ical_string_r(p.start);
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, start); 
+    free(start);
 
     if(!icaltime_is_null_time(p.end)){
-	end = icaltime_as_ical_string(p.end);
+	end = icaltime_as_ical_string_r(p.end);
     } else {
-	end = icaldurationtype_as_ical_string(p.duration);
+	end = icaldurationtype_as_ical_string_r(p.duration);
     }
 
     icalmemory_append_char(&buf, &buf_ptr, &buf_size, '/'); 
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, end); 
+    free(end);
     
-	icalmemory_add_tmp_buffer(buf);
-
     return buf;
 }
 

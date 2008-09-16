@@ -78,6 +78,7 @@ struct icalreqstattype {
 
 struct icalreqstattype icalreqstattype_from_string(const char* str);
 const char* icalreqstattype_as_string(struct icalreqstattype);
+char* icalreqstattype_as_string_r(struct icalreqstattype);
 
 
 

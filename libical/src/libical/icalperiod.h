@@ -43,6 +43,7 @@ struct icalperiodtype
 struct icalperiodtype icalperiodtype_from_string (const char* str);
 
 const char* icalperiodtype_as_ical_string(struct icalperiodtype p);
+char* icalperiodtype_as_ical_string_r(struct icalperiodtype p);
 
 struct icalperiodtype icalperiodtype_null_period(void);
 

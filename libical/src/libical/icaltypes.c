@@ -167,9 +167,18 @@ struct icalreqstattype icalreqstattype_from_string(const char* str)
 
 const char* icalreqstattype_as_string(struct icalreqstattype stat)
 {
+	char *buf;
+	buf = icalreqstattype_as_string_r(stat);
+	icalmemory_add_tmp_buffer(buf);
+	return buf;
+}
+
+
+char* icalreqstattype_as_string_r(struct icalreqstattype stat)
+{
   char *temp;
 
-  temp = (char*)icalmemory_tmp_buffer(TEMP_MAX);
+  temp = (char*)icalmemory_new_buffer(TEMP_MAX);
 
   icalerror_check_arg_rz((stat.code != ICAL_UNKNOWN_STATUS),"Status");
   

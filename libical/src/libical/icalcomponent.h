@@ -58,6 +58,7 @@ icalcomponent* icalcomponent_new_x(const char* x_name);
 void icalcomponent_free(icalcomponent* component);
 
 char* icalcomponent_as_ical_string(icalcomponent* component);
+char* icalcomponent_as_ical_string_r(icalcomponent* component);
 
 int icalcomponent_is_valid(icalcomponent* component);
 

@@ -193,6 +193,16 @@ icalparameter* icalparameter_new_from_string(const char *str)
     
 }
 
+char*
+icalparameter_as_ical_string(icalparameter* param)
+{
+	char *buf;
+	buf = icalparameter_as_ical_string_r(param);
+	icalmemory_add_tmp_buffer(buf);
+	return buf;
+}
+
+
 /**
  * Return a string representation of the parameter according to RFC2445.
  *
@@ -205,7 +215,7 @@ icalparameter* icalparameter_new_from_string(const char *str)
  * SAFE-CHAR	= any character except CTLs, DQUOTE. ";", ":", ","
  */
 char*
-icalparameter_as_ical_string (icalparameter* param)
+icalparameter_as_ical_string_r(icalparameter* param)
 {
     size_t buf_size = 1024;
     char* buf; 
@@ -216,10 +226,8 @@ icalparameter_as_ical_string (icalparameter* param)
     icalerror_check_arg_rz( (param!=0), "parameter");
 
     /* Create new buffer that we can append names, parameters and a
-       value to, and reallocate as needed. Later, this buffer will be
-       copied to a icalmemory_tmp_buffer, which is managed internally
-       by libical, so it can be given to the caller without fear of
-       the caller forgetting to free it */
+     * value to, and reallocate as needed.
+     */
 
     buf = icalmemory_new_buffer(buf_size);
     buf_ptr = buf;
@@ -269,14 +277,7 @@ icalparameter_as_ical_string (icalparameter* param)
         return 0;
     }
 
-    /* Now, copy the buffer to a tmp_buffer, which is safe to give to
-       the caller without worring about de-allocating it. */
-    
-    out_buf = icalmemory_tmp_copy(buf);
-    icalmemory_free_buffer(buf);
-
-    return out_buf;
-
+    return buf;
 }
 
 
