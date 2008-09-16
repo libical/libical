@@ -1158,25 +1158,31 @@ caller owns and must free, and some of the memory is managed by the
 library. Here is a summary of the memory rules. 
 
 1) If the function name has "new" in it, the caller gets control
-  of the memory. ( such as icalcomponent_new(), or icalproperty_new_clone()
-  ) 
+   of the memory. ( such as icalcomponent_new(), or icalproperty_new_clone()
+   ) 
 
 2) If you got the memory from a routine with new in it, you must
-  call the corresponding *_free routine to free the memory. ( Use
-  icalcomponent_free() to free objects created with icalcomponent_new()) 
+   call the corresponding *_free routine to free the memory. ( Use
+   icalcomponent_free() to free objects created with icalcomponent_new()) 
 
 3) If the function name has "add" in it, the caller is transferring
-  control of the memory to the routine. ( icalproperty_add_parameter() )
+   control of the memory to the routine. ( icalproperty_add_parameter() )
 
 4) If the function name has "remove" in it, the caller passes in
-  a pointer to an object and after the call returns, the caller owns
-  the object. So, before you call icalcomponent_remove_property(comp,foo),
-  you do not own "foo" and after the call returns, you do. 
+   a pointer to an object and after the call returns, the caller owns
+   the object. So, before you call icalcomponent_remove_property(comp,foo),
+   you do not own "foo" and after the call returns, you do. 
 
-5) If the routine returns a string, libical owns the memory and will
-  put it on a ring buffer to reclaim later. For example, icalcomponent_as_ical_string().
-  You'd better strdup() it if you want to keep it, and you don't have
-  to delete it. 
+5) If the routine returns a string and its name does NOT end in "_r",
+   libical owns the memory and will put it on a ring buffer to reclaim
+   later. For example, icalcomponent_as_ical_string().  You'd better
+   strdup() it if you want to keep it, and you don't have to delete it. 
+
+6) If the routine returns a string and its name *does* end in "_r", the
+   caller gets control of the memory and is responsible for freeing it.
+   For example, icalcomponent_as_ical_string_r() does the same thing as
+   icalcomponent_as_ical_string(), except you now have control of the
+   string buffer it returns.
 
 5.6 Error Handling
 
