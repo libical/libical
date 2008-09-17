@@ -60,6 +60,7 @@ msg_parse(RRCAP *cap, icalcomponent *comp) {
 	icalparameter  *param;
 	icalvalue      *value;
 	RRCAPCmdArgs   *ret = g_new0(RRCAPCmdArgs, 1);
+	char *str;
 
 	ret->comp = comp;
 
@@ -70,8 +71,10 @@ msg_parse(RRCAP *cap, icalcomponent *comp) {
 		goto FAILED;
 	}
 	if ((value = icalproperty_get_value(prop)) == NULL) {
+		str = icalproperty_as_ical_string_r(prop);
 		rr_cap_send_error(cap, NULL, ICAL_9_0_UNRECOGNIZED_COMMAND,
-			"CMD has no value", icalproperty_as_ical_string(prop));
+			"CMD has no value", str);
+		free(str);
 		goto FAILED;
 	}
 	ret->cmd = icalvalue_get_cmd(value);
@@ -82,10 +85,12 @@ msg_parse(RRCAP *cap, icalcomponent *comp) {
 	if ((param = icalproperty_get_first_parameter(prop,
 						ICAL_ID_PARAMETER)) != NULL) {
 		if ((ret->id = icalparameter_get_id(param)) == NULL) {
+			str = icalproperty_as_ical_string_r(prop);
 			rr_cap_send_error(cap, NULL,
 				ICAL_9_0_UNRECOGNIZED_COMMAND,
 				"ID param is garbled",
-				icalproperty_as_ical_string(prop));
+				str);
+			free(str);
 			goto FAILED;
 		}
 	}
@@ -95,10 +100,12 @@ msg_parse(RRCAP *cap, icalcomponent *comp) {
 						ICAL_LATENCY_PARAMETER)) != NULL) {
 		const char *tmp;
 		if ((tmp = icalparameter_get_latency(param)) == NULL) {
+			str = icalproperty_as_ical_string_r(prop);
 			rr_cap_send_error(cap, NULL,
 				ICAL_9_0_UNRECOGNIZED_COMMAND,
 				"LATENCY is garbled",
-				icalproperty_as_ical_string(prop));
+				str);
+			free(str);
 			goto FAILED;
 		}
 
@@ -110,18 +117,22 @@ msg_parse(RRCAP *cap, icalcomponent *comp) {
 						ICAL_ACTIONPARAM_PARAMETER)) != NULL) {
 		if ((ret->action = icalparameter_get_actionparam(param))
 		    == NULL) {
+			str = icalproperty_as_ical_string_r(prop);
 			rr_cap_send_error(cap, NULL,
 				ICAL_9_0_UNRECOGNIZED_COMMAND,
 				"ACTION is garbled",
-				icalproperty_as_ical_string(prop));
+				str);
+			free(str);
 			goto FAILED;
 		}
 	}
 
 	if ((ret->latency >= 0) ^ (ret->action != ICAL_ACTIONPARAM_NONE)) {
+		str = icalproperty_as_ical_string_r(prop);
 		rr_cap_send_error(cap, NULL, ICAL_9_0_UNRECOGNIZED_COMMAND,
 			"LATENCY and ACTION must be both present",
-			icalproperty_as_ical_string(prop));
+			str);
+		free(str);
 		goto FAILED;
 	}
 

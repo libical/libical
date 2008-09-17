@@ -105,8 +105,11 @@ static int
 msg_handler(const icalcap_message *capmsg) {
 
 	icalcomponent *reply;
+	char *temp;
 
-	g_message("Got: %s", icalcomponent_as_ical_string(capmsg->comp));
+	temp = icalcomponent_as_ical_string_r(capmsg->comp);
+	g_message("Got: %s", temp);
+	free(temp);
 
 	/* FIXME Check it's a GET-CAPABILITY */
 
@@ -166,8 +169,11 @@ main (gint argc, gchar **argv)
 			exit(0);
 		}
 
-		if (verbose)
-			g_print("Got %s\n", icalcomponent_as_ical_string(comp));
+		if (verbose) {
+			char *obj = icalcomponent_as_ical_string_r(comp);
+			g_print("Got %s\n", obj);
+			g_free(obj);
+		}
 
 		if (comp)
 			icalcomponent_free(comp);

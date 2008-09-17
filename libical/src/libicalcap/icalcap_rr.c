@@ -391,7 +391,7 @@ icalcap_message *
 icalcap_message_new_rr(const icalcap *cap, const icalcomponent *comp) {
 
 	struct _icalcap_message_rr	*ret;
-	gchar				*str;
+	gchar				*str, *obj;
 
 	if (comp == NULL) {
 		/* FIXME return an error */
@@ -400,9 +400,11 @@ icalcap_message_new_rr(const icalcap *cap, const icalcomponent *comp) {
 
 	ret = _icalcap_message_new_from_component_rr(cap, ICALCAP_MESSAGE_CMD, NULL);
 
+	obj = icalcomponent_as_ical_string_r(comp);
 	str = g_strdup_printf("%s\n\n%s",
 		"Content-Type: text/calendar",
-		icalcomponent_as_ical_string(comp));
+		obj);
+	free(obj);
 
 	ret->msg	= rr_message_static_new(RR_FRAME_TYPE_MSG, str, strlen(str), TRUE);
 
@@ -439,7 +441,10 @@ icalcap_message_new_reply_rr(const icalcap_message *orig, const icalcomponent *c
 	     cc != NULL;
 	     cc = icalcomponent_get_next_component(comp,
 					ICAL_VCALENDAR_COMPONENT)) {
-		g_string_append(str, icalcomponent_as_ical_string(cc));
+		char *obj;
+		obj = icalcomponent_as_ical_string_r(cc);
+		g_string_append(str, obj);
+		free(obj);
 	}
 
 	ret->msg	= rr_message_static_new(RR_FRAME_TYPE_RPY, str->str, strlen(str->str), TRUE);
