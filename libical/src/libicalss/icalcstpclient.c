@@ -101,7 +101,7 @@ void icalcstpc_free(icalcstpc* cstpc)
 }
 
 /* Get the next string to send to the server */
-char* icalcstpc_next_output(icalcstpc* cstp, char * line)
+char* icalcstpc_next_output_r(icalcstpc* cstp, char * line)
 {
     char* out;
     struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
@@ -114,10 +114,18 @@ char* icalcstpc_next_output(icalcstpc* cstp, char * line)
 
     impl->next_output = 0;
 
-    icalmemory_add_tmp_buffer(out);
-
     return out;
 }
+
+
+char* icalcstpc_next_output(icalcstpc* cstp, char * line)
+{
+	char *buf;
+	buf = icalcstpc_next_output_r(cstp, line);
+	icalmemory_add_tmp_buffer(buf);
+	return buf;
+}
+
 
 /* process the next string sent by the server */ 
 int icalcstpc_next_input(icalcstpc* cstp, char* line)

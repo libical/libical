@@ -403,7 +403,7 @@ icalerrorenum icalfileset_commit(icalset* set)
 	c = icalcomponent_get_next_component(fset->cluster,ICAL_ANY_COMPONENT)){
 	int sz;
 
-	str = icalcomponent_as_ical_string(c);
+	str = icalcomponent_as_ical_string_r(c);
     
 	sz=write(fset->fd,str,strlen(str));
 
@@ -413,6 +413,7 @@ icalerrorenum icalfileset_commit(icalset* set)
 	    return ICAL_FILE_ERROR;
 	}
 
+	free(str);
 	write_size += sz;
     }
     
@@ -602,7 +603,7 @@ struct icalfileset_id icalfileset_get_id(icalcomponent* comp)
     } else {
 	icalvalue *v;
 	v = icalproperty_get_value(p);
-	id.recurrence_id = strdup(icalvalue_as_ical_string(v));
+	id.recurrence_id = icalvalue_as_ical_string_r(v);
 
 	assert(id.recurrence_id != 0);
     }

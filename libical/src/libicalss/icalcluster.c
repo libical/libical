@@ -177,8 +177,11 @@ icalcomponent *icalcluster_get_component(icalcluster *impl) {
 	icalerror_check_arg_rz((impl!=0),"cluster");
 
 	if (icalcomponent_isa(impl->data) != ICAL_XROOT_COMPONENT) {
+		char *obj;
 		icalerror_warn("The top component is not an XROOT");
-		fprintf(stderr, "%s\n", icalcomponent_as_ical_string(impl->data));
+		obj = icalcomponent_as_ical_string_r(impl->data);
+		fprintf(stderr, "%s\n", obj);
+		free(obj);
 		abort();
 	}
 

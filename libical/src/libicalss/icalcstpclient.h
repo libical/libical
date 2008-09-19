@@ -67,6 +67,7 @@ int icalcstpc_set_timeout(icalcstpc* cstp, int sec);
 
 /* Get the next string to send to the server */
 char* icalcstpc_next_output(icalcstpc* cstp, char* line);
+char* icalcstpc_next_output_r(icalcstpc* cstp, char* line);
 
 /* process the next string from the server */ 
 int icalcstpc_next_input(icalcstpc* cstp, char * line);

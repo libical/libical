@@ -279,6 +279,7 @@ int icalssutil_is_rescheduled(icalcomponent* a,icalcomponent* b)
 {
     icalproperty *p1,*p2;
     icalcomponent *i1,*i2;
+    char *temp1, *temp2;
     int i;
 
     icalproperty_kind kind_array[] = {
@@ -297,6 +298,7 @@ int icalssutil_is_rescheduled(icalcomponent* a,icalcomponent* b)
     i2 = icalcomponent_get_first_real_component(b);
 
     for(i =0; kind_array[i] != ICAL_NO_PROPERTY; i++){
+	int cmp;
 	p1 = icalcomponent_get_first_property(i1,kind_array[i]);
 	p2 = icalcomponent_get_first_property(i2,kind_array[i]);
 	
@@ -305,9 +307,16 @@ int icalssutil_is_rescheduled(icalcomponent* a,icalcomponent* b)
 	       the other */
 	    return 1;
 	}
+	else if (!p1 && !p2)
+		continue;
+
+	temp1 = icalproperty_as_ical_string_r(p1);
+	temp2 = icalproperty_as_ical_string_r(p2);
+	cmp = strcmp(temp1, temp2);
+	free(temp1);
+	free(temp2);
 	
-	if(p1 && strcmp(icalproperty_as_ical_string(p1),
-			icalproperty_as_ical_string(p2)) != 0){
+	if (p1 && cmp != 0) {
 	    return 1;
 	}
     }

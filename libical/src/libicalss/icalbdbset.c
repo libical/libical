@@ -848,8 +848,8 @@ icalerrorenum icalbdbset_commit(icalset *set) {
     }
     key.size = strlen(key.data);
 
-            str = icalcomponent_as_ical_string(c);
-            data.data = str;
+    str = icalcomponent_as_ical_string_r(c);
+    data.data = str;
     data.size = strlen(str);
 
     if ((ret = dbcp->c_put(dbcp, &key, &data, DB_KEYLAST)) != 0) {
@@ -867,6 +867,8 @@ icalerrorenum icalbdbset_commit(icalset *set) {
                 }
             }
     }
+
+    free(str);
 
         if (deadlocked) {
             dbcp->c_close(dbcp);
@@ -1098,7 +1100,7 @@ struct icalbdbset_id icalbdbset_get_id(icalcomponent* comp)
     } else {
 	icalvalue *v;
 	v = icalproperty_get_value(p);
-	id.recurrence_id = strdup(icalvalue_as_ical_string(v));
+	id.recurrence_id = icalvalue_as_ical_string_r(v);
 
 	assert(id.recurrence_id != 0);
     }

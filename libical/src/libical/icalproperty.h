@@ -126,7 +126,7 @@ const char* icalproperty_method_to_string(icalproperty_method method);
 
 
 const char* icalproperty_enum_to_string(int e);
-const char* icalproperty_enum_to_string_r(int e);
+char* icalproperty_enum_to_string_r(int e);
 int icalproperty_string_to_enum(const char* str);
 int icalproperty_kind_and_string_to_enum(const int kind, const char* str);
 
