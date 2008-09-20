@@ -163,6 +163,13 @@ const char* icalproperty_enum_to_string(int e)
     return enum_map[e-ICALPROPERTY_FIRST_ENUM].str;
 }
 
+
+char *icalproperty_enum_to_string_r(int e)
+{
+	return icalmemory_strdup(icalproperty_enum_to_string(e));
+}
+
+
 int icalproperty_kind_and_string_to_enum(const int kind, const char* str)
 {
     icalproperty_kind pkind;
