@@ -6,9 +6,9 @@ libical (0.33-5) stable; urgency=high
 
 libical (0.31-4) stable; urgency=high
 
-* new release fixing a crash
+  * new release fixing a crash
 
--- Wilfried Goesgens <w.goesgens@outgesourced.org>  Mon, 17 Mar 2008 20:00:00 +0001
+ -- Wilfried Goesgens <w.goesgens@outgesourced.org>  Mon, 17 Mar 2008 20:00:00 +0001
 
 libical (0.30-1) unstable; urgency=low
 

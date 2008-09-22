@@ -61,14 +61,14 @@ endif
 		--mandir="/usr/share/man" \
 		--sysconfdir=/etc \
 		--localstatedir=/var \
-		--libexecdir="/usr/lib/libical" \
-		$(EXTRA_ARGS) $(PROFILE_ARGS)
+		$(EXTRA_ARGS) $(PROFILE_ARGS) \
+		--libexecdir="/usr/lib/libical"	
 
 
 build: build-stamp
 build-stamp:  config.status
 	dh_testdir
-
+	$(MAKE) clean
 	$(MAKE)
 
 	touch $@
@@ -89,7 +89,7 @@ install: build
 	dh_clean -k 
 	dh_installdirs
 
-	# Add here commands to install the package into debian/tmp
+# Add here commands to install the package into debian/tmp
 	$(MAKE) DESTDIR=$(CURDIR)/debian/tmp install
 
 

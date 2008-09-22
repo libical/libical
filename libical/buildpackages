@@ -51,9 +51,9 @@ case $1 in
 	    mkdir tmp
 	    cp -rL libical-$LIBICAL_VERSION tmp
 	    cd tmp/libical-$LIBICAL_VERSION
-	    rm -rf `find -name .svn ` `find . -name .libs` svn*tmp config.log config.status svn*tmp config.log config.status Makefile
+	    rm -rf `find -name .svn ` `find . -name .libs` svn*tmp config.log config.status svn*tmp config.log config.status Makefile config.h
 	    find -type f -exec chmod a-x {} \;
-	    chmod a+x configure
+	    chmod a+x configure libtool missing autogen.sh bootstrap debian/rules
 	    cd ..
 	    tar -chzf libical_${LIBICAL_VERSION}.orig.tar.gz libical-${LIBICAL_VERSION}/ --exclude "debian/*" --exclude "*.svn*" 
 	    pwd
