@@ -51,7 +51,7 @@ case $1 in
 	    mkdir tmp
 	    cp -rL libical-$LIBICAL_VERSION tmp
 	    cd tmp/libical-$LIBICAL_VERSION
-	    rm -rf `find -name .svn ` svn*tmp config.log config.status svn*tmp config.log config.status Makefile
+	    rm -rf `find -name .svn ` `find . -name .libs` svn*tmp config.log config.status svn*tmp config.log config.status Makefile
 	    find -type f -exec chmod a-x {} \;
 	    chmod a+x configure
 	    cd ..
