@@ -1,200 +1,122 @@
+# This is the top-level CMakeLists.txt file for the libical project.
+#
+# Pass the following variables to cmake to control the build:
+# (See doc/UsingLibical.txt for more information)
+#
+# -DICAL_ERRORS_ARE_FATAL=[true|false] 
+#  Set to make icalerror_* calls abort instead of internally signaling an error
+#  Default=true
+#
+# -DNO_WARN_DEPRECATED=[true|false]
+#  Set if you DO NOT WANT to see deprecated messages.
+#  Default=true
+#
+# -DICAL_UNIX_NEWLINE=[true|false]
+#  Set to terminate each line with the RFC2445 specified line terminator "\\n";
+#  else it will terminate lines with "\\n\\r"
+#  Default=true
+#
+# -DUSE_BUILTIN_TZDATA=[true|false]
+#  Set to build using our own timezone data.
+#  Default=false (use the system timezone data)
+#
+
 project(libical)
 
-ADD_DEFINITIONS(-DPACKAGE_DATA_DIR=\\""${DATA_INSTALL_DIR}/"\\" ) # added manually
+cmake_minimum_required(VERSION 2.4)
+cmake_policy(VERSION 2.6)
 
-include (ConfigureChecks.cmake)
-configure_file (config-libical.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-libical.h)
+set(LIBICAL_LIB_MAJOR_VERSION "0")
+set(LIBICAL_LIB_MINOR_VERSION "34")
+set(LIBICAL_LIB_PATCH_VERSION "0")
+set(LIBICAL_LIB_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}.${LIBICAL_LIB_PATCH_VERSION}")
 
-include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}/src/libicalss/
-	${CMAKE_CURRENT_BINARY_DIR}/src/libicalss/
-	${CMAKE_CURRENT_SOURCE_DIR}/src/libical/
-	${CMAKE_CURRENT_BINARY_DIR}/src/libical/
-	${CMAKE_CURRENT_BINARY_DIR}/ # for config.h
-)
+set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
+set(PROJECT_URL "http://freeassociation.sf.net/")
 
-set(ICALSCRIPTS ${CMAKE_SOURCE_DIR}/scripts/ )
+# set the output paths
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+if(WIN32)
+  set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH} )
+else(WIN32)
+  set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib )
+endif(WIN32)
 
-set(PROPERTYDEPS 
-	${ICALSCRIPTS}/mkderivedproperties.pl 
-	${CMAKE_SOURCE_DIR}/design-data/properties.csv	
-	${CMAKE_SOURCE_DIR}/design-data/value-types.csv
-	${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.h.in 
-	${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.c.in 
-)
+set (LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
+set (LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
 
-add_custom_command(OUTPUT
-${CMAKE_BINARY_DIR}/icalderivedproperty.h
-COMMAND ${PERL_EXECUTABLE} ARGS -I ${ICALSCRIPTS}
-${ICALSCRIPTS}/mkderivedproperties.pl -i
-${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.h.in
--h  ${CMAKE_SOURCE_DIR}/design-data/properties.csv ${CMAKE_SOURCE_DIR}/design-data/value-types.csv > ${CMAKE_BINARY_DIR}/icalderivedproperty.h   DEPENDS  ${PROPERTYDEPS} )
+IF(APPLE)
+  set(CMAKE_INSTALL_NAME_DIR ${LIB_DESTINATION})
+ENDIF(APPLE)
 
+if(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
+  set(ICAL_ERRORS_ARE_FATAL 1)
+else(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
+  if(ICAL_ERRORS_ARE_FATAL)
+    set(ICAL_ERRORS_ARE_FATAL 1)
+  else(ICAL_ERRORS_ARE_FATAL)
+    set(ICAL_ERRORS_ARE_FATAL 0)
+  endif(ICAL_ERRORS_ARE_FATAL)
+endif(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
 
-add_custom_command(OUTPUT
-${CMAKE_BINARY_DIR}/icalderivedproperty.c
-COMMAND ${PERL_EXECUTABLE} ARGS -I${ICALSCRIPTS}
-${ICALSCRIPTS}/mkderivedproperties.pl -i
-${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.c.in
--c ${CMAKE_SOURCE_DIR}/design-data/properties.csv
-${CMAKE_SOURCE_DIR}/design-data/value-types.csv > ${CMAKE_BINARY_DIR}/icalderivedproperty.c   DEPENDS  ${PROPERTYDEPS} ${CMAKE_BINARY_DIR}/icalderivedproperty.h )
+if(NOT DEFINED ICAL_UNIX_NEWLINE)
+  set(ICAL_UNIX_NEWLINE 1)
+else(NOT DEFINED ICAL_UNIX_NEWLINE)
+  if(ICAL_UNIX_NEWLINE)
+    set(ICAL_UNIX_NEWLINE 1)
+  else(ICAL_UNIX_NEWLINE)
+    set(ICAL_UNIX_NEWLINE 0)
+  endif(ICAL_UNIX_NEWLINE)
+endif(NOT DEFINED ICAL_UNIX_NEWLINE)
 
+if(NOT DEFINED NO_WARN_DEPRECATED)
+  set(NO_WARN_DEPRECATED 1)
+else(NOT DEFINED NO_WARN_DEPRECATED)
+  if(NO_WARN_DEPRECATED)
+    set(NO_WARN_DEPRECATED 1)
+  else(NO_WARN_DEPRECATED)
+    set(NO_WARN_DEPRECATED 0)
+  endif(NO_WARN_DEPRECATED)
+endif(NOT DEFINED NO_WARN_DEPRECATED)
 
-# files generated via add_custom_command are added automatically to the clean files, Alex
-#macro_additional_clean_files( 
-#                              ${CMAKE_BINARY_DIR}/icalderivedproperty.c 
-#                              ${CMAKE_BINARY_DIR}/icalderivedproperty.h 
-#)
+if(NOT DEFINED USE_BUILTIN_TZDATA)
+  set(USE_BUILTIN_TZDATA 0)
+else(NOT DEFINED USE_BUILTIN_TZDATA)
+  if(USE_BUILTIN_TZDATA)
+    set(USE_BUILTIN_TZDATA 1)
+  else(USE_BUILTIN_TZDATA)
+    set(USE_BUILTIN_TZDATA 0)
+  endif(USE_BUILTIN_TZDATA)
+endif(NOT DEFINED USE_BUILTIN_TZDATA)
 
-
-set(PARAMETERDEPS 
-	${ICALSCRIPTS}/mkderivedparameters.pl 
-	${CMAKE_SOURCE_DIR}/design-data/parameters.csv 
-	${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.c.in
-	${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.h.in
-)
-
-add_custom_command(OUTPUT
-${CMAKE_BINARY_DIR}/icalderivedparameter.h
-COMMAND ${PERL_EXECUTABLE} ARGS -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.h.in -h ${CMAKE_SOURCE_DIR}/design-data/parameters.csv > ${CMAKE_BINARY_DIR}/icalderivedparameter.h   DEPENDS  ${PARAMETERDEPS} )
-
-add_custom_command(OUTPUT
-${CMAKE_BINARY_DIR}/icalderivedparameter.c
-COMMAND ${PERL_EXECUTABLE} ARGS -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.c.in -c ${CMAKE_SOURCE_DIR}/design-data/parameters.csv > ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.c   DEPENDS  ${PARAMETERDEPS} ${CMAKE_BINARY_DIR}/icalderivedparameter.h )
-
-#files generated via add_custom_command are added automatically to the clean files, Alex
-#macro_additional_clean_files( 
-#	${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.c 
-#	${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.h 
-#)
-
-
-set(RESTRICTIONDEPS 
-	${ICALSCRIPTS}/mkrestrictiontable.pl
-	${CMAKE_SOURCE_DIR}/design-data/restrictions.csv
-	${CMAKE_SOURCE_DIR}/src/libical/icalrestriction.c.in
-)
-
-add_custom_command(OUTPUT
-${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c
-COMMAND ${PERL_EXECUTABLE} ARGS -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkrestrictiontable.pl -i ${CMAKE_SOURCE_DIR}/src/libical/icalrestriction.c.in ${CMAKE_SOURCE_DIR}/design-data/restrictions.csv > ${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c   DEPENDS  ${RESTRICTIONDEPS} )
-
-
-#files generated via add_custom_command are added automatically to the clean files, Alex
-#macro_additional_clean_files( ${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c)
-
-set(VALUEDEPS
-	${CMAKE_SOURCE_DIR}/scripts/mkderivedvalues.pl
-	${CMAKE_SOURCE_DIR}/design-data/value-types.csv
-	${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.c.in
-	${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.h.in
-)
-
-add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/icalderivedvalue.h COMMAND ${PERL_EXECUTABLE} ARGS -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.h.in -h ${CMAKE_SOURCE_DIR}/design-data/value-types.csv > ${CMAKE_BINARY_DIR}/icalderivedvalue.h   DEPENDS  ${VALUEDEPS} )
-
-
-add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/icalderivedvalue.c COMMAND ${PERL_EXECUTABLE} ARGS -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.c.in -c ${CMAKE_SOURCE_DIR}/design-data/value-types.csv > ${CMAKE_BINARY_DIR}/icalderivedvalue.c   DEPENDS  ${VALUEDEPS} ${CMAKE_BINARY_DIR}/icalderivedvalue.h )
-
-#files generated via add_custom_command are added automatically to the clean files, Alex
-#macro_additional_clean_files(
-#	${CMAKE_BINARY_DIR}/icalderivedvalue.h
-#	${CMAKE_BINARY_DIR}/icalderivedvalue.c
-#)
-
-
-# Keep absolute paths here, they are used in tests/CMakeLists.txt too.
-set(libical_SRCS
-   ${CMAKE_SOURCE_DIR}/src/libical/caldate.c       
-   ${CMAKE_SOURCE_DIR}/src/libical/icalarray.c     
-   ${CMAKE_SOURCE_DIR}/src/libical/icalattach.c        
-   ${CMAKE_BINARY_DIR}/icalderivedparameter.c  
-   ${CMAKE_SOURCE_DIR}/src/libical/icalrecur.c     
-   ${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c   
-   ${CMAKE_SOURCE_DIR}/src/libical/icalcomponent.c     
-   ${CMAKE_SOURCE_DIR}/src/libical/icalenums.c     
-   ${CMAKE_SOURCE_DIR}/src/libical/icalerror.c     
-   ${CMAKE_SOURCE_DIR}/src/libical/icalmemory.c        
-   ${CMAKE_SOURCE_DIR}/src/libical/icalmime.c      
-   ${CMAKE_SOURCE_DIR}/src/libical/icalparameter.c    
-   ${CMAKE_SOURCE_DIR}/src/libical/icalparser.c        
-   ${CMAKE_BINARY_DIR}/icalderivedproperty.c   
-   ${CMAKE_SOURCE_DIR}/src/libical/icalproperty.c      
-   ${CMAKE_SOURCE_DIR}/src/libical/icaltime.c      
-   ${CMAKE_SOURCE_DIR}/src/libical/icalduration.c      
-   ${CMAKE_SOURCE_DIR}/src/libical/icalperiod.c        
-   ${CMAKE_SOURCE_DIR}/src/libical/icaltimezone.c      
-   ${CMAKE_SOURCE_DIR}/src/libical/icaltypes.c     
-   ${CMAKE_SOURCE_DIR}/src/libical/icalvalue.c     
-   ${CMAKE_BINARY_DIR}/icalderivedvalue.c  
-   ${CMAKE_SOURCE_DIR}/src/libical/pvl.c           
-   ${CMAKE_SOURCE_DIR}/src/libical/sspm.c          
-   ${CMAKE_SOURCE_DIR}/src/libical/vsnprintf.c     
-)
-
-set(libicalss_SRCS
-   ${CMAKE_SOURCE_DIR}/src/libicalss/icalclassify.c      
-   ${CMAKE_SOURCE_DIR}/src/libicalss/icalclassify.h      
-)
-
-
-#macro_additional_clean_files(${CMAKE_BINARY_DIR}/src/libical/ical.h)
+include(ConfigureChecks.cmake)
+add_definitions(-DHAVE_CONFIG_H)
+configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 if(WIN32)
-  set(TOPS "\"${CMAKE_SOURCE_DIR}\"")
-  set(TOPB "\"${CMAKE_BINARY_DIR}\"")
-else(WIN32)
-  set(TOPS "${CMAKE_SOURCE_DIR}")
-  set(TOPB "${CMAKE_BINARY_DIR}")
+  set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
+      RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+      LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+      ARCHIVE DESTINATION ${LIB_INSTALL_DIR})
 endif(WIN32)
-add_custom_command(OUTPUT
-   ${CMAKE_BINARY_DIR}/src/libical/ical.h 
-   COMMAND 
-   ${CMAKE_COMMAND} 
-   -DTOPS:FILEPATH=${TOPS}
-   -DTOPB:FILEPATH=${TOPB}
-   -DKDE_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libical/ical.h
-   -P ${CMAKE_SOURCE_DIR}/ical_file.cmake
-   DEPENDS
-   ${CMAKE_BINARY_DIR}/icalderivedproperty.h
-   ${CMAKE_BINARY_DIR}/icalderivedparameter.h
-   ${CMAKE_BINARY_DIR}/icalderivedvalue.h
-)
 
-#macro_additional_clean_files(${CMAKE_BINARY_DIR}/src/libicalss/icalss.h)
+################# build targets ########################
 
-add_custom_command(OUTPUT
-   ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h 
-   COMMAND 
-   ${CMAKE_COMMAND} 
-   -DTOP:FILEPATH=${TOPS}
-   -DKDE_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
-   -P ${CMAKE_SOURCE_DIR}/icalss_file.cmake
-)
+add_subdirectory(design-data)
+add_subdirectory(doc)
+add_subdirectory(scripts)
+add_subdirectory(test-data)
+add_subdirectory(src)
+add_subdirectory(examples)
+if(DEFINED USE_BUILTIN_TZDATA)
+  # use our zoneinfo if cmake is passed -DUSE_BUILTIN_TZDATA
+  add_subdirectory(zoneinfo)
+endif(DEFINED USE_BUILTIN_TZDATA)
+
+############# install stuff ######################
 
 
-########### next target ###############
-
-
-target_link_libraries(libical libicalss )
-
-#set_target_properties(ical PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
-install(TARGETS libical 
-    RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-    LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-    ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-)
-
-# hack to force ical[ss].h creation
-add_custom_target(ical-headers DEPENDS
-        ${CMAKE_BINARY_DIR}/src/libical/ical.h
-        ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
-)
-##### add_dependencies(ical ical-headers)
-
-########### next target ###############
-
-#add_subdirectory( src )
-
-########### install files ###############
-
-#### DESTINATION (${INCLUDE_INSTALL_DIR}/ical)
+if(NOT WIN32)   # pkgconfig file
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+endif(NOT WIN32)

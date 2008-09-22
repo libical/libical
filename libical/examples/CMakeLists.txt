@@ -1,24 +1,20 @@
 
-
-
-
 ########### next target ###############
 
-set(doesnothing_SRCS 
-   access_components.c 
-   access_properties_and_parameters.c 
-   errors.c 
-   main.c 
-   parse_text.c )
+SET(doesnothing_SRCS
+   access_components.c
+   access_properties_and_parameters.c
+   errors.c
+   main.c
+   parse_text.c
+)
 
+add_executable(doesnothing ${doesnothing_SRCS})
 
-kde4_add_executable(doesnothing ${doesnothing_SRCS})
-
-target_link_libraries(doesnothing  ${KDE4_KDECORE_LIBS} ical icalss icalvcal )
+target_link_libraries(doesnothing ical icalss icalvcal ical icalss icalvcal)
 
 
 ########### install files ###############
-
 
 
 
@@ -28,11 +24,15 @@ target_link_libraries(doesnothing  ${KDE4_KDECORE_LIBS} ical icalss icalvcal )
 #
 #noinst_PROGRAMS = doesnothing
 #
+#if WITH_BDB4
+#doesnothing_LDADD = ../src/libical/libical.la ../src/libicalss/libicalss.la ../src/libicalvcal/libicalvcal.la @BDB_DIR_LIB@/@BDB_LIB@
+#else
 #doesnothing_LDADD = ../src/libical/libical.la ../src/libicalss/libicalss.la ../src/libicalvcal/libicalvcal.la
+#endif
 #
-##LIBS = @PTHREAD_LIBS@
+#LIBS = @PTHREAD_LIBS@
 #
-#INCLUDES = -I. -I../src/libical -I../src/libicalss -I../src/libicalvcal 
+#INCLUDES = -I. -I../src  -I../src/libical -I$(srcdir)/../src/libical -I../src/libicalss -I../src/libicalvcal 
 #
 #doesnothing_SOURCES = \
 #	access_components.c \
