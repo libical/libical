@@ -49,3 +49,4 @@ usr/include/libicalvcal/vcaltmp.h
 usr/lib/libical.a
 usr/lib/libicalss.a
 usr/lib/libicalvcal.a
+/usr/lib/pkgconfig/*.pc

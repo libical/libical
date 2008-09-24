@@ -437,8 +437,7 @@ icalproperty_as_ical_string_r(icalproperty* prop)
     icalvalue* value;
     char *out_buf;
     const char* kind_string = 0;
-
-    char newline[] = "\r\n";
+    const char newline[] = "\r\n";
 
     
     icalerror_check_arg_rz( (prop!=0),"prop");

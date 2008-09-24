@@ -303,25 +303,13 @@ icalcomponent_as_ical_string (icalcomponent* impl)
 char*
 icalcomponent_as_ical_string_r (icalcomponent* impl)
 {
-   char* buf, *out_buf;
+   char* buf;
    char* tmp_buf;
    size_t buf_size = 1024;
    char* buf_ptr = 0;
     pvl_elem itr;
-
-/* RFC 2445 explicitly says that the newline is *ALWAYS* a \r\n (CRLF)!!!! */
-
-/* WIN32 automatically adds the \r, Anybody else need it?
-   well, the spec says \r\n is a MUST
-
-#ifdef ICAL_UNIX_NEWLINE    
-    char newline[] = "\n";
-#else
-*/
-    char newline[] = "\r\n";
-/*
-#endif
-*/
+   /* RFC 2445 explicitly says that the newline is *ALWAYS* a \r\n (CRLF)!!!! */
+   const char newline[] = "\r\n";
    
    icalcomponent *c;
    icalproperty *p;
@@ -379,7 +367,6 @@ icalcomponent_as_ical_string_r (icalcomponent* impl)
    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:");
    icalmemory_append_string(&buf, &buf_ptr, &buf_size, 
 			    icalcomponent_kind_to_string(kind));
-   icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
    return buf;
