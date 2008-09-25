@@ -233,7 +233,7 @@ install(TARGETS ical DESTINATION lib)
 ########### install files ###############
 
 install(FILES
-  ical.h
+  ${CMAKE_BINARY_DIR}/src/libical/ical.h
   icalarray.h
   icalattach.h
   icalcomponent.h
