@@ -25,9 +25,12 @@ set(COMBINEDHEADERSICAL
    ${TOPS}/src/libical/icalrestriction.h
    ${TOPS}/src/libical/sspm.h
    ${TOPS}/src/libical/icalmime.h
+   ${TOPS}/src/libical/icallangbind.h
 )
 
-FILE(WRITE  ${ICAL_FILE_H_FILE} "#ifdef __cplusplus\n")
+FILE(WRITE  ${ICAL_FILE_H_FILE} "#ifndef LIBICAL_ICAL_H\n")
+FILE(APPEND ${ICAL_FILE_H_FILE} "#define LIBICAL_ICAL_H\n")
+FILE(APPEND ${ICAL_FILE_H_FILE} "#ifdef __cplusplus\n")
 FILE(APPEND ${ICAL_FILE_H_FILE} "extern \"C\" {\n")
 FILE(APPEND ${ICAL_FILE_H_FILE} "#endif\n")
 
@@ -42,4 +45,5 @@ endforeach (_current_FILE)
 FILE(APPEND ${ICAL_FILE_H_FILE} "\n")
 FILE(APPEND ${ICAL_FILE_H_FILE} "#ifdef __cplusplus\n")
 FILE(APPEND ${ICAL_FILE_H_FILE} "}\n")
+FILE(APPEND ${ICAL_FILE_H_FILE} "#endif\n")
 FILE(APPEND ${ICAL_FILE_H_FILE} "#endif\n")

@@ -1,4 +1,4 @@
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/icalversion.h @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icalversion.h @ONLY)
 
 include_directories(
   ${CMAKE_BINARY_DIR}
