@@ -40,6 +40,6 @@ foreach (_current_FILE ${COMBINEDHEADERSICAL})
 endforeach (_current_FILE)
 
 FILE(APPEND ${ICAL_FILE_H_FILE} "\n")
-FILE(APPEND ${ICAl_FILE_H_FILE} "#ifdef __cplusplus\n")
+FILE(APPEND ${ICAL_FILE_H_FILE} "#ifdef __cplusplus\n")
 FILE(APPEND ${ICAL_FILE_H_FILE} "}\n")
-FILE(APPEND ${ICAl_FILE_H_FILE} "#endif\n")
+FILE(APPEND ${ICAL_FILE_H_FILE} "#endif\n")
