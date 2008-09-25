@@ -20,7 +20,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 #include <string.h>
 
 #if defined(sun) && defined(__SVR4)
@@ -40,6 +42,10 @@
 # ifdef HAVE_ENDIAN_H
 #  include <endian.h>
 # endif 
+#endif
+
+#ifdef WIN32
+#include <io.h>
 #endif
 
 #include <limits.h>
@@ -178,13 +184,11 @@ find_transidx (time_t *transitions, ttinfo *types, int *trans_idx, long int num_
 static void
 set_zone_directory (void)
 {
+	char file_path[PATH_MAX];
 	const char *fname = ZONES_TAB_SYSTEM_FILENAME;
 	int i;	
 
 	for (i = 0;i < NUM_SEARCH_PATHS; i++) {
-		int flen = strlen (search_paths [i]) + strlen (fname) + 2;
-		char file_path [flen];
-
 		sprintf (file_path, "%s/%s", search_paths [i], fname);
 		if (!access (file_path, F_OK|R_OK)) {
 			zdir = search_paths [i];
