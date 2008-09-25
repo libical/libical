@@ -32,8 +32,8 @@
 #endif
 
 #include <libical/ical.h>
-#include <libicalss/icalss.h>
-#include <libicalvcal/icalvcal.h>
+#include <libical/icalss.h>
+#include <libicalvcal/vobject.h>
 
 #include "regression.h"
 

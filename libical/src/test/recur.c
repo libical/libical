@@ -36,7 +36,7 @@
 #endif
 
 #include <libical/ical.h>
-#include <libicalss/icalss.h>
+#include <libical/icalss.h>
 
 #ifdef WIN32
 #define snprintf	_snprintf

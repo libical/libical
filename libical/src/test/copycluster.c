@@ -33,7 +33,7 @@
 #include <stdlib.h> /* for exit */
 
 #include <libical/ical.h>
-#include <libicalss/icalss.h>
+#include <libical/icalss.h>
 
 #ifdef SIGALRM
 

@@ -34,7 +34,7 @@
 #include <string.h> /* For strerror */
 
 #include <libical/ical.h>
-#include <libicalss/icalss.h>
+#include <libical/icalss.h>
 #include "regression.h"
 
 extern int VERBOSE;

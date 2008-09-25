@@ -31,7 +31,7 @@
 #include <stdlib.h> /* for free */
 
 #include <libical/ical.h>
-#include <libicalss/icalss.h>
+#include <libical/icalss.h>
 
 void send_message(icalcomponent *reply,const char* this_user)
 {
