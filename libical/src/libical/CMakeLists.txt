@@ -2,7 +2,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.in ${CMAKE_CURRENT_BINA
 
 include_directories(
   ${CMAKE_BINARY_DIR}
-  ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_BINARY_DIR}/src/libical
+  ${CMAKE_SOURCE_DIR}/src
+  ${CMAKE_SOURCE_DIR}/src/libical
+  ${CMAKE_BINARY_DIR}/src/libical
 )
 
 set(PACKAGE_DATA_DIR "\"${CMAKE_INSTALL_PREFIX}/share\"")
@@ -210,12 +212,14 @@ SET(ical_LIB_SRCS
    pvl.h
    sspm.c
    sspm.h
-   vsnprintf.c
    icallangbind.h
    icallangbind.c
    caldate.c
    astime.h
 )
+if(NOT WIN32)
+  list(APPEND ical_LIB_SRCS vsnprintf.c)
+endif(NOT WIN32)
 
 add_library(ical SHARED ${ical_LIB_SRCS})
 add_dependencies(ical ical-header)

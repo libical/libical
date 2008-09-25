@@ -37,6 +37,12 @@ set(PROJECT_URL "http://freeassociation.sf.net/")
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
 
+# make msvc less verbose
+if(MSVC)
+  add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
+  add_definitions(-DBIG_ENDIAN=0 -DLITTLE_ENDIAN=1 -DBYTE_ORDER=BIG_ENDIAN)
+endif(MSVC)
+
 # set the output paths
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 if(WIN32)
