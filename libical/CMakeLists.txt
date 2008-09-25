@@ -34,6 +34,9 @@ set(LIBICAL_LIB_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR
 set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
 set(PROJECT_URL "http://freeassociation.sf.net/")
 
+# must have Perl to create the derived stuff
+find_package(Perl REQUIRED)
+
 # set the output paths
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 if(WIN32)
@@ -42,8 +45,11 @@ else(WIN32)
   set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib )
 endif(WIN32)
 
-set (LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
-set (LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
+set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
+set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
+set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include" CACHE STRING "Include directory name" FORCE)
+set(SHARE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share" CACHE STRING "Share directory name" FORCE)
+
 
 IF(APPLE)
   set(CMAKE_INSTALL_NAME_DIR ${LIB_DESTINATION})
@@ -108,10 +114,10 @@ add_subdirectory(scripts)
 add_subdirectory(test-data)
 add_subdirectory(src)
 add_subdirectory(examples)
-if(DEFINED USE_BUILTIN_TZDATA)
+if(USE_BUILTIN_TZDATA)
   # use our zoneinfo if cmake is passed -DUSE_BUILTIN_TZDATA
   add_subdirectory(zoneinfo)
-endif(DEFINED USE_BUILTIN_TZDATA)
+endif(USE_BUILTIN_TZDATA)
 
 ############# install stuff ######################
 

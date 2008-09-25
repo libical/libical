@@ -1,4 +1,36 @@
-include_directories(${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/libicalss ${CMAKE_SOURCE_DIR}/src/libical)
+include_directories(
+  ${CMAKE_BINARY_DIR}
+  ${CMAKE_SOURCE_DIR}/src
+  ${CMAKE_SOURCE_DIR}/src/libicalss ${CMAKE_BINARY_DIR}/src/libicalss 
+  ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_BINARY_DIR}/src/libical
+)
+
+if(WIN32)
+  set(TOPS "\"${CMAKE_SOURCE_DIR}\"")
+  set(TOPB "\"${CMAKE_BINARY_DIR}\"")
+else(WIN32)
+  set(TOPS "${CMAKE_SOURCE_DIR}")
+  set(TOPB "${CMAKE_BINARY_DIR}")
+endif(WIN32)
+
+add_custom_command(
+  OUTPUT
+  ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+  COMMAND
+  ${CMAKE_COMMAND}
+    -DTOPS:FILEPATH=${TOPS}
+    -DTOPB:FILEPATH=${TOPB}
+    -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
+  DEPENDS
+  ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.h
+  ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.h
+  ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h
+)
+
+add_custom_target(icalss-header DEPENDS
+  ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+)
 
 ########### next target ###############
 
@@ -34,18 +66,35 @@ set(icalss_LIB_SRCS
 )
 
 add_library(icalss SHARED ${icalss_LIB_SRCS})
+add_dependencies(icalss icalss-header)
 
 target_link_libraries(icalss)
 
-set_target_properties(icalss PROPERTIES VERSION 4.2.0 SOVERSION 4)
+set_target_properties(icalss PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
 install(TARGETS icalss DESTINATION lib)
 
 
 ########### install files ###############
 
-install(FILES  icalss.h  icalcalendar.h icalclassify.h icalcluster.h icaldirset.h icaldirsetimpl.h icalfileset.h icalfilesetimpl.h icalgauge.h icalgaugeimpl.h icalmessage.h icalset.h icalspanlist.h icalssyacc.h $(libicalssinclude_BDBHEADERS) DESTINATION /include/libical)
-
-
+install(FILES
+  icalss.h
+  icalcalendar.h
+  icalclassify.h
+  icalcluster.h
+  icaldirset.h 
+  icaldirsetimpl.h
+  icalfileset.h
+  icalfilesetimpl.h
+  icalgauge.h
+  icalgaugeimpl.h
+  icalmessage.h
+  icalset.h
+  icalspanlist.h
+  icalssyacc.h
+  #$(libicalssinclude_BDBHEADERS)
+  DESTINATION
+ ${INCLUDE_INSTALL_DIR}/libical
+)
 
 #original Makefile.am contents follow:
 

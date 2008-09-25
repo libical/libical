@@ -11,7 +11,7 @@ add_library(LibicalWrap SHARED ${LibicalWrap_LIB_SRCS})
 
 target_link_libraries(LibicalWrap)
 
-set_target_properties(LibicalWrap PROPERTIES VERSION 4.2.0 SOVERSION 4)
+set_target_properties(LibicalWrap PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
 install(TARGETS LibicalWrap DESTINATION lib)
 
 

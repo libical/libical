@@ -29,7 +29,7 @@ add_library(ical_jni SHARED ${ical_jni_LIB_SRCS})
 
 target_link_libraries(ical_jni ical_cxx)
 
-set_target_properties(ical_jni PROPERTIES VERSION 4.2.0 SOVERSION 4)
+set_target_properties(ical_jni PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
 install(TARGETS ical_jni DESTINATION lib)
 
 

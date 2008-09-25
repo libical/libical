@@ -6,8 +6,7 @@ add_subdirectory(test)
 
 ########### install files ###############
 
-install(FILES  ical.h DESTINATION /include)
-
+install(FILES ical.h DESTINATION ${INCLUDE_INSTALL_DIR})
 
 
 #original Makefile.am contents follow:
