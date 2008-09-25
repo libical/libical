@@ -161,7 +161,9 @@ typedef long intptr_t;
 #include <string.h> /* for strdup and strchr*/
 #include <assert.h>
 #include <stddef.h> /* For offsetof() macro */
+#ifdef HAVE_INTTYPES_H
 #include <inttypes.h>
+#endif
 
 #include "pvl.h"
 
