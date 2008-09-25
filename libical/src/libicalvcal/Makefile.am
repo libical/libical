@@ -29,7 +29,7 @@ libicalvcal_la_SOURCES =	\
 	vcaltmp.c		\
 	$(libicalvcal_la_DEVSOURCES)
 
-libicalvcalincludedir = $(includedir)/libicalvcal
+libicalvcalincludedir = $(includedir)/libical
 
 libicalvcalinclude_HEADERS =	\
 	icalvcal.h		\
