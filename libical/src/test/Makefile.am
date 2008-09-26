@@ -1,15 +1,17 @@
-if WITH_CXX_BINDINGS
-cxx_inc=-DWITH_CXX_BINDINGS
-cxx_libs=../libical/libical_cxx.la
-regression_cxx_SOURCES = 		\
+regression_SOURCES = 		\
 	regression.c		\
 	regression.h		\
 	regression-component.c	\
 	regression-classify.c	\
 	regression-utils.c	\
 	regression-recur.c	\
-	regression-storage.c	\
-	regression-cxx.cpp
+	regression-storage.c
+
+if WITH_CXX_BINDINGS
+cxx_inc=-DWITH_CXX_BINDINGS
+cxx_libs=../libical/libical_cxx.la
+regression_SOURCES +=          \
+regression-cxx.cpp
 else
 cxx_inc=
 cxx_libs=
@@ -28,7 +30,7 @@ else
 STOW = stow
 endif
 
-noinst_PROGRAMS = copycluster regression parser $(STOW) recur testmime testvcal process timezones
+check_PROGRAMS = copycluster regression parser $(STOW) recur testmime testvcal process timezones
 
 LDADD =  ../libicalss/libicalss.la ../libicalvcal/libicalvcal.la $(cxx_libs) ../libical/libical.la $(bdb4_libs)
 
@@ -44,28 +46,10 @@ INCLUDES = 						\
 	-DTEST_DATADIR=\"$(top_srcdir)/test-data\"	\
 	$(cxx_inc) $(bdb4_inc)
 
-regression_SOURCES = 		\
-	regression.c		\
-	regression.h		\
-	regression-component.c	\
-	regression-classify.c	\
-	regression-utils.c	\
-	regression-recur.c	\
-	regression-storage.c
-
-
 TESTS=regression timezones
-copycluster_SOURCES = copycluster.c
-
-timezones_SOURCES = \
-	timezones.c
 
 parser_SOURCES = icaltestparser.c
-stow_SOURCES = stow.c
-testvcal_SOURCES = testvcal.c
-recur_SOURCES = recur.c 
-testmime_SOURCES = testmime.c
-process_SOURCES = process.c
+
 # clusterin.vcd should be a real file with data but it doesn't seem to be in cvs
 CLEANFILES = 				\
 	test_fileset.ics 		\
