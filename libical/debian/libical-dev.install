@@ -40,12 +40,11 @@ usr/include/libical/icalmessage.h
 usr/include/libical/icalset.h
 usr/include/libical/icalspanlist.h
 usr/include/libical/icalssyacc.h
-usr/include/libicalvcal
-usr/include/libicalvcal/icalvcal.h
-usr/include/libicalvcal/port.h
-usr/include/libicalvcal/vcc.h
-usr/include/libicalvcal/vobject.h
-usr/include/libicalvcal/vcaltmp.h
+usr/include/libical/icalvcal.h
+usr/include/libical/port.h
+usr/include/libical/vcc.h
+usr/include/libical/vobject.h
+usr/include/libical/vcaltmp.h
 usr/lib/libical.a
 usr/lib/libicalss.a
 usr/lib/libicalvcal.a
