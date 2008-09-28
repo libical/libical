@@ -649,8 +649,13 @@ void test_dirset()
     int i;
     int count = 0;
 
+#ifndef _WIN32
     mkdir("store", 0755);
     mkdir("store-new", 0755);
+#else
+    mkdir("store");
+    mkdir("store-new");
+#endif
 
     s = icaldirset_new("store");
     s2 = icaldirset_new("store-new");
@@ -927,8 +932,13 @@ void test_calendar()
     icalerrorenum error;
     struct icaltimetype atime = icaltime_from_timet( time(0),0);
 
+#ifndef _WIN32
     mkdir("calendar", 0755);
     mkdir("calendar/booked", 0755);
+#else
+    mkdir("calendar");
+    mkdir("calendar/booked");
+#endif
 
     calendar = icalcalendar_new("calendar");
 
