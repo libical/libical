@@ -1,4 +1,9 @@
-include_directories(${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_SOURCE_DIR}/src/libicalss)
+include_directories(
+  ${CMAKE_BINARY_DIR} 
+  ${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src
+  ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_BINARY_DIR}/src/libical 
+  ${CMAKE_SOURCE_DIR}/src/libicalss ${CMAKE_BINARY_DIR}/src/libicalss
+)
 
 set(TEST_DATADIR "\"${CMAKE_SOURCE_DIR}/test-data\"")
 add_definitions(-DTEST_DATADIR=${TEST_DATADIR})
