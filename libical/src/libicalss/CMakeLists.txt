@@ -15,12 +15,12 @@ endif(WIN32)
 
 add_custom_command(
   OUTPUT
-  ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+  ${CMAKE_BINARY_DIR}/src/libical/icalss.h
   COMMAND
   ${CMAKE_COMMAND}
     -DTOPS:FILEPATH=${TOPS}
     -DTOPB:FILEPATH=${TOPB}
-    -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+    -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libical/icalss.h
     -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   DEPENDS
   ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.h
@@ -29,7 +29,7 @@ add_custom_command(
 )
 
 add_custom_target(icalss-header DEPENDS
-  ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+  ${CMAKE_BINARY_DIR}/src/libical/icalss.h
 )
 
 ########### next target ###############
@@ -71,13 +71,12 @@ add_dependencies(icalss icalss-header)
 target_link_libraries(icalss ical)
 
 set_target_properties(icalss PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
-install(TARGETS icalss DESTINATION lib)
-
+install(TARGETS icalss ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
 install(FILES
-  ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+  ${CMAKE_BINARY_DIR}/src/libical/icalss.h
   icalcalendar.h
   icalclassify.h
   icalcluster.h

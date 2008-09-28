@@ -27,8 +27,7 @@ add_library(icalvcal SHARED ${icalvcal_LIB_SRCS})
 target_link_libraries(icalvcal ical)
 
 set_target_properties(icalvcal PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
-install(TARGETS icalvcal DESTINATION lib)
-
+install(TARGETS icalvcal ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

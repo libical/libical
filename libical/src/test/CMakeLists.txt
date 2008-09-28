@@ -92,12 +92,13 @@ target_link_libraries(process ical icalss)
 
 ########### next target ###############
 
-set(timezones_SRCS timezones.c)
+if(NOT WIN32)
+  set(timezones_SRCS timezones.c)
 
-add_executable(timezones ${timezones_SRCS})
+  add_executable(timezones ${timezones_SRCS})
 
-target_link_libraries(timezones ical icalss)
-
+  target_link_libraries(timezones ical icalss)
+endif(NOT WIN32)
 
 ########### install files ###############
 

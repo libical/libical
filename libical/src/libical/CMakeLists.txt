@@ -227,8 +227,7 @@ add_dependencies(ical ical-header)
 target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
 
 set_target_properties(ical PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
-install(TARGETS ical DESTINATION lib)
-
+install(TARGETS ical ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
