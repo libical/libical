@@ -47,11 +47,6 @@
 #include <string.h> /* for strdup */
 #include <limits.h> /* for INT_MAX */
 
-#ifdef WIN32
-#define strncasecmp      strnicmp
-#endif
-
-
 struct icalcomponent_impl 
 {
 	char id[5];

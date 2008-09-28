@@ -31,6 +31,7 @@ check_function_exists(unsetenv HAVE_UNSETENV)
 include(CheckTypeSize)
 check_type_size(mode_t SIZEOF_MODE_T)
 check_type_size(size_t SIZEOF_SIZE_T)
+check_type_size(intptr_t INTPTR_T) # please do not rename HAVE_INTPTR_T will automatically be defined
 
 include(FindThreads)
 check_library_exists(pthread pthread_attr_get_np "" HAVE_PTHREAD_ATTR_GET_NP)

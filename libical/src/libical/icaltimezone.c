@@ -47,7 +47,6 @@
 #ifdef WIN32
 #include <mbstring.h>
 #include <windows.h>
-#define snprintf _snprintf
 /* Undef the similar macro from pthread.h, it doesn't check if
  * gmtime() returns NULL.
  */

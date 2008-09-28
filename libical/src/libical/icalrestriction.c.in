@@ -19,12 +19,6 @@
 
 #define TMP_BUF_SIZE 1024
 
-#ifdef WIN32
-#define snprintf	_snprintf
-#define strcasecmp	stricmp
-#endif
-
-
 /* Define the structs for the restrictions. these data are filled out
 in machine generated code below */
 
@@ -58,9 +52,6 @@ static const icalrestriction_component_record*
 icalrestriction_get_component_restriction(icalproperty_method method,
 					  icalcomponent_kind component,
 					  icalcomponent_kind subcomponent);
-
-static const icalrestriction_component_record icalrestriction_component_records[];
-static const icalrestriction_property_record icalrestriction_property_records[]; 
 
 icalrestriction_property_record null_prop_record =   {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_PROPERTY,ICAL_RESTRICTION_UNKNOWN,0};
 icalrestriction_component_record null_comp_record =   {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_COMPONENT,ICAL_RESTRICTION_UNKNOWN,0};
@@ -467,6 +458,8 @@ int icalrestriction_check(icalcomponent* outer_comp)
 
 }
 
+<insert_code_here>
+
 static const icalrestriction_property_record*
 icalrestriction_get_property_restriction(icalproperty_method method,
 					 icalcomponent_kind component,
@@ -510,4 +503,3 @@ icalrestriction_get_component_restriction(icalproperty_method method,
 	
     return &null_comp_record;
 }
-

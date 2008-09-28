@@ -45,13 +45,42 @@
 #endif
 
 #ifdef WIN32
+#if !defined(HAVE_BYTESWAP_H) && !defined(HAVE_SYS_ENDIAN_H) && !defined(HAVE_ENDIAN_H)
+#define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8 ) & 0xff)
+#define bswap_32(x) (((x) << 24) & 0xff000000)  \
+                    | (((x) << 8) & 0xff0000)   \
+                    | (((x) >> 8) & 0xff00)     \
+                    | (((x) >> 24) & 0xff )
+#define bswap_64(x) ((((x) & 0xff00000000000000ull) >> 56) \
+                    | (((x) & 0x00ff000000000000ull) >> 40) \
+                    | (((x) & 0x0000ff0000000000ull) >> 24) \
+                    | (((x) & 0x000000ff00000000ull) >> 8) \
+                    | (((x) & 0x00000000ff000000ull) << 8) \
+                    | (((x) & 0x0000000000ff0000ull) << 24) \
+                    | (((x) & 0x000000000000ff00ull) << 40) \
+                    | (((x) & 0x00000000000000ffull) << 56))
+#endif
 #include <io.h>
+#endif
+
+#ifndef PATH_MAX
+#define PATH_MAX 512
+#endif
+
+#ifndef F_OK
+#define F_OK 0
+#endif
+
+#ifndef R_OK
+#define R_OK 4
 #endif
 
 #include <limits.h>
 #include <time.h>
 #include <stdlib.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <libical/icalerror.h>
 #include <icaltz-util.h>
 

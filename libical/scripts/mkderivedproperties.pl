@@ -228,6 +228,7 @@ EOM
 	print<<EOM;
 $type icalproperty_get_${lc}(const icalproperty* prop){
 	icalerror_check_arg( (prop!=0),"prop");
+#ifndef _MSC_VER
         /*
 	 * Code by dirk\@objectpark.net:
 	 * Set the time zone manually. I am really puzzled that 
@@ -244,6 +245,9 @@ $type icalproperty_get_${lc}(const icalproperty* prop){
 		icaltime_set_timezone(&itt, zone);
         }
 	return itt;
+#else
+    return icalvalue_get_datetime(icalproperty_get_value(prop));
+#endif
 }
 EOM
     } else {

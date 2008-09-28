@@ -24,6 +24,9 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H 1
 
+/* Define to 1 if you have type 'intptr_t' defined. */
+#cmakedefine HAVE_INTPTR_T 1
+
 /* Define to 1 if you have the `isspace' function. */
 #cmakedefine HAVE_ISSPACE 1
 
@@ -147,4 +150,11 @@
 #cmakedefine HAVE_SIZEOF_SIZE_T
 #if !defined(HAVE_SIZEOF_SIZE_T)
 #define size_t int
+#endif
+
+/* some windows flags */
+#ifdef WIN32
+#define strncasecmp strnicmp
+#define strcasecmp stricmp
+#define snprintf _snprintf
 #endif

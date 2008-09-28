@@ -1,6 +1,6 @@
 include_directories(
   ${CMAKE_BINARY_DIR}
-  ${CMAKE_SOURCE_DIR}/src
+  ${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/libicalss ${CMAKE_BINARY_DIR}/src/libicalss 
   ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_BINARY_DIR}/src/libical
 )
@@ -77,7 +77,7 @@ install(TARGETS icalss DESTINATION lib)
 ########### install files ###############
 
 install(FILES
-  icalss.h
+  ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
   icalcalendar.h
   icalclassify.h
   icalcluster.h
