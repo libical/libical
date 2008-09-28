@@ -68,7 +68,7 @@ set(icalss_LIB_SRCS
 add_library(icalss SHARED ${icalss_LIB_SRCS})
 add_dependencies(icalss icalss-header)
 
-target_link_libraries(icalss)
+target_link_libraries(icalss ical)
 
 set_target_properties(icalss PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
 install(TARGETS icalss DESTINATION lib)
