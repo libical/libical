@@ -7,7 +7,7 @@ include_directories(
   ${CMAKE_BINARY_DIR}/src/libical
 )
 
-set(PACKAGE_DATA_DIR "\"${CMAKE_INSTALL_PREFIX}/share\"")
+set(PACKAGE_DATA_DIR "\"${CMAKE_INSTALL_PREFIX}/share/libical\"")
 add_definitions(-DPACKAGE_DATA_DIR=${PACKAGE_DATA_DIR})
 
 
