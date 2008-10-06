@@ -318,7 +318,7 @@ install(FILES
 #	-I$(top_builddir)/src/libical	\
 #	-I$(srcdir)
 #
-#libical_la_LDFLAGS = -version-info 34:0:34
+#libical_la_LDFLAGS = -version-info 40:0:40
 #
 #libical_la_LIBADD = $(PTHREAD_LIBS)
 #
