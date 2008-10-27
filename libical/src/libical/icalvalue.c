@@ -948,24 +948,29 @@ static char* icalvalue_duration_as_ical_string_r(const icalvalue* value) {
 void print_time_to_string(char* str, const struct icaltimetype *data)
 {
     char temp[20];
+    str[0] = '\0';
 
-    if (icaltime_is_utc(*data)){
-    snprintf(temp,sizeof(temp),"%02d%02d%02dZ",data->hour,data->minute,data->second);
-    } else {
-    snprintf(temp,sizeof(temp),"%02d%02d%02d",data->hour,data->minute,data->second);
-    }   
-
-    strcat(str,temp);
+    if (data != 0) {
+        if (icaltime_is_utc(*data)){
+            snprintf(temp,sizeof(temp),"%02d%02d%02dZ",data->hour,data->minute,data->second);
+            strncat(str,temp,7);
+        } else {
+            snprintf(temp,sizeof(temp),"%02d%02d%02d",data->hour,data->minute,data->second);
+            strncat(str,temp,6);
+        }   
+    }
 }
 
  
 void print_date_to_string(char* str,  const struct icaltimetype *data)
 {
     char temp[20];
+    str[0] = '\0';
 
-    snprintf(temp,sizeof(temp),"%04d%02d%02d",data->year,data->month,data->day);
-
-    strcat(str,temp);
+    if (data != 0) {
+        snprintf(temp,sizeof(temp),"%04d%02d%02d",data->year,data->month,data->day);
+        strncat(str,temp,8);
+    }
 }
 
 static char* icalvalue_date_as_ical_string_r(const icalvalue* value) {
@@ -977,7 +982,7 @@ static char* icalvalue_date_as_ical_string_r(const icalvalue* value) {
 
     str = (char*)icalmemory_new_buffer(9);
  
-    str[0] = 0;
+    str[0] = '\0';
     print_date_to_string(str,&data);
    
     return str;
@@ -985,10 +990,17 @@ static char* icalvalue_date_as_ical_string_r(const icalvalue* value) {
 
 void print_datetime_to_string(char* str,  const struct icaltimetype *data)
 {
-    print_date_to_string(str,data);
-    if ( !data->is_date ) {
-        strcat(str,"T");
-        print_time_to_string(str,data);
+    char temp[20];
+    str[0] = '\0';
+
+    if (data != 0) {
+        print_date_to_string(str,data);
+        if ( !data->is_date ) {
+            strncat(str,"T",19);
+            temp[0] = '\0';
+            print_time_to_string(temp,data);
+            strncat(str,temp,19);
+        }
     }
 }
 
@@ -1013,7 +1025,6 @@ static char* icalvalue_datetime_as_ical_string_r(const icalvalue* value) {
     str = (char*)icalmemory_new_buffer(20);
  
     str[0] = 0;
-
     print_datetime_to_string(str,&data);
    
     return str;
