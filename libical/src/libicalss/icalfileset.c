@@ -56,8 +56,6 @@
 #define S_ISREG(mode)    _S_ISTYPE((mode), _S_IFREG)
 #endif
 
-extern int errno;
-
 /** Default options used when NULL is passed to icalset_new() **/
 icalfileset_options icalfileset_options_default = {O_RDWR|O_CREAT, 0644, 0};
 

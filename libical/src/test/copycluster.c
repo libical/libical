@@ -25,11 +25,17 @@
 
  ======================================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h> /* for printf */
 #include <errno.h>
 #include <string.h> /* For strerror */
 #include <signal.h> /* for signal */
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h> /* for alarm */
+#endif
 #include <stdlib.h> /* for exit */
 
 #include <libical/ical.h>

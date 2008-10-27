@@ -41,7 +41,9 @@
 
 #include <stdlib.h> /* For rand */
 #include <string.h> /* for strrchr, strdup*/
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h>   /* for getopt */
+#endif
 
 /*int sspm_parse_mime(struct sspm_part *parts, 
 	       size_t max_parts,

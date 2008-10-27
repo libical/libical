@@ -47,6 +47,7 @@
 #include <sys/wait.h> /* For waitpid */
 #include <sys/time.h> /* for select */
 #else
+#include <direct.h> /* for mkdir */
 #include <Windows.h>
 #endif
 #include <sys/types.h> /* For wait pid */

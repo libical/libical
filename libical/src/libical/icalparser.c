@@ -55,11 +55,6 @@
 #include "icalmemory.h"
 #include "icalparser.h"
 
-#ifdef WIN32
-#define HAVE_CTYPE_H
-#define HAVE_ISWSPACE
-#endif
-
 #ifdef HAVE_WCTYPE_H
 # include <wctype.h>
 /* Some systems have an imcomplete implementation on wctype (FreeBSD,
