@@ -32,7 +32,9 @@
 
 #include <sys/types.h> /* For send(), others */
 #include <sys/socket.h>  /* For send(), others. */
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h> /* For alarm */
+#endif
 #include <errno.h>
 #include <stdlib.h> /* for malloc */
 #include <string.h>

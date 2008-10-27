@@ -17,7 +17,6 @@
 #ifndef WIN32
 #include <unistd.h> /* for stat, getpid, unlink */
 #include <fcntl.h> /* for fcntl */
-#include <unistd.h> /* for fcntl */
 #else
 #define	S_IRUSR	S_IREAD		/* R for owner */
 #define	S_IWUSR	S_IWRITE	/* W for owner */
