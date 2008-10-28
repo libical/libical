@@ -219,6 +219,10 @@ SET(ical_LIB_SRCS
 )
 if(NOT WIN32)
   list(APPEND ical_LIB_SRCS vsnprintf.c)
+else(NOT WIN32)
+  if(MSVC)
+    list(APPEND ical_LIB_SRCS ../ical.def)
+  endif(MSVC)
 endif(NOT WIN32)
 
 add_library(ical SHARED ${ical_LIB_SRCS})

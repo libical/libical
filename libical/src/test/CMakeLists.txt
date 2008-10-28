@@ -65,11 +65,13 @@ target_link_libraries(recur ical icalss)
 
 ########### next target ###############
 
+if(HAVE_UNISTD_H)
 set(testmime_SRCS testmime.c)
 
 add_executable(testmime ${testmime_SRCS})
 
 target_link_libraries(testmime ical icalss)
+endif(HAVE_UNISTD_H)
 
 
 ########### next target ###############

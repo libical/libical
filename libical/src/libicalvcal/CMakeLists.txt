@@ -22,6 +22,10 @@ SET(icalvcal_LIB_SRCS
    ${icalvcal_LIB_DEVSRCS}
 )
 
+if(MSVC)
+    list(APPEND icalvcal_LIB_SRCS ../icalvcal.def)
+endif(MSVC)
+
 add_library(icalvcal SHARED ${icalvcal_LIB_SRCS})
 
 target_link_libraries(icalvcal ical)

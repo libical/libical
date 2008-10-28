@@ -80,7 +80,6 @@ struct conversion_table_struct {
 	int icaltype;
 };
 
-static const struct conversion_table_struct conversion_table[];
 void* dc_prop(int icaltype, VObject *object, icalcomponent *comp,
 	      icalvcal_defaults *defaults);
 
@@ -158,144 +157,15 @@ static void convert_floating_time_to_utc (struct icaltimetype *itt)
   itt->is_utc = 1;
 }
 
-
-static void icalvcal_traverse_objects(VObject *object,
-				      icalcomponent* last_comp,
-				      icalproperty* last_prop,
-				      icalvcal_defaults *defaults)
-{
-    VObjectIterator iterator;
-    char* name = "[No Name]";
-    icalcomponent* subc = 0;
-    int i;
-    
-    if ( vObjectName(object)== 0){
-	printf("ERROR, object has no name");
-	assert(0);
-	return;
-    }
-
-    name = (char*)vObjectName(object);
-
-    /* Lookup this object in the conversion table */
-    for (i = 0; conversion_table[i].vcalname != 0; i++){
-	if(strcmp(conversion_table[i].vcalname, name) == 0){
-	    break;
-	}
-    }
-    
-    /* Did not find the object. It may be an X-property, or an unknown
-       property */
-    if (conversion_table[i].vcalname == 0){
-
-	/* Handle X properties */
-	if(strncmp(name, "X-",2) == 0){
-	   icalproperty* prop = (icalproperty*)dc_prop(ICAL_X_PROPERTY,object,
-						       last_comp, defaults);
-	   icalproperty_set_x_name(prop,name);
-	   icalcomponent_add_property(last_comp,prop);
-	} else {
-	    return;
-	}
-
-    } else {
-	
-	/* The vCal property is in the table, and it is not an X
-           property, so try to convert it to an iCal component,
-           property or parameter. */
-	
-	switch(conversion_table[i].type){
-	    
-	    
-	    case COMPONENT: {
-		subc = 
-		    (icalcomponent*)(conversion_table[i].conversion_func
-				     (conversion_table[i].icaltype,
-				      object, last_comp, defaults));
-		
-		if (subc) {
-		icalcomponent_add_component(last_comp,subc);
-		}		
-		break;
-	    }
-	    
-	    case PROPERTY: {
-		
-		if (vObjectValueType(object) &&
-		    conversion_table[i].conversion_func != 0 ) {
-		    
-		    icalproperty* prop = 
-			(icalproperty*)(conversion_table[i].conversion_func
-					(conversion_table[i].icaltype,
-					 object, last_comp, defaults));
-		    
-		    if (prop)
-		    icalcomponent_add_property(last_comp,prop);
-
-		    last_prop = prop;
-		    
-		}
-		break;
-	    }
-	    
-	    case PARAMETER: {
-		break;
-	    }
-	    
-	    case UNSUPPORTED: {
-
-		/* If the property is listed as UNSUPPORTED, insert a
-                   X_LIC_ERROR property to note this fact. */
-
-		char temp[1024];
-		char* message = "Unsupported vCal property";
-		icalparameter *error_param;
-		icalproperty *error_prop;
-
-		snprintf(temp,1024,"%s: %s",message,name);
-		
-		error_param = icalparameter_new_xlicerrortype(
-		    ICAL_XLICERRORTYPE_UNKNOWNVCALPROPERROR
-		    );
-
-		error_prop = icalproperty_new_xlicerror(temp);
-		icalproperty_add_parameter(error_prop, error_param);
-
-		icalcomponent_add_property(last_comp,error_prop);
-
-		break;
-	    }
-
-	    case IGNORE: {
-	      /* Do Nothing. */
-	      break;
-	    }
-
-	}
-    }
-
-
-    /* Now, step down into the next vCalproperty */
-
-    initPropIterator(&iterator,object);
-    while (moreIteration(&iterator)) {
-	VObject *eachProp = nextVObject(&iterator);
-
-	/* If 'object' is a component, then the next traversal down
-           should use it as the 'last_comp' */
-
-	if(subc!=0){
-	    icalvcal_traverse_objects(eachProp,subc,last_prop,defaults);
-	
-	} else {
-	    icalvcal_traverse_objects(eachProp,last_comp,last_prop,defaults);
-	}
-    }
-}
+static void icalvcal_traverse_objects(VObject *,
+				      icalcomponent *,
+				      icalproperty *,
+				      icalvcal_defaults *);
 
 icalcomponent* icalvcal_convert_with_defaults (VObject *object,
 					       icalvcal_defaults *defaults)
 {
+
    char* name =  (char*)vObjectName(object);
    icalcomponent* container = icalcomponent_new(ICAL_XROOT_COMPONENT);
    icalcomponent* root;
@@ -1603,6 +1473,140 @@ static const struct conversion_table_struct conversion_table[] =
 {0,0,0,0}
 };
 
+
+static void icalvcal_traverse_objects(VObject *object,
+				      icalcomponent* last_comp,
+				      icalproperty* last_prop,
+				      icalvcal_defaults *defaults)
+{
+    VObjectIterator iterator;
+    char* name = "[No Name]";
+    icalcomponent* subc = 0;
+    int i;
+
+    if ( vObjectName(object)== 0){
+	printf("ERROR, object has no name");
+	assert(0);
+	return;
+    }
+
+    name = (char*)vObjectName(object);
+
+    /* Lookup this object in the conversion table */
+    for (i = 0; conversion_table[i].vcalname != 0; i++){
+	if(strcmp(conversion_table[i].vcalname, name) == 0){
+	    break;
+	}
+    }
+    
+    /* Did not find the object. It may be an X-property, or an unknown
+       property */
+    if (conversion_table[i].vcalname == 0){
+
+	/* Handle X properties */
+	if(strncmp(name, "X-",2) == 0){
+	   icalproperty* prop = (icalproperty*)dc_prop(ICAL_X_PROPERTY,object,
+						       last_comp, defaults);
+	   icalproperty_set_x_name(prop,name);
+	   icalcomponent_add_property(last_comp,prop);
+	} else {
+	    return;
+	}
+
+    } else {
+	
+	/* The vCal property is in the table, and it is not an X
+           property, so try to convert it to an iCal component,
+           property or parameter. */
+	
+	switch(conversion_table[i].type){
+	    
+	    
+	    case COMPONENT: {
+		subc = 
+		    (icalcomponent*)(conversion_table[i].conversion_func
+				     (conversion_table[i].icaltype,
+				      object, last_comp, defaults));
+		
+		if (subc) {
+		icalcomponent_add_component(last_comp,subc);
+		}		
+		break;
+	    }
+	    
+	    case PROPERTY: {
+		
+		if (vObjectValueType(object) &&
+		    conversion_table[i].conversion_func != 0 ) {
+		    
+		    icalproperty* prop = 
+			(icalproperty*)(conversion_table[i].conversion_func
+					(conversion_table[i].icaltype,
+					 object, last_comp, defaults));
+		    
+		    if (prop)
+		    icalcomponent_add_property(last_comp,prop);
+
+		    last_prop = prop;
+		    
+		}
+		break;
+	    }
+	    
+	    case PARAMETER: {
+		break;
+	    }
+	    
+	    case UNSUPPORTED: {
+
+		/* If the property is listed as UNSUPPORTED, insert a
+                   X_LIC_ERROR property to note this fact. */
+
+		char temp[1024];
+		char* message = "Unsupported vCal property";
+		icalparameter *error_param;
+		icalproperty *error_prop;
+
+		snprintf(temp,1024,"%s: %s",message,name);
+		
+		error_param = icalparameter_new_xlicerrortype(
+		    ICAL_XLICERRORTYPE_UNKNOWNVCALPROPERROR
+		    );
+
+		error_prop = icalproperty_new_xlicerror(temp);
+		icalproperty_add_parameter(error_prop, error_param);
+
+		icalcomponent_add_property(last_comp,error_prop);
+
+		break;
+	    }
+
+	    case IGNORE: {
+	      /* Do Nothing. */
+	      break;
+	    }
+
+	}
+    }
+
+
+    /* Now, step down into the next vCalproperty */
+
+    initPropIterator(&iterator,object);
+    while (moreIteration(&iterator)) {
+	VObject *eachProp = nextVObject(&iterator);
+
+	/* If 'object' is a component, then the next traversal down
+           should use it as the 'last_comp' */
+
+	if(subc!=0){
+	    icalvcal_traverse_objects(eachProp,subc,last_prop,defaults);
+	
+	} else {
+	    icalvcal_traverse_objects(eachProp,last_comp,last_prop,defaults);
+	}
+    }
+}
 
 #if 0
 		switch (vObjectValueType(object)) {

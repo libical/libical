@@ -65,6 +65,10 @@ set(icalss_LIB_SRCS
    ${icalss_LIB_DEVSRCS}
 )
 
+if(MSVC)
+    list(APPEND icalss_LIB_SRCS ../icalss.def)
+endif(MSVC)
+
 add_library(icalss SHARED ${icalss_LIB_SRCS})
 add_dependencies(icalss icalss-header)
 
