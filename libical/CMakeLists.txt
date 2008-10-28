@@ -24,7 +24,8 @@
 project(libical)
 
 cmake_minimum_required(VERSION 2.4)
-cmake_policy(VERSION 2.6)
+#cannot use the following line with cmake 2.4.x
+#cmake_policy(VERSION 2.6)
 
 set(LIBICAL_LIB_MAJOR_VERSION "0")
 set(LIBICAL_LIB_MINOR_VERSION "41")
