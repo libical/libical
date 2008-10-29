@@ -1595,7 +1595,21 @@ fetch_lat_long_from_string  (const char *str, int *latitude_degrees, int *latitu
 	len = sptr - loc;
 	location = strncpy (location, loc, len);
 	location [len] = '\0';
-	
+
+#if defined(sun) && defined(__SVR4)
+    /* Handle EET, MET and WET in zone_sun.tab. */
+    if (!strcmp (location, "Europe/")) {
+        while (*sptr != '\t')
+            sptr++;
+        loc = ++sptr;
+        while (!isspace (*sptr))
+            sptr++;
+        len = sptr - loc;
+        location = strncpy (location, loc, len);
+        location [len] = '\0';
+    }
+#endif
+
 	lon = lat + 1;
 	while (*lon != '+' && *lon != '-')
 		lon++;
