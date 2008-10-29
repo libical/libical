@@ -16,7 +16,8 @@
 #define ICALSPANLIST_CXX_H
 
 #include <libical/ical.h>
-#include <libicalss/icalss.h>
+#include <libicalss/icalset.h>
+#include <libicalss/icalspanlist.h>
 #include "vcomponent.h"
 #include <vector>		/* For as_matrix.. */
 
