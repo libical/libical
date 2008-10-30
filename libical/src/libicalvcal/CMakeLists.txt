@@ -3,6 +3,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/libicalss ${CMAKE_BINARY_DIR}/src/libicalss 
   ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_BINARY_DIR}/src/libical
+  ${CMAKE_SOURCE_DIR}/src/libicalvcal ${CMAKE_BINARY_DIR}/src/libicalvcal
 )
 
 #these are generated sources, but we keep them in the repo
