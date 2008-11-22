@@ -81,6 +81,21 @@ gcc-specific automatic dependancy tracking.
 
 You will not need to re-run automake unless you got the sources from SVN. 
 
+When updating to a new release, tweak the version number in the following files:
+CMakeLists.txt
+configure.in
+src/libical/icalversion.h
+src/java/Makefile.am
+src/libicalcap/Makefile.am
+src/libical/Makefile.am
+src/libicalss/Makefile.am
+src/libicalvcal/Makefile.am
+src/java/CMakeLists.txt
+src/libicalcap/CMakeLists.txt
+src/libicalss/CMakeLists.txt
+src/libicalvcal/CMakeLists.txt
+
+
 Using the Library
 -----------------
 
