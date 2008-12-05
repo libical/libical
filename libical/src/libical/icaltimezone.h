@@ -44,15 +44,6 @@
 typedef struct _icaltimezone		icaltimezone;
 #endif
 
-/*
- * ical_tzid_prefix is a globally unique string used as part of the
- * time zone names generated from system tzdata.  Applications
- * may elect to set this string to something other than the
- * default by setting ical_tzid_prefix to some other value prior to
- * performing any libical library calls.
- */
-extern const char *ical_tzid_prefix;
-
 /**
  * @par Creating/Destroying individual icaltimezones.
  */
@@ -66,6 +57,12 @@ icaltimezone *icaltimezone_copy			(icaltimezone *originalzone);
 void icaltimezone_free				(icaltimezone *zone,
 						 int free_struct);
 
+/** Sets the prefix to be used for tzid's generated from system tzdata.
+    Must be globally unique (such as a domain name owned by the developer
+    of the calling application), and begin and end with forward slashes.
+    Do not change or de-allocate the string buffer after calling this.
+ */
+void icaltimezone_set_tzid_prefix(const char *new_prefix);
 
 /**
  * @par Accessing timezones.

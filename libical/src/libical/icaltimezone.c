@@ -2033,3 +2033,10 @@ void free_zone_directory(void)
 		free(zone_files_directory);
 	}
 }
+
+void icaltimezone_set_tzid_prefix(const char *new_prefix)
+{
+	if (new_prefix) {
+		ical_tzid_prefix = new_prefix;
+	}
+}
