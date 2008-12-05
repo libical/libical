@@ -59,9 +59,10 @@
 /** This is the toplevel directory where the timezone data is installed in. */
 #define ZONEINFO_DIRECTORY	PACKAGE_DATA_DIR "/zoneinfo"
 
-/** The prefix we use to uniquely identify TZIDs. */
-#define TZID_PREFIX		"/citadel.org/"
-#define TZID_PREFIX_LEN		13
+/** The prefix we use to uniquely identify TZIDs.
+    It must begin and end with forward slashes.
+ */
+const char *ical_tzid_prefix =	"/freeassociation.sourceforge.net/";
 
 /** This is the filename of the file containing the city names and
     coordinates of all the builtin timezones. */
@@ -1276,7 +1277,7 @@ icaltimezone_get_display_name		(icaltimezone	*zone)
 		   this is one of our TZIDs and if so we jump to the city name
 		   at the end of it. */
 		if (display_name
-		    && !strncmp (display_name, TZID_PREFIX, TZID_PREFIX_LEN)) {
+		    && !strncmp (display_name, ical_tzid_prefix, strlen(ical_tzid_prefix))) {
 		    /* Get the location, which is after the 3rd '/' char. */
 		    const char *p;
 		    int num_slashes = 0;
@@ -1292,7 +1293,6 @@ icaltimezone_get_display_name		(icaltimezone	*zone)
 
 	return display_name;
 }
-
 
 icalarray*
 icaltimezone_array_new			(void)
@@ -1486,7 +1486,7 @@ icaltimezone_get_builtin_timezone_from_tzid (const char *tzid)
 	return NULL;
 
     /* Check that the TZID starts with our unique prefix. */
-    if (strncmp (tzid, TZID_PREFIX, TZID_PREFIX_LEN))
+    if (strncmp (tzid, ical_tzid_prefix, strlen(ical_tzid_prefix)))
 	return NULL;
 
     /* Get the location, which is after the 3rd '/' character. */

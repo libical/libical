@@ -99,8 +99,6 @@ static int r_pos [] = {1, 2, 3, -2, -1};
 static char *search_paths [] = {"/usr/share/zoneinfo","/usr/lib/zoneinfo","/etc/zoneinfo","/usr/share/lib/zoneinfo"};
 static char *zdir = NULL;
 
-#define TZID_PREFIX		"/softwarestudio.org/"
-
 #define NUM_SEARCH_PATHS (sizeof (search_paths)/ sizeof (search_paths [0]))
 #define EFREAD(buf,size,num,fs) \
 	if (fread (buf, size, num, fs) == 0  && ferror (fs)) {\
@@ -124,6 +122,8 @@ typedef struct
 	time_t transition;
 	long int change;
 } leap;
+
+extern const char *ical_tzid_prefix;
 
 static int
 decode (const void *ptr)
@@ -369,8 +369,8 @@ icaltzutil_fetch_timezone (const char *location)
 	tz_comp = icalcomponent_new (ICAL_VTIMEZONE_COMPONENT);
 
 	/* Add tzid property */
-	tzid = (char *) malloc (strlen (TZID_PREFIX) + strlen (location) + 8);
-	sprintf (tzid, "%sTzfile/%s", TZID_PREFIX, location);
+	tzid = (char *) malloc (strlen (ical_tzid_prefix) + strlen (location) + 8);
+	sprintf (tzid, "%sTzfile/%s", ical_tzid_prefix, location);
 	icalprop = icalproperty_new_tzid (tzid);
 	icalcomponent_add_property (tz_comp, icalprop);
 	free (tzid);
