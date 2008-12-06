@@ -46,7 +46,7 @@ install(FILES  libical.jar DESTINATION /share)
 #
 #INCLUDES = -I../libical -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/$(JAVA_PLATFORM)
 #
-#libical_jni_la_LDFLAGS = -no-defined -version-info 42:0:42
+#libical_jni_la_LDFLAGS = -no-defined -version-info 43:0:43
 #
 #libical_jni_la_LIBADD = 			\
 #	../libical/libical_cxx.la
