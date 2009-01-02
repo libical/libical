@@ -1691,13 +1691,16 @@ static int next_weekday_by_week(icalrecur_iterator* impl)
 	 that to get the next day */
       /* ignore position of dow ("4FR"), only use dow ("FR")*/
       dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[BYDAYIDX]); 
+      dow -= impl->rule.week_start; /* Set Sunday to be 0 */
+      if (dow < 0) {
+          dow += 7;
+      }
+
       tt.year = impl->last.year;
       tt.day = impl->last.day;
       tt.month = impl->last.month;
 
-      start_of_week = icaltime_start_doy_of_week(tt);
-      
-      dow--; /* Set Sunday to be 0 */
+      start_of_week = icaltime_start_doy_week(tt, impl->rule.week_start);
       
       if(dow+start_of_week <1){
           /* The selected date is in the previous year. */
