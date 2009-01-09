@@ -226,12 +226,18 @@ else(NOT WIN32)
 endif(NOT WIN32)
 
 add_library(ical SHARED ${ical_LIB_SRCS})
+add_library(ical-static STATIC ${ical_LIB_SRCS})
+
 add_dependencies(ical ical-header)
 
 target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
 
 set_target_properties(ical PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
-install(TARGETS ical ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(ical PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+set_target_properties(ical-static PROPERTIES OUTPUT_NAME "ical")
+set_target_properties(ical-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+
+install(TARGETS ical ical-static ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
