@@ -35,6 +35,10 @@ case "$host" in
     use_builtin_timezone=no
     os_win32=no
     ;;
+*kfreebsd*-gnu*)
+    use_builtin_timezone=no
+    os_win32=no
+    ;;
 *)  
     use_builtin_timezone=yes
     os_win32=no
