@@ -241,6 +241,8 @@ install(TARGETS ical ical-static ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
+install(FILES ${CMAKE_SOURCE_DIR}/src/ical.h DESTINATION ${INCLUDE_INSTALL_DIR})
+
 install(FILES
   ${CMAKE_BINARY_DIR}/src/libical/ical.h
   icalarray.h
