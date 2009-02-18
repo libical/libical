@@ -179,36 +179,39 @@ zname_from_stridx (char *str, long int idx)
 static void 
 find_transidx (time_t *transitions, ttinfo *types, int *trans_idx, long int num_trans, int *stdidx, int *dstidx) 
 {
-	time_t now = time (NULL);
-	int i, found = 0, idx;
+	time_t now, year_start;
+	int i, found = 0;
+	struct icaltimetype itime;
 
-	for (i = 0; i < num_trans; i++)	{
-		if (now < transitions [i]) {
-			found = 1;	
-			break;
+	now = time (NULL);
+	itime = icaltime_from_timet (now, 0);
+	itime.month = itime.day = 1;
+	itime.hour = itime.minute = itime.second = 0;
+	year_start = icaltime_as_timet(itime);
+
+	/* Set this by default */
+	*stdidx = (num_trans - 1);
+
+	for (i = (num_trans - 1); i >= 0; --i)
+		if (year_start < transitions [i]) {
+			int idx;
+			found = 1;
+			idx = trans_idx [i];
+			(types [idx].isdst) ? (*dstidx = i) : (*stdidx = i);
 		}
+
+	/* If the transition found is the last among the list, prepare to use the last two transtions. 
+	 * Using this will most likely throw the DTSTART of the resulting component off by 1 or 2 days
+	 * but it would set right by the adjustment made. 
+	 * NOTE: We need to use the last two transitions only because there is no data for the future 
+	 * transitions. 
+	 */
+	if (found && (*dstidx == -1)) {
+		*dstidx = ((*stdidx) - 1);
 	}
-
-	/* If the transition time is not found, it means the timezone does not have the dst changes */
-	if (!found) {
-		*stdidx = i -1;
-		return;
-	}
-
-	idx = trans_idx [i];
-	types [idx].isdst ? (*dstidx = i) : (*stdidx = i);
-	
-	if (i < num_trans - 1) 
-		i++;
-	else 
-		return;
-
-	idx = trans_idx [i];
-	types [idx].isdst ? (*dstidx = i) : (*stdidx = i);
 
 	return;
 }
-
 
 static void
 set_zone_directory (void)
@@ -251,6 +254,32 @@ calculate_pos (icaltimetype icaltime)
 	return r_pos [pos];
 }
 
+static void
+adjust_dtstart_day_to_rrule (icalcomponent *comp, struct icalrecurrencetype rule)
+{
+	time_t now, year_start;
+	struct icaltimetype start, comp_start, iter_start, itime;
+	icalrecur_iterator *iter;
+
+	now = time (NULL);
+	itime = icaltime_from_timet (now, 0);
+	itime.month = itime.day = 1;
+	itime.hour = itime.minute = itime.second = 0;
+	year_start = icaltime_as_timet(itime);
+
+	comp_start = icalcomponent_get_dtstart (comp);
+	start = icaltime_from_timet (year_start, 0);
+
+	iter = icalrecur_iterator_new (rule, start);
+	iter_start = icalrecur_iterator_next (iter);
+	icalrecur_iterator_free (iter);
+
+	if (iter_start.day != comp_start.day) {
+		comp_start.day = iter_start.day;
+		icalcomponent_set_dtstart (comp, comp_start);
+	}
+}
+
 icalcomponent*
 icaltzutil_fetch_timezone (const char *location)
 {
@@ -274,7 +303,7 @@ icaltzutil_fetch_timezone (const char *location)
 	
 	full_path = (char *) malloc (strlen (zdir) + strlen (location) + 2);
 	sprintf (full_path,"%s/%s",zdir, location);
-	
+
 	if ((f = fopen (full_path, "rb")) == 0) {
 		icalerror_set_errno (ICAL_FILE_ERROR);
 		free (full_path);
@@ -409,6 +438,8 @@ icaltzutil_fetch_timezone (const char *location)
 			icalprop = icalproperty_new_rrule (ical_recur);
 			icalcomponent_add_property (std_comp, icalprop);
 
+			adjust_dtstart_day_to_rrule (std_comp, ical_recur);
+
 			icalprop = icalproperty_new_tzoffsetfrom (types [zp_idx].gmtoff);
 			icalcomponent_add_property (std_comp, icalprop);
 		} else {
@@ -446,6 +477,8 @@ icaltzutil_fetch_timezone (const char *location)
 		ical_recur.by_day [0] = sign * ((abs (pos) * 8) + icaltime_day_of_week (icaltime));
 		icalprop = icalproperty_new_rrule (ical_recur);
 		icalcomponent_add_property (dst_comp, icalprop);
+
+		adjust_dtstart_day_to_rrule (dst_comp, ical_recur);
 
 		icalprop = icalproperty_new_tzoffsetfrom (types [zp_idx].gmtoff);
 		icalcomponent_add_property (dst_comp, icalprop);
