@@ -981,7 +981,6 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 			tail, str, 
 			"Got a VALUE parameter with an unknown type",
 			ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR);
-		    icalparameter_free(param);
 			
 		    value_kind = 
 			icalproperty_kind_to_value_kind(
