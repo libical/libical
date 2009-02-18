@@ -196,7 +196,7 @@ icalset* icalcalendar_get_booked(icalcalendar* impl)
     icalerror_check_arg_rz((impl != 0),"impl");
     
     dir[0] = '\0';
-    strcpy(dir,impl->dir);
+    strncpy(dir,impl->dir,PATH_MAX);
     strcat(dir,"/");
     strcat(dir,BOOKED_DIR);
 
@@ -216,7 +216,7 @@ icalset* icalcalendar_get_incoming(icalcalendar* impl)
     icalerror_check_arg_rz((impl != 0),"impl");
 
     path[0] = '\0';
-    strcpy(path,impl->dir);
+    strncpy(path,impl->dir,PATH_MAX);
     strcat(path,"/");
     strcat(path,INCOMING_FILE);
 
@@ -233,7 +233,7 @@ icalset* icalcalendar_get_properties(icalcalendar* impl)
     icalerror_check_arg_rz((impl != 0),"impl");
 
     path[0] = '\0';
-    strcpy(path,impl->dir);
+    strncpy(path,impl->dir,PATH_MAX);
     strcat(path,"/");
     strcat(path,PROP_FILE);
 
@@ -250,7 +250,7 @@ icalset* icalcalendar_get_freebusy(icalcalendar* impl)
     icalerror_check_arg_rz((impl != 0),"impl");
 
     path[0] = '\0';
-    strcpy(path,impl->dir);
+    strncpy(path,impl->dir,PATH_MAX);
     strcat(path,"/");
     strcat(path,FBLIST_FILE);
 
