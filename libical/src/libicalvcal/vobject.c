@@ -1247,7 +1247,7 @@ static void writeGroup(OFile *fp, VObject *o)
 {
     char buf1[256];
     char buf2[256];
-    strcpy(buf1,NAME_OF(o));
+    strncpy(buf1,NAME_OF(o),256);
     while ((o=isAPropertyOf(o,VCGroupingProp)) != 0) {
 	strncpy(buf2,STRINGZ_VALUE_OF(o),sizeof(buf2));
 	buf2[sizeof(buf2)-1] = '\0';
