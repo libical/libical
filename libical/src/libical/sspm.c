@@ -181,7 +181,7 @@ char* sspm_get_parameter(const char* line, const char* parameter)
     if(s != 0){
 	strncpy(name,p,(size_t)s-(size_t)p);
     } else {
-	strcpy(name,p);
+	strncpy(name,p,1024);
     }
 
     /* Strip off trailing quote, if it exists */
