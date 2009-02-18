@@ -847,14 +847,16 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 				       struct icaltimetype *dtstart,
 				       struct icaltimetype *recurtime) {
   icalproperty *exdate, *exrule;
-  pvl_elem property_iterator = comp->property_iterator;
+  pvl_elem property_iterator;
 
   if (comp == NULL || 
       dtstart == NULL || 
       recurtime == NULL ||
       icaltime_is_null_time(*recurtime))
     /* BAD DATA */
-    return 1;	
+    return 1;
+    
+  property_iterator = comp->property_iterator;
 
   /** first test against the exdate values **/
   for (exdate = icalcomponent_get_first_property(comp,ICAL_EXDATE_PROPERTY);
