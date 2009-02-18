@@ -407,7 +407,7 @@ static void icaldirset_add_uid(icalcomponent* comp)
 	uid = icalproperty_new_uid(uidstring);
 	icalcomponent_add_property(comp,uid);
     } else {
-	strcpy(uidstring,icalproperty_get_uid(uid));
+	strncpy(uidstring,icalproperty_get_uid(uid),ICAL_PATH_MAX);
     }
 }
 
