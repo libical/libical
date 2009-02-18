@@ -139,7 +139,7 @@ void icalcalendar_free(icalcalendar* impl)
     }
 
     if (impl->freebusy !=0){
-	icalset_free(impl->booked);
+	icalset_free(impl->freebusy);
     }
 
     if (impl->properties !=0){
