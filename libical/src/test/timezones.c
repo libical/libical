@@ -54,13 +54,15 @@ int main(int argc, char **argv)
 
         /*
          * determine current local time and date: always use midday in
-         * the current zone
+         * the current zone and first day of first month in the year
          */
         start_time = time(NULL);
         localtime_r(&start_time, &start_tm);
         start_tm.tm_hour = 12;
         start_tm.tm_min = 0;
         start_tm.tm_sec = 0;
+	start_tm.tm_mday = 1;
+	start_tm.tm_mon = 0;
         start_time = mktime(&start_tm);
 
         /* check time conversion for the next 365 days */
