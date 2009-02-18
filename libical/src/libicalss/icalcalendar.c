@@ -89,7 +89,7 @@ icalerrorenum icalcalendar_create(struct icalcalendar_impl* impl)
     icalerror_check_arg_re((impl != 0),"impl",ICAL_BADARG_ERROR);
 
     path[0] = '\0';
-    strcpy(path,impl->dir);
+    strncpy(path,impl->dir,PATH_MAX);
     strcat(path,"/");
     strcat(path,BOOKED_DIR);
 
