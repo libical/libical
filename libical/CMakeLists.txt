@@ -5,7 +5,7 @@
 #
 # -DICAL_ERRORS_ARE_FATAL=[true|false] 
 #  Set to make icalerror_* calls abort instead of internally signaling an error
-#  Default=true
+#  Default=false
 #
 # -DNO_WARN_DEPRECATED=[true|false]
 #  Set if you DO NOT WANT to see deprecated messages.
@@ -66,7 +66,7 @@ IF(APPLE)
 ENDIF(APPLE)
 
 if(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
-  set(ICAL_ERRORS_ARE_FATAL 1)
+  set(ICAL_ERRORS_ARE_FATAL 0)
 else(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
   if(ICAL_ERRORS_ARE_FATAL)
     set(ICAL_ERRORS_ARE_FATAL 1)
