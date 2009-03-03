@@ -1577,13 +1577,48 @@ static int next_month(icalrecur_iterator* impl)
                                                    impl->last.year);
       assert( BYDAYPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
 
+      int set_pos_counter = 0;
+      
+      /* Count the past positions for the BYSETPOS calculation */
+      if(has_by_data(impl,BY_SET_POS)){
+          int last_day = impl->last.day;
+	  for(day = 1; day <= last_day; day++){
+    	      impl->last.day = day;
+	  
+              if(is_day_in_byday(impl,impl->last)){
+        	  set_pos_counter++;
+	      }
+	  }
+          impl->last.day = last_day;
+      }
+
+      int found = 0;
+      
       for(day = impl->last.day+1; day <= days_in_month; day++){
           impl->last.day = day;
-          if(is_day_in_byday(impl,impl->last)){
-              data_valid = 1;
+	  
+          /* If there is no BYSETPOS rule, calculate only by BYDAY */
+          if(!has_by_data(impl,BY_SET_POS) && is_day_in_byday(impl,impl->last)){
+              found = 1;
               break;
           }
+          /* If there is BYSETPOS rule, take into account the occurence
+	     matches with BYDAY */
+          if(has_by_data(impl,BY_SET_POS) && is_day_in_byday(impl,impl->last)){
+	      int i;
+	      set_pos_counter++;
+	      for (i = 0; impl->rule.by_set_pos[i] != ICAL_RECURRENCE_ARRAY_MAX && 
+	    		  i != ICAL_BY_SETPOS_SIZE && !found; i++){
+    	          if (impl->rule.by_set_pos[i] == set_pos_counter){
+                      found = 1;
+		  }
+	      }
+	      if (found)
+                  break;
+          }	  
       }
+      
+      data_valid = found;
 
       if ( day > days_in_month){
           impl->last.day = 1;
