@@ -1361,6 +1361,7 @@ icaltimezone_free_builtin_timezones(void)
 icaltimezone*
 icaltimezone_get_builtin_timezone	(const char *location)
 {
+    icalcomponent *comp;
     icaltimezone *zone;
     int lower;
     const char *zone_location;
@@ -1400,6 +1401,20 @@ icaltimezone_get_builtin_timezone	(const char *location)
 	zone_location = icaltimezone_get_location (zone);
 	if (strcmp (location, zone_location) == 0)
 		return zone;
+    }
+
+    /* Check whether file exists, but is not mentioned in zone.tab.
+       It means it's a deprecated timezone, but still available. */
+    comp = icaltzutil_fetch_timezone (location);
+    if (comp) {
+	icaltimezone tz;
+	icaltimezone_init (&tz);
+	if (icaltimezone_set_component (&tz, comp)) {
+	    icalarray_append (builtin_timezones, &tz);
+	    return icalarray_element_at (builtin_timezones, builtin_timezones->num_elements - 1);
+	} else {
+	    icalcomponent_free (comp);
+	}
     }
 
     return NULL;
