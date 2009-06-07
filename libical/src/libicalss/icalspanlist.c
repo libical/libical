@@ -175,6 +175,7 @@ icalspanlist* icalspanlist_new(icalset *set,
 	if ((freetime=(struct icaltime_span *)
 	     malloc(sizeof(struct icaltime_span))) == 0){
 	    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+	    icalspanlist_free(sl);
 	    return 0;
 	    }
 
@@ -207,6 +208,7 @@ icalspanlist* icalspanlist_new(icalset *set,
 	     if ((freetime=(struct icaltime_span *)
 		  malloc(sizeof(struct icaltime_span))) == 0){
 		 icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+		 icalspanlist_free(sl);
 		 return 0;
 	     }	
 	
@@ -541,6 +543,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent* comp)
 
     if (s == 0) {
       icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+      icalspanlist_free(sl);
       return 0;
     }
     

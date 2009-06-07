@@ -279,6 +279,7 @@ char* parser_get_param_name(char* line, char **end, char **buf)
         *end = *end+1;
 	    next = parser_get_next_char('"',*end,0);
 	    if (next == 0) {
+			free(str);
 		    return 0;
 	    }
 

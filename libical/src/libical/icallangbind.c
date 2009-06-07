@@ -160,8 +160,8 @@ char* icallangbind_property_eval_string_r(icalproperty* prop, char* sep)
 {
     char tmp[25];
     size_t buf_size = 1024;
-    char* buf = icalmemory_new_buffer(buf_size);
-    char* buf_ptr = buf;
+    char* buf; 
+    char* buf_ptr; 
     icalparameter *param;
     
     icalvalue* value;
@@ -169,6 +169,9 @@ char* icallangbind_property_eval_string_r(icalproperty* prop, char* sep)
     if( prop == 0){
 	return 0;
     }
+  
+    buf = icalmemory_new_buffer(buf_size);
+    buf_ptr = buf;
 
     APPENDS("{ ");
 

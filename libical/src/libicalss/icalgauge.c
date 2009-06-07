@@ -362,6 +362,7 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 	} else {
 	    sub_comp = icalcomponent_get_first_component(inner,w->comp);
 	    if(sub_comp == 0){
+		icalvalue_free(v);
 		return 0;
 	    }
 	}	   

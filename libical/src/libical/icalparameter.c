@@ -246,6 +246,7 @@ icalparameter_as_ical_string_r(icalparameter* param)
 	    kind_string == 0)
 	{
 	    icalerror_set_errno(ICAL_BADARG_ERROR);
+	    free(buf);
 	    return 0;
 	}
 	
@@ -274,6 +275,7 @@ icalparameter_as_ical_string_r(icalparameter* param)
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str); 
     } else {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+	free(buf);
         return 0;
     }
 

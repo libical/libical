@@ -329,6 +329,7 @@ char* set_tz(const char* tzid)
 
     if(new_tz == 0){
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+	free(old_tz_copy);
 	return 0;
     }
 

@@ -197,8 +197,8 @@ enum icalproperty_method icalvalue_get_method(const icalvalue* value) {
 
 
 icalvalue* icalvalue_new_caladdress (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_CALADDRESS_VALUE);
    icalerror_check_arg_rz( (v!=0),"v");
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_CALADDRESS_VALUE);
 
    icalvalue_set_caladdress((icalvalue*)impl,v);
    return (icalvalue*)impl;
@@ -286,8 +286,8 @@ enum icalproperty_status icalvalue_get_status(const icalvalue* value) {
 
 
 icalvalue* icalvalue_new_binary (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_BINARY_VALUE);
    icalerror_check_arg_rz( (v!=0),"v");
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_BINARY_VALUE);
 
    icalvalue_set_binary((icalvalue*)impl,v);
    return (icalvalue*)impl;
@@ -321,8 +321,8 @@ const char* icalvalue_get_binary(const icalvalue* value) {
 
 
 icalvalue* icalvalue_new_text (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_TEXT_VALUE);
    icalerror_check_arg_rz( (v!=0),"v");
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_TEXT_VALUE);
 
    icalvalue_set_text((icalvalue*)impl,v);
    return (icalvalue*)impl;
@@ -410,8 +410,8 @@ int icalvalue_get_integer(const icalvalue* value) {
 
 
 icalvalue* icalvalue_new_uri (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_URI_VALUE);
    icalerror_check_arg_rz( (v!=0),"v");
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_URI_VALUE);
 
    icalvalue_set_uri((icalvalue*)impl,v);
    return (icalvalue*)impl;
@@ -499,8 +499,8 @@ float icalvalue_get_float(const icalvalue* value) {
 
 
 icalvalue* icalvalue_new_query (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_QUERY_VALUE);
    icalerror_check_arg_rz( (v!=0),"v");
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_QUERY_VALUE);
 
    icalvalue_set_query((icalvalue*)impl,v);
    return (icalvalue*)impl;
@@ -534,8 +534,8 @@ const char* icalvalue_get_query(const icalvalue* value) {
 
 
 icalvalue* icalvalue_new_string (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_STRING_VALUE);
    icalerror_check_arg_rz( (v!=0),"v");
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_STRING_VALUE);
 
    icalvalue_set_string((icalvalue*)impl,v);
    return (icalvalue*)impl;
@@ -768,8 +768,8 @@ icalvalue_kind icalvalue_string_to_kind(const char* str)
 }
 
 icalvalue* icalvalue_new_x (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_X_VALUE);
    icalerror_check_arg_rz( (v!=0),"v");
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_X_VALUE);
 
    icalvalue_set_x((icalvalue*)impl,v);
    return (icalvalue*)impl;

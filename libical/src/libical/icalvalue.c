@@ -766,9 +766,10 @@ static char* icalvalue_binary_as_ical_string_r(const icalvalue* value) {
     
 static char* icalvalue_int_as_ical_string_r(const icalvalue* value) {
     int data;
-    char* str = (char*)icalmemory_new_buffer(MAX_INT_DIGITS); 
+    char* str;
 
     icalerror_check_arg_rz( (value!=0),"value");
+    str = (char*)icalmemory_new_buffer(MAX_INT_DIGITS); 
 
     data = icalvalue_get_integer(value);
 	
@@ -782,10 +783,11 @@ static char* icalvalue_utcoffset_as_ical_string_r(const icalvalue* value)
 {    
     int data,h,m,s;
     char sign;
-    char* str = (char*)icalmemory_new_buffer(9);
+    char* str;
 
     icalerror_check_arg_rz( (value!=0),"value");
 
+    str = (char*)icalmemory_new_buffer(9);
     data = icalvalue_get_utcoffset(value);
 
     if (abs(data) == data){
