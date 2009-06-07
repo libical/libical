@@ -174,13 +174,16 @@ icalproperty* icalproperty_new_from_string(const char* str)
 {
 
     size_t buf_size = 1024;
-    char* buf = icalmemory_new_buffer(buf_size);
-    char* buf_ptr = buf;  
+    char* buf;
+    char* buf_ptr;
     icalproperty *prop;
     icalcomponent *comp;
     int errors  = 0;
 
     icalerror_check_arg_rz( (str!=0),"str");
+
+    buf = icalmemory_new_buffer(buf_size);
+    buf_ptr = buf;
 
     /* Is this a HACK or a crafty reuse of code? */
 
@@ -432,8 +435,8 @@ icalproperty_as_ical_string_r(icalproperty* prop)
 
     const char* property_name = 0; 
     size_t buf_size = 1024;
-    char* buf = icalmemory_new_buffer(buf_size);
-    char* buf_ptr = buf;
+    char* buf;
+    char* buf_ptr;
     icalvalue* value;
     char *out_buf;
     const char* kind_string = 0;
@@ -442,6 +445,8 @@ icalproperty_as_ical_string_r(icalproperty* prop)
     
     icalerror_check_arg_rz( (prop!=0),"prop");
 
+    buf = icalmemory_new_buffer(buf_size);
+    buf_ptr = buf;
 
     /* Append property name */
 
@@ -999,10 +1004,13 @@ char* icalproperty_get_property_name_r(const icalproperty* prop)
 
     const char* property_name = 0;
     size_t buf_size = 256;
-    char* buf = icalmemory_new_buffer(buf_size);
-    char* buf_ptr = buf;  
+    char* buf;
+    char* buf_ptr;
 
     icalerror_check_arg_rz( (prop!=0),"prop");
+
+    buf = icalmemory_new_buffer(buf_size);
+    buf_ptr = buf;
  
     if (prop->kind == ICAL_X_PROPERTY && prop->x_name != 0){
         property_name = prop->x_name;

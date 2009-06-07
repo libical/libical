@@ -178,9 +178,9 @@ char* icalreqstattype_as_string_r(struct icalreqstattype stat)
 {
   char *temp;
 
-  temp = (char*)icalmemory_new_buffer(TEMP_MAX);
-
   icalerror_check_arg_rz((stat.code != ICAL_UNKNOWN_STATUS),"Status");
+
+  temp = (char*)icalmemory_new_buffer(TEMP_MAX);
   
   if (stat.desc == 0){
     stat.desc = icalenum_reqstat_desc(stat.code);

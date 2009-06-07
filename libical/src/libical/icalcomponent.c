@@ -312,9 +312,6 @@ icalcomponent_as_ical_string_r (icalcomponent* impl)
 
    const char* kind_string;
 
-   buf = icalmemory_new_buffer(buf_size);
-   buf_ptr = buf; 
-
    icalerror_check_arg_rz( (impl!=0), "component");
    icalerror_check_arg_rz( (kind!=ICAL_NO_COMPONENT), "component kind is ICAL_NO_COMPONENT");
    
@@ -325,6 +322,9 @@ icalcomponent_as_ical_string_r (icalcomponent* impl)
    }
 
    icalerror_check_arg_rz( (kind_string!=0),"Unknown kind of component");
+
+   buf = icalmemory_new_buffer(buf_size);
+   buf_ptr = buf; 
 
    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "BEGIN:");
    icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
