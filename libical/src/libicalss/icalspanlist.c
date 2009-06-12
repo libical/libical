@@ -555,6 +555,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent* comp)
     case ICAL_FBTYPE_NONE:
     case ICAL_FBTYPE_X:
       s->is_busy = 1;
+      break;
     default:
       s->is_busy = 0;
     }

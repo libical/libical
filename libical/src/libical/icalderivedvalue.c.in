@@ -102,8 +102,10 @@ icalvalue_kind icalvalue_string_to_kind(const char* str)
 }
 
 icalvalue* icalvalue_new_x (const char* v){
-   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_X_VALUE);
+   struct icalvalue_impl* impl;
    icalerror_check_arg_rz( (v!=0),"v");
+
+   impl = icalvalue_new_impl(ICAL_X_VALUE);
 
    icalvalue_set_x((icalvalue*)impl,v);
    return (icalvalue*)impl;

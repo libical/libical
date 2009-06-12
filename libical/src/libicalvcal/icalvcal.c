@@ -167,11 +167,13 @@ icalcomponent* icalvcal_convert_with_defaults (VObject *object,
 {
 
    char* name =  (char*)vObjectName(object);
-   icalcomponent* container = icalcomponent_new(ICAL_XROOT_COMPONENT);
+   icalcomponent* container;
    icalcomponent* root;
    icalproperty *prop;
 
    icalerror_check_arg_rz( (object!=0),"Object");
+
+   container = icalcomponent_new(ICAL_XROOT_COMPONENT);
 
    /* The root object must be a VCALENDAR */
    if(*name==0 || strcmp(name,VCCalProp) != 0){
