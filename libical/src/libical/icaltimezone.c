@@ -1631,8 +1631,10 @@ fetch_lat_long_from_string  (const char *str, int *latitude_degrees, int *latitu
 
 	if (parse_coord (lat, lon - lat, latitude_degrees, latitude_minutes, latitude_seconds) == 1 ||
 		       	parse_coord (lon, strlen (lon), longitude_degrees, longitude_minutes, longitude_seconds) 
-			== 1)
-			return 1;
+			== 1) {
+				free(lat);
+				return 1;
+			}
 	
 	free (lat);
 

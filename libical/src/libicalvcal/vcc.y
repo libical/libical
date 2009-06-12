@@ -1164,7 +1164,8 @@ VObject* Parse_MIME_FromFile(FILE *file)
     initLex(0,(unsigned long)-1,file);
     startPos = ftell(file);
     if (!(result = Parse_MIMEHelper())) {
-	fseek(file,startPos,SEEK_SET);
+	if (startPos >= 0)
+	   fseek(file,startPos,SEEK_SET);
 	}
     return result;
     }
