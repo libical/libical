@@ -2124,9 +2124,8 @@ void icalcomponent_merge_component(icalcomponent* comp,
     for (i = 0; i < tzids_to_rename->num_elements; i++) {
       free (icalarray_element_at (tzids_to_rename, i));
     }
-    icalarray_free (tzids_to_rename);
   }
-
+  icalarray_free (tzids_to_rename);
   /* Now move all the components from comp_to_merge to comp, excluding
      VTIMEZONE components. */
   subcomp = icalcomponent_get_first_component (comp_to_merge,
@@ -2247,9 +2246,14 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
 	/* The VTIMEZONEs match, so we can use the existing VTIMEZONE. But
 	   we have to rename TZIDs to this TZID. */
 	tzid_copy = strdup (tzid);
+        if(!tzid_copy) {
+          icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+          return;
+        }
 	existing_tzid_copy = strdup (existing_tzid);
-	if (!tzid_copy || !existing_tzid_copy) {
+        if (!existing_tzid_copy) {
 	  icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+          free(tzid_copy);
 	} else {
 	  icalarray_append (tzids_to_rename, tzid_copy);
 	  icalarray_append (tzids_to_rename, existing_tzid_copy);
@@ -2270,10 +2274,16 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
   /* We didn't find a VTIMEZONE that matched, so we have to rename the TZID,
      using the maximum numerical suffix found + 1. */
   tzid_copy = strdup (tzid);
+  if(!tzid_copy) {
+    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+    return;
+  }
+
   snprintf (suffix_buf, sizeof(suffix_buf), "%i", max_suffix + 1);
   new_tzid = malloc (tzid_len + strlen (suffix_buf) + 1);
-  if (!new_tzid || !tzid_copy) {
+  if (!new_tzid) {
     icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+    free(tzid_copy);
     return;
   }
 
