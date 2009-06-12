@@ -177,6 +177,7 @@ icalcomponent* icalvcal_convert_with_defaults (VObject *object,
 
    /* The root object must be a VCALENDAR */
    if(*name==0 || strcmp(name,VCCalProp) != 0){
+       icalcomponent_free(container);
        return 0; /* HACK. Should return an error */
    }
 

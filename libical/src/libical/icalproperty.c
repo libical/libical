@@ -196,6 +196,7 @@ icalproperty* icalproperty_new_from_string(const char* str)
 
     if(comp == 0){
         icalerror_set_errno(ICAL_PARSE_ERROR);
+        free(buf);
         return 0;
     }
 

@@ -207,18 +207,24 @@ icalvalue_get_trigger(const icalvalue* impl)
     icalerror_check_arg( (impl!=0),"value");
     icalerror_check_arg( (impl!=0),"value");
 
-    if(impl->kind == ICAL_DATETIME_VALUE){
-	 tr.duration = icaldurationtype_from_int(0);
-	 tr.time = impl->data.v_time;
-    } else if(impl->kind == ICAL_DURATION_VALUE){
+    if(impl) {
+      if(impl->kind == ICAL_DATETIME_VALUE){
+	tr.duration = icaldurationtype_from_int(0);
+	tr.time = impl->data.v_time;
+      } else if(impl->kind == ICAL_DURATION_VALUE){
 	tr.time = icaltime_null_time();
 	tr.duration = impl->data.v_duration;
-    } else {
+      } else {
 	tr.duration = icaldurationtype_from_int(0);
 	tr.time = icaltime_null_time();
 	icalerror_set_errno(ICAL_BADARG_ERROR);
+      }
+    } else {
+      tr.duration = icaldurationtype_from_int(0);
+      tr.time = icaltime_null_time();
+      icalerror_set_errno(ICAL_BADARG_ERROR);
     }
-
+    
     return tr;
 }
 
@@ -267,17 +273,23 @@ icalvalue_get_datetimeperiod(const icalvalue* impl)
   
   icalerror_check_arg( (impl!=0),"value");
   icalerror_check_value_type(value, ICAL_DATETIMEPERIOD_VALUE);
-  
-  if( impl->kind == ICAL_DATETIME_VALUE || impl->kind == ICAL_DATE_VALUE ){
+
+  if(impl) {
+    if( impl->kind == ICAL_DATETIME_VALUE || impl->kind == ICAL_DATE_VALUE ){
       dtp.period = icalperiodtype_null_period();
       dtp.time = impl->data.v_time;
-  } else if(impl->kind == ICAL_PERIOD_VALUE) {
+    } else if(impl->kind == ICAL_PERIOD_VALUE) {
       dtp.period = impl->data.v_period;
       dtp.time = icaltime_null_time();
-  } else {
+    } else {
       dtp.period = icalperiodtype_null_period();
       dtp.time = icaltime_null_time();
       icalerror_set_errno(ICAL_BADARG_ERROR);
+    }	
+  } else {
+    dtp.period = icalperiodtype_null_period();
+    dtp.time = icaltime_null_time();
+    icalerror_set_errno(ICAL_BADARG_ERROR);
   }	
 
   return dtp;
