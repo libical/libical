@@ -345,7 +345,8 @@ line between the header and the previous boundary\?";
 
 	} else if (parts[i].level < last_level){
 
-	    parent = icalcomponent_get_parent(parent);
+	    if (parent) 
+	        parent = icalcomponent_get_parent(parent);
 	    icalcomponent_add_component(parent,comp);
 
 	    last_level = parts[i].level;

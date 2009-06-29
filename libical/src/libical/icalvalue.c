@@ -709,6 +709,7 @@ icalvalue_free (icalvalue* v)
 	case ICAL_TEXT_VALUE:
 	case ICAL_CALADDRESS_VALUE:
 	case ICAL_URI_VALUE:
+	case ICAL_STRING_VALUE:
 	case ICAL_QUERY_VALUE:
 	{
 	    if (v->data.v_string != 0) { 

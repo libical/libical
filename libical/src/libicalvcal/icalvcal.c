@@ -862,7 +862,7 @@ static char* rrule_parse_duration (char *s, struct icalrecurrencetype *recur,
 
     /* It must be followed by whitespace or the end of the string.
        I'm not sure if anything else is allowed. */
-    if (*s != '\0' && *s != ' ' && *s != '\t') {
+    if (s && *s != '\0' && *s != ' ' && *s != '\t') {
 	*error_message = "Invalid Duration";
 	return NULL;
     }
