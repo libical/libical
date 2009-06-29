@@ -160,7 +160,7 @@ icalcluster* icalfileset_produce_icalcluster(const char *path) {
   fileset = icalfileset_new_reader(path);
   
 
-  if (fileset == 0 && icalerrno == ICAL_FILE_ERROR) {
+  if (fileset == 0 || icalerrno == ICAL_FILE_ERROR) {
     /* file does not exist */
     ret = icalcluster_new(path, NULL);
   } else {
