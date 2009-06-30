@@ -3,7 +3,7 @@
 "BOOLEAN","(a)int","integer","unitary",
 "CAL-ADDRESS","(a)const char*","string","unitary",
 "DATE","(a)struct icaltimetype","Time","unitary",
-"DATE-TIME","(a)struct icaltimetype","Time","unitary",
+"DATE-TIME","(m)struct icaltimetype","Time","unitary",
 "DURATION","(a)struct icaldurationtype","Duration","unitary",
 "FLOAT","(a)float","float","unitary",
 "INTEGER","(a)int","integer","unitary",
@@ -23,10 +23,10 @@
 "ACTION","(a)enum icalproperty_action","string","unitary","AUDIO;DISPLAY;EMAIL;PROCEDURE"
 "STATUS","(a)enum icalproperty_status","string","unitary","TENTATIVE;CONFIRMED;COMPLETED;NEEDS-ACTION;CANCELLED;IN-PROCESS;DRAFT;FINAL"
 "TRANSP","(a)enum icalproperty_transp","string","unitary","OPAQUE;OPAQUE-NOCONFLICT;TRANSPARENT;TRANSPARENT-NOCONFLICT"
-"CLASS","(a)enum icalproperty_class","string","unitary","PUBLIC;PRIVATE;CONFIDENTIAL"
+"CLASS","(m)enum icalproperty_class","string","unitary","PUBLIC;PRIVATE;CONFIDENTIAL"
 "#Other non-standard",,,,
 "REQUEST-STATUS","(a)struct icalreqstattype","string","unitary"
-"GEO","(a)struct icalgeotype","tuple","unitary",
+"GEO","(m)struct icalgeotype","tuple","unitary",
 "STRING","(a)const char*","string","unitary",
 "X","(m)const char*","string","unitary",
 "#CAP enumeration types",,,,

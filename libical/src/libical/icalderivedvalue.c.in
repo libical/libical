@@ -125,7 +125,7 @@ void icalvalue_set_x(icalvalue* impl, const char* v) {
  }
 const char* icalvalue_get_x(const icalvalue* value) {
 
-    icalerror_check_arg( (value!=0),"value");
+    icalerror_check_arg_rz( (value!=0),"value");
     icalerror_check_value_type(value, ICAL_X_VALUE);
     return value->x_value;
 }
@@ -166,7 +166,10 @@ icalvalue_set_recur(icalvalue* impl, struct icalrecurrencetype v)
 struct icalrecurrencetype
 icalvalue_get_recur(const icalvalue* value)
 {
-    icalerror_check_arg( (value!=0),"value");
+    struct icalrecurrencetype rt;
+    icalrecurrencetype_clear(&rt);
+
+    icalerror_check_arg_rx( (value!=0),"value", rt);
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
   
     return *(value->data.v_recur);
@@ -204,8 +207,10 @@ icalvalue_get_trigger(const icalvalue* impl)
 {
     struct icaltriggertype tr;
 
-    icalerror_check_arg( (impl!=0),"value");
-    icalerror_check_arg( (impl!=0),"value");
+    tr.duration = icaldurationtype_from_int(0);
+    tr.time = icaltime_null_time();
+
+    icalerror_check_arg_rx( (impl!=0),"value", tr);
 
     if(impl) {
       if(impl->kind == ICAL_DATETIME_VALUE){
@@ -226,6 +231,38 @@ icalvalue_get_trigger(const icalvalue* impl)
     }
     
     return tr;
+}
+
+icalvalue*
+icalvalue_new_datetime (struct icaltimetype v){
+
+   struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_DATETIME_VALUE);
+   icalvalue_set_datetime((icalvalue*)impl,v);
+   return (icalvalue*)impl;
+}
+
+void
+icalvalue_set_datetime(icalvalue* value, struct icaltimetype v) {
+    struct icalvalue_impl* impl;
+    icalerror_check_arg_rv( (value!=0),"value");
+
+    icalerror_check_value_type(value, ICAL_DATETIME_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+
+    impl->data.v_time = v;
+
+    icalvalue_reset_kind(impl);
+}
+
+struct icaltimetype
+icalvalue_get_datetime (const icalvalue* value) {
+  struct icaltimetype dt;
+  dt = icaltime_null_time();
+
+  icalerror_check_arg_rx((value!=0),"value", dt);
+  icalerror_check_value_type (value, ICAL_DATETIME_VALUE);
+  return ((struct icalvalue_impl*)value)->data.v_time;
 }
 
 /* DATE-TIME-PERIOD is a special case, and is not auto generated */
@@ -270,8 +307,11 @@ struct icaldatetimeperiodtype
 icalvalue_get_datetimeperiod(const icalvalue* impl)
 {
   struct icaldatetimeperiodtype dtp;
-  
-  icalerror_check_arg( (impl!=0),"value");
+
+  dtp.period = icalperiodtype_null_period();
+  dtp.time = icaltime_null_time();
+
+  icalerror_check_arg_rx( (impl!=0),"value", dtp);
   icalerror_check_value_type(value, ICAL_DATETIMEPERIOD_VALUE);
 
   if(impl) {
@@ -295,6 +335,70 @@ icalvalue_get_datetimeperiod(const icalvalue* impl)
   return dtp;
 }
 
+icalvalue*
+icalvalue_new_class (enum icalproperty_class v){
+
+    struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_CLASS_VALUE);
+    icalvalue_set_class((icalvalue*)impl,v);
+    return (icalvalue*)impl;
+}
+
+void
+icalvalue_set_class(icalvalue* value, enum icalproperty_class v) {
+    struct icalvalue_impl* impl;
+    icalerror_check_arg_rv( (value!=0),"value");
+
+    icalerror_check_value_type(value, ICAL_CLASS_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+    impl->data.v_enum = v;
+
+    icalvalue_reset_kind(impl);
+}
+
+enum icalproperty_class
+icalvalue_get_class (const icalvalue* value) {
+
+    icalproperty_class pr;
+    pr = ICAL_CLASS_NONE;
+
+    icalerror_check_arg_rx ((value!=NULL),"value", pr);
+    icalerror_check_arg ((value!=0),"value");
+    icalerror_check_value_type (value, ICAL_CLASS_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_enum;
+}
+
+icalvalue*
+icalvalue_new_geo (struct icalgeotype v){
+
+    struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_GEO_VALUE);
+    icalvalue_set_geo((icalvalue*)impl,v);
+    return (icalvalue*)impl;
+}
+
+void
+icalvalue_set_geo(icalvalue* value, struct icalgeotype v) {
+    struct icalvalue_impl* impl;
+    icalerror_check_arg_rv( (value!=0),"value");
+
+    icalerror_check_value_type(value, ICAL_GEO_VALUE);
+    impl = (struct icalvalue_impl*)value;
+
+    impl->data.v_geo = v;
+
+    icalvalue_reset_kind(impl);
+}
+
+struct icalgeotype
+icalvalue_get_geo (const icalvalue* value) {
+    struct icalgeotype gt;
+    gt.lat = 255.0;
+    gt.lon = 255.0;
+
+    icalerror_check_arg_rx((value!=0),"value", gt);
+    icalerror_check_value_type (value, ICAL_GEO_VALUE);
+    return ((struct icalvalue_impl*)value)->data.v_geo;
+}
 
 
 icalvalue *
