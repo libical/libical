@@ -360,6 +360,7 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 		attach = icalattach_new_from_url (s);
 		attach_prop = icalproperty_new_attach (attach);
 		icalcomponent_add_property (comp, attach_prop);
+		icalattach_unref(attach);
 
 		/* We output a "application/binary" FMTTYPE for Procedure
 		   alarms. */
@@ -471,6 +472,7 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 
 		fmttype_param = icalparameter_new_fmttype (defaults->alarm_audio_fmttype);
 		icalproperty_add_parameter (attach_prop, fmttype_param);
+		icalattach_unref(attach);
 	    } else {
 	        is_valid_alarm = 0;
 	    }
@@ -544,6 +546,7 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 		free (new_url);
 
 		icalproperty_set_attach (attach_prop, new_attach);
+		icalattach_unref(attach);
 
 	    } else {
 		is_valid_alarm = 0;

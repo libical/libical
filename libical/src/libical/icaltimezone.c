@@ -1354,6 +1354,7 @@ void
 icaltimezone_free_builtin_timezones(void)
 {
 	icaltimezone_array_free(builtin_timezones);
+	builtin_timezones = 0;
 }
 
 
