@@ -72,9 +72,12 @@ icalarray_new			(int		 element_size,
 void
 icalarray_free			(icalarray	*array)
 {
-    if (array->data)
+    if (array->data) {
 	free (array->data);
+	array->data = 0;
+    }
     free (array);
+    array = 0;
 }
 
 
@@ -152,7 +155,10 @@ icalarray_expand		(icalarray	*array,
 
     if (new_data) {
 	memcpy(new_data,array->data,array->element_size*array->space_allocated);
-	free(array->data);
+	if (array->data) {
+	    free(array->data);
+	    array->data = 0;
+	}
 	array->data = new_data;
 	array->space_allocated = new_space_allocated;
     } else {
