@@ -875,26 +875,18 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
        icalrecur_two_byrule(impl,BY_YEAR_DAY,BY_DAY) ){
 
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-
+        free(impl);
 	return 0;
     }
 
-    /* BYWEEKNO and BYMONTH rule parts may not both appear.*/
-
-    if(icalrecur_two_byrule(impl,BY_WEEK_NO,BY_MONTH)){
-	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-
-	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-	return 0;
-    }
+    
 
     /* BYWEEKNO and BYMONTHDAY rule parts may not both appear.*/
 
     if(icalrecur_two_byrule(impl,BY_WEEK_NO,BY_MONTH_DAY)){
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-
-	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-	return 0;
+        free(impl);
+    return 0;
     }
 
 
@@ -904,7 +896,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     if(freq == ICAL_MONTHLY_RECURRENCE && 
        icalrecur_one_byrule(impl,BY_WEEK_NO)){
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-	return 0;
+        free(impl);
+    return 0;
     }
 
 
@@ -914,13 +907,15 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     if(freq == ICAL_WEEKLY_RECURRENCE && 
        icalrecur_one_byrule(impl,BY_MONTH_DAY )) {
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-	return 0;
+	free(impl);
+    return 0;
     }
 
     /* BYYEARDAY may only appear in YEARLY rules */
     if(freq != ICAL_YEARLY_RECURRENCE && 
        icalrecur_one_byrule(impl,BY_YEAR_DAY )) {
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        free(impl);
 	return 0;
     }
 
@@ -993,6 +988,11 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
 	for (;;) {
             expand_year_days(impl, impl->last.year);
+        if( icalerrno != ICAL_NO_ERROR) {
+            icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+            free(impl);
+            return 0;
+        }
 	    if (impl->days[0] != ICAL_RECURRENCE_ARRAY_MAX)
 	        break; /* break when no days are expanded */
 	    increment_year(impl,impl->rule.interval);
@@ -1054,7 +1054,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
 	if(impl->last.day > days_in_month || impl->last.day == 0){
 	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-	    return 0;
+        free(impl);
+        return 0;
 	}
 	
     } else if (has_by_data(impl,BY_MONTH_DAY)) {
@@ -1885,7 +1886,7 @@ static pvl_list expand_by_day(icalrecur_iterator* impl, int year)
 
 static int expand_year_days(icalrecur_iterator* impl, int year)
 {
-    int j,k;
+    int i,j,k;
     int days_index=0;
     struct icaltimetype t;
     int flags;
@@ -1907,6 +1908,46 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
         (HBD(BY_YEAR_DAY) ? 1<<BY_YEAR_DAY : 0);
 
     
+    /* BY_WEEK_NO together with BY_MONTH - may conflict, in this case BY_MONTH wins */
+    if( (flags & 1<<BY_MONTH) && (flags & 1<<BY_WEEK_NO) ){
+        int valid_weeks[ICAL_BY_WEEKNO_SIZE];
+        memset(valid_weeks, 0, sizeof(valid_weeks));
+        int valid = 1;    
+        t.year = year;
+        t.is_date = 1;
+
+        // calculate valid week numbers
+        for(j=0; impl->by_ptrs[BY_MONTH][j]!=ICAL_RECURRENCE_ARRAY_MAX; j++){
+            int month = impl->by_ptrs[BY_MONTH][j];
+            int first_week, last_week;
+            t.month = month;
+            t.day = 1;
+            first_week =  icaltime_week_number(t);
+            t.day = icaltime_days_in_month(month,year);
+            last_week =  icaltime_week_number(t);
+            for(j=first_week; j<last_week; j++) {
+                valid_weeks[j] = 1;        
+            }
+        }
+
+        // check valid weeks
+        for(i = 0; BYWEEKPTR[i] != ICAL_RECURRENCE_ARRAY_MAX && valid; i++){
+                int weekno = BYWEEKPTR[i];
+                if(weekno < ICAL_BY_WEEKNO_SIZE)
+                    valid &= valid_weeks[i]; // check if the week number is valid
+                else
+                    valid = 0;  // invalid week number
+        }
+
+        // let us make the decision which rule to keep
+        if(valid) { // BYWEEKNO wins
+            flags -= 1<<BY_MONTH;
+        }
+        else { //BYMONTH vins
+            flags -= 1<<BY_WEEK_NO;
+        }
+    }
+
     switch(flags) {
         
     case 0: {
