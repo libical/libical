@@ -689,7 +689,7 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
 	    }
 
 	    rrule_iterator = icalrecur_iterator_new (rrule, dtstart);
-	    for (;;) {
+	    for (;rrule_iterator;) {
 		occ = icalrecur_iterator_next (rrule_iterator);
 		if (occ.year > end_year || icaltime_is_null_time (occ))
 		    break;

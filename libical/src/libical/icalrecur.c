@@ -2546,18 +2546,18 @@ int icalrecur_expand_recurrence(char* rule, time_t start,
     icstart = icaltime_from_timet_with_zone(start,0,0);
 
     recur = icalrecurrencetype_from_string(rule);
+    ritr = icalrecur_iterator_new(recur,icstart);
+    if(ritr) {
+        for(next = icalrecur_iterator_next(ritr);
+	        !icaltime_is_null_time(next) && i < count;
+	        next = icalrecur_iterator_next(ritr)){
 
-    for(ritr = icalrecur_iterator_new(recur,icstart),
-	next = icalrecur_iterator_next(ritr);
-	!icaltime_is_null_time(next) && i < count;
-	next = icalrecur_iterator_next(ritr)){
-
-	tt = icaltime_as_timet(next);
+	            tt = icaltime_as_timet(next);
 	
-	if (tt >= start ){
-	    array[i++] = tt;
-	}
-
+                if (tt >= start ){
+	                   array[i++] = tt;
+	            }
+        }
     }
 
     icalrecur_iterator_free(ritr);
