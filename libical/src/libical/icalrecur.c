@@ -2328,8 +2328,8 @@ static int check_contracting_rules(icalrecur_iterator* impl)
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
 {
     int valid = 1;
-    
-    if( (impl->rule.count!=0 &&impl->occurrence_no >= impl->rule.count) ||
+
+    if( !impl ||  (impl->rule.count!=0 &&impl->occurrence_no >= impl->rule.count) ||
        (!icaltime_is_null_time(impl->rule.until) && 
 	icaltime_compare(impl->last,impl->rule.until) > 0)) {
 	return icaltime_null_time();
