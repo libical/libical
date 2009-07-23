@@ -810,6 +810,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     icalrecur_iterator* impl;
     icalrecurrencetype_frequency freq;
 
+    icalerror_clear_errno();
+
     if ( ( impl = (icalrecur_iterator*)
 	   malloc(sizeof(icalrecur_iterator))) == 0) {
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -886,7 +888,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     if(icalrecur_two_byrule(impl,BY_WEEK_NO,BY_MONTH_DAY)){
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         free(impl);
-    return 0;
+        return 0;
     }
 
 
@@ -897,7 +899,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
        icalrecur_one_byrule(impl,BY_WEEK_NO)){
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         free(impl);
-    return 0;
+        return 0;
     }
 
 
@@ -908,7 +910,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
        icalrecur_one_byrule(impl,BY_MONTH_DAY )) {
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	free(impl);
-    return 0;
+        return 0;
     }
 
     /* BYYEARDAY may only appear in YEARLY rules */
@@ -1054,8 +1056,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
 	if(impl->last.day > days_in_month || impl->last.day == 0){
 	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(impl);
-        return 0;
+            free(impl);
+            return 0;
 	}
 	
     } else if (has_by_data(impl,BY_MONTH_DAY)) {
