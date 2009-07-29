@@ -29,6 +29,13 @@ autoconf
 echo ... removing autoheader cache files ...
 rm -rf autom4te*.cache
 
+echo ... pre-building yacc files ...
+for x in src/*/*.y
+do
+	echo Pre-building $x
+        ( cd `dirname $x` && yacc -o `basename $x |sed 's/y$/c/g' ` `basename $x` )
+done
+
 
 echo
 echo This script has been tested with autoconf 2.53 and
