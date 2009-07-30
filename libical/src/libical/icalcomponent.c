@@ -391,7 +391,6 @@ icalcomponent_isa (const icalcomponent* component)
        return component->kind;
    }
 
-   return ICAL_NO_COMPONENT;
 }
 
 
@@ -2598,11 +2597,6 @@ struct icaltimetype icalcomponent_get_due(icalcomponent* comp)
 
         return due;
 
-    } else {
-        /* Error, both duration and due have been specified */
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        return icaltime_null_time();
-
     }
 
 }
@@ -2646,8 +2640,5 @@ void icalcomponent_set_due(icalcomponent* comp, struct icaltimetype v)
 
         icalproperty_set_duration(dur_prop,dur);
 
-    } else {
-        /* Error, both duration and due have been specified */
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     }
 }

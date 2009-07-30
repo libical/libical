@@ -685,7 +685,7 @@ DLLEXPORT(void) cleanStrTbl()
 	    p = t;
 	    t = t->next;
 	    deleteStrItem(p);
-	    } while (t);
+	    }
 	strTbl[i] = 0;
 	}
 }

@@ -284,8 +284,6 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
     icalerror_check_arg_rz( (comp!=0), "comp");
     icalerror_check_arg_rz( (gauge!=0), "gauge");
     
-    if (gauge == 0 || comp == 0) return 0;
- 
     inner = icalcomponent_get_first_real_component(comp);
 
     if(inner == 0){
