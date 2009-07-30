@@ -348,7 +348,10 @@ icaltzutil_fetch_timezone (const char *location)
 		EFREAD(a, 4, 1, f);
 		c = fgetc (f);
 		types [i].isdst = c;
-		c = fgetc (f);
+		if((c = fgetc (f)) < 0) {
+		   c = 0;
+		   break;
+		}
 		types [i].abbr = c;
 		types [i].gmtoff = decode (a);
 	}

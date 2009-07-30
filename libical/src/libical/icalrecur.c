@@ -1161,7 +1161,7 @@ static void increment_hour(icalrecur_iterator* impl, int inc)
     days = impl->last.hour / 24;
     impl->last.hour = impl->last.hour % 24;
 
-    if (impl->days != 0){
+    if (days != 0){
 	increment_monthday(impl,days);
     }
 }

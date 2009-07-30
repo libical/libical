@@ -346,6 +346,7 @@ icalcomponent* icalmessage_new_error_reply(icalcomponent* c,
 
     icalerror_check_arg_rz(c,"c");
     
+    memset(&rs, 0, sizeof(struct icalreqstattype));
     reply = icalmessage_new_reply_base(c,user,msg);
     inner = icalmessage_get_inner(reply);
     cinner = icalmessage_get_inner(c);

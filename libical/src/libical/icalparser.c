@@ -1103,11 +1103,6 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    str = NULL;
 
 	} else {
-		if (str != NULL) {
-			icalmemory_free_buffer(str);
-			str = NULL;
-		}
-			
 	    if (vcount == 0){
 		char temp[200]; /* HACK */
 		
