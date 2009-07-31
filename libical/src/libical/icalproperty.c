@@ -926,6 +926,7 @@ void icalproperty_set_value_from_string(icalproperty* prop,const char* str,
         return;
     }
 
+    icalerror_clear_errno();
     nval = icalvalue_new_from_string(kind, str);
 
     if(nval == 0){

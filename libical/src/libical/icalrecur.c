@@ -987,6 +987,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     if(impl->rule.freq == ICAL_YEARLY_RECURRENCE){
         struct icaltimetype next;
+	icalerror_clear_errno();
 
 	for (;;) {
             expand_year_days(impl, impl->last.year);
@@ -2560,9 +2561,9 @@ int icalrecur_expand_recurrence(char* rule, time_t start,
 	                   array[i++] = tt;
 	            }
         }
+    icalrecur_iterator_free(ritr);
     }
 
-    icalrecur_iterator_free(ritr);
 
     return 1;
 }
