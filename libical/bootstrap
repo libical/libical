@@ -36,6 +36,13 @@ do
         ( cd `dirname $x` && yacc -o `basename $x |sed 's/y$/c/g' ` `basename $x` )
 done
 
+echo ... pre-building lex files ...
+for x in src/*/*.l
+do
+	echo Pre-building $x
+        ( cd `dirname $x` && lex -o `basename $x |sed 's/l$/c/g' ` `basename $x` )
+done
+
 
 echo
 echo This script has been tested with autoconf 2.53 and
