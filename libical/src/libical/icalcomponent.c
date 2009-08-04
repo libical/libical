@@ -2413,13 +2413,15 @@ icaltimezone* icalcomponent_get_timezone(icalcomponent* comp, const char *tzid)
 	middle = (lower + upper) >> 1;
 	zone = icalarray_element_at (comp->timezones, middle);
 	zone_tzid = icaltimezone_get_tzid (zone);
-	cmp = strcmp (tzid, zone_tzid);
-	if (cmp == 0)
-	    return zone;
-	else if (cmp < 0)
-	    upper = middle;
-	else
-	    lower = middle + 1;
+	if (zone_tzid != NULL) {
+		cmp = strcmp (tzid, zone_tzid);
+		if (cmp == 0)
+			return zone;
+		else if (cmp < 0)
+			upper = middle;
+		else
+			lower = middle + 1;
+	}
     }
 
     return NULL;
