@@ -18,7 +18,31 @@ static const char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 extern int yyparse(void);
 
 static int yygrowstack(void);
-#define YYPREFIX "yy"
+#define yyparse ssparse
+#define yylex sslex
+#define yyerror sserror
+#define yychar sschar
+#define yyval ssval
+#define yylval sslval
+#define yydebug ssdebug
+#define yynerrs ssnerrs
+#define yyerrflag sserrflag
+#define yyss ssss
+#define yyssp ssssp
+#define yyvs ssvs
+#define yyvsp ssvsp
+#define yylhs sslhs
+#define yylen sslen
+#define yydefred ssdefred
+#define yydgoto ssdgoto
+#define yysindex sssindex
+#define yyrindex ssrindex
+#define yygindex ssgindex
+#define yytable sstable
+#define yycheck sscheck
+#define yyname ssname
+#define yyrule ssrule
+#define YYPREFIX "ss"
 #line 2 "icalssyacc.y"
 /* -*- Mode: C -*-
   ======================================================================
@@ -83,7 +107,7 @@ int sslex();
 typedef union {
 	char* v_string;
 } YYSTYPE;
-#line 87 "icalssyacc.c"
+#line 111 "y.tab.c"
 #define STRING 257
 #define SELECT 258
 #define FROM 259
@@ -104,40 +128,40 @@ typedef union {
 #define NOT 274
 #define SQLNULL 275
 #define YYERRCODE 256
-short yylhs[] = {                                        -1,
+short sslhs[] = {                                        -1,
     0,    0,    0,    1,    1,    2,    2,    4,    4,    4,
     4,    4,    4,    4,    4,    4,    3,    3,    3,
 };
-short yylen[] = {                                         2,
+short sslen[] = {                                         2,
     6,    4,    1,    1,    3,    1,    3,    0,    3,    3,
     4,    3,    3,    3,    3,    3,    1,    3,    3,
 };
-short yydefred[] = {                                      0,
+short ssdefred[] = {                                      0,
     3,    0,    0,    4,    0,    0,    0,    6,    0,    5,
     0,    0,    0,    0,   17,    7,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    9,   12,   13,   14,   15,
    16,    0,   10,   18,   19,   11,
 };
-short yydgoto[] = {                                       3,
+short ssdgoto[] = {                                       3,
     5,    9,   14,   15,
 };
-short yysindex[] = {                                   -248,
+short sssindex[] = {                                   -248,
     0, -236,    0,    0, -250, -235, -234,    0, -247,    0,
  -233, -232, -261, -254,    0,    0, -231, -230, -229, -228,
  -227, -226, -257, -233, -233,    0,    0,    0,    0,    0,
     0, -275,    0,    0,    0,    0,
 };
-short yyrindex[] = {                                      0,
+short ssrindex[] = {                                      0,
     0,    0,    0,    0,    0,    0,    0,    0,   32,    0,
     1,    0,    0,   33,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    1,    1,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,
 };
-short yygindex[] = {                                      0,
+short ssgindex[] = {                                      0,
     0,    0,    0,   -5,
 };
 #define YYTABLESIZE 271
-short yytable[] = {                                      36,
+short sstable[] = {                                      36,
     8,   17,   18,   19,   20,   21,   22,    1,    6,    2,
     7,   23,   11,   12,   24,   25,   32,   33,   34,   35,
     4,    8,   10,   13,   16,   26,   27,   28,   29,   30,
@@ -167,7 +191,7 @@ short yytable[] = {                                      36,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    8,
     8,
 };
-short yycheck[] = {                                     275,
+short sscheck[] = {                                     275,
     0,  263,  264,  265,  266,  267,  268,  256,  259,  258,
   261,  273,  260,  261,  269,  270,  274,  275,   24,   25,
   257,  257,  257,  257,  257,  257,  257,  257,  257,  257,
@@ -203,7 +227,7 @@ short yycheck[] = {                                     275,
 #endif
 #define YYMAXTOKEN 275
 #if YYDEBUG
-char *yyname[] = {
+char *ssname[] = {
 "end-of-file",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -214,7 +238,7 @@ char *yyname[] = {
 "COMMA","QUOTE","EQUALS","NOTEQUALS","LESS","GREATER","LESSEQUALS",
 "GREATEREQUALS","AND","OR","EOL","END","IS","NOT","SQLNULL",
 };
-char *yyrule[] = {
+char *ssrule[] = {
 "$accept : query_min",
 "query_min : SELECT select_list FROM from_list WHERE where_list",
 "query_min : SELECT select_list FROM from_list",
@@ -418,7 +442,7 @@ void sserror(char *s){
   fprintf(stderr,"Parse error \'%s\'\n", s);
   icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 }
-#line 422 "icalssyacc.c"
+#line 446 "y.tab.c"
 /* allocate initial stack or double stack size, up to YYMAXDEPTH */
 static int yygrowstack(void)
 {
@@ -666,7 +690,7 @@ case 19:
 #line 108 "icalssyacc.y"
 {set_logic(icalss_yy_gauge,ICALGAUGELOGIC_OR);}
 break;
-#line 670 "icalssyacc.c"
+#line 694 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
