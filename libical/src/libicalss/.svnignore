@@ -4,9 +4,5 @@ Makefile.in
 .libs
 *.lo
 *.la
-icalss.h
-icalsslexer.c
-icalssyacc.h
-icalssyacc.c
 icalssyacc.output
 y.output

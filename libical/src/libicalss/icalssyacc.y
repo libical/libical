@@ -51,9 +51,8 @@ static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
 
 /* Don't know why I need this....  */
  
-/* TODO: older flex version produce whats here configured as OpenBSD */
-/* autoconf should figure out, and which flex version we should be newer than? */
-#ifndef __OpenBSD__
+/* older flex version (such as included in OpenBSD) takes a different calling syntax */
+#ifdef YYPARSE_PARAM
 int sslex(void *YYPARSE_PARAM);
 #else
 int sslex();
