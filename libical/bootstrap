@@ -40,7 +40,7 @@ echo ... pre-building lex files ...
 for x in src/*/*.l
 do
 	echo Pre-building $x
-        ( cd `dirname $x` && lex -o `basename $x |sed 's/l$/c/g' ` `basename $x` )
+        ( cd `dirname $x` && lex -o`basename $x |sed 's/l$/c/g' ` `basename $x` )
 done
 
 
