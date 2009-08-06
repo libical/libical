@@ -321,7 +321,7 @@ static char*
 fold_property_line (char *text)
 {
     size_t buf_size;
-    char *buf, *buf_ptr, *line_start, *next_line_start, *out_buf;
+    char *buf, *buf_ptr, *line_start, *next_line_start;
     int len, chars_left, first_line;
     char ch;
 

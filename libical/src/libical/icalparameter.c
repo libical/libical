@@ -220,7 +220,6 @@ icalparameter_as_ical_string_r(icalparameter* param)
     size_t buf_size = 1024;
     char* buf; 
     char* buf_ptr;
-    char *out_buf;
     const char *kind_string;
 
     icalerror_check_arg_rz( (param!=0), "parameter");

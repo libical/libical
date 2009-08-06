@@ -1919,7 +1919,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
         t.year = year;
         t.is_date = 1;
 
-        // calculate valid week numbers
+        /* calculate valid week numbers */
         for(j=0; impl->by_ptrs[BY_MONTH][j]!=ICAL_RECURRENCE_ARRAY_MAX; j++){
             int month = impl->by_ptrs[BY_MONTH][j];
             int first_week, last_week;
@@ -1933,20 +1933,20 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
             }
         }
 
-        // check valid weeks
+        /* check valid weeks */
         for(i = 0; BYWEEKPTR[i] != ICAL_RECURRENCE_ARRAY_MAX && valid; i++){
                 int weekno = BYWEEKPTR[i];
                 if(weekno < ICAL_BY_WEEKNO_SIZE)
-                    valid &= valid_weeks[i]; // check if the week number is valid
+			valid &= valid_weeks[i]; /* check if the week number is valid */
                 else
-                    valid = 0;  // invalid week number
+			valid = 0;  /* invalid week number */
         }
 
-        // let us make the decision which rule to keep
-        if(valid) { // BYWEEKNO wins
+        /* let us make the decision which rule to keep */
+        if(valid) { /* BYWEEKNO wins */
             flags -= 1<<BY_MONTH;
         }
-        else { //BYMONTH vins
+        else { /* BYMONTH vins */
             flags -= 1<<BY_WEEK_NO;
         }
     }

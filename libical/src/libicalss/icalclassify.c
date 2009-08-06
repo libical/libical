@@ -475,10 +475,11 @@ int icalclassify_request_new_organizer(
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
-//    (void)comp;
-//    (void)match;
-//    (void)user;
-
+/* already done before.
+    (void)comp;
+    (void)match;
+    (void)user;
+*/
 }
 
 int icalclassify_request_status(
@@ -489,9 +490,11 @@ int icalclassify_request_status(
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
-//    (void)comp;
-//    (void)match;
-//    (void)user;
+/*
+    (void)comp;
+    (void)match;
+    (void)user;
+*/
 }
 
 int icalclassify_request_forward(
@@ -502,9 +505,11 @@ int icalclassify_request_forward(
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
-//    (void)comp;
-//    (void)match;
-//    (void)user;
+/*
+    (void)comp;
+    (void)match;
+    (void)user;
+*/
 }
 
 int icalclassify_request_freebusy(
@@ -515,9 +520,11 @@ int icalclassify_request_freebusy(
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
-//    (void)comp;
-//    (void)match;
-//    (void)user;
+/*
+    (void)comp;
+    (void)match;
+    (void)user;
+*/
 }
 
 int icalclassify_reply_accept(
