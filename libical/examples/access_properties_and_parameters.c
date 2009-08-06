@@ -2,6 +2,7 @@
 
 #include <libical/ical.h>
 #include <string.h>
+#include <stdlib.h>
 
 /* Get a particular parameter out of a component. This routine will
    return a list of strings of all attendees who are required. Note
