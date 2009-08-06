@@ -270,16 +270,16 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
 
 /*************** Type Specific routines ***************/
 
-icalcomponent* icalcomponent_new_vcalendar();
-icalcomponent* icalcomponent_new_vevent();
-icalcomponent* icalcomponent_new_vtodo();
-icalcomponent* icalcomponent_new_vjournal();
-icalcomponent* icalcomponent_new_valarm();
-icalcomponent* icalcomponent_new_vfreebusy();
-icalcomponent* icalcomponent_new_vtimezone();
-icalcomponent* icalcomponent_new_xstandard();
-icalcomponent* icalcomponent_new_xdaylight();
-icalcomponent* icalcomponent_new_vagenda();
-icalcomponent* icalcomponent_new_vquery();
+icalcomponent* icalcomponent_new_vcalendar(void);
+icalcomponent* icalcomponent_new_vevent(void);
+icalcomponent* icalcomponent_new_vtodo(void);
+icalcomponent* icalcomponent_new_vjournal(void);
+icalcomponent* icalcomponent_new_valarm(void);
+icalcomponent* icalcomponent_new_vfreebusy(void);
+icalcomponent* icalcomponent_new_vtimezone(void);
+icalcomponent* icalcomponent_new_xstandard(void);
+icalcomponent* icalcomponent_new_xdaylight(void);
+icalcomponent* icalcomponent_new_vagenda(void);
+icalcomponent* icalcomponent_new_vquery(void);
 
 #endif /* !ICALCOMPONENT_H */

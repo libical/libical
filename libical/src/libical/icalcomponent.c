@@ -2030,51 +2030,51 @@ enum icalproperty_status icalcomponent_get_status(icalcomponent* comp){
     return icalproperty_get_status(prop);
 }
 
-icalcomponent* icalcomponent_new_vcalendar()
+icalcomponent* icalcomponent_new_vcalendar(void)
 {
     return icalcomponent_new(ICAL_VCALENDAR_COMPONENT);
 }
-icalcomponent* icalcomponent_new_vevent()
+icalcomponent* icalcomponent_new_vevent(void)
 {
     return icalcomponent_new(ICAL_VEVENT_COMPONENT);
 }
-icalcomponent* icalcomponent_new_vtodo()
+icalcomponent* icalcomponent_new_vtodo(void)
 {
     return icalcomponent_new(ICAL_VTODO_COMPONENT);
 }
-icalcomponent* icalcomponent_new_vjournal()
+icalcomponent* icalcomponent_new_vjournal(void)
 {
     return icalcomponent_new(ICAL_VJOURNAL_COMPONENT);
 }
-icalcomponent* icalcomponent_new_valarm()
+icalcomponent* icalcomponent_new_valarm(void)
 {
     return icalcomponent_new(ICAL_VALARM_COMPONENT);
 }
-icalcomponent* icalcomponent_new_vfreebusy()
+icalcomponent* icalcomponent_new_vfreebusy(void)
 {
     return icalcomponent_new(ICAL_VFREEBUSY_COMPONENT);
 }
-icalcomponent* icalcomponent_new_vtimezone()
+icalcomponent* icalcomponent_new_vtimezone(void)
 {
     return icalcomponent_new(ICAL_VTIMEZONE_COMPONENT);
 }
-icalcomponent* icalcomponent_new_xstandard()
+icalcomponent* icalcomponent_new_xstandard(void)
 {
     return icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
 }
-icalcomponent* icalcomponent_new_xdaylight()
+icalcomponent* icalcomponent_new_xdaylight(void)
 {
     return icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
 }
-icalcomponent* icalcomponent_new_vagenda()
+icalcomponent* icalcomponent_new_vagenda(void)
 {
     return icalcomponent_new(ICAL_VAGENDA_COMPONENT);
 }
-icalcomponent* icalcomponent_new_vquery()
+icalcomponent* icalcomponent_new_vquery(void)
 {
     return icalcomponent_new(ICAL_VQUERY_COMPONENT);
 }
-icalcomponent* icalcomponent_new_vreply()
+icalcomponent* icalcomponent_new_vreply(void)
 {
     return icalcomponent_new(ICAL_VREPLY_COMPONENT);
 }
