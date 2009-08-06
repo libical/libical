@@ -252,7 +252,7 @@ static const char *mime_headers[] = {
 };
 
 
-void* sspm_default_new_part()
+void* sspm_default_new_part(void)
 {
     return 0;
 }

@@ -92,7 +92,7 @@ typedef enum icalerrorstate {
 } icalerrorstate ;
 
 const char* icalerror_strerror(icalerrorenum e);
-const char* icalerror_perror();
+const char* icalerror_perror(void);
 void ical_bt(void);
 void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
 icalerrorstate icalerror_get_error_state( icalerrorenum error);

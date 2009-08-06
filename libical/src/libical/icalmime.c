@@ -53,7 +53,7 @@ struct text_part
 	size_t buf_size;
 };
 
-void* icalmime_text_new_part()
+void* icalmime_text_new_part(void)
 {
 
 #define BUF_SIZE 2048
@@ -125,7 +125,7 @@ void icalmime_text_free_part(void *part)
 
 /* Ignore Attachments for now */
 
-void* icalmime_attachment_new_part()
+void* icalmime_attachment_new_part(void)
 {
     return 0;
 }

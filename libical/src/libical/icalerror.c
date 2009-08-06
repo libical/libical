@@ -189,7 +189,7 @@ icalerrorstate icalerror_supress(const char* error){
     return es;
 }
 
-const char* icalerror_perror()
+const char* icalerror_perror(void)
 {
     return icalerror_strerror(icalerrno);
 }
