@@ -111,7 +111,7 @@ struct sspm_part {
 struct sspm_action_map {
 	enum sspm_major_type major;
 	enum sspm_minor_type minor;
-	void* (*new_part)();
+	void* (*new_part)(void);
 	void (*add_line)(void *part, struct sspm_header *header, 
 			 const char* line, size_t size);
 	void* (*end_part)(void* part);
