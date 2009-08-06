@@ -390,7 +390,7 @@ icalcomponent_isa (const icalcomponent* component)
    {
        return component->kind;
    }
-
+   return ICAL_NO_COMPONENT;
 }
 
 
