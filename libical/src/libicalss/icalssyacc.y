@@ -1,31 +1,31 @@
 %{
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icalssyacc.y
-  CREATOR: eric 08 Aug 2000
-  
-  DESCRIPTION:
-  
-  $Id: icalssyacc.y,v 1.10 2008-01-14 00:35:26 dothebart Exp $
-  $Locker:  $
-
-(C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
-
- This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
-
-  Or:
-
-    The Mozilla Public License Version 1.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
-
- The Original Code is eric. The Initial Developer of the Original
- Code is Eric Busboom
-
-  ======================================================================*/
+/* -*- Mode: C -*-                                                         */
+/*  ====================================================================== */
+/*  FILE: icalssyacc.y                                                     */
+/*  CREATOR: eric 08 Aug 2000                                              */
+/*                                                                         */
+/*  DESCRIPTION:                                                           */
+/*                                                                         */                                                                       
+/*  $Id: icalssyacc.y,v 1.10 2008-01-14 00:35:26 dothebart Exp $           */
+/*  $Locker:  $                                                            */
+/*                                                                         */                                                                     
+/*  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org        */
+/*                                                                         */
+/* This program is free software; you can redistribute it and/or modify    */
+/* it under the terms of either:                                           */
+/*                                                                         */
+/*    The LGPL as published by the Free Software Foundation, version       */
+/*    2.1, available at: http://www.fsf.org/copyleft/lesser.html           */
+/*                                                                         */
+/*  Or:                                                                    */
+/*                                                                         */
+/*    The Mozilla Public License Version 1.0. You may obtain a copy of     */
+/*    the License at http://www.mozilla.org/MPL/                           */
+/*                                                                         */
+/* The Original Code is eric. The Initial Developer of the Original        */
+/* Code is Eric Busboom                                                    */
+/*                                                                         */
+/*  ====================================================================== */
 /*#define YYDEBUG 1*/
 #include <stdlib.h>
 #include <string.h> /* for strdup() */
@@ -52,11 +52,11 @@ static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
 /* Don't know why I need this....  */
  
 /* older flex version (such as included in OpenBSD) takes a different calling syntax */
-#ifdef YYPARSE_PARAM
-int sslex(void *YYPARSE_PARAM);
-#else
-int sslex();
-#endif
+#ifdef YYPARSE_PARAM 
+int sslex(void *YYPARSE_PARAM); 
+#else 
+int sslex(void);
+#endif 
 %}
 
 %union {
@@ -140,8 +140,8 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
 	
     where->value = strdup(s);
 
-    /* Is there a period in str1 ? If so, the string specified both a
-       component and a property*/
+    /* Is there a period in str1 ? If so, the string specified both a */
+    /* component and a property                                       */ 
     if( (c = strrchr(str1,'.')) != 0){
 	compstr = str1;
 	propstr = c+1;
@@ -200,8 +200,8 @@ static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
     where->comp = ICAL_NO_COMPONENT;
     where->prop = ICAL_NO_PROPERTY;
 
-    /* Is there a period in str1 ? If so, the string specified both a
-       component and a property*/
+    /* Is there a period in str1 ? If so, the string specified both a */
+    /* component and a property */
     if( (c = strrchr(str1,'.')) != 0){
 	compstr = str1;
 	propstr = c+1;
