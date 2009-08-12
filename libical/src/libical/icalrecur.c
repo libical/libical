@@ -1686,12 +1686,15 @@ static int next_month(icalrecur_iterator* impl)
   } else {
       int days_in_month;
 
+      assert( BYMDPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
+      impl->last.day = BYMDPTR[0];
+
       increment_month(impl);
 
       days_in_month = icaltime_days_in_month(impl->last.month,
                                                    impl->last.year);
       if (impl->last.day > days_in_month){
-          data_valid = 0; /* signal that impl->last is invalid */
+          impl->last.day = days_in_month;
       }
   }
 
