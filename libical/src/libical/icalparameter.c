@@ -27,7 +27,6 @@
      Graham Davison <g.m.davison@computer.org>
 
  ======================================================================*/
-/*#line 29 "icalparameter.c.in"*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

@@ -1,3 +1,6 @@
+AM_YFLAGS = -l
+AM_LFLAGS = -L -R
+
 lib_LTLIBRARIES = libicalvcal.la
 
 INCLUDES =				\

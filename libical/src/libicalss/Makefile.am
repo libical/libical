@@ -23,8 +23,8 @@
 #======================================================================
 
 
-AM_YFLAGS =-d -v -p ss
-AM_LFLAGS = -Pss 
+AM_YFLAGS = -d -v -p ss -l
+AM_LFLAGS = -Pss -L -R
 LEX_OUTPUT_ROOT = lex.ss
 
 all: icalss.h

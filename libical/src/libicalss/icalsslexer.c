@@ -1,5 +1,4 @@
 
-#line 3 "lex.ss.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -522,8 +521,6 @@ int ss_flex_debug = 0;
 
 char sstext[YYLMAX];
 char *yytext_ptr;
-#line 1 "icalsslexer.l"
-#line 2 "icalsslexer.l"
 /* -*- Mode: C -*-
   ======================================================================
   FILE: icalsslexer.l
@@ -583,7 +580,6 @@ int icalss_input(char* buf, int max_size)
 #define SS_FATAL_ERROR(msg) sserror(msg)
 
 
-#line 587 "lex.ss.c"
 
 #define INITIAL 0
 #define sql 1
@@ -767,14 +763,12 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 83 "icalsslexer.l"
 
 
 
 
 
 
-#line 778 "lex.ss.c"
 
 	if ( !(yy_init) )
 		{
@@ -859,103 +853,83 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 89 "icalsslexer.l"
 { return SELECT; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 90 "icalsslexer.l"
 { return FROM; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 91 "icalsslexer.l"
 { return WHERE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 92 "icalsslexer.l"
 { return COMMA; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 93 "icalsslexer.l"
 { return EQUALS; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 94 "icalsslexer.l"
 { return EQUALS; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 95 "icalsslexer.l"
 { return NOTEQUALS; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 96 "icalsslexer.l"
 { return LESS; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 97 "icalsslexer.l"
 { return GREATER; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 98 "icalsslexer.l"
 { return LESSEQUALS; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 99 "icalsslexer.l"
 { return GREATEREQUALS; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 100 "icalsslexer.l"
 { return AND; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 101 "icalsslexer.l"
 { return OR; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 102 "icalsslexer.l"
 { return IS; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 103 "icalsslexer.l"
 { return NOT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 104 "icalsslexer.l"
 { return SQLNULL; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 105 "icalsslexer.l"
 { return QUOTE; }
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 106 "icalsslexer.l"
 ;			
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 107 "icalsslexer.l"
 { return EOL; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 109 "icalsslexer.l"
 {
 	int c = input();
 	unput(c);
@@ -969,7 +943,6 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 120 "icalsslexer.l"
 {
         sslval.v_string= icalmemory_tmp_copy(sstext);
 	return STRING; 
@@ -977,15 +950,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 126 "icalsslexer.l"
 { return sstext[0]; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 128 "icalsslexer.l"
 ECHO;
 	YY_BREAK
-#line 989 "lex.ss.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(sql):
 case YY_STATE_EOF(string_value):
@@ -1985,7 +1955,6 @@ void ssfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 128 "icalsslexer.l"
 
 
 
