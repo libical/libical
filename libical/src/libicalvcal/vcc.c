@@ -19,7 +19,6 @@ extern int yyparse(void);
 
 static int yygrowstack(void);
 #define YYPREFIX "yy"
-#line 2 "vcc.y"
 
 /***************************************************************************
 (C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International
@@ -209,12 +208,10 @@ static VObject* Parse_MIMEHelper(void);
 static VObject* popVObject(void);
 static int pushVObject(const char *prop);
 
-#line 197 "vcc.y"
 typedef union {
     char *str;
     VObject *vobj;
     } YYSTYPE;
-#line 218 "vcc.c"
 #define EQ 257
 #define COLON 258
 #define DOT 259
@@ -441,7 +438,6 @@ static short   *yyss;
 static short   *yysslim;
 static YYSTYPE *yyvs;
 static int      yystacksize;
-#line 391 "vcc.y"
 static int pushVObject(const char *prop)
     {
     VObject *newObj;
@@ -1266,7 +1262,6 @@ static void mime_error_(char *s)
 	}
     }
 
-#line 1270 "vcc.c"
 /* allocate initial stack or double stack size, up to YYMAXDEPTH */
 static int yygrowstack(void)
 {
@@ -1448,49 +1443,41 @@ yyreduce:
     switch (yyn)
     {
 case 2:
-#line 229 "vcc.y"
 { addList(&vObjList, yyvsp[0].vobj); curObj = 0; }
 break;
 case 4:
-#line 232 "vcc.y"
 { addList(&vObjList, yyvsp[0].vobj); curObj = 0; }
 break;
 case 7:
-#line 241 "vcc.y"
 {
 	lexPushMode(L_VCARD);
 	if (!pushVObject(VCCardProp)) YYERROR;
 	}
 break;
 case 8:
-#line 246 "vcc.y"
 {
 	lexPopMode(0);
 	yyval.vobj = popVObject();
 	}
 break;
 case 9:
-#line 251 "vcc.y"
 {
 	lexPushMode(L_VCARD);
 	if (!pushVObject(VCCardProp)) YYERROR;
 	}
 break;
 case 10:
-#line 256 "vcc.y"
 {
 	lexPopMode(0);
 	yyval.vobj = popVObject();
 	}
 break;
 case 13:
-#line 267 "vcc.y"
 {
 	lexPushMode(L_VALUES);
 	}
 break;
 case 14:
-#line 271 "vcc.y"
 {
 	if (lexWithinMode(L_BASE64) || lexWithinMode(L_QUOTED_PRINTABLE))
 	   lexPopMode(0);
@@ -1498,115 +1485,95 @@ case 14:
 	}
 break;
 case 16:
-#line 280 "vcc.y"
 {
 	enterProps(yyvsp[0].str);
 	}
 break;
 case 18:
-#line 285 "vcc.y"
 {
 	enterProps(yyvsp[0].str);
 	}
 break;
 case 22:
-#line 298 "vcc.y"
 {
 	enterAttr(yyvsp[0].str,0);
 	}
 break;
 case 23:
-#line 302 "vcc.y"
 {
 	enterAttr(yyvsp[-2].str,yyvsp[0].str);
 
 	}
 break;
 case 25:
-#line 311 "vcc.y"
 { enterValues(yyvsp[-1].str); }
 break;
 case 27:
-#line 313 "vcc.y"
 { enterValues(yyvsp[0].str); }
 break;
 case 29:
-#line 317 "vcc.y"
 { yyval.str = 0; }
 break;
 case 30:
-#line 322 "vcc.y"
 { if (!pushVObject(VCCalProp)) YYERROR; }
 break;
 case 31:
-#line 325 "vcc.y"
 { yyval.vobj = popVObject(); }
 break;
 case 32:
-#line 327 "vcc.y"
 { if (!pushVObject(VCCalProp)) YYERROR; }
 break;
 case 33:
-#line 329 "vcc.y"
 { yyval.vobj = popVObject(); }
 break;
 case 39:
-#line 344 "vcc.y"
 {
 	lexPushMode(L_VEVENT);
 	if (!pushVObject(VCEventProp)) YYERROR;
 	}
 break;
 case 40:
-#line 350 "vcc.y"
 {
 	lexPopMode(0);
 	popVObject();
 	}
 break;
 case 41:
-#line 355 "vcc.y"
 {
 	lexPushMode(L_VEVENT);
 	if (!pushVObject(VCEventProp)) YYERROR;
 	}
 break;
 case 42:
-#line 360 "vcc.y"
 {
 	lexPopMode(0);
 	popVObject();
 	}
 break;
 case 43:
-#line 368 "vcc.y"
 {
 	lexPushMode(L_VTODO);
 	if (!pushVObject(VCTodoProp)) YYERROR;
 	}
 break;
 case 44:
-#line 374 "vcc.y"
 {
 	lexPopMode(0);
 	popVObject();
 	}
 break;
 case 45:
-#line 379 "vcc.y"
 {
 	lexPushMode(L_VTODO);
 	if (!pushVObject(VCTodoProp)) YYERROR;
 	}
 break;
 case 46:
-#line 384 "vcc.y"
 {
 	lexPopMode(0);
 	popVObject();
 	}
 break;
-#line 1610 "vcc.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

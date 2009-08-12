@@ -120,7 +120,6 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "icalssyacc.y"
 
 /* -*- Mode: C -*-                                                         */
 /*  ====================================================================== */
@@ -202,12 +201,10 @@ int sslex(void);
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 62 "icalssyacc.y"
 {
 	char* v_string;
 }
 /* Line 187 of yacc.c.  */
-#line 211 "y.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -220,7 +217,6 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 224 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -1435,7 +1431,6 @@ yyreduce:
   switch (yyn)
     {
         case 4:
-#line 75 "icalssyacc.y"
     { 
                  yyclearin;
 		 YYABORT;
@@ -1443,83 +1438,67 @@ yyreduce:
     break;
 
   case 5:
-#line 82 "icalssyacc.y"
     {ssyacc_add_select(icalss_yy_gauge,(yyvsp[(1) - (1)].v_string));}
     break;
 
   case 6:
-#line 83 "icalssyacc.y"
     {ssyacc_add_select(icalss_yy_gauge,(yyvsp[(3) - (3)].v_string));}
     break;
 
   case 7:
-#line 88 "icalssyacc.y"
     {ssyacc_add_from(icalss_yy_gauge,(yyvsp[(1) - (1)].v_string));}
     break;
 
   case 8:
-#line 89 "icalssyacc.y"
     {ssyacc_add_from(icalss_yy_gauge,(yyvsp[(3) - (3)].v_string));}
     break;
 
   case 10:
-#line 94 "icalssyacc.y"
     {ssyacc_add_where(icalss_yy_gauge,(yyvsp[(1) - (3)].v_string),ICALGAUGECOMPARE_EQUAL,(yyvsp[(3) - (3)].v_string)); }
     break;
 
   case 11:
-#line 95 "icalssyacc.y"
     {ssyacc_add_where(icalss_yy_gauge,(yyvsp[(1) - (3)].v_string),ICALGAUGECOMPARE_ISNULL,""); }
     break;
 
   case 12:
-#line 96 "icalssyacc.y"
     {ssyacc_add_where(icalss_yy_gauge,(yyvsp[(1) - (4)].v_string),ICALGAUGECOMPARE_ISNOTNULL,""); }
     break;
 
   case 13:
-#line 97 "icalssyacc.y"
     {ssyacc_add_where(icalss_yy_gauge,(yyvsp[(1) - (3)].v_string),ICALGAUGECOMPARE_NOTEQUAL,(yyvsp[(3) - (3)].v_string)); }
     break;
 
   case 14:
-#line 98 "icalssyacc.y"
     {ssyacc_add_where(icalss_yy_gauge,(yyvsp[(1) - (3)].v_string),ICALGAUGECOMPARE_LESS,(yyvsp[(3) - (3)].v_string)); }
     break;
 
   case 15:
-#line 99 "icalssyacc.y"
     {ssyacc_add_where(icalss_yy_gauge,(yyvsp[(1) - (3)].v_string),ICALGAUGECOMPARE_GREATER,(yyvsp[(3) - (3)].v_string)); }
     break;
 
   case 16:
-#line 100 "icalssyacc.y"
     {ssyacc_add_where(icalss_yy_gauge,(yyvsp[(1) - (3)].v_string),ICALGAUGECOMPARE_LESSEQUAL,(yyvsp[(3) - (3)].v_string)); }
     break;
 
   case 17:
-#line 101 "icalssyacc.y"
     {ssyacc_add_where(icalss_yy_gauge,(yyvsp[(1) - (3)].v_string),ICALGAUGECOMPARE_GREATEREQUAL,(yyvsp[(3) - (3)].v_string)); }
     break;
 
   case 18:
-#line 105 "icalssyacc.y"
     {set_logic(icalss_yy_gauge,ICALGAUGELOGIC_NONE);}
     break;
 
   case 19:
-#line 106 "icalssyacc.y"
     {set_logic(icalss_yy_gauge,ICALGAUGELOGIC_AND);}
     break;
 
   case 20:
-#line 107 "icalssyacc.y"
     {set_logic(icalss_yy_gauge,ICALGAUGELOGIC_OR);}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1523 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1733,7 +1712,6 @@ yyreturn:
 }
 
 
-#line 111 "icalssyacc.y"
 
 
 static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1, 

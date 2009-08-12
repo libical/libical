@@ -86,12 +86,10 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 62 "icalssyacc.y"
 {
 	char* v_string;
 }
 /* Line 1489 of yacc.c.  */
-#line 95 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
