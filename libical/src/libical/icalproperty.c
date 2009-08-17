@@ -1022,6 +1022,7 @@ char* icalproperty_get_property_name_r(const icalproperty* prop)
  
     if (property_name == 0 ) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+	icalmemory_free_buffer(buf);
         return 0;
 
     } else {
