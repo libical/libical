@@ -313,10 +313,6 @@ icalset* icalset_new(icalset_kind kind, const char* dsn, void* options) {
     return(NULL);
   }
 
-  if ( data == 0) {
-    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-    return 0;
-  }
   data->kind    = kind;
   data->dsn     = strdup(dsn);
 #endif
