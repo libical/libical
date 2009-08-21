@@ -421,7 +421,12 @@ icaltzutil_fetch_timezone (const char *location)
 		icalprop = icalproperty_new_tzname (types [zidx].zname);
 		icalcomponent_add_property (std_comp, icalprop);
 
-		trans = transitions [stdidx] + types [zidx].gmtoff;
+		if (dstidx != -1)
+			zp_idx = trans_idx [stdidx-1]; 
+		else
+			zp_idx = zidx;
+		/* DTSTART localtime uses TZOFFSETFROM UTC offset */
+		trans = transitions [stdidx] + types [zp_idx].gmtoff;
 		icaltime = icaltime_from_timet (trans, 0);
 		dtstart = icaltime;
 		dtstart.year = 1970;
@@ -431,7 +436,6 @@ icaltzutil_fetch_timezone (const char *location)
 
 		/* If DST changes are present use RRULE */
 		if (dstidx != -1) {
-			zp_idx = trans_idx [stdidx-1]; 
 			icalrecurrencetype_clear (&ical_recur);
 			ical_recur.freq = ICAL_YEARLY_RECURRENCE;
 			ical_recur.by_month [0] = icaltime.month;
@@ -442,13 +446,9 @@ icaltzutil_fetch_timezone (const char *location)
 			icalcomponent_add_property (std_comp, icalprop);
 
 			adjust_dtstart_day_to_rrule (std_comp, ical_recur);
-
-			icalprop = icalproperty_new_tzoffsetfrom (types [zp_idx].gmtoff);
-			icalcomponent_add_property (std_comp, icalprop);
-		} else {
-			icalprop = icalproperty_new_tzoffsetfrom (types [zidx].gmtoff);
-			icalcomponent_add_property (std_comp, icalprop);
 		}
+        icalprop = icalproperty_new_tzoffsetfrom (types [zp_idx].gmtoff);
+        icalcomponent_add_property (std_comp, icalprop);
 
 		icalprop = icalproperty_new_tzoffsetto (types [zidx].gmtoff);
 		icalcomponent_add_property (std_comp, icalprop);
@@ -459,12 +459,13 @@ icaltzutil_fetch_timezone (const char *location)
 	
 	if (dstidx != -1) {
 		zidx = trans_idx [dstidx];
-	       	zp_idx = trans_idx [dstidx-1];
+		zp_idx = trans_idx [dstidx-1];
 		dst_comp = icalcomponent_new (ICAL_XDAYLIGHT_COMPONENT);
 		icalprop = icalproperty_new_tzname (types [zidx].zname);
 		icalcomponent_add_property (dst_comp, icalprop);
 
-		trans = transitions [dstidx] + types [zidx].gmtoff;
+		/* DTSTART localtime uses TZOFFSETFROM UTC offset */
+		trans = transitions [dstidx] + types [zp_idx].gmtoff;
 		icaltime = icaltime_from_timet (trans, 0);
 		dtstart = icaltime;
 		dtstart.year = 1970;
