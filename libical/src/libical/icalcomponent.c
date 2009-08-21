@@ -90,6 +90,8 @@ static int icalcomponent_compare_vtimezones (icalcomponent	*vtimezone1,
 					     icalcomponent	*vtimezone2);
 static int icalcomponent_compare_timezone_fn	(const void	*elem1,
 						 const void	*elem2);
+static struct icaltimetype
+icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop);
 
 
 void icalcomponent_add_children(icalcomponent *impl, va_list args)
@@ -862,7 +864,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
        exdate != NULL;
        exdate = icalcomponent_get_next_property(comp,ICAL_EXDATE_PROPERTY)) {
 	 
-    struct icaltimetype exdatetime = icalproperty_get_exdate(exdate);
+    struct icaltimetype exdatetime = icalcomponent_get_datetime(comp, exdate);
 
     if (icaltime_compare(*recurtime, exdatetime) == 0) {
       /** MATCHED **/
