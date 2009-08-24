@@ -3600,6 +3600,22 @@ void test_recurrenceexcluded(void)
 }
 
 
+void test_bad_dtstart_in_timezone(void)
+{
+	icaltimezone *myTZ = NULL;
+	icalcomponent *vtimezone = NULL;
+	char *str = NULL;
+
+	myTZ = icaltimezone_get_builtin_timezone("Europe/Zurich");
+	vtimezone = icaltimezone_get_component(myTZ);
+	str = icalcomponent_as_ical_string(vtimezone);
+	ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:19701025T030000") != NULL));
+	ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:19700329T020000") != NULL));
+}
+
+
+
+
 
 
 
@@ -3703,6 +3719,7 @@ int main(int argc, char *argv[])
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test, do_header);
+    test_run("Test bad dtstart in timezone as per r960", test_bad_dtstart_in_timezone, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
