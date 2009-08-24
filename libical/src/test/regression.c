@@ -3548,6 +3548,61 @@ void test_vcal(void)
   if (vcal) deleteVObject(vcal);
 }
 
+
+/*
+ * Test to see if recurrences are excluded in certain situations
+ * See r961 for more information
+ */
+void test_recurrenceexcluded(void)
+{
+    char funTime[2048];
+    icalcomponent * calendar = NULL;
+    icalcomponent * event = NULL;
+    struct icaltimetype dtstart;
+    struct icaltimetype recurtime;
+
+    funTime[0] = '\0';
+    strcat(funTime, "BEGIN:VCALENDAR\n"); 
+    strcat(funTime, "VERSION:2.0\n");
+    strcat(funTime, "BEGIN:VTIMEZONE\n");
+    strcat(funTime, "TZID:/mozilla.org/20071231_1/Europe/London\n");
+    strcat(funTime, "X-LIC-LOCATION:Europe/London\n");
+    strcat(funTime, "BEGIN:DAYLIGHT\n");
+    strcat(funTime, "TZOFFSETFROM:+0000\n");
+    strcat(funTime, "TZOFFSETTO:+0100\n");
+    strcat(funTime, "TZNAME:BST\n");
+    strcat(funTime, "DTSTART:19700328T230000\n");
+    strcat(funTime, "RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3\n");
+    strcat(funTime, "END:DAYLIGHT\n");
+    strcat(funTime, "BEGIN:STANDARD\n");
+    strcat(funTime, "TZOFFSETFROM:+0100\n");
+    strcat(funTime, "TZOFFSETTO:+0000\n");
+    strcat(funTime, "TZNAME:GMT\n");
+    strcat(funTime, "DTSTART:19701025T000000\n");
+    strcat(funTime, "RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10\n");
+    strcat(funTime, "END:STANDARD\n");
+    strcat(funTime, "END:VTIMEZONE\n");
+    strcat(funTime, "BEGIN:VEVENT\n");
+    strcat(funTime, "DTSTAMP:20080805T174443Z\n");
+    strcat(funTime, "UID:5fb6ccb8-9646-45ab-8c95-8d15e9de1280\n");
+    strcat(funTime, "SUMMARY:Exclude test\n");
+    strcat(funTime, "EXDATE;TZID=/mozilla.org/20071231_1/Europe/London:20080818T190000\n");
+    strcat(funTime, "RRULE:FREQ=DAILY;COUNT=12;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR\n");
+    strcat(funTime, "DTSTART;TZID=/mozilla.org/20071231_1/Europe/London:20080811T190000\n");
+    strcat(funTime, "DTEND;TZID=/mozilla.org/20071231_1/Europe/London:20080811T200000\n");
+    strcat(funTime, "END:VEVENT\n");
+    strcat(funTime, "END:VCALENDAR\n");
+    calendar = icalparser_parse_string(funTime);
+    dtstart = icalcomponent_get_dtstart(calendar);
+    event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+    recurtime = icaltime_from_string("20080818T180000Z");
+    ok("Recurrence is excluded as per r961", icalproperty_recurrence_is_excluded(event, &dtstart, &recurtime));
+}
+
+
+
+
+
 int main(int argc, char *argv[])
 {
     int c;
@@ -3647,6 +3702,7 @@ int main(int argc, char *argv[])
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
+    test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
