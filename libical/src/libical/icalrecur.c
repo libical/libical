@@ -1498,6 +1498,20 @@ static int is_day_in_byday(icalrecur_iterator* impl,struct icaltimetype tt){
     return 0;
 }
 
+int check_set_position(icalrecur_iterator* impl, int set_pos)
+{
+    int i;
+    int found = 0;
+    for (i = 0; impl->rule.by_set_pos[i] != ICAL_RECURRENCE_ARRAY_MAX && 
+              i != ICAL_BY_SETPOS_SIZE; i++){
+        if (impl->rule.by_set_pos[i] == set_pos) {
+              found = 1;
+              break;
+        }
+    }
+    return found;
+}
+
 static int next_month(icalrecur_iterator* impl)
 {
     int data_valid = 1;
@@ -1582,15 +1596,18 @@ static int next_month(icalrecur_iterator* impl)
       assert( BYDAYPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
 
       int set_pos_counter = 0;
+      int set_pos_total = 0;
       
       /* Count the past positions for the BYSETPOS calculation */
       if(has_by_data(impl,BY_SET_POS)){
           int last_day = impl->last.day;
-	  for(day = 1; day <= last_day; day++){
+	  for(day = 1; day <= days_in_month; day++){
     	      impl->last.day = day;
 	  
               if(is_day_in_byday(impl,impl->last)){
-        	  set_pos_counter++;
+		  set_pos_total++;
+		  if(day <= last_day)
+        	      set_pos_counter++;
 	      }
 	  }
           impl->last.day = last_day;
@@ -1601,25 +1618,16 @@ static int next_month(icalrecur_iterator* impl)
       for(day = impl->last.day+1; day <= days_in_month; day++){
           impl->last.day = day;
 	  
-          /* If there is no BYSETPOS rule, calculate only by BYDAY */
-          if(!has_by_data(impl,BY_SET_POS) && is_day_in_byday(impl,impl->last)){
-              found = 1;
-              break;
-          }
-          /* If there is BYSETPOS rule, take into account the occurence
-	     matches with BYDAY */
-          if(has_by_data(impl,BY_SET_POS) && is_day_in_byday(impl,impl->last)){
-	      int i;
-	      set_pos_counter++;
-	      for (i = 0; impl->rule.by_set_pos[i] != ICAL_RECURRENCE_ARRAY_MAX && 
-	    		  i != ICAL_BY_SETPOS_SIZE && !found; i++){
-    	          if (impl->rule.by_set_pos[i] == set_pos_counter){
-                      found = 1;
-		  }
-	      }
-	      if (found)
+          if(is_day_in_byday(impl,impl->last)){
+          /* If there is no BYSETPOS rule, calculate only by BYDAY
+             If there is BYSETPOS rule, take into account the occurence
+             matches with BYDAY */
+              if(!has_by_data(impl,BY_SET_POS) || check_set_position(impl, ++set_pos_counter)
+                  	|| check_set_position(impl, set_pos_counter-set_pos_total-1)) {
+                  found = 1;
                   break;
-          }	  
+              }
+           }
       }
       
       data_valid = found;
@@ -1633,7 +1641,9 @@ static int next_month(icalrecur_iterator* impl)
              invalid */
 
           if(is_day_in_byday(impl,impl->last)){
-              data_valid = 1;
+          /* If there is no BYSETPOS rule or BYSETPOS=1, new data is valid */
+              if(!has_by_data(impl,BY_SET_POS) || check_set_position(impl,1))
+                  data_valid = 1;
           } else {
               data_valid = 0; /* signal that impl->last is invalid */
           }
@@ -2093,7 +2103,24 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
 	    t.day = days_in_month;
 	    last_dow = icaltime_day_of_week(t);
 
-	    for(k=0;impl->by_ptrs[BY_DAY][k]!=ICAL_RECURRENCE_ARRAY_MAX;k++){
+	    if(has_by_data(impl,BY_SET_POS)) {
+	        /*FREQ=YEARLY; BYDAY=TH,20MO,-10FR; BYMONTH = 12; BYSETPOS=1*/
+	        int day;
+	        int set_pos_counter = 0;
+	        int set_pos_total = 0;
+	        int by_month_day[ICAL_BY_MONTHDAY_SIZE];
+	        for(day = 1; day <= days_in_month; day++){
+	            t.day = day;
+	            if(is_day_in_byday(impl,t))
+	                by_month_day[set_pos_total++] = day;
+	        }
+	        for(set_pos_counter = 0; set_pos_counter < set_pos_total; set_pos_counter++){
+	            if(check_set_position(impl, set_pos_counter+1) ||
+	                	check_set_position(impl, set_pos_counter-set_pos_total))
+	                impl->days[days_index++] = doy_offset + by_month_day[set_pos_counter];
+	        }
+	    }
+	    else for(k=0;impl->by_ptrs[BY_DAY][k]!=ICAL_RECURRENCE_ARRAY_MAX;k++){
 	        short day_coded = impl->by_ptrs[BY_DAY][k];
 		enum icalrecurrencetype_weekday dow =
 		  icalrecurrencetype_day_day_of_week(day_coded);
