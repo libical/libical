@@ -62,7 +62,7 @@ install(FILES
 #	-I$(srcdir)		\
 #	-DWITH_RR $(RRCAP_CFLAGS)
 #
-#libicalcap_evolution_la_LDFLAGS = $(RRCAP_LIBS) -version-info 43:0:43
+#libicalcap_evolution_la_LDFLAGS = $(RRCAP_LIBS) -version-info 44:0:44
 #
 #
 #libicalcap_evolution_la_SOURCES =		\

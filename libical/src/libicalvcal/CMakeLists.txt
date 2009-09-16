@@ -60,7 +60,7 @@ install(FILES
 #	-I$(top_builddir)/src/libical	\
 #	-I$(top_srcdir)/src/libicalss
 #
-#libicalvcal_la_LDFLAGS = -version-info 43:0:43
+#libicalvcal_la_LDFLAGS = -version-info 44:0:44
 #libicalvcal_la_LIBADD = ../libical/.libs/libical.la
 #
 #if DEV
