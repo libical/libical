@@ -18,3 +18,4 @@ doesnothing_SOURCES = \
 	main.c \
 	parse_text.c 
 
+distclean: clean

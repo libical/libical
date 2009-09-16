@@ -60,3 +60,5 @@ CLEANFILES = 				\
 
 clean-local:
 	rm -rf calendar
+
+distclean: clean

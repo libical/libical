@@ -147,6 +147,8 @@ clean-icalss:
 	rm -f libical/icalss.h
 	rmdir libical
 
+distclean:
+
 libicalssinclude_HEADERS = icalss.h  icalcalendar.h icalclassify.h icalcluster.h icaldirset.h icaldirsetimpl.h icalfileset.h icalfilesetimpl.h icalgauge.h icalgaugeimpl.h icalmessage.h icalset.h icalspanlist.h icalssyacc.h $(libicalssinclude_BDBHEADERS)
 
 CONFIG_CLEAN_FILES = y.output

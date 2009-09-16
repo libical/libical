@@ -68,7 +68,7 @@ endif
 build: build-stamp
 build-stamp:  config.status
 	dh_testdir
-	$(MAKE) clean
+#	$(MAKE) clean
 	$(MAKE)
 
 	touch $@
@@ -78,7 +78,7 @@ clean:
 	dh_testroot
 	rm -f build-stamp 
 # Add here commands to clean up after the build process.
-	[ ! -f Makefile ] || $(MAKE) distclean
+	#[ ! -f Makefile ] || $(MAKE) distclean
 	rm -f config.sub config.guess
 
 	dh_clean 
