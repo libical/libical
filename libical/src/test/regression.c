@@ -333,7 +333,7 @@ void test_properties()
 	icalparameter_new_cn("A Common Name 2"),
 	icalparameter_new_cn("A Common Name 3"),
        	icalparameter_new_cn("A Common Name 4"),
-	0);
+	(void *)0);
 
     for(param = icalproperty_get_first_parameter(prop,ICAL_ANY_PARAMETER);
 	param != 0;
@@ -457,7 +457,7 @@ void test_components()
 	icalproperty_vanew_comment(
 	    "A Comment",
 	    icalparameter_new_cn("A Common Name 1"),
-	    0),
+	    (void *)0),
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
 	    icalproperty_new_version("2.0"),
@@ -468,11 +468,11 @@ void test_components()
 		icalparameter_new_cn("A Common Name 2"),
 		icalparameter_new_cn("A Common Name 3"),
 		icalparameter_new_cn("A Common Name 4"),
-		0),
+		(void *)0),
 	    icalproperty_vanew_xlicerror(
 		"This is only a test",
 		icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
-		0),
+		(void *)0),
 
 	    0
 	    ),
@@ -866,8 +866,7 @@ void test_restriction()
 		    icalproperty_new_tzoffsetfrom(-4.0),
 		    icalproperty_new_tzoffsetto(-5.0),
 		    icalproperty_new_tzname("EST"),
-		    0
-		    ),
+		    (void *)0),
 		icalcomponent_vanew(
 		    ICAL_XSTANDARD_COMPONENT,
 		    icalproperty_new_dtstart(atime),
@@ -875,10 +874,8 @@ void test_restriction()
 		    icalproperty_new_tzoffsetfrom(-5.0),
 		    icalproperty_new_tzoffsetto(-4.0),
 		    icalproperty_new_tzname("EST"),
-		    0
-		    ),
-		0
-		),
+		    (void *)0),
+		(void *)0),
 	    icalcomponent_vanew(
 		ICAL_VEVENT_COMPONENT,
 		icalproperty_new_dtstamp(atime),
@@ -886,15 +883,13 @@ void test_restriction()
 		icalproperty_vanew_organizer(
 		    "mrbig@host.com",
 		    icalparameter_new_role(ICAL_ROLE_CHAIR),
-		    0
-		    ),
+		    (void *)0),
 		icalproperty_vanew_attendee(
 		    "employee-A@host.com",
 		    icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
 		    icalparameter_new_rsvp(ICAL_RSVP_TRUE),
 		    icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
-		    0
-		    ),
+		    (void *)0),
 		icalproperty_new_description("Project XYZ Review Meeting"),
 		icalproperty_new_categories("MEETING"),
 		icalproperty_new_class(ICAL_CLASS_PUBLIC),
@@ -908,13 +903,10 @@ void test_restriction()
 		icalproperty_vanew_dtend(
 		    atime,
 		    icalparameter_new_tzid("America/New_York"),
-		    0
-		    ),
+		    (void *)0),
 		icalproperty_new_location("1CP Conference Room 4350"),
-		0
-		),
-	    0
-	    );
+		(void *)0),
+	    (void *)0);
 
     valid = icalrestriction_check(comp);
 
@@ -957,13 +949,13 @@ void test_calendar()
 	    icalparameter_new_cn("A Common Name 2"),
 	    icalparameter_new_cn("A Common Name 3"),
 		icalparameter_new_cn("A Common Name 4"),
-	    0),
+	    (void *)0),
 	icalproperty_vanew_xlicerror(
 	    "This is only a test",
 	    icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
-	    0),
+	    (void *)0),
 	
-	0),0);
+	(void *)0),(void *)0);
     
     s = icalcalendar_get_booked(calendar);
 
@@ -1717,26 +1709,26 @@ void test_iterators()
     c= icalcomponent_vanew(
 	ICAL_VCALENDAR_COMPONENT,
 	icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-			    icalproperty_new_version("1"),0),
+			    icalproperty_new_version("1"),(void *)0),
 	icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-			    icalproperty_new_version("2"),0),
+			    icalproperty_new_version("2"),(void *)0),
 	icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-			    icalproperty_new_version("3"),0),
+			    icalproperty_new_version("3"),(void *)0),
 	icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-			    icalproperty_new_version("4"),0),
+			    icalproperty_new_version("4"),(void *)0),
 	icalcomponent_vanew(ICAL_VTODO_COMPONENT,
-			    icalproperty_new_version("5"),0),
+			    icalproperty_new_version("5"),(void *)0),
 	icalcomponent_vanew(ICAL_VJOURNAL_COMPONENT,
-			    icalproperty_new_version("6"),0),
+			    icalproperty_new_version("6"),(void *)0),
 	icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-			    icalproperty_new_version("7"),0),
+			    icalproperty_new_version("7"),(void *)0),
 	icalcomponent_vanew(ICAL_VJOURNAL_COMPONENT,
-			    icalproperty_new_version("8"),0),
+			    icalproperty_new_version("8"),(void *)0),
 	icalcomponent_vanew(ICAL_VJOURNAL_COMPONENT,
-			    icalproperty_new_version("9"),0),
+			    icalproperty_new_version("9"),(void *)0),
 	icalcomponent_vanew(ICAL_VJOURNAL_COMPONENT,
-			    icalproperty_new_version("10"),0),
-	0);
+			    icalproperty_new_version("10"),(void *)0),
+	(void *)0);
 
     /* List all of the VEVENTS */
 
@@ -1899,8 +1891,8 @@ void test_overlaps()
 
     c = icalcomponent_vanew(
 	ICAL_VEVENT_COMPONENT,
-	icalproperty_vanew_dtstart(icaltime_from_timet(tm1-hh,0),0),
-	icalproperty_vanew_dtend(icaltime_from_timet(tm2-hh,0),0),
+	icalproperty_vanew_dtstart(icaltime_from_timet(tm1-hh,0),(void *)0),
+	icalproperty_vanew_dtend(icaltime_from_timet(tm2-hh,0),(void *)0),
 	0
 	);
 
@@ -1915,8 +1907,8 @@ void test_overlaps()
 
     c = icalcomponent_vanew(
 	ICAL_VEVENT_COMPONENT,
-	icalproperty_vanew_dtstart(icaltime_from_timet(tm1-hh,0),0),
-	icalproperty_vanew_dtend(icaltime_from_timet(tm2,0),0),
+	icalproperty_vanew_dtstart(icaltime_from_timet(tm1-hh,0),(void *)0),
+	icalproperty_vanew_dtend(icaltime_from_timet(tm2,0),(void *)0),
 	0
 	);
 
@@ -1930,8 +1922,8 @@ void test_overlaps()
 
     c = icalcomponent_vanew(
 	ICAL_VEVENT_COMPONENT,
-	icalproperty_vanew_dtstart(icaltime_from_timet(tm1+5*hh,0),0),
-	icalproperty_vanew_dtend(icaltime_from_timet(tm2+5*hh,0),0),
+	icalproperty_vanew_dtstart(icaltime_from_timet(tm1+5*hh,0),(void *)0),
+	icalproperty_vanew_dtend(icaltime_from_timet(tm2+5*hh,0),(void *)0),
 	0
 	);
 
@@ -2082,9 +2074,8 @@ void test_convenience(){
 	    ICAL_VEVENT_COMPONENT,
 	    icalproperty_new_dtstart(icaltime_from_string("19970801T120000")),
 	    icalproperty_new_dtend(icaltime_from_string("19970801T130000")),
-	    0
-	    ),
-	0);
+	    (void *)0),
+	(void *)0);
 
     if (VERBOSE) printf("\n%s\n", icalcomponent_as_ical_string(c));
 
@@ -2104,9 +2095,8 @@ void test_convenience(){
 	    ICAL_VEVENT_COMPONENT,
 	    icalproperty_new_dtstart(icaltime_from_string("19970801T120000Z")),
 	    icalproperty_new_duration(icaldurationtype_from_string("PT1H30M")),
-	    0
-	    ),
-	0);
+	    (void *)0),
+	(void *)0);
 
     if (VERBOSE) printf("\n%s\n", icalcomponent_as_ical_string(c));
 
@@ -2128,9 +2118,8 @@ void test_convenience(){
 	    ICAL_VEVENT_COMPONENT,
 	    icalproperty_new_dtstart(icaltime_from_string("19970801T120000")),
 	    icalproperty_new_dtend(icaltime_from_string("19970801T130000")),
-	    0
-	    ),
-	0);
+	    (void *)0),
+	(void *)0);
 
     icalcomponent_set_duration(c,icaldurationtype_from_string("PT1H30M"));
 
@@ -2154,9 +2143,8 @@ void test_convenience(){
 	    ICAL_VEVENT_COMPONENT,
 	    icalproperty_new_dtstart(icaltime_from_string("19970801T120000Z")),
 	    icalproperty_new_duration(icaldurationtype_from_string("PT1H30M")),
-	    0
-	    ),
-	0);
+	    (void *)0),
+	(void *)0);
 
     icalcomponent_set_dtend(c,icaltime_from_string("19970801T133000Z"));
 
@@ -2179,9 +2167,8 @@ void test_convenience(){
 	ICAL_VCALENDAR_COMPONENT,
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
-	    0
-	    ),
-	0);
+	    (void *)0),
+	(void *)0);
 
     icalcomponent_set_dtstart(c,icaltime_from_string("19970801T120000Z"));
     icalcomponent_set_dtend(c,icaltime_from_string("19970801T133000Z"));
@@ -2203,9 +2190,8 @@ void test_convenience(){
 	ICAL_VCALENDAR_COMPONENT,
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
-	    0
-	    ),
-	0);
+	    (void *)0),
+	(void *)0);
 
 
     icalcomponent_set_dtstart(c,icaltime_from_string("19970801T120000Z"));
@@ -2228,9 +2214,8 @@ void test_convenience(){
 	ICAL_VCALENDAR_COMPONENT,
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
-	    0
-	    ),
-    0);
+	    (void *)0),
+    (void *)0);
 
     tt = icaltime_from_string("19970801T120000");
     icaltime_set_timezone(&tt,
@@ -2536,7 +2521,7 @@ void test_gauge_compare() {
     c =  icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
 	      icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
 		  icalproperty_new_dtstart(
-		      icaltime_from_string("20000101T000002")),0),0);
+		      icaltime_from_string("20000101T000002")),0),(void *)0);
 
     g = icalgauge_new_from_sql(
 	"SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'", 0);
@@ -2673,7 +2658,7 @@ void test_gauge_compare() {
     c =  icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
 	      icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
 		  icalproperty_new_dtstart(
-		      icaltime_from_string("20000102T000000")),0),0);
+		      icaltime_from_string("20000102T000000")),0),(void *)0);
 
 
     str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000103T000000'";
@@ -2707,7 +2692,7 @@ void test_gauge_compare() {
 
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
 		  icalproperty_new_dtstart(
-		      icaltime_from_string("20000102T000000")),0);
+		      icaltime_from_string("20000102T000000")),(void *)0);
 
 
     str =  "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000103T000000'";
@@ -2751,9 +2736,9 @@ void test_gauge_compare() {
 		icalproperty_new_dtstart(
 		    icaltime_from_string("20000101T120000")),
 
-		0),
-	    0),
-	0);
+		(void *)0),
+	    (void *)0),
+	(void *)0);
 
 
     str = "SELECT * FROM VEVENT WHERE VALARM.DTSTART = '20000101T120000'";
@@ -2812,8 +2797,8 @@ icalcomponent* make_component(int i){
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
 	    icalproperty_new_dtstart(t),
-	    0),
-	0);
+	    (void *)0),
+	(void *)0);
 
     assert(c != 0);
 

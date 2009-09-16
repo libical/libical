@@ -316,8 +316,7 @@ void create_new_component_with_va_args()
 		    icalproperty_new_tzoffsetfrom(-4.0),
 		    icalproperty_new_tzoffsetto(-5.0),
 		    icalproperty_new_tzname("EST"),
-		    0
-		    ),
+		    (void *)0),
 		icalcomponent_vanew(
 		    ICAL_XSTANDARD_COMPONENT,
 		    icalproperty_new_dtstart(atime),
@@ -325,10 +324,8 @@ void create_new_component_with_va_args()
 		    icalproperty_new_tzoffsetfrom(-5.0),
 		    icalproperty_new_tzoffsetto(-4.0),
 		    icalproperty_new_tzname("EST"),
-		    0
-		    ),
-		0
-		),
+		    (void *)0),
+		(void *)0),
 	    icalcomponent_vanew(
 		ICAL_VEVENT_COMPONENT,
 		icalproperty_new_dtstamp(atime),
@@ -336,15 +333,13 @@ void create_new_component_with_va_args()
 		icalproperty_vanew_organizer(
 		    "mrbig@host.com",
 		    icalparameter_new_role(ICAL_ROLE_CHAIR),
-		    0
-		    ),
+		    (void *)0),
 		icalproperty_vanew_attendee(
 		    "employee-A@host.com",
 		    icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
 		    icalparameter_new_rsvp(ICAL_RSVP_TRUE),
 		    icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
-		    0
-		    ),
+		    (void *)0),
 		icalproperty_new_description("Project XYZ Review Meeting"),
 		icalproperty_new_categories("MEETING"),
 		icalproperty_new_class(ICAL_CLASS_PUBLIC),
@@ -353,18 +348,14 @@ void create_new_component_with_va_args()
 		icalproperty_vanew_dtstart(
 		    atime,
 		    icalparameter_new_tzid("America/New_York"),
-		    0
-		    ),
+		    (void *)0),
 		icalproperty_vanew_dtend(
 		    atime,
 		    icalparameter_new_tzid("America/New_York"),
-		    0
-		    ),
+		    (void *)0),
 		icalproperty_new_location("1CP Conference Room 4350"),
-		0
-		),
-	    0
-	    );
+		(void *)0),
+	    (void *)0);
 
     ok("creating a complex vcalendar", (calendar != NULL));
     if (VERBOSE && calendar)
@@ -422,8 +413,7 @@ void test_icalcomponent_get_span()
 		icalproperty_vanew_dtend(
 		    icaltime_from_timet_with_zone(tm2,0,azone),
 		    icalparameter_new_tzid("America/Los_Angeles"),0),
-	    0
-	    );
+	    (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
@@ -438,8 +428,7 @@ void test_icalcomponent_get_span()
 	    ICAL_VEVENT_COMPONENT,
 	    icalproperty_vanew_dtstart(icaltime_from_timet(tm1,0),0),
 	    icalproperty_vanew_dtend(icaltime_from_timet(tm2,0),0),
-	    0
-	    );
+	    (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
@@ -459,8 +448,7 @@ void test_icalcomponent_get_span()
 		icalproperty_vanew_dtend(
 		    icaltime_from_timet_with_zone(tm2,0,azone),
 		    icalparameter_new_tzid("America/New_York"),0),
-	    0
-	    );
+	    (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
@@ -482,8 +470,7 @@ void test_icalcomponent_get_span()
 		icalproperty_vanew_dtend(
 		    icaltime_from_timet_with_zone(tm2,0,bzone),
 		    icalparameter_new_tzid("America/Los_Angeles"),0),
-	    0
-	    );
+	    (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
@@ -505,8 +492,7 @@ void test_icalcomponent_get_span()
 		    icalparameter_new_tzid("America/Los_Angeles"),0),
 	    icalproperty_new_duration(dur),
 
-	    0
-	    );
+	    (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
@@ -521,8 +507,7 @@ void test_icalcomponent_get_span()
     c = icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_new_dtstart(icaltime_from_timet(tm1,0)),
-	    0
-	    );
+	    (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
@@ -536,8 +521,7 @@ void test_icalcomponent_get_span()
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_new_dtstart(icaltime_from_timet(tm1,1)),
 		icalproperty_new_dtend(icaltime_from_timet(tm1,1)),
-	    0
-	    );
+	    (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
@@ -551,8 +535,7 @@ void test_icalcomponent_get_span()
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_new_dtstart(icaltime_from_timet(tm1,1)),
 		icalproperty_new_dtend(icaltime_from_timet(tm2,1)),
-	    0
-	    );
+	    (void *)0);
 
     span = icalcomponent_get_span(c);
     int_is("UTC #2", span.start, 973296000);
@@ -566,8 +549,7 @@ void test_icalcomponent_get_span()
     c = icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
 		icalproperty_new_dtstart(icaltime_from_timet(tm1,1)),
-	    0
-	    );
+	    (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
