@@ -360,21 +360,25 @@ fi
 python_val=false
 AM_CONDITIONAL(WITH_PYTHON, test $python_val = true)
 
-AC_OUTPUT([
-Makefile
-design-data/Makefile
-doc/Makefile
-examples/Makefile
-scripts/Makefile
-src/Makefile
-src/libical/Makefile
-src/libical/icalversion.h
-src/libicalss/Makefile
-src/libicalvcal/Makefile
-src/test/Makefile
-src/python/Makefile
-test-data/Makefile
-zoneinfo/Makefile
-libical.pc
-])
+if test "$use_builtin_timezone" = "yes"; then
+  AC_CONFIG_FILES([zoneinfo/Makefile])
+fi
+if test $python_val = true ; then
+  AC_CONFIG_FILES([src/python/Makefile])
+fi
 
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([design-data/Makefile])
+AC_CONFIG_FILES([doc/Makefile])
+AC_CONFIG_FILES([examples/Makefile])
+AC_CONFIG_FILES([scripts/Makefile])
+AC_CONFIG_FILES([src/Makefile])
+AC_CONFIG_FILES([src/libical/Makefile])
+AC_CONFIG_FILES([src/libical/icalversion.h])
+AC_CONFIG_FILES([src/libicalss/Makefile])
+AC_CONFIG_FILES([src/libicalvcal/Makefile])
+AC_CONFIG_FILES([src/test/Makefile])
+AC_CONFIG_FILES([test-data/Makefile])
+AC_CONFIG_FILES([libical.pc])
+
+AC_OUTPUT
