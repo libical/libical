@@ -2603,6 +2603,7 @@ struct icaltimetype icalcomponent_get_due(icalcomponent* comp)
 
     }
 
+    return icaltime_null_time();
 }
 
 /** @brief Set the due date of a VTODO task.
