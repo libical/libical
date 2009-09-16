@@ -2586,9 +2586,7 @@ struct icaltimetype icalcomponent_get_due(icalcomponent* comp)
     icalproperty *dur_prop
         = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
 
-    if( due_prop == 0 && dur_prop == 0){
-        return icaltime_null_time();
-    } else if ( due_prop != 0) {
+    if ( due_prop != 0) {
         return icalproperty_get_due(due_prop);
     } else if ( dur_prop != 0) {
 
@@ -2602,7 +2600,6 @@ struct icaltimetype icalcomponent_get_due(icalcomponent* comp)
         return due;
 
     }
-
     return icaltime_null_time();
 }
 
