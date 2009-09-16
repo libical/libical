@@ -46,3 +46,4 @@ EXTRA_DIST =		\
 	vcaltest.c	\
 	vctest.c
 
+distclean: clean
