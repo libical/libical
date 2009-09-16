@@ -51,7 +51,7 @@ INCLUDES =				\
 	-I$(top_builddir)/src/libical	\
 	-I$(srcdir)
 
-libical_la_LDFLAGS = -version-info 43:0:43
+libical_la_LDFLAGS = -version-info 44:0:44
 
 libical_la_LIBADD = $(PTHREAD_LIBS)
 
