@@ -3572,6 +3572,7 @@ void test_recurrenceexcluded(void)
     strcat(funTime, "UID:5fb6ccb8-9646-45ab-8c95-8d15e9de1280\n");
     strcat(funTime, "SUMMARY:Exclude test\n");
     strcat(funTime, "EXDATE;TZID=/mozilla.org/20071231_1/Europe/London:20080818T190000\n");
+    strcat(funTime, "EXDATE:20080819T180000Z\n");
     strcat(funTime, "RRULE:FREQ=DAILY;COUNT=12;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR\n");
     strcat(funTime, "DTSTART;TZID=/mozilla.org/20071231_1/Europe/London:20080811T190000\n");
     strcat(funTime, "DTEND;TZID=/mozilla.org/20071231_1/Europe/London:20080811T200000\n");
@@ -3582,6 +3583,8 @@ void test_recurrenceexcluded(void)
     event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
     recurtime = icaltime_from_string("20080818T180000Z");
     ok("Recurrence is excluded as per r961", icalproperty_recurrence_is_excluded(event, &dtstart, &recurtime));
+    recurtime = icaltime_from_string("20080819T180000Z");
+    ok("Recurrence is excluded for UTC EXDATE", icalproperty_recurrence_is_excluded(event, &dtstart, &recurtime));
 }
 
 
