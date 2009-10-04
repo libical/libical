@@ -25,6 +25,10 @@
 #endif
 #include <string.h>
 
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#endif
+
 #if defined(sun) && defined(__SVR4)
 #include <sys/byteorder.h>
 #else
