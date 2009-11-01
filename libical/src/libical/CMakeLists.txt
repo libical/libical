@@ -7,6 +7,13 @@ include_directories(
   ${CMAKE_BINARY_DIR}/src/libical
 )
 
+if(WIN32)
+  if(MSVC)
+    add_definitions(-DBUILD_LIBICALDLL)
+  endif(MSVC)
+endif(WIN32)
+
+
 set(PACKAGE_DATA_DIR "\\\"${CMAKE_INSTALL_PREFIX}/share/libical\\\"")
 add_definitions(-DPACKAGE_DATA_DIR=${PACKAGE_DATA_DIR})
 
@@ -232,9 +239,14 @@ add_dependencies(ical ical-header)
 
 target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
 
+if(MSVC)
+  set_target_properties(ical PROPERTIES OUTPUT_NAME "libical")
+  set_target_properties(ical-static PROPERTIES OUTPUT_NAME "libical-static")
+else(MSVC)
+  set_target_properties(ical-static PROPERTIES OUTPUT_NAME "ical")
+endif(MSVC)
 set_target_properties(ical PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
 set_target_properties(ical PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-set_target_properties(ical-static PROPERTIES OUTPUT_NAME "ical")
 set_target_properties(ical-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
 install(TARGETS ical ical-static ${INSTALL_TARGETS_DEFAULT_ARGS})

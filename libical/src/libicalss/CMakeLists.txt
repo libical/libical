@@ -76,9 +76,14 @@ add_dependencies(icalss icalss-header)
 
 target_link_libraries(icalss ical)
 
+if(MSVC)
+  set_target_properties(icalss PROPERTIES OUTPUT_NAME "libicalss")
+  set_target_properties(icalss-static PROPERTIES OUTPUT_NAME "libicalss-static")
+else(MSVC)
+  set_target_properties(icalss-static PROPERTIES OUTPUT_NAME "icalss")
+endif(MSVC)
 set_target_properties(icalss PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
 set_target_properties(icalss PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-set_target_properties(icalss-static PROPERTIES OUTPUT_NAME "icalss")
 set_target_properties(icalss-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
 install(TARGETS icalss icalss-static ${INSTALL_TARGETS_DEFAULT_ARGS})

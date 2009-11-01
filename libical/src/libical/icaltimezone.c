@@ -54,6 +54,12 @@
 
 /* The gmtime() in Microsoft's C library is MT-safe */
 #define gmtime_r(tp,tmp) (gmtime(tp)?(*(tmp)=*gmtime(tp),(tmp)):0)
+
+// MSVC lacks the POSIX macro S_ISDIR, however it's a trivial one:
+#ifndef S_ISDIR
+#define S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
+#endif
+
 #endif
 
 /** This is the toplevel directory where the timezone data is installed in. */

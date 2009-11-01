@@ -32,9 +32,14 @@ add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})
 
 target_link_libraries(icalvcal ical)
 
+if(MSVC)
+  set_target_properties(icalvcal PROPERTIES OUTPUT_NAME "libicalvcal")
+  set_target_properties(icalvcal-static PROPERTIES OUTPUT_NAME "libicalvcal-static")
+else(MSVC)
+  set_target_properties(icalvcal-static PROPERTIES OUTPUT_NAME "icalvcal")
+endif(MSVC)
 set_target_properties(icalvcal PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
 set_target_properties(icalvcal PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-set_target_properties(icalvcal-static PROPERTIES OUTPUT_NAME "icalvcal")
 set_target_properties(icalvcal-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
 install(TARGETS icalvcal icalvcal-static ${INSTALL_TARGETS_DEFAULT_ARGS})

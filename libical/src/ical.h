@@ -7,7 +7,7 @@
  http://freeassociation.sourceforge.net
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -19,5 +19,9 @@
 
  ************************************************************************/
 
+#ifdef _MSC_VER
+#pragma message("WARNING: #include <ical.h> is deprecated.  Please #include <libical/ical.h> instead.")
+#else
 #warning "#include <ical.h> is deprecated.  Please #include <libical/ical.h> instead."
+#endif
 #include <libical/ical.h>

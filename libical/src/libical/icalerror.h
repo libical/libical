@@ -69,7 +69,17 @@ icalerrorenum * icalerrno_return(void);
  *  @warning NOT THREAD SAFE -- recommended that you do not change
  *           this in a multithreaded program.
  */
-extern int icalerror_errors_are_fatal;
+#ifdef _MSC_VER
+  #ifdef BUILD_LIBICALDLL
+    #define LIBICAL_EXPORT __declspec(dllexport)
+  #else
+    #define LIBICAL_EXPORT __declspec(dllimport)
+  #endif
+#else
+  #define LIBICAL_EXPORT extern
+#endif
+
+LIBICAL_EXPORT int icalerror_errors_are_fatal;
 
 /* Warning messages */
 

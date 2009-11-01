@@ -1,4 +1,4 @@
-LIBRARY icalss.dll
+LIBRARY libicalss.dll
 EXPORTS
 icalcalendar_create
 icalcalendar_free
@@ -179,8 +179,6 @@ input_buffer_p DATA
 ss_create_buffer
 ss_delete_buffer
 ss_flush_buffer
-ss_init_buffer
-ss_load_buffer_state
 ss_scan_buffer
 ss_scan_bytes
 ss_scan_string
@@ -379,8 +377,6 @@ input_buffer_p DATA
 ss_create_buffer
 ss_delete_buffer
 ss_flush_buffer
-ss_init_buffer
-ss_load_buffer_state
 ss_scan_buffer
 ss_scan_bytes
 ss_scan_string
@@ -579,8 +575,6 @@ input_buffer_p DATA
 ss_create_buffer
 ss_delete_buffer
 ss_flush_buffer
-ss_init_buffer
-ss_load_buffer_state
 ss_scan_buffer
 ss_scan_bytes
 ss_scan_string
@@ -779,8 +773,6 @@ input_buffer_p DATA
 ss_create_buffer
 ss_delete_buffer
 ss_flush_buffer
-ss_init_buffer
-ss_load_buffer_state
 ss_scan_buffer
 ss_scan_bytes
 ss_scan_string
