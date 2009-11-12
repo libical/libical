@@ -53,6 +53,10 @@ INCLUDES =				\
 
 libical_la_LDFLAGS = -version-info 44:0:44
 
+if OS_WIN32
+libical_la_LDFLAGS += -no-undefined
+endif
+
 libical_la_LIBADD = $(PTHREAD_LIBS)
 
 libical_la_SOURCES =		\
