@@ -12,7 +12,12 @@ INCLUDES =				\
 	-I$(top_srcdir)/src/libicalss
 
 libicalvcal_la_LDFLAGS = -version-info 44:0:44
-libicalvcal_la_LIBADD = ../libical/.libs/libical.la
+
+if OS_WIN32
+libicalvcal_la_LDFLAGS += -no-undefined
+endif
+
+libicalvcal_la_LIBADD = $(top_builddir)/src/libical/libical.la
 
 if DEV
 libicalvcal_la_DEVSOURCES = vcc.y

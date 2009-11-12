@@ -142,7 +142,7 @@
 #include <limits.h>
 
 #ifndef HAVE_INTPTR_T
-#if defined (WIN32) || defined (XP_BEOS)
+#if (defined (WIN32) && !defined (__MINGW32__)) || defined (XP_BEOS)
 typedef long intptr_t;
 #endif
 #endif

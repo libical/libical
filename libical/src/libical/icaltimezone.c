@@ -60,6 +60,7 @@
 #define S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
 #endif
 
+#define strcasecmp      stricmp
 #endif
 
 /** This is the toplevel directory where the timezone data is installed in. */

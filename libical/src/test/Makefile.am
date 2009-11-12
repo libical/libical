@@ -28,9 +28,10 @@ endif
 if OS_WIN32
 else
 STOW = stow
+TIMEZONES = timezones
 endif
 
-check_PROGRAMS = copycluster regression parser $(STOW) recur testmime testvcal process timezones
+check_PROGRAMS = copycluster regression parser $(STOW) recur testmime testvcal process $(TIMEZONES)
 
 LDADD =  ../libicalss/libicalss.la ../libicalvcal/libicalvcal.la $(cxx_libs) ../libical/libical.la $(bdb4_libs)
 

@@ -64,7 +64,12 @@ INCLUDES =			\
 	$(BDB_INCLUDE)
 
 libicalss_la_LDFLAGS = -version-info 44:0:44
-libicalss_la_LIBADD = $(BDB_LIBFILES) 
+
+if OS_WIN32
+libicalss_la_LDFLAGS += -no-undefined
+endif
+
+libicalss_la_LIBADD = $(BDB_LIBFILES) $(top_builddir)/src/libical/libical.la
 
 if DEV
 libicalss_la_DEVSOURCES = icalsslexer.l icalssyacc.y

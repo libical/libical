@@ -7,5 +7,4 @@ Name: libical
 Description: An implementation of basic iCAL protocols
 Version: @VERSION@
 Libs: -L${libdir} -lical -licalss -licalvcal
-Cflags: -I${includedir}/
-
+Cflags: -I${includedir}
