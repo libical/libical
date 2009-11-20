@@ -19,18 +19,24 @@ if ($opt_i) {
 
   while(<IN>){
     if (/<insert_code_here>/){
+      $autogenMsg = "of section of machine generated code (mkderivedparameters.pl). Do not edit.";
+      if($opt_p){
+          $startComment = "#";
+          $endComment = "";
+      } else {
+          $startComment = "/*";
+          $endComment = " */";
+      }
+      print $startComment." START ".$autogenMsg.$endComment."\n\n";
+
       insert_code();
+
+      print $startComment." END   ".$autogenMsg.$endComment."\n\n";
     } else {
       print;
    }
 
   }    
-
-  if($opt_p){
-     print "# Everything below this line is machine generated. Do not edit. \n";
-  } else {
-    print "/* Everything below this line is machine generated. Do not edit. */\n";
-  }
 
 }
 
@@ -40,7 +46,9 @@ sub insert_code
 # Write parameter enumerations and datatypes
 
 if($opt_h){
-  print "typedef enum icalparameter_kind {\n    ICAL_ANY_PARAMETER = 0,\n";
+  my $enumConst = $params{'ANY'}->{"kindEnum"};
+  print "typedef enum icalparameter_kind {\n    ICAL_ANY_PARAMETER = ".$enumConst.",\n";
+  $enumVal = 1;
   foreach $param (sort keys %params) {
     
     next if !$param;
@@ -49,12 +57,13 @@ if($opt_h){
 
     my $uc = join("",map {uc($_);}  split(/-/,$param));
 
-    my @enums = @{$params{$param}->{'enums'}};
+    $enumConst = $params{$param}->{"kindEnum"};
         
-    print "    ICAL_${uc}_PARAMETER, \n";
+    print "    ICAL_${uc}_PARAMETER = ".$enumConst.", \n";
     
   }  
-  print "    ICAL_NO_PARAMETER\n} icalparameter_kind;\n\n";
+  $enumConst = $params{'NO'}->{"kindEnum"};
+  print "    ICAL_NO_PARAMETER = ".$enumConst."\n} icalparameter_kind;\n\n";
 
   # Now create enumerations for parameter values
   $idx = 20000;
@@ -65,7 +74,7 @@ if($opt_h){
     
     next if !$param;
     
-    next if $param eq 'NO' or $prop eq 'ANY';
+    next if $param eq 'NO' or $param eq 'ANY';
 
     my $type = $params{$param}->{"C"};
     my $ucv = join("",map {uc(lc($_));}  split(/-/,$param));    
@@ -131,7 +140,7 @@ if ($opt_c){
     
     next if !$param;
     
-    next if $param eq 'NO' or $prop eq 'ANY';
+    next if $param eq 'NO' or $param eq 'ANY';
 
     my $lc = join("",map {lc($_);}  split(/-/,$param));    
     my $uc = join("",map {uc(lc($_));}  split(/-/,$param));    
@@ -152,7 +161,7 @@ if ($opt_c){
     
     next if !$param;
     
-    next if $param eq 'NO' or $prop eq 'ANY';
+    next if $param eq 'NO' or $param eq 'ANY';
 
     my $type = $params{$param}->{"C"};
     my $uc = join("",map {uc(lc($_));}  split(/-/,$param));    
@@ -178,7 +187,9 @@ if ($opt_c){
 
 }
 
-foreach $param  (keys %params){
+foreach $param  (sort keys %params){
+
+  next if $param eq 'NO' or $param eq 'ANY';
 
   my $type = $params{$param}->{'C'};
 

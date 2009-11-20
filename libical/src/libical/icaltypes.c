@@ -43,6 +43,12 @@
 
 #define TEMP_MAX 1024
 
+#ifdef HAVE_PTHREAD
+ #include <pthread.h>    
+    static pthread_mutex_t unk_token_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
+
+static ical_unknown_token_handling unknownTokenHandling = ICAL_TREAT_AS_ERROR;
 
 int icaltriggertype_is_null_trigger(struct icaltriggertype tr)
 {
@@ -198,4 +204,36 @@ char* icalreqstattype_as_string_r(struct icalreqstattype stat)
   }
 
   return temp;
+}
+
+ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
+{
+    ical_unknown_token_handling myHandling;
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_lock (&unk_token_mutex);
+#endif
+
+    myHandling = unknownTokenHandling;
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_unlock (&unk_token_mutex);
+#endif
+
+    return myHandling;
+}
+
+void ical_set_unknown_token_handling_setting(ical_unknown_token_handling newSetting)
+{
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_lock (&unk_token_mutex);
+#endif
+
+    unknownTokenHandling = newSetting;
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_unlock (&unk_token_mutex);
+#endif
+
 }

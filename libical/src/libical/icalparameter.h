@@ -55,11 +55,20 @@ icalparameter_kind icalparameter_isa(icalparameter* parameter);
 
 int icalparameter_isa_parameter(void* param);
 
-/* Access the name of an X parameer */
+/* Access the name of an X parameter */
 void icalparameter_set_xname (icalparameter* param, const char* v);
 const char* icalparameter_get_xname(icalparameter* param);
 void icalparameter_set_xvalue (icalparameter* param, const char* v);
 const char* icalparameter_get_xvalue(icalparameter* param);
+
+/* Access the name of an IANA parameter */
+void icalparameter_set_iana_name (icalparameter* param, const char* v);
+const char* icalparameter_get_iana_name(icalparameter* param);
+void icalparameter_set_iana_value (icalparameter* param, const char* v);
+const char* icalparameter_get_iana_value(icalparameter* param);
+
+/* returns 1 if parameters have same name in ICAL, otherwise 0 */
+int icalparameter_has_same_name(icalparameter* param1, icalparameter* param2);
 
 /* Convert enumerations */
 

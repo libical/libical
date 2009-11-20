@@ -110,8 +110,9 @@ sub read_parameters_file {
   
     my $parameter_name = $column[0];
 
-    my $data_type = $column[1];
-    my $enum_string = $column[2];
+    my $enumConst = $column[1];
+    my $data_type = $column[2];
+    my $enum_string = $column[3];
 
     my @enums;
     if($enum_string){
@@ -119,6 +120,7 @@ sub read_parameters_file {
     }
     
     $h{$parameter_name} = { C => $data_type,
+			   kindEnum => $enumConst,
 			   enums => [@enums]
 			 };
   }

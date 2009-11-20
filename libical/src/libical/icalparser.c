@@ -898,13 +898,25 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 	    if(kind == ICAL_X_PARAMETER){
 		param = icalparameter_new(ICAL_X_PARAMETER);
-		
-		if(param != 0){
-		    icalparameter_set_xname(param,name);
-		    icalparameter_set_xvalue(param,pvalue);
-		}
-		icalmemory_free_buffer(buf_value);
-		buf_value = NULL;
+            if(param != 0){
+                icalparameter_set_xname(param,name);
+                icalparameter_set_xvalue(param,pvalue);
+            }
+            icalmemory_free_buffer(buf_value);
+            buf_value = NULL;
+	    } else if (kind == ICAL_IANA_PARAMETER){
+            ical_unknown_token_handling tokHandlingSetting = 
+                ical_get_unknown_token_handling_setting();
+            if (tokHandlingSetting == ICAL_DISCARD_TOKEN)
+                continue;
+            param = icalparameter_new(ICAL_IANA_PARAMETER);
+            
+            if(param != 0){
+                icalparameter_set_xname(param,name);
+                icalparameter_set_xvalue(param,pvalue);
+            }
+            icalmemory_free_buffer(buf_value);
+            buf_value = NULL;
 
 	    } else if (kind != ICAL_NO_PARAMETER){
 		param = icalparameter_new_from_value_string(kind,pvalue);
