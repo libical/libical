@@ -569,11 +569,15 @@ icalproperty_set_parameter (icalproperty* prop,icalparameter* parameter)
     icalerror_check_arg_rv( (parameter!=0),"parameter");
 
     kind = icalparameter_isa(parameter);
-    if (kind != ICAL_X_PARAMETER)
-      icalproperty_remove_parameter_by_kind(prop,kind);
-    else
+    if (kind == ICAL_X_PARAMETER) {
       icalproperty_remove_parameter_by_name(prop, 
 					    icalparameter_get_xname(parameter));
+    } else if (kind == ICAL_IANA_PARAMETER) {
+      icalproperty_remove_parameter_by_name(prop, 
+					    icalparameter_get_iana_name(parameter));
+    }
+    else
+      icalproperty_remove_parameter_by_kind(prop,kind);
 
     icalproperty_add_parameter(prop,parameter);
 }
@@ -603,8 +607,10 @@ void icalproperty_set_parameter_from_string(icalproperty* prop,
         return;
     }
 
-    if(kind == ICAL_X_PARAMETER){
-	icalparameter_set_xname(param, name);
+    if (kind == ICAL_X_PARAMETER) {
+        icalparameter_set_xname(param, name);
+    } else if (kind == ICAL_IANA_PARAMETER) {
+        icalparameter_set_iana_name(param, name);
     }
 
     icalproperty_set_parameter(prop,param);
@@ -644,13 +650,19 @@ char* icalproperty_get_parameter_as_string_r(icalproperty* prop,
     for(param = icalproperty_get_first_parameter(prop,kind); 
 	    param != 0; 
 	    param = icalproperty_get_next_parameter(prop,kind)) {
-	    if (kind != ICAL_X_PARAMETER) {
-		    break;
-	    }
 
-	    if (strcmp(icalparameter_get_xname(param),name)==0) {
+	    if (kind == ICAL_X_PARAMETER) {
+            if (strcmp(icalparameter_get_xname(param),name)==0) {
+                break;
+            }		
+        } else if (kind == ICAL_IANA_PARAMETER) {
+            if (strcmp(icalparameter_get_iana_name(param),name)==0) {
+                break;
+            }		
+	    } else {
 		    break;
-	    }		
+        }
+
     }
 
     if (param == 0){
@@ -763,6 +775,8 @@ icalproperty_remove_parameter_by_name(icalproperty* prop, const char *name)
 
 	if (icalparameter_isa(param) == ICAL_X_PARAMETER)
 	  kind_string = icalparameter_get_xname(param);
+    else if (icalparameter_isa(param) == ICAL_IANA_PARAMETER)
+	  kind_string = icalparameter_get_iana_name(param);
 	else
 	  kind_string = icalparameter_kind_to_string(icalparameter_isa(param));
 
@@ -797,21 +811,15 @@ icalproperty_remove_parameter_by_ref(icalproperty* prop, icalparameter* paramete
     icalerror_check_arg_rv((parameter!=0),"parameter");
 
     kind = icalparameter_isa(parameter);
-    name = icalparameter_get_xname(parameter);
 
-    /*
-     * FIXME If it's an X- parameter, also compare the names. It would be nice
-     * to have a better abstraction like icalparameter_equals()
-     */
-    for(p=pvl_head(prop->parameters);p != 0; p = pvl_next(p)){
-	icalparameter* p_param = (icalparameter *)pvl_data (p);
-	if (icalparameter_isa(p_param) == kind &&
-	    (kind != ICAL_X_PARAMETER ||
-	    !strcmp(icalparameter_get_xname(p_param), name))) {
+    for (p=pvl_head(prop->parameters);p != 0; p = pvl_next(p)) {
+        icalparameter* p_param = (icalparameter *)pvl_data (p);
+
+        if (icalparameter_has_same_name(parameter, p_param)) {
             pvl_remove (prop->parameters, p);
             icalparameter_free(p_param);
             break;
-	} 
+        }
     }   
 }
 

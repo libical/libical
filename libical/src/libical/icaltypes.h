@@ -105,5 +105,18 @@ struct icaltimezonetype {
 
 void icaltimezonetype_free(struct icaltimezonetype tzt);
 
+/* ical_unknown_token_handling :
+ *    How should the ICAL library handle components, properties and parameters with
+ *    unknown names?
+ *    FIXME:  Currently only affects parameters.  Extend to components and properties.
+ */
+typedef enum ical_unknown_token_handling {
+    ICAL_ASSUME_IANA_TOKEN = 1, 
+    ICAL_DISCARD_TOKEN = 2,
+    ICAL_TREAT_AS_ERROR = 3 
+} ical_unknown_token_handling;
+
+ical_unknown_token_handling ical_get_unknown_token_handling_setting(void);
+void ical_set_unknown_token_handling_setting(ical_unknown_token_handling newSetting);
 
 #endif /* !ICALTYPES_H */

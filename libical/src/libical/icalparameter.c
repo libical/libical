@@ -184,6 +184,8 @@ icalparameter* icalparameter_new_from_string(const char *str)
 
     if(kind == ICAL_X_PARAMETER){
         icalparameter_set_xname(param,cpy);
+    } else if(kind == ICAL_IANA_PARAMETER) {
+        icalparameter_set_iana_name(param, cpy);
     }
 
     free(cpy);
@@ -231,10 +233,11 @@ icalparameter_as_ical_string_r(icalparameter* param)
     buf_ptr = buf;
 
     if(param->kind == ICAL_X_PARAMETER) {
-
-	icalmemory_append_string(&buf, &buf_ptr, &buf_size, 
-				 icalparameter_get_xname(param));
-
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, 
+                     icalparameter_get_xname(param));
+    } else if (param->kind == ICAL_IANA_PARAMETER) {
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, 
+                     icalparameter_get_iana_name(param));
     } else {
 
 	kind_string = icalparameter_kind_to_string(param->kind);
@@ -365,6 +368,26 @@ icalparameter_get_xvalue (icalparameter* param)
     return param->string;
 }
 
+void icalparameter_set_iana_value (icalparameter* param, const char* v)
+{
+    icalparameter_set_xvalue(param, v);
+}
+
+const char* icalparameter_get_iana_value(icalparameter* param)
+{
+    return icalparameter_get_xvalue(param);
+}
+
+void icalparameter_set_iana_name (icalparameter* param, const char* v)
+{
+    icalparameter_set_xname(param, v);
+}
+
+const char* icalparameter_get_iana_name (icalparameter* param)
+{
+    return icalparameter_get_xname(param);
+}
+
 void icalparameter_set_parent(icalparameter* param,
 			     icalproperty* property)
 {
@@ -380,6 +403,36 @@ icalproperty* icalparameter_get_parent(icalparameter* param)
     return param->parent;
 }
 
+/* returns 1 if parameters have same name in ICAL, otherwise 0 */
+int icalparameter_has_same_name(icalparameter* param1, icalparameter* param2)
+{
+    icalparameter_kind kind1;
+    icalparameter_kind kind2;
+    const char *name1;
+    const char *name2;
+
+    icalerror_check_arg_rz( (param1!=0),"param1");
+    icalerror_check_arg_rz( (param2!=0),"param2");
+
+    kind1 = icalparameter_isa(param1);
+    kind2 = icalparameter_isa(param2);
+
+    if (kind1 != kind2)
+        return 0;
+
+    if  (kind1 == ICAL_X_PARAMETER) {
+        name1 = icalparameter_get_xname(param1);
+        name2 = icalparameter_get_xname(param2);
+        if (strcasecmp(name1, name2) != 0)
+            return 0;
+    } else if  (kind1 == ICAL_IANA_PARAMETER) {
+        name1 = icalparameter_get_iana_name(param1);
+        name2 = icalparameter_get_iana_name(param2);
+        if (strcasecmp(name1, name2) != 0)
+            return 0;
+    }
+	return 1;
+}
 
 /* Everything below this line is machine generated. Do not edit. */
 /* ALTREP */

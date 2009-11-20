@@ -38,6 +38,7 @@
 #include "icalproperty.h"
 #include "icalerror.h"
 #include "icalmemory.h"
+#include "icaltypes.h"
 
 #include <stdlib.h> /* for malloc() */
 #include <errno.h>
@@ -98,21 +99,25 @@ icalparameter_kind icalparameter_string_to_kind(const char* string)
     int i;
 
     if (string ==0 ) { 
-	return ICAL_NO_PARAMETER;
+        return ICAL_NO_PARAMETER;
     }
 
     for (i=0; parameter_map[i].kind  != ICAL_NO_PARAMETER; i++) {
 
-	if (strcasecmp(parameter_map[i].name, string) == 0) {
-	    return parameter_map[i].kind;
-	}
+        if (strcasecmp(parameter_map[i].name, string) == 0) {
+            return parameter_map[i].kind;
+        }
     }
 
     if(strncmp(string,"X-",2)==0){
-	return ICAL_X_PARAMETER;
+        return ICAL_X_PARAMETER;
     }
 
-    return ICAL_NO_PARAMETER;
+    if (ical_get_unknown_token_handling_setting() == ICAL_TREAT_AS_ERROR) {
+        return ICAL_NO_PARAMETER;
+    } else {
+        return ICAL_IANA_PARAMETER;
+    }
 }
 
 
