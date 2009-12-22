@@ -34,8 +34,8 @@
 
 struct icalgeotype 
 {
-	float lat;
-	float lon;
+	double lat;
+	double lon;
 };
 
 
