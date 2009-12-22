@@ -63,7 +63,7 @@ icalattach_new_from_url (const char *url)
 }
 
 icalattach *
-icalattach_new_from_data (unsigned char *data, icalattach_free_fn_t free_fn,
+icalattach_new_from_data (const char *data, icalattach_free_fn_t free_fn,
 			  void *free_fn_data)
 {
     icalattach *attach;
