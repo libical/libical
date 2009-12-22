@@ -30,7 +30,7 @@ typedef struct icalattach_impl icalattach;
 typedef void (* icalattach_free_fn_t) (unsigned char *data, void *user_data);
 
 icalattach *icalattach_new_from_url (const char *url);
-icalattach *icalattach_new_from_data (unsigned char *data,
+icalattach *icalattach_new_from_data (const char *data,
 	icalattach_free_fn_t free_fn, void *free_fn_data);
 
 void icalattach_ref (icalattach *attach);
