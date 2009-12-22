@@ -117,8 +117,8 @@ const char* icalperiodtype_as_ical_string(struct icalperiodtype p)
 char* icalperiodtype_as_ical_string_r(struct icalperiodtype p)
 {
 
-    const char* start;
-    const char* end;
+    char* start;
+    char* end;
 
     char *buf;
     size_t buf_size = 40;
