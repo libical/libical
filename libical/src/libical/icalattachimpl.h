@@ -46,7 +46,7 @@ struct icalattach_impl {
 
 		/* Inline data */
 		struct {
-			unsigned char *data;
+			char *data;
 			icalattach_free_fn_t free_fn;
 			void *free_fn_data;
 		} data;
