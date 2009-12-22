@@ -300,9 +300,9 @@ icalvalue* icalvalue_new_enum(icalvalue_kind kind, int x_type, const char* str)
  * If you want a code that that does the same job with a decimal separator
  * dependant on the current locale, then use strtof() from libc.
  */
-int simple_str_to_float(const char* from,
-                        float *result,
-                        char** to)
+int simple_str_to_double(const char* from,
+                         double *result,
+                         char** to)
 {
 #define TMP_NUM_SIZE 100
     char *start=NULL, *end=NULL, *cur=(char*)from ;
@@ -498,7 +498,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
         char *cur=NULL ;
         struct icalgeotype geo = {0.0, 0.0};
   
-        if (simple_str_to_float (str, &geo.lat, &cur)) {
+        if (simple_str_to_double (str, &geo.lat, &cur)) {
             goto geo_parsing_error ;
         }
   
@@ -521,7 +521,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
             ++cur ;
         }
 
-        if (simple_str_to_float (cur, &geo.lon, &cur)) {
+        if (simple_str_to_double (cur, &geo.lon, &cur)) {
             goto geo_parsing_error ;
         }
         value = icalvalue_new_geo (geo) ;
