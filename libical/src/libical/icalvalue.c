@@ -903,14 +903,6 @@ static char* icalvalue_text_as_ical_string_r(const icalvalue* value) {
 }
 
 
-static char* icalvalue_text_as_ical_string(const icalvalue* value) {
-	char *buf;
-	buf = icalvalue_text_as_ical_string_r(value);
-	icalmemory_add_tmp_buffer(buf);
-	return buf;
-}
-
-
 
 static char* 
 icalvalue_attach_as_ical_string_r(const icalvalue* value) 
