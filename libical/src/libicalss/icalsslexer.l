@@ -36,11 +36,14 @@
 const char* input_buffer;
 const char* input_buffer_p;
 
-#define min(a,b) ((a) < (b) ? (a) : (b))   
-
 int icalss_input(char* buf, int max_size)
 {
-    int n = min(max_size,strlen(input_buffer_p));
+    int n;
+    int l;
+
+    l = strlen(input_buffer_p);
+    if (max_size<l) n = max_size;
+    else n = l;
 
     if (n > 0){
 	memcpy(buf, input_buffer_p, n);
