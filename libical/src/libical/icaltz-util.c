@@ -221,7 +221,7 @@ find_transidx (time_t *transitions, ttinfo *types, int *trans_idx, long int num_
 }
 
 static void
-set_zone_directory (void)
+set_zonedir (void)
 {
 	char file_path[PATH_MAX];
 	const char *fname = ZONES_TAB_SYSTEM_FILENAME;
@@ -241,7 +241,7 @@ const char *
 icaltzutil_get_zone_directory (void)
 {
 	if (!zdir)
-		set_zone_directory ();
+		set_zonedir ();
 
 	return zdir;
 }
@@ -304,12 +304,16 @@ icaltzutil_fetch_timezone (const char *location)
 	icalproperty *icalprop;
 	icaltimetype dtstart, icaltime;
 	struct icalrecurrencetype ical_recur;
+	const char *basedir;
 	       
-	if (!zdir) 
-		set_zone_directory ();
-	
-	full_path = (char *) malloc (strlen (zdir) + strlen (location) + 2);
-	sprintf (full_path,"%s/%s",zdir, location);
+	basedir = icaltzutil_get_zone_directory();
+	if (!basedir) {
+		icalerror_set_errno (ICAL_FILE_ERROR);
+		return NULL;
+	}
+
+	full_path = (char *) malloc (strlen (basedir) + strlen (location) + 2);
+	sprintf (full_path,"%s/%s",basedir, location);
 
 	if ((f = fopen (full_path, "rb")) == 0) {
 		icalerror_set_errno (ICAL_FILE_ERROR);
