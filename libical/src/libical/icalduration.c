@@ -40,6 +40,11 @@
 #include "icalmemory.h"
 #include "icalvalue.h"
 
+#ifdef WIN32
+#ifndef HAVE_SNPRINTF
+#include "vsnprintf.h"
+#endif
+#endif
 
 
 

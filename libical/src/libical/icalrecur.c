@@ -139,6 +139,13 @@
 #include <stdint.h>
 #endif
 
+#ifdef WIN32
+#ifndef HAVE_SNPRINTF
+#include "vsnprintf.h"
+#endif
+#endif
+
+
 #include <limits.h>
 
 #ifndef HAVE_INTPTR_T

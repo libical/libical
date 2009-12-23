@@ -37,6 +37,13 @@
 #include <assert.h>
 #include "icalmemory.h"
 
+#ifdef WIN32
+#ifndef HAVE_SNPRINTF
+#include "vsnprintf.h"
+#endif
+#endif
+
+
 /*** @brief Allowed request status values
  */
 static const struct {

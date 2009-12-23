@@ -58,6 +58,9 @@
 // MSVC lacks the POSIX macro S_ISDIR, however it's a trivial one:
 #ifndef S_ISDIR
 #define S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
+#ifndef HAVE_SNPRINTF
+#include "vsnprintf.h"
+#endif
 #endif
 
 #define strcasecmp      stricmp

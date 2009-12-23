@@ -49,6 +49,9 @@
 
 #ifdef WIN32
 #define strncasecmp      strnicmp
+#ifndef HAVE_SNPRINTF
+#include "vsnprintf.h"
+#endif
 #endif
 
 struct icalcomponent_impl 
