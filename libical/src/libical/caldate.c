@@ -72,13 +72,13 @@ struct ut_instant * date;
 	ka = (long) jd;
 	if ( jd >= 2299161L )
 	{
-		ialp = ( (double) jd - 1867216.25 ) / ( 36524.25 );
+		ialp = (long) (((double) jd) - 1867216.25 ) / 36524.25;
 		ka = jd + 1L + ialp - ( ialp >> 2 );
 	}
 	kb = ka + 1524L;
-	kc =  ( (double) kb - 122.1 ) / 365.25;
-	kd = (double) kc * 365.25;
-	ke = (double) ( kb - kd ) / 30.6001;
+	kc = (long) ((double) kb - 122.1 ) / 365.25;
+	kd = (long) (double) kc * 365.25;
+	ke = (long) (double) ( kb - kd ) / 30.6001;
 	date->day = kb - kd - ((long) ( (double) ke * 30.6001 ));
 	if ( ke > 13L )
 		date->month = ke - 13L;
@@ -93,9 +93,9 @@ struct ut_instant * date;
 	else
 		date->year = kc - 4715L;
 	date->i_hour = date->d_hour = frac * 24.0;	/* hour */
-	date->i_minute = date->d_minute =
+	date->i_minute = date->d_minute = (long)
 		( date->d_hour - (double) date->i_hour ) * 60.0; /* minute */
-	date->i_second = date->d_second =
+	date->i_second = date->d_second = (long)
 		( date->d_minute - (double) date->i_minute ) * 60.0;/* second */
 	date->weekday = (jd + 1L) % 7L;	/* day of week */
 	if ( date->year == ((date->year >> 2) << 2) )
