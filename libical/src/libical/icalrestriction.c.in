@@ -28,6 +28,13 @@
 #include <assert.h>
 #include <stdio.h> /* For snprintf */   
 
+#ifdef WIN32
+#ifndef HAVE_SNPRINTF
+#include "vsnprintf.h"
+#endif
+#endif
+
+
 #define TMP_BUF_SIZE 1024
 
 /* Define the structs for the restrictions. these data are filled out

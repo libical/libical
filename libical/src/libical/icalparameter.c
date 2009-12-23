@@ -42,6 +42,14 @@
 #include <errno.h>
 #include <string.h> /* for memset() */
 
+
+#ifdef WIN32
+#ifndef HAVE_SNPRINTF
+#include "vsnprintf.h"
+#endif
+#define strcasecmp      stricmp
+#endif
+
 /* In icalderivedparameter */
 icalparameter* icalparameter_new_from_value_string(icalparameter_kind kind,const  char* val);
 
