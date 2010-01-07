@@ -1256,6 +1256,24 @@ void test_strings(){
 }
 
 
+void test_tzid_escape(){
+    icalparameter *tzid;
+    icalproperty *prop;
+
+    tzid = icalparameter_new_tzid("Timezone\nwith a newline");
+    prop = icalproperty_new_dtstart(icaltime_from_day_of_year(26, 2009));
+    icalproperty_add_parameter(prop, tzid);
+
+    if (VERBOSE)
+      printf("%s\n",icalproperty_as_ical_string(prop));
+
+    is("test encoding of 'Timezone\\nwith a newline'",
+       icalproperty_as_ical_string(prop), "DTSTART;VALUE=DATE,TZID=Timezone\\nwith a newline:20090126");
+
+    icalproperty_free(prop);
+}
+
+
 void test_requeststat()
 {
     icalproperty *p;
@@ -3696,6 +3714,7 @@ int main(int argc, char *argv[])
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
     test_run("Test strings", test_strings, do_test, do_header);
+    test_run("Test TZID escaping", test_tzid_escape, do_test, do_header);
     test_run("Test Compare", test_compare, do_test, do_header);
     test_run("Create Simple Component", create_simple_component, do_test, do_header);
     test_run("Create Components", create_new_component, do_test, do_header);
