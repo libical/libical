@@ -30,7 +30,7 @@
 #define ICALCALENDAR_H
 
 #include <libical/ical.h>
-#include <icalset.h>
+#include "icalset.h"
 
 /* icalcalendar
  * Routines for storing calendar data in a file system. The calendar 

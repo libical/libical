@@ -41,7 +41,7 @@
 
 #include <limits.h> /* For PATH_MAX */
 #include <libical/ical.h>
-#include <icalgauge.h>
+#include "icalgauge.h"
 
 #ifdef PATH_MAX
 #define ICAL_PATH_MAX PATH_MAX
