@@ -3,7 +3,7 @@
 
 #ifdef WITH_RR
 
-#include <ical.h>
+#include <libical/ical.h>
 #include <librr/rr.h>
 
 #define	ICALCAP_MESSAGE_CMD	1

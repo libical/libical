@@ -1,7 +1,7 @@
 #ifndef __ICALCAP_H__
 #define __ICALCAP_H__
 
-#include <ical.h>
+#include <libical/ical.h>
 
 /*
  * Opaque objects

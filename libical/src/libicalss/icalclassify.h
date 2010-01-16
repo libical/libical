@@ -28,8 +28,8 @@
 #define ICALCLASSIFY_H
 
 #include <libical/ical.h>
-#include <icalset.h>
-#include <icalcomponent.h>
+#include "icalset.h"
+#include "icalcomponent.h"
 
 icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match, 
 			      const char* user);
