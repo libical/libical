@@ -35,6 +35,9 @@
 # ifdef HAVE_BYTESWAP_H
 #  include <byteswap.h>
 # endif
+# ifdef HAVE_ENDIAN_H
+#  include <endian.h>
+# else
 # ifdef HAVE_SYS_ENDIAN_H
 #  include <sys/endian.h>
 #  ifdef bswap32
@@ -43,9 +46,7 @@
 #   define bswap_32 swap32
 #  endif
 # endif
-# ifdef HAVE_ENDIAN_H
-#  include <endian.h>
-# endif 
+# endif
 #endif
 
 #ifdef WIN32
