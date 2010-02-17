@@ -1,4 +1,4 @@
-#ifndef WIN32
+#ifdef WIN32
 #include "config.h"
 #ifndef HAVE_SNPRINTF
 #error DO NOT USE libical version of vsnprintf.
