@@ -105,7 +105,7 @@ libical_la_SOURCES =		\
 	pvl.h			\
 	sspm.c			\
 	sspm.h			\
-	vsnprintf.c		\
+	libicals_w32_vsnprintf_replacement.c \
 	icallangbind.h		\
 	icallangbind.c 		\
 	caldate.c 		\
