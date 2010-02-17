@@ -4,6 +4,9 @@
 #define roundup(x, y) ((((x)+((y)-1))/(y))*(y))
 #endif
 
+#include <stdlib.h>
+#include <stdarg.h>
+
 int
 #if __STDC__
 vsnprintf(char *str, size_t n, char const *fmt, va_list ap);
