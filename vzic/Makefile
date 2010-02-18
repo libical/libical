@@ -9,7 +9,7 @@ OLSON_DIR = /usr/local/tzdata2007c
 # This is used as the PRODID property on the iCalendar files output.
 # It identifies the product which created the iCalendar objects.
 # So you need to substitute your own organization name and product.
-PRODUCT_ID = -//citadel.org//NONSGML Citadel calendar//EN
+PRODUCT_ID = -//freeassociation.sourceforge.net//NONSGML Citadel calendar//EN
 
 # This is what libical-evolution uses.
 #PRODUCT_ID = -//Ximian//NONSGML Evolution Olson-VTIMEZONE Converter//EN
@@ -23,7 +23,7 @@ PRODUCT_ID = -//citadel.org//NONSGML Citadel calendar//EN
 # gets expanded to today's date. There is also a vzic-merge.pl which can be
 # used to merge changes into a master set of VTIMEZONEs. If a VTIMEZONE has
 # changed, it bumps the version number on the end of this prefix. */
-TZID_PREFIX = /citadel.org/%D_1/
+TZID_PREFIX = /freeassociation.sourceforge.net/%D_1/
 
 # This is what libical-evolution uses.
 #TZID_PREFIX = /softwarestudio.org/Olson_%D_1/
