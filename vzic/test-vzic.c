@@ -42,9 +42,10 @@
  * other timezones incorrect sometimes (e.g. if they change).
  */
 
+#include <stdlib.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <errno.h>
 
 #include <ical.h>
