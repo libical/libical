@@ -17,6 +17,7 @@ AC_PROG_CXX
 AM_PROG_LEX
 AC_PROG_LN_S
 AC_PROG_INSTALL
+AC_PROG_MKDIR_P
 
 dnl Initialize libtool
 AM_PROG_LIBTOOL
@@ -324,55 +325,27 @@ AC_ARG_ENABLE(python,
 [  --enable-python         Enable python bindings],,enable_python="no")
 
 if test "x$enable_python" = "xyes"; then
-	python_val=true
-else
-	python_val=false
+  AM_PATH_PYTHON([2.3], , [:])
+  AM_CONDITIONAL([HAVE_PYTHON], [test "$PYTHON" != :])
+  AC_CHECK_PROG(swig_val, swig, true, false)
+  AM_CONDITIONAL([HAVE_SWIG], [test "x$swig_val" = "xtrue"])
+  
+  PY_PREFIX=`$PYTHON -c 'import sys ; print sys.prefix'`
+  AC_CHECK_HEADER([python$PYTHON_VERSION/Python.h],[],[AC_MSG_ERROR([Can't find python header files])])
+  if test -f "$PY_PREFIX/include/python$PYTHON_VERSION/Python.h"; then
+    
+    PY_CFLAGS="-I$PY_PREFIX/include/python$PYTHON_VERSION"
+    AC_SUBST(PY_CFLAGS)
+    
+    # SWIG needs PIC in order to work.
+    CFLAGS="$CFLAGS -fPIC"
+  fi
+  
+  AC_CONFIG_FILES([src/python/Makefile])
 fi
-
-if test $python_val = true; then
-        
-	AC_CHECK_PROG(python_val, python, true, false)
-	AC_CHECK_PROG(python_val, swig, true, false)
-
-	  PY_PREFIX=`python -c 'import sys ; print sys.prefix'`
-	  PY_EXEC_PREFIX=`python -c 'import sys ; print sys.exec_prefix'`
-	  changequote(<<, >>)dnl
-	  PY_VERSION=`python -c 'import sys ; print sys.version[0:3]'`
-	  changequote([, ])dnl
-	  AC_CHECK_HEADER([python$PY_VERSION/Python.h],[],[AC_MSG_ERROR([Can't find python header files])])
-	  if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
-		  PY_LIBS="python$PY_VERSION"
-		  if test -d "$PY_EXEC_PREFIX/lib/python$PY_VERSION/config"; then
-		  	  PY_LIB_LOC="-L$PY_EXEC_PREFIX/lib/python$PY_VERSION/config"
-			  PY_MAKEFILE="$PY_EXEC_PREFIX/lib/python$PY_VERSION/config/Makefile"
-		  else  	  
-		  	  PY_LIB_LOC="-L$PY_EXEC_PREFIX/lib64/python$PY_VERSION/config"
-			  PY_MAKEFILE="$PY_EXEC_PREFIX/lib64/python$PY_VERSION/config/Makefile"
-		  fi
-		  PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION"
-		  
-		  PY_LOCALMODLIBS=`sed -n -e 's/^LOCALMODLIBS=\(.*\)/\1/p' $PY_MAKEFILE`
-		  PY_BASEMODLIBS=`sed -n -e 's/^BASEMODLIBS=\(.*\)/\1/p' $PY_MAKEFILE`
-		  PY_OTHER_LIBS=`sed -n -e 's/^LIBS=\(.*\)/\1/p' $PY_MAKEFILE`
-		  PY_EXTRA_LIBS="$PY_LOCALMODLIBS $PY_BASEMODLIBS $PY_OTHER_LIBS"
-		  AC_SUBST(PY_LIBS)
-		  AC_SUBST(PY_LIB_LOC)
-		  AC_SUBST(PY_CFLAGS)
-		  AC_SUBST(PY_EXTRA_LIBS)
-		  # SWIG needs PIC in order to work.
-		  CFLAGS="$CFLAGS -fPIC"
-	  else
-		  python_val=false
-	  fi
-fi
-python_val=false
-AM_CONDITIONAL(WITH_PYTHON, test $python_val = true)
 
 if test "$use_builtin_timezone" = "yes"; then
   AC_CONFIG_FILES([zoneinfo/Makefile])
-fi
-if test $python_val = true ; then
-  AC_CONFIG_FILES([src/python/Makefile])
 fi
 
 AC_CONFIG_FILES([Makefile])

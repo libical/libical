@@ -26,8 +26,8 @@
 
 
 %{
-#include "ical.h"
-#include "icalss.h"
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
 
 #include <sys/types.h> /* for size_t */
 #include <time.h>
