@@ -1,36 +1,12 @@
+# See xapian-bindings for an example of integrating autotools, swig and python
 
-lib_LTLIBRARIES = libLibicalWrap.la
+BUILT_SOURCES = _LibicalWrap.c
 
-libLibicalWrap_la_SOURCES = LibicalWrap.c
+pyexec_LTLIBRARIES = _LibicalWrap.la
 
-INCLUDES =				\
-	-I$(top_builddir)		\
-	-I$(top_srcdir)/src		\
-	-I$(top_builddir)/src		\
-	-I$(top_srcdir)/src/libical	\
-	-I$(top_builddir)/src/libical	\
-	-I$(top_srcdir)/src/libicalss	\
-	$(PY_CFLAGS) 	
-
-LDADD =  ../libical/libical.la ../libicalss/libicalss.la
-
-all: LibicalWrap.so
-
-LibicalWrap.c:  LibicalWrap.i
-	swig -python  -o LibicalWrap.c LibicalWrap.i 
-
-# This part should be done with libtool, but I don't know how to do
-# it. Libtool needs to generate a shared library in this directory
-# regardless of the value of AM_DISABLE_SHARED
-LibicalWrap.so: LibicalWrap.c 
-	ld -shared -o LibicalWrap.so LibicalWrap.o ../libical/.libs/libical.a  ../libicalss/.libs/libicalss.a 
-
-CLEANFILES = LibicalWrap.c LibicalWrap_wrap.doc  Libical.pyc LibicalWrap.so
-
-EXTRA_DIST = 		\
+common_FILES =		\
+__init__.py 		\
 Libical.py 		\
-LibicalWrap.i 		\
-python-binding.txt 	\
 test.py			\
 Attendee.py 		\
 Collection.py		\
@@ -42,7 +18,38 @@ Gauge.py		\
 Period.py		\
 Property.py		\
 Store.py  		\
-Time.py			\
+Time.py
+
+# Install as _DATA rather than _SCRIPTS because we don't want to make these
+# executable (they don't have a #! line).
+pkgpython_DATA = 	\
+$(common_FILES)		\
+LibicalWrap.py
+
+# To allow non-standard library names (ie those not prefixed by "lib") see:
+# http://sources.redhat.com/automake/automake.html#Libtool-Modules
+_LibicalWrap_la_SOURCES = _LibicalWrap.c
+_LibicalWrap_la_LDFLAGS = -avoid-version -module -lc
+_LibicalWrap_la_LTLIBADD =  ../libical/libical.la ../libicalss/libicalss.la
+
+AM_CPPFLAGS =				\
+	-I$(top_builddir)		\
+	-I$(top_srcdir)/src		\
+	-I$(top_builddir)/src		\
+	-I$(top_srcdir)/src/libical	\
+	-I$(top_builddir)/src/libical	\
+	-I$(top_srcdir)/src/libicalss	\
+	$(PY_CFLAGS)
+
+_LibicalWrap.c:  LibicalWrap.i
+	swig -python  -o _LibicalWrap.c LibicalWrap.i 
+
+CLEANFILES = _LibicalWrap.c _LibicalWrap_wrap.doc  Libical.pyc _LibicalWrap.so
+
+EXTRA_DIST = 		\
+$(common_FILES)		\
+LibicalWrap.i 		\
+python-binding.txt 	\
 ChangeLog
 
 
