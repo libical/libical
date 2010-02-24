@@ -133,12 +133,12 @@ def test_time():
 
     t = Time("19970325T123010Z",'DTSTART')
     
-    assert(t.year() == 1997)
-    assert(t.month() == 3)
-    assert(t.day() == 25)
-    assert(t.hour() == 12)
-    assert(t.minute() == 30)
-    assert(t.second() == 10)
+    assert(t.year == 1997)
+    assert(t.month == 3)
+    assert(t.day == 25)
+    assert(t.hour == 12)
+    assert(t.minute == 30)
+    assert(t.second == 10)
     assert(t.is_utc())
     assert(not t.is_date())
     
@@ -148,25 +148,26 @@ def test_time():
     print str(t)
     print t.timezone()
     #assert(str(t)=='DTSTART;TZID=America/Los_Angeles:19970325T123010')
-    assert(str(t)=='DTSTART;TZID=/softwarestudio.org/Olson_20010626_2/America/Los_Angeles:19970325T043010')
+    assert(str(t)=='DTSTART;TZID=/freeassociation.sourceforge.net/Tzfile/America/Los_Angeles:19970325T053010')
 
-    t.second(t.second()+80)
+    t.second = t.second+80
 
     t.timezone("UTC")
-    assert(t.minute() == 31)
-    assert(t.second() == 30)
+    print t.minute, t.second
+    assert(t.minute == 31)
+    assert(t.second == 30)
 
     d = Duration(3600,"DURATION")
     t2 = t + d
 
     print t2
-    assert(t2.hour() == 13)
+    assert(t2.hour == 13)
 
     t2 = t - d
 
     print t2
     assert(isinstance(t2,Time))
-    assert(t2.hour() == 11)
+    assert(t2.hour == 11)
 
     # test int args
     t = Time(2)
@@ -297,13 +298,13 @@ def test_component():
         
     print dtstart
     
-    print "\n Orig hour: ", dtstart.hour()
-    assert(dtstart.hour() == 12)
+    print "\n Orig hour: ", dtstart.hour
+    assert(dtstart.hour == 12)
 
-    dtstart.hour(dtstart.hour() + 5)
+    dtstart.hour = dtstart.hour + 5
 
-    print "\n New hour: ", dtstart.hour()
-    assert(dtstart.hour() == 17)
+    print "\n New hour: ", dtstart.hour
+    assert(dtstart.hour == 17)
 
     attendee = inner.properties('ATTENDEE')[0]
     
@@ -496,7 +497,7 @@ def do_test_store(storeobj=None, *args):
     for i in range(1,11):
 	newevent = event.clone()
 	newevent.uid("%d@localhost" % (i,))
-	newevent.dtstart().month( newevent.dtstart().month() + i )
+	newevent.dtstart().month = newevent.dtstart().month + i
 
 	#print ne
 	store.add_component(newevent)

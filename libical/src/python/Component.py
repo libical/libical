@@ -37,7 +37,21 @@ import string
 
 WrapperNULL = None
 
-class Component:
+# Swig objects are natively unhashable, so we hash on the pointer val.
+class SwigRefHash(dict):
+    def __getitem__(self, k):
+        return dict.__getitem__(self, int(k))
+    
+    def __setitem__(self, k, v):
+        return dict.__setitem__(self, int(k), v)
+    
+    def __delitem__(self, k):
+        dict.__delitem__(self, int(k))
+    
+    def has_key(self, k):
+        return dict.has_key(self, int(k))
+
+class Component(object):
 
     def __init__(self,ref=None,kind=None):
 
@@ -54,8 +68,8 @@ class Component:
         else:
             raise "Could not construct component of kind" + kind
 
-        self.cached_props = {}
-        self.cached_comps = {}
+        self.cached_props = SwigRefHash()
+        self.cached_comps = SwigRefHash()
 
     def __del__(self):
         if self._ref != None and icalcomponent_get_parent(self._ref) != WrapperNULL:
@@ -73,7 +87,7 @@ class Component:
 
 	d = {}
 	d['value'] = icalproperty_get_value_as_string(p)
-	d['name'] = icalproperty_get_name(p)
+	d['name'] = icalproperty_get_property_name(p)
 
 	propkind = icalproperty_string_to_kind(d['name'])
 	kind = icalproperty_kind_to_value_kind(propkind)
@@ -81,6 +95,7 @@ class Component:
         d['ref'] = p
 
 
+        #~ print p, Property(ref=p).name()
         if not self.cached_props.has_key(p):
             
             if d['value_type'] == 'DATE-TIME' or d['value_type'] == 'DATE':

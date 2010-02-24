@@ -151,7 +151,7 @@ on a single fundamental type, a structure or a union.
 
 3.1.4 Parameters 
 
-Parameters are represetned in a similar way to properties, except that
+Parameters are represented in a similar way to properties, except that
 they contain only one value
 
 3.2 Other elements of libical
@@ -161,7 +161,7 @@ structures, classes that aid in creating and using iCal components.
 
 3.2.1 Enumerations and types
 
-Libical is strongly typed, soo every component, property, parameter,
+Libical is strongly typed, so every component, property, parameter,
 and value type has an enumeration, and some have an associated structure
 or union. 
 
@@ -180,7 +180,7 @@ errors and component usage errors.
 
 Since many of libicals interfaces return strings, the library has its
 own memory management system to elimiate the need to free every string
-returned from the libraru. 
+returned from the library. 
 
 3.2.5 Storage classes
 
@@ -290,7 +290,7 @@ prop = icalproperty_new_dtstamp(atime) ;
 
 icalcomponent_add_property(event, prop);
 
-prop = icalproperty_new_uid(''guid-1.host1.com'') );
+prop = icalproperty_new_uid(''guid-1.host1.com'');
 
 icalcomponent_add_property(event,prop);
 

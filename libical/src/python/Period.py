@@ -76,13 +76,13 @@ class Period(Property):
             raise Property.ConstructorFailedError("Failed to construct Period")
 
     def _end_is_duration(self):        
-        dur = icalperiodtype_duration_get(self.pt)
+        dur = self.pt.duration
         if not icaldurationtype_is_null_duration(dur):
             return 1
         return 0
 
     def _end_is_time(self):
-        end = icalperiodtype_end_get(self.pt)
+        end = self.pt.end
         if not icaltime_is_null_time(end):
             return 1
         return 0
@@ -112,12 +112,12 @@ class Period(Property):
             else:
                 raise TypeError
 
-            icalperiodtype_start_set(self.pt,t.tt)
+            self.pt.start = t.tt
 
             self._update_value()
                 
         
-        return Time(icaltime_as_timet(icalperiodtype_start_get(self.pt)),
+        return Time(icaltime_as_timet(self.pt.start),
                     "DTSTART")
 
     def end(self,v=None):
@@ -139,23 +139,22 @@ class Period(Property):
                 raise TypeError
 
             if(self._end_is_duration()):
-                start = icaltime_as_timet(icalperiodtype_start_get(self.pt))
+                start = icaltime_as_timet(self.pt.start)
                 dur = t.utc_seconds()-start;
-                icalperiodtype_duration_set(self.pt,
-                                            icaldurationtype_from_int(dur))
+                self.pt.duration = icaldurationtype_from_int(dur)
             else:
-                icalperiodtype_end_set(self.pt,t.tt)
+                self.pt.end = t.tt
                 
             self._update_value()
 
         if(self._end_is_time()):
-            rt = Time(icaltime_as_timet(icalperiodtype_end_get(self.pt)),
+            rt = Time(icaltime_as_timet(self.pt.end),
                       'DTEND')
             rt.timezone(self.timezone())
             return rt
         elif(self._end_is_duration()):
-            start = icaltime_as_timet(icalperiodtype_start_get(self.pt))
-            dur = icaldurationtype_as_int(icalperiodtype_duration_get(self.pt))
+            start = icaltime_as_timet(self.pt.start)
+            dur = icaldurationtype_as_int(self.pt.duration)
             rt = Time(start+dur,'DTEND')
             rt.timezone(self.timezone())
             return rt
@@ -183,24 +182,23 @@ class Period(Property):
                 raise TypeError
 
             if(self._end_is_time()):
-                start = icaltime_as_timet(icalperiodtype_start_get(self.pt))
+                start = icaltime_as_timet(self.pt.start)
                 end = start + d.seconds()
 
-                icalperiodtype_end_set(self.pt,icaltime_from_timet(end,0))
+                self.pt.end = icaltime_from_timet(end,0)
             else:
-                icalperiodtype_duration_set(self.pt,d.dur)
+                self.pt.duration = d.dur
                 
         if(self._end_is_time()):
-            start =icaltime_as_timet(icalperiodtype_start_get(self.pt))
-            end = icaltime_as_timet(icalperiodtype_end_get(self.pt))
+            start =icaltime_as_timet(self.pt.start)
+            end = icaltime_as_timet(self.pt.end)
 
             print "End is time " + str(end-start)
 
             return Duration(end-start,"DURATION")
 
         elif(self._end_is_duration()):
-            dur = icaldurationtype_as_int(
-                icalperiodtype_duration_get(self.pt))
+            dur = icaldurationtype_as_int(self.pt.duration)
 
             return Duration(dur,"DURATION")
         else:
