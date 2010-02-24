@@ -54,7 +54,7 @@ def test_enum(prop,enum):
     return None
 
 
-class Property:
+class Property(object):
     """ Represent any iCalendar Property.
 
     Usage:
@@ -75,8 +75,8 @@ class Property:
     def __init__(self, type = None, ref = None):
 
 
-        assert(ref == None or isinstance(ref,StringType))
-        assert(type == None or isinstance(type,StringType))
+        #~ assert(ref == None or isinstance(ref,StringType))
+        #~ assert(type == None or isinstance(type,StringType))
 
         self._ref = None
         
@@ -87,13 +87,12 @@ class Property:
             self._ref = icalproperty_new(kind)
 
 	    if type.find("X-") == 0:
-		    icalproperty_set_x_name(self._ref, type)
+                icalproperty_set_x_name(self._ref, type)
 
         if self._ref == None or self._ref == 'NULL':
             raise Property.ConstructorFailedError("Failed to construct Property")
             
         self._deleted = 0;
-
 
         # Initialize all of the required keys
 
@@ -110,7 +109,7 @@ class Property:
             
     def name(self,v=None):
         """ Return the name of the property """
-        return icalproperty_get_name(self._ref)
+        return icalproperty_get_property_name(self._ref)
 
     def ref(self,v=None):
         """ Return the internal reference to the libical icalproperty """
@@ -133,7 +132,9 @@ class Property:
             
             if kind != None:
                 # Get the default kind of value for this property 
-                default_kind = icalvalue_kind_to_string(icalproperty_kind_to_value_kind(icalproperty_string_to_kind(self.name())))
+                default_kind = icalvalue_kind_to_string(
+                    icalproperty_kind_to_value_kind(
+                        icalproperty_string_to_kind(self.name())))
 
                 if(kind != default_kind):
                     self.__setitem__('VALUE',kind)
@@ -148,9 +149,8 @@ class Property:
             icalerror_clear_errno()
 
             #e1=icalerror_supress("MALFORMEDDATA")
-            if (self.name().find("X-") == 0) and type(v) is StringType:
-                 v = icallangbind_quote_as_ical(v)
-                 v = icallangbind_quote_as_ical(v)
+            if (self.name() == None or self.name().find("X-") == 0) and type(v) is StringType:
+                v = icallangbind_quote_as_ical(v)
 
             icalproperty_set_value_from_string(self._ref,str(v),vt)
             #icalerror_restore("MALFORMEDDATA",e1)

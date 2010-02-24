@@ -41,8 +41,6 @@
 #define mode_t int
 #endif
 
-extern int icalfileset_safe_saves;
-
 typedef struct icalfileset_impl icalfileset;
 
 icalset* icalfileset_new(const char* path);

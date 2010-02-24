@@ -79,7 +79,7 @@ class Time(Property):
             raise Property.ConstructorFailedError("Failed to construct a Time")
 
     def _update_value(self):
-        self.tt = icaltime_normalize(self.tt)
+        self.normalize()
         self.value(icaltime_as_ical_string(self.tt),"DATE-TIME")
 
     def valid(self):
@@ -88,12 +88,12 @@ class Time(Property):
 
     def utc_seconds(self,v=None):
         """ Return or set time in seconds past POSIX epoch"""
+        tz = icaltimezone_get_builtin_timezone(self.timezone())
         if (v!=None):
-	    tz = icaltimezone_get_builtin_timezone(self.timezone())
             self.tt = icaltime_from_timet_with_zone(v,0,tz)
             self._update_value()
 
-        return icaltime_as_timet(self.tt)
+        return icaltime_as_timet_with_zone(self.tt, tz)
 
     def is_utc(self):
         """ Return a boolean indicating if time is in UTC """
@@ -127,48 +127,56 @@ class Time(Property):
         self._update_value()
 	return icaltime_get_tzid(self.tt)
 
-    def second(self,v=None):
+    def normalize(self):
+        self.tt = icaltime_normalize(self.tt)
+
+    def __second_property(self,v=None):
         """ Get or set the seconds component of this time """
         if(v != None):
-            icaltimetype_second_set(self.tt,v)
+            self.tt.second = v
             self._update_value()
-        return icaltimetype_second_get(self.tt)
+        return self.tt.second
+    second = property(__second_property, __second_property)
 
-    def minute(self,v=None):
+    def __minute_property(self,v=None):
         """ Get or set the minute component of this time """
         if(v != None):
-            icaltimetype_minute_set(self.tt,v)
+            self.tt.minute = v
             self._update_value()
-        return icaltimetype_minute_get(self.tt)
+        return self.tt.minute
+    minute = property(__minute_property, __minute_property)
 
-    def hour(self,v=None):
+    def __hour_property(self,v=None):
         """ Get or set the hour component of this time """
         if(v != None):
-            icaltimetype_hour_set(self.tt,v)
+            self.tt.hour = v
             self._update_value()
-        return icaltimetype_hour_get(self.tt)
+        return self.tt.hour
+    hour = property(__hour_property, __hour_property)
 
-    def day(self,v=None):
+    def __day_property(self,v=None):
         """ Get or set the month day component of this time """
         if(v != None):
-            icaltimetype_day_set(self.tt,v)
+            self.tt.day = v
             self._update_value()
-        return icaltimetype_day_get(self.tt)
+        return self.tt.day
+    day = property(__day_property, __day_property)
 
-    def month(self,v=None):
+    def __month_property(self,v=None):
         """ Get or set the month component of this time. January is month 1 """
         if(v != None):
-            icaltimetype_month_set(self.tt,v)
+            self.tt.month = v
             self._update_value()
-        return icaltimetype_month_get(self.tt)
+        return self.tt.month
+    month = property(__month_property, __month_property)
 
-    def year(self,v=None):
+    def __year_property(self,v=None):
         """ Get or set the year component of this time """
         if(v != None):
-            icaltimetype_year_set(self.tt,v)
+            self.tt.year = v
             self._update_value()
-
-        return icaltimetype_year_get(self.tt)
+        return self.tt.year
+    year = property(__year_property, __year_property)
 
 
     def __cmp__(self,other):
@@ -185,9 +193,10 @@ class Time(Property):
 
         if not other.valid():
             return Duration(0,"DURATION")
-  
+
+        print self.utc_seconds(), other.seconds()
         seconds = self.utc_seconds() + other.seconds()
-    
+
         new = Time(seconds,self.name(),self.timezone())
 
         return new

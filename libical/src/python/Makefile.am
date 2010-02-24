@@ -30,7 +30,8 @@ LibicalWrap.py
 # http://sources.redhat.com/automake/automake.html#Libtool-Modules
 _LibicalWrap_la_SOURCES = _LibicalWrap.c
 _LibicalWrap_la_LDFLAGS = -avoid-version -module -lc
-_LibicalWrap_la_LTLIBADD =  ../libical/libical.la ../libicalss/libicalss.la
+_LibicalWrap_la_LIBADD =  $(top_srcdir)/src/libical/libical.la \
+	$(top_srcdir)/src/libicalss/libicalss.la
 
 AM_CPPFLAGS =				\
 	-I$(top_builddir)		\
@@ -41,8 +42,8 @@ AM_CPPFLAGS =				\
 	-I$(top_srcdir)/src/libicalss	\
 	$(PY_CFLAGS)
 
-_LibicalWrap.c:  LibicalWrap.i
-	swig -python  -o _LibicalWrap.c LibicalWrap.i 
+_LibicalWrap.c:  LibicalWrap.i $(top_srcdir)/src/libical/ical.h $(top_srcdir)/src/libicalss/icalss.h
+	swig -python -Wall $(AM_CPPFLAGS) -o _LibicalWrap.c LibicalWrap.i 
 
 CLEANFILES = _LibicalWrap.c _LibicalWrap_wrap.doc  Libical.pyc _LibicalWrap.so
 
