@@ -342,6 +342,9 @@ if test "x$enable_python" = "xyes"; then
   fi
   
   AC_CONFIG_FILES([src/python/Makefile])
+else
+  AM_CONDITIONAL([HAVE_PYTHON], false)
+  AM_CONDITIONAL([HAVE_SWIG], false)
 fi
 
 if test "$use_builtin_timezone" = "yes"; then
