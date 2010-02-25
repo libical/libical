@@ -576,6 +576,8 @@ def test_store():
     do_test_store(FileStore,"filesetout.ics")
 
 def run_tests():
+    print "Running unit tests for:", ICAL_PACKAGE, ICAL_VERSION
+
     test_property()
 
     test_time()

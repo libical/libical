@@ -25,6 +25,7 @@
 #    the License at http://www.mozilla.org/MPL/
 #======================================================================
 
+from LibicalWrap import ICAL_PACKAGE, ICAL_VERSION
 from Component import Component, NewComponent, Event, Todo, Journal
 from Property import Property, RecurrenceSet, test_enum
 from Time import Time
@@ -34,3 +35,5 @@ from Attendee import Attendee, Organizer
 from DerivedProperties import RDate, Trigger,Recurrence_Id, Attach 
 from Store import Store, FileStore
 from Gauge import Gauge
+
+version = ICAL_VERSION

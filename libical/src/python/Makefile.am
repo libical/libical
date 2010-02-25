@@ -20,9 +20,8 @@ Property.py		\
 Store.py  		\
 Time.py
 
-# Install as _DATA rather than _SCRIPTS because we don't want to make these
-# executable (they don't have a #! line).
-pkgpython_DATA = 	\
+# Install as python source so the code gets byte-compiled at install time.
+pkgpython_PYTHON = 	\
 $(common_FILES)		\
 LibicalWrap.py
 
@@ -42,10 +41,10 @@ AM_CPPFLAGS =				\
 	-I$(top_srcdir)/src/libicalss	\
 	$(PY_CFLAGS)
 
-_LibicalWrap.c:  LibicalWrap.i $(top_srcdir)/src/libical/ical.h $(top_srcdir)/src/libicalss/icalss.h
-	swig -python -Wall $(AM_CPPFLAGS) -o _LibicalWrap.c LibicalWrap.i 
+_LibicalWrap.c:  $(top_srcdir)/$(subdir)/LibicalWrap.i $(top_srcdir)/src/libical/ical.h $(top_srcdir)/src/libicalss/icalss.h
+	swig -python -Wall $(AM_CPPFLAGS) -o _LibicalWrap.c $(top_srcdir)/$(subdir)/LibicalWrap.i 
 
-CLEANFILES = _LibicalWrap.c _LibicalWrap_wrap.doc  Libical.pyc _LibicalWrap.so
+CLEANFILES = _LibicalWrap.c _LibicalWrap_wrap.doc  Libical.pyc LibicalWrap.py _LibicalWrap.so 
 
 EXTRA_DIST = 		\
 $(common_FILES)		\
