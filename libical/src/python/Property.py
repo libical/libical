@@ -43,12 +43,10 @@ def error_type():
 
 def test_enum(prop,enum):
 
-    kind =  icalproperty_string_to_kind(prop)
-    e = icalproperty_string_to_enum(enum)
-    
-    t = icalproperty_enum_belongs_to_property(kind,e)      
+    vkind = icalvalue_string_to_kind(prop)
+    e = icalproperty_kind_and_string_to_enum(vkind, enum)
 
-    if t == 1:
+    if e != 0:
         return 1
     
     return None
