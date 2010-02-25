@@ -117,7 +117,7 @@ class Period(Property):
             self._update_value()
                 
         
-        return Time(icaltime_as_timet(self.pt.start),
+        return Time(self.pt.start.as_timet(),
                     "DTSTART")
 
     def end(self,v=None):
@@ -139,7 +139,7 @@ class Period(Property):
                 raise TypeError
 
             if(self._end_is_duration()):
-                start = icaltime_as_timet(self.pt.start)
+                start = self.pt.start.as_timet()
                 dur = t.utc_seconds()-start;
                 self.pt.duration = icaldurationtype_from_int(dur)
             else:
@@ -148,12 +148,12 @@ class Period(Property):
             self._update_value()
 
         if(self._end_is_time()):
-            rt = Time(icaltime_as_timet(self.pt.end),
+            rt = Time(self.pt.end.as_timet(),
                       'DTEND')
             rt.timezone(self.timezone())
             return rt
         elif(self._end_is_duration()):
-            start = icaltime_as_timet(self.pt.start)
+            start = self.pt.start.as_timet()
             dur = icaldurationtype_as_int(self.pt.duration)
             rt = Time(start+dur,'DTEND')
             rt.timezone(self.timezone())
@@ -182,16 +182,16 @@ class Period(Property):
                 raise TypeError
 
             if(self._end_is_time()):
-                start = icaltime_as_timet(self.pt.start)
+                start = self.pt.start.as_timet()
                 end = start + d.seconds()
 
-                self.pt.end = icaltime_from_timet(end,0)
+                self.pt.end = icaltimetype.from_timet(end)
             else:
                 self.pt.duration = d.dur
                 
         if(self._end_is_time()):
-            start =icaltime_as_timet(self.pt.start)
-            end = icaltime_as_timet(self.pt.end)
+            start = self.pt.start.as_timet()
+            end = self.pt.end.as_timet()
 
             print "End is time " + str(end-start)
 
