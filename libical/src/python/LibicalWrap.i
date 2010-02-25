@@ -34,10 +34,14 @@
 
 %}
 
+%feature("autodoc", "1");
+
 typedef int time_t;
+
 
 // This is declared as an extern, but never used in the library.
 %ignore icalfileset_safe_saves;
+
 
 // Ignore these declarations because there does not exist a definition for them
 %ignore _icalerror_set_errno(icalerrorenum);
@@ -91,6 +95,20 @@ typedef int time_t;
 %ignore icaltime_is_floating(const struct icaltimetype t);
 %ignore icaltimezonetype_free(struct icaltimezonetype tzt);
 
+
+// Remove depreciated functions
+%ignore icalproperty_string_to_enum(const char* str);
+%ignore icaltimezone_get_utc_offset(icaltimezone	*zone,
+                                    struct icaltimetype	*tt,
+                                    int		*is_daylight);
+%ignore icaltimezone_get_utc_offset_of_utc_time	(icaltimezone	*zone,
+					 struct icaltimetype	*tt,
+					 int		*is_daylight);
+%ignore icaltime_start_doy_of_week(const struct icaltimetype t);
+%ignore icalcomponent_get_span(icalcomponent* comp);
+%ignore icalproperty_remove_parameter(icalproperty* prop, icalparameter_kind kind);
+
+
 #ifndef _DLOPEN_TEST
 %ignore icalset_register_class(icalset *set);
 #endif
@@ -99,6 +117,7 @@ typedef int time_t;
 %include "libical/ical.h"
 %include "libicalss/icalss.h"
 
+%inline %{
 // declare some internal functions which are not in the header file.
 void icalproperty_set_parent(icalproperty* property,
 			     icalcomponent* component);
@@ -111,4 +130,31 @@ icalproperty* icalvalue_get_parent(icalvalue* value);
 void icalparameter_set_parent(icalparameter* param,
 			     icalproperty* property);
 icalproperty* icalparameter_get_parent(icalparameter* value);
+%}
+
+// Add some methods to the icaltimetype struct
+%extend icaltimetype {
+    time_t as_timet(const icaltimezone *zone=NULL) {
+        return icaltime_as_timet_with_zone(*($self), zone);
+    }
+    
+    static struct icaltimetype from_timet(const time_t tm,
+            const int is_date=0, const icaltimezone *zone=NULL) {
+        return icaltime_from_timet_with_zone(tm, is_date, zone);
+    }
+}
+
+// This is a hackish way to support adding the __str__ method to
+// a class in python.  Its much easier than writing in C (that
+// I've figured out).
+%pythoncode %{
+
+def __icaltimetype_str__(self):
+    return "<icaltimetype (%d, %d, %d, %d, %d, %d, %d, %d)>" % (
+        self.year, self.month, self.day, self.hour, self.minute,
+        self.second, self.is_date, self.is_daylight)
+icaltimetype.__str__ = __icaltimetype_str__
+
+%}
+
 
