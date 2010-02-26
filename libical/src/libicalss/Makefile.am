@@ -27,7 +27,7 @@ AM_YFLAGS = -d -v -p ss -l
 AM_LFLAGS = -Pss -L -R
 LEX_OUTPUT_ROOT = lex.ss
 
-all: icalss.h libical/icalss.h
+BUILT_SOURCES = icalss.h
 
 # just to get it built
 $(srcdir)/icalgauge.c: icalssyacc.h
@@ -143,16 +143,6 @@ icalss.h: $(COMBINEDHEADERS)
 	echo '}'                          >> icalss.h
 	echo '#endif'                     >> icalss.h
 	echo '#endif'                     >> icalss.h
-
-libical/icalss.h:
-	mkdir -p ${@D}
-	ln -s ../icalss.h $@
-clean-local: clean-icalss
-clean-icalss:
-	rm -f libical/icalss.h
-	rmdir libical
-
-distclean:
 
 libicalssinclude_HEADERS = icalss.h  icalcalendar.h icalclassify.h icalcluster.h icaldirset.h icaldirsetimpl.h icalfileset.h icalfilesetimpl.h icalgauge.h icalgaugeimpl.h icalmessage.h icalset.h icalspanlist.h icalssyacc.h $(libicalssinclude_BDBHEADERS)
 
