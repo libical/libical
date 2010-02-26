@@ -46,6 +46,9 @@ usr/include/libical/vcc.h
 usr/include/libical/vobject.h
 usr/include/libical/vcaltmp.h
 usr/lib/libical.a
+usr/lib/libical.la
 usr/lib/libicalss.a
+usr/lib/libicalss.la
 usr/lib/libicalvcal.a
+usr/lib/libicalvcal.la
 /usr/lib/pkgconfig/*.pc
