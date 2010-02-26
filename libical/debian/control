@@ -2,7 +2,8 @@ Source: libical
 Priority: optional
 Maintainer: Wilfried Goesgens <w.goesgens@outgesourced.org>
 Uploaders: Fathi Boudra <fboudra@free.fr>
-Build-Depends: debhelper (>= 5), autotools-dev, tzdata
+Build-Depends: debhelper (>= 5), autotools-dev, tzdata, python-all-dev, python-support (>= 0.90), python (>= 2.3.5-11)
+XS-Python-Version: all
 Standards-Version: 3.7.3
 Section: libs
 Homepage: http://freeassociation.sourceforge.net/
@@ -45,4 +46,17 @@ Description: iCalendar library implementation in C (runtime)
  .
  This package contains the files necessary for running and debugging 
  applications that use the libical library.
+
+Package: python-libical
+Section: python
+Architecture: any
+Depends: ${shlibs:Depends}, ${python:Depends}, libical0 (= ${binary:Version})
+Description: iCalendar library implementation python language bindings
+ libical is an open source implementation of the IETF's iCalendar calendaring
+ and scheduling protocols (RFC 2445, 2446, and 2447). It parses iCal components
+ and provides a C API for manipulating the component properties, parameters,
+ and subcomponents.
+ .
+ This package contains the python language bindings.
+
 
