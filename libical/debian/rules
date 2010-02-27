@@ -45,6 +45,8 @@ major=2
 #major=`ls src/.libs/lib*.so.* | \
 # awk '{if (match($$0,/\.so\.[0-9]+$$/)) print substr($$0,RSTART+4)}'`
 
+PYVERS=$(shell pyversions -vr)
+
 
 build: build-c $(PYVERS:%=build-python%/build-stamp)
 install: build install-c $(PYVERS:%=install-python%)
@@ -52,8 +54,6 @@ clean: clean-c $(PYVERS:%=clean-python%)
 
 
 ### Python libraries build rules ###
-PYVERS=$(shell pyversions -vr)
-
 build-python%/configure-stamp:
 	mkdir build-python$*
 	dh_testdir
