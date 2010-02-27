@@ -1,17 +1,18 @@
 Source: libical
+Section: libs
 Priority: optional
 Maintainer: Wilfried Goesgens <w.goesgens@outgesourced.org>
-Uploaders: Fathi Boudra <fboudra@free.fr>
-Build-Depends: debhelper (>= 5), autotools-dev, tzdata, python-all-dev, python-support (>= 0.90), python (>= 2.3.5-11)
+Uploaders: Fathi Boudra <fabo@debian.org>
+Build-Depends: debhelper (>= 5.0.42), autotools-dev, tzdata,
+ python-all-dev (>= 2.4.4), python-support (>= 0.5.6), python (>= 2.4.4)
 XS-Python-Version: all
-Standards-Version: 3.7.3
-Section: libs
-Homepage: http://freeassociation.sourceforge.net/
+Standards-Version: 3.7.2
+Homepage: http://freeassociation.sourceforge.net
 
 Package: libical-dev
 Section: libdevel
 Architecture: any
-Depends: libical0 (= ${binary:Version})
+Depends: ${misc:Depends}, libical0 (= ${binary:Version})
 Description: iCalendar library implementation in C (development)
  libical is an open source implementation of the IETF's iCalendar calendaring
  and scheduling protocols (RFC 2445, 2446, and 2447). It parses iCal components
@@ -23,7 +24,7 @@ Description: iCalendar library implementation in C (development)
 Package: libical0
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, tzdata
 Description: iCalendar library implementation in C (runtime)
  libical is an open source implementation of the IETF's iCalendar calendaring
  and scheduling protocols (RFC 2445, 2446, and 2447). It parses iCal components
@@ -58,5 +59,3 @@ Description: iCalendar library implementation python language bindings
  and subcomponents.
  .
  This package contains the python language bindings.
-
-
