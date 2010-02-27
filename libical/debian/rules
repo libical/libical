@@ -1,14 +1,7 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-# This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
-
 
 # These are used for cross-compiling and for saving the configure script
 # from having to guess our platform (since we know it already)
@@ -16,11 +9,10 @@ DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
 CFLAGS = -Wall -g
-
-
 EXTRA_ARGS=
 PROFILE_ARGS=
-#to enable debugging: export DEB_BUILD_OPTIONS="debug profiling threadoff"
+
+# To enable debugging: export DEB_BUILD_OPTIONS="debug profiling threadoff"
 ifneq (,$(findstring profiling,$(DEB_BUILD_OPTIONS)))
 	PROFILE_ARGS= --with-gprof
 endif
@@ -47,16 +39,15 @@ major=2
 
 PYVERS=$(shell pyversions -vr)
 
-
 build: build-c $(PYVERS:%=build-python%/build-stamp)
 install: build install-c $(PYVERS:%=install-python%)
 clean: clean-c $(PYVERS:%=clean-python%)
 
-
 ### Python libraries build rules ###
 build-python%/configure-stamp:
-	mkdir build-python$*
 	dh_testdir
+
+	mkdir build-python$*
 	cd build-python$* && \
 	PYTHON=/usr/bin/python$* CFLAGS="$(BTCFLAGS) $(CFLAGS)" ../configure \
 		--host=$(DEB_HOST_GNU_TYPE) \
@@ -74,12 +65,14 @@ build-python%/configure-stamp:
 
 build-python%/build-stamp: build-c build-python%/configure-stamp
 	dh_testdir
+
 	# Trick into using already built build-c libs so we don't end up
 	# building the same ical lib more than once.
 	find "build-python$*/src" -maxdepth 1 -mindepth 1 | grep -v python$$ | xargs -r -t rm -rf
 	find "build-c/src" -maxdepth 1 -mindepth 1 | grep -v python$$ | xargs -r -t -I{} ln -s "../../{}" "build-python$*/src"
 	
 	$(MAKE) -C build-python$*/src/python pyexecdir=/usr/lib/pymodules/python$*
+
 	touch $@
 
 install-python%: build-python%/build-stamp
@@ -87,6 +80,7 @@ install-python%: build-python%/build-stamp
 	dh_testroot
 #	dh_clean -k 
 	dh_installdirs
+
 	# install with hack to move installed python libs to pymodule dir
 	$(MAKE) -C build-python$*/src/python install pyexecdir=/usr/lib/pymodules/python$* DESTDIR=$(CURDIR)/debian/tmp && \
 	mv -i $(CURDIR)/debian/tmp/usr/lib/python$*/*/* $(CURDIR)/debian/tmp/usr/lib/pymodules/python$*/
@@ -98,12 +92,19 @@ clean-python%:
 	rm -rf build-python$*
 	dh_prep
 
-
 ### C libraries build rules ###
 build-c/configure-stamp: configure
 #config.status: configure
-	mkdir build-c
 	dh_testdir
+
+ifneq "$(wildcard /usr/share/misc/config.sub)" ""
+	cp -f /usr/share/misc/config.sub config.sub
+endif
+ifneq "$(wildcard /usr/share/misc/config.guess)" ""
+	cp -f /usr/share/misc/config.guess config.guess
+endif
+
+	mkdir build-c
 	cd build-c && \
 	CFLAGS="$(BTCFLAGS) $(CFLAGS)" ../configure \
 		--host=$(DEB_HOST_GNU_TYPE) \
@@ -115,11 +116,13 @@ build-c/configure-stamp: configure
 		--localstatedir=/var \
 		$(EXTRA_ARGS) $(PROFILE_ARGS) \
 		--libexecdir="/usr/lib/libical"
+
 	touch $@
 
 build-c: build-c/build-stamp
 build-c/build-stamp:  build-c/configure-stamp
 	dh_testdir
+
 #	$(MAKE) clean
 	$(MAKE) -C build-c
 
@@ -128,15 +131,10 @@ build-c/build-stamp:  build-c/configure-stamp
 clean-c:
 	dh_testdir
 	dh_testroot
-	rm -rf build-c
-	dh_prep
 
-#	rm -f build-stamp 
-## Add here commands to clean up after the build process.
-#	#[ ! -f Makefile ] || $(MAKE) distclean
-#	rm -f config.sub config.guess
-#
-#	dh_clean 
+	rm -rf build-c
+
+	dh_prep
 
 install-c: build-c
 	dh_testdir
@@ -144,9 +142,7 @@ install-c: build-c
 	dh_clean -k 
 	dh_installdirs
 
-# Add here commands to install the package into debian/tmp
 	$(MAKE) -C build-c DESTDIR=$(CURDIR)/debian/tmp install
-
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -159,7 +155,7 @@ binary-arch: build install
 	dh_installchangelogs ChangeLog
 	dh_installdocs
 	dh_installexamples
-	dh_install  -s --sourcedir=debian/tmp
+	dh_install -s --sourcedir=debian/tmp
 #	dh_installmenu
 #	dh_installdebconf	
 #	dh_installlogrotate
