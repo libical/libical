@@ -192,7 +192,8 @@ int icalproperty_kind_and_string_to_enum(const int kind, const char* str)
 	    return 0;
 
     for (; i != ICALPROPERTY_LAST_ENUM; i++) {
-	if ( strcasecmp(enum_map[i-ICALPROPERTY_FIRST_ENUM].str, str) == 0) {
+	if(enum_map[i-ICALPROPERTY_FIRST_ENUM].prop == pkind &&
+           strcasecmp(enum_map[i-ICALPROPERTY_FIRST_ENUM].str, str) == 0) {
 	    return enum_map[i-ICALPROPERTY_FIRST_ENUM].prop_enum;
 	}
     }
