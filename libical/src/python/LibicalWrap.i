@@ -132,29 +132,5 @@ void icalparameter_set_parent(icalparameter* param,
 icalproperty* icalparameter_get_parent(icalparameter* value);
 %}
 
-// Add some methods to the icaltimetype struct
-%extend icaltimetype {
-    time_t as_timet(const icaltimezone *zone=NULL) {
-        return icaltime_as_timet_with_zone(*($self), zone);
-    }
-    
-    static struct icaltimetype from_timet(const time_t tm,
-            const int is_date=0, const icaltimezone *zone=NULL) {
-        return icaltime_from_timet_with_zone(tm, is_date, zone);
-    }
-}
-
-// This is a hackish way to support adding the __str__ method to
-// a class in python.  Its much easier than writing in C (that
-// I've figured out).
-%pythoncode %{
-
-def __icaltimetype_str__(self):
-    return "<icaltimetype (%d, %d, %d, %d, %d, %d, %d, %d)>" % (
-        self.year, self.month, self.day, self.hour, self.minute,
-        self.second, self.is_date, self.is_daylight)
-icaltimetype.__str__ = __icaltimetype_str__
-
-%}
-
+%include "LibicalWrap_icaltime.i"
 
