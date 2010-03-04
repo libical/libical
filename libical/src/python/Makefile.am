@@ -41,7 +41,7 @@ AM_CPPFLAGS =				\
 	-I$(top_srcdir)/src/libicalss	\
 	$(PY_CFLAGS)
 
-_LibicalWrap.c:  $(srcdir)/LibicalWrap.i $(top_builddir)/src/libical/ical.h $(top_builddir)/src/libicalss/icalss.h
+_LibicalWrap.c:  $(srcdir)/LibicalWrap.i $(srcdir)/*.i $(top_builddir)/src/libical/ical.h $(top_builddir)/src/libicalss/icalss.h
 	swig -python -Wall $(AM_CPPFLAGS) -o _LibicalWrap.c $(srcdir)/LibicalWrap.i 
 
 CLEANFILES = _LibicalWrap.c _LibicalWrap_wrap.doc  Libical.pyc LibicalWrap.py _LibicalWrap.so 
