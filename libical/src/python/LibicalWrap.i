@@ -118,7 +118,7 @@ typedef int time_t;
 %include "libicalss/icalss.h"
 
 %inline %{
-// declare some internal functions which are not in the header file.
+/* declare some internal functions which are not in the header file. */
 void icalproperty_set_parent(icalproperty* property,
 			     icalcomponent* component);
 icalcomponent* icalproperty_get_parent(const icalproperty* property);
