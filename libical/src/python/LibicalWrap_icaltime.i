@@ -50,7 +50,7 @@
 
     /** Return the day of the year for the Sunday of the week that the
        given time is within. */
-    // int start_doy_of_week() { return icaltime_start_doy_of_week(*($self)); }
+    /* int start_doy_of_week() { return icaltime_start_doy_of_week(*($self)); } */
 
     /** Return the day of the year for the first day of the week that the
        given time is within. */
@@ -73,7 +73,7 @@
 
     int is_date() { return icaltime_is_date(*($self)); }
     int is_utc() { return icaltime_is_utc(*($self)); }
-    // int is_floating() { return icaltime_is_floating(*($self)); }
+    /* int is_floating() { return icaltime_is_floating(*($self)); } */
     
     
     /* ***** Modify, compare and utility methods ***** */
@@ -118,7 +118,7 @@
 
 #if 0
     static icaltimetype from_string(const char* str, const icaltimezone *zone=NULL) {
-        // return _with_zone(str, zone);
+        /* return _with_zone(str, zone); */
         (void)zone;
         return icaltime_from_string(str);
     }
@@ -141,7 +141,7 @@
     }
 
     /** Return the number of days in this year */
-    // static int days_in_year (const int year) { return icaltime_days_in_year(year); }
+    /* static int days_in_year (const int year) { return icaltime_days_in_year(year); } */
 
 }
 
@@ -155,6 +155,13 @@ def __icaltimetype_str__(self):
         self.year, self.month, self.day, self.hour, self.minute,
         self.second, self.is_date, self.is_daylight)
 icaltimetype.__str__ = __icaltimetype_str__
+
+import datetime
+def icaltimetype_datetime(self):
+    "datetime() -> returns datetime object"
+    return datetime.datetime($self.year, $self.month, $self.day, $self.hour,
+        $self.minute, $self.second, 0, $self.timezone)
+icaltimetype.datetime = icaltimetype_datetime
 
 %}
 
