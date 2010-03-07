@@ -55,6 +55,7 @@ class Component(object):
 
     def __init__(self,ref=None,kind=None):
 
+        self._ref = None
         if ref != None:
             self._ref = ref
         elif kind != None:
@@ -191,7 +192,7 @@ class Component(object):
             comps.append(comp)
             c = icalcomponent_get_next_component(self._ref,kind);
 
-        return comps
+        return ComponentCollection(self, comps)
 
     def inner_component(self):
         
@@ -227,6 +228,10 @@ class Component(object):
     def __str__(self):
 
         return icalcomponent_as_ical_string(self._ref)
+
+    def name(self):
+        k = icalcomponent_isa(self._ref)
+        return icalcomponent_kind_to_string(k)
 
     def ref(self):
 	""" Return the internal reference to the libical icalproperty """
@@ -529,7 +534,7 @@ class GenericComponent(Component):
             for alarm in values:
                 self.add_component(alarm)
         else:
-            return ComponentCollection(self, self.components('VALARM'))
+            return self.components('VALARM')
 
     ####
     # Methods that deal with Properties that can occur multiple times are
