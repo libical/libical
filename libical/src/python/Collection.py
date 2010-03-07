@@ -100,7 +100,7 @@ class ComponentCollection:
         oldComps = self._components[beg:end]
         self._components.__setslice__(beg, end, sequence)
         for c in sequence:
-            self._components.addComponent(c)
+            self._parent.add_component(c)
         for c in oldComps:
             self._parent.remove_component(c)
 
@@ -118,7 +118,11 @@ class ComponentCollection:
 
     def __len__(self):
         return len(self._components)
-            
+    
+    def __add__(self, iterable):
+        for i in iterable:
+            self.append(i)
+    
     def append(self, property):
         self._components.append(property)
-        self._parent.addComponent(property)
+        self._parent.add_component(property)
