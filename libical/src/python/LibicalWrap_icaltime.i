@@ -27,14 +27,6 @@
 
     int __cmp__(const icaltimetype b) { return icaltime_compare(*($self), b); }
     
-    /* ***** Property methods ***** */
-
-    /** timezone property **/
-    const icaltimezone *icaltimetype_timezone_get() { return icaltime_get_timezone(*($self)); }
-    icaltimetype icaltimetype_timezone_set(const icaltimezone *zone) {
-        return icaltime_set_timezone($self, zone);
-    }
-
     /* ***** Conversion methods ***** */
 
     const char* as_ical_string() { return icaltime_as_ical_string(*($self)); }
@@ -71,6 +63,8 @@
        it, or setting one of the flags to an illegal value. */
     int is_valid_time() { return icaltime_is_valid_time(*($self)); }
 
+    /* is_date and is_utc are both over shadowed by the struct accessors,
+       but they do the same thing. */
     int is_date() { return icaltime_is_date(*($self)); }
     int is_utc() { return icaltime_is_utc(*($self)); }
     /* int is_floating() { return icaltime_is_floating(*($self)); } */
@@ -159,9 +153,30 @@ icaltimetype.__str__ = __icaltimetype_str__
 import datetime
 def icaltimetype_datetime(self):
     "datetime() -> returns datetime object"
-    return datetime.datetime($self.year, $self.month, $self.day, $self.hour,
-        $self.minute, $self.second, 0, $self.timezone)
+    return datetime.datetime(self.year, self.month, self.day, self.hour,
+        self.minute, self.second, 0, self.timezone)
 icaltimetype.datetime = icaltimetype_datetime
+
+# Remove accessors to private structure members
+icaltimetype_delprops = ["is_date", "is_utc", "zone"]
+
+_swig_remove_private_properties(icaltimetype, icaltimetype_delprops)
+
+
+# Set/Overwrite icaltimetype properties
+icaltimetype_props = {
+    "zone": (_LibicalWrap.icaltime_get_timezone, _LibicalWrap.icaltime_set_timezone, ),
+    "is_null_time": (_LibicalWrap.icaltime_is_null_time, ),
+    "is_valid_time": (_LibicalWrap.icaltime_is_valid_time, ),
+    # These do essentially the same thing as the default swig generated
+    # accessors is_date and is_utc, but by not defining the setter, we
+    # make them immutable from python
+    "is_date": (_LibicalWrap.icaltime_is_date, ),
+    "is_utc": (_LibicalWrap.icaltime_is_utc, ),
+#    "is_floating": (_LibicalWrap.icaltime_is_floating, ),
+}
+
+_swig_set_properties(icaltimetype, icaltimetype_props)
 
 %}
 
