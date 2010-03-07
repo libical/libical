@@ -88,7 +88,7 @@ class Property(object):
                 icalproperty_set_x_name(self._ref, type)
 
         if self._ref == None or self._ref == 'NULL':
-            raise Property.ConstructorFailedError("Failed to construct Property")
+            raise Property.ConstructorFailedError("Failed to construct Property: %s (%s)"%(type, ref))
             
         self._deleted = 0;
 
@@ -149,6 +149,9 @@ class Property(object):
             #e1=icalerror_supress("MALFORMEDDATA")
             if (self.name() == None or self.name().find("X-") == 0) and type(v) is StringType:
                 v = icallangbind_quote_as_ical(v)
+
+            if isinstance(v, unicode):
+                v = v.encode('utf8')
 
             icalproperty_set_value_from_string(self._ref,str(v),vt)
             #icalerror_restore("MALFORMEDDATA",e1)
