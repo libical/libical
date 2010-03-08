@@ -2000,6 +2000,8 @@ static const char* get_zone_directory(void)
 
 void set_zone_directory(char *path)
 {
+	if (zone_files_directory)
+		free_zone_directory();
 	zone_files_directory = malloc(strlen(path)+1);
 	if ( zone_files_directory != NULL )
 	{
@@ -2012,6 +2014,7 @@ void free_zone_directory(void)
 	if ( zone_files_directory != NULL )
 	{
 		free(zone_files_directory);
+		zone_files_directory = NULL;
 	}
 }
 
