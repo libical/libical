@@ -34,6 +34,11 @@
 
 %}
 
+%pythoncode %{
+import Error
+
+%}
+
 %feature("autodoc", "1");
 
 typedef int time_t;
@@ -113,7 +118,7 @@ typedef int time_t;
 #endif
 
 
-#include "fcntl.h" /* For Open flags */
+//#include "fcntl.h" /* For Open flags */
 %include "libical/ical.h"
 %include "libicalss/icalss.h"
 
@@ -151,20 +156,27 @@ def _swig_set_properties(cls, properties={}):
             setattr(cls, propname, _swig_property(*props))
 
 def _swig_remove_private_properties(cls, properties=tuple()):
+    # By default remove all properties
+    if not properties:
+        props = cls.__swig_getmethods__.copy()
+        props.update(cls.__swig_setmethods__)
+        #props.update(cls.__swig_delmethods__)
+        properties = props.keys()
+    
     for propname in properties:
-        if len(props) > 0 and cls.__swig_getmethods__.has_key(propname):
+        if cls.__swig_getmethods__.has_key(propname):
             del cls.__swig_getmethods__[propname]
-        if len(props) > 1 and cls.__swig_setmethods__.has_key(propname):
+        if cls.__swig_setmethods__.has_key(propname):
             del cls.__swig_setmethods__[propname]
         # Currently not used by swig
-        if len(props) > 2 and cls.__swig_delmethods__.has_key(propname):
-            del cls.__swig_delmethods__[propname]
+        #if cls.__swig_delmethods__.has_key(propname):
+        #    del cls.__swig_delmethods__[propname]
         
         if _newclass and hasattr(cls, propname):
             delattr(cls, propname)
 %}
 
 
-
+%include "LibicalWrap_icaltimezone.i"
 %include "LibicalWrap_icaltime.i"
 

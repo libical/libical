@@ -28,7 +28,7 @@
 from LibicalWrap import ICAL_PACKAGE, ICAL_VERSION
 from Component import Component, NewComponent, Event, Todo, Journal
 from Property import Property, RecurrenceSet, test_enum
-from Time import Time
+from Time import Time, UTC
 from Period import Period
 from Duration import Duration
 from Attendee import Attendee, Organizer
