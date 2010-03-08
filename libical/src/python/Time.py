@@ -30,6 +30,8 @@ from Property import Property
 from types import DictType, StringType, IntType, FloatType
 from Duration import Duration
 
+UTC = icaltimezone_get_utc_timezone()
+
 class Time(Property):
     """ Represent iCalendar DATE, TIME and DATE-TIME """
     def __init__(self, arg, name="DTSTART", zone=None):

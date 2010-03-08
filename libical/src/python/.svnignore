@@ -7,3 +7,4 @@ Makefile
 LibicalWrap.c
 LibicalWrap_wrap.doc
 config.c
+Makefile.in
