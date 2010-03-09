@@ -66,6 +66,30 @@ icalarray_new			(int		 element_size,
     return array;
 }
 
+
+icalarray *icalarray_copy	(icalarray	*originalarray)
+{
+    icalarray *array = icalarray_new(originalarray->element_size, originalarray->increment_size);
+
+    if (!array)
+        return NULL;
+
+    array->num_elements = originalarray->num_elements;
+    array->space_allocated = originalarray->space_allocated;
+    
+    array->data = malloc(array->space_allocated * array->element_size);
+
+    if (array->data) {
+	memcpy(array->data, originalarray->data,
+               array->element_size*array->space_allocated);
+    } else {
+	icalerror_set_errno(ICAL_ALLOCATION_ERROR);
+    }
+
+    return array;
+}
+
+
 /** @brief Destructor
  */
 
