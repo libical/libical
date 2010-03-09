@@ -21,9 +21,12 @@
   ======================================================================*/  
 
 %rename(icaltimezone) _icaltimezone;
+
 %inline %{
+#include "libical/icaltimezone.h"
 #include "libical/icaltimezoneimpl.h"
 %}
+%include "libical/icaltimezone.h"
 %include "libical/icaltimezoneimpl.h"
 
 
@@ -136,53 +139,15 @@ int	icaltimezone_dump_changes		(icaltimezone *zone,
 
 
 // Add some methods to the icaltimetype struct
-%extend icaltimezone {
+%extend _icaltimezone {
 
-    icaltimezone *__init__() {
-        return icaltimezone_new();
-    }
-    
-    void __del__() {
-        /* Always free the struct as well */
-        icaltimezone_free($self, 1);
-    }
-    
-    icaltimezone *copy() {
-        return icaltimezone_copy($self);
-    }
-    
     /* Might want to change this to somethingmore reasonable,
        like longitude or utc offset. */
     int __cmp__(icaltimezone *zone) {
         return strcmp(icaltimezone_get_tzid($self),
                       icaltimezone_get_tzid(zone));
     }
-    
-/**
- * @par Accessing timezones.
- */
 
-    /** Free any builtin timezone information **/
-    /* void icaltimezone_free_builtin_timezones(void); */
-
-    /** Returns the array of builtin icaltimezones. */
-    /* icalarray* icaltimezone_get_builtin_timezones	(void); */
-
-    /** Returns a single builtin timezone, given its Olson city name. */
-    static icaltimezone* get_builtin_timezone (const char *location) {
-        return icaltimezone_get_builtin_timezone(location);
-    }
-
-    /** Returns a single builtin timezone, given its offset. */
-    static icaltimezone* get_builtin_timezone_from_offset (int offset, const char *tzname) {
-        return icaltimezone_get_builtin_timezone_from_offset(offset, tzname);
-    }
-
-    /** Returns a single builtin timezone, given its TZID. */
-    static icaltimezone* get_builtin_timezone_from_tzid (const char *tzid) {
-        return icaltimezone_get_builtin_timezone_from_tzid(tzid);
-    }
-    
 }
 
 %pythoncode %{
@@ -213,9 +178,39 @@ _swig_set_properties(icaltimezone, icaltimezone_props)
 
 # UTC = _LibicalWrap.icaltimezone_get_utc_timezone()
 
-def icaltimezone_as_tzinfo(self):
-    return icaltzinfo(self)
-icaltimezone.as_tzinfo = icaltimezone_as_tzinfo
+def icaltimezone_copy(self):
+    tz = _LibicalWrap.icaltimezone_copy(self)
+    tz.this.acquire()
+    return tz
+
+def icaltimezone_new(self):
+    # Hand off the underlying pointer by setting the this attribute
+    print "newing icaltimezone"
+    obj = _LibicalWrap.icaltimezone_new()
+    obj.this.acquire()
+    try: self.this.append(obj.this)
+    except: self.this = obj.this
+    
+def icaltimezone_delete(self):
+    # do not delete the struct because swig will do this
+    if self.this.own():
+        _LibicalWrap.icaltimezone_free(self, 0)
+    
+icaltimezone_methods = {
+    'as_tzinfo': icaltzinfo,
+    'copy': icaltimezone_copy,
+    '__init__': icaltimezone_new, 
+    '__del__': icaltimezone_delete, 
+}
+_swig_add_instance_methods(icaltimezone, icaltimezone_methods)
+
+icaltimezone.get_builtin_timezone = staticmethod(_LibicalWrap.icaltimezone_get_builtin_timezone)
+icaltimezone.get_builtin_timezone_from_offset = staticmethod(_LibicalWrap.icaltimezone_get_builtin_timezone_from_offset)
+icaltimezone.get_builtin_timezone_from_tzid = staticmethod(_LibicalWrap.icaltimezone_get_builtin_timezone_from_tzid)
+
+#icaltimezone.free_builtin_timezones = staticmethod(_LibicalWrap.icaltimezone_free_builtin_timezones)
+#icaltimezone.get_builtin_timezones = staticmethod(_LibicalWrap.icaltimezone_get_builtin_timezones)
+
 
 %}
 
