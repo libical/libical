@@ -174,6 +174,14 @@ def _swig_remove_private_properties(cls, properties=tuple()):
         
         if _newclass and hasattr(cls, propname):
             delattr(cls, propname)
+
+import new
+def _swig_add_instance_methods(klass, meth_dict={}):
+    for methname, func in meth_dict.items():
+        meth = new.instancemethod(func, None, klass)
+        if not methname: methname = func.__name__
+        func.__name__ = methname
+        setattr(klass, methname, meth)
 %}
 
 
