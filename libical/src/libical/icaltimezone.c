@@ -197,10 +197,18 @@ icaltimezone_copy			(icaltimezone *originalzone)
     }
 
     memcpy (zone, originalzone, sizeof (icaltimezone));
+    if (zone->tzid != NULL) 
+	zone->tzid = strdup (zone->tzid);
     if (zone->location != NULL) 
 	zone->location = strdup (zone->location);
     if (zone->tznames != NULL)
 	zone->tznames = strdup (zone->tznames);
+    if (zone->changes != NULL)
+        zone->changes = icalarray_copy(zone->changes);
+    
+    /* Let the caller set the component because then they will
+       know to be careful not to free this reference twice. */
+    zone->component = NULL;
 
     return zone;
 }
