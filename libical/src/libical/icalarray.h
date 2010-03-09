@@ -46,6 +46,7 @@ struct _icalarray {
 
 icalarray *icalarray_new		(int		 element_size,
 					 int		 increment_size);
+icalarray *icalarray_copy		(icalarray	*array);
 void	   icalarray_free		(icalarray	*array);
 
 void	   icalarray_append		(icalarray	*array,
