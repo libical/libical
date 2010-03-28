@@ -325,7 +325,7 @@ void test_properties()
     icalproperty *clone;
     char test_cn_str[128] = "";
     char *test_cn_str_good = "A Common Name 1A Common Name 2A Common Name 3A Common Name 4";
-    char *test_ical_str_good = "COMMENT;CN=A Common Name 1;CN=A Common Name 2;CN=A Common Name 3;CN=A \n Common Name 4:Another Comment\n";
+    char *test_ical_str_good = "COMMENT;CN=A Common Name 1;CN=A Common Name 2;CN=A Common Name 3;CN=A \r\n Common Name 4:Another Comment\r\n";
 
     prop = icalproperty_vanew_comment(
 	"Another Comment",
@@ -374,10 +374,10 @@ void test_utf8()
 {
     icalproperty *prop;
     char *utf8text = "aáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaá";
-    char *test_ical_str_good = "DESCRIPTION:\n"
-" aáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaá\n"
-" óaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóa\n"
-" áóaáóaáóaáóaáóaáóaáóaáóaáóaá\n";
+    char *test_ical_str_good = "DESCRIPTION:\r\n"
+" aáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaá\r\n"
+" óaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóa\r\n"
+" áóaáóaáóaáóaáóaáóaáóaáóaáóaá\r\n";
 
     prop = icalproperty_new_description(utf8text);
 
@@ -437,13 +437,13 @@ void test_parameters()
 
 
 char *good_child =
-"BEGIN:VEVENT\n"
-"VERSION:2.0\n"
-"DESCRIPTION:This is an event\n"
-"COMMENT;CN=A Common Name 1;CN=A Common Name 2;CN=A Common Name 3;CN=A \n"
-" Common Name 4:Another Comment\n"
-"X-LIC-ERROR;X-LIC-ERRORTYPE=COMPONENT-PARSE-ERROR:This is only a test\n"
-"END:VEVENT\n";
+"BEGIN:VEVENT\r\n"
+"VERSION:2.0\r\n"
+"DESCRIPTION:This is an event\r\n"
+"COMMENT;CN=A Common Name 1;CN=A Common Name 2;CN=A Common Name 3;CN=A \r\n"
+" Common Name 4:Another Comment\r\n"
+"X-LIC-ERROR;X-LIC-ERRORTYPE=COMPONENT-PARSE-ERROR:This is only a test\r\n"
+"END:VEVENT\r\n";
 
 void test_components()
 {
@@ -1095,9 +1095,9 @@ void icalrecurrencetype_test()
 void test_recur_parameter_bug(){
 
     static const char test_icalcomp_str[] =
-"BEGIN:VEVENT\n"
-"RRULE;X-EVOLUTION-ENDDATE=20030209T081500:FREQ=DAILY;COUNT=10;INTERVAL=6\n"
-"END:VEVENT\n\n";
+"BEGIN:VEVENT\r\n"
+"RRULE;X-EVOLUTION-ENDDATE=20030209T081500:FREQ=DAILY;COUNT=10;INTERVAL=6\r\n"
+"END:VEVENT\r\n";
 
     icalcomponent *icalcomp;
     icalproperty *prop;
@@ -1256,6 +1256,8 @@ void test_strings(){
 }
 
 
+#ifdef INVALID_TEST
+/* This test is invalid because parameters may not have control chars, such as '\n' */
 void test_tzid_escape(){
     icalparameter *tzid;
     icalproperty *prop;
@@ -1272,6 +1274,7 @@ void test_tzid_escape(){
 
     icalproperty_free(prop);
 }
+#endif
 
 
 void test_requeststat()
@@ -3046,12 +3049,12 @@ void test_action()
     char *str;
 
     static const char test_icalcomp_str[] =
-"BEGIN:VEVENT\n"
-"ACTION:EMAIL\n"
-"ACTION:PROCEDURE\n"
-"ACTION:AUDIO\n"
-"ACTION:FUBAR\n"
-"END:VEVENT\n";
+"BEGIN:VEVENT\r\n"
+"ACTION:EMAIL\r\n"
+"ACTION:PROCEDURE\r\n"
+"ACTION:AUDIO\r\n"
+"ACTION:FUBAR\r\n"
+"END:VEVENT\r\n";
 
 
     c = icalparser_parse_string ((char *) test_icalcomp_str);
@@ -3093,12 +3096,12 @@ void test_trigger()
     const char* str;
 
     static const char test_icalcomp_str[] =
-"BEGIN:VEVENT\n"
-"TRIGGER;VALUE=DATE-TIME:19980403T120000\n"
-"TRIGGER;VALUE=DURATION:-PT15M\n"
-"TRIGGER;VALUE=DATE-TIME:19980403T120000\n"
-"TRIGGER;VALUE=DURATION:-PT15M\n"
-"END:VEVENT\n";
+"BEGIN:VEVENT\r\n"
+"TRIGGER;VALUE=DATE-TIME:19980403T120000\r\n"
+"TRIGGER;VALUE=DURATION:-PT15M\r\n"
+"TRIGGER;VALUE=DATE-TIME:19980403T120000\r\n"
+"TRIGGER;VALUE=DURATION:-PT15M\r\n"
+"END:VEVENT\r\n";
 
 
     c = icalparser_parse_string ((char *) test_icalcomp_str);
@@ -3127,7 +3130,7 @@ void test_trigger()
     p = icalproperty_new_trigger(tr);
     str = icalproperty_as_ical_string(p);
 
-    is("TRIGGER;VALUE=DATE-TIME:19970101T120000", str, "TRIGGER;VALUE=DATE-TIME:19970101T120000\n");
+    is("TRIGGER;VALUE=DATE-TIME:19970101T120000", str, "TRIGGER;VALUE=DATE-TIME:19970101T120000\r\n");
     icalproperty_free(p);
 
     /* TRIGGER, as a DURATION */
@@ -3136,7 +3139,7 @@ void test_trigger()
     p = icalproperty_new_trigger(tr);
     str = icalproperty_as_ical_string(p);
 
-    is("TRIGGER;VALUE=DURATION:P3DT3H50M45S", str, "TRIGGER;VALUE=DURATION:P3DT3H50M45S\n");
+    is("TRIGGER;VALUE=DURATION:P3DT3H50M45S", str, "TRIGGER;VALUE=DURATION:P3DT3H50M45S\r\n");
     icalproperty_free(p);
 
     /* TRIGGER, as a DATETIME, VALUE=DATETIME*/
@@ -3146,7 +3149,7 @@ void test_trigger()
     icalproperty_add_parameter(p,icalparameter_new_value( ICAL_VALUE_DATETIME));
     str = icalproperty_as_ical_string(p);
 
-    is("TRIGGER;VALUE=DATE-TIME:19970101T120000", str, "TRIGGER;VALUE=DATE-TIME:19970101T120000\n");
+    is("TRIGGER;VALUE=DATE-TIME:19970101T120000", str, "TRIGGER;VALUE=DATE-TIME:19970101T120000\r\n");
     icalproperty_free(p);
 
     /*TRIGGER, as a DURATION, VALUE=DATETIME */
@@ -3157,7 +3160,7 @@ void test_trigger()
 
     str = icalproperty_as_ical_string(p);
 
-    is("TRIGGER;VALUE=DURATION:P3DT3H50M45S", str, "TRIGGER;VALUE=DURATION:P3DT3H50M45S\n");
+    is("TRIGGER;VALUE=DURATION:P3DT3H50M45S", str, "TRIGGER;VALUE=DURATION:P3DT3H50M45S\r\n");
     icalproperty_free(p);
 
     /* TRIGGER, as a DATETIME, VALUE=DURATION*/
@@ -3167,7 +3170,7 @@ void test_trigger()
     icalproperty_add_parameter(p,icalparameter_new_value( ICAL_VALUE_DURATION));
     str = icalproperty_as_ical_string(p);
 
-    is("TRIGGER;VALUE=DATE-TIME:19970101T120000", str, "TRIGGER;VALUE=DATE-TIME:19970101T120000\n");
+    is("TRIGGER;VALUE=DATE-TIME:19970101T120000", str, "TRIGGER;VALUE=DATE-TIME:19970101T120000\r\n");
     icalproperty_free(p);
 
     /*TRIGGER, as a DURATION, VALUE=DURATION */
@@ -3178,7 +3181,7 @@ void test_trigger()
 
     str = icalproperty_as_ical_string(p);
 
-    is("TRIGGER;VALUE=DURATION:P3DT3H50M45S", str, "TRIGGER;VALUE=DURATION:P3DT3H50M45S\n");
+    is("TRIGGER;VALUE=DURATION:P3DT3H50M45S", str, "TRIGGER;VALUE=DURATION:P3DT3H50M45S\r\n");
     icalproperty_free(p);
 
 
@@ -3189,7 +3192,7 @@ void test_trigger()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_BINARY));
     str = icalproperty_as_ical_string(p);
 
-    is("TRIGGER;VALUE=DATE-TIME:19970101T120000", str, "TRIGGER;VALUE=DATE-TIME:19970101T120000\n");
+    is("TRIGGER;VALUE=DATE-TIME:19970101T120000", str, "TRIGGER;VALUE=DATE-TIME:19970101T120000\r\n");
     icalproperty_free(p);
 
     /*TRIGGER, as a DURATION, VALUE=BINARY   */
@@ -3200,7 +3203,7 @@ void test_trigger()
 
     str = icalproperty_as_ical_string(p);
 
-    is("TRIGGER;VALUE=DURATION:P3DT3H50M45S", str, "TRIGGER;VALUE=DURATION:P3DT3H50M45S\n");
+    is("TRIGGER;VALUE=DURATION:P3DT3H50M45S", str, "TRIGGER;VALUE=DURATION:P3DT3H50M45S\r\n");
     icalproperty_free(p);
 }
 
@@ -3224,7 +3227,7 @@ void test_rdate()
     str = icalproperty_as_ical_string(p);
 
     is("RDATE as DATE-TIME",
-       "RDATE;VALUE=DATE-TIME:19970101T120000\n",str);
+       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n",str);
     icalproperty_free(p);
 
     /* RDATE, as PERIOD */
@@ -3233,7 +3236,7 @@ void test_rdate()
     p = icalproperty_new_rdate(dtp);
 
     str = icalproperty_as_ical_string(p);
-    is("RDATE, as PERIOD", "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\n",str);
+    is("RDATE, as PERIOD", "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n",str);
     icalproperty_free(p);
 
     /* RDATE, as DATE-TIME, VALUE=DATE-TIME */
@@ -3244,7 +3247,7 @@ void test_rdate()
     str = icalproperty_as_ical_string(p);
 
     is("RDATE, as DATE-TIME, VALUE=DATE-TIME",
-       "RDATE;VALUE=DATE-TIME:19970101T120000\n",str);
+       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n",str);
     icalproperty_free(p);
 
 
@@ -3255,7 +3258,7 @@ void test_rdate()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_DATETIME));
     str = icalproperty_as_ical_string(p);
     is("RDATE, as PERIOD, VALUE=DATE-TIME",
-       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\n",str);
+       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n",str);
     icalproperty_free(p);
 
 
@@ -3267,7 +3270,7 @@ void test_rdate()
     str = icalproperty_as_ical_string(p);
 
     is("RDATE, as DATE-TIME, VALUE=PERIOD",
-       "RDATE;VALUE=DATE-TIME:19970101T120000\n",str);
+       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n",str);
     icalproperty_free(p);
 
 
@@ -3279,7 +3282,7 @@ void test_rdate()
     str = icalproperty_as_ical_string(p);
 
     is("RDATE, as PERIOD, VALUE=PERIOD",
-       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\n",str);
+       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n",str);
     icalproperty_free(p);
 
 
@@ -3291,7 +3294,7 @@ void test_rdate()
     str = icalproperty_as_ical_string(p);
 
     is("RDATE, as DATE-TIME, VALUE=BINARY",
-       "RDATE;VALUE=DATE-TIME:19970101T120000\n",str);
+       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n",str);
     icalproperty_free(p);
 
 
@@ -3303,7 +3306,7 @@ void test_rdate()
     str = icalproperty_as_ical_string(p);
 
     is("RDAE, as PERIOD, VALUE=BINARY",
-       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\n",str);
+       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n",str);
     icalproperty_free(p);
 }
 
@@ -3327,19 +3330,19 @@ void test_langbind()
 "END:VEVENT\n";
 
     static const char *test_str_parsed_good =
-"BEGIN:VEVENT\n"
-"ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:\n"
-" employee-A@host.com\n"
-"COMMENT: Comment that spans a line\n"
-"COMMENT: Comment with \\\"quotable\\\" 'characters' and other \\t bad magic \n"
-" things \\f Yeah.\n"
-"DTSTART:19970101T120000\n"
-"DTSTART:19970101T120000Z\n"
-"DTSTART;VALUE=DATE:19970101\n"
-"DURATION:P3DT4H25M\n"
-"FREEBUSY:19970101T120000/19970101T120000\n"
-"FREEBUSY:19970101T120000/P3DT4H25M\n"
-"END:VEVENT\n";
+"BEGIN:VEVENT\r\n"
+"ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:\r\n"
+" employee-A@host.com\r\n"
+"COMMENT: Comment that spans a line\r\n"
+"COMMENT: Comment with \\\"quotable\\\" 'characters' and other \\t bad magic \r\n"
+" things \\f Yeah.\r\n"
+"DTSTART:19970101T120000\r\n"
+"DTSTART:19970101T120000Z\r\n"
+"DTSTART;VALUE=DATE:19970101\r\n"
+"DURATION:P3DT4H25M\r\n"
+"FREEBUSY:19970101T120000/19970101T120000\r\n"
+"FREEBUSY:19970101T120000/P3DT4H25M\r\n"
+"END:VEVENT\r\n";
 
     if (VERBOSE) printf("%s\n",test_str);
 
@@ -3375,15 +3378,15 @@ void test_langbind()
 
     is ("Set attendee parameter",
 	icalproperty_as_ical_string(p),
-	"ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL:MAILTO:\n"
-	" employee-A@host.com\n");
+	"ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL:MAILTO:\r\n"
+	" employee-A@host.com\r\n");
 
     icalproperty_set_value_from_string(p,"mary@foo.org","TEXT");
 
     is ("Set attendee parameter value",
 	icalproperty_as_ical_string(p),
-	"ATTENDEE;VALUE=TEXT;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL:\n"
-" mary@foo.org\n");
+	"ATTENDEE;VALUE=TEXT;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL:\r\n"
+" mary@foo.org\r\n");
 
 	icalcomponent_free(c);
 }
@@ -3615,6 +3618,9 @@ void test_bad_dtstart_in_timezone(void)
 	myTZ = icaltimezone_get_builtin_timezone("Europe/Zurich");
 	vtimezone = icaltimezone_get_component(myTZ);
 	str = icalcomponent_as_ical_string(vtimezone);
+        
+        if(VERBOSE)
+            printf("%s\n", str);
 	ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:19701025T030000") != NULL));
 	ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:19700329T020000") != NULL));
 }
@@ -3636,6 +3642,7 @@ int main(int argc, char *argv[])
     int do_header = 0;
 
     set_zone_directory("../../zoneinfo");
+    icaltimezone_set_tzid_prefix("/softwarestudio.org/Olson_20010626_2/");
     putenv("TZ=");
 
     test_start(0);
@@ -3714,7 +3721,9 @@ int main(int argc, char *argv[])
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
     test_run("Test strings", test_strings, do_test, do_header);
+#ifdef INVALID_TEST
     test_run("Test TZID escaping", test_tzid_escape, do_test, do_header);
+#endif
     test_run("Test Compare", test_compare, do_test, do_header);
     test_run("Create Simple Component", create_simple_component, do_test, do_header);
     test_run("Create Components", create_new_component, do_test, do_header);
