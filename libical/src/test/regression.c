@@ -3260,8 +3260,7 @@ void test_rdate()
     p = icalproperty_new_rdate(dtp);
     str = icalproperty_as_ical_string(p);
 
-    is("RDATE as DATE-TIME",
-       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n",str);
+    is("RDATE as DATE-TIME", str, "RDATE;VALUE=DATE-TIME:19970101T120000\r\n");
     icalproperty_free(p);
 
     /* RDATE, as PERIOD */
@@ -3270,7 +3269,8 @@ void test_rdate()
     p = icalproperty_new_rdate(dtp);
 
     str = icalproperty_as_ical_string(p);
-    is("RDATE, as PERIOD", "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n",str);
+    is("RDATE, as PERIOD", str,
+       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n");
     icalproperty_free(p);
 
     /* RDATE, as DATE-TIME, VALUE=DATE-TIME */
@@ -3280,8 +3280,8 @@ void test_rdate()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_DATETIME));
     str = icalproperty_as_ical_string(p);
 
-    is("RDATE, as DATE-TIME, VALUE=DATE-TIME",
-       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n",str);
+    is("RDATE, as DATE-TIME, VALUE=DATE-TIME", str,
+       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n");
     icalproperty_free(p);
 
 
@@ -3292,8 +3292,8 @@ void test_rdate()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_DATETIME));
     str = icalproperty_as_ical_string(p);
 #if ADD_TESTS_REQUIRING_INVESTIGATION
-    is("RDATE, as PERIOD, VALUE=DATE-TIME",
-       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n",str);
+    is("RDATE, as PERIOD, VALUE=DATE-TIME", str,
+       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n");
 #endif
     icalproperty_free(p);
 
@@ -3306,8 +3306,8 @@ void test_rdate()
     str = icalproperty_as_ical_string(p);
 
 #if ADD_TESTS_REQUIRING_INVESTIGATION
-    is("RDATE, as DATE-TIME, VALUE=PERIOD",
-       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n",str);
+    is("RDATE, as DATE-TIME, VALUE=PERIOD", str,
+       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n");
 #endif
     icalproperty_free(p);
 
@@ -3319,8 +3319,8 @@ void test_rdate()
     icalproperty_add_parameter(p,icalparameter_new_value(ICAL_VALUE_PERIOD));
     str = icalproperty_as_ical_string(p);
 
-    is("RDATE, as PERIOD, VALUE=PERIOD",
-       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n",str);
+    is("RDATE, as PERIOD, VALUE=PERIOD", str,
+       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n");
     icalproperty_free(p);
 
 
@@ -3332,8 +3332,8 @@ void test_rdate()
     str = icalproperty_as_ical_string(p);
 
 #if ADD_TESTS_REQUIRING_INVESTIGATION
-    is("RDATE, as DATE-TIME, VALUE=BINARY",
-       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n",str);
+    is("RDATE, as DATE-TIME, VALUE=BINARY", str,
+       "RDATE;VALUE=DATE-TIME:19970101T120000\r\n");
 #endif
     icalproperty_free(p);
 
@@ -3346,8 +3346,8 @@ void test_rdate()
     str = icalproperty_as_ical_string(p);
 
 #if ADD_TESTS_REQUIRING_INVESTIGATION
-    is("RDAE, as PERIOD, VALUE=BINARY",
-       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n",str);
+    is("RDATE, as PERIOD, VALUE=BINARY", str,
+       "RDATE;VALUE=PERIOD:19970101T120000/PT3H10M15S\r\n");
 #endif
     icalproperty_free(p);
 }
