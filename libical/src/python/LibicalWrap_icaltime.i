@@ -151,11 +151,31 @@ def __icaltimetype_str__(self):
 icaltimetype.__str__ = __icaltimetype_str__
 
 import datetime
-def icaltimetype_datetime(self):
-    "datetime() -> returns datetime object"
+def icaltimetype_as_datetime(self):
+    "as_datetime() -> returns datetime object"
     return datetime.datetime(self.year, self.month, self.day, self.hour,
         self.minute, self.second, 0, self.timezone)
-icaltimetype.datetime = icaltimetype_datetime
+icaltimetype.as_datetime = icaltimetype_as_datetime
+
+def icaltimetype_from_datetime(dt):
+    "from_datetime() -> returns icaltimetype object"
+    tt = icaltimetype()
+    
+    tt.year = dt.year
+    tt.month = dt.month
+    tt.day = dt.day
+    tt.hour = dt.hour
+    tt.minute = dt.minute
+    tt.second = dt.second
+    if dt.tzinfo:
+        # TODO: convert to the right timezone, assume for now we are UTC
+        tt.zone = 0
+        tt.is_utc = True
+    tt.is_date = False
+    tt.isdaylight = False
+    
+    return tt
+icaltimetype.from_datetime = staticmethod(icaltimetype_from_datetime)
 
 # Remove accessors to private structure members
 icaltimetype_delprops = ["is_date", "is_utc", "zone"]
