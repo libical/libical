@@ -473,6 +473,7 @@ enum sspm_minor_type sspm_find_minor_content_type(char* type)
     char *p = strchr(ltype,'/');
 
     if (p==0){
+        free(ltype);
 	return SSPM_UNKNOWN_MINOR_TYPE; 
     }
 
