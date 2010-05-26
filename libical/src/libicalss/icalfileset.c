@@ -408,6 +408,7 @@ icalerrorenum icalfileset_commit(icalset* set)
 	if ( sz != strlen(str)){
 	    perror("write");
 	    icalerror_set_errno(ICAL_FILE_ERROR);
+	    free(str);
 	    return ICAL_FILE_ERROR;
 	}
 

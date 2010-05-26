@@ -174,6 +174,7 @@ icalparameter* icalparameter_new_from_string(const char *str)
 
     if(eq == 0){
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+	free(cpy);
         return 0;
     }
 
@@ -185,6 +186,7 @@ icalparameter* icalparameter_new_from_string(const char *str)
 
     if(kind == ICAL_NO_PARAMETER){
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+	free(cpy);
         return 0;
     }
 

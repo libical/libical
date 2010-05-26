@@ -156,6 +156,7 @@ icalproperty* icalclassify_find_attendee(icalcomponent *c,
 	 this_upn = strchr(this_attendee,':');
 
         if(this_upn == 0){
+	    free(this_attendee);
             continue;
         } else {
             this_upn++;

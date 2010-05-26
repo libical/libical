@@ -505,8 +505,10 @@ icalproperty_as_ical_string_r(icalproperty* prop)
 
     if (value != 0){
 	char *str = icalvalue_as_ical_string_r(value);
-	icalerror_assert((str !=0),"Could not get string representation of a value");
-	icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+	if (str != 0)
+	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+	else
+	    icalmemory_append_string(&buf, &buf_ptr, &buf_size,"ERROR: No Value"); 
 	free(str);
     } else {
 	icalmemory_append_string(&buf, &buf_ptr, &buf_size,"ERROR: No Value"); 
