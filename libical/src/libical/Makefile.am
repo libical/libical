@@ -51,7 +51,7 @@ INCLUDES =				\
 	-I$(top_builddir)/src/libical	\
 	-I$(srcdir)
 
-libical_la_LDFLAGS = -version-info 45:0:45
+libical_la_LDFLAGS = -version-info 46:0:46
 
 if OS_WIN32
 libical_la_LDFLAGS += -no-undefined
