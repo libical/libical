@@ -177,7 +177,7 @@ install(FILES
 #	-I$(top_builddir)/src/libical	\
 #	$(BDB_INCLUDE)
 #
-#libicalss_la_LDFLAGS = -version-info 45:0:45
+#libicalss_la_LDFLAGS = -version-info 46:0:46
 #libicalss_la_LIBADD = $(BDB_LIBFILES) 
 #
 #if DEV
