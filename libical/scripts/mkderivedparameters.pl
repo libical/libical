@@ -263,7 +263,9 @@ void icalparameter_set_${lc}(icalparameter* param, ${type} v)
    $pointer_check_v
    icalerror_check_arg_rv( (param!=0), "param");
    icalerror_clear_errno();
-   
+
+   if (param->string != NULL)
+      free (param->string);
    $set_code
 }
 

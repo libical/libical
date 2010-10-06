@@ -787,6 +787,7 @@ icalproperty_remove_parameter_by_name(icalproperty* prop, const char *name)
 
         if (0 == strcmp(kind_string, name)) {
             pvl_remove (prop->parameters, p);
+	    icalparameter_free(param);
             break;
         }
     }                       
