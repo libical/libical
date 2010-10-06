@@ -879,7 +879,14 @@ static char* icalvalue_text_as_ical_string_r(const icalvalue* value) {
 	    }
 
 	    case ';':
-	    case ',':
+            case ',':
+                /* unescaped COMMA is allowed in CATEGORIES property as its
+                   considered a list delimiter here, see:
+                   http://tools.ietf.org/html/rfc2445#section-4.3.11 */
+                if (icalproperty_isa(value->parent) == ICAL_CATEGORIES_PROPERTY) {
+                    icalmemory_append_char(&str,&str_p,&buf_sz,*p);
+                    break;
+                }
 	    case '"':
 	    case '\\':{
 		icalmemory_append_char(&str,&str_p,&buf_sz,'\\');
