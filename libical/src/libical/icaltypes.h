@@ -67,7 +67,7 @@ don't use it after the original string has been freed.
 
 BTW, you would get that original string from
 *icalproperty_get_requeststatus() or icalvalue_get_text(), when
-operating on a the value of a request_status property. */
+operating on the value of a request_status property. */
 
 struct icalreqstattype {
 
