@@ -1064,6 +1064,10 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
       if (icaltime_is_null_time(rrule_time)) 
 	break;
 
+      /* if we have iterated past end time, then no need to check any further */
+      if (icaltime_compare(rrule_time, end) > 0)
+	break;
+
       dur = icaltime_subtract(rrule_time, dtstart);
 
       recurspan.start = basespan.start + icaldurationtype_as_int(dur);
