@@ -930,10 +930,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
                 /* Change for mozilla */
                 /* have the option of being flexible towards unsupported parameters */
-                #ifndef ICAL_ERRORS_ARE_FATAL
-                continue;
-                #endif
-
+		#if ICAL_ERRORS_ARE_FATAL == 1
 		insert_error(tail, str, "Cant parse parameter name",
 			     ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
 		tail = 0;
@@ -947,6 +944,9 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 			name = 0;
 		}
 		return 0;
+		#else
+		continue;
+		#endif
 	    }
 
 	    /* if (pvalue) {
