@@ -364,7 +364,11 @@ void unset_tz(char *tzstr)
 #ifdef HAVE_UNSETENV
 	unsetenv("TZ");
 #else
+#ifdef WIN32
+	putenv("TZ=");
+#else
 	putenv("TZ");
+#endif
 #endif
     } 
 
