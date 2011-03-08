@@ -361,7 +361,7 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
     char *t, *n;
     int i=0;
     int sign = 1;
-    int weekno = 0;
+    char weekno = 0;           /* note: Novell/Groupwise sends BYDAY=255SU, so we fit in a signed char to get -1 SU for last sunday. */
     icalrecurrencetype_weekday wd;
     short *array = parser->rt.by_day;
     char* end;
