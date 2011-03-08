@@ -3272,7 +3272,7 @@ if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || \
 void icalerror_set_errno(icalerrorenum x);
 #endif
 
-#ifdef ICAL_ERRORS_ARE_FATAL
+#if ICAL_ERRORS_ARE_FATAL == 1
 #undef NDEBUG
 #endif
 
@@ -3282,7 +3282,7 @@ void icalerror_set_errno(icalerrorenum x);
 #define icalerror_check_component_type(value,type);
 
 /* Assert with a message */
-#ifdef ICAL_ERRORS_ARE_FATAL
+#if ICAL_ERRORS_ARE_FATAL == 1
 
 #ifdef __GNUC__
 #define icalerror_assert(test,message) if(!(test)){fprintf(stderr,"%s(), %s:%d: %s\n",__FUNCTION__,__FILE__,__LINE__,message);icalerror_stop_here(); abort();}
