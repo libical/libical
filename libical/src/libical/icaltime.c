@@ -364,8 +364,8 @@ void unset_tz(char *tzstr)
 #ifdef HAVE_UNSETENV
 	unsetenv("TZ");
 #else
-#ifdef WIN32
-	putenv("TZ=");
+#ifdef _MSC_VER 
+	putenv("TZ="); // The equals is required to remove with MS Visual C++
 #else
 	putenv("TZ");
 #endif
