@@ -231,6 +231,11 @@ EOM
     if ($lc eq "exdate") {
 	print<<EOM;
 $type icalproperty_get_${lc}(const icalproperty* prop){
+#ifndef _MSC_VER
+	struct icaltimetype itt;
+	icalparameter* param;
+	icaltimezone *zone;
+#endif
 	icalerror_check_arg( (prop!=0),"prop");
 #ifndef _MSC_VER
         /*
@@ -239,13 +244,10 @@ $type icalproperty_get_${lc}(const icalproperty* prop){
 	 * it doesnot work automatically like in the other functions 
 	 * like icalproperty_get_dtstart().
 	 */
-	struct icaltimetype itt =
-		icalvalue_get_datetime(icalproperty_get_value(prop));
-	icalparameter* param = icalproperty_get_first_parameter(prop,
-								ICAL_TZID_PARAMETER);
+	itt = icalvalue_get_datetime(icalproperty_get_value(prop));
+	param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER);
 	if (param) {
-	        const icaltimezone *zone =
-		        icaltimezone_get_builtin_timezone(icalparameter_get_tzid(param));
+	        zone = icaltimezone_get_builtin_timezone(icalparameter_get_tzid(param));
 		icaltime_set_timezone(&itt, zone);
         }
 	return itt;
