@@ -254,24 +254,22 @@ icalcomponent_free (icalcomponent* c)
 
     if(c != 0 ){
        
-		if ( c->properties != 0 )
-		{
-		   while( (prop=pvl_pop(c->properties)) != 0){
-		   assert(prop != 0);
-			   icalproperty_set_parent(prop,0);
-		   icalproperty_free(prop);
-		   }
-	        pvl_free(c->properties);
-		}
+	if ( c->properties != 0 )
+	{
+	    while( (prop=pvl_pop(c->properties)) != 0){
+		icalproperty_set_parent(prop,0);
+		icalproperty_free(prop);
+	    }
+	    pvl_free(c->properties);
+	}
       
 
-       while( (comp=pvl_data(pvl_head(c->components))) != 0){
-	   assert(comp!=0);
-	   icalcomponent_remove_component(c,comp);
-	   icalcomponent_free(comp);
-       }
+	while( (comp=pvl_data(pvl_head(c->components))) != 0){
+	    icalcomponent_remove_component(c,comp);
+	    icalcomponent_free(comp);
+	}
        
-       pvl_free(c->components);
+	pvl_free(c->components);
 
 	if (c->x_name != 0) {
 	    free(c->x_name);
