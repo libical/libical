@@ -38,7 +38,7 @@
 #include <time.h> /* for time() */
 
 #include <libical/ical.h>
-#include <libical/icalss.h>
+#include <libicalss/icalss.h>
 #include "regression.h"
 
 #define OUTPUT_FILE "filesetout.ics"

@@ -31,7 +31,7 @@
 #endif
 
 #include <libical/ical.h>
-#include <libical/icalss.h>
+#include <libicalss/icalss.h>
 #include "regression.h"
 
 extern int VERBOSE;

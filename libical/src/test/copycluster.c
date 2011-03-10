@@ -39,7 +39,7 @@
 #include <stdlib.h> /* for exit */
 
 #include <libical/ical.h>
-#include <libical/icalss.h>
+#include <libicalss/icalss.h>
 
 #ifdef SIGALRM
 
