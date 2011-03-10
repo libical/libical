@@ -32,7 +32,7 @@
 #endif
 
 #include <libical/ical.h>
-#include <libical/icalss.h>
+#include <libicalss/icalss.h>
 #include <libicalvcal/vobject.h>
 #include <libicalvcal/icalvcal.h>
 #include <libicalvcal/vcc.h>

@@ -39,7 +39,7 @@
 #include <ctype.h> /* for tolower */
 
 #include <libical/ical.h>
-#include <libical/icalss.h>
+#include <libicalss/icalss.h>
 
 char* program_name;
 #define TMPSIZE 2048
