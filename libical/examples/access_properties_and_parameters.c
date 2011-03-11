@@ -45,7 +45,7 @@ void get_required_attendees(icalcomponent* event)
 	    /* Remember, the caller does not own this string, so you
                should strdup it if you want to change it. */
 	    const char *attendee = icalproperty_get_attendee(p);
-	    printf(attendee);
+	    printf("%s",attendee);
 	}
     }
 
