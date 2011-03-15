@@ -261,7 +261,7 @@ AC_CHECK_TYPE(intptr_t)
 AC_STRUCT_TM
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS(gmtime_r isspace iswspace strdup snprintf unsetenv)
+AC_CHECK_FUNCS(gmtime_r isspace iswspace strdup snprintf unsetenv setenv)
 
 dnl **************************************************
 dnl * Check for C++

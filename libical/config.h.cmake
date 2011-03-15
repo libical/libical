@@ -68,6 +68,9 @@
 /* Define to 1 if you have the <sys/endian.h> header file. */
 #cmakedefine HAVE_SYS_ENDIAN_H 1
 
+/* Define to 1 if you have the `setenv' function. */
+#cmakedefine HAVE_SETENV 1
+
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #cmakedefine HAVE_SYS_STAT_H 1
 
