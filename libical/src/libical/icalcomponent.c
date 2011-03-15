@@ -1116,6 +1116,7 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
 
     if (!icalproperty_recurrence_is_excluded(comp, &dtstart, &rdate_period.time)) {
       /** call callback action **/
+      if (icaltime_span_overlaps(&recurspan, &limit_span))
       (*callback) (comp, &recurspan, callback_data);
     }
     comp->property_iterator = property_iterator;
