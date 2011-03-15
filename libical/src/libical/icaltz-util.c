@@ -30,6 +30,7 @@
 #endif
 
 #if defined(sun) && defined(__SVR4)
+#include <sys/types.h>
 #include <sys/byteorder.h>
 #else
 # ifdef HAVE_BYTESWAP_H
