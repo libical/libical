@@ -431,15 +431,11 @@ to prevent any crashes */
     
     /* Set TZ to UTC and use mktime to convert to a time_t. */
     old_tz = set_tz ("UTC");
-#ifdef WIN32
     tzset ();
-#endif
 
     t = mktime (&stm);
     unset_tz (old_tz);
-#ifdef WIN32
     tzset ();
-#endif
 
 #ifdef HAVE_PTHREAD
     pthread_mutex_unlock (&tzid_mutex);
