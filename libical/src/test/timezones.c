@@ -49,7 +49,15 @@ int main(int argc, char **argv)
          * select this location for glibc: needs support for TZ=<location>
          * which is not POSIX
          */
+#if defined(HAVE_SETENV)
         setenv("TZ", zone_location, 1);
+#else
+	static new_tz[256];
+	new_tz[0] = '\0';
+	strncat(new_tz, "TZ=", 255);
+	strncat(new_tz, zone_location, 255);
+	putenv(new_tz);
+#endif
         tzset();
 
         /*
