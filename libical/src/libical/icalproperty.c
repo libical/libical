@@ -460,7 +460,7 @@ icalproperty_as_ical_string_r(icalproperty* prop)
     if (property_name == 0 ) {
 	icalerror_warn("Got a property of an unknown kind.");
 	icalmemory_free_buffer(buf);
-	return 0;
+	return "[unknown]";
 	
     }
 
