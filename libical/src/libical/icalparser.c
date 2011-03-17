@@ -192,18 +192,18 @@ char* parser_get_next_char(char c, char *str, int qm)
 
     for(p=str; *p!=0; p++){
 	    if (qm == 1) {
-				if ( quote_mode == 0 && *p=='"' && *(p-1) != '\\' ){
+				if ( quote_mode == 0 && *p=='"' && p>str && *(p-1) != '\\' ){
 						quote_mode =1;
 						continue;
 				}
 
-				if ( quote_mode == 1 && *p=='"' && *(p-1) != '\\' ){
+				if ( quote_mode == 1 && *p=='"' && p>str && *(p-1) != '\\' ){
 						quote_mode =0;
 						continue;
 				}
 	    }
 		
-		if (quote_mode == 0 &&  *p== c  && *(p-1) != '\\' ){
+		if (quote_mode == 0 &&  *p== c  && p>str && *(p-1) != '\\' ){
 				return p;
 		} 
 
