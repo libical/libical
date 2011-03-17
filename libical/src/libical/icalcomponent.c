@@ -876,7 +876,9 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 	 
     struct icaltimetype exdatetime = icalcomponent_get_datetime(comp, exdate);
 
-    if (icaltime_compare(*recurtime, exdatetime) == 0) {
+    if ((icaltime_is_date(exdatetime) 
+    &&   icaltime_compare_date_only(*recurtime, exdatetime) == 0) ||
+        (icaltime_compare(*recurtime, exdatetime) == 0)) {
       /** MATCHED **/
         
       comp->property_iterator = property_iterator;
