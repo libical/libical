@@ -68,6 +68,7 @@
 -0251600 -0574000 America/Asuncion
 +0484531 -0913718 America/Atikokan
 -0125900 -0383100 America/Bahia
+-0125900 -0383100 America/Bahia_Banderas
 +0130600 -0593700 America/Barbados
 -0012700 -0482900 America/Belem
 +0173000 -0881200 America/Belize
@@ -112,6 +113,7 @@
 +0411745 -0863730 America/Indiana/Knox
 +0382232 -0862041 America/Indiana/Marengo
 +0382931 -0871643 America/Indiana/Petersburg
++0375711 -0864541 America/Indiana/Tell_City
 +0384452 -0850402 America/Indiana/Vevay
 +0384038 -0873143 America/Indiana/Vincennes
 +0410305 -0863611 America/Indiana/Winamac
@@ -127,10 +129,13 @@
 -0094000 -0354300 America/Maceio
 +0120900 -0861700 America/Managua
 -0030800 -0600100 America/Manaus
++0180400 -0630500 America/Marigot
 +0143600 -0610500 America/Martinique
++0255000 -0973000 America/Matamoros
 +0231300 -1062500 America/Mazatlan
 +0450628 -0873651 America/Menominee
 +0205800 -0893700 America/Merida
++0550737 -1313435 America/Metlakatla
 +0192400 -0990900 America/Mexico_City
 +0470300 -0562000 America/Miquelon
 +0460600 -0644700 America/Moncton
@@ -143,8 +148,10 @@
 +0490100 -0881600 America/Nipigon
 +0643004 -1652423 America/Nome
 -0035100 -0322500 America/Noronha
++0471551 -1014640 America/North_Dakota/Beulah
 +0470659 -1011757 America/North_Dakota/Center
 +0465042 -1012439 America/North_Dakota/New_Salem
++0293400 -1042500 America/Ojinaga
 +0085800 -0793200 America/Panama
 +0660800 -0654400 America/Pangnirtung
 +0055000 -0551000 America/Paramaribo
@@ -157,12 +164,16 @@
 +0624900 -0920459 America/Rankin_Inlet
 -0080300 -0345400 America/Recife
 +0502400 -1043900 America/Regina
++0744144 -0944945 America/Resolute
 -0095800 -0674800 America/Rio_Branco
 -0332700 -0704000 America/Santiago
++0301800 -1145200 America/Santa_Isabel
 +0182800 -0695400 America/Santo_Domingo
 -0233200 -0463700 America/Sao_Paulo
 +0702900 -0215800 America/Scoresbysund
 +0364708 -1084111 America/Shiprock
++0571035 -1351807 America/Sitka
++0175300 -0625100 America/St_Barthelemy
 +0473400 -0524300 America/St_Johns
 +0171800 -0624300 America/St_Kitts
 +0140100 -0610000 America/St_Lucia
@@ -183,6 +194,7 @@
 -0661700 +1103100 Antarctica/Casey
 -0683500 +0775800 Antarctica/Davis
 -0664000 +1400100 Antarctica/DumontDUrville
+-0543000 +1585700 Antarctica/Macquarie
 -0673600 +0625300 Antarctica/Mawson
 -0775000 +1663600 Antarctica/McMurdo
 -0644800 -0640600 Antarctica/Palmer
@@ -216,6 +228,7 @@
 +0383500 +0684800 Asia/Dushanbe
 +0313000 +0342800 Asia/Gaza
 +0454500 +1264100 Asia/Harbin
++0104500 +1064000 Asia/Ho_Chi_Minh
 +0221700 +1140900 Asia/Hong_Kong
 +0480100 +0913900 Asia/Hovd
 +0521600 +1042000 Asia/Irkutsk
@@ -227,7 +240,9 @@
 +0530100 +1583900 Asia/Kamchatka
 +0245200 +0670300 Asia/Karachi
 +0392900 +0755900 Asia/Kashgar
++0274300 +0851900 Asia/Kathmandu
 +0274300 +0851900 Asia/Katmandu
++0223200 +0882200 Asia/Kolkata
 +0560100 +0925000 Asia/Krasnoyarsk
 +0031000 +1014200 Asia/Kuala_Lumpur
 +0013300 +1102000 Asia/Kuching
@@ -238,6 +253,7 @@
 +0143500 +1210000 Asia/Manila
 +0233600 +0583500 Asia/Muscat
 +0351000 +0332200 Asia/Nicosia
++0534500 +0870700 Asia/Novokuznetsk
 +0550200 +0825500 Asia/Novosibirsk
 +0550000 +0732400 Asia/Omsk
 +0511300 +0512100 Asia/Oral
@@ -360,6 +376,7 @@
 -0135000 -1714400 Pacific/Apia
 -0365200 +1744600 Pacific/Auckland
 -0435700 -1763300 Pacific/Chatham
++0072500 +1514700 Pacific/Chuuk
 -0270900 -1092600 Pacific/Easter
 -0174000 +1682500 Pacific/Efate
 -0030800 -1710500 Pacific/Enderbury
@@ -385,6 +402,7 @@
 -0141600 -1704200 Pacific/Pago_Pago
 +0072000 +1342900 Pacific/Palau
 -0250400 -1300500 Pacific/Pitcairn
++0065800 +1581300 Pacific/Pohnpei
 +0065800 +1581300 Pacific/Ponape
 -0093000 +1471000 Pacific/Port_Moresby
 -0211400 -1594600 Pacific/Rarotonga
