@@ -21,7 +21,7 @@ set(COMBINEDHEADERSICAL
    ${TOPS}/src/libical/icaltimezone.h
    ${TOPS}/src/libical/icalparser.h
    ${TOPS}/src/libical/icalmemory.h
-   ${TOPS}/src/libical/icalerror.h
+   ${TOPB}/src/libical/icalerror.h
    ${TOPS}/src/libical/icalrestriction.h
    ${TOPS}/src/libical/sspm.h
    ${TOPS}/src/libical/icalmime.h

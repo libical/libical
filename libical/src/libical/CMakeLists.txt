@@ -2,6 +2,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.cmake ${CMAKE_CURRENT_B
 
 include_directories(
   ${CMAKE_BINARY_DIR}
+  ${CMAKE_BINARY_DIR}/src
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/libical
   ${CMAKE_BINARY_DIR}/src/libical
@@ -13,6 +14,7 @@ if(WIN32)
   endif(MSVC)
 endif(WIN32)
 
+configure_file(icalerror.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icalerror.h)
 
 set(PACKAGE_DATA_DIR "\\\"${CMAKE_INSTALL_PREFIX}/share/libical\\\"")
 add_definitions(-DPACKAGE_DATA_DIR=${PACKAGE_DATA_DIR})
@@ -185,7 +187,6 @@ SET(ical_LIB_SRCS
    icalenums.c
    icalenums.h
    icalerror.c
-   icalerror.h
    icalmemory.c
    icalmemory.h
    icalmime.c
@@ -230,12 +231,16 @@ if(WIN32)
   endif(MSVC)
 endif(WIN32)
 
-add_library(ical SHARED ${ical_LIB_SRCS})
+add_library(ical ${LIBRARY_TYPE} ${ical_LIB_SRCS})
 add_library(ical-static STATIC ${ical_LIB_SRCS})
 
 add_dependencies(ical ical-header)
 
 target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
+
+if (WINCE)
+  target_link_libraries(ical ${WCECOMPAT_LIBRARIES})
+endif(WINCE)
 
 if(MSVC)
   set_target_properties(ical PROPERTIES OUTPUT_NAME "libical")
@@ -263,7 +268,7 @@ install(FILES
   ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h
   icalduration.h
   icalenums.h
-  icalerror.h
+  ${CMAKE_BINARY_DIR}/src/libical/icalerror.h
   icallangbind.h
   icalmemory.h
   icalmime.h

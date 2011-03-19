@@ -7,7 +7,7 @@ SET(LibicalWrap_LIB_SRCS
    LibicalWrap.c
 )
 
-add_library(LibicalWrap SHARED ${LibicalWrap_LIB_SRCS})
+add_library(LibicalWrap ${LIBRARY_TYPE} ${LibicalWrap_LIB_SRCS})
 
 target_link_libraries(LibicalWrap)
 

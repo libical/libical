@@ -69,7 +69,7 @@ if(MSVC)
     list(APPEND icalss_LIB_SRCS ../icalss.def)
 endif(MSVC)
 
-add_library(icalss SHARED ${icalss_LIB_SRCS})
+add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
 add_library(icalss-static STATIC ${icalss_LIB_SRCS})
 
 add_dependencies(icalss icalss-header)

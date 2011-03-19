@@ -54,10 +54,6 @@
 #endif
 #include <sys/types.h> /* For wait pid */
 
-#ifdef WIN32
-typedef int pid_t;
-#endif
-
 
 /* For GNU libc, strcmp appears to be a macro, so using strcmp in
  assert results in incomprehansible assertion messages. This

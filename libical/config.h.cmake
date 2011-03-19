@@ -161,3 +161,9 @@
 #define strcasecmp stricmp
 #define snprintf _snprintf
 #endif
+
+#cmakedefine HAVE_PID_T 1
+#if !HAVE_PID_T
+typedef int pid_t;
+#endif
+

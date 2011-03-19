@@ -27,7 +27,7 @@ if(MSVC)
     list(APPEND icalvcal_LIB_SRCS ../icalvcal.def)
 endif(MSVC)
 
-add_library(icalvcal SHARED ${icalvcal_LIB_SRCS})
+add_library(icalvcal ${LIBRARY_TYPE} ${icalvcal_LIB_SRCS})
 add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})
 
 target_link_libraries(icalvcal ical)

@@ -25,7 +25,7 @@ SET(ical_jni_LIB_SRCS
    net_cp_jlibical_VComponent_cxx.h
 )
 
-add_library(ical_jni SHARED ${ical_jni_LIB_SRCS})
+add_library(ical_jni ${LIBRARY_TYPE} ${ical_jni_LIB_SRCS})
 
 target_link_libraries(ical_jni ical_cxx)
 
