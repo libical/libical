@@ -218,7 +218,7 @@ icaltime_from_timet_with_zone(const time_t tm, const int is_date,
     tt.is_date = 0; 
     tt.is_utc = (zone == utc_zone) ? 1 : 0;
     tt.is_daylight = 0;
-    tt.zone = utc_zone;
+    tt.zone = NULL;
 
     /* Use our timezone functions to convert to the required timezone. */
     icaltimezone_convert_time (&tt, utc_zone, (icaltimezone *)zone);
