@@ -51,6 +51,10 @@
 #define strcasecmp	stricmp
 #endif
 
+#ifdef _WIN32_WCE
+#undef IGNORE
+#endif
+
 enum datatype {
     COMPONENT,
     PROPERTY,

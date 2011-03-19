@@ -1,4 +1,4 @@
-LIBRARY libical.dll
+LIBRARY ical.dll
 EXPORTS
 caldat
 compare_map DATA

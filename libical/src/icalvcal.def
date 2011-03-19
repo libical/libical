@@ -1,4 +1,4 @@
-LIBRARY libicalvcal.dll
+LIBRARY icalvcal.dll
 EXPORTS
 Parse_MIME
 Parse_MIME_FromFile

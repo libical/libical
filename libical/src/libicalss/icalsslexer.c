@@ -39,6 +39,10 @@
 #include <errno.h>
 #include <stdlib.h>
 
+#ifdef _WIN32_WCE
+#include <io.h>
+#endif
+
 /* end standard C headers. */
 
 /* flex integer type definitions */

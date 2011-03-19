@@ -1600,12 +1600,11 @@ static int next_month(icalrecur_iterator* impl)
       int day;
       int days_in_month = icaltime_days_in_month(impl->last.month,
                                                    impl->last.year);
-      int set_pos_counter = 0;
-      int set_pos_total = 0;
-      int found = 0;
-      
       assert( BYDAYPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
 
+      int set_pos_counter = 0;
+      int set_pos_total = 0;
+      
       /* Count the past positions for the BYSETPOS calculation */
       if(has_by_data(impl,BY_SET_POS)){
           int last_day = impl->last.day;
@@ -1620,6 +1619,8 @@ static int next_month(icalrecur_iterator* impl)
 	  }
           impl->last.day = last_day;
       }
+
+      int found = 0;
       
       for(day = impl->last.day+1; day <= days_in_month; day++){
           impl->last.day = day;
@@ -1933,8 +1934,8 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
     /* BY_WEEK_NO together with BY_MONTH - may conflict, in this case BY_MONTH wins */
     if( (flags & 1<<BY_MONTH) && (flags & 1<<BY_WEEK_NO) ){
         int valid_weeks[ICAL_BY_WEEKNO_SIZE];
-        int valid = 1;    
         memset(valid_weeks, 0, sizeof(valid_weeks));
+        int valid = 1;    
         t.year = year;
         t.is_date = 1;
 

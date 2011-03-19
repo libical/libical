@@ -51,7 +51,9 @@ static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
 #ifdef WIN32
+#ifndef _WIN32_WCE
 #include <mbstring.h>
+#endif
 #include <windows.h>
 /* Undef the similar macro from pthread.h, it doesn't check if
  * gmtime() returns NULL.
@@ -1927,10 +1929,18 @@ static const char* get_zone_directory(void)
 	return zone_files_directory == NULL ? ZONEINFO_DIRECTORY : zone_files_directory;
 #else
 	wchar_t wbuffer[1000];
+#ifndef _WIN32_WCE
 	char buffer[1000], zoneinfodir[1000], dirname[1000];
+#else
+	wchar_t zoneinfodir[1000], dirname[1000];
+#endif
 	int used_default;
 	static char *cache = NULL;
+#ifndef _WIN32_WCE
 	char *dirslash, *zislash;
+#else
+	wchar_t *dirslash, *zislash;
+#endif
 	struct stat st;
 
 	if (zone_files_directory)
@@ -1943,6 +1953,8 @@ static const char* get_zone_directory(void)
 	if (!GetModuleFileNameW (NULL, wbuffer, sizeof (wbuffer) / sizeof (wbuffer[0])))
 	    return ZONEINFO_DIRECTORY;
 
+/*wince supports only unicode*/
+#ifndef _WIN32_WCE
 	/* Convert to system codepage */
 	if (!WideCharToMultiByte (CP_ACP, 0, wbuffer, -1, buffer, sizeof (buffer),
 				  NULL, &used_default) ||
@@ -1955,6 +1967,7 @@ static const char* get_zone_directory(void)
 		used_default)
 		return ZONEINFO_DIRECTORY;
 	}
+#endif
 	/* Look for the zoneinfo directory somewhere in the path where
 	 * the app is installed. If the path to the app is
 	 *
@@ -1990,10 +2003,38 @@ static const char* get_zone_directory(void)
 	 */
 
 	/* Strip away basename of app .exe first */
+#ifndef _WIN32_WCE
 	dirslash = _mbsrchr (buffer, '\\');
+#else
+	dirslash = wcsrchr (wbuffer, L'\\');
+#endif
 	if (dirslash)
+#ifndef _WIN32_WCE
 	    *dirslash = '\0';
+#else
+	    *dirslash = L'\0';
+#endif
 
+#ifdef _WIN32_WCE
+	while ((dirslash = wcsrchr (wbuffer, '\\'))) {
+	    /* Strip one more directory from app .exe location */
+	    *dirslash = L'\0';
+	    
+        MultiByteToWideChar(CP_ACP,0,ZONEINFO_DIRECTORY,-1,zoneinfodir,1000);
+        
+	    while ((zislash = wcschr (zoneinfodir, L'/'))) {
+		*zislash = L'.';
+		wcscpy (dirname, wbuffer);
+		wcscat (dirname, "/");
+		wcscat (dirname, zislash + 1);
+		if (stat (dirname, &st) == 0 &&
+		    S_ISDIR (st.st_mode)) {
+		    cache = wce_wctomb (dirname);
+		    return cache;
+		}
+	    }
+	}
+#else
 	while ((dirslash = _mbsrchr (buffer, '\\'))) {
 	    /* Strip one more directory from app .exe location */
 	    *dirslash = '\0';
@@ -2011,6 +2052,7 @@ static const char* get_zone_directory(void)
 		}
 	    }
 	}
+#endif
 	return ZONEINFO_DIRECTORY;
 #endif
 }
