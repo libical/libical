@@ -439,7 +439,10 @@ icaltzutil_fetch_timezone (const char *location)
 		else
 			zp_idx = zidx;
 		/* DTSTART localtime uses TZOFFSETFROM UTC offset */
-		trans = transitions [stdidx] + types [zp_idx].gmtoff;
+		if (num_trans != 0)
+			trans = transitions [stdidx] + types [zp_idx].gmtoff;
+		else
+			trans = types [zp_idx].gmtoff;
 		icaltime = icaltime_from_timet (trans, 0);
 		dtstart = icaltime;
 		dtstart.year = 1970;
@@ -478,7 +481,10 @@ icaltzutil_fetch_timezone (const char *location)
 		icalcomponent_add_property (dst_comp, icalprop);
 
 		/* DTSTART localtime uses TZOFFSETFROM UTC offset */
-		trans = transitions [dstidx] + types [zp_idx].gmtoff;
+		if (num_trans != 0)
+			trans = transitions [dstidx] + types [zp_idx].gmtoff;
+		else
+			trans = types [zp_idx].gmtoff;
 		icaltime = icaltime_from_timet (trans, 0);
 		dtstart = icaltime;
 		dtstart.year = 1970;
