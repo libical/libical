@@ -1277,30 +1277,18 @@ void test_tzid_escape(){
 #endif
 
 
-void test_tzid_escape(){
-    icalparameter *tzid;
-    icalproperty *prop;
-
-    tzid = icalparameter_new_tzid("Timezone\nwith a newline");
-    prop = icalproperty_new_dtstart(icaltime_from_day_of_year(26, 2009));
-    icalproperty_add_parameter(prop, tzid);
-
-    if (VERBOSE)
-      printf("%s\n",icalproperty_as_ical_string(prop));
-
-    is("test encoding of 'Timezone\\nwith a newline'",
-       icalproperty_as_ical_string(prop), "DTSTART;VALUE=DATE,TZID=Timezone\\nwith a newline:20090126");
-
-    icalproperty_free(prop);
-}
-
-
 void test_requeststat()
 {
+    icalcomponent *c;
     icalproperty *p;
     icalrequeststatus s;
     struct icalreqstattype st, st2;
     char temp[1024];
+
+    static const char test_icalcomp_str[] =
+"BEGIN:VEVENT\n"
+"REQUEST-STATUS:2.1;Success but fallback taken  on one or more property  values.;booga\n"
+"END:VEVENT\n";
 
     s = icalenum_num_to_reqstat(2,1);
 
@@ -1361,7 +1349,15 @@ void test_requeststat()
        icalreqstattype_as_string(st2),
        "2.1;Success but fallback taken  on one or more property  values.");
 
-    p = icalproperty_new_from_string("REQUEST-STATUS:2.1;Success but fallback taken  on one or more property  values.;booga");
+    c = icalparser_parse_string ((char *) test_icalcomp_str);
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+	exit (EXIT_FAILURE);
+    }
+
+    if (VERBOSE) printf("%s",icalcomponent_as_ical_string(c));
+
+    p = icalcomponent_get_first_property(c,ICAL_REQUESTSTATUS_PROPERTY);
 
 #if ADD_TESTS_REQUIRING_INVESTIGATION
     is("icalproperty_new_from_string()",
@@ -1478,7 +1474,6 @@ void do_test_time(char* zone)
        "2002-06-26 21:44:29 Z UTC");
 
     icttzone = icaltime_convert_to_zone(ictt, azone);
-
     ok("Convert from floating to zone",
        (strncmp(ictt_as_string(icttzone), "2002-06-26 21:44:29", 19)==0));
 
@@ -2276,7 +2271,7 @@ void test_convenience(){
 	icalcomponent_vanew(
 	    ICAL_VEVENT_COMPONENT,
 	    (void *)0),
-    (void *)0);
+	(void *)0);
 
     tt = icaltime_from_string("19970801T120000");
     icaltime_set_timezone(&tt,
@@ -2288,10 +2283,10 @@ void test_convenience(){
     icalcomponent_set_duration(c,icaldurationtype_from_string("PT1H30M"));
     duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
-    ok("Start is 1997-08-01 12:00:00 /softwarestudio.org/Olson_20010626_2/Europe/Rome",
-       (0 == strcmp("1997-08-01 12:00:00 /softwarestudio.org/Olson_20010626_2/Europe/Rome", ictt_as_string(icalcomponent_get_dtstart(c)))));
-    ok("End is 1997-08-01 13:30:00 /softwarestudio.org/Olson_20010626_2/Europe/Rome",
-       (0 == strcmp("1997-08-01 13:30:00 /softwarestudio.org/Olson_20010626_2/Europe/Rome", ictt_as_string(icalcomponent_get_dtend(c)))));
+    ok("Start is 1997-08-01 12:00:00 Europe/Rome",
+       (0 == strcmp("1997-08-01 12:00:00 Europe/Rome", ictt_as_string(icalcomponent_get_dtstart(c)))));
+    ok("End is 1997-08-01 13:30:00 Europe/Rome",
+       (0 == strcmp("1997-08-01 13:30:00 Europe/Rome", ictt_as_string(icalcomponent_get_dtend(c)))));
     ok("Duration is 90 m", (duration == 90));
 
     icalcomponent_free(c);
@@ -3455,30 +3450,40 @@ void test_langbind()
 
 void test_property_parse()
 {
+    icalcomponent *c;
     icalproperty *p;
+    icalparameter *param;
     const char *str;
 
-    p= icalproperty_new_from_string(
-                         "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com");
+    static const char test_icalcomp_str[] =
+"BEGIN:VEVENT\n"
+"ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com\n"
+"DTSTART:19970101T120000Z\n"
+"END:VEVENT\n";
+
+    c = icalparser_parse_string ((char *) test_icalcomp_str);
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+	exit (EXIT_FAILURE);
+    }
+
+    p = icalcomponent_get_first_property(c,ICAL_ATTENDEE_PROPERTY);
 
     ok("icalproperty_from_string(), ATTENDEE", (p != 0));
-    assert (p !=  0);
 
     str = icalproperty_as_ical_string(p);
     if (VERBOSE) printf("%s\n",str);
 
     icalproperty_free(p);
 
-    p= icalproperty_new_from_string("DTSTART:19970101T120000Z\n");
+    p = icalcomponent_get_first_property(c,ICAL_DTSTART_PROPERTY);
 
     ok("icalproperty_from_string(), simple DTSTART", (p != 0));
-    assert (p !=  0);
 
     str = icalproperty_as_ical_string(p);
     if (VERBOSE) printf("%s\n",str);
 
     icalproperty_free(p);
-
 }
 
 
@@ -3519,18 +3524,24 @@ void test_value_parameter()
 
 void test_x_parameter()
 {
+    icalcomponent *c;
     icalproperty *p;
+    icalparameter *param;
 
-    p= icalproperty_new_from_string(
-       "COMMENT;X-A=1;X-B=2: This is a note");
+    static const char test_icalcomp_str[] =
+"BEGIN:VEVENT\n"
+"COMMENT;X-A=1;X-B=2:\\sThis is a note\n"
+"END:VEVENT\n";
 
-    if (VERBOSE) printf("%s\n",icalproperty_as_ical_string(p));
+    c = icalparser_parse_string ((char *) test_icalcomp_str);
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+	exit (EXIT_FAILURE);
+    }
 
-    ok("COMMENT property",(icalproperty_isa(p) == ICAL_COMMENT_PROPERTY));
-#if ADD_TESTS_REQUIRING_INVESTIGATION
-    is("COMMENT parses param", icalproperty_get_comment(p)," This is a note");
-#endif
+    if (VERBOSE) printf("%s",icalcomponent_as_ical_string(c));
 
+    p = icalcomponent_get_first_property(c,ICAL_COMMENT_PROPERTY);
     icalproperty_set_parameter_from_string(p,"X-LIES", "no");
     icalproperty_set_parameter_from_string(p,"X-LAUGHS", "big");
     icalproperty_set_parameter_from_string(p,"X-TRUTH", "yes");
@@ -3538,46 +3549,62 @@ void test_x_parameter()
 
     if (VERBOSE) printf("%s\n",icalproperty_as_ical_string(p));
 
+    is("COMMENT parses param", icalproperty_get_comment(p)," This is a note");
+
     is("Check X-LIES", icalproperty_get_parameter_as_string(p, "X-LIES"), "no");
     is("Check X-LAUGHS", icalproperty_get_parameter_as_string(p, "X-LAUGHS"), "big");
     is("Check X-TRUTH", icalproperty_get_parameter_as_string(p, "X-TRUTH"), "yes");
     is("Check X-HUMOUR", icalproperty_get_parameter_as_string(p, "X-HUMOUR"), "bad");
 
-    icalproperty_free(p);
+    icalcomponent_free(c);
 }
 
 
 
 void test_x_property()
 {
+    icalcomponent *c;
     icalproperty *p;
+    icalparameter *param;
 
-    p= icalproperty_new_from_string(
-       "X-LIC-PROPERTY: This is a note");
+    static const char test_icalcomp_str[] =
+"BEGIN:VEVENT\n"
+"X-LIC-PROPERTY:\\sThis is a note\n"
+"END:VEVENT\n";
 
-    if (VERBOSE && p) printf("%s\n",icalproperty_as_ical_string(p));
+    c = icalparser_parse_string ((char *) test_icalcomp_str);
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+	exit (EXIT_FAILURE);
+    }
 
+    if (VERBOSE) printf("%s",icalcomponent_as_ical_string(c));
+
+    p = icalcomponent_get_first_property(c,ICAL_X_PROPERTY);
     ok("x-property is correct kind",(icalproperty_isa(p) == ICAL_X_PROPERTY));
     is("icalproperty_get_x_name() works",
        icalproperty_get_x_name(p),"X-LIC-PROPERTY");
-#if ADD_TESTS_REQUIRING_INVESTIGATION
     is("icalproperty_get_x() works",
        icalproperty_get_x(p)," This is a note");
-#endif
 
-    icalproperty_free(p);
+    icalcomponent_free(c);
 }
 
 void test_utcoffset()
 {
-    icalproperty *p;
+    icalcomponent *c;
 
-    p = icalproperty_new_from_string("TZOFFSETFROM:-001608");
-    ok("parse TZOOFSETFROM:-001608", (p!=NULL));
+    static const char test_icalcomp_str[] =
+"BEGIN:VTIMEZONE\n"
+"TZOFFSETFROM:-001608\n"
+"END:VTIMEZONE\n";
 
-    if (VERBOSE && p) printf("%s\n",icalproperty_as_ical_string(p));
+    c = icalparser_parse_string ((char *) test_icalcomp_str);
+    ok("parse TZOFFSETFROM:-001608", (c!=NULL));
 
-    if (p) icalproperty_free(p);
+    if (VERBOSE && c) printf("%s",icalcomponent_as_ical_string(c));
+
+    if (c) icalcomponent_free(c);
 }
 
 void test_attach()
@@ -3593,7 +3620,7 @@ void test_attach()
     c = icalparser_parse_string ((char *) test_icalcomp_str);
     ok("parse simple attachment", (c != NULL));
 
-    if (VERBOSE) printf("%s",icalcomponent_as_ical_string(c));
+    if (VERBOSE && c) printf("%s",icalcomponent_as_ical_string(c));
 
     if (c) icalcomponent_free(c);
 }
@@ -3788,7 +3815,6 @@ int main(int argc, char *argv[])
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
-    test_run("Test TZID escaping", test_tzid_escape, do_test, do_header);
     test_run("Test strings", test_strings, do_test, do_header);
 #ifdef INVALID_TEST
     test_run("Test TZID escaping", test_tzid_escape, do_test, do_header);
