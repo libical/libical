@@ -4,6 +4,8 @@ include_directories(
   ${CMAKE_BINARY_DIR}/src
 )
 
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
+
 set(TEST_DATADIR "\\\"${CMAKE_SOURCE_DIR}/test-data\\\"")
 add_definitions(-DTEST_DATADIR=${TEST_DATADIR})
 
@@ -32,6 +34,7 @@ add_executable(regression ${regression_SRCS})
 
 target_link_libraries(regression ical icalss icalvcal)
 
+add_test(regression regression)
 
 ########### next target ###############
 
@@ -99,6 +102,8 @@ if(NOT WIN32)
   add_executable(timezones ${timezones_SRCS})
 
   target_link_libraries(timezones ical icalss)
+
+  add_test(timezones timezones)
 endif(NOT WIN32)
 
 ########### install files ###############
