@@ -6,9 +6,9 @@ the available configuration options you can pass to cmake.
 
 The installation directory defaults to /usr/local on UNIX
 and c:/Program Files on Windows. You can change this by
-passing -DCMAKE_INSTALL_PREFIX=/path/to/libical to cmake.
+passing -DCMAKE_INSTALL_PREFIX=/install/path to cmake.
 
-To build
+To build a debug version pass -DCMAKE_BUILD_TYPE=Debug to cmake.
 
 % mkdir build
 % cd build
@@ -38,3 +38,6 @@ Building on Windows under Cygwin:
 % cmake ..
 % make
 % make install
+
+To run the test suite, run 'make test'.
+To run the test suite in verbose mode, run 'make test ARGS="-V"'.

@@ -29,6 +29,8 @@ cmake_minimum_required(VERSION 2.4)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
+enable_testing()
+
 if(WINCE)
   find_package(Wcecompat REQUIRED)
   include_directories(${WCECOMPAT_INCLUDE_DIR})
