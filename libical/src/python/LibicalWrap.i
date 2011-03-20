@@ -113,6 +113,9 @@ typedef int time_t;
 %ignore icalcomponent_get_span(icalcomponent* comp);
 %ignore icalproperty_remove_parameter(icalproperty* prop, icalparameter_kind kind);
 
+// Can't wrap va_list
+%ignore icalproperty_add_parameters(struct icalproperty_impl *prop, va_list args);
+
 #ifndef _DLOPEN_TEST
 %ignore icalset_register_class(icalset *set);
 #endif
