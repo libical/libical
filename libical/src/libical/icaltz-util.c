@@ -72,6 +72,12 @@
 #include <io.h>
 #endif
 
+#if defined(__APPLE__)
+#define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8 ) & 0xff)
+#define bswap_32 __builtin_bswap32
+#define bswap_64 __builtin_bswap64
+#endif
+
 #ifndef PATH_MAX
 #define PATH_MAX 512
 #endif
