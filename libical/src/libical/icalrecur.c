@@ -448,7 +448,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	if(name == 0){
 	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	    icalrecurrencetype_clear(&parser.rt);
-		free(parser.copy);
+	    free(parser.copy);
 	    return parser.rt;
 	}
 
@@ -460,6 +460,11 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	    parser.rt.until = icaltime_from_string(value);
 	} else if (strcasecmp(name,"INTERVAL") == 0){
 	    parser.rt.interval = (short)atoi(value);
+            /* don't allow an interval to be less than 1
+	       (RFC specifies an interval must be a positive integer) */
+	    if (parser.rt.interval < 1){
+	        parser.rt.interval = 1;
+	    }
 	} else if (strcasecmp(name,"WKST") == 0){
 	    parser.rt.week_start = icalrecur_string_to_weekday(value);
 	    sort_bydayrules(&parser);
@@ -492,7 +497,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
 	} else {
 	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	    icalrecurrencetype_clear(&parser.rt);
-		free(parser.copy);
+	    free(parser.copy);
 	    return parser.rt;
 	}
 	
