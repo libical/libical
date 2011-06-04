@@ -887,11 +887,11 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    name = parser_get_param_name(str,&pvalue,&buf_value);
 
 	    if (name == 0){
-		/* 'tail' defined above */
-		insert_error(tail, str, "Cant parse parameter name",
-			     ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
-		tail = 0;
-		break;
+		    /* 'tail' defined above */
+		    insert_error(tail, str, "Cant parse parameter name",
+			             ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
+			tail = 0;
+			break;
 	    }
 
 	    kind = icalparameter_string_to_kind(name);
@@ -919,61 +919,74 @@ icalcomponent* icalparser_add_line(icalparser* parser,
             buf_value = NULL;
 
 	    } else if (kind != ICAL_NO_PARAMETER){
-		param = icalparameter_new_from_value_string(kind,pvalue);
+			param = icalparameter_new_from_value_string(kind,pvalue);
 
-		icalmemory_free_buffer(buf_value);
-		buf_value = NULL;
+			icalmemory_free_buffer(buf_value);
+			buf_value = NULL;
 
 	    } else {
-		/* Error. Failed to parse the parameter*/
-		/* 'tail' defined above */
+		    /* Error. Failed to parse the parameter*/
+		    /* 'tail' defined above */
 
-                /* Change for mozilla */
-                /* have the option of being flexible towards unsupported parameters */
-		#if ICAL_ERRORS_ARE_FATAL == 1
-		insert_error(tail, str, "Cant parse parameter name",
-			     ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
-		tail = 0;
-		parser->state = ICALPARSER_ERROR;
-		/* if (pvalue) {
-			free(pvalue);
-			pvalue = 0;
-		} */
-		if (name) {
-			free(name);
-			name = 0;
-		}
-		return 0;
-		#else
-		continue;
-		#endif
+			icalmemory_free_buffer(buf_value);
+			buf_value = NULL;
+
+            /* Change for mozilla */
+            /* have the option of being flexible towards unsupported parameters */
+#if ICAL_ERRORS_ARE_FATAL == 1
+		    insert_error(tail, str, "Cant parse parameter name",
+			             ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
+			tail = 0;
+			parser->state = ICALPARSER_ERROR;
+			/* if (pvalue) {
+			       free(pvalue);
+			       pvalue = 0;
+			   }
+			*/
+		    if (name) {
+			    free(name);
+			    name = 0;
+		    }
+			icalmemory_free_buffer(str);
+			str = NULL;
+		    return 0;
+#else
+		    if (name) {
+			    free(name);
+			    name = 0;
+		    }
+			icalmemory_free_buffer(str);
+			str = NULL;
+		    continue;
+#endif
 	    }
 
 	    /* if (pvalue) {
-		free(pvalue);
-		pvalue = 0;
-	    } */
+		       free(pvalue);
+		       pvalue = 0;
+	       }
+		*/
 	    if (name) {
-		free(name);
-		name = 0;
+		    free(name);
+		    name = 0;
 	    }
 
 	    if (param == 0){
-		/* 'tail' defined above */
-		insert_error(tail,str,"Cant parse parameter value",
-			     ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR);
+		    /* 'tail' defined above */
+		    insert_error(tail,str,"Cant parse parameter value",
+			             ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR);
 		    
-		tail = 0;
-		parser->state = ICALPARSER_ERROR;
+ 		    tail = 0;
+		    parser->state = ICALPARSER_ERROR;
 		
-		icalmemory_free_buffer(buf_value);
-		buf_value = NULL;
-		icalmemory_free_buffer(name);
-		name = NULL;
-		icalmemory_free_buffer(str);
-		str = NULL;
+			icalmemory_free_buffer(buf_value);
+			buf_value = NULL;
+			icalmemory_free_buffer(name);
+			name = NULL;
+			icalmemory_free_buffer(str);
+			str = NULL;
   	  	
-		continue;
+			continue;
 	    }
 
 	    /* If it is a VALUE parameter, set the kind of value*/
