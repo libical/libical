@@ -441,7 +441,7 @@ icalcomponent_remove_property (icalcomponent* component, icalproperty* property)
 #ifdef ICAL_REMOVE_NONMEMBER_COMPONENT_IS_ERROR
     icalerror_assert( (icalproperty_get_parent(property)),"The property is not a member of a component");
 #else
-    if(icalproperty_get_parent(property) != 0){
+    if(icalproperty_get_parent(property) == 0){
 	return;
     }
 #endif
