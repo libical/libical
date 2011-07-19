@@ -287,17 +287,16 @@ icaltimezone_get_vtimezone_properties	(icaltimezone *zone,
     if (!tzid)
 	return 0;
 
-    prop = icalcomponent_get_first_property (component, ICAL_TZNAME_PROPERTY);
-    if (prop) {
-	tzname = icalproperty_get_tzname (prop);
-	zone->tznames = strdup(tzname);	
-    } else
-	zone->tznames = NULL;
-    
+    if (zone->tzid) free(zone->tzid);
     zone->tzid = strdup (tzid);
+
+    if (zone->component) icalcomponent_free(zone->component);
     zone->component = component;
-	if ( zone->location != 0 ) free ( zone->location );
+
+    if (zone->location) free(zone->location);
     zone->location = icaltimezone_get_location_from_vtimezone (component);
+
+    if (zone->tznames) free(zone->tznames);
     zone->tznames = icaltimezone_get_tznames_from_vtimezone (component);
 
     return 1;
@@ -1530,7 +1529,14 @@ icaltimezone_init_builtin_timezones	(void)
     /* Initialize the special UTC timezone. */
     utc_timezone.tzid = (char *)"UTC";
 
-    icaltimezone_parse_zone_tab ();
+#ifdef HAVE_PTHREAD
+    pthread_mutex_lock(&builtin_mutex);
+#endif
+    if (!builtin_timezones)
+        icaltimezone_parse_zone_tab ();
+#ifdef HAVE_PTHREAD
+    pthread_mutex_unlock(&builtin_mutex);
+#endif
 }
 
 static int
