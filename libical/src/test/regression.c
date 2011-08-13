@@ -2933,7 +2933,7 @@ void microsleep(int us)
 
     select(0,0,0,0,&tv);
 #else
-	Sleep(us);
+    Sleep(us);
 #endif
 }
 
@@ -3791,7 +3791,8 @@ int main(int argc, char *argv[])
     test_run("Test Dir Set", test_dirset, do_test, do_header);
     test_run("Test Dir Set (Extended)", test_dirset_extended, do_test, do_header);
 
-    test_run("Test File Locks", test_file_locks, do_test, do_header);
+/* test_file_locks is slow but should work ok -- uncomment to test it */
+/*    test_run("Test File Locks", test_file_locks, do_test, do_header);*/
     test_run("Test X Props and Params", test_x, do_test, do_header);
     test_run("Test Trigger", test_trigger, do_test, do_header);
     test_run("Test Restriction", test_restriction, do_test, do_header);
