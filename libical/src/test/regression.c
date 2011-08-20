@@ -567,7 +567,7 @@ void test_memory()
 
       printf("Final: %s\n", f);
 
-      printf("Final buffer size: %d\n",bufsize);
+      printf("Final buffer size: %zd\n",bufsize);
     }
 
     ok("final buffer size == 806", (bufsize == 806));
