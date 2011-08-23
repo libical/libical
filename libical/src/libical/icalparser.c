@@ -1092,7 +1092,14 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 		prop = clone;		    
 		tail = 0;
 	    }
-		
+
+		/* If this is a URI value for an ATTACH property, then change
+		   the value to an ATTACH kind as well.
+		   Now we can support ATTACH;TYPE=URI:http://my.fav.url
+		*/
+		if(value_kind == ICAL_URI_VALUE && prop_kind == ICAL_ATTACH_PROPERTY){
+				value_kind = ICAL_ATTACH_VALUE;
+		}
 	    value = icalvalue_new_from_string(value_kind, str);
 		
 	    /* Don't add properties without value */
