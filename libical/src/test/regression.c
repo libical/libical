@@ -1163,6 +1163,11 @@ void test_duration()
     if (VERBOSE) printf("%s\n",icaldurationtype_as_ical_string(d));
     int_is("P2DT8H30M", icaldurationtype_as_int(d), 203400);
 
+    d = icaldurationtype_from_string("P2W1DT5H");
+    if (VERBOSE) printf("%s %d\n",icaldurationtype_as_ical_string(d),
+			icaldurationtype_as_int(d));
+    int_is("P2W1DT5H", icaldurationtype_as_int(d), 1314000);
+
     icalerror_errors_are_fatal = 0;
 
     /* Test conversion of bad input */
@@ -1171,11 +1176,6 @@ void test_duration()
     if (VERBOSE) printf("%s %d\n",icaldurationtype_as_ical_string(d),
 			icaldurationtype_as_int(d));
     is("1314000", icaldurationtype_as_ical_string(d), "P15DT5H");
-
-    d = icaldurationtype_from_string("P2W1DT5H");
-    if (VERBOSE) printf("%s %d\n",icaldurationtype_as_ical_string(d),
-			icaldurationtype_as_int(d));
-    int_is("P15DT5H", icaldurationtype_as_int(d), 0);
 
     d = icaldurationtype_from_string("P-2DT8H30M");
     if (VERBOSE) printf("%s\n",icaldurationtype_as_ical_string(d));
