@@ -135,7 +135,7 @@ are no worse.) Here's a few problems we've had with the VTIMEZONEs:
 TESTING
 =======
 
-Do a 'make test-vic', then run ./test-vic.
+Do a 'make test-vzic', then run ./test-vzic.
 
 The test-vzic program compares our libical code and VTIMEZONE data against
 the Unix functions like mktime(). It steps over a period of time (1970-2037)
