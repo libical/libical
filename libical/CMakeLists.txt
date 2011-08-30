@@ -20,6 +20,10 @@
 #  Set to build using our own timezone data.
 #  Default=false (use the system timezone data)
 #
+# -DSTATIC_LIBRARY=[true|false]
+#  Set to build static libraries only.
+#  Default=false (build shared and static libs)
+#
 
 project(libical)
 
@@ -134,7 +138,7 @@ set(INSTALL_TARGETS_DEFAULT_ARGS
   ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
 )
 
-################# build targets ########################
+################# build subdirs ########################
 
 add_subdirectory(design-data)
 add_subdirectory(doc)
@@ -147,15 +151,14 @@ if(USE_BUILTIN_TZDATA)
   add_subdirectory(zoneinfo)
 endif(USE_BUILTIN_TZDATA)
 
-############# install stuff ######################
+########### create and install pkg-config file #########
 
+set(VERSION "${PROJECT_VERSION}")
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(exec_prefix "\${prefix}")
+set(libdir "\${exec_prefix}/lib")
+set(includedir "\${prefix}/include")
+set(PTHREAD_LIBS "${CMAKE_THREAD_LIBS_INIT}")
 
-if(NOT WIN32)   # pkgconfig file
-  set(VERSION "${PROJECT_VERSION}")
-  set(prefix "${CMAKE_INSTALL_PREFIX}")
-  set(exec_prefix "\${prefix}")
-  set(libdir "\${exec_prefix}/lib")
-  set(includedir "\${prefix}/include")
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
-endif(NOT WIN32)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
