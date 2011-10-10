@@ -4,6 +4,7 @@ static const char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h> /* for ptrdiff_h */
 
 #define YYBYACC 1
 #define YYMAJOR 1
@@ -18,7 +19,6 @@ static const char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 extern int yyparse(void);
 
 static int yygrowstack(void);
-#define YYPREFIX "yy"
 
 /***************************************************************************
 (C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International
@@ -76,8 +76,8 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #define DBG_(x)
 #endif
 
-#ifdef WIN32
-#define snprintf   _snprintf
+#if defined(_MSC_VER)
+#define snprintf _snprintf
 #define strcasecmp stricmp
 #endif
 
@@ -485,7 +485,7 @@ static void enterValues(const char *value)
 	if (value) {
 	    char *p1, *p2;
 	    wchar_t *p3;
-	    int i;
+	    size_t i;
 
 	    /* If the property already has a string value, we append this one,
 	       using ';' to separate the values. */
@@ -1265,7 +1265,8 @@ static void mime_error_(char *s)
 /* allocate initial stack or double stack size, up to YYMAXDEPTH */
 static int yygrowstack(void)
 {
-    int newsize, i;
+    int newsize;
+    ptrdiff_t i;
     short *newss;
     YYSTYPE *newvs;
 

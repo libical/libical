@@ -66,12 +66,12 @@ static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
 // MSVC lacks the POSIX macro S_ISDIR, however it's a trivial one:
 #ifndef S_ISDIR
 #define S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
-#ifndef HAVE_SNPRINTF
-#include "vsnprintf.h"
 #endif
 #endif
 
-#define strcasecmp      stricmp
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 /** This is the toplevel directory where the timezone data is installed in. */
@@ -426,7 +426,7 @@ icaltimezone_get_tznames_from_vtimezone (icalcomponent *component)
     /* If both standard and daylight TZNAMEs were found, if they are the same
        we return just one, else we format them like "EST/EDT". */
     if (standard_tzname && daylight_tzname) {
-	unsigned int standard_len, daylight_len;
+	size_t standard_len, daylight_len;
 	char *tznames;
 
 	if (!strcmp (standard_tzname, daylight_tzname))
@@ -1337,7 +1337,7 @@ icaltimezone_get_builtin_timezone	(const char *location)
 {
     icalcomponent *comp;
     icaltimezone *zone;
-    int lower;
+    unsigned int lower;
     const char *zone_location;
 
     if (!location || !location[0])
@@ -1565,7 +1565,7 @@ parse_coord			(char		*coord,
 }
 static int
 fetch_lat_long_from_string  (const char *str, int *latitude_degrees, int *latitude_minutes, int *latitude_seconds,
-		int *longitude_degrees, int *longitude_minutes, int *longitude_seconds, char *location)
+			     int *longitude_degrees, int *longitude_minutes, int *longitude_seconds, char *location)
 {
 	size_t len;
 	char *sptr, *lat, *lon, *loc, *temp;
@@ -1609,12 +1609,17 @@ fetch_lat_long_from_string  (const char *str, int *latitude_degrees, int *latitu
 	while (*lon != '+' && *lon != '-')
 		lon++;
 
-	if (parse_coord (lat, lon - lat, latitude_degrees, latitude_minutes, latitude_seconds) == 1 ||
-		       	parse_coord (lon, strlen (lon), longitude_degrees, longitude_minutes, longitude_seconds) 
-			== 1) {
-				free(lat);
-				return 1;
-			}
+	if (parse_coord (lat, (int)(lon - lat),
+			 latitude_degrees,
+			 latitude_minutes,
+			 latitude_seconds) == 1 ||
+	    parse_coord (lon, (int)strlen(lon),
+			 longitude_degrees,
+			 longitude_minutes,
+			 longitude_seconds) == 1) {
+	    free(lat);
+	    return 1;
+	}
 	
 	free (lat);
 
@@ -1635,7 +1640,7 @@ icaltimezone_parse_zone_tab		(void)
     FILE *fp;
     char buf[1024];  /* Used to store each line of zones.tab as it is read. */
     char location[1024]; /* Stores the city name when parsing buf. */
-    unsigned int filename_len;
+    size_t filename_len;
     int latitude_degrees = 0, latitude_minutes = 0, latitude_seconds = 0;
     int longitude_degrees = 0, longitude_minutes = 0, longitude_seconds = 0;
     icaltimezone zone;
@@ -1732,7 +1737,7 @@ icaltimezone_parse_zone_tab		(void)
 void
 icaltimezone_release_zone_tab		(void)
 {
-    int i;
+    unsigned int i;
     icalarray *mybuiltin_timezones = builtin_timezones;
 
     if (builtin_timezones == NULL)

@@ -46,9 +46,9 @@
 #include "dmalloc.h"
 #endif
 
-#ifdef WIN32
-#define snprintf      _snprintf
-#define strcasecmp    stricmp
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 #define TMP_BUF_SIZE 1024
@@ -1596,7 +1596,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
 {
     struct sspm_buffer buf;
     int part_num =0;
-    int slen;
+    size_t slen;
     (void)num_parts;
 
     buf.buffer = malloc(4096);

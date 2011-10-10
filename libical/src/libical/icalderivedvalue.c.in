@@ -47,8 +47,8 @@
 #include <stdlib.h> /* for atoi and atof */
 #include <limits.h> /* for SHRT_MAX */ 
         
-#ifdef WIN32
-#define strcasecmp      stricmp
+#ifdef _MSC_VER
+#define strcasecmp stricmp
 #endif
 
 struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind);

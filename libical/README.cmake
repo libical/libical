@@ -10,6 +10,7 @@ passing -DCMAKE_INSTALL_PREFIX=/install/path to cmake.
 
 To build a debug version pass -DCMAKE_BUILD_TYPE=Debug to cmake.
 
+Building on Linux/Unix with a native compiler:
 % mkdir build
 % cd build
 % cmake ..
@@ -27,7 +28,7 @@ Building on Windows with MicroSoft Visual Studio:
 Building on Windows with mingw:
 % mkdir build
 % cd build
-% cmake -G "NMake Makefiles" ..
+% cmake -G "MinGW Makefiles" ..
 % mingw32-make
 % mingw32-make install
 

@@ -30,6 +30,10 @@
 #include <string.h> /* For strerror */
 #include <stdlib.h> /* for free */
 
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#endif
+
 #include <libical/ical.h>
 #include <libicalss/icalss.h>
 

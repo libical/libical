@@ -43,9 +43,9 @@
 #include <errno.h>
 #include <stdio.h> /* for printf */
 #include <stdarg.h> /* for va_list, va_start, etc. */
-                                               
-#ifdef WIN32
-#define strcasecmp      stricmp
+
+#ifdef _MSC_VER
+#define strcasecmp stricmp
 #endif
 
 struct icalproperty_impl*

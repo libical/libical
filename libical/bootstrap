@@ -9,7 +9,7 @@
 rm -f .libs modules *.so *.lo *.la 2>/dev/null
 
 echo ... running autoreconf ...
-autoreconf --verbose --force --install
+autoreconf2.59 --verbose --force --install
 
 # If your autoconf version changes, the autom4te.cache stuff will mess you up.
 # Get rid of it.

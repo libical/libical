@@ -45,10 +45,11 @@
 
 #include "icalvcal.h"
 #include <string.h>
+#include <stddef.h> /* for ptrdiff_h */
 
-#ifdef WIN32
-#define snprintf	_snprintf
-#define strcasecmp	stricmp
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 #ifdef _WIN32_WCE
@@ -535,7 +536,7 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 
 	    /* Check for Gnome Calendar, which will just save a pathname. */
 	    if (url && url[0] == '/') {
-		int len;
+		size_t len;
 		char *new_url;
 		icalattach *new_attach;
 
@@ -826,7 +827,7 @@ static char* rrule_parse_duration (char *s, struct icalrecurrencetype *recur,
     } else if (*s >= '0' && *s <= '9') {
 	/* If it starts with a digit it must be the UNTIL date. */
 	char *e, buffer[20];
-	int len;
+	ptrdiff_t len;
 
 	/* Find the end of the date. */
 	e = s;

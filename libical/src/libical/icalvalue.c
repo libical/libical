@@ -50,9 +50,9 @@
 #include <locale.h>
 #include <ctype.h> /* for isspace and isdigit */
 
-#ifdef WIN32
-#define snprintf      _snprintf
-#define strcasecmp    stricmp
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 #if _MAC_OS_

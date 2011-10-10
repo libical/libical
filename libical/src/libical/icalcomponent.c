@@ -47,11 +47,9 @@
 #include <string.h> /* for strdup */
 #include <limits.h> /* for INT_MAX */
 
-#ifdef WIN32
-#define strncasecmp      strnicmp
-#ifndef HAVE_SNPRINTF
-#include "vsnprintf.h"
-#endif
+#ifdef _MSC_VER
+#define snprintf _snprintf
+#define strncasecmp strnicmp
 #endif
 
 struct icalcomponent_impl 
@@ -88,7 +86,7 @@ static void icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
 							 icalproperty *tzid_prop,
 							 const char *tzid,
 							 icalarray *tzids_to_rename);
-static unsigned int icalcomponent_get_tzid_prefix_len (const char *tzid);
+static size_t icalcomponent_get_tzid_prefix_len (const char *tzid);
 static void icalcomponent_rename_tzids(icalcomponent* comp,
 				       icalarray* rename_table);
 static void icalcomponent_rename_tzids_callback(icalparameter *param,
@@ -1003,7 +1001,7 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
   struct icaltimetype dtstart, dtend;
   icaltime_span recurspan, basespan, limit_span;
   time_t limit_start, limit_end;
-  int dtduration;
+  time_t dtduration;
   icalproperty *rrule, *rdate;
   struct icaldurationtype dur;
   pvl_elem property_iterator;	/* for saving the iterator */
@@ -2234,7 +2232,7 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
 					     icalarray *tzids_to_rename)
 {
   int i, suffix, max_suffix = 0, num_elements;
-  unsigned int tzid_len;
+  size_t tzid_len;
   char *tzid_copy, *new_tzid, suffix_buf[32];
   (void)tzid_prop; /* hack to stop unused variable warning */
 
@@ -2253,7 +2251,7 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
     icaltimezone *zone;
     const char *existing_tzid;
     const char *existing_tzid_copy;
-    unsigned int existing_tzid_len;
+    size_t existing_tzid_len;
 
     zone = icalarray_element_at (comp->timezones, i);
     existing_tzid = icaltimezone_get_tzid (zone);
@@ -2322,9 +2320,9 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
 
 
 /* Returns the length of the TZID, without any trailing digits. */
-static unsigned int icalcomponent_get_tzid_prefix_len (const char *tzid)
+static size_t icalcomponent_get_tzid_prefix_len (const char *tzid)
 {
-  int len;
+  size_t len;
   const char *p;
 
   len = strlen (tzid);

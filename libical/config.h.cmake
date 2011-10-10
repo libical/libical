@@ -155,13 +155,6 @@
 #define size_t int
 #endif
 
-/* some windows flags */
-#ifdef WIN32
-#define strncasecmp strnicmp
-#define strcasecmp stricmp
-#define snprintf _snprintf
-#endif
-
 #cmakedefine HAVE_PID_T 1
 #if !HAVE_PID_T
 typedef int pid_t;

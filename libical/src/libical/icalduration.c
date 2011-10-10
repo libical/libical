@@ -40,13 +40,9 @@
 #include "icalmemory.h"
 #include "icalvalue.h"
 
-#ifdef WIN32
-#ifndef HAVE_SNPRINTF
-#include "vsnprintf.h"
+#if defined(_MSC_VER)
+#define snprintf _snprintf
 #endif
-#endif
-
-
 
 /* From Seth Alves,  <alves@hungry.com>   */
 struct icaldurationtype icaldurationtype_from_int(int t)
@@ -86,7 +82,7 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
     int date_flag = 0;
     int digits=-1;
     int scan_size = -1;
-    int size = strlen(str);
+    size_t size = strlen(str);
     char p;
     struct icaldurationtype d;
 

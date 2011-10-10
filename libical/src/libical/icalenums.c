@@ -37,12 +37,9 @@
 #include <assert.h>
 #include "icalmemory.h"
 
-#ifdef WIN32
-#ifndef HAVE_SNPRINTF
-#include "vsnprintf.h"
+#if defined(_MSC_VER)
+#define snprintf _snprintf
 #endif
-#endif
-
 
 /*** @brief Allowed request status values
  */

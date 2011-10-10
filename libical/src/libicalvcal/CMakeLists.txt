@@ -24,7 +24,7 @@ SET(icalvcal_LIB_SRCS
 )
 
 if(MSVC)
-    list(APPEND icalvcal_LIB_SRCS ../icalvcal.def)
+  list(APPEND icalvcal_LIB_SRCS ../icalvcal.def)
 endif(MSVC)
 
 add_library(icalvcal ${LIBRARY_TYPE} ${icalvcal_LIB_SRCS})

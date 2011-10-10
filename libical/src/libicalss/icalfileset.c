@@ -42,20 +42,19 @@
 #include <share.h>
 #endif
 #endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h> /* for fcntl */
 #include "icalfilesetimpl.h"
 #include "icalclusterimpl.h"
 
-#ifdef WIN32
-#define snprintf	_snprintf
-#define strcasecmp	stricmp
-
+#if defined(_MSC_VER)
 #define _S_ISTYPE(mode, mask)  (((mode) & _S_IFMT) == (mask))
-
 #define S_ISDIR(mode)    _S_ISTYPE((mode), _S_IFDIR)
 #define S_ISREG(mode)    _S_ISTYPE((mode), _S_IFREG)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 #ifdef _WIN32_WCE
