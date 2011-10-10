@@ -45,9 +45,9 @@
 #include <stdio.h> /* for printf */
 #include <stdarg.h> /* for va_list, va_start, etc. */
                                                
-#ifdef WIN32
-#define snprintf      _snprintf
-#define strcasecmp    stricmp
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 /* Private routines for icalproperty */
@@ -267,7 +267,7 @@ icalproperty_free (icalproperty* p)
 /*#define MAX_LINE_LEN 120*/
 
 static char*
-get_next_line_start (char *line_start, int chars_left)
+get_next_line_start (char *line_start, size_t chars_left)
 {
     char *pos;
 
@@ -320,9 +320,9 @@ get_next_line_start (char *line_start, int chars_left)
 static char*
 fold_property_line (char *text)
 {
-    size_t buf_size;
+    size_t buf_size, len, chars_left;
     char *buf, *buf_ptr, *line_start, *next_line_start;
-    int len, chars_left, first_line;
+    int first_line;
     char ch;
 
     /* Start with a buffer twice the size of our property line, so we almost
@@ -808,7 +808,6 @@ icalproperty_remove_parameter_by_ref(icalproperty* prop, icalparameter* paramete
 {
     pvl_elem p;
     icalparameter_kind kind;
-    const char *name;
 
     icalerror_check_arg_rv((prop!=0),"prop");
     icalerror_check_arg_rv((parameter!=0),"parameter");

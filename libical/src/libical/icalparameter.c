@@ -42,12 +42,9 @@
 #include <errno.h>
 #include <string.h> /* for memset() */
 
-
-#ifdef WIN32
-#ifndef HAVE_SNPRINTF
-#include "vsnprintf.h"
-#endif
-#define strcasecmp      stricmp
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 /* In icalderivedparameter */

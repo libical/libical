@@ -39,8 +39,10 @@
 #include <libicalss/icalss.h>
 
 #ifdef WIN32
-#define snprintf	_snprintf
-#define strcasecmp	stricmp
+#define snprintf _snprintf
+#endif
+#ifdef _MSC_VER
+#define strcasecmp stricmp
 #endif
 
 static void sig_alrm(int i){

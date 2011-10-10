@@ -46,20 +46,20 @@
 /* define sample calendar struct */
 struct calendar {
   int ID;
-  int total_size;
+  size_t total_size;
 
   /* offsets */
-  int total_size_offset;
-  int vcalendar_size_offset;
-  int vcalendar_offset;
-  int title_size_offset;
-  int title_offset;
+  size_t total_size_offset;
+  size_t vcalendar_size_offset;
+  size_t vcalendar_offset;
+  size_t title_size_offset;
+  size_t title_offset;
 
   /* data */
-  int vcalendar_size;
+  size_t vcalendar_size;
   char *vcalendar;
 
-  int title_size;
+  size_t title_size;
   char *title;
 
 };
@@ -486,7 +486,7 @@ void test_bdbset()
 
 int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title) 
 {
-  int vcalendar_size, title_size, total_size;
+  size_t vcalendar_size, title_size, total_size;
   struct calendar *cal;
 
   if(vcalendar) 

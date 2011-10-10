@@ -261,7 +261,7 @@ typedef struct VObjectIterator {
 
 extern DLLEXPORT(VObject*) newVObject(const char *id);
 extern DLLEXPORT(void) deleteVObject(VObject *p);
-extern DLLEXPORT(char*) dupStr(const char *s, unsigned int size);
+extern DLLEXPORT(char*) dupStr(const char *s, size_t size);
 extern DLLEXPORT(void) deleteStr(const char *p);
 extern DLLEXPORT(void) unUseStr(const char *s);
 
@@ -313,7 +313,7 @@ extern DLLEXPORT(void) cleanVObjects(VObject *list);
 extern DLLEXPORT(const char*) lookupProp(const char* str);
 extern DLLEXPORT(const char*) lookupProp_(const char* str);
 
-extern DLLEXPORT(wchar_t*) fakeUnicode(const char *ps, int *bytes);
+extern DLLEXPORT(wchar_t*) fakeUnicode(const char *ps, size_t *bytes);
 extern DLLEXPORT(int) uStrLen(const wchar_t *u);
 extern DLLEXPORT(char*) fakeCString(const wchar_t *u);
 

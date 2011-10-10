@@ -50,7 +50,7 @@
 #include <sys/time.h> /* for select */
 #else
 #include <direct.h> /* for mkdir */
-#include <Windows.h>
+#include <windows.h>
 #endif
 #include <sys/types.h> /* For wait pid */
 
@@ -3448,7 +3448,6 @@ void test_property_parse()
 {
     icalcomponent *c;
     icalproperty *p;
-    icalparameter *param;
     const char *str;
 
     static const char test_icalcomp_str[] =
@@ -3522,7 +3521,6 @@ void test_x_parameter()
 {
     icalcomponent *c;
     icalproperty *p;
-    icalparameter *param;
 
     static const char test_icalcomp_str[] =
 "BEGIN:VEVENT\n"
@@ -3561,7 +3559,6 @@ void test_x_property()
 {
     icalcomponent *c;
     icalproperty *p;
-    icalparameter *param;
 
     static const char test_icalcomp_str[] =
 "BEGIN:VEVENT\n"
@@ -3724,9 +3721,10 @@ void test_bad_dtstart_in_timezone(void)
 
 int main(int argc, char *argv[])
 {
-    int c;
+#if !defined(HAVE_UNISTD_H)
     extern char *optarg;
     extern int optopt;
+#endif
     int errflg=0;
 /*    char* program_name = strrchr(argv[0],'/'); */
     int do_test = 0;
@@ -3740,6 +3738,7 @@ int main(int argc, char *argv[])
 
 
 #ifndef WIN32
+    int c;
     while ((c = getopt(argc, argv, "lvq")) != -1) {
       switch (c) {
       case 'v': {
@@ -3766,7 +3765,6 @@ int main(int argc, char *argv[])
       do_test = atoi(argv[2]);
 
 #endif
-
 
     test_run("Test time parser functions", test_time_parser, do_test, do_header);
     test_run("Test time", test_time, do_test, do_header);

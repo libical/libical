@@ -31,6 +31,11 @@
 #include <ctype.h>  /* for tolower()*/
 #include <string.h> /* for strstr */
 #include <stdlib.h> /* for free(), malloc() */
+
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#endif
+
 icalcomponent* icalmessage_get_inner(icalcomponent* comp)
 {
     if (icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT){

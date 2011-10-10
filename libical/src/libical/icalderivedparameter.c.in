@@ -44,8 +44,8 @@
 #include <errno.h>
 #include <string.h> /* for memset() */
 
-#ifdef WIN32
-#define strcasecmp      stricmp
+#ifdef _MSC_VER
+#define strcasecmp stricmp
 #endif
 
 icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);

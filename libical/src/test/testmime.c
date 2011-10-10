@@ -96,8 +96,10 @@ int main(int argc, char* argv[]) {
 
     FILE *f;
     int c;
+#if !defined(HAVE_UNISTD_H)
     extern char *optarg;
     extern int optind, optopt;
+#endif
     int errflg=0;
     char* program_name;
 

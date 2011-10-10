@@ -42,8 +42,8 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
  * vobject, and convert a vobject into its textual representation.
  */
 
-#ifdef WIN32
-#define snprintf   _snprintf
+#if defined(_MSC_VER)
+#define snprintf _snprintf
 #define strcasecmp stricmp
 #endif
 
@@ -124,7 +124,7 @@ DLLEXPORT(void) deleteVObject(VObject *p)
     free(p);
 }
 
-DLLEXPORT(char*) dupStr(const char *s, unsigned int size)
+DLLEXPORT(char*) dupStr(const char *s, size_t size)
 {
     char *t;
     if  (size == 0) {
@@ -1079,7 +1079,7 @@ static void appendcOFile(OFile *fp, char c)
 
 static void appendsOFile(OFile *fp, const char *s)
 {
-    int i, slen;
+    size_t i, slen;
     slen  = strlen(s);
     for (i=0; i<slen; i++) {
 	appendcOFile(fp,s[i]);
@@ -1406,10 +1406,10 @@ DLLEXPORT(char*) writeMemVObjects(char *s, int *len, VObject *list)
 /*----------------------------------------------------------------------
   APIs to do fake Unicode stuff.
   ----------------------------------------------------------------------*/
-DLLEXPORT(wchar_t*) fakeUnicode(const char *ps, int *bytes)
+DLLEXPORT(wchar_t*) fakeUnicode(const char *ps, size_t *bytes)
 {
     wchar_t *r, *pw;
-    int len = strlen(ps)+1;
+    size_t len = strlen(ps)+1;
 
     pw = r = (wchar_t*)malloc(sizeof(wchar_t)*len);
     if (bytes)

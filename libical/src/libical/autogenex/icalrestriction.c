@@ -31,8 +31,10 @@
 #define TMP_BUF_SIZE 1024
 
 #ifdef WIN32
-#define snprintf	_snprintf
-#define strcasecmp	stricmp
+#define snprintf _snprintf
+#endif
+#ifdef _MSC_VER
+#define strcasecmp stricmp
 #endif
 
 

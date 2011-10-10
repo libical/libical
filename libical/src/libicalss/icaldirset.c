@@ -65,7 +65,6 @@
 #include "icalcluster.h"
 #include "icalgauge.h"
 
-#include <limits.h> /* For PATH_MAX */
 #ifndef WIN32
 #include <dirent.h> /* for opendir() */
 #include <unistd.h> /* for stat, getpid */
@@ -74,23 +73,22 @@
 #include <io.h>
 #include <process.h>
 #endif
+
 #include <errno.h>
 #include <sys/types.h> /* for opendir() */
 #include <sys/stat.h> /* for stat */
+#include <limits.h> /* For PATH_MAX */
 #include <time.h> /* for clock() */
 #include <stdlib.h> /* for rand(), srand() */
 #include <string.h> /* for strdup */
 #include "icaldirsetimpl.h"
 
-
-#ifdef WIN32
-#define snprintf	_snprintf
-#define strcasecmp	stricmp
-
+#if defined(_MSC_VER)
 #define _S_ISTYPE(mode, mask)  (((mode) & _S_IFMT) == (mask))
-
 #define S_ISDIR(mode)    _S_ISTYPE((mode), _S_IFDIR)
 #define S_ISREG(mode)    _S_ISTYPE((mode), _S_IFREG)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/
@@ -174,10 +172,10 @@ icalerrorenum icaldirset_read_directory(icaldirset *dset)
 
     closedir(dp);
 #else
-	struct _finddata_t c_file;
-	long hFile;
+    struct _finddata_t c_file;
+    intptr_t hFile;
 	
-	/* Find first .c file in current directory */
+    /* Find first .c file in current directory */
     if( (hFile = _findfirst( "*", &c_file )) == -1L ) {
 		icalerror_set_errno(ICAL_FILE_ERROR);
 		return ICAL_FILE_ERROR;

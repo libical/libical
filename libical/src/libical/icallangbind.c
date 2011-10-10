@@ -30,9 +30,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef WIN32
-#define snprintf      _snprintf
-#define strcasecmp    stricmp
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 int* icallangbind_new_array(int size){
@@ -317,9 +317,7 @@ char* icallangbind_quote_as_ical_r(const char* str)
 
     /* assume every char could be quoted */
     char* buf = icalmemory_new_buffer(buf_size);
-    int result;
-
-    result = icalvalue_encode_ical_string(str, buf, buf_size);
+    (void)icalvalue_encode_ical_string(str, buf, (int)buf_size);
 
     return buf;
 }

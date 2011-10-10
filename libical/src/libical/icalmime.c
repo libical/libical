@@ -38,9 +38,9 @@
 #include "dmalloc.h"
 #endif
 
-#ifdef WIN32
-#define snprintf      _snprintf
-#define strcasecmp    stricmp
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 /* These *_part routines are called by the MIME parser via the

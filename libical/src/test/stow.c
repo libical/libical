@@ -23,6 +23,9 @@
 
  ======================================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <stdio.h>
 #include <errno.h>
@@ -33,7 +36,9 @@
 #include <stdlib.h>
 #include <sys/utsname.h> /* for uname */
 #include <sys/stat.h> /* for stat */
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h> /* for stat, getpid, getopt */
+#endif
 #include <pwd.h> /* For getpwent */
 #include <sys/types.h> /* For getpwent */
 #include <ctype.h> /* for tolower */
@@ -519,8 +524,10 @@ void usage(char *message)
 void get_options(int argc, char* argv[], struct options_struct *opt)
 {
     int c;
+#if !defined(HAVE_UNISTD_H)
     extern char *optarg;
     extern int optind, optopt;
+#endif
     int errflg=0;
 
     opt->storage = STORE_IN_FILE;

@@ -130,7 +130,7 @@ char* icalperiodtype_as_ical_string_r(struct icalperiodtype p)
 
     start = icaltime_as_ical_string_r(p.start);
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, start); 
-    icalmemory_free_buffer(start);
+    icalmemory_free_buffer((void*)start);
 
     if(!icaltime_is_null_time(p.end)){
 	end = icaltime_as_ical_string_r(p.end);
@@ -141,7 +141,7 @@ char* icalperiodtype_as_ical_string_r(struct icalperiodtype p)
     icalmemory_append_char(&buf, &buf_ptr, &buf_size, '/'); 
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, end); 
-    icalmemory_free_buffer(end);
+    icalmemory_free_buffer((void*)end);
     
     return buf;
 }

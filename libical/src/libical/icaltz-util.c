@@ -50,7 +50,7 @@
 # endif
 #endif
 
-#ifdef WIN32
+#ifdef _MSC_VER
 #if !defined(HAVE_BYTESWAP_H) && !defined(HAVE_SYS_ENDIAN_H) && !defined(HAVE_ENDIAN_H)
 #define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8 ) & 0xff)
 #define bswap_32(x) (((x) << 24) & 0xff000000)  \
@@ -65,9 +65,6 @@
                     | (((x) & 0x0000000000ff0000ull) << 24) \
                     | (((x) & 0x000000000000ff00ull) << 40) \
                     | (((x) & 0x00000000000000ffull) << 56))
-#define BIG_ENDIAN 'B'
-#define LITTLE_ENDIAN 'l'
-#define BYTE_ORDER LITTLE_ENDIAN
 #endif
 #include <io.h>
 #endif
@@ -301,10 +298,10 @@ icaltzutil_fetch_timezone (const char *location)
 	int ret = 0;
 	FILE *f;
 	tzinfo type_cnts;
-	unsigned int num_trans, num_types, num_chars, num_leaps, num_isstd, num_isgmt;
+	unsigned int i, num_trans, num_types, num_chars, num_leaps, num_isstd, num_isgmt;
 	time_t *transitions = NULL;
 	time_t trans;
-	int *trans_idx = NULL, dstidx = -1, stdidx = -1, pos, sign, zidx, zp_idx, i;
+	int *trans_idx = NULL, dstidx = -1, stdidx = -1, pos, sign, zidx, zp_idx;
 	ttinfo *types = NULL;
 	char *znames = NULL, *full_path, *tzid, *r_trans, *temp;
 	leap *leaps = NULL;

@@ -68,9 +68,9 @@
 # endif
 #endif
 
-#ifdef WIN32
-#define snprintf      _snprintf
-#define strcasecmp    stricmp
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#define strcasecmp stricmp
 #endif
 
 static char* parser_get_next_char(char c, char *str, int qm);
