@@ -2,7 +2,7 @@ lib_LTLIBRARIES = libical_jni.la
 
 INCLUDES = -I../libical -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/$(JAVA_PLATFORM)
 
-libical_jni_la_LDFLAGS = -no-defined -version-info 47:0:47
+libical_jni_la_LDFLAGS = -no-defined -version-info 48:0:48
 
 libical_jni_la_LIBADD = 			\
 	../libical/libical_cxx.la

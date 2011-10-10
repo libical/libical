@@ -63,7 +63,7 @@ INCLUDES =			\
 	-I$(top_builddir)/src/libical	\
 	$(BDB_INCLUDE)
 
-libicalss_la_LDFLAGS = -version-info 47:0:47
+libicalss_la_LDFLAGS = -version-info 48:0:48
 
 if OS_WIN32
 libicalss_la_LDFLAGS += -no-undefined

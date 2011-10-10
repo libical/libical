@@ -34,7 +34,7 @@ INCLUDES =			\
 	-I$(srcdir)		\
 	-DWITH_RR $(RRCAP_CFLAGS)
 
-libicalcap_evolution_la_LDFLAGS = $(RRCAP_LIBS) -version-info 47:0:47
+libicalcap_evolution_la_LDFLAGS = $(RRCAP_LIBS) -version-info 48:0:48
 
 
 libicalcap_evolution_la_SOURCES =		\

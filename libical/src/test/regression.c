@@ -2280,9 +2280,9 @@ void test_convenience(){
     duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
     ok("Start is 1997-08-01 12:00:00 Europe/Rome",
-       (0 == strcmp("1997-08-01 12:00:00 Europe/Rome", ictt_as_string(icalcomponent_get_dtstart(c)))));
+       (0 == strcmp("1997-08-01 12:00:00 /softwarestudio.org/Tzfile/Europe/Rome", ictt_as_string(icalcomponent_get_dtstart(c)))));
     ok("End is 1997-08-01 13:30:00 Europe/Rome",
-       (0 == strcmp("1997-08-01 13:30:00 Europe/Rome", ictt_as_string(icalcomponent_get_dtend(c)))));
+       (0 == strcmp("1997-08-01 13:30:00 /softwarestudio.org/Tzfile/Europe/Rome", ictt_as_string(icalcomponent_get_dtend(c)))));
     ok("Duration is 90 m", (duration == 90));
 
     icalcomponent_free(c);
@@ -3733,7 +3733,7 @@ int main(int argc, char *argv[])
     int do_header = 0;
 
     set_zone_directory("../../zoneinfo");
-    icaltimezone_set_tzid_prefix("/softwarestudio.org/Olson_20010626_2/");
+    icaltimezone_set_tzid_prefix("/softwarestudio.org/");
     putenv("TZ=");
 
     test_start(0);

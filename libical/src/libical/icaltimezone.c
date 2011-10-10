@@ -1477,18 +1477,17 @@ icaltimezone_get_builtin_timezone_from_tzid (const char *tzid)
     if (strncmp (tzid, ical_tzid_prefix, strlen(ical_tzid_prefix)))
 	return NULL;
 
-    /* Get the location, which is after the 4th '/' character. */
-    /* format is /unique_prefix/Olson_X/Tzfile/location */
+    /* Get the location, which is after the 3rd '/' character. */
     p = tzid;
     for (p = tzid; *p; p++) {
 	if (*p == '/') {
 	    num_slashes++;
-	    if (num_slashes == 4)
+	    if (num_slashes == 3)
 		break;
 	}
     }
 
-    if (num_slashes != 4)
+    if (num_slashes != 3)
 	return NULL;
 
     p++;
