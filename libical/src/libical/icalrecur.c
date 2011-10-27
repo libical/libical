@@ -1001,13 +1001,14 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
         struct icaltimetype next;
 	icalerror_clear_errno();
 
-	for (;;) {
+        /* Fail after hitting the year 20000 if no expanded days match */
+	while (impl->last.year < 20000) {
             expand_year_days(impl, impl->last.year);
-        if( icalerrno != ICAL_NO_ERROR) {
-            icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-            free(impl);
-            return 0;
-        }
+            if( icalerrno != ICAL_NO_ERROR) {
+                icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+                free(impl);
+                return 0;
+            }
 	    if (impl->days[0] != ICAL_RECURRENCE_ARRAY_MAX)
 	        break; /* break when no days are expanded */
 	    increment_year(impl,impl->rule.interval);
