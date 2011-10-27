@@ -115,14 +115,14 @@ void strstriplt(char *buf)
 		return;
 	}
 	len = strlen(buf);
-        while ((buf[0] != 0) && (isspace(buf[len - 1]))) {
+        while ((buf[0] != 0) && (isspace((unsigned char)buf[len - 1]))) {
                 buf[--len] = 0;
 	}
 	if (buf[0] == 0) {
 		return;
 	}
 	a = 0;
-        while ((buf[0]!=0) && (isspace(buf[a]))) {
+        while ((buf[0]!=0) && (isspace((unsigned char)buf[a]))) {
 		a++;
 	}
 	if (a > 0) {
