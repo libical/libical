@@ -11,6 +11,10 @@
 #  Set if you DO NOT WANT to see deprecated messages.
 #  Default=true
 #
+# -DICAL_ALLOW_EMPTY_PROPERTIES=[true|false]
+#  Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
+#  Default=false
+#
 # -DICAL_UNIX_NEWLINE=[true|false]
 #  Set to terminate each line with the RFC2445 specified line terminator "\\n";
 #  else it will terminate lines with "\\n\\r"
@@ -107,6 +111,16 @@ else(NOT DEFINED ICAL_UNIX_NEWLINE)
     set(ICAL_UNIX_NEWLINE 0)
   endif(ICAL_UNIX_NEWLINE)
 endif(NOT DEFINED ICAL_UNIX_NEWLINE)
+
+if(NOT DEFINED ICAL_ALLOW_EMPTY_PROPERTIES)
+  set(ICAL_ALLOW_EMPTY_PROPERTIES 0)
+else(NOT DEFINED ICAL_ALLOW_EMPTY_PROPERTIES)
+  if(ICAL_ALLOW_EMPTY_PROPERTIES)
+    set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
+  else(ICAL_ALLOW_EMPTY_PROPERTIES)
+    set(ICAL_ALLOW_EMPTY_PROPERTIES 0)
+  endif(ICAL_ALLOW_EMPTY_PROPERTIES)
+endif(NOT DEFINED ICAL_ALLOW_EMPTY_PROPERTIES)
 
 if(NOT DEFINED NO_WARN_DEPRECATED)
   set(NO_WARN_DEPRECATED 1)

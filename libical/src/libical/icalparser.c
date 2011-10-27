@@ -1135,6 +1135,10 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    str = NULL;
 
 	} else {
+#if ICAL_ALLOW_EMPTY_PROPERTIES
+        /* Don't replace empty properties with an error */
+        break;
+#else
 	    if (vcount == 0){
 		char temp[200]; /* HACK */
 		
@@ -1158,6 +1162,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 		break;
 	    }
+#endif
 	}
     }
 	

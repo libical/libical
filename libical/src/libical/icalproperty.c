@@ -507,12 +507,15 @@ icalproperty_as_ical_string_r(icalproperty* prop)
 	char *str = icalvalue_as_ical_string_r(value);
 	if (str != 0)
 	    icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+#if ICAL_ALLOW_EMPTY_PROPERTIES == 0
 	else
 	    icalmemory_append_string(&buf, &buf_ptr, &buf_size,"ERROR: No Value"); 
+#endif
 	free(str);
     } else {
+#if ICAL_ALLOW_EMPTY_PROPERTIES == 0
 	icalmemory_append_string(&buf, &buf_ptr, &buf_size,"ERROR: No Value"); 
-	
+#endif
     }
     
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
