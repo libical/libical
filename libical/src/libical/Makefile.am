@@ -179,7 +179,7 @@ COMBINEDHEADERS =					\
 	$(top_srcdir)/src/libical/icaltimezone.h	\
 	$(top_srcdir)/src/libical/icalparser.h		\
 	$(top_srcdir)/src/libical/icalmemory.h		\
-	$(top_srcdir)/src/libical/icalerror.h		\
+	icalerror.h		                        \
 	$(top_srcdir)/src/libical/icalrestriction.h	\
 	$(top_srcdir)/src/libical/sspm.h		\
 	$(top_srcdir)/src/libical/icalmime.h 		\
