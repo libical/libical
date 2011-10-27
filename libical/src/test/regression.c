@@ -3713,10 +3713,32 @@ void test_bad_dtstart_in_timezone(void)
 #endif
 }
 
-
-
-
-
+void test_icalcomponent_new_from_string(void)
+{
+    const char *item =
+        "BEGIN:VCALENDAR\n"
+        "PRODID:-//Ximian//NONSGML Evolution Calendar//EN\n"
+        "VERSION:2.0\n"
+        "BEGIN:VEVENT\n"
+        "SUMMARY:phone meeting\n"
+        "DTEND:20060406T163000Z\n"
+        "DTSTART:20060406T160000Z\n"
+        "UID:1234567890@dummy\n"
+        "DTSTAMP:20110824T104144Z\n"
+        "LAST-MODIFIED:20110824T104144Z\n"
+        "CREATED:20060409T213201\n"
+        "LOCATION:my office\n"
+        "DESCRIPTION:let's talk\n"
+        "CLASS:PUBLIC\n"
+        "TRANSP:OPAQUE\n"
+        "SEQUENCE:1\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+    // must succeed and not leak memory...
+    icalcomponent *comp = icalcomponent_new_from_string(item);
+    ok("parsed", (comp != NULL));
+    icalcomponent_free(comp);
+}
 
 
 int main(int argc, char *argv[])
@@ -3826,6 +3848,7 @@ int main(int argc, char *argv[])
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test, do_header);
     test_run("Test bad dtstart in timezone as per r960", test_bad_dtstart_in_timezone, do_test, do_header);
+    test_run("Test icalcomponent_new_from_string()", test_icalcomponent_new_from_string, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
