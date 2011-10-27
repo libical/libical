@@ -223,6 +223,7 @@ AC_DEFINE(NO_WARN_DEPRECATED,1,[Define to 1 if you DO NOT WANT to see deprecated
 AC_DEFINE(NO_WARN_ICAL_MALFORMEDDATA_ERROR_HACK,1,[Define to 1 if you DO NO WANT to see the warning messages related to ICAL_MALFORMEDDATA_ERROR and parsing .ics zoneinfo files])
 
 AC_DEFINE(ICAL_UNIX_NEWLINE,1,[Define to terminate lines with "\n" instead of "\r\n"])
+AC_DEFINE(ICAL_ALLOW_EMPTY_PROPERTIES,0,[Define to prevent empty properties from being replaced with X-LIC-ERROR properties])
 dnl AC_DEFINE(ICAL_NO_EMPTY_ARRAY_DECL,1,[Define to 1 if your compile does not like lines like: struct something foo[]])
 
 dnl Checks for libraries.
