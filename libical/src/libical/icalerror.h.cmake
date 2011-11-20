@@ -125,6 +125,10 @@ if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || \
 void icalerror_set_errno(icalerrorenum x); 
 #endif
 
+#if !defined(ICAL_ERRORS_ARE_FATAL)
+#define ICAL_ERRORS_ARE_FATAL 0
+#endif
+
 #if ICAL_ERRORS_ARE_FATAL == 1
 #undef NDEBUG
 #endif
