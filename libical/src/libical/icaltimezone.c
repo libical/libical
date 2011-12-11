@@ -571,6 +571,14 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
 	prop = icalcomponent_get_next_property (comp, ICAL_ANY_PROPERTY);
     }
 
+    /* Microsoft Outlook for Mac (and possibly other versions) will create
+       timezones without a tzoffsetfrom property if it's a timezone that
+       doesn't change for DST. */
+    if (found_tzoffsetto && !found_tzoffsetfrom) {
+        change.prev_utc_offset = change.utc_offset;
+        found_tzoffsetfrom = 1;
+    }
+
     /* If we didn't find a DTSTART, TZOFFSETTO and TZOFFSETFROM we have to
        ignore the component. FIXME: Add an error property? */
     if (!found_dtstart || !found_tzoffsetto || !found_tzoffsetfrom)
