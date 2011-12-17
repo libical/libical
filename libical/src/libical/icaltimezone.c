@@ -1785,7 +1785,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
     filename = (char*) malloc (filename_len);
     if (!filename) {
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-	return;
+	goto out;
     }
 
     snprintf (filename, filename_len, "%s/%s.ics", get_zone_directory(),
@@ -1795,7 +1795,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
     free (filename);
     if (!fp) {
 	icalerror_set_errno(ICAL_FILE_ERROR);
-	return;
+	goto out;
     }
 
 	
@@ -1819,7 +1819,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
 
     if (!subcomp) {
 	icalerror_set_errno(ICAL_PARSE_ERROR);
-	return;
+	goto out;
     }
 
     icaltimezone_get_vtimezone_properties (zone, subcomp);
@@ -1829,10 +1829,12 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
     icalcomponent_free(comp);
     }
 #endif 
-#ifdef HAVE_PTHREAD
+
  out:
+#ifdef HAVE_PTHREAD
     pthread_mutex_unlock(&builtin_mutex);
 #endif
+    return;
 }
 
 
