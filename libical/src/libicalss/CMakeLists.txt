@@ -28,7 +28,9 @@ add_custom_command(
   ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h
 )
 
-add_custom_target(icalss-header DEPENDS
+add_custom_target(icalss-header 
+  DEPENDS
+  ical-header
   ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
 )
 
