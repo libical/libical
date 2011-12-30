@@ -28,12 +28,18 @@
 #  Set to build static libraries only.
 #  Default=false (build shared and static libs)
 #
+# -DUSE_32BIT_TIME_T=[true|false]
+#  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
+#  Default=false (use the default size of time_t)
+#
 
 project(libical)
 
 cmake_minimum_required(VERSION 2.4)
-#cannot use the following line with cmake 2.4.x
-#cmake_policy(VERSION 2.6)
+if(COMMAND cmake_policy)
+  cmake_policy(SET CMP0003 NEW)
+  cmake_policy(SET CMP0005 OLD)
+endif(COMMAND cmake_policy)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
@@ -65,10 +71,13 @@ endif(STATIC_LIBRARY)
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
 
-# make msvc less verbose
+# MSVC specific definitions
 if(WIN32)
   if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DYY_NO_UNISTD_H)
+    if(USE_32BIT_TIME_T)
+      add_definitions(-D_USE_32BIT_TIME_T)
+    endif(USE_32BIT_TIME_T)
   endif(MSVC)
   add_definitions(-DBIG_ENDIAN=0 -DLITTLE_ENDIAN=1 -DBYTE_ORDER=BIG_ENDIAN)
 endif(WIN32)
