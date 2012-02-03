@@ -108,7 +108,7 @@ icalparameter_free (icalparameter* param)
 	free ((void*)param->x_name);
     }
     
-    memset(param,0,sizeof(param));
+    memset(param,0,sizeof(icalparameter));
 
     param->parent = 0;
     param->id[0] = 'X';

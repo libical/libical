@@ -48,7 +48,7 @@ struct icalperiodtype icalperiodtype_from_string (const char* str)
     
     struct icalperiodtype p, null_p;
     char *s = icalmemory_strdup(str);
-    char *start, *end = s;
+    char *start, *end;
     icalerrorstate es;
 
     /* Errors are normally generated in the following code, so save

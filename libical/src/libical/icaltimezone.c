@@ -276,7 +276,7 @@ icaltimezone_get_vtimezone_properties	(icaltimezone *zone,
 					 icalcomponent	*component)
 {
     icalproperty *prop;
-    const char *tzid, *tzname;
+    const char *tzid;
  
     prop = icalcomponent_get_first_property (component, ICAL_TZID_PROPERTY);
     if (!prop)
@@ -1486,7 +1486,6 @@ icaltimezone_get_builtin_timezone_from_tzid (const char *tzid)
 	return NULL;
 
     /* Get the location, which is after the 3rd '/' character. */
-    p = tzid;
     for (p = tzid; *p; p++) {
 	if (*p == '/') {
 	    num_slashes++;
@@ -1888,7 +1887,6 @@ icaltimezone_dump_changes		(icaltimezone *zone,
     printf ("Num changes: %i\n", zone->changes->num_elements);
 #endif
 
-    change_num = 0;
     for (change_num = 0; (unsigned int)change_num < zone->changes->num_elements; change_num++) {
 	zone_change = icalarray_element_at (zone->changes, change_num);
 

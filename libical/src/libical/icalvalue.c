@@ -418,7 +418,7 @@ int simple_str_to_double(const char* from,
         return 1 ;
     }
     memset(tmp_buf, 0, TMP_NUM_SIZE+1) ;
-    i=0 ;
+
     /*
      * copy the float number string into tmp_buf, and take
      * care to have the (optional) decimal separator be the one

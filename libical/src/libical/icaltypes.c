@@ -83,15 +83,12 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
 {
 
     
-    struct icaltriggertype tr, null_tr;
+    struct icaltriggertype tr;
     icalerrorstate es = ICAL_ERROR_DEFAULT;
     icalerrorenum e;
 
     tr.time= icaltime_null_time();
     tr.duration = icaldurationtype_from_int(0);
-
-    null_tr = tr;
-
 
     /* Suppress errors so a failure in icaltime_from_string() does not cause an abort */
     es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
