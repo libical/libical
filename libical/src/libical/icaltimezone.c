@@ -1354,7 +1354,7 @@ icaltimezone_get_builtin_timezone	(const char *location)
     if (!builtin_timezones)
 	icaltimezone_init_builtin_timezones ();
 
-    if (!strcmp (location, "UTC"))
+    if (strcmp (location, "UTC") == 0 || strcmp (location, "GMT") == 0)
 	return &utc_timezone;
     
 #if 0
@@ -1480,6 +1480,10 @@ icaltimezone_get_builtin_timezone_from_tzid (const char *tzid)
 
     if (!tzid || !tzid[0])
 	return NULL;
+
+    if (strcmp (tzid, "UTC") == 0 || strcmp (tzid, "GMT") == 0) {
+        return icaltimezone_get_builtin_timezone(tzid);
+    }
 
     /* Check that the TZID starts with our unique prefix. */
     if (strncmp (tzid, ical_tzid_prefix, strlen(ical_tzid_prefix)))
