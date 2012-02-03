@@ -490,7 +490,7 @@ icalproperty* icalcomponent_get_current_property (icalcomponent* component)
 {
    icalerror_check_arg_rz( (component!=0),"component");
 
-   if ((component->property_iterator==0)){
+   if (component->property_iterator==0){
        return 0;
    }
 

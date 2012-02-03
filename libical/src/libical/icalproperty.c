@@ -810,12 +810,9 @@ void
 icalproperty_remove_parameter_by_ref(icalproperty* prop, icalparameter* parameter)
 {
     pvl_elem p;
-    icalparameter_kind kind;
 
     icalerror_check_arg_rv((prop!=0),"prop");
     icalerror_check_arg_rv((parameter!=0),"parameter");
-
-    kind = icalparameter_isa(parameter);
 
     for (p=pvl_head(prop->parameters);p != 0; p = pvl_next(p)) {
         icalparameter* p_param = (icalparameter *)pvl_data (p);
