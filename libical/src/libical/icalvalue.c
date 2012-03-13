@@ -190,6 +190,7 @@ static char* icalmemory_strdup_and_dequote(const char* str)
     const char* p;
     char* out = (char*)malloc(sizeof(char) * strlen(str) +1);
     char* pout;
+    int wroteNull = 0;
 
     if (out == 0){
 	return 0;
@@ -197,7 +198,11 @@ static char* icalmemory_strdup_and_dequote(const char* str)
 
     pout = out;
 
-    for (p = str; *p!=0; p++){
+    /* Stop the loop when encountering a terminator in the source string
+       or if a null has been written to the destination. This prevents
+       reading past the end of the source string if the last character
+       is a backslash. */
+    for (p = str; !wroteNull && *p!=0; p++){
 	
 	if( *p == '\\')
 	{
@@ -205,6 +210,7 @@ static char* icalmemory_strdup_and_dequote(const char* str)
 	    switch(*p){
 		case 0:
 		{
+            wroteNull = 1; //stops iteration so p isn't incremented past the end of str
 		    *pout = '\0';
 		    break;
 
