@@ -1773,6 +1773,11 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
     pthread_mutex_lock(&builtin_mutex);
     if (zone->component)
        goto out;
+#else
+#ifdef USE_BUILTIN_TZDATA
+    if (zone->component)
+       return;
+#endif
 #endif
 
 #ifdef USE_BUILTIN_TZDATA

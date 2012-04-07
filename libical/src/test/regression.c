@@ -3740,6 +3740,33 @@ void test_icalcomponent_new_from_string(void)
     icalcomponent_free(comp);
 }
 
+void test_comma_in_quoted_value(void)
+{
+    icalcomponent *c;
+    icalproperty *p;
+
+    static const char test_icalcomp_str[] =
+"BEGIN:VEVENT\n"
+"X-TEST;VALUE=URI:\"geo:10.123456,-70.123456\"\n"
+"END:VEVENT\n";
+
+    c = icalparser_parse_string ((char *) test_icalcomp_str);
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+	exit (EXIT_FAILURE);
+    }
+
+    if (VERBOSE) printf("%s",icalcomponent_as_ical_string(c));
+
+    p = icalcomponent_get_first_property(c,ICAL_X_PROPERTY);
+    ok("x-property is correct kind",(icalproperty_isa(p) == ICAL_X_PROPERTY));
+    is("icalproperty_get_x_name() works",
+       icalproperty_get_x_name(p),"X-TEST");
+    is("icalproperty_get_value_as_string() works",
+       icalproperty_get_value_as_string(p),"\"geo:10.123456,-70.123456\"");
+
+    icalcomponent_free(c);
+}
 
 int main(int argc, char *argv[])
 {
@@ -3849,6 +3876,7 @@ int main(int argc, char *argv[])
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test, do_header);
     test_run("Test bad dtstart in timezone as per r960", test_bad_dtstart_in_timezone, do_test, do_header);
     test_run("Test icalcomponent_new_from_string()", test_icalcomponent_new_from_string, do_test, do_header);
+    test_run("Test comma in quoted value of x property", test_comma_in_quoted_value, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
