@@ -337,13 +337,19 @@ static
 char* parser_get_next_value(char* line, char **end, icalvalue_kind kind)
 {
     
-    char* next;
+    char* next = 0;
     char *p;
     char *str;
     size_t length = strlen(line);
+    int quoted = 0;
+
+    if( line[0] == '\"' && line[length - 1] == '\"' ) {
+        /* This line is quoted, don't split into multiple values */
+        quoted = 1;
+    }
 
     p = line;
-    while(1){
+    while(!quoted){
 
 	next = parser_get_next_char(',',p,1);
 
