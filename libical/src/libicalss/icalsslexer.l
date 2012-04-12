@@ -111,7 +111,9 @@ NULL			{ return SQLNULL; }
 
 \'[\@\*A-Za-z0-9\-\.\:\ ]+\' {
 	int c = input();
-	unput(c);
+        if(c != EOF){
+		unput(c);
+	}
 	if(c!='\''){
 		sslval.v_string= icalmemory_tmp_copy(yytext);
 		return STRING;
