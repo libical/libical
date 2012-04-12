@@ -1,5 +1,6 @@
 ,,
 "#Property Name","libical Value type","iCalendar default value"
+"ACKNOWLEDGED","DATE-TIME","DATE-TIME"
 "ACTION","ACTION","ACTION"
 "ALLOW-CONFLICT","TEXT","TEXT"
 "ATTACH","ATTACH","URI"
