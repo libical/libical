@@ -30,6 +30,9 @@ endif(MSVC)
 add_library(icalvcal ${LIBRARY_TYPE} ${icalvcal_LIB_SRCS})
 add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})
 
+add_dependencies(icalvcal ical-header)
+add_dependencies(icalvcal-static ical-header)
+
 target_link_libraries(icalvcal ical)
 
 if(MSVC)

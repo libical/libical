@@ -23,9 +23,7 @@ add_custom_command(
     -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
     -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   DEPENDS
-  ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.h
-  ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.h
-  ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h
+  ical-header
 )
 
 add_custom_target(icalss-header 
@@ -75,6 +73,7 @@ add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
 add_library(icalss-static STATIC ${icalss_LIB_SRCS})
 
 add_dependencies(icalss icalss-header)
+add_dependencies(icalss-static icalss-header)
 
 target_link_libraries(icalss ical)
 
