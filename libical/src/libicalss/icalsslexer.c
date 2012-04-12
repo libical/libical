@@ -936,7 +936,9 @@ case 20:
 YY_RULE_SETUP
 {
 	int c = input();
-	unput(c);
+        if(c != EOF){
+		unput(c);
+	}
 	if(c!='\''){
 		sslval.v_string= icalmemory_tmp_copy(sstext);
 		return STRING;
