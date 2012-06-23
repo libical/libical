@@ -159,14 +159,6 @@ int main(int argc, char **argv)
                total_failed,
                total_okay,
 	       percent_failed);
-	if(!percent_failed) {
-	    ret = 0; /* good enough.
-			we will never be perfect unless our builtin
-			zones are created with vzic's -pure option.
-			Even then, we need to be in-sync with the
-			distro tzdata.. not that likely */
-	    printf(" *** There will always be a small error rate comparing builtin to distro timezones *** \n");
-	}
     }
 
     return ret;
