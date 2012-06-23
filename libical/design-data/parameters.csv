@@ -23,6 +23,10 @@
 "X","29","const char*",
 "X-LIC-ERRORTYPE","31","icalparameter_xlicerrortype","COMPONENT-PARSE-ERROR;PROPERTY-PARSE-ERROR;PARAMETER-NAME-PARSE-ERROR;PARAMETER-VALUE-PARSE-ERROR;VALUE-PARSE-ERROR;INVALID-ITIP;UNKNOWN-VCAL-PROP-ERROR;MIME-PARSE-ERROR;VCAL-PROP-PARSE-ERROR"
 "X-LIC-COMPARETYPE","30","icalparameter_xliccomparetype","EQUAL;NOTEQUAL;LESS;GREATER;LESSEQUAL;GREATEREQUAL;REGEX;ISNULL;ISNOTNULL"
+"#Parameters from CalDAV Scheduling Extensions to WebDAV"
+"SCHEDULE-AGENT","34","icalparameter_scheduleagent","SERVER;CLIENT"
+"SCHEDULE-FORCE-SEND","35","icalparameter_scheduleforcesend","REQUEST;REPLY"
+"SCHEDULE-STATUS","36","const char*",
 "#CAP Parameters","Draft 8",
 "#this parameter should really be called ACTION, but this conflicts with the ACTION property"
 "ACTIONPARAM","1","icalparameter_action","ASK;ABORT"
