@@ -143,6 +143,23 @@ icalvalue* icalvalue_new_clone(const icalvalue* old) {
 	    }
 	    break;
 	}
+    case ICAL_ACTION_VALUE:
+    {
+        new->data = old->data;
+        
+        if (old->data.v_enum == ICAL_ACTION_X) {
+            //preserve the custom action string
+            if (old->x_value != 0) {
+                new->x_value = icalmemory_strdup(old->x_value);
+                
+                if (new->x_value == 0) {
+                    icalvalue_free(new);
+                    return 0;
+                }
+            }
+        }
+        break;
+    }
 	case ICAL_RECUR_VALUE:
 	{
 	    if(old->data.v_recur != 0){
