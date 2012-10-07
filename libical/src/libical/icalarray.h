@@ -39,7 +39,7 @@ struct _icalarray {
     unsigned int	 increment_size;
     unsigned int	 num_elements;
     unsigned int	 space_allocated;
-    void		*data;
+    void		**chunks;
 };
 
 
