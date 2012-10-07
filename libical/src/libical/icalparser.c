@@ -77,7 +77,7 @@ static char* parser_get_next_char(char c, char *str, int qm);
 static char* parser_get_next_parameter(char* line,char** end);
 static char* parser_get_next_value(char* line, char **end, icalvalue_kind kind);
 static char* parser_get_prop_name(char* line, char** end);
-static char* parser_get_param_name(char* line, char **end, char **buf_value);
+static char* parser_get_param_name(char* line, char **end);
 
 #define TMP_BUF_SIZE 80
 
@@ -261,14 +261,13 @@ char* parser_get_prop_name(char* line, char** end)
 }
 
 static
-char* parser_get_param_name(char* line, char **end, char **buf)
+char* parser_get_param_name(char* line, char **end)
 {
     char* next; 
     char *str;
 
     next = parser_get_next_char('=',line,1);
 
-    *buf = 0;
     if (next == 0) {
 	return 0;
     }
@@ -283,7 +282,9 @@ char* parser_get_param_name(char* line, char **end, char **buf)
 		    return 0;
 	    }
 
-	    *buf = *end = make_segment(*end,next);
+        *end = make_segment(*end,next);
+    } else {
+        *end = make_segment(*end, *end + strlen(*end));
     }
 
     return str;
@@ -884,13 +885,12 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	if (str != 0){
 	    char* name = 0;
 	    char* pvalue = 0;
-	    char *buf_value = NULL;
         
 	    icalparameter *param = 0;
 	    icalparameter_kind kind;
 	    icalcomponent *tail = pvl_data(pvl_tail(parser->components));
 
-	    name = parser_get_param_name(str,&pvalue,&buf_value);
+	    name = parser_get_param_name(str,&pvalue);
 
 	    if (name == 0){
 		    /* 'tail' defined above */
@@ -908,8 +908,6 @@ icalcomponent* icalparser_add_line(icalparser* parser,
                 icalparameter_set_xname(param,name);
                 icalparameter_set_xvalue(param,pvalue);
             }
-            icalmemory_free_buffer(buf_value);
-            buf_value = NULL;
 	    } else if (kind == ICAL_IANA_PARAMETER){
             ical_unknown_token_handling tokHandlingSetting = 
                 ical_get_unknown_token_handling_setting();
@@ -921,21 +919,11 @@ icalcomponent* icalparser_add_line(icalparser* parser,
                 icalparameter_set_xname(param,name);
                 icalparameter_set_xvalue(param,pvalue);
             }
-            icalmemory_free_buffer(buf_value);
-            buf_value = NULL;
-
 	    } else if (kind != ICAL_NO_PARAMETER){
 			param = icalparameter_new_from_value_string(kind,pvalue);
-
-			icalmemory_free_buffer(buf_value);
-			buf_value = NULL;
-
 	    } else {
 		    /* Error. Failed to parse the parameter*/
 		    /* 'tail' defined above */
-
-			icalmemory_free_buffer(buf_value);
-			buf_value = NULL;
 
             /* Change for mozilla */
             /* have the option of being flexible towards unsupported parameters */
@@ -944,11 +932,10 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 			             ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
 			tail = 0;
 			parser->state = ICALPARSER_ERROR;
-			/* if (pvalue) {
+			if (pvalue) {
 			       free(pvalue);
 			       pvalue = 0;
-			   }
-			*/
+            }
 		    if (name) {
 			    free(name);
 			    name = 0;
@@ -967,11 +954,11 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 #endif
 	    }
 
-	    /* if (pvalue) {
-		       free(pvalue);
-		       pvalue = 0;
-	       }
-		*/
+	    if (pvalue) {
+		   free(pvalue);
+		   pvalue = 0;
+	    }
+		
 	    if (name) {
 		    free(name);
 		    name = 0;
@@ -985,8 +972,6 @@ icalcomponent* icalparser_add_line(icalparser* parser,
  		    tail = 0;
 		    parser->state = ICALPARSER_ERROR;
 		
-			icalmemory_free_buffer(buf_value);
-			buf_value = NULL;
 			icalmemory_free_buffer(name);
 			name = NULL;
 			icalmemory_free_buffer(str);
