@@ -919,7 +919,49 @@ icalcomponent* icalparser_add_line(icalparser* parser,
                 icalparameter_set_xname(param,name);
                 icalparameter_set_xvalue(param,pvalue);
             }
-	    } else if (kind != ICAL_NO_PARAMETER){
+        } else if (kind == ICAL_TZID_PARAMETER){
+            /*
+             Special case handling for TZID to workaround invalid incoming data.
+             For example, Google Calendar will send back stuff like this:
+             DTSTART;TZID=GMT+05:30:20120904T020000
+           
+             In this case we read to the last colon rather than the first colon.
+             This way the TZID will become GMT+05:30 rather than trying to parse
+             the date-time as 30:20120904T020000.
+             */
+            char *lastColon = 0;
+            char *nextColon = end;
+          
+            /* Find the last colon in the line */
+            do {
+                nextColon = parser_get_next_char(':', nextColon, 1);
+              
+                if (nextColon) {
+                    lastColon = nextColon;
+                }
+            } while (nextColon);
+          
+            /*
+             Rebuild str so that it includes everything up to the last colon.
+             So given the above example, str will go from
+             "TZID=GMT+05" to "TZID=GMT+05:30"
+             */
+            if (lastColon && *(lastColon + 1) != 0) {
+                char *strStart = line + sizeof(str);
+              
+                end = lastColon + 1;
+              
+                icalmemory_free_buffer(str);
+                str = make_segment(strStart, end - 1);
+            }
+          
+            icalmemory_free_buffer(name);
+            icalmemory_free_buffer(pvalue);
+          
+            /* Reparse the parameter name and value with the new segment */
+            name = parser_get_param_name(str,&pvalue);
+            param = icalparameter_new_from_value_string(kind,pvalue);
+        } else if (kind != ICAL_NO_PARAMETER){
 			param = icalparameter_new_from_value_string(kind,pvalue);
 	    } else {
 		    /* Error. Failed to parse the parameter*/
