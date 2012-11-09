@@ -174,6 +174,10 @@ icalarray_sort			(icalarray	*array,
 				 int	       (*compare) (const void *,
 							   const void *))
 {
+    if (array->num_elements == 0) {
+        return;
+    }
+    
     if (array->num_elements <= array->increment_size) {
       qsort(array->chunks[0], array->num_elements, array->element_size, compare);
     } else {
