@@ -159,6 +159,35 @@ add_custom_target(ical-header DEPENDS
   ${CMAKE_BINARY_DIR}/src/libical/ical.h
 )
 
+macro(_list_prefix _outvar _listvar _prefix)
+  set(${_outvar})
+  foreach(_item IN LISTS ${_listvar})
+    list(APPEND ${_outvar} ${_prefix}${_item})
+  endforeach()
+endmacro(_list_prefix)
+
+# GObject Introspection
+if (HAVE_INTROSPECTION)
+  include(GObjectIntrospectionMacros)
+  set(INTROSPECTION_GIRS)
+  #set(INTROSPECTION_SCANNER_ARGS "--add-include-path=${CMAKE_CURRENT_SOURCE_DIR}")
+  #set(INTROSPECTION_COMPILER_ARGS "--includedir=${CMAKE_CURRENT_SOURCE_DIR}")
+
+  set(libical_0_48_gir "libical")
+  set(libical_0_48_gir_VERSION "0.48")
+  set(INTROSPECTION_SCANNER_ARGS ${CMAKE_BINARY_DIR}/src/libical/ical.h)
+  set(libical_0_48_gir_LIBRARY "ical")
+  set(libical_0_48_gir_INCLUDES GObject-2.0)
+  get_directory_property(_tmp_includes ical_LIB_SRCS)
+  _list_prefix(_includes _tmp_includes "-L")
+  set(libical_0_48_gir_CFLAGS ${_includes})
+  set(libical_0_48_gir_LIBS ical)
+
+  list(APPEND INTROSPECTION_GIRS libical-0.48.gir)
+
+  gir_add_introspections(INTROSPECTION_GIRS)
+endif ()
+
 ########### next target ###############
 
 set(BUILT_COMBINEDHEADERS

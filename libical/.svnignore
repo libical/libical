@@ -13,6 +13,8 @@ intl
 .libs
 libtool
 *.lo
+*.gir
+*.typelib
 ltmain.sh
 Makefile
 Makefile.in
