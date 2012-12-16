@@ -28,6 +28,11 @@
 #  Set to build static libraries only.
 #  Default=false (build shared and static libs)
 #
+# -DGOBJECT_INTROSPECTION=[true|false]
+#  Set to build GObject introspection "typelib" files
+#  Requires GObject Introspection development package v0.6.7 or higher
+#  Default=false (do not generate the introspection files)
+#
 # -DUSE_32BIT_TIME_T=[true|false]
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
@@ -160,6 +165,16 @@ set(INSTALL_TARGETS_DEFAULT_ARGS
   LIBRARY DESTINATION ${LIB_INSTALL_DIR}
   ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
 )
+
+if(GOBJECT_INTROSPECTION)
+  set(MIN_GOBJECT_INTROSPECTION "0.6.7")
+  find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
+  if(INTROSPECTION_FOUND)
+    set(HAVE_INTROSPECTION TRUE)
+  else(INTROSPECTION_FOUND)
+    message(FATAL_ERROR "You requested to build with GObject Introspection but the necessary development package is missing or too low a version (version ${MIN_GOBJECT_INTROSPECTION} or higher is required)")
+  endif(INTROSPECTION_FOUND)
+endif(GOBJECT_INTROSPECTION)
 
 ################# build subdirs ########################
 
