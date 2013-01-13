@@ -528,7 +528,7 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
     icalrecur_iterator* rrule_iterator;
     struct icaldatetimeperiodtype rdate;
     int found_dtstart = 0, found_tzoffsetto = 0, found_tzoffsetfrom = 0;
-    int has_recurrence = 0;
+    int has_rdate = 0, has_rrule = 0;
 
     /* First we check if it is a STANDARD or DAYLIGHT component, and
        just return if it isn't. */
@@ -560,8 +560,10 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
 	    found_tzoffsetfrom = 1;
 	    break;
 	case ICAL_RDATE_PROPERTY:
+            has_rdate = 1;
+            break;
 	case ICAL_RRULE_PROPERTY:
-	    has_recurrence = 1;
+            has_rrule = 1;
 	    break;
 	default:
 	    /* Just ignore any other properties. */
@@ -590,9 +592,9 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
 	    dtstart.hour, dtstart.minute, dtstart.second);
 #endif
 
-    /* If the STANDARD/DAYLIGHT component has no recurrence data, we just add
+    /* If the STANDARD/DAYLIGHT component has no recurrence rule, we add
        a single change for the DTSTART. */
-    if (!has_recurrence) {
+    if (!has_rrule) {
 	change.year   = dtstart.year;
 	change.month  = dtstart.month;
 	change.day    = dtstart.day;
@@ -611,12 +613,11 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
 
 	/* Add the change to the array. */
 	icalarray_append (changes, &change);
-	return;
     }
 
     /* The component has recurrence data, so we expand that now. */
     prop = icalcomponent_get_first_property (comp, ICAL_ANY_PROPERTY);
-    while (prop) {
+    while (prop && (has_rdate || has_rrule)) {
 #if 0
 	printf ("Expanding property...\n");
 #endif
