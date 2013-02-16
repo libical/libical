@@ -884,9 +884,12 @@ icaltimezone_get_utc_offset		(icaltimezone	*zone,
 	change_num += step;
 
 	/* If we go past the start of the changes array, then we have no data
-	   for this time so we return a UTC offset of 0. */
-	if (change_num < 0)
-	    return 0;
+	   for this time so we return the prev UTC offset. */
+	if (change_num < 0) {
+	    if (is_daylight)
+		*is_daylight = ! tmp_change.is_daylight;
+	    return tmp_change.prev_utc_offset;
+	}
 
 	if ((unsigned int)change_num >= zone->changes->num_elements)
 	    break;
