@@ -3,7 +3,7 @@
 # Pass the following variables to cmake to control the build:
 # (See doc/UsingLibical.txt for more information)
 #
-# -DICAL_ERRORS_ARE_FATAL=[true|false] 
+# -DICAL_ERRORS_ARE_FATAL=[true|false]
 #  Set to make icalerror_* calls abort instead of internally signaling an error
 #  Default=false
 #
@@ -60,7 +60,9 @@ endif(WINCE)
 set(LIBICAL_LIB_MAJOR_VERSION "0")
 set(LIBICAL_LIB_MINOR_VERSION "48")
 set(LIBICAL_LIB_PATCH_VERSION "0")
-set(LIBICAL_LIB_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}.${LIBICAL_LIB_PATCH_VERSION}")
+set(LIBICAL_LIB_VERSION_STRING
+  "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}.${LIBICAL_LIB_PATCH_VERSION}"
+)
 
 set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
 set(PROJECT_URL "http://freeassociation.sf.net/")
@@ -87,7 +89,7 @@ if(WIN32)
   add_definitions(-DBIG_ENDIAN=0 -DLITTLE_ENDIAN=1 -DBYTE_ORDER=BIG_ENDIAN)
 endif(WIN32)
 
-set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
+set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)")
 set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
 set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include" CACHE STRING "Include directory name" FORCE)
 set(SHARE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share" CACHE STRING "Share directory name" FORCE)
@@ -95,16 +97,16 @@ set(SHARE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share" CACHE STRING "Share direct
 # set the output paths
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 if(WIN32)
-  set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH} )
+  set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
   set(LIB_INSTALL_DIR lib)
   set(BIN_INSTALL_DIR bin)
 else(WIN32)
-  set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib )
+  set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 endif(WIN32)
 
-IF(APPLE)
+if(APPLE)
   set(CMAKE_INSTALL_NAME_DIR ${LIB_DESTINATION})
-ENDIF(APPLE)
+endif(APPLE)
 
 if(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
   set(ICAL_ERRORS_ARE_FATAL 0)
