@@ -1638,8 +1638,7 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent* comp)
         ret = icalcomponent_get_datetime(comp, end_prop);
     } else if ( dur_prop != 0) {
 
-        struct icaltimetype start = 
-            icalcomponent_get_dtstart(inner);
+        struct icaltimetype start = icalcomponent_get_dtstart(inner);
         struct icaldurationtype duration;
         
         //extra check to prevent empty durations from crashing
@@ -1649,9 +1648,7 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent* comp)
             duration = icaldurationtype_null_duration();
         }
 
-        struct icaltimetype end = icaltime_add(start,duration);
-
-        ret = end;
+        ret = icaltime_add(start,duration);
     }
 
     return ret;
