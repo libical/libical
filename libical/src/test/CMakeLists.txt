@@ -33,7 +33,7 @@ add_executable(regression ${regression_SRCS})
 
 target_link_libraries(regression ical icalss icalvcal)
 
-add_test(regression regression)
+add_test(NAME regression WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin COMMAND regression)
 
 ########### next target ###############
 
@@ -96,7 +96,7 @@ if(NOT WIN32)
 
   target_link_libraries(timezones ical icalss)
 
-  add_test(timezones timezones)
+  add_test(NAME timezones WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin COMMAND timezones)
 endif(NOT WIN32)
 
 ########### install files ###############
