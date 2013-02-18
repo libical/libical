@@ -3,10 +3,11 @@
 VZIC README
 ===========
 
-This is 'vzic', a program to convert the Olson timezone database files into
-VTIMEZONE files compatible with the iCalendar specification (RFC2445).
+This is 'vzic', a program to convert the IANA (formerly Olson)
+timezone database files into VTIMEZONE files compatible with the
+iCalendar specification (RFC2445).
 
-(The name is based on the 'zic' program which converts the Olson files into
+(The name is based on the 'zic' program which converts the IANA files into
 time zone information files used by several Unix C libraries, including
 glibc. See zic(8) and tzfile(5).)
 
@@ -15,12 +16,10 @@ glibc. See zic(8) and tzfile(5).)
 REQUIREMENTS
 ============
 
-You need the Olson timezone database files, which  can be found at:
+You need the IANA (formely known as Olson) timezone database files (tzdata),
+which  can be found at:
 
-  ftp://elsie.nci.nih.gov/pub/
-
-  (Old versions can be found at ftp://munnari.oz.au/pub/oldtz/)
-
+  http://www.iana.org/time-zones
 
 Vzic also uses the GLib library (for hash tables, dynamic arrays, and date
 calculations). You need version 2.0 or higher. You can get this from:
@@ -28,20 +27,27 @@ calculations). You need version 2.0 or higher. You can get this from:
   http://www.gtk.org
 
 
+PREPARATIONS
+============
+gunzip and untar the tzdata file:
+  % mkdir tzdata2012j
+  % cd  tzdata2012j; tar xvfz ../tzdata2012j.tar.gz; cd ..
+
 
 BUILDING
 ========
 
-Edit the Makefile to set the OLSON_DIR, PRODUCT_ID and TZID_PREFIX variables.
+Edit the Makefile to set the OLSON_DIR (in this case to tzdata2012j),
+PRODUCT_ID and TZID_PREFIX variables.
 
-Then run 'make'.
+Then run 'make -B'.
 
 
 
 RUNNING
 =======
 
-Run 'vzic'.
+Run './vzic'
 
 The output is placed in the zoneinfo subdirectory by default,
 but you can use the --output-dir options to set another toplevel output
@@ -54,7 +60,7 @@ slightly to get Outlook to parse them. Unfortunately this means they are
 slightly wrong. If given the --pure option, vzic outputs the exact data,
 without worrying about compatability.
 
-NOTE: We don't convert all the Olson files. We skip 'backward', 'etcetera',
+NOTE: We don't convert all the IANA files. We skip 'backward', 'etcetera',
 'leapseconds', 'pacificnew', 'solar87', 'solar88' and 'solar89', 'factory'
 and 'systemv', since these don't really provide any useful timezones.
 See vzic.c.
@@ -64,7 +70,7 @@ See vzic.c.
 MERGING CHANGES INTO A MASTER SET OF VTIMEZONES
 ===============================================
 
-The Olson timezone files are updated fairly often, so we need to build new
+The IANA timezone files are updated fairly often, so we need to build new
 sets of VTIMEZONE files. Though we have to be careful to ensure that the TZID
 of updated timezones is also updated, since it must remain unique.
 
@@ -100,7 +106,7 @@ are no worse.) Here's a few problems we've had with the VTIMEZONEs:
 
  o Outlook doesn't like any years before 1600. We were using '1st Jan 0001'
    in all VTIMEZONEs to specify the first UTC offset known for the timezone.
-   (The Olson data does not give a start date for this.)
+   (The IANA data does not give a start date for this.)
 
    Now we just skip this first component for most timezones. The UTC offset
    can still be found from the TZOFFSETFROM property of the first component.
@@ -117,7 +123,7 @@ are no worse.) Here's a few problems we've had with the VTIMEZONEs:
 
  o Outlook doesn't like TZOFFSETFROM/TZOFFSETTO properties which include a
    seconds component, e.g. 'TZOFFSETFROM:+110628'.
-   Quite a lot of the Olson timezones include seconds in their UTC offsets,
+   Quite a lot of the IANA timezones include seconds in their UTC offsets,
    though no timezones currently have a UTC offset that uses the seconds
    value.
 
@@ -146,7 +152,7 @@ The output matches for all of the timezones, except in a few places where the
 result can't be determined. So I think we can be fairly confident that the
 VTIMEZONEs are correct.
 
-Note that you must use the same Olson data in libical that the OS is using
+Note that you must use the same IANA data in libical that the OS is using
 for mktime() etc. For example, I am using RedHat 9 which uses tzdata2002d,
 so I converted this to VTIMEZONE files and installed it into the libical
 timezone data directory before testing. (You need to use '--pure' when

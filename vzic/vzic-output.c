@@ -2126,10 +2126,12 @@ output_rrule_2				(char		*buffer,
 		 month + 1, WeekDays[day_weekday]);
       } else {
 	printf ("ERROR: %s: Couldn't modify RRULE to be compatible with Outlook (day >= %i, month = %i)\n", CurrentZoneName, day_number, month + 1);
-	exit (1);
+	printf (" ===> FAILING BACK TO PURE MODE THEN\n");
+	goto Pure;
       }
 
     } else {
+Pure:
       sprintf (buffer,
 	       "RRULE:FREQ=YEARLY;BYMONTH=%i;BYMONTHDAY=%i,%i,%i,%i,%i,%i,%i;BYDAY=%s",
 	       month + 1,
