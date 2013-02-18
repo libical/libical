@@ -133,6 +133,11 @@ void test_header(char *header, int set) {
 void test_end(void) {
   int pct;
 
+  if (testnumber < 1) {
+    printf("\n        No Tests Run.\n");
+    return;
+  }
+
   if (failed) {
     int i, oldset = 0;
     
