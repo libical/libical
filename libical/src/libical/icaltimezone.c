@@ -673,9 +673,32 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
 		rrule.until.is_utc = 0;
 	    }
 
+        /* Add the dtstart to changes, otherwise some oddly-defined VTIMEZONE
+           components can cause the first year to get skipped. */
+        change.year   = dtstart.year;
+        change.month  = dtstart.month;
+        change.day    = dtstart.day;
+        change.hour   = dtstart.hour;
+        change.minute = dtstart.minute;
+        change.second = dtstart.second;
+        
+#if 0
+        printf ("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
+                change.year, change.month, change.day,
+                change.hour, change.minute, change.second);
+#endif
+        
+        icaltimezone_adjust_change (&change, 0, 0, 0,
+                                    -change.prev_utc_offset);
+        
+        icalarray_append (changes, &change);
+
 	    rrule_iterator = icalrecur_iterator_new (rrule, dtstart);
 	    for (;rrule_iterator;) {
 		occ = icalrecur_iterator_next (rrule_iterator);
+		/* Skip dtstart since we just added it */
+        if (icaltime_compare(dtstart, occ) == 0)
+            continue;
 		if (occ.year > end_year || icaltime_is_null_time (occ))
 		    break;
 
