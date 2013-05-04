@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.52)
 
-AC_INIT([libical], [0.48], [http://freeassociation.sf.net/])
+AC_INIT([libical], [1.00], [http://freeassociation.sf.net/])
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE
 
