@@ -39,8 +39,9 @@
 /* Define if we have pthread. */
 #cmakedefine HAVE_PTHREAD_ATTR_GET_NP 1
 #cmakedefine HAVE_PTHREAD_GETATTR_NP 1
+#cmakedefine HAVE_PTHREAD_CREATE 1
 #cmakedefine HAVE_PTHREAD_NP_H 1
-#if defined(HAVE_PTHREAD_ATTR_GET_NP) || defined(HAVE_PTHREAD_GETATTR_NP) || defined(HAVE_PTHREAD_NP_H)
+#if defined(HAVE_PTHREAD_ATTR_GET_NP) || defined(HAVE_PTHREAD_GETATTR_NP) || defined(HAVE_PTHREAD_CREATE) || defined(HAVE_PTHREAD_NP_H)
 #define HAVE_PTHREAD 1
 #endif
 
@@ -93,6 +94,9 @@
    error */
 #define ICAL_ERRORS_ARE_FATAL ${ICAL_ERRORS_ARE_FATAL}
 
+/* Define to prevent empty properties from being replaced with X-LIC-ERROR properties */
+#define ICAL_ALLOW_EMPTY_PROPERTIES ${ICAL_ALLOW_EMPTY_PROPERTIES}
+
 /* Define if we want _REENTRANT */
 #cmakedefine ICAL_REENTRANT 1
 
@@ -111,6 +115,9 @@
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "${PROJECT_URL}"
+
+/* where our self provided zonefiles should live */
+#define PACKAGE_DATA_DIR "${PACKAGE_DATA_DIR}"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "${CMAKE_PROJECT_NAME}"
