@@ -116,9 +116,6 @@
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "${PROJECT_URL}"
 
-/* where our self provided zonefiles should live */
-#define PACKAGE_DATA_DIR "${PACKAGE_DATA_DIR}"
-
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "${CMAKE_PROJECT_NAME}"
 
