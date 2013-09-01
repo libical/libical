@@ -34,6 +34,12 @@ add_executable(regression ${regression_SRCS})
 target_link_libraries(regression ical icalss icalvcal)
 
 add_test(NAME regression WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin COMMAND regression)
+if(WIN32)
+  set_tests_properties(regression PROPERTIES ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH};${CMAKE_BINARY_DIR}/bin;%PATH%")
+endif()
+if(CYGWIN)
+  set_tests_properties(regression PROPERTIES ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}")
+endif()
 
 ########### next target ###############
 
@@ -97,6 +103,9 @@ if(NOT WIN32)
   target_link_libraries(timezones ical icalss)
 
   add_test(NAME timezones WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin COMMAND timezones)
+  if(CYGWIN)
+    set_tests_properties(timezones PROPERTIES ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}")
+  endif()
 endif(NOT WIN32)
 
 ########### install files ###############
