@@ -63,7 +63,7 @@ if($opt_h){
   print "typedef enum icalvalue_kind {\n";
   print "   ICAL_ANY_VALUE=$idx,\n";
 
-  foreach $value  (keys %h) {
+  foreach $value  (sort keys %h) {
     
     $idx++;
     my $ucv = join("",map {uc(lc($_));}  split(/-/,$value));
