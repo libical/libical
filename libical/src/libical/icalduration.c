@@ -93,6 +93,10 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
 	
 	switch(p) 
 	    {
+            case '+': {
+                if(i != 0 || begin_flag == 1) goto error;
+                break;
+            }
 	    case '-': {
 		if(i != 0 || begin_flag == 1) goto error;
 
