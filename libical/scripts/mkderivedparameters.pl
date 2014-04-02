@@ -66,7 +66,7 @@ if($opt_h){
   print "    ICAL_NO_PARAMETER = ".$enumConst."\n} icalparameter_kind;\n\n";
 
   # Now create enumerations for parameter values
-  $idx = 20000;
+  $lastidx = $idx = 20000;
   
   print "#define ICALPARAMETER_FIRST_ENUM $idx\n\n";
   
@@ -85,10 +85,6 @@ if($opt_h){
       print "typedef enum $type {\n";
       my $first = 1;
 
-      unshift(@enums,"X");
-
-      push(@enums,"NONE");
-
       foreach $e (@enums) {
 	if (!$first){
 	  print ",\n";
@@ -96,11 +92,20 @@ if($opt_h){
 	  $first = 0;
 	}
 	
+	$e =~ /([a-zA-Z0-9\-]+)=?([0-9]+)?/;
+	$e = $1;
+	if ($2) {
+	    $idx = $2;
+	} else {
+	    $idx++;
+	}
+	if ($idx > $lastidx) {
+	    $lastidx = $idx;
+	}
+
 	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));    
 	
 	print "    ICAL_${ucv}_${uce} = $idx";
-	
-	$idx++;
       }
       $c_type =~ s/enum //;
 
@@ -108,7 +113,8 @@ if($opt_h){
     }
   }
 
-  print "#define ICALPARAMETER_LAST_ENUM $idx\n\n";
+  $lastidx++;
+  print "#define ICALPARAMETER_LAST_ENUM $lastidx\n\n";
 
 }
 
@@ -120,6 +126,10 @@ if ($opt_c){
   my $out;
 
   foreach $enum (@{$params{'VALUE'}->{'enums'}}){
+    $enum =~ /([a-zA-Z0-9\-]+)=?([0-9]+)?/;
+    $enum = $1;
+
+    next if $enum eq 'X' or $enum eq 'NONE';
     next if $enum eq 'NO' or $enum eq 'ERROR';
     $uc = join("",map {uc(lc($_));}  split(/-/,$enum));    
     $out.="    {ICAL_VALUE_${uc},ICAL_${uc}_VALUE},\n";
@@ -170,6 +180,11 @@ if ($opt_c){
     if(@enums){
 
       foreach $e (@enums){
+	$e =~ /([a-zA-Z0-9\-]+)=?([0-9]+)?/;
+	$e = $1;
+
+	next if $e eq 'X' or $e eq 'NONE';
+
 	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));    
 
 	$count++;

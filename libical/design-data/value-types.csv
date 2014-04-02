@@ -1,35 +1,38 @@
-"#Name","C type& gen flag","Python","Component Values","Enum Values"
-"BINARY","(a)const char*","file","unitary",
-"BOOLEAN","(a)int","integer","unitary",
-"CAL-ADDRESS","(a)const char*","string","unitary",
-"DATE","(a)struct icaltimetype","Time","unitary",
-"DATE-TIME","(m)struct icaltimetype","Time","unitary",
-"DURATION","(a)struct icaldurationtype","Duration","unitary",
-"FLOAT","(a)float","float","unitary",
-"INTEGER","(a)int","integer","unitary",
-"PERIOD","(a)struct icalperiodtype","Period","unitary",
-"RECUR","(m)struct icalrecurrencetype","RecurrenceSet","unitary",
-"TEXT","(a)const char*","string","unitary",
-"URI","(a)const char*","string","unitary",
-"UTC-OFFSET","(a)int","integer","unitary",
-"QUERY","(a)const char*","string","unitary",
+"#Name","C icalvalue_kind Enum","C type& gen flag","Python","Component Values","Enum Values"
+"BINARY","5003","(a)const char*","file","unitary",
+"BOOLEAN","5004","(a)int","integer","unitary",
+"CAL-ADDRESS","5005","(a)const char*","string","unitary",
+"DATE","5009","(a)struct icaltimetype","Time","unitary",
+"DATE-TIME","5010","(m)struct icaltimetype","Time","unitary",
+"DURATION","5012","(a)struct icaldurationtype","Duration","unitary",
+"FLOAT","5013","(a)float","float","unitary",
+"INTEGER","5015","(a)int","integer","unitary",
+"PERIOD","5017","(a)struct icalperiodtype","Period","unitary",
+"RECUR","5020","(m)struct icalrecurrencetype","RecurrenceSet","unitary",
+"TEXT","5024","(a)const char*","string","unitary",
+"URI","5027","(a)const char*","string","unitary",
+"UTC-OFFSET","5028","(a)int","integer","unitary",
+"QUERY","5018","(a)const char*","string","unitary",
 "#Non-standard multi-valued types",,,,
-"ATTACH","(m)icalattach *","none","URI;BINARY",
-"DATE-TIME-PERIOD","(m)struct icaldatetimeperiodtype","none","DATE-TIME;PERIOD",
-"TRIGGER","(m)struct icaltriggertype","string","DURATION;DATE-TIME",
+"ATTACH","5002","(m)icalattach *","none","URI;BINARY",
+"DATE-TIME-PERIOD","5011","(m)struct icaldatetimeperiodtype","none","DATE-TIME;PERIOD",
+"TRIGGER","5026","(m)struct icaltriggertype","string","DURATION;DATE-TIME",
 "#Non-standard property enumeration types",,,,
-"METHOD","(a)enum icalproperty_method","string","unitary","PUBLISH;REQUEST;REPLY;ADD;CANCEL;REFRESH;COUNTER;DECLINECOUNTER;CREATE;READ;RESPONSE;MOVE;MODIFY;GENERATEUID;DELETE"
-"X-LIC-CLASS","(a)enum icalproperty_xlicclass","string","unitary","PUBLISH-NEW;PUBLISH-UPDATE;PUBLISH-FREEBUSY;REQUEST-NEW;REQUEST-UPDATE;REQUEST-RESCHEDULE;REQUEST-DELEGATE;REQUEST-NEW-ORGANIZER;REQUEST-FORWARD;REQUEST-STATUS;REQUEST-FREEBUSY;REPLY-ACCEPT;REPLY-DECLINE;REPLY-DELEGATE;REPLY-CRASHER-ACCEPT;REPLY-CRASHER-DECLINE;ADD-INSTANCE;CANCEL-EVENT;CANCEL-INSTANCE;CANCEL-ALL;REFRESH;COUNTER;DECLINECOUNTER;MALFORMED;OBSOLETE;MISSEQUENCED;UNKNOWN"
-"ACTION","(a)enum icalproperty_action","string","unitary","AUDIO;DISPLAY;EMAIL;PROCEDURE"
-"STATUS","(a)enum icalproperty_status","string","unitary","TENTATIVE;CONFIRMED;COMPLETED;NEEDS-ACTION;CANCELLED;IN-PROCESS;DRAFT;FINAL"
-"TRANSP","(a)enum icalproperty_transp","string","unitary","OPAQUE;OPAQUE-NOCONFLICT;TRANSPARENT;TRANSPARENT-NOCONFLICT"
-"CLASS","(m)enum icalproperty_class","string","unitary","PUBLIC;PRIVATE;CONFIDENTIAL"
+"METHOD","5016","(a)enum icalproperty_method","string","unitary","X=10030;PUBLISH;REQUEST;REPLY;ADD;CANCEL;REFRESH;COUNTER;DECLINECOUNTER;CREATE;READ;RESPONSE;MOVE;MODIFY;GENERATEUID;DELETE;NONE"
+"X-LIC-CLASS","5030","(a)enum icalproperty_xlicclass","string","unitary","X=10067;PUBLISH-NEW;PUBLISH-UPDATE;PUBLISH-FREEBUSY;REQUEST-NEW;REQUEST-UPDATE;REQUEST-RESCHEDULE;REQUEST-DELEGATE;REQUEST-NEW-ORGANIZER;REQUEST-FORWARD;REQUEST-STATUS;REQUEST-FREEBUSY;REPLY-ACCEPT;REPLY-DECLINE;REPLY-DELEGATE;REPLY-CRASHER-ACCEPT;REPLY-CRASHER-DECLINE;ADD-INSTANCE;CANCEL-EVENT;CANCEL-INSTANCE;CANCEL-ALL;REFRESH;COUNTER;DECLINECOUNTER;MALFORMED;OBSOLETE;MISSEQUENCED;UNKNOWN;NONE"
+"ACTION","5001","(a)enum icalproperty_action","string","unitary","X=10000;AUDIO;DISPLAY;EMAIL;PROCEDURE;NONE=10005"
+"STATUS","5022","(a)enum icalproperty_status","string","unitary","X=10051;TENTATIVE;CONFIRMED;COMPLETED;NEEDS-ACTION;CANCELLED;IN-PROCESS;DRAFT;FINAL;NONE"
+"TRANSP","5025","(a)enum icalproperty_transp","string","unitary","X=10061;OPAQUE;OPAQUE-NOCONFLICT;TRANSPARENT;TRANSPARENT-NOCONFLICT;NONE"
+"CLASS","5007","(m)enum icalproperty_class","string","unitary","X=10011;PUBLIC;PRIVATE;CONFIDENTIAL;NONE"
 "#Other non-standard",,,,
-"REQUEST-STATUS","(a)struct icalreqstattype","string","unitary"
-"GEO","(m)struct icalgeotype","tuple","unitary",
-"STRING","(a)const char*","string","unitary",
-"X","(m)const char*","string","unitary",
+"REQUEST-STATUS","5021","(a)struct icalreqstattype","string","unitary"
+"GEO","5014","(m)struct icalgeotype","tuple","unitary",
+"STRING",""5023",(a)const char*","string","unitary",
+"X","5029","(m)const char*","string","unitary",
 "#CAP enumeration types",,,,
-"CMD","(a)enum icalproperty_cmd","string","unitary","ABORT;CONTINUE;CREATE;DELETE;GENERATE-UID;GET-CAPABILITY;IDENTIFY;MODIFY;MOVE;REPLY;SEARCH;SET-LOCALE"
-"QUERY-LEVEL","(a)enum icalproperty_querylevel","string","unitary","CAL-QL-1;CAL-QL-NONE"
-"CAR-LEVEL","(a)enum icalproperty_carlevel","string","unitary","CAR-NONE;CAR-MIN;CAR-FULL-1"
+"CMD","5008","(a)enum icalproperty_cmd","string","unitary","X=10016;ABORT;CONTINUE;CREATE;DELETE;GENERATE-UID;GET-CAPABILITY;IDENTIFY;MODIFY;MOVE;REPLY;SEARCH;SET-LOCALE;NONE"
+"QUERY-LEVEL","5019","(a)enum icalproperty_querylevel","string","unitary","X=10047;CAL-QL-1;CAL-QL-NONE;NONE"
+"CAR-LEVEL","5006","(a)enum icalproperty_carlevel","string","unitary","X=10006;CAR-NONE;CAR-MIN;CAR-FULL-1;NONE"
+"ANY","5000",,,,
+"NO","5031",,,,
+"#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"

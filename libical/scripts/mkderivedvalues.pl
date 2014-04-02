@@ -59,25 +59,28 @@ sub insert_code
 if($opt_h){
 
   # First print out the value enumerations
-  $idx = 5000;
+  $idx = $h{'ANY'}->{"kindEnum"};
   print "typedef enum icalvalue_kind {\n";
   print "   ICAL_ANY_VALUE=$idx,\n";
 
   foreach $value  (sort keys %h) {
     
-    $idx++;
+    next if !$value;
+    
+    next if $value eq 'NO' or $value eq 'ANY';
+
     my $ucv = join("",map {uc(lc($_));}  split(/-/,$value));
     
-    next if $value eq "NO";
-    
+    $idx = $h{$value}->{"kindEnum"};
+
     print "    ICAL_${ucv}_VALUE=$idx,\n";
   }
   
-  $idx++;
+  $idx = $h{'NO'}->{"kindEnum"};
   print "   ICAL_NO_VALUE=$idx\n} icalvalue_kind ;\n\n";
   
   # Now create enumerations for property values
-  $idx = 10000;
+  $lastidx = $idx = 10000;
   
   print "#define ICALPROPERTY_FIRST_ENUM $idx\n\n";
   
@@ -85,7 +88,7 @@ if($opt_h){
     
     next if !$value;
     
-    next if $value eq 'NO' or $prop eq 'ANY';
+    next if $value eq 'NO' or $value eq 'ANY';
 
     my $ucv = join("",map {uc(lc($_));}  split(/-/,$value));    
     my @enums = @{$h{$value}->{'enums'}};
@@ -96,10 +99,6 @@ if($opt_h){
       print "typedef $c_type {\n";
       my $first = 1;
 
-      unshift(@enums,"X");
-
-      push(@enums,"NONE");
-
       foreach $e (@enums) {
 	if (!$first){
 	  print ",\n";
@@ -107,11 +106,20 @@ if($opt_h){
 	  $first = 0;
 	}
 	
+	$e =~ /([a-zA-Z0-9\-]+)=?([0-9]+)?/;
+	$e = $1;
+	if ($2) {
+	    $idx = $2;
+	} else {
+	    $idx++;
+	}
+	if ($idx > $lastidx) {
+	    $lastidx = $idx;
+	}
+
 	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));    
 	
 	print "    ICAL_${ucv}_${uce} = $idx";
-	
-	$idx++;
       }  
 
       $c_type =~ s/enum //;
@@ -120,7 +128,8 @@ if($opt_h){
     }
   }
 
-  print "#define ICALPROPERTY_LAST_ENUM $idx\n\n";
+  $lastidx++;
+  print "#define ICALPROPERTY_LAST_ENUM $lastidx\n\n";
 
 }
 
@@ -134,10 +143,9 @@ if($opt_c){
 
   foreach $value  (keys %h) {
 
-    $idx++;
+    next if $value eq 'NO' or $value eq 'ANY';
+
     my $ucv = join("",map {uc(lc($_));}  split(/-/,$value));
-    
-    next if $value eq "NO";
     
     print "    {ICAL_${ucv}_VALUE,\"$value\"},\n";
   }
@@ -148,7 +156,9 @@ if($opt_c){
 }
 
 
-foreach $value  (keys %h) {
+foreach $value (sort keys %h) {
+
+  next if $value eq 'ANY';
 
   my $autogen = $h{$value}->{C}->[0];
   my $type = $h{$value}->{C}->[1];
