@@ -110,4 +110,6 @@
 "NO","100","NO","NO"
 "#VALARM Extension Properties","draft-daboo-valarm-extensions Section 13.1",
 "ACKNOWLEDGED","1","DATE-TIME","DATE-TIME"
+"#VAVAILABILITY Properties","draft-daboo-calendar-availability",
+"BUSYTYPE","101","BUSYTYPE","BUSYTYPE"
 "#NOTE for updaters.  Preserve the icalproperty_kind Enum values to aid forward compatibility"

@@ -720,6 +720,7 @@ icalcomponent* icalcomponent_get_first_real_component(icalcomponent *c)
 	   kind == ICAL_VTODO_COMPONENT ||
 	   kind == ICAL_VJOURNAL_COMPONENT ||
 	   kind == ICAL_VFREEBUSY_COMPONENT ||
+	   kind == ICAL_VAVAILABILITY_COMPONENT ||
 	   kind == ICAL_VQUERY_COMPONENT ||
 	   kind == ICAL_VAGENDA_COMPONENT){
 	    return comp;
@@ -1316,6 +1317,10 @@ static const struct icalcomponent_kind_map component_map[] =
     { ICAL_XLICMIMEPART_COMPONENT, "X-LIC-MIME-PART" },  
     { ICAL_ANY_COMPONENT, "ANY" },  
     { ICAL_XROOT_COMPONENT, "XROOT" },  
+
+    /* Calendar Availability components */
+    { ICAL_VAVAILABILITY_COMPONENT, "VAVAILABILITY" },
+    { ICAL_XAVAILABLE_COMPONENT, "AVAILABLE" },
 
     /* End of list */
     { ICAL_NO_COMPONENT, "" },
@@ -2101,6 +2106,14 @@ icalcomponent* icalcomponent_new_vquery(void)
 icalcomponent* icalcomponent_new_vreply(void)
 {
     return icalcomponent_new(ICAL_VREPLY_COMPONENT);
+}
+icalcomponent* icalcomponent_new_vavailability(void)
+{
+    return icalcomponent_new(ICAL_VAVAILABILITY_COMPONENT);
+}
+icalcomponent* icalcomponent_new_xavailable(void)
+{
+    return icalcomponent_new(ICAL_XAVAILABLE_COMPONENT);
 }
 
 /*

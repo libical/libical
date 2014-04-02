@@ -35,4 +35,6 @@
 "CAR-LEVEL","5006","(a)enum icalproperty_carlevel","string","unitary","X=10006;CAR-NONE;CAR-MIN;CAR-FULL-1;NONE"
 "ANY","5000",,,,
 "NO","5031",,,,
+"#VAVAILABILITY types","draft-daboo-calendar-availability",,,
+"BUSYTYPE","5032","(a)enum icalproperty_busytype","string","unitary","X=10097;BUSY;BUSY-UNAVAILABLE;BUSY-TENTATIVE;NONE"
 "#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"
