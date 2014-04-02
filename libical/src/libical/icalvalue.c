@@ -553,6 +553,9 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
     case ICAL_CARLEVEL_VALUE:
         value = icalvalue_new_enum(kind, ICAL_CARLEVEL_X,str);
         break;
+    case ICAL_BUSYTYPE_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_BUSYTYPE_X,str);
+        break;
 
     case ICAL_INTEGER_VALUE:
 	    value = icalvalue_new_integer(atoi(str));
@@ -1240,6 +1243,7 @@ icalvalue_as_ical_string_r(const icalvalue* value)
     case ICAL_STATUS_VALUE:
     case ICAL_TRANSP_VALUE:
     case ICAL_CLASS_VALUE:
+    case ICAL_BUSYTYPE_VALUE:
         if(value->x_value !=0){
             return icalmemory_strdup(value->x_value);
         }
