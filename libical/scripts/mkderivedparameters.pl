@@ -228,6 +228,12 @@ foreach $param  (sort keys %params){
      $pointer_check = "icalerror_check_arg_rz( (v!=0),\"v\");"; 
      $pointer_check_v = "icalerror_check_arg_rv( (v!=0),\"v\");"; 
 
+  } elsif ($type=~/int/ ) {
+
+    $charorenum= "    icalerror_check_arg( (param!=0), \"param\");\n$xrange\nreturn param->data;";
+     
+     $set_code = "((struct icalparameter_impl*)param)->data = v;";
+
   } else {
 
     $xrange ="     if (param->string != 0){\n        return ICAL_${uc}_X;\n        }\n" if !exists $no_xname{$uc};
