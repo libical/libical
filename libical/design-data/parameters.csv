@@ -14,7 +14,7 @@
 "PARTSTAT","20","icalparameter_partstat","X=20029;NEEDS-ACTION;ACCEPTED;DECLINED;TENTATIVE;DELEGATED;COMPLETED;INPROCESS;NONE"
 "RANGE","21","icalparameter_range","X=20038;THISANDPRIOR;THISANDFUTURE;NONE"
 "RELATED","22","icalparameter_related","X=20042;START;END;NONE"
-"RELTYPE","23","icalparameter_reltype","X=20046;PARENT;CHILD;SIBLING;NONE"
+"RELTYPE","23","icalparameter_reltype","X=20046;PARENT;CHILD;SIBLING;NONE;POLL=20107"
 "ROLE","24","icalparameter_role","X=20051;CHAIR;REQ-PARTICIPANT;OPT-PARTICIPANT;NON-PARTICIPANT;NONE"
 "RSVP","25","icalparameter_rsvp","X=20057;TRUE;FALSE;NONE"
 "SENT-BY","26","const char*",
@@ -40,4 +40,8 @@
 "#In practice any unknown paramater that is not an xparam is treated as an ianaparam"
 "IANA","33","const char*",
 "ANY","0",,
+"#VPOLL Parameters","draft-york-vpoll",
+"PUBLIC-COMMENT","37","const char*",
+"RESPONSE","38","int",
+"STAY-INFORMED","39","icalparameter_stayinformed","X=20108;TRUE;FALSE;NONE"
 "#NOTE for updaters.  Preserve the icalparameter_kind Enum values to aid forward compatibility"

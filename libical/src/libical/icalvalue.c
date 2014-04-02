@@ -341,7 +341,9 @@ static char* icalmemory_strdup_and_quote(const icalvalue* value,
             /* unescaped COMMA is allowed in CATEGORIES property as its
                considered a list delimiter here, see:
                http://tools.ietf.org/html/rfc2445#section-4.3.11 */
-            if (icalproperty_isa(value->parent) == ICAL_CATEGORIES_PROPERTY) {
+            if ((icalproperty_isa(value->parent) == ICAL_CATEGORIES_PROPERTY) ||
+                (icalproperty_isa(value->parent) == ICAL_RESOURCES_PROPERTY) ||
+                (icalproperty_isa(value->parent) == ICAL_POLLPROPERTIES_PROPERTY)) {
                 icalmemory_append_char(&str,&str_p,&buf_sz,*p);
                 break;
             }
@@ -555,6 +557,9 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
         break;
     case ICAL_BUSYTYPE_VALUE:
         value = icalvalue_new_enum(kind, ICAL_BUSYTYPE_X,str);
+        break;
+    case ICAL_POLLMODE_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_POLLMODE_X,str);
         break;
 
     case ICAL_INTEGER_VALUE:
@@ -1244,6 +1249,7 @@ icalvalue_as_ical_string_r(const icalvalue* value)
     case ICAL_TRANSP_VALUE:
     case ICAL_CLASS_VALUE:
     case ICAL_BUSYTYPE_VALUE:
+    case ICAL_POLLMODE_VALUE:
         if(value->x_value !=0){
             return icalmemory_strdup(value->x_value);
         }
