@@ -18,7 +18,8 @@
 "DATE-TIME-PERIOD","5011","(m)struct icaldatetimeperiodtype","none","DATE-TIME;PERIOD",
 "TRIGGER","5026","(m)struct icaltriggertype","string","DURATION;DATE-TIME",
 "#Non-standard property enumeration types",,,,
-"METHOD","5016","(a)enum icalproperty_method","string","unitary","X=10030;PUBLISH;REQUEST;REPLY;ADD;CANCEL;REFRESH;COUNTER;DECLINECOUNTER;CREATE;READ;RESPONSE;MOVE;MODIFY;GENERATEUID;DELETE;NONE"
+"#METHOD:POLLSTATUS from draft-york-vpoll",,,,
+"METHOD","5016","(a)enum icalproperty_method","string","unitary","X=10030;PUBLISH;REQUEST;REPLY;ADD;CANCEL;REFRESH;COUNTER;DECLINECOUNTER;CREATE;READ;RESPONSE;MOVE;MODIFY;GENERATEUID;DELETE;NONE;POLLSTATUS=10101"
 "X-LIC-CLASS","5030","(a)enum icalproperty_xlicclass","string","unitary","X=10067;PUBLISH-NEW;PUBLISH-UPDATE;PUBLISH-FREEBUSY;REQUEST-NEW;REQUEST-UPDATE;REQUEST-RESCHEDULE;REQUEST-DELEGATE;REQUEST-NEW-ORGANIZER;REQUEST-FORWARD;REQUEST-STATUS;REQUEST-FREEBUSY;REPLY-ACCEPT;REPLY-DECLINE;REPLY-DELEGATE;REPLY-CRASHER-ACCEPT;REPLY-CRASHER-DECLINE;ADD-INSTANCE;CANCEL-EVENT;CANCEL-INSTANCE;CANCEL-ALL;REFRESH;COUNTER;DECLINECOUNTER;MALFORMED;OBSOLETE;MISSEQUENCED;UNKNOWN;NONE"
 "ACTION","5001","(a)enum icalproperty_action","string","unitary","X=10000;AUDIO;DISPLAY;EMAIL;PROCEDURE;NONE=10005"
 "STATUS","5022","(a)enum icalproperty_status","string","unitary","X=10051;TENTATIVE;CONFIRMED;COMPLETED;NEEDS-ACTION;CANCELLED;IN-PROCESS;DRAFT;FINAL;NONE"
@@ -37,4 +38,5 @@
 "NO","5031",,,,
 "#VAVAILABILITY types","draft-daboo-calendar-availability",,,
 "BUSYTYPE","5032","(a)enum icalproperty_busytype","string","unitary","X=10096;BUSY;BUSY-UNAVAILABLE;BUSY-TENTATIVE;NONE"
-"#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"
+"#VPOLL types","draft-york-vpoll",,,
+"POLLMODE","5033","(a)enum icalproperty_pollmode","string","unitary","X=10102;BASIC;NONE""#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"

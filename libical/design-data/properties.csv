@@ -112,4 +112,11 @@
 "ACKNOWLEDGED","1","DATE-TIME","DATE-TIME"
 "#VAVAILABILITY Properties","draft-daboo-calendar-availability",
 "BUSYTYPE","101","BUSYTYPE","BUSYTYPE"
+"#VPOLL Properties","draft-york-vpoll",
+"ACCEPT-RESPONSE","102","TEXT,"TEXT"
+"POLL-ITEM-ID","103","INTEGER,"INTEGER"
+"POLL-MODE","104","POLLMODE,"POLLMODE"
+"POLL-PROPERTIES","105","TEXT,"TEXT"
+"POLL-WINNER","106","INTEGER,"INTEGER"
+"VOTER","107","CAL-ADDRESS,"CAL-ADDRESS"
 "#NOTE for updaters.  Preserve the icalproperty_kind Enum values to aid forward compatibility"

@@ -721,6 +721,7 @@ icalcomponent* icalcomponent_get_first_real_component(icalcomponent *c)
 	   kind == ICAL_VJOURNAL_COMPONENT ||
 	   kind == ICAL_VFREEBUSY_COMPONENT ||
 	   kind == ICAL_VAVAILABILITY_COMPONENT ||
+	   kind == ICAL_VPOLL_COMPONENT ||
 	   kind == ICAL_VQUERY_COMPONENT ||
 	   kind == ICAL_VAGENDA_COMPONENT){
 	    return comp;
@@ -1321,6 +1322,9 @@ static const struct icalcomponent_kind_map component_map[] =
     /* Calendar Availability components */
     { ICAL_VAVAILABILITY_COMPONENT, "VAVAILABILITY" },
     { ICAL_XAVAILABLE_COMPONENT, "AVAILABLE" },
+
+    /* Consensus Scheduling component */
+    { ICAL_VPOLL_COMPONENT, "VPOLL" },
 
     /* End of list */
     { ICAL_NO_COMPONENT, "" },
@@ -2114,6 +2118,10 @@ icalcomponent* icalcomponent_new_vavailability(void)
 icalcomponent* icalcomponent_new_xavailable(void)
 {
     return icalcomponent_new(ICAL_XAVAILABLE_COMPONENT);
+}
+icalcomponent* icalcomponent_new_vpoll(void)
+{
+    return icalcomponent_new(ICAL_VPOLL_COMPONENT);
 }
 
 /*

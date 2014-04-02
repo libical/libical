@@ -64,7 +64,8 @@ typedef enum icalcomponent_kind {
     ICAL_XLICMIMEPART_COMPONENT, /* a non-stardard component that mirrors
 				    structure of MIME data */
     ICAL_VAVAILABILITY_COMPONENT,
-    ICAL_XAVAILABLE_COMPONENT
+    ICAL_XAVAILABLE_COMPONENT,
+    ICAL_VPOLL_COMPONENT
 
 } icalcomponent_kind;
 
