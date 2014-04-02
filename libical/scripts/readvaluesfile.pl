@@ -20,16 +20,17 @@ sub read_values_file {
     @column = split(/,/,$_);
     
     my $value_name = $column[0];
+    my $enumConst = $column[1];
 
-    my $c_type_str =  $column[1];
+    my $c_type_str =  $column[2];
     my $c_autogen = ($c_type_str =~ /\(a\)/);
 
     my $c_type = $c_type_str;
     $c_type =~ s/\(.\)//;
 
-    my $python_type =  $column[2];
-    my $components = $column[3];
-    my $enum_values = $column[4];
+    my $python_type =  $column[3];
+    my $components = $column[4];
+    my $enum_values = $column[5];
 
     my @components;
     if($components ne "unitary"){
@@ -47,6 +48,7 @@ sub read_values_file {
     }
 
     $h{$value_name} = { C => [$c_autogen,$c_type],
+			kindEnum => $enumConst,
 			perl => $perl_type,
 			python => $python_type,
 			components=>[@components],
@@ -78,10 +80,12 @@ sub read_properties_file {
     
     my $property_name = $column[0];
 
-    my $lic_value = $column[1];
-    my $default_value = $column[2];
+    my $enumConst = $column[1];
+    my $lic_value = $column[2];
+    my $default_value = $column[3];
     
     $h{$property_name} = { lic_value => $lic_value,
+			   kindEnum => $enumConst,
 			   default_value => $default_value
 			 };
   }

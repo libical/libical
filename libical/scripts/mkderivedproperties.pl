@@ -85,7 +85,6 @@ if($opt_c){
   
   print "{ICAL_${uc}_PROPERTY,\"\",ICAL_NO_VALUE}};\n\n";
 
-  $idx = 10000;
   $count = 1;
   my $out = "";
 
@@ -101,10 +100,15 @@ if($opt_c){
 
       my ($c_autogen,$c_type) = @{$valuemap{$value}->{'C'}};
       
-      unshift(@enums,"X");
-      push(@enums,"NONE");
-
       foreach $e (@enums) {
+
+	$e =~ /([a-zA-Z0-9\-]+)=?([0-9]+)?/;
+	$e = $1;
+	if ($2) {
+	    $idx = $2;
+	} else {
+	    $idx++;
+	}
 
 	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));
 	
@@ -116,7 +120,6 @@ if($opt_c){
 
 	$out.="    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce},\"$str\" }, /*$idx*/\n";
 
-	$idx++;
 	$count++;
       }
       
@@ -136,7 +139,8 @@ if($opt_c){
 if($opt_h){
 
   # Create the property enumerations list
-  print "typedef enum icalproperty_kind {\n    ICAL_ANY_PROPERTY = 0,\n";
+  my $enumConst = $propmap{'ANY'}->{"kindEnum"};
+  print "typedef enum icalproperty_kind {\n    ICAL_ANY_PROPERTY = ".$enumConst.",\n";
   foreach $prop (sort keys %propmap) {
     
     next if !$prop;
@@ -145,10 +149,13 @@ if($opt_h){
     
     my ($uc,$lc,$lcvalue,$ucvalue,$type) = fudge_data($prop);
     
-    print "    ICAL_${uc}_PROPERTY, \n";
+    $enumConst = $propmap{$prop}->{"kindEnum"};
+        
+    print "    ICAL_${uc}_PROPERTY = ".$enumConst.", \n";
     
   }  
-  print "    ICAL_NO_PROPERTY\n} icalproperty_kind;\n\n";
+  $enumConst = $propmap{'NO'}->{"kindEnum"};
+  print "    ICAL_NO_PROPERTY = ".$enumConst."\n} icalproperty_kind;\n\n";
 
 
 }
