@@ -6,6 +6,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/libical
   ${CMAKE_BINARY_DIR}/src/libical
+  ${LIBICU_INCLUDE_DIRS}
 )
 
 if(WIN32)
@@ -267,6 +268,13 @@ add_library(ical-static STATIC ${ical_LIB_SRCS})
 add_dependencies(ical ical-header)
 
 target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
+
+if(ICU_FOUND)
+  target_link_libraries(ical ${ICU_LIBRARIES})
+endif(ICU_FOUND)
+if(ICU_I18N_FOUND)
+  target_link_libraries(ical ${ICU_I18N_LIBRARIES})
+endif(ICU_I18N_FOUND)
 
 if(WINCE)
   target_link_libraries(ical ${WCECOMPAT_LIBRARIES})
