@@ -80,6 +80,17 @@ endif(STATIC_LIBRARY)
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
 
+# libicu is highly recommended for RSCALE support
+#  libicu can be found at http://www.icu-project.org
+#  RSCALE info at http://tools.ietf.org/html/draft-daboo-icalendar-rscale
+find_package(ICU)
+if(ICU_FOUND)
+  set(HAVE_LIBICU 1)
+endif(ICU_FOUND)
+if(ICU_I18N_FOUND)
+  set(HAVE_LIBICU_I18N 1)
+endif(ICU_I18N_FOUND)
+
 # MSVC specific definitions
 if(WIN32)
   if(MSVC)
