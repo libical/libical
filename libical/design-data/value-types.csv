@@ -39,4 +39,5 @@
 "#VAVAILABILITY types","draft-daboo-calendar-availability",,,
 "BUSYTYPE","5032","(a)enum icalproperty_busytype","string","unitary","X=10096;BUSY;BUSY-UNAVAILABLE;BUSY-TENTATIVE;NONE"
 "#VPOLL types","draft-york-vpoll",,,
-"POLLMODE","5033","(a)enum icalproperty_pollmode","string","unitary","X=10102;BASIC;NONE""#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"
+"POLLMODE","5033","(a)enum icalproperty_pollmode","string","unitary","X=10102;BASIC;NONE"
+"#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"
