@@ -4,7 +4,7 @@
  CREATOR:      ajc 2008-sep-01
 
  (C) COPYRIGHT 2008 by Art Cancro
- http://freeassociation.sourceforge.net
+ http://libical.github.io/libical/
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:

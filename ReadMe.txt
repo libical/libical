@@ -44,9 +44,6 @@ copyright statement.
 
 Get Involved
 ============
-If you would like to contribute, monitor or report bug fixes to the project,
-visit http://sourceforge.net/projects/freeassociation/
-
 Subscribe to our development mailing list at https://lists.sourceforge.net/lists/listinfo/freeassociation-devel
 
 

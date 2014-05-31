@@ -67,7 +67,7 @@ set(LIBICAL_LIB_VERSION_STRING
 )
 
 set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
-set(PROJECT_URL "http://freeassociation.sf.net/")
+set(PROJECT_URL "http://libical.github.io/libical/")
 
 if(STATIC_LIBRARY)
   set(LIBICAL_STATIC 1)
