@@ -1,7 +1,0 @@
-Release Highlights
-==================
-
-Version 1.x.y:
--------------
- * foo
- * bar
