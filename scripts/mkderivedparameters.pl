@@ -36,7 +36,7 @@ if ($opt_i) {
       print;
    }
 
-  }    
+  }
 
 }
 
@@ -50,34 +50,34 @@ if($opt_h){
   print "typedef enum icalparameter_kind {\n    ICAL_ANY_PARAMETER = ".$enumConst.",\n";
   $enumVal = 1;
   foreach $param (sort keys %params) {
-    
+
     next if !$param;
-    
+
     next if $param eq 'NO' or $param eq 'ANY';
 
     my $uc = join("",map {uc($_);}  split(/-/,$param));
 
     $enumConst = $params{$param}->{"kindEnum"};
-        
+
     print "    ICAL_${uc}_PARAMETER = ".$enumConst.", \n";
-    
-  }  
+
+  }
   $enumConst = $params{'NO'}->{"kindEnum"};
   print "    ICAL_NO_PARAMETER = ".$enumConst."\n} icalparameter_kind;\n\n";
 
   # Now create enumerations for parameter values
   $lastidx = $idx = 20000;
-  
+
   print "#define ICALPARAMETER_FIRST_ENUM $idx\n\n";
-  
+
   foreach $param (sort keys %params) {
-    
+
     next if !$param;
-    
+
     next if $param eq 'NO' or $param eq 'ANY';
 
     my $type = $params{$param}->{"C"};
-    my $ucv = join("",map {uc(lc($_));}  split(/-/,$param));    
+    my $ucv = join("",map {uc(lc($_));}  split(/-/,$param));
     my @enums = @{$params{$param}->{'enums'}};
 
     if(@enums){
@@ -91,7 +91,7 @@ if($opt_h){
 	} else {
 	  $first = 0;
 	}
-	
+
 	$e =~ /([a-zA-Z0-9\-]+)=?([0-9]+)?/;
 	$e = $1;
 	if ($2) {
@@ -103,8 +103,8 @@ if($opt_h){
 	    $lastidx = $idx;
 	}
 
-	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));    
-	
+	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));
+
 	print "    ICAL_${ucv}_${uce} = $idx";
       }
       $c_type =~ s/enum //;
@@ -120,7 +120,7 @@ if($opt_h){
 
 if ($opt_c){
 
-  
+
   # Create the icalparameter_value to icalvalue_kind conversion table
   my $count = 0;
   my $out;
@@ -131,7 +131,7 @@ if ($opt_c){
 
     next if $enum eq 'X' or $enum eq 'NONE';
     next if $enum eq 'NO' or $enum eq 'ERROR';
-    $uc = join("",map {uc(lc($_));}  split(/-/,$enum));    
+    $uc = join("",map {uc(lc($_));}  split(/-/,$enum));
     $out.="    {ICAL_VALUE_${uc},ICAL_${uc}_VALUE},\n";
     $count++;
   }
@@ -141,19 +141,19 @@ if ($opt_c){
   print $out;
   print "    {ICAL_VALUE_X,ICAL_X_VALUE},\n";
   print "    {ICAL_VALUE_NONE,ICAL_NO_VALUE}\n};\n\n";
-  
+
   #Create the parameter Name map
 
   $out="";
   $count=0;
   foreach $param (sort keys %params) {
-    
+
     next if !$param;
-    
+
     next if $param eq 'NO' or $param eq 'ANY';
 
-    my $lc = join("",map {lc($_);}  split(/-/,$param));    
-    my $uc = join("",map {uc(lc($_));}  split(/-/,$param));    
+    my $lc = join("",map {lc($_);}  split(/-/,$param));
+    my $uc = join("",map {uc(lc($_));}  split(/-/,$param));
 
     $count++;
     $out.="    {ICAL_${uc}_PARAMETER,\"$param\"},\n";
@@ -163,18 +163,18 @@ if ($opt_c){
   print "static const struct icalparameter_kind_map parameter_map[$count] = { \n";
   print $out;
   print "    { ICAL_NO_PARAMETER, \"\"}\n};\n\n";
-  
+
   # Create the parameter value map
   $out ="";
   $count=0;
   foreach $param (sort keys %params) {
-    
+
     next if !$param;
-    
+
     next if $param eq 'NO' or $param eq 'ANY';
 
     my $type = $params{$param}->{"C"};
-    my $uc = join("",map {uc(lc($_));}  split(/-/,$param));    
+    my $uc = join("",map {uc(lc($_));}  split(/-/,$param));
     my @enums = @{$params{$param}->{'enums'}};
 
     if(@enums){
@@ -185,7 +185,7 @@ if ($opt_c){
 
 	next if $e eq 'X' or $e eq 'NONE';
 
-	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));    
+	my $uce = join("",map {uc(lc($_));}  split(/-/,$e));
 
 	$count++;
 	$out.="    {ICAL_${uc}_PARAMETER,ICAL_${uc}_${uce},\"$e\"},\n";
@@ -209,10 +209,10 @@ foreach $param  (sort keys %params){
   my $type = $params{$param}->{'C'};
 
   my $ucf = join("",map {ucfirst(lc($_));}  split(/-/,$param));
-  
+
   my $lc = lc($ucf);
   my $uc = uc($lc);
- 
+
   my $charorenum;
   my $set_code;
   my $pointer_check;
@@ -222,24 +222,24 @@ foreach $param  (sort keys %params){
   if ($type=~/char/ ) {
 
      $charorenum = "    icalerror_check_arg_rz( (param!=0), \"param\");\n    return param->string;";
-    
+
      $set_code = "((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);";
 
-     $pointer_check = "icalerror_check_arg_rz( (v!=0),\"v\");"; 
-     $pointer_check_v = "icalerror_check_arg_rv( (v!=0),\"v\");"; 
+     $pointer_check = "icalerror_check_arg_rz( (v!=0),\"v\");";
+     $pointer_check_v = "icalerror_check_arg_rv( (v!=0),\"v\");";
 
   } elsif ($type=~/int/ ) {
 
     $charorenum= "    icalerror_check_arg( (param!=0), \"param\");\n$xrange\nreturn param->data;";
-     
+
      $set_code = "((struct icalparameter_impl*)param)->data = v;";
 
   } else {
 
     $xrange ="     if (param->string != 0){\n        return ICAL_${uc}_X;\n        }\n" if !exists $no_xname{$uc};
-    
+
     $charorenum= "icalerror_check_arg( (param!=0), \"param\");\n$xrange\nreturn ($type)(param->data);";
-     
+
     $pointer_check = "icalerror_check_arg_rz(v >= ICAL_${uc}_X,\"v\");\n    icalerror_check_arg_rz(v < ICAL_${uc}_NONE,\"v\");";
 
     $pointer_check_v = "icalerror_check_arg_rv(v >= ICAL_${uc}_X,\"v\");\n    icalerror_check_arg_rv(v < ICAL_${uc}_NONE,\"v\");";
@@ -247,11 +247,11 @@ foreach $param  (sort keys %params){
      $set_code = "((struct icalparameter_impl*)param)->data = (int)v;";
 
    }
-  
-  
-  
+
+
+
   if ($opt_c) {
-    
+
   print <<EOM;
 /* $param */
 icalparameter* icalparameter_new_${lc}($type v)
@@ -286,7 +286,7 @@ void icalparameter_set_${lc}(icalparameter* param, ${type} v)
    icalerror_clear_errno();
 
    if (param->string != NULL)
-      free (param->string);
+      free ((void*)param->string);
    $set_code
 }
 
@@ -305,10 +305,10 @@ EOM
 }
 
 if ($opt_p) {
-    
+
   print <<EOM;
 
-# $param 
+# $param
 
 package Net::ICal::Parameter::${ucf};
 \@ISA=qw(Net::ICal::Parameter);
@@ -345,7 +345,7 @@ sub get
 
 sub set
 {
-   # This is hard to implement, so I've punted for now. 
+   # This is hard to implement, so I've punted for now.
    die "Set is not implemented";
 }
 
