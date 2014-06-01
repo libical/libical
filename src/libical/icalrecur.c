@@ -1889,7 +1889,7 @@ static pvl_list expand_by_day(icalrecur_iterator* impl, int year)
             }
 
             /* Then just multiple the position times 7 to get the pos'th day in the year */
-            pvl_push(days_list,(void*)(first+  (pos-1) * 7));
+            pvl_push(days_list,(void*)(ptrdiff_t)(first+  (pos-1) * 7));
             
         } else { /* pos < 0 */ 
             int last;
@@ -1902,7 +1902,7 @@ static pvl_list expand_by_day(icalrecur_iterator* impl, int year)
                 last = end_year_day - end_dow + dow - 7;
             }
 
-            pvl_push(days_list,(void*)(last - (pos-1) * 7));
+            pvl_push(days_list,(void*)(ptrdiff_t)(last - (pos-1) * 7));
         }
     }
     return days_list;
