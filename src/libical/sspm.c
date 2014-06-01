@@ -495,7 +495,7 @@ const char* sspm_major_type_string(enum sspm_major_type type)
 {
     int i;
 
-    for (i=0; major_content_type_map[i].type !=  SSPM_UNKNOWN_MINOR_TYPE; 
+    for (i=0; major_content_type_map[i].type !=  SSPM_UNKNOWN_MAJOR_TYPE; 
 	 i++){
 
 	if(type == major_content_type_map[i].type){
@@ -702,8 +702,7 @@ void* sspm_make_part(struct mime_impl *impl,
 		break;
 	    }
 	    
-	    if(strncmp((line+2),parent_header->boundary,
-		       sizeof(parent_header->boundary)) == 0){
+	    if(strcmp((line+2),parent_header->boundary) == 0){
 		*end_part = action.end_part(part);
 
 		if(sspm_is_mime_boundary(line)){
@@ -808,8 +807,7 @@ void* sspm_make_multipart_subpart(struct mime_impl *impl,
 
 		/* Check if it is the right boundary */
 		if(!sspm_is_mime_terminating_boundary(line) &&
-		   strncmp((line+2),parent_header->boundary, 
-			   sizeof(parent_header->boundary)) 
+		   strcmp((line+2),parent_header->boundary)
 		   == 0){
 		    /* The +2 in strncmp skips over the leading "--" */
 		    
