@@ -41,7 +41,7 @@
 cmake_minimum_required(VERSION 2.4)
 set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake >= 2.8.4 is required
 
-project(libical C)
+project(libical C CXX)
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
@@ -194,9 +194,28 @@ endif(GOBJECT_INTROSPECTION)
 #
 # Compiler settings
 #
-if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+  include(CheckCCompilerFlag)
   check_c_compiler_flag(-Wunused-but-set-variable HAVE_GCC_UNUSED_BUT_SET)
   check_c_compiler_flag(-Wlogical-op HAVE_GCC_LOGICAL_OP)
+  check_c_compiler_flag(-Wsizeof-pointer-memaccess HAVE_GCC_POINTER_MEMACCESS)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated -Wall -Wextra -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wcast-qual -Wcast-align -Wmissing-noreturn -Werror=return-type")
+  if(HAVE_GCC_UNUSED_BUT_SET)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-but-set-variable")
+  endif(HAVE_GCC_UNUSED_BUT_SET)
+  if(HAVE_GCC_LOGICAL_OP)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlogical-op")
+  endif(HAVE_GCC_LOGICAL_OP)
+  if(HAVE_GCC_POINTER_MEMACCESS)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsizeof-pointer-memaccess")
+  endif(HAVE_GCC_POINTER_MEMACCESS)
+endif(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+
+if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  include(CheckCXXCompilerFlag)
+  check_cxx_compiler_flag(-Wunused-but-set-variable HAVE_GCC_UNUSED_BUT_SET)
+  check_cxx_compiler_flag(-Wlogical-op HAVE_GCC_LOGICAL_OP)
+  check_cxx_compiler_flag(-Wsizeof-pointer-memaccess HAVE_GCC_POINTER_MEMACCESS)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wcast-qual -Wcast-align -Wmissing-noreturn -Werror=return-type")
   if(HAVE_GCC_UNUSED_BUT_SET)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-but-set-variable")
@@ -204,6 +223,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   if(HAVE_GCC_LOGICAL_OP)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlogical-op")
   endif(HAVE_GCC_LOGICAL_OP)
+  if(HAVE_GCC_POINTER_MEMACCESS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsizeof-pointer-memaccess")
+  endif(HAVE_GCC_POINTER_MEMACCESS)
 endif(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 
 ################# build subdirs ########################
