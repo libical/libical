@@ -1,9 +1,7 @@
 os:
   - linux
   - osx
-before_install:
-  - brew update
-  - brew install cmake
+before_install: ./scripts/setup-travis.sh
 language: c
 compiler:
   - gcc
