@@ -1172,7 +1172,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
         /* Don't replace empty properties with an error.
 		   Set an empty length string (not null) as the value instead */
         if (vcount == 0) {
-            icalproperty_set_value(prop, icalvalue_new_text(""));
+            icalproperty_set_value(prop, icalvalue_new(ICAL_NO_VALUE));
         }
 
         break;
