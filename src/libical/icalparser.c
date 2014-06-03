@@ -1092,12 +1092,14 @@ icalcomponent* icalparser_add_line(icalparser* parser,
            depend on that behaviour
         */
         switch (prop_kind) {
-            case ICAL_X_PROPERTY:
+            case ICAL_X_PROPERTY: {
                 /* Apple's geofence property uses a comma to separate latitude and longitude.
                    libical will normally try to split this into two separate values,
                    but in this case we need to treat it as a single value.
                 */
-                if (strncmp(icalproperty_get_x_name(prop), "X-APPLE-STRUCTURED-LOCATION", 27) == 0) {
+                const char *propertyString = "X-APPLE-STRUCTURED-LOCATION";
+                
+                if (strncmp(icalproperty_get_x_name(prop), propertyString, strlen(propertyString)) == 0) {
                     str = icalparser_get_value(end, &end, value_kind);
                 } else {
                     str = parser_get_next_value(end,&end, value_kind);
@@ -1105,6 +1107,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
                 
                 strstriplt (str);
                 break;
+            }
             case ICAL_CATEGORIES_PROPERTY:
             case ICAL_RESOURCES_PROPERTY:
             /* Referring to RFC 2445, section 4.8.5.3 and section 4.8.5.1:
