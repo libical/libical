@@ -2633,7 +2633,7 @@ struct icaltimetype icalcomponent_get_due(icalcomponent* comp)
         = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
 
     if ( due_prop != 0) {
-        return icalproperty_get_due(due_prop);
+        return icalcomponent_get_datetime(comp, due_prop);
     } else if ( dur_prop != 0) {
 
         struct icaltimetype start =
@@ -2687,6 +2687,11 @@ void icalcomponent_set_due(icalcomponent* comp, struct icaltimetype v)
             = icaltime_subtract(due,start);
 
         icalproperty_set_duration(dur_prop,dur);
-
+    }
+    
+    const char *tzid;
+    
+    if (due_prop && (tzid = icaltime_get_tzid(v)) != NULL && !icaltime_is_utc(v)) {
+        icalproperty_set_parameter(due_prop, icalparameter_new_tzid(tzid));
     }
 }

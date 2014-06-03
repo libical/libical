@@ -919,7 +919,7 @@ static char* icalvalue_utcoffset_as_ical_string_r(const icalvalue* value)
     m = (data - (h*3600))/ 60;
     s = (data - (h*3600) - (m*60));
 
-    if (s > 0)
+    if (s != 0)
     snprintf(str,9,"%c%02d%02d%02d",sign,abs(h),abs(m),abs(s));
     else
     snprintf(str,9,"%c%02d%02d",sign,abs(h),abs(m));
