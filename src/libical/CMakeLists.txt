@@ -157,13 +157,6 @@ add_custom_target(ical-header DEPENDS
   ${CMAKE_BINARY_DIR}/src/libical/ical.h
 )
 
-macro(_list_prefix _outvar _listvar _prefix)
-  set(${_outvar})
-  foreach(_item IN LISTS ${_listvar})
-    list(APPEND ${_outvar} ${_prefix}${_item})
-  endforeach()
-endmacro(_list_prefix)
-
 # GObject Introspection
 if(HAVE_INTROSPECTION)
   include(GObjectIntrospectionMacros)
@@ -180,8 +173,7 @@ if(HAVE_INTROSPECTION)
   set(INTROSPECTION_SCANNER_ARGS ${CMAKE_BINARY_DIR}/src/libical/ical.h)
   set(libical_${LIB_VERSION}_gir_LIBRARY "ical")
   set(libical_${LIB_VERSION}_gir_INCLUDES GObject-2.0)
-  get_directory_property(_tmp_includes ical_LIB_SRCS)
-  _list_prefix(_includes _tmp_includes "-L")
+  set(_includes ${_includes} "-L${LIBRARY_OUTPUT_PATH}")
   set(libical_${LIB_VERSION}_gir_CFLAGS ${_includes})
   set(libical_${LIB_VERSION}_gir_LIBS ical)
 
