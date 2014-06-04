@@ -3899,9 +3899,10 @@ int main(int argc, char *argv[])
     icalmemory_free_ring();
     free_zone_directory();
 
-    test_end();
+    int failed_count = test_end();
 
-    return 0;
+    /* return a non-zero exit code if a test failed */
+    return failed_count > 0;
 }
 
 

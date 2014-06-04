@@ -42,7 +42,7 @@ void _int_is(char* test_name, int i1, int i2, char *file, int linenum);
 #define int_is(I1, I2, EX) (_int_is(I1, I2, EX, __FILE__, __LINE__))
 void test_header(char*title, int test_set);
 void test_start(int);
-void test_end(void);
+int test_end(void);
 void test_run(char *test_name, 
 	      void (*test_fcn)(void), 
 	      int do_test, int headeronly);
