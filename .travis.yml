@@ -1,9 +1,27 @@
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: ""
+
 os:
   - linux
   - osx
+
 before_install: ./scripts/setup-travis.sh
+
 language: c
 compiler:
   - gcc
   - clang
 script: mkdir build && cd build && cmake .. && make && make test
+
+addons:
+  coverity_scan:
+    project:
+      name: "libical/libical"
+      description: "Libical is an Open Source implementation of the iCalendar protocols and protocol data units."
+    notification_email: allen.winter@kdab.com
+    build_command_prepend: mkdir build && cd build && cmake ..
+    build_command: make
+    branch_pattern: coverity_scan
