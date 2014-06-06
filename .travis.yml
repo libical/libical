@@ -20,6 +20,6 @@ addons:
       name: libical/libical
       description: "Libical is an Open Source implementation of the iCalendar protocols and protocol data units."
     notification_email: allen.winter@kdab.com
-    build_command_prepend: mkdir build && cd build && cmake ..
+    build_command_prepend: cd build && cmake ..
     build_command: make
     branch_pattern: coverity_scan
