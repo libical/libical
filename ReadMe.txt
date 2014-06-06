@@ -1,4 +1,4 @@
-Libical
+<a name="title"></a> Libical
 [![Build Status](https://travis-ci.org/libical/libical.svg?branch=master)](https://travis-ci.org/libical/libical)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/2367/badge.svg)](https://scan.coverity.com/projects/2367)
 
