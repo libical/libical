@@ -1,10 +1,10 @@
-<a href="https://scan.coverity.com/projects/2367">
-  <img alt="Coverity Scan Build Status"
-       src="https://scan.coverity.com/projects/2367/badge.svg"/>
-</a>
+Libical
+[![Build Status](https://travis-ci.org/libical/libical.svg?branch=master)](https://travis-ci.org/libical/libical)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/2367/badge.svg)](https://scan.coverity.com/projects/2367)
+
 Introduction
 ============
-LIBICAL -- an implementation of iCalendar protocols and data formats
+Libical -- an implementation of iCalendar protocols and data formats
 
 Most of the code in here was written by Eric Busboom with help from
 dozens of contributors.  It is currently maintained by Art Cancro
