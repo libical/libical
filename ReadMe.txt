@@ -1,3 +1,7 @@
+<a href="https://scan.coverity.com/projects/2367">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/2367/badge.svg"/>
+</a>
 Introduction
 ============
 LIBICAL -- an implementation of iCalendar protocols and data formats
