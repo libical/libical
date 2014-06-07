@@ -1435,7 +1435,7 @@ void do_test_time(char* zone)
     /* Test new API */
     if (VERBOSE) printf("\n---> From time_t \n");
 
-    tt = 1025127869;		/* stick with a constant... */
+    tt = 1025127869;		/* stick with a constant... Wed, 26 Jun 2002 21:44:29 GMT */
 
     if (VERBOSE) printf("Orig        : %s\n",ical_timet_string(tt));
     if (VERBOSE) printf("\nicaltime_from_timet(tt,0) (DEPRECATED)\n");

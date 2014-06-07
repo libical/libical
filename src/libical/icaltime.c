@@ -1117,7 +1117,7 @@ icaltime_get_tzid(const struct icaltimetype t) {
  *
  *	Force the icaltime to be interpreted relative to another timezone.
  *	If you need to do timezone conversion, applying offset adjustments,
- *	then you should use icaltime_convert_to_timezone instead.
+ *	then you should use icaltime_convert_to_zone instead.
  */
 struct icaltimetype
 icaltime_set_timezone(struct icaltimetype *t, const icaltimezone *zone) {
