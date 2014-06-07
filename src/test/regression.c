@@ -1489,15 +1489,12 @@ void do_test_time(char* zone)
     ok("Convert from UTC to zone (test year/mon only..)",
        (strncmp(ictt_as_string(icttzone), "2002-06-26 21:44:29", 7)==0));
 
-    tt2 = icaltime_as_timet(icttzone);
+    tt2 = icaltime_as_timet_with_zone(icttzone, icttzone.zone);
 
     if (VERBOSE) printf("No conversion: %s\n", ical_timet_string(tt2));
 
     ok("No conversion at all (test year/mon only)",
        (strncmp(ical_timet_string(tt2), "2002-06-26 21:44:29 Z",7) == 0));
-
-    tt2 = icaltime_as_timet_with_zone(icttzone, utczone);
-    if (VERBOSE) printf("Back to UTC  : %s\n", ical_timet_string(tt2));
 
     ok("test time conversion routines",(tt==tt2));
 
