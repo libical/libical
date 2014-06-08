@@ -115,23 +115,12 @@ int main(int c, char *argv[]){
 	icalrestriction_check(itr);
         icalerror_set_error_state(ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT);
 
-	if (itr != 0){
-
-	    if(tostdout){
-
-		printf("--------------\n%s\n",icalcomponent_as_ical_string(itr));
-
-	    } else {
-
-		icalfileset_add_component(clusterout,
-					  icalcomponent_new_clone(itr));
-	    }
-	    
-	    count++;
-
+	if(tostdout){
+	    printf("--------------\n%s\n",icalcomponent_as_ical_string(itr));
 	} else {
-	    printf("Got NULL component");
+	    icalfileset_add_component(clusterout, icalcomponent_new_clone(itr));
 	}
+	count++;
     }
 
 

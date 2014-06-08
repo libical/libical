@@ -785,12 +785,7 @@ void test_dirset_extended(void)
 	c != 0; 
 	c = icaldirset_get_next_component(s)){
 
-	if (c != 0){
-	    printf("%s", icalcomponent_as_ical_string(c));;
-	} else {
-	    printf("Failed to get component\n");
-	}
-
+	printf("%s", icalcomponent_as_ical_string(c));;
     }
 
     /* Remove all of the components */
