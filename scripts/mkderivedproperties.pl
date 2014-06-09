@@ -61,7 +61,7 @@ sub insert_code {
 if($opt_c){
 
 
-  my @props = sort keys %propmap;
+  my @props = sort {$propmap{$a}->{"kindEnum"} <=> $propmap{$b}->{"kindEnum"}} keys %propmap;
   my $count = scalar(@props);
 
 
@@ -86,7 +86,7 @@ if($opt_c){
   print "{ICAL_${uc}_PROPERTY,\"\",ICAL_NO_VALUE}};\n\n";
 
   $count = 1;
-  my $out = "";
+  my %lines;
 
   foreach $value (sort keys %valuemap) {
 
@@ -118,7 +118,9 @@ if($opt_c){
 	  $str = "";
 	}
 
-	$out.="    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce},\"$str\" }, /*$idx*/\n";
+    # Place each property into a hash based on the index specified in value-types.csv
+    # The lines are printed so they're in the same order as the indices
+    $lines{$idx} = "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce},\"$str\" }, /*$idx*/\n";
 
 	$count++;
       }
@@ -128,7 +130,9 @@ if($opt_c){
 
   $count++;
   print "static const struct icalproperty_enum_map enum_map[$count] = {\n";
-  print $out;
+  foreach $line (sort keys %lines) {
+    print $lines{$line};
+  }
   print "    {ICAL_NO_PROPERTY,0,\"\"}\n};\n\n";
 
 
