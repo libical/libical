@@ -1781,7 +1781,7 @@ void test_iterators()
 					     ICAL_VERSION_PROPERTY);
 	const char* s = icalproperty_get_version(p);
 
-	strcat(vevent_list, s);
+	strncat(vevent_list, s, sizeof(vevent_list));
     }
     is("iterate through VEVENTS in a component",
        vevent_list, vevent_list_good);
