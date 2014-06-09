@@ -130,12 +130,12 @@ void test_header(char *header, int set) {
   current_set = set;
 }
 
-void test_end(void) {
+int test_end(void) {
   int pct;
 
   if (testnumber < 1) {
     printf("\n        No Tests Run.\n");
-    return;
+    return 0;
   }
 
   if (failed) {
@@ -159,6 +159,8 @@ void test_end(void) {
   } else {
     printf("\n        All Tests Successful.\n");
   }
+  
+  return failed;
 }
 
 
