@@ -1431,7 +1431,7 @@ void do_test_time(char* zone)
     /* Test new API */
     if (VERBOSE) printf("\n---> From time_t \n");
 
-    tt = 1025127869;		/* stick with a constant... */
+    tt = 1025127869;		/* stick with a constant... Wed, 26 Jun 2002 21:44:29 GMT */
 
     if (VERBOSE) printf("Orig        : %s\n",ical_timet_string(tt));
     if (VERBOSE) printf("\nicaltime_from_timet(tt,0) (DEPRECATED)\n");
@@ -1485,15 +1485,12 @@ void do_test_time(char* zone)
     ok("Convert from UTC to zone (test year/mon only..)",
        (strncmp(ictt_as_string(icttzone), "2002-06-26 21:44:29", 7)==0));
 
-    tt2 = icaltime_as_timet(icttzone);
+    tt2 = icaltime_as_timet_with_zone(icttzone, icttzone.zone);
 
     if (VERBOSE) printf("No conversion: %s\n", ical_timet_string(tt2));
 
     ok("No conversion at all (test year/mon only)",
        (strncmp(ical_timet_string(tt2), "2002-06-26 21:44:29 Z",7) == 0));
-
-    tt2 = icaltime_as_timet_with_zone(icttzone, utczone);
-    if (VERBOSE) printf("Back to UTC  : %s\n", ical_timet_string(tt2));
 
     ok("test time conversion routines",(tt==tt2));
 
@@ -3895,9 +3892,10 @@ int main(int argc, char *argv[])
     icalmemory_free_ring();
     free_zone_directory();
 
-    test_end();
+    int failed_count = test_end();
 
-    return 0;
+    /* return a non-zero exit code if a test failed */
+    return failed_count > 0;
 }
 
 
