@@ -2662,6 +2662,8 @@ struct icaltimetype icalcomponent_get_due(icalcomponent* comp)
 
 void icalcomponent_set_due(icalcomponent* comp, struct icaltimetype v)
 {
+    const char *tzid;
+
     icalcomponent *inner = icalcomponent_get_inner(comp);
 
     icalproperty *due_prop
@@ -2688,9 +2690,7 @@ void icalcomponent_set_due(icalcomponent* comp, struct icaltimetype v)
 
         icalproperty_set_duration(dur_prop,dur);
     }
-    
-    const char *tzid;
-    
+
     if (due_prop && (tzid = icaltime_get_tzid(v)) != NULL && !icaltime_is_utc(v)) {
         icalproperty_set_parameter(due_prop, icalparameter_new_tzid(tzid));
     }

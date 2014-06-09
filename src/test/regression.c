@@ -3778,6 +3778,7 @@ int main(int argc, char *argv[])
 /*    char* program_name = strrchr(argv[0],'/'); */
     int do_test = 0;
     int do_header = 0;
+    int failed_count = 0;
 
     set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
@@ -3892,7 +3893,7 @@ int main(int argc, char *argv[])
     icalmemory_free_ring();
     free_zone_directory();
 
-    int failed_count = test_end();
+    failed_count = test_end();
 
     /* return a non-zero exit code if a test failed */
     return failed_count > 0;
