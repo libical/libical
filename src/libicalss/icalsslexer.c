@@ -566,7 +566,7 @@ const char* input_buffer_p;
 
 int icalss_input(char* buf, int max_size)
 {
-    int n = minInt(max_size,strlen(input_buffer_p));
+    int n = minInt(max_size,(int)strlen(input_buffer_p));
 
     if (n > 0){
 	memcpy(buf, input_buffer_p, n);
