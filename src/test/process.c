@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
     int i=0;
     const char *class_string;
     int dont_remove;
-    icalfileset_options options = {O_RDONLY, 0644, 0};
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
 
     icalset* f = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/process-incoming.ics", &options);
     icalset* trash = icalset_new_file("trash.ics");

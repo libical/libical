@@ -93,7 +93,7 @@ void test_classify(void)
     int error_count = 0;
     /* Open up the two storage files, one for the incomming components, 
        one for the calendar */
-    icalfileset_options options = {O_RDONLY, 0644, 0};
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
     icalset* incoming = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/incoming.ics", &options);
     icalset* cal = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/calendar.ics", &options);
     icalset* f = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/classify.ics", &options);

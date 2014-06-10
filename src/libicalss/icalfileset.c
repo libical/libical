@@ -62,7 +62,7 @@
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/
-icalfileset_options icalfileset_options_default = {O_RDWR|O_CREAT, 0644, 0};
+icalfileset_options icalfileset_options_default = {O_RDWR|O_CREAT, 0644, 0, NULL};
 
 int icalfileset_lock(icalfileset *set);
 int icalfileset_unlock(icalfileset *set);

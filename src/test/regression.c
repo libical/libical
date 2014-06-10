@@ -1925,7 +1925,7 @@ void test_overlaps()
 
     time_t hh = 1800; /* one half hour */
     
-    icalfileset_options options = {O_RDONLY, 0644, 0};
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
     set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/overlaps.ics", &options);
 
     c = icalcomponent_vanew(
@@ -1986,7 +1986,7 @@ void test_overlaps()
 void test_fblist()
 {
     icalspanlist *sl, *new_sl;
-    icalfileset_options options = {O_RDONLY, 0644, 0};
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
     icalset *set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/spanlist.ics", &options);
     struct icalperiodtype period;
     icalcomponent *comp;

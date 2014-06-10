@@ -101,7 +101,7 @@ void test_recur_file()
     time_t tt;
     char* file; 
     int num_recurs_found = 0;
-    icalfileset_options options = {O_RDONLY, 0644, 0};
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
 	
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 	
