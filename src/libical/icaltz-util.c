@@ -93,8 +93,8 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include <libical/icalerror.h>
-#include <icaltz-util.h>
+#include "icalerror.h"
+#include "icaltz-util.h"
 
 typedef struct 
 {
