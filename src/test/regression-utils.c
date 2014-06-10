@@ -59,7 +59,7 @@ static int current_set   = 0;
 static struct {int set; int test;} failed_tests[1024];
 
 void die_on_errors_set(int val) {
-  die_on_errors = 1;
+  die_on_errors = val;
 }
 
 void _ok(char* test_name, int success, char *file, int linenum, char *test) {
