@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     icaltimezone *utc_zone = icaltimezone_get_utc_timezone();
 
     /* for all known time zones... */
-    for (i = 0; i < timezones->num_elements; i++) {
+    for (i = 0; i < (int)timezones->num_elements; i++) {
         icaltimezone *zone = icalarray_element_at(timezones, i);
         const char *zone_location = icaltimezone_get_location(zone);
         int day;

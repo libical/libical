@@ -193,9 +193,9 @@ set_zonedir (void)
 {
 	char file_path[PATH_MAX];
 	const char *fname = ZONES_TAB_SYSTEM_FILENAME;
-	int i;	
+	unsigned int i;
 
-	for (i = 0;i < NUM_SEARCH_PATHS; i++) {
+	for (i = 0; i < NUM_SEARCH_PATHS; i++) {
 		sprintf (file_path, "%s/%s", search_paths [i], fname);
 		if (!access (file_path, F_OK|R_OK)) {
 			zdir = search_paths [i];

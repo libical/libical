@@ -424,7 +424,7 @@ icalerrorenum icalfileset_commit(icalset* set)
     
 	sz=write(fset->fd,str,strlen(str));
 
-	if ( sz != strlen(str)){
+	if ( sz != (int)strlen(str)){
 	    perror("write");
 	    icalerror_set_errno(ICAL_FILE_ERROR);
 	    free(str);
