@@ -106,8 +106,6 @@ typedef struct
 	char	charcnt[4];			
 } tzinfo; 
 
-static int r_pos [] = {1, 2, 3, -2, -1};
-
 static char *search_paths [] = {"/usr/share/zoneinfo","/usr/lib/zoneinfo","/etc/zoneinfo","/usr/share/lib/zoneinfo"};
 static char *zdir = NULL;
 
@@ -204,7 +202,6 @@ set_zonedir (void)
 	}
 }
 
-
 const char *
 icaltzutil_get_zone_directory (void)
 {
@@ -212,21 +209,6 @@ icaltzutil_get_zone_directory (void)
 		set_zonedir ();
 
 	return zdir;
-}
-
-/* Calculate the relative position of the week in a month from a date */
-static int
-calculate_pos (icaltimetype icaltime)
-{
-	int pos;
-
-	pos = (icaltime.day -1) / 7;
-
-	/* Check if pos 3 is the last occurence of the week day in the month */	
-	if (pos == 3 && ((icaltime.day + 7) > icaltime_days_in_month (icaltime.month, icaltime.year))) 
-		pos = 4;
-
-	return r_pos [pos];
 }
 
 icalcomponent*
@@ -237,15 +219,14 @@ icaltzutil_fetch_timezone (const char *location)
 	tzinfo type_cnts;
 	unsigned int i, num_trans, num_types, num_chars, num_leaps, num_isstd, num_isgmt;
 	time_t *transitions = NULL;
-	time_t trans, start, end;
-	int *trans_idx = NULL, pos, sign, zidx, zp_idx, idx, prev_idx;
+	time_t start, end;
+	int *trans_idx = NULL, idx, prev_idx;
 	ttinfo *types = NULL;
 	char *znames = NULL, *full_path, *tzid, *r_trans, *temp;
 	leap *leaps = NULL;
 	icalcomponent *tz_comp = NULL, *comp = NULL;
 	icalproperty *icalprop;
-	icaltimetype dtstart, icaltime;
-	struct icalrecurrencetype ical_recur;
+	icaltimetype dtstart;
 	const char *basedir;
 	       
 	basedir = icaltzutil_get_zone_directory();
