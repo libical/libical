@@ -418,13 +418,13 @@ icalerrorenum icalfileset_commit(icalset* set)
     for(c = icalcomponent_get_first_component(fset->cluster,ICAL_ANY_COMPONENT);
 	c != 0;
 	c = icalcomponent_get_next_component(fset->cluster,ICAL_ANY_COMPONENT)){
-	int sz;
+	ssize_t sz;
 
 	str = icalcomponent_as_ical_string_r(c);
     
 	sz=write(fset->fd,str,strlen(str));
 
-	if ( sz != (int)strlen(str)){
+	if ( sz != (ssize_t)strlen(str)){
 	    perror("write");
 	    icalerror_set_errno(ICAL_FILE_ERROR);
 	    free(str);
