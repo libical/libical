@@ -217,7 +217,7 @@ icaltzutil_fetch_timezone (const char *location)
 	int ret = 0;
 	FILE *f;
 	tzinfo type_cnts;
-	unsigned int i, num_trans, num_types, num_chars, num_leaps, num_isstd, num_isgmt;
+	unsigned int i, num_trans, num_types = 0, num_chars, num_leaps, num_isstd, num_isgmt;
 	time_t *transitions = NULL;
 	time_t start, end;
 	int *trans_idx = NULL, idx, prev_idx;
@@ -324,7 +324,7 @@ icaltzutil_fetch_timezone (const char *location)
 
 	/* Read all the contents now */
 
-	for (i = 0; i < num_types; i++) 
+	for (i = 0; i < num_types; i++)
 		types [i].zname = zname_from_stridx (znames, types [i].abbr);
 
 	tz_comp = icalcomponent_new (ICAL_VTIMEZONE_COMPONENT);
@@ -397,7 +397,7 @@ error:
 	if (trans_idx)
 		free (trans_idx);
 	if (types) {
-		for (i = 0; i < num_types; i++) 
+		for (i = 0; i < num_types; i++)
 			if (types [i].zname)
 				free (types [i].zname);
 		free (types);
