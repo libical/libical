@@ -152,13 +152,10 @@ void
 icalarray_remove_element_at	(icalarray	*array,
 				 int		 position)
 {
-    void *dest;
-    int elements_to_move;
-
     assert (position >= 0);
     assert ((unsigned int)position < array->num_elements);
 
-    while (position < array->num_elements - 1) {
+    while ((unsigned int)position < array->num_elements - 1) {
       memmove(icalarray_element_at(array, position),
               icalarray_element_at(array, position + 1),
               array->element_size);
@@ -181,7 +178,7 @@ icalarray_sort			(icalarray	*array,
     if (array->num_elements <= array->increment_size) {
       qsort(array->chunks[0], array->num_elements, array->element_size, compare);
     } else {
-      int pos;
+      unsigned int pos;
       void *tmp = malloc (array->num_elements * array->element_size);
       if (!tmp)
           return;

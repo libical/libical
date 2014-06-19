@@ -82,7 +82,7 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
     int date_flag = 0;
     int digits=-1;
     int scan_size = -1;
-    size_t size = strlen(str);
+    int size = (int)strlen(str);
     char p;
     struct icaldurationtype d;
 
