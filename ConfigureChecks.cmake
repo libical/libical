@@ -34,6 +34,7 @@ check_type_size(mode_t SIZEOF_MODE_T)
 check_type_size(size_t SIZEOF_SIZE_T)
 check_type_size(intptr_t INTPTR_T) # please do not rename HAVE_INTPTR_T will automatically be defined
 check_type_size(pid_t HAVE_PID_T)
+check_type_size(time_t SIZEOF_TIME_T)
 
 include(FindThreads)
 check_library_exists(pthread pthread_attr_get_np "" HAVE_PTHREAD_ATTR_GET_NP)

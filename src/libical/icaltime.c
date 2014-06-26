@@ -83,14 +83,15 @@ static time_t make_time(struct tm *tm, int tzm)
 
   static int days[] = { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 };
 
-  /* check that year specification within range */
-
-  if (tm->tm_year < 70 || tm->tm_year > 138)
-    return((time_t) -1);
-
   /* check that month specification within range */
 
   if (tm->tm_mon < 0 || tm->tm_mon > 11)
+    return((time_t) -1);
+
+#if (SIZEOF_TIME_T == 4)
+  /* check that year specification within range */
+
+  if (tm->tm_year < 70 || tm->tm_year > 138)
     return((time_t) -1);
 
   /* check for upper bound of Jan 17, 2038 (to avoid possibility of
@@ -102,6 +103,7 @@ static time_t make_time(struct tm *tm, int tzm)
     else if (tm->tm_mday > 17)
       return((time_t) -1);
   }
+#endif /* SIZEOF_TIME_T */
 
   /*
    *  calculate elapsed days since start of the epoch (midnight Jan
