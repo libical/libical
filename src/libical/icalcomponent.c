@@ -1005,7 +1005,6 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
   time_t limit_start, limit_end;
   time_t dtduration;
   icalproperty *rrule, *rdate;
-  struct icaldurationtype dur;
   pvl_elem property_iterator;	/* for saving the iterator */
   
   if (comp == NULL || callback == NULL)
@@ -1073,9 +1072,10 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
       if (icaltime_compare(rrule_time, end) > 0)
 	break;
 
-      dur = icaltime_subtract(rrule_time, dtstart);
-
-      recurspan.start = basespan.start + icaldurationtype_as_int(dur);
+      recurspan.start =
+	icaltime_as_timet_with_zone(rrule_time,
+				    rrule_time.zone ? rrule_time.zone :
+				    icaltimezone_get_utc_timezone());
       recurspan.end   = recurspan.start + dtduration;
 
       /** save the iterator ICK! **/
@@ -1108,9 +1108,10 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
     if (icaltime_is_null_time(rdate_period.time)) 
       continue;
 
-    dur = icaltime_subtract(rdate_period.time, dtstart);
-
-    recurspan.start = basespan.start + icaldurationtype_as_int(dur);
+    recurspan.start =
+      icaltime_as_timet_with_zone(rdate_period.time,
+				  rdate_period.time.zone ? rdate_period.time.zone :
+				  icaltimezone_get_utc_timezone());
     recurspan.end   = recurspan.start + dtduration;
 
     /** save the iterator ICK! **/
