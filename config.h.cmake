@@ -170,3 +170,4 @@
 typedef int pid_t;
 #endif
 
+#cmakedefine SIZEOF_TIME_T ${SIZEOF_TIME_T}
