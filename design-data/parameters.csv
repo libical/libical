@@ -1,0 +1,39 @@
+"#Name ","C icalparameter_kind Enum","C Type","Enumeration Values"
+"ALTREP","2","const char*",
+"CHARSET","3","const char*",
+"CN","4","const char*",
+"CUTYPE","5","icalparameter_cutype","INDIVIDUAL;GROUP;RESOURCE;ROOM;UNKNOWN"
+"DELEGATED-FROM","6","const char*",
+"DELEGATED-TO","7","const char*",
+"DIR","8","const char*",
+"ENCODING","10","icalparameter_encoding","8BIT;BASE64"
+"FBTYPE","11","icalparameter_fbtype","FREE;BUSY;BUSY-UNAVAILABLE;BUSY-TENTATIVE"
+"FMTTYPE","12","const char*",
+"LANGUAGE","14","const char*",
+"MEMBER","18","const char*",
+"PARTSTAT","20","icalparameter_partstat","NEEDS-ACTION;ACCEPTED;DECLINED;TENTATIVE;DELEGATED;COMPLETED;INPROCESS"
+"RANGE","21","icalparameter_range","THISANDPRIOR;THISANDFUTURE"
+"RELATED","22","icalparameter_related","START;END"
+"RELTYPE","23","icalparameter_reltype","PARENT;CHILD;SIBLING"
+"ROLE","24","icalparameter_role","CHAIR;REQ-PARTICIPANT;OPT-PARTICIPANT;NON-PARTICIPANT"
+"RSVP","25","icalparameter_rsvp","TRUE;FALSE"
+"SENT-BY","26","const char*",
+"TZID","27","const char*",
+"VALUE","28","icalparameter_value","BINARY;BOOLEAN;DATE;DURATION;FLOAT;INTEGER;PERIOD;RECUR;TEXT;URI;ERROR;DATE-TIME;UTC-OFFSET;CAL-ADDRESS"
+"X","29","const char*",
+"X-LIC-ERRORTYPE","31","icalparameter_xlicerrortype","COMPONENT-PARSE-ERROR;PROPERTY-PARSE-ERROR;PARAMETER-NAME-PARSE-ERROR;PARAMETER-VALUE-PARSE-ERROR;VALUE-PARSE-ERROR;INVALID-ITIP;UNKNOWN-VCAL-PROP-ERROR;MIME-PARSE-ERROR;VCAL-PROP-PARSE-ERROR"
+"X-LIC-COMPARETYPE","30","icalparameter_xliccomparetype","EQUAL;NOTEQUAL;LESS;GREATER;LESSEQUAL;GREATEREQUAL;REGEX;ISNULL;ISNOTNULL"
+"#CAP Parameters","Draft 8",
+"#this parameter should really be called ACTION, but this conflicts with the ACTION property"
+"ACTIONPARAM","1","icalparameter_action","ASK;ABORT"
+"ID","13","const char*",
+"ENABLE","9","icalparameter_enable","TRUE;FALSE"
+"LATENCY","15","const char*",
+"LOCAL","16","icalparameter_local","TRUE;FALSE"
+"LOCALIZE","17","const char*",
+"OPTIONS","19","const char*",
+"NO","32",,
+"#In practice any unknown paramater that is not an xparam is treated as an ianaparam"
+"IANA","33","const char*",
+"ANY","0",,
+"#NOTE for updaters.  Preserve the icalparameter_kind Enum values to aid forward compatibility"

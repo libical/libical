@@ -1,0 +1,369 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_PREREQ(2.52)
+
+AC_INIT([libical], [0.48], [http://freeassociation.sf.net/])
+AC_CANONICAL_SYSTEM
+AM_INIT_AUTOMAKE
+
+AM_CONFIG_HEADER(config.h)
+
+dnl  Initialize maintainer mode
+AM_MAINTAINER_MODE
+
+dnl Checks for programs.
+AC_PROG_YACC
+AC_PROG_CC
+AC_PROG_CXX
+AM_PROG_LEX
+AC_PROG_LN_S
+AC_PROG_INSTALL
+
+dnl Initialize libtool
+AM_PROG_LIBTOOL
+
+AC_SUBST(AR)
+
+dnl *** check for Win32
+
+AC_MSG_CHECKING([whether the system provides zonefiles or we should bring our own? ])
+case "$host" in
+*-mingw*)
+    use_builtin_timezone=yes
+    os_win32=yes
+    ;;
+*linux*)
+    use_builtin_timezone=no
+    os_win32=no
+    ;;
+*kfreebsd*-gnu*)
+    use_builtin_timezone=no
+    os_win32=no
+    ;;
+*)  
+    use_builtin_timezone=yes
+    os_win32=no
+    ;;
+esac
+
+if test "$use_builtin_timezone" = "no" ; then
+   	if test ! -d /usr/share/zoneinfo; then
+            use_builtin_timezone=yes
+	fi
+fi
+
+AC_MSG_RESULT([$use_builtin_timezone])
+AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
+
+if test "x$os_win32" = "xyes"; then
+	zoneinfo_dir="zoneinfo"
+fi
+
+dnl should we override the system default?
+AC_ARG_WITH(builtintz, [  --with-builtintz             deliver our own zonefiles?],
+		       [if test "x$withval" = "xyes" ; then
+			     use_builtin_timezone="yes"
+			  fi
+			  if test "x$withval" = "xno" ; then
+			     use_builtin_timezone="no"
+			  fi]
+		)
+
+zoneinfodir=""
+if test "$use_builtin_timezone" = "yes"; then
+   AC_DEFINE(USE_BUILTIN_TZDATA, [], [whether we should bring our own TZ-Data])
+   zoneinfodir=zoneinfo
+fi
+AC_SUBST(ZONE_INFO, "$zoneinfodir")
+
+
+
+dnl *** bdb4 support
+
+AC_MSG_CHECKING(for Berkeley DB4 support)
+AC_ARG_WITH(bdb4, [  --with-bdb4             Add support for Berkeley DB 4.0],
+[case $with_bdb4 in  
+    yes)	AC_MSG_RESULT(yes)
+		AC_MSG_RESULT(  Adding Berkeley DB support)
+		WITH_BDB4="yes"
+		;;
+    no)		AC_MSG_RESULT(no)
+		;;
+    *)		AC_MSG_RESULT(no)
+		AC_MSG_RESULT(Ignoring unknown argument to --with-bdb4: $with_bdb4)
+		;;
+esac],
+AC_MSG_RESULT(no))
+
+if test x$WITH_BDB4 = xyes; then
+  AC_ARG_WITH(bdb4_dir, [  --with-bdb4-dir=PATH    Use PATH as location of BerkeleyDB 4.0],
+     BDB_DIR=$withval,
+     BDB_DIR=/usr/local/BerkeleyDB.4.0
+  )
+
+  AC_MSG_CHECKING(for Berkeley DB include files)
+  if test -f $BDB_DIR/include/db.h; then
+   BDB_DIR_INCLUDE=$BDB_DIR/include
+   AC_MSG_RESULT($BDB_DIR_INCLUDE)
+  else
+    if test -f $BDB_DIR/include/db4/db.h; then
+     BDB_DIR_INCLUDE=$BDB_DIR/include/db4
+     AC_MSG_RESULT($BDB_DIR_INCLUDE)
+    else
+     WITH_BDB4="no"
+     AC_MSG_RESULT(not found!)
+    fi
+  fi
+
+  AC_MSG_CHECKING(for Berkeley DB libraries)
+  if test -f $BDB_DIR/lib/libdb-4.0.la; then
+   BDB_DIR_LIB=$BDB_DIR/lib
+   BDB_LIB=libdb-4.0.la
+   AC_MSG_RESULT($BDB_DIR_LIB $BDB_LIB)
+  else
+    if test -f $BDB_DIR/lib/libdb4.la; then
+     BDB_DIR_LIB=$BDB_DIR/lib
+     BDB_LIB=libdb4.la
+     AC_MSG_RESULT($BDB_DIR_LIB $BDB_LIB)
+    else
+     WITH_BDB4="no"
+     AC_MSG_RESULT(not found!)
+    fi
+  fi
+
+  AC_SUBST(BDB_DIR)
+  AC_SUBST(BDB_DIR_INCLUDE)
+  AC_SUBST(BDB_DIR_LIB)
+  AC_SUBST(BDB_LIB)
+  dnl 4.0 is required...
+  BDB_VERSION="4.0"
+  AC_SUBST(BDB_VERSION)
+fi
+AM_CONDITIONAL(WITH_BDB4, test x$WITH_BDB4 = xyes)
+
+
+dnl disable backtrace if we don't want it.
+AC_ARG_WITH(backtrace, 
+		    [  --with-backtrace        enable backtrace dumps in the syslog],
+			[ if test "x$withval" != "xno" ; then
+			     CFLAGS="$CFLAGS  -rdynamic "
+			     LDFLAGS="$LDFLAGS  -rdynamic "
+			     SERVER_LDFLAGS="$SERVER_LDFLAGS  -rdynamic "
+                             AC_CHECK_FUNCS(backtrace)
+			  fi
+			]
+)
+
+dnl *** Yacc/Bison support
+
+AC_MSG_CHECKING(whether to support development)
+AC_ARG_WITH(devel, [  --with-devel            Add development options],
+[case $with_devel in  
+    yes)	DEV="yes"
+		AC_MSG_RESULT(yes)
+		AC_MSG_RESULT(Setting up for development: -Wall, flex, bison)
+		AC_MSG_RESULT(** Note that you will need flex 2.5.7 or higher)
+		;;
+    no)		AC_MSG_RESULT(no)
+		;;
+    *)		AC_MSG_RESULT(no)
+		AC_MSG_RESULT(Ignoring unknown argument to --with-devel: $with_devel)
+		;;
+esac],
+AC_MSG_RESULT(no))
+AM_CONDITIONAL(DEV, test x$DEV = xyes)
+
+AC_CHECK_PROGS(AR, ar aal, ar)
+AC_CHECK_PROGS(PERL, perl5 perl)  
+
+AC_MSG_CHECKING(whether to define _REENTRANT)
+AC_ARG_ENABLE(reentrant, [  --enable-reentrant      define _REENTRANT to enable reentrant system calls],
+[ case "${enableval}" in
+  no)
+    AC_MSG_RESULT(no)
+    ac_cv_reentrant=no
+    ;;
+  *) 
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(ICAL_REENTRANT, ,[Define if we want _REENTRANT]) [CFLAGS="$CFLAGS -D_REENTRANT"]
+    ac_cv_reentrant=yes
+    ;;
+  esac ],
+  AC_MSG_RESULT(no)
+)
+
+
+dnl **************************************************
+dnl ICAL_ERRORS_ARE_FATAL
+dnl **************************************************
+AC_MSG_CHECKING(if icalerrors_* calls should abort instead of internally signalling an error)
+AC_ARG_ENABLE(icalerrors-are-fatal, 
+  [  --enable-icalerrors-are-fatal      define ICAL_ERRORS_ARE_FATAL to make icalerror_* calls fatal],
+  [  case "${enableval}" in
+	yes)
+	  ac_cv_ical_errors_are_fatal=yes
+	  ;;
+	*) 
+	  ac_cv_ical_errors_are_fatal=no
+	  ;;
+     esac ],
+  ac_cv_ical_errors_are_fatal=no
+)
+AC_MSG_RESULT($ac_cv_ical_errors_are_fatal)
+
+if test "x$ac_cv_ical_errors_are_fatal" != "xyes"; then
+   AC_DEFINE(ICAL_ERRORS_ARE_FATAL, 0, [Define to make icalerror_* calls abort instead of internally signalling an error])
+else
+   AC_DEFINE(ICAL_ERRORS_ARE_FATAL, 1, [Define to make icalerror_* calls abort instead of internally signalling an error])
+fi
+
+dnl **************************************************
+dnl test/regression.c (and maybe others) needs this defined
+dnl **************************************************
+AC_DEFINE(NO_WARN_DEPRECATED,1,[Define to 1 if you DO NOT WANT to see deprecated messages])
+AC_DEFINE(NO_WARN_ICAL_MALFORMEDDATA_ERROR_HACK,1,[Define to 1 if you DO NO WANT to see the warning messages related to ICAL_MALFORMEDDATA_ERROR and parsing .ics zoneinfo files])
+
+AC_DEFINE(ICAL_UNIX_NEWLINE,1,[Define to terminate lines with "\n" instead of "\r\n"])
+AC_DEFINE(ICAL_ALLOW_EMPTY_PROPERTIES,0,[Define to prevent empty properties from being replaced with X-LIC-ERROR properties])
+dnl AC_DEFINE(ICAL_NO_EMPTY_ARRAY_DECL,1,[Define to 1 if your compile does not like lines like: struct something foo[]])
+
+dnl Checks for libraries.
+dnl Replace `main' with a function in -lical:
+dnl AC_CHECK_LIB(ical, main)
+
+dnl Check if this system can use pthreads
+dnl HACK to support FreeBSD 4.x pthread
+
+case "${host}" in 
+        *-*-freebsdelf4* )
+		AC_MSG_RESULT(checking for pthread_create in -lpthread... -pthread (FreeBSD 4.x style))
+		AC_DEFINE(HAVE_PTHREAD, ,[Define if we have pthread.])
+		PTHREAD_LIBS=-pthread;;
+
+	*)
+	AC_CHECK_LIB(pthread,pthread_create,have_pthread=yes)
+	if test "x$have_pthread" = xyes; then
+	   AC_DEFINE(HAVE_PTHREAD, ,[Define if we have pthread.])
+	   PTHREAD_LIBS=-lpthread
+	fi;;
+esac
+
+AM_CONDITIONAL(HAVE_PTHREAD, test "$have_pthread" = "yes")
+AC_SUBST(PTHREAD_LIBS)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(assert.h ctype.h pthread.h stdint.h time.h sys/types.h unistd.h wctype.h endian.h sys/endian.h byteswap.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_SIZE_T
+AC_TYPE_MODE_T
+AC_CHECK_TYPE(intptr_t)
+AC_STRUCT_TM
+
+dnl Checks for library functions.
+AC_CHECK_FUNCS(gmtime_r isspace iswspace strdup snprintf unsetenv setenv)
+
+dnl **************************************************
+dnl * Check for C++
+dnl **************************************************
+
+AC_ARG_ENABLE(cxx, 
+[  --enable-cxx           Enable C++ bindings],,enable_cxx="no")
+AM_CONDITIONAL(WITH_CXX_BINDINGS, test x$enable_cxx = "xyes")
+
+AC_PREFIX_DEFAULT(/usr/local/libical)
+if test "$prefix" = NONE; then
+	AC_DEFINE_UNQUOTED(PACKAGE_DATA_DIR, "$ac_default_prefix/share/libical", [where our self provided zonefiles should live])
+	ssl_dir="$ac_default_prefix/keys"
+else
+	AC_DEFINE_UNQUOTED(PACKAGE_DATA_DIR, "$prefix/share/libical", [where our self provided zonefiles should live])
+fi
+
+dnl **************************************************
+dnl * Check for Java
+dnl **************************************************
+
+AC_ARG_ENABLE(java, 
+[  --enable-java          Enable Java bindings],,enable_java="no")
+if test "x$enable_java" = "xyes"; then
+  AC_PATH_PROG(JAR, jar, /usr/local/bin/jar, /usr/local/bin:$PATH)
+  AC_PATH_PROG(JAVA, java, /usr/local/bin/java, /usr/local/bin:$PATH)
+  AC_PATH_PROG(JAVAC, javac, /usr/local/bin/javac, /usr/local/bin:$PATH)
+  AC_PATH_PROG(JAVAH, javah, /usr/local/bin/javah, /usr/local/bin:$PATH)
+  AC_SUBST(JAR)
+  AC_SUBST(JAVA)
+  AC_SUBST(JAVAC)
+  AC_SUBST(JAVAH)
+
+  dnl truly gross
+
+  case "${host}" in
+        *-*-solaris*)   JAVA_PLATFORM="solaris" ;;
+        *-*-linux*)     JAVA_PLATFORM="linux" ;;
+        *-*-freebsd*)   JAVA_PLATFORM="bsd" ;;
+        *-*-aix*)       JAVA_PLATFORM="aix" ;;
+        *-sequent-*)    JAVA_PLATFORM="ptx" ;;
+        *-*-hpux*)      JAVA_PLATFORM="hpux" ;;
+        *-*-irix*)      JAVA_PLATFORM="irix" ;;
+        *-*-os390*)     JAVA_PLATFORM="os390" ;;
+        *-*-os400*)     JAVA_PLATFORM="os400" ;;
+        *-apple-darwin*|*-apple-rhapsody*)      JAVA_PLATFORM="darwin" ;;
+        *)              JAVA_PLATFORM="unknown" ;;
+  esac
+
+  AC_SUBST(JAVA_PLATFORM)
+fi
+enable_java=no
+AM_CONDITIONAL(WITH_JAVA, test x$enable_java = "xyes")
+
+dnl **************************************************
+dnl * Check for Python
+dnl **************************************************
+python_val=false
+AC_ARG_ENABLE(python, 
+[  --enable-python         Enable python bindings],,enable_python="no")
+
+if test "x$enable_python" = "xyes"; then
+  AM_PATH_PYTHON([2.3], , [:])
+  AM_CONDITIONAL([HAVE_PYTHON], [test "$PYTHON" != :])
+  AC_CHECK_PROG(swig_val, swig, true, false)
+  AM_CONDITIONAL([HAVE_SWIG], [test "x$swig_val" = "xtrue"])
+  
+  PY_PREFIX=`$PYTHON -c 'import sys ; print sys.prefix'`
+  AC_CHECK_HEADER([python$PYTHON_VERSION/Python.h],[],[AC_MSG_ERROR([Can't find python header files])])
+  if test -f "$PY_PREFIX/include/python$PYTHON_VERSION/Python.h"; then
+    
+    PY_CFLAGS="-I$PY_PREFIX/include/python$PYTHON_VERSION"
+    AC_SUBST(PY_CFLAGS)
+    
+    # SWIG needs PIC in order to work.
+    CFLAGS="$CFLAGS -fPIC"
+  fi
+  
+  AC_CONFIG_FILES([src/python/Makefile])
+else
+  AM_CONDITIONAL([HAVE_PYTHON], false)
+  AM_CONDITIONAL([HAVE_SWIG], false)
+fi
+
+if test "$use_builtin_timezone" = "yes"; then
+  AC_CONFIG_FILES([zoneinfo/Makefile])
+fi
+
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([design-data/Makefile])
+AC_CONFIG_FILES([doc/Makefile])
+AC_CONFIG_FILES([examples/Makefile])
+AC_CONFIG_FILES([scripts/Makefile])
+AC_CONFIG_FILES([src/Makefile])
+AC_CONFIG_FILES([src/libical/Makefile])
+AC_CONFIG_FILES([src/libical/icalversion.h])
+AC_CONFIG_FILES([src/libical/icalerror.h])
+AC_CONFIG_FILES([src/libicalss/Makefile])
+AC_CONFIG_FILES([src/libicalvcal/Makefile])
+AC_CONFIG_FILES([src/test/Makefile])
+AC_CONFIG_FILES([test-data/Makefile])
+AC_CONFIG_FILES([libical.pc])
+
+AC_OUTPUT

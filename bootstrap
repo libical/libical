@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# run me after checking Citadel out of CVS.
+#
+# $Id: bootstrap,v 1.4 2008-01-26 15:54:42 dothebart Exp $
+#
+
+# Remove any vestiges of pre-6.05 build environments
+rm -f .libs modules *.so *.lo *.la 2>/dev/null
+
+echo ... running autoreconf ...
+autoreconf --verbose --force --install
+
+# If your autoconf version changes, the autom4te.cache stuff will mess you up.
+# Get rid of it.
+echo ... removing autoheader cache files ...
+rm -rf autom4te*.cache
+
+#	echo ... pre-building yacc files ...
+#	for x in src/*/*.y
+#	do
+#		echo Pre-building $x
+#		( cd `dirname $x` && yacc -o `basename $x |sed 's/y$/c/g' ` `basename $x` )
+#	done
+#
+#	echo ... pre-building lex files ...
+#	for x in src/*/*.l
+#	do
+#		echo Pre-building $x
+#	        ( cd `dirname $x` && lex -o`basename $x |sed 's/l$/c/g' ` `basename $x` )
+#	done
+
+echo
+echo This script has been tested with autoconf 2.53 and
+echo automake 1.5. Other versions may work, but we recommend
+echo the latest echo compatible versions of these.
+echo
+echo Also note that autoconf and automake should be configured
+echo with the same prefix.
+echo
