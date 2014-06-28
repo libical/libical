@@ -903,13 +903,14 @@ icalcomponent* icalfileset_form_a_matched_recurrence_component(icalsetiter* itr)
     /* add recurrence-id to the component
      * if there is a recurrence-id already, remove it, then add the new one */
     prop = icalcomponent_get_first_property(comp, ICAL_RECURRENCEID_PROPERTY);
-    if (prop)
+    if (prop) {
         icalcomponent_remove_property(comp, prop);
-        icalcomponent_add_property(comp, icalproperty_new_recurrenceid(next));
+    }
+    icalcomponent_add_property(comp, icalproperty_new_recurrenceid(next));
 
      if (itr->gauge == 0 || icalgauge_compare(itr->gauge, comp) == 1) {
-         /* matches and returns */
-         return comp;
+        /* matches and returns */
+        return comp;
      }
      /* not matched */
      return NULL;
