@@ -1,0 +1,95 @@
+#!/bin/bash
+# find out the package version from conf
+if test -x Makefile; then
+    make clean
+fi
+
+./bootstrap
+
+export `grep PACKAGE_VERSION= configure |sed -e "s;';;g" -e "s;PACKAGE;LIBICAL;"`
+
+PACKAGE_VERSION=`cat packageversion`
+DATE=`date '+%a, %d %b %Y %H:%I:00 %z'`
+ACTUAL_DIR=`pwd`
+
+if echo "$ACTUAL_DIR" |grep -q "$LIBICAL_VERSION"; then
+	echo "directory ($ACTUAL_DIR) naming scheme seems right. nothing done."
+else
+	done=false
+	if test -L "$ACTUAL_DIR"; then 
+		SYMLINK_=`pwd`
+		SYMLINK=`ls -l $SYMLINK_|sed "s;.*-> ;;"`
+		if ls -l $SYMLINK_|grep -q "$LIBICAL_VERSION"; then
+			done=true
+		fi
+	else
+		SYMLINK=`pwd|sed "s;.*/;;"`
+	fi
+	if test "$done" = "false"; then 
+		cd ..
+		mv -- $SYMLINK "libical-$LIBICAL_VERSION"
+		ln -sf "libical-$LIBICAL_VERSION" libical
+		cd "libical-$LIBICAL_VERSION"
+	else
+		cd "../libical-$LIBICAL_VERSION"
+	fi
+	
+fi
+
+
+case $1 in
+    debian)
+	if grep -q "($LIBICAL_VERSION" debian/changelog; then
+	    echo rebuilding package.
+	else
+	    echo "Upstream Version higher than local."
+	    
+	fi
+	if test "$2" == "src"; then
+	    cd ..
+	    rm -rf tmp
+	    mkdir tmp
+	    cp -rL libical-$LIBICAL_VERSION tmp
+	    cd tmp/libical-$LIBICAL_VERSION
+	    rm -rf `find -name .svn ` `find . -name .libs` svn*tmp config.log config.status svn*tmp config.log config.status Makefile config.h
+	    find -type f -exec chmod a-x {} \;
+	    chmod a+x configure libtool missing autogen.sh bootstrap debian/rules
+	    cd ..
+	    tar -chzf libical_${LIBICAL_VERSION}.orig.tar.gz libical-${LIBICAL_VERSION}/ --exclude "debian/*" --exclude "*.svn*" 
+	    pwd
+	    cd  libical-${LIBICAL_VERSION}; debuild -S -sa -kw.goesgens@outgesourced.org
+	else
+	    fakeroot dpkg-buildpackage
+	fi
+	;;
+    csw)
+	if !test -d ~/pkgs/; then
+	    mkdir ~/pkgs
+	fi
+	echo "
+PKG=CSWlibical
+NAME=libical - all you need to parse ical components.
+VERSION=${PACKAGE_VERSION}
+CATEGORY=application
+VENDOR=http://freeassociation.sourceforge.net/  packaged for CSW by Wilfried Goesgens
+HOTLINE=https://uncensored.citadel.org/ Room libical support
+EMAIL=libical@outgesourced.org
+" >~/pkgs/libical
+	export LDFLAGS='-L/opt/csw/lib -L /usr/local/lib'
+	export CFLAGS='-I/opt/csw/include -I/usr/local/include  -DDISABLE_CURSES'
+	./configure \
+	    --prefix=/opt/csw/ 
+	    
+	gmake citserver aidepost msgform citmail userlist sendcommand base64 whobbs libical
+	gmake DESTDIR=$ACTUAL_DIR/cswstage install-new
+	
+
+
+	;;
+    sourcedist)
+	cd ..; tar --exclude "*.svn*" --exclude "*.dep*" --exclude "*.lib*" --exclude "*.o" --exclude "*.lo" --exclude "debian/*" -chvzf libical-$LIBICAL_VERSION.tar.gz libical-$LIBICAL_VERSION/
+	;;
+	*)
+		echo "Not yet implemented. we have: debian "
+		;;
+esac

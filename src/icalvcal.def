@@ -1,0 +1,94 @@
+LIBRARY
+EXPORTS
+Parse_MIME
+Parse_MIME_FromFile
+Parse_MIME_FromFileName
+addGroup
+addList
+addProp
+addPropSizedValue
+addPropSizedValue_
+addPropValue
+addProp_
+addVObjectProp
+alarm_comp
+cleanStrTbl
+cleanVObject
+cleanVObjects
+comp
+dc_prop
+deleteStr
+deleteVObject
+dupStr
+fakeCString
+fakeUnicode
+fieldedProp DATA
+get_string_value
+icalvcal_convert
+icalvcal_convert_with_defaults
+initLex
+initPropIterator
+initVObjectIterator
+isAPropertyOf
+lexBuf DATA
+lookupProp
+lookupProp_
+lookupStr
+mime_char DATA
+mime_debug DATA
+mime_lex
+mime_lineNum DATA
+mime_nerrs DATA
+mime_numErrors DATA
+mime_parse
+mime_yylval DATA
+moreIteration
+multivalued_prop
+newVObject
+newVObject_
+nextVObject
+nextVObjectInList
+printVObject
+printVObjectToFile
+printVObjectsToFile
+registerMimeErrorHandler
+rule_prop
+sequence_prop
+setVObjectAnyValue
+setVObjectIntegerValue
+setVObjectLongValue
+setVObjectName
+setVObjectStringZValue
+setVObjectStringZValue_
+setVObjectUStringZValue
+setVObjectUStringZValue_
+setVObjectVObjectValue
+setValueWithSize
+setValueWithSize_
+status_prop
+transp_prop
+uStrLen
+unUseStr
+utc_datetime_prop
+vObjectAnyValue
+vObjectIntegerValue
+vObjectLongValue
+vObjectName
+vObjectStringZValue
+vObjectUStringZValue
+vObjectVObjectValue
+vObjectValueType
+vcsAddAAlarm
+vcsAddDAlarm
+vcsAddEvent
+vcsAddMAlarm
+vcsAddPAlarm
+vcsAddTodo
+vcsCreateVCal
+weekday_codes DATA
+weekdays DATA
+writeMemVObject
+writeMemVObjects
+writeVObject
+writeVObjectToFile
+writeVObjectsToFile

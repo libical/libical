@@ -1,0 +1,105 @@
+
+LIBICAL -- an implementation of iCalendar protocols and data formats
+
+Most of the code in here was written by Eric Busboom with help from
+dozens of contributors.  It is currently maintained by Art Cancro
+and Wilfried Goesgens.
+
+libical is available for you to use under your choice of the Mozilla
+Public License (MPL) v1.0 or the GNU Library General Public License
+(LGPL) v2.1.
+
+This dual license ensures that the library can be incorporated into
+both proprietary code and GPL'd programs, and will benefit from
+improvements made by programmers in both realms.  We will only accept
+changes into the library if they are similarly dual-licensed.
+
+Portions of this distribution are (C) Copyright 1996 Apple Computer,
+Inc., AT&T Corp., International Business Machines Corporation and
+Siemens Rolm Communications Inc. See src/libicalvcal/README.TXT for
+details.
+
+Portions of this distribution are Copyright (c) 1997 Theo de
+Raadt.  See the header for src/libical/vsnprintf.c for the full
+copyright statement.
+
+If you would like to contribute to this project, please visit the
+SourceForge page: http://freeassociation.sourceforge.net
+
+
+Building the library
+--------------------
+
+This distribution is developed on CentOS Linux and should also
+build cleanly on any unix-like system as long as it has the usual
+set of open source build tools online.
+
+The library is configured with automake. IF YOU ARE BUILDING THE
+SOURCE FROM A TARBALL, From the root directory, run
+
+	./configure
+
+To build all of the Makefiles for your system. If you will be
+installing the library, you may want to use the --prefix flag to set
+the directory where the library and header files will be installed.
+
+	./configure --prefix=/proj/local/
+
+If configure runs fine, run "make" to build the library and 
+"make install" to install it.
+
+Although the distribution uses libtool to generate libraries, it has
+shared libraries turned off by default. To create and install shared
+libraries use:
+
+	./configure --enable-shared
+
+
+IF YOU ARE BUILDING FROM SVN, there will be no configure file until
+you create one with the "bootstrap" script.
+
+The current version of libical focuses on creating and
+manipulating iCal objects. With it, you can parse text representations
+of iCal components, add and remove sub-components, properties,
+parameters and values, and print the components back out as strings. 
+
+
+Notes for Libical Developers
+----------------------------
+
+If you don't want to use gcc as the compiler, and you got the sources
+from SVN, you should set the CC variable to the path to the compiler
+and run "automake --include-deps" to keep automake from using
+gcc-specific automatic dependancy tracking.
+
+        > CC=/pkg/SUNWspro/bin/cc; export CC
+        > automake --include-deps
+        > ./configure --prefix=/proj/local/
+        > make
+
+You will not need to re-run automake unless you got the sources from SVN. 
+
+When updating to a new release, tweak the version number in the following files:
+CMakeLists.txt
+configure.in
+src/libical/icalversion.h
+src/java/Makefile.am
+src/libicalcap/Makefile.am
+src/libical/Makefile.am
+src/libicalss/Makefile.am
+src/libicalvcal/Makefile.am
+src/java/CMakeLists.txt
+src/libicalcap/CMakeLists.txt
+src/libicalss/CMakeLists.txt
+src/libicalvcal/CMakeLists.txt
+
+
+Using the Library
+-----------------
+
+There is rudimentary, unfinished documentation in the /doc directory,
+and annotated examples in /examples and the test code in src/test.
+
+Sourcecode now in SVN
+---------------------
+We now work in our SF.net SVN Repository. Please don't use the CVS anymore.
