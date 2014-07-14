@@ -18,11 +18,12 @@
 # -DICAL_UNIX_NEWLINE=[true|false]
 #  Set to terminate each line with the RFC2445 specified line terminator "\\n";
 #  else it will terminate lines with "\\n\\r"
-#  Default=true
+#  Default=true (on non-Windows systems; else false)
 #
 # -DUSE_BUILTIN_TZDATA=[true|false]
 #  Set to build using our own timezone data.
-#  Default=false (use the system timezone data)
+#  Default=false (use the system timezone data on non-Windows systems)
+#  ALWAYS true on Windows systems
 #
 # -DSTATIC_LIBRARY=[true|false]
 #  Set to build static libraries only.
@@ -132,7 +133,11 @@ else(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
 endif(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
 
 if(NOT DEFINED ICAL_UNIX_NEWLINE)
-  set(ICAL_UNIX_NEWLINE 1)
+  if(WIN32 OR WINCE)
+    set(ICAL_UNIX_NEWLINE 0)
+  else(WIN32 OR WINCE)
+    set(ICAL_UNIX_NEWLINE 1)
+  endif(WIN32 OR WINCE)
 else(NOT DEFINED ICAL_UNIX_NEWLINE)
   if(ICAL_UNIX_NEWLINE)
     set(ICAL_UNIX_NEWLINE 1)
@@ -170,6 +175,10 @@ else(NOT DEFINED USE_BUILTIN_TZDATA)
     set(USE_BUILTIN_TZDATA 0)
   endif(USE_BUILTIN_TZDATA)
 endif(NOT DEFINED USE_BUILTIN_TZDATA)
+#Always use builtin tzdata on Windows systems.
+if(WIN32 OR WINCE)
+  set(USE_BUILTIN_TZDATA 1)
+endif(WIN32 OR WINCE)
 
 include(ConfigureChecks.cmake)
 add_definitions(-DHAVE_CONFIG_H)
