@@ -115,18 +115,20 @@ void strstriplt(char *buf)
 		return;
 	}
 	len = strlen(buf);
-        while ((buf[0] != 0) && (isspace((unsigned char)buf[len - 1]))) {
-                buf[--len] = 0;
-	}
+	/* the casts to unsigned char below are to work around isspace asserts
+       on Windows due to non-ascii characters becoming negative */
+    while ((buf[0] != 0) && (isspace((unsigned char)buf[len - 1]))) {
+        buf[--len] = 0;
+    }
 	if (buf[0] == 0) {
 		return;
 	}
 	a = 0;
-        while ((buf[0]!=0) && (isspace((unsigned char)buf[a]))) {
-		a++;
+    while ((buf[0]!=0) && (isspace((unsigned char)buf[a]))) {
+        a++;
 	}
 	if (a > 0) {
-                memmove(buf, &buf[a], len - a + 1);
+        memmove(buf, &buf[a], len - a + 1);
 	}
 }
 

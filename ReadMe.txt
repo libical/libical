@@ -46,7 +46,16 @@ copyright statement.
 
 Get Involved
 ============
-Subscribe to our development mailing list at https://lists.sourceforge.net/lists/listinfo/freeassociation-devel
+Subscribe to our mailing lists:
+
+For developer discussions
+  http://lists.infradead.org/mailman/listinfo/libical-devel
+
+For general discussions about libical and related projects
+  http://lists.infradead.org/mailman/listinfo/libical-interest
+
+Report bugs to our issue tracker at
+  https://github.com/libical/libical/issues
 
 
 Building the library
