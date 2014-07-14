@@ -38,6 +38,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <stddef.h> /* for ptrdiff_h */
 
 #ifdef _WIN32_WCE
 #include <io.h>
@@ -376,7 +377,7 @@ static void yy_fatal_error (yyconst char msg[]  );
  */
 #define YY_DO_BEFORE_ACTION \
 	(yytext_ptr) = yy_bp; \
-	ssleng = (size_t) (yy_cp - yy_bp); \
+	ssleng = (int)(ptrdiff_t) (yy_cp - yy_bp);	\
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	if ( ssleng >= YYLMAX ) \
@@ -564,14 +565,14 @@ const char* input_buffer_p;
 
 #define minInt(a,b) ((a) < (b) ? (a) : (b))   
 
-int icalss_input(char* buf, int max_size)
+int icalss_input(char* buf, size_t max_size)
 {
-    ssize_t n = minInt(max_size,(ssize_t)strlen(input_buffer_p));
+    size_t n = minInt(max_size,strlen(input_buffer_p));
 
     if (n > 0){
 	memcpy(buf, input_buffer_p, n);
 	input_buffer_p += n;
-	return n;
+	return (int)n;
     } else {
 	return 0;
     }
@@ -1149,7 +1150,7 @@ static int yy_get_next_buffer (void)
 
 	else
 		{
-			int num_to_read =
+			size_t num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
@@ -1163,7 +1164,7 @@ static int yy_get_next_buffer (void)
 
 			if ( b->yy_is_our_buffer )
 				{
-				int new_size = b->yy_buf_size * 2;
+				size_t new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -1194,7 +1195,7 @@ static int yy_get_next_buffer (void)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			(yy_n_chars), (size_t) num_to_read );
+			(yy_n_chars), num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
 		}
@@ -1316,7 +1317,7 @@ static int yy_get_next_buffer (void)
 		yy_cp += (int) (dest - source);
 		yy_bp += (int) (dest - source);
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars =
-			(yy_n_chars) = YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
+			(yy_n_chars) = (int)YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
 
 		if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 			YY_FATAL_ERROR( "flex scanner push-back overflow" );
@@ -1353,7 +1354,7 @@ static int yy_get_next_buffer (void)
 
 		else
 			{ /* need more input */
-			int offset = (yy_c_buf_p) - (yytext_ptr);
+			ptrdiff_t offset = (yy_c_buf_p) - (yytext_ptr);
 			++(yy_c_buf_p);
 
 			switch ( yy_get_next_buffer(  ) )
@@ -1629,7 +1630,7 @@ void sspop_buffer_state (void)
  */
 static void ssensure_buffer_stack (void)
 {
-	int num_to_alloc;
+	size_t num_to_alloc;
     
 	if (!(yy_buffer_stack)) {
 
@@ -1694,7 +1695,7 @@ YY_BUFFER_STATE ss_scan_buffer  (char * base, yy_size_t  size )
 	b->yy_buf_pos = b->yy_ch_buf = base;
 	b->yy_is_our_buffer = 0;
 	b->yy_input_file = 0;
-	b->yy_n_chars = b->yy_buf_size;
+	b->yy_n_chars = (int)b->yy_buf_size;
 	b->yy_is_interactive = 0;
 	b->yy_at_bol = 1;
 	b->yy_fill_buffer = 0;
@@ -1716,7 +1717,7 @@ YY_BUFFER_STATE ss_scan_buffer  (char * base, yy_size_t  size )
 YY_BUFFER_STATE ss_scan_string (yyconst char * yystr )
 {
     
-	return ss_scan_bytes(yystr,strlen(yystr) );
+	return ss_scan_bytes(yystr,(int)strlen(yystr) );
 }
 
 /** Setup the input buffer state to scan the given bytes. The next call to sslex() will

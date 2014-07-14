@@ -55,6 +55,8 @@
 #define S_ISREG(mode)    _S_ISTYPE((mode), _S_IFREG)
 #define snprintf _snprintf
 #define strcasecmp stricmp
+#include <basetsd.h>
+typedef SSIZE_T ssize_t;
 #endif
 
 #ifdef _WIN32_WCE
@@ -209,6 +211,7 @@ char* icalfileset_read_from_file(char *s, size_t size, void *d)
 icalerrorenum icalfileset_read_file(icalfileset* set,mode_t mode)
 {
     icalparser *parser;
+    (void)mode; /*unused*/
   
     parser = icalparser_new();
 
@@ -234,14 +237,12 @@ icalerrorenum icalfileset_read_file(icalfileset* set,mode_t mode)
 
 int icalfileset_filesize(icalfileset* fset)
 {
-    int cluster_file_size;
     struct stat sbuf;
     
     if (stat(fset->path,&sbuf) != 0){
 	
 	/* A file by the given name does not exist, or there was
 	   another error */
-	cluster_file_size = 0;
 	if (errno == ENOENT) {
 	    /* It was because the file does not exist */
 	    return 0;
@@ -369,7 +370,7 @@ icalerrorenum icalfileset_commit(icalset* set)
     char tmp[ICAL_PATH_MAX]; 
     char *str;
     icalcomponent *c;
-    off_t write_size=0;
+    size_t write_size=0;
     icalfileset *fset = (icalfileset*) set;
 #ifdef _WIN32_WCE
     wchar_t *wtmp=0;
@@ -422,7 +423,7 @@ icalerrorenum icalfileset_commit(icalset* set)
 
 	str = icalcomponent_as_ical_string_r(c);
     
-	sz=write(fset->fd,str,strlen(str));
+	sz = write(fset->fd,str,strlen(str));
 
 	if ( sz != (ssize_t)strlen(str)){
 	    perror("write");
@@ -438,7 +439,7 @@ icalerrorenum icalfileset_commit(icalset* set)
     fset->changed = 0;    
 
 #ifndef WIN32
-    if(ftruncate(fset->fd,write_size) < 0){
+    if(ftruncate(fset->fd,(off_t)write_size) < 0){
 	return ICAL_FILE_ERROR;
     }
 #else
@@ -572,6 +573,8 @@ icalcomponent* icalfileset_fetch(icalset* set,const char* uid)
 
 int icalfileset_has_uid(icalset* set,const char* uid)
 {
+    (void)set; /*unused*/
+    (void)uid; /*unused*/
     assert(0); /* HACK, not implemented */
     return 0;
 }
@@ -677,8 +680,9 @@ icalcomponent* icalfileset_fetch_match(icalset* set, icalcomponent *comp)
 icalerrorenum icalfileset_modify(icalset* set, icalcomponent *old,
 				 icalcomponent *new)
 {
-	/* icalfileset *fset = (icalfileset*) set; */
-
+    (void)set; /*unused*/
+    (void)old; /*unused*/
+    (void)new; /*unused*/
     assert(0); /* HACK, not implemented */
     return ICAL_NO_ERROR;
 }
@@ -920,11 +924,11 @@ icalcomponent* icalfilesetiter_to_next(icalset* set, icalsetiter* i)
 {
 
     icalcomponent* c = NULL;
-    /* icalfileset *fset = (icalfileset*) set; */
-    struct icaltimetype start, next;
+     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype recur;
     int g = 0;
+    (void)set; /*unused*/
 
     start = icaltime_from_timet( time(0),0);
     next = icaltime_from_timet( time(0),0);
