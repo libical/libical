@@ -44,5 +44,8 @@ Building on Windows under Cygwin:
 % make
 % make install
 
-To run the test suite, run 'make test'.
-To run the test suite in verbose mode, run 'make test ARGS="-V"'.
+To run the test suite, from inside the build directory
+run 'make test' (or 'nmake test' or 'mingw32-make test')
+
+To run the test suite in verbose mode, pass ARGS="-V" to the make command
+For example: nmake test ARGS="-V"
