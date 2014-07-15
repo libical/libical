@@ -39,15 +39,14 @@
 #  Default=false (use the default size of time_t)
 #
 
-cmake_minimum_required(VERSION 2.4)
-set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake >= 2.8.4 is required
+cmake_minimum_required(VERSION 2.8.9)
 
 project(libical C CXX)
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
   cmake_policy(SET CMP0005 OLD)
-endif(COMMAND cmake_policy)
+endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
@@ -58,7 +57,7 @@ if(WINCE)
   include_directories(${WCECOMPAT_INCLUDE_DIR})
   set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${WCECOMPAT_INCLUDE_DIR})
   set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${WCECOMPAT_LIBRARIES})
-endif(WINCE)
+endif()
 
 set(LIBICAL_LIB_MAJOR_VERSION "1")
 set(LIBICAL_LIB_MINOR_VERSION "0")
@@ -74,9 +73,9 @@ if(STATIC_LIBRARY)
   set(LIBICAL_STATIC 1)
   add_definitions(-DLIBICAL_STATIC)
   set(LIBRARY_TYPE STATIC)
-else(STATIC_LIBRARY)
+else()
   set(LIBRARY_TYPE SHARED)
-endif(STATIC_LIBRARY)
+endif()
 
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
@@ -87,10 +86,10 @@ find_package(Perl REQUIRED)
 find_package(ICU)
 if(ICU_FOUND)
   set(HAVE_LIBICU 1)
-endif(ICU_FOUND)
+endif()
 if(ICU_I18N_FOUND)
   set(HAVE_LIBICU_I18N 1)
-endif(ICU_I18N_FOUND)
+endif()
 
 # MSVC specific definitions
 if(WIN32)
@@ -98,10 +97,10 @@ if(WIN32)
     add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DYY_NO_UNISTD_H)
     if(USE_32BIT_TIME_T)
       add_definitions(-D_USE_32BIT_TIME_T)
-    endif(USE_32BIT_TIME_T)
-  endif(MSVC)
+    endif()
+  endif()
   add_definitions(-DBIG_ENDIAN=0 -DLITTLE_ENDIAN=1 -DBYTE_ORDER=BIG_ENDIAN)
-endif(WIN32)
+endif()
 
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)")
 set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
@@ -114,71 +113,71 @@ if(WIN32)
   set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
   set(LIB_INSTALL_DIR lib)
   set(BIN_INSTALL_DIR bin)
-else(WIN32)
+else()
   set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-endif(WIN32)
+endif()
 
 if(APPLE)
   set(CMAKE_INSTALL_NAME_DIR ${LIB_DESTINATION})
-endif(APPLE)
+endif()
 
 if(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
   set(ICAL_ERRORS_ARE_FATAL 0)
-else(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
+else()
   if(ICAL_ERRORS_ARE_FATAL)
     set(ICAL_ERRORS_ARE_FATAL 1)
-  else(ICAL_ERRORS_ARE_FATAL)
+  else()
     set(ICAL_ERRORS_ARE_FATAL 0)
-  endif(ICAL_ERRORS_ARE_FATAL)
-endif(NOT DEFINED ICAL_ERRORS_ARE_FATAL)
+  endif()
+endif()
 
 if(NOT DEFINED ICAL_UNIX_NEWLINE)
   if(WIN32 OR WINCE)
     set(ICAL_UNIX_NEWLINE 0)
-  else(WIN32 OR WINCE)
+  else()
     set(ICAL_UNIX_NEWLINE 1)
-  endif(WIN32 OR WINCE)
-else(NOT DEFINED ICAL_UNIX_NEWLINE)
+  endif()
+else()
   if(ICAL_UNIX_NEWLINE)
     set(ICAL_UNIX_NEWLINE 1)
-  else(ICAL_UNIX_NEWLINE)
+  else()
     set(ICAL_UNIX_NEWLINE 0)
-  endif(ICAL_UNIX_NEWLINE)
-endif(NOT DEFINED ICAL_UNIX_NEWLINE)
+  endif()
+endif()
 
 if(NOT DEFINED ICAL_ALLOW_EMPTY_PROPERTIES)
   set(ICAL_ALLOW_EMPTY_PROPERTIES 0)
-else(NOT DEFINED ICAL_ALLOW_EMPTY_PROPERTIES)
+else()
   if(ICAL_ALLOW_EMPTY_PROPERTIES)
     set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
-  else(ICAL_ALLOW_EMPTY_PROPERTIES)
+  else()
     set(ICAL_ALLOW_EMPTY_PROPERTIES 0)
-  endif(ICAL_ALLOW_EMPTY_PROPERTIES)
-endif(NOT DEFINED ICAL_ALLOW_EMPTY_PROPERTIES)
+  endif()
+endif()
 
 if(NOT DEFINED NO_WARN_DEPRECATED)
   set(NO_WARN_DEPRECATED 1)
-else(NOT DEFINED NO_WARN_DEPRECATED)
+else()
   if(NO_WARN_DEPRECATED)
     set(NO_WARN_DEPRECATED 1)
-  else(NO_WARN_DEPRECATED)
+  else()
     set(NO_WARN_DEPRECATED 0)
-  endif(NO_WARN_DEPRECATED)
-endif(NOT DEFINED NO_WARN_DEPRECATED)
+  endif()
+endif()
 
 if(NOT DEFINED USE_BUILTIN_TZDATA)
   set(USE_BUILTIN_TZDATA 0)
-else(NOT DEFINED USE_BUILTIN_TZDATA)
+else()
   if(USE_BUILTIN_TZDATA)
     set(USE_BUILTIN_TZDATA 1)
-  else(USE_BUILTIN_TZDATA)
+  else()
     set(USE_BUILTIN_TZDATA 0)
-  endif(USE_BUILTIN_TZDATA)
-endif(NOT DEFINED USE_BUILTIN_TZDATA)
+  endif()
+endif()
 #Always use builtin tzdata on Windows systems.
 if(WIN32 OR WINCE)
   set(USE_BUILTIN_TZDATA 1)
-endif(WIN32 OR WINCE)
+endif()
 
 include(ConfigureChecks.cmake)
 add_definitions(-DHAVE_CONFIG_H)
@@ -195,11 +194,11 @@ if(GOBJECT_INTROSPECTION)
   find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
   if(INTROSPECTION_FOUND)
     set(HAVE_INTROSPECTION TRUE)
-  else(INTROSPECTION_FOUND)
+  else()
     message(FATAL_ERROR "You requested to build with GObject Introspection but the necessary development package is missing or too low a version (version ${MIN_GOBJECT_INTROSPECTION} or higher is required)")
-  endif(INTROSPECTION_FOUND)
-endif(GOBJECT_INTROSPECTION)
- 
+  endif()
+endif()
+
 #
 # Compiler settings
 #
@@ -211,14 +210,14 @@ if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated -Wall -Wextra -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wcast-qual -Wcast-align -Wmissing-noreturn -Werror=return-type")
   if(HAVE_GCC_UNUSED_BUT_SET)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-but-set-variable")
-  endif(HAVE_GCC_UNUSED_BUT_SET)
+  endif()
   if(HAVE_GCC_LOGICAL_OP)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlogical-op")
-  endif(HAVE_GCC_LOGICAL_OP)
+  endif()
   if(HAVE_GCC_POINTER_MEMACCESS)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsizeof-pointer-memaccess")
-  endif(HAVE_GCC_POINTER_MEMACCESS)
-endif(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+  endif()
+endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   include(CheckCXXCompilerFlag)
@@ -228,14 +227,14 @@ if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wcast-qual -Wcast-align -Wmissing-noreturn -Werror=return-type")
   if(HAVE_GCC_UNUSED_BUT_SET)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-but-set-variable")
-  endif(HAVE_GCC_UNUSED_BUT_SET)
+  endif()
   if(HAVE_GCC_LOGICAL_OP)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlogical-op")
-  endif(HAVE_GCC_LOGICAL_OP)
+  endif()
   if(HAVE_GCC_POINTER_MEMACCESS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsizeof-pointer-memaccess")
-  endif(HAVE_GCC_POINTER_MEMACCESS)
-endif(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  endif()
+endif()
 
 ################# build subdirs ########################
 
@@ -248,7 +247,7 @@ add_subdirectory(examples)
 if(USE_BUILTIN_TZDATA)
   # use our zoneinfo if cmake is passed -DUSE_BUILTIN_TZDATA
   add_subdirectory(zoneinfo)
-endif(USE_BUILTIN_TZDATA)
+endif()
 
 ########### create and install pkg-config file #########
 
@@ -261,3 +260,30 @@ set(PTHREAD_LIBS "${CMAKE_THREAD_LIBS_INIT}")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+
+########### Create and install the CMake Config files ##########
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+  LibIcalConfig.cmake.in ${libical_BINARY_DIR}/LibIcalConfig.cmake
+  INSTALL_DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal
+  PATH_VARS LIB_INSTALL_DIR INCLUDE_INSTALL_DIR
+)
+
+# Create a version file
+write_basic_package_version_file(
+  ${libical_BINARY_DIR}/LibIcalConfigVersion.cmake
+  VERSION ${LIBICAL_LIB_VERSION_STRING}
+  COMPATIBILITY SameMajorVersion
+)
+
+install(
+  FILES ${libical_BINARY_DIR}/LibIcalConfigVersion.cmake ${libical_BINARY_DIR}/LibIcalConfig.cmake
+  DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal
+)
+
+install(
+  EXPORT icalTargets
+  DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal
+  FILE LibIcalTargets.cmake
+)

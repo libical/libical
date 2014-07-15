@@ -11,4 +11,4 @@ if(MSVC)
     DESTINATION
     ${LIB_INSTALL_DIR}
   )
-endif(MSVC)
+endif()

@@ -1,4 +1,8 @@
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icalversion.h @ONLY)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/icalversion.h
+  @ONLY
+)
 
 include_directories(
   ${CMAKE_BINARY_DIR}
@@ -12,8 +16,8 @@ include_directories(
 if(WIN32)
   if(MSVC)
     add_definitions(-DBUILD_LIBICALDLL)
-  endif(MSVC)
-endif(WIN32)
+  endif()
+endif()
 
 configure_file(icalerror.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icalerror.h)
 
@@ -133,10 +137,10 @@ add_custom_command(
 if(WIN32)
   set(TOPS "\"${CMAKE_SOURCE_DIR}\"")
   set(TOPB "\"${CMAKE_BINARY_DIR}\"")
-else(WIN32)
+else()
   set(TOPS "${CMAKE_SOURCE_DIR}")
   set(TOPB "${CMAKE_BINARY_DIR}")
-endif(WIN32)
+endif()
 
 add_custom_command(
   OUTPUT
@@ -251,8 +255,8 @@ set(ical_LIB_SRCS
 if(WIN32)
   if(MSVC)
     list(APPEND ical_LIB_SRCS ../ical.def)
-  endif(MSVC)
-endif(WIN32)
+  endif()
+endif()
 
 add_library(ical ${LIBRARY_TYPE} ${ical_LIB_SRCS})
 add_library(ical-static STATIC ${ical_LIB_SRCS})
@@ -263,21 +267,21 @@ target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
 
 if(ICU_FOUND)
   target_link_libraries(ical ${ICU_LIBRARIES})
-endif(ICU_FOUND)
+endif()
 if(ICU_I18N_FOUND)
   target_link_libraries(ical ${ICU_I18N_LIBRARIES})
-endif(ICU_I18N_FOUND)
+endif()
 
 if(WINCE)
   target_link_libraries(ical ${WCECOMPAT_LIBRARIES})
-endif(WINCE)
+endif()
 
 if(MSVC)
   set_target_properties(ical PROPERTIES OUTPUT_NAME "libical")
   set_target_properties(ical-static PROPERTIES OUTPUT_NAME "libical-static")
-else(MSVC)
+else()
   set_target_properties(ical-static PROPERTIES OUTPUT_NAME "ical")
-endif(MSVC)
+endif()
 set_target_properties(ical PROPERTIES
   VERSION ${LIBICAL_LIB_VERSION_STRING}
   SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
@@ -285,7 +289,11 @@ set_target_properties(ical PROPERTIES
 set_target_properties(ical PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 set_target_properties(ical-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
-install(TARGETS ical ical-static ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+  TARGETS ical ical-static
+  EXPORT icalTargets
+  DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
+)
 
 ########### install files ###############
 
