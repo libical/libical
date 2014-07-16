@@ -11,7 +11,7 @@ passing -DCMAKE_INSTALL_PREFIX=/install/path to cmake.
 To build a debug version pass -DCMAKE_BUILD_TYPE=Debug to cmake.
 
 To build libical you will need:
- - CMake version 2.8.7 or higher
+ - CMake version 2.8.9 or higher
  - Perl
  - libicu (not required but strongly recommended)
  - a C compiler (let us know if the build fails with your C compiler)
