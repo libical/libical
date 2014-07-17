@@ -1,6 +1,7 @@
 
 TODOs for libical
 -----------------
+fix Coverity Scan issues
 
 libical treats properties with multiple values incorrecty -- it always
 seperates multiple values into multiple properties. This is not
