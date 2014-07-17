@@ -33,7 +33,11 @@ set_target_properties(ical_jni PROPERTIES
   VERSION ${LIBICAL_LIB_VERSION_STRING}
   SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
 )
-install(TARGETS ical_jni DESTINATION lib)
+install(
+  TARGETS ical_jni
+  EXPORT icalTargets
+  DESTINATION lib
+)
 
 ########### install files ###############
 

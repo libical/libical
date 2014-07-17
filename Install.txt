@@ -11,7 +11,7 @@ passing -DCMAKE_INSTALL_PREFIX=/install/path to cmake.
 To build a debug version pass -DCMAKE_BUILD_TYPE=Debug to cmake.
 
 To build libical you will need:
- - CMake version 2.4 or higher
+ - CMake version 2.8.9 or higher
  - Perl
  - libicu (not required but strongly recommended)
  - a C compiler (let us know if the build fails with your C compiler)
@@ -44,5 +44,8 @@ Building on Windows under Cygwin:
 % make
 % make install
 
-To run the test suite, run 'make test'.
-To run the test suite in verbose mode, run 'make test ARGS="-V"'.
+To run the test suite, from inside the build directory
+run 'make test' (or 'nmake test' or 'mingw32-make test')
+
+To run the test suite in verbose mode, pass ARGS="-V" to the make command
+For example: nmake test ARGS="-V"

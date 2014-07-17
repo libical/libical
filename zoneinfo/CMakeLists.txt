@@ -26,4 +26,4 @@ foreach(_zoneinfocurrentdir ${zoneinfodir})
     FILES ${_icsfile}
     DESTINATION ${SHARE_INSTALL_DIR}/libical/zoneinfo/${_zoneinfocurrentdir}/
   )
-endforeach(_zoneinfocurrentdir ${zoneinfodir})
+endforeach()
