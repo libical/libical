@@ -47,7 +47,7 @@ Building on Windows under Cygwin:
 Building on MSYS with mingw:
 % mkdir build
 % cd build
-% cmake -G "MinGW Makefiles" ..
+% cmake -G "MSYS Makefiles" ..
 % nmake
 % nmake install
 
