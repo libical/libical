@@ -44,6 +44,13 @@ Building on Windows under Cygwin:
 % make
 % make install
 
+Building on MSYS with mingw:
+% mkdir build
+% cd build
+% cmake -G "MSYS Makefiles" ..
+% nmake
+% nmake install
+
 To run the test suite, from inside the build directory
 run 'make test' (or 'nmake test' or 'mingw32-make test')
 
