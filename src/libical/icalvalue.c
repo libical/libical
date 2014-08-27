@@ -577,7 +577,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
                and reconstruct it as sections */
             t = strtol(str,0,10);
             /* add phantom seconds field */
-            if(abs(t)<9999){t *= 100; }
+            if(strlen(str)<7){t *= 100; }
             hours = (t/10000);
             minutes = (t-hours*10000)/100;
             seconds = (t-hours*10000-minutes*100);
