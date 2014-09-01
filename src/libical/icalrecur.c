@@ -2160,6 +2160,10 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
 		    /* Add the nth instance of the weekday within the month. */
 		    month_day = first_matching_day + (pos - 1) * 7;
 
+		    /* Track back overflowing days */
+		    while(month_day > days_in_month)
+		        month_day -=7;
+
 		    if (month_day <= days_in_month)
 		        impl->days[days_index++] = (short)(doy_offset + month_day);
 
