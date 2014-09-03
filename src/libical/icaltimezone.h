@@ -168,6 +168,12 @@ void free_zone_directory(void);
 void icaltimezone_release_zone_tab(void);
 
 /*
+ * @par Handling whether to use builtin timezone files
+ */
+void icaltimezone_set_builtin_tzdata(int set);
+int icaltimezone_get_builtin_tzdata(void);
+
+/*
  * @par Debugging Output.
  */
 
