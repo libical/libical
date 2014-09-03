@@ -408,7 +408,7 @@ void test_parameters()
     p = icalparameter_new_from_string("ROLE=CHAIR");
 
     ok("ROLE_PARAMETER", (icalparameter_isa(p) == ICAL_ROLE_PARAMETER));
-    ok("ROLE_CHAIR", (icalparameter_get_partstat(p) == ICAL_ROLE_CHAIR));
+    ok("ROLE_CHAIR", (icalparameter_get_role(p) == ICAL_ROLE_CHAIR));
 
     icalparameter_free(p);
 
@@ -730,7 +730,7 @@ void test_dirset()
 
 	    error = icaldirset_add_component(s,clone);
 
-	    assert(icalerrno  == ICAL_NO_ERROR);
+	    assert(error  == ICAL_NO_ERROR);
 	}
     }
 
@@ -835,8 +835,6 @@ void test_restriction()
 
     struct icaldatetimeperiodtype rtime;
 
-    char *str;
-
     rtime.period.start = icaltime_from_timet( time(0),0);
     rtime.period.end = icaltime_from_timet( time(0),0);
     rtime.period.end.hour++;
@@ -904,7 +902,7 @@ void test_restriction()
 
     ok("icalrestriction_check() == 0", (valid==0));
 
-    str = icalcomponent_as_ical_string(comp);
+    (void)icalcomponent_as_ical_string(comp);
 
     icalcomponent_free(comp);
 
@@ -1824,11 +1822,10 @@ void test_iterators()
 
 	icalcomponent *this;
 	icalproperty *p;
-	const char* s;
 	next = icalcomponent_get_next_component(c,ICAL_ANY_COMPONENT);
 
 	p=icalcomponent_get_first_property(inner,ICAL_VERSION_PROPERTY);
-	s = icalproperty_get_version(p);
+	(void)icalproperty_get_version(p);
 
 	icalcomponent_remove_component(c,inner);
 
@@ -1836,7 +1833,7 @@ void test_iterators()
 
 	if(this != 0){
 	    p=icalcomponent_get_first_property(this,ICAL_VERSION_PROPERTY);
-	    s = icalproperty_get_version(p);
+	    (void)icalproperty_get_version(p);
 	}
 
 	icalcomponent_free(inner);
@@ -2272,17 +2269,22 @@ void test_convenience(){
     icalcomponent_set_duration(c,icaldurationtype_from_string("PT1H30M"));
     duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
-#ifndef USE_BUILTIN_TZDATA
-    ok("Start is 1997-08-01 12:00:00 Europe/Rome",
-       (0 == strcmp("1997-08-01 12:00:00 /softwarestudio.org/Tzfile/Europe/Rome", ictt_as_string(icalcomponent_get_dtstart(c)))));
-    ok("End is 1997-08-01 13:30:00 Europe/Rome",
-       (0 == strcmp("1997-08-01 13:30:00 /softwarestudio.org/Tzfile/Europe/Rome", ictt_as_string(icalcomponent_get_dtend(c)))));
-#else
-    ok("Start is 1997-08-01 12:00:00 Europe/Rome",
-       (0 == strcmp("1997-08-01 12:00:00 /citadel.org/20070227_1/Europe/Rome", ictt_as_string(icalcomponent_get_dtstart(c)))));
-    ok("End is 1997-08-01 13:30:00 Europe/Rome",
-       (0 == strcmp("1997-08-01 13:30:00 /citadel.org/20070227_1/Europe/Rome", ictt_as_string(icalcomponent_get_dtend(c)))));
-#endif
+    if (icaltimezone_get_builtin_tzdata()) {
+	ok("Start is 1997-08-01 12:00:00 Europe/Rome",
+	   (0 == strcmp("1997-08-01 12:00:00 /softwarestudio.org/Tzfile/Europe/Rome",
+			ictt_as_string(icalcomponent_get_dtstart(c)))));
+	ok("End is 1997-08-01 13:30:00 Europe/Rome",
+	   (0 == strcmp("1997-08-01 13:30:00 /softwarestudio.org/Tzfile/Europe/Rome",
+			ictt_as_string(icalcomponent_get_dtend(c)))));
+    } else {
+	ok("Start is 1997-08-01 12:00:00 Europe/Rome",
+	   (0 == strcmp("1997-08-01 12:00:00 /citadel.org/20070227_1/Europe/Rome",
+			ictt_as_string(icalcomponent_get_dtstart(c)))));
+	ok("End is 1997-08-01 13:30:00 Europe/Rome",
+	   (0 == strcmp("1997-08-01 13:30:00 /citadel.org/20070227_1/Europe/Rome",
+			ictt_as_string(icalcomponent_get_dtend(c)))));
+    }
+
     ok("Duration is 90 m", (duration == 90));
 
     icalcomponent_free(c);
@@ -2323,18 +2325,14 @@ void test_recur_parser()
   struct icalrecurrencetype rt;
   char *str;
 
-  str = "FREQ=YEARLY;UNTIL=20000131T090000Z;INTERVAL=1;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
+  str = "FREQ=YEARLY;UNTIL=20000131T090000Z;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
   rt = icalrecurrencetype_from_string(str);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
   is(str, icalrecurrencetype_as_string(&rt), str);
-#endif
 
-  str = "FREQ=DAILY;COUNT=3;INTERVAL=1;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
+  str = "FREQ=DAILY;COUNT=3;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
   
   rt = icalrecurrencetype_from_string(str);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
   is(str, icalrecurrencetype_as_string(&rt), str);
-#endif
 }
 
 char* ical_strstr(const char *haystack, const char *needle){
@@ -2347,7 +2345,7 @@ void test_start_of_week()
     struct icaltimetype tt1 = icaltime_from_string("19900110");
     int dow, doy,start_dow;
 
-    do{
+    do {
         tt1 = icaltime_normalize(tt1);
 
         doy = icaltime_start_doy_of_week(tt1);
@@ -3384,8 +3382,8 @@ void test_langbind()
 "BEGIN:VEVENT\r\n"
 "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:\r\n"
 " employee-A@host.com\r\n"
-"COMMENT: Comment that spans a line\r\n"
-"COMMENT: Comment with \\\"quotable\\\" 'characters' and other \\t bad magic \r\n"
+"COMMENT:Comment that spans a line\r\n"
+"COMMENT:Comment with \\\"quotable\\\" 'characters' and other \\t bad magic \r\n"
 " things \\f Yeah.\r\n"
 "DTSTART:19970101T120000\r\n"
 "DTSTART:19970101T120000Z\r\n"
@@ -3404,11 +3402,9 @@ void test_langbind()
 
     test_str_parsed = icalcomponent_as_ical_string(c);
 
-#if ADD_TESTS_REQUIRING_INVESTIGATION
     is("parsed version with bad chars, etc",
        test_str_parsed,
        test_str_parsed_good);
-#endif
 
 
     inner = icalcomponent_get_inner(c);
