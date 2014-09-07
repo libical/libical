@@ -55,10 +55,6 @@
 #define strcasecmp stricmp
 #endif
 
-#if _MAC_OS_
-#include "icalmemory_strdup.h"
-#endif
-
 #define TMP_BUF_SIZE 1024
 
 void print_datetime_to_string(char* str,  const struct icaltimetype *data);
@@ -868,11 +864,8 @@ icalvalue_is_valid (const icalvalue* value)
 
 static char* icalvalue_binary_as_ical_string_r(const icalvalue* value) {
 
-    const char* data;
     char* str;
     icalerror_check_arg_rz( (value!=0),"value");
-
-    data = icalvalue_get_binary(value);
 
     str = (char*)icalmemory_new_buffer(60);
     snprintf(str, 60,"icalvalue_binary_as_ical_string is not implemented yet");

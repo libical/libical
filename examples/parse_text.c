@@ -19,14 +19,12 @@ files, sockets, etc. */
 
 char* read_stream(char *s, size_t size, void *d)
 {
-  char *c = fgets(s,size, (FILE*)d);
-
-  return c;
-
+    return fgets(s, (int)size, (FILE*)d);
 }
 
 void parse_text(int argc, char* argv[])
 {
+    (void)argc;/*unused*/
 
     char* line; 
     FILE* stream;

@@ -285,6 +285,7 @@ void icalrecur_clause_name_and_value(struct icalrecur_parser *parser,
 void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
 			   int size, char* vals)
 {
+    (void)parser;/*unused*/
     char *t, *n;
     int i=0;
     int sign = 1;
@@ -370,12 +371,9 @@ void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
     char weekno = 0;           /* note: Novell/Groupwise sends BYDAY=255SU, so we fit in a signed char to get -1 SU for last sunday. */
     icalrecurrencetype_weekday wd;
     short *array = parser->rt.by_day;
-    char* end;
     char* vals_copy;
 
     vals_copy = icalmemory_strdup(vals);
-
-    end = (char*)vals_copy+strlen(vals_copy);
     n = vals_copy;
 
     while(n != 0){
@@ -1807,7 +1805,6 @@ static int next_week(icalrecur_iterator* impl)
       /*FREQ=WEEKLY;BYWEEK=20*/
     /* Use the Week Number byrule data */
       int week_no;
-      struct icaltimetype t;
       
       impl->by_indices[BY_WEEK_NO]++;
       
@@ -1817,10 +1814,6 @@ static int next_week(icalrecur_iterator* impl)
 	  
 	  end_of_data = 1;
       }
-      
-      t = impl->last;
-      t.month=1; /* HACK, should be setting to the date of the first week of year*/
-      t.day=1;
       
       week_no = impl->by_ptrs[BY_WEEK_NO][impl->by_indices[BY_WEEK_NO]];
       
@@ -2061,7 +2054,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
 
     case 1<<BY_WEEK_NO: {
         /* FREQ=YEARLY; BYWEEKNO=20,50 */
-
+#if 0 /*unfinished*/
 	int dow;
 
 	t.day = impl->dtstart.day;
@@ -2070,6 +2063,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
 	t.is_date = 1;
 
         dow = icaltime_day_of_week(t);
+#endif
 	/* HACK Not finished */ 
 
         icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);

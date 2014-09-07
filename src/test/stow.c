@@ -293,7 +293,8 @@ void return_failure(icalcomponent* comp,  char* message,
 /* The program had a fatal error and could not process the incoming component*/
 void return_error(icalcomponent* comp,  char* message, struct options_struct *opt)
 {
-    
+    (void)comp;/*unused*/
+    (void)opt;/*unused*/
 
     fputs(make_mime("Dest", "Source", "iMIP system failure", 
 		    message, 0,0),stdout);
@@ -467,15 +468,12 @@ char* check_component(icalcomponent* comp,  icalproperty **return_status,
 	}
 		
 	if (found_attendee == 0){
-	    struct icalreqstattype rs;
 	    memset(static_component_error_str,0,PATH_MAX);
 
 	    snprintf(static_component_error_str,PATH_MAX,
 		   "This target user (%s) is not listed as an attendee or organizer",
 		    opt->calid );
 	    component_error_str = static_component_error_str;
-
-	    rs.code = ICAL_3_7_INVCU_STATUS;
 
 	    break;
 	}
@@ -508,6 +506,8 @@ char* check_component(icalcomponent* comp,  icalproperty **return_status,
 
 void usage(char *message)
 {
+    (void)message;/*unused*/
+
     fprintf(stderr,"Usage: %s [-emdcn] [-i inputfile] [-o outputfile] [-u calid]\n",program_name);
     fprintf(stderr,"-e\tInput data is encapsulated in a MIME Message \n\
 -m\tInput is raw iCal \n\
@@ -692,6 +692,7 @@ void get_options(int argc, char* argv[], struct options_struct *opt)
 
 char* check_options(struct options_struct *opt)
 {
+    (void)opt;/*unused*/
     return 0;
 }
 

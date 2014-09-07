@@ -972,7 +972,7 @@ void sspm_read_header(struct mime_impl *impl,struct sspm_header *header)
 	    }
 	    
 	    case HEADER_CONTINUATION: {
-		char* last_line, *end;
+		char* last_line;
 		char *buf_start;
 
 		if(current_line < 0){
@@ -983,9 +983,6 @@ void sspm_read_header(struct mime_impl *impl,struct sspm_header *header)
 		}
 
 		last_line = header_lines[current_line];
-		end = (char*) ( (size_t)strlen(last_line)+
-				      (size_t)last_line);
-		
 		impl->state = IN_HEADER;
 
 		

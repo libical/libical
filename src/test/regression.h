@@ -36,15 +36,15 @@ char* icaltime_as_ctime(struct icaltimetype t);
 
 void _ok(char*name, int result, char*file, int linenum, char *test);
 void _is(char* test_name, const char* str1, const char* str2, char *file, int linenum);
-void _int_is(char* test_name, int i1, int i2, char *file, int linenum);
+void _int_is(char* test_name, time_t i1, time_t i2, char *file, int linenum);
 #define ok(TEST, EX) (_ok(TEST, EX, __FILE__, __LINE__, #EX))
 #define is(S1, S2, EX) (_is(S1, S2, EX, __FILE__, __LINE__))
 #define int_is(I1, I2, EX) (_int_is(I1, I2, EX, __FILE__, __LINE__))
 void test_header(char*title, int test_set);
 void test_start(int);
 int test_end(void);
-void test_run(char *test_name, 
-	      void (*test_fcn)(void), 
+void test_run(char *test_name,
+	      void (*test_fcn)(),
 	      int do_test, int headeronly);
 
 

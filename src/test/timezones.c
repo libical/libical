@@ -24,6 +24,8 @@
 
 int main(int argc, char **argv)
 {
+    (void)argc;/*unused*/
+    (void)argv;/*unused*/
     icalarray *timezones = icaltimezone_get_builtin_timezones();
     int i;
     int ret = 0;

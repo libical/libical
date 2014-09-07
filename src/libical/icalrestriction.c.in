@@ -63,10 +63,6 @@ static const icalrestriction_property_record*
 icalrestriction_get_property_restriction(icalproperty_method method,
 					 icalcomponent_kind component,
 					 icalproperty_kind property);
-static const icalrestriction_component_record*
-icalrestriction_get_component_restriction(icalproperty_method method,
-					  icalcomponent_kind component,
-					  icalcomponent_kind subcomponent);
 
 icalrestriction_property_record null_prop_record =   {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_PROPERTY,ICAL_RESTRICTION_UNKNOWN,0};
 icalrestriction_component_record null_comp_record =   {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_COMPONENT,ICAL_RESTRICTION_UNKNOWN,0};
@@ -239,10 +235,9 @@ const char* icalrestriction_must_be_recurring(
 		const icalrestriction_property_record *rec,
 		icalcomponent* comp, 
 		icalproperty* prop){
-    /* Hack */
-    (void)rec;
-    (void)comp;
-    (void)prop;
+    (void)rec; /*unused*/
+    (void)comp;/*unused*/
+    (void)prop;/*unused*/
     return 0;    
 }
 
@@ -251,6 +246,8 @@ const char* icalrestriction_must_have_duration(
 	icalcomponent* comp, 
 	icalproperty* prop)
 {    
+    (void)rec;/*unused*/
+    (void)prop;/*unused*/
     if( !icalcomponent_get_first_property(comp,ICAL_DURATION_PROPERTY)){
 
 	return "Failed iTIP restrictions for DURATION property. This component must have a DURATION property";
@@ -494,27 +491,4 @@ icalrestriction_get_property_restriction(icalproperty_method method,
     }
 	
     return &null_prop_record;
-}
-
-
-static const icalrestriction_component_record*
-icalrestriction_get_component_restriction(icalproperty_method method,
-					  icalcomponent_kind component,
-					  icalcomponent_kind subcomponent)
-{
-
-    int i;
-
-    for(i = 0;
-	icalrestriction_component_records[i].restriction != ICAL_RESTRICTION_NONE;
-	i++){
-
-	if (method == icalrestriction_component_records[i].method &&
-	    component == icalrestriction_component_records[i].component &&
-	    subcomponent ==  icalrestriction_component_records[i].subcomponent ){
-	    return  &icalrestriction_component_records[i];
-	}
-    }
-	
-    return &null_comp_record;
 }

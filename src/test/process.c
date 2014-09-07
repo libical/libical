@@ -47,9 +47,11 @@ void send_message(icalcomponent *reply,const char* this_user)
 
 int main(int argc, char* argv[])
 {
+    (void)argc;/*unused*/
+    (void)argv;/*unused*/
+
     icalcomponent *c, *next_c = NULL;
     int i=0;
-    const char *class_string;
     int dont_remove;
     icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
 
@@ -95,8 +97,6 @@ int main(int argc, char* argv[])
 	match = icalset_fetch_match(cal,c);
 
 	class = icalclassify(c,match,this_user);
-
-	class_string = icalproperty_enum_to_string(class);
 
 	/* Print out the notes associated with the incoming component
            and the matched component in the */
@@ -267,9 +267,7 @@ conflicts with this meeting. I am proposing a time that works better for me.");
 	  
 	    case ICAL_XLICCLASS_REQUESTRESCHEDULE: { 
 		/* Use same rules as REQUEST_NEW */
-		icalcomponent *overlaps;
-		overlaps = icalclassify_find_overlaps(cal,c);
-
+		(void)icalclassify_find_overlaps(cal,c);
 		break; 
 	    }
 	    case ICAL_XLICCLASS_REQUESTDELEGATE: { 

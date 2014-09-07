@@ -33,7 +33,7 @@ add_executable(regression ${regression_SRCS})
 
 target_link_libraries(regression ical icalss icalvcal)
 
-add_test(NAME regression WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin COMMAND regression)
+add_test(NAME regression COMMAND regression)
 if(WIN32)
   set_tests_properties(
     regression

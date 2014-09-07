@@ -90,7 +90,7 @@ char* read_stream(char *s, size_t size, void *d)
 
 int main(int argc, char* argv[])
 {
-
+    (void)argc;/*unused*/
     char* line; 
     FILE* stream;
     icalcomponent *c; 
