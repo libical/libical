@@ -47,8 +47,8 @@ void send_message(icalcomponent *reply,const char* this_user)
 
 int main(int argc, char* argv[])
 {
-    (void)argc;/*unused*/
-    (void)argv;/*unused*/
+    _unused(argc)
+    _unused(argv)
 
     icalcomponent *c, *next_c = NULL;
     int i=0;

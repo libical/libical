@@ -22,10 +22,8 @@ char* read_stream(char *s, size_t size, void *d)
     return fgets(s, (int)size, (FILE*)d);
 }
 
-void parse_text(int argc, char* argv[])
+void parse_text(char* argv[])
 {
-    (void)argc;/*unused*/
-
     char* line; 
     FILE* stream;
     icalcomponent *c; 

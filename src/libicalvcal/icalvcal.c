@@ -234,9 +234,9 @@ icalcomponent* icalvcal_convert (VObject *object)
 void* comp(int icaltype, VObject *o, icalcomponent *comp,
 	   icalvcal_defaults *defaults)
 {
-    (void)o;/*unused*/
-    (void)comp;/*unused*/
-    (void)defaults;/*unused*/
+    _unused(o)
+    _unused(comp)
+    _unused(defaults)
 
     icalcomponent_kind kind = (icalcomponent_kind)icaltype;
 
@@ -579,7 +579,7 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 void* alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
 		 icalvcal_defaults *defaults)
 {
-    (void)comp;/*unused*/
+    _unused(comp)
 /*    icalcomponent_kind kind = (icalcomponent_kind)icaltype; */
     int is_valid_alarm;
 
@@ -604,9 +604,9 @@ void* alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
 void* transp_prop(int icaltype, VObject *object, icalcomponent *comp,
 		  icalvcal_defaults *defaults)
 {
-    (void)icaltype;/*unused*/
-    (void)comp;/*unused*/
-    (void)defaults;/*unused*/
+    _unused(icaltype)
+    _unused(comp)
+    _unused(defaults)
 
     icalproperty *prop = NULL;
     char *s;
@@ -631,9 +631,9 @@ void* transp_prop(int icaltype, VObject *object, icalcomponent *comp,
 void* sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
 		    icalvcal_defaults *defaults)
 {
-    (void)icaltype;/*unused*/
-    (void)comp;/*unused*/
-    (void)defaults;/*unused*/
+    _unused(icaltype)
+    _unused(comp)
+    _unused(defaults)
 
     icalproperty *prop = NULL;
     char *s;
@@ -661,8 +661,8 @@ void* sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
 void* multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
 		       icalvcal_defaults *defaults)
 {
-    (void)comp;/*unused*/
-    (void)defaults;/*unused*/
+    _unused(comp)
+    _unused(defaults)
 
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop = NULL;
@@ -701,8 +701,8 @@ void* multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
 void* status_prop(int icaltype, VObject *object, icalcomponent *comp,
 		  icalvcal_defaults *defaults)
 {
-    (void)icaltype;/*unused*/
-    (void)defaults;/*unused*/
+    _unused(icaltype)
+    _unused(defaults)
 
     icalproperty *prop = NULL;
     char *s;
@@ -754,8 +754,8 @@ void* status_prop(int icaltype, VObject *object, icalcomponent *comp,
 void* utc_datetime_prop(int icaltype, VObject *object, icalcomponent *comp,
 			icalvcal_defaults *defaults)
 {
-    (void)comp;/*unused*/
-    (void)defaults;/*unused*/
+    _unused(comp)
+    _unused(defaults)
 
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop; 
@@ -1212,9 +1212,9 @@ static char* rrule_parse_yearly_days (char *s,
 void* rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 		icalvcal_defaults *defaults)
 {
-    (void)icaltype;/*unused*/
-    (void)comp;/*unused*/
-    (void)defaults;/*unused*/
+    _unused(icaltype)
+    _unused(comp)
+    _unused(defaults)
 
 /*    icalproperty_kind kind = (icalproperty_kind)icaltype;*/
     icalproperty *prop = NULL;
@@ -1294,8 +1294,8 @@ void* rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 void* dc_prop(int icaltype, VObject *object, icalcomponent *comp,
 	      icalvcal_defaults *defaults)
 {
-    (void)comp;/*unused*/
-    (void)defaults;/*unused*/
+    _unused(comp)
+    _unused(defaults)
 
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop; 

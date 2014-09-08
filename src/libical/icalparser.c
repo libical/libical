@@ -317,7 +317,7 @@ char* parser_get_next_paramvalue(char* line, char **end)
 
 char* icalparser_get_value(char* line, char **end, icalvalue_kind kind)
 {
-    (void)kind;/*unused*/
+	_unused(kind)
     char *str;
     size_t length = strlen(line);
 

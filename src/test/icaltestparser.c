@@ -25,6 +25,10 @@
 
  ======================================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <errno.h>
 #include <stdio.h>
@@ -90,7 +94,7 @@ char* read_stream(char *s, size_t size, void *d)
 
 int main(int argc, char* argv[])
 {
-    (void)argc;/*unused*/
+    _unused(argc)
     char* line; 
     FILE* stream;
     icalcomponent *c; 

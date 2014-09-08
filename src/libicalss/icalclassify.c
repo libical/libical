@@ -472,9 +472,9 @@ int icalclassify_request_new_organizer(
     struct icalclassify_parts *match, 
     const char* user)
 {
-    (void)comp;/*unused*/
-    (void)match;/*unused*/
-    (void)user;/*unused*/
+    _unused(comp)
+    _unused(match)
+    _unused(user)
 
     /*   Organizer has changed between match and component */
     icalclassify_pre
@@ -487,9 +487,9 @@ int icalclassify_request_status(
     struct icalclassify_parts *match, 
     const char* user)
 {
-    (void)comp;/*unused*/
-    (void)match;/*unused*/
-    (void)user;/*unused*/
+    _unused(comp)
+    _unused(match)
+    _unused(user)
 
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
@@ -501,9 +501,9 @@ int icalclassify_request_forward(
     struct icalclassify_parts *match, 
     const char* user)
 {
-    (void)comp;/*unused*/
-    (void)match;/*unused*/
-    (void)user;/*unused*/
+    _unused(comp)
+    _unused(match)
+    _unused(user)
 
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
@@ -515,9 +515,9 @@ int icalclassify_request_freebusy(
     struct icalclassify_parts *match, 
     const char* user)
 {
-    (void)comp;/*unused*/
-    (void)match;/*unused*/
-    (void)user;/*unused*/
+    _unused(comp)
+    _unused(match)
+    _unused(user)
 
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);

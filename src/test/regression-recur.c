@@ -20,6 +20,10 @@
 
   ======================================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <assert.h>
 #include <string.h> /* for strdup */
 #include <stdlib.h> /* for malloc */
@@ -45,7 +49,7 @@ extern int VERBOSE;
 
 
 static void sig_alrm(int i){
-    (void)i;/*unused*/
+    _unused(i)
     fprintf(stderr,"Could not get lock on file\n");
     exit(1);
 }
@@ -82,7 +86,7 @@ static void recur_callback(icalcomponent *comp,
 			   struct icaltime_span *span,
 			   void *data)
 {
-  (void)comp;/*unused*/
+  _unused(comp)
   int *num_recurs = data;
 
   if (VERBOSE) {
