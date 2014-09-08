@@ -126,7 +126,6 @@ void test_classify(void)
 	const char* this_note = get_note(c);
 	const char* expected_result = get_expect(c);
 	const char* actual_result;
-	const char* match_note;
 	char msg[128];
 
 	i++;
@@ -172,7 +171,7 @@ void test_classify(void)
            you would probably switch() on the class.*/
 	class = icalclassify(c,match,"A@example.com");
 	/** eventually test this too.. **/
-        match_note = get_note(match);
+        (void)get_note(match);
 	actual_result = icalproperty_enum_to_string(class);
 	sprintf(msg, "expecting %s", expected_result);
 	is(msg, expected_result, actual_result);
