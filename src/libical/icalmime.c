@@ -119,7 +119,7 @@ void* icalmime_text_end_part(void* part)
 
 void icalmime_text_free_part(void *part)
 {
-    part = part;
+    (void)part;/*unused*/
 }
 
 
@@ -170,7 +170,7 @@ static const struct sspm_action_map icalmime_local_action_map[] =
 
 struct sspm_part* icalmime_make_part(icalcomponent* comp)
 {
-    comp = comp;
+    (void)comp;/*unused*/
     return 0;
 }
 

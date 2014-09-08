@@ -853,16 +853,16 @@ void test_restriction()
 		    ICAL_XDAYLIGHT_COMPONENT,
 		    icalproperty_new_dtstart(atime),
 		    icalproperty_new_rdate(rtime),
-		    icalproperty_new_tzoffsetfrom(-4.0),
-		    icalproperty_new_tzoffsetto(-5.0),
+		    icalproperty_new_tzoffsetfrom(-4),
+		    icalproperty_new_tzoffsetto(-5),
 		    icalproperty_new_tzname("EST"),
 		    (void *)0),
 		icalcomponent_vanew(
 		    ICAL_XSTANDARD_COMPONENT,
 		    icalproperty_new_dtstart(atime),
 		    icalproperty_new_rdate(rtime),
-		    icalproperty_new_tzoffsetfrom(-5.0),
-		    icalproperty_new_tzoffsetto(-4.0),
+		    icalproperty_new_tzoffsetfrom(-5),
+		    icalproperty_new_tzoffsetto(-4),
 		    icalproperty_new_tzname("EST"),
 		    (void *)0),
 		(void *)0),
@@ -1779,7 +1779,7 @@ void test_iterators()
 					     ICAL_VERSION_PROPERTY);
 	const char* s = icalproperty_get_version(p);
 
-	strncat(vevent_list, s, sizeof(vevent_list));
+	strncat(vevent_list, s, sizeof(vevent_list) - strlen(vevent_list) - 1);
     }
     is("iterate through VEVENTS in a component",
        vevent_list, vevent_list_good);
@@ -2270,19 +2270,19 @@ void test_convenience(){
     duration = icaldurationtype_as_int(icalcomponent_get_duration(c))/60;
 
     if (icaltimezone_get_builtin_tzdata()) {
-	ok("Start is 1997-08-01 12:00:00 Europe/Rome",
-	   (0 == strcmp("1997-08-01 12:00:00 /softwarestudio.org/Tzfile/Europe/Rome",
-			ictt_as_string(icalcomponent_get_dtstart(c)))));
-	ok("End is 1997-08-01 13:30:00 Europe/Rome",
-	   (0 == strcmp("1997-08-01 13:30:00 /softwarestudio.org/Tzfile/Europe/Rome",
-			ictt_as_string(icalcomponent_get_dtend(c)))));
+       ok("Start is 1997-08-01 12:00:00 Europe/Rome",
+          (0 == strcmp("1997-08-01 12:00:00 /softwarestudio.org/Tzfile/Europe/Rome",
+                       ictt_as_string(icalcomponent_get_dtstart(c)))));
+       ok("End is 1997-08-01 13:30:00 Europe/Rome",
+          (0 == strcmp("1997-08-01 13:30:00 /softwarestudio.org/Tzfile/Europe/Rome",
+                       ictt_as_string(icalcomponent_get_dtend(c)))));
     } else {
-	ok("Start is 1997-08-01 12:00:00 Europe/Rome",
-	   (0 == strcmp("1997-08-01 12:00:00 /citadel.org/20070227_1/Europe/Rome",
-			ictt_as_string(icalcomponent_get_dtstart(c)))));
-	ok("End is 1997-08-01 13:30:00 Europe/Rome",
-	   (0 == strcmp("1997-08-01 13:30:00 /citadel.org/20070227_1/Europe/Rome",
-			ictt_as_string(icalcomponent_get_dtend(c)))));
+       ok("Start is 1997-08-01 12:00:00 Europe/Rome",
+          (0 == strcmp("1997-08-01 12:00:00 /citadel.org/20070227_1/Europe/Rome",
+                       ictt_as_string(icalcomponent_get_dtstart(c)))));
+       ok("End is 1997-08-01 13:30:00 Europe/Rome",
+          (0 == strcmp("1997-08-01 13:30:00 /citadel.org/20070227_1/Europe/Rome",
+                       ictt_as_string(icalcomponent_get_dtend(c)))));
     }
 
     ok("Duration is 90 m", (duration == 90));

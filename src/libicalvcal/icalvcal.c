@@ -130,7 +130,7 @@ char* get_string_value (VObject *object, int *free_string)
 
 static void convert_floating_time_to_utc (struct icaltimetype *itt)
 {
-  struct tm tmp_tm = { 0 }, *utc_tm;
+  struct tm tmp_tm, *utc_tm;
   time_t t;
 
   /* We assume the floating time is using the current Unix timezone.
