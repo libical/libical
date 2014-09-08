@@ -374,9 +374,9 @@ struct icalperiodtype icalspanlist_next_busy_time(icalspanlist* sl,
 
 int* icalspanlist_as_freebusy_matrix(icalspanlist* sl, int delta_t) {
   pvl_elem itr;
-  int spanduration_secs;
+  time_t spanduration_secs;
   int *matrix;
-  int matrix_slots;
+  time_t matrix_slots;
   time_t sl_start, sl_end;
 
   icalerror_check_arg_rz( (sl!=0), "spanlist");
@@ -420,9 +420,9 @@ int* icalspanlist_as_freebusy_matrix(icalspanlist* sl, int delta_t) {
     struct icaltime_span *s = (struct icaltime_span*)pvl_data(itr);
     
     if (s->is_busy == 1) {
-      int offset_start = s->start/delta_t - sl_start/delta_t;
-      int offset_end   = (s->end - 1) /delta_t  - sl_start/delta_t + 1;
-      int i;
+      time_t offset_start = s->start/delta_t - sl_start/delta_t;
+      time_t offset_end   = (s->end - 1) /delta_t  - sl_start/delta_t + 1;
+      time_t i;
       
       if (offset_end >= matrix_slots)
 	offset_end = matrix_slots - 1;

@@ -1844,7 +1844,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
 
     if (use_builtin_tzdata) {
     char *filename;
-    unsigned int filename_len;
+    size_t filename_len;
     FILE *fp;
     icalparser *parser;
 
