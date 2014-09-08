@@ -417,7 +417,7 @@ int simple_str_to_double(const char* from,
     }
 
     /*skip the white spaces at the beginning*/
-    while (cur && isspace (*cur))
+    while (cur && isspace ((int)*cur))
         cur++ ;
 
     start = cur ;
@@ -427,7 +427,7 @@ int simple_str_to_double(const char* from,
      * during the copy, we give ourselves a chance to convert the '.'
      * into the decimal separator of the current locale.
      */
-    while (cur && (isdigit (*cur) ||
+    while (cur && (isdigit ((int)*cur) ||
                    *cur == '.'    ||
                    *cur == '+'    ||
                    *cur == '-')){
@@ -614,7 +614,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
         }
   
         /*skip white spaces*/
-        while (cur && isspace (*cur)) {
+        while (cur && isspace ((int)*cur)) {
             ++cur ;
         }
 
@@ -628,7 +628,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
             goto geo_parsing_error ;
 
         /*skip white spaces*/
-        while (cur && isspace (*cur)) {
+        while (cur && isspace ((int)*cur)) {
             ++cur ;
         }
 

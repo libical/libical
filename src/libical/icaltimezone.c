@@ -1652,7 +1652,7 @@ fetch_lat_long_from_string  (const char *str, int *latitude_degrees, int *latitu
 		sptr++;
 	
 	loc = ++sptr;
-	while (!isspace (*sptr))
+	while (!isspace ((int)(*sptr)))
 		sptr++;
 	len = sptr - loc;
 	location = strncpy (location, loc, len);

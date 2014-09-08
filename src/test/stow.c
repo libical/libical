@@ -133,7 +133,7 @@ char* lowercase(const char* str)
     }
 
     for(p = new; *p!=0; p++){
-	*p = tolower(*p);
+	*p = tolower((int)*p);
     }
 
     return new;

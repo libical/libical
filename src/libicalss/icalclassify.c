@@ -63,7 +63,7 @@ char* icalclassify_lowercase(const char* str)
 
     xnew = icalmemory_strdup(str);
     for(p = xnew; *p!=0; p++){
-	*p = tolower(*p);
+	*p = tolower((int)*p);
     }
 
     return xnew;
