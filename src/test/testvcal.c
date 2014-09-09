@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     char* file;
 
     if (argc != 2){
-        file = "../../../test-data/user-cal.vcf";
+        file = "../../test-data/user-cal.vcf";
     } else {
         file = argv[1];
     }

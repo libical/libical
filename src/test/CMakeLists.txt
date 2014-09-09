@@ -13,6 +13,10 @@ macro(testme _name _srcs)
   add_executable(${_name} ${_srcs})
   target_link_libraries(${_name} ical icalss icalvcal)
   add_test(NAME ${_name} COMMAND ${_name})
+  set_tests_properties(
+    ${_name}
+    PROPERTIES WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+  )
   if(WIN32)
     set_tests_properties(
       ${_name}
