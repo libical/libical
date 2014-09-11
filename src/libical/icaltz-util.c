@@ -331,7 +331,7 @@ icaltzutil_fetch_timezone (const char *location)
 
 	/* Add tzid property */
 	tzid = (char *) malloc (strlen (ical_tzid_prefix) + strlen (location) + 8);
-	sprintf (tzid, "%sTzfile/%s", ical_tzid_prefix, location);
+	sprintf (tzid, "%s%s", ical_tzid_prefix, location);
 	icalprop = icalproperty_new_tzid (tzid);
 	icalcomponent_add_property (tz_comp, icalprop);
 	free (tzid);

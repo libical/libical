@@ -13,20 +13,23 @@ macro(testme _name _srcs)
   add_executable(${_name} ${_srcs})
   target_link_libraries(${_name} ical icalss icalvcal)
   add_test(NAME ${_name} COMMAND ${_name})
-  set_tests_properties(
-    ${_name}
-    PROPERTIES WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-  )
+  if(UNIX)
+    if(NOT "${_name}" MATCHES "regression")
+      set_tests_properties(${_name} PROPERTIES
+	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+      )
+    endif()
+  endif()
   if(WIN32)
-    set_tests_properties(
-      ${_name}
-      PROPERTIES ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH};${CMAKE_BINARY_DIR}/bin;%PATH%"
+    set_tests_properties(${_name} PROPERTIES
+      ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH};${CMAKE_BINARY_DIR}/bin;%PATH%"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
     )
   endif()
   if(CYGWIN OR MSYS)
-    set_tests_properties(
-      ${_name}
-      PROPERTIES ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}"
+    set_tests_properties(${_name} PROPERTIES
+      ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
     )
   endif()
 endmacro()

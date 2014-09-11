@@ -417,9 +417,7 @@ void test_icalcomponent_get_span()
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
-    int_is("America/Los_Angeles", span.start, 973407600);
-#endif
+    int_is("America/Los_Angeles", span.start, 973350000);
     icalcomponent_free(c);
 
     /** test 2
@@ -454,9 +452,7 @@ void test_icalcomponent_get_span()
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
-    int_is("America/New_York", span.start, 973396800);
-#endif
+    int_is("America/New_York", span.start, 973360800);
 
     icalcomponent_free(c);
 
@@ -478,9 +474,7 @@ void test_icalcomponent_get_span()
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
-    int_is("America/New_York", span.start, 973396800);
-#endif
+    int_is("America/New_York", span.start, 973360800);
     
     icalcomponent_free(c);
 
@@ -502,9 +496,7 @@ void test_icalcomponent_get_span()
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
-    int_is("America/Los_Angeles w/ duration", span.end, 973409400);
-#endif
+    int_is("America/Los_Angeles w/ duration", span.end, 973351800);
 
     icalcomponent_free(c);
 
