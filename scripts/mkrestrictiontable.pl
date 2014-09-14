@@ -64,39 +64,5 @@ print "    {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_PROPERTY,ICAL_RESTRICTION
 
 print "};\n";
 
-print "static const icalrestriction_component_record icalrestriction_component_records[] = {\n";
-
-
-# Go back through the entire file and build the component restriction table
-close(F);  
-open(F,"$ARGV[0]") || die "Can't open restriction data file $ARGV[0]:$!";
-
-while(<F>)
-{
-
-  chop;
-
-  s/\#.*$//;
-
-  my($method,$targetcomp,$prop,$subcomp,$restr,$sub) = split(/,/,$_);
-
-  next if !$method;
-  
-  if(!$sub) {
-    $sub = "0";
-  } else {
-    $sub = "icalrestriction_".$sub;
-  }
-
-
-    if($subcomp ne "NONE"){
-      print("    \{ICAL_METHOD_${method},ICAL_${targetcomp}_COMPONENT,ICAL_${subcomp}_COMPONENT,ICAL_RESTRICTION_${restr},$sub\},\n");
-    }
-
-}
-
-# print the terminating line 
-print "    {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_COMPONENT,ICAL_RESTRICTION_NONE,0}\n";
-print "};\n";
 }
 

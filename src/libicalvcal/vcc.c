@@ -1,7 +1,3 @@
-#ifndef lint
-static const char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
-#endif
-
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h> /* for ptrdiff_h */
