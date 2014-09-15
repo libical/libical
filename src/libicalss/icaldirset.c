@@ -129,11 +129,12 @@ icalerrorenum icaldirset_commit(icalset* set)
 
 void icaldirset_lock(const char* dir)
 {
+    (void)dir;/*unused*/
 }
-
 
 void icaldirset_unlock(const char* dir)
 {
+    (void)dir;/*unused*/
 }
 
 /* Load the contents of the store directory into the store's internal directory list*/
@@ -557,20 +558,24 @@ icalerrorenum icaldirset_remove_component(icalset* set, icalcomponent* comp)
 int icaldirset_count_components(icalset* store,
 			       icalcomponent_kind kind)
 {
+    (void)store;/*unused*/
+    (void)kind;/*unused*/
+
     /* HACK, not implemented */
     assert(0);
 
     return 0;
 }
 
-
 icalcomponent* icaldirset_fetch_match(icalset* set, icalcomponent *c)
 {
+    (void)set;/*unused*/
+    (void)c;/*unused*/
+
     fprintf(stderr," icaldirset_fetch_match is not implemented\n");
     assert(0);
     return 0;
 }
-
 
 icalcomponent* icaldirset_fetch(icalset* set, const char* uid)
 {
@@ -599,7 +604,6 @@ icalcomponent* icaldirset_fetch(icalset* set, const char* uid)
     return c;
 }
 
-
 int icaldirset_has_uid(icalset* set, const char* uid)
 {
     icalcomponent *c;
@@ -616,32 +620,33 @@ int icaldirset_has_uid(icalset* set, const char* uid)
 
 }
 
-
 icalerrorenum icaldirset_select(icalset* set, icalgauge* gauge)
 {
-  icaldirset *dset = (icaldirset*)set;
+    icaldirset *dset = (icaldirset*)set;
 
-  icalerror_check_arg_re( (set!=0), "set",ICAL_BADARG_ERROR);
+    icalerror_check_arg_re( (set!=0), "set",ICAL_BADARG_ERROR);
     icalerror_check_arg_re( (gauge!=0), "gauge",ICAL_BADARG_ERROR);
 
-  dset->gauge = gauge;
+    dset->gauge = gauge;
 
     return ICAL_NO_ERROR;
 }
-
 
 icalerrorenum icaldirset_modify(icalset* set, 
 				icalcomponent *old,
 			       icalcomponent *new)
 {
+    (void)set;/*unused*/
+    (void)old;/*unused*/
+    (void)new;/*unused*/
+
     assert(0);
     return ICAL_NO_ERROR; /* HACK, not implemented */
-
 }
-
 
 void icaldirset_clear(icalset* set)
 {
+    (void)set;/*unused*/
 
     assert(0);
     return;
@@ -779,6 +784,7 @@ icalcomponent* icaldirset_get_next_component(icalset* set)
 
 icalsetiter icaldirset_begin_component(icalset* set, icalcomponent_kind kind, icalgauge* gauge)
 {
+/*
     icalsetiter itr = icalsetiter_null;
     icaldirset *fset = (icaldirset*) set;
 
@@ -786,19 +792,26 @@ icalsetiter icaldirset_begin_component(icalset* set, icalcomponent_kind kind, ic
 
     itr.iter.kind = kind;
     itr.gauge = gauge;
-
+*/
     /* TO BE IMPLEMENTED */
+    (void)set;/*unused*/
+    (void)kind;/*unused*/
+    (void)gauge;/*unused*/
     return icalsetiter_null;
 }
 
 icalcomponent* icaldirsetiter_to_next(icalset* set, icalsetiter* i)
 {
     /* TO BE IMPLEMENTED */
+    (void)set;/*unused*/
+    (void)i;/*unused*/
     return NULL;
 }
 
 icalcomponent* icaldirsetiter_to_prior(icalset* set, icalsetiter* i)
 {
     /* TO BE IMPLEMENTED */
+    (void)set;/*unused*/
+    (void)i;/*unused*/
     return NULL;
 }

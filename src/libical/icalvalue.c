@@ -55,10 +55,6 @@
 #define strcasecmp stricmp
 #endif
 
-#if _MAC_OS_
-#include "icalmemory_strdup.h"
-#endif
-
 #define TMP_BUF_SIZE 1024
 
 void print_datetime_to_string(char* str,  const struct icaltimetype *data);
@@ -421,7 +417,7 @@ int simple_str_to_double(const char* from,
     }
 
     /*skip the white spaces at the beginning*/
-    while (cur && isspace (*cur))
+    while (cur && isspace ((int)*cur))
         cur++ ;
 
     start = cur ;
@@ -431,7 +427,7 @@ int simple_str_to_double(const char* from,
      * during the copy, we give ourselves a chance to convert the '.'
      * into the decimal separator of the current locale.
      */
-    while (cur && (isdigit (*cur) ||
+    while (cur && (isdigit ((int)*cur) ||
                    *cur == '.'    ||
                    *cur == '+'    ||
                    *cur == '-')){
@@ -618,7 +614,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
         }
   
         /*skip white spaces*/
-        while (cur && isspace (*cur)) {
+        while (cur && isspace ((int)*cur)) {
             ++cur ;
         }
 
@@ -632,7 +628,7 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
             goto geo_parsing_error ;
 
         /*skip white spaces*/
-        while (cur && isspace (*cur)) {
+        while (cur && isspace ((int)*cur)) {
             ++cur ;
         }
 
@@ -868,11 +864,8 @@ icalvalue_is_valid (const icalvalue* value)
 
 static char* icalvalue_binary_as_ical_string_r(const icalvalue* value) {
 
-    const char* data;
     char* str;
     icalerror_check_arg_rz( (value!=0),"value");
-
-    data = icalvalue_get_binary(value);
 
     str = (char*)icalmemory_new_buffer(60);
     snprintf(str, 60,"icalvalue_binary_as_ical_string is not implemented yet");

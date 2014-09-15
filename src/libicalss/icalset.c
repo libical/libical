@@ -437,7 +437,7 @@ icalcomponent* icalset_get_next_component(icalset* set) {
     return set->get_next_component(set);
 }
 
-icalsetiter icalsetiter_null = {{ICAL_NO_COMPONENT, 0}, 0};
+icalsetiter icalsetiter_null = {{ICAL_NO_COMPONENT, 0}, 0, 0, 0, 0};
 
 icalsetiter icalset_begin_component(icalset* set,
                                  icalcomponent_kind kind, icalgauge* gauge) {

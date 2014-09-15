@@ -171,3 +171,9 @@ typedef int pid_t;
 #endif
 
 #cmakedefine SIZEOF_TIME_T ${SIZEOF_TIME_T}
+
+#if !defined(_MSC_VER)
+#define _unused(x) (void)x;
+#else
+#define _unused(x)
+#endif

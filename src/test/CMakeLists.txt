@@ -9,13 +9,35 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 set(TEST_DATADIR "\\\"${CMAKE_SOURCE_DIR}/test-data\\\"")
 add_definitions(-DTEST_DATADIR=${TEST_DATADIR})
 
+macro(testme _name _srcs)
+  add_executable(${_name} ${_srcs})
+  target_link_libraries(${_name} ical icalss icalvcal)
+  add_test(NAME ${_name} COMMAND ${_name})
+  if(UNIX)
+    if(NOT "${_name}" MATCHES "regression")
+      set_tests_properties(${_name} PROPERTIES
+	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+      )
+    endif()
+  endif()
+  if(WIN32)
+    set_tests_properties(${_name} PROPERTIES
+      ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH};${CMAKE_BINARY_DIR}/bin;%PATH%"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    )
+  endif()
+  if(CYGWIN OR MSYS)
+    set_tests_properties(${_name} PROPERTIES
+      ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}"
+    )
+  endif()
+endmacro()
+
 ########### next target ###############
 
-set(copycluster_SRCS copycluster.c)
-
-add_executable(copycluster ${copycluster_SRCS})
-
-target_link_libraries(copycluster ical icalss)
+#not sure how to run this as it takes 2 cluster files as command line args
+#set(copycluster_SRCS copycluster.c)
+#add_test(copycluster "${copycluster_SRCS}")
 
 ########### next target ###############
 
@@ -28,93 +50,47 @@ set(regression_SRCS
   regression-recur.c
   regression-storage.c
 )
-
-add_executable(regression ${regression_SRCS})
-
-target_link_libraries(regression ical icalss icalvcal)
-
-add_test(NAME regression WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin COMMAND regression)
-if(WIN32)
-  set_tests_properties(
-    regression
-    PROPERTIES ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH};${CMAKE_BINARY_DIR}/bin;%PATH%"
-  )
-endif()
-if(CYGWIN OR MSYS)
-  set_tests_properties(
-    regression
-    PROPERTIES ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}"
-  )
-endif()
+testme(regression "${regression_SRCS}")
 
 ########### next target ###############
 
-set(parser_SRCS icaltestparser.c)
-
-add_executable(parser ${parser_SRCS})
-
-target_link_libraries(parser ical icalss)
+#not sure how to use this test
+#set(parser_SRCS icaltestparser.c)
+#testme(parser "${parser_SRCS}")
 
 ########### next target ###############
 
-if(NOT WIN32)
-  set(STOW_SRCS stow.c)
-
-  add_executable(stow ${STOW_SRCS})
-
-  target_link_libraries(stow ical icalss)
-endif()
+#not sure how to use this test
+#set(stow_SRCS stow.c)
+#testme(stow "${stow_SRCS}")
 
 ########### next target ###############
 
 set(recur_SRCS recur.c)
-
-add_executable(recur ${recur_SRCS})
-
-target_link_libraries(recur ical icalss)
+testme(recur "${recur_SRCS}")
 
 ########### next target ###############
 
-if(HAVE_UNISTD_H)
+if(HAVE_UNISTD_H) #getopt is required
   set(testmime_SRCS testmime.c)
-
-  add_executable(testmime ${testmime_SRCS})
-
-  target_link_libraries(testmime ical icalss)
+  testme(testmime "${testmime_SRCS}")
 endif()
 
 ########### next target ###############
 
 set(testvcal_SRCS testvcal.c)
-
-add_executable(testvcal ${testvcal_SRCS})
-
-target_link_libraries(testvcal ical icalss icalvcal)
+testme(testvcal "${testvcal_SRCS}")
 
 ########### next target ###############
 
 set(process_SRCS process.c)
-
-add_executable(process ${process_SRCS})
-
-target_link_libraries(process ical icalss)
+testme(process "${process_SRCS}")
 
 ########### next target ###############
 
-if(NOT WIN32)
+if(NOT USE_BUILTIN_TZDATA)
   set(timezones_SRCS timezones.c)
-
-  add_executable(timezones ${timezones_SRCS})
-
-  target_link_libraries(timezones ical icalss)
-
-  add_test(NAME timezones WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin COMMAND timezones)
-  if()
-    set_tests_properties(
-      timezones
-      PROPERTIES ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}"
-    )
-  endif()
+  testme(timezones "${timezones_SRCS}")
 endif()
 
 ########### install files ###############

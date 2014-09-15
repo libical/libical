@@ -442,7 +442,7 @@ char* sspm_lowercase(char* str)
     }
     new = sspm_strdup(str);
     for(p = new; *p!=0; p++){
-	*p = tolower(*p);
+	*p = tolower((int)*p);
     }
 
     return new;
@@ -972,7 +972,7 @@ void sspm_read_header(struct mime_impl *impl,struct sspm_header *header)
 	    }
 	    
 	    case HEADER_CONTINUATION: {
-		char* last_line, *end;
+		char* last_line;
 		char *buf_start;
 
 		if(current_line < 0){
@@ -983,9 +983,6 @@ void sspm_read_header(struct mime_impl *impl,struct sspm_header *header)
 		}
 
 		last_line = header_lines[current_line];
-		end = (char*) ( (size_t)strlen(last_line)+
-				      (size_t)last_line);
-		
 		impl->state = IN_HEADER;
 
 		
@@ -1151,13 +1148,13 @@ char *decode_quoted_printable(char *dest,
 		continue;
 	    }
 
-	    cc  = isdigit(*src) ? (*src - '0') : (*src - 55);
+	    cc  = isdigit((int)*src) ? (*src - '0') : (*src - 55);
 	    cc *= 0x10;
 	    src++; 
 	    if (!*src) {
 		break;
 	    }
-	    cc += isdigit(*src) ? (*src - '0') : (*src - 55);
+	    cc += isdigit((int)*src) ? (*src - '0') : (*src - 55);
 
 	    *dest = cc;
 

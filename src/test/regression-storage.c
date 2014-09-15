@@ -303,7 +303,7 @@ void test_bdbset()
     char *subdb, *szdata, *szpacked_data;
     char uid[255];
     struct icaltimetype start, end;
-    icalcomponent *c,*clone, *itr;
+    icalcomponent *c, *clone, *itr;
     DBT key, data;
     DBC *dbcp;
 
@@ -696,7 +696,7 @@ void test_dirset_extended(void)
 	for (itr = icalfileset_get_first_component(cluster);
 	     itr != 0;
 	     itr = icalfileset_get_next_component(cluster)){
-	    icalcomponent *clone, *inner;
+	    icalcomponent *inner;
 	    icalproperty *p;
 
 	    inner = icalcomponent_get_first_component(itr,ICAL_VEVENT_COMPONENT);
@@ -707,7 +707,7 @@ void test_dirset_extended(void)
 	    /* Change the dtstart and dtend times in the component
                pointed to by Itr*/
 
-	    clone = icalcomponent_new_clone(itr);
+	    (void)icalcomponent_new_clone(itr);
 	    inner = icalcomponent_get_first_component(itr,ICAL_VEVENT_COMPONENT);
 
 	    ok("Duplicating component...", 
@@ -752,7 +752,7 @@ void test_dirset_extended(void)
 					     icalcomponent_new_clone(itr));
 	    
 	    ok("Adding component to dirset", (icalerrno == ICAL_NO_ERROR));
-	    assert(icalerrno  == ICAL_NO_ERROR);
+	    assert(error  == ICAL_NO_ERROR);
 	}
 
     }

@@ -131,7 +131,11 @@ static icalarray *builtin_timezones = NULL;
 static icaltimezone utc_timezone = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 static char* zone_files_directory = NULL;
+#ifdef USE_BUILTIN_TZDATA
+static int use_builtin_tzdata = 1;
+#else
 static int use_builtin_tzdata = 0;
+#endif
 
 static void  icaltimezone_reset			(icaltimezone *zone);
 static char* icaltimezone_get_location_from_vtimezone (icalcomponent *component);
@@ -866,7 +870,7 @@ icaltimezone_get_utc_offset		(icaltimezone	*zone,
     /* Sanity check. */
     icalerror_assert (change_num >= 0,
 		      "Negative timezone change index");
-    icalerror_assert (change_num < zone->changes->num_elements,
+    icalerror_assert (change_num < (int)zone->changes->num_elements,
 		      "Timezone change index out of bounds");
 
     /* Now move backwards or forwards to find the timezone change that applies
@@ -1020,7 +1024,7 @@ icaltimezone_get_utc_offset_of_utc_time	(icaltimezone	*zone,
     /* Sanity check. */
     icalerror_assert (change_num >= 0,
 		      "Negative timezone change index");
-    icalerror_assert (change_num < zone->changes->num_elements,
+    icalerror_assert (change_num < (int)zone->changes->num_elements,
 		      "Timezone change index out of bounds");
 
     /* Now move backwards or forwards to find the timezone change that applies
@@ -1517,7 +1521,9 @@ icaltimezone_get_builtin_timezone_from_offset	(int offset, const char *tzname)
 icaltimezone*
 icaltimezone_get_builtin_timezone_from_tzid (const char *tzid)
 {
+#if 0
     int num_slashes = 0;
+#endif
     const char *p, *zone_tzid;
     icaltimezone *zone;
 
@@ -1646,7 +1652,7 @@ fetch_lat_long_from_string  (const char *str, int *latitude_degrees, int *latitu
 		sptr++;
 	
 	loc = ++sptr;
-	while (!isspace (*sptr))
+	while (!isspace ((int)(*sptr)))
 		sptr++;
 	len = sptr - loc;
 	location = strncpy (location, loc, len);
@@ -1838,7 +1844,7 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
 
     if (use_builtin_tzdata) {
     char *filename;
-    unsigned int filename_len;
+    size_t filename_len;
     FILE *fp;
     icalparser *parser;
 

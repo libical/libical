@@ -20,6 +20,10 @@
 
   ======================================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <assert.h>
 #include <string.h> /* for strdup */
 #include <stdlib.h> /* for malloc */
@@ -45,6 +49,7 @@ extern int VERBOSE;
 
 
 static void sig_alrm(int i){
+    _unused(i)
     fprintf(stderr,"Could not get lock on file\n");
     exit(1);
 }
@@ -81,6 +86,7 @@ static void recur_callback(icalcomponent *comp,
 			   struct icaltime_span *span,
 			   void *data)
 {
+  _unused(comp)
   int *num_recurs = data;
 
   if (VERBOSE) {
@@ -126,7 +132,6 @@ void test_recur_file()
     for (itr = icalfileset_get_first_component(cin);
 	itr != 0;
 	itr = icalfileset_get_next_component(cin)){
-      int badcomp = 0;
       int expected_events = 0;
       char msg[128];
 
@@ -146,7 +151,6 @@ void test_recur_file()
       ok((char*)desc_str, !(desc == 0 || dtstart == 0 || rrule == 0));
 
       if (desc == 0 || dtstart == 0 || rrule == 0) {
-	badcomp = 1;
 	if (VERBOSE) {
 	  printf("\n******** Error in input component ********\n");
 	  printf("The following component is malformed:\n %s\n", desc_str);

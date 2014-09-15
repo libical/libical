@@ -63,7 +63,7 @@ char* icalclassify_lowercase(const char* str)
 
     xnew = icalmemory_strdup(str);
     for(p = xnew; *p!=0; p++){
-	*p = tolower(*p);
+	*p = tolower((int)*p);
     }
 
     return xnew;
@@ -472,15 +472,14 @@ int icalclassify_request_new_organizer(
     struct icalclassify_parts *match, 
     const char* user)
 {
+    _unused(comp)
+    _unused(match)
+    _unused(user)
+
     /*   Organizer has changed between match and component */
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
-/* already done before.
-    (void)comp;
-    (void)match;
-    (void)user;
-*/
 }
 
 int icalclassify_request_status(
@@ -488,14 +487,13 @@ int icalclassify_request_status(
     struct icalclassify_parts *match, 
     const char* user)
 {
+    _unused(comp)
+    _unused(match)
+    _unused(user)
+
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
-/*
-    (void)comp;
-    (void)match;
-    (void)user;
-*/
 }
 
 int icalclassify_request_forward(
@@ -503,14 +501,13 @@ int icalclassify_request_forward(
     struct icalclassify_parts *match, 
     const char* user)
 {
+    _unused(comp)
+    _unused(match)
+    _unused(user)
+
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
-/*
-    (void)comp;
-    (void)match;
-    (void)user;
-*/
 }
 
 int icalclassify_request_freebusy(
@@ -518,14 +515,13 @@ int icalclassify_request_freebusy(
     struct icalclassify_parts *match, 
     const char* user)
 {
+    _unused(comp)
+    _unused(match)
+    _unused(user)
+
     icalclassify_pre
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
-/*
-    (void)comp;
-    (void)match;
-    (void)user;
-*/
 }
 
 int icalclassify_reply_accept(

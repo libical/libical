@@ -44,6 +44,7 @@
 #ifdef SIGALRM
 
 static void sig_alrm(int i){
+    (void)i;/*unused*/
     fprintf(stderr,"Could not get lock on file\n");
     exit(1);
 }

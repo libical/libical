@@ -57,7 +57,7 @@ static char* lowercase(const char* str)
     n = icalmemory_strdup(str);  
 
     for(p = n; *p!=0; p++){
-	*p = tolower(*p);
+	*p = tolower((int)*p);
     }
 
     return n;

@@ -130,7 +130,7 @@ char* get_string_value (VObject *object, int *free_string)
 
 static void convert_floating_time_to_utc (struct icaltimetype *itt)
 {
-  struct tm tmp_tm = { 0 }, *utc_tm;
+  struct tm tmp_tm, *utc_tm;
   time_t t;
 
   /* We assume the floating time is using the current Unix timezone.
@@ -234,6 +234,10 @@ icalcomponent* icalvcal_convert (VObject *object)
 void* comp(int icaltype, VObject *o, icalcomponent *comp,
 	   icalvcal_defaults *defaults)
 {
+    _unused(o)
+    _unused(comp)
+    _unused(defaults)
+
     icalcomponent_kind kind = (icalcomponent_kind)icaltype;
 
     icalcomponent* c = icalcomponent_new(kind);
@@ -575,6 +579,7 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 void* alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
 		 icalvcal_defaults *defaults)
 {
+    _unused(comp)
 /*    icalcomponent_kind kind = (icalcomponent_kind)icaltype; */
     int is_valid_alarm;
 
@@ -599,6 +604,10 @@ void* alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
 void* transp_prop(int icaltype, VObject *object, icalcomponent *comp,
 		  icalvcal_defaults *defaults)
 {
+    _unused(icaltype)
+    _unused(comp)
+    _unused(defaults)
+
     icalproperty *prop = NULL;
     char *s;
     int free_string;
@@ -622,6 +631,10 @@ void* transp_prop(int icaltype, VObject *object, icalcomponent *comp,
 void* sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
 		    icalvcal_defaults *defaults)
 {
+    _unused(icaltype)
+    _unused(comp)
+    _unused(defaults)
+
     icalproperty *prop = NULL;
     char *s;
     int free_string, sequence;
@@ -648,6 +661,9 @@ void* sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
 void* multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
 		       icalvcal_defaults *defaults)
 {
+    _unused(comp)
+    _unused(defaults)
+
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop = NULL;
     icalvalue *value;
@@ -685,6 +701,9 @@ void* multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
 void* status_prop(int icaltype, VObject *object, icalcomponent *comp,
 		  icalvcal_defaults *defaults)
 {
+    _unused(icaltype)
+    _unused(defaults)
+
     icalproperty *prop = NULL;
     char *s;
     int free_string;
@@ -735,17 +754,17 @@ void* status_prop(int icaltype, VObject *object, icalcomponent *comp,
 void* utc_datetime_prop(int icaltype, VObject *object, icalcomponent *comp,
 			icalvcal_defaults *defaults)
 {
+    _unused(comp)
+    _unused(defaults)
+
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop; 
     icalvalue *value;
-    icalvalue_kind value_kind;
     char *s;
     int free_string;
     struct icaltimetype itt;
 
     prop = icalproperty_new(kind);
-
-    value_kind = icalenum_property_kind_to_value_kind (icalproperty_isa(prop));
 
     s = get_string_value (object, &free_string);
 
@@ -1193,6 +1212,10 @@ static char* rrule_parse_yearly_days (char *s,
 void* rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 		icalvcal_defaults *defaults)
 {
+    _unused(icaltype)
+    _unused(comp)
+    _unused(defaults)
+
 /*    icalproperty_kind kind = (icalproperty_kind)icaltype;*/
     icalproperty *prop = NULL;
 /*    icalvalue *value; */
@@ -1271,6 +1294,9 @@ void* rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 void* dc_prop(int icaltype, VObject *object, icalcomponent *comp,
 	      icalvcal_defaults *defaults)
 {
+    _unused(comp)
+    _unused(defaults)
+
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop; 
     icalvalue *value;

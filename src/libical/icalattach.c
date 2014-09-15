@@ -147,5 +147,5 @@ icalattach_get_data (icalattach *attach)
     icalerror_check_arg_rz ((attach != NULL), "attach");
     icalerror_check_arg_rz ((!attach->is_url), "!attach->is_url");
 
-    return attach->u.data.data;
+    return (unsigned char *)attach->u.data.data;
 }

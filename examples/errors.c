@@ -8,11 +8,9 @@ void program_errors()
     /*Most routines will set icalerrno on errors. This is an
       enumeration defined in icalerror.h */
     
-    icalcomponent *c; 
-
     icalerror_clear_errno();
 
-    c = icalcomponent_new(ICAL_VEVENT_COMPONENT);
+    (void)icalcomponent_new(ICAL_VEVENT_COMPONENT);
 
     if (icalerrno != ICAL_NO_ERROR){
 

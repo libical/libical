@@ -9,4 +9,5 @@ int main()
 
 
 void do_something(icalcomponent* comp){
+    (void)comp;/*unused*/
 }
