@@ -566,7 +566,11 @@ void test_memory()
 
       printf("Final: %s\n", f);
 
-      printf("Final buffer size: %zd\n",bufsize);
+#ifdef WIN32
+      printf("Final buffer size: %Iu\n",bufsize);
+#else
+      printf("Final buffer size: %zu\n",bufsize);
+#endif
     }
 
     ok("final buffer size == 806", (bufsize == 806));
@@ -3728,7 +3732,6 @@ int main(int argc, char *argv[])
     extern char *optarg;
     extern int optopt;
 #endif
-    int errflg=0;
 /*    char* program_name = strrchr(argv[0],'/'); */
     int do_test = 0;
     int do_header = 0;
@@ -3742,6 +3745,7 @@ int main(int argc, char *argv[])
 
 
 #ifndef WIN32
+    int errflg=0;
     int c;
     while ((c = getopt(argc, argv, "lvq")) != -1) {
       switch (c) {

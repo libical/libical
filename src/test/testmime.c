@@ -42,7 +42,10 @@
 #include <stdlib.h> /* For rand */
 #include <string.h> /* for strrchr, strdup*/
 #if defined(HAVE_UNISTD_H)
-#include <unistd.h>   /* for getopt */
+#include <unistd.h>   /* for getopt, sleep */
+#endif
+#ifdef WIN32
+#include <windows.h> /* for Sleep */
 #endif
 
 /*int sspm_parse_mime(struct sspm_part *parts, 
@@ -326,7 +329,7 @@ int main(int argc, char* argv[]) {
 
     if (opt.sleep != 0){
 #ifdef WIN32
-        _sleep(opt.sleep*1000);
+        Sleep(opt.sleep*1000);
 #else
 	sleep(opt.sleep);
 #endif
