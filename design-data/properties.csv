@@ -119,4 +119,7 @@
 "POLL-PROPERTIES","105","TEXT,"TEXT"
 "POLL-WINNER","106","INTEGER,"INTEGER"
 "VOTER","107","CAL-ADDRESS,"CAL-ADDRESS"
+"#TZdist Properties","draft-ietf-tzdist-service",
+"EQUIVALENT-TZID","108","TEXT","TEXT"
+"TZUNTIL","109","DATE-TIME","DATE-TIME"
 "#NOTE for updaters.  Preserve the icalproperty_kind Enum values to aid forward compatibility"
