@@ -23,6 +23,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "icaltimezone.h"
 #include <string.h>
 
 #ifdef HAVE_STDINT_H
@@ -228,7 +229,11 @@ icaltzutil_fetch_timezone (const char *location)
 	icalproperty *icalprop;
 	icaltimetype dtstart;
 	const char *basedir;
-	       
+
+	if(icaltimezone_get_builtin_tzdata()) {
+		return NULL;
+	}
+
 	basedir = icaltzutil_get_zone_directory();
 	if (!basedir) {
 		icalerror_set_errno (ICAL_FILE_ERROR);
