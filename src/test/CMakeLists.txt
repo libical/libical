@@ -14,11 +14,9 @@ macro(testme _name _srcs)
   target_link_libraries(${_name} ical icalss icalvcal)
   add_test(NAME ${_name} COMMAND ${_name})
   if(UNIX)
-    if(NOT "${_name}" MATCHES "regression")
-      set_tests_properties(${_name} PROPERTIES
-	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-      )
-    endif()
+    set_tests_properties(${_name} PROPERTIES
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    )
   endif()
   if(WIN32)
     set_tests_properties(${_name} PROPERTIES
