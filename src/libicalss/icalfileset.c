@@ -320,7 +320,8 @@ int icalfileset_lock(icalfileset *set)
 
     return rtrn;
 #else
-	return 0;
+    _unused(set);
+    return 0;
 #endif
 }
 
@@ -337,10 +338,12 @@ int icalfileset_unlock(icalfileset *set)
 
     return (fcntl(set->fd, F_UNLCK, &lock)); 
 #else
-	return 0;
+    _unused(set);
+    return 0;
 #endif
 }
 
+#ifndef WIN32
 static char * shell_quote(const char *s)
 {
     char *result;
@@ -364,6 +367,7 @@ static char * shell_quote(const char *s)
     *p = '\0';
     return result;
 }
+#endif
 
 icalerrorenum icalfileset_commit(icalset* set)
 {

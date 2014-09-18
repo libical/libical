@@ -2023,7 +2023,7 @@ static const char* get_zone_directory(void)
 	int used_default;
 	static char *cache = NULL;
 #ifndef _WIN32_WCE
-	char *dirslash, *zislash;
+	unsigned char *dirslash, *zislash, *zislashp1;
 #else
 	wchar_t *dirslash, *zislash;
 #endif
@@ -2090,7 +2090,7 @@ static const char* get_zone_directory(void)
 
 	/* Strip away basename of app .exe first */
 #ifndef _WIN32_WCE
-	dirslash = _mbsrchr (buffer, '\\');
+	dirslash = _mbsrchr ((unsigned char *)buffer, '\\');
 #else
 	dirslash = wcsrchr (wbuffer, L'\\');
 #endif
@@ -2121,16 +2121,17 @@ static const char* get_zone_directory(void)
 	    }
 	}
 #else
-	while ((dirslash = _mbsrchr (buffer, '\\'))) {
+	while ((dirslash = _mbsrchr ((unsigned char *)buffer, '\\'))) {
 	    /* Strip one more directory from app .exe location */
 	    *dirslash = '\0';
 	    
 	    strcpy (zoneinfodir, ZONEINFO_DIRECTORY);
-	    while ((zislash = _mbschr (zoneinfodir, '/'))) {
+	    while ((zislash = _mbschr ((unsigned char *)zoneinfodir, '/'))) {
 		*zislash = '.';
 		strcpy (dirname, buffer);
 		strcat (dirname, "/");
-		strcat (dirname, zislash + 1);
+		zislashp1 = zislash + 1;
+		strcat (dirname, (char *)zislashp1);
 		if (stat (dirname, &st) == 0 &&
 		    S_ISDIR (st.st_mode)) {
 		    cache = strdup (dirname);

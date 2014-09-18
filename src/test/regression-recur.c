@@ -48,11 +48,13 @@ extern int VERBOSE;
 #endif
 
 
+#ifndef WIN32
 static void sig_alrm(int i){
     _unused(i)
     fprintf(stderr,"Could not get lock on file\n");
     exit(1);
 }
+#endif
 
 /* Get the expected result about the purpose of the property*/
 

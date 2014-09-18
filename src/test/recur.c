@@ -45,11 +45,13 @@
 #define strcasecmp stricmp
 #endif
 
+#ifndef WIN32
 static void sig_alrm(int i){
     (void)i;/*unused*/
     fprintf(stderr,"Could not get lock on file\n");
     exit(1);
 }
+#endif
 
 static void recur_callback(icalcomponent *comp,
 			   struct icaltime_span *span,

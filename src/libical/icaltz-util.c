@@ -23,6 +23,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include "icaltimezone.h"
 #include <string.h>
 
 #ifdef HAVE_STDINT_H
@@ -69,7 +70,7 @@
 #include <io.h>
 #endif
 
-#if defined(__APPLE__)
+#if defined(__APPLE__) || defined(__MINGW32__)
 #define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8 ) & 0xff)
 #define bswap_32 __builtin_bswap32
 #define bswap_64 __builtin_bswap64
@@ -228,7 +229,11 @@ icaltzutil_fetch_timezone (const char *location)
 	icalproperty *icalprop;
 	icaltimetype dtstart;
 	const char *basedir;
-	       
+
+	if(icaltimezone_get_builtin_tzdata()) {
+		return NULL;
+	}
+
 	basedir = icaltzutil_get_zone_directory();
 	if (!basedir) {
 		icalerror_set_errno (ICAL_FILE_ERROR);
@@ -237,7 +242,6 @@ icaltzutil_fetch_timezone (const char *location)
 
 	full_path = (char *) malloc (strlen (basedir) + strlen (location) + 2);
 	sprintf (full_path,"%s/%s",basedir, location);
-
 	if ((f = fopen (full_path, "rb")) == 0) {
 		icalerror_set_errno (ICAL_FILE_ERROR);
 		free (full_path);
