@@ -30,14 +30,14 @@ calculations). You need version 2.0 or higher. You can get this from:
 PREPARATIONS
 ============
 gunzip and untar the tzdata file:
-  % mkdir tzdata2012j
-  % cd  tzdata2012j; tar xvfz ../tzdata2012j.tar.gz; cd ..
+  % mkdir tzdata2014g
+  % cd  tzdata2014g; tar xvfz ../tzdata2014g.tar.gz; cd ..
 
 
 BUILDING
 ========
 
-Edit the Makefile to set the OLSON_DIR (in this case to tzdata2012j),
+Edit the Makefile to set the OLSON_DIR (in this case to tzdata2014g),
 PRODUCT_ID and TZID_PREFIX variables.
 
 Then run 'make -B'.
@@ -90,7 +90,8 @@ VTIMEZONEs. You then just run the script. (I recommend you keep a backup of
 the old master VTIMEZONE files, and use diff to compare the new master set
 with the old one, in case anything goes wrong.)
 
-You must merge in changes to the zones.tab file by hand.
+You must add the new timezones in the zones.tab file by hand.
+diff the new zones.tab versus the current zones.tab
 
 Note that some timezones are renamed or removed occasionally, so applications
 should be able to cope with this.
