@@ -315,20 +315,23 @@ static char* icalmemory_strdup_and_quote(const icalvalue* value,
             break;
 	    }
 
+/*issue74: \t is not escaped, but embedded literally.*/
 	    case '\t': {
-            icalmemory_append_string(&str,&str_p,&buf_sz,"\\t");
+            icalmemory_append_string(&str,&str_p,&buf_sz,"\t");
             break;
 	    }
+
+/*issue74: \r, \b and \f are not whitespace and are trashed.*/
 	    case '\r': {
-            icalmemory_append_string(&str,&str_p,&buf_sz,"\\r");
+            /*icalmemory_append_string(&str,&str_p,&buf_sz,"\\r");*/
             break;
 	    }
 	    case '\b': {
-            icalmemory_append_string(&str,&str_p,&buf_sz,"\\b");
+            /*icalmemory_append_string(&str,&str_p,&buf_sz,"\\b");*/
             break;
 	    }
 	    case '\f': {
-            icalmemory_append_string(&str,&str_p,&buf_sz,"\\f");
+            /*icalmemory_append_string(&str,&str_p,&buf_sz,"\\f");*/
             break;
 	    }
 
@@ -343,7 +346,9 @@ static char* icalmemory_strdup_and_quote(const icalvalue* value,
                 icalmemory_append_char(&str,&str_p,&buf_sz,*p);
                 break;
             }
+/*issue74, we don't escape double quotes
 	    case '"':
+*/
 	    case '\\': {
             icalmemory_append_char(&str,&str_p,&buf_sz,'\\');
             icalmemory_append_char(&str,&str_p,&buf_sz,*p);

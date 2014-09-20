@@ -1243,7 +1243,7 @@ void test_strings(){
       printf("%s\n",icalvalue_as_ical_string(v));
 
     is("test encoding of 'foo\\\\;b\\nar\\\\;ba\\tts'",
-       "foo\\\\\\;b\\nar\\\\\\;ba\\tts", icalvalue_as_ical_string(v));
+       "foo\\\\\\;b\\nar\\\\\\;ba	ts", icalvalue_as_ical_string(v));
 
     icalvalue_free(v);
 }
@@ -3346,8 +3346,8 @@ void test_langbind()
 "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:\r\n"
 " employee-A@host.com\r\n"
 "COMMENT:Comment that spans a line\r\n"
-"COMMENT:Comment with \\\"quotable\\\" 'characters' and other \\t bad magic \r\n"
-" things \\f Yeah.\r\n"
+"COMMENT:Comment with \"quotable\" 'characters' and other 	 bad magic things \r\n"
+"  Yeah.\r\n"
 "DTSTART:19970101T120000\r\n"
 "DTSTART:19970101T120000Z\r\n"
 "DTSTART;VALUE=DATE:19970101\r\n"
