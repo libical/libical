@@ -1,4 +1,4 @@
-Cubical v1.0 and above uses the CMake buildsystem.
+Libical v1.0 and above uses the CMake buildsystem.
 The autoconf build system has been removed and is no longer supported.
 
 Please see the comments at the top of CMakeLists.txt for
@@ -56,3 +56,8 @@ run 'make test' (or 'nmake test' or 'mingw32-make test')
 
 To run the test suite in verbose mode, pass ARGS="-V" to the make command
 For example: nmake test ARGS="-V"
+
+By default, the buildsystem creates shared(dynamic) and static versions
+of the libraries, but that behavior can be modified at CMake time:
+ - To build the static libraries only, pass -DSTATIC_ONLY=True to CMake.
+ - To build the shared libraries only, pass -DSHARED_ONLY=True to CMake.

@@ -259,7 +259,9 @@ if(WIN32)
 endif()
 
 add_library(ical ${LIBRARY_TYPE} ${ical_LIB_SRCS})
-add_library(ical-static STATIC ${ical_LIB_SRCS})
+if(NOT SHARED_ONLY)
+  add_library(ical-static STATIC ${ical_LIB_SRCS})
+endif()
 
 add_dependencies(ical ical-header)
 
@@ -278,22 +280,35 @@ endif()
 
 if(MSVC)
   set_target_properties(ical PROPERTIES OUTPUT_NAME "libical")
-  set_target_properties(ical-static PROPERTIES OUTPUT_NAME "libical-static")
+  if(NOT SHARED_ONLY)
+    set_target_properties(ical-static PROPERTIES OUTPUT_NAME "libical-static")
+  endif()
 else()
-  set_target_properties(ical-static PROPERTIES OUTPUT_NAME "ical")
+  if(NOT SHARED_ONLY)
+    set_target_properties(ical-static PROPERTIES OUTPUT_NAME "ical")
+  endif()
 endif()
 set_target_properties(ical PROPERTIES
   VERSION ${LIBICAL_LIB_VERSION_STRING}
   SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
 )
 set_target_properties(ical PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-set_target_properties(ical-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+if(NOT SHARED_ONLY)
+  set_target_properties(ical-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+endif()
 
 install(
-  TARGETS ical ical-static
+  TARGETS ical
   EXPORT icalTargets
   DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
 )
+if(NOT SHARED_ONLY)
+  install(
+    TARGETS ical-static
+    EXPORT icalTargets
+    DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
+  )
+endif()
 
 ########### install files ###############
 

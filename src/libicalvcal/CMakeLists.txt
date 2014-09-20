@@ -28,31 +28,48 @@ if(MSVC)
 endif()
 
 add_library(icalvcal ${LIBRARY_TYPE} ${icalvcal_LIB_SRCS})
-add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})
+if(NOT SHARED_ONLY)
+  add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})
+endif()
 
 add_dependencies(icalvcal ical-header)
-add_dependencies(icalvcal-static ical-header)
+if(NOT SHARED_ONLY)
+  add_dependencies(icalvcal-static ical-header)
+endif()
 
 target_link_libraries(icalvcal ical)
 
 if(MSVC)
   set_target_properties(icalvcal PROPERTIES OUTPUT_NAME "libicalvcal")
-  set_target_properties(icalvcal-static PROPERTIES OUTPUT_NAME "libicalvcal-static")
+  if(NOT SHARED_ONLY)
+    set_target_properties(icalvcal-static PROPERTIES OUTPUT_NAME "libicalvcal-static")
+  endif()
 else()
-  set_target_properties(icalvcal-static PROPERTIES OUTPUT_NAME "icalvcal")
+  if(NOT SHARED_ONLY)
+    set_target_properties(icalvcal-static PROPERTIES OUTPUT_NAME "icalvcal")
+  endif()
 endif()
 set_target_properties(icalvcal PROPERTIES
   VERSION ${LIBICAL_LIB_VERSION_STRING}
   SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
 )
 set_target_properties(icalvcal PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-set_target_properties(icalvcal-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+if(NOT SHARED_ONLY)
+  set_target_properties(icalvcal-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+endif()
 
 install(
-  TARGETS icalvcal icalvcal-static
+  TARGETS icalvcal
   EXPORT icalTargets
   DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
 )
+if(NOT SHARED_ONLY)
+  install(
+    TARGETS icalvcal-static
+    EXPORT icalTargets
+    DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
+  )
+endif()
 
 ########### install files ###############
 
