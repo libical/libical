@@ -25,7 +25,7 @@
 #  Default=false (use the system timezone data on non-Windows systems)
 #  ALWAYS true on Windows systems
 #
-# -DSTATIC_LIBRARY=[true|false]
+# -DSTATIC_ONLY=[true|false]
 #  Set to build static libraries only.
 #  Default=false (build shared and static libs)
 #
@@ -69,7 +69,7 @@ set(LIBICAL_LIB_VERSION_STRING
 set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
 set(PROJECT_URL "http://libical.github.io/libical/")
 
-if(STATIC_LIBRARY)
+if(STATIC_ONLY)
   set(LIBICAL_STATIC 1)
   add_definitions(-DLIBICAL_STATIC)
   set(LIBRARY_TYPE STATIC)
