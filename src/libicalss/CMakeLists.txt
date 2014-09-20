@@ -69,31 +69,48 @@ if(MSVC)
 endif()
 
 add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
-add_library(icalss-static STATIC ${icalss_LIB_SRCS})
+if(NOT SHARED_ONLY)
+  add_library(icalss-static STATIC ${icalss_LIB_SRCS})
+endif()
 
 add_dependencies(icalss icalss-header)
-add_dependencies(icalss-static icalss-header)
+if(NOT SHARED_ONLY)
+  add_dependencies(icalss-static icalss-header)
+endif()
 
 target_link_libraries(icalss ical)
 
 if(MSVC)
   set_target_properties(icalss PROPERTIES OUTPUT_NAME "libicalss")
-  set_target_properties(icalss-static PROPERTIES OUTPUT_NAME "libicalss-static")
+  if(NOT SHARED_ONLY)
+    set_target_properties(icalss-static PROPERTIES OUTPUT_NAME "libicalss-static")
+  endif()
 else()
-  set_target_properties(icalss-static PROPERTIES OUTPUT_NAME "icalss")
+  if(NOT SHARED_ONLY)
+    set_target_properties(icalss-static PROPERTIES OUTPUT_NAME "icalss")
+  endif()
 endif()
 set_target_properties(icalss PROPERTIES
   VERSION ${LIBICAL_LIB_VERSION_STRING}
   SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
 )
 set_target_properties(icalss PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-set_target_properties(icalss-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+if(NOT SHARED_ONLY)
+  set_target_properties(icalss-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+endif()
 
 install(
-  TARGETS icalss icalss-static
+  TARGETS icalss
   EXPORT icalTargets
   DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
 )
+if(NOT SHARED_ONLY)
+  install(
+    TARGETS icalss-static
+    EXPORT icalTargets
+    DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
+  )
+endif()
 
 ########### install files ###############
 

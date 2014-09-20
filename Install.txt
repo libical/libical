@@ -60,3 +60,4 @@ For example: nmake test ARGS="-V"
 By default, the buildsystem creates shared(dynamic) and static versions
 of the libraries, but that behavior can be modified at CMake time:
  - To build the static libraries only, pass -DSTATIC_ONLY=True to CMake.
+ - To build the shared libraries only, pass -DSHARED_ONLY=True to CMake.

@@ -29,6 +29,11 @@
 #  Set to build static libraries only.
 #  Default=false (build shared and static libs)
 #
+# -DSHARED_ONLY=[true|false]
+#  Set to build shared (dynamic) libraries only.
+#  Default=false (build shared and static libs)
+#  Takes precedence over STATIC_ONLY
+#
 # -DGOBJECT_INTROSPECTION=[true|false]
 #  Set to build GObject introspection "typelib" files
 #  Requires GObject Introspection development package v0.6.7 or higher
@@ -69,11 +74,20 @@ set(LIBICAL_LIB_VERSION_STRING
 set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
 set(PROJECT_URL "http://libical.github.io/libical/")
 
+# library build types
+set(LIBICAL_STATIC 0)
+set(LIBRARY_TYPE SHARED)
+
 if(STATIC_ONLY)
   set(LIBICAL_STATIC 1)
   add_definitions(-DLIBICAL_STATIC)
   set(LIBRARY_TYPE STATIC)
-else()
+endif()
+
+if(SHARED_ONLY)
+  set(STATIC_ONLY False)
+  set(LIBICAL_STATIC 0)
+  remove_definitions(-DLIBICAL_STATIC)
   set(LIBRARY_TYPE SHARED)
 endif()
 
