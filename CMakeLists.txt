@@ -190,6 +190,7 @@ else()
 endif()
 #Always use builtin tzdata on Windows systems.
 if(WIN32 OR WINCE)
+  message(STATUS "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata")
   set(USE_BUILTIN_TZDATA 1)
 endif()
 
