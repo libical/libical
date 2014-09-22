@@ -32,9 +32,8 @@
 #
 
 # Set these to the toplevel directories of the 2 sets of VTIMEZONE files.
-#$MASTER_ZONEINFO_DIR = "/home/damon/cvs/libical/zoneinfo";
-$MASTER_ZONEINFO_DIR = "/usr/share/libical-evolution/zoneinfo";
-$NEW_ZONEINFO_DIR = "/home/damon/src/vzic-1.0/zoneinfo";
+$MASTER_ZONEINFO_DIR = "/home/allen/projects/libical/libical/zoneinfo";
+$NEW_ZONEINFO_DIR = "/home/allen/projects/libical/vzic/zoneinfo";
 
 # Set this to 1 if you have version numbers in the TZID like libical.
 $LIBICAL_VERSIONING = 1;
