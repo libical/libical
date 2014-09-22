@@ -588,7 +588,7 @@ icaltime_is_leap_year (const int year)
 
 
 int
-ycaltime_days_in_year (const int year)
+icaltime_days_in_year (const int year)
 {
 	if (icaltime_is_leap_year (year))
 		return 366;
