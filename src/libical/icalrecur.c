@@ -1079,6 +1079,16 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
             free(impl);
             return 0;
 	}
+
+	/* If there is BY_MONTH_DAY data,
+	   and the first day of BY_DAY data != first BY_MONTH_DAY data,
+	   back up one week, so we don't return false data */
+	if (has_by_data(impl, BY_MONTH_DAY)) {
+	    if (impl->last.day != impl->by_ptrs[BY_MONTH_DAY][0]) {
+		impl->last.day -= 7;
+		icaltime_normalize(impl->last);
+	    }
+	}
 	
     } else if (has_by_data(impl,BY_MONTH_DAY)) {
 	impl->last = icaltime_normalize(impl->last);
