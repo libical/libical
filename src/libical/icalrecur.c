@@ -196,6 +196,9 @@ typedef long intptr_t;
 #define BYMDIDX impl->by_indices[BY_MONTH_DAY]
 #define BYMDPTR impl->by_ptrs[BY_MONTH_DAY]
 
+#define BYYDIDX impl->by_indices[BY_YEAR_DAY]
+#define BYYDPTR impl->by_ptrs[BY_YEAR_DAY]
+
 #define BYWEEKIDX impl->by_indices[BY_WEEK_NO]
 #define BYWEEKPTR impl->by_ptrs[BY_WEEK_NO]
 
@@ -889,8 +892,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     if(icalrecur_two_byrule(impl,BY_YEAR_DAY,BY_MONTH) ||
        icalrecur_two_byrule(impl,BY_YEAR_DAY,BY_WEEK_NO) ||
-       icalrecur_two_byrule(impl,BY_YEAR_DAY,BY_MONTH_DAY) ||
-       icalrecur_two_byrule(impl,BY_YEAR_DAY,BY_DAY) ){
+       icalrecur_two_byrule(impl,BY_YEAR_DAY,BY_MONTH_DAY) ){
 
 	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         free(impl);
@@ -2261,9 +2263,32 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
         break;
     }
 
+    case (1<<BY_DAY) + (1<<BY_YEAR_DAY) : {
+        /*FREQ=YEARLY; BYDAY=TH,20MO,-10FR; BYYEARDAY=1,15*/
+
+	for(j = 0;BYYDPTR[j]!=ICAL_RECURRENCE_ARRAY_MAX;j++) {
+            short day = BYYDPTR[j];
+            struct icaltimetype tt;
+
+            if (day < 0) day += icaltime_days_in_year(year) + 1;
+
+            tt = icaltime_from_day_of_year(day,year);
+
+	    if(is_day_in_byday(impl,tt)){
+		impl->days[days_index++] = day;
+	    }
+        }
+
+        break;
+    }
+
     case 1<<BY_YEAR_DAY: {
-	for(j=0;impl->by_ptrs[BY_YEAR_DAY][j]!=ICAL_RECURRENCE_ARRAY_MAX;j++){
-	    impl->days[days_index++] = impl->by_ptrs[BY_YEAR_DAY][j];
+	for(j=0;BYYDPTR[j]!=ICAL_RECURRENCE_ARRAY_MAX;j++){
+            short day = BYYDPTR[j];
+
+            if (day < 0) day += icaltime_days_in_year(year) + 1;
+
+	    impl->days[days_index++] = day;
         }
         break;
     }
