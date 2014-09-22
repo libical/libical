@@ -1042,4 +1042,4 @@ sspm_write_multipart_part
 sspm_write_part
 strstriplt
 unset_tz
-ycaltime_days_in_year
+icaltime_days_in_year
