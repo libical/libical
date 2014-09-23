@@ -1921,6 +1921,41 @@ static pvl_list expand_by_day(icalrecur_iterator* impl, int year)
 }
 
 
+/* Calculate ISO weeks per year
+   http://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year */
+static int iso_weeks_in_year(int year)
+{
+    /* Long years occur when year starts on Thu or leap year starts on Wed */
+    int dow = icaltime_day_of_week(icaltime_from_day_of_year(1, year));
+    int is_long = (dow == 5 || (dow == 4 && icaltime_is_leap_year(year)));
+
+    return (52 + is_long);
+}
+
+/* Calculate ISO week number
+   http://en.wikipedia.org/wiki/ISO_week_date#Calculation */
+static int iso_week_number(icalrecur_iterator* impl, struct icaltimetype tt)
+{
+    int dow, week;
+
+    /* Normalize day of week so that week_start day is 1 */
+    dow = icaltime_day_of_week(tt) - (impl->rule.week_start - 1);
+    if (dow <= 0) dow += 7;
+
+    week = (icaltime_day_of_year(tt) - dow + 10) / 7;
+    if (week < 1) {
+	/* Last week of preceding year */
+	week = iso_weeks_in_year(tt.year - 1);
+    }
+    else if (week > iso_weeks_in_year(tt.year)) {
+	/* First week of following year */
+	week = 1;
+    }
+
+    return week;
+}
+
+
 /* For INTERVAL=YEARLY, set up the days[] array in the iterator to
    list all of the days of the current year that are specified in this
    rule. */
@@ -1963,9 +1998,9 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
             int first_week, last_week;
             t.month = month;
             t.day = 1;
-            first_week =  icaltime_week_number(t);
+            first_week =  iso_week_number(impl,t);
             t.day = icaltime_days_in_month(month,year);
-            last_week =  icaltime_week_number(t);
+            last_week =  iso_week_number(impl,t);
             for(j=first_week; j<last_week; j++) {
                 valid_weeks[j] = 1;        
             }
@@ -2256,7 +2291,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
             
             for(i = 0; BYWEEKPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++){
                     int weekno = BYWEEKPTR[i];
-                    int this_weekno = icaltime_week_number(tt);
+                    int this_weekno = iso_week_number(impl,tt);
                     if(weekno== this_weekno){
                         impl->days[days_index++] = day;
                     }
@@ -2387,7 +2422,7 @@ static int check_contracting_rules(icalrecur_iterator* impl)
 {
 
     int day_of_week = icaltime_day_of_week(impl->last);
-    int week_no = icaltime_week_number(impl->last);
+    int week_no = iso_week_number(impl,impl->last);
     int year_day = icaltime_day_of_year(impl->last);
 
     if (
