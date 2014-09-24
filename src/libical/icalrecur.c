@@ -1955,6 +1955,8 @@ static int iso_week_number(icalrecur_iterator* impl, struct icaltimetype tt)
     return week;
 }
 
+#define is_bogus_date(tt) (tt.day > icaltime_days_in_month(tt.month, tt.year))
+
 
 /* For INTERVAL=YEARLY, set up the days[] array in the iterator to
    list all of the days of the current year that are specified in this
@@ -2031,7 +2033,9 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
         t = impl->dtstart;
         t.year = impl->last.year;
         
-        impl->days[days_index++] = (short)icaltime_day_of_year(t);
+	if (!is_bogus_date(t)) {
+	    impl->days[days_index++] = (short)icaltime_day_of_year(t);
+	}
   
         break;
     }
@@ -2047,10 +2051,11 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
 	    t.month = month;
 	    t.is_date = 1;
 
-	    doy = icaltime_day_of_year(t);
+	    if (!is_bogus_date(t)) {
+		doy = icaltime_day_of_year(t);
 	    
-            impl->days[days_index++] = (short)doy;
-
+		impl->days[days_index++] = (short)doy;
+	    }
         }
         break;
     }
@@ -2067,10 +2072,11 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
 		t.year = year;
 		t.is_date = 1;
 
-		doy = icaltime_day_of_year(t);
+		if (!is_bogus_date(t)) {
+		    doy = icaltime_day_of_year(t);
 
-		impl->days[days_index++] = (short)doy;
-
+		    impl->days[days_index++] = (short)doy;
+		}
             }
         break;
     }
@@ -2090,10 +2096,11 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
 		t.year = year;
 		t.is_date = 1;
 
-		doy = icaltime_day_of_year(t);
+		if (!is_bogus_date(t)) {
+		    doy = icaltime_day_of_year(t);
 
-		impl->days[days_index++] = (short)doy;
-
+		    impl->days[days_index++] = (short)doy;
+		}
             }
         }
 
