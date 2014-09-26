@@ -10,7 +10,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/libical
   ${CMAKE_BINARY_DIR}/src/libical
-  ${LIBICU_INCLUDE_DIRS}
 )
 
 if(WIN32)

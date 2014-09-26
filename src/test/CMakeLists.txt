@@ -9,10 +9,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 set(TEST_DATADIR "\\\"${CMAKE_SOURCE_DIR}/test-data\\\"")
 add_definitions(-DTEST_DATADIR=${TEST_DATADIR})
 
-macro(testme _name _srcs)
-  add_executable(${_name} ${_srcs})
-  target_link_libraries(${_name} ical icalss icalvcal)
-  add_test(NAME ${_name} COMMAND ${_name})
+macro(setprops _name)
   if(UNIX)
     set_tests_properties(${_name} PROPERTIES
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
@@ -29,6 +26,13 @@ macro(testme _name _srcs)
       ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}"
     )
   endif()
+endmacro()
+
+macro(testme _name _srcs)
+  add_executable(${_name} ${_srcs})
+  target_link_libraries(${_name} ical icalss icalvcal)
+  add_test(NAME ${_name} COMMAND ${_name})
+  setprops(${_name})
 endmacro()
 
 ########### next target ###############
@@ -66,6 +70,27 @@ testme(regression "${regression_SRCS}")
 
 set(recur_SRCS recur.c)
 testme(recur "${recur_SRCS}")
+
+########### next target ###############
+
+if(NOT WIN32) #since we currently do not have a Windows reference file
+  if(HAVE_UNISTD_H) #getopt is required
+    set(icalrecurtest_SRCS icalrecur_test.c)
+    add_executable(icalrecurtest ${icalrecurtest_SRCS})
+    target_link_libraries(icalrecurtest ical icalss icalvcal)
+    set(test_cmd "${CMAKE_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
+    set(test_args "")
+    add_test(NAME icalrecurtest
+      COMMAND ${CMAKE_COMMAND}
+      -D test_cmd=${test_cmd}
+      -D test_args:string=${test_args}
+      -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/icalrecur_test.out
+      -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
+      -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
+    )
+    setprops(icalrecurtest)
+  endif()
+endif()
 
 ########### next target ###############
 
