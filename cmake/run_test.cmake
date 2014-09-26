@@ -20,10 +20,20 @@ separate_arguments(test_args)
 
 execute_process(
   COMMAND ${test_cmd} ${test_args}
-  COMMAND ${CMAKE_COMMAND} -E compare_files ${output_blessed} ${output_test}
   RESULT_VARIABLE test_not_successful
+  ERROR_VARIABLE err
 )
 
 if(test_not_successful)
-  message(SEND_ERROR "${output_test} does not match ${output_blessed}!")
+  message(SEND_ERROR "Unable to run test '${test_cmd}': ${err} : shell output: ${test_not_successful}!")
+endif()
+
+execute_process(
+  COMMAND ${CMAKE_COMMAND} -E compare_files ${output_blessed} ${output_test}
+  RESULT_VARIABLE test_not_successful
+  ERROR_VARIABLE err
+)
+
+if(test_not_successful)
+  message(SEND_ERROR "Output does not match for ${output_blessed} and ${output_test}: ${err} : shell output: ${test_not_successful}!")
 endif()
