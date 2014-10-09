@@ -97,7 +97,6 @@ typedef int time_t;
 					const icaltimezone *zone);
 %ignore icaltime_from_week_number(const int week_number,
 					const int year);
-%ignore icaltime_is_floating(const struct icaltimetype t);
 %ignore icaltimezonetype_free(struct icaltimezonetype tzt);
 
 

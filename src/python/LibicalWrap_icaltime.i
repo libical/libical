@@ -67,8 +67,6 @@
        but they do the same thing. */
     int is_date() { return icaltime_is_date(*($self)); }
     int is_utc() { return icaltime_is_utc(*($self)); }
-    /* int is_floating() { return icaltime_is_floating(*($self)); } */
-    
     
     /* ***** Modify, compare and utility methods ***** */
     
@@ -193,7 +191,6 @@ icaltimetype_props = {
     # make them immutable from python
     "is_date": (_LibicalWrap.icaltime_is_date, ),
     "is_utc": (_LibicalWrap.icaltime_is_utc, ),
-#    "is_floating": (_LibicalWrap.icaltime_is_floating, ),
 }
 
 _swig_set_properties(icaltimetype, icaltimetype_props)

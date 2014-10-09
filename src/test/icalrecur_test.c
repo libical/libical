@@ -14,10 +14,6 @@
 #include <unicode/ucal.h>
 #endif
 
-extern int optind, opterr;
-extern char *optarg;
-
-
 struct recur {
     const char *dtstart;
     const char *rrule;

@@ -266,13 +266,6 @@ add_dependencies(ical ical-header)
 
 target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
 
-if(ICU_FOUND)
-  target_link_libraries(ical ${ICU_LIBRARIES})
-endif()
-if(ICU_I18N_FOUND)
-  target_link_libraries(ical ${ICU_I18N_LIBRARIES})
-endif()
-
 if(WINCE)
   target_link_libraries(ical ${WCECOMPAT_LIBRARIES})
 endif()
