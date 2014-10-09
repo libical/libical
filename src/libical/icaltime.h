@@ -74,7 +74,6 @@
  *	- icaltime_is_valid_time(struct icaltimetype t)
  *	- icaltime_is_date(struct icaltimetype t)
  *	- icaltime_is_utc(struct icaltimetype t)
- *	- icaltime_is_floating(struct icaltimetype t)
  *
  *	Modify, compare and utility methods include:
  *
@@ -225,9 +224,6 @@ int icaltime_is_date(const struct icaltimetype t);
 
 /** @brief Returns true if time is relative to UTC zone */
 int icaltime_is_utc(const struct icaltimetype t);
-
-/** @brief Returns true if time is a floating time */
-int icaltime_is_floating(const struct icaltimetype t);
 
 /** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
 int icaltime_compare_with_zone(const struct icaltimetype a,
