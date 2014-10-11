@@ -7,6 +7,7 @@ set(COMBINEDHEADERSICAL
    ${TOPS}/src/libical/icalperiod.h
    ${TOPS}/src/libical/icalenums.h
    ${TOPS}/src/libical/icaltypes.h
+   ${TOPS}/src/libical/icalarray.h
    ${TOPS}/src/libical/icalrecur.h
    ${TOPS}/src/libical/icalattach.h
    ${TOPB}/src/libical/icalderivedvalue.h
@@ -16,7 +17,6 @@ set(COMBINEDHEADERSICAL
    ${TOPB}/src/libical/icalderivedproperty.h
    ${TOPS}/src/libical/icalproperty.h
    ${TOPS}/src/libical/pvl.h
-   ${TOPS}/src/libical/icalarray.h
    ${TOPS}/src/libical/icalcomponent.h
    ${TOPS}/src/libical/icaltimezone.h
    ${TOPS}/src/libical/icalparser.h

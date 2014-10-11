@@ -71,6 +71,7 @@ whatever timezone that dtstart is in.
 
 #include <time.h>
 #include "icaltime.h"
+#include "icalarray.h"
 
 /*
  * Recurrance enumerations
@@ -104,6 +105,14 @@ typedef enum icalrecurrencetype_weekday
     ICAL_SATURDAY_WEEKDAY
 } icalrecurrencetype_weekday;
 
+typedef enum icalrecurrencetype_skip
+{
+    ICAL_SKIP_BACKWARD = 0,
+    ICAL_SKIP_FORWARD,
+    ICAL_SKIP_YES,
+    ICAL_SKIP_NONE
+} icalrecurrencetype_skip;
+
 enum {
     ICAL_RECURRENCE_ARRAY_MAX = 0x7f7f,
     ICAL_RECURRENCE_ARRAY_MAX_BYTE = 0x7f
@@ -115,18 +124,20 @@ enum {
  * Recurrence type routines
  */
 
-/* See RFC 2445 Section 4.3.10, RECUR Value, for an explaination of
-   the values and fields in struct icalrecurrencetype */
-
+/* See RFC 5545 Section 3.3.10, RECUR Value, and draft-daboo-icalendar-rscale
+ * for an explanation of the values and fields in struct icalrecurrencetype.
+ *
+ * The maximums below are based on Chinese/Hebrew leap years (13 months)
+ */
 #define ICAL_BY_SECOND_SIZE 61
 #define ICAL_BY_MINUTE_SIZE 61
 #define ICAL_BY_HOUR_SIZE 25
-#define ICAL_BY_DAY_SIZE 364 /* 7 days * 52 weeks */
+#define ICAL_BY_DAY_SIZE 385 /* 7 days * 55 weeks */
 #define ICAL_BY_MONTHDAY_SIZE 32
-#define ICAL_BY_YEARDAY_SIZE 367
-#define ICAL_BY_WEEKNO_SIZE 54
-#define ICAL_BY_MONTH_SIZE 13
-#define ICAL_BY_SETPOS_SIZE 367
+#define ICAL_BY_YEARDAY_SIZE 386
+#define ICAL_BY_WEEKNO_SIZE 57
+#define ICAL_BY_MONTH_SIZE 14
+#define ICAL_BY_SETPOS_SIZE 386
 
 /** Main struct for holding digested recurrence rules */
 struct icalrecurrencetype 
@@ -160,8 +171,15 @@ struct icalrecurrencetype
 	short by_week_no[ICAL_BY_WEEKNO_SIZE];
 	short by_month[ICAL_BY_MONTH_SIZE];
 	short by_set_pos[ICAL_BY_SETPOS_SIZE];
+
+	/* For RSCALE extension (draft-daboo-icalendar-rscale) */
+	char *rscale;
+	icalrecurrencetype_skip skip;
 };
 
+
+int icalrecurrencetype_rscale_is_supported(void);
+icalarray* icalrecurrencetype_rscale_supported_calendars(void);
 
 void icalrecurrencetype_clear(struct icalrecurrencetype *r);
 
@@ -181,6 +199,15 @@ enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day);
 int icalrecurrencetype_day_position(short day);
 
 icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
+
+/**
+ * The 'month' element of the by_month array is encoded to allow
+ * representation of the "L" leap suffix (draft-daboo-icalendar-rscale).
+ * These routines decode the month values.
+ */
+
+int icalrecurrencetype_month_is_leap(short month);
+int icalrecurrencetype_month_month(short month);
 
 /** Recurrance rule parser */
 
