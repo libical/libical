@@ -1,6 +1,9 @@
 Release Highlights
 ==================
 
+Version 1.1.0 (not released yet)
+ * [New] RSCALE support (requires libicu from http://www.icu-project.org)
+
 Version 1.0.1:
 --------------
  * [Bug] issue74: Do not escape double quote character
