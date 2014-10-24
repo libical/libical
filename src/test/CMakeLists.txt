@@ -35,11 +35,16 @@ macro(testme _name _srcs)
   setprops(${_name})
 endmacro()
 
+#macro to build (but do not create a test)
+macro(buildme _name _srcs)
+  add_executable(${_name} ${_srcs})
+  target_link_libraries(${_name} ical icalss icalvcal)
+endmacro()
+
 ########### next target ###############
 
-#not sure how to run this as it takes 2 cluster files as command line args
-#set(copycluster_SRCS copycluster.c)
-#add_test(copycluster "${copycluster_SRCS}")
+set(copycluster_SRCS copycluster.c)
+buildme(copycluster "${copycluster_SRCS}")
 
 ########### next target ###############
 
@@ -56,15 +61,13 @@ testme(regression "${regression_SRCS}")
 
 ########### next target ###############
 
-#not sure how to use this test
-#set(parser_SRCS icaltestparser.c)
-#testme(parser "${parser_SRCS}")
+set(parser_SRCS icaltestparser.c)
+buildme(parser "${parser_SRCS}")
 
 ########### next target ###############
 
-#not sure how to use this test
-#set(stow_SRCS stow.c)
-#testme(stow "${stow_SRCS}")
+set(stow_SRCS stow.c)
+buildme(stow "${stow_SRCS}")
 
 ########### next target ###############
 
