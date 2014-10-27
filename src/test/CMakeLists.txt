@@ -66,8 +66,11 @@ buildme(parser "${parser_SRCS}")
 
 ########### next target ###############
 
-set(stow_SRCS stow.c)
-buildme(stow "${stow_SRCS}")
+if(NOT WIN32)
+  #stow is very Unix specific
+  set(stow_SRCS stow.c)
+  buildme(stow "${stow_SRCS}")
+endif()
 
 ########### next target ###############
 
