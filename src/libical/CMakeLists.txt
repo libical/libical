@@ -10,8 +10,11 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/libical
   ${CMAKE_BINARY_DIR}/src/libical
-  ${ICU_INCLUDE_DIR}
 )
+
+if(ICU_FOUND)
+  include_directories(${ICU_INCLUDE_DIR})
+endif()
 
 if(WIN32)
   if(MSVC)

@@ -2,8 +2,11 @@ include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_BINARY_DIR}/src
-  ${ICU_INCLUDE_DIR}
 )
+
+if(ICU_FOUND)
+  include_directories(${ICU_INCLUDE_DIR})
+endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
