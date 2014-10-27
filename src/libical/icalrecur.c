@@ -1248,7 +1248,7 @@ static int initialize_iterator(icalrecur_iterator* impl)
 	/* Create locale for RSCALE calendar (lowercasing) */
 	char *r, *l, *locale = icalmemory_tmp_buffer(strlen(rule.rscale) + 11);
 	strcpy(locale, "@calendar=");
-	for (r = rule.rscale, l = locale+10; *r; *l++ = tolower(*r++));
+	for (r = rule.rscale, l = locale+10; *r; *l++ = tolower((int)*r++));
 	*l = '\0';  /* EOS */
 
 	/* Create RSCALE calendar and set to DTSTART */
