@@ -231,6 +231,10 @@ const struct recur rfc5545[] = {
 
 const struct recur rscale[] = {
 
+    /* Bad RSCALE */
+    { "20131025",
+      "RSCALE=RUSSIAN;FREQ=YEARLY" },
+
     /* Ethiopic last day of year */
     { "20140910",
       "RSCALE=ETHIOPIC;FREQ=YEARLY;BYMONTH=13;BYMONTHDAY=-1;COUNT=6" },
@@ -351,14 +355,17 @@ int main(int argc, char *argv[])
 	rrule = icalrecurrencetype_from_string(r->rrule);
 	ritr = icalrecur_iterator_new(rrule, dtstart);
 
-	for (next = icalrecur_iterator_next(ritr);
-	     !icaltime_is_null_time(next);
-	     next = icalrecur_iterator_next(ritr)) {
+	if (!ritr) fprintf(fp, " *** %s\n", icalerror_strerror(icalerrno));
+	else {
+	    for (next = icalrecur_iterator_next(ritr);
+		 !icaltime_is_null_time(next);
+		 next = icalrecur_iterator_next(ritr)) {
 
-	    fprintf(fp,"%s%s", sep, icaltime_as_ical_string(next));
-	    sep = ",";
+		fprintf(fp,"%s%s", sep, icaltime_as_ical_string(next));
+		sep = ",";
+	    }
+	    fprintf(fp,"\n");
 	}
-	fprintf(fp,"\n");
 
 	icalrecur_iterator_free(ritr);
     }
