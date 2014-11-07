@@ -85,26 +85,32 @@ testme(recur "${recur_SRCS}")
 
 if(NOT WIN32) #since we currently do not have a Windows reference file
   if(HAVE_UNISTD_H) #getopt is required
-    set(icalrecurtest_SRCS icalrecur_test.c)
-    add_executable(icalrecurtest ${icalrecurtest_SRCS})
-    target_link_libraries(icalrecurtest ical icalss icalvcal)
-    set(test_cmd "${CMAKE_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
-    if(ICU_FOUND)
-      set(test_args "-r")
-      set(reference_data "icalrecur_withicu_test.out")
-    else()
-      set(test_args "")
-      set(reference_data "icalrecur_test.out")
+    if(NOT USE_32BIT_TIME_T) #tests for years greater than 2037 will fail
+      set(icalrecurtest_SRCS icalrecur_test.c)
+      add_executable(icalrecurtest ${icalrecurtest_SRCS})
+      target_link_libraries(icalrecurtest ical icalss icalvcal)
+      set(test_cmd "${CMAKE_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
+      if(ICU_FOUND)
+        set(test_args "-r")
+        if(HAVE_ICU_DANGI)
+          set(reference_data "icalrecur_withicu_dangi_test.out")
+        else()
+          set(reference_data "icalrecur_withicu_test.out")
+        endif()
+      else()
+        set(test_args "")
+        set(reference_data "icalrecur_test.out")
+      endif()
+      add_test(NAME icalrecurtest
+        COMMAND ${CMAKE_COMMAND}
+        -D test_cmd=${test_cmd}
+        -D test_args:string=${test_args}
+        -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
+        -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
+        -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
+      )
+      setprops(icalrecurtest)
     endif()
-    add_test(NAME icalrecurtest
-      COMMAND ${CMAKE_COMMAND}
-      -D test_cmd=${test_cmd}
-      -D test_args:string=${test_args}
-      -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
-      -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
-      -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
-    )
-    setprops(icalrecurtest)
   endif()
 endif()
 

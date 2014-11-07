@@ -2,7 +2,7 @@
  * Program for testing libical recurrence iterator on RFC 5545 examples.
  */
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <stdio.h>
@@ -254,11 +254,11 @@ const struct recur rscale[] = {
     /* Islamic Ramadan */
     { "20130709",
       "RSCALE=ISLAMIC-CIVIL;FREQ=YEARLY;BYMONTH=9;COUNT=5" },
-
+#if defined(HAVE_ICU_DANGI)
     /* Korean Buddha birthday */
     { "20131025",
       "RSCALE=DANGI;FREQ=DAILY;BYMONTHDAY=8;BYMONTH=4;UNTIL=20160101" },
-
+#endif
     /* Chinese leap month (no leap) */
     { "20131025",
       "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=9;COUNT=3" },
