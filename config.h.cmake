@@ -172,6 +172,9 @@ typedef int pid_t;
 
 #cmakedefine SIZEOF_TIME_T ${SIZEOF_TIME_T}
 
+/* whether we have ICU DANGI calendar */
+#cmakedefine HAVE_ICU_DANGI
+
 #if !defined(_MSC_VER)
 #define _unused(x) (void)x;
 #else
