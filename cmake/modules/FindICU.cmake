@@ -8,6 +8,10 @@
 #  ICU_LIBRARY        - Library to link against for the common ICU
 #  ICU_I18N_LIBRARY   - Library to link against for ICU internationaliation
 #                       (note: in addition to ICU_LIBRARY)
+#  ICU_VERSION        - ICU version MAJOR.MINOR
+#  ICU_MAJOR_VERSION  - ICU major version
+#  ICO_MINOR_VERSION  - ICU minor version
+#
 
 if(ICU_INCLUDE_DIR AND ICU_LIBRARY)
     # Already in cache, be silent
@@ -39,7 +43,7 @@ if (ICU_INCLUDE_DIR AND ICU_LIBRARY)
     set(ICU_VERSION 0)
     set(ICU_MAJOR_VERSION 0)
     set(ICU_MINOR_VERSION 0)
-    file(READ "${ICU_INCLUDE_DIR}/unicode/uversion.h" _ICU_VERSION_CONENTS)
+    file(READ "${ICU_INCLUDE_DIR}/unicode/uvernum.h" _ICU_VERSION_CONENTS)
     string(REGEX REPLACE ".*#define U_ICU_VERSION_MAJOR_NUM ([0-9]+).*" "\\1" ICU_MAJOR_VERSION "${_ICU_VERSION_CONENTS}")
     string(REGEX REPLACE ".*#define U_ICU_VERSION_MINOR_NUM ([0-9]+).*" "\\1" ICU_MINOR_VERSION "${_ICU_VERSION_CONENTS}")
 
