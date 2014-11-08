@@ -74,6 +74,7 @@ endif ()
 
 if (ICU_FOUND)
     if (NOT ICU_FIND_QUIETLY)
+        message(STATUS "Found ICU version ${ICU_VERSION}")
         message(STATUS "Found ICU header files in ${ICU_INCLUDE_DIRS}")
         message(STATUS "Found ICU libraries: ${ICU_LIBRARIES}")
     endif ()
