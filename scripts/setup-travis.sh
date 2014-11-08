@@ -13,6 +13,5 @@ else
   echo "yes" | sudo add-apt-repository ppa:kalakris/cmake
   sudo apt-get update -qq
   sudo apt-get install cmake
-  #comment out for now as it causes an Exception: SegFault in the regression test
-  #sudo apt-get install libicu-dev
+  sudo apt-get install libicu-dev
 fi
