@@ -225,6 +225,10 @@ const struct recur rfc5545[] = {
     { "19970902T090000",
       "FREQ=DAILY;BYHOUR=9,10,11,12,13,14,15,16;BYMINUTE=0,20,40;COUNT=48" },
 
+    /* Every week on Thursday and Sundays (35 times in total) */
+    { "20111120T100000Z",
+      "FREQ=WEEKLY;COUNT=35;BYDAY=SU,TH" },
+
     { NULL, NULL }
 };
 
