@@ -2015,6 +2015,9 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	  short this_dow = (short)get_day_of_week(impl);
 	  short dow = (short)(impl->by_ptrs[BY_DAY][0]-this_dow);
 
+	  /* Normalize day of week around week start */
+	  if (this_dow < (short)impl->rule.week_start) dow -= 7;
+
 	  if((this_dow < impl->by_ptrs[BY_DAY][0] && dow >= 0) || dow < 0)
 	  {
 		/* initial time is after first day of BY_DAY data */
@@ -2616,6 +2619,9 @@ static int next_weekday_by_week(icalrecur_iterator* impl)
           if(!end_of_data){    
               continue;
           }
+
+	  increment_year(impl, -1);
+	  start_of_week--;  /* set_day_of_year() assumes last doy == -1 */
       } 
  
       set_day_of_year(impl, start_of_week + dow);
