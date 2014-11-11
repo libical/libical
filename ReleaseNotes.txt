@@ -3,6 +3,7 @@ Release Highlights
 
 Version 1.1.0 (not released yet)
  * [New] RSCALE support (requires libicu from http://www.icu-project.org)
+ * [Bug] issue83: Incorrect recurrence generation for weekly pattern
 
 Version 1.0.1:
 --------------
