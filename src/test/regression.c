@@ -3567,6 +3567,8 @@ void test_utcoffset()
 void test_attach()
 {
     icalcomponent *c;
+    icalproperty *p;
+    icalparameter *param;
 
     static const char test_icalcomp_str[] =
 "BEGIN:VEVENT\n"
@@ -3579,6 +3581,41 @@ void test_attach()
 
     if (VERBOSE && c) printf("%s",icalcomponent_as_ical_string(c));
 
+    if (c) icalcomponent_free(c);
+
+    static const char test_icalcomp_str_caldav[] =
+"BEGIN:VEVENT\n"
+"ATTACH;MANAGED-ID=e474a36f22;FMTTYPE=image/jpeg;SIZE=281639;FILENAME=2doimage.jpg:https://www.someurl.com/somefile.jpg\n"
+"END:VEVENT\n";
+
+    c = icalparser_parse_string ((char *) test_icalcomp_str_caldav);
+    ok("parse caldav attachment", (c != NULL));
+
+    if (VERBOSE && c) printf("%s",icalcomponent_as_ical_string(c));
+
+    p = icalcomponent_get_first_property(c,ICAL_ATTACH_PROPERTY);
+    ok("property is correct kind (attach)",(icalproperty_isa(p) == ICAL_ATTACH_PROPERTY));
+
+    param = icalproperty_get_first_parameter(p,ICAL_ANY_PARAMETER);
+    if (VERBOSE && param) printf("MANAGED-ID = %s\n",icalparameter_get_managedid(param));
+    is("managed-id",icalparameter_get_managedid(param),"e474a36f22");
+
+    param = icalproperty_get_next_parameter(p,ICAL_ANY_PARAMETER);
+    if (VERBOSE && param) printf("FMTTYPE = %s\n",icalparameter_get_fmttype(param));
+    is("fmttype",icalparameter_get_fmttype(param),"image/jpeg");
+
+    param = icalproperty_get_next_parameter(p,ICAL_ANY_PARAMETER);
+    if (VERBOSE && param) printf("SIZE = %s\n",icalparameter_get_size(param));
+    is("size",icalparameter_get_size(param),"281639");
+
+    param = icalproperty_get_next_parameter(p,ICAL_ANY_PARAMETER);
+    if (VERBOSE && param) printf("FILENAME = %s\n",icalparameter_get_filename(param));
+    is("filename",icalparameter_get_filename(param),"2doimage.jpg");
+
+    if (VERBOSE) printf("URI = %s\n",icalattach_get_url(icalproperty_get_attach(p)));
+    is("attach url",icalattach_get_url(icalproperty_get_attach(p)),"https://www.someurl.com/somefile.jpg");
+
+    if (p) icalproperty_free(p);
     if (c) icalcomponent_free(c);
 }
 
