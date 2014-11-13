@@ -3580,6 +3580,22 @@ void test_attach()
     if (VERBOSE && c) printf("%s",icalcomponent_as_ical_string(c));
 
     if (c) icalcomponent_free(c);
+
+    static const char test_icalcomp_str_attachwithurl[] =
+"BEGIN:VALARM\r\n"
+"ATTACH:foofile\r\n"
+"END:VALARM\r\n";
+
+    icalattach* attach = icalattach_new_from_url("foofile");
+    icalcomponent *ac = icalcomponent_new(ICAL_VALARM_COMPONENT);
+    icalproperty *ap = icalproperty_new_attach(attach);
+    icalcomponent_add_property(ac, ap);
+    if (VERBOSE)
+	printf("%s\n",icalcomponent_as_ical_string(ac));
+    is("attach url",icalattach_get_url(attach),"foofile");
+    is("attach with url",icalcomponent_as_ical_string(ac),test_icalcomp_str_attachwithurl);
+    icalproperty_free(ap);
+    icalcomponent_free(ac);
 }
 
 
