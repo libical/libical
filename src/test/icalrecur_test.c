@@ -229,6 +229,10 @@ const struct recur rfc5545[] = {
     { "20111120T100000Z",
       "FREQ=WEEKLY;COUNT=35;BYDAY=SU,TH" },
 
+    /* github issue180 */
+    { "20141030T000000Z",
+      "FREQ=DAILY;UNTIL=20141206T000000Z;BYMONTH=11,12,1,2,3,4,10" },
+
     { NULL, NULL }
 };
 
