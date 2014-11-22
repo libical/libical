@@ -94,15 +94,20 @@ char* read_stream(char *s, size_t size, void *d)
 
 int main(int argc, char* argv[])
 {
-    _unused(argc)
     char* line; 
     FILE* stream;
     icalcomponent *c; 
     icalparser *parser = icalparser_new();
 
+    if (argc != 2) {
+        fprintf(stderr, "Usage: parser [file.ics]\n");
+        return 0;
+    }
     stream = fopen(argv[1],"r");
-
-    assert(stream != 0);
+    if (stream == (FILE *)NULL) {
+        fprintf(stderr, "Cannot open file \"%s\" for reading\n",argv[1]);
+        return 1;
+    }
 
     icalparser_set_gen_data(parser,stream);
 

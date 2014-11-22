@@ -64,9 +64,9 @@ if(WINCE)
   set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${WCECOMPAT_LIBRARIES})
 endif()
 
-set(LIBICAL_LIB_MAJOR_VERSION "1")
+set(LIBICAL_LIB_MAJOR_VERSION "2")
 set(LIBICAL_LIB_MINOR_VERSION "0")
-set(LIBICAL_LIB_PATCH_VERSION "95")
+set(LIBICAL_LIB_PATCH_VERSION "0")
 set(LIBICAL_LIB_VERSION_STRING
   "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}.${LIBICAL_LIB_PATCH_VERSION}"
 )
@@ -100,6 +100,11 @@ find_package(Perl REQUIRED)
 find_package(ICU)
 if(ICU_FOUND)
   set(HAVE_LIBICU 1)
+  if(ICU_MAJOR_VERSION VERSION_GREATER 50)
+    set(HAVE_ICU_DANGI TRUE)
+  else()
+    set(HAVE_ICU_DANGI FALSE)
+  endif()
 endif()
 if(ICU_I18N_FOUND)
   set(HAVE_LIBICU_I18N 1)
@@ -249,6 +254,11 @@ if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   if(HAVE_GCC_POINTER_MEMACCESS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsizeof-pointer-memaccess")
   endif()
+endif()
+
+#some test programs need to know if we are using 32-bit time
+if(SIZEOF_TIME_T EQUAL 4)
+  set(USE_32BIT_TIME_T TRUE)
 endif()
 
 ################# build subdirs ########################

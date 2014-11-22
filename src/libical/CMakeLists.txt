@@ -10,8 +10,11 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/libical
   ${CMAKE_BINARY_DIR}/src/libical
-  ${LIBICU_INCLUDE_DIRS}
 )
+
+if(ICU_FOUND)
+  include_directories(${ICU_INCLUDE_DIR})
+endif()
 
 if(WIN32)
   if(MSVC)
@@ -268,10 +271,10 @@ add_dependencies(ical ical-header)
 target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
 
 if(ICU_FOUND)
-  target_link_libraries(ical ${ICU_LIBRARIES})
+  target_link_libraries(ical ${ICU_LIBRARY})
 endif()
 if(ICU_I18N_FOUND)
-  target_link_libraries(ical ${ICU_I18N_LIBRARIES})
+  target_link_libraries(ical ${ICU_I18N_LIBRARY})
 endif()
 
 if(WINCE)

@@ -44,4 +44,8 @@
 "PUBLIC-COMMENT","37","const char*",
 "RESPONSE","38","int",
 "STAY-INFORMED","39","icalparameter_stayinformed","X=20108;TRUE;FALSE;NONE"
+"#Caldav Attachment Parameters","draft-daboo-caldav-attachments"
+"MANAGED-ID","40","const char*",
+"SIZE","41","const char*",
+"FILENAME","42","const char*",
 "#NOTE for updaters.  Preserve the icalparameter_kind Enum values to aid forward compatibility"

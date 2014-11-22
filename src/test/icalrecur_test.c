@@ -2,7 +2,7 @@
  * Program for testing libical recurrence iterator on RFC 5545 examples.
  */
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <stdio.h>
@@ -225,11 +225,23 @@ const struct recur rfc5545[] = {
     { "19970902T090000",
       "FREQ=DAILY;BYHOUR=9,10,11,12,13,14,15,16;BYMINUTE=0,20,40;COUNT=48" },
 
+    /* Every week on Thursday and Sundays (35 times in total) */
+    { "20111120T100000Z",
+      "FREQ=WEEKLY;COUNT=35;BYDAY=SU,TH" },
+
+    /* github issue180 */
+    { "20141030T000000Z",
+      "FREQ=DAILY;UNTIL=20141206T000000Z;BYMONTH=11,12,1,2,3,4,10" },
+
     { NULL, NULL }
 };
 
 
 const struct recur rscale[] = {
+
+    /* Bad RSCALE */
+    { "20131025",
+      "RSCALE=RUSSIAN;FREQ=YEARLY" },
 
     /* Ethiopic last day of year */
     { "20140910",
@@ -250,11 +262,11 @@ const struct recur rscale[] = {
     /* Islamic Ramadan */
     { "20130709",
       "RSCALE=ISLAMIC-CIVIL;FREQ=YEARLY;BYMONTH=9;COUNT=5" },
-
+#if defined(HAVE_ICU_DANGI)
     /* Korean Buddha birthday */
     { "20131025",
       "RSCALE=DANGI;FREQ=DAILY;BYMONTHDAY=8;BYMONTH=4;UNTIL=20160101" },
-
+#endif
     /* Chinese leap month (no leap) */
     { "20131025",
       "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=9;COUNT=3" },
@@ -351,14 +363,17 @@ int main(int argc, char *argv[])
 	rrule = icalrecurrencetype_from_string(r->rrule);
 	ritr = icalrecur_iterator_new(rrule, dtstart);
 
-	for (next = icalrecur_iterator_next(ritr);
-	     !icaltime_is_null_time(next);
-	     next = icalrecur_iterator_next(ritr)) {
+	if (!ritr) fprintf(fp, " *** %s\n", icalerror_strerror(icalerrno));
+	else {
+	    for (next = icalrecur_iterator_next(ritr);
+		 !icaltime_is_null_time(next);
+		 next = icalrecur_iterator_next(ritr)) {
 
-	    fprintf(fp,"%s%s", sep, icaltime_as_ical_string(next));
-	    sep = ",";
+		fprintf(fp,"%s%s", sep, icaltime_as_ical_string(next));
+		sep = ",";
+	    }
+	    fprintf(fp,"\n");
 	}
-	fprintf(fp,"\n");
 
 	icalrecur_iterator_free(ritr);
     }

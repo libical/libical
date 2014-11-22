@@ -837,7 +837,7 @@ static int count_byrules(icalrecur_iterator* impl)
  * Callbacks for recurrence rules with RSCALE support (using ICU)
  *
  * References:
- *   - http://tools.ietf.org/html/draft-daboo-icalendar-rscale
+ *   - http://tools.ietf.org/html/draft-ietf-calext-rscale
  *   - http://en.wikipedia.org/wiki/Intercalation_%28timekeeping%29
  *   - http://icu-project.org/apiref/icu4c/ucal_8h.html
  *   - http://cldr.unicode.org/development/development-process/design-proposals/chinese-calendar-support
@@ -1219,22 +1219,29 @@ static int initialize_iterator(icalrecur_iterator* impl)
 {
     struct icalrecurrencetype rule = impl->rule;
     struct icaltimetype dtstart = impl->dtstart;
-    const char *gregorian = "@calendar-gregorian";
+    char locale[ULOC_KEYWORD_AND_VALUES_CAPACITY] = "";
     UErrorCode status = U_ZERO_ERROR;
     const char *tzid = UCAL_UNKNOWN_ZONE_ID;
 
     if (dtstart.zone)
 	tzid = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
 
+    /* Create locale for Gregorian calendar */
+    uloc_setKeywordValue("calendar", "gregorian",
+			 locale, sizeof(locale), &status);
+
     /* Create Gregorian calendar and set to DTSTART */
-    impl->greg = ucal_open((const UChar *) tzid, -1, gregorian,
+    impl->greg = ucal_open((const UChar *) tzid, -1, locale,
 			   UCAL_DEFAULT, &status);
     if (impl->greg) {
 	ucal_setDateTime(impl->greg, dtstart.year,
 			 dtstart.month-1  /* UCal is 0-based */, dtstart.day,
 			 dtstart.hour, dtstart.minute, dtstart.second, &status);
     }
-    if (!impl->greg || U_FAILURE(status)) return 0;
+    if (!impl->greg || U_FAILURE(status)) {
+	icalerror_set_errno(ICAL_INTERNAL_ERROR);
+	return 0;
+    }
 
     if (!rule.rscale) {
 	/* Use Gregorian as RSCALE */
@@ -1245,11 +1252,27 @@ static int initialize_iterator(icalrecur_iterator* impl)
 	impl->rule.skip = ICAL_SKIP_YES;
     }
     else {
+	UEnumeration *en;
+	const char *cal;
+	char *r;
+
+	/* Lowercase the specified calendar */
+	for (r = rule.rscale; *r; r++) *r = tolower((int) *r);
+
+	/* Check if specified calendar is supported */
+	en = ucal_getKeywordValuesForLocale("calendar", NULL, FALSE, &status);
+	while ((cal = uenum_next(en, NULL, &status))) {
+	    if (!strcmp(cal, rule.rscale)) break;
+	}
+	uenum_close(en);
+	if (!cal) {
+	    icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
+	    return 0;
+	}
+
 	/* Create locale for RSCALE calendar (lowercasing) */
-	char *r, *l, *locale = icalmemory_tmp_buffer(strlen(rule.rscale) + 11);
-	strcpy(locale, "@calendar=");
-	for (r = rule.rscale, l = locale+10; *r; *l++ = tolower(*r++));
-	*l = '\0';  /* EOS */
+	uloc_setKeywordValue("calendar", rule.rscale,
+			     locale, sizeof(locale), &status);
 
 	/* Create RSCALE calendar and set to DTSTART */
 	impl->rscale = ucal_open((const UChar *) tzid, -1, locale,
@@ -1258,7 +1281,10 @@ static int initialize_iterator(icalrecur_iterator* impl)
 	    UDate millis = ucal_getMillis(impl->greg, &status);
 	    ucal_setMillis(impl->rscale, millis, &status);
 	}
-	if (!impl->rscale || U_FAILURE(status)) return 0;
+	if (!impl->rscale || U_FAILURE(status)) {
+	    icalerror_set_errno(ICAL_INTERNAL_ERROR);
+	    return 0;
+	}
 
 	if (rule.skip == ICAL_SKIP_NONE) {
 	    /* When RSCALE is present SKIP defaults to BACKWARD */
@@ -1961,7 +1987,6 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
 
     if (initialize_iterator(impl) == 0) {
-	icalerror_set_errno(ICAL_INTERNAL_ERROR);
 	icalrecur_iterator_free(impl);
 	return 0;
     }
@@ -1989,6 +2014,9 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 	   * more explicit. */
 	  short this_dow = (short)get_day_of_week(impl);
 	  short dow = (short)(impl->by_ptrs[BY_DAY][0]-this_dow);
+
+	  /* Normalize day of week around week start */
+	  if (this_dow < (short)impl->rule.week_start) dow -= 7;
 
 	  if((this_dow < impl->by_ptrs[BY_DAY][0] && dow >= 0) || dow < 0)
 	  {
@@ -2591,6 +2619,9 @@ static int next_weekday_by_week(icalrecur_iterator* impl)
           if(!end_of_data){    
               continue;
           }
+
+	  increment_year(impl, -1);
+	  start_of_week--;  /* set_day_of_year() assumes last doy == -1 */
       } 
  
       set_day_of_year(impl, start_of_week + dow);
@@ -3231,7 +3262,7 @@ int icalrecurrencetype_day_position(short day)
 
 /**
  * The 'month' element of the by_month array is encoded to allow
- * representation of the "L" leap suffix (draft-daboo-icalendar-rscale).
+ * representation of the "L" leap suffix (draft-ietf-calext-rscale).
  * These routines decode the month values.
  *
  * The "L" suffix is encoded by multiplying the month by 256

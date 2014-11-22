@@ -4,6 +4,10 @@ include_directories(
   ${CMAKE_BINARY_DIR}/src
 )
 
+if(ICU_FOUND)
+  include_directories(${ICU_INCLUDE_DIR})
+endif()
+
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 set(TEST_DATADIR "\\\"${CMAKE_SOURCE_DIR}/test-data\\\"")
@@ -35,11 +39,16 @@ macro(testme _name _srcs)
   setprops(${_name})
 endmacro()
 
+#macro to build (but do not create a test)
+macro(buildme _name _srcs)
+  add_executable(${_name} ${_srcs})
+  target_link_libraries(${_name} ical icalss icalvcal)
+endmacro()
+
 ########### next target ###############
 
-#not sure how to run this as it takes 2 cluster files as command line args
-#set(copycluster_SRCS copycluster.c)
-#add_test(copycluster "${copycluster_SRCS}")
+set(copycluster_SRCS copycluster.c)
+buildme(copycluster "${copycluster_SRCS}")
 
 ########### next target ###############
 
@@ -56,15 +65,16 @@ testme(regression "${regression_SRCS}")
 
 ########### next target ###############
 
-#not sure how to use this test
-#set(parser_SRCS icaltestparser.c)
-#testme(parser "${parser_SRCS}")
+set(parser_SRCS icaltestparser.c)
+buildme(parser "${parser_SRCS}")
 
 ########### next target ###############
 
-#not sure how to use this test
-#set(stow_SRCS stow.c)
-#testme(stow "${stow_SRCS}")
+if(NOT WIN32)
+  #stow is very Unix specific
+  set(stow_SRCS stow.c)
+  buildme(stow "${stow_SRCS}")
+endif()
 
 ########### next target ###############
 
@@ -75,26 +85,44 @@ testme(recur "${recur_SRCS}")
 
 if(NOT WIN32) #since we currently do not have a Windows reference file
   if(HAVE_UNISTD_H) #getopt is required
-    set(icalrecurtest_SRCS icalrecur_test.c)
-    add_executable(icalrecurtest ${icalrecurtest_SRCS})
-    target_link_libraries(icalrecurtest ical icalss icalvcal)
-    set(test_cmd "${CMAKE_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
-    if(ICU_FOUND)
-      set(test_args "-r")
-      set(reference_data "icalrecur_withicu_test.out")
-    else()
+    if(NOT USE_32BIT_TIME_T) #tests for years greater than 2037 will fail
+      set(icalrecurtest_SRCS icalrecur_test.c)
+      add_executable(icalrecurtest ${icalrecurtest_SRCS})
+      target_link_libraries(icalrecurtest ical icalss icalvcal)
+      set(test_cmd "${CMAKE_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
+
+      if(ICU_FOUND)
+        #test rscale capable rrules
+        set(test_args "-r")
+        if(HAVE_ICU_DANGI)
+          set(reference_data "icalrecur_withicu_dangi_test.out")
+        else()
+          set(reference_data "icalrecur_withicu_test.out")
+        endif()
+        add_test(NAME icalrecurtest-r
+          COMMAND ${CMAKE_COMMAND}
+          -D test_cmd=${test_cmd}
+          -D test_args:string=${test_args}
+          -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
+          -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
+          -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
+        )
+        setprops(icalrecurtest-r)
+      endif()
+
+      #test non-rscale rrules
       set(test_args "")
       set(reference_data "icalrecur_test.out")
+      add_test(NAME icalrecurtest
+        COMMAND ${CMAKE_COMMAND}
+        -D test_cmd=${test_cmd}
+        -D test_args:string=${test_args}
+        -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
+        -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
+        -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
+      )
+      setprops(icalrecurtest)
     endif()
-    add_test(NAME icalrecurtest
-      COMMAND ${CMAKE_COMMAND}
-      -D test_cmd=${test_cmd}
-      -D test_args:string=${test_args}
-      -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
-      -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
-      -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
-    )
-    setprops(icalrecurtest)
   endif()
 endif()
 
