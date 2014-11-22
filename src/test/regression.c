@@ -730,10 +730,10 @@ void test_dirset()
 	    assert(icalerrno  == ICAL_NO_ERROR);
 
 	    printf("\n----------\n%s\n---------\n",icalcomponent_as_ical_string(clone));
+            error = icaldirset_add_component(s,clone);
 
-	    error = icaldirset_add_component(s,clone);
-
-	    assert(error  == ICAL_NO_ERROR);
+            assert(error  == ICAL_NO_ERROR);
+	    _unused(error);
 	}
     }
 
@@ -3044,11 +3044,11 @@ void test_file_locks()
     for (c = icalfileset_get_next_component(fs);
 	 c != 0;
 	 c = icalfileset_get_next_component(fs)){
-	struct icaldurationtype d = icalcomponent_get_duration(c);
+        struct icaldurationtype d = icalcomponent_get_duration(c);
 	sec = icaldurationtype_as_int(d);
-
+ 
 	/*printf("%d,%d ",i,sec);*/
-	assert(i == sec);
+        assert(i == sec);
 	i++;
     }
 
@@ -3056,6 +3056,7 @@ void test_file_locks()
 
 
     assert(sec == final);
+    _unused(sec);
 #endif
 }
 

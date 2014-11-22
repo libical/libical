@@ -1828,7 +1828,7 @@ icaltimezone_release_zone_tab		(void)
 static void
 icaltimezone_load_builtin_timezone	(icaltimezone *zone)
 {
-    icalcomponent *comp, *subcomp;
+    icalcomponent *comp=0, *subcomp;
 
 	    /* If the location isn't set, it isn't a builtin timezone. */
     if (!zone->location || !zone->location[0])

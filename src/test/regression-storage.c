@@ -753,6 +753,7 @@ void test_dirset_extended(void)
 	    
 	    ok("Adding component to dirset", (icalerrno == ICAL_NO_ERROR));
 	    assert(error  == ICAL_NO_ERROR);
+	    _unused(error);
 	}
 
     }
