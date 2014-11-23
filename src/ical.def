@@ -188,12 +188,14 @@ icalparameter_get_dir
 icalparameter_get_enable
 icalparameter_get_encoding
 icalparameter_get_fbtype
+icalparameter_get_filename
 icalparameter_get_fmttype
 icalparameter_get_id
 icalparameter_get_language
 icalparameter_get_latency
 icalparameter_get_local
 icalparameter_get_localize
+icalparameter_get_managedid
 icalparameter_get_member
 icalparameter_get_options
 icalparameter_get_parent
@@ -204,6 +206,7 @@ icalparameter_get_reltype
 icalparameter_get_role
 icalparameter_get_rsvp
 icalparameter_get_sentby
+icalparameter_get_size
 icalparameter_get_tzid
 icalparameter_get_value
 icalparameter_get_x
