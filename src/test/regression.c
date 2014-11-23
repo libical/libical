@@ -3567,8 +3567,6 @@ void test_utcoffset()
 void test_attach()
 {
     icalcomponent *c;
-    icalproperty *p;
-    icalparameter *param;
 
     static const char test_icalcomp_str[] =
 "BEGIN:VEVENT\n"
@@ -3582,6 +3580,13 @@ void test_attach()
     if (VERBOSE && c) printf("%s",icalcomponent_as_ical_string(c));
 
     if (c) icalcomponent_free(c);
+}
+
+void test_attach_caldav()
+{
+    icalcomponent *c;
+    icalproperty *p;
+    icalparameter *param;
 
     static const char test_icalcomp_str_caldav[] =
 "BEGIN:VEVENT\n"
@@ -3617,7 +3622,10 @@ void test_attach()
 
     if (p) icalproperty_free(p);
     if (c) icalcomponent_free(c);
+}
 
+void test_attach_url()
+{
     static const char test_icalcomp_str_attachwithurl[] =
 "BEGIN:VALARM\r\n"
 "ATTACH:foofile\r\n"
@@ -3886,6 +3894,8 @@ int main(int argc, char *argv[])
     test_run("Create Components with vaargs", create_new_component_with_va_args, do_test, do_header);
     test_run("Test Memory", test_memory, do_test, do_header);
     test_run("Test Attachment", test_attach, do_test, do_header);
+    test_run("Test CalDAV Attachment", test_attach_caldav, do_test, do_header);
+    test_run("Test Attachment with URL", test_attach_url, do_test, do_header);
     test_run("Test icalcalendar", test_calendar, do_test, do_header);
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
