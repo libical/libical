@@ -3853,7 +3853,7 @@ int main(int argc, char *argv[])
     test_run("Create Components with vaargs", create_new_component_with_va_args, do_test, do_header);
     test_run("Test Memory", test_memory, do_test, do_header);
     test_run("Test Attachment", test_attach, do_test, do_header);
-    test_run("Test Attachment with URL", test_attach, do_test, do_header);
+    test_run("Test Attachment with URL", test_attach_url, do_test, do_header);
     test_run("Test icalcalendar", test_calendar, do_test, do_header);
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
