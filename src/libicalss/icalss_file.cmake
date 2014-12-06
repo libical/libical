@@ -11,6 +11,9 @@ set(COMBINEDHEADERSICALSS
   ${TOPS}/src/libicalss/icalspanlist.h
   ${TOPS}/src/libicalss/icalmessage.h
 )
+if(WITH_BDB)
+  list(APPEND COMBINEDHEADERSICALSS ${TOPS}/src/libicalss/icalbdbset.h)
+endif()
 
 FILE(WRITE  ${ICAL_FILE_H_FILE} "#ifndef LIBICAL_ICALSS_H\n")
 FILE(APPEND ${ICAL_FILE_H_FILE} "#define LIBICAL_ICALSS_H\n")

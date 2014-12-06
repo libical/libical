@@ -4,6 +4,9 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/libicalss ${CMAKE_BINARY_DIR}/src/libicalss
   ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_BINARY_DIR}/src/libical
 )
+if(WITH_BDB)
+  include_directories(${DB_INCLUDE_DIR})
+endif()
 
 if(WIN32)
   set(TOPS "\"${CMAKE_SOURCE_DIR}\"")
@@ -21,6 +24,7 @@ add_custom_command(
     -DTOPS:FILEPATH=${TOPS}
     -DTOPB:FILEPATH=${TOPB}
     -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+    -DWITH_BDB=${WITH_BDB}
     -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   DEPENDS
   ical-header
@@ -63,6 +67,9 @@ set(icalss_LIB_SRCS
   icalmessage.h
   ${icalss_LIB_DEVSRCS}
 )
+if(WITH_BDB)
+  list(APPEND icalss_LIB_SRCS icalbdbset.c icalbdbset.h)
+endif()
 
 if(MSVC)
   list(APPEND icalss_LIB_SRCS ../icalss.def)
@@ -79,6 +86,9 @@ if(NOT SHARED_ONLY)
 endif()
 
 target_link_libraries(icalss ical)
+if(WITH_BDB)
+  target_link_libraries(icalss ${DB_LIBRARY})
+endif()
 
 if(MSVC)
   set_target_properties(icalss PROPERTIES OUTPUT_NAME "libicalss")

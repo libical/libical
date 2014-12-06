@@ -5,6 +5,7 @@ Version 2.0.0 (not released yet)
 --------------
  * [New] RSCALE support (requires libicu from http://www.icu-project.org)
  * [New] CalDAV attachment support (draft-daboo-caldav-attachments)
+ * [New] Resurrect the Berkeley DB storage support
  * [Bug] issue83: Incorrect recurrence generation for weekly pattern
  * Handle RRULEs better
 

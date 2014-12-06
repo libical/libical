@@ -37,8 +37,8 @@
 #include <stdio.h> /* for printf */
 #include <time.h> /* for time() */
 
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
 #include "regression.h"
 
 #define OUTPUT_FILE "filesetout.ics"
@@ -66,7 +66,7 @@ struct calendar {
 
 int vcalendar_init(struct calendar **cal, char *vcalendar, char *title);
 
-#ifdef WITH_BDB
+#if defined(WITH_BDB)
 #include <db.h>
 
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey);
@@ -208,7 +208,7 @@ void test_fileset_extended(void)
     ok("Opening output file", (cout != 0));
     assert(cout != 0);
     
-    for (iter = icalfileset_begin_component(cout, ICAL_ANY_COMPONENT, 0);
+    for (iter = icalfileset_begin_component(cout, ICAL_ANY_COMPONENT, 0, NULL);
          icalsetiter_deref(&iter) != 0; icalsetiter_next(&iter)) {
       icalcomponent *event;
       icalproperty *dtstart, *dtend;
@@ -239,7 +239,7 @@ void test_fileset_extended(void)
     /* otherwise, iter will contain a "removed" component and icalsetiter_next(&iter) */
     /* will fail. */
 
-    iter = icalfileset_begin_component(cout, ICAL_ANY_COMPONENT, 0);
+    iter = icalfileset_begin_component(cout, ICAL_ANY_COMPONENT, 0, NULL);
     itr = icalsetiter_deref(&iter);
     while (itr != 0) {
         icalsetiter_next(&iter);
@@ -281,7 +281,7 @@ void test_fileset_extended(void)
 }
 
 
-#ifdef WITH_BDB
+#if defined(WITH_BDB)
 
 /*
    In this example, we're storing a calendar with several components
@@ -297,18 +297,18 @@ void test_bdbset()
     icalset *cout;
     int month = 0;
     int count=0;
-    int num_components=0;
-    int szdata_len=0;
-    int ret=0;
-    char *subdb, *szdata, *szpacked_data;
-    char uid[255];
+/*    int num_components=0;*/
+/*    int szdata_len=0;*/
+/*    int ret=0;*/
+/*    char *subdb, *szdata, *szpacked_data;*/
+/*    char uid[255];*/
     struct icaltimetype start, end;
     icalcomponent *c, *clone, *itr;
     DBT key, data;
-    DBC *dbcp;
+/*    DBC *dbcp;*/
 
-    struct calendar *cal;
-    int cal_size;
+/*    struct calendar *cal;*/
+/*    int cal_size;*/
 
     return; // for now... TODO fix these broken tests..
 
@@ -328,7 +328,7 @@ void test_bdbset()
      *
      */
 
-    subdb = "calendar_id";
+    /*subdb = "calendar_id";*/
 
     /* open database, using subdb */
     cout = icalbdbset_new("calendar.db", ICALBDB_EVENTS, DB_HASH, 0);
@@ -386,7 +386,7 @@ void test_bdbset()
       /* commit changes */
       icalbdbset_commit(cout);
 
-      num_components = icalcomponent_count_components(clone, ICAL_ANY_COMPONENT);
+      /*num_components =*/ icalcomponent_count_components(clone, ICAL_ANY_COMPONENT);
 
       icalset_free(cout); 
 
@@ -405,11 +405,6 @@ void test_bdbset()
     /* Print them out */
 
     for(month = 1, count=0; month < 10; month++){
-      char *title;
-
-      icalcomponent *event;
-      icalproperty *dtstart, *dtend;
-
       for (itr = icalbdbset_get_first_component(cout);
 	   itr != 0;
 	   itr = icalbdbset_get_next_component(cout)){
@@ -456,11 +451,6 @@ void test_bdbset()
     /* Print them out again */
 
     for(month = 1, count=0; month < 10; month++){
-      char *title;
-
-      icalcomponent *event;
-      icalproperty *dtstart, *dtend;
-
       for (itr = icalbdbset_get_first_component(cout);
 	   itr != 0;
 	   itr = icalbdbset_get_next_component(cout)){
@@ -536,10 +526,12 @@ int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title)
  * from a primary key/data pair */
 
 /* just create a random title for now */
-#ifdef WITH_BDB
+#if defined(WITH_BDB)
 
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
 {
+  _unused(dbp);
+  _unused(pkey);
   icalcomponent *cl;
   char title[255];
 

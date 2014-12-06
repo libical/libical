@@ -3913,7 +3913,7 @@ int main(int argc, char *argv[])
     test_run("Test C++ API", test_cxx, do_test, do_header);
 #endif
 
-#ifdef WITH_BDB
+#if defined(WITH_BDB)
     test_run("Test BDB Set", test_bdbset, do_test, do_header);
 #endif
 

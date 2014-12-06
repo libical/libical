@@ -2,14 +2,14 @@
     ======================================================================
     FILE: icaldirset.c
     CREATOR: eric 28 November 1999
-  
+
     $Id: icaldirset.c,v 1.24 2008-01-02 20:07:40 dothebart Exp $
     $Locker:  $
-    
+
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -22,20 +22,18 @@
     The Original Code is eric. The Initial Developer of the Original
     Code is Eric Busboom
 
-
     ======================================================================*/
-
 
 /**
    @file   icaldirset.c
- 
+
    @brief  icaldirset manages a database of ical components and offers
   interfaces for reading, writing and searching for components.
 
   icaldirset groups components in to clusters based on their DTSTAMP
   time -- all components that start in the same month are grouped
   together in a single file. All files in a sotre are kept in a single
-  directory. 
+  directory.
 
   The primary interfaces are icaldirset__get_first_component and
   icaldirset_get_next_component. These routine iterate through all of
@@ -55,7 +53,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
 
 #include <libical/ical.h>
 #include "icaldirset.h"
@@ -92,49 +89,46 @@
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/
-icaldirset_options icaldirset_options_default = {O_RDWR|O_CREAT};
+icaldirset_options icaldirset_options_default = {O_RDWR | O_CREAT};
 
-
-const char* icaldirset_path(icalset* set)
+const char *icaldirset_path(icalset *set)
 {
-  icaldirset *dset = (icaldirset*)set;
+    icaldirset *dset = (icaldirset *)set;
 
-  return dset->dir;
+    return dset->dir;
 }
 
-
-void icaldirset_mark(icalset* set)
+void icaldirset_mark(icalset *set)
 {
-  icaldirset *dset = (icaldirset*)set;
+    icaldirset *dset = (icaldirset *)set;
 
-  icalcluster_mark(dset->cluster);
+    icalcluster_mark(dset->cluster);
 }
 
-
-icalerrorenum icaldirset_commit(icalset* set)
+icalerrorenum icaldirset_commit(icalset *set)
 {
-  icaldirset *dset = (icaldirset*)set;
-  icalset *fileset;
-  icalfileset_options options = icalfileset_options_default;
+    icaldirset *dset = (icaldirset *)set;
+    icalset *fileset;
+    icalfileset_options options = icalfileset_options_default;
 
-  options.cluster = dset->cluster;
+    options.cluster = dset->cluster;
 
-  fileset = icalset_new(ICAL_FILE_SET, icalcluster_key(dset->cluster), &options);
+    fileset = icalset_new(ICAL_FILE_SET, icalcluster_key(dset->cluster), &options);
 
-  fileset->commit(fileset);
-  fileset->free(fileset);
+    fileset->commit(fileset);
+    fileset->free(fileset);
 
-  return ICAL_NO_ERROR;
+    return ICAL_NO_ERROR;
 }
 
-void icaldirset_lock(const char* dir)
+void icaldirset_lock(const char *dir)
 {
-    (void)dir;/*unused*/
+    _unused(dir);
 }
 
-void icaldirset_unlock(const char* dir)
+void icaldirset_unlock(const char *dir)
 {
-    (void)dir;/*unused*/
+    _unused(dir);
 }
 
 /* Load the contents of the store directory into the store's internal directory list*/
@@ -143,167 +137,161 @@ icalerrorenum icaldirset_read_directory(icaldirset *dset)
     char *str;
 #ifndef WIN32
     struct dirent *de;
-    DIR* dp;
- 
+    DIR *dp;
+
     dp = opendir(dset->dir);
-   
+
     if (dp == 0) {
-	icalerror_set_errno(ICAL_FILE_ERROR);
-	return ICAL_FILE_ERROR;
+        icalerror_set_errno(ICAL_FILE_ERROR);
+        return ICAL_FILE_ERROR;
     }
 
     /* clear contents of directory list */
-    while((str = pvl_pop(dset->directory))){
-	free(str);
+    while ((str = pvl_pop(dset->directory))) {
+        free(str);
     }
-    
+
     /* load all of the cluster names in the directory list */
-    for(de = readdir(dp);
-	de != 0;
-	de = readdir(dp)){
+    for (de = readdir(dp);
+         de != 0;
+         de = readdir(dp)) {
 
-	/* Remove known directory names  '.' and '..'*/
-	if (strcmp(de->d_name,".") == 0 ||
-	    strcmp(de->d_name,"..") == 0 ){
-	    continue;
-	}
+        /* Remove known directory names  '.' and '..'*/
+        if (strcmp(de->d_name, ".") == 0 ||
+            strcmp(de->d_name, "..") == 0) {
+            continue;
+        }
 
-	pvl_push(dset->directory, (void*)strdup(de->d_name));	
+        pvl_push(dset->directory, (void *)strdup(de->d_name));
     }
 
     closedir(dp);
 #else
     struct _finddata_t c_file;
     intptr_t hFile;
-	
+
     /* Find first .c file in current directory */
-    if( (hFile = _findfirst( "*", &c_file )) == -1L ) {
-		icalerror_set_errno(ICAL_FILE_ERROR);
-		return ICAL_FILE_ERROR;
+    if ((hFile = _findfirst("*", &c_file)) == -1L) {
+        icalerror_set_errno(ICAL_FILE_ERROR);
+        return ICAL_FILE_ERROR;
     } else {
-      while((str = pvl_pop(dset->directory))){
-			free(str);
-		}
-		
-		/* load all of the cluster names in the directory list */
-      do {
-			/* Remove known directory names  '.' and '..'*/
-			if (strcmp(c_file.name,".") == 0 ||
-				strcmp(c_file.name,"..") == 0 ){
-				continue;
-			}
-			
-	pvl_push(dset->directory, (void*)strdup(c_file.name));
-		}
-		while ( _findnext( hFile, &c_file ) == 0 );
-			
-		_findclose( hFile );
-	}
+        while ((str = pvl_pop(dset->directory))) {
+            free(str);
+        }
+
+        /* load all of the cluster names in the directory list */
+        do {
+            /* Remove known directory names  '.' and '..'*/
+            if (strcmp(c_file.name, ".") == 0 ||
+                strcmp(c_file.name, "..") == 0) {
+                continue;
+            }
+
+            pvl_push(dset->directory, (void *)strdup(c_file.name));
+        } while (_findnext(hFile, &c_file) == 0);
+
+        _findclose(hFile);
+    }
 
 #endif
 
     return ICAL_NO_ERROR;
 }
 
-
-icalset* icaldirset_init(icalset* set, const char* dir, void* options_in)
+icalset *icaldirset_init(icalset *set, const char *dir, void *options_in)
 {
-  icaldirset *dset = (icaldirset*)set;
-  icaldirset_options *options = options_in;
+    icaldirset *dset = (icaldirset *)set;
+    icaldirset_options *options = options_in;
     struct stat sbuf;
 
-    icalerror_check_arg_rz( (dir!=0), "dir");
-  icalerror_check_arg_rz( (set!=0), "set");
+    icalerror_check_arg_rz((dir != 0), "dir");
+    icalerror_check_arg_rz((set != 0), "set");
 
-    if (stat(dir,&sbuf) != 0){
-	icalerror_set_errno(ICAL_FILE_ERROR);
-	return 0;
+    if (stat(dir, &sbuf) != 0) {
+        icalerror_set_errno(ICAL_FILE_ERROR);
+        return 0;
     }
-    
+
     /* dir is not the name of a direectory*/
-    if (!S_ISDIR(sbuf.st_mode)){ 
-	icalerror_set_errno(ICAL_USAGE_ERROR);
-	return 0;
-    }	    
+    if (!S_ISDIR(sbuf.st_mode)) {
+        icalerror_set_errno(ICAL_USAGE_ERROR);
+        return 0;
+    }
 
     icaldirset_lock(dir);
 
-  dset->dir = (char*)strdup(dir);
-  dset->options = *options;
-  dset->directory = pvl_newlist();
-  dset->directory_iterator = 0;
-  dset->gauge = 0;
-  dset->first_component = 0;
-  dset->cluster = 0;
-
-  return set;
-}
-
-icalset* icaldirset_new(const char* dir)
-{
-  return icalset_new(ICAL_DIR_SET, dir, &icaldirset_options_default);
-}
-
-    
-icalset* icaldirset_new_reader(const char* dir)
-{
-  icaldirset_options reader_options = icaldirset_options_default;
-
-  reader_options.flags = O_RDONLY;
-
-  return icalset_new(ICAL_DIR_SET, dir, &reader_options);
-}
-
-    
-icalset* icaldirset_new_writer(const char* dir)
-{
-  icaldirset_options writer_options = icaldirset_options_default;
-
-  writer_options.flags = O_RDWR|O_CREAT;
-
-  return icalset_new(ICAL_DIR_SET, dir, &writer_options);
-}
-
-
-void icaldirset_free(icalset* s)
-{
-  icaldirset *dset = (icaldirset*)s;
-    char* str;
-
-  icaldirset_unlock(dset->dir);
-
-  if(dset->dir !=0){
-    free(dset->dir);
-    dset->dir = 0;
-    }
-
-  if(dset->gauge !=0){
-    icalgauge_free(dset->gauge);
+    dset->dir = (char *)strdup(dir);
+    dset->options = *options;
+    dset->directory = pvl_newlist();
+    dset->directory_iterator = 0;
     dset->gauge = 0;
-    }
+    dset->first_component = 0;
+    dset->cluster = 0;
 
-  if(dset->cluster !=0){
-    icalcluster_free(dset->cluster);
-    }
-
-  while(dset->directory !=0 &&  (str=pvl_pop(dset->directory)) != 0){
-	free(str);
-    }
-
-  if(dset->directory != 0){
-    pvl_free(dset->directory);
-    dset->directory = 0;
-    }
-
-  dset->directory_iterator = 0;
-  dset->first_component = 0;
+    return set;
 }
 
+icalset *icaldirset_new(const char *dir)
+{
+    return icalset_new(ICAL_DIR_SET, dir, &icaldirset_options_default);
+}
+
+icalset *icaldirset_new_reader(const char *dir)
+{
+    icaldirset_options reader_options = icaldirset_options_default;
+
+    reader_options.flags = O_RDONLY;
+
+    return icalset_new(ICAL_DIR_SET, dir, &reader_options);
+}
+
+icalset *icaldirset_new_writer(const char *dir)
+{
+    icaldirset_options writer_options = icaldirset_options_default;
+
+    writer_options.flags = O_RDWR | O_CREAT;
+
+    return icalset_new(ICAL_DIR_SET, dir, &writer_options);
+}
+
+void icaldirset_free(icalset *s)
+{
+    icaldirset *dset = (icaldirset *)s;
+    char *str;
+
+    icaldirset_unlock(dset->dir);
+
+    if (dset->dir != 0) {
+        free(dset->dir);
+        dset->dir = 0;
+    }
+
+    if (dset->gauge != 0) {
+        icalgauge_free(dset->gauge);
+        dset->gauge = 0;
+    }
+
+    if (dset->cluster != 0) {
+        icalcluster_free(dset->cluster);
+    }
+
+    while (dset->directory != 0 && (str = pvl_pop(dset->directory)) != 0) {
+        free(str);
+    }
+
+    if (dset->directory != 0) {
+        pvl_free(dset->directory);
+        dset->directory = 0;
+    }
+
+    dset->directory_iterator = 0;
+    dset->first_component = 0;
+}
 
 /* icaldirset_next_uid_number updates a serial number in the Store
    directory in a file called SEQUENCE */
 
-int icaldirset_next_uid_number(icaldirset* dset)
+int icaldirset_next_uid_number(icaldirset *dset)
 {
     char sequence = 0;
     char temp[128];
@@ -312,68 +300,68 @@ int icaldirset_next_uid_number(icaldirset* dset)
     FILE *f;
     struct stat sbuf;
 
-    icalerror_check_arg_rz( (dset!=0), "dset");
+    icalerror_check_arg_rz((dset != 0), "dset");
 
-    snprintf(filename,sizeof(filename),"%s/%s",dset->dir,"SEQUENCE");
+    snprintf(filename, sizeof(filename), "%s/%s", dset->dir, "SEQUENCE");
 
     /* Create the file if it does not exist.*/
-    if (stat(filename,&sbuf) == -1 || !S_ISREG(sbuf.st_mode)){
+    if (stat(filename, &sbuf) == -1 || !S_ISREG(sbuf.st_mode)) {
 
-	f = fopen(filename,"w");
-	if (f != 0){
-	    fprintf(f,"0");
-	    fclose(f);
-	} else {
-	    icalerror_warn("Can't create SEQUENCE file in icaldirset_next_uid_number");
-	    return 0;
-	}
+        f = fopen(filename, "w");
+        if (f != 0) {
+            fprintf(f, "0");
+            fclose(f);
+        } else {
+            icalerror_warn("Can't create SEQUENCE file in icaldirset_next_uid_number");
+            return 0;
+        }
     }
-    
-    if ( (f = fopen(filename,"r+")) != 0){
 
-	rewind(f);
-	r = fgets(temp,128,f);
+    if ((f = fopen(filename, "r+")) != 0) {
 
-	if (r == 0){
-	    sequence = 1;
-	} else {
-	    sequence = atoi(temp)+1;
-	}
+        rewind(f);
+        r = fgets(temp, 128, f);
 
-	rewind(f);
+        if (r == 0) {
+            sequence = 1;
+        } else {
+            sequence = atoi(temp) + 1;
+        }
 
-	fprintf(f,"%d",sequence);
+        rewind(f);
 
-	fclose(f);
+        fprintf(f, "%d", sequence);
 
-	return sequence;
-	
+        fclose(f);
+
+        return sequence;
+
     } else {
-	icalerror_warn("Can't create SEQUENCE file in icaldirset_next_uid_number");
-	return 0;
+        icalerror_warn("Can't create SEQUENCE file in icaldirset_next_uid_number");
+        return 0;
     }
 }
 
-icalerrorenum icaldirset_next_cluster(icaldirset* dset)
+icalerrorenum icaldirset_next_cluster(icaldirset *dset)
 {
     char path[ICAL_PATH_MAX];
 
-    if (dset->directory_iterator == 0){
-	icalerror_set_errno(ICAL_INTERNAL_ERROR);
-	return ICAL_INTERNAL_ERROR;
-    }	    
+    if (dset->directory_iterator == 0) {
+        icalerror_set_errno(ICAL_INTERNAL_ERROR);
+        return ICAL_INTERNAL_ERROR;
+    }
     dset->directory_iterator = pvl_next(dset->directory_iterator);
 
-    if (dset->directory_iterator == 0){
-	/* There are no more clusters */
-	if(dset->cluster != 0){
-	    icalcluster_free(dset->cluster);
-	    dset->cluster = 0;
-	}
-	return ICAL_NO_ERROR;
+    if (dset->directory_iterator == 0) {
+        /* There are no more clusters */
+        if (dset->cluster != 0) {
+            icalcluster_free(dset->cluster);
+            dset->cluster = 0;
+        }
+        return ICAL_NO_ERROR;
     }
-	    
-    snprintf(path,sizeof(path),"%s/%s", dset->dir,(char*)pvl_data(dset->directory_iterator));
+
+    snprintf(path, sizeof(path), "%s/%s", dset->dir, (char *)pvl_data(dset->directory_iterator));
 
     icalcluster_free(dset->cluster);
     dset->cluster = icalfileset_produce_icalcluster(path);
@@ -381,7 +369,7 @@ icalerrorenum icaldirset_next_cluster(icaldirset* dset)
     return icalerrno;
 }
 
-static void icaldirset_add_uid(icalcomponent* comp)
+static void icaldirset_add_uid(icalcomponent *comp)
 {
     char uidstring[ICAL_PATH_MAX];
     icalproperty *uid;
@@ -389,36 +377,35 @@ static void icaldirset_add_uid(icalcomponent* comp)
     struct utsname unamebuf;
 #endif
 
-    icalerror_check_arg_rv( (comp!=0), "comp");
+    icalerror_check_arg_rv((comp != 0), "comp");
 
-    uid = icalcomponent_get_first_property(comp,ICAL_UID_PROPERTY);
-    
+    uid = icalcomponent_get_first_property(comp, ICAL_UID_PROPERTY);
+
     if (uid == 0) {
-	
+
 #ifndef WIN32
-	uname(&unamebuf);
-	
-	snprintf(uidstring,sizeof(uidstring),"%d-%s",(int)getpid(),unamebuf.nodename);
+        uname(&unamebuf);
+
+        snprintf(uidstring, sizeof(uidstring), "%d-%s", (int)getpid(), unamebuf.nodename);
 #else
-	snprintf(uidstring,sizeof(uidstring),"%d-%s",(int)getpid(),"WINDOWS");  /* FIX: There must be an easy get the system name */
+        snprintf(uidstring, sizeof(uidstring), "%d-%s", (int)getpid(), "WINDOWS"); /* FIX: There must be an easy get the system name */
 #endif
-	
-	uid = icalproperty_new_uid(uidstring);
-	icalcomponent_add_property(comp,uid);
+
+        uid = icalproperty_new_uid(uidstring);
+        icalcomponent_add_property(comp, uid);
     } else {
-	strncpy(uidstring,icalproperty_get_uid(uid),ICAL_PATH_MAX-1);
-	uidstring[ICAL_PATH_MAX-1]='\0';
+        strncpy(uidstring, icalproperty_get_uid(uid), ICAL_PATH_MAX - 1);
+        uidstring[ICAL_PATH_MAX - 1] = '\0';
     }
 }
-
 
 /**
   This assumes that the top level component is a VCALENDAR, and there
    is an inner component of type VEVENT, VTODO or VJOURNAL. The inner
-  component must have a DSTAMP property 
+  component must have a DSTAMP property
 */
 
-icalerrorenum icaldirset_add_component(icalset* set, icalcomponent* comp)
+icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
 {
     char clustername[ICAL_PATH_MAX];
     icalproperty *dt = 0;
@@ -426,176 +413,177 @@ icalerrorenum icaldirset_add_component(icalset* set, icalcomponent* comp)
     struct icaltimetype tm;
     icalerrorenum error = ICAL_NO_ERROR;
     icalcomponent *inner;
-    icaldirset *dset = (icaldirset*) set;
+    icaldirset *dset = (icaldirset *) set;
 
-    icalerror_check_arg_rz( (dset!=0), "dset");
-    icalerror_check_arg_rz( (comp!=0), "comp");
+    icalerror_check_arg_rz((dset != 0), "dset");
+    icalerror_check_arg_rz((comp != 0), "comp");
 
     icaldirset_add_uid(comp);
 
     /* Determine which cluster this object belongs in. This is a HACK */
 
-    for(inner = icalcomponent_get_first_component(comp,ICAL_ANY_COMPONENT);
-	inner != 0;
-	inner = icalcomponent_get_next_component(comp,ICAL_ANY_COMPONENT)){
-  
-	dt = icalcomponent_get_first_property(inner,ICAL_DTSTAMP_PROPERTY);
- 	
-      if (dt != 0)
-	    break; 
-	}	
+    for (inner = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
+         inner != 0;
+         inner = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
+
+        dt = icalcomponent_get_first_property(inner, ICAL_DTSTAMP_PROPERTY);
+
+        if (dt != 0) {
+            break;
+        }
+    }
 
     if (dt == 0) {
-	for(inner = icalcomponent_get_first_component(comp,ICAL_ANY_COMPONENT);
-	    inner != 0;
-	    inner = icalcomponent_get_next_component(comp,ICAL_ANY_COMPONENT)){
-	    
-	    dt = icalcomponent_get_first_property(inner,ICAL_DTSTART_PROPERTY);
-	    
-	  if (dt != 0)
-		break; 
-	    }	
-	}
+        for (inner = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
+             inner != 0;
+             inner = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
 
-    if (dt == 0){
-	icalerror_warn("The component does not have a DTSTAMP or DTSTART property, so it cannot be added to the store");
-	icalerror_set_errno(ICAL_BADARG_ERROR);
-	return ICAL_BADARG_ERROR;
+            dt = icalcomponent_get_first_property(inner, ICAL_DTSTART_PROPERTY);
+
+            if (dt != 0) {
+                break;
+            }
+        }
+    }
+
+    if (dt == 0) {
+        icalerror_warn("The component does not have a DTSTAMP or DTSTART property, so it cannot be added to the store");
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return ICAL_BADARG_ERROR;
     }
 
     v = icalproperty_get_value(dt);
     tm = icalvalue_get_datetime(v);
 
-    snprintf(clustername,ICAL_PATH_MAX,"%s/%04d%02d",dset->dir, tm.year, tm.month);
+    snprintf(clustername, ICAL_PATH_MAX, "%s/%04d%02d", dset->dir, tm.year, tm.month);
 
     /* Load the cluster and insert the object */
-    if(dset->cluster != 0 && 
-       strcmp(clustername,icalcluster_key(dset->cluster)) != 0 ){
-      icalcluster_free(dset->cluster);
-      dset->cluster = 0;
+    if (dset->cluster != 0 &&
+        strcmp(clustername, icalcluster_key(dset->cluster)) != 0) {
+        icalcluster_free(dset->cluster);
+        dset->cluster = 0;
     }
 
-    if (dset->cluster == 0){
-      dset->cluster = icalfileset_produce_icalcluster(clustername);
+    if (dset->cluster == 0) {
+        dset->cluster = icalfileset_produce_icalcluster(clustername);
 
-      if (dset->cluster == 0){
-	    error = icalerrno;
-	}
+        if (dset->cluster == 0) {
+            error = icalerrno;
+        }
     }
-    
-    if (error != ICAL_NO_ERROR){
-	icalerror_set_errno(error);
-	return error;
+
+    if (error != ICAL_NO_ERROR) {
+        icalerror_set_errno(error);
+        return error;
     }
 
     /* Add the component to the cluster */
-    icalcluster_add_component(dset->cluster,comp);
-    
+    icalcluster_add_component(dset->cluster, comp);
+
     /* icalcluster_mark(impl->cluster); */
 
-    return ICAL_NO_ERROR;    
+    return ICAL_NO_ERROR;
 }
 
 /**
    Remove a component in the current cluster. HACK. This routine is a
    "friend" of icalfileset, and breaks its encapsulation. It was
    either do it this way, or add several layers of interfaces that had
-   no other use.  
+   no other use.
  */
 
-icalerrorenum icaldirset_remove_component(icalset* set, icalcomponent* comp)
+icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
 {
-    icaldirset *dset = (icaldirset*)set;
+    icaldirset *dset = (icaldirset *)set;
     icalcomponent *filecomp = icalcluster_get_component(dset->cluster);
 
     icalcompiter i;
     int found = 0;
 
-    icalerror_check_arg_re((set!=0),"set",ICAL_BADARG_ERROR);
-    icalerror_check_arg_re((comp!=0),"comp",ICAL_BADARG_ERROR);
-    icalerror_check_arg_re((dset->cluster!=0),"Cluster pointer",ICAL_USAGE_ERROR);
+    icalerror_check_arg_re((set != 0), "set", ICAL_BADARG_ERROR);
+    icalerror_check_arg_re((comp != 0), "comp", ICAL_BADARG_ERROR);
+    icalerror_check_arg_re((dset->cluster != 0), "Cluster pointer", ICAL_USAGE_ERROR);
 
-    for(i = icalcomponent_begin_component(filecomp,ICAL_ANY_COMPONENT);
-	icalcompiter_deref(&i)!= 0; icalcompiter_next(&i)){
-	
-	icalcomponent *this = icalcompiter_deref(&i);
+    for (i = icalcomponent_begin_component(filecomp, ICAL_ANY_COMPONENT);
+         icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
 
-	if (this == comp){
-	    found = 1;
-	    break;
-	}
+        icalcomponent *this = icalcompiter_deref(&i);
+
+        if (this == comp) {
+            found = 1;
+            break;
+        }
     }
 
-    if (found != 1){
-	icalerror_warn("icaldirset_remove_component: component is not part of current cluster");
-	icalerror_set_errno(ICAL_USAGE_ERROR);
-	return ICAL_USAGE_ERROR;
+    if (found != 1) {
+        icalerror_warn("icaldirset_remove_component: component is not part of current cluster");
+        icalerror_set_errno(ICAL_USAGE_ERROR);
+        return ICAL_USAGE_ERROR;
     }
 
-    icalcluster_remove_component(dset->cluster,comp);
+    icalcluster_remove_component(dset->cluster, comp);
 
     /* icalcluster_mark(impl->cluster); */
 
     /* If the removal emptied the fileset, get the next fileset */
-    if( icalcluster_count_components(dset->cluster,ICAL_ANY_COMPONENT)==0){
-      icalerrorenum error = icaldirset_next_cluster(dset);
+    if (icalcluster_count_components(dset->cluster, ICAL_ANY_COMPONENT) == 0) {
+        icalerrorenum error = icaldirset_next_cluster(dset);
 
-      if(dset->cluster != 0 && error == ICAL_NO_ERROR){
-	icalcluster_get_first_component(dset->cluster);
-	} else {
-	    /* HACK. Not strictly correct for impl->cluster==0 */
-	    return error;
-	}
+        if (dset->cluster != 0 && error == ICAL_NO_ERROR) {
+            icalcluster_get_first_component(dset->cluster);
+        } else {
+            /* HACK. Not strictly correct for impl->cluster==0 */
+            return error;
+        }
     } else {
-	/* Do nothing */
+        /* Do nothing */
     }
 
     return ICAL_NO_ERROR;
 }
 
-
-
-int icaldirset_count_components(icalset* store,
-			       icalcomponent_kind kind)
+int icaldirset_count_components(icalset *store,
+                                icalcomponent_kind kind)
 {
-    (void)store;/*unused*/
-    (void)kind;/*unused*/
+    _unused(store);
+    _unused(kind);
 
-    /* HACK, not implemented */
+    /* NOT IMPLEMENTED */
     assert(0);
 
     return 0;
 }
 
-icalcomponent* icaldirset_fetch_match(icalset* set, icalcomponent *c)
+icalcomponent *icaldirset_fetch_match(icalset *set, icalcomponent *c)
 {
-    (void)set;/*unused*/
-    (void)c;/*unused*/
+    _unused(set);
+    _unused(c);
 
-    fprintf(stderr," icaldirset_fetch_match is not implemented\n");
+    fprintf(stderr, " icaldirset_fetch_match is not implemented\n");
     assert(0);
     return 0;
 }
 
-icalcomponent* icaldirset_fetch(icalset* set, const char* uid)
+icalcomponent *icaldirset_fetch(icalset *set, icalcomponent_kind kind, const char *uid)
 {
-    icaldirset *dset = (icaldirset*)set;
+    _unused(kind);
+    icaldirset *dset = (icaldirset *)set;
     icalgauge *gauge;
     icalgauge *old_gauge;
     icalcomponent *c;
     char sql[256];
 
-    icalerror_check_arg_rz( (set!=0), "set");
-    icalerror_check_arg_rz( (uid!=0), "uid");
+    icalerror_check_arg_rz((set != 0), "set");
+    icalerror_check_arg_rz((uid != 0), "uid");
 
     snprintf(sql, 256, "SELECT * FROM VEVENT WHERE UID = \"%s\"", uid);
-    
+
     gauge = icalgauge_new_from_sql(sql, 0);
 
     old_gauge = dset->gauge;
     dset->gauge = gauge;
 
-    c= icaldirset_get_first_component(set);
+    c = icaldirset_get_first_component(set);
 
     dset->gauge = old_gauge;
 
@@ -604,214 +592,210 @@ icalcomponent* icaldirset_fetch(icalset* set, const char* uid)
     return c;
 }
 
-int icaldirset_has_uid(icalset* set, const char* uid)
+int icaldirset_has_uid(icalset *set, const char *uid)
 {
     icalcomponent *c;
 
-    icalerror_check_arg_rz( (set!=0), "set");
-    icalerror_check_arg_rz( (uid!=0), "uid");
-    
+    icalerror_check_arg_rz((set != 0), "set");
+    icalerror_check_arg_rz((uid != 0), "uid");
+
     /* HACK. This is a temporary implementation. _has_uid should use a
        database, and _fetch should use _has_uid, not the other way
        around */
-    c = icaldirset_fetch(set,uid);
+    c = icaldirset_fetch(set, 0, uid);
 
-    return c!=0;
-
+    return c != 0;
 }
 
-icalerrorenum icaldirset_select(icalset* set, icalgauge* gauge)
+icalerrorenum icaldirset_select(icalset *set, icalgauge *gauge)
 {
-    icaldirset *dset = (icaldirset*)set;
+    icaldirset *dset = (icaldirset *)set;
 
-    icalerror_check_arg_re( (set!=0), "set",ICAL_BADARG_ERROR);
-    icalerror_check_arg_re( (gauge!=0), "gauge",ICAL_BADARG_ERROR);
+    icalerror_check_arg_re((set != 0), "set", ICAL_BADARG_ERROR);
+    icalerror_check_arg_re((gauge != 0), "gauge", ICAL_BADARG_ERROR);
 
     dset->gauge = gauge;
 
     return ICAL_NO_ERROR;
 }
 
-icalerrorenum icaldirset_modify(icalset* set, 
-				icalcomponent *old,
-			       icalcomponent *new)
+icalerrorenum icaldirset_modify(icalset *set,
+                                icalcomponent *old,
+                                icalcomponent *new)
 {
-    (void)set;/*unused*/
-    (void)old;/*unused*/
-    (void)new;/*unused*/
+    _unused(set);
+    _unused(old);
+    _unused(new);
 
+    /* NOT IMPLEMENTED */
     assert(0);
-    return ICAL_NO_ERROR; /* HACK, not implemented */
+    return ICAL_NO_ERROR;
 }
 
-void icaldirset_clear(icalset* set)
+void icaldirset_clear(icalset *set)
 {
-    (void)set;/*unused*/
+    _unused(set);
 
+    /* NOT IMPLEMENTED */
     assert(0);
     return;
-    /* HACK, not implemented */
 }
 
-icalcomponent* icaldirset_get_current_component(icalset* set)
+icalcomponent *icaldirset_get_current_component(icalset *set)
 {
-  icaldirset *dset = (icaldirset*)set;
+    icaldirset *dset = (icaldirset *)set;
 
-  if (dset->cluster == 0){
-    icaldirset_get_first_component(set);
+    if (dset->cluster == 0) {
+        icaldirset_get_first_component(set);
     }
-  if(dset->cluster == 0){
-	return 0;
+    if (dset->cluster == 0) {
+        return 0;
     }
 
-  return icalcluster_get_current_component(dset->cluster);
+    return icalcluster_get_current_component(dset->cluster);
 }
 
-
-icalcomponent* icaldirset_get_first_component(icalset* set)
+icalcomponent *icaldirset_get_first_component(icalset *set)
 {
-  icaldirset *dset = (icaldirset*)set;
+    icaldirset *dset = (icaldirset *)set;
 
     icalerrorenum error;
     char path[ICAL_PATH_MAX];
 
-  error = icaldirset_read_directory(dset);
+    error = icaldirset_read_directory(dset);
 
-    if (error != ICAL_NO_ERROR){
-	icalerror_set_errno(error);
-	return 0;
+    if (error != ICAL_NO_ERROR) {
+        icalerror_set_errno(error);
+        return 0;
     }
 
-  dset->directory_iterator = pvl_head(dset->directory);
-    
-  if (dset->directory_iterator == 0){
-	icalerror_set_errno(error);
-	return 0;
-    }
-    
-  snprintf(path,ICAL_PATH_MAX,"%s/%s",
-	   dset->dir,
-	   (char*)pvl_data(dset->directory_iterator));
+    dset->directory_iterator = pvl_head(dset->directory);
 
-    /* If the next cluster we need is different than the current cluster, 
+    if (dset->directory_iterator == 0) {
+        icalerror_set_errno(error);
+        return 0;
+    }
+
+    snprintf(path, ICAL_PATH_MAX, "%s/%s",
+             dset->dir,
+             (char *)pvl_data(dset->directory_iterator));
+
+    /* If the next cluster we need is different than the current cluster,
        delete the current one and get a new one */
 
-  if(dset->cluster != 0 && strcmp(path,icalcluster_key(dset->cluster)) != 0 ){
-    icalcluster_free(dset->cluster);
-    dset->cluster = 0;
-    }
-    
-  if (dset->cluster == 0){
-    dset->cluster = icalfileset_produce_icalcluster(path);
-
-    if (dset->cluster == 0){
-	    error = icalerrno;
-	}
-    } 
-
-    if (error != ICAL_NO_ERROR){
-	icalerror_set_errno(error);
-	return 0;
+    if (dset->cluster != 0 && strcmp(path, icalcluster_key(dset->cluster)) != 0) {
+        icalcluster_free(dset->cluster);
+        dset->cluster = 0;
     }
 
-  dset->first_component = 1;
+    if (dset->cluster == 0) {
+        dset->cluster = icalfileset_produce_icalcluster(path);
 
-  return icaldirset_get_next_component(set);
+        if (dset->cluster == 0) {
+            error = icalerrno;
+        }
+    }
+
+    if (error != ICAL_NO_ERROR) {
+        icalerror_set_errno(error);
+        return 0;
+    }
+
+    dset->first_component = 1;
+
+    return icaldirset_get_next_component(set);
 }
 
-
-icalcomponent* icaldirset_get_next_component(icalset* set)
+icalcomponent *icaldirset_get_next_component(icalset *set)
 {
-  icaldirset *dset = (icaldirset*)set;
+    icaldirset *dset = (icaldirset *)set;
     icalcomponent *c;
     icalerrorenum error;
 
-  icalerror_check_arg_rz( (set!=0), "set");
+    icalerror_check_arg_rz((set != 0), "set");
 
-
-  if(dset->cluster == 0){
-	icalerror_warn("icaldirset_get_next_component called with a NULL cluster (Caller must call icaldirset_get_first_component first");
-	icalerror_set_errno(ICAL_USAGE_ERROR);
-	return 0;
-
+    if (dset->cluster == 0) {
+        icalerror_warn("icaldirset_get_next_component called with a NULL cluster (Caller must call icaldirset_get_first_component first");
+        icalerror_set_errno(ICAL_USAGE_ERROR);
+        return 0;
     }
 
     /* Set the component iterator for the following for loop */
-  if (dset->first_component == 1){
-    icalcluster_get_first_component(dset->cluster);
-    dset->first_component = 0;
+    if (dset->first_component == 1) {
+        icalcluster_get_first_component(dset->cluster);
+        dset->first_component = 0;
     } else {
-    icalcluster_get_next_component(dset->cluster);
+        icalcluster_get_next_component(dset->cluster);
     }
 
-    while(1){
-	/* Iterate through all of the objects in the cluster*/
-    for( c = icalcluster_get_current_component(dset->cluster);
-	     c != 0;
-	 c = icalcluster_get_next_component(dset->cluster)){
-	    
-	    /* If there is a gauge defined and the component does not
-	       pass the gauge, skip the rest of the loop */
+    while (1) {
+        /* Iterate through all of the objects in the cluster*/
+        for (c = icalcluster_get_current_component(dset->cluster);
+             c != 0;
+             c = icalcluster_get_next_component(dset->cluster)) {
 
-      if (dset->gauge != 0 && icalgauge_compare(dset->gauge,c) == 0){
-		continue;
-	    }
+            /* If there is a gauge defined and the component does not
+               pass the gauge, skip the rest of the loop */
 
-	    /* Either there is no gauge, or the component passed the
-	       gauge, so return it*/
+            if (dset->gauge != 0 && icalgauge_compare(dset->gauge, c) == 0) {
+                continue;
+            }
 
-	    return c;
-	}
+            /* Either there is no gauge, or the component passed the
+               gauge, so return it*/
 
-	/* Fell through the loop, so the component we want is not
-	   in this cluster. Load a new cluster and try again.*/
+            return c;
+        }
 
-    error = icaldirset_next_cluster(dset);
+        /* Fell through the loop, so the component we want is not
+           in this cluster. Load a new cluster and try again.*/
 
-    if(dset->cluster == 0 || error != ICAL_NO_ERROR){
-	    /* No more clusters */
-	    return 0;
-	} else {
-      c = icalcluster_get_first_component(dset->cluster);
+        error = icaldirset_next_cluster(dset);
 
-	    return c;
-	}
-	
+        if (dset->cluster == 0 || error != ICAL_NO_ERROR) {
+            /* No more clusters */
+            return 0;
+        } else {
+            c = icalcluster_get_first_component(dset->cluster);
+
+            return c;
+        }
     }
 
     return 0; /* Should never get here */
 }
 
-icalsetiter icaldirset_begin_component(icalset* set, icalcomponent_kind kind, icalgauge* gauge)
+icalsetiter icaldirset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid)
 {
-/*
-    icalsetiter itr = icalsetiter_null;
-    icaldirset *fset = (icaldirset*) set;
+    _unused(set);
+    _unused(kind);
+    _unused(gauge);
+    _unused(tzid);
+    /*
+        icalsetiter itr = icalsetiter_null;
+        icaldirset *fset = (icaldirset*) set;
 
-    icalerror_check_arg_re((fset!=0), "set", icalsetiter_null);
+        icalerror_check_arg_re((fset!=0), "set", icalsetiter_null);
 
-    itr.iter.kind = kind;
-    itr.gauge = gauge;
-*/
+        itr.iter.kind = kind;
+        itr.gauge = gauge;
+    */
     /* TO BE IMPLEMENTED */
-    (void)set;/*unused*/
-    (void)kind;/*unused*/
-    (void)gauge;/*unused*/
     return icalsetiter_null;
 }
 
-icalcomponent* icaldirsetiter_to_next(icalset* set, icalsetiter* i)
+icalcomponent *icaldirsetiter_to_next(icalset *set, icalsetiter *i)
 {
+    _unused(set);
+    _unused(i);
     /* TO BE IMPLEMENTED */
-    (void)set;/*unused*/
-    (void)i;/*unused*/
     return NULL;
 }
 
-icalcomponent* icaldirsetiter_to_prior(icalset* set, icalsetiter* i)
+icalcomponent *icaldirsetiter_to_prior(icalset *set, icalsetiter *i)
 {
+    _unused(set);
+    _unused(i);
     /* TO BE IMPLEMENTED */
-    (void)set;/*unused*/
-    (void)i;/*unused*/
     return NULL;
 }
