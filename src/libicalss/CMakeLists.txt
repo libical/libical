@@ -5,7 +5,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_BINARY_DIR}/src/libical
 )
 if(WITH_BDB)
-  include_directories(${DB_INCLUDE_DIR})
+  include_directories(${BDB_INCLUDE_DIR})
 endif()
 
 if(WIN32)
@@ -87,7 +87,7 @@ endif()
 
 target_link_libraries(icalss ical)
 if(WITH_BDB)
-  target_link_libraries(icalss ${DB_LIBRARY})
+  target_link_libraries(icalss ${BDB_LIBRARY})
 endif()
 
 if(MSVC)
