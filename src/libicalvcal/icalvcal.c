@@ -300,7 +300,7 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
     icalproperty *summary_prop = NULL, *description_prop = NULL;
     icalproperty *action_prop, *attendee_prop = NULL;
     icalparameter *fmttype_param = NULL;
-    enum icalproperty_action action;
+    enum icalproperty_action action = ICAL_ACTION_NONE;
     int value_is_url = 0, is_valid_alarm = 1;
 
     initPropIterator (&iterator, object);
