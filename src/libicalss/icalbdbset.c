@@ -331,7 +331,7 @@ icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc)(const DB
     DBC *dbcp;
     DBT key, data;
     char *str;
-    int ret;
+    int ret = EINVAL;
     char keystore[256];
     char datastore[1024];
     char *more_mem = NULL;
