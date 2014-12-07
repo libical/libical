@@ -149,7 +149,7 @@ DB_ENV *icalbdbset_get_env(void)
 
 icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
 {
-    _unused(dsn);
+    _unused(dsn)
     icalbdbset *bset = (icalbdbset *)set;
     icalbdbset_options *options = options_in;
     int ret;
@@ -326,7 +326,7 @@ char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc)(const DBT *dbt))
 /* This populates a cluster with the entire contents of a database */
 icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc)(const DBT *dbt))
 {
-    _unused(pfunc);
+    _unused(pfunc)
     DB *dbp;
     DBC *dbcp;
     DBT key, data;
@@ -590,7 +590,7 @@ err1:
 
 int icalbdbset_cput(DBC *dbcp, DBT *key, DBT *data, int access_method)
 {
-    _unused(access_method);
+    _unused(access_method)
     int ret = 0;
 
     key->flags |= DB_DBT_MALLOC; /* change these to DB_DBT_USERMEM */
@@ -1030,8 +1030,8 @@ icalcomponent *icalbdbset_fetch(icalset *set, icalcomponent_kind kind, const cha
 
 int icalbdbset_has_uid(icalset *store, const char *uid)
 {
-    _unused(store);
-    _unused(uid);
+    _unused(store)
+    _unused(uid)
     assert(0); /* HACK, not implemented */
     return 0;
 }
@@ -1132,9 +1132,9 @@ icalcomponent *icalbdbset_fetch_match(icalset *set, icalcomponent *comp)
 
 icalerrorenum icalbdbset_modify(icalset *set, icalcomponent *old, icalcomponent *newc)
 {
-    _unused(set);
-    _unused(old);
-    _unused(newc);
+    _unused(set)
+    _unused(old)
+    _unused(newc)
     assert(0); /* HACK, not implemented */
     return ICAL_NO_ERROR;
 }
@@ -1426,7 +1426,7 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
 
 icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
 {
-    _unused(set);
+    _unused(set)
     icalcomponent *comp = NULL;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
@@ -1568,7 +1568,7 @@ int icalbdbset_commit_transaction(DB_TXN *txnid)
 
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
 {
-    _unused(dbp);
+    _unused(dbp)
     /*
      * Returns:
      * < 0 if a < b

@@ -530,8 +530,8 @@ int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title)
 
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
 {
-  _unused(dbp);
-  _unused(pkey);
+  _unused(dbp)
+  _unused(pkey)
   icalcomponent *cl;
   char title[255];
 
@@ -745,7 +745,7 @@ void test_dirset_extended(void)
 	    
 	    ok("Adding component to dirset", (icalerrno == ICAL_NO_ERROR));
 	    assert(error  == ICAL_NO_ERROR);
-	    _unused(error);
+	    _unused(error)
 	}
 
     }
