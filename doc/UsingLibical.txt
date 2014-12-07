@@ -811,11 +811,6 @@ In most cases, you will only use icalcomponent_as_ical_string (), since
 it will cascade and convert all of the parameters, properties and
 values that are attached to the root component.
 
-Icalproperty_as_ical_string() will terminate each line with the RFC2445
-specified line terminator "\\n" However, if you compile with the symbol
-ICAL_UNIX_NEWLINE undefined, ( it is defined by default) it will terminate
-lines with "\\n\\r"
-
 Remember that the string returned by these routines is owned by the
 library, and will eventually be re-written. You should copy it if
 you want to preserve it. 

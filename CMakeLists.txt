@@ -20,11 +20,6 @@
 #  Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
 #  Default=false
 #
-# -DICAL_UNIX_NEWLINE=[true|false] [CURRENTLY NOT IMPLEMENTED]
-#  Set to terminate each line with the RFC2445 specified line terminator "\\n";
-#  else it will terminate lines with "\\n\\r"
-#  Default=true (on non-Windows systems; else false)
-#
 # -DUSE_BUILTIN_TZDATA=[true|false]
 #  Set to build using our own timezone data.
 #  Default=false (use the system timezone data on non-Windows systems)
@@ -164,18 +159,6 @@ if(ICAL_ERRORS_ARE_FATAL)
   set(ICAL_ERRORS_ARE_FATAL 1)
 else()
   set(ICAL_ERRORS_ARE_FATAL 0)
-endif()
-
-if(WIN32 OR WINCE)
-  set(USE_CR False)
-else()
-  set(USE_CR True)
-endif()
-option(ICAL_UNIX_NEWLINE "Terminate each line with the RFC2445 specified line terminator CR else will terminate lines with CRLF" ${USE_CR})
-if(ICAL_UNIX_NEWLINE)
-  set(ICAL_UNIX_NEWLINE 1)
-else()
-  set(ICAL_UNIX_NEWLINE 0)
 endif()
 
 option(ICAL_ALLOW_EMPTY_PROPERTIES "Prevent empty properties from being replaced with X-LIC-ERROR properties.")
