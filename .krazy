@@ -1,0 +1,11 @@
+CHECKSETS foss,c++
+
+EXTRA crud
+
+#Skip ancient Apple files
+SKIP /src/libicalvcal/port\.h
+SKIP /src/libicalvcal/vcaltmp\.
+SKIP /src/libicalvcal/vcc\.
+SKIP /src/libicalvcal/vobject\.
+
+STYLE_LINEMAX 100
