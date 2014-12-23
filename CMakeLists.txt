@@ -3,6 +3,10 @@
 # Pass the following variables to cmake to control the build:
 # (See doc/UsingLibical.txt for more information)
 #
+# -DWITH_CXX_BINDINGS=[true|false]
+#  Build the C++ bindings.
+#  Default=true
+#
 # -DWITH_BDB=[true|false] [MAY BE BUGGY. DO NOT USE FOR PRODUCTION]
 #  Build with the optional Berkeley DB storage.
 #  Requires the Berkeley DB development toolkit pre-installed.
@@ -245,6 +249,10 @@ if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   if(HAVE_GCC_POINTER_MEMACCESS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsizeof-pointer-memaccess")
   endif()
+endif()
+option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
+if(WITH_CXX_BINDINGS)
+  add_definitions(-DWITH_CXX_BINDINGS)
 endif()
 
 #some test programs need to know if we are using 32-bit time

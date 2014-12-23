@@ -77,3 +77,8 @@ of the libraries, but that behavior can be modified at CMake time:
   files pass the -DGOBJECT_INTROSPECTION=True option to CMake.  You'll
   need to have the GObject Introspection development package v0.6.7 or higher
   installed beforehand.
+
+== Language Bindings ==
+This C library can be built with bindings for these other languages:
+* C++. By default the buildsystem will create and install the C++ bindings API.
+  Turn this off by passing -DWITH_CXX_BINDINGS=False option to CMake.

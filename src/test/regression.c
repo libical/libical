@@ -1,14 +1,9 @@
-/* -*- Mode: C -*-
+/*
   ======================================================================
   FILE: regression.c
   CREATOR: eric 03 April 1999
 
-  DESCRIPTION:
-
-  $Id: regression.c,v 1.67 2008-02-03 16:10:48 dothebart Exp $
-  $Locker:  $
-
-  (C) COPYRIGHT 1999 Eric Busboom
+  (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
   http://www.softwarestudio.org
 
   The contents of this file are subject to the Mozilla Public License
@@ -23,12 +18,10 @@
 
   The original author is Eric Busboom
   The original code is regression.c
-
-
   ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <libical/ical.h>
@@ -3910,7 +3903,7 @@ int main(int argc, char *argv[])
 
     /** OPTIONAL TESTS go here... **/
 
-#ifdef WITH_CXX_BINDINGS
+#if defined(WITH_CXX_BINDINGS)
     test_run("Test C++ API", test_cxx, do_test, do_header);
 #endif
 

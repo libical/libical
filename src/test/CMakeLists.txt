@@ -2,6 +2,7 @@ include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_BINARY_DIR}/src
+  ${CMAKE_SOURCE_DIR}/src/libical
 )
 
 if(ICU_FOUND)
@@ -35,6 +36,9 @@ endmacro()
 macro(testme _name _srcs)
   add_executable(${_name} ${_srcs})
   target_link_libraries(${_name} ical icalss icalvcal)
+  if(WITH_CXX_BINDINGS)
+    target_link_libraries(${_name} ical_cxx icalss_cxx)
+  endif()
   add_test(NAME ${_name} COMMAND ${_name})
   setprops(${_name})
 endmacro()
@@ -61,6 +65,9 @@ set(regression_SRCS
   regression-recur.c
   regression-storage.c
 )
+if(WITH_CXX_BINDINGS)
+  list(APPEND regression_SRCS regression-cxx.cpp)
+endif()
 testme(regression "${regression_SRCS}")
 
 ########### next target ###############
