@@ -332,7 +332,7 @@ if(WITH_CXX_BINDINGS)
     add_library(ical_cxx-static STATIC ${icalcxx_LIB_SRCS})
   endif()
 
-  target_link_libraries(ical_cxx ${CMAKE_THREAD_LIBS_INIT})
+  target_link_libraries(ical_cxx ical ${CMAKE_THREAD_LIBS_INIT})
 
   if(WINCE)
     target_link_libraries(ical_cxx ${WCECOMPAT_LIBRARIES})

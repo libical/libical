@@ -134,6 +134,8 @@ if(WITH_CXX_BINDINGS)
     add_library(icalss_cxx-static STATIC ${icalsscxx_LIB_SRCS})
   endif()
 
+  target_link_libraries(icalss_cxx icalss ical_cxx ${CMAKE_THREAD_LIBS_INIT})
+
   if(MSVC)
     set_target_properties(icalss_cxx PROPERTIES OUTPUT_NAME "libicalss_cxx")
     if(NOT SHARED_ONLY)
