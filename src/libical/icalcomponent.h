@@ -284,5 +284,7 @@ icalcomponent* icalcomponent_new_vquery(void);
 icalcomponent* icalcomponent_new_vavailability(void);
 icalcomponent* icalcomponent_new_xavailable(void);
 icalcomponent* icalcomponent_new_vpoll(void);
+icalcomponent* icalcomponent_new_vvoter(void);
+icalcomponent* icalcomponent_new_xvote(void);
 
 #endif /* !ICALCOMPONENT_H */

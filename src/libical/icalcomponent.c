@@ -1324,8 +1324,10 @@ static const struct icalcomponent_kind_map component_map[] =
     { ICAL_VAVAILABILITY_COMPONENT, "VAVAILABILITY" },
     { ICAL_XAVAILABLE_COMPONENT, "AVAILABLE" },
 
-    /* Consensus Scheduling component */
+    /* Consensus Scheduling components */
     { ICAL_VPOLL_COMPONENT, "VPOLL" },
+    { ICAL_VVOTER_COMPONENT, "VVOTER" },
+    { ICAL_XVOTE_COMPONENT, "VOTE" },
 
     /* End of list */
     { ICAL_NO_COMPONENT, "" },
@@ -2123,6 +2125,14 @@ icalcomponent* icalcomponent_new_xavailable(void)
 icalcomponent* icalcomponent_new_vpoll(void)
 {
     return icalcomponent_new(ICAL_VPOLL_COMPONENT);
+}
+icalcomponent* icalcomponent_new_vvoter(void)
+{
+    return icalcomponent_new(ICAL_VVOTER_COMPONENT);
+}
+icalcomponent* icalcomponent_new_xvote(void)
+{
+    return icalcomponent_new(ICAL_XVOTE_COMPONENT);
 }
 
 /*

@@ -40,9 +40,10 @@
 "#In practice any unknown paramater that is not an xparam is treated as an ianaparam"
 "IANA","33","const char*",
 "ANY","0",,
-"#VPOLL Parameters","draft-york-vpoll",
+"#VPOLL Parameters","draft-york-vpoll","PUBLIC-COMMENT and RESPONSE are deprecated"
 "PUBLIC-COMMENT","37","const char*",
 "RESPONSE","38","int",
+"REQUIRED","43","icalparameter_required","X=20112;TRUE;FALSE;NONE"
 "STAY-INFORMED","39","icalparameter_stayinformed","X=20108;TRUE;FALSE;NONE"
 "#Caldav Attachment Parameters","draft-daboo-caldav-attachments"
 "MANAGED-ID","40","const char*",

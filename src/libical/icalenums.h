@@ -65,7 +65,9 @@ typedef enum icalcomponent_kind {
 				    structure of MIME data */
     ICAL_VAVAILABILITY_COMPONENT,
     ICAL_XAVAILABLE_COMPONENT,
-    ICAL_VPOLL_COMPONENT
+    ICAL_VPOLL_COMPONENT,
+    ICAL_VVOTER_COMPONENT,
+    ICAL_XVOTE_COMPONENT
 
 } icalcomponent_kind;
 

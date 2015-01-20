@@ -562,6 +562,9 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
     case ICAL_POLLMODE_VALUE:
         value = icalvalue_new_enum(kind, ICAL_POLLMODE_X,str);
         break;
+    case ICAL_POLLCOMPLETION_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_POLLCOMPLETION_X,str);
+        break;
 
     case ICAL_INTEGER_VALUE:
 	    value = icalvalue_new_integer(atoi(str));
@@ -1248,6 +1251,7 @@ icalvalue_as_ical_string_r(const icalvalue* value)
     case ICAL_CLASS_VALUE:
     case ICAL_BUSYTYPE_VALUE:
     case ICAL_POLLMODE_VALUE:
+    case ICAL_POLLCOMPLETION_VALUE:
         if(value->x_value !=0){
             return icalmemory_strdup(value->x_value);
         }
