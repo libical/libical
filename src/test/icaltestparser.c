@@ -84,7 +84,7 @@ extern int yydebug;
 
 char* read_stream(char *s, size_t size, void *d)
 {
-  char *c = fgets(s,size, (FILE*)d);
+  char *c = fgets(s, (int)size, (FILE*)d);
 
   return c;
 

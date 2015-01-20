@@ -61,3 +61,24 @@ By default, the buildsystem creates shared(dynamic) and static versions
 of the libraries, but that behavior can be modified at CMake time:
  - To build the static libraries only, pass -DSTATIC_ONLY=True to CMake.
  - To build the shared libraries only, pass -DSHARED_ONLY=True to CMake.
+
+== Optional Dependencies ==
+* Berkeley DB storage.  If want to use (try) the Berkeley Database storage
+  you can pass the -DWITH_BDB=True option to CMake.  You'll need to have
+  the Berkeley DB toolkit development package installed beforehand.
+  This is very old code that disappeared in the 1.x series but
+  has been resurrected it in the 2.x series.
+
+  ** This code path has not been fully tested.
+  ** Don't be surprised if there are bugs.
+  ** Do NOT use for production code.
+
+* GObject Introspection.  To generate GObject introspection "typelib"
+  files pass the -DGOBJECT_INTROSPECTION=True option to CMake.  You'll
+  need to have the GObject Introspection development package v0.6.7 or higher
+  installed beforehand.
+
+== Language Bindings ==
+This C library can be built with bindings for these other languages:
+* C++. By default the buildsystem will create and install the C++ bindings API.
+  Turn this off by passing -DWITH_CXX_BINDINGS=False option to CMake.

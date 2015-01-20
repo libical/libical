@@ -36,7 +36,7 @@
 #include "icalmemory.h"
 #include "icaldirset.h"
 #include "icalfileset.h"
-#ifdef WITH_BDB4
+#if defined(WITH_BDB)
 #include "icalbdbset.h"
 #endif
 #include "icalerror.h"
@@ -69,7 +69,7 @@ struct calendar {
 
 int vcalendar_init(struct calendar **cal, char *vcalendar, char *title);
 
-#ifdef WITH_BDB4
+#if defined(WITH_BDB)
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey);
 char * parse_vcalendar(const DBT *dbt) ;
 #endif
@@ -270,7 +270,7 @@ void test_fileset()
    DB file), and keys for storage and retrieval.
 */
 
-#ifdef WITH_BDB4
+#if defined(WITH_BDB)
 void test_bdbset()
 {
     icalbdbset *cout;
@@ -856,7 +856,7 @@ int main(int argc, char *argv[])
     printf("\n------------Test Dir Set---------------\n");
     test_dirset();
 
-#ifdef WITH_BDB4
+#if defined(WITH_BDB)
     printf("\n------------Test BerkeleyDB Set---------------\n");
     test_bdbset();
 #endif

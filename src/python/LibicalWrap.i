@@ -82,7 +82,6 @@ typedef int time_t;
 %ignore icalparameter_is_valid(icalparameter* parameter);
 %ignore icalparser_parse_value(icalvalue_kind kind, 
 				   const char* str, icalcomponent** errors);
-%ignore icalrecur_iterator_decrement_count(icalrecur_iterator*);
 %ignore icalrestriction_is_parameter_allowed(icalproperty_kind property,
                                        icalparameter_kind parameter);
 %ignore icalset_clear_select(icalset* set);

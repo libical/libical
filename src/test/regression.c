@@ -1,14 +1,9 @@
-/* -*- Mode: C -*-
+/*
   ======================================================================
   FILE: regression.c
   CREATOR: eric 03 April 1999
 
-  DESCRIPTION:
-
-  $Id: regression.c,v 1.67 2008-02-03 16:10:48 dothebart Exp $
-  $Locker:  $
-
-  (C) COPYRIGHT 1999 Eric Busboom
+  (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
   http://www.softwarestudio.org
 
   The contents of this file are subject to the Mozilla Public License
@@ -23,12 +18,10 @@
 
   The original author is Eric Busboom
   The original code is regression.c
-
-
   ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <libical/ical.h>
@@ -730,10 +723,10 @@ void test_dirset()
 	    assert(icalerrno  == ICAL_NO_ERROR);
 
 	    printf("\n----------\n%s\n---------\n",icalcomponent_as_ical_string(clone));
+            error = icaldirset_add_component(s,clone);
 
-	    error = icaldirset_add_component(s,clone);
-
-	    assert(error  == ICAL_NO_ERROR);
+            assert(error  == ICAL_NO_ERROR);
+	    _unused(error)
 	}
     }
 
@@ -3044,11 +3037,11 @@ void test_file_locks()
     for (c = icalfileset_get_next_component(fs);
 	 c != 0;
 	 c = icalfileset_get_next_component(fs)){
-	struct icaldurationtype d = icalcomponent_get_duration(c);
+        struct icaldurationtype d = icalcomponent_get_duration(c);
 	sec = icaldurationtype_as_int(d);
-
+ 
 	/*printf("%d,%d ",i,sec);*/
-	assert(i == sec);
+        assert(i == sec);
 	i++;
     }
 
@@ -3056,6 +3049,7 @@ void test_file_locks()
 
 
     assert(sec == final);
+    _unused(sec)
 #endif
 }
 
@@ -3909,11 +3903,11 @@ int main(int argc, char *argv[])
 
     /** OPTIONAL TESTS go here... **/
 
-#ifdef WITH_CXX_BINDINGS
+#if defined(WITH_CXX_BINDINGS)
     test_run("Test C++ API", test_cxx, do_test, do_header);
 #endif
 
-#ifdef WITH_BDB
+#if defined(WITH_BDB)
     test_run("Test BDB Set", test_bdbset, do_test, do_header);
 #endif
 

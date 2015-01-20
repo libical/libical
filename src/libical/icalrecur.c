@@ -1511,7 +1511,7 @@ static int weeks_in_year(int year)
 static int get_week_number(icalrecur_iterator* impl, struct icaltimetype tt)
 {
     int dow, week;
-    _unused(impl);
+    _unused(impl)
 
     /* Normalize day of week so that week_start day is 1 */
     dow = icaltime_day_of_week(tt) - (impl->rule.week_start - 1);
@@ -1532,7 +1532,7 @@ static int get_week_number(icalrecur_iterator* impl, struct icaltimetype tt)
 
 static int get_days_in_month(icalrecur_iterator* impl, int month, int year)
 {
-    _unused(impl);
+    _unused(impl)
 
     return icaltime_days_in_month(month, year);
 }
@@ -2311,8 +2311,9 @@ static int next_day(icalrecur_iterator* impl)
 
   int has_by_day = (impl->by_ptrs[BY_DAY][0]!=ICAL_RECURRENCE_ARRAY_MAX);
   int this_frequency = (impl->rule.freq == ICAL_DAILY_RECURRENCE);
-
+ 
   assert(has_by_day || this_frequency);
+  _unused(has_by_day)
 
   if (next_hour(impl) == 0){
       return 0;
@@ -2322,7 +2323,7 @@ static int next_day(icalrecur_iterator* impl)
      called by any other next_* routine, and the days that are
      excluded will be taken care of by restriction filtering */
 
-  if(this_frequency){
+  if(this_frequency) {
       increment_monthday(impl,impl->rule.interval);
   } else {
       increment_monthday(impl,1);
@@ -2389,7 +2390,8 @@ static int next_month(icalrecur_iterator* impl)
     int this_frequency = (impl->rule.freq == ICAL_MONTHLY_RECURRENCE);
     
     assert( has_by_data(impl,BY_MONTH) || this_frequency);
-  
+    _unused(this_frequency)
+
     /* Iterate through the occurrences within a day. If we don't get to
        the end of the intra-day data, don't bother going to the next
        month */

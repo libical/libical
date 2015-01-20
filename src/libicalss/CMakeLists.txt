@@ -4,6 +4,9 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/libicalss ${CMAKE_BINARY_DIR}/src/libicalss
   ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_BINARY_DIR}/src/libical
 )
+if(WITH_BDB)
+  include_directories(${BDB_INCLUDE_DIR})
+endif()
 
 if(WIN32)
   set(TOPS "\"${CMAKE_SOURCE_DIR}\"")
@@ -21,6 +24,7 @@ add_custom_command(
     -DTOPS:FILEPATH=${TOPS}
     -DTOPB:FILEPATH=${TOPB}
     -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+    -DWITH_BDB=${WITH_BDB}
     -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   DEPENDS
   ical-header
@@ -63,7 +67,9 @@ set(icalss_LIB_SRCS
   icalmessage.h
   ${icalss_LIB_DEVSRCS}
 )
-
+if(WITH_BDB)
+  list(APPEND icalss_LIB_SRCS icalbdbset.c icalbdbset.h)
+endif()
 if(MSVC)
   list(APPEND icalss_LIB_SRCS ../icalss.def)
 endif()
@@ -79,6 +85,9 @@ if(NOT SHARED_ONLY)
 endif()
 
 target_link_libraries(icalss ical)
+if(WITH_BDB)
+  target_link_libraries(icalss ${BDB_LIBRARY})
+endif()
 
 if(MSVC)
   set_target_properties(icalss PROPERTIES OUTPUT_NAME "libicalss")
@@ -112,6 +121,54 @@ if(NOT SHARED_ONLY)
   )
 endif()
 
+########### next target ###############
+
+if(WITH_CXX_BINDINGS)
+  set(icalsscxx_LIB_SRCS
+    icalspanlist_cxx.cpp
+    icalspanlist_cxx.h
+  )
+
+  add_library(icalss_cxx ${LIBRARY_TYPE} ${icalsscxx_LIB_SRCS})
+  if(NOT SHARED_ONLY)
+    add_library(icalss_cxx-static STATIC ${icalsscxx_LIB_SRCS})
+  endif()
+
+  target_link_libraries(icalss_cxx icalss ical_cxx ${CMAKE_THREAD_LIBS_INIT})
+
+  if(MSVC)
+    set_target_properties(icalss_cxx PROPERTIES OUTPUT_NAME "libicalss_cxx")
+    if(NOT SHARED_ONLY)
+      set_target_properties(icalss_cxx-static PROPERTIES OUTPUT_NAME "libicalss_cxx-static")
+    endif()
+  else()
+    if(NOT SHARED_ONLY)
+      set_target_properties(icalss_cxx-static PROPERTIES OUTPUT_NAME "icalss_cxx")
+    endif()
+  endif()
+  set_target_properties(icalss_cxx PROPERTIES
+    VERSION ${LIBICAL_LIB_VERSION_STRING}
+    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+  )
+  set_target_properties(icalss_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+  if(NOT SHARED_ONLY)
+    set_target_properties(icalss_cxx-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+  endif()
+
+  install(
+    TARGETS icalss_cxx
+    EXPORT icalTargets
+    DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
+  )
+  if(NOT SHARED_ONLY)
+    install(
+      TARGETS icalss_cxx-static
+      EXPORT icalTargets
+      DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
+    )
+  endif()
+endif()
+
 ########### install files ###############
 
 install(FILES
@@ -132,3 +189,18 @@ install(FILES
   DESTINATION
   ${INCLUDE_INSTALL_DIR}/libical
 )
+
+if(WITH_CXX_BINDINGS)
+  install(FILES
+    icalspanlist_cxx.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR}/libical
+  )
+  if(WITH_BDB)
+    install(FILES icalbdbset_cxx.h
+      DESTINATION
+      ${INCLUDE_INSTALL_DIR}/libical
+    )
+  endif()
+endif()
+

@@ -106,15 +106,8 @@
 /* Define if we want _REENTRANT */
 #cmakedefine ICAL_REENTRANT 1
 
-/* Define to terminate lines with "\n" instead of "\r\n" */
-#define ICAL_UNIX_NEWLINE ${ICAL_UNIX_NEWLINE}
-
 /* Define to 1 if you DO NOT WANT to see deprecated messages */
 #define NO_WARN_DEPRECATED ${NO_WARN_DEPRECATED}
-
-/* Define to 1 if you DO NO WANT to see the warning messages related to
-   ICAL_MALFORMEDDATA_ERROR and parsing .ics zoneinfo files */
-#cmakedefine NO_WARN_ICAL_MALFORMEDDATA_ERROR_HACK 1
 
 /* Name of package */
 #define PACKAGE "${CMAKE_PROJECT_NAME}"

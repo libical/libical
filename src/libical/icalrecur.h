@@ -228,8 +228,6 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 /** Get the next occurrence from an iterator */
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator*);
 
-void icalrecur_iterator_decrement_count(icalrecur_iterator*);
-
 /** Free the iterator */
 void icalrecur_iterator_free(icalrecur_iterator*);
 

@@ -1,5 +1,3 @@
-/* -*- Mode: C++ -*- */
-
 /**
  * @file    icalparameter_cxx.h
  * @author  fnguyen (12/10/01)
@@ -8,10 +6,10 @@
  * (C) COPYRIGHT 2001, Critical Path
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
   Or:
 
@@ -19,152 +17,152 @@
     the License at http://www.mozilla.org/MPL/
  */
 
-
 #ifndef ICALPARAMETER_CXX_H
 #define ICALPARAMETER_CXX_H
 
 extern "C" {
-#include "ical.h"
+#include <libical/ical.h>
 };
-
 #include "icptrholder.h"
 
-typedef	char* string; // Will use the string library from STL
+typedef char *string; // Will use the string library from STL
 
-class ICalParameter {
+class ICalParameter
+{
 public:
-	ICalParameter() throw(icalerrorenum);
-	ICalParameter(const ICalParameter&) throw(icalerrorenum);
-	ICalParameter& operator=(const ICalParameter&) throw(icalerrorenum);
-	~ICalParameter();
+    ICalParameter() throw(icalerrorenum);
+    ICalParameter(const ICalParameter &) throw(icalerrorenum);
+    ICalParameter &operator=(const ICalParameter &) throw(icalerrorenum);
+    ~ICalParameter();
 
-	ICalParameter(icalparameter* v)  throw(icalerrorenum);
+    explicit ICalParameter(icalparameter *v)  throw(icalerrorenum);
 
-        // Create from string of form "PARAMNAME=VALUE"
-	ICalParameter(string str) throw(icalerrorenum);
+    // Create from string of form "PARAMNAME=VALUE"
+    explicit ICalParameter(string str) throw(icalerrorenum);
 
-        // Create from just the value, the part after the "="
-	ICalParameter(icalparameter_kind kind, string  str) throw(icalerrorenum); 
-	ICalParameter(icalparameter_kind kind) throw(icalerrorenum);
+    // Create from just the value, the part after the "="
+    explicit ICalParameter(icalparameter_kind kind) throw(icalerrorenum);
+    ICalParameter(icalparameter_kind kind, string  str) throw(icalerrorenum);
 
-	operator icalparameter*() { return imp; }
+    operator icalparameter *()
+    {
+        return imp;
+    }
 
-	void detach() {
-	    imp = NULL;
-	}
-
-public:
-	string as_ical_string() throw(icalerrorenum);
-	bool is_valid();
-	icalparameter_kind isa( );
-	int isa_parameter(void* param);
-	
-public:
-	/* Acess the name of an X parameer */
-	static void set_xname (ICalParameter  &param, string  v);
-	static string get_xname(ICalParameter  &param);
-	static void set_xvalue (ICalParameter  &param, string  v);
-	static string get_xvalue(ICalParameter  &param);
-
-	/* Convert enumerations */
-	static string kind_to_string(icalparameter_kind kind);
-	static icalparameter_kind string_to_kind(string  str);
+    void detach();
 
 public:
-	/* DELEGATED-FROM */
-	string get_delegatedfrom();
-	void set_delegatedfrom(string  v);
+    string as_ical_string() throw(icalerrorenum);
+    bool is_valid();
+    icalparameter_kind isa();
+    int isa_parameter(void *param);
 
-	/* RELATED */
-	icalparameter_related get_related();
-	void set_related(icalparameter_related v);
+public:
+    /* Acess the name of an X parameer */
+    static void set_xname(ICalParameter  &param, string v);
+    static string get_xname(ICalParameter  &param);
+    static void set_xvalue(ICalParameter  &param, string v);
+    static string get_xvalue(ICalParameter  &param);
 
-	/* SENT-BY */
-	string get_sentby();
-	void set_sentby(string  v);
+    /* Convert enumerations */
+    static string kind_to_string(icalparameter_kind kind);
+    static icalparameter_kind string_to_kind(string  str);
 
-	/* LANGUAGE */
-	string get_language();
-	void set_language(string  v);
+public:
+    /* DELEGATED-FROM */
+    string get_delegatedfrom() const;
+    void set_delegatedfrom(const string v);
 
-	/* RELTYPE */
-	icalparameter_reltype get_reltype();
-	void set_reltype(icalparameter_reltype v);
+    /* RELATED */
+    icalparameter_related get_related() const;
+    void set_related(const icalparameter_related v);
 
-	/* ENCODING */
-	icalparameter_encoding get_encoding();
-	void set_encoding(icalparameter_encoding v);
+    /* SENT-BY */
+    string get_sentby() const;
+    void set_sentby(const string v);
 
-	/* ALTREP */
-	string get_altrep();
-	void set_altrep(string  v);
+    /* LANGUAGE */
+    string get_language() const;
+    void set_language(const string v);
 
-	/* FMTTYPE */
-	string get_fmttype();
-	void set_fmttype(string  v);
+    /* RELTYPE */
+    icalparameter_reltype get_reltype() const;
+    void set_reltype(const icalparameter_reltype v);
 
-	/* FBTYPE */
-	icalparameter_fbtype get_fbtype();
-	void set_fbtype(icalparameter_fbtype v);
+    /* ENCODING */
+    icalparameter_encoding get_encoding() const;
+    void set_encoding(const icalparameter_encoding v);
 
-	/* RSVP */
-	icalparameter_rsvp get_rsvp();
-	void set_rsvp(icalparameter_rsvp v);
+    /* ALTREP */
+    string get_altrep() const;
+    void set_altrep(const string v);
 
-	/* RANGE */
-	icalparameter_range get_range();
-	void set_range(icalparameter_range v);
+    /* FMTTYPE */
+    string get_fmttype() const;
+    void set_fmttype(const string v);
 
-	/* DELEGATED-TO */
-	string get_delegatedto();
-	void set_delegatedto(string  v);
+    /* FBTYPE */
+    icalparameter_fbtype get_fbtype() const;
+    void set_fbtype(const icalparameter_fbtype v);
 
-	/* CN */
-	string get_cn();
-	void set_cn(string  v);
+    /* RSVP */
+    icalparameter_rsvp get_rsvp() const;
+    void set_rsvp(const icalparameter_rsvp v);
 
-	/* ROLE */
-	icalparameter_role get_role();
-	void set_role(icalparameter_role v);
+    /* RANGE */
+    icalparameter_range get_range() const;
+    void set_range(const icalparameter_range v);
 
-	/* X-LIC-COMPARETYPE */
-	icalparameter_xliccomparetype get_xliccomparetype();
-	void set_xliccomparetype(icalparameter_xliccomparetype v);
+    /* DELEGATED-TO */
+    string get_delegatedto() const;
+    void set_delegatedto(const string v);
 
-	/* PARTSTAT */
-	icalparameter_partstat get_partstat();
-	void set_partstat(icalparameter_partstat v);
+    /* CN */
+    string get_cn() const;
+    void set_cn(const string v);
 
-	/* X-LIC-ERRORTYPE */
-	icalparameter_xlicerrortype get_xlicerrortype();
-	void set_xlicerrortype(icalparameter_xlicerrortype v);
+    /* ROLE */
+    icalparameter_role get_role() const;
+    void set_role(const icalparameter_role v);
 
-	/* MEMBER */
-	string get_member();
-	void set_member(string  v);
+    /* X-LIC-COMPARETYPE */
+    icalparameter_xliccomparetype get_xliccomparetype() const;
+    void set_xliccomparetype(const icalparameter_xliccomparetype v);
 
-	/* X */
-	string get_x();
-	void set_x(string  v);
+    /* PARTSTAT */
+    icalparameter_partstat get_partstat() const;
+    void set_partstat(const icalparameter_partstat v);
 
-	/* CUTYPE */
-	icalparameter_cutype get_cutype();
-	void set_cutype(icalparameter_cutype v);
+    /* X-LIC-ERRORTYPE */
+    icalparameter_xlicerrortype get_xlicerrortype() const;
+    void set_xlicerrortype(const icalparameter_xlicerrortype v);
 
-	/* TZID */
-	string get_tzid();
-	void set_tzid(string  v);
+    /* MEMBER */
+    string get_member() const;
+    void set_member(const string v);
 
-	/* VALUE */
-	icalparameter_value get_value();
-	void set_value(icalparameter_value v);
+    /* X */
+    string get_x() const;
+    void set_x(const string v);
 
-	/* DIR */
-	string get_dir();
-	void set_dir(string  v);
+    /* CUTYPE */
+    icalparameter_cutype get_cutype() const;
+    void set_cutype(const icalparameter_cutype v);
+
+    /* TZID */
+    string get_tzid() const;
+    void set_tzid(string v);
+
+    /* VALUE */
+    icalparameter_value get_value() const;
+    void set_value(const icalparameter_value v);
+
+    /* DIR */
+    string get_dir() const;
+    void set_dir(const string v);
 
 private:
-	icalparameter* imp;
+    icalparameter *imp;
 };
 
-#endif 
+#endif

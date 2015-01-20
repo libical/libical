@@ -163,7 +163,7 @@ static time_t make_time(struct tm *tm, int tzm)
 struct icaltimetype 
 icaltime_from_timet(const time_t tm, const int is_date)
 {
-#ifndef NO_WARN_DEPRECATED
+#if NO_WARN_DEPRECATED == 0
 	icalerror_warn("icaltime_from_timet() is DEPRECATED, use icaltime_from_timet_with_zone() instead");
 #endif
 
@@ -668,7 +668,7 @@ int icaltime_start_doy_week(const struct icaltimetype t, int fdow){
  */
 int icaltime_start_doy_of_week(const struct icaltimetype t){
 
-#ifndef NO_WARN_DEPRECATED
+#if NO_WARN_DEPRECATED == 0
     icalerror_warn("icaltime_start_doy_of_week() is DEPRECATED, use\
 	icaltime_start_doy_week() instead");
 #endif
