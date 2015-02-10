@@ -271,24 +271,28 @@ const struct recur rscale[] = {
     { "20131025",
       "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=9;COUNT=3" },
 
-    /* Chinese leap month (skip yes) */
+    /* Chinese leap month (omit) */
     { "20131025",
-      "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=9L;SKIP=YES;COUNT=2" },
+      "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=9L;SKIP=OMIT;COUNT=2" },
 
     { "20131025",
-      "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=4L;SKIP=YES;UNTIL=21000101" },
+      "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=4L;SKIP=OMIT;UNTIL=21000101" },
+
+    /* Chinese leap month (skip forward) */
+    { "20131025",
+      "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=9L;SKIP=FORWARD;COUNT=3" },
 
     /* Chinese leap month (skip back) */
     { "20131025",
-      "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=9L;COUNT=3" },
+      "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=9L;SKIP=BACKWARD;COUNT=3" },
 
     /* Chinese leap month (both) */
     { "20131025",
-      "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=9,9L;COUNT=4" },
+      "RSCALE=CHINESE;FREQ=DAILY;BYMONTHDAY=10;BYMONTH=9,9L;SKIP=BACKWARD;COUNT=4" },
 
-    /* Jewish leap month (skip yes) */
+    /* Jewish leap month (omit) */
     { "20140205",
-      "RSCALE=HEBREW;FREQ=YEARLY;SKIP=YES;COUNT=4" },
+      "RSCALE=HEBREW;FREQ=YEARLY;COUNT=4" },
 
     /* Jewish leap month (skip forward) */
     { "20140205",
@@ -298,9 +302,29 @@ const struct recur rscale[] = {
     { "20140208",
       "RSCALE=HEBREW;FREQ=YEARLY;BYMONTH=5L;BYMONTHDAY=8;SKIP=FORWARD;COUNT=5" },
 
+    /* 30th day of Jewish leap month (skip forward) */
+    { "20140302",
+      "RSCALE=HEBREW;FREQ=YEARLY;BYMONTH=5L;BYMONTHDAY=30;SKIP=FORWARD;COUNT=5" },
+
+    /* Last day of Jewish leap month (skip forward) */
+    { "20140302",
+      "RSCALE=HEBREW;FREQ=YEARLY;BYMONTH=5L;BYMONTHDAY=-1;SKIP=FORWARD;COUNT=5" },
+
+    /* 30th day of Jewish leap month (skip backward) */
+    { "20140302",
+      "RSCALE=HEBREW;FREQ=YEARLY;BYMONTH=5L;BYMONTHDAY=30;SKIP=BACKWARD;COUNT=5" },
+
+    /* Last day of Jewish leap month (skip backward) */
+    { "20140302",
+      "RSCALE=HEBREW;FREQ=YEARLY;BYMONTH=5L;BYMONTHDAY=-1;SKIP=BACKWARD;COUNT=5" },
+
+    /* Gregorian leap day (omit) */
+    { "20120229",
+      "RSCALE=GREGORIAN;FREQ=YEARLY;COUNT=4" },
+
     /* Gregorian (skip back) */
     { "20140131",
-      "RSCALE=GREGORIAN;FREQ=MONTHLY;COUNT=4" },
+      "RSCALE=GREGORIAN;FREQ=MONTHLY;SKIP=BACKWARD;COUNT=4" },
 
     /* Gregorian (skip forward) */
     { "20140131",

@@ -211,6 +211,8 @@ typedef long intptr_t;
 #define BYWEEKIDX impl->by_indices[BY_WEEK_NO]
 #define BYWEEKPTR impl->by_ptrs[BY_WEEK_NO]
 
+#define LEAP_MONTH 0x1000
+
 const char* icalrecur_freq_to_string(icalrecurrencetype_frequency kind);
 icalrecurrencetype_frequency icalrecur_string_to_freq(const char* str);
 
@@ -334,8 +336,8 @@ void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
 	if (icalrecurrencetype_rscale_is_supported() &&
 	    array == parser->rt.by_month && *t == 'L') {
 	    /* The "L" suffix in a BYMONTH recur-rule-part
-	       is encoded by multiplying the month by 256 */
-	    v <<= 8;
+	       is encoded by setting a high-order bit */
+	    v |= LEAP_MONTH;
 	}
 
 	array[i++] = (short)v;
@@ -584,7 +586,7 @@ char* icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
 	icalmemory_append_string(&str,&str_p,&buf_sz,";RSCALE=");
 	icalmemory_append_string(&str,&str_p,&buf_sz, recur->rscale);
 
-	if(recur->skip != ICAL_SKIP_NONE && recur->skip != ICAL_SKIP_BACKWARD){
+	if(recur->skip != ICAL_SKIP_OMIT){
 	    icalmemory_append_string(&str,&str_p,&buf_sz,";SKIP=");
 	    icalmemory_append_string(&str,&str_p,&buf_sz,
 				     icalrecur_skip_to_string(recur->skip));
@@ -966,8 +968,9 @@ static int get_week_number(icalrecur_iterator* impl, struct icaltimetype tt)
 
     month = icalrecurrencetype_month_month(tt.month) - 1;  /* UCal is 0-based */
     ucal_setDate(impl->rscale, tt.year, month, tt.day, &status);
-    if (icalrecurrencetype_month_is_leap(tt.month))
+    if (icalrecurrencetype_month_is_leap(tt.month)) {
 	ucal_set(impl->rscale, UCAL_IS_LEAP_MONTH, 1);
+    }
 
     weekno = ucal_get(impl->rscale, UCAL_WEEK_OF_YEAR, &status);
 
@@ -990,7 +993,7 @@ static int get_days_in_month(icalrecur_iterator* impl, int month, int year)
 			 UCAL_ACTUAL_MAXIMUM, &status);
 }
 
-static int skip_leap(icalrecur_iterator *impl, int day, int month)
+static int omit_invalid(icalrecur_iterator *impl, int day, int month)
 {
     UErrorCode status = U_ZERO_ERROR;
     int my_day = ucal_get(impl->rscale, UCAL_DAY_OF_MONTH, &status);
@@ -1009,19 +1012,32 @@ static int skip_leap(icalrecur_iterator *impl, int day, int month)
     }
     else my_month++;  /* UCal is 0-based */
 
-    if (ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status)) my_month <<= 8;
-
-    if (my_day != day) {
-	if (impl->rule.skip == ICAL_SKIP_YES) return 1;
-
-	else if (impl->rule.skip == ICAL_SKIP_BACKWARD)
-	    ucal_add(impl->rscale, UCAL_DAY_OF_YEAR, -1, &status);
+    if (ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status)) {
+	my_month |= LEAP_MONTH;
     }
-    else if (my_month != month) {
-	if (impl->rule.skip == ICAL_SKIP_YES) return 1;
 
-	else if (impl->rule.skip == ICAL_SKIP_BACKWARD)
-	    ucal_add(impl->rscale, UCAL_MONTH, -1, &status);
+    if (my_day != day || my_month != month) {
+	switch (impl->rule.skip) {
+	case ICAL_SKIP_OMIT:
+	    return 1;
+
+	case ICAL_SKIP_BACKWARD:
+	    if (my_month != month) {
+		ucal_add(impl->rscale, UCAL_MONTH,
+			 -abs(my_month - icalrecurrencetype_month_month(month)),
+			 &status);
+	    }
+	    if (day < 0 || my_day != day) {
+		set_day_of_month(impl, -1);
+	    }
+	    break;
+
+	case ICAL_SKIP_FORWARD:
+	    if (my_day != day) {
+		set_day_of_month(impl, 1);
+	    }
+	    break;
+	}
     }
 
     return 0;
@@ -1040,7 +1056,7 @@ static int get_day_of_year(icalrecur_iterator* impl,
     if (!day) day = impl->rstart.day;
     set_day_of_month(impl, day);
 
-    if (skip_leap(impl, day, month)) {
+    if (omit_invalid(impl, day, month)) {
 	if (dow) *dow = 0;
 	return 0;
     }
@@ -1069,7 +1085,7 @@ static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator* impl,
     tt.year = ucal_get(cal, UCAL_YEAR, &status);
     tt.day = ucal_get(cal, UCAL_DATE, &status);
     tt.month = ucal_get(cal, UCAL_MONTH, &status) + 1;  /* UCal is 0-based */
-    if (is_leap_month) tt.month <<= 8;
+    if (is_leap_month) tt.month |= LEAP_MONTH;
 
     if (!tt.is_date) {
 	tt.hour = ucal_get(cal, UCAL_HOUR_OF_DAY, &status);
@@ -1247,9 +1263,6 @@ static int initialize_iterator(icalrecur_iterator* impl)
 	/* Use Gregorian as RSCALE */
 	impl->rscale = impl->greg;
 	impl->greg = NULL;
-
-	/* When RSCALE is not present SKIP defaults to YES */
-	impl->rule.skip = ICAL_SKIP_YES;
     }
     else {
 	UEnumeration *en;
@@ -1284,11 +1297,6 @@ static int initialize_iterator(icalrecur_iterator* impl)
 	if (!impl->rscale || U_FAILURE(status)) {
 	    icalerror_set_errno(ICAL_INTERNAL_ERROR);
 	    return 0;
-	}
-
-	if (rule.skip == ICAL_SKIP_NONE) {
-	    /* When RSCALE is present SKIP defaults to BACKWARD */
-	    impl->rule.skip = ICAL_SKIP_BACKWARD;
 	}
 
 	/* Hebrew calendar:
@@ -1363,21 +1371,31 @@ static int check_contracting_rules(icalrecur_iterator* impl)
 	for (idx = 0; BYMONPTR[idx] != ICAL_RECURRENCE_ARRAY_MAX; idx++) {
 	    short month = BYMONPTR[idx];
 
+	    if (icalrecurrencetype_month_is_leap(month) &&
+		!icalrecurrencetype_month_is_leap(last.month)) {
+		/* BYMONTH is a leap month, do skip processing */
+		short skip = 0;
+
+		switch (impl->rule.skip) {
+		case ICAL_SKIP_OMIT:
+		    break;
+
+		case ICAL_SKIP_FORWARD:
+		    skip = 1;
+
+		case ICAL_SKIP_BACKWARD:
+		    /* Use fwd/bwd month iff BYMONTH won't appear this year */
+		    set_month(impl, month);
+		    if (!ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status)) {
+			month = icalrecurrencetype_month_month(month) + skip;
+		    }
+		    break;
+		}
+	    }
+
 	    if (month == last.month) {
 		pass = 1;
 		break;
-	    }
-	    else if (icalrecurrencetype_month_is_leap(month)
-		     && impl->rule.skip != ICAL_SKIP_YES) {
-		/* BYMONTH is a leap month and we aren't skipping it.
-		   If current year isn't a leap year, try fwd/bwd skip */
-		set_month(impl, month);
-		month = icalrecurrencetype_month_month(month);
-		if (!ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status) &&
-		    last.month == month + (short) impl->rule.skip) {
-		    pass = 1;
-		    break;
-		}
 	    }
 	}
 
@@ -1535,6 +1553,11 @@ static int get_days_in_month(icalrecur_iterator* impl, int month, int year)
     _unused(impl)
 
     return icaltime_days_in_month(month, year);
+}
+
+static int omit_invalid(icalrecur_iterator *impl, int day, int month)
+{
+    return (day > icaltime_days_in_month(month, impl->last.year));
 }
 
 static int get_day_of_year(icalrecur_iterator* impl,
@@ -1794,9 +1817,6 @@ static void setup_defaults(icalrecur_iterator* impl,
 
 static int initialize_iterator(icalrecur_iterator* impl)
 {
-    /* When RSCALE is not present SKIP defaults to YES */
-    impl->rule.skip = ICAL_SKIP_YES;
-
     /* Set up defaults for BY_* arrays */
     setup_defaults(impl,BY_SECOND,ICAL_SECONDLY_RECURRENCE,
 		   impl->dtstart.second,
@@ -2525,7 +2545,7 @@ static int next_month(icalrecur_iterator* impl)
        */
 
   } else {
-      int day, days_in_month;
+      int day;
       struct icaltimetype last;
 
       assert( BYMDPTR[0]!=ICAL_RECURRENCE_ARRAY_MAX);
@@ -2546,34 +2566,14 @@ static int next_month(icalrecur_iterator* impl)
       }
       
       last = occurrence_as_icaltime(impl, 0);
-      days_in_month = get_days_in_month(impl, last.month, last.year);
 
       day = BYMDPTR[BYMDIDX];
       
-      if (day < 0) {
-          day = days_in_month + day + 1;
-      }
-
-      if ( day > days_in_month){
-	  switch (impl->rule.skip) {
-	  case ICAL_SKIP_YES:
-	      day = 1;
-	      data_valid = 0; /* signal that impl->last is invalid */
-	      break;
-	  case ICAL_SKIP_FORWARD:
-	      day = 1;
-	      __increment_month(impl,1);
-	      break;
-	  case ICAL_SKIP_BACKWARD:
-	      day = days_in_month;
-	      break;
-	  case ICAL_SKIP_NONE:
-	      break;
-	  }
-      }
-
       set_day_of_month(impl, day);
 
+      if (omit_invalid(impl, day, last.month)) {
+	  data_valid = 0; /* signal that impl->last is invalid */
+      }
   }
 
   return data_valid;
@@ -3231,7 +3231,7 @@ void icalrecurrencetype_clear(struct icalrecurrencetype *recur)
     memset(&(recur->until),0,sizeof(struct icaltimetype));
     recur->count = 0;
     recur->rscale = NULL;
-    recur->skip = ICAL_SKIP_NONE;
+    recur->skip = ICAL_SKIP_OMIT;
 }
 
 /** The 'day' element of icalrecurrencetype_weekday is encoded to
@@ -3267,18 +3267,17 @@ int icalrecurrencetype_day_position(short day)
  * representation of the "L" leap suffix (draft-ietf-calext-rscale).
  * These routines decode the month values.
  *
- * The "L" suffix is encoded by multiplying the month by 256
+ * The "L" suffix is encoded by setting a high-order bit
  */
 
 int icalrecurrencetype_month_is_leap(short month)
 {
-    return abs(month) > 255;
+    return (month & LEAP_MONTH);
 }
 
 int icalrecurrencetype_month_month(short month)
 {
-    if (abs(month) > 255) month >>= 8;
-    return month;
+    return (month & ~LEAP_MONTH);
 }
 
 
@@ -3368,15 +3367,14 @@ static struct {
 } skip_map[] = {
     {ICAL_SKIP_BACKWARD,"BACKWARD"},
     {ICAL_SKIP_FORWARD,"FORWARD"},
-    {ICAL_SKIP_YES,"YES"},
-    {ICAL_SKIP_NONE,0}
+    {ICAL_SKIP_OMIT,"OMIT"}
 };
 
 const char* icalrecur_skip_to_string(icalrecurrencetype_skip kind)
 {
     int i;
 
-    for (i=0; skip_map[i].kind != ICAL_SKIP_NONE ; i++) {
+    for (i=0; skip_map[i].kind != ICAL_SKIP_OMIT ; i++) {
 	if ( skip_map[i].kind == kind ) {
 	    return skip_map[i].str;
 	}
@@ -3388,12 +3386,12 @@ icalrecurrencetype_skip icalrecur_string_to_skip(const char* str)
 {
     int i;
 
-    for (i=0; skip_map[i].kind != ICAL_SKIP_NONE ; i++) {
+    for (i=0; skip_map[i].kind != ICAL_SKIP_OMIT ; i++) {
 	if ( strcasecmp(str,skip_map[i].str) == 0){
 	    return skip_map[i].kind;
 	}
     }
-    return ICAL_SKIP_NONE;
+    return ICAL_SKIP_OMIT;
 }
 
 /** Fill an array with the 'count' number of occurrences generated by

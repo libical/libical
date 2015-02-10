@@ -109,8 +109,7 @@ typedef enum icalrecurrencetype_skip
 {
     ICAL_SKIP_BACKWARD = 0,
     ICAL_SKIP_FORWARD,
-    ICAL_SKIP_YES,
-    ICAL_SKIP_NONE
+    ICAL_SKIP_OMIT
 } icalrecurrencetype_skip;
 
 enum {
