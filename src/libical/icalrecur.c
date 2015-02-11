@@ -913,14 +913,7 @@ static void set_month(icalrecur_iterator* impl, int month)
 {
     int is_leap_month = icalrecurrencetype_month_is_leap(month);
 
-    month = icalrecurrencetype_month_month(month);
-    if (month < 0) {
-	UErrorCode status = U_ZERO_ERROR;
-	int months_in_year = ucal_getLimit(impl->rscale, UCAL_MONTH,
-					   UCAL_ACTUAL_MAXIMUM, &status);
-	month = months_in_year + month + 1;
-    }
-    else month--;  /* UCal is 0-based */
+    month = icalrecurrencetype_month_month(month) - 1;  /* UCal is 0-based */
 
     ucal_set(impl->rscale, UCAL_MONTH, month);
     if (is_leap_month) ucal_set(impl->rscale, UCAL_IS_LEAP_MONTH, 1);
@@ -997,20 +990,14 @@ static int omit_invalid(icalrecur_iterator *impl, int day, int month)
 {
     UErrorCode status = U_ZERO_ERROR;
     int my_day = ucal_get(impl->rscale, UCAL_DAY_OF_MONTH, &status);
-    int my_month = ucal_get(impl->rscale, UCAL_MONTH, &status);
+    int my_month =
+      ucal_get(impl->rscale, UCAL_MONTH, &status) + 1;  /* UCal is 0-based */
 
     if (day < 0) {
 	int days_in_month = ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
 					  UCAL_ACTUAL_MAXIMUM, &status);
 	my_day -= days_in_month + 1;
     }
-
-    if (month < 0) {
-	int months_in_year = ucal_getLimit(impl->rscale, UCAL_MONTH,
-					   UCAL_ACTUAL_MAXIMUM, &status);
-	my_month -= months_in_year + 1;
-    }
-    else my_month++;  /* UCal is 0-based */
 
     if (ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status)) {
 	my_month |= LEAP_MONTH;
@@ -1019,6 +1006,9 @@ static int omit_invalid(icalrecur_iterator *impl, int day, int month)
     if (my_day != day || my_month != month) {
 	switch (impl->rule.skip) {
 	case ICAL_SKIP_OMIT:
+	    if (my_month != month) {
+		set_month(impl, month);
+	    }
 	    return 1;
 
 	case ICAL_SKIP_BACKWARD:
