@@ -1472,6 +1472,9 @@ static int set_day_of_week(icalrecur_iterator* impl, int dow, int pos)
 
 static void set_day_of_month(icalrecur_iterator* impl, int day)
 {
+    if (day < 0) {
+	day += icaltime_days_in_month(impl->last.month, impl->last.year) + 1;
+    }
     impl->last.day = day;
 }
 
@@ -1547,7 +1550,12 @@ static int get_days_in_month(icalrecur_iterator* impl, int month, int year)
 
 static int omit_invalid(icalrecur_iterator *impl, int day, int month)
 {
-    return (day > icaltime_days_in_month(month, impl->last.year));
+    if (day > icaltime_days_in_month(month, impl->last.year)) {
+	impl->last.day = 1;
+	return 1;
+    }
+
+    return 0;
 }
 
 static int get_day_of_year(icalrecur_iterator* impl,
@@ -1709,7 +1717,7 @@ static void increment_monthday(icalrecur_iterator* impl, int inc)
 	
 	if (impl->last.day > days_in_month){
 	    impl->last.day = impl->last.day-days_in_month;
-	    increment_month(impl);
+	    __increment_month(impl,1);
 	}
     }
 }
