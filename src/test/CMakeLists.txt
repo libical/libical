@@ -33,20 +33,42 @@ macro(setprops _name)
   endif()
 endmacro()
 
-macro(testme _name _srcs)
-  add_executable(${_name} ${_srcs})
-  target_link_libraries(${_name} ical icalss icalvcal)
-  if(WITH_CXX_BINDINGS)
-    target_link_libraries(${_name} ical_cxx icalss_cxx)
-  endif()
-  add_test(NAME ${_name} COMMAND ${_name})
-  setprops(${_name})
-endmacro()
-
 #macro to build (but do not create a test)
 macro(buildme _name _srcs)
   add_executable(${_name} ${_srcs})
-  target_link_libraries(${_name} ical icalss icalvcal)
+  if(NOT STATIC_ONLY)
+    target_link_libraries(${_name} ical icalss icalvcal)
+    if(WITH_CXX_BINDINGS)
+      target_link_libraries(${_name} ical_cxx icalss_cxx)
+    endif()
+  else()
+    target_link_libraries(${_name}
+      ${CMAKE_BINARY_DIR}/lib/libical.a
+      ${CMAKE_BINARY_DIR}/lib/libicalss.a
+      ${CMAKE_BINARY_DIR}/lib/libicalvcal.a
+    )
+    if(ICU_FOUND)
+      target_link_libraries(${_name} ${ICU_LIBRARY})
+    endif()
+    if(ICU_I18N_FOUND)
+      target_link_libraries(${_name} ${ICU_I18N_LIBRARY})
+    endif()
+    if(WITH_BDB)
+      target_link_libraries(${_name} ${BDB_LIBRARY})
+    endif()
+    if(WITH_CXX_BINDINGS)
+      target_link_libraries(${_name}
+        ${CMAKE_BINARY_DIR}/lib/libical_cxx.a
+        ${CMAKE_BINARY_DIR}/lib/libicalss_cxx.a
+      )
+    endif()
+  endif()
+endmacro()
+
+macro(testme _name _srcs)
+  buildme(${_name} "${_srcs}")
+  add_test(NAME ${_name} COMMAND ${_name})
+  setprops(${_name})
 endmacro()
 
 ########### next target ###############

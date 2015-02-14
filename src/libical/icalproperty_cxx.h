@@ -20,6 +20,8 @@
 #ifndef ICALPROPERTY_CXX_H
 #define ICALPROPERTY_CXX_H
 
+#include "libical_ical_export.h"
+
 extern "C" {
 #include <libical/ical.h>
 };
@@ -30,7 +32,7 @@ typedef char *string; // Will use the string library from STL
 class ICalParameter;
 class ICalValue;
 
-class ICalProperty
+class LIBICAL_ICAL_EXPORT ICalProperty
 {
 public:
     ICalProperty();
@@ -85,7 +87,7 @@ public:
     static void set_x_name(ICalProperty &prop, const string name);
     static string get_x_name(ICalProperty &prop);
 
-    static icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value val);
+    static icalvalue_kind value_to_value_kind(icalparameter_value val);
 
     /* Convert kinds to string and get default value type */
     static icalvalue_kind kind_to_value_kind(icalproperty_kind kind);

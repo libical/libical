@@ -18,15 +18,16 @@
 #ifndef ICALVALUE_CXX_H
 #define ICALVALUE_CXX_H
 
+#include "libical_ical_export.h"
+
 extern "C" {
 #include <libical/ical.h>
 };
-
 #include "icptrholder.h"
 
 typedef char *string; // Will use the string library from STL
 
-class ICalValue
+class LIBICAL_ICAL_EXPORT ICalValue
 {
 public:
     ICalValue()                                  throw(icalerrorenum);

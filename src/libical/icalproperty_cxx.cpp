@@ -191,7 +191,7 @@ string ICalProperty::get_x_name(ICalProperty &prop)
     return (string)icalproperty_get_x_name(prop);
 }
 
-icalvalue_kind ICalProperty::icalparameter_value_to_value_kind(icalparameter_value val)
+icalvalue_kind ICalProperty::value_to_value_kind(icalparameter_value val)
 {
     return icalparameter_value_to_value_kind(val);
 }

@@ -15,7 +15,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include "icalparameter_cxx.h"
 #include "icalproperty_cxx.h"
 #include "vcomponent.h"

@@ -198,7 +198,7 @@ public class ICalProperty
 	//static void set_x_name(ICalProperty prop, String name);
 	//static String get_x_name(ICalProperty prop);
 
-	//public native static /* ICalValueKind */ int icalparameter_value_to_value_kind(/* ICalParameterValue */ int val);
+	//public native static /* ICalValueKind */ int value_to_value_kind(/* ICalParameterValue */ int val);
 
 	/* Convert kinds to String and get default value type */
 	//public native static /* ICalValueKind */ int kind_to_value_kind(/* ICalPropertyKind */ int kind);

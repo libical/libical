@@ -327,42 +327,41 @@ if(WITH_CXX_BINDINGS)
     vcomponent.h
   )
 
-  add_library(ical_cxx ${LIBRARY_TYPE} ${icalcxx_LIB_SRCS})
-  if(NOT SHARED_ONLY)
-    add_library(ical_cxx-static STATIC ${icalcxx_LIB_SRCS})
-  endif()
-
-  target_link_libraries(ical_cxx ical ${CMAKE_THREAD_LIBS_INIT})
-
-  if(WINCE)
-    target_link_libraries(ical_cxx ${WCECOMPAT_LIBRARIES})
-  endif()
-
-  if(MSVC)
-    set_target_properties(ical_cxx PROPERTIES OUTPUT_NAME "libical_cxx")
-    if(NOT SHARED_ONLY)
-      set_target_properties(ical_cxx-static PROPERTIES OUTPUT_NAME "libical_cxx-static")
+  if(NOT STATIC_ONLY)
+    add_definitions(-DBUILD_LIBICAL_SHARED)
+    add_library(ical_cxx SHARED ${icalcxx_LIB_SRCS})
+    target_link_libraries(ical_cxx ical ${CMAKE_THREAD_LIBS_INIT})
+    if(WINCE)
+      target_link_libraries(ical_cxx ${WCECOMPAT_LIBRARIES})
     endif()
-  else()
-    if(NOT SHARED_ONLY)
+    if(MSVC)
+      set_target_properties(ical_cxx PROPERTIES OUTPUT_NAME "libical_cxx")
+    endif()
+    set_target_properties(ical_cxx PROPERTIES
+      VERSION ${LIBICAL_LIB_VERSION_STRING}
+      SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+    )
+    set_target_properties(ical_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+    remove_definitions(-DBUILD_LIBICAL_SHARED)
+
+    install(
+      TARGETS ical_cxx
+      EXPORT icalTargets
+      DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
+    )
+  endif()
+
+  if(NOT SHARED_ONLY)
+    add_definitions(-DBUILD_LIBICAL_STATIC)
+    add_library(ical_cxx-static STATIC ${icalcxx_LIB_SRCS})
+    if(MSVC)
+      set_target_properties(ical_cxx-static PROPERTIES OUTPUT_NAME "libical_cxx-static")
+    else()
       set_target_properties(ical_cxx-static PROPERTIES OUTPUT_NAME "ical_cxx")
     endif()
-  endif()
-  set_target_properties(ical_cxx PROPERTIES
-    VERSION ${LIBICAL_LIB_VERSION_STRING}
-    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-  )
-  set_target_properties(ical_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-  if(NOT SHARED_ONLY)
     set_target_properties(ical_cxx-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-  endif()
+    remove_definitions(-DBUILD_LIBICAL_STATIC)
 
-  install(
-    TARGETS ical_cxx
-    EXPORT icalTargets
-    DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
-  )
-  if(NOT SHARED_ONLY)
     install(
       TARGETS ical_cxx-static
       EXPORT icalTargets

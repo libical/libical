@@ -20,6 +20,8 @@
 #ifndef ICALBDBSET_CXX_H
 #define ICALBDBSET_CXX_H
 
+#include "libical_icalss_export.h"
+
 extern "C" {
 #include <libical/ical.h>
 #include <libicalss/icalgauge.h>
@@ -30,7 +32,7 @@ extern "C" {
 
 typedef char *string; // Will use the string library from STL
 
-class ICalBDBSet
+class LIBICAL_ICALSS_EXPORT ICalBDBSet
 {
 public:
 

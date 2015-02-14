@@ -20,6 +20,8 @@
 #ifndef VCOMPONENT_H
 #define VCOMPONENT_H
 
+#include "libical_ical_export.h"
+
 #include <libical/ical.h>
 #include "icptrholder.h"
 
@@ -35,7 +37,7 @@ class ICalProperty;
  *                            propogated via this exception type.
  */
 
-class VComponent
+class LIBICAL_ICAL_EXPORT VComponent
 {
 public:
     VComponent()                                 throw (icalerrorenum);

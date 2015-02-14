@@ -146,10 +146,10 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1name
 
 /*
  * Class:     net_cp_jlibical_ICalProperty
- * Method:    icalparameter_value_to_value_kind
+ * Method:    value_to_value_kind
  * Signature: (I)I
  */
-JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_icalparameter_1value_1to_1value_1kind
+JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_value_1to_1value_1kind
   (JNIEnv *, jclass, jint);
 
 /*

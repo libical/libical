@@ -20,6 +20,8 @@
 #ifndef ICALPARAMETER_CXX_H
 #define ICALPARAMETER_CXX_H
 
+#include "libical_ical_export.h"
+
 extern "C" {
 #include <libical/ical.h>
 };
@@ -27,7 +29,7 @@ extern "C" {
 
 typedef char *string; // Will use the string library from STL
 
-class ICalParameter
+class LIBICAL_ICAL_EXPORT ICalParameter
 {
 public:
     ICalParameter() throw(icalerrorenum);

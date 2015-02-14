@@ -21,6 +21,8 @@
 #ifndef ICALSPANLIST_CXX_H
 #define ICALSPANLIST_CXX_H
 
+#include "libical_icalss_export.h"
+
 extern "C" {
 #include <libical/ical.h>
 #include <libicalss/icalset.h>
@@ -36,7 +38,7 @@ extern "C" {
  * icalerrorenum.  See icalerror.h for the complete list of exceptions
  * that might be thrown.
  */
-class ICalSpanList
+class LIBICAL_ICALSS_EXPORT ICalSpanList
 {
 public:
     /** Construct an ICalSpanList from an icalset */
