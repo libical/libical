@@ -1,11 +1,5 @@
-include_directories(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_BINARY_DIR}/src/libical
-  ${CMAKE_SOURCE_DIR}/src/libicalss ${CMAKE_BINARY_DIR}/src/libicalss
-)
 
-########### next target ###############
+########### doesnothing target ###############
 
 set(doesnothing_SRCS
   access_components.c
@@ -36,6 +30,4 @@ else()
     target_link_libraries(doesnothing ${BDB_LIBRARY})
   endif()
 endif()
-
-########### install files ###############
 

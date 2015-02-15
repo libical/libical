@@ -62,6 +62,11 @@ of the libraries, but that behavior can be modified at CMake time:
  - To build the static libraries only, pass -DSTATIC_ONLY=True to CMake.
  - To build the shared libraries only, pass -DSHARED_ONLY=True to CMake.
 
+== Building with Different Compilers ==
+For example, say you want to use Clang to build on Linux.
+Then you can set the C and C++ compilers at CMake time, like so:
+% CC=clang CXX=clang++ cmake ..
+
 == Optional Dependencies ==
 * Berkeley DB storage.  If want to use (try) the Berkeley Database storage
   you can pass the -DWITH_BDB=True option to CMake.  You'll need to have
