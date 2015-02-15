@@ -34,7 +34,7 @@ class ICalProperty;
  * @brief A class wrapping the libical icalcomponent functions
  *
  * @exception icalerrorenum   Any errors generated in libical are
- *                            propogated via this exception type.
+ *                            propagated via this exception type.
  */
 
 class LIBICAL_ICAL_EXPORT VComponent
@@ -134,7 +134,7 @@ public:
      *  of DTSTART and the duration. If you call a get routine for
      *  one and the other exists, the routine will calculate the
      *  return value. If you call a set routine and neither
-     *  exists, the routine will create the apropriate property
+     *  exists, the routine will create the appropriate property
     */
 
     struct icaltimetype get_dtend() const;
@@ -217,7 +217,7 @@ private:
     icalcomponent *imp;
 };
 
-class VCalendar : public VComponent
+class LIBICAL_ICAL_EXPORT VCalendar : public VComponent
 {
 public:
     VCalendar();
@@ -229,7 +229,7 @@ public:
     explicit VCalendar(string str);
 };
 
-class VEvent : public VComponent
+class LIBICAL_ICAL_EXPORT VEvent : public VComponent
 {
 public:
     VEvent();
@@ -241,7 +241,7 @@ public:
     explicit VEvent(string str);
 };
 
-class VToDo : public VComponent
+class LIBICAL_ICAL_EXPORT VToDo : public VComponent
 {
 public:
     VToDo();
@@ -253,7 +253,7 @@ public:
     explicit VToDo(string str);
 };
 
-class VAgenda : public VComponent
+class LIBICAL_ICAL_EXPORT VAgenda : public VComponent
 {
 public:
     VAgenda();
@@ -265,7 +265,7 @@ public:
     explicit VAgenda(string str);
 };
 
-class VQuery : public VComponent
+class LIBICAL_ICAL_EXPORT VQuery : public VComponent
 {
 public:
     VQuery();
@@ -277,7 +277,7 @@ public:
     explicit VQuery(string str);
 };
 
-class VJournal : public VComponent
+class LIBICAL_ICAL_EXPORT VJournal : public VComponent
 {
 public:
     VJournal();
@@ -289,7 +289,7 @@ public:
     explicit VJournal(string str);
 };
 
-class VAlarm : public VComponent
+class LIBICAL_ICAL_EXPORT VAlarm : public VComponent
 {
 public:
     VAlarm();
@@ -308,7 +308,7 @@ public:
     icalrequeststatus getTriggerTime(VComponent &c, struct icaltriggertype *tr);
 };
 
-class VFreeBusy : public VComponent
+class LIBICAL_ICAL_EXPORT VFreeBusy : public VComponent
 {
 public:
     VFreeBusy();
@@ -320,7 +320,7 @@ public:
     explicit VFreeBusy(string str);
 };
 
-class VTimezone : public VComponent
+class LIBICAL_ICAL_EXPORT VTimezone : public VComponent
 {
 public:
     VTimezone();
@@ -332,7 +332,7 @@ public:
     explicit VTimezone(string str);
 };
 
-class XStandard : public VComponent
+class LIBICAL_ICAL_EXPORT XStandard : public VComponent
 {
 public:
     XStandard();
@@ -344,7 +344,7 @@ public:
     explicit XStandard(string str);
 };
 
-class XDaylight : public VComponent
+class LIBICAL_ICAL_EXPORT XDaylight : public VComponent
 {
 public:
     XDaylight();

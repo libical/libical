@@ -47,6 +47,7 @@ macro(buildme _name _srcs)
       ${CMAKE_BINARY_DIR}/lib/libicalss.a
       ${CMAKE_BINARY_DIR}/lib/libicalvcal.a
     )
+    target_link_libraries(${_name} ${CMAKE_THREAD_LIBS_INIT})
     if(ICU_FOUND)
       target_link_libraries(${_name} ${ICU_LIBRARY})
     endif()

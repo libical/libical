@@ -25,6 +25,7 @@ else()
     ${CMAKE_BINARY_DIR}/lib/libicalss.a
     ${CMAKE_BINARY_DIR}/lib/libicalvcal.a
   )
+  target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
   if(ICU_FOUND)
     target_link_libraries(doesnothing ${ICU_LIBRARY})
   endif()
