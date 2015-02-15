@@ -1,5 +1,6 @@
 include_directories(
   ${CMAKE_BINARY_DIR}
+  ${CMAKE_BINARY_DIR}/src
 )
 
 #these are generated sources, but we keep them in the repo
