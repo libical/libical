@@ -21,24 +21,13 @@
 #include <config.h>
 #endif
 
-#ifndef VCOMPONENT_H
 #include "vcomponent.h"
-#endif
-
-#ifndef ICALVALUE_CXX_H
 #include "icalvalue_cxx.h"
-#endif
-
-#ifndef ICALPROPERTY_CXX_H
 #include "icalproperty_cxx.h"
-#endif
-
-#ifndef ICALPARAMETER_CXX_H
 #include "icalparameter_cxx.h"
-#endif
-#include <stdlib.h>
-#include <string.h>
 
+#include <cstdlib>
+#include <cstring>
 #include <exception>
 
 VComponent::VComponent() throw(icalerrorenum) : imp(icalcomponent_new(ICAL_ANY_COMPONENT))

@@ -17,13 +17,8 @@
     the License at http://www.mozilla.org/MPL/
  */
 
-#ifndef ICALPARAMETER_CXX_H
 #include "icalparameter_cxx.h"
-#endif
-
-#ifndef ICALVALUE_CXX_H
 #include "icalvalue_cxx.h"
-#endif
 
 typedef char *string; // Will use the string library from STL
 

@@ -90,21 +90,16 @@ if(WITH_BDB)
 endif()
 
 # library build types
-set(LIBICAL_STATIC 0)
 set(LIBRARY_TYPE SHARED)
 
 option(STATIC_ONLY "Build static libraries only.")
 if(STATIC_ONLY)
-  set(LIBICAL_STATIC 1)
-  add_definitions(-DLIBICAL_STATIC)
   set(LIBRARY_TYPE STATIC)
 endif()
 
 option(SHARED_ONLY "Build shared (dynamic) libraries only. Takes precedence over STATIC_ONLY")
 if(SHARED_ONLY)
   set(STATIC_ONLY False)
-  set(LIBICAL_STATIC 0)
-  remove_definitions(-DLIBICAL_STATIC)
   set(LIBRARY_TYPE SHARED)
 endif()
 

@@ -17,17 +17,9 @@
     the License at http://www.mozilla.org/MPL/
  */
 
-#ifndef ICALPROPERTY_CXX_H
 #include "icalproperty_cxx.h"
-#endif
-
-#ifndef ICALPARAMETER_CXX_H
 #include "icalparameter_cxx.h"
-#endif
-
-#ifndef ICALVALUE_CXX_H
 #include "icalvalue_cxx.h"
-#endif
 
 ICalProperty::ICalProperty() : imp(icalproperty_new(ICAL_ANY_PROPERTY))
 {

@@ -1,20 +1,23 @@
 #ifndef LIBICAL_ICALSS_EXPORT_H
 #define LIBICAL_ICALSS_EXPORT_H
 
-#ifdef _MSC_VER
-  #if defined(BUILD_LIBICAL_STATIC)
-    #define LIBICAL_ICALSS_EXPORT extern
-  #elif defined(BUILD_LIBICAL_SHARED)
-    #define LIBICAL_ICALSS_EXPORT __declspec(dllexport)
-  #else
-    #define LIBICAL_ICALSS_EXPORT __declspec(dllimport)
-  #endif
+#ifdef LIBICAL_ICALSS_STATIC_DEFINE
+#  define LIBICAL_ICALSS_EXPORT
+#  define LIBICAL_ICALSS_NO_EXPORT
 #else
-  #if defined(BUILD_LIBICAL_STATIC)
-    #define LIBICAL_ICALSS_EXPORT
-  #else
-    #define LIBICAL_ICALSS_EXPORT __attribute__((visibility("default")))
-  #endif
+#  if defined(_MSC_VER)
+#    if defined(libical_icalss_EXPORTS)
+       /* We are building this library */
+#      define LIBICAL_ICALSS_EXPORT __declspec(dllexport)
+#    else
+       /* We are using this library */
+#      define LIBICAL_ICALSS_EXPORT __declspec(dllimport)
+#    endif
+#    define LIBICAL_ICALSS_NO_EXPORT
+# else
+#    define LIBICAL_ICALSS_EXPORT __attribute__((visibility("default")))
+#    define LIBICAL_ICALSS_NO_EXPORT __attribute__((visibility("hidden")))
+#  endif
 #endif
 
 #endif

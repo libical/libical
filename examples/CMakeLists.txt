@@ -17,11 +17,19 @@ add_executable(doesnothing ${doesnothing_SRCS})
 if(NOT STATIC_ONLY)
   target_link_libraries(doesnothing ical icalss icalvcal)
 else()
-  target_link_libraries(doesnothing
-    ${CMAKE_BINARY_DIR}/lib/libical.a
-    ${CMAKE_BINARY_DIR}/lib/libicalss.a
-    ${CMAKE_BINARY_DIR}/lib/libicalvcal.a
-  )
+  if(NOT WIN32)
+    target_link_libraries(doesnothing
+      ${CMAKE_BINARY_DIR}/lib/libical.a
+      ${CMAKE_BINARY_DIR}/lib/libicalss.a
+      ${CMAKE_BINARY_DIR}/lib/libicalvcal.a
+    )
+  else()
+    target_link_libraries(doesnothing
+      ${CMAKE_BINARY_DIR}/bin/libical-static.lib
+      ${CMAKE_BINARY_DIR}/bin/libicalss-static.lib
+      ${CMAKE_BINARY_DIR}/bin/libicalvcal-static.lib
+    )
+  endif()
   target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
   if(ICU_FOUND)
     target_link_libraries(doesnothing ${ICU_LIBRARY})

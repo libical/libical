@@ -64,15 +64,9 @@ typedef enum icalerrorenum {
 icalerrorenum * icalerrno_return(void);
 #define icalerrno (*(icalerrno_return()))
 
-#cmakedefine LIBICAL_STATIC 1
-
-/** If true, libicl aborts after a call to icalerror_set_error
- *
- *  @warning NOT THREAD SAFE -- recommended that you do not change
- *           this in a multithreaded program.
- */
+#if !defined(LIBICAL_EXPORT)
 #ifdef _MSC_VER
-  #if defined(LIBICAL_STATIC)
+  #if defined(BUILD_LIBICALSTATIC)
     #define LIBICAL_EXPORT extern
   #elif defined(BUILD_LIBICALDLL)
     #define LIBICAL_EXPORT __declspec(dllexport)
@@ -82,6 +76,13 @@ icalerrorenum * icalerrno_return(void);
 #else
   #define LIBICAL_EXPORT extern
 #endif
+#endif
+
+/** If true, libicu aborts after a call to icalerror_set_error
+ *
+ *  @warning NOT THREAD SAFE -- recommended that you do not change
+ *           this in a multithreaded program.
+ */
 
 LIBICAL_EXPORT int icalerror_errors_are_fatal;
 
@@ -92,7 +93,6 @@ LIBICAL_EXPORT int icalerror_errors_are_fatal;
 #else /* __GNU_C__ */
 #define icalerror_warn(message) {fprintf(stderr,"%s:%d: %s\n",__FILE__,__LINE__,message);}
 #endif /* __GNU_C__ */
-
 
 void icalerror_clear_errno(void);
 void _icalerror_set_errno(icalerrorenum);

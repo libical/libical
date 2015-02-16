@@ -1,3 +1,5 @@
+add_definitions(-Dlibical_icalss_EXPORTS)
+
 include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/src

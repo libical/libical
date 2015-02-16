@@ -36,6 +36,9 @@
 
 #include <stdlib.h>		/* for malloc() */
 #include <string.h>		/* for strcmp */
+#if defined(_MSC_VER)
+#define LIBICAL_EXPORT __declspec(dllexport)
+#endif
 #include "icalerror.h"
 
 #ifdef HAVE_PTHREAD

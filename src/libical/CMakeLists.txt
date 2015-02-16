@@ -1,3 +1,5 @@
+add_definitions(-Dlibical_ical_EXPORTS)
+
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.cmake
   ${CMAKE_CURRENT_BINARY_DIR}/icalversion.h
@@ -13,12 +15,6 @@ include_directories(
 
 if(ICU_FOUND)
   include_directories(${ICU_INCLUDE_DIR})
-endif()
-
-if(WIN32)
-  if(MSVC)
-    add_definitions(-DBUILD_LIBICALDLL)
-  endif()
 endif()
 
 configure_file(icalerror.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icalerror.h)
@@ -326,8 +322,9 @@ if(WITH_CXX_BINDINGS)
     vcomponent.h
   )
 
+  add_definitions(-DBUILD_LIBICALDLL)
+
   if(NOT STATIC_ONLY)
-    add_definitions(-DBUILD_LIBICAL_SHARED)
     add_library(ical_cxx SHARED ${icalcxx_LIB_SRCS})
     target_link_libraries(ical_cxx ical ${CMAKE_THREAD_LIBS_INIT})
     if(WINCE)
@@ -341,7 +338,6 @@ if(WITH_CXX_BINDINGS)
       SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
     )
     set_target_properties(ical_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-    remove_definitions(-DBUILD_LIBICAL_SHARED)
 
     install(
       TARGETS ical_cxx
@@ -351,7 +347,6 @@ if(WITH_CXX_BINDINGS)
   endif()
 
   if(NOT SHARED_ONLY)
-    add_definitions(-DBUILD_LIBICAL_STATIC)
     add_library(ical_cxx-static STATIC ${icalcxx_LIB_SRCS})
     if(MSVC)
       set_target_properties(ical_cxx-static PROPERTIES OUTPUT_NAME "libical_cxx-static")
@@ -359,7 +354,6 @@ if(WITH_CXX_BINDINGS)
       set_target_properties(ical_cxx-static PROPERTIES OUTPUT_NAME "ical_cxx")
     endif()
     set_target_properties(ical_cxx-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-    remove_definitions(-DBUILD_LIBICAL_STATIC)
 
     install(
       TARGETS ical_cxx-static
@@ -367,6 +361,11 @@ if(WITH_CXX_BINDINGS)
       DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
     )
   endif()
+
+  if(MSVC)
+    remove_definitions(-DBUILD_LIBICALDLL)
+  endif()
+
 endif()
 
 ########### install files ###############

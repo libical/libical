@@ -1,3 +1,5 @@
+add_definitions(-DBUILD_LIBICALDLL)
+
 include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_SOURCE_DIR}/src
@@ -42,11 +44,19 @@ macro(buildme _name _srcs)
       target_link_libraries(${_name} ical_cxx icalss_cxx)
     endif()
   else()
-    target_link_libraries(${_name}
-      ${CMAKE_BINARY_DIR}/lib/libical.a
-      ${CMAKE_BINARY_DIR}/lib/libicalss.a
-      ${CMAKE_BINARY_DIR}/lib/libicalvcal.a
-    )
+    if(NOT WIN32)
+      target_link_libraries(${_name}
+        ${CMAKE_BINARY_DIR}/lib/libical.a
+        ${CMAKE_BINARY_DIR}/lib/libicalss.a
+        ${CMAKE_BINARY_DIR}/lib/libicalvcal.a
+      )
+    else()
+      target_link_libraries(${_name}
+        ${CMAKE_BINARY_DIR}/bin/libical-static.lib
+        ${CMAKE_BINARY_DIR}/bin/libicalss-static.lib
+        ${CMAKE_BINARY_DIR}/bin/libicalvcal-static.lib
+      )
+    endif()
     target_link_libraries(${_name} ${CMAKE_THREAD_LIBS_INIT})
     if(ICU_FOUND)
       target_link_libraries(${_name} ${ICU_LIBRARY})
@@ -58,10 +68,17 @@ macro(buildme _name _srcs)
       target_link_libraries(${_name} ${BDB_LIBRARY})
     endif()
     if(WITH_CXX_BINDINGS)
-      target_link_libraries(${_name}
-        ${CMAKE_BINARY_DIR}/lib/libical_cxx.a
-        ${CMAKE_BINARY_DIR}/lib/libicalss_cxx.a
-      )
+      if(NOT WIN32)
+        target_link_libraries(${_name}
+          ${CMAKE_BINARY_DIR}/lib/libical_cxx.a
+          ${CMAKE_BINARY_DIR}/lib/libicalss_cxx.a
+        )
+      else()
+        target_link_libraries(${_name}
+          ${CMAKE_BINARY_DIR}/bin/libical_cxx-static.lib
+          ${CMAKE_BINARY_DIR}/bin/libicalss_cxx-static.lib
+        )
+      endif()
     endif()
   endif()
 endmacro()
@@ -113,6 +130,30 @@ testme(recur "${recur_SRCS}")
 
 ########### next target ###############
 
+if(HAVE_UNISTD_H) #getopt is required
+  set(testmime_SRCS testmime.c)
+  testme(testmime "${testmime_SRCS}")
+endif()
+
+########### next target ###############
+
+set(testvcal_SRCS testvcal.c)
+testme(testvcal "${testvcal_SRCS}")
+
+########### next target ###############
+
+set(process_SRCS process.c)
+testme(process "${process_SRCS}")
+
+########### next target ###############
+
+if(NOT USE_BUILTIN_TZDATA)
+  set(timezones_SRCS timezones.c)
+  testme(timezones "${timezones_SRCS}")
+endif()
+
+########### next target ###############
+
 if(NOT WIN32) #since we currently do not have a Windows reference file
   if(HAVE_UNISTD_H) #getopt is required
     if(NOT USE_32BIT_TIME_T) #tests for years greater than 2037 will fail
@@ -154,30 +195,6 @@ if(NOT WIN32) #since we currently do not have a Windows reference file
       setprops(icalrecurtest)
     endif()
   endif()
-endif()
-
-########### next target ###############
-
-if(HAVE_UNISTD_H) #getopt is required
-  set(testmime_SRCS testmime.c)
-  testme(testmime "${testmime_SRCS}")
-endif()
-
-########### next target ###############
-
-set(testvcal_SRCS testvcal.c)
-testme(testvcal "${testvcal_SRCS}")
-
-########### next target ###############
-
-set(process_SRCS process.c)
-testme(process "${process_SRCS}")
-
-########### next target ###############
-
-if(NOT USE_BUILTIN_TZDATA)
-  set(timezones_SRCS timezones.c)
-  testme(timezones "${timezones_SRCS}")
 endif()
 
 ########### install files ###############

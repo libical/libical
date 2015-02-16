@@ -19,9 +19,7 @@
 #include <config.h>
 #endif
 
-#ifndef ICALVALUE_CXX_H
 #include "icalvalue_cxx.h"
-#endif
 
 typedef char *string; // Will use the string library from STL
 
