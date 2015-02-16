@@ -1,3 +1,7 @@
+if(NOT SHARED_ONLY)
+  add_definitions(-DLIBICAL_ICAL_STATIC_DEFINE)
+endif()
+
 include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_SOURCE_DIR}/src
