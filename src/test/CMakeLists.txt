@@ -1,5 +1,3 @@
-add_definitions(-DBUILD_LIBICALDLL)
-
 include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_SOURCE_DIR}/src
