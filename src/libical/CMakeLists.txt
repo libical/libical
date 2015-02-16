@@ -17,8 +17,6 @@ if(ICU_FOUND)
   include_directories(${ICU_INCLUDE_DIR})
 endif()
 
-configure_file(icalerror.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icalerror.h)
-
 set(PACKAGE_DATA_DIR "\\\"${CMAKE_INSTALL_PREFIX}/share/libical\\\"")
 add_definitions(-DPACKAGE_DATA_DIR="${PACKAGE_DATA_DIR}")
 
