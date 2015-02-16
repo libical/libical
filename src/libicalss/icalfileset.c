@@ -33,7 +33,7 @@
 #include <errno.h>
 #include <sys/stat.h> /* for stat */
 #ifndef WIN32
-#include <unistd.h> /* for stat, getpid */
+#include <unistd.h> /* for stat, getpid, read, write */
 #else
 #include <io.h>
 #ifndef _WIN32_WCE
@@ -117,12 +117,7 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
         return 0;
     }
 
-#ifndef WIN32
     fset->fd = open(fset->path, flags, mode);
-#else
-    fset->fd = open(fset->path, flags, mode);
-    /* fset->fd = sopen(fset->path,flags, _SH_DENYWR, _S_IREAD | _S_IWRITE); */
-#endif
 
     if (fset->fd < 0) {
         icalerror_set_errno(ICAL_FILE_ERROR);
@@ -416,8 +411,11 @@ icalerrorenum icalfileset_commit(icalset *set)
 
         str = icalcomponent_as_ical_string_r(c);
 
+#if defined(_MSC_VER)
+        sz = write(fset->fd, str, (unsigned int)strlen(str));
+#else
         sz = write(fset->fd, str, strlen(str));
-
+#endif
         if (sz != (ssize_t)strlen(str)) {
             perror("write");
             icalerror_set_errno(ICAL_FILE_ERROR);
