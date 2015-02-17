@@ -154,7 +154,7 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
     icalbdbset_options *options = options_in;
     int ret;
     DB *cal_db;
-    char *subdb_name;
+    char *subdb_name=NULL;
 
     if (options == NULL) {
         *options = icalbdbset_options_default;
@@ -695,7 +695,7 @@ icalerrorenum icalbdbset_commit(icalset *set)
     DBC *dbcp;
     DBT key, data;
     icalcomponent *c;
-    char *str;
+    char *str = NULL;
     int ret = 0;
     int reterr = ICAL_NO_ERROR;
     char keystore[256];
@@ -865,7 +865,9 @@ icalerrorenum icalbdbset_commit(icalset *set)
             }
         }
 
-        free(str);
+        if(str) {
+            free(str);
+        }
 
         if (deadlocked) {
             dbcp->c_close(dbcp);

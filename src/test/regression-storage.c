@@ -348,7 +348,7 @@ void test_bdbset()
 
     for(month = 1; month < 10; month++){
       icalcomponent *event;
-      icalproperty *dtstart, *dtend, *location;
+      icalproperty *dtstart, *dtend;
 
       /* retrieve data */
       //      cout = icalbdbset_new(dbp, sdbp, NULL);  
@@ -372,8 +372,7 @@ void test_bdbset()
       assert(dtend!=0);
       icalproperty_set_dtend(dtend,end);
 
-      location = icalcomponent_get_first_property(event, ICAL_LOCATION_PROPERTY);
-      assert(location!=0);
+      assert(icalcomponent_get_first_property(event, ICAL_LOCATION_PROPERTY)!=0);
 
 #if 0
       /* change the uid to include the month */
