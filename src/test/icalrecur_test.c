@@ -24,7 +24,7 @@ const struct recur rfc5545[] = {
 
     /* Every day in January, for 3 years */
     { "19980101T090000",
-      "FREQ=YEARLY;UNTIL=20000131T140000Z;BYMONTH=1;BYDAY=SU.MO,TU.WE.TH.FR.SA" },
+      "FREQ=YEARLY;UNTIL=20000131T140000Z;BYMONTH=1;BYDAY=SU,MO,TU,WE,TH,FR,SA" },
 
     /* Yearly in June and July for 10 occurrences */
     { "19970610T090000",
