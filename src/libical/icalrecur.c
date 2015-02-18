@@ -703,7 +703,7 @@ struct icalrecur_iterator_impl {
     struct icaltimetype rstart;	/* DTSTART in RSCALE  */
 #endif
     
-    short days[366];
+    short days[ICAL_BY_YEARDAY_SIZE];
     short days_index;
     
     enum byrule byrule;
