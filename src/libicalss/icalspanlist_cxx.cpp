@@ -19,6 +19,9 @@
  */
 
 #include "icalspanlist_cxx.h"
+#include "vcomponent.h"
+using namespace LibICal;
+
 #include <exception>
 
 /** @brief Construct an ICalSpanList from an icalset

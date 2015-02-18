@@ -1,14 +1,11 @@
-/* -*- Mode: C -*-
+/*
   ======================================================================
   FILE: regression-storage.c
   CREATOR: eric 03 April 1999
   
   DESCRIPTION:
-  
-  $Id: regression-storage.c,v 1.6 2008-02-03 16:10:47 dothebart Exp $
-  $Locker:  $
 
-  (C) COPYRIGHT 1999 Eric Busboom 
+  (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
   http://www.softwarestudio.org
 
   The contents of this file are subject to the Mozilla Public License
@@ -28,18 +25,18 @@
   ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
+
+#include "regression.h"
 
 #include <assert.h>
 #include <string.h> /* for strdup */
 #include <stdlib.h> /* for malloc */
 #include <stdio.h> /* for printf */
-#include <time.h> /* for time() */
 
-#include "libical/ical.h"
-#include "libicalss/icalss.h"
-#include "regression.h"
+#include <libical/ical.h>
+#include <libicalss/icalss.h>
 
 #define OUTPUT_FILE "filesetout.ics"
 

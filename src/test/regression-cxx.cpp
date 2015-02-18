@@ -13,12 +13,17 @@
     the License at http://www.mozilla.org/MPL/
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+extern "C" {
+#include "regression.h"
+};
+
 #include "icalparameter_cxx.h"
 #include "icalproperty_cxx.h"
 #include "vcomponent.h"
-#include "regression.h"
+using namespace LibICal;
+
+#include <stdio.h>
+#include <stdlib.h>
 
 char content[] = "BEGIN:VCALENDAR\n\
 VERSION:2.1\n\

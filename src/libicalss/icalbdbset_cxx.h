@@ -27,10 +27,13 @@ extern "C" {
 #include <libicalss/icalgauge.h>
 }
 
-#include "vcomponent.h"
 #include <db_cxx.h>
 
 typedef char *string; // Will use the string library from STL
+
+namespace LibICal {
+
+class VComponent;
 
 class LIBICAL_ICALSS_EXPORT ICalBDBSet
 {
@@ -71,5 +74,7 @@ public:
     VComponent *get_component();
 
 };
+
+} // namespace LibICal
 
 #endif

@@ -19,6 +19,7 @@
 
 #include "icalparameter_cxx.h"
 #include "icalvalue_cxx.h"
+using namespace LibICal;
 
 typedef char *string; // Will use the string library from STL
 
@@ -29,7 +30,7 @@ ICalParameter::ICalParameter() throw(icalerrorenum) : imp(icalparameter_new(ICAL
 ICalParameter::ICalParameter(const ICalParameter &v) throw(icalerrorenum)
 {
     imp = icalparameter_new_clone(v.imp);
-    if (!imp) {
+    if (imp == NULL) {
         throw icalerrno;
     }
 }
@@ -43,7 +44,7 @@ ICalParameter &ICalParameter::operator=(const ICalParameter &v)  throw(icalerror
     if (imp != NULL) {
         icalparameter_free(imp);
         imp = icalparameter_new_clone(v.imp);
-        if (!imp) {
+        if (imp == NULL) {
             throw icalerrno;
         }
     }
@@ -71,7 +72,7 @@ ICalParameter::ICalParameter(icalparameter *v) throw(icalerrorenum) : imp(v)
 ICalParameter::ICalParameter(string str) throw(icalerrorenum)
 {
     imp = icalparameter_new_from_string(str);
-    if (!imp) {
+    if (imp == NULL) {
         throw icalerrno;
     }
 }
@@ -80,7 +81,7 @@ ICalParameter::ICalParameter(string str) throw(icalerrorenum)
 ICalParameter::ICalParameter(icalparameter_kind kind, string  str) throw(icalerrorenum)
 {
     imp = icalparameter_new_from_value_string(kind, str);
-    if (!imp) {
+    if (imp == NULL) {
         throw icalerrno;
     }
 }
@@ -88,7 +89,7 @@ ICalParameter::ICalParameter(icalparameter_kind kind, string  str) throw(icalerr
 ICalParameter::ICalParameter(icalparameter_kind kind) throw(icalerrorenum)
 {
     imp = icalparameter_new(kind);
-    if (!imp) {
+    if (imp == NULL) {
         throw icalerrno;
     }
 }
@@ -97,7 +98,7 @@ string ICalParameter::as_ical_string() throw(icalerrorenum)
 {
     char *str = icalparameter_as_ical_string(imp);
 
-    if (!str) {
+    if (str == NULL) {
         throw icalerrno;
     }
 
@@ -122,7 +123,7 @@ int ICalParameter::isa_parameter(void *param)
     return icalparameter_isa_parameter(param);
 }
 
-/* Acess the name of an X parameer */
+/* Access the name of an X parameter */
 void ICalParameter::set_xname(ICalParameter &param, string v)
 {
     icalparameter_set_xname(param, v);

@@ -24,20 +24,19 @@
 #include <config.h>
 #endif
 
+#include "regression.h"
+
 #include <libical/ical.h>
 #include <libicalss/icalss.h>
 #include <libicalvcal/vobject.h>
 #include <libicalvcal/icalvcal.h>
 #include <libicalvcal/vcc.h>
 
-#include "regression.h"
-
 #include <assert.h>
 #include <string.h> /* for strdup */
 #include <stdlib.h> /* for malloc */
 #include <stdio.h> /* for printf */
-#include <time.h> /* for time() */
-#ifndef WIN32
+#ifndef _WIN32
 #include <unistd.h> /* for unlink, fork */
 #include <sys/wait.h> /* For waitpid */
 #include <sys/time.h> /* for select */
@@ -418,7 +417,7 @@ void test_parameters()
 
     for (i=0;enums[i] != -1; i++){
       if (VERBOSE) printf("%s\n",icalparameter_enum_to_string(enums[i]));
-      ok("test paramter enums",
+      ok("test parameter enums",
 	 (icalparameter_string_to_enum(icalparameter_enum_to_string(enums[i]))==enums[i]));
     }
 }
@@ -559,7 +558,7 @@ void test_memory()
 
       printf("Final: %s\n", f);
 
-#ifdef WIN32
+#ifdef _WIN32
       printf("Final buffer size: %Iu\n",bufsize);
 #else
       printf("Final buffer size: %zu\n",bufsize);
@@ -2752,7 +2751,7 @@ void test_gauge_compare() {
     icalcomponent_free(c);
 
 
-    /* Complex comparisions */
+    /* Complex comparisons */
 
     c =  icalcomponent_vanew(
 	ICAL_VCALENDAR_COMPONENT,
@@ -2900,7 +2899,7 @@ void test_fileset()
 
 void microsleep(int us)
 {
-#ifndef WIN32
+#ifndef _WIN32
     struct timeval tv;
 
     tv.tv_sec = 0;
@@ -2915,7 +2914,7 @@ void microsleep(int us)
 
 void test_file_locks()
 {
-#ifndef WIN32
+#ifndef _WIN32
     pid_t pid;
     char *path = "test_fileset_locktest.ics";
     icalset *fs;
@@ -3804,7 +3803,7 @@ int main(int argc, char *argv[])
     test_start(0);
 
 
-#ifndef WIN32
+#ifndef _WIN32
     int errflg=0;
     int c;
     while ((c = getopt(argc, argv, "lvq")) != -1) {

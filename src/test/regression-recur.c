@@ -1,11 +1,11 @@
-/* -*- Mode: C -*-
+/*
   ======================================================================
   FILE: regression-recur.c
   CREATOR: ebusboom 8jun00
   
   DESCRIPTION:
 
-  (C) COPYRIGHT 1999 Eric Busboom 
+  (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
   http://www.softwarestudio.org
 
   The contents of this file are subject to the Mozilla Public License
@@ -21,26 +21,25 @@
   ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
+
+#include "regression.h"
+#include <libical/ical.h>
+#include <libicalss/icalss.h>
 
 #include <assert.h>
 #include <string.h> /* for strdup */
 #include <stdlib.h> /* for malloc */
 #include <stdio.h>  /* for printf */
-#include <time.h>   /* for time() */
 #include <signal.h> /* for signal */
-#ifndef WIN32
+#ifndef _WIN32
 #include <unistd.h> /* for alarm */
 #endif
 
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
-#include "regression.h"
-
 extern int VERBOSE;
 
-#ifdef WIN32
+#ifdef _WIN32
 #define snprintf _snprintf
 #endif
 #ifdef _MSC_VER
@@ -48,7 +47,7 @@ extern int VERBOSE;
 #endif
 
 
-#ifndef WIN32
+#ifndef _WIN32
 static void sig_alrm(int i){
     _unused(i)
     fprintf(stderr,"Could not get lock on file\n");
@@ -113,18 +112,18 @@ void test_recur_file()
 	
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 	
-#ifndef WIN32
+#ifndef _WIN32
     signal(SIGALRM,sig_alrm);
 #endif
     file = getenv("ICAL_RECUR_FILE");
     if (!file)
       file = TEST_DATADIR "/recur.txt";
 	
-#ifndef WIN32
+#ifndef _WIN32
     alarm(15); /* to get file lock */
 #endif
     cin = icalset_new(ICAL_FILE_SET, file, &options);
-#ifndef WIN32
+#ifndef _WIN32
     alarm(0);
 #endif
 	

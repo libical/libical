@@ -360,6 +360,7 @@ int main(int argc, char *argv[])
 	case 'r': /* Do RSCALE tests */
 	    if (!icalrecurrencetype_rscale_is_supported()) {
 		fprintf(stderr, "error: RSCALE not supported\n");
+                fclose(fp);
 		return(1);
 	    }
 	    r = rscale;
@@ -368,6 +369,7 @@ int main(int argc, char *argv[])
 
 	default:
 	    fprintf(stderr, "usage: %s [-r]\n", argv[0]);
+            fclose(fp);
 	    return(1);
 	    break;
 	}

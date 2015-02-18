@@ -28,8 +28,11 @@ extern "C" {
 #include <libicalss/icalset.h>
 #include <libicalss/icalspanlist.h>
 }
-#include "vcomponent.h"
 #include <vector>       /* For as_matrix.. */
+
+namespace LibICal {
+
+class VComponent;
 
 /**
  * This class wraps the icalspanlist routines in libicalss
@@ -71,5 +74,7 @@ public:
 private:
     icalspanlist *data;
 };
+
+} // namespace LibICal;
 
 #endif

@@ -29,6 +29,8 @@ extern "C" {
 
 typedef char *string; // Will use the string library from STL
 
+namespace LibICal {
+
 class ICalProperty;
 
 /**
@@ -121,12 +123,12 @@ public:
     void convert_errors();
 
     /// Kind conversion routines
-    static icalcomponent_kind string_to_kind(string str);
-    static string kind_to_string(icalcomponent_kind kind);
+    static icalcomponent_kind string_to_kind(const string &str);
+    static string kind_to_string(const icalcomponent_kind &kind);
 
 public:
     struct icaltimetype get_dtstart() const;
-    void set_dtstart(const struct icaltimetype v);
+    void set_dtstart(const struct icaltimetype &v);
 
     /** For the icalcomponent routines only, dtend and duration
      *  are tied together. If you call the set routine for one and
@@ -140,46 +142,46 @@ public:
     */
 
     struct icaltimetype get_dtend() const;
-    void set_dtend(const struct icaltimetype v);
+    void set_dtend(const struct icaltimetype &v);
 
     struct icaltimetype get_due() const;
-    void set_due(const struct icaltimetype v);
+    void set_due(const struct icaltimetype &v);
 
     struct icaldurationtype get_duration() const;
-    void set_duration(const struct icaldurationtype v);
+    void set_duration(const struct icaldurationtype &v);
 
     icalproperty_method get_method() const;
-    void set_method(const icalproperty_method method);
+    void set_method(const icalproperty_method &method);
 
     struct icaltimetype get_dtstamp() const;
-    void set_dtstamp(const struct icaltimetype v);
+    void set_dtstamp(const struct icaltimetype &v);
 
     string get_summary() const;
-    void set_summary(const string v);
+    void set_summary(const string &v);
 
     string get_location() const;
-    void set_location(const string v);
+    void set_location(const string &v);
 
     string get_description() const;
-    void set_description(const string v);
+    void set_description(const string &v);
 
     string get_comment() const;
-    void set_comment(const string v);
+    void set_comment(const string &v);
 
     string get_uid() const;
-    void set_uid(const string v);
+    void set_uid(const string &v);
 
     string get_relcalid() const;
-    void set_relcalid(const string v);
+    void set_relcalid(const string &v);
 
     struct icaltimetype get_recurrenceid() const;
-    void set_recurrenceid(const struct icaltimetype v);
+    void set_recurrenceid(const struct icaltimetype &v);
 
     int get_sequence() const;
-    void set_sequence(const int v);
+    void set_sequence(const int &v);
 
     int get_status() const;
-    void set_status(const enum icalproperty_status v);
+    void set_status(const enum icalproperty_status &v);
 
 public:
     /**
@@ -358,6 +360,8 @@ public:
     explicit XDaylight(string str);
 };
 
-typedef ICPointerHolder<VComponent> VComponentTmpPtr; /* see icptrholder.h for comments */
+} // namespace LibICal;
+
+typedef ICPointerHolder<LibICal::VComponent> VComponentTmpPtr;
 
 #endif /* VComponent_H */

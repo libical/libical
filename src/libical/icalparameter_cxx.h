@@ -29,6 +29,8 @@ extern "C" {
 
 typedef char *string; // Will use the string library from STL
 
+namespace LibICal {
+
 class LIBICAL_ICAL_EXPORT ICalParameter
 {
 public:
@@ -60,7 +62,7 @@ public:
     int isa_parameter(void *param);
 
 public:
-    /* Acess the name of an X parameer */
+    /* Access the name of an X parameter */
     static void set_xname(ICalParameter  &param, string v);
     static string get_xname(ICalParameter  &param);
     static void set_xvalue(ICalParameter  &param, string v);
@@ -166,5 +168,7 @@ public:
 private:
     icalparameter *imp;
 };
+
+} // namespace LibICal
 
 #endif

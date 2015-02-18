@@ -1,7 +1,7 @@
 /**
  * @file    vcomponent.cpp
  * @author  fnguyen (12/10/01)
- * @brief   Implemenation of C++ Wrapper for icalcomponent.c
+ * @brief   Implementation of C++ Wrapper for icalcomponent.c
  *
  * (C) COPYRIGHT 2001, Critical Path
 
@@ -25,6 +25,7 @@
 #include "icalvalue_cxx.h"
 #include "icalproperty_cxx.h"
 #include "icalparameter_cxx.h"
+using namespace LibICal;
 
 #include <cstdlib>
 #include <cstring>
@@ -353,21 +354,22 @@ void VComponent::convert_errors()
 }
 
 /* Kind conversion routines */
-icalcomponent_kind VComponent::string_to_kind(string str)
+icalcomponent_kind VComponent::string_to_kind(const string &str)
 {
     return icalcomponent_string_to_kind(str);
 }
 
-string VComponent::kind_to_string(icalcomponent_kind kind)
+string VComponent::kind_to_string(const icalcomponent_kind &kind)
 {
     return (string)icalcomponent_kind_to_string(kind);
 }
 
-struct icaltimetype VComponent::get_dtstart() const {
+struct icaltimetype VComponent::get_dtstart() const
+{
     return icalcomponent_get_dtstart(imp);
 }
 
-void VComponent::set_dtstart(const struct icaltimetype v)
+void VComponent::set_dtstart(const struct icaltimetype &v)
 {
     icalcomponent_set_dtstart(imp, v);
 }
@@ -382,29 +384,32 @@ void VComponent::set_dtstart(const struct icaltimetype v)
    routine will create the apcompriate comperty.
 */
 
-struct icaltimetype VComponent::get_dtend() const {
+struct icaltimetype VComponent::get_dtend() const
+{
     return icalcomponent_get_dtend(imp);
 }
 
-void VComponent::set_dtend(const struct icaltimetype v)
+void VComponent::set_dtend(const struct icaltimetype &v)
 {
     icalcomponent_set_dtend(imp, v);
 }
 
-struct icaltimetype VComponent::get_due() const {
+struct icaltimetype VComponent::get_due() const
+{
     return icalcomponent_get_due(imp);
 }
 
-void VComponent::set_due(const struct icaltimetype v)
+void VComponent::set_due(const struct icaltimetype &v)
 {
     icalcomponent_set_due(imp, v);
 }
 
-struct icaldurationtype VComponent::get_duration() const {
+struct icaldurationtype VComponent::get_duration() const
+{
     return icalcomponent_get_duration(imp);
 }
 
-void VComponent::set_duration(const struct icaldurationtype v)
+void VComponent::set_duration(const struct icaldurationtype &v)
 {
     icalcomponent_set_duration(imp, v);
 }
@@ -414,16 +419,17 @@ icalproperty_method VComponent::get_method() const
     return icalcomponent_get_method(imp);
 }
 
-void VComponent::set_method(const icalproperty_method method)
+void VComponent::set_method(const icalproperty_method &method)
 {
     icalcomponent_set_method(imp, method);
 }
 
-struct icaltimetype VComponent::get_dtstamp() const {
+struct icaltimetype VComponent::get_dtstamp() const
+{
     return icalcomponent_get_dtstamp(imp);
 }
 
-void VComponent::set_dtstamp(const struct icaltimetype v)
+void VComponent::set_dtstamp(const struct icaltimetype &v)
 {
     icalcomponent_set_dtstamp(imp, v);
 }
@@ -433,7 +439,7 @@ string VComponent::get_summary() const
     return (string)icalcomponent_get_summary(imp);
 }
 
-void VComponent::set_summary(const string v)
+void VComponent::set_summary(const string &v)
 {
     icalcomponent_set_summary(imp, v);
 }
@@ -443,7 +449,7 @@ string VComponent::get_location() const
     return (string)icalcomponent_get_location(imp);
 }
 
-void VComponent::set_location(const string v)
+void VComponent::set_location(const string &v)
 {
     icalcomponent_set_location(imp, v);
 }
@@ -453,7 +459,7 @@ string VComponent::get_description() const
     return (string)icalcomponent_get_description(imp);
 }
 
-void VComponent::set_description(const string v)
+void VComponent::set_description(const string &v)
 {
     icalcomponent_set_description(imp, v);
 }
@@ -463,7 +469,7 @@ string VComponent::get_comment() const
     return (string)icalcomponent_get_comment(imp);
 }
 
-void VComponent::set_comment(const string v)
+void VComponent::set_comment(const string &v)
 {
     icalcomponent_set_comment(imp, v);
 }
@@ -473,7 +479,7 @@ string VComponent::get_uid() const
     return (string)icalcomponent_get_uid(imp);
 }
 
-void VComponent::set_uid(const string v)
+void VComponent::set_uid(const string &v)
 {
     icalcomponent_set_uid(imp, v);
 }
@@ -483,16 +489,17 @@ string VComponent::get_relcalid() const
     return (string)icalcomponent_get_relcalid(imp);
 }
 
-void VComponent::set_relcalid(const string v)
+void VComponent::set_relcalid(const string &v)
 {
     icalcomponent_set_relcalid(imp, v);
 }
 
-struct icaltimetype VComponent::get_recurrenceid() const {
+struct icaltimetype VComponent::get_recurrenceid() const
+{
     return icalcomponent_get_recurrenceid(imp);
 }
 
-void VComponent::set_recurrenceid(const struct icaltimetype v)
+void VComponent::set_recurrenceid(const struct icaltimetype &v)
 {
     icalcomponent_set_recurrenceid(imp, v);
 }
@@ -502,7 +509,7 @@ int VComponent::get_sequence() const
     return (int)icalcomponent_get_sequence(imp);
 }
 
-void VComponent::set_sequence(const int v)
+void VComponent::set_sequence(const int &v)
 {
     icalcomponent_set_sequence(imp, v);
 }
@@ -512,7 +519,8 @@ int VComponent::get_status() const
     return (int)icalcomponent_get_status(imp);
 }
 
-void VComponent::set_status(const enum icalproperty_status v) {
+void VComponent::set_status(const enum icalproperty_status &v)
+{
     icalcomponent_set_status(imp, v);
 }
 
@@ -602,7 +610,7 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
 }
 
 /* removeMissing == true: remove properties that are missing from fromC */
-/* todo: only change the first occurence of the property */
+/* todo: only change the first occurrence of the property */
 /* todo: removeMissing is not implemented */
 bool VComponent::update(VComponent &fromC, bool removeMissing)
 {
@@ -678,7 +686,10 @@ VCalendar::VCalendar() : VComponent(icalcomponent_new_vcalendar())
 {
 }
 
-VCalendar::VCalendar(const VCalendar &v) : VComponent(v) {}
+VCalendar::VCalendar(const VCalendar &v) : VComponent(v)
+{
+}
+
 VCalendar &VCalendar::operator=(const VCalendar &v)
 {
     if (this == &v) {
@@ -689,15 +700,28 @@ VCalendar &VCalendar::operator=(const VCalendar &v)
     return *this;
 }
 
-VCalendar::~VCalendar() {}
+VCalendar::~VCalendar()
+{
+}
 
-VCalendar::VCalendar(icalcomponent *v) : VComponent(v) {}
-VCalendar::VCalendar(string str) : VComponent(str) {}
+VCalendar::VCalendar(icalcomponent *v) : VComponent(v)
+{
+}
+
+VCalendar::VCalendar(string str) : VComponent(str)
+{
+}
 
 /* VEvent */
 
-VEvent::VEvent() : VComponent(icalcomponent_new_vevent()) {}
-VEvent::VEvent(const VEvent &v) : VComponent(v) {}
+VEvent::VEvent() : VComponent(icalcomponent_new_vevent())
+{
+}
+
+VEvent::VEvent(const VEvent &v) : VComponent(v)
+{
+}
+
 VEvent &VEvent::operator=(const VEvent &v)
 {
     if (this == &v) {
@@ -708,15 +732,28 @@ VEvent &VEvent::operator=(const VEvent &v)
     return *this;
 }
 
-VEvent::~VEvent() {}
+VEvent::~VEvent()
+{
+}
 
-VEvent::VEvent(icalcomponent *v) : VComponent(v) {}
-VEvent::VEvent(string str) : VComponent(str) {}
+VEvent::VEvent(icalcomponent *v) : VComponent(v)
+{
+}
+
+VEvent::VEvent(string str) : VComponent(str)
+{
+}
 
 /* VTodo */
 
-VToDo::VToDo() : VComponent(icalcomponent_new_vtodo()) {}
-VToDo::VToDo(const VToDo &v) : VComponent(v) {}
+VToDo::VToDo() : VComponent(icalcomponent_new_vtodo())
+{
+}
+
+VToDo::VToDo(const VToDo &v) : VComponent(v)
+{
+}
+
 VToDo &VToDo::operator=(const VToDo &v)
 {
     if (this == &v) {
@@ -727,15 +764,28 @@ VToDo &VToDo::operator=(const VToDo &v)
     return *this;
 }
 
-VToDo::~VToDo() {}
+VToDo::~VToDo()
+{
+}
 
-VToDo::VToDo(icalcomponent *v) : VComponent(v) {}
-VToDo::VToDo(string str) : VComponent(str) {}
+VToDo::VToDo(icalcomponent *v) : VComponent(v)
+{
+}
+
+VToDo::VToDo(string str) : VComponent(str)
+{
+}
 
 /* VAgenda */
 
-VAgenda::VAgenda() : VComponent(icalcomponent_new_vagenda()) {}
-VAgenda::VAgenda(const VAgenda &v) : VComponent(v) {}
+VAgenda::VAgenda() : VComponent(icalcomponent_new_vagenda())
+{
+}
+
+VAgenda::VAgenda(const VAgenda &v) : VComponent(v)
+{
+}
+
 VAgenda &VAgenda::operator=(const VAgenda &v)
 {
     if (this == &v) {
@@ -746,15 +796,28 @@ VAgenda &VAgenda::operator=(const VAgenda &v)
     return *this;
 }
 
-VAgenda::~VAgenda() {}
+VAgenda::~VAgenda()
+{
+}
 
-VAgenda::VAgenda(icalcomponent *v) : VComponent(v) {}
-VAgenda::VAgenda(string str) : VComponent(str) {}
+VAgenda::VAgenda(icalcomponent *v) : VComponent(v)
+{
+}
+
+VAgenda::VAgenda(string str) : VComponent(str)
+{
+}
 
 /* VQuery */
 
-VQuery::VQuery() : VComponent(icalcomponent_new_vquery()) {}
-VQuery::VQuery(const VQuery &v) : VComponent(v) {}
+VQuery::VQuery() : VComponent(icalcomponent_new_vquery())
+{
+}
+
+VQuery::VQuery(const VQuery &v) : VComponent(v)
+{
+}
+
 VQuery &VQuery::operator=(const VQuery &v)
 {
     if (this == &v) {
@@ -765,15 +828,28 @@ VQuery &VQuery::operator=(const VQuery &v)
     return *this;
 }
 
-VQuery::~VQuery() {}
+VQuery::~VQuery()
+{
+}
 
-VQuery::VQuery(icalcomponent *v) : VComponent(v) {}
-VQuery::VQuery(string str) : VComponent(str) {}
+VQuery::VQuery(icalcomponent *v) : VComponent(v)
+{
+}
+
+VQuery::VQuery(string str) : VComponent(str)
+{
+}
 
 /* VJournal */
 
-VJournal::VJournal() : VComponent(icalcomponent_new_vjournal()) {}
-VJournal::VJournal(const VJournal &v) : VComponent(v) {}
+VJournal::VJournal() : VComponent(icalcomponent_new_vjournal())
+{
+}
+
+VJournal::VJournal(const VJournal &v) : VComponent(v)
+{
+}
+
 VJournal &VJournal::operator=(const VJournal &v)
 {
     if (this == &v) {
@@ -784,15 +860,28 @@ VJournal &VJournal::operator=(const VJournal &v)
     return *this;
 }
 
-VJournal::~VJournal() {}
+VJournal::~VJournal()
+{
+}
 
-VJournal::VJournal(icalcomponent *v) : VComponent(v) {}
-VJournal::VJournal(string str) : VComponent(str) {}
+VJournal::VJournal(icalcomponent *v) : VComponent(v)
+{
+}
+
+VJournal::VJournal(string str) : VComponent(str)
+{
+}
 
 /* VAlarm */
 
-VAlarm::VAlarm() : VComponent(icalcomponent_new_valarm()) {}
-VAlarm::VAlarm(const VAlarm &v) : VComponent(v) {}
+VAlarm::VAlarm() : VComponent(icalcomponent_new_valarm())
+{
+}
+
+VAlarm::VAlarm(const VAlarm &v) : VComponent(v)
+{
+}
+
 VAlarm &VAlarm::operator=(const VAlarm &v)
 {
     if (this == &v) {
@@ -803,10 +892,17 @@ VAlarm &VAlarm::operator=(const VAlarm &v)
     return *this;
 }
 
-VAlarm::~VAlarm() {}
+VAlarm::~VAlarm()
+{
+}
 
-VAlarm::VAlarm(icalcomponent *v) : VComponent(v) {}
-VAlarm::VAlarm(string str) : VComponent(str) {}
+VAlarm::VAlarm(icalcomponent *v) : VComponent(v)
+{
+}
+
+VAlarm::VAlarm(string str) : VComponent(str)
+{
+}
 
 icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *tr)
 {
@@ -873,7 +969,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
                     break;
                 }
             }
-        } else { // no RELATED explicity specified, the default is
+        } else { // no RELATED explicitly specified, the default is
             // relative to the start of an event or to-do, rfc2445
             // if no RELATED, we are forced to use dtstart for VEVENT,
             // due for VTODO to calculate trigger time.
@@ -903,8 +999,14 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
 
 /* VFreeBusy */
 
-VFreeBusy::VFreeBusy() : VComponent(icalcomponent_new_vfreebusy()) {}
-VFreeBusy::VFreeBusy(const VFreeBusy &v) : VComponent(v) {}
+VFreeBusy::VFreeBusy() : VComponent(icalcomponent_new_vfreebusy())
+{
+}
+
+VFreeBusy::VFreeBusy(const VFreeBusy &v) : VComponent(v)
+{
+}
+
 VFreeBusy &VFreeBusy::operator=(const VFreeBusy &v)
 {
     if (this == &v) {
@@ -915,15 +1017,28 @@ VFreeBusy &VFreeBusy::operator=(const VFreeBusy &v)
     return *this;
 }
 
-VFreeBusy::~VFreeBusy() {}
+VFreeBusy::~VFreeBusy()
+{
+}
 
-VFreeBusy::VFreeBusy(icalcomponent *v) : VComponent(v) {}
-VFreeBusy::VFreeBusy(string str) : VComponent(str) {}
+VFreeBusy::VFreeBusy(icalcomponent *v) : VComponent(v)
+{
+}
+
+VFreeBusy::VFreeBusy(string str) : VComponent(str)
+{
+}
 
 /* VTimezone */
 
-VTimezone::VTimezone() : VComponent(icalcomponent_new_vtimezone()) {}
-VTimezone::VTimezone(const VTimezone &v) : VComponent(v) {}
+VTimezone::VTimezone() : VComponent(icalcomponent_new_vtimezone())
+{
+}
+
+VTimezone::VTimezone(const VTimezone &v) : VComponent(v)
+{
+}
+
 VTimezone &VTimezone::operator=(const VTimezone &v)
 {
     if (this == &v) {
@@ -934,15 +1049,28 @@ VTimezone &VTimezone::operator=(const VTimezone &v)
     return *this;
 }
 
-VTimezone::~VTimezone() {}
+VTimezone::~VTimezone()
+{
+}
 
-VTimezone::VTimezone(icalcomponent *v) : VComponent(v) {}
-VTimezone::VTimezone(string str) : VComponent(str) {}
+VTimezone::VTimezone(icalcomponent *v) : VComponent(v)
+{
+}
+
+VTimezone::VTimezone(string str) : VComponent(str)
+{
+}
 
 /* XStandard */
 
-XStandard::XStandard() : VComponent(icalcomponent_new_xstandard()) {}
-XStandard::XStandard(const XStandard &v) : VComponent(v) {}
+XStandard::XStandard() : VComponent(icalcomponent_new_xstandard())
+{
+}
+
+XStandard::XStandard(const XStandard &v) : VComponent(v)
+{
+}
+
 XStandard &XStandard::operator=(const XStandard &v)
 {
     if (this == &v) {
@@ -953,15 +1081,28 @@ XStandard &XStandard::operator=(const XStandard &v)
     return *this;
 }
 
-XStandard::~XStandard() {}
+XStandard::~XStandard()
+{
+}
 
-XStandard::XStandard(icalcomponent *v) : VComponent(v) {}
-XStandard::XStandard(string str) : VComponent(str) {}
+XStandard::XStandard(icalcomponent *v) : VComponent(v)
+{
+}
+
+XStandard::XStandard(string str) : VComponent(str)
+{
+}
 
 /* XDaylight */
 
-XDaylight::XDaylight() : VComponent(icalcomponent_new_xdaylight()) {}
-XDaylight::XDaylight(const XDaylight &v) : VComponent(v) {}
+XDaylight::XDaylight() : VComponent(icalcomponent_new_xdaylight())
+{
+}
+
+XDaylight::XDaylight(const XDaylight &v) : VComponent(v)
+{
+}
+
 XDaylight &XDaylight::operator=(const XDaylight &v)
 {
     if (this == &v) {
@@ -972,7 +1113,14 @@ XDaylight &XDaylight::operator=(const XDaylight &v)
     return *this;
 }
 
-XDaylight::~XDaylight() {}
+XDaylight::~XDaylight()
+{
+}
 
-XDaylight::XDaylight(icalcomponent *v) : VComponent(v) {}
-XDaylight::XDaylight(string str) : VComponent(str) {}
+XDaylight::XDaylight(icalcomponent *v) : VComponent(v)
+{
+}
+
+XDaylight::XDaylight(string str) : VComponent(str)
+{
+}

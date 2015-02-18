@@ -19,6 +19,9 @@
 #ifndef TEST_REGRESSION_H
 #define TEST_REGRESSION_H
 
+#include "icaltypes.h"
+#include <time.h> //for time_t
+
 #ifdef  __cplusplus
 extern "C" {
 #endif
