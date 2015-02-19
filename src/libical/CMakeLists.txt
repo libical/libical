@@ -316,8 +316,8 @@ if(WITH_CXX_BINDINGS)
     icalproperty_cxx.h
     icalvalue_cxx.cpp
     icalvalue_cxx.h
-    vcomponent.cpp
-    vcomponent.h
+    vcomponent_cxx.cpp
+    vcomponent_cxx.h
   )
 
   add_definitions(-DBUILD_LIBICALDLL)
@@ -406,8 +406,8 @@ if(WITH_CXX_BINDINGS)
     icalparameter_cxx.h
     icalproperty_cxx.h
     icalvalue_cxx.h
-    icptrholder.h
-    vcomponent.h
+    icptrholder_cxx.h
+    vcomponent_cxx.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/libical
   )
