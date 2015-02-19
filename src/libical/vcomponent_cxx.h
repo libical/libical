@@ -1,5 +1,5 @@
 /**
- * @file    vcomponent.h
+ * @file    vcomponent_cxx.h
  * @author  fnguyen (12/10/01)
  * @brief   C++ classes for the icalcomponent wrapper (VToDo VEvent, etc..).
  *
@@ -17,15 +17,15 @@
     the License at http://www.mozilla.org/MPL/
  */
 
-#ifndef VCOMPONENT_H
-#define VCOMPONENT_H
+#ifndef VCOMPONENT_CXX_H
+#define VCOMPONENT_CXX_H
 
 #include "libical_ical_export.h"
 
 extern "C" {
 #include <libical/ical.h>
 };
-#include "icptrholder.h"
+#include "icptrholder_cxx.h"
 
 #include <string>
 

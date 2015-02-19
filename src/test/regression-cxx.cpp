@@ -19,7 +19,7 @@ extern "C" {
 
 #include "icalparameter_cxx.h"
 #include "icalproperty_cxx.h"
-#include "vcomponent.h"
+#include "vcomponent_cxx.h"
 using namespace LibICal;
 
 #include <cstdio>

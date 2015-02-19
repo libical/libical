@@ -1,9 +1,9 @@
-/* -*- Mode: C++ -*- */
+/*
 
 /**
- * @file    icptrholder.h
+ * @file    icptrholder_cxx.h
  * @author  wyau (08/29/02)
- * @brief   C++ template classes for managing C++ pointers returned by VComponent::get_..._component, 
+ * @brief   C++ template classes for managing C++ pointers returned by VComponent::get_..._component,
  *          VComponent::get_..._property, ICalPropety::get_..._value.
  * @remarks VComponent::get... functions returns a C++ oject that wraps the libical implementation.
  *          It is important to note that the wrapped implementation still belongs to the orginal
@@ -25,10 +25,10 @@
  * (C) COPYRIGHT 2001, Critical Path
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
   Or:
 
@@ -36,8 +36,8 @@
     the License at http://www.mozilla.org/MPL/
  */
 
-#ifndef __ICPTRHOLDER_H__
-#define __ICPTRHOLDER_H__
+#ifndef ICPTRHOLDER_CXX_H
+#define ICPTRHOLDER_CXX_H
 
 template<class T> class ICPointerHolder {
 public:

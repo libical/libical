@@ -1,5 +1,5 @@
 /**
- * @file    vcomponent.cpp
+ * @file    vcomponent_cxx.cpp
  * @author  fnguyen (12/10/01)
  * @brief   Implementation of C++ Wrapper for icalcomponent.c
  *
@@ -21,7 +21,7 @@
 #include <config.h>
 #endif
 
-#include "vcomponent.h"
+#include "vcomponent_cxx.h"
 #include "icalvalue_cxx.h"
 #include "icalproperty_cxx.h"
 #include "icalparameter_cxx.h"

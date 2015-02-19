@@ -19,7 +19,7 @@
  */
 
 #include "icalspanlist_cxx.h"
-#include "vcomponent.h"
+#include "vcomponent_cxx.h"
 using namespace LibICal;
 
 #include <exception>

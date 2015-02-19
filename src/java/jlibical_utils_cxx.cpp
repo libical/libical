@@ -1,4 +1,4 @@
-/* -*- Mode: C -*- */
+/*
 /*======================================================================
  FILE: jlibical_utils_cxx.cpp
  CREATOR: Srinivasa Boppana/George Norman
@@ -18,7 +18,7 @@
 #endif
 
 #ifndef VCOMPONENT_CXX_H
-#include "vcomponent.h"
+#include "vcomponent_cxx.h"
 #endif
 
 #ifndef ICALPROPERTY_CXX_H

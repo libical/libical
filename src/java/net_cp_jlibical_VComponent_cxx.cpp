@@ -1,4 +1,4 @@
-/* -*- Mode: C -*- */
+/*
 /*======================================================================
  FILE: net_cp_jlibical_VComponent_cxx.cpp
  CREATOR: gnorman 1/10/02
@@ -18,7 +18,7 @@
 #endif
 
 #ifndef VCOMPONENT_CXX_H
-#include "vcomponent.h"
+#include "vcomponent_cxx.h"
 #endif
 
 #ifndef ICALPROPERTY_CXX_H

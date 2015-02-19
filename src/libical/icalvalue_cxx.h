@@ -23,7 +23,7 @@
 extern "C" {
 #include <libical/ical.h>
 };
-#include "icptrholder.h"
+#include "icptrholder_cxx.h"
 
 #include <string>
 
