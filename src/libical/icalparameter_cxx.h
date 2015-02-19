@@ -27,9 +27,10 @@ extern "C" {
 };
 #include "icptrholder.h"
 
-typedef char *string; // Will use the string library from STL
+#include <string>
 
-namespace LibICal {
+namespace LibICal
+{
 
 class LIBICAL_ICAL_EXPORT ICalParameter
 {
@@ -42,11 +43,11 @@ public:
     explicit ICalParameter(icalparameter *v)  throw(icalerrorenum);
 
     // Create from string of form "PARAMNAME=VALUE"
-    explicit ICalParameter(string str) throw(icalerrorenum);
+    explicit ICalParameter(std::string str) throw(icalerrorenum);
 
     // Create from just the value, the part after the "="
     explicit ICalParameter(icalparameter_kind kind) throw(icalerrorenum);
-    ICalParameter(icalparameter_kind kind, string  str) throw(icalerrorenum);
+    ICalParameter(icalparameter_kind kind, std::string str) throw(icalerrorenum);
 
     operator icalparameter *()
     {
@@ -56,38 +57,38 @@ public:
     void detach();
 
 public:
-    string as_ical_string() throw(icalerrorenum);
+    std::string as_ical_string() throw(icalerrorenum);
     bool is_valid();
     icalparameter_kind isa();
     int isa_parameter(void *param);
 
 public:
     /* Access the name of an X parameter */
-    static void set_xname(ICalParameter  &param, string v);
-    static string get_xname(ICalParameter  &param);
-    static void set_xvalue(ICalParameter  &param, string v);
-    static string get_xvalue(ICalParameter  &param);
+    static void set_xname(ICalParameter &param, std::string v);
+    static std::string get_xname(ICalParameter &param);
+    static void set_xvalue(ICalParameter &param, std::string v);
+    static std::string get_xvalue(ICalParameter &param);
 
     /* Convert enumerations */
-    static string kind_to_string(icalparameter_kind kind);
-    static icalparameter_kind string_to_kind(string  str);
+    static std::string kind_to_string(icalparameter_kind kind);
+    static icalparameter_kind string_to_kind(std::string str);
 
 public:
     /* DELEGATED-FROM */
-    string get_delegatedfrom() const;
-    void set_delegatedfrom(const string v);
+    std::string get_delegatedfrom() const;
+    void set_delegatedfrom(const std::string v);
 
     /* RELATED */
     icalparameter_related get_related() const;
     void set_related(const icalparameter_related v);
 
     /* SENT-BY */
-    string get_sentby() const;
-    void set_sentby(const string v);
+    std::string get_sentby() const;
+    void set_sentby(const std::string v);
 
     /* LANGUAGE */
-    string get_language() const;
-    void set_language(const string v);
+    std::string get_language() const;
+    void set_language(const std::string v);
 
     /* RELTYPE */
     icalparameter_reltype get_reltype() const;
@@ -98,12 +99,12 @@ public:
     void set_encoding(const icalparameter_encoding v);
 
     /* ALTREP */
-    string get_altrep() const;
-    void set_altrep(const string v);
+    std::string get_altrep() const;
+    void set_altrep(const std::string v);
 
     /* FMTTYPE */
-    string get_fmttype() const;
-    void set_fmttype(const string v);
+    std::string get_fmttype() const;
+    void set_fmttype(const std::string v);
 
     /* FBTYPE */
     icalparameter_fbtype get_fbtype() const;
@@ -118,12 +119,12 @@ public:
     void set_range(const icalparameter_range v);
 
     /* DELEGATED-TO */
-    string get_delegatedto() const;
-    void set_delegatedto(const string v);
+    std::string get_delegatedto() const;
+    void set_delegatedto(const std::string v);
 
     /* CN */
-    string get_cn() const;
-    void set_cn(const string v);
+    std::string get_cn() const;
+    void set_cn(const std::string v);
 
     /* ROLE */
     icalparameter_role get_role() const;
@@ -142,28 +143,28 @@ public:
     void set_xlicerrortype(const icalparameter_xlicerrortype v);
 
     /* MEMBER */
-    string get_member() const;
-    void set_member(const string v);
+    std::string get_member() const;
+    void set_member(const std::string v);
 
     /* X */
-    string get_x() const;
-    void set_x(const string v);
+    std::string get_x() const;
+    void set_x(const std::string v);
 
     /* CUTYPE */
     icalparameter_cutype get_cutype() const;
     void set_cutype(const icalparameter_cutype v);
 
     /* TZID */
-    string get_tzid() const;
-    void set_tzid(string v);
+    std::string get_tzid() const;
+    void set_tzid(std::string v);
 
     /* VALUE */
     icalparameter_value get_value() const;
     void set_value(const icalparameter_value v);
 
     /* DIR */
-    string get_dir() const;
-    void set_dir(const string v);
+    std::string get_dir() const;
+    void set_dir(const std::string v);
 
 private:
     icalparameter *imp;

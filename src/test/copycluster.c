@@ -1,32 +1,29 @@
-/* -*- Mode: C -*-
+/*
   ======================================================================
   FILE: copycluster.c
   CREATOR: eric 15 January 2000
-  
-  $Id: copycluster.c,v 1.18 2008-02-03 16:10:46 dothebart Exp $
-  $Locker:  $
-    
- (C) COPYRIGHT 2000 Eric Busboom
- http://www.softwarestudio.org
 
- The contents of this file are subject to the Mozilla Public License
- Version 1.0 (the "License"); you may not use this file except in
- compliance with the License. You may obtain a copy of the License at
- http://www.mozilla.org/MPL/
+  (C) COPYRIGHT 2000 Eric Busboom
+  http://www.softwarestudio.org
+
+  The contents of this file are subject to the Mozilla Public License
+  Version 1.0 (the "License"); you may not use this file except in
+  compliance with the License. You may obtain a copy of the License at
+  http://www.mozilla.org/MPL/
  
- Software distributed under the License is distributed on an "AS IS"
- basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
- the License for the specific language governing rights and
- limitations under the License.
+  Software distributed under the License is distributed on an "AS IS"
+  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+  the License for the specific language governing rights and
+  limitations under the License.
  
- The Original Code is eric. The Initial Developer of the Original
- Code is Eric Busboom
+  The Original Code is eric. The Initial Developer of the Original
+  Code is Eric Busboom
 
 
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <stdio.h> /* for printf */
@@ -41,7 +38,7 @@
 #include <libical/ical.h>
 #include <libicalss/icalss.h>
 
-#ifdef SIGALRM
+#if defined(SIGALRM)
 
 static void sig_alrm(int i){
     (void)i;/*unused*/
@@ -77,12 +74,12 @@ int main(int c, char *argv[]){
 
     /*icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);*/
 
-#ifdef SIGALRM
+#if defined(SIGALRM)
     signal(SIGALRM,sig_alrm);
     alarm(10);
 #endif
     clusterin = icalfileset_new(argv[1]);
-#ifdef SIGALRM
+#if defined(SIGALRM)
     alarm(0);
 #endif
     if (clusterin == 0){
@@ -94,11 +91,11 @@ int main(int c, char *argv[]){
     }
 
     if (!tostdout){
-#ifdef SIGALRM
+#if defined(SIGALRM)
         alarm(10);
 #endif
 	clusterout = icalfileset_new(argv[2]);
-#ifdef SIGALRM
+#if defined(SIGALRM)
 	alarm(0);
 #endif
 	if (clusterout == 0){

@@ -27,9 +27,10 @@ extern "C" {
 };
 #include "icptrholder.h"
 
-namespace LibICal {
+#include <string>
 
-typedef char *string; // Will use the string library from STL
+namespace LibICal
+{
 
 class ICalParameter;
 class ICalValue;
@@ -43,9 +44,9 @@ public:
     ~ICalProperty();
 
     explicit ICalProperty(icalproperty *v);
-    explicit ICalProperty(string str);
+    explicit ICalProperty(std::string str);
     explicit ICalProperty(icalproperty_kind kind);
-    ICalProperty(icalproperty_kind kind, string str);
+    ICalProperty(icalproperty_kind kind, std::string str);
 
     operator icalproperty *()
     {
@@ -56,55 +57,55 @@ public:
     void detach();
 
 public:
-    string as_ical_string();
+    std::string as_ical_string();
     icalproperty_kind isa();
     int isa_property(void *property);
 
     void add_parameter(ICalParameter &parameter);
     void set_parameter(ICalParameter &parameter);
-    void set_parameter_from_string(const string name, const string val);
-    string get_parameter_as_string(const string name);
-    void remove_parameter(icalparameter_kind kind);
+    void set_parameter_from_string(const std::string &name, const std::string &val);
+    std::string get_parameter_as_string(const std::string &name);
+    void remove_parameter(const icalparameter_kind &kind);
     int count_parameters();
 
     /** Iterate through the parameters */
-    ICalParameter *get_first_parameter(icalparameter_kind kind);
-    ICalParameter *get_next_parameter(icalparameter_kind kind);
+    ICalParameter *get_first_parameter(const icalparameter_kind &kind);
+    ICalParameter *get_next_parameter(const icalparameter_kind &kind);
 
     /** Access the value of the property */
     void set_value(const ICalValue &val);
-    void set_value_from_string(const string val, const string kind);
+    void set_value_from_string(const std::string &val, const std::string &kind);
 
     ICalValue *get_value();
-    string get_value_as_string();
+    std::string get_value_as_string();
 
     /** Return the name of the property -- the type name converted
      *  to a string, or the value of get_x_name if the type is X
      *  property
      */
-    string get_name() const;
+    std::string get_name() const;
 
 public:
     /* Deal with X properties */
-    static void set_x_name(ICalProperty &prop, const string &name);
-    static string get_x_name(ICalProperty &prop);
+    static void set_x_name(ICalProperty &prop, const std::string &name);
+    static std::string get_x_name(ICalProperty &prop);
 
     static icalvalue_kind value_to_value_kind(const icalparameter_value &val);
 
     /* Convert kinds to string and get default value type */
     static icalvalue_kind kind_to_value_kind(const icalproperty_kind &kind);
     static icalproperty_kind value_kind_to_kind(const icalvalue_kind &kind);
-    static string kind_to_string(const icalproperty_kind &kind);
-    static icalproperty_kind string_to_kind(const string &str);
+    static std::string kind_to_string(const icalproperty_kind &kind);
+    static icalproperty_kind string_to_kind(const std::string &str);
 
-    static icalproperty_method string_to_method(const string &str);
-    static string method_to_string(const icalproperty_method &method);
+    static icalproperty_method string_to_method(const std::string &str);
+    static std::string method_to_string(const icalproperty_method &method);
 
-    static string enum_to_string(const int &e);
-    static int string_to_enum(const string &str);
+    static std::string enum_to_string(const int &e);
+    static int string_to_enum(const std::string &str);
 
-    static string status_to_string(const icalproperty_status &status);
-    static icalproperty_status string_to_status(const string &str);
+    static std::string status_to_string(const icalproperty_status &status);
+    static icalproperty_status string_to_status(const std::string &str);
 
     static int enum_belongs_to_property(const icalproperty_kind &kind, const int &e);
 
@@ -118,40 +119,40 @@ public:
     icalattach *get_attach() const;
 
     /* ATTENDEE */
-    void set_attendee(const string &val);
-    string get_attendee() const;
+    void set_attendee(const std::string &val);
+    std::string get_attendee() const;
 
     /* CALSCALE */
-    void set_calscale(const string &val);
-    string get_calscale() const;
+    void set_calscale(const std::string &val);
+    std::string get_calscale() const;
 
     /* CATEGORIES */
-    void set_categories(const string &val);
-    string get_categories() const;
+    void set_categories(const std::string &val);
+    std::string get_categories() const;
 
     /* CLASS */
     void set_class(const enum icalproperty_class &val);
     enum icalproperty_class get_class() const;
 
     /* COMMENT */
-    void set_comment(const string &val);
-    string get_comment() const;
+    void set_comment(const std::string &val);
+    std::string get_comment() const;
 
     /* COMPLETED */
     void set_completed(const struct icaltimetype &val);
     struct icaltimetype get_completed() const;
 
     /* CONTACT */
-    void set_contact(const string &val);
-    string get_contact() const;
+    void set_contact(const std::string &val);
+    std::string get_contact() const;
 
     /* CREATED */
     void set_created(const struct icaltimetype &val);
     struct icaltimetype get_created() const;
 
     /* DESCRIPTION */
-    void set_description(const string &val);
-    string get_description() const;
+    void set_description(const std::string &val);
+    std::string get_description() const;
 
     /* DTEND */
     void set_dtend(const struct icaltimetype &val);
@@ -194,16 +195,16 @@ public:
     struct icalgeotype get_geo() const;
 
     /* GRANT */
-    void set_grant(const string &val);
-    string get_grant() const;
+    void set_grant(const std::string &val);
+    std::string get_grant() const;
 
     /* LAST-MODIFIED */
     void set_lastmodified(const struct icaltimetype &val);
     struct icaltimetype get_lastmodified() const;
 
     /* LOCATION */
-    void set_location(const string &val);
-    string get_location() const;
+    void set_location(const std::string &val);
+    std::string get_location() const;
 
     /* MAXRESULTS */
     void set_maxresults(const int &val);
@@ -218,12 +219,12 @@ public:
     enum icalproperty_method get_method() const;
 
     /* OWNER */
-    void set_owner(const string &val);
-    string get_owner() const;
+    void set_owner(const std::string &val);
+    std::string get_owner() const;
 
     /* ORGANIZER */
-    void set_organizer(const string &val);
-    string get_organizer() const;
+    void set_organizer(const std::string &val);
+    std::string get_organizer() const;
 
     /* PERCENT-COMPLETE */
     void set_percentcomplete(const int &val);
@@ -234,16 +235,16 @@ public:
     int get_priority() const;
 
     /* PRODID */
-    void set_prodid(const string &val);
-    string get_prodid() const;
+    void set_prodid(const std::string &val);
+    std::string get_prodid() const;
 
     /* QUERY */
-    void set_query(const string &val);
-    string get_query() const;
+    void set_query(const std::string &val);
+    std::string get_query() const;
 
     /* QUERYNAME */
-    void set_queryname(const string &val);
-    string get_queryname() const;
+    void set_queryname(const std::string &val);
+    std::string get_queryname() const;
 
     /* RDATE */
     void set_rdate(const struct icaldatetimeperiodtype &val);
@@ -254,32 +255,32 @@ public:
     struct icaltimetype get_recurrenceid() const;
 
     /* RELATED-TO */
-    void set_relatedto(const string &val);
-    string get_relatedto() const;
+    void set_relatedto(const std::string &val);
+    std::string get_relatedto() const;
 
     /* RELCALID */
-    void set_relcalid(const string &val);
-    string get_relcalid() const;
+    void set_relcalid(const std::string &val);
+    std::string get_relcalid() const;
 
     /* REPEAT */
     void set_repeat(const int &val);
     int get_repeat() const;
 
     /* REQUEST-STATUS */
-    void set_requeststatus(const string &val);
-    string get_requeststatus() const;
+    void set_requeststatus(const std::string &val);
+    std::string get_requeststatus() const;
 
     /* RESOURCES */
-    void set_resources(const string &val);
-    string get_resources() const;
+    void set_resources(const std::string &val);
+    std::string get_resources() const;
 
     /* RRULE */
     void set_rrule(const struct icalrecurrencetype &val);
     struct icalrecurrencetype get_rrule() const;
 
     /* SCOPE */
-    void set_scope(const string &val);
-    string get_scope() const;
+    void set_scope(const std::string &val);
+    std::string get_scope() const;
 
     /* SEQUENCE */
     void set_sequence(const int &val);
@@ -290,12 +291,12 @@ public:
     enum icalproperty_status get_status() const;
 
     /* SUMMARY */
-    void set_summary(const string &val);
-    string get_summary() const;
+    void set_summary(const std::string &val);
+    std::string get_summary() const;
 
     /* TARGET */
-    void set_target(const string &val);
-    string get_target() const;
+    void set_target(const std::string &val);
+    std::string get_target() const;
 
     /* TRANSP */
     void set_transp(const enum icalproperty_transp &val);
@@ -306,12 +307,12 @@ public:
     struct icaltriggertype get_trigger() const;
 
     /* TZID */
-    void set_tzid(const string &val);
-    string get_tzid() const;
+    void set_tzid(const std::string &val);
+    std::string get_tzid() const;
 
     /* TZNAME */
-    void set_tzname(const string &val);
-    string get_tzname() const;
+    void set_tzname(const std::string &val);
+    std::string get_tzname() const;
 
     /* TZOFFSETFROM */
     void set_tzoffsetfrom(const int &val);
@@ -322,56 +323,56 @@ public:
     int get_tzoffsetto() const;
 
     /* TZURL */
-    void set_tzurl(const string &val);
-    string get_tzurl() const;
+    void set_tzurl(const std::string &val);
+    std::string get_tzurl() const;
 
     /* UID */
-    void set_uid(const string &val);
-    string get_uid() const;
+    void set_uid(const std::string &val);
+    std::string get_uid() const;
 
     /* URL */
-    void set_url(const string &val);
-    string get_url() const;
+    void set_url(const std::string &val);
+    std::string get_url() const;
 
     /* VERSION */
-    void set_version(const string &val);
-    string get_version() const;
+    void set_version(const std::string &val);
+    std::string get_version() const;
 
     /* X */
-    void set_x(const string &val);
-    string get_x() const;
+    void set_x(const std::string &val);
+    std::string get_x() const;
 
     /* X-LIC-CLUSTERCOUNT */
-    void set_xlicclustercount(const string &val);
-    string get_xlicclustercount() const;
+    void set_xlicclustercount(const std::string &val);
+    std::string get_xlicclustercount() const;
 
     /* X-LIC-ERROR */
-    void set_xlicerror(const string &val);
-    string get_xlicerror() const;
+    void set_xlicerror(const std::string &val);
+    std::string get_xlicerror() const;
 
     /* X-LIC-MIMECHARSET */
-    void set_xlicmimecharset(const string &val);
-    string get_xlicmimecharset() const;
+    void set_xlicmimecharset(const std::string &val);
+    std::string get_xlicmimecharset() const;
 
     /* X-LIC-MIMECID */
-    void set_xlicmimecid(const string &val);
-    string get_xlicmimecid() const;
+    void set_xlicmimecid(const std::string &val);
+    std::string get_xlicmimecid() const;
 
     /* X-LIC-MIMECONTENTTYPE */
-    void set_xlicmimecontenttype(const string &val);
-    string get_xlicmimecontenttype() const;
+    void set_xlicmimecontenttype(const std::string &val);
+    std::string get_xlicmimecontenttype() const;
 
     /* X-LIC-MIMEENCODING */
-    void set_xlicmimeencoding(const string &val);
-    string get_xlicmimeencoding() const;
+    void set_xlicmimeencoding(const std::string &val);
+    std::string get_xlicmimeencoding() const;
 
     /* X-LIC-MIMEFILENAME */
-    void set_xlicmimefilename(const string &val);
-    string get_xlicmimefilename() const;
+    void set_xlicmimefilename(const std::string &val);
+    std::string get_xlicmimefilename() const;
 
     /* X-LIC-MIMEOPTINFO */
-    void set_xlicmimeoptinfo(const string &val);
-    string get_xlicmimeoptinfo() const;
+    void set_xlicmimeoptinfo(const std::string &val);
+    std::string get_xlicmimeoptinfo() const;
 
 private:
     icalproperty *imp; /**< The actual C based icalproperty */

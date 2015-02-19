@@ -25,21 +25,22 @@ extern "C" {
 };
 #include "icptrholder.h"
 
-typedef char *string; // Will use the string library from STL
+#include <string>
 
-namespace LibICal {
+namespace LibICal
+{
 
 class LIBICAL_ICAL_EXPORT ICalValue
 {
 public:
-    ICalValue()                                  throw(icalerrorenum);
-    ICalValue(const ICalValue &)                 throw(icalerrorenum);
-    ICalValue &operator=(const ICalValue &)      throw(icalerrorenum);
+    ICalValue()                                    throw(icalerrorenum);
+    ICalValue(const ICalValue &)                   throw(icalerrorenum);
+    ICalValue &operator=(const ICalValue &)        throw(icalerrorenum);
     ~ICalValue();
 
-    explicit ICalValue(icalvalue *)              throw(icalerrorenum);
-    explicit ICalValue(icalvalue_kind kind)      throw(icalerrorenum);
-    ICalValue(icalvalue_kind kind, string  str)  throw(icalerrorenum);
+    explicit ICalValue(icalvalue *)                throw(icalerrorenum);
+    explicit ICalValue(const icalvalue_kind &kind) throw(icalerrorenum);
+    ICalValue(const icalvalue_kind &kind, const std::string &str) throw(icalerrorenum);
 
     operator icalvalue *()
     {
@@ -49,7 +50,7 @@ public:
     void detach();
 
 public:
-    string as_ical_string();
+    std::string as_ical_string();
     bool is_valid();
     icalvalue_kind isa();
     int isa_value(void *);
@@ -68,8 +69,8 @@ public:
     static icalparameter_xliccomparetype compare(ICalValue &a, ICalValue &b);
 
     /* Convert enumerations */
-    static icalvalue_kind string_to_kind(const string &str);
-    string kind_to_string(const icalvalue_kind &kind);
+    static icalvalue_kind string_to_kind(const std::string &str);
+    std::string kind_to_string(const icalvalue_kind &kind);
 
 public:
     /* BOOLEAN */
@@ -85,8 +86,8 @@ public:
     void set_method(const enum icalproperty_method &v);
 
     /* CAL-ADDRESS */
-    string get_caladdress() const;
-    void set_caladdress(const string &v);
+    std::string get_caladdress() const;
+    void set_caladdress(const std::string &v);
 
     /* PERIOD */
     struct icalperiodtype get_period() const;
@@ -97,12 +98,12 @@ public:
     void set_status(const enum icalproperty_status &v);
 
     /* BINARY */
-    string get_binary() const;
-    void set_binary(const string &v);
+    std::string get_binary() const;
+    void set_binary(const std::string &v);
 
     /* TEXT */
-    string get_text() const;
-    void set_text(const string &v);
+    std::string get_text() const;
+    void set_text(const std::string &v);
 
     /* DURATION */
     struct icaldurationtype get_duration() const;
@@ -113,8 +114,8 @@ public:
     void set_integer(const int &v);
 
     /* URI */
-    string get_uri() const;
-    void set_uri(const string &v);
+    std::string get_uri() const;
+    void set_uri(const std::string &v);
 
     /* ATTACH */
     icalattach *get_attach();
@@ -129,12 +130,12 @@ public:
     void set_float(const float &v);
 
     /* QUERY */
-    string get_query() const;
-    void set_query(const string &v);
+    std::string get_query() const;
+    void set_query(const std::string &v);
 
     /* STRING */
-    string get_string() const;
-    void set_string(const string &v);
+    std::string get_string() const;
+    void set_string(const std::string &v);
 
     /* TRANSP */
     enum icalproperty_transp get_transp() const;

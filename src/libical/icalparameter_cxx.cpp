@@ -21,8 +21,6 @@
 #include "icalvalue_cxx.h"
 using namespace LibICal;
 
-typedef char *string; // Will use the string library from STL
-
 ICalParameter::ICalParameter() throw(icalerrorenum) : imp(icalparameter_new(ICAL_ANY_PARAMETER))
 {
 }
@@ -69,18 +67,18 @@ ICalParameter::ICalParameter(icalparameter *v) throw(icalerrorenum) : imp(v)
 }
 
 /// Create from string of form "PARAMNAME=VALUE"
-ICalParameter::ICalParameter(string str) throw(icalerrorenum)
+ICalParameter::ICalParameter(std::string str) throw(icalerrorenum)
 {
-    imp = icalparameter_new_from_string(str);
+    imp = icalparameter_new_from_string(str.c_str());
     if (imp == NULL) {
         throw icalerrno;
     }
 }
 
 /// Create from just the value, the part after the "="
-ICalParameter::ICalParameter(icalparameter_kind kind, string  str) throw(icalerrorenum)
+ICalParameter::ICalParameter(icalparameter_kind kind, std::string str) throw(icalerrorenum)
 {
-    imp = icalparameter_new_from_value_string(kind, str);
+    imp = icalparameter_new_from_value_string(kind, str.c_str());
     if (imp == NULL) {
         throw icalerrno;
     }
@@ -94,7 +92,7 @@ ICalParameter::ICalParameter(icalparameter_kind kind) throw(icalerrorenum)
     }
 }
 
-string ICalParameter::as_ical_string() throw(icalerrorenum)
+std::string ICalParameter::as_ical_string() throw(icalerrorenum)
 {
     char *str = icalparameter_as_ical_string(imp);
 
@@ -124,46 +122,46 @@ int ICalParameter::isa_parameter(void *param)
 }
 
 /* Access the name of an X parameter */
-void ICalParameter::set_xname(ICalParameter &param, string v)
+void ICalParameter::set_xname(ICalParameter &param, std::string v)
 {
-    icalparameter_set_xname(param, v);
+    icalparameter_set_xname(param, v.c_str());
 }
 
-string ICalParameter::get_xname(ICalParameter &param)
+std::string ICalParameter::get_xname(ICalParameter &param)
 {
-    return (string)icalparameter_get_xname(param);
+    return (std::string)icalparameter_get_xname(param);
 }
 
-void ICalParameter::set_xvalue(ICalParameter &param, string v)
+void ICalParameter::set_xvalue(ICalParameter &param, std::string v)
 {
-    icalparameter_set_xvalue(param, v);
+    icalparameter_set_xvalue(param, v.c_str());
 }
 
-string ICalParameter::get_xvalue(ICalParameter &param)
+std::string ICalParameter::get_xvalue(ICalParameter &param)
 {
-    return (string)icalparameter_get_xvalue(param);
+    return (std::string)icalparameter_get_xvalue(param);
 }
 
 /* Convert enumerations */
-string ICalParameter::kind_to_string(icalparameter_kind kind)
+std::string ICalParameter::kind_to_string(icalparameter_kind kind)
 {
-    return (string)icalparameter_kind_to_string(kind);
+    return (std::string)icalparameter_kind_to_string(kind);
 }
 
-icalparameter_kind ICalParameter::string_to_kind(string  str)
+icalparameter_kind ICalParameter::string_to_kind(std::string str)
 {
-    return icalparameter_string_to_kind(str);
+    return icalparameter_string_to_kind(str.c_str());
 }
 
 /* DELEGATED-FROM */
-string ICalParameter::get_delegatedfrom() const
+std::string ICalParameter::get_delegatedfrom() const
 {
-    return (string)icalparameter_get_delegatedfrom(imp);
+    return (std::string)icalparameter_get_delegatedfrom(imp);
 }
 
-void ICalParameter::set_delegatedfrom(const string v)
+void ICalParameter::set_delegatedfrom(const std::string v)
 {
-    icalparameter_set_delegatedfrom(imp, v);
+    icalparameter_set_delegatedfrom(imp, v.c_str());
 }
 
 /* RELATED */
@@ -178,25 +176,25 @@ void ICalParameter::set_related(const icalparameter_related v)
 }
 
 /* SENT-BY */
-string ICalParameter::get_sentby() const
+std::string ICalParameter::get_sentby() const
 {
-    return (string)icalparameter_get_sentby(imp);
+    return (std::string)icalparameter_get_sentby(imp);
 }
 
-void ICalParameter::set_sentby(const string v)
+void ICalParameter::set_sentby(const std::string v)
 {
-    icalparameter_set_sentby(imp, v);
+    icalparameter_set_sentby(imp, v.c_str());
 }
 
 /* LANGUAGE */
-string ICalParameter::get_language() const
+std::string ICalParameter::get_language() const
 {
-    return (string)icalparameter_get_language(imp);
+    return (std::string)icalparameter_get_language(imp);
 }
 
-void ICalParameter::set_language(const string v)
+void ICalParameter::set_language(const std::string v)
 {
-    icalparameter_set_language(imp, v);
+    icalparameter_set_language(imp, v.c_str());
 }
 
 /* RELTYPE */
@@ -222,25 +220,25 @@ void ICalParameter::set_encoding(const icalparameter_encoding v)
 }
 
 /* ALTREP */
-string ICalParameter::get_altrep() const
+std::string ICalParameter::get_altrep() const
 {
-    return (string)icalparameter_get_language(imp);
+    return (std::string)icalparameter_get_language(imp);
 }
 
-void ICalParameter::set_altrep(const string v)
+void ICalParameter::set_altrep(const std::string v)
 {
-    icalparameter_set_altrep(imp, v);
+    icalparameter_set_altrep(imp, v.c_str());
 }
 
 /* FMTTYPE */
-string ICalParameter::get_fmttype() const
+std::string ICalParameter::get_fmttype() const
 {
-    return (string)icalparameter_get_fmttype(imp);
+    return (std::string)icalparameter_get_fmttype(imp);
 }
 
-void ICalParameter::set_fmttype(const string v)
+void ICalParameter::set_fmttype(const std::string v)
 {
-    icalparameter_set_fmttype(imp, v);
+    icalparameter_set_fmttype(imp, v.c_str());
 }
 
 /* FBTYPE */
@@ -277,25 +275,25 @@ void ICalParameter::set_range(const icalparameter_range v)
 }
 
 /* DELEGATED-TO */
-string ICalParameter::get_delegatedto() const
+std::string ICalParameter::get_delegatedto() const
 {
-    return (string)icalparameter_get_delegatedto(imp);
+    return (std::string)icalparameter_get_delegatedto(imp);
 }
 
-void ICalParameter::set_delegatedto(const string v)
+void ICalParameter::set_delegatedto(const std::string v)
 {
-    icalparameter_set_delegatedto(imp, v);
+    icalparameter_set_delegatedto(imp, v.c_str());
 }
 
 /* CN */
-string ICalParameter::get_cn() const
+std::string ICalParameter::get_cn() const
 {
-    return (string)icalparameter_get_cn(imp);
+    return (std::string)icalparameter_get_cn(imp);
 }
 
-void ICalParameter::set_cn(const string v)
+void ICalParameter::set_cn(const std::string v)
 {
-    icalparameter_set_cn(imp, v);
+    icalparameter_set_cn(imp, v.c_str());
 }
 
 /* ROLE */
@@ -343,25 +341,25 @@ void ICalParameter::set_xlicerrortype(const icalparameter_xlicerrortype v)
 }
 
 /* MEMBER */
-string ICalParameter::get_member() const
+std::string ICalParameter::get_member() const
 {
-    return (string)icalparameter_get_member(imp);
+    return (std::string)icalparameter_get_member(imp);
 }
 
-void ICalParameter::set_member(const string v)
+void ICalParameter::set_member(const std::string v)
 {
-    icalparameter_set_member(imp, v);
+    icalparameter_set_member(imp, v.c_str());
 }
 
 /* X */
-string ICalParameter::get_x() const
+std::string ICalParameter::get_x() const
 {
-    return (string)icalparameter_get_x(imp);
+    return (std::string)icalparameter_get_x(imp);
 }
 
-void ICalParameter::set_x(const string v)
+void ICalParameter::set_x(const std::string v)
 {
-    icalparameter_set_x(imp, v);
+    icalparameter_set_x(imp, v.c_str());
 }
 
 /* CUTYPE */
@@ -376,14 +374,14 @@ void ICalParameter::set_cutype(const icalparameter_cutype v)
 }
 
 /* TZID */
-string ICalParameter::get_tzid() const
+std::string ICalParameter::get_tzid() const
 {
-    return (string)icalparameter_get_tzid(imp);
+    return (std::string)icalparameter_get_tzid(imp);
 }
 
-void ICalParameter::set_tzid(const string v)
+void ICalParameter::set_tzid(const std::string v)
 {
-    icalparameter_set_tzid(imp, v);
+    icalparameter_set_tzid(imp, v.c_str());
 }
 
 /* VALUE */
@@ -398,12 +396,12 @@ void ICalParameter::set_value(const icalparameter_value v)
 }
 
 /* DIR */
-string ICalParameter::get_dir() const
+std::string ICalParameter::get_dir() const
 {
-    return (string)icalparameter_get_dir(imp);
+    return (std::string)icalparameter_get_dir(imp);
 }
 
-void ICalParameter::set_dir(const string v)
+void ICalParameter::set_dir(const std::string v)
 {
-    icalparameter_set_dir(imp, v);
+    icalparameter_set_dir(imp, v.c_str());
 }

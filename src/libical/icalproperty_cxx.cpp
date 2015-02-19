@@ -68,9 +68,9 @@ ICalProperty::ICalProperty(icalproperty *v) : imp(v)
 {
 }
 
-ICalProperty::ICalProperty(string str)
+ICalProperty::ICalProperty(std::string str)
 {
-    imp = icalproperty_new_from_string(str);
+    imp = icalproperty_new_from_string(str.c_str());
 }
 
 ICalProperty::ICalProperty(icalproperty_kind kind)
@@ -78,9 +78,9 @@ ICalProperty::ICalProperty(icalproperty_kind kind)
     imp = icalproperty_new(kind);
 }
 
-string ICalProperty::as_ical_string()
+std::string ICalProperty::as_ical_string()
 {
-    return (string)icalproperty_as_ical_string(imp);
+    return (std::string)icalproperty_as_ical_string(imp);
 }
 
 icalproperty_kind ICalProperty::isa()
@@ -112,17 +112,17 @@ void ICalProperty::set_parameter(ICalParameter &parameter)
     icalproperty_set_parameter(imp, parameter);
 }
 
-void ICalProperty::set_parameter_from_string(string name, string val)
+void ICalProperty::set_parameter_from_string(const std::string &name, const std::string &val)
 {
-    icalproperty_set_parameter_from_string(imp, name, val);
+    icalproperty_set_parameter_from_string(imp, name.c_str(), val.c_str());
 }
 
-string ICalProperty::get_parameter_as_string(string name)
+std::string ICalProperty::get_parameter_as_string(const std::string &name)
 {
-    return (string)icalproperty_get_parameter_as_string(imp, name);
+    return (std::string)icalproperty_get_parameter_as_string(imp, name.c_str());
 }
 
-void ICalProperty::remove_parameter(icalparameter_kind kind)
+void ICalProperty::remove_parameter(const icalparameter_kind &kind)
 {
     icalproperty_remove_parameter(imp, kind);
 }
@@ -133,13 +133,13 @@ int ICalProperty::count_parameters()
 }
 
 /** Iterate through the parameters */
-ICalParameter *ICalProperty::get_first_parameter(icalparameter_kind kind)
+ICalParameter *ICalProperty::get_first_parameter(const icalparameter_kind &kind)
 {
     icalparameter *p = icalproperty_get_first_parameter(imp, kind);
     return (p != NULL) ? new ICalParameter(p) : NULL;
 }
 
-ICalParameter *ICalProperty::get_next_parameter(icalparameter_kind kind)
+ICalParameter *ICalProperty::get_next_parameter(const icalparameter_kind &kind)
 {
     icalparameter *p = icalproperty_get_next_parameter(imp, kind);
     return (p != NULL) ? new ICalParameter(p) : NULL;
@@ -151,9 +151,9 @@ void ICalProperty::set_value(const ICalValue &val)
     icalproperty_set_value(imp, (ICalValue &)val);
 }
 
-void ICalProperty::set_value_from_string(string val, string kind)
+void ICalProperty::set_value_from_string(const std::string &val, const std::string &kind)
 {
-    icalproperty_set_value_from_string(imp, val, kind);
+    icalproperty_set_value_from_string(imp, val.c_str(), kind.c_str());
 }
 
 ICalValue *ICalProperty::get_value()
@@ -161,28 +161,28 @@ ICalValue *ICalProperty::get_value()
     return new ICalValue(icalproperty_get_value(imp));
 }
 
-string ICalProperty::get_value_as_string()
+std::string ICalProperty::get_value_as_string()
 {
-    return (string)icalproperty_get_value_as_string(imp);
+    return (std::string)icalproperty_get_value_as_string(imp);
 }
 
 /** Return the name of the property -- the type name converted to a
  *  string, or the value of get_x_name if the type is X property
  */
-string ICalProperty::get_name() const
+std::string ICalProperty::get_name() const
 {
-    return (string)icalproperty_get_property_name(imp);
+    return (std::string)icalproperty_get_property_name(imp);
 }
 
 /* Deal with X properties */
-void ICalProperty::set_x_name(ICalProperty &prop, const string &name)
+void ICalProperty::set_x_name(ICalProperty &prop, const std::string &name)
 {
-    icalproperty_set_x_name(prop, name);
+    icalproperty_set_x_name(prop, name.c_str());
 }
 
-string ICalProperty::get_x_name(ICalProperty &prop)
+std::string ICalProperty::get_x_name(ICalProperty &prop)
 {
-    return (string)icalproperty_get_x_name(prop);
+    return (std::string)icalproperty_get_x_name(prop);
 }
 
 icalvalue_kind ICalProperty::value_to_value_kind(const icalparameter_value &val)
@@ -201,44 +201,44 @@ icalproperty_kind ICalProperty::value_kind_to_kind(const icalvalue_kind &kind)
     return icalproperty_value_kind_to_kind(kind);
 }
 
-string ICalProperty::kind_to_string(const icalproperty_kind &kind)
+std::string ICalProperty::kind_to_string(const icalproperty_kind &kind)
 {
-    return (string)icalproperty_kind_to_string(kind);
+    return (std::string)icalproperty_kind_to_string(kind);
 }
 
-icalproperty_kind ICalProperty::string_to_kind(const string &str)
+icalproperty_kind ICalProperty::string_to_kind(const std::string &str)
 {
-    return icalproperty_string_to_kind(str);
+    return icalproperty_string_to_kind(str.c_str());
 }
 
-string ICalProperty::method_to_string(const icalproperty_method &method)
+std::string ICalProperty::method_to_string(const icalproperty_method &method)
 {
-    return (string)icalproperty_method_to_string(method);
+    return (std::string)icalproperty_method_to_string(method);
 }
 
-icalproperty_method ICalProperty::string_to_method(const string &str)
+icalproperty_method ICalProperty::string_to_method(const std::string &str)
 {
-    return icalproperty_string_to_method(str);
+    return icalproperty_string_to_method(str.c_str());
 }
 
-string ICalProperty::enum_to_string(const int &e)
+std::string ICalProperty::enum_to_string(const int &e)
 {
-    return (string)icalproperty_enum_to_string(e);
+    return (std::string)icalproperty_enum_to_string(e);
 }
 
-int ICalProperty::string_to_enum(const string &str)
+int ICalProperty::string_to_enum(const std::string &str)
 {
-    return icalproperty_string_to_enum(str);
+    return icalproperty_string_to_enum(str.c_str());
 }
 
-string ICalProperty::status_to_string(const icalproperty_status &s)
+std::string ICalProperty::status_to_string(const icalproperty_status &s)
 {
-    return (string)icalproperty_status_to_string(s);
+    return (std::string)icalproperty_status_to_string(s);
 }
 
-icalproperty_status ICalProperty::string_to_status(const string &str)
+icalproperty_status ICalProperty::string_to_status(const std::string &str)
 {
-    return icalproperty_string_to_status(str);
+    return icalproperty_string_to_status(str.c_str());
 }
 
 int ICalProperty::enum_belongs_to_property(const icalproperty_kind &kind, const int &e)
@@ -269,36 +269,36 @@ icalattach *ICalProperty::get_attach() const
 }
 
 /* ATTENDEE */
-void ICalProperty::set_attendee(const string &val)
+void ICalProperty::set_attendee(const std::string &val)
 {
-    icalproperty_set_attendee(imp, val);
+    icalproperty_set_attendee(imp, val.c_str());
 }
 
-string ICalProperty::get_attendee() const
+std::string ICalProperty::get_attendee() const
 {
-    return (string)icalproperty_get_attendee(imp);
+    return (std::string)icalproperty_get_attendee(imp);
 }
 
 /* CALSCALE */
-void ICalProperty::set_calscale(const string &val)
+void ICalProperty::set_calscale(const std::string &val)
 {
-    icalproperty_set_calscale(imp, val);
+    icalproperty_set_calscale(imp, val.c_str());
 }
 
-string ICalProperty::get_calscale() const
+std::string ICalProperty::get_calscale() const
 {
-    return (string)icalproperty_get_calscale(imp);
+    return (std::string)icalproperty_get_calscale(imp);
 }
 
 /* CATEGORIES */
-void ICalProperty::set_categories(const string &val)
+void ICalProperty::set_categories(const std::string &val)
 {
-    icalproperty_set_categories(imp, val);
+    icalproperty_set_categories(imp, val.c_str());
 }
 
-string ICalProperty::get_categories() const
+std::string ICalProperty::get_categories() const
 {
-    return (string)icalproperty_get_categories(imp);
+    return (std::string)icalproperty_get_categories(imp);
 }
 
 /* CLASS */
@@ -313,14 +313,14 @@ enum icalproperty_class ICalProperty::get_class() const
 }
 
 /* COMMENT */
-void ICalProperty::set_comment(const string &val)
+void ICalProperty::set_comment(const std::string &val)
 {
-    icalproperty_set_comment(imp, val);
+    icalproperty_set_comment(imp, val.c_str());
 }
 
-string ICalProperty::get_comment() const
+std::string ICalProperty::get_comment() const
 {
-    return (string)icalproperty_get_comment(imp);
+    return (std::string)icalproperty_get_comment(imp);
 }
 
 /* COMPLETED */
@@ -335,14 +335,14 @@ struct icaltimetype ICalProperty::get_completed() const
 }
 
 /* CONTACT */
-void ICalProperty::set_contact(const string &val)
+void ICalProperty::set_contact(const std::string &val)
 {
-    icalproperty_set_contact(imp, val);
+    icalproperty_set_contact(imp, val.c_str());
 }
 
-string ICalProperty::get_contact() const
+std::string ICalProperty::get_contact() const
 {
-    return (string)icalproperty_get_contact(imp);
+    return (std::string)icalproperty_get_contact(imp);
 }
 
 /* CREATED */
@@ -357,14 +357,14 @@ struct icaltimetype ICalProperty::get_created() const
 }
 
 /* DESCRIPTION */
-void ICalProperty::set_description(const string &val)
+void ICalProperty::set_description(const std::string &val)
 {
-    icalproperty_set_description(imp, val);
+    icalproperty_set_description(imp, val.c_str());
 }
 
-string ICalProperty::get_description() const
+std::string ICalProperty::get_description() const
 {
-    return (string)icalproperty_get_description(imp);
+    return (std::string)icalproperty_get_description(imp);
 }
 
 /* DTEND */
@@ -489,14 +489,14 @@ struct icaltimetype ICalProperty::get_lastmodified() const
 }
 
 /* LOCATION */
-void ICalProperty::set_location(const string &val)
+void ICalProperty::set_location(const std::string &val)
 {
-    icalproperty_set_location(imp, val);
+    icalproperty_set_location(imp, val.c_str());
 }
 
-string ICalProperty::get_location() const
+std::string ICalProperty::get_location() const
 {
-    return (string)icalproperty_get_location(imp);
+    return (std::string)icalproperty_get_location(imp);
 }
 
 /* MAXRESULTS */
@@ -533,25 +533,25 @@ enum icalproperty_method ICalProperty::get_method() const
 }
 
 /* ORGANIZER */
-void ICalProperty::set_organizer(const string &val)
+void ICalProperty::set_organizer(const std::string &val)
 {
-    icalproperty_set_organizer(imp, val);
+    icalproperty_set_organizer(imp, val.c_str());
 }
 
-string ICalProperty::get_organizer() const
+std::string ICalProperty::get_organizer() const
 {
-    return (string)icalproperty_get_organizer(imp);
+    return (std::string)icalproperty_get_organizer(imp);
 }
 
 /* OWNER */
-void ICalProperty::set_owner(const string &val)
+void ICalProperty::set_owner(const std::string &val)
 {
-    icalproperty_set_owner(imp, val);
+    icalproperty_set_owner(imp, val.c_str());
 }
 
-string ICalProperty::get_owner() const
+std::string ICalProperty::get_owner() const
 {
-    return (string)icalproperty_get_owner(imp);
+    return (std::string)icalproperty_get_owner(imp);
 }
 
 /* PERCENT-COMPLETE */
@@ -577,36 +577,36 @@ int ICalProperty::get_priority() const
 }
 
 /* PRODID */
-void ICalProperty::set_prodid(const string &val)
+void ICalProperty::set_prodid(const std::string &val)
 {
-    icalproperty_set_prodid(imp, val);
+    icalproperty_set_prodid(imp, val.c_str());
 }
 
-string ICalProperty::get_prodid() const
+std::string ICalProperty::get_prodid() const
 {
-    return (string)icalproperty_get_prodid(imp);
+    return (std::string)icalproperty_get_prodid(imp);
 }
 
 /* QUERY */
-void ICalProperty::set_query(const string &val)
+void ICalProperty::set_query(const std::string &val)
 {
-    icalproperty_set_query(imp, val);
+    icalproperty_set_query(imp, val.c_str());
 }
 
-string ICalProperty::get_query() const
+std::string ICalProperty::get_query() const
 {
-    return (string)icalproperty_get_query(imp);
+    return (std::string)icalproperty_get_query(imp);
 }
 
 /* QUERYNAME */
-void ICalProperty::set_queryname(const string &val)
+void ICalProperty::set_queryname(const std::string &val)
 {
-    icalproperty_set_queryname(imp, val);
+    icalproperty_set_queryname(imp, val.c_str());
 }
 
-string ICalProperty::get_queryname() const
+std::string ICalProperty::get_queryname() const
 {
-    return (string)icalproperty_get_queryname(imp);
+    return (std::string)icalproperty_get_queryname(imp);
 }
 
 /* RDATE */
@@ -632,25 +632,25 @@ struct icaltimetype ICalProperty::get_recurrenceid() const
 }
 
 /* RELATED-TO */
-void ICalProperty::set_relatedto(const string &val)
+void ICalProperty::set_relatedto(const std::string &val)
 {
-    icalproperty_set_relatedto(imp, val);
+    icalproperty_set_relatedto(imp, val.c_str());
 }
 
-string ICalProperty::get_relatedto() const
+std::string ICalProperty::get_relatedto() const
 {
-    return (string)icalproperty_get_relatedto(imp);
+    return (std::string)icalproperty_get_relatedto(imp);
 }
 
 /* RELCALID */
-void ICalProperty::set_relcalid(const string &val)
+void ICalProperty::set_relcalid(const std::string &val)
 {
-    icalproperty_set_relcalid(imp, val);
+    icalproperty_set_relcalid(imp, val.c_str());
 }
 
-string ICalProperty::get_relcalid() const
+std::string ICalProperty::get_relcalid() const
 {
-    return (string)icalproperty_get_relcalid(imp);
+    return (std::string)icalproperty_get_relcalid(imp);
 }
 
 /* REPEAT */
@@ -665,31 +665,31 @@ int ICalProperty::get_repeat() const
 }
 
 /* REQUEST-STATUS */
-void ICalProperty::set_requeststatus(const string &val)
+void ICalProperty::set_requeststatus(const std::string &val)
 {
     icalreqstattype v;
 
-    v = icalreqstattype_from_string((char *)val);
+    v = icalreqstattype_from_string(val.c_str());
 
     icalproperty_set_requeststatus(imp, v);
 }
 
-string ICalProperty::get_requeststatus() const
+std::string ICalProperty::get_requeststatus() const
 {
     icalreqstattype v;
     v = icalproperty_get_requeststatus(imp);
-    return (string)(icalreqstattype_as_string(v));
+    return (std::string)(icalreqstattype_as_string(v));
 }
 
 /* RESOURCES */
-void ICalProperty::set_resources(const string &val)
+void ICalProperty::set_resources(const std::string &val)
 {
-    icalproperty_set_resources(imp, val);
+    icalproperty_set_resources(imp, val.c_str());
 }
 
-string ICalProperty::get_resources() const
+std::string ICalProperty::get_resources() const
 {
-    return (string)icalproperty_get_resources(imp);
+    return (std::string)icalproperty_get_resources(imp);
 }
 
 /* RRULE */
@@ -704,14 +704,14 @@ struct icalrecurrencetype ICalProperty::get_rrule() const
 }
 
 /* SCOPE */
-void ICalProperty::set_scope(const string &val)
+void ICalProperty::set_scope(const std::string &val)
 {
-    icalproperty_set_scope(imp, val);
+    icalproperty_set_scope(imp, val.c_str());
 }
 
-string ICalProperty::get_scope() const
+std::string ICalProperty::get_scope() const
 {
-    return (string)icalproperty_get_scope(imp);
+    return (std::string)icalproperty_get_scope(imp);
 }
 
 /* SEQUENCE */
@@ -737,25 +737,25 @@ enum icalproperty_status ICalProperty::get_status() const
 }
 
 /* SUMMARY */
-void ICalProperty::set_summary(const string &val)
+void ICalProperty::set_summary(const std::string &val)
 {
-    icalproperty_set_summary(imp, val);
+    icalproperty_set_summary(imp, val.c_str());
 }
 
-string ICalProperty::get_summary() const
+std::string ICalProperty::get_summary() const
 {
-    return (string)icalproperty_get_summary(imp);
+    return (std::string)icalproperty_get_summary(imp);
 }
 
 /* TARGET */
-void ICalProperty::set_target(const string &val)
+void ICalProperty::set_target(const std::string &val)
 {
-    icalproperty_set_target(imp, val);
+    icalproperty_set_target(imp, val.c_str());
 }
 
-string ICalProperty::get_target() const
+std::string ICalProperty::get_target() const
 {
-    return (string)icalproperty_get_target(imp);
+    return (std::string)icalproperty_get_target(imp);
 }
 
 /* TRANSP */
@@ -781,25 +781,25 @@ struct icaltriggertype ICalProperty::get_trigger() const
 }
 
 /* TZID */
-void ICalProperty::set_tzid(const string &val)
+void ICalProperty::set_tzid(const std::string &val)
 {
-    icalproperty_set_tzid(imp, val);
+    icalproperty_set_tzid(imp, val.c_str());
 }
 
-string ICalProperty::get_tzid() const
+std::string ICalProperty::get_tzid() const
 {
-    return (string)icalproperty_get_tzid(imp);
+    return (std::string)icalproperty_get_tzid(imp);
 }
 
 /* TZNAME */
-void ICalProperty::set_tzname(const string &val)
+void ICalProperty::set_tzname(const std::string &val)
 {
-    icalproperty_set_tzname(imp, val);
+    icalproperty_set_tzname(imp, val.c_str());
 }
 
-string ICalProperty::get_tzname() const
+std::string ICalProperty::get_tzname() const
 {
-    return (string)icalproperty_get_tzname(imp);
+    return (std::string)icalproperty_get_tzname(imp);
 }
 
 /* TZOFFSETFROM */
@@ -825,144 +825,144 @@ int ICalProperty::get_tzoffsetto() const
 }
 
 /* TZURL */
-void ICalProperty::set_tzurl(const string &val)
+void ICalProperty::set_tzurl(const std::string &val)
 {
-    icalproperty_set_tzurl(imp, val);
+    icalproperty_set_tzurl(imp, val.c_str());
 }
 
-string ICalProperty::get_tzurl() const
+std::string ICalProperty::get_tzurl() const
 {
-    return (string)icalproperty_get_tzurl(imp);
+    return (std::string)icalproperty_get_tzurl(imp);
 }
 
 /* UID */
-void ICalProperty::set_uid(const string &val)
+void ICalProperty::set_uid(const std::string &val)
 {
-    icalproperty_set_uid(imp, val);
+    icalproperty_set_uid(imp, val.c_str());
 }
 
-string ICalProperty::get_uid() const
+std::string ICalProperty::get_uid() const
 {
-    return (string)icalproperty_get_uid(imp);
+    return (std::string)icalproperty_get_uid(imp);
 }
 
 /* URL */
-void ICalProperty::set_url(const string &val)
+void ICalProperty::set_url(const std::string &val)
 {
-    icalproperty_set_url(imp, val);
+    icalproperty_set_url(imp, val.c_str());
 }
 
-string ICalProperty::get_url() const
+std::string ICalProperty::get_url() const
 {
-    return (string)icalproperty_get_url(imp);
+    return (std::string)icalproperty_get_url(imp);
 }
 
 /* VERSION */
-void ICalProperty::set_version(const string &val)
+void ICalProperty::set_version(const std::string &val)
 {
-    icalproperty_set_version(imp, val);
+    icalproperty_set_version(imp, val.c_str());
 }
 
-string ICalProperty::get_version() const
+std::string ICalProperty::get_version() const
 {
-    return (string)icalproperty_get_version(imp);
+    return (std::string)icalproperty_get_version(imp);
 }
 
 /* X */
-void ICalProperty::set_x(const string &val)
+void ICalProperty::set_x(const std::string &val)
 {
-    icalproperty_set_x(imp, val);
+    icalproperty_set_x(imp, val.c_str());
 }
 
-string ICalProperty::get_x() const
+std::string ICalProperty::get_x() const
 {
-    return (string)icalproperty_get_x(imp);
+    return (std::string)icalproperty_get_x(imp);
 }
 
 /* X-LIC-CLUSTERCOUNT */
-void ICalProperty::set_xlicclustercount(const string &val)
+void ICalProperty::set_xlicclustercount(const std::string &val)
 {
-    icalproperty_set_xlicclustercount(imp, val);
+    icalproperty_set_xlicclustercount(imp, val.c_str());
 }
 
-string ICalProperty::get_xlicclustercount() const
+std::string ICalProperty::get_xlicclustercount() const
 {
-    return (string)icalproperty_get_xlicclustercount(imp);
+    return (std::string)icalproperty_get_xlicclustercount(imp);
 }
 
 /* X-LIC-ERROR */
-void ICalProperty::set_xlicerror(const string &val)
+void ICalProperty::set_xlicerror(const std::string &val)
 {
-    icalproperty_set_xlicerror(imp, val);
+    icalproperty_set_xlicerror(imp, val.c_str());
 }
 
-string ICalProperty::get_xlicerror() const
+std::string ICalProperty::get_xlicerror() const
 {
-    return (string)icalproperty_get_xlicerror(imp);
+    return (std::string)icalproperty_get_xlicerror(imp);
 }
 
 /* X-LIC-MIMECHARSET */
-void ICalProperty::set_xlicmimecharset(const string &val)
+void ICalProperty::set_xlicmimecharset(const std::string &val)
 {
-    icalproperty_set_xlicmimecharset(imp, val);
+    icalproperty_set_xlicmimecharset(imp, val.c_str());
 }
 
-string ICalProperty::get_xlicmimecharset() const
+std::string ICalProperty::get_xlicmimecharset() const
 {
-    return (string)icalproperty_get_xlicmimecharset(imp);
+    return (std::string)icalproperty_get_xlicmimecharset(imp);
 }
 
 /* X-LIC-MIMECID */
-void ICalProperty::set_xlicmimecid(const string &val)
+void ICalProperty::set_xlicmimecid(const std::string &val)
 {
-    icalproperty_set_xlicmimecid(imp, val);
+    icalproperty_set_xlicmimecid(imp, val.c_str());
 }
 
-string ICalProperty::get_xlicmimecid() const
+std::string ICalProperty::get_xlicmimecid() const
 {
-    return (string)icalproperty_get_xlicmimecid(imp);
+    return (std::string)icalproperty_get_xlicmimecid(imp);
 }
 
 /* X-LIC-MIMECONTENTTYPE */
-void ICalProperty::set_xlicmimecontenttype(const string &val)
+void ICalProperty::set_xlicmimecontenttype(const std::string &val)
 {
-    icalproperty_set_xlicmimecontenttype(imp, val);
+    icalproperty_set_xlicmimecontenttype(imp, val.c_str());
 }
 
-string ICalProperty::get_xlicmimecontenttype() const
+std::string ICalProperty::get_xlicmimecontenttype() const
 {
-    return (string)icalproperty_get_xlicmimecontenttype(imp);
+    return (std::string)icalproperty_get_xlicmimecontenttype(imp);
 }
 
 /* X-LIC-MIMEENCODING */
-void ICalProperty::set_xlicmimeencoding(const string &val)
+void ICalProperty::set_xlicmimeencoding(const std::string &val)
 {
-    icalproperty_set_xlicmimeencoding(imp, val);
+    icalproperty_set_xlicmimeencoding(imp, val.c_str());
 }
 
-string ICalProperty::get_xlicmimeencoding() const
+std::string ICalProperty::get_xlicmimeencoding() const
 {
-    return (string)icalproperty_get_xlicmimeencoding(imp);
+    return (std::string)icalproperty_get_xlicmimeencoding(imp);
 }
 
 /* X-LIC-MIMEFILENAME */
-void ICalProperty::set_xlicmimefilename(const string &val)
+void ICalProperty::set_xlicmimefilename(const std::string &val)
 {
-    icalproperty_set_xlicmimefilename(imp, val);
+    icalproperty_set_xlicmimefilename(imp, val.c_str());
 }
 
-string ICalProperty::get_xlicmimefilename() const
+std::string ICalProperty::get_xlicmimefilename() const
 {
-    return (string)icalproperty_get_xlicmimefilename(imp);
+    return (std::string)icalproperty_get_xlicmimefilename(imp);
 }
 
 /* X-LIC-MIMEOPTINFO */
-void ICalProperty::set_xlicmimeoptinfo(const string &val)
+void ICalProperty::set_xlicmimeoptinfo(const std::string &val)
 {
-    icalproperty_set_xlicmimeoptinfo(imp, val);
+    icalproperty_set_xlicmimeoptinfo(imp, val.c_str());
 }
 
-string ICalProperty::get_xlicmimeoptinfo() const
+std::string ICalProperty::get_xlicmimeoptinfo() const
 {
-    return (string)icalproperty_get_xlicmimeoptinfo(imp);
+    return (std::string)icalproperty_get_xlicmimeoptinfo(imp);
 }

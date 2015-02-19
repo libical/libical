@@ -22,8 +22,10 @@ extern "C" {
 #include "vcomponent.h"
 using namespace LibICal;
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+using namespace std;
 
 char content[] = "BEGIN:VCALENDAR\n\
 VERSION:2.1\n\
@@ -72,37 +74,37 @@ void test_cxx(void)
     vEvent->add_property(descProp);
 
     //
-    is("vEvent->get_summary()",
-       vEvent->get_summary(),
-       "jon said: change dir to c:\\rest\\test\\nest to get the file "
-       "called <foo.dat>\nthis should be in the next line.");
+    str_is("vEvent->get_summary()",
+           vEvent->get_summary().c_str(),
+           "jon said: change dir to c:\\rest\\test\\nest to get the file "
+           "called <foo.dat>\nthis should be in the next line.");
 
-    is("vEvent->get_dtstart()",
-       icaltime_as_ical_string(vEvent->get_dtstart()),
-       "20011221T180000Z");
+    str_is("vEvent->get_dtstart()",
+           icaltime_as_ical_string(vEvent->get_dtstart()),
+           "20011221T180000Z");
 
-    is("vEvent->get_dtend()",
-       icaltime_as_ical_string(vEvent->get_dtend()),
-       "20020101T080000Z");
+    str_is("vEvent->get_dtend()",
+           icaltime_as_ical_string(vEvent->get_dtend()),
+           "20020101T080000Z");
 
     ok("vEvent->as_ical_string()",
-       (vEvent->as_ical_string() != 0));
+       (vEvent->as_ical_string().c_str() != 0));
 
     if (VERBOSE) {
-        printf("Summary: %s\n", vEvent->get_summary());
+        printf("Summary: %s\n", vEvent->get_summary().c_str());
         printf("DTSTART: %s\n", icaltime_as_ical_string(vEvent->get_dtstart()));
         printf("DTEND: %s\n", icaltime_as_ical_string(vEvent->get_dtend()));
-        printf("LOCATION: %s\n", vEvent->get_location());
-        printf("DESCRIPTION: %s\n", vEvent->get_description());
+        printf("LOCATION: %s\n", vEvent->get_location().c_str());
+        printf("DESCRIPTION: %s\n", vEvent->get_description().c_str());
 
-        printf("vcomponent: %s", vEvent->as_ical_string());
+        printf("vcomponent: %s", vEvent->as_ical_string().c_str());
     }
 
     VComponent ic(icalparser_parse_string((const char *)content));
     ok("Parsing component", (ic.is_valid()));
 
     if (VERBOSE) {
-        printf("%s\n", ic.as_ical_string());
+        printf("%s\n", ic.as_ical_string().c_str());
     }
 
     // component is wrapped within BEGIN:VCALENDAR END:VCALENDAR
@@ -116,7 +118,7 @@ void test_cxx(void)
 
     while (sub_ic != NULL) {
         if (VERBOSE) {
-            printf("subcomponent: %s\n", sub_ic->as_ical_string());
+            printf("subcomponent: %s\n", sub_ic->as_ical_string().c_str());
         }
 
         sub_ic = dynamic_cast<VEvent *>(ic.get_next_component(ICAL_VEVENT_COMPONENT));
@@ -142,10 +144,10 @@ void test_cxx(void)
 
     cal->add_component(vAgenda);
 
-    ok("Complex VCALENDAR/VAGENDA", (cal->as_ical_string() != 0));
+    ok("Complex VCALENDAR/VAGENDA", (cal->as_ical_string().c_str() != 0));
 
     if (VERBOSE) {
-        printf("vAgenda: %s\n", cal->as_ical_string());
+        printf("vAgenda: %s\n", cal->as_ical_string().c_str());
     }
 
 //FIXME: causes an uncaught exception runtime error on APPLE. unknown reason.

@@ -274,9 +274,9 @@ void create_new_component()
     
     calendar_as_string = icalcomponent_as_ical_string(calendar);
 
-    is("build large, complex component", 
-       calendar_as_string,
-       create_new_component_str);
+    str_is("build large, complex component", 
+           calendar_as_string,
+           create_new_component_str);
 
     if (VERBOSE && calendar)
       printf("%s\n",icalcomponent_as_ical_string(calendar));

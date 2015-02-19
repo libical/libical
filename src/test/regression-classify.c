@@ -1,32 +1,29 @@
-/* -*- Mode: C -*-
+/*
   ======================================================================
   FILE: regression-classify.c
   CREATOR: eric 11 February 2000
-  
-  $Id: regression-classify.c,v 1.5 2008-01-02 20:07:46 dothebart Exp $
-  $Locker:  $
     
- (C) COPYRIGHT 2000 Eric Busboom
- http://www.softwarestudio.org
+  (C) COPYRIGHT 2000 Eric Busboom
+  http://www.softwarestudio.org
 
- The contents of this file are subject to the Mozilla Public License
- Version 1.0 (the "License"); you may not use this file except in
- compliance with the License. You may obtain a copy of the License at
- http://www.mozilla.org/MPL/
+  The contents of this file are subject to the Mozilla Public License
+  Version 1.0 (the "License"); you may not use this file except in
+  compliance with the License. You may obtain a copy of the License at
+  http://www.mozilla.org/MPL/
  
- Software distributed under the License is distributed on an "AS IS"
- basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
- the License for the specific language governing rights and
- limitations under the License.
+  Software distributed under the License is distributed on an "AS IS"
+  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+  the License for the specific language governing rights and
+  limitations under the License.
  
- The Original Code is eric. The Initial Developer of the Original
- Code is Eric Busboom
+  The Original Code is eric. The Initial Developer of the Original
+  Code is Eric Busboom
 
 
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <stdio.h> /* for printf */
@@ -174,7 +171,7 @@ void test_classify(void)
         (void)get_note(match);
 	actual_result = icalproperty_enum_to_string(class);
 	sprintf(msg, "expecting %s", expected_result);
-	is(msg, expected_result, actual_result);
+	str_is(msg, expected_result, actual_result);
 
 	if (VERBOSE) printf("Test %d\n\
 Incoming:      %s\n\

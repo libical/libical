@@ -27,9 +27,10 @@ extern "C" {
 };
 #include "icptrholder.h"
 
-typedef char *string; // Will use the string library from STL
+#include <string>
 
-namespace LibICal {
+namespace LibICal
+{
 
 class ICalProperty;
 
@@ -50,22 +51,22 @@ public:
     virtual ~VComponent();
 
     explicit VComponent(icalcomponent *v)        throw (icalerrorenum);
-    explicit VComponent(string str)              throw (icalerrorenum);
-    explicit VComponent(icalcomponent_kind kind) throw (icalerrorenum);
+    explicit VComponent(const std::string &str)  throw (icalerrorenum);
+    explicit VComponent(const icalcomponent_kind &kind) throw (icalerrorenum);
 
     operator icalcomponent *()
     {
         return imp;
     }
 
-    void new_from_string(string str);
+    void new_from_string(const std::string &str);
 
     // detach imp to this object. use with caution. it would cause
     // memory leak if you are not careful.
     void detach();
 
 public:
-    string as_ical_string() throw (icalerrorenum);
+    std::string as_ical_string() throw (icalerrorenum);
     bool is_valid();
     icalcomponent_kind isa();
     int isa_component(void *component);
@@ -73,12 +74,12 @@ public:
     /// Working with properties
     void add_property(ICalProperty *property);
     void remove_property(ICalProperty *property);
-    int count_properties(icalproperty_kind kind);
+    int count_properties(const icalproperty_kind &kind);
 
     // Iterate through the properties
     ICalProperty *get_current_property();
-    ICalProperty *get_first_property(icalproperty_kind kind);
-    ICalProperty *get_next_property(icalproperty_kind kind);
+    ICalProperty *get_first_property(const icalproperty_kind &kind);
+    ICalProperty *get_next_property(const icalproperty_kind &kind);
 
     // Working with components
 
@@ -91,7 +92,7 @@ public:
 
     void add_component(VComponent *child);
     void remove_component(VComponent *child);
-    int count_components(icalcomponent_kind kind);
+    int count_components(const icalcomponent_kind &kind);
 
     /**
      * Iteration Routines. There are two forms of iterators,
@@ -103,12 +104,12 @@ public:
 
     /// Iterate through components
     VComponent *get_current_component();
-    VComponent *get_first_component(icalcomponent_kind kind);
-    VComponent *get_next_component(icalcomponent_kind kind);
+    VComponent *get_first_component(const icalcomponent_kind &kind);
+    VComponent *get_next_component(const icalcomponent_kind &kind);
 
     /// Using external iterators
-    icalcompiter begin_component(icalcomponent_kind kind);
-    icalcompiter end_component(icalcomponent_kind kind);
+    icalcompiter begin_component(const icalcomponent_kind &kind);
+    icalcompiter end_component(const icalcomponent_kind &kind);
     VComponent *next(icalcompiter *i);
     VComponent *prev(icalcompiter *i);
     VComponent *current(icalcompiter *i);
@@ -123,8 +124,8 @@ public:
     void convert_errors();
 
     /// Kind conversion routines
-    static icalcomponent_kind string_to_kind(const string &str);
-    static string kind_to_string(const icalcomponent_kind &kind);
+    static icalcomponent_kind string_to_kind(const std::string &str);
+    static std::string kind_to_string(const icalcomponent_kind &kind);
 
 public:
     struct icaltimetype get_dtstart() const;
@@ -156,23 +157,23 @@ public:
     struct icaltimetype get_dtstamp() const;
     void set_dtstamp(const struct icaltimetype &v);
 
-    string get_summary() const;
-    void set_summary(const string &v);
+    std::string get_summary() const;
+    void set_summary(const std::string &v);
 
-    string get_location() const;
-    void set_location(const string &v);
+    std::string get_location() const;
+    void set_location(const std::string &v);
 
-    string get_description() const;
-    void set_description(const string &v);
+    std::string get_description() const;
+    void set_description(const std::string &v);
 
-    string get_comment() const;
-    void set_comment(const string &v);
+    std::string get_comment() const;
+    void set_comment(const std::string &v);
 
-    string get_uid() const;
-    void set_uid(const string &v);
+    std::string get_uid() const;
+    void set_uid(const std::string &v);
 
-    string get_relcalid() const;
-    void set_relcalid(const string &v);
+    std::string get_relcalid() const;
+    void set_relcalid(const std::string &v);
 
     struct icaltimetype get_recurrenceid() const;
     void set_recurrenceid(const struct icaltimetype &v);
@@ -230,7 +231,7 @@ public:
     ~VCalendar();
 
     explicit VCalendar(icalcomponent *v);
-    explicit VCalendar(string str);
+    explicit VCalendar(const std::string &str);
 };
 
 class LIBICAL_ICAL_EXPORT VEvent : public VComponent
@@ -242,7 +243,7 @@ public:
     ~VEvent();
 
     explicit VEvent(icalcomponent *v);
-    explicit VEvent(string str);
+    explicit VEvent(const std::string &str);
 };
 
 class LIBICAL_ICAL_EXPORT VToDo : public VComponent
@@ -254,7 +255,7 @@ public:
     ~VToDo();
 
     explicit VToDo(icalcomponent *v);
-    explicit VToDo(string str);
+    explicit VToDo(const std::string &str);
 };
 
 class LIBICAL_ICAL_EXPORT VAgenda : public VComponent
@@ -266,7 +267,7 @@ public:
     ~VAgenda();
 
     explicit VAgenda(icalcomponent *v);
-    explicit VAgenda(string str);
+    explicit VAgenda(const std::string &str);
 };
 
 class LIBICAL_ICAL_EXPORT VQuery : public VComponent
@@ -278,7 +279,7 @@ public:
     ~VQuery();
 
     explicit VQuery(icalcomponent *v);
-    explicit VQuery(string str);
+    explicit VQuery(const std::string &str);
 };
 
 class LIBICAL_ICAL_EXPORT VJournal : public VComponent
@@ -290,7 +291,7 @@ public:
     ~VJournal();
 
     explicit VJournal(icalcomponent *v);
-    explicit VJournal(string str);
+    explicit VJournal(const std::string &str);
 };
 
 class LIBICAL_ICAL_EXPORT VAlarm : public VComponent
@@ -302,7 +303,7 @@ public:
     ~VAlarm();
 
     explicit VAlarm(icalcomponent *v);
-    explicit VAlarm(string str);
+    explicit VAlarm(const std::string &str);
 
     /**
      *  compute the absolute trigger time for this alarm. trigger
@@ -321,7 +322,7 @@ public:
     ~VFreeBusy();
 
     explicit VFreeBusy(icalcomponent *v);
-    explicit VFreeBusy(string str);
+    explicit VFreeBusy(const std::string &str);
 };
 
 class LIBICAL_ICAL_EXPORT VTimezone : public VComponent
@@ -333,7 +334,7 @@ public:
     ~VTimezone();
 
     explicit VTimezone(icalcomponent *v);
-    explicit VTimezone(string str);
+    explicit VTimezone(const std::string &str);
 };
 
 class LIBICAL_ICAL_EXPORT XStandard : public VComponent
@@ -345,7 +346,7 @@ public:
     ~XStandard();
 
     explicit XStandard(icalcomponent *v);
-    explicit XStandard(string str);
+    explicit XStandard(const std::string &str);
 };
 
 class LIBICAL_ICAL_EXPORT XDaylight : public VComponent
@@ -357,7 +358,7 @@ public:
     ~XDaylight();
 
     explicit XDaylight(icalcomponent *v);
-    explicit XDaylight(string str);
+    explicit XDaylight(const std::string &str);
 };
 
 } // namespace LibICal;

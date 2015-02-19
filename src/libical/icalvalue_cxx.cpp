@@ -22,8 +22,6 @@
 #include "icalvalue_cxx.h"
 using namespace LibICal;
 
-typedef char *string; // Will use the string library from STL
-
 ICalValue::ICalValue() throw(icalerrorenum) : imp(icalvalue_new(ICAL_ANY_VALUE))
 {
 }
@@ -69,7 +67,7 @@ ICalValue::ICalValue(icalvalue *v) throw(icalerrorenum) : imp(v)
 {
 }
 
-ICalValue::ICalValue(icalvalue_kind kind) throw(icalerrorenum)
+ICalValue::ICalValue(const icalvalue_kind &kind) throw(icalerrorenum)
 {
     imp = icalvalue_new(kind);
     if (imp == NULL) {
@@ -77,17 +75,17 @@ ICalValue::ICalValue(icalvalue_kind kind) throw(icalerrorenum)
     }
 }
 
-ICalValue::ICalValue(icalvalue_kind kind, string  str) throw(icalerrorenum)
+ICalValue::ICalValue(const icalvalue_kind &kind, const std::string &str) throw(icalerrorenum)
 {
-    imp = icalvalue_new_from_string(kind, str);
+    imp = icalvalue_new_from_string(kind, str.c_str());
     if (imp == NULL) {
         throw icalerrno;
     }
 }
 
-string ICalValue::as_ical_string()
+std::string ICalValue::as_ical_string()
 {
-    return (string)icalvalue_as_ical_string(imp);
+    return (std::string)icalvalue_as_ical_string(imp);
 }
 
 bool ICalValue::is_valid()
@@ -145,14 +143,14 @@ icalparameter_xliccomparetype ICalValue::compare(ICalValue &a, ICalValue &b)
 }
 
 /* Convert enumerations */
-icalvalue_kind ICalValue::string_to_kind(const string &str)
+icalvalue_kind ICalValue::string_to_kind(const std::string &str)
 {
-    return icalvalue_string_to_kind(str);
+    return icalvalue_string_to_kind(str.c_str());
 }
 
-string ICalValue::kind_to_string(const icalvalue_kind &kind)
+std::string ICalValue::kind_to_string(const icalvalue_kind &kind)
 {
-    return (string)icalvalue_kind_to_string(kind);
+    return (std::string)icalvalue_kind_to_string(kind);
 }
 
 /* BOOLEAN */
@@ -189,14 +187,14 @@ void ICalValue::set_method(const enum icalproperty_method &v)
 }
 
 /* CAL-ADDRESS */
-string ICalValue::get_caladdress() const
+std::string ICalValue::get_caladdress() const
 {
-    return (string)icalvalue_get_caladdress(imp);
+    return (std::string)icalvalue_get_caladdress(imp);
 }
 
-void ICalValue::set_caladdress(const string &v)
+void ICalValue::set_caladdress(const std::string &v)
 {
-    icalvalue_set_caladdress(imp, v);
+    icalvalue_set_caladdress(imp, v.c_str());
 }
 
 /* PERIOD */
@@ -222,25 +220,25 @@ void ICalValue::set_status(const enum icalproperty_status &v)
 }
 
 /* BINARY */
-string ICalValue::get_binary() const
+std::string ICalValue::get_binary() const
 {
-    return (string)icalvalue_get_binary(imp);
+    return (std::string)icalvalue_get_binary(imp);
 }
 
-void ICalValue::set_binary(const string &v)
+void ICalValue::set_binary(const std::string &v)
 {
-    icalvalue_set_binary(imp, v);
+    icalvalue_set_binary(imp, v.c_str());
 }
 
 /* TEXT */
-string ICalValue::get_text() const
+std::string ICalValue::get_text() const
 {
-    return (string)icalvalue_get_text(imp);
+    return (std::string)icalvalue_get_text(imp);
 }
 
-void ICalValue::set_text(const string &v)
+void ICalValue::set_text(const std::string &v)
 {
-    icalvalue_set_text(imp, v);
+    icalvalue_set_text(imp, v.c_str());
 }
 
 /* DURATION */
@@ -266,14 +264,14 @@ void ICalValue::set_integer(const int &v)
 }
 
 /* URI */
-string ICalValue::get_uri() const
+std::string ICalValue::get_uri() const
 {
-    return (string)icalvalue_get_uri(imp);
+    return (std::string)icalvalue_get_uri(imp);
 }
 
-void ICalValue::set_uri(const string &v)
+void ICalValue::set_uri(const std::string &v)
 {
-    icalvalue_set_uri(imp, v);
+    icalvalue_set_uri(imp, v.c_str());
 }
 
 /* ATTACH */
@@ -310,25 +308,25 @@ void ICalValue::set_float(const float &v)
 }
 
 /* QUERY */
-string ICalValue::get_query() const
+std::string ICalValue::get_query() const
 {
-    return (string)icalvalue_get_query(imp);
+    return (std::string)icalvalue_get_query(imp);
 }
 
-void ICalValue::set_query(const string &v)
+void ICalValue::set_query(const std::string &v)
 {
-    icalvalue_set_query(imp, v);
+    icalvalue_set_query(imp, v.c_str());
 }
 
 /* STRING */
-string ICalValue::get_string() const
+std::string ICalValue::get_string() const
 {
-    return (string)icalvalue_get_string(imp);
+    return (std::string)icalvalue_get_string(imp);
 }
 
-void ICalValue::set_string(const string &v)
+void ICalValue::set_string(const std::string &v)
 {
-    icalvalue_set_string(imp, v);
+    icalvalue_set_string(imp, v.c_str());
 }
 
 /* TRANSP */

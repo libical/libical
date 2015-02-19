@@ -113,12 +113,12 @@ char *VComponent::quote_ical_string(char *str)
  *            Catch this error if you
  *
  */
-VComponent::VComponent(string str)  throw (icalerrorenum)
+VComponent::VComponent(const std::string &str) throw (icalerrorenum)
 {
     // Fix for BUG #15647, but breaks fix for BUG #15596.  Attempting a UI fix for cal-4.0.
     //char* quoted_str = quote_ical_string((char *)str);
     //imp = icalcomponent_new_from_string(quoted_str);
-    imp = icalcomponent_new_from_string(str);
+    imp = icalcomponent_new_from_string(str.c_str());
     if (!imp) {
         if (! icalerrno) {
             icalerrno = ICAL_BADARG_ERROR;
@@ -127,7 +127,7 @@ VComponent::VComponent(string str)  throw (icalerrorenum)
     }
 }
 
-VComponent::VComponent(icalcomponent_kind kind)  throw(icalerrorenum)
+VComponent::VComponent(const icalcomponent_kind &kind) throw(icalerrorenum)
 {
     imp = icalcomponent_new(kind);
 
@@ -136,7 +136,7 @@ VComponent::VComponent(icalcomponent_kind kind)  throw(icalerrorenum)
     }
 }
 
-string VComponent::as_ical_string()  throw(icalerrorenum)
+std::string VComponent::as_ical_string() throw(icalerrorenum)
 {
     char *str = icalcomponent_as_ical_string(imp);
 
@@ -165,12 +165,12 @@ int VComponent::isa_component(void *component)
     return icalcomponent_isa_component(component);
 }
 
-void VComponent::new_from_string(string str)
+void VComponent::new_from_string(const std::string &str)
 {
     if (imp != NULL) {
         icalcomponent_free(imp);
     }
-    imp = icalcomponent_new_from_string(str);
+    imp = icalcomponent_new_from_string(str.c_str());
 }
 
 /* Working with properties */
@@ -186,7 +186,7 @@ void VComponent::remove_property(ICalProperty *property)
     property->detach();     // set imp to null, it's free already.
 }
 
-int VComponent::count_properties(icalproperty_kind kind)
+int VComponent::count_properties(const icalproperty_kind &kind)
 {
     return icalcomponent_count_properties(imp, kind);
 }
@@ -198,13 +198,13 @@ ICalProperty *VComponent::get_current_property()
     return ((t != NULL) ? new ICalProperty(t) : NULL);
 }
 
-ICalProperty *VComponent::get_first_property(icalproperty_kind kind)
+ICalProperty *VComponent::get_first_property(const icalproperty_kind &kind)
 {
     icalproperty *t = icalcomponent_get_first_property(imp, kind);
     return ((t != NULL) ? new ICalProperty(t) : NULL);
 }
 
-ICalProperty *VComponent::get_next_property(icalproperty_kind kind)
+ICalProperty *VComponent::get_next_property(const icalproperty_kind &kind)
 {
     icalproperty *t = icalcomponent_get_next_property(imp, kind);
     return ((t != NULL) ? new ICalProperty(t) : NULL);
@@ -227,7 +227,7 @@ void VComponent::remove_component(VComponent *child)
     icalcomponent_remove_component(imp, *child);
 }
 
-int VComponent::count_components(icalcomponent_kind kind)
+int VComponent::count_components(const icalcomponent_kind &kind)
 {
     return  icalcomponent_count_components(imp, kind);
 }
@@ -245,7 +245,7 @@ VComponent *VComponent::get_current_component()
     return ((t != NULL) ? new VComponent(t) : NULL);
 }
 
-VComponent *VComponent::get_first_component(icalcomponent_kind kind)
+VComponent *VComponent::get_first_component(const icalcomponent_kind &kind)
 {
     VComponent *result = NULL;
     icalcomponent *t = icalcomponent_get_first_component(imp, kind);
@@ -277,7 +277,7 @@ VComponent *VComponent::get_first_component(icalcomponent_kind kind)
     return (result);
 }
 
-VComponent *VComponent::get_next_component(icalcomponent_kind kind)
+VComponent *VComponent::get_next_component(const icalcomponent_kind &kind)
 {
     VComponent *result = NULL;
     icalcomponent *t = icalcomponent_get_next_component(imp, kind);
@@ -310,12 +310,12 @@ VComponent *VComponent::get_next_component(icalcomponent_kind kind)
 }
 
 /* Using external iterators */
-icalcompiter VComponent::begin_component(icalcomponent_kind kind)
+icalcompiter VComponent::begin_component(const icalcomponent_kind &kind)
 {
     return icalcomponent_begin_component(imp, kind);
 }
 
-icalcompiter VComponent::end_component(icalcomponent_kind kind)
+icalcompiter VComponent::end_component(const icalcomponent_kind &kind)
 {
     return icalcomponent_end_component(imp, kind);
 }
@@ -354,14 +354,14 @@ void VComponent::convert_errors()
 }
 
 /* Kind conversion routines */
-icalcomponent_kind VComponent::string_to_kind(const string &str)
+icalcomponent_kind VComponent::string_to_kind(const std::string &str)
 {
-    return icalcomponent_string_to_kind(str);
+    return icalcomponent_string_to_kind(str.c_str());
 }
 
-string VComponent::kind_to_string(const icalcomponent_kind &kind)
+std::string VComponent::kind_to_string(const icalcomponent_kind &kind)
 {
-    return (string)icalcomponent_kind_to_string(kind);
+    return (std::string)icalcomponent_kind_to_string(kind);
 }
 
 struct icaltimetype VComponent::get_dtstart() const
@@ -434,64 +434,64 @@ void VComponent::set_dtstamp(const struct icaltimetype &v)
     icalcomponent_set_dtstamp(imp, v);
 }
 
-string VComponent::get_summary() const
+std::string VComponent::get_summary() const
 {
-    return (string)icalcomponent_get_summary(imp);
+    return (std::string)icalcomponent_get_summary(imp);
 }
 
-void VComponent::set_summary(const string &v)
+void VComponent::set_summary(const std::string &v)
 {
-    icalcomponent_set_summary(imp, v);
+    icalcomponent_set_summary(imp, v.c_str());
 }
 
-string VComponent::get_location() const
+std::string VComponent::get_location() const
 {
-    return (string)icalcomponent_get_location(imp);
+    return (std::string)icalcomponent_get_location(imp);
 }
 
-void VComponent::set_location(const string &v)
+void VComponent::set_location(const std::string &v)
 {
-    icalcomponent_set_location(imp, v);
+    icalcomponent_set_location(imp, v.c_str());
 }
 
-string VComponent::get_description() const
+std::string VComponent::get_description() const
 {
-    return (string)icalcomponent_get_description(imp);
+    return (std::string)icalcomponent_get_description(imp);
 }
 
-void VComponent::set_description(const string &v)
+void VComponent::set_description(const std::string &v)
 {
-    icalcomponent_set_description(imp, v);
+    icalcomponent_set_description(imp, v.c_str());
 }
 
-string VComponent::get_comment() const
+std::string VComponent::get_comment() const
 {
-    return (string)icalcomponent_get_comment(imp);
+    return (std::string)icalcomponent_get_comment(imp);
 }
 
-void VComponent::set_comment(const string &v)
+void VComponent::set_comment(const std::string &v)
 {
-    icalcomponent_set_comment(imp, v);
+    icalcomponent_set_comment(imp, v.c_str());
 }
 
-string VComponent::get_uid() const
+std::string VComponent::get_uid() const
 {
-    return (string)icalcomponent_get_uid(imp);
+    return (std::string)icalcomponent_get_uid(imp);
 }
 
-void VComponent::set_uid(const string &v)
+void VComponent::set_uid(const std::string &v)
 {
-    icalcomponent_set_uid(imp, v);
+    icalcomponent_set_uid(imp, v.c_str());
 }
 
-string VComponent::get_relcalid() const
+std::string VComponent::get_relcalid() const
 {
-    return (string)icalcomponent_get_relcalid(imp);
+    return (std::string)icalcomponent_get_relcalid(imp);
 }
 
-void VComponent::set_relcalid(const string &v)
+void VComponent::set_relcalid(const std::string &v)
 {
-    icalcomponent_set_relcalid(imp, v);
+    icalcomponent_set_relcalid(imp, v.c_str());
 }
 
 struct icaltimetype VComponent::get_recurrenceid() const
@@ -587,11 +587,11 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
     VComponentTmpPtr comp;
     for (comp = fromVC.get_first_component(ICAL_ANY_COMPONENT); comp != NULL;
          comp = fromVC.get_next_component(ICAL_ANY_COMPONENT)) {
-        const char *fromCompUid = comp->get_uid();
+        const char *fromCompUid = comp->get_uid().c_str();
         VComponentTmpPtr c;
         for (c = this->get_first_component(comp->isa()); c != NULL;
              c = this->get_next_component(comp->isa())) {
-            const char *thisCompUid = c->get_uid();
+            const char *thisCompUid = c->get_uid().c_str();
             if (strcmp(fromCompUid, thisCompUid) == 0) {
                 // recursively go down the components
                 c->remove(*comp, ignoreValue);
@@ -708,7 +708,7 @@ VCalendar::VCalendar(icalcomponent *v) : VComponent(v)
 {
 }
 
-VCalendar::VCalendar(string str) : VComponent(str)
+VCalendar::VCalendar(const std::string &str) : VComponent(str)
 {
 }
 
@@ -740,7 +740,7 @@ VEvent::VEvent(icalcomponent *v) : VComponent(v)
 {
 }
 
-VEvent::VEvent(string str) : VComponent(str)
+VEvent::VEvent(const std::string &str) : VComponent(str)
 {
 }
 
@@ -772,7 +772,7 @@ VToDo::VToDo(icalcomponent *v) : VComponent(v)
 {
 }
 
-VToDo::VToDo(string str) : VComponent(str)
+VToDo::VToDo(const std::string &str) : VComponent(str)
 {
 }
 
@@ -804,7 +804,7 @@ VAgenda::VAgenda(icalcomponent *v) : VComponent(v)
 {
 }
 
-VAgenda::VAgenda(string str) : VComponent(str)
+VAgenda::VAgenda(const std::string &str) : VComponent(str)
 {
 }
 
@@ -836,7 +836,7 @@ VQuery::VQuery(icalcomponent *v) : VComponent(v)
 {
 }
 
-VQuery::VQuery(string str) : VComponent(str)
+VQuery::VQuery(const std::string &str) : VComponent(str)
 {
 }
 
@@ -868,7 +868,7 @@ VJournal::VJournal(icalcomponent *v) : VComponent(v)
 {
 }
 
-VJournal::VJournal(string str) : VComponent(str)
+VJournal::VJournal(const std::string &str) : VComponent(str)
 {
 }
 
@@ -900,7 +900,7 @@ VAlarm::VAlarm(icalcomponent *v) : VComponent(v)
 {
 }
 
-VAlarm::VAlarm(string str) : VComponent(str)
+VAlarm::VAlarm(const std::string &str) : VComponent(str)
 {
 }
 
@@ -1025,7 +1025,7 @@ VFreeBusy::VFreeBusy(icalcomponent *v) : VComponent(v)
 {
 }
 
-VFreeBusy::VFreeBusy(string str) : VComponent(str)
+VFreeBusy::VFreeBusy(const std::string &str) : VComponent(str)
 {
 }
 
@@ -1057,7 +1057,7 @@ VTimezone::VTimezone(icalcomponent *v) : VComponent(v)
 {
 }
 
-VTimezone::VTimezone(string str) : VComponent(str)
+VTimezone::VTimezone(const std::string &str) : VComponent(str)
 {
 }
 
@@ -1089,7 +1089,7 @@ XStandard::XStandard(icalcomponent *v) : VComponent(v)
 {
 }
 
-XStandard::XStandard(string str) : VComponent(str)
+XStandard::XStandard(const std::string &str) : VComponent(str)
 {
 }
 
@@ -1121,6 +1121,6 @@ XDaylight::XDaylight(icalcomponent *v) : VComponent(v)
 {
 }
 
-XDaylight::XDaylight(string str) : VComponent(str)
+XDaylight::XDaylight(const std::string &str) : VComponent(str)
 {
 }

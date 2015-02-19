@@ -30,7 +30,8 @@ extern "C" {
 }
 #include <vector>       /* For as_matrix.. */
 
-namespace LibICal {
+namespace LibICal
+{
 
 class VComponent;
 

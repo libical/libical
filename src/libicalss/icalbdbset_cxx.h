@@ -29,9 +29,10 @@ extern "C" {
 
 #include <db_cxx.h>
 
-typedef char *string; // Will use the string library from STL
+#include <string>
 
-namespace LibICal {
+namespace LibICal
+{
 
 class VComponent;
 
