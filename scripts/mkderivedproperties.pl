@@ -86,6 +86,7 @@ if($opt_c){
   print "{ICAL_${uc}_PROPERTY,\"\",ICAL_NO_VALUE}};\n\n";
 
   $count = 1;
+  $bigcount = 0;
   my %lines;
 
   foreach $value (sort keys %valuemap) {
@@ -117,19 +118,30 @@ if($opt_c){
 	} else {
 	  $str = "";
 	}
+        if($e eq "NONE"){
+          $bigcount += 100;
+        }
 
-    # Place each property into a hash based on the index specified in value-types.csv
-    # The lines are printed so they're in the same order as the indices
-    $lines{$idx} = "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce},\"$str\" }, /*$idx*/\n";
-
+        # Create empty "future" properties so the hash math works.
+        if ($e eq "NONE") {
+          my ($tbd) = 1;
+          $saveidx++;
+          for(; $saveidx<$idx; $saveidx++,$tbd++) {
+            $lines{$saveidx} = "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_NONE,\"\" }, /*$saveidx*/\n";
+          }
+        }
+        # Place each property into a hash based on the index specified in value-types.csv
+        # The lines are printed so they're in the same order as the indices
+        $lines{$idx} = "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce},\"$str\" }, /*$idx*/\n";
+        $saveidx = $idx;
 	$count++;
       }
-
     }
   }
 
-  $count++;
-  print "static const struct icalproperty_enum_map enum_map[$count] = {\n";
+  $bigcount++;
+
+  print "static const struct icalproperty_enum_map enum_map[$bigcount] = {\n";
   foreach $line (sort keys %lines) {
     print $lines{$line};
   }
