@@ -1,10 +1,9 @@
 #!/usr/local/bin/perl 
 
-$pr = 1;
+$pr     = 1;
 $ignore = 0;
 
-
-print<<EOM;
+print <<EOM;
 /* -*- Mode: C -*-*/
 /*======================================================================
   FILE: ical.i
@@ -41,59 +40,55 @@ print<<EOM;
 
 EOM
 
-foreach $f (@ARGV)
-{
-  @f = split(/\//,$f);
+foreach $f (@ARGV) {
+  @f = split(/\//, $f);
   $fn = pop(@f);
 
-  $fn=~/pvl/ && next;
-  $fn=~/sspm/ && next;
-  $fn=~/cstp/ && next;
-   $fn=~/csdb/ && next;
-   $fn=~/vcal/ && next;
-   $fn=~/yacc/ && next;
-   $fn=~/lex/ && next;
+  $fn =~ /pvl/  && next;
+  $fn =~ /sspm/ && next;
+  $fn =~ /cstp/ && next;
+  $fn =~ /csdb/ && next;
+  $fn =~ /vcal/ && next;
+  $fn =~ /yacc/ && next;
+  $fn =~ /lex/  && next;
 
   print "\n/**********************************************************************\n";
 
   print "\t$fn\n";
   print "**********************************************************************/\n\n";
 
-
   open F, $f;
 
-  while(<F>){
-    
+  while (<F>) {
+
     s/^#.*//;
 
     s/\/\*.*\*\///;
-    
+
     /^\/\// && next;
 
     next if /^$/;
-    
-    if(/\/\*/){ $pr = 0;}
-    
+
+    if (/\/\*/) {$pr = 0;}
+
     /icalparser_parse\(/ and $ignore = 1;
-    /vanew/ and $ignore = 1; 
-    /_stub/ and $ignore = 1; 
-    /_response/ and $ignore = 1; 
-    /line_gen_func/ and $ignore = 1; 
-    /extern/  and $ignore = 1; 
-    /sspm/  and $ignore = 1; 
-    /icalrecur/  and $ignore = 1; 
+    /vanew/              and $ignore = 1;
+    /_stub/              and $ignore = 1;
+    /_response/          and $ignore = 1;
+    /line_gen_func/      and $ignore = 1;
+    /extern/             and $ignore = 1;
+    /sspm/               and $ignore = 1;
+    /icalrecur/          and $ignore = 1;
 
-    if ($pr == 1 && $ignore == 0){
-      print ;
+    if ($pr == 1 && $ignore == 0) {
+      print;
     }
-    
-    
-    if(/\*\//){ $pr = 1;}
 
-    if (/\;/){ $ignore = 0; }
+    if (/\*\//) {$pr = 1;}
+
+    if (/\;/) {$ignore = 0;}
 
   }
 
 }
-
 

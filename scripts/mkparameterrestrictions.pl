@@ -5,9 +5,8 @@
 # Change log:
 # <none>
 
-
 # usually open params-in-prop.txt
-open(F,"$ARGV[0]") || die "Can't open restriction file $ARGV[0]:$!";
+open(F, "$ARGV[0]") || die "Can't open restriction file $ARGV[0]:$!";
 
 print <<EOM;
 /*
@@ -41,19 +40,19 @@ int icalrestriction_is_parameter_allowed(icalproperty_kind prop,icalparameter_ki
 	{
 EOM
 
-while(<F>)
-{
-	chop;
-	
-	# split line by whitespace
-	my @v = split(/\s+/,$_);
-	# property is first item on line
-	my $prop = shift @v;
-	my $prop_name = $prop;
-	if (substr($prop,0,1) eq "X") { $prop = "X"; }
-	$prop = join("",split(/-/,$prop));
-	
-print <<EOM;
+while (<F>) {
+  chop;
+
+  # split line by whitespace
+  my @v = split(/\s+/, $_);
+
+  # property is first item on line
+  my $prop      = shift @v;
+  my $prop_name = $prop;
+  if (substr($prop, 0, 1) eq "X") {$prop = "X";}
+  $prop = join("", split(/-/, $prop));
+
+  print <<EOM;
 
 		/* ${prop_name} */
 		case ICAL_${prop}_PROPERTY:
@@ -61,13 +60,12 @@ print <<EOM;
 			{
 EOM
 
-	foreach $param (@v)
-	{
-		$param = join("",split(/-/,$param));
-		print "\t\t\t\tcase ICAL_${param}_PARAMETER:\n";
-	}
-	
-print <<EOM;
+  foreach $param (@v) {
+    $param = join("", split(/-/, $param));
+    print "\t\t\t\tcase ICAL_${param}_PARAMETER:\n";
+  }
+
+  print <<EOM;
 					return 1;
 				default:
 					return 0;

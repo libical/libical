@@ -6,7 +6,7 @@
 # <none>
 
 # usually open restrictions.csv
-open(F,"$ARGV[0]") || die "Can't open restriction file $ARGV[0]:$!";
+open(F, "$ARGV[0]") || die "Can't open restriction file $ARGV[0]:$!";
 
 print <<EOM;
 /*
@@ -48,57 +48,54 @@ icalrestriction_record icalrestriction_records[] =
 {
 EOM
 
-my $last_method = "";
+my $last_method    = "";
 my $last_component = "";
-my $last_property = "";
-my $need_header = 0;
+my $last_property  = "";
+my $need_header    = 0;
 
-while(<F>)
-{
-	chop;
-	
-	# split line at commas
-	my ($method,$component,$property,$subcomponent,$restriction)=split(/\,/,$_);
-	
-	#
-	#put in code to generate comments here!
-	#
-	if ($method ne $last_method)
-	{
-		$need_header = 1;
-		$last_method = $method;
-	}
-	if ($component ne $last_component)
-	{
-		$need_header = 1;
-		$last_component = $component;
-	}
-	
-	if ($need_header)
-	{
-		print "\n\t/* METHOD: ${method}, COMPONENT: ${component} */\n";
-		$need_header = 0;
-	}
-	
-	foreach $item ($component,$property,$subcomponent,$restriction)
-	{
-		# handle special cases.
-		if ($item eq "NONE")
-			{ $item = "NO"; }
-		else { if (substr($item,0,1) eq "X")
-			{ $item = "X"; }}
-		
-		# strip out dashes
-		$item = join("",split(/-/,$item));
-	}
-	# strip leading V from component names
-	$component =~ s/^(V?)(\w+?)((SAVINGS)?)((TIME)?)$/$2/;
-	$subcomponent =~ s/^V(\w+)/$1/;
+while (<F>) {
+  chop;
 
-	print "\t\{ICAL_METHOD_${method},ICAL_${component}_COMPONENT,";
-	print "ICAL_${property}_PROPERTY,ICAL_${subcomponent}_COMPONENT,";
-	print "ICAL_RESTRICTION_${restriction}\},\n";
-	
+  # split line at commas
+  my ($method, $component, $property, $subcomponent, $restriction) = split(/\,/, $_);
+
+  #
+  #put in code to generate comments here!
+  #
+  if ($method ne $last_method) {
+    $need_header = 1;
+    $last_method = $method;
+  }
+  if ($component ne $last_component) {
+    $need_header    = 1;
+    $last_component = $component;
+  }
+
+  if ($need_header) {
+    print "\n\t/* METHOD: ${method}, COMPONENT: ${component} */\n";
+    $need_header = 0;
+  }
+
+  foreach $item ($component, $property, $subcomponent, $restriction) {
+
+    # handle special cases.
+    if ($item eq "NONE") {$item = "NO";}
+    else {
+      if (substr($item, 0, 1) eq "X") {$item = "X";}
+    }
+
+    # strip out dashes
+    $item = join("", split(/-/, $item));
+  }
+
+  # strip leading V from component names
+  $component =~ s/^(V?)(\w+?)((SAVINGS)?)((TIME)?)$/$2/;
+  $subcomponent =~ s/^V(\w+)/$1/;
+
+  print "\t\{ICAL_METHOD_${method},ICAL_${component}_COMPONENT,";
+  print "ICAL_${property}_PROPERTY,ICAL_${subcomponent}_COMPONENT,";
+  print "ICAL_RESTRICTION_${restriction}\},\n";
+
 }
 
 print <<EOM;
