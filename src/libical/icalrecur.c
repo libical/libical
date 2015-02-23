@@ -2708,6 +2708,11 @@ static pvl_list expand_by_day(icalrecur_iterator* impl, int year)
 }
 
 
+static int compare_year_days(const void *a, const void *b)
+{
+    return (*(short *)a - *(short *)b);
+}
+
 /* For INTERVAL=YEARLY, set up the days[] array in the iterator to
    list all of the days of the current year that are specified in this
    rule. */
@@ -2940,6 +2945,9 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
 		    if (month_day > 0)
 		        impl->days[days_index++] = (short)(doy_offset + month_day);
 		}
+
+		/* Make sure the days are in chronological order */
+		qsort(impl->days, days_index, sizeof(short), compare_year_days);
 	    }
         }
         break;
