@@ -28,7 +28,7 @@
 "#Other non-standard",,,,
 "REQUEST-STATUS","5009","(a)struct icalreqstattype","string","unitary"
 "GEO","5004","(m)struct icalgeotype","tuple","unitary",
-"STRING",""5007",(a)const char*","string","unitary",
+"STRING","5007","(a)const char*","string","unitary",
 "X","5022","(m)const char*","string","unitary",
 "#CAP enumeration types",,,,
 "CMD","5010","(a)enum icalproperty_cmd","string","unitary","X=10400;ABORT;CONTINUE;CREATE;DELETE;GENERATE-UID;GET-CAPABILITY;IDENTIFY;MODIFY;MOVE;REPLY;SEARCH;SET-LOCALE;NONE=10499"
