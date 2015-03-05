@@ -125,4 +125,7 @@
 "#TZdist Properties","draft-ietf-tzdist-service",
 "TZID-ALIAS-OF","108","TEXT","TEXT"
 "TZUNTIL","109","DATE-TIME","DATE-TIME"
+"#Task Extension Properties","draft-apthorp-ical-tasks",
+"ESTIMATED-DURATION","113","DURATION","DURATION"
+"TASK-MODE","114","TASKMODE","TASKMODE"
 "#NOTE for updaters.  Preserve the icalproperty_kind Enum values to aid forward compatibility"
