@@ -380,7 +380,7 @@ install(FILES
   ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h
   icalduration.h
   icalenums.h
-  ${CMAKE_BINARY_DIR}/src/libical/icalerror.h
+  icalerror.h
   icallangbind.h
   icalmemory.h
   icalmime.h
