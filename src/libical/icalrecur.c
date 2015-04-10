@@ -3147,9 +3147,9 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
 {
     int valid = 1;
 
-    if( !impl ||  (impl->rule.count!=0 &&impl->occurrence_no >= impl->rule.count) ||
-       (!icaltime_is_null_time(impl->rule.until) && 
-	icaltime_compare(impl->last,impl->rule.until) > 0)) {
+    if(!impl ||  (impl->rule.count!=0 &&impl->occurrence_no >= impl->rule.count) ||
+       (impl->last.year >= 20000) || (!icaltime_is_null_time(impl->rule.until) &&
+       icaltime_compare(impl->last,impl->rule.until) > 0)) {
 	return icaltime_null_time();
     }
 
