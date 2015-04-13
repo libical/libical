@@ -78,6 +78,9 @@ const struct recur rfc5545[] = {
     { "20120229T120000Z",
       "FREQ=YEARLY;UNTIL=20140301T115959Z" },
 
+    /* Repeating on every February 31, no occurrences should be generated */
+    { "19410131",
+      "FREQ=YEARLY;COUNT=2;BYMONTH=2" },
 
     /* Monthly on the first Friday for 10 occurrences */
     { "19970905T090000",
