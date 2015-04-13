@@ -1882,6 +1882,21 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     icalerror_clear_errno();
 
+#define IN_RANGE(val, min, max) (val >= min && val <= max)
+
+    /* Make sure that DTSTART is a sane value */
+    if (!icaltime_is_valid_time(dtstart)
+	|| !IN_RANGE(dtstart.year,  0, MAX_TIME_T_YEAR)
+	|| !IN_RANGE(dtstart.month, 1, 12)
+	|| !IN_RANGE(dtstart.day,   1,
+		     icaltime_days_in_month(dtstart.month, dtstart.year))
+	|| (!dtstart.is_date && (!IN_RANGE(dtstart.hour,   0, 23) ||
+				 !IN_RANGE(dtstart.minute, 0, 59) ||
+				 !IN_RANGE(dtstart.second, 0, 59)))) {
+	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+	return 0;
+    }
+
     if ( ( impl = (icalrecur_iterator*)
 	   malloc(sizeof(icalrecur_iterator))) == 0) {
 	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -2054,8 +2069,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
         struct icaltimetype last = occurrence_as_icaltime(impl, 0);
 	icalerror_clear_errno();
 
-        /* Fail after hitting the year 20000 if no expanded days match */
-	while (last.year < 20000) {
+        /* Fail after exceeding MAX_TIME_T_YEAR if no expanded days match */
+	while (last.year <= MAX_TIME_T_YEAR) {
             expand_year_days(impl, last.year);
             if( icalerrno != ICAL_NO_ERROR) {
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
@@ -2105,6 +2120,12 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     impl->last = occurrence_as_icaltime(impl, 1);
 
+    /* Fail if first instance exceeds MAX_TIME_T_YEAR */
+    if (impl->last.year > MAX_TIME_T_YEAR ) {
+	icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+	free(impl);
+	return 0;
+    }
 
     return impl;
 }
