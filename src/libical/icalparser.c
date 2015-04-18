@@ -134,13 +134,12 @@ void strstriplt(char *buf)
 
 
 
-icalparser* icalparser_new(void)
+icalparser *icalparser_new(void)
 {
     struct icalparser_impl* impl = 0;
-    if ( ( impl = (struct icalparser_impl*)
-	   malloc(sizeof(struct icalparser_impl))) == 0) {
-	icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-	return 0;
+    if ((impl = (struct icalparser_impl *)malloc(sizeof(struct icalparser_impl))) == 0) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+	    return 0;
     }
     
     impl->root_component = 0;
@@ -151,8 +150,7 @@ icalparser* icalparser_new(void)
     impl->buffer_full = 0;
 	impl->continuation_line = 0;
     impl->lineno = 0;
-    impl->continuation_line = 0;
-    memset(impl->temp,0, TMP_BUF_SIZE);
+    memset(impl->temp, 0, TMP_BUF_SIZE);
 
     return (icalparser*)impl;
 }
@@ -163,11 +161,11 @@ void icalparser_free(icalparser* parser)
     icalcomponent *c;
 
     if (parser->root_component != 0){
-	icalcomponent_free(parser->root_component);
+	    icalcomponent_free(parser->root_component);
     }
 
-    while( (c=pvl_pop(parser->components)) != 0){
-	icalcomponent_free(c);
+    while ((c = pvl_pop(parser->components)) != 0) {
+        icalcomponent_free(c);
     }
     
     pvl_free(parser->components);
@@ -688,15 +686,13 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     icalerror_check_arg_rz((parser != 0),"parser");
 
-
-    if (line == 0)
-    {
-	parser->state = ICALPARSER_ERROR;
-	return 0;
+    if (line == 0) {
+        parser->state = ICALPARSER_ERROR;
+        return 0;
     }
 
-    if(line_is_blank(line) == 1){
-	return 0;
+    if (line_is_blank(line) == 1) {
+        return 0;
     }
 
     /* Begin by getting the property name at the start of the line. The
@@ -707,20 +703,20 @@ icalcomponent* icalparser_add_line(icalparser* parser,
     end = 0;
     str = parser_get_prop_name(line, &end);
 
-    if (str == 0 || *str == '\0' ){
-	/* Could not get a property name */
-	icalcomponent *tail = pvl_data(pvl_tail(parser->components));
+    if (str == 0 || *str == '\0' ) {
+        /* Could not get a property name */
+	    icalcomponent *tail = pvl_data(pvl_tail(parser->components));
 
-	if (tail){
-	    insert_error(tail,line,
-			 "Got a data line, but could not find a property name or component begin tag",
-			 ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
-	}
-	tail = 0;
-	parser->state = ICALPARSER_ERROR;
-	icalmemory_free_buffer(str);
-	str = NULL;
-	return 0; 
+	    if (tail) {
+	        insert_error(tail,line,
+                         "Got a data line, but could not find a property name or component begin tag",
+                         ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
+        }
+        tail = 0;
+        parser->state = ICALPARSER_ERROR;
+        icalmemory_free_buffer(str);
+        str = NULL;
+        return 0; 
     }
 
     /**********************************************************************
@@ -730,99 +726,93 @@ icalcomponent* icalparser_add_line(icalparser* parser,
        starting or ending a new component */
 
 
-    if(strcasecmp(str,"BEGIN") == 0){
-	icalcomponent *c;
+    if (strcasecmp(str,"BEGIN") == 0) {
+        icalcomponent *c;
         icalcomponent_kind comp_kind;
 
-	icalmemory_free_buffer(str);
-	str = NULL;
-
-	parser->level++;
-	str = parser_get_next_value(end,&end, value_kind);
+	    parser->level++;
+	    icalmemory_free_buffer(str);
+	    str = parser_get_next_value(end,&end, value_kind);
 	    
 
         comp_kind = icalenum_string_to_component_kind(str);
 
 
-        if (comp_kind == ICAL_NO_COMPONENT){
-
-
-	    c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);
-	    insert_error(c,str,"Parse error in component name",
-			 ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
+        if (comp_kind == ICAL_NO_COMPONENT) {
+            c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);
+	        insert_error(c,str,"Parse error in component name",
+                         ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
         }
 
-	c  =  icalcomponent_new(comp_kind);
+	    c  =  icalcomponent_new(comp_kind);
 
-	if (c == 0){
-	    c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);
-	    insert_error(c,str,"Parse error in component name",
-			 ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
-	}
+	    if (c == 0) {
+	        c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);
+            insert_error(c,str,"Parse error in component name",
+                         ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
+        }
 	    
-	pvl_push(parser->components,c);
+        pvl_push(parser->components,c);
 
-	parser->state = ICALPARSER_BEGIN_COMP;
+        parser->state = ICALPARSER_BEGIN_COMP;
 
-	icalmemory_free_buffer(str);
-	str = NULL;
-	return 0;
+        icalmemory_free_buffer(str);
+        str = NULL;
+        return 0;
 
-    } else if (strcasecmp(str,"END") == 0 ) {
-	icalcomponent* tail;
+    } else if (strcasecmp(str,"END") == 0) {
+        icalcomponent* tail;
 
-	icalmemory_free_buffer(str);
-	str = NULL;
-	parser->level--;
+        parser->level--;
+        icalmemory_free_buffer(str);
+        str = parser_get_next_value(end,&end, value_kind);
 
-	str = parser_get_next_value(end,&end, value_kind);
+        /* Pop last component off of list and add it to the second-to-last*/
+        parser->root_component = pvl_pop(parser->components);
 
-	/* Pop last component off of list and add it to the second-to-last*/
-	parser->root_component = pvl_pop(parser->components);
+        tail = pvl_data(pvl_tail(parser->components));
 
-	tail = pvl_data(pvl_tail(parser->components));
+        if (tail != 0) {
+            icalcomponent_add_component(tail,parser->root_component);
+        } 
 
-	if(tail != 0){
-	    icalcomponent_add_component(tail,parser->root_component);
-	} 
+        tail = 0;
+        icalmemory_free_buffer(str);
+        str = NULL;
 
-	tail = 0;
-	icalmemory_free_buffer(str);
-	str = NULL;
+	    /* Return the component if we are back to the 0th level */
+        if (parser->level == 0) {
+            icalcomponent *rtrn; 
 
-	/* Return the component if we are back to the 0th level */
-	if (parser->level == 0){
-	    icalcomponent *rtrn; 
+            if (pvl_count(parser->components) != 0) {
+                /* There are still components on the stack -- this means
+                   that one of them did not have a proper "END" */
+                pvl_push(parser->components,parser->root_component);
+                icalparser_clean(parser); /* may reset parser->root_component*/
+            }
 
-	    if(pvl_count(parser->components) != 0){
-	    /* There are still components on the stack -- this means
-               that one of them did not have a proper "END" */
-		pvl_push(parser->components,parser->root_component);
-		icalparser_clean(parser); /* may reset parser->root_component*/
-	    }
+            assert(pvl_count(parser->components) == 0);
 
-	    assert(pvl_count(parser->components) == 0);
+            parser->state = ICALPARSER_SUCCESS;
+            rtrn = parser->root_component;
+            parser->root_component = 0;
+            return rtrn;
 
-	    parser->state = ICALPARSER_SUCCESS;
-	    rtrn = parser->root_component;
-	    parser->root_component = 0;
-	    return rtrn;
-
-	} else {
-	    parser->state = ICALPARSER_END_COMP;
-	    return 0;
-	}
+        } else {
+            parser->state = ICALPARSER_END_COMP;
+            return 0;
+        }
     }
 
 
     /* There is no point in continuing if we have not seen a
        component yet */
 
-    if(pvl_data(pvl_tail(parser->components)) == 0){
-	parser->state = ICALPARSER_ERROR;
-	icalmemory_free_buffer(str);
-	str = NULL;
-	return 0;
+    if (pvl_data(pvl_tail(parser->components)) == 0) {
+        parser->state = ICALPARSER_ERROR;
+        icalmemory_free_buffer(str);
+        str = NULL;
+        return 0;
     }
 
 
@@ -833,36 +823,35 @@ icalcomponent* icalparser_add_line(icalparser* parser,
     /* At this point, the property name really is a property name,
        (Not a component name) so make a new property and add it to
        the component */
-
     
     prop_kind = icalproperty_string_to_kind(str);
 
     prop = icalproperty_new(prop_kind);
 
-    if (prop != 0){
-	icalcomponent *tail = pvl_data(pvl_tail(parser->components));
+    if (prop != 0) {
+        icalcomponent *tail = pvl_data(pvl_tail(parser->components));
 
-        if(prop_kind==ICAL_X_PROPERTY){
+        if (prop_kind==ICAL_X_PROPERTY) {
             icalproperty_set_x_name(prop,str);
         }
 
-	icalcomponent_add_property(tail, prop);
+        icalcomponent_add_property(tail, prop);
 
-	/* Set the value kind for the default for this type of
-	   property. This may be re-set by a VALUE parameter */
-	value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
+	    /* Set the value kind for the default for this type of
+	       property. This may be re-set by a VALUE parameter */
+	    value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
 
     } else {
-	icalcomponent* tail = pvl_data(pvl_tail(parser->components));
+        icalcomponent* tail = pvl_data(pvl_tail(parser->components));
 
-	insert_error(tail,str,"Parse error in property name",
-		     ICAL_XLICERRORTYPE_PROPERTYPARSEERROR);
+        insert_error(tail,str,"Parse error in property name",
+                     ICAL_XLICERRORTYPE_PROPERTYPARSEERROR);
 	    
-	tail = 0;
-	parser->state = ICALPARSER_ERROR;
-	icalmemory_free_buffer(str);
-	str = NULL;
-	return 0;
+        tail = 0;
+        parser->state = ICALPARSER_ERROR;
+        icalmemory_free_buffer(str);
+        str = NULL;
+        return 0;
     }
 
     icalmemory_free_buffer(str);
@@ -874,18 +863,17 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     /* Now, add any parameters to the last property */
 
-    while(1) {
-
-	if (*(end-1) == ':'){
-	    /* if the last separator was a ":" and the value is a
-	       URL, icalparser_get_next_parameter will find the
-	       ':' in the URL, so better break now. */
+    while (1) {
+        if (*(end-1) == ':'){
+	        /* if the last separator was a ":" and the value is a
+	           URL, icalparser_get_next_parameter will find the
+	           ':' in the URL, so better break now. */
 	    break;
 	}
 
 	str = parser_get_next_parameter(end,&end);
 	strstriplt(str);
-	if (str != 0){
+	if (str != 0) {
 	    char* name = 0;
 	    char* pvalue = 0;
         
@@ -895,7 +883,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
 	    name = parser_get_param_name(str,&pvalue);
 
-	    if (name == 0){
+	    if (name == 0) {
 		    /* 'tail' defined above */
 		    insert_error(tail, str, "Cant parse parameter name",
 			             ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
@@ -906,8 +894,8 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 	    kind = icalparameter_string_to_kind(name);
 
 	    if(kind == ICAL_X_PARAMETER){
-		param = icalparameter_new(ICAL_X_PARAMETER);
-            if(param != 0){
+            param = icalparameter_new(ICAL_X_PARAMETER);
+            if (param != 0) {
                 icalparameter_set_xname(param,name);
                 icalparameter_set_xvalue(param,pvalue);
             }
