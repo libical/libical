@@ -802,16 +802,11 @@ icalvalue_free (icalvalue* v)
 {
     icalerror_check_arg_rv((v != 0),"value");
 
-#ifdef ICAL_FREE_ON_LIST_IS_ERROR
-    icalerror_assert( (v->parent ==0),"This value is still attached to a property");
-    
-#else
-    if(v->parent !=0){
-	return;
+    if (v->parent !=0) {
+        return;
     }
-#endif
 
-    if(v->x_value != 0){
+    if (v->x_value != 0) {
         free(v->x_value);
     }
 

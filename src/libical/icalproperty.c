@@ -225,21 +225,16 @@ icalproperty_free (icalproperty* p)
     
     icalerror_check_arg_rv((p!=0),"prop");
 
-#ifdef ICAL_FREE_ON_LIST_IS_ERROR
-    icalerror_assert( (p->parent ==0),"Tried to free a property that is still attached to a component. ");
-    
-#else
-    if(p->parent !=0){
+    if (p->parent !=0) {
 	return;
     }
-#endif
 
-    if (p->value != 0){
+    if (p->value != 0) {
         icalvalue_set_parent(p->value,0);
 	icalvalue_free(p->value);
     }
     
-    while( (param = pvl_pop(p->parameters)) != 0){
+    while ((param = pvl_pop(p->parameters)) != 0) {
 	icalparameter_free(param);
     }
     

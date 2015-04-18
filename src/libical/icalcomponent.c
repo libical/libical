@@ -2,17 +2,15 @@
   FILE: icalcomponent.c
   CREATOR: eric 28 April 1999
   
-  $Id: icalcomponent.c,v 1.64 2008-01-30 20:28:42 dothebart Exp $
+  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
-
- This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of either: 
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
 
-  Or:
+   Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
@@ -21,9 +19,8 @@
 
 ======================================================================*/
 
-
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include "icalcomponent.h"
@@ -242,18 +239,12 @@ icalcomponent_free (icalcomponent* c)
 
     icalerror_check_arg_rv( (c!=0), "component");
 
-#ifdef ICAL_FREE_ON_LIST_IS_ERROR
-    icalerror_assert( (c->parent ==0),"Tried to free a component that is still attached to a parent component");
-#else
-    if(c->parent != 0){
-	return;
-    }
-#endif
-
     if(c != 0 ){
+        if(c->parent != 0) {
+            return;
+        }
        
-	if ( c->properties != 0 )
-	{
+	if (c->properties != 0)	{
 	    while( (prop=pvl_pop(c->properties)) != 0){
 		icalproperty_set_parent(prop,0);
 		icalproperty_free(prop);

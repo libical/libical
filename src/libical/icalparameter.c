@@ -86,25 +86,18 @@ void
 icalparameter_free (icalparameter* param)
 {
 
-/*  HACK. This always triggers, even when parameter is non-zero
+/*  Comment out the following as it always triggers, even when parameter is non-zero
     icalerror_check_arg_rv((parameter==0),"parameter");*/
 
-
-#ifdef ICAL_FREE_ON_LIST_IS_ERROR
-    icalerror_assert( (param->parent ==0),"Tried to free a parameter that is still attached to a component. ");
-    
-#else
-    if(param->parent !=0){
+    if (param->parent !=0) {
 	return;
     }
-#endif
-
     
-    if (param->string != 0){
+    if (param->string != 0) {
 	free ((void*)param->string);
     }
     
-    if (param->x_name != 0){
+    if (param->x_name != 0) {
 	free ((void*)param->x_name);
     }
     
@@ -122,9 +115,9 @@ icalparameter_new_clone(icalparameter* old)
 {
     struct icalparameter_impl *new;
 
-    new = icalparameter_new_impl(old->kind);
-
     icalerror_check_arg_rz((old!=0),"param");
+
+    new = icalparameter_new_impl(old->kind);
 
     if (new == 0){
 	return 0;
