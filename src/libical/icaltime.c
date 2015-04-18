@@ -27,7 +27,7 @@
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include "icaltime.h"
@@ -207,7 +207,7 @@ icaltime_from_timet_with_zone(const time_t tm, const int is_date,
 
     /* Convert the time_t to a struct tm in UTC time. We can trust gmtime
        for this. */
-#ifdef HAVE_PTHREAD
+#if defined(HAVE_PTHREAD)
     gmtime_r (&tm, &t);
 #else
     t = *(gmtime (&tm));
