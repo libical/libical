@@ -42,10 +42,6 @@
 #include <stdlib.h>   /* for malloc, free */
 #include <string.h> /* for strcasecmp */
 
-#ifdef DMALLOC
-#include "dmalloc.h"
-#endif
-
 #if defined(_MSC_VER)
 #define snprintf _snprintf
 #define strcasecmp stricmp

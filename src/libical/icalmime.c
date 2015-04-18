@@ -30,13 +30,9 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "sspm.h"
-#include "stdlib.h"
+#include <stdlib.h>
 #include <string.h> /* For strdup */
 #include <stdio.h> /* for snprintf*/
-
-#ifdef DMALLOC
-#include "dmalloc.h"
-#endif
 
 #if defined(_MSC_VER)
 #define snprintf _snprintf
@@ -190,7 +186,7 @@ icalcomponent* icalmime_parse(char* (*get_string)(char *s, size_t size,
 	return 0;
     }
 
-    memset(parts,0,sizeof(NUM_PARTS*sizeof(struct sspm_part)));
+    memset(parts,0,NUM_PARTS*sizeof(struct sspm_part));
 
     sspm_parse_mime(parts, 
 		    NUM_PARTS, /* Max parts */
@@ -376,7 +372,7 @@ int icalmime_test(char* (*get_string)(char *s, size_t size, void *d),
 	return 0;
     }
 
-    memset(parts,0,sizeof(NUM_PARTS*sizeof(struct sspm_part)));
+    memset(parts,0,NUM_PARTS*sizeof(struct sspm_part));
 
     sspm_parse_mime(parts, 
 		    NUM_PARTS, /* Max parts */

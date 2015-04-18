@@ -54,10 +54,6 @@
 #include "config.h"
 #endif
 
-#ifdef DMALLOC
-#include "dmalloc.h"
-#endif
-
 #include "icalmemory.h"
 #include "icalerror.h"
 
