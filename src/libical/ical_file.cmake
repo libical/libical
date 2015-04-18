@@ -2,7 +2,6 @@
 # It is required to make the combined header ical.h properly.
 set(COMBINEDHEADERSICAL
   ${TOPB}/src/libical/icalversion.h
-  ${TOPS}/src/libical/libical_ical_export.h
   ${TOPS}/src/libical/icaltime.h
   ${TOPS}/src/libical/icalduration.h
   ${TOPS}/src/libical/icalperiod.h
