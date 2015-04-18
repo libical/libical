@@ -54,10 +54,10 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #include <fcntl.h>
 
 
-#define NAME_OF(o)				o->id
+#define NAME_OF(o)			o->id
 #define VALUE_TYPE(o)			o->valType
 #define STRINGZ_VALUE_OF(o)		o->val.strs
-#define USTRINGZ_VALUE_OF(o)	o->val.ustrs
+#define USTRINGZ_VALUE_OF(o)	        o->val.ustrs
 #define INTEGER_VALUE_OF(o)		o->val.i
 #define LONG_VALUE_OF(o)		o->val.l
 #define ANY_VALUE_OF(o)			o->val.any
@@ -498,9 +498,9 @@ static void printValue(FILE *fp, VObject *o, int level)
 	    break;
 	    }
 	case VCVT_UINT:
-	    fprintf(fp,"%d", INTEGER_VALUE_OF(o)); break;
+	    fprintf(fp,"%u", INTEGER_VALUE_OF(o)); break;
 	case VCVT_ULONG:
-	    fprintf(fp,"%ld", LONG_VALUE_OF(o)); break;
+	    fprintf(fp,"%lu", LONG_VALUE_OF(o)); break;
 	case VCVT_RAW:
 	    fprintf(fp,"[raw data]"); break;
 	case VCVT_VOBJECT:
