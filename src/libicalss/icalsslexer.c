@@ -556,7 +556,6 @@ char *yytext_ptr;
 
 #include "icalssyacc.h"
 #include "icalgaugeimpl.h"
-#include "assert.h"
 
 #include <string.h> /* For strdup() */
 

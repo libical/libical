@@ -51,7 +51,7 @@
 */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <libical/ical.h>
@@ -200,12 +200,13 @@ icalerrorenum icaldirset_read_directory(icaldirset *dset)
 
 icalset *icaldirset_init(icalset *set, const char *dir, void *options_in)
 {
-    icaldirset *dset = (icaldirset *)set;
+    icaldirset *dset;
     icaldirset_options *options = options_in;
     struct stat sbuf;
 
     icalerror_check_arg_rz((dir != 0), "dir");
     icalerror_check_arg_rz((set != 0), "set");
+    dset = (icaldirset *)set;
 
     if (stat(dir, &sbuf) != 0) {
         icalerror_set_errno(ICAL_FILE_ERROR);
@@ -295,7 +296,7 @@ int icaldirset_next_uid_number(icaldirset *dset)
 {
     char sequence = 0;
     char temp[128];
-    char filename[ICAL_PATH_MAX];
+    char filename[ICAL_PATH_MAX] = {0};
     char *r;
     FILE *f;
     struct stat sbuf;
@@ -371,7 +372,7 @@ icalerrorenum icaldirset_next_cluster(icaldirset *dset)
 
 static void icaldirset_add_uid(icalcomponent *comp)
 {
-    char uidstring[ICAL_PATH_MAX];
+    char uidstring[ICAL_PATH_MAX] = {0};
     icalproperty *uid;
 #ifndef WIN32
     struct utsname unamebuf;
@@ -407,16 +408,18 @@ static void icaldirset_add_uid(icalcomponent *comp)
 
 icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
 {
-    char clustername[ICAL_PATH_MAX];
+    char clustername[ICAL_PATH_MAX] = {0};
     icalproperty *dt = 0;
     icalvalue *v;
     struct icaltimetype tm;
     icalerrorenum error = ICAL_NO_ERROR;
     icalcomponent *inner;
-    icaldirset *dset = (icaldirset *) set;
+    icaldirset *dset;
 
-    icalerror_check_arg_rz((dset != 0), "dset");
+    icalerror_check_arg_rz((set != 0), "set");
     icalerror_check_arg_rz((comp != 0), "comp");
+
+    dset = (icaldirset *)set;
 
     icaldirset_add_uid(comp);
 
@@ -494,15 +497,18 @@ icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
 
 icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
 {
-    icaldirset *dset = (icaldirset *)set;
-    icalcomponent *filecomp = icalcluster_get_component(dset->cluster);
-
+    icaldirset *dset;
+    icalcomponent *filecomp;
     icalcompiter i;
     int found = 0;
 
     icalerror_check_arg_re((set != 0), "set", ICAL_BADARG_ERROR);
     icalerror_check_arg_re((comp != 0), "comp", ICAL_BADARG_ERROR);
+
+    dset = (icaldirset *)set;
     icalerror_check_arg_re((dset->cluster != 0), "Cluster pointer", ICAL_USAGE_ERROR);
+
+    filecomp = icalcluster_get_component(dset->cluster);
 
     for (i = icalcomponent_begin_component(filecomp, ICAL_ANY_COMPONENT);
          icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
@@ -567,7 +573,7 @@ icalcomponent *icaldirset_fetch_match(icalset *set, icalcomponent *c)
 icalcomponent *icaldirset_fetch(icalset *set, icalcomponent_kind kind, const char *uid)
 {
     _unused(kind)
-    icaldirset *dset = (icaldirset *)set;
+    icaldirset *dset;
     icalgauge *gauge;
     icalgauge *old_gauge;
     icalcomponent *c;
@@ -579,7 +585,7 @@ icalcomponent *icaldirset_fetch(icalset *set, icalcomponent_kind kind, const cha
     snprintf(sql, 256, "SELECT * FROM VEVENT WHERE UID = \"%s\"", uid);
 
     gauge = icalgauge_new_from_sql(sql, 0);
-
+    dset = (icaldirset *)set;
     old_gauge = dset->gauge;
     dset->gauge = gauge;
 
@@ -609,11 +615,12 @@ int icaldirset_has_uid(icalset *set, const char *uid)
 
 icalerrorenum icaldirset_select(icalset *set, icalgauge *gauge)
 {
-    icaldirset *dset = (icaldirset *)set;
+    icaldirset *dset;
 
     icalerror_check_arg_re((set != 0), "set", ICAL_BADARG_ERROR);
     icalerror_check_arg_re((gauge != 0), "gauge", ICAL_BADARG_ERROR);
-
+    
+    dset = (icaldirset *)set;
     dset->gauge = gauge;
 
     return ICAL_NO_ERROR;
@@ -708,11 +715,12 @@ icalcomponent *icaldirset_get_first_component(icalset *set)
 
 icalcomponent *icaldirset_get_next_component(icalset *set)
 {
-    icaldirset *dset = (icaldirset *)set;
+    icaldirset *dset;
     icalcomponent *c;
     icalerrorenum error;
 
     icalerror_check_arg_rz((set != 0), "set");
+    dset = (icaldirset *)set;
 
     if (dset->cluster == 0) {
         icalerror_warn("icaldirset_get_next_component called with a NULL cluster (Caller must call icaldirset_get_first_component first");

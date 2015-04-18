@@ -151,13 +151,13 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
 {
     _unused(dsn)
     icalbdbset *bset = (icalbdbset *)set;
-    icalbdbset_options *options = options_in;
+    icalbdbset_options *options = (icalbdbset_options *)options_in;
     int ret;
     DB *cal_db;
     char *subdb_name=NULL;
 
     if (options == NULL) {
-        *options = icalbdbset_options_default;
+       *options = icalbdbset_options_default;
     }
 
     switch (options->subdb) {
@@ -957,13 +957,12 @@ icalerrorenum icalbdbset_remove_component(icalset *set, icalcomponent *child)
 
 int icalbdbset_count_components(icalset *set, icalcomponent_kind kind)
 {
-    icalbdbset *bset = (icalbdbset *)set;
-
     if (set == 0) {
         icalerror_set_errno(ICAL_BADARG_ERROR);
         return -1;
     }
 
+    icalbdbset *bset = (icalbdbset *)set;
     return icalcomponent_count_components(bset->cluster, kind);
 }
 
@@ -1203,13 +1202,14 @@ icalcomponent *icalbdbset_get_first_component(icalset *set)
     return 0;
 }
 
-icalsetiter icalbdbset_begin_component(
-    icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid)
+icalsetiter
+icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
+                           icalgauge *gauge, const char *tzid)
 {
     icalsetiter itr = icalsetiter_null;
     icalcomponent *comp = NULL;
     icalcompiter citr;
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype recur;
@@ -1218,6 +1218,7 @@ icalsetiter icalbdbset_begin_component(
     int orig_time_was_utc = 0;
 
     icalerror_check_arg_re((set != 0), "set", icalsetiter_null);
+    bset = (icalbdbset *)set;
 
     itr.gauge = gauge;
     itr.tzid = tzid;
@@ -1321,7 +1322,7 @@ icalsetiter icalbdbset_begin_component(
     getNextComp:
         if ((rrule != NULL && itr.last_component == NULL) ||
             (rrule == NULL)) {
-            comp =  icalcompiter_next(&citr);
+            comp = icalcompiter_next(&citr);
             comp = icalcompiter_deref(&citr);
         }
     } /* while */

@@ -222,10 +222,6 @@ static void icalset_init(void)
     pvl_push(icalset_kinds, &icalset_bdb4set_init);
 #endif
 
-#ifdef EXT_PATH
-    icalset_loaddir(EXT_PATH);
-#endif
-
     icalset_init_done++;
 }
 

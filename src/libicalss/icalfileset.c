@@ -95,7 +95,7 @@ icalset *icalfileset_new_writer(const char *path)
 icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
 {
     icalfileset_options *options = (options_in) ? options_in : &icalfileset_options_default;
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset = (icalfileset *)set;
     int flags;
     mode_t mode;
     off_t cluster_file_size;
@@ -257,9 +257,9 @@ int icalfileset_filesize(icalfileset *fset)
 
 void icalfileset_free(icalset *set)
 {
-    icalfileset *fset = (icalfileset *) set;
-
     icalerror_check_arg_rv((set != 0), "set");
+
+    icalfileset *fset = (icalfileset *)set;
 
     if (fset->cluster != 0) {
         icalfileset_commit(set);
@@ -359,7 +359,7 @@ icalerrorenum icalfileset_commit(icalset *set)
     char *str;
     icalcomponent *c;
     size_t write_size = 0;
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset = (icalfileset *)set;
 #ifdef _WIN32_WCE
     wchar_t *wtmp = 0;
     PROCESS_INFORMATION pi;
@@ -453,9 +453,9 @@ void icalfileset_mark(icalset *set)
 
 icalcomponent *icalfileset_get_component(icalset *set)
 {
-    icalfileset *fset = (icalfileset *) set;
     icalerror_check_arg_rz((set != 0), "set");
 
+    icalfileset *fset = (icalfileset *)set;
     return fset->cluster;
 }
 
@@ -464,11 +464,12 @@ icalcomponent *icalfileset_get_component(icalset *set)
 icalerrorenum icalfileset_add_component(icalset *set,
                                         icalcomponent *child)
 {
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset;
 
     icalerror_check_arg_re((set != 0), "set", ICAL_BADARG_ERROR);
     icalerror_check_arg_re((child != 0), "child", ICAL_BADARG_ERROR);
 
+    fset = (icalfileset *)set;
     icalcomponent_add_component(fset->cluster, child);
 
     icalfileset_mark(set);
@@ -476,14 +477,14 @@ icalerrorenum icalfileset_add_component(icalset *set,
     return ICAL_NO_ERROR;
 }
 
-icalerrorenum icalfileset_remove_component(icalset *set,
-        icalcomponent *child)
+icalerrorenum icalfileset_remove_component(icalset *set, icalcomponent *child)
 {
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset;
 
     icalerror_check_arg_re((set != 0), "set", ICAL_BADARG_ERROR);
     icalerror_check_arg_re((child != 0), "child", ICAL_BADARG_ERROR);
 
+    fset = (icalfileset *)set;
     icalcomponent_remove_component(fset->cluster, child);
 
     icalfileset_mark(set);
@@ -491,25 +492,26 @@ icalerrorenum icalfileset_remove_component(icalset *set,
     return ICAL_NO_ERROR;
 }
 
-int icalfileset_count_components(icalset *set,
-                                 icalcomponent_kind kind)
+int icalfileset_count_components(icalset *set, icalcomponent_kind kind)
 {
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset;
 
     if (set == 0) {
         icalerror_set_errno(ICAL_BADARG_ERROR);
         return -1;
     }
 
+    fset = (icalfileset *)set;
     return icalcomponent_count_components(fset->cluster, kind);
 }
 
 icalerrorenum icalfileset_select(icalset *set, icalgauge *gauge)
 {
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset;
 
     icalerror_check_arg_re(gauge != 0, "gauge", ICAL_BADARG_ERROR);
 
+    fset = (icalfileset *)set;
     fset->gauge = gauge;
 
     return ICAL_NO_ERROR;
@@ -517,20 +519,22 @@ icalerrorenum icalfileset_select(icalset *set, icalgauge *gauge)
 
 void icalfileset_clear(icalset *set)
 {
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset;
 
     icalerror_check_arg_rv(set != 0, "set");
 
+    fset = (icalfileset *)set;
     fset->gauge = 0;
 }
 
 icalcomponent *icalfileset_fetch(icalset *set, icalcomponent_kind kind, const char *uid)
 {
     _unused(kind)
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset;
     icalcompiter i;
 
     icalerror_check_arg_rz(set != 0, "set");
+    fset = (icalfileset *)set;
 
     for (i = icalcomponent_begin_component(fset->cluster, ICAL_ANY_COMPONENT);
          icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
@@ -632,7 +636,7 @@ struct icalfileset_id icalfileset_get_id(icalcomponent *comp)
    RECURRENCE-ID */
 icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *comp)
 {
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset = (icalfileset *)set;
     icalcompiter i;
 
     struct icalfileset_id comp_id, match_id;
@@ -677,19 +681,21 @@ icalerrorenum icalfileset_modify(icalset *set, icalcomponent *old,
 /* Iterate through components */
 icalcomponent *icalfileset_get_current_component(icalset *set)
 {
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset;
 
     icalerror_check_arg_rz((set != 0), "set");
 
+    fset = (icalfileset *)set;
     return icalcomponent_get_current_component(fset->cluster);
 }
 
 icalcomponent *icalfileset_get_first_component(icalset *set)
 {
     icalcomponent *c = 0;
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset;
 
     icalerror_check_arg_rz((set != 0), "set");
+    fset = (icalfileset *)set;
 
     do {
         if (c == 0) {
@@ -712,10 +718,11 @@ icalcomponent *icalfileset_get_first_component(icalset *set)
 
 icalcomponent *icalfileset_get_next_component(icalset *set)
 {
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset;
     icalcomponent *c;
 
     icalerror_check_arg_rz((set != 0), "set");
+    fset = (icalfileset *)set;
 
     do {
         c = icalcomponent_get_next_component(fset->cluster,
@@ -736,7 +743,7 @@ icalsetiter icalfileset_begin_component(icalset* set, icalcomponent_kind kind, i
     icalsetiter itr = icalsetiter_null;
     icalcomponent* comp = NULL;
     icalcompiter citr;
-    icalfileset *fset = (icalfileset*) set;
+    icalfileset *fset = (icalfileset*)set;
 
     icalerror_check_arg_re((set!=0), "set", icalsetiter_null);
 
@@ -764,7 +771,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
     icalsetiter itr = icalsetiter_null;
     icalcomponent *comp = NULL;
     icalcompiter citr;
-    icalfileset *fset = (icalfileset *) set;
+    icalfileset *fset;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype recur;
@@ -775,6 +782,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
     start = icaltime_from_timet(time(0), 0);
     itr.gauge = gauge;
 
+    fset = (icalfileset *)set;
     citr = icalcomponent_begin_component(fset->cluster, kind);
     comp = icalcompiter_deref(&citr);
 

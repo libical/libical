@@ -23,7 +23,7 @@
     ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <libical/ical.h>
@@ -40,17 +40,12 @@
 #include <stdlib.h> /* for malloc */
 #include <string.h>
 
-
-
 struct icalcstps_impl {
-	int timeout;
-	icalparser *parser;
-	enum cstps_state major_state;
-	struct icalcstps_commandfp commandfp;
+    int timeout;
+    icalparser *parser;
+    enum cstps_state major_state;
+    struct icalcstps_commandfp commandfp;
 };
-
-
-
 
 /* This state machine is a Mealy-type: actions occur on the
    transitions, not in the states.
@@ -144,19 +139,18 @@ void icalcstps_free(icalcstps* cstp);
 
 int icalcstps_set_timeout(icalcstps* cstp, int sec) 
 {
-    struct icalcstps_impl *impl = (struct icalcstps_impl *) cstp;
-
     icalerror_check_arg_rz( (cstp!=0), "cstp");
 
+    struct icalcstps_impl *impl = (struct icalcstps_impl *) cstp;
     impl->timeout = sec;
 
     return sec;
 }
 
 typedef struct icalcstps_response {	
-	icalrequeststatus code;
-	char caluid[1024];
-	void* result;
+    icalrequeststatus code;
+    char caluid[1024];
+    void *result;
 } icalcstps_response;
 
 
@@ -164,41 +158,50 @@ icalerrorenum prep_abort(struct icalcstps_impl* impl, char* data)
 {
     return ICAL_NO_ERROR;
 }
+
 icalerrorenum prep_authenticate(struct icalcstps_impl* impl, char* data)
 {    return ICAL_NO_ERROR;
 }
+
 icalerrorenum prep_capability(struct icalcstps_impl* impl, char* data)
 {    return ICAL_NO_ERROR;
 }
+
 icalerrorenum prep_calidexpand(struct icalcstps_impl* impl, char* data)
 {
     return ICAL_NO_ERROR;
 }
+
 icalerrorenum prep_continue(struct icalcstps_impl* impl, char* data)
 {
     return ICAL_NO_ERROR;
 }
+
 icalerrorenum prep_disconnect(struct icalcstps_impl* impl, char* data)
 {
     return ICAL_NO_ERROR;
 }
+
 icalerrorenum prep_identify(struct icalcstps_impl* impl, char* data)
 {
     return ICAL_NO_ERROR;
 }
+
 icalerrorenum prep_starttls(struct icalcstps_impl* impl, char* data)
 {
     return ICAL_NO_ERROR;
 }
+
 icalerrorenum prep_upnexpand(struct icalcstps_impl* impl, char* data)
 {
     return ICAL_NO_ERROR;
 }
+
 icalerrorenum prep_sendata(struct icalcstps_impl* impl, char* data)
 {    return ICAL_NO_ERROR;
 }
 
-char* icalcstps_process_incoming(icalcstps* cstp, char* input)
+char *icalcstps_process_incoming(icalcstps* cstp, char* input)
 {
     struct icalcstps_impl *impl = (struct icalcstps_impl *) cstp;
     char *i;
@@ -227,7 +230,11 @@ char* icalcstps_process_incoming(icalcstps* cstp, char* input)
     }
 
     printf("cmd: %s\n",cmd_or_resp);
-    printf("data: %s\n",data);
+    if (data) {
+        printf("data: %s\n",data);
+    } else {
+        printf("data is empty\n");
+    }
 	
     /* extract the command, look up in the state table, and dispatch
        to the proper handler */    
@@ -258,8 +265,6 @@ char* icalcstps_process_incoming(icalcstps* cstp, char* input)
 }
 
     /* Read data until we get a end of data marker */
-
-
 
 struct icalcstps_server_stubs {
   icalerrorenum (*abort)(icalcstps* cstp);
