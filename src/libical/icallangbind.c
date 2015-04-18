@@ -299,7 +299,7 @@ const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
 }
 
 
-#include "fcntl.h"
+#include <fcntl.h>
 int icallangbind_string_to_open_flag(const char* str)
 {
     if (strcmp(str,"r") == 0) {return O_RDONLY;}
