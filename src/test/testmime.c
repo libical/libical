@@ -95,8 +95,8 @@ char* read_stream(char *s, size_t size, void *d)
 }
 
 
-int main(int argc, char* argv[]) {
-
+int main(int argc, char* argv[])
+{
     FILE *f;
     int c;
 #if !defined(HAVE_UNISTD_H)
@@ -241,7 +241,7 @@ int main(int argc, char* argv[]) {
 	} d;
     
 	for(i=0; !feof(f); i++){
-	    fgets(temp,1024,f);
+	    (void)fgets(temp,1024,f);
 	    array[i] = strdup(temp);
 	    size += strlen(temp);
 	}
