@@ -521,10 +521,10 @@ static void enterAttr(const char *s1, const char *s2)
 	}
     else
 	addProp(curProp,p1);
-    if (stricmp(p1,VCBase64Prop) == 0 || (s2 && stricmp(p2,VCBase64Prop)==0))
+    if (stricmp(p1,VCBase64Prop) == 0 || (p2 && stricmp(p2,VCBase64Prop)==0))
 	lexPushMode(L_BASE64);
     else if (stricmp(p1,VCQuotedPrintableProp) == 0
-	    || (s2 && stricmp(p2,VCQuotedPrintableProp)==0))
+	    || (p2 && stricmp(p2,VCQuotedPrintableProp)==0))
 	lexPushMode(L_QUOTED_PRINTABLE);
     deleteStr(s1); deleteStr(s2);
     }
@@ -954,7 +954,7 @@ static char * lexGetDataFromBase64()
 		}
 	    }
 	} /* while */
-    DBG_(("db: bytesLen = %d\n",  bytesLen));
+    DBG_(("db: bytesLen = %lu\n",  bytesLen));
     /* kludge: all this won't be necessary if we have tree form
 	representation */
     if (bytes) {
