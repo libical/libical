@@ -79,20 +79,20 @@ icalcap_message_sync_send(icalcap_message *capmsg, int timeout) {
  * icalcap_message_free().
  */
 int
-icalcap_message_send(icalcap_message *capmsg) {
+icalcap_message_send(icalcap_message *capmsg)
+{
+    int	rc;
+    char   *str;
 
-	int	rc = FALSE;
-	char   *str;
-
-	g_return_val_if_fail(capmsg, FALSE);
+    g_return_val_if_fail(capmsg, FALSE);
 
 #ifdef WITH_RR
-	rc = icalcap_message_send_reply_rr(capmsg);
+    rc = icalcap_message_send_reply_rr(capmsg);
 #else
-	rc = FALSE;
+    rc = FALSE;
 #endif
 
-	return rc;
+    return rc;
 }
 
 /**

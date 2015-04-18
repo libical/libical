@@ -489,30 +489,27 @@ icalcap_message_send_reply_rr(icalcap_message *in) {
 }
 
 icalcomponent *
-icalcap_message_sync_send_rr(icalcap_message *in, int timeout) {
+icalcap_message_sync_send_rr(icalcap_message *in, int timeout)
+{
+    struct _icalcap_message_rr *capmsg = (struct _icalcap_message_rr *)in;
+    icalcomponent	       *comp;
 
-	struct _icalcap_message_rr     *capmsg = (struct _icalcap_message_rr *)in;
-	icalcomponent		       *comp, *ret;
+    gchar			*str2;
+    GError			*error = NULL;
+    int				rc;
 
-	gchar			       *str2;
-	GError			       *error = NULL;
-	int				rc;
+    /* FIXME */
+    rc = rr_cap_cmd(capmsg->cap->chan, capmsg->msg, 3 * timeout, &str2, &error);
+    capmsg->msg = NULL;
+    if (rc == 0) {
+        g_message("error = %s", error->message);
+        /* FIXME handle error */
+        return 0;
+    }
 
-	/* FIXME */
-	rc = rr_cap_cmd(capmsg->cap->chan, capmsg->msg, 3 * timeout, &str2, &error);
-	capmsg->msg = NULL;
-	if (rc == 0) {
-		g_message("error = %s", error->message);
-		/* FIXME handle error */
-		return 0;
-	}
-
-	comp = icalcap_component_new_from_string(str2);
-	g_free(str2);
-	if (ret == NULL)
-		return NULL;
-
-	return comp;
+    comp = icalcap_component_new_from_string(str2);
+    g_free(str2);
+    return comp;
 }
 
 /*
