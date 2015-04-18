@@ -39,10 +39,6 @@ Inc., AT&T Corp., International Business Machines Corporation and
 Siemens Rolm Communications Inc. See src/libicalvcal/README.TXT for
 details.
 
-Portions of this distribution are Copyright (c) 1997 Theo de
-Raadt.  See the header for src/libical/vsnprintf.c for the full
-copyright statement.
-
 
 Get Involved
 ============
