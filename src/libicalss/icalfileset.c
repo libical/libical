@@ -257,9 +257,11 @@ int icalfileset_filesize(icalfileset *fset)
 
 void icalfileset_free(icalset *set)
 {
+    icalfileset *fset;
+
     icalerror_check_arg_rv((set != 0), "set");
 
-    icalfileset *fset = (icalfileset *)set;
+    fset = (icalfileset *)set;
 
     if (fset->cluster != 0) {
         icalfileset_commit(set);
@@ -453,9 +455,11 @@ void icalfileset_mark(icalset *set)
 
 icalcomponent *icalfileset_get_component(icalset *set)
 {
+    icalfileset *fset;
+
     icalerror_check_arg_rz((set != 0), "set");
 
-    icalfileset *fset = (icalfileset *)set;
+    fset = (icalfileset *)set;
     return fset->cluster;
 }
 
