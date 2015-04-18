@@ -1,20 +1,20 @@
-/* -*- Mode: C -*-
+/*
   ======================================================================
   FILE: icaltypes.c
   CREATOR: eric 16 May 1999
-  
+
   $Id: icaltypes.c,v 1.18 2008-01-15 23:17:42 dothebart Exp $
   $Locker:  $
-    
+
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
   Or:
 
@@ -25,7 +25,7 @@
 
  ======================================================================*/
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include "icaltypes.h"
@@ -43,8 +43,8 @@
 
 #define TEMP_MAX 1024
 
-#ifdef HAVE_PTHREAD
- #include <pthread.h>    
+#if defined(HAVE_PTHREAD)
+#include <pthread.h>
     static pthread_mutex_t unk_token_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
@@ -52,14 +52,14 @@ static ical_unknown_token_handling unknownTokenHandling = ICAL_TREAT_AS_ERROR;
 
 int icaltriggertype_is_null_trigger(struct icaltriggertype tr)
 {
-    if(icaltime_is_null_time(tr.time) && 
+    if(icaltime_is_null_time(tr.time) &&
        icaldurationtype_is_null_duration(tr.duration)){
         return 1;
     }
 
     return 0;
 }
-    
+
 int icaltriggertype_is_bad_trigger(struct icaltriggertype tr)
 {
     if(icaldurationtype_is_bad_duration(tr.duration)){
@@ -73,18 +73,16 @@ struct icaltriggertype icaltriggertype_from_int(const int reltime)
 {
     struct icaltriggertype tr;
 
-    tr.time	= icaltime_null_time();
+    tr.time     = icaltime_null_time();
     tr.duration = icaldurationtype_from_int(reltime);
 
     return tr;
 }
 
-struct icaltriggertype icaltriggertype_from_string(const char* str)
+struct icaltriggertype icaltriggertype_from_string(const char *str)
 {
-
-    
     struct icaltriggertype tr;
-    icalerrorstate es = ICAL_ERROR_DEFAULT;
+    icalerrorstate es;
     icalerrorenum e;
 
     tr.time= icaltime_null_time();
@@ -101,10 +99,10 @@ struct icaltriggertype icaltriggertype_from_string(const char* str)
 
     if (icaltime_is_null_time(tr.time)){
 
-	tr.duration = icaldurationtype_from_string(str);
+        tr.duration = icaldurationtype_from_string(str);
 
         if (icaldurationtype_is_bad_duration(tr.duration)) goto error;
-    } 
+    }
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,es);
     icalerror_set_errno(e);
@@ -127,12 +125,12 @@ struct icalreqstattype icalreqstattype_from_string(const char* str)
   icalerror_check_arg((str != 0),"str");
 
   stat.code = ICAL_UNKNOWN_STATUS;
-  stat.debug = 0; 
-   stat.desc = 0;
+  stat.debug = 0;
+  stat.desc = 0;
 
   /* Get the status numbers */
 
-  sscanf(str, "%hd.%hd",&major, &minor);
+  sscanf(str, "%hd.%hd", &major, &minor);
 
   if (major <= 0 || minor < 0){
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
@@ -145,7 +143,7 @@ struct icalreqstattype icalreqstattype_from_string(const char* str)
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     return stat;
   }
-  
+
 
   p1 = strchr(str,';');
 
@@ -154,7 +152,7 @@ struct icalreqstattype icalreqstattype_from_string(const char* str)
     return stat;
   }
 
-  /* Just ignore the second clause; it will be taken from inside the library 
+  /* Just ignore the second clause; it will be taken from inside the library
    */
 
 
@@ -162,18 +160,18 @@ struct icalreqstattype icalreqstattype_from_string(const char* str)
   p2 = strchr(p1+1,';');
   if (p2 != 0 && *p2 != 0){
     stat.debug = p2+1;
-  } 
+  }
 
   return stat;
-  
+
 }
 
 const char* icalreqstattype_as_string(struct icalreqstattype stat)
 {
-	char *buf;
-	buf = icalreqstattype_as_string_r(stat);
-	icalmemory_add_tmp_buffer(buf);
-	return buf;
+    char *buf;
+    buf = icalreqstattype_as_string_r(stat);
+    icalmemory_add_tmp_buffer(buf);
+    return buf;
 }
 
 
@@ -184,16 +182,16 @@ char* icalreqstattype_as_string_r(struct icalreqstattype stat)
   icalerror_check_arg_rz((stat.code != ICAL_UNKNOWN_STATUS),"Status");
 
   temp = (char*)icalmemory_new_buffer(TEMP_MAX);
-  
+
   if (stat.desc == 0){
     stat.desc = icalenum_reqstat_desc(stat.code);
   }
-  
+
   if(stat.debug != 0){
     snprintf(temp,TEMP_MAX,"%d.%d;%s;%s", icalenum_reqstat_major(stat.code),
              icalenum_reqstat_minor(stat.code),
              stat.desc, stat.debug);
-    
+
   } else {
     snprintf(temp,TEMP_MAX,"%d.%d;%s", icalenum_reqstat_major(stat.code),
              icalenum_reqstat_minor(stat.code),
