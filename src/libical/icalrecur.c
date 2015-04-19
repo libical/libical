@@ -2069,8 +2069,8 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
         struct icaltimetype last = occurrence_as_icaltime(impl, 0);
 	icalerror_clear_errno();
 
-        /* Fail after exceeding MAX_TIME_T_YEAR if no expanded days match */
-	while (last.year <= MAX_TIME_T_YEAR) {
+        /* Fail after hitting the year 20000 if no expanded days match */
+	while (last.year < 20000) {
             expand_year_days(impl, last.year);
             if( icalerrno != ICAL_NO_ERROR) {
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
