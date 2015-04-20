@@ -1,28 +1,24 @@
-/* -*- Mode: C -*-
-    ======================================================================
-    FILE: icaldirset.c
-    CREATOR: eric 28 November 1999
+/*
+======================================================================
+ FILE: icaldirset.c
+ CREATOR: eric 28 November 1999
 
-    $Id: icaldirset.c,v 1.24 2008-01-02 20:07:40 dothebart Exp $
-    $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-    The Original Code is eric. The Initial Developer of the Original
-    Code is Eric Busboom
-
-    ======================================================================*/
+ The Original Code is eric. The Initial Developer of the Original
+ Code is Eric Busboom
+ ======================================================================*/
 
 /**
    @file   icaldirset.c
@@ -56,13 +52,12 @@
 
 #include <libical/ical.h>
 #include "icaldirset.h"
-#include "icaldirset.h"
 #include "icalfileset.h"
 #include "icalfilesetimpl.h"
 #include "icalcluster.h"
 #include "icalgauge.h"
 
-#ifndef WIN32
+#if !defined(_WIN32)
 #include <dirent.h> /* for opendir() */
 #include <unistd.h> /* for stat, getpid */
 #include <sys/utsname.h> /* for uname */
@@ -135,7 +130,7 @@ void icaldirset_unlock(const char *dir)
 icalerrorenum icaldirset_read_directory(icaldirset *dset)
 {
     char *str;
-#ifndef WIN32
+#if !defined(_WIN32)
     struct dirent *de;
     DIR *dp;
 
@@ -374,7 +369,7 @@ static void icaldirset_add_uid(icalcomponent *comp)
 {
     char uidstring[ICAL_PATH_MAX] = {0};
     icalproperty *uid;
-#ifndef WIN32
+#if !defined(_WIN32)
     struct utsname unamebuf;
 #endif
 
@@ -384,14 +379,12 @@ static void icaldirset_add_uid(icalcomponent *comp)
 
     if (uid == 0) {
 
-#ifndef WIN32
+#if !defined(_WIN32)
         uname(&unamebuf);
-
         snprintf(uidstring, sizeof(uidstring), "%d-%s", (int)getpid(), unamebuf.nodename);
 #else
         snprintf(uidstring, sizeof(uidstring), "%d-%s", (int)getpid(), "WINDOWS"); /* FIX: There must be an easy get the system name */
 #endif
-
         uid = icalproperty_new_uid(uidstring);
         icalcomponent_add_property(comp, uid);
     } else {
@@ -619,7 +612,7 @@ icalerrorenum icaldirset_select(icalset *set, icalgauge *gauge)
 
     icalerror_check_arg_re((set != 0), "set", ICAL_BADARG_ERROR);
     icalerror_check_arg_re((gauge != 0), "gauge", ICAL_BADARG_ERROR);
-    
+
     dset = (icaldirset *)set;
     dset->gauge = gauge;
 

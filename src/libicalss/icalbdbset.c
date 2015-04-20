@@ -1,10 +1,23 @@
-/* -*- Mode: C -*-
+/*
   ======================================================================
   FILE: icalbdbset.c
- ======================================================================*/
+
+  (C) COPYRIGHT 2001, Critical Path
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of either:
+
+     The LGPL as published by the Free Software Foundation, version
+     2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+
+  Or:
+
+     The Mozilla Public License Version 1.0. You may obtain a copy of
+     the License at http://www.mozilla.org/MPL/
+  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include "icalbdbset.h"
@@ -16,7 +29,7 @@
 #include <string.h>
 #include <sys/stat.h> /* for stat */
 
-#ifndef WIN32
+#if !defined(_WIN32)
 #include <unistd.h> /* for stat, getpid, unlink */
 #include <fcntl.h> /* for fcntl */
 #else
@@ -156,8 +169,8 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
     DB *cal_db;
     char *subdb_name=NULL;
 
-    if (options == NULL) {
-       *options = icalbdbset_options_default;
+    if (options == (icalbdbset_options *)NULL) {
+       options = &icalbdbset_options_default;
     }
 
     switch (options->subdb) {
@@ -1322,7 +1335,7 @@ icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
     getNextComp:
         if ((rrule != NULL && itr.last_component == NULL) ||
             (rrule == NULL)) {
-            comp = icalcompiter_next(&citr);
+            (void)icalcompiter_next(&citr);
             comp = icalcompiter_deref(&citr);
         }
     } /* while */

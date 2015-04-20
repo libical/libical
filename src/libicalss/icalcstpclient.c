@@ -1,35 +1,30 @@
-/* -*- Mode: C -*-
-    ======================================================================
-    FILE: icalcstps.c
-    CREATOR: ebusboom 23 Jun 2000
-  
-    $Id: icalcstpclient.c,v 1.9 2008-01-02 20:15:44 dothebart Exp $
-    $Locker:  $
-    
-    (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
-    
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of either: 
-    
+/*
+======================================================================
+ FILE: icalcstps.c
+ CREATOR: ebusboom 23 Jun 2000
+
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of either:
+
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
-    
-    Or:
-    
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+
+ Or:
+
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
-
-    ======================================================================*/
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <libical/ical.h>
 #include "icalcstp.h"
 #include "icalcstpclient.h"
-#include "pvl.h" 
+#include "pvl.h"
 
 #include <sys/types.h> /* For send(), others */
 #include <sys/socket.h>  /* For send(), others. */
@@ -73,7 +68,7 @@ icalcstpc* icalcstpc_new()
     struct icalcstpc_impl *impl;
 
     impl = malloc(sizeof(struct icalcstpc_impl));
-    
+
     if(impl == 0){
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
@@ -95,8 +90,8 @@ void icalcstpc_free(icalcstpc* cstpc)
     if(impl->next_input != 0){
         free(impl->next_input);
     }
-    
-    
+
+
     if(impl->parser != 0){
         icalparser_free(impl->parser);
     }
@@ -111,7 +106,7 @@ char* icalcstpc_next_output_r(icalcstpc* cstp, char * line)
     if(impl->next_output == 0){
         return 0;
     }
-    
+
     out = impl->next_output;
 
     impl->next_output = 0;
@@ -122,14 +117,14 @@ char* icalcstpc_next_output_r(icalcstpc* cstp, char * line)
 
 char* icalcstpc_next_output(icalcstpc* cstp, char * line)
 {
-	char *buf;
-	buf = icalcstpc_next_output_r(cstp, line);
-	icalmemory_add_tmp_buffer(buf);
-	return buf;
+        char *buf;
+        buf = icalcstpc_next_output_r(cstp, line);
+        icalmemory_add_tmp_buffer(buf);
+        return buf;
 }
 
 
-/* process the next string sent by the server */ 
+/* process the next string sent by the server */
 int icalcstpc_next_input(icalcstpc* cstp, char* line)
 {
     struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
@@ -203,10 +198,11 @@ int icalcstpc_set_timeout(icalcstpc* cstp, int sec)
 
 icalerrorenum icalcstpc_abort(icalcstpc* cstp)
 {
-    struct icalcstpc_impl* impl = (struct icalcstpc_impl*)cstp;
-    
+    struct icalcstpc_impl* impl;
+
     icalerror_check_arg_re(cstp!=0,"cstp",ICAL_BADARG_ERROR);
 
+    impl = (struct icalcstpc_impl*)cstp;
     impl->next_output = "ABORT\n";
 
     return ICAL_NO_ERROR;
@@ -214,8 +210,11 @@ icalerrorenum icalcstpc_abort(icalcstpc* cstp)
 
 icalerrorenum icalcstpclient_setup_output(icalcstpc* cstp, size_t sz)
 {
-   struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
+   struct icalcstpc_impl *impl;
 
+   icalerror_check_arg_re(cstp!=0,"cstp",ICAL_BADARG_ERROR);
+
+   impl = (struct icalcstpc_impl *)cstp;
    if(impl->next_output != 0){
        icalerror_set_errno(ICAL_USAGE_ERROR);
        return ICAL_USAGE_ERROR;
@@ -227,15 +226,15 @@ icalerrorenum icalcstpclient_setup_output(icalcstpc* cstp, size_t sz)
        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
        return ICAL_NEWFAILED_ERROR;
    }
-   
+
    return ICAL_NO_ERROR;
 
 }
 
-icalerrorenum icalcstpc_authenticate(icalcstpc* cstp, char* mechanism, 
+icalerrorenum icalcstpc_authenticate(icalcstpc* cstp, char* mechanism,
                                         char* data, char* f(char*))
 {
-   struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
+   struct icalcstpc_impl *impl;
    char* command_str;
    icalerrorenum error;
    size_t sz;
@@ -245,6 +244,7 @@ icalerrorenum icalcstpc_authenticate(icalcstpc* cstp, char* mechanism,
    icalerror_check_arg_re(data!=0,"data",ICAL_BADARG_ERROR);
    icalerror_check_arg_re(f!=0,"f",ICAL_BADARG_ERROR);
 
+   impl = (struct icalcstpc_impl *)cstp;
    impl->command = ICAL_AUTHENTICATE_COMMAND;
 
    command_str = icalcstp_command_to_string(impl->command);
@@ -262,19 +262,20 @@ icalerrorenum icalcstpc_authenticate(icalcstpc* cstp, char* mechanism,
 
 icalerrorenum icalcstpc_capability(icalcstpc* cstp)
 {
-    struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
+    struct icalcstpc_impl *impl;
     char* command_str;
     icalerrorenum error;
     size_t sz;
 
     icalerror_check_arg_re(cstp!=0,"cstp",ICAL_BADARG_ERROR);
-    
+
+    impl = (struct icalcstpc_impl *)cstp;
     impl->command = ICAL_CAPABILITY_COMMAND;
-    
+
     command_str = icalcstp_command_to_string(impl->command);
 
     sz = strlen(command_str);
-    
+
     if((error=icalcstpclient_setup_output(cstp,sz)) != ICAL_NO_ERROR){
         return error;
     }
@@ -318,13 +319,13 @@ icalerrorenum icalcstpc_identify(icalcstpc* cstp, char* id)
     return ICAL_NO_ERROR;
 }
 
-icalerrorenum icalcstpc_starttls(icalcstpc* cstp, char* command, 
+icalerrorenum icalcstpc_starttls(icalcstpc* cstp, char* command,
                                     char* data, char * f(char*))
 {
     struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
 
     impl->command = ICAL_STARTTLS_COMMAND;
-    
+
     return ICAL_NO_ERROR;
 }
 
@@ -344,10 +345,6 @@ icalerrorenum icalcstpc_sendata(icalcstpc* cstp, unsigned int time,
     struct icalcstpc_impl *impl = (struct icalcstpc_impl *)cstp;
 
     impl->command = ICAL_SENDDATA_COMMAND;
-    
+
     return ICAL_NO_ERROR;
 }
-
-
-
-

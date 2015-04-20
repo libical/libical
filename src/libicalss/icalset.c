@@ -1,7 +1,9 @@
-/* -*- Mode: C -*- */
-/*======================================================================
+/*
+======================================================================
  FILE: icalset.c
  CREATOR: eric 17 Jul 2000
+
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
  Icalset is the "base class" for representations of a collection of
  iCal components. Derived classes (actually delegates) include:
@@ -11,16 +13,11 @@
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database.
 
- $Id: icalset.c,v 1.18 2008-01-02 20:07:41 dothebart Exp $
- $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
-
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
   Or:
 
@@ -29,11 +26,10 @@
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <libical/ical.h>
@@ -262,7 +258,7 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
     }
 
     data = (icalset *)malloc(impl->size);
-    if (data == 0) {
+    if (data == (icalset *)NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         errno = ENOMEM;
         return 0;
