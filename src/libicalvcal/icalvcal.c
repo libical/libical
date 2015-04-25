@@ -1,17 +1,14 @@
 /*======================================================================
   FILE: icalvcal.c
   CREATOR: eric 25 May 00
-  
-  $Id: icalvcal.c,v 1.9 2008-02-03 16:10:46 dothebart Exp $
 
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
   Or:
 
@@ -31,7 +28,7 @@
   has extra data for the conversion.
 
   The conversion routine will create new iCal components or properties
-  and add them to the iCal component structure. 
+  and add them to the iCal component structure.
 
   The most common conversion routine is dc_prop. This routine converts
   properties for which the text representation of the vCal component
@@ -40,7 +37,7 @@
   ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include "icalvcal.h"
@@ -65,7 +62,7 @@ enum datatype {
 };
 
 /* The indices must match between the strings and the codes. */
-char *weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" }; 
+char *weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
 int weekday_codes[] = {
   ICAL_SUNDAY_WEEKDAY,
   ICAL_MONDAY_WEEKDAY,
@@ -78,29 +75,29 @@ int weekday_codes[] = {
 
 
 struct conversion_table_struct {
-	char* vcalname;
-	enum datatype type;
-	void* (*conversion_func)(int icaltype, VObject *o, icalcomponent *comp,
-				 icalvcal_defaults *defaults);
-	int icaltype;
+        char* vcalname;
+        enum datatype type;
+        void* (*conversion_func)(int icaltype, VObject *o, icalcomponent *comp,
+                                 icalvcal_defaults *defaults);
+        int icaltype;
 };
 
 void* dc_prop(int icaltype, VObject *object, icalcomponent *comp,
-	      icalvcal_defaults *defaults);
+              icalvcal_defaults *defaults);
 
 
 
 /* Creates an error property with the given message. */
 static icalproperty* create_parse_error_property (const char *message,
-						  const char *property_name,
-						  const char *property_value)
+                                                  const char *property_name,
+                                                  const char *property_value)
 {
     char temp[4096];
     icalparameter *error_param;
     icalproperty *error_prop;
 
     snprintf (temp, 1024, "%s: %s:%s", message, property_name, property_value);
-		
+
     error_param = icalparameter_new_xlicerrortype (ICAL_XLICERRORTYPE_VCALPROPPARSEERROR);
     error_prop = icalproperty_new_xlicerror (temp);
     icalproperty_add_parameter (error_prop, error_param);
@@ -112,13 +109,13 @@ static icalproperty* create_parse_error_property (const char *message,
 char* get_string_value (VObject *object, int *free_string)
 {
     switch (vObjectValueType(object)) {
-	case VCVT_USTRINGZ:
-	  *free_string = 1;
-	  return fakeCString(vObjectUStringZValue(object));
+        case VCVT_USTRINGZ:
+          *free_string = 1;
+          return fakeCString(vObjectUStringZValue(object));
 
-	case VCVT_STRINGZ:
-	  *free_string = 0;
-	  return (char*) vObjectStringZValue(object);
+        case VCVT_STRINGZ:
+          *free_string = 0;
+          return (char*) vObjectStringZValue(object);
     }
 
     *free_string = 0;
@@ -163,12 +160,12 @@ static void convert_floating_time_to_utc (struct icaltimetype *itt)
 }
 
 static void icalvcal_traverse_objects(VObject *,
-				      icalcomponent *,
-				      icalproperty *,
-				      icalvcal_defaults *);
+                                      icalcomponent *,
+                                      icalproperty *,
+                                      icalvcal_defaults *);
 
 icalcomponent* icalvcal_convert_with_defaults (VObject *object,
-					       icalvcal_defaults *defaults)
+                                               icalvcal_defaults *defaults)
 {
 
    char* name =  (char*)vObjectName(object);
@@ -195,7 +192,7 @@ icalcomponent* icalvcal_convert_with_defaults (VObject *object,
 #endif
 
    icalvcal_traverse_objects(object,container,0,defaults);
-   
+
    /* HACK. I am using the extra 'container' component because I am
       lazy. I know there is a way to get rid of it, but I did not care
       to find it. */
@@ -208,7 +205,7 @@ icalcomponent* icalvcal_convert_with_defaults (VObject *object,
    /* We add a VERSION and PRODID here, to make it a valid iCalendar object,
       but the application may change them if necessary. */
    prop = icalproperty_new_prodid ("-//Softwarestudio.org//" ICAL_PACKAGE
-				   " version " ICAL_VERSION "//EN");
+                                   " version " ICAL_VERSION "//EN");
    icalcomponent_add_property (root, prop);
 
    prop = icalproperty_new_version ("2.0");
@@ -232,7 +229,7 @@ icalcomponent* icalvcal_convert (VObject *object)
  * easier to use them. */
 
 void* comp(int icaltype, VObject *o, icalcomponent *comp,
-	   icalvcal_defaults *defaults)
+           icalvcal_defaults *defaults)
 {
     _unused(o)
     _unused(comp)
@@ -249,10 +246,10 @@ void* comp(int icaltype, VObject *o, icalcomponent *comp,
    (for audio, display, mail, and procedure alarms).
 
    AALARM has Run Time, Snooze Time, Repeat Count, Audio Content.
-	It may also have a TYPE parameter specifying the MIME type, e.g.
+        It may also have a TYPE parameter specifying the MIME type, e.g.
       AALARM;TYPE=WAVE;VALUE=URL:19960415T235959; ; ; file:///mmedia/taps.wav
       AALARM;TYPE=WAVE;VALUE=CONTENT-ID:19960903T060000;PT15M;4;<jsmith.part2.=
-	960901T083000.xyzMail@host1.com>
+        960901T083000.xyzMail@host1.com>
 
    DALARM has Run Time, Snooze Time, Repeat Count, Display String.
       DALARM:19960415T235000;PT5M;2;Your Taxes Are Due !!!
@@ -292,7 +289,7 @@ void* comp(int icaltype, VObject *o, icalcomponent *comp,
 /* This converts the vCalendar alarm properties into iCalendar properties and
    adds them to the component. It returns 1 if the alarm is valid, 0 if not. */
 static int get_alarm_properties (icalcomponent *comp, VObject *object,
-				 int icaltype, icalvcal_defaults *defaults)
+                                 int icaltype, icalvcal_defaults *defaults)
 {
     VObjectIterator iterator;
     icalproperty *trigger_prop = NULL, *duration_prop = NULL;
@@ -307,133 +304,133 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
     while (moreIteration (&iterator)) {
         VObject *eachProp = nextVObject (&iterator);
         const char *name =  vObjectName (eachProp);
-	char *s;
-	int free_string;
+        char *s;
+        int free_string;
 
-	s = get_string_value (eachProp, &free_string);
+        s = get_string_value (eachProp, &free_string);
 
-	/* Common properties. */
-	if (!strcmp (name, VCRunTimeProp)) {
-	    if (*s) {
-		struct icaltriggertype t;
-		icalparameter *param;
+        /* Common properties. */
+        if (!strcmp (name, VCRunTimeProp)) {
+            if (*s) {
+                struct icaltriggertype t;
+                icalparameter *param;
 
-		/* Convert it to an icaltimetype. */
-		t.time = icaltime_from_string (s);
+                /* Convert it to an icaltimetype. */
+                t.time = icaltime_from_string (s);
 
-		/* If it is a floating time, convert it to a UTC time. */
-		if (!t.time.is_utc)
-		    convert_floating_time_to_utc (&t.time);
+                /* If it is a floating time, convert it to a UTC time. */
+                if (!t.time.is_utc)
+                    convert_floating_time_to_utc (&t.time);
 
-		/* Create a TRIGGER property. */
-		trigger_prop = icalproperty_new_trigger (t);
+                /* Create a TRIGGER property. */
+                trigger_prop = icalproperty_new_trigger (t);
 
-		/* vCalendar triggers are always specific DATE-TIME values. */
-		param = icalparameter_new_value (ICAL_VALUE_DATETIME);
-		icalproperty_add_parameter (trigger_prop, param);
+                /* vCalendar triggers are always specific DATE-TIME values. */
+                param = icalparameter_new_value (ICAL_VALUE_DATETIME);
+                icalproperty_add_parameter (trigger_prop, param);
 
-		icalcomponent_add_property (comp, trigger_prop);
-	    }
- 
-	} else if (!strcmp (name, VCSnoozeTimeProp)) {
-	    struct icaldurationtype d;
+                icalcomponent_add_property (comp, trigger_prop);
+            }
 
-	    /* Parse the duration string.
-	       FIXME: vCalendar also permits 'Y' (Year) and 'M' (Month) here,
-	       which we don't handle at present. Though it is unlikely they
-	       will be used as a snooze time between repeated alarms! */
-	    d = icaldurationtype_from_string (s);
- 
-	    duration_prop = icalproperty_new_duration (d);
-	    icalcomponent_add_property (comp, duration_prop);
+        } else if (!strcmp (name, VCSnoozeTimeProp)) {
+            struct icaldurationtype d;
 
-	} else if (!strcmp (name, VCRepeatCountProp)) {
-	    /* If it starts with a digit convert it into a REPEAT property. */
-	    if (*s && *s >= '0' && *s <= '9') {
-		repeat_prop = icalproperty_new_repeat (atoi (s));
-		icalcomponent_add_property (comp, repeat_prop);
-	    }
+            /* Parse the duration string.
+               FIXME: vCalendar also permits 'Y' (Year) and 'M' (Month) here,
+               which we don't handle at present. Though it is unlikely they
+               will be used as a snooze time between repeated alarms! */
+            d = icaldurationtype_from_string (s);
 
-	} else if (!strcmp (name, VCValueProp)) {
-	    /* We just remember if the value is a URL. */
-	    if (!strcmp (s, "URL")) {
-		value_is_url = 1;
-	    }
+            duration_prop = icalproperty_new_duration (d);
+            icalcomponent_add_property (comp, duration_prop);
 
-	/* Audio properties && Procedure properties. */
-	} else if (!strcmp (name, VCAudioContentProp)
-		   || !strcmp (name, VCProcedureNameProp)) {
-	    if (*s && !attach_prop) {
-		icalattach *attach;
+        } else if (!strcmp (name, VCRepeatCountProp)) {
+            /* If it starts with a digit convert it into a REPEAT property. */
+            if (*s && *s >= '0' && *s <= '9') {
+                repeat_prop = icalproperty_new_repeat (atoi (s));
+                icalcomponent_add_property (comp, repeat_prop);
+            }
 
-		attach = icalattach_new_from_url (s);
-		attach_prop = icalproperty_new_attach (attach);
-		icalcomponent_add_property (comp, attach_prop);
-		icalattach_unref(attach);
+        } else if (!strcmp (name, VCValueProp)) {
+            /* We just remember if the value is a URL. */
+            if (!strcmp (s, "URL")) {
+                value_is_url = 1;
+            }
 
-		/* We output a "application/binary" FMTTYPE for Procedure
-		   alarms. */
-		if (!strcmp (name, VCProcedureNameProp) && !fmttype_param)
-		    fmttype_param = icalparameter_new_fmttype ("application/binary");
-	    }
+        /* Audio properties && Procedure properties. */
+        } else if (!strcmp (name, VCAudioContentProp)
+                   || !strcmp (name, VCProcedureNameProp)) {
+            if (*s && !attach_prop) {
+                icalattach *attach;
 
-	} else if (!strcmp (name, "TYPE")) {
-	    char *fmttype = NULL;
+                attach = icalattach_new_from_url (s);
+                attach_prop = icalproperty_new_attach (attach);
+                icalcomponent_add_property (comp, attach_prop);
+                icalattach_unref(attach);
 
-	    if (!strcmp (s, "PCM"))
-		fmttype = "audio/basic";
-	    else if (!strcmp (s, "AIFF"))
-		fmttype = "audio/x-aiff";
-	    else if (!strcmp (s, "WAVE"))
-		fmttype = "audio/x-wav";
+                /* We output a "application/binary" FMTTYPE for Procedure
+                   alarms. */
+                if (!strcmp (name, VCProcedureNameProp) && !fmttype_param)
+                    fmttype_param = icalparameter_new_fmttype ("application/binary");
+            }
 
-	    if (fmttype)
-		fmttype_param = icalparameter_new_fmttype (fmttype);
+        } else if (!strcmp (name, "TYPE")) {
+            char *fmttype = NULL;
 
-	/* Display properties. */
-	} else if (!strcmp (name, VCDisplayStringProp)) {
-	    if (!description_prop) {
-		description_prop = icalproperty_new_description (s);
-		icalcomponent_add_property (comp, description_prop);
-	    }
+            if (!strcmp (s, "PCM"))
+                fmttype = "audio/basic";
+            else if (!strcmp (s, "AIFF"))
+                fmttype = "audio/x-aiff";
+            else if (!strcmp (s, "WAVE"))
+                fmttype = "audio/x-wav";
 
-	/* Mail properties. */
-	} else if (!strcmp (name, VCEmailAddressProp)) {
-	    if (*s && strlen (s) < 1000) {
-	      char buffer[1024];
+            if (fmttype)
+                fmttype_param = icalparameter_new_fmttype (fmttype);
 
-		/* We need to add 'MAILTO:' before the email address, to make
-		   it valid iCalendar. */
-		sprintf (buffer, "MAILTO:%s", s);
-		attendee_prop = icalproperty_new_attendee (buffer);
-		icalcomponent_add_property (comp, attendee_prop);
-	    }
+        /* Display properties. */
+        } else if (!strcmp (name, VCDisplayStringProp)) {
+            if (!description_prop) {
+                description_prop = icalproperty_new_description (s);
+                icalcomponent_add_property (comp, description_prop);
+            }
 
-	} else if (!strcmp (name, VCNoteProp)) {
-	    if (!description_prop) {
-		description_prop = icalproperty_new_description (s);
-		icalcomponent_add_property (comp, description_prop);
-	    }
+        /* Mail properties. */
+        } else if (!strcmp (name, VCEmailAddressProp)) {
+            if (*s && strlen (s) < 1000) {
+              char buffer[1024];
 
-	    /* We also copy the Note to the SUMMARY property, since that is
-	       required in iCalendar. */
-	    if (!summary_prop) {
-		summary_prop = icalproperty_new_summary (s);
-		icalcomponent_add_property (comp, summary_prop);
+                /* We need to add 'MAILTO:' before the email address, to make
+                   it valid iCalendar. */
+                sprintf (buffer, "MAILTO:%s", s);
+                attendee_prop = icalproperty_new_attendee (buffer);
+                icalcomponent_add_property (comp, attendee_prop);
+            }
+
+        } else if (!strcmp (name, VCNoteProp)) {
+            if (!description_prop) {
+                description_prop = icalproperty_new_description (s);
+                icalcomponent_add_property (comp, description_prop);
+            }
+
+            /* We also copy the Note to the SUMMARY property, since that is
+               required in iCalendar. */
+            if (!summary_prop) {
+                summary_prop = icalproperty_new_summary (s);
+                icalcomponent_add_property (comp, summary_prop);
  }
-	}
+        }
 
-	if (free_string)
-	    deleteStr (s);
+        if (free_string)
+            deleteStr (s);
     }
 
     /* Add the FMTTYPE parameter to the ATTACH property if it exists. */
     if (fmttype_param) {
-	if (attach_prop) {
-	    icalproperty_add_parameter (attach_prop, fmttype_param);
-	} else {
-	    icalparameter_free (fmttype_param);
-	}
+        if (attach_prop) {
+            icalproperty_add_parameter (attach_prop, fmttype_param);
+        } else {
+            icalparameter_free (fmttype_param);
+        }
     }
 
 
@@ -442,131 +439,131 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 
     /* All alarms must have a trigger. */
     if (!trigger_prop)
-	is_valid_alarm = 0;
+        is_valid_alarm = 0;
 
     /* If there is a Duration but not a Repeat Count, we just remove the
        Duration so the alarm only occurs once. */
     if (duration_prop && !repeat_prop) {
-	icalcomponent_remove_property (comp, duration_prop);
-	icalproperty_free (duration_prop);
-	duration_prop = NULL;
+        icalcomponent_remove_property (comp, duration_prop);
+        icalproperty_free (duration_prop);
+        duration_prop = NULL;
     }
 
     /* Similarly if we have a Repeat Count but no Duration, we remove it. */
     if (repeat_prop && !duration_prop) {
-	icalcomponent_remove_property (comp, repeat_prop);
-	icalproperty_free (repeat_prop);
-	repeat_prop = NULL;
+        icalcomponent_remove_property (comp, repeat_prop);
+        icalproperty_free (repeat_prop);
+        repeat_prop = NULL;
     }
 
     switch (icaltype) {
     case ICAL_XAUDIOALARM_COMPONENT:
-	action = ICAL_ACTION_AUDIO;
+        action = ICAL_ACTION_AUDIO;
 
-	/* Audio alarms must have an ATTACH property, which is a URL.
-	   If they don't have one, we use the default alarm URL. */
-	if (!attach_prop || !value_is_url) {
-	    if (defaults && defaults->alarm_audio_url
-		&& defaults->alarm_audio_fmttype) {
-		icalattach *attach;
+        /* Audio alarms must have an ATTACH property, which is a URL.
+           If they don't have one, we use the default alarm URL. */
+        if (!attach_prop || !value_is_url) {
+            if (defaults && defaults->alarm_audio_url
+                && defaults->alarm_audio_fmttype) {
+                icalattach *attach;
 
-		if (attach_prop) {
-		    icalcomponent_remove_property (comp, attach_prop);
-		    icalproperty_free (attach_prop);
-		}
+                if (attach_prop) {
+                    icalcomponent_remove_property (comp, attach_prop);
+                    icalproperty_free (attach_prop);
+                }
 
-		attach = icalattach_new_from_url (defaults->alarm_audio_url);
-		attach_prop = icalproperty_new_attach (attach);
-		icalcomponent_add_property (comp, attach_prop);
+                attach = icalattach_new_from_url (defaults->alarm_audio_url);
+                attach_prop = icalproperty_new_attach (attach);
+                icalcomponent_add_property (comp, attach_prop);
 
-		fmttype_param = icalparameter_new_fmttype (defaults->alarm_audio_fmttype);
-		icalproperty_add_parameter (attach_prop, fmttype_param);
-		icalattach_unref(attach);
-	    } else {
-	        is_valid_alarm = 0;
-	    }
-	}
-	break;
+                fmttype_param = icalparameter_new_fmttype (defaults->alarm_audio_fmttype);
+                icalproperty_add_parameter (attach_prop, fmttype_param);
+                icalattach_unref(attach);
+            } else {
+                is_valid_alarm = 0;
+            }
+        }
+        break;
 
     case ICAL_XDISPLAYALARM_COMPONENT:
-	action = ICAL_ACTION_DISPLAY;
+        action = ICAL_ACTION_DISPLAY;
 
-	/* Display alarms must have a DESCRIPTION. */
-	if (!description_prop) {
-	    if (defaults && defaults->alarm_description) {
-		description_prop = icalproperty_new_description (defaults->alarm_description);
-		icalcomponent_add_property (comp, description_prop);
-	    } else {
-		is_valid_alarm = 0;
-	    }
-	}
-	break;
+        /* Display alarms must have a DESCRIPTION. */
+        if (!description_prop) {
+            if (defaults && defaults->alarm_description) {
+                description_prop = icalproperty_new_description (defaults->alarm_description);
+                icalcomponent_add_property (comp, description_prop);
+            } else {
+                is_valid_alarm = 0;
+            }
+        }
+        break;
 
     case ICAL_XEMAILALARM_COMPONENT:
-	action = ICAL_ACTION_EMAIL;
+        action = ICAL_ACTION_EMAIL;
 
-	/* Email alarms must have a SUMMARY, a DESCRIPTION, and an ATTENDEE. */
-	if (!attendee_prop) {
-	    is_valid_alarm = 0;
-	} else if (!summary_prop || !description_prop) {
-	    if (!summary_prop && defaults->alarm_description) {
-		summary_prop = icalproperty_new_summary (defaults->alarm_description);
-		icalcomponent_add_property (comp, summary_prop);
-	    }
+        /* Email alarms must have a SUMMARY, a DESCRIPTION, and an ATTENDEE. */
+        if (!attendee_prop) {
+            is_valid_alarm = 0;
+        } else if (!summary_prop || !description_prop) {
+            if (!summary_prop && defaults->alarm_description) {
+                summary_prop = icalproperty_new_summary (defaults->alarm_description);
+                icalcomponent_add_property (comp, summary_prop);
+            }
 
-	    if (!description_prop && defaults->alarm_description) {
-		description_prop = icalproperty_new_description (defaults->alarm_description);
-		icalcomponent_add_property (comp, description_prop);
-	    }
+            if (!description_prop && defaults->alarm_description) {
+                description_prop = icalproperty_new_description (defaults->alarm_description);
+                icalcomponent_add_property (comp, description_prop);
+            }
 
-	    if (!summary_prop || !description_prop)
-		is_valid_alarm = 0;
-	}
-	break;
+            if (!summary_prop || !description_prop)
+                is_valid_alarm = 0;
+        }
+        break;
 
     case ICAL_XPROCEDUREALARM_COMPONENT:
-	action = ICAL_ACTION_PROCEDURE;
+        action = ICAL_ACTION_PROCEDURE;
 
-	/* Procedure alarms must have an ATTACH property, which is a URL.
-	   We don't support inline data. */
-	if (!attach_prop) {
-	    is_valid_alarm = 0;
-	} else if (!value_is_url) {
-	    icalattach *attach;
-	    const char *url;
+        /* Procedure alarms must have an ATTACH property, which is a URL.
+           We don't support inline data. */
+        if (!attach_prop) {
+            is_valid_alarm = 0;
+        } else if (!value_is_url) {
+            icalattach *attach;
+            const char *url;
 
-	    attach = icalproperty_get_attach (attach_prop);
-	    url = icalattach_get_url (attach);
+            attach = icalproperty_get_attach (attach_prop);
+            url = icalattach_get_url (attach);
 
-	    /* Check for Gnome Calendar, which will just save a pathname. */
-	    if (url && url[0] == '/') {
-		size_t len;
-		char *new_url;
-		icalattach *new_attach;
+            /* Check for Gnome Calendar, which will just save a pathname. */
+            if (url && url[0] == '/') {
+                size_t len;
+                char *new_url;
+                icalattach *new_attach;
 
-		/* Turn it into a proper file: URL. */
-		len = strlen (url) + 12;
+                /* Turn it into a proper file: URL. */
+                len = strlen (url) + 12;
 
-		new_url = malloc (len);
-		strcpy (new_url, "file://");
-		strcat (new_url, url);
+                new_url = malloc (len);
+                strcpy (new_url, "file://");
+                strcat (new_url, url);
 
-		new_attach = icalattach_new_from_url (new_url);
-		free (new_url);
+                new_attach = icalattach_new_from_url (new_url);
+                free (new_url);
 
-		icalproperty_set_attach (attach_prop, new_attach);
-		icalattach_unref(attach);
+                icalproperty_set_attach (attach_prop, new_attach);
+                icalattach_unref(attach);
 
-	    } else {
-		is_valid_alarm = 0;
-	    }
-	}
-	break;
+            } else {
+                is_valid_alarm = 0;
+            }
+        }
+        break;
 
     default:
-	/* Shouldn't reach here ever. */
-	assert(0);
-	break;
+        /* Shouldn't reach here ever. */
+        assert(0);
+        break;
     }
 
     action_prop = icalproperty_new_action (action);
@@ -577,32 +574,32 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 
 
 void* alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
-		 icalvcal_defaults *defaults)
+                 icalvcal_defaults *defaults)
 {
     _unused(comp)
 /*    icalcomponent_kind kind = (icalcomponent_kind)icaltype; */
     int is_valid_alarm;
 
     icalcomponent* c = icalcomponent_new(ICAL_VALARM_COMPONENT);
- 
+
     is_valid_alarm = get_alarm_properties (c, o, icaltype, defaults);
 
     if (is_valid_alarm) {
     return (void*)c;
     } else {
-	icalcomponent_free (c);
-	return NULL;
+        icalcomponent_free (c);
+        return NULL;
     }
 }
 
 
 /* These #defines indicate conversion routines that are not defined yet. */
 
-#define parameter 0   
-#define rsvp_parameter 0   
+#define parameter 0
+#define rsvp_parameter 0
 
 void* transp_prop(int icaltype, VObject *object, icalcomponent *comp,
-		  icalvcal_defaults *defaults)
+                  icalvcal_defaults *defaults)
 {
     _unused(icaltype)
     _unused(comp)
@@ -623,13 +620,13 @@ void* transp_prop(int icaltype, VObject *object, icalcomponent *comp,
     }
 
     if (free_string)
-	deleteStr (s);
+        deleteStr (s);
 
     return (void*)prop;
 }
 
 void* sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
-		    icalvcal_defaults *defaults)
+                    icalvcal_defaults *defaults)
 {
     _unused(icaltype)
     _unused(comp)
@@ -650,7 +647,7 @@ void* sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
     prop = icalproperty_new_sequence (sequence);
 
     if (free_string)
-	deleteStr (s);
+        deleteStr (s);
 
     return (void*)prop;
 }
@@ -659,7 +656,7 @@ void* sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
 /* This handles properties which have multiple values, which are separated by
    ';' in vCalendar but ',' in iCalendar. So we just switch those. */
 void* multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
-		       icalvcal_defaults *defaults)
+                       icalvcal_defaults *defaults)
 {
     _unused(comp)
     _unused(defaults)
@@ -676,22 +673,22 @@ void* multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
     tmp_copy = strdup (s);
 
     if (free_string)
-	deleteStr (s);
+        deleteStr (s);
 
     if (tmp_copy) {
-	prop = icalproperty_new(kind);
+        prop = icalproperty_new(kind);
 
-	value_kind = icalenum_property_kind_to_value_kind (icalproperty_isa (prop));
+        value_kind = icalenum_property_kind_to_value_kind (icalproperty_isa (prop));
 
-	for (p = tmp_copy; *p; p++) {
-	    if (*p == ';')
-		*p = ',';
-	}
+        for (p = tmp_copy; *p; p++) {
+            if (*p == ';')
+                *p = ',';
+        }
 
-	value = icalvalue_new_from_string (value_kind, tmp_copy);
-	icalproperty_set_value (prop, value);
+        value = icalvalue_new_from_string (value_kind, tmp_copy);
+        icalproperty_set_value (prop, value);
 
-	free (tmp_copy);
+        free (tmp_copy);
     }
 
     return (void*)prop;
@@ -699,7 +696,7 @@ void* multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
 
 
 void* status_prop(int icaltype, VObject *object, icalcomponent *comp,
-		  icalvcal_defaults *defaults)
+                  icalvcal_defaults *defaults)
 {
     _unused(icaltype)
     _unused(defaults)
@@ -715,9 +712,9 @@ void* status_prop(int icaltype, VObject *object, icalcomponent *comp,
 
     /* In vCalendar:
        VEVENT can have: "NEEDS ACTION" (default), "SENT", "TENTATIVE",
-			"CONFIRMED", "DECLINED", "DELEGATED".
+                        "CONFIRMED", "DECLINED", "DELEGATED".
        VTODO can have:  "ACCEPTED", "NEEDS ACTION" (default), "SENT",
-			"DECLINED", "COMPLETED", "DELEGATED".
+                        "DECLINED", "COMPLETED", "DELEGATED".
        (Those are the only 2 components - there is no VJOURNAL)
 
        In iCalendar:
@@ -731,34 +728,34 @@ void* status_prop(int icaltype, VObject *object, icalcomponent *comp,
        is "COMPLETED" we keep it, otherwise we skip it.
     */
     if (kind == ICAL_VEVENT_COMPONENT) {
-	if (!strcmp (s, "TENTATIVE"))
-	    prop = icalproperty_new_status (ICAL_STATUS_TENTATIVE);
-	else if (!strcmp (s, "CONFIRMED"))
-	    prop = icalproperty_new_status (ICAL_STATUS_CONFIRMED);
+        if (!strcmp (s, "TENTATIVE"))
+            prop = icalproperty_new_status (ICAL_STATUS_TENTATIVE);
+        else if (!strcmp (s, "CONFIRMED"))
+            prop = icalproperty_new_status (ICAL_STATUS_CONFIRMED);
 
     } else if (kind == ICAL_VTODO_COMPONENT) {
-	if (!strcmp (s, "NEEDS ACTION"))
-	    prop = icalproperty_new_status (ICAL_STATUS_NEEDSACTION);
-	else if (!strcmp (s, "COMPLETED"))
-	    prop = icalproperty_new_status (ICAL_STATUS_COMPLETED);
+        if (!strcmp (s, "NEEDS ACTION"))
+            prop = icalproperty_new_status (ICAL_STATUS_NEEDSACTION);
+        else if (!strcmp (s, "COMPLETED"))
+            prop = icalproperty_new_status (ICAL_STATUS_COMPLETED);
 
     }
 
     if (free_string)
-	deleteStr (s);
+        deleteStr (s);
 
     return (void*)prop;
 }
 
 
 void* utc_datetime_prop(int icaltype, VObject *object, icalcomponent *comp,
-			icalvcal_defaults *defaults)
+                        icalvcal_defaults *defaults)
 {
     _unused(comp)
     _unused(defaults)
 
     icalproperty_kind kind = (icalproperty_kind)icaltype;
-    icalproperty *prop; 
+    icalproperty *prop;
     icalvalue *value;
     char *s;
     int free_string;
@@ -779,7 +776,7 @@ void* utc_datetime_prop(int icaltype, VObject *object, icalcomponent *comp,
     icalproperty_set_value(prop,value);
 
     if (free_string)
-	deleteStr (s);
+        deleteStr (s);
 
     return (void*)prop;
 }
@@ -789,7 +786,7 @@ void* utc_datetime_prop(int icaltype, VObject *object, icalcomponent *comp,
    after the interval and any whitespace. s points to the start of the
    interval. error_message is set if an error occurs. */
 static char* rrule_parse_interval (char *s, struct icalrecurrencetype *recur,
-				   char **error_message)
+                                   char **error_message)
 {
   int interval = 0;
 
@@ -822,76 +819,76 @@ static char* rrule_parse_interval (char *s, struct icalrecurrencetype *recur,
    date, e.g. 20020124T000000. error_message is set if an error occurs.
    If no duration is given, '#2' is assumed. */
 static char* rrule_parse_duration (char *s, struct icalrecurrencetype *recur,
-				   char **error_message)
+                                   char **error_message)
 {
     /* If we've already found an error, just return. */
     if (*error_message)
-	return NULL;
+        return NULL;
 
     if (!s || *s == '\0') {
-	/* If we are at the end of the string, assume '#2'. */
-	recur->count = 2;
+        /* If we are at the end of the string, assume '#2'. */
+        recur->count = 2;
 
     } else if (*s == '#') {
         /* If it starts with a '#' it is the COUNT. Note that in vCalendar
-	   #0 means forever, and setting recur->count to 0 means the same. */
-	int count = 0;
+           #0 means forever, and setting recur->count to 0 means the same. */
+        int count = 0;
 
-	s++;
-	while (*s >= '0' && *s <= '9')
-	    count = (count * 10) + (*s++ - '0');
+        s++;
+        while (*s >= '0' && *s <= '9')
+            count = (count * 10) + (*s++ - '0');
 
-	recur->count = count;
+        recur->count = count;
 
     } else if (*s >= '0' && *s <= '9') {
-	/* If it starts with a digit it must be the UNTIL date. */
-	char *e, buffer[20];
-	ptrdiff_t len;
+        /* If it starts with a digit it must be the UNTIL date. */
+        char *e, buffer[20];
+        ptrdiff_t len;
 
-	/* Find the end of the date. */
-	e = s;
-	while ((*e >= '0' && *e <= '9') || *e == 'T' || *e == 'Z')
-	    e++;
+        /* Find the end of the date. */
+        e = s;
+        while ((*e >= '0' && *e <= '9') || *e == 'T' || *e == 'Z')
+            e++;
 
-	/* Check it is a suitable length. */
-	len = e - s;
-	if (len != 8 && len != 15 && len != 16) {
-	    *error_message = "Invalid End Date";
-	    return NULL;
-	}
+        /* Check it is a suitable length. */
+        len = e - s;
+        if (len != 8 && len != 15 && len != 16) {
+            *error_message = "Invalid End Date";
+            return NULL;
+        }
 
-	/* Copy the date to our buffer and null-terminate it. */
-	strncpy (buffer, s, len);
-	buffer[len] = '\0';
+        /* Copy the date to our buffer and null-terminate it. */
+        strncpy (buffer, s, len);
+        buffer[len] = '\0';
 
-	/* Parse it into the until field. */
-	recur->until = icaltime_from_string (buffer);
+        /* Parse it into the until field. */
+        recur->until = icaltime_from_string (buffer);
 
-	/* In iCalendar UNTIL must be UTC if it is a DATE-TIME. But we
-	   don't really know what timezone the vCalendar times are in. So if
-	   it can be converted to a DATE value, we do that. Otherwise we just
-	   use the current Unix timezone. Should be OK 99% of the time. */
-	if (!recur->until.is_utc) {
-	    if (recur->until.hour == 0 && recur->until.minute == 0
-		&& recur->until.second == 0)
-		recur->until.is_date = 1;
-	    else
-		convert_floating_time_to_utc (&recur->until);
-	}
+        /* In iCalendar UNTIL must be UTC if it is a DATE-TIME. But we
+           don't really know what timezone the vCalendar times are in. So if
+           it can be converted to a DATE value, we do that. Otherwise we just
+           use the current Unix timezone. Should be OK 99% of the time. */
+        if (!recur->until.is_utc) {
+            if (recur->until.hour == 0 && recur->until.minute == 0
+                && recur->until.second == 0)
+                recur->until.is_date = 1;
+            else
+                convert_floating_time_to_utc (&recur->until);
+        }
 
-	s = e;
+        s = e;
 
     } else {
-	*error_message = "Invalid Duration";
-	return NULL;
+        *error_message = "Invalid Duration";
+        return NULL;
     }
 
 
     /* It must be followed by whitespace or the end of the string.
        I'm not sure if anything else is allowed. */
     if (s && *s != '\0' && *s != ' ' && *s != '\t') {
-	*error_message = "Invalid Duration";
-	return NULL;
+        *error_message = "Invalid Duration";
+        return NULL;
     }
 
     return s;
@@ -899,174 +896,175 @@ static char* rrule_parse_duration (char *s, struct icalrecurrencetype *recur,
 
 
 static char* rrule_parse_weekly_days (char *s,
-				      struct icalrecurrencetype *recur,
-				      char **error_message)
+                                      struct icalrecurrencetype *recur,
+                                      char **error_message)
 {
     int i;
 
     /* If we've already found an error, just return. */
     if (*error_message)
-	return NULL;
+        return NULL;
 
     for (i = 0; i < ICAL_BY_DAY_SIZE; i++) {
-	char *e = s;
-	int found_day, day;
+        char *e = s;
+        int found_day, day;
 
-	found_day = -1;
-	for (day = 0; day < 7; day++) {
-	    if (!strncmp (weekdays[day], s, 2)) {
-		/* Check the next char is whitespace or the end of string. */
-		e = s + 2;
-		if (*e == ' ' || *e == '\t' || *e == '\0') {
-		    found_day = day;
-	    break;
-	}
-	    }
-	}
+        found_day = -1;
+        for (day = 0; day < 7; day++) {
+            if (!strncmp (weekdays[day], s, 2)) {
+                /* Check the next char is whitespace or the end of string. */
+                e = s + 2;
+                if (*e == ' ' || *e == '\t' || *e == '\0') {
+                    found_day = day;
+            break;
+        }
+            }
+        }
 
-	if (found_day == -1)
-	    break;
-	    
-	recur->by_day[i] = weekday_codes[day];
+        if (found_day == -1)
+            break;
 
-	s = e;
-	/* Skip any whitespace. */
-	while (*s == ' ' || *s == '\t')
-	    s++;
+        /* cppcheck-suppress arrayIndexOutOfBounds since 'day' can't be >6 */
+        recur->by_day[i] = weekday_codes[day];
+
+        s = e;
+        /* Skip any whitespace. */
+        while (*s == ' ' || *s == '\t')
+            s++;
     }
 
     /* Terminate the array, if it isn't full. */
     if (i < ICAL_BY_DAY_SIZE)
-	recur->by_day[i] = ICAL_RECURRENCE_ARRAY_MAX;
+        recur->by_day[i] = ICAL_RECURRENCE_ARRAY_MAX;
 
     return s;
 }
 
 
 static char* rrule_parse_monthly_days (char *s,
-				       struct icalrecurrencetype *recur,
-				       char **error_message)
+                                       struct icalrecurrencetype *recur,
+                                       char **error_message)
 {
     int i;
 
     /* If we've already found an error, just return. */
     if (*error_message)
-	return NULL;
+        return NULL;
 
     for (i = 0; i < ICAL_BY_MONTHDAY_SIZE; i++) {
-	char *e;
-	int month_day;
+        char *e;
+        int month_day;
 
-	if (!strncmp (s, "LD", 2)) {
-	    month_day = -1;
-	    e = s + 2;
-	} else {
-	    month_day = strtol (s, &e, 10);
+        if (!strncmp (s, "LD", 2)) {
+            month_day = -1;
+            e = s + 2;
+        } else {
+            month_day = strtol (s, &e, 10);
 
-	    /* Check we got a valid day. */
-	    if (month_day < 1 || month_day > 31)
-		break;
+            /* Check we got a valid day. */
+            if (month_day < 1 || month_day > 31)
+                break;
 
-	    /* See if it is followed by a '+' or '-'. */
-	    if (*e == '+') {
-		e++;
-	    } else if (*e == '-') {
-		e++;
-		month_day = -month_day;
-	}
+            /* See if it is followed by a '+' or '-'. */
+            if (*e == '+') {
+                e++;
+            } else if (*e == '-') {
+                e++;
+                month_day = -month_day;
+        }
     }
 
-	/* Check the next char is whitespace or the end of the string. */
-	if (*e != ' ' && *e != '\t' && *e != '\0')
-	    break;
+        /* Check the next char is whitespace or the end of the string. */
+        if (*e != ' ' && *e != '\t' && *e != '\0')
+            break;
 
-	recur->by_month_day[i] = month_day;
+        recur->by_month_day[i] = month_day;
 
-	s = e;
-	/* Skip any whitespace. */
-	while (*s == ' ' || *s == '\t')
-	    s++;
+        s = e;
+        /* Skip any whitespace. */
+        while (*s == ' ' || *s == '\t')
+            s++;
     }
 
     /* Terminate the array, if it isn't full. */
     if (i < ICAL_BY_MONTHDAY_SIZE)
-	recur->by_month_day[i] = ICAL_RECURRENCE_ARRAY_MAX;
+        recur->by_month_day[i] = ICAL_RECURRENCE_ARRAY_MAX;
 
     return s;
 }
 
 
 static char* rrule_parse_monthly_positions (char *s,
-					    struct icalrecurrencetype *recur,
-					    char **error_message)
+                                            struct icalrecurrencetype *recur,
+                                            char **error_message)
 {
     int occurrences[ICAL_BY_DAY_SIZE];
-    int found_weekdays[7] = { 0 };
+    int found_weekdays[7] = { 0, 0, 0, 0, 0, 0, 0 };
     int i, num_positions, elems, month_position, day;
     int num_weekdays, only_weekday = 0;
     char *e;
 
     /* If we've already found an error, just return. */
     if (*error_message)
-	return NULL;
+        return NULL;
 
     /* First read the month position into our local occurrences array. */
     for (i = 0; i < ICAL_BY_DAY_SIZE; i++) {
-	int month_position;
+        int month_position;
 
-	/* Check we got a valid position number. */
-	month_position = *s - '0';
-	if (month_position < 0 || month_position > 5)
-	    break;
+        /* Check we got a valid position number. */
+        month_position = *s - '0';
+        if (month_position < 0 || month_position > 5)
+            break;
 
-	/* See if it is followed by a '+' or '-'. */
-	e = s + 1;
-	if (*e == '+') {
-	    e++;
-	} else if (*e == '-') {
-	    e++;
-	    month_position = -month_position;
-	}
+        /* See if it is followed by a '+' or '-'. */
+        e = s + 1;
+        if (*e == '+') {
+            e++;
+        } else if (*e == '-') {
+            e++;
+            month_position = -month_position;
+        }
 
-	/* Check the next char is whitespace or the end of the string. */
-	if (*e != ' ' && *e != '\t' && *e != '\0')
-	    break;
+        /* Check the next char is whitespace or the end of the string. */
+        if (*e != ' ' && *e != '\t' && *e != '\0')
+            break;
 
-	occurrences[i] = month_position;
+        occurrences[i] = month_position;
 
-	s = e;
-	/* Skip any whitespace. */
-	while (*s == ' ' || *s == '\t')
-	    s++;
+        s = e;
+        /* Skip any whitespace. */
+        while (*s == ' ' || *s == '\t')
+            s++;
     }
     num_positions = i;
 
     /* Now read the weekdays in. */
     for (;;) {
-	char *e = s;
-	int found_day, day;
+        char *e = s;
+        int found_day, day;
 
-	found_day = -1;
-	for (day = 0; day < 7; day++) {
-	    if (!strncmp (weekdays[day], s, 2)) {
-		/* Check the next char is whitespace or the end of string. */
-		e = s + 2;
-		if (*e == ' ' || *e == '\t' || *e == '\0') {
-		    found_day = day;
-		    break;
-		}
-	    }
-	}
+        found_day = -1;
+        for (day = 0; day < 7; day++) {
+            if (!strncmp (weekdays[day], s, 2)) {
+                /* Check the next char is whitespace or the end of string. */
+                e = s + 2;
+                if (*e == ' ' || *e == '\t' || *e == '\0') {
+                    found_day = day;
+                    break;
+                }
+            }
+        }
 
-	if (found_day == -1)
-	    break;
-	    
-	found_weekdays[found_day] = 1;
+        if (found_day == -1)
+            break;
 
-	s = e;
-	/* Skip any whitespace. */
-	while (*s == ' ' || *s == '\t')
-	    s++;
+        found_weekdays[found_day] = 1;
+
+        s = e;
+        /* Skip any whitespace. */
+        while (*s == ' ' || *s == '\t')
+            s++;
     }
 
     /* Now merge them together into the recur->by_day array. If there is a
@@ -1074,38 +1072,38 @@ static char* rrule_parse_monthly_positions (char *s,
        'BYDAY=TU;BYSETPOS=2', so Outlook will understand it. */
     num_weekdays = 0;
     for (day = 0; day < 7; day++) {
-	if (found_weekdays[day]) {
-	    num_weekdays++;
-	    only_weekday = day;
-	}
+        if (found_weekdays[day]) {
+            num_weekdays++;
+            only_weekday = day;
+        }
     }
     if (num_positions == 1 && num_weekdays == 1) {
-	recur->by_day[0] = weekday_codes[only_weekday];
-	recur->by_day[1] = ICAL_RECURRENCE_ARRAY_MAX;
+        recur->by_day[0] = weekday_codes[only_weekday];
+        recur->by_day[1] = ICAL_RECURRENCE_ARRAY_MAX;
 
-	recur->by_set_pos[0] = occurrences[0];
-	recur->by_set_pos[1] = ICAL_RECURRENCE_ARRAY_MAX;
+        recur->by_set_pos[0] = occurrences[0];
+        recur->by_set_pos[1] = ICAL_RECURRENCE_ARRAY_MAX;
     } else {
-	elems = 0;
-	for (i = 0; i < num_positions; i++) {
-	    month_position = occurrences[i];
+        elems = 0;
+        for (i = 0; i < num_positions; i++) {
+            month_position = occurrences[i];
 
-	    for (day = 0; day < 7; day++) {
-		if (found_weekdays[day]) {
-		    recur->by_day[elems] = (abs (month_position) * 8 + weekday_codes[day]) * ((month_position < 0) ? -1 : 1);
-		    elems++;
-		    if (elems == ICAL_BY_DAY_SIZE)
-			break;
-		}
-	    }
+            for (day = 0; day < 7; day++) {
+                if (found_weekdays[day]) {
+                    recur->by_day[elems] = (abs (month_position) * 8 + weekday_codes[day]) * ((month_position < 0) ? -1 : 1);
+                    elems++;
+                    if (elems == ICAL_BY_DAY_SIZE)
+                        break;
+                }
+            }
 
-	    if (elems == ICAL_BY_DAY_SIZE)
-		break;
-	}
+            if (elems == ICAL_BY_DAY_SIZE)
+                break;
+        }
 
-	/* Terminate the array, if it isn't full. */
-	if (elems < ICAL_BY_DAY_SIZE)
-	    recur->by_day[elems] = ICAL_RECURRENCE_ARRAY_MAX;
+        /* Terminate the array, if it isn't full. */
+        if (elems < ICAL_BY_DAY_SIZE)
+            recur->by_day[elems] = ICAL_RECURRENCE_ARRAY_MAX;
     }
 
     return s;
@@ -1113,80 +1111,80 @@ static char* rrule_parse_monthly_positions (char *s,
 
 
 static char* rrule_parse_yearly_months (char *s,
-					struct icalrecurrencetype *recur,
-					char **error_message)
+                                        struct icalrecurrencetype *recur,
+                                        char **error_message)
 {
     int i;
 
     /* If we've already found an error, just return. */
     if (*error_message)
-	return NULL;
+        return NULL;
 
     for (i = 0; i < ICAL_BY_MONTH_SIZE; i++) {
-	char *e;
-	int month;
+        char *e;
+        int month;
 
-	month = strtol (s, &e, 10);
+        month = strtol (s, &e, 10);
 
-	/* Check we got a valid month. */
-	if (month < 1 || month > 12)
-	  break;
+        /* Check we got a valid month. */
+        if (month < 1 || month > 12)
+          break;
 
-	/* Check the next char is whitespace or the end of the string. */
-	if (*e != ' ' && *e != '\t' && *e != '\0')
-	  break;
+        /* Check the next char is whitespace or the end of the string. */
+        if (*e != ' ' && *e != '\t' && *e != '\0')
+          break;
 
-	recur->by_month[i] = month;
+        recur->by_month[i] = month;
 
-	s = e;
-	/* Skip any whitespace. */
-	while (*s == ' ' || *s == '\t')
-	    s++;
+        s = e;
+        /* Skip any whitespace. */
+        while (*s == ' ' || *s == '\t')
+            s++;
     }
 
     /* Terminate the array, if it isn't full. */
     if (i < ICAL_BY_MONTH_SIZE)
-	recur->by_month[i] = ICAL_RECURRENCE_ARRAY_MAX;
+        recur->by_month[i] = ICAL_RECURRENCE_ARRAY_MAX;
 
     return s;
 }
 
 
 static char* rrule_parse_yearly_days (char *s,
-				      struct icalrecurrencetype *recur,
-				      char **error_message)
+                                      struct icalrecurrencetype *recur,
+                                      char **error_message)
 {
     int i;
 
     /* If we've already found an error, just return. */
     if (*error_message)
-	return NULL;
+        return NULL;
 
     for (i = 0; i < ICAL_BY_YEARDAY_SIZE; i++) {
-	char *e;
-	int year_day;
+        char *e;
+        int year_day;
 
-	year_day = strtol (s, &e, 10);
+        year_day = strtol (s, &e, 10);
 
-	/* Check we got a valid year_day. */
-	if (year_day < 1 || year_day > 366)
-	  break;
+        /* Check we got a valid year_day. */
+        if (year_day < 1 || year_day > 366)
+          break;
 
-	/* Check the next char is whitespace or the end of the string. */
-	if (*e != ' ' && *e != '\t' && *e != '\0')
-	  break;
+        /* Check the next char is whitespace or the end of the string. */
+        if (*e != ' ' && *e != '\t' && *e != '\0')
+          break;
 
-	recur->by_year_day[i] = year_day;
+        recur->by_year_day[i] = year_day;
 
-	s = e;
-	/* Skip any whitespace. */
-	while (*s == ' ' || *s == '\t')
-	    s++;
+        s = e;
+        /* Skip any whitespace. */
+        while (*s == ' ' || *s == '\t')
+            s++;
     }
 
     /* Terminate the array, if it isn't full. */
     if (i < ICAL_BY_YEARDAY_SIZE)
-	recur->by_year_day[i] = ICAL_RECURRENCE_ARRAY_MAX;
+        recur->by_year_day[i] = ICAL_RECURRENCE_ARRAY_MAX;
 
     return s;
 }
@@ -1198,19 +1196,19 @@ static char* rrule_parse_yearly_days (char *s,
    NOTE: There are a few things that this doesn't handle:
      1) vCalendar RRULE properties can contain an UNTIL date and a COUNT, and
         the first to occur specifies the end of the recurrence. However they
-	are mutually exclusive in iCalendar. For now we just use the COUNT.
+        are mutually exclusive in iCalendar. For now we just use the COUNT.
      2) For MONTHLY By Position recurrences, if no modifiers are given they
         are to be calculated based on the DTSTART, e.g. if DTSTART is on the
-	3rd Wednesday of the month then all occurrences are on the 3rd Wed.
-	This is awkward to do as we need to access the DTSTART property, which
-	may be after the RRULE property. So we don't do this at present.
+        3rd Wednesday of the month then all occurrences are on the 3rd Wed.
+        This is awkward to do as we need to access the DTSTART property, which
+        may be after the RRULE property. So we don't do this at present.
      3) The Extended Recurrence Rule Grammar - we only support the Basic rules.
         The extended grammar supports rules embedded in other rules, MINUTELY
-	recurrences, time modifiers in DAILY rules and maybe other stuff.
+        recurrences, time modifiers in DAILY rules and maybe other stuff.
 */
 
 void* rule_prop(int icaltype, VObject *object, icalcomponent *comp,
-		icalvcal_defaults *defaults)
+                icalvcal_defaults *defaults)
 {
     _unused(icaltype)
     _unused(comp)
@@ -1233,55 +1231,55 @@ void* rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 
     if (*s == 'D') {
       /* The DAILY RRULE only has an interval and duration (COUNT/UNTIL). */
-	recur.freq = ICAL_DAILY_RECURRENCE;
-	p = rrule_parse_interval (s + 1, &recur, &error_message);
-	p = rrule_parse_duration (p, &recur, &error_message);
+        recur.freq = ICAL_DAILY_RECURRENCE;
+        p = rrule_parse_interval (s + 1, &recur, &error_message);
+        p = rrule_parse_duration (p, &recur, &error_message);
     } else if (*s == 'W') {
-	/* The WEEKLY RRULE has weekday modifiers - MO TU WE. */
-	recur.freq = ICAL_WEEKLY_RECURRENCE;
-	p = rrule_parse_interval (s + 1, &recur, &error_message);
-	p = rrule_parse_weekly_days (p, &recur, &error_message);
-	p = rrule_parse_duration (p, &recur, &error_message);
+        /* The WEEKLY RRULE has weekday modifiers - MO TU WE. */
+        recur.freq = ICAL_WEEKLY_RECURRENCE;
+        p = rrule_parse_interval (s + 1, &recur, &error_message);
+        p = rrule_parse_weekly_days (p, &recur, &error_message);
+        p = rrule_parse_duration (p, &recur, &error_message);
     } else if (*s == 'M' && *(s + 1) == 'D') {
-	/* The MONTHLY By Day RRULE has day number modifiers - 1 1- LD. */
-	recur.freq = ICAL_MONTHLY_RECURRENCE;
-	p = rrule_parse_interval (s + 2, &recur, &error_message);
-	p = rrule_parse_monthly_days (p, &recur, &error_message);
-	p = rrule_parse_duration (p, &recur, &error_message);
+        /* The MONTHLY By Day RRULE has day number modifiers - 1 1- LD. */
+        recur.freq = ICAL_MONTHLY_RECURRENCE;
+        p = rrule_parse_interval (s + 2, &recur, &error_message);
+        p = rrule_parse_monthly_days (p, &recur, &error_message);
+        p = rrule_parse_duration (p, &recur, &error_message);
     } else if (*s == 'M' && *(s + 1) == 'P') {
-	/* The MONTHLY By Position RRULE has position modifiers - 1 2- and
-	   weekday modifiers - MO TU. */
-	recur.freq = ICAL_MONTHLY_RECURRENCE;
-	p = rrule_parse_interval (s + 2, &recur, &error_message);
-	p = rrule_parse_monthly_positions (p, &recur, &error_message);
-	p = rrule_parse_duration (p, &recur, &error_message);
+        /* The MONTHLY By Position RRULE has position modifiers - 1 2- and
+           weekday modifiers - MO TU. */
+        recur.freq = ICAL_MONTHLY_RECURRENCE;
+        p = rrule_parse_interval (s + 2, &recur, &error_message);
+        p = rrule_parse_monthly_positions (p, &recur, &error_message);
+        p = rrule_parse_duration (p, &recur, &error_message);
     } else if (*s == 'Y' && *(s + 1) == 'M') {
-	/* The YEARLY By Month RRULE has month modifiers - 1 3 12. */
-	recur.freq = ICAL_YEARLY_RECURRENCE;
-	p = rrule_parse_interval (s + 2, &recur, &error_message);
-	p = rrule_parse_yearly_months (p, &recur, &error_message);
-	p = rrule_parse_duration (p, &recur, &error_message);
+        /* The YEARLY By Month RRULE has month modifiers - 1 3 12. */
+        recur.freq = ICAL_YEARLY_RECURRENCE;
+        p = rrule_parse_interval (s + 2, &recur, &error_message);
+        p = rrule_parse_yearly_months (p, &recur, &error_message);
+        p = rrule_parse_duration (p, &recur, &error_message);
     } else if (*s == 'Y' && *(s + 1) == 'D') {
-	/* The YEARLY By Day RRULE has day number modifiers - 100 200. */
-	recur.freq = ICAL_YEARLY_RECURRENCE;
-	p = rrule_parse_interval (s + 2, &recur, &error_message);
-	p = rrule_parse_yearly_days (p, &recur, &error_message);
-	p = rrule_parse_duration (p, &recur, &error_message);
+        /* The YEARLY By Day RRULE has day number modifiers - 100 200. */
+        recur.freq = ICAL_YEARLY_RECURRENCE;
+        p = rrule_parse_interval (s + 2, &recur, &error_message);
+        p = rrule_parse_yearly_days (p, &recur, &error_message);
+        p = rrule_parse_duration (p, &recur, &error_message);
     } else {
-	error_message = "Invalid RRULE Frequency";
+        error_message = "Invalid RRULE Frequency";
     }
 
     if (error_message) {
-	prop = create_parse_error_property (error_message, property_name, s);
+        prop = create_parse_error_property (error_message, property_name, s);
     } else {
-	if (!strcmp (property_name, "RRULE"))
-	    prop = icalproperty_new_rrule (recur);
-	else
-	    prop = icalproperty_new_exrule (recur);
+        if (!strcmp (property_name, "RRULE"))
+            prop = icalproperty_new_rrule (recur);
+        else
+            prop = icalproperty_new_exrule (recur);
     }
 
     if (free_string)
-	deleteStr (s);
+        deleteStr (s);
 
     return (void*)prop;
 }
@@ -1292,13 +1290,13 @@ void* rule_prop(int icaltype, VObject *object, icalcomponent *comp,
    the same as ical */
 
 void* dc_prop(int icaltype, VObject *object, icalcomponent *comp,
-	      icalvcal_defaults *defaults)
+              icalvcal_defaults *defaults)
 {
     _unused(comp)
     _unused(defaults)
 
     icalproperty_kind kind = (icalproperty_kind)icaltype;
-    icalproperty *prop; 
+    icalproperty *prop;
     icalvalue *value;
     icalvalue_kind value_kind;
     char *s;
@@ -1315,7 +1313,7 @@ void* dc_prop(int icaltype, VObject *object, icalcomponent *comp,
     value = icalvalue_new_from_string(value_kind,s);
 
     if (free_string)
-	deleteStr (s);
+        deleteStr (s);
 
     icalproperty_set_value(prop,value);
 
@@ -1328,7 +1326,7 @@ of the vcal properties in it. I didn't feel like re-doing the entire
 table, so you'll have to find the missing properties the hard way --
 the code will assert */
 
-static const struct conversion_table_struct conversion_table[] = 
+static const struct conversion_table_struct conversion_table[] =
 {
 {VCCalProp,            COMPONENT, comp,         ICAL_VCALENDAR_COMPONENT},
 {VCTodoProp,           COMPONENT, comp,         ICAL_VTODO_COMPONENT},
@@ -1376,13 +1374,13 @@ static const struct conversion_table_struct conversion_table[] =
 
 /* We don't want the old VERSION or PRODID properties copied across as they
    are now incorrect. New VERSION & PRODID properties are added instead. */
-{VCVersionProp,        IGNORE,	  0,             0},
+{VCVersionProp,        IGNORE,    0,             0},
 {VCProdIdProp,         IGNORE,    0,             0},
 
 /* We ignore DAYLIGHT and TZ properties of the toplevel object, since we can't
    really do much with them. */
-{VCDayLightProp,       IGNORE,	  0,             0},
-{VCTimeZoneProp,       IGNORE,	  0,             0},
+{VCDayLightProp,       IGNORE,    0,             0},
+{VCTimeZoneProp,       IGNORE,    0,             0},
 
 /* These are all alarm properties. We handle these when the alarm component
    is created, so we ignore them when doing the automatic conversions.
@@ -1512,9 +1510,9 @@ static const struct conversion_table_struct conversion_table[] =
 
 
 static void icalvcal_traverse_objects(VObject *object,
-				      icalcomponent* last_comp,
-				      icalproperty* last_prop,
-				      icalvcal_defaults *defaults)
+                                      icalcomponent* last_comp,
+                                      icalproperty* last_prop,
+                                      icalvcal_defaults *defaults)
 {
     VObjectIterator iterator;
     char* name = "[No Name]";
@@ -1522,108 +1520,108 @@ static void icalvcal_traverse_objects(VObject *object,
     int i;
 
     if ( vObjectName(object)== 0){
-	printf("ERROR, object has no name");
-	assert(0);
-	return;
+        printf("ERROR, object has no name");
+        assert(0);
+        return;
     }
 
     name = (char*)vObjectName(object);
 
     /* Lookup this object in the conversion table */
     for (i = 0; conversion_table[i].vcalname != 0; i++){
-	if(strcmp(conversion_table[i].vcalname, name) == 0){
-	    break;
-	}
+        if(strcmp(conversion_table[i].vcalname, name) == 0){
+            break;
+        }
     }
-    
+
     /* Did not find the object. It may be an X-property, or an unknown
        property */
     if (conversion_table[i].vcalname == 0){
 
-	/* Handle X properties */
-	if(strncmp(name, "X-",2) == 0){
-	   icalproperty* prop = (icalproperty*)dc_prop(ICAL_X_PROPERTY,object,
-						       last_comp, defaults);
-	   icalproperty_set_x_name(prop,name);
-	   icalcomponent_add_property(last_comp,prop);
-	} else {
-	    return;
-	}
+        /* Handle X properties */
+        if(strncmp(name, "X-",2) == 0){
+           icalproperty* prop = (icalproperty*)dc_prop(ICAL_X_PROPERTY,object,
+                                                       last_comp, defaults);
+           icalproperty_set_x_name(prop,name);
+           icalcomponent_add_property(last_comp,prop);
+        } else {
+            return;
+        }
 
     } else {
-	
-	/* The vCal property is in the table, and it is not an X
+
+        /* The vCal property is in the table, and it is not an X
            property, so try to convert it to an iCal component,
            property or parameter. */
-	
-	switch(conversion_table[i].type){
-	    
-	    
-	    case COMPONENT: {
-		subc = 
-		    (icalcomponent*)(conversion_table[i].conversion_func
-				     (conversion_table[i].icaltype,
-				      object, last_comp, defaults));
-		
-		if (subc) {
-		icalcomponent_add_component(last_comp,subc);
-		}		
-		break;
-	    }
-	    
-	    case PROPERTY: {
-		
-		if (vObjectValueType(object) &&
-		    conversion_table[i].conversion_func != 0 ) {
-		    
-		    icalproperty* prop = 
-			(icalproperty*)(conversion_table[i].conversion_func
-					(conversion_table[i].icaltype,
-					 object, last_comp, defaults));
-		    
-		    if (prop)
-		    icalcomponent_add_property(last_comp,prop);
 
-		    last_prop = prop;
-		    
-		}
-		break;
-	    }
-	    
-	    case PARAMETER: {
-		break;
-	    }
-	    
-	    case UNSUPPORTED: {
+        switch(conversion_table[i].type){
 
-		/* If the property is listed as UNSUPPORTED, insert a
+
+            case COMPONENT: {
+                subc =
+                    (icalcomponent*)(conversion_table[i].conversion_func
+                                     (conversion_table[i].icaltype,
+                                      object, last_comp, defaults));
+
+                if (subc) {
+                icalcomponent_add_component(last_comp,subc);
+                }
+                break;
+            }
+
+            case PROPERTY: {
+
+                if (vObjectValueType(object) &&
+                    conversion_table[i].conversion_func != 0 ) {
+
+                    icalproperty* prop =
+                        (icalproperty*)(conversion_table[i].conversion_func
+                                        (conversion_table[i].icaltype,
+                                         object, last_comp, defaults));
+
+                    if (prop)
+                    icalcomponent_add_property(last_comp,prop);
+
+                    last_prop = prop;
+
+                }
+                break;
+            }
+
+            case PARAMETER: {
+                break;
+            }
+
+            case UNSUPPORTED: {
+
+                /* If the property is listed as UNSUPPORTED, insert a
                    X_LIC_ERROR property to note this fact. */
 
-		char temp[1024];
-		char* message = "Unsupported vCal property";
-		icalparameter *error_param;
-		icalproperty *error_prop;
+                char temp[1024];
+                char* message = "Unsupported vCal property";
+                icalparameter *error_param;
+                icalproperty *error_prop;
 
-		snprintf(temp,1024,"%s: %s",message,name);
-		
-		error_param = icalparameter_new_xlicerrortype(
-		    ICAL_XLICERRORTYPE_UNKNOWNVCALPROPERROR
-		    );
+                snprintf(temp,1024,"%s: %s",message,name);
 
-		error_prop = icalproperty_new_xlicerror(temp);
-		icalproperty_add_parameter(error_prop, error_param);
+                error_param = icalparameter_new_xlicerrortype(
+                    ICAL_XLICERRORTYPE_UNKNOWNVCALPROPERROR
+                    );
 
-		icalcomponent_add_property(last_comp,error_prop);
+                error_prop = icalproperty_new_xlicerror(temp);
+                icalproperty_add_parameter(error_prop, error_param);
 
-		break;
-	    }
+                icalcomponent_add_property(last_comp,error_prop);
 
-	    case IGNORE: {
-	      /* Do Nothing. */
-	      break;
-	    }
+                break;
+            }
 
-	}
+            case IGNORE: {
+              /* Do Nothing. */
+              break;
+            }
+
+        }
     }
 
 
@@ -1631,57 +1629,57 @@ static void icalvcal_traverse_objects(VObject *object,
 
     initPropIterator(&iterator,object);
     while (moreIteration(&iterator)) {
-	VObject *eachProp = nextVObject(&iterator);
+        VObject *eachProp = nextVObject(&iterator);
 
-	/* If 'object' is a component, then the next traversal down
+        /* If 'object' is a component, then the next traversal down
            should use it as the 'last_comp' */
 
-	if(subc!=0){
-	    icalvcal_traverse_objects(eachProp,subc,last_prop,defaults);
-	
-	} else {
-	    icalvcal_traverse_objects(eachProp,last_comp,last_prop,defaults);
-	}
+        if(subc!=0){
+            icalvcal_traverse_objects(eachProp,subc,last_prop,defaults);
+
+        } else {
+            icalvcal_traverse_objects(eachProp,last_comp,last_prop,defaults);
+        }
     }
 }
 
 #if 0
-		switch (vObjectValueType(object)) {
-		    case VCVT_USTRINGZ: {
-			char c;
-			char *t,*s;
-			s = t = fakeCString(vObjectUStringZValue(object));
-			printf(" ustringzstring:%s\n",s);
-			deleteStr(s);
-			break;
-		    }
-		    case VCVT_STRINGZ: {
-			char c;
-			const char *s = vObjectStringZValue(object);
-			printf(" stringzstring:%s\n",s);
-			break;
-		    }
-		    case VCVT_UINT:
-		    {
-			int i = vObjectIntegerValue(object);
-			printf(" int:%d\n",i);
-			break;
-		    }
-		    case VCVT_ULONG:
-		    {
-			long l = vObjectLongValue(object); 
-			printf(" int:%d\n",l);
-			break;
-		    }
-		    case VCVT_VOBJECT:
-		    {
-			printf("ERROR, should not get here\n");
-			break;
-		    }
-		    case VCVT_RAW:
-		    case 0:
-		    default:
-			break;
-		}
+                switch (vObjectValueType(object)) {
+                    case VCVT_USTRINGZ: {
+                        char c;
+                        char *t,*s;
+                        s = t = fakeCString(vObjectUStringZValue(object));
+                        printf(" ustringzstring:%s\n",s);
+                        deleteStr(s);
+                        break;
+                    }
+                    case VCVT_STRINGZ: {
+                        char c;
+                        const char *s = vObjectStringZValue(object);
+                        printf(" stringzstring:%s\n",s);
+                        break;
+                    }
+                    case VCVT_UINT:
+                    {
+                        int i = vObjectIntegerValue(object);
+                        printf(" int:%d\n",i);
+                        break;
+                    }
+                    case VCVT_ULONG:
+                    {
+                        long l = vObjectLongValue(object);
+                        printf(" int:%d\n",l);
+                        break;
+                    }
+                    case VCVT_VOBJECT:
+                    {
+                        printf("ERROR, should not get here\n");
+                        break;
+                    }
+                    case VCVT_RAW:
+                    case 0:
+                    default:
+                        break;
+                }
 
 #endif
