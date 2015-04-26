@@ -587,11 +587,11 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
     VComponentTmpPtr comp;
     for (comp = fromVC.get_first_component(ICAL_ANY_COMPONENT); comp != NULL;
          comp = fromVC.get_next_component(ICAL_ANY_COMPONENT)) {
-        const char *fromCompUid = comp->get_uid().c_str();
+        const std::string fromCompUid = comp->get_uid();
         VComponentTmpPtr c;
         for (c = this->get_first_component(comp->isa()); c != NULL;
              c = this->get_next_component(comp->isa())) {
-            if (strcmp(fromCompUid, c->get_uid().c_str()) == 0) {
+            if (strcmp(fromCompUid.c_str(), c->get_uid().c_str()) == 0) {
                 // recursively go down the components
                 c->remove(*comp, ignoreValue);
                 // if all properties are removed and there is no sub-components, then
@@ -981,6 +981,10 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
             } else if (c.isa() == ICAL_VTODO_COMPONENT) {
                 tt = c.get_due();
             }
+        }
+
+        if (related_param) {
+            free(related_param);
         }
 
         // malformed? encapsulating VEVENT or VTODO MUST have DTSTART/DTEND

@@ -297,7 +297,7 @@ DB *icalbdbset_bdb_open(const char *path, const char *subdb, int dbtype, mode_t 
 
     /* Create and initialize database object, open the database. */
     if ((ret = db_create(&dbp, ICAL_DB_ENV, 0)) != 0) {
-        return (NULL);
+        return NULL;
     }
 
     /* set comparison function, if BTREE */
@@ -319,7 +319,7 @@ DB *icalbdbset_bdb_open(const char *path, const char *subdb, int dbtype, mode_t 
         }
     }
 
-    return (dbp);
+    return dbp;
 }
 
 /* icalbdbset_parse_data -- parses using pfunc to unpack data. */
@@ -333,7 +333,7 @@ char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc)(const DBT *dbt))
         ret = (char *) dbt->data;
     }
 
-    return (ret);
+    return ret;
 }
 
 /* This populates a cluster with the entire contents of a database */
@@ -360,7 +360,7 @@ icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc)(const DB
     }
 
     if (!dbp) {
-        goto err1;
+        return ICAL_FILE_ERROR;
     }
 
     bset->cluster = icalcomponent_new(ICAL_XROOT_COMPONENT);
@@ -451,7 +451,7 @@ err2:
 err1:
     dbp->err(dbp, ret, "cursor index");
     abort();
-    return (ICAL_FILE_ERROR);
+    return ICAL_FILE_ERROR;
 }
 
 /* XXX add more to this */
@@ -679,7 +679,7 @@ int icalbdbset_put(DB *dbp, DBT *key, DBT *data, int access_method)
 
 int icalbdbset_get(DB *dbp, DB_TXN *tid, DBT *key, DBT *data, int flags)
 {
-    return (dbp->get(dbp, tid, key, data, flags));
+    return dbp->get(dbp, tid, key, data, flags);
 }
 
 /** Return the path of the database file **/
@@ -1179,7 +1179,7 @@ icalcomponent *icalbdbset_get_cluster(icalset *set)
     icalbdbset *bset = (icalbdbset *)set;
     icalerror_check_arg_rz((bset != 0), "bset");
 
-    return (bset->cluster);
+    return bset->cluster;
 }
 
 /** Iterate through components. */
@@ -1552,7 +1552,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
         }
     } while (comp != 0);
 
-    return 0;
+    return NULL; /*unreachable*/
 }
 
 icalcomponent *icalbdbset_get_next_component(icalset *set)
@@ -1577,12 +1577,12 @@ icalcomponent *icalbdbset_get_next_component(icalset *set)
 
 int icalbdbset_begin_transaction(DB_TXN *parent_tid, DB_TXN **tid)
 {
-    return (ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, parent_tid, tid, 0));
+    return ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, parent_tid, tid, 0);
 }
 
 int icalbdbset_commit_transaction(DB_TXN *txnid)
 {
-    return (txnid->commit(txnid, 0));
+    return txnid->commit(txnid, 0);
 }
 
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
@@ -1597,5 +1597,5 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
 
     char  *ac = (char *)a->data;
     char  *bc = (char *)b->data;
-    return (strncmp(ac, bc, a->size));
+    return strncmp(ac, bc, a->size);
 }
