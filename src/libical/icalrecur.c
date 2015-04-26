@@ -2412,8 +2412,8 @@ int check_set_position(icalrecur_iterator* impl, int set_pos)
 {
     int i;
     int found = 0;
-    for (i = 0; impl->rule.by_set_pos[i] != ICAL_RECURRENCE_ARRAY_MAX && 
-              i < ICAL_BY_SETPOS_SIZE; i++){
+    for (i = 0; i < ICAL_BY_SETPOS_SIZE &&
+	     impl->rule.by_set_pos[i] != ICAL_RECURRENCE_ARRAY_MAX; i++){
         if (impl->rule.by_set_pos[i] == set_pos) {
               found = 1;
               break;
