@@ -591,8 +591,7 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
         VComponentTmpPtr c;
         for (c = this->get_first_component(comp->isa()); c != NULL;
              c = this->get_next_component(comp->isa())) {
-            const char *thisCompUid = c->get_uid().c_str();
-            if (strcmp(fromCompUid, thisCompUid) == 0) {
+            if (strcmp(fromCompUid, c->get_uid().c_str()) == 0) {
                 // recursively go down the components
                 c->remove(*comp, ignoreValue);
                 // if all properties are removed and there is no sub-components, then
