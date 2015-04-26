@@ -21,8 +21,6 @@
 #include "icalparameter_cxx.h"
 #include "icalvalue_cxx.h"
 
-#include <cstdlib>
-
 using namespace LibICal;
 
 ICalProperty::ICalProperty() : imp(icalproperty_new(ICAL_ANY_PROPERTY))
@@ -101,7 +99,7 @@ int ICalProperty::operator==(ICalProperty &rhs)
     ICalValue  *thisPropValue = this->get_value();
     ICalValue  *rhsPropValue  = rhs.get_value();
     result = icalvalue_compare((icalvalue *)*thisPropValue, (icalvalue *)*rhsPropValue);
-    free(thisPropValue);
+    delete thisPropValue;
     return (result ==  ICAL_XLICCOMPARETYPE_EQUAL);
 }
 

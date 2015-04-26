@@ -121,25 +121,23 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 /* undef below if compile with MFC */
 /* #define INCLUDEMFC 1 */
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined(_WIN32)
 #ifdef INCLUDEMFC
 #include <afx.h>
 #endif
 #endif
 
-#include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
 #include "vcc.h"
 
 /****  Types, Constants  ****/
 
-#define YYDEBUG		1	/* 1 to compile in some debugging code */
-#define MAXTOKEN	256	/* maximum token (line) length */
-#define YYSTACKSIZE 	50	/* ~unref ? */
-#define MAXLEVEL	10	/* max # of nested objects parseable */
-				/* (includes outermost) */
+#define YYDEBUG         1       /* 1 to compile in some debugging code */
+#define MAXTOKEN        256     /* maximum token (line) length */
+#define YYSTACKSIZE     50      /* ~unref ? */
+#define MAXLEVEL        10      /* max # of nested objects parseable */
+                                /* (includes outermost) */
 
 
 /****  Global Variables  ****/
@@ -167,15 +165,15 @@ int yylex(void);
 int yyparse(void);
 
 enum LexMode {
-	L_NORMAL,
-	L_VCARD,
-	L_VCAL,
-	L_VEVENT,
-	L_VTODO,
-	L_VALUES,
-	L_BASE64,
-	L_QUOTED_PRINTABLE
-	};
+        L_NORMAL,
+        L_VCARD,
+        L_VCAL,
+        L_VEVENT,
+        L_VTODO,
+        L_VALUES,
+        L_BASE64,
+        L_QUOTED_PRINTABLE
+        };
 
 /****  Private Forward Declarations  ****/
 static void lexClearToken(void);
@@ -401,9 +399,6 @@ char *yyrule[] = {
 "todoitem : BEGIN_VTODO $$12 END_VTODO",
 };
 #endif
-#if YYDEBUG
-#include <stdio.h>
-#endif
 
 /* define the initial stack-sizes */
 #ifdef YYSTACKSIZE
@@ -438,16 +433,16 @@ static int pushVObject(const char *prop)
     {
     VObject *newObj;
     if (ObjStackTop == MAXLEVEL)
-	return FALSE;
+        return FALSE;
 
     ObjStack[++ObjStackTop] = curObj;
 
     if (curObj) {
         newObj = addProp(curObj,prop);
         curObj = newObj;
-	}
+        }
     else
-	curObj = newVObject(prop);
+        curObj = newVObject(prop);
 
     return TRUE;
     }
@@ -458,9 +453,9 @@ static VObject* popVObject()
     {
     VObject *oldObj;
     if (ObjStackTop < 0) {
-	yyerror("pop on empty Object Stack\n");
-	return 0;
-	}
+        yyerror("pop on empty Object Stack\n");
+        return 0;
+        }
     oldObj = curObj;
     curObj = ObjStack[ObjStackTop--];
 
@@ -471,34 +466,34 @@ static VObject* popVObject()
 static void enterValues(const char *value)
     {
     if (fieldedProp && *fieldedProp) {
-	if (value) {
-	    addPropValue(curProp,*fieldedProp,value);
-	    }
-	/* else this field is empty, advance to next field */
-	fieldedProp++;
-	}
+        if (value) {
+            addPropValue(curProp,*fieldedProp,value);
+            }
+        /* else this field is empty, advance to next field */
+        fieldedProp++;
+        }
     else {
-	if (value) {
-	    char *p1, *p2;
-	    wchar_t *p3;
-	    size_t i;
+        if (value) {
+            char *p1, *p2;
+            wchar_t *p3;
+            size_t i;
 
-	    /* If the property already has a string value, we append this one,
-	       using ';' to separate the values. */
-	    if (vObjectUStringZValue(curProp)) {
-		p1 = fakeCString(vObjectUStringZValue(curProp));
-		i = strlen(p1)+strlen(value)+2;
-		p2 = malloc(i);
-		snprintf(p2,i,"%s;%s",p1,value);
-		deleteStr(p1);
-		p3 = (wchar_t *) vObjectUStringZValue(curProp);
-		free(p3);
-		setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
-		deleteStr(p2);
-	    } else {
-	    setVObjectUStringZValue_(curProp,fakeUnicode(value,0));
-	    }
-	}
+            /* If the property already has a string value, we append this one,
+               using ';' to separate the values. */
+            if (vObjectUStringZValue(curProp)) {
+                p1 = fakeCString(vObjectUStringZValue(curProp));
+                i = strlen(p1)+strlen(value)+2;
+                p2 = malloc(i);
+                snprintf(p2,i,"%s;%s",p1,value);
+                deleteStr(p1);
+                p3 = (wchar_t *) vObjectUStringZValue(curProp);
+                free(p3);
+                setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
+                deleteStr(p2);
+            } else {
+            setVObjectUStringZValue_(curProp,fakeUnicode(value,0));
+            }
+        }
     }
     deleteStr(value);
     }
@@ -514,18 +509,18 @@ static void enterAttr(const char *s1, const char *s2)
     const char *p1, *p2 = NULL;
     p1 = lookupProp_(s1);
     if (s2) {
-	VObject *a;
-	p2 = lookupProp_(s2);
-	a = addProp(curProp,p1);
-	setVObjectStringZValue(a,p2);
-	}
+        VObject *a;
+        p2 = lookupProp_(s2);
+        a = addProp(curProp,p1);
+        setVObjectStringZValue(a,p2);
+        }
     else
-	addProp(curProp,p1);
+        addProp(curProp,p1);
     if (stricmp(p1,VCBase64Prop) == 0 || (p2 && stricmp(p2,VCBase64Prop)==0))
-	lexPushMode(L_BASE64);
+        lexPushMode(L_BASE64);
     else if (stricmp(p1,VCQuotedPrintableProp) == 0
-	    || (p2 && stricmp(p2,VCQuotedPrintableProp)==0))
-	lexPushMode(L_QUOTED_PRINTABLE);
+            || (p2 && stricmp(p2,VCQuotedPrintableProp)==0))
+        lexPushMode(L_QUOTED_PRINTABLE);
     deleteStr(s1); deleteStr(s2);
     }
 
@@ -536,7 +531,7 @@ static void enterAttr(const char *s1, const char *s2)
 #define LEXMODE() (lexBuf.lexModeStack[lexBuf.lexModeStackTop])
 
 struct LexBuf {
-	/* input */
+        /* input */
 #ifdef INCLUDEMFC
     CFile *inputFile;
 #else
@@ -545,17 +540,17 @@ struct LexBuf {
     char *inputString;
     unsigned long curPos;
     unsigned long inputLen;
-	/* lookahead buffer */
-	/*   -- lookahead buffer is short instead of char so that EOF
-	 /      can be represented correctly.
-	*/
+        /* lookahead buffer */
+        /*   -- lookahead buffer is short instead of char so that EOF
+         /      can be represented correctly.
+        */
     unsigned long len;
     short buf[MAX_LEX_LOOKAHEAD];
     unsigned long getPtr;
-	/* context stack */
+        /* context stack */
     unsigned long lexModeStackTop;
     enum LexMode lexModeStack[MAX_LEX_MODE_STACK_SIZE];
-	/* token buffer */
+        /* token buffer */
     unsigned long maxToken;
     char *strs;
     unsigned long strsLen;
@@ -564,26 +559,26 @@ struct LexBuf {
 static void lexPushMode(enum LexMode mode)
     {
     if (lexBuf.lexModeStackTop == (MAX_LEX_MODE_STACK_SIZE-1))
-	yyerror("lexical context stack overflow");
+        yyerror("lexical context stack overflow");
     else {
-	lexBuf.lexModeStack[++lexBuf.lexModeStackTop] = mode;
-	}
+        lexBuf.lexModeStack[++lexBuf.lexModeStackTop] = mode;
+        }
     }
 
 static void lexPopMode(int top)
     {
     /* special case of pop for ease of error recovery -- this
-	version will never underflow */
+        version will never underflow */
     if (top)
-	lexBuf.lexModeStackTop = 0;
+        lexBuf.lexModeStackTop = 0;
     else
-	if (lexBuf.lexModeStackTop > 0) lexBuf.lexModeStackTop--;
+        if (lexBuf.lexModeStackTop > 0) lexBuf.lexModeStackTop--;
     }
 
 static int lexWithinMode(enum LexMode mode) {
     unsigned long i;
     for (i=0;i<lexBuf.lexModeStackTop;i++)
-	if (mode == lexBuf.lexModeStack[i]) return 1;
+        if (mode == lexBuf.lexModeStack[i]) return 1;
     return 0;
     }
 
@@ -591,17 +586,17 @@ static char lexGetc_()
     {
     /* get next char from input, no buffering. */
     if (lexBuf.curPos == lexBuf.inputLen)
-	return EOF;
+        return EOF;
     else if (lexBuf.inputString)
-	return *(lexBuf.inputString + lexBuf.curPos++);
+        return *(lexBuf.inputString + lexBuf.curPos++);
     else {
 #ifdef INCLUDEMFC
-	char result;
-	return lexBuf.inputFile->Read(&result, 1) == 1 ? result : EOF;
+        char result;
+        return lexBuf.inputFile->Read(&result, 1) == 1 ? result : EOF;
 #else
-	return fgetc(lexBuf.inputFile);
+        return (char)fgetc(lexBuf.inputFile);
 #endif
-	}
+        }
     }
 
 static int lexGeta()
@@ -618,53 +613,53 @@ static int lexGeta_(int i)
 
 static void lexSkipLookahead() {
     if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=EOF) {
-	/* don't skip EOF. */
+        /* don't skip EOF. */
         lexBuf.getPtr = (lexBuf.getPtr + 1) % MAX_LEX_LOOKAHEAD;
-	lexBuf.len--;
+        lexBuf.len--;
         }
     }
 
 static int lexLookahead() {
     int c = (lexBuf.len)?
-	lexBuf.buf[lexBuf.getPtr]:
-	lexGeta();
+        lexBuf.buf[lexBuf.getPtr]:
+        lexGeta();
     /* do the \r\n -> \n or \r -> \n translation here */
     if (c == '\r') {
-	int a = (lexBuf.len>1)?
-	    lexBuf.buf[(lexBuf.getPtr+1)%MAX_LEX_LOOKAHEAD]:
-	    lexGeta_(1);
-	if (a == '\n') {
-	    lexSkipLookahead();
-	    }
-	lexBuf.buf[lexBuf.getPtr] = c = '\n';
-	}
+        int a = (lexBuf.len>1)?
+            lexBuf.buf[(lexBuf.getPtr+1)%MAX_LEX_LOOKAHEAD]:
+            lexGeta_(1);
+        if (a == '\n') {
+            lexSkipLookahead();
+            }
+        lexBuf.buf[lexBuf.getPtr] = c = '\n';
+        }
     else if (c == '\n') {
-	int a = (lexBuf.len>1)?
-	    lexBuf.buf[lexBuf.getPtr+1]:
-	    lexGeta_(1);
-	if (a == '\r') {
-	    lexSkipLookahead();
-	    }
-	lexBuf.buf[lexBuf.getPtr] = '\n';
-	}
+        int a = (lexBuf.len>1)?
+            lexBuf.buf[lexBuf.getPtr+1]:
+            lexGeta_(1);
+        if (a == '\r') {
+            lexSkipLookahead();
+            }
+        lexBuf.buf[lexBuf.getPtr] = '\n';
+        }
     return c;
     }
 
 static int lexGetc() {
     int c = lexLookahead();
     if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=EOF) {
-	/* EOF will remain in lookahead buffer */
+        /* EOF will remain in lookahead buffer */
         lexBuf.getPtr = (lexBuf.getPtr + 1) % MAX_LEX_LOOKAHEAD;
-	lexBuf.len--;
+        lexBuf.len--;
         }
     return c;
     }
 
 static void lexSkipLookaheadWord() {
     if (lexBuf.strsLen <= lexBuf.len) {
-	lexBuf.len -= lexBuf.strsLen;
-	lexBuf.getPtr = (lexBuf.getPtr + lexBuf.strsLen) % MAX_LEX_LOOKAHEAD;
-	}
+        lexBuf.len -= lexBuf.strsLen;
+        lexBuf.getPtr = (lexBuf.getPtr + lexBuf.strsLen) % MAX_LEX_LOOKAHEAD;
+        }
     }
 
 static void lexClearToken()
@@ -679,10 +674,10 @@ static void lexAppendc(int c)
     if (c == 0) return;
     lexBuf.strsLen++;
     if (lexBuf.strsLen >= lexBuf.maxToken) {
-	/* double the token string size */
-	lexBuf.maxToken <<= 1;
-	lexBuf.strs = (char*) realloc(lexBuf.strs,(size_t)lexBuf.maxToken);
-	}
+        /* double the token string size */
+        lexBuf.maxToken <<= 1;
+        lexBuf.strs = (char*) realloc(lexBuf.strs,(size_t)lexBuf.maxToken);
+        }
     }
 
 static char* lexStr() {
@@ -692,9 +687,9 @@ static char* lexStr() {
 static void lexSkipWhite() {
     int c = lexLookahead();
     while (c == ' ' || c == '\t') {
-	lexSkipLookahead();
-	c = lexLookahead();
-	}
+        lexSkipLookahead();
+        c = lexLookahead();
+        }
     }
 
 static char* lexGetWord() {
@@ -703,10 +698,10 @@ static char* lexGetWord() {
     lexClearToken();
     c = lexLookahead();
     while (c != EOF && !strchr("\t\n ;:=",c)) {
-	lexAppendc(c);
-	lexSkipLookahead();
-	c = lexLookahead();
-	}
+        lexAppendc(c);
+        lexSkipLookahead();
+        c = lexLookahead();
+        }
     lexAppendc(0);
     return lexStr();
     }
@@ -732,21 +727,21 @@ static char* lexLookaheadWord() {
     int curgetptr = 0;
     lexSkipWhite();
     lexClearToken();
-    curgetptr = (int)lexBuf.getPtr;	/* remember! */
+    curgetptr = (int)lexBuf.getPtr;     /* remember! */
     while (len < (MAX_LEX_LOOKAHEAD_0)) {
-	c = lexGetc();
-	len++;
-	if (c == EOF || strchr("\t\n ;:=", c)) {
-	    lexAppendc(0);
-	    /* restore lookahead buf. */
-	    lexBuf.len += len;
-	    lexBuf.getPtr = curgetptr;
-	    return lexStr();
-	    }
+        c = lexGetc();
+        len++;
+        if (c == EOF || strchr("\t\n ;:=", c)) {
+            lexAppendc(0);
+            /* restore lookahead buf. */
+            lexBuf.len += len;
+            lexBuf.getPtr = curgetptr;
+            return lexStr();
+            }
         else
-	    lexAppendc(c);
-	}
-    lexBuf.len += len;	/* char that has been moved to lookahead buffer */
+            lexAppendc(c);
+        }
+    lexBuf.len += len;  /* char that has been moved to lookahead buffer */
     lexBuf.getPtr = curgetptr;
     return 0;
     }
@@ -754,38 +749,38 @@ static char* lexLookaheadWord() {
 #ifdef _SUPPORT_LINE_FOLDING
 static void handleMoreRFC822LineBreak(int c) {
     /* suport RFC 822 line break in cases like
-     *	ADR: foo;
+     *  ADR: foo;
      *    morefoo;
      *    more foo;
      */
     if (c == ';') {
-	int a;
-	lexSkipLookahead();
-	/* skip white spaces */
-	a = lexLookahead();
-	while (a == ' ' || a == '\t') {
-	    lexSkipLookahead();
-	    a = lexLookahead();
-	    }
-	if (a == '\n') {
-	    lexSkipLookahead();
-	    a = lexLookahead();
-	    if (a == ' ' || a == '\t') {
-		/* continuation, throw away all the \n and spaces read so
-		 * far
-		 */
-		lexSkipWhite();
-		lexPushLookaheadc(';');
-		}
-	    else {
-		lexPushLookaheadc('\n');
-		lexPushLookaheadc(';');
-		}
-	    }
-	else {
-	    lexPushLookaheadc(';');
-	    }
-	}
+        int a;
+        lexSkipLookahead();
+        /* skip white spaces */
+        a = lexLookahead();
+        while (a == ' ' || a == '\t') {
+            lexSkipLookahead();
+            a = lexLookahead();
+            }
+        if (a == '\n') {
+            lexSkipLookahead();
+            a = lexLookahead();
+            if (a == ' ' || a == '\t') {
+                /* continuation, throw away all the \n and spaces read so
+                 * far
+                 */
+                lexSkipWhite();
+                lexPushLookaheadc(';');
+                }
+            else {
+                lexPushLookaheadc('\n');
+                lexPushLookaheadc(';');
+                }
+            }
+        else {
+            lexPushLookaheadc(';');
+            }
+        }
     }
 
 static char* lexGet1Value() {
@@ -794,25 +789,25 @@ static char* lexGet1Value() {
     c = lexLookahead();
     lexClearToken();
     while (c != EOF && c != ';') {
-	if (c == '\n') {
-	    int a;
-	    lexSkipLookahead();
-	    a  = lexLookahead();
-	    if (a == ' ' || a == '\t') {
-		lexAppendc(' ');
-		lexSkipLookahead();
-		}
-	    else {
-		lexPushLookaheadc('\n');
-		break;
-		}
-	    }
-	else {
-	    lexAppendc(c);
-	    lexSkipLookahead();
-	    }
-	c = lexLookahead();
-	}
+        if (c == '\n') {
+            int a;
+            lexSkipLookahead();
+            a  = lexLookahead();
+            if (a == ' ' || a == '\t') {
+                lexAppendc(' ');
+                lexSkipLookahead();
+                }
+            else {
+                lexPushLookaheadc('\n');
+                break;
+                }
+            }
+        else {
+            lexAppendc(c);
+            lexSkipLookahead();
+            }
+        c = lexLookahead();
+        }
     lexAppendc(0);
     handleMoreRFC822LineBreak(c);
     return c==EOF?0:lexStr();
@@ -824,13 +819,13 @@ static int match_begin_name(int end) {
     char *n = lexLookaheadWord();
     int token = ID;
     if (n) {
-	if (!stricmp(n,"vcard")) token = end?END_VCARD:BEGIN_VCARD;
-	else if (!stricmp(n,"vcalendar")) token = end?END_VCAL:BEGIN_VCAL;
-	else if (!stricmp(n,"vevent")) token = end?END_VEVENT:BEGIN_VEVENT;
-	else if (!stricmp(n,"vtodo")) token = end?END_VTODO:BEGIN_VTODO;
-	deleteStr(n);
-	return token;
-	}
+        if (!stricmp(n,"vcard")) token = end?END_VCARD:BEGIN_VCARD;
+        else if (!stricmp(n,"vcalendar")) token = end?END_VCAL:BEGIN_VCAL;
+        else if (!stricmp(n,"vevent")) token = end?END_VEVENT:BEGIN_VEVENT;
+        else if (!stricmp(n,"vtodo")) token = end?END_VTODO:BEGIN_VTODO;
+        deleteStr(n);
+        return token;
+        }
     return 0;
     }
 
@@ -879,92 +874,92 @@ static char * lexGetDataFromBase64()
 
     DBG_(("db: lexGetDataFromBase64\n"));
     while (1) {
-	c = lexGetc();
-	if (c == '\n') {
-	    ++mime_lineNum;
-	    if (lexLookahead() == '\n') {
-		/* a '\n' character by itself means end of data */
-		break;
-		}
-	    else continue; /* ignore '\n' */
-	    }
-	else {
-	    if ((c >= 'A') && (c <= 'Z'))
-		b = (unsigned char)(c - 'A');
-	    else if ((c >= 'a') && (c <= 'z'))
-		b = (unsigned char)(c - 'a') + 26;
-	    else if ((c >= '0') && (c <= '9'))
-		b = (unsigned char)(c - '0') + 52;
-	    else if (c == '+')
-		b = 62;
-	    else if (c == '/')
-		b = 63;
-	    else if (c == '=') {
-		b = 0;
-		pad++;
-	    } else if ((c == ' ') || (c == '\t')) {
-		continue;
-	    } else { /* error condition */
-		if (bytes) free(bytes);
-		else if (oldBytes) free(oldBytes);
-		/* error recovery: skip until 2 adjacent newlines. */
-		DBG_(("db: invalid character 0x%x '%c'\n", c,c));
-		if (c != EOF)  {
-		    c = lexGetc();
-		    while (c != EOF) {
-			if (c == '\n' && lexLookahead() == '\n') {
-			    ++mime_lineNum;
-			    break;
-			    }
-			c = lexGetc();
-			}
-		    }
-		return NULL;
-		}
-	    trip = (trip << 6) | b;
-	    if (++quadIx == 4) {
-		unsigned char outBytes[3];
-		int numOut;
-		int i;
-		for (i = 0; i < 3; i++) {
-		    outBytes[2-i] = (unsigned char)(trip & 0xFF);
-		    trip >>= 8;
-		    }
-		numOut = 3 - pad;
-		if (bytesLen + numOut > bytesMax) {
-		    if (!bytes) {
-			bytesMax = 1024;
-			bytes = (unsigned char*)malloc((size_t)bytesMax);
-			}
-		    else {
-			bytesMax <<= 2;
-			oldBytes = bytes;
-			bytes = (unsigned char*)realloc(bytes,(size_t)bytesMax);
-			}
-		    if (bytes == 0) {
-			mime_error("out of memory while processing BASE64 data\n");
-			}
-		    }
-		if (bytes) {
-		    memcpy(bytes + bytesLen, outBytes, numOut);
-		    bytesLen += numOut;
-		    }
-		trip = 0;
-		quadIx = 0;
-		}
-	    }
-	} /* while */
+        c = lexGetc();
+        if (c == '\n') {
+            ++mime_lineNum;
+            if (lexLookahead() == '\n') {
+                /* a '\n' character by itself means end of data */
+                break;
+                }
+            else continue; /* ignore '\n' */
+            }
+        else {
+            if ((c >= 'A') && (c <= 'Z'))
+                b = (unsigned char)(c - 'A');
+            else if ((c >= 'a') && (c <= 'z'))
+                b = (unsigned char)(c - 'a') + 26;
+            else if ((c >= '0') && (c <= '9'))
+                b = (unsigned char)(c - '0') + 52;
+            else if (c == '+')
+                b = 62;
+            else if (c == '/')
+                b = 63;
+            else if (c == '=') {
+                b = 0;
+                pad++;
+            } else if ((c == ' ') || (c == '\t')) {
+                continue;
+            } else { /* error condition */
+                if (bytes) free(bytes);
+                else if (oldBytes) free(oldBytes);
+                /* error recovery: skip until 2 adjacent newlines. */
+                DBG_(("db: invalid character 0x%x '%c'\n", c,c));
+                if (c != EOF)  {
+                    c = lexGetc();
+                    while (c != EOF) {
+                        if (c == '\n' && lexLookahead() == '\n') {
+                            ++mime_lineNum;
+                            break;
+                            }
+                        c = lexGetc();
+                        }
+                    }
+                return NULL;
+                }
+            trip = (trip << 6) | b;
+            if (++quadIx == 4) {
+                unsigned char outBytes[3];
+                int numOut;
+                int i;
+                for (i = 0; i < 3; i++) {
+                    outBytes[2-i] = (unsigned char)(trip & 0xFF);
+                    trip >>= 8;
+                    }
+                numOut = 3 - pad;
+                if (bytesLen + numOut > bytesMax) {
+                    if (!bytes) {
+                        bytesMax = 1024;
+                        bytes = (unsigned char*)malloc((size_t)bytesMax);
+                        }
+                    else {
+                        bytesMax <<= 2;
+                        oldBytes = bytes;
+                        bytes = (unsigned char*)realloc(bytes,(size_t)bytesMax);
+                        }
+                    if (bytes == 0) {
+                        mime_error("out of memory while processing BASE64 data\n");
+                        }
+                    }
+                if (bytes) {
+                    memcpy(bytes + bytesLen, outBytes, numOut);
+                    bytesLen += numOut;
+                    }
+                trip = 0;
+                quadIx = 0;
+                }
+            }
+        } /* while */
     DBG_(("db: bytesLen = %lu\n",  bytesLen));
     /* kludge: all this won't be necessary if we have tree form
-	representation */
+        representation */
     if (bytes) {
-	setValueWithSize(curProp,bytes,(unsigned int)bytesLen);
-	free(bytes);
-	}
+        setValueWithSize(curProp,bytes,(unsigned int)bytesLen);
+        free(bytes);
+        }
     else if (oldBytes) {
-	setValueWithSize(curProp,oldBytes,(unsigned int)bytesLen);
-	free(oldBytes);
-	}
+        setValueWithSize(curProp,oldBytes,(unsigned int)bytesLen);
+        free(oldBytes);
+        }
     return 0;
     }
 
@@ -976,16 +971,16 @@ static int match_begin_end_name(int end) {
     lexSkipWhite();
     token = match_begin_name(end);
     if (token == ID) {
-	lexPushLookaheadc(':');
-	DBG_(("db: ID '%s'\n", yylval.str));
-	return ID;
-	}
+        lexPushLookaheadc(':');
+        DBG_(("db: ID '%s'\n", yylval.str));
+        return ID;
+        }
     else if (token != 0) {
-	lexSkipLookaheadWord();
-	deleteStr(yylval.str);
-	DBG_(("db: begin/end %d\n", token));
-	return token;
-	}
+        lexSkipLookaheadWord();
+        deleteStr(yylval.str);
+        DBG_(("db: begin/end %d\n", token));
+        return token;
+        }
     return 0;
     }
 
@@ -995,51 +990,51 @@ static char* lexGetQuotedPrintable()
 
     lexClearToken();
     do {
-	cur = lexGetc();
-	switch (cur) {
-	    case '=': {
-		int c = 0;
-		int next[2];
-		int i;
-		for (i = 0; i < 2; i++) {
-		    next[i] = lexGetc();
-		    if (next[i] >= '0' && next[i] <= '9')
-			c = c * 16 + next[i] - '0';
-		    else if (next[i] >= 'A' && next[i] <= 'F')
-			c = c * 16 + next[i] - 'A' + 10;
-		    else
-			break;
-		    }
-		if (i == 0) {
-		    /* single '=' follow by LINESEP is continuation sign? */
-		    if (next[0] == '\n') {
-			++mime_lineNum;
-			}
-		    else {
-			lexPushLookaheadc('=');
-			goto EndString;
-			}
-		    }
-		else if (i == 1) {
-		    lexPushLookaheadc(next[1]);
-		    lexPushLookaheadc(next[0]);
-		    lexAppendc('=');
-		} else {
-		    lexAppendc(c);
-		    }
-		break;
-		} /* '=' */
-	    case '\n': {
-		lexPushLookaheadc('\n');
-		goto EndString;
-		}
-	    case (char)EOF:
-		break;
-	    default:
-		lexAppendc(cur);
-		break;
-	    } /* switch */
-	} while (cur != (char)EOF);
+        cur = lexGetc();
+        switch (cur) {
+            case '=': {
+                int c = 0;
+                int next[2];
+                int i;
+                for (i = 0; i < 2; i++) {
+                    next[i] = lexGetc();
+                    if (next[i] >= '0' && next[i] <= '9')
+                        c = c * 16 + next[i] - '0';
+                    else if (next[i] >= 'A' && next[i] <= 'F')
+                        c = c * 16 + next[i] - 'A' + 10;
+                    else
+                        break;
+                    }
+                if (i == 0) {
+                    /* single '=' follow by LINESEP is continuation sign? */
+                    if (next[0] == '\n') {
+                        ++mime_lineNum;
+                        }
+                    else {
+                        lexPushLookaheadc('=');
+                        goto EndString;
+                        }
+                    }
+                else if (i == 1) {
+                    lexPushLookaheadc(next[1]);
+                    lexPushLookaheadc(next[0]);
+                    lexAppendc('=');
+                } else {
+                    lexAppendc(c);
+                    }
+                break;
+                } /* '=' */
+            case '\n': {
+                lexPushLookaheadc('\n');
+                goto EndString;
+                }
+            case (char)EOF:
+                break;
+            default:
+                lexAppendc(cur);
+                break;
+            } /* switch */
+        } while (cur != (char)EOF);
 
 EndString:
     lexAppendc(0);
@@ -1050,118 +1045,118 @@ int yylex() {
 
     int lexmode = LEXMODE();
     if (lexmode == L_VALUES) {
-	int c = lexGetc();
-	if (c == ';') {
-	    DBG_(("db: SEMICOLON\n"));
-	    lexPushLookaheadc(c);
+        int c = lexGetc();
+        if (c == ';') {
+            DBG_(("db: SEMICOLON\n"));
+            lexPushLookaheadc(c);
 #ifdef _SUPPORT_LINE_FOLDING
-	    handleMoreRFC822LineBreak(c);
+            handleMoreRFC822LineBreak(c);
 #endif
-	    lexSkipLookahead();
-	    return SEMICOLON;
-	    }
-	else if (strchr("\n",c)) {
-	    ++mime_lineNum;
-	    /* consume all line separator(s) adjacent to each other */
-	    c = lexLookahead();
-	    while (strchr("\n",c)) {
-		lexSkipLookahead();
-		c = lexLookahead();
-		++mime_lineNum;
-		}
-	    DBG_(("db: LINESEP\n"));
-	    return LINESEP;
-	    }
-	else {
-	    char *p = 0;
-	    lexPushLookaheadc(c);
-	    if (lexWithinMode(L_BASE64)) {
-		/* get each char and convert to bin on the fly... */
-		p = lexGetDataFromBase64();
-		yylval.str = p;
-		return STRING;
-		}
-	    else if (lexWithinMode(L_QUOTED_PRINTABLE)) {
-		p = lexGetQuotedPrintable();
-		}
-	    else {
+            lexSkipLookahead();
+            return SEMICOLON;
+            }
+        else if (strchr("\n",c)) {
+            ++mime_lineNum;
+            /* consume all line separator(s) adjacent to each other */
+            c = lexLookahead();
+            while (strchr("\n",c)) {
+                lexSkipLookahead();
+                c = lexLookahead();
+                ++mime_lineNum;
+                }
+            DBG_(("db: LINESEP\n"));
+            return LINESEP;
+            }
+        else {
+            char *p = 0;
+            lexPushLookaheadc(c);
+            if (lexWithinMode(L_BASE64)) {
+                /* get each char and convert to bin on the fly... */
+                p = lexGetDataFromBase64();
+                yylval.str = p;
+                return STRING;
+                }
+            else if (lexWithinMode(L_QUOTED_PRINTABLE)) {
+                p = lexGetQuotedPrintable();
+                }
+            else {
 #ifdef _SUPPORT_LINE_FOLDING
-		p = lexGet1Value();
+                p = lexGet1Value();
 #else
-		p = lexGetStrUntil(";\n");
+                p = lexGetStrUntil(";\n");
 #endif
-		}
-	    if (p) {
-		DBG_(("db: STRING: '%s'\n", p));
-		yylval.str = p;
-		return STRING;
-		}
-	    else return 0;
-	    }
-	}
+                }
+            if (p) {
+                DBG_(("db: STRING: '%s'\n", p));
+                yylval.str = p;
+                return STRING;
+                }
+            else return 0;
+            }
+        }
     else {
-	/* normal mode */
-	while (1) {
-	    int c = lexGetc();
-	    switch(c) {
-		case ':': {
-		    /* consume all line separator(s) adjacent to each other */
-		    /* ignoring linesep immediately after colon. */
-/*		    c = lexLookahead();
-		    while (strchr("\n",c)) {
-			lexSkipLookahead();
-			c = lexLookahead();
-			++mime_lineNum;
-			}*/
-		    DBG_(("db: COLON\n"));
-		    return COLON;
-		    }
-		case ';':
-		    DBG_(("db: SEMICOLON\n"));
-		    return SEMICOLON;
-		case '=':
-		    DBG_(("db: EQ\n"));
-		    return EQ;
-		/* ignore whitespace in this mode */
-		case '\t':
-		case ' ': continue;
-		case '\n': {
-		    ++mime_lineNum;
-		    continue;
-		    }
-		case EOF: return 0;
-		    break;
-		default: {
-		    lexPushLookaheadc(c);
-		    if (isalpha(c)) {
-			char *t = lexGetWord();
-			yylval.str = t;
-			if (!stricmp(t, "begin")) {
-			    return match_begin_end_name(0);
-			    }
-			else if (!stricmp(t,"end")) {
-			    return match_begin_end_name(1);
-			    }
-		        else {
-			    DBG_(("db: ID '%s'\n", t));
-			    return ID;
-			    }
-			}
-		    else {
-			/* unknow token */
-			return 0;
-			}
-		    break;
-		    }
-		}
-	    }
-	}
+        /* normal mode */
+        while (1) {
+            int c = lexGetc();
+            switch(c) {
+                case ':': {
+                    /* consume all line separator(s) adjacent to each other */
+                    /* ignoring linesep immediately after colon. */
+/*                  c = lexLookahead();
+                    while (strchr("\n",c)) {
+                        lexSkipLookahead();
+                        c = lexLookahead();
+                        ++mime_lineNum;
+                        }*/
+                    DBG_(("db: COLON\n"));
+                    return COLON;
+                    }
+                case ';':
+                    DBG_(("db: SEMICOLON\n"));
+                    return SEMICOLON;
+                case '=':
+                    DBG_(("db: EQ\n"));
+                    return EQ;
+                /* ignore whitespace in this mode */
+                case '\t':
+                case ' ': continue;
+                case '\n': {
+                    ++mime_lineNum;
+                    continue;
+                    }
+                case EOF: return 0;
+                    break;
+                default: {
+                    lexPushLookaheadc(c);
+                    if (isalpha(c)) {
+                        char *t = lexGetWord();
+                        yylval.str = t;
+                        if (!stricmp(t, "begin")) {
+                            return match_begin_end_name(0);
+                            }
+                        else if (!stricmp(t,"end")) {
+                            return match_begin_end_name(1);
+                            }
+                        else {
+                            DBG_(("db: ID '%s'\n", t));
+                            return ID;
+                            }
+                        }
+                    else {
+                        /* unknow token */
+                        return 0;
+                        }
+                    break;
+                    }
+                }
+            }
+        }
     return 0;
     }
 
 
 /***************************************************************************/
-/***							Public Functions						****/
+/***                                                    Public Functions                                                ****/
 /***************************************************************************/
 
 static VObject* Parse_MIMEHelper()
@@ -1173,7 +1168,7 @@ static VObject* Parse_MIMEHelper()
     curObj = 0;
 
     if (yyparse() != 0)
-	return 0;
+        return 0;
 
     finiLex();
     return vObjList;
@@ -1196,7 +1191,7 @@ DLLEXPORT(VObject*) Parse_MIME_FromFile(CFile *file)
     initLex(0,-1,file);
     startPos = file->GetPosition();
     if (!(result = Parse_MIMEHelper()))
-	file->Seek(startPos, CFile::begin);
+        file->Seek(startPos, CFile::begin);
     return result;
     }
 
@@ -1210,9 +1205,9 @@ VObject* Parse_MIME_FromFile(FILE *file)
     initLex(0,(unsigned long)-1,file);
     startPos = ftell(file);
     if (!(result = Parse_MIMEHelper())) {
-	if (startPos >= 0)
-	   fseek(file,startPos,SEEK_SET);
-	}
+        if (startPos >= 0)
+           fseek(file,startPos,SEEK_SET);
+        }
     return result;
     }
 
@@ -1220,16 +1215,16 @@ DLLEXPORT(VObject*) Parse_MIME_FromFileName(char *fname)
     {
     FILE *fp = fopen(fname,"r");
     if (fp) {
-	VObject* o = Parse_MIME_FromFile(fp);
-	fclose(fp);
-	return o;
-	}
+        VObject* o = Parse_MIME_FromFile(fp);
+        fclose(fp);
+        return o;
+        }
     else {
-	char msg[256];
-	snprintf(msg, sizeof(msg), "can't open file '%s' for reading\n", fname);
-	mime_error_(msg);
-	return 0;
-	}
+        char msg[256];
+        snprintf(msg, sizeof(msg), "can't open file '%s' for reading\n", fname);
+        mime_error_(msg);
+        return 0;
+        }
     }
 
 #endif
@@ -1246,16 +1241,16 @@ static void mime_error(char *s)
     {
     char msg[256];
     if (mimeErrorHandler) {
-	snprintf(msg,sizeof(msg),"%s at line %d", s, mime_lineNum);
-	mimeErrorHandler(msg);
-	}
+        snprintf(msg,sizeof(msg),"%s at line %d", s, mime_lineNum);
+        mimeErrorHandler(msg);
+        }
     }
 
 static void mime_error_(char *s)
     {
     if (mimeErrorHandler) {
-	mimeErrorHandler(s);
-	}
+        mimeErrorHandler(s);
+        }
     }
 
 /* allocate initial stack or double stack size, up to YYMAXDEPTH */
@@ -1447,60 +1442,60 @@ case 4:
 break;
 case 7:
 {
-	lexPushMode(L_VCARD);
-	if (!pushVObject(VCCardProp)) YYERROR;
-	}
+        lexPushMode(L_VCARD);
+        if (!pushVObject(VCCardProp)) YYERROR;
+        }
 break;
 case 8:
 {
-	lexPopMode(0);
-	yyval.vobj = popVObject();
-	}
+        lexPopMode(0);
+        yyval.vobj = popVObject();
+        }
 break;
 case 9:
 {
-	lexPushMode(L_VCARD);
-	if (!pushVObject(VCCardProp)) YYERROR;
-	}
+        lexPushMode(L_VCARD);
+        if (!pushVObject(VCCardProp)) YYERROR;
+        }
 break;
 case 10:
 {
-	lexPopMode(0);
-	yyval.vobj = popVObject();
-	}
+        lexPopMode(0);
+        yyval.vobj = popVObject();
+        }
 break;
 case 13:
 {
-	lexPushMode(L_VALUES);
-	}
+        lexPushMode(L_VALUES);
+        }
 break;
 case 14:
 {
-	if (lexWithinMode(L_BASE64) || lexWithinMode(L_QUOTED_PRINTABLE))
-	   lexPopMode(0);
-	lexPopMode(0);
-	}
+        if (lexWithinMode(L_BASE64) || lexWithinMode(L_QUOTED_PRINTABLE))
+           lexPopMode(0);
+        lexPopMode(0);
+        }
 break;
 case 16:
 {
-	enterProps(yyvsp[0].str);
-	}
+        enterProps(yyvsp[0].str);
+        }
 break;
 case 18:
 {
-	enterProps(yyvsp[0].str);
-	}
+        enterProps(yyvsp[0].str);
+        }
 break;
 case 22:
 {
-	enterAttr(yyvsp[0].str,0);
-	}
+        enterAttr(yyvsp[0].str,0);
+        }
 break;
 case 23:
 {
-	enterAttr(yyvsp[-2].str,yyvsp[0].str);
+        enterAttr(yyvsp[-2].str,yyvsp[0].str);
 
-	}
+        }
 break;
 case 25:
 { enterValues(yyvsp[-1].str); }
@@ -1525,51 +1520,51 @@ case 33:
 break;
 case 39:
 {
-	lexPushMode(L_VEVENT);
-	if (!pushVObject(VCEventProp)) YYERROR;
-	}
+        lexPushMode(L_VEVENT);
+        if (!pushVObject(VCEventProp)) YYERROR;
+        }
 break;
 case 40:
 {
-	lexPopMode(0);
-	popVObject();
-	}
+        lexPopMode(0);
+        popVObject();
+        }
 break;
 case 41:
 {
-	lexPushMode(L_VEVENT);
-	if (!pushVObject(VCEventProp)) YYERROR;
-	}
+        lexPushMode(L_VEVENT);
+        if (!pushVObject(VCEventProp)) YYERROR;
+        }
 break;
 case 42:
 {
-	lexPopMode(0);
-	popVObject();
-	}
+        lexPopMode(0);
+        popVObject();
+        }
 break;
 case 43:
 {
-	lexPushMode(L_VTODO);
-	if (!pushVObject(VCTodoProp)) YYERROR;
-	}
+        lexPushMode(L_VTODO);
+        if (!pushVObject(VCTodoProp)) YYERROR;
+        }
 break;
 case 44:
 {
-	lexPopMode(0);
-	popVObject();
-	}
+        lexPopMode(0);
+        popVObject();
+        }
 break;
 case 45:
 {
-	lexPushMode(L_VTODO);
-	if (!pushVObject(VCTodoProp)) YYERROR;
-	}
+        lexPushMode(L_VTODO);
+        if (!pushVObject(VCTodoProp)) YYERROR;
+        }
 break;
 case 46:
 {
-	lexPopMode(0);
-	popVObject();
-	}
+        lexPopMode(0);
+        popVObject();
+        }
 break;
     }
     yyssp -= yym;

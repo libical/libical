@@ -289,7 +289,7 @@ void icaldirset_free(icalset *s)
 
 int icaldirset_next_uid_number(icaldirset *dset)
 {
-    char sequence = 0;
+    int sequence;
     char temp[128];
     char filename[ICAL_PATH_MAX] = {0};
     char *r;
@@ -586,7 +586,9 @@ icalcomponent *icaldirset_fetch(icalset *set, icalcomponent_kind kind, const cha
 
     dset->gauge = old_gauge;
 
-    icalgauge_free(gauge);
+    if (gauge) {
+        icalgauge_free(gauge);
+    }
 
     return c;
 }
