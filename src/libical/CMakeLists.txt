@@ -210,6 +210,7 @@ set(ical_LIB_SRCS
   icalenums.c
   icalenums.h
   icalerror.c
+  icalerror.h
   icalmemory.c
   icalmemory.h
   icalmime.c
@@ -230,6 +231,7 @@ set(ical_LIB_SRCS
   icaltz-util.h
   icaltimezone.c
   icaltimezone.h
+  icaltimezoneimpl.h
   icalduration.h
   icalduration.c
   icalperiod.h
@@ -310,12 +312,14 @@ endif()
 
 if(WITH_CXX_BINDINGS)
   set(icalcxx_LIB_SRCS
+    libical_ical_export.h
     icalparameter_cxx.cpp
     icalparameter_cxx.h
     icalproperty_cxx.cpp
     icalproperty_cxx.h
     icalvalue_cxx.cpp
     icalvalue_cxx.h
+    icptrholder_cxx.h
     vcomponent_cxx.cpp
     vcomponent_cxx.h
   )

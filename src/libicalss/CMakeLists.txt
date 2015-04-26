@@ -71,7 +71,11 @@ set(icalss_LIB_SRCS
   ${icalss_LIB_DEVSRCS}
 )
 if(WITH_BDB)
-  list(APPEND icalss_LIB_SRCS icalbdbset.c icalbdbset.h)
+  list(APPEND icalss_LIB_SRCS
+    icalbdbset.c
+    icalbdbset.h
+    icalbdbsetimpl.h
+  )
 endif()
 if(MSVC)
   list(APPEND icalss_LIB_SRCS ../icalss.def)
@@ -128,10 +132,15 @@ endif()
 
 if(WITH_CXX_BINDINGS)
   set(icalsscxx_LIB_SRCS
+    libical_icalss_export.h
     icalspanlist_cxx.cpp
     icalspanlist_cxx.h
   )
-
+  if(WITH_BDB)
+    list(APPEND icalsscxx_LIB_SRCS
+      icalbdbset_cxx.h
+    )
+  endif()
   add_library(icalss_cxx ${LIBRARY_TYPE} ${icalsscxx_LIB_SRCS})
   if(NOT SHARED_ONLY)
     add_library(icalss_cxx-static STATIC ${icalsscxx_LIB_SRCS})
@@ -206,4 +215,3 @@ if(WITH_CXX_BINDINGS)
     )
   endif()
 endif()
-
