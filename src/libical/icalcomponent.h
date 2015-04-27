@@ -8,7 +8,7 @@
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -25,28 +25,48 @@
 #ifndef ICALCOMPONENT_H
 #define ICALCOMPONENT_H
 
-#include "icalproperty.h"
-#include "icalvalue.h"
 #include "icalenums.h" /* defines icalcomponent_kind */
+#include "icalproperty.h"
 #include "pvl.h"
 
+struct icalcomponent_impl
+{
+        char id[5];
+        icalcomponent_kind kind;
+        char* x_name;
+        pvl_list properties;
+        pvl_elem property_iterator;
+        pvl_list components;
+        pvl_elem component_iterator;
+        struct icalcomponent_impl *parent;
+
+        /** An array of icaltimezone structs. We use this so we can do fast
+           lookup of timezones using binary searches. timezones_sorted is
+           set to 0 whenever we add a timezone, so we remember to sort the
+           array before doing a binary search. */
+        icalarray* timezones;
+        int timezones_sorted;
+};
 typedef struct icalcomponent_impl icalcomponent;
+
+#ifdef UNCLEAN
+#include "icalvalue.h"
 
 #ifndef ICALTIMEZONE_DEFINED
 #define ICALTIMEZONE_DEFINED
-/** @brief An opaque struct representing a timezone.  
- * We declare this here to avoid a circular dependancy. 
+/** @brief An opaque struct representing a timezone.
+ * We declare this here to avoid a circular dependancy.
  */
-typedef struct _icaltimezone		icaltimezone;
+typedef struct _icaltimezone            icaltimezone;
 #endif
-
+#endif
 
 /* This is exposed so that callers will not have to allocate and
    deallocate iterators. Pretend that you can't see it. */
 typedef struct icalcompiter
 {
-	icalcomponent_kind kind;
-	pvl_elem iter;
+        icalcomponent_kind kind;
+        pvl_elem iter;
 
 } icalcompiter;
 
@@ -66,31 +86,31 @@ icalcomponent_kind icalcomponent_isa(const icalcomponent* component);
 
 int icalcomponent_isa_component (void* component);
 
-/* 
+/*
  * Working with properties
  */
 
 void icalcomponent_add_property(icalcomponent* component,
-				icalproperty* property);
+                                icalproperty* property);
 
 void icalcomponent_remove_property(icalcomponent* component,
-				   icalproperty* property);
+                                   icalproperty* property);
 
 int icalcomponent_count_properties(icalcomponent* component,
-				   icalproperty_kind kind);
+                                   icalproperty_kind kind);
 
 /* Iterate through the properties */
 icalproperty* icalcomponent_get_current_property(icalcomponent* component);
 
 icalproperty* icalcomponent_get_first_property(icalcomponent* component,
-					      icalproperty_kind kind);
+                                              icalproperty_kind kind);
 icalproperty* icalcomponent_get_next_property(icalcomponent* component,
-					      icalproperty_kind kind);
+                                              icalproperty_kind kind);
 
 
-/* 
+/*
  * Working with components
- */ 
+ */
 
 
 /* Return the first VEVENT, VTODO or VJOURNAL sub-component of cop, or
@@ -100,20 +120,20 @@ icalcomponent* icalcomponent_get_inner(icalcomponent* comp);
 
 
 void icalcomponent_add_component(icalcomponent* parent,
-				icalcomponent* child);
+                                icalcomponent* child);
 
 void icalcomponent_remove_component(icalcomponent* parent,
-				icalcomponent* child);
+                                icalcomponent* child);
 
 int icalcomponent_count_components(icalcomponent* component,
-				   icalcomponent_kind kind);
+                                   icalcomponent_kind kind);
 
 /**
    This takes 2 VCALENDAR components and merges the second one into the first,
    resolving any problems with conflicting TZIDs. comp_to_merge will no
    longer exist after calling this function. */
 void icalcomponent_merge_component(icalcomponent* comp,
-				   icalcomponent* comp_to_merge);
+                                   icalcomponent* comp_to_merge);
 
 
 /* Iteration Routines. There are two forms of iterators, internal and
@@ -126,15 +146,15 @@ removes components from the container.*/
 icalcomponent* icalcomponent_get_current_component (icalcomponent* component);
 
 icalcomponent* icalcomponent_get_first_component(icalcomponent* component,
-					      icalcomponent_kind kind);
+                                              icalcomponent_kind kind);
 icalcomponent* icalcomponent_get_next_component(icalcomponent* component,
-					      icalcomponent_kind kind);
+                                              icalcomponent_kind kind);
 
 /* Using external iterators */
 icalcompiter icalcomponent_begin_component(icalcomponent* component,
-					   icalcomponent_kind kind);
+                                           icalcomponent_kind kind);
 icalcompiter icalcomponent_end_component(icalcomponent* component,
-					 icalcomponent_kind kind);
+                                         icalcomponent_kind kind);
 icalcomponent* icalcompiter_next(icalcompiter* i);
 icalcomponent* icalcompiter_prior(icalcompiter* i);
 icalcomponent* icalcompiter_deref(icalcompiter* i);
@@ -158,8 +178,8 @@ void icalcomponent_convert_errors(icalcomponent* component);
 
 /* Internal operations. They are private, and you should not be using them. */
 icalcomponent* icalcomponent_get_parent(icalcomponent* component);
-void icalcomponent_set_parent(icalcomponent* component, 
-			      icalcomponent* parent);
+void icalcomponent_set_parent(icalcomponent* component,
+                              icalcomponent* parent);
 
 /* Kind conversion routines */
 
@@ -205,8 +225,8 @@ void icalcomponent_set_dtend(icalcomponent* comp, struct icaltimetype v);
 struct icaltimetype icalcomponent_get_due(icalcomponent* comp);
 void icalcomponent_set_due(icalcomponent* comp, struct icaltimetype v);
 
-void icalcomponent_set_duration(icalcomponent* comp, 
-				struct icaldurationtype v);
+void icalcomponent_set_duration(icalcomponent* comp,
+                                struct icaldurationtype v);
 struct icaldurationtype icalcomponent_get_duration(icalcomponent* comp);
 
 void icalcomponent_set_method(icalcomponent* comp, icalproperty_method method);
@@ -227,8 +247,8 @@ const char* icalcomponent_get_uid(icalcomponent* comp);
 void icalcomponent_set_relcalid(icalcomponent* comp, const char* v);
 const char* icalcomponent_get_relcalid(icalcomponent* comp);
 
-void icalcomponent_set_recurrenceid(icalcomponent* comp, 
-				    struct icaltimetype v);
+void icalcomponent_set_recurrenceid(icalcomponent* comp,
+                                    struct icaltimetype v);
 struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent* comp);
 
 void icalcomponent_set_description(icalcomponent* comp, const char* v);
@@ -247,25 +267,25 @@ enum icalproperty_status icalcomponent_get_status(icalcomponent* comp);
 /** Calls the given function for each TZID parameter found in the
     component, and any subcomponents. */
 void icalcomponent_foreach_tzid(icalcomponent* comp,
-				void (*callback)(icalparameter *param, void *data),
-				void *callback_data);
+                                void (*callback)(icalparameter *param, void *data),
+                                void *callback_data);
 
 /** Returns the icaltimezone in the component corresponding to the
     TZID, or NULL if it can't be found. */
 icaltimezone* icalcomponent_get_timezone(icalcomponent* comp,
-					 const char *tzid);
+                                         const char *tzid);
 
 int icalproperty_recurrence_is_excluded(icalcomponent *comp,
                                        struct icaltimetype *dtstart,
-                                       struct icaltimetype *recurtime); 
+                                       struct icaltimetype *recurtime);
 
 void icalcomponent_foreach_recurrence(icalcomponent* comp,
-				      struct icaltimetype start,
-				      struct icaltimetype end,
-			void (*callback)(icalcomponent *comp, 
-                                         struct icaltime_span *span, 
+                                      struct icaltimetype start,
+                                      struct icaltimetype end,
+                        void (*callback)(icalcomponent *comp,
+                                         struct icaltime_span *span,
                                          void *data),
-			      void *callback_data);
+                              void *callback_data);
 
 
 /*************** Type Specific routines ***************/

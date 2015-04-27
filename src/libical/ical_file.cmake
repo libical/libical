@@ -36,9 +36,9 @@ FILE(APPEND ${ICAL_FILE_H_FILE} "#endif\n")
 
 foreach (_current_FILE ${COMBINEDHEADERSICAL})
    FILE(READ ${_current_FILE} _contents)
-   STRING(REGEX REPLACE "#include *\"ical.*\\.h\"" "" _contents "${_contents}")
-   STRING(REGEX REPLACE "#include *\"config.*\\.h\"" "" _contents "${_contents}")
-   STRING(REGEX REPLACE "#include *\"pvl\\.h\"" "" _contents "${_contents}" )
+#   STRING(REGEX REPLACE "#include *\"ical.*\\.h\"" "" _contents "${_contents}")
+#   STRING(REGEX REPLACE "#include *\"config.*\\.h\"" "" _contents "${_contents}")
+#   STRING(REGEX REPLACE "#include *\"pvl\\.h\"" "" _contents "${_contents}" )
    FILE(APPEND ${ICAL_FILE_H_FILE} "${_contents}")
 endforeach (_current_FILE)
 

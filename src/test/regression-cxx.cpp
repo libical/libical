@@ -13,6 +13,11 @@
     the License at http://www.mozilla.org/MPL/
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifdef UNCLEAN
 extern "C" {
 #include "regression.h"
 };
@@ -26,6 +31,7 @@ using namespace LibICal;
 #include <cstdlib>
 #include <string>
 using namespace std;
+#endif
 
 char content[] = "BEGIN:VCALENDAR\n\
 VERSION:2.1\n\

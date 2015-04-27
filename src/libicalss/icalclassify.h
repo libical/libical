@@ -11,7 +11,7 @@
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -27,12 +27,11 @@
 #ifndef ICALCLASSIFY_H
 #define ICALCLASSIFY_H
 
-#include <libical/ical.h>
 #include "icalset.h"
 #include "icalcomponent.h"
 
-icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match, 
-			      const char* user);
+icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match,
+                              const char* user);
 
 icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp);
 
@@ -40,8 +39,3 @@ char* icalclassify_class_to_string(icalproperty_xlicclass c);
 
 
 #endif /* ICALCLASSIFY_H*/
-
-
-				    
-
-

@@ -27,9 +27,11 @@
 #ifndef ICALFILESET_H
 #define ICALFILESET_H
 
-#include <libical/ical.h>
-#include "icalset.h"
 #include "icalcluster.h"
+#include "icalset.h"
+
+#ifdef UNCLEAN
+#include <libical/ical.h>
 #include "icalgauge.h"
 #include <sys/types.h> /* For open() flags and mode */
 #include <sys/stat.h> /* For open() flags and mode */
@@ -37,6 +39,7 @@
 
 #ifdef WIN32
 #define mode_t int
+#endif
 #endif
 
 typedef struct icalfileset_impl icalfileset;

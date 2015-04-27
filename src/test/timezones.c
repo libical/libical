@@ -5,7 +5,7 @@
   Version 1.0 (the "License"); you may not use this file except in
   compliance with the License. You may obtain a copy of the License at
   http://www.mozilla.org/MPL/
- 
+
   Software distributed under the License is distributed on an "AS IS"
   basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
   the License for the specific language governing rights and
@@ -14,13 +14,15 @@
   ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
+#ifdef UNCLEAN
 #include <libical/ical.h>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#endif
 
 int main(int argc, char **argv)
 {
@@ -56,11 +58,11 @@ int main(int argc, char **argv)
 #if defined(HAVE_SETENV)
         setenv("TZ", zone_location, 1);
 #else
-	static new_tz[256];
-	new_tz[0] = '\0';
-	strncat(new_tz, "TZ=", 255);
-	strncat(new_tz, zone_location, 255);
-	putenv(new_tz);
+        static new_tz[256];
+        new_tz[0] = '\0';
+        strncat(new_tz, "TZ=", 255);
+        strncat(new_tz, zone_location, 255);
+        putenv(new_tz);
 #endif
         tzset();
 
@@ -73,8 +75,8 @@ int main(int argc, char **argv)
         start_tm.tm_hour = 12;
         start_tm.tm_min = 0;
         start_tm.tm_sec = 0;
-	start_tm.tm_mday = 1;
-	start_tm.tm_mon = 0;
+        start_tm.tm_mday = 1;
+        start_tm.tm_mon = 0;
         start_time = mktime(&start_tm);
 
         /* check time conversion for the next 365 days */
@@ -89,7 +91,7 @@ int main(int argc, char **argv)
             curr_tt = icaltime_convert_to_zone(curr_tt, zone);
 
             /* compare... */
-            curr_failed = 
+            curr_failed =
                 curr_tm.tm_year + 1900 != curr_tt.year ||
                 curr_tm.tm_mon + 1 != curr_tt.month ||
                 curr_tm.tm_mday != curr_tt.day ||
@@ -122,7 +124,7 @@ int main(int argc, char **argv)
                        curr_tm.tm_hour,
                        curr_tm.tm_min,
                        curr_tm.tm_sec,
-		       curr_tm.tm_isdst);
+                       curr_tm.tm_isdst);
                 if (curr_failed) {
                     printf(" != libical %04d-%02d-%02d %02d:%02d:%02d dst %d",
                            curr_tt.year,
@@ -131,7 +133,7 @@ int main(int argc, char **argv)
                            curr_tt.hour,
                            curr_tt.minute,
                            curr_tt.second,
-			   curr_tt.is_daylight);
+                           curr_tt.is_daylight);
                     ret = 1;
                 }
                 printf("\n");
@@ -155,12 +157,12 @@ int main(int argc, char **argv)
     }
 
     if (total_failed || total_okay) {
-	percent_failed = total_failed * 100 / (total_failed + total_okay);
+        percent_failed = total_failed * 100 / (total_failed + total_okay);
         printf(" *** Summary: %d zones tested, %u days failed, %u okay => %u%% failed ***\n",
                timezones->num_elements,
                total_failed,
                total_okay,
-	       percent_failed);
+               percent_failed);
     }
 
     return ret;

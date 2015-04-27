@@ -10,7 +10,7 @@
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -23,49 +23,48 @@
 
  =========================================================================*/
 
-#include <libical/ical.h>
-
 #ifndef ICALMESSAGE_H
 #define ICALMESSAGE_H
 
+#include "icalcomponent.h"
 
-icalcomponent* icalmessage_new_accept_reply(icalcomponent* c, 
-					    const char* user,
-					    const char* msg);
+icalcomponent* icalmessage_new_accept_reply(icalcomponent* c,
+                                            const char* user,
+                                            const char* msg);
 
 icalcomponent* icalmessage_new_decline_reply(icalcomponent* c,
-					    const char* user,
-					    const char* msg);
+                                            const char* user,
+                                            const char* msg);
 
 /* New is modified version of old */
 icalcomponent* icalmessage_new_counterpropose_reply(icalcomponent* oldc,
-						    icalcomponent* newc,
-						    const char* user,
-						    const char* msg);
+                                                    icalcomponent* newc,
+                                                    const char* user,
+                                                    const char* msg);
 
 
 icalcomponent* icalmessage_new_delegate_reply(icalcomponent* c,
-					      const char* user,
-					      const char* delegatee,
-					      const char* msg);
+                                              const char* user,
+                                              const char* delegatee,
+                                              const char* msg);
 
 
 icalcomponent* icalmessage_new_cancel_event(icalcomponent* c,
-					    const char* user,
-					    const char* msg);
+                                            const char* user,
+                                            const char* msg);
 icalcomponent* icalmessage_new_cancel_instance(icalcomponent* c,
-					    const char* user,
-					    const char* msg);
+                                            const char* user,
+                                            const char* msg);
 icalcomponent* icalmessage_new_cancel_all(icalcomponent* c,
-					    const char* user,
-					    const char* msg);
+                                            const char* user,
+                                            const char* msg);
 
 
 icalcomponent* icalmessage_new_error_reply(icalcomponent* c,
-					   const char* user,
-					   const char* msg,
-					   const char* debug,
-					   icalrequeststatus rs);
+                                           const char* user,
+                                           const char* msg,
+                                           const char* debug,
+                                           icalrequeststatus rs);
 
 
 #endif /* ICALMESSAGE_H*/

@@ -7,7 +7,7 @@
  (C) COPYRIGHT 2002, Andrea Campi <a.campi@inet.it>
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -24,14 +24,13 @@
 #ifndef ICALATTACH_H
 #define ICALATTACH_H
 
-
 typedef struct icalattach_impl icalattach;
 
 typedef void (* icalattach_free_fn_t) (unsigned char *data, void *user_data);
 
 icalattach *icalattach_new_from_url (const char *url);
 icalattach *icalattach_new_from_data (const char *data,
-	icalattach_free_fn_t free_fn, void *free_fn_data);
+        icalattach_free_fn_t free_fn, void *free_fn_data);
 
 void icalattach_ref (icalattach *attach);
 void icalattach_unref (icalattach *attach);
@@ -48,13 +47,11 @@ void icalattachtype_set_url(struct icalattachtype* v, char* url);
 char* icalattachtype_get_url(struct icalattachtype* v);
 
 void icalattachtype_set_base64(struct icalattachtype* v, char* base64,
-				int owns);
+                                int owns);
 char* icalattachtype_get_base64(struct icalattachtype* v);
 
 void icalattachtype_set_binary(struct icalattachtype* v, char* binary,
-				int owns);
+                                int owns);
 void* icalattachtype_get_binary(struct icalattachtype* v);
-
-
 
 #endif /* !ICALATTACH_H */

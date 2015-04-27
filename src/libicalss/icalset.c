@@ -32,20 +32,19 @@
 #include <config.h>
 #endif
 
-#include <libical/ical.h>
 #include "icalset.h"
-#include "icalfileset.h"
-#include "icalfilesetimpl.h"
 #include "icaldirset.h"
 #include "icaldirsetimpl.h"
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
+#include "icalfileset.h"
+#include "icalfilesetimpl.h"
 
 #if defined(WITH_BDB)
 #include "icalbdbset.h"
 #include "icalbdbsetimpl.h"
 #endif
+
+#include <errno.h>
+#include <stdlib.h>
 
 /* #define _DLOPEN_TEST */
 #ifdef _DLOPEN_TEST

@@ -31,6 +31,10 @@
 #include "icaltypes.h"
 #include "icalerror.h"
 #include "icalmemory.h"
+
+#define TMP_BUF_SIZE 1024
+
+#ifdef UNCLEAN
 #include <stdlib.h> /* for malloc and abs() */
 #include <errno.h> /* for errno */
 #include <string.h> /* for icalmemory_strdup */
@@ -41,7 +45,7 @@
 #define strcasecmp stricmp
 #endif
 
-#define TEMP_MAX 1024
+#endif
 
 #if defined(HAVE_PTHREAD)
 #include <pthread.h>
@@ -181,19 +185,19 @@ char* icalreqstattype_as_string_r(struct icalreqstattype stat)
 
   icalerror_check_arg_rz((stat.code != ICAL_UNKNOWN_STATUS),"Status");
 
-  temp = (char*)icalmemory_new_buffer(TEMP_MAX);
+  temp = (char*)icalmemory_new_buffer(TMP_BUF_SIZE);
 
   if (stat.desc == 0){
     stat.desc = icalenum_reqstat_desc(stat.code);
   }
 
   if(stat.debug != 0){
-    snprintf(temp,TEMP_MAX,"%d.%d;%s;%s", icalenum_reqstat_major(stat.code),
+    snprintf(temp,TMP_BUF_SIZE,"%d.%d;%s;%s", icalenum_reqstat_major(stat.code),
              icalenum_reqstat_minor(stat.code),
              stat.desc, stat.debug);
 
   } else {
-    snprintf(temp,TEMP_MAX,"%d.%d;%s", icalenum_reqstat_major(stat.code),
+    snprintf(temp,TMP_BUF_SIZE,"%d.%d;%s", icalenum_reqstat_major(stat.code),
              icalenum_reqstat_minor(stat.code),
              stat.desc);
   }

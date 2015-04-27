@@ -2,15 +2,15 @@
   ======================================================================
   FILE: icalattach.c
   CREATOR: acampi 28 May 02
-  
+
   $Id: icalattach.c,v 1.3 2007-04-30 13:57:47 artcancro Exp $
   $Locker:  $
-    
+
 
  (C) COPYRIGHT 2000, Andrea Campi
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -23,18 +23,23 @@
   The original code is icaltypes.c
 
  ======================================================================*/
+
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
-#include "icaltypes.h"
-#include "icalerror.h"
-#include "icalmemory.h"
 #include "icalattachimpl.h"
-#include <stdlib.h> /* for malloc and abs() */
-#include <errno.h> /* for errno */
+#include "icalerror.h"
+
+#include <errno.h>
+#include <stdlib.h>
+
+#ifdef UNCLEAN
+#include "icaltypes.h"
+#include "icalmemory.h"
 #include <string.h> /* for icalmemory_strdup */
 #include <assert.h>
+#endif
 
 icalattach *
 icalattach_new_from_url (const char *url)
@@ -45,14 +50,14 @@ icalattach_new_from_url (const char *url)
     icalerror_check_arg_rz ((url != NULL), "url");
 
     if ((attach = malloc (sizeof (icalattach))) == NULL) {
-	errno = ENOMEM;
-	return NULL;
+        errno = ENOMEM;
+        return NULL;
     }
 
     if ((url_copy = strdup (url)) == NULL) {
-	free (attach);
-	errno = ENOMEM;
-	return NULL;
+        free (attach);
+        errno = ENOMEM;
+        return NULL;
     }
 
     attach->refcount = 1;
@@ -64,7 +69,7 @@ icalattach_new_from_url (const char *url)
 
 icalattach *
 icalattach_new_from_data (const char *data, icalattach_free_fn_t free_fn,
-			  void *free_fn_data)
+                          void *free_fn_data)
 {
     icalattach *attach;
     char *data_copy;
@@ -72,14 +77,14 @@ icalattach_new_from_data (const char *data, icalattach_free_fn_t free_fn,
     icalerror_check_arg_rz ((data != NULL), "data");
 
     if ((attach = malloc (sizeof (icalattach))) == NULL) {
-	errno = ENOMEM;
-	return NULL;
+        errno = ENOMEM;
+        return NULL;
     }
 
     if ((data_copy = strdup (data)) == NULL) {
-	free (attach);
-	errno = ENOMEM;
-	return NULL;
+        free (attach);
+        errno = ENOMEM;
+        return NULL;
     }
 
     attach->refcount = 1;
@@ -109,15 +114,15 @@ icalattach_unref (icalattach *attach)
     attach->refcount--;
 
     if (attach->refcount != 0)
-	return;
+        return;
 
     if (attach->is_url) {
-	free (attach->u.url.url);
+        free (attach->u.url.url);
     } else {
-	free (attach->u.data.data);
+        free (attach->u.data.data);
 /* unused for now
-	if (attach->u.data.free_fn)
-	   (* attach->u.data.free_fn) (attach->u.data.data, attach->u.data.free_fn_data);
+        if (attach->u.data.free_fn)
+           (* attach->u.data.free_fn) (attach->u.data.data, attach->u.data.free_fn_data);
 */
     }
 

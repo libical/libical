@@ -2,14 +2,14 @@
   ======================================================================
   FILE: icalarray.c
   CREATOR: Damon Chaplin 07 March 2001
-  
+
   $Id: icalarray.c,v 1.7 2008-01-15 23:17:40 dothebart Exp $
   $Locker:  $
-    
+
  (C) COPYRIGHT 2001, Ximian, Inc.
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -25,18 +25,18 @@
 /** @file icalarray.c
  *
  *  @brief An array of arbitrarily-sized elements which grows
- *  dynamically as elements are added. 
+ *  dynamically as elements are added.
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
-
-#include <stdlib.h>
-#include <string.h>
 
 #include "icalarray.h"
 #include "icalerror.h"
+
+#include <stdlib.h>
+#include <string.h>
 
 static void icalarray_expand		(icalarray	*array,
 					 int		 space_needed);
@@ -174,7 +174,7 @@ icalarray_sort			(icalarray	*array,
     if (array->num_elements == 0) {
         return;
     }
-    
+
     if (array->num_elements <= array->increment_size) {
       qsort(array->chunks[0], array->num_elements, array->element_size, compare);
     } else {
@@ -184,7 +184,7 @@ icalarray_sort			(icalarray	*array,
           return;
       for (pos = 0; pos < array->num_elements; pos++)
           memcpy((char *) tmp + array->element_size * pos, icalarray_element_at(array, pos), array->element_size);
-    
+
       qsort (tmp, array->num_elements, array->element_size, compare);
 
       for (pos = 0; pos < array->num_elements; pos++)
@@ -202,11 +202,11 @@ icalarray_expand		(icalarray	*array,
     int num_new_chunks;
     int c;
     void **new_chunks;
-    
+
     num_new_chunks = (space_needed + array->increment_size - 1) / array->increment_size;
     if (!num_new_chunks)
       num_new_chunks = 1;
- 
+
     new_chunks = malloc ((num_chunks + num_new_chunks) * sizeof (void *));
 
     if (new_chunks) {
@@ -220,5 +220,3 @@ icalarray_expand		(icalarray	*array,
     } else
 	icalerror_set_errno(ICAL_ALLOCATION_ERROR);
 }
-
-

@@ -10,7 +10,7 @@
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -22,7 +22,7 @@
 
 ======================================================================*/
 
-#include <libical/ical.h>
+#include "icalcomponent.h"
 
 typedef enum icalgaugecompare {
     ICALGAUGECOMPARE_EQUAL=ICAL_XLICCOMPARETYPE_EQUAL,
@@ -42,22 +42,20 @@ typedef enum icalgaugelogic {
     ICALGAUGELOGIC_AND,
     ICALGAUGELOGIC_OR
 } icalgaugelogic;
-    
+
 
 struct icalgauge_where {
-	icalgaugelogic logic;
-	icalcomponent_kind comp;
-	icalproperty_kind prop;
-	icalgaugecompare compare;
-	char* value;
+        icalgaugelogic logic;
+        icalcomponent_kind comp;
+        icalproperty_kind prop;
+        icalgaugecompare compare;
+        char* value;
 };
 
 struct icalgauge_impl
 {
-	pvl_list select; /**< Of icalgaugecompare, using only prop and comp fields*/
-	pvl_list from;   /**< List of component_kinds, as integers */
-	pvl_list where;  /**< List of icalgaugecompare */
+        pvl_list select; /**< Of icalgaugecompare, using only prop and comp fields*/
+        pvl_list from;   /**< List of component_kinds, as integers */
+        pvl_list where;  /**< List of icalgaugecompare */
         int      expand;
 };
-
-

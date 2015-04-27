@@ -8,7 +8,7 @@
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -23,7 +23,7 @@
 @file icalrecur.h
 @brief Routines for dealing with recurring time
 
-How to use: 
+How to use:
 
 1) Get a rule and a start time from a component
 
@@ -32,12 +32,12 @@ How to use:
         struct icalrecurrencetype recur;
         struct icaltimetype dtstart;
 
-	rrule = icalcomponent_get_first_property(comp,ICAL_RRULE_PROPERTY);
-	recur = icalproperty_get_rrule(rrule);
-	start = icalproperty_get_dtstart(dtstart);
+        rrule = icalcomponent_get_first_property(comp,ICAL_RRULE_PROPERTY);
+        recur = icalproperty_get_rrule(rrule);
+        start = icalproperty_get_dtstart(dtstart);
 @endcode
 
-Or, just make them up: 
+Or, just make them up:
 
 @code
         recur = icalrecurrencetype_from_string("FREQ=YEARLY;BYDAY=SU,WE");
@@ -55,7 +55,7 @@ Or, just make them up:
 
 @code
         struct icaltimetype next;
-        while (next = icalrecur_iterator_next(ritr) 
+        while (next = icalrecur_iterator_next(ritr)
                && !icaltime_is_null_time(next){
                 Do something with next
         }
@@ -69,9 +69,12 @@ whatever timezone that dtstart is in.
 #ifndef ICALRECUR_H
 #define ICALRECUR_H
 
-#include <time.h>
-#include "icaltime.h"
 #include "icalarray.h"
+#include "icaltime.h"
+
+#ifdef UNCLEAN
+#include <time.h>
+#endif
 
 /*
  * Recurrance enumerations
@@ -128,52 +131,52 @@ enum {
  *
  * The maximums below are based on Chinese/Hebrew leap years (13 months)
  */
-#define ICAL_BY_SECOND_SIZE	62	/* 0 to 60 */
-#define ICAL_BY_MINUTE_SIZE	61	/* 0 to 59 */	
-#define ICAL_BY_HOUR_SIZE	25	/* 0 to 23 */
-#define ICAL_BY_DAY_SIZE	386	/* 7 weekdays * 55 weeks */
-#define ICAL_BY_MONTHDAY_SIZE	32	/* 1 to 31 */
-#define ICAL_BY_YEARDAY_SIZE	386	/* 1 to 385 */
-#define ICAL_BY_WEEKNO_SIZE	56	/* 1 to 55 */
-#define ICAL_BY_MONTH_SIZE	14	/* 1 to 13 */
-#define ICAL_BY_SETPOS_SIZE	386	/* 1 to 385 */
+#define ICAL_BY_SECOND_SIZE     62      /* 0 to 60 */
+#define ICAL_BY_MINUTE_SIZE     61      /* 0 to 59 */
+#define ICAL_BY_HOUR_SIZE       25      /* 0 to 23 */
+#define ICAL_BY_DAY_SIZE        386     /* 7 weekdays * 55 weeks */
+#define ICAL_BY_MONTHDAY_SIZE   32      /* 1 to 31 */
+#define ICAL_BY_YEARDAY_SIZE    386     /* 1 to 385 */
+#define ICAL_BY_WEEKNO_SIZE     56      /* 1 to 55 */
+#define ICAL_BY_MONTH_SIZE      14      /* 1 to 13 */
+#define ICAL_BY_SETPOS_SIZE     386     /* 1 to 385 */
 
 /** Main struct for holding digested recurrence rules */
-struct icalrecurrencetype 
+struct icalrecurrencetype
 {
-	icalrecurrencetype_frequency freq;
+        icalrecurrencetype_frequency freq;
 
 
-	/* until and count are mutually exclusive. */
-       	struct icaltimetype until; 
-	int count;
+        /* until and count are mutually exclusive. */
+        struct icaltimetype until;
+        int count;
 
-	short interval;
-	
-	icalrecurrencetype_weekday week_start;
-	
-	/* The BY* parameters can each take a list of values. Here I
-	 * assume that the list of values will not be larger than the
-	 * range of the value -- that is, the client will not name a
-	 * value more than once. 
-	 
-	 * Each of the lists is terminated with the value
-	 * ICAL_RECURRENCE_ARRAY_MAX unless the the list is full.
-	 */
+        short interval;
 
-	short by_second[ICAL_BY_SECOND_SIZE];
-	short by_minute[ICAL_BY_MINUTE_SIZE];
-	short by_hour[ICAL_BY_HOUR_SIZE];
-	short by_day[ICAL_BY_DAY_SIZE]; /* Encoded value, see below */
-	short by_month_day[ICAL_BY_MONTHDAY_SIZE];
-	short by_year_day[ ICAL_BY_YEARDAY_SIZE];
-	short by_week_no[ICAL_BY_WEEKNO_SIZE];
-	short by_month[ICAL_BY_MONTH_SIZE];
-	short by_set_pos[ICAL_BY_SETPOS_SIZE];
+        icalrecurrencetype_weekday week_start;
 
-	/* For RSCALE extension (draft-ietf-calext-rscale) */
-	char *rscale;
-	icalrecurrencetype_skip skip;
+        /* The BY* parameters can each take a list of values. Here I
+         * assume that the list of values will not be larger than the
+         * range of the value -- that is, the client will not name a
+         * value more than once.
+
+         * Each of the lists is terminated with the value
+         * ICAL_RECURRENCE_ARRAY_MAX unless the the list is full.
+         */
+
+        short by_second[ICAL_BY_SECOND_SIZE];
+        short by_minute[ICAL_BY_MINUTE_SIZE];
+        short by_hour[ICAL_BY_HOUR_SIZE];
+        short by_day[ICAL_BY_DAY_SIZE]; /* Encoded value, see below */
+        short by_month_day[ICAL_BY_MONTHDAY_SIZE];
+        short by_year_day[ ICAL_BY_YEARDAY_SIZE];
+        short by_week_no[ICAL_BY_WEEKNO_SIZE];
+        short by_month[ICAL_BY_MONTH_SIZE];
+        short by_set_pos[ICAL_BY_SETPOS_SIZE];
+
+        /* For RSCALE extension (draft-ietf-calext-rscale) */
+        char *rscale;
+        icalrecurrencetype_skip skip;
 };
 
 
@@ -188,7 +191,7 @@ void icalrecurrencetype_clear(struct icalrecurrencetype *r);
  * The 'day' element of the by_day array is encoded to allow
  * representation of both the day of the week ( Monday, Tueday), but also
  * the Nth day of the week ( First tuesday of the month, last thursday of
- * the year) These routines decode the day values 
+ * the year) These routines decode the day values
  */
 
 /** 1 == Monday, etc. */
@@ -221,7 +224,7 @@ char* icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur);
 typedef struct icalrecur_iterator_impl  icalrecur_iterator;
 
 /** Create a new recurrence rule iterator */
-icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule, 
+icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
                                            struct icaltimetype dtstart);
 
 /** Get the next occurrence from an iterator */
@@ -232,10 +235,10 @@ void icalrecur_iterator_free(icalrecur_iterator*);
 
 /**
  * Fills array up with at most 'count' time_t values, each
- *  representing an occurrence time in seconds past the POSIX epoch 
+ *  representing an occurrence time in seconds past the POSIX epoch
  */
-int icalrecur_expand_recurrence(char* rule, time_t start, 
-				int count, time_t* array);
+int icalrecur_expand_recurrence(char* rule, time_t start,
+                                int count, time_t* array);
 
 
 #endif

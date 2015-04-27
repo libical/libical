@@ -19,12 +19,10 @@
 #ifndef ICALBDBSETIMPL_H
 #define ICALBDBSETIMPL_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
+#ifdef UNCLEAN
 #include "icalgauge.h"
 #include <db.h>
+#endif
 
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icaldirset*/

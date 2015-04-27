@@ -5,10 +5,11 @@
 #include <config.h>
 #endif
 
+#ifdef UNCLEAN
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#endif
 #include <libical/ical.h>
 #if defined(HAVE_LIBICU)
 #include <unicode/ucal.h>
@@ -163,7 +164,7 @@ const struct recur rfc5545[] = {
     { "19970902T090000",
       "FREQ=WEEKLY;COUNT=10;WKST=SU;BYDAY=TU,TH" },
 
-    /* Every other week on Monday, Wednesday, and Friday 
+    /* Every other week on Monday, Wednesday, and Friday
        until December 24, 1997, starting on Monday, September 1, 1997 */
     { "19970901T090000",
       "FREQ=WEEKLY;INTERVAL=2;UNTIL=19971224T000000Z;WKST=SU;BYDAY=MO,WE,FR" },
@@ -349,59 +350,59 @@ int main(int argc, char *argv[])
     const struct recur *r = rfc5545;
     FILE *fp = fopen("test.out","w");
     if(fp == NULL) {
-	fprintf(stderr, "unable to open the output file test.out\n");
-	return(1);
+        fprintf(stderr, "unable to open the output file test.out\n");
+        return(1);
     }
 
     int opt;
     while ((opt = getopt(argc, argv, "r")) != EOF) {
-	switch (opt) {
+        switch (opt) {
 #if defined(HAVE_LIBICU)
-	case 'r': /* Do RSCALE tests */
-	    if (!icalrecurrencetype_rscale_is_supported()) {
-		fprintf(stderr, "error: RSCALE not supported\n");
+        case 'r': /* Do RSCALE tests */
+            if (!icalrecurrencetype_rscale_is_supported()) {
+                fprintf(stderr, "error: RSCALE not supported\n");
                 fclose(fp);
-		return(1);
-	    }
-	    r = rscale;
-	    break;
+                return(1);
+            }
+            r = rscale;
+            break;
 #endif
 
-	default:
-	    fprintf(stderr, "usage: %s [-r]\n", argv[0]);
+        default:
+            fprintf(stderr, "usage: %s [-r]\n", argv[0]);
             fclose(fp);
-	    return(1);
-	    break;
-	}
+            return(1);
+            break;
+        }
     }
 
     for (; r->dtstart; r++) {
-	struct icalrecurrencetype rrule;
-	struct icaltimetype dtstart, next;
-	icalrecur_iterator *ritr;
-	const char *sep = "";
+        struct icalrecurrencetype rrule;
+        struct icaltimetype dtstart, next;
+        icalrecur_iterator *ritr;
+        const char *sep = "";
 
-	fprintf(fp,"\nRRULE:%s\n", r->rrule);
-	fprintf(fp,"DTSTART:%s\n", r->dtstart);
-	fprintf(fp,"INSTANCES:");
+        fprintf(fp,"\nRRULE:%s\n", r->rrule);
+        fprintf(fp,"DTSTART:%s\n", r->dtstart);
+        fprintf(fp,"INSTANCES:");
 
-	dtstart = icaltime_from_string(r->dtstart);
-	rrule = icalrecurrencetype_from_string(r->rrule);
-	ritr = icalrecur_iterator_new(rrule, dtstart);
+        dtstart = icaltime_from_string(r->dtstart);
+        rrule = icalrecurrencetype_from_string(r->rrule);
+        ritr = icalrecur_iterator_new(rrule, dtstart);
 
-	if (!ritr) fprintf(fp, " *** %s\n", icalerror_strerror(icalerrno));
-	else {
-	    for (next = icalrecur_iterator_next(ritr);
-		 !icaltime_is_null_time(next);
-		 next = icalrecur_iterator_next(ritr)) {
+        if (!ritr) fprintf(fp, " *** %s\n", icalerror_strerror(icalerrno));
+        else {
+            for (next = icalrecur_iterator_next(ritr);
+                 !icaltime_is_null_time(next);
+                 next = icalrecur_iterator_next(ritr)) {
 
-		fprintf(fp,"%s%s", sep, icaltime_as_ical_string(next));
-		sep = ",";
-	    }
-	    fprintf(fp,"\n");
-	}
+                fprintf(fp,"%s%s", sep, icaltime_as_ical_string(next));
+                sep = ",";
+            }
+            fprintf(fp,"\n");
+        }
 
-	icalrecur_iterator_free(ritr);
+        icalrecur_iterator_free(ritr);
     }
     fclose(fp);
 

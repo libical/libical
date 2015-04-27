@@ -8,7 +8,7 @@
  $Locker:  $
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -27,10 +27,12 @@
 #ifndef ICALMEMORY_H
 #define ICALMEMORY_H
 
+#ifdef UNCLEAN
 #ifndef WIN32
 #include <sys/types.h> /* for size_t */
 #else
 #include <stddef.h>
+#endif
 #endif
 
 /* Tmp buffers are managed by ical. References can be returned to the
@@ -68,18 +70,15 @@ void icalmemory_free_buffer(void* buf);
    buffer on the ring, the ring will loose track of it an you will
    have memory problems. */
 
-void icalmemory_append_string(char** buf, char** pos, size_t* buf_size, 
-			      const char* string);
+void icalmemory_append_string(char** buf, char** pos, size_t* buf_size,
+                              const char* string);
 
 /**  icalmemory_append_char is similar, but is appends a character instead of a string */
-void icalmemory_append_char(char** buf, char** pos, size_t* buf_size, 
-			      char ch);
+void icalmemory_append_char(char** buf, char** pos, size_t* buf_size,
+                              char ch);
 
 /** A wrapper around strdup. Partly to trap calls to strdup, partly
     because in -ansi, gcc on Red Hat claims that strdup is undeclared */
 char* icalmemory_strdup(const char *s);
 
 #endif /* !ICALMEMORY_H */
-
-
-

@@ -11,7 +11,7 @@
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -28,6 +28,10 @@
 #ifndef ICALVALUE_H
 #define ICALVALUE_H
 
+#include "icalderivedvalue.h"
+#include "icalderivedparameter.h"
+
+#ifdef UNCLEAN
 #include <time.h>
 #include "icalenums.h"
 #include "icaltypes.h"
@@ -35,9 +39,8 @@
 #include "icalduration.h"
 #include "icalperiod.h"
 #include "icalderivedproperty.h" /* For icalproperty_method, etc. */
-#include "icalderivedparameter.h"
-#include "icalderivedvalue.h"
-                          
+#endif
+
 /* Defined in icalderivedvalue.h */
 /*typedef struct icalvalue_impl icalvalue;*/
 
@@ -74,7 +77,7 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue* a, const icalva
 
 /* icalvalue* icalvalue_new_datetimeperiod (struct icaldatetimeperiodtype v); */
 /* void icalvalue_set_datetimeperiod(icalvalue* value,  */
-/* 				  struct icaldatetimeperiodtype v); */
+/*                                struct icaldatetimeperiodtype v); */
 /* struct icaldatetimeperiodtype icalvalue_get_datetimeperiod(const icalvalue* value); */
 
 /* Convert enumerations */

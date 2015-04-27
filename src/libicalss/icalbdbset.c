@@ -22,12 +22,18 @@
 
 #include "icalbdbset.h"
 #include "icalbdbsetimpl.h"
-#include "icalgauge.h"
+
+#include "icalparser.h"
+#include "icaltimezone.h"
+#include "icalvalue.h"
+
 #include <errno.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h> /* for stat */
+
+#define MAX_RETRY 5
+
+#ifdef UNCLEAN
+#include "icalgauge.h"
 
 #if !defined(_WIN32)
 #include <unistd.h> /* for stat, getpid, unlink */
@@ -36,10 +42,9 @@
 #define S_IRUSR S_IREAD     /* R for owner */
 #define S_IWUSR S_IWRITE    /* W for owner */
 #endif
-#define STRBUF_LEN 255
-#define MAX_RETRY 5
 
 extern int errno;
+#endif
 
 /* these are just stub functions */
 icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc)(const DBT *dbt));

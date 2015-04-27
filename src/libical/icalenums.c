@@ -2,7 +2,7 @@
 /*======================================================================
   FILE: icalenum.c
   CREATOR: eric 29 April 1999
-  
+
   $Id: icalenums.c,v 1.16 2008-01-15 23:17:40 dothebart Exp $
 
 
@@ -10,7 +10,7 @@
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -24,30 +24,31 @@
 
   ======================================================================*/
 
-
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include "icalenums.h"
+#include "icalmemory.h"
 
+#ifdef UNCLEAN
 #include <stdio.h> /* For fprintf */
 #include <stdio.h> /* For stderr */
 #include <string.h> /* For strncmp */
 #include <assert.h>
-#include "icalmemory.h"
 
 #if defined(_MSC_VER)
 #define snprintf _snprintf
+#endif
 #endif
 
 /*** @brief Allowed request status values
  */
 static const struct {
-	 enum icalrequeststatus kind;
-	int major;
-	int minor;
-	const char* str;
+         enum icalrequeststatus kind;
+        int major;
+        int minor;
+        const char* str;
 } request_status_map[] = {
     {ICAL_2_0_SUCCESS_STATUS, 2,0,"Success."},
     {ICAL_2_1_FALLBACK_STATUS, 2,1,"Success but fallback taken  on one or more property  values."},
@@ -98,9 +99,9 @@ const char* icalenum_reqstat_desc(icalrequeststatus stat)
     int i;
 
     for (i=0; request_status_map[i].kind  != ICAL_UNKNOWN_STATUS; i++) {
-	if ( request_status_map[i].kind ==  stat) {
-	    return request_status_map[i].str;
-	}
+        if ( request_status_map[i].kind ==  stat) {
+            return request_status_map[i].str;
+        }
     }
 
     return 0;
@@ -108,10 +109,10 @@ const char* icalenum_reqstat_desc(icalrequeststatus stat)
 
 char* icalenum_reqstat_code(icalrequeststatus stat)
 {
-	char *buf;
-	buf = icalenum_reqstat_code_r(stat);
-	icalmemory_add_tmp_buffer(buf);
-	return buf;
+        char *buf;
+        buf = icalenum_reqstat_code_r(stat);
+        icalmemory_add_tmp_buffer(buf);
+        return buf;
 }
 
 
@@ -123,12 +124,12 @@ char* icalenum_reqstat_code_r(icalrequeststatus stat)
     char tmpbuf[36];
 
     for (i=0; request_status_map[i].kind  != ICAL_UNKNOWN_STATUS; i++) {
-	if ( request_status_map[i].kind ==  stat) {
-	    major = request_status_map[i].major;
-	    minor = request_status_map[i].minor;
-	    snprintf(tmpbuf, sizeof(tmpbuf), "%i.%i", major, minor);
-	    return icalmemory_strdup(tmpbuf);
-	}
+        if ( request_status_map[i].kind ==  stat) {
+            major = request_status_map[i].major;
+            minor = request_status_map[i].minor;
+            snprintf(tmpbuf, sizeof(tmpbuf), "%i.%i", major, minor);
+            return icalmemory_strdup(tmpbuf);
+        }
     }
     return NULL;
 }
@@ -140,9 +141,9 @@ short icalenum_reqstat_major(icalrequeststatus stat)
     int i;
 
     for (i=0; request_status_map[i].kind  != ICAL_UNKNOWN_STATUS; i++) {
-	if ( request_status_map[i].kind ==  stat) {
-	    return request_status_map[i].major;
-	}
+        if ( request_status_map[i].kind ==  stat) {
+            return request_status_map[i].major;
+        }
     }
     return -1;
 }
@@ -154,9 +155,9 @@ short icalenum_reqstat_minor(icalrequeststatus stat)
     int i;
 
     for (i=0; request_status_map[i].kind  != ICAL_UNKNOWN_STATUS; i++) {
-	if ( request_status_map[i].kind ==  stat) {
-	    return request_status_map[i].minor;
-	}
+        if ( request_status_map[i].kind ==  stat) {
+            return request_status_map[i].minor;
+        }
     }
     return -1;
 }
@@ -169,12 +170,9 @@ icalrequeststatus icalenum_num_to_reqstat(short major, short minor)
     int i;
 
     for (i=0; request_status_map[i].kind  != ICAL_UNKNOWN_STATUS; i++) {
-	if ( request_status_map[i].major ==  major && request_status_map[i].minor ==  minor) {
-	    return request_status_map[i].kind;
-	}
+        if ( request_status_map[i].major ==  major && request_status_map[i].minor ==  minor) {
+            return request_status_map[i].kind;
+        }
     }
     return 0;
 }
-
-
-

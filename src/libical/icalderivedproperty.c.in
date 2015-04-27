@@ -3,14 +3,14 @@
 /*======================================================================
   FILE: icalderivedproperty.c
   CREATOR: eric 15 Feb 2001
-  
+
   $Id: icalderivedproperty.c.in,v 1.15 2008-01-28 22:34:37 artcancro Exp $
 
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -30,12 +30,16 @@
 
 #include "icalproperty.h"
 #include "icalcomponent.h"
-#include "pvl.h"
-#include "icalenums.h"
 #include "icalerror.h"
 #include "icalmemory.h"
-#include "icalparser.h"
 #include "icaltimezone.h"
+
+#include <string.h>
+
+#ifdef UNCLEAN
+#include "pvl.h"
+#include "icalenums.h"
+#include "icalparser.h"
 
 #include <string.h> /* For icalmemory_strdup, rindex */
 #include <assert.h>
@@ -47,9 +51,9 @@
 #ifdef _MSC_VER
 #define strcasecmp stricmp
 #endif
+#endif
 
-struct icalproperty_impl*
-icalproperty_new_impl (icalproperty_kind kind);
+struct icalproperty_impl *icalproperty_new_impl (icalproperty_kind kind);
 void icalproperty_add_parameters(struct icalproperty_impl *prop,va_list args);
 
 /* This map associates the property kinds with the string
@@ -57,9 +61,9 @@ void icalproperty_add_parameters(struct icalproperty_impl *prop,va_list args);
    property uses as a default */
 
 struct  icalproperty_map {
-	icalproperty_kind kind;
-	const char *name;
-	icalvalue_kind value;
+        icalproperty_kind kind;
+        const char *name;
+        icalvalue_kind value;
 
 };
 
@@ -71,7 +75,7 @@ struct icalproperty_enum_map {
     icalproperty_kind prop;
     int prop_enum;
     const char* str;
-}; 
+};
 
 
 <insert_code_here>
@@ -81,20 +85,20 @@ int icalproperty_kind_is_valid(const icalproperty_kind kind)
     int i = 0;
     do {
       if (property_map[i].kind == kind)
-	return 1;
+        return 1;
     } while (property_map[i++].kind != ICAL_NO_PROPERTY);
 
     return 0;
-}  
+}
 
 const char* icalproperty_kind_to_string(icalproperty_kind kind)
 {
     int i;
 
     for (i=0; property_map[i].kind != ICAL_NO_PROPERTY; i++) {
-	if (property_map[i].kind == kind) {
-	    return property_map[i].name;
-	}
+        if (property_map[i].kind == kind) {
+            return property_map[i].name;
+        }
     }
 
     return 0;
@@ -106,19 +110,19 @@ icalproperty_kind icalproperty_string_to_kind(const char* string)
 {
     int i;
 
-    if (string ==0 ) { 
-	return ICAL_NO_PROPERTY;
+    if (string ==0 ) {
+        return ICAL_NO_PROPERTY;
     }
 
 
     for (i=0; property_map[i].kind  != ICAL_NO_PROPERTY; i++) {
-	if (strcasecmp(property_map[i].name, string) == 0) {
-	    return property_map[i].kind;
-	}
+        if (strcasecmp(property_map[i].name, string) == 0) {
+            return property_map[i].kind;
+        }
     }
 
     if(strncmp(string,"X-",2)==0){
-	return ICAL_X_PROPERTY;
+        return ICAL_X_PROPERTY;
     }
 
 
@@ -131,9 +135,9 @@ icalproperty_kind icalproperty_value_kind_to_kind(icalvalue_kind kind)
     int i;
 
     for (i=0; property_map[i].kind  != ICAL_NO_PROPERTY; i++) {
-	if ( property_map[i].value == kind ) {
-	    return property_map[i].kind;
-	}
+        if ( property_map[i].value == kind ) {
+            return property_map[i].kind;
+        }
     }
 
     return ICAL_NO_PROPERTY;
@@ -146,9 +150,9 @@ icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind)
     int i;
 
     for (i=0; property_map[i].kind  != ICAL_NO_PROPERTY; i++) {
-	if ( property_map[i].kind == kind ) {
-	    return property_map[i].value;
-	}
+        if ( property_map[i].kind == kind ) {
+            return property_map[i].value;
+        }
     }
 
     return ICAL_NO_VALUE;
@@ -166,7 +170,7 @@ const char* icalproperty_enum_to_string(int e)
 
 char *icalproperty_enum_to_string_r(int e)
 {
-	return icalmemory_strdup(icalproperty_enum_to_string(e));
+        return icalmemory_strdup(icalproperty_enum_to_string(e));
 }
 
 
@@ -178,24 +182,24 @@ int icalproperty_kind_and_string_to_enum(const int kind, const char* str)
     icalerror_check_arg_rz(str!=0,"str")
 
     if ((pkind = icalproperty_value_kind_to_kind(kind)) == ICAL_NO_PROPERTY)
-	return 0;
+        return 0;
 
     while(*str == ' '){
-	str++;
+        str++;
     }
 
     for (i=ICALPROPERTY_FIRST_ENUM; i != ICALPROPERTY_LAST_ENUM; i++) {
-	if (enum_map[i-ICALPROPERTY_FIRST_ENUM].prop == pkind)
-	    break;
+        if (enum_map[i-ICALPROPERTY_FIRST_ENUM].prop == pkind)
+            break;
     }
     if (i == ICALPROPERTY_LAST_ENUM)
-	    return 0;
+            return 0;
 
     for (; i != ICALPROPERTY_LAST_ENUM; i++) {
-	if(enum_map[i-ICALPROPERTY_FIRST_ENUM].prop == pkind &&
+        if(enum_map[i-ICALPROPERTY_FIRST_ENUM].prop == pkind &&
            strcasecmp(enum_map[i-ICALPROPERTY_FIRST_ENUM].str, str) == 0) {
-	    return enum_map[i-ICALPROPERTY_FIRST_ENUM].prop_enum;
-	}
+            return enum_map[i-ICALPROPERTY_FIRST_ENUM].prop_enum;
+        }
     }
 
     return 0;
@@ -209,13 +213,13 @@ int icalproperty_string_to_enum(const char* str)
     icalerror_check_arg_rz(str!=0,"str")
 
     while(*str == ' '){
-	str++;
+        str++;
     }
 
     for (i=ICALPROPERTY_FIRST_ENUM; i != ICALPROPERTY_LAST_ENUM; i++) {
-	if ( strcasecmp(enum_map[i-ICALPROPERTY_FIRST_ENUM].str, str) == 0) {
-	    return enum_map[i-ICALPROPERTY_FIRST_ENUM].prop_enum;
-	}
+        if ( strcasecmp(enum_map[i-ICALPROPERTY_FIRST_ENUM].str, str) == 0) {
+            return enum_map[i-ICALPROPERTY_FIRST_ENUM].prop_enum;
+        }
     }
 
     return 0;
@@ -227,7 +231,7 @@ int icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e)
 
 
     for (i=ICALPROPERTY_FIRST_ENUM; i != ICALPROPERTY_LAST_ENUM; i++) {
-        if(enum_map[i-ICALPROPERTY_FIRST_ENUM].prop_enum == e && 
+        if(enum_map[i-ICALPROPERTY_FIRST_ENUM].prop_enum == e &&
            enum_map[i-ICALPROPERTY_FIRST_ENUM].prop == kind ){
             return 1;
         }
@@ -252,15 +256,15 @@ icalproperty_method icalproperty_string_to_method(const char* str)
     icalerror_check_arg_rx(str!=0,"str",ICAL_METHOD_NONE)
 
     while(*str == ' '){
-	str++;
+        str++;
     }
 
-    for (i=ICAL_METHOD_X-ICALPROPERTY_FIRST_ENUM; 
+    for (i=ICAL_METHOD_X-ICALPROPERTY_FIRST_ENUM;
          i != ICAL_METHOD_NONE-ICALPROPERTY_FIRST_ENUM;
          i++) {
-	if ( strcasecmp(enum_map[i].str, str) == 0) {
-	    return (icalproperty_method)enum_map[i].prop_enum;
-	}
+        if ( strcasecmp(enum_map[i].str, str) == 0) {
+            return (icalproperty_method)enum_map[i].prop_enum;
+        }
     }
 
     return ICAL_METHOD_NONE;
@@ -282,15 +286,15 @@ icalproperty_status icalenum_string_to_status(const char* str)
     icalerror_check_arg_rx(str!=0,"str",ICAL_STATUS_NONE)
 
     while(*str == ' '){
-	str++;
+        str++;
     }
 
-    for (i=ICAL_STATUS_X-ICALPROPERTY_FIRST_ENUM; 
+    for (i=ICAL_STATUS_X-ICALPROPERTY_FIRST_ENUM;
          i != ICAL_STATUS_NONE-ICALPROPERTY_FIRST_ENUM;
          i++) {
-	if ( strcasecmp(enum_map[i].str, str) == 0) {
-	    return (icalproperty_status)enum_map[i].prop_enum;
-	}
+        if ( strcasecmp(enum_map[i].str, str) == 0) {
+            return (icalproperty_status)enum_map[i].prop_enum;
+        }
     }
 
     return ICAL_STATUS_NONE;

@@ -2,10 +2,10 @@
   ======================================================================
   FILE: testclassify.c
   CREATOR: eric 11 February 2000
-  
+
   $Id: testclassify.c,v 1.6 2008-01-02 20:07:46 dothebart Exp $
   $Locker:  $
-    
+
  (C) COPYRIGHT 2000 Eric Busboom
  http://www.softwarestudio.org
 
@@ -13,23 +13,29 @@
  Version 1.0 (the "License"); you may not use this file except in
  compliance with the License. You may obtain a copy of the License at
  http://www.mozilla.org/MPL/
- 
+
  Software distributed under the License is distributed on an "AS IS"
  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
  the License for the specific language governing rights and
  limitations under the License.
- 
+
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
 
 
  ======================================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifdef UNCLEAN
 #include <stdio.h> /* for printf */
 #include <libical/ical.h>
 #include <errno.h>
 #include <string.h> /* For strerror */
 #include <libicalss/icalss.h>
+#endif
 
 /* Get a note about the purpose of the property*/
 const char* get_note(icalcomponent *c)
@@ -45,12 +51,12 @@ const char* get_note(icalcomponent *c)
             note = icalproperty_get_x(p);
             }
         }
-    } 
-    
+    }
+
     if(note == 0){
         note = "None";
     }
-    
+
     return note;
 }
 
@@ -60,7 +66,7 @@ int main(int argc, char* argv[])
     icalcomponent *c;
     int i=0;
 
-    /* Open up the two storage files, one for the incomming components, 
+    /* Open up the two storage files, one for the incomming components,
        one for the calendar */
     icalfileset_options options = {O_RDONLY, 0644, 0};
     icalset* incoming = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/incoming.ics", &options);
@@ -71,13 +77,13 @@ int main(int argc, char* argv[])
 
     /* Iterate through all of the incoming components */
     for(c=icalset_get_first_component(incoming);c!=0;
-	c=icalset_get_next_component(incoming)){
-	
-	icalproperty_xlicclass class;
-	icalcomponent *match = 0;
+        c=icalset_get_next_component(incoming)){
+
+        icalproperty_xlicclass class;
+        icalcomponent *match = 0;
         const char* this_uid;
 
-	i++;
+        i++;
 
         /* Check this component against the restrictions imposed by
            iTIP. An errors will be inserted as X-LIC-ERROR properties
@@ -98,7 +104,7 @@ int main(int argc, char* argv[])
            value, and then calling icalproperty_get_uid. There are
            several other convenience routines for DTSTART, DTEND,
            DURATION, SUMMARY, METHOD, and COMMENT */
-	this_uid = icalcomponent_get_uid(c);
+        this_uid = icalcomponent_get_uid(c);
 
         if(this_uid != 0){
             /* Look in the calendar for a component with the same UID
@@ -109,21 +115,19 @@ int main(int argc, char* argv[])
             match = icalset_fetch(cal,this_uid);
         }
 
-        
+
         /* Classify the incoming component. The third argument is the
            calid of the user who owns the calendar. In a real program,
            you would probably switch() on the class.*/
-	class = icalclassify(c,match,"A@example.com");
+        class = icalclassify(c,match,"A@example.com");
 
-	printf("Test %d\n\
+        printf("Test %d\n\
 Incoming:      %s\n\
 Matched:       %s\n\
 Classification: %s\n\n",
                i,get_note(c),get_note(match),
-               icalproperty_enum_to_string(class));	
+               icalproperty_enum_to_string(class));
     }
 
     return 0;
 }
-
-

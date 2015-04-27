@@ -7,13 +7,13 @@
   $Id: icalparameter.h,v 1.5 2008-01-15 23:17:40 dothebart Exp $
   $Locker:  $
 
-  
+
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -27,8 +27,8 @@
 
   ======================================================================*/
 
-#ifndef ICALPARAM_H
-#define ICALPARAM_H
+#ifndef ICALPARAMETER_H
+#define ICALPARAMETER_H
 
 #include "icalderivedparameter.h"
 
@@ -77,4 +77,4 @@ icalparameter_kind icalparameter_string_to_kind(const char* string);
 
 
 
-#endif 
+#endif

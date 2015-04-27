@@ -22,7 +22,9 @@
 #include "vcomponent_cxx.h"
 using namespace LibICal;
 
+#ifdef UNCLEAN
 #include <exception>
+#endif
 
 /** @brief Construct an ICalSpanList from an icalset
     @param set     The icalset containing the VEVENTS

@@ -17,15 +17,16 @@
     the License at http://www.mozilla.org/MPL/
  */
 
-#ifndef VCOMPONENT_CXX_H
-#define VCOMPONENT_CXX_H
+#ifndef ICAL_VCOMPONENT_CXX_H
+#define ICAL_VCOMPONENT_CXX_H
 
 #include "libical_ical_export.h"
+#include "icptrholder_cxx.h"
 
 extern "C" {
-#include <libical/ical.h>
+#include "icalerror.h"
+#include "icalcomponent.h"
 };
-#include "icptrholder_cxx.h"
 
 #include <string>
 
@@ -365,4 +366,4 @@ public:
 
 typedef ICPointerHolder<LibICal::VComponent> VComponentTmpPtr;
 
-#endif /* VComponent_H */
+#endif /* ICAL_VCOMPONENT_H */

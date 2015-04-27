@@ -18,8 +18,11 @@
  */
 
 #include "icalparameter_cxx.h"
-#include "icalvalue_cxx.h"
 using namespace LibICal;
+
+#ifdef UNCLEAN
+#include "icalvalue_cxx.h"
+#endif
 
 ICalParameter::ICalParameter() throw(icalerrorenum) : imp(icalparameter_new(ICAL_ANY_PARAMETER))
 {

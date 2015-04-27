@@ -8,7 +8,7 @@
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -25,31 +25,31 @@
 #ifndef ICALTYPES_H
 #define ICALTYPES_H
 
-#include <time.h>
-#include "icalenums.h"
-#include "icaltime.h"
 #include "icalduration.h"
+#include "icalenums.h"
 #include "icalperiod.h"
 
-
-struct icalgeotype 
+struct icaldatetimeperiodtype
 {
-	double lat;
-	double lon;
+    struct icaltimetype time;
+    struct icalperiodtype period;
 };
 
-
-struct icaldatetimeperiodtype 
+struct icalgeotype
 {
-	struct icaltimetype time;
-	struct icalperiodtype period;
+    double lat;
+    double lon;
 };
 
+#ifdef UNCLEAN
+#include <time.h>
+#include "icaltime.h"
+#endif
 
-struct icaltriggertype 
+struct icaltriggertype
 {
-	struct icaltimetype time; 
-	struct icaldurationtype duration;
+    struct icaltimetype time;
+    struct icaldurationtype duration;
 };
 
 struct icaltriggertype icaltriggertype_from_int(const int reltime);
@@ -71,9 +71,9 @@ operating on the value of a request_status property. */
 
 struct icalreqstattype {
 
-	icalrequeststatus code;
-	const char* desc;
-	const char* debug;
+        icalrequeststatus code;
+        const char* desc;
+        const char* debug;
 };
 
 struct icalreqstattype icalreqstattype_from_string(const char* str);
@@ -90,7 +90,7 @@ struct icaltimezonephase {
     int tzoffsetfrom;
     const char* comment;
     struct icaldatetimeperiodtype rdate;
-    const char* rrule;    
+    const char* rrule;
 };
 
 
@@ -98,7 +98,7 @@ struct icaltimezonetype {
     const char* tzid;
     struct icaltimetype last_mod;
     const char* tzurl;
-    
+
     /* Array of phases. The end of the array is a phase with tzname == 0 */
     struct icaltimezonephase *phases;
 };
@@ -111,9 +111,9 @@ void icaltimezonetype_free(struct icaltimezonetype tzt);
  *    FIXME:  Currently only affects parameters.  Extend to components and properties.
  */
 typedef enum ical_unknown_token_handling {
-    ICAL_ASSUME_IANA_TOKEN = 1, 
+    ICAL_ASSUME_IANA_TOKEN = 1,
     ICAL_DISCARD_TOKEN = 2,
-    ICAL_TREAT_AS_ERROR = 3 
+    ICAL_TREAT_AS_ERROR = 3
 } ical_unknown_token_handling;
 
 ical_unknown_token_handling ical_get_unknown_token_handling_setting(void);

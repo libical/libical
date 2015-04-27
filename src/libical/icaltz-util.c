@@ -1,12 +1,11 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
-/* 
- * Authors : 
+/*
+ * Authors :
  *  Chenthill Palanisamy <pchenthill@novell.com>
  *
  * Copyright 2007, Novell, Inc.
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of version 2 of the GNU Lesser General Public 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of version 2 of the GNU Lesser General Public
  * License as published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
@@ -16,14 +15,25 @@
  *
  * * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
+
+#include "icaltz-util.h"
+#include "icalerror.h"
 #include "icaltimezone.h"
+
+#include <stdlib.h>
+
+#if defined(HAVE_BYTESWAP_H)
+#include <byteswap.h>
+#endif
+
+#ifdef UNCLEAN
 #include <string.h>
 
 #ifdef HAVE_STDINT_H
@@ -94,18 +104,17 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include "icalerror.h"
-#include "icaltz-util.h"
+#endif
 
-typedef struct 
+typedef struct
 {
-	char	ttisgmtcnt [4];	
-	char	ttisstdcnt[4];	
-	char	leapcnt[4];		
-	char	timecnt[4];	
+	char	ttisgmtcnt [4];
+	char	ttisstdcnt[4];
+	char	leapcnt[4];
+	char	timecnt[4];
 	char	typecnt[4];
-	char	charcnt[4];			
-} tzinfo; 
+	char	charcnt[4];
+} tzinfo;
 
 static char *search_paths [] = {"/usr/share/zoneinfo","/usr/lib/zoneinfo","/etc/zoneinfo","/usr/share/lib/zoneinfo"};
 static char *zdir = NULL;
@@ -121,7 +130,7 @@ typedef struct
 {
 	long int gmtoff;
 	unsigned char isdst;
-	unsigned int abbr;	
+	unsigned int abbr;
 	unsigned char isstd;
 	unsigned char isgmt;
 	char *zname;
@@ -167,7 +176,7 @@ decode (const void *ptr)
 }
 
 static char *
-zname_from_stridx (char *str, long int idx) 
+zname_from_stridx (char *str, long int idx)
 {
 	int i = 0;
 	char *ret;
@@ -175,7 +184,7 @@ zname_from_stridx (char *str, long int idx)
 
 	i = idx;
 
-	while (str [i] != '\0') 
+	while (str [i] != '\0')
 		i++;
 
 	size = i - idx;
@@ -250,7 +259,7 @@ icaltzutil_fetch_timezone (const char *location)
 
 	if ((ret = fseek (f, 20, SEEK_SET)) != 0) {
 		icalerror_set_errno (ICAL_FILE_ERROR);
-		goto error;	
+		goto error;
 	}
 
 	EFREAD(&type_cnts, 24, 1, f);
@@ -265,7 +274,7 @@ icaltzutil_fetch_timezone (const char *location)
 	transitions = calloc (num_trans, sizeof (time_t));
 	r_trans = calloc (num_trans, 4);
 	EFREAD(r_trans, 4, num_trans, f);
-	temp = r_trans;	
+	temp = r_trans;
 
 	if (num_trans) {
 		trans_idx = calloc (num_trans, sizeof (int));
@@ -275,7 +284,7 @@ icaltzutil_fetch_timezone (const char *location)
 			r_trans += 4;
 		}
 	}
-	
+
 	free (temp);
 
 	types = calloc (num_types, sizeof (ttinfo));
@@ -347,7 +356,7 @@ icaltzutil_fetch_timezone (const char *location)
 	prev_idx = 0;
 	if (num_trans == 0) {
 		prev_idx = idx = 0;
-		
+
 	} else {
 		idx = trans_idx[0];
 	}
@@ -416,7 +425,7 @@ error:
 }
 
 /*
-int 
+int
 main (int argc, char *argv [])
 {
 	tzutil_fetch_timezone (argv [1]);

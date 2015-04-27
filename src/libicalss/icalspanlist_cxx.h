@@ -24,11 +24,12 @@
 #include "libical_icalss_export.h"
 
 extern "C" {
-#include <libical/ical.h>
-#include <libicalss/icalset.h>
-#include <libicalss/icalspanlist.h>
+#include "icalcomponent.h"
+#include "icalspanlist.h"
+#include "icaltime.h"
 }
-#include <vector>       /* For as_matrix.. */
+
+#include <vector>
 
 namespace LibICal
 {

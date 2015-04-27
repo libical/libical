@@ -9,7 +9,7 @@
  (C) COPYRIGHT 2001, Damon Chaplin
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -27,28 +27,33 @@
  **/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "icalproperty.h"
+#include "icaltimezone.h"
+#include "icaltimezoneimpl.h"
 #include "icalarray.h"
 #include "icalerror.h"
 #include "icalparser.h"
-#include "icaltimezone.h"
-#include "icaltimezoneimpl.h"
 #include "icaltz-util.h"
 
-#include <sys/stat.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
 static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
+
+
+#ifdef UNCLEAN
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "icalproperty.h"
+
+#include <sys/stat.h>
 
 #ifdef WIN32
 #ifndef _WIN32_WCE
@@ -72,6 +77,8 @@ static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
 #if defined(_MSC_VER)
 #define snprintf _snprintf
 #define strcasecmp stricmp
+#endif
+
 #endif
 
 /** This is the toplevel directory where the timezone data is installed in. */
@@ -122,7 +129,6 @@ struct _icaltimezonechange {
     int		 is_daylight;
     /**< Whether this is STANDARD or DAYLIGHT time. */
 };
-
 
 /** An array of icaltimezones for the builtin timezones. */
 static icalarray *builtin_timezones = NULL;
@@ -214,15 +220,15 @@ icaltimezone_copy			(icaltimezone *originalzone)
     }
 
     memcpy (zone, originalzone, sizeof (icaltimezone));
-    if (zone->tzid != NULL) 
+    if (zone->tzid != NULL)
 	zone->tzid = strdup (zone->tzid);
-    if (zone->location != NULL) 
+    if (zone->location != NULL)
 	zone->location = strdup (zone->location);
     if (zone->tznames != NULL)
 	zone->tznames = strdup (zone->tznames);
     if (zone->changes != NULL)
         zone->changes = icalarray_copy(zone->changes);
-    
+
     /* Let the caller set the component because then they will
        know to be careful not to free this reference twice. */
     zone->component = NULL;
@@ -255,7 +261,7 @@ icaltimezone_reset			(icaltimezone *zone)
 		icalcomponent_free (zone->component);
     if (zone->changes)
 		icalarray_free (zone->changes);
-	
+
     icaltimezone_init (zone);
 }
 
@@ -287,7 +293,7 @@ icaltimezone_get_vtimezone_properties	(icaltimezone *zone,
 {
     icalproperty *prop;
     const char *tzid;
- 
+
     prop = icalcomponent_get_first_property (component, ICAL_TZID_PROPERTY);
     if (!prop)
 	return 0;
@@ -546,7 +552,7 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
 	change.is_daylight = 0;
     else if (icalcomponent_isa (comp) == ICAL_XDAYLIGHT_COMPONENT)
 	change.is_daylight = 1;
-    else 
+    else
 	return;
 
     /* Step through each of the properties to find the DTSTART,
@@ -691,16 +697,16 @@ icaltimezone_expand_vtimezone		(icalcomponent	*comp,
         change.hour   = dtstart.hour;
         change.minute = dtstart.minute;
         change.second = dtstart.second;
-        
+
 #if 0
         printf ("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
                 change.year, change.month, change.day,
                 change.hour, change.minute, change.second);
 #endif
-        
+
         icaltimezone_adjust_change (&change, 0, 0, 0,
                                     -change.prev_utc_offset);
-        
+
         icalarray_append (changes, &change);
 
 	    rrule_iterator = icalrecur_iterator_new (rrule, dtstart);
@@ -808,7 +814,7 @@ icaltimezone_convert_time		(struct icaltimetype *tt,
     icaltime_adjust (tt, 0, 0, 0, -utc_offset);
 
     /* Now we convert the time to the new timezone by getting the UTC offset
-       of our UTC time and adding it. */       
+       of our UTC time and adding it. */
     utc_offset = icaltimezone_get_utc_offset_of_utc_time (to_zone, tt,
 							  &is_daylight);
     tt->is_daylight = is_daylight;
@@ -1090,7 +1096,7 @@ icaltimezone_find_nearby_change		(icaltimezone	*zone,
 {
     icaltimezonechange *zone_change;
     int lower, upper, middle, cmp;
-					 
+
     /* Do a simple binary search. */
     lower = middle = 0;
     upper = zone->changes->num_elements;
@@ -1403,7 +1409,7 @@ icaltimezone_get_builtin_timezone	(const char *location)
 
     if (strcmp (location, "UTC") == 0 || strcmp (location, "GMT") == 0)
 	return &utc_timezone;
-    
+
 #if 0
     /* Do a simple binary search. */
     lower = middle = 0;
@@ -1463,10 +1469,10 @@ tm_to_icaltimetype (struct tm *tm)
 	itt.day = tm->tm_mday;
 	itt.month = tm->tm_mon + 1;
 	itt.year = tm->tm_year+ 1900;
-    
+
 	itt.is_utc = 0;
-	itt.is_date = 0; 
-	
+	itt.is_date = 0;
+
 	return itt;
 }
 
@@ -1477,7 +1483,7 @@ get_offset (icaltimezone *zone)
     struct icaltimetype tt;
     int offset;
     time_t now = time(NULL);
-	
+
     gmtime_r ((const time_t *) &now, &local);
     tt = tm_to_icaltimetype (&local);
     offset = icaltimezone_get_utc_offset(zone, &tt, NULL);
@@ -1491,7 +1497,7 @@ icaltimezone_get_builtin_timezone_from_offset	(int offset, const char *tzname)
 {
     icaltimezone *zone=NULL;
     int count, i;
-    
+
     if (!builtin_timezones)
 	icaltimezone_init_builtin_timezones ();
 
@@ -1507,13 +1513,13 @@ icaltimezone_get_builtin_timezone_from_offset	(int offset, const char *tzname)
 	int z_offset;
 	zone = icalarray_element_at (builtin_timezones, i);
         icaltimezone_load_builtin_timezone (zone);
-	
+
 	z_offset = get_offset(zone);
 
 	if (z_offset == offset && zone->tznames && !strcmp(tzname, zone->tznames))
 	    return zone;
     }
-    
+
     return NULL;
 }
 
@@ -1609,7 +1615,7 @@ icaltimezone_init_builtin_timezones	(void)
 static int
 parse_coord			(char		*coord,
 				 int		 len,
-				 int		*degrees, 
+				 int		*degrees,
 				 int 		*minutes,
 				 int 		*seconds)
 {
@@ -1650,7 +1656,7 @@ fetch_lat_long_from_string  (const char *str, int *latitude_degrees, int *latitu
 	lat [len] = '\0';
 	while (*sptr != '\t')
 		sptr++;
-	
+
 	loc = ++sptr;
 	while (!isspace ((int)(*sptr)))
 		sptr++;
@@ -1687,7 +1693,7 @@ fetch_lat_long_from_string  (const char *str, int *latitude_degrees, int *latitu
 	    free(lat);
 	    return 1;
 	}
-	
+
 	free (lat);
 
 	return 0;
@@ -1748,7 +1754,7 @@ icaltimezone_parse_zone_tab		(void)
     while (fgets (buf, sizeof(buf), fp)) {
 	if (*buf == '#') continue;
 
-	if (use_builtin_tzdata) {	
+	if (use_builtin_tzdata) {
 	/* The format of each line is: "[ latitude longitude ] location". */
 	if (buf[0] != '+' && buf[0] != '-') {
 	    latitude_degrees = longitude_degrees = 360;
@@ -1769,7 +1775,7 @@ icaltimezone_parse_zone_tab		(void)
 	    continue;
 	}
 	} else {
-	if (fetch_lat_long_from_string (buf, &latitude_degrees, &latitude_minutes, 
+	if (fetch_lat_long_from_string (buf, &latitude_degrees, &latitude_minutes,
 				&latitude_seconds,
 				&longitude_degrees, &longitude_minutes, &longitude_seconds,
 				location)) {
@@ -1866,8 +1872,8 @@ icaltimezone_load_builtin_timezone	(icaltimezone *zone)
 	goto out;
     }
 
-	
-	/* ##### B.# Sun, 11 Nov 2001 04:04:29 +1100 
+
+	/* ##### B.# Sun, 11 Nov 2001 04:04:29 +1100
 	this is where the MALFORMEDDATA error is being set, after the call to 'icalparser_parse'
 	fprintf(stderr, "** WARNING ** %s: %d %s\n", __FILE__, __LINE__, icalerror_strerror(icalerrno));
 	*/
@@ -1925,7 +1931,7 @@ icaltimezone_load_get_line_fn		(char		*s,
  * given file, up to the maximum year given. We compare this output with the
  * output from 'vzic --dump-changes' to make sure that we are consistent.
  * (vzic is the Olson timezone database to VTIMEZONE converter.)
- * 
+ *
  * The output format is:
  *
  *	Zone-Name [tab] Date [tab] Time [tab] UTC-Offset
@@ -2057,7 +2063,7 @@ static const char* get_zone_directory(void)
 	/* Look for the zoneinfo directory somewhere in the path where
 	 * the app is installed. If the path to the app is
 	 *
-	 *	C:\opt\evo-2.6\bin\evolution-2.6.exe 
+	 *	C:\opt\evo-2.6\bin\evolution-2.6.exe
 	 *
 	 * and the compile-time ZONEINFO_DIRECTORY is
 	 *
@@ -2105,9 +2111,9 @@ static const char* get_zone_directory(void)
 	while ((dirslash = wcsrchr (wbuffer, '\\'))) {
 	    /* Strip one more directory from app .exe location */
 	    *dirslash = L'\0';
-	    
+
         MultiByteToWideChar(CP_ACP,0,ZONEINFO_DIRECTORY,-1,zoneinfodir,1000);
-        
+
 	    while ((zislash = wcschr (zoneinfodir, L'/'))) {
 		*zislash = L'.';
 		wcscpy (dirname, wbuffer);
@@ -2124,7 +2130,7 @@ static const char* get_zone_directory(void)
 	while ((dirslash = _mbsrchr ((unsigned char *)buffer, '\\'))) {
 	    /* Strip one more directory from app .exe location */
 	    *dirslash = '\0';
-	    
+
 	    strcpy (zoneinfodir, ZONEINFO_DIRECTORY);
 	    while ((zislash = _mbschr ((unsigned char *)zoneinfodir, '/'))) {
 		*zislash = '.';

@@ -2,7 +2,7 @@
 /*======================================================================
   FILE: icalparser.h
   CREATOR: eric 20 April 1999
-  
+
   $Id: icalparser.h,v 1.9 2008-01-15 23:17:41 dothebart Exp $
 
 
@@ -10,7 +10,7 @@
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -24,23 +24,25 @@
 
 ======================================================================*/
 
-
 #ifndef ICALPARSER_H
 #define ICALPARSER_H
 
-#include "icalenums.h"
-#include "icaltypes.h"
-#include"icalcomponent.h"
-
-#include <stdio.h> /* For FILE* */
+#include "icalcomponent.h"
 
 typedef struct icalparser_impl icalparser;
 
+#ifdef UNCLEAN
+#include "icalenums.h"
+#include "icaltypes.h"
+
+#include <stdio.h> /* For FILE* */
+
+#endif
 
 /**
  * @file  icalparser.h
- * @brief Line-oriented parsing. 
- * 
+ * @brief Line-oriented parsing.
+ *
  * Create a new parser via icalparse_new_parser, then add lines one at
  * a time with icalparse_add_line(). icalparser_add_line() will return
  * non-zero when it has finished with a component.
@@ -69,7 +71,7 @@ void icalparser_free(icalparser* parser);
  */
 
 icalcomponent* icalparser_parse(icalparser *parser,
-	char* (*line_gen_func)(char *s, size_t size, void *d));
+        char* (*line_gen_func)(char *s, size_t size, void *d));
 
 /**
    Set the data that icalparser_parse will give to the line_gen_func
@@ -86,8 +88,8 @@ icalcomponent* icalparser_parse_string(const char* str);
  ***********************************************************************/
 
 /** Use the flex/bison parser to turn a string into a value type */
-icalvalue*  icalparser_parse_value(icalvalue_kind kind, 
-				   const char* str, icalcomponent** errors);
+icalvalue*  icalparser_parse_value(icalvalue_kind kind,
+                                   const char* str, icalcomponent** errors);
 
 /** Given a line generator function, return a single iCal content line.*/
 char* icalparser_get_line(icalparser* parser, char* (*line_gen_func)(char *s, size_t size, void *d));

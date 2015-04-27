@@ -383,4 +383,3 @@ void ICalValue::set_action(const enum icalproperty_action &v)
 {
     icalvalue_set_action(imp, v);
 }
-

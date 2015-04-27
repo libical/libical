@@ -22,14 +22,21 @@
 #endif
 
 #include "vcomponent_cxx.h"
-#include "icalvalue_cxx.h"
-#include "icalproperty_cxx.h"
 #include "icalparameter_cxx.h"
+#include "icalproperty_cxx.h"
+#include "icalvalue_cxx.h"
 using namespace LibICal;
 
+extern "C" {
+#include "icalmemory.h"
+};
+
 #include <cstdlib>
+
+#ifdef UNCLEAN
 #include <cstring>
 #include <exception>
+#endif
 
 VComponent::VComponent() throw(icalerrorenum) : imp(icalcomponent_new(ICAL_ANY_COMPONENT))
 {

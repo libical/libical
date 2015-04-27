@@ -41,8 +41,14 @@
 #endif
 
 #include "icalvcal.h"
-#include <string.h>
+#include "icalerror.h"
+#include "icalvalue.h"
+#include "icalversion.h" /* for ICAL_PACKAGE */
+
 #include <stddef.h> /* for ptrdiff_h */
+
+#ifdef UNCLEAN
+#include <string.h>
 
 #if defined(_MSC_VER)
 #define snprintf _snprintf
@@ -51,6 +57,7 @@
 
 #ifdef _WIN32_WCE
 #undef IGNORE
+#endif
 #endif
 
 enum datatype {

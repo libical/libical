@@ -50,17 +50,27 @@
 #include <config.h>
 #endif
 
-#include <libical/ical.h>
 #include "icaldirset.h"
+#include "icaldirsetimpl.h"
 #include "icalfileset.h"
+
+#include <stdlib.h>
+
+#if defined(HAVE_DIRENT_H)
+#include <dirent.h>
+#endif
+
+#if defined(HAVE_SYS_UTSNAME_H)
+#include <sys/utsname.h>
+#endif
+
+#ifdef UNCLEAN
 #include "icalfilesetimpl.h"
 #include "icalcluster.h"
 #include "icalgauge.h"
 
 #if !defined(_WIN32)
-#include <dirent.h> /* for opendir() */
 #include <unistd.h> /* for stat, getpid */
-#include <sys/utsname.h> /* for uname */
 #else
 #include <io.h>
 #include <process.h>
@@ -69,11 +79,8 @@
 #include <errno.h>
 #include <sys/types.h> /* for opendir() */
 #include <sys/stat.h> /* for stat */
-#include <limits.h> /* For PATH_MAX */
 #include <time.h> /* for clock() */
-#include <stdlib.h> /* for rand(), srand() */
 #include <string.h> /* for strdup */
-#include "icaldirsetimpl.h"
 
 #if defined(_MSC_VER)
 #define _S_ISTYPE(mode, mask)  (((mode) & _S_IFMT) == (mask))
@@ -81,6 +88,7 @@
 #define S_ISREG(mode)    _S_ISTYPE((mode), _S_IFREG)
 #define snprintf _snprintf
 #define strcasecmp stricmp
+#endif
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/
@@ -130,7 +138,7 @@ void icaldirset_unlock(const char *dir)
 icalerrorenum icaldirset_read_directory(icaldirset *dset)
 {
     char *str;
-#if !defined(_WIN32)
+#if defined(HAVE_DIRENT_H)
     struct dirent *de;
     DIR *dp;
 
@@ -291,7 +299,7 @@ int icaldirset_next_uid_number(icaldirset *dset)
 {
     int sequence;
     char temp[128];
-    char filename[ICAL_PATH_MAX] = {0};
+    char filename[MAXPATHLEN] = {0};
     char *r;
     FILE *f;
     struct stat sbuf;
@@ -340,7 +348,7 @@ int icaldirset_next_uid_number(icaldirset *dset)
 
 icalerrorenum icaldirset_next_cluster(icaldirset *dset)
 {
-    char path[ICAL_PATH_MAX];
+    char path[MAXPATHLEN];
 
     if (dset->directory_iterator == 0) {
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
@@ -367,9 +375,9 @@ icalerrorenum icaldirset_next_cluster(icaldirset *dset)
 
 static void icaldirset_add_uid(icalcomponent *comp)
 {
-    char uidstring[ICAL_PATH_MAX] = {0};
+    char uidstring[MAXPATHLEN] = {0};
     icalproperty *uid;
-#if !defined(_WIN32)
+#if defined(HAVE_SYS_UTSNAME_H)
     struct utsname unamebuf;
 #endif
 
@@ -379,7 +387,7 @@ static void icaldirset_add_uid(icalcomponent *comp)
 
     if (uid == 0) {
 
-#if !defined(_WIN32)
+#if defined(HAVE_SYS_UTSNAME_H)
         uname(&unamebuf);
         snprintf(uidstring, sizeof(uidstring), "%d-%s", (int)getpid(), unamebuf.nodename);
 #else
@@ -388,8 +396,8 @@ static void icaldirset_add_uid(icalcomponent *comp)
         uid = icalproperty_new_uid(uidstring);
         icalcomponent_add_property(comp, uid);
     } else {
-        strncpy(uidstring, icalproperty_get_uid(uid), ICAL_PATH_MAX - 1);
-        uidstring[ICAL_PATH_MAX - 1] = '\0';
+        strncpy(uidstring, icalproperty_get_uid(uid), MAXPATHLEN - 1);
+        uidstring[MAXPATHLEN - 1] = '\0';
     }
 }
 
@@ -401,7 +409,7 @@ static void icaldirset_add_uid(icalcomponent *comp)
 
 icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
 {
-    char clustername[ICAL_PATH_MAX] = {0};
+    char clustername[MAXPATHLEN] = {0};
     icalproperty *dt = 0;
     icalvalue *v;
     struct icaltimetype tm;
@@ -451,7 +459,7 @@ icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
     v = icalproperty_get_value(dt);
     tm = icalvalue_get_datetime(v);
 
-    snprintf(clustername, ICAL_PATH_MAX, "%s/%04d%02d", dset->dir, tm.year, tm.month);
+    snprintf(clustername, MAXPATHLEN, "%s/%04d%02d", dset->dir, tm.year, tm.month);
 
     /* Load the cluster and insert the object */
     if (dset->cluster != 0 &&
@@ -662,7 +670,7 @@ icalcomponent *icaldirset_get_first_component(icalset *set)
     icaldirset *dset = (icaldirset *)set;
 
     icalerrorenum error;
-    char path[ICAL_PATH_MAX];
+    char path[MAXPATHLEN];
 
     error = icaldirset_read_directory(dset);
 
@@ -678,7 +686,7 @@ icalcomponent *icaldirset_get_first_component(icalset *set)
         return 0;
     }
 
-    snprintf(path, ICAL_PATH_MAX, "%s/%s",
+    snprintf(path, MAXPATHLEN, "%s/%s",
              dset->dir,
              (char *)pvl_data(dset->directory_iterator));
 

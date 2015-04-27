@@ -36,11 +36,10 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 
 ***************************************************************************/
 
-#ifndef __VCC_H__
-#define __VCC_H__ 1
+#ifndef VCC_H
+#define VCC_H
 
 #include "vobject.h"
-
 
 #if defined(__CPLUSPLUS__) || defined(__cplusplus)
 extern "C" {
@@ -76,5 +75,4 @@ extern VObject* Parse_MIME_FromFile(FILE *file);
 }
 #endif
 
-#endif /* __VCC_H__ */
-
+#endif /* VCC_H */

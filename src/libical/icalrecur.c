@@ -131,6 +131,14 @@
 #include <config.h>
 #endif
 
+#include "icalrecur.h"
+#include "icalerror.h"
+#include "icalmemory.h"
+#include "icaltimezone.h"
+
+#include <ctype.h>
+#include <stdlib.h>
+
 #ifdef HAVE_LIBICU
 #include <unicode/ucal.h>
 #define RSCALE_IS_SUPPORTED 1
@@ -138,6 +146,7 @@
 #define RSCALE_IS_SUPPORTED 0
 #endif
 
+#ifdef UNCLEAN
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif
@@ -161,14 +170,6 @@ typedef long intptr_t;
 #define strcasecmp stricmp
 #endif
 
-#include "icalrecur.h"
-
-#include "icalerror.h"
-#include "icalmemory.h"
-#include "icaltimezone.h"
-
-#include <ctype.h> /* for tolower */
-#include <stdlib.h> /* for malloc, strtol */
 #include <errno.h> /* for errno */
 #include <string.h> /* for strdup and strchr*/
 #include <assert.h>
@@ -178,6 +179,7 @@ typedef long intptr_t;
 #endif
 
 #include "pvl.h"
+#endif
 
 #if (SIZEOF_TIME_T > 4)
 /** Arbitrarily go up to 1000th anniversary of Gregorian calendar, since
@@ -188,9 +190,6 @@ typedef long intptr_t;
    only go up to the start of 2038. */
 #define MAX_TIME_T_YEAR 2037
 #endif
-
-#define TEMP_MAX 1024
-
 
 #define BYDAYIDX impl->by_indices[BY_DAY]
 #define BYDAYPTR impl->by_ptrs[BY_DAY]

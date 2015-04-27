@@ -2,20 +2,20 @@
   ======================================================================
   FILE: storage.c
   CREATOR: eric 03 April 1999
-  
+
   DESCRIPTION:
-  
+
   $Id: storage.c,v 1.6 2008-01-02 20:07:46 dothebart Exp $
   $Locker:  $
 
-  (C) COPYRIGHT 1999 Eric Busboom 
+  (C) COPYRIGHT 1999 Eric Busboom
   http://www.softwarestudio.org
 
   The contents of this file are subject to the Mozilla Public License
   Version 1.0 (the "License"); you may not use this file except in
   compliance with the License. You may obtain a copy of the License at
   http://www.mozilla.org/MPL/
- 
+
   Software distributed under the License is distributed on an "AS IS"
   basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
   the License for the specific language governing rights and
@@ -24,9 +24,14 @@
   The original author is Eric Busboom
   The original code is usecases.c
 
-    
+
   ======================================================================*/
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifdef UNCLEAN
 #include <libical/ical.h>
 #include <assert.h>
 #include <string.h> /* for strdup */
@@ -45,6 +50,7 @@
 
 #define OUTPUT_FILE "filesetout.ics"
 #define DATABASE "calendar.db"
+#endif
 
 /* define sample calendar struct */
 struct calendar {
@@ -160,30 +166,30 @@ void test_fileset()
     /* Add data to the file */
 
     for(month = 1; month < 10; month++){
-	icalcomponent *event;
-	icalproperty *dtstart, *dtend;
+        icalcomponent *event;
+        icalproperty *dtstart, *dtend;
 
         cout = icalfileset_new(OUTPUT_FILE);
         assert(cout != 0);
 
-	start.month = month; 
-	end.month = month;
-	
-	clone = icalcomponent_new_clone(c);
-	assert(clone !=0);
-	event = icalcomponent_get_first_component(clone,ICAL_VEVENT_COMPONENT);
-	assert(event != 0);
+        start.month = month;
+        end.month = month;
 
-	dtstart = icalcomponent_get_first_property(event,ICAL_DTSTART_PROPERTY);
-	assert(dtstart!=0);
-	icalproperty_set_dtstart(dtstart,start);
-        
-	dtend = icalcomponent_get_first_property(event,ICAL_DTEND_PROPERTY);
-	assert(dtend!=0);
-	icalproperty_set_dtend(dtend,end);
-	
-	icalfileset_add_component(cout,clone);
-	icalfileset_commit(cout);
+        clone = icalcomponent_new_clone(c);
+        assert(clone !=0);
+        event = icalcomponent_get_first_component(clone,ICAL_VEVENT_COMPONENT);
+        assert(event != 0);
+
+        dtstart = icalcomponent_get_first_property(event,ICAL_DTSTART_PROPERTY);
+        assert(dtstart!=0);
+        icalproperty_set_dtstart(dtstart,start);
+
+        dtend = icalcomponent_get_first_property(event,ICAL_DTEND_PROPERTY);
+        assert(dtend!=0);
+        icalproperty_set_dtend(dtend,end);
+
+        icalfileset_add_component(cout,clone);
+        icalfileset_commit(cout);
 
         icalset_free(cout);
 
@@ -193,7 +199,7 @@ void test_fileset()
 
     cout = icalfileset_new(OUTPUT_FILE);
     assert(cout != 0);
-    
+
     for (itr = icalfileset_get_first_component(cout);
          itr != 0;
          itr = icalfileset_get_next_component(cout)){
@@ -207,7 +213,7 @@ void test_fileset()
 
       dtstart = icalcomponent_get_first_property(event,ICAL_DTSTART_PROPERTY);
       dtend = icalcomponent_get_first_property(event,ICAL_DTEND_PROPERTY);
-      
+
       printf("%d %s %s\n",count, icalproperty_as_ical_string(dtstart),
              icalproperty_as_ical_string(dtend));
 
@@ -219,7 +225,7 @@ void test_fileset()
 
     cout = icalfileset_new(OUTPUT_FILE);
     assert(cout != 0);
-    
+
     for (itr = icalfileset_get_first_component(cout);
          itr != 0;
          itr = icalfileset_get_next_component(cout)){
@@ -236,7 +242,7 @@ void test_fileset()
     cout = icalfileset_new(OUTPUT_FILE);
     assert(cout != 0);
     count =0;
-    
+
     for (itr = icalfileset_get_first_component(cout);
          itr != 0;
          itr = icalfileset_get_next_component(cout)){
@@ -250,7 +256,7 @@ void test_fileset()
 
       dtstart = icalcomponent_get_first_property(event,ICAL_DTSTART_PROPERTY);
       dtend = icalcomponent_get_first_property(event,ICAL_DTEND_PROPERTY);
-      
+
       printf("%d %s %s\n",count, icalproperty_as_ical_string(dtstart),
              icalproperty_as_ical_string(dtend));
 
@@ -264,7 +270,7 @@ void test_fileset()
 /*
    In this example, we're storing a calendar with several components
    under the reference id "calendar_7286" and retrieving records based
-   on title, "month_1" through "month_10".  We use a number of the 
+   on title, "month_1" through "month_10".  We use a number of the
    "optional" arguments to specify secondary indices, sub-databases
    (i.e. having multiple databases residing within a single Berkeley
    DB file), and keys for storage and retrieval.
@@ -294,13 +300,13 @@ void test_bdbset()
     end = start;
     end.hour++;
 
-    /* Note: as per the Berkeley DB ref pages: 
+    /* Note: as per the Berkeley DB ref pages:
      *
      * The database argument is optional, and allows applications to
      * have multiple databases in a single file. Although no database
      * argument needs to be specified, it is an error to attempt to
      * open a second database in a file that was not initially created
-     * using a database name. 
+     * using a database name.
      *
      */
 
@@ -309,11 +315,11 @@ void test_bdbset()
 
     /* open database, using subdb */
     dbp = icalbdbset_database_open(DATABASE, subdb, DB_HASH);
-    sdbp = icalbdbset_secondary_open(dbp, 
-				     DATABASE, 
-				     "title", 
-				     get_title, 
-				     DB_HASH); 
+    sdbp = icalbdbset_secondary_open(dbp,
+                                     DATABASE,
+                                     "title",
+                                     get_title,
+                                     DB_HASH);
 
     c = icalparser_parse_string(str2);
     assert(c != 0);
@@ -325,23 +331,23 @@ void test_bdbset()
       icalproperty *dtstart, *dtend, *location;
 
       /* retrieve data */
-      cout = icalbdbset_new(dbp, sdbp, NULL);  
+      cout = icalbdbset_new(dbp, sdbp, NULL);
       assert(cout != 0);
 
-      start.month = month; 
+      start.month = month;
       end.month = month;
-		
+
       clone = icalcomponent_new_clone(c);
       assert(clone !=0);
       event = icalcomponent_get_first_component(clone,
-						ICAL_VEVENT_COMPONENT);
+                                                ICAL_VEVENT_COMPONENT);
       assert(event != 0);
 
       dtstart = icalcomponent_get_first_property(event,
-						 ICAL_DTSTART_PROPERTY);
+                                                 ICAL_DTSTART_PROPERTY);
       assert(dtstart!=0);
       icalproperty_set_dtstart(dtstart,start);
-        
+
       dtend = icalcomponent_get_first_property(event,ICAL_DTEND_PROPERTY);
       assert(dtend!=0);
       icalproperty_set_dtend(dtend,end);
@@ -362,14 +368,14 @@ void test_bdbset()
 
       num_components = icalcomponent_count_components(clone, ICAL_ANY_COMPONENT);
 
-      icalset_free(cout); 
+      icalset_free(cout);
 
     }
 
     /* try out the cursor operations */
     memset(&key, 0, sizeof(DBT));
     memset(&data, 0, sizeof(DBT));
-    
+
     ret = icalbdbset_acquire_cursor(dbp, &dbcp);
     ret = icalbdbset_get_first(dbcp, &key, &data);
     ret = icalbdbset_get_next(dbcp, &key, &data);
@@ -385,21 +391,21 @@ void test_bdbset()
 
       cout = icalbdbset_new(dbp, sdbp, NULL);
       assert(cout != 0);
-    
+
       for (itr = icalbdbset_get_first_component(cout);
-	   itr != 0;
-	   itr = icalbdbset_get_next_component(cout)){
+           itr != 0;
+           itr = icalbdbset_get_next_component(cout)){
 
-	icalcomponent *event;
-	icalproperty *dtstart, *dtend;
+        icalcomponent *event;
+        icalproperty *dtstart, *dtend;
 
-	count++;
+        count++;
 
       event = icalcomponent_get_first_component(itr,ICAL_VEVENT_COMPONENT);
 
       dtstart = icalcomponent_get_first_property(event,ICAL_DTSTART_PROPERTY);
       dtend = icalcomponent_get_first_property(event,ICAL_DTEND_PROPERTY);
-      
+
       printf("%d %s %s\n",count, icalproperty_as_ical_string(dtstart),
              icalproperty_as_ical_string(dtend));
 
@@ -409,27 +415,27 @@ void test_bdbset()
 
     /* close database */
     icalbdbset_database_close(dbp);
-    icalbdbset_database_close(sdbp); 
+    icalbdbset_database_close(sdbp);
 
     /* open database */
     dbp = icalbdbset_database_open(DATABASE, subdb, DB_HASH);
-    sdbp = icalbdbset_secondary_open(dbp, 
-				     DATABASE, 
-				     "title", 
-				     get_title, 
-				     DB_HASH); 
+    sdbp = icalbdbset_secondary_open(dbp,
+                                     DATABASE,
+                                     "title",
+                                     get_title,
+                                     DB_HASH);
 
     /* Remove all of them */
     for(month = 1; month < 10; month++){
 
       cout = icalbdbset_new(dbp, sdbp, NULL);
       assert(cout != 0);
-    
+
       for (itr = icalbdbset_get_first_component(cout);
-	   itr != 0;
-	   itr = icalbdbset_get_next_component(cout)){
-	
-	icalbdbset_remove_component(cout, itr);
+           itr != 0;
+           itr = icalbdbset_get_next_component(cout)){
+
+        icalbdbset_remove_component(cout, itr);
       }
 
       icalbdbset_commit(cout);
@@ -447,21 +453,21 @@ void test_bdbset()
 
       cout = icalbdbset_new(dbp, sdbp, NULL);
       assert(cout != 0);
-    
+
       for (itr = icalbdbset_get_first_component(cout);
-	   itr != 0;
-	   itr = icalbdbset_get_next_component(cout)){
+           itr != 0;
+           itr = icalbdbset_get_next_component(cout)){
 
-	icalcomponent *event;
-	icalproperty *dtstart, *dtend;
+        icalcomponent *event;
+        icalproperty *dtstart, *dtend;
 
-	count++;
+        count++;
 
       event = icalcomponent_get_first_component(itr,ICAL_VEVENT_COMPONENT);
 
       dtstart = icalcomponent_get_first_property(event,ICAL_DTSTART_PROPERTY);
       dtend = icalcomponent_get_first_property(event,ICAL_DTEND_PROPERTY);
-      
+
       printf("%d %s %s\n",count, icalproperty_as_ical_string(dtstart),
              icalproperty_as_ical_string(dtend));
 
@@ -480,17 +486,17 @@ int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
   icalcomponent *cl;
   char title[255];
 
-  memset(skey, 0, sizeof(DBT)); 
+  memset(skey, 0, sizeof(DBT));
 
   cl = icalparser_parse_string((char *)pdata->data);
   sprintf(title, "title_%s", icalcomponent_get_uid(cl));
 
   skey->data = strdup(title);
   skey->size = strlen(skey->data);
-  return (0); 
+  return (0);
 }
 
-char * parse_vcalendar(const DBT *dbt) 
+char * parse_vcalendar(const DBT *dbt)
 {
   char *str;
   struct calendar *cal;
@@ -504,19 +510,19 @@ char * parse_vcalendar(const DBT *dbt)
 #endif
 
 
-int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title) 
+int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title)
 {
   int vcalendar_size, title_size, total_size;
   struct calendar *cal;
 
-  if(vcalendar) 
+  if(vcalendar)
     vcalendar_size = strlen(vcalendar);
   else {
     vcalendar = "";
     vcalendar_size = strlen(vcalendar);
   }
 
-  if(title) 
+  if(title)
     title_size = strlen(title);
   else {
     title = "";
@@ -541,7 +547,7 @@ int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title)
   cal->vcalendar_size        = vcalendar_size;
   cal->title_size            = title_size;
 
-  if (vcalendar && *vcalendar) 
+  if (vcalendar && *vcalendar)
     cal->vcalendar = strdup(vcalendar);
 
   if (title && *title)
@@ -552,7 +558,7 @@ int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title)
   return 0;
 }
 
-char * pack_calendar(struct calendar *cal, int size) 
+char * pack_calendar(struct calendar *cal, int size)
 {
   char *str;
 
@@ -564,28 +570,28 @@ char * pack_calendar(struct calendar *cal, int size)
 
   /* total_size */
   memcpy(str + cal->total_size_offset,
-	 &cal->total_size,
-	 sizeof(cal->total_size));
+         &cal->total_size,
+         sizeof(cal->total_size));
 
   /* vcalendar_size */
-  memcpy(str + cal->vcalendar_size_offset, 
-         &cal->vcalendar_size, 
+  memcpy(str + cal->vcalendar_size_offset,
+         &cal->vcalendar_size,
          sizeof(cal->vcalendar_size));
 
   /* vcalendar */
-  memcpy(str + cal->vcalendar_offset, 
-         cal->vcalendar, 
+  memcpy(str + cal->vcalendar_offset,
+         cal->vcalendar,
          cal->vcalendar_size);
 
   /* title_size */
   memcpy(str + cal->title_size_offset,
-	 &cal->title_size,
-	 sizeof(cal->title_size));
+         &cal->title_size,
+         sizeof(cal->title_size));
 
   /* title */
   memcpy(str + cal->title_offset,
-	 cal->title,
-	 cal->title_size);
+         cal->title,
+         cal->title_size);
 
   return str;
 }
@@ -607,39 +613,39 @@ struct calendar * unpack_calendar(char *str, int size)
 
   /* total_size */
   memcpy(&cal->total_size,
-	 str + cal->total_size_offset,
-	 sizeof(cal->total_size));
+         str + cal->total_size_offset,
+         sizeof(cal->total_size));
 
   /* vcalendar_size */
-  memcpy(&cal->vcalendar_size, 
-	 str + cal->vcalendar_size_offset, 
-	 sizeof(cal->vcalendar_size));
+  memcpy(&cal->vcalendar_size,
+         str + cal->vcalendar_size_offset,
+         sizeof(cal->vcalendar_size));
 
-  if((cal->vcalendar = (char *)malloc(sizeof(char) * 
-				      cal->vcalendar_size))==NULL)
+  if((cal->vcalendar = (char *)malloc(sizeof(char) *
+                                      cal->vcalendar_size))==NULL)
     return 0;
 
   /* vcalendar */
-  memcpy(cal->vcalendar, 
-	 (char *)(str + cal->vcalendar_offset), 
-	 cal->vcalendar_size);
+  memcpy(cal->vcalendar,
+         (char *)(str + cal->vcalendar_offset),
+         cal->vcalendar_size);
 
   cal->title_size_offset     = cal->vcalendar_offset + cal->vcalendar_size;
   cal->title_offset          = cal->title_size_offset + sizeof(int);
 
   /* title_size */
   memcpy(&cal->title_size,
-	 str + cal->title_size_offset,
-	 sizeof(cal->title_size));
+         str + cal->title_size_offset,
+         sizeof(cal->title_size));
 
   if((cal->title = (char *)malloc(sizeof(char) *
-				  cal->title_size))==NULL)
+                                  cal->title_size))==NULL)
     return 0;
 
   /* title*/
   memcpy(cal->title,
-	 (char *)(str + cal->title_offset),
-	 cal->title_size);
+         (char *)(str + cal->title_offset),
+         cal->title_size);
 
   return cal;
 }
@@ -671,84 +677,84 @@ int test_dirset()
 
     for (i = 1; i<NUMCOMP+1; i++){
 
-	/*rtime.start.month = i%12;*/
-	rtime.start.month = i;
-	rtime.end = rtime.start;
-	rtime.end.hour++;
-	
-	for (itr = icalfileset_get_first_component(cluster);
-	     itr != 0;
-	     itr = icalfileset_get_next_component(cluster)){
-	    icalcomponent *clone, *inner;
-	    icalproperty *p;
+        /*rtime.start.month = i%12;*/
+        rtime.start.month = i;
+        rtime.end = rtime.start;
+        rtime.end.hour++;
 
-	    inner = icalcomponent_get_first_component(itr,ICAL_VEVENT_COMPONENT);
+        for (itr = icalfileset_get_first_component(cluster);
+             itr != 0;
+             itr = icalfileset_get_next_component(cluster)){
+            icalcomponent *clone, *inner;
+            icalproperty *p;
+
+            inner = icalcomponent_get_first_component(itr,ICAL_VEVENT_COMPONENT);
             if (inner == 0){
               continue;
             }
 
-	    /* Change the dtstart and dtend times in the component
+            /* Change the dtstart and dtend times in the component
                pointed to by Itr*/
 
-	    clone = icalcomponent_new_clone(itr);
-	    inner = icalcomponent_get_first_component(itr,ICAL_VEVENT_COMPONENT);
+            clone = icalcomponent_new_clone(itr);
+            inner = icalcomponent_get_first_component(itr,ICAL_VEVENT_COMPONENT);
 
-	    assert(icalerrno == ICAL_NO_ERROR);
-	    assert(inner !=0);
+            assert(icalerrno == ICAL_NO_ERROR);
+            assert(inner !=0);
 
-	    /* DTSTART*/
-	    p = icalcomponent_get_first_property(inner,ICAL_DTSTART_PROPERTY);
-	    assert(icalerrno  == ICAL_NO_ERROR);
+            /* DTSTART*/
+            p = icalcomponent_get_first_property(inner,ICAL_DTSTART_PROPERTY);
+            assert(icalerrno  == ICAL_NO_ERROR);
 
-	    if (p == 0){
-		p = icalproperty_new_dtstart(rtime.start);
-		icalcomponent_add_property(inner,p);
-	    } else {
-		icalproperty_set_dtstart(p,rtime.start);
-	    }
-	    assert(icalerrno  == ICAL_NO_ERROR);
+            if (p == 0){
+                p = icalproperty_new_dtstart(rtime.start);
+                icalcomponent_add_property(inner,p);
+            } else {
+                icalproperty_set_dtstart(p,rtime.start);
+            }
+            assert(icalerrno  == ICAL_NO_ERROR);
 
-	    /* DTEND*/
-	    p = icalcomponent_get_first_property(inner,ICAL_DTEND_PROPERTY);
-	    assert(icalerrno  == ICAL_NO_ERROR);
+            /* DTEND*/
+            p = icalcomponent_get_first_property(inner,ICAL_DTEND_PROPERTY);
+            assert(icalerrno  == ICAL_NO_ERROR);
 
-	    if (p == 0){
-		p = icalproperty_new_dtstart(rtime.end);
-		icalcomponent_add_property(inner,p);
-	    } else {
-		icalproperty_set_dtstart(p,rtime.end);
-	    }
-	    assert(icalerrno  == ICAL_NO_ERROR);
-	    
-	    printf("\n----------\n%s\n---------\n",icalcomponent_as_ical_string(inner));
+            if (p == 0){
+                p = icalproperty_new_dtstart(rtime.end);
+                icalcomponent_add_property(inner,p);
+            } else {
+                icalproperty_set_dtstart(p,rtime.end);
+            }
+            assert(icalerrno  == ICAL_NO_ERROR);
 
-	    error = icaldirset_add_component(s,
-					     icalcomponent_new_clone(itr));
-	    
-	    assert(icalerrno  == ICAL_NO_ERROR);
+            printf("\n----------\n%s\n---------\n",icalcomponent_as_ical_string(inner));
 
-	}
+            error = icaldirset_add_component(s,
+                                             icalcomponent_new_clone(itr));
+
+            assert(icalerrno  == ICAL_NO_ERROR);
+
+        }
 
     }
-    
-    gauge = 
-	icalcomponent_vanew(
-	    ICAL_VCALENDAR_COMPONENT,
-	    icalcomponent_vanew(
-		ICAL_VEVENT_COMPONENT,  
-		icalproperty_vanew_summary(
-		    "Submit Income Taxes",
-		    icalparameter_new_xliccomparetype(ICAL_XLICCOMPARETYPE_EQUAL),
-		    0),
-		0),
-	    icalcomponent_vanew(
-		ICAL_VEVENT_COMPONENT,  
-		icalproperty_vanew_summary(
-		    "Bastille Day Party",
-		    icalparameter_new_xliccomparetype(ICAL_XLICCOMPARETYPE_EQUAL),
-		    0),
-		0),
-	    0);
+
+    gauge =
+        icalcomponent_vanew(
+            ICAL_VCALENDAR_COMPONENT,
+            icalcomponent_vanew(
+                ICAL_VEVENT_COMPONENT,
+                icalproperty_vanew_summary(
+                    "Submit Income Taxes",
+                    icalparameter_new_xliccomparetype(ICAL_XLICCOMPARETYPE_EQUAL),
+                    0),
+                0),
+            icalcomponent_vanew(
+                ICAL_VEVENT_COMPONENT,
+                icalproperty_vanew_summary(
+                    "Bastille Day Party",
+                    icalparameter_new_xliccomparetype(ICAL_XLICCOMPARETYPE_EQUAL),
+                    0),
+                0),
+            0);
 
 #if 0
 
@@ -756,18 +762,18 @@ int test_dirset()
     icaldirset_select(s,gauge);
 
     for(c = icaldirset_first(s); c != 0; c = icaldirset_next(s)){
-	
-	printf("Got one! (%d)\n", count++);
-	
-	if (c != 0){
-	    printf("%s", icalcomponent_as_ical_string(c));;
-	    if (icaldirset_store(s2,c) == 0){
-		printf("Failed to write!\n");
-	    }
-	    icalcomponent_free(c);
-	} else {
-	    printf("Failed to get component\n");
-	}
+
+        printf("Got one! (%d)\n", count++);
+
+        if (c != 0){
+            printf("%s", icalcomponent_as_ical_string(c));;
+            if (icaldirset_store(s2,c) == 0){
+                printf("Failed to write!\n");
+            }
+            icalcomponent_free(c);
+        } else {
+            printf("Failed to get component\n");
+        }
     }
 
 
@@ -775,26 +781,26 @@ int test_dirset()
 #endif
 
 
-    for(c = icaldirset_get_first_component(s); 
-	c != 0; 
-	c = icaldirset_get_next_component(s)){
+    for(c = icaldirset_get_first_component(s);
+        c != 0;
+        c = icaldirset_get_next_component(s)){
 
-	if (c != 0){
-	    printf("%s", icalcomponent_as_ical_string(c));;
-	} else {
-	    printf("Failed to get component\n");
-	}
+        if (c != 0){
+            printf("%s", icalcomponent_as_ical_string(c));;
+        } else {
+            printf("Failed to get component\n");
+        }
 
     }
 
     /* Remove all of the components */
     i=0;
     while((c=icaldirset_get_current_component(s)) != 0 ){
-	i++;
+        i++;
 
-	icaldirset_remove_component(s,c);
+        icaldirset_remove_component(s,c);
     }
-	
+
 
     icalset_free(s);
     return 0;
@@ -811,29 +817,29 @@ void test_calendar()
     struct icaltimetype atime = icaltime_null_time();
 
     comp = icalcomponent_vanew(
-	ICAL_VEVENT_COMPONENT,
-	icalproperty_new_version("2.0"),
-	icalproperty_new_description("This is an event"),
-	icalproperty_new_dtstart(atime),
-	icalproperty_vanew_comment(
-	    "Another Comment",
-	    icalparameter_new_cn("A Common Name 1"),
-	    icalparameter_new_cn("A Common Name 2"),
-	    icalparameter_new_cn("A Common Name 3"),
-		icalparameter_new_cn("A Common Name 4"),
-	    0),
-	icalproperty_vanew_xlicerror(
-	    "This is only a test",
-	    icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
-	    0),
-	
-	0);
-	
-	
+        ICAL_VEVENT_COMPONENT,
+        icalproperty_new_version("2.0"),
+        icalproperty_new_description("This is an event"),
+        icalproperty_new_dtstart(atime),
+        icalproperty_vanew_comment(
+            "Another Comment",
+            icalparameter_new_cn("A Common Name 1"),
+            icalparameter_new_cn("A Common Name 2"),
+            icalparameter_new_cn("A Common Name 3"),
+                icalparameter_new_cn("A Common Name 4"),
+            0),
+        icalproperty_vanew_xlicerror(
+            "This is only a test",
+            icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
+            0),
+
+        0);
+
+
     s = icalcalendar_get_booked(calendar);
 
     error = icaldirset_add_component(s,comp);
-    
+
     assert(error == ICAL_NO_ERROR);
 
     c = icalcalendar_get_properties(calendar);
@@ -851,7 +857,7 @@ int main(int argc, char *argv[])
 {
 
     printf("\n------------Test File Set---------------\n");
-    test_fileset(); 
+    test_fileset();
 
     printf("\n------------Test Dir Set---------------\n");
     test_dirset();
@@ -868,6 +874,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
-
-

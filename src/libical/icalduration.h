@@ -11,7 +11,7 @@
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -30,16 +30,18 @@
 #ifndef ICALDURATION_H
 #define ICALDURATION_H
 
+#ifdef UNCLEAN
 #include "icaltime.h"
+#endif
 
 struct icaldurationtype
 {
-	int is_neg;
-	unsigned int days;
-	unsigned int weeks;
-	unsigned int hours;
-	unsigned int minutes;
-	unsigned int seconds;
+        int is_neg;
+        unsigned int days;
+        unsigned int weeks;
+        unsigned int hours;
+        unsigned int minutes;
+        unsigned int seconds;
 };
 
 struct icaldurationtype icaldurationtype_from_int(int t);
@@ -53,12 +55,9 @@ int icaldurationtype_is_null_duration(struct icaldurationtype d);
 int icaldurationtype_is_bad_duration(struct icaldurationtype d);
 
 struct icaltimetype  icaltime_add(struct icaltimetype t,
-				  struct icaldurationtype  d);
+                                  struct icaldurationtype  d);
 
 struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
-					   struct icaltimetype t2);
+                                           struct icaltimetype t2);
 
 #endif /* !ICALDURATION_H */
-
-
-

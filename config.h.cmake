@@ -6,20 +6,11 @@
 /* Define if you have the ICU internationalization library. */
 #cmakedefine HAVE_LIBICU_I18N 1
 
-/* Define to 1 if you have the <assert.h> header file. */
-#cmakedefine HAVE_ASSERT_H 1
-
 /* Define to 1 if you have the `backtrace' function. */
 #cmakedefine HAVE_BACKTRACE 1
 
 /* Define to 1 if you have the <byteswap.h> header file. */
 #cmakedefine HAVE_BYTESWAP_H 1
-
-/* Define to 1 if you have the <ctype.h> header file. */
-#cmakedefine HAVE_CTYPE_H 1
-
-/* Define to 1 if you have the <dlfcn.h> header file. */
-#cmakedefine HAVE_DLFCN_H 1
 
 /* Define to 1 if you have the <endian.h> header file. */
 #cmakedefine HAVE_ENDIAN_H 1
@@ -39,8 +30,8 @@
 /* Define to 1 if you have the `iswspace' function. */
 #cmakedefine HAVE_ISWSPACE 1
 
-/* Define to 1 if you have the <memory.h> header file. */
-#cmakedefine HAVE_MEMORY_H 1
+/* Define to 1 if you have the <dirent.h> header file. */
+#cmakedefine HAVE_DIRENT_H 1
 
 /* Define if we have pthread. */
 #cmakedefine HAVE_PTHREAD_ATTR_GET_NP 1
@@ -57,14 +48,44 @@
 /* Define to 1 if you have the `snprintf' function. */
 #cmakedefine HAVE_SNPRINTF 1
 
+/* Define to 1 if you have the `_snprintf' function. */
+#cmakedefine HAVE__SNPRINTF 1
+
+/* Define to 1 if you have the `stat' function. */
+#cmakedefine HAVE_STAT 1
+
+/* Define to 1 if you have the `_stat' function. */
+#cmakedefine HAVE__STAT 1
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #cmakedefine HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #cmakedefine HAVE_STDLIB_H 1
 
+/* Define to 1 if you have the `strcasecmp' function. */
+#cmakedefine HAVE_STRCASECMP 1
+
+/* Define to 1 if you have the `stricmp' function. */
+#cmakedefine HAVE_STRICMP 1
+
 /* Define to 1 if you have the `strdup' function. */
 #cmakedefine HAVE_STRDUP 1
+
+/* Define to 1 if you have the `_strdup' function. */
+#cmakedefine HAVE__STRDUP 1
+
+/* Define to 1 if you have the `access' function. */
+#cmakedefine HAVE_ACCESS 1
+
+/* Define to 1 if you have the `_access' function. */
+#cmakedefine HAVE__ACCESS 1
+
+/* Define to 1 if you have the `open' function. */
+#cmakedefine HAVE_OPEN 1
+
+/* Define to 1 if you have the `_open' function. */
+#cmakedefine HAVE__OPEN 1
 
 /* Define to 1 if you have the <strings.h> header file. */
 #cmakedefine HAVE_STRINGS_H 1
@@ -78,17 +99,20 @@
 /* Define to 1 if you have the `setenv' function. */
 #cmakedefine HAVE_SETENV 1
 
-/* Define to 1 if you have the <sys/stat.h> header file. */
-#cmakedefine HAVE_SYS_STAT_H 1
+/* Define to 1 if you have the <sys/param.h> header file. */
+#cmakedefine HAVE_SYS_PARAM_H 1
 
-/* Define to 1 if you have the <sys/types.h> header file. */
-#cmakedefine HAVE_SYS_TYPES_H 1
+/* Define to 1 if you have the <sys/utsname.h> header file. */
+#cmakedefine HAVE_SYS_UTSNAME_H 1
 
 /* Define to 1 if you have the <time.h> header file. */
 #cmakedefine HAVE_TIME_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #cmakedefine HAVE_UNISTD_H 1
+
+/* Define to 1 if you have the <fcntl.h> header file. */
+#cmakedefine HAVE_FCNTL_H 1
 
 /* Define to 1 if you have the `unsetenv' function. */
 #cmakedefine HAVE_UNSETENV 1
@@ -167,6 +191,114 @@ typedef int pid_t;
 
 /* whether we have ICU DANGI calendar */
 #cmakedefine HAVE_ICU_DANGI
+
+/* strcasecmp: String compare, case independent */
+#if !defined(HAVE_STRCASECMP)
+#if defined(HAVE_STRICMP)
+#define strcasecmp stricmp
+#else
+#error "No case independent string compare function available"
+#endif
+#else
+#include <strings.h>
+#endif
+
+/* snprintf: size limited sprintf */
+#if defined(HAVE__SNPRINTF)
+#define snprintf _snprintf
+#else
+#if !defined(HAVE_SNPRINTF)
+#error "No size limited sprintf available"
+#endif
+#endif
+#include <stdio.h>
+
+/* stat: function to get status info on a file */
+#if defined(HAVE__STAT)
+#define stat _stat
+#else
+#if !defined(HAVE_STAT)
+#error "No function to get status info one a file available"
+#endif
+#endif
+#include <sys/types.h>
+#include <sys/stat.h>
+
+/* strdup: function to duplicate a string */
+#if defined(HAVE__STRDUP)
+#define strdup _strdup
+#else
+#if !defined(HAVE_STRDUP)
+#error "No duplicate a string function available"
+#endif
+#endif
+#include <string.h>
+
+/* iswspace: whitespace wide character function */
+#if !defined(HAVE_ISWSPACE)
+#include <ctype.h>
+#define iswspace isspace
+#else
+#if defined(HAVE_WCTYPE_H)
+#include <wctype.h>
+#endif
+#endif
+
+/* access - function to check user file permissions */
+#if defined(HAVE__ACCESS)
+#include <io.h>
+#define access _access
+#else
+#if !defined(HAVE_ACCESS)
+#error "No check user file access function available"
+#else
+#if defined(HAVE_UNISTD_H)
+#include <unistd.h>
+#endif
+#endif
+#endif
+
+/* open - system function to open a file */
+#if defined(HAVE__OPEN)
+#include <io.h>
+#define open _open
+#else
+#if !defined(HAVE_OPEN)
+#error "No open file system function available"
+#else
+#if defined(HAVE_FCNTL_H)
+#include <fcntl.h>
+#endif
+#endif
+#endif
+
+#if defined(_MSC_VER)
+#if !defined(F_OK) /* file exists */
+#define F_OK 0
+#endif
+#if !defined(W_OK) /* file has write permission */
+#define W_OK 2
+#endif
+#if !defined(R_OK) /* file has read permission */
+#define R_OK 4
+#endif
+#if !defined(X_OK) /* file has execute permission */
+#define X_OK 6
+#endif
+#endif
+
+/* define MAXPATHLEN */
+#if defined(_WIN32)
+#include <windows.h> //for MAX_PATH
+#define MAXPATHLEN MAX_PATH
+#else
+#if defined(HAVE_SYS_PARAM_H)
+#include <sys/param.h>
+#endif
+#endif
+#if !defined(MAXPATHLEN)
+#define MAXPATHLEN 1024
+#endif
 
 #if !defined(_MSC_VER)
 #define _unused(x) (void)x;

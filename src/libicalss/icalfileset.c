@@ -25,12 +25,19 @@
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include "icalfileset.h"
-#include "icalgauge.h"
+#include "icalfilesetimpl.h"
+#include "icalparser.h"
+#include "icalvalue.h"
+
 #include <errno.h>
+#include <stdlib.h>
+
+#ifdef UNCLEAN
+#include "icalgauge.h"
 #include <sys/stat.h> /* for stat */
 #ifndef WIN32
 #include <unistd.h> /* for stat, getpid, read, write */
@@ -40,11 +47,6 @@
 #include <share.h>
 #endif
 #endif
-
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h> /* for fcntl */
-#include "icalfilesetimpl.h"
 #include "icalclusterimpl.h"
 
 #if defined(_MSC_VER)
@@ -59,6 +61,7 @@ typedef SSIZE_T ssize_t;
 
 #ifdef _WIN32_WCE
 #include <winbase.h>
+#endif
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/
@@ -357,7 +360,7 @@ static char *shell_quote(const char *s)
 
 icalerrorenum icalfileset_commit(icalset *set)
 {
-    char tmp[ICAL_PATH_MAX];
+    char tmp[MAXPATHLEN];
     char *str;
     icalcomponent *c;
     size_t write_size = 0;
@@ -379,10 +382,10 @@ icalerrorenum icalfileset_commit(icalset *set)
     if (fset->options.safe_saves == 1) {
 #ifndef WIN32
         char *quoted_file = shell_quote(fset->path);
-        snprintf(tmp, ICAL_PATH_MAX, "cp '%s' '%s.bak'", fset->path, fset->path);
+        snprintf(tmp, MAXPATHLEN, "cp '%s' '%s.bak'", fset->path, fset->path);
         free(quoted_file);
 #else
-        snprintf(tmp, ICAL_PATH_MAX, "copy %s %s.bak", fset->path, fset->path);
+        snprintf(tmp, MAXPATHLEN, "copy %s %s.bak", fset->path, fset->path);
 #endif
 
 #ifndef _WIN32_WCE

@@ -10,7 +10,7 @@
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -29,8 +29,13 @@
 #ifndef ICALCLUSTER_H
 #define ICALCLUSTER_H
 
+#include "icalcomponent.h"
+#include "icalerror.h"
+
+#ifdef UNCLEAN
 #include <libical/ical.h>
 #include "icalset.h"
+#endif
 
 typedef struct icalcluster_impl icalcluster;
 
@@ -47,15 +52,12 @@ void icalcluster_commit(icalcluster *cluster);
 icalcomponent* icalcluster_get_component(icalcluster* cluster);
 int icalcluster_count_components(icalcluster *cluster, icalcomponent_kind kind);
 icalerrorenum icalcluster_add_component(icalcluster* cluster,
-					icalcomponent* child);
+                                        icalcomponent* child);
 icalerrorenum icalcluster_remove_component(icalcluster* cluster,
-					   icalcomponent* child);
+                                           icalcomponent* child);
 
 icalcomponent* icalcluster_get_current_component(icalcluster* cluster);
 icalcomponent* icalcluster_get_first_component(icalcluster* cluster);
 icalcomponent* icalcluster_get_next_component(icalcluster* cluster);
 
 #endif /* !ICALCLUSTER_H */
-
-
-

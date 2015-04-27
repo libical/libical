@@ -1,6 +1,7 @@
 CHECKSETS foss,c++
 
-EXTRA crud,style,camelcase
+EXTRA crud,camelcase
+#EXTRA style
 
 #Skip ancient Apple files
 SKIP /src/libicalvcal/port\.h

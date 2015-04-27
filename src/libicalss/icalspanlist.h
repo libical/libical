@@ -10,7 +10,7 @@
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -25,23 +25,28 @@
 #ifndef ICALSPANLIST_H
 #define ICALSPANLIST_H
 
-#include <libical/ical.h>
 #include "icalset.h"
 
 /** @file icalspanlist.h
  *  @brief Code that supports collections of free/busy spans of time
  */
 
+struct icalspanlist_impl {
+  pvl_list spans;               /**< list of icaltime_span data **/
+  struct icaltimetype start;    /**< start time of span **/
+  struct icaltimetype end;      /**< end time of span **/
+};
+
 typedef struct icalspanlist_impl icalspanlist;
 
 
 /** @brief Constructor
- * Make a free list from a set of component. Start and end should be in UTC 
+ * Make a free list from a set of component. Start and end should be in UTC
  */
 
-icalspanlist* icalspanlist_new(icalset *set, 
-				struct icaltimetype start,
-				struct icaltimetype end);
+icalspanlist* icalspanlist_new(icalset *set,
+                                struct icaltimetype start,
+                                struct icaltimetype end);
 
 /** @brief Destructor
  */
@@ -53,17 +58,17 @@ icalcomponent* icalspanlist_make_busy_list(icalspanlist* sl);
 
 /** Get first next free time after time t. all times are in UTC. */
 struct icalperiodtype icalspanlist_next_free_time(icalspanlist* sl,
-						struct icaltimetype t);
+                                                struct icaltimetype t);
 /** Get first next busy time after time t. all times are in UTC. */
 struct icalperiodtype icalspanlist_next_busy_time(icalspanlist* sl,
-						struct icaltimetype t);
+                                                struct icaltimetype t);
 
 void icalspanlist_dump(icalspanlist* s);
 
 /** @brief Return a valid VFREEBUSY component for this span */
 icalcomponent *icalspanlist_as_vfreebusy(icalspanlist* s_in,
-					 const char* organizer,
-					 const char* attendee);
+                                         const char* organizer,
+                                         const char* attendee);
 
 /** @brief Return an integer matrix of total events per delta_t timespan */
 int *icalspanlist_as_freebusy_matrix(icalspanlist* span, int delta_t);
@@ -72,6 +77,3 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist* span, int delta_t);
 icalspanlist *icalspanlist_from_vfreebusy(icalcomponent* c);
 
 #endif
-				    
-
-

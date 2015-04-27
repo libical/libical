@@ -7,13 +7,13 @@
   $Id: icalproperty.h,v 1.20 2008-01-15 23:17:41 dothebart Exp $
   $Locker:  $
 
-  
+
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -27,22 +27,22 @@
 
   ======================================================================*/
 
-
 #ifndef ICALPROPERTY_H
 #define ICALPROPERTY_H
 
-#include <time.h>
 #include <stdarg.h>  /* for va_... */
 
+#ifdef UNCLEAN
+#include <time.h>
 #include "icalderivedparameter.h"
-
-#include "icalvalue.h"  
+#include "icalvalue.h"
 #include "icalrecur.h"
-
-/* Actually in icalderivedproperty.h:
-   typedef struct icalproperty_impl icalproperty; */
+#endif
 
 #include "icalderivedproperty.h" /* To get icalproperty_kind enumerations */
+
+/* Declared in icalderivedproperty.h */
+/*typedef struct icalproperty_impl icalproperty;*/
 
 icalproperty* icalproperty_new(icalproperty_kind kind);
 
@@ -69,16 +69,16 @@ char* icalproperty_get_parameter_as_string_r(icalproperty* prop,
                                                  const char* name);
 
 void icalproperty_remove_parameter(icalproperty* prop,
-				   icalparameter_kind kind);
+                                   icalparameter_kind kind);
 
 void icalproperty_remove_parameter_by_kind(icalproperty* prop,
-					   icalparameter_kind kind);
+                                           icalparameter_kind kind);
 
 void icalproperty_remove_parameter_by_name(icalproperty* prop,
-					   const char *name);
+                                           const char *name);
 
 void icalproperty_remove_parameter_by_ref(icalproperty* prop,
-					  icalparameter *param);
+                                          icalparameter *param);
 
 
 
@@ -86,9 +86,9 @@ int icalproperty_count_parameters(const icalproperty* prop);
 
 /* Iterate through the parameters */
 icalparameter* icalproperty_get_first_parameter(icalproperty* prop,
-						icalparameter_kind kind);
+                                                icalparameter_kind kind);
 icalparameter* icalproperty_get_next_parameter(icalproperty* prop,
-						icalparameter_kind kind);
+                                                icalparameter_kind kind);
 /* Access the value of the property */
 void icalproperty_set_value(icalproperty* prop, icalvalue* value);
 void icalproperty_set_value_from_string(icalproperty* prop,const char* value, const char* kind);
@@ -104,7 +104,7 @@ const char* icalproperty_get_x_name(icalproperty* prop);
 
 /** Return the name of the property -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X
- *  property 
+ *  property
  */
 const char* icalproperty_get_property_name (const icalproperty* prop);
 char* icalproperty_get_property_name_r(const icalproperty* prop);

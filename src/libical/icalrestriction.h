@@ -2,7 +2,7 @@
 /*======================================================================
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
-  
+
   $Id: icalrestriction.h,v 1.3 2008-01-15 23:17:42 dothebart Exp $
 
 
@@ -10,7 +10,7 @@
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -28,26 +28,26 @@
 
 ======================================================================*/
 
-#include "icalproperty.h"
-#include "icalcomponent.h"
-
 #ifndef ICALRESTRICTION_H
 #define ICALRESTRICTION_H
 
+#include "icalcomponent.h"
+#include "icalproperty.h"
+
 /* These must stay in this order for icalrestriction_compare to work */
 typedef enum icalrestriction_kind {
-    ICAL_RESTRICTION_NONE=0,		/* 0 */
-    ICAL_RESTRICTION_ZERO,		/* 1 */
-    ICAL_RESTRICTION_ONE,		/* 2 */
-    ICAL_RESTRICTION_ZEROPLUS,		/* 3 */
-    ICAL_RESTRICTION_ONEPLUS,		/* 4 */
-    ICAL_RESTRICTION_ZEROORONE,		/* 5 */
-    ICAL_RESTRICTION_ONEEXCLUSIVE,	/* 6 */
-    ICAL_RESTRICTION_ONEMUTUAL,		/* 7 */
-    ICAL_RESTRICTION_UNKNOWN		/* 8 */
+    ICAL_RESTRICTION_NONE=0,            /* 0 */
+    ICAL_RESTRICTION_ZERO,              /* 1 */
+    ICAL_RESTRICTION_ONE,               /* 2 */
+    ICAL_RESTRICTION_ZEROPLUS,          /* 3 */
+    ICAL_RESTRICTION_ONEPLUS,           /* 4 */
+    ICAL_RESTRICTION_ZEROORONE,         /* 5 */
+    ICAL_RESTRICTION_ONEEXCLUSIVE,      /* 6 */
+    ICAL_RESTRICTION_ONEMUTUAL,         /* 7 */
+    ICAL_RESTRICTION_UNKNOWN            /* 8 */
 } icalrestriction_kind;
 
-int 
+int
 icalrestriction_compare(icalrestriction_kind restr, int count);
 
 
@@ -59,6 +59,3 @@ int icalrestriction_check(icalcomponent* comp);
 
 
 #endif /* !ICALRESTRICTION_H */
-
-
-

@@ -10,7 +10,7 @@
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -29,14 +29,22 @@
 #ifndef ICALCALENDAR_H
 #define ICALCALENDAR_H
 
-#include <libical/ical.h>
 #include "icalset.h"
 
 /* icalcalendar
- * Routines for storing calendar data in a file system. The calendar 
+ * Routines for storing calendar data in a file system. The calendar
  * has two icaldirsets, one for incoming components and one for booked
  * components. It also has interfaces to access the free/busy list
  * and a list of calendar properties */
+
+struct icalcalendar_impl
+{
+    char* dir;
+    icalset* freebusy;
+    icalset* properties;
+    icalset* booked;
+    icalset* incoming;
+};
 
 typedef struct icalcalendar_impl icalcalendar;
 
@@ -62,6 +70,3 @@ icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
 
 
 #endif /* !ICALCALENDAR_H */
-
-
-

@@ -38,14 +38,19 @@
 #ifndef ICALSET_H
 #define ICALSET_H
 
-#include <limits.h> /* For PATH_MAX */
-#include <libical/ical.h>
 #include "icalgauge.h"
+#include "icalcomponent.h"
+#include "icalerror.h"
+
+#ifdef UNCLEAN
+#include <limits.h> /* For PATH_MAX */
 
 #ifdef PATH_MAX
 #define ICAL_PATH_MAX PATH_MAX
 #else
 #define ICAL_PATH_MAX 1024
+#endif
+
 #endif
 
 typedef struct icalset_impl icalset;

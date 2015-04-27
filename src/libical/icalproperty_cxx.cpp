@@ -20,7 +20,6 @@
 #include "icalproperty_cxx.h"
 #include "icalparameter_cxx.h"
 #include "icalvalue_cxx.h"
-
 using namespace LibICal;
 
 ICalProperty::ICalProperty() : imp(icalproperty_new(ICAL_ANY_PROPERTY))

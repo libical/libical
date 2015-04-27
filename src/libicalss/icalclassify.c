@@ -2,21 +2,21 @@
     ======================================================================
     FILE: icalclassify.c
     CREATOR: ebusboom 23 aug 2000
-  
+
     $Id: icalclassify.c,v 1.19 2008-01-15 23:17:43 dothebart Exp $
     $Locker:  $
-    
+
     (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
         http://www.softwarestudio.org
-    
+
     This program is free software; you can redistribute it and/or modify
-    it under the terms of either: 
-    
+    it under the terms of either:
+
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
-    
+
     Or:
-    
+
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
@@ -24,19 +24,18 @@
     ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
-#include <libical/ical.h>
 #include "icalclassify.h"
-#include <libical/icalmemory.h>
+#include "icalmemory.h"
+
+#include <ctype.h>
+#include <stdlib.h>
+
+#ifdef UNCLEAN
 #include "icalerror.h"
-
-#include <ctype.h>   /* For tolower() */
-#include <string.h> /* for index() */
-#include <stdlib.h> /* for malloc and free */
-
-
+#endif
 
 struct icalclassify_parts {
     icalcomponent *c;
@@ -47,10 +46,9 @@ struct icalclassify_parts {
     char* reply_attendee;
     char* uid;
     int sequence;
-    struct icaltimetype dtstamp;	
+    struct icaltimetype dtstamp;
     struct icaltimetype recurrence_id;
-}; 
-	
+};
 
 char* icalclassify_lowercase(const char* str)
 {
@@ -58,12 +56,12 @@ char* icalclassify_lowercase(const char* str)
     char *xnew;
 
     if(str ==0){
-	return 0;
+        return 0;
     }
 
     xnew = icalmemory_strdup(str);
     for(p = xnew; *p!=0; p++){
-	*p = tolower((int)*p);
+        *p = tolower((int)*p);
     }
 
     return xnew;
@@ -80,50 +78,50 @@ icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp)
     icalcomponent *return_set;
     icalcomponent *c;
     struct icaltime_span span,compspan;
-    
+
     icalerror_clear_errno();
     compspan = icalcomponent_get_span(comp);
 
     if(icalerrno != ICAL_NO_ERROR){
-	return 0;
+        return 0;
     }
 
 
     return_set = icalcomponent_new(ICAL_XROOT_COMPONENT);
 
     for(c = icalset_get_first_component(set);
-	c != 0;
-	c = icalset_get_next_component(set)){
+        c != 0;
+        c = icalset_get_next_component(set)){
 
-	icalerror_clear_errno();
+        icalerror_clear_errno();
 
-	span = icalcomponent_get_span(c);
+        span = icalcomponent_get_span(c);
 
-	if(icalerrno != ICAL_NO_ERROR){
-	    continue;
-	}
+        if(icalerrno != ICAL_NO_ERROR){
+            continue;
+        }
 
-	if (compspan.start < span.end && 
-	    compspan.end > span.start){
+        if (compspan.start < span.end &&
+            compspan.end > span.start){
 
-	    icalcomponent *clone = icalcomponent_new_clone(c);
+            icalcomponent *clone = icalcomponent_new_clone(c);
 
-	    icalcomponent_add_component(return_set,clone);
-	}	
+            icalcomponent_add_component(return_set,clone);
+        }
     }
 
     if(icalcomponent_count_components(return_set,ICAL_ANY_COMPONENT) !=0){
-	return return_set;
+        return return_set;
     } else {
-	icalcomponent_free(return_set);
-	return 0;
+        icalcomponent_free(return_set);
+        return 0;
     }
 }
 
 
 
-icalproperty* icalclassify_find_attendee(icalcomponent *c, 
-						  const char* attendee)
+icalproperty* icalclassify_find_attendee(icalcomponent *c,
+                                                  const char* attendee)
 {
     icalproperty *p;
     icalcomponent* inner;
@@ -146,31 +144,31 @@ icalproperty* icalclassify_find_attendee(icalcomponent *c,
     inner = icalcomponent_get_first_real_component(c);
 
     for(p  = icalcomponent_get_first_property(inner,ICAL_ATTENDEE_PROPERTY);
-	p != 0;
-	p  = icalcomponent_get_next_property(inner,ICAL_ATTENDEE_PROPERTY))
+        p != 0;
+        p  = icalcomponent_get_next_property(inner,ICAL_ATTENDEE_PROPERTY))
     {
-	char* this_upn;
-	char* this_attendee
-	    = icalclassify_lowercase(icalproperty_get_attendee(p));
-	 if ( !this_attendee ) continue;
-	 this_upn = strchr(this_attendee,':');
+        char* this_upn;
+        char* this_attendee
+            = icalclassify_lowercase(icalproperty_get_attendee(p));
+         if ( !this_attendee ) continue;
+         this_upn = strchr(this_attendee,':');
 
         if(this_upn == 0){
-	    free(this_attendee);
+            free(this_attendee);
             continue;
         } else {
             this_upn++;
         }
 
-	if(strcmp(this_upn,upn)==0){
-			free(lattendee);
-			free(this_attendee);
+        if(strcmp(this_upn,upn)==0){
+                        free(lattendee);
+                        free(this_attendee);
             return p;
-	}
+        }
 
-		free(this_attendee);
+                free(this_attendee);
     }
-	free(lattendee);
+        free(lattendee);
 
     return 0;
 
@@ -179,24 +177,24 @@ icalproperty* icalclassify_find_attendee(icalcomponent *c,
 void icalssutil_free_parts(struct icalclassify_parts *parts)
 {
     if(parts == 0){
-	return;
+        return;
     }
 
     if(parts->organizer != 0){
-	free(parts->organizer);
+        free(parts->organizer);
     }
 
     if(parts->uid != 0){
-	free(parts->uid);
+        free(parts->uid);
     }
 
     if(parts->reply_attendee){
-	free(parts->reply_attendee);
+        free(parts->reply_attendee);
     }
 }
 
-void icalssutil_get_parts(icalcomponent* c,  
-			  struct icalclassify_parts* parts)
+void icalssutil_get_parts(icalcomponent* c,
+                          struct icalclassify_parts* parts)
 {
     icalproperty *p;
     icalcomponent *inner;
@@ -208,14 +206,14 @@ void icalssutil_get_parts(icalcomponent* c,
     parts->reply_partstat = ICAL_PARTSTAT_NONE;
 
     if(c == 0){
-	return;
+        return;
     }
 
     parts->c = c;
 
     p = icalcomponent_get_first_property(c,ICAL_METHOD_PROPERTY);
     if(p!=0){
-	parts->method = icalproperty_get_method(p);
+        parts->method = icalproperty_get_method(p);
     }
 
     inner = icalcomponent_get_first_real_component(c);
@@ -230,9 +228,9 @@ void icalssutil_get_parts(icalcomponent* c,
       }
     }
 
-    p = icalcomponent_get_first_property(inner,ICAL_SEQUENCE_PROPERTY);    
+    p = icalcomponent_get_first_property(inner,ICAL_SEQUENCE_PROPERTY);
     if(p!=0){
-	parts->sequence = icalproperty_get_sequence(p);
+        parts->sequence = icalproperty_get_sequence(p);
     }
 
     p = icalcomponent_get_first_property(inner,ICAL_UID_PROPERTY);
@@ -245,32 +243,32 @@ void icalssutil_get_parts(icalcomponent* c,
 
     p = icalcomponent_get_first_property(inner,ICAL_RECURRENCEID_PROPERTY);
     if(p!=0){
-	parts->recurrence_id = icalproperty_get_recurrenceid(p);
+        parts->recurrence_id = icalproperty_get_recurrenceid(p);
     }
 
     p = icalcomponent_get_first_property(inner,ICAL_DTSTAMP_PROPERTY);
     if(p!=0){
-	parts->dtstamp = icalproperty_get_dtstamp(p);
+        parts->dtstamp = icalproperty_get_dtstamp(p);
     }
 
     if(parts->method==ICAL_METHOD_REPLY){
-	icalparameter *param;
-	p  = icalcomponent_get_first_property(inner,ICAL_ATTENDEE_PROPERTY);
+        icalparameter *param;
+        p  = icalcomponent_get_first_property(inner,ICAL_ATTENDEE_PROPERTY);
 
-	if(p!=0){
-	    const char *attendee = 0;
-	    param = icalproperty_get_first_parameter(p,ICAL_PARTSTAT_PARAMETER);
-	    
-	    if(param != 0){
-		parts->reply_partstat = 
-		    icalparameter_get_partstat(param);
-	    }
-	    attendee = icalproperty_get_attendee(p);
-	    if ( attendee )
-		parts->reply_attendee = strdup( attendee );
-	}
+        if(p!=0){
+            const char *attendee = 0;
+            param = icalproperty_get_first_parameter(p,ICAL_PARTSTAT_PARAMETER);
 
-    }    
+            if(param != 0){
+                parts->reply_partstat =
+                    icalparameter_get_partstat(param);
+            }
+            attendee = icalproperty_get_attendee(p);
+            if ( attendee )
+                parts->reply_attendee = strdup( attendee );
+        }
+
+    }
 
 
 }
@@ -284,90 +282,90 @@ int icalssutil_is_rescheduled(icalcomponent* a,icalcomponent* b)
     int i;
 
     icalproperty_kind kind_array[] = {
-	ICAL_DTSTART_PROPERTY,
-	ICAL_DTEND_PROPERTY,
-	ICAL_DURATION_PROPERTY,
-	ICAL_DUE_PROPERTY,
-	ICAL_RRULE_PROPERTY,
-	ICAL_RDATE_PROPERTY,
-	ICAL_EXRULE_PROPERTY,
-	ICAL_EXDATE_PROPERTY,
-	ICAL_NO_PROPERTY
+        ICAL_DTSTART_PROPERTY,
+        ICAL_DTEND_PROPERTY,
+        ICAL_DURATION_PROPERTY,
+        ICAL_DUE_PROPERTY,
+        ICAL_RRULE_PROPERTY,
+        ICAL_RDATE_PROPERTY,
+        ICAL_EXRULE_PROPERTY,
+        ICAL_EXDATE_PROPERTY,
+        ICAL_NO_PROPERTY
     };
 
     i1 = icalcomponent_get_first_real_component(a);
     i2 = icalcomponent_get_first_real_component(b);
 
     for(i =0; kind_array[i] != ICAL_NO_PROPERTY; i++){
-	int cmp;
-	p1 = icalcomponent_get_first_property(i1,kind_array[i]);
-	p2 = icalcomponent_get_first_property(i2,kind_array[i]);
-	
-	if( (p1!=0)^(p2!=0) ){
-	    /* Return true if the property exists in one component and not
-	       the other */
-	    return 1;
-	}
-	else if (!p1 && !p2)
-		continue;
+        int cmp;
+        p1 = icalcomponent_get_first_property(i1,kind_array[i]);
+        p2 = icalcomponent_get_first_property(i2,kind_array[i]);
 
-	temp1 = icalproperty_as_ical_string_r(p1);
-	temp2 = icalproperty_as_ical_string_r(p2);
-	cmp = strcmp(temp1, temp2);
-	free(temp1);
-	free(temp2);
-	
-	if (p1 && cmp != 0) {
-	    return 1;
-	}
+        if( (p1!=0)^(p2!=0) ){
+            /* Return true if the property exists in one component and not
+               the other */
+            return 1;
+        }
+        else if (!p1 && !p2)
+                continue;
+
+        temp1 = icalproperty_as_ical_string_r(p1);
+        temp2 = icalproperty_as_ical_string_r(p2);
+        cmp = strcmp(temp1, temp2);
+        free(temp1);
+        free(temp2);
+
+        if (p1 && cmp != 0) {
+            return 1;
+        }
     }
 
     return 0;
-    
+
 }
 
 #define icalclassify_pre \
-    int rtrn =0; 
+    int rtrn =0;
 
 #define icalclassify_post \
     return rtrn;
 
 
-int icalclassify_publish_new(struct icalclassify_parts *comp, 
-				struct icalclassify_parts *match, 
-				const char* user)
+int icalclassify_publish_new(struct icalclassify_parts *comp,
+                                struct icalclassify_parts *match,
+                                const char* user)
 {
     icalclassify_pre;
     (void)user;
 
     if(comp->method == ICAL_METHOD_PUBLISH &&
-	match == 0 && comp->inner_kind != ICAL_VFREEBUSY_COMPONENT){
-	rtrn = 1;
+        match == 0 && comp->inner_kind != ICAL_VFREEBUSY_COMPONENT){
+        rtrn = 1;
     }
-	
+
     icalclassify_post;
 
 }
 
-int icalclassify_publish_update(struct icalclassify_parts *comp, 
-				struct icalclassify_parts *match, 
-				const char* user)
+int icalclassify_publish_update(struct icalclassify_parts *comp,
+                                struct icalclassify_parts *match,
+                                const char* user)
 {
     icalclassify_pre;
     (void)user;
 
     if(comp->method == ICAL_METHOD_PUBLISH &&
-	match !=0 && comp->inner_kind != ICAL_VFREEBUSY_COMPONENT){
-	rtrn = 1;
+        match !=0 && comp->inner_kind != ICAL_VFREEBUSY_COMPONENT){
+        rtrn = 1;
     }
-	
+
     icalclassify_post;
 
 }
 
-int icalclassify_publish_freebusy(struct icalclassify_parts *comp, 
-				struct icalclassify_parts *match, 
-				const char* user)
+int icalclassify_publish_freebusy(struct icalclassify_parts *comp,
+                                struct icalclassify_parts *match,
+                                const char* user)
 {
     icalclassify_pre;
 
@@ -375,17 +373,17 @@ int icalclassify_publish_freebusy(struct icalclassify_parts *comp,
     (void)user;
     if(comp->method == ICAL_METHOD_PUBLISH &&
        comp->inner_kind == ICAL_VFREEBUSY_COMPONENT){
-	rtrn = 1;
+        rtrn = 1;
     }
-	
+
     icalclassify_post;
 
 }
 
 
-int icalclassify_request_new(struct icalclassify_parts *comp, 
-				    struct icalclassify_parts *match, 
-				    const char* user)
+int icalclassify_request_new(struct icalclassify_parts *comp,
+                                    struct icalclassify_parts *match,
+                                    const char* user)
 {
     /* Method is  REQUEST, and there is no match */
 
@@ -393,7 +391,7 @@ int icalclassify_request_new(struct icalclassify_parts *comp,
     (void)user;
 
     if(match->c==0 && comp->method == ICAL_METHOD_REQUEST){
-	rtrn = 1;
+        rtrn = 1;
     }
 
     icalclassify_post
@@ -402,19 +400,19 @@ int icalclassify_request_new(struct icalclassify_parts *comp,
 
 int icalclassify_request_update(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     /* REQUEST method, Higher SEQUENCE than match, and all
        time-related properties are unchanged */
-    
+
     icalclassify_pre
     (void)user;
 
     if (match != 0 &&
-	comp->sequence >= match->sequence &&
-	!icalssutil_is_rescheduled(comp->c,match->c)){
-	rtrn = 1;
+        comp->sequence >= match->sequence &&
+        !icalssutil_is_rescheduled(comp->c,match->c)){
+        rtrn = 1;
     }
 
     icalclassify_post
@@ -423,7 +421,7 @@ int icalclassify_request_update(
 
 int icalclassify_request_reschedule(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     /* REQUEST method, Higher SEQUENCE than match, and one or more
@@ -432,9 +430,9 @@ int icalclassify_request_reschedule(
     (void)user;
 
     if (match->c != 0 &&
-	comp->sequence > match->sequence &&
-	icalssutil_is_rescheduled(comp->c,match->c)){
-	rtrn = 1;
+        comp->sequence > match->sequence &&
+        icalssutil_is_rescheduled(comp->c,match->c)){
+        rtrn = 1;
     }
 
     icalclassify_post
@@ -443,7 +441,7 @@ int icalclassify_request_reschedule(
 
 int icalclassify_request_delegate(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalproperty* attendee;
@@ -458,9 +456,9 @@ int icalclassify_request_delegate(
     }
 
     param = icalproperty_get_first_parameter(attendee,ICAL_DELEGATEDFROM_PARAMETER);
-	    
+
     if (param != 0){
-	rtrn = 1;
+        rtrn = 1;
     }
 
     icalclassify_post
@@ -469,7 +467,7 @@ int icalclassify_request_delegate(
 
 int icalclassify_request_new_organizer(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     _unused(comp)
@@ -484,7 +482,7 @@ int icalclassify_request_new_organizer(
 
 int icalclassify_request_status(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     _unused(comp)
@@ -498,7 +496,7 @@ int icalclassify_request_status(
 
 int icalclassify_request_forward(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     _unused(comp)
@@ -512,7 +510,7 @@ int icalclassify_request_forward(
 
 int icalclassify_request_freebusy(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     _unused(comp)
@@ -526,7 +524,7 @@ int icalclassify_request_freebusy(
 
 int icalclassify_reply_accept(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalproperty* attendee;
@@ -537,14 +535,14 @@ int icalclassify_reply_accept(
 
     if(attendee != 0&&
        comp->reply_partstat == ICAL_PARTSTAT_ACCEPTED){
-	rtrn = 1;
+        rtrn = 1;
     }
 
     icalclassify_post
 }
 int icalclassify_reply_decline(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalproperty* attendee;
@@ -556,13 +554,13 @@ int icalclassify_reply_decline(
 
     if( attendee != 0 &&
        comp->reply_partstat == ICAL_PARTSTAT_DECLINED){
-	rtrn = 1;
+        rtrn = 1;
     }
     icalclassify_post
 }
 int icalclassify_reply_delegate(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalproperty* attendee;
@@ -573,13 +571,13 @@ int icalclassify_reply_delegate(
 
     if( attendee != 0 &&
        comp->reply_partstat == ICAL_PARTSTAT_DELEGATED){
-	rtrn = 1;
+        rtrn = 1;
     }
     icalclassify_post
 }
 int icalclassify_reply_crasher_accept(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalproperty* attendee;
@@ -590,13 +588,13 @@ int icalclassify_reply_crasher_accept(
 
     if(attendee == 0 &&
        comp->reply_partstat == ICAL_PARTSTAT_ACCEPTED){
-	rtrn = 1;
+        rtrn = 1;
     }
     icalclassify_post
 }
 int icalclassify_reply_crasher_decline(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalproperty* attendee;
@@ -608,13 +606,13 @@ int icalclassify_reply_crasher_decline(
 
     if(attendee == 0 &&
        comp->reply_partstat == ICAL_PARTSTAT_DECLINED){
-	rtrn = 1;
+        rtrn = 1;
     }
     icalclassify_post
 }
 int icalclassify_add_instance(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalclassify_pre
@@ -622,78 +620,78 @@ int icalclassify_add_instance(
     (void)user;
 
     if(comp->method == ICAL_METHOD_ADD){
-	rtrn = 1;
+        rtrn = 1;
     }
     icalclassify_post
 }
 int icalclassify_cancel_event(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalclassify_pre
     (void)match;
     (void)user;
     if(comp->method == ICAL_METHOD_CANCEL){
-	rtrn = 1;
+        rtrn = 1;
     }
     icalclassify_post
 }
 int icalclassify_cancel_instance(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalclassify_pre
     (void)match;
     (void)user;
     if(comp->method == ICAL_METHOD_CANCEL){
-	rtrn = 1;
+        rtrn = 1;
     }
     icalclassify_post
 }
 int icalclassify_cancel_all(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalclassify_pre
     (void)match;
     (void)user;
     if(comp->method == ICAL_METHOD_CANCEL){
-	rtrn = 1;
+        rtrn = 1;
     }
     icalclassify_post
 }
 int icalclassify_refesh(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalclassify_pre
     (void)match;
     (void)user;
     if(comp->method == ICAL_METHOD_REFRESH){
-	rtrn = 1;
+        rtrn = 1;
     }
     icalclassify_post
 }
 int icalclassify_counter(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalclassify_pre
     (void)match;
     (void)user;
     if(comp->method == ICAL_METHOD_COUNTER){
-	rtrn = 1;
+        rtrn = 1;
     }
     icalclassify_post
 }
 int icalclassify_delinecounter(
     struct icalclassify_parts *comp,
-    struct icalclassify_parts *match, 
+    struct icalclassify_parts *match,
     const char* user)
 {
     icalclassify_pre
@@ -701,17 +699,17 @@ int icalclassify_delinecounter(
     (void)user;
 
     if(comp->method == ICAL_METHOD_DECLINECOUNTER){
-	rtrn = 1;
+        rtrn = 1;
     }
-	
+
     icalclassify_post
 }
 
 static const struct icalclassify_map {
-	icalproperty_method method;
-	int (*fn)(struct icalclassify_parts *comp,struct icalclassify_parts *match, const char* user);
-	icalproperty_xlicclass class;
-} icalclassify_map[] = 
+        icalproperty_method method;
+        int (*fn)(struct icalclassify_parts *comp,struct icalclassify_parts *match, const char* user);
+        icalproperty_xlicclass class;
+} icalclassify_map[] =
 { {ICAL_METHOD_PUBLISH,icalclassify_publish_new,ICAL_XLICCLASS_PUBLISHNEW},
  {ICAL_METHOD_PUBLISH,icalclassify_publish_update,ICAL_XLICCLASS_PUBLISHUPDATE},
  {ICAL_METHOD_PUBLISH,icalclassify_publish_freebusy,ICAL_XLICCLASS_PUBLISHFREEBUSY},
@@ -744,8 +742,8 @@ static const struct icalclassify_map {
 };
 
 
-icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match, 
-			      const char* user)
+icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match,
+                              const char* user)
 {
     icalcomponent *inner;
     icalproperty *p;
@@ -758,9 +756,9 @@ icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match,
     struct icalclassify_parts match_parts;
 
     inner = icalcomponent_get_first_real_component(c);
-    
+
     if (inner == 0) {
-	return ICAL_XLICCLASS_NONE;
+        return ICAL_XLICCLASS_NONE;
     }
 
     icalssutil_get_parts(c,&comp_parts);
@@ -768,52 +766,51 @@ icalproperty_xlicclass icalclassify(icalcomponent* c,icalcomponent* match,
 
     /* Determine if the incoming component is obsoleted by the match */
     if(match != 0 && (
-	comp_parts.method == ICAL_METHOD_REQUEST
-	)){
-	assert ( ! ((comp_parts.dtstamp.is_utc==1)^
-		    (match_parts.dtstamp.is_utc==1)));
+        comp_parts.method == ICAL_METHOD_REQUEST
+        )){
+        assert ( ! ((comp_parts.dtstamp.is_utc==1)^
+                    (match_parts.dtstamp.is_utc==1)));
 
-	if( comp_parts.sequence<match_parts.sequence &&
-	    icaltime_compare(comp_parts.dtstamp,match_parts.dtstamp)>0)
-	{
-	    /* comp has a smaller sequence and a later DTSTAMP */
-	    class = ICAL_XLICCLASS_MISSEQUENCED;
-	    goto CLEANUP;
-	}
+        if( comp_parts.sequence<match_parts.sequence &&
+            icaltime_compare(comp_parts.dtstamp,match_parts.dtstamp)>0)
+        {
+            /* comp has a smaller sequence and a later DTSTAMP */
+            class = ICAL_XLICCLASS_MISSEQUENCED;
+            goto CLEANUP;
+        }
 
-	if( (comp_parts.sequence<match_parts.sequence )
-	     /*&&icaltime_compare(comp_parts.dtstamp,match_parts.dtstamp)<=0*/
-	     ||
-	   ( comp_parts.sequence == match_parts.sequence &&
-	     icaltime_compare(comp_parts.dtstamp,match_parts.dtstamp)<=0)){
+        if( (comp_parts.sequence<match_parts.sequence )
+             /*&&icaltime_compare(comp_parts.dtstamp,match_parts.dtstamp)<=0*/
+             ||
+           ( comp_parts.sequence == match_parts.sequence &&
+             icaltime_compare(comp_parts.dtstamp,match_parts.dtstamp)<=0)){
 
-	    class = ICAL_XLICCLASS_OBSOLETE;
-	    goto CLEANUP;
-	}
+            class = ICAL_XLICCLASS_OBSOLETE;
+            goto CLEANUP;
+        }
 
     }
 
     p = icalcomponent_get_first_property(c,ICAL_METHOD_PROPERTY);
     if (p == 0) {
-	class = ICAL_XLICCLASS_UNKNOWN;
-	goto CLEANUP;
+        class = ICAL_XLICCLASS_UNKNOWN;
+        goto CLEANUP;
     }
     method = icalproperty_get_method(p);
 
     for (i =0; icalclassify_map[i].method != ICAL_METHOD_NONE; i++){
-	if(icalclassify_map[i].method == method){
-	    if( (*(icalclassify_map[i].fn))(&comp_parts,&match_parts,user)==1){
-		class = icalclassify_map[i].class;
-		break;
-	    }
-	}
+        if(icalclassify_map[i].method == method){
+            if( (*(icalclassify_map[i].fn))(&comp_parts,&match_parts,user)==1){
+                class = icalclassify_map[i].class;
+                break;
+            }
+        }
     }
 
 CLEANUP:
-    icalssutil_free_parts(&comp_parts); 
+    icalssutil_free_parts(&comp_parts);
     icalssutil_free_parts(&match_parts);
 
     return class;
 
 }
-

@@ -20,8 +20,8 @@
 ======================================================================*/
 
 
-#ifndef __PVL_H__
-#define __PVL_H__
+#ifndef ICAL_PVL_H
+#define ICAL_PVL_H
 
 typedef struct pvl_list_t* pvl_list;
 typedef struct pvl_elem_t* pvl_elem;
@@ -34,10 +34,10 @@ typedef struct pvl_elem_t* pvl_elem;
 
 typedef struct pvl_elem_t
 {
-	int MAGIC;			/**< Magic Identifier */
-	void *d;			/**< Pointer to data user is storing */
-	struct pvl_elem_t *next;	/**< Next element */
-	struct pvl_elem_t *prior;	/**< Prior element */
+        int MAGIC;                      /**< Magic Identifier */
+        void *d;                        /**< Pointer to data user is storing */
+        struct pvl_elem_t *next;        /**< Next element */
+        struct pvl_elem_t *prior;       /**< Prior element */
 } pvl_elem_t;
 
 
@@ -98,13 +98,8 @@ pvl_elem pvl_find_next(pvl_list l,pvl_findf f,void* v);
  * Pass each element in the list to a function
  * a is list elem, b is other data
  */
-typedef void (*pvl_applyf)(void* a, void* b); 
+typedef void (*pvl_applyf)(void* a, void* b);
 void pvl_apply(pvl_list l,pvl_applyf f, void *v);
 
 
-#endif /* __PVL_H__ */
-
-
-
-
-
+#endif /* ICAL_PVL_H */

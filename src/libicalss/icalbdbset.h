@@ -19,10 +19,15 @@
 #ifndef ICALBDBSET_H
 #define ICALBDBSET_H
 
+#include "icalset.h"
+
+#include <db.h>
+
+#ifdef UNCLEAN
 #include <libical/ical.h>
 #include <libicalss/icalset.h>
 #include <libicalss/icalgauge.h>
-#include <db.h>
+#endif
 
 typedef struct icalbdbset_impl icalbdbset;
 

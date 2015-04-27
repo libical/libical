@@ -22,6 +22,7 @@
 
 #include "libical_icalss_export.h"
 
+#ifdef UNCLEAN
 extern "C" {
 #include <libical/ical.h>
 #include <libicalss/icalgauge.h>
@@ -30,6 +31,7 @@ extern "C" {
 #include <db_cxx.h>
 
 #include <string>
+#endif
 
 namespace LibICal
 {

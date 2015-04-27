@@ -10,12 +10,12 @@
   Version 1.0 (the "License"); you may not use this file except in
   compliance with the License. You may obtain a copy of the License at
   http://www.mozilla.org/MPL/
- 
+
   Software distributed under the License is distributed on an "AS IS"
   basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
   the License for the specific language governing rights and
   limitations under the License.
- 
+
   The Original Code is eric. The Initial Developer of the Original
   Code is Eric Busboom
 
@@ -26,6 +26,12 @@
 #include <config.h>
 #endif
 
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
+
+#include <stdlib.h>
+
+#ifdef UNCLEAN
 #include <stdio.h> /* for printf */
 #include <errno.h>
 #include <string.h> /* For strerror */
@@ -37,7 +43,7 @@
 
 #include <libical/ical.h>
 #include <libicalss/icalss.h>
-
+#endif
 #if defined(SIGALRM)
 
 static void sig_alrm(int i){
@@ -63,12 +69,12 @@ int main(int c, char *argv[]){
     int tostdout = 0;
 
     if(c < 2 || c > 3){
-	usage(argv[0]);
-	exit(1);
+        usage(argv[0]);
+        exit(1);
     }
 
     if (c == 2){
-	tostdout = 1;
+        tostdout = 1;
     }
 
 
@@ -83,42 +89,42 @@ int main(int c, char *argv[]){
     alarm(0);
 #endif
     if (clusterin == 0){
-	printf("Could not open input cluster \"%s\"\n",argv[1]);
-	if(icalerrno!= ICAL_NO_ERROR){
+        printf("Could not open input cluster \"%s\"\n",argv[1]);
+        if(icalerrno!= ICAL_NO_ERROR){
           printf("Error: %s\n",icalerror_strerror(icalerrno));
         }
-	exit(1);
+        exit(1);
     }
 
     if (!tostdout){
 #if defined(SIGALRM)
         alarm(10);
 #endif
-	clusterout = icalfileset_new(argv[2]);
+        clusterout = icalfileset_new(argv[2]);
 #if defined(SIGALRM)
-	alarm(0);
+        alarm(0);
 #endif
-	if (clusterout == 0){
-	    printf("Could not open output cluster \"%s\"\n",argv[2]);
-	    exit(1);
-	}
+        if (clusterout == 0){
+            printf("Could not open output cluster \"%s\"\n",argv[2]);
+            exit(1);
+        }
     }
 
 
     for (itr = icalset_get_first_component(clusterin);
-	 itr != 0;
-	 itr = icalset_get_next_component(clusterin)){
+         itr != 0;
+         itr = icalset_get_next_component(clusterin)){
 
         icalerror_set_error_state(ICAL_BADARG_ERROR, ICAL_ERROR_NONFATAL);
-	icalrestriction_check(itr);
+        icalrestriction_check(itr);
         icalerror_set_error_state(ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT);
 
-	if(tostdout){
-	    printf("--------------\n%s\n",icalcomponent_as_ical_string(itr));
-	} else {
-	    icalfileset_add_component(clusterout, icalcomponent_new_clone(itr));
-	}
-	count++;
+        if(tostdout){
+            printf("--------------\n%s\n",icalcomponent_as_ical_string(itr));
+        } else {
+            icalfileset_add_component(clusterout, icalcomponent_new_clone(itr));
+        }
+        count++;
     }
 
 
@@ -127,11 +133,9 @@ int main(int c, char *argv[]){
     icalset_free(clusterin);
 
     if (!tostdout){
-	icalfileset_mark(clusterout);
-	icalset_free(clusterout);
+        icalfileset_mark(clusterout);
+        icalset_free(clusterout);
     }
 
      return 0;
 }
-
-

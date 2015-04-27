@@ -19,11 +19,12 @@
 #define ICALVALUE_CXX_H
 
 #include "libical_ical_export.h"
+#include "icptrholder_cxx.h"
 
 extern "C" {
-#include <libical/ical.h>
+#include "icalerror.h"
+#include "icalvalue.h"
 };
-#include "icptrholder_cxx.h"
 
 #include <string>
 

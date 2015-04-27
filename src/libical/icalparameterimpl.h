@@ -2,16 +2,16 @@
   ======================================================================
   FILE: icalparameterimpl.h
   CREATOR: eric 09 May 1999
-  
+
   $Id: icalparameterimpl.h,v 1.4 2008-01-15 23:17:40 dothebart Exp $
   $Locker:  $
-    
+
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
@@ -27,26 +27,26 @@
      Graham Davison (g.m.davison@computer.org)
 
  ======================================================================*/
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #ifndef ICALPARAMETER_IMPL
 #define ICALPARAMETER_IMPL
 
-#include "icalparameter.h"
 #include "icalproperty.h"
+
+#ifdef UNCLEAN
+#include "icalparameter.h"
+#endif
 
 struct icalparameter_impl
 {
-	icalparameter_kind kind;
-	char id[5];
-	int size;
-	const char* string;
-	const char* x_name;
-	icalproperty* parent;
+        icalparameter_kind kind;
+        char id[5];
+        int size;
+        const char* string;
+        const char* x_name;
+        icalproperty* parent;
 
-	int data;
+        int data;
 };
 
 
