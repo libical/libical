@@ -25,6 +25,8 @@
 
 #include "icalcomponent.h"
 #include "icalerror.h"
+#include "icalmemory.h"
+#include "icalparser.h"
 #include "icalrestriction.h"
 #include "icaltimezone.h"
 
@@ -33,13 +35,11 @@
 
 #ifdef UNCLEAN
 #include "pvl.h" /* "Pointer-to-void list" */
-#include "icalmemory.h"
 #include "icalenums.h"
 #include "icaltime.h"
 #include "icalarray.h"
 #include "icalduration.h"
 #include "icalperiod.h"
-#include "icalparser.h"
 
 #include <stdarg.h> /* for va_list, etc */
 #include <errno.h>

@@ -30,9 +30,7 @@
 #ifndef ICALDURATION_H
 #define ICALDURATION_H
 
-#ifdef UNCLEAN
 #include "icaltime.h"
-#endif
 
 struct icaldurationtype
 {
