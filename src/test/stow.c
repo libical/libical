@@ -27,35 +27,32 @@
 #include <config.h>
 #endif
 
-#ifdef UNCLEAN
-#include <stdio.h>
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
+
+#include <ctype.h>
 #include <errno.h>
-#include <stdio.h>
-#include <string.h>
-#include <limits.h> /* for PATH_MAX */
-#include <assert.h>
 #include <stdlib.h>
-#include <sys/utsname.h> /* for uname */
+
+#if defined(HAVE_SYS_UTSNAME_H)
+#include <sys/utsname.h>
+#endif
+
+#define TMPSIZE 2048
+#define SENDMAIL "/usr/lib/sendmail -t"
+
+char* program_name;
+
+#ifdef UNCLEAN
+#include <assert.h>
 #include <sys/stat.h> /* for stat */
 #if defined(HAVE_UNISTD_H)
 #include <unistd.h> /* for stat, getpid, getopt */
 #endif
 #include <pwd.h> /* For getpwent */
 #include <sys/types.h> /* For getpwent */
-#include <ctype.h> /* for tolower */
-
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
-
-char* program_name;
-#define TMPSIZE 2048
-#define SENDMAIL "/usr/lib/sendmail -t"
 
 void usage(char *message);
-
-#ifndef PATH_MAX
-#define PATH_MAX 256 /* HACK */
-#endif
 #endif
 
 enum options {
@@ -139,30 +136,6 @@ char* lowercase(const char* str)
 
     return new;
 }
-
-#if 0
-char* get_local_attendee(struct options_struct *opt)
-{
-    char attendee[PATH_MAX];
-
-    if(opt->calid){
-
-        strncpy(attendee,opt->calid,PATH_MAX);
-
-    } else {
-
-        char* user = getenv("USER");
-        struct utsname uts;
-        uname(&utget_option);
-        /* HACK nodename may not be a fully qualified domain name */
-        snprintf(attendee,PATH_MAX,"%s@%s",user,uts.nodename);
-
-    }
-
-    return lowercase(attendee);
-}
-#endif
-
 
 icalcomponent* get_first_real_component(icalcomponent *comp)
 {
@@ -383,7 +356,7 @@ int check_attendee(icalproperty *p,  struct options_struct *opt){
     return 0;
 }
 
-char static_component_error_str[PATH_MAX];
+char static_component_error_str[MAXPATHLEN];
 char* check_component(icalcomponent* comp,  icalproperty **return_status,
                       struct options_struct *opt)
 {
@@ -469,9 +442,9 @@ char* check_component(icalcomponent* comp,  icalproperty **return_status,
         }
 
         if (found_attendee == 0){
-            memset(static_component_error_str,0,PATH_MAX);
+            memset(static_component_error_str,0,MAXPATHLEN);
 
-            snprintf(static_component_error_str,PATH_MAX,
+            snprintf(static_component_error_str,MAXPATHLEN,
                    "This target user (%s) is not listed as an attendee or organizer",
                     opt->calid );
             component_error_str = static_component_error_str;
@@ -487,7 +460,7 @@ char* check_component(icalcomponent* comp,  icalproperty **return_status,
         icalrestriction_check(comp);
 
         if(errors != icalcomponent_count_errors(comp)){
-            snprintf(static_component_error_str,PATH_MAX,
+            snprintf(static_component_error_str,MAXPATHLEN,
                    "The component does not conform to iTIP restrictions.\n Here is the original component; look at the X-LIC-ERROR properties\nfor details\n\n%s",icalcomponent_as_ical_string(comp));
             component_error_str = static_component_error_str;
             break;
@@ -605,19 +578,19 @@ void get_options(int argc, char* argv[], struct options_struct *opt)
 
     if(opt->calid == 0){
         /* If no calid specified, use username */
-        char attendee[PATH_MAX];
+        char attendee[MAXPATHLEN];
         char* user = getenv("USER");
         struct utsname uts;
         uname(&uts);
         /* HACK nodename may not be a fully qualified domain name */
-        snprintf(attendee,PATH_MAX,"%s@%s",user,uts.nodename);
+        snprintf(attendee,MAXPATHLEN,"%s@%s",user,uts.nodename);
 
         opt->calid = lowercase(attendee);
     }
 
     if(opt->storage == STORE_IN_FILE &&
         opt->output_file ==0){
-        char file[PATH_MAX];
+        char file[MAXPATHLEN];
         char* user = getenv("USER");
         struct passwd *pw;
 
@@ -645,7 +618,7 @@ void get_options(int argc, char* argv[], struct options_struct *opt)
             exit(1);
         }
 
-        snprintf(file,PATH_MAX,"%s/.facs/%s",pw->pw_dir,opt->calid);
+        snprintf(file,MAXPATHLEN,"%s/.facs/%s",pw->pw_dir,opt->calid);
 
         opt->output_file = strdup(file);
     }

@@ -25,6 +25,9 @@
 #include <config.h>
 #endif
 
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
+
 #ifdef UNCLEAN
 #include <stdio.h> /* for printf */
 #include <errno.h>
@@ -34,10 +37,8 @@
 #if defined(_MSC_VER)
 #define snprintf _snprintf
 #endif
-
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
 #endif
+
 void send_message(icalcomponent *reply,const char* this_user)
 {
     printf("From: %s\n\n%s\n",this_user,icalcomponent_as_ical_string(reply));

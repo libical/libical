@@ -29,15 +29,16 @@
 #include <config.h>
 #endif
 
+#include "libical/ical.h"
+
 #ifdef UNCLEAN
 #include <stdio.h>
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#include <libical/ical.h>
-
 #include <stdlib.h>
 #endif
+
 char str[] = "BEGIN:VCALENDAR\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\
 VERSION:2.0\

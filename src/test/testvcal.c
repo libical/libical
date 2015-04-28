@@ -29,10 +29,10 @@
 #include <config.h>
 #endif
 
-#ifdef UNCLEAN
-#include <libicalvcal/icalvcal.h>
-#include <stdio.h>
-#endif
+#include "libicalvcal/icalvcal.h"
+#include "libicalvcal/vcc.h"
+
+#include <assert.h>
 
 /* Given a vCal data file as its first argument, this program will
    print out an equivalent iCal component.

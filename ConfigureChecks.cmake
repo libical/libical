@@ -20,6 +20,8 @@ include(CheckFunctionExists)
 check_function_exists(access HAVE_ACCESS) #Unix <unistd.h>
 check_function_exists(_access HAVE__ACCESS) #Windows <io.h>
 check_function_exists(backtrace HAVE_BACKTRACE)
+check_function_exists(fork HAVE_FORK)
+check_function_exists(getpwent HAVE_GETPWENT)
 check_function_exists(gmtime_r HAVE_GMTIME_R)
 check_function_exists(isspace HAVE_ISSPACE)
 check_function_exists(iswspace HAVE_ISWSPACE)
@@ -35,6 +37,8 @@ check_function_exists(stricmp HAVE_STRICMP)
 check_function_exists(strdup HAVE_STRDUP) #Unix <string.h>
 check_function_exists(_strdup HAVE__STRDUP) #Windows <string.h>
 check_function_exists(unsetenv HAVE_UNSETENV)
+check_function_exists(unlink HAVE_UNLINK)
+check_function_exists(waitpid HAVE_WAITPID)
 
 include(CheckTypeSize)
 check_type_size(mode_t SIZEOF_MODE_T)

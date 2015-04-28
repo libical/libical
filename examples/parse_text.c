@@ -1,12 +1,7 @@
 /* parse_text.c
-   
- */
-#include <stdio.h>
-#include <errno.h>
-#include <stdio.h>
-#include <string.h>
-#include <libical/ical.h>
 
+ */
+#include <libical/ical.h>
 #include <stdlib.h>
 
 /* The icalparser_get_line routine will create a single *content* line
@@ -24,9 +19,9 @@ char* read_stream(char *s, size_t size, void *d)
 
 void parse_text(char* argv[])
 {
-    char* line; 
+    char* line;
     FILE* stream;
-    icalcomponent *c; 
+    icalcomponent *c;
 
     /* Create a new parser object */
     icalparser *parser = icalparser_new();
@@ -39,25 +34,25 @@ void parse_text(char* argv[])
     icalparser_set_gen_data(parser,stream);
 
     do{
-    
-	/* Get a single content line by making one or more calls to
+
+        /* Get a single content line by making one or more calls to
            read_stream()*/
-	line = icalparser_get_line(parser,read_stream);
+        line = icalparser_get_line(parser,read_stream);
 
-	/* Now, add that line into the parser object. If that line
+        /* Now, add that line into the parser object. If that line
            completes a component, c will be non-zero */
-	c = icalparser_add_line(parser,line);
+        c = icalparser_add_line(parser,line);
 
 
-	if (c != 0){
-	    char *temp = icalcomponent_as_ical_string_r(c);
-	    printf("%s", temp);
-	    free(temp);
+        if (c != 0){
+            char *temp = icalcomponent_as_ical_string_r(c);
+            printf("%s", temp);
+            free(temp);
 
-	    printf("\n---------------\n");
+            printf("\n---------------\n");
 
-	    icalcomponent_free(c);
-	}
+            icalcomponent_free(c);
+        }
 
     } while ( line != 0);
 

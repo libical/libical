@@ -17,20 +17,22 @@
 #include <config.h>
 #endif
 
-#ifdef UNCLEAN
 extern "C" {
 #include "regression.h"
+#include "libical/icalparser.h"
 };
 
-#include "icalparameter_cxx.h"
 #include "icalproperty_cxx.h"
 #include "vcomponent_cxx.h"
 using namespace LibICal;
 
-#include <cstdio>
-#include <cstdlib>
 #include <string>
 using namespace std;
+
+#ifdef UNCLEAN
+#include "icalparameter_cxx.h"
+#include <cstdio>
+#include <cstdlib>
 #endif
 
 char content[] = "BEGIN:VCALENDAR\n\

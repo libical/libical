@@ -37,8 +37,11 @@
 #include <config.h>
 #endif
 
+#include "libical/ical.h"
+
+#include <stdlib.h>
+
 #ifdef UNCLEAN
-#include <libical/ical.h>
 
 #include <stdlib.h> /* For rand */
 #include <string.h> /* for strrchr, strdup*/

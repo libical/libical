@@ -2,16 +2,14 @@
 #include <config.h>
 #endif
 
-#ifdef UNCLEAN
-#include <libical/ical.h>
+#include "libical/ical.h"
 
-#include <stdlib.h>     /* abort() */
-#include <string.h>     /* strcmp() */
+#include <stdlib.h>
+
+int QUIET = 0;
+int VERBOSE = 1;
 
 static char ictt_str[1024];
-int VERBOSE = 1;
-int QUIET = 0;
-#endif
 
 const char* ical_timet_string(const time_t t)
 {

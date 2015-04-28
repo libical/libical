@@ -117,6 +117,18 @@
 /* Define to 1 if you have the `unsetenv' function. */
 #cmakedefine HAVE_UNSETENV 1
 
+/* Define to 1 if you have the `waitpid' function. */
+#cmakedefine HAVE_WAITPID 1
+
+/* Define to 1 if you have the `fork' function. */
+#cmakedefine HAVE_FORK 1
+
+/* Define to 1 if you have the `getpwent' function. */
+#cmakedefine HAVE_GETPWENT 1
+
+/* Define to 1 if you have the `unlink' function. */
+#cmakedefine HAVE_UNLINK 1
+
 /* Define to 1 if you have the <wctype.h> header file. */
 #cmakedefine HAVE_WCTYPE_H 1
 
@@ -191,6 +203,12 @@ typedef int pid_t;
 
 /* whether we have ICU DANGI calendar */
 #cmakedefine HAVE_ICU_DANGI
+
+/* getpwent - function to get password file entry */
+#if defined(HAVE_GETPWENT)
+#include <sys/types.h>
+#include <pwd.h>
+#endif
 
 /* strcasecmp: String compare, case independent */
 #if !defined(HAVE_STRCASECMP)
@@ -284,6 +302,26 @@ typedef int pid_t;
 #endif
 #if !defined(X_OK) /* file has execute permission */
 #define X_OK 6
+#endif
+#endif
+
+/* fork - system function to create a child process */
+#if defined(HAVE_FORK)
+#if defined(HAVE_UNISTD_H)
+#include <unistd.h>
+#endif
+#endif
+
+/* waitpid - system function waiting on a process */
+#if defined(HAVE_WAITPID)
+#include <sys/types.h>
+#include <sys/wait.h>
+#endif
+
+/* unlink - system function to delete a file */
+#if defined(HAVE_UNLINK)
+#if defined(HAVE_UNISTD_H)
+#include <unistd.h>
 #endif
 #endif
 

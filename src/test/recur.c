@@ -29,6 +29,11 @@
 #include <config.h>
 #endif
 
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
+
+#include <stdlib.h>
+
 #ifdef UNCLEAN
 #include <assert.h>
 #include <string.h> /* for strdup */
@@ -39,9 +44,6 @@
 #ifndef WIN32
 #include <unistd.h> /* for alarm */
 #endif
-
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
 
 #ifdef WIN32
 #define snprintf _snprintf

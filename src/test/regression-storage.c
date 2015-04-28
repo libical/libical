@@ -28,18 +28,16 @@
 #include <config.h>
 #endif
 
-#ifdef UNCLEAN
 #include "regression.h"
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
 
-#include <assert.h>
-#include <string.h> /* for strdup */
-#include <stdlib.h> /* for malloc */
-#include <stdio.h> /* for printf */
-
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
+#include <stdlib.h>
 
 #define OUTPUT_FILE "filesetout.ics"
+
+#ifdef UNCLEAN
+#include <assert.h>
 #endif
 
 /* define sample calendar struct */

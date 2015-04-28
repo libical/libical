@@ -17,11 +17,13 @@
 #include <config.h>
 #endif
 
+#include "libical/ical.h"
+
+#include <stdlib.h>
+
 #ifdef UNCLEAN
-#include <libical/ical.h>
 #include <time.h>
 #include <stdio.h>
-#include <stdlib.h>
 #endif
 
 int main(int argc, char **argv)

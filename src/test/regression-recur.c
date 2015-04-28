@@ -24,14 +24,15 @@
 #include <config.h>
 #endif
 
-#ifdef UNCLEAN
 #include "regression.h"
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
 
+#include <stdlib.h>
+
+#ifdef UNCLEAN
 #include <assert.h>
 #include <string.h> /* for strdup */
-#include <stdlib.h> /* for malloc */
 #include <stdio.h>  /* for printf */
 #include <signal.h> /* for signal */
 #ifndef _WIN32

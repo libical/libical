@@ -24,18 +24,18 @@
 #include <config.h>
 #endif
 
-#ifdef UNCLEAN
 #include "regression.h"
-
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
-#include <libicalvcal/vobject.h>
-#include <libicalvcal/icalvcal.h>
-#include <libicalvcal/vcc.h>
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
+#include "libicalvcal/icalvcal.h"
+#include "libicalvcal/vobject.h"
+#include "libicalvcal/vcc.h"
 
 #include <assert.h>
+#include <stdlib.h>
+
+#ifdef UNCLEAN
 #include <string.h> /* for strdup */
-#include <stdlib.h> /* for malloc */
 #include <stdio.h> /* for printf */
 #ifndef _WIN32
 #include <unistd.h> /* for unlink, fork */
@@ -1236,7 +1236,7 @@ void test_strings(){
       printf("%s\n",icalvalue_as_ical_string(v));
 
     str_is("test encoding of 'foo\\\\;b\\nar\\\\;ba\\tts'",
-       "foo\\\\\\;b\\nar\\\\\\;ba       ts", icalvalue_as_ical_string(v));
+       "foo\\\\\\;b\\nar\\\\\\;ba	ts", icalvalue_as_ical_string(v));
 
     icalvalue_free(v);
 }
@@ -2838,6 +2838,7 @@ icalcomponent* make_component(int i){
 }
 void test_fileset()
 {
+#if defined(HAVE_UNLINK)
     icalset *fs;
     icalcomponent *c;
     int i;
@@ -2895,7 +2896,7 @@ void test_fileset()
     icalset_free(fs);
 
         /*icalgauge_free(g);*/
-
+#endif
 }
 
 void microsleep(int us)
@@ -2915,7 +2916,7 @@ void microsleep(int us)
 
 void test_file_locks()
 {
-#ifndef _WIN32
+#if defined(HAVE_WAITPID) && defined(HAVE_FORK) && defined(HAVE_UNLINK)
     pid_t pid;
     char *path = "test_fileset_locktest.ics";
     icalset *fs;
@@ -2963,7 +2964,6 @@ void test_file_locks()
         for(i = 0; i< 50; i++){
             fs = icalfileset_new(path);
 
-
             assert(fs != 0);
 
             c = icalfileset_get_first_component(fs);
@@ -2986,8 +2986,6 @@ void test_file_locks()
             icalset_free(fs);
 
             microsleep(rand()/(RAND_MAX/20));
-
-
         }
 
         exit(0);
@@ -3027,7 +3025,6 @@ void test_file_locks()
 
     assert(waitpid(pid,0,0)==pid);
 
-
     fs = icalfileset_new(path);
 
     i=1;
@@ -3046,7 +3043,6 @@ void test_file_locks()
     }
 
     printf("\nFinal: %d\n",final);
-
 
     assert(sec == final);
     _unused(sec)
@@ -3345,7 +3341,7 @@ void test_langbind()
 "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:\r\n"
 " employee-A@host.com\r\n"
 "COMMENT:Comment that spans a line\r\n"
-"COMMENT:Comment with \"quotable\" 'characters' and other        bad magic things \r\n"
+"COMMENT:Comment with \"quotable\" 'characters' and other 	 bad magic things \r\n"
 "  Yeah.\r\n"
 "DTSTART:19970101T120000\r\n"
 "DTSTART:19970101T120000Z\r\n"
@@ -3920,3 +3916,9 @@ int main(int argc, char *argv[])
     /* return a non-zero exit code if a test failed */
     return failed_count > 0;
 }
+
+/* make sure to keep tabs in our test strings */
+/* Local Variables:    */
+/* mode: c             */
+/* indent-tabs-mode: t */
+/* End:                */
