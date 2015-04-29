@@ -108,7 +108,7 @@ find_package(Perl REQUIRED)
 
 # libicu is highly recommended for RSCALE support
 #  libicu can be found at http://www.icu-project.org
-#  RSCALE info at http://tools.ietf.org/html/draft-daboo-icalendar-rscale
+#  RSCALE info at http://tools.ietf.org/html/rfc7529
 find_package(ICU)
 if(ICU_FOUND)
   set(HAVE_LIBICU 1)
