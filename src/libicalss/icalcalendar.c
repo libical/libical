@@ -42,10 +42,6 @@
 #include <unistd.h>  /* For mkdir, stat */
 #endif
 
-#ifndef PATH_MAX
-#define PATH_MAX 512
-#endif
-
 #include <string.h> /* for strcat */
 
 #ifdef WIN32
@@ -75,17 +71,17 @@ struct icalcalendar_impl* icalcalendar_new_impl(void)
 
 icalerrorenum icalcalendar_create(struct icalcalendar_impl* impl)
 {
-    char path[PATH_MAX];
+    char path[MAXPATHLEN];
     struct stat sbuf;
     int r;
 
     icalerror_check_arg_re((impl != 0),"impl",ICAL_BADARG_ERROR);
 
     path[0] = '\0';
-    strncpy(path,impl->dir,PATH_MAX-1);
-    strncat(path,"/",PATH_MAX-strlen(path)-1);
-    strncat(path,BOOKED_DIR,PATH_MAX-strlen(path)-1);
-    path[PATH_MAX-1] = '\0';
+    strncpy(path,impl->dir,MAXPATHLEN-1);
+    strncat(path,"/",MAXPATHLEN-strlen(path)-1);
+    strncat(path,BOOKED_DIR,MAXPATHLEN-strlen(path)-1);
+    path[MAXPATHLEN-1] = '\0';
 
     r = stat(path,&sbuf);
 
@@ -185,15 +181,15 @@ int icalcalendar_ownlock(icalcalendar* impl)
 
 icalset* icalcalendar_get_booked(icalcalendar* impl)
 {
-    char dir[PATH_MAX];
+    char dir[MAXPATHLEN];
 
     icalerror_check_arg_rz((impl != 0),"impl");
 
     dir[0] = '\0';
-    strncpy(dir,impl->dir,PATH_MAX-1);
-    strncat(dir,"/",PATH_MAX-strlen(dir)-1);
-    strncat(dir,BOOKED_DIR,PATH_MAX-strlen(dir)-1);
-    dir[PATH_MAX-1] = '\0';
+    strncpy(dir,impl->dir,MAXPATHLEN-1);
+    strncat(dir,"/",MAXPATHLEN-strlen(dir)-1);
+    strncat(dir,BOOKED_DIR,MAXPATHLEN-strlen(dir)-1);
+    dir[MAXPATHLEN-1] = '\0';
 
     if (impl->booked == 0){
         icalerror_clear_errno();
@@ -207,14 +203,14 @@ icalset* icalcalendar_get_booked(icalcalendar* impl)
 
 icalset* icalcalendar_get_incoming(icalcalendar* impl)
 {
-    char path[PATH_MAX];
+    char path[MAXPATHLEN];
     icalerror_check_arg_rz((impl != 0),"impl");
 
     path[0] = '\0';
-    strncpy(path,impl->dir,PATH_MAX-1);
-    strncat(path,"/",PATH_MAX-strlen(path)-1);
-    strncat(path,INCOMING_FILE,PATH_MAX-strlen(path)-1);
-    path[PATH_MAX-1] = '\0';
+    strncpy(path,impl->dir,MAXPATHLEN-1);
+    strncat(path,"/",MAXPATHLEN-strlen(path)-1);
+    strncat(path,INCOMING_FILE,MAXPATHLEN-strlen(path)-1);
+    path[MAXPATHLEN-1] = '\0';
 
     if (impl->properties == 0){
         impl->properties = icalfileset_new(path);
@@ -225,14 +221,14 @@ icalset* icalcalendar_get_incoming(icalcalendar* impl)
 
 icalset* icalcalendar_get_properties(icalcalendar* impl)
 {
-    char path[PATH_MAX];
+    char path[MAXPATHLEN];
     icalerror_check_arg_rz((impl != 0),"impl");
 
     path[0] = '\0';
-    strncpy(path,impl->dir,PATH_MAX-1);
-    strncat(path,"/",PATH_MAX-strlen(path)-1);
-    strncat(path,PROP_FILE,PATH_MAX-strlen(path)-1);
-    path[PATH_MAX-1] = '\0';
+    strncpy(path,impl->dir,MAXPATHLEN-1);
+    strncat(path,"/",MAXPATHLEN-strlen(path)-1);
+    strncat(path,PROP_FILE,MAXPATHLEN-strlen(path)-1);
+    path[MAXPATHLEN-1] = '\0';
 
     if (impl->properties == 0){
         impl->properties = icalfileset_new(path);
@@ -243,14 +239,14 @@ icalset* icalcalendar_get_properties(icalcalendar* impl)
 
 icalset* icalcalendar_get_freebusy(icalcalendar* impl)
 {
-    char path[PATH_MAX];
+    char path[MAXPATHLEN];
     icalerror_check_arg_rz((impl != 0),"impl");
 
     path[0] = '\0';
-    strncpy(path,impl->dir,PATH_MAX-1);
-    strncat(path,"/",PATH_MAX-strlen(path)-1);
-    strncat(path,FBLIST_FILE,PATH_MAX-strlen(path)-1);
-    path[PATH_MAX-1] = '\0';
+    strncpy(path,impl->dir,MAXPATHLEN-1);
+    strncat(path,"/",MAXPATHLEN-strlen(path)-1);
+    strncat(path,FBLIST_FILE,MAXPATHLEN-strlen(path)-1);
+    path[MAXPATHLEN-1] = '\0';
 
     if (impl->freebusy == 0){
         impl->freebusy = icalfileset_new(path);

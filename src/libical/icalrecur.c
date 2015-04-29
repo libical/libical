@@ -137,6 +137,7 @@
 #include "icaltimezone.h"
 
 #include <ctype.h>
+#include <stddef.h> /* For offsetof() macro */
 #include <stdlib.h>
 
 #ifdef HAVE_LIBICU
@@ -173,7 +174,6 @@ typedef long intptr_t;
 #include <errno.h> /* for errno */
 #include <string.h> /* for strdup and strchr*/
 #include <assert.h>
-#include <stddef.h> /* For offsetof() macro */
 #ifdef HAVE_INTTYPES_H
 #include <inttypes.h>
 #endif

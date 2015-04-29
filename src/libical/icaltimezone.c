@@ -45,16 +45,6 @@
 static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
-
-#ifdef UNCLEAN
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "icalproperty.h"
-
-#include <sys/stat.h>
-
 #ifdef WIN32
 #ifndef _WIN32_WCE
 #include <mbstring.h>
@@ -71,12 +61,6 @@ static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
 // MSVC lacks the POSIX macro S_ISDIR, however it's a trivial one:
 #ifndef S_ISDIR
 #define S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
-#endif
-#endif
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
 #endif
 
 #endif

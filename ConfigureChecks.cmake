@@ -33,7 +33,9 @@ check_function_exists(_snprintf HAVE__SNPRINTF) #Windows <stdio.h>
 check_function_exists(stat HAVE_STAT)
 check_function_exists(_stat HAVE__STAT)
 check_function_exists(strcasecmp HAVE_STRCASECMP)
+check_function_exists(strncasecmp HAVE_STRNCASECMP)
 check_function_exists(stricmp HAVE_STRICMP)
+check_function_exists(strnicmp HAVE_STRNICMP)
 check_function_exists(strdup HAVE_STRDUP) #Unix <string.h>
 check_function_exists(_strdup HAVE__STRDUP) #Windows <string.h>
 check_function_exists(unsetenv HAVE_UNSETENV)

@@ -66,8 +66,14 @@
 /* Define to 1 if you have the `strcasecmp' function. */
 #cmakedefine HAVE_STRCASECMP 1
 
+/* Define to 1 if you have the `strncasecmp' function. */
+#cmakedefine HAVE_STRNCASECMP 1
+
 /* Define to 1 if you have the `stricmp' function. */
 #cmakedefine HAVE_STRICMP 1
+
+/* Define to 1 if you have the `strnicmp' function. */
+#cmakedefine HAVE_STRNICMP 1
 
 /* Define to 1 if you have the `strdup' function. */
 #cmakedefine HAVE_STRDUP 1
@@ -216,6 +222,17 @@ typedef int pid_t;
 #define strcasecmp stricmp
 #else
 #error "No case independent string compare function available"
+#endif
+#else
+#include <strings.h>
+#endif
+
+/* strncasecmp: String compare, case independent, size limited */
+#if !defined(HAVE_STRNCASECMP)
+#if defined(HAVE_STRNICMP)
+#define strncasecmp strnicmp
+#else
+#error "No case independent string compare size limited function available"
 #endif
 #else
 #include <strings.h>
