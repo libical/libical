@@ -89,7 +89,6 @@ FILE_PATTERNS          = *.cpp \
                          *.dox
 RECURSIVE              = YES
 EXCLUDE                = @CMAKE_SOURCE_DIR@/src/java \
-                         @CMAKE_SOURCE_DIR@/src/libicalcap \
 			 @CMAKE_SOURCE_DIR@/src/php \
 			 @CMAKE_SOURCE_DIR@/src/python
 EXCLUDE_SYMLINKS       = NO
