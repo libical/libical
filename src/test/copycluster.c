@@ -39,19 +39,14 @@
 #if defined(HAVE_UNISTD_H)
 #include <unistd.h> /* for alarm */
 #endif
-#include <stdlib.h> /* for exit */
-
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
 #endif
-#if defined(SIGALRM)
 
+#if defined(SIGALRM)
 static void sig_alrm(int i){
     (void)i;/*unused*/
     fprintf(stderr,"Could not get lock on file\n");
     exit(1);
 }
-
 #endif
 
 /* This program copies a file that holds iCal components to an other file. */

@@ -25,6 +25,9 @@
 
  ======================================================================*/
 
+#ifndef ICALDIRSETIMPL_H
+#define ICALDIRSETIMPL_H
+
 #include "icalcluster.h"
 
 /* This definition is in its own file so it can be kept out of the
@@ -41,3 +44,5 @@ struct icaldirset_impl
   pvl_list directory;           /**< ??? */
   pvl_elem directory_iterator;  /**< ??? */
 };
+
+#endif

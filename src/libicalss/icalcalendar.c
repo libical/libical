@@ -55,6 +55,15 @@
 #define PROP_FILE "properties.ics"
 #define FBLIST_FILE "freebusy.ics"
 
+struct icalcalendar_impl
+{
+    char* dir;
+    icalset* freebusy;
+    icalset* properties;
+    icalset* booked;
+    icalset* incoming;
+};
+
 struct icalcalendar_impl* icalcalendar_new_impl(void)
 {
     struct icalcalendar_impl* impl;

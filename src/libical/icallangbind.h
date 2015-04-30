@@ -2,15 +2,15 @@
   ======================================================================
   FILE: icallangbind.h
   CREATOR: eric 25 jan 2001
-  
+
   DESCRIPTION:
-  
+
   $Id: icallangbind.h,v 1.8 2008-01-02 20:07:31 dothebart Exp $
   $Locker:  $
 
-  (C) COPYRIGHT 1999 Eric Busboom 
+  (C) COPYRIGHT 1999 Eric Busboom
   http://www.softwarestudio.org
-  
+
   This package is free software and is provided "as is" without
   express or implied warranty.  It may be used, redistributed and/or
   modified under the same terms as perl itself. ( Either the Artistic
@@ -18,8 +18,8 @@
 
   ======================================================================*/
 
-#ifndef __ICALLANGBIND_H__
-#define __ICALLANGBIND_H__
+#ifndef ICALLANGBIND_H
+#define ICALLANGBIND_H
 
 int* icallangbind_new_array(int size);
 void icallangbind_free_array(int* array);
@@ -53,4 +53,5 @@ int icallangbind_string_to_open_flag(const char* str);
 
 const char* icallangbind_quote_as_ical(const char* str);
 char* icallangbind_quote_as_ical_r(const char* str);
-#endif /*__ICALLANGBIND_H__*/
+
+#endif

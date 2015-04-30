@@ -1,5 +1,5 @@
-#ifndef __ICALCAP_IMPL_H__
-#define __ICALCAP_IMPL_H__
+#ifndef ICALCAP_IMPL_H
+#define ICALCAP_IMPL_H
 
 #include "icalcap_session.h"
 
@@ -11,19 +11,19 @@
 #include <librrcap/rr-cap.h>
 
 struct _icalcap {
-	RRCAP	       *chan;
-	const char     *username,
-		       *authname;
+        RRCAP          *chan;
+        const char     *username,
+                       *authname;
 };
 
 struct _icalerror {
-	GError *err;
+        GError *err;
 };
 
 
-void	icalcap_free_rr(icalcap *cap);
+void    icalcap_free_rr(icalcap *cap);
 
-int	icalcap_stop_rr(icalcap *cap);
+int     icalcap_stop_rr(icalcap *cap);
 
 icalcomponent *icalcap_send_component_rr(const icalcap *cap, const icalcomponent *comp, int timeout);
 

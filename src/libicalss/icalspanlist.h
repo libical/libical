@@ -31,12 +31,6 @@
  *  @brief Code that supports collections of free/busy spans of time
  */
 
-struct icalspanlist_impl {
-  pvl_list spans;               /**< list of icaltime_span data **/
-  struct icaltimetype start;    /**< start time of span **/
-  struct icaltimetype end;      /**< end time of span **/
-};
-
 typedef struct icalspanlist_impl icalspanlist;
 
 

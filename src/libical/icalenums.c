@@ -31,17 +31,6 @@
 #include "icalenums.h"
 #include "icalmemory.h"
 
-#ifdef UNCLEAN
-#include <stdio.h> /* For fprintf */
-#include <stdio.h> /* For stderr */
-#include <string.h> /* For strncmp */
-#include <assert.h>
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#endif
-#endif
-
 /*** @brief Allowed request status values
  */
 static const struct {

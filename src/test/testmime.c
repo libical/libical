@@ -42,9 +42,6 @@
 #include <stdlib.h>
 
 #ifdef UNCLEAN
-
-#include <stdlib.h> /* For rand */
-#include <string.h> /* for strrchr, strdup*/
 #if defined(HAVE_UNISTD_H)
 #include <unistd.h>   /* for getopt, sleep */
 #endif

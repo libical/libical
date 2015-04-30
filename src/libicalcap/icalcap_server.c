@@ -1,33 +1,34 @@
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "icalcap.h"
 #include "icalcap_server.h"
 #include "icalcap_server_impl.h"
 
-
 icalcap_server *
 icalcap_server_new(icalcap_auth_handler auth_cb, icalcap_chanup_handler chanup_cb,
-	icalcap_msg_handler msg_cb) {
+        icalcap_msg_handler msg_cb) {
 
 #ifdef WITH_RR
-	return icalcap_server_new_rr(auth_cb, chanup_cb, msg_cb);
+        return icalcap_server_new_rr(auth_cb, chanup_cb, msg_cb);
 #else
-	return NULL;
+        return NULL;
 #endif
 }
 
 int
 icalcap_server_listen(icalcap_server *cap, const char *hostname, const int _port) {
 
-	int port = _port;
+        int port = _port;
 
-	if (port <= 0)
-		port = 1026;
+        if (port <= 0)
+                port = 1026;
 
 #ifdef WITH_RR
-	return icalcap_server_listen_rr(cap, hostname, port);
+        return icalcap_server_listen_rr(cap, hostname, port);
 #else
-	return 0;
+        return 0;
 #endif
 }
 
@@ -35,9 +36,9 @@ int
 icalcap_server_run(const icalcap_server *cap) {
 
 #ifdef WITH_RR
-	return icalcap_server_run_rr(cap);
+        return icalcap_server_run_rr(cap);
 #else
-	return 0;
+        return 0;
 #endif
 }
 
@@ -45,8 +46,8 @@ int
 icalcap_server_shutdown(icalcap_server *cap) {
 
 #ifdef WITH_RR
-	return icalcap_server_shutdown_rr(cap);
+        return icalcap_server_shutdown_rr(cap);
 #else
-	return 0;
+        return 0;
 #endif
 }

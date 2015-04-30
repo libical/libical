@@ -29,24 +29,6 @@
 #include "icalproperty.h"
 #include "pvl.h"
 
-struct icalcomponent_impl
-{
-        char id[5];
-        icalcomponent_kind kind;
-        char* x_name;
-        pvl_list properties;
-        pvl_elem property_iterator;
-        pvl_list components;
-        pvl_elem component_iterator;
-        struct icalcomponent_impl *parent;
-
-        /** An array of icaltimezone structs. We use this so we can do fast
-           lookup of timezones using binary searches. timezones_sorted is
-           set to 0 whenever we add a timezone, so we remember to sort the
-           array before doing a binary search. */
-        icalarray* timezones;
-        int timezones_sorted;
-};
 typedef struct icalcomponent_impl icalcomponent;
 
 #ifdef UNCLEAN

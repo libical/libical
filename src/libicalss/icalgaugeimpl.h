@@ -22,6 +22,9 @@
 
 ======================================================================*/
 
+#ifndef ICALGAUGEIMPL_H
+#define ICALGAUGEIMPL_H
+
 #include "icalcomponent.h"
 
 typedef enum icalgaugecompare {
@@ -59,3 +62,5 @@ struct icalgauge_impl
         pvl_list where;  /**< List of icalgaugecompare */
         int      expand;
 };
+
+#endif

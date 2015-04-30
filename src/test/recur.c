@@ -37,21 +37,13 @@
 #ifdef UNCLEAN
 #include <assert.h>
 #include <string.h> /* for strdup */
-#include <stdlib.h> /* for malloc */
-#include <stdio.h> /* for printf */
 #include <time.h> /* for time() */
 #include <signal.h> /* for signal */
 #ifndef WIN32
 #include <unistd.h> /* for alarm */
 #endif
+#endif
 
-#ifdef WIN32
-#define snprintf _snprintf
-#endif
-#ifdef _MSC_VER
-#define strcasecmp stricmp
-#endif
-#endif
 #ifndef WIN32
 static void sig_alrm(int i){
     (void)i;/*unused*/

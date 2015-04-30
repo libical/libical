@@ -25,6 +25,9 @@
 
  ======================================================================*/
 
+#ifndef ICALCLUSTERIMPL_H
+#define ICALCLUSTERIMPL_H
+
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icaldirset*/
 
@@ -38,3 +41,5 @@ struct icalcluster_impl {
         icalcomponent  *data;
         int             changed;
 };
+
+#endif

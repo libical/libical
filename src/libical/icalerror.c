@@ -32,12 +32,12 @@
 #include "icalerror.h"
 
 #include <stdlib.h>
+
 #ifdef HAVE_BACKTRACE
 #include <execinfo.h>
 #endif
 
 #ifdef UNCLEAN
-#include <stdlib.h>             /* for malloc() */
 #include <string.h>             /* for strcmp */
 #if defined(_MSC_VER)
 #define LIBICAL_EXPORT __declspec(dllexport)

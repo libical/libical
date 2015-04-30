@@ -52,7 +52,6 @@
 #include <stddef.h> /* For offsetof() macro */
 #include <errno.h>
 #include <time.h> /* for mktime */
-#include <stdlib.h> /* for atoi and atof */
 #include <limits.h> /* for SHRT_MAX */
 
 #if defined(_MSC_VER)

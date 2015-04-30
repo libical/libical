@@ -2,15 +2,15 @@
   ======================================================================
   FILE: icallangbind.c
   CREATOR: eric 15 dec 2000
-  
+
   DESCRIPTION:
-  
+
   $Id: icallangbind.c,v 1.24 2008-01-02 20:07:31 dothebart Exp $
   $Locker:  $
 
-  (C) COPYRIGHT 1999 Eric Busboom 
+  (C) COPYRIGHT 1999 Eric Busboom
   http://www.softwarestudio.org
-  
+
   This package is free software and is provided "as is" without
   express or implied warranty.  It may be used, redistributed and/or
   modified under the same terms as perl itself. ( Either the Artistic
@@ -19,7 +19,7 @@
   ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include "icalcomponent.h"
@@ -46,7 +46,7 @@ void icallangbind_free_array(int* array){
 
 int icallangbind_access_array(int* array, int index) {
     return array[index];
-}                    
+}
 
 /** Iterators to fetch parameters given property */
 
@@ -54,17 +54,17 @@ icalparameter* icallangbind_get_first_parameter(icalproperty *prop)
 
 {
     icalparameter_kind kind = ICAL_ANY_PARAMETER;
-    
+
     return icalproperty_get_first_parameter(prop,kind);
 }
 
 icalparameter* icallangbind_get_next_parameter(icalproperty *prop)
 {
     icalparameter_kind kind = ICAL_ANY_PARAMETER;
-    
+
     return icalproperty_get_next_parameter(prop,kind);
 }
-		                                              
+
 
 /** Like icalcomponent_get_first_component(), but takes a string for the
    kind and can iterate over X properties as if each X name was a
@@ -77,24 +77,24 @@ icalproperty* icallangbind_get_first_property(icalcomponent *c,
     icalproperty *p;
 
     if (kind == ICAL_NO_PROPERTY){
-	return 0;
+        return 0;
     }
 
     if(kind == ICAL_X_PROPERTY){
         for(p = icalcomponent_get_first_property(c,kind);
             p !=0;
             p = icalcomponent_get_next_property(c,kind)){
-            
+
             if(strcmp(icalproperty_get_x_name(p),prop) == 0){
                 return p;
-            }                
+            }
         }
     } else {
         p=icalcomponent_get_first_property(c,kind);
 
         return p;
     }
-	
+
     return 0;
 
 }
@@ -106,24 +106,24 @@ icalproperty* icallangbind_get_next_property(icalcomponent *c,
     icalproperty *p;
 
     if (kind == ICAL_NO_PROPERTY){
-	return 0;
+        return 0;
     }
 
     if(kind == ICAL_X_PROPERTY){
         for(p = icalcomponent_get_next_property(c,kind);
             p !=0;
             p = icalcomponent_get_next_property(c,kind)){
-            
+
             if(strcmp(icalproperty_get_x_name(p),prop) == 0){
                 return p;
-            }                
+            }
         }
     } else {
         p=icalcomponent_get_next_property(c,kind);
 
         return p;
     }
-	
+
     return 0;
 
 }
@@ -135,7 +135,7 @@ icalcomponent* icallangbind_get_first_component(icalcomponent *c,
     icalcomponent_kind kind = icalenum_string_to_component_kind(comp);
 
     if (kind == ICAL_NO_COMPONENT){
-	return 0;
+        return 0;
     }
     return icalcomponent_get_first_component(c,kind);
 }
@@ -146,7 +146,7 @@ icalcomponent* icallangbind_get_next_component(icalcomponent *c,
     icalcomponent_kind kind = icalenum_string_to_component_kind(comp);
 
     if (kind == ICAL_NO_COMPONENT){
-	return 0;
+        return 0;
     }
     return icalcomponent_get_next_component(c,kind);
 }
@@ -160,16 +160,16 @@ char* icallangbind_property_eval_string_r(icalproperty* prop, char* sep)
 {
     char tmp[25];
     size_t buf_size = 1024;
-    char* buf; 
-    char* buf_ptr; 
+    char* buf;
+    char* buf_ptr;
     icalparameter *param;
-    
+
     icalvalue* value;
 
     if( prop == 0){
-	return 0;
+        return 0;
     }
-  
+
     buf = icalmemory_new_buffer(buf_size);
     buf_ptr = buf;
 
@@ -201,45 +201,45 @@ char* icallangbind_property_eval_string_r(icalproperty* prop, char* sep)
 
     if(value){
         switch (icalvalue_isa(value)){
-	
+
         case ICAL_ATTACH_VALUE:
-        case ICAL_BINARY_VALUE: 
+        case ICAL_BINARY_VALUE:
         case ICAL_NO_VALUE: {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
             break;
         }
 
-        default: 
+        default:
         {
             char* str = icalvalue_as_ical_string_r(value);
             char* copy = (char*) malloc(strlen(str)+1);
-            
+
             const char *i;
             char *j;
 
             if(copy ==0){
                 icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-                break; 
+                break;
             }
             /* Remove any newlines */
-                
+
             for(j=copy, i = str; *i != 0; j++,i++){
                 if(*i=='\n'){
                     i++;
-                }   
+                }
                 *j = *i;
             }
-                
+
             *j = 0;
-                
+
             APPENDS(", 'value'");
             APPENDS(sep);
             APPENDC('\'');
             APPENDS(copy);
             APPENDC('\'');
-            
+
             free(copy);
-	    free(str);
+            free(str);
             break;
 
         }
@@ -251,7 +251,7 @@ char* icallangbind_property_eval_string_r(icalproperty* prop, char* sep)
     for(param = icalproperty_get_first_parameter(prop,ICAL_ANY_PARAMETER);
         param != 0;
         param = icalproperty_get_next_parameter(prop,ICAL_ANY_PARAMETER)){
-        
+
         char *copy = icalparameter_as_ical_string_r(param);
         char *v;
 
@@ -278,9 +278,9 @@ char* icallangbind_property_eval_string_r(icalproperty* prop, char* sep)
         APPENDC('\'');
         APPENDS(sep);
         APPENDC('\'');
-        APPENDS(v);        
+        APPENDS(v);
         APPENDC('\'');
-	free(copy);
+        free(copy);
     }
 
 
@@ -292,10 +292,10 @@ char* icallangbind_property_eval_string_r(icalproperty* prop, char* sep)
 
 const char* icallangbind_property_eval_string(icalproperty* prop, char* sep)
 {
-	char *buf;
-	buf = icallangbind_property_eval_string_r(prop, sep);
-	icalmemory_add_tmp_buffer(buf);
-	return buf;
+        char *buf;
+        buf = icallangbind_property_eval_string_r(prop, sep);
+        icalmemory_add_tmp_buffer(buf);
+        return buf;
 }
 
 
@@ -325,9 +325,8 @@ char* icallangbind_quote_as_ical_r(const char* str)
 
 const char* icallangbind_quote_as_ical(const char* str)
 {
-	char *buf;
-	buf = icallangbind_quote_as_ical_r(str);
-	icalmemory_add_tmp_buffer(buf);
-	return(buf);
+        char *buf;
+        buf = icallangbind_quote_as_ical_r(str);
+        icalmemory_add_tmp_buffer(buf);
+        return(buf);
 }
-

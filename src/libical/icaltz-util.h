@@ -25,12 +25,6 @@
 
 #include "icalcomponent.h"
 
-#ifdef UNCLEAN
-#include <stdio.h>
-#include "icaltime.h"
-#include "icalcomponent.h"
-#endif
-
 #if defined(sun) && defined(__SVR4)
 #define ZONES_TAB_SYSTEM_FILENAME "tab/zone_sun.tab"
 #else

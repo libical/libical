@@ -9,4 +9,7 @@ SKIP /src/libicalvcal/vcaltmp\.
 SKIP /src/libicalvcal/vcc\.
 SKIP /src/libicalvcal/vobject\.
 
+#Skip zoneinfo
+SKIP /zoneinfo/
+
 STYLE_LINEMAX 100
