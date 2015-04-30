@@ -834,7 +834,7 @@ static int count_byrules(icalrecur_iterator* impl)
  * Callbacks for recurrence rules with RSCALE support (using ICU)
  *
  * References:
- *   - http://tools.ietf.org/html/draft-ietf-calext-rscale
+ *   - http://tools.ietf.org/html/rfc7529
  *   - http://en.wikipedia.org/wiki/Intercalation_%28timekeeping%29
  *   - http://icu-project.org/apiref/icu4c/ucal_8h.html
  *   - http://cldr.unicode.org/development/development-process/design-proposals/chinese-calendar-support
@@ -3286,7 +3286,7 @@ int icalrecurrencetype_day_position(short day)
 
 /**
  * The 'month' element of the by_month array is encoded to allow
- * representation of the "L" leap suffix (draft-ietf-calext-rscale).
+ * representation of the "L" leap suffix (RFC 7529).
  * These routines decode the month values.
  *
  * The "L" suffix is encoded by setting a high-order bit

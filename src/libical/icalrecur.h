@@ -126,7 +126,7 @@ enum {
  * Recurrence type routines
  */
 
-/* See RFC 5545 Section 3.3.10, RECUR Value, and draft-ietf-calext-rscale
+/* See RFC 5545 Section 3.3.10, RECUR Value, and RFC 7529
  * for an explanation of the values and fields in struct icalrecurrencetype.
  *
  * The maximums below are based on Chinese/Hebrew leap years (13 months)
@@ -174,7 +174,7 @@ struct icalrecurrencetype
         short by_month[ICAL_BY_MONTH_SIZE];
         short by_set_pos[ICAL_BY_SETPOS_SIZE];
 
-        /* For RSCALE extension (draft-ietf-calext-rscale) */
+        /* For RSCALE extension (RFC 7529) */
         char *rscale;
         icalrecurrencetype_skip skip;
 };
@@ -204,7 +204,7 @@ icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
 
 /**
  * The 'month' element of the by_month array is encoded to allow
- * representation of the "L" leap suffix (draft-ietf-calext-rscale).
+ * representation of the "L" leap suffix (RFC 7529).
  * These routines decode the month values.
  */
 
