@@ -84,6 +84,12 @@
 /* Define to 1 if you have the `_access' function. */
 #cmakedefine HAVE__ACCESS 1
 
+/* Define to 1 if you have the `mkdir' function. */
+#cmakedefine HAVE_MKDIR 1
+
+/* Define to 1 if you have the `_mkdir' function. */
+#cmakedefine HAVE__MKDIR 1
+
 /* Define to 1 if you have the `open' function. */
 #cmakedefine HAVE_OPEN 1
 
@@ -142,9 +148,6 @@
 /* Define to 1 if you DO NOT WANT to see deprecated messages */
 #define NO_WARN_DEPRECATED ${NO_WARN_DEPRECATED}
 
-/* Name of package */
-#define PACKAGE "${CMAKE_PROJECT_NAME}"
-
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "${PROJECT_URL}"
 
@@ -168,9 +171,6 @@
 
 /* whether we should bring our own TZ-Data */
 #cmakedefine USE_BUILTIN_TZDATA
-
-/* Version number of package */
-#define VERSION "${PROJECT_VERSION}"
 
 /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
    `char[]'. */
@@ -281,6 +281,19 @@ typedef int pid_t;
 #if defined(HAVE_UNISTD_H)
 #include <unistd.h>
 #endif
+#endif
+#endif
+
+/* mkdir - system function to create a directory */
+#if defined(HAVE__MKDIR)
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#else
+#if !defined(HAVE_MKDIR)
+#error "No create directory system function available"
+#else
+#include <sys/types.h>
+#include <sys/stat.h>
 #endif
 #endif
 

@@ -22,6 +22,8 @@ check_function_exists(getpwent HAVE_GETPWENT)
 check_function_exists(gmtime_r HAVE_GMTIME_R)
 check_function_exists(isspace HAVE_ISSPACE)
 check_function_exists(iswspace HAVE_ISWSPACE)
+check_function_exists(mkdir HAVE_MKDIR)
+check_function_exists(_mkdir HAVE__MKDIR) #Windows <io.h>
 check_function_exists(open HAVE_OPEN) #Unix <fcntl.h>
 check_function_exists(_open HAVE__OPEN) #Windows <io.h>
 check_function_exists(setenv HAVE_SETENV)

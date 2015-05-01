@@ -1,19 +1,14 @@
-/* -*- Mode: C -*- */
 /*======================================================================
  FILE: icalcalendar.h
  CREATOR: eric 23 December 1999
 
-
- $Id: icalcalendar.h,v 1.4 2008-01-02 20:07:39 dothebart Exp $
- $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
   Or:
 
@@ -22,8 +17,6 @@
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
-
 ======================================================================*/
 
 #ifndef ICALCALENDAR_H
