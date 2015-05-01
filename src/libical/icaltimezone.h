@@ -1,26 +1,19 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /*======================================================================
  FILE: icaltimezone.h
  CREATOR: Damon Chaplin 15 March 2001
 
-
- $Id: icaltimezone.h,v 1.14 2008-01-15 23:17:42 dothebart Exp $
- $Locker:  $
-
- (C) COPYRIGHT 2001, Damon Chaplin
+ (C) COPYRIGHT 2001, Damon Chaplin <damon@ximian.com>
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
-
 ======================================================================*/
 /**
  * @file icaltimezone.h
@@ -38,10 +31,10 @@
 
 #ifndef ICALTIMEZONE_DEFINED
 #define ICALTIMEZONE_DEFINED
-/** @brief An opaque struct representing a timezone.  
- * We declare this here to avoid a circular dependancy. 
+/** @brief An opaque struct representing a timezone.
+ * We declare this here to avoid a circular dependancy.
  */
-typedef struct _icaltimezone		icaltimezone;
+typedef struct _icaltimezone            icaltimezone;
 #endif
 
 /**
@@ -49,13 +42,13 @@ typedef struct _icaltimezone		icaltimezone;
  */
 
 /** Creates a new icaltimezone. */
-icaltimezone *icaltimezone_new			(void);
-icaltimezone *icaltimezone_copy			(icaltimezone *originalzone);
+icaltimezone *icaltimezone_new                  (void);
+icaltimezone *icaltimezone_copy                 (icaltimezone *originalzone);
 
 /** Frees all memory used for the icaltimezone. Set free_struct to free the
    icaltimezone struct as well. */
-void icaltimezone_free				(icaltimezone *zone,
-						 int free_struct);
+void icaltimezone_free                          (icaltimezone *zone,
+                                                 int free_struct);
 
 /** Sets the prefix to be used for tzid's generated from system tzdata.
     Must be globally unique (such as a domain name owned by the developer
@@ -72,46 +65,46 @@ void icaltimezone_set_tzid_prefix(const char *new_prefix);
 void icaltimezone_free_builtin_timezones(void);
 
 /** Returns the array of builtin icaltimezones. */
-icalarray* icaltimezone_get_builtin_timezones	(void);
+icalarray* icaltimezone_get_builtin_timezones   (void);
 
 /** Returns a single builtin timezone, given its Olson city name. */
-icaltimezone* icaltimezone_get_builtin_timezone	(const char *location);
+icaltimezone* icaltimezone_get_builtin_timezone (const char *location);
 
 /** Returns a single builtin timezone, given its offset. */
-icaltimezone* icaltimezone_get_builtin_timezone_from_offset	(int offset, const char *tzname);
+icaltimezone* icaltimezone_get_builtin_timezone_from_offset     (int offset, const char *tzname);
 
 /** Returns a single builtin timezone, given its TZID. */
 icaltimezone* icaltimezone_get_builtin_timezone_from_tzid (const char *tzid);
 
 /** Returns the UTC timezone. */
-icaltimezone* icaltimezone_get_utc_timezone	(void);
+icaltimezone* icaltimezone_get_utc_timezone     (void);
 
 /** Returns the TZID of a timezone. */
-const char*	icaltimezone_get_tzid			(icaltimezone *zone);
+const char*     icaltimezone_get_tzid                   (icaltimezone *zone);
 
 /** Returns the city name of a timezone. */
-const char*	icaltimezone_get_location		(icaltimezone *zone);
+const char*     icaltimezone_get_location               (icaltimezone *zone);
 
 /** Returns the TZNAME properties used in the latest STANDARD and DAYLIGHT
    components. If they are the same it will return just one, e.g. "LMT".
    If they are different it will format them like "EST/EDT". Note that this
    may also return NULL. */
-const char*	icaltimezone_get_tznames		(icaltimezone *zone);
+const char*     icaltimezone_get_tznames                (icaltimezone *zone);
 
 /** Returns the latitude of a builtin timezone. */
-double	icaltimezone_get_latitude		(icaltimezone *zone);
+double  icaltimezone_get_latitude               (icaltimezone *zone);
 
 /** Returns the longitude of a builtin timezone. */
-double	icaltimezone_get_longitude		(icaltimezone *zone);
+double  icaltimezone_get_longitude              (icaltimezone *zone);
 
 /** Returns the VTIMEZONE component of a timezone. */
-icalcomponent*	icaltimezone_get_component	(icaltimezone *zone);
+icalcomponent*  icaltimezone_get_component      (icaltimezone *zone);
 
 /** Sets the VTIMEZONE component of an icaltimezone, initializing the tzid,
    location & tzname fields. It returns 1 on success or 0 on failure, i.e.
    no TZID was found. */
-int	icaltimezone_set_component		(icaltimezone *zone,
-						 icalcomponent	*comp);
+int     icaltimezone_set_component              (icaltimezone *zone,
+                                                 icalcomponent  *comp);
 
 const char* icaltimezone_get_display_name       (icaltimezone   *zone);
 
@@ -119,9 +112,9 @@ const char* icaltimezone_get_display_name       (icaltimezone   *zone);
  * @par Converting times between timezones.
  */
 
-void	icaltimezone_convert_time		(struct icaltimetype *tt,
-						 icaltimezone *from_zone,
-						 icaltimezone *to_zone);
+void    icaltimezone_convert_time               (struct icaltimetype *tt,
+                                                 icaltimezone *from_zone,
+                                                 icaltimezone *to_zone);
 
 
 /**
@@ -132,28 +125,28 @@ void	icaltimezone_convert_time		(struct icaltimetype *tt,
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in
    daylight-savings time. */
-int icaltimezone_get_utc_offset	(icaltimezone *zone,
-				 struct icaltimetype *tt,
-				 int		*is_daylight);
+int icaltimezone_get_utc_offset (icaltimezone *zone,
+                                 struct icaltimetype *tt,
+                                 int            *is_daylight);
 
 /** Calculates the UTC offset of a given UTC time in the given
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in
    daylight-savings time. */
-int	icaltimezone_get_utc_offset_of_utc_time	(icaltimezone *zone,
-						 struct icaltimetype *tt,
-						 int		*is_daylight);
+int     icaltimezone_get_utc_offset_of_utc_time (icaltimezone *zone,
+                                                 struct icaltimetype *tt,
+                                                 int            *is_daylight);
 
 
 
 /*
  * Handling arrays of timezones. Mainly for internal use.
  */
-icalarray*  icaltimezone_array_new		(void);
+icalarray*  icaltimezone_array_new              (void);
 
-void	    icaltimezone_array_append_from_vtimezone (icalarray	    *timezones,
-						      icalcomponent *child);
-void	    icaltimezone_array_free		(icalarray	*timezones);
+void        icaltimezone_array_append_from_vtimezone (icalarray     *timezones,
+                                                      icalcomponent *child);
+void        icaltimezone_array_free             (icalarray      *timezones);
 
 
 /*
@@ -179,8 +172,8 @@ int icaltimezone_get_builtin_tzdata(void);
 
 /** Dumps information about changes in the timezone up to and including
    max_year. */
-int	icaltimezone_dump_changes		(icaltimezone *zone,
-						 int		 max_year,
-						 FILE		*fp);
+int     icaltimezone_dump_changes               (icaltimezone *zone,
+                                                 int             max_year,
+                                                 FILE           *fp);
 
 #endif /* ICALTIMEZONE_H */

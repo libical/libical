@@ -1,22 +1,19 @@
 /*======================================================================
-  FILE: icalcomponent.c
-  CREATOR: eric 28 April 1999
+ FILE: icalcomponent.c
+ CREATOR: eric 28 April 1999
 
-  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of either:
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-   Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
-  The original code is icalcomponent.c
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -46,11 +43,6 @@
 #include <stdio.h> /* for fprintf */
 #include <string.h> /* for strdup */
 #include <limits.h> /* for INT_MAX */
-
-#ifdef _MSC_VER
-#define snprintf _snprintf
-#define strncasecmp strnicmp
-#endif
 #endif
 
 struct icalcomponent_impl
@@ -451,8 +443,8 @@ icalcomponent_remove_property (icalcomponent* component, icalproperty* property)
                component->property_iterator = pvl_next(itr);
            }
 
-           pvl_remove( component->properties, itr);
-          icalproperty_set_parent(property,0);
+           (void)pvl_remove( component->properties, itr);
+           icalproperty_set_parent(property,0);
         }
     }
 }
@@ -584,7 +576,7 @@ icalcomponent_remove_component (icalcomponent* parent, icalcomponent* child)
     /* If the component is a VTIMEZONE, remove it from our array as well. */
     if (child->kind == ICAL_VTIMEZONE_COMPONENT) {
         icaltimezone *zone;
-        int i, num_elements;
+        size_t i, num_elements;
 
         num_elements = parent->timezones ? parent->timezones->num_elements : 0;
         for (i = 0; i < num_elements; i++) {
@@ -613,7 +605,7 @@ icalcomponent_remove_component (icalcomponent* parent, icalcomponent* child)
                    pvl_next(parent->component_iterator);
 
            }
-           pvl_remove( parent->components, itr);
+           (void)pvl_remove( parent->components, itr);
            child->parent = 0;
            break;
        }
@@ -990,10 +982,10 @@ static int icalcomponent_is_busy(icalcomponent *comp) {
 void icalcomponent_foreach_recurrence(icalcomponent* comp,
                                       struct icaltimetype start,
                                       struct icaltimetype end,
-                        void (*callback)(icalcomponent *comp,
-                                         struct icaltime_span *span,
-                                         void *data),
-                                void *callback_data)
+                                      void (*callback)(icalcomponent *comp,
+                                                       struct icaltime_span *span,
+                                                       void *data),
+                                      void *callback_data)
 {
   struct icaltimetype dtstart, dtend;
   icaltime_span recurspan, basespan, limit_span;
@@ -2145,7 +2137,7 @@ void icalcomponent_merge_component(icalcomponent* comp,
 {
   icalcomponent *subcomp, *next_subcomp;
   icalarray *tzids_to_rename;
-  unsigned int i;
+  size_t i;
 
   /* Check that both components are VCALENDAR components. */
   assert (icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT);
@@ -2261,8 +2253,8 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
                                              const char *tzid,
                                              icalarray *tzids_to_rename)
 {
-  int i, suffix, max_suffix = 0, num_elements;
-  size_t tzid_len;
+  int suffix, max_suffix = 0;
+  size_t i, num_elements, tzid_len;
   char *tzid_copy, *new_tzid, suffix_buf[32];
   (void)tzid_prop; /* hack to stop unused variable warning */
 
@@ -2383,7 +2375,7 @@ static void icalcomponent_rename_tzids_callback(icalparameter *param, void *data
 {
     icalarray *rename_table = data;
     const char *tzid;
-    int i;
+    size_t i;
 
     tzid = icalparameter_get_tzid (param);
     if (!tzid)
@@ -2391,7 +2383,7 @@ static void icalcomponent_rename_tzids_callback(icalparameter *param, void *data
 
     /* Step through the rename table to see if the current TZID matches
        any of the ones we want to rename. */
-    for (i = 0; (unsigned int)i < rename_table->num_elements - 1; i += 2) {
+    for (i = 0; i < rename_table->num_elements - 1; i += 2) {
         if (!strcmp (tzid, icalarray_element_at (rename_table, i))) {
             icalparameter_set_tzid (param, icalarray_element_at (rename_table, i + 1));
             break;
@@ -2447,7 +2439,8 @@ void icalcomponent_foreach_tzid(icalcomponent* comp,
 icaltimezone* icalcomponent_get_timezone(icalcomponent* comp, const char *tzid)
 {
     icaltimezone *zone;
-    int lower, upper, middle, cmp;
+    size_t lower, middle, upper;
+    int cmp;
     const char *zone_tzid;
 
     if (!comp->timezones)

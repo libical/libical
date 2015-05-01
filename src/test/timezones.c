@@ -1,5 +1,5 @@
-/* -*- Mode: C -*-
-  ======================================================================
+/*
+======================================================================
 
   The contents of this file are subject to the Mozilla Public License
   Version 1.0 (the "License"); you may not use this file except in
@@ -11,7 +11,7 @@
   the License for the specific language governing rights and
   limitations under the License.
 
-  ======================================================================*/
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     (void)argc;/*unused*/
     (void)argv;/*unused*/
     icalarray *timezones = icaltimezone_get_builtin_timezones();
-    int i;
+    size_t i;
     int ret = 0;
     unsigned int total_failed = 0;
     unsigned int total_okay = 0;
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     icaltimezone *utc_zone = icaltimezone_get_utc_timezone();
 
     /* for all known time zones... */
-    for (i = 0; i < (int)timezones->num_elements; i++) {
+    for (i = 0; i < timezones->num_elements; i++) {
         icaltimezone *zone = icalarray_element_at(timezones, i);
         const char *zone_location = icaltimezone_get_location(zone);
         int day;
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 
     if (total_failed || total_okay) {
         percent_failed = total_failed * 100 / (total_failed + total_okay);
-        printf(" *** Summary: %d zones tested, %u days failed, %u okay => %u%% failed ***\n",
+        printf(" *** Summary: %lu zones tested, %u days failed, %u okay => %u%% failed ***\n",
                timezones->num_elements,
                total_failed,
                total_okay,
