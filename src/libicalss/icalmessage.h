@@ -1,26 +1,19 @@
-/* -*- Mode: C -*- */
 /*======================================================================
  FILE: icalmessage.h
  CREATOR: eric 07 Nov 2000
 
-
- $Id: icalmessage.h,v 1.3 2008-01-02 20:07:41 dothebart Exp $
- $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
   Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
-
  =========================================================================*/
 
 #ifndef ICALMESSAGE_H
