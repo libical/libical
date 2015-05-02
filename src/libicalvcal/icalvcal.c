@@ -1,6 +1,6 @@
 /*======================================================================
-  FILE: icalvcal.c
-  CREATOR: eric 25 May 00
+ FILE: icalvcal.c
+ CREATOR: eric 25 May 00
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
@@ -10,31 +10,28 @@
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-  The original code is icalvcal.c
+ The original code is icalvcal.c
 
+ The icalvcal_convert routine calls icalvcal_traverse_objects to do
+ its work.s his routine steps through through all of the properties
+ and components of a VObject. For each name of a property or a
+ component, icalvcal_traverse_objects looks up the name in
+ conversion_table[]. This table indicates wether the name is of a
+ component or a property, lists a routine to handle conversion, and
+ has extra data for the conversion.
 
+ The conversion routine will create new iCal components or properties
+ and add them to the iCal component structure.
 
-  The icalvcal_convert routine calls icalvcal_traverse_objects to do
-  its work.s his routine steps through through all of the properties
-  and components of a VObject. For each name of a property or a
-  component, icalvcal_traverse_objects looks up the name in
-  conversion_table[]. This table indicates wether the name is of a
-  component or a property, lists a routine to handle conversion, and
-  has extra data for the conversion.
-
-  The conversion routine will create new iCal components or properties
-  and add them to the iCal component structure.
-
-  The most common conversion routine is dc_prop. This routine converts
-  properties for which the text representation of the vCal component
-  is identical the iCal representation.
-
-  ======================================================================*/
+ The most common conversion routine is dc_prop. This routine converts
+ properties for which the text representation of the vCal component
+ is identical the iCal representation.
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -47,25 +44,12 @@
 
 #include <stddef.h> /* for ptrdiff_h */
 
-#ifdef UNCLEAN
-#include <string.h>
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
-#endif
-
-#ifdef _WIN32_WCE
-#undef IGNORE
-#endif
-#endif
-
 enum datatype {
-    COMPONENT,
-    PROPERTY,
-    PARAMETER,
-    UNSUPPORTED,
-    IGNORE
+    DT_COMPONENT,
+    DT_PROPERTY,
+    DT_PARAMETER,
+    DT_UNSUPPORTED,
+    DT_IGNORE
 };
 
 /* The indices must match between the strings and the codes. */
@@ -1335,182 +1319,182 @@ the code will assert */
 
 static const struct conversion_table_struct conversion_table[] =
 {
-{VCCalProp,            COMPONENT, comp,         ICAL_VCALENDAR_COMPONENT},
-{VCTodoProp,           COMPONENT, comp,         ICAL_VTODO_COMPONENT},
-{VCEventProp,          COMPONENT, comp,         ICAL_VEVENT_COMPONENT},
-{VCAAlarmProp,         COMPONENT, alarm_comp,   ICAL_XAUDIOALARM_COMPONENT},
-{VCDAlarmProp,         COMPONENT, alarm_comp,   ICAL_XDISPLAYALARM_COMPONENT},
-{VCMAlarmProp,         COMPONENT, alarm_comp,   ICAL_XEMAILALARM_COMPONENT},
-{VCPAlarmProp,         COMPONENT, alarm_comp,   ICAL_XPROCEDUREALARM_COMPONENT},
+{VCCalProp,            DT_COMPONENT, comp,         ICAL_VCALENDAR_COMPONENT},
+{VCTodoProp,           DT_COMPONENT, comp,         ICAL_VTODO_COMPONENT},
+{VCEventProp,          DT_COMPONENT, comp,         ICAL_VEVENT_COMPONENT},
+{VCAAlarmProp,         DT_COMPONENT, alarm_comp,   ICAL_XAUDIOALARM_COMPONENT},
+{VCDAlarmProp,         DT_COMPONENT, alarm_comp,   ICAL_XDISPLAYALARM_COMPONENT},
+{VCMAlarmProp,         DT_COMPONENT, alarm_comp,   ICAL_XEMAILALARM_COMPONENT},
+{VCPAlarmProp,         DT_COMPONENT, alarm_comp,   ICAL_XPROCEDUREALARM_COMPONENT},
 
 /* These can all be converted directly by parsing the string into a libical
    value. */
-{VCClassProp,          PROPERTY,  dc_prop,       ICAL_CLASS_PROPERTY},
-{VCDescriptionProp,    PROPERTY,  dc_prop,       ICAL_DESCRIPTION_PROPERTY},
-{VCAttendeeProp,       PROPERTY,  dc_prop,       ICAL_ATTENDEE_PROPERTY},
-{VCDTendProp,          PROPERTY,  dc_prop,       ICAL_DTEND_PROPERTY},
-{VCDTstartProp,        PROPERTY,  dc_prop,       ICAL_DTSTART_PROPERTY},
-{VCDueProp,            PROPERTY,  dc_prop,       ICAL_DUE_PROPERTY},
-{VCLocationProp,       PROPERTY,  dc_prop,       ICAL_LOCATION_PROPERTY},
-{VCSummaryProp,        PROPERTY,  dc_prop,       ICAL_SUMMARY_PROPERTY},
-{VCUniqueStringProp,   PROPERTY,  dc_prop,       ICAL_UID_PROPERTY},
-{VCURLProp,            PROPERTY,  dc_prop,       ICAL_URL_PROPERTY},
-{VCPriorityProp,       PROPERTY,  dc_prop,       ICAL_PRIORITY_PROPERTY},
+{VCClassProp,          DT_PROPERTY,  dc_prop,       ICAL_CLASS_PROPERTY},
+{VCDescriptionProp,    DT_PROPERTY,  dc_prop,       ICAL_DESCRIPTION_PROPERTY},
+{VCAttendeeProp,       DT_PROPERTY,  dc_prop,       ICAL_ATTENDEE_PROPERTY},
+{VCDTendProp,          DT_PROPERTY,  dc_prop,       ICAL_DTEND_PROPERTY},
+{VCDTstartProp,        DT_PROPERTY,  dc_prop,       ICAL_DTSTART_PROPERTY},
+{VCDueProp,            DT_PROPERTY,  dc_prop,       ICAL_DUE_PROPERTY},
+{VCLocationProp,       DT_PROPERTY,  dc_prop,       ICAL_LOCATION_PROPERTY},
+{VCSummaryProp,        DT_PROPERTY,  dc_prop,       ICAL_SUMMARY_PROPERTY},
+{VCUniqueStringProp,   DT_PROPERTY,  dc_prop,       ICAL_UID_PROPERTY},
+{VCURLProp,            DT_PROPERTY,  dc_prop,       ICAL_URL_PROPERTY},
+{VCPriorityProp,       DT_PROPERTY,  dc_prop,       ICAL_PRIORITY_PROPERTY},
 
 /* These can contain multiple values, which are separated in ';' in vCalendar
    but ',' in iCalendar. */
-{VCCategoriesProp,     PROPERTY,  multivalued_prop,ICAL_CATEGORIES_PROPERTY},
-{VCRDateProp,          PROPERTY,  multivalued_prop,ICAL_RDATE_PROPERTY},
-{VCExpDateProp,        PROPERTY,  multivalued_prop,ICAL_EXDATE_PROPERTY},
+{VCCategoriesProp,     DT_PROPERTY,  multivalued_prop,ICAL_CATEGORIES_PROPERTY},
+{VCRDateProp,          DT_PROPERTY,  multivalued_prop,ICAL_RDATE_PROPERTY},
+{VCExpDateProp,        DT_PROPERTY,  multivalued_prop,ICAL_EXDATE_PROPERTY},
 
 /* These can be in floating time in vCalendar, but must be in UTC in iCalendar.
  */
-{VCDCreatedProp,       PROPERTY,  utc_datetime_prop,ICAL_CREATED_PROPERTY},
-{VCLastModifiedProp,   PROPERTY,  utc_datetime_prop,ICAL_LASTMODIFIED_PROPERTY},
-{VCCompletedProp,      PROPERTY,  utc_datetime_prop,ICAL_COMPLETED_PROPERTY},
+{VCDCreatedProp,       DT_PROPERTY,  utc_datetime_prop,ICAL_CREATED_PROPERTY},
+{VCLastModifiedProp,   DT_PROPERTY,  utc_datetime_prop,ICAL_LASTMODIFIED_PROPERTY},
+{VCCompletedProp,      DT_PROPERTY,  utc_datetime_prop,ICAL_COMPLETED_PROPERTY},
 
-{VCTranspProp,         PROPERTY,  transp_prop,   ICAL_TRANSP_PROPERTY},
-{VCSequenceProp,       PROPERTY,  sequence_prop, ICAL_SEQUENCE_PROPERTY},
-{VCStatusProp,         PROPERTY,  status_prop,   ICAL_STATUS_PROPERTY},
-{VCRRuleProp,          PROPERTY,  rule_prop,     ICAL_RRULE_PROPERTY},
-{VCXRuleProp,          PROPERTY,  rule_prop,     ICAL_EXRULE_PROPERTY},
+{VCTranspProp,         DT_PROPERTY,  transp_prop,   ICAL_TRANSP_PROPERTY},
+{VCSequenceProp,       DT_PROPERTY,  sequence_prop, ICAL_SEQUENCE_PROPERTY},
+{VCStatusProp,         DT_PROPERTY,  status_prop,   ICAL_STATUS_PROPERTY},
+{VCRRuleProp,          DT_PROPERTY,  rule_prop,     ICAL_RRULE_PROPERTY},
+{VCXRuleProp,          DT_PROPERTY,  rule_prop,     ICAL_EXRULE_PROPERTY},
 
-{VCRSVPProp,           UNSUPPORTED, rsvp_parameter,ICAL_RSVP_PARAMETER  },
-{VCEncodingProp,       UNSUPPORTED, parameter,     ICAL_ENCODING_PARAMETER},
-{VCRoleProp,           UNSUPPORTED, parameter,     ICAL_ROLE_PARAMETER},
+{VCRSVPProp,           DT_UNSUPPORTED, rsvp_parameter,ICAL_RSVP_PARAMETER  },
+{VCEncodingProp,       DT_UNSUPPORTED, parameter,     ICAL_ENCODING_PARAMETER},
+{VCRoleProp,           DT_UNSUPPORTED, parameter,     ICAL_ROLE_PARAMETER},
 
 /* We don't want the old VERSION or PRODID properties copied across as they
    are now incorrect. New VERSION & PRODID properties are added instead. */
-{VCVersionProp,        IGNORE,    0,             0},
-{VCProdIdProp,         IGNORE,    0,             0},
+{VCVersionProp,        DT_IGNORE,    0,             0},
+{VCProdIdProp,         DT_IGNORE,    0,             0},
 
 /* We ignore DAYLIGHT and TZ properties of the toplevel object, since we can't
    really do much with them. */
-{VCDayLightProp,       IGNORE,    0,             0},
-{VCTimeZoneProp,       IGNORE,    0,             0},
+{VCDayLightProp,       DT_IGNORE,    0,             0},
+{VCTimeZoneProp,       DT_IGNORE,    0,             0},
 
 /* These are all alarm properties. We handle these when the alarm component
    is created, so we ignore them when doing the automatic conversions.
    "TYPE" is used in AALARM, but doesn't seem to have a name in vobject.h. */
-{"TYPE",               IGNORE,0,            0},
-{VCRunTimeProp,        IGNORE,0,            0},
-{VCSnoozeTimeProp,     IGNORE,0,            0},
-{VCRepeatCountProp,    IGNORE,0,            0},
-{VCValueProp,          IGNORE,0,            0},
-{VCProcedureNameProp,  IGNORE,0,            0},
-{VCDisplayStringProp,  IGNORE,0,            0},
-{VCEmailAddressProp,   IGNORE,0,            0},
-{VCNoteProp,           IGNORE,0,            0},
+{"TYPE",               DT_IGNORE,0,            0},
+{VCRunTimeProp,        DT_IGNORE,0,            0},
+{VCSnoozeTimeProp,     DT_IGNORE,0,            0},
+{VCRepeatCountProp,    DT_IGNORE,0,            0},
+{VCValueProp,          DT_IGNORE,0,            0},
+{VCProcedureNameProp,  DT_IGNORE,0,            0},
+{VCDisplayStringProp,  DT_IGNORE,0,            0},
+{VCEmailAddressProp,   DT_IGNORE,0,            0},
+{VCNoteProp,           DT_IGNORE,0,            0},
 
-{VCQuotedPrintableProp,UNSUPPORTED,0,            0},
-{VC7bitProp,           UNSUPPORTED,0,            0},
-{VC8bitProp,           UNSUPPORTED,0,            0},
-{VCAdditionalNamesProp,UNSUPPORTED,0,            0},
-{VCAdrProp,            UNSUPPORTED,0,            0},
-{VCAgentProp,          UNSUPPORTED,0,            0},
-{VCAIFFProp,           UNSUPPORTED,0,            0},
-{VCAOLProp,            UNSUPPORTED,0,            0},
-{VCAppleLinkProp,      UNSUPPORTED,0,            0},
-{VCAttachProp,         UNSUPPORTED,0,            0},
-{VCATTMailProp,        UNSUPPORTED,0,            0},
-{VCAudioContentProp,   UNSUPPORTED,0,            0},
-{VCAVIProp,            UNSUPPORTED,0,            0},
-{VCBase64Prop,         UNSUPPORTED,0,            0},
-{VCBBSProp,            UNSUPPORTED,0,            0},
-{VCBirthDateProp,      UNSUPPORTED,0,            0},
-{VCBMPProp,            UNSUPPORTED,0,            0},
-{VCBodyProp,           UNSUPPORTED,0,            0},
-{VCCaptionProp,        UNSUPPORTED,0,            0},
-{VCCarProp,            UNSUPPORTED,0,            0},
-{VCCellularProp,       UNSUPPORTED,0,            0},
-{VCCGMProp,            UNSUPPORTED,0,            0},
-{VCCharSetProp,        UNSUPPORTED,0,            0},
-{VCCIDProp,            UNSUPPORTED,0,            0},
-{VCCISProp,            UNSUPPORTED,0,            0},
-{VCCityProp,           UNSUPPORTED,0,            0},
-{VCCommentProp,        UNSUPPORTED,0,            0},
-{VCCountryNameProp,    UNSUPPORTED,0,            0},
-{VCDataSizeProp,       UNSUPPORTED,0,            0},
-{VCDeliveryLabelProp,  UNSUPPORTED,0,            0},
-{VCDIBProp,            UNSUPPORTED,0,            0},
-{VCDomesticProp,       UNSUPPORTED,0,            0},
-{VCEndProp,            UNSUPPORTED,0,            0},
-{VCEWorldProp,         UNSUPPORTED,0,            0},
-{VCExNumProp,          UNSUPPORTED,0,            0},
-{VCExpectProp,         UNSUPPORTED,0,            0},
-{VCFamilyNameProp,     UNSUPPORTED,0,            0},
-{VCFaxProp,            UNSUPPORTED,0,            0},
-{VCFullNameProp,       UNSUPPORTED,0,            0},
-{VCGeoProp,            UNSUPPORTED,0,            0},
-{VCGeoLocationProp,    UNSUPPORTED,0,            0},
-{VCGIFProp,            UNSUPPORTED,0,            0},
-{VCGivenNameProp,      UNSUPPORTED,0,            0},
-{VCGroupingProp,       UNSUPPORTED,0,            0},
-{VCHomeProp,           UNSUPPORTED,0,            0},
-{VCIBMMailProp,        UNSUPPORTED,0,            0},
-{VCInlineProp,         UNSUPPORTED,0,            0},
-{VCInternationalProp,  UNSUPPORTED,0,            0},
-{VCInternetProp,       UNSUPPORTED,0,            0},
-{VCISDNProp,           UNSUPPORTED,0,            0},
-{VCJPEGProp,           UNSUPPORTED,0,            0},
-{VCLanguageProp,       UNSUPPORTED,0,            0},
-{VCLastRevisedProp,    UNSUPPORTED,0,            0},
-{VCLogoProp,           UNSUPPORTED,0,            0},
-{VCMailerProp,         UNSUPPORTED,0,            0},
-{VCMCIMailProp,        UNSUPPORTED,0,            0},
-{VCMessageProp,        UNSUPPORTED,0,            0},
-{VCMETProp,            UNSUPPORTED,0,            0},
-{VCModemProp,          UNSUPPORTED,0,            0},
-{VCMPEG2Prop,          UNSUPPORTED,0,            0},
-{VCMPEGProp,           UNSUPPORTED,0,            0},
-{VCMSNProp,            UNSUPPORTED,0,            0},
-{VCNamePrefixesProp,   UNSUPPORTED,0,            0},
-{VCNameProp,           UNSUPPORTED,0,            0},
-{VCNameSuffixesProp,   UNSUPPORTED,0,            0},
-{VCOrgNameProp,        UNSUPPORTED,0,            0},
-{VCOrgProp,            UNSUPPORTED,0,            0},
-{VCOrgUnit2Prop,       UNSUPPORTED,0,            0},
-{VCOrgUnit3Prop,       UNSUPPORTED,0,            0},
-{VCOrgUnit4Prop,       UNSUPPORTED,0,            0},
-{VCOrgUnitProp,        UNSUPPORTED,0,            0},
-{VCPagerProp,          UNSUPPORTED,0,            0},
-{VCParcelProp,         UNSUPPORTED,0,            0},
-{VCPartProp,           UNSUPPORTED,0,            0},
-{VCPCMProp,            UNSUPPORTED,0,            0},
-{VCPDFProp,            UNSUPPORTED,0,            0},
-{VCPGPProp,            UNSUPPORTED,0,            0},
-{VCPhotoProp,          UNSUPPORTED,0,            0},
-{VCPICTProp,           UNSUPPORTED,0,            0},
-{VCPMBProp,            UNSUPPORTED,0,            0},
-{VCPostalBoxProp,      UNSUPPORTED,0,            0},
-{VCPostalCodeProp,     UNSUPPORTED,0,            0},
-{VCPostalProp,         UNSUPPORTED,0,            0},
-{VCPowerShareProp,     UNSUPPORTED,0,            0},
-{VCPreferredProp,      UNSUPPORTED,0,            0},
-{VCProdigyProp,        UNSUPPORTED,0,            0},
-{VCPronunciationProp,  UNSUPPORTED,0,            0},
-{VCPSProp,             UNSUPPORTED,0,            0},
-{VCPublicKeyProp,      UNSUPPORTED,0,            0},
-{VCQPProp,             UNSUPPORTED,0,            0},
-{VCQuickTimeProp,      UNSUPPORTED,0,            0},
-{VCRegionProp,         UNSUPPORTED,0,            0},
-{VCResourcesProp,      UNSUPPORTED,0,            0},
-{VCRNumProp,           UNSUPPORTED,0,            0},
-{VCStartProp,          UNSUPPORTED,0,            0},
-{VCStreetAddressProp,  UNSUPPORTED,0,            0},
-{VCSubTypeProp,        UNSUPPORTED,0,            0},
-{VCTelephoneProp,      UNSUPPORTED,0,            0},
-{VCTIFFProp,           UNSUPPORTED,0,            0},
-{VCTitleProp,          UNSUPPORTED,0,            0},
-{VCTLXProp,            UNSUPPORTED,0,            0},
-{VCURLValueProp,       UNSUPPORTED,0,            0},
-{VCVideoProp,          UNSUPPORTED,0,            0},
-{VCVoiceProp,          UNSUPPORTED,0,            0},
-{VCWAVEProp,           UNSUPPORTED,0,            0},
-{VCWMFProp,            UNSUPPORTED,0,            0},
-{VCWorkProp,           UNSUPPORTED,0,            0},
-{VCX400Prop,           UNSUPPORTED,0,            0},
-{VCX509Prop,           UNSUPPORTED,0,            0},
+{VCQuotedPrintableProp,DT_UNSUPPORTED,0,            0},
+{VC7bitProp,           DT_UNSUPPORTED,0,            0},
+{VC8bitProp,           DT_UNSUPPORTED,0,            0},
+{VCAdditionalNamesProp,DT_UNSUPPORTED,0,            0},
+{VCAdrProp,            DT_UNSUPPORTED,0,            0},
+{VCAgentProp,          DT_UNSUPPORTED,0,            0},
+{VCAIFFProp,           DT_UNSUPPORTED,0,            0},
+{VCAOLProp,            DT_UNSUPPORTED,0,            0},
+{VCAppleLinkProp,      DT_UNSUPPORTED,0,            0},
+{VCAttachProp,         DT_UNSUPPORTED,0,            0},
+{VCATTMailProp,        DT_UNSUPPORTED,0,            0},
+{VCAudioContentProp,   DT_UNSUPPORTED,0,            0},
+{VCAVIProp,            DT_UNSUPPORTED,0,            0},
+{VCBase64Prop,         DT_UNSUPPORTED,0,            0},
+{VCBBSProp,            DT_UNSUPPORTED,0,            0},
+{VCBirthDateProp,      DT_UNSUPPORTED,0,            0},
+{VCBMPProp,            DT_UNSUPPORTED,0,            0},
+{VCBodyProp,           DT_UNSUPPORTED,0,            0},
+{VCCaptionProp,        DT_UNSUPPORTED,0,            0},
+{VCCarProp,            DT_UNSUPPORTED,0,            0},
+{VCCellularProp,       DT_UNSUPPORTED,0,            0},
+{VCCGMProp,            DT_UNSUPPORTED,0,            0},
+{VCCharSetProp,        DT_UNSUPPORTED,0,            0},
+{VCCIDProp,            DT_UNSUPPORTED,0,            0},
+{VCCISProp,            DT_UNSUPPORTED,0,            0},
+{VCCityProp,           DT_UNSUPPORTED,0,            0},
+{VCCommentProp,        DT_UNSUPPORTED,0,            0},
+{VCCountryNameProp,    DT_UNSUPPORTED,0,            0},
+{VCDataSizeProp,       DT_UNSUPPORTED,0,            0},
+{VCDeliveryLabelProp,  DT_UNSUPPORTED,0,            0},
+{VCDIBProp,            DT_UNSUPPORTED,0,            0},
+{VCDomesticProp,       DT_UNSUPPORTED,0,            0},
+{VCEndProp,            DT_UNSUPPORTED,0,            0},
+{VCEWorldProp,         DT_UNSUPPORTED,0,            0},
+{VCExNumProp,          DT_UNSUPPORTED,0,            0},
+{VCExpectProp,         DT_UNSUPPORTED,0,            0},
+{VCFamilyNameProp,     DT_UNSUPPORTED,0,            0},
+{VCFaxProp,            DT_UNSUPPORTED,0,            0},
+{VCFullNameProp,       DT_UNSUPPORTED,0,            0},
+{VCGeoProp,            DT_UNSUPPORTED,0,            0},
+{VCGeoLocationProp,    DT_UNSUPPORTED,0,            0},
+{VCGIFProp,            DT_UNSUPPORTED,0,            0},
+{VCGivenNameProp,      DT_UNSUPPORTED,0,            0},
+{VCGroupingProp,       DT_UNSUPPORTED,0,            0},
+{VCHomeProp,           DT_UNSUPPORTED,0,            0},
+{VCIBMMailProp,        DT_UNSUPPORTED,0,            0},
+{VCInlineProp,         DT_UNSUPPORTED,0,            0},
+{VCInternationalProp,  DT_UNSUPPORTED,0,            0},
+{VCInternetProp,       DT_UNSUPPORTED,0,            0},
+{VCISDNProp,           DT_UNSUPPORTED,0,            0},
+{VCJPEGProp,           DT_UNSUPPORTED,0,            0},
+{VCLanguageProp,       DT_UNSUPPORTED,0,            0},
+{VCLastRevisedProp,    DT_UNSUPPORTED,0,            0},
+{VCLogoProp,           DT_UNSUPPORTED,0,            0},
+{VCMailerProp,         DT_UNSUPPORTED,0,            0},
+{VCMCIMailProp,        DT_UNSUPPORTED,0,            0},
+{VCMessageProp,        DT_UNSUPPORTED,0,            0},
+{VCMETProp,            DT_UNSUPPORTED,0,            0},
+{VCModemProp,          DT_UNSUPPORTED,0,            0},
+{VCMPEG2Prop,          DT_UNSUPPORTED,0,            0},
+{VCMPEGProp,           DT_UNSUPPORTED,0,            0},
+{VCMSNProp,            DT_UNSUPPORTED,0,            0},
+{VCNamePrefixesProp,   DT_UNSUPPORTED,0,            0},
+{VCNameProp,           DT_UNSUPPORTED,0,            0},
+{VCNameSuffixesProp,   DT_UNSUPPORTED,0,            0},
+{VCOrgNameProp,        DT_UNSUPPORTED,0,            0},
+{VCOrgProp,            DT_UNSUPPORTED,0,            0},
+{VCOrgUnit2Prop,       DT_UNSUPPORTED,0,            0},
+{VCOrgUnit3Prop,       DT_UNSUPPORTED,0,            0},
+{VCOrgUnit4Prop,       DT_UNSUPPORTED,0,            0},
+{VCOrgUnitProp,        DT_UNSUPPORTED,0,            0},
+{VCPagerProp,          DT_UNSUPPORTED,0,            0},
+{VCParcelProp,         DT_UNSUPPORTED,0,            0},
+{VCPartProp,           DT_UNSUPPORTED,0,            0},
+{VCPCMProp,            DT_UNSUPPORTED,0,            0},
+{VCPDFProp,            DT_UNSUPPORTED,0,            0},
+{VCPGPProp,            DT_UNSUPPORTED,0,            0},
+{VCPhotoProp,          DT_UNSUPPORTED,0,            0},
+{VCPICTProp,           DT_UNSUPPORTED,0,            0},
+{VCPMBProp,            DT_UNSUPPORTED,0,            0},
+{VCPostalBoxProp,      DT_UNSUPPORTED,0,            0},
+{VCPostalCodeProp,     DT_UNSUPPORTED,0,            0},
+{VCPostalProp,         DT_UNSUPPORTED,0,            0},
+{VCPowerShareProp,     DT_UNSUPPORTED,0,            0},
+{VCPreferredProp,      DT_UNSUPPORTED,0,            0},
+{VCProdigyProp,        DT_UNSUPPORTED,0,            0},
+{VCPronunciationProp,  DT_UNSUPPORTED,0,            0},
+{VCPSProp,             DT_UNSUPPORTED,0,            0},
+{VCPublicKeyProp,      DT_UNSUPPORTED,0,            0},
+{VCQPProp,             DT_UNSUPPORTED,0,            0},
+{VCQuickTimeProp,      DT_UNSUPPORTED,0,            0},
+{VCRegionProp,         DT_UNSUPPORTED,0,            0},
+{VCResourcesProp,      DT_UNSUPPORTED,0,            0},
+{VCRNumProp,           DT_UNSUPPORTED,0,            0},
+{VCStartProp,          DT_UNSUPPORTED,0,            0},
+{VCStreetAddressProp,  DT_UNSUPPORTED,0,            0},
+{VCSubTypeProp,        DT_UNSUPPORTED,0,            0},
+{VCTelephoneProp,      DT_UNSUPPORTED,0,            0},
+{VCTIFFProp,           DT_UNSUPPORTED,0,            0},
+{VCTitleProp,          DT_UNSUPPORTED,0,            0},
+{VCTLXProp,            DT_UNSUPPORTED,0,            0},
+{VCURLValueProp,       DT_UNSUPPORTED,0,            0},
+{VCVideoProp,          DT_UNSUPPORTED,0,            0},
+{VCVoiceProp,          DT_UNSUPPORTED,0,            0},
+{VCWAVEProp,           DT_UNSUPPORTED,0,            0},
+{VCWMFProp,            DT_UNSUPPORTED,0,            0},
+{VCWorkProp,           DT_UNSUPPORTED,0,            0},
+{VCX400Prop,           DT_UNSUPPORTED,0,            0},
+{VCX509Prop,           DT_UNSUPPORTED,0,            0},
 
 {0,0,0,0}
 };
@@ -1564,7 +1548,7 @@ static void icalvcal_traverse_objects(VObject *object,
         switch(conversion_table[i].type){
 
 
-            case COMPONENT: {
+            case DT_COMPONENT: {
                 subc =
                     (icalcomponent*)(conversion_table[i].conversion_func
                                      (conversion_table[i].icaltype,
@@ -1576,7 +1560,7 @@ static void icalvcal_traverse_objects(VObject *object,
                 break;
             }
 
-            case PROPERTY: {
+            case DT_PROPERTY: {
 
                 if (vObjectValueType(object) &&
                     conversion_table[i].conversion_func != 0 ) {
@@ -1595,13 +1579,13 @@ static void icalvcal_traverse_objects(VObject *object,
                 break;
             }
 
-            case PARAMETER: {
+            case DT_PARAMETER: {
                 break;
             }
 
-            case UNSUPPORTED: {
+            case DT_UNSUPPORTED: {
 
-                /* If the property is listed as UNSUPPORTED, insert a
+                /* If the property is listed as DT_UNSUPPORTED, insert a
                    X_LIC_ERROR property to note this fact. */
 
                 char temp[1024];
@@ -1623,7 +1607,7 @@ static void icalvcal_traverse_objects(VObject *object,
                 break;
             }
 
-            case IGNORE: {
+            case DT_IGNORE: {
               /* Do Nothing. */
               break;
             }

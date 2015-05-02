@@ -102,6 +102,18 @@
 /* Define to 1 if you have the `_open' function. */
 #cmakedefine HAVE__OPEN 1
 
+/* Define to 1 if you have the `read' function. */
+#cmakedefine HAVE_READ 1
+
+/* Define to 1 if you have the `_read' function. */
+#cmakedefine HAVE__READ 1
+
+/* Define to 1 if you have the `write' function. */
+#cmakedefine HAVE_WRITE 1
+
+/* Define to 1 if you have the `_write' function. */
+#cmakedefine HAVE__WRITE 1
+
 /* Define to 1 if you have the <sys/endian.h> header file. */
 #cmakedefine HAVE_SYS_ENDIAN_H 1
 
@@ -328,6 +340,42 @@ typedef int pid_t;
 #endif
 #if defined(HAVE_FCNTL_H)
 #include <fcntl.h>
+#endif
+
+/* read - system function to read from a file descriptor */
+#if defined(HAVE__READ)
+#include <io.h>
+#define read _read
+#else
+#if !defined(HAVE_READ)
+#error "No read from file descriptor system function available"
+#else
+#if defined(HAVE_UNISTD_H)
+#include <unistd.h>
+#endif
+#endif
+#endif
+
+/* write - system function to write to a file descriptor */
+#if defined(HAVE__WRITE)
+#include <io.h>
+#define write _write
+#else
+#if !defined(HAVE_WRITE)
+#error "No write to file descriptor system function available"
+#else
+#if defined(HAVE_UNISTD_H)
+#include <unistd.h>
+#endif
+#endif
+#endif
+
+#if defined(_MSC_VER)
+typedef int IO_SIZE_T;
+typedef unsigned int IO_SSIZE_T;
+#else
+typedef size_t IO_SIZE_T;
+typedef ssize_t IO_SSIZE_T;
 #endif
 
 #if defined(_MSC_VER)

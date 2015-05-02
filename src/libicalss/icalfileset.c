@@ -412,20 +412,11 @@ icalerrorenum icalfileset_commit(icalset *set)
     for (c = icalcomponent_get_first_component(fset->cluster, ICAL_ANY_COMPONENT);
          c != 0;
          c = icalcomponent_get_next_component(fset->cluster, ICAL_ANY_COMPONENT)) {
-#if defined(_MSC_VER)
-        int sz;
-#else
-        ssize_t sz;
-#endif
+        IO_SSIZE_T sz;
         str = icalcomponent_as_ical_string_r(c);
 
-#if defined(_MSC_VER)
-        sz = _write(fset->fd, str, (unsigned int)strlen(str));
-        if (sz != (int)strlen(str)) {
-#else
-        sz = write(fset->fd, str, strlen(str));
-        if (sz != (ssize_t)strlen(str)) {
-#endif
+        sz = write(fset->fd, str, (IO_SIZE_T)strlen(str));
+        if (sz != (IO_SIZE_T)strlen(str)) {
             perror("write");
             icalerror_set_errno(ICAL_FILE_ERROR);
             free(str);

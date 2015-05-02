@@ -39,6 +39,10 @@ check_function_exists(stricmp HAVE_STRICMP)
 check_function_exists(strnicmp HAVE_STRNICMP)
 check_function_exists(strdup HAVE_STRDUP) #Unix <string.h>
 check_function_exists(_strdup HAVE__STRDUP) #Windows <string.h>
+check_function_exists(read HAVE_READ) #Unix <unistd.h>
+check_function_exists(_read HAVE__READ) #Windows <io.h>
+check_function_exists(write HAVE_WRITE) #Unix <unistd.h>
+check_function_exists(_write HAVE__WRITE) #Windows <io.h>
 check_function_exists(unsetenv HAVE_UNSETENV)
 check_function_exists(unlink HAVE_UNLINK)
 check_function_exists(waitpid HAVE_WAITPID)

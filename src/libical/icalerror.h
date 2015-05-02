@@ -58,7 +58,7 @@ icalerrorenum * icalerrno_return(void);
 #define icalerrno (*(icalerrno_return()))
 
 #if !defined(LIBICAL_EXPORT)
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
   #if defined(BUILD_LIBICALSTATIC)
     #define LIBICAL_EXPORT extern
   #elif defined(BUILD_LIBICALDLL)

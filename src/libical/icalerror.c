@@ -29,22 +29,18 @@
 #include <config.h>
 #endif
 
+#if defined(_MSC_VER)
+#define LIBICAL_EXPORT __declspec(dllexport) /*must come before icalerror.h*/
+#endif
 #include "icalerror.h"
 
 #include <stdlib.h>
 
-#ifdef HAVE_BACKTRACE
+#if defined(HAVE_BACKTRACE)
 #include <execinfo.h>
 #endif
 
-#ifdef UNCLEAN
-#include <string.h>             /* for strcmp */
-#if defined(_MSC_VER)
-#define LIBICAL_EXPORT __declspec(dllexport)
-#endif
-#endif
-
-#ifdef HAVE_PTHREAD
+#if defined(HAVE_PTHREAD)
 #include <pthread.h>
 
 static pthread_key_t  icalerrno_key;
