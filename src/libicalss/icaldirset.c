@@ -55,6 +55,7 @@
 #include "icalfileset.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #if defined(HAVE_DIRENT_H)
 #include <dirent.h>
@@ -62,19 +63,6 @@
 
 #if defined(HAVE_SYS_UTSNAME_H)
 #include <sys/utsname.h>
-#endif
-
-#ifdef UNCLEAN
-#include "icalfilesetimpl.h"
-#include "icalcluster.h"
-#include "icalgauge.h"
-
-#include <errno.h>
-#include <sys/types.h> /* for opendir() */
-#include <sys/stat.h> /* for stat */
-#include <time.h> /* for clock() */
-#include <string.h> /* for strdup */
-
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/

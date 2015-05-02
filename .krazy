@@ -1,6 +1,6 @@
 CHECKSETS foss,c++
 
-EXTRA crud,camelcase
+EXTRA crud,camelcase,defines
 #EXTRA style
 
 #Skip ancient Apple files
