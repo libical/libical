@@ -18,6 +18,8 @@ check_function_exists(access HAVE_ACCESS) #Unix <unistd.h>
 check_function_exists(_access HAVE__ACCESS) #Windows <io.h>
 check_function_exists(backtrace HAVE_BACKTRACE)
 check_function_exists(fork HAVE_FORK)
+check_function_exists(getpid HAVE_GETPID) #Unix <unistd.h>
+check_function_exists(_getpid HAVE__GETPID) #Windows <process.h>
 check_function_exists(getpwent HAVE_GETPWENT)
 check_function_exists(gmtime_r HAVE_GMTIME_R)
 check_function_exists(isspace HAVE_ISSPACE)

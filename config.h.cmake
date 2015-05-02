@@ -84,6 +84,12 @@
 /* Define to 1 if you have the `_access' function. */
 #cmakedefine HAVE__ACCESS 1
 
+/* Define to 1 if you have the `getpid' function. */
+#cmakedefine HAVE_GETPID 1
+
+/* Define to 1 if you have the `_getpid' function. */
+#cmakedefine HAVE__GETPID 1
+
 /* Define to 1 if you have the `mkdir' function. */
 #cmakedefine HAVE_MKDIR 1
 
@@ -270,13 +276,27 @@ typedef int pid_t;
 #endif
 #endif
 
-/* access - function to check user file permissions */
+/* access - system function to check user file permissions */
 #if defined(HAVE__ACCESS)
 #include <io.h>
 #define access _access
 #else
 #if !defined(HAVE_ACCESS)
 #error "No check user file access function available"
+#else
+#if defined(HAVE_UNISTD_H)
+#include <unistd.h>
+#endif
+#endif
+#endif
+
+/* getpid - system function to get process identification */
+#if defined(HAVE__GETPID)
+#include <process.h>
+#define getpid _getpid
+#else
+#if !defined(HAVE_GETPID)
+#error "No get process identification function available"
 #else
 #if defined(HAVE_UNISTD_H)
 #include <unistd.h>
@@ -304,11 +324,10 @@ typedef int pid_t;
 #else
 #if !defined(HAVE_OPEN)
 #error "No open file system function available"
-#else
+#endif
+#endif
 #if defined(HAVE_FCNTL_H)
 #include <fcntl.h>
-#endif
-#endif
 #endif
 
 #if defined(_MSC_VER)
@@ -324,6 +343,12 @@ typedef int pid_t;
 #if !defined(X_OK) /* file has execute permission */
 #define X_OK 6
 #endif
+#endif
+
+#if defined(_MSC_VER)
+#define _S_ISTYPE(mode, mask)  (((mode) & _S_IFMT) == (mask))
+#define S_ISDIR(mode) _S_ISTYPE((mode), _S_IFDIR)
+#define S_ISREG(mode) _S_ISTYPE((mode), _S_IFREG)
 #endif
 
 /* fork - system function to create a child process */

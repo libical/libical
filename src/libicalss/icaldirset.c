@@ -54,7 +54,7 @@
 #include "icaldirsetimpl.h"
 #include "icalfileset.h"
 
-#include <stdlib.h>
+#include <stdio.h>
 
 #if defined(HAVE_DIRENT_H)
 #include <dirent.h>
@@ -69,26 +69,12 @@
 #include "icalcluster.h"
 #include "icalgauge.h"
 
-#if !defined(_WIN32)
-#include <unistd.h> /* for stat, getpid */
-#else
-#include <io.h>
-#include <process.h>
-#endif
-
 #include <errno.h>
 #include <sys/types.h> /* for opendir() */
 #include <sys/stat.h> /* for stat */
 #include <time.h> /* for clock() */
 #include <string.h> /* for strdup */
 
-#if defined(_MSC_VER)
-#define _S_ISTYPE(mode, mask)  (((mode) & _S_IFMT) == (mask))
-#define S_ISDIR(mode)    _S_ISTYPE((mode), _S_IFDIR)
-#define S_ISREG(mode)    _S_ISTYPE((mode), _S_IFREG)
-#define snprintf _snprintf
-#define strcasecmp stricmp
-#endif
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/
