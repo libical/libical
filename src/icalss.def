@@ -90,7 +90,6 @@ icalfileset_commit
 icalfileset_count_components
 icalfileset_fetch
 icalfileset_fetch_match
-icalfileset_filesize
 icalfileset_form_a_matched_recurrence_component
 icalfileset_free
 icalfileset_get_component
@@ -101,7 +100,6 @@ icalfileset_get_next_component
 icalfileset_has_uid
 icalfileset_id_free
 icalfileset_init
-icalfileset_lock
 icalfileset_mark
 icalfileset_modify
 icalfileset_new
@@ -110,11 +108,9 @@ icalfileset_new_writer
 icalfileset_options_default DATA
 icalfileset_path
 icalfileset_produce_icalcluster
-icalfileset_read_file
 icalfileset_read_from_file
 icalfileset_remove_component
 icalfileset_select
-icalfileset_unlock
 icalfilesetiter_to_next
 icalgauge_compare
 icalgauge_compare_recurse

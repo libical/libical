@@ -1,4 +1,3 @@
-/* -*- Mode: C -*- */
 /**
  @file icalset.h
  @author eric 28 November 1999
@@ -14,25 +13,22 @@
 **/
 
 /*
- $Id: icalset.h,v 1.15 2008-01-02 20:07:42 dothebart Exp $
- $Locker:  $
 
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
 ======================================================================*/
 
 #ifndef ICALSET_H
@@ -41,17 +37,6 @@
 #include "icalgauge.h"
 #include "icalcomponent.h"
 #include "icalerror.h"
-
-#ifdef UNCLEAN
-#include <limits.h> /* For PATH_MAX */
-
-#ifdef PATH_MAX
-#define ICAL_PATH_MAX PATH_MAX
-#else
-#define ICAL_PATH_MAX 1024
-#endif
-
-#endif
 
 typedef struct icalset_impl icalset;
 
@@ -71,7 +56,7 @@ typedef struct icalsetiter {
 
 struct icalset_impl {
     icalset_kind kind;
-    int size;
+    size_t size;
     char *dsn;
     icalset *(*init)(icalset *set, const char *dsn, void *options);
     void (*free)(icalset *set);
@@ -117,10 +102,7 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options);
 icalset *icalset_new_file(const char *path);
 icalset *icalset_new_file_reader(const char *path);
 icalset *icalset_new_file_writer(const char *path);
-
 icalset *icalset_new_dir(const char *path);
-icalset *icalset_new_file_reader(const char *path);
-icalset *icalset_new_file_writer(const char *path);
 
 void icalset_free(icalset *set);
 

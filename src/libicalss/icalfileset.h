@@ -1,27 +1,22 @@
-/* -*- Mode: C -*- */
 /*======================================================================
  FILE: icalfileset.h
  CREATOR: eric 23 December 1999
 
- $Id: icalfileset.h,v 1.15 2008-01-02 20:07:40 dothebart Exp $
- $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
 ======================================================================*/
 
 #ifndef ICALFILESET_H
@@ -29,18 +24,6 @@
 
 #include "icalcluster.h"
 #include "icalset.h"
-
-#ifdef UNCLEAN
-#include <libical/ical.h>
-#include "icalgauge.h"
-#include <sys/types.h> /* For open() flags and mode */
-#include <sys/stat.h> /* For open() flags and mode */
-#include <fcntl.h> /* For open() flags and mode */
-
-#ifdef WIN32
-#define mode_t int
-#endif
-#endif
 
 typedef struct icalfileset_impl icalfileset;
 
@@ -119,7 +102,7 @@ icalcomponent *icalfileset_get_component(icalset *cluster);
 
 typedef struct icalfileset_options {
     int          flags;       /**< flags for open() O_RDONLY, etc  */
-    mode_t       mode;        /**< file mode */
+    int          mode;        /**< file mode */
     int          safe_saves;  /**< to lock or not */
     icalcluster  *cluster;    /**< use this cluster to initialize data */
 } icalfileset_options;

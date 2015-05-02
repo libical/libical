@@ -197,16 +197,16 @@
 /* Define to empty if `const' does not conform to ANSI C. */
 #cmakedefine const
 
-/* Define to `int' if <sys/types.h> does not define. */
-#cmakedefine HAVE_SIZEOF_MODE_T
-#if !defined(HAVE_SIZEOF_MODE_T)
-#define mode_t int
-#endif
-
-/* Define to `unsigned int' if <sys/types.h> does not define. */
+/* Typedef size_t if needed */
 #cmakedefine HAVE_SIZEOF_SIZE_T
 #if !defined(HAVE_SIZEOF_SIZE_T)
-#define size_t int
+typedef unsigned long size_t;
+#endif
+
+/* Typedef ssize_t if needed */
+#cmakedefine HAVE_SIZEOF_SSIZE_T
+#if !defined(HAVE_SIZEOF_SSIZE_T)
+typedef long ssize_t;
 #endif
 
 #cmakedefine HAVE_PID_T 1
@@ -432,8 +432,10 @@ typedef ssize_t IO_SSIZE_T;
 #define MAXPATHLEN 1024
 #endif
 
+#if !defined(S_SPLINT_S)
 #if !defined(_MSC_VER)
 #define _unused(x) (void)x;
 #else
 #define _unused(x)
+#endif
 #endif

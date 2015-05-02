@@ -1,28 +1,23 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icalfileset.c
-  CREATOR: eric 23 December 1999
+/*======================================================================
+ FILE: icalfileset.c
+ CREATOR: eric 23 December 1999
 
-  $Id: icalfileset.c,v 1.36 2008-01-15 23:17:43 dothebart Exp $
-  $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
- ======================================================================*/
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -36,41 +31,17 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#ifdef UNCLEAN
-#include "icalgauge.h"
-#include <sys/stat.h> /* for stat */
-#ifndef WIN32
-#include <unistd.h> /* for stat, getpid, read, write */
-#else
-#include <io.h>
-#ifndef _WIN32_WCE
-#include <share.h>
-#endif
-#endif
-#include "icalclusterimpl.h"
-
-#if defined(_MSC_VER)
-#define _S_ISTYPE(mode, mask)  (((mode) & _S_IFMT) == (mask))
-#define S_ISDIR(mode)    _S_ISTYPE((mode), _S_IFDIR)
-#define S_ISREG(mode)    _S_ISTYPE((mode), _S_IFREG)
-#define snprintf _snprintf
-#define strcasecmp stricmp
-#include <basetsd.h>
-typedef SSIZE_T ssize_t;
-#endif
-
-#ifdef _WIN32_WCE
+#if defined(_WIN32_WCE)
 #include <winbase.h>
-#endif
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/
 icalfileset_options icalfileset_options_default = {O_RDWR | O_CREAT, 0644, 0, NULL};
 
-int icalfileset_lock(icalfileset *set);
-int icalfileset_unlock(icalfileset *set);
-icalerrorenum icalfileset_read_file(icalfileset *set, mode_t mode);
-int icalfileset_filesize(icalfileset *set);
+static int icalfileset_lock(icalfileset *set);
+static int icalfileset_unlock(icalfileset *set);
+static icalerrorenum icalfileset_read_file(icalfileset *set, int mode);
+static long icalfileset_filesize(icalfileset *set);
 
 icalerrorenum icalfileset_create_cluster(const char *path);
 
@@ -100,8 +71,8 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
     icalfileset_options *options = (options_in) ? options_in : &icalfileset_options_default;
     icalfileset *fset = (icalfileset *)set;
     int flags;
-    mode_t mode;
-    off_t cluster_file_size;
+    int mode;
+    long cluster_file_size;
 
     icalerror_clear_errno();
     icalerror_check_arg_rz((path != 0), "path");
@@ -128,7 +99,7 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
         return 0;
     }
 
-#ifndef WIN32
+#if !defined(_WIN32)
     icalfileset_lock(fset);
 #endif
 
@@ -199,7 +170,7 @@ char *icalfileset_read_from_file(char *s, size_t size, void *d)
     }
 }
 
-icalerrorenum icalfileset_read_file(icalfileset *set, mode_t mode)
+icalerrorenum icalfileset_read_file(icalfileset *set, int mode)
 {
     _unused(mode)
     icalparser *parser;
@@ -226,7 +197,7 @@ icalerrorenum icalfileset_read_file(icalfileset *set, mode_t mode)
     return ICAL_NO_ERROR;
 }
 
-int icalfileset_filesize(icalfileset *fset)
+long icalfileset_filesize(icalfileset *fset)
 {
     struct stat sbuf;
 
@@ -251,7 +222,7 @@ int icalfileset_filesize(icalfileset *fset)
             return -1;
         } else {
             /* Lets assume that it is a file of the right type */
-            return sbuf.st_size;
+            return (long)sbuf.st_size;
         }
     }
 
@@ -267,7 +238,7 @@ void icalfileset_free(icalset *set)
     fset = (icalfileset *)set;
 
     if (fset->cluster != 0) {
-        icalfileset_commit(set);
+        (void)icalfileset_commit(set);
         icalcomponent_free(fset->cluster);
         fset->cluster = 0;
     }
@@ -298,7 +269,7 @@ const char *icalfileset_path(icalset *set)
 
 int icalfileset_lock(icalfileset *set)
 {
-#ifndef WIN32
+#if !defined(_WIN32)
     struct flock lock;
     int rtrn;
 
@@ -320,7 +291,7 @@ int icalfileset_lock(icalfileset *set)
 
 int icalfileset_unlock(icalfileset *set)
 {
-#ifndef WIN32
+#if !defined(_WIN32)
     struct flock lock;
     icalerror_check_arg_rz((set->fd > 0), "set->fd");
 
@@ -336,7 +307,7 @@ int icalfileset_unlock(icalfileset *set)
 #endif
 }
 
-#ifndef WIN32
+#if !defined(_WIN32)
 static char *shell_quote(const char *s)
 {
     char *result;
@@ -365,7 +336,7 @@ icalerrorenum icalfileset_commit(icalset *set)
     icalcomponent *c;
     size_t write_size = 0;
     icalfileset *fset = (icalfileset *)set;
-#ifdef _WIN32_WCE
+#if defined(_WIN32_WCE)
     wchar_t *wtmp = 0;
     PROCESS_INFORMATION pi;
 #endif
@@ -380,7 +351,7 @@ icalerrorenum icalfileset_commit(icalset *set)
     }
 
     if (fset->options.safe_saves == 1) {
-#ifndef WIN32
+#if !defined(_WIN32)
         char *quoted_file = shell_quote(fset->path);
         snprintf(tmp, MAXPATHLEN, "cp '%s' '%s.bak'", fset->path, fset->path);
         free(quoted_file);
@@ -388,7 +359,7 @@ icalerrorenum icalfileset_commit(icalset *set)
         snprintf(tmp, MAXPATHLEN, "copy %s %s.bak", fset->path, fset->path);
 #endif
 
-#ifndef _WIN32_WCE
+#if !defined(_WIN32_WCE)
         if (system(tmp) < 0) {
 #else
 
@@ -400,7 +371,7 @@ icalerrorenum icalfileset_commit(icalset *set)
             return ICAL_FILE_ERROR;
         }
     }
-#ifdef _WIN32_WCE
+#if defined(_WIN32_WCE)
     free(wtmp);
 #endif
 
@@ -416,7 +387,7 @@ icalerrorenum icalfileset_commit(icalset *set)
         str = icalcomponent_as_ical_string_r(c);
 
         sz = write(fset->fd, str, (IO_SIZE_T)strlen(str));
-        if (sz != (IO_SIZE_T)strlen(str)) {
+        if (sz != (IO_SSIZE_T)strlen(str)) {
             perror("write");
             icalerror_set_errno(ICAL_FILE_ERROR);
             free(str);
@@ -429,12 +400,12 @@ icalerrorenum icalfileset_commit(icalset *set)
 
     fset->changed = 0;
 
-#ifndef WIN32
+#if !defined(_WIN32)
     if (ftruncate(fset->fd, (off_t)write_size) < 0) {
         return ICAL_FILE_ERROR;
     }
 #else
-#ifndef _WIN32_WCE
+#if !defined(_WIN32_WCE)
     chsize(fset->fd, tell(fset->fd));
 #else
     SetEndOfFile(fset->fd);

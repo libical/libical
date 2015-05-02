@@ -1,20 +1,19 @@
-/*
-  ======================================================================
-  FILE: icalbdbset.h
+/*======================================================================
+ FILE: icalbdbset.h
 
-  (C) COPYRIGHT 2001, Critical Path
+ (C) COPYRIGHT 2001, Critical Path
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of either:
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of either:
 
-     The LGPL as published by the Free Software Foundation, version
-     2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    The LGPL as published by the Free Software Foundation, version
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
-     The Mozilla Public License Version 1.0. You may obtain a copy of
-     the License at http://www.mozilla.org/MPL/
-  ======================================================================*/
+    The Mozilla Public License Version 1.0. You may obtain a copy of
+    the License at http://www.mozilla.org/MPL/
+======================================================================*/
 
 #ifndef ICALBDBSET_H
 #define ICALBDBSET_H
@@ -22,12 +21,6 @@
 #include "icalset.h"
 
 #include <db.h>
-
-#ifdef UNCLEAN
-#include <libical/ical.h>
-#include <libicalss/icalset.h>
-#include <libicalss/icalgauge.h>
-#endif
 
 typedef struct icalbdbset_impl icalbdbset;
 
@@ -46,7 +39,7 @@ void icalbdbset_rmdbLog(void);
    specify if database is internally a BTREE or HASH */
 icalset *icalbdbset_new(const char *database_filename,
                         icalbdbset_subdb_type subdb_type,
-                        int dbtype, int flag);
+                        int dbtype, u_int32_t flag);
 
 DB *icalbdbset_bdb_open_secondary(DB *dbp,
                                   const char *subdb,
@@ -63,16 +56,16 @@ void icalbdbset_free(icalset *set);
 
 /* cursor operations */
 int icalbdbset_acquire_cursor(DB *dbp, DB_TXN *tid, DBC **rdbcp);
-int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, int access_method);
-int icalbdbset_cput(DBC *dbcp, DBT *key, DBT *data, int access_method);
+int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method);
+int icalbdbset_cput(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method);
 
 int icalbdbset_get_first(DBC *dbcp, DBT *key, DBT *data);
 int icalbdbset_get_next(DBC *dbcp, DBT *key, DBT *data);
 int icalbdbset_get_last(DBC *dbcp, DBT *key, DBT *data);
 int icalbdbset_get_key(DBC *dbcp, DBT *key, DBT *data);
 int icalbdbset_delete(DB *dbp, DBT *key);
-int icalbdbset_put(DB *dbp, DBT *key, DBT *data, int access_method);
-int icalbdbset_get(DB *dbp, DB_TXN *tid, DBT *key, DBT *data, int flags);
+int icalbdbset_put(DB *dbp, DBT *key, DBT *data, u_int32_t access_method);
+int icalbdbset_get(DB *dbp, DB_TXN *tid, DBT *key, DBT *data, u_int32_t flags);
 
 const char *icalbdbset_path(icalset *set);
 const char *icalbdbset_subdb(icalset *set);
@@ -137,12 +130,12 @@ int icalbdbset_commit_transaction(DB_TXN *txnid);
 DB *icalbdbset_bdb_open(const char *path,
                         const char *subdb,
                         int type,
-                        mode_t mode, int flag);
+                        int mode, u_int32_t flag);
 
 typedef struct icalbdbset_options {
     icalbdbset_subdb_type subdb;     /**< the subdatabase to open */
     int                   dbtype;    /**< db_open type: DB_HASH | DB_BTREE */
-    mode_t                mode;      /**< file mode */
+    int                   mode;      /**< file mode */
     u_int32_t             flag;      /**< DB->set_flags(): DB_DUP | DB_DUPSORT */
     char *(*pfunc)(const DBT *dbt);  /**< parsing function */
     int (*callback)(DB *db, /**< callback for secondary db open */

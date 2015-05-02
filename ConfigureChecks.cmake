@@ -48,8 +48,8 @@ check_function_exists(unlink HAVE_UNLINK)
 check_function_exists(waitpid HAVE_WAITPID)
 
 include(CheckTypeSize)
-check_type_size(mode_t SIZEOF_MODE_T)
 check_type_size(size_t SIZEOF_SIZE_T)
+check_type_size(ssize_t SIZEOF_SSIZE_T)
 check_type_size(intptr_t INTPTR_T) # please do not rename HAVE_INTPTR_T will automatically be defined
 check_type_size(pid_t HAVE_PID_T)
 check_type_size(time_t SIZEOF_TIME_T)
