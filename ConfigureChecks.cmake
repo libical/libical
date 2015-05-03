@@ -14,38 +14,41 @@ check_include_files(unistd.h HAVE_UNISTD_H)
 check_include_files(wctype.h HAVE_WCTYPE_H)
 
 include(CheckFunctionExists)
-check_function_exists(access HAVE_ACCESS) #Unix <unistd.h>
-check_function_exists(_access HAVE__ACCESS) #Windows <io.h>
+if(WIN32 AND MSVC)
+  check_function_exists(_access HAVE__ACCESS) #Windows <io.h>
+  check_function_exists(_getpid HAVE__GETPID) #Windows <process.h>
+  check_function_exists(_mkdir HAVE__MKDIR) #Windows <direct.h>
+  check_function_exists(_open HAVE__OPEN) #Windows <io.h>
+  check_function_exists(_snprintf HAVE__SNPRINTF) #Windows <stdio.h>
+  check_function_exists(_stat HAVE__STAT) #Windows <sys/types.h>,<sys/stat.h>
+  check_function_exists(_strdup HAVE__STRDUP) #Windows <string.h>
+  check_function_exists(_stricmp HAVE__STRICMP) #Windows <string.h>
+  check_function_exists(_strnicmp HAVE__STRNICMP) #Windows <string.h>
+  check_function_exists(_read HAVE__READ) #Windows <io.h>
+  check_function_exists(_write HAVE__WRITE) #Windows <io.h>
+else()
+  check_function_exists(access HAVE_ACCESS) #Unix <unistd.h>
+  check_function_exists(fork HAVE_FORK) #Unix <unistd.h>
+  check_function_exists(getpid HAVE_GETPID) #Unix <unistd.h>
+  check_function_exists(getpwent HAVE_GETPWENT) #Unix <sys/types.h>,<pwd.h>
+  check_function_exists(gmtime_r HAVE_GMTIME_R) #Unix <time.h>
+  check_function_exists(mkdir HAVE_MKDIR) #Unix <sys/stat.h>,<sys/types.h>
+  check_function_exists(open HAVE_OPEN) #Unix <sys/stat.h>,<sys/types.h>,<fcntl.h>
+  check_function_exists(snprintf HAVE_SNPRINTF) #Unix <stdio.h>
+  check_function_exists(stat HAVE_STAT) #Unix <sys/stat.h>,<sys/types.h>,<unistd.h>
+  check_function_exists(strdup HAVE_STRDUP) #Unix <string.h>
+  check_function_exists(strcasecmp HAVE_STRCASECMP) #Unix <strings.h>
+  check_function_exists(strncasecmp HAVE_STRNCASECMP) #Unix <strings.h>
+  check_function_exists(read HAVE_READ) #Unix <unistd.h>
+  check_function_exists(unlink HAVE_UNLINK) #Unix <unistd.h>
+  check_function_exists(waitpid HAVE_WAITPID) #Unix <sys/types.h>,<sys/wait.h>
+  check_function_exists(write HAVE_WRITE) #Unix <unistd.h>
+endif()
+
 check_function_exists(backtrace HAVE_BACKTRACE)
-check_function_exists(fork HAVE_FORK)
-check_function_exists(getpid HAVE_GETPID) #Unix <unistd.h>
-check_function_exists(_getpid HAVE__GETPID) #Windows <process.h>
-check_function_exists(getpwent HAVE_GETPWENT)
-check_function_exists(gmtime_r HAVE_GMTIME_R)
-check_function_exists(isspace HAVE_ISSPACE)
-check_function_exists(iswspace HAVE_ISWSPACE)
-check_function_exists(mkdir HAVE_MKDIR)
-check_function_exists(_mkdir HAVE__MKDIR) #Windows <io.h>
-check_function_exists(open HAVE_OPEN) #Unix <fcntl.h>
-check_function_exists(_open HAVE__OPEN) #Windows <io.h>
+check_function_exists(iswspace HAVE_ISWSPACE) #Linux <wctype.h>
 check_function_exists(setenv HAVE_SETENV)
-check_function_exists(snprintf HAVE_SNPRINTF) #Unix <stdio.h>
-check_function_exists(_snprintf HAVE__SNPRINTF) #Windows <stdio.h>
-check_function_exists(stat HAVE_STAT)
-check_function_exists(_stat HAVE__STAT)
-check_function_exists(strcasecmp HAVE_STRCASECMP)
-check_function_exists(strncasecmp HAVE_STRNCASECMP)
-check_function_exists(stricmp HAVE_STRICMP)
-check_function_exists(strnicmp HAVE_STRNICMP)
-check_function_exists(strdup HAVE_STRDUP) #Unix <string.h>
-check_function_exists(_strdup HAVE__STRDUP) #Windows <string.h>
-check_function_exists(read HAVE_READ) #Unix <unistd.h>
-check_function_exists(_read HAVE__READ) #Windows <io.h>
-check_function_exists(write HAVE_WRITE) #Unix <unistd.h>
-check_function_exists(_write HAVE__WRITE) #Windows <io.h>
 check_function_exists(unsetenv HAVE_UNSETENV)
-check_function_exists(unlink HAVE_UNLINK)
-check_function_exists(waitpid HAVE_WAITPID)
 
 include(CheckTypeSize)
 check_type_size(size_t SIZEOF_SIZE_T)

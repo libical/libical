@@ -99,9 +99,7 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
         return 0;
     }
 
-#if !defined(_WIN32)
     icalfileset_lock(fset);
-#endif
 
     if (cluster_file_size > 0) {
         icalerrorenum error;

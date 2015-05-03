@@ -24,9 +24,6 @@
 /* Define to 1 if you have type 'intptr_t' defined. */
 #cmakedefine HAVE_INTPTR_T 1
 
-/* Define to 1 if you have the `isspace' function. */
-#cmakedefine HAVE_ISSPACE 1
-
 /* Define to 1 if you have the `iswspace' function. */
 #cmakedefine HAVE_ISWSPACE 1
 
@@ -66,11 +63,11 @@
 /* Define to 1 if you have the `strncasecmp' function. */
 #cmakedefine HAVE_STRNCASECMP 1
 
-/* Define to 1 if you have the `stricmp' function. */
-#cmakedefine HAVE_STRICMP 1
+/* Define to 1 if you have the `_stricmp' function. */
+#cmakedefine HAVE__STRICMP 1
 
-/* Define to 1 if you have the `strnicmp' function. */
-#cmakedefine HAVE_STRNICMP 1
+/* Define to 1 if you have the `_strnicmp' function. */
+#cmakedefine HAVE__STRNICMP 1
 
 /* Define to 1 if you have the `strdup' function. */
 #cmakedefine HAVE_STRDUP 1
@@ -225,26 +222,28 @@ typedef int pid_t;
 #include <pwd.h>
 #endif
 
-/* strcasecmp: String compare, case independent */
-#if !defined(HAVE_STRCASECMP)
-#if defined(HAVE_STRICMP)
-#define strcasecmp stricmp
+/* strcasecmp or stricmp: String compare, case independent */
+#if defined(HAVE__STRICMP)
+#define strcasecmp _stricmp
+#include <string.h>
 #else
+#if !defined(HAVE_STRCASECMP)
 #error "No case independent string compare function available"
-#endif
 #else
 #include <strings.h>
+#endif
 #endif
 
-/* strncasecmp: String compare, case independent, size limited */
-#if !defined(HAVE_STRNCASECMP)
-#if defined(HAVE_STRNICMP)
-#define strncasecmp strnicmp
+/* strncasecmp or strnicmp: String compare, case independent, size limited */
+#if defined(HAVE__STRICMP)
+#define strncasecmp _strnicmp
+#include <string.h>
 #else
+#if !defined(HAVE_STRNCASECMP)
 #error "No case independent string compare size limited function available"
-#endif
 #else
 #include <strings.h>
+#endif
 #endif
 
 /* snprintf: size limited sprintf */
@@ -326,6 +325,9 @@ typedef int pid_t;
 #else
 #include <sys/types.h>
 #include <sys/stat.h>
+#if defined(__MINGW32__) || defined(__MINGW64__)
+#define mkdir(path, mode) mkdir(path)
+#endif
 #endif
 #endif
 

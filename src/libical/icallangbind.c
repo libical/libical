@@ -23,17 +23,12 @@
 #endif
 
 #include "icalcomponent.h"
-#include "icalproperty.h"
 #include "icalerror.h"
 #include "icalmemory.h"
+#include "icalproperty.h"
 #include "icalvalue.h"
-#include <stdlib.h>
-#include <string.h>
 
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
-#endif
+#include <stdlib.h>
 
 int* icallangbind_new_array(int size){
     int* p = (int*)malloc(size*sizeof(int));
