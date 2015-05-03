@@ -1,11 +1,6 @@
-/*
-  ======================================================================
-  FILE: icaltypes.c
-  CREATOR: eric 16 May 1999
-
-  $Id: icaltypes.c,v 1.18 2008-01-15 23:17:42 dothebart Exp $
-  $Locker:  $
-
+/*======================================================================
+ FILE: icaltypes.c
+ CREATOR: eric 16 May 1999
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -16,13 +11,10 @@
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
-  The original code is icaltypes.c
-
  ======================================================================*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -33,19 +25,6 @@
 #include "icalmemory.h"
 
 #define TMP_BUF_SIZE 1024
-
-#ifdef UNCLEAN
-#include <stdlib.h> /* for malloc and abs() */
-#include <errno.h> /* for errno */
-#include <string.h> /* for icalmemory_strdup */
-#include <assert.h>
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
-#endif
-
-#endif
 
 #if defined(HAVE_PTHREAD)
 #include <pthread.h>

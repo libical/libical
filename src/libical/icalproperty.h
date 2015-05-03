@@ -1,13 +1,6 @@
-/* -*- Mode: C -*- */
 /*======================================================================
-  FILE: icalproperty.h
-  CREATOR: eric 20 March 1999
-
-
-  $Id: icalproperty.h,v 1.20 2008-01-15 23:17:41 dothebart Exp $
-  $Locker:  $
-
-
+ FILE: icalproperty.h
+ CREATOR: eric 20 March 1999
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -16,33 +9,20 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
-  The original code is icalparam.h
-
-  ======================================================================*/
+======================================================================*/
 
 #ifndef ICALPROPERTY_H
 #define ICALPROPERTY_H
 
-#include <stdarg.h>  /* for va_... */
-
-#ifdef UNCLEAN
-#include <time.h>
-#include "icalderivedparameter.h"
-#include "icalvalue.h"
-#include "icalrecur.h"
-#endif
-
 #include "icalderivedproperty.h" /* To get icalproperty_kind enumerations */
 
-/* Declared in icalderivedproperty.h */
-/*typedef struct icalproperty_impl icalproperty;*/
+#include <stdarg.h>  /* for va_... */
 
 icalproperty* icalproperty_new(icalproperty_kind kind);
 

@@ -1,10 +1,9 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icalmemory.c
-  CREATOR: eric 30 June 1999
+/*======================================================================
+ FILE: icalmemory.c
+ CREATOR: eric 30 June 1999
 
-  $Id: icalmemory.c,v 1.12 2008-02-03 16:10:46 dothebart Exp $
-  $Locker:  $
+ Copyright (C) 2000 Eric Busboom <eric@softwarestudio.org>
+   http://www.softwarestudio.org
 
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in
@@ -21,16 +20,13 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
- The Original Code is icalmemory.h
-
- ======================================================================*/
+======================================================================*/
 
 /**
  * @file icalmemory.c
@@ -56,15 +52,6 @@
 #include "icalerror.h"
 
 #include <stdlib.h>
-
-#ifdef UNCLEAN
-#include <stdio.h> /* for printf (debugging) */
-#include <string.h> /* for memset(), strdup */
-
-#ifdef _WIN32
-#include <windows.h>
-#endif
-#endif
 
 #define BUFFER_RING_SIZE 2500
 #define MIN_BUFFER_SIZE 200

@@ -1,10 +1,9 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icaltestparser.c
-  CREATOR: eric 20 June 1999
+/*======================================================================
+ FILE: icaltestparser.c
+ CREATOR: eric 20 June 1999
 
-  $Id: icaltestparser.c,v 1.4 2008-01-02 20:07:45 dothebart Exp $
-  $Locker:  $
+ (C) COPYRIGHT 1999 The Software Studio.
+ http://www.softwarestudio.org
 
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in
@@ -16,14 +15,8 @@
  the License for the specific language governing rights and
  limitations under the License.
 
-  The original author is Eric Busboom
-  The original code is icaltestparser.c
-
-
- (C) COPYRIGHT 1999 The Software Studio.
- http://www.softwarestudio.org
-
- ======================================================================*/
+ The original author is Eric Busboom
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -31,13 +24,7 @@
 
 #include "libical/ical.h"
 
-#ifdef UNCLEAN
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
-#endif
-
-char str[] = "BEGIN:VCALENDAR\
+ char str[] = "BEGIN:VCALENDAR\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\
 VERSION:2.0\
 BEGIN:VTIMEZONE\

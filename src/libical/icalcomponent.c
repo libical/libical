@@ -30,21 +30,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#ifdef UNCLEAN
-#include "pvl.h" /* "Pointer-to-void list" */
-#include "icalenums.h"
-#include "icaltime.h"
-#include "icalarray.h"
-#include "icalduration.h"
-#include "icalperiod.h"
-
-#include <stdarg.h> /* for va_list, etc */
-#include <errno.h>
-#include <stdio.h> /* for fprintf */
-#include <string.h> /* for strdup */
-#include <limits.h> /* for INT_MAX */
-#endif
-
 struct icalcomponent_impl
 {
         char id[5];

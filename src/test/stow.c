@@ -1,13 +1,9 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: stow.c
-  CREATOR: eric 29 April 2000
+/*======================================================================
+ FILE: stow.c
+ CREATOR: eric 29 April 2000
 
-  $Id: stow.c,v 1.10 2008-01-02 20:07:46 dothebart Exp $
-  $Locker:  $
-
- (C) COPYRIGHT 2000 Eric Busboom
- http://www.softwarestudio.org
+ (C) COPYRIGHT 2000 Eric Busboom <eric@softwarestudio.org>
+      http://www.softwarestudio.org
 
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in
@@ -20,9 +16,7 @@
  limitations under the License.
 
  The Initial Developer of the Original Code is Eric Busboom
-
- ======================================================================*/
-
+======================================================================*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -43,17 +37,7 @@
 
 char* program_name;
 
-#ifdef UNCLEAN
-#include <assert.h>
-#include <sys/stat.h> /* for stat */
-#if defined(HAVE_UNISTD_H)
-#include <unistd.h> /* for stat, getpid, getopt */
-#endif
-#include <pwd.h> /* For getpwent */
-#include <sys/types.h> /* For getpwent */
-
 void usage(char *message);
-#endif
 
 enum options {
     STORE_IN_FILE,

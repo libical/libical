@@ -1,10 +1,6 @@
-/* -*- Mode: C -*- */
 /*======================================================================
-  FILE: icalvalue.c
-  CREATOR: eric 02 May 1999
-
-  $Id: icalvalueimpl.h,v 1.7 2008-01-15 23:17:43 dothebart Exp $
-
+ FILE: icalvalue.c
+ CREATOR: eric 02 May 1999
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -13,30 +9,21 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-  The original code is icalvalue.c
-
   Contributions from:
      Graham Davison (g.m.davison@computer.org)
-
-
 ======================================================================*/
 
 #ifndef ICALVALUEIMPL_H
 #define ICALVALUEIMPL_H
 
 #include "icalproperty.h"
-
-#ifdef UNCLEAN
-#include "icalenums.h"
-#include "icalderivedvalue.h"
-#endif
 
 struct icalvalue_impl {
     icalvalue_kind kind; /*this is the kind that is visible from the outside*/

@@ -1,11 +1,6 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icalderivedparameters.{c,h}
-  CREATOR: eric 09 May 1999
-
-  $Id: icalderivedparameter.c.in,v 1.9 2008-01-15 23:17:40 dothebart Exp $
-  $Locker:  $
-
+/*======================================================================
+ FILE: icalderivedparameters.{c,h}
+ CREATOR: eric 09 May 1999
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -15,17 +10,14 @@
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-  The original code is icalderivedparameters.{c,h}
-
-  Contributions from:
-     Graham Davison (g.m.davison@computer.org)
-
- ======================================================================*/
+ Contributions from:
+    Graham Davison (g.m.davison@computer.org)
+======================================================================*/
 /*#line 29 "icalparameter.c.in"*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -40,12 +32,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef UNCLEAN
-#include "icalproperty.h"
-#include "icaltypes.h"
-#include <errno.h>
-#endif
 
 icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
 

@@ -1,8 +1,6 @@
-/* -*- Mode: C -*- */
 /*======================================================================
  FILE: icalattach.h
  CREATOR: acampi 28 May 02
-
 
  (C) COPYRIGHT 2002, Andrea Campi <a.campi@inet.it>
 
@@ -10,15 +8,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
-  The original code is icalattach.h
-
 ======================================================================*/
 
 #ifndef ICALATTACH_H

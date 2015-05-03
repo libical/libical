@@ -1,10 +1,6 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icaltime.c
-  CREATOR: eric 02 June 2000
-
-  $Id: icaltime.c,v 1.71 2008-01-29 18:31:48 dothebart Exp $
-  $Locker:  $
+/*======================================================================
+ FILE: icaltime.c
+ CREATOR: eric 02 June 2000
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -13,18 +9,16 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
-
- ======================================================================*/
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -38,24 +32,7 @@
 
 #include <stdlib.h>
 
-#ifdef UNCLEAN
-#include <assert.h>
-#include <string.h>
-#include <stdio.h>
-#include <time.h>
-
-#include "icalvalue.h"
-
-#ifdef WIN32
-#include <windows.h>
-#endif
-
-#if defined(_MSC_VER)
-#define snprintf   _snprintf
-#define strcasecmp stricmp
-#endif
-
-#ifdef WIN32
+#if defined(_WIN32)
 /* Undef the similar macro from pthread.h, it doesn't check if
  * gmtime() returns NULL.
  */
@@ -64,9 +41,8 @@
 /* The gmtime() in Microsoft's C library is MT-safe */
 #define gmtime_r(tp,tmp) (gmtime(tp)?(*(tmp)=*gmtime(tp),(tmp)):0)
 #endif
-#endif
 
-#ifdef HAVE_PTHREAD
+#if defined(HAVE_PTHREAD)
  #include <pthread.h>
     static pthread_mutex_t tzid_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif

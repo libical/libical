@@ -1,28 +1,25 @@
-/*
-  ======================================================================
-  FILE: regression-storage.c
-  CREATOR: eric 03 April 1999
+/*======================================================================
+ FILE: regression-storage.c
+ CREATOR: eric 03 April 1999
 
-  DESCRIPTION:
+ (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
-  (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
-  http://www.softwarestudio.org
+ DESCRIPTION:
 
-  The contents of this file are subject to the Mozilla Public License
-  Version 1.0 (the "License"); you may not use this file except in
-  compliance with the License. You may obtain a copy of the License at
-  http://www.mozilla.org/MPL/
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.0 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
 
-  Software distributed under the License is distributed on an "AS IS"
-  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-  the License for the specific language governing rights and
-  limitations under the License.
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ the License for the specific language governing rights and
+ limitations under the License.
 
-  The original author is Eric Busboom
-  The original code is usecases.c
-
-
-  ======================================================================*/
+ The original author is Eric Busboom
+ The original code is usecases.c
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -35,10 +32,6 @@
 #include <stdlib.h>
 
 #define OUTPUT_FILE "filesetout.ics"
-
-#ifdef UNCLEAN
-#include <assert.h>
-#endif
 
 /* define sample calendar struct */
 struct calendar {

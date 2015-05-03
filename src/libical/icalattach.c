@@ -1,27 +1,19 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icalattach.c
-  CREATOR: acampi 28 May 02
+/*======================================================================
+ FILE: icalattach.c
+ CREATOR: acampi 28 May 02
 
-  $Id: icalattach.c,v 1.3 2007-04-30 13:57:47 artcancro Exp $
-  $Locker:  $
-
-
- (C) COPYRIGHT 2000, Andrea Campi
+ (C) COPYRIGHT 2002, Andrea Campi <a.campi@inet.it>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
-  The original code is icaltypes.c
-
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -33,13 +25,6 @@
 
 #include <errno.h>
 #include <stdlib.h>
-
-#ifdef UNCLEAN
-#include "icaltypes.h"
-#include "icalmemory.h"
-#include <string.h> /* for icalmemory_strdup */
-#include <assert.h>
-#endif
 
 icalattach *
 icalattach_new_from_url (const char *url)

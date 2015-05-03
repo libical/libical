@@ -12,19 +12,15 @@
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
- */
+*/
 
 #include "icalspanlist_cxx.h"
 #include "vcomponent_cxx.h"
 using namespace LibICal;
-
-#ifdef UNCLEAN
-#include <exception>
-#endif
 
 /** @brief Construct an ICalSpanList from an icalset
     @param set     The icalset containing the VEVENTS

@@ -5,11 +5,6 @@
 #include "regression.h"
 #include "libical/ical.h"
 
-#ifdef UNCLEAN
-#include <string.h>
-extern int VERBOSE;
-#endif
-
 void create_simple_component(void)
 {
 

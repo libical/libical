@@ -1,8 +1,6 @@
-/* -*- Mode: C -*- */
 /*======================================================================
  FILE: icalrecur.h
  CREATOR: eric 20 March 2000
-
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -11,13 +9,13 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-*/
+========================================================================*/
 
 /**
 @file icalrecur.h
@@ -71,10 +69,6 @@ whatever timezone that dtstart is in.
 
 #include "icalarray.h"
 #include "icaltime.h"
-
-#ifdef UNCLEAN
-#include <time.h>
-#endif
 
 /*
  * Recurrance enumerations

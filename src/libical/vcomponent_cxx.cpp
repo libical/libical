@@ -15,7 +15,7 @@
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
- */
+*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -32,11 +32,6 @@ extern "C" {
 };
 
 #include <cstdlib>
-
-#ifdef UNCLEAN
-#include <cstring>
-#include <exception>
-#endif
 
 VComponent::VComponent() throw(icalerrorenum) : imp(icalcomponent_new(ICAL_ANY_COMPONENT))
 {

@@ -5,12 +5,12 @@
 #include <config.h>
 #endif
 
-#ifdef UNCLEAN
-#include <stdio.h>
-#include <stdlib.h>
+#include <libical/ical.h>
+
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h>
 #endif
-#include <libical/ical.h>
+
 #if defined(HAVE_LIBICU)
 #include <unicode/ucal.h>
 #endif
@@ -346,6 +346,8 @@ const struct recur rscale[] = {
 
 int main(int argc, char *argv[])
 {
+    int opt;
+
     /* Default to RFC 5545 tests */
     const struct recur *r = rfc5545;
     FILE *fp = fopen("test.out","w");
@@ -354,7 +356,6 @@ int main(int argc, char *argv[])
         return(1);
     }
 
-    int opt;
     while ((opt = getopt(argc, argv, "r")) != EOF) {
         switch (opt) {
 #if defined(HAVE_LIBICU)

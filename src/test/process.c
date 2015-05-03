@@ -1,13 +1,9 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: process.c
-  CREATOR: eric 11 February 2000
+/*======================================================================
+ FILE: process.c
+ CREATOR: eric 11 February 2000
 
-  $Id: process.c,v 1.10 2008-02-03 16:10:46 dothebart Exp $
-  $Locker:  $
-
- (C) COPYRIGHT 2000 Eric Busboom
- http://www.softwarestudio.org
+ (C) COPYRIGHT 2000 Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in
@@ -18,8 +14,7 @@
  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
  the License for the specific language governing rights and
  limitations under the License.
-
- ======================================================================*/
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -27,17 +22,6 @@
 
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
-
-#ifdef UNCLEAN
-#include <stdio.h> /* for printf */
-#include <errno.h>
-#include <string.h> /* For strerror */
-#include <stdlib.h> /* for free */
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#endif
-#endif
 
 void send_message(icalcomponent *reply,const char* this_user)
 {

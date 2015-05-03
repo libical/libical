@@ -1,29 +1,20 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icalcluster.c
-  CREATOR: acampi 13 March 2002
+/*======================================================================
+ FILE: icalcluster.c
+ CREATOR: acampi 13 March 2002
 
-  $Id: icalcluster.c,v 1.4 2007-04-30 13:57:48 artcancro Exp $
-  $Locker:  $
-
- (C) COPYRIGHT 2002, Eric Busboom, http://www.softwarestudio.org
+ Copyright (C) 2002 Andrea Campi <a.campi@inet.it>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
- The Original Code is eric. The Initial Developer of the Original
- Code is Eric Busboom
-
-
- ======================================================================*/
+======================================================================*/
 
 /**
  *
@@ -36,7 +27,6 @@
  * with anything as key and an icalcomponent as value.
  */
 
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -45,29 +35,6 @@
 #include "icalclusterimpl.h"
 
 #include <stdlib.h>
-
-#ifdef UNCLEAN
-#include <string.h>
-
-#if 0
-#include <errno.h>
-#include <sys/stat.h> /* for stat */
-#ifndef WIN32
-#include <unistd.h> /* for stat, getpid */
-#else
-#include <io.h>
-#include <share.h>
-#endif
-#include <fcntl.h> /* for fcntl */
-#endif
-
-#include "icalgauge.h"
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
-#endif
-#endif
 
 icalcluster * icalcluster_new_impl(void) {
 

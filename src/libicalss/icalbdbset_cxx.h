@@ -15,23 +15,12 @@
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
- */
+*/
 
 #ifndef ICALBDBSET_CXX_H
 #define ICALBDBSET_CXX_H
 
 #include "libical_icalss_export.h"
-
-#ifdef UNCLEAN
-extern "C" {
-#include <libical/ical.h>
-#include <libicalss/icalgauge.h>
-}
-
-#include <db_cxx.h>
-
-#include <string>
-#endif
 
 namespace LibICal
 {

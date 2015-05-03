@@ -1,10 +1,6 @@
-/* -*- Mode: C -*- */
 /*======================================================================
-  FILE: icalvalue.c
-  CREATOR: eric 02 May 1999
-
-  $Id: icalderivedvalue.c.in,v 1.15 2007-04-30 13:57:48 artcancro Exp $
-
+ FILE: icalvalue.c
+ CREATOR: eric 02 May 1999
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -14,17 +10,13 @@
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-  The original code is icalvalue.c
-
-  Contributions from:
-     Graham Davison (g.m.davison@computer.org)
-
-
+ Contributions from:
+   Graham Davison (g.m.davison@computer.org)
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -39,20 +31,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef UNCLEAN
-#include "icalparser.h"
-#include "icalenums.h"
-#include <stdio.h> /* for snprintf */
-#include <stddef.h> /* For offsetof() macro */
-#include <time.h> /* for mktime */
-#include <stdlib.h> /* for atoi and atof */
-#include <limits.h> /* for SHRT_MAX */
-
-#ifdef _MSC_VER
-#define strcasecmp stricmp
-#endif
-#endif
 
 struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind);
 

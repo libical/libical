@@ -1,11 +1,6 @@
-/* -*- Mode: C -*- */
-
 /*======================================================================
-  FILE: icalproperty.c
-  CREATOR: eric 28 April 1999
-
-  $Id: icalproperty.c,v 1.44 2008-01-30 20:28:42 dothebart Exp $
-
+ FILE: icalproperty.c
+ CREATOR: eric 28 April 1999
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -14,15 +9,14 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
   The original code is icalproperty.c
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -38,22 +32,6 @@
 #include "pvl.h"
 
 #include <stdlib.h>
-
-#ifdef UNCLEAN
-#include "icalparameter.h"
-#include "icalenums.h"
-
-#include <string.h> /* For icalmemory_strdup, rindex */
-#include <assert.h>
-#include <errno.h>
-#include <stdio.h> /* for printf */
-#include <stdarg.h> /* for va_list, va_start, etc. */
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
-#endif
-#endif
 
 /* Private routines for icalproperty */
 void icalvalue_set_parent(icalvalue* value,

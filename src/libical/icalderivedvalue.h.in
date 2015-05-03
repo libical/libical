@@ -1,13 +1,6 @@
-/* -*- Mode: C -*- */
 /*======================================================================
-  FILE: icalvalue.h
-  CREATOR: eric 20 March 1999
-
-
-  $Id: icalderivedvalue.h.in,v 1.10 2007-04-30 13:57:48 artcancro Exp $
-  $Locker:  $
-
-
+ FILE: icalvalue.h
+ CREATOR: eric 20 March 1999
 
  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
@@ -17,14 +10,11 @@
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.fsf.org/copyleft/lesser.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
-  The original code is icalvalue.h
-
-  ======================================================================*/
+======================================================================*/
 
 #ifndef ICALDERIVEDVALUE_H
 #define ICALDERIVEDVALUE_H
@@ -33,11 +23,6 @@
 #include "icalrecur.h"
 #include "icaltypes.h"
 
-#ifdef UNCLEAN
-#include "icaltime.h"
-#include "icalduration.h"
-#include "icalperiod.h"
-#endif
 typedef struct icalvalue_impl icalvalue;
 
 void icalvalue_set_x(icalvalue* value, const char* v);

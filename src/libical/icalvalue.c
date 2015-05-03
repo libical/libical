@@ -1,11 +1,6 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/* vi:set ts=4 sts=4 sw=4 expandtab : */
 /*======================================================================
-  FILE: icalvalue.c
-  CREATOR: eric 02 May 1999
-
-  $Id: icalvalue.c,v 1.44 2008-01-15 23:17:43 dothebart Exp $
-
+ FILE: icalvalue.c
+ CREATOR: eric 02 May 1999
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -14,19 +9,15 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-  The original code is icalvalue.c
-
   Contributions from:
      Graham Davison <g.m.davison@computer.org>
-
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -44,22 +35,6 @@
 #include <stdlib.h>
 
 #define TMP_BUF_SIZE 1024
-
-#ifdef UNCLEAN
-#include "icalparser.h"
-#include "icalenums.h"
-
-#include <stddef.h> /* For offsetof() macro */
-#include <errno.h>
-#include <time.h> /* for mktime */
-#include <limits.h> /* for SHRT_MAX */
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
-#endif
-
-#endif
 
 void print_datetime_to_string(char* str,  const struct icaltimetype *data);
 void print_date_to_string(char* str,  const struct icaltimetype *data);

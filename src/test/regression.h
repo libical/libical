@@ -1,29 +1,24 @@
-/*
-  ======================================================================
-  FILE: regression.c
-  CREATOR: eric 03 April 1999
+/*======================================================================
+ FILE: regression.c
+ CREATOR: eric 03 April 1999
 
-  (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
-  http://www.softwarestudio.org
+ (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
-  The contents of this file are subject to the Mozilla Public License
-  Version 1.0 (the "License"); you may not use this file except in
-  compliance with the License. You may obtain a copy of the License at
-  http://www.mozilla.org/MPL/
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.0 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
 
-  Software distributed under the License is distributed on an "AS IS"
-  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-  the License for the specific language governing rights and
-  limitations under the License.
-  ======================================================================*/
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ the License for the specific language governing rights and
+ limitations under the License.
+ ======================================================================*/
 #ifndef TEST_REGRESSION_H
 #define TEST_REGRESSION_H
 
 #include "icaltypes.h"
-
-#ifdef UNCLEAN
-#include <time.h> //for time_t
-#endif
 
 #ifdef  __cplusplus
 extern "C" {

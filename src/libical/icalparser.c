@@ -1,10 +1,9 @@
-/* -*- Mode: C; tab-width: 4; c-basic-offset: 8; -*-
-  ======================================================================
-  FILE: icalparser.c
-  CREATOR: eric 04 August 1999
+/*======================================================================
+ FILE: icalparser.c
+ CREATOR: eric 04 August 1999
 
-  $Id: icalparser.c,v 1.53 2008-01-15 23:17:40 dothebart Exp $
-  $Locker:  $
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in
@@ -16,22 +15,18 @@
  the License for the specific language governing rights and
  limitations under the License.
 
-
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
   The Initial Developer of the Original Code is Eric Busboom
-
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -47,35 +42,6 @@
 #include <stdlib.h>
 
 #define TMP_BUF_SIZE 80
-
-#ifdef UNCLEAN
-#include "pvl.h"
-#include "icalderivedparameter.h"
-#include "icalparameter.h"
-#include "icalproperty.h"
-
-#include <string.h> /* For strncpy & size_t */
-#include <stdio.h> /* For FILE and fgets and snprintf */
-
-#ifdef HAVE_WCTYPE_H
-# include <wctype.h>
-/* Some systems have an imcomplete implementation on wctype (FreeBSD,
- * Darwin). Cope with that. */
-# ifndef HAVE_ISWSPACE
-#  define iswspace        isspace
-# endif
-#else
-# if !defined HAVE_ISWSPACE && !defined WIN32
-#  define iswspace        isspace
-# endif
-#endif
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
-#endif
-
-#endif
 
 static char* parser_get_next_char(char c, char *str, int qm);
 static char* parser_get_next_parameter(char* line,char** end);

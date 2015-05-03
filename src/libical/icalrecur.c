@@ -1,7 +1,6 @@
-/*
-  ======================================================================
-  FILE: icalrecur.c
-  CREATOR: eric 16 May 2000
+/*======================================================================
+ FILE: icalrecur.c
+ CREATOR: eric 16 May 2000
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -12,11 +11,11 @@
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-*/
+========================================================================*/
 
 /**
   @file icalrecur.c
@@ -145,40 +144,6 @@
 #define RSCALE_IS_SUPPORTED 1
 #else
 #define RSCALE_IS_SUPPORTED 0
-#endif
-
-#ifdef UNCLEAN
-#ifdef HAVE_STDINT_H
-#include <stdint.h>
-#endif
-
-#include <stdio.h>
-#include <stdarg.h>
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#endif
-
-#include <limits.h>
-
-#ifndef HAVE_INTPTR_T
-#if (defined (WIN32) && !defined (__MINGW32__)) || defined (XP_BEOS)
-typedef long intptr_t;
-#endif
-#endif
-
-#ifdef _MSC_VER
-#define strcasecmp stricmp
-#endif
-
-#include <errno.h> /* for errno */
-#include <string.h> /* for strdup and strchr*/
-#include <assert.h>
-#ifdef HAVE_INTTYPES_H
-#include <inttypes.h>
-#endif
-
-#include "pvl.h"
 #endif
 
 #if (SIZEOF_TIME_T > 4)

@@ -1,13 +1,9 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: testclassify.c
-  CREATOR: eric 11 February 2000
+/*======================================================================
+ FILE: testclassify.c
+ CREATOR: eric 11 February 2000
 
-  $Id: testclassify.c,v 1.6 2008-01-02 20:07:46 dothebart Exp $
-  $Locker:  $
-
- (C) COPYRIGHT 2000 Eric Busboom
- http://www.softwarestudio.org
+ (C) COPYRIGHT 2000 Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in
@@ -21,20 +17,10 @@
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
-
- ======================================================================*/
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
-
-#ifdef UNCLEAN
-#include <stdio.h> /* for printf */
-#include <libical/ical.h>
-#include <errno.h>
-#include <string.h> /* For strerror */
-#include <libicalss/icalss.h>
 #endif
 
 /* Get a note about the purpose of the property*/

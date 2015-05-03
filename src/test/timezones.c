@@ -21,15 +21,10 @@
 
 #include <stdlib.h>
 
-#ifdef UNCLEAN
-#include <time.h>
-#include <stdio.h>
-#endif
-
 int main(int argc, char **argv)
 {
-    (void)argc;/*unused*/
-    (void)argv;/*unused*/
+    _unused(argc)
+    _unused(argv)
     icalarray *timezones = icaltimezone_get_builtin_timezones();
     size_t i;
     int ret = 0;

@@ -29,12 +29,6 @@ using namespace LibICal;
 #include <string>
 using namespace std;
 
-#ifdef UNCLEAN
-#include "icalparameter_cxx.h"
-#include <cstdio>
-#include <cstdlib>
-#endif
-
 char content[] = "BEGIN:VCALENDAR\n\
 VERSION:2.1\n\
 BEGIN:VEVENT\n\

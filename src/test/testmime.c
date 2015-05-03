@@ -1,10 +1,9 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE:
-  CREATOR: eric 25 June 2000
+/*======================================================================
+ FILE:
+ CREATOR: eric 25 June 2000
 
-  $Id: testmime.c,v 1.6 2008-02-03 16:10:48 dothebart Exp $
-  $Locker:  $
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in
@@ -16,22 +15,19 @@
  the License for the specific language governing rights and
  limitations under the License.
 
-
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-  The Initial Developer of the Original Code is Eric Busboom
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
- ======================================================================*/
+ The Initial Developer of the Original Code is Eric Busboom
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -40,15 +36,6 @@
 #include "libical/ical.h"
 
 #include <stdlib.h>
-
-#ifdef UNCLEAN
-#if defined(HAVE_UNISTD_H)
-#include <unistd.h>   /* for getopt, sleep */
-#endif
-#ifdef WIN32
-#include <windows.h> /* for Sleep */
-#endif
-#endif
 
 /*int sspm_parse_mime(struct sspm_part *parts,
                size_t max_parts,

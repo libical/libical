@@ -1,29 +1,24 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icaltime.c
-  CREATOR: eric 02 June 2000
+/*======================================================================
+ FILE: icaltime.c
+ CREATOR: eric 02 June 2000
 
-  $Id: icalduration.c,v 1.21 2008-01-15 23:17:40 dothebart Exp $
-  $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+   http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
-
- ======================================================================*/
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -33,20 +28,6 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icaltime.h"
-
-#ifdef UNCLEAN
-
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "icalvalue.h"
-
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#endif
-#endif
 
 /* From Seth Alves,  <alves@hungry.com>   */
 struct icaldurationtype icaldurationtype_from_int(int t)

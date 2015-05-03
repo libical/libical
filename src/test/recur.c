@@ -1,29 +1,26 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: recur.c
-  CREATOR: ebusboom 8jun00
+/*======================================================================
+ FILE: recur.c
+ CREATOR: ebusboom 8jun00
 
-  DESCRIPTION:
+ (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
+      http://www.softwarestudio.org
 
-  Test program for expanding recurrences. Run as:
+ DESCRIPTION:
+
+ Test program for expanding recurrences. Run as:
 
      ./recur ../../test-data/recur.txt
 
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.0 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
 
-  (C) COPYRIGHT 1999 Eric Busboom
-  http://www.softwarestudio.org
-
-  The contents of this file are subject to the Mozilla Public License
-  Version 1.0 (the "License"); you may not use this file except in
-  compliance with the License. You may obtain a copy of the License at
-  http://www.mozilla.org/MPL/
-
-  Software distributed under the License is distributed on an "AS IS"
-  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-  the License for the specific language governing rights and
-  limitations under the License.
-
-  ======================================================================*/
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ the License for the specific language governing rights and
+ limitations under the License.
+ ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -33,16 +30,6 @@
 #include "libicalss/icalss.h"
 
 #include <stdlib.h>
-
-#ifdef UNCLEAN
-#include <assert.h>
-#include <string.h> /* for strdup */
-#include <time.h> /* for time() */
-#include <signal.h> /* for signal */
-#ifndef WIN32
-#include <unistd.h> /* for alarm */
-#endif
-#endif
 
 #ifndef WIN32
 static void sig_alrm(int i){

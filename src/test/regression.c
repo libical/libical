@@ -1,24 +1,23 @@
-/*
-  ======================================================================
-  FILE: regression.c
-  CREATOR: eric 03 April 1999
+/*======================================================================
+ FILE: regression.c
+ CREATOR: eric 03 April 1999
 
-  (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
-  http://www.softwarestudio.org
+ (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
-  The contents of this file are subject to the Mozilla Public License
-  Version 1.0 (the "License"); you may not use this file except in
-  compliance with the License. You may obtain a copy of the License at
-  http://www.mozilla.org/MPL/
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.0 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
 
-  Software distributed under the License is distributed on an "AS IS"
-  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-  the License for the specific language governing rights and
-  limitations under the License.
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ the License for the specific language governing rights and
+ limitations under the License.
 
-  The original author is Eric Busboom
-  The original code is regression.c
-  ======================================================================*/
+ The original author is Eric Busboom
+ The original code is regression.c
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -34,19 +33,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#ifdef UNCLEAN
-#include <string.h> /* for strdup */
-#include <stdio.h> /* for printf */
-#ifndef _WIN32
-#include <unistd.h> /* for unlink, fork */
-#include <sys/wait.h> /* For waitpid */
-#include <sys/time.h> /* for select */
-#else
-#include <direct.h> /* for mkdir */
-#include <windows.h>
-#endif
-#include <sys/types.h> /* For wait pid */
-#endif
 /* For GNU libc, strcmp appears to be a macro, so using strcmp in
  assert results in incomprehansible assertion messages. This
  eliminates the problem */

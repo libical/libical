@@ -2,7 +2,6 @@
  FILE: icalcomponent.h
  CREATOR: eric 20 March 1999
 
-
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
@@ -12,7 +11,7 @@
     The LGPL as published by the Free Software Foundation, version
     2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
@@ -26,18 +25,6 @@
 #include "pvl.h"
 
 typedef struct icalcomponent_impl icalcomponent;
-
-#ifdef UNCLEAN
-#include "icalvalue.h"
-
-#ifndef ICALTIMEZONE_DEFINED
-#define ICALTIMEZONE_DEFINED
-/** @brief An opaque struct representing a timezone.
- * We declare this here to avoid a circular dependancy.
- */
-typedef struct _icaltimezone            icaltimezone;
-#endif
-#endif
 
 /* This is exposed so that callers will not have to allocate and
    deallocate iterators. Pretend that you can't see it. */
