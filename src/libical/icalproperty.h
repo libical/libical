@@ -81,6 +81,8 @@ LIBICAL_ICAL_EXPORT icalvalue* icalproperty_get_value(const icalproperty* prop);
 LIBICAL_ICAL_EXPORT const char* icalproperty_get_value_as_string(const icalproperty* prop);
 char* icalproperty_get_value_as_string_r(const icalproperty* prop);
 
+void icalvalue_set_parent(icalvalue* value, icalproperty* property);
+
 /* Deal with X properties */
 
 LIBICAL_ICAL_EXPORT void icalproperty_set_x_name(icalproperty* prop, const char* name);

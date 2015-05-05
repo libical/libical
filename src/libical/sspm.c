@@ -394,7 +394,7 @@ static struct sspm_action_map get_action(struct mime_impl *impl,
                                   enum sspm_major_type major,
                                   enum sspm_minor_type minor)
 {
-    int i;
+    size_t i;
 
     /* Read caller suppled action map */
 
@@ -411,7 +411,9 @@ static struct sspm_action_map get_action(struct mime_impl *impl,
 
     /* Else, read default action map */
 
-    for(i=0; sspm_action_map[i].major != SSPM_UNKNOWN_MAJOR_TYPE; i++){
+    for(i=0;
+        i<sizeof(sspm_action_map) && sspm_action_map[i].major != SSPM_UNKNOWN_MAJOR_TYPE;
+        i++){
             if((major == sspm_action_map[i].major &&
                minor == sspm_action_map[i].minor) ||
                (major == sspm_action_map[i].major &&

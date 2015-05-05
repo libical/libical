@@ -850,6 +850,7 @@ icaltimezone_get_utc_offset             (icaltimezone   *zone,
     zone_change = icalarray_element_at(zone->changes, change_num);
     step = 1;
     found_change = 0;
+    change_num_to_use = -1;
     for (;;) {
         /* Copy the change, so we can adjust it. */
         tmp_change = *zone_change;
@@ -994,6 +995,7 @@ icaltimezone_get_utc_offset_of_utc_time (icaltimezone   *zone,
     zone_change = icalarray_element_at(zone->changes, change_num);
     step = 1;
     found_change = 0;
+    change_num_to_use = -1;
     for (;;) {
         /* Copy the change and adjust it to UTC. */
         tmp_change = *zone_change;
