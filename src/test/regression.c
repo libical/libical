@@ -1870,8 +1870,6 @@ void test_icalset()
 }
 
 
-icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp);
-
 void test_overlaps()
 {
     icalcomponent *cset,*c;

@@ -8,7 +8,7 @@
 #  define LIBICAL_VCAL_NO_EXPORT
 #else
 #  if defined(_MSC_VER)
-#    if defined(libical_ical_EXPORTS)
+#    if defined(libical_vcal_EXPORTS)
        /* We are building this library */
 #      define LIBICAL_VCAL_EXPORT __declspec(dllexport)
 #    else

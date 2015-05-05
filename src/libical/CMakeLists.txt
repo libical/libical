@@ -251,11 +251,6 @@ set(ical_LIB_SRCS
   caldate.c
   astime.h
 )
-if(WIN32)
-  if(MSVC)
-    list(APPEND ical_LIB_SRCS ../ical.def)
-  endif()
-endif()
 
 add_library(ical ${LIBRARY_TYPE} ${ical_LIB_SRCS})
 if(NOT SHARED_ONLY)

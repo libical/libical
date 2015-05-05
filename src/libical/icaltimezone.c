@@ -1998,7 +1998,7 @@ static const char* get_zone_directory(void)
             return ZONEINFO_DIRECTORY;
 
 /*wince supports only unicode*/
-#if !def(_WIN32_WCE)
+#if !defined(_WIN32_WCE)
         /* Convert to system codepage */
         if (!WideCharToMultiByte (CP_ACP, 0, wbuffer, -1, buffer, sizeof (buffer),
                                   NULL, &used_default) ||

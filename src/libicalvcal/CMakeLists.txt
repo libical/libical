@@ -26,10 +26,6 @@ set(icalvcal_LIB_SRCS
   ${icalvcal_LIB_DEVSRCS}
 )
 
-if(MSVC)
-  list(APPEND icalvcal_LIB_SRCS ../icalvcal.def)
-endif()
-
 add_library(icalvcal ${LIBRARY_TYPE} ${icalvcal_LIB_SRCS})
 if(NOT SHARED_ONLY)
   add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})

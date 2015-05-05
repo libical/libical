@@ -78,9 +78,6 @@ if(WITH_BDB)
     icalbdbsetimpl.h
   )
 endif()
-if(MSVC)
-  list(APPEND icalss_LIB_SRCS ../icalss.def)
-endif()
 
 add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
 if(NOT SHARED_ONLY)
