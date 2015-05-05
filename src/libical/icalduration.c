@@ -33,7 +33,8 @@
 struct icaldurationtype icaldurationtype_from_int(int t)
 {
     struct icaldurationtype dur;
-    int used = 0;
+    unsigned int ut;
+    unsigned int used = 0;
 
     dur = icaldurationtype_null_duration();
 
@@ -42,17 +43,18 @@ struct icaldurationtype icaldurationtype_from_int(int t)
         t = -t;
     }
 
-    if (t % (60 * 60 * 24 * 7) == 0) {
-        dur.weeks = t / (60 * 60 * 24 * 7);
+    ut = (unsigned int)t;
+    if (ut % (60 * 60 * 24 * 7) == 0) {
+        dur.weeks = ut / (60 * 60 * 24 * 7);
     } else {
         used += dur.weeks * (60 * 60 * 24 * 7);
-        dur.days = (t - used) / (60 * 60 * 24);
+        dur.days = (ut - used) / (60 * 60 * 24);
         used += dur.days * (60 * 60 * 24);
-        dur.hours = (t - used) / (60 * 60);
+        dur.hours = (ut - used) / (60 * 60);
         used += dur.hours * (60 * 60);
-        dur.minutes = (t - used) / (60);
+        dur.minutes = (ut - used) / (60);
         used += dur.minutes * (60);
-        dur.seconds = (t - used);
+        dur.seconds = (ut - used);
     }
 
     return dur;
@@ -128,32 +130,37 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
             case 'H': {
                 if (time_flag == 0||d.hours !=0||digits ==-1)
                     goto error;
-                d.hours = digits; digits = -1;
+                d.hours = (unsigned int)digits;
+                digits = -1;
                 break;
             }
             case 'M': {
                 if (time_flag == 0||d.minutes != 0||digits ==-1)
                     goto error;
-                d.minutes = digits; digits = -1;
+                d.minutes = (unsigned int)digits;
+                digits = -1;
                 break;
             }
             case 'S': {
                 if (time_flag == 0||d.seconds!=0||digits ==-1)
                     goto error;
-                d.seconds = digits; digits = -1;
+                d.seconds = (unsigned int)digits;
+                digits = -1;
                 break;
             }
             case 'W': {
                 if (time_flag==1||date_flag==1||d.weeks!=0||digits ==-1)
                     goto error;
-                d.weeks = digits; digits = -1;
+                d.weeks = (unsigned int)digits;
+                digits = -1;
                 break;
             }
             case 'D': {
                 if (time_flag==1||d.days!=0||digits ==-1)
                     goto error;
                 date_flag = 1;
-                d.days = digits; digits = -1;
+                d.days = (unsigned int)digits;
+                digits = -1;
                 break;
             }
             default: {
@@ -171,14 +178,13 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
     return icaldurationtype_bad_duration();
 }
 
-#define TMP_BUF_SIZE 1024
 static
 void append_duration_segment(char** buf, char** buf_ptr, size_t* buf_size,
                              const char* sep, unsigned int value) {
 
-    char temp[TMP_BUF_SIZE];
+    char temp[1024];
 
-    snprintf(temp,sizeof(temp),"%d",value);
+    snprintf(temp, sizeof(temp), "%u", value);
 
     icalmemory_append_string(buf, buf_ptr, buf_size, temp);
     icalmemory_append_string(buf, buf_ptr, buf_size, sep);

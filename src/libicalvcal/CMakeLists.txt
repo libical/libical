@@ -1,3 +1,5 @@
+add_definitions(-Dlibical_vcal_EXPORTS)
+
 include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/src
@@ -12,6 +14,7 @@ set(icalvcal_LIB_DEVSRCS vcc.c)
 ########### next target ###############
 
 set(icalvcal_LIB_SRCS
+  libical_vcal_export.h
   icalvcal.h
   icalvcal.c
   port.h

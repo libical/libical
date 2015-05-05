@@ -1,11 +1,8 @@
-/* -*- Mode: C -*- */
 /*======================================================================
   FILE: icalparam.h
   CREATOR: eric 20 March 1999
 
 
-  $Id: icalparameter.h,v 1.5 2008-01-15 23:17:40 dothebart Exp $
-  $Locker:  $
 
 
 
@@ -16,7 +13,7 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
   Or:
 
@@ -30,36 +27,37 @@
 #ifndef ICALPARAMETER_H
 #define ICALPARAMETER_H
 
+#include "libical_ical_export.h"
 #include "icalderivedparameter.h"
 
 /* Declared in icalderivedparameter.h */
 /*typedef struct icalparameter_impl icalparameter;*/
 
-icalparameter* icalparameter_new(icalparameter_kind kind);
-icalparameter* icalparameter_new_clone(icalparameter* p);
+LIBICAL_ICAL_EXPORT icalparameter* icalparameter_new(icalparameter_kind kind);
+LIBICAL_ICAL_EXPORT icalparameter* icalparameter_new_clone(icalparameter* p);
 
 /* Create from string of form "PARAMNAME=VALUE" */
-icalparameter* icalparameter_new_from_string(const char* value);
+LIBICAL_ICAL_EXPORT icalparameter* icalparameter_new_from_string(const char* value);
 
 /* Create from just the value, the part after the "=" */
-icalparameter* icalparameter_new_from_value_string(icalparameter_kind kind, const char* value);
+LIBICAL_ICAL_EXPORT icalparameter* icalparameter_new_from_value_string(icalparameter_kind kind, const char* value);
 
-void icalparameter_free(icalparameter* parameter);
+LIBICAL_ICAL_EXPORT void icalparameter_free(icalparameter* parameter);
 
-char* icalparameter_as_ical_string(icalparameter* parameter);
+LIBICAL_ICAL_EXPORT char* icalparameter_as_ical_string(icalparameter* parameter);
 char* icalparameter_as_ical_string_r(icalparameter* parameter);
 
 int icalparameter_is_valid(icalparameter* parameter);
 
-icalparameter_kind icalparameter_isa(icalparameter* parameter);
+LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter* parameter);
 
-int icalparameter_isa_parameter(void* param);
+LIBICAL_ICAL_EXPORT int icalparameter_isa_parameter(void* param);
 
 /* Access the name of an X parameter */
-void icalparameter_set_xname (icalparameter* param, const char* v);
-const char* icalparameter_get_xname(icalparameter* param);
-void icalparameter_set_xvalue (icalparameter* param, const char* v);
-const char* icalparameter_get_xvalue(icalparameter* param);
+LIBICAL_ICAL_EXPORT void icalparameter_set_xname (icalparameter* param, const char* v);
+LIBICAL_ICAL_EXPORT const char* icalparameter_get_xname(icalparameter* param);
+LIBICAL_ICAL_EXPORT void icalparameter_set_xvalue (icalparameter* param, const char* v);
+LIBICAL_ICAL_EXPORT const char* icalparameter_get_xvalue(icalparameter* param);
 
 /* Access the name of an IANA parameter */
 void icalparameter_set_iana_name (icalparameter* param, const char* v);
@@ -72,8 +70,8 @@ int icalparameter_has_same_name(icalparameter* param1, icalparameter* param2);
 
 /* Convert enumerations */
 
-const char* icalparameter_kind_to_string(icalparameter_kind kind);
-icalparameter_kind icalparameter_string_to_kind(const char* string);
+LIBICAL_ICAL_EXPORT const char* icalparameter_kind_to_string(icalparameter_kind kind);
+LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char* string);
 
 
 

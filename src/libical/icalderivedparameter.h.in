@@ -20,10 +20,11 @@
 #ifndef ICALDERIVEDPARAMETER_H
 #define ICALDERIVEDPARAMETER_H
 
+#include "libical_ical_export.h"
 
 typedef struct icalparameter_impl icalparameter;
 
-const char* icalparameter_enum_to_string(int e);
-int icalparameter_string_to_enum(const char* str);
+LIBICAL_ICAL_EXPORT const char* icalparameter_enum_to_string(int e);
+LIBICAL_ICAL_EXPORT int icalparameter_string_to_enum(const char* str);
 
 <insert_code_here>

@@ -16,14 +16,16 @@
     the License at http://www.mozilla.org/MPL/
 ======================================================================*/
 
-#ifndef ICALARRAY_H
-#define ICALARRAY_H
-
 /** @file icalarray.h
  *
  *  @brief An array of arbitrarily-sized elements which grows
  *  dynamically as elements are added.
  */
+
+#ifndef ICALARRAY_H
+#define ICALARRAY_H
+
+#include "libical_ical_export.h"
 
 typedef struct _icalarray icalarray;
 struct _icalarray {
@@ -44,7 +46,7 @@ void icalarray_append(icalarray *array, const void *element);
 
 void icalarray_remove_element_at(icalarray *array, size_t position);
 
-void *icalarray_element_at(icalarray *array, size_t position);
+LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray *array, size_t position);
 
 void icalarray_sort(icalarray *array, int (*compare)(const void *, const void *));
 

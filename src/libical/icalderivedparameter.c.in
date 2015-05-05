@@ -23,9 +23,9 @@
 #include <config.h>
 #endif
 
+#include "icalderivedparameter.h"
 #include "icalparameter.h"
 #include "icalparameterimpl.h"
-#include "icalderivedvalue.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icaltime.h"

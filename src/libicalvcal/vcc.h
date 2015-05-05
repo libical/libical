@@ -39,6 +39,7 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #ifndef VCC_H
 #define VCC_H
 
+#include "libical_vcal_export.h"
 #include "vobject.h"
 
 #if defined(__CPLUSPLUS__) || defined(__cplusplus)
@@ -50,7 +51,7 @@ typedef void (*MimeErrorHandler)(char *);
 extern DLLEXPORT(void) registerMimeErrorHandler(MimeErrorHandler);
 
 extern DLLEXPORT(VObject*) Parse_MIME(const char *input, unsigned long len);
-extern DLLEXPORT(VObject*) Parse_MIME_FromFileName(char* fname);
+LIBICAL_VCAL_EXPORT VObject *Parse_MIME_FromFileName(char* fname);
 
 
 /* NOTE regarding Parse_MIME_FromFile
@@ -66,9 +67,9 @@ will get a link error.
 
 
 #ifdef INCLUDEMFC
-extern VObject* Parse_MIME_FromFile(CFile *file);
+LIBICAL_VCAL_EXPORT VObject* Parse_MIME_FromFile(CFile *file);
 #else
-extern VObject* Parse_MIME_FromFile(FILE *file);
+LIBICAL_VCAL_EXPORT VObject* Parse_MIME_FromFile(FILE *file);
 #endif
 
 #if defined(__CPLUSPLUS__) || defined(__cplusplus)

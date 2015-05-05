@@ -1,10 +1,6 @@
-/* -*- Mode: C -*- */
 /*======================================================================
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
-
-  $Id: icalrestriction.h,v 1.3 2008-01-15 23:17:42 dothebart Exp $
-
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -13,24 +9,23 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-  The original code is icalrestriction.h
+ The original code is icalrestriction.h
 
-  Contributions from:
-     Graham Davison (g.m.davison@computer.org)
-
-
+ Contributions from:
+    Graham Davison (g.m.davison@computer.org)
 ======================================================================*/
 
 #ifndef ICALRESTRICTION_H
 #define ICALRESTRICTION_H
 
+#include "libical_ical_export.h"
 #include "icalcomponent.h"
 #include "icalproperty.h"
 
@@ -47,15 +42,13 @@ typedef enum icalrestriction_kind {
     ICAL_RESTRICTION_UNKNOWN            /* 8 */
 } icalrestriction_kind;
 
-int
-icalrestriction_compare(icalrestriction_kind restr, int count);
+int icalrestriction_compare(icalrestriction_kind restr, int count);
 
 
-int
-icalrestriction_is_parameter_allowed(icalproperty_kind property,
-                                       icalparameter_kind parameter);
+int icalrestriction_is_parameter_allowed(icalproperty_kind property,
+                                         icalparameter_kind parameter);
 
-int icalrestriction_check(icalcomponent* comp);
+LIBICAL_ICAL_EXPORT int icalrestriction_check(icalcomponent* comp);
 
 
 #endif /* !ICALRESTRICTION_H */

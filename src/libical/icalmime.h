@@ -20,11 +20,13 @@
 #ifndef ICALMIME_H
 #define ICALMIME_H
 
+#include "libical_ical_export.h"
 #include "icalcomponent.h"
 
-icalcomponent* icalmime_parse(  char* (*line_gen_func)(char *s, size_t size,
-                                                       void *d),
-                                void *data);
+LIBICAL_ICAL_EXPORT icalcomponent* icalmime_parse(char* (*line_gen_func)(char *s,
+                                                                         size_t size,
+                                                                         void *d),
+                                                  void *data);
 
 /* The inverse of icalmime_parse, not implemented yet. Use sspm.h directly.  */
 char* icalmime_as_mime_string(char* component);

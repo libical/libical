@@ -78,6 +78,7 @@ which accompanied this distribution.
 #ifndef VOBJECT_H
 #define VOBJECT_H
 
+#include "libical_vcal_export.h"
 #include "port.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -259,7 +260,7 @@ typedef struct VObjectIterator {
     } VObjectIterator;
 
 extern DLLEXPORT(VObject*) newVObject(const char *id);
-extern DLLEXPORT(void) deleteVObject(VObject *p);
+LIBICAL_VCAL_EXPORT void deleteVObject(VObject *p);
 extern DLLEXPORT(char*) dupStr(const char *s, size_t size);
 extern DLLEXPORT(void) deleteStr(const char *p);
 extern DLLEXPORT(void) unUseStr(const char *s);

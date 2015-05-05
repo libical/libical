@@ -2,7 +2,6 @@
  FILE: pvl.h
  CREATOR: eric November, 1995
 
-
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
@@ -10,18 +9,18 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
 ======================================================================*/
-
 
 #ifndef ICAL_PVL_H
 #define ICAL_PVL_H
+
+#include "libical_ical_export.h"
 
 typedef struct pvl_list_t* pvl_list;
 typedef struct pvl_elem_t* pvl_elem;
@@ -52,22 +51,22 @@ extern int  pvl_list_count;
 
 /* Create new lists or elements */
 pvl_elem pvl_new_element(void* d, pvl_elem next,pvl_elem prior);
-pvl_list pvl_newlist(void);
-void pvl_free(pvl_list);
+LIBICAL_ICAL_EXPORT pvl_list pvl_newlist(void);
+LIBICAL_ICAL_EXPORT void pvl_free(pvl_list);
 
 /* Add, remove, or get the head of the list */
 void pvl_unshift(pvl_list l,void *d);
 void* pvl_shift(pvl_list l);
-pvl_elem pvl_head(pvl_list);
+LIBICAL_ICAL_EXPORT pvl_elem pvl_head(pvl_list);
 
 /* Add, remove or get the tail of the list */
-void pvl_push(pvl_list l,void *d);
-void* pvl_pop(pvl_list l);
-pvl_elem pvl_tail(pvl_list);
+LIBICAL_ICAL_EXPORT void pvl_push(pvl_list l,void *d);
+LIBICAL_ICAL_EXPORT void* pvl_pop(pvl_list l);
+LIBICAL_ICAL_EXPORT pvl_elem pvl_tail(pvl_list);
 
 /* Insert elements in random places */
 typedef int (*pvl_comparef)(void* a, void* b); /* a, b are of the data type*/
-void pvl_insert_ordered(pvl_list l,pvl_comparef f,void *d);
+LIBICAL_ICAL_EXPORT void pvl_insert_ordered(pvl_list l,pvl_comparef f,void *d);
 void pvl_insert_after(pvl_list l,pvl_elem e,void *d);
 void pvl_insert_before(pvl_list l,pvl_elem e,void *d);
 
@@ -78,12 +77,12 @@ void pvl_clear(pvl_list); /* Remove all elements, de-allocate all data */
 int pvl_count(pvl_list);
 
 /* Navagate the list */
-pvl_elem pvl_next(pvl_elem e);
+LIBICAL_ICAL_EXPORT pvl_elem pvl_next(pvl_elem e);
 pvl_elem pvl_prior(pvl_elem e);
 
 /* get the data in the list */
 #ifndef PVL_USE_MACROS
-void* pvl_data(pvl_elem);
+LIBICAL_ICAL_EXPORT void* pvl_data(pvl_elem);
 #else
 #define pvl_data(x) x==0 ? 0 : ((struct pvl_elem_t *)x)->d;
 #endif

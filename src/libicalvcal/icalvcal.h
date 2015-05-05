@@ -20,6 +20,7 @@
 #ifndef ICALVCAL_H
 #define ICALVCAL_H
 
+#include "libical_vcal_export.h"
 #include "vobject.h"
 #include "icalcomponent.h"
 
@@ -36,7 +37,7 @@ struct _icalvcal_defaults {
 
 /* Convert a vObject into an icalcomponent */
 
-icalcomponent* icalvcal_convert(VObject *object);
+LIBICAL_VCAL_EXPORT icalcomponent* icalvcal_convert(VObject *object);
 
 
 icalcomponent* icalvcal_convert_with_defaults (VObject *object,

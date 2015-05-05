@@ -270,25 +270,25 @@ EOM
         print <<EOM;
 $type icalproperty_get_${lc}(const icalproperty* prop){
 #ifndef _MSC_VER
-	struct icaltimetype itt;
-	icalparameter* param;
-	icaltimezone *zone;
+        struct icaltimetype itt;
+        icalparameter* param;
+        icaltimezone *zone;
 #endif
-	icalerror_check_arg( (prop!=0),"prop");
+        icalerror_check_arg( (prop!=0),"prop");
 #ifndef _MSC_VER
         /*
-	 * Code by dirk\@objectpark.net:
-	 * Set the time zone manually. I am really puzzled that
-	 * it doesnot work automatically like in the other functions
-	 * like icalproperty_get_dtstart().
-	 */
-	itt = icalvalue_get_datetime(icalproperty_get_value(prop));
-	param = icalproperty_get_first_parameter((icalproperty *)prop, ICAL_TZID_PARAMETER);
-	if (param) {
-	        zone = icaltimezone_get_builtin_timezone(icalparameter_get_tzid(param));
-		icaltime_set_timezone(&itt, zone);
+         * Code by dirk\@objectpark.net:
+         * Set the time zone manually. I am really puzzled that
+         * it doesnot work automatically like in the other functions
+         * like icalproperty_get_dtstart().
+         */
+        itt = icalvalue_get_datetime(icalproperty_get_value(prop));
+        param = icalproperty_get_first_parameter((icalproperty *)prop, ICAL_TZID_PARAMETER);
+        if (param) {
+                zone = icaltimezone_get_builtin_timezone(icalparameter_get_tzid(param));
+                icaltime_set_timezone(&itt, zone);
         }
-	return itt;
+        return itt;
 #else
     return icalvalue_get_datetime(icalproperty_get_value(prop));
 #endif
@@ -306,12 +306,12 @@ EOM
 
       print "\
 /* $prop */\
-icalproperty* icalproperty_new_${lc}($type v);\
-void icalproperty_set_${lc}(icalproperty* prop, $type v);\
-$type icalproperty_get_${lc}(const icalproperty* prop);";
+LIBICAL_ICAL_EXPORT icalproperty* icalproperty_new_${lc}($type v);\
+LIBICAL_ICAL_EXPORT void icalproperty_set_${lc}(icalproperty* prop, $type v);\
+LIBICAL_ICAL_EXPORT $type icalproperty_get_${lc}(const icalproperty* prop);";
 
       if ($include_vanew) {
-        print "icalproperty* icalproperty_vanew_${lc}($type v, ...);\n";
+        print "\nLIBICAL_ICAL_EXPORT icalproperty* icalproperty_vanew_${lc}($type v, ...);\n";
       }
 
     }

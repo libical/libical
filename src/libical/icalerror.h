@@ -1,10 +1,6 @@
-/* -*- Mode: C -*- */
 /*======================================================================
   FILE: icalerror.h
   CREATOR: eric 09 May 1999
-
-  $Id: icalerror.h,v 1.17 2008-01-15 23:17:40 dothebart Exp $
-
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -13,20 +9,20 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-  The original code is icalerror.h
-
+ The original code is icalerror.h
 ======================================================================*/
 
 #ifndef ICALERROR_H
 #define ICALERROR_H
 
+#include "libical_ical_export.h"
 #include <assert.h>
 #include <stdio.h>
 
@@ -35,7 +31,7 @@
 /** This routine is called before any error is triggered. It is called
    by icalerror_set_errno, so it does not appear in all of the macros
    below */
-void icalerror_stop_here(void);
+LIBICAL_ICAL_EXPORT void icalerror_stop_here(void);
 
 void icalerror_crash_here(void);
 
@@ -54,22 +50,8 @@ typedef enum icalerrorenum {
 
 } icalerrorenum;
 
-icalerrorenum * icalerrno_return(void);
+LIBICAL_ICAL_EXPORT icalerrorenum * icalerrno_return(void);
 #define icalerrno (*(icalerrno_return()))
-
-#if !defined(LIBICAL_EXPORT)
-#if defined(_MSC_VER)
-  #if defined(BUILD_LIBICALSTATIC)
-    #define LIBICAL_EXPORT extern
-  #elif defined(BUILD_LIBICALDLL)
-    #define LIBICAL_EXPORT __declspec(dllexport)
-  #else
-    #define LIBICAL_EXPORT __declspec(dllimport)
-  #endif
-#else
-  #define LIBICAL_EXPORT extern
-#endif
-#endif
 
 /** If true, libicu aborts after a call to icalerror_set_error
  *
@@ -77,7 +59,9 @@ icalerrorenum * icalerrno_return(void);
  *           this in a multithreaded program.
  */
 
-LIBICAL_EXPORT int icalerror_errors_are_fatal;
+#if !defined(__cplusplus)
+LIBICAL_ICAL_EXPORT int icalerror_errors_are_fatal;
+#endif
 
 /* Warning messages */
 
@@ -87,7 +71,7 @@ LIBICAL_EXPORT int icalerror_errors_are_fatal;
 #define icalerror_warn(message) {fprintf(stderr,"%s:%d: %s\n",__FILE__,__LINE__,message);}
 #endif /* __GNU_C__ */
 
-void icalerror_clear_errno(void);
+LIBICAL_ICAL_EXPORT void icalerror_clear_errno(void);
 void _icalerror_set_errno(icalerrorenum);
 
 /* Make an individual error fatal or non-fatal. */
@@ -98,11 +82,11 @@ typedef enum icalerrorstate {
     ICAL_ERROR_UNKNOWN    /* Asked state for an unknown error type */
 } icalerrorstate ;
 
-const char* icalerror_strerror(icalerrorenum e);
+LIBICAL_ICAL_EXPORT const char* icalerror_strerror(icalerrorenum e);
 const char* icalerror_perror(void);
 void ical_bt(void);
-void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
-icalerrorstate icalerror_get_error_state( icalerrorenum error);
+LIBICAL_ICAL_EXPORT void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
+LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state( icalerrorenum error);
 
 #ifndef ICAL_SETERROR_ISFUNC
 #define icalerror_set_errno(x) \
@@ -115,7 +99,7 @@ if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || \
    assert(0); \
 } }
 #else
-void icalerror_set_errno(icalerrorenum x);
+LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
 #endif
 
 #if !defined(ICAL_ERRORS_ARE_FATAL)

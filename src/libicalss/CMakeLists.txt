@@ -45,6 +45,7 @@ add_custom_target(icalss-header
 set(icalss_LIB_DEVSRCS icalsslexer.c icalssyacc.c)
 
 set(icalss_LIB_SRCS
+  libical_icalss_export.h
   icalcalendar.c
   icalcalendar.h
   icalclassify.c
@@ -132,7 +133,6 @@ endif()
 
 if(WITH_CXX_BINDINGS)
   set(icalsscxx_LIB_SRCS
-    libical_icalss_export.h
     icalspanlist_cxx.cpp
     icalspanlist_cxx.h
   )

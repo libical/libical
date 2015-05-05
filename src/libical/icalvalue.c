@@ -40,7 +40,6 @@ void print_datetime_to_string(char* str,  const struct icaltimetype *data);
 void print_date_to_string(char* str,  const struct icaltimetype *data);
 void print_time_to_string(char* str,  const struct icaltimetype *data);
 
-
 struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind){
 
     struct icalvalue_impl* v;
@@ -1066,14 +1065,14 @@ static char* icalvalue_float_as_ical_string_r(const icalvalue* value) {
        sure snprintf uses a '.' as a separator
        set locate to 'C' and keep old locale */
     old_locale = strdup (setlocale (LC_NUMERIC,NULL));
-    setlocale (LC_NUMERIC,"C");
+    (void)setlocale (LC_NUMERIC,"C");
 
     str = (char*)icalmemory_new_buffer(40);
 
     snprintf(str,40,"%f",data);
 
     /* restore saved locale */
-    setlocale (LC_NUMERIC,old_locale);
+    (void)setlocale (LC_NUMERIC,old_locale);
     free (old_locale);
 
     return str;
@@ -1093,14 +1092,14 @@ static char* icalvalue_geo_as_ical_string_r(const icalvalue* value) {
      * sure snprintf uses a '.' as a separator
      * set locate to 'C' and keep old locale */
     old_locale = strdup (setlocale (LC_NUMERIC,NULL));
-    setlocale (LC_NUMERIC,"C");
+    (void)setlocale (LC_NUMERIC,"C");
 
     str = (char*)icalmemory_new_buffer(80);
 
     snprintf(str,80,"%f;%f",data.lat,data.lon);
 
     /* restore saved locale */
-    setlocale (LC_NUMERIC,old_locale);
+    (void)setlocale (LC_NUMERIC,old_locale);
     free (old_locale);
 
     return str;
@@ -1474,8 +1473,7 @@ void icalvalue_reset_kind(icalvalue* value)
 
 }
 
-void icalvalue_set_parent(icalvalue* value,
-                 icalproperty* property)
+void icalvalue_set_parent(icalvalue* value, icalproperty* property)
 {
     value->parent = property;
 }

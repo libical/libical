@@ -67,6 +67,7 @@ whatever timezone that dtstart is in.
 #ifndef ICALRECUR_H
 #define ICALRECUR_H
 
+#include "libical_ical_export.h"
 #include "icalarray.h"
 #include "icaltime.h"
 
@@ -174,10 +175,10 @@ struct icalrecurrencetype
 };
 
 
-int icalrecurrencetype_rscale_is_supported(void);
+LIBICAL_ICAL_EXPORT int icalrecurrencetype_rscale_is_supported(void);
 icalarray* icalrecurrencetype_rscale_supported_calendars(void);
 
-void icalrecurrencetype_clear(struct icalrecurrencetype *r);
+LIBICAL_ICAL_EXPORT void icalrecurrencetype_clear(struct icalrecurrencetype *r);
 
 /**
  * Array Encoding
@@ -208,8 +209,8 @@ int icalrecurrencetype_month_month(short month);
 /** Recurrance rule parser */
 
 /** Convert between strings and recurrencetype structures. */
-struct icalrecurrencetype icalrecurrencetype_from_string(const char* str);
-char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
+LIBICAL_ICAL_EXPORT struct icalrecurrencetype icalrecurrencetype_from_string(const char* str);
+LIBICAL_ICAL_EXPORT char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
 char* icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur);
 
 
@@ -218,21 +219,21 @@ char* icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur);
 typedef struct icalrecur_iterator_impl  icalrecur_iterator;
 
 /** Create a new recurrence rule iterator */
-icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
-                                           struct icaltimetype dtstart);
+LIBICAL_ICAL_EXPORT icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
+                                                               struct icaltimetype dtstart);
 
 /** Get the next occurrence from an iterator */
-struct icaltimetype icalrecur_iterator_next(icalrecur_iterator*);
+LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_next(icalrecur_iterator*);
 
 /** Free the iterator */
-void icalrecur_iterator_free(icalrecur_iterator*);
+LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator*);
 
 /**
  * Fills array up with at most 'count' time_t values, each
  *  representing an occurrence time in seconds past the POSIX epoch
  */
-int icalrecur_expand_recurrence(char* rule, time_t start,
-                                int count, time_t* array);
+LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(char* rule, time_t start,
+                                                    int count, time_t* array);
 
 
 #endif

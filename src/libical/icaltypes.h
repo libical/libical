@@ -20,6 +20,7 @@
 #ifndef ICALTYPES_H
 #define ICALTYPES_H
 
+#include "libical_ical_export.h"
 #include "icalduration.h"
 #include "icalenums.h"
 #include "icalperiod.h"
@@ -66,8 +67,8 @@ struct icalreqstattype {
         const char* debug;
 };
 
-struct icalreqstattype icalreqstattype_from_string(const char* str);
-const char* icalreqstattype_as_string(struct icalreqstattype);
+LIBICAL_ICAL_EXPORT struct icalreqstattype icalreqstattype_from_string(const char* str);
+LIBICAL_ICAL_EXPORT const char* icalreqstattype_as_string(struct icalreqstattype);
 char* icalreqstattype_as_string_r(struct icalreqstattype);
 
 

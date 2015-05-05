@@ -3,16 +3,16 @@
 /*======================================================================
  FILE: icalenums.h
 
- 
+
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
   Or:
 
@@ -29,7 +29,7 @@
 #ifndef ICALENUMS_H
 #define ICALENUMS_H
 
-
+#include "libical_ical_export.h"
 
 /***********************************************************************
  * Component enumerations
@@ -37,7 +37,7 @@
 
 typedef enum icalcomponent_kind {
     ICAL_NO_COMPONENT,
-    ICAL_ANY_COMPONENT,	/* Used to select all components*/
+    ICAL_ANY_COMPONENT, /* Used to select all components*/
     ICAL_XROOT_COMPONENT,
     ICAL_XATTACH_COMPONENT, /* MIME attached data, returned by parser. */
     ICAL_VEVENT_COMPONENT,
@@ -47,7 +47,7 @@ typedef enum icalcomponent_kind {
     ICAL_VAGENDA_COMPONENT,
     ICAL_VFREEBUSY_COMPONENT,
     ICAL_VALARM_COMPONENT,
-    ICAL_XAUDIOALARM_COMPONENT,  
+    ICAL_XAUDIOALARM_COMPONENT,
     ICAL_XDISPLAYALARM_COMPONENT,
     ICAL_XEMAILALARM_COMPONENT,
     ICAL_XPROCEDUREALARM_COMPONENT,
@@ -62,7 +62,7 @@ typedef enum icalcomponent_kind {
     ICAL_VCOMMAND_COMPONENT,
     ICAL_XLICINVALID_COMPONENT,
     ICAL_XLICMIMEPART_COMPONENT, /* a non-stardard component that mirrors
-				    structure of MIME data */
+                                    structure of MIME data */
     ICAL_VAVAILABILITY_COMPONENT,
     ICAL_XAVAILABLE_COMPONENT,
     ICAL_VPOLL_COMPONENT,
@@ -116,14 +116,14 @@ typedef enum icalrequeststatus {
     ICAL_5_2_NOSERVICE_STATUS,
     ICAL_5_3_NOSCHED_STATUS,
     ICAL_6_1_CONTAINER_NOT_FOUND,
-	ICAL_9_0_UNRECOGNIZED_COMMAND
+        ICAL_9_0_UNRECOGNIZED_COMMAND
 } icalrequeststatus;
 
 
-const char* icalenum_reqstat_desc(icalrequeststatus stat);
-short icalenum_reqstat_major(icalrequeststatus stat);
-short icalenum_reqstat_minor(icalrequeststatus stat);
-icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
+LIBICAL_ICAL_EXPORT const char* icalenum_reqstat_desc(icalrequeststatus stat);
+LIBICAL_ICAL_EXPORT short icalenum_reqstat_major(icalrequeststatus stat);
+LIBICAL_ICAL_EXPORT short icalenum_reqstat_minor(icalrequeststatus stat);
+LIBICAL_ICAL_EXPORT icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
 char* icalenum_reqstat_code(icalrequeststatus stat);
 char* icalenum_reqstat_code_r(icalrequeststatus stat);
 
@@ -170,4 +170,3 @@ char* icalenum_reqstat_code_r(icalrequeststatus stat);
 
 
 #endif /* !ICALENUMS_H */
-

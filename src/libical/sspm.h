@@ -1,10 +1,6 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: sspm.h Mime Parser
-  CREATOR: eric 25 June 2000
-
-  $Id: sspm.h,v 1.5 2008-01-15 23:17:43 dothebart Exp $
-  $Locker:  $
+/*======================================================================
+ FILE: sspm.h Mime Parser
+ CREATOR: eric 25 June 2000
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -24,20 +20,20 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
   The Initial Developer of the Original Code is Eric Busboom
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
- ======================================================================*/
+======================================================================*/
 
 #ifndef ICAL_SSPM_H
 #define ICAL_SSPM_H
+
+#include "libical_ical_export.h"
 
 enum sspm_major_type {
     SSPM_NO_MAJOR_TYPE,
@@ -132,12 +128,12 @@ int sspm_parse_mime(struct sspm_part *parts,
 
 void sspm_free_parts(struct sspm_part *parts, size_t max_parts);
 
-char *decode_quoted_printable(char *dest,
-                                       char *src,
-                                       size_t *size);
-char *decode_base64(char *dest,
-                             char *src,
-                             size_t *size);
+LIBICAL_ICAL_EXPORT char *decode_quoted_printable(char *dest,
+                                                  char *src,
+                                                  size_t *size);
+LIBICAL_ICAL_EXPORT char *decode_base64(char *dest,
+                                        char *src,
+                                        size_t *size);
 
 
 int sspm_write_mime(struct sspm_part *parts,size_t num_parts,

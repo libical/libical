@@ -25,21 +25,23 @@
 /* Tmp buffers are managed by ical. References can be returned to the
    caller, although the caller will not own the memory. */
 
-void* icalmemory_tmp_buffer(size_t size);
-char* icalmemory_tmp_copy(const char* str);
+#include "libical_ical_export.h"
+
+LIBICAL_ICAL_EXPORT void* icalmemory_tmp_buffer(size_t size);
+LIBICAL_ICAL_EXPORT char* icalmemory_tmp_copy(const char* str);
 
 /** Add an externally allocated buffer to the ring. */
-void  icalmemory_add_tmp_buffer(void*);
+LIBICAL_ICAL_EXPORT void  icalmemory_add_tmp_buffer(void*);
 
 
 /** Free all memory used in the ring */
-void icalmemory_free_ring(void);
+LIBICAL_ICAL_EXPORT void icalmemory_free_ring(void);
 
 /* Non-tmp buffers must be freed. These are mostly wrappers around
  * malloc, etc, but are used so the caller can change the memory
  * allocators in a future version of the library */
 
-void* icalmemory_new_buffer(size_t size);
+LIBICAL_ICAL_EXPORT void* icalmemory_new_buffer(size_t size);
 void* icalmemory_resize_buffer(void* buf, size_t size);
 void icalmemory_free_buffer(void* buf);
 
@@ -57,15 +59,15 @@ void icalmemory_free_buffer(void* buf);
    buffer on the ring, the ring will loose track of it an you will
    have memory problems. */
 
-void icalmemory_append_string(char** buf, char** pos, size_t* buf_size,
-                              const char* string);
+LIBICAL_ICAL_EXPORT void icalmemory_append_string(char** buf, char** pos, size_t* buf_size,
+                                                  const char* string);
 
 /**  icalmemory_append_char is similar, but is appends a character instead of a string */
-void icalmemory_append_char(char** buf, char** pos, size_t* buf_size,
-                              char ch);
+LIBICAL_ICAL_EXPORT void icalmemory_append_char(char** buf, char** pos,
+                                                size_t* buf_size, char ch);
 
 /** A wrapper around strdup. Partly to trap calls to strdup, partly
     because in -ansi, gcc on Red Hat claims that strdup is undeclared */
-char* icalmemory_strdup(const char *s);
+LIBICAL_ICAL_EXPORT char* icalmemory_strdup(const char *s);
 
 #endif /* !ICALMEMORY_H */

@@ -1,11 +1,6 @@
-/* -*- Mode: C -*- */
 /*======================================================================
  FILE: icaltime.h
  CREATOR: eric 02 June 2000
-
-
- $Id: icaltime.h,v 1.28 2008-01-15 23:17:42 dothebart Exp $
- $Locker:  $
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -14,17 +9,15 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
-
 ======================================================================*/
 
 /**     @file icaltime.h
@@ -77,8 +70,6 @@
  *
  *      Modify, compare and utility methods include:
  *
- *      - icaltime_add(struct icaltimetype t, struct icaldurationtype  d)
- *      - icaltime_subtract(struct icaltimetype t1, struct icaltimetype t2)
  *      - icaltime_compare_with_zone(struct icaltimetype a,struct icaltimetype b)
  *      - icaltime_compare(struct icaltimetype a,struct icaltimetype b)
  *      - icaltime_compare_date_only(struct icaltimetype a,
@@ -92,6 +83,8 @@
 
 #ifndef ICALTIME_H
 #define ICALTIME_H
+
+#include "libical_ical_export.h"
 
 #include <time.h>
 
@@ -139,7 +132,7 @@ typedef struct icaltimetype icaltimetype;
 
 /** Return a null time, which indicates no time has been set.
     This time represent the beginning of the epoch */
-struct icaltimetype icaltime_null_time(void);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_null_time(void);
 
 /** Return a null date */
 struct icaltimetype icaltime_null_date(void);
@@ -148,25 +141,27 @@ struct icaltimetype icaltime_null_date(void);
 struct icaltimetype icaltime_current_time_with_zone(const icaltimezone *zone);
 
 /** Returns the current day as an icaltimetype, with is_date set. */
-struct icaltimetype icaltime_today(void);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_today(void);
 
 /** Convert seconds past UNIX epoch to a timetype*/
-struct icaltimetype icaltime_from_timet(const time_t v, const int is_date);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet(const time_t v,
+                                                            const int is_date);
 
 /** Convert seconds past UNIX epoch to a timetype, using timezones. */
-struct icaltimetype icaltime_from_timet_with_zone(const time_t tm,
-        const int is_date, const icaltimezone *zone);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const time_t tm,
+                                                                      const int is_date,
+                                                                      const icaltimezone *zone);
 
 /** create a time from an ISO format string */
-struct icaltimetype icaltime_from_string(const char* str);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_string(const char* str);
 
 /** create a time from an ISO format string */
 struct icaltimetype icaltime_from_string_with_zone(const char* str,
         const icaltimezone *zone);
 
 /** Create a new time, given a day of year and a year. */
-struct icaltimetype icaltime_from_day_of_year(const int doy,
-        const int year);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy,
+                                                                  const int year);
 
 /**     @brief Contructor (TODO).
  * Create a new time from a weeknumber and a year. */
@@ -174,14 +169,14 @@ struct icaltimetype icaltime_from_week_number(const int week_number,
         const int year);
 
 /** Return the time as seconds past the UNIX epoch */
-time_t icaltime_as_timet(const struct icaltimetype);
+LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);
 
 /** Return the time as seconds past the UNIX epoch, using timezones. */
-time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
-        const icaltimezone *zone);
+LIBICAL_ICAL_EXPORT time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
+                                                       const icaltimezone *zone);
 
 /** Return a string represention of the time, in RFC2445 format. */
-const char* icaltime_as_ical_string(const struct icaltimetype tt);
+LIBICAL_ICAL_EXPORT const char* icaltime_as_ical_string(const struct icaltimetype tt);
 char* icaltime_as_ical_string_r(const struct icaltimetype tt);
 
 /** @brief Return the timezone */
@@ -191,18 +186,18 @@ const icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
 const char *icaltime_get_tzid(const struct icaltimetype t);
 
 /** @brief Set the timezone */
-struct icaltimetype icaltime_set_timezone(struct icaltimetype *t,
-        const icaltimezone *zone);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_set_timezone(struct icaltimetype *t,
+                                                              const icaltimezone *zone);
 
 /** Return the day of the year of the given time */
-int icaltime_day_of_year(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT int icaltime_day_of_year(const struct icaltimetype t);
 
 /** Return the day of the week of the given time. Sunday is 1 */
-int icaltime_day_of_week(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT int icaltime_day_of_week(const struct icaltimetype t);
 
 /** Return the day of the year for the Sunday of the week that the
    given time is within. */
-int icaltime_start_doy_of_week(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT int icaltime_start_doy_of_week(const struct icaltimetype t);
 
 /** Return the day of the year for the first day of the week that the
    given time is within. */
@@ -212,7 +207,7 @@ int icaltime_start_doy_week(const struct icaltimetype t, int fdow);
 int icaltime_week_number(const struct icaltimetype t);
 
 /** Return true of the time is null. */
-int icaltime_is_null_time(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT int icaltime_is_null_time(const struct icaltimetype t);
 
 /** Returns false if the time is clearly invalid, but is not null. This
    is usually the result of creating a new time type buy not clearing
@@ -223,15 +218,15 @@ int icaltime_is_valid_time(const struct icaltimetype t);
 int icaltime_is_date(const struct icaltimetype t);
 
 /** @brief Returns true if time is relative to UTC zone */
-int icaltime_is_utc(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT int icaltime_is_utc(const struct icaltimetype t);
 
 /** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
 int icaltime_compare_with_zone(const struct icaltimetype a,
-        const struct icaltimetype b);
+                               const struct icaltimetype b);
 
 /** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
-int icaltime_compare(const struct icaltimetype a,
-        const struct icaltimetype b);
+LIBICAL_ICAL_EXPORT int icaltime_compare(const struct icaltimetype a,
+                                         const struct icaltimetype b);
 
 /** like icaltime_compare, but only use the date parts. */
 int icaltime_compare_date_only(const struct icaltimetype a,
@@ -246,12 +241,12 @@ void  icaltime_adjust(struct icaltimetype *tt, const int days,
         const int hours, const int minutes, const int seconds);
 
 /** Normalize the icaltime, so that all fields are within the normal range. */
-struct icaltimetype icaltime_normalize(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltimetype t);
 
 /** convert tt, of timezone tzid, into a utc time. Does nothing if the
    time is already UTC.  */
-struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
-        icaltimezone *zone);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
+                                                                 icaltimezone *zone);
 
 /** Return the number of days in the given month */
 int icaltime_days_in_month(const int month, const int year);

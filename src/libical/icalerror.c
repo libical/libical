@@ -1,11 +1,6 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icalerror.c
-  CREATOR: eric 16 May 1999
-
-  $Id: icalerror.c,v 1.22 2008-01-15 23:17:40 dothebart Exp $
-  $Locker:  $
-
+/*======================================================================
+ FILE: icalerror.c
+ CREATOR: eric 16 May 1999
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
@@ -14,24 +9,20 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
   The original code is icalerror.c
-
- ======================================================================*/
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#if defined(_MSC_VER)
-#define LIBICAL_EXPORT __declspec(dllexport) /*must come before icalerror.h*/
-#endif
 #include "icalerror.h"
 
 #include <stdlib.h>

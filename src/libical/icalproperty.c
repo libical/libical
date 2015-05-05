@@ -33,18 +33,6 @@
 
 #include <stdlib.h>
 
-/* Private routines for icalproperty */
-void icalvalue_set_parent(icalvalue* value,
-                             icalproperty* property);
-icalproperty* icalvalue_get_parent(icalvalue* value);
-
-void icalparameter_set_parent(icalparameter* param,
-                             icalproperty* property);
-icalproperty* icalparameter_get_parent(icalparameter* value);
-
-
-void icalproperty_set_x_name(icalproperty* prop, const char* name);
-
 struct icalproperty_impl
 {
         char id[5];
@@ -241,8 +229,7 @@ icalproperty_free (icalproperty* p)
 
 /* This returns where the start of the next line should be. chars_left does
    not include the trailing '\0'. */
-#define MAX_LINE_LEN 75
-/*#define MAX_LINE_LEN 120*/
+static size_t MAX_LINE_LEN = 75;
 
 static char*
 get_next_line_start (char *line_start, size_t chars_left)

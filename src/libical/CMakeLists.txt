@@ -200,6 +200,7 @@ set(BUILT_SOURCES
 
 set(ical_LIB_SRCS
   ${BUILT_SOURCES}
+  libical_ical_export.h
   icalarray.c
   icalarray.h
   icalattach.h
@@ -312,7 +313,6 @@ endif()
 
 if(WITH_CXX_BINDINGS)
   set(icalcxx_LIB_SRCS
-    libical_ical_export.h
     icalparameter_cxx.cpp
     icalparameter_cxx.h
     icalproperty_cxx.cpp

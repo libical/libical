@@ -1,6 +1,8 @@
 #ifndef LIBICAL_ICAL_EXPORT_H
 #define LIBICAL_ICAL_EXPORT_H
 
+#if !defined(S_SPLINT_S)
+
 #ifdef LIBICAL_ICAL_STATIC_DEFINE
 #  define LIBICAL_ICAL_EXPORT
 #  define LIBICAL_ICAL_NO_EXPORT
@@ -18,6 +20,8 @@
 #    define LIBICAL_ICAL_EXPORT __attribute__((visibility("default")))
 #    define LIBICAL_ICAL_NO_EXPORT __attribute__((visibility("hidden")))
 #  endif
+#endif
+
 #endif
 
 #endif

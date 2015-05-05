@@ -19,20 +19,22 @@
 #ifndef ICALATTACH_H
 #define ICALATTACH_H
 
+#include "libical_ical_export.h"
+
 typedef struct icalattach_impl icalattach;
 
 typedef void (* icalattach_free_fn_t) (unsigned char *data, void *user_data);
 
-icalattach *icalattach_new_from_url (const char *url);
+LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_url (const char *url);
 icalattach *icalattach_new_from_data (const char *data,
         icalattach_free_fn_t free_fn, void *free_fn_data);
 
 void icalattach_ref (icalattach *attach);
-void icalattach_unref (icalattach *attach);
+LIBICAL_ICAL_EXPORT void icalattach_unref (icalattach *attach);
 
 int icalattach_get_is_url (icalattach *attach);
-const char *icalattach_get_url (icalattach *attach);
-unsigned char *icalattach_get_data (icalattach *attach);
+LIBICAL_ICAL_EXPORT const char *icalattach_get_url (icalattach *attach);
+LIBICAL_ICAL_EXPORT unsigned char *icalattach_get_data (icalattach *attach);
 
 struct icalattachtype* icalattachtype_new(void);
 void  icalattachtype_add_reference(struct icalattachtype* v);

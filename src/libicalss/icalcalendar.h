@@ -22,6 +22,7 @@
 #ifndef ICALCALENDAR_H
 #define ICALCALENDAR_H
 
+#include "libical_icalss_export.h"
 #include "icalset.h"
 
 /* icalcalendar
@@ -32,9 +33,9 @@
 
 typedef struct icalcalendar_impl icalcalendar;
 
-icalcalendar* icalcalendar_new(char* dir);
+LIBICAL_ICALSS_EXPORT icalcalendar* icalcalendar_new(char* dir);
 
-void icalcalendar_free(icalcalendar* calendar);
+LIBICAL_ICALSS_EXPORT void icalcalendar_free(icalcalendar* calendar);
 
 int icalcalendar_lock(icalcalendar* calendar);
 
@@ -44,11 +45,11 @@ int icalcalendar_islocked(icalcalendar* calendar);
 
 int icalcalendar_ownlock(icalcalendar* calendar);
 
-icalset* icalcalendar_get_booked(icalcalendar* calendar);
+LIBICAL_ICALSS_EXPORT icalset* icalcalendar_get_booked(icalcalendar* calendar);
 
 icalset* icalcalendar_get_incoming(icalcalendar* calendar);
 
-icalset* icalcalendar_get_properties(icalcalendar* calendar);
+LIBICAL_ICALSS_EXPORT icalset* icalcalendar_get_properties(icalcalendar* calendar);
 
 icalset* icalcalendar_get_freebusy(icalcalendar* calendar);
 

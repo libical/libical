@@ -24,6 +24,7 @@
 #endif
 
 #include "icalderivedvalue.h"
+#include "icalvalue.h"
 #include "icalvalueimpl.h"
 #include "icalerror.h"
 #include "icalmemory.h"

@@ -1,31 +1,29 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: icallangbind.c
-  CREATOR: eric 15 dec 2000
+/*======================================================================
+ FILE: icallangbind.c
+ CREATOR: eric 15 dec 2000
 
-  DESCRIPTION:
+ (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
-  $Id: icallangbind.c,v 1.24 2008-01-02 20:07:31 dothebart Exp $
-  $Locker:  $
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of either:
 
-  (C) COPYRIGHT 1999 Eric Busboom
-  http://www.softwarestudio.org
+    The LGPL as published by the Free Software Foundation, version
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  This package is free software and is provided "as is" without
-  express or implied warranty.  It may be used, redistributed and/or
-  modified under the same terms as perl itself. ( Either the Artistic
-  License or the GPL. )
+ Or:
 
-  ======================================================================*/
+    The Mozilla Public License Version 1.0. You may obtain a copy of
+    the License at http://www.mozilla.org/MPL/
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include "icalcomponent.h"
+#include "icallangbind.h"
 #include "icalerror.h"
 #include "icalmemory.h"
-#include "icalproperty.h"
 #include "icalvalue.h"
 
 #include <stdlib.h>

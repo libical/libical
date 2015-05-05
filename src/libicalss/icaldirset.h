@@ -30,7 +30,7 @@
 
 typedef struct icaldirset_impl icaldirset;
 
-icalset *icaldirset_new(const char *path);
+LIBICAL_ICALSS_EXPORT icalset *icaldirset_new(const char *path);
 
 icalset *icaldirset_new_reader(const char *path);
 icalset *icaldirset_new_writer(const char *path);
@@ -45,15 +45,17 @@ const char *icaldirset_path(icalset *set);
 void icaldirset_mark(icalset *set);
 icalerrorenum icaldirset_commit(icalset *set);
 
-icalerrorenum icaldirset_add_component(icalset *store, icalcomponent *comp);
-icalerrorenum icaldirset_remove_component(icalset *store, icalcomponent *comp);
+LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_add_component(icalset *store,
+                                                             icalcomponent *comp);
+LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_remove_component(icalset *store,
+                                                                icalcomponent *comp);
 
 int icaldirset_count_components(icalset *store,
                                 icalcomponent_kind kind);
 
 /* Restrict the component returned by icaldirset_first, _next to those
    that pass the gauge. _clear removes the gauge. */
-icalerrorenum icaldirset_select(icalset *store, icalgauge *gauge);
+LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_select(icalset *store, icalgauge *gauge);
 void icaldirset_clear(icalset *store);
 
 /* Get a component by uid */
@@ -69,9 +71,9 @@ icalerrorenum icaldirset_modify(icalset *store, icalcomponent *oldc,
 /* Iterate through the components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
-icalcomponent *icaldirset_get_current_component(icalset *store);
-icalcomponent *icaldirset_get_first_component(icalset *store);
-icalcomponent *icaldirset_get_next_component(icalset *store);
+LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_current_component(icalset *store);
+LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_first_component(icalset *store);
+LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_next_component(icalset *store);
 
 /* External iterator for thread safety */
 icalsetiter icaldirset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid);
