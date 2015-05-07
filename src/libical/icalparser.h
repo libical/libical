@@ -46,8 +46,8 @@ typedef enum icalparser_state {
 
 LIBICAL_ICAL_EXPORT icalparser* icalparser_new(void);
 LIBICAL_ICAL_EXPORT icalcomponent* icalparser_add_line(icalparser* parser, char* str );
-icalcomponent* icalparser_clean(icalparser* parser);
-icalparser_state icalparser_get_state(icalparser* parser);
+LIBICAL_ICAL_EXPORT icalcomponent* icalparser_clean(icalparser* parser);
+LIBICAL_ICAL_EXPORT icalparser_state icalparser_get_state(icalparser* parser);
 LIBICAL_ICAL_EXPORT void icalparser_free(icalparser* parser);
 
 
@@ -78,8 +78,9 @@ LIBICAL_ICAL_EXPORT icalcomponent* icalparser_parse_string(const char* str);
  ***********************************************************************/
 
 /** Use the flex/bison parser to turn a string into a value type */
-icalvalue*  icalparser_parse_value(icalvalue_kind kind,
-                                   const char* str, icalcomponent** errors);
+LIBICAL_ICAL_EXPORT icalvalue* icalparser_parse_value(icalvalue_kind kind,
+                                                      const char* str,
+                                                      icalcomponent** errors);
 
 /** Given a line generator function, return a single iCal content line.*/
 LIBICAL_ICAL_EXPORT char* icalparser_get_line(icalparser* parser,

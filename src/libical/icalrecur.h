@@ -156,7 +156,7 @@ struct icalrecurrencetype
          * value more than once.
 
          * Each of the lists is terminated with the value
-         * ICAL_RECURRENCE_ARRAY_MAX unless the the list is full.
+         * ICAL_RECURRENCE_ARRAY_MAX unless the list is full.
          */
 
         short by_second[ICAL_BY_SECOND_SIZE];
@@ -176,7 +176,7 @@ struct icalrecurrencetype
 
 
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_rscale_is_supported(void);
-icalarray* icalrecurrencetype_rscale_supported_calendars(void);
+LIBICAL_ICAL_EXPORT icalarray* icalrecurrencetype_rscale_supported_calendars(void);
 
 LIBICAL_ICAL_EXPORT void icalrecurrencetype_clear(struct icalrecurrencetype *r);
 

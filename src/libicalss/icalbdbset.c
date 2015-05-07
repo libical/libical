@@ -1585,7 +1585,6 @@ int icalbdbset_commit_transaction(DB_TXN *txnid)
 
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
 {
-    _unused(dbp);
     /*
      * Returns:
      * < 0 if a < b
@@ -1595,5 +1594,6 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
 
     char  *ac = (char *)a->data;
     char  *bc = (char *)b->data;
+    _unused(dbp);
     return strncmp(ac, bc, a->size);
 }

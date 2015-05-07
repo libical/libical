@@ -3762,6 +3762,10 @@ int main(int argc, char *argv[])
     extern char *optarg;
     extern int optopt;
 #endif
+#ifndef _WIN32
+    int errflg=0;
+    int c;
+#endif
 /*    char* program_name = strrchr(argv[0],'/'); */
     int do_test = 0;
     int do_header = 0;
@@ -3775,8 +3779,6 @@ int main(int argc, char *argv[])
 
 
 #ifndef _WIN32
-    int errflg=0;
-    int c;
     while ((c = getopt(argc, argv, "lvq")) != -1) {
       switch (c) {
       case 'v': {

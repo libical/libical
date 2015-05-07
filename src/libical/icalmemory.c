@@ -63,31 +63,55 @@ typedef struct {
         void *ring[BUFFER_RING_SIZE];
 } buffer_ring;
 
-void icalmemory_free_tmp_buffer (void* buf);
-void icalmemory_free_ring_byval(buffer_ring *br);
-
-#ifndef HAVE_PTHREAD
+#if !defined(HAVE_PTHREAD)
 static buffer_ring* global_buffer_ring = 0;
 #endif
 
-#ifdef HAVE_PTHREAD
+/** get rid of this buffer ring */
+static void icalmemory_free_ring_byval(buffer_ring *br)
+{
+   int i;
+   for(i=0; i<BUFFER_RING_SIZE; i++){
+    if ( br->ring[i] != 0){
+       free( br->ring[i]);
+    }
+    }
+   free(br);
+}
+
+#if defined(HAVE_PTHREAD)
 #include <pthread.h>
 
 static pthread_key_t  ring_key;
 static pthread_once_t ring_key_once = PTHREAD_ONCE_INIT;
 
-static void ring_destroy(void * buf) {
+static void ring_destroy(void * buf)
+{
     if (buf) icalmemory_free_ring_byval((buffer_ring *) buf);
     pthread_setspecific(ring_key, NULL);
 }
 
-static void ring_key_alloc(void) {
+static void ring_key_alloc(void)
+{
     pthread_key_create(&ring_key, ring_destroy);
 }
 #endif
 
+#if 0
+/*keep for historical sake*/
+static void icalmemory_free_tmp_buffer (void* buf)
+{
+   if(buf == 0)
+   {
+       return;
+   }
 
-static buffer_ring * buffer_ring_new(void) {
+   free(buf);
+}
+#endif
+
+static buffer_ring * buffer_ring_new(void)
+{
         buffer_ring *br;
         int i;
 
@@ -100,8 +124,7 @@ static buffer_ring * buffer_ring_new(void) {
         return(br);
 }
 
-
-#ifdef HAVE_PTHREAD
+#if defined(HAVE_PTHREAD)
 static buffer_ring* get_buffer_ring_pthread(void) {
     buffer_ring *br;
 
@@ -125,14 +148,14 @@ static buffer_ring* get_buffer_ring_global(void) {
 }
 #endif
 
-static buffer_ring *get_buffer_ring(void) {
-#ifdef HAVE_PTHREAD
-        return(get_buffer_ring_pthread());
+static buffer_ring *get_buffer_ring(void)
+{
+#if defined(HAVE_PTHREAD)
+    return(get_buffer_ring_pthread());
 #else
-        return get_buffer_ring_global();
+    return get_buffer_ring_global();
 #endif
 }
-
 
 /** Add an existing buffer to the buffer ring */
 void  icalmemory_add_tmp_buffer(void* buf)
@@ -154,14 +177,12 @@ void  icalmemory_add_tmp_buffer(void* buf)
     br->ring[br->pos] = buf;
 }
 
-
 /**
  * Create a new temporary buffer on the ring. Libical owns these and
  * will deallocate them.
  */
 
-void*
-icalmemory_tmp_buffer (size_t size)
+void* icalmemory_tmp_buffer (size_t size)
 {
     char *buf;
 
@@ -183,36 +204,22 @@ icalmemory_tmp_buffer (size_t size)
     return buf;
 }
 
-/** get rid of this buffer ring */
-void icalmemory_free_ring_byval(buffer_ring *br) {
-   int i;
-   for(i=0; i<BUFFER_RING_SIZE; i++){
-    if ( br->ring[i] != 0){
-       free( br->ring[i]);
-    }
-    }
-   free(br);
-}
-
 void icalmemory_free_ring()
 {
-   buffer_ring *br;
-   br = get_buffer_ring();
+    buffer_ring *br;
+    br = get_buffer_ring();
 
-   icalmemory_free_ring_byval(br);
-#ifdef HAVE_PTHREAD
-  pthread_setspecific(ring_key, 0);
+    icalmemory_free_ring_byval(br);
+#if defined(HAVE_PTHREAD)
+    pthread_setspecific(ring_key, 0);
 #else
-  global_buffer_ring = 0;
+    global_buffer_ring = 0;
 #endif
 
 }
 
-
-
 /** Like strdup, but the buffer is on the ring. */
-char*
-icalmemory_tmp_copy(const char* str)
+char* icalmemory_tmp_copy(const char* str)
 {
     char* b = icalmemory_tmp_buffer(strlen(str)+1);
 
@@ -226,18 +233,6 @@ char* icalmemory_strdup(const char *s)
 {
     return strdup(s);
 }
-
-void
-icalmemory_free_tmp_buffer (void* buf)
-{
-   if(buf == 0)
-   {
-       return;
-   }
-
-   free(buf);
-}
-
 
 /*
  * These buffer routines create memory the old fashioned way -- so the
@@ -275,16 +270,14 @@ void icalmemory_free_buffer(void* buf)
     free(buf);
 }
 
-void
-icalmemory_append_string(char** buf, char** pos, size_t* buf_size,
-                              const char* string)
+void icalmemory_append_string(char** buf, char** pos, size_t* buf_size, const char* string)
 {
     char *new_buf;
     char *new_pos;
 
     size_t data_length, final_length, string_length;
 
-#ifndef ICAL_NO_INTERNAL_DEBUG
+#if !defined(ICAL_NO_INTERNAL_DEBUG)
     icalerror_check_arg_rv( (buf!=0),"buf");
     icalerror_check_arg_rv( (*buf!=0),"*buf");
     icalerror_check_arg_rv( (pos!=0),"pos");
@@ -316,17 +309,14 @@ icalmemory_append_string(char** buf, char** pos, size_t* buf_size,
     *pos += string_length;
 }
 
-
-void
-icalmemory_append_char(char** buf, char** pos, size_t* buf_size,
-                              char ch)
+void icalmemory_append_char(char** buf, char** pos, size_t* buf_size, char ch)
 {
     char *new_buf;
     char *new_pos;
 
     size_t data_length, final_length;
 
-#ifndef ICAL_NO_INTERNAL_DEBUG
+#if !defined(ICAL_NO_INTERNAL_DEBUG)
     icalerror_check_arg_rv( (buf!=0),"buf");
     icalerror_check_arg_rv( (*buf!=0),"*buf");
     icalerror_check_arg_rv( (pos!=0),"pos");

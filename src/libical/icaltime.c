@@ -288,7 +288,7 @@ static char* saved_tz = NULL;
 /* If you use set_tz(), you must call unset_tz() some time later to restore the
    original TZ. Pass unset_tz() the string that set_tz() returns. Call both the functions
    locking the tzid mutex as in icaltime_as_timet_with_zone */
-char* set_tz(const char* tzid)
+static char* set_tz(const char* tzid)
 {
     char *old_tz, *old_tz_copy = NULL, *new_tz;
 

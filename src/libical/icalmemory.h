@@ -42,8 +42,8 @@ LIBICAL_ICAL_EXPORT void icalmemory_free_ring(void);
  * allocators in a future version of the library */
 
 LIBICAL_ICAL_EXPORT void* icalmemory_new_buffer(size_t size);
-void* icalmemory_resize_buffer(void* buf, size_t size);
-void icalmemory_free_buffer(void* buf);
+LIBICAL_ICAL_EXPORT void* icalmemory_resize_buffer(void* buf, size_t size);
+LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void* buf);
 
 /**
    icalmemory_append_string will copy the string 'string' to the

@@ -39,18 +39,12 @@
 #include "icalvalue.h"
 
 #include <ctype.h>
+#include <stddef.h> /* for ptrdiff_h */
 #include <stdlib.h>
 
 #define TMP_BUF_SIZE 80
 
-static char* parser_get_next_char(char c, char *str, int qm);
-static char* parser_get_next_parameter(char* line,char** end);
-static char* parser_get_next_value(char* line, char **end, icalvalue_kind kind);
-static char* parser_get_prop_name(char* line, char** end);
-static char* parser_get_param_name(char* line, char **end);
-
-struct icalparser_impl
-{
+struct icalparser_impl {
     int buffer_full; /* flag indicates that temp is smaller that
                         data being read into it*/
     int continuation_line; /* last line read was a continuation line */
@@ -64,14 +58,13 @@ struct icalparser_impl
     pvl_list components;
 
     void *line_gen_data;
-
 };
 
 
 /*
  * New version of strstrip() that does not move the pointer.
  */
-void strstriplt(char *buf)
+static void strstriplt(char *buf)
 {
     size_t len;
     int a;
@@ -152,8 +145,7 @@ icalvalue* icalvalue_new_From_string_with_error(icalvalue_kind kind,
                                                 icalproperty **error);
 
 
-static
-char* parser_get_next_char(char c, char *str, int qm)
+static char* parser_get_next_char(char c, char *str, int qm)
 {
     int quote_mode = 0;
     char* p;
@@ -193,7 +185,7 @@ static char* make_segment(char* start, char* end)
 
     tmp = (buf+size);
     while ((tmp >= buf) &&
-           ((*tmp == '\0') || iswspace(*tmp)))
+           ((*tmp == '\0') || iswspace((wint_t)*tmp)))
     {
         *tmp = 0;
         tmp--;
@@ -202,8 +194,7 @@ static char* make_segment(char* start, char* end)
     return buf;
 }
 
-static
-char* parser_get_prop_name(char* line, char** end)
+static char* parser_get_prop_name(char* line, char** end)
 {
     char* p;
     char* v;
@@ -228,8 +219,7 @@ char* parser_get_prop_name(char* line, char** end)
     return str;
 }
 
-static
-char* parser_get_param_name(char* line, char **end)
+static char* parser_get_param_name(char* line, char **end)
 {
     char* next;
     char *str;
@@ -259,8 +249,8 @@ char* parser_get_param_name(char* line, char **end)
 }
 
 #if 0
-static
-char* parser_get_next_paramvalue(char* line, char **end)
+/*keep for historical sake*/
+static char* parser_get_next_paramvalue(char* line, char **end)
 {
     char* next;
     char *str;
@@ -281,7 +271,7 @@ char* parser_get_next_paramvalue(char* line, char **end)
 }
 #endif
 
-char* icalparser_get_value(char* line, char **end, icalvalue_kind kind)
+static char* icalparser_get_value(char* line, char **end, icalvalue_kind kind)
 {
     char *str;
     size_t length = strlen(line);
@@ -298,13 +288,12 @@ char* icalparser_get_value(char* line, char **end, icalvalue_kind kind)
 }
 
 /**
-   A property may have multiple values, if the values are seperated by
+   A property may have multiple values, if the values are separated by
    commas in the content line. This routine will look for the next
    comma after line and will set the next place to start searching in
    end. */
 
-static
-char* parser_get_next_value(char* line, char **end, icalvalue_kind kind)
+static char* parser_get_next_value(char* line, char **end, icalvalue_kind kind)
 {
 
     char* next = 0;
@@ -532,7 +521,7 @@ char* icalparser_get_line(icalparser *parser,
     *(line_p) = '\0';
     }
 
-    while ( (*line_p == '\0' || iswspace(*line_p)) && line_p > line )
+    while ( (*line_p == '\0' || iswspace((wint_t)*line_p)) && line_p > line )
     {
         *line_p = '\0';
         line_p--;
@@ -577,8 +566,7 @@ static int line_is_blank(char* line){
 }
 
 icalcomponent* icalparser_parse(icalparser *parser,
-                char* (*line_gen_func)(char *s, size_t size,
-                               void* d))
+                                char* (*line_gen_func)(char *s, size_t size, void* d))
 {
 
     char* line;
@@ -640,8 +628,7 @@ icalcomponent* icalparser_parse(icalparser *parser,
 }
 
 
-icalcomponent* icalparser_add_line(icalparser* parser,
-                                       char* line)
+icalcomponent* icalparser_add_line(icalparser* parser, char* line)
 {
     char *str;
     char *end;
@@ -756,7 +743,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
                 /* There are still components on the stack -- this means
                    that one of them did not have a proper "END" */
                 pvl_push(parser->components,parser->root_component);
-                icalparser_clean(parser); /* may reset parser->root_component*/
+                (void)icalparser_clean(parser); /* may reset parser->root_component*/
             }
 
             assert(pvl_count(parser->components) == 0);
@@ -1059,7 +1046,7 @@ icalcomponent* icalparser_add_line(icalparser* parser,
 
     vcount=0;
     while(1) {
-        /* Only some properies can have multiple values. This list was taken
+        /* Only some properties can have multiple values. This list was taken
            from rfc2445. Also added the x-properties, because the spec actually
            says that commas should be escaped. For x-properties, other apps may
            depend on that behaviour
@@ -1260,28 +1247,27 @@ char* icalparser_string_line_generator(char *out, size_t buf_size, void *d)
     size_t size;
     struct slg_data* data = (struct slg_data*)d;
 
-    if(data->pos==0){
-    data->pos=data->str;
+    if (data->pos == 0 ) {
+        data->pos = data->str;
     }
 
     /* If the pointer is at the end of the string, we are done */
-    if (*(data->pos)==0){
-    return 0;
+    if (*(data->pos) == 0) {
+        return 0;
     }
 
     n = strchr(data->pos,'\n');
 
-    if (n == 0){
-    size = strlen(data->pos);
+    if (n == 0) {
+        size = strlen(data->pos);
     } else {
-    n++; /* include newline in output */
-    size = (n-data->pos);
+        n++; /* include newline in output */
+        size = (size_t)(ptrdiff_t)(n - data->pos);
     }
 
-    if (size > buf_size-1){
-    size = buf_size-1;
+    if (size > buf_size-1) {
+        size = buf_size-1;
     }
-
 
     strncpy(out,data->pos,size);
 

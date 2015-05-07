@@ -51,11 +51,12 @@ check_function_exists(setenv HAVE_SETENV)
 check_function_exists(unsetenv HAVE_UNSETENV)
 
 include(CheckTypeSize)
+check_type_size(intptr_t SIZEOF_INTPTR_T)
+check_type_size(pid_t SIZEOF_PID_T)
 check_type_size(size_t SIZEOF_SIZE_T)
 check_type_size(ssize_t SIZEOF_SSIZE_T)
-check_type_size(intptr_t INTPTR_T) # please do not rename HAVE_INTPTR_T will automatically be defined
-check_type_size(pid_t HAVE_PID_T)
 check_type_size(time_t SIZEOF_TIME_T)
+check_type_size(wint_t SIZEOF_WINT_T)
 
 include(FindThreads)
 check_library_exists(pthread pthread_attr_get_np "" HAVE_PTHREAD_ATTR_GET_NP)

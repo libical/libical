@@ -15,7 +15,6 @@
  the License for the specific language governing rights and
  limitations under the License.
 
-
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
@@ -71,7 +70,7 @@ enum sspm_encoding {
     SSPM_UNKNOWN_ENCODING
 };
 
-enum sspm_error{
+enum sspm_error {
     SSPM_NO_ERROR,
     SSPM_UNEXPECTED_BOUNDARY_ERROR,
     SSPM_WRONG_BOUNDARY_ERROR,
@@ -80,63 +79,62 @@ enum sspm_error{
     SSPM_MALFORMED_HEADER_ERROR
 };
 
-
-struct sspm_header
-{
-        int def;
-        char* boundary;
-        enum sspm_major_type major;
-        enum sspm_minor_type minor;
-        char *minor_text;
-        char ** content_type_params;
-        char* charset;
-        enum sspm_encoding encoding;
-        char* filename;
-        char* content_id;
-        enum sspm_error error;
-        char* error_text;
+struct sspm_header {
+    int def;
+    char *boundary;
+    enum sspm_major_type major;
+    enum sspm_minor_type minor;
+    char *minor_text;
+    char **content_type_params;
+    char *charset;
+    enum sspm_encoding encoding;
+    char *filename;
+    char *content_id;
+    enum sspm_error error;
+    char *error_text;
 };
 
 struct sspm_part {
-        struct sspm_header header;
-        int level;
-        size_t data_size;
-        void *data;
+    struct sspm_header header;
+    int level;
+    size_t data_size;
+    void *data;
 };
 
 struct sspm_action_map {
-        enum sspm_major_type major;
-        enum sspm_minor_type minor;
-        void* (*new_part)(void);
-        void (*add_line)(void *part, struct sspm_header *header,
-                         const char* line, size_t size);
-        void* (*end_part)(void* part);
-        void (*free_part)(void *part);
+    enum sspm_major_type major;
+    enum sspm_minor_type minor;
+    void *(*new_part)(void);
+    void (*add_line)(void *part, struct sspm_header *header,
+                     const char *line, size_t size);
+    void *(*end_part)(void *part);
+    void (*free_part)(void *part);
 };
 
-const char* sspm_major_type_string(enum sspm_major_type type);
-const char* sspm_minor_type_string(enum sspm_minor_type type);
-const char* sspm_encoding_string(enum sspm_encoding type);
+LIBICAL_ICAL_EXPORT const char *sspm_major_type_string(enum sspm_major_type type);
 
-int sspm_parse_mime(struct sspm_part *parts,
-                    size_t max_parts,
-                    const struct sspm_action_map *actions,
-                    char* (*get_string)(char *s, size_t size, void* data),
-                    void *get_string_data,
-                    struct sspm_header *first_header
-    );
+LIBICAL_ICAL_EXPORT const char *sspm_minor_type_string(enum sspm_minor_type type);
 
-void sspm_free_parts(struct sspm_part *parts, size_t max_parts);
+LIBICAL_ICAL_EXPORT const char *sspm_encoding_string(enum sspm_encoding type);
+
+LIBICAL_ICAL_EXPORT int sspm_parse_mime(struct sspm_part *parts,
+                                        size_t max_parts,
+                                        const struct sspm_action_map *actions,
+                                        char *(*get_string)(char *s, size_t size, void *data),
+                                        void *get_string_data,
+                                        struct sspm_header *first_header);
+
+LIBICAL_ICAL_EXPORT void sspm_free_parts(struct sspm_part *parts, size_t max_parts);
 
 LIBICAL_ICAL_EXPORT char *decode_quoted_printable(char *dest,
-                                                  char *src,
-                                                  size_t *size);
+        char *src,
+        size_t *size);
+
 LIBICAL_ICAL_EXPORT char *decode_base64(char *dest,
                                         char *src,
                                         size_t *size);
 
-
-int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
-                    char **output_string, const char* header);
+LIBICAL_ICAL_EXPORT int sspm_write_mime(struct sspm_part *parts, size_t num_parts,
+                                        char **output_string, const char *header);
 
 #endif /* ICAL_SSPM_H */

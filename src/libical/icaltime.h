@@ -201,7 +201,7 @@ LIBICAL_ICAL_EXPORT int icaltime_start_doy_of_week(const struct icaltimetype t);
 
 /** Return the day of the year for the first day of the week that the
    given time is within. */
-int icaltime_start_doy_week(const struct icaltimetype t, int fdow);
+LIBICAL_ICAL_EXPORT int icaltime_start_doy_week(const struct icaltimetype t, int fdow);
 
 /** Return the week number for the week the given time is within */
 int icaltime_week_number(const struct icaltimetype t);
@@ -252,7 +252,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_convert_to_zone(const struct ic
 int icaltime_days_in_month(const int month, const int year);
 
 /** Return whether you've specified a leapyear or not. */
-int icaltime_is_leap_year (const int year);
+LIBICAL_ICAL_EXPORT int icaltime_is_leap_year(const int year);
 
 /** Return the number of days in this year */
 int icaltime_days_in_year (const int year);

@@ -125,7 +125,7 @@ LIBICAL_ICAL_EXPORT short icalenum_reqstat_major(icalrequeststatus stat);
 LIBICAL_ICAL_EXPORT short icalenum_reqstat_minor(icalrequeststatus stat);
 LIBICAL_ICAL_EXPORT icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
 char* icalenum_reqstat_code(icalrequeststatus stat);
-char* icalenum_reqstat_code_r(icalrequeststatus stat);
+LIBICAL_ICAL_EXPORT char* icalenum_reqstat_code_r(icalrequeststatus stat);
 
 /***********************************************************************
  * Conversion functions

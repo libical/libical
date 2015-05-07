@@ -194,6 +194,12 @@
 /* Define to empty if `const' does not conform to ANSI C. */
 #cmakedefine const
 
+/* Typedef intptr_t if needed */
+#cmakedefine HAVE_SIZEOF_INTPTR_T 1
+#if !defined(HAVE_SIZEOF_INTPTR_T)
+typedef unsigned int inptr_t;
+#endif
+
 /* Typedef size_t if needed */
 #cmakedefine HAVE_SIZEOF_SIZE_T
 #if !defined(HAVE_SIZEOF_SIZE_T)
@@ -206,9 +212,20 @@ typedef unsigned long size_t;
 typedef long ssize_t;
 #endif
 
-#cmakedefine HAVE_PID_T 1
-#if !HAVE_PID_T
+/* Typedef pid_t if needed */
+#cmakedefine HAVE_SIZEOF_PID_T 1
+#if !defined(HAVE_SIZEOF_PID_T)
 typedef int pid_t;
+#endif
+
+/* Typedef wint_t if needed */
+#cmakedefine HAVE_SIZEOF_WINT_T 1
+#if !defined(HAVE_SIZEOF_WINT_T)
+#if defined(HAVE_WCTYPE_H)
+#include <wctype.h>
+#else
+typedef unsigned int wint_t;
+#endif
 #endif
 
 #cmakedefine SIZEOF_TIME_T ${SIZEOF_TIME_T}
@@ -284,6 +301,8 @@ typedef int pid_t;
 #else
 #if defined(HAVE_WCTYPE_H)
 #include <wctype.h>
+#else
+#include <ctype>
 #endif
 #endif
 
