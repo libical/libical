@@ -707,7 +707,7 @@ void test_dirset()
             error = icaldirset_add_component(s,clone);
 
             assert(error  == ICAL_NO_ERROR);
-            _unused(error)
+            _unused(error);
         }
     }
 
@@ -3019,7 +3019,7 @@ void test_file_locks()
     printf("\nFinal: %d\n",final);
 
     assert(sec == final);
-    _unused(sec)
+    _unused(sec);
 #endif
 }
 

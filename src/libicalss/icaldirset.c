@@ -100,12 +100,12 @@ icalerrorenum icaldirset_commit(icalset *set)
 
 void icaldirset_lock(const char *dir)
 {
-    _unused(dir)
+    _unused(dir);
 }
 
 void icaldirset_unlock(const char *dir)
 {
-    _unused(dir)
+    _unused(dir);
 }
 
 /* Load the contents of the store directory into the store's internal directory list*/
@@ -526,8 +526,8 @@ icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
 int icaldirset_count_components(icalset *store,
                                 icalcomponent_kind kind)
 {
-    _unused(store)
-    _unused(kind)
+    _unused(store);
+    _unused(kind);
 
     /* NOT IMPLEMENTED */
     assert(0);
@@ -537,8 +537,8 @@ int icaldirset_count_components(icalset *store,
 
 icalcomponent *icaldirset_fetch_match(icalset *set, icalcomponent *c)
 {
-    _unused(set)
-    _unused(c)
+    _unused(set);
+    _unused(c);
 
     fprintf(stderr, " icaldirset_fetch_match is not implemented\n");
     assert(0);
@@ -547,12 +547,12 @@ icalcomponent *icaldirset_fetch_match(icalset *set, icalcomponent *c)
 
 icalcomponent *icaldirset_fetch(icalset *set, icalcomponent_kind kind, const char *uid)
 {
-    _unused(kind)
     icaldirset *dset;
     icalgauge *gauge;
     icalgauge *old_gauge;
     icalcomponent *c;
     char sql[256];
+    _unused(kind);
 
     icalerror_check_arg_rz((set != 0), "set");
     icalerror_check_arg_rz((uid != 0), "uid");
@@ -607,9 +607,9 @@ icalerrorenum icaldirset_modify(icalset *set,
                                 icalcomponent *old,
                                 icalcomponent *new)
 {
-    _unused(set)
-    _unused(old)
-    _unused(new)
+    _unused(set);
+    _unused(old);
+    _unused(new);
 
     /* NOT IMPLEMENTED */
     assert(0);
@@ -618,7 +618,7 @@ icalerrorenum icaldirset_modify(icalset *set,
 
 void icaldirset_clear(icalset *set)
 {
-    _unused(set)
+    _unused(set);
 
     /* NOT IMPLEMENTED */
     assert(0);
@@ -752,10 +752,10 @@ icalcomponent *icaldirset_get_next_component(icalset *set)
 
 icalsetiter icaldirset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid)
 {
-    _unused(set)
-    _unused(kind)
-    _unused(gauge)
-    _unused(tzid)
+    _unused(set);
+    _unused(kind);
+    _unused(gauge);
+    _unused(tzid);
     /*
         icalsetiter itr = icalsetiter_null;
         icaldirset *fset = (icaldirset*) set;
@@ -771,16 +771,16 @@ icalsetiter icaldirset_begin_component(icalset *set, icalcomponent_kind kind, ic
 
 icalcomponent *icaldirsetiter_to_next(icalset *set, icalsetiter *i)
 {
-    _unused(set)
-    _unused(i)
+    _unused(set);
+    _unused(i);
     /* TO BE IMPLEMENTED */
     return NULL;
 }
 
 icalcomponent *icaldirsetiter_to_prior(icalset *set, icalsetiter *i)
 {
-    _unused(set)
-    _unused(i)
+    _unused(set);
+    _unused(i);
     /* TO BE IMPLEMENTED */
     return NULL;
 }

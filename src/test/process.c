@@ -33,9 +33,6 @@ void send_message(icalcomponent *reply,const char* this_user)
 
 int main(int argc, char* argv[])
 {
-    _unused(argc)
-    _unused(argv)
-
     icalcomponent *c, *next_c = NULL;
     int i=0;
     int dont_remove;
@@ -47,6 +44,9 @@ int main(int argc, char* argv[])
     icalset* out = icalset_new_file("outgoing.ics");
 
     const char* this_user = "alice@cal.softwarestudio.org";
+
+    _unused(argc);
+    _unused(argv);
 
     assert(f!= 0);
     assert(cal!=0);

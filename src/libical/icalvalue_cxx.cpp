@@ -119,7 +119,7 @@ struct icalrecurrencetype ICalValue::get_recur()
 
 void ICalValue::set_trigger(const struct icaltriggertype &v)
 {
-    _unused(v)
+    _unused(v);
 }
 
 struct icaltriggertype ICalValue::get_trigger()

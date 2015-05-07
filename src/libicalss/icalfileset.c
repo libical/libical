@@ -170,8 +170,8 @@ char *icalfileset_read_from_file(char *s, size_t size, void *d)
 
 icalerrorenum icalfileset_read_file(icalfileset *set, int mode)
 {
-    _unused(mode)
     icalparser *parser;
+    _unused(mode);
 
     parser = icalparser_new();
 
@@ -282,7 +282,7 @@ int icalfileset_lock(icalfileset *set)
 
     return rtrn;
 #else
-    _unused(set)
+    _unused(set);
     return 0;
 #endif
 }
@@ -300,7 +300,7 @@ int icalfileset_unlock(icalfileset *set)
 
     return (fcntl(set->fd, F_UNLCK, &lock));
 #else
-    _unused(set)
+    _unused(set);
     return 0;
 #endif
 }
@@ -500,9 +500,9 @@ void icalfileset_clear(icalset *set)
 
 icalcomponent *icalfileset_fetch(icalset *set, icalcomponent_kind kind, const char *uid)
 {
-    _unused(kind)
     icalfileset *fset;
     icalcompiter i;
+    _unused(kind);
 
     icalerror_check_arg_rz(set != 0, "set");
     fset = (icalfileset *)set;
@@ -540,8 +540,8 @@ icalcomponent *icalfileset_fetch(icalset *set, icalcomponent_kind kind, const ch
 
 int icalfileset_has_uid(icalset *set, const char *uid)
 {
-    _unused(set)
-    _unused(uid)
+    _unused(set);
+    _unused(uid);
     assert(0); /* HACK, not implemented */
     return 0;
 }
@@ -642,9 +642,9 @@ icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *comp)
 icalerrorenum icalfileset_modify(icalset *set, icalcomponent *old,
                                  icalcomponent *new)
 {
-    _unused(set)
-    _unused(old)
-    _unused(new)
+    _unused(set);
+    _unused(old);
+    _unused(new);
     assert(0); /* HACK, not implemented */
     return ICAL_NO_ERROR;
 }
@@ -738,7 +738,6 @@ icalsetiter icalfileset_begin_component(icalset* set, icalcomponent_kind kind, i
 
 icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid)
 {
-    _unused(tzid)
     icalsetiter itr = icalsetiter_null;
     icalcomponent *comp = NULL;
     icalcompiter citr;
@@ -747,6 +746,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype recur;
     int g = 0;
+    _unused(tzid);
 
     icalerror_check_arg_re((set != 0), "set", icalsetiter_null);
 
@@ -888,12 +888,12 @@ icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *itr)
 }
 icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
 {
-    _unused(set)
     icalcomponent *c = NULL;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype recur;
     int g = 0;
+    _unused(set);
 
     start = icaltime_from_timet(time(0), 0);
     next = icaltime_from_timet(time(0), 0);

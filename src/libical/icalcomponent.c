@@ -2241,7 +2241,7 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
   int suffix, max_suffix = 0;
   size_t i, num_elements, tzid_len;
   char *tzid_copy, *new_tzid, suffix_buf[32];
-  (void)tzid_prop; /* hack to stop unused variable warning */
+  _unused(tzid_prop);
 
   /* Find the length of the TZID without any trailing digits. */
   tzid_len = icalcomponent_get_tzid_prefix_len (tzid);

@@ -251,12 +251,11 @@ void return_failure(icalcomponent* comp,  char* message,
 /* The program had a fatal error and could not process the incoming component*/
 void return_error(icalcomponent* comp,  char* message, struct options_struct *opt)
 {
-    (void)comp;/*unused*/
-    (void)opt;/*unused*/
+    _unused(comp);
+    _unused(opt);
 
     fputs(make_mime("Dest", "Source", "iMIP system failure",
                     message, 0,0),stdout);
-
 }
 
 icalcomponent* make_reply(icalcomponent *comp, icalproperty *return_status,
@@ -464,7 +463,7 @@ char* check_component(icalcomponent* comp,  icalproperty **return_status,
 
 void usage(char *message)
 {
-    (void)message;/*unused*/
+    _unused(message);
 
     fprintf(stderr,"Usage: %s [-emdcn] [-i inputfile] [-o outputfile] [-u calid]\n",program_name);
     fprintf(stderr,"-e\tInput data is encapsulated in a MIME Message \n\
@@ -650,7 +649,7 @@ void get_options(int argc, char* argv[], struct options_struct *opt)
 
 char* check_options(struct options_struct *opt)
 {
-    (void)opt;/*unused*/
+    _unused(opt);
     return 0;
 }
 

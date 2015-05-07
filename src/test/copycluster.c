@@ -29,8 +29,9 @@
 #include <stdlib.h>
 
 #if defined(SIGALRM)
-static void sig_alrm(int i){
-    (void)i;/*unused*/
+static void sig_alrm(int i)
+{
+    _unused(i);
     fprintf(stderr,"Could not get lock on file\n");
     exit(1);
 }

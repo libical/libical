@@ -66,8 +66,8 @@ void icalmime_text_add_line(void *part,
                             const char* line, size_t size)
 {
     struct text_part* impl = (struct text_part*) part;
-    (void)header;
-    (void)size;
+    _unused(header);
+    _unused(size);
 
     icalmemory_append_string(&(impl->buf),&(impl->buf_pos),
                              &(impl->buf_size),line);
@@ -109,7 +109,7 @@ void* icalmime_text_end_part(void* part)
 
 void icalmime_text_free_part(void *part)
 {
-    (void)part;/*unused*/
+    _unused(part);
 }
 
 
@@ -122,21 +122,21 @@ void* icalmime_attachment_new_part(void)
 void icalmime_attachment_add_line(void *part, struct sspm_header *header,
                                   const char* line, size_t size)
 {
-    (void)part;
-    (void)header;
-    (void)line;
-    (void)size;
+    _unused(part);
+    _unused(header);
+    _unused(line);
+    _unused(size);
 }
 
 void* icalmime_attachment_end_part(void* part)
 {
-    (void)part;
+    _unused(part);
     return 0;
 }
 
 void icalmime_attachment_free_part(void *part)
 {
-    (void)part;
+    _unused(part);
 }
 
 
@@ -160,7 +160,7 @@ static const struct sspm_action_map icalmime_local_action_map[] =
 
 struct sspm_part* icalmime_make_part(icalcomponent* comp)
 {
-    (void)comp;/*unused*/
+    _unused(comp);
     return 0;
 }
 

@@ -115,8 +115,8 @@ const char* icalrestriction_may_be_draft_final_canceled(
     icalproperty* prop)
 {
     icalproperty_status stat = icalproperty_get_status(prop);
-    (void)rec;
-    (void)comp;
+    _unused(rec);
+    _unused(comp);
 
     if( !( stat == ICAL_STATUS_DRAFT ||
            stat == ICAL_STATUS_FINAL ||
@@ -135,8 +135,8 @@ const char* icalrestriction_may_be_comp_need_process(
     icalproperty* prop)
 {
     icalproperty_status stat = icalproperty_get_status(prop);
-    (void)rec;
-    (void)comp;
+    _unused(rec);
+    _unused(comp);
 
     if( !( stat == ICAL_STATUS_COMPLETED ||
            stat == ICAL_STATUS_NEEDSACTION ||
@@ -154,8 +154,8 @@ const char* icalrestriction_may_be_tent_conf(const icalrestriction_property_reco
 {
     icalproperty_status stat = icalproperty_get_status(prop);
 
-    (void)rec;
-    (void)comp;
+    _unused(rec);
+    _unused(comp);
 
     if( !( stat == ICAL_STATUS_TENTATIVE ||
            stat == ICAL_STATUS_CONFIRMED )){
@@ -173,8 +173,8 @@ const char* icalrestriction_may_be_tent_conf_cancel(
 {
     icalproperty_status stat = icalproperty_get_status(prop);
 
-    (void)rec;
-    (void)comp;
+    _unused(rec);
+    _unused(comp);
 
     if( !( stat == ICAL_STATUS_TENTATIVE ||
            stat == ICAL_STATUS_CONFIRMED ||
@@ -194,8 +194,8 @@ const char* icalrestriction_must_be_cancel_if_present(
 {
     /* This routine will not be called if prop == 0 */
     icalproperty_status stat = icalproperty_get_status(prop);
-    (void)rec;
-    (void)comp;
+    _unused(rec);
+    _unused(comp);
 
     if( stat != ICAL_STATUS_CANCELLED)
     {
@@ -212,9 +212,9 @@ const char* icalrestriction_must_be_canceled_no_attendee(
     icalcomponent* comp,
     icalproperty* prop)
 {
-    (void)rec;
-    (void)comp;
-    (void)prop;
+    _unused(rec);
+    _unused(comp);
+    _unused(prop);
 
     /* Hack. see rfc2446, 3.2.5 CANCEL for porperty STATUS. I don't
        understand the note */
@@ -225,10 +225,11 @@ const char* icalrestriction_must_be_canceled_no_attendee(
 const char* icalrestriction_must_be_recurring(
                 const icalrestriction_property_record *rec,
                 icalcomponent* comp,
-                icalproperty* prop){
-    (void)rec; /*unused*/
-    (void)comp;/*unused*/
-    (void)prop;/*unused*/
+                icalproperty* prop)
+{
+    _unused(rec);
+    _unused(comp);
+    _unused(prop);
     return 0;
 }
 
@@ -237,8 +238,8 @@ const char* icalrestriction_must_have_duration(
         icalcomponent* comp,
         icalproperty* prop)
 {
-    (void)rec;/*unused*/
-    (void)prop;/*unused*/
+    _unused(rec);
+    _unused(prop);
     if( !icalcomponent_get_first_property(comp,ICAL_DURATION_PROPERTY)){
 
         return "Failed iTIP restrictions for DURATION property. This component must have a DURATION property";
@@ -253,8 +254,8 @@ const char* icalrestriction_must_have_repeat(
                 icalcomponent* comp,
                 icalproperty* prop)
 {
-    (void)rec;
-    (void)prop;
+    _unused(rec);
+    _unused(prop);
     if( !icalcomponent_get_first_property(comp,ICAL_REPEAT_PROPERTY)){
 
         return "Failed iTIP restrictions for REPEAT property. This component must have a REPEAT property";
@@ -267,12 +268,11 @@ const char* icalrestriction_must_have_repeat(
 const char* icalrestriction_must_if_tz_ref(
                 const icalrestriction_property_record *rec,
                 icalcomponent* comp,
-                icalproperty* prop){
-
-    /* Hack */
-    (void)rec;
-    (void)comp;
-    (void)prop;
+                icalproperty* prop)
+{
+    _unused(rec);
+    _unused(comp);
+    _unused(prop);
     return 0;
 }
 
@@ -282,8 +282,8 @@ const char* icalrestriction_no_dtend(
                 icalproperty* prop)
 {
 
-    (void)rec;
-    (void)prop;
+    _unused(rec);
+    _unused(prop);
     if(icalcomponent_get_first_property(comp,ICAL_DTEND_PROPERTY)){
 
         return "Failed iTIP restrictions for DTEND property. The component must not have both DURATION and DTEND";
@@ -298,9 +298,9 @@ const char* icalrestriction_no_duration(
                 icalcomponent* comp,
                 icalproperty* prop)
 {
-    (void)rec;
-    (void)comp;
-    (void)prop;
+    _unused(rec);
+    _unused(comp);
+    _unused(prop);
 
     /* _no_dtend takes care of this one */
     return 0;
@@ -313,8 +313,8 @@ const char* icalrestriction_must_be_email(
 {
     icalproperty_action stat = icalproperty_get_action(prop);
 
-    (void)rec;
-    (void)comp;
+    _unused(rec);
+    _unused(comp);
 
     if( !( stat == ICAL_ACTION_EMAIL)){
 

@@ -326,7 +326,7 @@ int icalclassify_publish_new(struct icalclassify_parts *comp,
                                 const char* user)
 {
     icalclassify_pre;
-    (void)user;
+    _unused(user);
 
     if(comp->method == ICAL_METHOD_PUBLISH &&
         match == 0 && comp->inner_kind != ICAL_VFREEBUSY_COMPONENT){
@@ -342,7 +342,7 @@ int icalclassify_publish_update(struct icalclassify_parts *comp,
                                 const char* user)
 {
     icalclassify_pre;
-    (void)user;
+    _unused(user);
 
     if(comp->method == ICAL_METHOD_PUBLISH &&
         match !=0 && comp->inner_kind != ICAL_VFREEBUSY_COMPONENT){
@@ -359,8 +359,8 @@ int icalclassify_publish_freebusy(struct icalclassify_parts *comp,
 {
     icalclassify_pre;
 
-    (void)match;
-    (void)user;
+    _unused(match);
+    _unused(user);
     if(comp->method == ICAL_METHOD_PUBLISH &&
        comp->inner_kind == ICAL_VFREEBUSY_COMPONENT){
         rtrn = 1;
@@ -378,7 +378,7 @@ int icalclassify_request_new(struct icalclassify_parts *comp,
     /* Method is  REQUEST, and there is no match */
 
     icalclassify_pre
-    (void)user;
+    _unused(user);
 
     if(match->c==0 && comp->method == ICAL_METHOD_REQUEST){
         rtrn = 1;
@@ -397,7 +397,7 @@ int icalclassify_request_update(
        time-related properties are unchanged */
 
     icalclassify_pre
-    (void)user;
+    _unused(user);
 
     if (match != 0 &&
         comp->sequence >= match->sequence &&
@@ -417,7 +417,7 @@ int icalclassify_request_reschedule(
     /* REQUEST method, Higher SEQUENCE than match, and one or more
        time-related properties are changed */
     icalclassify_pre
-    (void)user;
+    _unused(user);
 
     if (match->c != 0 &&
         comp->sequence > match->sequence &&
@@ -437,7 +437,7 @@ int icalclassify_request_delegate(
     icalproperty* attendee;
     icalparameter* param;
     icalclassify_pre;
-    (void)match;
+    _unused(match);
 
     attendee = icalclassify_find_attendee(comp->c,user);
 
@@ -460,12 +460,12 @@ int icalclassify_request_new_organizer(
     struct icalclassify_parts *match,
     const char* user)
 {
-    _unused(comp)
-    _unused(match)
-    _unused(user)
-
     /*   Organizer has changed between match and component */
     icalclassify_pre
+    _unused(comp);
+    _unused(match);
+    _unused(user);
+
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
 }
@@ -475,11 +475,11 @@ int icalclassify_request_status(
     struct icalclassify_parts *match,
     const char* user)
 {
-    _unused(comp)
-    _unused(match)
-    _unused(user)
-
     icalclassify_pre
+    _unused(comp);
+    _unused(match);
+    _unused(user);
+
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
 }
@@ -489,11 +489,11 @@ int icalclassify_request_forward(
     struct icalclassify_parts *match,
     const char* user)
 {
-    _unused(comp)
-    _unused(match)
-    _unused(user)
-
     icalclassify_pre
+    _unused(comp);
+    _unused(match);
+    _unused(user);
+
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
 }
@@ -503,11 +503,11 @@ int icalclassify_request_freebusy(
     struct icalclassify_parts *match,
     const char* user)
 {
-    _unused(comp)
-    _unused(match)
-    _unused(user)
-
     icalclassify_pre
+    _unused(comp);
+    _unused(match);
+    _unused(user);
+
     icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
     icalclassify_post
 }
@@ -519,7 +519,7 @@ int icalclassify_reply_accept(
 {
     icalproperty* attendee;
     icalclassify_pre;
-    (void)user;
+    _unused(user);
 
     attendee = icalclassify_find_attendee(match->c,comp->reply_attendee);
 
@@ -537,7 +537,7 @@ int icalclassify_reply_decline(
 {
     icalproperty* attendee;
     icalclassify_pre;
-    (void)user;
+    _unused(user);
 
     attendee = icalclassify_find_attendee(match->c,comp->reply_attendee);
 
@@ -555,7 +555,7 @@ int icalclassify_reply_delegate(
 {
     icalproperty* attendee;
     icalclassify_pre;
-    (void)user;
+    _unused(user);
 
     attendee = icalclassify_find_attendee(match->c,comp->reply_attendee);
 
@@ -572,7 +572,7 @@ int icalclassify_reply_crasher_accept(
 {
     icalproperty* attendee;
     icalclassify_pre;
-    (void)user;
+    _unused(user);
 
     attendee= icalclassify_find_attendee(match->c,comp->reply_attendee);
 
@@ -589,8 +589,7 @@ int icalclassify_reply_crasher_decline(
 {
     icalproperty* attendee;
     icalclassify_pre;
-    (void)user;
-
+    _unused(user);
 
     attendee = icalclassify_find_attendee(match->c,comp->reply_attendee);
 
@@ -606,8 +605,8 @@ int icalclassify_add_instance(
     const char* user)
 {
     icalclassify_pre
-    (void)match;
-    (void)user;
+    _unused(match);
+    _unused(user);
 
     if(comp->method == ICAL_METHOD_ADD){
         rtrn = 1;
@@ -620,8 +619,8 @@ int icalclassify_cancel_event(
     const char* user)
 {
     icalclassify_pre
-    (void)match;
-    (void)user;
+    _unused(match);
+    _unused(user);
     if(comp->method == ICAL_METHOD_CANCEL){
         rtrn = 1;
     }
@@ -633,8 +632,8 @@ int icalclassify_cancel_instance(
     const char* user)
 {
     icalclassify_pre
-    (void)match;
-    (void)user;
+    _unused(match);
+    _unused(user);
     if(comp->method == ICAL_METHOD_CANCEL){
         rtrn = 1;
     }
@@ -646,8 +645,8 @@ int icalclassify_cancel_all(
     const char* user)
 {
     icalclassify_pre
-    (void)match;
-    (void)user;
+    _unused(match);
+    _unused(user);
     if(comp->method == ICAL_METHOD_CANCEL){
         rtrn = 1;
     }
@@ -659,8 +658,8 @@ int icalclassify_refesh(
     const char* user)
 {
     icalclassify_pre
-    (void)match;
-    (void)user;
+    _unused(match);
+    _unused(user);
     if(comp->method == ICAL_METHOD_REFRESH){
         rtrn = 1;
     }
@@ -672,8 +671,8 @@ int icalclassify_counter(
     const char* user)
 {
     icalclassify_pre
-    (void)match;
-    (void)user;
+    _unused(match);
+    _unused(user);
     if(comp->method == ICAL_METHOD_COUNTER){
         rtrn = 1;
     }
@@ -685,8 +684,8 @@ int icalclassify_delinecounter(
     const char* user)
 {
     icalclassify_pre
-    (void)match;
-    (void)user;
+    _unused(match);
+    _unused(user);
 
     if(comp->method == ICAL_METHOD_DECLINECOUNTER){
         rtrn = 1;

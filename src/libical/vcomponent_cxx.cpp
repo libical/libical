@@ -676,7 +676,7 @@ bool VComponent::add(VComponent &fromC)
          comp = fromC.get_next_component(ICAL_ANY_COMPONENT)) {
         VComponent *c = new VComponent(comp->isa());
         err = c->add(*comp);
-        _unused(err)
+        _unused(err);
         add_component(c);
     }
 

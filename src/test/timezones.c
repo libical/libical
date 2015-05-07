@@ -23,8 +23,6 @@
 
 int main(int argc, char **argv)
 {
-    _unused(argc)
-    _unused(argv)
     icalarray *timezones = icaltimezone_get_builtin_timezones();
     size_t i;
     int ret = 0;
@@ -33,6 +31,8 @@ int main(int argc, char **argv)
     unsigned int percent_failed = 0;
     int verbose = 0;
     icaltimezone *utc_zone = icaltimezone_get_utc_timezone();
+    _unused(argc);
+    _unused(argv);
 
     /* for all known time zones... */
     for (i = 0; i < timezones->num_elements; i++) {

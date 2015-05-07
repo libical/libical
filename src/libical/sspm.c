@@ -252,21 +252,21 @@ void* sspm_default_new_part(void)
 void sspm_default_add_line(void *part, struct sspm_header *header,
                            const char* line, size_t size)
 {
-    (void)part;
-    (void)header;
-    (void)line;
-    (void)size;
+    _unused(part);
+    _unused(header);
+    _unused(line);
+    _unused(size);
 }
 
 void* sspm_default_end_part(void* part)
 {
-    (void)part;
+    _unused(part);
     return 0;
 }
 
 void sspm_default_free_part(void *part)
 {
-    (void)part;
+    _unused(part);
 }
 
 
@@ -1026,7 +1026,7 @@ int sspm_parse_mime(struct sspm_part *parts,
     struct mime_impl impl;
     struct sspm_header header;
     int i;
-    (void)first_header;
+    _unused(first_header);
 
     /* Initialize all of the data */
     memset(&impl,0,sizeof(struct mime_impl));
@@ -1420,7 +1420,7 @@ void sspm_encode_base64(struct sspm_buffer *buf, char* data, size_t size)
     int i = 0;
     int first = 1;
     int lpos = 0;
-    (void)size;
+    _unused(size);
 
     inbuf[0] = inbuf[1] = inbuf[2]  = 0;
 
@@ -1554,7 +1554,7 @@ void sspm_write_multipart_part(struct sspm_buffer *buf,
 
 void sspm_write_part(struct sspm_buffer *buf,struct sspm_part *part,int *part_num)
 {
-    (void)part_num;
+    _unused(part_num);
 
     /* Write header */
     sspm_write_header(buf,&(part->header));
@@ -1583,7 +1583,7 @@ int sspm_write_mime(struct sspm_part *parts,size_t num_parts,
     struct sspm_buffer buf;
     int part_num =0;
     size_t slen;
-    (void)num_parts;
+    _unused(num_parts);
 
     buf.buffer = malloc(4096);
     buf.buffer[0] = '\0';

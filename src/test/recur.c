@@ -32,8 +32,9 @@
 #include <stdlib.h>
 
 #ifndef WIN32
-static void sig_alrm(int i){
-    (void)i;/*unused*/
+static void sig_alrm(int i)
+{
+    _unused(i);
     fprintf(stderr,"Could not get lock on file\n");
     exit(1);
 }
@@ -43,8 +44,8 @@ static void recur_callback(icalcomponent *comp,
                            struct icaltime_span *span,
                            void *data)
 {
-    (void)comp;/*unused*/
-    (void)data;/*unused*/
+    _unused(comp);
+    _unused(data);
     printf("cb: %s", ctime(&span->start));
     printf("    %s\n", ctime(&span->end));
 

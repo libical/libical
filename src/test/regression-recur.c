@@ -29,8 +29,9 @@
 #include <stdlib.h>
 
 #ifndef _WIN32
-static void sig_alrm(int i){
-    _unused(i)
+static void sig_alrm(int i)
+{
+    _unused(i);
     fprintf(stderr,"Could not get lock on file\n");
     exit(1);
 }
@@ -68,8 +69,8 @@ static void recur_callback(icalcomponent *comp,
                            struct icaltime_span *span,
                            void *data)
 {
-  _unused(comp)
   int *num_recurs = data;
+  _unused(comp);
 
   if (VERBOSE) {
     printf("recur: %s", ctime(&span->start));

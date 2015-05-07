@@ -434,10 +434,11 @@ typedef ssize_t IO_SSIZE_T;
 #define MAXPATHLEN 1024
 #endif
 
-#if !defined(S_SPLINT_S)
-#if !defined(_MSC_VER)
-#define _unused(x) (void)x;
+/* Unused argument macro */
+#if !defined(_unused)
+#if defined(__LCLINT__) || defined(S_SPLINT_S)
+#define _unused(x) /*@unused@*/ x
 #else
-#define _unused(x)
+#define _unused(x) (void)x
 #endif
 #endif
