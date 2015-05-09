@@ -1206,7 +1206,7 @@ VObject* Parse_MIME_FromFile(FILE *file)
     startPos = ftell(file);
     if (!(result = Parse_MIMEHelper())) {
         if (startPos >= 0)
-           fseek(file,startPos,SEEK_SET);
+          (void)fseek(file,startPos,SEEK_SET);
         }
     return result;
     }

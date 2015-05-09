@@ -184,40 +184,32 @@ icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v)
    }
 }
 
-struct icaltriggertype
-icalvalue_get_trigger(const icalvalue* impl)
+struct icaltriggertype icalvalue_get_trigger(const icalvalue* impl)
 {
     struct icaltriggertype tr;
 
     tr.duration = icaldurationtype_from_int(0);
     tr.time = icaltime_null_time();
 
-    icalerror_check_arg_rx( (impl!=0),"value", tr);
+    icalerror_check_arg_rx((impl != 0),"value", tr);
 
-    if(impl) {
-      if(impl->kind == ICAL_DATETIME_VALUE){
+    if (impl->kind == ICAL_DATETIME_VALUE) {
         tr.duration = icaldurationtype_from_int(0);
         tr.time = impl->data.v_time;
-      } else if(impl->kind == ICAL_DURATION_VALUE){
+    } else if (impl->kind == ICAL_DURATION_VALUE) {
         tr.time = icaltime_null_time();
         tr.duration = impl->data.v_duration;
-      } else {
+    } else {
         tr.duration = icaldurationtype_from_int(0);
         tr.time = icaltime_null_time();
         icalerror_set_errno(ICAL_BADARG_ERROR);
-      }
-    } else {
-      tr.duration = icaldurationtype_from_int(0);
-      tr.time = icaltime_null_time();
-      icalerror_set_errno(ICAL_BADARG_ERROR);
     }
 
     return tr;
 }
 
-icalvalue*
-icalvalue_new_datetime (struct icaltimetype v){
-
+icalvalue *icalvalue_new_datetime (struct icaltimetype v)
+{
    struct icalvalue_impl* impl = icalvalue_new_impl(ICAL_DATETIME_VALUE);
    icalvalue_set_datetime((icalvalue*)impl,v);
    return (icalvalue*)impl;
