@@ -40,8 +40,8 @@ void print_datetime_to_string(char* str,  const struct icaltimetype *data);
 void print_date_to_string(char* str,  const struct icaltimetype *data);
 void print_time_to_string(char* str,  const struct icaltimetype *data);
 
-struct icalvalue_impl*  icalvalue_new_impl(icalvalue_kind kind){
-
+LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kind)
+{
     struct icalvalue_impl* v;
 
     if (!icalvalue_kind_is_valid(kind))
@@ -382,9 +382,7 @@ icalvalue* icalvalue_new_enum(icalvalue_kind kind, int x_type, const char* str)
  * If you want a code that that does the same job with a decimal separator
  * dependant on the current locale, then use strtof() from libc.
  */
-int simple_str_to_double(const char* from,
-                         double *result,
-                         char** to)
+static int simple_str_to_double(const char* from, double *result, char** to)
 {
 #define TMP_NUM_SIZE 100
     char *start=NULL, *end=NULL, *cur=(char*)from ;
@@ -450,7 +448,9 @@ int simple_str_to_double(const char* from,
     return 0 ;
 }
 
-icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* str,icalproperty** error)
+static icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,
+                                                       const char* str,
+                                                       icalproperty** error)
 {
 
     struct icalvalue_impl *value = 0;
@@ -610,8 +610,6 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
         }
 
         ++cur ;
-        if (!cur)
-            goto geo_parsing_error ;
 
         /*skip white spaces*/
         while (cur && isspace ((int)*cur)) {
@@ -627,8 +625,9 @@ icalvalue* icalvalue_new_from_string_with_error(icalvalue_kind kind,const char* 
 geo_parsing_error:
         if (error != 0){
             char temp[TMP_BUF_SIZE];
-            sprintf(temp, "Could not parse %s as a %s property",
-                    str, icalvalue_kind_to_string(kind));
+            snprintf(temp, sizeof(temp),
+                     "Could not parse %s as a %s property",
+                     str, icalvalue_kind_to_string(kind));
             *error = icalproperty_vanew_xlicerror(
                                    temp,
                                    icalparameter_new_xlicerrortype(

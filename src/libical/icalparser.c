@@ -1025,14 +1025,10 @@ icalcomponent* icalparser_add_line(icalparser* parser, char* line)
         icalmemory_free_buffer(str);
         str = NULL;
 
-    } else { /* if ( str != 0)  */
-        /* If we did not get a param string, go on to looking for a value */
-        if (str != NULL) {
-            icalmemory_free_buffer(str);
-            str = NULL;
-        }
+    } else {
+        /* str is NULL*/
         break;
-    } /* if ( str != 0)  */
+    }
 
     } /* while(1) */
 

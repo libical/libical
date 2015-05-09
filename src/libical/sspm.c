@@ -385,18 +385,17 @@ static struct sspm_action_map get_action(struct mime_impl *impl,
 
     /* Else, read default action map */
     len = sizeof(sspm_action_map) / sizeof(sspm_action_map[0]);
-    for (i = 0; i < len && sspm_action_map[i].major != SSPM_UNKNOWN_MAJOR_TYPE;
-         i++)
+    for (i = 0; i < len && sspm_action_map[i].major != SSPM_UNKNOWN_MAJOR_TYPE; i++)
     {
         if ((major == sspm_action_map[i].major &&
              minor == sspm_action_map[i].minor) ||
             (major == sspm_action_map[i].major &&
              minor == SSPM_ANY_MINOR_TYPE)) {
-            break;
+          return sspm_action_map[i];
         }
     }
-
-    return sspm_action_map[i];
+    assert(i < len); /*should return before now*/
+    return sspm_action_map[0];
 }
 
 static char *sspm_lowercase(char *str)

@@ -30,31 +30,32 @@ LIBICAL_ICAL_EXPORT void icalvalue_set_x(icalvalue* value, const char* v);
 LIBICAL_ICAL_EXPORT icalvalue* icalvalue_new_x(const char* v);
 LIBICAL_ICAL_EXPORT const char* icalvalue_get_x(const icalvalue* value);
 
-icalvalue* icalvalue_new_recur (struct icalrecurrencetype v);
+LIBICAL_ICAL_EXPORT icalvalue* icalvalue_new_recur (struct icalrecurrencetype v);
 LIBICAL_ICAL_EXPORT void icalvalue_set_recur(icalvalue* value, struct icalrecurrencetype v);
 LIBICAL_ICAL_EXPORT struct icalrecurrencetype icalvalue_get_recur(const icalvalue* value);
 
-icalvalue* icalvalue_new_trigger (struct icaltriggertype v);
-void icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v);
+LIBICAL_ICAL_EXPORT icalvalue* icalvalue_new_trigger (struct icaltriggertype v);
+LIBICAL_ICAL_EXPORT void icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v);
 LIBICAL_ICAL_EXPORT struct icaltriggertype icalvalue_get_trigger(const icalvalue* value);
 
 LIBICAL_ICAL_EXPORT icalvalue* icalvalue_new_datetime(struct icaltimetype v);
 LIBICAL_ICAL_EXPORT struct icaltimetype icalvalue_get_datetime(const icalvalue* value);
 LIBICAL_ICAL_EXPORT void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v);
 
-icalvalue* icalvalue_new_datetimeperiod (struct icaldatetimeperiodtype v);
-LIBICAL_ICAL_EXPORT void icalvalue_set_datetimeperiod(icalvalue* value, struct icaldatetimeperiodtype v);
+LIBICAL_ICAL_EXPORT icalvalue* icalvalue_new_datetimeperiod (struct icaldatetimeperiodtype v);
+LIBICAL_ICAL_EXPORT void icalvalue_set_datetimeperiod(icalvalue* value,
+                                                      struct icaldatetimeperiodtype v);
 LIBICAL_ICAL_EXPORT struct icaldatetimeperiodtype icalvalue_get_datetimeperiod(const icalvalue* value);
 
-icalvalue* icalvalue_new_geo(struct icalgeotype v);
+LIBICAL_ICAL_EXPORT icalvalue* icalvalue_new_geo(struct icalgeotype v);
 LIBICAL_ICAL_EXPORT struct icalgeotype icalvalue_get_geo(const icalvalue* value);
 LIBICAL_ICAL_EXPORT void icalvalue_set_geo(icalvalue* value, struct icalgeotype v);
 
-icalvalue *icalvalue_new_attach (icalattach *attach);
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_attach (icalattach *attach);
 LIBICAL_ICAL_EXPORT void icalvalue_set_attach (icalvalue *value, icalattach *attach);
 LIBICAL_ICAL_EXPORT icalattach *icalvalue_get_attach (const icalvalue *value);
 
-void icalvalue_reset_kind(icalvalue* value);
+LIBICAL_ICAL_EXPORT void icalvalue_reset_kind(icalvalue* value);
 
 <insert_code_here>
 

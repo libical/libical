@@ -36,7 +36,7 @@
 /* In icalderivedparameter */
 icalparameter* icalparameter_new_from_value_string(icalparameter_kind kind,const  char* val);
 
-struct icalparameter_impl* icalparameter_new_impl(icalparameter_kind kind)
+LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparameter_kind kind)
 {
     struct icalparameter_impl* v;
 

@@ -99,7 +99,7 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
         return 0;
     }
 
-    icalfileset_lock(fset);
+    (void)icalfileset_lock(fset);
 
     if (cluster_file_size > 0) {
         icalerrorenum error;
@@ -144,7 +144,7 @@ icalcluster *icalfileset_produce_icalcluster(const char *path)
     return ret;
 }
 
-char *icalfileset_read_from_file(char *s, size_t size, void *d)
+static char *icalfileset_read_from_file(char *s, size_t size, void *d)
 {
     char *p = s;
     icalfileset *set = d;
@@ -247,7 +247,7 @@ void icalfileset_free(icalset *set)
     }
 
     if (fset->fd > 0) {
-        icalfileset_unlock(fset);
+        (void)icalfileset_unlock(fset);
         close(fset->fd);
         fset->fd = -1;
     }
@@ -554,7 +554,7 @@ struct icalfileset_id {
     int sequence;
 };
 
-void icalfileset_id_free(struct icalfileset_id *id)
+static void icalfileset_id_free(struct icalfileset_id *id)
 {
     if (id->recurrence_id != 0) {
         free(id->recurrence_id);
@@ -565,7 +565,7 @@ void icalfileset_id_free(struct icalfileset_id *id)
     }
 }
 
-struct icalfileset_id icalfileset_get_id(icalcomponent *comp)
+static struct icalfileset_id icalfileset_get_id(icalcomponent *comp)
 {
     icalcomponent *inner;
     struct icalfileset_id id;
