@@ -39,7 +39,7 @@
 #include "icalvalue.h"
 
 #include <ctype.h>
-#include <stddef.h> /* for ptrdiff_h */
+#include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
 
 #define TMP_BUF_SIZE 80

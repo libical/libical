@@ -4,6 +4,7 @@
 
 #include "vcc.h"
 #include <ctype.h>
+#include <stddef.h> /* for ptrdiff_t */
 
 #define YYBYACC 1
 #define YYMAJOR 1

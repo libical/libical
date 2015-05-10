@@ -32,7 +32,7 @@
 #include "icaltz-util.h"
 
 #include <ctype.h>
-#include <stddef.h> /* for ptrdiff_h */
+#include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
 
 #ifdef HAVE_PTHREAD

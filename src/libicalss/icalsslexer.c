@@ -38,7 +38,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <stddef.h> /* for ptrdiff_h */
+#include <stddef.h> /* for ptrdiff_t */
 
 #ifdef _WIN32_WCE
 #include <io.h>

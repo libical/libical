@@ -42,7 +42,7 @@
 #include "icalvalue.h"
 #include "icalversion.h" /* for ICAL_PACKAGE */
 
-#include <stddef.h> /* for ptrdiff_h */
+#include <stddef.h> /* for ptrdiff_t */
 
 enum datatype {
     DT_COMPONENT,
