@@ -42,24 +42,28 @@
 #ifndef ICAL_astime_h
 #define ICAL_astime_h
 
-typedef struct ut_instant {
-        double  j_date; /**< julian decimal date, 0 = 01 Jan 4713 BC 12 HR UT */
-        long year;      /**< year, valid range [-4,713, +2,147,483,647] */
-        int     month;  /**<    [1-12]  */
-        int     day;    /**<    [1-31]  */
-        int     i_hour; /**<    [0-23]  */
-        int     i_minute;       /**<    [0-59]  */
-        int     i_second;       /**<    [0-59]  */
-        double  d_hour;         /**< [0.0-23.9999] includes minute and second */
-        double  d_minute;       /**<    [0.0-59.9999] includes second   */
-        double  d_second;       /**<    [0.0-59.9999]   */
-        int     weekday;        /**<    [0-6]   */
-        int     day_of_year;    /**<    [1-366] */
-} UTinstant, * UTinstantPtr;
+#include "libical_ical_export.h"
+
+typedef struct ut_instant
+{
+    double j_date;      /**< julian decimal date, 0 = 01 Jan 4713 BC 12 HR UT */
+    long year;          /**< year, valid range [-4,713, +2,147,483,647] */
+    int month;          /**<    [1-12]  */
+    int day;            /**<    [1-31]  */
+    int i_hour;         /**<    [0-23]  */
+    int i_minute;               /**<    [0-59]  */
+    int i_second;               /**<    [0-59]  */
+    double d_hour;              /**< [0.0-23.9999] includes minute and second */
+    double d_minute;            /**<    [0.0-59.9999] includes second   */
+    double d_second;            /**<    [0.0-59.9999]   */
+    int weekday;                /**<    [0-6]   */
+    int day_of_year;            /**<    [1-366] */
+} UTinstant, *UTinstantPtr;
 
 /*      Functions in caldate.c  */
 
-long caldat( UTinstantPtr );    /** converts julian date to year,mo,da */
-double juldat( UTinstantPtr );  /** returns julian day from year,mo,da */
+LIBICAL_ICAL_EXPORT long caldat(UTinstantPtr);      /** converts julian date to year,mo,da */
+
+LIBICAL_ICAL_EXPORT double juldat(UTinstantPtr);    /** returns julian day from year,mo,da */
 
 #endif

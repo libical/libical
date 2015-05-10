@@ -2,7 +2,6 @@
  FILE: pvl.c
  CREATOR: eric November, 1995
 
-
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
@@ -10,13 +9,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -28,6 +26,13 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
+
+/**
+ * Globals incremented for each call to pvl_new_element(); each list gets a unique id.
+ */
+
+static int pvl_elem_count = 0;
+static int pvl_list_count = 0;
 
 /**
   struct pvl_list_t
@@ -46,18 +51,6 @@ typedef struct pvl_list_t
         int count;                      /**< Number of items in the list */
         struct pvl_elem_t *p;           /**< Pointer used for iterators */
 } pvl_list_t;
-
-
-
-
-/**
- * This global is incremented for each call to pvl_new_element(); it gives each
- * list a unique identifer
- */
-
-int pvl_elem_count = 0;
-int pvl_list_count = 0;
-
 
 /**
  * @brief Creates a new list, clears the pointers and assigns a magic number

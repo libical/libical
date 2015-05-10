@@ -80,15 +80,14 @@ typedef enum icalrecurrencetype_frequency
     /* These enums are used to index an array, so don't change the
        order or the integers */
 
-    ICAL_SECONDLY_RECURRENCE=0,
-    ICAL_MINUTELY_RECURRENCE=1,
-    ICAL_HOURLY_RECURRENCE=2,
-    ICAL_DAILY_RECURRENCE=3,
-    ICAL_WEEKLY_RECURRENCE=4,
-    ICAL_MONTHLY_RECURRENCE=5,
-    ICAL_YEARLY_RECURRENCE=6,
-    ICAL_NO_RECURRENCE=7
-
+    ICAL_SECONDLY_RECURRENCE = 0,
+    ICAL_MINUTELY_RECURRENCE = 1,
+    ICAL_HOURLY_RECURRENCE = 2,
+    ICAL_DAILY_RECURRENCE = 3,
+    ICAL_WEEKLY_RECURRENCE = 4,
+    ICAL_MONTHLY_RECURRENCE = 5,
+    ICAL_YEARLY_RECURRENCE = 6,
+    ICAL_NO_RECURRENCE = 7
 } icalrecurrencetype_frequency;
 
 typedef enum icalrecurrencetype_weekday
@@ -110,12 +109,11 @@ typedef enum icalrecurrencetype_skip
     ICAL_SKIP_OMIT
 } icalrecurrencetype_skip;
 
-enum {
+enum icalrecurrence_array_max_values
+{
     ICAL_RECURRENCE_ARRAY_MAX = 0x7f7f,
     ICAL_RECURRENCE_ARRAY_MAX_BYTE = 0x7f
 };
-
-
 
 /**
  * Recurrence type routines
@@ -139,44 +137,43 @@ enum {
 /** Main struct for holding digested recurrence rules */
 struct icalrecurrencetype
 {
-        icalrecurrencetype_frequency freq;
+    icalrecurrencetype_frequency freq;
 
+    /* until and count are mutually exclusive. */
+    struct icaltimetype until;
+    int count;
 
-        /* until and count are mutually exclusive. */
-        struct icaltimetype until;
-        int count;
+    short interval;
 
-        short interval;
+    icalrecurrencetype_weekday week_start;
 
-        icalrecurrencetype_weekday week_start;
+    /* The BY* parameters can each take a list of values. Here I
+     * assume that the list of values will not be larger than the
+     * range of the value -- that is, the client will not name a
+     * value more than once.
 
-        /* The BY* parameters can each take a list of values. Here I
-         * assume that the list of values will not be larger than the
-         * range of the value -- that is, the client will not name a
-         * value more than once.
+     * Each of the lists is terminated with the value
+     * ICAL_RECURRENCE_ARRAY_MAX unless the list is full.
+     */
 
-         * Each of the lists is terminated with the value
-         * ICAL_RECURRENCE_ARRAY_MAX unless the list is full.
-         */
+    short by_second[ICAL_BY_SECOND_SIZE];
+    short by_minute[ICAL_BY_MINUTE_SIZE];
+    short by_hour[ICAL_BY_HOUR_SIZE];
+    short by_day[ICAL_BY_DAY_SIZE];     /* Encoded value, see below */
+    short by_month_day[ICAL_BY_MONTHDAY_SIZE];
+    short by_year_day[ICAL_BY_YEARDAY_SIZE];
+    short by_week_no[ICAL_BY_WEEKNO_SIZE];
+    short by_month[ICAL_BY_MONTH_SIZE];
+    short by_set_pos[ICAL_BY_SETPOS_SIZE];
 
-        short by_second[ICAL_BY_SECOND_SIZE];
-        short by_minute[ICAL_BY_MINUTE_SIZE];
-        short by_hour[ICAL_BY_HOUR_SIZE];
-        short by_day[ICAL_BY_DAY_SIZE]; /* Encoded value, see below */
-        short by_month_day[ICAL_BY_MONTHDAY_SIZE];
-        short by_year_day[ ICAL_BY_YEARDAY_SIZE];
-        short by_week_no[ICAL_BY_WEEKNO_SIZE];
-        short by_month[ICAL_BY_MONTH_SIZE];
-        short by_set_pos[ICAL_BY_SETPOS_SIZE];
-
-        /* For RSCALE extension (RFC 7529) */
-        char *rscale;
-        icalrecurrencetype_skip skip;
+    /* For RSCALE extension (RFC 7529) */
+    char *rscale;
+    icalrecurrencetype_skip skip;
 };
 
-
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_rscale_is_supported(void);
-LIBICAL_ICAL_EXPORT icalarray* icalrecurrencetype_rscale_supported_calendars(void);
+
+LIBICAL_ICAL_EXPORT icalarray *icalrecurrencetype_rscale_supported_calendars(void);
 
 LIBICAL_ICAL_EXPORT void icalrecurrencetype_clear(struct icalrecurrencetype *r);
 
@@ -190,12 +187,12 @@ LIBICAL_ICAL_EXPORT void icalrecurrencetype_clear(struct icalrecurrencetype *r);
  */
 
 /** 1 == Monday, etc. */
-enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day);
+LIBICAL_ICAL_EXPORT enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day);
 
 /** 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc */
-int icalrecurrencetype_day_position(short day);
+LIBICAL_ICAL_EXPORT int icalrecurrencetype_day_position(short day);
 
-icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
+LIBICAL_ICAL_EXPORT icalrecurrencetype_weekday icalrecur_string_to_weekday(const char *str);
 
 /**
  * The 'month' element of the by_month array is encoded to allow
@@ -203,37 +200,38 @@ icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
  * These routines decode the month values.
  */
 
-int icalrecurrencetype_month_is_leap(short month);
-int icalrecurrencetype_month_month(short month);
+LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_is_leap(short month);
+
+LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_month(short month);
 
 /** Recurrance rule parser */
 
 /** Convert between strings and recurrencetype structures. */
-LIBICAL_ICAL_EXPORT struct icalrecurrencetype icalrecurrencetype_from_string(const char* str);
-LIBICAL_ICAL_EXPORT char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
-char* icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur);
+LIBICAL_ICAL_EXPORT struct icalrecurrencetype icalrecurrencetype_from_string(const char *str);
 
+LIBICAL_ICAL_EXPORT char *icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
+
+LIBICAL_ICAL_EXPORT char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur);
 
 /** Recurrence iteration routines */
 
-typedef struct icalrecur_iterator_impl  icalrecur_iterator;
+typedef struct icalrecur_iterator_impl icalrecur_iterator;
 
 /** Create a new recurrence rule iterator */
-LIBICAL_ICAL_EXPORT icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
+LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                                                                struct icaltimetype dtstart);
 
 /** Get the next occurrence from an iterator */
-LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_next(icalrecur_iterator*);
+LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *);
 
 /** Free the iterator */
-LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator*);
+LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator *);
 
 /**
  * Fills array up with at most 'count' time_t values, each
  *  representing an occurrence time in seconds past the POSIX epoch
  */
-LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(char* rule, time_t start,
-                                                    int count, time_t* array);
-
+LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(char *rule, time_t start,
+                                                    int count, time_t * array);
 
 #endif

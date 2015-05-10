@@ -47,8 +47,6 @@ implements the core parser
 vobject.c implements an API that insulates the caller from
 the parser and changes in the vCard/vCalendar BNF
 
-port.h defines compilation environment dependent stuff
-
 vcc.h and vobject.h are header files for their .c counterparts
 
 vcaltmp.h and vcaltmp.c implement vCalendar "macro" functions
@@ -74,19 +72,17 @@ which accompanied this distribution.
 
 */
 
-
 #ifndef VOBJECT_H
 #define VOBJECT_H
 
 #include "libical_vcal_export.h"
-#include "port.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 #if defined(__CPLUSPLUS__) || defined(__cplusplus)
-extern "C" {
+extern "C"
+{
 #endif
-
 
 #define VC7bitProp                              "7BIT"
 #define VC8bitProp                              "8BIT"
@@ -252,95 +248,98 @@ extern "C" {
 #define XPilotIdProp                            "X-PILOTID"
 #define XPilotStatusProp                        "X-PILOTSTAT"
 
-typedef struct VObject VObject;
+    typedef struct VObject VObject;
 
-typedef struct VObjectIterator {
-    VObject* start;
-    VObject* next;
+    typedef struct VObjectIterator
+    {
+        VObject *start;
+        VObject *next;
     } VObjectIterator;
 
-extern DLLEXPORT(VObject*) newVObject(const char *id);
-LIBICAL_VCAL_EXPORT void deleteVObject(VObject *p);
-extern DLLEXPORT(char*) dupStr(const char *s, size_t size);
-extern DLLEXPORT(void) deleteStr(const char *p);
-extern DLLEXPORT(void) unUseStr(const char *s);
+    LIBICAL_VCAL_EXPORT VObject *newVObject(const char *id);
+    LIBICAL_VCAL_EXPORT void deleteVObject(VObject * p);
+    LIBICAL_VCAL_EXPORT char *dupStr(const char *s, size_t size);
+    LIBICAL_VCAL_EXPORT void deleteStr(const char *p);
+    LIBICAL_VCAL_EXPORT void unUseStr(const char *s);
 
-extern DLLEXPORT(void) setVObjectName(VObject *o, const char* id);
-extern DLLEXPORT(void) setVObjectStringZValue(VObject *o, const char *s);
-extern DLLEXPORT(void) setVObjectStringZValue_(VObject *o, const char *s);
-extern DLLEXPORT(void) setVObjectUStringZValue(VObject *o, const wchar_t *s);
-extern DLLEXPORT(void) setVObjectUStringZValue_(VObject *o, const wchar_t *s);
-extern DLLEXPORT(void) setVObjectIntegerValue(VObject *o, unsigned int i);
-extern DLLEXPORT(void) setVObjectLongValue(VObject *o, unsigned long l);
-extern DLLEXPORT(void) setVObjectAnyValue(VObject *o, void *t);
-extern DLLEXPORT(VObject*) setValueWithSize(VObject *prop, void *val, unsigned int size);
-extern DLLEXPORT(VObject*) setValueWithSize_(VObject *prop, void *val, unsigned int size);
+    LIBICAL_VCAL_EXPORT void setVObjectName(VObject * o, const char *id);
+    LIBICAL_VCAL_EXPORT void setVObjectStringZValue(VObject * o, const char *s);
+    LIBICAL_VCAL_EXPORT void setVObjectStringZValue_(VObject * o, const char *s);
+    LIBICAL_VCAL_EXPORT void setVObjectUStringZValue(VObject * o, const wchar_t * s);
+    LIBICAL_VCAL_EXPORT void setVObjectUStringZValue_(VObject * o, const wchar_t * s);
+    LIBICAL_VCAL_EXPORT void setVObjectIntegerValue(VObject * o, unsigned int i);
+    LIBICAL_VCAL_EXPORT void setVObjectLongValue(VObject * o, unsigned long l);
+    LIBICAL_VCAL_EXPORT void setVObjectAnyValue(VObject * o, void *t);
+    LIBICAL_VCAL_EXPORT VObject *setValueWithSize(VObject * prop, void *val, unsigned int size);
+    LIBICAL_VCAL_EXPORT VObject *setValueWithSize_(VObject * prop, void *val, unsigned int size);
 
-extern DLLEXPORT(const char*) vObjectName(VObject *o);
-extern DLLEXPORT(const char*) vObjectStringZValue(VObject *o);
-extern DLLEXPORT(const wchar_t*) vObjectUStringZValue(VObject *o);
-extern DLLEXPORT(unsigned int) vObjectIntegerValue(VObject *o);
-extern DLLEXPORT(unsigned long) vObjectLongValue(VObject *o);
-extern DLLEXPORT(void*) vObjectAnyValue(VObject *o);
-extern DLLEXPORT(VObject*) vObjectVObjectValue(VObject *o);
-extern DLLEXPORT(void) setVObjectVObjectValue(VObject *o, VObject *p);
+    LIBICAL_VCAL_EXPORT const char *vObjectName(VObject * o);
+    LIBICAL_VCAL_EXPORT const char *vObjectStringZValue(VObject * o);
+    LIBICAL_VCAL_EXPORT const wchar_t *vObjectUStringZValue(VObject * o);
+    LIBICAL_VCAL_EXPORT unsigned int vObjectIntegerValue(VObject * o);
+    LIBICAL_VCAL_EXPORT unsigned long vObjectLongValue(VObject * o);
+    LIBICAL_VCAL_EXPORT void *vObjectAnyValue(VObject * o);
+    LIBICAL_VCAL_EXPORT VObject *vObjectVObjectValue(VObject * o);
+    LIBICAL_VCAL_EXPORT void setVObjectVObjectValue(VObject * o, VObject * p);
 
-extern DLLEXPORT(VObject*) addVObjectProp(VObject *o, VObject *p);
-extern DLLEXPORT(VObject*) addProp(VObject *o, const char *id);
-extern DLLEXPORT(VObject*) addProp_(VObject *o, const char *id);
-extern DLLEXPORT(VObject*) addPropValue(VObject *o, const char *p, const char *v);
-extern DLLEXPORT(VObject*) addPropSizedValue_(VObject *o, const char *p, const char *v, unsigned int size);
-extern DLLEXPORT(VObject*) addPropSizedValue(VObject *o, const char *p, const char *v, unsigned int size);
-extern DLLEXPORT(VObject*) addGroup(VObject *o, const char *g);
-extern DLLEXPORT(void) addList(VObject **o, VObject *p);
+    LIBICAL_VCAL_EXPORT VObject *addVObjectProp(VObject * o, VObject * p);
+    LIBICAL_VCAL_EXPORT VObject *addProp(VObject * o, const char *id);
+    LIBICAL_VCAL_EXPORT VObject *addProp_(VObject * o, const char *id);
+    LIBICAL_VCAL_EXPORT VObject *addPropValue(VObject * o, const char *p, const char *v);
+    LIBICAL_VCAL_EXPORT VObject *addPropSizedValue_(VObject * o, const char *p, const char *v,
+                                                    unsigned int size);
+    LIBICAL_VCAL_EXPORT VObject *addPropSizedValue(VObject * o, const char *p, const char *v,
+                                                   unsigned int size);
+    LIBICAL_VCAL_EXPORT VObject *addGroup(VObject * o, const char *g);
+    LIBICAL_VCAL_EXPORT void addList(VObject ** o, VObject * p);
 
-extern DLLEXPORT(VObject*) isAPropertyOf(VObject *o, const char *id);
+    LIBICAL_VCAL_EXPORT VObject *isAPropertyOf(VObject * o, const char *id);
 
-extern DLLEXPORT(VObject*) nextVObjectInList(VObject *o);
-extern DLLEXPORT(void) initPropIterator(VObjectIterator *i, VObject *o);
-extern DLLEXPORT(int) moreIteration(VObjectIterator *i);
-extern DLLEXPORT(VObject*) nextVObject(VObjectIterator *i);
+    LIBICAL_VCAL_EXPORT VObject *nextVObjectInList(VObject * o);
+    LIBICAL_VCAL_EXPORT void initPropIterator(VObjectIterator * i, VObject * o);
+    LIBICAL_VCAL_EXPORT int moreIteration(VObjectIterator * i);
+    LIBICAL_VCAL_EXPORT VObject *nextVObject(VObjectIterator * i);
 
-extern DLLEXPORT(char*) writeMemVObject(char *s, int *len, VObject *o);
-extern DLLEXPORT(char*) writeMemVObjects(char *s, int *len, VObject *list);
+    LIBICAL_VCAL_EXPORT char *writeMemVObject(char *s, int *len, VObject * o);
+    LIBICAL_VCAL_EXPORT char *writeMemVObjects(char *s, int *len, VObject * list);
 
-extern DLLEXPORT(const char*) lookupStr(const char *s);
-extern DLLEXPORT(void) cleanStrTbl();
+    LIBICAL_VCAL_EXPORT const char *lookupStr(const char *s);
+    LIBICAL_VCAL_EXPORT void cleanStrTbl();
 
-extern DLLEXPORT(void) cleanVObject(VObject *o);
-extern DLLEXPORT(void) cleanVObjects(VObject *list);
+    LIBICAL_VCAL_EXPORT void cleanVObject(VObject * o);
+    LIBICAL_VCAL_EXPORT void cleanVObjects(VObject * list);
 
-extern DLLEXPORT(const char*) lookupProp(const char* str);
-extern DLLEXPORT(const char*) lookupProp_(const char* str);
+    LIBICAL_VCAL_EXPORT const char *lookupProp(const char *str);
+    LIBICAL_VCAL_EXPORT const char *lookupProp_(const char *str);
 
-extern DLLEXPORT(wchar_t*) fakeUnicode(const char *ps, size_t *bytes);
-extern DLLEXPORT(int) uStrLen(const wchar_t *u);
-extern DLLEXPORT(char*) fakeCString(const wchar_t *u);
+    LIBICAL_VCAL_EXPORT wchar_t *fakeUnicode(const char *ps, size_t * bytes);
+    LIBICAL_VCAL_EXPORT int uStrLen(const wchar_t * u);
+    LIBICAL_VCAL_EXPORT char *fakeCString(const wchar_t * u);
 
-extern DLLEXPORT(void) printVObjectToFile(char *fname,VObject *o);
-extern DLLEXPORT(void) printVObjectsToFile(char *fname,VObject *list);
-extern DLLEXPORT(void) writeVObjectToFile(char *fname, VObject *o);
-extern DLLEXPORT(void) writeVObjectsToFile(char *fname, VObject *list);
+    LIBICAL_VCAL_EXPORT void printVObjectToFile(char *fname, VObject * o);
+    LIBICAL_VCAL_EXPORT void printVObjectsToFile(char *fname, VObject * list);
+    LIBICAL_VCAL_EXPORT void writeVObjectToFile(char *fname, VObject * o);
+    LIBICAL_VCAL_EXPORT void writeVObjectsToFile(char *fname, VObject * list);
 
-extern DLLEXPORT(int) vObjectValueType(VObject *o);
+    LIBICAL_VCAL_EXPORT int vObjectValueType(VObject * o);
 
 /* return type of vObjectValueType: */
 #define VCVT_NOVALUE    0
-        /* if the VObject has no value associated with it. */
+    /* if the VObject has no value associated with it. */
 #define VCVT_STRINGZ    1
-        /* if the VObject has value set by setVObjectStringZValue. */
+    /* if the VObject has value set by setVObjectStringZValue. */
 #define VCVT_USTRINGZ   2
-        /* if the VObject has value set by setVObjectUStringZValue. */
+    /* if the VObject has value set by setVObjectUStringZValue. */
 #define VCVT_UINT               3
-        /* if the VObject has value set by setVObjectIntegerValue. */
+    /* if the VObject has value set by setVObjectIntegerValue. */
 #define VCVT_ULONG              4
-        /* if the VObject has value set by setVObjectLongValue. */
+    /* if the VObject has value set by setVObjectLongValue. */
 #define VCVT_RAW                5
-        /* if the VObject has value set by setVObjectAnyValue. */
+    /* if the VObject has value set by setVObjectAnyValue. */
 #define VCVT_VOBJECT    6
-        /* if the VObject has value set by setVObjectVObjectValue. */
+    /* if the VObject has value set by setVObjectVObjectValue. */
 
-extern const char** fieldedProp;
+    extern const char **fieldedProp;
 
 /* NOTE regarding printVObject and writeVObject
 
@@ -353,12 +352,12 @@ your build directly then you may find them a more convenient API
 and you can go ahead and use them. If you try to use them with
 the DLL LIB you will get a link error.
 */
-extern void printVObject(FILE *fp,VObject *o);
-extern void writeVObject(FILE *fp, VObject *o);
-
+    extern void printVObject(FILE * fp, VObject * o);
+    extern void writeVObject(FILE * fp, VObject * o);
 
 #if defined(__CPLUSPLUS__) || defined(__cplusplus)
 }
+
 #endif
 
 #endif /* VOBJECT_H */

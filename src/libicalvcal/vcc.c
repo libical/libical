@@ -72,11 +72,6 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #define DBG_(x)
 #endif
 
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
-#endif
-
 /****  External Functions  ****/
 
 /* assign local name to parser variables and functions so that
@@ -433,7 +428,7 @@ static int pushVObject(const char *prop)
     {
     VObject *newObj;
     if (ObjStackTop == MAXLEVEL)
-        return FALSE;
+        return 0; /*FALSE*/
 
     ObjStack[++ObjStackTop] = curObj;
 
@@ -444,7 +439,7 @@ static int pushVObject(const char *prop)
     else
         curObj = newVObject(prop);
 
-    return TRUE;
+    return 1; /*TRUE*/
     }
 
 
@@ -516,10 +511,10 @@ static void enterAttr(const char *s1, const char *s2)
         }
     else
         addProp(curProp,p1);
-    if (stricmp(p1,VCBase64Prop) == 0 || (p2 && stricmp(p2,VCBase64Prop)==0))
+    if (strcasecmp(p1,VCBase64Prop) == 0 || (p2 && strcasecmp(p2,VCBase64Prop)==0))
         lexPushMode(L_BASE64);
-    else if (stricmp(p1,VCQuotedPrintableProp) == 0
-            || (p2 && stricmp(p2,VCQuotedPrintableProp)==0))
+    else if (strcasecmp(p1,VCQuotedPrintableProp) == 0
+            || (p2 && strcasecmp(p2,VCQuotedPrintableProp)==0))
         lexPushMode(L_QUOTED_PRINTABLE);
     deleteStr(s1); deleteStr(s2);
     }
@@ -819,10 +814,10 @@ static int match_begin_name(int end) {
     char *n = lexLookaheadWord();
     int token = ID;
     if (n) {
-        if (!stricmp(n,"vcard")) token = end?END_VCARD:BEGIN_VCARD;
-        else if (!stricmp(n,"vcalendar")) token = end?END_VCAL:BEGIN_VCAL;
-        else if (!stricmp(n,"vevent")) token = end?END_VEVENT:BEGIN_VEVENT;
-        else if (!stricmp(n,"vtodo")) token = end?END_VTODO:BEGIN_VTODO;
+        if (!strcasecmp(n,"vcard")) token = end?END_VCARD:BEGIN_VCARD;
+        else if (!strcasecmp(n,"vcalendar")) token = end?END_VCAL:BEGIN_VCAL;
+        else if (!strcasecmp(n,"vevent")) token = end?END_VEVENT:BEGIN_VEVENT;
+        else if (!strcasecmp(n,"vtodo")) token = end?END_VTODO:BEGIN_VTODO;
         deleteStr(n);
         return token;
         }
@@ -1131,10 +1126,10 @@ int yylex() {
                     if (isalpha(c)) {
                         char *t = lexGetWord();
                         yylval.str = t;
-                        if (!stricmp(t, "begin")) {
+                        if (!strcasecmp(t, "begin")) {
                             return match_begin_end_name(0);
                             }
-                        else if (!stricmp(t,"end")) {
+                        else if (!strcasecmp(t,"end")) {
                             return match_begin_end_name(1);
                             }
                         else {
@@ -1174,7 +1169,7 @@ static VObject* Parse_MIMEHelper()
     return vObjList;
     }
 
-DLLEXPORT(VObject*) Parse_MIME(const char *input, unsigned long len)
+VObject* Parse_MIME(const char *input, unsigned long len)
     {
     initLex(input, len, 0);
     return Parse_MIMEHelper();
@@ -1183,7 +1178,7 @@ DLLEXPORT(VObject*) Parse_MIME(const char *input, unsigned long len)
 
 #ifdef INCLUDEMFC
 
-DLLEXPORT(VObject*) Parse_MIME_FromFile(CFile *file)
+VObject* Parse_MIME_FromFile(CFile *file)
     {
     unsigned long startPos;
     VObject *result;
@@ -1211,7 +1206,7 @@ VObject* Parse_MIME_FromFile(FILE *file)
     return result;
     }
 
-DLLEXPORT(VObject*) Parse_MIME_FromFileName(char *fname)
+VObject* Parse_MIME_FromFileName(char *fname)
     {
     FILE *fp = fopen(fname,"r");
     if (fp) {
@@ -1232,7 +1227,7 @@ DLLEXPORT(VObject*) Parse_MIME_FromFileName(char *fname)
 
 static MimeErrorHandler mimeErrorHandler;
 
-DLLEXPORT(void) registerMimeErrorHandler(MimeErrorHandler me)
+void registerMimeErrorHandler(MimeErrorHandler me)
     {
     mimeErrorHandler = me;
     }

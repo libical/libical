@@ -28,15 +28,15 @@
 
 #define ICAL_SETERROR_ISFUNC
 
-/** This routine is called before any error is triggered. It is called
-   by icalerror_set_errno, so it does not appear in all of the macros
-   below */
+/** This routine is called before any error is triggered. It is called by
+    icalerror_set_errno, so it does not appear in all of the macros below */
 LIBICAL_ICAL_EXPORT void icalerror_stop_here(void);
 
-void icalerror_crash_here(void);
+LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
 
-typedef enum icalerrorenum {
-    ICAL_NO_ERROR,     /* icalerrno may not be initialized - put it first so and pray that the compiler initialize things to zero */
+typedef enum icalerrorenum
+{
+    ICAL_NO_ERROR = 0,
     ICAL_BADARG_ERROR,
     ICAL_NEWFAILED_ERROR,
     ICAL_ALLOCATION_ERROR,
@@ -46,11 +46,11 @@ typedef enum icalerrorenum {
     ICAL_FILE_ERROR,
     ICAL_USAGE_ERROR,
     ICAL_UNIMPLEMENTED_ERROR,
-    ICAL_UNKNOWN_ERROR  /* Used for problems in input to icalerror_strerror()*/
-
+    ICAL_UNKNOWN_ERROR  /* Used for problems in input to icalerror_strerror() */
 } icalerrorenum;
 
-LIBICAL_ICAL_EXPORT icalerrorenum * icalerrno_return(void);
+LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
+
 #define icalerrno (*(icalerrno_return()))
 
 /** If true, libicu aborts after a call to icalerror_set_error
@@ -66,34 +66,37 @@ LIBICAL_ICAL_EXPORT int icalerror_errors_are_fatal;
 /* Warning messages */
 
 #ifdef __GNUC__ca
-#define icalerror_warn(message) {fprintf(stderr,"%s(), %s:%d: %s\n",__FUNCTION__,__FILE__,__LINE__,message);}
+#define icalerror_warn(message) \
+{fprintf(stderr, "%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message);}
 #else /* __GNU_C__ */
-#define icalerror_warn(message) {fprintf(stderr,"%s:%d: %s\n",__FILE__,__LINE__,message);}
+#define icalerror_warn(message) \
+{fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, message);}
 #endif /* __GNU_C__ */
 
 LIBICAL_ICAL_EXPORT void icalerror_clear_errno(void);
-void _icalerror_set_errno(icalerrorenum);
+LIBICAL_ICAL_EXPORT void _icalerror_set_errno(icalerrorenum);
 
 /* Make an individual error fatal or non-fatal. */
-typedef enum icalerrorstate {
-    ICAL_ERROR_FATAL,     /* Not fata */
-    ICAL_ERROR_NONFATAL,  /* Fatal */
-    ICAL_ERROR_DEFAULT,   /* Use the value of icalerror_errors_are_fatal*/
-    ICAL_ERROR_UNKNOWN    /* Asked state for an unknown error type */
-} icalerrorstate ;
+typedef enum icalerrorstate
+{
+    ICAL_ERROR_FATAL, /* Not fata */
+    ICAL_ERROR_NONFATAL, /* Fatal */
+    ICAL_ERROR_DEFAULT, /* Use the value of icalerror_errors_are_fatal */
+    ICAL_ERROR_UNKNOWN  /* Asked state for an unknown error type */
+} icalerrorstate;
 
-LIBICAL_ICAL_EXPORT const char* icalerror_strerror(icalerrorenum e);
-const char* icalerror_perror(void);
-void ical_bt(void);
-LIBICAL_ICAL_EXPORT void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
-LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state( icalerrorenum error);
+LIBICAL_ICAL_EXPORT const char *icalerror_strerror(icalerrorenum e);
+LIBICAL_ICAL_EXPORT const char *icalerror_perror(void);
+LIBICAL_ICAL_EXPORT void ical_bt(void);
+LIBICAL_ICAL_EXPORT void icalerror_set_error_state(icalerrorenum error, icalerrorstate);
+LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state(icalerrorenum error);
 
 #ifndef ICAL_SETERROR_ISFUNC
 #define icalerror_set_errno(x) \
 icalerrno = x; \
-if(icalerror_get_error_state(x)==ICAL_ERROR_FATAL || \
-   (icalerror_get_error_state(x)==ICAL_ERROR_DEFAULT && \
-    icalerror_errors_are_fatal == 1 )){ \
+if(icalerror_get_error_state(x) == ICAL_ERROR_FATAL || \
+   (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && \
+    icalerror_errors_are_fatal == 1)){ \
    icalerror_warn(icalerror_strerror(x)); \
    ical_bt(); \
    assert(0); \
@@ -119,9 +122,17 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
 #if ICAL_ERRORS_ARE_FATAL == 1
 
 #ifdef __GNUC__
-#define icalerror_assert(test,message) if(!(test)){fprintf(stderr,"%s(), %s:%d: %s\n",__FUNCTION__,__FILE__,__LINE__,message);icalerror_stop_here(); abort();}
+#define icalerror_assert(test,message) \
+if (!(test)) { \
+    fprintf(stderr, "%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
+    icalerror_stop_here(); \
+    abort();}
 #else /*__GNUC__*/
-#define icalerror_assert(test,message) if(!(test)){fprintf(stderr,"%s:%d: %s\n",__FILE__,__LINE__,message);icalerror_stop_here(); abort();}
+#define icalerror_assert(test,message) \
+if (!(test)) { \
+    fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, message); \
+    icalerror_stop_here(); \
+    abort();}
 #endif /*__GNUC__*/
 
 #else /* ICAL_ERRORS_ARE_FATAL */
@@ -129,27 +140,44 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
 #endif /* ICAL_ERRORS_ARE_FATAL */
 
 /* Check & abort if check fails */
-#define icalerror_check_arg(test,arg) if(!(test)) { icalerror_set_errno(ICAL_BADARG_ERROR); }
+#define icalerror_check_arg(test,arg) \
+if (!(test)) { \
+    icalerror_set_errno(ICAL_BADARG_ERROR); \
+}
 
 /* Check & return void if check fails*/
-#define icalerror_check_arg_rv(test,arg) if(!(test)) {icalerror_set_errno(ICAL_BADARG_ERROR); return; }
+#define icalerror_check_arg_rv(test,arg) \
+if (!(test)) { \
+    icalerror_set_errno(ICAL_BADARG_ERROR); \
+    return; \
+}
 
 /* Check & return 0 if check fails*/
-#define icalerror_check_arg_rz(test,arg) if(!(test)) { icalerror_set_errno(ICAL_BADARG_ERROR); return 0;}
+#define icalerror_check_arg_rz(test,arg) \
+if (!(test)) { \
+    icalerror_set_errno(ICAL_BADARG_ERROR); \
+    return 0; \
+}
 
 /* Check & return an error if check fails*/
-#define icalerror_check_arg_re(test,arg,error) if(!(test)) { icalerror_stop_here(); assert(0); return error;}
+#define icalerror_check_arg_re(test,arg,error) \
+if (!(test)) { \
+    icalerror_stop_here(); \
+    assert(0); \
+    return error; \
+}
 
 /* Check & return something*/
-#define icalerror_check_arg_rx(test,arg,x) if(!(test)) { icalerror_set_errno(ICAL_BADARG_ERROR); return x;}
+#define icalerror_check_arg_rx(test,arg,x) \
+if (!(test)) { \
+    icalerror_set_errno(ICAL_BADARG_ERROR); \
+    return x; \
+}
 
+/* String interfaces to set an error to NONFATAL and restore it to its original value */
 
+LIBICAL_ICAL_EXPORT icalerrorstate icalerror_supress(const char *error);
 
-/* String interfaces to set an error to NONFATAL and restore it to its
-   original value */
-
-icalerrorstate icalerror_supress(const char* error);
-void icalerror_restore(const char* error, icalerrorstate es);
-
+LIBICAL_ICAL_EXPORT void icalerror_restore(const char *error, icalerrorstate es);
 
 #endif /* !ICALERROR_H */

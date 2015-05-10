@@ -17,7 +17,6 @@ set(icalvcal_LIB_SRCS
   libical_vcal_export.h
   icalvcal.h
   icalvcal.c
-  port.h
   vcc.h
   vobject.h
   vobject.c
@@ -73,7 +72,7 @@ endif()
 ########### install files ###############
 
 install(FILES
-  icalvcal.h port.h vcc.h vobject.h vcaltmp.h
+  icalvcal.h vcc.h vobject.h vcaltmp.h
   DESTINATION
   ${INCLUDE_INSTALL_DIR}/libical
 )

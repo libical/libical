@@ -41,16 +41,12 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
  * doc: vobject and APIs to construct vobject, APIs pretty print
  * vobject, and convert a vobject into its textual representation.
  */
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
 #endif
 
 #include "vobject.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <fcntl.h>
 
 #define NAME_OF(o)                      o->id
 #define VALUE_TYPE(o)                   o->valType
@@ -100,7 +96,7 @@ const char** fieldedProp;
         deleteStrItem
    ----------------------------------------------------------------------*/
 
-DLLEXPORT(VObject*) newVObject_(const char *id)
+VObject* newVObject_(const char *id)
 {
     VObject *p = (VObject*)malloc(sizeof(VObject));
     p->next = 0;
@@ -111,18 +107,18 @@ DLLEXPORT(VObject*) newVObject_(const char *id)
     return p;
 }
 
-DLLEXPORT(VObject*) newVObject(const char *id)
+VObject* newVObject(const char *id)
 {
     return newVObject_(lookupStr(id));
 }
 
-DLLEXPORT(void) deleteVObject(VObject *p)
+void deleteVObject(VObject *p)
 {
     unUseStr(p->id);
     free(p);
 }
 
-DLLEXPORT(char*) dupStr(const char *s, size_t size)
+char* dupStr(const char *s, size_t size)
 {
     char *t;
     if  (size == 0) {
@@ -139,7 +135,7 @@ DLLEXPORT(char*) dupStr(const char *s, size_t size)
         }
 }
 
-DLLEXPORT(void) deleteStr(const char *p)
+void deleteStr(const char *p)
 {
     if (p) free((void*)p);
 }
@@ -164,95 +160,95 @@ static void deleteStrItem(StrItem *p)
   The following function provide accesses to VObject's value.
   ----------------------------------------------------------------------*/
 
-DLLEXPORT(const char*) vObjectName(VObject *o)
+const char* vObjectName(VObject *o)
 {
     return NAME_OF(o);
 }
 
-DLLEXPORT(void) setVObjectName(VObject *o, const char* id)
+void setVObjectName(VObject *o, const char* id)
 {
     NAME_OF(o) = id;
 }
 
-DLLEXPORT(const char*) vObjectStringZValue(VObject *o)
+const char* vObjectStringZValue(VObject *o)
 {
     return STRINGZ_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectStringZValue(VObject *o, const char *s)
+void setVObjectStringZValue(VObject *o, const char *s)
 {
     STRINGZ_VALUE_OF(o) = dupStr(s,0);
     VALUE_TYPE(o) = VCVT_STRINGZ;
 }
 
-DLLEXPORT(void) setVObjectStringZValue_(VObject *o, const char *s)
+void setVObjectStringZValue_(VObject *o, const char *s)
 {
     STRINGZ_VALUE_OF(o) = s;
     VALUE_TYPE(o) = VCVT_STRINGZ;
 }
 
-DLLEXPORT(const wchar_t*) vObjectUStringZValue(VObject *o)
+const wchar_t* vObjectUStringZValue(VObject *o)
 {
     return USTRINGZ_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectUStringZValue(VObject *o, const wchar_t *s)
+void setVObjectUStringZValue(VObject *o, const wchar_t *s)
 {
     USTRINGZ_VALUE_OF(o) = (wchar_t*) dupStr((char*)s,(uStrLen(s)+1)*2);
     VALUE_TYPE(o) = VCVT_USTRINGZ;
 }
 
-DLLEXPORT(void) setVObjectUStringZValue_(VObject *o, const wchar_t *s)
+void setVObjectUStringZValue_(VObject *o, const wchar_t *s)
 {
     USTRINGZ_VALUE_OF(o) = s;
     VALUE_TYPE(o) = VCVT_USTRINGZ;
 }
 
-DLLEXPORT(unsigned int) vObjectIntegerValue(VObject *o)
+unsigned int vObjectIntegerValue(VObject *o)
 {
     return INTEGER_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectIntegerValue(VObject *o, unsigned int i)
+void setVObjectIntegerValue(VObject *o, unsigned int i)
 {
     INTEGER_VALUE_OF(o) = i;
     VALUE_TYPE(o) = VCVT_UINT;
 }
 
-DLLEXPORT(unsigned long) vObjectLongValue(VObject *o)
+unsigned long vObjectLongValue(VObject *o)
 {
     return LONG_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectLongValue(VObject *o, unsigned long l)
+void setVObjectLongValue(VObject *o, unsigned long l)
 {
     LONG_VALUE_OF(o) = l;
     VALUE_TYPE(o) = VCVT_ULONG;
 }
 
-DLLEXPORT(void*) vObjectAnyValue(VObject *o)
+void* vObjectAnyValue(VObject *o)
 {
     return ANY_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectAnyValue(VObject *o, void *t)
+void setVObjectAnyValue(VObject *o, void *t)
 {
     ANY_VALUE_OF(o) = t;
     VALUE_TYPE(o) = VCVT_RAW;
 }
 
-DLLEXPORT(VObject*) vObjectVObjectValue(VObject *o)
+VObject* vObjectVObjectValue(VObject *o)
 {
     return VOBJECT_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectVObjectValue(VObject *o, VObject *p)
+void setVObjectVObjectValue(VObject *o, VObject *p)
 {
     VOBJECT_VALUE_OF(o) = p;
     VALUE_TYPE(o) = VCVT_VOBJECT;
 }
 
-DLLEXPORT(int) vObjectValueType(VObject *o)
+int vObjectValueType(VObject *o)
 {
     return VALUE_TYPE(o);
 }
@@ -262,7 +258,7 @@ DLLEXPORT(int) vObjectValueType(VObject *o)
   The following functions can be used to build VObject.
   ----------------------------------------------------------------------*/
 
-DLLEXPORT(VObject*) addVObjectProp(VObject *o, VObject *p)
+VObject* addVObjectProp(VObject *o, VObject *p)
 {
     /* circular link list pointed to tail */
     /*
@@ -297,17 +293,17 @@ DLLEXPORT(VObject*) addVObjectProp(VObject *o, VObject *p)
     return p;
 }
 
-DLLEXPORT(VObject*) addProp(VObject *o, const char *id)
+VObject* addProp(VObject *o, const char *id)
 {
     return addVObjectProp(o,newVObject(id));
 }
 
-DLLEXPORT(VObject*) addProp_(VObject *o, const char *id)
+VObject* addProp_(VObject *o, const char *id)
 {
     return addVObjectProp(o,newVObject_(id));
 }
 
-DLLEXPORT(void) addList(VObject **o, VObject *p)
+void addList(VObject **o, VObject *p)
 {
     p->next = 0;
     if (*o == 0) {
@@ -322,12 +318,12 @@ DLLEXPORT(void) addList(VObject **o, VObject *p)
         }
 }
 
-DLLEXPORT(VObject*) nextVObjectInList(VObject *o)
+VObject* nextVObjectInList(VObject *o)
 {
     return o->next;
 }
 
-DLLEXPORT(VObject*) setValueWithSize_(VObject *prop, void *val, unsigned int size)
+VObject* setValueWithSize_(VObject *prop, void *val, unsigned int size)
 {
     VObject *sizeProp;
     setVObjectAnyValue(prop, val);
@@ -336,30 +332,30 @@ DLLEXPORT(VObject*) setValueWithSize_(VObject *prop, void *val, unsigned int siz
     return prop;
 }
 
-DLLEXPORT(VObject*) setValueWithSize(VObject *prop, void *val, unsigned int size)
+VObject* setValueWithSize(VObject *prop, void *val, unsigned int size)
 {
     void *p = dupStr((const char *)val,size);
     return setValueWithSize_(prop,p,p?size:0);
 }
 
-DLLEXPORT(void) initPropIterator(VObjectIterator *i, VObject *o)
+void initPropIterator(VObjectIterator *i, VObject *o)
 {
     i->start = o->prop;
     i->next = 0;
 }
 
-DLLEXPORT(void) initVObjectIterator(VObjectIterator *i, VObject *o)
+void initVObjectIterator(VObjectIterator *i, VObject *o)
 {
     i->start = o->next;
     i->next = 0;
 }
 
-DLLEXPORT(int) moreIteration(VObjectIterator *i)
+int moreIteration(VObjectIterator *i)
 {
     return (i->start && (i->next==0 || i->next!=i->start));
 }
 
-DLLEXPORT(VObject*) nextVObject(VObjectIterator *i)
+VObject* nextVObject(VObjectIterator *i)
 {
     if (i->start && i->next != i->start) {
         if (i->next == 0) {
@@ -374,19 +370,19 @@ DLLEXPORT(VObject*) nextVObject(VObjectIterator *i)
     else return (VObject*)0;
 }
 
-DLLEXPORT(VObject*) isAPropertyOf(VObject *o, const char *id)
+VObject* isAPropertyOf(VObject *o, const char *id)
 {
     VObjectIterator i;
     initPropIterator(&i,o);
     while (moreIteration(&i)) {
         VObject *each = nextVObject(&i);
-        if (!stricmp(id,each->id))
+        if (!strcasecmp(id,each->id))
             return each;
         }
     return (VObject*)0;
 }
 
-DLLEXPORT(VObject*) addGroup(VObject *o, const char *g)
+VObject* addGroup(VObject *o, const char *g)
 {
     /*
         a.b.c
@@ -427,7 +423,7 @@ DLLEXPORT(VObject*) addGroup(VObject *o, const char *g)
         return addProp_(o,lookupProp(g));
 }
 
-DLLEXPORT(VObject*) addPropValue(VObject *o, const char *p, const char *v)
+VObject* addPropValue(VObject *o, const char *p, const char *v)
 {
     VObject *prop;
     prop = addProp(o,p);
@@ -435,7 +431,7 @@ DLLEXPORT(VObject*) addPropValue(VObject *o, const char *p, const char *v)
     return prop;
 }
 
-DLLEXPORT(VObject*) addPropSizedValue_(VObject *o, const char *p, const char *v,
+VObject* addPropSizedValue_(VObject *o, const char *p, const char *v,
         unsigned int size)
 {
     VObject *prop;
@@ -444,7 +440,7 @@ DLLEXPORT(VObject*) addPropSizedValue_(VObject *o, const char *p, const char *v,
     return prop;
 }
 
-DLLEXPORT(VObject*) addPropSizedValue(VObject *o, const char *p, const char *v,
+VObject* addPropSizedValue(VObject *o, const char *p, const char *v,
         unsigned int size)
 {
     return addPropSizedValue_(o,p,dupStr(v,size),size);
@@ -545,7 +541,7 @@ void printVObject(FILE *fp,VObject *o)
     printVObject_(fp,o,0);
 }
 
-DLLEXPORT(void) printVObjectToFile(char *fname,VObject *o)
+void printVObjectToFile(char *fname,VObject *o)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -554,7 +550,7 @@ DLLEXPORT(void) printVObjectToFile(char *fname,VObject *o)
         }
 }
 
-DLLEXPORT(void) printVObjectsToFile(char *fname,VObject *list)
+void printVObjectsToFile(char *fname,VObject *list)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -566,7 +562,7 @@ DLLEXPORT(void) printVObjectsToFile(char *fname,VObject *list)
         }
 }
 
-DLLEXPORT(void) cleanVObject(VObject *o)
+void cleanVObject(VObject *o)
 {
     if (o == 0) return;
     if (o->prop) {
@@ -600,7 +596,7 @@ DLLEXPORT(void) cleanVObject(VObject *o)
     deleteVObject(o);
 }
 
-DLLEXPORT(void) cleanVObjects(VObject *list)
+void cleanVObjects(VObject *list)
 {
     while (list) {
         VObject *t = list;
@@ -627,13 +623,13 @@ static unsigned int hashStr(const char *s)
     return h % STRTBLSIZE;
 }
 
-DLLEXPORT(const char*) lookupStr(const char *s)
+const char* lookupStr(const char *s)
 {
     StrItem *t;
     unsigned int h = hashStr(s);
     if ((t = strTbl[h]) != 0) {
         do {
-            if (stricmp(t->s,s) == 0) {
+            if (strcasecmp(t->s,s) == 0) {
                 t->refCnt++;
                 return t->s;
                 }
@@ -645,14 +641,14 @@ DLLEXPORT(const char*) lookupStr(const char *s)
     return s;
 }
 
-DLLEXPORT(void) unUseStr(const char *s)
+void unUseStr(const char *s)
 {
     StrItem *t, *p;
     unsigned int h = hashStr(s);
     if ((t = strTbl[h]) != 0) {
         p = t;
         do {
-            if (stricmp(t->s,s) == 0) {
+            if (strcasecmp(t->s,s) == 0) {
                 t->refCnt--;
                 if (t->refCnt == 0) {
                     if (p == strTbl[h]) {
@@ -672,7 +668,7 @@ DLLEXPORT(void) unUseStr(const char *s)
         }
 }
 
-DLLEXPORT(void) cleanStrTbl()
+void cleanStrTbl()
 {
     int i;
     for (i=0; i<STRTBLSIZE;i++) {
@@ -934,7 +930,7 @@ static const struct PreDefProp* lookupPropInfo(const char* str)
     int i;
 
     for (i = 0; propNames[i].name; i++)
-        if (stricmp(str, propNames[i].name) == 0) {
+        if (strcasecmp(str, propNames[i].name) == 0) {
             return &propNames[i];
             }
 
@@ -942,12 +938,12 @@ static const struct PreDefProp* lookupPropInfo(const char* str)
 }
 
 
-DLLEXPORT(const char*) lookupProp_(const char* str)
+const char* lookupProp_(const char* str)
 {
     int i;
 
     for (i = 0; propNames[i].name; i++)
-        if (stricmp(str, propNames[i].name) == 0) {
+        if (strcasecmp(str, propNames[i].name) == 0) {
             const char* s;
             s = propNames[i].alias?propNames[i].alias:propNames[i].name;
             return lookupStr(s);
@@ -956,12 +952,12 @@ DLLEXPORT(const char*) lookupProp_(const char* str)
 }
 
 
-DLLEXPORT(const char*) lookupProp(const char* str)
+const char* lookupProp(const char* str)
 {
     int i;
 
     for (i = 0; propNames[i].name; i++)
-        if (stricmp(str, propNames[i].name) == 0) {
+        if (strcasecmp(str, propNames[i].name) == 0) {
             const char *s;
             fieldedProp = propNames[i].fields;
             s = propNames[i].alias?propNames[i].alias:propNames[i].name;
@@ -1262,7 +1258,7 @@ static int inList(const char **list, const char *s)
 {
     if (list == 0) return 0;
     while (*list) {
-        if (stricmp(*list,s) == 0) return 1;
+        if (strcasecmp(*list,s) == 0) return 1;
         list++;
         }
     return 0;
@@ -1290,9 +1286,9 @@ static void writeProp(OFile *fp, VObject *o)
             const char *s;
             VObject *eachProp = nextVObject(&t);
             s = NAME_OF(eachProp);
-            if (stricmp(VCGroupingProp,s) && !inList(fields_,s))
+            if (strcasecmp(VCGroupingProp,s) && !inList(fields_,s))
                 writeAttrValue(fp,eachProp);
-            if (stricmp(VCQPProp,s)==0 || stricmp(VCQuotedPrintableProp,s)==0)
+            if (strcasecmp(VCQPProp,s)==0 || strcasecmp(VCQuotedPrintableProp,s)==0)
                  isQuoted=1;
             }
         if (fields_) {
@@ -1357,7 +1353,7 @@ void writeVObject(FILE *fp, VObject *o)
     writeVObject_(&ofp,o);
 }
 
-DLLEXPORT(void) writeVObjectToFile(char *fname, VObject *o)
+void writeVObjectToFile(char *fname, VObject *o)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -1366,7 +1362,7 @@ DLLEXPORT(void) writeVObjectToFile(char *fname, VObject *o)
         }
 }
 
-DLLEXPORT(void) writeVObjectsToFile(char *fname, VObject *list)
+void writeVObjectsToFile(char *fname, VObject *list)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -1378,7 +1374,7 @@ DLLEXPORT(void) writeVObjectsToFile(char *fname, VObject *list)
         }
 }
 
-DLLEXPORT(char*) writeMemVObject(char *s, int *len, VObject *o)
+char* writeMemVObject(char *s, int *len, VObject *o)
 {
     OFile ofp;
     initMemOFile(&ofp,s,len?*len:0);
@@ -1388,7 +1384,7 @@ DLLEXPORT(char*) writeMemVObject(char *s, int *len, VObject *o)
     return ofp.s;
 }
 
-DLLEXPORT(char*) writeMemVObjects(char *s, int *len, VObject *list)
+char* writeMemVObjects(char *s, int *len, VObject *list)
 {
     OFile ofp;
     initMemOFile(&ofp,s,len?*len:0);
@@ -1404,7 +1400,7 @@ DLLEXPORT(char*) writeMemVObjects(char *s, int *len, VObject *list)
 /*----------------------------------------------------------------------
   APIs to do fake Unicode stuff.
   ----------------------------------------------------------------------*/
-DLLEXPORT(wchar_t*) fakeUnicode(const char *ps, size_t *bytes)
+wchar_t* fakeUnicode(const char *ps, size_t *bytes)
 {
     wchar_t *r, *pw;
     size_t len = strlen(ps)+1;
@@ -1427,14 +1423,14 @@ DLLEXPORT(wchar_t*) fakeUnicode(const char *ps, size_t *bytes)
     return r;
 }
 
-DLLEXPORT(int) uStrLen(const wchar_t *u)
+int uStrLen(const wchar_t *u)
 {
     int i = 0;
     while (*u != (wchar_t)0) { u++; i++; }
     return i;
 }
 
-DLLEXPORT(char*) fakeCString(const wchar_t *u)
+char* fakeCString(const wchar_t *u)
 {
     char *s, *t;
     int len = uStrLen(u) + 1;

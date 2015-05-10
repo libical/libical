@@ -2,8 +2,6 @@
  FILE: icalclassify.h
  CREATOR: eric 21 Aug 2000
 
-
-
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
@@ -18,7 +16,6 @@
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-
  =========================================================================*/
 
 #ifndef ICALCLASSIFY_H
@@ -28,13 +25,12 @@
 #include "icalset.h"
 #include "icalcomponent.h"
 
-LIBICAL_ICALSS_EXPORT icalproperty_xlicclass icalclassify(icalcomponent* c,
-                                                          icalcomponent* match,
-                                                          const char* user);
+LIBICAL_ICALSS_EXPORT icalproperty_xlicclass icalclassify(icalcomponent * c,
+                                                          icalcomponent * match, const char *user);
 
-LIBICAL_ICALSS_EXPORT icalcomponent* icalclassify_find_overlaps(icalset* set, icalcomponent* comp);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalclassify_find_overlaps(icalset * set,
+                                                                icalcomponent * comp);
 
-char* icalclassify_class_to_string(icalproperty_xlicclass c);
+LIBICAL_ICALSS_EXPORT char *icalclassify_class_to_string(icalproperty_xlicclass c);
 
-
-#endif /* ICALCLASSIFY_H*/
+#endif /* ICALCLASSIFY_H */

@@ -29,20 +29,21 @@
 
 struct icalperiodtype
 {
-        struct icaltimetype start;
-        struct icaltimetype end;
-        struct icaldurationtype duration;
+    struct icaltimetype start;
+    struct icaltimetype end;
+    struct icaldurationtype duration;
 };
 
-LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_from_string (const char* str);
+LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_from_string(const char *str);
 
-LIBICAL_ICAL_EXPORT const char* icalperiodtype_as_ical_string(struct icalperiodtype p);
-char* icalperiodtype_as_ical_string_r(struct icalperiodtype p);
+LIBICAL_ICAL_EXPORT const char *icalperiodtype_as_ical_string(struct icalperiodtype p);
+
+LIBICAL_ICAL_EXPORT char *icalperiodtype_as_ical_string_r(struct icalperiodtype p);
 
 LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_null_period(void);
 
-int icalperiodtype_is_null_period(struct icalperiodtype p);
+LIBICAL_ICAL_EXPORT int icalperiodtype_is_null_period(struct icalperiodtype p);
 
-int icalperiodtype_is_valid_period(struct icalperiodtype p);
+LIBICAL_ICAL_EXPORT int icalperiodtype_is_valid_period(struct icalperiodtype p);
 
 #endif /* !ICALTIME_H */

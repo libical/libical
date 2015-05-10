@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Authors :
  *  Chenthill Palanisamy <pchenthill@novell.com>
@@ -23,6 +22,7 @@
 #ifndef ICALTZUTIL_H
 #define ICALTZUTIL_H
 
+#include "libical_ical_export.h"
 #include "icalcomponent.h"
 
 #if defined(sun) && defined(__SVR4)
@@ -31,7 +31,8 @@
 #define ZONES_TAB_SYSTEM_FILENAME "zone.tab"
 #endif
 
-const char *icaltzutil_get_zone_directory (void);
-icalcomponent *icaltzutil_fetch_timezone (const char *location);
+LIBICAL_ICAL_EXPORT const char *icaltzutil_get_zone_directory(void);
+
+LIBICAL_ICAL_EXPORT icalcomponent *icaltzutil_fetch_timezone(const char *location);
 
 #endif

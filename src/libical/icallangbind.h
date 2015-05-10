@@ -24,33 +24,45 @@
 #include "icalcomponent.h"
 #include "icalproperty.h"
 
-int* icallangbind_new_array(int size);
-void icallangbind_free_array(int* array);
-int icallangbind_access_array(int* array, int index);
-icalproperty* icallangbind_get_property(icalcomponent *c, int n, const char* prop);
-const char* icallangbind_get_property_val(icalproperty* p);
-const char* icallangbind_get_parameter(icalproperty *p, const char* parameter);
-icalcomponent* icallangbind_get_component(icalcomponent *c, const char* comp);
+LIBICAL_ICAL_EXPORT int *icallangbind_new_array(int size);
 
-LIBICAL_ICAL_EXPORT icalproperty* icallangbind_get_first_property(icalcomponent *c, const char* prop);
+LIBICAL_ICAL_EXPORT void icallangbind_free_array(int *array);
 
-LIBICAL_ICAL_EXPORT icalproperty* icallangbind_get_next_property(icalcomponent *c, const char* prop);
+LIBICAL_ICAL_EXPORT int icallangbind_access_array(int *array, int index);
 
-icalcomponent* icallangbind_get_first_component(icalcomponent *c, const char* comp);
+LIBICAL_ICAL_EXPORT icalproperty *icallangbind_get_property(icalcomponent * c,
+                                                            int n, const char *prop);
 
-icalcomponent* icallangbind_get_next_component(icalcomponent *c, const char* comp);
+LIBICAL_ICAL_EXPORT const char *icallangbind_get_property_val(icalproperty * p);
 
-icalparameter* icallangbind_get_first_parameter(icalproperty *prop);
+LIBICAL_ICAL_EXPORT const char *icallangbind_get_parameter(icalproperty * p, const char *parameter);
 
-icalparameter* icallangbind_get_next_parameter(icalproperty *prop);
+LIBICAL_ICAL_EXPORT icalcomponent *icallangbind_get_component(icalcomponent * c, const char *comp);
 
-LIBICAL_ICAL_EXPORT const char* icallangbind_property_eval_string(icalproperty* prop, char* sep);
-char* icallangbind_property_eval_string_r(icalproperty* prop, char* sep);
+LIBICAL_ICAL_EXPORT icalproperty *icallangbind_get_first_property(icalcomponent * c,
+                                                                  const char *prop);
 
+LIBICAL_ICAL_EXPORT icalproperty *icallangbind_get_next_property(icalcomponent * c,
+                                                                 const char *prop);
 
-int icallangbind_string_to_open_flag(const char* str);
+LIBICAL_ICAL_EXPORT icalcomponent *icallangbind_get_first_component(icalcomponent * c,
+                                                                    const char *comp);
 
-const char* icallangbind_quote_as_ical(const char* str);
-char* callangbind_quote_as_ical_r(const char* str);
+LIBICAL_ICAL_EXPORT icalcomponent *icallangbind_get_next_component(icalcomponent * c,
+                                                                   const char *comp);
+
+LIBICAL_ICAL_EXPORT icalparameter *icallangbind_get_first_parameter(icalproperty * prop);
+
+LIBICAL_ICAL_EXPORT icalparameter *icallangbind_get_next_parameter(icalproperty * prop);
+
+LIBICAL_ICAL_EXPORT const char *icallangbind_property_eval_string(icalproperty * prop, char *sep);
+
+LIBICAL_ICAL_EXPORT char *icallangbind_property_eval_string_r(icalproperty * prop, char *sep);
+
+LIBICAL_ICAL_EXPORT int icallangbind_string_to_open_flag(const char *str);
+
+LIBICAL_ICAL_EXPORT const char *icallangbind_quote_as_ical(const char *str);
+
+LIBICAL_ICAL_EXPORT char *callangbind_quote_as_ical_r(const char *str);
 
 #endif

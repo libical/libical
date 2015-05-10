@@ -43,16 +43,17 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #include "vobject.h"
 
 #if defined(__CPLUSPLUS__) || defined(__cplusplus)
-extern "C" {
+extern "C"
+{
 #endif
 
-typedef void (*MimeErrorHandler)(char *);
+    typedef void (*MimeErrorHandler) (char *);
 
-extern DLLEXPORT(void) registerMimeErrorHandler(MimeErrorHandler);
+    LIBICAL_VCAL_EXPORT void registerMimeErrorHandler(MimeErrorHandler);
 
-extern DLLEXPORT(VObject*) Parse_MIME(const char *input, unsigned long len);
-LIBICAL_VCAL_EXPORT VObject *Parse_MIME_FromFileName(char* fname);
+    LIBICAL_VCAL_EXPORT VObject *Parse_MIME(const char *input, unsigned long len);
 
+    LIBICAL_VCAL_EXPORT VObject *Parse_MIME_FromFileName(char *fname);
 
 /* NOTE regarding Parse_MIME_FromFile
 The function above, Parse_MIME_FromFile, comes in two flavors,
@@ -65,15 +66,15 @@ that take a file name. If you use them with the DLL LIB you
 will get a link error.
 */
 
-
 #ifdef INCLUDEMFC
-LIBICAL_VCAL_EXPORT VObject* Parse_MIME_FromFile(CFile *file);
+    LIBICAL_VCAL_EXPORT VObject *Parse_MIME_FromFile(CFile * file);
 #else
-LIBICAL_VCAL_EXPORT VObject* Parse_MIME_FromFile(FILE *file);
+    LIBICAL_VCAL_EXPORT VObject *Parse_MIME_FromFile(FILE * file);
 #endif
 
 #if defined(__CPLUSPLUS__) || defined(__cplusplus)
 }
+
 #endif
 
 #endif /* VCC_H */

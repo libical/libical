@@ -28,7 +28,8 @@
 #include "libical_ical_export.h"
 
 typedef struct _icalarray icalarray;
-struct _icalarray {
+struct _icalarray
+{
     size_t element_size;
     size_t increment_size;
     size_t num_elements;
@@ -36,18 +37,19 @@ struct _icalarray {
     void **chunks;
 };
 
-icalarray *icalarray_new(size_t element_size, size_t increment_size);
+LIBICAL_ICAL_EXPORT icalarray *icalarray_new(size_t element_size, size_t increment_size);
 
-icalarray *icalarray_copy(icalarray *array);
+LIBICAL_ICAL_EXPORT icalarray *icalarray_copy(icalarray * array);
 
-void icalarray_free(icalarray *array);
+LIBICAL_ICAL_EXPORT void icalarray_free(icalarray * array);
 
-void icalarray_append(icalarray *array, const void *element);
+LIBICAL_ICAL_EXPORT void icalarray_append(icalarray * array, const void *element);
 
-void icalarray_remove_element_at(icalarray *array, size_t position);
+LIBICAL_ICAL_EXPORT void icalarray_remove_element_at(icalarray * array, size_t position);
 
-LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray *array, size_t position);
+LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray * array, size_t position);
 
-void icalarray_sort(icalarray *array, int (*compare)(const void *, const void *));
+LIBICAL_ICAL_EXPORT void icalarray_sort(icalarray * array,
+                                        int (*compare) (const void *, const void *));
 
 #endif /* ICALARRAY_H */

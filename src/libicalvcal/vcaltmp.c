@@ -51,11 +51,13 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 
 ***************************************************************************/
 
-#include "vcaltmp.h"
-#include <stdio.h>
-#include <string.h>
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
-DLLEXPORT(VObject*) vcsCreateVCal(
+#include "vcaltmp.h"
+
+VObject* vcsCreateVCal(
         char *date_created,
         char *location,
         char *product_id,
@@ -75,7 +77,7 @@ DLLEXPORT(VObject*) vcsCreateVCal(
     }
 
 
-DLLEXPORT(VObject*) vcsAddEvent(
+VObject* vcsAddEvent(
         VObject *vcal,
         char *start_date_time,
         char *end_date_time,
@@ -110,7 +112,7 @@ DLLEXPORT(VObject*) vcsAddEvent(
     }
 
 
-DLLEXPORT(VObject*) vcsAddTodo(
+VObject* vcsAddTodo(
         VObject *vcal,
         char *start_date_time,
         char *due_date_time,
@@ -145,7 +147,7 @@ DLLEXPORT(VObject*) vcsAddTodo(
     }
 
 
-DLLEXPORT(VObject*) vcsAddAAlarm(
+VObject* vcsAddAAlarm(
         VObject *vevent,
         char *run_time,
         char *snooze_time,
@@ -164,7 +166,7 @@ DLLEXPORT(VObject*) vcsAddAAlarm(
     }
 
 
-DLLEXPORT(VObject*) vcsAddMAlarm(
+VObject* vcsAddMAlarm(
         VObject *vevent,
         char *run_time,
         char *snooze_time,
@@ -185,7 +187,7 @@ DLLEXPORT(VObject*) vcsAddMAlarm(
     }
 
 
-DLLEXPORT(VObject*) vcsAddDAlarm(
+VObject* vcsAddDAlarm(
         VObject *vevent,
         char *run_time,
         char *snooze_time,
@@ -204,7 +206,7 @@ DLLEXPORT(VObject*) vcsAddDAlarm(
     }
 
 
-DLLEXPORT(VObject*) vcsAddPAlarm(
+VObject* vcsAddPAlarm(
         VObject *vevent,
         char *run_time,
         char *snooze_time,

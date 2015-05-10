@@ -34,7 +34,8 @@
 
 #include "libical_ical_export.h"
 
-enum sspm_major_type {
+enum sspm_major_type
+{
     SSPM_NO_MAJOR_TYPE,
     SSPM_TEXT_MAJOR_TYPE,
     SSPM_IMAGE_MAJOR_TYPE,
@@ -46,7 +47,8 @@ enum sspm_major_type {
     SSPM_UNKNOWN_MAJOR_TYPE
 };
 
-enum sspm_minor_type {
+enum sspm_minor_type
+{
     SSPM_NO_MINOR_TYPE,
     SSPM_ANY_MINOR_TYPE,
     SSPM_PLAIN_MINOR_TYPE,
@@ -60,7 +62,8 @@ enum sspm_minor_type {
     SSPM_UNKNOWN_MINOR_TYPE
 };
 
-enum sspm_encoding {
+enum sspm_encoding
+{
     SSPM_NO_ENCODING,
     SSPM_QUOTED_PRINTABLE_ENCODING,
     SSPM_8BIT_ENCODING,
@@ -70,7 +73,8 @@ enum sspm_encoding {
     SSPM_UNKNOWN_ENCODING
 };
 
-enum sspm_error {
+enum sspm_error
+{
     SSPM_NO_ERROR,
     SSPM_UNEXPECTED_BOUNDARY_ERROR,
     SSPM_WRONG_BOUNDARY_ERROR,
@@ -79,7 +83,8 @@ enum sspm_error {
     SSPM_MALFORMED_HEADER_ERROR
 };
 
-struct sspm_header {
+struct sspm_header
+{
     int def;
     char *boundary;
     enum sspm_major_type major;
@@ -94,21 +99,22 @@ struct sspm_header {
     char *error_text;
 };
 
-struct sspm_part {
+struct sspm_part
+{
     struct sspm_header header;
     int level;
     size_t data_size;
     void *data;
 };
 
-struct sspm_action_map {
+struct sspm_action_map
+{
     enum sspm_major_type major;
     enum sspm_minor_type minor;
-    void *(*new_part)(void);
-    void (*add_line)(void *part, struct sspm_header *header,
-                     const char *line, size_t size);
-    void *(*end_part)(void *part);
-    void (*free_part)(void *part);
+    void *(*new_part) (void);
+    void (*add_line) (void *part, struct sspm_header * header, const char *line, size_t size);
+    void *(*end_part) (void *part);
+    void (*free_part) (void *part);
 };
 
 LIBICAL_ICAL_EXPORT const char *sspm_major_type_string(enum sspm_major_type type);
@@ -120,19 +126,14 @@ LIBICAL_ICAL_EXPORT const char *sspm_encoding_string(enum sspm_encoding type);
 LIBICAL_ICAL_EXPORT int sspm_parse_mime(struct sspm_part *parts,
                                         size_t max_parts,
                                         const struct sspm_action_map *actions,
-                                        char *(*get_string)(char *s, size_t size, void *data),
-                                        void *get_string_data,
-                                        struct sspm_header *first_header);
+                                        char *(*get_string) (char *s, size_t size, void *data),
+                                        void *get_string_data, struct sspm_header *first_header);
 
 LIBICAL_ICAL_EXPORT void sspm_free_parts(struct sspm_part *parts, size_t max_parts);
 
-LIBICAL_ICAL_EXPORT char *decode_quoted_printable(char *dest,
-        char *src,
-        size_t *size);
+LIBICAL_ICAL_EXPORT char *decode_quoted_printable(char *dest, char *src, size_t * size);
 
-LIBICAL_ICAL_EXPORT char *decode_base64(char *dest,
-                                        char *src,
-                                        size_t *size);
+LIBICAL_ICAL_EXPORT char *decode_base64(char *dest, char *src, size_t * size);
 
 LIBICAL_ICAL_EXPORT int sspm_write_mime(struct sspm_part *parts, size_t num_parts,
                                         char **output_string, const char *header);

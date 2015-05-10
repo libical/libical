@@ -30,25 +30,24 @@
 #include "icalproperty.h"
 
 /* These must stay in this order for icalrestriction_compare to work */
-typedef enum icalrestriction_kind {
-    ICAL_RESTRICTION_NONE=0,            /* 0 */
-    ICAL_RESTRICTION_ZERO,              /* 1 */
-    ICAL_RESTRICTION_ONE,               /* 2 */
-    ICAL_RESTRICTION_ZEROPLUS,          /* 3 */
-    ICAL_RESTRICTION_ONEPLUS,           /* 4 */
-    ICAL_RESTRICTION_ZEROORONE,         /* 5 */
-    ICAL_RESTRICTION_ONEEXCLUSIVE,      /* 6 */
-    ICAL_RESTRICTION_ONEMUTUAL,         /* 7 */
-    ICAL_RESTRICTION_UNKNOWN            /* 8 */
+typedef enum icalrestriction_kind
+{
+    ICAL_RESTRICTION_NONE = 0, /* 0 */
+    ICAL_RESTRICTION_ZERO, /* 1 */
+    ICAL_RESTRICTION_ONE, /* 2 */
+    ICAL_RESTRICTION_ZEROPLUS, /* 3 */
+    ICAL_RESTRICTION_ONEPLUS, /* 4 */
+    ICAL_RESTRICTION_ZEROORONE, /* 5 */
+    ICAL_RESTRICTION_ONEEXCLUSIVE, /* 6 */
+    ICAL_RESTRICTION_ONEMUTUAL, /* 7 */
+    ICAL_RESTRICTION_UNKNOWN    /* 8 */
 } icalrestriction_kind;
 
-int icalrestriction_compare(icalrestriction_kind restr, int count);
+LIBICAL_ICAL_EXPORT int icalrestriction_compare(icalrestriction_kind restr, int count);
 
+LIBICAL_ICAL_EXPORT int icalrestriction_is_parameter_allowed(icalproperty_kind property,
+                                                             icalparameter_kind parameter);
 
-int icalrestriction_is_parameter_allowed(icalproperty_kind property,
-                                         icalparameter_kind parameter);
-
-LIBICAL_ICAL_EXPORT int icalrestriction_check(icalcomponent* comp);
-
+LIBICAL_ICAL_EXPORT int icalrestriction_check(icalcomponent * comp);
 
 #endif /* !ICALRESTRICTION_H */
