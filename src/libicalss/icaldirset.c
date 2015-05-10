@@ -66,7 +66,7 @@
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/
-icaldirset_options icaldirset_options_default = {O_RDWR | O_CREAT};
+static icaldirset_options icaldirset_options_default = {O_RDWR | O_CREAT};
 
 const char *icaldirset_path(icalset *set)
 {

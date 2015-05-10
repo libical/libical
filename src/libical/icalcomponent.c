@@ -1250,7 +1250,7 @@ void icalcomponent_set_parent(icalcomponent* component, icalcomponent* parent)
    component->parent = parent;
 }
 
-icalcompiter icalcompiter_null = {ICAL_NO_COMPONENT,0};
+static icalcompiter icalcompiter_null = {ICAL_NO_COMPONENT,0};
 
 
 struct icalcomponent_kind_map {

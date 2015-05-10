@@ -53,8 +53,8 @@ enum datatype {
 };
 
 /* The indices must match between the strings and the codes. */
-char *weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
-int weekday_codes[] = {
+static char *weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
+static int weekday_codes[] = {
   ICAL_SUNDAY_WEEKDAY,
   ICAL_MONDAY_WEEKDAY,
   ICAL_TUESDAY_WEEKDAY,

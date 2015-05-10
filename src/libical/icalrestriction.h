@@ -45,9 +45,6 @@ typedef enum icalrestriction_kind
 
 LIBICAL_ICAL_EXPORT int icalrestriction_compare(icalrestriction_kind restr, int count);
 
-LIBICAL_ICAL_EXPORT int icalrestriction_is_parameter_allowed(icalproperty_kind property,
-                                                             icalparameter_kind parameter);
-
 LIBICAL_ICAL_EXPORT int icalrestriction_check(icalcomponent *comp);
 
 #endif /* !ICALRESTRICTION_H */

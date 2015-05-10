@@ -58,7 +58,7 @@ static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
 /** The prefix we use to uniquely identify TZIDs.
     It must begin and end with forward slashes.
  */
-const char *ical_tzid_prefix =  "/freeassociation.sourceforge.net/";
+const char *ical_tzid_prefix = "/freeassociation.sourceforge.net/"; /*FIXME*. should be static*/
 
 /** This is the filename of the file containing the city names and
     coordinates of all the builtin timezones. */

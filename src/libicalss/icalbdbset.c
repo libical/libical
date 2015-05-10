@@ -38,7 +38,8 @@ int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method);
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b);
 
 /** Default options used when NULL is passed to icalset_new() **/
-icalbdbset_options icalbdbset_options_default = {ICALBDB_EVENTS, DB_BTREE, 0644, 0, NULL, NULL};
+static icalbdbset_options icalbdbset_options_default =
+  {ICALBDB_EVENTS, DB_BTREE, 0644, 0, NULL, NULL};
 
 static DB_ENV *ICAL_DB_ENV = 0;
 
