@@ -47,13 +47,13 @@ typedef enum icalparser_state
 
 LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalparser_add_line(icalparser * parser, char *str);
+LIBICAL_ICAL_EXPORT icalcomponent *icalparser_add_line(icalparser *parser, char *str);
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalparser_clean(icalparser * parser);
+LIBICAL_ICAL_EXPORT icalcomponent *icalparser_clean(icalparser *parser);
 
-LIBICAL_ICAL_EXPORT icalparser_state icalparser_get_state(icalparser * parser);
+LIBICAL_ICAL_EXPORT icalparser_state icalparser_get_state(icalparser *parser);
 
-LIBICAL_ICAL_EXPORT void icalparser_free(icalparser * parser);
+LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
 
 /**
  * Message oriented parsing.  icalparser_parse takes a string that
@@ -62,7 +62,7 @@ LIBICAL_ICAL_EXPORT void icalparser_free(icalparser * parser);
  * pointer to a function that returns one content line per invocation
  */
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse(icalparser * parser,
+LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse(icalparser *parser,
                                                     char *(*line_gen_func) (char *s,
                                                                             size_t size, void *d));
 
@@ -70,7 +70,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse(icalparser * parser,
    Set the data that icalparser_parse will give to the line_gen_func
    as the parameter 'd'
  */
-LIBICAL_ICAL_EXPORT void icalparser_set_gen_data(icalparser * parser, void *data);
+LIBICAL_ICAL_EXPORT void icalparser_set_gen_data(icalparser *parser, void *data);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
 
@@ -83,7 +83,7 @@ LIBICAL_ICAL_EXPORT icalvalue *icalparser_parse_value(icalvalue_kind kind,
                                                       const char *str, icalcomponent ** errors);
 
 /** Given a line generator function, return a single iCal content line.*/
-LIBICAL_ICAL_EXPORT char *icalparser_get_line(icalparser * parser,
+LIBICAL_ICAL_EXPORT char *icalparser_get_line(icalparser *parser,
                                               char *(*line_gen_func) (char *s,
                                                                       size_t size, void *d));
 

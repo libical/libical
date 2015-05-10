@@ -37,9 +37,9 @@ struct _icalvcal_defaults
 
 /* Convert a vObject into an icalcomponent */
 
-LIBICAL_VCAL_EXPORT icalcomponent *icalvcal_convert(VObject * object);
+LIBICAL_VCAL_EXPORT icalcomponent *icalvcal_convert(VObject *object);
 
-LIBICAL_VCAL_EXPORT icalcomponent *icalvcal_convert_with_defaults(VObject * object,
+LIBICAL_VCAL_EXPORT icalcomponent *icalvcal_convert_with_defaults(VObject *object,
                                                                   icalvcal_defaults * defaults);
 
 #endif /* !ICALVCAL_H */

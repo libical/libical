@@ -32,38 +32,38 @@ typedef struct icalspanlist_impl icalspanlist;
  * Make a free list from a set of component. Start and end should be in UTC
  */
 
-LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_new(icalset * set,
+LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_new(icalset *set,
                                                      struct icaltimetype start,
                                                      struct icaltimetype end);
 
 /** @brief Destructor
  */
-LIBICAL_ICALSS_EXPORT void icalspanlist_free(icalspanlist * spl);
+LIBICAL_ICALSS_EXPORT void icalspanlist_free(icalspanlist *spl);
 
 /* Unimplemented functions */
-LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_make_free_list(icalspanlist * sl);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_make_free_list(icalspanlist *sl);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_make_busy_list(icalspanlist * sl);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_make_busy_list(icalspanlist *sl);
 
 /** Get first next free time after time t. all times are in UTC. */
-LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_free_time(icalspanlist * sl,
+LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl,
                                                                         struct icaltimetype t);
 
 /** Get first next busy time after time t. all times are in UTC. */
-LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_busy_time(icalspanlist * sl,
+LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_busy_time(icalspanlist *sl,
                                                                         struct icaltimetype t);
 
-LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist * s);
+LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist *s);
 
 /** @brief Return a valid VFREEBUSY component for this span */
-LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist * s_in,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *s_in,
                                                                const char *organizer,
                                                                const char *attendee);
 
 /** @brief Return an integer matrix of total events per delta_t timespan */
-LIBICAL_ICALSS_EXPORT int *icalspanlist_as_freebusy_matrix(icalspanlist * span, int delta_t);
+LIBICAL_ICALSS_EXPORT int *icalspanlist_as_freebusy_matrix(icalspanlist *span, int delta_t);
 
 /** @brief Construct an icalspanlist from a VFREEBUSY component */
-LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_from_vfreebusy(icalcomponent * c);
+LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *c);
 
 #endif

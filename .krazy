@@ -3,6 +3,9 @@ CHECKSETS foss,c++
 EXTRA crud,camelcase
 #EXTRA style
 
+#Skip foo_export.h
+SKIP libical_.*_export\.h
+
 #Skip ancient Apple files
 SKIP /src/libicalvcal/port\.h
 SKIP /src/libicalvcal/vcaltmp\.

@@ -27,12 +27,11 @@
 
 #include "libical_ical_export.h"
 
-LIBICAL_ICAL_EXPORT void* icalmemory_tmp_buffer(size_t size);
-LIBICAL_ICAL_EXPORT char* icalmemory_tmp_copy(const char* str);
+LIBICAL_ICAL_EXPORT void *icalmemory_tmp_buffer(size_t size);
+LIBICAL_ICAL_EXPORT char *icalmemory_tmp_copy(const char *str);
 
 /** Add an externally allocated buffer to the ring. */
-LIBICAL_ICAL_EXPORT void  icalmemory_add_tmp_buffer(void*);
-
+LIBICAL_ICAL_EXPORT void icalmemory_add_tmp_buffer(void *);
 
 /** Free all memory used in the ring */
 LIBICAL_ICAL_EXPORT void icalmemory_free_ring(void);
@@ -41,9 +40,9 @@ LIBICAL_ICAL_EXPORT void icalmemory_free_ring(void);
  * malloc, etc, but are used so the caller can change the memory
  * allocators in a future version of the library */
 
-LIBICAL_ICAL_EXPORT void* icalmemory_new_buffer(size_t size);
-LIBICAL_ICAL_EXPORT void* icalmemory_resize_buffer(void* buf, size_t size);
-LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void* buf);
+LIBICAL_ICAL_EXPORT void *icalmemory_new_buffer(size_t size);
+LIBICAL_ICAL_EXPORT void *icalmemory_resize_buffer(void *buf, size_t size);
+LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void *buf);
 
 /**
    icalmemory_append_string will copy the string 'string' to the
@@ -59,15 +58,14 @@ LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void* buf);
    buffer on the ring, the ring will loose track of it an you will
    have memory problems. */
 
-LIBICAL_ICAL_EXPORT void icalmemory_append_string(char** buf, char** pos, size_t* buf_size,
-                                                  const char* string);
+LIBICAL_ICAL_EXPORT void icalmemory_append_string(char **buf, char **pos, size_t *buf_size,
+                                                  const char *string);
 
 /**  icalmemory_append_char is similar, but is appends a character instead of a string */
-LIBICAL_ICAL_EXPORT void icalmemory_append_char(char** buf, char** pos,
-                                                size_t* buf_size, char ch);
+LIBICAL_ICAL_EXPORT void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch);
 
 /** A wrapper around strdup. Partly to trap calls to strdup, partly
     because in -ansi, gcc on Red Hat claims that strdup is undeclared */
-LIBICAL_ICAL_EXPORT char* icalmemory_strdup(const char *s);
+LIBICAL_ICAL_EXPORT char *icalmemory_strdup(const char *s);
 
 #endif /* !ICALMEMORY_H */

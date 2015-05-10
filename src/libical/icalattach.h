@@ -31,15 +31,15 @@ LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_data(const char *data,
                                                          icalattach_free_fn_t free_fn,
                                                          void *free_fn_data);
 
-LIBICAL_ICAL_EXPORT void icalattach_ref(icalattach * attach);
+LIBICAL_ICAL_EXPORT void icalattach_ref(icalattach *attach);
 
-LIBICAL_ICAL_EXPORT void icalattach_unref(icalattach * attach);
+LIBICAL_ICAL_EXPORT void icalattach_unref(icalattach *attach);
 
-LIBICAL_ICAL_EXPORT int icalattach_get_is_url(icalattach * attach);
+LIBICAL_ICAL_EXPORT int icalattach_get_is_url(icalattach *attach);
 
-LIBICAL_ICAL_EXPORT const char *icalattach_get_url(icalattach * attach);
+LIBICAL_ICAL_EXPORT const char *icalattach_get_url(icalattach *attach);
 
-LIBICAL_ICAL_EXPORT unsigned char *icalattach_get_data(icalattach * attach);
+LIBICAL_ICAL_EXPORT unsigned char *icalattach_get_data(icalattach *attach);
 
 LIBICAL_ICAL_EXPORT struct icalattachtype *icalattachtype_new(void);
 

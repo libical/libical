@@ -25,11 +25,11 @@
 #include "icalset.h"
 #include "icalcomponent.h"
 
-LIBICAL_ICALSS_EXPORT icalproperty_xlicclass icalclassify(icalcomponent * c,
-                                                          icalcomponent * match, const char *user);
+LIBICAL_ICALSS_EXPORT icalproperty_xlicclass icalclassify(icalcomponent *c,
+                                                          icalcomponent *match, const char *user);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalclassify_find_overlaps(icalset * set,
-                                                                icalcomponent * comp);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalclassify_find_overlaps(icalset *set,
+                                                                icalcomponent *comp);
 
 LIBICAL_ICALSS_EXPORT char *icalclassify_class_to_string(icalproperty_xlicclass c);
 

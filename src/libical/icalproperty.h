@@ -29,76 +29,76 @@ LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new(icalproperty_kind kind);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_impl(icalproperty_kind kind);
 
-LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_clone(icalproperty * prop);
+LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_clone(icalproperty *prop);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_from_string(const char *str);
 
-LIBICAL_ICAL_EXPORT const char *icalproperty_as_ical_string(icalproperty * prop);
+LIBICAL_ICAL_EXPORT const char *icalproperty_as_ical_string(icalproperty *prop);
 
-LIBICAL_ICAL_EXPORT char *icalproperty_as_ical_string_r(icalproperty * prop);
+LIBICAL_ICAL_EXPORT char *icalproperty_as_ical_string_r(icalproperty *prop);
 
-LIBICAL_ICAL_EXPORT void icalproperty_free(icalproperty * prop);
+LIBICAL_ICAL_EXPORT void icalproperty_free(icalproperty *prop);
 
-LIBICAL_ICAL_EXPORT icalproperty_kind icalproperty_isa(icalproperty * property);
+LIBICAL_ICAL_EXPORT icalproperty_kind icalproperty_isa(icalproperty *property);
 
 LIBICAL_ICAL_EXPORT int icalproperty_isa_property(void *property);
 
 LIBICAL_ICAL_EXPORT void icalproperty_add_parameters(struct icalproperty_impl *prop, va_list args);
 
-LIBICAL_ICAL_EXPORT void icalproperty_add_parameter(icalproperty * prop, icalparameter * parameter);
+LIBICAL_ICAL_EXPORT void icalproperty_add_parameter(icalproperty *prop, icalparameter *parameter);
 
-LIBICAL_ICAL_EXPORT void icalproperty_set_parameter(icalproperty * prop, icalparameter * parameter);
+LIBICAL_ICAL_EXPORT void icalproperty_set_parameter(icalproperty *prop, icalparameter *parameter);
 
-LIBICAL_ICAL_EXPORT void icalproperty_set_parameter_from_string(icalproperty * prop,
+LIBICAL_ICAL_EXPORT void icalproperty_set_parameter_from_string(icalproperty *prop,
                                                                 const char *name,
                                                                 const char *value);
-LIBICAL_ICAL_EXPORT const char *icalproperty_get_parameter_as_string(icalproperty * prop,
+LIBICAL_ICAL_EXPORT const char *icalproperty_get_parameter_as_string(icalproperty *prop,
                                                                      const char *name);
 
-LIBICAL_ICAL_EXPORT char *icalproperty_get_parameter_as_string_r(icalproperty * prop,
+LIBICAL_ICAL_EXPORT char *icalproperty_get_parameter_as_string_r(icalproperty *prop,
                                                                  const char *name);
 
-LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter(icalproperty * prop,
+LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter(icalproperty *prop,
                                                        icalparameter_kind kind);
 
-LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_kind(icalproperty * prop,
+LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_kind(icalproperty *prop,
                                                                icalparameter_kind kind);
 
-LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_name(icalproperty * prop,
+LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_name(icalproperty *prop,
                                                                const char *name);
 
-LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_ref(icalproperty * prop,
-                                                              icalparameter * param);
+LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_ref(icalproperty *prop,
+                                                              icalparameter *param);
 
-LIBICAL_ICAL_EXPORT int icalproperty_count_parameters(const icalproperty * prop);
+LIBICAL_ICAL_EXPORT int icalproperty_count_parameters(const icalproperty *prop);
 
 /* Iterate through the parameters */
-LIBICAL_ICAL_EXPORT icalparameter *icalproperty_get_first_parameter(icalproperty * prop,
+LIBICAL_ICAL_EXPORT icalparameter *icalproperty_get_first_parameter(icalproperty *prop,
                                                                     icalparameter_kind kind);
-LIBICAL_ICAL_EXPORT icalparameter *icalproperty_get_next_parameter(icalproperty * prop,
+LIBICAL_ICAL_EXPORT icalparameter *icalproperty_get_next_parameter(icalproperty *prop,
                                                                    icalparameter_kind kind);
 /* Access the value of the property */
-LIBICAL_ICAL_EXPORT void icalproperty_set_value(icalproperty * prop, icalvalue * value);
-LIBICAL_ICAL_EXPORT void icalproperty_set_value_from_string(icalproperty * prop, const char *value,
+LIBICAL_ICAL_EXPORT void icalproperty_set_value(icalproperty *prop, icalvalue *value);
+LIBICAL_ICAL_EXPORT void icalproperty_set_value_from_string(icalproperty *prop, const char *value,
                                                             const char *kind);
 
-LIBICAL_ICAL_EXPORT icalvalue *icalproperty_get_value(const icalproperty * prop);
-LIBICAL_ICAL_EXPORT const char *icalproperty_get_value_as_string(const icalproperty * prop);
-LIBICAL_ICAL_EXPORT char *icalproperty_get_value_as_string_r(const icalproperty * prop);
+LIBICAL_ICAL_EXPORT icalvalue *icalproperty_get_value(const icalproperty *prop);
+LIBICAL_ICAL_EXPORT const char *icalproperty_get_value_as_string(const icalproperty *prop);
+LIBICAL_ICAL_EXPORT char *icalproperty_get_value_as_string_r(const icalproperty *prop);
 
-LIBICAL_ICAL_EXPORT void icalvalue_set_parent(icalvalue * value, icalproperty * property);
+LIBICAL_ICAL_EXPORT void icalvalue_set_parent(icalvalue *value, icalproperty *property);
 
 /* Deal with X properties */
 
-LIBICAL_ICAL_EXPORT void icalproperty_set_x_name(icalproperty * prop, const char *name);
-LIBICAL_ICAL_EXPORT const char *icalproperty_get_x_name(icalproperty * prop);
+LIBICAL_ICAL_EXPORT void icalproperty_set_x_name(icalproperty *prop, const char *name);
+LIBICAL_ICAL_EXPORT const char *icalproperty_get_x_name(icalproperty *prop);
 
 /** Return the name of the property -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X
  *  property
  */
-LIBICAL_ICAL_EXPORT const char *icalproperty_get_property_name(const icalproperty * prop);
-LIBICAL_ICAL_EXPORT char *icalproperty_get_property_name_r(const icalproperty * prop);
+LIBICAL_ICAL_EXPORT const char *icalproperty_get_property_name(const icalproperty *prop);
+LIBICAL_ICAL_EXPORT char *icalproperty_get_property_name_r(const icalproperty *prop);
 
 LIBICAL_ICAL_EXPORT icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
 

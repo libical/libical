@@ -48,6 +48,6 @@ LIBICAL_ICAL_EXPORT int icalrestriction_compare(icalrestriction_kind restr, int 
 LIBICAL_ICAL_EXPORT int icalrestriction_is_parameter_allowed(icalproperty_kind property,
                                                              icalparameter_kind parameter);
 
-LIBICAL_ICAL_EXPORT int icalrestriction_check(icalcomponent * comp);
+LIBICAL_ICAL_EXPORT int icalrestriction_check(icalcomponent *comp);
 
 #endif /* !ICALRESTRICTION_H */

@@ -39,17 +39,17 @@ struct _icalarray
 
 LIBICAL_ICAL_EXPORT icalarray *icalarray_new(size_t element_size, size_t increment_size);
 
-LIBICAL_ICAL_EXPORT icalarray *icalarray_copy(icalarray * array);
+LIBICAL_ICAL_EXPORT icalarray *icalarray_copy(icalarray *array);
 
-LIBICAL_ICAL_EXPORT void icalarray_free(icalarray * array);
+LIBICAL_ICAL_EXPORT void icalarray_free(icalarray *array);
 
-LIBICAL_ICAL_EXPORT void icalarray_append(icalarray * array, const void *element);
+LIBICAL_ICAL_EXPORT void icalarray_append(icalarray *array, const void *element);
 
-LIBICAL_ICAL_EXPORT void icalarray_remove_element_at(icalarray * array, size_t position);
+LIBICAL_ICAL_EXPORT void icalarray_remove_element_at(icalarray *array, size_t position);
 
-LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray * array, size_t position);
+LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray *array, size_t position);
 
-LIBICAL_ICAL_EXPORT void icalarray_sort(icalarray * array,
+LIBICAL_ICAL_EXPORT void icalarray_sort(icalarray *array,
                                         int (*compare) (const void *, const void *));
 
 #endif /* ICALARRAY_H */

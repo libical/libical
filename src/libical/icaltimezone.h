@@ -43,11 +43,11 @@ typedef struct _icaltimezone icaltimezone;
 /** Creates a new icaltimezone. */
 LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_new(void);
 
-LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_copy(icaltimezone * originalzone);
+LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_copy(icaltimezone *originalzone);
 
 /** Frees all memory used for the icaltimezone. Set free_struct to free the
    icaltimezone struct as well. */
-LIBICAL_ICAL_EXPORT void icaltimezone_free(icaltimezone * zone, int free_struct);
+LIBICAL_ICAL_EXPORT void icaltimezone_free(icaltimezone *zone, int free_struct);
 
 /** Sets the prefix to be used for tzid's generated from system tzdata.
     Must be globally unique (such as a domain name owned by the developer
@@ -80,40 +80,40 @@ LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(co
 LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_get_utc_timezone(void);
 
 /** Returns the TZID of a timezone. */
-LIBICAL_ICAL_EXPORT const char *icaltimezone_get_tzid(icaltimezone * zone);
+LIBICAL_ICAL_EXPORT const char *icaltimezone_get_tzid(icaltimezone *zone);
 
 /** Returns the city name of a timezone. */
-LIBICAL_ICAL_EXPORT const char *icaltimezone_get_location(icaltimezone * zone);
+LIBICAL_ICAL_EXPORT const char *icaltimezone_get_location(icaltimezone *zone);
 
 /** Returns the TZNAME properties used in the latest STANDARD and DAYLIGHT
    components. If they are the same it will return just one, e.g. "LMT".
    If they are different it will format them like "EST/EDT". Note that this
    may also return NULL. */
-LIBICAL_ICAL_EXPORT const char *icaltimezone_get_tznames(icaltimezone * zone);
+LIBICAL_ICAL_EXPORT const char *icaltimezone_get_tznames(icaltimezone *zone);
 
 /** Returns the latitude of a builtin timezone. */
-LIBICAL_ICAL_EXPORT double icaltimezone_get_latitude(icaltimezone * zone);
+LIBICAL_ICAL_EXPORT double icaltimezone_get_latitude(icaltimezone *zone);
 
 /** Returns the longitude of a builtin timezone. */
-LIBICAL_ICAL_EXPORT double icaltimezone_get_longitude(icaltimezone * zone);
+LIBICAL_ICAL_EXPORT double icaltimezone_get_longitude(icaltimezone *zone);
 
 /** Returns the VTIMEZONE component of a timezone. */
-LIBICAL_ICAL_EXPORT icalcomponent *icaltimezone_get_component(icaltimezone * zone);
+LIBICAL_ICAL_EXPORT icalcomponent *icaltimezone_get_component(icaltimezone *zone);
 
 /** Sets the VTIMEZONE component of an icaltimezone, initializing the tzid,
    location & tzname fields. It returns 1 on success or 0 on failure, i.e.
    no TZID was found. */
-LIBICAL_ICAL_EXPORT int icaltimezone_set_component(icaltimezone * zone, icalcomponent * comp);
+LIBICAL_ICAL_EXPORT int icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp);
 
-LIBICAL_ICAL_EXPORT const char *icaltimezone_get_display_name(icaltimezone * zone);
+LIBICAL_ICAL_EXPORT const char *icaltimezone_get_display_name(icaltimezone *zone);
 
 /**
  * @par Converting times between timezones.
  */
 
 LIBICAL_ICAL_EXPORT void icaltimezone_convert_time(struct icaltimetype *tt,
-                                                   icaltimezone * from_zone,
-                                                   icaltimezone * to_zone);
+                                                   icaltimezone *from_zone,
+                                                   icaltimezone *to_zone);
 
 /**
  * @par Getting offsets from UTC.
@@ -123,14 +123,14 @@ LIBICAL_ICAL_EXPORT void icaltimezone_convert_time(struct icaltimetype *tt,
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in
    daylight-savings time. */
-LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset(icaltimezone * zone,
+LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset(icaltimezone *zone,
                                                     struct icaltimetype *tt, int *is_daylight);
 
 /** Calculates the UTC offset of a given UTC time in the given
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in
    daylight-savings time. */
-LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset_of_utc_time(icaltimezone * zone,
+LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
                                                                 struct icaltimetype *tt,
                                                                 int *is_daylight);
 
@@ -139,10 +139,10 @@ LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset_of_utc_time(icaltimezone * z
  */
 LIBICAL_ICAL_EXPORT icalarray *icaltimezone_array_new(void);
 
-LIBICAL_ICAL_EXPORT void icaltimezone_array_append_from_vtimezone(icalarray * timezones,
-                                                                  icalcomponent * child);
+LIBICAL_ICAL_EXPORT void icaltimezone_array_append_from_vtimezone(icalarray *timezones,
+                                                                  icalcomponent *child);
 
-LIBICAL_ICAL_EXPORT void icaltimezone_array_free(icalarray * timezones);
+LIBICAL_ICAL_EXPORT void icaltimezone_array_free(icalarray *timezones);
 
 /*
  * @par Handling the default location the timezone files
@@ -169,6 +169,6 @@ LIBICAL_ICAL_EXPORT int icaltimezone_get_builtin_tzdata(void);
 
 /** Dumps information about changes in the timezone up to and including
    max_year. */
-LIBICAL_ICAL_EXPORT int icaltimezone_dump_changes(icaltimezone * zone, int max_year, FILE * fp);
+LIBICAL_ICAL_EXPORT int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp);
 
 #endif /* ICALTIMEZONE_H */

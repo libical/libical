@@ -26,7 +26,8 @@
 #include "libical_ical_export.h"
 #include "icaltime.h"
 
-struct icaldurationtype {
+struct icaldurationtype
+{
     int is_neg;
     unsigned int days;
     unsigned int weeks;
@@ -46,9 +47,9 @@ LIBICAL_ICAL_EXPORT int icaldurationtype_is_null_duration(struct icaldurationtyp
 LIBICAL_ICAL_EXPORT int icaldurationtype_is_bad_duration(struct icaldurationtype d);
 
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_add(struct icaltimetype t,
-        struct icaldurationtype d);
+                                                     struct icaldurationtype d);
 
 LIBICAL_ICAL_EXPORT struct icaldurationtype icaltime_subtract(struct icaltimetype t1,
-        struct icaltimetype t2);
+                                                              struct icaltimetype t2);
 
 #endif /* !ICALDURATION_H */

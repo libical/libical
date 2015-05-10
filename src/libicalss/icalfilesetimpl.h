@@ -25,15 +25,16 @@
 
 #include "icalfileset.h"
 
-struct icalfileset_impl {
-  icalset super;                /**< parent class */
-  char *path;                   /**< pathname of file */
-  icalfileset_options options;  /**< copy of options passed to icalset_new() */
+struct icalfileset_impl
+{
+    icalset super;              /**< parent class */
+    char *path;                 /**< pathname of file */
+    icalfileset_options options;/**< copy of options passed to icalset_new() */
 
-  icalcomponent* cluster;       /**< cluster containing data */
-  icalgauge* gauge;             /**< gauge for filtering out data */
-  int changed;                  /**< boolean flag, 1 if data has changed */
-  int fd;                       /**< file descriptor */
+    icalcomponent *cluster;     /**< cluster containing data */
+    icalgauge *gauge;           /**< gauge for filtering out data */
+    int changed;                /**< boolean flag, 1 if data has changed */
+    int fd;                     /**< file descriptor */
 };
 
 #endif

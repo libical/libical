@@ -29,14 +29,14 @@
 
 struct icalparameter_impl
 {
-        icalparameter_kind kind;
-        char id[5];
-        int size;
-        const char* string;
-        const char* x_name;
-        icalproperty* parent;
+    icalparameter_kind kind;
+    char id[5];
+    int size;
+    const char *string;
+    const char *x_name;
+    icalproperty *parent;
 
-        int data;
+    int data;
 };
 
-#endif /*ICALPARAMETER_IMPL*/
+#endif /*ICALPARAMETER_IMPL */

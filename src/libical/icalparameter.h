@@ -28,7 +28,7 @@
 
 LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
 
-LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_clone(icalparameter * p);
+LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_clone(icalparameter *p);
 
 /* Create from string of form "PARAMNAME=VALUE" */
 LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_string(const char *value);
@@ -37,38 +37,38 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_string(const char *val
 LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_value_string(icalparameter_kind kind,
                                                                        const char *value);
 
-LIBICAL_ICAL_EXPORT void icalparameter_free(icalparameter * parameter);
+LIBICAL_ICAL_EXPORT void icalparameter_free(icalparameter *parameter);
 
-LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter * parameter);
+LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter *parameter);
 
-LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string_r(icalparameter * parameter);
+LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string_r(icalparameter *parameter);
 
-LIBICAL_ICAL_EXPORT int icalparameter_is_valid(icalparameter * parameter);
+LIBICAL_ICAL_EXPORT int icalparameter_is_valid(icalparameter *parameter);
 
-LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter * parameter);
+LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter *parameter);
 
 LIBICAL_ICAL_EXPORT int icalparameter_isa_parameter(void *param);
 
 /* Access the name of an X parameter */
-LIBICAL_ICAL_EXPORT void icalparameter_set_xname(icalparameter * param, const char *v);
+LIBICAL_ICAL_EXPORT void icalparameter_set_xname(icalparameter *param, const char *v);
 
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_xname(icalparameter * param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_xname(icalparameter *param);
 
-LIBICAL_ICAL_EXPORT void icalparameter_set_xvalue(icalparameter * param, const char *v);
+LIBICAL_ICAL_EXPORT void icalparameter_set_xvalue(icalparameter *param, const char *v);
 
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_xvalue(icalparameter * param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_xvalue(icalparameter *param);
 
 /* Access the name of an IANA parameter */
-LIBICAL_ICAL_EXPORT void icalparameter_set_iana_name(icalparameter * param, const char *v);
+LIBICAL_ICAL_EXPORT void icalparameter_set_iana_name(icalparameter *param, const char *v);
 
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_name(icalparameter * param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_name(icalparameter *param);
 
-LIBICAL_ICAL_EXPORT void icalparameter_set_iana_value(icalparameter * param, const char *v);
+LIBICAL_ICAL_EXPORT void icalparameter_set_iana_value(icalparameter *param, const char *v);
 
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(icalparameter * param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(icalparameter *param);
 
 /* returns 1 if parameters have same name in ICAL, otherwise 0 */
-LIBICAL_ICAL_EXPORT int icalparameter_has_same_name(icalparameter * param1, icalparameter * param2);
+LIBICAL_ICAL_EXPORT int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2);
 
 /* Convert enumerations */
 

@@ -24,13 +24,13 @@
 
 #define ICALCLUSTER_ID "clus"
 
-struct icalcluster_impl {
+struct icalcluster_impl
+{
+    char id[5]; /* clus */
 
-        char            id[5];          /* clus */
-
-        char           *key;
-        icalcomponent  *data;
-        int             changed;
+    char *key;
+    icalcomponent *data;
+    int changed;
 };
 
 #endif

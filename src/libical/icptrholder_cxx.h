@@ -44,83 +44,80 @@
 
 #include <cassert>
 
-template<class T> class ICPointerHolder {
-public:
-    ICPointerHolder()
-    {
+template < class T > class ICPointerHolder {
+  public:
+    ICPointerHolder() {
         ptr = 0;
     }
 
-    ICPointerHolder(T *p)
-    {
+    ICPointerHolder(T * p) {
         ptr = p;
     }
 
     // copy constructor to support assignment
-    ICPointerHolder(const ICPointerHolder &ip)
+    ICPointerHolder(const ICPointerHolder & ip)
     {
         ptr = ip.ptr;
 
         // We need to transfer ownership of ptr to this object by setting
         // ip's ptr to null. Otherwise, ptr will de deleted twice.
         // const ugliness requires us to do the const_cast.
-        ICPointerHolder *ipp = const_cast<ICPointerHolder*>(&ip);
+        ICPointerHolder *ipp = const_cast < ICPointerHolder * >(&ip);
+
         ipp->ptr = 0;
     };
 
-    ~ICPointerHolder()
-    {
+    ~ICPointerHolder() {
         release();
     }
 
-    ICPointerHolder &operator=(T *p)
-    {
+    ICPointerHolder & operator=(T * p) {
         this->release();
         ptr = p;
         return *this;
     }
 
-    ICPointerHolder &operator=(ICPointerHolder &p)
-    {
+    ICPointerHolder & operator=(ICPointerHolder & p) {
         this->release();
-        ptr = p.ptr;            // this transfer ownership of the pointer
-        p.ptr = 0;              // set it to null so the pointer won't get delete twice.
+        ptr = p.ptr;    // this transfer ownership of the pointer
+        p.ptr = 0;      // set it to null so the pointer won't get delete twice.
         return *this;
     }
 
-    int operator!=(T *p)
+    int operator!=(T * p)
     {
         return (ptr != p);
     }
 
-    int operator==(T *p)
+    int operator==(T * p)
     {
         return (ptr == p);
     }
 
-    operator T *() const
+    operator  T *() const
     {
         return ptr;
     }
 
-    T * operator->() const
+    T *operator->() const
     {
         assert(ptr);
         return ptr;
     }
 
-    T& operator*()
+    T & operator*()
     {
         assert(ptr);
         return *ptr;
     }
 
-private:
-    void  release()
+  private:
+    void release()
     {
         if (ptr != 0) {
             ptr->detach();
             delete ptr;
+
             ptr = 0;
         }
     }

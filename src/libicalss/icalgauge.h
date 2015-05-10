@@ -34,13 +34,13 @@ typedef struct icalgauge_impl icalgauge;
 
 LIBICAL_ICALSS_EXPORT icalgauge *icalgauge_new_from_sql(char *sql, int expand);
 
-LIBICAL_ICALSS_EXPORT int icalgauge_get_expand(icalgauge * gauge);
+LIBICAL_ICALSS_EXPORT int icalgauge_get_expand(icalgauge *gauge);
 
-LIBICAL_ICALSS_EXPORT void icalgauge_free(icalgauge * gauge);
+LIBICAL_ICALSS_EXPORT void icalgauge_free(icalgauge *gauge);
 
-LIBICAL_ICALSS_EXPORT char *icalgauge_as_sql(icalcomponent * gauge);
+LIBICAL_ICALSS_EXPORT char *icalgauge_as_sql(icalcomponent *gauge);
 
-LIBICAL_ICALSS_EXPORT void icalgauge_dump(icalgauge * gauge);
+LIBICAL_ICALSS_EXPORT void icalgauge_dump(icalgauge *gauge);
 
 /** @brief Return true if comp matches the gauge.
  *
@@ -48,10 +48,10 @@ LIBICAL_ICALSS_EXPORT void icalgauge_dump(icalgauge * gauge);
  * cannonical form -- a VCALENDAR with one VEVENT, VTODO or VJOURNAL
  * sub component
  */
-LIBICAL_ICALSS_EXPORT int icalgauge_compare(icalgauge * g, icalcomponent * comp);
+LIBICAL_ICALSS_EXPORT int icalgauge_compare(icalgauge *g, icalcomponent *comp);
 
 /** Clone the component, but only return the properties
  *  specified in the gauge */
-LIBICAL_ICALSS_EXPORT icalcomponent *icalgauge_new_clone(icalgauge * g, icalcomponent * comp);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalgauge_new_clone(icalgauge *g, icalcomponent *comp);
 
 #endif /* ICALGAUGE_H */

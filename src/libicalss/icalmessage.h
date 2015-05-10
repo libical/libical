@@ -22,37 +22,37 @@
 #include "libical_icalss_export.h"
 #include "icalcomponent.h"
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_accept_reply(icalcomponent * c,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_accept_reply(icalcomponent *c,
                                                                   const char *user,
                                                                   const char *msg);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_decline_reply(icalcomponent * c,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_decline_reply(icalcomponent *c,
                                                                    const char *user,
                                                                    const char *msg);
 
 /* New is modified version of old */
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_counterpropose_reply(icalcomponent * oldc,
-                                                                          icalcomponent * newc,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_counterpropose_reply(icalcomponent *oldc,
+                                                                          icalcomponent *newc,
                                                                           const char *user,
                                                                           const char *msg);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_delegate_reply(icalcomponent * c,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_delegate_reply(icalcomponent *c,
                                                                     const char *user,
                                                                     const char *delegatee,
                                                                     const char *msg);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_cancel_event(icalcomponent * c,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_cancel_event(icalcomponent *c,
                                                                   const char *user,
                                                                   const char *msg);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_cancel_instance(icalcomponent * c,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_cancel_instance(icalcomponent *c,
                                                                      const char *user,
                                                                      const char *msg);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_cancel_all(icalcomponent * c,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_cancel_all(icalcomponent *c,
                                                                 const char *user, const char *msg);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_error_reply(icalcomponent * c,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_error_reply(icalcomponent *c,
                                                                  const char *user,
                                                                  const char *msg,
                                                                  const char *debug,

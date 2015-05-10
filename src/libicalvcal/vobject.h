@@ -84,38 +84,38 @@ extern "C"
 {
 #endif
 
-#define VC7bitProp                              "7BIT"
-#define VC8bitProp                              "8BIT"
+#define VC7bitProp                      "7BIT"
+#define VC8bitProp                      "8BIT"
 #define VCAAlarmProp                    "AALARM"
-#define VCAdditionalNamesProp   "ADDN"
-#define VCAdrProp                               "ADR"
-#define VCAgentProp                             "AGENT"
-#define VCAIFFProp                              "AIFF"
-#define VCAOLProp                               "AOL"
+#define VCAdditionalNamesProp           "ADDN"
+#define VCAdrProp                       "ADR"
+#define VCAgentProp                     "AGENT"
+#define VCAIFFProp                      "AIFF"
+#define VCAOLProp                       "AOL"
 #define VCAppleLinkProp                 "APPLELINK"
 #define VCAttachProp                    "ATTACH"
 #define VCAttendeeProp                  "ATTENDEE"
 #define VCATTMailProp                   "ATTMAIL"
 #define VCAudioContentProp              "AUDIOCONTENT"
-#define VCAVIProp                               "AVI"
+#define VCAVIProp                       "AVI"
 #define VCBase64Prop                    "BASE64"
-#define VCBBSProp                               "BBS"
+#define VCBBSProp                       "BBS"
 #define VCBirthDateProp                 "BDAY"
-#define VCBMPProp                               "BMP"
-#define VCBodyProp                              "BODY"
+#define VCBMPProp                       "BMP"
+#define VCBodyProp                      "BODY"
 #define VCBusinessRoleProp              "ROLE"
-#define VCCalProp                               "VCALENDAR"
+#define VCCalProp                       "VCALENDAR"
 #define VCCaptionProp                   "CAP"
-#define VCCardProp                              "VCARD"
-#define VCCarProp                               "CAR"
+#define VCCardProp                      "VCARD"
+#define VCCarProp                       "CAR"
 #define VCCategoriesProp                "CATEGORIES"
 #define VCCellularProp                  "CELL"
-#define VCCGMProp                               "CGM"
+#define VCCGMProp                       "CGM"
 #define VCCharSetProp                   "CS"
-#define VCCIDProp                               "CID"
-#define VCCISProp                               "CIS"
-#define VCCityProp                              "L"
-#define VCClassProp                             "CLASS"
+#define VCCIDProp                       "CID"
+#define VCCISProp                       "CIS"
+#define VCCityProp                      "L"
+#define VCClassProp                     "CLASS"
 #define VCCommentProp                   "NOTE"
 #define VCCompletedProp                 "COMPLETED"
 #define VCContentIDProp                 "CONTENT-ID"
@@ -124,72 +124,72 @@ extern "C"
 #define VCDataSizeProp                  "DATASIZE"
 #define VCDayLightProp                  "DAYLIGHT"
 #define VCDCreatedProp                  "DCREATED"
-#define VCDeliveryLabelProp     "LABEL"
+#define VCDeliveryLabelProp             "LABEL"
 #define VCDescriptionProp               "DESCRIPTION"
-#define VCDIBProp                               "DIB"
+#define VCDIBProp                       "DIB"
 #define VCDisplayStringProp             "DISPLAYSTRING"
 #define VCDomesticProp                  "DOM"
-#define VCDTendProp                             "DTEND"
+#define VCDTendProp                     "DTEND"
 #define VCDTstartProp                   "DTSTART"
-#define VCDueProp                               "DUE"
+#define VCDueProp                       "DUE"
 #define VCEmailAddressProp              "EMAIL"
 #define VCEncodingProp                  "ENCODING"
-#define VCEndProp                               "END"
-#define VCEventProp                             "VEVENT"
+#define VCEndProp                       "END"
+#define VCEventProp                     "VEVENT"
 #define VCEWorldProp                    "EWORLD"
-#define VCExNumProp                             "EXNUM"
+#define VCExNumProp                     "EXNUM"
 #define VCExpDateProp                   "EXDATE"
 #define VCExpectProp                    "EXPECT"
 #define VCExtAddressProp                "EXT ADD"
 #define VCFamilyNameProp                "F"
-#define VCFaxProp                               "FAX"
+#define VCFaxProp                       "FAX"
 #define VCFullNameProp                  "FN"
-#define VCGeoProp                               "GEO"
+#define VCGeoProp                       "GEO"
 #define VCGeoLocationProp               "GEO"
-#define VCGIFProp                               "GIF"
+#define VCGIFProp                       "GIF"
 #define VCGivenNameProp                 "G"
 #define VCGroupingProp                  "Grouping"
-#define VCHomeProp                              "HOME"
+#define VCHomeProp                      "HOME"
 #define VCIBMMailProp                   "IBMMail"
 #define VCInlineProp                    "INLINE"
 #define VCInternationalProp             "INTL"
 #define VCInternetProp                  "INTERNET"
-#define VCISDNProp                              "ISDN"
-#define VCJPEGProp                              "JPEG"
+#define VCISDNProp                      "ISDN"
+#define VCJPEGProp                      "JPEG"
 #define VCLanguageProp                  "LANG"
 #define VCLastModifiedProp              "LAST-MODIFIED"
 #define VCLastRevisedProp               "REV"
 #define VCLocationProp                  "LOCATION"
-#define VCLogoProp                              "LOGO"
+#define VCLogoProp                      "LOGO"
 #define VCMailerProp                    "MAILER"
 #define VCMAlarmProp                    "MALARM"
 #define VCMCIMailProp                   "MCIMAIL"
 #define VCMessageProp                   "MSG"
-#define VCMETProp                               "MET"
-#define VCModemProp                             "MODEM"
-#define VCMPEG2Prop                             "MPEG2"
-#define VCMPEGProp                              "MPEG"
-#define VCMSNProp                               "MSN"
+#define VCMETProp                       "MET"
+#define VCModemProp                     "MODEM"
+#define VCMPEG2Prop                     "MPEG2"
+#define VCMPEGProp                      "MPEG"
+#define VCMSNProp                       "MSN"
 #define VCNamePrefixesProp              "NPRE"
-#define VCNameProp                              "N"
+#define VCNameProp                      "N"
 #define VCNameSuffixesProp              "NSUF"
-#define VCNoteProp                              "NOTE"
+#define VCNoteProp                      "NOTE"
 #define VCOrgNameProp                   "ORGNAME"
-#define VCOrgProp                               "ORG"
+#define VCOrgProp                       "ORG"
 #define VCOrgUnit2Prop                  "OUN2"
 #define VCOrgUnit3Prop                  "OUN3"
 #define VCOrgUnit4Prop                  "OUN4"
 #define VCOrgUnitProp                   "OUN"
-#define VCPagerProp                             "PAGER"
+#define VCPagerProp                     "PAGER"
 #define VCPAlarmProp                    "PALARM"
 #define VCParcelProp                    "PARCEL"
-#define VCPartProp                              "PART"
-#define VCPCMProp                               "PCM"
-#define VCPDFProp                               "PDF"
-#define VCPGPProp                               "PGP"
-#define VCPhotoProp                             "PHOTO"
-#define VCPICTProp                              "PICT"
-#define VCPMBProp                               "PMB"
+#define VCPartProp                      "PART"
+#define VCPCMProp                       "PCM"
+#define VCPDFProp                       "PDF"
+#define VCPGPProp                       "PGP"
+#define VCPhotoProp                     "PHOTO"
+#define VCPICTProp                      "PICT"
+#define VCPMBProp                       "PMB"
 #define VCPostalBoxProp                 "BOX"
 #define VCPostalCodeProp                "PC"
 #define VCPostalProp                    "POSTAL"
@@ -200,53 +200,53 @@ extern "C"
 #define VCProdIdProp                    "PRODID"
 #define VCProdigyProp                   "PRODIGY"
 #define VCPronunciationProp             "SOUND"
-#define VCPSProp                                "PS"
+#define VCPSProp                        "PS"
 #define VCPublicKeyProp                 "KEY"
-#define VCQPProp                                "QP"
+#define VCQPProp                        "QP"
 #define VCQuickTimeProp                 "QTIME"
-#define VCQuotedPrintableProp   "QUOTED-PRINTABLE"
-#define VCRDateProp                             "RDATE"
+#define VCQuotedPrintableProp           "QUOTED-PRINTABLE"
+#define VCRDateProp                     "RDATE"
 #define VCRegionProp                    "R"
 #define VCRelatedToProp                 "RELATED-TO"
 #define VCRepeatCountProp               "REPEATCOUNT"
 #define VCResourcesProp                 "RESOURCES"
-#define VCRNumProp                              "RNUM"
-#define VCRoleProp                              "ROLE"
-#define VCRRuleProp                             "RRULE"
-#define VCRSVPProp                              "RSVP"
+#define VCRNumProp                      "RNUM"
+#define VCRoleProp                      "ROLE"
+#define VCRRuleProp                     "RRULE"
+#define VCRSVPProp                      "RSVP"
 #define VCRunTimeProp                   "RUNTIME"
 #define VCSequenceProp                  "SEQUENCE"
 #define VCSnoozeTimeProp                "SNOOZETIME"
-#define VCStartProp                             "START"
+#define VCStartProp                     "START"
 #define VCStatusProp                    "STATUS"
 #define VCStreetAddressProp             "STREET"
 #define VCSubTypeProp                   "SUBTYPE"
 #define VCSummaryProp                   "SUMMARY"
 #define VCTelephoneProp                 "TEL"
-#define VCTIFFProp                              "TIFF"
+#define VCTIFFProp                      "TIFF"
 #define VCTimeZoneProp                  "TZ"
-#define VCTitleProp                             "TITLE"
-#define VCTLXProp                               "TLX"
-#define VCTodoProp                              "VTODO"
+#define VCTitleProp                     "TITLE"
+#define VCTLXProp                       "TLX"
+#define VCTodoProp                      "VTODO"
 #define VCTranspProp                    "TRANSP"
 #define VCUniqueStringProp              "UID"
-#define VCURLProp                               "URL"
+#define VCURLProp                       "URL"
 #define VCURLValueProp                  "URLVAL"
-#define VCValueProp                             "VALUE"
+#define VCValueProp                     "VALUE"
 #define VCVersionProp                   "VERSION"
-#define VCVideoProp                             "VIDEO"
-#define VCVoiceProp                             "VOICE"
-#define VCWAVEProp                              "WAVE"
-#define VCWMFProp                               "WMF"
-#define VCWorkProp                              "WORK"
-#define VCX400Prop                              "X400"
-#define VCX509Prop                              "X509"
-#define VCXRuleProp                             "XRULE"
+#define VCVideoProp                     "VIDEO"
+#define VCVoiceProp                     "VOICE"
+#define VCWAVEProp                      "WAVE"
+#define VCWMFProp                       "WMF"
+#define VCWorkProp                      "WORK"
+#define VCX400Prop                      "X400"
+#define VCX509Prop                      "X509"
+#define VCXRuleProp                     "XRULE"
 
 /* Extensions */
 
-#define XPilotIdProp                            "X-PILOTID"
-#define XPilotStatusProp                        "X-PILOTSTAT"
+#define XPilotIdProp                    "X-PILOTID"
+#define XPilotStatusProp                "X-PILOTSTAT"
 
     typedef struct VObject VObject;
 
@@ -257,70 +257,70 @@ extern "C"
     } VObjectIterator;
 
     LIBICAL_VCAL_EXPORT VObject *newVObject(const char *id);
-    LIBICAL_VCAL_EXPORT void deleteVObject(VObject * p);
+    LIBICAL_VCAL_EXPORT void deleteVObject(VObject *p);
     LIBICAL_VCAL_EXPORT char *dupStr(const char *s, size_t size);
     LIBICAL_VCAL_EXPORT void deleteStr(const char *p);
     LIBICAL_VCAL_EXPORT void unUseStr(const char *s);
 
-    LIBICAL_VCAL_EXPORT void setVObjectName(VObject * o, const char *id);
-    LIBICAL_VCAL_EXPORT void setVObjectStringZValue(VObject * o, const char *s);
-    LIBICAL_VCAL_EXPORT void setVObjectStringZValue_(VObject * o, const char *s);
-    LIBICAL_VCAL_EXPORT void setVObjectUStringZValue(VObject * o, const wchar_t * s);
-    LIBICAL_VCAL_EXPORT void setVObjectUStringZValue_(VObject * o, const wchar_t * s);
-    LIBICAL_VCAL_EXPORT void setVObjectIntegerValue(VObject * o, unsigned int i);
-    LIBICAL_VCAL_EXPORT void setVObjectLongValue(VObject * o, unsigned long l);
-    LIBICAL_VCAL_EXPORT void setVObjectAnyValue(VObject * o, void *t);
-    LIBICAL_VCAL_EXPORT VObject *setValueWithSize(VObject * prop, void *val, unsigned int size);
-    LIBICAL_VCAL_EXPORT VObject *setValueWithSize_(VObject * prop, void *val, unsigned int size);
+    LIBICAL_VCAL_EXPORT void setVObjectName(VObject *o, const char *id);
+    LIBICAL_VCAL_EXPORT void setVObjectStringZValue(VObject *o, const char *s);
+    LIBICAL_VCAL_EXPORT void setVObjectStringZValue_(VObject *o, const char *s);
+    LIBICAL_VCAL_EXPORT void setVObjectUStringZValue(VObject *o, const wchar_t *s);
+    LIBICAL_VCAL_EXPORT void setVObjectUStringZValue_(VObject *o, const wchar_t *s);
+    LIBICAL_VCAL_EXPORT void setVObjectIntegerValue(VObject *o, unsigned int i);
+    LIBICAL_VCAL_EXPORT void setVObjectLongValue(VObject *o, unsigned long l);
+    LIBICAL_VCAL_EXPORT void setVObjectAnyValue(VObject *o, void *t);
+    LIBICAL_VCAL_EXPORT VObject *setValueWithSize(VObject *prop, void *val, unsigned int size);
+    LIBICAL_VCAL_EXPORT VObject *setValueWithSize_(VObject *prop, void *val, unsigned int size);
 
-    LIBICAL_VCAL_EXPORT const char *vObjectName(VObject * o);
-    LIBICAL_VCAL_EXPORT const char *vObjectStringZValue(VObject * o);
-    LIBICAL_VCAL_EXPORT const wchar_t *vObjectUStringZValue(VObject * o);
-    LIBICAL_VCAL_EXPORT unsigned int vObjectIntegerValue(VObject * o);
-    LIBICAL_VCAL_EXPORT unsigned long vObjectLongValue(VObject * o);
-    LIBICAL_VCAL_EXPORT void *vObjectAnyValue(VObject * o);
-    LIBICAL_VCAL_EXPORT VObject *vObjectVObjectValue(VObject * o);
-    LIBICAL_VCAL_EXPORT void setVObjectVObjectValue(VObject * o, VObject * p);
+    LIBICAL_VCAL_EXPORT const char *vObjectName(VObject *o);
+    LIBICAL_VCAL_EXPORT const char *vObjectStringZValue(VObject *o);
+    LIBICAL_VCAL_EXPORT const wchar_t *vObjectUStringZValue(VObject *o);
+    LIBICAL_VCAL_EXPORT unsigned int vObjectIntegerValue(VObject *o);
+    LIBICAL_VCAL_EXPORT unsigned long vObjectLongValue(VObject *o);
+    LIBICAL_VCAL_EXPORT void *vObjectAnyValue(VObject *o);
+    LIBICAL_VCAL_EXPORT VObject *vObjectVObjectValue(VObject *o);
+    LIBICAL_VCAL_EXPORT void setVObjectVObjectValue(VObject *o, VObject *p);
 
-    LIBICAL_VCAL_EXPORT VObject *addVObjectProp(VObject * o, VObject * p);
-    LIBICAL_VCAL_EXPORT VObject *addProp(VObject * o, const char *id);
-    LIBICAL_VCAL_EXPORT VObject *addPropValue(VObject * o, const char *p, const char *v);
-    LIBICAL_VCAL_EXPORT VObject *addPropSizedValue_(VObject * o, const char *p, const char *v,
+    LIBICAL_VCAL_EXPORT VObject *addVObjectProp(VObject *o, VObject *p);
+    LIBICAL_VCAL_EXPORT VObject *addProp(VObject *o, const char *id);
+    LIBICAL_VCAL_EXPORT VObject *addPropValue(VObject *o, const char *p, const char *v);
+    LIBICAL_VCAL_EXPORT VObject *addPropSizedValue_(VObject *o, const char *p, const char *v,
                                                     unsigned int size);
-    LIBICAL_VCAL_EXPORT VObject *addPropSizedValue(VObject * o, const char *p, const char *v,
+    LIBICAL_VCAL_EXPORT VObject *addPropSizedValue(VObject *o, const char *p, const char *v,
                                                    unsigned int size);
-    LIBICAL_VCAL_EXPORT VObject *addGroup(VObject * o, const char *g);
-    LIBICAL_VCAL_EXPORT void addList(VObject ** o, VObject * p);
+    LIBICAL_VCAL_EXPORT VObject *addGroup(VObject *o, const char *g);
+    LIBICAL_VCAL_EXPORT void addList(VObject ** o, VObject *p);
 
-    LIBICAL_VCAL_EXPORT VObject *isAPropertyOf(VObject * o, const char *id);
+    LIBICAL_VCAL_EXPORT VObject *isAPropertyOf(VObject *o, const char *id);
 
-    LIBICAL_VCAL_EXPORT VObject *nextVObjectInList(VObject * o);
-    LIBICAL_VCAL_EXPORT void initPropIterator(VObjectIterator * i, VObject * o);
+    LIBICAL_VCAL_EXPORT VObject *nextVObjectInList(VObject *o);
+    LIBICAL_VCAL_EXPORT void initPropIterator(VObjectIterator * i, VObject *o);
     LIBICAL_VCAL_EXPORT int moreIteration(VObjectIterator * i);
     LIBICAL_VCAL_EXPORT VObject *nextVObject(VObjectIterator * i);
 
-    LIBICAL_VCAL_EXPORT char *writeMemVObject(char *s, int *len, VObject * o);
-    LIBICAL_VCAL_EXPORT char *writeMemVObjects(char *s, int *len, VObject * list);
+    LIBICAL_VCAL_EXPORT char *writeMemVObject(char *s, int *len, VObject *o);
+    LIBICAL_VCAL_EXPORT char *writeMemVObjects(char *s, int *len, VObject *list);
 
     LIBICAL_VCAL_EXPORT const char *lookupStr(const char *s);
     LIBICAL_VCAL_EXPORT void cleanStrTbl();
 
-    LIBICAL_VCAL_EXPORT void cleanVObject(VObject * o);
-    LIBICAL_VCAL_EXPORT void cleanVObjects(VObject * list);
+    LIBICAL_VCAL_EXPORT void cleanVObject(VObject *o);
+    LIBICAL_VCAL_EXPORT void cleanVObjects(VObject *list);
 
     LIBICAL_VCAL_EXPORT const char *lookupProp(const char *str);
     LIBICAL_VCAL_EXPORT const char *lookupProp_(const char *str);
 
-    LIBICAL_VCAL_EXPORT wchar_t *fakeUnicode(const char *ps, size_t * bytes);
-    LIBICAL_VCAL_EXPORT int uStrLen(const wchar_t * u);
-    LIBICAL_VCAL_EXPORT char *fakeCString(const wchar_t * u);
+    LIBICAL_VCAL_EXPORT wchar_t *fakeUnicode(const char *ps, size_t *bytes);
+    LIBICAL_VCAL_EXPORT int uStrLen(const wchar_t *u);
+    LIBICAL_VCAL_EXPORT char *fakeCString(const wchar_t *u);
 
-    LIBICAL_VCAL_EXPORT void printVObjectToFile(char *fname, VObject * o);
-    LIBICAL_VCAL_EXPORT void printVObjectsToFile(char *fname, VObject * list);
-    LIBICAL_VCAL_EXPORT void writeVObjectToFile(char *fname, VObject * o);
-    LIBICAL_VCAL_EXPORT void writeVObjectsToFile(char *fname, VObject * list);
+    LIBICAL_VCAL_EXPORT void printVObjectToFile(char *fname, VObject *o);
+    LIBICAL_VCAL_EXPORT void printVObjectsToFile(char *fname, VObject *list);
+    LIBICAL_VCAL_EXPORT void writeVObjectToFile(char *fname, VObject *o);
+    LIBICAL_VCAL_EXPORT void writeVObjectsToFile(char *fname, VObject *list);
 
-    LIBICAL_VCAL_EXPORT int vObjectValueType(VObject * o);
+    LIBICAL_VCAL_EXPORT int vObjectValueType(VObject *o);
 
 /* return type of vObjectValueType: */
 #define VCVT_NOVALUE    0
@@ -351,8 +351,8 @@ your build directly then you may find them a more convenient API
 and you can go ahead and use them. If you try to use them with
 the DLL LIB you will get a link error.
 */
-    extern void printVObject(FILE * fp, VObject * o);
-    extern void writeVObject(FILE * fp, VObject * o);
+    extern void printVObject(FILE *fp, VObject *o);
+    extern void writeVObject(FILE *fp, VObject *o);
 
 #if defined(__CPLUSPLUS__) || defined(__cplusplus)
 }

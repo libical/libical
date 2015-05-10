@@ -23,7 +23,8 @@
 
 #include "libical_icalss_export.h"
 
-extern "C" {
+extern "C"
+{
 #include "icalcomponent.h"
 #include "icalspanlist.h"
 #include "icaltime.h"
@@ -34,7 +35,7 @@ extern "C" {
 namespace LibICal
 {
 
-class VComponent;
+    class VComponent;
 
 /**
  * This class wraps the icalspanlist routines in libicalss
@@ -43,40 +44,40 @@ class VComponent;
  * icalerrorenum.  See icalerror.h for the complete list of exceptions
  * that might be thrown.
  */
-class LIBICAL_ICALSS_EXPORT ICalSpanList
-{
-public:
+    class LIBICAL_ICALSS_EXPORT ICalSpanList
+    {
+      public:
     /** Construct an ICalSpanList from an icalset */
-    ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) throw(icalerrorenum);
+        ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) throw(icalerrorenum);
 
     /** Construct an ICalSpanList from the VFREEBUSY chunk of a icalcomponent */
-    explicit ICalSpanList(icalcomponent *comp) throw(icalerrorenum);
+        explicit ICalSpanList(icalcomponent *comp) throw(icalerrorenum);
 
     /** Construct an ICalSpanList from the VFREEBUSY chunk of a vcomponent */
-    explicit ICalSpanList(VComponent &comp) throw(icalerrorenum);
+        explicit ICalSpanList(VComponent & comp) throw(icalerrorenum);
 
     /** Destructor */
-    ~ICalSpanList();
+        ~ICalSpanList();
 
     /** Return a VFREEBUSY icalcomponent */
-    VComponent *get_vfreebusy(const char *organizer, const char *attendee) throw(icalerrorenum);
+        VComponent *get_vfreebusy(const char *organizer, const char *attendee) throw(icalerrorenum);
 
     /** Return the base data when casting */
-    operator icalspanlist *()
-    {
-        return data;
-    }
+        operator   icalspanlist *()
+        {
+            return data;
+        }
 
     /** Return a vector of the number of events over delta t */
-    std::vector<int> as_vector(int delta_t) throw(icalerrorenum);
+        std::vector < int >as_vector(int delta_t) throw(icalerrorenum);
 
     /** Dump the spanlist to stdout */
-    void dump();
+        void dump();
 
-private:
-    icalspanlist *data;
-};
+      private:
+         icalspanlist *data;
+    };
 
-} // namespace LibICal;
+}       // namespace LibICal;
 
 #endif
