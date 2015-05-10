@@ -1,6 +1,9 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stddef.h> /* for ptrdiff_h */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "vcc.h"
+#include <ctype.h>
 
 #define YYBYACC 1
 #define YYMAJOR 1
@@ -121,10 +124,6 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #include <afx.h>
 #endif
 #endif
-
-#include <stdio.h>
-#include <ctype.h>
-#include "vcc.h"
 
 /****  Types, Constants  ****/
 
