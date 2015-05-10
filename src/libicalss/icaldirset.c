@@ -98,18 +98,18 @@ icalerrorenum icaldirset_commit(icalset *set)
     return ICAL_NO_ERROR;
 }
 
-void icaldirset_lock(const char *dir)
+static void icaldirset_lock(const char *dir)
 {
     _unused(dir);
 }
 
-void icaldirset_unlock(const char *dir)
+static void icaldirset_unlock(const char *dir)
 {
     _unused(dir);
 }
 
 /* Load the contents of the store directory into the store's internal directory list*/
-icalerrorenum icaldirset_read_directory(icaldirset *dset)
+static icalerrorenum icaldirset_read_directory(icaldirset *dset)
 {
     char *str;
 #if defined(HAVE_DIRENT_H)
@@ -320,7 +320,7 @@ int icaldirset_next_uid_number(icaldirset *dset)
     }
 }
 
-icalerrorenum icaldirset_next_cluster(icaldirset *dset)
+static icalerrorenum icaldirset_next_cluster(icaldirset *dset)
 {
     char path[MAXPATHLEN];
 

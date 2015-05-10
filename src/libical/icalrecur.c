@@ -173,20 +173,125 @@
 
 #define LEAP_MONTH 0x1000
 
-const char* icalrecur_freq_to_string(icalrecurrencetype_frequency kind);
-icalrecurrencetype_frequency icalrecur_string_to_freq(const char* str);
-
-const char* icalrecur_weekday_to_string(icalrecurrencetype_weekday kind);
-icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str);
-
-const char* icalrecur_skip_to_string(icalrecurrencetype_skip kind);
-icalrecurrencetype_skip icalrecur_string_to_skip(const char* str);
-
 int icalrecurrencetype_rscale_is_supported(void)
 {
     return RSCALE_IS_SUPPORTED;
 }
 
+/****************** Enumeration Routines ******************/
+
+static struct
+{
+    icalrecurrencetype_frequency kind;
+    const char* str;
+} freq_map[] = {
+    {ICAL_SECONDLY_RECURRENCE,"SECONDLY"},
+    {ICAL_MINUTELY_RECURRENCE,"MINUTELY"},
+    {ICAL_HOURLY_RECURRENCE,"HOURLY"},
+    {ICAL_DAILY_RECURRENCE,"DAILY"},
+    {ICAL_WEEKLY_RECURRENCE,"WEEKLY"},
+    {ICAL_MONTHLY_RECURRENCE,"MONTHLY"},
+    {ICAL_YEARLY_RECURRENCE,"YEARLY"},
+    {ICAL_NO_RECURRENCE,0}
+};
+
+static icalrecurrencetype_frequency icalrecur_string_to_freq(const char* str)
+{
+    int i;
+
+    for (i=0; freq_map[i].kind != ICAL_NO_RECURRENCE ; i++) {
+        if ( strcasecmp(str,freq_map[i].str) == 0){
+            return freq_map[i].kind;
+        }
+    }
+    return ICAL_NO_RECURRENCE;
+}
+
+static const char* icalrecur_freq_to_string(icalrecurrencetype_frequency kind)
+{
+    int i;
+
+    for (i=0; freq_map[i].kind != ICAL_NO_RECURRENCE ; i++) {
+        if ( freq_map[i].kind == kind ) {
+            return freq_map[i].str;
+        }
+    }
+    return 0;
+}
+
+static struct
+{
+    icalrecurrencetype_skip kind;
+    const char* str;
+} skip_map[] = {
+    {ICAL_SKIP_BACKWARD,"BACKWARD"},
+    {ICAL_SKIP_FORWARD,"FORWARD"},
+    {ICAL_SKIP_OMIT,"OMIT"}
+};
+
+static icalrecurrencetype_skip icalrecur_string_to_skip(const char* str)
+{
+    int i;
+
+    for (i=0; skip_map[i].kind != ICAL_SKIP_OMIT ; i++) {
+        if ( strcasecmp(str,skip_map[i].str) == 0){
+            return skip_map[i].kind;
+        }
+    }
+    return ICAL_SKIP_OMIT;
+}
+
+static const char* icalrecur_skip_to_string(icalrecurrencetype_skip kind)
+{
+    int i;
+
+    for (i=0; skip_map[i].kind != ICAL_SKIP_OMIT ; i++) {
+        if ( skip_map[i].kind == kind ) {
+            return skip_map[i].str;
+        }
+    }
+    return 0;
+}
+
+static struct {
+    icalrecurrencetype_weekday wd;
+    const char * str;
+} wd_map[] = {
+    {ICAL_SUNDAY_WEEKDAY,"SU"},
+    {ICAL_MONDAY_WEEKDAY,"MO"},
+    {ICAL_TUESDAY_WEEKDAY,"TU"},
+    {ICAL_WEDNESDAY_WEEKDAY,"WE"},
+    {ICAL_THURSDAY_WEEKDAY,"TH"},
+    {ICAL_FRIDAY_WEEKDAY,"FR"},
+    {ICAL_SATURDAY_WEEKDAY,"SA"},
+    {ICAL_NO_WEEKDAY,0}
+};
+
+static const char* icalrecur_weekday_to_string(icalrecurrencetype_weekday kind)
+{
+    int i;
+
+    for (i=0; wd_map[i].wd  != ICAL_NO_WEEKDAY; i++) {
+        if ( wd_map[i].wd ==  kind) {
+            return wd_map[i].str;
+        }
+    }
+
+    return 0;
+}
+
+static icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str)
+{
+    int i;
+
+    for (i=0; wd_map[i].wd  != ICAL_NO_WEEKDAY; i++) {
+        if ( strcasecmp(str,wd_map[i].str) == 0){
+            return wd_map[i].wd;
+        }
+    }
+
+    return ICAL_NO_WEEKDAY;
+}
 
 /*********************** Rule parsing routines ************************/
 
@@ -199,7 +304,7 @@ struct icalrecur_parser {
         struct icalrecurrencetype rt;
 };
 
-const char* icalrecur_first_clause(struct icalrecur_parser *parser)
+static const char* icalrecur_first_clause(struct icalrecur_parser *parser)
 {
     char *idx;
     parser->this_clause = parser->copy;
@@ -219,7 +324,7 @@ const char* icalrecur_first_clause(struct icalrecur_parser *parser)
 
 }
 
-const char* icalrecur_next_clause(struct icalrecur_parser *parser)
+static const char* icalrecur_next_clause(struct icalrecur_parser *parser)
 {
     char* idx;
 
@@ -244,8 +349,8 @@ const char* icalrecur_next_clause(struct icalrecur_parser *parser)
 
 }
 
-void icalrecur_clause_name_and_value(struct icalrecur_parser *parser,
-                                     char** name, char** value)
+static void icalrecur_clause_name_and_value(struct icalrecur_parser *parser,
+                                            char** name, char** value)
 {
     char *idx;
 
@@ -264,8 +369,8 @@ void icalrecur_clause_name_and_value(struct icalrecur_parser *parser,
     *value = idx;
 }
 
-void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
-                           int size, char* vals)
+static void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
+                                  int size, char* vals)
 {
     char *t, *n;
     int i=0;
@@ -339,7 +444,7 @@ sort_bydayrules(struct icalrecur_parser *parser)
     }
 }
 
-void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
+static void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char* vals)
 {
 
     char *t, *n;
@@ -698,7 +803,7 @@ enum expand_table {
 };
 
 /**
- * The split map indicates, for a particular interval, wether a BY_*
+ * The split map indicates, for a particular interval, whether a BY_*
  * rule part expands the number of instances in the occcurrence set or
  * contracts it. 1=> contract, 2=>expand, and 3 means the pairing is
  * not allowed.
@@ -2368,7 +2473,7 @@ static int next_yearday(icalrecur_iterator* impl)
 }
 */
 
-int check_set_position(icalrecur_iterator* impl, int set_pos)
+static int check_set_position(icalrecur_iterator* impl, int set_pos)
 {
     int i;
     int found = 0;
@@ -2488,7 +2593,7 @@ static int next_month(icalrecur_iterator* impl)
 
           if(is_day_in_byday(impl,last)){
           /* If there is no BYSETPOS rule, calculate only by BYDAY
-             If there is BYSETPOS rule, take into account the occurence
+             If there is BYSETPOS rule, take into account the occurrence
              matches with BYDAY */
               if(!has_by_data(impl,BY_SET_POS) || check_set_position(impl, ++set_pos_counter)
                         || check_set_position(impl, set_pos_counter-set_pos_total-1)) {
@@ -3265,120 +3370,6 @@ int icalrecurrencetype_month_is_leap(short month)
 int icalrecurrencetype_month_month(short month)
 {
     return (month & ~LEAP_MONTH);
-}
-
-
-/****************** Enumeration Routines ******************/
-
-static struct {icalrecurrencetype_weekday wd; const char * str; }
-wd_map[] = {
-    {ICAL_SUNDAY_WEEKDAY,"SU"},
-    {ICAL_MONDAY_WEEKDAY,"MO"},
-    {ICAL_TUESDAY_WEEKDAY,"TU"},
-    {ICAL_WEDNESDAY_WEEKDAY,"WE"},
-    {ICAL_THURSDAY_WEEKDAY,"TH"},
-    {ICAL_FRIDAY_WEEKDAY,"FR"},
-    {ICAL_SATURDAY_WEEKDAY,"SA"},
-    {ICAL_NO_WEEKDAY,0}
-};
-
-const char* icalrecur_weekday_to_string(icalrecurrencetype_weekday kind)
-{
-    int i;
-
-    for (i=0; wd_map[i].wd  != ICAL_NO_WEEKDAY; i++) {
-        if ( wd_map[i].wd ==  kind) {
-            return wd_map[i].str;
-        }
-    }
-
-    return 0;
-}
-
-icalrecurrencetype_weekday icalrecur_string_to_weekday(const char* str)
-{
-    int i;
-
-    for (i=0; wd_map[i].wd  != ICAL_NO_WEEKDAY; i++) {
-        if ( strcasecmp(str,wd_map[i].str) == 0){
-            return wd_map[i].wd;
-        }
-    }
-
-    return ICAL_NO_WEEKDAY;
-}
-
-
-
-static struct {
-        icalrecurrencetype_frequency kind;
-        const char* str;
-} freq_map[] = {
-    {ICAL_SECONDLY_RECURRENCE,"SECONDLY"},
-    {ICAL_MINUTELY_RECURRENCE,"MINUTELY"},
-    {ICAL_HOURLY_RECURRENCE,"HOURLY"},
-    {ICAL_DAILY_RECURRENCE,"DAILY"},
-    {ICAL_WEEKLY_RECURRENCE,"WEEKLY"},
-    {ICAL_MONTHLY_RECURRENCE,"MONTHLY"},
-    {ICAL_YEARLY_RECURRENCE,"YEARLY"},
-    {ICAL_NO_RECURRENCE,0}
-};
-
-const char* icalrecur_freq_to_string(icalrecurrencetype_frequency kind)
-{
-    int i;
-
-    for (i=0; freq_map[i].kind != ICAL_NO_RECURRENCE ; i++) {
-        if ( freq_map[i].kind == kind ) {
-            return freq_map[i].str;
-        }
-    }
-    return 0;
-}
-
-icalrecurrencetype_frequency icalrecur_string_to_freq(const char* str)
-{
-    int i;
-
-    for (i=0; freq_map[i].kind != ICAL_NO_RECURRENCE ; i++) {
-        if ( strcasecmp(str,freq_map[i].str) == 0){
-            return freq_map[i].kind;
-        }
-    }
-    return ICAL_NO_RECURRENCE;
-}
-
-static struct {
-        icalrecurrencetype_skip kind;
-        const char* str;
-} skip_map[] = {
-    {ICAL_SKIP_BACKWARD,"BACKWARD"},
-    {ICAL_SKIP_FORWARD,"FORWARD"},
-    {ICAL_SKIP_OMIT,"OMIT"}
-};
-
-const char* icalrecur_skip_to_string(icalrecurrencetype_skip kind)
-{
-    int i;
-
-    for (i=0; skip_map[i].kind != ICAL_SKIP_OMIT ; i++) {
-        if ( skip_map[i].kind == kind ) {
-            return skip_map[i].str;
-        }
-    }
-    return 0;
-}
-
-icalrecurrencetype_skip icalrecur_string_to_skip(const char* str)
-{
-    int i;
-
-    for (i=0; skip_map[i].kind != ICAL_SKIP_OMIT ; i++) {
-        if ( strcasecmp(str,skip_map[i].str) == 0){
-            return skip_map[i].kind;
-        }
-    }
-    return ICAL_SKIP_OMIT;
 }
 
 /** Fill an array with the 'count' number of occurrences generated by

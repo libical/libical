@@ -1,29 +1,23 @@
-/* -*- Mode: C -*- */
 /*======================================================================
  FILE: icalgauge.c
  CREATOR: eric 23 December 1999
 
-
- $Id: icalgauge.c,v 1.15 2008-01-02 20:07:40 dothebart Exp $
- $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -161,7 +155,7 @@ icalcomponent* icalgauge_make_gauge(icalcomponent* query);
   */
 
 
-int icalgauge_compare_recurse(icalcomponent* comp, icalcomponent* gauge)
+/*non-static,recursive*/ int icalgauge_compare_recurse(icalcomponent* comp, icalcomponent* gauge)
 {
     int pass = 1,localpass = 0;
     icalproperty *p;

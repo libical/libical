@@ -28,7 +28,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-icalcomponent* icalmessage_get_inner(icalcomponent* comp)
+static icalcomponent* icalmessage_get_inner(icalcomponent* comp)
 {
     if (icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT){
         return icalcomponent_get_first_real_component(comp);
@@ -55,7 +55,7 @@ static char* lowercase(const char* str)
     return n;
 }
 
-icalproperty* icalmessage_find_attendee(icalcomponent* comp, const char* user)
+static icalproperty* icalmessage_find_attendee(icalcomponent* comp, const char* user)
 {
     icalcomponent *inner = icalmessage_get_inner(comp);
     icalproperty *p,*attendee = 0;
@@ -86,8 +86,8 @@ icalproperty* icalmessage_find_attendee(icalcomponent* comp, const char* user)
 
 }
 
-void icalmessage_copy_properties(icalcomponent* to, icalcomponent* from,
-                icalproperty_kind kind)
+static void icalmessage_copy_properties(icalcomponent* to, icalcomponent* from,
+                                        icalproperty_kind kind)
 {
     icalcomponent *to_inner = icalmessage_get_inner(to);
     icalcomponent *from_inner = icalmessage_get_inner(from);
@@ -110,9 +110,9 @@ void icalmessage_copy_properties(icalcomponent* to, icalcomponent* from,
         );
 }
 
-icalcomponent *icalmessage_new_reply_base(icalcomponent* c,
-                                            const char* user,
-                                            const char* msg)
+static icalcomponent *icalmessage_new_reply_base(icalcomponent* c,
+                                                 const char* user,
+                                                 const char* msg)
 {
     icalproperty *attendee;
     char tmp[45];

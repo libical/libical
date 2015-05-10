@@ -53,7 +53,7 @@ struct icalcomponent_impl
 void icalproperty_set_parent(icalproperty* property,
                              icalcomponent* component);
 icalcomponent* icalproperty_get_parent(icalproperty* property);
-void icalcomponent_add_children(icalcomponent *impl,va_list args);
+static void icalcomponent_add_children(icalcomponent *impl,va_list args);
 static icalcomponent* icalcomponent_new_impl (icalcomponent_kind kind);
 
 static void icalcomponent_merge_vtimezone (icalcomponent *comp,
@@ -75,7 +75,6 @@ static int icalcomponent_compare_timezone_fn    (const void     *elem1,
                                                  const void     *elem2);
 static struct icaltimetype
 icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop);
-
 
 void icalcomponent_add_children(icalcomponent *impl, va_list args)
 {

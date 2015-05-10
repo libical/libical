@@ -90,6 +90,7 @@ LIBICAL_ICAL_EXPORT const char *icalerror_perror(void);
 LIBICAL_ICAL_EXPORT void ical_bt(void);
 LIBICAL_ICAL_EXPORT void icalerror_set_error_state(icalerrorenum error, icalerrorstate);
 LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state(icalerrorenum error);
+LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char* str);
 
 #ifndef ICAL_SETERROR_ISFUNC
 #define icalerror_set_errno(x) \

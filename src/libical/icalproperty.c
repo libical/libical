@@ -1009,9 +1009,6 @@ char* icalproperty_get_property_name_r(const icalproperty* prop)
     return buf;
 }
 
-
-
-
 void icalproperty_set_parent(icalproperty* property,
                              icalcomponent* component)
 {

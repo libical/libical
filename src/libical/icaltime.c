@@ -331,7 +331,7 @@ static char* set_tz(const char* tzid)
     return old_tz_copy; /* This will be zero if the TZ env var was not set */
 }
 
-void unset_tz(char *tzstr)
+static void unset_tz(char *tzstr)
 {
     /* restore the original environment */
 

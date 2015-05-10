@@ -192,8 +192,6 @@ LIBICAL_ICAL_EXPORT enum icalrecurrencetype_weekday icalrecurrencetype_day_day_o
 /** 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc */
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_day_position(short day);
 
-LIBICAL_ICAL_EXPORT icalrecurrencetype_weekday icalrecur_string_to_weekday(const char *str);
-
 /**
  * The 'month' element of the by_month array is encoded to allow
  * representation of the "L" leap suffix (RFC 7529).

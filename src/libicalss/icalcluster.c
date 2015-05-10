@@ -36,7 +36,7 @@
 
 #include <stdlib.h>
 
-icalcluster * icalcluster_new_impl(void) {
+static icalcluster * icalcluster_new_impl(void) {
 
         struct icalcluster_impl* impl;
 

@@ -284,7 +284,6 @@ extern "C"
 
     LIBICAL_VCAL_EXPORT VObject *addVObjectProp(VObject * o, VObject * p);
     LIBICAL_VCAL_EXPORT VObject *addProp(VObject * o, const char *id);
-    LIBICAL_VCAL_EXPORT VObject *addProp_(VObject * o, const char *id);
     LIBICAL_VCAL_EXPORT VObject *addPropValue(VObject * o, const char *p, const char *v);
     LIBICAL_VCAL_EXPORT VObject *addPropSizedValue_(VObject * o, const char *p, const char *v,
                                                     unsigned int size);

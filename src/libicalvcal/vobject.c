@@ -96,7 +96,7 @@ const char** fieldedProp;
         deleteStrItem
    ----------------------------------------------------------------------*/
 
-VObject* newVObject_(const char *id)
+static VObject* newVObject_(const char *id)
 {
     VObject *p = (VObject*)malloc(sizeof(VObject));
     p->next = 0;
@@ -298,7 +298,7 @@ VObject* addProp(VObject *o, const char *id)
     return addVObjectProp(o,newVObject(id));
 }
 
-VObject* addProp_(VObject *o, const char *id)
+static VObject* addProp_(VObject *o, const char *id)
 {
     return addVObjectProp(o,newVObject_(id));
 }
@@ -733,8 +733,8 @@ static const char *AAlarmFields[] = {
     0
     };
 
-/* ExDate -- has unamed fields */
-/* RDate -- has unamed fields */
+/* ExDate -- has unnamed fields */
+/* RDate -- has unnamed fields */
 
 static const char *DAlarmFields[] = {
     VCRunTimeProp,

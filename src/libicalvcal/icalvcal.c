@@ -21,7 +21,7 @@
  its work.s his routine steps through through all of the properties
  and components of a VObject. For each name of a property or a
  component, icalvcal_traverse_objects looks up the name in
- conversion_table[]. This table indicates wether the name is of a
+ conversion_table[]. This table indicates whether the name is of a
  component or a property, lists a routine to handle conversion, and
  has extra data for the conversion.
 
@@ -73,8 +73,8 @@ struct conversion_table_struct {
         int icaltype;
 };
 
-void* dc_prop(int icaltype, VObject *object, icalcomponent *comp,
-              icalvcal_defaults *defaults);
+static void* dc_prop(int icaltype, VObject *object, icalcomponent *comp,
+                     icalvcal_defaults *defaults);
 
 
 
@@ -97,7 +97,7 @@ static icalproperty* create_parse_error_property (const char *message,
 }
 
 
-char* get_string_value (VObject *object, int *free_string)
+static char* get_string_value (VObject *object, int *free_string)
 {
     switch (vObjectValueType(object)) {
         case VCVT_USTRINGZ:
@@ -219,8 +219,8 @@ icalcomponent* icalvcal_convert (VObject *object)
  * timezone_comp() may not really be necessary, I think it would be
  * easier to use them. */
 
-void* comp(int icaltype, VObject *o, icalcomponent *comp,
-           icalvcal_defaults *defaults)
+static void* comp(int icaltype, VObject *o, icalcomponent *comp,
+                  icalvcal_defaults *defaults)
 {
     icalcomponent_kind kind = (icalcomponent_kind)icaltype;
     icalcomponent* c = icalcomponent_new(kind);
@@ -562,8 +562,8 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 }
 
 
-void* alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
-                 icalvcal_defaults *defaults)
+static void* alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
+                        icalvcal_defaults *defaults)
 {
 /*    icalcomponent_kind kind = (icalcomponent_kind)icaltype; */
     int is_valid_alarm;
@@ -586,8 +586,8 @@ void* alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
 #define parameter 0
 #define rsvp_parameter 0
 
-void* transp_prop(int icaltype, VObject *object, icalcomponent *comp,
-                  icalvcal_defaults *defaults)
+static void* transp_prop(int icaltype, VObject *object, icalcomponent *comp,
+                         icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
     char *s;
@@ -612,8 +612,8 @@ void* transp_prop(int icaltype, VObject *object, icalcomponent *comp,
     return (void*)prop;
 }
 
-void* sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
-                    icalvcal_defaults *defaults)
+static void* sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
+                           icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
     char *s;
@@ -641,8 +641,8 @@ void* sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
 
 /* This handles properties which have multiple values, which are separated by
    ';' in vCalendar but ',' in iCalendar. So we just switch those. */
-void* multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
-                       icalvcal_defaults *defaults)
+static void* multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
+                              icalvcal_defaults *defaults)
 {
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop = NULL;
@@ -680,8 +680,8 @@ void* multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
 }
 
 
-void* status_prop(int icaltype, VObject *object, icalcomponent *comp,
-                  icalvcal_defaults *defaults)
+static void* status_prop(int icaltype, VObject *object, icalcomponent *comp,
+                         icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
     char *s;
@@ -732,8 +732,8 @@ void* status_prop(int icaltype, VObject *object, icalcomponent *comp,
 }
 
 
-void* utc_datetime_prop(int icaltype, VObject *object, icalcomponent *comp,
-                        icalvcal_defaults *defaults)
+static void* utc_datetime_prop(int icaltype, VObject *object, icalcomponent *comp,
+                               icalvcal_defaults *defaults)
 {
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop;
@@ -1190,8 +1190,8 @@ static char* rrule_parse_yearly_days (char *s,
         recurrences, time modifiers in DAILY rules and maybe other stuff.
 */
 
-void* rule_prop(int icaltype, VObject *object, icalcomponent *comp,
-                icalvcal_defaults *defaults)
+static void* rule_prop(int icaltype, VObject *object, icalcomponent *comp,
+                       icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
     char *s, *p, *error_message = NULL;

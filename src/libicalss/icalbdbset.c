@@ -32,7 +32,6 @@
 #define MAX_RETRY 5
 
 /* these are just stub functions */
-icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc)(const DBT *dbt));
 icalerrorenum icalbdbset_create_cluster(const char *path);
 int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method);
 
@@ -149,6 +148,124 @@ DB_ENV *icalbdbset_get_env(void)
  *  pfunc is used to unpack data from the database.  If not given, we
  *  assume data is a string.
  */
+
+/* This populates a cluster with the entire contents of a database */
+static icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc)(const DBT *dbt))
+{
+    DB *dbp;
+    DBC *dbcp;
+    DBT key, data;
+    char *str;
+    int ret = EINVAL;
+    char keystore[256];
+    char datastore[1024];
+    char *more_mem = NULL;
+    DB_TXN *tid;
+    _unused(pfunc);
+
+    memset(&key, 0, sizeof(DBT));
+    memset(&data, 0, sizeof(DBT));
+
+    if (bset->sdbp) {
+        dbp = bset->sdbp;
+    } else {
+        dbp = bset->dbp;
+    }
+
+    if (!dbp) {
+        return ICAL_FILE_ERROR;
+    }
+
+    bset->cluster = icalcomponent_new(ICAL_XROOT_COMPONENT);
+
+    if ((ret = ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, NULL, &tid, 0)) != 0) {
+        /*char *foo = db_strerror(ret);*/
+        abort();
+    }
+
+    /* acquire a cursor for the database */
+    if ((ret = dbp->cursor(dbp, tid, &dbcp, 0)) != 0) {
+        dbp->err(dbp, ret, "primary index");
+        goto err1;
+    }
+
+    key.flags = DB_DBT_USERMEM;
+    key.data = keystore;
+    key.ulen = (u_int32_t)sizeof(keystore);
+
+    data.flags = DB_DBT_USERMEM;
+    data.data = datastore;
+    data.ulen = (u_int32_t)sizeof(datastore);
+
+    /* fetch the key/data pair */
+    while (1) {
+        ret = dbcp->c_get(dbcp, &key, &data, DB_NEXT);
+        if (ret == DB_NOTFOUND) {
+            break;
+        } else if (ret == ENOMEM) {
+            if (more_mem) {
+                free(more_mem);
+            }
+            more_mem = malloc(data.ulen + 1024);
+            data.data = more_mem;
+            data.ulen = data.ulen + 1024;
+        } else if (ret == DB_LOCK_DEADLOCK) {
+            /*char *foo = db_strerror(ret);*/
+            abort(); /* should retry in case of DB_LOCK_DEADLOCK */
+        } else if (ret) {
+            /*char *foo = db_strerror(ret);*/
+            /* some other weird-ass error  */
+            dbp->err(dbp, ret, "cursor");
+            abort();
+        } else {
+            icalcomponent *cl;
+
+            /* this prevents an array read bounds error */
+            if ((str = (char *)calloc(data.size + 1, sizeof(char))) == NULL) {
+                goto err2;
+            }
+            memcpy(str, (char *)data.data, data.size);
+
+            cl = icalparser_parse_string(str);
+
+            icalcomponent_add_component(bset->cluster, cl);
+            free(str);
+        }
+    }
+    if (ret != DB_NOTFOUND) {
+        goto err2;
+    }
+
+    if (more_mem) {
+        free(more_mem);
+        more_mem = NULL;
+    }
+
+    if ((ret = dbcp->c_close(dbcp)) != 0) {
+        /*char *foo = db_strerror(ret);*/
+        abort(); /* should retry in case of DB_LOCK_DEADLOCK */
+    }
+
+    if ((ret = tid->commit(tid, 0)) != 0) {
+        /*char *foo = db_strerror(ret);*/
+        abort();
+    }
+
+    return ICAL_NO_ERROR;
+
+err2:
+    if (more_mem) {
+        free(more_mem);
+    }
+    dbcp->c_close(dbcp);
+    abort(); /* should retry in case of DB_LOCK_DEADLOCK */
+    return ICAL_INTERNAL_ERROR;
+
+err1:
+    dbp->err(dbp, ret, "cursor index");
+    abort();
+    return ICAL_FILE_ERROR;
+}
 
 icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
 {
@@ -328,124 +445,6 @@ char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc)(const DBT *dbt))
     }
 
     return ret;
-}
-
-/* This populates a cluster with the entire contents of a database */
-icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc)(const DBT *dbt))
-{
-    DB *dbp;
-    DBC *dbcp;
-    DBT key, data;
-    char *str;
-    int ret = EINVAL;
-    char keystore[256];
-    char datastore[1024];
-    char *more_mem = NULL;
-    DB_TXN *tid;
-    _unused(pfunc);
-
-    memset(&key, 0, sizeof(DBT));
-    memset(&data, 0, sizeof(DBT));
-
-    if (bset->sdbp) {
-        dbp = bset->sdbp;
-    } else {
-        dbp = bset->dbp;
-    }
-
-    if (!dbp) {
-        return ICAL_FILE_ERROR;
-    }
-
-    bset->cluster = icalcomponent_new(ICAL_XROOT_COMPONENT);
-
-    if ((ret = ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, NULL, &tid, 0)) != 0) {
-        /*char *foo = db_strerror(ret);*/
-        abort();
-    }
-
-    /* acquire a cursor for the database */
-    if ((ret = dbp->cursor(dbp, tid, &dbcp, 0)) != 0) {
-        dbp->err(dbp, ret, "primary index");
-        goto err1;
-    }
-
-    key.flags = DB_DBT_USERMEM;
-    key.data = keystore;
-    key.ulen = (u_int32_t)sizeof(keystore);
-
-    data.flags = DB_DBT_USERMEM;
-    data.data = datastore;
-    data.ulen = (u_int32_t)sizeof(datastore);
-
-    /* fetch the key/data pair */
-    while (1) {
-        ret = dbcp->c_get(dbcp, &key, &data, DB_NEXT);
-        if (ret == DB_NOTFOUND) {
-            break;
-        } else if (ret == ENOMEM) {
-            if (more_mem) {
-                free(more_mem);
-            }
-            more_mem = malloc(data.ulen + 1024);
-            data.data = more_mem;
-            data.ulen = data.ulen + 1024;
-        } else if (ret == DB_LOCK_DEADLOCK) {
-            /*char *foo = db_strerror(ret);*/
-            abort(); /* should retry in case of DB_LOCK_DEADLOCK */
-        } else if (ret) {
-            /*char *foo = db_strerror(ret);*/
-            /* some other weird-ass error  */
-            dbp->err(dbp, ret, "cursor");
-            abort();
-        } else {
-            icalcomponent *cl;
-
-            /* this prevents an array read bounds error */
-            if ((str = (char *)calloc(data.size + 1, sizeof(char))) == NULL) {
-                goto err2;
-            }
-            memcpy(str, (char *)data.data, data.size);
-
-            cl = icalparser_parse_string(str);
-
-            icalcomponent_add_component(bset->cluster, cl);
-            free(str);
-        }
-    }
-    if (ret != DB_NOTFOUND) {
-        goto err2;
-    }
-
-    if (more_mem) {
-        free(more_mem);
-        more_mem = NULL;
-    }
-
-    if ((ret = dbcp->c_close(dbcp)) != 0) {
-        /*char *foo = db_strerror(ret);*/
-        abort(); /* should retry in case of DB_LOCK_DEADLOCK */
-    }
-
-    if ((ret = tid->commit(tid, 0)) != 0) {
-        /*char *foo = db_strerror(ret);*/
-        abort();
-    }
-
-    return ICAL_NO_ERROR;
-
-err2:
-    if (more_mem) {
-        free(more_mem);
-    }
-    dbcp->c_close(dbcp);
-    abort(); /* should retry in case of DB_LOCK_DEADLOCK */
-    return ICAL_INTERNAL_ERROR;
-
-err1:
-    dbp->err(dbp, ret, "cursor index");
-    abort();
-    return ICAL_FILE_ERROR;
 }
 
 /* XXX add more to this */
@@ -1056,7 +1055,7 @@ struct icalbdbset_id {
     int sequence;
 };
 
-void icalbdbset_id_free(struct icalbdbset_id *id)
+static void icalbdbset_id_free(struct icalbdbset_id *id)
 {
     if (id->recurrence_id != 0) {
         free(id->recurrence_id);
@@ -1293,7 +1292,7 @@ icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
                     itr.last_component = NULL;
                     icalrecur_iterator_free(itr.ritr);
                     itr.ritr = NULL;
-                    /* no matched occurence */
+                    /* no matched occurrence */
                     goto getNextComp;
                 } else {
                     itr.last_component = comp;
@@ -1404,8 +1403,8 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
             itr->last_component = NULL;
             icalrecur_iterator_free(itr->ritr);
             itr->ritr = NULL;
-            /* no more pending matched occurence,
-             * all the pending matched occurences have been returned */
+            /* no more pending matched occurrence,
+             * all the pending matched occurrences have been returned */
             return NULL;
         } else {
             itr->last_component = comp;
@@ -1453,7 +1452,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
 
     do {
 
-        /* no pending occurence, read the next component */
+        /* no pending occurrence, read the next component */
         if (i->last_component == NULL) {
             comp = icalcompiter_next(&(i->iter));
         } else {
@@ -1515,7 +1514,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
                     i->last_component = NULL;
                     icalrecur_iterator_free(i->ritr);
                     i->ritr = NULL;
-                    /* no more occurence, should go to get next component */
+                    /* no more occurrence, should go to get next component */
                     continue;
                 } else {
                     i->last_component = comp;

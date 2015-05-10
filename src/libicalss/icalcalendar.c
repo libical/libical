@@ -57,7 +57,7 @@ struct icalcalendar_impl* icalcalendar_new_impl(void)
 }
 
 
-icalerrorenum icalcalendar_create(struct icalcalendar_impl* impl)
+static icalerrorenum icalcalendar_create(struct icalcalendar_impl* impl)
 {
     char path[MAXPATHLEN];
     struct stat sbuf;

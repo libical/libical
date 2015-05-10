@@ -43,7 +43,7 @@ struct text_part
         size_t buf_size;
 };
 
-void* icalmime_text_new_part(void)
+static void* icalmime_text_new_part(void)
 {
 
 #define BUF_SIZE 2048
@@ -61,9 +61,10 @@ void* icalmime_text_new_part(void)
 
     return impl;
 }
-void icalmime_text_add_line(void *part,
-                            struct sspm_header *header,
-                            const char* line, size_t size)
+
+static void icalmime_text_add_line(void *part,
+                                   struct sspm_header *header,
+                                   const char* line, size_t size)
 {
     struct text_part* impl = (struct text_part*) part;
     _unused(header);
@@ -74,7 +75,7 @@ void icalmime_text_add_line(void *part,
 
 }
 
-void* icalmime_textcalendar_end_part(void* part)
+static void* icalmime_textcalendar_end_part(void* part)
 {
 
     struct text_part* impl = (struct text_part*) part;
@@ -87,7 +88,7 @@ void* icalmime_textcalendar_end_part(void* part)
 
 }
 
-void* icalmime_text_end_part_r(void* part)
+static void* icalmime_text_end_part_r(void* part)
 {
     char *buf;
     struct text_part* impl = ( struct text_part*) part;
@@ -107,7 +108,7 @@ void* icalmime_text_end_part(void* part)
 }
 
 
-void icalmime_text_free_part(void *part)
+static void icalmime_text_free_part(void *part)
 {
     _unused(part);
 }
@@ -115,12 +116,13 @@ void icalmime_text_free_part(void *part)
 
 /* Ignore Attachments for now */
 
-void* icalmime_attachment_new_part(void)
+static void* icalmime_attachment_new_part(void)
 {
     return 0;
 }
-void icalmime_attachment_add_line(void *part, struct sspm_header *header,
-                                  const char* line, size_t size)
+
+static void icalmime_attachment_add_line(void *part, struct sspm_header *header,
+                                         const char* line, size_t size)
 {
     _unused(part);
     _unused(header);
@@ -128,19 +130,16 @@ void icalmime_attachment_add_line(void *part, struct sspm_header *header,
     _unused(size);
 }
 
-void* icalmime_attachment_end_part(void* part)
+static void* icalmime_attachment_end_part(void* part)
 {
     _unused(part);
     return 0;
 }
 
-void icalmime_attachment_free_part(void *part)
+static void icalmime_attachment_free_part(void *part)
 {
     _unused(part);
 }
-
-
-
 
 static const struct sspm_action_map icalmime_local_action_map[] =
 {
