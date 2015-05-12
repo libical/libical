@@ -2045,7 +2045,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
           short dow = (short)(impl->by_ptrs[BY_DAY][0]-this_dow);
 
           /* Normalize day of week around week start */
-          if (this_dow < (short)impl->rule.week_start) dow -= 7;
+          if (dow != 0 && this_dow < (short)impl->rule.week_start) dow -= 7;
 
           if((this_dow < impl->by_ptrs[BY_DAY][0] && dow >= 0) || dow < 0)
           {

@@ -163,6 +163,10 @@ const struct recur rfc5545[] = {
     { "19970902T090000",
       "FREQ=WEEKLY;COUNT=10;WKST=SU;BYDAY=TU,TH" },
 
+    /* Weekly on Sunday every four weeks */
+    { "20150322T000000",
+      "FREQ=WEEKLY;INTERVAL=4;BYDAY=SU;COUNT=4" },
+
     /* Every other week on Monday, Wednesday, and Friday 
        until December 24, 1997, starting on Monday, September 1, 1997 */
     { "19970901T090000",
