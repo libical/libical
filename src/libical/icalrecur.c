@@ -1291,7 +1291,7 @@ static int initialize_iterator(icalrecur_iterator* impl)
             int idx;
 
             for (idx = 0; BYMONPTR[idx] != ICAL_RECURRENCE_ARRAY_MAX; idx++) {
-                if (BYMONPTR[idx] > 5  /* 5L == 1280 */) {
+                if (BYMONPTR[idx] > 5  /* 5L == 0x1005 */) {
                     /* Translate 5L to 6, 6-12 to 7-13 */
                     BYMONPTR[idx] =
                         icalrecurrencetype_month_month(BYMONPTR[idx]) + 1;
