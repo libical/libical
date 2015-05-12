@@ -118,7 +118,7 @@
   This flag is usually set early in a next_* routine and returned in
   the end. The way it is used allows the next_* routine to set the
   last time back to the first element in a BYxx rule, and then signal
-  to the higer level routine to increment the next higher level. For
+  to the higher level routine to increment the next higher level. For
   instance. WITH FREQ=MONTHLY;BYDAY=TU,FR, After next_weekday_by_month
   runs though both TU and FR, it sets the week day back to TU and sets
   end_of_data to 1x. This signals next_month to increment the month.
@@ -738,7 +738,7 @@ char* icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
 }
 
 
-/************************* occurrence iteration routiens ******************/
+/************************* occurrence iteration routines ******************/
 
 enum byrule {
     NO_CONTRACTION = -1,
@@ -804,7 +804,7 @@ enum expand_table {
 
 /**
  * The split map indicates, for a particular interval, whether a BY_*
- * rule part expands the number of instances in the occcurrence set or
+ * rule part expands the number of instances in the occurrence set or
  * contracts it. 1=> contract, 2=>expand, and 3 means the pairing is
  * not allowed.
  */
@@ -866,7 +866,7 @@ int icalrecur_two_byrule(icalrecur_iterator* impl,
 
 }
 
-/** Check that the rule has only the one given interdat byrule parts. */
+/** Check that the rule has only the one given interday byrule parts. */
 static int icalrecur_one_byrule(icalrecur_iterator* impl,enum byrule one)
 {
     int passes = 1;
@@ -1977,7 +1977,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     impl->occurrence_no = 0;
     freq = impl->rule.freq;
 
-    /* Set up convienience pointers to make the code simpler. Allows
+    /* Set up convenience pointers to make the code simpler. Allows
        us to iterate through all of the BY* arrays in the rule. */
 
     impl->by_ptrs[BY_MONTH]=impl->rule.by_month;
@@ -1993,7 +1993,7 @@ icalrecur_iterator* icalrecur_iterator_new(struct icalrecurrencetype rule,
     memset(impl->orig_data,0,9*sizeof(short));
 
     /* Note which by rules had data in them when the iterator was
-       created. We can't use the actuall by_x arrays, because the
+       created. We can't use the actual by_x arrays, because the
        empty ones will be given default values later in this
        routine. The orig_data array will be used later in has_by_data */
 
@@ -2209,7 +2209,7 @@ void icalrecur_iterator_free(icalrecur_iterator* i)
 
 }
 
-/** Increment month is different that the other incement_* routines --
+/** Increment month is different that the other increment_* routines --
    it figures out the interval for itself, and uses BYMONTH data if
    available. */
 static void increment_month(icalrecur_iterator* impl)
@@ -2518,7 +2518,7 @@ static int next_month(icalrecur_iterator* impl)
       int days_in_month = get_days_in_month(impl, last.month, last.year);
       /* Iterate through the remaining days in the month and check if
          each day is listed in the BY_DAY array and in the BY_MONTHDAY
-         array. This seems very inneficient, but I think it is the
+         array. This seems very inefficient, but I think it is the
          simplest way to account for both BYDAY=1FR (First friday in
          month) and BYDAY=FR ( every friday in month ) */
 
@@ -2556,7 +2556,7 @@ static int next_month(icalrecur_iterator* impl)
 
       /* This code iterates through the remaining days in the month
          and checks if each day is listed in the BY_DAY array. This
-         seems very inneficient, but I think it is the simplest way to
+         seems very inefficient, but I think it is the simplest way to
          account for both BYDAY=1FR (First friday in month) and
          BYDAY=FR ( every friday in month ) */
 
@@ -2678,7 +2678,7 @@ static int next_weekday_by_week(icalrecur_iterator* impl)
       return 1;
   }
 
-  /* If we get here, we need to step to tne next day */
+  /* If we get here, we need to step to the next day */
 
   for (;;) {
       BYDAYIDX++; /* Look at next elem in BYDAY array */
@@ -2817,7 +2817,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
     memset(impl->days,ICAL_RECURRENCE_ARRAY_MAX_BYTE,sizeof(impl->days));
 
     /* The flags and the following switch statement select which code
-       to use to expand the yers days, based on which BY-rules are
+       to use to expand the years days, based on which BY-rules are
        present. */
 
     flags = (HBD(BY_DAY) ? 1<<BY_DAY : 0) +
@@ -2862,7 +2862,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
         if(valid) { /* BYWEEKNO wins */
             flags -= 1<<BY_MONTH;
         }
-        else { /* BYMONTH vins */
+        else { /* BYMONTH wins */
             flags -= 1<<BY_WEEK_NO;
         }
     }
@@ -3327,7 +3327,7 @@ void icalrecurrencetype_clear(struct icalrecurrencetype *recur)
 }
 
 /** The 'day' element of icalrecurrencetype_weekday is encoded to
- * allow representation of both the day of the week ( Monday, Tueday),
+ * allow representation of both the day of the week ( Monday, Tuesday),
  * but also the Nth day of the week ( First tuesday of the month, last
  * thursday of the year) These routines decode the day values.
  *
