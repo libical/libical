@@ -936,29 +936,29 @@ icalarray* icalrecurrencetype_rscale_supported_calendars(void)
 
 static void set_second(icalrecur_iterator* impl, int second)
 {
-    ucal_set(impl->rscale, UCAL_SECOND, second);
+    ucal_set(impl->rscale, UCAL_SECOND, (int32_t)second);
 }
 
 static void set_minute(icalrecur_iterator* impl, int minute)
 {
-    ucal_set(impl->rscale, UCAL_MINUTE, minute);
+    ucal_set(impl->rscale, UCAL_MINUTE, (int32_t)minute);
 }
 
 static void set_hour(icalrecur_iterator* impl, int hour)
 {
-    ucal_set(impl->rscale, UCAL_HOUR_OF_DAY, hour);
+    ucal_set(impl->rscale, UCAL_HOUR_OF_DAY, (int32_t)hour);
 }
 
 static int set_day_of_week(icalrecur_iterator* impl, int dow, int pos)
 {
     UErrorCode status = U_ZERO_ERROR;
-    int max_pos = ucal_getLimit(impl->rscale, UCAL_DAY_OF_WEEK_IN_MONTH,
-                                UCAL_ACTUAL_MAXIMUM, &status);
+    int max_pos = (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_WEEK_IN_MONTH,
+                                     UCAL_ACTUAL_MAXIMUM, &status);
 
     if (pos > max_pos || pos < -max_pos) return 0;
 
-    ucal_set(impl->rscale, UCAL_DAY_OF_WEEK, dow);
-    if (pos) ucal_set(impl->rscale, UCAL_DAY_OF_WEEK_IN_MONTH, pos);
+    ucal_set(impl->rscale, UCAL_DAY_OF_WEEK, (int32_t)dow);
+    if (pos) ucal_set(impl->rscale, UCAL_DAY_OF_WEEK_IN_MONTH, (int32_t)pos);
 
     return 1;
 }
@@ -967,11 +967,11 @@ static void set_day_of_month(icalrecur_iterator* impl, int day)
 {
     if (day < 0) {
         UErrorCode status = U_ZERO_ERROR;
-        int days_in_month = ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
-                                          UCAL_ACTUAL_MAXIMUM, &status);
+        int days_in_month = (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
+                                               UCAL_ACTUAL_MAXIMUM, &status);
         day = days_in_month + day + 1;
     }
-    ucal_set(impl->rscale, UCAL_DAY_OF_MONTH, day);
+    ucal_set(impl->rscale, UCAL_DAY_OF_MONTH, (int32_t)day);
 }
 
 static void set_month(icalrecur_iterator* impl, int month)
@@ -980,7 +980,7 @@ static void set_month(icalrecur_iterator* impl, int month)
 
     month = icalrecurrencetype_month_month(month) - 1;  /* UCal is 0-based */
 
-    ucal_set(impl->rscale, UCAL_MONTH, month);
+    ucal_set(impl->rscale, UCAL_MONTH, (int32_t)month);
     if (is_leap_month) ucal_set(impl->rscale, UCAL_IS_LEAP_MONTH, 1);
 }
 
@@ -988,11 +988,11 @@ static void set_day_of_year(icalrecur_iterator* impl, int doy)
 {
     if (doy < 0) {
         UErrorCode status = U_ZERO_ERROR;
-        int days_in_year = ucal_getLimit(impl->rscale, UCAL_DAY_OF_YEAR,
-                                         UCAL_ACTUAL_MAXIMUM, &status);
+        int days_in_year = (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_YEAR,
+                                              UCAL_ACTUAL_MAXIMUM, &status);
         doy = days_in_year + doy + 1;
     }
-    ucal_set(impl->rscale, UCAL_DAY_OF_YEAR, doy);
+    ucal_set(impl->rscale, UCAL_DAY_OF_YEAR, (int32_t)doy);
 }
 
 static int get_start_of_week(icalrecur_iterator* impl)
@@ -1000,8 +1000,8 @@ static int get_start_of_week(icalrecur_iterator* impl)
     UErrorCode status = U_ZERO_ERROR;
     int doy, dow;
 
-    doy = ucal_get(impl->rscale, UCAL_DAY_OF_YEAR, &status);
-    dow = ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
+    doy = (int)ucal_get(impl->rscale, UCAL_DAY_OF_YEAR, &status);
+    dow = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
     dow -= impl->rule.week_start;
     if (dow < 0) dow += 7;
 
@@ -1012,7 +1012,7 @@ static int get_day_of_week(icalrecur_iterator* impl)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    return ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
+    return (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
 }
 
 static int get_week_number(icalrecur_iterator* impl, struct icaltimetype tt)
@@ -1025,12 +1025,12 @@ static int get_week_number(icalrecur_iterator* impl, struct icaltimetype tt)
     last_millis = ucal_getMillis(impl->rscale, &status);
 
     month = icalrecurrencetype_month_month(tt.month) - 1;  /* UCal is 0-based */
-    ucal_setDate(impl->rscale, tt.year, month, tt.day, &status);
+    ucal_setDate(impl->rscale, (int32_t)tt.year, (int32_t)month, (int32_t)tt.day, &status);
     if (icalrecurrencetype_month_is_leap(tt.month)) {
         ucal_set(impl->rscale, UCAL_IS_LEAP_MONTH, 1);
     }
 
-    weekno = ucal_get(impl->rscale, UCAL_WEEK_OF_YEAR, &status);
+    weekno = (int)ucal_get(impl->rscale, UCAL_WEEK_OF_YEAR, &status);
 
     /* Restore saved rscale date */
     ucal_setMillis(impl->rscale, last_millis, &status);
@@ -1042,25 +1042,24 @@ static int get_days_in_month(icalrecur_iterator* impl, int month, int year)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    ucal_set(impl->rscale, UCAL_YEAR, year);
+    ucal_set(impl->rscale, UCAL_YEAR, (int32_t)year);
 
     if (!month) month = impl->rstart.month;
     set_month(impl, month);
 
-    return ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
-                         UCAL_ACTUAL_MAXIMUM, &status);
+    return (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
+                              UCAL_ACTUAL_MAXIMUM, &status);
 }
 
 static int omit_invalid(icalrecur_iterator *impl, int day, int month)
 {
     UErrorCode status = U_ZERO_ERROR;
-    int my_day = ucal_get(impl->rscale, UCAL_DAY_OF_MONTH, &status);
-    int my_month =
-      ucal_get(impl->rscale, UCAL_MONTH, &status) + 1;  /* UCal is 0-based */
+    int my_day = (int)ucal_get(impl->rscale, UCAL_DAY_OF_MONTH, &status);
+    int my_month = (int)(ucal_get(impl->rscale, UCAL_MONTH, &status) + 1);  /* UCal is 0-based */
 
     if (day < 0) {
-        int days_in_month = ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
-                                          UCAL_ACTUAL_MAXIMUM, &status);
+        int days_in_month = (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
+                                               UCAL_ACTUAL_MAXIMUM, &status);
         my_day -= days_in_month + 1;
     }
 
@@ -1103,7 +1102,7 @@ static int get_day_of_year(icalrecur_iterator* impl,
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    ucal_set(impl->rscale, UCAL_YEAR, year);
+    ucal_set(impl->rscale, UCAL_YEAR, (int32_t)year);
 
     if (!month) month = impl->rstart.month;
     set_month(impl, month);
@@ -1116,9 +1115,9 @@ static int get_day_of_year(icalrecur_iterator* impl,
         return 0;
     }
 
-    if (dow) *dow = ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
+    if (dow) *dow = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
 
-    return ucal_get(impl->rscale, UCAL_DAY_OF_YEAR, &status);
+    return (int)ucal_get(impl->rscale, UCAL_DAY_OF_YEAR, &status);
 }
 
 static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator* impl,
@@ -1134,18 +1133,19 @@ static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator* impl,
         UDate millis = ucal_getMillis(impl->rscale, &status);
         ucal_setMillis(impl->greg, millis, &status);
         cal = impl->greg;
+    } else {
+        is_leap_month = (int)ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status);
     }
-    else is_leap_month = ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status);
 
-    tt.year = ucal_get(cal, UCAL_YEAR, &status);
-    tt.day = ucal_get(cal, UCAL_DATE, &status);
-    tt.month = ucal_get(cal, UCAL_MONTH, &status) + 1;  /* UCal is 0-based */
+    tt.year = (int)ucal_get(cal, UCAL_YEAR, &status);
+    tt.day = (int)ucal_get(cal, UCAL_DATE, &status);
+    tt.month = (int)(ucal_get(cal, UCAL_MONTH, &status) + 1);  /* UCal is 0-based */
     if (is_leap_month) tt.month |= LEAP_MONTH;
 
     if (!tt.is_date) {
-        tt.hour = ucal_get(cal, UCAL_HOUR_OF_DAY, &status);
-        tt.minute = ucal_get(cal, UCAL_MINUTE, &status);
-        tt.second = ucal_get(cal, UCAL_SECOND, &status);
+        tt.hour = (int)ucal_get(cal, UCAL_HOUR_OF_DAY, &status);
+        tt.minute = (int)ucal_get(cal, UCAL_MINUTE, &status);
+        tt.second = (int)ucal_get(cal, UCAL_SECOND, &status);
     }
 
     return tt;
@@ -1154,18 +1154,18 @@ static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator* impl,
 struct icaltimetype __icaltime_from_day_of_year(icalrecur_iterator* impl,
                                                 int day, int year, int *weekno)
 {
-    ucal_set(impl->rscale, UCAL_YEAR, year);
+    ucal_set(impl->rscale, UCAL_YEAR, (int32_t)year);
     if (day < 0) {
         UErrorCode status = U_ZERO_ERROR;
-        int days_in_year = ucal_getLimit(impl->rscale, UCAL_DAY_OF_YEAR,
-                                         UCAL_ACTUAL_MAXIMUM, &status);
+        int days_in_year = (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_YEAR,
+                                              UCAL_ACTUAL_MAXIMUM, &status);
         day = days_in_year + day + 1;
     }
-    ucal_set(impl->rscale, UCAL_DAY_OF_YEAR, day);
+    ucal_set(impl->rscale, UCAL_DAY_OF_YEAR, (int32_t)day);
 
     if (weekno) {
         UErrorCode status = U_ZERO_ERROR;
-        *weekno = ucal_get(impl->rscale, UCAL_WEEK_OF_YEAR, &status);
+        *weekno = (int)ucal_get(impl->rscale, UCAL_WEEK_OF_YEAR, &status);
     }
 
     return occurrence_as_icaltime(impl, 0);
@@ -1179,7 +1179,7 @@ static int is_day_in_byday(icalrecur_iterator *impl, struct icaltimetype tt)
         UErrorCode status = U_ZERO_ERROR;
         int dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[idx]);
         int pos =  icalrecurrencetype_day_position(BYDAYPTR[idx]);
-        int this_dow = ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
+        int this_dow = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
 
         if (dow == this_dow) {
             int day;
@@ -1187,11 +1187,11 @@ static int is_day_in_byday(icalrecur_iterator *impl, struct icaltimetype tt)
             if (pos == 0) return 1;  /* Just a dow, like "TU" or "FR" */
 
             /* Get day of pos */
-            ucal_set(impl->rscale, UCAL_DAY_OF_WEEK_IN_MONTH, pos);
-            day = ucal_get(impl->rscale, UCAL_DAY_OF_MONTH, &status);
+            ucal_set(impl->rscale, UCAL_DAY_OF_WEEK_IN_MONTH, (int32_t)pos);
+            day = (int)ucal_get(impl->rscale, UCAL_DAY_OF_MONTH, &status);
 
             /* Reset current day */
-            ucal_set(impl->rscale, UCAL_DAY_OF_MONTH, tt.day);
+            ucal_set(impl->rscale, UCAL_DAY_OF_MONTH, (int32_t)tt.day);
 
             /* Compare day of pos to current day */
             if (day == tt.day) return 1;  /* pos+dow: "3FR" or -1TU" */
@@ -1205,42 +1205,42 @@ static void increment_year(icalrecur_iterator* impl, int inc)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    ucal_add(impl->rscale, UCAL_YEAR, inc, &status);
+    ucal_add(impl->rscale, UCAL_YEAR, (int32_t)inc, &status);
 }
 
 static void __increment_month(icalrecur_iterator* impl, int inc)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    ucal_add(impl->rscale, UCAL_MONTH, inc, &status);
+    ucal_add(impl->rscale, UCAL_MONTH, (int32_t)inc, &status);
 }
 
 static void increment_monthday(icalrecur_iterator* impl, int inc)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    ucal_add(impl->rscale, UCAL_DAY_OF_MONTH, inc, &status);
+    ucal_add(impl->rscale, UCAL_DAY_OF_MONTH, (int32_t)inc, &status);
 }
 
 static void increment_hour(icalrecur_iterator* impl, int inc)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    ucal_add(impl->rscale, UCAL_HOUR_OF_DAY, inc, &status);
+    ucal_add(impl->rscale, UCAL_HOUR_OF_DAY, (int32_t)inc, &status);
 }
 
 static void increment_minute(icalrecur_iterator* impl, int inc)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    ucal_add(impl->rscale, UCAL_MINUTE, inc, &status);
+    ucal_add(impl->rscale, UCAL_MINUTE, (int32_t)inc, &status);
 }
 
 static void increment_second(icalrecur_iterator* impl, int inc)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    ucal_add(impl->rscale, UCAL_SECOND, inc, &status);
+    ucal_add(impl->rscale, UCAL_SECOND, (int32_t)inc, &status);
 }
 
 static void expand_by_day_init(icalrecur_iterator* impl, int year,
@@ -1248,18 +1248,18 @@ static void expand_by_day_init(icalrecur_iterator* impl, int year,
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    ucal_set(impl->rscale, UCAL_YEAR, year);
+    ucal_set(impl->rscale, UCAL_YEAR, (int32_t)year);
     ucal_set(impl->rscale, UCAL_DAY_OF_YEAR, 1);
 
     /* Find the day that 1st Jan falls on, 1 (Sun) to 7 (Sat). */
-    *start_dow = ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
+    *start_dow = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
 
     /* Get the last day of the year */
-    *end_year_day = ucal_getLimit(impl->rscale, UCAL_DAY_OF_YEAR,
-                                  UCAL_ACTUAL_MAXIMUM, &status);
-    ucal_set(impl->rscale, UCAL_DAY_OF_YEAR, *end_year_day);
+    *end_year_day = (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_YEAR,
+                                       UCAL_ACTUAL_MAXIMUM, &status);
+    ucal_set(impl->rscale, UCAL_DAY_OF_YEAR, (int32_t)(*end_year_day));
 
-    *end_dow = ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
+    *end_dow = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
 }
 
 static void setup_defaults(icalrecur_iterator* impl, enum byrule byrule,
@@ -1281,7 +1281,7 @@ static void setup_defaults(icalrecur_iterator* impl, enum byrule byrule,
             short first = impl->by_ptrs[byrule][0];
 
             if (field == UCAL_MONTH) set_month(impl, first);
-            else ucal_set(impl->rscale, field, first);
+            else ucal_set(impl->rscale, field, (int32_t)first);
         }
     }
 }
@@ -1298,16 +1298,21 @@ static int initialize_iterator(icalrecur_iterator* impl)
         tzid = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
 
     /* Create locale for Gregorian calendar */
-    uloc_setKeywordValue("calendar", "gregorian",
-                         locale, sizeof(locale), &status);
+    (void)uloc_setKeywordValue("calendar", "gregorian",
+                               locale, sizeof(locale), &status);
 
     /* Create Gregorian calendar and set to DTSTART */
     impl->greg = ucal_open((const UChar *) tzid, -1, locale,
                            UCAL_DEFAULT, &status);
     if (impl->greg) {
-        ucal_setDateTime(impl->greg, dtstart.year,
-                         dtstart.month-1  /* UCal is 0-based */, dtstart.day,
-                         dtstart.hour, dtstart.minute, dtstart.second, &status);
+        ucal_setDateTime(impl->greg,
+                         (int32_t)dtstart.year,
+                         (int32_t)(dtstart.month-1),  /* UCal is 0-based */
+                         (int32_t)dtstart.day,
+                         (int32_t)dtstart.hour,
+                         (int32_t)dtstart.minute,
+                         (int32_t)dtstart.second,
+                         &status);
     }
     if (!impl->greg || U_FAILURE(status)) {
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
@@ -1339,8 +1344,8 @@ static int initialize_iterator(icalrecur_iterator* impl)
         }
 
         /* Create locale for RSCALE calendar (lowercasing) */
-        uloc_setKeywordValue("calendar", rule.rscale,
-                             locale, sizeof(locale), &status);
+        (void)uloc_setKeywordValue("calendar", rule.rscale,
+                                   locale, sizeof(locale), &status);
 
         /* Create RSCALE calendar and set to DTSTART */
         impl->rscale = ucal_open((const UChar *) tzid, -1, locale,
@@ -1399,9 +1404,9 @@ static int check_contracting_rules(icalrecur_iterator* impl)
 {
     UErrorCode status = U_ZERO_ERROR;
     struct icaltimetype last = occurrence_as_icaltime(impl, 0);
-    int day_of_week = ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
-    int week_no = ucal_get(impl->rscale, UCAL_WEEK_OF_YEAR, &status);
-    int year_day = ucal_get(impl->rscale, UCAL_DAY_OF_YEAR, &status);
+    int day_of_week = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
+    int week_no = (int)ucal_get(impl->rscale, UCAL_WEEK_OF_YEAR, &status);
+    int year_day = (int)ucal_get(impl->rscale, UCAL_DAY_OF_YEAR, &status);
 
     if (!check_contract_restriction(impl, BY_SECOND, last.second) ||
         !check_contract_restriction(impl, BY_MINUTE, last.minute) ||
@@ -3033,7 +3038,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
                 }
 
                 /* Make sure the days are in chronological order */
-                qsort(impl->days, days_index, sizeof(short), compare_year_days);
+                qsort(impl->days, (size_t)days_index, sizeof(short), compare_year_days);
             }
         }
         break;
@@ -3108,7 +3113,7 @@ static int expand_year_days(icalrecur_iterator* impl, int year)
             short day = (short)(intptr_t)pvl_data(itr);
             int this_weekno, i;
 
-            __icaltime_from_day_of_year(impl,day,year,&this_weekno);
+            (void)__icaltime_from_day_of_year(impl,day,year,&this_weekno);
 
             for(i = 0; BYWEEKPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++){
                     int weekno = BYWEEKPTR[i];
