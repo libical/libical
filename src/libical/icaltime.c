@@ -89,7 +89,7 @@ static time_t make_time(struct tm *tm, int tzm)
    *  (number of leap days to subtract)
    */
 
-  tim = (tm->tm_year - 70) * 365 + ((tm->tm_year - 1) / 4) - 17;
+  tim = (time_t)((tm->tm_year - 70) * 365 + ((tm->tm_year - 1) / 4) - 17);
 
   /* add number of days elapsed in the current year */
 
@@ -600,44 +600,46 @@ int icaltime_days_in_month(const int month, const int year)
 }
 
 /* 1-> Sunday, 7->Saturday */
-int icaltime_day_of_week(const struct icaltimetype t){
-        UTinstant jt;
+int icaltime_day_of_week(const struct icaltimetype t)
+{
+    UTinstant jt;
 
-        memset(&jt,0,sizeof(UTinstant));
+    memset(&jt,0,sizeof(UTinstant));
 
-        jt.year = t.year;
+    jt.year = t.year;
     jt.month = t.month;
     jt.day = t.day;
     jt.i_hour = 0;
     jt.i_minute = 0;
     jt.i_second = 0;
 
-        juldat(&jt);
+    (void)juldat(&jt);
 
-        return jt.weekday + 1;
+    return jt.weekday + 1;
 }
 
 /** Day of the year that the first day of the week (Sunday) is on.
  */
-int icaltime_start_doy_week(const struct icaltimetype t, int fdow){
-        UTinstant jt;
-        int delta;
+int icaltime_start_doy_week(const struct icaltimetype t, int fdow)
+{
+    UTinstant jt;
+    int delta;
 
-        memset(&jt,0,sizeof(UTinstant));
+    memset(&jt,0,sizeof(UTinstant));
 
-        jt.year = t.year;
+    jt.year = t.year;
     jt.month = t.month;
     jt.day = t.day;
     jt.i_hour = 0;
     jt.i_minute = 0;
     jt.i_second = 0;
 
-        juldat(&jt);
-        caldat(&jt);
+    (void)juldat(&jt);
+    (void)caldat(&jt);
 
-        delta = jt.weekday - (fdow - 1);
-        if (delta < 0) delta += 7;
-        return jt.day_of_year - delta;
+    delta = jt.weekday - (fdow - 1);
+    if (delta < 0) delta += 7;
+    return jt.day_of_year - delta;
 }
 
 /** Day of the year that the first day of the week (Sunday) is on.
@@ -660,21 +662,21 @@ int icaltime_start_doy_of_week(const struct icaltimetype t){
  */
 int icaltime_week_number(const struct icaltimetype ictt)
 {
-        UTinstant jt;
+    UTinstant jt;
 
-        memset(&jt,0,sizeof(UTinstant));
+    memset(&jt,0,sizeof(UTinstant));
 
-        jt.year = ictt.year;
+    jt.year = ictt.year;
     jt.month = ictt.month;
     jt.day = ictt.day;
     jt.i_hour = 0;
     jt.i_minute = 0;
     jt.i_second = 0;
 
-        juldat(&jt);
-        caldat(&jt);
+    (void)juldat(&jt);
+    (void)caldat(&jt);
 
-        return (jt.day_of_year - jt.weekday) / 7;
+    return (jt.day_of_year - jt.weekday) / 7;
 }
 
 /* The first array is for non-leap years, the second for leap years*/

@@ -1074,9 +1074,8 @@ static int omit_invalid(icalrecur_iterator *impl, int day, int month)
 
         case ICAL_SKIP_BACKWARD:
             if (my_month != month) {
-                ucal_add(impl->rscale, UCAL_MONTH,
-                         -abs(my_month - icalrecurrencetype_month_month(month)),
-                         &status);
+                int back_month = -abs(my_month - icalrecurrencetype_month_month(month));
+                ucal_add(impl->rscale, UCAL_MONTH, (int32_t)back_month, &status);
             }
             if (day < 0 || my_day != day) {
                 set_day_of_month(impl, -1);

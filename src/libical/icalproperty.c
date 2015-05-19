@@ -709,7 +709,7 @@ icalproperty_remove_parameter_by_kind(icalproperty* prop, icalparameter_kind kin
     for(p=pvl_head(prop->parameters);p != 0; p = pvl_next(p)){
         icalparameter* param = (icalparameter *)pvl_data (p);
         if (icalparameter_isa(param) == kind) {
-            pvl_remove (prop->parameters, p);
+            (void)pvl_remove (prop->parameters, p);
             icalparameter_free(param);
             break;
         }
@@ -754,7 +754,7 @@ icalproperty_remove_parameter_by_name(icalproperty* prop, const char *name)
           continue;
 
         if (0 == strcmp(kind_string, name)) {
-            pvl_remove (prop->parameters, p);
+            (void)pvl_remove (prop->parameters, p);
             icalparameter_free(param);
             break;
         }
@@ -783,7 +783,7 @@ icalproperty_remove_parameter_by_ref(icalproperty* prop, icalparameter* paramete
         icalparameter* p_param = (icalparameter *)pvl_data (p);
 
         if (icalparameter_has_same_name(parameter, p_param)) {
-            pvl_remove (prop->parameters, p);
+            (void)pvl_remove (prop->parameters, p);
             icalparameter_free(p_param);
             break;
         }

@@ -246,18 +246,21 @@ const char* icalerror_strerror(icalerrorenum e) {
 void ical_bt(void)
 {
 #ifdef HAVE_BACKTRACE
-        void *stack_frames[50];
-        size_t size, i;
-        char **strings;
+    void *stack_frames[50];
+    int i, num;
+    size_t size;
+    char **strings;
 
-        size = backtrace(stack_frames, sizeof(stack_frames) / sizeof(void*));
-        strings = backtrace_symbols(stack_frames, size);
-        for (i = 0; i < size; i++) {
-                if (strings != NULL)
-                        fprintf(stderr, "%s\n", strings[i]);
-                else
-                        fprintf(stderr, "%p\n", stack_frames[i]);
+    size = sizeof(stack_frames) / sizeof(stack_frames[0]);
+    num = backtrace(stack_frames, (int)size);
+    strings = backtrace_symbols(stack_frames, num);
+    for (i = 0; i < num; i++) {
+        if (strings != NULL) {
+            fprintf(stderr, "%s\n", strings[i]);
+        } else {
+            fprintf(stderr, "%p\n", stack_frames[i]);
         }
-        free(strings);
+    }
+    free(strings);
 #endif
 }

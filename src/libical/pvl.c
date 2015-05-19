@@ -496,7 +496,7 @@ pvl_clear(pvl_list l)
     while(e != 0)
     {
         next = pvl_next(e);
-        pvl_remove(l,e);
+        (void)pvl_remove(l,e);
         e = next;
     }
 }

@@ -150,7 +150,7 @@ static const struct sspm_action_map icalmime_local_action_map[] =
     {SSPM_IMAGE_MAJOR_TYPE,SSPM_CALENDAR_MINOR_TYPE,icalmime_attachment_new_part,icalmime_attachment_add_line,icalmime_attachment_end_part,icalmime_attachment_free_part},
     {SSPM_AUDIO_MAJOR_TYPE,SSPM_CALENDAR_MINOR_TYPE,icalmime_attachment_new_part,icalmime_attachment_add_line,icalmime_attachment_end_part,icalmime_attachment_free_part},
     {SSPM_IMAGE_MAJOR_TYPE,SSPM_CALENDAR_MINOR_TYPE,icalmime_attachment_new_part,icalmime_attachment_add_line,icalmime_attachment_end_part,icalmime_attachment_free_part},
-   {SSPM_UNKNOWN_MAJOR_TYPE,SSPM_UNKNOWN_MINOR_TYPE,0,0,0,0}
+    {SSPM_UNKNOWN_MAJOR_TYPE,SSPM_UNKNOWN_MINOR_TYPE, NULL,NULL,NULL,NULL}
 };
 
 #define NUM_PARTS 100 /* HACK. Hard Limit */
