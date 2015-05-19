@@ -286,7 +286,7 @@ $type icalproperty_get_${lc}(const icalproperty* prop){
         param = icalproperty_get_first_parameter((icalproperty *)prop, ICAL_TZID_PARAMETER);
         if (param) {
                 zone = icaltimezone_get_builtin_timezone(icalparameter_get_tzid(param));
-                icaltime_set_timezone(&itt, zone);
+                (void)icaltime_set_timezone(&itt, zone);
         }
         return itt;
 #else

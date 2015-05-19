@@ -56,7 +56,7 @@ icalrestriction_get_property_restriction(icalproperty_method method,
                                          icalproperty_kind property);
 
 static icalrestriction_property_record null_prop_record =
-    {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_PROPERTY,ICAL_RESTRICTION_UNKNOWN,0};
+    {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_PROPERTY,ICAL_RESTRICTION_UNKNOWN,NULL};
 
 /** Each row gives the result of comparing a restriction against a count.
    The columns in each row represent 0,1,2+. '-1' indicates
@@ -367,7 +367,7 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
 
         prop = icalcomponent_get_first_property(comp, kind);
 
-        if (prop != 0 && prop_record->function !=0  ){
+        if (prop != 0 && prop_record->function != NULL  ){
             funcr =  prop_record->function(prop_record,comp,prop);
         }
 
