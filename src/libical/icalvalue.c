@@ -36,10 +36,6 @@
 
 #define TMP_BUF_SIZE 1024
 
-void print_datetime_to_string(char* str,  const struct icaltimetype *data);
-void print_date_to_string(char* str,  const struct icaltimetype *data);
-void print_time_to_string(char* str,  const struct icaltimetype *data);
-
 LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kind)
 {
     struct icalvalue_impl* v;
@@ -377,7 +373,7 @@ icalvalue* icalvalue_new_enum(icalvalue_kind kind, int x_type, const char* str)
 /**
  * Transforms a simple float number string into a double.
  * The decimal separator (if any) of the double has to be '.'
- * The code is locale *independant* and does *not* change the locale.
+ * The code is locale *independent* and does *not* change the locale.
  * It should be thread safe.
  * If you want a code that that does the same job with a decimal separator
  * dependant on the current locale, then use strtof() from libc.
@@ -964,10 +960,10 @@ static char* icalvalue_duration_as_ical_string_r(const icalvalue* value) {
     return icaldurationtype_as_ical_string_r(data);
 }
 
-
-
-void print_time_to_string(char* str, const struct icaltimetype *data)
-{
+static void print_time_to_string(char* str, const struct icaltimetype *data)
+{ /* this function is a candidate for a library-wide external function
+     except it isn't used any place outside of icalvalue.c.
+     see print_date_to_string() and print_datetime_to_string in icalvalue.h */
     char temp[20];
     str[0] = '\0';
 

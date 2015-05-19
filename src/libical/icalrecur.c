@@ -134,6 +134,7 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icaltimezone.h"
+#include "icalvalue.h" /* for print_date_to_string(), print_datetime_to_string() */
 
 #include <ctype.h>
 #include <stddef.h> /* For offsetof() macro */
@@ -614,10 +615,6 @@ static struct {const char* str;size_t offset; int limit;  } recurmap[] =
     {";BYSETPOS=",offsetof(struct icalrecurrencetype,by_set_pos),ICAL_BY_SETPOS_SIZE - 1},
     {0,0,0},
 };
-
-/* A private routine in icalvalue.c */
-void print_date_to_string(char* str,  struct icaltimetype *data);
-void print_datetime_to_string(char* str,  struct icaltimetype *data);
 
 char* icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 {
