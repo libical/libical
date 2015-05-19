@@ -32,16 +32,6 @@
 
 #include <stdlib.h>
 
-#if defined(_WIN32)
-/* Undef the similar macro from pthread.h, it doesn't check if
- * gmtime() returns NULL.
- */
-#undef gmtime_r
-
-/* The gmtime() in Microsoft's C library is MT-safe */
-#define gmtime_r(tp,tmp) (gmtime(tp)?(*(tmp)=*gmtime(tp),(tmp)):0)
-#endif
-
 #if defined(HAVE_PTHREAD)
  #include <pthread.h>
     static pthread_mutex_t tzid_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -183,13 +173,8 @@ icaltime_from_timet_with_zone(const time_t tm, const int is_date,
 
     utc_zone = icaltimezone_get_utc_timezone ();
 
-    /* Convert the time_t to a struct tm in UTC time. We can trust gmtime
-       for this. */
-#if defined(HAVE_PTHREAD)
-    gmtime_r (&tm, &t);
-#else
-    t = *(gmtime (&tm));
-#endif
+    /* Convert the time_t to a struct tm in UTC time. We can trust gmtime for this. */
+    gmtime_r(&tm, &t);
 
     tt.year   = t.tm_year + 1900;
     tt.month  = t.tm_mon + 1;

@@ -54,9 +54,6 @@
 /* Define to 1 if you have the `_stat' function. */
 #cmakedefine HAVE__STAT 1
 
-/* Define to 1 if you have the <stdint.h> header file. */
-#cmakedefine HAVE_STDINT_H 1
-
 /* Define to 1 if you have the `strcasecmp' function. */
 #cmakedefine HAVE_STRCASECMP 1
 
@@ -123,9 +120,6 @@
 /* Define to 1 if you have the <sys/utsname.h> header file. */
 #cmakedefine HAVE_SYS_UTSNAME_H 1
 
-/* Define to 1 if you have the <time.h> header file. */
-#cmakedefine HAVE_TIME_H 1
-
 /* Define to 1 if you have the <unistd.h> header file. */
 #cmakedefine HAVE_UNISTD_H 1
 
@@ -157,9 +151,6 @@
 /* Define to prevent empty properties from being replaced with X-LIC-ERROR properties */
 #define ICAL_ALLOW_EMPTY_PROPERTIES ${ICAL_ALLOW_EMPTY_PROPERTIES}
 
-/* Define if we want _REENTRANT */
-#cmakedefine ICAL_REENTRANT 1
-
 /* Define to 1 if you DO NOT WANT to see deprecated messages */
 #define NO_WARN_DEPRECATED ${NO_WARN_DEPRECATED}
 
@@ -178,18 +169,8 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "${PROJECT_VERSION}"
 
-/* Define to 1 if you have the ANSI C header files. */
-#cmakedefine STDC_HEADERS 1
-
-/* Define to 1 if your <sys/time.h> declares `struct tm'. */
-#cmakedefine TM_IN_SYS_TIME 1
-
 /* whether we should bring our own TZ-Data */
 #cmakedefine USE_BUILTIN_TZDATA
-
-/* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
-   `char[]'. */
-#cmakedefine YYTEXT_POINTER 1
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #cmakedefine const
@@ -439,6 +420,20 @@ typedef ssize_t IO_SSIZE_T;
 #include <unistd.h>
 #endif
 #endif
+
+/* gmtime_r - thread safe gmtime() really only need on Unix */
+#if !defined(HAVE_GMTIME_R)
+#if !defined(_WIN32)
+#error "No thread-safe gmtime function available"
+#endif
+/*on Windows there might be a macro called gmtime_r in pthread.h. don't use it.*/
+#if defined(gmtime_r)
+#undef gmtime_r
+#endif
+/* FYI: The gmtime() in Microsoft's C library is MT-safe */
+#define gmtime_r(tp,tmp) (gmtime(tp)?(*(tmp)=*gmtime(tp),(tmp)):0)
+#endif
+#include <time.h>
 
 /* define MAXPATHLEN */
 #if defined(_WIN32)

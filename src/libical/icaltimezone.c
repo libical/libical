@@ -45,11 +45,6 @@ static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
 #include <mbstring.h>
 #endif
 #include <windows.h>
-/* Undef the similar macro from pthread.h, it doesn't check if gmtime() returns NULL. */
-#undef gmtime_r
-
-/* The gmtime() in Microsoft's C library is MT-safe */
-#define gmtime_r(tp,tmp) (gmtime(tp)?(*(tmp)=*gmtime(tp),(tmp)):0)
 #endif
 
 /** This is the toplevel directory where the timezone data is installed in. */
@@ -1439,9 +1434,9 @@ get_offset (icaltimezone *zone)
     struct tm local;
     struct icaltimetype tt;
     int offset;
-    time_t now = time(NULL);
+    const time_t now = time(NULL);
 
-    gmtime_r ((const time_t *) &now, &local);
+    gmtime_r(&now, &local);
     tt = tm_to_icaltimetype (&local);
     offset = icaltimezone_get_utc_offset(zone, &tt, NULL);
 
