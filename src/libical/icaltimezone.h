@@ -171,4 +171,7 @@ LIBICAL_ICAL_EXPORT int icaltimezone_get_builtin_tzdata(void);
    max_year. */
 LIBICAL_ICAL_EXPORT int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp);
 
+/* For the library only -- do not make visible */
+extern const char *icaltimezone_tzid_prefix(void);
+
 #endif /* ICALTIMEZONE_H */

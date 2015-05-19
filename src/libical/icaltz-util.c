@@ -120,8 +120,6 @@ typedef struct
         long int change;
 } leap;
 
-extern const char *ical_tzid_prefix;
-
 static int decode(const void *ptr)
 {
 #if defined(sun) && defined(__SVR4)
@@ -318,9 +316,9 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         tz_comp = icalcomponent_new (ICAL_VTIMEZONE_COMPONENT);
 
         /* Add tzid property */
-        size = strlen(ical_tzid_prefix) + strlen (location) + 1;
+        size = strlen(icaltimezone_tzid_prefix()) + strlen (location) + 1;
         tzid = (char *)malloc(size);
-        snprintf(tzid, size, "%s%s", ical_tzid_prefix, location);
+        snprintf(tzid, size, "%s%s", icaltimezone_tzid_prefix(), location);
         icalprop = icalproperty_new_tzid (tzid);
         icalcomponent_add_property (tz_comp, icalprop);
         free (tzid);
