@@ -997,10 +997,13 @@ void icalcomponent_foreach_recurrence(icalcomponent* comp,
   /** Calculate the ceiling and floor values.. **/
   limit_start = icaltime_as_timet_with_zone(start, icaltimezone_get_utc_timezone());
   if (!icaltime_is_null_time(end))
-    limit_end   = icaltime_as_timet_with_zone(end, icaltimezone_get_utc_timezone());
+    limit_end = icaltime_as_timet_with_zone(end, icaltimezone_get_utc_timezone());
   else
-    limit_end   = INT_MAX;  /* max 32 bit time_t */
-
+#if (SIZEOF_TIME_T > 4)
+    limit_end = (time_t)LONG_MAX;
+#else
+    limit_end = (time_t)INT_MAX;
+#endif
   limit_span.start = limit_start;
   limit_span.end   = limit_end;
 
