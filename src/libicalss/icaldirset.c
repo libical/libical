@@ -266,60 +266,6 @@ void icaldirset_free(icalset *s)
     dset->first_component = 0;
 }
 
-/* icaldirset_next_uid_number updates a serial number in the Store
-   directory in a file called SEQUENCE */
-
-int icaldirset_next_uid_number(icaldirset *dset)
-{
-    int sequence;
-    char temp[128];
-    char filename[MAXPATHLEN] = {0};
-    char *r;
-    FILE *f;
-    struct stat sbuf;
-
-    icalerror_check_arg_rz((dset != 0), "dset");
-
-    snprintf(filename, sizeof(filename), "%s/%s", dset->dir, "SEQUENCE");
-
-    /* Create the file if it does not exist.*/
-    if (stat(filename, &sbuf) == -1 || !S_ISREG(sbuf.st_mode)) {
-
-        f = fopen(filename, "w");
-        if (f != 0) {
-            fprintf(f, "0");
-            fclose(f);
-        } else {
-            icalerror_warn("Can't create SEQUENCE file in icaldirset_next_uid_number");
-            return 0;
-        }
-    }
-
-    if ((f = fopen(filename, "r+")) != 0) {
-
-        rewind(f);
-        r = fgets(temp, 128, f);
-
-        if (r == 0) {
-            sequence = 1;
-        } else {
-            sequence = atoi(temp) + 1;
-        }
-
-        rewind(f);
-
-        fprintf(f, "%d", sequence);
-
-        fclose(f);
-
-        return sequence;
-
-    } else {
-        icalerror_warn("Can't create SEQUENCE file in icaldirset_next_uid_number");
-        return 0;
-    }
-}
-
 static icalerrorenum icaldirset_next_cluster(icaldirset *dset)
 {
     char path[MAXPATHLEN];
