@@ -462,8 +462,8 @@ static void enterValues(const char *value)
     {
     if (fieldedProp && *fieldedProp) {
         if (value) {
-            addPropValue(curProp,*fieldedProp,value);
-            }
+          (void)addPropValue(curProp,*fieldedProp,value);
+        }
         /* else this field is empty, advance to next field */
         fieldedProp++;
         }
@@ -510,7 +510,7 @@ static void enterAttr(const char *s1, const char *s2)
         setVObjectStringZValue(a,p2);
         }
     else
-        addProp(curProp,p1);
+        (void)addProp(curProp,p1);
     if (strcasecmp(p1,VCBase64Prop) == 0 || (p2 && strcasecmp(p2,VCBase64Prop)==0))
         lexPushMode(L_BASE64);
     else if (strcasecmp(p1,VCQuotedPrintableProp) == 0
@@ -707,7 +707,7 @@ static void lexPushLookaheadc(int c) {
     if (c == EOF) return;
     putptr = (int)lexBuf.getPtr - 1;
     if (putptr < 0) putptr += MAX_LEX_LOOKAHEAD;
-    lexBuf.getPtr = putptr;
+    lexBuf.getPtr = (unsigned long)putptr;
     lexBuf.buf[putptr] = c;
     lexBuf.len += 1;
     }
@@ -730,14 +730,14 @@ static char* lexLookaheadWord() {
             lexAppendc(0);
             /* restore lookahead buf. */
             lexBuf.len += len;
-            lexBuf.getPtr = curgetptr;
+            lexBuf.getPtr = (unsigned long)curgetptr;
             return lexStr();
             }
         else
             lexAppendc(c);
         }
     lexBuf.len += len;  /* char that has been moved to lookahead buffer */
-    lexBuf.getPtr = curgetptr;
+    lexBuf.getPtr = (unsigned long)curgetptr;
     return 0;
     }
 
@@ -914,13 +914,13 @@ static char * lexGetDataFromBase64()
             trip = (trip << 6) | b;
             if (++quadIx == 4) {
                 unsigned char outBytes[3];
-                int numOut;
+                size_t numOut;
                 int i;
                 for (i = 0; i < 3; i++) {
                     outBytes[2-i] = (unsigned char)(trip & 0xFF);
                     trip >>= 8;
                     }
-                numOut = 3 - pad;
+                numOut = (size_t)(3 - pad);
                 if (bytesLen + numOut > bytesMax) {
                     if (!bytes) {
                         bytesMax = 1024;
@@ -948,11 +948,11 @@ static char * lexGetDataFromBase64()
     /* kludge: all this won't be necessary if we have tree form
         representation */
     if (bytes) {
-        setValueWithSize(curProp,bytes,(unsigned int)bytesLen);
+        (void)setValueWithSize(curProp,bytes,(unsigned int)bytesLen);
         free(bytes);
         }
     else if (oldBytes) {
-        setValueWithSize(curProp,oldBytes,(unsigned int)bytesLen);
+        (void)setValueWithSize(curProp,oldBytes,(unsigned int)bytesLen);
         free(oldBytes);
         }
     return 0;
@@ -1263,7 +1263,7 @@ static int yygrowstack(void)
     else if ((newsize *= 2) > YYMAXDEPTH)
         newsize = YYMAXDEPTH;
 
-    i = yyssp - yyss;
+    i = (ptrdiff_t)(yyssp - yyss);
     newss = (yyss != 0)
           ? (short *)realloc(yyss, newsize * sizeof(*newss))
           : (short *)malloc(newsize * sizeof(*newss));
@@ -1522,7 +1522,7 @@ break;
 case 40:
 {
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
 break;
 case 41:
@@ -1534,7 +1534,7 @@ break;
 case 42:
 {
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
 break;
 case 43:
@@ -1546,7 +1546,7 @@ break;
 case 44:
 {
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
 break;
 case 45:
@@ -1558,7 +1558,7 @@ break;
 case 46:
 {
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
 break;
     }

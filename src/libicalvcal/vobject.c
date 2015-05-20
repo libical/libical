@@ -194,7 +194,8 @@ const wchar_t* vObjectUStringZValue(VObject *o)
 
 void setVObjectUStringZValue(VObject *o, const wchar_t *s)
 {
-    USTRINGZ_VALUE_OF(o) = (wchar_t*) dupStr((char*)s,(uStrLen(s)+1)*2);
+    size_t size = (size_t)((uStrLen(s)+1)*2);
+    USTRINGZ_VALUE_OF(o) = (wchar_t*) dupStr((char*)s,size);
     VALUE_TYPE(o) = VCVT_USTRINGZ;
 }
 
@@ -250,7 +251,7 @@ void setVObjectVObjectValue(VObject *o, VObject *p)
 
 int vObjectValueType(VObject *o)
 {
-    return VALUE_TYPE(o);
+    return (int)VALUE_TYPE(o);
 }
 
 
@@ -436,7 +437,7 @@ VObject* addPropSizedValue_(VObject *o, const char *p, const char *v,
 {
     VObject *prop;
     prop = addProp(o,p);
-    setValueWithSize_(prop, (void*)v, size);
+    (void)setValueWithSize_(prop, (void*)v, size);
     return prop;
 }
 
@@ -1000,7 +1001,7 @@ stuff:
         else if (fp->alloc) {
             fp->limit = fp->limit + OFILE_REALLOC_SIZE;
             if (OFILE_REALLOC_SIZE <= slen) fp->limit += slen;
-            fp->s = (char *) realloc(fp->s,fp->limit);
+            fp->s = (char *) realloc(fp->s,(size_t)fp->limit);
             if (fp->s) goto stuff;
             }
         if (fp->alloc)
@@ -1050,7 +1051,7 @@ stuff:
             }
         else if (fp->alloc) {
             fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-            fp->s = realloc(fp->s,fp->limit);
+            fp->s = realloc(fp->s,(size_t)fp->limit);
             if (fp->s) goto stuff;
             }
         if (fp->alloc)
@@ -1210,7 +1211,7 @@ static void writeValue(OFile *fp, VObject *o, unsigned long size,int quote)
             }
         case VCVT_RAW: {
             appendcOFile(fp,'\n');
-            writeBase64(fp,(unsigned char*)(ANY_VALUE_OF(o)),size);
+            writeBase64(fp,(unsigned char*)(ANY_VALUE_OF(o)),(long)size);
             break;
             }
         case VCVT_VOBJECT:
@@ -1433,7 +1434,7 @@ int uStrLen(const wchar_t *u)
 char* fakeCString(const wchar_t *u)
 {
     char *s, *t;
-    int len = uStrLen(u) + 1;
+    size_t len = (size_t)(uStrLen(u) + 1);
     t = s = (char*)malloc(len);
     while (*u) {
         if (*u == (wchar_t)0x2028)

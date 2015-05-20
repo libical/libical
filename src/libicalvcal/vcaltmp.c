@@ -66,7 +66,7 @@ VObject* vcsCreateVCal(
         )
     {
     VObject *vcal = newVObject(VCCalProp);
-#define Z(p,v) if (v) addPropValue(vcal,p,v);
+#define Z(p,v) if (v) (void)addPropValue(vcal,p,v);
     Z(VCDCreatedProp, date_created);
     Z(VCLocationProp, location)
     Z(VCProdIdProp, product_id)
@@ -92,13 +92,13 @@ VObject* vcsAddEvent(
         )
     {
     VObject *vevent = addProp(vcal,VCEventProp);
-#define Z(p,v) if (v) addPropValue(vevent,p,v);
+#define Z(p,v) if (v) (void)addPropValue(vevent,p,v);
     Z(VCDTstartProp,start_date_time);
     Z(VCDTendProp,end_date_time);
     if (description) {
         VObject *p = addPropValue(vevent,VCDescriptionProp,description);
         if (strchr(description,'\n'))
-            addProp(p,VCQuotedPrintableProp);
+            (void)addProp(p,VCQuotedPrintableProp);
         }
     Z(VCSummaryProp,summary);
     Z(VCCategoriesProp,categories);
@@ -127,14 +127,14 @@ VObject* vcsAddTodo(
         )
     {
     VObject *vtodo = addProp(vcal,VCTodoProp);
-#define Z(p,v) if (v) addPropValue(vtodo,p,v);
+#define Z(p,v) if (v) (void)addPropValue(vtodo,p,v);
     Z(VCDTstartProp,start_date_time);
     Z(VCDueProp,due_date_time);
     Z(VCCompletedProp,date_time_complete);
     if (description) {
         VObject *p = addPropValue(vtodo,VCDescriptionProp,description);
         if (strchr(description,'\n'))
-            addProp(p,VCQuotedPrintableProp);
+            (void)addProp(p,VCQuotedPrintableProp);
         }
     Z(VCSummaryProp,summary);
     Z(VCPriorityProp,priority);
@@ -156,7 +156,7 @@ VObject* vcsAddAAlarm(
         )
     {
     VObject *aalarm= addProp(vevent,VCAAlarmProp);
-#define Z(p,v) if (v) addPropValue(aalarm,p,v);
+#define Z(p,v) if (v) (void)addPropValue(aalarm,p,v);
     Z(VCRunTimeProp,run_time);
     Z(VCSnoozeTimeProp,snooze_time);
     Z(VCRepeatCountProp,repeat_count);
@@ -176,7 +176,7 @@ VObject* vcsAddMAlarm(
         )
     {
     VObject *malarm= addProp(vevent,VCMAlarmProp);
-#define Z(p,v) if (v) addPropValue(malarm,p,v);
+#define Z(p,v) if (v) (void)addPropValue(malarm,p,v);
     Z(VCRunTimeProp,run_time);
     Z(VCSnoozeTimeProp,snooze_time);
     Z(VCRepeatCountProp,repeat_count);
@@ -196,7 +196,7 @@ VObject* vcsAddDAlarm(
         )
     {
     VObject *dalarm= addProp(vevent,VCDAlarmProp);
-#define Z(p,v) if (v) addPropValue(dalarm,p,v);
+#define Z(p,v) if (v) (void)addPropValue(dalarm,p,v);
     Z(VCRunTimeProp,run_time);
     Z(VCSnoozeTimeProp,snooze_time);
     Z(VCRepeatCountProp,repeat_count);
@@ -215,7 +215,7 @@ VObject* vcsAddPAlarm(
         )
     {
     VObject *palarm= addProp(vevent,VCPAlarmProp);
-#define Z(p,v) if (v) addPropValue(palarm,p,v);
+#define Z(p,v) if (v) (void)addPropValue(palarm,p,v);
     Z(VCRunTimeProp,run_time);
     Z(VCSnoozeTimeProp,snooze_time);
     Z(VCRepeatCountProp,repeat_count);
