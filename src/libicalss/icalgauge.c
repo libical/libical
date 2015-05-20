@@ -29,11 +29,9 @@
 #include "icalerror.h"
 #include "icalvalue.h"
 
-#include "icalssyacc.h"
-int ssparse(void);
-
 #include <stdlib.h>
 
+extern int ssparse(void);
 extern char *input_buffer;
 extern char *input_buffer_p;
 
