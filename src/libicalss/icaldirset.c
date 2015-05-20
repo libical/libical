@@ -92,7 +92,7 @@ icalerrorenum icaldirset_commit(icalset *set)
 
     fileset = icalset_new(ICAL_FILE_SET, icalcluster_key(dset->cluster), &options);
 
-    fileset->commit(fileset);
+    (void)fileset->commit(fileset);
     fileset->free(fileset);
 
     return ICAL_NO_ERROR;
@@ -456,7 +456,7 @@ icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
     }
 
     /* Add the component to the cluster */
-    icalcluster_add_component(dset->cluster, comp);
+    (void)icalcluster_add_component(dset->cluster, comp);
 
     /* icalcluster_mark(impl->cluster); */
 
@@ -502,7 +502,7 @@ icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
         return ICAL_USAGE_ERROR;
     }
 
-    icalcluster_remove_component(dset->cluster, comp);
+    (void)icalcluster_remove_component(dset->cluster, comp);
 
     /* icalcluster_mark(impl->cluster); */
 
@@ -511,7 +511,7 @@ icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
         icalerrorenum error = icaldirset_next_cluster(dset);
 
         if (dset->cluster != 0 && error == ICAL_NO_ERROR) {
-            icalcluster_get_first_component(dset->cluster);
+            (void)icalcluster_get_first_component(dset->cluster);
         } else {
             /* HACK. Not strictly correct for impl->cluster==0 */
             return error;
@@ -630,7 +630,7 @@ icalcomponent *icaldirset_get_current_component(icalset *set)
     icaldirset *dset = (icaldirset *)set;
 
     if (dset->cluster == 0) {
-        icaldirset_get_first_component(set);
+        (void)icaldirset_get_first_component(set);
     }
     if (dset->cluster == 0) {
         return 0;
@@ -707,10 +707,10 @@ icalcomponent *icaldirset_get_next_component(icalset *set)
 
     /* Set the component iterator for the following for loop */
     if (dset->first_component == 1) {
-        icalcluster_get_first_component(dset->cluster);
+        (void)icalcluster_get_first_component(dset->cluster);
         dset->first_component = 0;
     } else {
-        icalcluster_get_next_component(dset->cluster);
+        (void)icalcluster_get_next_component(dset->cluster);
     }
 
     while (1) {
