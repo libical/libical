@@ -359,25 +359,16 @@ icalproperty_get_value_kind(icalproperty *prop)
             this_kind = icalvalue_isa(value);
         }
 
-    if ( orig_kind != ICAL_NO_VALUE ) {
-      kind_string = icalvalue_kind_to_string( orig_kind );
-    } else if(this_kind == default_kind &&
-           orig_kind != ICAL_NO_VALUE){
-            /* The kind is the default, so it does not need to be
-               included, but do it anyway, since it was explicit in
-               the property. But, use the default, not the one
-               specified in the property */
+    if (orig_kind != ICAL_NO_VALUE) {
+        kind_string = icalvalue_kind_to_string(orig_kind);
+    } else if (this_kind != default_kind && this_kind != ICAL_NO_VALUE) {
+        /* Not the default, so it must be specified */
+        kind_string = icalvalue_kind_to_string(this_kind);
+    } else {
+        /* Don'tinclude the VALUE parameter at all */
+    }
 
-            kind_string = icalvalue_kind_to_string(default_kind);
-
-        } else if (this_kind != default_kind && this_kind !=  ICAL_NO_VALUE){
-            /* Not the default, so it must be specified */
-            kind_string = icalvalue_kind_to_string(this_kind);
-        } else {
-            /* Don'tinclude the VALUE parameter at all */
-        }
-
-        return kind_string;
+    return kind_string;
 }
 
 const char*
