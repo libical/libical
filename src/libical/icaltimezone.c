@@ -1712,12 +1712,16 @@ icaltimezone_parse_zone_tab             (void)
             latitude_degrees = longitude_degrees = 360;
             latitude_minutes = longitude_minutes = 0;
             latitude_seconds = longitude_seconds = 0;
-            if (sscanf (buf, "%s", location) != 1) {
+            if (sscanf (buf, "%1000s", location) != 1) { /*limit location to 1000chars*/
+                                                         /*increase as needed*/
+                                                         /*see location and buf declarations*/
                 fprintf (stderr, "Invalid timezone description line: %s\n", buf);
                 continue;
             }
         } else
-        if (sscanf (buf, "%4d%2d%2d %4d%2d%2d %s",
+        if (sscanf (buf, "%4d%2d%2d %4d%2d%2d %1000s", /*limit location to 1000chars*/
+                                                       /*increase as needed*/
+                                                       /*see location and buf declarations*/
                     &latitude_degrees, &latitude_minutes,
                     &latitude_seconds,
                     &longitude_degrees, &longitude_minutes,
