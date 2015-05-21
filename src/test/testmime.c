@@ -77,7 +77,7 @@ char* minor_type_string[] = {
 
 char* read_stream(char *s, size_t size, void *d)
 {
-    char *c = fgets(s,size, (FILE*)d);
+    char *c = fgets(s, (int)size, (FILE*)d);
 
     return c;
 
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
     int c;
 #if !defined(HAVE_UNISTD_H)
     extern char *optarg;
-    extern int optind, optopt;
+    extern int optopt;
 #endif
     int errflg=0;
     char* program_name;
@@ -217,22 +217,23 @@ int main(int argc, char* argv[])
         char *array[1024];
         char temp[1024];
         char *buf;
-        int i,last;
-        int size = 0;
-        int non_rand;
-        int rand_lines;
-        int r;
-        int j;
+        unsigned int i, j;
+        unsigned int last, non_rand, rand_lines, r;
+        size_t size;
         icalcomponent *c;
         struct slg_data {
                 char* pos;
                 char* str;
         } d;
 
-        for(i=0; !feof(f); i++){
-            (void)fgets(temp,1024,f);
-            array[i] = strdup(temp);
-            size += strlen(temp);
+        size = 0;
+        for (i=0; i<1024 && !feof(f); ++i) {
+            if (fgets(temp, 1024, f) != NULL) {
+                array[i] = strdup(temp);
+                size += strlen(temp);
+            } else {
+                break;
+            }
         }
         last = i;
 
@@ -240,12 +241,12 @@ int main(int argc, char* argv[])
         assert(buf != 0);
 
 
-        for(j=0; j<opt.count; j++){
+        for(j=0; j<(unsigned int)opt.count; j++){
 
             srand(j);
             memset(buf,0,size*2);
             /* First insert some non-randomized lines */
-            non_rand = ((float)rand()/(float)RAND_MAX) * last;
+            non_rand = (unsigned int)(((float)rand()/(float)RAND_MAX) * last);
             for(i=0;i<non_rand;i++){
                 strcat(buf,array[i]);
             }
@@ -256,7 +257,7 @@ int main(int argc, char* argv[])
 
             for(i=0;i<rand_lines;i++){
                 srand(i);
-                r = ((float)rand()/(float)RAND_MAX) * rand_lines;
+                r = (unsigned int)(((float)rand()/(float)RAND_MAX) * rand_lines);
                 strcat(buf,array[r+non_rand]);
 
             }
@@ -289,7 +290,7 @@ int main(int argc, char* argv[])
 
             size = strlen(str);
             memset(conv,0,4096);
-            decode_quoted_printable(conv,str,&size);
+            (void)decode_quoted_printable(conv,str,&size);
 
             conv[size] = '\0';
             printf("%s",conv);
@@ -307,7 +308,7 @@ int main(int argc, char* argv[])
 
             size = strlen(str);
             memset(conv,0,4096);
-            decode_base64(conv,str,&size);
+            (void)decode_base64(conv,str,&size);
 
             conv[size] = '\0';
             printf("%s",conv);
