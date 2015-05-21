@@ -446,5 +446,8 @@ error:
     if (leaps)
         free(leaps);
 
+    if (tzid)
+        free(tzid);
+
     return tz_comp;
 }
