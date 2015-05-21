@@ -275,45 +275,42 @@ static char* saved_tz = NULL;
    locking the tzid mutex as in icaltime_as_timet_with_zone */
 static char* set_tz(const char* tzid)
 {
-    char *old_tz, *old_tz_copy = NULL, *new_tz;
+    static char temp[256];
+    char *save_getenv, *old_tz=NULL, *new_tz;
 
     /* Get the old TZ setting and save a copy of it to return. */
-    old_tz = getenv("TZ");
-    if(old_tz){
-        old_tz_copy = (char*)malloc(strlen (old_tz) + 4);
-
-        if(old_tz_copy == 0){
+    save_getenv = getenv("TZ");
+    if (save_getenv) {
+        snprintf(temp, sizeof(temp), "TZ=%250s", save_getenv); /*limit env timezone to 250chars*/
+                                                               /*increase as needed*/
+        old_tz = strdup(temp);
+        if(old_tz == 0){
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             return 0;
         }
-
-        strcpy (old_tz_copy, "TZ=");
-        strcpy (old_tz_copy + 3, old_tz);
     }
 
     /* Create the new TZ string. */
-    new_tz = (char*)malloc(strlen (tzid) + 4);
-
+    snprintf(temp, sizeof(temp), "TZ=%250s", tzid); /* limit provided timezone to 250 chars*/
+                                                    /* increase as needed*/
+    new_tz = strdup(temp);
     if(new_tz == 0){
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-        free(old_tz_copy);
+        free(old_tz);
         return 0;
     }
-
-    strcpy (new_tz, "TZ=");
-    strcpy (new_tz + 3, tzid);
 
     /* Add the new TZ to the environment. */
     putenv(new_tz);
 
     /* Free any previous TZ environment string we have used in a synchronized manner. */
-
-    free (saved_tz);
+    if (saved_tz)
+        free(saved_tz);
 
     /* Save a pointer to the TZ string we just set, so we can free it later. */
     saved_tz = new_tz;
 
-    return old_tz_copy; /* This will be zero if the TZ env var was not set */
+    return old_tz; /* This will be zero if the TZ env var was not set */
 }
 
 static void unset_tz(char *tzstr)
@@ -340,7 +337,8 @@ static void unset_tz(char *tzstr)
     }
 
     /* Free any previous TZ environment string we have used in a synchronized manner */
-    free (saved_tz);
+    if (saved_tz)
+        free (saved_tz);
 
     /* Save a pointer to the TZ string we just set, so we can free it later.
        (This can possibly be NULL if there was no TZ to restore.) */
