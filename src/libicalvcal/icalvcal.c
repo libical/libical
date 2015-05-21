@@ -306,6 +306,7 @@ static int get_alarm_properties (icalcomponent *comp, VObject *object,
 
                 /* Convert it to an icaltimetype. */
                 t.time = icaltime_from_string (s);
+                t.duration = icaldurationtype_null_duration();
 
                 /* If it is a floating time, convert it to a UTC time. */
                 if (!t.time.is_utc)
