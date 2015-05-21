@@ -28,9 +28,23 @@ using namespace LibICal;
     @param end     Designated end of the spanlist
 */
 
-ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) throw(icalerrorenum)
+ICalSpanList::ICalSpanList() throw(icalerrorenum)
+: data(0)
 {
-    data = icalspanlist_new(set, start, end);
+    throw icalerrno;
+}
+
+ICalSpanList::ICalSpanList(const ICalSpanList &v) throw(icalerrorenum)
+  : data(v.data)
+{
+    if (data == NULL) {
+        throw icalerrno;
+    }
+}
+
+ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) throw(icalerrorenum)
+  : data(icalspanlist_new(set, start, end))
+{
     if (!data) {
         throw icalerrno;
     }
@@ -41,8 +55,8 @@ ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) t
 */
 
 ICalSpanList::ICalSpanList(icalcomponent *comp) throw(icalerrorenum)
+  : data(icalspanlist_from_vfreebusy(comp))
 {
-    data = icalspanlist_from_vfreebusy(comp);
     if (!data) {
         throw icalerrno;
     }
@@ -52,8 +66,8 @@ ICalSpanList::ICalSpanList(icalcomponent *comp) throw(icalerrorenum)
     @param comp  A valid VComponent with a VFREEBUSY section
 */
 ICalSpanList::ICalSpanList(VComponent &comp) throw(icalerrorenum)
+  : data(icalspanlist_from_vfreebusy((icalcomponent *) comp))
 {
-    data = icalspanlist_from_vfreebusy((icalcomponent *) comp);
     if (!data) {
         throw icalerrno;
     }

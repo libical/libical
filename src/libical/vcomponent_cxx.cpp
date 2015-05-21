@@ -38,8 +38,8 @@ VComponent::VComponent() throw(icalerrorenum) : imp(icalcomponent_new(ICAL_ANY_C
 }
 
 VComponent::VComponent(const VComponent &v) throw(icalerrorenum)
+  : imp(icalcomponent_new_clone(v.imp))
 {
-    imp = icalcomponent_new_clone(v.imp);
     if (!imp) {
         throw icalerrno;
     }
@@ -116,11 +116,8 @@ char *VComponent::quote_ical_string(char *str)
  *
  */
 VComponent::VComponent(const std::string &str) throw (icalerrorenum)
+  : imp(icalcomponent_new_from_string(str.c_str()))
 {
-    // Fix for BUG #15647, but breaks fix for BUG #15596.  Attempting a UI fix for cal-4.0.
-    //char* quoted_str = quote_ical_string((char *)str);
-    //imp = icalcomponent_new_from_string(quoted_str);
-    imp = icalcomponent_new_from_string(str.c_str());
     if (!imp) {
         if (! icalerrno) {
             icalerrno = ICAL_BADARG_ERROR;
@@ -130,9 +127,8 @@ VComponent::VComponent(const std::string &str) throw (icalerrorenum)
 }
 
 VComponent::VComponent(const icalcomponent_kind &kind) throw(icalerrorenum)
+  : imp(icalcomponent_new(kind))
 {
-    imp = icalcomponent_new(kind);
-
     if (!imp) {
         throw icalerrno;
     }

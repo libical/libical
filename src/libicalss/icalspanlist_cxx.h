@@ -47,6 +47,9 @@ namespace LibICal
     class LIBICAL_ICALSS_EXPORT ICalSpanList
     {
       public:
+        ICalSpanList() throw(icalerrorenum);
+        ICalSpanList(const ICalSpanList &v) throw(icalerrorenum);
+
     /** Construct an ICalSpanList from an icalset */
         ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) throw(icalerrorenum);
 
@@ -62,8 +65,10 @@ namespace LibICal
     /** Return a VFREEBUSY icalcomponent */
         VComponent *get_vfreebusy(const char *organizer, const char *attendee) throw(icalerrorenum);
 
+        ICalSpanList & operator=(const ICalSpanList &) throw(icalerrorenum);
+
     /** Return the base data when casting */
-        operator   icalspanlist *()
+        operator icalspanlist *()
         {
             return data;
         }
@@ -78,6 +83,6 @@ namespace LibICal
          icalspanlist *data;
     };
 
-}       // namespace LibICal;
+} // namespace LibICal;
 
 #endif
