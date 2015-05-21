@@ -276,12 +276,11 @@ static char* saved_tz = NULL;
 static char* set_tz(const char* tzid)
 {
     static char temp[256];
-    char *save_getenv, *old_tz=NULL, *new_tz;
+    char *old_tz=NULL, *new_tz;
 
     /* Get the old TZ setting and save a copy of it to return. */
-    save_getenv = getenv("TZ");
-    if (save_getenv) {
-        snprintf(temp, sizeof(temp), "TZ=%250s", save_getenv); /*limit env timezone to 250chars*/
+    if (getenv("TZ")) { /*do not cache the getenv() value, as the result is tainted*/
+        snprintf(temp, sizeof(temp), "TZ=%250s", getenv("TZ")); /*limit env timezone to 250chars*/
                                                                /*increase as needed*/
         old_tz = strdup(temp);
         if(old_tz == 0){
