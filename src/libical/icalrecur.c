@@ -463,10 +463,16 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char* str)
         icalrecur_clause_name_and_value(&parser,&name,&value);
 
         if(name == 0){
-            icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-            icalrecurrencetype_clear(&parser.rt);
-            free(parser.copy);
-            return parser.rt;
+            if (strlen(parser.this_clause) > 0){
+                icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+                icalrecurrencetype_clear(&parser.rt);
+                free(parser.copy);
+                return parser.rt;
+            } else {
+                /* Hit an empty name/value pair, but we're also at the end of the string
+                   This was probably a trailing semicolon with no data (e.g. "FREQ=WEEKLY;INTERVAL=1;BYDAY=MO;")*/
+                break;
+            }
         }
 
         if (strcasecmp(name,"FREQ") == 0){

@@ -186,6 +186,9 @@ const struct recur rfc5545[] = {
     { "19970805T090000",
       "FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=SU" },
 
+    /* Weekly (with a trailing semicolon that was seen in the wild on Google Calendar) */
+    { "20141006T090000",
+      "FREQ=WEEKLY;INTERVAL=1;COUNT=2;BYDAY=MO;" },
 
     /* Daily for 10 occurrences */
     { "19970902T090000",
