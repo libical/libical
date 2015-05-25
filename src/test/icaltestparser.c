@@ -2,8 +2,8 @@
  FILE: icaltestparser.c
  CREATOR: eric 20 June 1999
 
- (C) COPYRIGHT 1999 The Software Studio.
- http://www.softwarestudio.org
+ (C) COPYRIGHT 1999 The Software Studio <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in

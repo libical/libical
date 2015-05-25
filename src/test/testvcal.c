@@ -1,13 +1,9 @@
-/* -*- Mode: C -*-
-  ======================================================================
-  FILE: vcal.c
-  CREATOR: eric 26 May 2000
+/*======================================================================
+ FILE: testvcal.c
+ CREATOR: eric 26 May 2000
 
-  $Id: testvcal.c,v 1.4 2008-01-02 20:07:46 dothebart Exp $
-  $Locker:  $
-
- (C) COPYRIGHT 2000 Eric Busboom
- http://www.softwarestudio.org
+ (C) COPYRIGHT 2000 Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  The contents of this file are subject to the Mozilla Public License
  Version 1.0 (the "License"); you may not use this file except in
@@ -21,9 +17,7 @@
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
-
- ======================================================================*/
+======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -1,5 +1,7 @@
 CHECKSETS foss,c++
 
+EXCLUDE dpointer
+
 EXTRA crud,camelcase
 #EXTRA style
 
@@ -11,6 +13,10 @@ SKIP /src/libicalvcal/port\.h
 SKIP /src/libicalvcal/vcaltmp\.
 SKIP /src/libicalvcal/vcc\.
 SKIP /src/libicalvcal/vobject\.
+
+#Skip contributed files
+SKIP /src/libical/astime\.h
+SKIP /src/libical/caldate\.c
 
 #Skip zoneinfo
 SKIP /zoneinfo/
