@@ -30,6 +30,7 @@
 #include "icalmemory.h"
 #include "icaltimezone.h"
 
+#include <ctype.h>
 #include <stdlib.h>
 
 #if defined(HAVE_PTHREAD)
@@ -276,12 +277,29 @@ static char* saved_tz = NULL;
 static char* set_tz(const char* tzid)
 {
     static char temp[256];
-    char *old_tz=NULL, *new_tz;
+    char *save_getenv, *old_tz=NULL, *new_tz;
+    size_t i, j, len;
+    char *prefix = "TZ=";
+    size_t prefix_len = strlen(prefix);
 
     /* Get the old TZ setting and save a copy of it to return. */
-    if (getenv("TZ")) { /*do not cache the getenv() value, as the result is tainted*/
-        snprintf(temp, sizeof(temp), "TZ=%250s", getenv("TZ")); /*limit env timezone to 250chars*/
-                                                               /*increase as needed*/
+    temp[0] = '\0';
+    save_getenv = getenv("TZ");
+    j = prefix_len;
+    /* Untaint the TZ env string by removing any non-printing chars */
+    if (save_getenv) {
+        strncpy(temp, prefix, prefix_len);
+        len = MIN(strlen(save_getenv), sizeof(temp) - prefix_len);
+        for (i=0; i<len; ++i) {
+            if (isprint(save_getenv[i])) {
+              temp[j++] = save_getenv[i];
+            }
+        }
+        temp[j] = '\0';
+    }
+
+    /* If we are setting TZ to something then dup it into old_tz */
+    if (j != prefix_len) {
         old_tz = strdup(temp);
         if(old_tz == 0){
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
