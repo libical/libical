@@ -129,6 +129,12 @@
 /* Define to 1 if you have the `unsetenv' function. */
 #cmakedefine HAVE_UNSETENV 1
 
+/* Define to 1 if you have the `alarm' function. */
+#cmakedefine HAVE_ALARM 1
+
+/* Define to 1 if you have the `signal' function. */
+#cmakedefine HAVE_SIGNAL 1
+
 /* Define to 1 if you have the `waitpid' function. */
 #cmakedefine HAVE_WAITPID 1
 
@@ -406,6 +412,16 @@ typedef ssize_t IO_SSIZE_T;
 #if defined(HAVE_UNISTD_H)
 #include <unistd.h>
 #endif
+#endif
+
+/* alarm - function to set and alarm for delivering a signal */
+#if defined(HAVE_ALARM)
+#include <unistd.h>
+#endif
+
+/* signal - signal handling function */
+#if defined(HAVE_SIGNAL)
+#include <signal.h>
 #endif
 
 /* waitpid - system function waiting on a process */

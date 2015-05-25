@@ -28,7 +28,7 @@
 
 #include <stdlib.h>
 
-#if defined(SIGALRM)
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
 static void sig_alrm(int i)
 {
     _unused(i);
@@ -63,12 +63,12 @@ int main(int c, char *argv[]){
 
     /*icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);*/
 
-#if defined(SIGALRM)
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
     signal(SIGALRM,sig_alrm);
     alarm(10);
 #endif
     clusterin = icalfileset_new(argv[1]);
-#if defined(SIGALRM)
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
     alarm(0);
 #endif
     if (clusterin == 0){
@@ -80,11 +80,11 @@ int main(int c, char *argv[]){
     }
 
     if (!tostdout){
-#if defined(SIGALRM)
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
         alarm(10);
 #endif
         clusterout = icalfileset_new(argv[2]);
-#if defined(SIGALRM)
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
         alarm(0);
 #endif
         if (clusterout == 0){

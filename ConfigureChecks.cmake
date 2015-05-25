@@ -26,12 +26,14 @@ if(WIN32 AND MSVC)
   check_function_exists(_write HAVE__WRITE) #Windows <io.h>
 else()
   check_function_exists(access HAVE_ACCESS) #Unix <unistd.h>
+  check_function_exists(alarm HAVE_ALARM) #Unix <unistd.h>
   check_function_exists(fork HAVE_FORK) #Unix <unistd.h>
   check_function_exists(getpid HAVE_GETPID) #Unix <unistd.h>
   check_function_exists(getpwent HAVE_GETPWENT) #Unix <sys/types.h>,<pwd.h>
   check_function_exists(gmtime_r HAVE_GMTIME_R) #Unix <time.h>
   check_function_exists(mkdir HAVE_MKDIR) #Unix <sys/stat.h>,<sys/types.h>
   check_function_exists(open HAVE_OPEN) #Unix <sys/stat.h>,<sys/types.h>,<fcntl.h>
+  check_function_exists(signal HAVE_SIGNAL) #Unix <signal.h>
   check_function_exists(snprintf HAVE_SNPRINTF) #Unix <stdio.h>
   check_function_exists(stat HAVE_STAT) #Unix <sys/stat.h>,<sys/types.h>,<unistd.h>
   check_function_exists(strdup HAVE_STRDUP) #Unix <string.h>

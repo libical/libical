@@ -28,7 +28,7 @@
 
 #include <stdlib.h>
 
-#ifndef _WIN32
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
 static void sig_alrm(int i)
 {
     _unused(i);
@@ -94,18 +94,18 @@ void test_recur_file()
 
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 
-#ifndef _WIN32
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
     signal(SIGALRM,sig_alrm);
 #endif
     file = getenv("ICAL_RECUR_FILE");
     if (!file)
       file = TEST_DATADIR "/recur.txt";
 
-#ifndef _WIN32
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
     alarm(15); /* to get file lock */
 #endif
     cin = icalset_new(ICAL_FILE_SET, file, &options);
-#ifndef _WIN32
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
     alarm(0);
 #endif
 

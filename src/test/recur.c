@@ -31,7 +31,7 @@
 
 #include <stdlib.h>
 
-#ifndef WIN32
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
 static void sig_alrm(int i)
 {
     _unused(i);
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 
-#ifndef WIN32
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
     signal(SIGALRM,sig_alrm);
 #endif
 
@@ -77,11 +77,11 @@ int main(int argc, char *argv[])
                 exit(1);
     }
 
-#ifndef WIN32
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
     alarm(300); /* to get file lock */
 #endif
     cin = icalfileset_new(file);
-#ifndef WIN32
+#if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
     alarm(0);
 #endif
 
