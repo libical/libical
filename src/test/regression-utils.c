@@ -1,3 +1,22 @@
+/*======================================================================
+ FILE: regression-utils.c
+
+ (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
+
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.0 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
+
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ the License for the specific language governing rights and
+ limitations under the License.
+
+ The original author is Eric Busboom
+======================================================================*/
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -16,8 +35,9 @@ const char* ical_timet_string(const time_t t)
     struct tm tmp;
     gmtime_r(&t, &tmp);
 
-    sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d Z",tmp.tm_year+1900,
-            tmp.tm_mon+1,tmp.tm_mday,tmp.tm_hour,tmp.tm_min,tmp.tm_sec);
+    snprintf(ictt_str, sizeof(ictt_str),
+             "%02d-%02d-%02d %02d:%02d:%02d Z",
+             tmp.tm_year+1900, tmp.tm_mon+1,tmp.tm_mday,tmp.tm_hour,tmp.tm_min,tmp.tm_sec);
 
     return ictt_str;
 
@@ -28,12 +48,14 @@ const char* ictt_as_string(struct icaltimetype t)
     const char *zone = icaltimezone_get_tzid((icaltimezone *)t.zone);
 
     if (icaltime_is_utc(t))
-        sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d Z UTC",
-        t.year,t.month,t.day, t.hour,t.minute,t.second);
+        snprintf(ictt_str, sizeof(ictt_str),
+                 "%02d-%02d-%02d %02d:%02d:%02d Z UTC",
+                 t.year,t.month,t.day, t.hour,t.minute,t.second);
     else
-        sprintf(ictt_str,"%02d-%02d-%02d %02d:%02d:%02d %s",
-        t.year,t.month,t.day, t.hour,t.minute,t.second,
-        zone == NULL? "(floating)": zone);
+        snprintf(ictt_str, sizeof(ictt_str),
+                 "%02d-%02d-%02d %02d:%02d:%02d %s",
+                 t.year,t.month,t.day, t.hour,t.minute,t.second,
+                 zone == NULL? "(floating)": zone);
 
     return ictt_str;
 }
@@ -43,7 +65,7 @@ char* icaltime_as_ctime(struct icaltimetype t)
     time_t tt;
 
     tt = icaltime_as_timet(t);
-    sprintf(ictt_str,"%s",ctime(&tt));
+    snprintf(ictt_str, sizeof(ictt_str), "%s", ctime(&tt));
 
     return ictt_str;
 }
@@ -99,7 +121,8 @@ void _is(char* test_name, const char* str1, const char* str2, char *file, int li
   }
 }
 
-void _int_is(char* test_name, int i1, int i2, char *file, int linenum) {
+void _int_is(char* test_name, int i1, int i2, char *file, int linenum)
+{
   _ok(test_name, (i1==i2), file, linenum, "");
 
   if (i1!=i2) {

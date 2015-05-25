@@ -87,8 +87,8 @@ int main(int argc, char* argv[])
         /* Print out the notes associated with the incoming component
            and the matched component in the */
         {
-            const char *c_note=0;
-            const char *m_note=0;
+            const char *inc_note=0;
+            const char *match_note=0;
             icalproperty *p;
 
             for(p = icalcomponent_get_first_property(c,ICAL_X_PROPERTY);
@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
                 p = icalcomponent_get_next_property(c,ICAL_X_PROPERTY)){
 
                 if(strcmp(icalproperty_get_x_name(p),"X-LIC-NOTE")==0){
-                    c_note = icalproperty_get_x(p);
+                    inc_note = icalproperty_get_x(p);
                 }
             }
 
@@ -107,16 +107,16 @@ int main(int argc, char* argv[])
                     p = icalcomponent_get_next_property(match,
                                                         ICAL_X_PROPERTY)){
                     if(strcmp(icalproperty_get_x_name(p),"X-LIC-NOTE")==0){
-                        m_note = icalproperty_get_x(p);
+                        match_note = icalproperty_get_x(p);
                     }
                 }
             }
 
-            if(c_note != 0){
-                printf("Incoming: %s\n",c_note);
+            if(inc_note != 0){
+                printf("Incoming: %s\n",inc_note);
             }
-            if(m_note != 0){
-                printf("Match   : %s\n",m_note);
+            if(match_note != 0){
+                printf("Match   : %s\n",match_note);
             }
         }
 
@@ -171,7 +171,7 @@ int main(int argc, char* argv[])
                     reply = icalmessage_new_accept_reply(c,this_user,
                                          "I can make it to this meeting");
 
-                    icalset_add_component(out,reply);
+                    (void)icalset_add_component(out,reply);
 
                 } else {
                     /* There was a conflict, so delegate, counterpropose
@@ -187,7 +187,7 @@ int main(int argc, char* argv[])
                           "Unfortunately, I have another commitment that \
 conflicts with this meeting. I am delegating my attendance to Bob. ");
 
-                        icalset_add_component(out,reply);
+                        (void)icalset_add_component(out,reply);
 
                     } else if (dtstart.hour%4 == 1) {
                         /* Counter propose to next available time */
@@ -218,7 +218,7 @@ conflicts with this meeting. I am delegating my attendance to Bob. ");
                            "Unfortunately, I have another commitment that \
 conflicts with this meeting. I am proposing a time that works better for me.");
 
-                        icalset_add_component(out,reply);
+                        (void)icalset_add_component(out,reply);
 
                     } else {
                         /* Decline the meeting */
@@ -227,7 +227,7 @@ conflicts with this meeting. I am proposing a time that works better for me.");
                                                               this_user,
                                           "I can't make it to this meeting");
 
-                        icalset_add_component(out,reply);
+                        (void)icalset_add_component(out,reply);
 
                     }
 

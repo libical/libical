@@ -145,8 +145,13 @@ char* make_mime(const char* to, const char* from, const char* subject,
                 const char* text_message, const char* method,
                 const char* ical_message)
 {
-    size_t size = strlen(to)+strlen(from)+strlen(subject)+
-        strlen(text_message)+ strlen(ical_message)+TMPSIZE;
+    size_t mess_size =
+      strlen(to) +
+      strlen(from) +
+      strlen(subject) +
+      strlen(text_message) +
+      strlen(ical_message) +
+      TMPSIZE;
 
     char mime_part_1[TMPSIZE];
     char mime_part_2[TMPSIZE];
@@ -155,33 +160,32 @@ char* make_mime(const char* to, const char* from, const char* subject,
     struct utsname uts;
     char* m;
 
-
-    if ((m = malloc(sizeof(char)*size)) == 0){
+    if ((m = malloc(sizeof(char)*mess_size)) == 0){
         fprintf(stderr,"%s: Can't allocate memory: %s\n",program_name,strerror(errno));
         exit(1);
     }
 
     uname(&uts);
 
-    srand(time(0)<<getpid());
-    sprintf(content_id,"%d-%d@%s",(int)time(0),rand(),uts.nodename);
-    sprintf(boundary,"%d-%d-%s",(int)time(0),rand(),uts.nodename);
+    srand((unsigned int)(time(0)<<getpid()));
+    snprintf(content_id, TMPSIZE, "%d-%d@%s",(int)time(0), rand(), uts.nodename);
+    snprintf(boundary, TMPSIZE, "%d-%d-%s",(int)time(0), rand(), uts.nodename);
 
-    sprintf(mime_part_1,"Content-ID: %s\n\
+    snprintf(mime_part_1, TMPSIZE, "Content-ID: %s\n\
 Content-type: text/plain\n\
 Content-Description: Text description of error message\n\n\
 %s\n\n--%s",
-            content_id,text_message,boundary);
+             content_id,text_message,boundary);
 
     if(ical_message != 0 && method != 0){
-        sprintf(mime_part_2,"Content-ID: %s\n\
+        snprintf(mime_part_2, TMPSIZE, "Content-ID: %s\n\
 Content-type: text/calendar; method=%s\n\
 Content-Description: iCal component reply\n\n\
 %s\n\n--%s--",
-                content_id,method,ical_message,boundary);
+                 content_id,method,ical_message,boundary);
     }
 
-    sprintf(m,"To: %s\n\
+    snprintf(m, mess_size, "To: %s\n\
 From: %s\n\
 Subject: %s\n\
 MIME-Version: 1.0\n\
@@ -695,7 +699,7 @@ void store_component(icalcomponent *comp, struct options_struct *opt)
 
 char* read_stream(char *s, size_t size, void *d)
 {
-  char *c = fgets(s,size, (FILE*)d);
+  char *c = fgets(s, (int)size, (FILE*)d);
 
   return c;
 }

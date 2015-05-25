@@ -1,3 +1,21 @@
+/*======================================================================
+ FILE: regression-component.c
+
+ (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
+
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.0 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
+
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ the License for the specific language governing rights and
+ limitations under the License.
+
+ The original author is Eric Busboom
+======================================================================*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -435,7 +453,7 @@ void test_icalcomponent_get_span()
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
-    int_is("floating time", span.start, tm1);
+    int_is("floating time", (int)span.start, (int)tm1);
 
     icalcomponent_free(c);
 
@@ -517,7 +535,7 @@ void test_icalcomponent_get_span()
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
-    int_is("null span", span.start, 0);
+    int_is("null span", (int)span.start, 0);
     icalcomponent_free(c);
 
     /** test 7
@@ -531,7 +549,7 @@ void test_icalcomponent_get_span()
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
-    int_is("UTC", span.start, 973296000);
+    int_is("UTC", (int)span.start, 973296000);
     icalcomponent_free(c);
 
     /** test 8
@@ -544,7 +562,7 @@ void test_icalcomponent_get_span()
             (void *)0);
 
     span = icalcomponent_get_span(c);
-    int_is("UTC #2", span.start, 973296000);
+    int_is("UTC #2", (int)span.start, 973296000);
     if (VERBOSE) print_span(tnum++,span);
 
     icalcomponent_free(c);
@@ -559,7 +577,7 @@ void test_icalcomponent_get_span()
 
     span = icalcomponent_get_span(c);
     if (VERBOSE) print_span(tnum++,span);
-    int_is("start date only", span.end, 973382399);
+    int_is("start date only", (int)span.end, 973382399);
 
     icalcomponent_free(c);
 

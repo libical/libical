@@ -613,7 +613,7 @@ void test_memory()
         assert(f!=0);
 
         memset(f,0,bufsize);
-        sprintf(f,"%d",i);
+        snprintf(f, bufsize, "%d", i);
     }
 }
 
@@ -713,7 +713,7 @@ void test_dirset()
 
     gauge = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE VEVENT.SUMMARY = 'Submit Income Taxes' OR VEVENT.SUMMARY = 'Bastille Day Party'", 0);
 
-    icaldirset_select(s,gauge);
+    (void)icaldirset_select(s,gauge);
 
     for(c = icaldirset_get_first_component(s); c != 0; c = icaldirset_get_next_component(s)){
         printf("Got one! (%d)\n", count++);
@@ -1278,7 +1278,7 @@ void test_requeststat()
 
     st.desc = 0;
 
-    sprintf(temp,"%s\n",icalreqstattype_as_string(st));
+    snprintf(temp, sizeof(temp), "%s\n", icalreqstattype_as_string(st));
 
 
     st2 = icalreqstattype_from_string("2.1;Success but fallback taken  on one or more property  values.;booga");
@@ -1386,7 +1386,7 @@ void do_test_time(char* zone)
     struct icaltimetype ictt, icttutc, icttzone, icttdayl,
         icttla, icttny,icttphoenix, icttlocal, icttnorm;
     time_t tt,tt2, tt_p200;
-    int offset_tz;
+    time_t offset_tz;
     icalvalue *v;
     short day_of_week,start_day_of_week, day_of_year;
     icaltimezone *azone, *utczone;
@@ -1531,9 +1531,9 @@ void do_test_time(char* zone)
       printf("20001103T183030         : %s\n",ictt_as_string(icttlocal));
     }
 
-    offset_tz = -icaltimezone_get_utc_offset_of_utc_time(azone, &ictt, 0); /* FIXME */
+    offset_tz = (time_t)(-icaltimezone_get_utc_offset_of_utc_time(azone, &ictt, 0));
     if (VERBOSE)
-      printf("offset_tz               : %d\n",offset_tz);
+      printf("offset_tz               : %ld\n", (long)offset_tz);
 
     ok("test utc offset", (tt-tt2 == offset_tz));
 
@@ -1587,13 +1587,13 @@ void do_test_time(char* zone)
     start_day_of_week = icaltime_start_doy_of_week(ictt);
     day_of_year = icaltime_day_of_year(ictt);
 
-    sprintf(msg, "Testing day of week %d", day_of_week);
+    snprintf(msg, sizeof(msg), "Testing day of week %d", day_of_week);
     int_is(msg, day_of_week, 6);
 
-    sprintf(msg, "Testing day of year %d",day_of_year);
+    snprintf(msg, sizeof(msg), "Testing day of year %d",day_of_year);
     int_is(msg, day_of_year, 308);
 
-    sprintf(msg, "Week started on doy of %d", start_day_of_week);
+    snprintf(msg, sizeof(msg), "Week started on doy of %d", start_day_of_week);
     int_is(msg, start_day_of_week , 303);
 
     if (VERBOSE) printf("\n TimeZone Conversions \n");
@@ -1747,14 +1747,14 @@ void test_iterators()
 
     /* Delete all of the VEVENTS */
     /* reset iterator */
-    icalcomponent_get_first_component(c,ICAL_VEVENT_COMPONENT);
+    (void)icalcomponent_get_first_component(c,ICAL_VEVENT_COMPONENT);
 
     while((inner=icalcomponent_get_current_component(c)) != 0 ){
         if(icalcomponent_isa(inner) == ICAL_VEVENT_COMPONENT){
             icalcomponent_remove_component(c,inner);
-                icalcomponent_free(inner);
+            icalcomponent_free(inner);
         } else {
-            icalcomponent_get_next_component(c,ICAL_VEVENT_COMPONENT);
+            (void)icalcomponent_get_next_component(c,ICAL_VEVENT_COMPONENT);
         }
     }
 
@@ -1859,7 +1859,7 @@ void test_icalset()
 
         clone = icalcomponent_new_clone(c);
 
-        icalset_add_component(d,clone);
+        (void)icalset_add_component(d,clone);
 
         printf(" class %d\n",icalclassify(c,0,"user"));
 
@@ -2003,7 +2003,7 @@ void test_fblist()
       char *strp = out_str;
 
       for (i=0; foo[i]!=-1; i++){
-        sprintf(strp, "%d", foo[i]);
+        snprintf(strp, 80, "%1d", foo[i]);
         strp++;
       }
       str_is("Checking freebusy validity", out_str, "1121110");
@@ -2219,8 +2219,7 @@ void test_convenience(){
         (void *)0);
 
     tt = icaltime_from_string("19970801T120000");
-    icaltime_set_timezone(&tt,
-        icaltimezone_get_builtin_timezone("Europe/Rome"));
+    (void)icaltime_set_timezone(&tt, icaltimezone_get_builtin_timezone("Europe/Rome"));
     icalcomponent_set_dtstart(c,tt);
 
     if (VERBOSE) printf("\n%s\n", icalcomponent_as_ical_string(c));
@@ -2307,7 +2306,7 @@ void test_start_of_week()
 
         if(doy == 1){
           char msg[128];
-          sprintf(msg, "%s", ictt_as_string(tt1));
+          snprintf(msg, sizeof(msg), "%s", ictt_as_string(tt1));
           int_is(msg, start_dow, 1);
         }
 
@@ -2349,7 +2348,7 @@ void test_doy()
         stm.tm_year = tt1.year-1900;
         stm.tm_isdst = -1;
 
-        mktime(&stm);
+        (void)mktime(&stm);
 
         doy = icaltime_day_of_year(tt1);
 
@@ -2357,7 +2356,7 @@ void test_doy()
 
         if (doy == 1) {
           /** show some test cases **/
-          sprintf(msg, "Year %d - mktime() compare", tt1.year);
+          snprintf(msg, sizeof(msg), "Year %d - mktime() compare", tt1.year);
           int_is(msg, doy,doy2);
         }
 
@@ -2377,7 +2376,7 @@ void test_doy()
     do{
         if(doy == 1){
           /** show some test cases **/
-          sprintf(msg, "Year %d - icaltime_day_of_year() compare", tt1.year);
+          snprintf(msg, sizeof(msg), "Year %d - icaltime_day_of_year() compare", tt1.year);
           int_is(msg, doy,doy2);
         }
 
@@ -2794,7 +2793,7 @@ icalcomponent* make_component(int i){
 
     t.day += i;
 
-    icaltime_normalize(t);
+    (void)icaltime_normalize(t);
 
     c =  icalcomponent_vanew(
         ICAL_VCALENDAR_COMPONENT,
@@ -2832,10 +2831,10 @@ void test_fileset()
 
     for (i = 0; i!= 10; i++){
         c = make_component(i);
-        icalfileset_add_component(fs,c);
+        (void)icalfileset_add_component(fs,c);
     }
 
-    icalfileset_commit(fs);
+    (void)icalfileset_commit(fs);
 
     icalset_free(fs);
     /** reopen fileset.ics **/
@@ -2853,7 +2852,7 @@ void test_fileset()
     }
     int_is("icalfileset get components",comp_count, 10);
 
-    icalfileset_select(fs,g);
+    (void)icalfileset_select(fs,g);
 
     if (VERBOSE) printf("\n== DTSTART > '20000103T120000Z' AND DTSTART <= '20000106T120000Z' \n");
 
@@ -2912,13 +2911,13 @@ void test_file_locks()
 
         icalcomponent_set_duration(c,d);
 
-        icalfileset_add_component(fs,c);
+        (void)icalfileset_add_component(fs,c);
 
         c2 = icalcomponent_new_clone(c);
 
-        icalfileset_add_component(fs,c2);
+        (void)icalfileset_add_component(fs,c2);
 
-        icalfileset_commit(fs);
+        (void)icalfileset_commit(fs);
     }
 
     icalset_free(fs);
@@ -2952,10 +2951,10 @@ void test_file_locks()
 
             c2 = icalcomponent_new_clone(c);
             icalcomponent_set_summary(c2,"Child");
-            icalfileset_add_component(fs,c2);
+            (void)icalfileset_add_component(fs,c2);
 
             icalfileset_mark(fs);
-            icalfileset_commit(fs);
+            (void)icalfileset_commit(fs);
 
             icalset_free(fs);
 
@@ -2985,10 +2984,10 @@ void test_file_locks()
 
             c2 = icalcomponent_new_clone(c);
             icalcomponent_set_summary(c2,"Parent");
-            icalfileset_add_component(fs,c2);
+            (void)icalfileset_add_component(fs,c2);
 
             icalfileset_mark(fs);
-            icalfileset_commit(fs);
+            (void)icalfileset_commit(fs);
             icalset_free(fs);
 
             putc('.',stdout);

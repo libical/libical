@@ -61,8 +61,8 @@ int vcalendar_init(struct calendar **cal, char *vcalendar, char *title);
 
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey);
 char * parse_vcalendar(const DBT *dbt) ;
-char * pack_calendar(struct calendar *cal, int size);
-struct calendar * unpack_calendar(char *str, int size);
+char * pack_calendar(struct calendar *cal, size_t size);
+struct calendar * unpack_calendar(char *str, size_t size);
 #endif
 /*
 static char str[] = "BEGIN:VCALENDAR\n\
@@ -185,8 +185,8 @@ void test_fileset_extended(void)
 
         icalproperty_set_dtend(dtend,end);
 
-        icalfileset_add_component(cout,clone);
-        icalfileset_commit(cout);
+        (void)icalfileset_add_component(cout,clone);
+        (void)icalfileset_commit(cout);
 
         icalset_free(cout);
     }
@@ -232,8 +232,8 @@ void test_fileset_extended(void)
     iter = icalfileset_begin_component(cout, ICAL_ANY_COMPONENT, 0, NULL);
     itr = icalsetiter_deref(&iter);
     while (itr != 0) {
-        icalsetiter_next(&iter);
-        icalfileset_remove_component(cout, itr);
+        (void)icalsetiter_next(&iter);
+        (void)icalfileset_remove_component(cout, itr);
         icalcomponent_free(itr);
         itr = icalsetiter_deref(&iter);
     }
@@ -370,10 +370,10 @@ void test_bdbset()
       icalcomponent_set_uid(clone, uid);
 #endif
 
-      icalbdbset_add_component(cout,clone);
+      (void)icalbdbset_add_component(cout,clone);
 
       /* commit changes */
-      icalbdbset_commit(cout);
+      (void)icalbdbset_commit(cout);
 
       /*num_components =*/ icalcomponent_count_components(clone, ICAL_ANY_COMPONENT);
 
@@ -429,10 +429,10 @@ void test_bdbset()
            itr != 0;
            itr = icalbdbset_get_next_component(cout)){
 
-        icalbdbset_remove_component(cout, itr);
+        (void)icalbdbset_remove_component(cout, itr);
       }
 
-      icalbdbset_commit(cout);
+      (void)icalbdbset_commit(cout);
       icalset_free(cout);
 
     }
@@ -527,14 +527,14 @@ int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
   memset(skey, 0, sizeof(DBT));
 
   cl = icalparser_parse_string((char *)pdata->data);
-  sprintf(title, "title_%s", icalcomponent_get_uid(cl));
+  snprintf(title, sizeof(title), "title_%s", icalcomponent_get_uid(cl));
 
   skey->data = strdup(title);
-  skey->size = strlen(skey->data);
+  skey->size = (u_int32_t)strlen(skey->data);
   return (0);
 }
 
-char * pack_calendar(struct calendar *cal, int size)
+char * pack_calendar(struct calendar *cal, size_t size)
 {
   char *str;
 
@@ -572,7 +572,7 @@ char * pack_calendar(struct calendar *cal, int size)
   return str;
 }
 
-struct calendar * unpack_calendar(char *str, int size)
+struct calendar * unpack_calendar(char *str, size_t size)
 {
   struct calendar *cal;
   if((cal = (struct calendar *) malloc(size))==NULL)
@@ -743,7 +743,7 @@ void test_dirset_extended(void)
 
     ok("Creating complex Gauge", (gauge!=0));
 
-    icaldirset_select(s,gauge);
+    (void)icaldirset_select(s,gauge);
 
     for(c = icaldirset_get_first_component(s); c != 0;
         c = icaldirset_get_next_component(s)){
@@ -775,7 +775,7 @@ void test_dirset_extended(void)
     while((c=icaldirset_get_current_component(s)) != 0 ){
         i++;
 
-        icaldirset_remove_component(s,c);
+        (void)icaldirset_remove_component(s,c);
     }
 
 
