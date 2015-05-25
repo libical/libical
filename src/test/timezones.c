@@ -155,8 +155,8 @@ int main(int argc, char **argv)
 
     if (total_failed || total_okay) {
         percent_failed = total_failed * 100 / (total_failed + total_okay);
-        printf(" *** Summary: %zu zones tested, %u days failed, %u okay => %u%% failed ***\n",
-               timezones->num_elements,
+        printf(" *** Summary: %lu zones tested, %u days failed, %u okay => %u%% failed ***\n",
+               (unsigned long)timezones->num_elements,
                total_failed,
                total_okay,
                percent_failed);

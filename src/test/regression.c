@@ -544,12 +544,7 @@ void test_memory()
 
 
       printf("Final: %s\n", f);
-
-#ifdef _WIN32
-      printf("Final buffer size: %Iu\n",bufsize);
-#else
-      printf("Final buffer size: %zu\n",bufsize);
-#endif
+      printf("Final buffer size: %lu\n", (unsigned long)bufsize);
     }
 
     ok("final buffer size == 806", (bufsize == 806));
