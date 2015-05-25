@@ -64,7 +64,7 @@ int main(int c, char *argv[]){
     /*icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);*/
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
-    signal(SIGALRM,sig_alrm);
+    (void)signal(SIGALRM,sig_alrm);
     alarm(10);
 #endif
     clusterin = icalfileset_new(argv[1]);
@@ -111,7 +111,7 @@ int main(int c, char *argv[]){
     }
 
 
-    printf("Transfered %d components\n",count);
+    printf("Transferred %d components\n",count);
 
     icalset_free(clusterin);
 

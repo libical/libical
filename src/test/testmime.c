@@ -318,11 +318,7 @@ int main(int argc, char* argv[])
     }
 
     if (opt.sleep != 0){
-#ifdef WIN32
-        Sleep(opt.sleep*1000);
-#else
-        sleep(opt.sleep);
-#endif
+        sleep((unsigned int)opt.sleep);
     }
 
     if( opt.input_file != 0){

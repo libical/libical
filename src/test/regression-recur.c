@@ -95,7 +95,7 @@ void test_recur_file()
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
-    signal(SIGALRM,sig_alrm);
+    (void)signal(SIGALRM,sig_alrm);
 #endif
     file = getenv("ICAL_RECUR_FILE");
     if (!file)

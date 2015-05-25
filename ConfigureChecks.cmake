@@ -17,6 +17,7 @@ if(WIN32 AND MSVC)
   check_function_exists(_getpid HAVE__GETPID) #Windows <process.h>
   check_function_exists(_mkdir HAVE__MKDIR) #Windows <direct.h>
   check_function_exists(_open HAVE__OPEN) #Windows <io.h>
+  check_function_exists(Sleep, HAVE_WINSLEEP) #Windows <windows.h>
   check_function_exists(_snprintf HAVE__SNPRINTF) #Windows <stdio.h>
   check_function_exists(_stat HAVE__STAT) #Windows <sys/types.h>,<sys/stat.h>
   check_function_exists(_strdup HAVE__STRDUP) #Windows <string.h>
@@ -33,6 +34,8 @@ else()
   check_function_exists(gmtime_r HAVE_GMTIME_R) #Unix <time.h>
   check_function_exists(mkdir HAVE_MKDIR) #Unix <sys/stat.h>,<sys/types.h>
   check_function_exists(open HAVE_OPEN) #Unix <sys/stat.h>,<sys/types.h>,<fcntl.h>
+  check_function_exists(sleep HAVE_UNIXSLEEP) #Unix <unistd.h>
+  check_function_exists(nanosleep HAVE_NANOSLEEP) #Unix <time.h>
   check_function_exists(signal HAVE_SIGNAL) #Unix <signal.h>
   check_function_exists(snprintf HAVE_SNPRINTF) #Unix <stdio.h>
   check_function_exists(stat HAVE_STAT) #Unix <sys/stat.h>,<sys/types.h>,<unistd.h>
@@ -41,6 +44,7 @@ else()
   check_function_exists(strncasecmp HAVE_STRNCASECMP) #Unix <strings.h>
   check_function_exists(read HAVE_READ) #Unix <unistd.h>
   check_function_exists(unlink HAVE_UNLINK) #Unix <unistd.h>
+  check_function_exists(usleep HAVE_USLEEP) #Unix <unistd.h>
   check_function_exists(waitpid HAVE_WAITPID) #Unix <sys/types.h>,<sys/wait.h>
   check_function_exists(write HAVE_WRITE) #Unix <unistd.h>
 endif()

@@ -42,6 +42,18 @@
 /* Define to 1 if you have the <pthread.h> header file. */
 #cmakedefine HAVE_PTHREAD_H 1
 
+/* Define to 1 if you have the Windows `Sleep' function. */
+#cmakedefine HAVE_WINSLEEP 1
+
+/* Define to 1 if you have the Unix `sleep' function. */
+#cmakedefine HAVE_UNIXSLEEP 1
+
+/* Define to 1 if you have the `nanosleep' function. */
+#cmakedefine HAVE_NANOSLEEP 1
+
+/* Define to 1 if you have the `usleep' function. */
+#cmakedefine HAVE_USLEEP 1
+
 /* Define to 1 if you have the `snprintf' function. */
 #cmakedefine HAVE_SNPRINTF 1
 
@@ -259,6 +271,35 @@ typedef unsigned int wint_t;
 #endif
 #endif
 #include <stdio.h>
+
+/* sleep: function to sleep for a specified time */
+#if defined(HAVE_WINSLEEP)
+#include <windows.h>
+#if defined(sleep)
+#undef sleep
+#endif
+#define sleep(n) (Sleep((n)*1000))
+#else
+#if !defined(HAVE_UNIXSLEEP)
+#error "No function to go to sleep available"
+#else
+#include <unistd.h>
+#endif
+#endif
+
+/* nanosleep: function for high resolution sleeping */
+#if defined(HAVE_NANOSLEEP)
+#include <time.h>
+#endif
+
+/* usleep: deprecated, but useful if nanosleep is unavailable */
+#if defined(HAVE_USLEEP)
+#include <unistd.h>
+#endif
+
+#if !defined(HAVE_NANOSLEEP) && !defined(HAVE_USLEEP)
+#error "No function for high resolution timing available"
+#endif
 
 /* stat: function to get status info on a file */
 #if defined(HAVE__STAT)

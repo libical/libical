@@ -520,7 +520,7 @@ int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title)
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
 {
   icalcomponent *cl;
-  char title[255];
+  static char title[255];
   _unused(dbp);
   _unused(pkey);
 

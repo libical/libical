@@ -2872,17 +2872,18 @@ void test_fileset()
 #endif
 }
 
-void microsleep(int us)
+void microsleep(int us) /*us is in microseconds */
 {
-#ifndef _WIN32
-    struct timeval tv;
+#if defined(HAVE_NANOSLEEP)
+    struct timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = us * 1000; /* convert from microseconds to nanoseconds */
 
-    tv.tv_sec = 0;
-    tv.tv_usec = us;
-
-    select(0,0,0,0,&tv);
-#else
-    Sleep(us);
+    nanosleep(&ts, NULL);
+#elif defined(HAVE_USLEEP)
+    usleep(us);
+#else /*Windows Sleep is useless for microsleeping*/
+#error missing a microsleep capability here
 #endif
 }
 
