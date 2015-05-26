@@ -2276,7 +2276,7 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
   for (i = 0; i < num_elements; i++) {
     icaltimezone *zone;
     const char *existing_tzid;
-    const char *existing_tzid_copy;
+    char *existing_tzid_copy;
     size_t existing_tzid_len;
 
     zone = icalarray_element_at (comp->timezones, i);
@@ -2306,6 +2306,7 @@ icalcomponent_handle_conflicting_vtimezones (icalcomponent *comp,
 	  icalarray_append (tzids_to_rename, tzid_copy);
 	  free(tzid_copy);
 	  icalarray_append (tzids_to_rename, existing_tzid_copy);
+	  free(existing_tzid_copy);
 	}
 	return;
       } else {
