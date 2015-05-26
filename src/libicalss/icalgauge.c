@@ -303,7 +303,6 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 	    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 	    return 0;
 	}
-        inner = comp;
     }
 
     /* Check that this component is one of the FROM types */
@@ -380,8 +379,6 @@ int icalgauge_compare(icalgauge* gauge,icalcomponent* comp)
 
        }
 
-
-	this_clause = 0;
 	local_pass = (w->compare == ICALGAUGECOMPARE_ISNULL) ? 1 : 0;
 
 	for(prop = icalcomponent_get_first_property(sub_comp,w->prop);

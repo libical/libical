@@ -287,7 +287,6 @@ icaltzutil_fetch_timezone (const char *location)
 		c = fgetc (f);
 		types [i].isdst = c;
 		if((c = fgetc (f)) < 0) {
-		   c = 0;
 		   break;
 		}
 		types [i].abbr = c;

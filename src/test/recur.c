@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 	itr != 0;
 	itr = icalfileset_get_next_component(cin)){
 		
-      struct icaltimetype start = icaltime_from_timet(1,0);
+      struct icaltimetype start;
       struct icaltimetype end = icaltime_today();
 
 

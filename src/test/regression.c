@@ -1461,8 +1461,6 @@ void do_test_time(char* zone)
     ok("Convert from floating to zone",
        (strncmp(ictt_as_string(icttzone), "2002-06-26 21:44:29", 19)==0));
 
-    tt2 = icaltime_as_timet(icttzone);
-
     if (VERBOSE) printf("\n---> Convert from UTC \n");
 
     ictt = icaltime_from_timet_with_zone(tt, 0, utczone);
@@ -2354,8 +2352,6 @@ void test_doy()
     struct icaltimetype tt1, tt2;
     short doy,doy2;
     char msg[128];
-
-    doy = -1;
 
     tt1 = icaltime_from_string("19900101");
 
