@@ -137,7 +137,7 @@ void test_recur_file()
       char msg[128];
 
 
-      struct icaltimetype start = icaltime_null_time();
+      struct icaltimetype start;
       struct icaltimetype startmin = icaltime_from_timet(1,0);
       struct icaltimetype endmax = icaltime_null_time();
       const char *desc_str = "malformed component";
