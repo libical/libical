@@ -42,12 +42,6 @@
 /* Define to 1 if you have the <pthread.h> header file. */
 #cmakedefine HAVE_PTHREAD_H 1
 
-/* Define to 1 if you have the Windows `Sleep' function. */
-#cmakedefine HAVE_WINSLEEP 1
-
-/* Define to 1 if you have the Unix `sleep' function. */
-#cmakedefine HAVE_UNIXSLEEP 1
-
 /* Define to 1 if you have the `nanosleep' function. */
 #cmakedefine HAVE_NANOSLEEP 1
 
@@ -273,18 +267,14 @@ typedef unsigned int wint_t;
 #include <stdio.h>
 
 /* sleep: function to sleep for a specified time */
-#if defined(HAVE_WINSLEEP)
+#if defined(_WIN32)
 #include <windows.h>
 #if defined(sleep)
 #undef sleep
 #endif
 #define sleep(n) (Sleep((n)*1000))
 #else
-#if !defined(HAVE_UNIXSLEEP)
-#error "No function to go to sleep available"
-#else
 #include <unistd.h>
-#endif
 #endif
 
 /* nanosleep: function for high resolution sleeping */
