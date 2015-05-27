@@ -421,7 +421,6 @@ int* icalspanlist_as_freebusy_matrix(icalspanlist* sl, int delta_t) {
       if (offset_end >= matrix_slots)
         offset_end = matrix_slots - 1;
 
-      i = offset_start;
       for (i=offset_start; i < offset_end; i++) {
         matrix[i]++;
       }
