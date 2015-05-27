@@ -2877,9 +2877,7 @@ void microsleep(int us) /*us is in microseconds */
     nanosleep(&ts, NULL);
 #elif defined(HAVE_USLEEP)
     usleep(us);
-#else /*Windows Sleep is useless for microsleeping*/
-#error missing a microsleep capability here
-#endif
+#endif /*Windows Sleep is useless for microsleeping*/
 }
 
 
