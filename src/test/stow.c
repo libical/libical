@@ -640,6 +640,7 @@ void get_options(int argc, char* argv[], struct options_struct *opt)
                 } else {
                     fprintf(stderr,"%s: Creating calendar directory %s\n",
                             program_name,facspath);
+                    free(facspath);
                 }
 
             } else if(type==REGULAR || type == ERROR){
@@ -647,8 +648,10 @@ void get_options(int argc, char* argv[], struct options_struct *opt)
                         program_name,facspath);
                 exit(1);
             }
+        } else {
+            free(facspath);
         }
-     }
+    }
 }
 
 char* check_options(struct options_struct *opt)

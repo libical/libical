@@ -1769,7 +1769,7 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
 
     if(where->value == 0){
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-        free(where->value);
+        free(where);
         return;
     }
 
