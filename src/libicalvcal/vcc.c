@@ -859,7 +859,7 @@ static void finiLex() {
  */
 static char * lexGetDataFromBase64()
     {
-    unsigned long bytesLen = 0, bytesMax = 0;
+    size_t bytesLen = 0, bytesMax = 0;
     int quadIx = 0, pad = 0;
     unsigned long trip = 0;
     unsigned char b;
