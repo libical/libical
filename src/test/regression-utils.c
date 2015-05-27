@@ -32,12 +32,16 @@ static char ictt_str[1024];
 
 const char* ical_timet_string(const time_t t)
 {
-    struct tm tmp;
-    gmtime_r(&t, &tmp);
+    struct tm tmp, stm;
+    if (gmtime_r(&t, &tmp)) {
+      stm = tmp;
+    } else {
+      memset(&stm, 0, sizeof(stm));
+    }
 
     snprintf(ictt_str, sizeof(ictt_str),
              "%02d-%02d-%02d %02d:%02d:%02d Z",
-             tmp.tm_year+1900, tmp.tm_mon+1,tmp.tm_mday,tmp.tm_hour,tmp.tm_min,tmp.tm_sec);
+             stm.tm_year+1900, stm.tm_mon+1,stm.tm_mday,stm.tm_hour,stm.tm_min,stm.tm_sec);
 
     return ictt_str;
 
