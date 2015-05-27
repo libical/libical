@@ -295,7 +295,6 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             c = fgetc(f);
             types[i].isdst = (unsigned char)c;
             if ((c = fgetc(f)) < 0) {
-                c = 0;
                 break;
             }
             types[i].abbr = (unsigned int)c;
