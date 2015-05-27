@@ -276,46 +276,30 @@ static char* saved_tz = NULL;
    locking the tzid mutex as in icaltime_as_timet_with_zone */
 static char* set_tz(const char* tzid)
 {
-    static char temp[256];
-    char *save_getenv, *old_tz=NULL, *new_tz;
-    size_t i, j, len;
-    char *prefix = "TZ=";
-    size_t prefix_len = strlen(prefix);
+    char *old_tz, *old_tz_copy = NULL, *new_tz;
 
     /* Get the old TZ setting and save a copy of it to return. */
-    temp[0] = '\0';
-    save_getenv = getenv("TZ");
-    j = prefix_len;
-    /* Untaint the TZ env string by removing any non-printing chars */
-    if (save_getenv) {
-        strncpy(temp, prefix, prefix_len);
-        len = MIN(strlen(save_getenv), sizeof(temp) - prefix_len);
-        for (i=0; i<len; ++i) {
-            if (isprint(save_getenv[i])) {
-              temp[j++] = save_getenv[i];
-            }
-        }
-        temp[j] = '\0';
-    }
+    old_tz = getenv("TZ");
+    if(old_tz){
+       old_tz_copy = (char*)malloc(strlen (old_tz) + 4);
 
-    /* If we are setting TZ to something then dup it into old_tz */
-    if (j != prefix_len) {
-        old_tz = strdup(temp);
-        if(old_tz == 0){
+        if(old_tz_copy == 0){
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             return 0;
         }
+        strcpy (old_tz_copy, "TZ=");
+        strcpy (old_tz_copy + 3, old_tz);
     }
-
     /* Create the new TZ string. */
-    snprintf(temp, sizeof(temp), "TZ=%250s", tzid); /* limit provided timezone to 250 chars*/
-                                                    /* increase as needed*/
-    new_tz = strdup(temp);
+    new_tz = (char*)malloc(strlen (tzid) + 4);
     if(new_tz == 0){
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-        free(old_tz);
+        free(old_tz_copy);
         return 0;
     }
+
+    strcpy (new_tz, "TZ=");
+    strcpy (new_tz + 3, tzid);
 
     /* Add the new TZ to the environment. */
     putenv(new_tz);
@@ -327,7 +311,7 @@ static char* set_tz(const char* tzid)
     /* Save a pointer to the TZ string we just set, so we can free it later. */
     saved_tz = new_tz;
 
-    return old_tz; /* This will be zero if the TZ env var was not set */
+    return old_tz_copy; /* This will be zero if the TZ env var was not set */
 }
 
 static void unset_tz(char *tzstr)
