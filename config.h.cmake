@@ -288,7 +288,9 @@ typedef unsigned int wint_t;
 #endif
 
 #if !defined(HAVE_NANOSLEEP) && !defined(HAVE_USLEEP)
+#if !defined(_WIN32)
 #error "No function for high resolution timing available"
+#endif
 #endif
 
 /* stat: function to get status info on a file */
@@ -447,7 +449,9 @@ typedef ssize_t IO_SSIZE_T;
 
 /* alarm - function to set and alarm for delivering a signal */
 #if defined(HAVE_ALARM)
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h>
+#endif
 #endif
 
 /* signal - signal handling function */
@@ -493,6 +497,11 @@ typedef ssize_t IO_SSIZE_T;
 #endif
 #if !defined(MAXPATHLEN)
 #define MAXPATHLEN 1024
+#endif
+
+/* MIN macro */
+#if !defined(MIN)
+#define MIN(a,b) (((a)<(b))?(a):(b))
 #endif
 
 /* Unused argument macro */

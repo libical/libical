@@ -26,7 +26,6 @@ if(WIN32 AND MSVC)
   check_function_exists(_write HAVE__WRITE) #Windows <io.h>
 else()
   check_function_exists(access HAVE_ACCESS) #Unix <unistd.h>
-  check_function_exists(alarm HAVE_ALARM) #Unix <unistd.h>
   check_function_exists(fork HAVE_FORK) #Unix <unistd.h>
   check_function_exists(getpid HAVE_GETPID) #Unix <unistd.h>
   check_function_exists(getpwent HAVE_GETPWENT) #Unix <sys/types.h>,<pwd.h>
@@ -45,6 +44,9 @@ else()
   check_function_exists(usleep HAVE_USLEEP) #Unix <unistd.h>
   check_function_exists(waitpid HAVE_WAITPID) #Unix <sys/types.h>,<sys/wait.h>
   check_function_exists(write HAVE_WRITE) #Unix <unistd.h>
+  if(NOT MINGW)
+    check_function_exists(alarm HAVE_ALARM) #Unix <unistd.h>
+  endif()
 endif()
 
 check_function_exists(backtrace HAVE_BACKTRACE)
