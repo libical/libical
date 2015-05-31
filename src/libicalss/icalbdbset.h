@@ -61,7 +61,7 @@ LIBICAL_ICALSS_EXPORT char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc) (cons
 LIBICAL_ICALSS_EXPORT void icalbdbset_free(icalset *set);
 
 /* cursor operations */
-LIBICAL_ICALSS_EXPORT int icalbdbset_acquire_cursor(DB *dbp, DB_TXN * tid, DBC ** rdbcp);
+LIBICAL_ICALSS_EXPORT int icalbdbset_acquire_cursor(DB *dbp, DB_TXN *tid, DBC ** rdbcp);
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data,
                                           u_int32_t access_method);
@@ -81,7 +81,7 @@ LIBICAL_ICALSS_EXPORT int icalbdbset_delete(DB *dbp, DBT *key);
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_put(DB *dbp, DBT *key, DBT *data, u_int32_t access_method);
 
-LIBICAL_ICALSS_EXPORT int icalbdbset_get(DB *dbp, DB_TXN * tid, DBT *key, DBT *data,
+LIBICAL_ICALSS_EXPORT int icalbdbset_get(DB *dbp, DB_TXN *tid, DBT *key, DBT *data,
                                          u_int32_t flags);
 
 LIBICAL_ICALSS_EXPORT const char *icalbdbset_path(icalset *set);
@@ -153,9 +153,9 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_get_component(icalset *set);
 
 LIBICAL_ICALSS_EXPORT DB_ENV *icalbdbset_get_env(void);
 
-LIBICAL_ICALSS_EXPORT int icalbdbset_begin_transaction(DB_TXN * parent_id, DB_TXN ** txnid);
+LIBICAL_ICALSS_EXPORT int icalbdbset_begin_transaction(DB_TXN *parent_id, DB_TXN ** txnid);
 
-LIBICAL_ICALSS_EXPORT int icalbdbset_commit_transaction(DB_TXN * txnid);
+LIBICAL_ICALSS_EXPORT int icalbdbset_commit_transaction(DB_TXN *txnid);
 
 LIBICAL_ICALSS_EXPORT DB *icalbdbset_bdb_open(const char *path,
                                               const char *subdb,

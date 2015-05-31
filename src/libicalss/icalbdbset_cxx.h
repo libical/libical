@@ -33,18 +33,17 @@ namespace LibICal
 
         ICalBDBSet();
         ICalBDBSet(const ICalBDBSet &);
+        ICalBDBSet(const string &path, int flags);
         ICalBDBSet operator=(const ICalBDBSet &);
         ~ICalBDBSet();
-
-        ICalBDBSet(const string & path, int flags);
 
       public:
 
         void free();
         string path();
 
-        icalerrorenum add_component(VComponent * child);
-        icalerrorenum remove_component(VComponent * child);
+        icalerrorenum add_component(VComponent *child);
+        icalerrorenum remove_component(VComponent *child);
         int count_components(icalcomponent_kind kind);
 
         // Restrict the component returned by icalbdbset_first, _next to those
@@ -53,9 +52,9 @@ namespace LibICal
         void clear();
 
         // Get and search for a component by uid
-        VComponent *fetch(string & uid);
+        VComponent *fetch(string &uid);
         VComponent *fetch_match(icalcomponent *c);
-        int has_uid(string & uid);
+        int has_uid(string &uid);
 
         // Iterate through components. If a guage has been defined, these
         // will skip over components that do not pass the gauge

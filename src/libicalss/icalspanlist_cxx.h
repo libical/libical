@@ -57,7 +57,7 @@ namespace LibICal
         explicit ICalSpanList(icalcomponent *comp) throw(icalerrorenum);
 
     /** Construct an ICalSpanList from the VFREEBUSY chunk of a vcomponent */
-        explicit ICalSpanList(VComponent & comp) throw(icalerrorenum);
+        explicit ICalSpanList(VComponent &comp) throw(icalerrorenum);
 
     /** Destructor */
         ~ICalSpanList();
@@ -65,10 +65,10 @@ namespace LibICal
     /** Return a VFREEBUSY icalcomponent */
         VComponent *get_vfreebusy(const char *organizer, const char *attendee) throw(icalerrorenum);
 
-        ICalSpanList & operator=(const ICalSpanList &) throw(icalerrorenum);
+        ICalSpanList &operator=(const ICalSpanList &) throw(icalerrorenum);
 
     /** Return the base data when casting */
-        operator icalspanlist *()
+        operator  icalspanlist *()
         {
             return data;
         }
@@ -83,6 +83,6 @@ namespace LibICal
          icalspanlist *data;
     };
 
-} // namespace LibICal;
+}       // namespace LibICal;
 
 #endif

@@ -46,7 +46,7 @@
 #include <stdlib.h>
 
 /* #define _DLOPEN_TEST */
-#ifdef _DLOPEN_TEST
+#if defined(_DLOPEN_TEST)
 #include <sys/types.h>
 #include <dlfcn.h>
 #include <dirent.h>
@@ -132,32 +132,32 @@ static icalset icalset_bdbset_init = {
 };
 #endif
 
-#ifdef _DLOPEN_TEST
-static int  icalset_init_done = 0;
+#if defined(_DLOPEN_TEST)
+static int icalset_init_done = 0;
 static pvl_list icalset_kinds = 0;
 
-typedef icalset *(*fptr)(void);
+typedef icalset *(*fptr) (void);
 
 /**
  * Try to load the file and register any icalset found within.
  */
 static int load(const char *file)
 {
-    void           *modh;
-    fptr            inith;
-    icalset        *icalset_init_ptr;
+    void *modh;
+    fptr inith;
+    icalset *icalset_init_ptr;
 
     if ((modh = dlopen(file, RTLD_NOW)) == 0) {
         perror("dlopen");
         return 0;
     }
 
-    if ((inith = (fptr)dlsym(modh, "InitModule")) == 0) {
+    if ((inith = (fptr) dlsym(modh, "InitModule")) == 0) {
         perror("dlsym");
         return 0;
     }
 
-    while ((icalset_init_ptr = ((inith)())) != 0) {
+    while ((icalset_init_ptr = ((inith) ())) != 0) {
         pvl_push(icalset_kinds, &icalset_init_ptr);
     }
 
@@ -170,11 +170,10 @@ static int load(const char *file)
  */
 int icalset_loaddir(const char *path)
 {
-    DIR             *d;
-    struct dirent   *dp;
-    char            buf[PATH_MAX],
-                    *bufptr;
-    int             tot = 0;
+    DIR *d;
+    struct dirent *dp;
+    char buf[PATH_MAX], *bufptr;
+    int tot = 0;
 
     strcpy(buf, path);
     bufptr = buf + strlen(buf);
@@ -236,16 +235,16 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
     icalset *data = NULL;
     icalset *ret = NULL;
 
-#ifdef _DLOPEN_TEST
-    pvl_elem    e;
-    icalset    *impl;
+#if defined(_DLOPEN_TEST)
+    pvl_elem e;
+    icalset *impl;
 
     if (!icalset_init_done) {
         icalset_init();
     }
 
     for (e = pvl_head(icalset_kinds); e != 0; e = pvl_next(e)) {
-        impl = (icalset *)pvl_data(e);
+        impl = (icalset *) pvl_data(e);
         if (impl->kind == kind) {
             break;
         }
@@ -255,8 +254,8 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
         return (NULL);
     }
 
-    data = (icalset *)malloc(impl->size);
-    if (data == (icalset *)NULL) {
+    data = (icalset *) malloc(impl->size);
+    if (data == (icalset *) NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         errno = ENOMEM;
         return 0;
@@ -267,7 +266,7 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
     /* *data = *impl; */
     memcpy(data, impl, sizeof(icalset));
 
-    data->dsn     = strdup(dsn);
+    data->dsn = strdup(dsn);
 #else
     switch (kind) {
     case ICAL_FILE_SET:
@@ -309,8 +308,8 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
         return (NULL);
     }
 
-    data->kind    = kind;
-    data->dsn     = strdup(dsn);
+    data->kind = kind;
+    data->dsn = strdup(dsn);
 #endif
 
     /** call the implementation specific initializer **/
@@ -426,8 +425,7 @@ int icalset_has_uid(icalset *set, const char *uid)
     return set->has_uid(set, uid);
 }
 
-icalerrorenum icalset_modify(icalset *set, icalcomponent *old,
-                             icalcomponent *new)
+icalerrorenum icalset_modify(icalset *set, icalcomponent *old, icalcomponent *new)
 {
     return set->modify(set, old, new);
 }
@@ -447,7 +445,8 @@ icalcomponent *icalset_get_next_component(icalset *set)
     return set->get_next_component(set);
 }
 
-icalsetiter icalsetiter_null = {{ICAL_NO_COMPONENT, 0}, 0, 0, 0, 0};
+icalsetiter icalsetiter_null = { {ICAL_NO_COMPONENT, 0}
+, 0, 0, 0, 0 };
 
 icalsetiter icalset_begin_component(icalset *set,
                                     icalcomponent_kind kind, icalgauge *gauge, const char *tzid)
@@ -458,12 +457,12 @@ icalsetiter icalset_begin_component(icalset *set,
 icalcomponent *icalsetiter_next(icalsetiter *itr)
 {
     icalcomponent *c = 0;
+
     icalerror_check_arg_rz((itr != NULL), "i");
 
-    do  {
+    do {
         c = icalcompiter_next(&(itr->iter));
-        if (c != 0 && (itr->gauge == 0 ||
-                       icalgauge_compare(itr->gauge, c) == 1)) {
+        if (c != 0 && (itr->gauge == 0 || icalgauge_compare(itr->gauge, c) == 1)) {
             return c;
         }
     } while (c != 0);
@@ -474,12 +473,12 @@ icalcomponent *icalsetiter_next(icalsetiter *itr)
 icalcomponent *icalsetiter_prior(icalsetiter *i)
 {
     icalcomponent *c = 0;
+
     icalerror_check_arg_rz((i != NULL), "i");
 
-    do  {
+    do {
         c = icalcompiter_prior(&(i->iter));
-        if (c != 0 && (i->gauge == 0 ||
-                       icalgauge_compare(i->gauge, c) == 1)) {
+        if (c != 0 && (i->gauge == 0 || icalgauge_compare(i->gauge, c) == 1)) {
             return c;
         }
     } while (c != 0);
