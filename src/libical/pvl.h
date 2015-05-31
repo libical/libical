@@ -82,7 +82,7 @@ LIBICAL_ICAL_EXPORT pvl_elem pvl_next(pvl_elem e);
 LIBICAL_ICAL_EXPORT pvl_elem pvl_prior(pvl_elem e);
 
 /* get the data in the list */
-#ifndef PVL_USE_MACROS
+#if !defined(PVL_USE_MACROS)
 LIBICAL_ICAL_EXPORT void *pvl_data(pvl_elem);
 #else
 #define pvl_data(x) x==0 ? 0 : ((struct pvl_elem_t *)x)->d;

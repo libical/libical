@@ -39,8 +39,8 @@
  *      @brief contains definitions of structures used for time calculations.
  */
 
-#ifndef ICAL_astime_h
-#define ICAL_astime_h
+#ifndef ICAL_ASTIME_H
+#define ICAL_ASTIME_H
 
 #include "libical_ical_export.h"
 

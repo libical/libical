@@ -22,8 +22,8 @@
    Graham Davison (g.m.davison@computer.org)
 ======================================================================*/
 
-#ifndef ICALPARAMETER_IMPL
-#define ICALPARAMETER_IMPL
+#ifndef ICALPARAMETERIMPL_H
+#define ICALPARAMETERIMPL_H
 
 #include "icalproperty.h"
 

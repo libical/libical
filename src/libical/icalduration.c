@@ -29,7 +29,7 @@
 #include "icalmemory.h"
 #include "icaltime.h"
 
-/* From Seth Alves,  <alves@hungry.com>   */
+/* From Seth Alves, <alves@hungry.com>   */
 struct icaldurationtype icaldurationtype_from_int(int t)
 {
     struct icaldurationtype dur;
@@ -38,7 +38,7 @@ struct icaldurationtype icaldurationtype_from_int(int t)
 
     dur = icaldurationtype_null_duration();
 
-    if(t < 0){
+    if (t < 0) {
         dur.is_neg = 1;
         t = -t;
     }
@@ -60,14 +60,13 @@ struct icaldurationtype icaldurationtype_from_int(int t)
     return dur;
 }
 
-struct icaldurationtype icaldurationtype_from_string(const char* str)
+struct icaldurationtype icaldurationtype_from_string(const char *str)
 {
-
     int i;
     int begin_flag = 0;
     int time_flag = 0;
     int date_flag = 0;
-    int digits=-1;
+    int digits = -1;
     int scan_size = -1;
     int size = (int)strlen(str);
     char p;
@@ -75,158 +74,175 @@ struct icaldurationtype icaldurationtype_from_string(const char* str)
 
     memset(&d, 0, sizeof(struct icaldurationtype));
 
-    for(i=0;i != size;i++){
+    for (i = 0; i != size; i++) {
         p = str[i];
 
-        switch(p)
+        switch (p) {
+        case '+':
             {
-            case '+': {
-                if(i != 0 || begin_flag == 1) goto error;
+                if (i != 0 || begin_flag == 1) {
+                  goto error;
+                }
                 break;
             }
-            case '-': {
-                if(i != 0 || begin_flag == 1) goto error;
-
+        case '-':
+            {
+                if (i != 0 || begin_flag == 1) {
+                    goto error;
+                }
                 d.is_neg = 1;
                 break;
             }
 
-            case 'P': {
-                if (i != 0 && i !=1 ) goto error;
+        case 'P':
+            {
+                if (i != 0 && i != 1) {
+                    goto error;
+                }
                 begin_flag = 1;
                 break;
             }
 
-            case 'T': {
+        case 'T':
+            {
                 time_flag = 1;
                 break;
             }
 
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                {
-
-                    /* HACK. Skip any more digits if the l;ast one
-                       read has not been assigned */
-                    if(digits != -1){
-                        break;
-                    }
-
-                    if (begin_flag == 0) goto error;
-                    /* Get all of the digits, not one at a time */
-                    scan_size = sscanf(&str[i],"%10d",&digits); /*limit to 10digits. increase as needed*/
-                    if(scan_size == 0) goto error;
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            {
+                /* HACK.
+                   Skip any more digits if the last one read has not been assigned */
+                if (digits != -1) {
                     break;
                 }
 
-            case 'H': {
-                if (time_flag == 0||d.hours !=0||digits ==-1)
+                if (begin_flag == 0) {
                     goto error;
+                }
+                /* Get all of the digits, not one at a time */
+                scan_size = sscanf(&str[i], "%10d", &digits);   /*limit to 10digits.
+                                                                  increase as needed */
+                if (scan_size == 0) {
+                    goto error;
+                }
+                break;
+            }
+
+        case 'H':
+            {
+                if (time_flag == 0 || d.hours != 0 || digits == -1) {
+                    goto error;
+                }
                 d.hours = (unsigned int)digits;
                 digits = -1;
                 break;
             }
-            case 'M': {
-                if (time_flag == 0||d.minutes != 0||digits ==-1)
+        case 'M':
+            {
+                if (time_flag == 0 || d.minutes != 0 || digits == -1) {
                     goto error;
+                }
                 d.minutes = (unsigned int)digits;
                 digits = -1;
                 break;
             }
-            case 'S': {
-                if (time_flag == 0||d.seconds!=0||digits ==-1)
+        case 'S':
+            {
+                if (time_flag == 0 || d.seconds != 0 || digits == -1) {
                     goto error;
+                }
                 d.seconds = (unsigned int)digits;
                 digits = -1;
                 break;
             }
-            case 'W': {
-                if (time_flag==1||date_flag==1||d.weeks!=0||digits ==-1)
+        case 'W':
+            {
+                if (time_flag == 1 || date_flag == 1 || d.weeks != 0 || digits == -1) {
                     goto error;
+                }
                 d.weeks = (unsigned int)digits;
                 digits = -1;
                 break;
             }
-            case 'D': {
-                if (time_flag==1||d.days!=0||digits ==-1)
+        case 'D':
+            {
+                if (time_flag == 1 || d.days != 0 || digits == -1) {
                     goto error;
+                }
                 date_flag = 1;
                 d.days = (unsigned int)digits;
                 digits = -1;
                 break;
             }
-            default: {
+        default:
+            {
                 goto error;
             }
-
-            }
+        }
     }
 
     return d;
 
-
- error:
+  error:
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     return icaldurationtype_bad_duration();
 }
 
-static
-void append_duration_segment(char** buf, char** buf_ptr, size_t* buf_size,
-                             const char* sep, unsigned int value) {
-
+static void append_duration_segment(char **buf, char **buf_ptr, size_t *buf_size,
+                                    const char *sep, unsigned int value)
+{
     char temp[1024];
 
     snprintf(temp, sizeof(temp), "%u", value);
 
     icalmemory_append_string(buf, buf_ptr, buf_size, temp);
     icalmemory_append_string(buf, buf_ptr, buf_size, sep);
-
 }
 
-char* icaldurationtype_as_ical_string(struct icaldurationtype d)
+char *icaldurationtype_as_ical_string(struct icaldurationtype d)
 {
-        char *buf;
-        buf = icaldurationtype_as_ical_string_r(d);
-        icalmemory_add_tmp_buffer(buf);
-        return buf;
+    char *buf;
+
+    buf = icaldurationtype_as_ical_string_r(d);
+    icalmemory_add_tmp_buffer(buf);
+    return buf;
 }
 
-
-char* icaldurationtype_as_ical_string_r(struct icaldurationtype d)
+char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
 {
-
     char *buf;
     size_t buf_size = 256;
-    char* buf_ptr = 0;
+    char *buf_ptr = 0;
     int seconds;
 
-    buf = (char*)icalmemory_new_buffer(buf_size);
+    buf = (char *)icalmemory_new_buffer(buf_size);
     buf_ptr = buf;
-
 
     seconds = icaldurationtype_as_int(d);
 
-    if(seconds !=0){
+    if (seconds != 0) {
 
-        if(d.is_neg == 1){
+        if (d.is_neg == 1) {
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, '-');
         }
 
         icalmemory_append_char(&buf, &buf_ptr, &buf_size, 'P');
 
-        if (d.weeks != 0 ) {
+        if (d.weeks != 0) {
             append_duration_segment(&buf, &buf_ptr, &buf_size, "W", d.weeks);
         }
 
-        if (d.days != 0 ) {
+        if (d.days != 0) {
             append_duration_segment(&buf, &buf_ptr, &buf_size, "D", d.days);
         }
 
@@ -234,18 +250,15 @@ char* icaldurationtype_as_ical_string_r(struct icaldurationtype d)
 
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, "T");
 
-            if (d.hours != 0 ) {
+            if (d.hours != 0) {
                 append_duration_segment(&buf, &buf_ptr, &buf_size, "H", d.hours);
             }
-            if (d.minutes != 0 ) {
-                append_duration_segment(&buf, &buf_ptr, &buf_size, "M",
-                                        d.minutes);
+            if (d.minutes != 0) {
+                append_duration_segment(&buf, &buf_ptr, &buf_size, "M", d.minutes);
             }
-            if (d.seconds != 0 ) {
-                append_duration_segment(&buf, &buf_ptr, &buf_size, "S",
-                                        d.seconds);
+            if (d.seconds != 0) {
+                append_duration_segment(&buf, &buf_ptr, &buf_size, "S", d.seconds);
             }
-
         }
     } else {
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, "PT0S");
@@ -254,30 +267,28 @@ char* icaldurationtype_as_ical_string_r(struct icaldurationtype d)
     return buf;
 }
 
-
 /* From Russel Steinthal */
 int icaldurationtype_as_int(struct icaldurationtype dur)
 {
-    return (int)( (dur.seconds +
-                   (60 * dur.minutes) +
-                   (60 * 60 * dur.hours) +
-                   (60 * 60 * 24 * dur.days) +
-                   (60 * 60 * 24 * 7 * dur.weeks))
-                  * (dur.is_neg==1? -1 : 1) ) ;
+    return (int)((dur.seconds +
+                  (60 * dur.minutes) +
+                  (60 * 60 * dur.hours) +
+                  (60 * 60 * 24 * dur.days) + (60 * 60 * 24 * 7 * dur.weeks))
+                 * (dur.is_neg == 1 ? -1 : 1));
 }
 
 struct icaldurationtype icaldurationtype_null_duration(void)
 {
     struct icaldurationtype d;
 
-    memset(&d,0,sizeof(struct icaldurationtype));
+    memset(&d, 0, sizeof(struct icaldurationtype));
 
     return d;
 }
 
 int icaldurationtype_is_null_duration(struct icaldurationtype d)
 {
-    if(icaldurationtype_as_int(d) == 0){
+    if (icaldurationtype_as_int(d) == 0) {
         return 1;
     } else {
         return 0;
@@ -294,7 +305,8 @@ int icaldurationtype_is_null_duration(struct icaldurationtype d)
 struct icaldurationtype icaldurationtype_bad_duration()
 {
     struct icaldurationtype d;
-    memset(&d,0,sizeof(struct icaldurationtype));
+
+    memset(&d, 0, sizeof(struct icaldurationtype));
     d.is_neg = -1;
     return d;
 }
@@ -304,9 +316,7 @@ int icaldurationtype_is_bad_duration(struct icaldurationtype d)
     return (d.is_neg == -1);
 }
 
-
-struct icaltimetype  icaltime_add(struct icaltimetype t,
-                                  struct icaldurationtype  d)
+struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype d)
 {
     if (!d.is_neg) {
         t.second += d.seconds;
@@ -327,14 +337,10 @@ struct icaltimetype  icaltime_add(struct icaltimetype t,
     return t;
 }
 
-struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
-                                           struct icaltimetype t2)
+struct icaldurationtype icaltime_subtract(struct icaltimetype t1, struct icaltimetype t2)
 {
-
     time_t t1t = icaltime_as_timet(t1);
     time_t t2t = icaltime_as_timet(t2);
 
-    return icaldurationtype_from_int((int)(t1t-t2t));
-
-
+    return icaldurationtype_from_int((int)(t1t - t2t));
 }

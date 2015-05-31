@@ -41,7 +41,7 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
 {
     icalarray *array;
 
-    array = (icalarray *)malloc(sizeof(icalarray));
+    array = (icalarray *) malloc(sizeof(icalarray));
     if (!array) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return NULL;
@@ -59,6 +59,7 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
 static void *icalarray_alloc_chunk(icalarray *array)
 {
     void *chunk = malloc(array->element_size * array->increment_size);
+
     if (!chunk) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
     }
@@ -82,9 +83,10 @@ icalarray *icalarray_copy(icalarray *originalarray)
     if (array->chunks) {
         for (chunk = 0; chunk < chunks; chunk++) {
             array->chunks[chunk] = icalarray_alloc_chunk(array);
-            if (array->chunks[chunk])
+            if (array->chunks[chunk]) {
                 memcpy(array->chunks[chunk], originalarray->chunks[chunk],
                        array->increment_size * array->element_size);
+            }
         }
 
     } else {
@@ -102,6 +104,7 @@ void icalarray_free(icalarray *array)
     if (array->chunks) {
         size_t chunks = array->space_allocated / array->increment_size;
         size_t chunk;
+
         for (chunk = 0; chunk < chunks; chunk++) {
             free(array->chunks[chunk]);
         }
@@ -115,6 +118,7 @@ void icalarray_free(icalarray *array)
 void icalarray_append(icalarray *array, const void *element)
 {
     size_t pos;
+
     if (array->num_elements >= array->space_allocated) {
         icalarray_expand(array, 1);
     }
@@ -135,15 +139,14 @@ void icalarray_remove_element_at(icalarray *array, size_t position)
 {
     while (position < array->num_elements - 1) {
         memmove(icalarray_element_at(array, position),
-                icalarray_element_at(array, position + 1),
-                array->element_size);
+                icalarray_element_at(array, position + 1), array->element_size);
         position++;
     }
 
     array->num_elements--;
 }
 
-void icalarray_sort(icalarray *array, int (*compare)(const void *, const void *))
+void icalarray_sort(icalarray *array, int (*compare) (const void *, const void *))
 {
     if (array->num_elements == 0) {
         return;
@@ -154,11 +157,12 @@ void icalarray_sort(icalarray *array, int (*compare)(const void *, const void *)
     } else {
         size_t pos;
         void *tmp = malloc(array->num_elements * array->element_size);
+
         if (!tmp) {
             return;
         }
         for (pos = 0; pos < array->num_elements; pos++) {
-            memcpy((char *) tmp + array->element_size * pos,
+            memcpy((char *)tmp + array->element_size * pos,
                    icalarray_element_at(array, pos), array->element_size);
         }
 
@@ -166,13 +170,13 @@ void icalarray_sort(icalarray *array, int (*compare)(const void *, const void *)
 
         for (pos = 0; pos < array->num_elements; pos++) {
             memcpy(icalarray_element_at(array, pos),
-                   (char *) tmp + array->element_size * pos, array->element_size);
+                   (char *)tmp + array->element_size * pos, array->element_size);
         }
         free(tmp);
     }
 }
 
-static void icalarray_expand(icalarray  *array, size_t space_needed)
+static void icalarray_expand(icalarray *array, size_t space_needed)
 {
     size_t num_chunks = array->space_allocated / array->increment_size;
     size_t num_new_chunks;

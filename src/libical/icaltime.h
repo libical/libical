@@ -90,7 +90,7 @@
 
 /* An opaque struct representing a timezone. We declare this here to avoid
    a circular dependancy. */
-#ifndef ICALTIMEZONE_DEFINED
+#if !defined(ICALTIMEZONE_DEFINED)
 #define ICALTIMEZONE_DEFINED
 typedef struct _icaltimezone icaltimezone;
 #endif

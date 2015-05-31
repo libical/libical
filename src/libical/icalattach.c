@@ -26,21 +26,20 @@
 #include <errno.h>
 #include <stdlib.h>
 
-icalattach *
-icalattach_new_from_url (const char *url)
+icalattach *icalattach_new_from_url(const char *url)
 {
     icalattach *attach;
     char *url_copy;
 
-    icalerror_check_arg_rz ((url != NULL), "url");
+    icalerror_check_arg_rz((url != NULL), "url");
 
-    if ((attach = malloc (sizeof (icalattach))) == NULL) {
+    if ((attach = malloc(sizeof(icalattach))) == NULL) {
         errno = ENOMEM;
         return NULL;
     }
 
-    if ((url_copy = strdup (url)) == NULL) {
-        free (attach);
+    if ((url_copy = strdup(url)) == NULL) {
+        free(attach);
         errno = ENOMEM;
         return NULL;
     }
@@ -52,22 +51,21 @@ icalattach_new_from_url (const char *url)
     return attach;
 }
 
-icalattach *
-icalattach_new_from_data (const char *data, icalattach_free_fn_t free_fn,
-                          void *free_fn_data)
+icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn,
+                                     void *free_fn_data)
 {
     icalattach *attach;
     char *data_copy;
 
-    icalerror_check_arg_rz ((data != NULL), "data");
+    icalerror_check_arg_rz((data != NULL), "data");
 
-    if ((attach = malloc (sizeof (icalattach))) == NULL) {
+    if ((attach = malloc(sizeof(icalattach))) == NULL) {
         errno = ENOMEM;
         return NULL;
     }
 
-    if ((data_copy = strdup (data)) == NULL) {
-        free (attach);
+    if ((data_copy = strdup(data)) == NULL) {
+        free(attach);
         errno = ENOMEM;
         return NULL;
     }
@@ -81,20 +79,18 @@ icalattach_new_from_data (const char *data, icalattach_free_fn_t free_fn,
     return attach;
 }
 
-void
-icalattach_ref (icalattach *attach)
+void icalattach_ref(icalattach *attach)
 {
-    icalerror_check_arg_rv ((attach != NULL), "attach");
-    icalerror_check_arg_rv ((attach->refcount > 0), "attach->refcount > 0");
+    icalerror_check_arg_rv((attach != NULL), "attach");
+    icalerror_check_arg_rv((attach->refcount > 0), "attach->refcount > 0");
 
     attach->refcount++;
 }
 
-void
-icalattach_unref (icalattach *attach)
+void icalattach_unref(icalattach *attach)
 {
-    icalerror_check_arg_rv ((attach != NULL), "attach");
-    icalerror_check_arg_rv ((attach->refcount > 0), "attach->refcount > 0");
+    icalerror_check_arg_rv((attach != NULL), "attach");
+    icalerror_check_arg_rv((attach->refcount > 0), "attach->refcount > 0");
 
     attach->refcount--;
 
@@ -102,40 +98,37 @@ icalattach_unref (icalattach *attach)
         return;
 
     if (attach->is_url) {
-        free (attach->u.url.url);
+        free(attach->u.url.url);
     } else {
-        free (attach->u.data.data);
+        free(attach->u.data.data);
 /* unused for now
         if (attach->u.data.free_fn)
            (* attach->u.data.free_fn) (attach->u.data.data, attach->u.data.free_fn_data);
 */
     }
 
-    free (attach);
+    free(attach);
 }
 
-int
-icalattach_get_is_url (icalattach *attach)
+int icalattach_get_is_url(icalattach *attach)
 {
-    icalerror_check_arg_rz ((attach != NULL), "attach");
+    icalerror_check_arg_rz((attach != NULL), "attach");
 
     return attach->is_url ? 1 : 0;
 }
 
-const char *
-icalattach_get_url (icalattach *attach)
+const char *icalattach_get_url(icalattach *attach)
 {
-    icalerror_check_arg_rz ((attach != NULL), "attach");
-    icalerror_check_arg_rz ((attach->is_url), "attach->is_url");
+    icalerror_check_arg_rz((attach != NULL), "attach");
+    icalerror_check_arg_rz((attach->is_url), "attach->is_url");
 
     return attach->u.url.url;
 }
 
-unsigned char *
-icalattach_get_data (icalattach *attach)
+unsigned char *icalattach_get_data(icalattach *attach)
 {
-    icalerror_check_arg_rz ((attach != NULL), "attach");
-    icalerror_check_arg_rz ((!attach->is_url), "!attach->is_url");
+    icalerror_check_arg_rz((attach != NULL), "attach");
+    icalerror_check_arg_rz((!attach->is_url), "!attach->is_url");
 
     return (unsigned char *)attach->u.data.data;
 }

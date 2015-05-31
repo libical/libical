@@ -17,8 +17,8 @@
     the License at http://www.mozilla.org/MPL/
 ======================================================================*/
 
-#ifndef ICALTIMEZONE_IMPL
-#define ICALTIMEZONE_IMPL
+#ifndef ICALTIMEZONEIMPL_H
+#define ICALTIMEZONEIMPL_H
 
 struct _icaltimezone
 {

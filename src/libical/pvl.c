@@ -45,11 +45,11 @@ static int pvl_list_count = 0;
 
 typedef struct pvl_list_t
 {
-        int MAGIC;                      /**< Magic Identifier */
-        struct pvl_elem_t *head;        /**< Head of list */
-        struct pvl_elem_t *tail;        /**< Tail of list */
-        int count;                      /**< Number of items in the list */
-        struct pvl_elem_t *p;           /**< Pointer used for iterators */
+    int MAGIC;                          /**< Magic Identifier */
+    struct pvl_elem_t *head;            /**< Head of list */
+    struct pvl_elem_t *tail;            /**< Tail of list */
+    int count;                          /**< Number of items in the list */
+    struct pvl_elem_t *p;               /**< Pointer used for iterators */
 } pvl_list_t;
 
 /**
@@ -58,13 +58,11 @@ typedef struct pvl_list_t
  * @return  Pointer to the new list, 0 if there is no available memory.
  */
 
-pvl_list
-pvl_newlist()
+pvl_list pvl_newlist()
 {
     struct pvl_list_t *L;
 
-    if ( ( L = (struct pvl_list_t*)malloc(sizeof(struct pvl_list_t))) == 0)
-    {
+    if ((L = (struct pvl_list_t *)malloc(sizeof(struct pvl_list_t))) == 0) {
         errno = ENOMEM;
         return 0;
     }
@@ -79,14 +77,13 @@ pvl_newlist()
     return L;
 }
 
-void
-pvl_free(pvl_list l)
+void pvl_free(pvl_list l)
 {
-   struct pvl_list_t *L = (struct pvl_list_t *)l;
+    struct pvl_list_t *L = (struct pvl_list_t *)l;
 
-   pvl_clear(l);
+    pvl_clear(l);
 
-   free(L);
+    free(L);
 }
 
 /**
@@ -104,13 +101,11 @@ pvl_free(pvl_list l)
  * @return A pointer to the new element, 0 if there is no memory available.
  */
 
-pvl_elem
-pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
+pvl_elem pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
 {
     struct pvl_elem_t *E;
 
-    if ( ( E = (struct pvl_elem_t*)malloc(sizeof(struct pvl_elem_t))) == 0)
-    {
+    if ((E = (struct pvl_elem_t *)malloc(sizeof(struct pvl_elem_t))) == 0) {
         errno = ENOMEM;
         return 0;
     }
@@ -120,7 +115,7 @@ pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
     E->next = next;
     E->prior = prior;
 
-    return (pvl_elem)E;
+    return (pvl_elem) E;
 }
 
 /**
@@ -130,13 +125,11 @@ pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
  * @param d     Pointer to the item to add
  */
 
-void
-pvl_unshift(pvl_list L,void *d)
+void pvl_unshift(pvl_list L, void *d)
 {
-    struct pvl_elem_t *E = pvl_new_element(d,L->head,0);
+    struct pvl_elem_t *E = pvl_new_element(d, L->head, 0);
 
-    if (E->next != 0)
-    {
+    if (E->next != 0) {
         /* Link the head node to it */
         E->next->prior = E;
     }
@@ -146,8 +139,7 @@ pvl_unshift(pvl_list L,void *d)
 
     /* maybe move the tail */
 
-    if (L->tail == 0)
-    {
+    if (L->tail == 0) {
         L->tail = E;
     }
 
@@ -162,16 +154,13 @@ pvl_unshift(pvl_list L,void *d)
  * @return the entry on the front of the list
  */
 
-void*
-pvl_shift(pvl_list L)
+void *pvl_shift(pvl_list L)
 {
-    if (L->head == 0)
-    {
+    if (L->head == 0) {
         return 0;
     }
 
-    return pvl_remove(L,(void*)L->head);
-
+    return pvl_remove(L, (void *)L->head);
 }
 
 /**
@@ -182,30 +171,26 @@ pvl_shift(pvl_list L)
  *
  */
 
-void
-pvl_push(pvl_list L,void *d)
+void pvl_push(pvl_list L, void *d)
 {
-    struct pvl_elem_t *E = pvl_new_element(d,0,L->tail);
+    struct pvl_elem_t *E = pvl_new_element(d, 0, L->tail);
 
     /* These are done in pvl_new_element
        E->next = 0;
        E->prior = L->tail;
-    */
+     */
 
-    if (L->tail != 0)
-    {
+    if (L->tail != 0) {
         L->tail->next = E;
     }
 
-    if (L->head == 0)
-    {
+    if (L->head == 0) {
         L->head = E;
     }
 
     L->tail = E;
 
     L->count++;
-
 }
 
 /**
@@ -214,18 +199,14 @@ pvl_push(pvl_list L,void *d)
  * @param L     The list to operate on
  */
 
-void*
-pvl_pop(pvl_list L)
+void *pvl_pop(pvl_list L)
 {
-    if ( L->tail == 0)
-    {
+    if (L->tail == 0) {
         return 0;
     }
 
-    return pvl_remove(L,(void*) L->tail);;
-
+    return pvl_remove(L, (void *)L->tail);
 }
-
 
 /**
  * Add a new item to a list that is ordered by a comparison function.
@@ -236,8 +217,7 @@ pvl_pop(pvl_list L)
  * @param d     Pointer to data to pass to the comparison function
  */
 
-void
-pvl_insert_ordered(pvl_list L,pvl_comparef f,void *d)
+void pvl_insert_ordered(pvl_list L, pvl_comparef f, void *d)
 {
     struct pvl_elem_t *P;
 
@@ -245,41 +225,35 @@ pvl_insert_ordered(pvl_list L,pvl_comparef f,void *d)
 
     /* Empty list, add to head */
 
-    if(L->head == 0)
-    {
-        pvl_unshift(L,d);
+    if (L->head == 0) {
+        pvl_unshift(L, d);
         return;
     }
 
     /* smaller than head, add to head */
 
-    if ( ((*f)(d,L->head->d)) <= 0)
-    {
-        pvl_unshift(L,d);
+    if (((*f) (d, L->head->d)) <= 0) {
+        pvl_unshift(L, d);
         return;
     }
 
     /* larger than tail, add to tail */
-    if ( (*f)(d,L->tail->d) >= 0)
-    {
-        pvl_push(L,d);
+    if ((*f) (d, L->tail->d) >= 0) {
+        pvl_push(L, d);
         return;
     }
 
-
     /* Search for the first element that is smaller, and add before it */
 
-    for (P=L->head; P != 0; P = P->next)
-    {
-        if ( (*f)(P->d,d) >= 0)
-        {
-            pvl_insert_before(L,P,d);
+    for (P = L->head; P != 0; P = P->next) {
+        if ((*f) (P->d, d) >= 0) {
+            pvl_insert_before(L, P, d);
             return;
         }
     }
 
     /* badness, choke */
-#ifndef lint
+#if !defined(lint)
     assert(0);
 #endif
 }
@@ -291,29 +265,24 @@ pvl_insert_ordered(pvl_list L,pvl_comparef f,void *d)
  * @param d     Pointer to the item to add.
  */
 
-void
-pvl_insert_after(pvl_list L,pvl_elem P,void *d)
+void pvl_insert_after(pvl_list L, pvl_elem P, void *d)
 {
     struct pvl_elem_t *E = 0;
 
     L->count++;
 
-    if (P == 0)
-    {
-        pvl_unshift(L,d);
+    if (P == 0) {
+        pvl_unshift(L, d);
         return;
     }
 
-    if ( P == L->tail)
-    {
-        E = pvl_new_element(d,0,P);
+    if (P == L->tail) {
+        E = pvl_new_element(d, 0, P);
         L->tail = E;
         E->prior->next = E;
-    }
-    else
-    {
-        E = pvl_new_element(d,P->next,P);
-        E->next->prior  = E;
+    } else {
+        E = pvl_new_element(d, P->next, P);
+        E->next->prior = E;
         E->prior->next = E;
     }
 }
@@ -326,28 +295,23 @@ pvl_insert_after(pvl_list L,pvl_elem P,void *d)
  * @param d     Pointer to the data to be added.
  */
 
-void
-pvl_insert_before(pvl_list L,pvl_elem P,void *d)
+void pvl_insert_before(pvl_list L, pvl_elem P, void *d)
 {
     struct pvl_elem_t *E = 0;
 
     L->count++;
 
-    if (P == 0)
-    {
-        pvl_unshift(L,d);
+    if (P == 0) {
+        pvl_unshift(L, d);
         return;
     }
 
-    if ( P == L->head)
-    {
-        E = pvl_new_element(d,P,0);
+    if (P == L->head) {
+        E = pvl_new_element(d, P, 0);
         E->next->prior = E;
         L->head = E;
-    }
-    else
-    {
-        E = pvl_new_element(d,P,P->prior);
+    } else {
+        E = pvl_new_element(d, P, P->prior);
         E->prior->next = E;
         E->next->prior = E;
     }
@@ -363,15 +327,12 @@ pvl_insert_before(pvl_list L,pvl_elem P,void *d)
  * @param E     The element to remove.
  */
 
-void*
-pvl_remove(pvl_list L,pvl_elem E)
+void *pvl_remove(pvl_list L, pvl_elem E)
 {
-    void* data;
+    void *data;
 
-    if (E == L->head)
-    {
-        if (E->next != 0)
-        {
+    if (E == L->head) {
+        if (E->next != 0) {
             E->next->prior = 0;
             L->head = E->next;
         } else {
@@ -379,11 +340,8 @@ pvl_remove(pvl_list L,pvl_elem E)
             L->tail = 0;
             L->head = 0;
         }
-    }
-    else if (E == L->tail)
-    {
-        if (E->prior != 0)
-        {
+    } else if (E == L->tail) {
+        if (E->prior != 0) {
             E->prior->next = 0;
             L->tail = E->prior;
         } else {
@@ -392,13 +350,10 @@ pvl_remove(pvl_list L,pvl_elem E)
             L->head = 0;
             L->tail = 0;
         }
-    }
-    else
-    {
+    } else {
         E->prior->next = E->next;
         E->next->prior = E->prior;
     }
-
 
     L->count--;
 
@@ -411,7 +366,6 @@ pvl_remove(pvl_list L,pvl_elem E)
     free(E);
 
     return data;
-
 }
 
 /**
@@ -428,15 +382,12 @@ pvl_remove(pvl_list L,pvl_elem E)
  * @return Pointer to the element that the find function found.
  */
 
-pvl_elem
-pvl_find(pvl_list l,pvl_findf f,void* v)
+pvl_elem pvl_find(pvl_list l, pvl_findf f, void *v)
 {
     pvl_elem e;
 
-    for (e=pvl_head(l); e!= 0; e = pvl_next(e))
-    {
-        if ( (*f)(((struct pvl_elem_t *)e)->d,v) == 1)
-        {
+    for (e = pvl_head(l); e != 0; e = pvl_next(e)) {
+        if ((*f) (((struct pvl_elem_t *)e)->d, v) == 1) {
             /* Save this elem for a call to find_next */
             ((struct pvl_list_t *)l)->p = e;
             return e;
@@ -444,7 +395,6 @@ pvl_find(pvl_list l,pvl_findf f,void* v)
     }
 
     return 0;
-
 }
 
 /**
@@ -458,16 +408,12 @@ pvl_find(pvl_list l,pvl_findf f,void* v)
  * @return Pointer to the element that the find function found.
  */
 
-pvl_elem
-pvl_find_next(pvl_list l,pvl_findf f,void* v)
+pvl_elem pvl_find_next(pvl_list l, pvl_findf f, void *v)
 {
-
     pvl_elem e;
 
-    for (e=pvl_head(l); e!= 0; e = pvl_next(e))
-    {
-        if ( (*f)(((struct pvl_elem_t *)e)->d,v) == 1)
-        {
+    for (e = pvl_head(l); e != 0; e = pvl_next(e)) {
+        if ((*f) (((struct pvl_elem_t *)e)->d, v) == 1) {
             /* Save this elem for a call to find_next */
             ((struct pvl_list_t *)l)->p = e;
             return e;
@@ -475,7 +421,6 @@ pvl_find_next(pvl_list l,pvl_findf f,void* v)
     }
 
     return 0;
-
 }
 
 /**
@@ -483,8 +428,7 @@ pvl_find_next(pvl_list l,pvl_findf f,void* v)
  * the data items the elements hold.
  */
 
-void
-pvl_clear(pvl_list l)
+void pvl_clear(pvl_list l)
 {
     pvl_elem e = pvl_head(l);
     pvl_elem next;
@@ -493,81 +437,71 @@ pvl_clear(pvl_list l)
         return;
     }
 
-    while(e != 0)
-    {
+    while (e != 0) {
         next = pvl_next(e);
-        (void)pvl_remove(l,e);
+        (void)pvl_remove(l, e);
         e = next;
     }
 }
-
 
 /**
  * @brief Returns the number of items in the list.
  */
 
-int
-pvl_count(pvl_list L)
+int pvl_count(pvl_list L)
 {
     return L->count;
 }
-
 
 /**
  * @brief Returns a pointer to the given element
  */
 
-pvl_elem
-pvl_next(pvl_elem E)
+pvl_elem pvl_next(pvl_elem E)
 {
-    if (E == 0){
+    if (E == 0) {
         return 0;
     }
 
-    return (pvl_elem)E->next;
+    return (pvl_elem) E->next;
 }
-
 
 /**
  * @brief Returns a pointer to the element previous to the element given.
  */
 
-pvl_elem
-pvl_prior(pvl_elem E)
+pvl_elem pvl_prior(pvl_elem E)
 {
-    return (pvl_elem)E->prior;
+    return (pvl_elem) E->prior;
 }
-
 
 /**
  * @brief Returns a pointer to the first item in the list.
  */
 
-pvl_elem
-pvl_head(pvl_list L )
+pvl_elem pvl_head(pvl_list L)
 {
-    return (pvl_elem)L->head;
+    return (pvl_elem) L->head;
 }
 
 /**
  * @brief Returns a pointer to the last item in the list.
  */
-pvl_elem
-pvl_tail(pvl_list L)
+pvl_elem pvl_tail(pvl_list L)
 {
-    return (pvl_elem)L->tail;
+    return (pvl_elem) L->tail;
 }
 
-#ifndef PVL_USE_MACROS
-void*
-pvl_data(pvl_elem E)
+#if !defined(PVL_USE_MACROS)
+void *pvl_data(pvl_elem E)
 {
-    if ( E == 0){
+    if (E == 0) {
         return 0;
     }
 
     return E->d;
 }
+
 #endif
 
 /**
@@ -578,14 +512,11 @@ pvl_data(pvl_elem E)
  * @param v     Data to pass to the function on every iteration
  */
 
-void
-pvl_apply(pvl_list l,pvl_applyf f, void *v)
+void pvl_apply(pvl_list l, pvl_applyf f, void *v)
 {
     pvl_elem e;
 
-    for (e=pvl_head(l); e!= 0; e = pvl_next(e))
-    {
-        (*f)(((struct pvl_elem_t *)e)->d,v);
+    for (e = pvl_head(l); e != 0; e = pvl_next(e)) {
+        (*f) (((struct pvl_elem_t *)e)->d, v);
     }
-
 }

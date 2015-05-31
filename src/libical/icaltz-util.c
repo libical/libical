@@ -29,32 +29,28 @@
 
 #include <stdlib.h>
 
-#if defined(HAVE_BYTESWAP_H)
-#include <byteswap.h>
-#endif
-
 #if defined(sun) && defined(__SVR4)
 #include <sys/types.h>
 #include <sys/byteorder.h>
 #else
-# ifdef HAVE_BYTESWAP_H
-#  include <byteswap.h>
-# endif
-# ifdef HAVE_ENDIAN_H
-#  include <endian.h>
-# else
-# ifdef HAVE_SYS_ENDIAN_H
-#  include <sys/endian.h>
-#  ifdef bswap32
-#   define bswap_32 bswap32
-#  else
-#   define bswap_32 swap32
-#  endif
-# endif
-# endif
+#if defined(HAVE_BYTESWAP_H)
+#include <byteswap.h>
+#endif
+#if defined(HAVE_ENDIAN_H)
+#include <endian.h>
+#else
+#if defined(HAVE_SYS_ENDIAN_H)
+#include <sys/endian.h>
+#if defined(bswap32)
+#define bswap_32 bswap32
+#else
+#define bswap_32 swap32
+#endif
+#endif
+#endif
 #endif
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 #if !defined(HAVE_BYTESWAP_H) && !defined(HAVE_SYS_ENDIAN_H) && !defined(HAVE_ENDIAN_H)
 #define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8 ) & 0xff)
 
@@ -85,15 +81,16 @@
 
 typedef struct
 {
-        char    ttisgmtcnt[4];
-        char    ttisstdcnt[4];
-        char    leapcnt[4];
-        char    timecnt[4];
-        char    typecnt[4];
-        char    charcnt[4];
+    char ttisgmtcnt[4];
+    char ttisstdcnt[4];
+    char leapcnt[4];
+    char timecnt[4];
+    char typecnt[4];
+    char charcnt[4];
 } tzinfo;
 
 static char *zdir = NULL;
+
 static char *search_paths[] = {
     "/usr/share/zoneinfo",
     "/usr/lib/zoneinfo",
@@ -109,35 +106,35 @@ if (fread(buf, size, num, fs) < num  && ferror (fs)) { \
 
 typedef struct
 {
-        long int gmtoff;
-        unsigned char isdst;
-        unsigned int abbr;
-        unsigned char isstd;
-        unsigned char isgmt;
-        char *zname;
+    long int gmtoff;
+    unsigned char isdst;
+    unsigned int abbr;
+    unsigned char isstd;
+    unsigned char isgmt;
+    char *zname;
 
 } ttinfo;
 
 typedef struct
 {
-        time_t transition;
-        long int change;
+    time_t transition;
+    long int change;
 } leap;
 
 static int decode(const void *ptr)
 {
 #if defined(sun) && defined(__SVR4)
-    if (sizeof (int) == 4) {
-#ifdef _BIG_ENDIAN
-        return *(const int *) ptr;
+    if (sizeof(int) == 4) {
+#if defined(_BIG_ENDIAN)
+        return *(const int *)ptr;
 #else
-        return BSWAP_32 (*(const int *) ptr);
+        return BSWAP_32(*(const int *)ptr);
 #endif
 #else
-    if ((BYTE_ORDER == BIG_ENDIAN) && sizeof (int) == 4) {
-        return *(const int *) ptr;
-    } else if (BYTE_ORDER == LITTLE_ENDIAN && sizeof (int) == 4) {
-        return (int)bswap_32(*(const unsigned int *) ptr);
+    if ((BYTE_ORDER == BIG_ENDIAN) && sizeof(int) == 4) {
+        return *(const int *)ptr;
+    } else if (BYTE_ORDER == LITTLE_ENDIAN && sizeof(int) == 4) {
+        return (int)bswap_32(*(const unsigned int *)ptr);
 #endif
     } else {
         const unsigned char *p = ptr;
@@ -163,7 +160,7 @@ static char *zname_from_stridx(char *str, long idx)
         i++;
     }
 
-    size = (size_t)(i - idx);
+    size = (size_t) (i - idx);
     str += idx;
     ret = (char *)malloc(size + 1);
     ret = strncpy(ret, str, size);
@@ -181,7 +178,7 @@ static void set_zonedir(void)
     num_search_paths = sizeof(search_paths) / sizeof(search_paths[0]);
     for (i = 0; i < num_search_paths; i++) {
         snprintf(file_path, MAXPATHLEN, "%s/%s", search_paths[i], fname);
-        if (!access(file_path, F_OK|R_OK)) {
+        if (!access(file_path, F_OK | R_OK)) {
             zdir = search_paths[i];
             break;
         }
@@ -198,223 +195,225 @@ const char *icaltzutil_get_zone_directory(void)
 
 icalcomponent *icaltzutil_fetch_timezone(const char *location)
 {
-        tzinfo type_cnts;
-        size_t i, num_trans, num_types, num_chars, num_leaps, num_isstd, num_isgmt;
-        size_t size;
+    tzinfo type_cnts;
+    size_t i, num_trans, num_types, num_chars, num_leaps, num_isstd, num_isgmt;
+    size_t size;
 
-        const char *zonedir;
-        FILE *f = NULL;
-        char *full_path = NULL;
-        time_t *transitions = NULL;
-        char *r_trans = NULL, *temp;
-        int *trans_idx = NULL;
-        ttinfo *types = NULL;
-        char *znames = NULL;
-        leap *leaps = NULL;
-        char *tzid = NULL;
+    const char *zonedir;
+    FILE *f = NULL;
+    char *full_path = NULL;
+    time_t *transitions = NULL;
+    char *r_trans = NULL, *temp;
+    int *trans_idx = NULL;
+    ttinfo *types = NULL;
+    char *znames = NULL;
+    leap *leaps = NULL;
+    char *tzid = NULL;
 
-        time_t start, end;
-        int idx, prev_idx;
-        icalcomponent *tz_comp = NULL, *comp = NULL;
-        icalproperty *icalprop;
-        icaltimetype dtstart;
+    time_t start, end;
+    int idx, prev_idx;
+    icalcomponent *tz_comp = NULL, *comp = NULL;
+    icalproperty *icalprop;
+    icaltimetype dtstart;
 
-        if (icaltimezone_get_builtin_tzdata()) {
-            goto error;
-        }
+    if (icaltimezone_get_builtin_tzdata()) {
+        goto error;
+    }
 
-        zonedir = icaltzutil_get_zone_directory();
-        if (!zonedir) {
-            icalerror_set_errno(ICAL_FILE_ERROR);
-            goto error;
-        }
+    zonedir = icaltzutil_get_zone_directory();
+    if (!zonedir) {
+        icalerror_set_errno(ICAL_FILE_ERROR);
+        goto error;
+    }
 
-        size = strlen(zonedir) + strlen(location) + 2;
-        full_path = (char *)malloc(size);
-        if (full_path == NULL) {
+    size = strlen(zonedir) + strlen(location) + 2;
+    full_path = (char *)malloc(size);
+    if (full_path == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        goto error;
+    }
+    snprintf(full_path, size, "%s/%s", zonedir, location);
+    if ((f = fopen(full_path, "rb")) == 0) {
+        icalerror_set_errno(ICAL_FILE_ERROR);
+        goto error;
+    }
+
+    if (fseek(f, 20, SEEK_SET) != 0) {
+        icalerror_set_errno(ICAL_FILE_ERROR);
+        goto error;
+    }
+
+    EFREAD(&type_cnts, 24, 1, f);
+
+    num_isgmt = (size_t) decode(type_cnts.ttisgmtcnt);
+    num_leaps = (size_t) decode(type_cnts.leapcnt);
+    num_chars = (size_t) decode(type_cnts.charcnt);
+    num_trans = (size_t) decode(type_cnts.timecnt);
+    num_isstd = (size_t) decode(type_cnts.ttisstdcnt);
+    num_types = (size_t) decode(type_cnts.typecnt);
+
+    transitions = calloc(num_trans, sizeof(time_t));
+    if (transitions == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        goto error;
+    }
+    r_trans = calloc(num_trans, 4);
+    if (r_trans == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        goto error;
+    }
+
+    EFREAD(r_trans, 4, num_trans, f);
+    temp = r_trans;
+    if (num_trans) {
+        trans_idx = calloc(num_trans, sizeof(int));
+        if (trans_idx == NULL) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             goto error;
         }
-        snprintf(full_path, size, "%s/%s", zonedir, location);
-        if ((f = fopen(full_path, "rb")) == 0) {
-            icalerror_set_errno(ICAL_FILE_ERROR);
-            goto error;
+        for (i = 0; i < num_trans; i++) {
+            trans_idx[i] = fgetc(f);
+            transitions[i] = (time_t) decode(r_trans);
+            r_trans += 4;
         }
+    }
+    r_trans = temp;
 
-        if (fseek(f, 20, SEEK_SET) != 0) {
-            icalerror_set_errno(ICAL_FILE_ERROR);
-            goto error;
+    types = calloc(num_types, sizeof(ttinfo));
+    if (types == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        goto error;
+    }
+    for (i = 0; i < num_types; i++) {
+        unsigned char a[4];
+        int c;
+
+        EFREAD(a, 4, 1, f);
+        c = fgetc(f);
+        types[i].isdst = (unsigned char)c;
+        if ((c = fgetc(f)) < 0) {
+            break;
         }
+        types[i].abbr = (unsigned int)c;
+        types[i].gmtoff = decode(a);
+    }
 
-        EFREAD(&type_cnts, 24, 1, f);
+    znames = (char *)malloc(num_chars);
+    if (znames == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        goto error;
+    }
+    EFREAD(znames, num_chars, 1, f);
 
-        num_isgmt = (size_t)decode(type_cnts.ttisgmtcnt);
-        num_leaps = (size_t)decode(type_cnts.leapcnt);
-        num_chars = (size_t)decode(type_cnts.charcnt);
-        num_trans = (size_t)decode(type_cnts.timecnt);
-        num_isstd = (size_t)decode(type_cnts.ttisstdcnt);
-        num_types = (size_t)decode(type_cnts.typecnt);
+    /* We got all the information which we need */
 
-        transitions = calloc(num_trans, sizeof(time_t));
-        if (transitions == NULL) {
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            goto error;
-        }
-        r_trans = calloc(num_trans, 4);
-        if (r_trans == NULL) {
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            goto error;
-        }
+    leaps = calloc(num_leaps, sizeof(leap));
+    if (leaps == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        goto error;
+    }
+    for (i = 0; i < num_leaps; i++) {
+        char c[4];
 
-        EFREAD(r_trans, 4, num_trans, f);
-        temp = r_trans;
-        if (num_trans) {
-            trans_idx = calloc(num_trans, sizeof(int));
-            if (trans_idx == NULL) {
-                icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-                goto error;
-            }
-            for (i = 0; i < num_trans; i++) {
-                trans_idx[i] = fgetc(f);
-                transitions[i] = (time_t)decode(r_trans);
-                r_trans += 4;
-            }
-        }
-        r_trans = temp;
+        EFREAD(c, 4, 1, f);
+        leaps[i].transition = (time_t) decode(c);
 
-        types = calloc(num_types, sizeof(ttinfo));
-        if (types == NULL) {
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            goto error;
-        }
-        for (i = 0; i < num_types; i++) {
-            unsigned char a[4];
-            int c;
+        EFREAD(c, 4, 1, f);
+        leaps[i].change = decode(c);
+    }
 
-            EFREAD(a, 4, 1, f);
-            c = fgetc(f);
-            types[i].isdst = (unsigned char)c;
-            if ((c = fgetc(f)) < 0) {
-                break;
-            }
-            types[i].abbr = (unsigned int)c;
-            types[i].gmtoff = decode(a);
-        }
+    for (i = 0; i < num_isstd; ++i) {
+        int c = getc(f);
 
-        znames = (char *)malloc(num_chars);
-        if (znames == NULL) {
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            goto error;
-        }
-        EFREAD(znames, num_chars, 1, f);
+        types[i].isstd = c != 0;
+    }
 
-        /* We got all the information which we need */
+    while (i < num_types) {
+        types[i++].isstd = 0;
+    }
 
-        leaps = calloc(num_leaps, sizeof(leap));
-        if (leaps == NULL) {
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            goto error;
-        }
-        for (i = 0; i < num_leaps; i++) {
-            char c[4];
+    for (i = 0; i < num_isgmt; ++i) {
+        int c = getc(f);
 
-            EFREAD(c, 4, 1, f);
-            leaps[i].transition = (time_t)decode(c);
+        types[i].isgmt = c != 0;
+    }
 
-            EFREAD(c, 4, 1, f);
-            leaps[i].change = decode(c);
-        }
+    while (i < num_types) {
+        types[i++].isgmt = 0;
+    }
 
-        for (i = 0; i < num_isstd; ++i) {
-            int c = getc(f);
-            types[i].isstd = c != 0;
-        }
+    /* Read all the contents now */
 
-        while (i < num_types) {
-            types[i++].isstd = 0;
-        }
+    for (i = 0; i < num_types; i++) {
+        types[i].zname = zname_from_stridx(znames, (long)types[i].abbr);
+    }
 
-        for (i = 0; i <  num_isgmt; ++i) {
-            int c = getc(f);
-            types[i].isgmt = c != 0;
-        }
+    tz_comp = icalcomponent_new(ICAL_VTIMEZONE_COMPONENT);
 
-        while (i < num_types) {
-            types[i++].isgmt = 0;
-        }
+    /* Add tzid property */
+    size = strlen(icaltimezone_tzid_prefix()) + strlen(location) + 1;
+    tzid = (char *)malloc(size);
+    if (tzid == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        goto error;
+    }
+    snprintf(tzid, size, "%s%s", icaltimezone_tzid_prefix(), location);
+    icalprop = icalproperty_new_tzid(tzid);
+    icalcomponent_add_property(tz_comp, icalprop);
 
-        /* Read all the contents now */
+    icalprop = icalproperty_new_x(location);
+    icalproperty_set_x_name(icalprop, "X-LIC-LOCATION");
+    icalcomponent_add_property(tz_comp, icalprop);
 
-        for (i = 0; i < num_types; i++) {
-            types[i].zname = zname_from_stridx(znames, (long)types[i].abbr);
-        }
+    prev_idx = 0;
+    if (num_trans == 0) {
+        prev_idx = idx = 0;
+    } else {
+        idx = trans_idx[0];
+    }
+    start = 0;
+    for (i = 1; i < num_trans; i++, start = end) {
+        prev_idx = idx;
+        idx = trans_idx[i];
+        end = transitions[i] + types[prev_idx].gmtoff;
+        /* don't bother starting until the epoch */
+        if (0 > end)
+            continue;
 
-        tz_comp = icalcomponent_new(ICAL_VTIMEZONE_COMPONENT);
-
-        /* Add tzid property */
-        size = strlen(icaltimezone_tzid_prefix()) + strlen(location) + 1;
-        tzid = (char *)malloc(size);
-        if (tzid == NULL) {
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            goto error;
-        }
-        snprintf(tzid, size, "%s%s", icaltimezone_tzid_prefix(), location);
-        icalprop = icalproperty_new_tzid(tzid);
-        icalcomponent_add_property(tz_comp, icalprop);
-
-        icalprop = icalproperty_new_x(location);
-        icalproperty_set_x_name(icalprop, "X-LIC-LOCATION");
-        icalcomponent_add_property(tz_comp, icalprop);
-
-        prev_idx = 0;
-        if (num_trans == 0) {
-            prev_idx = idx = 0;
-        } else {
-            idx = trans_idx[0];
-        }
-        start = 0;
-        for (i = 1; i < num_trans; i++, start = end) {
-            prev_idx = idx;
-            idx = trans_idx[i];
-            end = transitions[i] + types[prev_idx].gmtoff;
-            /* don't bother starting until the epoch */
-            if (0 > end)
-                continue;
-
-            if (types[prev_idx].isdst) {
-                comp = icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
-            } else {
-                comp = icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
-            }
-            icalprop = icalproperty_new_tzname(types[prev_idx].zname);
-            icalcomponent_add_property(comp, icalprop);
-            dtstart = icaltime_from_timet(start, 0);
-            icalprop = icalproperty_new_dtstart(dtstart);
-            icalcomponent_add_property(comp, icalprop);
-            icalprop = icalproperty_new_tzoffsetfrom(types[idx].gmtoff);
-            icalcomponent_add_property(comp, icalprop);
-            icalprop = icalproperty_new_tzoffsetto(types[prev_idx].gmtoff);
-            icalcomponent_add_property(comp, icalprop);
-            icalcomponent_add_component(tz_comp, comp);
-        }
-        /* finally, add a last zone with no end date */
-        if (types[idx].isdst) {
+        if (types[prev_idx].isdst) {
             comp = icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
         } else {
             comp = icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
         }
-        icalprop = icalproperty_new_tzname(types[idx].zname);
+        icalprop = icalproperty_new_tzname(types[prev_idx].zname);
         icalcomponent_add_property(comp, icalprop);
         dtstart = icaltime_from_timet(start, 0);
         icalprop = icalproperty_new_dtstart(dtstart);
         icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff);
+        icalprop = icalproperty_new_tzoffsetfrom(types[idx].gmtoff);
         icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_tzoffsetto(types[idx].gmtoff);
+        icalprop = icalproperty_new_tzoffsetto(types[prev_idx].gmtoff);
         icalcomponent_add_property(comp, icalprop);
         icalcomponent_add_component(tz_comp, comp);
+    }
+    /* finally, add a last zone with no end date */
+    if (types[idx].isdst) {
+        comp = icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
+    } else {
+        comp = icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
+    }
+    icalprop = icalproperty_new_tzname(types[idx].zname);
+    icalcomponent_add_property(comp, icalprop);
+    dtstart = icaltime_from_timet(start, 0);
+    icalprop = icalproperty_new_dtstart(dtstart);
+    icalcomponent_add_property(comp, icalprop);
+    icalprop = icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff);
+    icalcomponent_add_property(comp, icalprop);
+    icalprop = icalproperty_new_tzoffsetto(types[idx].gmtoff);
+    icalcomponent_add_property(comp, icalprop);
+    icalcomponent_add_component(tz_comp, comp);
 
-error:
+  error:
     if (f)
         fclose(f);
 
