@@ -37,18 +37,17 @@
 
 */
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     VObject *vcal = 0;
     icalcomponent *comp;
-    char* file;
+    char *file;
 
-    if (argc != 2){
+    if (argc != 2) {
         file = "../../test-data/user-cal.vcf";
     } else {
         file = argv[1];
     }
-
 
     vcal = Parse_MIME_FromFileName(file);
 
@@ -56,7 +55,7 @@ int main(int argc, char* argv[])
 
     comp = icalvcal_convert(vcal);
 
-    printf("%s\n",icalcomponent_as_ical_string(comp));
+    printf("%s\n", icalcomponent_as_ical_string(comp));
 
     return 0;
 }

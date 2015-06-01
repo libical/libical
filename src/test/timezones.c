@@ -31,6 +31,7 @@ int main(int argc, char **argv)
     unsigned int percent_failed = 0;
     int verbose = 0;
     icaltimezone *utc_zone = icaltimezone_get_utc_timezone();
+
     _unused(argc);
     _unused(argv);
 
@@ -56,6 +57,7 @@ int main(int argc, char **argv)
         setenv("TZ", zone_location, 1);
 #else
         static new_tz[256];
+
         new_tz[0] = '\0';
         strncat(new_tz, "TZ=", 255);
         strncat(new_tz, zone_location, 255);
@@ -77,14 +79,13 @@ int main(int argc, char **argv)
         start_time = mktime(&start_tm);
 
         /* check time conversion for the next 365 days */
-        for (day = 0, curr_time = start_time;
-             day < 365;
-             day++, curr_time += 24 * 60 * 60) {
+        for (day = 0, curr_time = start_time; day < 365; day++, curr_time += 24 * 60 * 60) {
             /* determine date/time with glibc */
             localtime_r(&curr_time, &curr_tm);
             /* determine date/time with libical */
             curr_tt = icaltime_from_timet_with_zone(curr_time, 0, utc_zone);
-            curr_tt.zone = utc_zone; /* workaround: icaltime_from_timet_with_zone() should do this, but doesn't! */
+            curr_tt.zone = utc_zone;    /* workaround: icaltime_from_timet_with_zone()
+                                           should do this, but doesn't! */
             curr_tt = icaltime_convert_to_zone(curr_tt, zone);
 
             /* compare... */
@@ -99,38 +100,27 @@ int main(int argc, char **argv)
             /* only print first failed day and first day which is okay again */
             if (verbose || curr_failed != failed) {
                 struct tm utc_tm;
+
                 gmtime_r(&curr_time, &utc_tm);
-                printf("%s: day %03d: %s: %04d-%02d-%02d %02d:%02d:%02d UTC = libc %04d-%02d-%02d %02d:%02d:%02d dst %d",
-                       zone_location,
-                       day,
-
-                       verbose ?
-                       (curr_failed ? "failed" : "okay") :
-                       (curr_failed ? "first failed" : "okay again"),
-
-                       utc_tm.tm_year + 1900,
-                       utc_tm.tm_mon + 1,
-                       utc_tm.tm_mday,
-                       utc_tm.tm_hour,
-                       utc_tm.tm_min,
-                       utc_tm.tm_sec,
-
-                       curr_tm.tm_year + 1900,
-                       curr_tm.tm_mon + 1,
-                       curr_tm.tm_mday,
-                       curr_tm.tm_hour,
-                       curr_tm.tm_min,
-                       curr_tm.tm_sec,
-                       curr_tm.tm_isdst);
+                printf(
+                    "%s: day %03d: %s: %04d-%02d-%02d %02d:%02d:%02d UTC = "
+                    "libc %04d-%02d-%02d %02d:%02d:%02d dst %d",
+                    zone_location, day,
+                    verbose ? (curr_failed ? "failed" : "okay") : (curr_failed ? "first failed" :
+                                                                   "okay again"),
+                    utc_tm.tm_year + 1900, utc_tm.tm_mon + 1, utc_tm.tm_mday, utc_tm.tm_hour,
+                    utc_tm.tm_min, utc_tm.tm_sec, curr_tm.tm_year + 1900, curr_tm.tm_mon + 1,
+                    curr_tm.tm_mday, curr_tm.tm_hour, curr_tm.tm_min, curr_tm.tm_sec,
+                    curr_tm.tm_isdst);
                 if (curr_failed) {
                     printf(" != libical %04d-%02d-%02d %02d:%02d:%02d dst %d",
-                           curr_tt.year,
-                           curr_tt.month,
-                           curr_tt.day,
-                           curr_tt.hour,
-                           curr_tt.minute,
-                           curr_tt.second,
-                           curr_tt.is_daylight);
+                        curr_tt.year,
+                        curr_tt.month,
+                        curr_tt.day,
+                        curr_tt.hour,
+                        curr_tt.minute,
+                        curr_tt.second,
+                        curr_tt.is_daylight);
                     ret = 1;
                 }
                 printf("\n");
@@ -138,6 +128,7 @@ int main(int argc, char **argv)
 
                 if (!zonedef_printed) {
                     icalcomponent *comp = icaltimezone_get_component(zone);
+
                     if (comp) {
                         printf("%s\n", icalcomponent_as_ical_string(comp));
                     }
@@ -156,10 +147,7 @@ int main(int argc, char **argv)
     if (total_failed || total_okay) {
         percent_failed = total_failed * 100 / (total_failed + total_okay);
         printf(" *** Summary: %lu zones tested, %u days failed, %u okay => %u%% failed ***\n",
-               (unsigned long)timezones->num_elements,
-               total_failed,
-               total_okay,
-               percent_failed);
+               (unsigned long)timezones->num_elements, total_failed, total_okay, percent_failed);
     }
 
     return ret;

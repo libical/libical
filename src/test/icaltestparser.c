@@ -24,7 +24,7 @@
 
 #include "libical/ical.h"
 
- char str[] = "BEGIN:VCALENDAR\
+char str[] = "BEGIN:VCALENDAR\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\
 VERSION:2.0\
 BEGIN:VTIMEZONE\
@@ -69,20 +69,17 @@ extern int yydebug;
 
 /* Have the parser fetch data from stdin */
 
-char* read_stream(char *s, size_t size, void *d)
+char *read_stream(char *s, size_t size, void *d)
 {
-  char *c = fgets(s, (int)size, (FILE*)d);
+    char *c = fgets(s, (int)size, (FILE *) d);
 
-  return c;
-
+    return c;
 }
 
-
-
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-    char* line;
-    FILE* stream;
+    char *line;
+    FILE *stream;
     icalcomponent *c;
     icalparser *parser = icalparser_new();
 
@@ -90,29 +87,28 @@ int main(int argc, char* argv[])
         fprintf(stderr, "Usage: parser [file.ics]\n");
         return 0;
     }
-    stream = fopen(argv[1],"r");
-    if (stream == (FILE *)NULL) {
-        fprintf(stderr, "Cannot open file \"%s\" for reading\n",argv[1]);
+    stream = fopen(argv[1], "r");
+    if (stream == (FILE *) NULL) {
+        fprintf(stderr, "Cannot open file \"%s\" for reading\n", argv[1]);
         return 1;
     }
 
-    icalparser_set_gen_data(parser,stream);
+    icalparser_set_gen_data(parser, stream);
 
-    do{
+    do {
 
-        line = icalparser_get_line(parser,read_stream);
+        line = icalparser_get_line(parser, read_stream);
 
-        c = icalparser_add_line(parser,line);
+        c = icalparser_add_line(parser, line);
 
-
-        if (c != 0){
-            /*icalcomponent_convert_errors(c);*/
-            printf("%s",icalcomponent_as_ical_string(c));
+        if (c != 0) {
+            /*icalcomponent_convert_errors(c); */
+            printf("%s", icalcomponent_as_ical_string(c));
             printf("\n---------------\n");
             icalcomponent_free(c);
         }
 
-    } while ( line != 0);
+    } while (line != 0);
 
     return 0;
- }
+}

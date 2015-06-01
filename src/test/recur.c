@@ -35,20 +35,18 @@
 static void sig_alrm(int i)
 {
     _unused(i);
-    fprintf(stderr,"Could not get lock on file\n");
+    fprintf(stderr, "Could not get lock on file\n");
     exit(1);
 }
+
 #endif
 
-static void recur_callback(icalcomponent *comp,
-                           struct icaltime_span *span,
-                           void *data)
+static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
 {
     _unused(comp);
     _unused(data);
     printf("cb: %s", ctime(&span->start));
     printf("    %s\n", ctime(&span->end));
-
 }
 
 int main(int argc, char *argv[])
@@ -58,23 +56,23 @@ int main(int argc, char *argv[])
     icalcomponent *itr;
     icalproperty *desc, *dtstart, *rrule;
     struct icalrecurrencetype recur;
-    icalrecur_iterator* ritr;
+    icalrecur_iterator *ritr;
     time_t tt;
-    char* file;
+    char *file;
 
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
-    (void)signal(SIGALRM,sig_alrm);
+    (void)signal(SIGALRM, sig_alrm);
 #endif
 
-    if (argc <= 1){
-                file = "../../test-data/recur.txt";
-    } else if (argc == 2){
-                file = argv[1];
+    if (argc <= 1) {
+        file = "../../test-data/recur.txt";
+    } else if (argc == 2) {
+        file = argv[1];
     } else {
-                fprintf(stderr,"usage: recur [input file]\n");
-                exit(1);
+        fprintf(stderr, "usage: recur [input file]\n");
+        exit(1);
     }
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
@@ -85,71 +83,60 @@ int main(int argc, char *argv[])
     alarm(0);
 #endif
 
-    if(cin == 0){
-                fprintf(stderr,"recur: can't open file %s\n",file);
-                exit(1);
+    if (cin == 0) {
+        fprintf(stderr, "recur: can't open file %s\n", file);
+        exit(1);
     }
-
 
     for (itr = icalfileset_get_first_component(cin);
-        itr != 0;
-        itr = icalfileset_get_next_component(cin)){
+         itr != 0; itr = icalfileset_get_next_component(cin)) {
 
-      struct icaltimetype start;
-      struct icaltimetype end = icaltime_today();
+        struct icaltimetype start;
+        struct icaltimetype end = icaltime_today();
 
+        desc = icalcomponent_get_first_property(itr, ICAL_DESCRIPTION_PROPERTY);
+        dtstart = icalcomponent_get_first_property(itr, ICAL_DTSTART_PROPERTY);
+        rrule = icalcomponent_get_first_property(itr, ICAL_RRULE_PROPERTY);
 
+        if (desc == 0 || dtstart == 0 || rrule == 0) {
+            printf("\n******** Error in input component ********\n");
+            printf("The following component is malformed:\n %s\n",
+                   icalcomponent_as_ical_string(itr));
+            continue;
+        }
 
-                desc = icalcomponent_get_first_property(itr,ICAL_DESCRIPTION_PROPERTY);
-                dtstart = icalcomponent_get_first_property(itr,ICAL_DTSTART_PROPERTY);
-                rrule = icalcomponent_get_first_property(itr,ICAL_RRULE_PROPERTY);
+        printf("\n\n#### %s\n", icalproperty_get_description(desc));
+        printf("#### %s\n", icalvalue_as_ical_string(icalproperty_get_value(rrule)));
+        recur = icalproperty_get_rrule(rrule);
+        start = icalproperty_get_dtstart(dtstart);
 
-                if (desc == 0 || dtstart == 0 || rrule == 0){
-                        printf("\n******** Error in input component ********\n");
-                        printf("The following component is malformed:\n %s\n",
-                                icalcomponent_as_ical_string(itr));
-                        continue;
-                }
+        ritr = icalrecur_iterator_new(recur, start);
 
-                printf("\n\n#### %s\n",icalproperty_get_description(desc));
-                printf("#### %s\n",icalvalue_as_ical_string(icalproperty_get_value(rrule)));
-                recur = icalproperty_get_rrule(rrule);
-                start = icalproperty_get_dtstart(dtstart);
+        tt = icaltime_as_timet(start);
 
-                ritr = icalrecur_iterator_new(recur,start);
+        printf("#### %s\n", ctime(&tt));
 
-                tt = icaltime_as_timet(start);
+        icalrecur_iterator_free(ritr);
 
-                printf("#### %s\n",ctime(&tt ));
+        ritr = icalrecur_iterator_new(recur, start);
+        for (next = icalrecur_iterator_next(ritr);
+             !icaltime_is_null_time(next);
+             next = icalrecur_iterator_next(ritr)) {
+            tt = icaltime_as_timet(next);
+            printf("  %s", ctime(&tt));
+        }
+        icalrecur_iterator_free(ritr);
 
-                icalrecur_iterator_free(ritr);
-
-                for(ritr = icalrecur_iterator_new(recur,start),
-                        next = icalrecur_iterator_next(ritr);
-                !icaltime_is_null_time(next);
-                next = icalrecur_iterator_next(ritr)){
-
-                        tt = icaltime_as_timet(next);
-
-                        printf("  %s",ctime(&tt ));
-
-                }
-                icalrecur_iterator_free(ritr);
-
-      icalcomponent_foreach_recurrence(itr, start, end,
-                                       recur_callback, NULL);
-
-
-
+        icalcomponent_foreach_recurrence(itr, start, end, recur_callback, NULL);
     }
 
-        icalset_free(cin);
+    icalset_free(cin);
 
-        icaltimezone_free_builtin_timezones();
+    icaltimezone_free_builtin_timezones();
 
-        icalmemory_free_ring();
+    icalmemory_free_ring();
 
-        free_zone_directory();
+    free_zone_directory();
 
     return 0;
 }
