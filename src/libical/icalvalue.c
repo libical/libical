@@ -720,8 +720,8 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
     default:
         {
+            char temp[TMP_BUF_SIZE];
             if (error != 0) {
-                char temp[TMP_BUF_SIZE];
 
                 snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
 
@@ -731,7 +731,10 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                              0);
             }
 
-            icalerror_warn("icalvalue_new_from_string got an unknown value type");
+            snprintf(temp, TMP_BUF_SIZE,
+                     "icalvalue_new_from_string got an unknown value type (%s) for \'%s\'",
+                     icalvalue_kind_to_string(kind), str);
+            icalerror_warn(temp);
             value = 0;
         }
     }
