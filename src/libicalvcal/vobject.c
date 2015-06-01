@@ -1,67 +1,61 @@
 /***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
+(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International
+Business Machines Corporation and Siemens Rolm Communications Inc.
 
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
+For purposes of this license notice, the term Licensors shall mean,
+collectively, Apple Computer, Inc., AT&T Corp., International
+Business Machines Corporation and Siemens Rolm Communications Inc.
+The term Licensor shall mean any of the Licensors.
+
+Subject to acceptance of the following conditions, permission is hereby
+granted by Licensors without the need for written agreement and without
+license or royalty fees, to use, copy, modify and distribute this
+software for any purpose.
+
+The above copyright notice and the following four paragraphs must be
+reproduced in all copies of this software and any software including
+this software.
+
+THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE
+ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR
+MODIFICATIONS.
+
+IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,
+INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT
+OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGE.
+
+EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE.
+
+The software is provided with RESTRICTED RIGHTS.  Use, duplication, or
+disclosure by the government are subject to restrictions set forth in
+DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 
 ***************************************************************************/
 
 /*
  * src: vobject.c
- * doc: vobject and APIs to construct vobject, APIs pretty print 
+ * doc: vobject and APIs to construct vobject, APIs pretty print
  * vobject, and convert a vobject into its textual representation.
  */
 
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#define strcasecmp stricmp
+#ifdef HAVE_CONFIG_H
+#include <config.h>
 #endif
 
 #include "vobject.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <fcntl.h>
 
-
-#define NAME_OF(o)			o->id
-#define VALUE_TYPE(o)			o->valType
-#define STRINGZ_VALUE_OF(o)		o->val.strs
-#define USTRINGZ_VALUE_OF(o)	        o->val.ustrs
-#define INTEGER_VALUE_OF(o)		o->val.i
-#define LONG_VALUE_OF(o)		o->val.l
-#define ANY_VALUE_OF(o)			o->val.any
-#define VOBJECT_VALUE_OF(o)		o->val.vobj
+#define NAME_OF(o)                      o->id
+#define VALUE_TYPE(o)                   o->valType
+#define STRINGZ_VALUE_OF(o)             o->val.strs
+#define USTRINGZ_VALUE_OF(o)            o->val.ustrs
+#define INTEGER_VALUE_OF(o)             o->val.i
+#define LONG_VALUE_OF(o)                o->val.l
+#define ANY_VALUE_OF(o)                 o->val.any
+#define VOBJECT_VALUE_OF(o)             o->val.vobj
 
 typedef union ValueItem {
     const char *strs;
@@ -94,15 +88,15 @@ const char** fieldedProp;
 
 /*----------------------------------------------------------------------
    The following functions involve with memory allocation:
-	newVObject
-	deleteVObject
-	dupStr
-	deleteStr
-	newStrItem
-	deleteStrItem
+        newVObject
+        deleteVObject
+        dupStr
+        deleteStr
+        newStrItem
+        deleteStrItem
    ----------------------------------------------------------------------*/
 
-DLLEXPORT(VObject*) newVObject_(const char *id)
+static VObject* newVObject_(const char *id)
 {
     VObject *p = (VObject*)malloc(sizeof(VObject));
     p->next = 0;
@@ -113,35 +107,35 @@ DLLEXPORT(VObject*) newVObject_(const char *id)
     return p;
 }
 
-DLLEXPORT(VObject*) newVObject(const char *id)
+VObject* newVObject(const char *id)
 {
     return newVObject_(lookupStr(id));
 }
 
-DLLEXPORT(void) deleteVObject(VObject *p)
+void deleteVObject(VObject *p)
 {
     unUseStr(p->id);
     free(p);
 }
 
-DLLEXPORT(char*) dupStr(const char *s, size_t size)
+char* dupStr(const char *s, size_t size)
 {
     char *t;
     if  (size == 0) {
-	size = strlen(s);
-	}
+        size = strlen(s);
+        }
     t = (char*)malloc(size+1);
     if (t) {
-	memcpy(t,s,size);
-	t[size] = 0;
-	return t;
-	}
+        memcpy(t,s,size);
+        t[size] = 0;
+        return t;
+        }
     else {
-	return (char*)0;
-	}
+        return (char*)0;
+        }
 }
 
-DLLEXPORT(void) deleteStr(const char *p)
+void deleteStr(const char *p)
 {
     if (p) free((void*)p);
 }
@@ -166,97 +160,98 @@ static void deleteStrItem(StrItem *p)
   The following function provide accesses to VObject's value.
   ----------------------------------------------------------------------*/
 
-DLLEXPORT(const char*) vObjectName(VObject *o)
+const char* vObjectName(VObject *o)
 {
     return NAME_OF(o);
 }
 
-DLLEXPORT(void) setVObjectName(VObject *o, const char* id)
+void setVObjectName(VObject *o, const char* id)
 {
     NAME_OF(o) = id;
 }
 
-DLLEXPORT(const char*) vObjectStringZValue(VObject *o)
+const char* vObjectStringZValue(VObject *o)
 {
     return STRINGZ_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectStringZValue(VObject *o, const char *s)
+void setVObjectStringZValue(VObject *o, const char *s)
 {
     STRINGZ_VALUE_OF(o) = dupStr(s,0);
     VALUE_TYPE(o) = VCVT_STRINGZ;
 }
 
-DLLEXPORT(void) setVObjectStringZValue_(VObject *o, const char *s)
+void setVObjectStringZValue_(VObject *o, const char *s)
 {
     STRINGZ_VALUE_OF(o) = s;
     VALUE_TYPE(o) = VCVT_STRINGZ;
 }
 
-DLLEXPORT(const wchar_t*) vObjectUStringZValue(VObject *o)
+const wchar_t* vObjectUStringZValue(VObject *o)
 {
     return USTRINGZ_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectUStringZValue(VObject *o, const wchar_t *s)
+void setVObjectUStringZValue(VObject *o, const wchar_t *s)
 {
-    USTRINGZ_VALUE_OF(o) = (wchar_t*) dupStr((char*)s,(uStrLen(s)+1)*2);
+    size_t size = (size_t)((uStrLen(s)+1)*2);
+    USTRINGZ_VALUE_OF(o) = (wchar_t*) dupStr((char*)s,size);
     VALUE_TYPE(o) = VCVT_USTRINGZ;
 }
 
-DLLEXPORT(void) setVObjectUStringZValue_(VObject *o, const wchar_t *s)
+void setVObjectUStringZValue_(VObject *o, const wchar_t *s)
 {
     USTRINGZ_VALUE_OF(o) = s;
     VALUE_TYPE(o) = VCVT_USTRINGZ;
 }
 
-DLLEXPORT(unsigned int) vObjectIntegerValue(VObject *o)
+unsigned int vObjectIntegerValue(VObject *o)
 {
     return INTEGER_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectIntegerValue(VObject *o, unsigned int i)
+void setVObjectIntegerValue(VObject *o, unsigned int i)
 {
     INTEGER_VALUE_OF(o) = i;
     VALUE_TYPE(o) = VCVT_UINT;
 }
 
-DLLEXPORT(unsigned long) vObjectLongValue(VObject *o)
+unsigned long vObjectLongValue(VObject *o)
 {
     return LONG_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectLongValue(VObject *o, unsigned long l)
+void setVObjectLongValue(VObject *o, unsigned long l)
 {
     LONG_VALUE_OF(o) = l;
     VALUE_TYPE(o) = VCVT_ULONG;
 }
 
-DLLEXPORT(void*) vObjectAnyValue(VObject *o)
+void* vObjectAnyValue(VObject *o)
 {
     return ANY_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectAnyValue(VObject *o, void *t)
+void setVObjectAnyValue(VObject *o, void *t)
 {
     ANY_VALUE_OF(o) = t;
     VALUE_TYPE(o) = VCVT_RAW;
 }
 
-DLLEXPORT(VObject*) vObjectVObjectValue(VObject *o)
+VObject* vObjectVObjectValue(VObject *o)
 {
     return VOBJECT_VALUE_OF(o);
 }
 
-DLLEXPORT(void) setVObjectVObjectValue(VObject *o, VObject *p)
+void setVObjectVObjectValue(VObject *o, VObject *p)
 {
     VOBJECT_VALUE_OF(o) = p;
     VALUE_TYPE(o) = VCVT_VOBJECT;
 }
 
-DLLEXPORT(int) vObjectValueType(VObject *o)
+int vObjectValueType(VObject *o)
 {
-    return VALUE_TYPE(o);
+    return (int)VALUE_TYPE(o);
 }
 
 
@@ -264,72 +259,72 @@ DLLEXPORT(int) vObjectValueType(VObject *o)
   The following functions can be used to build VObject.
   ----------------------------------------------------------------------*/
 
-DLLEXPORT(VObject*) addVObjectProp(VObject *o, VObject *p)
+VObject* addVObjectProp(VObject *o, VObject *p)
 {
     /* circular link list pointed to tail */
     /*
     o {next,id,prop,val}
                 V
-	pn {next,id,prop,val}
+        pn {next,id,prop,val}
              V
-	    ...
-	p1 {next,id,prop,val}
+            ...
+        p1 {next,id,prop,val}
              V
-	     pn
+             pn
     -->
     o {next,id,prop,val}
                 V
-	pn {next,id,prop,val}
+        pn {next,id,prop,val}
              V
-	p {next,id,prop,val}
-	    ...
-	p1 {next,id,prop,val}
+        p {next,id,prop,val}
+            ...
+        p1 {next,id,prop,val}
              V
-	     pn
+             pn
     */
 
     VObject *tail = o->prop;
     if (tail) {
-	p->next = tail->next;
-	o->prop = tail->next = p;
-	}
+        p->next = tail->next;
+        o->prop = tail->next = p;
+        }
     else {
-	o->prop = p->next = p;
-	}
+        o->prop = p->next = p;
+        }
     return p;
 }
 
-DLLEXPORT(VObject*) addProp(VObject *o, const char *id)
+VObject* addProp(VObject *o, const char *id)
 {
     return addVObjectProp(o,newVObject(id));
 }
 
-DLLEXPORT(VObject*) addProp_(VObject *o, const char *id)
+static VObject* addProp_(VObject *o, const char *id)
 {
     return addVObjectProp(o,newVObject_(id));
 }
 
-DLLEXPORT(void) addList(VObject **o, VObject *p)
+void addList(VObject **o, VObject *p)
 {
     p->next = 0;
     if (*o == 0) {
-	*o = p;
-	}
+        *o = p;
+        }
     else {
-	VObject *t = *o;
-	while (t->next) {
-	   t = t->next;
-	   }
-	t->next = p;
-	}
+        VObject *t = *o;
+        while (t->next) {
+           t = t->next;
+           }
+        t->next = p;
+        }
 }
 
-DLLEXPORT(VObject*) nextVObjectInList(VObject *o)
+VObject* nextVObjectInList(VObject *o)
 {
     return o->next;
 }
 
-DLLEXPORT(VObject*) setValueWithSize_(VObject *prop, void *val, unsigned int size)
+VObject* setValueWithSize_(VObject *prop, void *val, unsigned int size)
 {
     VObject *sizeProp;
     setVObjectAnyValue(prop, val);
@@ -338,98 +333,98 @@ DLLEXPORT(VObject*) setValueWithSize_(VObject *prop, void *val, unsigned int siz
     return prop;
 }
 
-DLLEXPORT(VObject*) setValueWithSize(VObject *prop, void *val, unsigned int size)
+VObject* setValueWithSize(VObject *prop, void *val, unsigned int size)
 {
     void *p = dupStr((const char *)val,size);
     return setValueWithSize_(prop,p,p?size:0);
 }
 
-DLLEXPORT(void) initPropIterator(VObjectIterator *i, VObject *o)
+void initPropIterator(VObjectIterator *i, VObject *o)
 {
-    i->start = o->prop; 
+    i->start = o->prop;
     i->next = 0;
 }
 
-DLLEXPORT(void) initVObjectIterator(VObjectIterator *i, VObject *o)
+void initVObjectIterator(VObjectIterator *i, VObject *o)
 {
-    i->start = o->next; 
+    i->start = o->next;
     i->next = 0;
 }
 
-DLLEXPORT(int) moreIteration(VObjectIterator *i)
-{ 
+int moreIteration(VObjectIterator *i)
+{
     return (i->start && (i->next==0 || i->next!=i->start));
 }
 
-DLLEXPORT(VObject*) nextVObject(VObjectIterator *i)
+VObject* nextVObject(VObjectIterator *i)
 {
     if (i->start && i->next != i->start) {
-	if (i->next == 0) {
-	    i->next = i->start->next;
-	    return i->next;
-	    }
-	else {
-	    i->next = i->next->next;
-	    return i->next;
-	    }
-	}
+        if (i->next == 0) {
+            i->next = i->start->next;
+            return i->next;
+            }
+        else {
+            i->next = i->next->next;
+            return i->next;
+            }
+        }
     else return (VObject*)0;
 }
 
-DLLEXPORT(VObject*) isAPropertyOf(VObject *o, const char *id)
+VObject* isAPropertyOf(VObject *o, const char *id)
 {
     VObjectIterator i;
     initPropIterator(&i,o);
     while (moreIteration(&i)) {
-	VObject *each = nextVObject(&i);
-	if (!stricmp(id,each->id))
-	    return each;
-	}
+        VObject *each = nextVObject(&i);
+        if (!strcasecmp(id,each->id))
+            return each;
+        }
     return (VObject*)0;
 }
 
-DLLEXPORT(VObject*) addGroup(VObject *o, const char *g)
+VObject* addGroup(VObject *o, const char *g)
 {
     /*
-	a.b.c
-	-->
-	prop(c)
-	    prop(VCGrouping=b)
-		prop(VCGrouping=a)
+        a.b.c
+        -->
+        prop(c)
+            prop(VCGrouping=b)
+                prop(VCGrouping=a)
      */
     char *dot = strrchr(g,'.');
     if (dot) {
-	VObject *p, *t;
-	char *gs, *n = dot+1;
-	gs = dupStr(g,0);	/* so we can write to it. */
-	/* used to be
-	* t = p = addProp_(o,lookupProp_(n));
-	*/
-	t = p = addProp_(o,lookupProp(n));
-	dot = strrchr(gs,'.');
-	*dot = 0;
-	do {
-	    dot = strrchr(gs,'.');
-	    if (dot) {
-		n = dot+1;
-		*dot=0;
-		}
-	    else
-		n = gs;
-	    /* property(VCGroupingProp=n);
-	     *	and the value may have VCGrouping property
-	     */
-	    t = addProp(t,VCGroupingProp);
-	    setVObjectStringZValue(t,lookupProp_(n));
-	    } while (n != gs);
-	deleteStr(gs);	
-	return p;
-	}
+        VObject *p, *t;
+        char *gs, *n = dot+1;
+        gs = dupStr(g,0);       /* so we can write to it. */
+        /* used to be
+        * t = p = addProp_(o,lookupProp_(n));
+        */
+        t = p = addProp_(o,lookupProp(n));
+        dot = strrchr(gs,'.');
+        *dot = 0;
+        do {
+            dot = strrchr(gs,'.');
+            if (dot) {
+                n = dot+1;
+                *dot=0;
+                }
+            else
+                n = gs;
+            /* property(VCGroupingProp=n);
+             *  and the value may have VCGrouping property
+             */
+            t = addProp(t,VCGroupingProp);
+            setVObjectStringZValue(t,lookupProp_(n));
+            } while (n != gs);
+        deleteStr(gs);
+        return p;
+        }
     else
-	return addProp_(o,lookupProp(g));
+        return addProp_(o,lookupProp(g));
 }
 
-DLLEXPORT(VObject*) addPropValue(VObject *o, const char *p, const char *v)
+VObject* addPropValue(VObject *o, const char *p, const char *v)
 {
     VObject *prop;
     prop = addProp(o,p);
@@ -437,17 +432,17 @@ DLLEXPORT(VObject*) addPropValue(VObject *o, const char *p, const char *v)
     return prop;
 }
 
-DLLEXPORT(VObject*) addPropSizedValue_(VObject *o, const char *p, const char *v,
-	unsigned int size)
+VObject* addPropSizedValue_(VObject *o, const char *p, const char *v,
+        unsigned int size)
 {
     VObject *prop;
     prop = addProp(o,p);
-    setValueWithSize_(prop, (void*)v, size);
+    (void)setValueWithSize_(prop, (void*)v, size);
     return prop;
 }
 
-DLLEXPORT(VObject*) addPropSizedValue(VObject *o, const char *p, const char *v,
-	unsigned int size)
+VObject* addPropSizedValue(VObject *o, const char *p, const char *v,
+        unsigned int size)
 {
     return addPropSizedValue_(o,p,dupStr(v,size),size);
 }
@@ -464,66 +459,66 @@ static void indent(FILE *fp, int level)
 {
     int i;
     for (i=0;i<level*4;i++) {
-	fputc(' ', fp);
-	}
+        fputc(' ', fp);
+        }
 }
 
 static void printValue(FILE *fp, VObject *o, int level)
 {
     switch (VALUE_TYPE(o)) {
-	case VCVT_USTRINGZ: {
-	    char c;
+        case VCVT_USTRINGZ: {
+            char c;
             char *t,*s;
-	    s = t = fakeCString(USTRINGZ_VALUE_OF(o));
-	    fputc('"',fp);
-	    while (c=*t,c) {
-	        fputc(c,fp);
-		if (c == '\n') indent(fp,level+2);
-		t++;
-		}
-	    fputc('"',fp);
-	    deleteStr(s);
-	    break;
-	    }
-	case VCVT_STRINGZ: {
-	    char c;
-	    const char *s = STRINGZ_VALUE_OF(o);
-	    fputc('"',fp);
-	    while (c=*s,c) {
-	        fputc(c,fp);
-		if (c == '\n') indent(fp,level+2);
-		s++;
-		}
-	    fputc('"',fp);
-	    break;
-	    }
-	case VCVT_UINT:
-	    fprintf(fp,"%u", INTEGER_VALUE_OF(o)); break;
-	case VCVT_ULONG:
-	    fprintf(fp,"%lu", LONG_VALUE_OF(o)); break;
-	case VCVT_RAW:
-	    fprintf(fp,"[raw data]"); break;
-	case VCVT_VOBJECT:
-	    fprintf(fp,"[vobject]\n");
-	    printVObject_(fp,VOBJECT_VALUE_OF(o),level+1);
-	    break;
-	case 0:
-	    fprintf(fp,"[none]"); break;
-	default:
-	    fprintf(fp,"[unknown]"); break;
-	}
+            s = t = fakeCString(USTRINGZ_VALUE_OF(o));
+            fputc('"',fp);
+            while (c=*t,c) {
+                fputc(c,fp);
+                if (c == '\n') indent(fp,level+2);
+                t++;
+                }
+            fputc('"',fp);
+            deleteStr(s);
+            break;
+            }
+        case VCVT_STRINGZ: {
+            char c;
+            const char *s = STRINGZ_VALUE_OF(o);
+            fputc('"',fp);
+            while (c=*s,c) {
+                fputc(c,fp);
+                if (c == '\n') indent(fp,level+2);
+                s++;
+                }
+            fputc('"',fp);
+            break;
+            }
+        case VCVT_UINT:
+            fprintf(fp,"%u", INTEGER_VALUE_OF(o)); break;
+        case VCVT_ULONG:
+            fprintf(fp,"%lu", LONG_VALUE_OF(o)); break;
+        case VCVT_RAW:
+            fprintf(fp,"[raw data]"); break;
+        case VCVT_VOBJECT:
+            fprintf(fp,"[vobject]\n");
+            printVObject_(fp,VOBJECT_VALUE_OF(o),level+1);
+            break;
+        case 0:
+            fprintf(fp,"[none]"); break;
+        default:
+            fprintf(fp,"[unknown]"); break;
+        }
 }
 
 static void printNameValue(FILE *fp,VObject *o, int level)
 {
     indent(fp,level);
     if (NAME_OF(o)) {
-	fprintf(fp,"%s", NAME_OF(o));
-	}
+        fprintf(fp,"%s", NAME_OF(o));
+        }
     if (VALUE_TYPE(o)) {
-	fputc('=',fp);
-	printValue(fp,o, level);
-	}
+        fputc('=',fp);
+        printValue(fp,o, level);
+        }
     fprintf(fp,"\n");
 }
 
@@ -531,15 +526,15 @@ static void printVObject_(FILE *fp, VObject *o, int level)
     {
     VObjectIterator t;
     if (o == 0) {
-	fprintf(fp,"[NULL]\n");
-	return;
-	}
+        fprintf(fp,"[NULL]\n");
+        return;
+        }
     printNameValue(fp,o,level);
     initPropIterator(&t,o);
     while (moreIteration(&t)) {
-	VObject *eachProp = nextVObject(&t);
-	printVObject_(fp,eachProp,level+1);
-	}
+        VObject *eachProp = nextVObject(&t);
+        printVObject_(fp,eachProp,level+1);
+        }
     }
 
 void printVObject(FILE *fp,VObject *o)
@@ -547,68 +542,68 @@ void printVObject(FILE *fp,VObject *o)
     printVObject_(fp,o,0);
 }
 
-DLLEXPORT(void) printVObjectToFile(char *fname,VObject *o)
+void printVObjectToFile(char *fname,VObject *o)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
-	printVObject(fp,o);
-	fclose(fp);
-	}
+        printVObject(fp,o);
+        fclose(fp);
+        }
 }
 
-DLLEXPORT(void) printVObjectsToFile(char *fname,VObject *list)
+void printVObjectsToFile(char *fname,VObject *list)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
-	while (list) {
-	    printVObject(fp,list);
-	    list = nextVObjectInList(list);
-	    }
-	fclose(fp);
-	}
+        while (list) {
+            printVObject(fp,list);
+            list = nextVObjectInList(list);
+            }
+        fclose(fp);
+        }
 }
 
-DLLEXPORT(void) cleanVObject(VObject *o)
+void cleanVObject(VObject *o)
 {
     if (o == 0) return;
     if (o->prop) {
-	/* destroy time: cannot use the iterator here.
-	   Have to break the cycle in the circular link
-	   list and turns it into regular NULL-terminated
-	   list -- since at some point of destruction,
-	   the reference entry for the iterator to work
-	   will not longer be valid.
-	   */
-	VObject *p;
-	p = o->prop->next;
-	o->prop->next = 0;
-	do {
-	   VObject *t = p->next;
-	   cleanVObject(p);
-	   p = t;
-	   } while (p);
-	}
+        /* destroy time: cannot use the iterator here.
+           Have to break the cycle in the circular link
+           list and turns it into regular NULL-terminated
+           list -- since at some point of destruction,
+           the reference entry for the iterator to work
+           will not longer be valid.
+           */
+        VObject *p;
+        p = o->prop->next;
+        o->prop->next = 0;
+        do {
+           VObject *t = p->next;
+           cleanVObject(p);
+           p = t;
+           } while (p);
+        }
     switch (VALUE_TYPE(o)) {
-	case VCVT_USTRINGZ:
-	case VCVT_STRINGZ:
-	case VCVT_RAW:
-		/* assume they are all allocated by malloc. */
-	    free((char*)STRINGZ_VALUE_OF(o));
-	    break;
-	case VCVT_VOBJECT:
-	    cleanVObject(VOBJECT_VALUE_OF(o));
-	    break;
-	}
+        case VCVT_USTRINGZ:
+        case VCVT_STRINGZ:
+        case VCVT_RAW:
+                /* assume they are all allocated by malloc. */
+            free((char*)STRINGZ_VALUE_OF(o));
+            break;
+        case VCVT_VOBJECT:
+            cleanVObject(VOBJECT_VALUE_OF(o));
+            break;
+        }
     deleteVObject(o);
 }
 
-DLLEXPORT(void) cleanVObjects(VObject *list)
+void cleanVObjects(VObject *list)
 {
     while (list) {
-	VObject *t = list;
-	list = nextVObjectInList(list);
-	cleanVObject(t);
-	}
+        VObject *t = list;
+        list = nextVObjectInList(list);
+        cleanVObject(t);
+        }
 }
 
 /*----------------------------------------------------------------------
@@ -624,70 +619,70 @@ static unsigned int hashStr(const char *s)
     unsigned int h = 0;
     int i;
     for (i=0;s[i];i++) {
-	h += s[i]*i;
-	}
+        h += s[i]*i;
+        }
     return h % STRTBLSIZE;
 }
 
-DLLEXPORT(const char*) lookupStr(const char *s)
+const char* lookupStr(const char *s)
 {
     StrItem *t;
     unsigned int h = hashStr(s);
     if ((t = strTbl[h]) != 0) {
-	do {
-	    if (stricmp(t->s,s) == 0) {
-		t->refCnt++;
-		return t->s;
-		}
-	    t = t->next;
-	    } while (t);
-	}
+        do {
+            if (strcasecmp(t->s,s) == 0) {
+                t->refCnt++;
+                return t->s;
+                }
+            t = t->next;
+            } while (t);
+        }
     s = dupStr(s,0);
     strTbl[h] = newStrItem(s,strTbl[h]);
     return s;
 }
 
-DLLEXPORT(void) unUseStr(const char *s)
+void unUseStr(const char *s)
 {
     StrItem *t, *p;
     unsigned int h = hashStr(s);
     if ((t = strTbl[h]) != 0) {
-	p = t;
-	do {
-	    if (stricmp(t->s,s) == 0) {
-		t->refCnt--;
-		if (t->refCnt == 0) {
-		    if (p == strTbl[h]) {
-			strTbl[h] = t->next;
-			}
-		    else {
-			p->next = t->next;
-			}
-		    deleteStr(t->s);
-		    deleteStrItem(t);
-		    return;
-		    }
-		}
-	    p = t;
-	    t = t->next;
-	    } while (t);
-	}
+        p = t;
+        do {
+            if (strcasecmp(t->s,s) == 0) {
+                t->refCnt--;
+                if (t->refCnt == 0) {
+                    if (p == strTbl[h]) {
+                        strTbl[h] = t->next;
+                        }
+                    else {
+                        p->next = t->next;
+                        }
+                    deleteStr(t->s);
+                    deleteStrItem(t);
+                    return;
+                    }
+                }
+            p = t;
+            t = t->next;
+            } while (t);
+        }
 }
 
-DLLEXPORT(void) cleanStrTbl()
+void cleanStrTbl()
 {
     int i;
     for (i=0; i<STRTBLSIZE;i++) {
-	StrItem *t = strTbl[i];
-	while (t) {
-	    StrItem *p;
-	    deleteStr(t->s);
-	    p = t;
-	    t = t->next;
-	    deleteStrItem(p);
-	    }
-	strTbl[i] = 0;
-	}
+        StrItem *t = strTbl[i];
+        while (t) {
+            StrItem *p;
+            deleteStr(t->s);
+            p = t;
+            t = t->next;
+            deleteStrItem(p);
+            }
+        strTbl[i] = 0;
+        }
 }
 
 
@@ -699,8 +694,8 @@ struct PreDefProp {
     };
 
 /* flags in PreDefProp */
-#define PD_BEGIN	0x1
-#define PD_INTERNAL	0x2
+#define PD_BEGIN        0x1
+#define PD_INTERNAL     0x2
 
 static const char *adrFields[] = {
     VCPostalBoxProp,
@@ -739,8 +734,8 @@ static const char *AAlarmFields[] = {
     0
     };
 
-/* ExDate -- has unamed fields */
-/* RDate -- has unamed fields */
+/* ExDate -- has unnamed fields */
+/* RDate -- has unnamed fields */
 
 static const char *DAlarmFields[] = {
     VCRunTimeProp,
@@ -934,41 +929,41 @@ static const struct PreDefProp* lookupPropInfo(const char* str)
 {
     /* brute force for now, could use a hash table here. */
     int i;
-	
+
     for (i = 0; propNames[i].name; i++)
-	if (stricmp(str, propNames[i].name) == 0) {
-	    return &propNames[i];
-	    }
-    
+        if (strcasecmp(str, propNames[i].name) == 0) {
+            return &propNames[i];
+            }
+
     return 0;
 }
 
 
-DLLEXPORT(const char*) lookupProp_(const char* str)
+const char* lookupProp_(const char* str)
 {
     int i;
-	
+
     for (i = 0; propNames[i].name; i++)
-	if (stricmp(str, propNames[i].name) == 0) {
-	    const char* s;
-	    s = propNames[i].alias?propNames[i].alias:propNames[i].name;
-	    return lookupStr(s);
-	    }
+        if (strcasecmp(str, propNames[i].name) == 0) {
+            const char* s;
+            s = propNames[i].alias?propNames[i].alias:propNames[i].name;
+            return lookupStr(s);
+            }
     return lookupStr(str);
 }
 
 
-DLLEXPORT(const char*) lookupProp(const char* str)
+const char* lookupProp(const char* str)
 {
     int i;
-	
+
     for (i = 0; propNames[i].name; i++)
-	if (stricmp(str, propNames[i].name) == 0) {
-	    const char *s;
-	    fieldedProp = propNames[i].fields;
-	    s = propNames[i].alias?propNames[i].alias:propNames[i].name;
-	    return lookupStr(s);
-	    }
+        if (strcasecmp(str, propNames[i].name) == 0) {
+            const char *s;
+            fieldedProp = propNames[i].fields;
+            s = propNames[i].alias?propNames[i].alias:propNames[i].name;
+            return lookupStr(s);
+            }
     fieldedProp = 0;
     return lookupStr(str);
 }
@@ -994,87 +989,87 @@ static void appendsOFile(OFile *fp, const char *s)
     if (fp->fail) return;
     slen  = strlen(s);
     if (fp->fp) {
-	fwrite(s,1,slen,fp->fp);
-	}
+        fwrite(s,1,slen,fp->fp);
+        }
     else {
 stuff:
-	if (fp->len + slen < fp->limit) {
-	    memcpy(fp->s+fp->len,s,slen);
-	    fp->len += slen;
-	    return;
-	    }
-	else if (fp->alloc) {
-	    fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-	    if (OFILE_REALLOC_SIZE <= slen) fp->limit += slen;
-	    fp->s = (char *) realloc(fp->s,fp->limit);
-	    if (fp->s) goto stuff;
-	    }
-	if (fp->alloc)
-	    free(fp->s);
-	fp->s = 0;
-	fp->fail = 1;
-	}
+        if (fp->len + slen < fp->limit) {
+            memcpy(fp->s+fp->len,s,slen);
+            fp->len += slen;
+            return;
+            }
+        else if (fp->alloc) {
+            fp->limit = fp->limit + OFILE_REALLOC_SIZE;
+            if (OFILE_REALLOC_SIZE <= slen) fp->limit += slen;
+            fp->s = (char *) realloc(fp->s,(size_t)fp->limit);
+            if (fp->s) goto stuff;
+            }
+        if (fp->alloc)
+            free(fp->s);
+        fp->s = 0;
+        fp->fail = 1;
+        }
 }
 
 static void appendcOFile(OFile *fp, char c)
 {
     if (fp->fail) return;
     if (fp->fp) {
-	fputc(c,fp->fp);
-	}
+        fputc(c,fp->fp);
+        }
     else {
 stuff:
-	if (fp->len+1 < fp->limit) {
-	    fp->s[fp->len] = c;
-	    fp->len++;
-	    return;
-	    }
-	else if (fp->alloc) {
-	    fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-	    fp->s = (char *) realloc(fp->s,fp->limit);
-	    if (fp->s) goto stuff;
-	    }
-	if (fp->alloc)
-	    free(fp->s);
-	fp->s = 0;
-	fp->fail = 1;
-	}
+        if (fp->len+1 < fp->limit) {
+            fp->s[fp->len] = c;
+            fp->len++;
+            return;
+            }
+        else if (fp->alloc) {
+            fp->limit = fp->limit + OFILE_REALLOC_SIZE;
+            fp->s = (char *) realloc(fp->s,fp->limit);
+            if (fp->s) goto stuff;
+            }
+        if (fp->alloc)
+            free(fp->s);
+        fp->s = 0;
+        fp->fail = 1;
+        }
 }
 #else
 static void appendcOFile_(OFile *fp, char c)
 {
     if (fp->fail) return;
     if (fp->fp) {
-	fputc(c,fp->fp);
-	}
+        fputc(c,fp->fp);
+        }
     else {
 stuff:
-	if (fp->len+1 < fp->limit) {
-	    fp->s[fp->len] = c;
-	    fp->len++;
-	    return;
-	    }
-	else if (fp->alloc) {
-	    fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-	    fp->s = realloc(fp->s,fp->limit);
-	    if (fp->s) goto stuff;
-	    }
-	if (fp->alloc)
-	    free(fp->s);
-	fp->s = 0;
-	fp->fail = 1;
-	}
+        if (fp->len+1 < fp->limit) {
+            fp->s[fp->len] = c;
+            fp->len++;
+            return;
+            }
+        else if (fp->alloc) {
+            fp->limit = fp->limit + OFILE_REALLOC_SIZE;
+            fp->s = realloc(fp->s,(size_t)fp->limit);
+            if (fp->s) goto stuff;
+            }
+        if (fp->alloc)
+            free(fp->s);
+        fp->s = 0;
+        fp->fail = 1;
+        }
 }
 
 static void appendcOFile(OFile *fp, char c)
 {
     if (c == '\n') {
-	/* write out as <CR><LF> */
-	appendcOFile_(fp,0xd);
-	appendcOFile_(fp,0xa);
-	}
+        /* write out as <CR><LF> */
+        appendcOFile_(fp,0xd);
+        appendcOFile_(fp,0xa);
+        }
     else
-	appendcOFile_(fp,c);
+        appendcOFile_(fp,c);
 }
 
 static void appendsOFile(OFile *fp, const char *s)
@@ -1082,8 +1077,8 @@ static void appendsOFile(OFile *fp, const char *s)
     size_t i, slen;
     slen  = strlen(s);
     for (i=0; i<slen; i++) {
-	appendcOFile(fp,s[i]);
-	}
+        appendcOFile(fp,s[i]);
+        }
 }
 
 #endif
@@ -1121,31 +1116,31 @@ static int writeBase64(OFile *fp, unsigned char *s, long len)
     quad[4] = 0;
 
     while (cur < len) {
-	    /* collect the triplet of bytes into 'trip' */
-	trip = 0;
-	for (i = 0; i < 3; i++) {
-	    b = (cur < len) ? *(s + cur) : 0;
-	    cur++;
-	    trip = trip << 8 | b;
-	    }
-	/* fill in 'quad' with the appropriate four characters */
-	for (i = 3; i >= 0; i--) {
-	    b = (unsigned char)(trip & 0x3F);
-	    trip = trip >> 6;
-	    if ((3 - i) < (cur - len))
-		    quad[i] = '='; /* pad char */
-	    else if (b < 26) quad[i] = (char)b + 'A';
-	    else if (b < 52) quad[i] = (char)(b - 26) + 'a';
-	    else if (b < 62) quad[i] = (char)(b - 52) + '0';
-	    else if (b == 62) quad[i] = '+';
-	    else quad[i] = '/';
-	    }
-	/* now output 'quad' with appropriate whitespace and line ending */
-	appendsOFile(fp, (numQuads == 0 ? "    " : ""));
-	appendsOFile(fp, quad);
-	appendsOFile(fp, ((cur >= len)?"\n" :(numQuads==MAXQUADS-1?"\n" : "")));
-	numQuads = (numQuads + 1) % MAXQUADS;
-	}
+            /* collect the triplet of bytes into 'trip' */
+        trip = 0;
+        for (i = 0; i < 3; i++) {
+            b = (cur < len) ? *(s + cur) : 0;
+            cur++;
+            trip = trip << 8 | b;
+            }
+        /* fill in 'quad' with the appropriate four characters */
+        for (i = 3; i >= 0; i--) {
+            b = (unsigned char)(trip & 0x3F);
+            trip = trip >> 6;
+            if ((3 - i) < (cur - len))
+                    quad[i] = '='; /* pad char */
+            else if (b < 26) quad[i] = (char)b + 'A';
+            else if (b < 52) quad[i] = (char)(b - 26) + 'a';
+            else if (b < 62) quad[i] = (char)(b - 52) + '0';
+            else if (b == 62) quad[i] = '+';
+            else quad[i] = '/';
+            }
+        /* now output 'quad' with appropriate whitespace and line ending */
+        appendsOFile(fp, (numQuads == 0 ? "    " : ""));
+        appendsOFile(fp, quad);
+        appendsOFile(fp, ((cur >= len)?"\n" :(numQuads==MAXQUADS-1?"\n" : "")));
+        numQuads = (numQuads + 1) % MAXQUADS;
+        }
     appendcOFile(fp,'\n');
 
     return 1;
@@ -1165,20 +1160,20 @@ static void writeQPString(OFile *fp, const char *s)
     while (*p) {
         /* break up lines biggger than 75 chars */
         if(count >=74){
-		count=0;
-		appendsOFile(fp,"=\n");
-	}
-	
-	/* escape any non ASCII characters and '=' as per rfc1521 */
-	if (*p<= 0x1f || *p >=0x7f || *p == '=' ) {
-		snprintf(buf,sizeof(buf),"=%02X",(unsigned char)*p);
-		appendsOFile(fp,buf); 
-		count+=3; 
-	} else {
-		appendcOFile(fp,*p);	
-		count++; 
-	}
-	p++;
+                count=0;
+                appendsOFile(fp,"=\n");
+        }
+
+        /* escape any non ASCII characters and '=' as per rfc1521 */
+        if (*p<= 0x1f || *p >=0x7f || *p == '=' ) {
+                snprintf(buf,sizeof(buf),"=%02X",(unsigned char)*p);
+                appendsOFile(fp,buf);
+                count+=3;
+        } else {
+                appendcOFile(fp,*p);
+                count++;
+        }
+        p++;
     }
 }
 
@@ -1190,57 +1185,57 @@ static void writeValue(OFile *fp, VObject *o, unsigned long size,int quote)
 {
     if (o == 0) return;
     switch (VALUE_TYPE(o)) {
-	case VCVT_USTRINGZ: {
-	    char *s = fakeCString(USTRINGZ_VALUE_OF(o));
-	    if(quote) writeQPString(fp, s);
-	    else writeString(fp,s);
-	    deleteStr(s);
-	    break;
-	    }
-	case VCVT_STRINGZ: {
-	    if(quote) writeQPString(fp, STRINGZ_VALUE_OF(o));
-	    else writeString(fp,STRINGZ_VALUE_OF(o));
-	    break;
-	    }
-	case VCVT_UINT: {
-	    char buf[16];
-	    snprintf(buf,sizeof(buf),"%u", INTEGER_VALUE_OF(o));
-	    appendsOFile(fp,buf);
-	    break;
-	    }
-	case VCVT_ULONG: {
-	    char buf[16];
-	    snprintf(buf,sizeof(buf),"%lu", LONG_VALUE_OF(o));
-	    appendsOFile(fp,buf);
-	    break;
-	    }
-	case VCVT_RAW: {
-	    appendcOFile(fp,'\n');
-	    writeBase64(fp,(unsigned char*)(ANY_VALUE_OF(o)),size);
-	    break;
-	    }
-	case VCVT_VOBJECT:
-	    appendcOFile(fp,'\n');
-	    writeVObject_(fp,VOBJECT_VALUE_OF(o));
-	    break;
-	}
+        case VCVT_USTRINGZ: {
+            char *s = fakeCString(USTRINGZ_VALUE_OF(o));
+            if(quote) writeQPString(fp, s);
+            else writeString(fp,s);
+            deleteStr(s);
+            break;
+            }
+        case VCVT_STRINGZ: {
+            if(quote) writeQPString(fp, STRINGZ_VALUE_OF(o));
+            else writeString(fp,STRINGZ_VALUE_OF(o));
+            break;
+            }
+        case VCVT_UINT: {
+            char buf[16];
+            snprintf(buf,sizeof(buf),"%u", INTEGER_VALUE_OF(o));
+            appendsOFile(fp,buf);
+            break;
+            }
+        case VCVT_ULONG: {
+            char buf[16];
+            snprintf(buf,sizeof(buf),"%lu", LONG_VALUE_OF(o));
+            appendsOFile(fp,buf);
+            break;
+            }
+        case VCVT_RAW: {
+            appendcOFile(fp,'\n');
+            writeBase64(fp,(unsigned char*)(ANY_VALUE_OF(o)),(long)size);
+            break;
+            }
+        case VCVT_VOBJECT:
+            appendcOFile(fp,'\n');
+            writeVObject_(fp,VOBJECT_VALUE_OF(o));
+            break;
+        }
 }
 
 static void writeAttrValue(OFile *fp, VObject *o)
 {
     if (NAME_OF(o)) {
-	const struct PreDefProp *pi;
-	pi = lookupPropInfo(NAME_OF(o));
-	if (pi && ((pi->flags & PD_INTERNAL) != 0)) return;
-	appendcOFile(fp,';');
-	appendsOFile(fp,NAME_OF(o));
-	}
+        const struct PreDefProp *pi;
+        pi = lookupPropInfo(NAME_OF(o));
+        if (pi && ((pi->flags & PD_INTERNAL) != 0)) return;
+        appendcOFile(fp,';');
+        appendsOFile(fp,NAME_OF(o));
+        }
     else
-	appendcOFile(fp,';');
+        appendcOFile(fp,';');
     if (VALUE_TYPE(o)) {
-	appendcOFile(fp,'=');
-	writeValue(fp,o,0,0);
-	}
+        appendcOFile(fp,'=');
+        writeValue(fp,o,0,0);
+        }
 }
 
 static void writeGroup(OFile *fp, VObject *o)
@@ -1251,12 +1246,12 @@ static void writeGroup(OFile *fp, VObject *o)
     buf1[sizeof(buf1)-1]='\0';
 
     while ((o=isAPropertyOf(o,VCGroupingProp)) != 0) {
-	strncpy(buf2,STRINGZ_VALUE_OF(o),sizeof(buf2)-1);
-	buf2[sizeof(buf2)-1] = '\0';
-	strncat(buf2,".",sizeof(buf2)-strlen(buf2)-1);
-	strncat(buf2,buf1,sizeof(buf2)-strlen(buf2)-1);
-	strcpy(buf1,buf2);
-	}
+        strncpy(buf2,STRINGZ_VALUE_OF(o),sizeof(buf2)-1);
+        buf2[sizeof(buf2)-1] = '\0';
+        strncat(buf2,".",sizeof(buf2)-strlen(buf2)-1);
+        strncat(buf2,buf1,sizeof(buf2)-strlen(buf2)-1);
+        strcpy(buf1,buf2);
+        }
     appendsOFile(fp,buf1);
 }
 
@@ -1264,9 +1259,9 @@ static int inList(const char **list, const char *s)
 {
     if (list == 0) return 0;
     while (*list) {
-	if (stricmp(*list,s) == 0) return 1;
-	list++;
-	}
+        if (strcasecmp(*list,s) == 0) return 1;
+        list++;
+        }
     return 0;
 }
 
@@ -1274,56 +1269,56 @@ static void writeProp(OFile *fp, VObject *o)
 {
     int isQuoted=0;
     if (NAME_OF(o)) {
-	const struct PreDefProp *pi;
-	VObjectIterator t;
-	const char **fields_ = 0;
-	pi = lookupPropInfo(NAME_OF(o));
-	if (pi && ((pi->flags & PD_BEGIN) != 0)) {
-	    writeVObject_(fp,o);
-	    return;
-	    }
-	if (isAPropertyOf(o,VCGroupingProp))
-	    writeGroup(fp,o);
-	else
-	    appendsOFile(fp,NAME_OF(o));
-	if (pi) fields_ = pi->fields;
-	initPropIterator(&t,o);
-	while (moreIteration(&t)) {
-	    const char *s;
-	    VObject *eachProp = nextVObject(&t);
-	    s = NAME_OF(eachProp);
-	    if (stricmp(VCGroupingProp,s) && !inList(fields_,s))
-		writeAttrValue(fp,eachProp);
-	    if (stricmp(VCQPProp,s)==0 || stricmp(VCQuotedPrintableProp,s)==0)
-		 isQuoted=1;
-	    }
-	if (fields_) {
-	    int i = 0, n = 0;
-	    const char** fields = fields_;
-	    /* output prop as fields */
-	    appendcOFile(fp,':');
-	    while (*fields) {
-		VObject *t = isAPropertyOf(o,*fields);
-		i++;
-		if (t) n = i;
-		fields++;
-		}
-	    fields = fields_;
-	    for (i=0;i<n;i++) {
-		writeValue(fp,isAPropertyOf(o,*fields),0,isQuoted);
-		fields++;
-		if (i<(n-1)) appendcOFile(fp,';');
-		}
-	    }
-	}
-	
+        const struct PreDefProp *pi;
+        VObjectIterator t;
+        const char **fields_ = 0;
+        pi = lookupPropInfo(NAME_OF(o));
+        if (pi && ((pi->flags & PD_BEGIN) != 0)) {
+            writeVObject_(fp,o);
+            return;
+            }
+        if (isAPropertyOf(o,VCGroupingProp))
+            writeGroup(fp,o);
+        else
+            appendsOFile(fp,NAME_OF(o));
+        if (pi) fields_ = pi->fields;
+        initPropIterator(&t,o);
+        while (moreIteration(&t)) {
+            const char *s;
+            VObject *eachProp = nextVObject(&t);
+            s = NAME_OF(eachProp);
+            if (strcasecmp(VCGroupingProp,s) && !inList(fields_,s))
+                writeAttrValue(fp,eachProp);
+            if (strcasecmp(VCQPProp,s)==0 || strcasecmp(VCQuotedPrintableProp,s)==0)
+                 isQuoted=1;
+            }
+        if (fields_) {
+            int i = 0, n = 0;
+            const char** fields = fields_;
+            /* output prop as fields */
+            appendcOFile(fp,':');
+            while (*fields) {
+                VObject *t = isAPropertyOf(o,*fields);
+                i++;
+                if (t) n = i;
+                fields++;
+                }
+            fields = fields_;
+            for (i=0;i<n;i++) {
+                writeValue(fp,isAPropertyOf(o,*fields),0,isQuoted);
+                fields++;
+                if (i<(n-1)) appendcOFile(fp,';');
+                }
+            }
+        }
+
     if (VALUE_TYPE(o)) {
-	unsigned long size = 0;
+        unsigned long size = 0;
         VObject *p = isAPropertyOf(o,VCDataSizeProp);
-	if (p) size = LONG_VALUE_OF(p);
-	appendcOFile(fp,':');
-	writeValue(fp,o,size,isQuoted);
-	}
+        if (p) size = LONG_VALUE_OF(p);
+        appendcOFile(fp,':');
+        writeValue(fp,o,size,isQuoted);
+        }
 
     appendcOFile(fp,'\n');
 }
@@ -1331,25 +1326,25 @@ static void writeProp(OFile *fp, VObject *o)
 static void writeVObject_(OFile *fp, VObject *o)
 {
     if (NAME_OF(o)) {
-	const struct PreDefProp *pi;
-	pi = lookupPropInfo(NAME_OF(o));
+        const struct PreDefProp *pi;
+        pi = lookupPropInfo(NAME_OF(o));
 
-	if (pi && ((pi->flags & PD_BEGIN) != 0)) {
-	    VObjectIterator t;
-	    const char *begin = NAME_OF(o);
-	    appendsOFile(fp,"BEGIN:");
-	    appendsOFile(fp,begin);
-	    appendcOFile(fp,'\n');
-	    initPropIterator(&t,o);
-	    while (moreIteration(&t)) {
-		VObject *eachProp = nextVObject(&t);
-		writeProp(fp, eachProp);
-		}
-	    appendsOFile(fp,"END:");
-	    appendsOFile(fp,begin);
-	    appendsOFile(fp,"\n\n");
-	    }
-	}
+        if (pi && ((pi->flags & PD_BEGIN) != 0)) {
+            VObjectIterator t;
+            const char *begin = NAME_OF(o);
+            appendsOFile(fp,"BEGIN:");
+            appendsOFile(fp,begin);
+            appendcOFile(fp,'\n');
+            initPropIterator(&t,o);
+            while (moreIteration(&t)) {
+                VObject *eachProp = nextVObject(&t);
+                writeProp(fp, eachProp);
+                }
+            appendsOFile(fp,"END:");
+            appendsOFile(fp,begin);
+            appendsOFile(fp,"\n\n");
+            }
+        }
 }
 
 void writeVObject(FILE *fp, VObject *o)
@@ -1359,28 +1354,28 @@ void writeVObject(FILE *fp, VObject *o)
     writeVObject_(&ofp,o);
 }
 
-DLLEXPORT(void) writeVObjectToFile(char *fname, VObject *o)
+void writeVObjectToFile(char *fname, VObject *o)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
-	writeVObject(fp,o);
-	fclose(fp);
-	}
+        writeVObject(fp,o);
+        fclose(fp);
+        }
 }
 
-DLLEXPORT(void) writeVObjectsToFile(char *fname, VObject *list)
+void writeVObjectsToFile(char *fname, VObject *list)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
-	while (list) {
-	    writeVObject(fp,list);
-	    list = nextVObjectInList(list);
-	    }
-	fclose(fp);
-	}
+        while (list) {
+            writeVObject(fp,list);
+            list = nextVObjectInList(list);
+            }
+        fclose(fp);
+        }
 }
 
-DLLEXPORT(char*) writeMemVObject(char *s, int *len, VObject *o)
+char* writeMemVObject(char *s, int *len, VObject *o)
 {
     OFile ofp;
     initMemOFile(&ofp,s,len?*len:0);
@@ -1390,14 +1385,14 @@ DLLEXPORT(char*) writeMemVObject(char *s, int *len, VObject *o)
     return ofp.s;
 }
 
-DLLEXPORT(char*) writeMemVObjects(char *s, int *len, VObject *list)
+char* writeMemVObjects(char *s, int *len, VObject *list)
 {
     OFile ofp;
     initMemOFile(&ofp,s,len?*len:0);
     while (list) {
-	writeVObject_(&ofp,list);
-	list = nextVObjectInList(list);
-	}
+        writeVObject_(&ofp,list);
+        list = nextVObjectInList(list);
+        }
     if (len) *len = ofp.len;
     appendcOFile(&ofp,0);
     return ofp.s;
@@ -1406,50 +1401,50 @@ DLLEXPORT(char*) writeMemVObjects(char *s, int *len, VObject *list)
 /*----------------------------------------------------------------------
   APIs to do fake Unicode stuff.
   ----------------------------------------------------------------------*/
-DLLEXPORT(wchar_t*) fakeUnicode(const char *ps, size_t *bytes)
+wchar_t* fakeUnicode(const char *ps, size_t *bytes)
 {
     wchar_t *r, *pw;
     size_t len = strlen(ps)+1;
 
     pw = r = (wchar_t*)malloc(sizeof(wchar_t)*len);
     if (bytes)
-	*bytes = len * sizeof(wchar_t);
+        *bytes = len * sizeof(wchar_t);
 
-    while (*ps) { 
-	if (*ps == '\n')
-	    *pw = (wchar_t)0x2028;
-	else if (*ps == '\r')
-	    *pw = (wchar_t)0x2029;
-	else
-	    *pw = (wchar_t)(unsigned char)*ps;
-	ps++; pw++;
-	}				 
+    while (*ps) {
+        if (*ps == '\n')
+            *pw = (wchar_t)0x2028;
+        else if (*ps == '\r')
+            *pw = (wchar_t)0x2029;
+        else
+            *pw = (wchar_t)(unsigned char)*ps;
+        ps++; pw++;
+        }
     *pw = (wchar_t)0;
-	
+
     return r;
 }
 
-DLLEXPORT(int) uStrLen(const wchar_t *u)
+int uStrLen(const wchar_t *u)
 {
     int i = 0;
     while (*u != (wchar_t)0) { u++; i++; }
     return i;
 }
 
-DLLEXPORT(char*) fakeCString(const wchar_t *u)
+char* fakeCString(const wchar_t *u)
 {
     char *s, *t;
-    int len = uStrLen(u) + 1;
+    size_t len = (size_t)(uStrLen(u) + 1);
     t = s = (char*)malloc(len);
     while (*u) {
-	if (*u == (wchar_t)0x2028)
-	    *t = '\n';
-	else if (*u == (wchar_t)0x2029)
-	    *t = '\r';
-	else
-	    *t = (char)*u;
-	u++; t++;
-	}
+        if (*u == (wchar_t)0x2028)
+            *t = '\n';
+        else if (*u == (wchar_t)0x2029)
+            *t = '\r';
+        else
+            *t = (char)*u;
+        u++; t++;
+        }
     *t = 0;
     return s;
 }

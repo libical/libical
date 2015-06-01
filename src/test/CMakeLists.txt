@@ -7,6 +7,8 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_BINARY_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/libical
+  ${CMAKE_BINARY_DIR}/src/libical
+  ${CMAKE_SOURCE_DIR}/src/libicalss
 )
 
 if(ICU_FOUND)
@@ -200,4 +202,3 @@ if(NOT WIN32) #since we currently do not have a Windows reference file
 endif()
 
 ########### install files ###############
-

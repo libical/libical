@@ -1,6 +1,11 @@
+add_definitions(-Dlibical_vcal_EXPORTS)
+
 include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/src
+  ${CMAKE_SOURCE_DIR}/src
+  ${CMAKE_BINARY_DIR}/src/libical
+  ${CMAKE_SOURCE_DIR}/src/libical
 )
 
 #these are generated sources, but we keep them in the repo
@@ -9,9 +14,9 @@ set(icalvcal_LIB_DEVSRCS vcc.c)
 ########### next target ###############
 
 set(icalvcal_LIB_SRCS
+  libical_vcal_export.h
   icalvcal.h
   icalvcal.c
-  port.h
   vcc.h
   vobject.h
   vobject.c
@@ -19,10 +24,6 @@ set(icalvcal_LIB_SRCS
   vcaltmp.c
   ${icalvcal_LIB_DEVSRCS}
 )
-
-if(MSVC)
-  list(APPEND icalvcal_LIB_SRCS ../icalvcal.def)
-endif()
 
 add_library(icalvcal ${LIBRARY_TYPE} ${icalvcal_LIB_SRCS})
 if(NOT SHARED_ONLY)
@@ -71,7 +72,7 @@ endif()
 ########### install files ###############
 
 install(FILES
-  icalvcal.h port.h vcc.h vobject.h vcaltmp.h
+  icalvcal.h vcc.h vobject.h vcaltmp.h
   DESTINATION
   ${INCLUDE_INSTALL_DIR}/libical
 )

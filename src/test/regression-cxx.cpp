@@ -13,17 +13,19 @@
     the License at http://www.mozilla.org/MPL/
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 extern "C" {
 #include "regression.h"
+#include "libical/icalparser.h"
 };
 
-#include "icalparameter_cxx.h"
 #include "icalproperty_cxx.h"
 #include "vcomponent_cxx.h"
 using namespace LibICal;
 
-#include <cstdio>
-#include <cstdlib>
 #include <string>
 using namespace std;
 

@@ -20,7 +20,6 @@
 #include "icalproperty_cxx.h"
 #include "icalparameter_cxx.h"
 #include "icalvalue_cxx.h"
-
 using namespace LibICal;
 
 ICalProperty::ICalProperty() : imp(icalproperty_new(ICAL_ANY_PROPERTY))
@@ -28,8 +27,8 @@ ICalProperty::ICalProperty() : imp(icalproperty_new(ICAL_ANY_PROPERTY))
 }
 
 ICalProperty::ICalProperty(const ICalProperty &v) throw(icalerrorenum)
+  : imp(icalproperty_new_clone(v.imp))
 {
-    imp = icalproperty_new_clone(v.imp);
     if (imp == NULL) {
         throw icalerrno;
     }
@@ -69,13 +68,13 @@ ICalProperty::ICalProperty(icalproperty *v) : imp(v)
 }
 
 ICalProperty::ICalProperty(std::string str)
+  : imp(icalproperty_new_from_string(str.c_str()))
 {
-    imp = icalproperty_new_from_string(str.c_str());
 }
 
 ICalProperty::ICalProperty(icalproperty_kind kind)
+  : imp(icalproperty_new(kind))
 {
-    imp = icalproperty_new(kind);
 }
 
 std::string ICalProperty::as_ical_string()

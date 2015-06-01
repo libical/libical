@@ -15,29 +15,31 @@
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
- */
+*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "vcomponent_cxx.h"
-#include "icalvalue_cxx.h"
-#include "icalproperty_cxx.h"
 #include "icalparameter_cxx.h"
+#include "icalproperty_cxx.h"
+#include "icalvalue_cxx.h"
 using namespace LibICal;
 
+extern "C" {
+#include "icalmemory.h"
+};
+
 #include <cstdlib>
-#include <cstring>
-#include <exception>
 
 VComponent::VComponent() throw(icalerrorenum) : imp(icalcomponent_new(ICAL_ANY_COMPONENT))
 {
 }
 
 VComponent::VComponent(const VComponent &v) throw(icalerrorenum)
+  : imp(icalcomponent_new_clone(v.imp))
 {
-    imp = icalcomponent_new_clone(v.imp);
     if (!imp) {
         throw icalerrno;
     }
@@ -114,11 +116,8 @@ char *VComponent::quote_ical_string(char *str)
  *
  */
 VComponent::VComponent(const std::string &str) throw (icalerrorenum)
+  : imp(icalcomponent_new_from_string(str.c_str()))
 {
-    // Fix for BUG #15647, but breaks fix for BUG #15596.  Attempting a UI fix for cal-4.0.
-    //char* quoted_str = quote_ical_string((char *)str);
-    //imp = icalcomponent_new_from_string(quoted_str);
-    imp = icalcomponent_new_from_string(str.c_str());
     if (!imp) {
         if (! icalerrno) {
             icalerrno = ICAL_BADARG_ERROR;
@@ -128,9 +127,8 @@ VComponent::VComponent(const std::string &str) throw (icalerrorenum)
 }
 
 VComponent::VComponent(const icalcomponent_kind &kind) throw(icalerrorenum)
+  : imp(icalcomponent_new(kind))
 {
-    imp = icalcomponent_new(kind);
-
     if (!imp) {
         throw icalerrno;
     }
@@ -674,7 +672,7 @@ bool VComponent::add(VComponent &fromC)
          comp = fromC.get_next_component(ICAL_ANY_COMPONENT)) {
         VComponent *c = new VComponent(comp->isa());
         err = c->add(*comp);
-        _unused(err)
+        _unused(err);
         add_component(c);
     }
 

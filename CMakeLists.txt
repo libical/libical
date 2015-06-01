@@ -48,13 +48,13 @@
 #  Default=false (use the default size of time_t)
 #
 
-cmake_minimum_required(VERSION 2.8.9)
-
+cmake_minimum_required(VERSION 2.8.9) #first line, to shutup a cygwin warning
 project(libical C CXX)
 
-if(COMMAND cmake_policy)
-  cmake_policy(SET CMP0003 NEW)
-  cmake_policy(SET CMP0005 OLD)
+cmake_policy(SET CMP0003 NEW)
+cmake_policy(SET CMP0005 OLD)
+if(POLICY CMP0054)
+  cmake_policy(SET CMP0054 NEW)
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
@@ -219,7 +219,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
   check_c_compiler_flag(-Wlogical-op HAVE_GCC_LOGICAL_OP)
   check_c_compiler_flag(-Wsizeof-pointer-memaccess HAVE_GCC_POINTER_MEMACCESS)
   check_c_compiler_flag(-Wformat-security HAVE_GCC_FORMAT_SECURITY)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated -Wall -Wextra -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Werror=return-type")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden -Wno-deprecated -Wall -Wextra -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Werror=return-type")
   if(HAVE_GCC_UNUSED_BUT_SET)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-but-set-variable")
   endif()
@@ -244,7 +244,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   check_cxx_compiler_flag(-Wsizeof-pointer-memaccess HAVE_GXX_POINTER_MEMACCESS)
   check_cxx_compiler_flag(-Wreorder HAVE_GXX_REORDER)
   check_cxx_compiler_flag(-Wformat-security HAVE_GXX_FORMAT_SECURITY)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Werror=return-type")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Werror=return-type")
   if(HAVE_GXX_UNUSED_BUT_SET)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-but-set-variable")
   endif()
@@ -273,6 +273,16 @@ endif()
 #some test programs need to know if we are using 32-bit time
 if(SIZEOF_TIME_T EQUAL 4)
   set(USE_32BIT_TIME_T TRUE)
+endif()
+if(WIN32 AND MSVC)
+  if(SIZEOF_SIZE_T LESS SIZEOF_TIME_T)
+    unset(SIZEOF_SIZE_T CACHE)
+    unset(SIZEOF_TIME_T CACHE)
+    message(FATAL_ERROR
+      "You are using a Microsoft Visual 32-bit compiler with 64-bit time."
+      "Run cmake again with the \"-DUSE_32BIT_TIME_T=true\" command line option."
+    )
+  endif()
 endif()
 
 ################# build subdirs ########################

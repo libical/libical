@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 ################################################################################
 # (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 #     http://www.softwarestudio.org
@@ -238,9 +238,9 @@ void icalvalue_set_${lc}(icalvalue* value, $type v) {\
     } elsif ($opt_h && $autogen) {
 
       print "\n /* $value */ \
-icalvalue* icalvalue_new_${lc}($type v); \
-$type icalvalue_get_${lc}(const icalvalue* value); \
-void icalvalue_set_${lc}(icalvalue* value, ${type} v);\n\n";
+LIBICAL_ICAL_EXPORT icalvalue* icalvalue_new_${lc}($type v); \
+LIBICAL_ICAL_EXPORT $type icalvalue_get_${lc}(const icalvalue* value); \
+LIBICAL_ICAL_EXPORT void icalvalue_set_${lc}(icalvalue* value, ${type} v);\n\n";
 
     }
 

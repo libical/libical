@@ -145,10 +145,6 @@ SOURCE=.\icalcalendar.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\icalcaputil.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\icalclassify.h
 # End Source File
 # Begin Source File

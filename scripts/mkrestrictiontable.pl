@@ -62,7 +62,7 @@ sub insert_code
     next if !$method;
 
     if (!$sub) {
-      $sub = "0";
+      $sub = "NULL";
     } else {
       $sub = "icalrestriction_" . $sub;
     }
@@ -76,9 +76,8 @@ sub insert_code
   }
 
   # Print the terminating line
-  print "    {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_PROPERTY,ICAL_RESTRICTION_NONE,0}\n";
+  print "    {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_PROPERTY,ICAL_RESTRICTION_NONE,NULL}\n";
 
   print "};\n";
 
 }
-

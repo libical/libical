@@ -1,61 +1,59 @@
-/* -*- Mode: C -*- */
 /*======================================================================
  FILE: icalcluster.h
- CREATOR: eric 23 December 1999
+ CREATOR: acampi 13 March 2002
 
-
- $Id: icalcluster.h,v 1.4 2008-01-02 20:07:40 dothebart Exp $
- $Locker:  $
-
- (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+ Copyright (C) 2002 Andrea Campi <a.campi@inet.it>
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
-
- The Original Code is eric. The Initial Developer of the Original
- Code is Eric Busboom
-
-
 ======================================================================*/
 
 #ifndef ICALCLUSTER_H
 #define ICALCLUSTER_H
 
-#include <libical/ical.h>
-#include "icalset.h"
+#include "libical_icalss_export.h"
+#include "icalcomponent.h"
+#include "icalerror.h"
 
 typedef struct icalcluster_impl icalcluster;
 
-icalcluster* icalcluster_new(const char *key, icalcomponent *data);
-icalcluster* icalcluster_new_clone(const icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_new(const char *key, icalcomponent *data);
 
-void icalcluster_free(icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_new_clone(const icalcluster *cluster);
 
-const char* icalcluster_key(icalcluster *cluster);
-int icalcluster_is_changed(icalcluster *cluster);
-void icalcluster_mark(icalcluster *cluster);
-void icalcluster_commit(icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT void icalcluster_free(icalcluster *cluster);
 
-icalcomponent* icalcluster_get_component(icalcluster* cluster);
-int icalcluster_count_components(icalcluster *cluster, icalcomponent_kind kind);
-icalerrorenum icalcluster_add_component(icalcluster* cluster,
-					icalcomponent* child);
-icalerrorenum icalcluster_remove_component(icalcluster* cluster,
-					   icalcomponent* child);
+LIBICAL_ICALSS_EXPORT const char *icalcluster_key(icalcluster *cluster);
 
-icalcomponent* icalcluster_get_current_component(icalcluster* cluster);
-icalcomponent* icalcluster_get_first_component(icalcluster* cluster);
-icalcomponent* icalcluster_get_next_component(icalcluster* cluster);
+LIBICAL_ICALSS_EXPORT int icalcluster_is_changed(icalcluster *cluster);
+
+LIBICAL_ICALSS_EXPORT void icalcluster_mark(icalcluster *cluster);
+
+LIBICAL_ICALSS_EXPORT void icalcluster_commit(icalcluster *cluster);
+
+LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_component(icalcluster *cluster);
+
+LIBICAL_ICALSS_EXPORT int icalcluster_count_components(icalcluster *cluster,
+                                                       icalcomponent_kind kind);
+
+LIBICAL_ICALSS_EXPORT icalerrorenum icalcluster_add_component(icalcluster *cluster,
+                                                              icalcomponent *child);
+
+LIBICAL_ICALSS_EXPORT icalerrorenum icalcluster_remove_component(icalcluster *cluster,
+                                                                 icalcomponent *child);
+
+LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_current_component(icalcluster *cluster);
+
+LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_first_component(icalcluster *cluster);
+
+LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_next_component(icalcluster *cluster);
 
 #endif /* !ICALCLUSTER_H */
-
-
-

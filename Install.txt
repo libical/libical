@@ -30,6 +30,10 @@ Building on Windows with MicroSoft Visual Studio:
 % nmake
 % nmake install
 
+NOTE: Some MSVC 32bit compilers (like MSVC2005) use a 64bit version of time_t.
+In these cases you must pass -DUSE_32BIT_TIME_T=true to cmake to make sure
+the 32bit version of time_t is used instead.
+
 Building on Windows with mingw:
 % mkdir build
 % cd build

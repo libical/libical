@@ -1,43 +1,37 @@
-
-/* -*- Mode: C -*-*/
 /*======================================================================
  FILE: icalenums.h
-
- 
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
-  The original code is icalenums.h
-
-  Contributions from:
-     Graham Davison <g.m.davison@computer.org>
-
+ Contributions from:
+    Graham Davison <g.m.davison@computer.org>
 ======================================================================*/
 
 #ifndef ICALENUMS_H
 #define ICALENUMS_H
 
-
+#include "libical_ical_export.h"
 
 /***********************************************************************
  * Component enumerations
 **********************************************************************/
 
-typedef enum icalcomponent_kind {
+typedef enum icalcomponent_kind
+{
     ICAL_NO_COMPONENT,
-    ICAL_ANY_COMPONENT,	/* Used to select all components*/
+    ICAL_ANY_COMPONENT, /* Used to select all components */
     ICAL_XROOT_COMPONENT,
     ICAL_XATTACH_COMPONENT, /* MIME attached data, returned by parser. */
     ICAL_VEVENT_COMPONENT,
@@ -47,7 +41,7 @@ typedef enum icalcomponent_kind {
     ICAL_VAGENDA_COMPONENT,
     ICAL_VFREEBUSY_COMPONENT,
     ICAL_VALARM_COMPONENT,
-    ICAL_XAUDIOALARM_COMPONENT,  
+    ICAL_XAUDIOALARM_COMPONENT,
     ICAL_XDISPLAYALARM_COMPONENT,
     ICAL_XEMAILALARM_COMPONENT,
     ICAL_XPROCEDUREALARM_COMPONENT,
@@ -62,22 +56,20 @@ typedef enum icalcomponent_kind {
     ICAL_VCOMMAND_COMPONENT,
     ICAL_XLICINVALID_COMPONENT,
     ICAL_XLICMIMEPART_COMPONENT, /* a non-stardard component that mirrors
-				    structure of MIME data */
+                                           structure of MIME data */
     ICAL_VAVAILABILITY_COMPONENT,
     ICAL_XAVAILABLE_COMPONENT,
     ICAL_VPOLL_COMPONENT,
     ICAL_VVOTER_COMPONENT,
     ICAL_XVOTE_COMPONENT
-
 } icalcomponent_kind;
-
-
 
 /***********************************************************************
  * Request Status codes
  **********************************************************************/
 
-typedef enum icalrequeststatus {
+typedef enum icalrequeststatus
+{
     ICAL_UNKNOWN_STATUS,
     ICAL_2_0_SUCCESS_STATUS,
     ICAL_2_1_FALLBACK_STATUS,
@@ -116,26 +108,29 @@ typedef enum icalrequeststatus {
     ICAL_5_2_NOSERVICE_STATUS,
     ICAL_5_3_NOSCHED_STATUS,
     ICAL_6_1_CONTAINER_NOT_FOUND,
-	ICAL_9_0_UNRECOGNIZED_COMMAND
+    ICAL_9_0_UNRECOGNIZED_COMMAND
 } icalrequeststatus;
 
+LIBICAL_ICAL_EXPORT const char *icalenum_reqstat_desc(icalrequeststatus stat);
 
-const char* icalenum_reqstat_desc(icalrequeststatus stat);
-short icalenum_reqstat_major(icalrequeststatus stat);
-short icalenum_reqstat_minor(icalrequeststatus stat);
-icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
-char* icalenum_reqstat_code(icalrequeststatus stat);
-char* icalenum_reqstat_code_r(icalrequeststatus stat);
+LIBICAL_ICAL_EXPORT short icalenum_reqstat_major(icalrequeststatus stat);
+
+LIBICAL_ICAL_EXPORT short icalenum_reqstat_minor(icalrequeststatus stat);
+
+LIBICAL_ICAL_EXPORT icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
+
+LIBICAL_ICAL_EXPORT char *icalenum_reqstat_code(icalrequeststatus stat);
+
+LIBICAL_ICAL_EXPORT char *icalenum_reqstat_code_r(icalrequeststatus stat);
 
 /***********************************************************************
  * Conversion functions
 **********************************************************************/
 
-
 /* Thse routines used to be in icalenums.c, but were moved into the
    icalproperty, icalparameter, icalvalue, or icalcomponent modules. */
 
-/* const char* icalproperty_kind_to_string(icalproperty_kind kind);*/
+/*const char* icalproperty_kind_to_string(icalproperty_kind kind);*/
 #define icalenum_property_kind_to_string(x) icalproperty_kind_to_string(x)
 
 /*icalproperty_kind icalproperty_string_to_kind(const char* string)*/
@@ -168,6 +163,4 @@ char* icalenum_reqstat_code_r(icalrequeststatus stat);
 /*icalcomponent_kind icalenum_string_to_component_kind(const char* string);*/
 #define icalenum_string_to_component_kind(x) icalcomponent_string_to_kind(x)
 
-
 #endif /* !ICALENUMS_H */
-

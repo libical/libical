@@ -4,8 +4,8 @@ include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/src
   ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src/libical
   ${CMAKE_BINARY_DIR}/src/libical
+  ${CMAKE_SOURCE_DIR}/src/libical
 )
 if(WITH_BDB)
   include_directories(${BDB_INCLUDE_DIR})
@@ -45,6 +45,7 @@ add_custom_target(icalss-header
 set(icalss_LIB_DEVSRCS icalsslexer.c icalssyacc.c)
 
 set(icalss_LIB_SRCS
+  libical_icalss_export.h
   icalcalendar.c
   icalcalendar.h
   icalclassify.c
@@ -76,9 +77,6 @@ if(WITH_BDB)
     icalbdbset.h
     icalbdbsetimpl.h
   )
-endif()
-if(MSVC)
-  list(APPEND icalss_LIB_SRCS ../icalss.def)
 endif()
 
 add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
@@ -132,7 +130,6 @@ endif()
 
 if(WITH_CXX_BINDINGS)
   set(icalsscxx_LIB_SRCS
-    libical_icalss_export.h
     icalspanlist_cxx.cpp
     icalspanlist_cxx.h
   )

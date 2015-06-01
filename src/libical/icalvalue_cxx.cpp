@@ -27,8 +27,8 @@ ICalValue::ICalValue() throw(icalerrorenum) : imp(icalvalue_new(ICAL_ANY_VALUE))
 }
 
 ICalValue::ICalValue(const ICalValue &v) throw (icalerrorenum)
+  : imp(icalvalue_new_clone(v.imp))
 {
-    imp = icalvalue_new_clone(v.imp);
     if (imp == NULL) {
         throw icalerrno;
     }
@@ -68,16 +68,16 @@ ICalValue::ICalValue(icalvalue *v) throw(icalerrorenum) : imp(v)
 }
 
 ICalValue::ICalValue(const icalvalue_kind &kind) throw(icalerrorenum)
+  : imp(icalvalue_new(kind))
 {
-    imp = icalvalue_new(kind);
     if (imp == NULL) {
         throw icalerrno;
     }
 }
 
 ICalValue::ICalValue(const icalvalue_kind &kind, const std::string &str) throw(icalerrorenum)
+  : imp(icalvalue_new_from_string(kind, str.c_str()))
 {
-    imp = icalvalue_new_from_string(kind, str.c_str());
     if (imp == NULL) {
         throw icalerrno;
     }
@@ -119,7 +119,7 @@ struct icalrecurrencetype ICalValue::get_recur()
 
 void ICalValue::set_trigger(const struct icaltriggertype &v)
 {
-    _unused(v)
+    _unused(v);
 }
 
 struct icaltriggertype ICalValue::get_trigger()
@@ -383,4 +383,3 @@ void ICalValue::set_action(const enum icalproperty_action &v)
 {
     icalvalue_set_action(imp, v);
 }
-

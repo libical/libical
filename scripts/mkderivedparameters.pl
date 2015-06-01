@@ -313,9 +313,9 @@ EOM
 
       print <<EOM;
 /* $param */
-icalparameter* icalparameter_new_${lc}($type v);
-${type} icalparameter_get_${lc}(const icalparameter* value);
-void icalparameter_set_${lc}(icalparameter* value, ${type} v);
+LIBICAL_ICAL_EXPORT icalparameter* icalparameter_new_${lc}($type v);
+LIBICAL_ICAL_EXPORT ${type} icalparameter_get_${lc}(const icalparameter* value);
+LIBICAL_ICAL_EXPORT void icalparameter_set_${lc}(icalparameter* value, ${type} v);
 
 EOM
 

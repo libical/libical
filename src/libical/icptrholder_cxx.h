@@ -23,7 +23,7 @@
  *
  * Usage example:
  *   VComponentTmpPtr p;// VComponentTmpPtr is an instantiation of this template
- *   for (p=component.get_first_component; p!= NULL; p=component.get_next_component) {
+ *   for (p=component.get_first_component; p!= 0; p=component.get_next_component) {
  *
  * (C) COPYRIGHT 2001, Critical Path
 
@@ -42,28 +42,30 @@
 #ifndef ICPTRHOLDER_CXX_H
 #define ICPTRHOLDER_CXX_H
 
-template<class T> class ICPointerHolder {
-public:
+#include <cassert>
+
+template < class T > class ICPointerHolder {
+  public:
     ICPointerHolder()
+      : ptr(0)
     {
-        ptr = NULL;
     }
 
     ICPointerHolder(T *p)
+      : ptr(p)
     {
-        ptr = p;
     }
 
     // copy constructor to support assignment
     ICPointerHolder(const ICPointerHolder &ip)
+      : ptr(ip.ptr)
     {
-        ptr = ip.ptr;
-
         // We need to transfer ownership of ptr to this object by setting
         // ip's ptr to null. Otherwise, ptr will de deleted twice.
         // const ugliness requires us to do the const_cast.
-        ICPointerHolder *ipp = const_cast<ICPointerHolder*>(&ip);
-        ipp->ptr = NULL;
+        ICPointerHolder *ipp = const_cast < ICPointerHolder * >(&ip);
+
+        ipp->ptr = 0;
     };
 
     ~ICPointerHolder()
@@ -71,7 +73,7 @@ public:
         release();
     }
 
-    ICPointerHolder &operator=(T *p)
+    ICPointerHolder & operator=(T *p)
     {
         this->release();
         ptr = p;
@@ -81,8 +83,8 @@ public:
     ICPointerHolder &operator=(ICPointerHolder &p)
     {
         this->release();
-        ptr = p.ptr;            // this transfer ownership of the pointer
-        p.ptr = NULL;           // set it to null so the pointer won't get delete twice.
+        ptr = p.ptr;    // this transfer ownership of the pointer
+        p.ptr = 0;      // set it to null so the pointer won't get delete twice.
         return *this;
     }
 
@@ -96,30 +98,31 @@ public:
         return (ptr == p);
     }
 
-    operator T *() const
+    operator  T *() const
     {
         return ptr;
     }
 
-    T * operator->() const
+    T *operator->() const
     {
         assert(ptr);
         return ptr;
     }
 
-    T& operator*()
+    T &operator*()
     {
         assert(ptr);
         return *ptr;
     }
 
-private:
-    void  release()
+  private:
+    void release()
     {
-        if (ptr != NULL) {
+        if (ptr != 0) {
             ptr->detach();
             delete ptr;
-            ptr = NULL;
+
+            ptr = 0;
         }
     }
 

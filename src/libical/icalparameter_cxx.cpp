@@ -18,16 +18,16 @@
  */
 
 #include "icalparameter_cxx.h"
-#include "icalvalue_cxx.h"
 using namespace LibICal;
 
-ICalParameter::ICalParameter() throw(icalerrorenum) : imp(icalparameter_new(ICAL_ANY_PARAMETER))
+ICalParameter::ICalParameter() throw(icalerrorenum)
+  : imp(icalparameter_new(ICAL_ANY_PARAMETER))
 {
 }
 
 ICalParameter::ICalParameter(const ICalParameter &v) throw(icalerrorenum)
+  : imp(icalparameter_new_clone(v.imp))
 {
-    imp = icalparameter_new_clone(v.imp);
     if (imp == NULL) {
         throw icalerrno;
     }
@@ -62,14 +62,15 @@ ICalParameter::~ICalParameter()
     }
 }
 
-ICalParameter::ICalParameter(icalparameter *v) throw(icalerrorenum) : imp(v)
+ICalParameter::ICalParameter(icalparameter *v) throw(icalerrorenum)
+  : imp(v)
 {
 }
 
 /// Create from string of form "PARAMNAME=VALUE"
 ICalParameter::ICalParameter(const std::string &str) throw(icalerrorenum)
+  : imp(icalparameter_new_from_string(str.c_str()))
 {
-    imp = icalparameter_new_from_string(str.c_str());
     if (imp == NULL) {
         throw icalerrno;
     }
@@ -78,16 +79,16 @@ ICalParameter::ICalParameter(const std::string &str) throw(icalerrorenum)
 /// Create from just the value, the part after the "="
 ICalParameter::ICalParameter(const icalparameter_kind &kind,
                              const std::string &str) throw(icalerrorenum)
+  : imp(icalparameter_new_from_value_string(kind, str.c_str()))
 {
-    imp = icalparameter_new_from_value_string(kind, str.c_str());
     if (imp == NULL) {
         throw icalerrno;
     }
 }
 
 ICalParameter::ICalParameter(const icalparameter_kind &kind) throw(icalerrorenum)
+  : imp(icalparameter_new(kind))
 {
-    imp = icalparameter_new(kind);
     if (imp == NULL) {
         throw icalerrno;
     }

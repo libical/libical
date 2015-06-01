@@ -1,58 +1,48 @@
-/* -*- Mode: C -*- */
 /*======================================================================
  FILE: icalmemory.h
  CREATOR: eric 30 June 1999
 
-
- $Id: icalmemory.h,v 1.6 2008-01-15 23:17:40 dothebart Exp $
- $Locker:  $
+ (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+     http://www.softwarestudio.org
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either: 
+ it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
+ Or:
 
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
  The Initial Developer of the Original Code is Eric Busboom
-
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
 ======================================================================*/
 
 #ifndef ICALMEMORY_H
 #define ICALMEMORY_H
 
-#ifndef WIN32
-#include <sys/types.h> /* for size_t */
-#else
-#include <stddef.h>
-#endif
-
 /* Tmp buffers are managed by ical. References can be returned to the
    caller, although the caller will not own the memory. */
 
-void* icalmemory_tmp_buffer(size_t size);
-char* icalmemory_tmp_copy(const char* str);
+#include "libical_ical_export.h"
+
+LIBICAL_ICAL_EXPORT void *icalmemory_tmp_buffer(size_t size);
+LIBICAL_ICAL_EXPORT char *icalmemory_tmp_copy(const char *str);
 
 /** Add an externally allocated buffer to the ring. */
-void  icalmemory_add_tmp_buffer(void*);
-
+LIBICAL_ICAL_EXPORT void icalmemory_add_tmp_buffer(void *);
 
 /** Free all memory used in the ring */
-void icalmemory_free_ring(void);
+LIBICAL_ICAL_EXPORT void icalmemory_free_ring(void);
 
 /* Non-tmp buffers must be freed. These are mostly wrappers around
  * malloc, etc, but are used so the caller can change the memory
  * allocators in a future version of the library */
 
-void* icalmemory_new_buffer(size_t size);
-void* icalmemory_resize_buffer(void* buf, size_t size);
-void icalmemory_free_buffer(void* buf);
+LIBICAL_ICAL_EXPORT void *icalmemory_new_buffer(size_t size);
+LIBICAL_ICAL_EXPORT void *icalmemory_resize_buffer(void *buf, size_t size);
+LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void *buf);
 
 /**
    icalmemory_append_string will copy the string 'string' to the
@@ -68,18 +58,14 @@ void icalmemory_free_buffer(void* buf);
    buffer on the ring, the ring will loose track of it an you will
    have memory problems. */
 
-void icalmemory_append_string(char** buf, char** pos, size_t* buf_size, 
-			      const char* string);
+LIBICAL_ICAL_EXPORT void icalmemory_append_string(char **buf, char **pos, size_t *buf_size,
+                                                  const char *string);
 
 /**  icalmemory_append_char is similar, but is appends a character instead of a string */
-void icalmemory_append_char(char** buf, char** pos, size_t* buf_size, 
-			      char ch);
+LIBICAL_ICAL_EXPORT void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch);
 
 /** A wrapper around strdup. Partly to trap calls to strdup, partly
     because in -ansi, gcc on Red Hat claims that strdup is undeclared */
-char* icalmemory_strdup(const char *s);
+LIBICAL_ICAL_EXPORT char *icalmemory_strdup(const char *s);
 
 #endif /* !ICALMEMORY_H */
-
-
-
