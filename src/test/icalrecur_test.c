@@ -185,15 +185,7 @@ const struct recur rfc5545[] = {
     {"20150322T000000",
      "FREQ=WEEKLY;INTERVAL=4;BYDAY=SU;COUNT=4"},
 
-<<<<<<< HEAD
-    /* Weekly on Sunday every four weeks */
-    { "20150322T000000",
-      "FREQ=WEEKLY;INTERVAL=4;BYDAY=SU;COUNT=4" },
-
-    /* Every other week on Monday, Wednesday, and Friday 
-=======
     /* Every other week on Monday, Wednesday, and Friday
->>>>>>> coverity_scan
        until December 24, 1997, starting on Monday, September 1, 1997 */
     {"19970901T090000",
      "FREQ=WEEKLY;INTERVAL=2;UNTIL=19971224T000000Z;WKST=SU;BYDAY=MO,WE,FR"},
@@ -213,13 +205,8 @@ const struct recur rfc5545[] = {
      "FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=SU"},
 
     /* Weekly (with a trailing semicolon that was seen in the wild on Google Calendar) */
-<<<<<<< HEAD
-    { "20141006T090000",
-      "FREQ=WEEKLY;INTERVAL=1;COUNT=2;BYDAY=MO;" },
-=======
     {"20141006T090000",
      "FREQ=WEEKLY;INTERVAL=1;COUNT=2;BYDAY=MO;"},
->>>>>>> coverity_scan
 
     /* Daily for 10 occurrences */
     {"19970902T090000",
