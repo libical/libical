@@ -13,7 +13,7 @@
 #  ICO_MINOR_VERSION  - ICU minor version
 #
 
-if (WIN32)
+if(WIN32)
   file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _program_FILES_DIR)
 endif()
 
