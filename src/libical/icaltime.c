@@ -5,6 +5,8 @@
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
+ The timegm code is Copyright (c) 2001-2006, NLnet Labs. All rights reserved.
+
  This program is free software; you can redistribute it and/or modify
  it under the terms of either:
 
@@ -18,6 +20,32 @@
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
+
+ The timegm code in this file is copyrighted by NLNET LABS 2001-2006,
+ according to the following conditions:
+
+ * Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+
+ * Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+  * and/or other materials provided with the distribution.
+
+ * Neither the name of the NLNET LABS nor the names of its contributors may
+   be used to endorse or promote products derived from this software without
+   specific prior written permission.
+
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+   TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+   PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE
+   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   POSSIBILITY OF SUCH DAMAGE.
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -33,10 +61,45 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#if defined(HAVE_PTHREAD)
-#include <pthread.h>
-static pthread_mutex_t tzid_mutex = PTHREAD_MUTEX_INITIALIZER;
-#endif
+/* The first array is for non-leap years, the second for leap years*/
+static const int days_in_year_passed_month[2][13] = {
+    /* jan feb mar  apr  may  jun  jul  aug  sep  oct  nov  dec */
+    {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365},
+    {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366}
+};
+
+static int icaltime_leap_days(int y1, int y2)
+{
+    --y1;
+    --y2;
+    return (y2/4 - y1/4) - (y2/100 - y1/100) + (y2/400 - y1/400);
+}
+
+/*
+ * Code adapted from Python 2.4.1 sources (Lib/calendar.py).
+ */
+static time_t icaltime_timegm(const struct tm *tm)
+{
+    int year;
+    time_t days;
+    time_t hours;
+    time_t minutes;
+    time_t seconds;
+
+    year = 1900 + tm->tm_year;
+    days = (time_t)(365 * (year - 1970) + icaltime_leap_days(1970, year));
+    days += days_in_year_passed_month[0][tm->tm_mon];
+
+    if (tm->tm_mon > 1 && icaltime_is_leap_year(year))
+        ++days;
+
+    days += tm->tm_mday - 1;
+    hours = days * 24 + tm->tm_hour;
+    minutes = hours * 60 + tm->tm_min;
+    seconds = minutes * 60 + tm->tm_sec;
+
+    return seconds;
+}
 
 /*
  *  Function to convert a struct tm time specification
@@ -163,8 +226,8 @@ struct icaltimetype icaltime_from_timet(const time_t tm, const int is_date)
  *      target timezone with no need to store the source timezone.
  *
  */
-struct icaltimetype
-icaltime_from_timet_with_zone(const time_t tm, const int is_date, const icaltimezone *zone)
+struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_date,
+                                                  const icaltimezone *zone)
 {
     struct icaltimetype tt;
     struct tm t;
@@ -258,90 +321,6 @@ time_t icaltime_as_timet(const struct icaltimetype tt)
     return t;
 }
 
-/* Structure used by set_tz to hold an old value of TZ, and the new
-   value, which is in memory we will have to free in unset_tz */
-/* This will hold the last "TZ=XXX" string we used with putenv(). After we
-   call putenv() again to set a new TZ string, we can free the previous one.
-   As far as I know, no libc implementations actually free the memory used in
-   the environment variables (how could they know if it is a static string or
-   a malloc'ed string?), so we have to free it ourselves. */
-static char *saved_tz = NULL;
-
-/* If you use set_tz(), you must call unset_tz() some time later to restore the
-   original TZ. Pass unset_tz() the string that set_tz() returns. Call both the functions
-   locking the tzid mutex as in icaltime_as_timet_with_zone */
-static char *set_tz(const char *tzid)
-{
-    char *old_tz, *old_tz_copy = NULL, *new_tz;
-
-    /* Get the old TZ setting and save a copy of it to return. */
-    old_tz = getenv("TZ");
-    if (old_tz) {
-        old_tz_copy = (char *)malloc(strlen(old_tz) + 4);
-
-        if (old_tz_copy == 0) {
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            return 0;
-        }
-        strcpy(old_tz_copy, "TZ=");
-        strcpy(old_tz_copy + 3, old_tz);
-    }
-    /* Create the new TZ string. */
-    new_tz = (char *)malloc(strlen(tzid) + 4);
-    if (new_tz == 0) {
-        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-        free(old_tz_copy);
-        return 0;
-    }
-
-    strcpy(new_tz, "TZ=");
-    strcpy(new_tz + 3, tzid);
-
-    /* Add the new TZ to the environment. */
-    putenv(new_tz);
-
-    /* Free any previous TZ environment string we have used in a synchronized manner. */
-    if (saved_tz)
-        free(saved_tz);
-
-    /* Save a pointer to the TZ string we just set, so we can free it later. */
-    saved_tz = new_tz;
-
-    return old_tz_copy; /* This will be zero if the TZ env var was not set */
-}
-
-static void unset_tz(char *tzstr)
-{
-    /* restore the original environment */
-
-    if (tzstr != 0) {
-        putenv(tzstr);
-    } else {
-        /* Delete from environment.  We prefer unsetenv(3) over putenv(3)
-           because the former is POSIX and behaves consistently.  The later
-           does not unset the variable in some systems (like NetBSD), leaving
-           it with an empty value.  This causes problems later because further
-           calls to time related functions in libc will treat times in UTC. */
-#if defined(HAVE_UNSETENV)
-        unsetenv("TZ");
-#else
-#if defined(_MSC_VER)
-        putenv("TZ=");  // The equals is required to remove with MS Visual C++
-#else
-        putenv("TZ");
-#endif
-#endif
-    }
-
-    /* Free any previous TZ environment string we have used in a synchronized manner */
-    if (saved_tz)
-        free(saved_tz);
-
-    /* Save a pointer to the TZ string we just set, so we can free it later.
-       (This can possibly be NULL if there was no TZ to restore.) */
-    saved_tz = tzstr;
-}
-
 /**     Return the time as seconds past the UNIX epoch, using the
  *      given timezone.
  *
@@ -355,7 +334,6 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icaltimez
     icaltimezone *utc_zone;
     struct tm stm;
     time_t t;
-    char *old_tz;
     struct icaltimetype local_tt;
 
     utc_zone = icaltimezone_get_utc_timezone();
@@ -383,24 +361,9 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icaltimez
     stm.tm_mon = local_tt.month - 1;
     stm.tm_year = local_tt.year - 1900;
     stm.tm_isdst = -1;
-/* The functions putenv and mktime are not thread safe, inserting a lock
-to prevent any crashes */
 
-#if defined(HAVE_PTHREAD)
-    pthread_mutex_lock(&tzid_mutex);
-#endif
+    t = icaltime_timegm(&stm);
 
-    /* Set TZ to UTC and use mktime to convert to a time_t. */
-    old_tz = set_tz("UTC");
-    tzset();
-
-    t = mktime(&stm);
-    unset_tz(old_tz);
-    tzset();
-
-#if defined(HAVE_PTHREAD)
-    pthread_mutex_unlock(&tzid_mutex);
-#endif
     return t;
 }
 
@@ -669,13 +632,6 @@ int icaltime_week_number(const struct icaltimetype ictt)
 
     return (jt.day_of_year - jt.weekday) / 7;
 }
-
-/* The first array is for non-leap years, the second for leap years*/
-static const int days_in_year_passed_month[2][13] = {
-    /* jan feb mar  apr  may  jun  jul  aug  sep  oct  nov  dec */
-    {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365},
-    {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366}
-};
 
 /**
  *      Returns the day of the year, counting from 1 (Jan 1st).
