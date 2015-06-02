@@ -106,6 +106,11 @@ endif()
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
 
+# Ensure finding 64bit libs when using 64-bit compilers
+if(CMAKE_CL_64)
+  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS True)
+endif()
+
 # libicu is highly recommended for RSCALE support
 #  libicu can be found at http://www.icu-project.org
 #  RSCALE info at http://tools.ietf.org/html/rfc7529

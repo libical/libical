@@ -13,16 +13,30 @@
 #  ICO_MINOR_VERSION  - ICU minor version
 #
 
+if (WIN32)
+  file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _program_FILES_DIR)
+endif()
+
 if(ICU_INCLUDE_DIR AND ICU_LIBRARY)
   # Already in cache, be silent
   set(ICU_FIND_QUIETLY TRUE)
+endif()
+
+#set the root from the ICU_BASE environment
+file(TO_NATIVE_PATH "$ENV{ICU_BASE}" icu_root)
+#override the root from ICU_BASE defined to cmake
+if(DEFINED ICU_BASE)
+  file(TO_NATIVE_PATH "${ICU_BASE}" icu_root)
 endif()
 
 # Look for the header file.
 find_path(
   ICU_INCLUDE_DIR
   NAMES unicode/utypes.h
-  HINTS /usr/local/opt/icu4c/include
+  HINTS
+  ${icu_root}/include
+  ${_program_FILES_DIR}/icu/include
+  /usr/local/opt/icu4c/include
   DOC "Include directory for the ICU library"
 )
 mark_as_advanced(ICU_INCLUDE_DIR)
@@ -31,7 +45,10 @@ mark_as_advanced(ICU_INCLUDE_DIR)
 find_library(
   ICU_LIBRARY
   NAMES icuuc cygicuuc cygicuuc32
-  HINTS /usr/local/opt/icu4c/lib
+  HINTS
+  ${icu_root}/lib/
+  ${_program_FILES_DIR}/icu/lib/
+  /usr/local/opt/icu4c/lib/
   DOC "Libraries to link against for the common parts of ICU"
 )
 mark_as_advanced(ICU_LIBRARY)
@@ -55,7 +72,10 @@ if(ICU_INCLUDE_DIR AND ICU_LIBRARY)
   find_library(
     ICU_I18N_LIBRARY
     NAMES icuin icui18n cygicuin cygicuin32
-    HINTS /usr/local/opt/icu4c/lib
+    HINTS
+    ${icu_root}/lib/
+    ${_program_FILES_DIR}/icu/lib/
+    /usr/local/opt/icu4c/lib/
     DOC "Libraries to link against for ICU internationalization"
   )
   mark_as_advanced(ICU_I18N_LIBRARY)
