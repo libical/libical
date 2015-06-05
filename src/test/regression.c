@@ -336,6 +336,7 @@ void test_properties()
 
 void test_utf8()
 {
+    icalcomponent *comp;
     icalproperty *prop;
     char *utf8text =
         "aáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaá";
@@ -362,7 +363,7 @@ void test_utf8()
     icalproperty_free(prop);
 
     /* test issue 116 */
-    icalcomponent *comp = icalcomponent_new_from_string(item);
+    comp = icalcomponent_new_from_string(item);
     ok("parsed", (comp != NULL));
     str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá");
     str_is("summary", icalcomponent_get_summary(comp), "áó aáóaáó aáä");
