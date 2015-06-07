@@ -145,6 +145,17 @@ LIBICAL_ICAL_EXPORT void icaltimezone_array_append_from_vtimezone(icalarray *tim
 LIBICAL_ICAL_EXPORT void icaltimezone_array_free(icalarray *timezones);
 
 /*
+ * By request (issue #112) make vtimezone functions public
+ */
+LIBICAL_ICAL_EXPORT void icaltimezone_expand_vtimezone(icalcomponent *comp,
+                                                       int end_year, icalarray *changes);
+
+LIBICAL_ICAL_EXPORT char *icaltimezone_get_location_from_vtimezone(icalcomponent *component);
+
+LIBICAL_ICAL_EXPORT char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component);
+
+
+/*
  * @par Handling the default location the timezone files
  */
 

@@ -112,10 +112,7 @@ static int use_builtin_tzdata = 0;
 #endif
 
 static void icaltimezone_reset(icaltimezone *zone);
-static char *icaltimezone_get_location_from_vtimezone(icalcomponent *component);
-static char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component);
 static void icaltimezone_expand_changes(icaltimezone *zone, int end_year);
-static void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray *changes);
 static int icaltimezone_compare_change_fn(const void *elem1, const void *elem2);
 
 static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonechange *change);
@@ -282,7 +279,7 @@ static int icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcompone
 }
 
 /** Gets the LOCATION or X-LIC-LOCATION property from a VTIMEZONE. */
-static char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
+char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
 {
     icalproperty *prop;
     const char *location;
@@ -314,7 +311,7 @@ static char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
    same TZNAME, it returns that. If they use different TZNAMEs, it
    formats them like "EST/EDT". The returned string should be freed by
    the caller. */
-static char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
+char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 {
     icalcomponent *comp;
     icalcomponent_kind type;
@@ -477,7 +474,7 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
     zone->end_year = end_year;
 }
 
-static void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray *changes)
+void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray *changes)
 {
     icaltimezonechange change;
     icalproperty *prop;
