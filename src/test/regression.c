@@ -3786,7 +3786,6 @@ int main(int argc, char *argv[])
 
     set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
-    putenv("TZ=");
 
     test_start(0);
 
