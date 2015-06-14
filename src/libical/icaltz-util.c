@@ -196,7 +196,8 @@ const char *icaltzutil_get_zone_directory(void)
 icalcomponent *icaltzutil_fetch_timezone(const char *location)
 {
     tzinfo type_cnts;
-    size_t i, num_trans, num_types, num_chars, num_leaps, num_isstd, num_isgmt;
+    size_t i, num_trans, num_chars, num_leaps, num_isstd, num_isgmt;
+    size_t num_types = 0;
     size_t size;
 
     const char *zonedir;
