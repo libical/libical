@@ -18,6 +18,9 @@
 /* Define to 1 if you have the `gmtime_r' function. */
 #cmakedefine HAVE_GMTIME_R 1
 
+/* Define to 1 if you have the `localtime_r' function. */
+#cmakedefine HAVE_LOCALTIME_R 1
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H 1
 
@@ -472,7 +475,7 @@ typedef ssize_t IO_SSIZE_T;
 #endif
 #endif
 
-/* gmtime_r - thread safe gmtime() really only need on Unix */
+/* gmtime_r - thread safe gmtime() really only needed on Unix */
 #if !defined(HAVE_GMTIME_R)
 #if !defined(_WIN32)
 #error "No thread-safe gmtime function available"
@@ -483,6 +486,20 @@ typedef ssize_t IO_SSIZE_T;
 #endif
 /* FYI: The gmtime() in Microsoft's C library is MT-safe */
 #define gmtime_r(tp,tmp) (gmtime(tp)?(*(tmp)=*gmtime(tp),(tmp)):0)
+#endif
+#include <time.h>
+
+/* localtime_r - thread safe localtime() really only needed on Unix */
+#if !defined(HAVE_LOCALTIME_R)
+#if !defined(_WIN32)
+#error "No thread-safe localtime function available"
+#endif
+/*on Windows there might be a macro called localtime_r in pthread.h. don't use it.*/
+#if defined(localtime_r)
+#undef localtime_r
+#endif
+/* FYI: The localtime() in Microsoft's C library is MT-safe */
+#define localtime_r(tp,tmp) (localtime(tp)?(*(tmp)=*localtime(tp),(tmp)):0)
 #endif
 #include <time.h>
 

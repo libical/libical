@@ -30,6 +30,7 @@ else()
   check_function_exists(getpid HAVE_GETPID) #Unix <unistd.h>
   check_function_exists(getpwent HAVE_GETPWENT) #Unix <sys/types.h>,<pwd.h>
   check_function_exists(gmtime_r HAVE_GMTIME_R) #Unix <time.h>
+  check_function_exists(localtime_r HAVE_LOCALTIME_R) #Unix <time.h>
   check_function_exists(mkdir HAVE_MKDIR) #Unix <sys/stat.h>,<sys/types.h>
   check_function_exists(open HAVE_OPEN) #Unix <sys/stat.h>,<sys/types.h>,<fcntl.h>
   check_function_exists(nanosleep HAVE_NANOSLEEP) #Unix <time.h>
