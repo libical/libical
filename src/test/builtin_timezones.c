@@ -30,6 +30,9 @@ int main()
     int dd, hh, zz, tried = 0;
     long zz2 = -1;
 
+    set_zone_directory("../../zoneinfo");
+    icaltimezone_set_tzid_prefix("/softwarestudio.org/");
+
     tt = icaltime_current_time_with_zone(icaltimezone_get_builtin_timezone("America/New_York"));
 
     tt.year = 2038;
@@ -46,6 +49,11 @@ int main()
 
     builtin_timezones = icaltimezone_get_builtin_timezones();
     printf("got %lu zones\n", (unsigned long)builtin_timezones->num_elements);
+    if (builtin_timezones->num_elements == 0) {
+      printf("YIKES. Try running from the build/bin directory\n");
+      return(1);
+    }
+
     for (zz = -1; zz < (int)builtin_timezones->num_elements; zz++) {
         icaltimezone *zone;
 
