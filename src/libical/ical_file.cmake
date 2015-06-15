@@ -19,6 +19,7 @@ set(COMBINEDHEADERSICAL
   ${TOPS}/src/libical/pvl.h
   ${TOPS}/src/libical/icalcomponent.h
   ${TOPS}/src/libical/icaltimezone.h
+  ${TOPS}/src/libical/icaltz-util.h
   ${TOPS}/src/libical/icalparser.h
   ${TOPS}/src/libical/icalmemory.h
   ${TOPS}/src/libical/icalerror.h

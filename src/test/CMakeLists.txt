@@ -156,7 +156,6 @@ if(NOT USE_BUILTIN_TZDATA)
   testme(timezones "${timezones_SRCS}")
 endif()
 
-
 ########### next target ###############
 
 set(builtin_timezones_SRCS builtin_timezones.c)

@@ -187,6 +187,9 @@
 /* whether we should bring our own TZ-Data */
 #cmakedefine USE_BUILTIN_TZDATA
 
+/* whether we should use operable vtimezones */
+#cmakedefine USE_INTEROPERABLE_VTIMEZONES
+
 /* Define to empty if `const' does not conform to ANSI C. */
 #cmakedefine const
 

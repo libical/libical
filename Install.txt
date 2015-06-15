@@ -99,3 +99,32 @@ Then you can set the C and C++ compilers at CMake time, like so:
 This C library can be built with bindings for these other languages:
 * C++. By default the buildsystem will create and install the C++ bindings API.
   Turn this off by passing -DWITH_CXX_BINDINGS=False option to CMake.
+
+* There are Java, Perl, PHP and Python bindings but they are old and haven't
+  been tested in a very long time.  Volunteers wanted.
+
+== Tweaking the Library Behavior ==
+Use these CMake options to adjust the library behavior as follows:
+ * ICAL_ERRORS_ARE_FATALL=[true|false]
+   Set to make icalerror_* calls abort instead of internally signaling an error.
+   Default=false
+
+ * NO_WARN_DEPRECATED=[true|false]
+   Set if you DO NOT WANT to see deprecated messages.
+   Default=true
+
+ * ICAL_ALLOW_EMPTY_PROPERTIES=[true|false]
+   Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
+   Default=false
+
+ * USE_BUILTIN_TZDATA=[true|false]
+   Set to build using our own (instead of the system's) timezone data.
+   Default=false (use the system timezone data on non-Windows systems)
+   ALWAYS true on Windows systems
+
+ * USE_INTEROPERABLE_VTIMEZONES=[true|false]
+   Set to use inter-operable rather than exact VTIMEZONEs.
+   Default=false (build exact VTIMEZONEs)
+   Notes:
+     Change the behavior at runtime using the icaltzutil_set_exact_vtimezones_support() function.
+     Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.

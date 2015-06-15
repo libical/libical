@@ -154,7 +154,6 @@ LIBICAL_ICAL_EXPORT char *icaltimezone_get_location_from_vtimezone(icalcomponent
 
 LIBICAL_ICAL_EXPORT char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component);
 
-
 /*
  * @par Handling the default location the timezone files
  */

@@ -47,6 +47,13 @@
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
 #
+# -DUSE_INTEROPERABLE_VTIMEZONES=[true|false]
+#  Set to use inter-operable rather than exact vtimezones.
+#  Default=false (build exact vtimezones)
+#  Notes:
+#   Change the behavior at runtime using the icaltzutil_set_exact_vtimezones_support() function.
+#   Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.
+#
 
 cmake_minimum_required(VERSION 2.8.9) #first line, to shutup a cygwin warning
 project(libical C CXX)
@@ -194,6 +201,13 @@ if(WIN32 OR WINCE)
     message(STATUS "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata")
     set(USE_BUILTIN_TZDATA 1)
   endif()
+endif()
+
+option(USE_INTEROPERABLE_VTIMEZONES "use interoperable rather than exact vtimezones." False)
+if(USE_INTEROPERABLE_VTIMEZONES)
+  set(USE_INTEROPERABLE_VTIMEZONES 1)
+else()
+  set(USE_INTEROPERABLE_VTIMEZONES 0)
 endif()
 
 include(ConfigureChecks.cmake)

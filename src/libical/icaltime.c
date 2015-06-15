@@ -72,7 +72,7 @@ static int icaltime_leap_days(int y1, int y2)
 {
     --y1;
     --y2;
-    return (y2/4 - y1/4) - (y2/100 - y1/100) + (y2/400 - y1/400);
+    return (y2 / 4 - y1 / 4) - (y2 / 100 - y1 / 100) + (y2 / 400 - y1 / 400);
 }
 
 /*
