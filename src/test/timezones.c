@@ -21,33 +21,41 @@
 
 #include <stdlib.h>
 
-int main(int argc, char **argv)
+int main()
 {
-    icalarray *timezones = icaltimezone_get_builtin_timezones();
+    icalarray *timezones;
+    icaltimezone *zone, *utc_zone;
+    char *zone_location;
     size_t i;
     int ret = 0;
     unsigned int total_failed = 0;
     unsigned int total_okay = 0;
     unsigned int percent_failed = 0;
     int verbose = 0;
-    icaltimezone *utc_zone = icaltimezone_get_utc_timezone();
 
-    _unused(argc);
-    _unused(argv);
+    int day;
+    time_t start_time;
+    struct tm start_tm;
+    time_t curr_time;
+    struct tm curr_tm;
+    struct icaltimetype curr_tt;
+    int failed = 0;
+    int curr_failed;
+    int zonedef_printed = 0;
+#if !defined(HAVE_SETENV)
+    static char new_tz[256];
+#endif
+
+    set_zone_directory("../../zoneinfo");
+    icaltimezone_set_tzid_prefix("/softwarestudio.org/");
+
+    timezones = icaltimezone_get_builtin_timezones();
+    utc_zone = icaltimezone_get_utc_timezone();
 
     /* for all known time zones... */
     for (i = 0; i < timezones->num_elements; i++) {
-        icaltimezone *zone = icalarray_element_at(timezones, i);
-        const char *zone_location = icaltimezone_get_location(zone);
-        int day;
-        time_t start_time;
-        struct tm start_tm;
-        time_t curr_time;
-        struct tm curr_tm;
-        struct icaltimetype curr_tt;
-        int failed = 0;
-        int curr_failed;
-        int zonedef_printed = 0;
+        zone = (icaltimezone *)icalarray_element_at(timezones, i);
+        zone_location = (char *)icaltimezone_get_location(zone);
 
         /*
          * select this location for glibc: needs support for TZ=<location>
@@ -56,15 +64,12 @@ int main(int argc, char **argv)
 #if defined(HAVE_SETENV)
         setenv("TZ", zone_location, 1);
 #else
-        static new_tz[256];
-
         new_tz[0] = '\0';
         strncat(new_tz, "TZ=", 255);
         strncat(new_tz, zone_location, 255);
         putenv(new_tz);
 #endif
         tzset();
-
         /*
          * determine current local time and date: always use midday in
          * the current zone and first day of first month in the year
