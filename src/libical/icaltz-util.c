@@ -38,14 +38,14 @@
 #endif
 #if defined(HAVE_ENDIAN_H)
 #include <endian.h>
-#else
-#if defined(HAVE_SYS_ENDIAN_H)
+#elif defined(HAVE_SYS_ENDIAN_H)
 #include <sys/endian.h>
+#endif
+#ifndef bswap_32
 #if defined(bswap32)
 #define bswap_32 bswap32
 #else
 #define bswap_32 swap32
-#endif
 #endif
 #endif
 #endif
