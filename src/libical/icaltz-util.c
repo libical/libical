@@ -41,7 +41,7 @@
 #elif defined(HAVE_SYS_ENDIAN_H)
 #include <sys/endian.h>
 #endif
-#ifndef bswap_32
+#if !defined(bswap_32) && !defined(_MSC_VER)
 #if defined(bswap32)
 #define bswap_32 bswap32
 #else
