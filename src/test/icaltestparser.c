@@ -24,6 +24,7 @@
 
 #include "libical/ical.h"
 
+//krazy:cond=style
 char str[] = "BEGIN:VCALENDAR\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\
 VERSION:2.0\
@@ -64,6 +65,7 @@ LOCATION:1CP Conference Room 4350\
 END:VEVENT\
 END:VCALENDAR\
 ";
+//krazy:endcond=style
 
 extern int yydebug;
 

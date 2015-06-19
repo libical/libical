@@ -90,7 +90,8 @@ int main()
             }
         }
 
-        printf("\r%lu %% done", (zz >= 0 ? zz : 0) * 100 / builtin_timezones->num_elements);
+        printf("\r%lu %% done",
+               (zz >= 0 ? zz : 0) * 100 / (unsigned long)builtin_timezones->num_elements);
         fflush(stdout);
     }
 

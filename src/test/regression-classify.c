@@ -166,10 +166,10 @@ void test_classify(void)
         str_is(msg, expected_result, actual_result);
 
         if (VERBOSE) {
-            printf("Test %d\n\
-Incoming:      %s\n\
-Matched:       %s\n\
-Classification: %s\n\n",
+            printf("Test %d\n"
+                   "Incoming:      %s\n"
+                   "Matched:       %s\n"
+                   "Classification: %s\n\n",
             i, this_note, get_note(match), icalproperty_enum_to_string(class));
         }
     }
