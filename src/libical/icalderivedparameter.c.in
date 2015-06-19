@@ -86,12 +86,16 @@ int icalparameter_compare_kind_map(const struct icalparameter_kind_map *a, const
 
 icalparameter_kind icalparameter_string_to_kind(const char* string)
 {
+    struct icalparameter_kind_map key;
+    struct icalparameter_kind_map *result;
+
     if (string == 0) {
         return ICAL_NO_PARAMETER;
     }
 
-    const struct icalparameter_kind_map key = {ICAL_ANY_PARAMETER, string};
-    struct icalparameter_kind_map *result = bsearch(&key, parameter_map, sizeof(parameter_map) / sizeof(struct icalparameter_kind_map), sizeof(struct icalparameter_kind_map), (int(*)(const void *, const void *))icalparameter_compare_kind_map);
+    key.kind = ICAL_ANY_PARAMETER;
+    key.name = string;
+    result = bsearch(&key, parameter_map, sizeof(parameter_map) / sizeof(struct icalparameter_kind_map), sizeof(struct icalparameter_kind_map), (int(*)(const void *, const void *))icalparameter_compare_kind_map);
 
     if (result) {
         return result->kind;
