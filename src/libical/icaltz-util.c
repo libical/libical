@@ -50,6 +50,10 @@
 #endif
 #endif
 
+#if defined(__OpenBSD__) && !defined(bswap_32)
+#define bswap_32 swap32
+#endif
+
 #if defined(_MSC_VER)
 #if !defined(HAVE_BYTESWAP_H) && !defined(HAVE_SYS_ENDIAN_H) && !defined(HAVE_ENDIAN_H)
 #define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8) & 0xff)
