@@ -15,6 +15,7 @@
     The Mozilla Public License Version 1.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 ======================================================================*/
+//krazy:excludeall=cpp
 
 /** @file icaltimezone.c
  *  @brief implementation of timezone handling routines
@@ -37,7 +38,13 @@
 
 #if defined(HAVE_PTHREAD)
 #include <pthread.h>
+#if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
+// It seems the same thread can attempt to lock builtin_mutex multiple times
+// (at least when using builtin tzdata), so make it builtin_mutex recursive:
+static pthread_mutex_t builtin_mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+#else
 static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
 #endif
 
 #if defined(_WIN32)
@@ -1582,12 +1589,11 @@ static void icaltimezone_parse_zone_tab(void)
 
     icalerror_assert(builtin_timezones == NULL, "Parsing zones.tab file multiple times");
 
-    builtin_timezones = icalarray_new(sizeof(icaltimezone), 32);
+    builtin_timezones = icalarray_new(sizeof(icaltimezone), 1024);
 
     if (!use_builtin_tzdata) {
         filename_len =
-            strlen((char *)icaltzutil_get_zone_directory()) +
-            strlen(ZONES_TAB_SYSTEM_FILENAME) + 2;
+            strlen((char *)icaltzutil_get_zone_directory()) + strlen(ZONES_TAB_SYSTEM_FILENAME) + 2;
     } else {
         filename_len = strlen(get_zone_directory()) + strlen(ZONES_TAB_FILENAME) + 2;
     }
