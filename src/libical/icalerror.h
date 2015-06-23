@@ -60,7 +60,7 @@ LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
  */
 
 #if !defined(__cplusplus)
-LIBICAL_ICAL_EXPORT int icalerror_errors_are_fatal;
+LIBICAL_ICAL_EXPORT extern int icalerror_errors_are_fatal;
 #endif
 
 /* Warning messages */
