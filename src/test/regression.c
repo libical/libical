@@ -357,6 +357,21 @@ void test_utf8()
         "END:VEVENT\n"
         "END:VCALENDAR\n";
 
+    const char *agenda93 =
+        "BEGIN:VCALENDAR\n"
+        "VERSION:2.0\n"
+        "CALSCALE:GREGORIAN\n"
+        "PRODID:-//Henrik Levkowetz//ietf-agenda-ical 1.03//EN\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART;TZID=Europe/Prague:20150721T190000\n"
+        "DTEND;TZID=Europe/Prague:20150721T230000\n"
+        "DTSTAMP:20150627T071730Z\n"
+        "UID:ical-ietf-93-3ce43c64.1@tools.ietf.org\n"
+        "SEQUENCE:197\n"
+        "SUMMARY:IETF 93 Social Event at the Žofín Palace\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
     prop = icalproperty_new_description(utf8text);
 
     str_is("icalproperty_as_ical_string()", icalproperty_as_ical_string(prop), test_ical_str_good);
@@ -367,6 +382,12 @@ void test_utf8()
     ok("parsed", (comp != NULL));
     str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá");
     str_is("summary", icalcomponent_get_summary(comp), "áó aáóaáó aáä");
+    icalcomponent_free(comp);
+
+    /* test another report against issue 116 */
+    comp = icalcomponent_new_from_string(agenda93);
+    ok("parsed", (comp != NULL));
+    str_is("summary", icalcomponent_get_summary(comp), "IETF 93 Social Event at the Žofín Palace");
     icalcomponent_free(comp);
 }
 
