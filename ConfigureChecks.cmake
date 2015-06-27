@@ -27,6 +27,7 @@ if(WIN32 AND MSVC)
 else()
   check_function_exists(access HAVE_ACCESS) #Unix <unistd.h>
   check_function_exists(fork HAVE_FORK) #Unix <unistd.h>
+  check_function_exists(getopt HAVE_GETOPT) #Unix <unistd.h>
   check_function_exists(getpid HAVE_GETPID) #Unix <unistd.h>
   check_function_exists(getpwent HAVE_GETPWENT) #Unix <sys/types.h>,<pwd.h>
   check_function_exists(gmtime_r HAVE_GMTIME_R) #Unix <time.h>

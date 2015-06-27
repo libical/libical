@@ -26,10 +26,6 @@
 
 #include <libical/ical.h>
 
-#if defined(HAVE_UNISTD_H)
-#include <unistd.h>
-#endif
-
 #if defined(HAVE_LIBICU)
 #include <unicode/ucal.h>
 #endif

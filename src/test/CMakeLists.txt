@@ -134,7 +134,7 @@ testme(recur "${recur_SRCS}")
 
 ########### next target ###############
 
-if(HAVE_UNISTD_H) #getopt is required
+if(HAVE_GETOPT) #getopt is required
   set(testmime_SRCS testmime.c)
   testme(testmime "${testmime_SRCS}")
 endif()
@@ -164,7 +164,7 @@ testme(builtin_timezones "${builtin_timezones_SRCS}")
 ########### next target ###############
 
 if(NOT WIN32) #since we currently do not have a Windows reference file
-  if(HAVE_UNISTD_H) #getopt is required
+  if(HAVE_GETOPT) #getopt is required
     if(NOT USE_32BIT_TIME_T) #tests for years greater than 2037 will fail
       set(icalrecurtest_SRCS icalrecur_test.c)
       add_executable(icalrecurtest ${icalrecurtest_SRCS})

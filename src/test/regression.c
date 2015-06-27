@@ -3796,7 +3796,7 @@ int main(int argc, char *argv[])
     extern char *optarg;
     extern int optopt;
 #endif
-#ifndef _WIN32
+#if defined(HAVE_GETOPT)
     int errflg = 0;
     int c;
 #endif
@@ -3810,7 +3810,7 @@ int main(int argc, char *argv[])
 
     test_start(0);
 
-#ifndef _WIN32
+#if defined(HAVE_GETOPT)
     while ((c = getopt(argc, argv, "lvq")) != -1) {
         switch (c) {
         case 'v':

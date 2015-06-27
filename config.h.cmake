@@ -87,6 +87,9 @@
 /* Define to 1 if you have the `_access' function. */
 #cmakedefine HAVE__ACCESS 1
 
+/* Define to 1 if you have the `getopt' function. */
+#cmakedefine HAVE_GETOPT 1
+
 /* Define to 1 if you have the `getpid' function. */
 #cmakedefine HAVE_GETPID 1
 
@@ -344,6 +347,15 @@ typedef unsigned int wint_t;
 #include <unistd.h>
 #endif
 #endif
+#endif
+
+/* getopt - function to parse command-line options */
+#if defined(HAVE_GETOPT)
+#if defined(HAVE_UNISTD_H)
+#include <unistd.h>
+#endif
+#else
+#error "No parse command-line function available"
 #endif
 
 /* getpid - system function to get process identification */
