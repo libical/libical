@@ -51,7 +51,6 @@ struct icalcomponent_impl
 
 /* icalproperty functions that only components get to use */
 void icalproperty_set_parent(icalproperty *property, icalcomponent *component);
-icalcomponent *icalproperty_get_parent(icalproperty *property);
 static void icalcomponent_add_children(icalcomponent *impl, va_list args);
 static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind);
 
