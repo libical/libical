@@ -633,18 +633,13 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
     str = (char *)icalmemory_new_buffer(buf_sz);
     str_p = str;
 
-    icalmemory_append_string(&str, &str_p, &buf_sz, "FREQ=");
-    icalmemory_append_string(&str, &str_p, &buf_sz, icalrecur_freq_to_string(recur->freq));
-
     if (recur->rscale != 0) {
         icalmemory_append_string(&str, &str_p, &buf_sz, ";RSCALE=");
         icalmemory_append_string(&str, &str_p, &buf_sz, recur->rscale);
-
-        if (recur->skip != ICAL_SKIP_OMIT) {
-            icalmemory_append_string(&str, &str_p, &buf_sz, ";SKIP=");
-            icalmemory_append_string(&str, &str_p, &buf_sz, icalrecur_skip_to_string(recur->skip));
-        }
     }
+
+    icalmemory_append_string(&str, &str_p, &buf_sz, "FREQ=");
+    icalmemory_append_string(&str, &str_p, &buf_sz, icalrecur_freq_to_string(recur->freq));
 
     if (recur->until.year != 0) {
 
@@ -716,6 +711,11 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
             icalrecur_weekday_to_string(icalrecurrencetype_day_day_of_week(recur->week_start));
         icalmemory_append_string(&str, &str_p, &buf_sz, ";WKST=");
         icalmemory_append_string(&str, &str_p, &buf_sz, daystr);
+    }
+
+    if (recur->rscale != 0 && recur->skip != ICAL_SKIP_OMIT) {
+        icalmemory_append_string(&str, &str_p, &buf_sz, ";SKIP=");
+        icalmemory_append_string(&str, &str_p, &buf_sz, icalrecur_skip_to_string(recur->skip));
     }
 
     return str;
