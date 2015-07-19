@@ -1,6 +1,7 @@
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering.
 # It is required to make the combined header icalss.h properly.
 set(COMBINEDHEADERSICALSS
+  ${TOPS}/src/libicalss/libical_icalss_export.h
   ${TOPS}/src/libicalss/icalgauge.h
   ${TOPS}/src/libicalss/icalset.h
   ${TOPS}/src/libicalss/icalcluster.h
