@@ -72,7 +72,11 @@ endif()
 ########### install files ###############
 
 install(FILES
-  icalvcal.h vcc.h vobject.h vcaltmp.h
+  icalvcal.h
+  vcaltmp.h
+  vcc.h
+  vobject.h
+  libical_vcal_export.h
   DESTINATION
   ${INCLUDE_INSTALL_DIR}/libical
 )

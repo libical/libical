@@ -195,6 +195,7 @@ install(FILES
   icalset.h
   icalspanlist.h
   icalssyacc.h
+  libical_icalss_export.h
   DESTINATION
   ${INCLUDE_INSTALL_DIR}/libical
 )

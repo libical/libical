@@ -392,6 +392,7 @@ install(FILES
   icaltimezone.h
   icaltypes.h
   icalvalue.h
+  libical_ical_export.h
   pvl.h
   sspm.h
   DESTINATION
