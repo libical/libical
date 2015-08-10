@@ -143,24 +143,24 @@ icalvalue *icalvalue_new_From_string_with_error(icalvalue_kind kind,
 static char *parser_get_next_char(char c, char *str, int qm)
 {
     int quote_mode = 0;
-    char *p;
+    char *p = str;
+    char next_char = *p;
+    char prev_char = 0;
 
-    for (p = str; *p != 0; p++) {
-        if (qm == 1) {
-            if (quote_mode == 0 && *p == '"' && p > str && *(p - 1) != '\\') {
-                quote_mode = 1;
-                continue;
-            }
-
-            if (quote_mode == 1 && *p == '"' && p > str && *(p - 1) != '\\') {
-                quote_mode = 0;
-                continue;
+    while (next_char != 0) {
+        if (prev_char != '\\') {
+            if (qm == 1 && next_char == '"') {
+                /* Encountered a quote, toggle quote mode */
+                quote_mode = !quote_mode;
+            } else if (quote_mode == 0 && next_char == c) {
+                /* Found a matching character out of quote mode, return it */
+                return p;
             }
         }
 
-        if (quote_mode == 0 && *p == c && p > str && *(p - 1) != '\\') {
-            return p;
-        }
+        /* Save the previous character so we can check if it's a backslash in the next iteration */
+        prev_char = next_char;
+        next_char = *(++p);
     }
 
     return 0;
