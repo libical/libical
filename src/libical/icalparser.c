@@ -210,17 +210,62 @@ static char *parser_get_prop_name(char *line, char **end)
     return str;
 }
 
-static char *parser_get_param_name(char *line, char **end)
+static int parser_get_param_name_stack(char *line, char *name, size_t name_length, char *value, size_t value_length)
 {
     char *next;
-    char *str;
 
+    /* The name is everything up to the equals sign */
     next = parser_get_next_char('=', line, 1);
 
     if (next == 0) {
         return 0;
     }
 
+    size_t requested_name_length = next - line;
+    size_t requested_value_length;
+
+    /* Figure out what range of line contains the value (everything after the equals sign) */
+    next++;
+
+    if (next[0] == '"') {
+        /* Dequote the value */
+        next++;
+
+        char *end_quote = parser_get_next_char('"', next, 0);
+
+        if (end_quote == 0) {
+            return 0;
+        }
+
+        requested_value_length = end_quote - next;
+    } else {
+        requested_value_length = strlen(next);
+    }
+
+    /* There's not enough room in the name or value inputs, we need to fall back to parser_get_param_name_heap and use heap-allocated strings */
+    if (requested_name_length >= name_length - 1 || requested_value_length >= value_length - 1) {
+        return 0;
+    }
+
+    strlcpy(name, line, requested_name_length + 1);
+    strlcpy(value, next, requested_value_length + 1);
+    
+    return 1;
+}
+
+static char *parser_get_param_name_heap(char *line, char **end)
+{
+    /* This is similar to parser_get_param_name_stack except it returns heap objects in the return value and the end parameter
+       This is used in case the name or value is longer than the stack-allocated string */
+    char *next;
+    char *str;
+    
+    next = parser_get_next_char('=', line, 1);
+    
+    if (next == 0) {
+        return 0;
+    }
+    
     str = make_segment(line, next);
     *end = next + 1;
     if (**end == '"') {
@@ -230,12 +275,12 @@ static char *parser_get_param_name(char *line, char **end)
             free(str);
             return 0;
         }
-
+        
         *end = make_segment(*end, next);
     } else {
         *end = make_segment(*end, *end + strlen(*end));
     }
-
+    
     return str;
 }
 
@@ -794,21 +839,30 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         str = parser_get_next_parameter(end, &end);
         strstriplt(str);
         if (str != 0) {
-            char *name = 0;
-            char *pvalue = 0;
+            char *name_heap = 0;
+            char *pvalue_heap = 0;
+            char name_stack[TMP_BUF_SIZE];
+            char pvalue_stack[TMP_BUF_SIZE];
+            char *name = name_stack;
+            char *pvalue = pvalue_stack;
 
             icalparameter *param = 0;
             icalparameter_kind kind;
             icalcomponent *tail = pvl_data(pvl_tail(parser->components));
 
-            name = parser_get_param_name(str, &pvalue);
+            if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack), pvalue_stack, sizeof(pvalue_stack))) {
+                name_heap = parser_get_param_name_heap(str, &pvalue_heap);
 
-            if (name == 0) {
-                /* 'tail' defined above */
-                insert_error(tail, str, "Cant parse parameter name",
-                             ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
-                tail = 0;
-                break;
+                name = name_heap;
+                pvalue = pvalue_heap;
+
+                if (name_heap == 0) {
+                    /* 'tail' defined above */
+                    insert_error(tail, str, "Cant parse parameter name",
+                                 ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
+                    tail = 0;
+                    break;
+                }
             }
 
             kind = icalparameter_string_to_kind(name);
@@ -881,11 +935,24 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     str = make_segment(strStart, end - 1);
                 }
 
-                icalmemory_free_buffer(name);
-                icalmemory_free_buffer(pvalue);
+                if (name_heap) {
+                    icalmemory_free_buffer(name_heap);
+                    name_heap = 0;
+                }
+
+                if (pvalue_heap) {
+                    icalmemory_free_buffer(pvalue_heap);
+                    pvalue_heap = 0;
+                }
 
                 /* Reparse the parameter name and value with the new segment */
-                name = parser_get_param_name(str, &pvalue);
+                if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack), pvalue_stack, sizeof(pvalue_stack))) {
+                    name_heap = parser_get_param_name_heap(str, &pvalue_heap);
+                    
+                    name = name_heap;
+                    pvalue = pvalue_heap;
+                }
+
                 param = icalparameter_new_from_value_string(kind, pvalue);
             } else if (kind != ICAL_NO_PARAMETER) {
                 param = icalparameter_new_from_value_string(kind, pvalue);
@@ -900,21 +967,21 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                              ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
                 tail = 0;
                 parser->state = ICALPARSER_ERROR;
-                if (pvalue) {
-                    free(pvalue);
+                if (pvalue_heap) {
+                    icalmemory_free_buffer(pvalue_heap);
                     pvalue = 0;
                 }
-                if (name) {
-                    free(name);
+                if (name_heap) {
+                    icalmemory_free_buffer(name_heap);
                     name = 0;
                 }
                 icalmemory_free_buffer(str);
                 str = NULL;
                 return 0;
 #else
-                if (name) {
-                    free(name);
-                    name = 0;
+                if (name_heap) {
+                    icalmemory_free_buffer(name_heap);
+                    name_heap = 0;
                 }
                 icalmemory_free_buffer(str);
                 str = NULL;
@@ -922,14 +989,14 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 #endif
             }
 
-            if (pvalue) {
-                free(pvalue);
-                pvalue = 0;
+            if (pvalue_heap) {
+                icalmemory_free_buffer(pvalue_heap);
+                pvalue_heap = 0;
             }
 
-            if (name) {
-                free(name);
-                name = 0;
+            if (name_heap) {
+                icalmemory_free_buffer(name_heap);
+                name_heap = 0;
             }
 
             if (param == 0) {
@@ -940,8 +1007,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 tail = 0;
                 parser->state = ICALPARSER_ERROR;
 
-                icalmemory_free_buffer(name);
-                name = NULL;
                 icalmemory_free_buffer(str);
                 str = NULL;
 
@@ -970,15 +1035,11 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     tail = 0;
                     parser->state = ICALPARSER_ERROR;
 
-                    icalmemory_free_buffer(name);
-                    name = NULL;
                     icalmemory_free_buffer(str);
                     str = NULL;
                     continue;
                 }
             }
-            icalmemory_free_buffer(name);
-            name = NULL;
 
             /* Everything is OK, so add the parameter */
             icalproperty_add_parameter(prop, param);
