@@ -247,8 +247,11 @@ static int parser_get_param_name_stack(char *line, char *name, size_t name_lengt
         return 0;
     }
 
-    strlcpy(name, line, requested_name_length + 1);
-    strlcpy(value, next, requested_value_length + 1);
+    strncpy(name, line, requested_name_length);
+    name[requested_name_length] = 0;
+
+    strncpy(value, next, requested_value_length);
+    value[requested_value_length] = 0;
     
     return 1;
 }
