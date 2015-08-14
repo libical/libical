@@ -355,7 +355,9 @@ typedef unsigned int wint_t;
 #include <unistd.h>
 #endif
 #else
+#if !defined(_WIN32)
 #error "No parse command-line function available"
+#endif
 #endif
 
 /* getpid - system function to get process identification */
