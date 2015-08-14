@@ -210,9 +210,11 @@ static char *parser_get_prop_name(char *line, char **end)
     return str;
 }
 
-static int parser_get_param_name_stack(char *line, char *name, size_t name_length, char *value, size_t value_length)
+static int parser_get_param_name_stack(char *line, char *name, size_t name_length,
+                                       char *value, size_t value_length)
 {
-    char *next;
+    char *next, *end_quote;
+    size_t requested_name_length, requested_value_length;
 
     /* The name is everything up to the equals sign */
     next = parser_get_next_char('=', line, 1);
@@ -221,8 +223,7 @@ static int parser_get_param_name_stack(char *line, char *name, size_t name_lengt
         return 0;
     }
 
-    size_t requested_name_length = next - line;
-    size_t requested_value_length;
+    requested_name_length = (ptrdiff_t)(next - line);
 
     /* Figure out what range of line contains the value (everything after the equals sign) */
     next++;
@@ -231,18 +232,19 @@ static int parser_get_param_name_stack(char *line, char *name, size_t name_lengt
         /* Dequote the value */
         next++;
 
-        char *end_quote = parser_get_next_char('"', next, 0);
+        end_quote = parser_get_next_char('"', next, 0);
 
         if (end_quote == 0) {
             return 0;
         }
 
-        requested_value_length = end_quote - next;
+        requested_value_length = (ptrdiff_t)(end_quote - next);
     } else {
         requested_value_length = strlen(next);
     }
 
-    /* There's not enough room in the name or value inputs, we need to fall back to parser_get_param_name_heap and use heap-allocated strings */
+    /* There's not enough room in the name or value inputs, we need to fall back
+       to parser_get_param_name_heap and use heap-allocated strings */
     if (requested_name_length >= name_length - 1 || requested_value_length >= value_length - 1) {
         return 0;
     }
@@ -252,23 +254,25 @@ static int parser_get_param_name_stack(char *line, char *name, size_t name_lengt
 
     strncpy(value, next, requested_value_length);
     value[requested_value_length] = 0;
-    
+
     return 1;
 }
 
 static char *parser_get_param_name_heap(char *line, char **end)
 {
-    /* This is similar to parser_get_param_name_stack except it returns heap objects in the return value and the end parameter
-       This is used in case the name or value is longer than the stack-allocated string */
+    /* This is similar to parser_get_param_name_stack except it returns heap
+       objects in the return value and the end parameter. This is used in case
+       the name or value is longer than the stack-allocated string.
+    */
     char *next;
     char *str;
-    
+
     next = parser_get_next_char('=', line, 1);
-    
+
     if (next == 0) {
         return 0;
     }
-    
+
     str = make_segment(line, next);
     *end = next + 1;
     if (**end == '"') {
@@ -278,12 +282,12 @@ static char *parser_get_param_name_heap(char *line, char **end)
             free(str);
             return 0;
         }
-        
+
         *end = make_segment(*end, next);
     } else {
         *end = make_segment(*end, *end + strlen(*end));
     }
-    
+
     return str;
 }
 
@@ -853,7 +857,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             icalparameter_kind kind;
             icalcomponent *tail = pvl_data(pvl_tail(parser->components));
 
-            if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack), pvalue_stack, sizeof(pvalue_stack))) {
+            if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack),
+                                             pvalue_stack, sizeof(pvalue_stack))) {
                 name_heap = parser_get_param_name_heap(str, &pvalue_heap);
 
                 name = name_heap;
@@ -949,9 +954,10 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 }
 
                 /* Reparse the parameter name and value with the new segment */
-                if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack), pvalue_stack, sizeof(pvalue_stack))) {
+                if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack),
+                                                 pvalue_stack, sizeof(pvalue_stack))) {
                     name_heap = parser_get_param_name_heap(str, &pvalue_heap);
-                    
+
                     name = name_heap;
                     pvalue = pvalue_heap;
                 }
