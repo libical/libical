@@ -45,14 +45,11 @@ LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparame
         return 0;
     }
 
+    memset(v, 0, sizeof(struct icalparameter_impl));
+
     strcpy(v->id, "para");
 
     v->kind = kind;
-    v->size = 0;
-    v->string = 0;
-    v->x_name = 0;
-    v->parent = 0;
-    v->data = 0;
 
     return v;
 }

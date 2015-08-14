@@ -72,14 +72,12 @@ icalproperty *icalproperty_new_impl(icalproperty_kind kind)
         return 0;
     }
 
+    memset(prop, 0, sizeof(icalproperty));
+
     strcpy(prop->id, "prop");
 
     prop->kind = kind;
     prop->parameters = pvl_newlist();
-    prop->parameter_iterator = 0;
-    prop->value = 0;
-    prop->x_name = 0;
-    prop->parent = 0;
 
     return prop;
 }

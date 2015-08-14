@@ -97,16 +97,13 @@ static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind)
         return 0;
     }
 
+    memset(comp, 0, sizeof(icalcomponent));
+
     strcpy(comp->id, "comp");
 
     comp->kind = kind;
     comp->properties = pvl_newlist();
-    comp->property_iterator = 0;
     comp->components = pvl_newlist();
-    comp->component_iterator = 0;
-    comp->x_name = 0;
-    comp->parent = 0;
-    comp->timezones = NULL;
     comp->timezones_sorted = 1;
 
     return comp;
