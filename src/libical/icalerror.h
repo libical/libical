@@ -59,9 +59,8 @@ LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
  *           this in a multithreaded program.
  */
 
-#if !defined(__cplusplus)
-LIBICAL_ICAL_EXPORT extern int icalerror_errors_are_fatal;
-#endif
+LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(int fatal);
+LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
 
 /* Warning messages */
 
@@ -79,7 +78,7 @@ LIBICAL_ICAL_EXPORT void _icalerror_set_errno(icalerrorenum);
 /* Make an individual error fatal or non-fatal. */
 typedef enum icalerrorstate
 {
-    ICAL_ERROR_FATAL, /* Not fata */
+    ICAL_ERROR_FATAL, /* Not fatal */
     ICAL_ERROR_NONFATAL, /* Fatal */
     ICAL_ERROR_DEFAULT, /* Use the value of icalerror_errors_are_fatal */
     ICAL_ERROR_UNKNOWN  /* Asked state for an unknown error type */
@@ -97,7 +96,7 @@ LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
 icalerrno = x; \
 if(icalerror_get_error_state(x) == ICAL_ERROR_FATAL || \
    (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && \
-    icalerror_errors_are_fatal == 1)){ \
+    icalerror_get_errors_are_fatal() == 1)){              \
    icalerror_warn(icalerror_strerror(x)); \
    ical_bt(); \
    assert(0); \

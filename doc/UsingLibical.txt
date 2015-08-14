@@ -1302,13 +1302,18 @@ of a good idea than a really useful bit of code.
 
 5.6.4 ICAL_ERRORS_ARE_FATAL and icalerror_errors_are_fatal
 
-If the global variable icalerror_errors_are_fatal is set to 1, then
-any error condition will cause the program to abort. The abort occurs
+If icalerror_get_errors_are_fatal() returns 1, then any error
+condition will cause the program to abort. The abort occurs
 in icalerror_set_errno(), and is done with an assert(0) if NDEBUG
 is undefined, and with icalerror_crash_here if NDEBUG is defined.
-The default value of icalerror_errors_are_fatal is 1 when ICAL_ERRORS_ARE_FATAL
+Initially, icalerror_get_errors_are_fatal() is 1 when ICAL_ERRORS_ARE_FATAL
 is defined, and 0 otherwise. Since ICAL_ERRORS_ARE_FATAL is defined
-by default, icalerror_errors_are_fatal is also defined by default.
+by default, icalerror_get_errors_are_fatal() is also set to 1 by default.
+
+You can change the compiled-in ICAL_ERRORS_ARE_FATAL behavior at runtime
+by calling icalerror_set_errors_are_fatal(0) (i.e, errors are not fatal)
+or icalerror_set_errors_are_fatal(1) (i.e, errors are fatal).
+
 
 5.7 Naming Standard
 

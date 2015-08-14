@@ -1180,7 +1180,7 @@ void test_duration()
     }
     int_is("P2W1DT5H", icaldurationtype_as_int(d), 1314000);
 
-    icalerror_errors_are_fatal = 0;
+    icalerror_set_errors_are_fatal(0);
 
     /* Test conversion of bad input */
 
@@ -1208,7 +1208,7 @@ void test_duration()
     }
     int_is("T10H", icaldurationtype_as_int(d), 0);
 
-    icalerror_errors_are_fatal = 1;
+    icalerror_set_errors_are_fatal(1);
 
     d = icaldurationtype_from_int(4233600);
     if (VERBOSE) {
@@ -1457,7 +1457,7 @@ void do_test_time(char *zone)
     icaltimezone *azone, *utczone;
     char msg[256];
 
-    icalerror_errors_are_fatal = 0;
+    icalerror_set_errors_are_fatal(0);
 
     azone = icaltimezone_get_builtin_timezone(zone);
     utczone = icaltimezone_get_utc_timezone();
@@ -1763,7 +1763,7 @@ void do_test_time(char *zone)
     ok("Converted time +200d in zone America/Los_Angeles is 2001-05-22 11:30:30",
        (strncmp(ictt_as_string(icttla), "2001-05-22 11:30:30", 19) == 0));
 
-    icalerror_errors_are_fatal = 1;
+    icalerror_set_errors_are_fatal(1);
 }
 
 void test_iterators()
@@ -2192,7 +2192,7 @@ void test_convenience()
 
     icalcomponent_free(c);
 
-    icalerror_errors_are_fatal = 0;
+    icalerror_set_errors_are_fatal(0);
 
     c = icalcomponent_vanew(
             ICAL_VCALENDAR_COMPONENT,
@@ -2240,7 +2240,7 @@ void test_convenience()
        (0 == strcmp("1997-08-01 13:30:00 Z UTC", ictt_as_string(icalcomponent_get_dtend(c)))));
     ok("Duration is 90 m", (duration == 90));
 
-    icalerror_errors_are_fatal = 1;
+    icalerror_set_errors_are_fatal(1);
 
     icalcomponent_free(c);
 
@@ -2312,7 +2312,7 @@ void test_time_parser()
 {
     struct icaltimetype tt;
 
-    icalerror_errors_are_fatal = 0;
+    icalerror_set_errors_are_fatal(0);
 
     tt = icaltime_from_string("19970101T1000");
     ok("19970101T1000 is null time", icaltime_is_null_time(tt));
@@ -2338,7 +2338,7 @@ void test_time_parser()
     if (VERBOSE)
         printf("%s\n", icaltime_as_ctime(tt));
 
-    icalerror_errors_are_fatal = 1;
+    icalerror_set_errors_are_fatal(1);
 }
 
 void test_recur_parser()

@@ -432,7 +432,7 @@ void test_icalcomponent_get_span()
 #endif
     icalcomponent_free(c);
 
-    icalerror_errors_are_fatal = 0;
+    icalerror_set_errors_are_fatal(0);
     /** test 6
      *  We specify only start time, should return a null span with no error
      */
@@ -493,5 +493,5 @@ void test_icalcomponent_get_span()
     icalcomponent_free(c);
 
     /* assert(icalerrno == ICAL_MALFORMEDDATA_ERROR); */
-    icalerror_errors_are_fatal = 1;
+    icalerror_set_errors_are_fatal(1);
 }

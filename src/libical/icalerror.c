@@ -91,6 +91,27 @@ void icalerror_crash_here(void)
     assert(*p);
 }
 
+void icalerror_clear_errno()
+{
+    icalerrno = ICAL_NO_ERROR;
+}
+
+#if ICAL_ERRORS_ARE_FATAL == 1
+static int icalerror_errors_are_fatal = 1;
+#else
+static int icalerror_errors_are_fatal = 0;
+#endif
+
+void icalerror_set_errors_are_fatal(int fatal)
+{
+    icalerror_errors_are_fatal = (fatal != 0);
+}
+
+int icalerror_get_errors_are_fatal()
+{
+    return icalerror_errors_are_fatal;
+}
+
 #if defined(ICAL_SETERROR_ISFUNC)
 void icalerror_set_errno(icalerrorenum x)
 {
@@ -103,17 +124,6 @@ void icalerror_set_errno(icalerrorenum x)
     }
 }
 
-#endif
-
-void icalerror_clear_errno()
-{
-    icalerrno = ICAL_NO_ERROR;
-}
-
-#if ICAL_ERRORS_ARE_FATAL == 1
-int icalerror_errors_are_fatal = 1;
-#else
-int icalerror_errors_are_fatal = 0;
 #endif
 
 struct icalerror_state
