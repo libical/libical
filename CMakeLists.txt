@@ -15,6 +15,9 @@
 # -DICAL_ERRORS_ARE_FATAL=[true|false]
 #  Set to make icalerror_* calls abort instead of internally signaling an error
 #  Default=false
+#  Notes:
+#   Change the behavior at runtime using the icalerror_set_errors_are_fatal() function.
+#   Query the behavior at runtime using the icalerror_get_errors_are_fatal() function.
 #
 # -DNO_WARN_DEPRECATED=[true|false]
 #  Set if you DO NOT WANT to see deprecated messages.
@@ -240,7 +243,11 @@ if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
   check_c_compiler_flag(-Wlogical-op HAVE_GCC_LOGICAL_OP)
   check_c_compiler_flag(-Wsizeof-pointer-memaccess HAVE_GCC_POINTER_MEMACCESS)
   check_c_compiler_flag(-Wformat-security HAVE_GCC_FORMAT_SECURITY)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden -Wno-deprecated -Wall -Wextra -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Werror=return-type")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
+    -fvisibility=hidden -Wno-deprecated -Wall -Wextra -Winit-self \
+    -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef \
+    -Wpointer-arith -Werror=return-type"
+  )
   if(HAVE_GCC_UNUSED_BUT_SET)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-but-set-variable")
   endif()
@@ -268,7 +275,11 @@ if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   check_cxx_compiler_flag(-Wsizeof-pointer-memaccess HAVE_GXX_POINTER_MEMACCESS)
   check_cxx_compiler_flag(-Wreorder HAVE_GXX_REORDER)
   check_cxx_compiler_flag(-Wformat-security HAVE_GXX_FORMAT_SECURITY)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Werror=return-type")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
+    -fvisibility=hidden -Weffc++ -Wno-deprecated -Wall -Wextra \
+    -Woverloaded-virtual -Winit-self -Wmissing-include-dirs -Wunused \
+    -Wno-div-by-zero -Wundef -Wpointer-arith -Werror=return-type"
+  )
   if(HAVE_GXX_UNUSED_BUT_SET)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-but-set-variable")
   endif()
@@ -334,7 +345,11 @@ set(libdir "\${exec_prefix}/lib")
 set(includedir "\${prefix}/include")
 set(PTHREAD_LIBS "${CMAKE_THREAD_LIBS_INIT}")
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in
+  ${CMAKE_CURRENT_BINARY_DIR}/libical.pc
+  @ONLY
+)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 ########### Create and install the CMake Config files ##########
