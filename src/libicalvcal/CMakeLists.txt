@@ -26,12 +26,9 @@ set(icalvcal_LIB_SRCS
 )
 
 add_library(icalvcal ${LIBRARY_TYPE} ${icalvcal_LIB_SRCS})
-if(NOT SHARED_ONLY)
-  add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})
-endif()
-
 add_dependencies(icalvcal ical-header)
 if(NOT SHARED_ONLY)
+  add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})
   add_dependencies(icalvcal-static ical-header)
 endif()
 

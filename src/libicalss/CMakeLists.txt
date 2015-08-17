@@ -19,9 +19,8 @@ else()
   set(TOPB "${CMAKE_BINARY_DIR}")
 endif()
 
-add_custom_command(
-  OUTPUT
-  ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+add_custom_target(
+  icalss-header ALL
   COMMAND
   ${CMAKE_COMMAND}
     -DTOPS:FILEPATH=${TOPS}
@@ -31,12 +30,6 @@ add_custom_command(
     -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   DEPENDS
   ical-header
-)
-
-add_custom_target(icalss-header
-  DEPENDS
-  ical-header
-  ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
 )
 
 ########### next target ###############
@@ -80,12 +73,9 @@ if(WITH_BDB)
 endif()
 
 add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
-if(NOT SHARED_ONLY)
-  add_library(icalss-static STATIC ${icalss_LIB_SRCS})
-endif()
-
 add_dependencies(icalss icalss-header)
 if(NOT SHARED_ONLY)
+  add_library(icalss-static STATIC ${icalss_LIB_SRCS})
   add_dependencies(icalss-static icalss-header)
 endif()
 
@@ -139,8 +129,10 @@ if(WITH_CXX_BINDINGS)
     )
   endif()
   add_library(icalss_cxx ${LIBRARY_TYPE} ${icalsscxx_LIB_SRCS})
+  add_dependencies(icalss_cxx icalss-header)
   if(NOT SHARED_ONLY)
     add_library(icalss_cxx-static STATIC ${icalsscxx_LIB_SRCS})
+    add_dependencies(icalss_cxx-static icalss-header)
   endif()
 
   target_link_libraries(icalss_cxx icalss ical_cxx ${CMAKE_THREAD_LIBS_INIT})

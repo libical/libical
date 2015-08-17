@@ -18,6 +18,7 @@ set(doesnothing_SRCS
 )
 
 add_executable(doesnothing ${doesnothing_SRCS})
+add_dependencies(doesnothing ical icalss icalvcal)
 
 if(NOT STATIC_ONLY)
   target_link_libraries(doesnothing ical icalss icalvcal)

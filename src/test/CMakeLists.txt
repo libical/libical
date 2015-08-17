@@ -43,11 +43,13 @@ endmacro()
 macro(buildme _name _srcs)
   add_executable(${_name} ${_srcs})
   if(NOT STATIC_ONLY)
+    add_dependencies(${_name} ical icalss icalvcal)
     target_link_libraries(${_name} ical icalss icalvcal)
     if(WITH_CXX_BINDINGS)
       target_link_libraries(${_name} ical_cxx icalss_cxx)
     endif()
   else()
+    add_dependencies(${_name} ical-static icalss-static icalvcal-static)
     if(NOT WIN32)
       target_link_libraries(${_name}
         ${CMAKE_BINARY_DIR}/lib/libical.a
