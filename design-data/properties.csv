@@ -1,6 +1,6 @@
 ,,
 "#Property Name","C icalproperty_kind Enum","libical Value type","iCalendar default value"
-"#iCalendar Properties","RFC5545 Section 8.3.2",
+"#iCalendar Properties","RFC5545 Sections 3.7 and 3.8",
 "CALSCALE","8","TEXT","TEXT"
 "METHOD","48","METHOD","METHOD"
 "PRODID","57","TEXT","TEXT"
