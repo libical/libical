@@ -1,6 +1,6 @@
 ,,
 "#Property Name","C icalproperty_kind Enum","libical Value type","iCalendar default value"
-"#iCalendar Properties","RFC5545 Sections 3.7 and 3.8",
+"#iCalendar Properties","RFC 5545 Sections 3.7 and 3.8",
 "CALSCALE","8","TEXT","TEXT"
 "METHOD","48","METHOD","METHOD"
 "PRODID","57","TEXT","TEXT"
@@ -37,7 +37,6 @@
 "URL","88","URI","URI"
 "UID","87","TEXT","TEXT"
 "EXDATE","35","DATE-TIME","DATE-TIME"
-"EXRULE","37","RECUR","RECUR"
 "RDATE","62","DATE-TIME-PERIOD","DATE-TIME"
 "RRULE","73","RECUR","RECUR"
 "ACTION","2","ACTION","ACTION"
@@ -49,6 +48,8 @@
 "SEQUENCE","75","INTEGER","INTEGER"
 "REQUEST-STATUS","70","REQUEST-STATUS","REQUEST-STATUS"
 "X","90","X","X"
+"#Deprecated RFC 2445 Properties","See RFC 5545 Section A.3",
+"EXRULE","37","RECUR","RECUR"
 "#CAP Properties","RFC 4324 Section 2.1.2",
 ,"FIXME","Should be BOOLEAN"
 "ALLOW-CONFLICT","3","TEXT","TEXT"
