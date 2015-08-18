@@ -13,7 +13,8 @@ and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users. 
 
-Libical implements RFC2445, RFC2446 and some of RFC2447.
+Libical implements RFC5545, RFC5546, RFC7529; the iCalendar extensions
+in RFC6638; and some of RFC6047.
 
 
 License

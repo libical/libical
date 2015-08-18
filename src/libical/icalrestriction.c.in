@@ -209,7 +209,7 @@ static const char* icalrestriction_must_be_canceled_no_attendee(
     _unused(comp);
     _unused(prop);
 
-    /* Hack. see rfc2446, 3.2.5 CANCEL for porperty STATUS. I don't
+    /* Hack. see rfc5546, 3.2.5 CANCEL for property STATUS. I don't
        understand the note */
 
     return 0;

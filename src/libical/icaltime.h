@@ -174,7 +174,7 @@ LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);
 LIBICAL_ICAL_EXPORT time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
                                                        const icaltimezone *zone);
 
-/** Return a string represention of the time, in RFC2445 format. */
+/** Return a string represention of the time, in RFC5545 format. */
 LIBICAL_ICAL_EXPORT const char *icaltime_as_ical_string(const struct icaltimetype tt);
 
 LIBICAL_ICAL_EXPORT char *icaltime_as_ical_string_r(const struct icaltimetype tt);

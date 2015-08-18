@@ -128,7 +128,7 @@ void test_properties()
     /* Get a string representation of the property's value */
     printf("Prop value: %s\n",icalproperty_get_comment(prop));
 
-    /* Spit out the property in its RFC 2445 representation */
+    /* Spit out the property in its RFC 5545 representation */
     str = icalproperty_as_ical_string_r(prop);
     printf("As iCAL string:\n %s\n", str);
     free(str);

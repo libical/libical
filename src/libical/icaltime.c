@@ -218,7 +218,7 @@ struct icaltimetype icaltime_from_timet(const time_t tm, const int is_date)
  *      DATE-TIME type.
  *      If the zone is not specified (NULL zone param) the time is taken
  *      to be floating, that is, valid in any timezone. Note that, in
- *      addition to the uses specified in [RFC2445], this can be used
+ *      addition to the uses specified in [RFC5545], this can be used
  *      when doing simple math on couples of times.
  *      If the zone is specified (UTC or otherwise), it's stored in the
  *      object and it's used as the native timezone for this object.
@@ -377,7 +377,7 @@ const char *icaltime_as_ical_string(const struct icaltimetype tt)
 }
 
 /**
- * Return a string represention of the time, in RFC2445 format. The
+ * Return a string represention of the time, in RFC5545 format. The
  * string is owned by libical
  */
 char *icaltime_as_ical_string_r(const struct icaltimetype tt)

@@ -356,11 +356,11 @@ static char *parser_get_next_value(char *line, char **end, icalvalue_kind kind)
 
         next = parser_get_next_char(',', p, 1);
 
-        /* Unforunately, RFC2445 says that for the RECUR value, COMMA
-           can both separate digits in a list, and it can separate
+        /* Unforunately, RFC2445 allowed that for the RECUR value, COMMA
+           could both separate digits in a list, and it could separate
            multiple recurrence specifications. This is not a friendly
-           part of the spec. This weirdness tries to
-           distinguish the two uses. it is probably a HACK */
+           part of the spec and was deprecated in RFC5545. The following
+           weirdness tries to distinguish the two uses. It is probably a HACK */
 
         if (kind == ICAL_RECUR_VALUE) {
             if (next != 0 && (*end + length) > next + 5 && strncmp(next, "FREQ", 4) == 0) {
@@ -522,7 +522,7 @@ char *icalparser_get_line(icalparser *parser,
 
         /* If the output line ends in a '\n' and the temp buffer
            begins with a ' ' or tab, then the buffer holds a continuation
-           line, so keep reading.  RFC 2445, section 4.1 */
+           line, so keep reading.  RFC 5545, section 3.1 */
 
         if (line_p > line + 1 && *(line_p - 1) == '\n'
             && (parser->temp[0] == ' ' || parser->temp[0] == '\t')) {
@@ -1074,7 +1074,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
     vcount = 0;
     while (1) {
         /* Only some properties can have multiple values. This list was taken
-           from rfc2445. Also added the x-properties, because the spec actually
+           from rfc5545. Also added the x-properties, because the spec actually
            says that commas should be escaped. For x-properties, other apps may
            depend on that behaviour
          */
@@ -1098,14 +1098,14 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             }
         case ICAL_CATEGORIES_PROPERTY:
         case ICAL_RESOURCES_PROPERTY:
-            /* Referring to RFC 2445, section 4.8.5.3 and section 4.8.5.1:
+            /* Referring to RFC 5545, section 3.8.5.2 and section 3.8.5.1:
                RDATE and EXDATE can specify a list of dates/date-times/periods.
              */
         case ICAL_RDATE_PROPERTY:
         case ICAL_EXDATE_PROPERTY:
-            /* Referring to RFC 2445, section 4.8.2.6 Free/Busy Time:
-               The "FREEBUSY" property can specify more than one value, separated by
-               the COMMA character (US-ASCII decimal 44).
+            /* Referring to RFC 5545, section 3.8.2.6 Free/Busy Time:
+               The "FREEBUSY" property can specify more than one value,
+               separated by the COMMA character.
              */
         case ICAL_FREEBUSY_PROPERTY:
             str = parser_get_next_value(end, &end, value_kind);

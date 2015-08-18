@@ -251,7 +251,7 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
     char *buf_ptr = 0;
     pvl_elem itr;
 
-    /* RFC 2445 explicitly says that the newline is *ALWAYS* a \r\n (CRLF)!!!! */
+    /* RFC5545 explicitly says that the newline is *ALWAYS* a \r\n (CRLF)!!!! */
     const char newline[] = "\r\n";
 
     icalcomponent *c;
@@ -1145,7 +1145,7 @@ static const struct icalcomponent_kind_map component_map[] = {
     {ICAL_VFREEBUSY_COMPONENT, "VFREEBUSY"},
     {ICAL_VTIMEZONE_COMPONENT, "VTIMEZONE"},
     {ICAL_VALARM_COMPONENT, "VALARM"},
-    {ICAL_XSTANDARD_COMPONENT, "STANDARD"}, /*These are part of RFC2445 */
+    {ICAL_XSTANDARD_COMPONENT, "STANDARD"}, /*These are part of RFC5545 */
     {ICAL_XDAYLIGHT_COMPONENT, "DAYLIGHT"}, /*but are not really components */
     {ICAL_X_COMPONENT, "X"},
     {ICAL_VSCHEDULE_COMPONENT, "SCHEDULE"},

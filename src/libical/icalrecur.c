@@ -27,7 +27,11 @@
   iterator via icalrecur_iterator_new(). This routine copies the
   recurrence rule into the iterator and extracts things like start and
   end dates. Then, it checks if the rule is legal, using some logic
-  from RFC2445 and some logic that probably should be in RFC2445.
+  from RFC5545 and some logic that probably should be in RFC5545.
+
+  If compiled with support for Non-Gregorian Recurrence Rules (RFC7529),
+  icalrecur_iterator_new() verifies that the given RSCALE is supported
+  and configures ICU4C to convert occurrences to/from non-Gregorian dates.
 
   Then, icalrecur_iterator_new() re-writes some of the BY*
   arrays. This involves ( via a call to setup_defaults() ) :
@@ -2044,7 +2048,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
     }
 
     /* Rewrite some of the rules and set up defaults to make later
-       processing easier. Primarily, t involves copying an element
+       processing easier. Primarily, it involves copying an element
        from the start time into the corresponding BY_* array when the
        BY_* array is empty */
 

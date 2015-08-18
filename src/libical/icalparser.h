@@ -57,7 +57,7 @@ LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
 
 /**
  * Message oriented parsing.  icalparser_parse takes a string that
- * holds the text ( in RFC 2445 format ) and returns a pointer to an
+ * holds the text ( in RFC 5545 format ) and returns a pointer to an
  * icalcomponent. The caller owns the memory. line_gen_func is a
  * pointer to a function that returns one content line per invocation
  */

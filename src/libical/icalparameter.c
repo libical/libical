@@ -177,7 +177,7 @@ char *icalparameter_as_ical_string(icalparameter *param)
 }
 
 /**
- * Return a string representation of the parameter according to RFC2445.
+ * Return a string representation of the parameter according to RFC5445.
  *
  * param        = param-name "=" param-value
  * param-name   = iana-token / x-token

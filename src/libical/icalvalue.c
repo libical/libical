@@ -251,7 +251,7 @@ static char *icalmemory_strdup_and_dequote(const char *str)
 
 /*
  * Returns a quoted copy of a string
- * @todo This is not RFC2445 compliant.
+ * @todo This is not RFC5545 compliant.
  * The RFC only allows:
  * TSAFE-CHAR = %x20-21 / %x23-2B / %x2D-39 / %x3C-5B / %x5D-7E / NON-US-ASCII
  * As such, \t\r\b\f are not allowed, not even escaped
@@ -303,7 +303,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
         case ',':
             /* unescaped COMMA is allowed in CATEGORIES property as its
                considered a list delimiter here, see:
-               http://tools.ietf.org/html/rfc2445#section-4.3.11 */
+               http://tools.ietf.org/html/rfc5545#section-3.8.1.2 */
             if ((icalproperty_isa(value->parent) == ICAL_CATEGORIES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_RESOURCES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_POLLPROPERTIES_PROPERTY)) {
