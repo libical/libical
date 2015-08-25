@@ -1265,6 +1265,7 @@ struct slg_data
 
 char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
 {
+    int replace_cr = 0;
     char *n;
     size_t size;
     struct slg_data *data = (struct slg_data *)d;
@@ -1281,7 +1282,14 @@ char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
     n = strchr(data->pos, '\n');
 
     if (n == 0) {
-        size = strlen(data->pos);
+        n = strchr(data->pos, '\r'); /* support malformed input with only CR and no LF (e.g. from Kerio Connect Server) */
+        if(n == 0) {
+            size = strlen(data->pos);
+        } else {
+            n++; /* include CR in output - will be replaced by LF later on */
+            replace_cr = 1;
+            size = (size_t) (ptrdiff_t) (n - data->pos);
+        }
     } else {
         n++;    /* include newline in output */
         size = (size_t) (ptrdiff_t) (n - data->pos);
@@ -1293,6 +1301,9 @@ char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
 
     strncpy(out, data->pos, size);
 
+    if(replace_cr) {
+        *(out + size - 1) = '\n';
+    }
     *(out + size) = '\0';
 
     data->pos += size;
