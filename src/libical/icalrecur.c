@@ -148,6 +148,14 @@
 #define RSCALE_IS_SUPPORTED 1
 #else
 #define RSCALE_IS_SUPPORTED 0
+
+/* The maximums below are based on Gregorian leap years */
+#undef ICAL_BY_MONTH_SIZE
+#undef ICAL_BY_WEEKNO_SIZE
+#undef ICAL_BY_YEARDAY_SIZE
+#define ICAL_BY_MONTH_SIZE      13      /* 1 to 12 */
+#define ICAL_BY_WEEKNO_SIZE     54      /* 1 to 53 */
+#define ICAL_BY_YEARDAY_SIZE    367     /* 1 to 366 */
 #endif
 
 #if (SIZEOF_TIME_T > 4)
@@ -230,26 +238,27 @@ static struct skip_map
 } skip_map[] = {
     {ICAL_SKIP_BACKWARD, "BACKWARD"},
     {ICAL_SKIP_FORWARD, "FORWARD"},
-    {ICAL_SKIP_OMIT, "OMIT"}
+    {ICAL_SKIP_OMIT, "OMIT"},
+    {ICAL_SKIP_UNDEFINED, 0}
 };
 
 static icalrecurrencetype_skip icalrecur_string_to_skip(const char *str)
 {
     int i;
 
-    for (i = 0; skip_map[i].kind != ICAL_SKIP_OMIT; i++) {
+    for (i = 0; skip_map[i].kind != ICAL_SKIP_UNDEFINED; i++) {
         if (strcasecmp(str, skip_map[i].str) == 0) {
             return skip_map[i].kind;
         }
     }
-    return ICAL_SKIP_OMIT;
+    return ICAL_SKIP_UNDEFINED;
 }
 
 static const char *icalrecur_skip_to_string(icalrecurrencetype_skip kind)
 {
     int i;
 
-    for (i = 0; skip_map[i].kind != ICAL_SKIP_OMIT; i++) {
+    for (i = 0; skip_map[i].kind != ICAL_SKIP_UNDEFINED; i++) {
         if (skip_map[i].kind == kind) {
             return skip_map[i].str;
         }
@@ -374,21 +383,20 @@ static void icalrecur_clause_name_and_value(struct icalrecur_parser *parser,
     *value = idx;
 }
 
-static void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
-                                  int size, char *vals)
+static int icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
+                                 int min, int size, char *vals)
 {
     char *t, *n;
     int i = 0;
     int v;
-
-    _unused(parser);
+    int max = size - (min == 0);
 
     n = vals;
 
     while (n != 0) {
 
         if (i == size) {
-            return;
+            return -1;
         }
 
         t = n;
@@ -400,19 +408,33 @@ static void icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
             n++;
         }
 
-        /* HACK. sign is not allowed for all BYxxx rule parts */
         v = strtol(t, &t, 10);
 
-        /* Check for leap month suffix (RSCALE only) */
-        if (icalrecurrencetype_rscale_is_supported() && array == parser->rt.by_month && *t == 'L') {
-            /* The "L" suffix in a BYMONTH recur-rule-part
-               is encoded by setting a high-order bit */
-            v |= LEAP_MONTH;
+        /* Sanity check value */
+        if (v < 0) {
+            if (min >= 0 || v <= -max) return -1;
+        }
+        else if (v > 0) {
+            if (v >= max) return -1;
+        }
+        else if (min) return -1;
+
+        if (*t) {
+            /* Check for leap month suffix (RSCALE only) */
+            if (icalrecurrencetype_rscale_is_supported() &&
+                array == parser->rt.by_month && strcmp(t, "L") == 0) {
+                /* The "L" suffix in a BYMONTH recur-rule-part
+                   is encoded by setting a high-order bit */
+                v |= LEAP_MONTH;
+            }
+            else return -1;
         }
 
         array[i++] = (short)v;
         array[i] = ICAL_RECURRENCE_ARRAY_MAX;
     }
+
+    return 0;
 }
 
 /*
@@ -449,14 +471,11 @@ static void sort_bydayrules(struct icalrecur_parser *parser)
     }
 }
 
-static void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char *vals)
+static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
+                                    const char *vals)
 {
     char *t, *n;
     int i = 0;
-    int sign = 1;
-    char weekno = 0;    /* note: Novell/Groupwise sends BYDAY=255SU,
-                           so we fit in a signed char to get -1 SU for last sunday. */
-    icalrecurrencetype_weekday wd;
     short *array = parser->rt.by_day;
     char *vals_copy;
 
@@ -464,6 +483,15 @@ static void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char
     n = vals_copy;
 
     while (n != 0) {
+        int sign = 1;
+        char weekno;  /* note: Novell/Groupwise sends BYDAY=255SU,
+                         so we fit in a signed char to get -1 SU for last Sun */
+        icalrecurrencetype_weekday wd;
+
+        if (i == ICAL_BY_DAY_SIZE) {
+            free(vals_copy);
+            return -1;
+        }
 
         t = n;
 
@@ -474,27 +502,25 @@ static void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char
             n++;
         }
 
-        /* Get optional sign. */
-        if (*t == '-') {
-            sign = -1;
-            t++;
-        } else if (*t == '+') {
-            sign = 1;
-            t++;
-        } else {
-            sign = 1;
-        }
-
         /* Get Optional weekno */
         weekno = (char)strtol(t, &t, 10);
+        if (weekno < 0) {
+            weekno = -weekno;
+            sign = -1;
+        }
 
         /* Outlook/Exchange generate "BYDAY=MO, FR" and "BYDAY=2 TH".
          * Cope with that.
          */
-        if (*t == ' ')
-            t++;
+        if (*t == ' ') t++;
 
         wd = icalrecur_string_to_weekday(t);
+
+        /* Sanity check value */
+        if (wd == ICAL_NO_WEEKDAY || weekno >= ICAL_BY_WEEKNO_SIZE) {
+            free(vals_copy);
+            return -1;
+        }
 
         array[i++] = (short)(sign * (wd + 8 * weekno));
         array[i] = ICAL_RECURRENCE_ARRAY_MAX;
@@ -503,6 +529,8 @@ static void icalrecur_add_bydayrules(struct icalrecur_parser *parser, const char
     free(vals_copy);
 
     sort_bydayrules(parser);
+
+    return 0;
 }
 
 struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
@@ -525,68 +553,84 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
     }
 
     /* Loop through all of the clauses */
-    for (icalrecur_first_clause(&parser); parser.this_clause != 0; icalrecur_next_clause(&parser)) {
+    for (icalrecur_first_clause(&parser);
+         parser.this_clause != 0; icalrecur_next_clause(&parser)) {
         char *name, *value;
+        int r = 0;
 
         icalrecur_clause_name_and_value(&parser, &name, &value);
 
         if (name == 0) {
             if (strlen(parser.this_clause) > 0) {
-                icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-                icalrecurrencetype_clear(&parser.rt);
-                free(parser.copy);
-                return parser.rt;
+                r = -1;
             } else {
-                /* Hit an empty name/value pair, but we're also at the end of the
-                   string This was probably a trailing semicolon with no data
-                   (e.g. "FREQ=WEEKLY;INTERVAL=1;BYDAY=MO;") */
+                /* Hit an empty name/value pair,
+                   but we're also at the end of the string.
+                   This was probably a trailing semicolon with no data
+                   (e.g. "FREQ=WEEKLY;INTERVAL=1;BYDAY=MO;")
+                */
                 break;
             }
-        }
-
-        if (strcasecmp(name, "FREQ") == 0) {
+        } else if (strcasecmp(name, "FREQ") == 0) {
             parser.rt.freq = icalrecur_string_to_freq(value);
-        } else if (icalrecurrencetype_rscale_is_supported() && strcasecmp(name, "RSCALE") == 0) {
+            if (parser.rt.freq == ICAL_NO_RECURRENCE) r = -1;
+        } else if (icalrecurrencetype_rscale_is_supported() &&
+                   strcasecmp(name, "RSCALE") == 0) {
             parser.rt.rscale = icalmemory_tmp_copy(value);
-        } else if (icalrecurrencetype_rscale_is_supported() && strcasecmp(name, "SKIP") == 0) {
+        } else if (icalrecurrencetype_rscale_is_supported() &&
+                   strcasecmp(name, "SKIP") == 0) {
             parser.rt.skip = icalrecur_string_to_skip(value);
+            if (parser.rt.skip == ICAL_SKIP_UNDEFINED) r = -1;
         } else if (strcasecmp(name, "COUNT") == 0) {
             parser.rt.count = atoi(value);
+            /* don't allow count to be less than 1 */
+            if (parser.rt.count < 1) r = -1;
         } else if (strcasecmp(name, "UNTIL") == 0) {
             parser.rt.until = icaltime_from_string(value);
+            if (icaltime_is_null_time(parser.rt.until)) r = -1;
         } else if (strcasecmp(name, "INTERVAL") == 0) {
             parser.rt.interval = (short)atoi(value);
             /* don't allow an interval to be less than 1
                (RFC specifies an interval must be a positive integer) */
-            if (parser.rt.interval < 1) {
-                parser.rt.interval = 1;
-            }
+            if (parser.rt.interval < 1) r = -1;
         } else if (strcasecmp(name, "WKST") == 0) {
             parser.rt.week_start = icalrecur_string_to_weekday(value);
-            sort_bydayrules(&parser);
+            if (parser.rt.week_start == ICAL_NO_WEEKDAY) r = -1;
+            else sort_bydayrules(&parser);
         } else if (strcasecmp(name, "BYSECOND") == 0) {
-            icalrecur_add_byrules(&parser, parser.rt.by_second, ICAL_BY_SECOND_SIZE, value);
+            r = icalrecur_add_byrules(&parser, parser.rt.by_second,
+                                      0, ICAL_BY_SECOND_SIZE, value);
         } else if (strcasecmp(name, "BYMINUTE") == 0) {
-            icalrecur_add_byrules(&parser, parser.rt.by_minute, ICAL_BY_MINUTE_SIZE, value);
+            r = icalrecur_add_byrules(&parser, parser.rt.by_minute,
+                                      0, ICAL_BY_MINUTE_SIZE, value);
         } else if (strcasecmp(name, "BYHOUR") == 0) {
-            icalrecur_add_byrules(&parser, parser.rt.by_hour, ICAL_BY_HOUR_SIZE, value);
+            r = icalrecur_add_byrules(&parser, parser.rt.by_hour,
+                                      0, ICAL_BY_HOUR_SIZE, value);
         } else if (strcasecmp(name, "BYDAY") == 0) {
-            icalrecur_add_bydayrules(&parser, value);
+            r = icalrecur_add_bydayrules(&parser, value);
         } else if (strcasecmp(name, "BYMONTHDAY") == 0) {
-            icalrecur_add_byrules(&parser, parser.rt.by_month_day, ICAL_BY_MONTHDAY_SIZE, value);
+            r = icalrecur_add_byrules(&parser, parser.rt.by_month_day,
+                                      -1, ICAL_BY_MONTHDAY_SIZE, value);
         } else if (strcasecmp(name, "BYYEARDAY") == 0) {
-            icalrecur_add_byrules(&parser, parser.rt.by_year_day, ICAL_BY_YEARDAY_SIZE, value);
+            r = icalrecur_add_byrules(&parser, parser.rt.by_year_day,
+                                      -1, ICAL_BY_YEARDAY_SIZE, value);
         } else if (strcasecmp(name, "BYWEEKNO") == 0) {
-            icalrecur_add_byrules(&parser, parser.rt.by_week_no, ICAL_BY_WEEKNO_SIZE, value);
+            r = icalrecur_add_byrules(&parser, parser.rt.by_week_no,
+                                      -1, ICAL_BY_WEEKNO_SIZE, value);
         } else if (strcasecmp(name, "BYMONTH") == 0) {
-            icalrecur_add_byrules(&parser, parser.rt.by_month, ICAL_BY_MONTH_SIZE, value);
+            r = icalrecur_add_byrules(&parser, parser.rt.by_month,
+                                      1, ICAL_BY_MONTH_SIZE, value);
         } else if (strcasecmp(name, "BYSETPOS") == 0) {
-            icalrecur_add_byrules(&parser, parser.rt.by_set_pos, ICAL_BY_SETPOS_SIZE, value);
+            r = icalrecur_add_byrules(&parser, parser.rt.by_set_pos,
+                                      -1, ICAL_BY_SETPOS_SIZE, value);
         } else {
+            r = -1;
+        }
+
+        if (r) {
             icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
             icalrecurrencetype_clear(&parser.rt);
-            free(parser.copy);
-            return parser.rt;
+            break;
         }
     }
 
@@ -695,8 +739,10 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
                         icalmemory_append_string(&str, &str_p, &buf_sz, temp);
                     }
 
-                } else if (j == 7 && icalrecurrencetype_month_is_leap(array[i])) { /*BYMONTH*/
-                    snprintf(temp, sizeof(temp), "%dL", icalrecurrencetype_month_month(array[i]));
+                } else if (j == 7  /* BYMONTH */
+                           && icalrecurrencetype_month_is_leap(array[i])) {
+                    snprintf(temp, sizeof(temp), "%dL",
+                             icalrecurrencetype_month_month(array[i]));
                     icalmemory_append_string(&str, &str_p, &buf_sz, temp);
                 } else {
                     snprintf(temp, sizeof(temp), "%d", array[i]);
@@ -719,8 +765,9 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
     }
 
     if (recur->rscale != 0 && recur->skip != ICAL_SKIP_OMIT) {
+        const char *skipstr = icalrecur_skip_to_string(recur->skip);
         icalmemory_append_string(&str, &str_p, &buf_sz, ";SKIP=");
-        icalmemory_append_string(&str, &str_p, &buf_sz, icalrecur_skip_to_string(recur->skip));
+        icalmemory_append_string(&str, &str_p, &buf_sz, skipstr);
     }
 
     return str;
@@ -873,6 +920,11 @@ static int count_byrules(icalrecur_iterator* impl)
 }
 
 */
+
+static int has_by_data(icalrecur_iterator *impl, enum byrule byrule)
+{
+    return (impl->orig_data[byrule] == 1);
+}
 
 #if defined(HAVE_LIBICU)
 /*
@@ -1074,6 +1126,10 @@ static int omit_invalid(icalrecur_iterator *impl, int day, int month)
                 set_day_of_month(impl, 1);
             }
             break;
+
+        default:
+            /* Should never get here! */
+            break;
         }
     }
 
@@ -1257,6 +1313,47 @@ static void expand_by_day_init(icalrecur_iterator *impl, int year,
     *end_dow = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
 }
 
+static int validate_byrule(icalrecur_iterator *impl,
+                           enum byrule byrule, UCalendarDateFields field,
+                           short (*decode_val)(short *, unsigned),
+                           unsigned decode_flags)
+{
+    if (has_by_data(impl, byrule)) {
+        UErrorCode status = U_ZERO_ERROR;
+        short *by_ptr = impl->by_ptrs[byrule];
+        short max = ucal_getLimit(impl->rscale, field, UCAL_MAXIMUM, &status);
+        short idx;
+
+        for (idx = 0; by_ptr[idx] != ICAL_RECURRENCE_ARRAY_MAX; idx++) {
+            short val = decode_val ?
+                decode_val(&by_ptr[idx], decode_flags) : by_ptr[idx];
+
+            if (abs(val) > max) return 0;
+        }
+    }
+
+    return 1;
+}
+
+static short decode_month(short *month, unsigned is_hebrew)
+{
+    if (is_hebrew && *month > 5) {  /* 5L == 0x1005 */
+        /* Hebrew calendar:
+           Translate RSCALE months to ICU (numbered 1-13, where 6 is leap).
+           Hence, 5L maps to 6 and 6-12 map to 7-13. */
+        *month = icalrecurrencetype_month_month(*month) + 1;
+    }
+
+    return icalrecurrencetype_month_month(*month) - 1;  /* UCal is 0-based */
+}
+
+static short decode_day(short *day, unsigned flags)
+{
+    _unused(flags);
+
+    return icalrecurrencetype_day_position(*day);
+}
+
 static void setup_defaults(icalrecur_iterator *impl, enum byrule byrule,
                            icalrecurrencetype_frequency req, int deftime,
                            UCalendarDateFields field)
@@ -1291,22 +1388,26 @@ static int initialize_iterator(icalrecur_iterator *impl)
     char locale[ULOC_KEYWORD_AND_VALUES_CAPACITY] = "";
     UErrorCode status = U_ZERO_ERROR;
     const char *tzid = UCAL_UNKNOWN_ZONE_ID;
+    int is_hebrew = 0;
 
     if (dtstart.zone)
         tzid = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
 
     /* Create locale for Gregorian calendar */
-    (void)uloc_setKeywordValue("calendar", "gregorian", locale, sizeof(locale), &status);
+    (void)uloc_setKeywordValue("calendar", "gregorian",
+                               locale, sizeof(locale), &status);
 
     /* Create Gregorian calendar and set to DTSTART */
-    impl->greg = ucal_open((const UChar *)tzid, -1, locale, UCAL_DEFAULT, &status);
+    impl->greg =
+        ucal_open((const UChar *)tzid, -1, locale, UCAL_DEFAULT, &status);
     if (impl->greg) {
         ucal_setDateTime(impl->greg,
                          (int32_t) dtstart.year,
                          (int32_t) (dtstart.month - 1), /* UCal is 0-based */
                          (int32_t) dtstart.day,
                          (int32_t) dtstart.hour,
-                         (int32_t) dtstart.minute, (int32_t) dtstart.second, &status);
+                         (int32_t) dtstart.minute,
+                         (int32_t) dtstart.second, &status);
     }
     if (!impl->greg || U_FAILURE(status)) {
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
@@ -1330,8 +1431,10 @@ static int initialize_iterator(icalrecur_iterator *impl)
         /* Check if specified calendar is supported */
         en = ucal_getKeywordValuesForLocale("calendar", NULL, FALSE, &status);
         while ((cal = uenum_next(en, NULL, &status))) {
-            if (!strcmp(cal, rule.rscale))
+            if (!strcmp(cal, rule.rscale)) {
+                is_hebrew = !strcmp(rule.rscale, "hebrew");
                 break;
+            }
         }
         uenum_close(en);
         if (!cal) {
@@ -1339,11 +1442,13 @@ static int initialize_iterator(icalrecur_iterator *impl)
             return 0;
         }
 
-        /* Create locale for RSCALE calendar (lowercasing) */
-        (void)uloc_setKeywordValue("calendar", rule.rscale, locale, sizeof(locale), &status);
+        /* Create locale for RSCALE calendar */
+        (void)uloc_setKeywordValue("calendar", rule.rscale,
+                                   locale, sizeof(locale), &status);
 
         /* Create RSCALE calendar and set to DTSTART */
-        impl->rscale = ucal_open((const UChar *)tzid, -1, locale, UCAL_DEFAULT, &status);
+        impl->rscale =
+            ucal_open((const UChar *)tzid, -1, locale, UCAL_DEFAULT, &status);
         if (impl->rscale) {
             UDate millis = ucal_getMillis(impl->greg, &status);
 
@@ -1353,19 +1458,17 @@ static int initialize_iterator(icalrecur_iterator *impl)
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
             return 0;
         }
+    }
 
-        /* Hebrew calendar:
-           Translate RSCALE months to ICU (numbered 1-13, where 6 is leap) */
-        if (!strcmp(locale + 10, "hebrew")) {
-            int idx;
-
-            for (idx = 0; BYMONPTR[idx] != ICAL_RECURRENCE_ARRAY_MAX; idx++) {
-                if (BYMONPTR[idx] > 5) { /* 5L == 0x1005 */
-                    /* Translate 5L to 6, 6-12 to 7-13 */
-                    BYMONPTR[idx] = icalrecurrencetype_month_month(BYMONPTR[idx]) + 1;
-                }
-            }
-        }
+    /* Validate BY_* array values whose legal maximums differ based on RSCALE */
+    if (!validate_byrule(impl, BY_MONTH, UCAL_MONTH, &decode_month, is_hebrew)
+        || !validate_byrule(impl, BY_DAY, UCAL_WEEK_OF_YEAR, &decode_day, 0)
+        || !validate_byrule(impl, BY_MONTH_DAY, UCAL_DAY_OF_MONTH, NULL, 0)
+        || !validate_byrule(impl, BY_YEAR_DAY, UCAL_DAY_OF_YEAR, NULL, 0)
+        || !validate_byrule(impl, BY_WEEK_NO, UCAL_WEEK_OF_YEAR, NULL, 0)
+        || !validate_byrule(impl, BY_SET_POS, UCAL_DAY_OF_YEAR, NULL, 0)) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
     }
 
     /* Set iCalendar defaults */
@@ -1376,15 +1479,20 @@ static int initialize_iterator(icalrecur_iterator *impl)
     impl->rstart = occurrence_as_icaltime(impl, 0);
 
     /* Set up defaults for BY_* arrays */
-    setup_defaults(impl, BY_SECOND, ICAL_SECONDLY_RECURRENCE, impl->rstart.second, UCAL_SECOND);
+    setup_defaults(impl, BY_SECOND, ICAL_SECONDLY_RECURRENCE,
+                   impl->rstart.second, UCAL_SECOND);
 
-    setup_defaults(impl, BY_MINUTE, ICAL_MINUTELY_RECURRENCE, impl->rstart.minute, UCAL_MINUTE);
+    setup_defaults(impl, BY_MINUTE, ICAL_MINUTELY_RECURRENCE,
+                   impl->rstart.minute, UCAL_MINUTE);
 
-    setup_defaults(impl, BY_HOUR, ICAL_HOURLY_RECURRENCE, impl->rstart.hour, UCAL_HOUR_OF_DAY);
+    setup_defaults(impl, BY_HOUR, ICAL_HOURLY_RECURRENCE,
+                   impl->rstart.hour, UCAL_HOUR_OF_DAY);
 
-    setup_defaults(impl, BY_MONTH_DAY, ICAL_DAILY_RECURRENCE, impl->rstart.day, UCAL_DAY_OF_MONTH);
+    setup_defaults(impl, BY_MONTH_DAY, ICAL_DAILY_RECURRENCE,
+                   impl->rstart.day, UCAL_DAY_OF_MONTH);
 
-    setup_defaults(impl, BY_MONTH, ICAL_MONTHLY_RECURRENCE, impl->rstart.month, UCAL_MONTH);
+    setup_defaults(impl, BY_MONTH, ICAL_MONTHLY_RECURRENCE,
+                   impl->rstart.month, UCAL_MONTH);
 
     return 1;
 }
@@ -1437,6 +1545,10 @@ static int check_contracting_rules(icalrecur_iterator *impl)
                     if (!ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status)) {
                         month = icalrecurrencetype_month_month(month) + skip;
                     }
+                    break;
+
+                default:
+                    /* Should never get here! */
                     break;
                 }
             }
@@ -1912,20 +2024,20 @@ static int check_contracting_rules(icalrecur_iterator *impl)
 
 #endif /* HAVE_LIBICU */
 
-static int has_by_data(icalrecur_iterator *impl, enum byrule byrule)
-{
-    return (impl->orig_data[byrule] == 1);
-}
-
 static int expand_year_days(icalrecur_iterator *impl, int year);
 
 icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                                            struct icaltimetype dtstart)
 {
     icalrecur_iterator *impl;
-    icalrecurrencetype_frequency freq;
+    icalrecurrencetype_frequency freq = rule.freq;
 
     icalerror_clear_errno();
+
+    if (freq == ICAL_NO_RECURRENCE) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
 
 #define IN_RANGE(val, min, max) (val >= min && val <= max)
 
@@ -1953,7 +2065,6 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
     impl->dtstart = dtstart;
     impl->days_index = 0;
     impl->occurrence_no = 0;
-    freq = impl->rule.freq;
 
     /* Set up convenience pointers to make the code simpler. Allows
        us to iterate through all of the BY* arrays in the rule. */
