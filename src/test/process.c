@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
 
         case ICAL_XLICCLASS_PUBLISHUPDATE:{
                 /* Only accept publish updates from self. If self, fall
-                   throught to ICAL_XLICCLASS_REQUESTUPDATE */
+                   through to ICAL_XLICCLASS_REQUESTUPDATE */
             }
 
         case ICAL_XLICCLASS_REQUESTUPDATE:{

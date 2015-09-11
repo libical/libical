@@ -29,6 +29,7 @@ SKIP /src/libical/astime\.h
 SKIP /src/libical/caldate\.c
 SKIP /cmake/modules/GObjectIntrospectionMacros\.cmake|/cmake/modules/FindGObjectIntrospection\.cmake
 SKIP /doc/Doxyfile\.cmake
+SKIP /iOS\.cmake
 
 #Skip zoneinfo
 SKIP /zoneinfo/

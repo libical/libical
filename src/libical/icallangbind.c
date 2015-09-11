@@ -63,7 +63,7 @@ icalparameter *icallangbind_get_next_parameter(icalproperty *prop)
 
 /** Like icalcomponent_get_first_component(), but takes a string for the
    kind and can iterate over X properties as if each X name was a
-   seperate kind */
+   separate kind */
 
 icalproperty *icallangbind_get_first_property(icalcomponent *c, const char *prop)
 {

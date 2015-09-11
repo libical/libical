@@ -556,7 +556,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
 
         if (!user) {
             fprintf(stderr,
-                    "%s: Can't get username. Try explicitly specifing the output file with -o",
+                    "%s: Can't get username. Try explicitly specifying the output file with -o",
                     program_name);
             exit(1);
         }
@@ -571,7 +571,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
         if (pw == 0) {
             fprintf(stderr,
                     "%s: Can't get get password entry for user \"%s\" "
-                    "Try explicitly specifing the output file with -o",
+                    "Try explicitly specifying the output file with -o",
                     program_name, user);
             exit(1);
         }
@@ -579,7 +579,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
         if (pw->pw_dir == 0) {
             fprintf(stderr,
                     "%s: User \"%s\" has no home directory. "
-                    "Try explicitly specifing the output file with -o",
+                    "Try explicitly specifying the output file with -o",
                     program_name, user);
             exit(1);
         }
@@ -597,7 +597,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
         char *facspath = strdup(opt->output_file);
         enum file_type type;
 
-        /* Cut off the last slash to make it just a directoy */
+        /* Cut off the last slash to make it just a directory */
 
         p = strrchr(facspath, '/');
 

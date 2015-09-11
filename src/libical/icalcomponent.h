@@ -174,7 +174,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_first_real_component(icalco
    times of an event in UTC */
 LIBICAL_ICAL_EXPORT struct icaltime_span icalcomponent_get_span(icalcomponent *comp);
 
-/******************** Convienience routines **********************/
+/******************** Convenience routines **********************/
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_dtstart(icalcomponent *comp, struct icaltimetype v);
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp);
