@@ -1321,7 +1321,8 @@ static int validate_byrule(icalrecur_iterator *impl,
     if (has_by_data(impl, byrule)) {
         UErrorCode status = U_ZERO_ERROR;
         short *by_ptr = impl->by_ptrs[byrule];
-        short max = ucal_getLimit(impl->rscale, field, UCAL_MAXIMUM, &status);
+        short max =
+            (short)ucal_getLimit(impl->rscale, field, UCAL_MAXIMUM, &status);
         short idx;
 
         for (idx = 0; by_ptr[idx] != ICAL_RECURRENCE_ARRAY_MAX; idx++) {
@@ -1388,7 +1389,7 @@ static int initialize_iterator(icalrecur_iterator *impl)
     char locale[ULOC_KEYWORD_AND_VALUES_CAPACITY] = "";
     UErrorCode status = U_ZERO_ERROR;
     const char *tzid = UCAL_UNKNOWN_ZONE_ID;
-    int is_hebrew = 0;
+    short is_hebrew = 0;
 
     if (dtstart.zone)
         tzid = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
