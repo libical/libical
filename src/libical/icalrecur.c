@@ -412,12 +412,16 @@ static int icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
 
         /* Sanity check value */
         if (v < 0) {
-            if (min >= 0 || v <= -max) return -1;
+            if (min >= 0 || v <= -max) {
+                return -1;
+            }
+        } else if (v > 0) {
+            if (v >= max) {
+                return -1;
+            }
+        } else if (min) {
+            return -1;
         }
-        else if (v > 0) {
-            if (v >= max) return -1;
-        }
-        else if (min) return -1;
 
         if (*t) {
             /* Check for leap month suffix (RSCALE only) */
@@ -426,8 +430,9 @@ static int icalrecur_add_byrules(struct icalrecur_parser *parser, short *array,
                 /* The "L" suffix in a BYMONTH recur-rule-part
                    is encoded by setting a high-order bit */
                 v |= LEAP_MONTH;
+            } else {
+                return -1;
             }
-            else return -1;
         }
 
         array[i++] = (short)v;
@@ -512,7 +517,9 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
         /* Outlook/Exchange generate "BYDAY=MO, FR" and "BYDAY=2 TH".
          * Cope with that.
          */
-        if (*t == ' ') t++;
+        if (*t == ' ') {
+            t++;
+        }
 
         wd = icalrecur_string_to_weekday(t);
 
@@ -595,8 +602,11 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             if (parser.rt.interval < 1) r = -1;
         } else if (strcasecmp(name, "WKST") == 0) {
             parser.rt.week_start = icalrecur_string_to_weekday(value);
-            if (parser.rt.week_start == ICAL_NO_WEEKDAY) r = -1;
-            else sort_bydayrules(&parser);
+            if (parser.rt.week_start == ICAL_NO_WEEKDAY) {
+                r = -1;
+            } else {
+                sort_bydayrules(&parser);
+            }
         } else if (strcasecmp(name, "BYSECOND") == 0) {
             r = icalrecur_add_byrules(&parser, parser.rt.by_second,
                                       0, ICAL_BY_SECOND_SIZE, value);
@@ -739,8 +749,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
                         icalmemory_append_string(&str, &str_p, &buf_sz, temp);
                     }
 
-                } else if (j == 7  /* BYMONTH */
-                           && icalrecurrencetype_month_is_leap(array[i])) {
+                } else if (j == 7 /* BYMONTH */ && icalrecurrencetype_month_is_leap(array[i])) {
                     snprintf(temp, sizeof(temp), "%dL",
                              icalrecurrencetype_month_month(array[i]));
                     icalmemory_append_string(&str, &str_p, &buf_sz, temp);
@@ -931,11 +940,11 @@ static int has_by_data(icalrecur_iterator *impl, enum byrule byrule)
  * Callbacks for recurrence rules with RSCALE support (using ICU)
  *
  * References:
- *   - http://tools.ietf.org/html/rfc7529
- *   - http://en.wikipedia.org/wiki/Intercalation_%28timekeeping%29
- *   - http://icu-project.org/apiref/icu4c/ucal_8h.html
- *   - http://cldr.unicode.org/development/development-process/design-proposals/chinese-calendar-support
- *   - http://cldr.unicode.org/development/development-process/design-proposals/islamic-calendar-types
+ *   - tools.ietf.org/html/rfc7529
+ *   - en.wikipedia.org/wiki/Intercalation_%28timekeeping%29
+ *   - icu-project.org/apiref/icu4c/ucal_8h.html
+ *   - cldr.unicode.org/development/development-process/design-proposals/chinese-calendar-support
+ *   - cldr.unicode.org/development/development-process/design-proposals/islamic-calendar-types
  *
  * ICU Notes:
  *   - Months are 0-based
@@ -1462,12 +1471,12 @@ static int initialize_iterator(icalrecur_iterator *impl)
     }
 
     /* Validate BY_* array values whose legal maximums differ based on RSCALE */
-    if (!validate_byrule(impl, BY_MONTH, UCAL_MONTH, &decode_month, is_hebrew)
-        || !validate_byrule(impl, BY_DAY, UCAL_WEEK_OF_YEAR, &decode_day, 0)
-        || !validate_byrule(impl, BY_MONTH_DAY, UCAL_DAY_OF_MONTH, NULL, 0)
-        || !validate_byrule(impl, BY_YEAR_DAY, UCAL_DAY_OF_YEAR, NULL, 0)
-        || !validate_byrule(impl, BY_WEEK_NO, UCAL_WEEK_OF_YEAR, NULL, 0)
-        || !validate_byrule(impl, BY_SET_POS, UCAL_DAY_OF_YEAR, NULL, 0)) {
+    if (!validate_byrule(impl, BY_MONTH, UCAL_MONTH, &decode_month, (unsigned)is_hebrew) ||
+        !validate_byrule(impl, BY_DAY, UCAL_WEEK_OF_YEAR, &decode_day, 0) ||
+        !validate_byrule(impl, BY_MONTH_DAY, UCAL_DAY_OF_MONTH, NULL, 0) ||
+        !validate_byrule(impl, BY_YEAR_DAY, UCAL_DAY_OF_YEAR, NULL, 0) ||
+        !validate_byrule(impl, BY_WEEK_NO, UCAL_WEEK_OF_YEAR, NULL, 0) ||
+        !validate_byrule(impl, BY_SET_POS, UCAL_DAY_OF_YEAR, NULL, 0)) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         return 0;
     }
