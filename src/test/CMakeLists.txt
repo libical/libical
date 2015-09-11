@@ -137,6 +137,13 @@ testme(recur "${recur_SRCS}")
 ########### next target ###############
 
 if(HAVE_GETOPT) #getopt is required
+  set(icalrecur_test_SRCS icalrecur_test.c)
+  buildme(icalrecur_test "${icalrecur_test_SRCS}")
+endif()
+
+########### next target ###############
+
+if(HAVE_GETOPT) #getopt is required
   set(testmime_SRCS testmime.c)
   testme(testmime "${testmime_SRCS}")
 endif()
