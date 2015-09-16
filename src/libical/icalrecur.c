@@ -875,14 +875,15 @@ struct expand_split_map_struct
 };
 
 static const struct expand_split_map_struct expand_map[] = {
-    {ICAL_SECONDLY_RECURRENCE, {1, 1, 1, 1, 1, 1, 1, 1}},
-    {ICAL_MINUTELY_RECURRENCE, {2, 1, 1, 1, 1, 1, 1, 1}},
-    {ICAL_HOURLY_RECURRENCE, {2, 2, 1, 1, 1, 1, 1, 1}},
-    {ICAL_DAILY_RECURRENCE, {2, 2, 2, 1, 1, 1, 1, 1}},
-    {ICAL_WEEKLY_RECURRENCE, {2, 2, 2, 2, 3, 3, 1, 1}},
-    {ICAL_MONTHLY_RECURRENCE, {2, 2, 2, 2, 2, 3, 3, 1}},
-    {ICAL_YEARLY_RECURRENCE, {2, 2, 2, 2, 2, 2, 2, 2}},
-    {ICAL_NO_RECURRENCE, {0, 0, 0, 0, 0, 0, 0, 0}}
+    /*                           s  m  h  D  MD YD W  M   */
+    {ICAL_SECONDLY_RECURRENCE, { 1, 1, 1, 1, 1, 1, 3, 1 }},
+    {ICAL_MINUTELY_RECURRENCE, { 2, 1, 1, 1, 1, 1, 3, 1 }},
+    {ICAL_HOURLY_RECURRENCE,   { 2, 2, 1, 1, 1, 1, 3, 1 }},
+    {ICAL_DAILY_RECURRENCE,    { 2, 2, 2, 1, 1, 2, 3, 1 }},
+    {ICAL_WEEKLY_RECURRENCE,   { 2, 2, 2, 2, 3, 3, 3, 1 }},
+    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 3, 3, 1 }},
+    {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2 }},
+    {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0 }}
 
 };
 
@@ -1381,7 +1382,7 @@ static void setup_defaults(icalrecur_iterator *impl, enum byrule byrule,
 {
     icalrecurrencetype_frequency freq = impl->rule.freq;
 
-    if (expand_map[freq].map[byrule] != CONTRACT) {
+    if (expand_map[freq].map[byrule] == EXPAND) {
 
         /* Re-write the BY rule arrays with data from the DTSTART time so
            we don't have to explicitly deal with DTSTART */
@@ -1997,21 +1998,20 @@ static void setup_defaults(icalrecur_iterator *impl,
                            enum byrule byrule, icalrecurrencetype_frequency req,
                            int deftime, int *timepart)
 {
-    icalrecurrencetype_frequency freq;
+    icalrecurrencetype_frequency freq = impl->rule.freq;
 
-    freq = impl->rule.freq;
+    if (expand_map[freq].map[byrule] == EXPAND) {
 
-    /* Re-write the BY rule arrays with data from the DTSTART time so
-       we don't have to explicitly deal with DTSTART */
+        /* Re-write the BY rule arrays with data from the DTSTART time so
+           we don't have to explicitly deal with DTSTART */
+        if (impl->by_ptrs[byrule][0] == ICAL_RECURRENCE_ARRAY_MAX) {
+            impl->by_ptrs[byrule][0] = (short)deftime;
+        }
 
-    if (impl->by_ptrs[byrule][0] == ICAL_RECURRENCE_ARRAY_MAX &&
-        expand_map[freq].map[byrule] != CONTRACT) {
-        impl->by_ptrs[byrule][0] = (short)deftime;
-    }
-
-    /* Initialize the first occurrence */
-    if (freq != req && expand_map[freq].map[byrule] != CONTRACT) {
-        *timepart = impl->by_ptrs[byrule][0];
+        /* Initialize the first occurrence */
+        if (freq != req) {
+            *timepart = impl->by_ptrs[byrule][0];
+        }
     }
 }
 
