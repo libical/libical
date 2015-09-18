@@ -866,69 +866,23 @@ struct expand_split_map_struct
     icalrecurrencetype_frequency frequency;
 
     /* Elements of the 'map' array correspond to the BYxxx rules:
-       Second,Minute,Hour,Day,Month Day,Year Day,Week No,Month */
+       Second,Minute,Hour,Day,Month Day,Year Day,Week No,Month,SetPos */
 
-    short map[8];
+    short map[BY_SET_POS+1];
 };
 
 static const struct expand_split_map_struct expand_map[] = {
-    /*                           s  m  h  D  MD YD W  M   */
-    {ICAL_SECONDLY_RECURRENCE, { 1, 1, 1, 1, 1, 1, 3, 1 }},
-    {ICAL_MINUTELY_RECURRENCE, { 2, 1, 1, 1, 1, 1, 3, 1 }},
-    {ICAL_HOURLY_RECURRENCE,   { 2, 2, 1, 1, 1, 1, 3, 1 }},
-    {ICAL_DAILY_RECURRENCE,    { 2, 2, 2, 1, 1, 2, 3, 1 }},
-    {ICAL_WEEKLY_RECURRENCE,   { 2, 2, 2, 2, 3, 3, 3, 1 }},
-    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 3, 3, 1 }},
-    {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2 }},
-    {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0 }}
+    /*                           s  m  h  D  MD YD W  M  P */
+    {ICAL_SECONDLY_RECURRENCE, { 1, 1, 1, 1, 1, 1, 3, 1, 1 }},
+    {ICAL_MINUTELY_RECURRENCE, { 2, 1, 1, 1, 1, 1, 3, 1, 1 }},
+    {ICAL_HOURLY_RECURRENCE,   { 2, 2, 1, 1, 1, 1, 3, 1, 1 }},
+    {ICAL_DAILY_RECURRENCE,    { 2, 2, 2, 1, 1, 3, 3, 1, 1 }},
+    {ICAL_WEEKLY_RECURRENCE,   { 2, 2, 2, 2, 3, 3, 3, 1, 1 }},
+    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 3, 3, 1, 1 }},
+    {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2, 1 }},
+    {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }}
 
 };
-
-/** Check that the rule has only the two given interday byrule parts. */
-static int icalrecur_two_byrule(icalrecur_iterator *impl,
-                                enum byrule one, enum byrule two)
-{
-    short test_array[9];
-    enum byrule itr;
-    int passes = 0;
-
-    memset(test_array, 0, sizeof(test_array));
-
-    test_array[one] = 1;
-    test_array[two] = 1;
-
-    for (itr = BY_DAY; itr != BY_SET_POS; itr++) {
-
-        if ((test_array[itr] == 0 &&
-             impl->by_ptrs[itr][0] != ICAL_RECURRENCE_ARRAY_MAX) ||
-            (test_array[itr] == 1 &&
-             impl->by_ptrs[itr][0] == ICAL_RECURRENCE_ARRAY_MAX)) {
-            /* test failed */
-            passes = 0;
-        }
-    }
-
-    return passes;
-}
-
-/** Check that the rule has only the one given interday byrule parts. */
-static int icalrecur_one_byrule(icalrecur_iterator *impl, enum byrule one)
-{
-    int passes = 1;
-    enum byrule itr;
-
-    for (itr = BY_DAY; itr != BY_SET_POS; itr++) {
-
-        if ((itr == one &&
-             impl->by_ptrs[itr][0] == ICAL_RECURRENCE_ARRAY_MAX) ||
-            (itr != one &&
-             impl->by_ptrs[itr][0] != ICAL_RECURRENCE_ARRAY_MAX)) {
-            passes = 0;
-        }
-    }
-
-    return passes;
-}
 
 static int has_by_data(icalrecur_iterator *impl, enum byrule byrule)
 {
@@ -1969,6 +1923,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
 {
     icalrecur_iterator *impl;
     icalrecurrencetype_frequency freq = rule.freq;
+    enum byrule byrule;
 
     icalerror_clear_errno();
 
@@ -2046,59 +2001,13 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     /* Check if the recurrence rule is legal */
 
-    /* If the BYYEARDAY appears, no other date rule part may appear.   */
-
-    if (icalrecur_two_byrule(impl, BY_YEAR_DAY, BY_MONTH) ||
-        icalrecur_two_byrule(impl, BY_YEAR_DAY, BY_WEEK_NO) ||
-        icalrecur_two_byrule(impl, BY_YEAR_DAY, BY_MONTH_DAY)) {
-
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(impl);
-        return 0;
-    }
-
-    /* BYWEEKNO and BYMONTHDAY rule parts may not both appear. */
-
-    if (icalrecur_two_byrule(impl, BY_WEEK_NO, BY_MONTH_DAY)) {
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(impl);
-        return 0;
-    }
-
-    /*For MONTHLY recurrences (FREQ=MONTHLY) neither BYYEARDAY nor
-       BYWEEKNO may appear. */
-
-    if (freq == ICAL_MONTHLY_RECURRENCE &&
-        icalrecur_one_byrule(impl, BY_WEEK_NO)) {
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(impl);
-        return 0;
-    }
-
-    /*For WEEKLY recurrences (FREQ=WEEKLY) neither BYMONTHDAY nor
-       BYYEARDAY may appear. */
-
-    if (freq == ICAL_WEEKLY_RECURRENCE &&
-        icalrecur_one_byrule(impl, BY_MONTH_DAY)) {
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(impl);
-        return 0;
-    }
-
-    /* BYYEARDAY may only appear in YEARLY rules */
-    if (freq != ICAL_YEARLY_RECURRENCE &&
-        icalrecur_one_byrule(impl, BY_YEAR_DAY)) {
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(impl);
-        return 0;
-    }
-
-    /* BYWEEKNO may only appear in YEARLY rules */
-    if (freq != ICAL_YEARLY_RECURRENCE &&
-        icalrecur_one_byrule(impl, BY_WEEK_NO)) {
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(impl);
-        return 0;
+    for (byrule = BY_SECOND; byrule <= BY_SET_POS; byrule++) {
+        if (expand_map[freq].map[byrule] == ILLEGAL
+            && impl->by_ptrs[byrule][0] != ICAL_RECURRENCE_ARRAY_MAX) {
+            icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+            free(impl);
+            return 0;
+        }
     }
 
     /* Rewrite some of the rules and set up defaults to make later
