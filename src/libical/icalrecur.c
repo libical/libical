@@ -835,9 +835,6 @@ struct icalrecur_iterator_impl
 
 };
 
-static int check_contract_restriction(icalrecur_iterator *impl,
-                                      enum byrule byrule, int v);
-
 int icalrecur_iterator_sizeof_byarray(short *byarray)
 {
     int array_itr;
@@ -1520,79 +1517,6 @@ static int initialize_iterator(icalrecur_iterator *impl)
     return 1;
 }
 
-static int check_contracting_rules(icalrecur_iterator *impl)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    struct icaltimetype last = occurrence_as_icaltime(impl, 0);
-    int day_of_week = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
-    int week_no = (int)ucal_get(impl->rscale, UCAL_WEEK_OF_YEAR, &status);
-    int year_day = (int)ucal_get(impl->rscale, UCAL_DAY_OF_YEAR, &status);
-
-    if (!check_contract_restriction(impl, BY_SECOND, last.second) ||
-        !check_contract_restriction(impl, BY_MINUTE, last.minute) ||
-        !check_contract_restriction(impl, BY_HOUR, last.hour) ||
-        !check_contract_restriction(impl, BY_DAY, day_of_week) ||
-        !check_contract_restriction(impl, BY_WEEK_NO, week_no) ||
-        !check_contract_restriction(impl, BY_MONTH_DAY, last.day) ||
-        !check_contract_restriction(impl, BY_YEAR_DAY, year_day)) {
-        return 0;
-    } else if (BYMONPTR[0] != ICAL_RECURRENCE_ARRAY_MAX &&
-               expand_map[impl->rule.freq].map[BY_MONTH] == CONTRACT) {
-        /* Handle BYMONTH separately, due to leap months and fwd/bwd skip */
-        UErrorCode status = U_ZERO_ERROR;
-        UDate last_millis;
-        int pass = 0;
-        int idx;
-
-        /* Save existing rscale date */
-        last_millis = ucal_getMillis(impl->rscale, &status);
-
-        for (idx = 0; BYMONPTR[idx] != ICAL_RECURRENCE_ARRAY_MAX; idx++) {
-            short month = BYMONPTR[idx];
-
-            if (icalrecurrencetype_month_is_leap(month) &&
-                !icalrecurrencetype_month_is_leap(last.month)) {
-                /* BYMONTH is a leap month, do skip processing */
-                short skip = 0;
-
-                switch (impl->rule.skip) {
-                case ICAL_SKIP_OMIT:
-                    break;
-
-                case ICAL_SKIP_FORWARD:
-                    skip = 1;
-
-                case ICAL_SKIP_BACKWARD:
-                    /* Use fwd/bwd month iff BYMONTH won't appear this year */
-                    set_month(impl, month);
-                    if (!ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status)) {
-                        month = icalrecurrencetype_month_month(month) + skip;
-                    }
-                    break;
-
-                default:
-                    /* Should never get here! */
-                    break;
-                }
-            }
-
-            if (month == last.month) {
-                pass = 1;
-                break;
-            }
-        }
-
-        /* Restore saved rscale date */
-        ucal_setMillis(impl->rscale, last_millis, &status);
-
-        return pass;
-    } else {
-        /* BYMONTH is not a contracting byrule,
-           or has no data, so the test passes */
-        return 1;
-    }
-}
-
 #else /* !HAVE_LIBICU */
 
 /*
@@ -2034,27 +1958,6 @@ static int initialize_iterator(icalrecur_iterator *impl)
                    impl->dtstart.month, &(impl->last.month));
 
     return 1;
-}
-
-static int check_contracting_rules(icalrecur_iterator *impl)
-{
-    int day_of_week = icaltime_day_of_week(impl->last);
-    int week_no = get_week_number(impl, impl->last);
-    int year_day = icaltime_day_of_year(impl->last);
-
-    if (check_contract_restriction(impl, BY_SECOND, impl->last.second) &&
-        check_contract_restriction(impl, BY_MINUTE, impl->last.minute) &&
-        check_contract_restriction(impl, BY_HOUR, impl->last.hour) &&
-        check_contract_restriction(impl, BY_DAY, day_of_week) &&
-        check_contract_restriction(impl, BY_WEEK_NO, week_no) &&
-        check_contract_restriction(impl, BY_MONTH_DAY, impl->last.day) &&
-        check_contract_restriction(impl, BY_MONTH, impl->last.month) &&
-        check_contract_restriction(impl, BY_YEAR_DAY, year_day)) {
-
-        return 1;
-    } else {
-        return 0;
-    }
 }
 
 #endif /* HAVE_LIBICU */
@@ -3337,6 +3240,29 @@ static int check_contract_restriction(icalrecur_iterator *impl,
         /* This is not a contracting byrule, or it has no data, so the
            test passes */
         return 1;
+    }
+}
+
+static int check_contracting_rules(icalrecur_iterator *impl)
+{
+    struct icaltimetype last = occurrence_as_icaltime(impl, 0);
+    int day_of_week;
+    int week_no = get_week_number(impl, last);
+    int year_day =
+        get_day_of_year(impl, last.year, last.month, last.day, &day_of_week);
+
+    if (check_contract_restriction(impl, BY_SECOND, last.second) &&
+        check_contract_restriction(impl, BY_MINUTE, last.minute) &&
+        check_contract_restriction(impl, BY_HOUR, last.hour) &&
+        check_contract_restriction(impl, BY_DAY, day_of_week) &&
+        check_contract_restriction(impl, BY_WEEK_NO, week_no) &&
+        check_contract_restriction(impl, BY_MONTH_DAY, last.day) &&
+        check_contract_restriction(impl, BY_MONTH, last.month) &&
+        check_contract_restriction(impl, BY_YEAR_DAY, year_day)) {
+
+        return 1;
+    } else {
+        return 0;
     }
 }
 
