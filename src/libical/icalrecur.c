@@ -2644,8 +2644,9 @@ static const unsigned char *expand_by_day(icalrecur_iterator *impl, int year)
                 if (day < first_matching_day) continue;
             }
 
-            __icaltime_from_day_of_year(impl,
-                                        day + doy_offset, year, &this_weekno);
+            (void)__icaltime_from_day_of_year(impl,
+                                              day + doy_offset, year,
+                                              &this_weekno);
 
             do {
                 int j, valid = 1;
@@ -2704,6 +2705,8 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
         }
     }
     else if (has_by_data(impl, BY_WEEK_NO)) {
+        int weekno, start_doy;
+
         /* We only support BYWEEKNO + BYDAY */
         if (has_by_data(impl, BY_YEAR_DAY) ||
             has_by_data(impl, BY_MONTH_DAY) ||
@@ -2712,12 +2715,10 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             return 0;
         }
 
-        int weekno, start_doy;
-
         /* Calculate location of DTSTART day in weekno 1 */
         doy = get_day_of_year(impl, year,
                               impl->dtstart.month, impl->dtstart.day, NULL);
-        __icaltime_from_day_of_year(impl, doy, year, &weekno);
+        (void)__icaltime_from_day_of_year(impl, doy, year, &weekno);
         if (weekno > doy) weekno = 0;
         start_doy = doy - 7 * (weekno - 1);
 
@@ -2742,7 +2743,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
                 int month_day = BYMDPTR[j];
 
                 doy = get_day_of_year(impl, year, month, month_day, NULL);
-                        
+
                 if (doy != 0) {
                     impl->days[doy] = 1;
                     set_pos_total++;
@@ -2767,7 +2768,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             else {
                 /* Add each BYDAY to the yeardays map */
                 valid = impl->days[doy] = bydays[doy];
-            }  
+            }
 
             if (valid) set_pos_total++;
         }
@@ -2781,7 +2782,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
         /* "Filter" the year days map with each BYSETPOS */
         for (doy = 1; doy <= last_doy; doy++) {
             if (impl->days[doy]) {
-                impl->days[doy] = 
+                impl->days[doy] =
                     (check_set_position(impl, set_pos_counter + 1) ||
                      check_set_position(impl, set_pos_counter - set_pos_total));
                 set_pos_counter++;
