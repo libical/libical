@@ -2706,7 +2706,8 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
     else if (has_by_data(impl, BY_WEEK_NO)) {
         /* We only support BYWEEKNO + BYDAY */
         if (has_by_data(impl, BY_YEAR_DAY) ||
-            has_by_data(impl, BY_MONTH) || has_by_data(impl, BY_MONTH_DAY)) {
+            has_by_data(impl, BY_MONTH_DAY) ||
+            (has_by_data(impl, BY_MONTH) && !has_by_data(impl, BY_DAY))) {
             icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
             return 0;
         }

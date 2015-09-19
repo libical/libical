@@ -252,7 +252,7 @@ const struct recur rfc5545[] = {
     {"20141030T000000Z",
      "FREQ=DAILY;UNTIL=20141206T000000Z;BYMONTH=11,12,1,2,3,4,10"},
 
-    /* CalendarServer test:  */
+    /* CalendarServer test: Specific in first 2 weeks of year */
     {"20130101T000000",
      "FREQ=YEARLY;BYWEEKNO=1,2;UNTIL=20170101T000000Z"},
 
