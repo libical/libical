@@ -252,6 +252,22 @@ const struct recur rfc5545[] = {
     {"20141030T000000Z",
      "FREQ=DAILY;UNTIL=20141206T000000Z;BYMONTH=11,12,1,2,3,4,10"},
 
+    /* CalendarServer test:  */
+    {"20130101T000000",
+     "FREQ=YEARLY;BYWEEKNO=1,2;UNTIL=20170101T000000Z"},
+
+    /* CalendarServer test: Last day of year in leap year */
+    {"20121231T120000",
+     "FREQ=YEARLY;BYYEARDAY=366;UNTIL=20200101T000000"},
+
+    /* CalendarServer test: Last Friday in October */
+    {"20101029T120000",
+     "FREQ=YEARLY;BYDAY=-1FR;BYMONTH=10;UNTIL=20150101T000000Z"},
+
+    /* CalendarServer test: First Friday in April */
+    {"20100402T120000",
+     "FREQ=YEARLY;BYDAY=1FR;BYMONTH=4;UNTIL=20150101T000000Z"},
+
     {NULL, NULL}
 };
 
