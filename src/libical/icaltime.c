@@ -367,6 +367,10 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icaltimez
     return t;
 }
 
+/**
+ * Return a string represention of the time, in RFC5545 format. The
+ * string is owned by libical.
+ */
 const char *icaltime_as_ical_string(const struct icaltimetype tt)
 {
     char *buf;
@@ -378,7 +382,7 @@ const char *icaltime_as_ical_string(const struct icaltimetype tt)
 
 /**
  * Return a string represention of the time, in RFC5545 format. The
- * string is owned by libical
+ * string is owned by the caller.
  */
 char *icaltime_as_ical_string_r(const struct icaltimetype tt)
 {
