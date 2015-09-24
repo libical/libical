@@ -849,8 +849,7 @@ static void daysmask_clearall(unsigned long mask[])
            sizeof(unsigned long) * LONGS_PER_BITS(ICAL_BY_YEARDAY_SIZE));
 }
 
-static void daysmask_setbit(unsigned long mask[],
-                            unsigned int n, unsigned int v)
+static void daysmask_setbit(unsigned long mask[], short n, int v)
 {
     if (v)
         mask[n / BITS_PER_LONG] |= (1UL << (n % BITS_PER_LONG));
@@ -858,7 +857,7 @@ static void daysmask_setbit(unsigned long mask[],
         mask[n / BITS_PER_LONG] &= ~(1UL << (n % BITS_PER_LONG));
 }
 
-static unsigned int daysmask_getbit(unsigned long mask[], unsigned int n)
+static unsigned long daysmask_getbit(unsigned long mask[], short n)
 {
     return (mask[n / BITS_PER_LONG] >> (n % BITS_PER_LONG)) & 1;
 }
@@ -2351,12 +2350,12 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
 
         if (is_limiting) {
             /* "Filter" the year days bitmask with the bydays bitmask */
-            valid = (daysmask_getbit(impl->days, doy) &
-                     daysmask_getbit(bydays, doy));
+            valid = (int)(daysmask_getbit(impl->days, doy) &
+                          daysmask_getbit(bydays, doy));
         }
         else {
             /* Add each BYDAY to the year days bitmask */
-            valid = daysmask_getbit(bydays, doy);
+            valid = (int)daysmask_getbit(bydays, doy);
         }
 
         daysmask_setbit(impl->days, doy, valid);
