@@ -207,7 +207,7 @@ static struct freq_map
     {ICAL_NO_RECURRENCE, 0}
 };
 
-static icalrecurrencetype_frequency icalrecur_string_to_freq(const char *str)
+icalrecurrencetype_frequency icalrecur_string_to_freq(const char *str)
 {
     int i;
 
@@ -219,7 +219,7 @@ static icalrecurrencetype_frequency icalrecur_string_to_freq(const char *str)
     return ICAL_NO_RECURRENCE;
 }
 
-static const char *icalrecur_freq_to_string(icalrecurrencetype_frequency kind)
+const char *icalrecur_freq_to_string(icalrecurrencetype_frequency kind)
 {
     int i;
 
@@ -242,7 +242,7 @@ static struct skip_map
     {ICAL_SKIP_UNDEFINED, 0}
 };
 
-static icalrecurrencetype_skip icalrecur_string_to_skip(const char *str)
+icalrecurrencetype_skip icalrecur_string_to_skip(const char *str)
 {
     int i;
 
@@ -254,7 +254,7 @@ static icalrecurrencetype_skip icalrecur_string_to_skip(const char *str)
     return ICAL_SKIP_UNDEFINED;
 }
 
-static const char *icalrecur_skip_to_string(icalrecurrencetype_skip kind)
+const char *icalrecur_skip_to_string(icalrecurrencetype_skip kind)
 {
     int i;
 
@@ -281,7 +281,7 @@ static struct wd_map
     {ICAL_NO_WEEKDAY, 0}
 };
 
-static const char *icalrecur_weekday_to_string(icalrecurrencetype_weekday kind)
+const char *icalrecur_weekday_to_string(icalrecurrencetype_weekday kind)
 {
     int i;
 
@@ -294,7 +294,7 @@ static const char *icalrecur_weekday_to_string(icalrecurrencetype_weekday kind)
     return 0;
 }
 
-static icalrecurrencetype_weekday icalrecur_string_to_weekday(const char *str)
+icalrecurrencetype_weekday icalrecur_string_to_weekday(const char *str)
 {
     int i;
 

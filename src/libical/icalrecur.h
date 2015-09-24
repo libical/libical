@@ -72,7 +72,7 @@ whatever timezone that dtstart is in.
 #include "icaltime.h"
 
 /*
- * Recurrance enumerations
+ * Recurrence enumerations
  */
 
 typedef enum icalrecurrencetype_frequency
@@ -115,6 +115,19 @@ enum icalrecurrence_array_max_values
     ICAL_RECURRENCE_ARRAY_MAX = 0x7f7f,
     ICAL_RECURRENCE_ARRAY_MAX_BYTE = 0x7f
 };
+
+/*
+ * Recurrence enumerations conversion routines.
+ */
+
+LIBICAL_ICAL_EXPORT icalrecurrencetype_frequency icalrecur_string_to_freq(const char *str);
+LIBICAL_ICAL_EXPORT const char *icalrecur_freq_to_string(icalrecurrencetype_frequency kind);
+
+LIBICAL_ICAL_EXPORT icalrecurrencetype_skip icalrecur_string_to_skip(const char *str);
+LIBICAL_ICAL_EXPORT const char *icalrecur_skip_to_string(icalrecurrencetype_skip kind);
+
+LIBICAL_ICAL_EXPORT const char *icalrecur_weekday_to_string(icalrecurrencetype_weekday kind);
+LIBICAL_ICAL_EXPORT icalrecurrencetype_weekday icalrecur_string_to_weekday(const char *str);
 
 /**
  * Recurrence type routines
