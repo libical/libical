@@ -1609,7 +1609,7 @@ static int get_day_of_year(icalrecur_iterator *impl,
     if (!day) {
         day = impl->dtstart.day;
     }
-    else if (abs(day > days_in_month)) {
+    else if (abs(day) > days_in_month) {
         /* Skip bogus days */
         if (dow) {
             *dow = 0;
