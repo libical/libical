@@ -917,6 +917,22 @@ static int has_by_data(icalrecur_iterator *impl, enum byrule byrule)
     return (impl->orig_data[byrule] == 1);
 }
 
+static void setup_defaults(icalrecur_iterator *impl,
+                           enum byrule byrule, int deftime)
+{
+    icalrecurrencetype_frequency freq = impl->rule.freq;
+
+    if (expand_map[freq].map[byrule] == EXPAND) {
+
+        /* Re-write the BY rule arrays with data from the DTSTART time so
+           we don't have to explicitly deal with DTSTART */
+        if (impl->by_ptrs[byrule][0] == ICAL_RECURRENCE_ARRAY_MAX) {
+            impl->by_ptrs[byrule][0] = (short)deftime;
+        }
+    }
+}
+
+
 #if defined(HAVE_LIBICU)
 /*
  * Callbacks for recurrence rules with RSCALE support (using ICU)
@@ -965,22 +981,6 @@ static void set_minute(icalrecur_iterator *impl, int minute)
 static void set_hour(icalrecur_iterator *impl, int hour)
 {
     ucal_set(impl->rscale, UCAL_HOUR_OF_DAY, (int32_t) hour);
-}
-
-static int set_day_of_week(icalrecur_iterator *impl, int dow, int pos)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    int max_pos = (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_WEEK_IN_MONTH,
-                                     UCAL_ACTUAL_MAXIMUM, &status);
-
-    if (pos > max_pos || pos < (-max_pos))
-        return 0;
-
-    ucal_set(impl->rscale, UCAL_DAY_OF_WEEK, (int32_t) dow);
-    if (pos)
-        ucal_set(impl->rscale, UCAL_DAY_OF_WEEK_IN_MONTH, (int32_t) pos);
-
-    return 1;
 }
 
 static void set_day_of_month(icalrecur_iterator *impl, int day)
@@ -1304,33 +1304,6 @@ static short decode_day(short *day, unsigned flags)
     return icalrecurrencetype_day_position(*day);
 }
 
-static void setup_defaults(icalrecur_iterator *impl, enum byrule byrule,
-                           icalrecurrencetype_frequency req, int deftime,
-                           UCalendarDateFields field)
-{
-    icalrecurrencetype_frequency freq = impl->rule.freq;
-
-    if (expand_map[freq].map[byrule] == EXPAND) {
-
-        /* Re-write the BY rule arrays with data from the DTSTART time so
-           we don't have to explicitly deal with DTSTART */
-        if (impl->by_ptrs[byrule][0] == ICAL_RECURRENCE_ARRAY_MAX) {
-            impl->by_ptrs[byrule][0] = (short)deftime;
-        }
-
-        /* Initialize the first occurrence */
-        if (freq != req) {
-            short first = impl->by_ptrs[byrule][0];
-
-            if (field == UCAL_MONTH) {
-                set_month(impl, first);
-            } else {
-                ucal_set(impl->rscale, field, (int32_t) first);
-            }
-        }
-    }
-}
-
 static int initialize_iterator(icalrecur_iterator *impl)
 {
     struct icalrecurrencetype rule = impl->rule;
@@ -1439,20 +1412,15 @@ static int initialize_iterator(icalrecur_iterator *impl)
     impl->rstart = occurrence_as_icaltime(impl, 0);
 
     /* Set up defaults for BY_* arrays */
-    setup_defaults(impl, BY_SECOND, ICAL_SECONDLY_RECURRENCE,
-                   impl->rstart.second, UCAL_SECOND);
+    setup_defaults(impl, BY_SECOND, impl->rstart.second);
 
-    setup_defaults(impl, BY_MINUTE, ICAL_MINUTELY_RECURRENCE,
-                   impl->rstart.minute, UCAL_MINUTE);
+    setup_defaults(impl, BY_MINUTE, impl->rstart.minute);
 
-    setup_defaults(impl, BY_HOUR, ICAL_HOURLY_RECURRENCE,
-                   impl->rstart.hour, UCAL_HOUR_OF_DAY);
+    setup_defaults(impl, BY_HOUR, impl->rstart.hour);
 
-    setup_defaults(impl, BY_MONTH_DAY, ICAL_DAILY_RECURRENCE,
-                   impl->rstart.day, UCAL_DAY_OF_MONTH);
+    setup_defaults(impl, BY_MONTH_DAY, impl->rstart.day);
 
-    setup_defaults(impl, BY_MONTH, ICAL_MONTHLY_RECURRENCE,
-                   impl->rstart.month, UCAL_MONTH);
+    setup_defaults(impl, BY_MONTH, impl->rstart.month);
 
     return 1;
 }
@@ -1481,47 +1449,6 @@ static void set_minute(icalrecur_iterator *impl, int minute)
 static void set_hour(icalrecur_iterator *impl, int hour)
 {
     impl->last.hour = hour;
-}
-
-static int set_day_of_week(icalrecur_iterator *impl, int dow, int pos)
-{
-    int poscount = 0;
-    int days_in_month =
-        icaltime_days_in_month(impl->last.month, impl->last.year);
-
-    if (pos >= 0) {
-        /* Count up from the first day pf the month to find the
-           pos'th weekday of dow ( like the second monday. ) */
-
-        for (impl->last.day = 1;
-             impl->last.day <= days_in_month; impl->last.day++) {
-
-            if (icaltime_day_of_week(impl->last) == dow) {
-                if (++poscount == pos || pos == 0) {
-                    break;
-                }
-            }
-        }
-    } else {
-        /* Count down from the last day pf the month to find the
-           pos'th weekday of dow ( like the second to last monday. ) */
-        pos = -pos;
-        for (impl->last.day = days_in_month;
-             impl->last.day != 0; impl->last.day--) {
-
-            if (icaltime_day_of_week(impl->last) == dow) {
-                if (++poscount == pos) {
-                    break;
-                }
-            }
-        }
-    }
-
-    if (impl->last.day > days_in_month || impl->last.day == 0) {
-        return 0;
-    }
-
-    return 1;
 }
 
 static void set_month(icalrecur_iterator *impl, int month)
@@ -1749,44 +1676,18 @@ static void increment_second(icalrecur_iterator *impl, int inc)
     }
 }
 
-static void setup_defaults(icalrecur_iterator *impl,
-                           enum byrule byrule, icalrecurrencetype_frequency req,
-                           int deftime, int *timepart)
-{
-    icalrecurrencetype_frequency freq = impl->rule.freq;
-
-    if (expand_map[freq].map[byrule] == EXPAND) {
-
-        /* Re-write the BY rule arrays with data from the DTSTART time so
-           we don't have to explicitly deal with DTSTART */
-        if (impl->by_ptrs[byrule][0] == ICAL_RECURRENCE_ARRAY_MAX) {
-            impl->by_ptrs[byrule][0] = (short)deftime;
-        }
-
-        /* Initialize the first occurrence */
-        if (freq != req) {
-            *timepart = impl->by_ptrs[byrule][0];
-        }
-    }
-}
-
 static int initialize_iterator(icalrecur_iterator *impl)
 {
     /* Set up defaults for BY_* arrays */
-    setup_defaults(impl, BY_SECOND, ICAL_SECONDLY_RECURRENCE,
-                   impl->dtstart.second, &(impl->last.second));
+    setup_defaults(impl, BY_SECOND, impl->dtstart.second);
 
-    setup_defaults(impl, BY_MINUTE, ICAL_MINUTELY_RECURRENCE,
-                   impl->dtstart.minute, &(impl->last.minute));
+    setup_defaults(impl, BY_MINUTE, impl->dtstart.minute);
 
-    setup_defaults(impl, BY_HOUR, ICAL_HOURLY_RECURRENCE,
-                   impl->dtstart.hour, &(impl->last.hour));
+    setup_defaults(impl, BY_HOUR, impl->dtstart.hour);
 
-    setup_defaults(impl, BY_MONTH_DAY, ICAL_DAILY_RECURRENCE,
-                   impl->dtstart.day, &(impl->last.day));
+    setup_defaults(impl, BY_MONTH_DAY, impl->dtstart.day);
 
-    setup_defaults(impl, BY_MONTH, ICAL_MONTHLY_RECURRENCE,
-                   impl->dtstart.month, &(impl->last.month));
+    setup_defaults(impl, BY_MONTH, impl->dtstart.month);
 
     return 1;
 }
@@ -1962,32 +1863,6 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
         break;
 
     case ICAL_MONTHLY_RECURRENCE:
-        /* If this is a monthly interval with by day data, then we need to
-           set the last value to the appropriate day of the month */
-
-        if (has_by_data(impl, BY_DAY)) {
-
-            int dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[BYDAYIDX]);
-            int pos = icalrecurrencetype_day_position(BYDAYPTR[BYDAYIDX]);
-
-            if (set_day_of_week(impl, dow, pos) == 0) {
-                icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-                free(impl);
-                return 0;
-            }
-
-            /* If there is BY_MONTH_DAY data,
-               and the first day of BY_DAY data != first BY_MONTH_DAY data,
-               back up one week, so we don't return false data */
-            if (has_by_data(impl, BY_MONTH_DAY)) {
-                last = occurrence_as_icaltime(impl, 0);
-
-                if (last.day != BYMDPTR[0]) {
-                    increment_monthday(impl, -7);
-                }
-            }
-        }
-
         /* For MONTHLY rule, begin by setting up the year days array.
            The MONTHLY rules work by expanding one month at a time. */
 
