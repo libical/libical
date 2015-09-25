@@ -145,6 +145,7 @@
 
 #if defined(HAVE_LIBICU)
 #include <unicode/ucal.h>
+#include <unicode/ustring.h>
 #define RSCALE_IS_SUPPORTED 1
 #else
 #define RSCALE_IS_SUPPORTED 0
@@ -1336,11 +1337,20 @@ static int initialize_iterator(icalrecur_iterator *impl)
     struct icaltimetype dtstart = impl->dtstart;
     char locale[ULOC_KEYWORD_AND_VALUES_CAPACITY] = "";
     UErrorCode status = U_ZERO_ERROR;
-    const char *tzid = UCAL_UNKNOWN_ZONE_ID;
+    UChar *tzid = UCAL_UNKNOWN_ZONE_ID;
     short is_hebrew = 0;
 
-    if (dtstart.zone)
-        tzid = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
+    if (dtstart.zone) {
+        /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
+        const char *src = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
+        size_t len = (strlen(src) + 1) * U_SIZEOF_UCHAR;
+        tzid = icalmemory_tmp_buffer(len);
+        tzid = u_strFromUTF8Lenient(tzid, len, NULL, src, -1, &status);
+        if (U_FAILURE(status)) {
+            icalerror_set_errno(ICAL_INTERNAL_ERROR);
+            return 0;
+        }
+    }
 
     /* Create locale for Gregorian calendar */
     (void)uloc_setKeywordValue("calendar", "gregorian",
@@ -1348,7 +1358,7 @@ static int initialize_iterator(icalrecur_iterator *impl)
 
     /* Create Gregorian calendar and set to DTSTART */
     impl->greg =
-        ucal_open((const UChar *)tzid, -1, locale, UCAL_DEFAULT, &status);
+        ucal_open(tzid, -1, locale, UCAL_DEFAULT, &status);
     if (impl->greg) {
         ucal_setDateTime(impl->greg,
                          (int32_t) dtstart.year,
@@ -1397,7 +1407,7 @@ static int initialize_iterator(icalrecur_iterator *impl)
 
         /* Create RSCALE calendar and set to DTSTART */
         impl->rscale =
-            ucal_open((const UChar *)tzid, -1, locale, UCAL_DEFAULT, &status);
+            ucal_open(tzid, -1, locale, UCAL_DEFAULT, &status);
         if (impl->rscale) {
             UDate millis = ucal_getMillis(impl->greg, &status);
 
