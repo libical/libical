@@ -1337,7 +1337,7 @@ static int initialize_iterator(icalrecur_iterator *impl)
     struct icaltimetype dtstart = impl->dtstart;
     char locale[ULOC_KEYWORD_AND_VALUES_CAPACITY] = "";
     UErrorCode status = U_ZERO_ERROR;
-    UChar *tzid = UCAL_UNKNOWN_ZONE_ID;
+    UChar *tzid = NULL;
     short is_hebrew = 0;
 
     if (dtstart.zone) {
