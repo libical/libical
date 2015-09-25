@@ -382,13 +382,14 @@ int main(int argc, char *argv[])
     /* Default to RFC 5545 tests */
     const struct recur *r = rfc5545;
     FILE *fp = fopen("test.out", "w");
+    int verbose = 0;
 
     if (fp == NULL) {
         fprintf(stderr, "unable to open the output file test.out\n");
         return (1);
     }
 
-    while ((opt = getopt(argc, argv, "r")) != EOF) {
+    while ((opt = getopt(argc, argv, "rv")) != EOF) {
         switch (opt) {
 #if defined(HAVE_LIBICU)
         case 'r':      /* Do RSCALE tests */
@@ -400,6 +401,10 @@ int main(int argc, char *argv[])
             r = rscale;
             break;
 #endif
+
+        case 'v':      /* Verbose output to stdout */
+            verbose = 1;
+            break;
 
         default:
             fprintf(stderr, "usage: %s [-r]\n", argv[0]);
@@ -419,6 +424,8 @@ int main(int argc, char *argv[])
         fprintf(fp, "DTSTART:%s\n", r->dtstart);
         fprintf(fp, "INSTANCES:");
 
+        if (verbose) printf("Processing %s\n", r->rrule);
+
         dtstart = icaltime_from_string(r->dtstart);
         rrule = icalrecurrencetype_from_string(r->rrule);
         ritr = icalrecur_iterator_new(rrule, dtstart);
@@ -427,7 +434,8 @@ int main(int argc, char *argv[])
             fprintf(fp, " *** %s\n", icalerror_strerror(icalerrno));
         } else {
             for (next = icalrecur_iterator_next(ritr);
-                 !icaltime_is_null_time(next); next = icalrecur_iterator_next(ritr)) {
+                 !icaltime_is_null_time(next);
+                 next = icalrecur_iterator_next(ritr)) {
 
                 fprintf(fp, "%s%s", sep, icaltime_as_ical_string(next));
                 sep = ",";
