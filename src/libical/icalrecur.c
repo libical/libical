@@ -831,6 +831,8 @@ struct icalrecur_iterator_impl
     struct icaltimetype rstart; /* DTSTART in RSCALE  */
 #endif
 
+    struct icaltimetype expand_start;  /* Start date pre- year day expansion */
+
     /* days[] is a bitmask of year days.  A bit value of 1 signals an occurrence
        days_index is the bit number of the next occurrence */
     unsigned long days[LONGS_PER_BITS(ICAL_BY_YEARDAY_SIZE)];
@@ -983,19 +985,7 @@ static void set_hour(icalrecur_iterator *impl, int hour)
     ucal_set(impl->rscale, UCAL_HOUR_OF_DAY, (int32_t) hour);
 }
 
-static void set_day_of_month(icalrecur_iterator *impl, int day)
-{
-    if (day < 0) {
-        UErrorCode status = U_ZERO_ERROR;
-        int days_in_month = (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
-                                               UCAL_ACTUAL_MAXIMUM, &status);
-
-        day = days_in_month + day + 1;
-    }
-    ucal_set(impl->rscale, UCAL_DAY_OF_MONTH, (int32_t) day);
-}
-
-static void set_month(icalrecur_iterator *impl, int month)
+static void __set_month(icalrecur_iterator *impl, int month)
 {
     int is_leap_month = icalrecurrencetype_month_is_leap(month);
 
@@ -1004,6 +994,46 @@ static void set_month(icalrecur_iterator *impl, int month)
     ucal_set(impl->rscale, UCAL_MONTH, (int32_t) month);
     if (is_leap_month)
         ucal_set(impl->rscale, UCAL_IS_LEAP_MONTH, 1);
+}
+
+static int set_month(icalrecur_iterator *impl, int month)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    int actual_month;
+
+    __set_month(impl, month);
+
+    ucal_set(impl->rscale, UCAL_DAY_OF_MONTH, (int32_t) 1);
+
+    actual_month = 1 +  /* UCal is 0-based */
+        (int)ucal_get(impl->rscale, UCAL_MONTH, &status);
+
+    if (ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status)) {
+        actual_month |= LEAP_MONTH;
+    }
+
+    if (actual_month != month) {
+        switch (impl->rule.skip) {
+        default:
+            /* Should never get here! */
+
+        case ICAL_SKIP_OMIT:
+            /* Invalid month */
+            return 0;
+
+        case ICAL_SKIP_BACKWARD:
+            /* Skip back to next valid month */
+            ucal_add(impl->rscale, UCAL_MONTH, (int32_t) -1, &status);
+            break;
+
+        case ICAL_SKIP_FORWARD:
+            /* UCal skips forward to valid month by default */
+            break;
+        }
+    }
+
+    return (1 +  /* UCal is 0-based */
+            (int)ucal_get(impl->rscale, UCAL_MONTH, &status));
 }
 
 static int get_days_in_year(icalrecur_iterator *impl, int year)
@@ -1077,64 +1107,10 @@ static int get_days_in_month(icalrecur_iterator *impl, int month, int year)
     if (!month) {
         month = impl->rstart.month;
     }
-    set_month(impl, month);
+    __set_month(impl, month);
 
     return (int)ucal_getLimit(impl->rscale,
                               UCAL_DAY_OF_MONTH, UCAL_ACTUAL_MAXIMUM, &status);
-}
-
-static int omit_invalid(icalrecur_iterator *impl, int day, int month)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    int my_day = (int)ucal_get(impl->rscale, UCAL_DAY_OF_MONTH, &status);
-    int my_month = 1 +  /* UCal is 0-based */
-        (int)ucal_get(impl->rscale, UCAL_MONTH, &status);
-
-    if (day < 0) {
-        int days_in_month = (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
-                                               UCAL_ACTUAL_MAXIMUM, &status);
-
-        my_day -= days_in_month + 1;
-    }
-
-    if (ucal_get(impl->rscale, UCAL_IS_LEAP_MONTH, &status)) {
-        my_month |= LEAP_MONTH;
-    }
-
-    if (my_day != day || my_month != month) {
-        switch (impl->rule.skip) {
-        case ICAL_SKIP_OMIT:
-            if (my_month != month) {
-                set_month(impl, month);
-            }
-            return 1;
-
-        case ICAL_SKIP_BACKWARD:
-            if (my_month != month) {
-                int back_month =
-                    -abs(my_month - icalrecurrencetype_month_month(month));
-
-                ucal_add(impl->rscale,
-                         UCAL_MONTH, (int32_t) back_month, &status);
-            }
-            if (day < 0 || my_day != day) {
-                set_day_of_month(impl, -1);
-            }
-            break;
-
-        case ICAL_SKIP_FORWARD:
-            if (my_day != day) {
-                set_day_of_month(impl, 1);
-            }
-            break;
-
-        default:
-            /* Should never get here! */
-            break;
-        }
-    }
-
-    return 0;
 }
 
 static int get_day_of_year(icalrecur_iterator *impl,
@@ -1147,19 +1123,12 @@ static int get_day_of_year(icalrecur_iterator *impl,
     if (!month) {
         month = impl->rstart.month;
     }
-    set_month(impl, month);
+    __set_month(impl, month);
 
     if (!day) {
         day = impl->rstart.day;
     }
-    set_day_of_month(impl, day);
-
-    if (omit_invalid(impl, day, month)) {
-        if (dow) {
-            *dow = 0;
-        }
-        return 0;
-    }
+    ucal_set(impl->rscale, UCAL_DAY_OF_MONTH, (int32_t) day);
 
     if (dow) {
         *dow = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
@@ -1451,9 +1420,9 @@ static void set_hour(icalrecur_iterator *impl, int hour)
     impl->last.hour = hour;
 }
 
-static void set_month(icalrecur_iterator *impl, int month)
+static int set_month(icalrecur_iterator *impl, int month)
 {
-    impl->last.month = month;
+    return (impl->last.month = month);
 }
 
 static int get_days_in_year(icalrecur_iterator *impl, int year)
@@ -1545,16 +1514,6 @@ static int get_day_of_year(icalrecur_iterator *impl,
 
     if (!day) {
         day = impl->dtstart.day;
-    }
-    else if (abs(day) > days_in_month) {
-        /* Skip bogus days */
-        if (dow) {
-            *dow = 0;
-        }
-        return 0;
-    }
-    else if (day < 0) {
-        day += days_in_month + 1;
     }
     t.day = day;
 
@@ -1921,15 +1880,16 @@ static void increment_month(icalrecur_iterator *impl)
     if (has_by_data(impl, BY_MONTH)) {
         /* Ignore the frequency and use the byrule data */
 
-        BYMONIDX++;
+        do {
+            BYMONIDX++;
 
-        if (BYMONPTR[BYMONIDX] == ICAL_RECURRENCE_ARRAY_MAX) {
-            BYMONIDX = 0;
+            if (BYMONPTR[BYMONIDX] == ICAL_RECURRENCE_ARRAY_MAX) {
+                BYMONIDX = 0;
 
-            increment_year(impl, 1);
-        }
+                increment_year(impl, 1);
+            }
 
-        set_month(impl, BYMONPTR[BYMONIDX]);
+        } while (!set_month(impl, BYMONPTR[BYMONIDX]));
 
     } else {
 
@@ -2149,9 +2109,34 @@ static int check_set_position(icalrecur_iterator *impl, int set_pos)
 static int expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
 {
     int i, set_pos_total = 0;
+    int days_in_month = get_days_in_month(impl, month, year);
 
     for (i = 0; BYMDPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
-        short doy = get_day_of_year(impl, year, month, BYMDPTR[i], NULL);
+        short doy, mday = BYMDPTR[i];
+        int this_month = month;
+ 
+        if (abs(mday) > days_in_month) {
+            switch (impl->rule.skip) {
+            default:
+                /* Should never get here! */
+
+            case ICAL_SKIP_OMIT:
+                continue;
+
+            case ICAL_SKIP_FORWARD:
+                if (mday > 0) this_month++;   /* Next month */
+                mday = 1;                     /* First day of month */
+                break;
+
+            case ICAL_SKIP_BACKWARD:
+                if (mday < 0) this_month--;    /* Prev month */
+                mday = get_days_in_month(impl, this_month, year);
+                break;
+            }
+        }
+        else if (mday < 0) mday += days_in_month + 1;
+ 
+        doy = get_day_of_year(impl, year, this_month, mday, NULL);
 
         if (doy != 0) {
             daysmask_setbit(impl->days, doy, 1);
@@ -2287,6 +2272,10 @@ static int expand_month_days(icalrecur_iterator *impl, int year, int month)
 
     daysmask_clearall(impl->days);
 
+    /* We may end up skipping fwd/bwd a month during expansion.
+       Mark our current start date so next_month() can increment from here */
+    impl->expand_start = occurrence_as_icaltime(impl, 0);
+
     doy_offset = get_day_of_year(impl, year, month, 1, &first_dow) - 1;
     days_in_month = get_days_in_month(impl, month, year);
 
@@ -2330,12 +2319,12 @@ static int next_month(icalrecur_iterator *impl)
         for (;;) {
             struct icaltimetype last;
 
-            last = occurrence_as_icaltime(impl, 0);
-            if (last.day < BYMDPTR[BYMDIDX] &&
-                impl->rule.skip == ICAL_SKIP_FORWARD) {
-                /* We skipped forward a day, backup to the previous month */
-                __increment_month(impl, -1);
-            }
+            /* We may have skipped fwd/bwd a month during expansion.
+               Reset the date to pre-expansion so we can increment properly */
+            last = impl->expand_start;
+            (void)get_day_of_year(impl, last.year, last.month, last.day, NULL);
+
+            /* Increment to and expand the next month */
             increment_month(impl);
             last = occurrence_as_icaltime(impl, 0);
             expand_month_days(impl, last.year, last.month);
@@ -2487,7 +2476,9 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
     else {
         /* Add each BYMONTHDAY in each BYMONTH to the year days bitmask */
         for (i = 0; BYMONPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
-            set_pos_total += expand_bymonth_days(impl, year, BYMONPTR[i]);
+            int month = set_month(impl, BYMONPTR[i]);
+
+            if (month) set_pos_total += expand_bymonth_days(impl, year, month);
         }
     }
 
