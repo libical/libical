@@ -276,6 +276,14 @@ const struct recur rfc5545[] = {
     {"20150101T000000Z",
      "FREQ=MONTHLY;BYMONTHDAY=-31;COUNT=12"},
 
+    /* Test yearly with largest day of year */
+    {"20121231T120000",
+     "FREQ=YEARLY;BYYEARDAY=366;COUNT=3"},
+
+    /* Test yearly with -largest day of year */
+    {"20120101T120000",
+     "FREQ=YEARLY;BYYEARDAY=-366;COUNT=3"},
+
     {NULL, NULL}
 };
 
@@ -395,6 +403,22 @@ const struct recur rscale[] = {
     /* Test monthly with -largest day of month */
     {"20150101T000000Z",
      "RSCALE=GREGORIAN;FREQ=MONTHLY;BYMONTHDAY=-31;COUNT=12;SKIP=BACKWARD"},
+
+    /* Test yearly with largest day of year */
+    {"20121231T120000",
+     "RSCALE=GREGORIAN;FREQ=YEARLY;BYYEARDAY=366;SKIP=FORWARD;COUNT=9"},
+
+    /* Test yearly with largest day of year */
+    {"20121231T120000",
+     "RSCALE=GREGORIAN;FREQ=YEARLY;BYYEARDAY=366;SKIP=BACKWARD;COUNT=9"},
+
+    /* Test yearly with -largest day of year */
+    {"20120101T120000",
+     "RSCALE=GREGORIAN;FREQ=YEARLY;BYYEARDAY=-366;SKIP=FORWARD;COUNT=9"},
+
+    /* Test yearly with -largest day of year */
+    {"20120101T120000",
+     "RSCALE=GREGORIAN;FREQ=YEARLY;BYYEARDAY=-366;SKIP=BACKWARD;COUNT=9"},
 
     {NULL, NULL}
 };

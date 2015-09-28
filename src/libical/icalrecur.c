@@ -818,6 +818,9 @@ enum byrule
 /* Number of longs in mask of n bits */
 #define LONGS_PER_BITS(n)  ((n + BITS_PER_LONG -1 ) / BITS_PER_LONG)
 
+#define ICAL_YEARDAYS_MASK_SIZE    (ICAL_BY_YEARDAY_SIZE + 7)
+#define ICAL_YEARDAYS_MASK_OFFSET  4
+
 struct icalrecur_iterator_impl
 {
     struct icaltimetype dtstart;        /* Hack. Make into time_t */
@@ -833,9 +836,19 @@ struct icalrecur_iterator_impl
 
     struct icaltimetype expand_start;  /* Start date pre- year day expansion */
 
-    /* days[] is a bitmask of year days.  A bit value of 1 signals an occurrence
-       days_index is the bit number of the next occurrence */
-    unsigned long days[LONGS_PER_BITS(ICAL_BY_YEARDAY_SIZE)];
+    /* days[] is a bitmask of year days.  A bit value of 1 marks an occurrence.
+       The size of the bitmask is 7 + max days in year to accommodate full first
+       and last weeks of the year: up to 3 days in previous year and
+       up to 4 days in following year.  As a result, the days are offset by 4:
+       bit 0 is day -3 (3rd last day of previous year) and bit 4 is day 1
+       of the current year.  Days in the following year use higher day numbers,
+       e.g. day 367 is day 1 or 2 of following year depending on whether the
+       current year is a leap year.
+
+       days_index is the day of year of the next occurrence,
+       with a range of -3 to 4 + days in year.
+    */
+    unsigned long days[LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE)];
     short days_index;
 
     enum byrule byrule;
@@ -849,11 +862,12 @@ struct icalrecur_iterator_impl
 static void daysmask_clearall(unsigned long mask[])
 {
     memset(mask, 0,
-           sizeof(unsigned long) * LONGS_PER_BITS(ICAL_BY_YEARDAY_SIZE));
+           sizeof(unsigned long) * LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE));
 }
 
 static void daysmask_setbit(unsigned long mask[], short n, int v)
 {
+    n += ICAL_YEARDAYS_MASK_OFFSET;
     if (v)
         mask[n / BITS_PER_LONG] |= (1UL << (n % BITS_PER_LONG));
     else
@@ -862,6 +876,7 @@ static void daysmask_setbit(unsigned long mask[], short n, int v)
 
 static unsigned long daysmask_getbit(unsigned long mask[], short n)
 {
+    n += ICAL_YEARDAYS_MASK_OFFSET;
     return (mask[n / BITS_PER_LONG] >> (n % BITS_PER_LONG)) & 1;
 }
 
@@ -1697,7 +1712,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
     impl->rule = rule;
     impl->last = dtstart;
     impl->dtstart = dtstart;
-    impl->days_index = ICAL_BY_YEARDAY_SIZE;
+    impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
     impl->occurrence_no = 0;
 
     /* Set up convenience pointers to make the code simpler. Allows
@@ -1809,7 +1824,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                 free(impl);
                 return 0;
             }
-            if (impl->days_index < ICAL_BY_YEARDAY_SIZE) {
+            if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
                 break;  /* break when a matching day is found */
             }
             increment_year(impl, impl->rule.interval);
@@ -1828,7 +1843,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
         /* Fail after hitting the year 20000 if no expanded days match */
         while (last.year < 20000) {
             expand_month_days(impl, last.year, last.month);
-            if (impl->days_index < ICAL_BY_YEARDAY_SIZE) {
+            if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
                 break;  /* break when a matching day is found */
             }
             increment_month(impl);
@@ -2155,7 +2170,7 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
                          int is_limiting)
 {
     /* Try to calculate each of the occurrences. */
-    unsigned long bydays[LONGS_PER_BITS(ICAL_BY_YEARDAY_SIZE)];
+    unsigned long bydays[LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE)];
     int i, set_pos_total = 0;
     short doy;
 
@@ -2246,7 +2261,7 @@ static void filter_bysetpos(icalrecur_iterator *impl, int pos_total,
     int pos_count = 0;
     short doy;
 
-    impl->days_index = ICAL_BY_YEARDAY_SIZE;
+    impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
     for (doy = start_doy; doy <= end_doy; doy++) {
         if (daysmask_getbit(impl->days, doy)) {
@@ -2286,7 +2301,7 @@ static int expand_month_days(icalrecur_iterator *impl, int year, int month)
         /* Apply each BYDAY to the year days bitmask */
         int last_dow;
 
-        impl->days_index = ICAL_BY_YEARDAY_SIZE;
+        impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
         (void)get_day_of_year(impl, year, month, days_in_month, &last_dow);
 
@@ -2311,10 +2326,10 @@ static int next_month(icalrecur_iterator *impl)
     }
 
     /* Find next year day that is set */
-    while (++impl->days_index < ICAL_BY_YEARDAY_SIZE &&
+    while (++impl->days_index < ICAL_YEARDAYS_MASK_SIZE &&
            !daysmask_getbit(impl->days, impl->days_index));
 
-    if (impl->days_index >= ICAL_BY_YEARDAY_SIZE) {
+    if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
 
         for (;;) {
             struct icaltimetype last;
@@ -2328,7 +2343,7 @@ static int next_month(icalrecur_iterator *impl)
             increment_month(impl);
             last = occurrence_as_icaltime(impl, 0);
             expand_month_days(impl, last.year, last.month);
-            if (impl->days_index < ICAL_BY_YEARDAY_SIZE) {
+            if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
                 break;  /* break when a matching day is found */
             }
         }
@@ -2421,6 +2436,10 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
 
     daysmask_clearall(impl->days);
 
+    /* We may end up skipping fwd/bwd a year during expansion.
+       Mark our current start date so next_year() can increment from here */
+    impl->expand_start = occurrence_as_icaltime(impl, 0);
+
     if (has_by_data(impl, BY_YEAR_DAY)) {
         /* We only support BYYEARDAY + BYDAY */
         if (has_by_data(impl, BY_WEEK_NO) ||
@@ -2434,10 +2453,26 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             doy = BYYDPTR[i];
 
             if (abs(doy) > days_in_year) {
-                /* XXX  Handle SKIP=FORWARD/BACKWARD */
-                continue;
+                switch (impl->rule.skip) {
+                default:
+                    /* Should never get here! */
+
+                case ICAL_SKIP_OMIT:
+                    /* Invalid day */
+                    continue;
+
+                case ICAL_SKIP_FORWARD:
+                    if (doy < 0) doy = 1;         /* First day of this year */
+                    else doy = days_in_year + 1;  /* First day of next year */
+                    break;
+
+                case ICAL_SKIP_BACKWARD:
+                    if (doy < 0) doy = -1;        /* Last day of prev year */
+                    else doy = days_in_year;      /* Last day of this year */
+                    break;
+                }
             }
-            if (doy < 0) doy += days_in_year + 1;
+            else if (doy < 0) doy += days_in_year + 1;
 
             daysmask_setbit(impl->days, doy, 1);
             set_pos_total++;
@@ -2488,7 +2523,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             has_by_data(impl, BY_YEAR_DAY) || has_by_data(impl, BY_MONTH_DAY);
         int first_dow, last_dow;
 
-        impl->days_index = ICAL_BY_YEARDAY_SIZE;
+        impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
         set_pos_total = 0;
 
         if (has_by_data(impl, BY_MONTH)) {
@@ -2541,22 +2576,32 @@ static int next_year(icalrecur_iterator *impl)
         return 0;
     }
 
+    /* We may have skipped fwd/bwd a year with previous occurrence.
+       Reset the year to pre-expansion so we can increment properly */
+    (void)get_day_of_year(impl, impl->expand_start.year, 1, 1, NULL);
+
     /* Find next year day that is set */
-    while (++impl->days_index < ICAL_BY_YEARDAY_SIZE &&
+    while (++impl->days_index < ICAL_YEARDAYS_MASK_SIZE &&
            !daysmask_getbit(impl->days, impl->days_index));
 
-    if (impl->days_index >= ICAL_BY_YEARDAY_SIZE) {
+    if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
 
         for (;;) {
             struct icaltimetype last;
 
+            /* Increment to and expand the next year */
             increment_year(impl, impl->rule.interval);
             last = occurrence_as_icaltime(impl, 0);
             expand_year_days(impl, last.year);
-            if (impl->days_index < ICAL_BY_YEARDAY_SIZE) {
+            if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
                 break;  /* break when a matching day is found */
             }
         }
+    }
+
+    if (impl->days_index < 0) {
+        /* Day is in previous year */
+        increment_year(impl, -1);
     }
 
     set_day_of_year(impl, impl->days_index);
