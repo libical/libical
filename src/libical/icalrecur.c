@@ -1517,7 +1517,6 @@ static int get_day_of_year(icalrecur_iterator *impl,
                            int year, int month, int day, int *dow)
 {
     struct icaltimetype t = impl->dtstart;
-    int days_in_month = icaltime_days_in_month(month, year);
 
     t.is_date = 1;
     t.year = year;
