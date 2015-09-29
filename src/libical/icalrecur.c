@@ -834,7 +834,7 @@ struct icalrecur_iterator_impl
     struct icaltimetype rstart; /* DTSTART in RSCALE  */
 #endif
 
-    struct icaltimetype expand_start;  /* Start date pre- year day expansion */
+    struct icaltimetype period_start;  /* Start date of monthly/yearly period */
 
     /* days[] is a bitmask of year days.  A bit value of 1 marks an occurrence.
        The size of the bitmask is 7 + max days in year to accommodate full first
@@ -1051,6 +1051,17 @@ static int set_month(icalrecur_iterator *impl, int month)
             (int)ucal_get(impl->rscale, UCAL_MONTH, &status));
 }
 
+static int get_months_in_year(icalrecur_iterator *impl, int year)
+{
+    UErrorCode status = U_ZERO_ERROR;
+
+    if (year) ucal_set(impl->rscale, UCAL_YEAR, (int32_t) year);
+
+    return (1 +  /* UCal is 0-based */
+            (int)ucal_getLimit(impl->rscale, UCAL_MONTH,
+                               UCAL_ACTUAL_MAXIMUM, &status));
+}
+
 static int get_days_in_year(icalrecur_iterator *impl, int year)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -1142,6 +1153,10 @@ static int get_day_of_year(icalrecur_iterator *impl,
 
     if (!day) {
         day = impl->rstart.day;
+    }
+    else if (day < 0) {
+        day += 1 + (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
+                                      UCAL_ACTUAL_MAXIMUM, &status);
     }
     ucal_set(impl->rscale, UCAL_DAY_OF_MONTH, (int32_t) day);
 
@@ -1440,6 +1455,8 @@ static int set_month(icalrecur_iterator *impl, int month)
     return (impl->last.month = month);
 }
 
+#define get_months_in_year(impl, year)  (12)
+
 static int get_days_in_year(icalrecur_iterator *impl, int year)
 {
     _unused(impl);
@@ -1528,6 +1545,9 @@ static int get_day_of_year(icalrecur_iterator *impl,
 
     if (!day) {
         day = impl->dtstart.day;
+    }
+    else if (day < 0) {
+        day += icaltime_days_in_month(month, year) + 1;
     }
     t.day = day;
 
@@ -1670,6 +1690,8 @@ static int initialize_iterator(icalrecur_iterator *impl)
 static void increment_month(icalrecur_iterator *impl);
 static int expand_month_days(icalrecur_iterator *impl, int year, int month);
 static int expand_year_days(icalrecur_iterator *impl, int year);
+static int next_yearday(icalrecur_iterator *impl,
+                        void (*next_period)(icalrecur_iterator *));
 
 icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                                            struct icaltimetype dtstart)
@@ -2126,37 +2148,41 @@ static int expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
     int days_in_month = get_days_in_month(impl, month, year);
 
     for (i = 0; BYMDPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
-        short doy, mday = BYMDPTR[i];
+        short doy = 0, mday = BYMDPTR[i];
         int this_month = month;
- 
+
         if (abs(mday) > days_in_month) {
+            int days_in_year = get_days_in_year(impl, year);
+
             switch (impl->rule.skip) {
             default:
                 /* Should never get here! */
 
             case ICAL_SKIP_OMIT:
                 continue;
-
+ 
             case ICAL_SKIP_FORWARD:
                 if (mday > 0) this_month++;   /* Next month */
-                mday = 1;                     /* First day of month */
+
+                if (this_month > get_months_in_year(impl, year))
+                    doy = days_in_year + 1;   /* First day of next year */
+                else mday = 1;                /* First day of month */
                 break;
 
             case ICAL_SKIP_BACKWARD:
                 if (mday < 0) this_month--;    /* Prev month */
-                mday = get_days_in_month(impl, this_month, year);
+
+                if (this_month == 0) doy = -1; /* Last day of prev year */
+                else mday = -1;                /* Last day of month */
                 break;
             }
         }
-        else if (mday < 0) mday += days_in_month + 1;
- 
-        doy = get_day_of_year(impl, year, this_month, mday, NULL);
 
-        if (doy != 0) {
-            daysmask_setbit(impl->days, doy, 1);
-            if (doy < impl->days_index) impl->days_index = doy;
-            set_pos_total++;
-        }
+        if (!doy) doy = get_day_of_year(impl, year, this_month, mday, NULL);
+
+        daysmask_setbit(impl->days, doy, 1);
+        set_pos_total++;
+        if (doy < impl->days_index) impl->days_index = doy;
     }
 
     return set_pos_total;
@@ -2288,7 +2314,7 @@ static int expand_month_days(icalrecur_iterator *impl, int year, int month)
 
     /* We may end up skipping fwd/bwd a month during expansion.
        Mark our current start date so next_month() can increment from here */
-    impl->expand_start = occurrence_as_icaltime(impl, 0);
+    impl->period_start = occurrence_as_icaltime(impl, 0);
 
     doy_offset = get_day_of_year(impl, year, month, 1, &first_dow) - 1;
     days_in_month = get_days_in_month(impl, month, year);
@@ -2318,39 +2344,19 @@ static int expand_month_days(icalrecur_iterator *impl, int year, int month)
     return 0;
 }
 
+static void __next_month(icalrecur_iterator *impl)
+{
+    struct icaltimetype this;
+
+    /* Increment to and expand the next month */
+    increment_month(impl);
+    this = occurrence_as_icaltime(impl, 0);
+    expand_month_days(impl, this.year, this.month);
+}
+
 static int next_month(icalrecur_iterator *impl)
 {
-    if (next_hour(impl) == 0) {
-        return 0;
-    }
-
-    /* Find next year day that is set */
-    while (++impl->days_index < ICAL_YEARDAYS_MASK_SIZE &&
-           !daysmask_getbit(impl->days, impl->days_index));
-
-    if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
-
-        for (;;) {
-            struct icaltimetype last;
-
-            /* We may have skipped fwd/bwd a month during expansion.
-               Reset the date to pre-expansion so we can increment properly */
-            last = impl->expand_start;
-            (void)get_day_of_year(impl, last.year, last.month, last.day, NULL);
-
-            /* Increment to and expand the next month */
-            increment_month(impl);
-            last = occurrence_as_icaltime(impl, 0);
-            expand_month_days(impl, last.year, last.month);
-            if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
-                break;  /* break when a matching day is found */
-            }
-        }
-    }
-
-    set_day_of_year(impl, impl->days_index);
-
-    return 1;
+    return next_yearday(impl, &__next_month);
 }
 
 static int next_weekday_by_week(icalrecur_iterator *impl)
@@ -2430,14 +2436,14 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
 {
     int i;
     int set_pos_total = 0;
-    short days_in_year = (short)get_days_in_year(impl, year); 
+    short days_in_year = (short)get_days_in_year(impl, year);
     short doy;
 
     daysmask_clearall(impl->days);
 
     /* We may end up skipping fwd/bwd a year during expansion.
        Mark our current start date so next_year() can increment from here */
-    impl->expand_start = occurrence_as_icaltime(impl, 0);
+    impl->period_start = occurrence_as_icaltime(impl, 0);
 
     if (has_by_data(impl, BY_YEAR_DAY)) {
         /* We only support BYYEARDAY + BYDAY */
@@ -2569,15 +2575,33 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
     return 0;
 }
 
+static void __next_year(icalrecur_iterator *impl)
+{
+    struct icaltimetype this;
+
+    /* Increment to and expand the next year */
+    increment_year(impl, impl->rule.interval);
+    this = occurrence_as_icaltime(impl, 0);
+    expand_year_days(impl, this.year);
+}
+
 static int next_year(icalrecur_iterator *impl)
 {
+    return next_yearday(impl, &__next_year);
+}
+
+static int next_yearday(icalrecur_iterator *impl,
+                        void (*next_period)(icalrecur_iterator *))
+{
+    struct icaltimetype start = impl->period_start;
+
     if (next_hour(impl) == 0) {
         return 0;
     }
 
-    /* We may have skipped fwd/bwd a year with previous occurrence.
-       Reset the year to pre-expansion so we can increment properly */
-    (void)get_day_of_year(impl, impl->expand_start.year, 1, 1, NULL);
+    /* We may have skipped fwd/bwd a month/year with previous occurrence.
+       Reset the period start date so we can increment properly */
+    (void)get_day_of_year(impl, start.year, start.month, start.day, NULL);
 
     /* Find next year day that is set */
     while (++impl->days_index < ICAL_YEARDAYS_MASK_SIZE &&
@@ -2586,12 +2610,9 @@ static int next_year(icalrecur_iterator *impl)
     if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
 
         for (;;) {
-            struct icaltimetype last;
+            /* Increment to and expand the next period */
+            next_period(impl);
 
-            /* Increment to and expand the next year */
-            increment_year(impl, impl->rule.interval);
-            last = occurrence_as_icaltime(impl, 0);
-            expand_year_days(impl, last.year);
             if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
                 break;  /* break when a matching day is found */
             }
@@ -2695,38 +2716,37 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         valid = 1;
         switch (impl->rule.freq) {
 
-        case ICAL_SECONDLY_RECURRENCE:{
-                next_second(impl);
-                break;
-            }
-        case ICAL_MINUTELY_RECURRENCE:{
-                next_minute(impl);
-                break;
-            }
-        case ICAL_HOURLY_RECURRENCE:{
-                (void)next_hour(impl);
-                break;
-            }
-        case ICAL_DAILY_RECURRENCE:{
-                next_day(impl);
-                break;
-            }
-        case ICAL_WEEKLY_RECURRENCE:{
-                next_week(impl);
-                break;
-            }
-        case ICAL_MONTHLY_RECURRENCE:{
-                valid = next_month(impl);
-                break;
-            }
-        case ICAL_YEARLY_RECURRENCE:{
-                next_year(impl);
-                break;
-            }
-        default:{
-                icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-                return icaltime_null_time();
-            }
+        case ICAL_SECONDLY_RECURRENCE:
+            next_second(impl);
+            break;
+
+        case ICAL_MINUTELY_RECURRENCE:
+            next_minute(impl);
+            break;
+
+        case ICAL_HOURLY_RECURRENCE:
+            next_hour(impl);
+            break;
+
+        case ICAL_DAILY_RECURRENCE:
+            next_day(impl);
+            break;
+
+        case ICAL_WEEKLY_RECURRENCE:
+            next_week(impl);
+            break;
+
+        case ICAL_MONTHLY_RECURRENCE:
+            next_month(impl);
+            break;
+
+        case ICAL_YEARLY_RECURRENCE:
+            next_year(impl);
+            break;
+
+        default:
+            icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+            return icaltime_null_time();
         }
 
         impl->last = occurrence_as_icaltime(impl, 1);
