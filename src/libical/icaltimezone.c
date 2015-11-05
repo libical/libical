@@ -1587,6 +1587,7 @@ static int fetch_lat_long_from_string(const char *str,
    useful for binary searches. */
 static void icaltimezone_parse_zone_tab(void)
 {
+    const char *zonedir, *zonetab;
     char *filename;
     FILE *fp;
     char buf[1024];     /* Used to store each line of zones.tab as it is read. */
@@ -1601,28 +1602,39 @@ static void icaltimezone_parse_zone_tab(void)
     builtin_timezones = icalarray_new(sizeof(icaltimezone), 1024);
 
     if (!use_builtin_tzdata) {
-        filename_len =
-            strlen((char *)icaltzutil_get_zone_directory()) + strlen(ZONES_TAB_SYSTEM_FILENAME) + 2;
+        zonedir = icaltzutil_get_zone_directory();
+        zonetab = ZONES_TAB_SYSTEM_FILENAME;
     } else {
-        filename_len = strlen(get_zone_directory()) + strlen(ZONES_TAB_FILENAME) + 2;
+        zonedir = get_zone_directory();
+        zonetab = ZONES_TAB_FILENAME;
     }
+
+    filename_len = 0;
+    if (zonedir) {
+        filename_len = strlen(zonedir);
+    }
+
+    icalerror_assert(filename_len > 0, "Unable to locate a zoneinfo dir");
+    if (filename_len == 0) {
+        icalerror_set_errno(ICAL_INTERNAL_ERROR);\
+        return;
+    }
+
+    filename_len += strlen(zonetab);
+    filename_len += 2; /* for dir separator and final '\0' */
 
     filename = (char *)malloc(filename_len);
     if (!filename) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return;
     }
-    if (!use_builtin_tzdata) {
-        snprintf(filename, filename_len, "%s/%s", icaltzutil_get_zone_directory(),
-                 ZONES_TAB_SYSTEM_FILENAME);
-    } else {
-        snprintf(filename, filename_len, "%s/%s", get_zone_directory(), ZONES_TAB_FILENAME);
-    }
+    snprintf(filename, filename_len, "%s/%s", zonedir, zonetab);
 
     fp = fopen(filename, "r");
     free(filename);
+    icalerror_assert(fp, "Cannot open the zonetab file for reading");
     if (!fp) {
-        icalerror_set_errno(ICAL_FILE_ERROR);
+        icalerror_set_errno(ICAL_INTERNAL_ERROR);
         return;
     }
 
