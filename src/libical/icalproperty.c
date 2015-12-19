@@ -93,10 +93,11 @@ icalproperty *icalproperty_new(icalproperty_kind kind)
 
 icalproperty *icalproperty_new_clone(icalproperty *old)
 {
-    icalproperty *new = icalproperty_new_impl(old->kind);
+    icalproperty *new;
     pvl_elem p;
 
     icalerror_check_arg_rz((old != 0), "old");
+    new = icalproperty_new_impl(old->kind);
     icalerror_check_arg_rz((new != 0), "new");
 
     if (old->value != 0) {
