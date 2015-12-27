@@ -372,7 +372,7 @@ static int simple_str_to_double(const char *from, double *result, char **to)
     char *start = NULL, *end = NULL, *cur = (char *)from;
     char tmp_buf[TMP_NUM_SIZE + 1];     /*hack */
 
-#if !defined(_WIN32_WCE)
+#if !defined(HAVE_GETNUMBERFORMAT)
     struct lconv *loc_data = localeconv();
 #endif
     int i = 0;
@@ -408,7 +408,7 @@ static int simple_str_to_double(const char *from, double *result, char **to)
      * care to have the (optional) decimal separator be the one
      * of the current locale.
      */
-#if !defined(_WIN32_WCE)
+#if !defined(HAVE_GETNUMBERFORMAT)
     for (i = 0; i < end - from; ++i) {
         if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0]
             && loc_data->decimal_point[0] != '.') {

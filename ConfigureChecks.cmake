@@ -56,6 +56,9 @@ check_function_exists(iswspace HAVE_ISWSPACE) #Linux <wctype.h>
 check_function_exists(setenv HAVE_SETENV)
 check_function_exists(unsetenv HAVE_UNSETENV)
 
+set(CMAKE_REQUIRED_LIBRARIES kernel32.lib)
+check_function_exists(GetNumberFormat HAVE_GETNUMBERFORMAT) #Windows <windows.h>
+
 include(CheckTypeSize)
 check_type_size(intptr_t SIZEOF_INTPTR_T)
 check_type_size(pid_t SIZEOF_PID_T)
