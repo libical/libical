@@ -18,7 +18,7 @@
  The original author is Eric Busboom
  The original code is regression.c
 ======================================================================*/
-
+//krazy:skip
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

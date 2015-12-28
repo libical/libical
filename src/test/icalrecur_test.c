@@ -472,7 +472,9 @@ int main(int argc, char *argv[])
         fprintf(fp, "DTSTART:%s\n", r->dtstart);
         fprintf(fp, "INSTANCES:");
 
-        if (verbose) printf("Processing %s\n", r->rrule);
+        if (verbose) {
+            printf("Processing %s\n", r->rrule);
+        }
 
         dtstart = icaltime_from_string(r->dtstart);
         rrule = icalrecurrencetype_from_string(r->rrule);

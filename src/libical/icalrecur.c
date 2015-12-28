@@ -760,8 +760,8 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
                         icalmemory_append_string(&str, &str_p, &buf_sz, temp);
                     }
 
-                } else if (j == 7 /* BYMONTH */
-                           && icalrecurrencetype_month_is_leap(array[i])) {
+                } else if (j == 7 /* BYMONTH */ &&
+                           icalrecurrencetype_month_is_leap(array[i])) {
                     snprintf(temp, sizeof(temp), "%dL",
                              icalrecurrencetype_month_month(array[i]));
                     icalmemory_append_string(&str, &str_p, &buf_sz, temp);
@@ -868,10 +868,11 @@ static void daysmask_clearall(unsigned long mask[])
 static void daysmask_setbit(unsigned long mask[], short n, int v)
 {
     n += ICAL_YEARDAYS_MASK_OFFSET;
-    if (v)
+    if (v) {
         mask[n / BITS_PER_LONG] |= (1UL << (n % BITS_PER_LONG));
-    else
+    } else {
         mask[n / BITS_PER_LONG] &= ~(1UL << (n % BITS_PER_LONG));
+    }
 }
 
 static unsigned long daysmask_getbit(unsigned long mask[], short n)
@@ -926,7 +927,6 @@ static const struct expand_split_map_struct expand_map[] = {
     {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 3, 3, 1, 1 }},
     {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2, 1 }},
     {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }}
-
 };
 
 static int has_by_data(icalrecur_iterator *impl, enum byrule byrule)
@@ -948,7 +948,6 @@ static void setup_defaults(icalrecur_iterator *impl,
         }
     }
 }
-
 
 #if defined(HAVE_LIBICU)
 /*
@@ -1055,7 +1054,9 @@ static int get_months_in_year(icalrecur_iterator *impl, int year)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    if (year) ucal_set(impl->rscale, UCAL_YEAR, (int32_t) year);
+    if (year) {
+        ucal_set(impl->rscale, UCAL_YEAR, (int32_t) year);
+    }
 
     return (1 +  /* UCal is 0-based */
             (int)ucal_getLimit(impl->rscale, UCAL_MONTH,
@@ -1066,7 +1067,9 @@ static int get_days_in_year(icalrecur_iterator *impl, int year)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    if (year) ucal_set(impl->rscale, UCAL_YEAR, (int32_t) year);
+    if (year) {
+        ucal_set(impl->rscale, UCAL_YEAR, (int32_t) year);
+    }
 
     return (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_YEAR,
                               UCAL_ACTUAL_MAXIMUM, &status);
@@ -1074,7 +1077,9 @@ static int get_days_in_year(icalrecur_iterator *impl, int year)
 
 static void set_day_of_year(icalrecur_iterator *impl, int doy)
 {
-    if (doy < 0) doy += get_days_in_year(impl, 0) + 1;
+    if (doy < 0) {
+        doy += get_days_in_year(impl, 0) + 1;
+    }
 
     ucal_set(impl->rscale, UCAL_DAY_OF_YEAR, (int32_t) doy);
 }
@@ -1087,8 +1092,9 @@ static int get_start_of_week(icalrecur_iterator *impl)
     doy = (int)ucal_get(impl->rscale, UCAL_DAY_OF_YEAR, &status);
     dow = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
     dow -= impl->rule.week_start;
-    if (dow < 0)
+    if (dow < 0) {
         dow += 7;
+    }
 
     return (doy - dow);
 }
@@ -1206,7 +1212,9 @@ struct icaltimetype __icaltime_from_day_of_year(icalrecur_iterator *impl,
                                                 int day, int year, int *weekno)
 {
     ucal_set(impl->rscale, UCAL_YEAR, (int32_t) year);
-    if (day < 0) day += get_days_in_year(impl, 0) + 1;
+    if (day < 0) {
+        day += get_days_in_year(impl, 0) + 1;
+    }
 
     ucal_set(impl->rscale, UCAL_DAY_OF_YEAR, (int32_t) day);
 
@@ -1468,7 +1476,9 @@ static void set_day_of_year(icalrecur_iterator *impl, int doy)
 {
     struct icaltimetype next;
 
-    if (doy < 0) doy += get_days_in_year(impl, impl->last.year) + 1;
+    if (doy < 0) {
+        doy += get_days_in_year(impl, impl->last.year) + 1;
+    }
 
     next = icaltime_from_day_of_year(doy, impl->last.year);
 
@@ -1569,7 +1579,9 @@ struct icaltimetype __icaltime_from_day_of_year(icalrecur_iterator *impl,
 {
     struct icaltimetype tt;
 
-    if (day < 0) day += get_days_in_year(impl, year) + 1;
+    if (day < 0) {
+        day += get_days_in_year(impl, year) + 1;
+    }
 
     tt = icaltime_from_day_of_year(day, year);
 
@@ -1778,8 +1790,8 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
     /* Check if the recurrence rule is legal */
 
     for (byrule = BY_SECOND; byrule <= BY_SET_POS; byrule++) {
-        if (expand_map[freq].map[byrule] == ILLEGAL
-            && impl->by_ptrs[byrule][0] != ICAL_RECURRENCE_ARRAY_MAX) {
+        if (expand_map[freq].map[byrule] == ILLEGAL &&
+            impl->by_ptrs[byrule][0] != ICAL_RECURRENCE_ARRAY_MAX) {
             icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
             free(impl);
             return 0;
@@ -1989,8 +2001,8 @@ static int next_second(icalrecur_iterator *impl)
 
         impl->by_indices[BY_SECOND]++;
 
-        if (impl->by_ptrs[BY_SECOND][impl->by_indices[BY_SECOND]]
-            == ICAL_RECURRENCE_ARRAY_MAX) {
+        if (impl->by_ptrs[BY_SECOND][impl->by_indices[BY_SECOND]] ==
+            ICAL_RECURRENCE_ARRAY_MAX) {
             impl->by_indices[BY_SECOND] = 0;
 
             end_of_data = 1;
@@ -2075,8 +2087,8 @@ static int next_hour(icalrecur_iterator *impl)
 
         impl->by_indices[BY_HOUR]++;
 
-        if (impl->by_ptrs[BY_HOUR][impl->by_indices[BY_HOUR]]
-            == ICAL_RECURRENCE_ARRAY_MAX) {
+        if (impl->by_ptrs[BY_HOUR][impl->by_indices[BY_HOUR]] ==
+            ICAL_RECURRENCE_ARRAY_MAX) {
             impl->by_indices[BY_HOUR] = 0;
 
             end_of_data = 1;
@@ -2160,25 +2172,34 @@ static int expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
 
             case ICAL_SKIP_OMIT:
                 continue;
- 
-            case ICAL_SKIP_FORWARD:
-                if (mday > 0) this_month++;   /* Next month */
 
-                if (this_month > get_months_in_year(impl, year))
-                    doy = days_in_year + 1;   /* First day of next year */
-                else mday = 1;                /* First day of month */
+            case ICAL_SKIP_FORWARD:
+                if (mday > 0) this_month++;  /* Next month */
+
+                if (this_month > get_months_in_year(impl, year)) {
+                    doy = days_in_year + 1;  /* First day of next year */
+                } else {
+                    mday = 1;                /* First day of month */
+                }
                 break;
 
             case ICAL_SKIP_BACKWARD:
-                if (mday < 0) this_month--;    /* Prev month */
+                if (mday < 0) {
+                    this_month--;  /* Prev month */
+                }
 
-                if (this_month == 0) doy = -1; /* Last day of prev year */
-                else mday = -1;                /* Last day of month */
+                if (this_month == 0) {
+                    doy = -1;      /* Last day of prev year */
+                } else {
+                    mday = -1;     /* Last day of month */
+                }
                 break;
             }
         }
 
-        if (!doy) doy = get_day_of_year(impl, year, this_month, mday, NULL);
+        if (!doy) {
+            doy = get_day_of_year(impl, year, this_month, mday, NULL);
+        }
 
         daysmask_setbit(impl->days, doy, 1);
         set_pos_total++;
@@ -2222,13 +2243,17 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
             /* nth instance of the weekday within the period. */
             day = first_matching_day + (pos - 1) * 7;
 
-            if (day > last_matching_day) continue;
+            if (day > last_matching_day) {
+                continue;
+            }
 
         } else { /* pos < 0 */
             /* -nth instance of the weekday within the period. */
             day = last_matching_day + (pos + 1) * 7;
 
-            if (day < first_matching_day) continue;
+            if (day < first_matching_day) {
+                continue;
+            }
         }
 
         (void)__icaltime_from_day_of_year(impl, day + doy_offset, year,
@@ -2239,7 +2264,7 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
             int valid = 1;
 
             if (has_by_data(impl, BY_WEEK_NO)) {
-                /* Make sure our day falls in one of the BYWEEKNO */ 
+                /* Make sure our day falls in one of the BYWEEKNO */
                 int j;
 
                 for (j = 0; BYWEEKPTR[j] != ICAL_RECURRENCE_ARRAY_MAX; j++) {
@@ -2249,7 +2274,9 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
                 }
             }
 
-            if (valid) daysmask_setbit(bydays, day + doy_offset, 1);
+            if (valid) {
+                daysmask_setbit(bydays, day + doy_offset, 1);
+            }
 
         } while (!pos && ((day += 7) <= last_day) && ++this_weekno);
     }
@@ -2262,8 +2289,7 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
             /* "Filter" the year days bitmask with the bydays bitmask */
             valid = (int)(daysmask_getbit(impl->days, doy) &
                           daysmask_getbit(bydays, doy));
-        }
-        else {
+        } else {
             /* Add each BYDAY to the year days bitmask */
             valid = (int)daysmask_getbit(bydays, doy);
         }
@@ -2467,17 +2493,24 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
                     continue;
 
                 case ICAL_SKIP_FORWARD:
-                    if (doy < 0) doy = 1;         /* First day of this year */
-                    else doy = days_in_year + 1;  /* First day of next year */
+                    if (doy < 0) {
+                        doy = 1;                 /* First day of this year */
+                    } else {
+                        doy = days_in_year + 1;  /* First day of next year */
+                    }
                     break;
 
                 case ICAL_SKIP_BACKWARD:
-                    if (doy < 0) doy = -1;        /* Last day of prev year */
-                    else doy = days_in_year;      /* Last day of this year */
+                    if (doy < 0) {
+                        doy = -1;                /* Last day of prev year */
+                    } else {
+                        doy = days_in_year;      /* Last day of this year */
+                    }
                     break;
                 }
+            } else if (doy < 0) {
+                doy += days_in_year + 1;
             }
-            else if (doy < 0) doy += days_in_year + 1;
 
             daysmask_setbit(impl->days, doy, 1);
             set_pos_total++;
@@ -2512,8 +2545,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             set_pos_total++;
             if (doy < impl->days_index) impl->days_index = doy;
         }
-    }
-    else {
+    } else {
         /* Add each BYMONTHDAY in each BYMONTH to the year days bitmask */
         for (i = 0; BYMONPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
             int month = set_month(impl, BYMONPTR[i]);
@@ -2551,8 +2583,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
                                                doy_offset, days_in_month,
                                                first_dow, last_dow, limiting);
             }
-        }
-        else {
+        } else {
             /* Numeric BYDAY are within the year */
 
             /* Get day of week of first day of year */
