@@ -22,6 +22,8 @@
 
 #include "libical_icalss_export.h"
 
+#include <string>
+
 namespace LibICal
 {
 
@@ -33,14 +35,14 @@ namespace LibICal
 
         ICalBDBSet();
         ICalBDBSet(const ICalBDBSet &);
-        ICalBDBSet(const string &path, int flags);
+        ICalBDBSet(const std::string &path, int flags);
         ICalBDBSet operator=(const ICalBDBSet &);
         ~ICalBDBSet();
 
       public:
 
         void free();
-        string path();
+        std::string path();
 
         icalerrorenum add_component(VComponent *child);
         icalerrorenum remove_component(VComponent *child);
@@ -52,9 +54,9 @@ namespace LibICal
         void clear();
 
         // Get and search for a component by uid
-        VComponent *fetch(string &uid);
+        VComponent *fetch(std::string &uid);
         VComponent *fetch_match(icalcomponent *c);
-        int has_uid(string &uid);
+        int has_uid(std::string &uid);
 
         // Iterate through components. If a guage has been defined, these
         // will skip over components that do not pass the gauge
