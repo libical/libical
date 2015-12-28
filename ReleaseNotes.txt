@@ -1,13 +1,17 @@
 Release Highlights
 ==================
 
-Version 2.0.0 (not released yet)
+Version 2.0.0:
 --------------
+ * WARNING: Version 2 IS NOT Binary Compatible with Older Versions
+ * Version 2 is Source Compatible with Older Versions 
+ * Lots of source code scrubbing
  * [New] RSCALE support (requires libicu from http://www.icu-project.org)
  * [New] CalDAV attachment support (draft-daboo-caldav-attachments)
  * [New] Resurrect the Berkeley DB storage support
  * [Bug] issue83: Incorrect recurrence generation for weekly pattern
  * Handle RRULEs better
+ * Handle threading better
 
 Version 1.0.1:
 --------------
