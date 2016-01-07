@@ -63,6 +63,6 @@ LIBICAL_ICAL_EXPORT int icallangbind_string_to_open_flag(const char *str);
 
 LIBICAL_ICAL_EXPORT const char *icallangbind_quote_as_ical(const char *str);
 
-LIBICAL_ICAL_EXPORT char *callangbind_quote_as_ical_r(const char *str);
+LIBICAL_ICAL_EXPORT char *icallangbind_quote_as_ical_r(const char *str);
 
 #endif
