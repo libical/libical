@@ -128,3 +128,14 @@ Use these CMake options to adjust the library behavior as follows:
    Notes:
      Change the behavior at runtime using the icaltzutil_set_exact_vtimezones_support() function.
      Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.
+
+== Tweaking the Installation Directories ==
+By default, the installation layout is according to the GNU standard installation directories.
+http://www.gnu.org/prep/standards/html_node/Directory-Variables.html
+
+You can override various installation folders by passing the following variables to CMake:
+ CMAKE_INSTALL_LIBDIR = The fullpath where you want the put the installed libraries
+ CMAKE_INSTALL_INCLUDEDIR = The fullpath where you want to put the installed include files
+ CMAKE_INSTALL_DATAROOTDIR = The fullpath where to want to put the shared files
+
+for example: cmake -DCMAKE_INSTALL_PREFIX=/opt -DCMAKE_INSTALL_LIBDIR=/opt/lib32 ..
