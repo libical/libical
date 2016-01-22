@@ -179,7 +179,7 @@ if(HAVE_INTROSPECTION)
 
   set(libical_${LIB_VERSION}_gir "libical")
   set(libical_${LIB_VERSION}_gir_VERSION ${LIBICAL_LIB_VERSION_STRING})
-  set(INTROSPECTION_SCANNER_ARGS ${CMAKE_BINARY_DIR}/src/libical/ical.h)
+  set(INTROSPECTION_SCANNER_ARGS -I${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_BINARY_DIR}/src/libical/ical.h)
   set(libical_${LIB_VERSION}_gir_LIBRARY "ical")
   set(libical_${LIB_VERSION}_gir_INCLUDES GObject-2.0)
   set(_includes ${_includes} "-L${LIBRARY_OUTPUT_PATH}")
