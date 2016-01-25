@@ -7,6 +7,6 @@ iculib=@ICU_LIBRARIES@ @ICU_I18N_LIBRARIES@
 
 Name: libical
 Description: An implementation of basic iCAL protocols
-Version: @VERSION@
+Version: @LIBICAL_LIB_VERSION_STRING@
 Libs: -L${libdir} -lical -licalss -licalvcal ${threadslib} ${iculib}
 Cflags: -I${includedir}
