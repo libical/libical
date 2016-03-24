@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 #endif
 
     if (argc <= 1) {
-        file = "../../test-data/recur.txt";
+        file = TEST_DATADIR "/recur.txt";
     } else if (argc == 2) {
         file = argv[1];
     } else {
