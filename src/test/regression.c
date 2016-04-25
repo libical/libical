@@ -1764,6 +1764,34 @@ void do_test_time(char *zone)
        (strncmp(ictt_as_string(icttla), "2001-05-22 11:30:30", 19) == 0));
 
     icalerror_set_errors_are_fatal(1);
+
+    /* Do some checks for icaltime_compare */
+    if (VERBOSE) {
+        printf("\n icaltime_compare() tests \n");
+    }
+
+    ictt = icaltime_from_string("20001203T183030");
+    icttutc = icaltime_convert_to_zone(ictt, utczone);
+    icttny = icaltime_convert_to_zone(ictt,
+                                      icaltimezone_get_builtin_timezone("America/New_York"));
+
+    int_is("icaltime_compare(): same float and UTC",
+           icaltime_compare(ictt, icttutc),
+           0);
+
+    int_is("icaltime_compare(): same float and NY",
+           icaltime_compare(ictt, icttny),
+           0);
+
+    /* The offset is set as from UTC: see issue #231 */
+    icttny.hour = icttny.hour - 5;
+    int_is("icaltime_compare(): different float and NY",
+           icaltime_compare(ictt, icttny),
+           1);
+
+    int_is("icaltime_compare(): same UTC and NY",
+           icaltime_compare(icttutc, icttny),
+           0);
 }
 
 void test_iterators()

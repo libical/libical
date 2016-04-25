@@ -221,10 +221,6 @@ LIBICAL_ICAL_EXPORT int icaltime_is_date(const struct icaltimetype t);
 LIBICAL_ICAL_EXPORT int icaltime_is_utc(const struct icaltimetype t);
 
 /** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
-LIBICAL_ICAL_EXPORT int icaltime_compare_with_zone(const struct icaltimetype a,
-                                                   const struct icaltimetype b);
-
-/** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
 LIBICAL_ICAL_EXPORT int icaltime_compare(const struct icaltimetype a, const struct icaltimetype b);
 
 /** like icaltime_compare, but only use the date parts. */

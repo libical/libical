@@ -777,8 +777,10 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
 {
     struct icaltimetype a, b;
 
-    /* We only need to perform time zone conversion if times aren't in the same time zone */
-    if (a_in.zone != b_in.zone || a_in.is_utc != b_in.is_utc) {
+    /* We only need to perform time zone conversion if times aren't in the same time zone
+       or neither of them is floating (zone equals NULL) */
+    if ((a_in.zone != b_in.zone || a_in.is_utc != b_in.is_utc)
+        && (a_in.zone != NULL && b_in.zone != NULL)) {
         a = icaltime_convert_to_zone(a_in, icaltimezone_get_utc_timezone());
         b = icaltime_convert_to_zone(b_in, icaltimezone_get_utc_timezone());
     } else {
