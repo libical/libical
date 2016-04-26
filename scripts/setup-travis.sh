@@ -9,6 +9,7 @@ then
   #brew install cmake
   brew install icu4c
   brew install db
+  brew install gtk-doc
 else
   #install a newer cmake since at this time Travis only has version 2.8.7
   echo "yes" | sudo add-apt-repository ppa:kalakris/cmake
@@ -16,4 +17,5 @@ else
   sudo apt-get install cmake
   sudo apt-get install libicu-dev
   sudo apt-get install libdb4.8-dev
+  sudo apt-get install gtk-doc-tools
 fi
