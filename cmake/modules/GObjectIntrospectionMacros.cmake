@@ -89,7 +89,7 @@ macro(gir_add_introspections introspections_girs)
 
   endforeach()
 
-  add_custom_target(gir-girs ALL DEPENDS ${_gir_girs})
-  add_custom_target(gir-typelibs ALL DEPENDS ${_gir_typelibs})
+  add_custom_target(gir-girs-${_gir_name} ALL DEPENDS ${_gir_girs})
+  add_custom_target(gir-typelibs-${_gir_name} ALL DEPENDS ${_gir_typelibs})
 
 endmacro(gir_add_introspections)

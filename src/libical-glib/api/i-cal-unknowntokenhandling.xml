@@ -1,0 +1,30 @@
+<!--
+  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+
+  This library is free software: you can redistribute it and/or modify it
+  under the terms of version 2.1. of the GNU Lesser General Public License
+  as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library. If not, see <http://www.gnu.org/licenses/>.
+-->
+<structure namespace="ICal" name="Unknowntokenhandling">
+    <enum name="ICalUnknowntokenhandling" default_native="0">
+        <element name="ICAL_ASSUME_IANA_TOKEN"/>
+        <element name="ICAL_DISCARD_TOKEN"/>
+        <element name="ICAL_TREAT_AS_ERROR"/>
+    </enum>
+    <method name="i_cal_get_unknown_token_handling_setting" corresponds="ical_get_unknown_token_handling_setting" kind="get" since="1.0">
+        <returns type="ICalUnknowntokenhandling" comment="The setting of #ICalUnknowntokenhandling"/>
+        <comment>Get the setting of #ICalUnknowntokenhandling</comment>
+    </method>
+    <method name="i_cal_set_unknown_token_handling_setting" corresponds="ical_set_unknown_token_handling_setting" kind="set" since="1.0">
+        <parameter type="ICalUnknowntokenhandling" name="newSetting" comment="A #ICalUnknowntokenhandling"/>
+        <comment>Set the setting of #ICalUnknowntokenhandling</comment>
+    </method>
+</structure>

@@ -1,0 +1,171 @@
+<!--
+  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+
+  This library is free software: you can redistribute it and/or modify it
+  under the terms of version 2.1. of the GNU Lesser General Public License
+  as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library. If not, see <http://www.gnu.org/licenses/>.
+-->
+<structure namespace="ICal" name="Timetype" native="struct icaltimetype" is_bare="true" default_native="i_cal_timetype_new_default ()">
+    <method name="i_cal_timetype_new_default" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
+        <returns type="struct icaltimetype" comment="The newly created #ICalTimetype. It is the epoch time (1970-01-01 00:00:00 UTC)" />
+        <comment xml:space="preserve">Create a new #ICalTimetype.</comment>
+        <custom>	struct icaltimetype timetype;
+	timetype.year = 1970;
+	timetype.month = 1;
+	timetype.day = 1;
+	timetype.hour = 0;
+	timetype.minute = 0;
+	timetype.second = 0;
+	timetype.is_utc = 1;
+	timetype.is_date = 0;
+	timetype.is_daylight = 0;
+	timetype.zone = NULL;
+	return timetype;</custom>
+    </method>
+    <method name="i_cal_timetype_new" corresponds="CUSTOM" kind="constructor" since="1.0">
+        <returns type="ICalTimetype *" annotation="transfer full" comment="The newly created #ICalTimetype. It is the epoch time (1970-01-01 00:00:00 UTC)" />
+        <comment xml:space="preserve">Create a new #ICalTimetype.</comment>
+        <custom>	return i_cal_timetype_new_full (i_cal_timetype_new_default());</custom>
+    </method>
+	<method name="i_cal_timetype_get_year" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
+        <returns type="gint" comment="The year."/>
+        <comment xml:space="preserve">Get the year of #ICalTimetype.</comment>
+        <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->year;</custom>
+    </method>
+    <method name="i_cal_timetype_set_year" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set."/>
+        <parameter type="gint" name="year" comment="The year."/>
+        <comment>Set the year of #ICalTimetype.</comment>
+        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIMETYPE (timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->year = year;</custom>
+    </method>
+    <method name="i_cal_timetype_get_month" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
+        <returns type="gint" comment="The month." />
+        <comment xml:space="preserve">Get the month of #ICalTimetype.</comment>
+        <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->month;</custom>
+    </method>
+    <method name="i_cal_timetype_set_month" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set."/>
+        <parameter type="gint" name="month" comment="The month."/>
+        <comment>Set the month of #ICalTimetype.</comment>
+        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIMETYPE (timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->month = month;</custom>
+    </method>
+    <method name="i_cal_timetype_get_day" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
+        <returns type="gint" comment="The day." />
+        <comment xml:space="preserve">Get the day of #ICalTimetype.</comment>
+        <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->day;</custom>
+    </method>
+    <method name="i_cal_timetype_set_day" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set."/>
+        <parameter type="gint" name="day" comment="The day."/>
+        <comment>Set the day of #ICalTimetype.</comment>
+        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIMETYPE (timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->day = day;</custom>
+    </method>
+    <method name="i_cal_timetype_get_hour" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
+        <returns type="gint" comment="The hour." />
+        <comment xml:space="preserve">Get the hour of #ICalTimetype.</comment>
+        <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->hour;</custom>
+    </method>
+    <method name="i_cal_timetype_set_hour" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set."/>
+        <parameter type="gint" name="hour" comment="The hour."/>
+        <comment>Set the hour of #ICalTimetype.</comment>
+        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIMETYPE (timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->hour = hour;</custom>
+    </method>
+    <method name="i_cal_timetype_get_minute" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
+        <returns type="gint" comment="The minute." />
+        <comment xml:space="preserve">Get the minute of #ICalTimetype.</comment>
+        <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->minute;</custom>
+    </method>
+    <method name="i_cal_timetype_set_minute" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set."/>
+        <parameter type="gint" name="minute" comment="The minute."/>
+        <comment>Set the minute of #ICalTimetype.</comment>
+        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIMETYPE (timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->minute = minute;</custom>
+    </method>
+    <method name="i_cal_timetype_get_second" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
+        <returns type="gint" comment="The second." />
+        <comment xml:space="preserve">Get the second of #ICalTimetype.</comment>
+        <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->second;</custom>
+    </method>
+    <method name="i_cal_timetype_set_second" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set."/>
+        <parameter type="gint" name="second" comment="The second."/>
+        <comment>Set the second of #ICalTimetype.</comment>
+        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIMETYPE (timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->second = second;</custom>
+    </method>
+    <method name="i_cal_timetype_is_utc" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
+        <returns type="gint" comment="The is_utc." />
+        <comment xml:space="preserve">Get the is_utc of #ICalTimetype.</comment>
+        <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_utc;</custom>
+    </method>
+    <method name="i_cal_timetype_set_is_utc" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set."/>
+        <parameter type="gint" name="is_utc" comment="The is_utc."/>
+        <comment>Set the is_utc of #ICalTimetype.</comment>
+        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIMETYPE (timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_utc = is_utc;</custom>
+    </method>
+    <method name="i_cal_timetype_is_date" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
+        <returns type="gint" comment="The is_date." />
+        <comment xml:space="preserve">Get the is_date of #ICalTimetype.</comment>
+        <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_date;</custom>
+    </method>
+    <method name="i_cal_timetype_set_is_date" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set."/>
+        <parameter type="gint" name="is_date" comment="The is_date."/>
+        <comment>Set the is_date of #ICalTimetype.</comment>
+        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIMETYPE (timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_date = is_date;</custom>
+    </method>
+    <method name="i_cal_timetype_is_daylight" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
+        <returns type="gint" comment="The is_daylight." />
+        <comment xml:space="preserve">Get the is_daylight of #ICalTimetype.</comment>
+        <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_daylight;</custom>
+    </method>
+    <method name="i_cal_timetype_set_is_daylight" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set."/>
+        <parameter type="gint" name="is_daylight" comment="The is_daylight."/>
+        <comment>Set the is_daylight of #ICalTimetype.</comment>
+        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIMETYPE (timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_daylight = is_daylight;</custom>
+    </method>
+    <method name="i_cal_timetype_get_zone" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
+        <returns type="const ICalTimezone *" translator="i_cal_timezone_new_full" translator_argus="NULL, TRUE" comment="The timezone." />
+        <comment xml:space="preserve">Get the is_daylight of #ICalTimetype.</comment>
+        <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return i_cal_timezone_new_full ((icaltimezone *)(((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->zone), NULL, TRUE);</custom>
+    </method>
+</structure>

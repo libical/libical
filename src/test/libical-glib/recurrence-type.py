@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+#GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./recurrence-type.py
+
+###############################################################################
+#
+# Copyright (C) 2015 William Yu <williamyu@gnome.org>
+#
+# This library is free software: you can redistribute it and/or modify it
+# under the terms of version 2.1. of the GNU Lesser General Public License
+# as published by the Free Software Foundation.
+#
+# This library is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+# for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this library. If not, see <http://www.gnu.org/licenses/>.
+#
+###############################################################################
+
+from gi.repository import ICalGLib
+
+weekday = ICalGLib.RecurrenceType.day_day_of_week (0);
+assert (weekday == ICalGLib.RecurrenceTypeWeekday.NO_WEEKDAY);
+weekday = ICalGLib.RecurrenceType.day_day_of_week (1);
+assert (weekday == ICalGLib.RecurrenceTypeWeekday.SUNDAY_WEEKDAY);
+
+assert (ICalGLib.RecurrenceType.day_position(15) == 1);
+assert (ICalGLib.RecurrenceType.day_position(16) == 2);
+assert (ICalGLib.RecurrenceType.day_position(25) == 3);
+
+string = "COUNT=10;FREQ=DAILY";
+recurrence = ICalGLib.RecurrenceType.from_string (string);
+assert (recurrence.as_string_r() == "FREQ=DAILY;COUNT=10");
+
+by_second = recurrence.get_by_second();
+# The value is dependent on the libical version.
+assert len(by_second) == 61 or len(by_second) == 62;
+by_minute = recurrence.get_by_minute();
+assert len(by_minute) == 61;
+by_hour = recurrence.get_by_hour();
+assert len(by_hour) == 25;
+by_day = recurrence.get_by_day();
+# The value is dependent on the libical version.
+assert len(by_day) == 364 or len(by_day) == 386;
+by_month_day = recurrence.get_by_month_day();
+assert len(by_month_day) == 32;
+by_year_day = recurrence.get_by_year_day();
+# The value is dependent on the libical version.
+assert len(by_year_day) == 367 or len(by_year_day) == 386;
+by_week_no = recurrence.get_by_week_no();
+# The value is dependent on the libical version.
+assert len(by_week_no) == 54 or len(by_week_no) == 56;
+by_month = recurrence.get_by_month();
+# The value is dependent on the libical version.
+assert len(by_month) == 13 or len(by_month) == 14;
+by_set_pos = recurrence.get_by_set_pos();
+# The value is dependent on the libical version.
+assert len(by_set_pos) == 367 or len(by_set_pos) == 386;
+
+recurrence.set_by_second(0, 1);
+by_second = recurrence.get_by_second();
+assert by_second[0] == 1;
+
+recurrence = ICalGLib.RecurrenceType.from_string (string);
+
+assert (ICalGLib.recur_string_to_weekday ("MO") == ICalGLib.RecurrenceTypeWeekday.MONDAY_WEEKDAY);
+
+start = 100000;
+result = ICalGLib.recur_expand_recurrence (string, start, 10);
+secs_per_day = 24*60*60;
+for i in range (0, 9):
+    assert (result[i] == start + i*secs_per_day);
+
+string = "19970101T183248Z/19970102T071625Z";
+
+period = ICalGLib.PeriodType.from_string (string);
+start = period.get_start();
+
+iter = ICalGLib.RecurIterator.new (recurrence, start);
+timetype = iter.next();
+day = timetype.get_day();
+ref = 1;
+while day != 0:
+    assert (day == ref);
+    ref += 1;
+    timetype = iter.next();
+    day = timetype.get_day();

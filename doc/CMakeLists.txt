@@ -1,3 +1,5 @@
+add_subdirectory(reference)
+
 #
 # API docs
 #
@@ -42,4 +44,3 @@ if(DOXYGEN_FOUND)
   )
 
 endif()
-

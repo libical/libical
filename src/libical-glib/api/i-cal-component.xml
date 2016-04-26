@@ -1,0 +1,478 @@
+<!--
+  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+
+  This library is free software: you can redistribute it and/or modify it
+  under the terms of version 2.1. of the GNU Lesser General Public License
+  as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library. If not, see <http://www.gnu.org/licenses/>.
+-->
+<structure namespace="ICal" name="Component" native="icalcomponent" destroy_func="icalcomponent_free" includes="libical-glib/i-cal-parameter.h">
+	<method name="i_cal_component_new" corresponds="icalcomponent_new" kind="constructor" since="1.0">
+        <parameter type="ICalComponentKind" name="kind" comment="The #ICalComponentKind."/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a new #ICalComponent with specific type.</comment>
+    </method>
+    <method name="i_cal_component_new_clone" corresponds="icalcomponent_new_clone" kind="clone" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be created."/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly deeply cloned #ICalComponent."/>
+        <comment xml:space="preserve">Deeply clone a #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_new_from_string" corresponds="icalcomponent_new_from_string" kind="constructor" since="1.0">
+        <parameter type="const gchar *" name="str" comment="The string used to create #ICalComponent."/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent based on @str."/>
+        <comment xml:space="preserve">Create a new #ICalComponent based on a string.</comment>
+    </method>
+    <method name="i_cal_component_new_x" corresponds="icalcomponent_new_x" kind="constructor" since="1.0">
+        <parameter type="const gchar *" name="x_name" comment="The name of x property."/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a new #ICalComponent based on name of x property.</comment>
+    </method>
+    <method name="i_cal_component_free" corresponds="icalcomponent_free" annotation="skip" kind="destructor" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be freed."/>
+        <comment xml:space="preserve">Free a #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_as_ical_string_r" corresponds="icalcomponent_as_ical_string_r" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be converted."/>
+        <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalComponent."/>
+        <comment xml:space="preserve">Convert a #ICalComponent to a string.</comment>
+    </method>
+    <method name="i_cal_component_is_valid" corresponds="icalcomponent_is_valid" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be checked."/>
+        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <comment xml:space="preserve">Check whether #ICalComponent is valid.</comment>
+    </method>
+    <method name="i_cal_component_isa" corresponds="icalcomponent_isa" since="1.0">
+        <parameter type="const ICalComponent *" name="component" comment="The #ICalComponent to be checked."/>
+        <returns type="ICalComponentKind" error_return_value="I_CAL_NO_COMPONENT" comment="A #ICalComponentKind."/>
+        <comment xml:space="preserve">Get the type of #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_isa_component" corresponds="icalcomponent_isa_component" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be checked."/>
+        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <comment xml:space="preserve">Check whether the native part of #ICalComponent is icalcomponent.</comment>
+    </method>
+    <method name="i_cal_component_add_property" corresponds="icalcomponent_add_property" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
+        <parameter type="ICalProperty *" name="property" translator_argus="component" comment="A #ICalProperty."/>
+        <comment xml:space="preserve">Add a #ICalProperty into #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_remove_property" corresponds="icalcomponent_remove_property" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
+        <parameter type="ICalProperty *" name="property" owner_op="REMOVE" comment="A #ICalProperty."/>
+        <comment xml:space="preserve">Remove #ICalProperty from #ICalComponent. Caution: The compare is based on address. So you must use the original #ICalProperty as the target.</comment>
+    </method>
+    <method name="i_cal_component_count_properties" corresponds="icalcomponent_count_properties" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent."/>
+        <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind."/>
+        <returns type="gint" comment="The number of #ICalProperty."/>
+        <comment xml:space="preserve">Count the #ICalProperty in #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_property_get_parent" corresponds="icalproperty_get_parent" since="2.0">
+        <parameter type="ICalProperty *" name="property" comment="The #ICalProperty."/>
+        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)property" comment="The parent #ICalComponent of #ICalProperty."/>
+        <comment xml:space="preserve">Get the parent component of the property. Use with caution. When icalproperty is deallocated, it won't deallocate its parent. However the #ICalComponent object created using this method will be deallocated (if no reference in other places). So You need to make sure there is another reference except the one in #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_component_get_current_property" corresponds="icalcomponent_get_current_property" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
+        <returns type="ICalProperty *" annotation="transfer full" translator_argus="(GObject *)component" comment="The current #ICalProperty."/>
+        <comment xml:space="preserve">Get the current #ICalProperty in #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_first_property" corresponds="icalcomponent_get_first_property" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
+        <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind."/>
+        <returns type="ICalProperty *" annotation="transfer full" translator_argus="(GObject *)component" comment="The first #ICalProperty."/>
+        <comment xml:space="preserve">Get the first #ICalProperty with specific kind in #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_next_property" corresponds="icalcomponent_get_next_property" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
+        <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind."/>
+        <returns type="ICalProperty *" annotation="transfer full" translator_argus="(GObject *)component" comment="The next #ICalProperty."/>
+        <comment xml:space="preserve">Get the next #ICalProperty with specific kind in #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_inner" corresponds="icalcomponent_get_inner" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)comp" comment="The first VEVENT, VTODO or VJOURNAL sub-component."/>
+        <comment xml:space="preserve">Return the first VEVENT, VTODO or VJOURNAL sub-component of cop, or comp if it is one of those types.</comment>
+    </method>
+    <method name="i_cal_component_add_component" corresponds="icalcomponent_add_component" since="1.0">
+        <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent."/>
+        <parameter type="ICalComponent *" name="child" translator_argus="(GObject*) parent" comment="A child #ICalComponent."/>
+        <comment xml:space="preserve">Add a #ICalComponent into another #ICalComponent as a child component.</comment>
+    </method>
+    <method name="i_cal_component_remove_component" corresponds="icalcomponent_remove_component" since="1.0">
+        <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent."/>
+        <parameter type="ICalComponent *" name="child" owner_op="REMOVE" comment="A child #ICalComponent."/>
+        <comment xml:space="preserve">Remove a child #ICalComponent from another #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_count_components" corresponds="icalcomponent_count_components" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be checked."/>
+        <parameter type="ICalComponentKind" name="kind" comment="The target #ICalComponentKind"/>
+        <returns type="gint" comment="The count of child #ICalComponent in the parent one."/>
+        <comment xml:space="preserve">Count the child #ICalComponent with the target kind in the parent one.</comment>
+    </method>
+    <method name="i_cal_component_merge_component" corresponds="icalcomponent_merge_component" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent."/>
+        <parameter type="ICalComponent *" name="comp_to_merge" annotation="in" native_op="STEAL" comment="A #ICalComponent. After merged it will not exist any more."/>
+        <comment xml:space="preserve">This takes 2 VCALENDAR components and merges the second one into the first, resolving any problems with conflicting TZIDs. comp_to_merge will no longer exist after calling this function.</comment>
+    </method>
+    <method name="i_cal_component_get_current_component" corresponds="icalcomponent_get_current_component" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
+        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)component" comment="The current #ICalComponent."/>
+        <comment xml:space="preserve">Get the current #ICalComponent in #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_first_component" corresponds="icalcomponent_get_first_component" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
+        <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind."/>
+        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)component" comment="The first #ICalComponent."/>
+        <comment xml:space="preserve">Get the first #ICalComponent with specific kind in #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_next_component" corresponds="icalcomponent_get_next_component" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
+        <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind."/>
+        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)component" comment="The next #ICalComponent."/>
+        <comment xml:space="preserve">Get the next #ICalComponent with specific kind in #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_begin_component" corresponds="icalcomponent_begin_component" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
+        <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind."/>
+        <returns type="ICalCompIter *" annotation="transfer full" comment="A #ICalCompIter"/>
+        <comment xml:space="preserve">Get the #ICalCompIter pointing to the first child #ICalComponent. Use #ICalCompIter when you need remove the child component from the parent. For traversing, i_cal_object_set_owner needs to be called after this API. See component.py in tests for details.</comment>
+    </method>
+    <method name="i_cal_component_end_component" corresponds="icalcomponent_end_component" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
+        <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind."/>
+        <returns type="ICalCompIter *" annotation="transfer full" comment="A #ICalCompIter"/>
+        <comment xml:space="preserve">Get the #ICalCompIter pointing to the end child #ICalComponent. Use #ICalCompIter when you need remove the child component from the parent. For traversing, i_cal_object_set_owner needs to be called after this API. See component.py in tests for details.</comment>
+    </method>
+    <method name="i_cal_comp_iter_next" corresponds="icalcompiter_next" since="1.0">
+        <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter."/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalCompIter"/>
+        <comment xml:space="preserve">Get the next #ICalComponent pointed by #ICalCompIter. Use #ICalCompIter when you need remove the child component from the parent. For traversing, i_cal_object_set_owner needs to be called after this API. See component.py in tests for details.</comment>
+    </method>
+    <method name="i_cal_comp_iter_prior" corresponds="icalcompiter_prior" since="1.0">
+        <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter."/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalCompIter"/>
+        <comment xml:space="preserve">Get the prior #ICalComponent pointed by #ICalCompIter. Use #ICalCompIter when you need remove the child component from the parent. For traversing, i_cal_object_set_owner needs to be called after this API. See component.py in tests for details.</comment>
+    </method>
+    <method name="i_cal_comp_iter_deref" corresponds="icalcompiter_deref" since="1.0">
+        <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter."/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalComponent"/>
+        <comment xml:space="preserve">Get the current #ICalComponent pointed by #ICalCompIter. Use #ICalCompIter when you need remove the child component from the parent. For traversing, i_cal_object_set_owner needs to be called after this API. See component.py in tests for details.</comment>
+    </method>
+    <method name="i_cal_component_check_restrictions" corresponds="icalcomponent_check_restrictions" kind="other" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be checked"/>
+        <returns type="gint" comment="The number of restrictions in @comp"/>
+        <comment xml:space="preserve">Check the number of restrictions in #ICalComponent</comment>
+    </method>
+    <method name="i_cal_component_count_errors" corresponds="icalcomponent_count_errors" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
+        <returns type="gint" comment="The count of errors."/>
+        <comment xml:space="preserve">Count the number of errors in #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_strip_errors" corresponds="icalcomponent_strip_errors" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
+        <comment xml:space="preserve">Remove all X-LIC-ERROR properties.</comment>
+    </method>
+    <method name="i_cal_component_convert_errors" corresponds="icalcomponent_convert_errors" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
+        <comment xml:space="preserve">Convert some X-LIC-ERROR properties into RETURN-STATUS properties.</comment>
+    </method>
+    <method name="i_cal_component_kind_is_valid" corresponds="icalcomponent_kind_is_valid" since="1.0">
+        <parameter type="const ICalComponentKind" name="kind" comment="A #ICalComponentKind."/>
+        <returns type="gint" comment="1 if @kind id a #ICalComponent but not the I_CAL_NO_COMPONENT, 0 if not."/>
+        <comment xml:space="preserve">Check if a #ICalComponentKind is valid.</comment>
+    </method>
+    <method name="i_cal_component_string_to_kind" corresponds="icalcomponent_string_to_kind" since="1.0">
+        <parameter type="const gchar *" name="string" comment="A string."/>
+        <returns type="ICalComponentKind" error_return_value="I_CAL_NO_COMPONENT" comment="A #ICalComponentKind"/>
+        <comment xml:space="preserve">Convert a string to a #ICalComponentKind.</comment>
+    </method>
+    <method name="i_cal_component_kind_to_string" corresponds="icalcomponent_kind_to_string" since="1.0">
+        <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind."/>
+        <returns type="const gchar *" annotation="transfer none" comment="The string representation of @kind."/>
+        <comment xml:space="preserve">Convert a #ICalComponentKind to a string.</comment>
+    </method>
+    <method name="i_cal_component_get_first_real_component" corresponds="icalcomponent_get_first_real_component" since="1.0">
+        <parameter type="ICalComponent *" name="c" comment="A VCOMPONENT type of #ICalComponent."/>
+        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)c" comment="A reference to the first VEVENT, VTODO or VJOURNAL"/>
+        <comment xml:space="preserve">For VCOMPONENT: Return a reference to the first VEVENT, VTODO or VJOURNAL.</comment>
+    </method>
+    <method name="i_cal_component_get_span" corresponds="icalcomponent_get_span" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
+        <returns type="ICalTimeSpan *" annotation="transfer full" comment="A #ICalTimeSpan."/>
+        <comment xml:space="preserve">For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the start and end times of an event in UTC</comment>
+    </method>
+    <method name="i_cal_component_set_dtstart" corresponds="icalcomponent_set_dtstart" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="ICalTimetype *" name="v" comment="A #ICalTimetype."/>
+        <comment xml:space="preserve">Set the dtstart of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_dtstart" corresponds="icalcomponent_get_dtstart" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="ICalTimetype *" annotation="transfer full" comment="A #ICalTimetype."/>
+        <comment xml:space="preserve">Get the dtstart of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_dtend" corresponds="icalcomponent_set_dtend" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="ICalTimetype *" name="v" comment="A #ICalTimetype."/>
+        <comment xml:space="preserve">Set the dtend of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_dtend" corresponds="icalcomponent_get_dtend" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="ICalTimetype *" annotation="transfer full" comment="A #ICalTimetype."/>
+        <comment xml:space="preserve">Get the dtend of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_due" corresponds="icalcomponent_set_due" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="ICalTimetype *" name="v" comment="A #ICalTimetype."/>
+        <comment xml:space="preserve">Set the due of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_due" corresponds="icalcomponent_get_due" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="ICalTimetype *" annotation="transfer full" comment="A #ICalTimetype."/>
+        <comment xml:space="preserve">Get the due of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_duration" corresponds="icalcomponent_set_duration" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="ICalDurationType *" name="v" comment="A #ICalDurationType."/>
+        <comment xml:space="preserve">Set the duration of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_duration" corresponds="icalcomponent_get_duration" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="ICalDurationType *" annotation="transfer full" comment="A #ICalDurationType."/>
+        <comment xml:space="preserve">Get the duration of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_method" corresponds="icalcomponent_set_method" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="ICalPropertyMethod" name="method" comment="A #ICalPropertyMethod."/>
+        <comment xml:space="preserve">Set the method of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_method" corresponds="icalcomponent_get_method" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="ICalPropertyMethod" comment="A #ICalPropertyMethod."/>
+        <comment xml:space="preserve">Get the method of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_dtstamp" corresponds="icalcomponent_set_dtstamp" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="ICalTimetype *" name="v" comment="A #ICalTimetype."/>
+        <comment xml:space="preserve">Set the dtstamp of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_dtstamp" corresponds="icalcomponent_get_dtstamp" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="ICalTimetype *" annotation="transfer full" comment="A #ICalTimetype."/>
+        <comment xml:space="preserve">Get the dtstamp of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_summary" corresponds="icalcomponent_set_summary" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="const gchar *" name="v" comment="A string representing summary."/>
+        <comment xml:space="preserve">Set the summary of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_summary" corresponds="icalcomponent_get_summary" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="const gchar *" annotation="transfer none" comment="The summary of @comp."/>
+        <comment xml:space="preserve">Get the summary of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_comment" corresponds="icalcomponent_set_comment" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="const gchar *" name="v" comment="A string representing comment."/>
+        <comment xml:space="preserve">Set the comment of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_comment" corresponds="icalcomponent_get_comment" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="const gchar *" annotation="transfer none" comment="The comment of @comp."/>
+        <comment xml:space="preserve">Get the comment of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_uid" corresponds="icalcomponent_set_uid" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="const gchar *" name="v" comment="A string representing uid."/>
+        <comment xml:space="preserve">Set the uid of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_uid" corresponds="icalcomponent_get_uid" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="const gchar *" annotation="transfer none" comment="The uid of @comp."/>
+        <comment xml:space="preserve">Get the uid of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_relcalid" corresponds="icalcomponent_set_relcalid" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="const gchar *" name="v" comment="A string representing relcalid."/>
+        <comment xml:space="preserve">Set the relcalid of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_relcalid" corresponds="icalcomponent_get_relcalid" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="const gchar *" annotation="transfer none" comment="The relcalid of @comp."/>
+        <comment xml:space="preserve">Get the relcalid of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_recurrenceid" corresponds="icalcomponent_set_recurrenceid" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="ICalTimetype *" name="v" comment="A #ICalTimetype."/>
+        <comment xml:space="preserve">Set the recurrenceid of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_recurrenceid" corresponds="icalcomponent_get_recurrenceid" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="ICalTimetype *" annotation="transfer full" comment="A #ICalTimetype."/>
+        <comment xml:space="preserve">Get the recurrenceid of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_description" corresponds="icalcomponent_set_description" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="const gchar *" name="v" comment="A string representing description."/>
+        <comment xml:space="preserve">Set the description of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_description" corresponds="icalcomponent_get_description" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="const gchar *" annotation="transfer none" comment="The description of @comp."/>
+        <comment xml:space="preserve">Get the description of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_location" corresponds="icalcomponent_set_location" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="const gchar *" name="v" comment="A string representing location."/>
+        <comment xml:space="preserve">Set the location of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_location" corresponds="icalcomponent_get_location" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="const gchar *" annotation="transfer none" comment="The location of @comp."/>
+        <comment xml:space="preserve">Get the location of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_sequence" corresponds="icalcomponent_set_sequence" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="gint" name="v" comment="The sequence number."/>
+        <comment xml:space="preserve">Set the sequence of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_sequence" corresponds="icalcomponent_get_sequence" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="gint" comment="The sequence of @comp."/>
+        <comment xml:space="preserve">Get the sequence of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_set_status" corresponds="icalcomponent_set_status" kind="set" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="ICalPropertyStatus" name="status" comment="A #ICalPropertyStatus."/>
+        <comment xml:space="preserve">Set the status of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_get_status" corresponds="icalcomponent_get_status" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <returns type="ICalPropertyStatus" comment="A #ICalPropertyStatus."/>
+        <comment xml:space="preserve">Get the status of the #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_foreach_tzid" corresponds="CUSTOM" annotation="skip" kind="other" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be queried."/>
+        <parameter type="void" name="(*callback)(ICalParameter *param, void *data)" comment="FULL: @callback: The callback function."/>
+        <parameter type="void *" name="callback_data" annotation="allow-none" comment="The data for callback function"/>
+        <comment>Apply the same manipulation on every tzid in #ICalComponent. It cannot be used by Python yet. For convenience, a python version of this API is defined in tests/component.py.</comment>
+        <custom>	ICalProperty *prop;
+        ICalPropertyKind kind;
+        ICalParameter *param;
+        ICalComponent *subcomp;
+
+	g_return_if_fail (comp != NULL &amp;&amp; I_CAL_IS_COMPONENT (comp));
+	g_return_if_fail (callback != NULL);
+
+	/* First look for any TZID parameters used in this component itself. */
+	prop = i_cal_component_get_first_property (comp, I_CAL_ANY_PROPERTY);
+	while (prop) {
+		kind = i_cal_property_isa (prop);
+
+		/* These are the only properties that can have a TZID. Note that
+		COMPLETED, CREATED, DTSTAMP and LASTMODIFIED must be in UTC. */
+		if (kind == I_CAL_DTSTART_PROPERTY || kind == I_CAL_DTEND_PROPERTY
+		 || kind == I_CAL_DUE_PROPERTY || kind == I_CAL_EXDATE_PROPERTY
+		 || kind == I_CAL_RDATE_PROPERTY) {
+			param = i_cal_property_get_first_parameter (prop, I_CAL_TZID_PARAMETER);
+
+			if (param)
+				(*callback) (param, callback_data);
+		}
+
+		prop = i_cal_component_get_next_property (comp, I_CAL_ANY_PROPERTY);
+	}
+
+	/* Now recursively check child components. */
+	subcomp = i_cal_component_get_first_component (comp, I_CAL_ANY_COMPONENT);
+	while (subcomp) {
+	    i_cal_component_foreach_tzid (subcomp, callback, callback_data);
+	    subcomp = i_cal_component_get_next_component (comp, ICAL_ANY_COMPONENT);
+	}</custom>
+    </method>
+    <method name="i_cal_component_get_timezone" corresponds="icalcomponent_get_timezone" kind="get" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="const gchar *" name="tzid" comment="A string representing timezone."/>
+        <returns type="ICalTimezone *" annotation="transfer full, allow-none" translator_argus="(GObject *)comp, FALSE" comment="A #ICalTimezone."/>
+        <comment xml:space="preserve">Returns the icaltimezone in the component corresponding to the TZID, or NULL if it can't be found.</comment>
+    </method>
+    <method name="i_cal_property_recurrence_is_excluded" corresponds="icalproperty_recurrence_is_excluded" since="1.0">
+        <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
+        <parameter type="ICalTimetype *" name="dtstart" native_op="POINTER" comment="The base dtstart value for this component."/>
+        <parameter type="ICalTimetype *" name="recurtime" native_op="POINTER" comment="The time to test against."/>
+        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <comment xml:space="preserve">Decide if this recurrance is acceptable. This function decides if a specific recurrence value is excluded by EXRULE or EXDATE properties.</comment>
+    </method>
+    <method name="i_cal_component_new_vcalendar" corresponds="icalcomponent_new_vcalendar" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vcalendar</comment>
+    </method>
+    <method name="i_cal_component_new_vevent" corresponds="icalcomponent_new_vevent" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vevent</comment>
+    </method>
+    <method name="i_cal_component_new_vtodo" corresponds="icalcomponent_new_vtodo" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vtodo</comment>
+    </method>
+    <method name="i_cal_component_new_vjournal" corresponds="icalcomponent_new_vjournal" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vjournal</comment>
+    </method>
+    <method name="i_cal_component_new_valarm" corresponds="icalcomponent_new_valarm" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be valarm</comment>
+    </method>
+    <method name="i_cal_component_new_vfreebusy" corresponds="icalcomponent_new_vfreebusy" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vfreebusy</comment>
+    </method>
+    <method name="i_cal_component_new_vtimezone" corresponds="icalcomponent_new_vtimezone" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vtimezone</comment>
+    </method>
+    <method name="i_cal_component_new_xstandard" corresponds="icalcomponent_new_xstandard" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be xstandard</comment>
+    </method>
+    <method name="i_cal_component_new_xdaylight" corresponds="icalcomponent_new_xdaylight" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be xdaylight</comment>
+    </method>
+    <method name="i_cal_component_new_vagenda" corresponds="icalcomponent_new_vagenda" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vagenda</comment>
+    </method>
+    <method name="i_cal_component_new_vquery" corresponds="icalcomponent_new_vquery" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vquery</comment>
+    </method>
+    <method name="i_cal_component_new_vavailability" corresponds="icalcomponent_new_vavailability" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vavailability</comment>
+    </method>
+    <method name="i_cal_component_new_xavailable" corresponds="icalcomponent_new_xavailable" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be xavailable</comment>
+    </method>
+    <method name="i_cal_component_new_vpoll" corresponds="icalcomponent_new_vpoll" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vpoll</comment>
+    </method>
+    <method name="i_cal_component_new_vvoter" corresponds="icalcomponent_new_vvoter" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be vvoter</comment>
+    </method>
+    <method name="i_cal_component_new_xvote" corresponds="icalcomponent_new_xvote" kind="constructor" since="1.0">
+        <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+        <comment xml:space="preserve">Create a #ICalComponent with the type to be xvote</comment>
+    </method>
+</structure>

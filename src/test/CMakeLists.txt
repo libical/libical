@@ -15,6 +15,10 @@ if(ICU_FOUND)
   include_directories(${ICU_INCLUDE_DIR})
 endif()
 
+if(ICAL_GLIB AND HAVE_INTROSPECTION)
+    add_subdirectory(libical-glib)
+endif()
+
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 set(TEST_DATADIR "\\\"${CMAKE_SOURCE_DIR}/test-data\\\"")
