@@ -263,14 +263,14 @@ GList *
 get_list_from_string(const gchar *str)
 {
 	gchar **ret;
-	int iter;
-	int len;
+	guint iter;
+	guint len;
 	GList *list = NULL;
 
 	ret = g_strsplit(str, ",", 0);
 	len = g_strv_length(ret);
 	for (iter = 0; iter < len; iter++) {
-		g_strstrip(ret[iter]);
+		(void)g_strstrip(ret[iter]);
 		list = g_list_append(list, ret[iter]);
 	}
 
@@ -318,7 +318,7 @@ parse_parameters(xmlNode *node, Method *method)
 			} else if (xmlStrcmp (attr->name, (xmlChar *) "owner_op") == 0) {
 				para->owner_op = (gchar *)xmlNodeListGetString(attr->doc, attr->children, 1);
 			} else {
-				printf("The tag name of %s in parameter cannot be finished\n", attr->name);
+				printf("The tag name of %s in parameter cannot be finished\n", (char *)attr->name);
 			}
 		}
 		method->parameters = g_list_append(method->parameters, para);
@@ -358,7 +358,7 @@ parse_return(xmlNode *node, Method *method)
 		} else if (xmlStrcmp (attr->name, (xmlChar *) "error_return_value") == 0) {
 			method->ret->errorReturnValue = (gchar *)xmlNodeListGetString(attr->doc, attr->children, 1);
 		} else {
-			printf("The tag name of %s in return cannot be finished\n", attr->name);
+			printf("The tag name of %s in return cannot be finished\n", (char *)attr->name);
 		}
 	}
 	return TRUE;
@@ -413,7 +413,7 @@ parse_method(xmlNode *node, Method *method)
 			method->annotations = get_list_from_string(anno);
 			xmlFree(anno);
 		} else {
-			printf("The attribute %s in method %s cannot be parsed", attr->name, node->name);
+			printf("The attribute %s in method %s cannot be parsed", (char *)attr->name, (char *)node->name);
 			return TRUE;
 		}
 	}
@@ -423,7 +423,7 @@ parse_method(xmlNode *node, Method *method)
 			parse_return(child, method) != TRUE &&
 			parse_comment(child, method) != TRUE &&
 			parse_custom(child, method) != TRUE) {
-			printf("The node named %s in method cannot be parsed\n", child->name);
+			printf("The node named %s in method cannot be parsed\n", (char *)child->name);
 			return FALSE;
 		}
 	}
@@ -447,7 +447,7 @@ parse_declaration (xmlNode *node, Declaration *declaration)
 		} else if (xmlStrcmp (attr->name, (xmlChar *)"content") == 0) {
 			declaration->content = (gchar *)xmlNodeListGetString (attr->doc, attr->children, 1);
 		} else {
-			printf ("The node named %s in declaration cannot be parsed\n", attr->name);
+			printf ("The node named %s in declaration cannot be parsed\n", (char *)attr->name);
 		}
 	}
 
@@ -474,13 +474,13 @@ parse_enumeration (xmlNode *node, Enumeration *enumeration)
 		} else if (xmlStrcmp (attr->name, (xmlChar *)"comment") == 0) {
 			enumeration->comment = (gchar *)xmlNodeListGetString (attr->doc, attr->children, 1);
 		} else {
-			printf ("The node named %s in enum cannot be parsed\n", attr->name);
+			printf ("The node named %s in enum cannot be parsed\n", (char *)attr->name);
 		}
 	}
 
 	for (child = xmlFirstElementChild (node); child != NULL; child = xmlNextElementSibling (child)) {
 		if (xmlStrcmp (child->name, (xmlChar *)"element") != 0) {
-			printf ("The child node named %s is not an element\n", child->name);
+			printf ("The child node named %s is not an element\n", (char *)child->name);
 			continue;
 		}
 		elementName = (gchar *)xmlNodeListGetString(child->properties->doc, child->properties->children, 1);
@@ -536,7 +536,7 @@ parse_structure(xmlNode *node, Structure *structure)
 			}
 			g_free(strIsBare);
 		} else {
-			printf("The attribute of %s in structure cannot be parsed\n", attr->name);
+			printf("The attribute of %s in structure cannot be parsed\n", (char *)attr->name);
 		}
 	}
 
@@ -588,13 +588,13 @@ populate_dependencies (Structure *structure)
 		for (iter_para = g_list_first (method->parameters); iter_para != NULL; iter_para = g_list_next (iter_para)) {
 			para = (Parameter *)iter_para->data;
 			trueType = get_true_type (para->type);
-			g_hash_table_insert (structure->dependencies, trueType, NULL);
+			(void)g_hash_table_insert (structure->dependencies, trueType, NULL);
 			trueType = NULL;
 		}
 
 		if (method->ret != NULL) {
 			trueType = get_true_type (method->ret->type);
-			g_hash_table_insert (structure->dependencies, trueType, NULL);
+			(void)g_hash_table_insert (structure->dependencies, trueType, NULL);
 			trueType = NULL;
 		}
 	}
