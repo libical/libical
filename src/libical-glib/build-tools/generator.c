@@ -47,12 +47,14 @@ get_source_method_comment (Method *method)
 	gchar *buffer;
 	gchar *res;
 	gchar *comment_line;
-	gint iter;
-	gint len;
+	guint iter;
+	guint len;
 	gint count;
 	gint cursor;
 	gchar *full_flag;
+	guint full_flag_len;
 	gchar *full_comment;
+	guint comment_len;
 
 	g_return_val_if_fail (method != NULL, NULL);
 
@@ -70,20 +72,23 @@ get_source_method_comment (Method *method)
 
 	/* Processing the parameters */
 	if (method->parameters != NULL) {
+		full_flag = g_strdup ("FULL:");
+		full_flag_len = strlen (full_flag);
+
 		for (iter_list = g_list_first (method->parameters); iter_list != NULL; iter_list = g_list_next (iter_list)) {
 			para = (Parameter *)iter_list->data;
+			comment_len = strlen (para->comment);
 
 			/* Handling the special case in which the parameter's comment is fully specified */
-			full_flag = g_strdup ("FULL:");
-			for (iter = 0; iter < strlen (full_flag) && iter < strlen (para->comment); iter++) {
+			for (iter = 0; iter < full_flag_len && iter < comment_len; iter++) {
 				if (full_flag[iter] != para->comment[iter]) {
 					break;
 				}
 			}
 
-			if (iter == strlen (full_flag)) {
-				full_comment = g_new (gchar, strlen (para->comment) - strlen (full_flag) + 1);
-				stpcpy (full_comment, para->comment + strlen(full_flag));
+			if (iter == full_flag_len) {
+				full_comment = g_new (gchar, comment_len - full_flag_len + 1);
+				stpcpy (full_comment, para->comment + full_flag_len);
 				buffer = g_strconcat (res, "\n * ", full_comment, NULL);
 				g_free (res);
 				res = buffer;
@@ -115,8 +120,9 @@ get_source_method_comment (Method *method)
 					res = buffer;
 				}
 			}
-			g_free (full_flag);
 		}
+
+		g_free (full_flag);
 	}
 
 	/* Processing general comment */
@@ -293,13 +299,14 @@ get_lower_snake_from_upper_camel (const gchar *upperCamel)
 gchar *
 get_lower_train_from_lower_snake (const gchar *lowerSnake)
 {
-	int i;
+	guint i;
 	gchar *ret;
+	guint len = strlen (lowerSnake);
 
 	g_return_val_if_fail (lowerSnake != NULL && *lowerSnake != '\0', NULL);
 
 	ret = g_strdup (lowerSnake);
-	for (i = 0; i < strlen (lowerSnake); i++) {
+	for (i = 0; i < len; i++) {
 		if (lowerSnake[i] == '_')
 			ret[i] = '-';
 	}
@@ -1207,7 +1214,7 @@ get_hash_table_from_structure (Structure *structure)
 void
 generate_conditional (FILE *out, Structure *structure, gchar *statement, GHashTable * table)
 {
-	gint iter;
+	guint iter;
 	gboolean isNegate;
 	gboolean isTrue;
 	gchar *condition;
@@ -1218,6 +1225,8 @@ generate_conditional (FILE *out, Structure *structure, gchar *statement, GHashTa
 	gchar c;
 	gchar *var;
 	gchar *val;
+	guint statement_len = strlen (statement);
+	guint expression_len;
 
 	g_return_if_fail (out != NULL && structure != NULL && statement != NULL && *statement != '\0');
 
@@ -1236,8 +1245,8 @@ generate_conditional (FILE *out, Structure *structure, gchar *statement, GHashTa
 		isNegate = TRUE;
 		iter = 1;
 	}
-	g_return_if_fail (iter + 1 < strlen (statement) && statement[iter++] == '$' && statement[iter++] == '{');
-	while (iter < strlen (statement) && statement[iter] != '}') {
+	g_return_if_fail (iter + 1 < statement_len && statement[iter++] == '$' && statement[iter++] == '{');
+	while (iter < statement_len && statement[iter] != '}') {
 		len = strlen (condition);
 		condition[len] = statement[iter++];
 		condition[len+1] = '\0';
@@ -1253,17 +1262,19 @@ generate_conditional (FILE *out, Structure *structure, gchar *statement, GHashTa
 	g_free (condition);
 
 	g_stpcpy (expression, statement+iter+1);
+	expression_len = strlen (expression);
+
 	if ((isNegate && !isTrue) || (!isNegate && isTrue)) {
 		for (iter = 0; iter < strlen (expression); iter++) {
-			if (iter < strlen(expression)-1 && expression[iter] == '$' && expression[iter+1] == '^') {
+			if (iter < expression_len-1 && expression[iter] == '$' && expression[iter+1] == '^') {
 				iter += 2;
 				count = 1;
 				buffer = g_new (gchar, BUFFER_SIZE);
 				*buffer = '\0';
-				while (iter < strlen (expression)) {
-					if (iter < strlen (expression)-1 && expression[iter] == '^' && expression[iter+1] == '$')
+				while (iter < expression_len) {
+					if (iter < expression_len-1 && expression[iter] == '^' && expression[iter+1] == '$')
 						--count;
-					if (iter < strlen (expression)-1 && expression[iter] == '$' && expression[iter+1] == '^')
+					if (iter < expression_len-1 && expression[iter] == '$' && expression[iter+1] == '^')
 						++count;
 
 					if (count == 0) {
@@ -1691,29 +1702,31 @@ get_translator_name_for_return (gchar *upperCamel)
 gchar *
 get_true_type (const gchar *type)
 {
-	int i;
-	int start;
-	int end;
+	guint i;
+	guint start;
+	guint end;
 	gchar *res;
-	const gchar *constPrefix;
+	const gchar *const_prefix = "const";
+	const guint const_prefix_len = strlen (const_prefix);
+	guint type_len;
 
-	g_return_val_if_fail (type != NULL, NULL);
+	g_return_val_if_fail (type != NULL && *type != '\0', NULL);
 
+	type_len = strlen (type);
 	i = 0;
 	start = 0;
-	end = strlen (type)-1;
-	constPrefix = "const";
+	end = type_len-1;
 
-	for (i = 0; i < strlen (constPrefix) && i < strlen (type) && constPrefix[i] == type[i]; i++);
+	for (i = 0; i < const_prefix_len && i < type_len && const_prefix[i] == type[i]; i++);
 
-	if (i == strlen (constPrefix)) {
+	if (i == const_prefix_len) {
 		start = i+1;
 	} else {
 		start = 0;
 	}
 
-	if (type[strlen (type)-1] == '*') {
-		end = strlen (type)-3;
+	if (type[type_len-1] == '*') {
+		end = type_len-3;
 	}
 
 	res = g_new (gchar, end - start + 2);
@@ -1797,10 +1810,11 @@ generate_header_enum (FILE *out, Enumeration *enumeration)
 {
 	GList *iter;
 	gchar *nativeName;
-	int i;
+	guint i;
 	gchar *newName;
 	gchar *comment;
 	gchar *tmp;
+	const guint enum_header_len = strlen (ENUM_HEADER);
 
 	g_return_if_fail (out != NULL && enumeration != NULL);
 
@@ -1839,16 +1853,16 @@ generate_header_enum (FILE *out, Enumeration *enumeration)
 		if (iter != g_list_first (enumeration->elements)) {
 			fputc (',', out);
 		}
-		if (strlen (ENUM_HEADER) >= strlen (nativeName)) {
+		if (enum_header_len >= strlen (nativeName)) {
 			printf ("The enum name %s is longer than the enum header %s\n", nativeName, ENUM_HEADER);
 			continue;
 		}
-		for (i = 0; i < strlen (ENUM_HEADER); i++) {
+		for (i = 0; i < enum_header_len; i++) {
 			if (ENUM_HEADER[i] != nativeName[i]) {
 				break;
 			}
 		}
-		if (i != strlen(ENUM_HEADER)) {
+		if (i != enum_header_len) {
 			printf ("The enum name %s cannot be processed\n", nativeName);
 			continue;
 		}
@@ -1879,7 +1893,7 @@ get_source_run_time_checkers (Method *method, const gchar *namespace)
 	GList *iter;
 	GList *jter;
 	Parameter *parameter;
-	int i;
+	guint i;
 	gchar *buffer;
 	gchar *nameSpaceUpperSnake;
 	gchar *nameUpperSnake;
@@ -1888,22 +1902,24 @@ get_source_run_time_checkers (Method *method, const gchar *namespace)
 	gchar *res;
 	gchar *defaultValue;
 	gchar *retTrueType;
+	guint namespace_len;
 
 	g_return_val_if_fail (method != NULL, NULL);
-	g_return_val_if_fail (namespace == NULL || *namespace != '\0', NULL);
+	g_return_val_if_fail (namespace != NULL && *namespace != '\0', NULL);
 
 	buffer = g_new (gchar, BUFFER_SIZE);
 	*buffer = '\0';
 	res = NULL;
+	namespace_len = strlen (namespace);
 
 	for (iter = g_list_first (method->parameters); iter != NULL; iter = g_list_next (iter)) {
 		parameter = (Parameter *)iter->data;
 
 		if (namespace != NULL && parameter->type[strlen (parameter->type)-1] == '*') {
 			trueType = get_true_type (parameter->type);
-			for (i = 0; i < strlen (namespace) && i < strlen (parameter->type) && namespace[i] == trueType[i]; i++);
+			for (i = 0; i < strlen (namespace) && i < namespace_len && namespace[i] == trueType[i]; i++);
 
-			if (i == strlen (namespace)) {
+			if (i == namespace_len) {
 				g_stpcpy (buffer + strlen (buffer), "\t");
 				nameSpaceUpperSnake = get_upper_snake_from_upper_camel (namespace);
 				nameUpperSnake = get_upper_snake_from_upper_camel (trueType+i);
