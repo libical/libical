@@ -6,6 +6,7 @@ if ( test "`uname -s`" = "Darwin" )
 then
   brew install icu4c
   brew install db
+  brew install glib
   brew install gtk-doc
 else
   sudo apt-get update -qq
