@@ -2,10 +2,10 @@ add_definitions(-Dlibical_ical_EXPORTS)
 
 # build the src-generator
 add_executable(src-generator
-	build-tools/generator.c
-	build-tools/generator.h
-	build-tools/xml-parser.c
-	build-tools/xml-parser.h)
+	tools/generator.c
+	tools/generator.h
+	tools/xml-parser.c
+	tools/xml-parser.h)
 
 target_compile_options (src-generator PUBLIC ${GLIB_CFLAGS} ${LIBXML_CFLAGS} -DG_LOG_DOMAIN=\"src-generator\")
 target_link_libraries (src-generator ${GLIB_LIBRARIES} ${LIBXML_LIBRARIES})
