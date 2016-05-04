@@ -17,6 +17,14 @@ if(PKG_CONFIG_FOUND)
     set(GLIB_CFLAGS "${_pc_glib_CFLAGS}")
     set(GLIB_LIBRARIES "${_pc_glib_LIBRARIES}")
   endif()
+  if(APPLE)
+    find_library(
+      INTL_LIBRARY
+      NAMES intl
+      HINTS
+      /usr/local/opt/gettext/lib
+      )
+  endif()
 endif()
 
 mark_as_advanced(
