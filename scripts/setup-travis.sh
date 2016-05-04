@@ -6,7 +6,8 @@ if ( test "`uname -s`" = "Darwin" )
 then
   brew install icu4c
   brew install db
-  brew install glib
+  #gettext is needed for libintl which links to glib
+  brew install gettext
   brew install gtk-doc
 else
   sudo apt-get update -qq
