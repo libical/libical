@@ -21,8 +21,8 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
-#include <libxml2/libxml/xmlreader.h>
-#include <glib-2.0/glib.h>
+#include <libxml/xmlreader.h>
+#include <glib.h>
 #include "xml-parser.h"
 
 
