@@ -10,9 +10,6 @@ add_executable(src-generator
 
 target_compile_options(src-generator PUBLIC ${GLIB_CFLAGS} ${LIBXML_CFLAGS} -DG_LOG_DOMAIN=\"src-generator\")
 target_link_libraries(src-generator ${GLIB_LIBRARIES} ${LIBXML_LIBRARIES})
-if(APPLE)
-  target_link_libraries(src-generator ${INTL_LIBRARY})
-endif()
 
 list(APPEND API_FILES
   api/i-cal-array.xml

@@ -6,12 +6,12 @@ if ( test "`uname -s`" = "Darwin" )
 then
   brew install icu4c
   brew install db
-  #gettext is needed for libintl which links to glib
-  brew install gettext
+  brew install gobject-introspection
   brew install gtk-doc
 else
   sudo apt-get update -qq
   sudo apt-get install libicu-dev
   sudo apt-get install libdb4.8-dev
+  sudo apt-get install gobject-introspection
   sudo apt-get install gtk-doc-tools
 fi
