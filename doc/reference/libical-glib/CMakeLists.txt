@@ -8,14 +8,6 @@ if(NOT (GTKDOC_SCAN AND GTKDOC_MKDB AND GTKDOC_MKHTML AND GTKDOC_FIXXREF))
   return()
 endif()
 
-#with homebrew on OSX, we need to set XML_CATALOG_FILES
-if(APPLE)
-  set(xml_cat "/usr/local/etc/xml/catalog")
-  if(EXISTS ${xml_cat})
-    set(ENV{XML_CATALOG_FILES} ${xml_cat})
-  endif()
-endif()
-
 # To regenerate libical-glib-docs.xml.in from current sources use these steps:
 #   a) delete ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-docs.xml
 #   b) go to ${CMAKE_CURRENT_BINARY_DIR} and run command:
@@ -57,16 +49,29 @@ add_custom_command(OUTPUT xml/libical-glib-doc.bottom
     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/libical-glib-docs.xml"
 )
 
-add_custom_command(OUTPUT html/index.html
-  COMMAND ${GTKDOC_MKHTML}
-    --path=..
-    libical-glib
-    ../libical-glib-docs.xml
-  WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html"
-  DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/libical-glib-docs.xml"
-          "${CMAKE_CURRENT_BINARY_DIR}/xml/libical-glib-doc.bottom"
-  COMMENT "Generating libical-glib documentation"
-)
+if(APPLE)
+  add_custom_command(OUTPUT html/index.html
+    COMMAND env XML_CATALOG_FILES="/usr/local/etc/xml/catalog" ${GTKDOC_MKHTML}
+      --path=..
+      libical-glib
+      ../libical-glib-docs.xml
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/libical-glib-docs.xml"
+            "${CMAKE_CURRENT_BINARY_DIR}/xml/libical-glib-doc.bottom"
+    COMMENT "Generating libical-glib documentation"
+  )
+else()
+  add_custom_command(OUTPUT html/index.html
+    COMMAND ${GTKDOC_MKHTML}
+      --path=..
+      libical-glib
+      ../libical-glib-docs.xml
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html"
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/libical-glib-docs.xml"
+            "${CMAKE_CURRENT_BINARY_DIR}/xml/libical-glib-doc.bottom"
+    COMMENT "Generating libical-glib documentation"
+  )
+endif()
 
 add_custom_target(documentation ALL
   COMMAND ${GTKDOC_FIXXREF}
