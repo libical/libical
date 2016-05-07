@@ -5,7 +5,6 @@ env:
 os:
 - linux
 - osx
-  env: XML_CATALOG_FILES=/usr/local/etc/xml/catalog 
 
 before_install: ./scripts/setup-travis.sh
 
