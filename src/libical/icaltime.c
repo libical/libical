@@ -236,7 +236,8 @@ struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_
     utc_zone = icaltimezone_get_utc_timezone();
 
     /* Convert the time_t to a struct tm in UTC time. We can trust gmtime for this. */
-    gmtime_r(&tm, &t);
+    if (!gmtime_r(&tm, &t))
+        return is_date ? icaltime_null_date () : icaltime_null_time ();
 
     tt.year = t.tm_year + 1900;
     tt.month = t.tm_mon + 1;

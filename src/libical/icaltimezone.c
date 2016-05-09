@@ -1363,7 +1363,9 @@ static int get_offset(icaltimezone *zone)
     int offset;
     const time_t now = time(NULL);
 
-    gmtime_r(&now, &local);
+    if (!gmtime_r(&now, &local))
+        return 0;
+
     tt = tm_to_icaltimetype(&local);
     offset = icaltimezone_get_utc_offset(zone, &tt, NULL);
 
