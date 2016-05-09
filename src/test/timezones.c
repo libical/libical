@@ -106,7 +106,9 @@ int main()
             if (verbose || curr_failed != failed) {
                 struct tm utc_tm;
 
-                gmtime_r(&curr_time, &utc_tm);
+                if (!gmtime_r(&curr_time, &utc_tm))
+                    memset(&utc_tm, 0, sizeof(utc_tm));
+
                 printf(
                     "%s: day %03d: %s: %04d-%02d-%02d %02d:%02d:%02d UTC = "
                     "libc %04d-%02d-%02d %02d:%02d:%02d dst %d",

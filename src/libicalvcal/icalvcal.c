@@ -134,7 +134,10 @@ static void convert_floating_time_to_utc(struct icaltimetype *itt)
     t = mktime(&tmp_tm);
 
     /* Now convert back to a struct tm, but with a UTC time. */
-    gmtime_r(&t, &utc_tm);
+    if (!gmtime_r(&t, &utc_tm)) {
+        *itt = itt->is_date ? icaltime_null_date () : icaltime_null_time ();
+        return;
+    }
 
     /* Now put it back into the icaltime. */
     itt->year = utc_tm.tm_year + 1900;
