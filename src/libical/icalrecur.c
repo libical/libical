@@ -926,7 +926,7 @@ static const struct expand_split_map_struct expand_map[] = {
     {ICAL_WEEKLY_RECURRENCE,   { 2, 2, 2, 2, 3, 3, 3, 1, 1 }},
     {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 3, 3, 1, 1 }},
     {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2, 1 }},
-    {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }}
+    {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }} //krazy:exclude=style
 };
 
 static int has_by_data(icalrecur_iterator *impl, enum byrule byrule)
