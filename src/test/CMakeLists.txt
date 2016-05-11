@@ -16,7 +16,7 @@ if(ICU_FOUND)
 endif()
 
 if(ICAL_GLIB AND HAVE_INTROSPECTION)
-    add_subdirectory(libical-glib)
+  add_subdirectory(libical-glib)
 endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
