@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2015 William Yu <williamyu@gnome.org>
  *
@@ -24,201 +23,195 @@
 #define LOCK_PROPS(x) g_mutex_lock (&((x)->priv->props_lock))
 #define UNLOCK_PROPS(x) g_mutex_unlock (&((x)->priv->props_lock))
 
-struct _ICalObjectPrivate {
-	GMutex props_lock;	/* to guard all the below members */
+struct _ICalObjectPrivate
+{
+    GMutex props_lock;  /* to guard all the below members */
 
-	gpointer native;
-	GDestroyNotify native_destroy_func;
-	gboolean is_global_memory;
-	GObject *owner;
-	GSList *dependers;	/* referenced GObject-s */
+    gpointer native;
+    GDestroyNotify native_destroy_func;
+    gboolean is_global_memory;
+    GObject *owner;
+    GSList *dependers;  /* referenced GObject-s */
 };
 
-G_DEFINE_ABSTRACT_TYPE (ICalObject, i_cal_object, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE(ICalObject, i_cal_object, G_TYPE_OBJECT)
 
-enum {
-	PROP_0,
-	PROP_NATIVE,
-	PROP_NATIVE_DESTROY_FUNC,
-	PROP_IS_GLOBAL_MEMORY,
-	PROP_OWNER
+enum
+{
+    PROP_0,
+    PROP_NATIVE,
+    PROP_NATIVE_DESTROY_FUNC,
+    PROP_IS_GLOBAL_MEMORY,
+    PROP_OWNER
 };
 
-static void
-i_cal_object_set_property (GObject *object,
-			   guint property_id,
-			   const GValue *value,
-			   GParamSpec *pspec)
+static void i_cal_object_set_property(GObject *object, guint property_id,
+                                      const GValue * value, GParamSpec * pspec)
 {
-	ICalObject *iobject;
+    ICalObject *iobject;
 
-	g_return_if_fail (I_CAL_IS_OBJECT (object));
+    g_return_if_fail(I_CAL_IS_OBJECT(object));
 
-	iobject = I_CAL_OBJECT (object);
+    iobject = I_CAL_OBJECT(object);
 
-	switch (property_id) {
-		case PROP_NATIVE:
-			/* no need for LOCK_PROPS() here, these can be set only during construction time */
-			g_return_if_fail (iobject->priv->native == NULL);
-			iobject->priv->native = g_value_get_pointer (value);
-			return;
+    switch (property_id) {
+    case PROP_NATIVE:
+        /* no need for LOCK_PROPS() here, these can be set only during construction time */
+        g_return_if_fail(iobject->priv->native == NULL);
+        iobject->priv->native = g_value_get_pointer(value);
+        return;
 
-		case PROP_NATIVE_DESTROY_FUNC:
-			i_cal_object_set_native_destroy_func (iobject, g_value_get_pointer (value));
-			return;
+    case PROP_NATIVE_DESTROY_FUNC:
+        i_cal_object_set_native_destroy_func(iobject, g_value_get_pointer(value));
+        return;
 
-		case PROP_IS_GLOBAL_MEMORY:
-			/* no need for LOCK_PROPS() here, these can be set only during construction time */
-			iobject->priv->is_global_memory = g_value_get_boolean (value);
-			return;
+    case PROP_IS_GLOBAL_MEMORY:
+        /* no need for LOCK_PROPS() here, these can be set only during construction time */
+        iobject->priv->is_global_memory = g_value_get_boolean(value);
+        return;
 
-		case PROP_OWNER:
-			i_cal_object_set_owner (iobject, g_value_get_object (value));
-			return;
-	}
+    case PROP_OWNER:
+        i_cal_object_set_owner(iobject, g_value_get_object(value));
+        return;
+    }
 
-	G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
 }
 
-static void
-i_cal_object_get_property (GObject *object,
-			   guint property_id,
-			   GValue *value,
-			   GParamSpec *pspec)
+static void i_cal_object_get_property(GObject *object, guint property_id,
+                                      GValue * value, GParamSpec * pspec)
 {
-	ICalObject *iobject;
+    ICalObject *iobject;
 
-	g_return_if_fail (I_CAL_IS_OBJECT (object));
+    g_return_if_fail(I_CAL_IS_OBJECT(object));
 
-	iobject = I_CAL_OBJECT (object);
+    iobject = I_CAL_OBJECT(object);
 
-	switch (property_id) {
-		case PROP_NATIVE:
-			g_value_set_pointer (value, i_cal_object_get_native (iobject));
-			return;
+    switch (property_id) {
+    case PROP_NATIVE:
+        g_value_set_pointer(value, i_cal_object_get_native(iobject));
+        return;
 
-		case PROP_NATIVE_DESTROY_FUNC:
-			g_value_set_pointer (value, i_cal_object_get_native_destroy_func (iobject));
-			return;
+    case PROP_NATIVE_DESTROY_FUNC:
+        g_value_set_pointer(value, i_cal_object_get_native_destroy_func(iobject));
+        return;
 
-		case PROP_IS_GLOBAL_MEMORY:
-			g_value_set_boolean (value, i_cal_object_get_is_global_memory (iobject));
-			return;
+    case PROP_IS_GLOBAL_MEMORY:
+        g_value_set_boolean(value, i_cal_object_get_is_global_memory(iobject));
+        return;
 
-		case PROP_OWNER:
-			g_value_take_object (value, i_cal_object_ref_owner (iobject));
-			return;
-	}
+    case PROP_OWNER:
+        g_value_take_object(value, i_cal_object_ref_owner(iobject));
+        return;
+    }
 
-	G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
 }
 
-static void
-i_cal_object_finalize (GObject *object)
+static void i_cal_object_finalize(GObject *object)
 {
-	/* todo: Need to devise a way to check destroy_func and native */
-	ICalObject *iobject = I_CAL_OBJECT (object);
+    /* todo: Need to devise a way to check destroy_func and native */
+    ICalObject *iobject = I_CAL_OBJECT(object);
 
-	if (!iobject->priv->owner &&
-	    !iobject->priv->is_global_memory) {
-		iobject->priv->native_destroy_func (iobject->priv->native);
-	}
+    if (!iobject->priv->owner && !iobject->priv->is_global_memory) {
+        iobject->priv->native_destroy_func(iobject->priv->native);
+    }
 
-	if (iobject->priv->owner)
-		g_object_unref (iobject->priv->owner);
-	g_slist_free_full (iobject->priv->dependers, g_object_unref);
+    if (iobject->priv->owner) {
+        g_object_unref(iobject->priv->owner);
+    }
 
-	g_mutex_clear (&iobject->priv->props_lock);
+    g_slist_free_full(iobject->priv->dependers, g_object_unref);
 
-	/* Chain up to parent's method. */
-	G_OBJECT_CLASS (i_cal_object_parent_class)->finalize (object);
+    g_mutex_clear(&iobject->priv->props_lock);
+
+    /* Chain up to parent's method. */
+    G_OBJECT_CLASS(i_cal_object_parent_class)->finalize(object);
 }
 
-static void
-i_cal_object_class_init (ICalObjectClass *class)
+static void i_cal_object_class_init(ICalObjectClass * class)
 {
-	GObjectClass *object_class;
+    GObjectClass *object_class;
 
-	g_type_class_add_private (class, sizeof (ICalObjectPrivate));
+    g_type_class_add_private(class, sizeof(ICalObjectPrivate));
 
-	object_class = G_OBJECT_CLASS (class);
-	object_class->set_property = i_cal_object_set_property;
-	object_class->get_property = i_cal_object_get_property;
-	object_class->finalize = i_cal_object_finalize;
+    object_class = G_OBJECT_CLASS(class);
+    object_class->set_property = i_cal_object_set_property;
+    object_class->get_property = i_cal_object_get_property;
+    object_class->finalize = i_cal_object_finalize;
 
-	/**
-	 * ICalObject:native:
-	 *
-	 * The native libical structure for this ICalObject.
-	 **/
-	g_object_class_install_property (
-		object_class,
-		PROP_NATIVE,
-		g_param_spec_pointer (
-			"native",
-			"Native",
-			"Native libical structure",
-			G_PARAM_READWRITE |
-			G_PARAM_CONSTRUCT_ONLY |
-			G_PARAM_STATIC_STRINGS));
+    /**
+     * ICalObject:native:
+     *
+     * The native libical structure for this ICalObject.
+     **/
+    g_object_class_install_property(
+        object_class,
+        PROP_NATIVE,
+        g_param_spec_pointer(
+            "native",
+            "Native",
+            "Native libical structure",
+            G_PARAM_READWRITE |
+            G_PARAM_CONSTRUCT_ONLY |
+            G_PARAM_STATIC_STRINGS));
 
-	/**
-	 * ICalObject:native-destroy-func:
-	 *
-	 * GDestroyNotify function to use to destroy the native libical pointer.
-	 **/
-	g_object_class_install_property (
-		object_class,
-		PROP_NATIVE_DESTROY_FUNC,
-		g_param_spec_pointer (
-			"native-destroy-func",
-			"Native-Destroy-Func",
-			"GDestroyNotify function to use to destroy the native libical structure",
-			G_PARAM_READWRITE |
-			G_PARAM_STATIC_STRINGS));
+    /**
+     * ICalObject:native-destroy-func:
+     *
+     * GDestroyNotify function to use to destroy the native libical pointer.
+     **/
+    g_object_class_install_property(
+        object_class,
+        PROP_NATIVE_DESTROY_FUNC,
+        g_param_spec_pointer(
+            "native-destroy-func",
+            "Native-Destroy-Func",
+            "GDestroyNotify function to use to destroy the native libical structure",
+            G_PARAM_READWRITE |
+            G_PARAM_STATIC_STRINGS));
 
-	/**
-	 * ICalObject:is-global-memory:
-	 *
-	 * Whether the native libical structure is from a global shared memory.
-	 * If TRUE, then it is not freed on #ICalObject's finalize.
-	 **/
-	g_object_class_install_property (
-		object_class,
-		PROP_IS_GLOBAL_MEMORY,
-		g_param_spec_boolean (
-			"is-global-memory",
-			"Is-Global-Memory",
-			"Whether the native libical structure is from a global shared memory",
-			FALSE,
-			G_PARAM_READWRITE |
-			G_PARAM_CONSTRUCT_ONLY |
-			G_PARAM_STATIC_STRINGS));
+    /**
+     * ICalObject:is-global-memory:
+     *
+     * Whether the native libical structure is from a global shared memory.
+     * If TRUE, then it is not freed on #ICalObject's finalize.
+     **/
+    g_object_class_install_property(
+        object_class,
+        PROP_IS_GLOBAL_MEMORY,
+        g_param_spec_boolean(
+            "is-global-memory",
+            "Is-Global-Memory",
+            "Whether the native libical structure is from a global shared memory",
+            FALSE,
+            G_PARAM_READWRITE |
+            G_PARAM_CONSTRUCT_ONLY |
+            G_PARAM_STATIC_STRINGS));
 
-	/**
-	 * ICalObject:owner:
-	 *
-	 * Owner of the native libical structure. If set, then it is
-	 * responsible for a free of the native libical structure.
-	 **/
-	g_object_class_install_property (
-		object_class,
-		PROP_OWNER,
-		g_param_spec_object (
-			"owner",
-			"Owner",
-			"The native libical structure owner",
-			G_TYPE_OBJECT,
-			G_PARAM_READWRITE |
-			G_PARAM_STATIC_STRINGS));
+    /**
+     * ICalObject:owner:
+     *
+     * Owner of the native libical structure. If set, then it is
+     * responsible for a free of the native libical structure.
+     **/
+    g_object_class_install_property(
+        object_class,
+        PROP_OWNER,
+        g_param_spec_object(
+            "owner",
+            "Owner",
+            "The native libical structure owner",
+            G_TYPE_OBJECT,
+            G_PARAM_READWRITE |
+            G_PARAM_STATIC_STRINGS));
 }
 
-static void
-i_cal_object_init (ICalObject *iobject)
+static void i_cal_object_init(ICalObject *iobject)
 {
-	iobject->priv = G_TYPE_INSTANCE_GET_PRIVATE (iobject, I_CAL_TYPE_OBJECT, ICalObjectPrivate);
+    iobject->priv = G_TYPE_INSTANCE_GET_PRIVATE(iobject, I_CAL_TYPE_OBJECT, ICalObjectPrivate);
 
-	g_mutex_init (&iobject->priv->props_lock);
+    g_mutex_init(&iobject->priv->props_lock);
 }
 
 /**
@@ -237,27 +230,26 @@ i_cal_object_init (ICalObject *iobject)
  * Since: 1.0
  **/
 void
-i_cal_object_construct (ICalObject *iobject,
-			gpointer native,
-			GDestroyNotify native_destroy_func,
-			gboolean is_global_memory,
-			GObject *owner)
+i_cal_object_construct(ICalObject *iobject,
+                       gpointer native,
+                       GDestroyNotify native_destroy_func,
+                       gboolean is_global_memory, GObject *owner)
 {
-	g_return_if_fail (I_CAL_IS_OBJECT (iobject));
-	g_return_if_fail (native != NULL);
-	if (owner)
-		g_return_if_fail (G_IS_OBJECT (owner));
+    g_return_if_fail(I_CAL_IS_OBJECT(iobject));
+    g_return_if_fail(native != NULL);
+    if (owner)
+        g_return_if_fail(G_IS_OBJECT(owner));
 
-	//LOCK_PROPS (iobject);
+    //LOCK_PROPS (iobject);
 
-	g_warn_if_fail (iobject->priv->native == NULL);
+    g_warn_if_fail(iobject->priv->native == NULL);
 
-	iobject->priv->native = native;
-	iobject->priv->native_destroy_func = native_destroy_func;
-	iobject->priv->is_global_memory = is_global_memory;
-	i_cal_object_set_owner (iobject, owner);
+    iobject->priv->native = native;
+    iobject->priv->native_destroy_func = native_destroy_func;
+    iobject->priv->is_global_memory = is_global_memory;
+    i_cal_object_set_owner(iobject, owner);
 
-	//UNLOCK_PROPS (iobject);
+    //UNLOCK_PROPS (iobject);
 }
 
 /**
@@ -270,20 +262,19 @@ i_cal_object_construct (ICalObject *iobject,
  *
  * Since: 1.0
  **/
-gpointer
-i_cal_object_get_native (ICalObject *iobject)
+gpointer i_cal_object_get_native(ICalObject *iobject)
 {
-	gpointer native;
+    gpointer native;
 
-	g_return_val_if_fail (I_CAL_IS_OBJECT (iobject), NULL);
+    g_return_val_if_fail(I_CAL_IS_OBJECT(iobject), NULL);
 
-	LOCK_PROPS (iobject);
+    LOCK_PROPS(iobject);
 
-	native = iobject->priv->native;
+    native = iobject->priv->native;
 
-	UNLOCK_PROPS (iobject);
+    UNLOCK_PROPS(iobject);
 
-	return native;
+    return native;
 }
 
 /**
@@ -297,21 +288,20 @@ i_cal_object_get_native (ICalObject *iobject)
  *
  * Since: 1.0
  **/
-gpointer
-i_cal_object_steal_native (ICalObject *iobject)
+gpointer i_cal_object_steal_native(ICalObject *iobject)
 {
-	gpointer native;
+    gpointer native;
 
-	g_return_val_if_fail (I_CAL_IS_OBJECT (iobject), NULL);
+    g_return_val_if_fail(I_CAL_IS_OBJECT(iobject), NULL);
 
-	LOCK_PROPS (iobject);
+    LOCK_PROPS(iobject);
 
-	native = iobject->priv->native;
-	iobject->priv->native = NULL;
+    native = iobject->priv->native;
+    iobject->priv->native = NULL;
 
-	UNLOCK_PROPS (iobject);
+    UNLOCK_PROPS(iobject);
 
-	return native;
+    return native;
 }
 
 /**
@@ -325,20 +315,19 @@ i_cal_object_steal_native (ICalObject *iobject)
  *
  * Since: 1.0
  **/
-GDestroyNotify
-i_cal_object_get_native_destroy_func (ICalObject *iobject)
+GDestroyNotify i_cal_object_get_native_destroy_func(ICalObject *iobject)
 {
-	GDestroyNotify func;
+    GDestroyNotify func;
 
-	g_return_val_if_fail (I_CAL_IS_OBJECT (iobject), NULL);
+    g_return_val_if_fail(I_CAL_IS_OBJECT(iobject), NULL);
 
-	LOCK_PROPS (iobject);
+    LOCK_PROPS(iobject);
 
-	func = iobject->priv->native_destroy_func;
+    func = iobject->priv->native_destroy_func;
 
-	UNLOCK_PROPS (iobject);
+    UNLOCK_PROPS(iobject);
 
-	return func;
+    return func;
 }
 
 /**
@@ -350,24 +339,22 @@ i_cal_object_get_native_destroy_func (ICalObject *iobject)
  *
  * Since: 1.0
  **/
-void
-i_cal_object_set_native_destroy_func (ICalObject *iobject,
-				      GDestroyNotify native_destroy_func)
+void i_cal_object_set_native_destroy_func(ICalObject *iobject, GDestroyNotify native_destroy_func)
 {
-	g_return_if_fail (I_CAL_IS_OBJECT (iobject));
+    g_return_if_fail(I_CAL_IS_OBJECT(iobject));
 
-	LOCK_PROPS (iobject);
+    LOCK_PROPS(iobject);
 
-	if (native_destroy_func == iobject->priv->native_destroy_func) {
-		UNLOCK_PROPS (iobject);
-		return;
-	}
+    if (native_destroy_func == iobject->priv->native_destroy_func) {
+        UNLOCK_PROPS(iobject);
+        return;
+    }
 
-	iobject->priv->native_destroy_func = native_destroy_func;
+    iobject->priv->native_destroy_func = native_destroy_func;
 
-	UNLOCK_PROPS (iobject);
+    UNLOCK_PROPS(iobject);
 
-	g_object_notify (G_OBJECT (iobject), "native-destroy-func");
+    g_object_notify(G_OBJECT(iobject), "native-destroy-func");
 }
 
 /**
@@ -381,20 +368,19 @@ i_cal_object_set_native_destroy_func (ICalObject *iobject,
  *
  * Since: 1.0
  **/
-gboolean
-i_cal_object_get_is_global_memory (ICalObject *iobject)
+gboolean i_cal_object_get_is_global_memory(ICalObject *iobject)
 {
-	gboolean is_global_memory;
+    gboolean is_global_memory;
 
-	g_return_val_if_fail (I_CAL_IS_OBJECT (iobject), FALSE);
+    g_return_val_if_fail(I_CAL_IS_OBJECT(iobject), FALSE);
 
-	LOCK_PROPS (iobject);
+    LOCK_PROPS(iobject);
 
-	is_global_memory = iobject->priv->is_global_memory;
+    is_global_memory = iobject->priv->is_global_memory;
 
-	UNLOCK_PROPS (iobject);
+    UNLOCK_PROPS(iobject);
 
-	return is_global_memory;
+    return is_global_memory;
 }
 
 /**
@@ -407,29 +393,28 @@ i_cal_object_get_is_global_memory (ICalObject *iobject)
  *
  * Since: 1.0
  **/
-void
-i_cal_object_set_owner (ICalObject *iobject,
-			GObject *owner)
+void i_cal_object_set_owner(ICalObject *iobject, GObject *owner)
 {
-	g_return_if_fail (I_CAL_IS_OBJECT (iobject));
-	if (owner)
-		g_return_if_fail (G_IS_OBJECT (owner));
+    g_return_if_fail(I_CAL_IS_OBJECT(iobject));
+    if (owner)
+        g_return_if_fail(G_IS_OBJECT(owner));
 
-	LOCK_PROPS (iobject);
+    LOCK_PROPS(iobject);
 
-	if (owner == iobject->priv->owner) {
-		UNLOCK_PROPS (iobject);
-		return;
-	}
+    if (owner == iobject->priv->owner) {
+        UNLOCK_PROPS(iobject);
+        return;
+    }
 
-	if (owner)
-		g_object_ref (owner);
-	g_clear_object (&iobject->priv->owner);
-	iobject->priv->owner = owner;
+    if (owner) {
+        g_object_ref(owner);
+    }
+    g_clear_object(&iobject->priv->owner);
+    iobject->priv->owner = owner;
 
-	UNLOCK_PROPS (iobject);
+    UNLOCK_PROPS(iobject);
 
-	g_object_notify (G_OBJECT (iobject), "owner");
+    g_object_notify(G_OBJECT(iobject), "owner");
 }
 
 /**
@@ -445,22 +430,21 @@ i_cal_object_set_owner (ICalObject *iobject,
  *
  * Since: 1.0
  **/
-GObject *
-i_cal_object_ref_owner (ICalObject *iobject)
+GObject *i_cal_object_ref_owner(ICalObject *iobject)
 {
-	GObject *owner;
+    GObject *owner;
 
-	g_return_val_if_fail (I_CAL_IS_OBJECT (iobject), NULL);
+    g_return_val_if_fail(I_CAL_IS_OBJECT(iobject), NULL);
 
-	LOCK_PROPS (iobject);
+    LOCK_PROPS(iobject);
 
-	owner = iobject->priv->owner;
-	if (owner)
-		g_object_ref (owner);
+    owner = iobject->priv->owner;
+    if (owner)
+        g_object_ref(owner);
 
-	UNLOCK_PROPS (iobject);
+    UNLOCK_PROPS(iobject);
 
-	return owner;
+    return owner;
 }
 
 /**
@@ -471,22 +455,21 @@ i_cal_object_ref_owner (ICalObject *iobject)
  *
  * Since: 1.0
  **/
-void
-i_cal_object_remove_owner (ICalObject *iobject)
+void i_cal_object_remove_owner(ICalObject *iobject)
 {
-	GObject *owner;
+    GObject *owner;
 
-	g_return_if_fail (I_CAL_IS_OBJECT (iobject));
+    g_return_if_fail(I_CAL_IS_OBJECT(iobject));
 
-	LOCK_PROPS (iobject);
+    LOCK_PROPS(iobject);
 
-	owner = iobject->priv->owner;
-	if (owner) {
-		g_object_unref (owner);
-		iobject->priv->owner = NULL;
-	}
+    owner = iobject->priv->owner;
+    if (owner) {
+        g_object_unref(owner);
+        iobject->priv->owner = NULL;
+    }
 
-	UNLOCK_PROPS (iobject);
+    UNLOCK_PROPS(iobject);
 }
 
 /**
@@ -501,24 +484,22 @@ i_cal_object_remove_owner (ICalObject *iobject)
  *
  * Since: 1.0
  **/
-void
-i_cal_object_add_depender (ICalObject *iobject,
-			   GObject *depender)
+void i_cal_object_add_depender(ICalObject *iobject, GObject *depender)
 {
-	g_return_if_fail (I_CAL_IS_OBJECT (iobject));
-	g_return_if_fail (G_IS_OBJECT (depender));
+    g_return_if_fail(I_CAL_IS_OBJECT(iobject));
+    g_return_if_fail(G_IS_OBJECT(depender));
 
-	LOCK_PROPS (iobject);
+    LOCK_PROPS(iobject);
 
-	if (g_slist_find (iobject->priv->dependers, depender)) {
-		g_warn_if_reached ();
-		UNLOCK_PROPS (iobject);
-		return;
-	}
+    if (g_slist_find(iobject->priv->dependers, depender)) {
+        g_warn_if_reached();
+        UNLOCK_PROPS(iobject);
+        return;
+    }
 
-	iobject->priv->dependers = g_slist_prepend (iobject->priv->dependers, g_object_ref (depender));
+    iobject->priv->dependers = g_slist_prepend(iobject->priv->dependers, g_object_ref(depender));
 
-	UNLOCK_PROPS (iobject);
+    UNLOCK_PROPS(iobject);
 }
 
 /**
@@ -532,23 +513,21 @@ i_cal_object_add_depender (ICalObject *iobject,
  *
  * Since: 1.0
  **/
-void
-i_cal_object_remove_depender (ICalObject *iobject,
-			      GObject *depender)
+void i_cal_object_remove_depender(ICalObject *iobject, GObject *depender)
 {
-	g_return_if_fail (I_CAL_IS_OBJECT (iobject));
-	g_return_if_fail (G_IS_OBJECT (depender));
+    g_return_if_fail(I_CAL_IS_OBJECT(iobject));
+    g_return_if_fail(G_IS_OBJECT(depender));
 
-	LOCK_PROPS (iobject);
+    LOCK_PROPS(iobject);
 
-	if (!g_slist_find (iobject->priv->dependers, depender)) {
-		g_warn_if_reached ();
-		UNLOCK_PROPS (iobject);
-		return;
-	}
+    if (!g_slist_find(iobject->priv->dependers, depender)) {
+        g_warn_if_reached();
+        UNLOCK_PROPS(iobject);
+        return;
+    }
 
-	iobject->priv->dependers = g_slist_remove (iobject->priv->dependers, depender);
-	g_object_unref (depender);
+    iobject->priv->dependers = g_slist_remove(iobject->priv->dependers, depender);
+    g_object_unref(depender);
 
-	UNLOCK_PROPS (iobject);
+    UNLOCK_PROPS(iobject);
 }
