@@ -18,7 +18,7 @@
 
 static const gchar *templates_dir = NULL;
 
-static FILE *open_file(const gchar * dir, const gchar * filename)
+static FILE *open_file(const gchar *dir, const gchar *filename)
 {
     gchar *path;
     FILE *tmpl;
@@ -35,7 +35,7 @@ static FILE *open_file(const gchar * dir, const gchar * filename)
     return tmpl;
 }
 
-gchar *get_source_method_comment(Method * method)
+gchar *get_source_method_comment(Method *method)
 {
     GList *iter_list;
     GList *jter;
@@ -188,7 +188,7 @@ gchar *get_source_method_comment(Method * method)
     return res;
 }
 
-gchar *get_upper_camel_from_lower_snake(const gchar * lowerSnake)
+gchar *get_upper_camel_from_lower_snake(const gchar *lowerSnake)
 {
     gchar *buffer;
     gchar *ret;
@@ -221,7 +221,7 @@ gchar *get_upper_camel_from_lower_snake(const gchar * lowerSnake)
     return ret;
 }
 
-gchar *get_upper_snake_from_lower_snake(const gchar * lowerSnake)
+gchar *get_upper_snake_from_lower_snake(const gchar *lowerSnake)
 {
     gchar *ret;
     gchar *dest;
@@ -251,7 +251,7 @@ gchar *get_upper_snake_from_lower_snake(const gchar * lowerSnake)
     return dest;
 }
 
-gchar *get_upper_snake_from_upper_camel(const gchar * upperCamel)
+gchar *get_upper_snake_from_upper_camel(const gchar *upperCamel)
 {
     gchar *lowerSnake;
     gchar *upperSnake;
@@ -263,7 +263,7 @@ gchar *get_upper_snake_from_upper_camel(const gchar * upperCamel)
     return upperSnake;
 }
 
-gchar *get_lower_snake_from_upper_camel(const gchar * upperCamel)
+gchar *get_lower_snake_from_upper_camel(const gchar *upperCamel)
 {
     gchar *buffer;
     gchar *dest;
@@ -293,7 +293,7 @@ gchar *get_lower_snake_from_upper_camel(const gchar * upperCamel)
     return dest;
 }
 
-gchar *get_lower_train_from_lower_snake(const gchar * lowerSnake)
+gchar *get_lower_train_from_lower_snake(const gchar *lowerSnake)
 {
     guint i;
     gchar *ret;
@@ -310,7 +310,7 @@ gchar *get_lower_train_from_lower_snake(const gchar * lowerSnake)
     return ret;
 }
 
-gchar *get_lower_train_from_upper_camel(const gchar * upperCamel)
+gchar *get_lower_train_from_upper_camel(const gchar *upperCamel)
 {
     gchar *ret;
     guint i, len;
@@ -327,7 +327,7 @@ gchar *get_lower_train_from_upper_camel(const gchar * upperCamel)
     return ret;
 }
 
-void generate_header_method_get_type(FILE *out, Structure * structure)
+void generate_header_method_get_type(FILE *out, Structure *structure)
 {
     gchar *upperCamel;
     gchar *lowerSnake;
@@ -347,7 +347,7 @@ void generate_header_method_get_type(FILE *out, Structure * structure)
     method_free(get_type);
 }
 
-void generate_header_method_new_full(FILE *out, Structure * structure)
+void generate_header_method_new_full(FILE *out, Structure *structure)
 {
     gchar *upperCamel;
     gchar *lowerSnake;
@@ -396,7 +396,7 @@ void generate_header_method_new_full(FILE *out, Structure * structure)
     method_free(new_full);
 }
 
-gchar *get_source_method_proto_new_full(Structure * structure)
+gchar *get_source_method_proto_new_full(Structure *structure)
 {
     gchar *upperCamel;
     gchar *lowerSnake;
@@ -448,7 +448,7 @@ gchar *get_source_method_proto_new_full(Structure * structure)
     return res;
 }
 
-gchar *get_source_method_proto_set_owner(Structure * structure)
+gchar *get_source_method_proto_set_owner(Structure *structure)
 {
     gchar *upperCamel;
     gchar *lowerSnake;
@@ -482,7 +482,7 @@ gchar *get_source_method_proto_set_owner(Structure * structure)
     return res;
 }
 
-gchar *get_source_method_proto_set_native(Structure * structure)
+gchar *get_source_method_proto_set_native(Structure *structure)
 {
     gchar *upperCamel;
     gchar *lowerSnake;
@@ -515,7 +515,7 @@ gchar *get_source_method_proto_set_native(Structure * structure)
     return res;
 }
 
-gchar *get_source_method_proto_set_is_global(Structure * structure)
+gchar *get_source_method_proto_set_is_global(Structure *structure)
 {
     gchar *upperCamel;
     gchar *lowerSnake;
@@ -548,7 +548,7 @@ gchar *get_source_method_proto_set_is_global(Structure * structure)
     return res;
 }
 
-gchar *get_source_method_proto_set_property(Structure * structure)
+gchar *get_source_method_proto_set_property(Structure *structure)
 {
     gchar *upperCamel;
     gchar *lowerSnake;
@@ -593,7 +593,7 @@ gchar *get_source_method_proto_set_property(Structure * structure)
     return res;
 }
 
-gchar *get_source_method_proto_get_property(Structure * structure)
+gchar *get_source_method_proto_get_property(Structure *structure)
 {
     gchar *upperCamel;
     gchar *lowerSnake;
@@ -642,16 +642,34 @@ static FILE *open_private_header(void)
 {
     static gboolean first_private_header_write = TRUE;
     const gchar *mode = "ab";
+    FILE *fp;
+    const gchar *guard = "#ifndef LIBICAL_GLIB_PRIVATE_H\n#define LIBICAL_GLIB_PRIVATE_H\n";
 
     if (first_private_header_write) {
         first_private_header_write = FALSE;
         mode = "wb";
     }
 
-    return fopen(PRIVATE_HEADER, mode);
+    fp = fopen(PRIVATE_HEADER, mode);
+    if ((g_strcmp0(mode, "wb") == 0) && fp != NULL) {
+        (void)fwrite(guard, sizeof(gchar), strlen(guard), fp);
+    }
+    return fp;
 }
 
-void generate_header_method_protos(FILE *out, Structure * structure)
+static void close_private_header(void)
+{
+    FILE *fp;
+    const gchar *endGuard = "#endif\n";
+
+    fp = fopen(PRIVATE_HEADER, "ab");
+    if (fp != NULL) {
+        (void)fwrite(endGuard, sizeof(gchar), strlen(endGuard), fp);
+        (void)fclose(fp);
+    }
+}
+
+void generate_header_method_protos(FILE *out, Structure *structure)
 {
     GList *iter;
     Method *method;
@@ -712,7 +730,7 @@ void generate_header_method_protos(FILE *out, Structure * structure)
     }
 }
 
-void generate_header_method_proto(FILE *out, Method * method)
+void generate_header_method_proto(FILE *out, Method *method)
 {
     GList *iter_list;
     Parameter *para;
@@ -807,7 +825,7 @@ void generate_header_method_proto(FILE *out, Method * method)
     g_free(buffer);
 }
 
-void generate_code_from_template(FILE *in, FILE *out, Structure * structure, GHashTable * table)
+void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHashTable *table)
 {
     gchar c;
     gchar *buffer;
@@ -910,7 +928,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure * structure, GHa
     g_free(buffer);
 }
 
-void generate_header(FILE *out, Structure * structure, GHashTable * table)
+void generate_header(FILE *out, Structure *structure, GHashTable *table)
 {
     FILE *in;
 
@@ -921,7 +939,7 @@ void generate_header(FILE *out, Structure * structure, GHashTable * table)
     fclose(in);
 }
 
-void generate_header_structure_boilerplate(FILE *out, Structure * structure, GHashTable * table)
+void generate_header_structure_boilerplate(FILE *out, Structure *structure, GHashTable *table)
 {
     FILE *in;
 
@@ -932,7 +950,7 @@ void generate_header_structure_boilerplate(FILE *out, Structure * structure, GHa
     fclose(in);
 }
 
-void generate_header_includes(FILE *out, Structure * structure)
+void generate_header_includes(FILE *out, Structure *structure)
 {
     gchar *typeName;
     Structure *parentStructure;
@@ -1007,7 +1025,7 @@ void generate_header_includes(FILE *out, Structure * structure)
     g_hash_table_destroy(includeNames);
 }
 
-void generate_source_includes(FILE *out, Structure * structure)
+void generate_source_includes(FILE *out, Structure *structure)
 {
     gchar *typeName;
     Structure *parentStructure;
@@ -1067,7 +1085,7 @@ void generate_source_includes(FILE *out, Structure * structure)
     g_hash_table_destroy(includeNames);
 }
 
-void generate_header_forward_declaration(FILE *out, Structure * structure)
+void generate_header_forward_declaration(FILE *out, Structure *structure)
 {
     gchar *typeName;
     gchar *typeKind;
@@ -1125,7 +1143,7 @@ void generate_header_forward_declaration(FILE *out, Structure * structure)
     g_hash_table_destroy(includeNames);
 }
 
-void generate_source(FILE *out, Structure * structure, GHashTable * table)
+void generate_source(FILE *out, Structure *structure, GHashTable *table)
 {
     FILE *in;
 
@@ -1136,7 +1154,7 @@ void generate_source(FILE *out, Structure * structure, GHashTable * table)
     fclose(in);
 }
 
-void generate_source_structure_boilerplate(FILE *out, Structure * structure, GHashTable * table)
+void generate_source_structure_boilerplate(FILE *out, Structure *structure, GHashTable *table)
 {
     FILE *in;
 
@@ -1147,7 +1165,7 @@ void generate_source_structure_boilerplate(FILE *out, Structure * structure, GHa
     fclose(in);
 }
 
-GHashTable *get_hash_table_from_structure(Structure * structure)
+GHashTable *get_hash_table_from_structure(Structure *structure)
 {
     GHashTable *table;
 
@@ -1209,7 +1227,7 @@ GHashTable *get_hash_table_from_structure(Structure * structure)
     return table;
 }
 
-void generate_conditional(FILE *out, Structure * structure, gchar * statement, GHashTable * table)
+void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHashTable *table)
 {
     guint iter;
     gboolean isNegate;
@@ -1327,7 +1345,7 @@ void generate_conditional(FILE *out, Structure * structure, gchar * statement, G
     g_free(var);
 }
 
-gchar *get_source_method_code(Method * method)
+gchar *get_source_method_code(Method *method)
 {
     gchar *buffer;
     gchar *ret;
@@ -1363,7 +1381,7 @@ gchar *get_source_method_code(Method * method)
     return ret;
 }
 
-gchar *get_translator_for_parameter(Parameter * para)
+gchar *get_translator_for_parameter(Parameter *para)
 {
     gchar *trueType;
     gchar *res;
@@ -1426,7 +1444,7 @@ gchar *get_translator_for_parameter(Parameter * para)
     return res;
 }
 
-gchar *get_translator_for_return(Ret * ret)
+gchar *get_translator_for_return(Ret *ret)
 {
     gchar *trueType;
     gchar *lowerSnake;
@@ -1457,7 +1475,7 @@ gchar *get_translator_for_return(Ret * ret)
     return res;
 }
 
-gchar *get_inline_parameter(Parameter * para)
+gchar *get_inline_parameter(Parameter *para)
 {
     gchar *buffer;
     gchar *ret;
@@ -1521,7 +1539,7 @@ gchar *get_inline_parameter(Parameter * para)
     return ret;
 }
 
-gchar *get_source_method_body(Method * method, const gchar * nameSpace)
+gchar *get_source_method_body(Method *method, const gchar *nameSpace)
 {
     gchar *buffer;
     gchar *ret;
@@ -1618,11 +1636,11 @@ gchar *get_source_method_body(Method * method, const gchar * nameSpace)
                 }
                 g_free(trueType);
                 /*
-                   if (g_strcmp0 (g_hash_table_lookup (allTypes, method->ret->type), "true") == 0) {
-                   (void)g_stpcpy (buffer + strlen (buffer), ", ");
-                   (void)g_stpcpy (buffer + strlen (buffer), "FALSE");
-                   }
-                   * */
+                  if (g_strcmp0 (g_hash_table_lookup (allTypes, method->ret->type), "true") == 0) {
+                      (void)g_stpcpy (buffer + strlen (buffer), ", ");
+                      (void)g_stpcpy (buffer + strlen (buffer), "FALSE");
+                  }
+                **/
             }
             (void)g_stpcpy(buffer + strlen(buffer), ")");
             g_free(translator);
@@ -1642,7 +1660,7 @@ gchar *get_source_method_body(Method * method, const gchar * nameSpace)
     return ret;
 }
 
-gchar *get_source_method_proto(Method * method)
+gchar *get_source_method_proto(Method *method)
 {
     gchar *buffer;
     GList *iter_list;
@@ -1703,7 +1721,7 @@ gchar *get_source_method_proto(Method * method)
     return ret;
 }
 
-gchar *get_translator_name_for_return(gchar * upperCamel)
+gchar *get_translator_name_for_return(gchar *upperCamel)
 {
     gchar *lowerSnake;
     gchar *res;
@@ -1715,7 +1733,7 @@ gchar *get_translator_name_for_return(gchar * upperCamel)
     return res;
 }
 
-gchar *get_true_type(const gchar * type)
+gchar *get_true_type(const gchar *type)
 {
     guint i;
     guint start;
@@ -1762,7 +1780,7 @@ static void initialize_default_value_table()
     (void)g_hash_table_insert(defaultValues, g_strdup("time_t"), g_strdup("0"));
 }
 
-void generate_header_and_source(Structure * structure, gchar * dir)
+void generate_header_and_source(Structure *structure, gchar *dir)
 {
     gchar *headerName;
     gchar *sourceName;
@@ -1802,7 +1820,7 @@ void generate_header_and_source(Structure * structure, gchar * dir)
     g_hash_table_destroy(table);
 }
 
-void generate_header_enums(FILE *out, Structure * structure)
+void generate_header_enums(FILE *out, Structure *structure)
 {
     GList *iter;
     Enumeration *enumeration;
@@ -1817,7 +1835,7 @@ void generate_header_enums(FILE *out, Structure * structure)
     }
 }
 
-void generate_header_enum(FILE *out, Enumeration * enumeration)
+void generate_header_enum(FILE *out, Enumeration *enumeration)
 {
     GList *iter;
     gchar *nativeName;
@@ -1900,7 +1918,7 @@ void generate_header_enum(FILE *out, Enumeration * enumeration)
     fputc('\n', out);
 }
 
-gchar *get_source_run_time_checkers(Method * method, const gchar * namespace)
+gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
 {
     GList *iter;
     GList *jter;
@@ -2022,7 +2040,7 @@ gchar *get_source_run_time_checkers(Method * method, const gchar * namespace)
     return res;
 }
 
-static gint generate_library(const gchar * apis_dir)
+static gint generate_library(const gchar *apis_dir)
 {
     xmlDoc *doc;
     xmlNode *node;
@@ -2158,7 +2176,7 @@ static gint generate_library(const gchar * apis_dir)
     return 0;
 }
 
-void generate_header_header_declaration(FILE *out, Structure * structure)
+void generate_header_header_declaration(FILE *out, Structure *structure)
 {
     GList *list_iter;
     Declaration *declaration;
@@ -2177,7 +2195,7 @@ void generate_header_header_declaration(FILE *out, Structure * structure)
     }
 }
 
-void generate_header_header_file(GList * structures)
+void generate_header_header_file(GList *structures)
 {
     FILE *out;
     FILE *in;
@@ -2256,6 +2274,7 @@ int main(int argc, char *argv[])
     apis_dir = argv[2];
 
     res = generate_library(apis_dir);
+    close_private_header();
 
     return res;
 }
