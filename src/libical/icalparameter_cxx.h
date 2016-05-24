@@ -27,7 +27,7 @@ extern "C"
 {
 #include "icalerror.h"
 #include "icalparameter.h"
-};
+}
 
 #include <string>
 

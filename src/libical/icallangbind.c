@@ -179,7 +179,7 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, char *sep)
     APPENDS(", 'pid' ");
     APPENDS(sep);
     APPENDC('\'');
-    snprintf(tmp, 25, "%p", prop);
+    snprintf(tmp, 25, "%p", (void *)prop);
     APPENDS(tmp);
     APPENDC('\'');
 
