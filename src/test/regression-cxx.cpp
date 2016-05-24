@@ -20,7 +20,7 @@
 extern "C" {
 #include "regression.h"
 #include "libical/icalparser.h"
-};
+}
 
 #include "icalproperty_cxx.h"
 #include "vcomponent_cxx.h"
