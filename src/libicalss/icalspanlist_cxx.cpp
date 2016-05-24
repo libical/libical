@@ -48,7 +48,7 @@ ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) t
     if (!data) {
         throw icalerrno;
     }
-};
+}
 
 /** @brief Constructor
     @param comp  A valid icalcomponent with a VFREEBUSY section

@@ -29,7 +29,7 @@ using namespace LibICal;
 
 extern "C" {
 #include "icalmemory.h"
-};
+}
 
 #include <cstdlib>
 
