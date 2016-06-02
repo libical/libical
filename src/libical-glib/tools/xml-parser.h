@@ -77,6 +77,7 @@ typedef struct Declaration {
 
 typedef struct Enumeration {
     gchar *name;
+    gchar *nativeName;
     GList *elements;
     gchar *defaultNative;
     gchar *comment;

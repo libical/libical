@@ -14,7 +14,7 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="DerivedProperty">
-	<enum name="ICalPropertyKind" default_native="I_CAL_NO_PROPERTY">
+    <enum name="ICalPropertyKind" native_name="icalproperty_kind" default_native="I_CAL_NO_PROPERTY">
         <element name="ICAL_ANY_PROPERTY"/>
         <element name="ICAL_ACCEPTRESPONSE_PROPERTY"/>
         <element name="ICAL_ACKNOWLEDGED_PROPERTY"/>

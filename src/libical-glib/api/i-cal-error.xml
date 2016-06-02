@@ -14,7 +14,7 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Error">
-    <enum name="ICalErrorEnum" default_native="ICAL_UNKNOWN_ERROR">
+    <enum name="ICalErrorEnum" native_name="icalerrorenum" default_native="ICAL_UNKNOWN_ERROR">
         <element name="ICAL_NO_ERROR"/>
         <element name="ICAL_BADARG_ERROR"/>
         <element name="ICAL_NEWFAILED_ERROR"/>
@@ -27,7 +27,7 @@
         <element name="ICAL_UNIMPLEMENTED_ERROR"/>
         <element name="ICAL_UNKNOWN_ERROR"/>
     </enum>
-    <enum name="ICalErrorState" default_native = "I_CAL_ERROR_DEFAULT">
+    <enum name="ICalErrorState" native_name="icalerrorstate" default_native="I_CAL_ERROR_UNKNOWN">
         <element name="ICAL_ERROR_FATAL"/>
         <element name="ICAL_ERROR_NONFATAL"/>
         <element name="ICAL_ERROR_DEFAULT"/>

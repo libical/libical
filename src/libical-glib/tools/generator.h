@@ -72,7 +72,7 @@ gchar *get_source_method_proto_get_property(Structure *structure);
 
 GHashTable *get_hash_table_from_structure(Structure *structure);
 void generate_header_method_protos(FILE *out, Structure *structure);
-void generate_header_method_proto(FILE *out, Method *method);
+void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate);
 void generate_header_method_new_full(FILE *out, Structure *structure);
 void generate_header_method_get_type(FILE *out, Structure *structure);
 void generate_header_enums(FILE *out, Structure *structure);

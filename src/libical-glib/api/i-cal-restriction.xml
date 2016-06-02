@@ -14,7 +14,7 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Restriction">
-    <enum name="ICalRestrictionKind" default_native="I_CAL_RESTRICTION_UNKNOWN">
+    <enum name="ICalRestrictionKind" native_name="icalrestriction_kind" default_native="I_CAL_RESTRICTION_UNKNOWN">
         <element name="ICAL_RESTRICTION_NONE"/>
         <element name="ICAL_RESTRICTION_ZERO"/>
         <element name="ICAL_RESTRICTION_ONE"/>

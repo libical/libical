@@ -34,7 +34,7 @@
     </method>
     <method name="i_cal_timezone_phase_is_stdandard" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
-        <returns type="gint" annotation="transfer none" comment="The is_stdandard of @phase."/>
+        <returns type="gint" comment="The is_stdandard of @phase."/>
         <comment>Get the is_stdandard of #ICalTimezonePhase.</comment>
         <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), FALSE);
 	return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->is_stdandard;</custom>
@@ -63,7 +63,7 @@
     </method>
     <method name="i_cal_timezone_phase_get_offsetto" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
-        <returns type="gint" annotation="transfer none" comment="The offsetto of @phase."/>
+        <returns type="gint" comment="The offsetto of @phase."/>
         <comment>Get the offsetto of #ICalTimezonePhase. Returns -61 if there is an error.</comment>
         <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), -61);
 	return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->offsetto;</custom>
@@ -77,7 +77,7 @@
     </method>
     <method name="i_cal_timezone_phase_get_tzoffsetfrom" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
-        <returns type="gint" annotation="transfer none" comment="The tzoffsetfrom of @phase."/>
+        <returns type="gint" comment="The tzoffsetfrom of @phase."/>
         <comment>Get the tzoffsetfrom of #ICalTimezonePhase. Returns -61 if there is an error.</comment>
         <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), -61);
 	return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->tzoffsetfrom;</custom>

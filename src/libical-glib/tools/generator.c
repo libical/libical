@@ -14,6 +14,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <errno.h>
+
 #include "generator.h"
 
 static const gchar *templates_dir = NULL;
@@ -343,7 +345,7 @@ void generate_header_method_get_type(FILE *out, Structure *structure)
     get_type->ret->type = g_strdup("GType");
     get_type->name = g_strconcat(lowerSnake, "_get_type", NULL);
     g_free(lowerSnake);
-    generate_header_method_proto(out, get_type);
+    generate_header_method_proto(out, get_type, FALSE);
     method_free(get_type);
 }
 
@@ -392,7 +394,7 @@ void generate_header_method_new_full(FILE *out, Structure *structure)
         para = NULL;
     }
 
-    generate_header_method_proto(out, new_full);
+    generate_header_method_proto(out, new_full, TRUE);
     method_free(new_full);
 }
 
@@ -638,6 +640,19 @@ gchar *get_source_method_proto_get_property(Structure *structure)
     return res;
 }
 
+static void write_str(FILE *fp, const gchar *str)
+{
+    gint len;
+
+    g_return_if_fail(fp != NULL);
+    g_return_if_fail(str != NULL);
+
+    len = strlen(str);
+
+    if (fwrite(str, sizeof(gchar), len, fp) != (size_t) len)
+        g_error("Failed to write %d bytes to file: %s", len, g_strerror(errno));
+}
+
 static FILE *open_private_header(void)
 {
     static gboolean first_private_header_write = TRUE;
@@ -652,7 +667,8 @@ static FILE *open_private_header(void)
 
     fp = fopen(PRIVATE_HEADER, mode);
     if ((g_strcmp0(mode, "wb") == 0) && fp != NULL) {
-        (void)fwrite(guard, sizeof(gchar), strlen(guard), fp);
+        write_str(fp, guard);
+        write_str(fp, "\n#include \"libical-glib.h\"\n");
     }
     return fp;
 }
@@ -664,7 +680,7 @@ static void close_private_header(void)
 
     fp = fopen(PRIVATE_HEADER, "ab");
     if (fp != NULL) {
-        (void)fwrite(endGuard, sizeof(gchar), strlen(endGuard), fp);
+        write_str(fp, endGuard);
         (void)fclose(fp);
     }
 }
@@ -679,7 +695,7 @@ void generate_header_method_protos(FILE *out, Structure *structure)
 
     privateHeader = NULL;
     typeName = g_strconcat(structure->nameSpace, structure->name, NULL);
-    privateHeaderComment = g_strconcat("/* Private header for ", typeName, " */\n", NULL);
+    privateHeaderComment = g_strconcat("\n/* Private methods for ", typeName, " */\n", NULL);
 
     if (structure->native != NULL) {
         /** Open or create the private header file if it does not exist.
@@ -687,14 +703,7 @@ void generate_header_method_protos(FILE *out, Structure *structure)
          * Create the new_full method in it.
          */
         privateHeader = open_private_header();
-        (void)fwrite(privateHeaderComment, sizeof(gchar), strlen(privateHeaderComment),
-                     privateHeader);
-        (void)fwrite("typedef struct _", sizeof(gchar), strlen("typedef struct _"), privateHeader);
-        (void)fwrite(typeName, sizeof(gchar), strlen(typeName), privateHeader);
-        fputc(' ', privateHeader);
-        (void)fwrite(typeName, sizeof(gchar), strlen(typeName), privateHeader);
-        fputc(';', privateHeader);
-        fputc('\n', privateHeader);
+        write_str(privateHeader, privateHeaderComment);
         generate_header_method_new_full(privateHeader, structure);
 
         generate_header_method_get_type(out, structure);
@@ -708,17 +717,10 @@ void generate_header_method_protos(FILE *out, Structure *structure)
                If not, the forward declaration is needed. */
             if (privateHeader == NULL) {
                 privateHeader = open_private_header();
-                (void)fwrite("typedef struct _", sizeof(gchar), strlen("typedef struct _"),
-                             privateHeader);
-                (void)fwrite(typeName, sizeof(gchar), strlen(typeName), privateHeader);
-                fputc(' ', privateHeader);
-                (void)fwrite(typeName, sizeof(gchar), strlen(typeName), privateHeader);
-                fputc(';', privateHeader);
-                fputc('\n', privateHeader);
             }
-            generate_header_method_proto(privateHeader, method);
+            generate_header_method_proto(privateHeader, method, TRUE);
         } else {
-            generate_header_method_proto(out, method);
+            generate_header_method_proto(out, method, FALSE);
         }
     }
 
@@ -730,7 +732,7 @@ void generate_header_method_protos(FILE *out, Structure *structure)
     }
 }
 
-void generate_header_method_proto(FILE *out, Method *method)
+void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
 {
     GList *iter_list;
     Parameter *para;
@@ -742,13 +744,16 @@ void generate_header_method_proto(FILE *out, Method *method)
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
 
-    fprintf(out, "\nLIBICAL_ICAL_EXPORT\n");
+    if (isPrivate)
+        write_str(out, "\n");
+    else
+        write_str(out, "\nLIBICAL_ICAL_EXPORT\n");
 
     /* Generate the method return */
     if (method->ret == NULL) {
-        (void)fwrite("void", sizeof(char), strlen("void"), out);
+        write_str(out, "void");
         for (iter = 0; iter < RET_TAB_COUNT; iter++) {
-            (void)fwrite("\t", sizeof(char), strlen("\t"), out);
+            write_str(out, "\t");
         }
     } else {
         count = (gint) strlen(method->ret->type) / TAB_SIZE;
@@ -764,11 +769,11 @@ void generate_header_method_proto(FILE *out, Method *method)
             buffer[len + 1] = '\0';
         }
 
-        (void)fwrite(method->ret->type, sizeof(char), strlen(method->ret->type), out);
+        write_str(out, method->ret->type);
         if (method->ret->type[strlen(method->ret->type) - 1] != '*') {
-            fputc(' ', out);
+            write_str(out, " ");
         }
-        (void)fwrite(buffer, sizeof(gchar), strlen(buffer), out);
+        write_str(out, buffer);
     }
 
     /* Generate the method name */
@@ -791,8 +796,8 @@ void generate_header_method_proto(FILE *out, Method *method)
         }
     }
 
-    (void)fwrite(method->name, sizeof(char), strlen(method->name), out);
-    (void)fwrite(buffer, sizeof(gchar), strlen(buffer), out);
+    write_str(out, method->name);
+    write_str(out, buffer);
 
     /* Generate all the parameters */
     for (iter = 0; iter < RET_TAB_COUNT + METHOD_NAME_TAB_COUNT; iter++) {
@@ -801,27 +806,27 @@ void generate_header_method_proto(FILE *out, Method *method)
     buffer[iter] = '\0';
 
     if (method->parameters == NULL) {
-        (void)fwrite("(void);", sizeof(gchar), strlen("(void);"), out);
+        write_str(out, "(void);");
     } else {
         for (iter_list = g_list_first(method->parameters); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
             para = (Parameter *) iter_list->data;
             if (iter_list == g_list_first(method->parameters)) {
-                (void)fwrite("(", sizeof(char), strlen("("), out);
+                write_str(out, "(");
             } else {
-                (void)fwrite(",\n", sizeof(char), strlen(",\n"), out);
-                (void)fwrite(buffer, sizeof(gchar), strlen(buffer), out);
-                fputc(' ', out);
+                write_str(out, ",\n");
+                write_str(out, buffer);
+                write_str(out, " ");
             }
-            (void)fwrite((char *)para->type, sizeof(char), strlen(para->type), out);
+            write_str(out, para->type);
             if (para->type[strlen(para->type) - 1] != '*') {
-                fputc(' ', out);
+                write_str(out, " ");
             }
-            (void)fwrite((char *)para->name, sizeof(char), strlen(para->name), out);
+            write_str(out, para->name);
         }
-        (void)fwrite(");", sizeof(char), strlen(");"), out);
+        write_str(out, ");");
     }
-    fputc('\n', out);
+    write_str(out, "\n");
     g_free(buffer);
 }
 
@@ -881,9 +886,9 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                          iter = g_list_next(iter)) {
                         method =
                             get_source_method_body((Method *) iter->data, structure->nameSpace);
-                        (void)fwrite(method, sizeof(gchar), strlen(method), out);
+                        write_str(out, method);
                         if (iter != g_list_last(structure->methods)) {
-                            (void)fwrite("\n\n", sizeof(gchar), strlen("\n\n"), out);
+                            write_str(out, "\n\n");
                         }
                         g_free(method);
                     }
@@ -901,14 +906,14 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                     generate_header_header_declaration(out, structure);
                 } else if (g_hash_table_contains(table, buffer)) {
                     val = g_hash_table_lookup(table, buffer);
-                    (void)fwrite(val, sizeof(gchar), strlen(val), out);
+                    write_str(out, val);
                     val = NULL;
                 } else if (g_strcmp0(buffer, "structure_boilerplate") == 0) {
                     if (structure->native != NULL)
                         generate_header_structure_boilerplate(out, structure, table);
                 } else if (g_hash_table_contains(table, buffer)) {
                     val = g_hash_table_lookup(table, buffer);
-                    (void)fwrite(val, sizeof(gchar), strlen(val), out);
+                    write_str(out, val);
                     val = NULL;
                 } else if (g_strcmp0(buffer, "source_boilerplate") == 0) {
                     if (structure->native != NULL)
@@ -969,14 +974,14 @@ void generate_header_includes(FILE *out, Structure *structure)
 
     for (iter = g_list_first(structure->includes); iter != NULL; iter = g_list_next(iter)) {
         includeName = (gchar *) iter->data;
-        (void)fwrite("#include <", sizeof(gchar), strlen("#include <"), out);
-        (void)fwrite(includeName, sizeof(gchar), strlen(includeName), out);
-        (void)fwrite(">\n", sizeof(gchar), strlen(">\n"), out);
+        write_str(out, "#include <");
+        write_str(out, includeName);
+        write_str(out, ">\n");
     }
 
-    (void)fwrite("#include <", sizeof(gchar), strlen("#include <"), out);
-    (void)fwrite(COMMON_HEADER, sizeof(gchar), strlen(COMMON_HEADER), out);
-    (void)fwrite(".h>\n", sizeof(gchar), strlen(".h>\n"), out);
+    write_str(out, "#include <");
+    write_str(out, COMMON_HEADER);
+    write_str(out, ".h>\n");
 
     g_return_if_fail(out != NULL && structure != NULL);
 
@@ -1017,10 +1022,9 @@ void generate_header_includes(FILE *out, Structure *structure)
     for (g_hash_table_iter_init(&iter_table, includeNames);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
         includeName = (gchar *) key;
-        (void)fwrite("#include <libical-glib/",
-                     sizeof(gchar), strlen("#include <libical-glib/"), out);
-        (void)fwrite(includeName, sizeof(gchar), strlen(includeName), out);
-        (void)fwrite(".h>\n", sizeof(gchar), strlen(".h>\n"), out);
+        write_str(out, "#include <libical-glib/");
+        write_str(out, includeName);
+        write_str(out, ".h>\n");
     }
     g_hash_table_destroy(includeNames);
 }
@@ -1045,14 +1049,14 @@ void generate_source_includes(FILE *out, Structure *structure)
     upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
     lowerTrain = get_lower_train_from_upper_camel(upperCamel);
     g_free(upperCamel);
-    (void)fwrite("#include \"", sizeof(gchar), strlen("#include \""), out);
-    (void)fwrite(lowerTrain, sizeof(gchar), strlen(lowerTrain), out);
-    (void)fwrite(".h\"\n", sizeof(gchar), strlen(".h\"\n"), out);
+    write_str(out, "#include \"");
+    write_str(out, lowerTrain);
+    write_str(out, ".h\"\n");
     g_free(lowerTrain);
 
-    (void)fwrite("#include \"", sizeof(gchar), strlen("#include \""), out);
-    (void)fwrite(PRIVATE_HEADER, sizeof(gchar), strlen(PRIVATE_HEADER), out);
-    (void)fwrite("\"\n", sizeof(gchar), strlen("\"\n"), out);
+    write_str(out, "#include \"");
+    write_str(out, PRIVATE_HEADER);
+    write_str(out, "\"\n");
 
     for (g_hash_table_iter_init(&iter_table, structure->dependencies);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
@@ -1076,12 +1080,12 @@ void generate_source_includes(FILE *out, Structure *structure)
     for (g_hash_table_iter_init(&iter_table, includeNames);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
         includeName = (gchar *) key;
-        (void)fwrite("#include \"", sizeof(gchar), strlen("#include \""), out);
-        (void)fwrite(includeName, sizeof(gchar), strlen(includeName), out);
-        (void)fwrite(".h\"\n", sizeof(gchar), strlen(".h\"\n"), out);
+        write_str(out, "#include \"");
+        write_str(out, includeName);
+        write_str(out, ".h\"\n");
     }
 
-    fputc('\n', out);
+    write_str(out, "\n");
     g_hash_table_destroy(includeNames);
 }
 
@@ -1129,15 +1133,14 @@ void generate_header_forward_declaration(FILE *out, Structure *structure)
     for (g_hash_table_iter_init(&iter_table, includeNames);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
         typeName = (gchar *) key;
-        (void)fwrite("typedef struct _", sizeof(gchar), strlen("typedef struct _"), out);
-        (void)fwrite(typeName, sizeof(gchar), strlen(typeName), out);
-        fputc(' ', out);
-        (void)fwrite(typeName, sizeof(gchar), strlen(typeName), out);
-        fputc(';', out);
-        fputc('\n', out);
+        write_str(out, "typedef struct _");
+        write_str(out, typeName);
+        write_str(out, " ");
+        write_str(out, typeName);
+        write_str(out, ";\n");
     }
     if (typeName != NULL) {
-        fputc('\n', out);
+        write_str(out, "\n");
     }
 
     g_hash_table_destroy(includeNames);
@@ -1327,7 +1330,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
 
                     if (g_hash_table_contains(table, var)) {
                         val = g_hash_table_lookup(table, var);
-                        (void)fwrite(val, sizeof(gchar), strlen(val), out);
+                        write_str(out, val);
                         val = NULL;
                     } else {
                         printf("The string %s is not recognized in conditional, "
@@ -1381,6 +1384,23 @@ gchar *get_source_method_code(Method *method)
     return ret;
 }
 
+static gboolean is_enum_type(const gchar *type)
+{
+    gchar *trueType;
+    const gchar *structureKind;
+    gboolean res = FALSE;
+
+    g_return_val_if_fail(type != NULL, FALSE);
+
+    trueType = get_true_type(type);
+    if (trueType && g_hash_table_contains(type2kind, trueType)) {
+        structureKind = g_hash_table_lookup(type2kind, trueType);
+        res = g_strcmp0 (structureKind, "enum") == 0;
+    }
+
+    return res;
+}
+
 gchar *get_translator_for_parameter(Parameter *para)
 {
     gchar *trueType;
@@ -1407,7 +1427,23 @@ gchar *get_translator_for_parameter(Parameter *para)
             } else {
                 is_bare = structure->isBare;
             }
-            if (g_strcmp0(structureKind, "enum") != 0) {
+            if (g_strcmp0(structureKind, "enum") == 0) {
+                GList *link;
+
+                for (link = structure->enumerations; link; link = g_list_next(link)) {
+                    Enumeration *enumeration = link->data;
+
+                    if (g_strcmp0 (trueType, enumeration->name) == 0) {
+                        if (!enumeration->nativeName) {
+                            g_printerr("Missing 'native_name' for enum %s\n", enumeration->name);
+                            break;
+                        }
+
+                        res = g_strconcat("(", enumeration->nativeName, ")", NULL);
+                        break;
+                    }
+                }
+            } else {
                 /* If the kind of parameter is specified */
                 if (para->native_op != NULL) {
                     if (g_strcmp0(para->native_op, "OBJECT") == 0) {
@@ -1461,8 +1497,31 @@ gchar *get_translator_for_return(Ret *ret)
     } else {
         trueType = get_true_type(ret->type);
         if (g_hash_table_contains(type2kind, trueType)) {
+            Structure *structure;
+
             kind = g_strdup(g_hash_table_lookup(type2kind, trueType));
-            if (g_strcmp0(kind, "enum") != 0) {
+            structure = g_hash_table_lookup(type2structure, trueType);
+            if (!structure) {
+                printf("ERROR: There is no corresponding structure for type %s\n", trueType);
+            }
+
+            if (structure && g_strcmp0(kind, "enum") == 0) {
+                GList *link;
+
+                for (link = structure->enumerations; link; link = g_list_next(link)) {
+                    Enumeration *enumeration = link->data;
+
+                    if (g_strcmp0 (trueType, enumeration->name) == 0) {
+                        if (!enumeration->nativeName) {
+                            g_printerr("Missing 'native_name' for enum %s\n", enumeration->name);
+                            break;
+                        }
+
+                        res = g_strconcat("(", enumeration->name, ")", NULL);
+                        break;
+                    }
+                }
+            } else {
                 lowerSnake = get_lower_snake_from_upper_camel(trueType);
                 res = g_strconcat(lowerSnake, "_new_full", NULL);
                 g_free(lowerSnake);
@@ -1495,14 +1554,14 @@ gchar *get_inline_parameter(Parameter *para)
     if (translator != NULL) {
         (void)g_stpcpy(buffer + strlen(buffer), translator);
         (void)g_stpcpy(buffer + strlen(buffer), " (");
-        if (para->translator == NULL)
+        if (para->translator == NULL && !is_enum_type(para->type))
             (void)g_stpcpy(buffer + strlen(buffer), "I_CAL_OBJECT (");
     }
 
     (void)g_stpcpy(buffer + strlen(buffer), para->name);
 
     if (translator != NULL) {
-        if (para->translator == NULL) {
+        if (para->translator == NULL && !is_enum_type(para->type)) {
             (void)g_stpcpy(buffer + strlen(buffer), ")");
         }
         (void)g_stpcpy(buffer + strlen(buffer), ")");
@@ -1630,7 +1689,7 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
                 trueType = get_true_type(method->ret->type);
                 if (g_hash_table_contains(type2structure, trueType)) {
                     structure = g_hash_table_lookup(type2structure, trueType);
-                    if (structure->isBare == FALSE) {
+                    if (!structure->isBare && !is_enum_type(method->ret->type)) {
                         (void)g_stpcpy(buffer + strlen(buffer), ", NULL");
                     }
                 }
@@ -1831,7 +1890,7 @@ void generate_header_enums(FILE *out, Structure *structure)
         enumeration = (Enumeration *) iter->data;
 
         generate_header_enum(out, enumeration);
-        fputc('\n', out);
+        write_str(out, "\n");
     }
 }
 
@@ -1870,19 +1929,19 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
         g_free(comment);
         comment = tmp;
 
-        (void)fwrite(comment, sizeof(gchar), strlen(comment), out);
+        write_str(out, comment);
         g_free(comment);
         comment = NULL;
         tmp = NULL;
     }
 
     /*Generate the declaration */
-    (void)fwrite("typedef enum {", sizeof(gchar), strlen("typedef enum {"), out);
+    write_str(out, "typedef enum {");
 
     for (iter = g_list_first(enumeration->elements); iter != NULL; iter = g_list_next(iter)) {
         nativeName = (gchar *) iter->data;
         if (iter != g_list_first(enumeration->elements)) {
-            fputc(',', out);
+            write_str(out, ",");
         }
         if (enum_header_len >= (guint) strlen(nativeName)) {
             printf("The enum name %s is longer than the enum header %s\n", nativeName, ENUM_HEADER);
@@ -1903,19 +1962,17 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
             newName = g_strconcat("I_CAL_", nativeName + i, NULL);
         }
 
-        fputc('\n', out);
-        fputc('\t', out);
-        (void)fwrite(newName, sizeof(gchar), strlen(newName), out);
-        (void)fwrite(" = ", sizeof(gchar), strlen(" = "), out);
-        (void)fwrite(nativeName, sizeof(gchar), strlen(nativeName), out);
+        write_str(out, "\n\t");
+        write_str(out, newName);
+        write_str(out, " = ");
+        write_str(out, nativeName);
 
         g_free(newName);
     }
 
-    (void)fwrite("\n} ", sizeof(gchar), strlen("\n} "), out);
-    (void)fwrite(enumeration->name, sizeof(gchar), strlen(enumeration->name), out);
-    fputc(';', out);
-    fputc('\n', out);
+    write_str(out, "\n} ");
+    write_str(out, enumeration->name);
+    write_str(out, ";\n");
 }
 
 gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
@@ -2188,8 +2245,8 @@ void generate_header_header_declaration(FILE *out, Structure *structure)
         declaration = (Declaration *) list_iter->data;
 
         if (g_strcmp0(declaration->position, "header") == 0) {
-            (void)fwrite(declaration->content, sizeof(gchar), strlen(declaration->content), out);
-            fputc('\n', out);
+            write_str(out, declaration->content);
+            write_str(out, "\n");
         }
         declaration = NULL;
     }
@@ -2235,7 +2292,7 @@ void generate_header_header_file(GList *structures)
                     upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
                     lowerTrain = get_lower_train_from_upper_camel(upperCamel);
                     header = g_strconcat("#include <libical-glib/", lowerTrain, ".h>\n", NULL);
-                    (void)fwrite(header, sizeof(gchar), strlen(header), out);
+                    write_str(out, header);
                     g_free(header);
                     g_free(upperCamel);
                     g_free(lowerTrain);

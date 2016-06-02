@@ -14,7 +14,7 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Enums">
-    <enum name="ICalComponentKind" default_native="I_CAL_NO_COMPONENT">
+    <enum name="ICalComponentKind" native_name="icalcomponent_kind" default_native="I_CAL_NO_COMPONENT">
         <element name="ICAL_NO_COMPONENT"/>
         <element name="ICAL_ANY_COMPONENT"/>
         <element name="ICAL_XROOT_COMPONENT"/>
@@ -47,7 +47,7 @@
         <element name="ICAL_VVOTER_COMPONENT"/>
         <element name="ICAL_XVOTE_COMPONENT"/>
     </enum>
-    <enum name="ICalRequestStatus" default_native="I_CAL_UNKNOWN_STATUS">
+    <enum name="ICalRequestStatus" native_name="icalrequeststatus" default_native="I_CAL_UNKNOWN_STATUS">
         <element name="ICAL_UNKNOWN_STATUS"/>
         <element name="ICAL_2_0_SUCCESS_STATUS"/>
         <element name="ICAL_2_1_FALLBACK_STATUS"/>

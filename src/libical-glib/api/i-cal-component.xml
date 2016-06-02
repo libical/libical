@@ -14,7 +14,7 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Component" native="icalcomponent" destroy_func="icalcomponent_free" includes="libical-glib/i-cal-parameter.h">
-	<method name="i_cal_component_new" corresponds="icalcomponent_new" kind="constructor" since="1.0">
+    <method name="i_cal_component_new" corresponds="icalcomponent_new" kind="constructor" since="1.0">
         <parameter type="ICalComponentKind" name="kind" comment="The #ICalComponentKind."/>
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Create a new #ICalComponent with specific type.</comment>

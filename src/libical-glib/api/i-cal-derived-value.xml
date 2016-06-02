@@ -14,7 +14,7 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="DerivedValue">
-	<enum name="ICalValueKind" default_native="I_CAL_NO_VALUE">
+	<enum name="ICalValueKind" native_name="icalvalue_kind" default_native="I_CAL_NO_VALUE">
 	    <element name="ICAL_ANY_VALUE"/>
 	    <element name="ICAL_ACTION_VALUE"/>
 	    <element name="ICAL_ATTACH_VALUE"/>
@@ -52,36 +52,36 @@
 	    <element name="ICAL_XLICCLASS_VALUE"/>
 	    <element name="ICAL_NO_VALUE"/>
 	</enum>
-	<enum name="ICalPropertyAction" default_native="I_CAL_ACTION_NONE">
-		<element name="ICAL_ACTION_X"/>
+	<enum name="ICalPropertyAction" native_name="icalproperty_action" default_native="I_CAL_ACTION_NONE">
+	    <element name="ICAL_ACTION_X"/>
 	    <element name="ICAL_ACTION_AUDIO"/>
 	    <element name="ICAL_ACTION_DISPLAY"/>
 	    <element name="ICAL_ACTION_EMAIL"/>
 	    <element name="ICAL_ACTION_PROCEDURE"/>
 	    <element name="ICAL_ACTION_NONE"/>
 	</enum>
-	<enum name="ICalPropertyBusytype" default_native="I_CAL_BUSYTYPE_NONE">
-		<element name="ICAL_BUSYTYPE_X"/>
+	<enum name="ICalPropertyBusytype" native_name="icalproperty_busytype" default_native="I_CAL_BUSYTYPE_NONE">
+	    <element name="ICAL_BUSYTYPE_X"/>
 	    <element name="ICAL_BUSYTYPE_BUSY"/>
 	    <element name="ICAL_BUSYTYPE_BUSYUNAVAILABLE"/>
 	    <element name="ICAL_BUSYTYPE_BUSYTENTATIVE"/>
 	    <element name="ICAL_BUSYTYPE_NONE"/>
 	</enum>
-	<enum name="ICalPropertyCarlevel" default_native="I_CAL_CARLEVEL_NONE">
+	<enum name="ICalPropertyCarlevel" native_name="icalproperty_carlevel" default_native="I_CAL_CARLEVEL_NONE">
 	    <element name="ICAL_CARLEVEL_X"/>
 	    <element name="ICAL_CARLEVEL_CARNONE"/>
 	    <element name="ICAL_CARLEVEL_CARMIN"/>
 	    <element name="ICAL_CARLEVEL_CARFULL1"/>
 	    <element name="ICAL_CARLEVEL_NONE"/>
 	</enum>
-	<enum name="ICalProperty_Class" default_native="I_CAL_CLASS_NONE">
-		<element name="ICAL_CLASS_X"/>
+	<enum name="ICalProperty_Class" native_name="icalproperty_class" default_native="I_CAL_CLASS_NONE">
+	    <element name="ICAL_CLASS_X"/>
 	    <element name="ICAL_CLASS_PUBLIC"/>
 	    <element name="ICAL_CLASS_PRIVATE"/>
 	    <element name="ICAL_CLASS_CONFIDENTIAL"/>
 	    <element name="ICAL_CLASS_NONE"/>
 	</enum>
-	<enum name="ICalPropertyCmd" default_native="I_CAL_CMD_NONE">
+	<enum name="ICalPropertyCmd" native_name="icalproperty_cmd" default_native="I_CAL_CMD_NONE">
 	    <element name="ICAL_CMD_X"/>
 	    <element name="ICAL_CMD_ABORT"/>
 	    <element name="ICAL_CMD_CONTINUE"/>
@@ -97,7 +97,7 @@
 	    <element name="ICAL_CMD_SETLOCALE"/>
 	    <element name="ICAL_CMD_NONE"/>
 	</enum>
-	<enum name="ICalPropertyMethod" default_native="I_CAL_METHOD_NONE">
+	<enum name="ICalPropertyMethod" native_name="icalproperty_method" default_native="I_CAL_METHOD_NONE">
 	    <element name="ICAL_METHOD_X"/>
 	    <element name="ICAL_METHOD_PUBLISH"/>
 	    <element name="ICAL_METHOD_REQUEST"/>
@@ -116,27 +116,27 @@
 	    <element name="ICAL_METHOD_DELETE"/>
 	    <element name="ICAL_METHOD_NONE"/>
 	</enum>
-	<enum name="ICalPropertyPollcompletion" default_native="ICAL_POLLCOMPLETION_NONE">
-		<element name="ICAL_POLLCOMPLETION_X"/>
+	<enum name="ICalPropertyPollcompletion" native_name="icalproperty_pollcompletion" default_native="ICAL_POLLCOMPLETION_NONE">
+	    <element name="ICAL_POLLCOMPLETION_X"/>
 	    <element name="ICAL_POLLCOMPLETION_SERVER"/>
 	    <element name="ICAL_POLLCOMPLETION_SERVERSUBMIT"/>
 	    <element name="ICAL_POLLCOMPLETION_SERVERCHOICE"/>
 	    <element name="ICAL_POLLCOMPLETION_CLIENT"/>
 	    <element name="ICAL_POLLCOMPLETION_NONE"/>
 	</enum>
-	<enum name="ICalPropertyPollmode" default_native="ICAL_POLLMODE_NONE">
-		<element name="ICAL_POLLMODE_X"/>
+	<enum name="ICalPropertyPollmode" native_name="icalproperty_pollmode" default_native="ICAL_POLLMODE_NONE">
+	    <element name="ICAL_POLLMODE_X"/>
 	    <element name="ICAL_POLLMODE_BASIC"/>
 	    <element name="ICAL_POLLMODE_NONE"/>
 	</enum>
-	<enum name="ICalPropertyQuerylevel" default_native="I_CAL_QUERYLEVEL_NONE">
+	<enum name="ICalPropertyQuerylevel" native_name="icalproperty_querylevel" default_native="I_CAL_QUERYLEVEL_NONE">
 	    <element name="ICAL_QUERYLEVEL_X"/>
 	    <element name="ICAL_QUERYLEVEL_CALQL1"/>
 	    <element name="ICAL_QUERYLEVEL_CALQLNONE"/>
 	    <element name="ICAL_QUERYLEVEL_NONE"/>
 	</enum>
-	<enum name="ICalPropertyStatus" default_native="I_CAL_STATUS_NONE">
-		<element name="ICAL_STATUS_X"/>
+	<enum name="ICalPropertyStatus" native_name="icalproperty_status" default_native="I_CAL_STATUS_NONE">
+	    <element name="ICAL_STATUS_X"/>
 	    <element name="ICAL_STATUS_TENTATIVE"/>
 	    <element name="ICAL_STATUS_CONFIRMED"/>
 	    <element name="ICAL_STATUS_COMPLETED"/>
@@ -147,21 +147,21 @@
 	    <element name="ICAL_STATUS_FINAL"/>
 	    <element name="ICAL_STATUS_NONE"/>
 	</enum>
-	<enum name="ICalPropertyTaskmode" default_native="ICAL_TASKMODE_NONE">
-		<element name="ICAL_TASKMODE_X"/>
+	<enum name="ICalPropertyTaskmode" native_name="icalproperty_taskmode" default_native="ICAL_TASKMODE_NONE">
+	    <element name="ICAL_TASKMODE_X"/>
 	    <element name="ICAL_TASKMODE_AUTOMATICCOMPLETION"/>
 	    <element name="ICAL_TASKMODE_AUTOMATICFAILURE"/>
 	    <element name="ICAL_TASKMODE_AUTOMATICSTATUS"/>
 	    <element name="ICAL_TASKMODE_NONE"/>
 	</enum>
-	<enum name="ICalPropertyTransp" default_native="I_CAL_TRANSP_NONE">
-		<element name="ICAL_TRANSP_X"/>
+	<enum name="ICalPropertyTransp" native_name="icalproperty_transp" default_native="I_CAL_TRANSP_NONE">
+	    <element name="ICAL_TRANSP_X"/>
 	    <element name="ICAL_TRANSP_OPAQUE"/>
 	    <element name="ICAL_TRANSP_TRANSPARENT"/>
 	    <element name="ICAL_TRANSP_NONE"/>
 	</enum>
-	<enum name="ICalPropertyXlicclass" default_native="I_CAL_XLICCLASS_NONE">
-		<element name="ICAL_XLICCLASS_X"/>
+	<enum name="ICalPropertyXlicclass" native_name="icalproperty_xlicclass" default_native="I_CAL_XLICCLASS_NONE">
+	    <element name="ICAL_XLICCLASS_X"/>
 	    <element name="ICAL_XLICCLASS_PUBLISHNEW"/>
 	    <element name="ICAL_XLICCLASS_PUBLISHUPDATE"/>
 	    <element name="ICAL_XLICCLASS_PUBLISHFREEBUSY"/>

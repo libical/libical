@@ -14,7 +14,7 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="RecurrenceType" native="struct icalrecurrencetype" is_bare="true" default_native="i_cal_recurrence_type_new ()">
-     <enum name="ICalRecurrenceTypeFrequency" default_native="I_CAL_NO_RECURRENCE">
+     <enum name="ICalRecurrenceTypeFrequency" native_name="icalrecurrencetype_frequency" default_native="I_CAL_NO_RECURRENCE">
         <element name="ICAL_SECONDLY_RECURRENCE"/>
         <element name="ICAL_MINUTELY_RECURRENCE"/>
         <element name="ICAL_HOURLY_RECURRENCE"/>
@@ -24,7 +24,7 @@
         <element name="ICAL_YEARLY_RECURRENCE"/>
         <element name="ICAL_NO_RECURRENCE"/>
     </enum>
-    <enum name="ICalRecurrenceTypeWeekday" default_native="I_CAL_NO_WEEKDAY">
+    <enum name="ICalRecurrenceTypeWeekday" native_name="icalrecurrencetype_weekday" default_native="I_CAL_NO_WEEKDAY">
         <element name="ICAL_NO_WEEKDAY"/>
         <element name="ICAL_SUNDAY_WEEKDAY"/>
         <element name="ICAL_MONDAY_WEEKDAY"/>
@@ -34,24 +34,24 @@
         <element name="ICAL_FRIDAY_WEEKDAY"/>
         <element name="ICAL_SATURDAY_WEEKDAY"/>
     </enum>
-    <enum name="ICalRecurrenceTypeSkip" default_native="I_CAL_SKIP_UNDEFINED">
+    <enum name="ICalRecurrenceTypeSkip" native_name="icalrecurrencetype_skip" default_native="I_CAL_SKIP_UNDEFINED">
         <element name="ICAL_SKIP_BACKWARD"/>
         <element name="ICAL_SKIP_FORWARD"/>
         <element name="ICAL_SKIP_OMIT"/>
         <element name="ICAL_SKIP_UNDEFINED"/>
 	</enum>
-	<enum name="ICalRecurrenceTypeArrayMaxValues" default_native="I_CAL_RECURRENCE_ARRAY_MAX">
-		<element name="ICAL_RECURRENCE_ARRAY_MAX"/>
-		<element name="ICAL_RECURRENCE_ARRAY_MAX_BYTE"/>
-	</enum>
-	<method name="i_cal_recurrence_type_rscale_is_supported" corresponds="icalrecurrencetype_rscale_is_supported" kind="get" since="2.0">
-		<returns type="gint" comment="Whether rscale is supported"/>
-		<comment xml:space="preserve">Check whether rscale is supported.</comment>
-	</method>
-	<method name="i_cal_recurrence_type_rscale_supported_calendars" corresponds="icalrecurrencetype_rscale_supported_calendars" kind="other" since="2.0">
-		<returns type="ICalArray *" annotation="transfer full" comment="Array of calendars. Currently always NULL."/>
-		<comment xml:space="preserve">Get an array of calendars supporting rscale (currently always return NULL).</comment>
-	</method>
+    <enum name="ICalRecurrenceTypeArrayMaxValues" native_name="enum icalrecurrence_array_max_values" default_native="I_CAL_RECURRENCE_ARRAY_MAX">
+	<element name="ICAL_RECURRENCE_ARRAY_MAX"/>
+	<element name="ICAL_RECURRENCE_ARRAY_MAX_BYTE"/>
+    </enum>
+    <method name="i_cal_recurrence_type_rscale_is_supported" corresponds="icalrecurrencetype_rscale_is_supported" kind="get" since="2.0">
+	<returns type="gint" comment="Whether rscale is supported"/>
+	<comment xml:space="preserve">Check whether rscale is supported.</comment>
+    </method>
+    <method name="i_cal_recurrence_type_rscale_supported_calendars" corresponds="icalrecurrencetype_rscale_supported_calendars" kind="other" since="2.0">
+	<returns type="ICalArray *" annotation="transfer full" comment="Array of calendars. Currently always NULL."/>
+	<comment xml:space="preserve">Get an array of calendars supporting rscale (currently always return NULL).</comment>
+    </method>
     <method name="i_cal_recurrence_type_new" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
         <returns type="struct icalrecurrencetype" comment="The default value."/>
         <custom>	struct icalrecurrencetype ret;

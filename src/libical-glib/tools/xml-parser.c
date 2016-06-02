@@ -20,7 +20,7 @@ Structure *structure_new()
 {
     Structure *structure;
 
-    structure = g_new(Structure, 1);
+    structure = g_new0(Structure, 1);
     structure->nameSpace = NULL;
     structure->name = NULL;
     structure->native = NULL;
@@ -70,13 +70,12 @@ void structure_free(Structure * structure)
     g_free(structure->cloneFunc);
     g_free(structure->defaultNative);
     g_hash_table_destroy(structure->dependencies);
-
-    structure = NULL;
+    g_free(structure);
 }
 
 Declaration *declaration_new()
 {
-    Declaration *declaration = g_new(Declaration, 1);
+    Declaration *declaration = g_new0(Declaration, 1);
 
     declaration->position = NULL;
     declaration->content = NULL;
@@ -102,7 +101,7 @@ Method *method_new()
 {
     Method *method;
 
-    method = g_new(Method, 1);
+    method = g_new0(Method, 1);
 
     method->name = NULL;
     method->corresponds = NULL;
@@ -138,15 +137,14 @@ void method_free(Method * method)
     g_free(method->comment);
     g_free(method->custom);
     ret_free(method->ret);
-
-    method = NULL;
+    g_free(method);
 }
 
 Parameter *parameter_new()
 {
     Parameter *parameter;
 
-    parameter = g_new(Parameter, 1);
+    parameter = g_new0(Parameter, 1);
     parameter->comment = NULL;
     parameter->name = NULL;
     parameter->type = NULL;
@@ -182,15 +180,14 @@ void parameter_free(Parameter * para)
     g_free(para->translator);
     g_free(para->native_op);
     g_free(para->owner_op);
-
-    para = NULL;
+    g_free(para);
 }
 
 Ret *ret_new()
 {
     Ret *ret;
 
-    ret = g_new(Ret, 1);
+    ret = g_new0(Ret, 1);
     ret->comment = NULL;
     ret->type = NULL;
     ret->annotations = NULL;
@@ -221,16 +218,16 @@ void ret_free(Ret * ret)
     g_free(ret->comment);
     g_free(ret->translator);
     g_free(ret->errorReturnValue);
-
-    ret = NULL;
+    g_free(ret);
 }
 
 Enumeration *enumeration_new()
 {
-    Enumeration *enumeration = g_new(Enumeration, 1);
+    Enumeration *enumeration = g_new0(Enumeration, 1);
 
     enumeration->elements = NULL;
     enumeration->name = NULL;
+    enumeration->nativeName = NULL;
     enumeration->defaultNative = NULL;
     enumeration->comment = NULL;
 
@@ -249,9 +246,10 @@ void enumeration_free(Enumeration * enumeration)
     }
     g_list_free(enumeration->elements);
     g_free(enumeration->name);
+    g_free(enumeration->nativeName);
     g_free(enumeration->defaultNative);
     g_free(enumeration->comment);
-    enumeration = NULL;
+    g_free(enumeration);
 }
 
 GList *get_list_from_string(const gchar * str)
@@ -456,6 +454,8 @@ gboolean parse_enumeration(xmlNode * node, Enumeration * enumeration)
     for (attr = node->properties; attr != NULL; attr = attr->next) {
         if (xmlStrcmp(attr->name, (xmlChar *) "name") == 0) {
             enumeration->name = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+        } else if (xmlStrcmp(attr->name, (xmlChar *) "native_name") == 0) {
+            enumeration->nativeName = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "default_native") == 0) {
             enumeration->defaultNative =
                 (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);

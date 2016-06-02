@@ -14,7 +14,7 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="DerivedParameter">
-	<enum name="ICalParameterKind" default_native="I_CAL_NO_PARAMETER">
+    <enum name="ICalParameterKind" native_name="icalparameter_kind" default_native="I_CAL_NO_PARAMETER">
         <element name="ICAL_ANY_PARAMETER"/>
         <element name="ICAL_ACTIONPARAM_PARAMETER"/>
         <element name="ICAL_ALTREP_PARAMETER"/>
@@ -63,13 +63,13 @@
         <element name="ICAL_XLICERRORTYPE_PARAMETER"/>
         <element name="ICAL_NO_PARAMETER"/>
     </enum>
-    <enum name="ICalParameterAction" default_native="I_CAL_ACTIONPARAM_NONE">
+    <enum name="ICalParameterAction" native_name="icalparameter_action" default_native="I_CAL_ACTIONPARAM_NONE">
         <element name="ICAL_ACTIONPARAM_X"/>
         <element name="ICAL_ACTIONPARAM_ASK"/>
         <element name="ICAL_ACTIONPARAM_ABORT"/>
         <element name="ICAL_ACTIONPARAM_NONE"/>
     </enum>
-    <enum name="ICalParameterCutype" default_native="I_CAL_CUTYPE_NONE">
+    <enum name="ICalParameterCutype" native_name="icalparameter_cutype" default_native="I_CAL_CUTYPE_NONE">
         <element name="ICAL_CUTYPE_X"/>
         <element name="ICAL_CUTYPE_INDIVIDUAL"/>
         <element name="ICAL_CUTYPE_GROUP"/>
@@ -78,19 +78,19 @@
         <element name="ICAL_CUTYPE_UNKNOWN"/>
         <element name="ICAL_CUTYPE_NONE"/>
     </enum>
-    <enum name="ICalParameterEnable" default_native="I_CAL_ENABLE_NONE">
+    <enum name="ICalParameterEnable" native_name="icalparameter_enable" default_native="I_CAL_ENABLE_NONE">
         <element name="ICAL_ENABLE_X"/>
         <element name="ICAL_ENABLE_TRUE"/>
         <element name="ICAL_ENABLE_FALSE"/>
         <element name="ICAL_ENABLE_NONE"/>
     </enum>
-    <enum name="ICalParameterEncoding" default_native="I_CAL_ENCODING_NONE">
+    <enum name="ICalParameterEncoding" native_name="icalparameter_encoding" default_native="I_CAL_ENCODING_NONE">
         <element name="ICAL_ENCODING_X"/>
         <element name="ICAL_ENCODING_8BIT"/>
         <element name="ICAL_ENCODING_BASE64"/>
         <element name="ICAL_ENCODING_NONE"/>
     </enum>
-    <enum name="ICalParameterFbtype" default_native="I_CAL_FBTYPE_NONE">
+    <enum name="ICalParameterFbtype" native_name="icalparameter_fbtype" default_native="I_CAL_FBTYPE_NONE">
         <element name="ICAL_FBTYPE_X"/>
         <element name="ICAL_FBTYPE_FREE"/>
         <element name="ICAL_FBTYPE_BUSY"/>
@@ -98,13 +98,13 @@
         <element name="ICAL_FBTYPE_BUSYTENTATIVE"/>
         <element name="ICAL_FBTYPE_NONE"/>
     </enum>
-    <enum name="ICalParameterLocal" default_native="I_CAL_LOCAL_NONE">
+    <enum name="ICalParameterLocal" native_name="icalparameter_local" default_native="I_CAL_LOCAL_NONE">
         <element name="ICAL_LOCAL_X"/>
         <element name="ICAL_LOCAL_TRUE"/>
         <element name="ICAL_LOCAL_FALSE"/>
         <element name="ICAL_LOCAL_NONE"/>
     </enum>
-    <enum name="ICalParameterPartstat" default_native="I_CAL_PARTSTAT_NONE">
+    <enum name="ICalParameterPartstat" native_name="icalparameter_partstat" default_native="I_CAL_PARTSTAT_NONE">
         <element name="ICAL_PARTSTAT_X"/>
         <element name="ICAL_PARTSTAT_NEEDSACTION"/>
         <element name="ICAL_PARTSTAT_ACCEPTED"/>
@@ -116,19 +116,19 @@
         <element name="ICAL_PARTSTAT_FAILED"/>
         <element name="ICAL_PARTSTAT_NONE"/>
     </enum>
-    <enum name="ICalParameterRange" default_native="I_CAL_RANGE_NONE">
+    <enum name="ICalParameterRange" native_name="icalparameter_range" default_native="I_CAL_RANGE_NONE">
         <element name="ICAL_RANGE_X"/>
         <element name="ICAL_RANGE_THISANDPRIOR"/>
         <element name="ICAL_RANGE_THISANDFUTURE"/>
         <element name="ICAL_RANGE_NONE"/>
     </enum>
-    <enum name="ICalParameterRelated" default_native="I_CAL_RELATED_NONE">
+    <enum name="ICalParameterRelated" native_name="icalparameter_related" default_native="I_CAL_RELATED_NONE">
         <element name="ICAL_RELATED_X"/>
         <element name="ICAL_RELATED_START"/>
         <element name="ICAL_RELATED_END"/>
         <element name="ICAL_RELATED_NONE"/>
     </enum>
-    <enum name="ICalParameterReltype" default_native="I_CAL_RELTYPE_NONE">
+    <enum name="ICalParameterReltype" native_name="icalparameter_reltype" default_native="I_CAL_RELTYPE_NONE">
         <element name="ICAL_RELTYPE_X"/>
         <element name="ICAL_RELTYPE_PARENT"/>
         <element name="ICAL_RELTYPE_CHILD"/>
@@ -136,13 +136,13 @@
         <element name="ICAL_RELTYPE_POLL"/>
         <element name="ICAL_RELTYPE_NONE"/>
     </enum>
-    <enum name="ICalParameterRequired" default_native="I_CAL_REQUIRED_NONE">
+    <enum name="ICalParameterRequired" native_name="icalparameter_required" default_native="I_CAL_REQUIRED_NONE">
         <element name="ICAL_REQUIRED_X"/>
         <element name="ICAL_REQUIRED_TRUE"/>
         <element name="ICAL_REQUIRED_FALSE"/>
         <element name="ICAL_REQUIRED_NONE"/>
     </enum>
-    <enum name="ICalParameterRole" default_native="I_CAL_ROLE_NONE">
+    <enum name="ICalParameterRole" native_name="icalparameter_role" default_native="I_CAL_ROLE_NONE">
         <element name="ICAL_ROLE_X"/>
         <element name="ICAL_ROLE_CHAIR"/>
         <element name="ICAL_ROLE_REQPARTICIPANT"/>
@@ -150,38 +150,38 @@
         <element name="ICAL_ROLE_NONPARTICIPANT"/>
         <element name="ICAL_ROLE_NONE"/>
     </enum>
-    <enum name="ICalParameterRsvp" default_native="I_CAL_RSVP_NONE">
+    <enum name="ICalParameterRsvp" native_name="icalparameter_rsvp" default_native="I_CAL_RSVP_NONE">
         <element name="ICAL_RSVP_X"/>
         <element name="ICAL_RSVP_TRUE"/>
         <element name="ICAL_RSVP_FALSE"/>
         <element name="ICAL_RSVP_NONE"/>
     </enum>
-    <enum name="ICalParameterScheduleagent" default_native="I_CAL_SCHEDULEAGENT_NONE">
+    <enum name="ICalParameterScheduleagent" native_name="icalparameter_scheduleagent" default_native="I_CAL_SCHEDULEAGENT_NONE">
         <element name="ICAL_SCHEDULEAGENT_X"/>
         <element name="ICAL_SCHEDULEAGENT_SERVER"/>
         <element name="ICAL_SCHEDULEAGENT_CLIENT"/>
         <element name="ICAL_SCHEDULEAGENT_NONE"/>
     </enum>
-    <enum name="ICalParameterScheduleforcesend" default_native="I_CAL_SCHEDULEFORCESEND_NONE">
+    <enum name="ICalParameterScheduleforcesend" native_name="icalparameter_scheduleforcesend" default_native="I_CAL_SCHEDULEFORCESEND_NONE">
         <element name="ICAL_SCHEDULEFORCESEND_X"/>
         <element name="ICAL_SCHEDULEFORCESEND_REQUEST"/>
         <element name="ICAL_SCHEDULEFORCESEND_REPLY"/>
         <element name="ICAL_SCHEDULEFORCESEND_NONE"/>
     </enum>
-    <enum name="ICalParameterStayinformed" default_native="I_CAL_STAYINFORMED_NONE">
+    <enum name="ICalParameterStayinformed" native_name="icalparameter_stayinformed" default_native="I_CAL_STAYINFORMED_NONE">
         <element name="ICAL_STAYINFORMED_X"/>
         <element name="ICAL_STAYINFORMED_TRUE"/>
         <element name="ICAL_STAYINFORMED_FALSE"/>
         <element name="ICAL_STAYINFORMED_NONE"/>
     </enum>
-    <enum name="ICalParameterSubstate" default_native="I_CAL_SUBSTATE_NONE">
+    <enum name="ICalParameterSubstate" native_name="icalparameter_substate" default_native="I_CAL_SUBSTATE_NONE">
         <element name="ICAL_SUBSTATE_X"/>
         <element name="ICAL_SUBSTATE_OK"/>
         <element name="ICAL_SUBSTATE_ERROR"/>
         <element name="ICAL_SUBSTATE_SUSPENDED"/>
         <element name="ICAL_SUBSTATE_NONE"/>
     </enum>
-    <enum name="ICalParameterValue" default_native="I_CAL_SCHEDULEFORCESEND_NONE">
+    <enum name="ICalParameterValue" native_name="icalparameter_value" default_native="I_CAL_VALUE_NONE">
         <element name="ICAL_VALUE_X"/>
         <element name="ICAL_VALUE_BINARY"/>
         <element name="ICAL_VALUE_BOOLEAN"/>
@@ -199,7 +199,7 @@
         <element name="ICAL_VALUE_CALADDRESS"/>
         <element name="ICAL_VALUE_NONE"/>
     </enum>
-    <enum name="ICalParameterXliccomparetype" default_native="I_CAL_XLICCOMPARETYPE_NONE">
+    <enum name="ICalParameterXliccomparetype" native_name="icalparameter_xliccomparetype" default_native="I_CAL_XLICCOMPARETYPE_NONE">
         <element name="ICAL_XLICCOMPARETYPE_X"/>
         <element name="ICAL_XLICCOMPARETYPE_EQUAL"/>
         <element name="ICAL_XLICCOMPARETYPE_NOTEQUAL"/>
@@ -212,7 +212,7 @@
         <element name="ICAL_XLICCOMPARETYPE_ISNOTNULL"/>
         <element name="ICAL_XLICCOMPARETYPE_NONE"/>
     </enum>
-    <enum name="ICalParameterXlicerrortype" default_native="I_CAL_XLICERRORTYPE_NONE">
+    <enum name="ICalParameterXlicerrortype" native_name="icalparameter_xlicerrortype" default_native="I_CAL_XLICERRORTYPE_NONE">
         <element name="ICAL_XLICERRORTYPE_X"/>
         <element name="ICAL_XLICERRORTYPE_COMPONENTPARSEERROR"/>
         <element name="ICAL_XLICERRORTYPE_PROPERTYPARSEERROR"/>
