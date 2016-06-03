@@ -96,10 +96,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/libical
 )
 
-if("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-enum-conversion")
-endif()
-
 add_library(ical-glib ${LIBRARY_TYPE} ${LIBICAL_GLIB_SOURCES})
 add_dependencies(ical-glib ical-header)
 target_compile_options(ical-glib PRIVATE ${GLIB_CFLAGS})
