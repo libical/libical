@@ -212,7 +212,7 @@ class Time(Property):
         
         if isinstance(o,Time):
             # Subtract a time from this time and return a duration
-            seconds = self.utc_seconds() - other.utc_seconds()
+            seconds = self.utc_seconds() - o.utc_seconds()
             return Duration(seconds)
         elif isinstance(o,Duration):
             # Subtract a duration from this time and return a time
