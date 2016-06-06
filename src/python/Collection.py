@@ -113,7 +113,7 @@ class ComponentCollection:
         self._components[i]=prop
 
     def __delitem__(self, i):
-        self._parent.remove_componet(self._components[i])
+        self._parent.remove_component(self._components[i])
         del self._components[i]
 
     def __len__(self):

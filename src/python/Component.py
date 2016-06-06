@@ -67,7 +67,7 @@ class Component(object):
             icalcomponent_add_component(self._ref,inner);
 
         else:
-            raise "Could not construct component of kind" + kind
+            raise "Could not construct component of with an unspecified kind"
 
         self.cached_props = SwigRefHash()
         self.cached_comps = SwigRefHash()
@@ -761,9 +761,9 @@ class Todo(GenericComponent):
         return self._singular_property('COMPLETED', 'DATE-TIME', value, Time)
 
     def geo(self, value=None):
-        if isinstance(v, ListType) or isinstance(v, TupleType):
-            v = "%s;%s" % (float(v[0]), float(v[1]))
-        return self._singular_property("GEO", "FLOAT", value)
+        if isinstance(value, ListType) or isinstance(value, TupleType):
+            v = "%s;%s" % (float(value[0]), float(value[1]))
+        return self._singular_property("GEO", "FLOAT", v)
 
     def location(self, value=None):
         return self._singular_property('LOCATION', 'TEXT', value)
