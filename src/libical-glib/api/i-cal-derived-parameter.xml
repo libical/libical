@@ -661,18 +661,18 @@
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_new_required" corresponds="icalparameter_new_required" kind="constructor" since="2.0">
-        <parameter type="ICalParameterReltype" name="v" comment="The type of #ICalParameter to be created"/>
+        <parameter type="ICalParameterRequired" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve">Create a new #ICalParameter according to the required type</comment>
     </method>
     <method name="i_cal_parameter_get_required" corresponds="icalparameter_get_required" kind="get" since="2.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="ICalParameterReltype" comment="The type of the @value" />
+        <returns type="ICalParameterRequired" comment="The type of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_required" corresponds="icalparameter_set_required" kind="set" since="2.0">
         <parameter type="ICalParameter *" name="value" comment="The #ICalParameter to be set"/>
-        <parameter type="ICalParameterReltype" name="v" comment="The type of #ICalParameter to be set in the @value"/>
+        <parameter type="ICalParameterRequired" name="v" comment="The type of #ICalParameter to be set in the @value"/>
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_new_response" corresponds="icalparameter_new_response" kind="constructor" since="2.0">

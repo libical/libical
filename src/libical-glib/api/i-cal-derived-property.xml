@@ -1472,18 +1472,18 @@
         <comment>Get the target of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_taskmode" corresponds="icalproperty_new_taskmode" kind="constructor" since="2.0">
-        <parameter type="ICalPropertyAction" name="v" comment="The taskmode."/>
+        <parameter type="ICalPropertyTaskmode" name="v" comment="The taskmode."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_taskmode" corresponds="icalproperty_set_taskmode" kind="set" since="2.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyAction" name="v" comment="The taskmode."/>
+        <parameter type="ICalPropertyTaskmode" name="v" comment="The taskmode."/>
         <comment>Set the taskmode for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_taskmode" corresponds="icalproperty_get_taskmode" kind="get" since="2.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalPropertyAction" comment="Get the taskmode of #ICalProperty."/>
+        <returns type="ICalPropertyTaskmode" comment="Get the taskmode of #ICalProperty."/>
         <comment>Get the taskmode of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_transp" corresponds="icalproperty_new_transp" kind="constructor" since="1.0">

@@ -116,7 +116,7 @@
 	    <element name="ICAL_METHOD_DELETE"/>
 	    <element name="ICAL_METHOD_NONE"/>
 	</enum>
-	<enum name="ICalPropertyPollcompletion" native_name="icalproperty_pollcompletion" default_native="ICAL_POLLCOMPLETION_NONE">
+	<enum name="ICalPropertyPollcompletion" native_name="icalproperty_pollcompletion" default_native="I_CAL_POLLCOMPLETION_NONE">
 	    <element name="ICAL_POLLCOMPLETION_X"/>
 	    <element name="ICAL_POLLCOMPLETION_SERVER"/>
 	    <element name="ICAL_POLLCOMPLETION_SERVERSUBMIT"/>
@@ -124,7 +124,7 @@
 	    <element name="ICAL_POLLCOMPLETION_CLIENT"/>
 	    <element name="ICAL_POLLCOMPLETION_NONE"/>
 	</enum>
-	<enum name="ICalPropertyPollmode" native_name="icalproperty_pollmode" default_native="ICAL_POLLMODE_NONE">
+	<enum name="ICalPropertyPollmode" native_name="icalproperty_pollmode" default_native="I_CAL_POLLMODE_NONE">
 	    <element name="ICAL_POLLMODE_X"/>
 	    <element name="ICAL_POLLMODE_BASIC"/>
 	    <element name="ICAL_POLLMODE_NONE"/>
@@ -147,7 +147,7 @@
 	    <element name="ICAL_STATUS_FINAL"/>
 	    <element name="ICAL_STATUS_NONE"/>
 	</enum>
-	<enum name="ICalPropertyTaskmode" native_name="icalproperty_taskmode" default_native="ICAL_TASKMODE_NONE">
+	<enum name="ICalPropertyTaskmode" native_name="icalproperty_taskmode" default_native="I_CAL_TASKMODE_NONE">
 	    <element name="ICAL_TASKMODE_X"/>
 	    <element name="ICAL_TASKMODE_AUTOMATICCOMPLETION"/>
 	    <element name="ICAL_TASKMODE_AUTOMATICFAILURE"/>

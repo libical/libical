@@ -36,14 +36,14 @@
         <returns type="ICalRequestStatus" comment="The code of @reqstat."/>
         <comment>Get the code of #ICalReqstatType.</comment>
         <custom>	g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT_TYPE (reqstat), I_CAL_UNKNOWN_STATUS);
-	return ((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))->code;</custom>
+	return (ICalRequestStatus) (((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))->code);</custom>
     </method>
     <method name="i_cal_reqstat_type_set_code" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalReqstatType *" name="reqstat" comment="The #ICalReqstatType."/>
         <parameter type="ICalRequestStatus" name="code" comment="The code of @reqstat."/>
         <comment>Set the code of #ICalReqstatType.</comment>
         <custom>	g_return_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT_TYPE (reqstat));
-	((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))->code = code;</custom>
+	((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))->code = (icalrequeststatus) (code);</custom>
     </method>
     <method name="i_cal_reqstat_type_get_desc" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalReqstatType *" name="reqstat" comment="The #ICalReqstatType."/>

@@ -395,7 +395,7 @@
 	subcomp = i_cal_component_get_first_component (comp, I_CAL_ANY_COMPONENT);
 	while (subcomp) {
 	    i_cal_component_foreach_tzid (subcomp, callback, callback_data);
-	    subcomp = i_cal_component_get_next_component (comp, ICAL_ANY_COMPONENT);
+	    subcomp = i_cal_component_get_next_component (comp, I_CAL_ANY_COMPONENT);
 	}</custom>
     </method>
     <method name="i_cal_component_get_timezone" corresponds="icalcomponent_get_timezone" kind="get" since="1.0">

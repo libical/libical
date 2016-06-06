@@ -112,14 +112,14 @@
         <returns type="ICalRecurrenceTypeFrequency" comment="The freq of #ICalRecurrenceType."/>
         <comment>Get the freq from #ICalRecurrenceType.</comment>
         <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE_TYPE (recur), I_CAL_NO_RECURRENCE);
-	return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->freq;</custom>
+	return (ICalRecurrenceTypeFrequency) (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->freq);</custom>
     </method>
     <method name="i_cal_recurrence_type_set_freq" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalRecurrenceType *" name="recur" comment="The #ICalRecurrenceType."/>
         <parameter type="ICalRecurrenceTypeFrequency" name="freq" comment="The freq of #ICalRecurrenceType."/>
         <comment>Set the freq from #ICalRecurrenceType.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE_TYPE (recur));
-	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->freq = freq;</custom>
+	((struct icalrecurrencetype *) i_cal_object_get_native ((ICalObject *)recur))->freq = (icalrecurrencetype_frequency) freq;</custom>
     </method>
     <method name="i_cal_recurrence_type_get_count" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrenceType *" name="recur" comment="The #ICalRecurrenceType."/>
@@ -154,14 +154,14 @@
         <returns type="ICalRecurrenceTypeWeekday" comment="The week_start of #ICalRecurrenceType."/>
         <comment>Get the week_start from #ICalRecurrenceType.</comment>
         <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE_TYPE (recur), I_CAL_NO_WEEKDAY);
-	return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->week_start;</custom>
+	return (ICalRecurrenceTypeWeekday) (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->week_start);</custom>
     </method>
     <method name="i_cal_recurrence_type_set_week_start" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalRecurrenceType *" name="recur" comment="The #ICalRecurrenceType."/>
         <parameter type="ICalRecurrenceTypeWeekday" name="week_start" comment="The week_start of #ICalRecurrenceType."/>
         <comment>Set the week_start from #ICalRecurrenceType.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE_TYPE (recur));
-	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->week_start = week_start;</custom>
+	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->week_start = (icalrecurrencetype_weekday) week_start;</custom>
     </method>
     <method name="i_cal_recurrence_type_get_by_second" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrenceType *" name="recur" comment="The #ICalRecurrenceType."/>
