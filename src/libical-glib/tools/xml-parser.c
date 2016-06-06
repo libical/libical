@@ -533,23 +533,26 @@ gboolean parse_structure(xmlNode * node, Structure * structure)
             method = method_new();
             if (!parse_method(child, method)) {
                 method_free(method);
+            } else {
+                structure->methods = g_list_append(structure->methods, method);
             }
-            structure->methods = g_list_append(structure->methods, method);
             method = NULL;
         }
         if (g_strcmp0((gchar *) child->name, "declaration") == 0) {
             declaration = declaration_new();
             if (!parse_declaration(child, declaration)) {
                 declaration_free(declaration);
+            } else {
+                structure->declarations = g_list_append(structure->declarations, declaration);
             }
-            structure->declarations = g_list_append(structure->declarations, declaration);
             declaration = NULL;
         } else if (g_strcmp0((gchar *) child->name, "enum") == 0) {
             enumeration = enumeration_new();
             if (!parse_enumeration(child, enumeration)) {
                 enumeration_free(enumeration);
+            } else {
+                structure->enumerations = g_list_append(structure->enumerations, enumeration);
             }
-            structure->enumerations = g_list_append(structure->enumerations, enumeration);
             enumeration = NULL;
         }
     }

@@ -832,7 +832,7 @@ void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
 
 void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHashTable *table)
 {
-    gchar c;
+    gint c;
     gchar *buffer;
     gint count;
     gchar last;
@@ -850,6 +850,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
         if (c == '$') {
             if ((c = fgetc(in)) != '{' && c != '^') {
                 printf("The following char is not {");
+                g_free(buffer);
                 return;
             }
 
@@ -921,6 +922,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                 } else {
                     printf("The string %s is not recognized, please check the template\n", buffer);
                     fflush(NULL);
+                    g_free(buffer);
                     return;
                 }
             }
@@ -1237,7 +1239,6 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     gboolean isTrue;
     gchar *condition;
     gchar *expression;
-    gchar *buffer;
     gint count;
     gint len;
     gchar c;
@@ -1249,15 +1250,9 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     g_return_if_fail(out != NULL && structure != NULL && statement != NULL && *statement != '\0');
 
     iter = 0;
+    count = 0;
     isNegate = FALSE;
     isTrue = FALSE;
-    condition = g_new(gchar, BUFFER_SIZE);
-    *condition = '\0';
-    expression = g_new(gchar, BUFFER_SIZE);
-    *expression = '\0';
-    var = g_new(gchar, BUFFER_SIZE);
-    *var = '\0';
-    count = 0;
 
     if (statement[0] == '!') {
         isNegate = TRUE;
@@ -1265,6 +1260,14 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     }
     g_return_if_fail(iter + 1 < statement_len && statement[iter++] == '$' &&
                      statement[iter++] == '{');
+
+    condition = g_new(gchar, BUFFER_SIZE);
+    *condition = '\0';
+    expression = g_new(gchar, BUFFER_SIZE);
+    *expression = '\0';
+    var = g_new(gchar, BUFFER_SIZE);
+    *var = '\0';
+
     while (iter < statement_len && statement[iter] != '}') {
         len = (gint) strlen(condition);
         condition[len] = statement[iter++];
@@ -1288,6 +1291,8 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
             if (iter < expression_len - 1 &&
                 expression[iter] == '$' &&
                 expression[iter + 1] == '^') {
+                gchar *buffer;
+
                 iter += 2;
                 count = 1;
                 buffer = g_new(gchar, BUFFER_SIZE);
@@ -1306,7 +1311,6 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                     if (count == 0) {
                         iter += 1;
                         generate_conditional(out, structure, buffer, table);
-                        g_free(buffer);
                         break;
                     }
                     len = (gint) strlen(buffer);
@@ -1314,11 +1318,14 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                     buffer[len + 1] = '\0';
                     ++iter;
                 }
+                g_free(buffer);
             } else {
                 c = expression[iter];
                 if (c == '$') {
                     if ((c = expression[++iter]) != '{') {
                         printf("The following char is not {");
+                        g_free(expression);
+                        g_free(var);
                         return;
                     }
 
@@ -1335,6 +1342,8 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                     } else {
                         printf("The string %s is not recognized in conditional, "
                                "please check the template\n", var);
+                        g_free(expression);
+                        g_free(var);
                         return;
                     }
                     var[0] = '\0';
@@ -1427,7 +1436,9 @@ gchar *get_translator_for_parameter(Parameter *para)
             } else {
                 is_bare = structure->isBare;
             }
-            if (g_strcmp0(structureKind, "enum") == 0) {
+            if (!structure) {
+                /* printed an error above, do nothing in this case */
+            } else if (g_strcmp0(structureKind, "enum") == 0) {
                 GList *link;
 
                 for (link = structure->enumerations; link; link = g_list_next(link)) {
@@ -1874,8 +1885,10 @@ void generate_header_and_source(Structure *structure, gchar *dir)
     generate_header(header, structure, table);
     generate_source(source, structure, table);
 
-    fclose(header);
-    fclose(source);
+    if (header)
+        fclose(header);
+    if (source)
+        fclose(source);
     g_hash_table_destroy(table);
 }
 
@@ -2002,10 +2015,10 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
     for (iter = g_list_first(method->parameters); iter != NULL; iter = g_list_next(iter)) {
         parameter = (Parameter *) iter->data;
 
-        if (namespace != NULL && parameter->type[strlen(parameter->type) - 1] == '*') {
+        if (parameter && parameter->type && parameter->type[strlen(parameter->type) - 1] == '*') {
             trueType = get_true_type(parameter->type);
             for (i = 0;
-                 i < (guint) strlen(namespace) && i < namespace_len && namespace[i] == trueType[i];
+                 trueType[i] && i < namespace_len && namespace[i] == trueType[i];
                  i++);
 
             if (i == namespace_len) {
@@ -2110,6 +2123,7 @@ static gint generate_library(const gchar *apis_dir)
     GList *iter_list;
     GDir *dir;
     GError *local_error = NULL;
+    gint res = 0;
 
     g_return_val_if_fail(apis_dir != NULL, 1);
     g_return_val_if_fail(g_file_test(apis_dir, G_FILE_TEST_IS_DIR), 1);
@@ -2131,6 +2145,7 @@ static gint generate_library(const gchar *apis_dir)
         g_warning("Failed to open API directory '%s': %s", apis_dir,
                   local_error ? local_error->message : "Unknown error");
         g_clear_error(&local_error);
+        g_free(buffer);
         return 1;
     }
 
@@ -2146,8 +2161,8 @@ static gint generate_library(const gchar *apis_dir)
         if (doc == NULL) {
             printf("The doc %s cannot be parsed.\n", path);
             g_free(path);
-            g_dir_close(dir);
-            return 1;
+            res = 1;
+            goto out;
         }
 
         g_free(path);
@@ -2155,15 +2170,17 @@ static gint generate_library(const gchar *apis_dir)
         node = xmlDocGetRootElement(doc);
         if (node == NULL) {
             printf("The root node cannot be retrieved from the doc\n");
-            g_dir_close(dir);
-            return 1;
+            xmlFreeDoc(doc);
+            res = 1;
+            goto out;
         }
 
         structure = structure_new();
         if (!parse_structure(node, structure)) {
             printf("The node cannot be parsed into a structure.\n");
-            g_dir_close(dir);
-            return 1;
+            xmlFreeDoc(doc);
+            res = 1;
+            goto out;
         }
 
         if (structure->native != NULL) {
@@ -2182,8 +2199,9 @@ static gint generate_library(const gchar *apis_dir)
                 } else {
                     printf("Please supply a default value for the bare structure %s\n",
                            structure->name);
-                    g_dir_close(dir);
-                    return 1;
+                    xmlFreeDoc(doc);
+                    res = 1;
+                    goto out;
                 }
             }
         }
@@ -2199,15 +2217,14 @@ static gint generate_library(const gchar *apis_dir)
                                           g_strdup(enumeration->defaultNative));
             } else {
                 printf("Please supply a default value for enum %s\n", enumeration->name);
-                g_dir_close(dir);
-                return 1;
+                xmlFreeDoc(doc);
+                res = 1;
+                goto out;
             }
         }
         structures = g_list_append(structures, structure);
         xmlFreeDoc(doc);
     }
-
-    g_dir_close(dir);
 
     /* Generate the common header for all the headers, which is libical-glib.h for here */
     generate_header_header_file(structures);
@@ -2219,18 +2236,15 @@ static gint generate_library(const gchar *apis_dir)
         generate_header_and_source(structure, (char *)"");
     }
 
+ out:
+    g_dir_close(dir);
     g_hash_table_destroy(type2kind);
     g_hash_table_destroy(type2structure);
     g_hash_table_destroy(defaultValues);
-    for (iter_list = g_list_first(structures); iter_list != NULL;
-         iter_list = g_list_next(iter_list)) {
-        structure = (Structure *) iter_list->data;
-        structure_free(structure);
-    }
-    g_list_free(structures);
+    g_list_free_full(structures, (GDestroyNotify)structure_free);
     g_free(buffer);
 
-    return 0;
+    return res;
 }
 
 void generate_header_header_declaration(FILE *out, Structure *structure)
@@ -2256,7 +2270,7 @@ void generate_header_header_file(GList *structures)
 {
     FILE *out;
     FILE *in;
-    gchar c;
+    gint c;
     gchar *buffer;
     GList *iter;
     gint len;
@@ -2268,7 +2282,14 @@ void generate_header_header_file(GList *structures)
     g_return_if_fail(structures != NULL);
 
     in = open_file(templates_dir, HEADER_HEADER_TEMPLATE);
+    if (!in)
+        return;
     out = fopen("libical-glib.h", "w");
+    if (!out) {
+        fprintf(stderr, "Failed to open libical-glib.h for writing\n");
+        fclose(in);
+        return;
+    }
 
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
@@ -2277,6 +2298,9 @@ void generate_header_header_file(GList *structures)
         if (c == '$') {
             if ((c = fgetc(in)) != '{' && c != '^') {
                 printf("The following char is not {");
+                g_free (buffer);
+                fclose(in);
+                fclose(out);
                 return;
             }
 
@@ -2302,6 +2326,9 @@ void generate_header_header_file(GList *structures)
                 printf("The string %s is not recognized, please check the header-header-template\n",
                        buffer);
                 fflush(NULL);
+                g_free (buffer);
+                fclose(in);
+                fclose(out);
                 return;
             }
             buffer[0] = '\0';
@@ -2310,6 +2337,8 @@ void generate_header_header_file(GList *structures)
         }
     }
 
+    fclose(in);
+    fclose(out);
     g_free(buffer);
 }
 
