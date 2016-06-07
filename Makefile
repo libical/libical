@@ -3,7 +3,7 @@
 # You will need to set this to the directory that the Olson timezone data
 # files are in.
 #
-OLSON_DIR = tzdata2015f
+OLSON_DIR = tzdata2016d
 
 
 # This is used as the PRODID property on the iCalendar files output.
