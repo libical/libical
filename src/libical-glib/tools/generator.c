@@ -14,9 +14,9 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <errno.h>
-
 #include "generator.h"
+
+#include <errno.h>
 
 static const gchar *templates_dir = NULL;
 
@@ -744,10 +744,11 @@ void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
 
-    if (isPrivate)
+    if (isPrivate) {
         write_str(out, "\n");
-    else
+    } else {
         write_str(out, "\nLIBICAL_ICAL_EXPORT\n");
+    }
 
     /* Generate the method return */
     if (method->ret == NULL) {
@@ -1404,7 +1405,7 @@ static gboolean is_enum_type(const gchar *type)
     trueType = get_true_type(type);
     if (trueType && g_hash_table_contains(type2kind, trueType)) {
         structureKind = g_hash_table_lookup(type2kind, trueType);
-        res = g_strcmp0 (structureKind, "enum") == 0;
+        res = g_strcmp0(structureKind, "enum") == 0;
     }
 
     return res;
@@ -1885,10 +1886,12 @@ void generate_header_and_source(Structure *structure, gchar *dir)
     generate_header(header, structure, table);
     generate_source(source, structure, table);
 
-    if (header)
+    if (header) {
         fclose(header);
-    if (source)
+    }
+    if (source) {
         fclose(source);
+    }
     g_hash_table_destroy(table);
 }
 
@@ -2284,6 +2287,7 @@ void generate_header_header_file(GList *structures)
     in = open_file(templates_dir, HEADER_HEADER_TEMPLATE);
     if (!in)
         return;
+
     out = fopen("libical-glib.h", "w");
     if (!out) {
         fprintf(stderr, "Failed to open libical-glib.h for writing\n");
