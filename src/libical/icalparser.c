@@ -570,6 +570,7 @@ static void insert_error(icalcomponent *comp, const char *text,
         snprintf(temp, 1024, "%s: %s", message, text);
     }
 
+    /* coverity[leaked_storage] */
     icalcomponent_add_property(
         comp,
         icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), 0));
@@ -843,6 +844,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             break;
         }
 
+        icalmemory_free_buffer(str);
         str = parser_get_next_parameter(end, &end);
         strstriplt(str);
         if (str != 0) {
@@ -884,8 +886,17 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             } else if (kind == ICAL_IANA_PARAMETER) {
                 ical_unknown_token_handling tokHandlingSetting =
                     ical_get_unknown_token_handling_setting();
-                if (tokHandlingSetting == ICAL_DISCARD_TOKEN)
+                if (tokHandlingSetting == ICAL_DISCARD_TOKEN) {
+                    if (name_heap) {
+                        icalmemory_free_buffer(name_heap);
+                        name_heap = 0;
+                    }
+                    if (pvalue_heap) {
+                        icalmemory_free_buffer(pvalue_heap);
+                        pvalue_heap = 0;
+                    }
                     continue;
+                }
 
                 param = icalparameter_new(ICAL_IANA_PARAMETER);
 
@@ -988,10 +999,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 str = NULL;
                 return 0;
 #else
-                if (pvalue_heap) {
-                    icalmemory_free_buffer(pvalue_heap);
-                    pvalue = 0;
-                }
                 if (name_heap) {
                     icalmemory_free_buffer(name_heap);
                     name_heap = 0;
@@ -1066,9 +1073,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         }
 
     }   /* while(1) */
-
-    icalmemory_free_buffer(str);
-    str = NULL;
 
     /**********************************************************************
      * Handle values
