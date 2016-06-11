@@ -954,25 +954,16 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     str = make_segment(strStart, end - 1);
                 }
 
-                if (name_heap) {
-                    icalmemory_free_buffer(name_heap);
-                    name_heap = 0;
-                }
-
-                if (pvalue_heap) {
-                    icalmemory_free_buffer(pvalue_heap);
-                    pvalue_heap = 0;
-                }
-
                 /* Reparse the parameter name and value with the new segment */
                 if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack),
                                                  pvalue_stack, sizeof(pvalue_stack))) {
+                    icalmemory_free_buffer(name_heap);
+                    icalmemory_free_buffer(pvalue_heap);
                     name_heap = parser_get_param_name_heap(str, &pvalue_heap);
 
                     name = name_heap;
                     pvalue = pvalue_heap;
                 }
-
                 param = icalparameter_new_from_value_string(kind, pvalue);
             } else if (kind != ICAL_NO_PARAMETER) {
                 param = icalparameter_new_from_value_string(kind, pvalue);
@@ -1002,6 +993,10 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 if (name_heap) {
                     icalmemory_free_buffer(name_heap);
                     name_heap = 0;
+                }
+                if (pvalue_heap) {
+                    icalmemory_free_buffer(pvalue_heap);
+                    pvalue_heap = 0;
                 }
                 icalmemory_free_buffer(str);
                 str = NULL;
@@ -1089,6 +1084,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
            says that commas should be escaped. For x-properties, other apps may
            depend on that behaviour
          */
+        icalmemory_free_buffer(str);
+        str = NULL;
         switch (prop_kind) {
         case ICAL_X_PROPERTY:{
                 /* Apple's geofence property uses a comma to separate latitude and longitude.
