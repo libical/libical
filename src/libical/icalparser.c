@@ -988,6 +988,10 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 str = NULL;
                 return 0;
 #else
+                if (pvalue_heap) {
+                    icalmemory_free_buffer(pvalue_heap);
+                    pvalue = 0;
+                }
                 if (name_heap) {
                     icalmemory_free_buffer(name_heap);
                     name_heap = 0;
@@ -1062,6 +1066,9 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         }
 
     }   /* while(1) */
+
+    icalmemory_free_buffer(str);
+    str = NULL;
 
     /**********************************************************************
      * Handle values
