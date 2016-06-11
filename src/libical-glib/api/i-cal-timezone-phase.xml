@@ -23,7 +23,9 @@
         timezonephase.dtstart = i_cal_timetype_new_default ();
         timezonephase.offsetto = 0;
         timezonephase.tzoffsetfrom = 0;
+        timezonephase.comment = NULL;
         timezonephase.rdate = i_cal_datetimeperiod_type_new_default ();
+        timezonephase.rrule = NULL;
         return timezonephase;</custom>
         </method>
         <method name="i_cal_timezone_phase_get_tzname" corresponds="CUSTOM" kind="get" since="1.0">

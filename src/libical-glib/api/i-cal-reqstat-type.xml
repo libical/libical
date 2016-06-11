@@ -30,6 +30,7 @@
         <custom>        struct icalreqstattype reqstattype;
         reqstattype.code = ICAL_UNKNOWN_STATUS;
         reqstattype.desc = NULL;
+        reqstattype.debug = NULL;
         return reqstattype;</custom>
     </method>
     <method name="i_cal_reqstat_type_get_code" corresponds="CUSTOM" kind="get" since="1.0">

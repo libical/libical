@@ -20,6 +20,7 @@
         <custom>        struct icaltimezonetype timezonetype;
         timezonetype.tzid = NULL;
         timezonetype.last_mod = i_cal_timetype_new_default ();
+        timezonetype.tzurl = NULL;
         timezonetype.phases = NULL;
         return timezonetype;</custom>
         </method>
