@@ -73,7 +73,7 @@ sub insert_code
 
       $enumConst = $params{$param}->{"kindEnum"};
 
-      print "    ICAL_${uc}_PARAMETER = " . $enumConst . ", \n";
+      print "    ICAL_${uc}_PARAMETER = " . $enumConst . ",\n";
 
     }
     $enumConst = $params{'NO'}->{"kindEnum"};
@@ -145,15 +145,15 @@ sub insert_code
       next if $enum eq 'X'  or $enum eq 'NONE';
       next if $enum eq 'NO' or $enum eq 'ERROR';
       $uc = join("", map {uc(lc($_));} split(/-/, $enum));
-      $out .= "    {ICAL_VALUE_${uc},ICAL_${uc}_VALUE},\n";
+      $out .= "    {ICAL_VALUE_${uc}, ICAL_${uc}_VALUE},\n";
       $count++;
     }
 
     $count += 2;
     print "static const struct icalparameter_value_kind_map value_kind_map[$count] = {\n";
     print $out;
-    print "    {ICAL_VALUE_X,ICAL_X_VALUE},\n";
-    print "    {ICAL_VALUE_NONE,ICAL_NO_VALUE}\n};\n\n";
+    print "    {ICAL_VALUE_X, ICAL_X_VALUE},\n";
+    print "    {ICAL_VALUE_NONE, ICAL_NO_VALUE}\n};\n\n";
 
     #Create the parameter Name map
 
@@ -169,11 +169,11 @@ sub insert_code
       my $uc = join("", map {uc(lc($_));} split(/-/, $param));
 
       $count++;
-      $out .= "    {ICAL_${uc}_PARAMETER,\"$param\"},\n";
+      $out .= "    {ICAL_${uc}_PARAMETER, \"$param\"},\n";
 
     }
     $count += 1;
-    print "static const struct icalparameter_kind_map parameter_map[$count] = { \n";
+    print "static const struct icalparameter_kind_map parameter_map[$count] = {\n";
     print $out;
     print "    { ICAL_NO_PARAMETER, \"\"}\n};\n\n";
 
@@ -201,7 +201,7 @@ sub insert_code
           my $uce = join("", map {uc(lc($_));} split(/-/, $e));
 
           $count++;
-          $out .= "    {ICAL_${uc}_PARAMETER,ICAL_${uc}_${uce},\"$e\"},\n";
+          $out .= "    {ICAL_${uc}_PARAMETER,ICAL_${uc}_${uce}, \"$e\"},\n";
         }
 
       }
@@ -209,9 +209,9 @@ sub insert_code
 
     $count += 3;
     print "static const struct icalparameter_map icalparameter_map[] = {\n";
-    print "{ICAL_ANY_PARAMETER,0,\"\"},\n";
+    print "{ICAL_ANY_PARAMETER, 0, \"\"},\n";
     print $out;
-    print "    {ICAL_NO_PARAMETER,0,\"\"}};\n\n";
+    print "    {ICAL_NO_PARAMETER, 0, \"\"}\n};\n\n";
 
   }
 
@@ -233,37 +233,37 @@ sub insert_code
     my $xrange;
 
     if ($type =~ /char/) {
-
+      $type =~ s/char\*/char \*/;
       $charorenum =
-        "    icalerror_check_arg_rz( (param!=0), \"param\");\n    return param->string;";
+        "    icalerror_check_arg_rz((param != 0), \"param\");\n    return param->string;";
 
-      $set_code = "((struct icalparameter_impl*)param)->string = icalmemory_strdup(v);";
+      $set_code = "((struct icalparameter_impl *)param)->string = icalmemory_strdup(v);";
 
-      $pointer_check   = "icalerror_check_arg_rz( (v!=0),\"v\");";
-      $pointer_check_v = "icalerror_check_arg_rv( (v!=0),\"v\");";
+      $pointer_check   = "    icalerror_check_arg_rz((v != 0), \"v\");";
+      $pointer_check_v = "\n    icalerror_check_arg_rv((v != 0), \"v\");";
 
     } elsif ($type =~ /int/) {
 
       $charorenum =
-        "    icalerror_check_arg( (param!=0), \"param\");\n$xrange\nreturn param->data;";
+        "    icalerror_check_arg((param != 0), \"param\");\n$xrange\nreturn param->data;";
 
-      $set_code = "((struct icalparameter_impl*)param)->data = v;";
+      $set_code = "((struct icalparameter_impl *)param)->data = v;";
 
     } else {
 
-      $xrange = "     if (param->string != 0){\n        return ICAL_${uc}_X;\n        }\n"
+      $xrange = "    if (param->string != 0) {\n        return ICAL_${uc}_X;\n    }\n"
         if !exists $no_xname{$uc};
 
       $charorenum =
-        "icalerror_check_arg( (param!=0), \"param\");\n$xrange\nreturn ($type)(param->data);";
+"    icalerror_check_arg((param != 0), \"param\");\n    if (!param) {\n        return ICAL_${uc}_NONE;\n    }\n$xrange\nreturn ($type)(param->data);";
 
       $pointer_check =
-"icalerror_check_arg_rz(v >= ICAL_${uc}_X,\"v\");\n    icalerror_check_arg_rz(v < ICAL_${uc}_NONE,\"v\");";
+"    icalerror_check_arg_rz(v >= ICAL_${uc}_X, \"v\");\n    icalerror_check_arg_rz(v < ICAL_${uc}_NONE, \"v\");";
 
       $pointer_check_v =
-"icalerror_check_arg_rv(v >= ICAL_${uc}_X,\"v\");\n    icalerror_check_arg_rv(v < ICAL_${uc}_NONE,\"v\");";
+"\n    icalerror_check_arg_rv(v >= ICAL_${uc}_X, \"v\");\n    icalerror_check_arg_rv(v < ICAL_${uc}_NONE, \"v\");";
 
-      $set_code = "((struct icalparameter_impl*)param)->data = (int)v;";
+      $set_code = "((struct icalparameter_impl *)param)->data = (int)v;";
 
     }
 
@@ -271,40 +271,40 @@ sub insert_code
 
       print <<EOM;
 /* $param */
-icalparameter* icalparameter_new_${lc}($type v)
+icalparameter *icalparameter_new_${lc}($type v)
 {
-   struct icalparameter_impl *impl;
-   icalerror_clear_errno();
-   $pointer_check
-   impl = icalparameter_new_impl(ICAL_${uc}_PARAMETER);
-   if (impl == 0) {
-      return 0;
-   }
+    struct icalparameter_impl *impl;
+    icalerror_clear_errno();
+$pointer_check
+    impl = icalparameter_new_impl(ICAL_${uc}_PARAMETER);
+    if (impl == 0) {
+       return 0;
+    }
 
-   icalparameter_set_${lc}((icalparameter*) impl,v);
-   if (icalerrno != ICAL_NO_ERROR) {
-      icalparameter_free((icalparameter*) impl);
-      return 0;
-   }
+    icalparameter_set_${lc}((icalparameter *)impl, v);
+    if (icalerrno != ICAL_NO_ERROR) {
+       icalparameter_free((icalparameter *)impl);
+       return 0;
+    }
 
-   return (icalparameter*) impl;
+    return (icalparameter *)impl;
 }
 
-${type} icalparameter_get_${lc}(const icalparameter* param)
+${type} icalparameter_get_${lc}(const icalparameter *param)
 {
-   icalerror_clear_errno();
+    icalerror_clear_errno();
 $charorenum
 }
 
-void icalparameter_set_${lc}(icalparameter* param, ${type} v)
-{
-   $pointer_check_v
-   icalerror_check_arg_rv( (param!=0), "param");
-   icalerror_clear_errno();
+void icalparameter_set_${lc}(icalparameter *param, ${type} v)
+{$pointer_check_v
+    icalerror_check_arg_rv((param != 0), "param");
+    icalerror_clear_errno();
 
-   if (param->string != NULL)
-      free ((void*)param->string);
-   $set_code
+    if (param->string != NULL) {
+        free((void *)param->string);
+    }
+    $set_code
 }
 
 EOM
@@ -313,9 +313,9 @@ EOM
 
       print <<EOM;
 /* $param */
-LIBICAL_ICAL_EXPORT icalparameter* icalparameter_new_${lc}($type v);
-LIBICAL_ICAL_EXPORT ${type} icalparameter_get_${lc}(const icalparameter* value);
-LIBICAL_ICAL_EXPORT void icalparameter_set_${lc}(icalparameter* value, ${type} v);
+LIBICAL_ICAL_EXPORT icalparameter * icalparameter_new_${lc}($type v);
+LIBICAL_ICAL_EXPORT ${type} icalparameter_get_${lc}(const icalparameter *value);
+LIBICAL_ICAL_EXPORT void icalparameter_set_${lc}(icalparameter *value, ${type} v);
 
 EOM
 

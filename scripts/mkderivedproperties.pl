@@ -64,7 +64,7 @@ sub fudge_data
   my $ucvalue  = uc($lcvalue);
 
   my $type = $valuemap{$value}->{C}->[1];
-
+  $type =~ s/char\*/char \*/;
   return ($uc, $lc, $lcvalue, $ucvalue, $type);
 
 }
@@ -88,7 +88,7 @@ sub insert_code
 
       my ($uc, $lc, $lcvalue, $ucvalue, $type) = fudge_data($prop);
 
-      print "{ICAL_${uc}_PROPERTY,\"$prop\",ICAL_${ucvalue}_VALUE},\n";
+      print "{ICAL_${uc}_PROPERTY, \"$prop\", ICAL_${ucvalue}_VALUE},\n";
 
     }
 
@@ -96,7 +96,7 @@ sub insert_code
 
     my ($uc, $lc, $lcvalue, $ucvalue, $type) = fudge_data($prop);
 
-    print "{ICAL_${uc}_PROPERTY,\"\",ICAL_NO_VALUE}};\n\n";
+    print "{ICAL_${uc}_PROPERTY, \"\", ICAL_NO_VALUE}};\n\n";
 
     $count    = 1;
     $bigcount = 0;
@@ -141,13 +141,13 @@ sub insert_code
             $saveidx++;
             for (; $saveidx < $idx ; $saveidx++, $tbd++) {
               $lines{$saveidx} =
-                "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_NONE,\"\" }, /*$saveidx*/\n";
+                "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_NONE, \"\" }, /*$saveidx*/\n";
             }
           }
 
           # Place each property into a hash based on the index specified in value-types.csv
           # The lines are printed so they're in the same order as the indices
-          $lines{$idx} = "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce},\"$str\" }, /*$idx*/\n";
+          $lines{$idx} = "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce}, \"$str\" }, /*$idx*/\n";
           $saveidx = $idx;
           $count++;
         }
@@ -160,7 +160,7 @@ sub insert_code
     foreach $line (sort keys %lines) {
       print $lines{$line};
     }
-    print "    {ICAL_NO_PROPERTY,0,\"\"}\n};\n\n";
+    print "    {ICAL_NO_PROPERTY, 0, \"\"}\n};\n\n";
 
   }
 
@@ -179,11 +179,11 @@ sub insert_code
 
       $enumConst = $propmap{$prop}->{"kindEnum"};
 
-      print "    ICAL_${uc}_PROPERTY = " . $enumConst . ", \n";
+      print "    ICAL_${uc}_PROPERTY = " . $enumConst . ",\n";
 
     }
     $enumConst = $propmap{'NO'}->{"kindEnum"};
-    print "    ICAL_NO_PROPERTY = " . $enumConst . "\n} icalproperty_kind;\n\n";
+    print "    ICAL_NO_PROPERTY = " . $enumConst . "\n} icalproperty_kind;\n";
 
   }
 
@@ -197,40 +197,42 @@ sub insert_code
 
     my $pointer_check;
     if ($type =~ /\*/) {
-      $pointer_check = "icalerror_check_arg_rz( (v!=0),\"v\");\n" if $type =~ /\*/;
+      $pointer_check = "    icalerror_check_arg_rz((v != 0), \"v\");\n" if $type =~ /\*/;
     } elsif ($type eq "void") {
-      $pointer_check = "icalerror_check_arg_rv( (v!=0),\"v\");\n" if $type =~ /\*/;
+      $pointer_check = "    icalerror_check_arg_rv((v != 0), \"v\");\n" if $type =~ /\*/;
 
     }
 
-    my $set_pointer_check = "icalerror_check_arg_rv( (v!=0),\"v\");\n" if $type =~ /\*/;
+    my $set_pointer_check = "\n    icalerror_check_arg_rv((v != 0), \"v\");" if $type =~ /\*/;
 
     if ($opt_c) {    # Generate C source
 
       if ($include_vanew) {
         print <<EOM;
-icalproperty* icalproperty_vanew_${lc}($type v, ...){
-   va_list args;
-   struct icalproperty_impl *impl;
-   $pointer_check
-   impl= icalproperty_new_impl(ICAL_${uc}_PROPERTY);
-   icalproperty_set_${lc}((icalproperty*)impl,v);
-   va_start(args,v);
-   icalproperty_add_parameters(impl, args);
-   va_end(args);
-   return (icalproperty*)impl;
+icalproperty *icalproperty_vanew_${lc}($type v, ...)
+{
+    va_list args;
+    struct icalproperty_impl *impl;
+$pointer_check
+    impl = icalproperty_new_impl(ICAL_${uc}_PROPERTY);
+    icalproperty_set_${lc}((icalproperty*)impl, v);
+    va_start(args, v);
+    icalproperty_add_parameters(impl, args);
+    va_end(args);
+    return (icalproperty*)impl;
 }
 EOM
       }
       print <<EOM;
 
 /* $prop */
-icalproperty* icalproperty_new_${lc}($type v) {
-   struct icalproperty_impl *impl;
-   $pointer_check
-   impl = icalproperty_new_impl(ICAL_${uc}_PROPERTY);
-   icalproperty_set_${lc}((icalproperty*)impl,v);
-   return (icalproperty*)impl;
+icalproperty *icalproperty_new_${lc}($type v)
+{
+    struct icalproperty_impl *impl;
+$pointer_check
+    impl = icalproperty_new_impl(ICAL_${uc}_PROPERTY);
+    icalproperty_set_${lc}((icalproperty*)impl, v);
+    return (icalproperty*)impl;
 }
 
 EOM
@@ -243,38 +245,43 @@ EOM
         || $lc eq "recurrenceid")
       {
         print <<EOM;
-void icalproperty_set_${lc}(icalproperty* prop, $type v){
+void icalproperty_set_${lc}(icalproperty *prop, $type v)
+{
     icalvalue *value;
-    $set_pointer_check
-    icalerror_check_arg_rv( (prop!=0),"prop");
-    if (v.is_date)
+$set_pointer_check
+    icalerror_check_arg_rv((prop != 0), "prop");
+    if (v.is_date) {
         value = icalvalue_new_date(v);
-    else
+    } else {
         value = icalvalue_new_datetime(v);
-    icalproperty_set_value(prop,value);
+    }
+    icalproperty_set_value(prop, value);
 }
+
 EOM
       } else {
 
         print <<EOM;
-void icalproperty_set_${lc}(icalproperty* prop, $type v){
-    $set_pointer_check
-    icalerror_check_arg_rv( (prop!=0),"prop");
-    icalproperty_set_value(prop,icalvalue_new_${lcvalue}(v));
+void icalproperty_set_${lc}(icalproperty *prop, $type v)
+{$set_pointer_check
+    icalerror_check_arg_rv((prop != 0), "prop");
+    icalproperty_set_value(prop, icalvalue_new_${lcvalue}(v));
 }
+
 EOM
       }
 
       # Dirk Theisen pointed out, exdate needs to match TZID parameters in EXDATE
       if ($lc eq "exdate") {
         print <<EOM;
-$type icalproperty_get_${lc}(const icalproperty* prop){
+$type icalproperty_get_${lc}(const icalproperty *prop)
+{
 #ifndef _MSC_VER
         struct icaltimetype itt;
-        icalparameter* param;
+        icalparameter *param;
         icaltimezone *zone;
 #endif
-        icalerror_check_arg( (prop!=0),"prop");
+        icalerror_check_arg((prop != 0), "prop");
 #ifndef _MSC_VER
         /*
          * Code by dirk\@objectpark.net:
@@ -293,25 +300,28 @@ $type icalproperty_get_${lc}(const icalproperty* prop){
     return icalvalue_get_datetime(icalproperty_get_value(prop));
 #endif
 }
+
 EOM
       } else {
         print <<EOM;
-$type icalproperty_get_${lc}(const icalproperty* prop){
-    icalerror_check_arg( (prop!=0),"prop");
+$type icalproperty_get_${lc}(const icalproperty *prop)
+{
+    icalerror_check_arg((prop != 0), "prop");
     return icalvalue_get_${lcvalue}(icalproperty_get_value(prop));
 }
+
 EOM
       }
     } elsif ($opt_h) {    # Generate C Header file
 
       print "\
 /* $prop */\
-LIBICAL_ICAL_EXPORT icalproperty* icalproperty_new_${lc}($type v);\
-LIBICAL_ICAL_EXPORT void icalproperty_set_${lc}(icalproperty* prop, $type v);\
-LIBICAL_ICAL_EXPORT $type icalproperty_get_${lc}(const icalproperty* prop);";
+LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_${lc}($type v);\
+LIBICAL_ICAL_EXPORT void icalproperty_set_${lc}(icalproperty *prop, $type v);\
+LIBICAL_ICAL_EXPORT $type icalproperty_get_${lc}(const icalproperty *prop);";
 
       if ($include_vanew) {
-        print "\nLIBICAL_ICAL_EXPORT icalproperty* icalproperty_vanew_${lc}($type v, ...);\n";
+        print "\nLIBICAL_ICAL_EXPORT icalproperty *icalproperty_vanew_${lc}($type v, ...);\n";
       }
 
     }
@@ -320,7 +330,7 @@ LIBICAL_ICAL_EXPORT $type icalproperty_get_${lc}(const icalproperty* prop);";
 
   if ($opt_h) {
 
-    print "\n\n#endif /*ICALPROPERTY_H*/\n";
+    print "\n#endif /*ICALPROPERTY_H*/\n";
   }
 
 }

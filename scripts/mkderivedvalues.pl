@@ -141,8 +141,7 @@ sub insert_code
     }
 
     $lastidx++;
-    print "#define ICALPROPERTY_LAST_ENUM $lastidx\n\n";
-
+    print "#define ICALPROPERTY_LAST_ENUM $lastidx\n";
   }
 
   if ($opt_c) {
@@ -171,20 +170,21 @@ sub insert_code
 
     my $autogen = $h{$value}->{C}->[0];
     my $type    = $h{$value}->{C}->[1];
+    $type =~ s/char\*/char \*/;
 
     my $ucf = join("", map {ucfirst(lc($_));} split(/-/, $value));
 
     my $lc = lc($ucf);
     my $uc = uc($lc);
 
-    my $pointer_check    = "icalerror_check_arg_rz( (v!=0),\"v\");\n" if $type =~ /\*/;
-    my $pointer_check_rv = "icalerror_check_arg_rv( (v!=0),\"v\");\n" if $type =~ /\*/;
+    my $pointer_check    = "    icalerror_check_arg_rz((v != 0), \"v\");\n" if $type =~ /\*/;
+    my $pointer_check_rv = "    icalerror_check_arg_rv((v != 0), \"v\");\n" if $type =~ /\*/;
 
     my $assign;
 
     if ($type =~ /char/) {
       $assign =
-"icalmemory_strdup(v);\n\n    if (impl->data.v_string == 0){\n      errno = ENOMEM;\n    }\n";
+"icalmemory_strdup(v);\n\n    if (impl->data.v_string == 0) {\n        errno = ENOMEM;\n    }\n";
     } else {
       $assign = "v;";
     }
@@ -202,46 +202,64 @@ sub insert_code
 
     if ($opt_c && $autogen) {
 
-      print "\n\n\
-icalvalue* icalvalue_new_${lc} ($type v){\
-   struct icalvalue_impl* impl;\
-   $pointer_check\
-   impl = icalvalue_new_impl(ICAL_${uc}_VALUE);\
-   icalvalue_set_${lc}((icalvalue*)impl,v);\
-   return (icalvalue*)impl;\
+      print "\
+icalvalue *icalvalue_new_${lc}($type v)\
+{\
+    struct icalvalue_impl *impl;\
+$pointer_check\
+    impl = icalvalue_new_impl(ICAL_${uc}_VALUE);\
+    icalvalue_set_${lc}((icalvalue *)impl, v);\
+    return (icalvalue*)impl;\
 }\
-void icalvalue_set_${lc}(icalvalue* value, $type v) {\
-    struct icalvalue_impl* impl; \
-    icalerror_check_arg_rv( (value!=0),\"value\");\
-    $pointer_check_rv\
+\
+void icalvalue_set_${lc}(icalvalue *value, $type v)\
+{\
+    struct icalvalue_impl *impl;\
+    icalerror_check_arg_rv((value != 0), \"value\");\
+$pointer_check_rv\
     icalerror_check_value_type(value, ICAL_${uc}_VALUE);\
-    impl = (struct icalvalue_impl*)value;\n";
+    impl = (struct icalvalue_impl *)value;\n";
 
       if ($union_data eq 'string') {
 
-        print "    if(impl->data.v_${union_data}!=0) {free((void*)impl->data.v_${union_data});}\n";
+        print
+"    if (impl->data.v_${union_data} != 0) {\n        free((void *)impl->data.v_${union_data});\n    }\n";
       }
 
-      print "\n\
-    impl->data.v_$union_data = $assign \n\
-    icalvalue_reset_kind(impl);\n}\n";
+      print "\
+    impl->data.v_$union_data = $assign\
+    icalvalue_reset_kind(impl);\n}\n\n";
 
-      print "$type\ icalvalue_get_${lc} (const icalvalue* value) {\n\n";
+      print "$type\ icalvalue_get_${lc}(const icalvalue *value)\n{\n";
       if ($union_data eq 'string') {
-        print "    icalerror_check_arg_rz ((value!=0),\"value\");\n";
+        print "    icalerror_check_arg_rz((value != 0), \"value\");\n";
       } else {
-        print "    icalerror_check_arg ((value!=0),\"value\");\n";
+        print "    icalerror_check_arg((value != 0), \"value\");\n";
+        if ($union_data eq 'enum') {
+          print "    if (!value) {\n        return ICAL_${uc}_NONE;\n    }\n";
+        } elsif ($union_data eq 'int') {
+          print "    if (!value) {\n        return 0;\n    }\n";
+        } elsif ($union_data eq 'float') {
+          print "    if (!value) {\n        return 0.0;\n     }\n";
+        } elsif ($union_data eq 'time') {
+          print "    if (!value) {\n        return icaltime_null_time();\n    }\n";
+        } elsif ($union_data eq 'duration') {
+          print "    if (!value) {\n        return icaldurationtype_null_duration();\n    }\n";
+        } elsif ($union_data eq 'period') {
+          print "    if (!value) {\n        return icalperiodtype_null_period();\n    }\n";
+        } elsif ($union_data eq 'requeststatus') {
+          print "    if (!value) {\n        return icalreqstattype_from_string(\"0.0\");\n    }\n";
+        }
       }
-      print "    icalerror_check_value_type (value, ICAL_${uc}_VALUE);\
-    return ((struct icalvalue_impl*)value)->data.v_${union_data};\n}\n";
+      print "    icalerror_check_value_type(value, ICAL_${uc}_VALUE);\
+    return ((struct icalvalue_impl *)value)->data.v_${union_data};\n}\n";
 
     } elsif ($opt_h && $autogen) {
 
-      print "\n /* $value */ \
-LIBICAL_ICAL_EXPORT icalvalue* icalvalue_new_${lc}($type v); \
-LIBICAL_ICAL_EXPORT $type icalvalue_get_${lc}(const icalvalue* value); \
-LIBICAL_ICAL_EXPORT void icalvalue_set_${lc}(icalvalue* value, ${type} v);\n\n";
-
+      print "\n/* $value */\
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_${lc}($type v);\
+LIBICAL_ICAL_EXPORT $type icalvalue_get_${lc}(const icalvalue *value);\
+LIBICAL_ICAL_EXPORT void icalvalue_set_${lc}(icalvalue *value, ${type} v);\n";
     }
 
   }
