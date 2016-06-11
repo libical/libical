@@ -17,38 +17,39 @@
     <method name="i_cal_timezonetype_new_default" corresponds="CUSTOM" kind="private" since="1.0">
         <returns type="struct icaltimezonetype" annotation="transfer full" comment="The newly created #ICalTimezonetype" />
         <comment xml:space="preserve">Create a new default #ICalTimezonetype</comment>
-        <custom>	struct icaltimezonetype timezonetype;
-	timezonetype.last_mod = i_cal_timetype_new_default ();
-	timezonetype.phases = NULL;
-	return timezonetype;</custom>
-	</method>
-	<method name="i_cal_timezonetype_get_tzid" corresponds="CUSTOM" kind="get" since="1.0">
+        <custom>        struct icaltimezonetype timezonetype;
+        timezonetype.tzid = NULL;
+        timezonetype.last_mod = i_cal_timetype_new_default ();
+        timezonetype.phases = NULL;
+        return timezonetype;</custom>
+        </method>
+        <method name="i_cal_timezonetype_get_tzid" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonetype *" name="timezonetype" comment="The #ICalTimezonetype."/>
         <returns type="const gchar *" annotation="transfer none" comment="The tzid of @timezonetype."/>
         <comment>Get the tzid of #ICalTimezonetype.</comment>
-        <custom>	g_return_val_if_fail (timezonetype != NULL &amp;&amp; I_CAL_IS_TIMEZONETYPE (timezonetype), NULL);
-	return ((struct icaltimezonetype *)i_cal_object_get_native ((ICalObject *)timezonetype))->tzid;</custom>
+        <custom>        g_return_val_if_fail (timezonetype != NULL &amp;&amp; I_CAL_IS_TIMEZONETYPE (timezonetype), NULL);
+        return ((struct icaltimezonetype *)i_cal_object_get_native ((ICalObject *)timezonetype))->tzid;</custom>
     </method>
     <method name="i_cal_timezonetype_get_tzurl" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonetype *" name="timezonetype" comment="The #ICalTimezonetype."/>
         <returns type="const gchar *" annotation="transfer none" comment="The tzurl of @timezonetype."/>
         <comment>Get the tzurl of #ICalTimezonetype.</comment>
-        <custom>	g_return_val_if_fail (timezonetype != NULL &amp;&amp; I_CAL_IS_TIMEZONETYPE (timezonetype), NULL);
-	return ((struct icaltimezonetype *)i_cal_object_get_native ((ICalObject *)timezonetype))->tzurl;</custom>
+        <custom>        g_return_val_if_fail (timezonetype != NULL &amp;&amp; I_CAL_IS_TIMEZONETYPE (timezonetype), NULL);
+        return ((struct icaltimezonetype *)i_cal_object_get_native ((ICalObject *)timezonetype))->tzurl;</custom>
     </method>
     <method name="i_cal_timezonetype_get_last_mod" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonetype *" name="timezonetype" comment="The #ICalTimezonetype."/>
         <returns type="ICalTimetype *" annotation="transfer full" comment="The last_mod of #ICalTimezonetype."/>
         <comment>Get the last_mod from #ICalTimezonetype.</comment>
-        <custom>	g_return_val_if_fail (timezonetype != NULL &amp;&amp; I_CAL_IS_TIMEZONETYPE (timezonetype), NULL);
-	return i_cal_timetype_new_full (((struct icaltimezonetype *)i_cal_object_get_native ((ICalObject *)timezonetype))->last_mod);</custom>
+        <custom>        g_return_val_if_fail (timezonetype != NULL &amp;&amp; I_CAL_IS_TIMEZONETYPE (timezonetype), NULL);
+        return i_cal_timetype_new_full (((struct icaltimezonetype *)i_cal_object_get_native ((ICalObject *)timezonetype))->last_mod);</custom>
     </method>
     <method name="i_cal_timezonetype_set_last_mod" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimezonetype *" name="timezonetype" comment="The #ICalTimezonetype."/>
         <parameter type="ICalTimetype *" name="last_mod" comment="The last_mod of #ICalTimezonetype."/>
         <comment>Set the last_mod from #ICalTimezonetype.</comment>
-        <custom>	g_return_if_fail (timezonetype != NULL &amp;&amp; I_CAL_IS_TIMEZONETYPE (timezonetype));
-	g_return_if_fail (last_mod != NULL &amp;&amp; I_CAL_IS_TIMETYPE (last_mod));
-	((struct icaltimezonetype *)i_cal_object_get_native ((ICalObject *)timezonetype))->last_mod = *(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)last_mod);</custom>
+        <custom>        g_return_if_fail (timezonetype != NULL &amp;&amp; I_CAL_IS_TIMEZONETYPE (timezonetype));
+        g_return_if_fail (last_mod != NULL &amp;&amp; I_CAL_IS_TIMETYPE (last_mod));
+        ((struct icaltimezonetype *)i_cal_object_get_native ((ICalObject *)timezonetype))->last_mod = *(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)last_mod);</custom>
     </method>
 </structure>

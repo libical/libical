@@ -17,105 +17,106 @@
     <method name="i_cal_timezone_phase_new_default" corresponds="CUSTOM" kind="private" since="1.0">
         <returns type="struct icaltimezonephase" annotation="transfer full" comment="The newly created #ICalTimezonePhase" />
         <comment xml:space="preserve">Create a new default #ICalTimezonePhase</comment>
-        <custom>	struct icaltimezonephase timezonephase;
-	timezonephase.is_stdandard = 1;
-	timezonephase.dtstart = i_cal_timetype_new_default ();
-	timezonephase.offsetto = 0;
-	timezonephase.tzoffsetfrom = 0;
-	timezonephase.rdate = i_cal_datetimeperiod_type_new_default ();
-	return timezonephase;</custom>
-	</method>
-	<method name="i_cal_timezone_phase_get_tzname" corresponds="CUSTOM" kind="get" since="1.0">
+        <custom>        struct icaltimezonephase timezonephase;
+        timezonephase.tzname = NULL;
+        timezonephase.is_stdandard = 1;
+        timezonephase.dtstart = i_cal_timetype_new_default ();
+        timezonephase.offsetto = 0;
+        timezonephase.tzoffsetfrom = 0;
+        timezonephase.rdate = i_cal_datetimeperiod_type_new_default ();
+        return timezonephase;</custom>
+        </method>
+        <method name="i_cal_timezone_phase_get_tzname" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <returns type="const gchar *" annotation="transfer none" comment="The tzname of @phase."/>
         <comment>Get the tzname of #ICalTimezonePhase.</comment>
-        <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
-	return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->tzname;</custom>
+        <custom>        g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
+        return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->tzname;</custom>
     </method>
     <method name="i_cal_timezone_phase_is_stdandard" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <returns type="gint" comment="The is_stdandard of @phase."/>
         <comment>Get the is_stdandard of #ICalTimezonePhase.</comment>
-        <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), FALSE);
-	return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->is_stdandard;</custom>
+        <custom>        g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), FALSE);
+        return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->is_stdandard;</custom>
     </method>
     <method name="i_cal_timezone_phase_set_is_stdandard" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <parameter type="gint" name="is_stdandard" comment="The is_stdandard."/>
         <comment>Set the is_stdandard of #ICalTimezonePhase.</comment>
-        <custom>	g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
-	((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->is_stdandard = is_stdandard;</custom>
+        <custom>        g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
+        ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->is_stdandard = is_stdandard;</custom>
     </method>
     <method name="i_cal_timezone_phase_get_dtstart" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <returns type="ICalTimetype *" annotation="transfer full" comment="The dtstart of #ICalTimezonePhase."/>
         <comment>Get the dtstart from #ICalTimezonePhase.</comment>
-        <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
-	return i_cal_timetype_new_full (((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->dtstart);</custom>
+        <custom>        g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
+        return i_cal_timetype_new_full (((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->dtstart);</custom>
     </method>
     <method name="i_cal_timezone_phase_set_dtstart" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <parameter type="ICalTimetype *" name="dtstart" comment="The dtstart of #ICalTimezonePhase."/>
         <comment>Set the dtstart from #ICalTimezonePhase.</comment>
-        <custom>	g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
+        <custom>        g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
     g_return_if_fail (dtstart != NULL &amp;&amp; I_CAL_IS_TIMETYPE (dtstart));
-	((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->dtstart = *(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)dtstart);</custom>
+        ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->dtstart = *(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)dtstart);</custom>
     </method>
     <method name="i_cal_timezone_phase_get_offsetto" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <returns type="gint" comment="The offsetto of @phase."/>
         <comment>Get the offsetto of #ICalTimezonePhase. Returns -61 if there is an error.</comment>
-        <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), -61);
-	return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->offsetto;</custom>
+        <custom>        g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), -61);
+        return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->offsetto;</custom>
     </method>
     <method name="i_cal_timezone_phase_set_offsetto" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <parameter type="gint" name="offsetto" comment="The offsetto."/>
         <comment>Set the offsetto of #ICalTimezonePhase.</comment>
-        <custom>	g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
-	((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->offsetto = offsetto;</custom>
+        <custom>        g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
+        ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->offsetto = offsetto;</custom>
     </method>
     <method name="i_cal_timezone_phase_get_tzoffsetfrom" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <returns type="gint" comment="The tzoffsetfrom of @phase."/>
         <comment>Get the tzoffsetfrom of #ICalTimezonePhase. Returns -61 if there is an error.</comment>
-        <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), -61);
-	return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->tzoffsetfrom;</custom>
+        <custom>        g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), -61);
+        return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->tzoffsetfrom;</custom>
     </method>
     <method name="i_cal_timezone_phase_set_tzoffsetfrom" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <parameter type="gint" name="tzoffsetfrom" comment="The tzoffsetfrom."/>
         <comment>Set the tzoffsetfrom of #ICalTimezonePhase.</comment>
-        <custom>	g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
-	((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->tzoffsetfrom = tzoffsetfrom;</custom>
+        <custom>        g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
+        ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->tzoffsetfrom = tzoffsetfrom;</custom>
     </method>
     <method name="i_cal_timezone_phase_get_comment" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <returns type="const gchar *" annotation="transfer none" comment="The comment of @phase."/>
         <comment>Get the comment of #ICalTimezonePhase.</comment>
-        <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
-	return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->comment;</custom>
+        <custom>        g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
+        return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->comment;</custom>
     </method>
     <method name="i_cal_timezone_phase_get_rdate" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <returns type="ICalDatetimeperiodType *" annotation="transfer full" comment="The rdate of #ICalTimezonePhase."/>
         <comment>Get the rdate from #ICalTimezonePhase.</comment>
-        <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
-	return i_cal_datetimeperiod_type_new_full (((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->rdate);</custom>
+        <custom>        g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
+        return i_cal_datetimeperiod_type_new_full (((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->rdate);</custom>
     </method>
     <method name="i_cal_timezone_phase_set_rdate" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <parameter type="ICalDatetimeperiodType *" name="rdate" comment="The rdate of #ICalTimezonePhase."/>
         <comment>Set the rdate from #ICalTimezonePhase.</comment>
-        <custom>	g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
+        <custom>        g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
     g_return_if_fail (rdate != NULL &amp;&amp; I_CAL_IS_DATETIMEPERIOD_TYPE (rdate));
-	((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->rdate = *(struct icaldatetimeperiodtype *)i_cal_object_get_native ((ICalObject *)rdate);</custom>
+        ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->rdate = *(struct icaldatetimeperiodtype *)i_cal_object_get_native ((ICalObject *)rdate);</custom>
     </method>
     <method name="i_cal_timezone_phase_get_rrule" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
         <returns type="const gchar *" annotation="transfer none" comment="The rrule of @phase."/>
         <comment>Get the rrule of #ICalTimezonePhase.</comment>
-        <custom>	g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
-	return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->rrule;</custom>
+        <custom>        g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
+        return ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->rrule;</custom>
     </method>
 </structure>
