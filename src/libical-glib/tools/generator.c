@@ -642,15 +642,15 @@ gchar *get_source_method_proto_get_property(Structure *structure)
 
 static void write_str(FILE *fp, const gchar *str)
 {
-    gint len;
+    size_t len;
 
     g_return_if_fail(fp != NULL);
     g_return_if_fail(str != NULL);
 
     len = strlen(str);
 
-    if (fwrite(str, sizeof(gchar), len, fp) != (size_t) len)
-        g_error("Failed to write %d bytes to file: %s", len, g_strerror(errno));
+    if (fwrite(str, sizeof(gchar), len, fp) != len)
+        g_error("Failed to write %d bytes to file: %s", (gint)len, g_strerror(errno));
 }
 
 static FILE *open_private_header(void)
