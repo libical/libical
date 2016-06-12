@@ -368,8 +368,9 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
                 fmttype = "audio/x-wav";
             }
 
-            if (fmttype)
+            if (fmttype && !fmttype_param) {
                 fmttype_param = icalparameter_new_fmttype(fmttype);
+            }
 
             /* Display properties. */
         } else if (!strcmp(name, VCDisplayStringProp)) {
