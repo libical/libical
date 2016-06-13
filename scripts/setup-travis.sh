@@ -12,6 +12,6 @@ else
   sudo apt-get update -qq
   sudo apt-get install libicu-dev
   sudo apt-get install libdb4.8-dev
-  sudo apt-get install gobject-introspection
+  sudo apt-get install gobject-introspection libgirepository1.0-dev
   sudo apt-get install gtk-doc-tools
 fi
