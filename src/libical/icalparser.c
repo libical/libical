@@ -957,10 +957,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 /* Reparse the parameter name and value with the new segment */
                 if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack),
                                                  pvalue_stack, sizeof(pvalue_stack))) {
-                    if (pvalue_heap) {
-                        icalmemory_free_buffer(pvalue_heap);
-                        pvalue = 0;
-                    }
                     if (name_heap) {
                         icalmemory_free_buffer(name_heap);
                         name = 0;
