@@ -1131,7 +1131,8 @@ void generate_forward_declarations_header_file(GList *structures)
             if (g_hash_table_contains(type2structure, typeName)) {
                 parentStructure = g_hash_table_lookup(type2structure, typeName);
                 typeKind = g_hash_table_lookup(type2kind, typeName);
-                if (g_strcmp0(typeKind, "std") == 0 && !g_hash_table_contains(typeNames, typeName)) {
+                if (g_strcmp0(typeKind, "std") == 0 &&
+                    !g_hash_table_contains(typeNames, typeName)) {
                     (void)g_hash_table_insert(typeNames, g_strdup (typeName), (gchar *) "std");
                 }
             }
