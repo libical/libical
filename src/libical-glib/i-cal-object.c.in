@@ -240,7 +240,7 @@ i_cal_object_construct(ICalObject *iobject,
     if (owner)
         g_return_if_fail(G_IS_OBJECT(owner));
 
-    //LOCK_PROPS (iobject);
+    /* LOCK_PROPS (iobject); */
 
     g_warn_if_fail(iobject->priv->native == NULL);
 
@@ -249,7 +249,7 @@ i_cal_object_construct(ICalObject *iobject,
     iobject->priv->is_global_memory = is_global_memory;
     i_cal_object_set_owner(iobject, owner);
 
-    //UNLOCK_PROPS (iobject);
+    /* UNLOCK_PROPS (iobject); */
 }
 
 /**

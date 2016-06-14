@@ -17,15 +17,18 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBICAL_GLIB_H
-#define LIBICAL_GLIB_H
+#if !defined (__LIBICAL_GLIB_H_INSIDE__) && !defined (LIBICAL_GLIB_COMPILATION)
+#error "Only <libical-glib/libical-glib.h> can be included directly."
+#endif
+
+#ifndef ${upperSnake}_H
+#define ${upperSnake}_H
 
 #include <glib-object.h>
 
-#define __LIBICAL_GLIB_H_INSIDE__
+G_BEGIN_DECLS
 
-#include <libical-glib/i-cal-forward-declarations.h>
-${allHeaders}
-#undef __LIBICAL_GLIB_H_INSIDE__
+${forward_declarations}
+G_END_DECLS
 
-#endif /* LIBICAL_GLIB_H */
+#endif /* ${upperSnake}_H */

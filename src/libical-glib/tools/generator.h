@@ -26,6 +26,7 @@
 
 #define HEADER_TEMPLATE "header-template"
 #define HEADER_HEADER_TEMPLATE "header-header-template"
+#define HEADER_FORWARD_DECLARATIONS_TEMPLATE "header-forward-declarations-template"
 #define INLINE_TRANSLATION "${translator} (${name})"
 #define SOURCE_TEMPLATE "source-template"
 #define COMMON_HEADER "libical-glib/i-cal-object"
@@ -38,6 +39,7 @@
 #define METHOD_NAME_TAB_COUNT 4
 #define COMMENT_LINE_LENGTH 100
 #define PRIVATE_HEADER "libical-glib-private.h"
+#define FORWARD_DECLARATIONS_HEADER "i-cal-forward-declarations.h"
 
 /* Store the default value for bare type */
 GHashTable *defaultValues;

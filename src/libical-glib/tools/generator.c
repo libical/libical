@@ -902,8 +902,6 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                     generate_header_includes(out, structure);
                 } else if (g_strcmp0(buffer, "sourceIncludes") == 0) {
                     generate_source_includes(out, structure);
-                } else if (g_strcmp0(buffer, "forward_declaration") == 0) {
-                    generate_header_forward_declaration(out, structure);
                 } else if (g_strcmp0(buffer, "header_declaration") == 0) {
                     generate_header_header_declaration(out, structure);
                 } else if (g_hash_table_contains(table, buffer)) {
@@ -1092,61 +1090,99 @@ void generate_source_includes(FILE *out, Structure *structure)
     g_hash_table_destroy(includeNames);
 }
 
-void generate_header_forward_declaration(FILE *out, Structure *structure)
+void generate_forward_declarations_header_file(GList *structures)
 {
+    FILE *in, *out;
+    gint c, len;
+    gchar buffer[BUFFER_SIZE];
     gchar *typeName;
     gchar *typeKind;
     Structure *parentStructure;
-    gchar *upperCamel;
-    gchar *ownUpperCamel;
-    GHashTable *includeNames;
+    GList *link;
+    GHashTable *typeNames;
     GHashTableIter iter_table;
     gpointer key;
     gpointer value;
 
-    g_return_if_fail(out != NULL && structure != NULL);
+    g_return_if_fail(structures != NULL);
 
-    includeNames = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, NULL);
+    in = open_file(templates_dir, HEADER_FORWARD_DECLARATIONS_TEMPLATE);
+    if (!in)
+        return;
 
-    /* Temporary solution. To be rewritten */
-    for (g_hash_table_iter_init(&iter_table, structure->dependencies);
-         g_hash_table_iter_next(&iter_table, &key, &value);) {
-        typeName = (gchar *) key;
-        if (g_hash_table_contains(type2structure, typeName)) {
-            parentStructure = g_hash_table_lookup(type2structure, typeName);
-            upperCamel = g_strconcat(parentStructure->nameSpace, parentStructure->name, NULL);
-            ownUpperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
-            if (g_strcmp0(upperCamel, ownUpperCamel) == 0) {
-                g_free(upperCamel);
-                g_free(ownUpperCamel);
-                continue;
+    out = fopen(FORWARD_DECLARATIONS_HEADER, "wb");
+    if (!out) {
+        fclose(in);
+        fprintf(stderr, "Failed to open '%s' for writing\n", FORWARD_DECLARATIONS_HEADER);
+        return;
+    }
+
+    typeNames = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
+
+    for (link = structures; link; link = g_list_next (link)) {
+        Structure *structure = link->data;
+
+        if (!structure)
+            continue;
+
+        for (g_hash_table_iter_init(&iter_table, structure->dependencies);
+             g_hash_table_iter_next(&iter_table, &key, &value);) {
+            typeName = (gchar *) key;
+            if (g_hash_table_contains(type2structure, typeName)) {
+                parentStructure = g_hash_table_lookup(type2structure, typeName);
+                typeKind = g_hash_table_lookup(type2kind, typeName);
+                if (g_strcmp0(typeKind, "std") == 0 && !g_hash_table_contains(typeNames, typeName)) {
+                    (void)g_hash_table_insert(typeNames, g_strdup (typeName), (gchar *) "std");
+                }
             }
-
-            typeKind = g_hash_table_lookup(type2kind, typeName);
-            if (g_strcmp0(typeKind, "std") == 0) {
-                (void)g_hash_table_insert(includeNames, typeName, (gchar *) "std");
-            }
-            g_free(upperCamel);
-            g_free(ownUpperCamel);
         }
     }
 
-    typeName = NULL;
+    *buffer = '\0';
 
-    for (g_hash_table_iter_init(&iter_table, includeNames);
-         g_hash_table_iter_next(&iter_table, &key, &value);) {
-        typeName = (gchar *) key;
-        write_str(out, "typedef struct _");
-        write_str(out, typeName);
-        write_str(out, " ");
-        write_str(out, typeName);
-        write_str(out, ";\n");
-    }
-    if (typeName != NULL) {
-        write_str(out, "\n");
+    while ((c = fgetc(in)) != EOF) {
+        if (c == '$') {
+            if ((c = fgetc(in)) != '{' && c != '^') {
+                printf("The following char is not {");
+                g_free (buffer);
+                fclose(in);
+                fclose(out);
+                return;
+            }
+
+            while ((c = fgetc(in)) != '}') {
+                len = (gint) strlen(buffer);
+                buffer[len] = c;
+                buffer[len + 1] = '\0';
+            }
+
+            if (g_strcmp0(buffer, "forward_declarations") == 0) {
+                g_hash_table_iter_init(&iter_table, typeNames);
+                while (g_hash_table_iter_next(&iter_table, &key, &value)) {
+                    typeName = (gchar *) key;
+                    write_str(out, "typedef struct _");
+                    write_str(out, typeName);
+                    write_str(out, " ");
+                    write_str(out, typeName);
+                    write_str(out, ";\n");
+                }
+            } else if (g_strcmp0(buffer, "upperSnake") == 0) {
+                write_str(out, "I_CAL_FORWARD_DECLARATIONS");
+            } else {
+                fprintf(stderr, "The string '%s' is not recognized, please check the %s\n",
+                       buffer, FORWARD_DECLARATIONS_HEADER);
+                fflush(stderr);
+                break;
+            }
+            buffer[0] = '\0';
+        } else {
+            fputc(c, out);
+        }
     }
 
-    g_hash_table_destroy(includeNames);
+    g_hash_table_destroy(typeNames);
+    fclose(out);
+    fclose(in);
 }
 
 void generate_source(FILE *out, Structure *structure, GHashTable *table)
@@ -2228,6 +2264,9 @@ static gint generate_library(const gchar *apis_dir)
         structures = g_list_append(structures, structure);
         xmlFreeDoc(doc);
     }
+
+    /* Generate the forward declarations header file */
+    generate_forward_declarations_header_file(structures);
 
     /* Generate the common header for all the headers, which is libical-glib.h for here */
     generate_header_header_file(structures);

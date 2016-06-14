@@ -50,6 +50,7 @@ list(APPEND API_FILES
 list(APPEND LIBICAL_GLIB_HEADERS
   ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.h
   ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.h
+  ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
 )
 
 # add the command to generate the source code from the api files
@@ -65,7 +66,7 @@ foreach(file IN LISTS API_FILES)
 endforeach()
 
 add_custom_command (
-  OUTPUT ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
+  OUTPUT ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
   COMMAND src-generator "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
   DEPENDS src-generator ${xml_files}
 )
