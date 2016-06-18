@@ -40,7 +40,7 @@ configuration:
   - Release
 
 build_script:
-  - call C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat %PLATFORM%
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %PLATFORM%
   - mkdir build
   - cd build
   - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true ..
@@ -75,6 +75,4 @@ notifications:
   - provider: Email
     to:
       - allen.winter@kdab.com
-    subject: 'Build {{status}}'                  # optional
-    message: "{{message}}, {{commitId}}, ..."    # optional
     on_build_status_changed: true
