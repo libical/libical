@@ -1,0 +1,66 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+# version format
+version: 1.0.{build}-{branch}
+
+# branches to build
+branches:
+  except:
+    - gh-pages
+
+# Do not build on tags (GitHub and BitBucket)
+skip_tags: false
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# Build worker image
+image:
+  - Visual Studio 2015
+  - Visual Studio 2013
+
+# scripts that are called at very beginning, before repo cloning
+init:
+  - git config --global core.autocrlf input
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform: Any CPU
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration:
+  - Debug
+  - Release
+
+build_script:
+  - mkdir build
+  - cd build
+  - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true ..
+  - nmake
+
+# to disable automatic builds
+#build: off
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+test_script:
+  - cd build
+  - nmake test
+
+# to disable automatic tests
+#test: off
+
+
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#
+
+deploy: off
