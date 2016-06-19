@@ -47,6 +47,7 @@ build_script:
   - mkdir build
   - cd build
   - cmake -G "NMake Makefiles" -DUSE_32BIT_TIME_T=%goo% -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true ..
+  - type CMakeCache.txt
   - nmake
 
 # to disable automatic builds
