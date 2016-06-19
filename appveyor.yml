@@ -40,10 +40,13 @@ configuration:
   - Release
 
 build_script:
+  - echo libical: build type is %CONFIGURATION% for platform %PLATFORM%
+  - set goo=false
+  - if "%PLATFORM%"=="x86" set goo=true
   - call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %PLATFORM%
   - mkdir build
   - cd build
-  - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true ..
+  - cmake -G "NMake Makefiles" -DUSE_32BIT_TIME_T=%goo% -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true ..
   - nmake
 
 # to disable automatic builds
@@ -54,7 +57,6 @@ build_script:
 #---------------------------------#
 
 test_script:
-  - cd build
   - nmake test
 
 # to disable automatic tests
