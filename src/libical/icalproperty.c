@@ -334,6 +334,12 @@ static const char *icalproperty_get_value_kind(icalproperty *prop)
 
     if (value != 0) {
         this_kind = icalvalue_isa(value);
+
+        if (this_kind == ICAL_ATTACH_VALUE) {
+            icalattach *a = icalvalue_get_attach(value);
+            this_kind =
+                icalattach_get_is_url(a) ? ICAL_URI_VALUE : ICAL_BINARY_VALUE;
+        }
     }
 
     if (orig_kind != ICAL_NO_VALUE) {

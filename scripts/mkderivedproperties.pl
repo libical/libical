@@ -87,8 +87,10 @@ sub insert_code
       next if $prop eq 'NO';
 
       my ($uc, $lc, $lcvalue, $ucvalue, $type) = fudge_data($prop);
+      my $defvalue = $propmap{$prop}->{'default_value'};
+      $defvalue =~ s/-//g;
 
-      print "{ICAL_${uc}_PROPERTY,\"$prop\",ICAL_${ucvalue}_VALUE},\n";
+      print "{ICAL_${uc}_PROPERTY,\"$prop\",ICAL_${defvalue}_VALUE},\n";
 
     }
 

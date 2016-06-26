@@ -3122,7 +3122,7 @@ void test_trigger()
     static const char test_icalcomp_str[] =
         "BEGIN:VEVENT\r\n"
         "TRIGGER;VALUE=DATE-TIME:19980403T120000\r\n"
-        "TRIGGER;VALUE=DURATION:-PT15M\r\n"
+        "TRIGGER:-PT15M\r\n"
         "TRIGGER;VALUE=DATE-TIME:19980403T120000\r\n"
         "TRIGGER;VALUE=DURATION:-PT15M\r\n" "END:VEVENT\r\n";
 
@@ -3163,7 +3163,7 @@ void test_trigger()
     p = icalproperty_new_trigger(tr);
     str = icalproperty_as_ical_string(p);
 
-    str_is("TRIGGER;VALUE=DURATION:P3DT3H50M45S", str, "TRIGGER;VALUE=DURATION:P3DT3H50M45S\r\n");
+    str_is("TRIGGER:P3DT3H50M45S", str, "TRIGGER:P3DT3H50M45S\r\n");
     icalproperty_free(p);
 
     /* TRIGGER, as a DATETIME, VALUE=DATETIME */
@@ -3249,7 +3249,7 @@ void test_rdate()
     p = icalproperty_new_rdate(dtp);
     str = icalproperty_as_ical_string(p);
 
-    str_is("RDATE as DATE-TIME", str, "RDATE;VALUE=DATE-TIME:19970101T120000\r\n");
+    str_is("RDATE as DATE-TIME", str, "RDATE:19970101T120000\r\n");
     icalproperty_free(p);
 
     /* RDATE, as PERIOD */
@@ -3644,6 +3644,25 @@ void test_attach_url()
     icalcomponent_free(ac);
 }
 
+void test_attach_data()
+{
+    static const char test_icalcomp_str_attachwithdata[] =
+        "BEGIN:VALARM\r\n" "ATTACH;VALUE=BINARY:foofile\r\n" "END:VALARM\r\n";
+
+    icalattach *attach = icalattach_new_from_data("foofile", NULL, 0);
+    icalcomponent *ac = icalcomponent_new(ICAL_VALARM_COMPONENT);
+    icalproperty *ap = icalproperty_new_attach(attach);
+
+    icalcomponent_add_property(ac, ap);
+    if (VERBOSE) {
+        printf("%s\n", icalcomponent_as_ical_string(ac));
+    }
+    str_is("attach data", (const char *) icalattach_get_data(attach), "foofile");
+    str_is("attach with data", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
+    icalproperty_free(ap);
+    icalcomponent_free(ac);
+}
+
 void test_vcal(void)
 {
     VObject *vcal = 0;
@@ -3900,6 +3919,7 @@ int main(int argc, char *argv[])
     test_run("Test Attachment", test_attach, do_test, do_header);
     test_run("Test CalDAV Attachment", test_attach_caldav, do_test, do_header);
     test_run("Test Attachment with URL", test_attach_url, do_test, do_header);
+    test_run("Test Attachment with data", test_attach_data, do_test, do_header);
     test_run("Test icalcalendar", test_calendar, do_test, do_header);
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
