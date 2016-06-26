@@ -401,8 +401,7 @@ VObject* addGroup(VObject *o, const char *g)
         * t = p = addProp_(o,lookupProp_(n));
         */
         t = p = addProp_(o,lookupProp(n));
-        dot = strrchr(gs,'.');
-        *dot = 0;
+        (void)strrchr(gs,'.');
         do {
             dot = strrchr(gs,'.');
             if (dot) {

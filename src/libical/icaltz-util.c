@@ -18,6 +18,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+//krazy:excludeall=cpp
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -153,9 +154,9 @@ static int decode(const void *ptr)
     }
 }
 
-static char *zname_from_stridx(char *str, long idx)
+static char *zname_from_stridx(char *str, size_t idx)
 {
-    long i;
+    size_t i;
     size_t size;
     char *ret;
 
@@ -164,7 +165,7 @@ static char *zname_from_stridx(char *str, long idx)
         i++;
     }
 
-    size = (size_t)(i - idx);
+    size = i - idx;
     str += idx;
     ret = (char *)malloc(size + 1);
     ret = strncpy(ret, str, size);
@@ -448,7 +449,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     /* Read all the contents now */
 
     for (i = 0; i < num_types; i++) {
-        types[i].zname = zname_from_stridx(znames, (long)types[i].abbr);
+        /* coverity[tainted_data] */
+        types[i].zname = zname_from_stridx(znames, types[i].abbr);
     }
 
     if (!_s_use_exact_timezones) {

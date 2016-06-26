@@ -1,0 +1,40 @@
+G_DEFINE_TYPE (${upperCamel}, ${lowerSnake}, I_CAL_TYPE_OBJECT)
+
+static void ${lowerSnake}_class_init (${upperCamel}Class *klass)
+{
+    g_type_class_add_private (klass, sizeof (${upperCamel}));
+}
+
+static void ${lowerSnake}_init (G_GNUC_UNUSED ${upperCamel} *self)
+{
+}
+
+/**
+ * ${lowerSnake}_new_full: (skip)
+ * @native: The native libical object.$^!${isBare}
+ * @owner: The parent.^$$^${isPossibleGlobal}
+ * @is_global_memory: Whether it is allocated in the global memory.^$
+ *
+ * Create a new libical-glib object from the native libical object and the owner.
+ *
+ * Returns: (transfer full): The newly create libical-glib object.
+ *
+ * Since: 1.0
+ **/
+${new_full}
+{
+    ${upperCamel} *object;$^${isBare}
+    ${native} *clone;^$$^!${isBare}
+    if (native == NULL)
+        return NULL;^$
+    object = g_object_new (${upperSnake}_TYPE, NULL);$^${isBare}
+    clone = g_new (${native}, 1);
+    *clone = native;^$
+    i_cal_object_construct ((ICalObject *)object,
+                            $^!${isBare}(gpointer) native^$$^${isBare}(gpointer) clone^$,
+                            (GDestroyNotify) ${destroyFunc},
+                            $^${isPossibleGlobal}is_global_memory^$$^!${isPossibleGlobal}FALSE^$,
+                            $^!${isBare}owner^$$^${isBare}NULL^$);
+
+    return object;
+}

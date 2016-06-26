@@ -85,7 +85,7 @@ void icalerror_stop_here(void)
 void icalerror_crash_here(void)
 {
     int *p = 0;
-
+    /* coverity[var_deref_op] */
     *p = 1;
 
     assert(*p);

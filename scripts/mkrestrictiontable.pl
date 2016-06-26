@@ -66,17 +66,19 @@ sub insert_code
     } else {
       $sub = "icalrestriction_" . $sub;
     }
+    $restr =~ s/\s+$//;
 
     if ($prop ne "NONE") {
       print(
-"    \{ICAL_METHOD_${method},ICAL_${targetcomp}_COMPONENT,ICAL_${prop}_PROPERTY,ICAL_RESTRICTION_${restr},$sub},\n"
+"    \{ICAL_METHOD_${method}, ICAL_${targetcomp}_COMPONENT, ICAL_${prop}_PROPERTY, ICAL_RESTRICTION_${restr}, $sub},\n"
       );
     }
 
   }
 
   # Print the terminating line
-  print "    {ICAL_METHOD_NONE,ICAL_NO_COMPONENT,ICAL_NO_PROPERTY,ICAL_RESTRICTION_NONE,NULL}\n";
+  print
+    "    {ICAL_METHOD_NONE, ICAL_NO_COMPONENT, ICAL_NO_PROPERTY, ICAL_RESTRICTION_NONE, NULL}\n";
 
   print "};\n";
 

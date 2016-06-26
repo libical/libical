@@ -1445,6 +1445,7 @@ static int yy_get_next_buffer (void)
                 YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
                 }
 
+        /* coverity[var_deref_op] */
         YY_CURRENT_BUFFER_LVALUE = new_buffer;
         ss_load_buffer_state( );
 
@@ -1597,6 +1598,7 @@ void sspush_buffer_state (YY_BUFFER_STATE new_buffer )
         /* Only push if top exists. Otherwise, replace top. */
         if (YY_CURRENT_BUFFER)
                 (yy_buffer_stack_top)++;
+        /* coverity[var_deref_op] */
         YY_CURRENT_BUFFER_LVALUE = new_buffer;
 
         /* copied from ss_switch_to_buffer. */

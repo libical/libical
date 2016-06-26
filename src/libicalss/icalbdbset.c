@@ -1482,6 +1482,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
         if (comp == 0) {
             return NULL;
         }
+
         if (i->gauge == 0) {
             return comp;
         }
@@ -1566,6 +1567,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
         }
     } while (comp != 0);
 
+    /* coverity[dead_error_line] */
     return NULL;        /*unreachable */
 }
 

@@ -46,6 +46,11 @@
 #  Requires GObject Introspection development package v0.6.7 or higher
 #  Default=false (do not generate the introspection files)
 #
+# -DICAL_GLIB=[true|false]
+#  Set to build libical-glib (GObject) interface
+#  Requires glib development package v2.20 or higher
+#  Default=true (build the libical-glib interface)
+#
 # -DUSE_32BIT_TIME_T=[true|false]
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
@@ -58,7 +63,7 @@
 #   Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.
 #
 
-cmake_minimum_required(VERSION 2.8.9) #first line, to shutup a cygwin warning
+cmake_minimum_required(VERSION 3.0.2) #first line, to shutup a cygwin warning
 project(libical C CXX)
 
 cmake_policy(SET CMP0003 NEW)
@@ -234,6 +239,23 @@ if(GOBJECT_INTROSPECTION)
     set(HAVE_INTROSPECTION TRUE)
   else()
     message(FATAL_ERROR "You requested to build with GObject Introspection but the necessary development package is missing or too low a version (version ${MIN_GOBJECT_INTROSPECTION} or higher is required)")
+  endif()
+endif()
+
+set(MIN_GLIB "2.32")
+set(MIN_LIBXML "2.7.3")
+option(ICAL_GLIB "Build libical-glib interface. Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True)
+if(ICAL_GLIB)
+  find_package(GLib ${MIN_GLIB})
+  find_package(LibXML ${MIN_LIBXML})
+  if(GLIB_FOUND AND LIBXML_FOUND)
+    set(HAVE_GLIB TRUE)
+  elseif(GLIB_FOUND)
+    message(FATAL_ERROR "You requested to build libical-glib, but the necessary development package is missing or too low a version (libxml ${MIN_LIBXML} or higher is required)")
+  elseif(LIBXML_FOUND)
+    message(FATAL_ERROR "You requested to build libical-glib, but the necessary development package is missing or too low a version (glib ${MIN_GLIB} or higher is required)")
+  else()
+    message(FATAL_ERROR "You requested to build libical-glib, but the necessary development packages are missing or too low a version (glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required)")
   endif()
 endif()
 

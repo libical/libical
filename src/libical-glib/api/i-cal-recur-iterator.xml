@@ -1,0 +1,32 @@
+<!--
+  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+
+  This library is free software: you can redistribute it and/or modify it
+  under the terms of version 2.1. of the GNU Lesser General Public License
+  as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library. If not, see <http://www.gnu.org/licenses/>.
+-->
+<structure namespace="ICal" name="RecurIterator" native="icalrecur_iterator" destroy_func="icalrecur_iterator_free">
+    <method name="i_cal_recur_iterator_new" corresponds="icalrecur_iterator_new" kind="constructor" since="1.0">
+        <parameter type="ICalRecurrenceType *" name="rule" comment="The rule applied on the #ICalRecurIterator."/>
+        <parameter type="ICalTimetype *" name="dtstart" comment="The start time of the recurrence."/>
+        <returns type="ICalRecurIterator *" annotation="transfer full" comment="The newly created #ICalRecurIterator"/>
+        <comment xml:space="preserve">Create a #ICalRecurIterator.</comment>
+    </method>
+    <method name="i_cal_recur_iterator_next" corresponds="icalrecur_iterator_next" since="1.0">
+        <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator."/>
+        <returns type="ICalTimetype *" annotation="transfer none" comment="The next occurrence according to this recurrence rule."/>
+        <comment xml:space="preserve">Get the next occurrence from an iterator.</comment>
+    </method>
+    <method name="i_cal_recur_iterator_free" corresponds="icalrecur_iterator_free" annotation="skip" kind="destructor" since="1.0">
+        <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator to be freed."/>
+        <comment xml:space="preserve">Free an iterator.</comment>
+    </method>
+</structure>

@@ -1,0 +1,83 @@
+<!--
+  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+
+  This library is free software: you can redistribute it and/or modify it
+  under the terms of version 2.1. of the GNU Lesser General Public License
+  as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library. If not, see <http://www.gnu.org/licenses/>.
+-->
+<structure namespace="ICal" name="Parser" native="icalparser" destroy_func="icalparser_free">
+    <enum name="ICalParserState" native_name="icalparserstate" default_native="I_CAL_PARSER_ERROR">
+        <element name="ICALPARSER_ERROR"/>
+        <element name="ICALPARSER_SUCCESS"/>
+        <element name="ICALPARSER_BEGIN_COMP"/>
+        <element name="ICALPARSER_END_COMP"/>
+        <element name="ICALPARSER_IN_PROGRESS"/>
+    </enum>
+    <method name="i_cal_parser_new" corresponds="icalparser_new" kind="constructor" since="1.0">
+        <returns type="ICalParser *" annotation="transfer full" comment="The newly created #ICalParser."/>
+        <comment xml:space="preserve">Create a default #ICalParser.</comment>
+    </method>
+    <method name="i_cal_parser_add_line" corresponds="icalparser_add_line" since="1.0">
+        <parameter type="ICalParser *" name="parser" annotation="in, transfer full" comment="The #ICalParser used to parse the string into the #ICalComponent."/>
+        <parameter type="gchar *" name="str" annotation="allow-none, transfer none" comment="A line of string representation of the #ICalComponent."/>
+        <returns type="ICalComponent *" annotation="allow-none, transfer full" translator_argus="(gpointer) parser" comment="The complete #ICalComponent."/>
+        <comment xml:space="preserve">Add a line at one time into the #ICalParser until the parsing is complete and #ICalComponent will be returned.</comment>
+    </method>
+    <method name="i_cal_parser_clean" corresponds="icalparser_clean" since="1.0">
+        <parameter type="ICalParser *" name="parser" comment="The parser to be cleaned and queried."/>
+        <returns type="ICalComponent *" annotation="allow-none, transfer full" translator_argus="(gpointer) parser" comment="The root #ICalComponent in @parser."/>
+        <comment xml:space="preserve">We won't get a clean exit if some components did not have an "END" tag. Clear off any component that may be left in the list</comment>
+    </method>
+    <method name="i_cal_parser_get_state" corresponds="icalparser_get_state" kind="get" since="1.0">
+        <parameter type="ICalParser *" name="parser" comment="The #ICalParser to be queried."/>
+        <returns type="ICalParserState" comment="The parser state stored in the #ICalParser."/>
+        <comment xml:space="preserve">Get the state of the target parser.</comment>
+    </method>
+    <method name="i_cal_parser_free" corresponds="icalparser_free" kind="destructor" since="1.0">
+        <parameter type="ICalParser *" name="parser" comment="The #ICalParser to be freed."/>
+        <comment xml:space="preserve">Free a #ICalParser.</comment>
+    </method>
+    <method name="i_cal_parser_parse" corresponds="CUSTOM" since="1.0">
+        <parameter type="ICalParser *" name="parser" comment="The parser used to parse the string and output the #ICalComponent."/>
+        <parameter type="gchar *" name="(*func)(gchar *,size_t,void *)" comment="FULL: @func: The function used to parse."/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="The component output by the parser."/>
+        <comment xml:space="preserve">icalparser_parse takes a string that holds the text ( in RFC 2445 format ) and returns a pointer to an icalcomponent. The caller owns the memory. line_gen_func is a pointer to a function that returns one content line per invocation</comment>
+        <custom>	g_return_val_if_fail (parser != NULL &amp;&amp; func != NULL, NULL);
+
+	return i_cal_component_new_full (icalparser_parse ((icalparser *)i_cal_object_get_native ((ICalObject *)parser), func), NULL);</custom>
+    </method>
+    <method name="i_cal_parser_set_gen_data" corresponds="icalparser_set_gen_data" since="1.0">
+        <parameter type="ICalParser *" name="parser" comment="The parser"/>
+        <parameter type="void *" name="data" comment="Set the data that icalparser_parse will give to the line_gen_func as the parameter 'd'"/>
+        <comment xml:space="preserve">Set the data that icalparser_parse will give to the line_gen_func as the parameter 'd'</comment>
+    </method>
+    <method name="i_cal_parser_parse_string" corresponds="icalparser_parse_string" since="1.0">
+        <parameter type="const gchar *" name="str" comment="The string to be parsed"/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="The #ICalComponent parsed from str."/>
+        <comment xml:space="preserve">Parse the string into a #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_parser_get_line" corresponds="CUSTOM" since="1.0">
+        <parameter type="ICalParser *" name="parser" comment="The parser to be queried."/>
+        <parameter type="gchar *" name="(*func)(gchar *,size_t,void *)" comment="FULL: @func: A line generator function."/>
+        <returns type="gchar *" annotation="transfer full" comment="A single iCal content line."/>
+        <comment xml:space="preserve">Given a line generator function, return a single iCal content line.</comment>
+        <custom>	g_return_val_if_fail (parser != NULL &amp;&amp; func != NULL, NULL);
+
+	return icalparser_get_line ((icalparser *)i_cal_object_get_native ((ICalObject *)parser), func);</custom>
+    </method>
+    <method name="i_cal_parser_string_line_generator" corresponds="icalparser_string_line_generator" since="1.0">
+        <parameter type="gchar *" name="out" comment="The input."/>
+        <parameter type="size_t" name="buf_size" comment="The size of the buffer."/>
+        <parameter type="void *" name="d" comment="The data to be supplied."/>
+        <returns type="gchar *" annotation="transfer full" comment="The generated line."/>
+        <comment xml:space="preserve">The string line generator used as line_gen_func</comment>
+    </method>
+</structure>

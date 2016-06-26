@@ -1,0 +1,59 @@
+<!--
+  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+
+  This library is free software: you can redistribute it and/or modify it
+  under the terms of version 2.1. of the GNU Lesser General Public License
+  as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library. If not, see <http://www.gnu.org/licenses/>.
+-->
+<structure namespace="ICal" name="TimeSpan" native="struct icaltime_span" is_bare="true" default_native="icaltime_span_new (i_cal_timetype_new_default (), i_cal_timetype_new_default (), 0)" includes="libical-glib/i-cal-timetype.h">
+    <method name="i_cal_time_span_get_start" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimeSpan *" name="timespan" comment="The #ICalTimeSpan to be queried."/>
+        <returns type="time_t" comment="The start." />
+        <comment xml:space="preserve">Get the start of #ICalTimeSpan.</comment>
+        <custom>	g_return_val_if_fail (timespan != NULL, 0);
+	return ((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)timespan))->start;</custom>
+    </method>
+    <method name="i_cal_time_span_set_start" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimeSpan *" name="timespan" comment="The #ICalTimeSpan to be set."/>
+        <parameter type="time_t" name="start" comment="The start." />
+        <comment xml:space="preserve">Set the start of #ICalTimeSpan.</comment>
+        <custom>	g_return_if_fail (timespan != NULL);
+	((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)timespan))->start = start;</custom>
+    </method>
+    <method name="i_cal_time_span_get_end" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimeSpan *" name="timespan" comment="The #ICalTimeSpan to be queried."/>
+        <returns type="time_t" comment="The end." />
+        <comment xml:space="preserve">Get the end of #ICalTimeSpan.</comment>
+        <custom>	g_return_val_if_fail (timespan != NULL, 0);
+	return ((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)timespan))->end;</custom>
+    </method>
+    <method name="i_cal_time_span_set_end" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimeSpan *" name="timespan" comment="The #ICalTimeSpan to be set."/>
+        <parameter type="time_t" name="end" comment="The end." />
+        <comment xml:space="preserve">Set the end of #ICalTimeSpan.</comment>
+        <custom>	g_return_if_fail (timespan != NULL);
+	((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)timespan))->end = end;</custom>
+    </method>
+    <method name="i_cal_time_span_is_busy" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTimeSpan *" name="timespan" comment="The #ICalTimeSpan to be queried."/>
+        <returns type="gint" comment="The is_busy." />
+        <comment xml:space="preserve">Get the is_busy of #ICalTimeSpan.</comment>
+        <custom>	g_return_val_if_fail (timespan != NULL, 0);
+	return ((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)timespan))->is_busy;</custom>
+    </method>
+    <method name="i_cal_time_span_set_is_busy" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimeSpan *" name="timespan" comment="The #ICalTimeSpan to be set."/>
+        <parameter type="gint" name="is_busy" comment="The is_busy." />
+        <comment xml:space="preserve">Set the is_busy of #ICalTimeSpan.</comment>
+        <custom>	g_return_if_fail (timespan != NULL);
+	((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)timespan))->is_busy = is_busy;</custom>
+    </method>
+</structure>

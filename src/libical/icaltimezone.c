@@ -1667,6 +1667,7 @@ static void icaltimezone_parse_zone_tab(void)
                 continue;
             }
         } else {
+            /* coverity[tainted_data] */
             if (fetch_lat_long_from_string(buf, &latitude_degrees, &latitude_minutes,
                                            &latitude_seconds,
                                            &longitude_degrees, &longitude_minutes,

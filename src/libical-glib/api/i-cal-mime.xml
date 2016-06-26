@@ -1,0 +1,27 @@
+<!--
+  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+
+  This library is free software: you can redistribute it and/or modify it
+  under the terms of version 2.1. of the GNU Lesser General Public License
+  as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library. If not, see <http://www.gnu.org/licenses/>.
+-->
+<structure namespace="ICal" name="Mime">
+    <method name="i_cal_mime_parse" corresponds="CUSTOM" since="1.0">
+        <parameter type="gchar *" name="(*func)(gchar *,size_t,void *)" comment="FULL: @func: The parsing function."/>
+        <parameter type="void *" name="data" comment="The source to be parsed."/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="The #ICalComponent parsed from @data"/>
+        <comment xml:space="preserve">Parse from the data to #ICalComponent.</comment>
+        <custom>	g_return_val_if_fail (func != NULL, NULL);
+	g_return_val_if_fail (data != NULL, NULL);
+
+	return i_cal_component_new_full (icalmime_parse(func, data), NULL) ;</custom>
+    </method>
+</structure>

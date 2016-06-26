@@ -383,6 +383,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
                 prop_value = icalproperty_get_value(prop);
             }
 
+            /* coverity[mixed_enums] */
             relation = (icalgaugecompare) icalvalue_compare(prop_value, v);
 
             if (relation == w->compare) {

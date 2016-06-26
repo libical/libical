@@ -570,6 +570,7 @@ static void insert_error(icalcomponent *comp, const char *text,
         snprintf(temp, 1024, "%s: %s", message, text);
     }
 
+    /* coverity[leaked_storage] */
     icalcomponent_add_property(
         comp,
         icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), 0));
@@ -843,6 +844,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             break;
         }
 
+        icalmemory_free_buffer(str);
         str = parser_get_next_parameter(end, &end);
         strstriplt(str);
         if (str != 0) {
@@ -884,8 +886,17 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             } else if (kind == ICAL_IANA_PARAMETER) {
                 ical_unknown_token_handling tokHandlingSetting =
                     ical_get_unknown_token_handling_setting();
-                if (tokHandlingSetting == ICAL_DISCARD_TOKEN)
+                if (tokHandlingSetting == ICAL_DISCARD_TOKEN) {
+                    if (name_heap) {
+                        icalmemory_free_buffer(name_heap);
+                        name_heap = 0;
+                    }
+                    if (pvalue_heap) {
+                        icalmemory_free_buffer(pvalue_heap);
+                        pvalue_heap = 0;
+                    }
                     continue;
+                }
 
                 param = icalparameter_new(ICAL_IANA_PARAMETER);
 
@@ -943,25 +954,18 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     str = make_segment(strStart, end - 1);
                 }
 
-                if (name_heap) {
-                    icalmemory_free_buffer(name_heap);
-                    name_heap = 0;
-                }
-
-                if (pvalue_heap) {
-                    icalmemory_free_buffer(pvalue_heap);
-                    pvalue_heap = 0;
-                }
-
                 /* Reparse the parameter name and value with the new segment */
                 if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack),
                                                  pvalue_stack, sizeof(pvalue_stack))) {
+                    if (name_heap) {
+                        icalmemory_free_buffer(name_heap);
+                        name = 0;
+                    }
                     name_heap = parser_get_param_name_heap(str, &pvalue_heap);
 
                     name = name_heap;
                     pvalue = pvalue_heap;
                 }
-
                 param = icalparameter_new_from_value_string(kind, pvalue);
             } else if (kind != ICAL_NO_PARAMETER) {
                 param = icalparameter_new_from_value_string(kind, pvalue);
@@ -991,6 +995,10 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 if (name_heap) {
                     icalmemory_free_buffer(name_heap);
                     name_heap = 0;
+                }
+                if (pvalue_heap) {
+                    icalmemory_free_buffer(pvalue_heap);
+                    pvalue_heap = 0;
                 }
                 icalmemory_free_buffer(str);
                 str = NULL;
@@ -1078,6 +1086,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
            says that commas should be escaped. For x-properties, other apps may
            depend on that behaviour
          */
+        icalmemory_free_buffer(str);
+        str = NULL;
         switch (prop_kind) {
         case ICAL_X_PROPERTY:{
                 /* Apple's geofence property uses a comma to separate latitude and longitude.
@@ -1282,7 +1292,8 @@ char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
     n = strchr(data->pos, '\n');
 
     if (n == 0) {
-        n = strchr(data->pos, '\r'); /* support malformed input with only CR and no LF (e.g. from Kerio Connect Server) */
+        n = strchr(data->pos, '\r'); /* support malformed input with only CR and no LF
+                                        (e.g. from Kerio Connect Server) */
         if(n == 0) {
             size = strlen(data->pos);
         } else {

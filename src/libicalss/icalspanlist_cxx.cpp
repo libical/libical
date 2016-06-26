@@ -20,6 +20,9 @@
 
 #include "icalspanlist_cxx.h"
 #include "vcomponent_cxx.h"
+
+#include <cstdlib> // for free()
+
 using namespace LibICal;
 
 /** @brief Construct an ICalSpanList from an icalset
@@ -139,5 +142,6 @@ std::vector<int> ICalSpanList::as_vector(int delta_t) throw(icalerrorenum)
         event_vec.push_back(matrix[i]); // Add item at end of vector
     }
 
-    return (event_vec);
+    free(matrix);
+    return event_vec;
 }

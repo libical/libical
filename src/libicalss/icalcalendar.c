@@ -69,6 +69,7 @@ static icalerrorenum icalcalendar_create(struct icalcalendar_impl *impl)
     strncat(path, BOOKED_DIR, MAXPATHLEN - strlen(path) - 1);
     path[MAXPATHLEN - 1] = '\0';
 
+    /* coverity[fs_check_call] */
     r = stat(path, &sbuf);
 
     if (r != 0 && errno == ENOENT) {
