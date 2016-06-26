@@ -63,7 +63,7 @@
 #   Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.
 #
 
-cmake_minimum_required(VERSION 3.0.2) #first line, to shutup a cygwin warning
+cmake_minimum_required(VERSION 2.8.9) #first line, to shutup a cygwin warning
 project(libical C CXX)
 
 cmake_policy(SET CMP0003 NEW)
