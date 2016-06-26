@@ -111,7 +111,7 @@
 "NO","100","NO","NO"
 "#VALARM Extension Properties","draft-daboo-valarm-extensions Section 13.1",
 "ACKNOWLEDGED","1","DATE-TIME","DATE-TIME"
-"#VAVAILABILITY Properties","draft-daboo-calendar-availability",
+"#VAVAILABILITY Properties","draft-ietf-calext-availability Section 3.2",
 "BUSYTYPE","101","BUSYTYPE","BUSYTYPE"
 "#VPOLL Properties","draft-york-vpoll",
 "ACCEPT-RESPONSE","102","TEXT,"TEXT"
@@ -123,10 +123,17 @@
 "REPLY-URL","111","URI,"URI"
 "RESPONSE","112","INTEGER,"INTEGER"
 "VOTER","107","CAL-ADDRESS,"CAL-ADDRESS"
-"#TZdist Properties","draft-ietf-tzdist-service",
+"#TZdist Properties","RFC 7808 Section 7",
 "TZID-ALIAS-OF","108","TEXT","TEXT"
 "TZUNTIL","109","DATE-TIME","DATE-TIME"
 "#Task Extension Properties","draft-apthorp-ical-tasks",
 "ESTIMATED-DURATION","113","DURATION","DURATION"
 "TASK-MODE","114","TASKMODE","TASKMODE"
+"#New Properties for iCalendar","draft-ietf-calext-extensions Section 5",
+"NAME","115","TEXT","TEXT"
+"REFRESH-INTERVAL","116","DURATION","DURATION"
+"SOURCE","117","URI","URI"
+"COLOR","118","TEXT","TEXT"
+"IMAGE","119","ATTACH","URI"
+"CONFERENCE","120","URI","URI"
 "#NOTE for updaters.  Preserve the icalproperty_kind Enum values to aid forward compatibility"
