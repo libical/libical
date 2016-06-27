@@ -38,25 +38,31 @@ struct icalvalue_impl
     {
         icalattach *v_attach;
         /* void *v_binary; *//* use v_attach */
+
         const char *v_string;
-        /*char *v_text; */
-        /*char *v_caladdress; */
-        /*char *v_uri; */
+        /*char *v_text; */      /* use v_string */
+        /*char *v_caladdress; *//* use v_string */
+        /*char *v_query; */     /* use v_string */
+        /*char *v_uri; */       /* use v_string */
+
         float v_float;
+
         int v_int;
-        /*int v_boolean; */
-        /*int v_integer; */
+        /*int v_boolean; */  /* use v_int */
+        /*int v_integer; */  /* use v_int */
+        /*int v_utcoffset; *//* use v_int */
+
         struct icaldurationtype v_duration;
-        /*int v_utcoffset; */
 
         struct icalperiodtype v_period;
-        /*struct icalperiodtype v_datetimeperiod; */
+        /*struct icalperiodtype v_datetimeperiod; *//* use v_time/v_period */
+
         struct icalgeotype v_geo;
-        /*time_t v_time; */
+
         struct icaltimetype v_time;
-        /*struct icaltimetype v_date; */
-        /*struct icaltimetype v_datetime; */
-        /*struct icaltimetype v_datetimedate; */
+        /*struct icaltimetype v_date; */        /* use v_time */
+        /*struct icaltimetype v_datetime; */    /* use v_time */
+        /*struct icaltimetype v_datetimedate; *//* use v_time */
 
         struct icalreqstattype v_requeststatus;
 
@@ -64,9 +70,9 @@ struct icalvalue_impl
            directly ( not referenced ) in this union, but it
            contributes 2000 bytes to every value, so now it is
            a reference */
-
         struct icalrecurrencetype *v_recur;
-        /*struct icaltriggertype v_trigger; */
+
+        /*struct icaltriggertype v_trigger; *//* use v_time/v_duration */
 
         int v_enum;
         /* v_enum takes care of several enumerated types including:
@@ -75,6 +81,10 @@ struct icalvalue_impl
            icalproperty_action v_action;
            icalproperty_class v_class;
            icalproperty_transp v_transp;
+           icalproperty_busytype v_busytype;
+           icalproperty_taskmode v_taskmode;
+           icalproperty_pollmode v_pollmode;
+           icalproperty_pollcompletion v_pollcomplete;
          */
 
     } data;
