@@ -366,12 +366,12 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
   /** malloc our matrix, add one extra slot for a final -1 **/
     matrix_slots = spanduration_secs / delta_t + 1;
 
-    matrix = (int *)malloc(sizeof(int) * matrix_slots);
+    matrix = (int *)malloc((size_t)(sizeof(int) * matrix_slots));
     if (matrix == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return NULL;
     }
-    memset(matrix, 0, sizeof(int) * matrix_slots);
+    memset(matrix, 0, (size_t)(sizeof(int) * matrix_slots));
     matrix[matrix_slots - 1] = -1;
 
     /* loop through each span and mark the slots in the array */

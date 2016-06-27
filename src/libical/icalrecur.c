@@ -1325,7 +1325,7 @@ static int initialize_iterator(icalrecur_iterator *impl)
         const char *src = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
         size_t len = (strlen(src) + 1) * U_SIZEOF_UCHAR;
         tzid = icalmemory_tmp_buffer(len);
-        tzid = u_strFromUTF8Lenient(tzid, len, NULL, src, -1, &status);
+        tzid = u_strFromUTF8Lenient(tzid, (int32_t)len, NULL, src, -1, &status);
         if (U_FAILURE(status)) {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
             return 0;
