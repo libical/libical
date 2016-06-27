@@ -66,7 +66,7 @@ struct icalvalue_impl
            a reference */
 
         struct icalrecurrencetype *v_recur;
-        struct icaltriggertype v_trigger;
+        /*struct icaltriggertype v_trigger; */
 
         int v_enum;
         /* v_enum takes care of several enumerated types including:
