@@ -209,7 +209,7 @@ sub insert_code
 
     $count += 3;
     print "static const struct icalparameter_map icalparameter_map[] = {\n";
-    print "{ICAL_ANY_PARAMETER, 0, \"\"},\n";
+    print "    {ICAL_ANY_PARAMETER, 0, \"\"},\n";
     print $out;
     print "    {ICAL_NO_PARAMETER, 0, \"\"}\n};\n\n";
 
@@ -244,8 +244,9 @@ sub insert_code
 
     } elsif ($type =~ /int/) {
 
+      $xrange = "    if (param != 0) {\n       return param->data;\n    } else {\n       return 0;\n    }";
       $charorenum =
-        "    icalerror_check_arg((param != 0), \"param\");\n$xrange\nreturn param->data;";
+        "    icalerror_check_arg((param != 0), \"param\");\n$xrange";
 
       $set_code = "((struct icalparameter_impl *)param)->data = v;";
 
@@ -255,7 +256,7 @@ sub insert_code
         if !exists $no_xname{$uc};
 
       $charorenum =
-"    icalerror_check_arg((param != 0), \"param\");\n    if (!param) {\n        return ICAL_${uc}_NONE;\n    }\n$xrange\nreturn ($type)(param->data);";
+"    icalerror_check_arg((param != 0), \"param\");\n    if (!param) {\n        return ICAL_${uc}_NONE;\n    }\n$xrange\n    return ($type)(param->data);";
 
       $pointer_check =
 "    icalerror_check_arg_rz(v >= ICAL_${uc}_X, \"v\");\n    icalerror_check_arg_rz(v < ICAL_${uc}_NONE, \"v\");";
