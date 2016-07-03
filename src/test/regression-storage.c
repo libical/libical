@@ -493,10 +493,10 @@ int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title)
     cal->vcalendar_size = vcalendar_size;
     cal->title_size = title_size;
 
-    if (vcalendar && *vcalendar)
+    if (*vcalendar) /* we know that vcalendar is not NULL here */
         cal->vcalendar = strdup(vcalendar);
 
-    if (title && *title)
+    if (*title) /* we know that title is not NULL here */
         cal->title = strdup(title);
 
     *rcal = cal;
@@ -723,15 +723,11 @@ void test_dirset_extended(void)
 
         printf("Got one! (%d)\n", count++);
 
-        if (c != 0) {
-            printf("%s", icalcomponent_as_ical_string(c));
-            if (icaldirset_add_component(s2, c) == 0) {
-                printf("Failed to write!\n");
-            }
-            icalcomponent_free(c);
-        } else {
-            printf("Failed to get component\n");
+        printf("%s", icalcomponent_as_ical_string(c));
+        if (icaldirset_add_component(s2, c) == 0) {
+            printf("Failed to write!\n");
         }
+        icalcomponent_free(c);
     }
 
     icalset_free(s2);

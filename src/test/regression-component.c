@@ -323,6 +323,7 @@ void test_icalcomponent_get_span()
      */
     span.start = tm1;
     span.end = tm2;
+    span.is_busy = 0;
     if (VERBOSE)
         print_span(tnum++, span);
 

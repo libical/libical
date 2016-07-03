@@ -681,8 +681,8 @@ void test_dirset()
     int i;
     int count = 0;
 
-    mkdir("store", 0755);
-    mkdir("store-new", 0755);
+    ok("Creating the store directory", mkdir("store", 0755) != 0);
+    ok("Creating the store-new directory", mkdir("store-new", 0755) != 0);
 
     s = icaldirset_new("store");
     s2 = icaldirset_new("store-new");
@@ -758,27 +758,21 @@ void test_dirset()
         }
     }
 
-    gauge =
-        icalgauge_new_from_sql(
-            "SELECT * FROM VEVENT WHERE "
-            "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
-            "VEVENT.SUMMARY = 'Bastille Day Party'",
-            0);
+    gauge = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE "
+								   "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
+								   "VEVENT.SUMMARY = 'Bastille Day Party'",
+								   0);
 
     (void)icaldirset_select(s, gauge);
 
     for (c = icaldirset_get_first_component(s); c != 0; c = icaldirset_get_next_component(s)) {
         printf("Got one! (%d)\n", count++);
 
-        if (c != 0) {
-            printf("%s", icalcomponent_as_ical_string(c));
-            if (icaldirset_add_component(s2, c) == 0) {
-                printf("Failed to write!\n");
-            }
-            icalcomponent_free(c);
-        } else {
-            printf("Failed to get component\n");
-        }
+		printf("%s", icalcomponent_as_ical_string(c));
+		if (icaldirset_add_component(s2, c) == 0) {
+			printf("Failed to write!\n");
+		}
+		icalcomponent_free(c);
     }
 
     icalset_free(s2);
@@ -933,8 +927,8 @@ void test_calendar()
     icalerrorenum error;
     struct icaltimetype atime = icaltime_from_timet(time(0), 0);
 
-    mkdir("calendar", 0755);
-    mkdir("calendar/booked", 0755);
+    ok("Creating the calendar directory", mkdir("calendar", 0755) != 0);
+	ok("Creating the calendar/booked directory", mkdir("calendar/booked", 0755) != 0);
 
     calendar = icalcalendar_new("calendar");
 
@@ -979,6 +973,7 @@ void test_calendar()
 
 void test_increment(void);
 
+/* coverity[pass_by_value] */
 void print_occur(struct icalrecurrencetype recur, struct icaltimetype start)
 {
     struct icaltimetype next;
@@ -1021,7 +1016,7 @@ void test_recur()
         "FREQ=MONTHLY;UNTIL=19971224T000000Z;INTERVAL=1;BYDAY=TU,2FR,3SA",
         icaltime_as_timet(start), 25, array);
 
-    for (i = 0; array[i] != 0 && i < 25; i++) {
+    for (i = 0; i < 25 && array[i] != 0; i++) {
         if (VERBOSE)
             printf("  %s", ctime(&(array[i])));
     }
@@ -2019,6 +2014,7 @@ void test_fblist()
     sl = icalspanlist_new(set,
                           icaltime_from_string("19980101T000000Z"),
                           icaltime_from_string("19980108T000000Z"));
+    ok("create initial spanlist", (sl != NULL));
 
     ok("open ../test-data/spanlist.ics", (set != NULL));
     assert(set != NULL);
@@ -2071,7 +2067,7 @@ void test_fblist()
 
     ok("Calculating daily freebusy matrix", (foo != NULL));
 
-    {
+	if (foo) {
         char out_str[80] = "";
         char *strp = out_str;
 
@@ -2080,16 +2076,17 @@ void test_fblist()
             strp++;
         }
         str_is("Checking freebusy validity", out_str, "1121110");
-    }
-    if (VERBOSE) {
-        for (i = 0; foo[i] != -1; i++) {
-            printf("%d", foo[i]);
-            if ((i % 7) == 6)
-                printf("\n");
-        }
-        printf("\n\n");
-    }
-    free(foo);
+
+		if (VERBOSE) {
+			for (i = 0; foo[i] != -1; i++) {
+				printf("%d", foo[i]);
+				if ((i % 7) == 6)
+					printf("\n");
+			}
+			printf("\n\n");
+		}
+		free(foo);
+	}
 
     icalspanlist_free(sl);
 
@@ -3665,7 +3662,7 @@ void test_attach_data()
 
 void test_vcal(void)
 {
-    VObject *vcal = 0;
+    VObject *vcal;
     icalcomponent *comp;
     char *file = TEST_DATADIR "/user-cal.vcf";
 
@@ -3673,18 +3670,19 @@ void test_vcal(void)
 
     ok("Parsing " TEST_DATADIR "/user-cal.vcf", (vcal != 0));
 
-    comp = icalvcal_convert(vcal);
+	if (vcal) {
+		comp = icalvcal_convert(vcal);
 
-    ok("Converting to ical component", (comp != 0));
+		ok("Converting to ical component", (comp != 0));
 
-    if (VERBOSE && comp)
-        printf("%s\n", icalcomponent_as_ical_string(comp));
+		if (VERBOSE && comp)
+			printf("%s\n", icalcomponent_as_ical_string(comp));
 
-    if (comp)
-        icalcomponent_free(comp);
+		if (comp)
+			icalcomponent_free(comp);
 
-    if (vcal)
         deleteVObject(vcal);
+	}
 }
 
 /*
@@ -3845,6 +3843,7 @@ int main(int argc, char *argv[])
         case 'l':
         {
             do_header = 1;
+			break;
         }
         case '?':
         {
