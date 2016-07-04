@@ -681,8 +681,8 @@ void test_dirset()
     int i;
     int count = 0;
 
-    ok("Creating the store directory", mkdir("store", 0755) != 0);
-    ok("Creating the store-new directory", mkdir("store-new", 0755) != 0);
+    (void)mkdir("store", 0755);
+    (void)mkdir("store-new", 0755);
 
     s = icaldirset_new("store");
     s2 = icaldirset_new("store-new");
@@ -927,8 +927,8 @@ void test_calendar()
     icalerrorenum error;
     struct icaltimetype atime = icaltime_from_timet(time(0), 0);
 
-    ok("Creating the calendar directory", mkdir("calendar", 0755) != 0);
-	ok("Creating the calendar/booked directory", mkdir("calendar/booked", 0755) != 0);
+    (void)mkdir("calendar", 0755);
+    (void)mkdir("calendar/booked", 0755);
 
     calendar = icalcalendar_new("calendar");
 
