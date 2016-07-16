@@ -579,8 +579,10 @@ struct calendar *unpack_calendar(char *str, size_t size)
     /* vcalendar_size */
     memcpy(&cal->vcalendar_size, str + cal->vcalendar_size_offset, sizeof(cal->vcalendar_size));
 
-    if ((cal->vcalendar = (char *)malloc(sizeof(char) * cal->vcalendar_size)) == NULL)
+    if ((cal->vcalendar = (char *)malloc(sizeof(char) * cal->vcalendar_size)) == NULL) {
+        free(cal);
         return 0;
+    }
 
     /* vcalendar */
     memcpy(cal->vcalendar, (char *)(str + cal->vcalendar_offset), cal->vcalendar_size);

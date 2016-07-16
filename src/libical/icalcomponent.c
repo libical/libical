@@ -1014,6 +1014,8 @@ int icalcomponent_count_errors(icalcomponent *component)
     icalcomponent *c;
     pvl_elem itr;
 
+    icalerror_check_arg_rz((component != 0), "component");
+
     for (itr = pvl_head(component->properties); itr != 0; itr = pvl_next(itr)) {
         p = (icalproperty *) pvl_data(itr);
 
@@ -1036,6 +1038,8 @@ void icalcomponent_strip_errors(icalcomponent *component)
     icalproperty *p;
     icalcomponent *c;
     pvl_elem itr, next_itr;
+
+    icalerror_check_arg_rv((component != 0), "component");
 
     for (itr = pvl_head(component->properties); itr != 0; itr = next_itr) {
         p = (icalproperty *) pvl_data(itr);

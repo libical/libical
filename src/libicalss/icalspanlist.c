@@ -152,6 +152,9 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
         struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
 
+        if (!s)
+            continue;
+
         if ((freetime = (struct icaltime_span *)malloc(sizeof(struct icaltime_span))) == 0) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             icalspanlist_free(sl);
@@ -234,9 +237,10 @@ void icalspanlist_dump(icalspanlist *sl)
 
     for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
         struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
-
-        printf("#%02d %d start: %s", ++i, s->is_busy, ctime(&s->start));
-        printf("      end  : %s", ctime(&s->end));
+        if (s) {
+            printf("#%02d %d start: %s", ++i, s->is_busy, ctime(&s->start));
+            printf("      end  : %s", ctime(&s->end));
+        }
     }
 }
 
@@ -291,6 +295,9 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
        reference time. */
     for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
         s = (struct icaltime_span *)pvl_data(itr);
+
+        if (!s)
+            continue;
 
         if (s->is_busy == 0 && s->start >= rangett && (rangett < s->end || s->end == s->start)) {
 
@@ -379,7 +386,7 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
         struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
 
-        if (s->is_busy == 1) {
+        if (s && s->is_busy == 1) {
             time_t offset_start = s->start / delta_t - sl_start / delta_t;
             time_t offset_end = (s->end - 1) / delta_t - sl_start / delta_t + 1;
             time_t i;
@@ -444,7 +451,7 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
         struct icalperiodtype period;
         struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
 
-        if (s->is_busy == 1) {
+        if (s && s->is_busy == 1) {
 
             period.start = icaltime_from_timet_with_zone(s->start, 0, utc_zone);
             period.end = icaltime_from_timet_with_zone(s->end, 0, utc_zone);

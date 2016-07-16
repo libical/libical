@@ -106,11 +106,16 @@ enum file_type test_file(char *path)
 
 char *lowercase(const char *str)
 {
+    char *new;
     char *p = 0;
-    char *new = strdup(str);
 
-    if (str == 0) {
-        return 0;
+    if (!str)
+        return NULL;
+
+    new = strdup(str);
+
+    if (!new) {
+        return NULL;
     }
 
     for (p = new; *p != 0; p++) {

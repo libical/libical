@@ -308,7 +308,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
         icalproperty *prop;
         icalvalue_kind vk;
 
-        if (w->prop == ICAL_NO_PROPERTY || w->value == 0) {
+        if (!w || w->prop == ICAL_NO_PROPERTY || w->value == 0) {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
             return 0;
         }
@@ -436,6 +436,9 @@ void icalgauge_dump(icalgauge *gauge)
     for (p = pvl_head(gauge->select); p != 0; p = pvl_next(p)) {
         struct icalgauge_where *w = pvl_data(p);
 
+        if (!w)
+            continue;
+
         if (w->comp != ICAL_NO_COMPONENT) {
             printf("%s ", icalenum_component_kind_to_string(w->comp));
         }
@@ -465,6 +468,9 @@ void icalgauge_dump(icalgauge *gauge)
     printf("--- Where ---\n");
     for (p = pvl_head(gauge->where); p != 0; p = pvl_next(p)) {
         struct icalgauge_where *w = pvl_data(p);
+
+        if (!w)
+            continue;
 
         if (w->logic != ICALGAUGELOGIC_NONE) {
             printf("%d ", w->logic);
