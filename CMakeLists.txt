@@ -355,7 +355,7 @@ endif()
 
 ########### create and install pkg-config file #########
 
-set(VERSION "${PROJECT_VERSION}")
+set(VERSION "${LIBICAL_LIB_VERSION_STRING}")
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 set(exec_prefix "\${prefix}")
 set(libdir "\${exec_prefix}/lib")
