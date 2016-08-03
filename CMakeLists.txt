@@ -34,6 +34,7 @@
 #
 # -DSTATIC_ONLY=[true|false]
 #  Set to build static libraries only.
+#  Turns-off GObject Introspection.
 #  Default=false (build shared and static libs)
 #
 # -DSHARED_ONLY=[true|false]
@@ -237,6 +238,9 @@ if(GOBJECT_INTROSPECTION)
   find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
   if(INTROSPECTION_FOUND)
     set(HAVE_INTROSPECTION TRUE)
+    if(STATIC_ONLY)
+      message(FATAL_ERROR "You are attempting to build with GObject Introspection enabled, however that option is not supported when building static libraries only. Please disable the static only option to CMake (-DSTATIC_ONLY=False) if you really want to build with GObject Introspection. Alternatively, you can disable Gobject Introspection (by passing -DGOBJECT_INTROSPECTION=False to CMake)")
+    endif()
   else()
     message(FATAL_ERROR "You requested to build with GObject Introspection but the necessary development package is missing or too low a version (version ${MIN_GOBJECT_INTROSPECTION} or higher is required)")
   endif()
