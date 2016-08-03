@@ -496,6 +496,7 @@ typedef ssize_t IO_SSIZE_T;
 #endif
 
 /* gmtime_r - thread safe gmtime() really only needed on Unix */
+#include <time.h> /*define before possible mention of gmtime()*/
 #if !defined(HAVE_GMTIME_R)
 #if !defined(_WIN32)
 #error "No thread-safe gmtime function available"
@@ -507,7 +508,6 @@ typedef ssize_t IO_SSIZE_T;
 /* FYI: The gmtime() in Microsoft's C library is MT-safe */
 #define gmtime_r(tp,tmp) (gmtime(tp)?(*(tmp)=*gmtime(tp),(tmp)):0)
 #endif
-#include <time.h>
 
 /* localtime_r - thread safe localtime() really only needed on Unix */
 #if !defined(HAVE_LOCALTIME_R)
