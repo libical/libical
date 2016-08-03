@@ -64,10 +64,10 @@ extern "C"
 #define ok(TEST, EX) (_ok(TEST, EX, __FILE__, __LINE__, #EX))
 #define str_is(S1, S2, EX) (_is(S1, S2, EX, __FILE__, __LINE__))
 #define int_is(I1, I2, EX) (_int_is(I1, I2, EX, __FILE__, __LINE__))
-    void test_header(char *title, int test_set);
+    void test_header(const char *title, int test_set);
     void test_start(int);
     int test_end(void);
-    void test_run(char *test_name, void (*test_fcn) (), int do_test, int headeronly);
+    void test_run(const char *test_name, void (*test_fcn) (), int do_test, int headeronly);
 
 #ifdef  __cplusplus
 }

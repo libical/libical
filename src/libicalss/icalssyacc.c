@@ -163,10 +163,10 @@ extern struct icalgauge_impl *icalss_yy_gauge;
 #define YY_EXTRA_TYPE  icalgauge_impl*
 
 
-void sserror(char *s);
+void sserror(const char *s);
 
 static void ssyacc_add_where(struct icalgauge_impl* impl, char* prop,
-                        icalgaugecompare compare , char* value);
+                             icalgaugecompare compare , const char* value);
 static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
 static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
 static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
@@ -1715,11 +1715,12 @@ yyreturn:
 
 
 static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
-        icalgaugecompare compare , char* value_str)
+        icalgaugecompare compare , const char* value_str)
 {
 
     struct icalgauge_where *where;
-    char *compstr, *propstr, *c, *s,*l;
+    char *compstr, *propstr, *c, *l;
+    const char *s;
 
     if ( (where = malloc(sizeof(struct icalgauge_where))) ==0){
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -1737,7 +1738,7 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
     if(*s == '\''){
         s++;
     }
-    l = s+strlen(s)-1;
+    l = (char *)(s+strlen(s)-1);
     if(*l == '\''){
         *l=0;
     }
@@ -1856,7 +1857,7 @@ static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
 }
 
 
-void sserror(char *s){
+void sserror(const char *s){
   fprintf(stderr,"Parse error \'%s\'\n", s);
   icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 }

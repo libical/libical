@@ -37,7 +37,7 @@
 
 char *program_name;
 
-void usage(char *message);
+void usage(const char *message);
 
 enum options
 {
@@ -439,7 +439,7 @@ char *check_component(icalcomponent *comp, icalproperty ** return_status,
     return component_error_str;
 }
 
-void usage(char *message)
+void usage(const char *message)
 {
     _unused(message);
 //krazy:cond=style

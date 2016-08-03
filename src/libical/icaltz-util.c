@@ -94,9 +94,9 @@ typedef struct
     char charcnt[4];
 } tzinfo;
 
-static char *zdir = NULL;
+static const char *zdir = NULL;
 
-static char *search_paths[] = {
+static const char *search_paths[] = {
     "/usr/share/zoneinfo",
     "/usr/lib/zoneinfo",
     "/etc/zoneinfo",

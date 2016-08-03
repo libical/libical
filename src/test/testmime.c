@@ -46,7 +46,7 @@
     );
 */
 
-char *major_type_string[] = {
+const char *major_type_string[] = {
     "TEXT",
     "IMAGE",
     "AUDIO",
@@ -58,7 +58,7 @@ char *major_type_string[] = {
     "NO"
 };
 
-char *minor_type_string[] = {
+const char *minor_type_string[] = {
     "ANY",
     "PLAIN",
     "RFC822",

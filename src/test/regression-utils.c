@@ -92,7 +92,7 @@ void die_on_errors_set(int val)
     die_on_errors = val;
 }
 
-void _ok(char *test_name, int success, char *file, int linenum, char *test)
+void _ok(const char *test_name, int success, char *file, int linenum, const char *test)
 {
     testnumber++;
 
@@ -113,7 +113,7 @@ void _ok(char *test_name, int success, char *file, int linenum, char *test)
     }
 }
 
-void _is(char *test_name, const char *str1, const char *str2, char *file, int linenum)
+void _is(const char *test_name, const char *str1, const char *str2, char *file, int linenum)
 {
     int diff;
 
@@ -160,7 +160,7 @@ void test_start(int numtests)
     }
 }
 
-void test_header(char *header, int set)
+void test_header(const char *header, int set)
 {
     if (!QUIET)
         printf("########## %-40s (%d) ##########\n", header, set);
@@ -185,7 +185,7 @@ int test_end(void)
         printf("\n        Failed tests:\n          ");
         for (i = 0; i < failed; i++) {
             int this_set = failed_tests[i].set;
-            char *prefix = "";
+            const char *prefix = "";
 
             if (this_set != oldset) {
                 prefix = "\n          ";
@@ -203,7 +203,7 @@ int test_end(void)
     return failed;
 }
 
-void test_run(char *test_name, void (*test_fcn) (void), int do_test, int headeronly)
+void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int headeronly)
 {
     static int test_set = 1;
 

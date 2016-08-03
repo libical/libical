@@ -279,7 +279,7 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
     icalbdbset_options *options = (icalbdbset_options *) options_in;
     int ret;
     DB *cal_db;
-    char *subdb_name = NULL;
+    const char *subdb_name = NULL;
 
     _unused(dsn);
 

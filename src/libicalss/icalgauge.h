@@ -32,6 +32,8 @@
 
 typedef struct icalgauge_impl icalgauge;
 
+/* TODO:V3:API:icalgauge *icalgauge_new_from_sql(const char *sql, int expand);*/
+
 LIBICAL_ICALSS_EXPORT icalgauge *icalgauge_new_from_sql(char *sql, int expand);
 
 LIBICAL_ICALSS_EXPORT int icalgauge_get_expand(icalgauge *gauge);

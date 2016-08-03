@@ -284,8 +284,8 @@ void test_properties()
 
     icalproperty *clone;
     char test_cn_str[128] = "";
-    char *test_cn_str_good = "A Common Name 1A Common Name 2A Common Name 3A Common Name 4";
-    char *test_ical_str_good =
+    const char *test_cn_str_good = "A Common Name 1A Common Name 2A Common Name 3A Common Name 4";
+    const char *test_ical_str_good =
         "COMMENT;CN=A Common Name 1;CN=A Common Name 2;CN=A Common Name 3;CN=A \r\n Common Name 4:Another Comment\r\n";
 
     prop = icalproperty_vanew_comment("Another Comment",
@@ -338,9 +338,9 @@ void test_utf8()
 {
     icalcomponent *comp;
     icalproperty *prop;
-    char *utf8text =
+    const char *utf8text =
         "aáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaá";
-    char *test_ical_str_good =
+    const char *test_ical_str_good =
         "DESCRIPTION:\r\n"
         " aáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaá\r\n"
         " óaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóaáóa\r\n"
@@ -399,7 +399,7 @@ void test_parameters()
         { ICAL_CUTYPE_INDIVIDUAL, ICAL_CUTYPE_RESOURCE, ICAL_FBTYPE_BUSY, ICAL_PARTSTAT_NEEDSACTION,
   ICAL_ROLE_NONPARTICIPANT, ICAL_XLICCOMPARETYPE_LESSEQUAL, ICAL_XLICERRORTYPE_MIMEPARSEERROR, -1 };
 
-    char *str1 = "A Common Name";
+    const char *str1 = "A Common Name";
 
     p = icalparameter_new_cn(str1);
 
@@ -441,7 +441,7 @@ void test_parameters()
     }
 }
 
-char *good_child =
+const char *good_child =
     "BEGIN:VEVENT\r\n"
     "VERSION:2.0\r\n"
     "DESCRIPTION:This is an event\r\n"
@@ -758,7 +758,8 @@ void test_dirset()
         }
     }
 
-    gauge = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE "
+    gauge = icalgauge_new_from_sql((char *)
+								   "SELECT * FROM VEVENT WHERE "
 								   "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
 								   "VEVENT.SUMMARY = 'Bastille Day Party'",
 								   0);
@@ -930,7 +931,7 @@ void test_calendar()
     (void)mkdir("calendar", 0755);
     (void)mkdir("calendar/booked", 0755);
 
-    calendar = icalcalendar_new("calendar");
+    calendar = icalcalendar_new((char *)"calendar");
 
     comp =
         icalcomponent_vanew(
@@ -1013,7 +1014,7 @@ void test_recur()
         printf("\n  Using icalrecur_expand_recurrence\n");
 
     icalrecur_expand_recurrence(
-        "FREQ=MONTHLY;UNTIL=19971224T000000Z;INTERVAL=1;BYDAY=TU,2FR,3SA",
+		(char *)"FREQ=MONTHLY;UNTIL=19971224T000000Z;INTERVAL=1;BYDAY=TU,2FR,3SA",
         icaltime_as_timet(start), 25, array);
 
     for (i = 0; i < 25 && array[i] != 0; i++) {
@@ -1030,7 +1031,7 @@ void test_expand_recurrence()
     time_t now = 931057385;
     int i, numfound = 0;
 
-    icalrecur_expand_recurrence("FREQ=MONTHLY;BYDAY=MO,WE", now, 5, arr);
+    icalrecur_expand_recurrence((char *)"FREQ=MONTHLY;BYDAY=MO,WE", now, 5, arr);
 
     if (VERBOSE)
         printf("Start %s", ctime(&now));
@@ -1222,7 +1223,7 @@ void test_period()
 {
     struct icalperiodtype p;
     icalvalue *v;
-    char *str;
+    const char *str;
 
     str = "19971015T050000Z/PT8H30M";
     p = icalperiodtype_from_string(str);
@@ -1441,7 +1442,7 @@ void test_dtstart()
     icalproperty_free(p);
 }
 
-void do_test_time(char *zone)
+void do_test_time(const char *zone)
 {
     struct icaltimetype ictt, icttutc, icttzone, icttdayl,
         icttla, icttny, icttphoenix, icttlocal, icttnorm;
@@ -1765,11 +1766,11 @@ void test_iterators()
 {
     icalcomponent *c, *inner, *next;
     icalcompiter i;
-    char vevent_list[64] = "";
-    char remaining_list[64] = "";
+    const char vevent_list[64] = "";
+    const char remaining_list[64] = "";
 
-    char *vevent_list_good = "12347";
-    char *remaining_list_good = "568910";
+    const char *vevent_list_good = "12347";
+    const char *remaining_list_good = "568910";
 
     int nomore = 1;
 
@@ -1807,7 +1808,7 @@ void test_iterators()
                                                            ICAL_VERSION_PROPERTY);
         const char *s = icalproperty_get_version(p);
 
-        strncat(vevent_list, s, sizeof(vevent_list) - strlen(vevent_list) - 1);
+        strncat((char *)vevent_list, s, sizeof(vevent_list) - strlen(vevent_list) - 1);
     }
     str_is("iterate through VEVENTS in a component", vevent_list, vevent_list_good);
 
@@ -1832,7 +1833,7 @@ void test_iterators()
 
         const char *s = icalproperty_get_version(p);
 
-        strcat(remaining_list, s);
+        strcat((char *)remaining_list, s);
     }
 
     str_is("iterate through remaining components", remaining_list, remaining_list_good);
@@ -1881,7 +1882,7 @@ void test_iterators()
 
 void test_time()
 {
-    char *zones[6] =
+    const char *zones[6] =
     {
         "America/Los_Angeles", "America/New_York", "Europe/London", "Asia/Shanghai", NULL
     };
@@ -2341,7 +2342,7 @@ void test_time_parser()
 void test_recur_parser()
 {
     struct icalrecurrencetype rt;
-    char *str;
+    const char *str;
 
     str =
         "FREQ=YEARLY;UNTIL=20000131T090000Z;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
@@ -2540,12 +2541,12 @@ void test_x()
 void test_gauge_sql()
 {
     icalgauge *g;
-    char *str;
+    const char *str;
 
     str =
         "SELECT DTSTART,DTEND,COMMENT FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != NULL));
     if (VERBOSE)
         icalgauge_dump(g);
@@ -2555,7 +2556,7 @@ void test_gauge_sql()
     str =
         "SELECT * FROM VEVENT,VTODO WHERE VEVENT.SUMMARY = 'Bongoa' AND SEQUENCE < 5 OR METHOD != 'CREATE'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != NULL));
     if (VERBOSE)
         icalgauge_dump(g);
@@ -2564,7 +2565,7 @@ void test_gauge_sql()
 
     str = "SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != NULL));
     if (VERBOSE)
         icalgauge_dump(g);
@@ -2573,7 +2574,7 @@ void test_gauge_sql()
 
     str = "SELECT * FROM VEVENT WHERE SUMMARY == 'BA301'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != NULL));
     if (VERBOSE)
         icalgauge_dump(g);
@@ -2582,7 +2583,7 @@ void test_gauge_sql()
 
     str = "SELECT * FROM VEVENT WHERE LOCATION == '104 Forum'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != NULL));
     if (VERBOSE)
         icalgauge_dump(g);
@@ -2594,7 +2595,7 @@ void test_gauge_compare()
 {
     icalgauge *g;
     icalcomponent *c;
-    char *str;
+    const char *str;
 
     /* Equality */
 
@@ -2605,9 +2606,10 @@ void test_gauge_compare()
                 icalproperty_new_dtstart(icaltime_from_string("20000101T000002")), 0),
             (void *)0);
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'", (c != 0 && g != 0));
+    ok(str, (c != 0 && g != 0));
     assert(c != 0);
     assert(g != 0);
 
@@ -2615,18 +2617,20 @@ void test_gauge_compare()
 
     icalgauge_free(g);
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'\n", (g != 0));
+    ok(str, (g != 0));
 
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 0);
 
     icalgauge_free(g);
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART != '20000101T000003'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART != '20000101T000003'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART != '20000101T000003'\n", (c != 0 && g != 0));
+    ok(str, (c != 0 && g != 0));
 
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
@@ -2635,18 +2639,20 @@ void test_gauge_compare()
 
     /* Less than */
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART < '20000101T000003'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART < '20000101T000003'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART < '20000101T000003'", (c != 0 && g != 0));
+    ok(str, (c != 0 && g != 0));
 
     int_is("compare", icalgauge_compare(g, c), 1);
 
     assert(g != 0);
     icalgauge_free(g);
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'\n", (g != 0));
+    ok(str, (g != 0));
 
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 0);
@@ -2655,18 +2661,20 @@ void test_gauge_compare()
 
     /* Greater than */
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART > '20000101T000001'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000001'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART > '20000101T000001'\n", (g != 0));
+    ok(str, (g != 0));
 
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
     icalgauge_free(g);
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'\n", (g != 0));
+    ok(str, (g != 0));
 
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 0);
@@ -2675,17 +2683,19 @@ void test_gauge_compare()
 
     /* Greater than or Equal to */
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000002'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000002'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000002'\n", (g != 0));
+    ok(str, (g != 0));
 
     int_is("compare", icalgauge_compare(g, c), 1);
 
     icalgauge_free(g);
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'\n", (g != 0));
+    ok(str, (g != 0));
 
     int_is("compare", icalgauge_compare(g, c), 0);
 
@@ -2693,18 +2703,20 @@ void test_gauge_compare()
 
     /* Less than or Equal to */
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000002'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000002'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000002'\n", (g != 0));
+    ok(str, (g != 0));
 
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
     icalgauge_free(g);
 
-    g = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'", 0);
+	str = "SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'";
+    g = icalgauge_new_from_sql((char *)str, 0);
 
-    ok("SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'\n", (g != 0));
+    ok(str, (g != 0));
 
     int_is("compare", icalgauge_compare(g, c), 0);
 
@@ -2723,7 +2735,7 @@ void test_gauge_compare()
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000103T000000'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
@@ -2731,7 +2743,7 @@ void test_gauge_compare()
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 0);
 
@@ -2739,7 +2751,7 @@ void test_gauge_compare()
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' or DTSTART < '20000102T000000'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
@@ -2755,7 +2767,7 @@ void test_gauge_compare()
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000103T000000'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
@@ -2763,7 +2775,7 @@ void test_gauge_compare()
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 0);
 
@@ -2771,7 +2783,7 @@ void test_gauge_compare()
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' or DTSTART < '20000102T000000'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
@@ -2796,35 +2808,35 @@ void test_gauge_compare()
 
     str = "SELECT * FROM VEVENT WHERE VALARM.DTSTART = '20000101T120000'";
 
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
     icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo'";
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
     icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo' AND  VALARM.DTSTART = '20000101T120000'";
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
     icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'bar' AND  VALARM.DTSTART = '20000101T120000'";
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 0);
 
     icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'bar' or  VALARM.DTSTART = '20000101T120000'";
-    g = icalgauge_new_from_sql(str, 0);
+    g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
@@ -2860,10 +2872,11 @@ void test_fileset()
     icalcomponent *c;
     int i;
     int comp_count = 0;
-    char *path = "test_fileset.ics";
+    const char *path = "test_fileset.ics";
     icalgauge *g =
         icalgauge_new_from_sql(
-            "SELECT * FROM VEVENT "
+			(char *)
+			"SELECT * FROM VEVENT "
             "WHERE DTSTART > '20000103T120000Z' AND "
             "DTSTART <= '20000106T120000Z'",
             0);
@@ -2940,7 +2953,7 @@ void test_file_locks()
 {
 #if defined(HAVE_WAITPID) && defined(HAVE_FORK) && defined(HAVE_UNLINK)
     pid_t pid;
-    char *path = "test_fileset_locktest.ics";
+    const char *path = "test_fileset_locktest.ics";
     icalset *fs;
     icalcomponent *c, *c2;
     struct icaldurationtype d;
@@ -3371,7 +3384,7 @@ void test_langbind()
          p != 0; p = icallangbind_get_next_property(inner, "ANY")
         ) {
 
-        const char *str = icallangbind_property_eval_string(p, ":");
+        const char *str = icallangbind_property_eval_string(p, (char *)":");
 
       /** TODO add tests **/
         if (VERBOSE)
@@ -3664,9 +3677,9 @@ void test_vcal(void)
 {
     VObject *vcal;
     icalcomponent *comp;
-    char *file = TEST_DATADIR "/user-cal.vcf";
+    const char *file = TEST_DATADIR "/user-cal.vcf";
 
-    vcal = Parse_MIME_FromFileName(file);
+    vcal = Parse_MIME_FromFileName((char *)file);
 
     ok("Parsing " TEST_DATADIR "/user-cal.vcf", (vcal != 0));
 
@@ -3822,7 +3835,7 @@ int main(int argc, char *argv[])
     int do_header = 0;
     int failed_count = 0;
 
-    set_zone_directory("../../zoneinfo");
+    set_zone_directory((char *)"../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
     test_start(0);

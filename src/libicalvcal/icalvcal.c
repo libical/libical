@@ -54,7 +54,7 @@ enum datatype
 };
 
 /* The indices must match between the strings and the codes. */
-static char *weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
+static const char *weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
 
 static int weekday_codes[] = {
     ICAL_SUNDAY_WEEKDAY,
@@ -68,7 +68,7 @@ static int weekday_codes[] = {
 
 struct conversion_table_struct
 {
-    char *vcalname;
+    const char *vcalname;
     enum datatype type;
     void *(*conversion_func) (int icaltype, VObject *o, icalcomponent *comp,
                               icalvcal_defaults *defaults);
@@ -96,7 +96,7 @@ static icalproperty *create_parse_error_property(const char *message,
     return error_prop;
 }
 
-static char *get_string_value(VObject *object, int *free_string)
+static const char *get_string_value(VObject *object, int *free_string)
 {
     switch (vObjectValueType(object)) {
     case VCVT_USTRINGZ:
@@ -286,7 +286,7 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
     while (moreIteration(&iterator)) {
         VObject *eachProp = nextVObject(&iterator);
         const char *name = vObjectName(eachProp);
-        char *s;
+        const char *s;
         int free_string;
 
         s = get_string_value(eachProp, &free_string);
@@ -358,7 +358,7 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
             }
 
         } else if (!strcmp(name, "TYPE")) {
-            char *fmttype = NULL;
+            const char *fmttype = NULL;
 
             if (!strcmp(s, "PCM")) {
                 fmttype = "audio/basic";
@@ -583,7 +583,7 @@ static void *transp_prop(int icaltype, VObject *object, icalcomponent *comp,
                          icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
-    char *s;
+    const char *s;
     int free_string;
 
     _unused(icaltype);
@@ -609,7 +609,7 @@ static void *sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
                            icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
-    char *s;
+    const char *s;
     int free_string, sequence;
 
     _unused(icaltype);
@@ -641,7 +641,8 @@ static void *multivalued_prop(int icaltype, VObject *object, icalcomponent *comp
     icalproperty *prop = NULL;
     icalvalue *value;
     icalvalue_kind value_kind;
-    char *s, *tmp_copy, *p;
+    const char *s;
+    char *tmp_copy, *p;
     int free_string;
 
     _unused(comp);
@@ -677,7 +678,7 @@ static void *status_prop(int icaltype, VObject *object, icalcomponent *comp,
                          icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
-    char *s;
+    const char *s;
     int free_string;
     icalcomponent_kind kind;
 
@@ -731,7 +732,7 @@ static void *utc_datetime_prop(int icaltype, VObject *object, icalcomponent *com
     icalproperty_kind kind = (icalproperty_kind) icaltype;
     icalproperty *prop;
     icalvalue *value;
-    char *s;
+    const char *s;
     int free_string;
     struct icaltimetype itt;
 
@@ -761,7 +762,8 @@ static void *utc_datetime_prop(int icaltype, VObject *object, icalcomponent *com
 /* Parse the interval from the RRULE, returning a pointer to the first char
    after the interval and any whitespace. s points to the start of the
    interval. error_message is set if an error occurs. */
-static char *rrule_parse_interval(char *s, struct icalrecurrencetype *recur, char **error_message)
+static const char *rrule_parse_interval(const char *s, struct icalrecurrencetype *recur,
+                                        const char **error_message)
 {
     int interval = 0;
 
@@ -792,7 +794,8 @@ static char *rrule_parse_interval(char *s, struct icalrecurrencetype *recur, cha
 /* Parse the duration from the RRULE, either a COUNT, e.g. '#5', or an UNTIL
    date, e.g. 20020124T000000. error_message is set if an error occurs.
    If no duration is given, '#2' is assumed. */
-static char *rrule_parse_duration(char *s, struct icalrecurrencetype *recur, char **error_message)
+static const char *rrule_parse_duration(const char *s, struct icalrecurrencetype *recur,
+                                        const char **error_message)
 {
     /* If we've already found an error, just return. */
     if (*error_message)
@@ -815,7 +818,8 @@ static char *rrule_parse_duration(char *s, struct icalrecurrencetype *recur, cha
 
     } else if (*s >= '0' && *s <= '9') {
         /* If it starts with a digit it must be the UNTIL date. */
-        char *e, buffer[20];
+        const char *e;
+        char buffer[20];
         ptrdiff_t len;
 
         /* Find the end of the date. */
@@ -868,8 +872,9 @@ static char *rrule_parse_duration(char *s, struct icalrecurrencetype *recur, cha
     return s;
 }
 
-static char *rrule_parse_weekly_days(char *s,
-                                     struct icalrecurrencetype *recur, char **error_message)
+static const char *rrule_parse_weekly_days(const char *s,
+                                           struct icalrecurrencetype *recur,
+                                           const char **error_message)
 {
     int i;
 
@@ -878,7 +883,7 @@ static char *rrule_parse_weekly_days(char *s,
         return NULL;
 
     for (i = 0; i < ICAL_BY_DAY_SIZE; i++) {
-        char *e = s;
+        const char *e = s;
         int found_day, day;
 
         found_day = -1;
@@ -912,8 +917,9 @@ static char *rrule_parse_weekly_days(char *s,
     return s;
 }
 
-static char *rrule_parse_monthly_days(char *s,
-                                      struct icalrecurrencetype *recur, char **error_message)
+static const char *rrule_parse_monthly_days(const char *s,
+                                            struct icalrecurrencetype *recur,
+                                            const char **error_message)
 {
     int i;
 
@@ -922,14 +928,14 @@ static char *rrule_parse_monthly_days(char *s,
         return NULL;
 
     for (i = 0; i < ICAL_BY_MONTHDAY_SIZE; i++) {
-        char *e;
+        const char *e;
         int month_day;
 
         if (!strncmp(s, "LD", 2)) {
             month_day = -1;
             e = s + 2;
         } else {
-            month_day = strtol(s, &e, 10);
+            month_day = strtol(s, (char **)&e, 10);
 
             /* Check we got a valid day. */
             if (month_day < 1 || month_day > 31)
@@ -963,14 +969,15 @@ static char *rrule_parse_monthly_days(char *s,
     return s;
 }
 
-static char *rrule_parse_monthly_positions(char *s,
-                                           struct icalrecurrencetype *recur, char **error_message)
+static const char *rrule_parse_monthly_positions(const char *s,
+                                                 struct icalrecurrencetype *recur,
+                                                 const char **error_message)
 {
     int occurrences[ICAL_BY_DAY_SIZE];
     int found_weekdays[7] = { 0, 0, 0, 0, 0, 0, 0 };
     int i, num_positions, elems, month_position, day;
     int num_weekdays, only_weekday = 0;
-    char *e;
+    const char *e;
 
     /* If we've already found an error, just return. */
     if (*error_message)
@@ -1009,7 +1016,7 @@ static char *rrule_parse_monthly_positions(char *s,
 
     /* Now read the weekdays in. */
     for (;;) {
-        char *e = s;
+        const char *e = s;
         int found_day, day;
 
         found_day = -1;
@@ -1079,8 +1086,9 @@ static char *rrule_parse_monthly_positions(char *s,
     return s;
 }
 
-static char *rrule_parse_yearly_months(char *s,
-                                       struct icalrecurrencetype *recur, char **error_message)
+static const char *rrule_parse_yearly_months(const char *s,
+                                             struct icalrecurrencetype *recur,
+                                             const char **error_message)
 {
     int i;
 
@@ -1089,10 +1097,10 @@ static char *rrule_parse_yearly_months(char *s,
         return NULL;
 
     for (i = 0; i < ICAL_BY_MONTH_SIZE; i++) {
-        char *e;
+        const char *e;
         int month;
 
-        month = strtol(s, &e, 10);
+        month = strtol(s, (char **)&e, 10);
 
         /* Check we got a valid month. */
         if (month < 1 || month > 12)
@@ -1117,8 +1125,9 @@ static char *rrule_parse_yearly_months(char *s,
     return s;
 }
 
-static char *rrule_parse_yearly_days(char *s,
-                                     struct icalrecurrencetype *recur, char **error_message)
+static const char *rrule_parse_yearly_days(const char *s,
+                                           struct icalrecurrencetype *recur,
+                                           const char **error_message)
 {
     int i;
 
@@ -1174,7 +1183,7 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
                        icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
-    char *s, *p, *parsestat, *error_message;
+    const char *s, *p, *parsestat, *error_message;
     const char *property_name;
     int free_string;
     struct icalrecurrencetype recur;
@@ -1257,7 +1266,7 @@ void *dc_prop(int icaltype, VObject *object, icalcomponent *comp, icalvcal_defau
     icalproperty *prop;
     icalvalue *value;
     icalvalue_kind value_kind;
-    char *s;
+    const char *s;
 
 /*/,*t=0; */
     int free_string;
@@ -1471,7 +1480,7 @@ static void icalvcal_traverse_objects(VObject *object,
                                       icalproperty *last_prop, icalvcal_defaults *defaults)
 {
     VObjectIterator iterator;
-    char *name = "[No Name]";
+    const char *name = "[No Name]";
     icalcomponent *subc = 0;
     int i;
 
@@ -1552,7 +1561,7 @@ static void icalvcal_traverse_objects(VObject *object,
                X_LIC_ERROR property to note this fact. */
 
             char temp[1024];
-            char *message = "Unsupported vCal property";
+            const char *message = "Unsupported vCal property";
             icalparameter *error_param;
             icalproperty *error_prop;
 

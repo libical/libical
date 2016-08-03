@@ -84,7 +84,7 @@ void test_recur_file()
     struct icalrecurrencetype recur;
     icalrecur_iterator *ritr;
     time_t tt;
-    char *file;
+    const char *file;
     int num_recurs_found = 0;
     icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
 

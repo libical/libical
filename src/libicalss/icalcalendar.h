@@ -33,6 +33,7 @@
 
 typedef struct icalcalendar_impl icalcalendar;
 
+/*TODO:V3:API:icalcalendar *icalcalendar_new(const char *dir);*/
 LIBICAL_ICALSS_EXPORT icalcalendar *icalcalendar_new(char *dir);
 
 LIBICAL_ICALSS_EXPORT void icalcalendar_free(icalcalendar *calendar);

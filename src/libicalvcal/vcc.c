@@ -150,7 +150,7 @@ extern "C" {
 #endif
 
     extern void Parse_Debug(const char *s);
-    static void yyerror(char *s);
+    static void yyerror(const char *s);
 
 #if defined(__CPLUSPLUS__)
     };
@@ -333,7 +333,7 @@ short yycheck[] = {                                       8,
 #endif
 #define YYMAXTOKEN 274
 #if YYDEBUG
-char *yyname[] = {
+const char *yyname[] = {
 "end-of-file",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -344,7 +344,7 @@ char *yyname[] = {
 "SPACE","HTAB","LINESEP","NEWLINE","BEGIN_VCARD","END_VCARD","BEGIN_VCAL",
 "END_VCAL","BEGIN_VEVENT","END_VEVENT","BEGIN_VTODO","END_VTODO","ID","STRING",
 };
-char *yyrule[] = {
+const char *yyrule[] = {
 "$accept : mime",
 "mime : vobjects",
 "$$1 :",
@@ -1232,7 +1232,7 @@ void registerMimeErrorHandler(MimeErrorHandler me)
     mimeErrorHandler = me;
     }
 
-static void mime_error(char *s)
+static void mime_error(const char *s)
     {
     char msg[256];
     if (mimeErrorHandler) {

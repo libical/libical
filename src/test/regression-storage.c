@@ -55,7 +55,7 @@ struct calendar
 
 };
 
-int vcalendar_init(struct calendar **cal, char *vcalendar, char *title);
+int vcalendar_init(struct calendar **cal, const char *vcalendar, const char *title);
 
 #if defined(WITH_BDB)
 #include <db.h>
@@ -455,7 +455,7 @@ void test_bdbset()
 
 #endif
 
-int vcalendar_init(struct calendar **rcal, char *vcalendar, char *title)
+int vcalendar_init(struct calendar **rcal, const char *vcalendar, const char *title)
 {
     size_t vcalendar_size, title_size, total_size;
     struct calendar *cal;
@@ -712,6 +712,7 @@ void test_dirset_extended(void)
     }
 
     gauge = icalgauge_new_from_sql(
+                (char *)
                 "SELECT * FROM VEVENT WHERE "
                 "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
                 "VEVENT.SUMMARY = 'Bastille Day Party'",

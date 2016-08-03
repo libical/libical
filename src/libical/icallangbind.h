@@ -55,8 +55,10 @@ LIBICAL_ICAL_EXPORT icalparameter *icallangbind_get_first_parameter(icalproperty
 
 LIBICAL_ICAL_EXPORT icalparameter *icallangbind_get_next_parameter(icalproperty *prop);
 
+/*TODO:V3:API:const char *icallangbind_property_eval_string(icalproperty *prop, const char *sep);*/
 LIBICAL_ICAL_EXPORT const char *icallangbind_property_eval_string(icalproperty *prop, char *sep);
 
+/*TODO:V3:API:char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep);*/
 LIBICAL_ICAL_EXPORT char *icallangbind_property_eval_string_r(icalproperty *prop, char *sep);
 
 LIBICAL_ICAL_EXPORT int icallangbind_string_to_open_flag(const char *str);

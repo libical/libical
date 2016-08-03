@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 {
     VObject *vcal = 0;
     icalcomponent *comp;
-    char *file;
+    const char *file;
 
     if (argc != 2) {
         file = TEST_DATADIR "/user-cal.vcf";
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         file = argv[1];
     }
 
-    vcal = Parse_MIME_FromFileName(file);
+    vcal = Parse_MIME_FromFileName((char *)file);
 
     assert(vcal != 0);
 

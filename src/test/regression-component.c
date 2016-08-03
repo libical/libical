@@ -47,7 +47,7 @@ void create_simple_component(void)
     icalcomponent_free(calendar);
 }
 
-static char *create_new_component_str =
+static const char *create_new_component_str =
     "BEGIN:VCALENDAR\r\n"
     "VERSION:2.0\r\n"
     "PRODID:-//RDU Software//NONSGML HandCal//EN\r\n"
