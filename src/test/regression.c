@@ -1766,8 +1766,8 @@ void test_iterators()
 {
     icalcomponent *c, *inner, *next;
     icalcompiter i;
-    const char vevent_list[64] = "";
-    const char remaining_list[64] = "";
+    char vevent_list[64] = "";
+    char remaining_list[64] = "";
 
     const char *vevent_list_good = "12347";
     const char *remaining_list_good = "568910";
@@ -1808,7 +1808,7 @@ void test_iterators()
                                                            ICAL_VERSION_PROPERTY);
         const char *s = icalproperty_get_version(p);
 
-        strncat((char *)vevent_list, s, sizeof(vevent_list) - strlen(vevent_list) - 1);
+        strncat(vevent_list, s, sizeof(vevent_list) - strlen(vevent_list) - 1);
     }
     str_is("iterate through VEVENTS in a component", vevent_list, vevent_list_good);
 
@@ -1833,7 +1833,7 @@ void test_iterators()
 
         const char *s = icalproperty_get_version(p);
 
-        strcat((char *)remaining_list, s);
+        strcat(remaining_list, s);
     }
 
     str_is("iterate through remaining components", remaining_list, remaining_list_good);
