@@ -11,7 +11,7 @@ passing -DCMAKE_INSTALL_PREFIX=/install/path to cmake.
 To build a debug version pass -DCMAKE_BUILD_TYPE=Debug to cmake.
 
 To build libical you will need:
- - CMake version 3.0.2 or higher
+ - CMake version 2.8.9 or higher
  - Perl
  - libicu (not required but strongly recommended)
  - a C compiler (let us know if the build fails with your C compiler)
@@ -24,6 +24,7 @@ Building on Unix with gcc or clang:
 % make install
 
 Building on Windows with MicroSoft Visual Studio:
+From a command prompt for the version of MSVC you want to use
 % mkdir build
 % cd build
 % cmake -G "NMake Makefiles" ..
@@ -35,6 +36,8 @@ In these cases you must pass -DUSE_32BIT_TIME_T=true to cmake to make sure
 the 32bit version of time_t is used instead.
 
 Building on Windows with mingw:
+Make sure you have the path to the MinGW programs in %PATH% first, for example:
+% set "PATH=c:\MinGW\mingw64\bin;%PATH%"
 % mkdir build
 % cd build
 % cmake -G "MinGW Makefiles" ..
