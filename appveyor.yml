@@ -36,14 +36,17 @@ platform:
 
 # build Configuration, i.e. Debug, Release, etc.
 configuration:
-  - Debug
-  - Release
+  - 2015
+  - 2013
+  - 2012
+  - MinGW
+#todo: 2010, 2008
 
 build_script:
-  - call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %PLATFORM%
+  - call scripts\set_compiler_env.bat
   - mkdir build
   - cd build
-  - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true ..
+  - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true ..
   - nmake
 
 # to disable automatic builds
