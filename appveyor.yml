@@ -46,7 +46,7 @@ build_script:
   - call scripts\set_compiler_env.bat
   - mkdir build
   - cd build
-  - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true ..
+  - if "%configuration%" EQU "MinGW" ( cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true .. ) else ( cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true .. )
   - nmake
 
 # to disable automatic builds
