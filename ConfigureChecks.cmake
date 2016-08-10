@@ -36,7 +36,6 @@ else()
   check_function_exists(open HAVE_OPEN) #Unix <sys/stat.h>,<sys/types.h>,<fcntl.h>
   check_function_exists(nanosleep HAVE_NANOSLEEP) #Unix <time.h>
   check_function_exists(signal HAVE_SIGNAL) #Unix <signal.h>
-  check_function_exists(snprintf HAVE_SNPRINTF) #Unix <stdio.h>
   check_function_exists(stat HAVE_STAT) #Unix <sys/stat.h>,<sys/types.h>,<unistd.h>
   check_function_exists(strdup HAVE_STRDUP) #Unix <string.h>
   check_function_exists(strcasecmp HAVE_STRCASECMP) #Unix <strings.h>
@@ -55,6 +54,11 @@ check_function_exists(backtrace HAVE_BACKTRACE)
 check_function_exists(iswspace HAVE_ISWSPACE) #Linux <wctype.h>
 check_function_exists(setenv HAVE_SETENV)
 check_function_exists(unsetenv HAVE_UNSETENV)
+check_function_exists(snprintf HAVE_SNPRINTF) #Available with MSVC 2015
+#TODO:V2:BUILDSYSTEM:Figure out why check_function_exists fails to find snprintf for MSVC2015
+if(MSVC_VERSION GREATER 1899)
+  set(HAVE_SNPRINTF true)
+endif()
 
 set(_SAVE_RQL ${CMAKE_REQUIRED_LIBRARIES})
 set(CMAKE_REQUIRED_LIBRARIES kernel32.lib)

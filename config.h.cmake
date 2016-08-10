@@ -310,7 +310,7 @@ typedef unsigned int wint_t;
 #define stat _stat
 #else
 #if !defined(HAVE_STAT)
-#error "No function to get status info one a file available"
+#error "No function to get status info on a file available"
 #endif
 #endif
 #include <sys/types.h>
