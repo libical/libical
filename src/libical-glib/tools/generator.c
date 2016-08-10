@@ -1097,7 +1097,6 @@ void generate_forward_declarations_header_file(GList *structures)
     gchar buffer[BUFFER_SIZE];
     gchar *typeName;
     gchar *typeKind;
-    Structure *parentStructure;
     GList *link;
     GHashTable *typeNames;
     GHashTableIter iter_table;
@@ -1129,7 +1128,6 @@ void generate_forward_declarations_header_file(GList *structures)
              g_hash_table_iter_next(&iter_table, &key, &value);) {
             typeName = (gchar *) key;
             if (g_hash_table_contains(type2structure, typeName)) {
-                parentStructure = g_hash_table_lookup(type2structure, typeName);
                 typeKind = g_hash_table_lookup(type2kind, typeName);
                 if (g_strcmp0(typeKind, "std") == 0 &&
                     !g_hash_table_contains(typeNames, typeName)) {
