@@ -38,6 +38,4 @@ goto :eof
 :: MinGW detected
 :mingw
 :: workaround for CMake not wanting sh.exe in PATH for MinGW
-set PATH=%PATH:C:\Program Files (x86)\Git\bin;=%
-
-endlocal & set PATH=c:\mingw\bin;%PATH%
+endlocal & set PATH=%PATH:C:\Program Files (x86)\Git\bin;=% & set PATH=c:\MinGW\bin;%PATH%
