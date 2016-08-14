@@ -36,15 +36,14 @@ platform:
 
 # build Configuration, i.e. Debug, Release, etc.
 configuration:
-  - 2015
+#  - 2015
   - 2013
   - 2012
-  - MinGW
+#  - MinGW
 #todo: 2010, 2008
 
 build_script:
   - call scripts\set_compiler_env.bat
-  - path
   - mkdir build
   - cd build
   - if "%configuration%" EQU "MinGW" ( cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true .. ) else ( cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False -DUSE_INTEROPERABLE_VTIMEZONES=true .. )
