@@ -111,7 +111,7 @@
 "NO","100","NO","NO"
 "#VALARM Extension Properties","draft-daboo-valarm-extensions Section 13.1",
 "ACKNOWLEDGED","1","DATE-TIME","DATE-TIME"
-"#VAVAILABILITY Properties","draft-ietf-calext-availability Section 3.2",
+"#VAVAILABILITY Properties","RFC 7953 Section 3.2",
 "BUSYTYPE","101","BUSYTYPE","BUSYTYPE"
 "#VPOLL Properties","draft-york-vpoll",
 "ACCEPT-RESPONSE","102","TEXT,"TEXT"

@@ -36,7 +36,7 @@
 "CAR-LEVEL","5016","(a)enum icalproperty_carlevel","string","unitary","X=10200;CAR-NONE;CAR-MIN;CAR-FULL-1;NONE=10299"
 "ANY","5000",,,,
 "NO","5031",,,,
-"#VAVAILABILITY types","draft-daboo-calendar-availability",,,
+"#VAVAILABILITY types","RFC 7953 Section 3.2",,,
 "BUSYTYPE","5032","(a)enum icalproperty_busytype","string","unitary","X=10100;BUSY;BUSY-UNAVAILABLE;BUSY-TENTATIVE;NONE=10199"
 "#VPOLL types","draft-york-vpoll",,,
 "POLLMODE","5033","(a)enum icalproperty_pollmode","string","unitary","X=10700;BASIC;NONE=10799"
