@@ -70,7 +70,6 @@
  *
  *      Modify, compare and utility methods include:
  *
- *      - icaltime_compare_with_zone(struct icaltimetype a,struct icaltimetype b)
  *      - icaltime_compare(struct icaltimetype a,struct icaltimetype b)
  *      - icaltime_compare_date_only(struct icaltimetype a,
  *              struct icaltimetype b)

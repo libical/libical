@@ -20,7 +20,7 @@
   Contributions from:
   Graham Davison (g.m.davison@computer.org)
 
-  ======================================================================*/  
+  ======================================================================*/
 
 %module LibicalWrap
 
@@ -53,14 +53,14 @@ typedef int time_t;
 %ignore icalattachtype_add_reference(struct icalattachtype* v);
 %ignore icalattachtype_get_binary(struct icalattachtype* v);
 %ignore icalattachtype_set_binary(struct icalattachtype* v, char* binary,
-				int owns);
+                int owns);
 %ignore icalattachtype_get_url(struct icalattachtype* v);
 %ignore icalattachtype_set_url(struct icalattachtype* v, char* url);
 %ignore icalattachtype_free(struct icalattachtype* v);
 %ignore icalattachtype_get_base64(struct icalattachtype* v);
 %ignore icalattachtype_new(void);
 %ignore icalattachtype_set_base64(struct icalattachtype* v, char* base64,
-				int owns);
+                int owns);
 %ignore icalclassify_class_to_string(icalproperty_xlicclass c);
 %ignore icalfileset_new_from_cluster(const char* path, icalcluster *cluster);
 %ignore icalgauge_as_sql(icalcomponent* gauge);
@@ -70,18 +70,18 @@ typedef int time_t;
 %ignore icallangbind_get_property(icalcomponent *c, int n, const char* prop);
 %ignore icallangbind_get_property_val(icalproperty* p);
 %ignore icalmessage_new_cancel_all(icalcomponent* c,
-					    const char* user,
-					    const char* msg);
+                        const char* user,
+                        const char* msg);
 %ignore icalmessage_new_cancel_event(icalcomponent* c,
-					    const char* user,
-					    const char* msg);
+                        const char* user,
+                        const char* msg);
 %ignore icalmessage_new_cancel_instance(icalcomponent* c,
-					    const char* user,
-					    const char* msg);
+                        const char* user,
+                        const char* msg);
 %ignore icalmime_as_mime_string(char* icalcomponent);
 %ignore icalparameter_is_valid(icalparameter* parameter);
-%ignore icalparser_parse_value(icalvalue_kind kind, 
-				   const char* str, icalcomponent** errors);
+%ignore icalparser_parse_value(icalvalue_kind kind,
+                   const char* str, icalcomponent** errors);
 %ignore icalrestriction_is_parameter_allowed(icalproperty_kind property,
                                        icalparameter_kind parameter);
 %ignore icalset_clear_select(icalset* set);
@@ -89,24 +89,22 @@ typedef int time_t;
 %ignore icalspanlist_make_busy_list(icalspanlist* sl);
 %ignore icalspanlist_next_busy_time(icalspanlist* sl,
                                     struct icaltimetype t);
-%ignore icaltime_compare_with_zone(const struct icaltimetype a,
-        const struct icaltimetype b);
 %ignore icaltime_days_in_year (const int year);
 %ignore icaltime_from_string_with_zone(const char* str,
-					const icaltimezone *zone);
+                    const icaltimezone *zone);
 %ignore icaltime_from_week_number(const int week_number,
-					const int year);
+                    const int year);
 %ignore icaltimezonetype_free(struct icaltimezonetype tzt);
 
 
 // Remove depreciated functions
 %ignore icalproperty_string_to_enum(const char* str);
-%ignore icaltimezone_get_utc_offset(icaltimezone	*zone,
-                                    struct icaltimetype	*tt,
-                                    int		*is_daylight);
-%ignore icaltimezone_get_utc_offset_of_utc_time	(icaltimezone	*zone,
-					 struct icaltimetype	*tt,
-					 int		*is_daylight);
+%ignore icaltimezone_get_utc_offset(icaltimezone    *zone,
+                                    struct icaltimetype *tt,
+                                    int     *is_daylight);
+%ignore icaltimezone_get_utc_offset_of_utc_time (icaltimezone   *zone,
+                     struct icaltimetype    *tt,
+                     int        *is_daylight);
 %ignore icaltime_start_doy_of_week(const struct icaltimetype t);
 %ignore icalcomponent_get_span(icalcomponent* comp);
 %ignore icalproperty_remove_parameter(icalproperty* prop, icalparameter_kind kind);
@@ -126,15 +124,15 @@ typedef int time_t;
 %inline %{
 /* declare some internal functions which are not in the header file. */
 void icalproperty_set_parent(icalproperty* property,
-			     icalcomponent* component);
+                 icalcomponent* component);
 icalcomponent* icalproperty_get_parent(const icalproperty* property);
 
 void icalvalue_set_parent(icalvalue* value,
-			     icalproperty* property);
+                 icalproperty* property);
 icalproperty* icalvalue_get_parent(icalvalue* value);
 
 void icalparameter_set_parent(icalparameter* param,
-			     icalproperty* property);
+                 icalproperty* property);
 icalproperty* icalparameter_get_parent(icalparameter* value);
 
 %}
@@ -152,7 +150,7 @@ def _swig_set_properties(cls, properties={}):
         # Currently not used by swig
         if len(props) > 2:
             cls.__swig_delmethods__[propname] = props[2]
-        
+
         if _newclass:
             setattr(cls, propname, _swig_property(*props))
 
@@ -163,7 +161,7 @@ def _swig_remove_private_properties(cls, properties=tuple()):
         props.update(cls.__swig_setmethods__)
         #props.update(cls.__swig_delmethods__)
         properties = props.keys()
-    
+
     for propname in properties:
         if cls.__swig_getmethods__.has_key(propname):
             del cls.__swig_getmethods__[propname]
@@ -172,7 +170,7 @@ def _swig_remove_private_properties(cls, properties=tuple()):
         # Currently not used by swig
         #if cls.__swig_delmethods__.has_key(propname):
         #    del cls.__swig_delmethods__[propname]
-        
+
         if _newclass and hasattr(cls, propname):
             delattr(cls, propname)
 
@@ -188,4 +186,3 @@ def _swig_add_instance_methods(klass, meth_dict={}):
 
 %include "LibicalWrap_icaltimezone.i"
 %include "LibicalWrap_icaltime.i"
-
