@@ -64,6 +64,12 @@
 #   Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.
 #
 
+## Special CMake Options for Developers
+#
+# -DABI_DUMPER=[true|false]
+#  Build for the abi-dumper
+#  Default=false
+
 cmake_minimum_required(VERSION 2.8.9) #first line, to shutup a cygwin warning
 project(libical C CXX)
 
@@ -323,6 +329,19 @@ endif()
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
 endif()
+
+################ Developer Options #####################
+option(ABI_DUMPER "Build for abi-dumper." False)
+if(ABI_DUMPER)
+  if(CMAKE_COMPILER_IS_GNUCC)
+    set(CMAKE_C_FLAGS "-g -Og")
+    set(CMAKE_CXX_FLAGS "-g -Og")
+  else()
+    message(FATAL_ERROR
+      "You are trying to build for the abi-dumper using a non-GCC compiler.")
+  endif()
+endif()
+########################################################
 
 option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
 if(WITH_CXX_BINDINGS)
