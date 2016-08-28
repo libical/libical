@@ -67,8 +67,12 @@
 ## Special CMake Options for Developers
 #
 # -DABI_DUMPER=[true|false]
-#  Build for the abi-dumper
+#  Build for the abi-dumper (requires gcc)
 #  Default=false
+#
+# -DADDRESS_SANITIZER=[true|false]
+#  Build with the address sanitizer (requires gcc or clang)
+#
 
 cmake_minimum_required(VERSION 2.8.9) #first line, to shutup a cygwin warning
 project(libical C CXX)
@@ -341,6 +345,19 @@ if(ABI_DUMPER)
       "You are trying to build for the abi-dumper using a non-GCC compiler.")
   endif()
 endif()
+
+option(ADDRESS_SANITIZER "Build with the address sanitizer." False)
+if(ADDRESS_SANITIZER)
+  if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
+    set(ICAL_GLIB False)
+  else()
+    message(FATAL_ERROR
+      "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
+  endif()
+endif()
+
 ########################################################
 
 option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
