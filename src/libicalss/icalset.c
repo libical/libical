@@ -152,7 +152,7 @@ static int load(const char *file)
         return 0;
     }
 
-    if ((inith = (fptr) dlsym(modh, "InitModule")) == 0) {
+    if ((inith = (fptr)dlsym(modh, "InitModule")) == 0) {
         perror("dlsym");
         return 0;
     }
@@ -244,7 +244,7 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
     }
 
     for (e = pvl_head(icalset_kinds); e != 0; e = pvl_next(e)) {
-        impl = (icalset *) pvl_data(e);
+        impl = (icalset *)pvl_data(e);
         if (impl->kind == kind) {
             break;
         }
@@ -254,8 +254,8 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
         return (NULL);
     }
 
-    data = (icalset *) malloc(impl->size);
-    if (data == (icalset *) NULL) {
+    data = (icalset *)malloc(impl->size);
+    if (data == (icalset *)NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         errno = ENOMEM;
         return 0;
@@ -269,8 +269,10 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
     data->dsn = strdup(dsn);
 #else
     switch (kind) {
-    case ICAL_FILE_SET:
-        data = (icalset *) malloc(sizeof(icalfileset));
+    case ICAL_FILE_SET: {
+        icalfileset *fdata;
+        fdata = (icalfileset *)malloc(sizeof(icalfileset));
+        data = (icalset *)fdata;
         if (data == 0) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             errno = ENOMEM;
@@ -279,8 +281,11 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
         memset(data, 0, sizeof(icalfileset));
         *data = icalset_fileset_init;
         break;
-    case ICAL_DIR_SET:
-        data = (icalset *) malloc(sizeof(icaldirset));
+    }
+    case ICAL_DIR_SET: {
+        icaldirset *ddata;
+        ddata = (icaldirset *)malloc(sizeof(icaldirset));
+        data = (icalset *)ddata;
         if (data == 0) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             errno = ENOMEM;
@@ -289,9 +294,12 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
         memset(data, 0, sizeof(icaldirset));
         *data = icalset_dirset_init;
         break;
+    }
 #if defined(WITH_BDB)
-    case ICAL_BDB_SET:
-        data = (icalset *) malloc(sizeof(icalbdbset));
+    case ICAL_BDB_SET: {
+        icalbdbset *bdata;
+        bdata = (icalbdbset *)malloc(sizeof(icalbdbset));
+        data = (icalset *)bdata;
         if (data == 0) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             errno = ENOMEM;
@@ -300,6 +308,7 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
         memset(data, 0, sizeof(icalbdbset));
         *data = icalset_bdbset_init;
         break;
+    }
 #endif
 
     default:
