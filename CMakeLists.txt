@@ -135,6 +135,7 @@ endif()
 #  RSCALE info at http://tools.ietf.org/html/rfc7529
 find_package(ICU)
 if(ICU_FOUND)
+  set(ICUUC_LIBS "-licuuc") #for libical.pc
   set(HAVE_LIBICU 1)
   if(ICU_MAJOR_VERSION VERSION_GREATER 50)
     set(HAVE_ICU_DANGI TRUE)
@@ -144,6 +145,7 @@ if(ICU_FOUND)
 endif()
 if(ICU_I18N_FOUND)
   set(HAVE_LIBICU_I18N 1)
+  set(ICUI18N_LIBS "-licui18n") #for libical.pc
 endif()
 
 # MSVC specific definitions
