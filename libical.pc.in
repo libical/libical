@@ -3,10 +3,10 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 threadslib=@PTHREAD_LIBS@
-iculib=@ICU_LIBRARIES@ @ICU_I18N_LIBRARIES@
+iculibs=@ICUUC_LIBS@ @ICUI18N_LIBS@
 
 Name: libical
 Description: An implementation of basic iCAL protocols
 Version: @LIBICAL_LIB_VERSION_STRING@
-Libs: -L${libdir} -lical -licalss -licalvcal ${threadslib} ${iculib}
+Libs: -L${libdir} -lical -licalss -licalvcal ${threadslib} ${iculibs}
 Cflags: -I${includedir}
