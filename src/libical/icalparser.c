@@ -170,14 +170,14 @@ static char *parser_get_next_char(char c, char *str, int qm)
 static char *make_segment(char *start, char *end)
 {
     char *buf, *tmp;
-    size_t size = (size_t) end - (size_t) start;
+    ptrdiff_t size = (ptrdiff_t)(end - start);
 
-    buf = icalmemory_new_buffer(size + 1);
+    buf = icalmemory_new_buffer((size_t)(size + 1));
     strncpy(buf, start, size);
     *(buf + size) = 0;
 
     tmp = (buf + size);
-    while ((tmp >= buf) && ((*tmp == '\0') || iswspace((wint_t) * tmp))) {
+    while ((tmp >= buf) && ((*tmp == '\0') || iswspace((wint_t)*tmp))) {
         *tmp = 0;
         tmp--;
     }
@@ -962,8 +962,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                         name = 0;
                     }
                     name_heap = parser_get_param_name_heap(str, &pvalue_heap);
-
-                    name = name_heap;
                     pvalue = pvalue_heap;
                 }
                 param = icalparameter_new_from_value_string(kind, pvalue);
