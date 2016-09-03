@@ -484,7 +484,7 @@ static void enterValues(const char *value)
                 p3 = (wchar_t *) vObjectUStringZValue(curProp);
                 free(p3);
                 setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
-                deleteStr(p2);
+                free(p2);
             } else {
             setVObjectUStringZValue_(curProp,fakeUnicode(value,0));
             }
