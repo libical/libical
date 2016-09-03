@@ -1531,7 +1531,8 @@ static int fetch_lat_long_from_string(const char *str,
     }
     len = (ptrdiff_t) (sptr - temp);
     lat = (char *)malloc(len + 1);
-    lat = strncpy(lat, temp, len);
+    memset(lat, '\0', len);
+    strncpy(lat, temp, len);
     lat[len] = '\0';
     while (*sptr != '\t') {
         sptr++;
