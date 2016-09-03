@@ -56,6 +56,8 @@ int main()
     for (i = 0; i < timezones->num_elements; i++) {
         zone = (icaltimezone *)icalarray_element_at(timezones, i);
         zone_location = (char *)icaltimezone_get_location(zone);
+        if (!zone_location)
+            continue;
 
         /*
          * select this location for glibc: needs support for TZ=<location>
@@ -164,5 +166,6 @@ int main()
        }
     }
 
+    icaltimezone_free_builtin_timezones();
     return ret;
 }
