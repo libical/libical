@@ -206,6 +206,7 @@ void return_failure(icalcomponent *comp, char *message, struct options_struct *o
     char *local_attendee = opt->calid;
     FILE *p;
     const char *org_addr;
+    char *mime;
 
     icalcomponent *inner = get_first_real_component(comp);
 
@@ -232,8 +233,12 @@ void return_failure(icalcomponent *comp, char *message, struct options_struct *o
         exit(1);
     }
 
-    fputs(make_mime(org_addr, local_attendee, "iMIP error",
-                    message, "reply", icalcomponent_as_ical_string(comp)), p);
+    mime = make_mime(org_addr, local_attendee, "iMIP error",
+                     message, "reply", icalcomponent_as_ical_string(comp));
+    if (mime) {
+        fputs(mime, p);
+        free(mime);
+    }
 
     if (opt->errors == ERRORS_TO_ORGANIZER) {
         pclose(p);
@@ -246,7 +251,11 @@ void return_error(icalcomponent *comp, char *message, struct options_struct *opt
     _unused(comp);
     _unused(opt);
 
-    fputs(make_mime("Dest", "Source", "iMIP system failure", message, 0, 0), stdout);
+    char *mime = make_mime("Dest", "Source", "iMIP system failure", message, "", "");
+    if (mime) {
+        fputs(mime, stdout);
+        free(mime);
+    }
 }
 
 icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
