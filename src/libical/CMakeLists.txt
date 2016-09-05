@@ -317,39 +317,40 @@ if(WITH_CXX_BINDINGS)
 
   add_definitions(-DBUILD_LIBICALDLL)
 
-  if(NOT STATIC_ONLY)
-    add_library(ical_cxx SHARED ${icalcxx_LIB_SRCS})
-    add_dependencies(ical_cxx ical-header)
-    target_link_libraries(ical_cxx ical ${CMAKE_THREAD_LIBS_INIT})
-    if(WINCE)
-      target_link_libraries(ical_cxx ${WCECOMPAT_LIBRARIES})
-    endif()
-    if(MSVC)
-      set_target_properties(ical_cxx PROPERTIES OUTPUT_NAME "libical_cxx")
-    endif()
-    set_target_properties(ical_cxx PROPERTIES
-      VERSION ${LIBICAL_LIB_VERSION_STRING}
-      SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-    )
-    set_target_properties(ical_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-
-    install(
-      TARGETS ical_cxx
-      EXPORT icalTargets
-      DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
-    )
-  endif()
-
+  add_library(ical_cxx ${LIBRARY_TYPE} ${icalcxx_LIB_SRCS})
+  add_dependencies(ical_cxx ical-header)
   if(NOT SHARED_ONLY)
     add_library(ical_cxx-static STATIC ${icalcxx_LIB_SRCS})
     add_dependencies(ical_cxx-static ical-header)
-    if(MSVC)
+  endif()
+  target_link_libraries(ical_cxx ical ${CMAKE_THREAD_LIBS_INIT})
+
+  if(MSVC)
+    set_target_properties(ical_cxx PROPERTIES OUTPUT_NAME "libical_cxx")
+    if(NOT SHARED_ONLY)
       set_target_properties(ical_cxx-static PROPERTIES OUTPUT_NAME "libical_cxx-static")
-    else()
+    endif()
+  else()
+    if(NOT SHARED_ONLY)
       set_target_properties(ical_cxx-static PROPERTIES OUTPUT_NAME "ical_cxx")
     endif()
-    set_target_properties(ical_cxx-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+  endif()
 
+  set_target_properties(ical_cxx PROPERTIES
+    VERSION ${LIBICAL_LIB_VERSION_STRING}
+    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+  )
+  set_target_properties(ical_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+  if(NOT SHARED_ONLY)
+    set_target_properties(ical_cxx-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+  endif()
+
+  install(
+    TARGETS ical_cxx
+    EXPORT icalTargets
+    DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
+  )
+  if(NOT SHARED_ONLY)
     install(
       TARGETS ical_cxx-static
       EXPORT icalTargets
