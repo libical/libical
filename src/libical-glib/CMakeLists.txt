@@ -67,8 +67,8 @@ endforeach()
 
 add_custom_command (
   OUTPUT ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
-  COMMAND src-generator "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
-  DEPENDS src-generator ${xml_files}
+  COMMAND ${EXECUTABLE_OUTPUT_PATH}/src-generator "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
+  DEPENDS ${EXECUTABLE_OUTPUT_PATH}/src-generator ${xml_files}
 )
 
 configure_file(
