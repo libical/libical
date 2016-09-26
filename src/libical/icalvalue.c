@@ -468,14 +468,14 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         }
     case ICAL_BOOLEAN_VALUE:
         {
-            /* HACK */
-            value = 0;
-
-            if (error != 0) {
+            if (!strcmp(str, "TRUE")) value = icalvalue_new_boolean(1);
+            else if (!strcmp(str, "FALSE")) value = icalvalue_new_boolean(0);
+            else if (error != 0) {
                 char temp[TMP_BUF_SIZE];
 
-                snprintf(temp, sizeof(temp), "%s Values are not implemented",
-                         icalvalue_kind_to_string(kind));
+                snprintf(temp, sizeof(temp),
+                         "Could not parse %s as a %s property",
+                         str, icalvalue_kind_to_string(kind));
                 *error = icalproperty_vanew_xlicerror(
                              temp,
                              icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR),
@@ -836,6 +836,21 @@ static char *icalvalue_binary_as_ical_string_r(const icalvalue *value)
     return str;
 }
 
+static char *icalvalue_boolean_as_ical_string_r(const icalvalue *value)
+{
+    int data;
+    char *str;
+
+    icalerror_check_arg_rz((value != 0), "value");
+    str = (char *)icalmemory_new_buffer(6);
+
+    data = icalvalue_get_integer(value);
+
+    strcpy(str, data ? "TRUE" : "FALSE");
+
+    return str;
+}
+
 #define MAX_INT_DIGITS 12       /* Enough for 2^32 + sign */
 
 static char *icalvalue_int_as_ical_string_r(const icalvalue *value)
@@ -1147,6 +1162,8 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
         return icalvalue_binary_as_ical_string_r(value);
 
     case ICAL_BOOLEAN_VALUE:
+        return icalvalue_boolean_as_ical_string_r(value);
+
     case ICAL_INTEGER_VALUE:
         return icalvalue_int_as_ical_string_r(value);
 
