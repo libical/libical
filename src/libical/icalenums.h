@@ -61,7 +61,9 @@ typedef enum icalcomponent_kind
     ICAL_XAVAILABLE_COMPONENT,
     ICAL_VPOLL_COMPONENT,
     ICAL_VVOTER_COMPONENT,
-    ICAL_XVOTE_COMPONENT
+    ICAL_XVOTE_COMPONENT,
+    ICAL_VPATCH_COMPONENT,
+    ICAL_XPATCH_COMPONENT
 } icalcomponent_kind;
 
 /***********************************************************************

@@ -60,6 +60,8 @@
 "FEATURE","48","icalparameter_feature",X=22100;AUDIO;CHAT;FEED;MODERATOR;PHONE;SCREEN;VIDEO;NONE=22199",
 "LABEL","49","const char*",
 "EMAIL","50","const char*",
+"#VPATCH Extension Parameters","draft-daboo-icalendar-vpatch"
+"PATCH-ACTION","51","icalparameter_patchaction",X=22200;CREATE;BYNAME;BYVALUE;BYPARAM;NONE=22299",
 "#NOTE for updaters.  Preserve the icalparameter_kind Enum values to aid forward compatibility"
 "# New Enum values for an existing icalparameter_kind should be inserted before the corresponding NONE value"
-"# New icalparamter_kind types should start their Enum value after the highest NONE value (currently 22199)"
+"# New icalparamter_kind types should start their Enum value after the highest NONE value (currently 22299)"
