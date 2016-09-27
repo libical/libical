@@ -4,6 +4,7 @@ Release Highlights
 Version 2.0.1:
 --------------
  * icalvalue_as_ical_string() returns "TRUE" (non-zero) or "FALSE" (zero) values only.
+ * new icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
 
 Version 2.0.0:
 --------------
