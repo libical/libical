@@ -608,6 +608,7 @@ icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c)
             kind == ICAL_VFREEBUSY_COMPONENT ||
             kind == ICAL_VAVAILABILITY_COMPONENT ||
             kind == ICAL_VPOLL_COMPONENT ||
+            kind == ICAL_VPATCH_COMPONENT ||
             kind == ICAL_VQUERY_COMPONENT || kind == ICAL_VAGENDA_COMPONENT) {
             return comp;
         }
@@ -1180,6 +1181,10 @@ static const struct icalcomponent_kind_map component_map[] = {
     {ICAL_VPOLL_COMPONENT, "VPOLL"},
     {ICAL_VVOTER_COMPONENT, "VVOTER"},
     {ICAL_XVOTE_COMPONENT, "VOTE"},
+
+    /* VPATCH components */
+    {ICAL_VPATCH_COMPONENT, "VPATCH"},
+    {ICAL_XPATCH_COMPONENT, "PATCH"},
 
     /* End of list */
     {ICAL_NO_COMPONENT, ""},
@@ -1983,6 +1988,16 @@ icalcomponent *icalcomponent_new_vvoter(void)
 icalcomponent *icalcomponent_new_xvote(void)
 {
     return icalcomponent_new(ICAL_XVOTE_COMPONENT);
+}
+
+icalcomponent *icalcomponent_new_vpatch(void)
+{
+    return icalcomponent_new(ICAL_VPATCH_COMPONENT);
+}
+
+icalcomponent *icalcomponent_new_xpatch(void)
+{
+    return icalcomponent_new(ICAL_XPATCH_COMPONENT);
 }
 
 /*
