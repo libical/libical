@@ -136,4 +136,10 @@
 "COLOR","118","TEXT","TEXT"
 "IMAGE","119","ATTACH","URI"
 "CONFERENCE","120","URI","URI"
+"#VPATCH Extension Properties", "draft-daboo_icalendar-vpatch Section 4",
+"PATCH-VERSION","121","TEXT","TEXT"
+"PATCH-ORDER","122","INTEGER","INTEGER"
+"PATCH-TARGET","123","TEXT","TEXT"
+"PATCH-DELETE","124","TEXT","TEXT"
+"PATCH-PARAMETER","125","TEXT","TEXT"
 "#NOTE for updaters.  Preserve the icalproperty_kind Enum values to aid forward compatibility"

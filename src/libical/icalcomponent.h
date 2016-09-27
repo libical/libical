@@ -304,4 +304,8 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vvoter(void);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_xvote(void);
 
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vpatch(void);
+
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_xpatch(void);
+
 #endif /* !ICALCOMPONENT_H */
