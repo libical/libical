@@ -190,14 +190,15 @@ void test_values()
     icalvalue_free(v);
     icalvalue_free(copy);
 
-    v = icalvalue_new_boolean(1);
-    int_is("icalvalue_new_boolean(1)", icalvalue_get_boolean(v), 1);
+    v = icalvalue_new_boolean(0);
+    int_is("icalvalue_new_boolean(0)", icalvalue_get_boolean(v), 0);
+    str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "FALSE");
     icalvalue_set_boolean(v, 2);
     ok("icalvalue_set_boolean(2)", (2 == icalvalue_get_boolean(v)));
-    str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "2");
+    str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "TRUE");
 
     copy = icalvalue_new_clone(v);
-    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "2");
+    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "TRUE");
 
     icalvalue_free(v);
     icalvalue_free(copy);
