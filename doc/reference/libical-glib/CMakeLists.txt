@@ -85,4 +85,4 @@ add_custom_target(documentation ALL
 
 add_dependencies(documentation ical-glib)
 
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${OUTPUT_DOCDIR} PATTERN "html/*")
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html/ DESTINATION ${OUTPUT_DOCDIR})
