@@ -46,7 +46,7 @@
 "RESPONSE","38","int",
 "REQUIRED","43","icalparameter_required","X=21000;TRUE;FALSE;NONE=21099"
 "STAY-INFORMED","39","icalparameter_stayinformed","X=21500;TRUE;FALSE;NONE=21599"
-"#CalDAV Managed Attachment Parameters","draft-daboo-caldav-attachments"
+"#CalDAV Managed Attachment Parameters","draft-ietf-calext-caldav-attachments"
 "MANAGED-ID","40","const char*",
 "SIZE","41","const char*",
 "FILENAME","42","const char*",
