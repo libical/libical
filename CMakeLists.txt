@@ -143,19 +143,22 @@ endif()
 # libicu is highly recommended for RSCALE support
 #  libicu can be found at http://www.icu-project.org
 #  RSCALE info at http://tools.ietf.org/html/rfc7529
-find_package(ICU)
-if(ICU_FOUND)
-  set(ICUUC_LIBS "-licuuc") #for libical.pc
-  set(HAVE_LIBICU 1)
-  if(ICU_MAJOR_VERSION VERSION_GREATER 50)
-    set(HAVE_ICU_DANGI TRUE)
-  else()
-    set(HAVE_ICU_DANGI FALSE)
+option(WITH_ICU "Build with ICU support." ON)
+if (WITH_ICU)
+  find_package(ICU REQUIRED)
+  if(ICU_FOUND)
+    set(ICUUC_LIBS "-licuuc") #for libical.pc
+    set(HAVE_LIBICU 1)
+    if(ICU_MAJOR_VERSION VERSION_GREATER 50)
+      set(HAVE_ICU_DANGI TRUE)
+    else()
+      set(HAVE_ICU_DANGI FALSE)
+    endif()
   endif()
-endif()
-if(ICU_I18N_FOUND)
-  set(HAVE_LIBICU_I18N 1)
-  set(ICUI18N_LIBS "-licui18n") #for libical.pc
+  if(ICU_I18N_FOUND)
+    set(HAVE_LIBICU_I18N 1)
+    set(ICUI18N_LIBS "-licui18n") #for libical.pc
+  endif()
 endif()
 
 # MSVC specific definitions
