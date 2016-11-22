@@ -128,14 +128,12 @@ icalvalue *icalvalue_new_clone(const icalvalue *old)
     case ICAL_RECUR_VALUE:
         {
             if (old->data.v_recur != 0) {
-                new->data.v_recur = malloc(sizeof(struct icalrecurrencetype));
+                icalvalue_set_recur(new, *(old->data.v_recur));
 
                 if (new->data.v_recur == 0) {
                     icalvalue_free(new);
                     return 0;
                 }
-
-                memcpy(new->data.v_recur, old->data.v_recur, sizeof(struct icalrecurrencetype));
             }
             break;
         }
@@ -795,6 +793,7 @@ void icalvalue_free(icalvalue *v)
     case ICAL_RECUR_VALUE:
         {
             if (v->data.v_recur != 0) {
+                free(v->data.v_recur->rscale);
                 free((void *)v->data.v_recur);
                 v->data.v_recur = 0;
             }
