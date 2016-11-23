@@ -160,8 +160,6 @@ struct sspm_part *icalmime_make_part(icalcomponent *comp)
     return 0;
 }
 
-char *icalmime_as_mime_string(char *icalcomponent);
-
 icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d), void *data)
 {
     struct sspm_part *parts;

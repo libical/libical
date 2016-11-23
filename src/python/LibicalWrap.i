@@ -78,17 +78,11 @@ typedef int time_t;
 %ignore icalmessage_new_cancel_instance(icalcomponent* c,
                         const char* user,
                         const char* msg);
-%ignore icalmime_as_mime_string(char* icalcomponent);
-%ignore icalparameter_is_valid(icalparameter* parameter);
 %ignore icalparser_parse_value(icalvalue_kind kind,
                    const char* str, icalcomponent** errors);
 %ignore icalrestriction_is_parameter_allowed(icalproperty_kind property,
                                        icalparameter_kind parameter);
 %ignore icalset_clear_select(icalset* set);
-%ignore icalspanlist_make_free_list(icalspanlist* sl);
-%ignore icalspanlist_make_busy_list(icalspanlist* sl);
-%ignore icalspanlist_next_busy_time(icalspanlist* sl,
-                                    struct icaltimetype t);
 %ignore icaltime_days_in_year (const int year);
 %ignore icaltime_from_string_with_zone(const char* str,
                     const icaltimezone *zone);
@@ -108,9 +102,6 @@ typedef int time_t;
 %ignore icaltime_start_doy_of_week(const struct icaltimetype t);
 %ignore icalcomponent_get_span(icalcomponent* comp);
 %ignore icalproperty_remove_parameter(icalproperty* prop, icalparameter_kind kind);
-
-// Can't wrap va_list
-%ignore icalproperty_add_parameters(struct icalproperty_impl *prop, va_list args);
 
 #ifndef _DLOPEN_TEST
 %ignore icalset_register_class(icalset *set);

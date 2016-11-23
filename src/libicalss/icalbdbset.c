@@ -31,10 +31,6 @@
 
 #define MAX_RETRY 5
 
-/* these are just stub functions */
-icalerrorenum icalbdbset_create_cluster(const char *path);
-int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method);
-
 static int _compare_ids(const char *compid, const char *matchid);
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b);
 

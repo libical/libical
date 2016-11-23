@@ -1514,10 +1514,6 @@ static void ss_load_buffer_state  (void)
         ssfree((void *) b  );
 }
 
-#ifndef __cplusplus
-extern int isatty (int );
-#endif /* __cplusplus */
-
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a ssrestart() or at EOF.

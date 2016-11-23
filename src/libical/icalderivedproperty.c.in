@@ -29,9 +29,6 @@
 
 #include <string.h>
 
-struct icalproperty_impl *icalproperty_new_impl(icalproperty_kind kind);
-void icalproperty_add_parameters(struct icalproperty_impl *prop, va_list args);
-
 /* This map associates the property kinds with the string
    representation of the property name and the kind of VALUE that the
    property uses as a default */

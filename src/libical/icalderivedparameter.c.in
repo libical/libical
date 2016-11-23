@@ -33,8 +33,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
-
 struct icalparameter_impl *icalparameter_new_impl(icalparameter_kind kind);
 
 /* This map associates each of the parameters with the string

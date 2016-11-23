@@ -45,8 +45,6 @@ static int icalfileset_unlock(icalfileset *set);
 static icalerrorenum icalfileset_read_file(icalfileset *set, int mode);
 static long icalfileset_filesize(icalfileset *set);
 
-icalerrorenum icalfileset_create_cluster(const char *path);
-
 icalset *icalfileset_new(const char *path)
 {
     return icalset_new(ICAL_FILE_SET, path, &icalfileset_options_default);

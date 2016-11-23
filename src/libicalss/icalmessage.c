@@ -276,11 +276,6 @@ icalcomponent *icalmessage_new_delegate_request(icalcomponent *c,
     return reply;
 }
 
-icalcomponent *icalmessage_new_cancel_event(icalcomponent *c, const char *user, const char *msg);
-icalcomponent *icalmessage_new_cancel_instance(icalcomponent *c,
-                                               const char *user, const char *msg);
-icalcomponent *icalmessage_new_cancel_all(icalcomponent *c, const char *user, const char *msg);
-
 icalcomponent *icalmessage_new_error_reply(icalcomponent *c,
                                            const char *user,
                                            const char *msg,

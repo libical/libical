@@ -244,7 +244,6 @@ void icalspanlist_dump(icalspanlist *sl)
     }
 }
 
-icalcomponent *icalspanlist_make_free_list(icalspanlist *sl);
 icalcomponent *icalspanlist_make_busy_list(icalspanlist *sl);
 
 /** @brief Find next free time span in a spanlist.
@@ -318,8 +317,6 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
 
     return period;
 }
-
-struct icalperiodtype icalspanlist_next_busy_time(icalspanlist *sl, struct icaltimetype t);
 
 /** @brief Returns an hour-by-hour array of free/busy times over a
  *         given period.

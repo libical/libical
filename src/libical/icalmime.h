@@ -27,7 +27,4 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalmime_parse(char *(*line_gen_func) (char *
                                                                           size_t size,
                                                                           void *d), void *data);
 
-/* The inverse of icalmime_parse, not implemented yet. Use sspm.h directly.  */
-LIBICAL_ICAL_EXPORT char *icalmime_as_mime_string(char *component);
-
 #endif /* !ICALMIME_H */
