@@ -36,7 +36,6 @@ extern "C"
     void create_new_component_with_va_args(void);
     void create_simple_component(void);
     void test_icalcomponent_get_span(void);
-    void create_new_component_with_va_args(void);
 
 /* regression-classify.c */
     void test_classify(void);

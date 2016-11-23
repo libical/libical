@@ -26,8 +26,6 @@
 #include <libicalss/icalss.h>
 #include "regression.h"
 
-extern int VERBOSE;
-
 /* Get a note about the purpose of the property*/
 static const char *get_note(icalcomponent *c)
 {

@@ -45,6 +45,11 @@ if ($opt_i) {
     }
 
   }
+
+  if ($opt_h) {
+    print "#endif /*ICALVALUE_H*/\n";
+  }
+
 }
 
 sub insert_code
@@ -262,10 +267,6 @@ LIBICAL_ICAL_EXPORT $type icalvalue_get_${lc}(const icalvalue *value);\
 LIBICAL_ICAL_EXPORT void icalvalue_set_${lc}(icalvalue *value, ${type} v);\n";
     }
 
-  }
-
-  if ($opt_h) {
-    print "#endif /*ICALVALUE_H*/\n";
   }
 
 }
