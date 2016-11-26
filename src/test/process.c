@@ -146,9 +146,7 @@ int main(int argc, char *argv[])
                    is 1 modulo 4, counterpropose for the first
                    available free time. Otherwise, deline the meeting */
 
-                icalcomponent *overlaps;
-
-                overlaps = icalclassify_find_overlaps(cal, c);
+                icalcomponent *overlaps = icalclassify_find_overlaps(cal, c);
 
                 if (overlaps == 0) {
                     /* No overlaps, book the meeting */
@@ -206,6 +204,8 @@ int main(int argc, char *argv[])
                                 "this meeting. I am proposing a time that works better for me.");
 
                         (void)icalset_add_component(out, reply);
+                        icalspanlist_free(spanl);
+                        icalcomponent_free(newc);
 
                     } else {
                         /* Decline the meeting */
@@ -219,6 +219,7 @@ int main(int argc, char *argv[])
                         (void)icalset_add_component(out, reply);
                     }
                 }
+                icalcomponent_free(overlaps);
                 break;
             }
         case ICAL_XLICCLASS_PUBLISHFREEBUSY:{
