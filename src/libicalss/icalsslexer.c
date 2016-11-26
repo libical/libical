@@ -40,6 +40,10 @@
 #include <stdlib.h>
 #include <stddef.h> /* for ptrdiff_t */
 
+#ifndef __cplusplus
+extern int isatty(int);
+#endif /* __cplusplus */
+
 #ifdef _WIN32_WCE
 #include <io.h>
 #endif
