@@ -144,6 +144,11 @@ icalcomponent *get_first_real_component(icalcomponent *comp)
 char *make_mime(const char *to, const char *from, const char *subject,
                 const char *text_message, const char *method, const char *ical_message)
 {
+    if ((to == NULL) || (from == NULL) || (subject == NULL) ||
+        (text_message == NULL) || (ical_message == NULL)) {
+        return NULL;
+    }
+
     size_t mess_size =
         strlen(to) +
         strlen(from) + strlen(subject) + strlen(text_message) + strlen(ical_message) + TMPSIZE;
@@ -171,7 +176,7 @@ Content-type: text/plain\n\
 Content-Description: Text description of error message\n\n\
 %s\n\n--%s", content_id, text_message, boundary);
 
-    if (ical_message != 0 && method != 0) {
+    if (method != 0) {
         snprintf(mime_part_2, TMPSIZE, "Content-ID: %s\n\
 Content-type: text/calendar; method=%s\n\
 Content-Description: iCal component reply\n\n\
@@ -576,6 +581,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
         }
 
         /* Find password entry for user */
+        /* cppcheck-suppress getpwentCalled as we don't care about multi-threaded in a test prog */
         while ((pw = getpwent()) != 0) {
             if (strcmp(user, pw->pw_name) == 0) {
                 break;
