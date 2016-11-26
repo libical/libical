@@ -218,8 +218,10 @@ void icalcomponent_free(icalcomponent *c)
             free(c->x_name);
         }
 
-        if (c->timezones)
+        if (c->timezones) {
             icaltimezone_array_free(c->timezones);
+            c->timezones = 0;
+        }
 
         c->kind = ICAL_NO_COMPONENT;
         c->properties = 0;
@@ -2023,6 +2025,7 @@ void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_m
         }
     }
     icalarray_free(tzids_to_rename);
+    tzids_to_rename = 0;
     /* Now move all the components from comp_to_merge to comp, excluding
        VTIMEZONE components. */
     subcomp = icalcomponent_get_first_component(comp_to_merge, ICAL_ANY_COMPONENT);
