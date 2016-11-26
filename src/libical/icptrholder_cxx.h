@@ -44,21 +44,22 @@
 
 #include <cassert>
 
-template < class T > class ICPointerHolder {
-  public:
+template < class T > class ICPointerHolder
+{
+public:
     ICPointerHolder()
-      : ptr(0)
+        : ptr(0)
     {
     }
 
     ICPointerHolder(T *p)
-      : ptr(p)
+        : ptr(p)
     {
     }
 
     // copy constructor to support assignment
     ICPointerHolder(const ICPointerHolder &ip)
-      : ptr(ip.ptr)
+        : ptr(ip.ptr)
     {
         // We need to transfer ownership of ptr to this object by setting
         // ip's ptr to null. Otherwise, ptr will de deleted twice.
@@ -73,7 +74,7 @@ template < class T > class ICPointerHolder {
         release();
     }
 
-    ICPointerHolder & operator=(T *p)
+    ICPointerHolder &operator=(T *p)
     {
         this->release();
         ptr = p;
@@ -88,12 +89,12 @@ template < class T > class ICPointerHolder {
         return *this;
     }
 
-    int operator!=(T *p)
+    bool operator!=(T *p)
     {
         return (ptr != p);
     }
 
-    int operator==(T *p)
+    bool operator==(T *p)
     {
         return (ptr == p);
     }
@@ -115,7 +116,7 @@ template < class T > class ICPointerHolder {
         return *ptr;
     }
 
-  private:
+private:
     void release()
     {
         if (ptr != 0) {

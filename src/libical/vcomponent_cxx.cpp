@@ -38,9 +38,9 @@ VComponent::VComponent() throw(icalerrorenum) : imp(icalcomponent_new(ICAL_ANY_C
 }
 
 VComponent::VComponent(const VComponent &v) throw(icalerrorenum)
-  : imp(icalcomponent_new_clone(v.imp))
+    : imp(icalcomponent_new_clone(v.imp))
 {
-    if (!imp) {
+    if (imp == NULL) {
         throw icalerrno;
     }
 }
@@ -54,7 +54,7 @@ VComponent &VComponent::operator=(const VComponent &v) throw(icalerrorenum)
     if (imp != NULL) {
         icalcomponent_free(imp);
         imp = icalcomponent_new_clone(v.imp);
-        if (!imp) {
+        if (imp == NULL) {
             throw icalerrno;
         }
     }
@@ -69,7 +69,7 @@ void VComponent::detach()
 
 VComponent::~VComponent()
 {
-    if (imp) {
+    if (imp != NULL) {
         icalcomponent_free(imp);
     }
 }
@@ -85,7 +85,7 @@ char *VComponent::quote_ical_string(char *str)
     size_t  buf_sz;
     buf_sz = strlen(str) * 2; // assume worse case scenarios.
     // otherwise, we have to parse the string and count \ */
-    char *out = (char *)icalmemory_new_buffer(buf_sz); /* memory is from the ring buffer */
+    char *out = static_cast<char *>(icalmemory_new_buffer(buf_sz)); /* memory from the ring buf */
     char *pout;
 
     if (out == 0) {
@@ -116,9 +116,9 @@ char *VComponent::quote_ical_string(char *str)
  *
  */
 VComponent::VComponent(const std::string &str) throw (icalerrorenum)
-  : imp(icalcomponent_new_from_string(str.c_str()))
+    : imp(icalcomponent_new_from_string(str.c_str()))
 {
-    if (!imp) {
+    if (imp == NULL) {
         if (! icalerrno) {
             icalerrno = ICAL_BADARG_ERROR;
         }
@@ -127,9 +127,9 @@ VComponent::VComponent(const std::string &str) throw (icalerrorenum)
 }
 
 VComponent::VComponent(const icalcomponent_kind &kind) throw(icalerrorenum)
-  : imp(icalcomponent_new(kind))
+    : imp(icalcomponent_new(kind))
 {
-    if (!imp) {
+    if (imp == NULL) {
         throw icalerrno;
     }
 }
@@ -138,7 +138,7 @@ std::string VComponent::as_ical_string() throw(icalerrorenum)
 {
     char *str = icalcomponent_as_ical_string(imp);
 
-    if (!str) {
+    if (str == NULL) {
         throw icalerrno;
     }
 
@@ -150,7 +150,7 @@ bool VComponent::is_valid()
     if (imp == NULL) {
         return false;
     }
-    return (icalcomponent_is_valid(imp) ? true : false);
+    return (icalcomponent_is_valid(imp) != 0);
 }
 
 icalcomponent_kind VComponent::isa()
@@ -320,17 +320,17 @@ icalcompiter VComponent::end_component(const icalcomponent_kind &kind)
 
 VComponent *VComponent::next(icalcompiter *i)
 {
-    return (VComponent *)icalcompiter_next(i);
+    return reinterpret_cast<VComponent *>(icalcompiter_next(i));
 }
 
 VComponent *VComponent::prev(icalcompiter *i)
 {
-    return (VComponent *)icalcompiter_prior(i);
+    return reinterpret_cast<VComponent *>(icalcompiter_prior(i));
 }
 
 VComponent *VComponent::current(icalcompiter *i)
 {
-    return (VComponent *)icalcompiter_deref(i);
+    return reinterpret_cast<VComponent *>(icalcompiter_deref(i));
 }
 
 /* Working with embedded error properties */
@@ -359,11 +359,10 @@ icalcomponent_kind VComponent::string_to_kind(const std::string &str)
 
 std::string VComponent::kind_to_string(const icalcomponent_kind &kind)
 {
-    return (std::string)icalcomponent_kind_to_string(kind);
+    return static_cast<std::string>(icalcomponent_kind_to_string(kind));
 }
 
-struct icaltimetype VComponent::get_dtstart() const
-{
+struct icaltimetype VComponent::get_dtstart() const {
     return icalcomponent_get_dtstart(imp);
 }
 
@@ -382,8 +381,7 @@ void VComponent::set_dtstart(const struct icaltimetype &v)
    routine will create the apcompriate comperty.
 */
 
-struct icaltimetype VComponent::get_dtend() const
-{
+struct icaltimetype VComponent::get_dtend() const {
     return icalcomponent_get_dtend(imp);
 }
 
@@ -392,8 +390,7 @@ void VComponent::set_dtend(const struct icaltimetype &v)
     icalcomponent_set_dtend(imp, v);
 }
 
-struct icaltimetype VComponent::get_due() const
-{
+struct icaltimetype VComponent::get_due() const {
     return icalcomponent_get_due(imp);
 }
 
@@ -402,8 +399,7 @@ void VComponent::set_due(const struct icaltimetype &v)
     icalcomponent_set_due(imp, v);
 }
 
-struct icaldurationtype VComponent::get_duration() const
-{
+struct icaldurationtype VComponent::get_duration() const {
     return icalcomponent_get_duration(imp);
 }
 
@@ -422,8 +418,7 @@ void VComponent::set_method(const icalproperty_method &method)
     icalcomponent_set_method(imp, method);
 }
 
-struct icaltimetype VComponent::get_dtstamp() const
-{
+struct icaltimetype VComponent::get_dtstamp() const {
     return icalcomponent_get_dtstamp(imp);
 }
 
@@ -434,7 +429,7 @@ void VComponent::set_dtstamp(const struct icaltimetype &v)
 
 std::string VComponent::get_summary() const
 {
-    return (std::string)icalcomponent_get_summary(imp);
+    return static_cast<std::string>(icalcomponent_get_summary(imp));
 }
 
 void VComponent::set_summary(const std::string &v)
@@ -444,7 +439,7 @@ void VComponent::set_summary(const std::string &v)
 
 std::string VComponent::get_location() const
 {
-    return (std::string)icalcomponent_get_location(imp);
+    return static_cast<std::string>(icalcomponent_get_location(imp));
 }
 
 void VComponent::set_location(const std::string &v)
@@ -454,7 +449,7 @@ void VComponent::set_location(const std::string &v)
 
 std::string VComponent::get_description() const
 {
-    return (std::string)icalcomponent_get_description(imp);
+    return static_cast<std::string>(icalcomponent_get_description(imp));
 }
 
 void VComponent::set_description(const std::string &v)
@@ -464,7 +459,7 @@ void VComponent::set_description(const std::string &v)
 
 std::string VComponent::get_comment() const
 {
-    return (std::string)icalcomponent_get_comment(imp);
+    return static_cast<std::string>(icalcomponent_get_comment(imp));
 }
 
 void VComponent::set_comment(const std::string &v)
@@ -474,7 +469,7 @@ void VComponent::set_comment(const std::string &v)
 
 std::string VComponent::get_uid() const
 {
-    return (std::string)icalcomponent_get_uid(imp);
+    return static_cast<std::string>(icalcomponent_get_uid(imp));
 }
 
 void VComponent::set_uid(const std::string &v)
@@ -484,7 +479,7 @@ void VComponent::set_uid(const std::string &v)
 
 std::string VComponent::get_relcalid() const
 {
-    return (std::string)icalcomponent_get_relcalid(imp);
+    return static_cast<std::string>(icalcomponent_get_relcalid(imp));
 }
 
 void VComponent::set_relcalid(const std::string &v)
@@ -492,8 +487,7 @@ void VComponent::set_relcalid(const std::string &v)
     icalcomponent_set_relcalid(imp, v.c_str());
 }
 
-struct icaltimetype VComponent::get_recurrenceid() const
-{
+struct icaltimetype VComponent::get_recurrenceid() const {
     return icalcomponent_get_recurrenceid(imp);
 }
 
@@ -504,7 +498,7 @@ void VComponent::set_recurrenceid(const struct icaltimetype &v)
 
 int VComponent::get_sequence() const
 {
-    return (int)icalcomponent_get_sequence(imp);
+    return icalcomponent_get_sequence(imp);
 }
 
 void VComponent::set_sequence(const int &v)
@@ -514,7 +508,7 @@ void VComponent::set_sequence(const int &v)
 
 int VComponent::get_status() const
 {
-    return (int)icalcomponent_get_status(imp);
+    return icalcomponent_get_status(imp);
 }
 
 void VComponent::set_status(const enum icalproperty_status &v)
@@ -525,7 +519,7 @@ void VComponent::set_status(const enum icalproperty_status &v)
 /* For VCOMPONENT: Return a reference to the first VEVENT, VTODO, or VJOURNAL */
 VComponent *VComponent::get_first_real_component()
 {
-    return (VComponent *)icalcomponent_get_first_real_component(imp);
+    return reinterpret_cast<VComponent *>(icalcomponent_get_first_real_component(imp));
 }
 
 /* For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the start and end
@@ -562,7 +556,8 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
 
     /* properties first */
     ICalPropertyTmpPtr propToBeRemoved;
-    for (propToBeRemoved = fromVC.get_first_property(ICAL_ANY_PROPERTY); propToBeRemoved != NULL;
+    for (propToBeRemoved = fromVC.get_first_property(ICAL_ANY_PROPERTY);
+         propToBeRemoved != NULL;
          propToBeRemoved = fromVC.get_next_property(ICAL_ANY_PROPERTY)) {
 
         /* loop through properties from this component */
@@ -573,7 +568,7 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
             if (ignoreValue) {
                 this->remove_property(p);
             } else {
-                if (*p == *propToBeRemoved) {
+                if (p == propToBeRemoved) {
                     this->remove_property(p);
                     break;
                 }
@@ -663,6 +658,7 @@ bool VComponent::add(VComponent &fromC)
         /* clone another property */
         ICalProperty *p = new ICalProperty(*prop);
         add_property(p);
+        delete p;
     }
 
     /* sub-components next */
@@ -674,6 +670,7 @@ bool VComponent::add(VComponent &fromC)
         err = c->add(*comp);
         _unused(err);
         add_component(c);
+        delete c;
     }
 
     return true;
@@ -903,9 +900,6 @@ VAlarm::VAlarm(const std::string &str) : VComponent(str)
 
 icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *tr)
 {
-    struct icaltimetype tt;
-    ICalParameter *related_param;
-
     ICalPropertyTmpPtr trigger_prop = this->get_first_property(ICAL_TRIGGER_PROPERTY);
 
     // all VALARMs must have a TRIGGER
@@ -915,9 +909,8 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
 
     *tr = trigger_prop->get_trigger();
 
-    tt = icaltime_null_time();
-
-    if (icaltime_is_null_time(tr->time)) {
+    if (icaltime_is_null_time(tr->time) == 1) {
+        struct icaltimetype tt = icaltime_null_time();
 
         // relative time trigger
 
@@ -925,14 +918,14 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
         // TRIGGER;RELATED=START:-P15M 15 minutes before START
         // get RELATED parameter
 
-        related_param = trigger_prop->get_first_parameter(ICAL_RELATED_PARAMETER);
+        ICalParameter *related_param = trigger_prop->get_first_parameter(ICAL_RELATED_PARAMETER);
 
-        if (related_param && related_param->is_valid()) {
+        if ((related_param != NULL) && related_param->is_valid()) {
 
             // get RELATED parameter value
             icalparameter_related related = related_param->get_related();
 
-            if (related) {
+            if (related != 0) {
                 switch (related) {
                 case ICAL_RELATED_END:
                     if (c.isa() == ICAL_VEVENT_COMPONENT) {
@@ -941,14 +934,14 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
                         // If a recurrenceid exists, use that to calculate the
                         // dtend from the dtstart.
                         struct icaltimetype recur_time = c.get_recurrenceid();
-                        if (!(icaltime_is_null_time(recur_time))) {
+                        if (icaltime_is_null_time(recur_time) != 1) {
                             struct icaldurationtype dur = icaltime_subtract(c.get_dtstart(), tt);
                             tt = icaltime_add(recur_time, dur);
                         }
                     } else if (c.isa() == ICAL_VTODO_COMPONENT) {
                         tt = c.get_due();
                         struct icaltimetype recur_time = c.get_recurrenceid();
-                        if (!(icaltime_is_null_time(recur_time))) {
+                        if (icaltime_is_null_time(recur_time) != 1) {
                             tt = recur_time;
                         }
                     }
@@ -960,7 +953,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
                 default:
                     tt = c.get_dtstart();
                     struct icaltimetype recur_time = c.get_recurrenceid();
-                    if (!(icaltime_is_null_time(recur_time))) {
+                    if (icaltime_is_null_time(recur_time) != 1) {
                         tt = recur_time;
                     }
                     break;
@@ -972,7 +965,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
             // due for VTODO to calculate trigger time.
             // If a recur time exists, use that. Recur time trumps dtstart or due.
             struct icaltimetype recur_time = c.get_recurrenceid();
-            if (!(icaltime_is_null_time(recur_time))) {
+            if (icaltime_is_null_time(recur_time) != 1) {
                 tt = recur_time;
             } else if (c.isa() == ICAL_VEVENT_COMPONENT) {
                 tt = c.get_dtstart();
@@ -981,12 +974,12 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
             }
         }
 
-        if (related_param) {
+        if (related_param != NULL) {
             free(related_param);
         }
 
         // malformed? encapsulating VEVENT or VTODO MUST have DTSTART/DTEND
-        if (icaltime_is_null_time(tt)) {
+        if (icaltime_is_null_time(tt) == 1) {
             return ICAL_3_1_INVPROPVAL_STATUS;
         };
 
