@@ -944,7 +944,7 @@ static char * lexGetDataFromBase64()
                 }
             }
         } /* while */
-    DBG_(("db: bytesLen = %l\n",  bytesLen));
+    DBG_(("db: bytesLen = %lu\n",  (unsigned long)bytesLen));
     /* kludge: all this won't be necessary if we have tree form
         representation */
     if (bytes) {

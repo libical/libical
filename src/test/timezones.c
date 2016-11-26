@@ -68,7 +68,7 @@ int main()
 #else
         new_tz[0] = '\0';
         strncat(new_tz, "TZ=", 255);
-        strncat(new_tz, zone_location, 255);
+        strncat(new_tz, zone_location, 255 - strlen(new_tz));
         putenv(new_tz);
 #endif
         tzset();

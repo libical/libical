@@ -299,9 +299,10 @@ gchar *get_lower_train_from_lower_snake(const gchar *lowerSnake)
 {
     guint i;
     gchar *ret;
-    guint len = (guint) strlen(lowerSnake);
+    guint len;
 
     g_return_val_if_fail(lowerSnake != NULL && *lowerSnake != '\0', NULL);
+    len =  (guint) strlen(lowerSnake);
 
     ret = g_strdup(lowerSnake);
     for (i = 0; i < len; i++) {
@@ -984,8 +985,6 @@ void generate_header_includes(FILE *out, Structure *structure)
     write_str(out, COMMON_HEADER);
     write_str(out, ".h>\n");
 
-    g_return_if_fail(out != NULL && structure != NULL);
-
     includeNames = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
 
     upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
@@ -1280,7 +1279,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     gchar c;
     gchar *var;
     gchar *val;
-    guint statement_len = (guint) strlen(statement);
+    guint statement_len;
     guint expression_len;
 
     g_return_if_fail(out != NULL && structure != NULL && statement != NULL && *statement != '\0');
@@ -1289,6 +1288,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     count = 0;
     isNegate = FALSE;
     isTrue = FALSE;
+    statement_len = (guint) strlen(statement);
 
     if (statement[0] == '!') {
         isNegate = TRUE;
@@ -1682,7 +1682,7 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
             g_free(checkers);
         }
 
-        /*op on the owner */
+        /* op on the owner */
         /* TODO: Change the translatorArgus in Parameter to parent */
         for (iter = g_list_first(method->parameters); iter != NULL; iter = g_list_next(iter)) {
             parameter = (Parameter *) iter->data;
@@ -1965,8 +1965,9 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
                 enumeration->name);
     }
 
-    /*Generate the comment block */
+    /* Generate the comment block */
     if (enumeration->comment != NULL) {
+        //krazy:cond=style
         comment = g_strdup("/**");
         tmp = g_strconcat(comment, "\n * ", enumeration->name, ":", NULL);
         g_free(comment);
@@ -1979,14 +1980,14 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
         tmp = g_strconcat(comment, "\n */\n", NULL);
         g_free(comment);
         comment = tmp;
-
+        //krazy:endcond=style
         write_str(out, comment);
         g_free(comment);
         comment = NULL;
         tmp = NULL;
     }
 
-    /*Generate the declaration */
+    /* Generate the declaration */
     write_str(out, "typedef enum {");
 
     for (iter = g_list_first(enumeration->elements); iter != NULL; iter = g_list_next(iter)) {
