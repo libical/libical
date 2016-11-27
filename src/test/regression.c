@@ -1396,6 +1396,7 @@ void test_requeststat()
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT);
 
     icalproperty_free(p);
+	icalcomponent_free(c);
 }
 
 void test_dtstart()
@@ -2037,7 +2038,7 @@ void test_fblist()
     icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
     icalset *set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/spanlist.ics", &options);
     struct icalperiodtype period;
-    icalcomponent *comp;
+    icalcomponent *comp, *fbcomp;
     int *foo;
     int i;
 
@@ -2071,9 +2072,9 @@ void test_fblist()
            "19980102T010000");
 
     if (VERBOSE) {
-        printf("%s\n",
-               icalcomponent_as_ical_string(icalspanlist_as_vfreebusy(
-                   sl, "a@foo.com", "b@foo.com")));
+		fbcomp = icalspanlist_as_vfreebusy(sl, "a@foo.com", "b@foo.com");
+        printf("%s\n", icalcomponent_as_ical_string(fbcomp));
+		icalcomponent_free(fbcomp);
     }
 
     foo = icalspanlist_as_freebusy_matrix(sl, 3600);
@@ -3475,6 +3476,7 @@ void test_property_parse()
         printf("%s\n", str);
 
     icalproperty_free(p);
+	icalcomponent_free(c);
 }
 
 void test_value_parameter()
@@ -3679,6 +3681,7 @@ void test_attach_url()
     }
     str_is("attach url", icalattach_get_url(attach), "foofile");
     str_is("attach with url", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithurl);
+	icalattach_unref(attach);
     icalproperty_free(ap);
     icalcomponent_free(ac);
 }
@@ -3698,6 +3701,7 @@ void test_attach_data()
     }
     str_is("attach data", (const char *) icalattach_get_data(attach), "foofile");
     str_is("attach with data", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
+	icalattach_unref(attach);
     icalproperty_free(ap);
     icalcomponent_free(ac);
 }
@@ -3780,6 +3784,7 @@ void test_recurrenceexcluded(void)
     recurtime = icaltime_from_string("20080819T180000Z");
     ok("Recurrence is excluded for UTC EXDATE",
        icalproperty_recurrence_is_excluded(event, &dtstart, &recurtime));
+	icalcomponent_free(calendar);
 }
 
 void test_bad_dtstart_in_timezone(void)
