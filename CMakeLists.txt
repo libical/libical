@@ -166,7 +166,8 @@ if(WIN32)
     if(USE_32BIT_TIME_T)
       add_definitions(-D_USE_32BIT_TIME_T)
     endif()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4290")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4290") #C++ exception specification ignored
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4068") #unknown pragma
   endif()
   add_definitions(-DBIG_ENDIAN=0 -DLITTLE_ENDIAN=1 -DBYTE_ORDER=BIG_ENDIAN)
 endif()
