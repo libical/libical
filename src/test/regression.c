@@ -450,6 +450,16 @@ const char *good_child =
     " Common Name 4:Another Comment\r\n"
     "X-LIC-ERROR;X-LIC-ERRORTYPE=COMPONENT-PARSE-ERROR:This is only a test\r\n" "END:VEVENT\r\n";
 
+const char *bad_child =
+	"BEGIN;\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n";
+
 void test_components()
 {
     icalcomponent *c;
@@ -492,6 +502,13 @@ void test_components()
     str_is("test results of child component", icalcomponent_as_ical_string(child), good_child);
 
     icalcomponent_free(c);
+
+	int estate = icalerror_get_errors_are_fatal();
+	icalerror_set_errors_are_fatal(0);
+    c = icalcomponent_new_from_string(bad_child);
+    ok("parse failed as expected", (c == NULL));
+	icalcomponent_free(c);
+	icalerror_set_errors_are_fatal(estate);
 }
 
 void test_memory()
