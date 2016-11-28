@@ -52,7 +52,11 @@ struct icalproperty_enum_map
     const char *str;
 };
 
+//TODO:V3:API:Is there a way to change the API so -Wvarargs doesn't complain?
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wvarargs"
 <insert_code_here>
+#pragma clang diagnostic pop
 
 int icalproperty_kind_is_valid(const icalproperty_kind kind)
 {
