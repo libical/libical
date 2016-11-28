@@ -464,6 +464,7 @@ void test_components()
 {
     icalcomponent *c;
     icalcomponent *child;
+	int estate;
 
     c = icalcomponent_vanew(
             ICAL_VCALENDAR_COMPONENT,
@@ -503,7 +504,7 @@ void test_components()
 
     icalcomponent_free(c);
 
-	int estate = icalerror_get_errors_are_fatal();
+	estate = icalerror_get_errors_are_fatal();
 	icalerror_set_errors_are_fatal(0);
     c = icalcomponent_new_from_string(bad_child);
     ok("parse failed as expected", (c == NULL));
