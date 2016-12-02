@@ -25,6 +25,7 @@
 #endif
 
 #include <libical/ical.h>
+#include <stdlib.h>
 
 #if defined(HAVE_LIBICU)
 #include <unicode/ucal.h>
@@ -494,6 +495,7 @@ int main(int argc, char *argv[])
         }
 
         icalrecur_iterator_free(ritr);
+        free(rrule.rscale);
     }
     fclose(fp);
 
