@@ -713,12 +713,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
         comp_kind = icalenum_string_to_component_kind(str);
 
-        if (comp_kind == ICAL_NO_COMPONENT) {
-            c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);
-            insert_error(c, str, "Parse error in component name",
-                         ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
-        }
-
         c = icalcomponent_new(comp_kind);
 
         if (c == 0) {
