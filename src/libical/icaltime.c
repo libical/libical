@@ -445,7 +445,7 @@ struct icaltimetype icaltime_from_string(const char *str)
         tt.is_utc = 0;
         tt.is_date = 0;
     } else if ((size == 16) || (size == 20)) {  /* UTC time, ends in 'Z' */
-        if ((str[15] != 'Z') && (str[19] != 'Z'))
+        if ((str[size-1] != 'Z'))
             goto FAIL;
 
         tt.is_utc = 1;
