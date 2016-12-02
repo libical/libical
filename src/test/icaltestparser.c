@@ -102,6 +102,7 @@ int main(int argc, char *argv[])
         line = icalparser_get_line(parser, read_stream);
 
         c = icalparser_add_line(parser, line);
+        icalmemory_free_buffer(line);
 
         if (c != 0) {
             /*icalcomponent_convert_errors(c); */
@@ -111,6 +112,9 @@ int main(int argc, char *argv[])
         }
 
     } while (line != 0);
+
+    icalparser_free(parser);
+    fclose(stream);
 
     return 0;
 }
