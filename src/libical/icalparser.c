@@ -148,7 +148,7 @@ static char *parser_get_next_char(char c, char *str, int qm)
     char prev_char = 0;
 
     while (next_char != 0) {
-        if (prev_char != '\\') {
+        if (prev_char && prev_char != '\\') {
             if (qm == 1 && next_char == '"') {
                 /* Encountered a quote, toggle quote mode */
                 quote_mode = !quote_mode;
