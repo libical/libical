@@ -36,8 +36,6 @@
 #include <stddef.h>     /* for ptrdiff_t */
 #include <stdlib.h>
 
-#define TMP_BUF_SIZE 1024 /* for reading a line in a zones.tab file */
-
 #if defined(HAVE_PTHREAD)
 #include <pthread.h>
 #if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
@@ -226,6 +224,7 @@ static void icaltimezone_reset(icaltimezone *zone)
 
     if (zone->changes) {
         icalarray_free(zone->changes);
+        zone->changes = NULL;
     }
 
     icaltimezone_init(zone);
@@ -751,7 +750,6 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
     /* Now we convert the time to the new timezone by getting the UTC offset
        of our UTC time and adding it. */
     utc_offset = icaltimezone_get_utc_offset_of_utc_time(to_zone, tt, &is_daylight);
-
     tt->is_daylight = is_daylight;
     icaltime_adjust(tt, 0, 0, 0, utc_offset);
 }
@@ -1583,6 +1581,7 @@ static int fetch_lat_long_from_string(const char *str,
     }
 
     free(lat);
+
     return 0;
 }
 
@@ -1598,9 +1597,8 @@ static void icaltimezone_parse_zone_tab(void)
     const char *zonedir, *zonetab;
     char *filename;
     FILE *fp;
-    char buf[TMP_BUF_SIZE];      /* Stores each line of zones.tab as it is read. */
-    char location[TMP_BUF_SIZE]; /* Stores the city name when parsing buf. */
-    const char *scan_format;
+    char buf[1024];     /* Used to store each line of zones.tab as it is read. */
+    char location[1024];        /* Stores the city name when parsing buf. */
     size_t filename_len;
     int latitude_degrees = 0, latitude_minutes = 0, latitude_seconds = 0;
     int longitude_degrees = 0, longitude_minutes = 0, longitude_seconds = 0;
@@ -1625,7 +1623,7 @@ static void icaltimezone_parse_zone_tab(void)
 
     icalerror_assert(filename_len > 0, "Unable to locate a zoneinfo dir");
     if (filename_len == 0) {
-        icalerror_set_errno(ICAL_INTERNAL_ERROR);
+        icalerror_set_errno(ICAL_INTERNAL_ERROR);\
         return;
     }
 
@@ -1647,13 +1645,6 @@ static void icaltimezone_parse_zone_tab(void)
         return;
     }
 
-    /* Build the scan format for parsing the timezone description line*/
-    if (use_builtin_tzdata) {
-        scan_format = "%" _tostring(TMP_BUF_SIZE) "s";
-    } else {
-        scan_format = "%4d%2d%2d %4d%2d%2d %" _tostring(TMP_BUF_SIZE) "s";
-    }
-
     while (fgets(buf, (int)sizeof(buf), fp)) {
         if (*buf == '#')
             continue;
@@ -1664,11 +1655,15 @@ static void icaltimezone_parse_zone_tab(void)
                 latitude_degrees = longitude_degrees = 360;
                 latitude_minutes = longitude_minutes = 0;
                 latitude_seconds = longitude_seconds = 0;
-                if (sscanf(buf, scan_format, location) != 1) {
+                if (sscanf(buf, "%1000s", location) != 1) {     /*limit location to 1000chars */
+                    /*increase as needed */
+                    /*see location and buf declarations */
                     fprintf(stderr, "Invalid timezone description line: %s\n", buf);
                     continue;
                 }
-            } else if (sscanf(buf, scan_format,
+            } else if (sscanf(buf, "%4d%2d%2d %4d%2d%2d %1000s", /*limit location to 1000chars */
+                              /*increase as needed */
+                              /*see location and buf declarations */
                               &latitude_degrees, &latitude_minutes,
                               &latitude_seconds,
                               &longitude_degrees, &longitude_minutes,
