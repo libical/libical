@@ -549,3 +549,7 @@ typedef ssize_t IO_SSIZE_T;
 #define _unused(x) (void)x
 #endif
 #endif
+
+/* Stringification macros */
+#define _stringify(x) #x
+#define _tostring(x) _stringify(x)
