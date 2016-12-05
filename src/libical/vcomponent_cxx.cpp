@@ -621,8 +621,11 @@ bool VComponent::update(VComponent &fromC, bool removeMissing)
             thisProp = new ICalProperty(prop->isa());
             this->add_property(thisProp);
         }
-        ICalValue *value = new ICalValue(*(prop->get_value())); // clone the value
+        ICalValue *tempValue = prop->get_value();
+        ICalValue *value = new ICalValue(*tempValue); // clone the value
         thisProp->set_value(*value);
+        delete tempValue;
+        delete value;
     }
 
     /* recursively updating sub-components */

@@ -249,6 +249,7 @@ icalcomponent *icalmessage_new_delegate_request(icalcomponent *c,
     icalcomponent *reply;
     icalproperty *attendee;
     icalcomponent *inner;
+    icalparameter *delegateeParam;
 
     icalerror_check_arg_rz(c, "c");
 
@@ -267,12 +268,11 @@ icalcomponent *icalmessage_new_delegate_request(icalcomponent *c,
 
     icalproperty_set_parameter(attendee, icalparameter_new_delegatedto(delegatee));
 
+    delegateeParam = icalparameter_new_delegatedfrom(icalproperty_get_attendee(attendee));
     icalcomponent_add_property(
         inner,
-        icalproperty_vanew_attendee(
-            delegatee,
-            icalparameter_new_delegatedfrom(icalproperty_get_attendee(attendee)), 0));
-
+        icalproperty_vanew_attendee(delegatee, delegateeParam, 0));
+    icalparameter_free(delegateeParam);
     return reply;
 }
 

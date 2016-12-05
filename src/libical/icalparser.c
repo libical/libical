@@ -147,8 +147,8 @@ static char *parser_get_next_char(char c, char *str, int qm)
     char next_char = *p;
     char prev_char = 0;
 
-    while (next_char != 0) {
-        if (prev_char && prev_char != '\\') {
+    while (next_char != '\0') {
+        if ((prev_char != '\0') && (prev_char != '\\')) {
             if (qm == 1 && next_char == '"') {
                 /* Encountered a quote, toggle quote mode */
                 quote_mode = !quote_mode;
@@ -570,7 +570,6 @@ static void insert_error(icalcomponent *comp, const char *text,
         snprintf(temp, 1024, "%s: %s", message, text);
     }
 
-    /* coverity[leaked_storage] */
     icalcomponent_add_property(
         comp,
         icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), 0));

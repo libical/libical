@@ -32,6 +32,7 @@
 #include <stdlib.h>
 
 #define TMP_BUF_SIZE 1024
+#define TMP_ERR_SIZE 256
 
 /* These *_part routines are called by the MIME parser via the
    local_action_map */
@@ -200,7 +201,8 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
 
         if (parts[i].header.error != SSPM_NO_ERROR) {
             const char *str = "Unknown error";
-            char temp[256];
+            char temp[TMP_ERR_SIZE];
+            icalparameter *errParam;
 
             if (parts[i].header.error == SSPM_MALFORMED_HEADER_ERROR) {
                 str = "Malformed header, possibly due to input not in MIME format";
@@ -225,24 +227,26 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
             }
 
             if (parts[i].header.error_text != 0) {
-                snprintf(temp, 256, "%s: %s", str, parts[i].header.error_text);
+                snprintf(temp, TMP_ERR_SIZE, "%s: %s", str, parts[i].header.error_text);
             } else {
                 strcpy(temp, str);
             }
 
+            errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_MIMEPARSEERROR);
             icalcomponent_add_property(
                  comp,
-                 icalproperty_vanew_xlicerror(
-                     temp,
-                     icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_MIMEPARSEERROR), 0));
+                 icalproperty_vanew_xlicerror(temp, errParam, 0));
+            icalparameter_free(errParam);
         }
 
         if (parts[i].header.major != SSPM_NO_MAJOR_TYPE &&
             parts[i].header.major != SSPM_UNKNOWN_MAJOR_TYPE) {
 
+            char *mimeTypeCopy = icalmemory_strdup(mimetype);
             icalcomponent_add_property(
                 comp,
-                icalproperty_new_xlicmimecontenttype((char *)icalmemory_strdup(mimetype)));
+                icalproperty_new_xlicmimecontenttype(mimeTypeCopy));
+            free(mimeTypeCopy);
         }
 
         if (parts[i].header.encoding != SSPM_NO_ENCODING) {
@@ -281,11 +285,11 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
                    parts[i].header.minor != SSPM_CALENDAR_MINOR_TYPE && parts[i].data != 0) {
 
             /* Add other text components as "DESCRIPTION" properties */
-
+            char *descStr = icalmemory_strdup((char *)parts[i].data);
             icalcomponent_add_property(
                 comp,
-                icalproperty_new_description((char *)icalmemory_strdup((char *)parts[i].data)));
-
+                icalproperty_new_description(descStr));
+            free(descStr);
             parts[i].data = 0;
         }
 

@@ -2121,7 +2121,7 @@ void test_fblist()
         char *strp = out_str;
 
         for (i = 0; foo[i] != -1; i++) {
-            snprintf(strp, 80, "%1d", foo[i]);
+            snprintf(strp, 79, "%1d", foo[i]);
             strp++;
         }
         str_is("Checking freebusy validity", out_str, "1121110");
@@ -2176,14 +2176,11 @@ void test_fblist()
         icalspanlist_dump(new_sl);
     }
 
-    if (sl)
-        icalspanlist_free(sl);
+	icalspanlist_free(sl);
 
-    if (new_sl)
-        icalspanlist_free(new_sl);
+	icalspanlist_free(new_sl);
 
-    if (comp)
-        icalcomponent_free(comp);
+	icalcomponent_free(comp);
 
     icalset_free(set);
 }
@@ -2663,7 +2660,8 @@ void test_gauge_compare()
 
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
 	str = "SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2683,7 +2681,8 @@ void test_gauge_compare()
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     /* Less than */
 
@@ -2692,10 +2691,11 @@ void test_gauge_compare()
 
     ok(str, (c != 0 && g != 0));
 
+    assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    assert(g != 0);
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
 	str = "SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2717,7 +2717,8 @@ void test_gauge_compare()
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
 	str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2738,7 +2739,8 @@ void test_gauge_compare()
 
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
 	str = "SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2759,7 +2761,8 @@ void test_gauge_compare()
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
 	str = "SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2787,7 +2790,8 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
 
@@ -2803,7 +2807,8 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     icalcomponent_free(c);
 
@@ -2819,7 +2824,8 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
 
@@ -2835,7 +2841,9 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
+
     icalcomponent_free(c);
 
     /* Complex comparisons */
@@ -2860,21 +2868,24 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo'";
     g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo' AND  VALARM.DTSTART = '20000101T120000'";
     g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'bar' AND  VALARM.DTSTART = '20000101T120000'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2888,7 +2899,8 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     icalcomponent_free(c);
 }

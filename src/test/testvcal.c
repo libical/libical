@@ -57,5 +57,6 @@ int main(int argc, char *argv[])
 
     printf("%s\n", icalcomponent_as_ical_string(comp));
 
+    icalcomponent_free(comp);
     return 0;
 }

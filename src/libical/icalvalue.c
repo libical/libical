@@ -606,14 +606,14 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
           geo_parsing_error:
             if (error != 0) {
                 char temp[TMP_BUF_SIZE];
+                icalparameter *errParam;
 
                 snprintf(temp, sizeof(temp),
                          "Could not parse %s as a %s property",
                          str, icalvalue_kind_to_string(kind));
-                *error = icalproperty_vanew_xlicerror(
-                             temp,
-                             icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR),
-                             0);
+                errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
+                icalparameter_free(errParam);
             }
         }
         break;
@@ -719,14 +719,15 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
     default:
         {
             char temp[TMP_BUF_SIZE];
+            icalparameter *errParam;
+
             if (error != 0) {
 
                 snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
 
-                *error = icalproperty_vanew_xlicerror(
-                             temp,
-                             icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR),
-                             0);
+                errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
+                icalparameter_free(errParam);
             }
 
             snprintf(temp, TMP_BUF_SIZE,
@@ -739,13 +740,13 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
     if (error != 0 && *error == 0 && value == 0) {
         char temp[TMP_BUF_SIZE];
+        icalparameter *errParam;
 
         snprintf(temp, TMP_BUF_SIZE, "Failed to parse value: \'%s\'", str);
 
-        *error = icalproperty_vanew_xlicerror(
-                     temp,
-                     icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR),
-                     0);
+        errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+        *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
+        icalparameter_free(errParam);
     }
 
     return value;

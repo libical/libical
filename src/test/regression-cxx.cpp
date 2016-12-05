@@ -120,16 +120,17 @@ void test_cxx(void)
     // we need to unwrap it.
 
     VEvent *sub_ic = dynamic_cast<VEvent *>(ic.get_first_component(ICAL_VEVENT_COMPONENT));
-
-    int_is("Getting VEvent subcomponent",
-           sub_ic->isa(),
-           ICAL_VEVENT_COMPONENT);
-    while (sub_ic != NULL) {
-        if (VERBOSE != 0) {
-            printf("subcomponent: %s\n", sub_ic->as_ical_string().c_str());
+    if (sub_ic != NULL) {
+        int_is("Getting VEvent subcomponent",
+               sub_ic->isa(),
+               ICAL_VEVENT_COMPONENT);
+        while (sub_ic != NULL) {
+            if (VERBOSE != 0) {
+                printf("subcomponent: %s\n", sub_ic->as_ical_string().c_str());
+            }
+            delete sub_ic;
+            sub_ic = dynamic_cast<VEvent *>(ic.get_next_component(ICAL_VEVENT_COMPONENT));
         }
-        delete sub_ic;
-        sub_ic = dynamic_cast<VEvent *>(ic.get_next_component(ICAL_VEVENT_COMPONENT));
     }
 
     VCalendar *cal = new VCalendar();

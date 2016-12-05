@@ -323,6 +323,9 @@ int check_attendee(icalproperty *p, struct options_struct *opt)
     const char *s = icalproperty_get_attendee(p);
     char *lower_attendee = lowercase(s);
     char *local_attendee = opt->calid;
+    char *start = lower_attendee;
+
+    int found = 0;
 
     /* Check that attendee begins with "mailto:" */
     if (strncmp(lower_attendee, "mailto:", 7) == 0) {
@@ -330,15 +333,12 @@ int check_attendee(icalproperty *p, struct options_struct *opt)
         lower_attendee += 7;
 
         if (strcmp(lower_attendee, local_attendee) == 0) {
-            return 1;
+            found = 1;
         }
-
-        lower_attendee -= 7;
-
-        free(lower_attendee);
     }
 
-    return 0;
+    free(start);
+    return found;
 }
 
 char static_component_error_str[MAXPATHLEN];
@@ -634,20 +634,20 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
                     fprintf(stderr,
                             "%s: Failed to create calendar directory %s: %s\n",
                             program_name, facspath, strerror(errno));
+                    free(facspath);
                     exit(1);
                 } else {
                     fprintf(stderr, "%s: Creating calendar directory %s\n", program_name, facspath);
-                    free(facspath);
                 }
 
             } else if (type == REGULAR || type == ERROR) {
                 fprintf(stderr, "%s: Cannot create calendar directory %s\n",
                         program_name, facspath);
+                free(facspath);
                 exit(1);
             }
-        } else {
-            free(facspath);
         }
+        free(facspath);
     }
 }
 
@@ -733,6 +733,7 @@ icalcomponent *read_nonmime_component(struct options_struct * opt)
         icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 
         if (comp != 0) {
+            icalparser_free(parser);
             return comp;
         }
 
@@ -742,6 +743,7 @@ icalcomponent *read_nonmime_component(struct options_struct * opt)
         fclose(stream);
     }
 
+    icalparser_free(parser);
     return comp;
 }
 
