@@ -1050,8 +1050,9 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     case ICAL_ATTACH_PROPERTY:
                     case ICAL_IMAGE_PROPERTY:
                         /* Accept BINARY */
-                        if (value_kind != ICAL_BINARY_VALUE)
+                        if (value_kind != ICAL_BINARY_VALUE) {
                             value_err = illegal_type;
+                        }
                         break;
 
                     case ICAL_DTEND_PROPERTY:
@@ -1060,28 +1061,33 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     case ICAL_EXDATE_PROPERTY:
                     case ICAL_RECURRENCEID_PROPERTY:
                         /* Accept DATE */
-                        if (value_kind != ICAL_DATE_VALUE)
+                        if (value_kind != ICAL_DATE_VALUE) {
                             value_err = illegal_type;
+                        }
                         break;
 
                     case ICAL_GEO_PROPERTY:
                         /* Accept FLOAT (but change to GEO) */
-                        if (value_kind != ICAL_FLOAT_VALUE)
+                        if (value_kind != ICAL_FLOAT_VALUE) {
                             value_err = illegal_type;
-                        else value_kind = ICAL_GEO_VALUE;
+                        } else {
+                            value_kind = ICAL_GEO_VALUE;
+                        }
                         break;
 
                     case ICAL_RDATE_PROPERTY:
                         /* Accept DATE or PERIOD */
                         if (value_kind != ICAL_DATE_VALUE &&
-                            value_kind != ICAL_PERIOD_VALUE)
+                            value_kind != ICAL_PERIOD_VALUE) {
                             value_err = illegal_type;
+                        }
                         break;
 
                     case ICAL_TRIGGER_PROPERTY:
                         /* Accept DATE-TIME */
-                        if (value_kind != ICAL_DATETIME_VALUE)
+                        if (value_kind != ICAL_DATETIME_VALUE) {
                             value_err = illegal_type;
+                        }
                         break;
 
                     case ICAL_X_PROPERTY:
