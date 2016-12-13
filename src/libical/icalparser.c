@@ -1023,6 +1023,12 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
             /* If it is a VALUE parameter, set the kind of value */
             if (icalparameter_isa(param) == ICAL_VALUE_PARAMETER) {
+                const char unknown_type[] =
+                    "Got a VALUE parameter with an unknown type";
+                const char illegal_type[] =
+                    "Got a VALUE parameter with an illegal type for property";
+                const char *value_err = NULL;
+
                 value_kind =
                     (icalvalue_kind)icalparameter_value_to_value_kind(
                         icalparameter_get_value(param));
@@ -1033,8 +1039,67 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                        parameter ( it was not one of the defined
                        values ), so reset the value_kind */
 
-                    insert_error(tail, str,
-                                 "Got a VALUE parameter with an unknown type",
+                    value_err = unknown_type;
+                }
+                else if (value_kind !=
+                         icalproperty_kind_to_value_kind(icalproperty_isa(prop))) {
+                    /* VALUE parameter type does not match default type
+                       for this property (check for allowed alternate types) */
+
+                    switch (prop_kind) {
+                    case ICAL_ATTACH_PROPERTY:
+                    case ICAL_IMAGE_PROPERTY:
+                        /* Accept BINARY */
+                        if (value_kind != ICAL_BINARY_VALUE)
+                            value_err = illegal_type;
+                        break;
+
+                    case ICAL_DTEND_PROPERTY:
+                    case ICAL_DUE_PROPERTY:
+                    case ICAL_DTSTART_PROPERTY:
+                    case ICAL_EXDATE_PROPERTY:
+                    case ICAL_RECURRENCEID_PROPERTY:
+                        /* Accept DATE */
+                        if (value_kind != ICAL_DATE_VALUE)
+                            value_err = illegal_type;
+                        break;
+
+                    case ICAL_GEO_PROPERTY:
+                        /* Accept FLOAT (but change to GEO) */
+                        if (value_kind != ICAL_FLOAT_VALUE)
+                            value_err = illegal_type;
+                        else value_kind = ICAL_GEO_VALUE;
+                        break;
+
+                    case ICAL_RDATE_PROPERTY:
+                        /* Accept DATE or PERIOD */
+                        if (value_kind != ICAL_DATE_VALUE &&
+                            value_kind != ICAL_PERIOD_VALUE)
+                            value_err = illegal_type;
+                        break;
+
+                    case ICAL_TRIGGER_PROPERTY:
+                        /* Accept DATE-TIME */
+                        if (value_kind != ICAL_DATETIME_VALUE)
+                            value_err = illegal_type;
+                        break;
+
+                    case ICAL_X_PROPERTY:
+                        /* Accept ANY value type */
+                        break;
+
+                    default:
+                        /* ONLY default type is allowed */
+                        value_err = illegal_type;
+                        break;
+                    }
+                }
+
+                if (value_err != NULL) {
+                    /* Ooops, unknown/illegal VALUE parameter,
+                       so reset the value_kind */
+
+                    insert_error(tail, str, value_err,
                                  ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR);
 
                     value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
