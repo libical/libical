@@ -301,8 +301,6 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
     const icalrestriction_property_record *prop_record;
     const char *funcr = 0;
     icalproperty *prop;
-    icalparameter *errParam = NULL;
-    icalproperty *errProp = NULL;
 
     int count;
     int compare;
@@ -335,6 +333,8 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
         if (compare == 0) {
 #define TMP_BUF_SIZE 1024
             char temp[TMP_BUF_SIZE];
+            icalproperty *errProp;
+            icalparameter *errParam;
 
             snprintf(temp, TMP_BUF_SIZE,
                      "Failed iTIP restrictions for %s property. "
@@ -343,6 +343,7 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
             errProp = icalproperty_vanew_xlicerror(temp, errParam, 0);
             icalcomponent_add_property(comp, errProp);
+            icalproperty_free(errProp);
         }
 
         prop = icalcomponent_get_first_property(comp, kind);
@@ -352,15 +353,13 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
         }
 
         if (funcr != 0) {
-            if (errParam != NULL)
-                icalparameter_free(errParam);
-
-            if (errProp != NULL)
-                icalproperty_free(errProp);
+            icalproperty *errProp;
+            icalparameter *errParam;
 
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
             errProp = icalproperty_vanew_xlicerror(funcr, errParam, 0);
             icalcomponent_add_property(comp, errProp);
+            icalproperty_free(errProp);
 
             compare = 0;
         }

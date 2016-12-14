@@ -466,18 +466,19 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         }
     case ICAL_BOOLEAN_VALUE:
         {
-            if (!strcmp(str, "TRUE")) value = icalvalue_new_boolean(1);
-            else if (!strcmp(str, "FALSE")) value = icalvalue_new_boolean(0);
-            else if (error != 0) {
+            if (!strcmp(str, "TRUE")) {
+                value = icalvalue_new_boolean(1);
+            } else if (!strcmp(str, "FALSE")) {
+                value = icalvalue_new_boolean(0);
+            } else if (error != 0) {
                 char temp[TMP_BUF_SIZE];
+                icalparameter *errParam;
 
                 snprintf(temp, sizeof(temp),
                          "Could not parse %s as a %s property",
                          str, icalvalue_kind_to_string(kind));
-                *error = icalproperty_vanew_xlicerror(
-                             temp,
-                             icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR),
-                             0);
+                errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
             }
             break;
         }
