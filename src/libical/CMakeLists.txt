@@ -155,15 +155,7 @@ endif()
 
 add_custom_target(
   ical-header ALL
-  COMMAND
-    ${CMAKE_COMMAND}
-      -DTOPS:FILEPATH=${TOPS}
-      -DTOPB:FILEPATH=${TOPB}
-      -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libical/ical.h
-      -P ${CMAKE_CURRENT_SOURCE_DIR}/ical_file.cmake
-  DEPENDS
-    ${BUILT_SOURCES}
-    ${BUILT_HEADERS}
+  DEPENDS ${CMAKE_BINARY_DIR}/src/libical/ical.h
 )
 
 # GObject Introspection
@@ -246,6 +238,18 @@ set(ical_LIB_SRCS
   icallangbind.c
   caldate.c
   astime.h
+)
+
+add_custom_command(
+  OUTPUT
+    ${CMAKE_BINARY_DIR}/src/libical/ical.h
+  COMMAND
+    ${CMAKE_COMMAND}
+      -DTOPS:FILEPATH=${TOPS}
+      -DTOPB:FILEPATH=${TOPB}
+      -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libical/ical.h
+      -P ${CMAKE_CURRENT_SOURCE_DIR}/ical_file.cmake
+  DEPENDS ${ical_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/ical_file.cmake
 )
 
 add_library(ical ${LIBRARY_TYPE} ${ical_LIB_SRCS})
