@@ -1526,11 +1526,11 @@ static int fetch_lat_long_from_string(const char *str,
 
     /* We need to parse the latitude/longitude co-ordinates and location fields  */
     sptr = (char *)str;
-    while (*sptr != '\t') {
+    while ((*sptr != '\t') && (*sptr != '\0')) {
         sptr++;
     }
     temp = ++sptr;
-    while (*sptr != '\t') {
+    while (*sptr != '\t' && *sptr != '\0') {
         sptr++;
     }
     len = (ptrdiff_t) (sptr - temp);
@@ -1538,30 +1538,28 @@ static int fetch_lat_long_from_string(const char *str,
     memset(lat, '\0', len);
     strncpy(lat, temp, len);
     lat[len] = '\0';
-    while (*sptr != '\t') {
+    while ((*sptr != '\t') && (*sptr != '\0')) {
         sptr++;
     }
     loc = ++sptr;
-    while (!isspace((int)(*sptr))) {
+    while (!isspace((int)(*sptr)) && (*sptr != '\0')) {
         sptr++;
     }
-    len = (ptrdiff_t) (sptr - loc);
+    len = (ptrdiff_t)(sptr - loc);
     location = strncpy(location, loc, len);
-    location[len] = '\0';
 
 #if defined(sun) && defined(__SVR4)
     /* Handle EET, MET and WET in zone_sun.tab. */
     if (!strcmp(location, "Europe/")) {
-        while (*sptr != '\t') {
+        while ((*sptr != '\t') && (*sptr != '\0')) {
             sptr++;
         }
         loc = ++sptr;
-        while (!isspace(*sptr)) {
+        while (!isspace(*sptr) && (*sptr != '\0')) {
             sptr++;
         }
-        len = sptr - loc;
+        len = (ptrdiff_t)(sptr - loc);
         location = strncpy(location, loc, len);
-        location[len] = '\0';
     }
 #endif
 
