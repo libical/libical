@@ -34,6 +34,7 @@ LIBICAL_ICAL_EXPORT void icalerror_stop_here(void);
 
 LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
 
+#pragma GCC visibility push(default)
 typedef enum icalerrorenum
 {
     ICAL_NO_ERROR = 0,
@@ -48,6 +49,7 @@ typedef enum icalerrorenum
     ICAL_UNIMPLEMENTED_ERROR,
     ICAL_UNKNOWN_ERROR  /* Used for problems in input to icalerror_strerror() */
 } icalerrorenum;
+#pragma GCC visibility pop
 
 LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
 
