@@ -1546,7 +1546,7 @@ static int fetch_lat_long_from_string(const char *str,
         sptr++;
     }
     len = (ptrdiff_t)(sptr - loc);
-    location = strncpy(location, loc, len);
+    strncpy(location, loc, len);
 
 #if defined(sun) && defined(__SVR4)
     /* Handle EET, MET and WET in zone_sun.tab. */
@@ -1559,7 +1559,7 @@ static int fetch_lat_long_from_string(const char *str,
             sptr++;
         }
         len = (ptrdiff_t)(sptr - loc);
-        location = strncpy(location, loc, len);
+        strncpy(location, loc, len);
     }
 #endif
 
