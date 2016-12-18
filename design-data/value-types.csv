@@ -1,5 +1,5 @@
 "#Name","C icalvalue_kind Enum","C type& gen flag","Python","Component Values","Enum Values"
-"BINARY","5011","(a)const char*","file","unitary",
+"BINARY","5011","(m)const char*","file","unitary",
 "BOOLEAN","5021","(a)int","integer","unitary",
 "CAL-ADDRESS","5023","(a)const char*","string","unitary",
 "DATE","5002","(a)struct icaltimetype","Time","unitary",
