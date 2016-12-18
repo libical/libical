@@ -50,17 +50,6 @@ typedef int time_t;
 
 // Ignore these declarations because there does not exist a definition for them
 %ignore _icalerror_set_errno(icalerrorenum);
-%ignore icalattachtype_add_reference(struct icalattachtype* v);
-%ignore icalattachtype_get_binary(struct icalattachtype* v);
-%ignore icalattachtype_set_binary(struct icalattachtype* v, char* binary,
-                int owns);
-%ignore icalattachtype_get_url(struct icalattachtype* v);
-%ignore icalattachtype_set_url(struct icalattachtype* v, char* url);
-%ignore icalattachtype_free(struct icalattachtype* v);
-%ignore icalattachtype_get_base64(struct icalattachtype* v);
-%ignore icalattachtype_new(void);
-%ignore icalattachtype_set_base64(struct icalattachtype* v, char* base64,
-                int owns);
 %ignore icalclassify_class_to_string(icalproperty_xlicclass c);
 %ignore icalfileset_new_from_cluster(const char* path, icalcluster *cluster);
 %ignore icalgauge_as_sql(icalcomponent* gauge);

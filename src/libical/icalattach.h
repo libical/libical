@@ -41,24 +41,4 @@ LIBICAL_ICAL_EXPORT const char *icalattach_get_url(icalattach *attach);
 
 LIBICAL_ICAL_EXPORT unsigned char *icalattach_get_data(icalattach *attach);
 
-LIBICAL_ICAL_EXPORT struct icalattachtype *icalattachtype_new(void);
-
-LIBICAL_ICAL_EXPORT void icalattachtype_add_reference(struct icalattachtype *v);
-
-LIBICAL_ICAL_EXPORT void icalattachtype_free(struct icalattachtype *v);
-
-LIBICAL_ICAL_EXPORT void icalattachtype_set_url(struct icalattachtype *v, char *url);
-
-LIBICAL_ICAL_EXPORT char *icalattachtype_get_url(struct icalattachtype *v);
-
-LIBICAL_ICAL_EXPORT void icalattachtype_set_base64(struct icalattachtype *v,
-                                                   char *base64, int owns);
-
-LIBICAL_ICAL_EXPORT char *icalattachtype_get_base64(struct icalattachtype *v);
-
-LIBICAL_ICAL_EXPORT void icalattachtype_set_binary(struct icalattachtype *v,
-                                                   char *binary, int owns);
-
-LIBICAL_ICAL_EXPORT void *icalattachtype_get_binary(struct icalattachtype *v);
-
 #endif /* !ICALATTACH_H */
