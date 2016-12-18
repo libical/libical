@@ -855,23 +855,20 @@ There are several ways to create a new icaltimetype structure:
 
 struct icaltimetype icaltime_from_string(const char* str);
 
-struct icaltimetype icaltime_from_timet(time_t v, int is_date);
-
-struct icaltimetype icaltime_from_int(int v, int is_date, int is_utc);
+struct icaltimetype icaltime_from_timet_with_zone(time_t v,
+                                                  int is_date,
+                                                  icaltimezone* zone);
 
 Icaltime_from_string takes any RFC5545 compliant time string:
 
 struct icaltimetype tt = icaltime_from_string("19970101T103000");
 
-Icaltime_from_timet takes a timet value, representing seconds past
-the POSIX epoch, and a flag to indicate if the time is a date. Dates
-have an identical structure to a time, but the time portion ( hours,
-minuts and seconds ) is always 00:00:00. Dates act differently in
-sorting an comparision, and they have a different string representation
+Icaltime_from_timet_with_zone takes a timet value, representing seconds past
+the POSIX epoch, a flag to indicate if the time is a date, and a time zone.
+Dates have an identical structure to a time, but the time portion (hours,
+minuts and seconds) is always 00:00:00. Dates act differently in
+sorting and comparision, and they have a different string representation
 in RFC5545.
-
-The icaltime_from_int is like icaltime_from_timet, but with an arbitrary
-epoch. This routine was a mistake and is deprecated.
 
 5.3.3 Time manipulating routines
 
@@ -919,7 +916,9 @@ Two routines convert time structures to and from the number of seconds
 since the POSIX epoch. The is_date field indicates whether or not
 the hour, minute and second fields should be used in the conversion.
 
-struct icaltimetype icaltime_from_timet(time_t v, int is_date);
+struct icaltimetype icaltime_from_timet_with_zone(time_t v,
+                                                  int is_date,
+                                                  icaltimezone* zone);
 
 time_t icaltime_as_timet(struct icaltimetype);
 
