@@ -107,7 +107,8 @@ buildme(parser "${parser_SRCS}")
 file(GLOB TEST_FILES ${CMAKE_SOURCE_DIR}/test-data/*.ics)
 foreach(TEST_FILE ${TEST_FILES})
   get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
-  add_test(NAME "parser-${TEST_NAME}" COMMAND parser ${TEST_FILE})
+  add_test(NAME parser-${TEST_NAME} COMMAND parser ${TEST_FILE})
+  setprops(parser-${TEST_NAME})
 endforeach()
 
 ########### next target ###############
