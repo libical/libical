@@ -5,6 +5,10 @@ Version 2.1.0:
 --------------
  * icalvalue_as_ical_string() returns "TRUE" (non-zero) or "FALSE" (zero) values only.
  * new icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
+ * Removed deprecated functions
+    * icaltime_start_day_of_week
+    * icalproperty_remove_parameter
+    * icalproperty_string_to_enum
 
 Version 2.0.0:
 --------------
