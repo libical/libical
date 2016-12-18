@@ -13,6 +13,29 @@
 #  ICO_MINOR_VERSION  - ICU minor version
 #
 
+find_package(PkgConfig)
+if(PKG_CONFIG_FOUND)
+  pkg_check_modules(_pc_icu icu-i18n)
+  if(_pc_icu_FOUND)
+    set(ICU_FOUND 1)
+    set(ICU_I18N_FOUND 1)
+    string(REPLACE ";" " " ICU_LDFLAGS "${_pc_icu_LDFLAGS}")
+    set(ICU_LIBRARIES ${ICU_LDFLAGS})
+    set(ICU_LIBRARY ${ICU_LDFLAGS})
+    set(ICU_I18N_LIBRARY ${ICU_LDFLAGS})
+    mark_as_advanced(ICU_LIBRARY)
+    mark_as_advanced(ICU_I18N_LIBRARY)
+    set(ICU_INCLUDE_DIRS ${_pc_icu_CFLAGS})
+    set(ICU_INCLUDE_DIR ${_pc_icu_INCLUDE_DIRS})
+    mark_as_advanced(ICU_INCLUDE_DIR)
+    set(ICU_VERSION ${_pc_icu_VERSION})
+    string(REGEX REPLACE "([0-9]+)[.].*" "\\1" ICU_MAJOR_VERSION "${ICU_VERSION}")
+    string(REGEX REPLACE ".*[.]([0-9]+)" "\\1" ICU_MINOR_VERSION "${ICU_VERSION}")
+  endif()
+endif()
+
+if(NOT ICU_FOUND)
+
 if(WIN32)
   file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _program_FILES_DIR)
 endif()
@@ -93,6 +116,8 @@ else()
   set(ICU_VERSION)
   set(ICU_MAJOR_VERSION)
   set(ICU_MINOR_VERSION)
+endif()
+
 endif()
 
 if(ICU_FOUND)
