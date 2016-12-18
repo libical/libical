@@ -104,7 +104,7 @@ public:
     static std::string method_to_string(const icalproperty_method &method);
 
     static std::string enum_to_string(const int &e);
-    static int string_to_enum(const std::string &str);
+    static int kind_and_string_to_enum(const icalproperty_kind &kind, const std::string &str);
 
     static std::string status_to_string(const icalproperty_status &status);
     static icalproperty_status string_to_status(const std::string &str);

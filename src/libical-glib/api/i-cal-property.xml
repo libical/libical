@@ -193,11 +193,6 @@
         <returns type="gchar *" annotation="transfer full" comment="The string representation of @e."/>
         <comment xml:space="preserve">Convert the enum to string.</comment>
     </method>
-    <method name="i_cal_property_string_to_enum" corresponds="icalproperty_string_to_enum" since="1.0">
-        <parameter type="const gchar *" name="str" comment="A string."/>
-        <returns type="gint" comment="The enum corresponding to @str."/>
-        <comment xml:space="preserve">Convert the string to an enum.</comment>
-    </method>
     <method name="i_cal_property_kind_and_string_to_enum" corresponds="icalproperty_kind_and_string_to_enum" since="1.0">
         <parameter type="const gint" name="kind" comment="The kind."/>
         <parameter type="const gchar *" name="str" comment="A string."/>

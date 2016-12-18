@@ -44,7 +44,6 @@ import Error
 typedef int time_t;
 
 // Remove deprecated functions
-%ignore icalproperty_string_to_enum(const char* str);
 %ignore icaltimezone_get_utc_offset(icaltimezone    *zone,
                                     struct icaltimetype *tt,
                                     int     *is_daylight);
