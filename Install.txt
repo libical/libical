@@ -118,10 +118,6 @@ Use these CMake options to adjust the library behavior as follows:
    Set to make icalerror_* calls abort instead of internally signaling an error.
    Default=false
 
- * NO_WARN_DEPRECATED=[true|false]
-   Set if you DO NOT WANT to see deprecated messages.
-   Default=true
-
  * ICAL_ALLOW_EMPTY_PROPERTIES=[true|false]
    Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
    Default=false
