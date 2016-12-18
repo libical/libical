@@ -49,8 +49,6 @@ struct icalcomponent_impl
     int timezones_sorted;
 };
 
-/* icalproperty functions that only components get to use */
-void icalproperty_set_parent(icalproperty *property, icalcomponent *component);
 static void icalcomponent_add_children(icalcomponent *impl, va_list args);
 static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind);
 

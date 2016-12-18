@@ -87,6 +87,7 @@ LIBICAL_ICAL_EXPORT const char *icalproperty_get_value_as_string(const icalprope
 LIBICAL_ICAL_EXPORT char *icalproperty_get_value_as_string_r(const icalproperty *prop);
 
 LIBICAL_ICAL_EXPORT void icalvalue_set_parent(icalvalue *value, icalproperty *property);
+LIBICAL_ICAL_EXPORT icalproperty *icalvalue_get_parent(icalvalue *value);
 
 /* Deal with X properties */
 
@@ -101,6 +102,9 @@ LIBICAL_ICAL_EXPORT const char *icalproperty_get_property_name(const icalpropert
 LIBICAL_ICAL_EXPORT char *icalproperty_get_property_name_r(const icalproperty *prop);
 
 LIBICAL_ICAL_EXPORT icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
+
+LIBICAL_ICAL_EXPORT void icalparameter_set_parent(icalparameter *param, icalproperty *property);
+LIBICAL_ICAL_EXPORT icalproperty *icalparameter_get_parent(icalparameter *param);
 
 /* Convert kinds to string and get default value type */
 LIBICAL_ICAL_EXPORT icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);
