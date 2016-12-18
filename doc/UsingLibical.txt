@@ -857,8 +857,6 @@ struct icaltimetype icaltime_from_string(const char* str);
 
 struct icaltimetype icaltime_from_timet(time_t v, int is_date);
 
-struct icaltimetype icaltime_from_int(int v, int is_date, int is_utc);
-
 Icaltime_from_string takes any RFC5545 compliant time string:
 
 struct icaltimetype tt = icaltime_from_string("19970101T103000");
@@ -869,9 +867,6 @@ have an identical structure to a time, but the time portion ( hours,
 minuts and seconds ) is always 00:00:00. Dates act differently in
 sorting an comparision, and they have a different string representation
 in RFC5545.
-
-The icaltime_from_int is like icaltime_from_timet, but with an arbitrary
-epoch. This routine was a mistake and is deprecated.
 
 5.3.3 Time manipulating routines
 
