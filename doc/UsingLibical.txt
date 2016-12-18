@@ -710,7 +710,7 @@ void icalproperty_add_parameter(
 
      icalparameter* parameter);
 
-void icalproperty_remove_parameter(
+void icalproperty_remove_parameter_by_kind(
 
      icalproperty* prop,
 

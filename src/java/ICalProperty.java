@@ -175,7 +175,7 @@ public class ICalProperty
         public native void set_parameter(ICalParameter parameter);
         public native void set_parameter_from_string(String name, String val);
         public native String get_parameter_as_string(String name);
-        public native void remove_parameter(/* ICalParameterKind */ int kind);
+        public native void remove_parameter_by_kind(/* ICalParameterKind */ int kind);
         public native int count_parameters();
 
         /* Iterate through the parameters */

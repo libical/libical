@@ -124,9 +124,9 @@ std::string ICalProperty::get_parameter_as_string(const std::string &name)
     return static_cast<std::string>(icalproperty_get_parameter_as_string(imp, name.c_str()));
 }
 
-void ICalProperty::remove_parameter(const icalparameter_kind &kind)
+void ICalProperty::remove_parameter_by_kind(const icalparameter_kind &kind)
 {
-    icalproperty_remove_parameter(imp, kind);
+    icalproperty_remove_parameter_by_kind(imp, kind);
 }
 
 int ICalProperty::count_parameters()

@@ -631,17 +631,6 @@ char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *nam
     return str;
 }
 
-/** @see icalproperty_remove_parameter_by_kind()
- *
- *  @deprecated Please use icalproperty_remove_parameter_by_kind()
- *              instead.
- */
-
-void icalproperty_remove_parameter(icalproperty *prop, icalparameter_kind kind)
-{
-    icalproperty_remove_parameter_by_kind(prop, kind);
-}
-
 /** @brief Remove all parameters with the specified kind.
  *
  *  @param prop   A valid icalproperty.

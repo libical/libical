@@ -67,7 +67,7 @@ public:
     void set_parameter(ICalParameter &parameter);
     void set_parameter_from_string(const std::string &name, const std::string &val);
     std::string get_parameter_as_string(const std::string &name);
-    void remove_parameter(const icalparameter_kind &kind);
+    void remove_parameter_by_kind(const icalparameter_kind &kind);
     int count_parameters();
 
     /** Iterate through the parameters */
