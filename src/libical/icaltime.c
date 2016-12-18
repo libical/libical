@@ -601,20 +601,6 @@ int icaltime_start_doy_week(const struct icaltimetype t, int fdow)
     return jt.day_of_year - delta;
 }
 
-/** Day of the year that the first day of the week (Sunday) is on.
- *
- *  @deprecated Doesn't take into account different week start days.
- */
-int icaltime_start_doy_of_week(const struct icaltimetype t)
-{
-#if NO_WARN_DEPRECATED == 0
-    icalerror_warn(
-        "icaltime_start_doy_of_week() is DEPRECATED, use icaltime_start_doy_week() instead");
-#endif
-
-    return icaltime_start_doy_week(t, 1);
-}
-
 /**
  * @todo Doesn't take into account the start day of the
  * week. strftime assumes that weeks start on Monday.

@@ -1678,7 +1678,7 @@ void do_test_time(const char *zone)
         printf("\n Day Of week \n");
 
     day_of_week = icaltime_day_of_week(ictt);
-    start_day_of_week = icaltime_start_doy_of_week(ictt);
+    start_day_of_week = icaltime_start_doy_week(ictt, 1);
     day_of_year = icaltime_day_of_year(ictt);
 
     snprintf(msg, sizeof(msg), "Testing day of week %d", day_of_week);
@@ -2414,7 +2414,7 @@ void test_start_of_week()
     do {
         tt1 = icaltime_normalize(tt1);
 
-        doy = icaltime_start_doy_of_week(tt1);
+        doy = icaltime_start_doy_week(tt1, 1);
         dow = icaltime_day_of_week(tt1);
 
         tt2 = icaltime_from_day_of_year(doy, tt1.year);

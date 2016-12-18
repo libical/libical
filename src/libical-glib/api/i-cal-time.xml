@@ -97,11 +97,6 @@
         <returns type="gint" comment="the day of the week of the given time. Sunday is 1." />
         <comment xml:space="preserve">Return the day of the week of the given time. Sunday is 1</comment>
     </method>
-    <method name="i_cal_time_start_doy_of_week" corresponds="icaltime_start_doy_of_week" since="1.0">
-        <parameter type="ICalTimetype *" name="tt" annotation="in, transfer none" comment="The #ICalTimetype to be queried"/>
-        <returns type="gint" comment="the day of the year for the Sunday of the week that the given time is within." />
-        <comment xml:space="preserve">Return the day of the year for the Sunday of the week that the given time is within.</comment>
-    </method>
     <method name="i_cal_time_start_doy_week" corresponds="icaltime_start_doy_week" since="1.0">
         <parameter type="ICalTimetype *" name="tt" annotation="in, transfer none" comment="The #ICalTimetype to be queried"/>
         <parameter type="gint" name="fdow" comment="The first day of the week" />

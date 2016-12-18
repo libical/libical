@@ -248,9 +248,9 @@ struct icaltimetype icaltime_from_day_of_year(short doy,  short year);
 /* Return the day of the week of the given time. Sunday is 0 */
 short icaltime_day_of_week(struct icaltimetype t);
 
-/* Return the day of the year for the Sunday of the week that the
+/* Return the day of the year for the first day of the week that the
    given time is within. */
-short icaltime_start_doy_of_week(struct icaltimetype t);
+short icaltime_start_doy_week(struct icaltimetype t, int fdow);
 
 /* Return a string with the time represented in the same format as ctime(). THe string is owned by libical */
 char* icaltime_as_ctime(struct icaltimetype);

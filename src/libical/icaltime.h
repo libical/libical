@@ -56,7 +56,7 @@
  *      - icaltime_set_timezone(struct icaltimetype t, const icaltimezone *zone)
  *      - icaltime_day_of_year(struct icaltimetype t)
  *      - icaltime_day_of_week(struct icaltimetype t)
- *      - icaltime_start_doy_of_week(struct icaltimetype t, int fdow)
+ *      - icaltime_start_doy_week(struct icaltimetype t, int fdow)
  *      - icaltime_week_number(struct icaltimetype t)
  *
  *      Query methods include:
@@ -182,10 +182,6 @@ LIBICAL_ICAL_EXPORT int icaltime_day_of_year(const struct icaltimetype t);
 
 /** Return the day of the week of the given time. Sunday is 1 */
 LIBICAL_ICAL_EXPORT int icaltime_day_of_week(const struct icaltimetype t);
-
-/** Return the day of the year for the Sunday of the week that the
-   given time is within. */
-LIBICAL_ICAL_EXPORT int icaltime_start_doy_of_week(const struct icaltimetype t);
 
 /** Return the day of the year for the first day of the week that the
    given time is within. */

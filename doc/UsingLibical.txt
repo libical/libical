@@ -909,7 +909,7 @@ struct icaltimetype icaltime_from_day_of_year(short doy, short year);
 
 short icaltime_day_of_week(struct icaltimetype t);
 
-short icaltime_start_doy_of_week(struct icaltimetype t);
+short icaltime_start_doy_week(struct icaltimetype t, int fdow);
 
 short icaltime_week_number(short day_of_month, short month, short year);
 
