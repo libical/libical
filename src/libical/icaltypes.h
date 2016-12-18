@@ -97,8 +97,6 @@ struct icaltimezonetype
     struct icaltimezonephase *phases;
 };
 
-LIBICAL_ICAL_EXPORT void icaltimezonetype_free(struct icaltimezonetype tzt);
-
 /* ical_unknown_token_handling :
  *    How should the ICAL library handle components, properties and parameters with
  *    unknown names?

@@ -40,9 +40,7 @@
  *      - icaltime_today()
  *      - icaltime_from_timet_with_zone(time_t tm, int is_date,
  *              icaltimezone *zone)
- *      - icaltime_from_string_with_zone(const char* str, icaltimezone *zone)
  *      - icaltime_from_day_of_year(int doy, int year)
- *      - icaltime_from_week_number(int week_number, int year)
  *
  *      italtimetype objects can be converted to different formats:
  *
@@ -154,17 +152,8 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const time
 /** create a time from an ISO format string */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_string(const char *str);
 
-/** create a time from an ISO format string */
-LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_string_with_zone(const char *str,
-                                                                       const icaltimezone *zone);
-
 /** Create a new time, given a day of year and a year. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy, const int year);
-
-/**     @brief Contructor (TODO).
- * Create a new time from a weeknumber and a year. */
-LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_week_number(const int week_number,
-                                                                  const int year);
 
 /** Return the time as seconds past the UNIX epoch */
 LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);

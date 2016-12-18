@@ -78,10 +78,6 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
  * Parser support functions
  ***********************************************************************/
 
-/** Use the flex/bison parser to turn a string into a value type */
-LIBICAL_ICAL_EXPORT icalvalue *icalparser_parse_value(icalvalue_kind kind,
-                                                      const char *str, icalcomponent ** errors);
-
 /** Given a line generator function, return a single iCal content line.*/
 LIBICAL_ICAL_EXPORT char *icalparser_get_line(icalparser *parser,
                                               char *(*line_gen_func) (char *s,

@@ -36,9 +36,6 @@ LIBICAL_ICALSS_EXPORT icalset *icalfileset_new_writer(const char *path);
 
 LIBICAL_ICALSS_EXPORT icalset *icalfileset_init(icalset *set, const char *dsn, void *options);
 
-LIBICAL_ICALSS_EXPORT icalfileset *icalfileset_new_from_cluster(const char *path,
-                                                                icalcluster *cluster);
-
 LIBICAL_ICALSS_EXPORT icalcluster *icalfileset_produce_icalcluster(const char *path);
 
 LIBICAL_ICALSS_EXPORT void icalfileset_free(icalset *cluster);

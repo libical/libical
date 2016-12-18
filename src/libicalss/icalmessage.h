@@ -41,17 +41,6 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_delegate_reply(icalcomponen
                                                                     const char *delegatee,
                                                                     const char *msg);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_cancel_event(icalcomponent *c,
-                                                                  const char *user,
-                                                                  const char *msg);
-
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_cancel_instance(icalcomponent *c,
-                                                                     const char *user,
-                                                                     const char *msg);
-
-LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_cancel_all(icalcomponent *c,
-                                                                const char *user, const char *msg);
-
 LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_error_reply(icalcomponent *c,
                                                                  const char *user,
                                                                  const char *msg,

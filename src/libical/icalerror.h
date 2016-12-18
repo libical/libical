@@ -75,7 +75,6 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
 #endif /* __GNU_C__ */
 
 LIBICAL_ICAL_EXPORT void icalerror_clear_errno(void);
-LIBICAL_ICAL_EXPORT void _icalerror_set_errno(icalerrorenum);
 
 /* Make an individual error fatal or non-fatal. */
 typedef enum icalerrorstate

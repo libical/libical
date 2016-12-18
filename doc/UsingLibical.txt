@@ -913,9 +913,6 @@ short icaltime_start_doy_of_week(struct icaltimetype t);
 
 short icaltime_week_number(short day_of_month, short month, short year);
 
-struct icaltimetype icaltime_from_week_number(short week_number, short
-year);
-
 short icaltime_days_in_month(short month,short year);
 
 Two routines convert time structures to and from the number of seconds

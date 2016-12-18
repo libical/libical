@@ -43,43 +43,6 @@ import Error
 
 typedef int time_t;
 
-
-// This is declared as an extern, but never used in the library.
-%ignore icalfileset_safe_saves;
-
-
-// Ignore these declarations because there does not exist a definition for them
-%ignore _icalerror_set_errno(icalerrorenum);
-%ignore icalclassify_class_to_string(icalproperty_xlicclass c);
-%ignore icalfileset_new_from_cluster(const char* path, icalcluster *cluster);
-%ignore icalgauge_as_sql(icalcomponent* gauge);
-%ignore icalgauge_new_clone(icalgauge* g, icalcomponent* comp);
-%ignore icallangbind_get_component(icalcomponent *c, const char* comp);
-%ignore icallangbind_get_parameter(icalproperty *p, const char* parameter);
-%ignore icallangbind_get_property(icalcomponent *c, int n, const char* prop);
-%ignore icallangbind_get_property_val(icalproperty* p);
-%ignore icalmessage_new_cancel_all(icalcomponent* c,
-                        const char* user,
-                        const char* msg);
-%ignore icalmessage_new_cancel_event(icalcomponent* c,
-                        const char* user,
-                        const char* msg);
-%ignore icalmessage_new_cancel_instance(icalcomponent* c,
-                        const char* user,
-                        const char* msg);
-%ignore icalparser_parse_value(icalvalue_kind kind,
-                   const char* str, icalcomponent** errors);
-%ignore icalrestriction_is_parameter_allowed(icalproperty_kind property,
-                                       icalparameter_kind parameter);
-%ignore icalset_clear_select(icalset* set);
-%ignore icaltime_days_in_year (const int year);
-%ignore icaltime_from_string_with_zone(const char* str,
-                    const icaltimezone *zone);
-%ignore icaltime_from_week_number(const int week_number,
-                    const int year);
-%ignore icaltimezonetype_free(struct icaltimezonetype tzt);
-
-
 // Remove depreciated functions
 %ignore icalproperty_string_to_enum(const char* str);
 %ignore icaltimezone_get_utc_offset(icaltimezone    *zone,
