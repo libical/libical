@@ -193,7 +193,7 @@ struct icaltimetype
 
 
 /* Convert seconds past UNIX epoch to a timetype*/
-struct icaltimetype icaltime_from_timet(int v, int is_date);
+struct icaltimetype icaltime_from_timet_with_zone(int v, int is_date, const char* tzid);
 
 /* Return the time as seconds past the UNIX epoch */
 /* Normally, this returns a time_t, but SWIG tries to turn that type

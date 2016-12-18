@@ -208,7 +208,7 @@ static void find_transidx(time_t *transitions, ttinfo *types,
     struct icaltimetype itime;
 
     now = time(NULL);
-    itime = icaltime_from_timet(now, 0);
+    itime = icaltime_from_timet_with_zone(now, 0, NULL);
     itime.month = itime.day = 1;
     itime.hour = itime.minute = itime.second = 0;
     year_start = icaltime_as_timet(itime);
@@ -276,13 +276,13 @@ static void adjust_dtstart_day_to_rrule(icalcomponent *comp, struct icalrecurren
     icalrecur_iterator *iter;
 
     now = time(NULL);
-    itime = icaltime_from_timet(now, 0);
+    itime = icaltime_from_timet_with_zone(now, 0, NULL);
     itime.month = itime.day = 1;
     itime.hour = itime.minute = itime.second = 0;
     year_start = icaltime_as_timet(itime);
 
     comp_start = icalcomponent_get_dtstart(comp);
-    start = icaltime_from_timet(year_start, 0);
+    start = icaltime_from_timet_with_zone(year_start, 0, NULL);
 
     iter = icalrecur_iterator_new(rule, start);
     iter_start = icalrecur_iterator_next(iter);
@@ -502,7 +502,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             } else {
                 trans = (time_t)types[zp_idx].gmtoff;
             }
-            icaltime = icaltime_from_timet(trans, 0);
+            icaltime = icaltime_from_timet_with_zone(trans, 0, NULL);
             dtstart = icaltime;
             dtstart.year = 1970;
             dtstart.minute = dtstart.second = 0;
@@ -545,7 +545,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 trans = (time_t)types[zp_idx].gmtoff;
             }
 
-            icaltime = icaltime_from_timet(trans, 0);
+            icaltime = icaltime_from_timet_with_zone(trans, 0, NULL);
             dtstart = icaltime;
             dtstart.year = 1970;
             dtstart.minute = dtstart.second = 0;
@@ -594,7 +594,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             }
             icalprop = icalproperty_new_tzname(types[prev_idx].zname);
             icalcomponent_add_property(comp, icalprop);
-            dtstart = icaltime_from_timet(start, 0);
+            dtstart = icaltime_from_timet_with_zone(start, 0, NULL);
             icalprop = icalproperty_new_dtstart(dtstart);
             icalcomponent_add_property(comp, icalprop);
             icalprop = icalproperty_new_tzoffsetfrom(types[idx].gmtoff);
@@ -611,7 +611,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         }
         icalprop = icalproperty_new_tzname(types[idx].zname);
         icalcomponent_add_property(comp, icalprop);
-        dtstart = icaltime_from_timet(start, 0);
+        dtstart = icaltime_from_timet_with_zone(start, 0, NULL);
         icalprop = icalproperty_new_dtstart(dtstart);
         icalcomponent_add_property(comp, icalprop);
         icalprop = icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff);

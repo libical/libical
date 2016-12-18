@@ -141,9 +141,6 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_current_time_with_zone(const ic
 /** Returns the current day as an icaltimetype, with is_date set. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_today(void);
 
-/** Convert seconds past UNIX epoch to a timetype*/
-LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet(const time_t v, const int is_date);
-
 /** Convert seconds past UNIX epoch to a timetype, using timezones. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const time_t tm,
                                                                       const int is_date,

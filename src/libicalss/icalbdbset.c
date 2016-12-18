@@ -1292,7 +1292,7 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
             }
 
             recur = icalproperty_get_rrule(rrule);
-            start = icaltime_from_timet(time(0), 0);
+            start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
                 dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
@@ -1400,7 +1400,7 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
     }
 
     recur = icalproperty_get_rrule(rrule);
-    start = icaltime_from_timet(time(0), 0);
+    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
     if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
         dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
@@ -1514,7 +1514,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
             }
 
             recur = icalproperty_get_rrule(rrule);
-            start = icaltime_from_timet(time(0), 0);
+            start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
                 dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);

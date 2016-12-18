@@ -215,9 +215,9 @@ void test_values()
     icalvalue_free(v);
     icalvalue_free(copy);
 
-    v = icalvalue_new_date(icaltime_from_timet(1023404802, 0));
+    v = icalvalue_new_date(icaltime_from_timet_with_zone(1023404802, 0, NULL));
     str_is("icalvalue_new_date()", icalvalue_as_ical_string(v), "20020606T230642");
-    icalvalue_set_date(v, icaltime_from_timet(1023404802 - 3600, 0));
+    icalvalue_set_date(v, icaltime_from_timet_with_zone(1023404802 - 3600, 0, NULL));
     str_is("icalvalue_set_date()", icalvalue_as_ical_string(v), "20020606T220642");
 
     copy = icalvalue_new_clone(v);
@@ -709,7 +709,7 @@ void test_dirset()
     ok("opening 'store' dirset", s != NULL);
     ok("opening 'store-new' dirset", s2 != NULL);
 
-    rtime.start = icaltime_from_timet(time(0), 0);
+    rtime.start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
     cluster = icalfileset_new("clusterin.vcd");
 
@@ -867,13 +867,13 @@ void test_compare()
 void test_restriction()
 {
     icalcomponent *comp;
-    struct icaltimetype atime = icaltime_from_timet(time(0), 0);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
     int valid;
 
     struct icaldatetimeperiodtype rtime;
 
-    rtime.period.start = icaltime_from_timet(time(0), 0);
-    rtime.period.end = icaltime_from_timet(time(0), 0);
+    rtime.period.start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    rtime.period.end = icaltime_from_timet_with_zone(time(0), 0, NULL);
     rtime.period.end.hour++;
     rtime.time = icaltime_null_time();
 
@@ -945,7 +945,7 @@ void test_calendar()
     icalset *s;
     icalcalendar *calendar;
     icalerrorenum error;
-    struct icaltimetype atime = icaltime_from_timet(time(0), 0);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
     (void)mkdir("calendar", 0755);
     (void)mkdir("calendar/booked", 0755);
@@ -1085,7 +1085,7 @@ void icalrecurrencetype_test()
             "FREQ=YEARLY;UNTIL=20060101T000000;INTERVAL=2;BYDAY=SU,WE;BYSECOND=15,30; BYMONTH=1,6,11");
 
     struct icalrecurrencetype r = icalvalue_get_recur(v);
-    struct icaltimetype t = icaltime_from_timet(time(0), 0);
+    struct icaltimetype t = icaltime_from_timet_with_zone(time(0), 0, NULL);
     struct icaltimetype next;
     time_t tt;
 
@@ -1488,14 +1488,6 @@ void do_test_time(const char *zone)
     if (VERBOSE) {
         printf("Orig        : %s\n", ical_timet_string(tt));
     }
-    if (VERBOSE) {
-        printf("\nicaltime_from_timet(tt,0) (DEPRECATED)\n");
-    }
-
-    ictt = icaltime_from_timet(tt, 0);
-
-    str_is("icaltime_from_timet(1025127869) as UTC", ictt_as_string(ictt),
-           "2002-06-26 21:44:29 (floating)");
 
     ictt = icaltime_from_timet_with_zone(tt, 0, NULL);
     str_is("Floating time from time_t", ictt_as_string(ictt), "2002-06-26 21:44:29 (floating)");
@@ -1988,8 +1980,8 @@ void test_overlaps()
     set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/overlaps.ics", &options);
 
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                            icalproperty_vanew_dtstart(icaltime_from_timet(tm1 - hh, 0), (void *)0),
-                            icalproperty_vanew_dtend(icaltime_from_timet(tm2 - hh, 0), (void *)0),
+                            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1 - hh, 0, NULL), (void *)0),
+                            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2 - hh, 0, NULL), (void *)0),
                             0);
 
     cset = icalclassify_find_overlaps(set, c);
@@ -2009,8 +2001,8 @@ void test_overlaps()
 
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet(tm1 - hh, 0), (void *)0),
-            icalproperty_vanew_dtend(icaltime_from_timet(tm2, 0), (void *)0),
+            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1 - hh, 0, NULL), (void *)0),
+            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), (void *)0),
             0);
 
     cset = icalclassify_find_overlaps(set, c);
@@ -2029,8 +2021,8 @@ void test_overlaps()
 
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet(tm1 + 5 * hh, 0), (void *)0),
-            icalproperty_vanew_dtend(icaltime_from_timet(tm2 + 5 * hh, 0), (void *)0),
+            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1 + 5 * hh, 0, NULL), (void *)0),
+            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2 + 5 * hh, 0, NULL), (void *)0),
             0);
 
     cset = icalclassify_find_overlaps(set, c);

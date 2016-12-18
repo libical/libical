@@ -774,7 +774,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
 
     icalerror_check_arg_re((set != 0), "set", icalsetiter_null);
 
-    start = icaltime_from_timet(time(0), 0);
+    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     itr.gauge = gauge;
 
     fset = (icalfileset *) set;
@@ -855,7 +855,7 @@ icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *itr)
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype recur;
 
-    start = icaltime_from_timet(time(0), 0);
+    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     comp = itr->last_component;
 
     if (comp == NULL || itr->gauge == NULL) {
@@ -921,8 +921,8 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
 
     _unused(set);
 
-    start = icaltime_from_timet(time(0), 0);
-    next = icaltime_from_timet(time(0), 0);
+    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    next = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
     do {
         c = icalcompiter_next(&(i->iter));

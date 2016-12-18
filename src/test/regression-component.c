@@ -89,13 +89,13 @@ void create_new_component()
     icalcomponent *timezone;
     icalcomponent *tzc;
     icalcomponent *event;
-    struct icaltimetype atime = icaltime_from_timet(1023398689, 0);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(1023398689, 0, NULL);
     struct icaldatetimeperiodtype rtime;
     icalproperty *property;
     char *calendar_as_string;
 
-    rtime.period.start = icaltime_from_timet(1023398689, 0);
-    rtime.period.end = icaltime_from_timet(1023409689, 0);
+    rtime.period.start = icaltime_from_timet_with_zone(1023398689, 0, NULL);
+    rtime.period.end = icaltime_from_timet_with_zone(1023409689, 0, NULL);
     rtime.period.end.hour++;
     rtime.time = icaltime_null_time();
 
@@ -215,11 +215,11 @@ void create_new_component()
 void create_new_component_with_va_args()
 {
     icalcomponent *calendar;
-    struct icaltimetype atime = icaltime_from_timet(time(0), 0);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
     struct icaldatetimeperiodtype rtime;
 
-    rtime.period.start = icaltime_from_timet(time(0), 0);
-    rtime.period.end = icaltime_from_timet(time(0), 0);
+    rtime.period.start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    rtime.period.end = icaltime_from_timet_with_zone(time(0), 0, NULL);
     rtime.period.end.hour++;
     rtime.time = icaltime_null_time();
 
@@ -354,8 +354,8 @@ void test_icalcomponent_get_span()
      */
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet(tm1, 0), 0),
-            icalproperty_vanew_dtend(icaltime_from_timet(tm2, 0), 0),
+            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL), 0),
+            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), 0),
             (void *)0);
 
     span = icalcomponent_get_span(c);
@@ -439,7 +439,7 @@ void test_icalcomponent_get_span()
      */
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_new_dtstart(icaltime_from_timet(tm1, 0)),
+            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL)),
             (void *)0);
 
     span = icalcomponent_get_span(c);
@@ -454,8 +454,8 @@ void test_icalcomponent_get_span()
      */
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_new_dtstart(icaltime_from_timet(tm1, 1)),
-            icalproperty_new_dtend(icaltime_from_timet(tm1, 1)),
+            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
+            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm1, 1, NULL)),
             (void *)0);
 
     span = icalcomponent_get_span(c);
@@ -469,8 +469,8 @@ void test_icalcomponent_get_span()
      *  We specify start and end date
      */
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                            icalproperty_new_dtstart(icaltime_from_timet(tm1, 1)),
-                            icalproperty_new_dtend(icaltime_from_timet(tm2, 1)), (void *)0);
+                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
+                            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm2, 1, NULL)), (void *)0);
 
     span = icalcomponent_get_span(c);
     int_is("UTC #2", (int)span.start, 973296000);
@@ -483,7 +483,7 @@ void test_icalcomponent_get_span()
      *  We specify start date
      */
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                            icalproperty_new_dtstart(icaltime_from_timet(tm1, 1)), (void *)0);
+                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)), (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)

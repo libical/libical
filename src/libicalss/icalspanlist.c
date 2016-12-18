@@ -282,9 +282,9 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
         period.start = t;
 
         if (s->is_busy == 1) {
-            period.end = icaltime_from_timet(s->start, 0);
+            period.end = icaltime_from_timet_with_zone(s->start, 0, NULL);
         } else {
-            period.end = icaltime_from_timet(s->end, 0);
+            period.end = icaltime_from_timet_with_zone(s->end, 0, NULL);
         }
 
         return period;
@@ -301,12 +301,12 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
         if (s->is_busy == 0 && s->start >= rangett && (rangett < s->end || s->end == s->start)) {
 
             if (rangett < s->start) {
-                period.start = icaltime_from_timet(s->start, 0);
+                period.start = icaltime_from_timet_with_zone(s->start, 0, NULL);
             } else {
-                period.start = icaltime_from_timet(rangett, 0);
+                period.start = icaltime_from_timet_with_zone(rangett, 0, NULL);
             }
 
-            period.end = icaltime_from_timet(s->end, 0);
+            period.end = icaltime_from_timet_with_zone(s->end, 0, NULL);
 
             return period;
         }
@@ -419,7 +419,7 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 {
     icalcomponent *comp;
     icalproperty *p;
-    struct icaltimetype atime = icaltime_from_timet(time(0), 0);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
     pvl_elem itr;
     icaltimezone *utc_zone;
     icalparameter *param;

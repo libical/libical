@@ -140,7 +140,7 @@ void test_fileset_extended(void)
     icalcomponent *c, *clone, *itr;
     icalsetiter iter;
 
-    start = icaltime_from_timet(time(0), 0);
+    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     end = start;
     end.hour++;
 
@@ -305,7 +305,7 @@ void test_bdbset()
 
     return;     // for now... TODO fix these broken tests..
 
-    start = icaltime_from_timet(time(0), 0);
+    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     end = start;
     end.hour++;
 
@@ -636,7 +636,7 @@ void test_dirset_extended(void)
     ok("Open dirset 'store'", (s != 0));
     assert(s != 0);
 
-    rtime.start = icaltime_from_timet(time(0), 0);
+    rtime.start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
     cluster = icalfileset_new(OUTPUT_FILE);
 

@@ -113,7 +113,7 @@ static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
         icalcomponent_vanew(
             ICAL_VCALENDAR_COMPONENT, icalproperty_new_method(ICAL_METHOD_REPLY),
             icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                                icalproperty_new_dtstamp(icaltime_from_timet(time(0), 0)),
+                                icalproperty_new_dtstamp(icaltime_from_timet_with_zone(time(0), 0, NULL)),
                                 0),
             0);
 
@@ -127,7 +127,7 @@ static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
     icalmessage_copy_properties(reply, c, ICAL_SUMMARY_PROPERTY);
     icalmessage_copy_properties(reply, c, ICAL_SEQUENCE_PROPERTY);
 
-    icalcomponent_set_dtstamp(reply, icaltime_from_timet(time(0), 0));
+    icalcomponent_set_dtstamp(reply, icaltime_from_timet_with_zone(time(0), 0, NULL));
 
     if (msg != 0) {
         icalcomponent_add_property(inner, icalproperty_new_comment(msg));
