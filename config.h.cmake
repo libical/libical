@@ -172,9 +172,6 @@
 /* Define to prevent empty properties from being replaced with X-LIC-ERROR properties */
 #define ICAL_ALLOW_EMPTY_PROPERTIES ${ICAL_ALLOW_EMPTY_PROPERTIES}
 
-/* Define to 1 if you DO NOT WANT to see deprecated messages */
-#define NO_WARN_DEPRECATED ${NO_WARN_DEPRECATED}
-
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "${PROJECT_URL}"
 

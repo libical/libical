@@ -124,9 +124,9 @@ std::string ICalProperty::get_parameter_as_string(const std::string &name)
     return static_cast<std::string>(icalproperty_get_parameter_as_string(imp, name.c_str()));
 }
 
-void ICalProperty::remove_parameter(const icalparameter_kind &kind)
+void ICalProperty::remove_parameter_by_kind(const icalparameter_kind &kind)
 {
-    icalproperty_remove_parameter(imp, kind);
+    icalproperty_remove_parameter_by_kind(imp, kind);
 }
 
 int ICalProperty::count_parameters()
@@ -228,9 +228,9 @@ std::string ICalProperty::enum_to_string(const int &e)
     return static_cast<std::string>(icalproperty_enum_to_string(e));
 }
 
-int ICalProperty::string_to_enum(const std::string &str)
+int ICalProperty::kind_and_string_to_enum(const icalproperty_kind &kind, const std::string &str)
 {
-    return icalproperty_string_to_enum(str.c_str());
+    return icalproperty_kind_and_string_to_enum(kind, str.c_str());
 }
 
 std::string ICalProperty::status_to_string(const icalproperty_status &status)

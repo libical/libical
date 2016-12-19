@@ -174,26 +174,6 @@ int icalproperty_kind_and_string_to_enum(const int kind, const char *str)
     return 0;
 }
 
-/** @deprecated please use icalproperty_kind_and_string_to_enum instead */
-int icalproperty_string_to_enum(const char *str)
-{
-    int i;
-
-    icalerror_check_arg_rz(str != 0, "str");
-
-    while (*str == ' ') {
-        str++;
-    }
-
-    for (i = ICALPROPERTY_FIRST_ENUM; i != ICALPROPERTY_LAST_ENUM; i++) {
-        if (strcasecmp(enum_map[i - ICALPROPERTY_FIRST_ENUM].str, str) == 0) {
-            return enum_map[i - ICALPROPERTY_FIRST_ENUM].prop_enum;
-        }
-    }
-
-    return 0;
-}
-
 int icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e)
 {
     int i;

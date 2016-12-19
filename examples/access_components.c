@@ -30,13 +30,13 @@ icalcomponent* create_new_component()
     /* variable definitions */
     icalcomponent* calendar;
     icalcomponent* event;
-    struct icaltimetype atime = icaltime_from_timet( time(0),0);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, icaltimezone_get_utc_timezone());
     struct icalperiodtype rtime;
     icalproperty* property;
 
     /* Define a time type that will use as data later. */
-    rtime.start = icaltime_from_timet( time(0),0);
-    rtime.end = icaltime_from_timet( time(0),0);
+    rtime.start = icaltime_from_timet_with_zone(time(0), 0, icaltimezone_get_utc_timezone());
+    rtime.end = icaltime_from_timet_with_zone(time(0), 0, icaltimezone_get_utc_timezone());
     rtime.end.hour++;
 
     /* Create calendar and add properties */
@@ -198,11 +198,11 @@ icalcomponent* create_new_component_with_va_args()
 
     /* This is a similar set up to the last routine */
     icalcomponent* calendar;
-    struct icaltimetype atime = icaltime_from_timet( time(0),0);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, icaltimezone_get_utc_timezone());
     struct icalperiodtype rtime;
 
-    rtime.start = icaltime_from_timet( time(0),0);
-    rtime.end = icaltime_from_timet( time(0),0);
+    rtime.start = icaltime_from_timet_with_zone(time(0), 0, icaltimezone_get_utc_timezone());
+    rtime.end = icaltime_from_timet_with_zone(time(0), 0, icaltimezone_get_utc_timezone());
     rtime.end.hour++;
 
     /* Some of these routines are the same as those in the previous

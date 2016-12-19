@@ -58,9 +58,6 @@ LIBICAL_ICAL_EXPORT const char *icalproperty_get_parameter_as_string(icalpropert
 LIBICAL_ICAL_EXPORT char *icalproperty_get_parameter_as_string_r(icalproperty *prop,
                                                                  const char *name);
 
-LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter(icalproperty *prop,
-                                                       icalparameter_kind kind);
-
 LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_kind(icalproperty *prop,
                                                                icalparameter_kind kind);
 
@@ -120,7 +117,6 @@ LIBICAL_ICAL_EXPORT const char *icalproperty_method_to_string(icalproperty_metho
 
 LIBICAL_ICAL_EXPORT const char *icalproperty_enum_to_string(int e);
 LIBICAL_ICAL_EXPORT char *icalproperty_enum_to_string_r(int e);
-LIBICAL_ICAL_EXPORT int icalproperty_string_to_enum(const char *str);
 LIBICAL_ICAL_EXPORT int icalproperty_kind_and_string_to_enum(const int kind, const char *str);
 
 LIBICAL_ICAL_EXPORT const char *icalproperty_status_to_string(icalproperty_status);

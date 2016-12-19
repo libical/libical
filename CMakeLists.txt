@@ -19,10 +19,6 @@
 #   Change the behavior at runtime using the icalerror_set_errors_are_fatal() function.
 #   Query the behavior at runtime using the icalerror_get_errors_are_fatal() function.
 #
-# -DNO_WARN_DEPRECATED=[true|false]
-#  Set if you DO NOT WANT to see deprecated messages.
-#  Default=true
-#
 # -DICAL_ALLOW_EMPTY_PROPERTIES=[true|false]
 #  Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
 #  Default=false
@@ -205,13 +201,6 @@ if(ICAL_ALLOW_EMPTY_PROPERTIES)
   set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
 else()
   set(ICAL_ALLOW_EMPTY_PROPERTIES 0)
-endif()
-
-option(NO_WARN_DEPRECATED "DO NOT print deprecated messages." True)
-if(NO_WARN_DEPRECATED)
-  set(NO_WARN_DEPRECATED 1)
-else()
-  set(NO_WARN_DEPRECATED 0)
 endif()
 
 option(USE_BUILTIN_TZDATA "build using our own timezone data, else use the system timezone data on non-Windows systems. ALWAYS true on Windows.")

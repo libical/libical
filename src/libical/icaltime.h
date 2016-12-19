@@ -56,7 +56,7 @@
  *      - icaltime_set_timezone(struct icaltimetype t, const icaltimezone *zone)
  *      - icaltime_day_of_year(struct icaltimetype t)
  *      - icaltime_day_of_week(struct icaltimetype t)
- *      - icaltime_start_doy_of_week(struct icaltimetype t, int fdow)
+ *      - icaltime_start_doy_week(struct icaltimetype t, int fdow)
  *      - icaltime_week_number(struct icaltimetype t)
  *
  *      Query methods include:
@@ -141,9 +141,6 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_current_time_with_zone(const ic
 /** Returns the current day as an icaltimetype, with is_date set. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_today(void);
 
-/** Convert seconds past UNIX epoch to a timetype*/
-LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet(const time_t v, const int is_date);
-
 /** Convert seconds past UNIX epoch to a timetype, using timezones. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const time_t tm,
                                                                       const int is_date,
@@ -182,10 +179,6 @@ LIBICAL_ICAL_EXPORT int icaltime_day_of_year(const struct icaltimetype t);
 
 /** Return the day of the week of the given time. Sunday is 1 */
 LIBICAL_ICAL_EXPORT int icaltime_day_of_week(const struct icaltimetype t);
-
-/** Return the day of the year for the Sunday of the week that the
-   given time is within. */
-LIBICAL_ICAL_EXPORT int icaltime_start_doy_of_week(const struct icaltimetype t);
 
 /** Return the day of the year for the first day of the week that the
    given time is within. */

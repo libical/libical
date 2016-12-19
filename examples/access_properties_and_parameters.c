@@ -82,7 +82,7 @@ void update_attendees(icalcomponent* event)
             /* Remove the NEEDSACTION parameter and replace it with
                TENTATIVE */
 
-            icalproperty_remove_parameter(p,ICAL_PARTSTAT_PARAMETER);
+            icalproperty_remove_parameter_by_kind(p,ICAL_PARTSTAT_PARAMETER);
 
             /* Don't forget to free it */
             icalparameter_free(parameter);

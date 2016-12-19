@@ -190,17 +190,17 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1parameter_1as_1
 
 /*
  * Class:     net_cp_jlibical_ICalProperty
- * Method:    remove_parameter
+ * Method:    remove_parameter_by_kind
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_remove_1parameter
+JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_remove_1parameter_by_kind
   (JNIEnv *env, jobject jobj, jint kind)
 {
 	ICalProperty* cObj = getSubjectAsICalProperty(env,jobj,JLIBICAL_ERR_CLIENT_INTERNAL);
 
 	if (cObj != NULL)
 	{
-		cObj->remove_parameter((icalparameter_kind)kind);
+		cObj->remove_parameter_by_kind((icalparameter_kind)kind);
 	}
 }
 

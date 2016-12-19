@@ -181,27 +181,6 @@ static time_t make_time(struct tm *tm, int tzm)
     return (tim);
 }
 
-/**     @brief Constructor (deprecated).
- *
- * Convert seconds past UNIX epoch to a timetype.
- *
- * @deprecated This constructor is deprecated and shouldn't be used in
- *   new software.  Use icaltime_from_timet_with_zone(time_t, int,
- *   icaltimezone *) instead.  In the meantime, calls to this method
- *   return a floating time, which can always be converted to a local
- *   time with an appropriate call to icaltime_convert_to_zone().
- */
-
-struct icaltimetype icaltime_from_timet(const time_t tm, const int is_date)
-{
-#if NO_WARN_DEPRECATED == 0
-    icalerror_warn(
-        "icaltime_from_timet() is DEPRECATED, use icaltime_from_timet_with_zone() instead");
-#endif
-
-    return icaltime_from_timet_with_zone(tm, is_date, 0);
-}
-
 /**     @brief Constructor.
  *
  *      @param tm The time
@@ -599,20 +578,6 @@ int icaltime_start_doy_week(const struct icaltimetype t, int fdow)
         delta += 7;
     }
     return jt.day_of_year - delta;
-}
-
-/** Day of the year that the first day of the week (Sunday) is on.
- *
- *  @deprecated Doesn't take into account different week start days.
- */
-int icaltime_start_doy_of_week(const struct icaltimetype t)
-{
-#if NO_WARN_DEPRECATED == 0
-    icalerror_warn(
-        "icaltime_start_doy_of_week() is DEPRECATED, use icaltime_start_doy_week() instead");
-#endif
-
-    return icaltime_start_doy_week(t, 1);
 }
 
 /**

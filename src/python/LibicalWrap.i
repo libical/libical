@@ -43,17 +43,14 @@ import Error
 
 typedef int time_t;
 
-// Remove depreciated functions
-%ignore icalproperty_string_to_enum(const char* str);
+// Remove deprecated functions
 %ignore icaltimezone_get_utc_offset(icaltimezone    *zone,
                                     struct icaltimetype *tt,
                                     int     *is_daylight);
 %ignore icaltimezone_get_utc_offset_of_utc_time (icaltimezone   *zone,
                      struct icaltimetype    *tt,
                      int        *is_daylight);
-%ignore icaltime_start_doy_of_week(const struct icaltimetype t);
 %ignore icalcomponent_get_span(icalcomponent* comp);
-%ignore icalproperty_remove_parameter(icalproperty* prop, icalparameter_kind kind);
 
 #ifndef _DLOPEN_TEST
 %ignore icalset_register_class(icalset *set);

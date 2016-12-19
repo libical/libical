@@ -31,12 +31,6 @@
         <returns type="ICalTimetype *" annotation="transfer full" comment="The newly created #ICalTimetype" />
         <comment xml:space="preserve">Create a #ICalTimetype representing today</comment>
     </method>
-    <method name="i_cal_time_from_timet" corresponds="icaltime_from_timet" kind="others" since="1.0">
-        <parameter type="const time_t" name="v" comment="The seconds past since epoch time"/>
-        <parameter type="gint" name="is_date" comment="Whether it is a date type, 1 if yes, 0 if not."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="The newly created #ICalTimetype" />
-        <comment xml:space="preserve">Convert seconds past UNIX epoch to a timetype</comment>
-    </method>
     <method name="i_cal_time_from_timet_with_zone" corresponds="icaltime_from_timet_with_zone" kind="others" since="1.0">
         <parameter type="const time_t" name="v" comment="The seconds past since epoch time"/>
         <parameter type="gint" name="is_date" comment="Whether it is a date type, 1 if yes, 0 if not."/>
@@ -96,11 +90,6 @@
         <parameter type="ICalTimetype *" name="tt" annotation="in, transfer none" comment="The #ICalTimetype to be queried"/>
         <returns type="gint" comment="the day of the week of the given time. Sunday is 1." />
         <comment xml:space="preserve">Return the day of the week of the given time. Sunday is 1</comment>
-    </method>
-    <method name="i_cal_time_start_doy_of_week" corresponds="icaltime_start_doy_of_week" since="1.0">
-        <parameter type="ICalTimetype *" name="tt" annotation="in, transfer none" comment="The #ICalTimetype to be queried"/>
-        <returns type="gint" comment="the day of the year for the Sunday of the week that the given time is within." />
-        <comment xml:space="preserve">Return the day of the year for the Sunday of the week that the given time is within.</comment>
     </method>
     <method name="i_cal_time_start_doy_week" corresponds="icaltime_start_doy_week" since="1.0">
         <parameter type="ICalTimetype *" name="tt" annotation="in, transfer none" comment="The #ICalTimetype to be queried"/>
