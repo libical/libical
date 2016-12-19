@@ -70,11 +70,6 @@
         <returns type="gchar *" annotation="transfer full" comment="The string representation of the parameter."/>
         <comment xml:space="preserve">Get the string representation of the target parameter in the #ICalProperty.</comment>
     </method>
-    <method name="i_cal_property_remove_parameter" corresponds="icalproperty_remove_parameter" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated."/>
-        <parameter type="ICalParameterKind" name="kind" comment="The kind of parameter to be removed."/>
-        <comment xml:space="preserve">Remove the target kind of parameters in #ICalProperty.</comment>
-    </method>
     <method name="i_cal_property_remove_parameter_by_kind" corresponds="icalproperty_remove_parameter_by_kind" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated."/>
         <parameter type="ICalParameterKind" name="kind" comment="The #ICalParameterKind to be removed."/>
