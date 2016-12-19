@@ -244,8 +244,9 @@ def main():
     assert(span.get_start() == 1394096400);
     assert(span.get_end() == 1394098200);
     assert(span.is_busy() == 1);
-    comp.set_dtstart(ICalGLib.time_from_timet(1494096400, 0));
-    comp.set_dtend(ICalGLib.time_from_timet(1494098200, 0));
+    utc = ICalGLib.Timezone.get_utc_timezone();
+    comp.set_dtstart(ICalGLib.time_from_timet_with_zone(1494096400, 0, utc));
+    comp.set_dtend(ICalGLib.time_from_timet_with_zone(1494098200, 0, utc));
     span = comp.get_span();
     assert(span.get_start() == 1494096400);
     assert(span.get_end() == 1494098200);

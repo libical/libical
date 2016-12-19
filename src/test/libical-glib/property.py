@@ -49,7 +49,7 @@ assert(retrieved_parameter2.as_ical_string_r() == parameter2.as_ical_string_r())
 retrieved_parameter3 = string_property.get_first_parameter(ICalGLib.ParameterKind.ACTIONPARAM_PARAMETER);
 assert(retrieved_parameter3.as_ical_string_r() == "ACTIONPARAM=This is a action param");
 
-string_property.remove_parameter(ICalGLib.ParameterKind.CHARSET_PARAMETER);
+string_property.remove_parameter_by_kind(ICalGLib.ParameterKind.CHARSET_PARAMETER);
 assert(string_property.count_parameters() == 3);
 string_property.remove_parameter_by_kind(ICalGLib.ParameterKind.ALTREP_PARAMETER);
 assert(string_property.count_parameters() == 2);
@@ -89,7 +89,7 @@ string = ICalGLib.Property.method_to_string(ICalGLib.PropertyMethod.PUBLISH);
 assert(ICalGLib.Property.string_to_method(string) == ICalGLib.PropertyMethod.PUBLISH);
 
 string = ICalGLib.Property.enum_to_string_r(ICalGLib.PropertyMethod.PUBLISH);
-assert(ICalGLib.PropertyMethod.PUBLISH == ICalGLib.Property.string_to_enum(string));
+assert(string == "PUBLISH");
 
 #Test i_cal_value_set_parent. No error will be thrown.
 property_string = "SUMMARY:Bastille Day Party";
