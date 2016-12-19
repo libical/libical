@@ -61,23 +61,6 @@ typedef int time_t;
 %include "libical/ical.h"
 %include "libicalss/icalss.h"
 
-%inline %{
-/* declare some internal functions which are not in the header file. */
-void icalproperty_set_parent(icalproperty* property,
-                 icalcomponent* component);
-icalcomponent* icalproperty_get_parent(const icalproperty* property);
-
-void icalvalue_set_parent(icalvalue* value,
-                 icalproperty* property);
-icalproperty* icalvalue_get_parent(icalvalue* value);
-
-void icalparameter_set_parent(icalparameter* param,
-                 icalproperty* property);
-icalproperty* icalparameter_get_parent(icalparameter* value);
-
-%}
-
-
 %pythoncode %{
 
 # Helper functions for overriding default swig property methods

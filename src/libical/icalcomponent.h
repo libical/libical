@@ -71,6 +71,9 @@ LIBICAL_ICAL_EXPORT void icalcomponent_remove_property(icalcomponent *component,
 LIBICAL_ICAL_EXPORT int icalcomponent_count_properties(icalcomponent *component,
                                                        icalproperty_kind kind);
 
+LIBICAL_ICAL_EXPORT void icalproperty_set_parent(icalproperty *property,
+                                                 icalcomponent *component);
+
 LIBICAL_ICAL_EXPORT icalcomponent *icalproperty_get_parent(const icalproperty *property);
 
 /* Iterate through the properties */

@@ -69,7 +69,6 @@ sub insert_code
     URI            => 'string',
     UTCOFFSET      => 'int',
     QUERY          => 'string',
-    BINARY         => 'string',
     X              => 'string'
   );
 

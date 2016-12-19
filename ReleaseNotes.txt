@@ -1,10 +1,15 @@
 Release Highlights
 ==================
 
-Version 2.1.0:
+Version 3.0.0:
 --------------
  * icalvalue_as_ical_string() returns "TRUE" (non-zero) or "FALSE" (zero) values only.
  * new icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
+ * new publicly available functions:
+     + icalproperty_set_parent (icalproperty_get_parent was already public)
+     + icalvalue_get_parent (icalvalue_set_parent was already public)
+     + icalparameter_set_parent
+     + icalparameter_get_parent
  * Removed deprecated functions
     * icaltime_from_timet (use icaltime_from_timet_with_zone)
     * icaltime_start_day_of_week (use icaltime_start_day_week)

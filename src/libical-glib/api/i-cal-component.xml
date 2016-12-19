@@ -79,6 +79,11 @@
         <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)property" comment="The parent #ICalComponent of #ICalProperty."/>
         <comment xml:space="preserve">Get the parent component of the property. Use with caution. When icalproperty is deallocated, it won't deallocate its parent. However the #ICalComponent object created using this method will be deallocated (if no reference in other places). So You need to make sure there is another reference except the one in #ICalProperty.</comment>
     </method>
+    <method name="i_cal_property_set_parent" corresponds="icalproperty_set_parent" since="3.0">
+        <parameter type="ICalProperty *" name="property" comment="An #ICalProperty."/>
+        <parameter type="ICalComponent *" name="component" comment="An #ICalComponent."/>
+        <comment xml:space="preserve">Set the parent #ICalComponent of the specified #ICalProperty.</comment>
+    </method>
     <method name="i_cal_component_get_current_property" corresponds="icalcomponent_get_current_property" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
         <returns type="ICalProperty *" annotation="transfer full" translator_argus="(GObject *)component" comment="The current #ICalProperty."/>
@@ -364,39 +369,39 @@
         <parameter type="void" name="(*callback)(ICalParameter *param, void *data)" comment="FULL: @callback: The callback function."/>
         <parameter type="void *" name="callback_data" annotation="allow-none" comment="The data for callback function"/>
         <comment>Apply the same manipulation on every tzid in #ICalComponent. It cannot be used by Python yet. For convenience, a python version of this API is defined in tests/component.py.</comment>
-        <custom>	ICalProperty *prop;
+        <custom>        ICalProperty *prop;
         ICalPropertyKind kind;
         ICalParameter *param;
         ICalComponent *subcomp;
 
-	g_return_if_fail (comp != NULL &amp;&amp; I_CAL_IS_COMPONENT (comp));
-	g_return_if_fail (callback != NULL);
+        g_return_if_fail (comp != NULL &amp;&amp; I_CAL_IS_COMPONENT (comp));
+        g_return_if_fail (callback != NULL);
 
-	/* First look for any TZID parameters used in this component itself. */
-	prop = i_cal_component_get_first_property (comp, I_CAL_ANY_PROPERTY);
-	while (prop) {
-		kind = i_cal_property_isa (prop);
+        /* First look for any TZID parameters used in this component itself. */
+        prop = i_cal_component_get_first_property (comp, I_CAL_ANY_PROPERTY);
+        while (prop) {
+                kind = i_cal_property_isa (prop);
 
-		/* These are the only properties that can have a TZID. Note that
-		COMPLETED, CREATED, DTSTAMP and LASTMODIFIED must be in UTC. */
-		if (kind == I_CAL_DTSTART_PROPERTY || kind == I_CAL_DTEND_PROPERTY
-		 || kind == I_CAL_DUE_PROPERTY || kind == I_CAL_EXDATE_PROPERTY
-		 || kind == I_CAL_RDATE_PROPERTY) {
-			param = i_cal_property_get_first_parameter (prop, I_CAL_TZID_PARAMETER);
+                /* These are the only properties that can have a TZID. Note that
+                COMPLETED, CREATED, DTSTAMP and LASTMODIFIED must be in UTC. */
+                if (kind == I_CAL_DTSTART_PROPERTY || kind == I_CAL_DTEND_PROPERTY
+                 || kind == I_CAL_DUE_PROPERTY || kind == I_CAL_EXDATE_PROPERTY
+                 || kind == I_CAL_RDATE_PROPERTY) {
+                        param = i_cal_property_get_first_parameter (prop, I_CAL_TZID_PARAMETER);
 
-			if (param)
-				(*callback) (param, callback_data);
-		}
+                        if (param)
+                                (*callback) (param, callback_data);
+                }
 
-		prop = i_cal_component_get_next_property (comp, I_CAL_ANY_PROPERTY);
-	}
+                prop = i_cal_component_get_next_property (comp, I_CAL_ANY_PROPERTY);
+        }
 
-	/* Now recursively check child components. */
-	subcomp = i_cal_component_get_first_component (comp, I_CAL_ANY_COMPONENT);
-	while (subcomp) {
-	    i_cal_component_foreach_tzid (subcomp, callback, callback_data);
-	    subcomp = i_cal_component_get_next_component (comp, I_CAL_ANY_COMPONENT);
-	}</custom>
+        /* Now recursively check child components. */
+        subcomp = i_cal_component_get_first_component (comp, I_CAL_ANY_COMPONENT);
+        while (subcomp) {
+            i_cal_component_foreach_tzid (subcomp, callback, callback_data);
+            subcomp = i_cal_component_get_next_component (comp, I_CAL_ANY_COMPONENT);
+        }</custom>
     </method>
     <method name="i_cal_component_get_timezone" corresponds="icalcomponent_get_timezone" kind="get" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>

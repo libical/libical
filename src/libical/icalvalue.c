@@ -1457,6 +1457,8 @@ void icalvalue_reset_kind(icalvalue *value)
 
 void icalvalue_set_parent(icalvalue *value, icalproperty *property)
 {
+    icalerror_check_arg_rv((value != 0), "value");
+
     value->parent = property;
 }
 
