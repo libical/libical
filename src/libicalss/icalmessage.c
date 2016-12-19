@@ -112,9 +112,10 @@ static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
     icalcomponent *reply =
         icalcomponent_vanew(
             ICAL_VCALENDAR_COMPONENT, icalproperty_new_method(ICAL_METHOD_REPLY),
-            icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                                icalproperty_new_dtstamp(icaltime_from_timet_with_zone(time(0), 0, NULL)),
-                                0),
+            icalcomponent_vanew(
+                ICAL_VEVENT_COMPONENT,
+                icalproperty_new_dtstamp(icaltime_from_timet_with_zone(time(0), 0, NULL)),
+                0),
             0);
 
     icalcomponent *inner = icalmessage_get_inner(reply);

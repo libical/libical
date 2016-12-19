@@ -470,7 +470,8 @@ void test_icalcomponent_get_span()
      */
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
                             icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
-                            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm2, 1, NULL)), (void *)0);
+                            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm2, 1, NULL)),
+                            (void *)0);
 
     span = icalcomponent_get_span(c);
     int_is("UTC #2", (int)span.start, 973296000);
@@ -483,7 +484,8 @@ void test_icalcomponent_get_span()
      *  We specify start date
      */
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)), (void *)0);
+                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
+                            (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)
