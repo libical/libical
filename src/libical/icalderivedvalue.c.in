@@ -177,11 +177,11 @@ void icalvalue_set_trigger(icalvalue *value, struct icaltriggertype v)
     icalerror_check_arg_rv((value != 0), "value");
 
     if (!icaltime_is_null_time(v.time)) {
-        icalvalue_set_datetime(value, v.time);
         value->kind = ICAL_DATETIME_VALUE;
+        icalvalue_set_datetime(value, v.time);
     } else {
-        icalvalue_set_duration(value, v.duration);
         value->kind = ICAL_DURATION_VALUE;
+        icalvalue_set_duration(value, v.duration);
     }
 }
 
@@ -209,6 +209,33 @@ struct icaltriggertype icalvalue_get_trigger(const icalvalue *impl)
     return tr;
 }
 
+icalvalue *icalvalue_new_date(struct icaltimetype v)
+{
+    struct icalvalue_impl *impl = icalvalue_new_impl(ICAL_DATE_VALUE);
+
+    icalvalue_set_date((icalvalue *) impl, v);
+    return (icalvalue *) impl;
+}
+
+void icalvalue_set_date(icalvalue *value, struct icaltimetype v)
+{
+    icalerror_check_arg_rv((icaltime_is_date(v)), "v");
+
+    icalvalue_set_datetimedate(value, v);
+}
+
+struct icaltimetype icalvalue_get_date(const icalvalue *value)
+{
+    struct icaltimetype dt;
+
+    dt = icaltime_null_date();
+
+    icalerror_check_arg_rx((value != 0), "value", dt);
+    icalerror_check_arg_rx((value->kind == ICAL_DATE_VALUE), "value->kind", dt);
+
+    return ((struct icalvalue_impl *)value)->data.v_time;
+}
+
 icalvalue *icalvalue_new_datetime(struct icaltimetype v)
 {
     struct icalvalue_impl *impl = icalvalue_new_impl(ICAL_DATETIME_VALUE);
@@ -219,26 +246,56 @@ icalvalue *icalvalue_new_datetime(struct icaltimetype v)
 
 void icalvalue_set_datetime(icalvalue *value, struct icaltimetype v)
 {
+    icalerror_check_arg_rv((!icaltime_is_date(v)), "v");
+
+    icalvalue_set_datetimedate(value, v);
+}
+
+struct icaltimetype icalvalue_get_datetime(const icalvalue *value)
+{
+    /* For backwards compatibility, fetch both DATE and DATE-TIME */
+    return icalvalue_get_datetimedate(value);
+}
+
+icalvalue *icalvalue_new_datetimedate(struct icaltimetype v)
+{
+    struct icalvalue_impl *impl = icalvalue_new_impl(ICAL_DATETIME_VALUE);
+
+    icalvalue_set_datetimedate((icalvalue *) impl, v);
+    return (icalvalue *) impl;
+}
+
+void icalvalue_set_datetimedate(icalvalue *value, struct icaltimetype v)
+{
     struct icalvalue_impl *impl;
 
+    if (!icaltime_is_valid_time(v)) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
+
     icalerror_check_arg_rv((value != 0), "value");
+    icalerror_check_arg_rv(((value->kind == ICAL_DATETIME_VALUE) ||
+                            (value->kind == ICAL_DATE_VALUE)),
+                           "value->kind");
 
-    icalerror_check_value_type(value, ICAL_DATETIME_VALUE);
     impl = (struct icalvalue_impl *)value;
-
     impl->data.v_time = v;
 
     icalvalue_reset_kind(impl);
 }
 
-struct icaltimetype icalvalue_get_datetime(const icalvalue *value)
+struct icaltimetype icalvalue_get_datetimedate(const icalvalue *value)
 {
     struct icaltimetype dt;
 
     dt = icaltime_null_time();
 
     icalerror_check_arg_rx((value != 0), "value", dt);
-    icalerror_check_value_type(value, ICAL_DATETIME_VALUE);
+    icalerror_check_arg_rx(((value->kind == ICAL_DATETIME_VALUE) ||
+                            (value->kind == ICAL_DATE_VALUE)),
+                           "value->kind", dt);
+
     return ((struct icalvalue_impl *)value)->data.v_time;
 }
 
@@ -260,12 +317,8 @@ void icalvalue_set_datetimeperiod(icalvalue *impl, struct icaldatetimeperiodtype
     icalerror_check_value_type(value, ICAL_DATETIMEPERIOD_VALUE);
 
     if (!icaltime_is_null_time(v.time)) {
-        if (!icaltime_is_valid_time(v.time)) {
-            icalerror_set_errno(ICAL_BADARG_ERROR);
-            return;
-        }
         impl->kind = ICAL_DATETIME_VALUE;
-        icalvalue_set_datetime(impl, v.time);
+        icalvalue_set_datetimedate(impl, v.time);
     } else if (!icalperiodtype_is_null_period(v.period)) {
         if (!icalperiodtype_is_valid_period(v.period)) {
             icalerror_set_errno(ICAL_BADARG_ERROR);

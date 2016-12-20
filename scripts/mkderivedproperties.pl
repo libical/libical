@@ -237,33 +237,6 @@ $pointer_check
     return (icalproperty*)impl;
 }
 
-EOM
-
-      # Allow DTSTART, DTEND, DUE, EXDATE and RECURRENCE-ID to take DATE values.
-      if ( $lc eq "dtstart"
-        || $lc eq "dtend"
-        || $lc eq "due"
-        || $lc eq "exdate"
-        || $lc eq "recurrenceid")
-      {
-        print <<EOM;
-void icalproperty_set_${lc}(icalproperty *prop, $type v)
-{
-    icalvalue *value;
-$set_pointer_check
-    icalerror_check_arg_rv((prop != 0), "prop");
-    if (v.is_date) {
-        value = icalvalue_new_date(v);
-    } else {
-        value = icalvalue_new_datetime(v);
-    }
-    icalproperty_set_value(prop, value);
-}
-
-EOM
-      } else {
-
-        print <<EOM;
 void icalproperty_set_${lc}(icalproperty *prop, $type v)
 {$set_pointer_check
     icalerror_check_arg_rv((prop != 0), "prop");
@@ -271,7 +244,6 @@ void icalproperty_set_${lc}(icalproperty *prop, $type v)
 }
 
 EOM
-      }
 
       # Dirk Theisen pointed out, exdate needs to match TZID parameters in EXDATE
       if ($lc eq "exdate") {

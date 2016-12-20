@@ -4,12 +4,17 @@ Release Highlights
 Version 3.0.0:
 --------------
  * icalvalue_as_ical_string() returns "TRUE" (non-zero) or "FALSE" (zero) values only.
- * New icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
- * New publicly available functions:
-    + icalproperty_set_parent (icalproperty_get_parent was already public)
-    + icalvalue_get_parent (icalvalue_set_parent was already public)
-    + icalparameter_set_parent
-    + icalparameter_get_parent
+ * new icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
+ * better value type checking of property values when parsing
+ * icalvalue_new/set_date and icalvalue_new/set_datetime now enforce DATE and DATE-TIME values respectively
+ * new publicly available functions:
+     + icalproperty_set_parent (icalproperty_get_parent was already public)
+     + icalvalue_get_parent (icalvalue_set_parent was already public)
+     + icalparameter_set_parent
+     + icalparameter_get_parent
+     + icalvalue_new_datetimedate (DATE or DATE-TIME)
+     + icalvalue_set_datetimedate
+     + icalvalue_get_datetimedate
  * Removed deprecated functions
     + icaltime_from_timet (use icaltime_from_timet_with_zone)
     + icaltime_start_day_of_week (use icaltime_start_day_week)
@@ -22,7 +27,7 @@ Version 2.0.0:
  * Version 2 is Source Compatible with Older Versions
  * Lots of source code scrubbing
  * [New] RSCALE support (requires libicu from http://www.icu-project.org)
- * [New] CalDAV attachment support (draft-daboo-caldav-attachments)
+ * [New] CalDAV attachment support (draft-ietf-calext-caldav-attachments)
  * [New] Resurrect the Berkeley DB storage support
  * [Bug] issue83: Incorrect recurrence generation for weekly pattern
  * Handle RRULEs better

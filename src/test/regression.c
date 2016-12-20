@@ -215,10 +215,10 @@ void test_values()
     icalvalue_free(v);
     icalvalue_free(copy);
 
-    v = icalvalue_new_date(icaltime_from_timet_with_zone(1023404802, 0, NULL));
-    str_is("icalvalue_new_date()", icalvalue_as_ical_string(v), "20020606T230642");
-    icalvalue_set_date(v, icaltime_from_timet_with_zone(1023404802 - 3600, 0, NULL));
-    str_is("icalvalue_set_date()", icalvalue_as_ical_string(v), "20020606T220642");
+		v = icalvalue_new_datetime(icaltime_from_timet_with_zone(1023404802, 0, NULL));
+    str_is("icalvalue_new_datetime()", icalvalue_as_ical_string(v), "20020606T230642");
+    icalvalue_set_datetime(v, icaltime_from_timet_with_zone(1023404802 - 3600, 0, NULL));
+    str_is("icalvalue_set_datetime()", icalvalue_as_ical_string(v), "20020606T220642");
 
     copy = icalvalue_new_clone(v);
     str_is("icalvalue_new_clone()", icalvalue_as_ical_string(v), "20020606T220642");
