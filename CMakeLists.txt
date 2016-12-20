@@ -43,6 +43,11 @@
 #  Requires GObject Introspection development package v0.6.7 or higher
 #  Default=false (do not generate the introspection files)
 #
+# -DICAL_GLIB_VAPI=[true|false]
+#  Set to build Vala "vapi" files
+#  Requires Vala package
+#  Default=false (build the libical-glib interface)
+#
 # -DICAL_GLIB=[true|false]
 #  Set to build libical-glib (GObject) interface
 #  Requires glib development package v2.20 or higher
@@ -245,6 +250,23 @@ if(GOBJECT_INTROSPECTION)
     endif()
   else()
     message(FATAL_ERROR "You requested to build with GObject Introspection but the necessary development package is missing or too low a version (version ${MIN_GOBJECT_INTROSPECTION} or higher is required)")
+  endif()
+endif()
+
+option(ICAL_GLIB_VAPI "Build Vala \"vapi\" files.")
+if(ICAL_GLIB_VAPI)
+  if(NOT GOBJECT_INTROSPECTION)
+    message(FATAL_ERROR "You requested to build the Vapi but have not enabled the GObject Introspection, please retry by passing -DGOBJECT_INTROSPECTION=True to CMake")
+  endif()
+
+  find_program(VALAC valac)
+  if(NOT VALAC)
+    message(FATAL_ERROR "The valac not found. Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False")
+  endif()
+
+  find_program(VAPIGEN vapigen)
+  if(NOT VAPIGEN)
+    message(FATAL_ERROR "The vapigen not found. Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False")
   endif()
 endif()
 

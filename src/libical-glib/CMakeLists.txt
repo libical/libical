@@ -166,6 +166,31 @@ if(HAVE_INTROSPECTION)
   gir_add_introspections(INTROSPECTION_GIRS)
 endif()
 
+if(ICAL_GLIB_VAPI)
+  add_custom_target(vala ALL)
+  set(gir_fullname ${CMAKE_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
+  set (vapi_file ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.vapi)
+
+  add_custom_command(OUTPUT ${vapi_file}
+    COMMAND ${VAPIGEN}
+      --vapidir=${CMAKE_CURRENT_SOURCE_DIR}
+      --vapidir=${CMAKE_CURRENT_BINARY_DIR}
+      --girdir=${CMAKE_BINARY_DIR}/src/libical-glib
+      --pkg gio-2.0
+      --library libical-glib
+      --metadatadir=${CMAKE_CURRENT_SOURCE_DIR}
+      ${gir_fullname}
+    DEPENDS
+      ${gir_fullname}
+  )
+
+  add_custom_target(valafile DEPENDS ${vapi_file})
+
+  add_dependencies(vala valafile)
+
+  install(FILES ${vapi_file} DESTINATION ${SHARE_INSTALL_DIR}/vala/vapi)
+endif()
+
 if(MSVC)
   set_target_properties(ical-glib PROPERTIES OUTPUT_NAME "libical-glib")
   if(NOT SHARED_ONLY)
