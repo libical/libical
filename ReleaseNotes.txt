@@ -4,10 +4,10 @@ Release Highlights
 Version 3.0.0:
 --------------
  * icalvalue_as_ical_string() returns "TRUE" (non-zero) or "FALSE" (zero) values only.
- * new icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
- * better value type checking of property values when parsing
+ * New icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
+ * Better value type checking of property values when parsing
  * icalvalue_new/set_date and icalvalue_new/set_datetime now enforce DATE and DATE-TIME values respectively
- * new publicly available functions:
+ * New publicly available functions:
      + icalproperty_set_parent (icalproperty_get_parent was already public)
      + icalvalue_get_parent (icalvalue_set_parent was already public)
      + icalparameter_set_parent
