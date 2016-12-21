@@ -20,6 +20,7 @@ Version 3.0.0:
     + icaltime_start_day_of_week (use icaltime_start_day_week)
     + icalproperty_remove_parameter (use icalproperty_remove_parameter_by_kind)
     + icalproperty_string_to_enum (use icalproperty_kind_and_string_to_enum)
+ * Build Vala vapi file for libical-glib
 
 Version 2.0.0:
 --------------

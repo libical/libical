@@ -98,6 +98,10 @@ Then you can set the C and C++ compilers at CMake time, like so:
   need to have the GObject Introspection development package v0.6.7 or higher
   installed beforehand.
 
+* Vala.  To generate Vala "vapi" file, pass the -DICAL_GLIB_VAPI=True option to
+  CMake. As it relies on the GObject Introspection, you also need to set the
+  GObject Introspection option to True.
+
 You can also force CMake to ignore any of the optional dependencies
 by passing the option -DCMAKE_DISABLE_FIND_PACKAGE_<PACKAGE>=True.
 For instance:
