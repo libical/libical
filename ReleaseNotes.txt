@@ -15,11 +15,19 @@ Version 3.0.0:
      + icalvalue_new_datetimedate (DATE or DATE-TIME)
      + icalvalue_set_datetimedate
      + icalvalue_get_datetimedate
- * Removed deprecated functions
+ * Removed deprecated functions:
     + icaltime_from_timet (use icaltime_from_timet_with_zone)
     + icaltime_start_day_of_week (use icaltime_start_day_week)
     + icalproperty_remove_parameter (use icalproperty_remove_parameter_by_kind)
     + icalproperty_string_to_enum (use icalproperty_kind_and_string_to_enum)
+ * Signature changed for functions:
+    + VObject *Parse_MIME_FromFileName(const char *fname)
+    + icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
+    + const char *icallangbind_property_eval_string(icalproperty *prop, const char *sep)
+    + const char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
+    + void set_zone_directory(const char *path)
+    + icalcalendar *icalcalendar_new(const char *dir)
+    + int icalrecur_expand_recurrence(const char *rule, time_t start, int count, time_t *array)
 
 Version 2.0.0:
 --------------

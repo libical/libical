@@ -53,8 +53,7 @@ extern "C"
 
     LIBICAL_VCAL_EXPORT VObject *Parse_MIME(const char *input, unsigned long len);
 
-    /*TODO:V3:API:VObject *Parse_MIME_FromFileName(const char *fname);*/
-    LIBICAL_VCAL_EXPORT VObject *Parse_MIME_FromFileName(char *fname);
+    LIBICAL_VCAL_EXPORT VObject *Parse_MIME_FromFileName(const char *fname);
 
 /* NOTE regarding Parse_MIME_FromFile
 The function above, Parse_MIME_FromFile, comes in two flavors,

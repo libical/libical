@@ -718,7 +718,6 @@ void test_dirset_extended(void)
     }
 
     gauge = icalgauge_new_from_sql(
-                (char *)
                 "SELECT * FROM VEVENT WHERE "
                 "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
                 "VEVENT.SUMMARY = 'Bastille Day Party'",

@@ -141,7 +141,7 @@ icalcomponent *icallangbind_get_next_component(icalcomponent *c, const char *com
 
 #define APPENDC(x) icalmemory_append_char(&buf, &buf_ptr, &buf_size, x);
 
-char *icallangbind_property_eval_string_r(icalproperty *prop, char *sep)
+char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
 {
     char tmp[25];
     size_t buf_size = 1024;
@@ -269,7 +269,7 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, char *sep)
     return buf;
 }
 
-const char *icallangbind_property_eval_string(icalproperty *prop, char *sep)
+const char *icallangbind_property_eval_string(icalproperty *prop, const char *sep)
 {
     char *buf;
 

@@ -2,10 +2,10 @@
 # -*- Mode: perl -*-
 #======================================================================
 # FILE: Libical.pm
-# CREATOR: eric 
+# CREATOR: eric
 #
 # DESCRIPTION:
-#   
+#
 #
 #  $Id: Libical.pm,v 1.8 2001-03-03 05:44:01 ebusboom Exp $
 #  $Locker:  $
@@ -15,7 +15,7 @@
 # This package is free software and is provided "as is" without express
 # or implied warranty.  It may be used, redistributed and/or modified
 # under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# GPL. )
 #
 #======================================================================
 
@@ -44,15 +44,15 @@ $VERSION = "0.01";
 
 sub validate_component {
   my $comp_str = shift;
- 
 
-  my $c = Net::ICal::Libical::icalparser_parse_string($comp_str); 
+
+  my $c = Net::ICal::Libical::icalparser_parse_string($comp_str);
   my $out;
 
   die "Failed to parse component" if !$c;
 
   my $r = Net::ICal::Libical::icalrestriction_check($c);
-  
+
   $out = Net::ICal::Libical::icalcomponent_as_ical_string($c);
 
   Net::ICal::Libical::icalcomponent_free($c);
@@ -72,8 +72,8 @@ sub generate_occurrences {
   my $array = Net::ICal::Libical::icallangbind_new_array(25);
 
   Net::ICal::Libical::icalrecur_expand_recurrence($rule,$start,
-						$count,$array);
-		   
+                                                  $count,$array);
+
   for($i = 0; $i<$count; $i++){
     my $t = Net::ICal::Libical::icallangbind_access_array($array,$i);
     if($t != 0) {
@@ -92,7 +92,7 @@ sub generate_occurrences {
 # perl binding to libical. Currently, it is looking for an author....
 
 
-           
+
 
 
 1;
@@ -115,7 +115,7 @@ sub valid { }
 # """ Return or set time in seconds past POSIX epoch"""
 sub utc_seconds {}
 
-# """ Return or set boolean indicating if time is in UTC """ 
+# """ Return or set boolean indicating if time is in UTC """
 sub is_utc {}
 
 # Get/Set booll indicating is time is a date
@@ -177,14 +177,14 @@ sub start {}
 #The return value is an instance of Time.
 
 #If the Period has a duration set, but not an end time, this
-#method will caluculate the end time from the duration. 
+#method will caluculate the end time from the duration.
 sub end {}
 
 #Return or set the duration of the period. The duration may be
 #expressed as an RFC2445 format string or an instance of Duration.
 #The return value is an instance of Duration.
 #If the period has an end time set, but not a duration, this
-#method will calculate the duration from the end time.  
+#method will calculate the duration from the end time.
 sub duration{}
 
 # Get set the timezone for the period. Basically returns self->dict{TZID}
@@ -224,7 +224,7 @@ package Net::ICal::Libical::Recurrence_Id;
 
 package Net::ICal::Libical::Attach;
 @ISA= (Property)
-        
+
 package Net::ICal::Libical::Event;
 @ISA= (Component)
 
@@ -254,7 +254,7 @@ sub dtend{}
 #If the duration value is being set and dtend() has a value, the dtend
 #property will be removed.
 sub duration{}
- 
+
 #Sets attendees or returns a list of Attendee objects.
 sub attendees {}
 
@@ -283,14 +283,14 @@ sub recurrence_id{}
 #Usage:
 #sequence(1)     # Set the value using an integer
 #sequence('2')   # Set the value using a string containing an integer
-#sequence()      # Return an integer       
+#sequence()      # Return an integer
 sub sequence{}
-  
+
 #Sets or returns the value of the LAST-MODIFIED property.
 #Usage:
 #lastmodified(time_obj)          # Set the value using a Time object
 #lastmodified('19970101T123000Z')# Set using an iCalendar string
-#lastmodified(982362522)         # Set using seconds 
+#lastmodified(982362522)         # Set using seconds
 #lastmodified()                  # Return a Time
 sub lastmodified{}
 
@@ -300,7 +300,7 @@ sub lastmodified{}
 #Usage:
 #created(time_obj)           # Set the value using a Time object
 #created('19970101T123000Z') # Set using an iCalendar string
-#created(982362522)          # Set using seconds 
+#created(982362522)          # Set using seconds
 #created()                   # Return a Time
 sub created {}
 
@@ -319,11 +319,11 @@ sub attach{}
 
 #Represents a set of event occurrences. This
 #package controls a component's RRULE, EXRULE, RDATE and EXDATE
-#properties and can produce from them a set of occurrences. 
-package Net::ICal::Libical::RecurrenceSet: 
+#properties and can produce from them a set of occurrences.
+package Net::ICal::Libical::RecurrenceSet:
 
 
-#Include a date or rule to the set. 
+#Include a date or rule to the set.
 #Use date= or pass in a
 #Time instance to include a date. Included dates will add an
 #RDATE property or will remove an EXDATE property of the same
@@ -334,7 +334,7 @@ package Net::ICal::Libical::RecurrenceSet:
 
 sub include{}
 
-#Exclude date or rule to the set. 
+#Exclude date or rule to the set.
 #Use date= or pass in a Time instance to exclude a
 #date. Excluded dates will add an EXDATE property or will remove
 #an RDATE property of the same date.
@@ -350,7 +350,7 @@ package Net::ICal::Libical::Store;
 sub new{}
 sub path{}
 sub mark{}
-sub commit{} 
+sub commit{}
 sub addComponent{}
 sub removeComponent{}
 sub countComponents{}
@@ -369,7 +369,7 @@ package Net::ICal::Libical::FileStore;
 sub new{}
 sub path{}
 sub mark{}
-sub commit{} 
+sub commit{}
 sub addComponent{}
 sub removeComponent{}
 sub countComponents{}

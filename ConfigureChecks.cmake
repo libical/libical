@@ -55,7 +55,7 @@ check_function_exists(iswspace HAVE_ISWSPACE) #Linux <wctype.h>
 check_function_exists(setenv HAVE_SETENV)
 check_function_exists(unsetenv HAVE_UNSETENV)
 check_function_exists(snprintf HAVE_SNPRINTF) #Available with MSVC 2015
-#TODO:V2:BUILDSYSTEM:Figure out why check_function_exists fails to find snprintf for MSVC2015
+#TODO:BUILDSYSTEM:Figure out why check_function_exists fails to find snprintf for MSVC2015
 if(MSVC_VERSION GREATER 1899)
   set(HAVE_SNPRINTF true)
 endif()

@@ -18,7 +18,7 @@
 
   Contributions from:
 
-  ======================================================================*/  
+  ======================================================================*/
 
 %rename(icaltimezone) _icaltimezone;
 
@@ -82,15 +82,15 @@ void icaltimezone_set_tzid_prefix(const char *new_prefix);
 void icaltimezone_free_builtin_timezones(void);
 
 /** Returns the array of builtin icaltimezones. */
-icalarray* icaltimezone_get_builtin_timezones	(void);
+icalarray* icaltimezone_get_builtin_timezones   (void);
 
 /**
  * @par Converting times between timezones.
  */
 
-void	icaltimezone_convert_time		(struct icaltimetype *tt,
-						 icaltimezone *from_zone,
-						 icaltimezone *to_zone);
+void    icaltimezone_convert_time       (struct icaltimetype *tt,
+                         icaltimezone *from_zone,
+                         icaltimezone *to_zone);
 
 
 /**
@@ -101,17 +101,17 @@ void	icaltimezone_convert_time		(struct icaltimetype *tt,
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in
    daylight-savings time. */
-int icaltimezone_get_utc_offset	(icaltimezone *zone,
-				 struct icaltimetype *tt,
-				 int		*is_daylight);
+int icaltimezone_get_utc_offset (icaltimezone *zone,
+                 struct icaltimetype *tt,
+                 int        *is_daylight);
 
 /** Calculates the UTC offset of a given UTC time in the given
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in
    daylight-savings time. */
-int	icaltimezone_get_utc_offset_of_utc_time	(icaltimezone *zone,
-						 struct icaltimetype *tt,
-						 int		*is_daylight);
+int icaltimezone_get_utc_offset_of_utc_time (icaltimezone *zone,
+                         struct icaltimetype *tt,
+                         int        *is_daylight);
 
 
 /*
@@ -119,7 +119,7 @@ int	icaltimezone_get_utc_offset_of_utc_time	(icaltimezone *zone,
  */
 
 /** Set the directory to look for the zonefiles */
-void set_zone_directory(char *path);
+void set_zone_directory(const char *path);
 
 /** Free memory dedicated to the zonefile directory */
 void free_zone_directory(void);
@@ -131,9 +131,9 @@ void icaltimezone_release_zone_tab(void);
 
 /** Dumps information about changes in the timezone up to and including
    max_year. */
-int	icaltimezone_dump_changes		(icaltimezone *zone,
-						 int		 max_year,
-						 FILE		*fp);
+int icaltimezone_dump_changes       (icaltimezone *zone,
+                         int         max_year,
+                         FILE       *fp);
 
 #endif
 
@@ -190,17 +190,17 @@ def icaltimezone_new(self):
     obj.this.acquire()
     try: self.this.append(obj.this)
     except: self.this = obj.this
-    
+
 def icaltimezone_delete(self):
     # do not delete the struct because swig will do this
     if self.this.own():
         _LibicalWrap.icaltimezone_free(self, 0)
-    
+
 icaltimezone_methods = {
     'as_tzinfo': icaltzinfo,
     'copy': icaltimezone_copy,
-    '__init__': icaltimezone_new, 
-    '__del__': icaltimezone_delete, 
+    '__init__': icaltimezone_new,
+    '__del__': icaltimezone_delete,
 }
 _swig_add_instance_methods(icaltimezone, icaltimezone_methods)
 
@@ -213,4 +213,3 @@ icaltimezone.get_builtin_timezone_from_tzid = staticmethod(_LibicalWrap.icaltime
 
 
 %}
-

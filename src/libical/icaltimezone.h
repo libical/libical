@@ -159,8 +159,7 @@ LIBICAL_ICAL_EXPORT char *icaltimezone_get_tznames_from_vtimezone(icalcomponent 
  */
 
 /** Set the directory to look for the zonefiles */
-/*TODO:V3:API:void set_zone_directory(const char *path);*/
-LIBICAL_ICAL_EXPORT void set_zone_directory(char *path);
+LIBICAL_ICAL_EXPORT void set_zone_directory(const char *path);
 
 /** Free memory dedicated to the zonefile directory */
 LIBICAL_ICAL_EXPORT void free_zone_directory(void);

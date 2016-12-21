@@ -30,7 +30,7 @@ int main()
     int dd, hh, zz, tried = 0;
     long zz2 = -1;
 
-    set_zone_directory((char *)"../../zoneinfo");
+    set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
     tt = icaltime_current_time_with_zone(icaltimezone_get_builtin_timezone("America/New_York"));

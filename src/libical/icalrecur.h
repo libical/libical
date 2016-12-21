@@ -45,7 +45,7 @@ Or, just make them up:
 2) Create an iterator
 
 @code
-        icalrecur_iterator* ritr;
+        icalrecur_iterator *ritr;
         ritr = icalrecur_iterator_new(recur,start);
 @endcode
 
@@ -243,8 +243,7 @@ LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator *);
  * Fills array up with at most 'count' time_t values, each
  *  representing an occurrence time in seconds past the POSIX epoch
  */
-/*TODO:V3:API:int icalrecur_expand_recurrence(const char *rule, time_t start,...)*/
-LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(char *rule, time_t start,
-                                                    int count, time_t * array);
+LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(const char *rule, time_t start,
+                                                    int count, time_t *array);
 
 #endif
