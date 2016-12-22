@@ -280,6 +280,7 @@ static char *parser_get_param_name_heap(char *line, char **end)
         next = parser_get_next_char('"', *end, 0);
         if (next == 0) {
             free(str);
+            *end = NULL;
             return 0;
         }
 
