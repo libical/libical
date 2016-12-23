@@ -37,6 +37,7 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icalvalue.h"
+#include "icalproperty_p.h"
 
 #include <ctype.h>
 #include <stddef.h>     /* for ptrdiff_t */
@@ -1056,92 +1057,25 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
             /* If it is a VALUE parameter, set the kind of value */
             if (icalparameter_isa(param) == ICAL_VALUE_PARAMETER) {
-                const char unknown_type[] =
-                    "Got a VALUE parameter with an unknown type";
-                const char illegal_type[] =
-                    "Got a VALUE parameter with an illegal type for property";
-                const char *value_err = NULL;
-
                 value_kind =
                     (icalvalue_kind)icalparameter_value_to_value_kind(
                         icalparameter_get_value(param));
 
-                if (value_kind == ICAL_NO_VALUE) {
+                if (!icalproperty_value_kind_is_valid(prop_kind, value_kind)) {
 
-                    /* Ooops, could not parse the value of the
-                       parameter ( it was not one of the defined
-                       values ), so reset the value_kind */
+                    /* Ooops, invalid VALUE parameter, so reset the value_kind */
 
-                    value_err = unknown_type;
-                }
-                else if (value_kind !=
-                         icalproperty_kind_to_value_kind(icalproperty_isa(prop))) {
-                    /* VALUE parameter type does not match default type
-                       for this property (check for allowed alternate types) */
+                    const char *err_str = "Invalid VALUE type for property";
+                    const char *prop_str = icalproperty_kind_to_string(prop_kind);
+                    char *tmp_buf = icalmemory_tmp_buffer(strlen(err_str) +
+                                                          strlen(prop_str) + 2);
 
-                    switch (prop_kind) {
-                    case ICAL_ATTACH_PROPERTY:
-                    case ICAL_IMAGE_PROPERTY:
-                        /* Accept BINARY */
-                        if (value_kind != ICAL_BINARY_VALUE) {
-                            value_err = illegal_type;
-                        }
-                        break;
+                    sprintf(tmp_buf, "%s %s", err_str, prop_str);
 
-                    case ICAL_DTEND_PROPERTY:
-                    case ICAL_DUE_PROPERTY:
-                    case ICAL_DTSTART_PROPERTY:
-                    case ICAL_EXDATE_PROPERTY:
-                    case ICAL_RECURRENCEID_PROPERTY:
-                        /* Accept DATE */
-                        if (value_kind != ICAL_DATE_VALUE) {
-                            value_err = illegal_type;
-                        }
-                        break;
-
-                    case ICAL_GEO_PROPERTY:
-                        /* Accept FLOAT (but change to GEO) */
-                        if (value_kind != ICAL_FLOAT_VALUE) {
-                            value_err = illegal_type;
-                        } else {
-                            value_kind = ICAL_GEO_VALUE;
-                        }
-                        break;
-
-                    case ICAL_RDATE_PROPERTY:
-                        /* Accept DATE or PERIOD */
-                        if (value_kind != ICAL_DATE_VALUE &&
-                            value_kind != ICAL_PERIOD_VALUE) {
-                            value_err = illegal_type;
-                        }
-                        break;
-
-                    case ICAL_TRIGGER_PROPERTY:
-                        /* Accept DATE-TIME */
-                        if (value_kind != ICAL_DATETIME_VALUE) {
-                            value_err = illegal_type;
-                        }
-                        break;
-
-                    case ICAL_X_PROPERTY:
-                        /* Accept ANY value type */
-                        break;
-
-                    default:
-                        /* ONLY default type is allowed */
-                        value_err = illegal_type;
-                        break;
-                    }
-                }
-
-                if (value_err != NULL) {
-                    /* Ooops, unknown/illegal VALUE parameter,
-                       so reset the value_kind */
-
-                    insert_error(tail, str, value_err,
+                    insert_error(tail, str, tmp_buf,
                                  ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR);
 
-                    value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
+                    value_kind = icalproperty_kind_to_value_kind(prop_kind);
 
                     icalparameter_free(param);
                     tail = 0;
@@ -1183,44 +1117,13 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
          */
         icalmemory_free_buffer(str);
         str = NULL;
-        switch (prop_kind) {
-        case ICAL_X_PROPERTY:{
-                /* Apple's geofence property uses a comma to separate latitude and longitude.
-                   libical will normally try to split this into two separate values,
-                   but in this case we need to treat it as a single value.
-                 */
-                const char *propertyString = "X-APPLE-STRUCTURED-LOCATION";
 
-                if (strncmp(icalproperty_get_x_name(prop), propertyString,
-                            strlen(propertyString)) == 0) {
-                    str = icalparser_get_value(end, &end, value_kind);
-                } else {
-                    str = parser_get_next_value(end, &end, value_kind);
-                }
-
-                strstriplt(str);
-                break;
-            }
-        case ICAL_CATEGORIES_PROPERTY:
-        case ICAL_RESOURCES_PROPERTY:
-            /* Referring to RFC 5545, section 3.8.5.2 and section 3.8.5.1:
-               RDATE and EXDATE can specify a list of dates/date-times/periods.
-             */
-        case ICAL_RDATE_PROPERTY:
-        case ICAL_EXDATE_PROPERTY:
-            /* Referring to RFC 5545, section 3.8.2.6 Free/Busy Time:
-               The "FREEBUSY" property can specify more than one value,
-               separated by the COMMA character.
-             */
-        case ICAL_FREEBUSY_PROPERTY:
+        if (icalproperty_value_kind_is_multivalued(prop_kind, &value_kind)) {
             str = parser_get_next_value(end, &end, value_kind);
-            strstriplt(str);
-            break;
-        default:
+        } else {
             str = icalparser_get_value(end, &end, value_kind);
-            strstriplt(str);
-            break;
         }
+        strstriplt(str);
 
         if (str != 0) {
 
@@ -1234,13 +1137,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 tail = 0;
             }
 
-            /* If this is a URI value for an ATTACH property, then change
-               the value to an ATTACH kind as well.
-               Now we can support ATTACH;TYPE=URI:http://my.fav.url
-             */
-            if (value_kind == ICAL_URI_VALUE && prop_kind == ICAL_ATTACH_PROPERTY) {
-                value_kind = ICAL_ATTACH_VALUE;
-            }
             value = icalvalue_new_from_string(value_kind, str);
 
             /* Don't add properties without value */

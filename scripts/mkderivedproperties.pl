@@ -65,7 +65,9 @@ sub fudge_data
 
   my $type = $valuemap{$value}->{C}->[1];
   $type =~ s/char\*/char \*/;
-  return ($uc, $lc, $lcvalue, $ucvalue, $type);
+
+  my @comp_types = @{$valuemap{$value}->{'components'}};
+  return ($uc, $lc, $lcvalue, $ucvalue, $type, @comp_types);
 
 }
 
@@ -86,19 +88,52 @@ sub insert_code
 
       next if $prop eq 'NO';
 
-      my ($uc, $lc, $lcvalue, $ucvalue, $type) = fudge_data($prop);
+      my ($uc, $lc, $lcvalue, $ucvalue, $type, @comp_types) = fudge_data($prop);
       my $defvalue = $propmap{$prop}->{'default_value'};
       $defvalue =~ s/-//g;
 
-      print "{ICAL_${uc}_PROPERTY,\"$prop\",ICAL_${defvalue}_VALUE},\n";
+      my @flags = @{$propmap{$prop}->{'flags'}};
 
+      print "    { ICAL_${uc}_PROPERTY, \"$prop\",\n";
+      print "      ICAL_${ucvalue}_VALUE, ICAL_${defvalue}_VALUE,\n";
+      print "      { ";
+
+      if (@comp_types) {
+          foreach $comp (@comp_types) {
+              $comp =~ s/-//g;
+              print "ICAL_${comp}_VALUE, ";
+          }
+      } elsif ($defvalue ne "NO") {
+          print "ICAL_${defvalue}_VALUE, ";
+      } else {
+          print "ICAL_${ucvalue}_VALUE, ";
+      }
+
+      print "ICAL_NO_VALUE }, ";
+
+      if (@flags) {
+          my $sep = "\n      ";
+          foreach $flag (@flags) {
+              $flag =~ s/-//g;
+              $flag  = uc($flag);
+              print "${sep}ICAL_PROPERTY_${flag}";
+              $sep = " | ";
+          }
+      } else {
+          print "0";
+      }
+
+      print " },\n";
     }
 
     $prop = "NO";
 
     my ($uc, $lc, $lcvalue, $ucvalue, $type) = fudge_data($prop);
 
-    print "{ICAL_${uc}_PROPERTY, \"\", ICAL_NO_VALUE}};\n\n";
+    print "    { ICAL_${uc}_PROPERTY, \"\",";
+    print "      ICAL_NO_VALUE, ICAL_NO_VALUE,\n";
+    print "      { ICAL_NO_VALUE }, 0 }\n}";
+    print ";\n\n";
 
     $count    = 1;
     $bigcount = 0;

@@ -23,7 +23,7 @@
 #include <config.h>
 #endif
 
-#include "icalproperty.h"
+#include "icalproperty_p.h"
 #include "icalcomponent.h"
 #include "icalerror.h"
 #include "icalmemory.h"
@@ -316,39 +316,33 @@ static char *fold_property_line(char *text)
    this one, so we need to do it here */
 static const char *icalproperty_get_value_kind(icalproperty *prop)
 {
-    const char *kind_string = 0;
+    const char *kind_string = NULL;
+    icalvalue_kind kind = ICAL_NO_VALUE;
+    icalparameter *val_param =
+        icalproperty_get_first_parameter(prop, ICAL_VALUE_PARAMETER);
 
-    icalparameter *orig_val_param = icalproperty_get_first_parameter(prop, ICAL_VALUE_PARAMETER);
-
-    icalvalue *value = icalproperty_get_value(prop);
-
-    icalvalue_kind orig_kind = ICAL_NO_VALUE;
-
-    icalvalue_kind this_kind = ICAL_NO_VALUE;
-
-    icalvalue_kind default_kind = icalproperty_kind_to_value_kind(prop->kind);
-
-    if (orig_val_param) {
-        orig_kind = icalparameter_value_to_value_kind(icalparameter_get_value(orig_val_param));
+    if (val_param) {
+        kind = icalparameter_value_to_value_kind(icalparameter_get_value(val_param));
     }
 
-    if (value != 0) {
-        this_kind = icalvalue_isa(value);
+    if (kind == ICAL_NO_VALUE) {
+        icalvalue *value = icalproperty_get_value(prop);
 
-        if (this_kind == ICAL_ATTACH_VALUE) {
+        kind = icalvalue_isa(value);
+
+        if (kind == ICAL_ATTACH_VALUE) {
             icalattach *a = icalvalue_get_attach(value);
-            this_kind =
-                icalattach_get_is_url(a) ? ICAL_URI_VALUE : ICAL_BINARY_VALUE;
+
+            kind = icalattach_get_is_url(a) ? ICAL_URI_VALUE : ICAL_BINARY_VALUE;
         }
     }
 
-    if (orig_kind != ICAL_NO_VALUE) {
-        kind_string = icalvalue_kind_to_string(orig_kind);
-    } else if (this_kind != default_kind && this_kind != ICAL_NO_VALUE) {
+    if (kind != ICAL_NO_VALUE &&
+        !icalproperty_value_kind_is_default(prop->kind, kind)) {
         /* Not the default, so it must be specified */
-        kind_string = icalvalue_kind_to_string(this_kind);
+        kind_string = icalvalue_kind_to_string(kind);
     } else {
-        /* Don'tinclude the VALUE parameter at all */
+        /* Don't include the VALUE parameter at all */
     }
 
     return kind_string;

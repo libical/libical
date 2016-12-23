@@ -100,11 +100,20 @@ sub read_properties_file
     my $enumConst     = $column[1];
     my $lic_value     = $column[2];
     my $default_value = $column[3];
+    my $flags         = $column[4];
+
+    my @flags;
+    if ($flags ne "") {
+      @flags = split(/;/, $flags);
+    } else {
+      @flags = ();
+    }
 
     $h{$property_name} = {
       lic_value     => $lic_value,
       kindEnum      => $enumConst,
-      default_value => $default_value
+      default_value => $default_value,
+      flags         => [@flags]
     };
   }
 
