@@ -7,6 +7,7 @@ Version 3.0.0:
  * New icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
  * Better value type checking of property values when parsing
  * icalvalue_new/set_date and icalvalue_new/set_datetime now enforce DATE and DATE-TIME values respectively
+ * Parameter values are now en/decoded per RFC6868
  * New publicly available functions:
      + icalproperty_set_parent (icalproperty_get_parent was already public)
      + icalvalue_get_parent (icalvalue_set_parent was already public)
