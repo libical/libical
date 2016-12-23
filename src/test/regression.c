@@ -1281,8 +1281,7 @@ void test_strings()
     icalvalue_free(v);
 }
 
-#if defined(INVALID_TEST)
-/* This test is invalid because parameters may not have control chars, such as '\n' */
+/* Check RFC6868 encoding of "unsafe" chars in parameter values, such as '\n' */
 void test_tzid_escape()
 {
     icalparameter *tzid;
@@ -1297,12 +1296,10 @@ void test_tzid_escape()
 
     str_is("test encoding of 'Timezone\\nwith a newline'",
            icalproperty_as_ical_string(prop),
-           "DTSTART;VALUE=DATE,TZID=Timezone\\nwith a newline:20090126");
+           "DTSTART;VALUE=DATE;TZID=Timezone^nwith a newline:20090126\r\n");
 
     icalproperty_free(prop);
 }
-
-#endif
 
 void test_requeststat()
 {
@@ -3971,9 +3968,7 @@ int main(int argc, char *argv[])
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
     test_run("Test strings", test_strings, do_test, do_header);
-#if defined(INVALID_TEST)
     test_run("Test TZID escaping", test_tzid_escape, do_test, do_header);
-#endif
     test_run("Test Compare", test_compare, do_test, do_header);
     test_run("Create Simple Component", create_simple_component, do_test, do_header);
     test_run("Create Components", create_new_component, do_test, do_header);
