@@ -71,6 +71,13 @@ CONFIGURE() {
   cmake .. $2 || exit 1
 }
 
+#function CLEAN:
+# remove the builddir
+CLEAN() {
+  cd $TOP
+  rm -rf $BDIR
+}
+
 #function BUILD:
 # runs a build test, where build means: configure, compile, link and run the unit tests
 # $1 = the name of the test
@@ -81,8 +88,7 @@ BUILD() {
   make |& tee make.out || exit 1
   COMPILE_WARNINGS make.out
   make test |& tee make-test.out || exit 1
-  cd ..
-  rm -rf $BDIR
+  CLEAN
 }
 
 #function GCC_BUILD:
@@ -148,7 +154,7 @@ CPPCHECK() {
       grep -v icalsslexer\.c | tee cppcheck.out
   CPPCHECK_WARNINGS cppcheck.out
   rm -f cppcheck.out
-  rm -rf $BDIR
+  CLEAN
   echo "===== END CPPCHECK: $1 ======"
 }
 
@@ -217,7 +223,7 @@ SPLINT() {
        -I $TOP/src/libical-glib | \
   cat -
   status=${PIPESTATUS[0]}
-  rm -rf $BDIR
+  CLEAN
   if ( test $status -gt 0 )
   then
     echo "Splint warnings encountered.  Exiting..."
@@ -237,8 +243,7 @@ CLANGTIDY() {
   CONFIGURE "$1-tidy" "$2 -DCMAKE_CXX_CLANG_TIDY=\"clang-tidy;-checks=$tidyopts\""
   cmake --build . |& tee make-tidy.out
   COMPILE_WARNINGS make-tidy.out
-  cd ..
-  rm -rf $BDIR
+  CLEAN
   echo "===== END CLANG-TIDY: $1 ====="
 }
 
