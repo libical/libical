@@ -169,7 +169,7 @@ endif()
 if(ICAL_GLIB_VAPI)
   add_custom_target(vala ALL)
   set(gir_fullname ${CMAKE_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
-  set (vapi_file ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.vapi)
+  set(vapi_file ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.vapi)
 
   add_custom_command(OUTPUT ${vapi_file}
     COMMAND ${VAPIGEN}
