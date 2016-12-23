@@ -116,7 +116,6 @@ icalcomponent *icalcomponent_new(icalcomponent_kind kind)
 
 /** @brief Constructor
  */
-//TODO:V3:API:Is there a way to change the API so -Wvarargs doesn't complain?
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wvarargs"
 icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...)

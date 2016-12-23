@@ -1172,7 +1172,7 @@ VObject* Parse_MIME_FromFile(FILE *file)
     return result;
     }
 
-DLLEXPORT(VObject*) Parse_MIME_FromFileName(char *fname)
+DLLEXPORT(VObject*) Parse_MIME_FromFileName(const char *fname)
     {
     FILE *fp = fopen(fname,"r");
     if (fp) {

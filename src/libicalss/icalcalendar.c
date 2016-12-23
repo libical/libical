@@ -83,7 +83,7 @@ static icalerrorenum icalcalendar_create(struct icalcalendar_impl *impl)
     return ICAL_NO_ERROR;
 }
 
-icalcalendar *icalcalendar_new(char *dir)
+icalcalendar *icalcalendar_new(const char *dir)
 {
     struct icalcalendar_impl *impl;
 

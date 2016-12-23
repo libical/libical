@@ -43,8 +43,8 @@ BUILD() {
   mkdir -p $BDIR
   cd $BDIR
   rm -rf *
-  cmake .. $2
-  make |& tee make.out
+  cmake .. $2 || exit 1
+  make |& tee make.out || exit 1
   WARNINGS make.out
   make test |& tee make-test.out || exit 1
   cd ..
@@ -209,7 +209,7 @@ cd ..
 TOP=`pwd`
 BDIR=""
 
-CMAKEOPTS="-DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_BDB=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True"
+CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_BDB=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True"
 
 KRAZY
 

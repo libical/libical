@@ -2038,7 +2038,7 @@ static const char *get_zone_directory(void)
 #endif
 }
 
-void set_zone_directory(char *path)
+void set_zone_directory(const char *path)
 {
     if (zone_files_directory)
         free_zone_directory();

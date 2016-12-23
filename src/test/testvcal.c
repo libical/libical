@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         file = argv[1];
     }
 
-    vcal = Parse_MIME_FromFileName((char *)file);
+    vcal = Parse_MIME_FromFileName(file);
 
     assert(vcal != 0);
 

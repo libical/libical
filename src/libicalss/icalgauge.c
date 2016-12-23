@@ -37,7 +37,7 @@ extern char *input_buffer_p;
 
 struct icalgauge_impl *icalss_yy_gauge;
 
-icalgauge *icalgauge_new_from_sql(char *sql, int expand)
+icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
 {
     struct icalgauge_impl *impl;
     int r;
@@ -53,7 +53,7 @@ icalgauge *icalgauge_new_from_sql(char *sql, int expand)
     impl->expand = expand;
 
     icalss_yy_gauge = impl;
-    input_buffer = input_buffer_p = sql;
+    input_buffer = input_buffer_p = (char *)sql;
 
     r = ssparse();
 

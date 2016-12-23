@@ -1071,7 +1071,7 @@ test for the properties within a components; only components that
 pass the test are returned. A gauge can be constructed from a MINSQL
 string with:
 
-icalgauge* icalgauge_new_from_sql(char* sql);
+icalgauge* icalgauge_new_from_sql(const char* sql);
 
 Then, you can add the gauge to the set with :
 

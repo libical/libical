@@ -65,7 +65,7 @@
     </method>
     <method name="i_cal_langbind_property_eval_string_r" corresponds="icallangbind_property_eval_string_r" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalComponent to be translated."/>
-        <parameter type="gchar *" name="sep" comment="The seperator."/>
+        <parameter type="const gchar *" name="sep" comment="The seperator."/>
         <returns type="gchar *" annotation="transfer full" comment="The sring representation of @prop"/>
         <comment xml:space="preserve">Translate the #ICalProperty into the string representation.</comment>
     </method>

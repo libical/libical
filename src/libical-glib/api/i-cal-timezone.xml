@@ -21,7 +21,7 @@
     <method name="i_cal_timezone_destroy" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
         <parameter type="icaltimezone *" name="zone" comment="The #ICalTimezone to be freed"/>
         <comment xml:space="preserve">The destructor of the type #ICalTimezone to fully destroy the object by providing 1 as the second argument of i_cal_time_zone_free. The method is used as a default destructor for introspection.</comment>
-        <custom>	icaltimezone_free (zone, 1);</custom>
+        <custom>        icaltimezone_free (zone, 1);</custom>
     </method>
     <method name="i_cal_timezone_copy" corresponds="icaltimezone_copy" kind="clone" since="1.0">
         <parameter type="const ICalTimezone *" name="zone" comment="The #ICalTimezone needs to be cloned."/>
@@ -153,7 +153,7 @@
         <comment xml:space="preserve">Get the name of the vtimezone in component.</comment>
     </method>
     <method name="i_cal_timezone_set_zone_directory" corresponds ="set_zone_directory" kind ="others" since="1.0">
-        <parameter type="gchar *" name="path" comment="The path to look for the zonefiles"/>
+        <parameter type="const gchar *" name="path" comment="The path to look for the zonefiles"/>
         <comment xml:space="preserve">Set the directory to look for the zonefiles</comment>
     </method>
     <method name="i_cal_timezone_free_zone_directory" corresponds="free_zone_directory" kind ="others" since="1.0">
@@ -182,6 +182,6 @@
         <parameter type="guint" name="index" comment="The index"/>
         <returns type="ICalTimezone *" annotation="transfer full" translator_argus="timezones, FALSE" comment="The #ICalTimezone at the position @index in @timezones."/>
         <comment>Get the #ICalTimezone at specified position in array.</comment>
-        <custom>	return i_cal_timezone_new_full ((gpointer)i_cal_array_element_at (timezones, index), (GObject *)timezones, FALSE);</custom>
+        <custom>        return i_cal_timezone_new_full ((gpointer)i_cal_array_element_at (timezones, index), (GObject *)timezones, FALSE);</custom>
     </method>
 </structure>

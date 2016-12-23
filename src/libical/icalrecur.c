@@ -2869,7 +2869,7 @@ int icalrecurrencetype_month_month(short month)
  * back into local time before using them.
  */
 
-int icalrecur_expand_recurrence(char *rule,
+int icalrecur_expand_recurrence(const char *rule,
                                 time_t start, int count, time_t *array)
 {
     struct icalrecurrencetype recur;

@@ -174,13 +174,95 @@ char *icalparameter_as_ical_string(icalparameter *param)
 }
 
 /**
- * Return a string representation of the parameter according to RFC5445.
+ * checks whether this character is allowed in a (Q)SAFE-CHAR
+ *
+ * QSAFE-CHAR	= WSP / %x21 / %x23-7E / NON-US-ASCII
+ * ; any character except CTLs and DQUOTE
+ * SAFE-CHAR	= WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E / NON-US-ASCII
+ * ; any character except CTLs, DQUOTE. ";", ":", ","
+ * WSP		= SPACE / HTAB
+ * NON-US-ASCII       = %x80-F8
+ * ; Use restricted by charset parameter
+ * ; on outer MIME object (UTF-8 preferred)
+ */
+static int icalparameter_is_safe_char(unsigned char character, int quoted)
+{
+    if (character == ' ' || character == '\t' || character == '!' ||
+        (character >= 0x80 && character <= 0xF8)) {
+        return 1;
+    }
+
+    if (quoted && character >= 0x23 && character <= 0x7e) {
+        return 1;
+    }
+    else if (!quoted &&
+             ((character >= 0x23 && character <= 0x2b) ||
+              (character >= 0x2d && character <= 0x39) ||
+              (character >= 0x3c && character <= 0x7e))) {
+        return 1;
+    }
+
+    return 0;
+}
+
+ /**
+ * Appends the parameter value to the buffer, encoding per RFC 6868
+ * and filtering out those characters not permitted by the specifications
+ * 
+ * paramtext	= *SAFE-CHAR
+ * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
+ */
+static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
+                                               size_t *buf_size, const char *value)
+{
+    int qm = 0;
+    const char *p;
+
+    /* Encapsulate the property in quotes if necessary */
+    if (strpbrk(value, ";:,") != 0) {
+        icalmemory_append_char(buf, buf_ptr, buf_size, '"');
+        qm = 1;
+    }
+
+    /* Copy the parameter value */
+    for (p = value; *p; p++) {
+        if (icalparameter_is_safe_char(*p, qm)) {
+            icalmemory_append_char(buf, buf_ptr, buf_size, *p);
+        } else {
+            /* Encode unsafe characters per RFC6868, otherwise replace with SP */
+            switch (*p) {
+            case '\n':
+                icalmemory_append_string(buf, buf_ptr, buf_size, "^n");
+                break;
+
+            case '^':
+                icalmemory_append_string(buf, buf_ptr, buf_size, "^^");
+                break;
+
+            case '"':
+                icalmemory_append_string(buf, buf_ptr, buf_size, "^'");
+                break;
+
+            default:
+                icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
+                break;
+            }
+        }
+    }
+
+    if (qm == 1) {
+        icalmemory_append_char(buf, buf_ptr, buf_size, '"');
+    }
+}
+
+/**
+ * Return a string representation of the parameter according to RFC5445/RFC6868.
  *
  * param        = param-name "=" param-value
  * param-name   = iana-token / x-token
  * param-value  = paramtext /quoted-string
- * paramtext    = *SAFE-SHARE
- * quoted-string= DQUOTE *QSAFE-CHARE DQUOTE
+ * paramtext    = *SAFE-CHAR
+ * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
  * QSAFE-CHAR   = any character except CTLs and DQUOTE
  * SAFE-CHAR    = any character except CTLs, DQUOTE. ";", ":", ","
  */
@@ -222,17 +304,7 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "=");
 
     if (param->string != 0) {
-        int qm = 0;
-
-        /* Encapsulate the property in quotes if necessary */
-        if (strpbrk(param->string, ";:,") != 0) {
-            icalmemory_append_char(&buf, &buf_ptr, &buf_size, '"');
-            qm = 1;
-        }
-        icalmemory_append_string(&buf, &buf_ptr, &buf_size, param->string);
-        if (qm == 1) {
-            icalmemory_append_char(&buf, &buf_ptr, &buf_size, '"');
-        }
+        icalparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, param->string);
     } else if (param->data != 0) {
         const char *str = icalparameter_enum_to_string(param->data);
 
