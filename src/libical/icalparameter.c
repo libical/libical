@@ -176,11 +176,11 @@ char *icalparameter_as_ical_string(icalparameter *param)
 /**
  * checks whether this character is allowed in a (Q)SAFE-CHAR
  *
- * QSAFE-CHAR   = WSP / %x21 / %x23-7E / NON-US-ASCII
+ * QSAFE-CHAR	= WSP / %x21 / %x23-7E / NON-US-ASCII
  * ; any character except CTLs and DQUOTE
- * SAFE-CHAR    = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E / NON-US-ASCII
+ * SAFE-CHAR	= WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E / NON-US-ASCII
  * ; any character except CTLs, DQUOTE. ";", ":", ","
- * WSP      = SPACE / HTAB
+ * WSP		= SPACE / HTAB
  * NON-US-ASCII       = %x80-F8
  * ; Use restricted by charset parameter
  * ; on outer MIME object (UTF-8 preferred)
@@ -208,8 +208,8 @@ static int icalparameter_is_safe_char(unsigned char character, int quoted)
  /**
  * Appends the parameter value to the buffer, encoding per RFC 6868
  * and filtering out those characters not permitted by the specifications
- *
- * paramtext    = *SAFE-CHAR
+ * 
+ * paramtext	= *SAFE-CHAR
  * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
  */
 static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
@@ -226,7 +226,7 @@ static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
 
     /* Copy the parameter value */
     for (p = value; *p; p++) {
-        if (icalparameter_is_safe_char((unsigned char)*p, qm)) {
+        if (icalparameter_is_safe_char(*p, qm)) {
             icalmemory_append_char(buf, buf_ptr, buf_size, *p);
         } else {
             /* Encode unsafe characters per RFC6868, otherwise replace with SP */
