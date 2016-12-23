@@ -10,7 +10,24 @@ set -o pipefail
 #ensure parallel builds
 export MAKEFLAGS=-j8
 
-WARNINGS() {
+##### START FUNCTIONS #####
+
+#function SET_GCC
+# setup compiling with gcc
+SET_GCC() {
+  export CC=gcc; export CXX=g++
+}
+
+#function SET_CLANG
+# setup compiling with clang
+SET_CLANG() {
+  export CC=clang; export CXX=clang++
+}
+
+#function COMPILE_WARNINGS:
+# print warnings found in the compile-stage output
+# $1 = file with the compile-stage output
+COMPILE_WARNINGS() {
   w=`cat $1 | grep warning: | grep -v "failed to load external entity" | grep -v "are missing in source code comment block" | grep -v "g-ir-scanner:" | grep -v "argument unused during compilation:" | wc -l | awk '{print $1}'`
   if ( test $w -gt 0 )
   then
@@ -21,6 +38,9 @@ WARNINGS() {
   fi
 }
 
+#function CPPCHECK_WARNINGS:
+# print warnings found in the cppcheck output
+# $1 = file with the cppcheck output
 CPPCHECK_WARNINGS() {
   w=`cat $1 | grep '\(warning\)' | wc -l | awk '{print $1}'`
   if ( test $w -gt 0 )
@@ -32,45 +52,76 @@ CPPCHECK_WARNINGS() {
   fi
 }
 
+#function BDIR:
+# set the name of the build directory for the current test
+# $1 = the name of the current test
 BDIR() {
   BDIR=$TOP/build-$1
 }
 
-BUILD() {
-  echo "===== START BUILD: $1 ======"
-  cd $TOP
+#function CONFIGURE:
+# creates the builddir and runs CMake with the specified options
+# $1 = the name of the test
+# $2 = CMake options
+CONFIGURE() {
   BDIR $1
   mkdir -p $BDIR
   cd $BDIR
   rm -rf *
   cmake .. $2 || exit 1
+}
+
+#function BUILD:
+# runs a build test, where build means: configure, compile, link and run the unit tests
+# $1 = the name of the test
+# $2 = CMake options
+BUILD() {
+  cd $TOP
+  CONFIGURE "$1" "$2"
   make |& tee make.out || exit 1
-  WARNINGS make.out
+  COMPILE_WARNINGS make.out
   make test |& tee make-test.out || exit 1
   cd ..
   rm -rf $BDIR
-  echo "===== END BUILD: $1 ======"
 }
 
-SET_GCC() {
-  export CC=gcc; export CXX=g++
+#function GCC_BUILD:
+# runs a build test using gcc
+# $1 = the name of the test (which will have "-gcc" appended to it)
+# $2 = CMake options
+GCC_BUILD() {
+  name="$1-gcc"
+  echo "===== START GCC BUILD: $1 ======"
+  SET_GCC
+  BUILD "$name" "$2"
+  echo "===== END GCC BUILD: $1 ======"
 }
 
-SET_CLANG() {
-  export CC=clang; export CXX=clang++
+#function CLANG_BUILD:
+# runs a build test using clang
+# $1 = the name of the test (which will have "-clang" appended to it)
+# $2 = CMake options
+CLANG_BUILD() {
+  name="$1-clang"
+  echo "===== START CLANG BUILD: $1 ======"
+  SET_CLANG
+  BUILD "$name" "$2"
+  echo "===== END CLANG BUILD: $1 ======"
 }
 
+#function CPPCHECK
+# runs a cppcheck test, which means: configure, compile, link and run cppcheck
+# $1 = the name of the test (which will have "-cppcheck" appended to it)
+# $2 = CMake options
 CPPCHECK() {
+  name="$1-cppcheck"
   echo "===== START SETUP FOR CPPCHECK: $1 ======"
 
   #first build it
   cd $TOP
-  BDIR "$1-cppcheck"
-  mkdir -p $BDIR
-  cd $BDIR
-  rm -rf *
-  cmake .. $2
-  make |& tee make.out
+  SET_GCC
+  CONFIGURE "$name" "$2"
+  make |& tee make.out || exit 1
 
   echo "===== START CPPCHECK: $1 ======"
   cd $TOP
@@ -101,18 +152,21 @@ CPPCHECK() {
   echo "===== END CPPCHECK: $1 ======"
 }
 
+#function SPLINT
+# runs a splint test, which means: configure, compile, link and run splint
+# $1 = the name of the test (which will have "-splint" appended to it
+# $2 = CMake options
 SPLINT() {
-  echo "===== START SPLINT: $1 ======"
+  name="$1-splint"
+  echo "===== START SETUP FOR SPLINT: $1 ======"
 
   #first build it
   cd $TOP
-  BDIR "$1-splint"
-  mkdir -p $BDIR
-  cd $BDIR
-  rm -rf *
-  cmake .. $2
-  make |& tee make.out
+  SET_GCC
+  CONFIGURE "$name" "$2"
+  make |& tee make.out || exit 1
 
+  echo "===== START SPLINT: $1 ======"
   cd $TOP
   files=`find src -name "*.c" -o -name "*.h" | \
   # skip C++
@@ -172,22 +226,24 @@ SPLINT() {
   echo "===== END SPLINT: $1 ======"
 }
 
-BUILD_TIDY() {
+#function CLANGTIDY
+# runs a clang-tidy test, which means: configure, compile, link and run clang-tidy
+# $1 = the name of the test (which will have "-tidy" appended)
+# $2 = CMake options
+CLANGTIDY() {
   echo "===== START CLANG-TIDY: $1 ====="
   tidyopts="*,-modernize*,-google-build-using-namespace,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-const-cast,-cppcoreguidelines-pro-type-reinterpret-cast,-llvm-include-order,-cppcoreguidelines-pro-type-vararg"
   cd $TOP
-  BDIR "$1-tidy"
-  mkdir -p $BDIR
-  cd $BDIR
-  rm -rf *
-  cmake .. $2 -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-checks=$tidyopts"
+  CONFIGURE "$1-tidy" "$2 -DCMAKE_CXX_CLANG_TIDY=\"clang-tidy;-checks=$tidyopts\""
   cmake --build . |& tee make-tidy.out
-  WARNINGS make-tidy.out
+  COMPILE_WARNINGS make-tidy.out
   cd ..
   rm -rf $BDIR
   echo "===== END CLANG-TIDY: $1 ====="
 }
 
+#function KRAZY
+# runs a krazy2 test
 KRAZY() {
   echo "===== START KRAZY ====="
   cd $TOP
@@ -202,6 +258,8 @@ KRAZY() {
   echo "===== END KRAZY ======"
 }
 
+##### END FUNCTIONS #####
+
 #MAIN
 TOP=`dirname $0`
 cd $TOP
@@ -214,24 +272,22 @@ CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_B
 KRAZY
 
 #GCC based tests
-SET_GCC
-BUILD test1-gcc ""
-BUILD test2-gcc "$CMAKEOPTS"
-BUILD test1cross-gcc "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-BUILD test2cross-gcc "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+GCC_BUILD test1 ""
+GCC_BUILD test2 "$CMAKEOPTS"
+GCC_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
+GCC_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 
-SPLINT test2-gcc "$CMAKEOPTS"
-CPPCHECK test2-gcc "$CMAKEOPTS"
+SPLINT test2 "$CMAKEOPTS"
+CPPCHECK test2 "$CMAKEOPTS"
 
 #Clang based tests
-SET_CLANG
-BUILD test1-clang ""
-BUILD test2-clang "$CMAKEOPTS"
-BUILD test1cross-clang "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-BUILD test2cross-clang "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+CLANG_BUILD test1 ""
+CLANG_BUILD test2 "$CMAKEOPTS"
+CLANG_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
+CLANG_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 
-BUILD_TIDY test2 "$CMAKEOPTS"
+CLANGTIDY test2 "$CMAKEOPTS"
 
-BUILD asan1 "-DADDRESS_SANITIZER=True -DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_BDB=True"
+CLANG_BUILD asan1 "-DADDRESS_SANITIZER=True -DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_BDB=True"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"
