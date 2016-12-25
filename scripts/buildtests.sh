@@ -24,39 +24,58 @@ SET_CLANG() {
   export CC=clang; export CXX=clang++
 }
 
-#function COMPILE_WARNINGS:
-# print warnings found in the compile-stage output
-# $1 = file with the compile-stage output
-COMPILE_WARNINGS() {
-  w=`cat $1 | grep warning: | grep -v "failed to load external entity" | grep -v "are missing in source code comment block" | grep -v "g-ir-scanner:" | grep -v "argument unused during compilation:" | wc -l | awk '{print $1}'`
+#function SET_BDIR:
+# set the name of the build directory for the current test
+# $1 = the name of the current test
+SET_BDIR() {
+  BDIR=$TOP/build-$1
+}
+
+#function CHECK_WARNINGS:
+# print non-whitelisted warnings found in the file and exit if there are any
+# $1 = file to check
+# $2 = whitelist regex
+CHECK_WARNINGS() {
+  w=`cat $1 | grep warning: | grep -v "$2" | wc -l | awk '{print $1}'`
   if ( test $w -gt 0 )
   then
     echo "EXITING. $w warnings encountered"
     echo
-    cat $1 | grep warning: | grep -v "failed to load external entity" | grep -v "are missing in source code comment block" | grep -v "g-ir-scanner:" | grep -v "argument unused during compilation:"
+    cat $1 | grep warning: | grep -v "$2"
     exit 1
   fi
+}
+
+#function COMPILE_WARNINGS:
+# print warnings found in the compile-stage output
+# $1 = file with the compile-stage output
+COMPILE_WARNINGS() {
+  whitelist='\(Value[[:space:]]descriptions\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\)'
+  CHECK_WARNINGS $1 $whitelist
 }
 
 #function CPPCHECK_WARNINGS:
 # print warnings found in the cppcheck output
 # $1 = file with the cppcheck output
 CPPCHECK_WARNINGS() {
-  w=`cat $1 | grep '\(warning\)' | wc -l | awk '{print $1}'`
-  if ( test $w -gt 0 )
-  then
-    echo "EXITING. $w warnings encountered"
-    echo
-    cat $1 | grep '\(warning\)'
-    exit 1
-  fi
+  whitelist=""
+  CHECK_WARNINGS $1 $whitelist
 }
 
-#function BDIR:
-# set the name of the build directory for the current test
-# $1 = the name of the current test
-BDIR() {
-  BDIR=$TOP/build-$1
+#function TIDY_WARNINGS:
+# print warnings find in the clang-tidy output
+# $1 = file with the clang-tidy output
+TIDY_WARNINGS() {
+  whitelist='\(Value[[:space:]]descriptions\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|modernize-\|cppcoreguidelines-pro-type-const-cast\|cppcoreguidelines-pro-type-reinterpret-cast\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-bounds-pointer-arithmetic\|google-build-using-namespace\|llvm-include-order\)'
+  CHECK_WARNINGS $1 $whitelist
+}
+
+#function SCAN_WARNINGS:
+# print warnings found in the scan-build output
+# $1 = file with the scan-build output
+SCAN_WARNINGS() {
+  whitelist='\(Value[[:space:]]descriptions\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\|icalssyacc.*garbage[[:space:]]value\)'
+  CHECK_WARNINGS $1 $whitelist
 }
 
 #function CONFIGURE:
@@ -64,7 +83,7 @@ BDIR() {
 # $1 = the name of the test
 # $2 = CMake options
 CONFIGURE() {
-  BDIR $1
+  SET_BDIR $1
   mkdir -p $BDIR
   cd $BDIR
   rm -rf *
@@ -208,6 +227,9 @@ SPLINT() {
        -DLIBICAL_ICAL_EXPORT=extern \
        -DLIBICAL_ICALSS_EXPORT=extern \
        -DLIBICAL_VCAL_EXPORT=extern \
+       -DLIBICAL_ICAL_NO_EXPORT="" \
+       -DLIBICAL_ICALSS_NO_EXPORT="" \
+       -DLIBICAL_VCAL_NO_EXPORT="" \
        -DENOENT=1 -DENOMEM=1 -DEINVAL=1 -DSIGALRM=1 \
        `pkg-config glib-2.0 --cflags` \
        `pkg-config libxml-2.0 --cflags` \
@@ -223,12 +245,12 @@ SPLINT() {
        -I $TOP/src/libical-glib | \
   cat -
   status=${PIPESTATUS[0]}
-  CLEAN
   if ( test $status -gt 0 )
   then
     echo "Splint warnings encountered.  Exiting..."
     exit 1
   fi
+  CLEAN
   echo "===== END SPLINT: $1 ======"
 }
 
@@ -238,13 +260,34 @@ SPLINT() {
 # $2 = CMake options
 CLANGTIDY() {
   echo "===== START CLANG-TIDY: $1 ====="
-  tidyopts="*,-modernize*,-google-build-using-namespace,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-const-cast,-cppcoreguidelines-pro-type-reinterpret-cast,-llvm-include-order,-cppcoreguidelines-pro-type-vararg"
   cd $TOP
-  CONFIGURE "$1-tidy" "$2 -DCMAKE_CXX_CLANG_TIDY=\"clang-tidy;-checks=$tidyopts\""
-  cmake --build . |& tee make-tidy.out
-  COMPILE_WARNINGS make-tidy.out
+  SET_CLANG
+  CONFIGURE "$1-tidy" "$2 -DCMAKE_CXX_CLANG_TIDY=clang-tidy;-checks=*"
+  cmake --build . |& tee make-tidy.out || exit 1
+  TIDY_WARNINGS make-tidy.out
   CLEAN
   echo "===== END CLANG-TIDY: $1 ====="
+}
+
+#function CLANGSCAN
+# runs a scan-build, which means: configure, compile and link using scan-build
+# $1 = the name of the test (which will have "-scan" appended)
+# $2 = CMake options
+CLANGSCAN() {
+  echo "===== START SCAN-BUILD: $1 ====="
+  cd $TOP
+
+  #configure specially with scan-build
+  SET_BDIR "$1-scan"
+  mkdir -p $BDIR
+  cd $BDIR
+  rm -rf *
+  scan-build cmake .. "$2" || exit 1
+
+  scan-build make |& tee make-scan.out || exit 1
+  SCAN_WARNINGS make-scan.out
+  CLEAN
+  echo "===== END CLANG-SCAN: $1 ====="
 }
 
 #function KRAZY
@@ -274,25 +317,26 @@ BDIR=""
 
 CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_BDB=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True"
 
+#Static code checkers
 KRAZY
+SPLINT test2 "$CMAKEOPTS"
+CPPCHECK test2 "$CMAKEOPTS"
+CLANGSCAN test2 "$CMAKEOPTS"
+CLANGTIDY test2 "$CMAKEOPTS"
 
-#GCC based tests
+#GCC based build tests
 GCC_BUILD test1 ""
 GCC_BUILD test2 "$CMAKEOPTS"
 GCC_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
 GCC_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 
-SPLINT test2 "$CMAKEOPTS"
-CPPCHECK test2 "$CMAKEOPTS"
-
-#Clang based tests
+#Clang based build tests
 CLANG_BUILD test1 ""
 CLANG_BUILD test2 "$CMAKEOPTS"
 CLANG_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
 CLANG_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 
-CLANGTIDY test2 "$CMAKEOPTS"
-
+#Address sanitizer
 CLANG_BUILD asan1 "-DADDRESS_SANITIZER=True -DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_BDB=True"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"
