@@ -49,11 +49,11 @@ struct icalproperty_map
        This size SHOULD be calculated by the generating perl script(s). */
     icalvalue_kind valid_values[4];
 
-    unsigned flags;
+    unsigned int flags;
 };
 
-#define ICAL_PROPERTY_IS_STRUCTURED  (1<<0)
-#define ICAL_PROPERTY_IS_MULTIVALUED (1<<1)
+#define ICAL_PROPERTY_IS_STRUCTURED  (1U<<0)
+#define ICAL_PROPERTY_IS_MULTIVALUED (1U<<1)
 
 /* This map associates the property enumerations with the king of
    property that they are used in and the string representation of the
@@ -151,7 +151,7 @@ icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind)
 int icalproperty_value_kind_is_valid(icalproperty_kind pkind,
                                      icalvalue_kind vkind)
 {
-    int i;
+    int i, j;
 
     if (vkind == ICAL_NO_VALUE) return 0;
     if (pkind == ICAL_X_PROPERTY) return 1;
@@ -161,10 +161,10 @@ int icalproperty_value_kind_is_valid(icalproperty_kind pkind,
 
         if (map->kind == pkind) {
             const icalvalue_kind *valid = map->valid_values;
-            int j;
-
             for (j = 0; valid[j] != ICAL_NO_VALUE; j++) {
-                if (valid[j] == vkind) return 1;
+                if (valid[j] == vkind) {
+                    return 1;
+                }
             }
             break;
         }

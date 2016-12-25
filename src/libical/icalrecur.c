@@ -1273,7 +1273,7 @@ static void increment_second(icalrecur_iterator *impl, int inc)
 static int validate_byrule(icalrecur_iterator *impl,
                            enum byrule byrule, UCalendarDateFields field,
                            short (*decode_val)(short *, unsigned),
-                           unsigned decode_flags)
+                           unsigned int decode_flags)
 {
     if (has_by_data(impl, byrule)) {
         UErrorCode status = U_ZERO_ERROR;
@@ -1293,7 +1293,7 @@ static int validate_byrule(icalrecur_iterator *impl,
     return 1;
 }
 
-static short decode_month(short *month, unsigned is_hebrew)
+static short decode_month(short *month, unsigned int is_hebrew)
 {
     if (is_hebrew && *month > 5) {  /* 5L == 0x1005 */
         /* Hebrew calendar:
@@ -1305,7 +1305,7 @@ static short decode_month(short *month, unsigned is_hebrew)
     return icalrecurrencetype_month_month(*month) - 1;  /* UCal is 0-based */
 }
 
-static short decode_day(short *day, unsigned flags)
+static short decode_day(short *day, unsigned int flags)
 {
     _unused(flags);
 
@@ -1402,7 +1402,7 @@ static int initialize_iterator(icalrecur_iterator *impl)
 
     /* Validate BY_* array values whose legal maximums differ based on RSCALE */
     if (!validate_byrule(impl, BY_MONTH, UCAL_MONTH,
-                         &decode_month, (unsigned)is_hebrew) ||
+                         &decode_month, (unsigned int)is_hebrew) ||
         !validate_byrule(impl, BY_DAY, UCAL_WEEK_OF_YEAR, &decode_day, 0) ||
         !validate_byrule(impl, BY_MONTH_DAY, UCAL_DAY_OF_MONTH, NULL, 0) ||
         !validate_byrule(impl, BY_YEAR_DAY, UCAL_DAY_OF_YEAR, NULL, 0) ||

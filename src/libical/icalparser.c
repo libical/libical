@@ -1067,10 +1067,9 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
                     const char *err_str = "Invalid VALUE type for property";
                     const char *prop_str = icalproperty_kind_to_string(prop_kind);
-                    char *tmp_buf = icalmemory_tmp_buffer(strlen(err_str) +
-                                                          strlen(prop_str) + 2);
-
-                    sprintf(tmp_buf, "%s %s", err_str, prop_str);
+                    size_t tmp_buf_len = strlen(err_str) + strlen(prop_str) + 2;
+                    char *tmp_buf = icalmemory_tmp_buffer(tmp_buf_len);
+                    snprintf(tmp_buf, tmp_buf_len, "%s %s", err_str, prop_str);
 
                     insert_error(tail, str, tmp_buf,
                                  ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR);
