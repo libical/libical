@@ -64,7 +64,7 @@ gchar *get_source_method_comment(Method *method)
 
     for (iter_list = g_list_first(method->annotations); iter_list != NULL;
          iter_list = g_list_next(iter_list)) {
-        anno = (gchar *) iter_list->data;
+        anno = (gchar *)iter_list->data;
         buffer = g_strconcat(res, " (", anno, ")", NULL);
         g_free(res);
         res = buffer;
@@ -73,12 +73,12 @@ gchar *get_source_method_comment(Method *method)
     /* Processing the parameters */
     if (method->parameters != NULL) {
         full_flag = g_strdup("FULL:");
-        full_flag_len = (guint) strlen(full_flag);
+        full_flag_len = (guint)strlen(full_flag);
 
         for (iter_list = g_list_first(method->parameters); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
-            para = (Parameter *) iter_list->data;
-            comment_len = (guint) strlen(para->comment);
+            para = (Parameter *)iter_list->data;
+            comment_len = (guint)strlen(para->comment);
 
             /* Handling the special case in which the parameter's comment is fully specified */
             for (iter = 0; iter < full_flag_len && iter < comment_len; iter++) {
@@ -99,14 +99,14 @@ gchar *get_source_method_comment(Method *method)
                 g_free(res);
                 res = buffer;
 
-                para = (Parameter *) iter_list->data;
+                para = (Parameter *)iter_list->data;
                 buffer = g_strconcat(res, para->name, NULL);
                 g_free(res);
                 res = buffer;
 
                 for (jter = g_list_first(para->annotations);
                      jter != NULL; jter = g_list_next(jter)) {
-                    anno = (gchar *) jter->data;
+                    anno = (gchar *)jter->data;
                     if (jter == g_list_first(para->annotations)) {
                         buffer = g_strconcat(res, ": (", anno, ")", NULL);
                     } else {
@@ -131,7 +131,7 @@ gchar *get_source_method_comment(Method *method)
     if (method->comment != NULL) {
         comment_line = g_new(gchar, BUFFER_SIZE);
         *comment_line = '\0';
-        len = (guint) strlen(method->comment);
+        len = (guint)strlen(method->comment);
         count = 0;
         (void)g_stpcpy(comment_line, "\n *\n * ");
         for (iter = 0; iter < len; iter++) {
@@ -140,7 +140,7 @@ gchar *get_source_method_comment(Method *method)
                 count = -1;
             }
 
-            cursor = (gint) strlen(comment_line);
+            cursor = (gint)strlen(comment_line);
             comment_line[cursor] = method->comment[iter];
             comment_line[cursor + 1] = '\0';
 
@@ -161,7 +161,7 @@ gchar *get_source_method_comment(Method *method)
 
         for (jter = g_list_first(method->ret->annotations);
              jter != NULL; jter = g_list_next(jter)) {
-            anno = (gchar *) jter->data;
+            anno = (gchar *)jter->data;
             if (jter == g_list_first(method->ret->annotations)) {
                 buffer = g_strconcat(res, ": (", anno, ")", NULL);
             } else {
@@ -202,20 +202,20 @@ gchar *get_upper_camel_from_lower_snake(const gchar *lowerSnake)
     buffer = g_new(gchar, BUFFER_SIZE);
     buffer[0] = toupper(lowerSnake[0]);
     buffer[1] = '\0';
-    for (i = 1; i < (guint) strlen(lowerSnake); i++) {
+    for (i = 1; i < (guint)strlen(lowerSnake); i++) {
         if (lowerSnake[i] == '_') {
-            len = (guint) strlen(buffer);
+            len = (guint)strlen(buffer);
             buffer[len] = toupper(lowerSnake[++i]);
             buffer[len + 1] = '\0';
         } else {
-            len = (guint) strlen(buffer);
+            len = (guint)strlen(buffer);
             buffer[len] = lowerSnake[i];
             buffer[len + 1] = '\0';
         }
     }
 
     ret = g_new(gchar, strlen(buffer) + 1);
-    for (i = 0; i < (guint) strlen(buffer); i++) {
+    for (i = 0; i < (guint)strlen(buffer); i++) {
         ret[i] = buffer[i];
     }
     ret[i] = '\0';
@@ -234,7 +234,7 @@ gchar *get_upper_snake_from_lower_snake(const gchar *lowerSnake)
     ret = g_new(gchar, BUFFER_SIZE);
     ret[0] = '\0';
 
-    for (i = 0; i < (guint) strlen(lowerSnake); i++) {
+    for (i = 0; i < (guint)strlen(lowerSnake); i++) {
         if (lowerSnake[i] == '_') {
             ret[i] = '_';
             ret[i + 1] = '\0';
@@ -245,7 +245,7 @@ gchar *get_upper_snake_from_lower_snake(const gchar *lowerSnake)
     }
 
     dest = g_new(gchar, strlen(ret) + 1);
-    for (i = 0; i < (guint) strlen(ret); i++) {
+    for (i = 0; i < (guint)strlen(ret); i++) {
         dest[i] = ret[i];
     }
     dest[i] = '\0';
@@ -277,14 +277,14 @@ gchar *get_lower_snake_from_upper_camel(const gchar *upperCamel)
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
 
-    for (i = 0; i < (guint) strlen(upperCamel); i++) {
+    for (i = 0; i < (guint)strlen(upperCamel); i++) {
         if (isupper(upperCamel[i]) && i != 0) {
-            len = (guint) strlen(buffer);
+            len = (guint)strlen(buffer);
             buffer[len] = '_';
             buffer[len + 1] = tolower(upperCamel[i]);
             buffer[len + 2] = '\0';
         } else {
-            len = (guint) strlen(buffer);
+            len = (guint)strlen(buffer);
             buffer[len] = tolower(upperCamel[i]);
             buffer[len + 1] = '\0';
         }
@@ -302,7 +302,7 @@ gchar *get_lower_train_from_lower_snake(const gchar *lowerSnake)
     guint len;
 
     g_return_val_if_fail(lowerSnake != NULL && *lowerSnake != '\0', NULL);
-    len =  (guint) strlen(lowerSnake);
+    len =  (guint)strlen(lowerSnake);
 
     ret = g_strdup(lowerSnake);
     for (i = 0; i < len; i++) {
@@ -321,7 +321,7 @@ gchar *get_lower_train_from_upper_camel(const gchar *upperCamel)
     g_return_val_if_fail(upperCamel != NULL && *upperCamel != '\0', NULL);
 
     ret = get_lower_snake_from_upper_camel(upperCamel);
-    len = (guint) strlen(ret);
+    len = (guint)strlen(ret);
     for (i = 0; i < len; i++) {
         if (ret[i] == '_')
             ret[i] = '-';
@@ -711,7 +711,7 @@ void generate_header_method_protos(FILE *out, Structure *structure)
     }
 
     for (iter = g_list_first(structure->methods); iter != NULL; iter = g_list_next(iter)) {
-        method = (Method *) iter->data;
+        method = (Method *)iter->data;
 
         if (g_strcmp0(method->kind, "private") == 0) {
             /* This checks whether there was method declared in private header already.
@@ -758,7 +758,7 @@ void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
             write_str(out, "\t");
         }
     } else {
-        count = (gint) strlen(method->ret->type) / TAB_SIZE;
+        count = (gint)strlen(method->ret->type) / TAB_SIZE;
         *buffer = '\0';
         if (count >= RET_TAB_COUNT) {
             buffer[0] = '\n';
@@ -766,7 +766,7 @@ void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
             count = 0;
         }
         for (iter = count; iter < RET_TAB_COUNT; iter++) {
-            len = (gint) strlen(buffer);
+            len = (gint)strlen(buffer);
             buffer[len] = '\t';
             buffer[len + 1] = '\0';
         }
@@ -779,20 +779,20 @@ void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
     }
 
     /* Generate the method name */
-    count = (gint) (strlen(method->name) / TAB_SIZE);
+    count = (gint)(strlen(method->name) / TAB_SIZE);
     *buffer = '\0';
     if (count >= METHOD_NAME_TAB_COUNT) {
         buffer[0] = '\n';
         buffer[1] = '\0';
         count = 0;
         for (iter = count; iter < RET_TAB_COUNT + METHOD_NAME_TAB_COUNT; iter++) {
-            len = (gint) strlen(buffer);
+            len = (gint)strlen(buffer);
             buffer[len] = '\t';
             buffer[len + 1] = '\0';
         }
     } else {
         for (iter = count; iter < METHOD_NAME_TAB_COUNT; iter++) {
-            len = (gint) strlen(buffer);
+            len = (gint)strlen(buffer);
             buffer[len] = '\t';
             buffer[len + 1] = '\0';
         }
@@ -812,7 +812,7 @@ void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
     } else {
         for (iter_list = g_list_first(method->parameters); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
-            para = (Parameter *) iter_list->data;
+            para = (Parameter *)iter_list->data;
             if (iter_list == g_list_first(method->parameters)) {
                 write_str(out, "(");
             } else {
@@ -869,7 +869,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                     } else {
                         last = c;
                     }
-                    len = (gint) strlen(buffer);
+                    len = (gint)strlen(buffer);
                     buffer[len] = c;
                     buffer[len + 1] = '\0';
                 }
@@ -879,7 +879,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                 generate_conditional(out, structure, buffer, table);
             } else {
                 while ((c = fgetc(in)) != '}') {
-                    len = (gint) strlen(buffer);
+                    len = (gint)strlen(buffer);
                     buffer[len] = c;
                     buffer[len + 1] = '\0';
                 }
@@ -888,7 +888,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                     for (iter = g_list_first(structure->methods); iter != NULL;
                          iter = g_list_next(iter)) {
                         method =
-                            get_source_method_body((Method *) iter->data, structure->nameSpace);
+                            get_source_method_body((Method *)iter->data, structure->nameSpace);
                         write_str(out, method);
                         if (iter != g_list_last(structure->methods)) {
                             write_str(out, "\n\n");
@@ -975,7 +975,7 @@ void generate_header_includes(FILE *out, Structure *structure)
     g_return_if_fail(out != NULL && structure != NULL);
 
     for (iter = g_list_first(structure->includes); iter != NULL; iter = g_list_next(iter)) {
-        includeName = (gchar *) iter->data;
+        includeName = (gchar *)iter->data;
         write_str(out, "#include <");
         write_str(out, includeName);
         write_str(out, ">\n");
@@ -988,12 +988,11 @@ void generate_header_includes(FILE *out, Structure *structure)
     includeNames = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
 
     upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
-    lowerTrain = get_lower_train_from_upper_camel(upperCamel);
     g_free(upperCamel);
 
     for (g_hash_table_iter_init(&iter_table, structure->dependencies);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
-        typeName = (gchar *) key;
+        typeName = (gchar *)key;
         if (g_hash_table_contains(type2structure, typeName)) {
             parentStructure = g_hash_table_lookup(type2structure, typeName);
             upperCamel = g_strconcat(parentStructure->nameSpace, parentStructure->name, NULL);
@@ -1021,7 +1020,7 @@ void generate_header_includes(FILE *out, Structure *structure)
 
     for (g_hash_table_iter_init(&iter_table, includeNames);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
-        includeName = (gchar *) key;
+        includeName = (gchar *)key;
         write_str(out, "#include <libical-glib/");
         write_str(out, includeName);
         write_str(out, ".h>\n");
@@ -1060,7 +1059,7 @@ void generate_source_includes(FILE *out, Structure *structure)
 
     for (g_hash_table_iter_init(&iter_table, structure->dependencies);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
-        typeName = (gchar *) key;
+        typeName = (gchar *)key;
         if (g_hash_table_contains(type2structure, typeName)) {
             parentStructure = g_hash_table_lookup(type2structure, typeName);
             upperCamel = g_strconcat(parentStructure->nameSpace, parentStructure->name, NULL);
@@ -1079,7 +1078,7 @@ void generate_source_includes(FILE *out, Structure *structure)
 
     for (g_hash_table_iter_init(&iter_table, includeNames);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
-        includeName = (gchar *) key;
+        includeName = (gchar *)key;
         write_str(out, "#include \"");
         write_str(out, includeName);
         write_str(out, ".h\"\n");
@@ -1125,7 +1124,7 @@ void generate_forward_declarations_header_file(GList *structures)
 
         for (g_hash_table_iter_init(&iter_table, structure->dependencies);
              g_hash_table_iter_next(&iter_table, &key, &value);) {
-            typeName = (gchar *) key;
+            typeName = (gchar *)key;
             if (g_hash_table_contains(type2structure, typeName)) {
                 typeKind = g_hash_table_lookup(type2kind, typeName);
                 if (g_strcmp0(typeKind, "std") == 0 &&
@@ -1149,7 +1148,7 @@ void generate_forward_declarations_header_file(GList *structures)
             }
 
             while ((c = fgetc(in)) != '}') {
-                len = (gint) strlen(buffer);
+                len = (gint)strlen(buffer);
                 buffer[len] = c;
                 buffer[len + 1] = '\0';
             }
@@ -1157,7 +1156,7 @@ void generate_forward_declarations_header_file(GList *structures)
             if (g_strcmp0(buffer, "forward_declarations") == 0) {
                 g_hash_table_iter_init(&iter_table, typeNames);
                 while (g_hash_table_iter_next(&iter_table, &key, &value)) {
-                    typeName = (gchar *) key;
+                    typeName = (gchar *)key;
                     write_str(out, "typedef struct _");
                     write_str(out, typeName);
                     write_str(out, " ");
@@ -1251,13 +1250,13 @@ GHashTable *get_hash_table_from_structure(Structure *structure)
             (void)g_hash_table_insert(table, (char *)"destroyFunc",
                                       g_strdup(structure->destroyFunc));
         } else {
-            (void)g_hash_table_insert(table, (char *)"destroyFunc", g_strdup((gchar *) "g_free"));
+            (void)g_hash_table_insert(table, (char *)"destroyFunc", g_strdup((gchar *)"g_free"));
         }
         if (structure->cloneFunc != NULL) {
-            (void)g_hash_table_insert(table, (gchar *) "cloneFunc", g_strdup(structure->cloneFunc));
+            (void)g_hash_table_insert(table, (gchar *)"cloneFunc", g_strdup(structure->cloneFunc));
         }
         if (structure->isBare) {
-            (void)g_hash_table_insert(table, (gchar *) "defaultNative",
+            (void)g_hash_table_insert(table, (gchar *)"defaultNative",
                                       g_strdup(structure->defaultNative));
         }
     }
@@ -1285,10 +1284,9 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     g_return_if_fail(out != NULL && structure != NULL && statement != NULL && *statement != '\0');
 
     iter = 0;
-    count = 0;
     isNegate = FALSE;
     isTrue = FALSE;
-    statement_len = (guint) strlen(statement);
+    statement_len = (guint)strlen(statement);
 
     if (statement[0] == '!') {
         isNegate = TRUE;
@@ -1305,7 +1303,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     *var = '\0';
 
     while (iter < statement_len && statement[iter] != '}') {
-        len = (gint) strlen(condition);
+        len = (gint)strlen(condition);
         condition[len] = statement[iter++];
         condition[len + 1] = '\0';
     }
@@ -1320,10 +1318,10 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     g_free(condition);
 
     (void)g_stpcpy(expression, statement + iter + 1);
-    expression_len = (guint) strlen(expression);
+    expression_len = (guint)strlen(expression);
 
     if ((isNegate && !isTrue) || (!isNegate && isTrue)) {
-        for (iter = 0; iter < (guint) strlen(expression); iter++) {
+        for (iter = 0; iter < (guint)strlen(expression); iter++) {
             if (iter < expression_len - 1 &&
                 expression[iter] == '$' &&
                 expression[iter + 1] == '^') {
@@ -1349,7 +1347,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                         generate_conditional(out, structure, buffer, table);
                         break;
                     }
-                    len = (gint) strlen(buffer);
+                    len = (gint)strlen(buffer);
                     buffer[len] = expression[iter];
                     buffer[len + 1] = '\0';
                     ++iter;
@@ -1366,7 +1364,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                     }
 
                     while ((c = expression[++iter]) != '}') {
-                        len = (gint) strlen(var);
+                        len = (gint)strlen(var);
                         var[len] = c;
                         var[len + 1] = '\0';
                     }
@@ -1415,7 +1413,7 @@ gchar *get_source_method_code(Method *method)
             } else {
                 (void)g_stpcpy(buffer + strlen(buffer), ", ");
             }
-            para = get_inline_parameter((Parameter *) iter->data);
+            para = get_inline_parameter((Parameter *)iter->data);
             (void)g_stpcpy(buffer + strlen(buffer), para);
             g_free(para);
         }
@@ -1460,7 +1458,7 @@ gchar *get_translator_for_parameter(Parameter *para)
     is_bare = FALSE;
 
     if (para->translator != NULL) {
-        if (g_strcmp0(para->translator, (gchar *) "NONE") != 0)
+        if (g_strcmp0(para->translator, (gchar *)"NONE") != 0)
             res = g_strdup(para->translator);
     } else {
         trueType = get_true_type(para->type);
@@ -1495,7 +1493,7 @@ gchar *get_translator_for_parameter(Parameter *para)
                 if (para->native_op != NULL) {
                     if (g_strcmp0(para->native_op, "OBJECT") == 0) {
                         res =
-                            g_strconcat("* (", structure->native, " *) i_cal_object_get_native",
+                            g_strconcat("* (", structure->native, " *)i_cal_object_get_native",
                                         NULL);
                     } else if (g_strcmp0(para->native_op, "POINTER") == 0) {
                         res =
@@ -1511,7 +1509,7 @@ gchar *get_translator_for_parameter(Parameter *para)
                 } else {
                     if (is_bare) {
                         res =
-                            g_strconcat("* (", structure->native, " *) i_cal_object_get_native",
+                            g_strconcat("* (", structure->native, " *)i_cal_object_get_native",
                                         NULL);
                     } else {
                         res =
@@ -1539,7 +1537,7 @@ gchar *get_translator_for_return(Ret *ret)
     res = NULL;
 
     if (ret->translator != NULL) {
-        if (g_strcmp0(ret->translator, (gchar *) "NONE") != 0)
+        if (g_strcmp0(ret->translator, (gchar *)"NONE") != 0)
             res = g_strdup(ret->translator);
     } else {
         trueType = get_true_type(ret->type);
@@ -1675,7 +1673,7 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
 
     (void)g_stpcpy(buffer + strlen(buffer), "\n{\n");
 
-    if (g_strcmp0(method->corresponds, (gchar *) "CUSTOM") != 0) {
+    if (g_strcmp0(method->corresponds, (gchar *)"CUSTOM") != 0) {
         checkers = get_source_run_time_checkers(method, nameSpace);
         if (checkers != NULL) {
             (void)g_stpcpy(buffer + strlen(buffer), checkers);
@@ -1685,7 +1683,7 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
         /* op on the owner */
         /* TODO: Change the translatorArgus in Parameter to parent */
         for (iter = g_list_first(method->parameters); iter != NULL; iter = g_list_next(iter)) {
-            parameter = (Parameter *) iter->data;
+            parameter = (Parameter *)iter->data;
             if (parameter->owner_op != NULL) {
                 if (g_strcmp0(parameter->owner_op, "REMOVE") == 0) {
                     (void)g_stpcpy(buffer + strlen(buffer),
@@ -1697,14 +1695,14 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
                                    "\ti_cal_object_set_owner ((ICalObject *)");
                     (void)g_stpcpy(buffer + strlen(buffer), parameter->name);
                     (void)g_stpcpy(buffer + strlen(buffer), ", (GObject *)");
-                    (void)g_stpcpy(buffer + strlen(buffer), (gchar *) parameter->owner_op);
+                    (void)g_stpcpy(buffer + strlen(buffer), (gchar *)parameter->owner_op);
                     (void)g_stpcpy(buffer + strlen(buffer), ");\n");
                 }
             } else if (parameter->translatorArgus != NULL) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\ti_cal_object_set_owner ((ICalObject *)");
                 (void)g_stpcpy(buffer + strlen(buffer), parameter->name);
                 (void)g_stpcpy(buffer + strlen(buffer), ", (GObject *)");
-                (void)g_stpcpy(buffer + strlen(buffer), (gchar *) parameter->translatorArgus->data);
+                (void)g_stpcpy(buffer + strlen(buffer), (gchar *)parameter->translatorArgus->data);
                 (void)g_stpcpy(buffer + strlen(buffer), ");\n");
             }
         }
@@ -1725,11 +1723,11 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
 
         if (method->ret != NULL && translator != NULL) {
             if (method->ret->translatorArgus != NULL) {
-                if (g_strcmp0((gchar *) method->ret->translatorArgus->data, "NONE") != 0) {
+                if (g_strcmp0((gchar *)method->ret->translatorArgus->data, "NONE") != 0) {
                     for (iter = g_list_first(method->ret->translatorArgus); iter != NULL;
                          iter = g_list_next(iter)) {
                         (void)g_stpcpy(buffer + strlen(buffer), ", ");
-                        (void)g_stpcpy(buffer + strlen(buffer), (gchar *) iter->data);
+                        (void)g_stpcpy(buffer + strlen(buffer), (gchar *)iter->data);
                     }
                 }
             } else {
@@ -1790,8 +1788,8 @@ gchar *get_source_method_proto(Method *method)
     /* Generate the method name */
     (void)g_stpcpy(buffer + strlen(buffer), method->name);
 
-    paddingLength = (gint) strlen(method->name) + 2;
-    padding = g_new(gchar, (gsize) (paddingLength + 1));
+    paddingLength = (gint)strlen(method->name) + 2;
+    padding = g_new(gchar, (gsize)(paddingLength + 1));
     for (iter = 0; iter < paddingLength; iter++) {
         padding[iter] = ' ';
     }
@@ -1803,7 +1801,7 @@ gchar *get_source_method_proto(Method *method)
     } else {
         for (iter_list = g_list_first(method->parameters); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
-            para = (Parameter *) iter_list->data;
+            para = (Parameter *)iter_list->data;
             if (iter_list == g_list_first(method->parameters)) {
                 (void)g_stpcpy(buffer + strlen(buffer), " (");
             } else {
@@ -1846,14 +1844,13 @@ gchar *get_true_type(const gchar *type)
     guint end;
     gchar *res;
     const gchar *const_prefix = "const";
-    const guint const_prefix_len = (guint) strlen(const_prefix);
+    const guint const_prefix_len = (guint)strlen(const_prefix);
     guint type_len;
 
     g_return_val_if_fail(type != NULL && *type != '\0', NULL);
 
-    type_len = (guint) strlen(type);
+    type_len = (guint)strlen(type);
     i = 0;
-    start = 0;
     end = type_len - 1;
 
     for (i = 0; i < const_prefix_len && i < type_len && const_prefix[i] == type[i]; i++);
@@ -1938,7 +1935,7 @@ void generate_header_enums(FILE *out, Structure *structure)
     g_return_if_fail(out != NULL && structure != NULL);
 
     for (iter = g_list_first(structure->enumerations); iter != NULL; iter = g_list_next(iter)) {
-        enumeration = (Enumeration *) iter->data;
+        enumeration = (Enumeration *)iter->data;
 
         generate_header_enum(out, enumeration);
         write_str(out, "\n");
@@ -1953,7 +1950,7 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
     gchar *newName;
     gchar *comment;
     gchar *tmp;
-    const guint enum_header_len = (guint) strlen(ENUM_HEADER);
+    const guint enum_header_len = (guint)strlen(ENUM_HEADER);
 
     g_return_if_fail(out != NULL && enumeration != NULL);
 
@@ -1991,11 +1988,11 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
     write_str(out, "typedef enum {");
 
     for (iter = g_list_first(enumeration->elements); iter != NULL; iter = g_list_next(iter)) {
-        nativeName = (gchar *) iter->data;
+        nativeName = (gchar *)iter->data;
         if (iter != g_list_first(enumeration->elements)) {
             write_str(out, ",");
         }
-        if (enum_header_len >= (guint) strlen(nativeName)) {
+        if (enum_header_len >= (guint)strlen(nativeName)) {
             printf("The enum name %s is longer than the enum header %s\n", nativeName, ENUM_HEADER);
             continue;
         }
@@ -2049,10 +2046,10 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
     res = NULL;
-    namespace_len = (guint) strlen(namespace);
+    namespace_len = (guint)strlen(namespace);
 
     for (iter = g_list_first(method->parameters); iter != NULL; iter = g_list_next(iter)) {
-        parameter = (Parameter *) iter->data;
+        parameter = (Parameter *)iter->data;
 
         if (parameter && parameter->type && parameter->type[strlen(parameter->type) - 1] == '*') {
             trueType = get_true_type(parameter->type);
@@ -2101,7 +2098,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
 
             for (jter = g_list_first(parameter->annotations); jter != NULL;
                  jter = g_list_next(jter)) {
-                if (g_strcmp0((gchar *) jter->data, "allow-none") == 0) {
+                if (g_strcmp0((gchar *)jter->data, "allow-none") == 0) {
                     break;
                 }
             }
@@ -2190,7 +2187,7 @@ static gint generate_library(const gchar *apis_dir)
 
     /* Parse the all the XML files into the Structure */
     while (filename = g_dir_read_name(dir), filename) {
-        gint len = (gint) strlen(filename);
+        gint len = (gint)strlen(filename);
 
         if (len <= 4 || g_ascii_strncasecmp(filename + len - 4, ".xml", 4) != 0)
             continue;
@@ -2247,7 +2244,7 @@ static gint generate_library(const gchar *apis_dir)
 
         for (iter_list = g_list_first(structure->enumerations); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
-            enumeration = (Enumeration *) iter_list->data;
+            enumeration = (Enumeration *)iter_list->data;
             (void)g_hash_table_insert(type2kind, g_strdup(enumeration->name), (void *)"enum");
             (void)g_hash_table_insert(type2structure, g_strdup(enumeration->name), structure);
 
@@ -2274,7 +2271,7 @@ static gint generate_library(const gchar *apis_dir)
     /* Generate all the header and source files for each structure */
     for (iter_list = g_list_first(structures); iter_list != NULL;
          iter_list = g_list_next(iter_list)) {
-        structure = (Structure *) iter_list->data;
+        structure = (Structure *)iter_list->data;
         generate_header_and_source(structure, (char *)"");
     }
 
@@ -2298,7 +2295,7 @@ void generate_header_header_declaration(FILE *out, Structure *structure)
 
     for (list_iter = g_list_first(structure->declarations); list_iter != NULL;
          list_iter = g_list_next(list_iter)) {
-        declaration = (Declaration *) list_iter->data;
+        declaration = (Declaration *)list_iter->data;
 
         if (g_strcmp0(declaration->position, "header") == 0) {
             write_str(out, declaration->content);
@@ -2348,14 +2345,14 @@ void generate_header_header_file(GList *structures)
             }
 
             while ((c = fgetc(in)) != '}') {
-                len = (gint) strlen(buffer);
+                len = (gint)strlen(buffer);
                 buffer[len] = c;
                 buffer[len + 1] = '\0';
             }
 
             if (g_strcmp0(buffer, "allHeaders") == 0) {
                 for (iter = g_list_first(structures); iter != NULL; iter = g_list_next(iter)) {
-                    structure = (Structure *) iter->data;
+                    structure = (Structure *)iter->data;
                     upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
                     lowerTrain = get_lower_train_from_upper_camel(upperCamel);
                     header = g_strconcat("#include <libical-glib/", lowerTrain, ".h>\n", NULL);
