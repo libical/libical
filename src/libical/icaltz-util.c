@@ -539,11 +539,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             icalcomponent_add_property(dst_comp, icalprop);
 
             /* DTSTART localtime uses TZOFFSETFROM UTC offset */
-            if (num_trans != 0) {
-                trans = transitions[dstidx] + types[zp_idx].gmtoff;
-            } else {
-                trans = (time_t)types[zp_idx].gmtoff;
-            }
+            trans = transitions[dstidx] + types[zp_idx].gmtoff;
 
             icaltime = icaltime_from_timet_with_zone(trans, 0, NULL);
             dtstart = icaltime;
