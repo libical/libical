@@ -1850,7 +1850,6 @@ gchar *get_true_type(const gchar *type)
     g_return_val_if_fail(type != NULL && *type != '\0', NULL);
 
     type_len = (guint)strlen(type);
-    i = 0;
     end = type_len - 1;
 
     for (i = 0; i < const_prefix_len && i < type_len && const_prefix[i] == type[i]; i++);
