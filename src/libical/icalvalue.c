@@ -479,6 +479,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                          str, icalvalue_kind_to_string(kind));
                 errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
                 *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
+                icalparameter_free(errParam);
             }
             break;
         }
