@@ -27,6 +27,7 @@ HELP() {
   echo " -s, --no-splint       Don't run any splint tests"
   echo " -l, --no-clang-build  Don't run any clang-build tests"
   echo " -g, --no-gcc-build    Don't run any gcc-build tests"
+  echo " -a, --no-asan-build   Don't run any ASAN-build tests"
   echo
 }
 
@@ -159,6 +160,23 @@ CLANG_BUILD() {
   SET_CLANG
   BUILD "$name" "$2"
   echo "===== END CLANG BUILD: $1 ======"
+}
+
+#function ASAN_BUILD:
+# runs an clang ASAN build test
+# $1 = the name of the test (which will have "-asan" appended to it)
+# $2 = CMake options
+ASAN_BUILD() {
+  name="$1-asan"
+  if ( test $runasanbuild -eq 0 )
+  then
+    echo "===== ASAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START ASAN BUILD: $1 ======"
+  SET_CLANG
+  BUILD "$name" "-DADDRESS_SANITIZER=True $2"
+  echo "===== END ASAN BUILD: $1 ======"
 }
 
 #function CPPCHECK
@@ -361,7 +379,7 @@ KRAZY() {
 
 ##### END FUNCTIONS #####
 
-TEMP=`getopt -o hkctbslg --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build -- "$@"`
+TEMP=`getopt -o hkctbslga --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
@@ -372,6 +390,7 @@ runtidy=1
 runscan=1
 runclangbuild=1
 rungccbuild=1
+runasanbuild=1
 runsplint=1
 while true ; do
     case "$1" in
@@ -383,6 +402,7 @@ while true ; do
         -s|--no-splint)      runsplint=0;     shift;;
         -l|--no-clang-build) runclangbuild=0; shift;;
         -g|--no-gcc-build)   rungccbuild=0;   shift;;
+        -a|--no-asan-build)  runasanbuild=0;       shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
@@ -417,6 +437,6 @@ CLANG_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i6
 CLANG_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 
 #Address sanitizer
-CLANG_BUILD asan1 "-DADDRESS_SANITIZER=True -DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_BDB=True"
+ASAN_BUILD test "-DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_BDB=True"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"
