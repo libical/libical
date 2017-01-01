@@ -12,6 +12,24 @@ export MAKEFLAGS=-j8
 
 ##### START FUNCTIONS #####
 
+#function HELP
+# print a help message and exit
+HELP() {
+  echo
+  echo "Usage: `basename $0` [OPTIONS]"
+  echo
+  echo "Run build tests"
+  echo "Options:"
+  echo " -k, --no-krazy        Don't run any Krazy tests"
+  echo " -c, --no-cppcheck     Don't run any cppcheck tests"
+  echo " -t, --no-tidy         Don't run any clang-tidy tests"
+  echo " -b, --no-scan         Don't run any scan-build tests"
+  echo " -s, --no-splint       Don't run any splint tests"
+  echo " -l, --no-clang-build  Don't run any clang-build tests"
+  echo " -g, --no-gcc-build    Don't run any gcc-build tests"
+  echo
+}
+
 #function SET_GCC
 # setup compiling with gcc
 SET_GCC() {
@@ -58,8 +76,7 @@ COMPILE_WARNINGS() {
 # print warnings found in the cppcheck output
 # $1 = file with the cppcheck output
 CPPCHECK_WARNINGS() {
-  whitelist=""
-  CHECK_WARNINGS $1 $whitelist
+  CHECK_WARNINGS $1 ""
 }
 
 #function TIDY_WARNINGS:
@@ -116,6 +133,11 @@ BUILD() {
 # $2 = CMake options
 GCC_BUILD() {
   name="$1-gcc"
+  if ( test $rungccbuild -eq 0 )
+  then
+    echo "===== GCC BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
   echo "===== START GCC BUILD: $1 ======"
   SET_GCC
   BUILD "$name" "$2"
@@ -128,6 +150,11 @@ GCC_BUILD() {
 # $2 = CMake options
 CLANG_BUILD() {
   name="$1-clang"
+  if ( test $runclangbuild -eq 0 )
+  then
+    echo "===== CLANG BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
   echo "===== START CLANG BUILD: $1 ======"
   SET_CLANG
   BUILD "$name" "$2"
@@ -140,6 +167,11 @@ CLANG_BUILD() {
 # $2 = CMake options
 CPPCHECK() {
   name="$1-cppcheck"
+  if ( test $runcppcheck -eq 0 )
+  then
+    echo "===== CPPCHECK TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
   echo "===== START SETUP FOR CPPCHECK: $1 ======"
 
   #first build it
@@ -183,6 +215,11 @@ CPPCHECK() {
 # $2 = CMake options
 SPLINT() {
   name="$1-splint"
+  if ( test $runsplint -eq 0 )
+  then
+    echo "===== SPLIT TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
   echo "===== START SETUP FOR SPLINT: $1 ======"
 
   #first build it
@@ -243,7 +280,7 @@ SPLINT() {
        -I $TOP/src/libicalss \
        -I $TOP/src/libicalvcal \
        -I $TOP/src/libical-glib | \
-  cat -
+  cat - |& tee splint-$name.out
   status=${PIPESTATUS[0]}
   if ( test $status -gt 0 )
   then
@@ -251,6 +288,7 @@ SPLINT() {
     exit 1
   fi
   CLEAN
+  rm splint-$name.out
   echo "===== END SPLINT: $1 ======"
 }
 
@@ -259,6 +297,11 @@ SPLINT() {
 # $1 = the name of the test (which will have "-tidy" appended)
 # $2 = CMake options
 CLANGTIDY() {
+  if ( test $runtidy -eq 0 )
+  then
+    echo "===== CLANG-TIDY TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
   echo "===== START CLANG-TIDY: $1 ====="
   cd $TOP
   SET_CLANG
@@ -274,6 +317,11 @@ CLANGTIDY() {
 # $1 = the name of the test (which will have "-scan" appended)
 # $2 = CMake options
 CLANGSCAN() {
+  if ( test $runscan -eq 0 )
+  then
+    echo "===== SCAN-BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
   echo "===== START SCAN-BUILD: $1 ====="
   cd $TOP
 
@@ -293,6 +341,11 @@ CLANGSCAN() {
 #function KRAZY
 # runs a krazy2 test
 KRAZY() {
+  if ( test $runkrazy -eq 0 )
+  then
+    echo "===== KRAZY TEST DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
   echo "===== START KRAZY ====="
   cd $TOP
   krazy2all |& tee krazy.out
@@ -307,6 +360,33 @@ KRAZY() {
 }
 
 ##### END FUNCTIONS #####
+
+TEMP=`getopt -o hkctbslg --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build -- "$@"`
+if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
+# Note the quotes around `$TEMP': they are essential!
+eval set -- "$TEMP"
+
+runkrazy=1
+runcppcheck=1
+runtidy=1
+runscan=1
+runclangbuild=1
+rungccbuild=1
+runsplint=1
+while true ; do
+    case "$1" in
+        -h|--help) HELP; exit 1;;
+        -k|--no-krazy)       runkrazy=0;      shift;;
+        -c|--no-cppcheck)    runcppcheck=0;   shift;;
+        -t|--no-tidy)        runtidy=0;       shift;;
+        -b|--no-scan)        runscan=0;       shift;;
+        -s|--no-splint)      runsplint=0;     shift;;
+        -l|--no-clang-build) runclangbuild=0; shift;;
+        -g|--no-gcc-build)   rungccbuild=0;   shift;;
+        --) shift; break;;
+        *)  echo "Internal error!"; exit 1;;
+    esac
+done
 
 #MAIN
 TOP=`dirname $0`
