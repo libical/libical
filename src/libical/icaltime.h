@@ -102,12 +102,6 @@ struct icaltime_span
 
 typedef struct icaltime_span icaltime_span;
 
-/*
- *      FIXME
- *
- *      is_utc is redundant, and might be considered a minor optimization.
- *      It might be deprecated, so you should use icaltime_is_utc() instead.
- */
 struct icaltimetype
 {
     int year;           /**< Actual year, e.g. 2001. */
@@ -121,9 +115,9 @@ struct icaltimetype
 
     int is_date;        /**< 1 -> interpret this as date. */
 
-    int is_daylight;     /**< 1 -> time is in daylight savings time. */
+    int is_daylight;    /**< 1 -> time is in daylight savings time. */
 
-    const icaltimezone *zone;           /**< timezone */
+    const icaltimezone *zone;  /**< timezone */
 };
 
 typedef struct icaltimetype icaltimetype;
@@ -152,7 +146,13 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_string(const char *str);
 /** Create a new time, given a day of year and a year. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy, const int year);
 
-/** Return the time as seconds past the UNIX epoch */
+/**
+ * Returns the time as seconds past the UNIX epoch
+ *
+ * This function probably won't do what you expect.  In particular, you should
+ * only pass an icaltime in UTC, since no conversion is done.  Even in that case,
+ * it's probably better to just use icaltime_as_timet_with_zone().
+ */
 LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);
 
 /** Return the time as seconds past the UNIX epoch, using timezones. */

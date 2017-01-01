@@ -754,8 +754,6 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
     icaltime_adjust(tt, 0, 0, 0, utc_offset);
 }
 
-/** @deprecated This API wasn't updated when we changed icaltimetype to contain its own
-    timezone. Also, this takes a pointer instead of the struct. */
 /* Calculates the UTC offset of a given local time in the given
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in
@@ -906,8 +904,6 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
     return zone_change->utc_offset;
 }
 
-/** @deprecated This API wasn't updated when we changed icaltimetype to contain its own
-    timezone. Also, this takes a pointer instead of the struct. */
 /** Calculates the UTC offset of a given UTC time in the given
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in

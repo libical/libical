@@ -43,15 +43,6 @@ import Error
 
 typedef int time_t;
 
-// Remove deprecated functions
-%ignore icaltimezone_get_utc_offset(icaltimezone    *zone,
-                                    struct icaltimetype *tt,
-                                    int     *is_daylight);
-%ignore icaltimezone_get_utc_offset_of_utc_time (icaltimezone   *zone,
-                     struct icaltimetype    *tt,
-                     int        *is_daylight);
-%ignore icalcomponent_get_span(icalcomponent* comp);
-
 #ifndef _DLOPEN_TEST
 %ignore icalset_register_class(icalset *set);
 #endif

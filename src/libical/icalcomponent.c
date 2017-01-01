@@ -613,7 +613,6 @@ icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c)
 }
 
 /**     @brief Get the timespan covered by this component, in UTC
- *      (deprecated)
  *
  *      see icalcomponent_foreach_recurrence() for a better way to
  *      extract spans from an component.

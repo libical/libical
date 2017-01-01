@@ -262,14 +262,6 @@ struct icaltimetype icaltime_today(void)
     return icaltime_from_timet_with_zone(time(NULL), 1, NULL);
 }
 
-/**     @brief  Return the time as seconds past the UNIX epoch
- *
- *      While this function is not currently deprecated, it probably won't do
- *      what you expect, unless you know what you're doing. In particular, you
- *      should only pass an icaltime in UTC, since no conversion is done. Even
- *      in that case, it's probably better to just use
- *      icaltime_as_timet_with_zone().
- */
 time_t icaltime_as_timet(const struct icaltimetype tt)
 {
     struct tm stm;
