@@ -75,7 +75,7 @@
 #  Build with the address sanitizer (requires gcc or clang)
 #
 
-cmake_minimum_required(VERSION 2.8.9) #first line, to shutup a cygwin warning
+cmake_minimum_required(VERSION 3.1.0) #first line, to shutup a cygwin warning
 project(libical C CXX)
 
 cmake_policy(SET CMP0003 NEW)
