@@ -957,7 +957,7 @@ static int __greg_month_diff(icaltimetype a, icaltimetype b)
 {
     return (12 * (b.year - a.year) + (b.month - a.month));
 }
-    
+
 static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b);
 
 #if defined(HAVE_LIBICU)
@@ -1452,18 +1452,17 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
                      (int32_t) date.year,
                      (int32_t) (date.month - 1), /* UCal is 0-based */
                      (int32_t) date.day, &status);
-    }
-    else {
+    } else {
         ucal_setDateTime(impl->greg,
                          (int32_t) date.year,
                          (int32_t) (date.month - 1), /* UCal is 0-based */
                          (int32_t) date.day,
-                         (int32_t) has_by_data(impl, BY_HOUR) ?
-                         impl->by_ptrs[BY_HOUR][0] : impl->rstart.hour,
-                         (int32_t) has_by_data(impl, BY_MINUTE) ?
-                         impl->by_ptrs[BY_MINUTE][0] : impl->rstart.minute,
-                         (int32_t) has_by_data(impl, BY_SECOND) ?
-                         impl->by_ptrs[BY_SECOND][0] : impl->rstart.second,
+                         (int32_t) (has_by_data(impl, BY_HOUR) ?
+                                    impl->by_ptrs[BY_HOUR][0] : impl->rstart.hour),
+                         (int32_t) (has_by_data(impl, BY_MINUTE) ?
+                                    impl->by_ptrs[BY_MINUTE][0] : impl->rstart.minute),
+                         (int32_t) (has_by_data(impl, BY_SECOND) ?
+                                    impl->by_ptrs[BY_SECOND][0] : impl->rstart.second),
                          &status);
     }
 
@@ -1481,11 +1480,9 @@ static int month_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
     if (impl->rscale == impl->greg) {
         /* Use simple Gregorian math */
         diff = __greg_month_diff(a, b);
-    }
-    else if (a.year == b.year) {
+    } else if (a.year == b.year) {
         diff = b.month - a.month;
-    }
-    else {
+    } else {
         /* Count months in each year to account for leap months */
         UErrorCode status = U_ZERO_ERROR;
         UDate millis;
@@ -1770,7 +1767,7 @@ static int month_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 
     return __greg_month_diff(a, b);
 }
-    
+
 /* Calculate the number of Gregorian days between 2 dates */
 static int day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 {
@@ -2016,8 +2013,7 @@ static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
     if (a.year == b.year) {
         diff = get_day_of_year(impl, b.year, b.month, b.day, NULL) -
             get_day_of_year(impl, a.year, a.month, a.day, NULL);
-    }
-    else {
+    } else {
         /* Count days in each year to account for leap days/months */
         int year = a.year;
 
@@ -2846,9 +2842,9 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     }
 
     /* If initial time is valid, return it */
-    if (impl->occurrence_no == 0
-        && icaltime_compare(impl->last, impl->istart) >= 0
-        && check_contracting_rules(impl)) {
+    if ((impl->occurrence_no == 0) &&
+        (icaltime_compare(impl->last, impl->istart) >= 0) &&
+        check_contracting_rules(impl)) {
 
         impl->occurrence_no++;
         return impl->last;
