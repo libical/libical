@@ -17,6 +17,7 @@ Version 3.0.0:
      + icalvalue_new_datetimedate (DATE or DATE-TIME)
      + icalvalue_set_datetimedate
      + icalvalue_get_datetimedate
+     + icalrecur_iterator_set_start
  * Removed deprecated functions:
     + icaltime_from_timet (use icaltime_from_timet_with_zone)
     + icaltime_start_day_of_week (use icaltime_start_day_week)

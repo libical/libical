@@ -827,11 +827,12 @@ struct icalrecur_iterator_impl
     struct icaltimetype dtstart;     /* copy of DTSTART: to fill in defaults */
     struct icalrecurrencetype rule;  /* copy of RRULE */
 
+    struct icaltimetype rstart;      /* DTSTART in RSCALE  */
+    struct icaltimetype istart;      /* Gregorian start time for iterator */
     struct icaltimetype last;        /* last time returned from iterator */
     int occurrence_no;               /* number of steps made on the iterator */
 
 #if defined(HAVE_LIBICU)
-    struct icaltimetype rstart;      /* DTSTART in RSCALE  */
     UCalendar *greg;                 /* Gregorian calendar */
     UCalendar *rscale;               /* RSCALE calendar    */
 #endif
@@ -950,6 +951,14 @@ static void setup_defaults(icalrecur_iterator *impl,
         }
     }
 }
+
+/* Calculate the number of Gregorian months between 2 dates */
+static int __greg_month_diff(icaltimetype a, icaltimetype b)
+{
+    return (12 * (b.year - a.year) + (b.month - a.month));
+}
+    
+static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b);
 
 #if defined(HAVE_LIBICU)
 /*
@@ -1433,6 +1442,90 @@ static int initialize_iterator(icalrecur_iterator *impl)
     return 1;
 }
 
+/* Set Gregorian date and convert to RSCALE */
+static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
+{
+    UErrorCode status = U_ZERO_ERROR;
+
+    if (impl->rstart.is_date) {
+        ucal_setDate(impl->greg,
+                     (int32_t) date.year,
+                     (int32_t) (date.month - 1), /* UCal is 0-based */
+                     (int32_t) date.day, &status);
+    }
+    else {
+        ucal_setDateTime(impl->greg,
+                         (int32_t) date.year,
+                         (int32_t) (date.month - 1), /* UCal is 0-based */
+                         (int32_t) date.day,
+                         (int32_t) has_by_data(impl, BY_HOUR) ?
+                         impl->by_ptrs[BY_HOUR][0] : impl->rstart.hour,
+                         (int32_t) has_by_data(impl, BY_MINUTE) ?
+                         impl->by_ptrs[BY_MINUTE][0] : impl->rstart.minute,
+                         (int32_t) has_by_data(impl, BY_SECOND) ?
+                         impl->by_ptrs[BY_SECOND][0] : impl->rstart.second,
+                         &status);
+    }
+
+    if (impl->rscale != impl->greg) {
+        UDate millis = ucal_getMillis(impl->greg, &status);
+        ucal_setMillis(impl->rscale, millis, &status);
+    }
+}
+
+/* Calculate the number of RSCALE months between 2 dates */
+static int month_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
+{
+    int diff;
+
+    if (impl->rscale == impl->greg) {
+        /* Use simple Gregorian math */
+        diff = __greg_month_diff(a, b);
+    }
+    else if (a.year == b.year) {
+        diff = b.month - a.month;
+    }
+    else {
+        /* Count months in each year to account for leap months */
+        UErrorCode status = U_ZERO_ERROR;
+        UDate millis;
+        int year = a.year;
+
+        /* Save current date */
+        millis = ucal_getMillis(impl->rscale, &status);
+
+        set_day_of_year(impl, 1);
+        diff = get_months_in_year(impl, year) - a.month;
+        while (++year < b.year) diff += get_months_in_year(impl, year);
+        diff += b.month;
+
+        /* Restore date */
+        ucal_setMillis(impl->rscale, millis, &status);
+    }
+
+    return diff;
+}
+
+/* Calculate the number of RSCALE days between 2 dates */
+static int day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UDate millis;
+    int diff;
+
+    /* Save current date */
+    millis = ucal_getMillis(impl->rscale, &status);
+
+    set_day_of_year(impl, 1);
+
+    diff = __day_diff(impl, a, b);
+
+    /* Restore date */
+    ucal_setMillis(impl->rscale, millis, &status);
+
+    return diff;
+}
+
 #else /* !HAVE_LIBICU */
 
 /*
@@ -1653,6 +1746,37 @@ static int initialize_iterator(icalrecur_iterator *impl)
     return 1;
 }
 
+/* Set Gregorian date */
+static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
+{
+    impl->last.year = date.year;
+    impl->last.month = date.month;
+    impl->last.day = date.day;
+
+    if (!impl->dtstart.is_date) {
+        impl->last.hour = has_by_data(impl, BY_HOUR) ?
+            impl->by_ptrs[BY_HOUR][0] : impl->dtstart.hour;
+        impl->last.minute = has_by_data(impl, BY_MINUTE) ?
+            impl->by_ptrs[BY_MINUTE][0] : impl->dtstart.minute;
+        impl->last.second = has_by_data(impl, BY_SECOND) ?
+            impl->by_ptrs[BY_SECOND][0] : impl->dtstart.second;
+    }
+}
+
+/* Calculate the number of Gregorian months between 2 dates */
+static int month_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
+{
+    _unused(impl);
+
+    return __greg_month_diff(a, b);
+}
+    
+/* Calculate the number of Gregorian days between 2 dates */
+static int day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
+{
+    return __day_diff(impl, a, b);
+}
+
 #endif /* HAVE_LIBICU */
 
 static void increment_month(icalrecur_iterator *impl);
@@ -1726,6 +1850,8 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     impl->dtstart = dtstart;
     impl->rule = rule;
+    impl->rstart = dtstart;
+    impl->istart = dtstart;
     impl->last = dtstart;
     impl->occurrence_no = 0;
     impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
@@ -1880,6 +2006,28 @@ void icalrecur_iterator_free(icalrecur_iterator *i)
 #endif
 
     free(i);
+}
+
+/* Calculate the number of days between 2 dates */
+static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
+{
+    int diff;
+
+    if (a.year == b.year) {
+        diff = get_day_of_year(impl, b.year, b.month, b.day, NULL) -
+            get_day_of_year(impl, a.year, a.month, a.day, NULL);
+    }
+    else {
+        /* Count days in each year to account for leap days/months */
+        int year = a.year;
+
+        diff = get_days_in_year(impl, year) -
+            get_day_of_year(impl, a.year, a.month, a.day, NULL);
+        while (++year < b.year) diff += get_days_in_year(impl, year);
+        diff += get_day_of_year(impl, b.year, b.month, b.day, NULL);
+    }
+
+    return diff;
 }
 
 /** Increment month is different that the other increment_* routines --
@@ -2699,7 +2847,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
 
     /* If initial time is valid, return it */
     if (impl->occurrence_no == 0
-        && icaltime_compare(impl->last, impl->dtstart) >= 0
+        && icaltime_compare(impl->last, impl->istart) >= 0
         && check_contracting_rules(impl)) {
 
         impl->occurrence_no++;
@@ -2756,12 +2904,122 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
             return icaltime_null_time();
         }
 
-    } while (icaltime_compare(impl->last, impl->dtstart) < 0 ||
+    } while (icaltime_compare(impl->last, impl->istart) < 0 ||
              !check_contracting_rules(impl));
 
     impl->occurrence_no++;
 
     return impl->last;
+}
+
+int icalrecur_iterator_set_start(icalrecur_iterator *impl,
+                                 struct icaltimetype start)
+{
+    short interval = impl->rule.interval;
+    int diff;
+
+    /* We can't adjust start date if we need to count occurrences */
+    if (impl->rule.count > 0) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
+    /* Convert start to same time zone as DTSTART */
+    impl->istart =
+        icaltime_convert_to_zone(start, (icaltimezone *) impl->dtstart.zone);
+
+    if (icaltime_compare(impl->istart, impl->dtstart) < 0) {
+        /* If start is before DTSTART, use DTSTART */
+        impl->istart = impl->dtstart;
+    }
+    else if (!icaltime_is_null_time(impl->rule.until) &&
+        icaltime_compare(impl->istart, impl->rule.until) > 0) {
+        /* If start is after UNTIL, we're done */
+        impl->last = impl->istart;
+        return 1;
+    }
+
+    /* Set Gregorian start date */
+    set_datetime(impl, impl->istart);
+
+    /* Get start date as RSCALE date */
+    start = occurrence_as_icaltime(impl, 0);
+
+    switch (impl->rule.freq) {
+    case ICAL_YEARLY_RECURRENCE:
+        if ((interval > 1) &&
+            (diff = (start.year - impl->rstart.year) % interval)) {
+            /* Specified start year doesn't match interval -
+               bump start to first day of next year that matches interval */
+            set_day_of_year(impl, 1);
+            increment_year(impl, interval - diff);
+        }
+
+        /* Get (adjusted) start date as RSCALE date */
+        start = occurrence_as_icaltime(impl, 0);
+
+        /* Expand days array for (adjusted) start year */
+        expand_year_days(impl, start.year);
+
+        /* Copy the first day into last */
+        set_day_of_year(impl, impl->days_index);
+
+        break;
+
+    case ICAL_MONTHLY_RECURRENCE:
+        if ((interval > 1) &&
+            (diff = month_diff(impl, impl->rstart, start) % interval)) {
+            /* Specified month doesn't match interval -
+               bump start to first day of next month that matches interval */
+            increment_monthday(impl, -start.day);
+            __increment_month(impl, interval - diff);
+        }
+
+        /* Get (adjusted) start date as RSCALE date */
+        start = occurrence_as_icaltime(impl, 0);
+
+        /* Expand days array for (adjusted) start month */
+        expand_month_days(impl, start.year, start.month);
+
+        /* Copy the first day into last */
+        set_day_of_year(impl, impl->days_index);
+
+        break;
+
+    case ICAL_WEEKLY_RECURRENCE:
+
+        adjust_to_byday(impl);
+
+        /* Get adjusted start date as RSCALE date */
+        start = occurrence_as_icaltime(impl, 0);
+
+        if ((interval > 1) &&
+            (diff = (day_diff(impl, impl->rstart, start) + 6) / 7) % interval) {
+            /* Specified day doesn't match interval -
+               bump start to next week that matches interval */
+            increment_monthday(impl, 7 * (interval - diff));
+        }
+        break;
+
+    case ICAL_DAILY_RECURRENCE:
+        if ((interval > 1) &&
+            (diff = day_diff(impl, impl->rstart, start) % interval)) {
+            /* Specified day doesn't match interval -
+               bump start to next day that matches interval */
+            increment_monthday(impl, interval - diff);
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    /* Re-initialize iterator */
+    impl->occurrence_no = 0;
+    memset(impl->by_indices, 0, sizeof(impl->by_indices));
+    impl->last = occurrence_as_icaltime(impl, 1);
+
+    return 1;
 }
 
 /************************** Type Routines **********************/

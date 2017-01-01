@@ -229,9 +229,17 @@ LIBICAL_ICAL_EXPORT char *icalrecurrencetype_as_string_r(struct icalrecurrencety
 
 typedef struct icalrecur_iterator_impl icalrecur_iterator;
 
-/** Create a new recurrence rule iterator */
+/** Create a new recurrence rule iterator, starting at DTSTART */
 LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                                                                struct icaltimetype dtstart);
+
+/** Set the date-time at which the iterator will start,
+ *  where 'start' is a value between DTSTART and UNTIL.
+ *
+ *  NOTE: CAN NOT be used with RRULEs that contain COUNT.
+ */
+LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_start(icalrecur_iterator *impl,
+                                                     struct icaltimetype start);
 
 /** Get the next occurrence from an iterator */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *);
