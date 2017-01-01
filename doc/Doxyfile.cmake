@@ -2,7 +2,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = "Libical API Documentation"
-PROJECT_NUMBER         = v@PROJECT_VERSION@
+PROJECT_NUMBER         = @PROJECT_VERSION@
 OUTPUT_DIRECTORY       = apidocs
 #CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -166,6 +166,7 @@ SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 # Configuration::additions related to external references
 #---------------------------------------------------------------------------
+GENERATE_TAGFILE       = libical.tag
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 PERL_PATH              = /usr/bin/perl
