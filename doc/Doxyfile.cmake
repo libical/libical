@@ -1,8 +1,8 @@
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME           = Libical
-PROJECT_NUMBER         = @PROJECT_VERSION@
+PROJECT_NAME           = "Libical API Documentation"
+PROJECT_NUMBER         = v@PROJECT_VERSION@
 OUTPUT_DIRECTORY       = apidocs
 #CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -22,8 +22,8 @@ ABBREVIATE_BRIEF       = "The \$name class" \
 ALWAYS_DETAILED_SEC    = NO
 INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = NO
-STRIP_FROM_PATH        = 
-STRIP_FROM_INC_PATH    = 
+STRIP_FROM_PATH        =
+STRIP_FROM_INC_PATH    =
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = NO
 MULTILINE_CPP_IS_BRIEF = NO
@@ -47,10 +47,10 @@ HIDE_UNDOC_MEMBERS     = NO
 HIDE_UNDOC_CLASSES     = NO
 HIDE_FRIEND_COMPOUNDS  = YES
 HIDE_IN_BODY_DOCS      = NO
-INTERNAL_DOCS          = YES
+INTERNAL_DOCS          = NO
 CASE_SENSE_NAMES       = YES
 HIDE_SCOPE_NAMES       = NO
-SHOW_INCLUDE_FILES     = YES
+SHOW_INCLUDE_FILES     = NO
 INLINE_INFO            = YES
 SORT_MEMBER_DOCS       = YES
 SORT_MEMBERS_CTORS_1ST = YES
@@ -60,10 +60,10 @@ GENERATE_TODOLIST      = NO
 GENERATE_TESTLIST      = YES
 GENERATE_BUGLIST       = YES
 GENERATE_DEPRECATEDLIST = YES
-ENABLED_SECTIONS       = 
+ENABLED_SECTIONS       =
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES
-FILE_VERSION_FILTER    = 
+FILE_VERSION_FILTER    =
 #---------------------------------------------------------------------------
 # configuration options related to warning and progress messages
 #---------------------------------------------------------------------------
@@ -72,7 +72,7 @@ WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
 WARN_NO_PARAMDOC       = YES
-WARN_FORMAT            = "\$file:\$line: \$text"
+WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           = doxygen.log
 #---------------------------------------------------------------------------
 # configuration options related to the input files
@@ -89,8 +89,8 @@ FILE_PATTERNS          = *.cpp \
                          *.dox
 RECURSIVE              = YES
 EXCLUDE                = @CMAKE_SOURCE_DIR@/src/java \
-			 @CMAKE_SOURCE_DIR@/src/php \
-			 @CMAKE_SOURCE_DIR@/src/python
+                         @CMAKE_SOURCE_DIR@/src/php \
+                         @CMAKE_SOURCE_DIR@/src/python
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */.svn/* \
                          */.git/* \
@@ -103,19 +103,19 @@ EXCLUDE_PATTERNS       = */.svn/* \
                          */tests/* \
                          *_p.cpp \
                          *_export.h
-EXAMPLE_PATH           = 
+EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             = @CMAKE_SOURCE_DIR@/docs
-INPUT_FILTER           = 
-FILTER_PATTERNS        = 
+INPUT_FILTER           =
+FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO
 #---------------------------------------------------------------------------
 # configuration options related to the alphabetical class index
 #---------------------------------------------------------------------------
 ALPHABETICAL_INDEX     = YES
 COLS_IN_ALPHA_INDEX    = 5
-IGNORE_PREFIX          = 
+IGNORE_PREFIX          =
 #---------------------------------------------------------------------------
 # do NOT generate any formats other than html
 #---------------------------------------------------------------------------
@@ -147,19 +147,24 @@ ENUM_VALUES_PER_LINE   = 4
 GENERATE_TREEVIEW      = NO
 TREEVIEW_WIDTH         = 250
 #---------------------------------------------------------------------------
-# Configuration options related to the preprocessor   
+# Configuration options related to the preprocessor
 #---------------------------------------------------------------------------
 ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = YES
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
-INCLUDE_PATH           = 
-INCLUDE_FILE_PATTERNS  = 
-PREDEFINED             = Q_DECL_IMPORT=""
-EXPAND_AS_DEFINED      = 
+INCLUDE_PATH           =
+INCLUDE_FILE_PATTERNS  =
+PREDEFINED             = LIBICAL_ICAL_EXPORT="" \
+                         LIBICAL_ICALSS_EXPORT="" \
+                         LIBICAL_VCAL_EXPORT="" \
+                         LIBICAL_ICAL_NO_EXPORT="" \
+                         LIBICAL_ICALS_NO_EXPORT="" \
+                         LIBICAL_VCAL_NO_EXPORT=""
+EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
-# Configuration::additions related to external references   
+# Configuration::additions related to external references
 #---------------------------------------------------------------------------
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
@@ -190,7 +195,7 @@ DOT_MULTI_TARGETS      = NO
 GENERATE_LEGEND        = YES
 DOT_CLEANUP            = YES
 #---------------------------------------------------------------------------
-# Configuration::additions related to the search engine   
+# Configuration::additions related to the search engine
 #---------------------------------------------------------------------------
 SEARCHENGINE           = YES
 SERVER_BASED_SEARCH    = NO
