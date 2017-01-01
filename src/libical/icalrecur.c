@@ -824,15 +824,16 @@ enum byrule
 
 struct icalrecur_iterator_impl
 {
-    struct icaltimetype dtstart;        /* Hack. Make into time_t */
-    struct icaltimetype last;   /* last time return from _iterator_next */
-    int occurrence_no;  /* number of step made on t iterator */
-    struct icalrecurrencetype rule;
+    struct icaltimetype dtstart;     /* copy of DTSTART: to fill in defaults */
+    struct icalrecurrencetype rule;  /* copy of RRULE */
+
+    struct icaltimetype last;        /* last time returned from iterator */
+    int occurrence_no;               /* number of steps made on the iterator */
 
 #if defined(HAVE_LIBICU)
-    UCalendar *greg;    /* Gregorian calendar */
-    UCalendar *rscale;  /* RSCALE calendar    */
-    struct icaltimetype rstart; /* DTSTART in RSCALE  */
+    struct icaltimetype rstart;      /* DTSTART in RSCALE  */
+    UCalendar *greg;                 /* Gregorian calendar */
+    UCalendar *rscale;               /* RSCALE calendar    */
 #endif
 
     struct icaltimetype period_start;  /* Start date of monthly/yearly period */
@@ -1182,7 +1183,7 @@ static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator *impl,
     UCalendar *cal = impl->rscale;
     int is_leap_month = 0;
 
-    if (impl->greg && normalize) {
+    if (normalize && (impl->rscale != impl->greg)) {
         /* Convert to Gregorian date */
         UDate millis = ucal_getMillis(impl->rscale, &status);
 
@@ -1357,7 +1358,6 @@ static int initialize_iterator(icalrecur_iterator *impl)
     if (!rule.rscale) {
         /* Use Gregorian as RSCALE */
         impl->rscale = impl->greg;
-        impl->greg = NULL;
     } else {
         UEnumeration *en;
         const char *cal;
@@ -1619,67 +1619,22 @@ static void __increment_month(icalrecur_iterator *impl, int inc)
 
 static void increment_monthday(icalrecur_iterator *impl, int inc)
 {
-    int i;
-
-    if (inc < 0) {
-        impl->last.day += inc;
-        icaltime_normalize(impl->last);
-        return;
-    }
-
-    for (i = 0; i < inc; i++) {
-        int days_in_month =
-            icaltime_days_in_month(impl->last.month, impl->last.year);
-
-        impl->last.day++;
-
-        if (impl->last.day > days_in_month) {
-            impl->last.day = impl->last.day - days_in_month;
-            __increment_month(impl, 1);
-        }
-    }
+    icaltime_adjust(&impl->last, inc, 0, 0, 0);
 }
 
 static void increment_hour(icalrecur_iterator *impl, int inc)
 {
-    int days;
-
-    impl->last.hour += inc;
-
-    days = impl->last.hour / 24;
-    impl->last.hour = impl->last.hour % 24;
-
-    if (days != 0) {
-        increment_monthday(impl, days);
-    }
+    icaltime_adjust(&impl->last, 0, inc, 0, 0);
 }
 
 static void increment_minute(icalrecur_iterator *impl, int inc)
 {
-    int hours;
-
-    impl->last.minute += inc;
-
-    hours = impl->last.minute / 60;
-    impl->last.minute = impl->last.minute % 60;
-
-    if (hours != 0) {
-        increment_hour(impl, hours);
-    }
+    icaltime_adjust(&impl->last, 0, 0, inc, 0);
 }
 
 static void increment_second(icalrecur_iterator *impl, int inc)
 {
-    int minutes;
-
-    impl->last.second += inc;
-
-    minutes = impl->last.second / 60;
-    impl->last.second = impl->last.second % 60;
-
-    if (minutes != 0) {
-        increment_minute(impl, minutes);
-    }
+    icaltime_adjust(&impl->last, 0, 0, 0, inc);
 }
 
 static int initialize_iterator(icalrecur_iterator *impl)
@@ -1705,6 +1660,32 @@ static int expand_month_days(icalrecur_iterator *impl, int year, int month);
 static int expand_year_days(icalrecur_iterator *impl, int year);
 static int next_yearday(icalrecur_iterator *impl,
                         void (*next_period)(icalrecur_iterator *));
+
+static void adjust_to_byday(icalrecur_iterator *impl)
+{
+    /* If there is BY_DAY data, then we need to move the initial
+       time to the start of the BY_DAY data. That is if the
+       start time is on a Wednesday, and the rule has
+       BYDAY=MO,WE,FR, move the initial time back to
+       monday. Otherwise, jumping to the next week ( jumping 7
+       days ahead ) will skip over some occurrences in the
+       second week. */
+
+    /* This depends on impl->by_ptrs[BY_DAY] being correctly sorted by
+     * day. This should probably be abstracted to make such assumption
+     * more explicit. */
+    short this_dow = (short)get_day_of_week(impl);
+    short dow = (short)(impl->by_ptrs[BY_DAY][0] - this_dow);
+
+    /* Normalize day of week around week start */
+    if (dow != 0 && this_dow < (short)impl->rule.week_start)
+        dow -= 7;
+
+    if ((this_dow < impl->by_ptrs[BY_DAY][0] && dow >= 0) || dow < 0) {
+        /* initial time is after first day of BY_DAY data */
+        increment_monthday(impl, dow);
+    }
+}
 
 icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                                            struct icaltimetype dtstart)
@@ -1743,11 +1724,11 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     memset(impl, 0, sizeof(icalrecur_iterator));
 
+    impl->dtstart = dtstart;
     impl->rule = rule;
     impl->last = dtstart;
-    impl->dtstart = dtstart;
-    impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
     impl->occurrence_no = 0;
+    impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
     /* Set up convenience pointers to make the code simpler. Allows
        us to iterate through all of the BY* arrays in the rule. */
@@ -1821,28 +1802,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
             impl->by_ptrs[BY_DAY][0] = (short)get_day_of_week(impl);
 
         } else {
-            /* If there is BY_DAY data, then we need to move the initial
-               time to the start of the BY_DAY data. That is if the
-               start time is on a Wednesday, and the rule has
-               BYDAY=MO,WE,FR, move the initial time back to
-               monday. Otherwise, jumping to the next week ( jumping 7
-               days ahead ) will skip over some occurrences in the
-               second week. */
-
-            /* This depends on impl->by_ptrs[BY_DAY] being correctly sorted by
-             * day. This should probably be abstracted to make such assumption
-             * more explicit. */
-            short this_dow = (short)get_day_of_week(impl);
-            short dow = (short)(impl->by_ptrs[BY_DAY][0] - this_dow);
-
-            /* Normalize day of week around week start */
-            if (dow != 0 && this_dow < (short)impl->rule.week_start)
-                dow -= 7;
-
-            if ((this_dow < impl->by_ptrs[BY_DAY][0] && dow >= 0) || dow < 0) {
-                /* initial time is after first day of BY_DAY data */
-                increment_monthday(impl, dow);
-            }
+            adjust_to_byday(impl);
         }
         break;
 
@@ -1911,10 +1871,11 @@ void icalrecur_iterator_free(icalrecur_iterator *i)
 
 #if defined(HAVE_LIBICU)
     if (i->greg) {
+        if (i->rscale && (i->rscale != i->greg)) {
+            ucal_close(i->rscale);
+        }
+
         ucal_close(i->greg);
-    }
-    if (i->rscale) {
-        ucal_close(i->rscale);
     }
 #endif
 
@@ -2728,8 +2689,7 @@ static int check_contracting_rules(icalrecur_iterator *impl)
 
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
 {
-    int valid = 1;
-
+    /* Quit if we reached COUNT or if last time is after the UNTIL time */
     if (!impl ||
         (impl->rule.count != 0 && impl->occurrence_no >= impl->rule.count) ||
         (!icaltime_is_null_time(impl->rule.until) &&
@@ -2737,15 +2697,17 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         return icaltime_null_time();
     }
 
-    if (impl->occurrence_no == 0 && check_contracting_rules(impl)
-        && icaltime_compare(impl->last, impl->dtstart) >= 0) {
+    /* If initial time is valid, return it */
+    if (impl->occurrence_no == 0
+        && icaltime_compare(impl->last, impl->dtstart) >= 0
+        && check_contracting_rules(impl)) {
 
         impl->occurrence_no++;
         return impl->last;
     }
 
+    /* Iterate until we get the next valid time */
     do {
-        valid = 1;
         switch (impl->rule.freq) {
 
         case ICAL_SECONDLY_RECURRENCE:
@@ -2783,19 +2745,19 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
 
         impl->last = occurrence_as_icaltime(impl, 1);
 
+        /* Ignore times that are after the MAX year or the UNTIL time */
+        if (impl->last.year > MAX_TIME_T_YEAR ||
+            (!icaltime_is_null_time(impl->rule.until) &&
+             icaltime_compare(impl->last, impl->rule.until) > 0)) {
+            return icaltime_null_time();
+        }
         if (impl->last.year > MAX_TIME_T_YEAR) {
             /* HACK */
             return icaltime_null_time();
         }
 
-    } while (!check_contracting_rules(impl) ||
-             icaltime_compare(impl->last, impl->dtstart) < 0 || valid == 0);
-
-    /* Ignore null times and times that are after the until time */
-    if (!icaltime_is_null_time(impl->rule.until) &&
-        icaltime_compare(impl->last, impl->rule.until) > 0) {
-        return icaltime_null_time();
-    }
+    } while (icaltime_compare(impl->last, impl->dtstart) < 0 ||
+             !check_contracting_rules(impl));
 
     impl->occurrence_no++;
 
