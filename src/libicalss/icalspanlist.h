@@ -47,7 +47,7 @@ LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_free_time(icalspan
 LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist *s);
 
 /** @brief Return a valid VFREEBUSY component for this span */
-LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *s_in,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
                                                                const char *organizer,
                                                                const char *attendee);
 
@@ -55,6 +55,6 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *s_i
 LIBICAL_ICALSS_EXPORT int *icalspanlist_as_freebusy_matrix(icalspanlist *span, int delta_t);
 
 /** @brief Construct an icalspanlist from a VFREEBUSY component */
-LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *c);
+LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp);
 
 #endif

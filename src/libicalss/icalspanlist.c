@@ -402,8 +402,8 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
 /** @brief Return a VFREEBUSY component for the corresponding spanlist
  *
  *   @param sl         A valid icalspanlist, from icalspanlist_new()
- *   @param organizer  The organizer specified as MAILTO:user@domain
- *   @param attendee   The attendee specified as MAILTO:user@domain
+ *   @param organizer  The organizer specified as "MAILTO:user@domain"
+ *   @param attendee   The attendee specified as "MAILTO:user@domain"
  *
  *   @return            A valid icalcomponent or NULL.
  *
@@ -468,7 +468,7 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 /** @brief Return a spanlist corresponding to the VFREEBUSY portion of
  *         an icalcomponent.
  *
- *   @param   c        A valid icalcomponent.
+ *   @param   comp     A valid icalcomponent.
  *
  *   @return           A valid icalspanlist or NULL if no VFREEBUSY section.
  *
