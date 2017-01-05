@@ -27,6 +27,7 @@
 	    <element name="ICAL_CMD_VALUE"/>
 	    <element name="ICAL_DATE_VALUE"/>
 	    <element name="ICAL_DATETIME_VALUE"/>
+	    <element name="ICAL_DATETIMEDATE_VALUE"/>
 	    <element name="ICAL_DATETIMEPERIOD_VALUE"/>
 	    <element name="ICAL_DURATION_VALUE"/>
 	    <element name="ICAL_FLOAT_VALUE"/>
@@ -250,6 +251,21 @@
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried."/>
 		<returns type="ICalTimetype *" annotation="allow-none, transfer full" comment="The datetime within #ICalValue"/>
 		<comment>Get the datetime of #ICalValue.</comment>
+	</method>
+	<method name="i_cal_value_set_datetimedate" corresponds="icalvalue_set_datetimedate" kind="set" since="3.0">
+		<parameter type="ICalValue *" name="value" comment="The #ICalValue."/>
+		<parameter type="ICalTimetype *" name="v" comment="The datetimedate (DATE-TIME or DATE) value."/>
+		<comment>Set the datetimedate (DATE-TIME or DATE) in the #ICalValue.</comment>
+	</method>
+	<method name="i_cal_value_new_datetimedate" corresponds="icalvalue_new_datetimedate" kind="constructor" since="3.0">
+		<parameter type="ICalTimetype *" name="v" comment="The DATE-TIME or DATE value"/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<comment>Create a new #ICalValue with the type datetimedate (DATE-TIME or DATE).</comment>
+	</method>
+	<method name="i_cal_value_get_datetimedate" corresponds="icalvalue_get_datetimedate" kind="get" since="3.0">
+		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried."/>
+		<returns type="ICalTimetype *" annotation="allow-none, transfer full" comment="The datetimedate within #ICalValue"/>
+		<comment>Get the datetimedate (DATE-TIME or DATE) of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_datetimeperiod" corresponds="icalvalue_set_datetimeperiod" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue."/>
