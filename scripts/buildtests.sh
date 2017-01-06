@@ -263,7 +263,6 @@ SPLINT() {
        -weak -warnposix \
        -modobserver -initallelements -redef \
        -linelen 1000 \
-       -DWITH_BDB=1 \
        -DHAVE_CONFIG_H=1 \
        -DPACKAGE_DATA_DIR="\"foo\"" \
        -DTEST_DATADIR="\"bar\"" \
@@ -415,7 +414,7 @@ cd ..
 TOP=`pwd`
 BDIR=""
 
-CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_BDB=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True"
+CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DUSE_INTEROPERABLE_VTIMEZONES=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True"
 
 #Static code checkers
 KRAZY
@@ -437,6 +436,6 @@ CLANG_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i6
 CLANG_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 
 #Address sanitizer
-ASAN_BUILD test "-DUSE_INTEROPERABLE_VTIMEZONES=True -DWITH_BDB=True"
+ASAN_BUILD test "-DUSE_INTEROPERABLE_VTIMEZONES=True"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"

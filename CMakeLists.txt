@@ -7,11 +7,6 @@
 #  Build the C++ bindings.
 #  Default=true
 #
-# -DWITH_BDB=[true|false] [MAY BE BUGGY. DO NOT USE FOR PRODUCTION]
-#  Build with the optional Berkeley DB storage.
-#  Requires the Berkeley DB development toolkit pre-installed.
-#  Default=false
-#
 # -DICAL_ERRORS_ARE_FATAL=[true|false]
 #  Set to make icalerror_* calls abort instead of internally signaling an error
 #  Default=false
@@ -89,6 +84,10 @@ endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
+#Include CMake capabilities
+include(FeatureSummary)
+
+# Enable the test harness
 enable_testing()
 
 if(WINCE)
@@ -109,14 +108,11 @@ set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
 set(PROJECT_URL "http://libical.github.io/libical/")
 
 # compile in Berkeley DB support
-option(WITH_BDB "Build in Berkeley DB Support.  Requires pre-installed Berkeley DB development toolkit")
-if(WITH_BDB)
-  find_package(BDB)
-  if(BDB_FOUND)
-    add_definitions(-DWITH_BDB)
-  else()
-    message(FATAL_ERROR "Cannot build the Berkeley DB storage support as requested. Unable to the locate the pre-installed Berkeley DB development toolkit.")
-  endif()
+find_package(BDB)
+set_package_properties(BDB PROPERTIES TYPE OPTIONAL PURPOSE "For Berkeley DB storage support")
+add_feature_info("Berkeley DB storage support" BDB_FOUND "requires the Berkeley DB development toolkit")
+if(BDB_FOUND)
+  set(HAVE_BDB True)
 endif()
 
 # library build types
@@ -135,6 +131,7 @@ endif()
 
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
+set_package_properties(Perl PROPERTIES TYPE REQUIRED PURPOSE "Required by the libical build system.")
 
 # Ensure finding 64bit libs when using 64-bit compilers
 if(CMAKE_CL_64)
@@ -145,6 +142,8 @@ endif()
 #  libicu can be found at http://www.icu-project.org
 #  RSCALE info at http://tools.ietf.org/html/rfc7529
 find_package(ICU)
+set_package_properties(ICU PROPERTIES TYPE RECOMMENDED PURPOSE "For RSCALE (RFC7529) support")
+add_feature_info("RSCALE support (RFC7529)" ICU_FOUND "requires the ICU development libraries (libicu)")
 if(ICU_FOUND)
   set(REQUIRES_PRIVATE_ICU "Requires.private: icu-i18n") #for libical.pc
   set(HAVE_LIBICU 1)
@@ -464,3 +463,5 @@ install(
   DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal
   FILE LibIcalTargets.cmake
 )
+
+feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

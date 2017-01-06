@@ -1,4 +1,6 @@
 find_program(PYTHON3 python3)
+set_package_properties(PYTHON3 PROPERTIES TYPE REQUIRED PURPOSE "Required by the libical build system.")
+add_feature_info("libical-glib testing" PYTHON3 "python3 is required to run the regression tests")
 
 list(APPEND TEST_FILES
   array.py
@@ -34,6 +36,4 @@ if(PYTHON3)
     set_tests_properties(${test_name} PROPERTIES ENVIRONMENT "${test_env}")
 
   endforeach()
-else()
-  message(WARNING "python3 not found, cannot run libical-glib tests")
 endif()

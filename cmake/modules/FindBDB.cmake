@@ -5,6 +5,8 @@
 #  BDB_LIBRARY        - Library to link against for the Berkeley DB
 #
 
+set_package_info(BDB "Berkeley DB storage" "http://www.oracle.com/database/berkeley-db")
+
 if(BDB_INCLUDE_DIR AND BDB_LIBRARY)
   # Already in cache, be silent
   set(BDB_FIND_QUIETLY TRUE)

@@ -6,6 +6,9 @@
 /* Define if you have the ICU internationalization library. */
 #cmakedefine HAVE_LIBICU_I18N 1
 
+/* Define if you have the Berkeley DB library. */
+#cmakedefine HAVE_BDB 1
+
 /* Define to 1 if you have the `backtrace' function. */
 #cmakedefine HAVE_BACKTRACE 1
 

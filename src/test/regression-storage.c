@@ -57,7 +57,7 @@ struct calendar
 
 int vcalendar_init(struct calendar **cal, const char *vcalendar, const char *title);
 
-#if defined(WITH_BDB)
+#if defined(HAVE_BDB)
 #include <db.h>
 
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey);
@@ -272,7 +272,7 @@ void test_fileset_extended(void)
     icalcomponent_free(c);
 }
 
-#if defined(WITH_BDB)
+#if defined(HAVE_BDB)
 
 /*
    In this example, we're storing a calendar with several components
@@ -509,7 +509,7 @@ int vcalendar_init(struct calendar **rcal, const char *vcalendar, const char *ti
  * from a primary key/data pair */
 
 /* just create a random title for now */
-#if defined(WITH_BDB)
+#if defined(HAVE_BDB)
 
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
 {

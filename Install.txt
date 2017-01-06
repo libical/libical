@@ -82,11 +82,9 @@ Then you can set the C and C++ compilers at CMake time, like so:
   ICU_BASE environment variable to the top folder where its installed
   and run cmake again.
 
-* Berkeley DB storage.  If want to use (try) the Berkeley Database storage
-  you can pass the -DWITH_BDB=True option to CMake.  You'll need to have
-  the Berkeley DB toolkit development package installed beforehand.
-  This is very old code that disappeared in the 1.x series but
-  has been resurrected it in the 2.x series.
+* Berkeley DB storage.
+  Optional for the Berkeley Database storage support.
+  The development toolkit can be found at http://www.oracle.com/database/berkeley-db
 
   ** This code path has not been fully tested.
   ** Don't be surprised if there are bugs.

@@ -37,7 +37,7 @@
 #include "icalfileset.h"
 #include "icalfilesetimpl.h"
 
-#if defined(WITH_BDB)
+#if defined(HAVE_BDB)
 #include "icalbdbset.h"
 #include "icalbdbsetimpl.h"
 #endif
@@ -104,7 +104,7 @@ static icalset icalset_fileset_init = {
     NULL
 };
 
-#if defined(WITH_BDB)
+#if defined(HAVE_BDB)
 static icalset icalset_bdbset_init = {
     ICAL_BDB_SET,
     sizeof(icalbdbset),
@@ -212,8 +212,10 @@ static void icalset_init(void)
 
     pvl_push(icalset_kinds, &icalset_fileset_init);
     pvl_push(icalset_kinds, &icalset_dirset_init);
-#if defined(WITH_BDB)
+#if defined(HAVE_BDB)
     pvl_push(icalset_kinds, &icalset_bdb4set_init);
+#else
+#error 3
 #endif
 
     icalset_init_done++;
@@ -296,7 +298,7 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
         *data = icalset_dirset_init;
         break;
     }
-#if defined(WITH_BDB)
+#if defined(HAVE_BDB)
     case ICAL_BDB_SET: {
         icalbdbset *bdata;
         bdata = (icalbdbset *)malloc(sizeof(icalbdbset));

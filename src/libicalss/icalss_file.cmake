@@ -11,7 +11,7 @@ set(COMBINEDHEADERSICALSS
   ${TOPS}/src/libicalss/icalspanlist.h
   ${TOPS}/src/libicalss/icalmessage.h
 )
-if(WITH_BDB)
+if(BDB_FOUND)
   list(APPEND COMBINEDHEADERSICALSS ${TOPS}/src/libicalss/icalbdbset.h)
 endif()
 

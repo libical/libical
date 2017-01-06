@@ -7,7 +7,7 @@ include_directories(
   ${CMAKE_BINARY_DIR}/src/libical
   ${CMAKE_SOURCE_DIR}/src/libical
 )
-if(WITH_BDB)
+if(BDB_FOUND)
   include_directories(${BDB_INCLUDE_DIR})
 endif()
 
@@ -26,7 +26,7 @@ add_custom_target(
     -DTOPS:FILEPATH=${TOPS}
     -DTOPB:FILEPATH=${TOPB}
     -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
-    -DWITH_BDB=${WITH_BDB}
+    -DBDB_FOUND=${BDB_FOUND}
     -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   DEPENDS
   ical-header
@@ -64,7 +64,7 @@ set(icalss_LIB_SRCS
   icalmessage.h
   ${icalss_LIB_DEVSRCS}
 )
-if(WITH_BDB)
+if(BDB_FOUND)
   list(APPEND icalss_LIB_SRCS
     icalbdbset.c
     icalbdbset.h
@@ -80,7 +80,7 @@ if(NOT SHARED_ONLY)
 endif()
 
 target_link_libraries(icalss ical)
-if(WITH_BDB)
+if(BDB_FOUND)
   target_link_libraries(icalss ${BDB_LIBRARY})
 endif()
 
@@ -123,7 +123,7 @@ if(WITH_CXX_BINDINGS)
     icalspanlist_cxx.cpp
     icalspanlist_cxx.h
   )
-  if(WITH_BDB)
+  if(BDB_FOUND)
     list(APPEND icalsscxx_LIB_SRCS
       icalbdbset_cxx.h
     )
@@ -198,7 +198,7 @@ if(WITH_CXX_BINDINGS)
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/libical
   )
-  if(WITH_BDB)
+  if(BDB_FOUND)
     install(FILES icalbdbset_cxx.h
       DESTINATION
       ${INCLUDE_INSTALL_DIR}/libical
