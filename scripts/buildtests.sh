@@ -53,14 +53,15 @@ SET_BDIR() {
 #function CHECK_WARNINGS:
 # print non-whitelisted warnings found in the file and exit if there are any
 # $1 = file to check
-# $2 = whitelist regex
+# $2 = warning keyword
+# $3 = whitelist regex
 CHECK_WARNINGS() {
-  w=`cat $1 | grep warning: | grep -v "$2" | wc -l | awk '{print $1}'`
+  w=`cat $1 | grep "$2" | grep -v "$3" | wc -l | awk '{print $1}'`
   if ( test $w -gt 0 )
   then
     echo "EXITING. $w warnings encountered"
     echo
-    cat $1 | grep warning: | grep -v "$2"
+    cat $1 | grep "$2" | grep -v "$3"
     exit 1
   fi
 }
@@ -70,14 +71,14 @@ CHECK_WARNINGS() {
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
   whitelist='\(Value[[:space:]]descriptions\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\)'
-  CHECK_WARNINGS $1 $whitelist
+  CHECK_WARNINGS $1 "warning:" $whitelist
 }
 
 #function CPPCHECK_WARNINGS:
 # print warnings found in the cppcheck output
 # $1 = file with the cppcheck output
 CPPCHECK_WARNINGS() {
-  CHECK_WARNINGS $1 ""
+  CHECK_WARNINGS $1 "\(warning\)" ""
 }
 
 #function TIDY_WARNINGS:
@@ -85,7 +86,7 @@ CPPCHECK_WARNINGS() {
 # $1 = file with the clang-tidy output
 TIDY_WARNINGS() {
   whitelist='\(Value[[:space:]]descriptions\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|modernize-\|cppcoreguidelines-pro-type-const-cast\|cppcoreguidelines-pro-type-reinterpret-cast\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-bounds-pointer-arithmetic\|google-build-using-namespace\|llvm-include-order\)'
-  CHECK_WARNINGS $1 $whitelist
+  CHECK_WARNINGS $1 "warning:" $whitelist
 }
 
 #function SCAN_WARNINGS:
@@ -93,7 +94,7 @@ TIDY_WARNINGS() {
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
   whitelist='\(Value[[:space:]]descriptions\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\|icalssyacc.*garbage[[:space:]]value\)'
-  CHECK_WARNINGS $1 $whitelist
+  CHECK_WARNINGS $1 "warning:" $whitelist
 }
 
 #function CONFIGURE:
