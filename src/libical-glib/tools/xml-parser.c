@@ -348,7 +348,9 @@ gboolean parse_return(xmlNode * node, Method * method)
             method->ret->errorReturnValue =
                 (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
         } else {
-            printf("The tag name of %s in return cannot be finished\n", (char *)attr->name);
+            fprintf(stderr,
+                    "The tag name of '%s' in 'returns' cannot be finished\n",
+                    (char *)attr->name);
         }
     }
     return TRUE;
@@ -400,8 +402,8 @@ gboolean parse_method(xmlNode * node, Method * method)
             method->annotations = get_list_from_string(anno);
             xmlFree(anno);
         } else {
-            printf("The attribute %s in method %s cannot be parsed", (char *)attr->name,
-                   (char *)node->name);
+            fprintf(stderr, "The attribute '%s' in method '%s' cannot be parsed",
+                    (char *)attr->name, method->name);
             return TRUE;
         }
     }
@@ -410,7 +412,9 @@ gboolean parse_method(xmlNode * node, Method * method)
         if (parse_parameters(child, method) != TRUE &&
             parse_return(child, method) != TRUE &&
             parse_comment(child, method) != TRUE && parse_custom(child, method) != TRUE) {
-            printf("The node named %s in method cannot be parsed\n", (char *)child->name);
+            fprintf(stderr,
+                    "The node named '%s' in method '%s' cannot be parsed\n",
+                    (char *)child->name, method->name);
             return FALSE;
         }
     }
@@ -433,7 +437,9 @@ gboolean parse_declaration(xmlNode * node, Declaration * declaration)
         } else if (xmlStrcmp(attr->name, (xmlChar *) "content") == 0) {
             declaration->content = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
         } else {
-            printf("The node named %s in declaration cannot be parsed\n", (char *)attr->name);
+            fprintf(stderr,
+                    "The node named '%s' in declaration cannot be parsed\n",
+                    (char *)attr->name);
         }
     }
 
@@ -462,13 +468,17 @@ gboolean parse_enumeration(xmlNode * node, Enumeration * enumeration)
         } else if (xmlStrcmp(attr->name, (xmlChar *) "comment") == 0) {
             enumeration->comment = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
         } else {
-            printf("The node named %s in enum cannot be parsed\n", (char *)attr->name);
+            fprintf(stderr,
+                    "The node named '%s' in enum '%s' cannot be parsed\n",
+                    (char *)attr->name, enumeration->name);
         }
     }
 
     for (child = xmlFirstElementChild(node); child != NULL; child = xmlNextElementSibling(child)) {
         if (xmlStrcmp(child->name, (xmlChar *) "element") != 0) {
-            printf("The child node named %s is not an element\n", (char *)child->name);
+            fprintf(stderr,
+                    "The child node named '%s' is not an element in enumeration '%s'\n",
+                    (char *)child->name, enumeration->name);
             continue;
         }
         elementName =
@@ -524,7 +534,9 @@ gboolean parse_structure(xmlNode * node, Structure * structure)
             }
             g_free(strIsBare);
         } else {
-            printf("The attribute of %s in structure cannot be parsed\n", (char *)attr->name);
+            fprintf(stderr,
+                    "The attribute of %s in structure '%s' cannot be parsed\n",
+                    (char *)attr->name, structure->name);
         }
     }
 

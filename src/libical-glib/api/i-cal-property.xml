@@ -130,7 +130,7 @@
     </method>
     <method name="i_cal_value_get_parent" corresponds="icalvalue_get_parent" since="3.0">
         <parameter type="ICalValue *" name="value" comment="The child #ICalValue"/>
-        <return type="ICalProperty *" name="property" comment="The parent #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The parent #ICalProperty"/>
         <comment xml:space="preserve">Get the parent #ICalProperty of the specified #ICalValue.</comment>
     </method>
     <method name="i_cal_parameter_set_parent" corresponds="icalparameter_set_parent" since="3.0">
@@ -140,7 +140,7 @@
     </method>
     <method name="i_cal_parameter_get_parent" corresponds="icalparameter_get_parent" since="3.0">
         <parameter type="ICalParameter *" name="param" comment="The child #ICalParameter"/>
-        <return type="ICalProperty *" name="property" comment="The parent #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The parent #ICalProperty"/>
         <comment xml:space="preserve">Get the parent #ICalProperty of the specified #ICalParameter.</comment>
     </method>
     <method name="i_cal_property_set_x_name" corresponds="icalproperty_set_x_name" since="1.0">
