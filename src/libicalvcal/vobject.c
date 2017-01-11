@@ -114,7 +114,10 @@ VObject* newVObject(const char *id)
 
 void deleteVObject(VObject *p)
 {
-    unUseStr(p->id);
+    if (!p)
+        return;
+    if (p->id)
+        unUseStr(p->id);
     free(p);
 }
 
@@ -137,7 +140,8 @@ char* dupStr(const char *s, size_t size)
 
 void deleteStr(const char *p)
 {
-    if (p) free((void*)p);
+    if (p)
+        free((void*)p);
 }
 
 
@@ -152,7 +156,8 @@ static StrItem* newStrItem(const char *s, StrItem *next)
 
 static void deleteStrItem(StrItem *p)
 {
-    free((void*)p);
+    if (p)
+        free((void*)p);
 }
 
 
@@ -401,21 +406,27 @@ VObject* addGroup(VObject *o, const char *g)
         * t = p = addProp_(o,lookupProp_(n));
         */
         t = p = addProp_(o,lookupProp(n));
-        (void)strrchr(gs,'.');
-        do {
-            dot = strrchr(gs,'.');
-            if (dot) {
-                n = dot+1;
-                *dot=0;
+        dot = strrchr(gs,'.');
+        if (dot) {
+            *dot = 0;
+            do {
+                dot = strrchr(gs,'.');
+                if (dot) {
+                    n = dot+1;
+                    *dot=0;
                 }
-            else
-                n = gs;
-            /* property(VCGroupingProp=n);
-             *  and the value may have VCGrouping property
-             */
+                else
+                    n = gs;
+                /* property(VCGroupingProp=n);
+                 *  and the value may have VCGrouping property
+                 */
+                t = addProp(t,VCGroupingProp);
+                setVObjectStringZValue(t,lookupProp_(n));
+            } while (n != gs);
+        } else {
             t = addProp(t,VCGroupingProp);
             setVObjectStringZValue(t,lookupProp_(n));
-            } while (n != gs);
+        }
         deleteStr(gs);
         return p;
         }
@@ -625,6 +636,7 @@ static unsigned int hashStr(const char *s)
 
 const char* lookupStr(const char *s)
 {
+    char *newS;
     StrItem *t;
     unsigned int h = hashStr(s);
     if ((t = strTbl[h]) != 0) {
@@ -636,36 +648,38 @@ const char* lookupStr(const char *s)
             t = t->next;
             } while (t);
         }
-    s = dupStr(s,0);
-    strTbl[h] = newStrItem(s,strTbl[h]);
-    return s;
+    newS = dupStr(s,0);
+    strTbl[h] = newStrItem(newS,strTbl[h]);
+    return newS;
 }
 
 void unUseStr(const char *s)
 {
-    StrItem *t, *p;
+    StrItem *cur, *prev;
+
     unsigned int h = hashStr(s);
-    if ((t = strTbl[h]) != 0) {
-        p = t;
-        do {
-            if (strcasecmp(t->s,s) == 0) {
-                t->refCnt--;
-                if (t->refCnt == 0) {
-                    if (p == strTbl[h]) {
-                        strTbl[h] = t->next;
-                        }
-                    else {
-                        p->next = t->next;
-                        }
-                    deleteStr(t->s);
-                    deleteStrItem(t);
-                    return;
-                    }
+    cur = strTbl[h];
+    prev = cur;
+    while (cur != 0) {
+        if (strcasecmp(cur->s,s) == 0) {
+            cur->refCnt--;
+            /* if that was the last reference to this string, kill it. */
+            if (cur->refCnt == 0) {
+                if (cur == strTbl[h]) {
+                    strTbl[h] = cur->next;
+                    deleteStr(prev->s);
+                    deleteStrItem(prev);
+                } else {
+                    prev->next = cur->next;
+                    deleteStr(cur->s);
+                    deleteStrItem(cur);
                 }
-            p = t;
-            t = t->next;
-            } while (t);
+                return;
+            }
         }
+        prev = cur;
+        cur = cur->next;
+    }
 }
 
 void cleanStrTbl()
@@ -1297,9 +1311,9 @@ static void writeProp(OFile *fp, VObject *o)
             /* output prop as fields */
             appendcOFile(fp,':');
             while (*fields) {
-                VObject *t = isAPropertyOf(o,*fields);
+                VObject *tl = isAPropertyOf(o,*fields);
                 i++;
-                if (t) n = i;
+                if (tl) n = i;
                 fields++;
                 }
             fields = fields_;
@@ -1425,7 +1439,12 @@ wchar_t* fakeUnicode(const char *ps, size_t *bytes)
 
 int uStrLen(const wchar_t *u)
 {
-    int i = 0;
+    int i;
+
+    if (u == NULL)
+        return 0;
+
+    i = 0;
     while (*u != (wchar_t)0) { u++; i++; }
     return i;
 }
@@ -1433,7 +1452,12 @@ int uStrLen(const wchar_t *u)
 char* fakeCString(const wchar_t *u)
 {
     char *s, *t;
-    size_t len = (size_t)(uStrLen(u) + 1);
+    size_t len;
+
+    if (u == NULL)
+        return NULL;
+
+    len = (size_t)(uStrLen(u) + 1);
     t = s = (char*)malloc(len);
     while (*u) {
         if (*u == (wchar_t)0x2028)
