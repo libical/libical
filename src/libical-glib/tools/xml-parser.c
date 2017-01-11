@@ -308,7 +308,9 @@ gboolean parse_parameters(xmlNode * node, Method * method)
             } else if (xmlStrcmp(attr->name, (xmlChar *) "owner_op") == 0) {
                 para->owner_op = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
             } else {
-                printf("The tag name of %s in parameter cannot be finished\n", (char *)attr->name);
+                fprintf(stderr,
+                        "The tag name of %s in parameter cannot be finished\n",
+                        (char *)attr->name);
             }
         }
         method->parameters = g_list_append(method->parameters, para);
