@@ -392,6 +392,28 @@ void test_utf8()
     icalcomponent_free(comp);
 }
 
+void test_icaltime_compare_utc_zone()
+{
+    struct icaltimetype a;
+    struct icaltimetype b;
+
+    /* test comparing a UTC and floating time */
+    a = icaltime_from_string("20170130T103000Z");
+    b = icaltime_from_string("20170130T103000");
+    int_is("a == b", icaltime_compare(a, b), 0);
+
+    /* test comparing times across time zones (where UTC is specified by zone) */
+    a = icaltime_from_string("20170130T103000Z");
+    b = icaltime_from_string("20170130T103000");
+    b.zone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
+    int_is("a < b", icaltime_compare(a, b), -1);
+
+    /* test comparing times across time zones (where UTC is specified by is_utc and zone is NULL) */
+    a.zone = NULL;
+    int_is("a.is_utc", a.is_utc, 1);
+    int_is("a < b", icaltime_compare(a, b), -1);
+}
+
 void test_parameters()
 {
     icalparameter *p;
@@ -3986,6 +4008,7 @@ int main(int argc, char *argv[])
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
+    test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
              do_header);
 #if ADD_TESTS_REQUIRING_INVESTIGATION
