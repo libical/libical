@@ -111,8 +111,6 @@ struct icaltimetype
     int minute;
     int second;
 
-    int is_utc;         /**< 1-> time is in UTC timezone */
-
     int is_date;        /**< 1 -> interpret this as date. */
 
     int is_daylight;    /**< 1 -> time is in daylight savings time. */

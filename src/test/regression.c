@@ -407,11 +407,6 @@ void test_icaltime_compare_utc_zone()
     b = icaltime_from_string("20170130T103000");
     b.zone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
     int_is("a < b", icaltime_compare(a, b), -1);
-
-    /* test comparing times across time zones (where UTC is specified by is_utc and zone is NULL) */
-    a.zone = NULL;
-    int_is("a.is_utc", a.is_utc, 1);
-    int_is("a < b", icaltime_compare(a, b), -1);
 }
 
 void test_parameters()

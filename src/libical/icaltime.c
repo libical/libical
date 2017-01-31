@@ -225,9 +225,8 @@ struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_
     tt.minute = t.tm_min;
     tt.second = t.tm_sec;
     tt.is_date = 0;
-    tt.is_utc = (zone == utc_zone) ? 1 : 0;
     tt.is_daylight = 0;
-    tt.zone = NULL;
+    tt.zone = (zone == NULL) ? NULL : utc_zone;
 
     /* Use our timezone functions to convert to the required timezone. */
     icaltimezone_convert_time(&tt, utc_zone, (icaltimezone *) zone);
@@ -366,7 +365,7 @@ char *icaltime_as_ical_string_r(const struct icaltimetype tt)
     } else {
         const char *fmt;
 
-        if (tt.is_utc) {
+        if (icaltime_is_utc(tt)) {
             fmt = "%04d%02d%02dT%02d%02d%02dZ";
         } else {
             fmt = "%04d%02d%02dT%02d%02d%02d";
@@ -413,17 +412,14 @@ struct icaltimetype icaltime_from_string(const char *str)
     size = strlen(str);
 
     if ((size == 15) || (size == 19)) { /* floating time with/without separators */
-        tt.is_utc = 0;
         tt.is_date = 0;
     } else if ((size == 16) || (size == 20)) {  /* UTC time, ends in 'Z' */
         if ((str[size-1] != 'Z'))
             goto FAIL;
 
-        tt.is_utc = 1;
         tt.zone = icaltimezone_get_utc_timezone();
         tt.is_date = 0;
     } else if ((size == 8) || (size == 10)) {   /* A DATE */
-        tt.is_utc = 0;
         tt.is_date = 1;
     } else {    /* error */
         goto FAIL;
@@ -689,8 +685,7 @@ struct icaltimetype icaltime_null_date(void)
  */
 int icaltime_is_valid_time(const struct icaltimetype t)
 {
-    if (t.is_utc > 1 || t.is_utc < 0 ||
-        t.year < 0 || t.year > 3000 || t.is_date > 1 || t.is_date < 0) {
+    if (t.year < 0 || t.year > 3000 || t.is_date > 1 || t.is_date < 0) {
         return 0;
     } else {
         return 1;
@@ -710,7 +705,7 @@ int icaltime_is_date(const struct icaltimetype t)
  */
 int icaltime_is_utc(const struct icaltimetype t)
 {
-    return t.is_utc;
+    return t.zone == icaltimezone_get_utc_timezone();
 }
 
 /**
@@ -737,10 +732,7 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
 
     /* We only need to perform time zone conversion if times aren't in the same time zone
        or neither of them is floating (zone equals NULL) */
-    if ((a_in.zone != b_in.zone || a_in.is_utc != b_in.is_utc) &&
-        ((a_in.zone != NULL && b_in.zone != NULL) ||
-         (a_in.zone != NULL && b_in.is_utc) ||
-         (a_in.is_utc && b_in.zone != NULL))) {
+    if (a_in.zone != b_in.zone && a_in.zone != NULL && b_in.zone != NULL) {
         a = icaltime_convert_to_zone(a_in, icaltimezone_get_utc_timezone());
         b = icaltime_convert_to_zone(b_in, icaltimezone_get_utc_timezone());
     } else {
@@ -979,7 +971,7 @@ struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt, icalt
     }
 
     /* If it's a floating time we don't want to adjust the time */
-    if (tt.zone != NULL || tt.is_utc) {
+    if (tt.zone != NULL) {
         icaltimezone *from_zone = (icaltimezone *) tt.zone;
 
         if (!from_zone) {
@@ -990,11 +982,6 @@ struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt, icalt
     }
 
     ret.zone = zone;
-    if (zone == icaltimezone_get_utc_timezone()) {
-        ret.is_utc = 1;
-    } else {
-        ret.is_utc = 0;
-    }
 
     return ret;
 }
@@ -1031,11 +1018,6 @@ struct icaltimetype icaltime_set_timezone(struct icaltimetype *t, const icaltime
     }
 
     t->zone = zone;
-    if (zone == icaltimezone_get_utc_timezone()) {
-        t->is_utc = 1;
-    } else {
-        t->is_utc = 0;
-    }
 
     return *t;
 }

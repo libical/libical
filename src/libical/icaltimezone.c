@@ -624,7 +624,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
             /* If the rrule UNTIL value is set and is in UTC, we convert it to
                a local time, since the recurrence code has no way to convert
                it itself. */
-            if (!icaltime_is_null_time(rrule.until) && rrule.until.is_utc) {
+            if (!icaltime_is_null_time(rrule.until) && icaltime_is_utc(rrule.until)) {
 #if 0
                 printf("  Found RRULE UNTIL in UTC.\n");
 #endif
@@ -633,7 +633,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                    since that is the offset from UTC that will be in effect
                    when each of the RRULE occurrences happens. */
                 icaltime_adjust(&rrule.until, 0, 0, 0, change.prev_utc_offset);
-                rrule.until.is_utc = 0;
+                rrule.until.zone = NULL;
             }
 
             /* Add the dtstart to changes, otherwise some oddly-defined VTIMEZONE
@@ -1350,7 +1350,6 @@ static struct icaltimetype tm_to_icaltimetype(struct tm *tm)
     itt.month = tm->tm_mon + 1;
     itt.year = tm->tm_year + 1900;
 
-    itt.is_utc = 0;
     itt.is_date = 0;
 
     return itt;
