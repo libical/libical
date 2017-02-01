@@ -2,6 +2,7 @@
 #
 #  ICU_FOUND          - True if ICU found.
 #  ICU_I18N_FOUND     - True if ICU's internationalization library found.
+#  ICU_BINARY_DIR     - Directory with the runtime binaries
 #  ICU_INCLUDE_DIR    - Directory to include to get ICU headers
 #                       Note: always include ICU headers as, e.g.,
 #                       unicode/utypes.h
@@ -54,6 +55,19 @@ find_library(
   DOC "Libraries to link against for the common parts of ICU"
 )
 mark_as_advanced(ICU_LIBRARY)
+
+# Look for the binary path.
+find_program(
+  tmp_DIR
+  NAMES genccode uconv
+  PATHS
+  ${icu_root}/bin/
+  ${_program_FILES_DIR}/icu/bin/
+  /usr/local/opt/icu4c/bin/
+)
+get_filename_component(tmp_DIR ${tmp_DIR} DIRECTORY)
+set(ICU_BINARY_DIR ${tmp_DIR} CACHE DOC "Runtime binaries directory for the ICU library")
+mark_as_advanced(ICU_BINARY_DIR)
 
 # Copy the results to the output variables.
 if(ICU_INCLUDE_DIR AND ICU_LIBRARY)
