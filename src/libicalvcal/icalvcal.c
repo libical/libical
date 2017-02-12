@@ -147,8 +147,8 @@ static void convert_floating_time_to_utc(struct icaltimetype *itt)
     itt->minute = utc_tm.tm_min;
     itt->second = utc_tm.tm_sec;
 
-    /* Set the is_utc flag. */
-    itt->is_utc = 1;
+    /* Set the zone to UTC. */
+    itt->zone = icaltimezone_get_utc_timezone();
 }
 
 static void icalvcal_traverse_objects(VObject *,
@@ -302,7 +302,7 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
                 t.duration = icaldurationtype_null_duration();
 
                 /* If it is a floating time, convert it to a UTC time. */
-                if (!t.time.is_utc)
+                if (t.time.zone == NULL)
                     convert_floating_time_to_utc(&t.time);
 
                 /* Create a TRIGGER property. */
@@ -747,7 +747,7 @@ static void *utc_datetime_prop(int icaltype, VObject *object, icalcomponent *com
     itt = icaltime_from_string(s);
 
     /* If it is a floating time, convert it to a UTC time. */
-    if (!itt.is_utc)
+    if (itt.zone == NULL)
         convert_floating_time_to_utc(&itt);
 
     value = icalvalue_new_datetime(itt);
@@ -845,7 +845,7 @@ static const char *rrule_parse_duration(const char *s, struct icalrecurrencetype
            don't really know what timezone the vCalendar times are in. So if
            it can be converted to a DATE value, we do that. Otherwise we just
            use the current Unix timezone. Should be OK 99% of the time. */
-        if (!recur->until.is_utc) {
+        if (!icaltime_is_utc(recur->until)) {
             if (recur->until.hour == 0 &&
                 recur->until.minute == 0 &&
                 recur->until.second == 0) {
