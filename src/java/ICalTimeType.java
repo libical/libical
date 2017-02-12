@@ -79,15 +79,6 @@ public class ICalTimeType
 	return second;
     }
 
-    public void setIs_utc(boolean lcl_arg0)
-    {
-	is_utc = lcl_arg0 ? 1 : 0;
-    }
-    public boolean getIs_utc()
-    {
-	return is_utc == 0 ? false : true;
-    }
-
     public void setIs_date(boolean lcl_arg0)
     {
 	is_date = lcl_arg0 ? 1 : 0;
@@ -138,7 +129,6 @@ public class ICalTimeType
     private int	hour;
     private int	minute;
     private int	second;
-    private int	is_utc;
     private int	is_date;
     private String	zone = new String();	//   Converted from char*
 }

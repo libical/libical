@@ -54,7 +54,6 @@ void  jni_SetUntil_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurr
 	jni_SetHour_in_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
 	jni_SetMinute_in_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
 	jni_SetSecond_in_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
-	jni_SetIs_utc_in_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
 	jni_SetIs_date_in_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
 	jni_SetZone_in_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
 }
@@ -69,7 +68,6 @@ void jni_GetUntil_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecur
 	jni_GetHour_from_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
 	jni_GetMinute_from_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
 	jni_GetSecond_from_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
-	jni_GetIs_utc_from_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
 	jni_GetIs_date_from_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
 	jni_GetZone_from_ICalTimeType(&(__ICalRecurrenceType_->until), env, lcl_jobj0);
 }
