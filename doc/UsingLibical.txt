@@ -839,13 +839,10 @@ struct icaltimetype {
 
   int second;
 
-  int is_utc; /* 1-> time is in UTC timezone */
-
   int is_date; /* 1 -> interpret this as date. */ };
 
 The year, month, day, hour, minute and second fields hold the broken-out
-time values. The is_utc field distinguishes between times in UTC and
-a local time zone. The is_date field indicates if the time should
+time values. The is_date field indicates if the time should
 be interpreted only as a date. If it is a date, the hour, minute and
 second fields are assumed to be zero, regardless of their actual vaules.
 
@@ -1364,8 +1361,6 @@ struct icaltimetype
         int minute;
 
         int second;
-
-         int is_utc;
 
         int is_date;
 
