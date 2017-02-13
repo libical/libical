@@ -27,7 +27,7 @@ ICalValue::ICalValue() throw(icalerrorenum) : imp(icalvalue_new(ICAL_ANY_VALUE))
 }
 
 ICalValue::ICalValue(const ICalValue &v) throw (icalerrorenum)
-  : imp(icalvalue_new_clone(v.imp))
+    : imp(icalvalue_new_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -68,7 +68,7 @@ ICalValue::ICalValue(icalvalue *v) throw(icalerrorenum) : imp(v)
 }
 
 ICalValue::ICalValue(const icalvalue_kind &kind) throw(icalerrorenum)
-  : imp(icalvalue_new(kind))
+    : imp(icalvalue_new(kind))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -76,7 +76,7 @@ ICalValue::ICalValue(const icalvalue_kind &kind) throw(icalerrorenum)
 }
 
 ICalValue::ICalValue(const icalvalue_kind &kind, const std::string &str) throw(icalerrorenum)
-  : imp(icalvalue_new_from_string(kind, str.c_str()))
+    : imp(icalvalue_new_from_string(kind, str.c_str()))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -85,7 +85,7 @@ ICalValue::ICalValue(const icalvalue_kind &kind, const std::string &str) throw(i
 
 std::string ICalValue::as_ical_string()
 {
-    return (std::string)icalvalue_as_ical_string(imp);
+    return static_cast<std::string>(icalvalue_as_ical_string(imp));
 }
 
 bool ICalValue::is_valid()
@@ -93,7 +93,7 @@ bool ICalValue::is_valid()
     if (imp == NULL) {
         return false;
     }
-    return (icalvalue_is_valid(imp) ? true : false);
+    return (icalvalue_is_valid(imp) != 0);
 }
 
 icalvalue_kind ICalValue::isa()
@@ -150,7 +150,7 @@ icalvalue_kind ICalValue::string_to_kind(const std::string &str)
 
 std::string ICalValue::kind_to_string(const icalvalue_kind &kind)
 {
-    return (std::string)icalvalue_kind_to_string(kind);
+    return static_cast<std::string>(icalvalue_kind_to_string(kind));
 }
 
 /* BOOLEAN */
@@ -189,7 +189,7 @@ void ICalValue::set_method(const enum icalproperty_method &v)
 /* CAL-ADDRESS */
 std::string ICalValue::get_caladdress() const
 {
-    return (std::string)icalvalue_get_caladdress(imp);
+    return static_cast<std::string>(icalvalue_get_caladdress(imp));
 }
 
 void ICalValue::set_caladdress(const std::string &v)
@@ -198,8 +198,7 @@ void ICalValue::set_caladdress(const std::string &v)
 }
 
 /* PERIOD */
-struct icalperiodtype ICalValue::get_period() const
-{
+struct icalperiodtype ICalValue::get_period() const {
     return icalvalue_get_period(imp);
 }
 
@@ -222,7 +221,7 @@ void ICalValue::set_status(const enum icalproperty_status &v)
 /* BINARY */
 std::string ICalValue::get_binary() const
 {
-    return (std::string)icalvalue_get_binary(imp);
+    return static_cast<std::string>(icalvalue_get_binary(imp));
 }
 
 void ICalValue::set_binary(const std::string &v)
@@ -233,7 +232,7 @@ void ICalValue::set_binary(const std::string &v)
 /* TEXT */
 std::string ICalValue::get_text() const
 {
-    return (std::string)icalvalue_get_text(imp);
+    return static_cast<std::string>(icalvalue_get_text(imp));
 }
 
 void ICalValue::set_text(const std::string &v)
@@ -242,8 +241,7 @@ void ICalValue::set_text(const std::string &v)
 }
 
 /* DURATION */
-struct icaldurationtype ICalValue::get_duration() const
-{
+struct icaldurationtype ICalValue::get_duration() const {
     return icalvalue_get_duration(imp);
 }
 
@@ -266,7 +264,7 @@ void ICalValue::set_integer(const int &v)
 /* URI */
 std::string ICalValue::get_uri() const
 {
-    return (std::string)icalvalue_get_uri(imp);
+    return static_cast<std::string>(icalvalue_get_uri(imp));
 }
 
 void ICalValue::set_uri(const std::string &v)
@@ -310,7 +308,7 @@ void ICalValue::set_float(const float &v)
 /* QUERY */
 std::string ICalValue::get_query() const
 {
-    return (std::string)icalvalue_get_query(imp);
+    return static_cast<std::string>(icalvalue_get_query(imp));
 }
 
 void ICalValue::set_query(const std::string &v)
@@ -321,7 +319,7 @@ void ICalValue::set_query(const std::string &v)
 /* STRING */
 std::string ICalValue::get_string() const
 {
-    return (std::string)icalvalue_get_string(imp);
+    return static_cast<std::string>(icalvalue_get_string(imp));
 }
 
 void ICalValue::set_string(const std::string &v)
@@ -341,8 +339,7 @@ void ICalValue::set_transp(const enum icalproperty_transp &v)
 }
 
 /* DATE-TIME */
-struct icaltimetype ICalValue::get_datetime() const
-{
+struct icaltimetype ICalValue::get_datetime() const {
     return icalvalue_get_datetime(imp);
 }
 
@@ -352,8 +349,7 @@ void ICalValue::set_datetime(const struct icaltimetype &v)
 }
 
 /* GEO */
-struct icalgeotype ICalValue::get_geo() const
-{
+struct icalgeotype ICalValue::get_geo() const {
     return icalvalue_get_geo(imp);
 }
 
@@ -363,8 +359,7 @@ void ICalValue::set_geo(const struct icalgeotype &v)
 }
 
 /* DATE */
-struct icaltimetype ICalValue::get_date() const
-{
+struct icaltimetype ICalValue::get_date() const {
     return icalvalue_get_date(imp);
 }
 

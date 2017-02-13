@@ -40,17 +40,8 @@ LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_new(icalset *set,
  */
 LIBICAL_ICALSS_EXPORT void icalspanlist_free(icalspanlist *spl);
 
-/* Unimplemented functions */
-LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_make_free_list(icalspanlist *sl);
-
-LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_make_busy_list(icalspanlist *sl);
-
 /** Get first next free time after time t. all times are in UTC. */
 LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl,
-                                                                        struct icaltimetype t);
-
-/** Get first next busy time after time t. all times are in UTC. */
-LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_busy_time(icalspanlist *sl,
                                                                         struct icaltimetype t);
 
 LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist *s);

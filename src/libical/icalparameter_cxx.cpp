@@ -21,12 +21,12 @@
 using namespace LibICal;
 
 ICalParameter::ICalParameter() throw(icalerrorenum)
-  : imp(icalparameter_new(ICAL_ANY_PARAMETER))
+    : imp(icalparameter_new(ICAL_ANY_PARAMETER))
 {
 }
 
 ICalParameter::ICalParameter(const ICalParameter &v) throw(icalerrorenum)
-  : imp(icalparameter_new_clone(v.imp))
+    : imp(icalparameter_new_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -63,13 +63,13 @@ ICalParameter::~ICalParameter()
 }
 
 ICalParameter::ICalParameter(icalparameter *v) throw(icalerrorenum)
-  : imp(v)
+    : imp(v)
 {
 }
 
 /// Create from string of form "PARAMNAME=VALUE"
 ICalParameter::ICalParameter(const std::string &str) throw(icalerrorenum)
-  : imp(icalparameter_new_from_string(str.c_str()))
+    : imp(icalparameter_new_from_string(str.c_str()))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -79,7 +79,7 @@ ICalParameter::ICalParameter(const std::string &str) throw(icalerrorenum)
 /// Create from just the value, the part after the "="
 ICalParameter::ICalParameter(const icalparameter_kind &kind,
                              const std::string &str) throw(icalerrorenum)
-  : imp(icalparameter_new_from_value_string(kind, str.c_str()))
+    : imp(icalparameter_new_from_value_string(kind, str.c_str()))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -87,7 +87,7 @@ ICalParameter::ICalParameter(const icalparameter_kind &kind,
 }
 
 ICalParameter::ICalParameter(const icalparameter_kind &kind) throw(icalerrorenum)
-  : imp(icalparameter_new(kind))
+    : imp(icalparameter_new(kind))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -110,7 +110,7 @@ bool ICalParameter::is_valid()
     if (imp == NULL) {
         return false;
     }
-    return (icalparameter_isa_parameter((void *)imp) ? true : false);
+    return (icalparameter_isa_parameter(static_cast<void *>(imp)) != 0);
 }
 
 icalparameter_kind ICalParameter::isa()
@@ -131,7 +131,7 @@ void ICalParameter::set_xname(ICalParameter &param, const std::string &v)
 
 std::string ICalParameter::get_xname(ICalParameter &param)
 {
-    return (std::string)icalparameter_get_xname(param);
+    return static_cast<std::string>(icalparameter_get_xname(param));
 }
 
 void ICalParameter::set_xvalue(ICalParameter &param, const std::string &v)
@@ -141,13 +141,13 @@ void ICalParameter::set_xvalue(ICalParameter &param, const std::string &v)
 
 std::string ICalParameter::get_xvalue(ICalParameter &param)
 {
-    return (std::string)icalparameter_get_xvalue(param);
+    return static_cast<std::string>(icalparameter_get_xvalue(param));
 }
 
 /* Convert enumerations */
 std::string ICalParameter::kind_to_string(const icalparameter_kind &kind)
 {
-    return (std::string)icalparameter_kind_to_string(kind);
+    return static_cast<std::string>(icalparameter_kind_to_string(kind));
 }
 
 icalparameter_kind ICalParameter::string_to_kind(const std::string &str)
@@ -158,7 +158,7 @@ icalparameter_kind ICalParameter::string_to_kind(const std::string &str)
 /* DELEGATED-FROM */
 std::string ICalParameter::get_delegatedfrom() const
 {
-    return (std::string)icalparameter_get_delegatedfrom(imp);
+    return static_cast<std::string>(icalparameter_get_delegatedfrom(imp));
 }
 
 void ICalParameter::set_delegatedfrom(const std::string &v)
@@ -180,7 +180,7 @@ void ICalParameter::set_related(const icalparameter_related &v)
 /* SENT-BY */
 std::string ICalParameter::get_sentby() const
 {
-    return (std::string)icalparameter_get_sentby(imp);
+    return static_cast<std::string>(icalparameter_get_sentby(imp));
 }
 
 void ICalParameter::set_sentby(const std::string &v)
@@ -191,7 +191,7 @@ void ICalParameter::set_sentby(const std::string &v)
 /* LANGUAGE */
 std::string ICalParameter::get_language() const
 {
-    return (std::string)icalparameter_get_language(imp);
+    return static_cast<std::string>(icalparameter_get_language(imp));
 }
 
 void ICalParameter::set_language(const std::string &v)
@@ -224,7 +224,7 @@ void ICalParameter::set_encoding(const icalparameter_encoding &v)
 /* ALTREP */
 std::string ICalParameter::get_altrep() const
 {
-    return (std::string)icalparameter_get_language(imp);
+    return static_cast<std::string>(icalparameter_get_language(imp));
 }
 
 void ICalParameter::set_altrep(const std::string &v)
@@ -235,7 +235,7 @@ void ICalParameter::set_altrep(const std::string &v)
 /* FMTTYPE */
 std::string ICalParameter::get_fmttype() const
 {
-    return (std::string)icalparameter_get_fmttype(imp);
+    return static_cast<std::string>(icalparameter_get_fmttype(imp));
 }
 
 void ICalParameter::set_fmttype(const std::string &v)
@@ -279,7 +279,7 @@ void ICalParameter::set_range(const icalparameter_range &v)
 /* DELEGATED-TO */
 std::string ICalParameter::get_delegatedto() const
 {
-    return (std::string)icalparameter_get_delegatedto(imp);
+    return static_cast<std::string>(icalparameter_get_delegatedto(imp));
 }
 
 void ICalParameter::set_delegatedto(const std::string &v)
@@ -290,7 +290,7 @@ void ICalParameter::set_delegatedto(const std::string &v)
 /* CN */
 std::string ICalParameter::get_cn() const
 {
-    return (std::string)icalparameter_get_cn(imp);
+    return static_cast<std::string>(icalparameter_get_cn(imp));
 }
 
 void ICalParameter::set_cn(const std::string &v)
@@ -345,7 +345,7 @@ void ICalParameter::set_xlicerrortype(const icalparameter_xlicerrortype &v)
 /* MEMBER */
 std::string ICalParameter::get_member() const
 {
-    return (std::string)icalparameter_get_member(imp);
+    return static_cast<std::string>(icalparameter_get_member(imp));
 }
 
 void ICalParameter::set_member(const std::string &v)
@@ -356,7 +356,7 @@ void ICalParameter::set_member(const std::string &v)
 /* X */
 std::string ICalParameter::get_x() const
 {
-    return (std::string)icalparameter_get_x(imp);
+    return static_cast<std::string>(icalparameter_get_x(imp));
 }
 
 void ICalParameter::set_x(const std::string &v)
@@ -378,7 +378,7 @@ void ICalParameter::set_cutype(const icalparameter_cutype &v)
 /* TZID */
 std::string ICalParameter::get_tzid() const
 {
-    return (std::string)icalparameter_get_tzid(imp);
+    return static_cast<std::string>(icalparameter_get_tzid(imp));
 }
 
 void ICalParameter::set_tzid(const std::string &v)
@@ -400,7 +400,7 @@ void ICalParameter::set_value(const icalparameter_value &v)
 /* DIR */
 std::string ICalParameter::get_dir() const
 {
-    return (std::string)icalparameter_get_dir(imp);
+    return static_cast<std::string>(icalparameter_get_dir(imp));
 }
 
 void ICalParameter::set_dir(const std::string &v)

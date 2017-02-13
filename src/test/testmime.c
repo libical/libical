@@ -227,6 +227,7 @@ int main(int argc, char *argv[])
         }
         last = i;
 
+        assert(size > 0);
         buf = malloc(size * 2);
         assert(buf != 0);
 
@@ -236,7 +237,7 @@ int main(int argc, char *argv[])
             memset(buf, 0, size * 2);
             /* First insert some non-randomized lines */
             non_rand = (unsigned int)(((float)rand() / (float)RAND_MAX) * last);
-            for (i = 0; i < non_rand; i++) {
+            for (i = 0; i < last && i < non_rand; i++) {
                 strcat(buf, array[i]);
             }
 

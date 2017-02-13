@@ -147,8 +147,8 @@ static char *parser_get_next_char(char c, char *str, int qm)
     char next_char = *p;
     char prev_char = 0;
 
-    while (next_char != 0) {
-        if (prev_char != '\\') {
+    while (next_char != '\0') {
+        if ((prev_char != '\0') && (prev_char != '\\')) {
             if (qm == 1 && next_char == '"') {
                 /* Encountered a quote, toggle quote mode */
                 quote_mode = !quote_mode;
@@ -170,14 +170,14 @@ static char *parser_get_next_char(char c, char *str, int qm)
 static char *make_segment(char *start, char *end)
 {
     char *buf, *tmp;
-    size_t size = (size_t) end - (size_t) start;
+    ptrdiff_t size = (ptrdiff_t)(end - start);
 
-    buf = icalmemory_new_buffer(size + 1);
+    buf = icalmemory_new_buffer((size_t)(size + 1));
     strncpy(buf, start, size);
     *(buf + size) = 0;
 
     tmp = (buf + size);
-    while ((tmp >= buf) && ((*tmp == '\0') || iswspace((wint_t) * tmp))) {
+    while ((tmp >= buf) && ((*tmp == '\0') || iswspace((wint_t)*tmp))) {
         *tmp = 0;
         tmp--;
     }
@@ -570,7 +570,6 @@ static void insert_error(icalcomponent *comp, const char *text,
         snprintf(temp, 1024, "%s: %s", message, text);
     }
 
-    /* coverity[leaked_storage] */
     icalcomponent_add_property(
         comp,
         icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), 0));
@@ -712,12 +711,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         str = parser_get_next_value(end, &end, value_kind);
 
         comp_kind = icalenum_string_to_component_kind(str);
-
-        if (comp_kind == ICAL_NO_COMPONENT) {
-            c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);
-            insert_error(c, str, "Parse error in component name",
-                         ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
-        }
 
         c = icalcomponent_new(comp_kind);
 
@@ -962,8 +955,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                         name = 0;
                     }
                     name_heap = parser_get_param_name_heap(str, &pvalue_heap);
-
-                    name = name_heap;
                     pvalue = pvalue_heap;
                 }
                 param = icalparameter_new_from_value_string(kind, pvalue);

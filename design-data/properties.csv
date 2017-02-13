@@ -129,7 +129,7 @@
 "#Task Extension Properties","draft-apthorp-ical-tasks",
 "ESTIMATED-DURATION","113","DURATION","DURATION"
 "TASK-MODE","114","TASKMODE","TASKMODE"
-"#New Properties for iCalendar","draft-ietf-calext-extensions Section 5",
+"#New Properties for iCalendar","RFC 7986 Section 5",
 "NAME","115","TEXT","TEXT"
 "REFRESH-INTERVAL","116","DURATION","DURATION"
 "SOURCE","117","URI","URI"

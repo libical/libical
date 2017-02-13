@@ -92,7 +92,7 @@ void test_cxx(void)
     ok("vEvent->as_ical_string()",
        (vEvent->as_ical_string().c_str() != 0));
 
-    if (VERBOSE) {
+    if (VERBOSE != 0) {
         printf("Summary: %s\n", vEvent->get_summary().c_str());
         printf("DTSTART: %s\n", icaltime_as_ical_string(vEvent->get_dtstart()));
         printf("DTEND: %s\n", icaltime_as_ical_string(vEvent->get_dtend()));
@@ -102,10 +102,17 @@ void test_cxx(void)
         printf("vcomponent: %s", vEvent->as_ical_string().c_str());
     }
 
-    VComponent ic(icalparser_parse_string((const char *)content));
+    delete descProp;
+    delete locationProp;
+    delete endProp;
+    delete startProp;
+    delete summProp;
+    delete vEvent;
+
+    VComponent ic(icalparser_parse_string(const_cast<const char *>(content)));
     ok("Parsing component", (ic.is_valid()));
 
-    if (VERBOSE) {
+    if (VERBOSE != 0) {
         printf("%s\n", ic.as_ical_string().c_str());
     }
 
@@ -113,17 +120,17 @@ void test_cxx(void)
     // we need to unwrap it.
 
     VEvent *sub_ic = dynamic_cast<VEvent *>(ic.get_first_component(ICAL_VEVENT_COMPONENT));
-
-    int_is("Getting VEvent subcomponent",
-           sub_ic->isa(),
-           ICAL_VEVENT_COMPONENT);
-
-    while (sub_ic != NULL) {
-        if (VERBOSE) {
-            printf("subcomponent: %s\n", sub_ic->as_ical_string().c_str());
+    if (sub_ic != NULL) {
+        int_is("Getting VEvent subcomponent",
+               sub_ic->isa(),
+               ICAL_VEVENT_COMPONENT);
+        while (sub_ic != NULL) {
+            if (VERBOSE != 0) {
+                printf("subcomponent: %s\n", sub_ic->as_ical_string().c_str());
+            }
+            delete sub_ic;
+            sub_ic = dynamic_cast<VEvent *>(ic.get_next_component(ICAL_VEVENT_COMPONENT));
         }
-
-        sub_ic = dynamic_cast<VEvent *>(ic.get_next_component(ICAL_VEVENT_COMPONENT));
     }
 
     VCalendar *cal = new VCalendar();
@@ -135,25 +142,31 @@ void test_cxx(void)
     ICalProperty *prop = new ICalProperty(ICAL_OWNER_PROPERTY);
     prop->set_owner(string("fred@flintstone.net"));
     vAgenda->add_property(prop);
+    delete prop;
 
     prop = new ICalProperty(ICAL_SUMMARY_PROPERTY);
     prop->set_summary(string("CPMain"));
     vAgenda->add_property(prop);
+    delete prop;
 
     prop = new ICalProperty(ICAL_TZID_PROPERTY);
     prop->set_tzid(string("America/Los_Angeles"));
     vAgenda->add_property(prop);
+    delete prop;
 
     cal->add_component(vAgenda);
 
     ok("Complex VCALENDAR/VAGENDA", (cal->as_ical_string().c_str() != 0));
 
-    if (VERBOSE) {
+    if (VERBOSE != 0) {
         printf("vAgenda: %s\n", cal->as_ical_string().c_str());
     }
 
+    delete vAgenda;
+    delete cal;
+
 //FIXME: causes an uncaught exception runtime error on APPLE. unknown reason.
-#if !defined(__APPLE__)
+#if !defined(__APPLE__) //krazy:exclude=cpp
     int caughtException = 0;
     try {
         VComponent v = VComponent(string("HFHFHFHF"));

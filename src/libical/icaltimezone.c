@@ -222,8 +222,10 @@ static void icaltimezone_reset(icaltimezone *zone)
     if (zone->component)
         icalcomponent_free(zone->component);
 
-    if (zone->changes)
+    if (zone->changes) {
         icalarray_free(zone->changes);
+        zone->changes = NULL;
+    }
 
     icaltimezone_init(zone);
 }
@@ -474,8 +476,10 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
        matter. */
     icalarray_sort(changes, icaltimezone_compare_change_fn);
 
-    if (zone->changes)
+    if (zone->changes) {
         icalarray_free(zone->changes);
+        zone->changes = 0;
+    }
 
     zone->changes = changes;
     zone->end_year = end_year;
@@ -1531,7 +1535,8 @@ static int fetch_lat_long_from_string(const char *str,
     }
     len = (ptrdiff_t) (sptr - temp);
     lat = (char *)malloc(len + 1);
-    lat = strncpy(lat, temp, len);
+    memset(lat, '\0', len);
+    strncpy(lat, temp, len);
     lat[len] = '\0';
     while (*sptr != '\t') {
         sptr++;

@@ -40,6 +40,10 @@
 #include <stdlib.h>
 #include <stddef.h> /* for ptrdiff_t */
 
+#ifndef __cplusplus
+extern int isatty(int);
+#endif /* __cplusplus */
+
 #ifdef _WIN32_WCE
 #include <io.h>
 #endif
@@ -1513,10 +1517,6 @@ static void ss_load_buffer_state  (void)
 
         ssfree((void *) b  );
 }
-
-#ifndef __cplusplus
-extern int isatty (int );
-#endif /* __cplusplus */
 
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,

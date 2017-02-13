@@ -134,6 +134,7 @@ void icalvalue_set_recur(icalvalue *impl, struct icalrecurrencetype v)
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
 
     if (impl->data.v_recur != 0) {
+        free(impl->data.v_recur->rscale);
         free(impl->data.v_recur);
         impl->data.v_recur = 0;
     }
@@ -145,6 +146,8 @@ void icalvalue_set_recur(icalvalue *impl, struct icalrecurrencetype v)
         return;
     } else {
         memcpy(impl->data.v_recur, &v, sizeof(struct icalrecurrencetype));
+
+        if (v.rscale) impl->data.v_recur->rscale = icalmemory_strdup(v.rscale);
     }
 }
 

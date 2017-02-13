@@ -43,8 +43,6 @@ LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter *parameter)
 
 LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string_r(icalparameter *parameter);
 
-LIBICAL_ICAL_EXPORT int icalparameter_is_valid(icalparameter *parameter);
-
 LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter *parameter);
 
 LIBICAL_ICAL_EXPORT int icalparameter_isa_parameter(void *param);

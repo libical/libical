@@ -98,6 +98,12 @@ Then you can set the C and C++ compilers at CMake time, like so:
   need to have the GObject Introspection development package v0.6.7 or higher
   installed beforehand.
 
+You can also force CMake to ignore any of the optional dependencies
+by passing the option -DCMAKE_DISABLE_FIND_PACKAGE_<PACKAGE>=True.
+For instance:
+# tell cmake to ignore ICU
+  % cmake -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True
+
 == Language Bindings ==
 This C library can be built with bindings for these other languages:
 * C++. By default the buildsystem will create and install the C++ bindings API.
@@ -108,7 +114,7 @@ This C library can be built with bindings for these other languages:
 
 == Tweaking the Library Behavior ==
 Use these CMake options to adjust the library behavior as follows:
- * ICAL_ERRORS_ARE_FATALL=[true|false]
+ * ICAL_ERRORS_ARE_FATAL=[true|false]
    Set to make icalerror_* calls abort instead of internally signaling an error.
    Default=false
 

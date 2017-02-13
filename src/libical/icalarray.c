@@ -112,7 +112,6 @@ void icalarray_free(icalarray *array)
         array->chunks = 0;
     }
     free(array);
-    array = 0;
 }
 
 void icalarray_append(icalarray *array, const void *element)

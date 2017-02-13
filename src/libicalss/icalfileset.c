@@ -18,7 +18,7 @@
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
 ======================================================================*/
-
+//krazy:excludeall=cpp
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -38,12 +38,12 @@
 /** Default options used when NULL is passed to icalset_new() **/
 icalfileset_options icalfileset_options_default = { O_RDWR | O_CREAT, 0644, 0, NULL };
 
+static int _compare_ids(const char *compid, const char *matchid);
+
 static int icalfileset_lock(icalfileset *set);
 static int icalfileset_unlock(icalfileset *set);
 static icalerrorenum icalfileset_read_file(icalfileset *set, int mode);
 static long icalfileset_filesize(icalfileset *set);
-
-icalerrorenum icalfileset_create_cluster(const char *path);
 
 icalset *icalfileset_new(const char *path)
 {
@@ -600,7 +600,7 @@ static struct icalfileset_id icalfileset_get_id(icalcomponent *comp)
     p = icalcomponent_get_first_property(inner, ICAL_RECURRENCEID_PROPERTY);
 
     if (p == 0) {
-        id.recurrence_id = 0;
+        id.recurrence_id = NULL;
     } else {
         icalvalue *v;
 
@@ -616,6 +616,22 @@ static struct icalfileset_id icalfileset_get_id(icalcomponent *comp)
 /* Find the component that is related to the given
    component. Currently, it just matches based on UID and
    RECURRENCE-ID */
+
+static int _compare_ids(const char *compid, const char *matchid)
+{
+    if (compid != NULL && matchid != NULL) {
+        if (strcmp(compid, matchid) == 0) {
+            return 1;
+        }
+    }
+
+    if (compid == NULL && matchid == NULL) {
+        return 1;
+    }
+
+    return 0;
+}
+
 icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *comp)
 {
     icalfileset *fset = (icalfileset *) set;
@@ -632,9 +648,8 @@ icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *comp)
 
         match_id = icalfileset_get_id(match);
 
-        if (strcmp(comp_id.uid, match_id.uid) == 0 &&
-            (comp_id.recurrence_id == 0 ||
-             strcmp(comp_id.recurrence_id, match_id.recurrence_id) == 0)) {
+        if (_compare_ids(comp_id.uid, match_id.uid) &&
+            _compare_ids(comp_id.recurrence_id, match_id.recurrence_id)) {
 
             /* HACK. What to do with SEQUENCE? */
 

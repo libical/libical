@@ -32,13 +32,13 @@ using namespace LibICal;
 */
 
 ICalSpanList::ICalSpanList() throw(icalerrorenum)
-: data(0)
+    : data(0)
 {
     throw icalerrno;
 }
 
 ICalSpanList::ICalSpanList(const ICalSpanList &v) throw(icalerrorenum)
-  : data(v.data)
+    : data(v.data)
 {
     if (data == NULL) {
         throw icalerrno;
@@ -46,9 +46,9 @@ ICalSpanList::ICalSpanList(const ICalSpanList &v) throw(icalerrorenum)
 }
 
 ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) throw(icalerrorenum)
-  : data(icalspanlist_new(set, start, end))
+    : data(icalspanlist_new(set, start, end))
 {
-    if (!data) {
+    if (data == NULL) {
         throw icalerrno;
     }
 }
@@ -58,9 +58,9 @@ ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) t
 */
 
 ICalSpanList::ICalSpanList(icalcomponent *comp) throw(icalerrorenum)
-  : data(icalspanlist_from_vfreebusy(comp))
+    : data(icalspanlist_from_vfreebusy(comp))
 {
-    if (!data) {
+    if (data == NULL) {
         throw icalerrno;
     }
 }
@@ -69,9 +69,9 @@ ICalSpanList::ICalSpanList(icalcomponent *comp) throw(icalerrorenum)
     @param comp  A valid VComponent with a VFREEBUSY section
 */
 ICalSpanList::ICalSpanList(VComponent &comp) throw(icalerrorenum)
-  : data(icalspanlist_from_vfreebusy((icalcomponent *) comp))
+    : data(icalspanlist_from_vfreebusy(static_cast<icalcomponent *>(comp)))
 {
-    if (!data) {
+    if (data == NULL) {
         throw icalerrno;
     }
 }
@@ -84,7 +84,7 @@ void ICalSpanList::dump()
 /** Destructor */
 ICalSpanList::~ICalSpanList()
 {
-    if (data) {
+    if (data == NULL) {
         icalspanlist_free(data);
     }
 }
@@ -102,12 +102,12 @@ VComponent *ICalSpanList::get_vfreebusy(
     VComponent    *vcomp;
 
     comp = icalspanlist_as_vfreebusy(data, organizer, attendee);
-    if (comp == 0) {
+    if (comp == NULL) {
         throw icalerrno;
     }
 
     vcomp = new VComponent(comp);
-    if (vcomp == 0) {
+    if (vcomp == NULL) {
         throw icalerrno;
     }
 
@@ -134,8 +134,8 @@ std::vector<int> ICalSpanList::as_vector(int delta_t) throw(icalerrorenum)
 
     matrix = icalspanlist_as_freebusy_matrix(data, delta_t);
 
-    if (!matrix) {
-        throw ICAL_USAGE_ERROR;
+    if (matrix == NULL) {
+        throw icalerrno;
     }
 
     while (matrix[i] != -1) {

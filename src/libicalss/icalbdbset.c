@@ -31,10 +31,7 @@
 
 #define MAX_RETRY 5
 
-/* these are just stub functions */
-icalerrorenum icalbdbset_create_cluster(const char *path);
-int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method);
-
+static int _compare_ids(const char *compid, const char *matchid);
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b);
 
 /** Default options used when NULL is passed to icalset_new() **/
@@ -1108,7 +1105,7 @@ struct icalbdbset_id icalbdbset_get_id(icalcomponent *comp)
     p = icalcomponent_get_first_property(inner, ICAL_RECURRENCEID_PROPERTY);
 
     if (p == 0) {
-        id.recurrence_id = 0;
+        id.recurrence_id = NULL;
     } else {
         icalvalue *v;
 
@@ -1124,6 +1121,21 @@ struct icalbdbset_id icalbdbset_get_id(icalcomponent *comp)
 /* Find the component that is related to the given
    component. Currently, it just matches based on UID and
    RECURRENCE-ID */
+
+static int _compare_ids(const char *compid, const char *matchid)
+{
+    if (compid != NULL && matchid != NULL) {
+        if (strcmp(compid, matchid) == 0) {
+            return 1;
+        }
+    }
+
+    if (compid == NULL && matchid == NULL) {
+        return 1;
+    }
+
+    return 0;
+}
 
 icalcomponent *icalbdbset_fetch_match(icalset *set, icalcomponent *comp)
 {
@@ -1141,9 +1153,8 @@ icalcomponent *icalbdbset_fetch_match(icalset *set, icalcomponent *comp)
 
         match_id = icalbdbset_get_id(match);
 
-        if (strcmp(comp_id.uid, match_id.uid) == 0 &&
-            (comp_id.recurrence_id == 0 ||
-             strcmp(comp_id.recurrence_id, match_id.recurrence_id) == 0)) {
+        if (_compare_ids(comp_id.uid, match_id.uid) &&
+            _compare_ids(comp_id.recurrence_id, match_id.recurrence_id)) {
 
             /* HACK. What to do with SEQUENCE? */
 

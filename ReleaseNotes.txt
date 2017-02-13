@@ -1,10 +1,15 @@
 Release Highlights
 ==================
 
+Version 2.1.0:
+--------------
+ * icalvalue_as_ical_string() returns "TRUE" (non-zero) or "FALSE" (zero) values only.
+ * new icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
+
 Version 2.0.0:
 --------------
  * WARNING: Version 2 IS NOT Binary Compatible with Older Versions
- * Version 2 is Source Compatible with Older Versions 
+ * Version 2 is Source Compatible with Older Versions
  * Lots of source code scrubbing
  * [New] RSCALE support (requires libicu from http://www.icu-project.org)
  * [New] CalDAV attachment support (draft-daboo-caldav-attachments)
@@ -41,5 +46,3 @@ Version 1.0.1:
  * [Quality] More regression tests added, in particular for recurrence
  * [Quality] Almost all compile warnings silenced
  * [Quality] A bunch of Coverity Scan warnings silenced
-
-

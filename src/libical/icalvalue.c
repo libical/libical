@@ -128,14 +128,12 @@ icalvalue *icalvalue_new_clone(const icalvalue *old)
     case ICAL_RECUR_VALUE:
         {
             if (old->data.v_recur != 0) {
-                new->data.v_recur = malloc(sizeof(struct icalrecurrencetype));
+                icalvalue_set_recur(new, *(old->data.v_recur));
 
                 if (new->data.v_recur == 0) {
                     icalvalue_free(new);
                     return 0;
                 }
-
-                memcpy(new->data.v_recur, old->data.v_recur, sizeof(struct icalrecurrencetype));
             }
             break;
         }
@@ -468,14 +466,14 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         }
     case ICAL_BOOLEAN_VALUE:
         {
-            /* HACK */
-            value = 0;
-
-            if (error != 0) {
+            if (!strcmp(str, "TRUE")) value = icalvalue_new_boolean(1);
+            else if (!strcmp(str, "FALSE")) value = icalvalue_new_boolean(0);
+            else if (error != 0) {
                 char temp[TMP_BUF_SIZE];
 
-                snprintf(temp, sizeof(temp), "%s Values are not implemented",
-                         icalvalue_kind_to_string(kind));
+                snprintf(temp, sizeof(temp),
+                         "Could not parse %s as a %s property",
+                         str, icalvalue_kind_to_string(kind));
                 *error = icalproperty_vanew_xlicerror(
                              temp,
                              icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR),
@@ -608,14 +606,14 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
           geo_parsing_error:
             if (error != 0) {
                 char temp[TMP_BUF_SIZE];
+                icalparameter *errParam;
 
                 snprintf(temp, sizeof(temp),
                          "Could not parse %s as a %s property",
                          str, icalvalue_kind_to_string(kind));
-                *error = icalproperty_vanew_xlicerror(
-                             temp,
-                             icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR),
-                             0);
+                errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
+                icalparameter_free(errParam);
             }
         }
         break;
@@ -721,14 +719,15 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
     default:
         {
             char temp[TMP_BUF_SIZE];
+            icalparameter *errParam;
+
             if (error != 0) {
 
                 snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
 
-                *error = icalproperty_vanew_xlicerror(
-                             temp,
-                             icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR),
-                             0);
+                errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
+                icalparameter_free(errParam);
             }
 
             snprintf(temp, TMP_BUF_SIZE,
@@ -741,13 +740,13 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
     if (error != 0 && *error == 0 && value == 0) {
         char temp[TMP_BUF_SIZE];
+        icalparameter *errParam;
 
         snprintf(temp, TMP_BUF_SIZE, "Failed to parse value: \'%s\'", str);
 
-        *error = icalproperty_vanew_xlicerror(
-                     temp,
-                     icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR),
-                     0);
+        errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+        *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
+        icalparameter_free(errParam);
     }
 
     return value;
@@ -795,6 +794,7 @@ void icalvalue_free(icalvalue *v)
     case ICAL_RECUR_VALUE:
         {
             if (v->data.v_recur != 0) {
+                free(v->data.v_recur->rscale);
                 free((void *)v->data.v_recur);
                 v->data.v_recur = 0;
             }
@@ -832,6 +832,21 @@ static char *icalvalue_binary_as_ical_string_r(const icalvalue *value)
 
     str = (char *)icalmemory_new_buffer(60);
     snprintf(str, 60, "icalvalue_binary_as_ical_string is not implemented yet");
+
+    return str;
+}
+
+static char *icalvalue_boolean_as_ical_string_r(const icalvalue *value)
+{
+    int data;
+    char *str;
+
+    icalerror_check_arg_rz((value != 0), "value");
+    str = (char *)icalmemory_new_buffer(6);
+
+    data = icalvalue_get_integer(value);
+
+    strcpy(str, data ? "TRUE" : "FALSE");
 
     return str;
 }
@@ -1147,6 +1162,8 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
         return icalvalue_binary_as_ical_string_r(value);
 
     case ICAL_BOOLEAN_VALUE:
+        return icalvalue_boolean_as_ical_string_r(value);
+
     case ICAL_INTEGER_VALUE:
         return icalvalue_int_as_ical_string_r(value);
 

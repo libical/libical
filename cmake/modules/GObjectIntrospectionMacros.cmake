@@ -50,7 +50,8 @@ macro(gir_add_introspections introspections_girs)
     set(_gir_libtool "--no-libtool")
 
     add_custom_command(
-      COMMAND ${INTROSPECTION_SCANNER}
+      COMMAND ${CMAKE_COMMAND} -E env "CC='${CMAKE_C_COMPILER}'"
+              ${INTROSPECTION_SCANNER}
               ${INTROSPECTION_SCANNER_ARGS}
               --namespace=${_gir_namespace}
               --nsversion=${_gir_version}
@@ -85,7 +86,7 @@ macro(gir_add_introspections introspections_girs)
       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
     list(APPEND _gir_typelibs ${CMAKE_CURRENT_BINARY_DIR}/${_typelib})
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${_typelib} DESTINATION lib/girepository-1.0)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${_typelib} DESTINATION ${LIB_INSTALL_DIR}/girepository-1.0)
 
   endforeach()
 

@@ -29,9 +29,6 @@
 
 #include <string.h>
 
-struct icalproperty_impl *icalproperty_new_impl(icalproperty_kind kind);
-void icalproperty_add_parameters(struct icalproperty_impl *prop, va_list args);
-
 /* This map associates the property kinds with the string
    representation of the property name and the kind of VALUE that the
    property uses as a default */
@@ -55,7 +52,11 @@ struct icalproperty_enum_map
     const char *str;
 };
 
+//TODO:V3:API:Is there a way to change the API so -Wvarargs doesn't complain?
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wvarargs"
 <insert_code_here>
+#pragma clang diagnostic pop
 
 int icalproperty_kind_is_valid(const icalproperty_kind kind)
 {

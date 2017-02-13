@@ -585,7 +585,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             if (parser.rt.freq == ICAL_NO_RECURRENCE) r = -1;
         } else if (icalrecurrencetype_rscale_is_supported() &&
                    strcasecmp(name, "RSCALE") == 0) {
-            parser.rt.rscale = icalmemory_tmp_copy(value);
+            parser.rt.rscale = icalmemory_strdup(value);
         } else if (icalrecurrencetype_rscale_is_supported() &&
                    strcasecmp(name, "SKIP") == 0) {
             parser.rt.skip = icalrecur_string_to_skip(value);
@@ -641,6 +641,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
 
         if (r) {
             icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+            free(parser.rt.rscale);
             icalrecurrencetype_clear(&parser.rt);
             break;
         }
@@ -2896,6 +2897,7 @@ int icalrecur_expand_recurrence(char *rule,
         }
         icalrecur_iterator_free(ritr);
     }
+    free(recur.rscale);
 
     return 1;
 }

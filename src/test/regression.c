@@ -190,14 +190,15 @@ void test_values()
     icalvalue_free(v);
     icalvalue_free(copy);
 
-    v = icalvalue_new_boolean(1);
-    int_is("icalvalue_new_boolean(1)", icalvalue_get_boolean(v), 1);
+    v = icalvalue_new_boolean(0);
+    int_is("icalvalue_new_boolean(0)", icalvalue_get_boolean(v), 0);
+    str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "FALSE");
     icalvalue_set_boolean(v, 2);
     ok("icalvalue_set_boolean(2)", (2 == icalvalue_get_boolean(v)));
-    str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "2");
+    str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "TRUE");
 
     copy = icalvalue_new_clone(v);
-    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "2");
+    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "TRUE");
 
     icalvalue_free(v);
     icalvalue_free(copy);
@@ -449,10 +450,21 @@ const char *good_child =
     " Common Name 4:Another Comment\r\n"
     "X-LIC-ERROR;X-LIC-ERRORTYPE=COMPONENT-PARSE-ERROR:This is only a test\r\n" "END:VEVENT\r\n";
 
+const char *bad_child =
+	"BEGIN;\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n"
+	"TZNAME:\\r\n";
+
 void test_components()
 {
     icalcomponent *c;
     icalcomponent *child;
+	int estate;
 
     c = icalcomponent_vanew(
             ICAL_VCALENDAR_COMPONENT,
@@ -491,6 +503,13 @@ void test_components()
     str_is("test results of child component", icalcomponent_as_ical_string(child), good_child);
 
     icalcomponent_free(c);
+
+	estate = icalerror_get_errors_are_fatal();
+	icalerror_set_errors_are_fatal(0);
+    c = icalcomponent_new_from_string(bad_child);
+    ok("parse failed as expected", (c == NULL));
+	icalcomponent_free(c);
+	icalerror_set_errors_are_fatal(estate);
 }
 
 void test_memory()
@@ -1395,6 +1414,7 @@ void test_requeststat()
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT);
 
     icalproperty_free(p);
+	icalcomponent_free(c);
 }
 
 void test_dtstart()
@@ -2036,7 +2056,7 @@ void test_fblist()
     icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
     icalset *set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/spanlist.ics", &options);
     struct icalperiodtype period;
-    icalcomponent *comp;
+    icalcomponent *comp, *fbcomp;
     int *foo;
     int i;
 
@@ -2070,9 +2090,9 @@ void test_fblist()
            "19980102T010000");
 
     if (VERBOSE) {
-        printf("%s\n",
-               icalcomponent_as_ical_string(icalspanlist_as_vfreebusy(
-                   sl, "a@foo.com", "b@foo.com")));
+		fbcomp = icalspanlist_as_vfreebusy(sl, "a@foo.com", "b@foo.com");
+        printf("%s\n", icalcomponent_as_ical_string(fbcomp));
+		icalcomponent_free(fbcomp);
     }
 
     foo = icalspanlist_as_freebusy_matrix(sl, 3600);
@@ -2101,7 +2121,7 @@ void test_fblist()
         char *strp = out_str;
 
         for (i = 0; foo[i] != -1; i++) {
-            snprintf(strp, 80, "%1d", foo[i]);
+            snprintf(strp, 79, "%1d", foo[i]);
             strp++;
         }
         str_is("Checking freebusy validity", out_str, "1121110");
@@ -2156,14 +2176,11 @@ void test_fblist()
         icalspanlist_dump(new_sl);
     }
 
-    if (sl)
-        icalspanlist_free(sl);
+	icalspanlist_free(sl);
 
-    if (new_sl)
-        icalspanlist_free(new_sl);
+	icalspanlist_free(new_sl);
 
-    if (comp)
-        icalcomponent_free(comp);
+	icalcomponent_free(comp);
 
     icalset_free(set);
 }
@@ -2643,7 +2660,8 @@ void test_gauge_compare()
 
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
 	str = "SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2663,7 +2681,8 @@ void test_gauge_compare()
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     /* Less than */
 
@@ -2672,10 +2691,11 @@ void test_gauge_compare()
 
     ok(str, (c != 0 && g != 0));
 
+    assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    assert(g != 0);
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
 	str = "SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2697,7 +2717,8 @@ void test_gauge_compare()
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
 	str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2718,7 +2739,8 @@ void test_gauge_compare()
 
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
 	str = "SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2739,7 +2761,8 @@ void test_gauge_compare()
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
 	str = "SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2767,7 +2790,8 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
 
@@ -2783,7 +2807,8 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     icalcomponent_free(c);
 
@@ -2799,7 +2824,8 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
 
@@ -2815,7 +2841,9 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
+
     icalcomponent_free(c);
 
     /* Complex comparisons */
@@ -2840,21 +2868,24 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo'";
     g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo' AND  VALARM.DTSTART = '20000101T120000'";
     g = icalgauge_new_from_sql((char *)str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'bar' AND  VALARM.DTSTART = '20000101T120000'";
     g = icalgauge_new_from_sql((char *)str, 0);
@@ -2868,7 +2899,8 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-    icalgauge_free(g);
+	if (g != NULL)
+		icalgauge_free(g);
 
     icalcomponent_free(c);
 }
@@ -3474,6 +3506,7 @@ void test_property_parse()
         printf("%s\n", str);
 
     icalproperty_free(p);
+	icalcomponent_free(c);
 }
 
 void test_value_parameter()
@@ -3678,6 +3711,7 @@ void test_attach_url()
     }
     str_is("attach url", icalattach_get_url(attach), "foofile");
     str_is("attach with url", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithurl);
+	icalattach_unref(attach);
     icalproperty_free(ap);
     icalcomponent_free(ac);
 }
@@ -3697,6 +3731,7 @@ void test_attach_data()
     }
     str_is("attach data", (const char *) icalattach_get_data(attach), "foofile");
     str_is("attach with data", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
+	icalattach_unref(attach);
     icalproperty_free(ap);
     icalcomponent_free(ac);
 }
@@ -3779,6 +3814,7 @@ void test_recurrenceexcluded(void)
     recurtime = icaltime_from_string("20080819T180000Z");
     ok("Recurrence is excluded for UTC EXDATE",
        icalproperty_recurrence_is_excluded(event, &dtstart, &recurtime));
+	icalcomponent_free(calendar);
 }
 
 void test_bad_dtstart_in_timezone(void)

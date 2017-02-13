@@ -86,8 +86,10 @@ void icalerror_crash_here(void)
 {
     int *p = 0;
     /* coverity[var_deref_op] */
+    /* cppcheck-suppress nullPointer */
     *p = 1;
 
+    /* cppcheck-suppress nullPointer */
     assert(*p);
 }
 

@@ -144,6 +144,11 @@ icalcomponent *get_first_real_component(icalcomponent *comp)
 char *make_mime(const char *to, const char *from, const char *subject,
                 const char *text_message, const char *method, const char *ical_message)
 {
+    if ((to == NULL) || (from == NULL) || (subject == NULL) ||
+        (text_message == NULL) || (ical_message == NULL)) {
+        return NULL;
+    }
+
     size_t mess_size =
         strlen(to) +
         strlen(from) + strlen(subject) + strlen(text_message) + strlen(ical_message) + TMPSIZE;
@@ -171,7 +176,7 @@ Content-type: text/plain\n\
 Content-Description: Text description of error message\n\n\
 %s\n\n--%s", content_id, text_message, boundary);
 
-    if (ical_message != 0 && method != 0) {
+    if (method != 0) {
         snprintf(mime_part_2, TMPSIZE, "Content-ID: %s\n\
 Content-type: text/calendar; method=%s\n\
 Content-Description: iCal component reply\n\n\
@@ -206,6 +211,7 @@ void return_failure(icalcomponent *comp, char *message, struct options_struct *o
     char *local_attendee = opt->calid;
     FILE *p;
     const char *org_addr;
+    char *mime;
 
     icalcomponent *inner = get_first_real_component(comp);
 
@@ -232,8 +238,12 @@ void return_failure(icalcomponent *comp, char *message, struct options_struct *o
         exit(1);
     }
 
-    fputs(make_mime(org_addr, local_attendee, "iMIP error",
-                    message, "reply", icalcomponent_as_ical_string(comp)), p);
+    mime = make_mime(org_addr, local_attendee, "iMIP error",
+                     message, "reply", icalcomponent_as_ical_string(comp));
+    if (mime) {
+        fputs(mime, p);
+        free(mime);
+    }
 
     if (opt->errors == ERRORS_TO_ORGANIZER) {
         pclose(p);
@@ -246,7 +256,11 @@ void return_error(icalcomponent *comp, char *message, struct options_struct *opt
     _unused(comp);
     _unused(opt);
 
-    fputs(make_mime("Dest", "Source", "iMIP system failure", message, 0, 0), stdout);
+    char *mime = make_mime("Dest", "Source", "iMIP system failure", message, "", "");
+    if (mime) {
+        fputs(mime, stdout);
+        free(mime);
+    }
 }
 
 icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
@@ -309,6 +323,9 @@ int check_attendee(icalproperty *p, struct options_struct *opt)
     const char *s = icalproperty_get_attendee(p);
     char *lower_attendee = lowercase(s);
     char *local_attendee = opt->calid;
+    char *start = lower_attendee;
+
+    int found = 0;
 
     /* Check that attendee begins with "mailto:" */
     if (strncmp(lower_attendee, "mailto:", 7) == 0) {
@@ -316,15 +333,12 @@ int check_attendee(icalproperty *p, struct options_struct *opt)
         lower_attendee += 7;
 
         if (strcmp(lower_attendee, local_attendee) == 0) {
-            return 1;
+            found = 1;
         }
-
-        lower_attendee -= 7;
-
-        free(lower_attendee);
     }
 
-    return 0;
+    free(start);
+    return found;
 }
 
 char static_component_error_str[MAXPATHLEN];
@@ -567,6 +581,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
         }
 
         /* Find password entry for user */
+        /* cppcheck-suppress getpwentCalled as we don't care about multi-threaded in a test prog */
         while ((pw = getpwent()) != 0) {
             if (strcmp(user, pw->pw_name) == 0) {
                 break;
@@ -619,20 +634,20 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
                     fprintf(stderr,
                             "%s: Failed to create calendar directory %s: %s\n",
                             program_name, facspath, strerror(errno));
+                    free(facspath);
                     exit(1);
                 } else {
                     fprintf(stderr, "%s: Creating calendar directory %s\n", program_name, facspath);
-                    free(facspath);
                 }
 
             } else if (type == REGULAR || type == ERROR) {
                 fprintf(stderr, "%s: Cannot create calendar directory %s\n",
                         program_name, facspath);
+                free(facspath);
                 exit(1);
             }
-        } else {
-            free(facspath);
         }
+        free(facspath);
     }
 }
 
@@ -718,6 +733,7 @@ icalcomponent *read_nonmime_component(struct options_struct * opt)
         icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 
         if (comp != 0) {
+            icalparser_free(parser);
             return comp;
         }
 
@@ -727,6 +743,7 @@ icalcomponent *read_nonmime_component(struct options_struct * opt)
         fclose(stream);
     }
 
+    icalparser_free(parser);
     return comp;
 }
 

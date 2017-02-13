@@ -191,6 +191,7 @@ void test_fileset_extended(void)
         (void)icalfileset_add_component(cout, clone);
         (void)icalfileset_commit(cout);
 
+        icalcomponent_free(clone);
         icalset_free(cout);
     }
 
@@ -593,8 +594,11 @@ struct calendar *unpack_calendar(char *str, size_t size)
     /* title_size */
     memcpy(&cal->title_size, str + cal->title_size_offset, sizeof(cal->title_size));
 
-    if ((cal->title = (char *)malloc(sizeof(char) * cal->title_size)) == NULL)
+    if ((cal->title = (char *)malloc(sizeof(char) * cal->title_size)) == NULL) {
+        free(cal->vcalendar);
+        free(cal);
         return 0;
+    }
 
     /* title */
     memcpy(cal->title, (char *)(str + cal->title_offset), cal->title_size);
@@ -610,7 +614,9 @@ char *parse_vcalendar(const DBT *dbt)
     str = (char *)dbt->data;
     cal = unpack_calendar(str, dbt->size);
 
-    return cal->vcalendar;
+    str = cal->vcalendar;
+    free(cal);
+    return str;
 }
 
 #endif

@@ -484,7 +484,7 @@ static void enterValues(const char *value)
                 p3 = (wchar_t *) vObjectUStringZValue(curProp);
                 free(p3);
                 setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
-                deleteStr(p2);
+                free(p2);
             } else {
             setVObjectUStringZValue_(curProp,fakeUnicode(value,0));
             }
@@ -944,7 +944,7 @@ static char * lexGetDataFromBase64()
                 }
             }
         } /* while */
-    DBG_(("db: bytesLen = %l\n",  bytesLen));
+    DBG_(("db: bytesLen = %lu\n",  (unsigned long)bytesLen));
     /* kludge: all this won't be necessary if we have tree form
         representation */
     if (bytes) {

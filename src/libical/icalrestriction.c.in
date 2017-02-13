@@ -301,6 +301,8 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
     const icalrestriction_property_record *prop_record;
     const char *funcr = 0;
     icalproperty *prop;
+    icalparameter *errParam = NULL;
+    icalproperty *errProp = NULL;
 
     int count;
     int compare;
@@ -338,13 +340,9 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
                      "Failed iTIP restrictions for %s property. "
                      "Expected %s instances of the property and got %d",
                      icalenum_property_kind_to_string(kind), restr_string_map[restr], count);
-
-            icalcomponent_add_property(
-                comp,
-                icalproperty_vanew_xlicerror(
-                    temp,
-                    icalparameter_new_xlicerrortype
-                    (ICAL_XLICERRORTYPE_INVALIDITIP), 0));
+            errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
+            errProp = icalproperty_vanew_xlicerror(temp, errParam, 0);
+            icalcomponent_add_property(comp, errProp);
         }
 
         prop = icalcomponent_get_first_property(comp, kind);
@@ -354,12 +352,15 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
         }
 
         if (funcr != 0) {
-            icalcomponent_add_property(
-                comp,
-                icalproperty_vanew_xlicerror(
-                    funcr,
-                    icalparameter_new_xlicerrortype
-                    (ICAL_XLICERRORTYPE_INVALIDITIP), 0));
+            if (errParam != NULL)
+                icalparameter_free(errParam);
+
+            if (errProp != NULL)
+                icalproperty_free(errProp);
+
+            errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
+            errProp = icalproperty_vanew_xlicerror(funcr, errParam, 0);
+            icalcomponent_add_property(comp, errProp);
 
             compare = 0;
         }
