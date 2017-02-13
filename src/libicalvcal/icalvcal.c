@@ -40,6 +40,7 @@
 #include "icalvcal.h"
 #include "icalerror.h"
 #include "icalvalue.h"
+#include "icaltimezone.h"
 #include "icalversion.h"        /* for ICAL_PACKAGE */
 
 #include <stddef.h>     /* for ptrdiff_t */
