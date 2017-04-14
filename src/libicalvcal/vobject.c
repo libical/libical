@@ -194,7 +194,7 @@ const wchar_t* vObjectUStringZValue(VObject *o)
 
 void setVObjectUStringZValue(VObject *o, const wchar_t *s)
 {
-    size_t size = (size_t)((uStrLen(s)+1)*2);
+    size_t size = (size_t)((uStrLen(s)+1)*sizeof(wchar_t));
     USTRINGZ_VALUE_OF(o) = (wchar_t*) dupStr((char*)s,size);
     VALUE_TYPE(o) = VCVT_USTRINGZ;
 }
