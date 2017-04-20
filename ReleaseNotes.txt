@@ -23,6 +23,7 @@ Version 3.0.0:
     + icaltime_start_day_of_week (use icaltime_start_day_week)
     + icalproperty_remove_parameter (use icalproperty_remove_parameter_by_kind)
     + icalproperty_string_to_enum (use icalproperty_kind_and_string_to_enum)
+ * Build Vala vapi file for libical-glib
  * Signature changed for functions:
     + VObject *Parse_MIME_FromFileName(const char *fname)
     + icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
