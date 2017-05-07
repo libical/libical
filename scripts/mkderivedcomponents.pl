@@ -3,7 +3,7 @@
 # (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 #     http://www.softwarestudio.org
 #
-# This program is free software; you can redistribute it and/or modify
+# This library is free software; you can redistribute it and/or modify
 # it under the terms of either:
 #
 #   The LGPL as published by the Free Software Foundation, version
@@ -11,7 +11,7 @@
 #
 # Or:
 #
-#   The Mozilla Public License Version 1.0. You may obtain a copy of
+#   The Mozilla Public License Version 2.0. You may obtain a copy of
 #   the License at http://www.mozilla.org/MPL/
 ################################################################################
 
@@ -67,22 +67,22 @@ if ($opt_c or $opt_h and !$opt_i) {
   ======================================================================
   FILE: icalderivedproperties.{c,h}
   CREATOR: eric 09 May 1999
-  
+
   \044Id:\044
-    
-  (C) COPYRIGHT 1999 Eric Busboom 
+
+  (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
   http://www.softwarestudio.org
 
   The contents of this file are subject to the Mozilla Public License
   Version 1.0 (the "License"); you may not use this file except in
   compliance with the License. You may obtain a copy of the License at
   http://www.mozilla.org/MPL/
- 
+
   Software distributed under the License is distributed on an "AS IS"
   basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
   the License for the specific language governing rights and
   limitations under the License.
- 
+
 
  ======================================================================*/
 
@@ -125,7 +125,7 @@ icalcomponent* icalcomponent_new_${lc}()
 icalcomponent* icalcomponent_vanew_${lc}(...)
 {
    va_list args;
-   struct icalcomponent_impl *impl = icalcomponent_new_impl(ICAL_${uc}_component);  
+   struct icalcomponent_impl *impl = icalcomponent_new_impl(ICAL_${uc}_component);
 
    va_start(args,v);
    icalcomponent_add_properties(impl, args);
@@ -133,7 +133,7 @@ icalcomponent* icalcomponent_vanew_${lc}(...)
 
    return (icalcomponent*)impl;
 }
- 
+
 EOM
 
   } elsif ($opt_h) {    # Make a C header
@@ -154,7 +154,7 @@ EOM
 
     print <<EOM;
 
-# $comp 
+# $comp
 package Net::ICal::Component::${ucf};
 \@ISA=qw(Net::ICal::Component);
 
@@ -168,7 +168,7 @@ sub new
 
    # Self is blessed in new_from_ref
 
-   return \$self; 
+   return \$self;
 
 }
 EOM
@@ -176,4 +176,3 @@ EOM
   }
 
 }
-

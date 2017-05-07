@@ -1,17 +1,27 @@
-
 /*======================================================================
  FILE: jlibical_consts_cxx/h
  CREATOR: Srinivasa Boppana/George Norman
- (C) COPYRIGHT 2002, Critical Path
-======================================================================*/
 
+ (C) COPYRIGHT 2002, Critical Path
+
+ This library is free software; you can redistribute it and/or modify
+ it under the terms of either:
+
+    The LGPL as published by the Free Software Foundation, version
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+
+ Or:
+
+    The Mozilla Public License Version 2.0. You may obtain a copy of
+    the License at http://www.mozilla.org/MPL/
+======================================================================*/
 #ifndef JLIBICAL_CONSTS_CXX_H
 #define JLIBICAL_CONSTS_CXX_H
 
 /*
  * Error code constants.
  */
-#define JLIBICAL_OK                         0	/* good return code */
+#define JLIBICAL_OK                         0   /* good return code */
 
 /* system/API errors */
 #define JLIBICAL_ERR_NETWORK                100 /* general network error */
@@ -24,12 +34,12 @@
 /* Java classes */
 #define JLIBICAL_CLASS_ICALVALUE                "net/cp/jlibical/ICalValue"
 #define JLIBICAL_CLASS_VCOMPONENT               "net/cp/jlibical/VComponent"
-#define JLIBICAL_CLASS_VALARM			"net/cp/jlibical/VAlarm"
-#define JLIBICAL_CLASS_VCALENDAR		"net/cp/jlibical/VCalendar"
+#define JLIBICAL_CLASS_VALARM                   "net/cp/jlibical/VAlarm"
+#define JLIBICAL_CLASS_VCALENDAR                "net/cp/jlibical/VCalendar"
 #define JLIBICAL_CLASS_VAGENDA                  "net/cp/jlibical/VAgenda"
-#define JLIBICAL_CLASS_VEVENT			"net/cp/jlibical/VEvent"
-#define JLIBICAL_CLASS_VQUERY			"net/cp/jlibical/VQuery"
-#define JLIBICAL_CLASS_VTODO			"net/cp/jlibical/VToDo"
+#define JLIBICAL_CLASS_VEVENT                   "net/cp/jlibical/VEvent"
+#define JLIBICAL_CLASS_VQUERY                   "net/cp/jlibical/VQuery"
+#define JLIBICAL_CLASS_VTODO                    "net/cp/jlibical/VToDo"
 #define JLIBICAL_CLASS_ICALPARAMETER            "net/cp/jlibical/ICalParameter"
 #define JLIBICAL_CLASS_ICALPROPERTY             "net/cp/jlibical/ICalProperty"
 
@@ -37,6 +47,6 @@
 #define JLIBICAL_CLASS_ICALTIMETYPE             "net/cp/jlibical/ICalTimeType"
 #define JLIBICAL_CLASS_ICALTRIGGERTYPE          "net/cp/jlibical/ICalTriggerType"
 #define JLIBICAL_CLASS_ICALRECURRENCETYPE       "net/cp/jlibical/ICalRecurrenceType"
-#define JLIBICAL_CLASS_ICALPERIODTYPE      		"net/cp/jlibical/ICalPeriodType"
+#define JLIBICAL_CLASS_ICALPERIODTYPE                   "net/cp/jlibical/ICalPeriodType"
 
 #endif /* JLIBICAL_CONSTS_CXX_H */

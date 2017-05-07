@@ -1,19 +1,22 @@
 #!/usr/bin/perl -w
-# -*- Mode: perl -*-
 #======================================================================
+# FILE: Component.pm
+# CREATOR: eric
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+#     http://www.softwarestudio.org
 #
-# $Id: Period.pm,v 1.1 2001-03-02 19:50:31 ebusboom Exp $
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
 #
-# (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+#    The LGPL as published by the Free Software Foundation, version
+#    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 #
-# $Log
+# Or:
+#
+#    The Mozilla Public License Version 2.0. You may obtain a copy of
+#    the License at http://www.mozilla.org/MPL/
 #======================================================================
-
 
 =pod
 =head1 NAME
@@ -27,9 +30,9 @@ Net::ICal::Period -- represent a period of time
   $p = new Net::ICal::Period("19970101T120000","PT3W2D40S");
   $p = new Net::ICal::Period(time(),3600);
   $p =   new Net::ICal::Period(
-		      new Net::ICal::Time("19970101T120000",
-					  "America/Los_Angeles"),
-		      new Net::ICal::Duration("2h"));
+                      new Net::ICal::Time("19970101T120000",
+                                          "America/Los_Angeles"),
+                      new Net::ICal::Duration("2h"));
 
 =head1 DESCRIPTION
 
@@ -38,12 +41,12 @@ real schedule. You can either say, "This event starts at 12
 and ends at 2" or "This event starts at 12 and lasts 2 hours."
 
 These two ways of specifying events can be treated differently
-in schedules. If you say, "The meeting is from 12 to 2, but I 
+in schedules. If you say, "The meeting is from 12 to 2, but I
 have to leave at 2," you are implying that the start date and
 end date are fixed. If you say, "I have a 2-hour drive to
 Chicago, and I need to leave at 4," you are saying that it will
 take 2 hours no matter when you leave, and that moving the start
-time will slide the end time correspondingly. 
+time will slide the end time correspondingly.
 
 =head1 BASIC METHODS
 
@@ -67,7 +70,7 @@ use UNIVERSAL qw(isa);
 Creates a new period object given to parameters: The first must be a
 I<Time> object or valid argument to Net::ICal::Time::new.
 
-The second can be either: 
+The second can be either:
 
 =pod
 
@@ -75,13 +78,13 @@ The second can be either:
 
 =item * a I<Time> object
 
-=item * a valid argument to Net::ICal::Time::new. 
+=item * a valid argument to Net::ICal::Time::new.
 
 =item * a I<Duration> object
 
-=item * a valid argument to Net::ICal::Duration::new. 
+=item * a valid argument to Net::ICal::Duration::new.
 
-=back 
+=back
 
 Either give a start time and an end time, or a start time and a duration.
 
@@ -104,10 +107,10 @@ sub new{
     $self->{START} = $arg1->clone();
   } else  {
     $self->{START} = new Net::ICal::Time($arg1);
-  } 
-    
+  }
 
-  if(isa($arg2,'Net::ICal::Time')){ 
+
+  if(isa($arg2,'Net::ICal::Time')){
     $self->{END} = $arg2->clone();
   } elsif (isa($arg2,'Net::ICal::Duration')) {
     $self->{DURATION} = $arg2->clone();
@@ -142,9 +145,9 @@ Return true if:
      Both start and end times have no timezone ( Floating time) or
      Both start and end time have (possibly different) timezones or
      Both start and end times are in UTC and
-     The end time is after the start time. 
+     The end time is after the start time.
 
-  There is a duration and the duration is positive  
+  There is a duration and the duration is positive
 
 =cut
 
@@ -161,7 +164,7 @@ sub is_valid {
 Accessor for the start time of the event as a I<Time> object.
 Can also take a valid time string or an integer (number of
 seconds since the epoch) as a parameter. If a second parameter
-is given, it'll set this Duration's start time. 
+is given, it'll set this Duration's start time.
 
 =cut
 
@@ -170,7 +173,7 @@ sub start{
   my $t = shift;
 
   if($t){
-    if(isa($t,'Net::ICal::Time')){ 
+    if(isa($t,'Net::ICal::Time')){
       $self->{START} = $t->clone();
     } else {
       $self->{START} = new Net::ICal::Time($t);
@@ -178,15 +181,15 @@ sub start{
   }
 
   return $self->{START};
-} 
+}
 
 #-----------------------------------------------------------------
 =pod
 =head2 end([$time])
 
 Accessor for the end time. Takes a I<Time> object, a valid time string,
-or an integer and returns a time object. This routine is coupled to 
-the I<duration> accessor. See I<duration> below for more imformation. 
+or an integer and returns a time object. This routine is coupled to
+the I<duration> accessor. See I<duration> below for more imformation.
 
 =cut
 
@@ -202,13 +205,13 @@ sub end{
     } else {
       $end = new Net::ICal::Time($t);
     }
-    
+
     # If duration exists, use the time to compute a new duration
     if ($self->{DURATION}){
-      $self->{DURATION} = $end->subtract($self->{START}); 
+      $self->{DURATION} = $end->subtract($self->{START});
     } else {
       $self->{END} = $end;
-    }    
+    }
   }
 
   # Return end time, possibly computing it from DURATION
@@ -218,14 +221,14 @@ sub end{
     return $self->{END};
   }
 
-} 
+}
 
 #----------------------------------------------------------------------
 =pod
 =head2 duration([$duration])
 
 Accessor for the duration of the event. Takes a I<duration> object and
-returns a I<Duration> object. 
+returns a I<Duration> object.
 
 Since the end time and the duration both specify the end time, the
 object will store one and access to the other will be computed. So,
@@ -252,19 +255,19 @@ sub duration{
   my $dur;
 
   if($d){
-    if(isa($d,'Net::ICal::Duration')){ 
+    if(isa($d,'Net::ICal::Duration')){
       $dur = $d->clone();
     } else {
       $dur = new Net::ICal::Duration($d);
     }
-    
+
     # If end exists, use the duration to compute a new end
-    # otherwise, set the duration. 
+    # otherwise, set the duration.
     if ($self->{END}){
-      $self->{END} = $self->{START}->add($dur); 
+      $self->{END} = $self->{START}->add($dur);
     } else {
       $self->{DURATION} = $dur;
-    }    
+    }
   }
 
   # Return duration, possibly computing it from END
@@ -291,13 +294,13 @@ sub as_ical {
   $out = $self->{START}->as_ical() ."/";
 
   if($self->{DURATION}){
-    $out .= $self->{DURATION}->as_ical() 
+    $out .= $self->{DURATION}->as_ical()
   } else {
-    $out .= $self->{END}->as_ical() 
+    $out .= $self->{END}->as_ical()
   }
- 
+
   return $out;
- 
+
 }
 
 
@@ -312,7 +315,7 @@ A set of developers' tests to make sure the module's working properly.
 
 # Run this with a one-liner:
 #   perl -e "use lib('/home/srl/dev/rk/reefknot/base/'); use Net::ICal::Period; Net::ICal::Period::test();"
-# adjusted for your environment. 
+# adjusted for your environment.
 sub test {
 
   print("--------- Test Net::ICal::Period --------------\n");
@@ -356,4 +359,3 @@ sub test {
 
 
 __END__
-

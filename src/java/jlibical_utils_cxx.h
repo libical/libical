@@ -1,8 +1,19 @@
-
 /*======================================================================
  FILE: jlibical_utils_cxx.h
  CREATOR: Srinivasa Boppana/George Norman
+
  (C) COPYRIGHT 2002, Critical Path
+
+ This library is free software; you can redistribute it and/or modify
+ it under the terms of either:
+
+    The LGPL as published by the Free Software Foundation, version
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+
+ Or:
+
+    The Mozilla Public License Version 2.0. You may obtain a copy of
+    the License at http://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifndef TEST_CXX_H

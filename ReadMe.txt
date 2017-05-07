@@ -11,7 +11,7 @@ and Wilfried Goesgens.
 Libical is an Open Source implementation of the iCalendar protocols
 and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
-store their calendar data and arrange meetings with other users. 
+store their calendar data and arrange meetings with other users.
 
 Libical implements RFC5545, RFC5546, RFC7529; the iCalendar extensions
 in RFC6638; and some of RFC6047.
@@ -20,10 +20,10 @@ in RFC6638; and some of RFC6047.
 License
 ========
 The code and datafiles in this distribution are licensed under the
-Mozilla Public License (MPL) v1.0. See http://www.mozilla.org/MPL/1.0
-for a copy of the license. 
+Mozilla Public License (MPL) v2.0. See http://www.mozilla.org/MPL
+for a copy of the license.
 
-Alternately, you may use libical under the terms of the GNU Library
+Alternately, you may use libical under the terms of the GNU Lesser
 General Public License (LGPL) v2.1. See http://www.gnu.org/licenses/lgpl-2.1.txt
 for a copy of the license.
 

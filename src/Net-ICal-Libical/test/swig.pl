@@ -1,4 +1,19 @@
 #!/usr/bin/perl
+#======================================================================
+# (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+#     http://www.softwarestudio.org
+#
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
+#
+#   The LGPL as published by the Free Software Foundation, version
+#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.txt
+#
+# Or:
+#
+#   The Mozilla Public License Version 2.0. You may obtain a copy of
+#   the License at http://www.mozilla.org/MPL/
+#======================================================================
 
 use lib "../blib/lib";
 use lib "../blib/arch";
@@ -24,6 +39,6 @@ END:VEVENT
 END:VCALENDAR
 EOM
 
-$c = Net::ICal::Libical::icalparser_parse_string($comp_str);   
+$c = Net::ICal::Libical::icalparser_parse_string($comp_str);
 
 print Net::ICal::Libical::icalcomponent_as_ical_string($c)."\n";

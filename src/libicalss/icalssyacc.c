@@ -121,27 +121,22 @@
 
 /* Copy the first part of user declarations.  */
 
-/* -*- Mode: C -*-                                                         */
 /*  ====================================================================== */
 /*  FILE: icalssyacc.y                                                     */
 /*  CREATOR: eric 08 Aug 2000                                              */
 /*                                                                         */
-/*  DESCRIPTION:                                                           */
-/*                                                                         */
-/*  $Id: icalssyacc.y,v 1.10 2008-01-14 00:35:26 dothebart Exp $           */
-/*  $Locker:  $                                                            */
-/*                                                                         */
-/*  (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org        */
+/*  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>             */
+/*      http://www.softwarestudio.org                                      */
 /*                                                                         */
 /* This program is free software; you can redistribute it and/or modify    */
 /* it under the terms of either:                                           */
 /*                                                                         */
 /*    The LGPL as published by the Free Software Foundation, version       */
-/*    2.1, available at: http://www.fsf.org/copyleft/lesser.html           */
+/*    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html         */
 /*                                                                         */
 /*  Or:                                                                    */
 /*                                                                         */
-/*    The Mozilla Public License Version 1.0. You may obtain a copy of     */
+/*    The Mozilla Public License Version 2.0. You may obtain a copy of     */
 /*    the License at http://www.mozilla.org/MPL/                           */
 /*                                                                         */
 /* The Original Code is eric. The Initial Developer of the Original        */

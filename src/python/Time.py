@@ -1,28 +1,21 @@
-#!/usr/bin/env python 
-# -*- Mode: python -*-
+#!/usr/bin/env python
 #======================================================================
 # FILE: Time.py
-# CREATOR: eric 
-#
-# DESCRIPTION:
-#   
-#
-#  $Id: Time.py,v 1.3 2002-07-12 08:02:46 acampi Exp $
-#  $Locker:  $
+# CREATOR: eric
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
-# (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>  
+# (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of either: 
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
 #
-#    The LGPL as published by the Free Software Foundation, version
-#    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+#   The LGPL as published by the Free Software Foundation, version
+#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.txt
 #
-#  Or:
+# Or:
 #
-#    The Mozilla Public License Version 1.0. You may obtain a copy of
-#    the License at http://www.mozilla.org/MPL/
+#   The Mozilla Public License Version 2.0. You may obtain a copy of
+#   the License at http://www.mozilla.org/MPL/
 #======================================================================
 
 from LibicalWrap import *
@@ -35,13 +28,13 @@ UTC = icaltimezone_get_utc_timezone()
 class Time(Property):
     """ Represent iCalendar DATE, TIME and DATE-TIME """
     def __init__(self, arg, name="DTSTART", zone=None):
-        """ 
-        Create a new Time from a string or number of seconds past the 
+        """
+        Create a new Time from a string or number of seconds past the
         POSIX epoch
 
         Time("19970325T123000Z")  Construct from an iCalendar string
         Time(8349873494)          Construct from seconds past POSIX epoch
-        
+
         """
         e1=icalerror_supress("MALFORMEDDATA")
         e2=icalerror_supress("BADARG")
@@ -55,12 +48,12 @@ class Time(Property):
                 # Create from an iCal string
                 self.tt = icaltime_from_string(arg)
             elif isinstance(arg, IntType) or   \
-                 isinstance(arg, FloatType): 
+                 isinstance(arg, FloatType):
                 # Create from seconds past the POSIX epoch
-		if zone:
-                	self.tt = icaltime_from_timet_with_zone(int(arg),0,icaltimezone_get_builtin_timezone(zone))
-		else:
-                	self.tt = icaltime_from_timet_with_zone(int(arg),0,icaltimezone_get_utc_timezone())
+                if zone:
+                        self.tt = icaltime_from_timet_with_zone(int(arg),0,icaltimezone_get_builtin_timezone(zone))
+                else:
+                        self.tt = icaltime_from_timet_with_zone(int(arg),0,icaltimezone_get_utc_timezone())
             elif isinstance(arg, Time):
                 # Copy an instance
                 self.tt = arg.tt
@@ -107,27 +100,27 @@ class Time(Property):
 
     def timezone(self,v=None):
         """ Return, set (if none) or alter the timezone for this time """
-	
-	origtz = icaltime_get_tzid(self.tt)
 
-	if (v != None):
+        origtz = icaltime_get_tzid(self.tt)
+
+        if (v != None):
             assert(isinstance(v,StringType) )
-	    if (v == "UTC"):
+            if (v == "UTC"):
                 tz = icaltimezone_get_utc_timezone()
-		del self['TZID']
+                del self['TZID']
             else:
-	    	tz = icaltimezone_get_builtin_timezone(v)
+                tz = icaltimezone_get_builtin_timezone(v)
 
             if not origtz:
-	        self.tt = icaltime_set_timezone(self.tt, tz)
+                self.tt = icaltime_set_timezone(self.tt, tz)
             else:
-	        self.tt = icaltime_convert_to_zone(self.tt,tz)
+                self.tt = icaltime_convert_to_zone(self.tt,tz)
 
-	    if (icaltime_get_tzid(self.tt) != "UTC"):
-            	self['TZID'] = icaltime_get_tzid(self.tt)
+            if (icaltime_get_tzid(self.tt) != "UTC"):
+                self['TZID'] = icaltime_get_tzid(self.tt)
 
         self._update_value()
-	return icaltime_get_tzid(self.tt)
+        return icaltime_get_tzid(self.tt)
 
     def normalize(self):
         self.tt = icaltime_normalize(self.tt)
@@ -191,7 +184,7 @@ class Time(Property):
 
     def __add__(self,o):
 
-        other = Duration(o,"DURATION")      
+        other = Duration(o,"DURATION")
 
         if not other.valid():
             return Duration(0,"DURATION")
@@ -205,11 +198,11 @@ class Time(Property):
 
     def __radd_(self,o):
         return self.__add__(o)
-    
+
 
     def __sub__(self,o):
 
-        
+
         if isinstance(o,Time):
             # Subtract a time from this time and return a duration
             seconds = self.utc_seconds() - o.utc_seconds()

@@ -1,17 +1,16 @@
 /*
  * Copyright (C) 2015 William Yu <williamyu@gnome.org>
  *
- * This library is free software: you can redistribute it and/or modify it
- * under the terms of version 2.1. of the GNU Lesser General Public License
- * as published by the Free Software Foundation.
+ * This library is free software; you can redistribute it and/or modify
+ * it under the terms of either:
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
- * for more details.
+ *   The LGPL as published by the Free Software Foundation, version
+ *   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library. If not, see <http://www.gnu.org/licenses/>.
+ * Or:
+ *
+ *   The Mozilla Public License Version 2.0. You may obtain a copy of
+ *   the License at http://www.mozilla.org/MPL/
  */
 
 #include "xml-parser.h"

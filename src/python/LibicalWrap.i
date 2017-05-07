@@ -2,7 +2,7 @@
 /*======================================================================
   FILE: ical.i
 
-  (C) COPYRIGHT 1999 Eric Busboom
+  (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
   http://www.softwarestudio.org
 
   The contents of this file are subject to the Mozilla Public License

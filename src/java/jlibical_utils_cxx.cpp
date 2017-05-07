@@ -1,8 +1,19 @@
-/*
 /*======================================================================
  FILE: jlibical_utils_cxx.cpp
  CREATOR: Srinivasa Boppana/George Norman
+
  (C) COPYRIGHT 2002, Critical Path
+
+ This library is free software; you can redistribute it and/or modify
+ it under the terms of either:
+
+    The LGPL as published by the Free Software Foundation, version
+    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+
+ Or:
+
+    The Mozilla Public License Version 2.0. You may obtain a copy of
+    the License at http://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifndef JLIBICAL_UTILS_CXX_H
@@ -54,26 +65,26 @@
 //-------------------------------------------------------
 void* getCObjectPtr(JNIEnv *env, jobject surrogate)
 {
-	void* result = 0;
+        void* result = 0;
     jclass jcls = env->GetObjectClass(surrogate);
     jfieldID fid = env->GetFieldID(jcls,"m_Obj","J");
 
     if (fid == NULL)
     {
-		// this should never happen.
+                // this should never happen.
         throwException( env, JLIBICAL_ERR_CLIENT_INTERNAL );
         return(NULL);
     }
 
-	result = (void*)env->GetLongField(surrogate,fid);
+        result = (void*)env->GetLongField(surrogate,fid);
     if (result == NULL)
-	{
-		// the proxy object (java) has no subject (c++ object)
+        {
+                // the proxy object (java) has no subject (c++ object)
         throwException( env, JLIBICAL_ERR_CLIENT_INTERNAL );
         return(NULL);
-	}
+        }
 
-	return(result);
+        return(result);
 }
 
 //-------------------------------------------------------
@@ -91,7 +102,7 @@ void setCObjectPtr(JNIEnv *env, jobject surrogate, void* subject)
         return;
     }
 
-	env->SetLongField(surrogate,fid,(long)subject);
+        env->SetLongField(surrogate,fid,(long)subject);
 }
 
 //-------------------------------------------------------
@@ -100,14 +111,14 @@ void setCObjectPtr(JNIEnv *env, jobject surrogate, void* subject)
 //-------------------------------------------------------
 VComponent* getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType)
 {
-	VComponent* result = (VComponent*)(getCObjectPtr(env,surrogateComponent));
+        VComponent* result = (VComponent*)(getCObjectPtr(env,surrogateComponent));
 
-	if (result == NULL)
-	{
+        if (result == NULL)
+        {
         throwException(env, exceptionType );
-	}
+        }
 
-	return(result);
+        return(result);
 }
 
 //-------------------------------------------------------
@@ -116,14 +127,14 @@ VComponent* getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int 
 //-------------------------------------------------------
 ICalProperty* getSubjectAsICalProperty(JNIEnv *env, jobject surrogateProperty, int exceptionType)
 {
-	ICalProperty* result = (ICalProperty*)(getCObjectPtr(env,surrogateProperty));
+        ICalProperty* result = (ICalProperty*)(getCObjectPtr(env,surrogateProperty));
 
-	if (result == NULL)
-	{
+        if (result == NULL)
+        {
         throwException(env, exceptionType );
-	}
+        }
 
-	return(result);
+        return(result);
 }
 
 //-------------------------------------------------------
@@ -132,14 +143,14 @@ ICalProperty* getSubjectAsICalProperty(JNIEnv *env, jobject surrogateProperty, i
 //-------------------------------------------------------
 ICalValue* getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int exceptionType)
 {
-	ICalValue* result = (ICalValue*)(getCObjectPtr(env,surrogateValue));
+        ICalValue* result = (ICalValue*)(getCObjectPtr(env,surrogateValue));
 
-	if (result == NULL)
-	{
+        if (result == NULL)
+        {
         throwException( env, exceptionType );
-	}
+        }
 
-	return(result);
+        return(result);
 }
 
 //-------------------------------------------------------
@@ -148,134 +159,134 @@ ICalValue* getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int except
 //-------------------------------------------------------
 ICalParameter* getSubjectAsICalParameter(JNIEnv *env, jobject surrogateParameter, int exceptionType)
 {
-	ICalParameter* result = (ICalParameter*)(getCObjectPtr(env,surrogateParameter));
+        ICalParameter* result = (ICalParameter*)(getCObjectPtr(env,surrogateParameter));
 
-	if (result == NULL)
-	{
+        if (result == NULL)
+        {
         throwException( env, exceptionType );
-	}
+        }
 
-	return(result);
+        return(result);
 }
 
 //-------------------------------------------------------
 // Copy the data from the src (a java ICalTimeType object)
 // to the dest (a c struct icaltimetype*).
 // Returns true if success.  False if exception is thrown:
-//	- the src java object is not an ICalTimeType type
-//	- the dest c struct is null.
+//      - the src java object is not an ICalTimeType type
+//      - the dest c struct is null.
 //-------------------------------------------------------
 bool copyObjToicaltimetype(JNIEnv *env, jobject src, icaltimetype* dest)
 {
-	bool result = false;
+        bool result = false;
 
-	if (dest != NULL && env->IsInstanceOf(src,env->FindClass(JLIBICAL_CLASS_ICALTIMETYPE)))
-	{
-		jni_GetAll_from_ICalTimeType(dest, env, src);
-		result = true;
-	}
-	else
-	{
+        if (dest != NULL && env->IsInstanceOf(src,env->FindClass(JLIBICAL_CLASS_ICALTIMETYPE)))
+        {
+                jni_GetAll_from_ICalTimeType(dest, env, src);
+                result = true;
+        }
+        else
+        {
         throwException( env, JLIBICAL_ERR_ILLEGAL_ARGUMENT );
-	}
+        }
 
-	return(result);
+        return(result);
 }
 
 //-------------------------------------------------------
 // Copy the data from the src (a java ICalTriggerType object)
 // to the dest (a c struct icaltriggertype*).
 // Returns true if success.  False if exception is thrown:
-//	- the src java object is not an ICalTriggerType type
-//	- the dest c struct is null.
+//      - the src java object is not an ICalTriggerType type
+//      - the dest c struct is null.
 //-------------------------------------------------------
 bool copyObjToicaltriggertype(JNIEnv *env, jobject src, icaltriggertype* dest)
 {
-	bool result = false;
+        bool result = false;
 
-	if (dest != NULL && env->IsInstanceOf(src,env->FindClass(JLIBICAL_CLASS_ICALTRIGGERTYPE)))
-	{
-		jni_GetAll_from_ICalTriggerType(dest, env, src);
-		result = true;
-	}
-	else
-	{
+        if (dest != NULL && env->IsInstanceOf(src,env->FindClass(JLIBICAL_CLASS_ICALTRIGGERTYPE)))
+        {
+                jni_GetAll_from_ICalTriggerType(dest, env, src);
+                result = true;
+        }
+        else
+        {
         throwException( env, JLIBICAL_ERR_ILLEGAL_ARGUMENT );
-	}
+        }
 
-	return(result);
+        return(result);
 }
 
 //-------------------------------------------------------
 // Copy the data from the src (a java ICalDurationType object)
 // to the dest (a c struct icaldurationtype*).
 // Returns true if success.  False if exception is thrown:
-//	- the src java object is not an ICalDurationType type
-//	- the dest c struct is null.
+//      - the src java object is not an ICalDurationType type
+//      - the dest c struct is null.
 //-------------------------------------------------------
 bool copyObjToicaldurationtype(JNIEnv *env, jobject src, icaldurationtype* dest)
 {
-	bool result = false;
+        bool result = false;
 
-	if (dest != NULL && env->IsInstanceOf(src,env->FindClass(JLIBICAL_CLASS_ICALDURATIONTYPE)))
-	{
-		jni_GetAll_from_ICalDurationType(dest, env, src);
-		result = true;
-	}
-	else
-	{
+        if (dest != NULL && env->IsInstanceOf(src,env->FindClass(JLIBICAL_CLASS_ICALDURATIONTYPE)))
+        {
+                jni_GetAll_from_ICalDurationType(dest, env, src);
+                result = true;
+        }
+        else
+        {
         throwException( env, JLIBICAL_ERR_ILLEGAL_ARGUMENT );
-	}
+        }
 
-	return(result);
+        return(result);
 }
 
 //-------------------------------------------------------
 // Copy the data from the src (a java ICalRecurrenceType object)
 // to the dest (a c struct icalrecurrencetype*).
 // Returns true if success.  False if exception is thrown:
-//	- the src java object is not an ICalRecurrenceType type
-//	- the dest c struct is null.
+//      - the src java object is not an ICalRecurrenceType type
+//      - the dest c struct is null.
 //-------------------------------------------------------
 bool copyObjToicalrecurrencetype(JNIEnv *env, jobject src, icalrecurrencetype* dest)
 {
-	bool result = false;
+        bool result = false;
 
-	if (dest != NULL && env->IsInstanceOf(src,env->FindClass(JLIBICAL_CLASS_ICALRECURRENCETYPE)))
-	{
-		jni_GetAll_from_ICalRecurrenceType(dest, env, src);
-		result = true;
-	}
-	else
-	{
+        if (dest != NULL && env->IsInstanceOf(src,env->FindClass(JLIBICAL_CLASS_ICALRECURRENCETYPE)))
+        {
+                jni_GetAll_from_ICalRecurrenceType(dest, env, src);
+                result = true;
+        }
+        else
+        {
         throwException( env, JLIBICAL_ERR_ILLEGAL_ARGUMENT );
-	}
+        }
 
-	return(result);
+        return(result);
 }
 
 //-------------------------------------------------------
 // Copy the data from the src (a java ICalPeriodType object)
 // to the dest (a c struct icalperiodtype*).
 // Returns true if success.  False if exception is thrown:
-//	- the src java object is not an ICalPeriodType type
-//	- the dest c struct is null.
+//      - the src java object is not an ICalPeriodType type
+//      - the dest c struct is null.
 //-------------------------------------------------------
 bool copyObjToicalperiodtype(JNIEnv *env, jobject src, icalperiodtype* dest)
 {
-	bool result = false;
+        bool result = false;
 
-	if (dest != NULL && env->IsInstanceOf(src,env->FindClass(JLIBICAL_CLASS_ICALPERIODTYPE)))
-	{
-		jni_GetAll_from_ICalPeriodType(dest, env, src);
-		result = true;
-	}
-	else
-	{
+        if (dest != NULL && env->IsInstanceOf(src,env->FindClass(JLIBICAL_CLASS_ICALPERIODTYPE)))
+        {
+                jni_GetAll_from_ICalPeriodType(dest, env, src);
+                result = true;
+        }
+        else
+        {
         throwException( env, JLIBICAL_ERR_ILLEGAL_ARGUMENT );
-	}
+        }
 
-	return(result);
+        return(result);
 }
 
 //-------------------------------------------------------
@@ -285,21 +296,21 @@ bool copyObjToicalperiodtype(JNIEnv *env, jobject src, icalperiodtype* dest)
 //-------------------------------------------------------
 jobject createNewVComponentSurrogate(JNIEnv *env, VComponent* subject)
 {
-	char* classname = JLIBICAL_CLASS_VCOMPONENT;
-	if (dynamic_cast<VAlarm*>(subject))
-		classname = JLIBICAL_CLASS_VALARM;
-	else if (dynamic_cast<VCalendar*>(subject))
-		classname = JLIBICAL_CLASS_VCALENDAR;
-	else if (dynamic_cast<VEvent*>(subject))
-		classname = JLIBICAL_CLASS_VEVENT;
-	else if (dynamic_cast<VQuery*>(subject))
-		classname = JLIBICAL_CLASS_VQUERY;
-	else if (dynamic_cast<VToDo*>(subject))
-		classname = JLIBICAL_CLASS_VTODO;
+        char* classname = JLIBICAL_CLASS_VCOMPONENT;
+        if (dynamic_cast<VAlarm*>(subject))
+                classname = JLIBICAL_CLASS_VALARM;
+        else if (dynamic_cast<VCalendar*>(subject))
+                classname = JLIBICAL_CLASS_VCALENDAR;
+        else if (dynamic_cast<VEvent*>(subject))
+                classname = JLIBICAL_CLASS_VEVENT;
+        else if (dynamic_cast<VQuery*>(subject))
+                classname = JLIBICAL_CLASS_VQUERY;
+        else if (dynamic_cast<VToDo*>(subject))
+                classname = JLIBICAL_CLASS_VTODO;
         else if (dynamic_cast<VAgenda*>(subject))
                 classname = JLIBICAL_CLASS_VAGENDA;
 
-	return(doCreateNewSurrogate(env,env->FindClass(classname),(jlong)subject));
+        return(doCreateNewSurrogate(env,env->FindClass(classname),(jlong)subject));
 }
 
 //-------------------------------------------------------
@@ -309,7 +320,7 @@ jobject createNewVComponentSurrogate(JNIEnv *env, VComponent* subject)
 //-------------------------------------------------------
 jobject createNewICalPropertySurrogate(JNIEnv *env, ICalProperty* subject)
 {
-	return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALPROPERTY),(jlong)subject));
+        return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALPROPERTY),(jlong)subject));
 }
 
 //-------------------------------------------------------
@@ -319,7 +330,7 @@ jobject createNewICalPropertySurrogate(JNIEnv *env, ICalProperty* subject)
 //-------------------------------------------------------
 jobject createNewICalValueSurrogate(JNIEnv *env, ICalValue* subject)
 {
-	return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALVALUE),(jlong)subject));
+        return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALVALUE),(jlong)subject));
 }
 
 //-------------------------------------------------------
@@ -329,7 +340,7 @@ jobject createNewICalValueSurrogate(JNIEnv *env, ICalValue* subject)
 //-------------------------------------------------------
 jobject createNewICalParameterSurrogate(JNIEnv *env, ICalParameter* subject)
 {
-	return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALPARAMETER),(jlong)subject));
+        return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALPARAMETER),(jlong)subject));
 }
 
 //-------------------------------------------------------
@@ -340,7 +351,7 @@ jobject createNewICalParameterSurrogate(JNIEnv *env, ICalParameter* subject)
 //-------------------------------------------------------
 jobject createNewICalTimeType(JNIEnv *env, icaltimetype* source)
 {
-	return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALTIMETYPE),(jlong)source));
+        return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALTIMETYPE),(jlong)source));
 }
 
 //-------------------------------------------------------
@@ -351,7 +362,7 @@ jobject createNewICalTimeType(JNIEnv *env, icaltimetype* source)
 //-------------------------------------------------------
 jobject createNewICalTriggerType(JNIEnv *env, icaltriggertype* source)
 {
-	return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALTRIGGERTYPE),(jlong)source));
+        return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALTRIGGERTYPE),(jlong)source));
 }
 
 //-------------------------------------------------------
@@ -362,7 +373,7 @@ jobject createNewICalTriggerType(JNIEnv *env, icaltriggertype* source)
 //-------------------------------------------------------
 jobject createNewICalDurationType(JNIEnv *env, icaldurationtype* source)
 {
-	return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALDURATIONTYPE),(jlong)source));
+        return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALDURATIONTYPE),(jlong)source));
 }
 
 //-------------------------------------------------------
@@ -373,7 +384,7 @@ jobject createNewICalDurationType(JNIEnv *env, icaldurationtype* source)
 //-------------------------------------------------------
 jobject createNewICalRecurrenceType(JNIEnv *env, icalrecurrencetype* source)
 {
-	return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALRECURRENCETYPE),(jlong)source));
+        return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALRECURRENCETYPE),(jlong)source));
 }
 
 //-------------------------------------------------------
@@ -384,7 +395,7 @@ jobject createNewICalRecurrenceType(JNIEnv *env, icalrecurrencetype* source)
 //-------------------------------------------------------
 jobject createNewICalPeriodType(JNIEnv *env, icalperiodtype* source)
 {
-	return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALPERIODTYPE),(jlong)source));
+        return(doCreateNewSurrogate(env,env->FindClass(JLIBICAL_CLASS_ICALPERIODTYPE),(jlong)source));
 }
 
 //-------------------------------------------------------
@@ -392,66 +403,66 @@ jobject createNewICalPeriodType(JNIEnv *env, icalperiodtype* source)
 //-------------------------------------------------------
 jobject doCreateNewSurrogate(JNIEnv *env, jclass surrogateClass, jlong subject)
 {
-	jobject result = NULL;
+        jobject result = NULL;
 
-	if (subject != NULL)
-	{
-		jmethodID jconstructorID = env->GetMethodID(surrogateClass, "<init>", "(J)V");
+        if (subject != NULL)
+        {
+                jmethodID jconstructorID = env->GetMethodID(surrogateClass, "<init>", "(J)V");
 
-		result = env->NewObject(surrogateClass, jconstructorID, subject);
-	}
+                result = env->NewObject(surrogateClass, jconstructorID, subject);
+        }
 
-	return(result);
+        return(result);
 }
 
 
 //-------------------------------------------------------
 // For the given cpErr, create a new Exception and send it to env.
 // Note: Throw does not throw anything.  It only sets the state.
-//		The JVM will check this and throw an exception later.
+//              The JVM will check this and throw an exception later.
 //-------------------------------------------------------
 void throwException(JNIEnv *env, int cpErr)
 {
-	jclass jexceptionClass;
-	jthrowable jexceptionObj;
-	jmethodID jconstructorID;
-	const char* exClassName;
+        jclass jexceptionClass;
+        jthrowable jexceptionObj;
+        jmethodID jconstructorID;
+        const char* exClassName;
 
-	if (env->ExceptionOccurred())
-	{
-		return;
-	}
+        if (env->ExceptionOccurred())
+        {
+                return;
+        }
 
     switch ( cpErr )
     {
     case JLIBICAL_ERR_NETWORK:
             exClassName = "net.cp.jlibical/JLCNetworkException";
-	    break;
+            break;
 
     case JLIBICAL_ERR_SERVER_INTERNAL:
             exClassName = "net.cp.jlibical/JLCServerInternalException";
-	    break;
+            break;
 
     case JLIBICAL_ERR_CLIENT_INTERNAL:
             exClassName = "net.cp.jlibical/JLCClientInternalException";
-	    break;
+            break;
 
     case JLIBICAL_ERR_ILLEGAL_ARGUMENT:
             exClassName = "net.cp.jlibical/JLCIllegalArgumentException";
-	    break;
+            break;
 
     case JLIBICAL_ERR_API_NOT_INITED:
             exClassName = "net.cp.jlibical/JLCNotInitedException";
-	    break;
+            break;
 
     case JLIBICAL_ERR_HOST_INVALID:
             exClassName = "net.cp.jlibical/JLCHostInvalidException";
-	    break;
+            break;
 
     default:
             exClassName = "net.cp.jlibical/JLCClientInternalException";
-	    printf("*** JLIBICAL JNI throwException: unknown error code: %d\n", cpErr );
-	    break;
+            printf("*** JLIBICAL JNI throwException: unknown error code: %d\n", cpErr );
+            break;
     }
 
     env->ThrowNew(env->FindClass(exClassName),"");

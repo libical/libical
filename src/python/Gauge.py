@@ -1,28 +1,21 @@
 #!/usr/bin/env python
-# -*- Mode: python -*-
 #======================================================================
 # FILE: Gauge.py
 # CREATOR: mtearle
 #
-# DESCRIPTION:
-#
-#
-#  $Id: Gauge.py,v 1.2 2002-07-08 17:56:11 acampi Exp $
-#  $Locker:  $
-#
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
 # (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>
 #
-# This program is free software; you can redistribute it and/or modify
+# This library is free software; you can redistribute it and/or modify
 # it under the terms of either:
 #
-#    The LGPL as published by the Free Software Foundation, version
-#    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+#   The LGPL as published by the Free Software Foundation, version
+#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.txt
 #
-#  Or:
+# Or:
 #
-#    The Mozilla Public License Version 1.0. You may obtain a copy of
-#    the License at http://www.mozilla.org/MPL/
+#   The Mozilla Public License Version 2.0. You may obtain a copy of
+#   the License at http://www.mozilla.org/MPL/
 #======================================================================
 
 from LibicalWrap import *

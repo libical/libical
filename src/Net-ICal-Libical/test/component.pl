@@ -1,4 +1,19 @@
 #!/usr/bin/perl
+#======================================================================
+# (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+#     http://www.softwarestudio.org
+#
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
+#
+#   The LGPL as published by the Free Software Foundation, version
+#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.txt
+#
+# Or:
+#
+#   The Mozilla Public License Version 2.0. You may obtain a copy of
+#   the License at http://www.mozilla.org/MPL/
+#======================================================================
 
 use lib "../blib/lib";
 use lib "../blib/arch";
@@ -8,7 +23,7 @@ use Time::Local;
 
 use Net::ICal::Libical;
 
-use POSIX; 
+use POSIX;
 
 
   my $comp_str=<<EOM;
@@ -38,9 +53,9 @@ SUMMARY
 UID
  :0981234-1234234-23\@example.com
 END:VEVENT
-END:VCALENDAR         
+END:VCALENDAR
 EOM
-  
+
 my $c;
 
 $c = new Net::ICal::Libical::Component($comp_str);
@@ -50,7 +65,7 @@ my @props = $c->properties();
 my $p;
 foreach $p (@props) {
   print $p->name()." ".$p->value()."\n";
-  
+
 }
 
 $inner = ($c->components())[0];
@@ -101,6 +116,3 @@ $p->seconds(3630);
 
 print $p->as_ical_string()."\n";
 print $p->seconds(),"\n";
-
-
-
