@@ -21,15 +21,7 @@ endif()
 
 add_custom_target(
   icalss-header ALL
-  COMMAND
-  ${CMAKE_COMMAND}
-    -DTOPS:FILEPATH=${TOPS}
-    -DTOPB:FILEPATH=${TOPB}
-    -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
-    -DBDB_FOUND=${BDB_FOUND}
-    -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
-  DEPENDS
-  ical-header
+  DEPENDS ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
 )
 
 ########### next target ###############
@@ -71,6 +63,19 @@ if(BDB_FOUND)
     icalbdbsetimpl.h
   )
 endif()
+
+add_custom_command(
+  OUTPUT
+    ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+  COMMAND
+  ${CMAKE_COMMAND}
+    -DTOPS:FILEPATH=${TOPS}
+    -DTOPB:FILEPATH=${TOPB}
+    -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+    -DBDB_FOUND=${BDB_FOUND}
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
+  DEPENDS ${icalss_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
+)
 
 add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
 add_dependencies(icalss icalss-header)
