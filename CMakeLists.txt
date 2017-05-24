@@ -53,8 +53,8 @@
 #  Default=false (use the default size of time_t)
 #
 # -DUSE_INTEROPERABLE_VTIMEZONES=[true|false]
-#  Set to use inter-operable rather than exact vtimezones.
-#  Default=false (build exact vtimezones)
+#  Unset to use exact rather than inter-operable VTIMEZONEs.
+#  Default=True (inter-operable VTIMEZONEs)
 #  Notes:
 #   Change the behavior at runtime using the icaltzutil_set_exact_vtimezones_support() function.
 #   Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.
@@ -222,7 +222,7 @@ if(WIN32 OR WINCE)
   endif()
 endif()
 
-option(USE_INTEROPERABLE_VTIMEZONES "use interoperable rather than exact vtimezones." False)
+option(USE_INTEROPERABLE_VTIMEZONES "use inter-operable rather than exact vtimezones." True)
 if(USE_INTEROPERABLE_VTIMEZONES)
   set(USE_INTEROPERABLE_VTIMEZONES 1)
 else()

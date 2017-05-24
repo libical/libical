@@ -125,8 +125,8 @@ Use these CMake options to adjust the library behavior as follows:
    ALWAYS true on Windows systems
 
  * USE_INTEROPERABLE_VTIMEZONES=[true|false]
-   Set to use inter-operable rather than exact VTIMEZONEs.
-   Default=false (build exact VTIMEZONEs)
+   Unset to use exact rather than inter-operable VTIMEZONEs.
+   Default=True (inter-operable VTIMEZONEs)
    Notes:
      Change the behavior at runtime using the icaltzutil_set_exact_vtimezones_support() function.
      Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.
