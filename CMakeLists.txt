@@ -52,13 +52,6 @@
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
 #
-# -DUSE_INTEROPERABLE_VTIMEZONES=[true|false]
-#  Unset to use exact rather than inter-operable VTIMEZONEs.
-#  Default=True (inter-operable VTIMEZONEs)
-#  Notes:
-#   Change the behavior at runtime using the icaltzutil_set_exact_vtimezones_support() function.
-#   Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.
-#
 
 ## Special CMake Options for Developers
 #
@@ -220,13 +213,6 @@ if(WIN32 OR WINCE)
     message(STATUS "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata")
     set(USE_BUILTIN_TZDATA 1)
   endif()
-endif()
-
-option(USE_INTEROPERABLE_VTIMEZONES "use inter-operable rather than exact vtimezones." True)
-if(USE_INTEROPERABLE_VTIMEZONES)
-  set(USE_INTEROPERABLE_VTIMEZONES 1)
-else()
-  set(USE_INTEROPERABLE_VTIMEZONES 0)
 endif()
 
 include(ConfigureChecks.cmake)
