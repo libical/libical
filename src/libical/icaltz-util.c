@@ -266,12 +266,12 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     icaltimetype prev_daylight_time = icaltime_null_time();
     icaltimetype prev_prev_standard_time;
     icaltimetype prev_prev_daylight_time;
-    long prev_standard_gmtoff;
-    long prev_daylight_gmtoff;
+    long prev_standard_gmtoff = 0;
+    long prev_daylight_gmtoff = 0;
     icalcomponent *cur_standard_comp = NULL;
     icalcomponent *cur_daylight_comp = NULL;
-    icalproperty *cur_standard_rrule_property;
-    icalproperty *cur_daylight_rrule_property;
+    icalproperty *cur_standard_rrule_property = NULL;
+    icalproperty *cur_daylight_rrule_property = NULL;
 
     if (icaltimezone_get_builtin_tzdata()) {
         goto error;
