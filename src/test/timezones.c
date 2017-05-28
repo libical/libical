@@ -57,6 +57,7 @@ int main()
     for (i = 0; i < timezones->num_elements; i++) {
         zone = (icaltimezone *)icalarray_element_at(timezones, i);
         zone_location = (char *)icaltimezone_get_location(zone);
+        zonedef_printed = 0;
         if (!zone_location)
             continue;
 
@@ -136,7 +137,7 @@ int main()
                 printf("\n");
                 failed = curr_failed;
 
-                if (!zonedef_printed) {
+                if (failed && !zonedef_printed) {
                     icalcomponent *comp = icaltimezone_get_component(zone);
 
                     if (comp) {
@@ -158,13 +159,6 @@ int main()
         percent_failed = total_failed * 100 / (total_failed + total_okay);
         printf(" *** Summary: %lu zones tested, %u days failed, %u okay => %u%% failed ***\n",
                (unsigned long)timezones->num_elements, total_failed, total_okay, percent_failed);
-
-        if (!icaltzutil_get_exact_vtimezones_support()) {
-            if (!percent_failed) {
-                ret = 0;
-                printf(" *** Expect some small error rate with inter-operable vtimezones *** \n");
-            }
-       }
     }
 
     icaltimezone_free_builtin_timezones();

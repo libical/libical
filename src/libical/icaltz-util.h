@@ -32,10 +32,4 @@ LIBICAL_ICAL_EXPORT const char *icaltzutil_get_zone_directory(void);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icaltzutil_fetch_timezone(const char *location);
 
-/* set @p on to 0 if inter-operable vtimezones are desired; else exact timezones are in-effect */
-LIBICAL_ICAL_EXPORT void icaltzutil_set_exact_vtimezones_support(int on);
-
-/* return 1 if exact vtimezones are in-effect; else inter-operable vtimezones are in-effect */
-LIBICAL_ICAL_EXPORT int icaltzutil_get_exact_vtimezones_support(void);
-
 #endif

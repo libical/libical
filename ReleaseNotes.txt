@@ -4,9 +4,7 @@ Release Highlights
 Version 3.0.0:
 --------------
  * Requires CMake v3.1.0 or higher
- * By default, inter-operable VTIMEZONEs are used.
-   => to change back to exact VTIMEZONEs, pass -DUSE_INTEROPERABLE_VTIMEZONES=False to CMake
-   => to change runtime behavior, see the new icaltzutil_set_exact_vtimezones_support function.
+ * More accurate VTIMEZONE generation when using the system time zone data (when USE_BUILTIN_TZDATA=False)
  * icalvalue_as_ical_string() returns "TRUE" (non-zero) or "FALSE" (zero) values only.
  * New icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
  * Better value type checking of property values when parsing

@@ -124,13 +124,6 @@ Use these CMake options to adjust the library behavior as follows:
    Default=false (use the system timezone data on non-Windows systems)
    ALWAYS true on Windows systems
 
- * USE_INTEROPERABLE_VTIMEZONES=[true|false]
-   Unset to use exact rather than inter-operable VTIMEZONEs.
-   Default=True (inter-operable VTIMEZONEs)
-   Notes:
-     Change the behavior at runtime using the icaltzutil_set_exact_vtimezones_support() function.
-     Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.
-
 == Tweaking the Installation Directories ==
 By default, the installation layout is according to the GNU standard installation directories.
 http://www.gnu.org/prep/standards/html_node/Directory-Variables.html
