@@ -140,7 +140,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
 
     p2 = strchr(p1 + 1, ';');
     if (p2 != 0 && *p2 != 0) {
-        stat.debug = p2 + 1;
+        stat.debug = icalmemory_tmp_copy(p2 + 1);
     }
 
     return stat;
