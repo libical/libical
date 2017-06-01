@@ -14,7 +14,10 @@
 #  ICO_MINOR_VERSION  - ICU minor version
 #
 
-set_package_info(ICU "libicu (International Components for Unicode) libraries" "http://www.icu-project.org")
+set_package_properties(ICU PROPERTIES
+  DESCRIPTION "libicu (International Components for Unicode) libraries"
+  URL "http://www.icu-project.org"
+)
 
 if(WIN32)
   file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _program_FILES_DIR)
