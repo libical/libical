@@ -51,8 +51,8 @@ macro(gir_add_introspections introspections_girs)
 
     add_custom_command(
       COMMAND ${CMAKE_COMMAND} -E env "CC='${CMAKE_C_COMPILER}'"
-              ${INTROSPECTION_SCANNER}
-              ${INTROSPECTION_SCANNER_ARGS}
+              ${GObjectIntrospection_SCANNER}
+              ${GObjectIntrospection_SCANNER_ARGS}
               --namespace=${_gir_namespace}
               --nsversion=${_gir_version}
               ${_gir_libtool}
@@ -76,8 +76,8 @@ macro(gir_add_introspections introspections_girs)
 
     string(REPLACE ".gir" ".typelib" _typelib "${gir}")
     add_custom_command(
-      COMMAND ${INTROSPECTION_COMPILER}
-              ${INTROSPECTION_COMPILER_ARGS}
+      COMMAND ${GObjectIntrospection_COMPILER}
+              ${GObjectIntrospection_COMPILER_ARGS}
               --includedir=.
               ${CMAKE_CURRENT_BINARY_DIR}/${gir}
               -o ${CMAKE_CURRENT_BINARY_DIR}/${_typelib}

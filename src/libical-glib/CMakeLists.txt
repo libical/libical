@@ -120,17 +120,17 @@ if(HAVE_INTROSPECTION)
   include(GObjectIntrospectionMacros)
   set(LIBICAL_GLIB_GIR_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
 
-  set(INTROSPECTION_GIRS)
-  set(INTROSPECTION_SCANNER_FLAGS)
-  set(INTROSPECTION_SCANNER_ARGS)
-  set(INTROSPECTION_COMPILER_ARGS)
+  set(GObjectIntrospection_GIRS)
+  set(GObjectIntrospection_SCANNER_FLAGS)
+  set(GObjectIntrospection_SCANNER_ARGS)
+  set(GObjectIntrospection_COMPILER_ARGS)
   set(LIB_VERSION)
 
   set(LIB_VERSION ${LIBICAL_GLIB_GIR_VERSION_STRING})
   string(REPLACE "." "_" LIB_VERSION "${LIB_VERSION}")
   string(REPLACE "-" "_" LIB_VERSION "${LIB_VERSION}")
 
-  set(INTROSPECTION_SCANNER_ARGS
+  set(GObjectIntrospection_SCANNER_ARGS
     --add-include-path=${CMAKE_CURRENT_BINARY_DIR}
     --add-include-path=${CMAKE_CURRENT_SOURCE_DIR}
     --add-include-path=${CMAKE_BINARY_DIR}/src
@@ -161,9 +161,9 @@ if(HAVE_INTROSPECTION)
   set(ICalGLib_${LIB_VERSION}_gir_LIBS ical-glib)
   set(ICalGLib_${LIB_VERSION}_gir_FILES ${LIBICAL_GLIB_GIR_SOURCES})
 
-  list(APPEND INTROSPECTION_GIRS ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
+  list(APPEND GObjectIntrospection_GIRS ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
 
-  gir_add_introspections(INTROSPECTION_GIRS)
+  gir_add_introspections(GObjectIntrospection_GIRS)
 endif()
 
 if(ICAL_GLIB_VAPI)

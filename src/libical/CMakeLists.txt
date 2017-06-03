@@ -161,9 +161,9 @@ add_custom_target(
 # GObject Introspection
 if(HAVE_INTROSPECTION)
   include(GObjectIntrospectionMacros)
-  set(INTROSPECTION_GIRS)
-  #set(INTROSPECTION_SCANNER_ARGS "--add-include-path=${CMAKE_CURRENT_SOURCE_DIR}")
-  #set(INTROSPECTION_COMPILER_ARGS "--includedir=${CMAKE_CURRENT_SOURCE_DIR}")
+  set(GObjectIntrospection_GIRS)
+  #set(GObjectIntrospection_SCANNER_ARGS "--add-include-path=${CMAKE_CURRENT_SOURCE_DIR}")
+  #set(GObjectIntrospection_COMPILER_ARGS "--includedir=${CMAKE_CURRENT_SOURCE_DIR}")
 
   set(LIB_VERSION ${LIBICAL_LIB_VERSION_STRING})
   string(REPLACE "." "_" LIB_VERSION "${LIB_VERSION}")
@@ -171,16 +171,16 @@ if(HAVE_INTROSPECTION)
 
   set(libical_${LIB_VERSION}_gir "libical")
   set(libical_${LIB_VERSION}_gir_VERSION ${LIBICAL_LIB_VERSION_STRING})
-  set(INTROSPECTION_SCANNER_ARGS -I${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_BINARY_DIR}/src/libical/ical.h)
+  set(GObjectIntrospection_SCANNER_ARGS -I${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_BINARY_DIR}/src/libical/ical.h)
   set(libical_${LIB_VERSION}_gir_LIBRARY "ical")
   set(libical_${LIB_VERSION}_gir_INCLUDES GObject-2.0)
   set(_includes ${_includes} "-L${LIBRARY_OUTPUT_PATH}")
   set(libical_${LIB_VERSION}_gir_CFLAGS ${_includes})
   set(libical_${LIB_VERSION}_gir_LIBS ical)
 
-  list(APPEND INTROSPECTION_GIRS libical-${LIBICAL_LIB_VERSION_STRING}.gir)
+  list(APPEND GObjectIntrospection_GIRS libical-${LIBICAL_LIB_VERSION_STRING}.gir)
 
-  gir_add_introspections(INTROSPECTION_GIRS)
+  gir_add_introspections(GObjectIntrospection_GIRS)
 endif()
 
 ########### next target ###############

@@ -229,7 +229,12 @@ set(MIN_GOBJECT_INTROSPECTION "0.6.7")
 option(GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher.")
 if(GOBJECT_INTROSPECTION)
   find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
-  if(INTROSPECTION_FOUND)
+  set_package_properties(GObjectIntrospection PROPERTIES
+    TYPE REQUIRED
+    URL "https://wiki.gnome.org/Projects/GObjectIntrospection"
+    PURPOSE "Required in order to build the GObject introspection \"typelib\" files.\n   (due to the -DGOBJECT_INTROSPECTION=True CMake option)"
+  )
+  if(GObjectIntrospection_FOUND)
     set(HAVE_INTROSPECTION TRUE)
     if(STATIC_ONLY)
       message(FATAL_ERROR "You are attempting to build with GObject Introspection enabled, however that option is not supported when building static libraries only. Please disable the static only option to CMake (-DSTATIC_ONLY=False) if you really want to build with GObject Introspection. Alternatively, you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to CMake)")
