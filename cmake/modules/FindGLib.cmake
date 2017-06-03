@@ -6,6 +6,11 @@
 #  GLIB_CFLAGS
 #  GLIB_LIBRARIES
 
+set_package_properties(GLib PROPERTIES
+  DESCRIPTION "A library of handy utility functions"
+  URL "http://www.gtk.org"
+)
+
 find_package(PkgConfig)
 if(PKG_CONFIG_FOUND)
   if(PACKAGE_FIND_VERSION_COUNT GREATER 0)
