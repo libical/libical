@@ -25,12 +25,6 @@
 
 using namespace LibICal;
 
-/** @brief Construct an ICalSpanList from an icalset
-    @param set     The icalset containing the VEVENTS
-    @param start   Designated start of the spanlist
-    @param end     Designated end of the spanlist
-*/
-
 ICalSpanList::ICalSpanList() throw(icalerrorenum)
     : data(0)
 {
@@ -45,6 +39,11 @@ ICalSpanList::ICalSpanList(const ICalSpanList &v) throw(icalerrorenum)
     }
 }
 
+/** Construct an ICalSpanList from an icalset
+    @param set     The icalset containing the VEVENTS
+    @param start   Designated start of the spanlist
+    @param end     Designated end of the spanlist
+*/
 ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) throw(icalerrorenum)
     : data(icalspanlist_new(set, start, end))
 {
