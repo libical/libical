@@ -332,26 +332,28 @@ calendar =
             icalproperty_vanew_organizer(
                 "mrbig@host.com",
                 icalparameter_new_role(ICAL_ROLE_CHAIR),
-                0),
+                NULL),
             icalproperty_vanew_attendee(
                 "employee-A@host.com",
                 icalparameter_new_role(
                     ICAL_ROLE_REQPARTICIPANT),
                 icalparameter_new_rsvp(1),
                 icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
-                0),
+                NULL),
             icalproperty_new_location(
                "1CP Conference Room 4350"),
-            0),
-        0);
+            NULL),
+        NULL);
 ```
 
 This form is similar to the constructor form, except that the constructors
 have `vanew` instead of `new` in the name. The arguments are similar
 too, except that the component constructor can have a list of properties,
-and the property constructor can have a list of parameters. *Be sure
-to terminate every list with a '0', or your code will crash, if you
-are lucky*.
+and the property constructor can have a list of parameters. 
+
+*Be sure to terminate every list with a `NULL` (or a *`(void 0)`*, or your code 
+will crash, if you are lucky*. The reason you can't use 0 itself is that
+depending on what platform you are on, `sizeof(int) ≠ sizeof(void*)`.
 
 #### 5.1.3 Parsing Text Files
 
