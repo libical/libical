@@ -1,7 +1,8 @@
 # Using Libical
 
->   Eric Busboom (eric@softwarestudio.org)
->   January 2001
+>   Author: Eric Busboom <eric@softwarestudio.org>
+>   
+>   Date: January 2001
 
 ## 1 Introduction
 
@@ -87,41 +88,23 @@ will look something like:
 
 ```ical
 BEGIN:VCALENDAR
-
 METHOD:REQUEST
-
 PRODID: -//hacksw/handcal//NONSGML v1.0//EN
-
 BEGIN:VEVENT
-
 DTSTAMP:19980309T231000Z
-
 UID:guid-1.host1.com
-
 ORGANIZER;ROLE=CHAIR:MAILTO:mrbig@host.com
-
 ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:
-
   MAILTO:employee-A@host.com
-
 DESCRIPTION:Project XYZ Review Meeting
-
 CATEGORIES:MEETING
-
 CLASS:PUBLIC
-
 CREATED:19980309T130000Z
-
 SUMMARY:XYZ Project Review
-
 DTSTART;TZID=US-Eastern:19980312T083000
-
 DTEND;TZID=US-Eastern:19980312T093000
-
 LOCATION:1CP Conference Room 4350
-
 END:VEVENT
-
 END:VCALENDAR
 ```
 
@@ -210,15 +193,13 @@ like components, but are not defined as components in the specification.
 group properties within the `VTIMEZONE` components. For instanace, the
 timezone properties associated with daylight savings time starts with
 `BEGIN:DAYLIGHT` and ends with `END:DAYLIGHT`, just like other components,
-but is not defined as a component in 
-[RFC5545](https://tools.ietf.org/html/rfc5545) 
-(see [section 3.6.5](https://tools.ietf.org/html/rfc5545#section-3.6.5))
+but is not defined as a component in [RFC5545][] (see [section 3.6.5][RFC5545 3.6.5])
 In libical, this grouping is represented by the `XDAYLIGHT` component.
 Standard iCal components all start with the letter "V," while pseudo
 components start with "X."
 
 There are also pseudo components that are conceptually derived classes
-of `VALARM`. RFC5546 defines what properties may be included in each
+of `VALARM`. [RFC5546][] defines what properties may be included in each
 component, and for `VALARM`, the set of properties it may have depends
 on the value of the `ACTION` property.
 
@@ -230,6 +211,8 @@ a `DESCRIPTION` property.
 To handle these various, complex restrictions, libical has pseudo components
 for each type of alarm: `XAUDIOALARM`, `XDISPLAYALARM`, `XEMAILALARM` and
 `XPROCEDUREALARM`.
+
+[RFC5545 3.6.5]: <https://tools.ietf.org/html/rfc5545#section-3.6.5>
 
 ### 4.2 Combined Values
 
@@ -290,30 +273,26 @@ and then assemble them in to components:
 
 ```c
 icalcomponent *event;
-
 icalproperty *prop;
-
 icalparameter *param;
-
 struct icaltimetype atime;
 
+// create new VEVENT component
 event = icalcomponent_new(ICAL_VEVENT_COMPONENT);
 
-prop = icalproperty_new_dtstamp(atime) ;
-
+// add DTSTAMP property to the event
+prop = icalproperty_new_dtstamp(atime);
 icalcomponent_add_property(event, prop);
 
-prop = icalproperty_new_uid("guid-1.host1.com");
+// add UID property to the event
+prop = icalproperty_new_uid("guid-1.example.com");
+icalcomponent_add_property(event, prop);
 
-icalcomponent_add_property(event,prop);
-
-prop=icalproperty_new_organizer("mrbig@host.com");
-
-param = icalparameter_new_role(ICAL_ROLE_CHAIR)
-
+// add ORGANIZER (with ROLE=CHAIR) to the event
+prop = icalproperty_new_organizer("mrbig@example.com");
+param = icalparameter_new_role(ICAL_ROLE_CHAIR);
 icalproperty_add_parameter(prop, param);
-
-icalcomponent_add_property(event,prop);
+icalcomponent_add_property(event, prop);
 ```
 
 Notice that libical uses a semi-object-oriented style of interface.
@@ -329,7 +308,7 @@ reference, libical will either silently ignore the error or will abort
 with an error message. This behavior is controlled by a compile time
 flag (`ICAL_ERRORS_ARE_FATAL`), and will abort by default.
 
-5.1.2 varargs Constructors
+#### 5.1.2 varargs Constructors
 
 There is another way to create complex components, which is arguably
 more elegant, if you are not horrified by varargs. The varargs constructor
@@ -337,71 +316,42 @@ interface allows you to create intricate components in a single block
 of code. Here is the previous examples in the vaargs style.
 
 ```c
-    calendar =
+icalcomponent *calendar;
+struct icaltimetype atime;
 
+calendar =
+    icalcomponent_vanew(
+        ICAL_VCALENDAR_COMPONENT,
+        icalproperty_new_version("2.0"),
+        icalproperty_new_prodid(
+             "-//RDU Software//NONSGML HandCal//EN"),
         icalcomponent_vanew(
-
-            ICAL_VCALENDAR_COMPONENT,
-
-            icalproperty_new_version(''2.0''),
-
-            icalproperty_new_prodid(
-
-                 ''-//RDU Software//NONSGML HandCal//EN''),
-
-            icalcomponent_vanew(
-
-                ICAL_VEVENT_COMPONENT,
-
-                icalproperty_new_dtstamp(atime),
-
-                icalproperty_new_uid(''guid-1.host1.com''),
-
-                icalproperty_vanew_organizer(
-
-                    ''mrbig@host.com''),
-
-                    icalparameter_new_role(ICAL_ROLE_CHAIR),
-
-                    0
-
-                    ),
-
-                icalproperty_vanew_attendee(
-
-                    ''employee-A@host.com'',
-
-                    icalparameter_new_role(
-
-                        ICAL_ROLE_REQPARTICIPANT),
-
-                    icalparameter_new_rsvp(1),
-
-                    icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
-
-                    0
-
-                    ),
-
-                icalproperty_new_location(
-
-                   "1CP Conference Room 4350"),
-
-                0
-
-                ),
-
-            0
-
-            );
+            ICAL_VEVENT_COMPONENT,
+            icalproperty_new_dtstamp(atime),
+            icalproperty_new_uid("guid-1.host1.com"),
+            icalproperty_vanew_organizer(
+                "mrbig@host.com",
+                icalparameter_new_role(ICAL_ROLE_CHAIR),
+                0),
+            icalproperty_vanew_attendee(
+                "employee-A@host.com",
+                icalparameter_new_role(
+                    ICAL_ROLE_REQPARTICIPANT),
+                icalparameter_new_rsvp(1),
+                icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
+                0),
+            icalproperty_new_location(
+               "1CP Conference Room 4350"),
+            0),
+        0);
 ```
 
 This form is similar to the constructor form, except that the constructors
-have "vanew" instead of "new" in the name. The arguments are similar
+have `vanew` instead of `new` in the name. The arguments are similar
 too, except that the component constructor can have a list of properties,
-and the property constructor can have a list of parameters. Be sure
+and the property constructor can have a list of parameters. *Be sure
 to terminate every list with a '0', or your code will crash, if you
-are lucky.
+are lucky*.
 
 #### 5.1.3 Parsing Text Files
 
@@ -425,13 +375,20 @@ the component line by line. This is possible too by using:
 ```c
 icalparser* icalparser_new();
 
-void icalparser_free(icalparser* parser);
+void icalparser_free(
+    icalparser* parser);
 
-icalparser_get_line(parser,read_stream);
+icalparser_get_line(
+    icalparser *parser,
+    char* (*read_stream)(char *s, size_t size,  void* d));
 
-icalparser_add_line(parser,line);
+icalparser_add_line(
+    icalparser *parser,
+    char *line);
 
-icalparser_set_gen_data(parser,stream)
+icalparser_set_gen_data(
+    icalparser *parser,
+    void *data);
 ```
 
 These routines will construct a parser object to which you can add
@@ -441,47 +398,42 @@ to get string data from a source. For example:
 
 ```c
 char* read_stream(char *s, size_t size, void *d)
-
 {
-
-  char *c = fgets(s,size, (FILE*)d);
-
-  return c;
-
+    return fgets(s, size, (FILE*)d);
 }
 
-main() {
+int main(int argc, char *argv[]) 
+{
+    char *line;
+    icalcomponent *component;
+    icalparser *parser = icalparser_new();
 
-  char* line;
+    // open file (first command-line argument)
+    FILE* stream = fopen(argv[1], "r");
 
-  icalcomponent *c;
+    // associate the FILE with the parser so that read_stream
+    // will have access to it
+    icalparser_set_gen_data(parser, stream);
 
-  icalparser *parser = icalparser_new();
+    do {
+        // read the file, line-by-line, and parse the data
+        line = icalparser_get_line(parser, read_stream);
+        component = icalparser_add_line(parser, line);
 
-  FILE* stream = fopen(argv[1],"r");
+        // if icalparser has finished parsing a component,
+        // it will return it
+        if (component != 0) {
+            // print the parsed component
+            printf("%s", icalcomponent_as_ical_string(component));
+            icalparser_clean(parser);
 
-  icalparser_set_gen_data(parser,stream);
+            printf("\n---------------\n");
 
-  do {
+            icalcomponent_free(component);
+        }
+    } while (line != 0);
 
-    line = icalparser_get_line(parser,read_stream);
-
-    c = icalparser_add_line(parser,line);
-
-    if (c != 0){
-
-      printf("%s",icalcomponent_as_ical_string(c));
-
-      icalparser_claim(parser);
-
-      printf("\n---------------\n");
-
-      icalcomponent_free(c);
-
-    }
-
-  } while (line != 0);
-
+    return 0;
 }
 ```
 
@@ -501,9 +453,9 @@ Since the example code is a very common way to use the parser, there
 is a convenience routine;
 
 ```c
-icalcomponent* icalparser_parse(icalparser *parser,
-
-               char* (*line_gen_func)(char *s, size_t size,  void* d))
+icalcomponent* icalparser_parse(
+    icalparser *parser,
+    char* (*line_gen_func)(char *s, size_t size,  void* d));
 ```
 
 To use this routine, you still must construct the parser object and
@@ -513,6 +465,40 @@ newly constructed component. If the parser can construct multiple
 components from the input, it will return a reference to an `XROOT`
 component (of type `ICAL_XROOT_COMPONENT`.) This `XROOT` component will
 hold all of the components constructed from the input as children.
+
+```c
+char* read_stream(char *s, size_t size, void *d)
+{
+    return fgets(s, size, (FILE*)d);
+}
+
+int main(int argc, char *argv[]) 
+{
+    char* line;
+    icalcomponent *component;
+    icalparser *parser = icalparser_new();
+
+    // open file (first command-line argument)
+    FILE* stream = fopen(argv[1], "r");
+
+    // associate the FILE with the parser so that read_stream
+    // will have access to it
+    icalparser_set_gen_data(parser, stream);
+
+    // parse the opened file
+    component = icalparser_parse(parser, read_stream);
+
+    if (component != 0) {
+        // print the parsed component
+        printf("%s", icalcomponent_as_ical_string(component));
+        icalcomponent_free(component);
+    }
+
+    icalparser_free(parser);
+
+    return 0;
+}
+```
 
 ### 5.2 Accessing Components
 
@@ -527,8 +513,8 @@ To find a sub-component of a component, use:
 
 ```c
 icalcomponent* icalcomponent_get_first_component(
-                                   icalcomponent* component,
-                                   icalcomponent_kind kind);
+    icalcomponent* component,
+    icalcomponent_kind kind);
 ```
 
 This routine will return a reference to the first component of the
@@ -556,27 +542,21 @@ the first:
 
 ```c
 icalcomponent* icalcomponent_get_next_component(
-
-               icalcomponent* component,
-
-               icalcomponent_kind kind);
+    icalcomponent* component,
+    icalcomponent_kind kind);
 ```
 
 With the 'first' and 'next' routines, you can create a for loop to
 iterate through all of a components subcomponents
 
 ```c
-  for(c = icalcomponent_get_first_component(comp,ICAL_ANY_COMPONENT);
+icalcomponent *c;
 
-         c != 0;
-
-
- c = icalcomponent_get_next_component(comp,ICAL_ANY_COMPONENT))
-
+for(c = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
+    c != 0;
+    c = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT))
 {
-
       do_something(c);
-
 }
 ```
 
@@ -597,17 +577,22 @@ To solve this problem, there are also external iterators for components.
 The routines associated with these external iterators are:
 
 ```c
-icalcompiter icalcomponent_begin_component(icalcomponent* component,
-icalcomponent_kind kind);
+icalcompiter icalcomponent_begin_component(
+    icalcomponent* component,
+    icalcomponent_kind kind);
 
-icalcompiter icalcomponent_end_component(icalcomponent* component,
-icalcomponent_kind kind);
+icalcompiter icalcomponent_end_component(
+    icalcomponent* component,
+    icalcomponent_kind kind);
 
-icalcomponent* icalcompiter_next(icalcompiter* i);
+icalcomponent* icalcompiter_next(
+    icalcompiter* i);
 
-icalcomponent* icalcompiter_prior(icalcompiter* i);
+icalcomponent* icalcompiter_prior(
+    icalcompiter* i);
 
-icalcomponent* icalcompiter_deref(icalcompiter* i);
+icalcomponent* icalcompiter_deref(
+    icalcompiter* i);
 ```
 
 The `*_begin_*()` and `*_end_*()` routines return a new iterator that points
@@ -624,18 +609,11 @@ when they move to point off the end of the list.
 Here is an example of a loop using these routines:
 
 ```c
-for(
-
-   i = icalcomponent_begin_component(impl->cluster,ICAL_ANY_COMPONENT);
-
-   icalcompiter_deref(&i)!= 0;
-
-   icalcompiter_next(&i)
-
-) {
-
-      icalcomponent *this = icalcompiter_deref(&i);
-
+for(i = icalcomponent_begin_component(impl->cluster, ICAL_ANY_COMPONENT);
+    icalcompiter_deref(&i)!= 0;
+    icalcompiter_next(&i)) 
+{
+    icalcomponent *this = icalcompiter_deref(&i);
 }
 ```
 
@@ -651,18 +629,12 @@ avoid the problem, you will need to step the iterator ahead of the
 element you are going to remove, like this:
 
 ```c
-for(c = icalcomponent_get_first_component(parent_comp,ICAL_ANY_COMPONENT);
-
-       c != 0;
-
-       c = next
-
+for(c = icalcomponent_get_first_component(parent_comp, ICAL_ANY_COMPONENT);
+    c != 0;
+    c = next)
 {
-
-    next = icalcomponent_get_next_component(parent_comp,ICAL_ANY_COMPONENT);
-
+    next = icalcomponent_get_next_component(parent_comp, ICAL_ANY_COMPONENT);
     icalcomponent_remove_component(parent_comp,c);
-
 }
 ```
 
@@ -675,18 +647,12 @@ the child. The following code will exploit this behavior:
 ```c
 icalcomponent_get_first_component(parent_comp,ICAL_VEVENT_COMPONENT);
 
-while((c=icalcomponent_get_current_component(c)) != 0 ){
-
+while((c=icalcomponent_get_current_component(c)) != 0){
    if(icalcomponent_isa(c) == ICAL_VEVENT_COMPONENT){
-
       icalcomponent_remove_component(parent_comp,inner);
-
    } else {
-
       icalcomponent_get_next_component(parent_comp,ICAL_VEVENT_COMPONENT);
-
    }
-
 }
 ```
 
@@ -698,55 +664,39 @@ interfaces:
 
 ```c
 icalproperty* icalcomponent_get_first_property(
-
-     icalcomponent* component,
-
-     icalproperty_kind kind);
+    icalcomponent* component,
+    icalproperty_kind kind);
 
 icalproperty* icalcomponent_get_next_property(
-
-     icalcomponent* component,
-
-     icalproperty_kind kind);
+    icalcomponent* component,
+    icalproperty_kind kind);
 
 void icalcomponent_add_property(
-
-     icalcomponent* component,
-
-     icalproperty* property);
+    icalcomponent* component,
+    icalproperty* property);
 
 void icalcomponent_remove_property(
-
-     icalcomponent* component,
-
-     icalproperty* property);
+    icalcomponent* component,
+    icalproperty* property);
 ```
 
 For parameters:
 
 ```c
 icalparameter* icalproperty_get_first_parameter(
-
      icalproperty* prop,
-
      icalparameter_kind kind);
 
 icalparameter* icalproperty_get_next_parameter(
-
      icalproperty* prop,
-
      icalparameter_kind kind);
 
 void icalproperty_add_parameter(
-
      icalproperty* prop,
-
      icalparameter* parameter);
 
 void icalproperty_remove_parameter_by_kind(
-
      icalproperty* prop,
-
      icalparameter_kind kind);
 ```
 
@@ -769,9 +719,12 @@ accesses the internal value. For instanace, for the `UID` property, the
 routines are:
 
 ```c
-void icalproperty_set_uid(icalproperty* prop, const char* v)
+void icalproperty_set_uid(
+    icalproperty* prop, 
+    const char* v);
 
-const char* icalproperty_get_uid(icalproperty* prop)
+const char* icalproperty_get_uid(
+    icalproperty* prop);
 ```
 
 For multi-valued properties, like `ATTACH`, the value type is usually
@@ -781,9 +734,12 @@ If you want to work with the underlying value object, you can get and
 set it with:
 
 ```c
-icalvalue* icalproperty_get_value (icalproperty* prop)
+icalvalue* icalproperty_get_value(
+    icalproperty* prop);
 
-void icalproperty_set_value(icalproperty* prop, icalvalue* value);
+void icalproperty_set_value(
+    icalproperty* prop, 
+    icalvalue* value);
 ```
 
 `icalproperty_get_value()` will return a reference that you can manipulate
@@ -792,9 +748,12 @@ know what the type of the value is. For instance, if you know that
 the value is a `DATETIME` type, you can manipulate it with:
 
 ```c
-struct icaltimetype icalvalue_get_datetime(icalvalue* value);
+struct icaltimetype icalvalue_get_datetime(
+    icalvalue* value);
 
-void icalvalue_set_datetime(icalvalue* value, struct icaltimetype v);
+void icalvalue_set_datetime(
+    icalvalue* value, 
+    struct icaltimetype v);
 ```
 
 When working with an extension property or value (and `X-PROPERTY` or
@@ -802,18 +761,24 @@ a property that has the parameter `VALUE=x-name`), the value type is
 always a string. To get and set the value, use:
 
 ```x
-void icalproperty_set_x(icalproperty* prop, char* v);
+void icalproperty_set_x(
+    icalproperty* prop, 
+    char* v);
 
-char* icalproperty_get_x(icalproperty* prop);
+char* icalproperty_get_x(
+    icalproperty* prop);
 ```
 
 All X properties have the type of `ICAL_X_PROPERTY`, so you will need
 these routines to get and set the name of the property:
 
 ```c
-char* icalproperty_get_x_name(icalproperty* prop)
+char* icalproperty_get_x_name(
+    icalproperty* prop)
 
-void icalproperty_set_x_name(icalproperty* prop, char* name);
+void icalproperty_set_x_name(
+    icalproperty* prop, 
+    char* name);
 ```
 
 #### 5.2.7 Checking Component Validity
@@ -848,13 +813,13 @@ To create an RFC5545 compliant text representation of an object, use
 one of the `*_as_ical_string()` routines:
 
 ```c
-char* icalcomponent_as_ical_string (icalcomponent* component)
+char* icalcomponent_as_ical_string(icalcomponent* component)
 
-char* icalproperty_as_ical_string (icalproperty* property)
+char* icalproperty_as_ical_string(icalproperty* property)
 
-char* icalparameter_as_ical_string (icalparameter* parameter)
+char* icalparameter_as_ical_string(icalparameter* parameter)
 
-char* icalvalue_as_ical_string (icalvalue* value)
+char* icalvalue_as_ical_string(icalvalue* value)
 ```
 
 In most cases, you will only use `icalcomponent_as_ical_string()`, since
@@ -876,22 +841,15 @@ local time and UTC. The libical structure is:
 
 ```c
 struct icaltimetype {
-
   int year;
-
   int month;
-
   int day;
-
   int hour;
-
   int minute;
-
   int second;
-
   int is_utc; /* 1-> time is in UTC timezone */
-
-  int is_date; /* 1 -> interpret this as date. */ };
+  int is_date; /* 1 -> interpret this as date. */ 
+};
 ```
 
 The `year`, `month`, `day`, `hour`, `minute` and `second` fields 
@@ -906,14 +864,18 @@ second fields are assumed to be zero, regardless of their actual vaules.
 There are several ways to create a new icaltimetype structure:
 
 ```c
-struct icaltimetype icaltime_from_string(const char* str);
+struct icaltimetype icaltime_from_string(
+    const char* str);
 
-struct icaltimetype icaltime_from_timet_with_zone(time_t v,
-                                                  int is_date,
-                                                  icaltimezone* zone);
+struct icaltimetype icaltime_from_timet_with_zone(
+    time_t v,
+    int is_date,
+    icaltimezone* zone);
+```
 
-icaltime_from_string takes any RFC5545 compliant time string:
+`icaltime_from_string()` takes any RFC5545 compliant time string:
 
+```c
 struct icaltimetype tt = icaltime_from_string("19970101T103000");
 ```
 
@@ -951,7 +913,6 @@ Normalizing allows you to do arithmetic operations on time values.
 struct icaltimetype tt = icaltime_from_string("19970101T103000");
 
 tt.days +=3
-
 tt.second += 70;
 
 tt = icaltime_normalize(tt);
@@ -961,17 +922,28 @@ There are several routines to get the day of the week or month, etc,
 from a time structure.
 
 ```c
-short icaltime_day_of_year(struct icaltimetype t);
+short icaltime_day_of_year(
+    struct icaltimetype t);
 
-struct icaltimetype icaltime_from_day_of_year(short doy, short year);
+struct icaltimetype icaltime_from_day_of_year(
+    short doy, 
+    short year);
 
-short icaltime_day_of_week(struct icaltimetype t);
+short icaltime_day_of_week(
+    struct icaltimetype t);
 
-short icaltime_start_doy_week(struct icaltimetype t, int fdow);
+short icaltime_start_doy_week(
+    struct icaltimetype t, 
+    int fdow);
 
-short icaltime_week_number(short day_of_month, short month, short year);
+short icaltime_week_number(
+    short day_of_month, 
+    short month, 
+    short year);
 
-short icaltime_days_in_month(short month,short year);
+short icaltime_days_in_month(
+    short month,
+    short year);
 ```
 
 Two routines convert time structures to and from the number of seconds
@@ -979,17 +951,21 @@ since the POSIX epoch. The `is_date` field indicates whether or not
 the hour, minute and second fields should be used in the conversion.
 
 ```c
-struct icaltimetype icaltime_from_timet_with_zone(time_t v,
-                                                  int is_date,
-                                                  icaltimezone* zone);
+struct icaltimetype icaltime_from_timet_with_zone(
+    time_t v,
+    int is_date,
+    icaltimezone* zone);
 
-time_t icaltime_as_timet(struct icaltimetype);
+time_t icaltime_as_timet(
+    struct icaltimetype);
 ```
 
 The compare routine works exactly like `strcmp()`, but on time structures.
 
 ```c
-int icaltime_compare(struct icaltimetype a, struct icaltimetype b);
+int icaltime_compare(
+    struct icaltimetype a, 
+    struct icaltimetype b);
 ```
 
 The following routines convert between UTC and a named timezone. The
@@ -1008,15 +984,22 @@ years March 15 may be standard time, and some years may have standard
 time all year.
 
 ```c
-int icaltime_utc_offset(struct icaltimetype tt, char* tzid);
+int icaltime_utc_offset(
+    struct icaltimetype tt, 
+    char* tzid);
 
 int icaltime_local_utc_offset();
 
-struct icaltimetype icaltime_as_utc(struct icaltimetype tt,char* tzid);
+struct icaltimetype icaltime_as_utc(
+    struct icaltimetype tt, 
+    char* tzid);
 
-struct icaltimetype icaltime_as_zone(struct icaltimetype tt,char* tzid);
+struct icaltimetype icaltime_as_zone(
+    struct icaltimetype tt, 
+    char* tzid);
 
-struct icaltimetype icaltime_as_local(struct icaltimetype tt);
+struct icaltimetype icaltime_as_local(
+    struct icaltimetype tt);
 ```
 
 ### 5.4 Storing Objects
@@ -1034,44 +1017,65 @@ for example, could be added in the future.
 All of the icalset derived classes have the same interface:
 
 ```c
-icaldirset* icaldirset_new(const char* path);
+icaldirset* icaldirset_new(
+    const char* path);
 
-void icaldirset_free(icaldirset* store);
+void icaldirset_free(
+    icaldirset* store);
 
-const char* icaldirset_path(icaldirset* store);
+const char* icaldirset_path(
+    icaldirset* store);
 
-void icaldirset_mark(icaldirset* store);
+void icaldirset_mark(
+    icaldirset* store);
 
-icalerrorenum icaldirset_commit(icaldirset* store);
+icalerrorenum icaldirset_commit(
+    icaldirset* store);
 
-icalerrorenum icaldirset_add_component(icaldirset* store, icalcomponent*
-comp);
+icalerrorenum icaldirset_add_component(
+    icaldirset* store, 
+    icalcomponent* comp);
 
-icalerrorenum icaldirset_remove_component(icaldirset* store, icalcomponent*
-comp);
+icalerrorenum icaldirset_remove_component(
+    icaldirset* store, 
+    icalcomponent* comp);
 
-int icaldirset_count_components(icaldirset* store, icalcomponent_kind
-kind);
+int icaldirset_count_components(
+    icaldirset* store, 
+    icalcomponent_kind kind);
 
-icalerrorenum icaldirset_select(icaldirset* store, icalcomponent* gauge);
+icalerrorenum icaldirset_select(
+    icaldirset* store, 
+    icalcomponent* gauge);
 
-void icaldirset_clear(icaldirset* store);
+void icaldirset_clear(
+    icaldirset* store);
 
-icalcomponent* icaldirset_fetch(icaldirset* store, const char* uid);
+icalcomponent* icaldirset_fetch(
+    icaldirset* store, 
+    const char* uid);
 
-int icaldirset_has_uid(icaldirset* store, const char* uid);
+int icaldirset_has_uid(
+    icaldirset* store, 
+    const char* uid);
 
-icalcomponent* icaldirset_fetch_match(icaldirset* set, icalcomponent
-*c);
+icalcomponent* icaldirset_fetch_match(
+    icaldirset* set, 
+    icalcomponent *c);
 
-icalerrorenum icaldirset_modify(icaldirset* store, icalcomponent *oldc,
-icalcomponent *newc);
+icalerrorenum icaldirset_modify(
+    icaldirset* store, 
+    icalcomponent *oldc,
+    icalcomponent *newc);
 
-icalcomponent* icaldirset_get_current_component(icaldirset* store);
+icalcomponent* icaldirset_get_current_component(
+    icaldirset* store);
 
-icalcomponent* icaldirset_get_first_component(icaldirset* store);
+icalcomponent* icaldirset_get_first_component(
+    icaldirset* store);
 
-icalcomponent* icaldirset_get_next_component(icaldirset* store);
+icalcomponent* icaldirset_get_next_component(
+    icaldirset* store);
 ```
 
 #### 5.4.1 Creating a new set
@@ -1093,9 +1097,13 @@ You can also create a new set based on the derived class, For instance,
 with icalfileset:
 
 ```c
-icalfileset* icalfileset_new(const char* path);
+icalfileset* icalfileset_new(
+    const char* path);
 
-icalfileset* icalfileset_new_open(const char* path, int flags, int mode);
+icalfileset* icalfileset_new_open(
+    const char* path, 
+    int flags, 
+    int mode);
 ```
 
 `icalset_new_file()` is identical to `icalfileset_new()`. Both routines will
@@ -1114,8 +1122,9 @@ other icalset derived classess will be similar.
 To add components to a set, use:
 
 ```c
-icalerrorenum icalfileset_add_component(icalfileset* cluster, icalcomponent*
-child);
+icalerrorenum icalfileset_add_component(
+    icalfileset* cluster, 
+    icalcomponent* child);
 ```
 
 The fileset keeps an inmemory copy of the components, and this set
@@ -1158,67 +1167,46 @@ icalgauge* icalgauge_new_from_sql(const char* sql);
 Then, you can add the gauge to the set with :
 
 ```c
-icalerrorenum icalfileset_select(icalfileset* store, icalgauge* gauge);
+icalerrorenum icalfileset_select(
+    icalfileset* store, 
+    icalgauge* gauge);
 ```
 
 Here is an example that puts all of these routines together:
 
 ```c
 void test_fileset()
-
 {
-
     icalfileset *fs;
-
     icalcomponent *c;
-
     int i;
-
     char *path = "test_fileset.ics";
 
     icalgauge  *g = icalgauge_new_from_sql(
-
         "SELECT * FROM VEVENT WHERE DTSTART > '20000103T120000Z' AND
 DTSTART <= '20000106T120000Z'");
 
-
-
     fs = icalfileset_new(path);
 
-
-
     for (i = 0; i!= 10; i++){
-
         c = make_component(i); /* Make a new component where DTSTART
 has month of i */
-
         icalfileset_add_component(fs,c);
-
     }
 
     icalfileset_commit(fs); /* Write to disk */
-
-    icalfileset_select(fs,g); /* Set the gauge to filter components
-*/
-
-
+    icalfileset_select(fs,g); /* Set the gauge to filter components */
 
     for (c = icalfileset_get_first_component(fs);
-
          c != 0;
-
-         c = icalfileset_get_next_component(fs)){
-
+         c = icalfileset_get_next_component(fs))
+    {
         struct icaltimetype t = icalcomponent_get_dtstart(c);
-
-
-
         printf("%s\n",icaltime_as_ctime(t));
 
     }
 
     icalfileset_free(fs);
-
 }
 ```
 
@@ -1362,7 +1350,6 @@ but does not format propertly in output. ]
 
 The types of errors are listed in icalerror.h. They are:
 
-
 -   `ICAL_XLICERRORTYPE_COMPONENTPARSEERROR`
 -   `ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR`
 -   `ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR`
@@ -1439,24 +1426,14 @@ comment string "HACK."
 struct icaltimetype
 
 {
-
-       int year;
-
-        int month;
-
-        int day;
-
-        int hour;
-
-        int minute;
-
-        int second;
-
-         int is_utc;
-
-        int is_date;
-
-        const char* zone;
-
+    int year;
+    int month;
+    int day;
+    int hour;
+    int minute;
+    int second;
+    int is_utc;
+    int is_date;
+    const char* zone;
 };
 ```
