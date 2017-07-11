@@ -717,7 +717,7 @@ void icalproperty_remove_parameter_by_kind(
      icalparameter_kind kind);
 
 Note that since there should be only one parameter of each type in
-a property, you will rarely need to use icalparameter_get_nect_paameter.
+a property, you will rarely need to use icalparameter_get_next_parameter.
 
 5.2.6 Working with values
 
@@ -730,7 +730,7 @@ they properties that contain them. This involves fewer routine calls
 and intermediate variables than working with them independently, and
 it is type-safe.
 
-For each property, there are a _get_ and a _set_ routine that access
+For each property, there are a _get_ and a _set_ routine that accesses
 the internal value. For instanace, for the UID property, the routines
 are:
 
@@ -1203,7 +1203,7 @@ to get a string that describes the error. The enumerations are:
 * ICAL_MALFORMEDDATA_ERROR -- An input string was not in the correct
   format
 
-* ICAL_PARSE_ERROR -- The parser failed to parse an incomming component
+* ICAL_PARSE_ERROR -- The parser failed to parse an incoming component
 
 * ICAL_INTERNAL_ERROR -- Largely equivalent to an assert
 
@@ -1329,7 +1329,7 @@ Names that start with "XLIC" or "X-LIC" are not part of any iCal spec.
 They are used internally by libical.
 
 Enums that identify a component, property, value or parameter end with
-"_COMPONENT," "_PROPERTY," "_VALUE," or "_PARAMETER"s
+"_COMPONENT," "_PROPERTY," "_VALUE," or "_PARAMETER"
 
 Enums that identify a parameter value have the name of the parameter
 as the second word. For instance: ICAL_ROLE_REQPARTICIPANT or ICAL_PARTSTAT_ACCEPTED.
