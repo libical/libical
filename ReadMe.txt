@@ -25,24 +25,37 @@ iCalendar extensions in [RFC6638][]; and some of [RFC6047][].
 ## License
 
 The code and datafiles in this distribution are licensed under the
-Mozilla Public License (MPL) v2.0. See http://www.mozilla.org/MPL
-for a copy of the license.
+Mozilla Public License (MPL) v2.0. See <http://www.mozilla.org/MPL>
+for a copy of this license.
 
 Alternately, you may use libical under the terms of the GNU Lesser
-General Public License (LGPL) v2.1. See http://www.gnu.org/licenses/lgpl-2.1.txt
-for a copy of the license.
+General Public License (LGPL) v2.1. See <http://www.gnu.org/licenses/lgpl-2.1.txt>
+for a copy of this license.
 
 This dual license ensures that the library can be incorporated into
 both proprietary code and GPL'd programs, and will benefit from improvements
 made by programmers in both realms. I will only accept changes into
 my version of the library if they are similarly dual-licensed.
 
+## Building
+
+See the top-level [Install.txt](Install.txt) file.
+
+## Documentation
+
+There is rudimentary, unfinished documentation in the `doc/` directory,
+see [UsingLibical.md](doc/UsingLibical.md)
+and annotated examples in `examples/` and the test code in `src/test/`.
+
+Additionally, progress is underway to add Doxygen documentation
+for libical, which is available [here](http://libical.github.io/libical/apidocs/index.html)
 
 ## Acknowledgments
 
 Portions of this distribution are (C) Copyright 1996 Apple Computer,
 Inc., AT&T Corp., International Business Machines Corporation and
-Siemens Rolm Communications Inc. See src/libicalvcal/README.TXT for
+Siemens Rolm Communications Inc. See 
+[src/libicalvcal/README.TXT](src/libicalvcal/README.txt) for
 details.
 
 ## Get Involved
@@ -57,17 +70,3 @@ For general discussions about libical and related projects
 
 Report bugs to our issue tracker at
   <https://github.com/libical/libical/issues>
-
-
-## Building the library
-
-See the top-level [Install.txt](Install.txt) file.
-
-## Using the Library
-
-There is rudimentary, unfinished documentation in the `doc/` directory,
-see [UsingLibical.md](doc/UsingLibical.md)
-and annotated examples in `examples/` and the test code in `src/test/`.
-
-Additionally, progress is underway to add Doxygen documentation
-for libical, which is available [here](http://libical.github.io/libical/apidocs/index.html)
