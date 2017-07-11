@@ -80,8 +80,8 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
 
 /**
  * @brief Adds a single line to be parsed by the icalparser.
- * @param parser The current parser
- * @param str A single line to be parsed
+ * @param parser The parser to use
+ * @param str A string representing a single line of RFC5545-formatted iCalendar data
  * @return When this was the last line of the component to be parsed,
  *  it returns the icalcomponent, otherwise it returns `NULL`.
  *
@@ -93,6 +93,9 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_add_line(icalparser *parser, char 
  * @brief Cleans out an icalparser and returns parsed component
  * @param parser The icalparser to clean
  * @return The parsed component
+ *
+ * This will parse components even if it hasn't encountered a proper
+ * END tag for it yet and return them.
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_clean(icalparser *parser);
 
