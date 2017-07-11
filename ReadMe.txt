@@ -1,8 +1,8 @@
 # <a name="title"></a> Libical [![Build Status](https://travis-ci.org/libical/libical.svg?branch=master)](https://travis-ci.org/libical/libical) [![Coverity Scan Build Status](https://scan.coverity.com/projects/2367/badge.svg)](https://scan.coverity.com/projects/2367)
 
-Introduction
-============
-Libical -- an implementation of iCalendar protocols and data formats
+## Introduction
+
+Libical — an implementation of iCalendar protocols and data formats
 
 Most of the code in here was written by Eric Busboom with help from
 dozens of contributors.  It is currently maintained by Art Cancro
@@ -13,12 +13,17 @@ and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.
 
-Libical implements RFC5545, RFC5546, RFC7529; the iCalendar extensions
-in RFC6638; and some of RFC6047.
+Libical implements [RFC5545][], [RFC5546][], [RFC7529][]; the 
+iCalendar extensions in [RFC6638][]; and some of [RFC6047][].
 
+[RFC5545]: https://tools.ietf.org/html/rfc5545
+[RFC5546]: https://tools.ietf.org/html/rfc5546
+[RFC7529]: https://tools.ietf.org/html/rfc7529
+[RFC6638]: https://tools.ietf.org/html/rfc6638
+[RFC6047]: https://tools.ietf.org/html/rfc6047
 
-License
-========
+## License
+
 The code and datafiles in this distribution are licensed under the
 Mozilla Public License (MPL) v2.0. See http://www.mozilla.org/MPL
 for a copy of the license.
@@ -33,34 +38,36 @@ made by programmers in both realms. I will only accept changes into
 my version of the library if they are similarly dual-licensed.
 
 
-Acknowledgments
-===============
+## Acknowledgments
+
 Portions of this distribution are (C) Copyright 1996 Apple Computer,
 Inc., AT&T Corp., International Business Machines Corporation and
 Siemens Rolm Communications Inc. See src/libicalvcal/README.TXT for
 details.
 
+## Get Involved
 
-Get Involved
-============
 Subscribe to our mailing lists:
 
 For developer discussions
-  http://lists.infradead.org/mailman/listinfo/libical-devel
+  <http://lists.infradead.org/mailman/listinfo/libical-devel>
 
 For general discussions about libical and related projects
-  http://lists.infradead.org/mailman/listinfo/libical-interest
+  <http://lists.infradead.org/mailman/listinfo/libical-interest>
 
 Report bugs to our issue tracker at
-  https://github.com/libical/libical/issues
+  <https://github.com/libical/libical/issues>
 
 
-Building the library
-====================
-See the top-level Install.txt file.
+## Building the library
 
+See the top-level [Install.txt](Install.txt) file.
 
-Using the Library
-=================
-There is rudimentary, unfinished documentation in the /doc directory,
-and annotated examples in /examples and the test code in src/test.
+## Using the Library
+
+There is rudimentary, unfinished documentation in the `doc/` directory,
+see [UsingLibical.md](doc/UsingLibical.md)
+and annotated examples in `examples/` and the test code in `src/test/`.
+
+Additionally, progress is underway to add Doxygen documentation
+for libical, which is available [here](http://libical.github.io/libical/apidocs/index.html)
