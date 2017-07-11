@@ -71,6 +71,8 @@ typedef enum icalparser_state
     ICALPARSER_IN_PROGRESS
 } icalparser_state;
 
+typedef char *(icalparser_line_gen_func) (char *s, size_t size, void *d);
+
 /**
  * @brief Creates a new ::icalparser.
  * @return An ::icalparser object
@@ -269,8 +271,7 @@ LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
  * ```
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse(icalparser *parser,
-                                                    char *(*line_gen_func) (char *s,
-                                                                            size_t size, void *d));
+                                                    icalparser_line_gen_func *line_gen_func);
 
 /**
  * @brief Sets the data that icalparser_parse will give to the line_gen_func
@@ -331,8 +332,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
  * call icalparser_set_gen_data().
  */
 LIBICAL_ICAL_EXPORT char *icalparser_get_line(icalparser *parser,
-                                              char *(*line_gen_func) (char *s,
-                                                                      size_t size, void *d));
+                                              icalparser_line_gen_func *line_gen_func);
 
 LIBICAL_ICAL_EXPORT char *icalparser_string_line_generator(char *out, size_t buf_size, void *d);
 
