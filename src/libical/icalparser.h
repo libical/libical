@@ -57,10 +57,10 @@ typedef enum icalparser_state
     /** Parsing was successful. */
     ICALPARSER_SUCCESS,
 
-    /** ? */
+    /** Currently parsing the begin of a component */
     ICALPARSER_BEGIN_COMP,
 
-    /** ? */
+    /** Currently parsing the end of the component */
     ICALPARSER_END_COMP,
 
     /** Parsing is currently in progress */
