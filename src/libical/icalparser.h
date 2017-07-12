@@ -226,11 +226,10 @@ LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
  * component (or `NULL` on error).
  *
  * @par Error handling
- * -   If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to
- *     ::ICAL_BADARG_ERROR.
+ * -   If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR.
  * -   If data read by @a line_gen_func is empty, if returns `NULL`
- * -   If data read by @a line_gen_func is `NULL`, it returns `NULL` and sets the @a parser's ::icalparser_state to
- *     ::ICALPARSER_ERROR.
+ * -   If data read by @a line_gen_func is `NULL`, it returns `NULL`
+ *     and sets the @a parser's ::icalparser_state to ::ICALPARSER_ERROR.
  * -   For errors during parsing, the functions can set the ::icalparser_state to
  *     ::ICALPARSER_ERROR and/or return components of the type ::ICAL_XLICINVALID_COMPONENT,
  *     or components with properties of the type ::ICAL_XLICERROR_PROPERTY.
