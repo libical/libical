@@ -26,45 +26,137 @@
 #include <assert.h>
 #include <stdio.h>
 
+/**
+ * @file icalerror.h
+ * @brief Error handling for libical
+ */
+
 #define ICAL_SETERROR_ISFUNC
 
-/** This routine is called before any error is triggered. It is called by
-    icalerror_set_errno, so it does not appear in all of the macros below */
+/** 
+ * @brief Triggered before any error is called
+ *
+ * This routine is called before any error is triggered. 
+ * It is called by icalerror_set_errno, so it does not 
+ * appear in all of the macros below.
+ *
+ * This routine can be used while debugging by setting
+ * a breakpoint here.
+ */
 LIBICAL_ICAL_EXPORT void icalerror_stop_here(void);
 
+/**
+ * @brief Triggered to abort the process
+ *
+ * This routine is called to abort the process in the
+ * case of an error.
+ */
 LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
 
 #pragma GCC visibility push(default)
+/**
+ * @enum icalerrorenum
+ * @typedef icalerrorenum
+ * @brief Represents the different types of errors that
+ *  can be triggered in libical
+ */
 typedef enum icalerrorenum
 {
+    /** No error happened */
     ICAL_NO_ERROR = 0,
+
+    /** A bad argument was passed to a function */
     ICAL_BADARG_ERROR,
+
+    /** An error occured while creating a new object with a `*_new()` routine */
     ICAL_NEWFAILED_ERROR,
+
+    /** An error occured while allocating some memory */
     ICAL_ALLOCATION_ERROR,
+
+    /** Malformed data was passed to a function */
     ICAL_MALFORMEDDATA_ERROR,
+
+    /** An error occured while parsing part of an iCal component */
     ICAL_PARSE_ERROR,
+
+    /** An internal error happened in library code */
     ICAL_INTERNAL_ERROR, /* Like assert --internal consist. prob */
+
+    /** An error happened while working with a file */
     ICAL_FILE_ERROR,
+
+    /** Failure to properly sequence calls to a set of interfaces */
     ICAL_USAGE_ERROR,
+
+    /** An unimplemented function was called */
     ICAL_UNIMPLEMENTED_ERROR,
+
+    /** An unknown error occured */
     ICAL_UNKNOWN_ERROR  /* Used for problems in input to icalerror_strerror() */
 } icalerrorenum;
 #pragma GCC visibility pop
 
+/**
+ * @brief Return the current icalerrno value
+ * @return A pointer to the current icalerrno value
+ */
 LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
 
+/**
+ * @brief Access the current *icalerrno* value
+ * @return The current icalerrno value
+ * @note Pseudo-variable that can only be used to access the current
+ *  icalerrno.
+ *
+ * ### Usage
+ * ```c
+ * if(icalerrno == ICAL_PARSE_ERROR) {
+ *     // ...
+ * }
+ * ```
+ */
 #define icalerrno (*(icalerrno_return()))
 
-/** If true, libicu aborts after a call to icalerror_set_error
+/** 
+ * @brief Change if errors are fatal
+ * @param fatal If true, libical aborts after a call to icalerror_set_error()
+ * @warning NOT THREAD SAFE recommended that you do not change
+ *  this in a multithreaded program.
  *
- *  @warning NOT THREAD SAFE -- recommended that you do not change
- *           this in a multithreaded program.
+ * ### Usage
+ * ```c
+ * icalerror_set_errors_are_fatal(true); // default
+ * icalerror_set_errors_are_fatal(false);
+ * ```
  */
-
 LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(int fatal);
+
+/**
+ * @brief Determine if errors are fatal
+ * @return True if libical errors are fatal
+ *
+ * ### Usage
+ * ```c
+ * if(icalerror_get_errors_are_fatal()) {
+ *     // ...
+ * }
+ * ```
+ */
 LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
 
 /* Warning messages */
+
+/**
+ * @def icalerror_warn(message)
+ * @brief Prints a formatted warning message to stderr
+ * @param message Warning message to print
+ *
+ * ### Usage
+ * ```c
+ * icalerror_warn("Non-standard tag encountered");
+ * ```
+ */
 
 #ifdef __GNUC__ca
 #define icalerror_warn(message) \
@@ -74,22 +166,128 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
 {fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, message);}
 #endif /* __GNU_C__ */
 
+/**
+ * @brief Reset icalerrno to ICAL_NO_ERROR
+ * 
+ * ### Usage
+ * ```c
+ * if(icalerrno == ICAL_PARSE_ERROR) {
+ *     // ignore parsing errors
+ *     icalerror_clear_errno();
+ * }
+ * ```
+ */
 LIBICAL_ICAL_EXPORT void icalerror_clear_errno(void);
 
-/* Make an individual error fatal or non-fatal. */
+/**
+ * @enum icalerrorstate
+ * @typedef icalerrorstate
+ * @brief Determine if an error is fatal or non-fatal.
+ */
 typedef enum icalerrorstate
 {
-    ICAL_ERROR_FATAL, /* Not fatal */
-    ICAL_ERROR_NONFATAL, /* Fatal */
-    ICAL_ERROR_DEFAULT, /* Use the value of icalerror_errors_are_fatal */
-    ICAL_ERROR_UNKNOWN  /* Asked state for an unknown error type */
+    /** Fatal */
+    ICAL_ERROR_FATAL,
+
+    /** Non-fatal */
+    ICAL_ERROR_NONFATAL,
+
+    /** Use the value of icalerror_errors_are_fatal */
+    ICAL_ERROR_DEFAULT,
+
+    /** Asked state for an unknown error type */
+    ICAL_ERROR_UNKNOWN
 } icalerrorstate;
 
+/**
+ * @brief Find description string for error
+ * @param e The type of error that occured
+ * @return A string describing the error that occured
+ *
+ * @par Error handling
+ * If the type of error @a e wasn't found, it returns the description
+ * for ICAL_UNKNOWN_ERROR. 
+ *
+ * @par Ownership
+ * The string that is returned is owned by the library and must not
+ * be free'd() by the user.
+ *
+ * ### Usage
+ * ```c
+ * if(icalerrno != ICAL_NO_ERROR) {
+ *     printf("%s\n", icalerror_strerror(icalerrno));
+ * }
+ * ```
+ */
 LIBICAL_ICAL_EXPORT const char *icalerror_strerror(icalerrorenum e);
+
+/**
+ * @brief Return the description string for the current error
+ *
+ * @par Error handling
+ * If the type of error @a e wasn't found, it returns the description
+ * for ICAL_UNKNOWN_ERROR. 
+ *
+ * @par Ownership
+ * The string that is returned is owned by the library and must not
+ * be free'd() by the user.
+ *
+ * ### Usage
+ * ```c
+ * if(icalerrno != ICAL_NO_ERROR) {
+ *     printf("%s\n", icalerror_perror());
+ * }
+ * ```
+ */
 LIBICAL_ICAL_EXPORT const char *icalerror_perror(void);
+
+/**
+ * @brief Prints backtrace
+ * @note Only works on systems that support it (HAVE_BACKTRACE enabled).
+ *
+ * ### Usage
+ * ```
+ * if(icalerrno != ICAL_NO_ERROR) {
+ *     ical_bt();
+ * }
+ * ```
+ */
 LIBICAL_ICAL_EXPORT void ical_bt(void);
-LIBICAL_ICAL_EXPORT void icalerror_set_error_state(icalerrorenum error, icalerrorstate);
+
+/**
+ * @brief Set the error and error state
+ * @param error The current error
+ * @param state The severity of the error
+ *
+ * ### Usage
+ * ```c
+ * icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
+ * ```
+ */
+LIBICAL_ICAL_EXPORT void icalerror_set_error_state(icalerrorenum error, icalerrorstate state);
+
+/**
+ * @brief Get the error state (severity) for a given error
+ * @param error The error to examine
+ * @return Returns the severity of the error
+ */
 LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state(icalerrorenum error);
+
+/**
+ * @brief Read an error from a string
+ * @param str The error name string
+ * @return An icalerrorenum representing the error
+ *
+ * @par Error handling
+ * If the error specified in @a str can't be found, instead
+ * ICAL_UNKNOWN_ERROR is returned.
+ *
+ * ### Usage
+ * ```c
+ * assert(icalerror_error_from_string("PARSE") == ICAL_PARSE_ERROR);
+ * assert(icalerror_error_from_string("NONSENSE") == ICAL_UNKNOWN_ERROR);
+ * ```
+ */
 LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
 
 #if !defined(ICAL_SETERROR_ISFUNC)
@@ -105,6 +303,18 @@ if(icalerror_get_error_state(x) == ICAL_ERROR_FATAL || \
 #else
 LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
 #endif
+
+/**
+ * @def ICAL_ERRORS_ARE_FATAL
+ * @brief Determines if all libical errors are fatal and lead to
+ *  the process aborting.
+ *
+ * If set to 1, all libical errors are fatal and lead to the
+ * process aborting upon encountering on. Otherwise, errors
+ * are nonfatal.
+ *
+ * Can be checked with libical_get_errors_are_fatal().
+ */
 
 #if !defined(ICAL_ERRORS_ARE_FATAL)
 #define ICAL_ERRORS_ARE_FATAL 0
@@ -177,8 +387,41 @@ if (!(test)) { \
 
 /* String interfaces to set an error to NONFATAL and restore it to its original value */
 
+/**
+ * @brief Suppresses a given error
+ * @param error The name of the error to suppress
+ * @return The previous icalerrorstate (severity)
+ *
+ * Calling this function causes the given error to be listed as
+ * ICAL_ERROR_NONFATAL, and thus suppressed. Error states can be
+ * restored with icalerror_restore().
+ *
+ * ### Usage
+ * ```c
+ * // suppresses internal errors
+ * icalerror_supress("INTERNAL");
+ * ```
+ */
 LIBICAL_ICAL_EXPORT icalerrorstate icalerror_supress(const char *error);
 
+/**
+ * @begin Assign the given error the given icalerrorstate (severity)
+ * @param error The error in question
+ * @param es The icalerrorstate (severity) to set it to
+ *
+ * Calling the function changes the errorstate of the given error.
+ *
+ * ### Usage
+ * ```c
+ * // suppress internal errors
+ * icalerror_supress("INTERNAL");
+ *
+ * // ...
+ *
+ * // restore internal errors
+ * icalerror_restore("INTERNAL", ICAL_ERROR_DEFAULT);
+ * ```
+ */
 LIBICAL_ICAL_EXPORT void icalerror_restore(const char *error, icalerrorstate es);
 
 #endif /* !ICALERROR_H */
