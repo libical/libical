@@ -29,6 +29,13 @@
 /**
  * @file icalerror.h
  * @brief Error handling for libical
+ *
+ * Most routines will set the global error value @a icalerrno on errors. 
+ * This variable is an enumeration; permissible values can be found in 
+ * icalerror.h. If the routine returns an enum @a icalerrorenum, then the 
+ * return value will be the same as @a icalerrno. You can use icalerror_strerror() 
+ * to get a string that describes the error, or icalerror_perror() to
+ * get a string describing the current error set in @a icalerrno.
  */
 
 #define ICAL_SETERROR_ISFUNC
@@ -55,8 +62,8 @@ LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
 
 #pragma GCC visibility push(default)
 /**
- * @enum icalerrorenum
  * @typedef icalerrorenum
+ * @enum icalerrorenum
  * @brief Represents the different types of errors that
  *  can be triggered in libical
  */
@@ -290,6 +297,21 @@ LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state(icalerrorenum error
  */
 LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
 
+/**
+ * @def icalerror_set_errno(x)
+ * @brief Sets the @a icalerrno to a given error
+ * @param x The error to set @a icalerrno to
+ *
+ * Sets @a icalerrno to the error given in @a x. Additionally, if
+ * the error is an ICAL_ERROR_FATAL or if it's an ICAL_ERROR_DEFAULT
+ * and ICAL_ERRORS_ARE_FATAL is true, it prints a warning to @a stderr
+ * and aborts the process.
+ *
+ * ### Usage
+ * ```c
+ * icalerror_set_errno(ICAL_PARSE_ERROR);
+ * ```
+ */
 #if !defined(ICAL_SETERROR_ISFUNC)
 #define icalerror_set_errno(x) \
 icalerrno = x; \
@@ -330,6 +352,17 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
 #define icalerror_check_component_type(value,type);
 
 /* Assert with a message */
+/**
+ * @def icalerror_assert(test, message)
+ * @brief Assert with a message
+ * @param test The assertion to test
+ * @param message The message to print on failure of assertion
+ *
+ * Tests the given assertion @a test, and if it fails, prints the
+ * @a message given on stderr as a warning and aborts the process.
+ * This only works if ICAL_ERRORS_ARE_FATAL is true, otherwise
+ * does nothing.
+ */
 #if ICAL_ERRORS_ARE_FATAL == 1
 
 #ifdef __GNUC__
@@ -350,27 +383,101 @@ if (!(test)) { \
 #define icalerror_assert(test,message)
 #endif /* ICAL_ERRORS_ARE_FATAL */
 
-/* Check & abort if check fails */
+/**
+ * @brief Checks the assertion @a test and raises error on failure
+ * @param test The assertion to check
+ * @param arg  The argument involved (as a string)
+ *
+ * This function checks the assertion @a test, which is used to
+ * test if the parameter @a arg is correct. If the assertion fails,
+ * it sets @a icalerrno to ICAL_BADARG_ERROR.
+ *
+ * ### Example
+ * ```c
+ * void test_function(icalcomponent *component) {
+ *    icalerror_check_arg(component != 0, "component");
+ *  
+ *    // use component
+ * }
+ * ```
+ */
 #define icalerror_check_arg(test,arg) \
 if (!(test)) { \
     icalerror_set_errno(ICAL_BADARG_ERROR); \
 }
 
-/* Check & return void if check fails*/
+/**
+ * @brief Checks the assertion @a test and raises error on failure, returns void
+ * @param test The assertion to check
+ * @param arg  The argument involved (as a string)
+ *
+ * This function checks the assertion @a test, which is used to
+ * test if the parameter @a arg is correct. If the assertion fails,
+ * it sets @a icalerrno to ICAL_BADARG_ERROR and causes the enclosing
+ * function to return `void`.
+ *
+ * ### Example
+ * ```c
+ * void test_function(icalcomponent *component) {
+ *    icalerror_check_arg_rv(component != 0, "component");
+ *  
+ *    // use component
+ * }
+ * ```
+ */
 #define icalerror_check_arg_rv(test,arg) \
 if (!(test)) { \
     icalerror_set_errno(ICAL_BADARG_ERROR); \
     return; \
 }
 
-/* Check & return 0 if check fails*/
+/**
+ * @brief Checks the assertion @a test and raises error on failure, returns 0
+ * @param test The assertion to check
+ * @param arg  The argument involved (as a string)
+ *
+ * This function checks the assertion @a test, which is used to
+ * test if the parameter @a arg is correct. If the assertion fails,
+ * it sets @a icalerrno to ICAL_BADARG_ERROR and causes the enclosing
+ * function to return `0`.
+ *
+ * ### Example
+ * ```c
+ * int test_function(icalcomponent *component) {
+ *    icalerror_check_arg_rz(component != 0, "component");
+ *  
+ *    // use component
+ *    return icalcomponent_count_kinds(component, ICAL_ANY_COMPONENT);
+ * }
+ * ```
+ */
 #define icalerror_check_arg_rz(test,arg) \
 if (!(test)) { \
     icalerror_set_errno(ICAL_BADARG_ERROR); \
     return 0; \
 }
 
-/* Check & return an error if check fails*/
+/**
+ * @brief Checks the assertion @a test and raises error on failure, returns @a error
+ * @param test The assertion to check
+ * @param arg  The argument involved (as a string)
+ * @param error What to return on error
+ *
+ * This function checks the assertion @a test, which is used to
+ * test if the parameter @a arg is correct. If the assertion fails,
+ * it aborts the process with `assert(0)` and causes the enclosing
+ * function to return @a error.
+ *
+ * ### Example
+ * ```c
+ * icalcomponent *test_function(icalcomponent *component) {
+ *    icalerror_check_arg_re(component != 0, "component", NULL);
+ *  
+ *    // use component
+ *    return icalcomponent_get_first_real_component(component);
+ * }
+ * ```
+ */
 #define icalerror_check_arg_re(test,arg,error) \
 if (!(test)) { \
     icalerror_stop_here(); \
@@ -378,7 +485,27 @@ if (!(test)) { \
     return error; \
 }
 
-/* Check & return something*/
+/**
+ * @brief Checks the assertion @a test and raises error on failure, returns @a x
+ * @param test The assertion to check
+ * @param arg  The argument involved (as a string)
+ * @param x    What to return on error
+ *
+ * This function checks the assertion @a test, which is used to
+ * test if the parameter @a arg is correct. If the assertion fails,
+ * it sets @a icalerrno to ICAL_BADARG_ERROR and causes the enclosing
+ * function to return @a x.
+ *
+ * ### Example
+ * ```c
+ * icalcomponent *test_function(icalcomponent *component) {
+ *    icalerror_check_arg_rx(component != 0, "component", NULL);
+ *  
+ *    // use component
+ *    return icalcomponent_get_first_real_component(component);
+ * }
+ * ```
+ */
 #define icalerror_check_arg_rx(test,arg,x) \
 if (!(test)) { \
     icalerror_set_errno(ICAL_BADARG_ERROR); \
