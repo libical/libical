@@ -55,7 +55,7 @@ typedef struct icalparser_impl icalparser;
  */
 typedef enum icalparser_state
 {
-    /** An error occured while parsing. */
+    /** An error occurred while parsing. */
     ICALPARSER_ERROR,
 
     /** Parsing was successful. */
@@ -107,7 +107,7 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
  * @par Error handling
  * -   If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to
  *     ::ICAL_BADARG_ERROR.
- * -   If @a line is empty, if retrns `NULL`
+ * -   If @a line is empty, if returns `NULL`
  * -   If @a line is `NULL`, it returns `NULL` and sets the @a parser's ::icalparser_state to
  *     ::ICALPARSER_ERROR.
  * -   For errors during parsing, the functions can set the ::icalparser_state to
@@ -228,7 +228,7 @@ LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
  * @par Error handling
  * -   If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to
  *     ::ICAL_BADARG_ERROR.
- * -   If data read by @a line_gen_func is empty, if retrns `NULL`
+ * -   If data read by @a line_gen_func is empty, if returns `NULL`
  * -   If data read by @a line_gen_func is `NULL`, it returns `NULL` and sets the @a parser's ::icalparser_state to
  *     ::ICALPARSER_ERROR.
  * -   For errors during parsing, the functions can set the ::icalparser_state to
