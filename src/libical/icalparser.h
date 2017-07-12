@@ -33,8 +33,8 @@
  * into the structures provided by this library.
  *
  * ### Usage
- * Create a new parser via icalparse_new_parser(), then add lines one at
- * a time with icalparse_add_line(). icalparser_add_line() will return
+ * Create a new parser via icalparser_new_parser(), then add lines one at
+ * a time with icalparser_add_line(). icalparser_add_line() will return
  * non-zero when it has finished with a component.
  */
 
@@ -72,22 +72,22 @@ typedef enum icalparser_state
 } icalparser_state;
 
 /**
- * @brief Creates a new ::icalparser. 
+ * @brief Creates a new ::icalparser.
  * @return An ::icalparser object
  *
  * @par Error handling
  * On error, it returns `NULL` and sets ::icalerrno to
- * ::ICAL_NEWFILES_ERROR.
+ * ::ICAL_NEWFAILED_ERROR.
  *
  * @par Ownership
- * All icalparser objects created with this function need to be
+ * All ::icalparser objects created with this function need to be
  * freed using the icalparser_free() function.
  *
  * ### Usage
  * ```c
  * // create new parser
  * icalparser *parser = icalparser_new();
- * 
+ *
  * // do something with it...
  *
  * // free parser
@@ -106,7 +106,7 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
  *
  * @par Error handling
  * -   If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to
- *     ::ICAL_BADARG_ERROR. 
+ *     ::ICAL_BADARG_ERROR.
  * -   If @a line is empty, if retrns `NULL`
  * -   If @a line is `NULL`, it returns `NULL` and sets the @a parser's ::icalparser_state to
  *     ::ICALPARSER_ERROR.
@@ -117,7 +117,7 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
  * @par Ownership
  * Ownership of the @a str is transferred to libical upon calling this
  * method. The returned ::icalcomponent is owned by the caller and needs
- * to be free'd() with the appropriate method after it's no longer needed.
+ * to be `free()`d with the appropriate method after it's no longer needed.
  *
  * ### Example
  * ```c
@@ -126,7 +126,7 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
        return fgets(s, (int)size, (FILE*)d);
  * }
  *
- * void parse() 
+ * void parse()
  * {
  *     char* line;
  *     FILE* stream;
@@ -163,24 +163,24 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_add_line(icalparser *parser, char 
  * @return The parsed ::icalcomponent
  *
  * @par Error handling
- * If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to 
+ * If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to
  * ::ICAL_BADARG_ERROR. For parsing errors, it inserts an `X-LIC-ERROR`
  * property into the affected components.
  *
  * @par Ownership
  * The returned ::icalcomponent is property of the caller and needs to be
- * free'd() with icalcompnent_free() after use.
+ * free'd with icalcomponent_free() after use.
  *
  * This will parse components even if it hasn't encountered a proper
- * END tag for it yet and return them, as well as clearing any intermediate
- * state resulting from being in the middle of parsing something so the 
+ * `END` tag for it yet and return them, as well as clearing any intermediate
+ * state resulting from being in the middle of parsing something so the
  * parser can be used to parse something new.
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_clean(icalparser *parser);
 
 /**
  * @brief Returns current state of the icalparser
- * @param parser The (valid, non-NULL) icalparser
+ * @param parser The (valid, non-`NULL`) parser object
  * @return The current state of the icalparser, as an ::icalparser_state
  *
  * ### Example
@@ -216,18 +216,18 @@ LIBICAL_ICAL_EXPORT icalparser_state icalparser_get_state(icalparser *parser);
 LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
 
 /**
- * @brief Message oriented parsing. 
+ * @brief Message oriented parsing.
  * @param parser The parser to use
  * @param line_gen_func A function that returns one content line per invocation
  * @return The parsed icalcomponent
  * @sa icalparser_parse_string()
  *
- * Reads an icalcomponent using the supplied line_gen_func, returning the parsed
- * component (or NULL on error).
- * 
+ * Reads an icalcomponent using the supplied @a line_gen_func, returning the parsed
+ * component (or `NULL` on error).
+ *
  * @par Error handling
  * -   If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to
- *     ::ICAL_BADARG_ERROR. 
+ *     ::ICAL_BADARG_ERROR.
  * -   If data read by @a line_gen_func is empty, if retrns `NULL`
  * -   If data read by @a line_gen_func is `NULL`, it returns `NULL` and sets the @a parser's ::icalparser_state to
  *     ::ICALPARSER_ERROR.
@@ -237,7 +237,7 @@ LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
  *
  * @par Ownership
  * The returned ::icalcomponent is owned by the caller of the function, and
- * needs to be free'd() with the appropriate method when no longer needed.
+ * needs to be `free()`d with the appropriate method when no longer needed.
  *
  * ### Example
  * ```c
@@ -246,7 +246,7 @@ LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
        return fgets(s, (int)size, (FILE*)d);
  * }
  *
- * void parse() 
+ * void parse()
  * {
  *     char* line;
  *     FILE* stream;
@@ -279,17 +279,37 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse(icalparser *parser,
  * @param data The pointer which will be passed to the line_gen_func as argument `d`
  *
  * If you use any of the icalparser_parser() or icalparser_get_line() functions,
- * the `line_gen_func` that they expect has a third `void* d` argument. This function
- * sets what will be passed to your line_gen_function as such argument.
+ * the @a line_gen_func that they expect has a third `void* d` argument. This function
+ * sets what will be passed to your @a line_gen_function as such argument.
  */
 LIBICAL_ICAL_EXPORT void icalparser_set_gen_data(icalparser *parser, void *data);
 
 /**
- * @brief Parse a string and return the parsed icalcomponent.
- * @param str The iCalendar to be parsed
- * @return An icalcomponent representing the iCalendar
- * 
- * On error, returns NULL and sets icalerrno
+ * @brief Parse a string and return the parsed ::icalcomponent.
+ * @param str The iCal formatted data to be parsed
+ * @return An ::icalcomponent representing the iCalendar
+ *
+ * @par Error handling
+ * On error, returns `NULL` and sets ::icalerrno
+ *
+ * @par Ownership
+ * The returned ::icalcomponent is owned by the caller of the function, and
+ * needs to be free'd with the appropriate functions after use.
+ *
+ * ### Example
+ * ```c
+ * char *ical_string;
+ *
+ * // parse ical_string
+ * icalcomponent *component = icalparser_parse_string(ical_string);
+ *
+ * if(!icalerrno || component == NULL) {
+ *     // use component ...
+ * }
+ *
+ * // release component
+ * icalcomponent_free(component);
+ * ```
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
 
@@ -297,17 +317,17 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
  * Parser support functions
  ***********************************************************************/
 
-/** 
+/**
  * @brief Given a line generator function, return a single iCal content line.
- * @return Aa pointer to a single line of data or NULL if it reached
- *  end of file reading from the `line_gen_func`. Note that the pointer
- *  returned is owned by libical and must not be freed by the user.
+ * @return Aa pointer to a single line of data or `NULL` if it reached
+ *  end of file reading from the @a line_gen_func. Note that the pointer
+ *  returned is owned by libical and must not be `free()`d by the user.
  * @param parser The parser object to use
  * @param line_gen_func The function to use for reading data
  *
- * This function uses the supplied `line_gen_func` to read data in, 
+ * This function uses the supplied @a line_gen_func to read data in,
  * until it has read a full line, and returns the full line.
- * To supply arbitrary data (as the parameter `d`) to your `line_gen_func`, 
+ * To supply arbitrary data (as the parameter @a d) to your @a line_gen_func,
  * call icalparser_set_gen_data().
  */
 LIBICAL_ICAL_EXPORT char *icalparser_get_line(icalparser *parser,
