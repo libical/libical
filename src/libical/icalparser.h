@@ -29,6 +29,10 @@
  * @file  icalparser.h
  * @brief Line-oriented parsing.
  *
+ * This file provides methods to parse iCalendar-formatted data
+ * into the structures provided by this library.
+ *
+ * ### Usage
  * Create a new parser via icalparse_new_parser(), then add lines one at
  * a time with icalparse_add_line(). icalparser_add_line() will return
  * non-zero when it has finished with a component.
@@ -71,10 +75,23 @@ typedef enum icalparser_state
  * @brief Creates a new icalparser. 
  * @return An icalparser object
  *
+ * @par Error handling
+ * On error, it returns `NULL` and sets an icalerrno.
+ *
+ * @par Ownership
  * All icalparser objects created with this function need to be
  * freed using the icalparser_free() function.
  *
- * On error, it returns `NULL` and sets an icalerrno.
+ * ### Usage
+ * ```c
+ * // create new parser
+ * icalparser *parser = icalparser_new();
+ * 
+ * // do something with it...
+ *
+ * // free parser
+ * icalparser_free(parser);
+ * ```
  */
 LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
 
@@ -85,7 +102,12 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
  * @return When this was the last line of the component to be parsed,
  *  it returns the icalcomponent, otherwise it returns `NULL`.
  *
+ * @par Error handling
  * On error, it sets the icalparser_state.
+ *
+ * @par Ownership
+ * Ownership of the @a str is transferred to libical upon calling this
+ * method.
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_add_line(icalparser *parser, char *str);
 
