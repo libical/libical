@@ -30,12 +30,12 @@
  * @file icalerror.h
  * @brief Error handling for libical
  *
- * Most routines will set the global error value @a icalerrno on errors. 
+ * Most routines will set the global error value ::icalerrno on errors. 
  * This variable is an enumeration; permissible values can be found in 
- * icalerror.h. If the routine returns an enum @a icalerrorenum, then the 
- * return value will be the same as @a icalerrno. You can use icalerror_strerror() 
+ * icalerror.h. If the routine returns an enum ::icalerrorenum, then the 
+ * return value will be the same as ::icalerrno. You can use icalerror_strerror() 
  * to get a string that describes the error, or icalerror_perror() to
- * get a string describing the current error set in @a icalerrno.
+ * get a string describing the current error set in ::icalerrno.
  */
 
 #define ICAL_SETERROR_ISFUNC
@@ -44,7 +44,7 @@
  * @brief Triggered before any error is called
  *
  * This routine is called before any error is triggered. 
- * It is called by icalerror_set_errno, so it does not 
+ * It is called by icalerror_set_errno(), so it does not 
  * appear in all of the macros below.
  *
  * This routine can be used while debugging by setting
@@ -66,6 +66,10 @@ LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
  * @enum icalerrorenum
  * @brief Represents the different types of errors that
  *  can be triggered in libical
+ *
+ * Each of these values represent a different type of error, which
+ * is stored in ::icalerrno on exit of the library function (or 
+ * can be returned, but if it is, ::icalerrno is also set).
  */
 typedef enum icalerrorenum
 {
@@ -105,22 +109,33 @@ typedef enum icalerrorenum
 #pragma GCC visibility pop
 
 /**
- * @brief Return the current icalerrno value
- * @return A pointer to the current icalerrno value
+ * @brief Return the current ::icalerrno value
+ * @return A pointer to the current ::icalerrno value
+ * 
+ * Yields a pointer to the current ::icalerrno value. This can
+ * be used to access (read from and write to) it. 
+ *
+ * ### Examples
+ * ```c
+ * assert(*icalerrno_return() == icalerrno);
+ * ```
  */
 LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
 
 /**
- * @brief Access the current *icalerrno* value
- * @return The current icalerrno value
- * @note Pseudo-variable that can only be used to access the current
- *  icalerrno.
+ * @brief Access the current ::icalerrno value
+ * @return The current ::icalerrno value
+ * @note Pseudo-variable that can be used to access the current
+ *  ::icalerrno.
  *
  * ### Usage
  * ```c
  * if(icalerrno == ICAL_PARSE_ERROR) {
  *     // ...
  * }
+ *
+ * // resets error
+ * icalerrno = ICAL_NO_ERROR;
  * ```
  */
 #define icalerrno (*(icalerrno_return()))
@@ -128,7 +143,7 @@ LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
 /** 
  * @brief Change if errors are fatal
  * @param fatal If true, libical aborts after a call to icalerror_set_error()
- * @warning NOT THREAD SAFE recommended that you do not change
+ * @warning NOT THREAD SAFE: it is recommended that you do not change
  *  this in a multithreaded program.
  *
  * ### Usage
@@ -146,7 +161,9 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(int fatal);
  * ### Usage
  * ```c
  * if(icalerror_get_errors_are_fatal()) {
- *     // ...
+ *     // since errors are fatal, this will abort the
+ *     // program.
+ *     icalerror_set_errno(ICAL_PARSE_ERROR);
  * }
  * ```
  */
@@ -174,7 +191,7 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
 #endif /* __GNU_C__ */
 
 /**
- * @brief Reset icalerrno to ICAL_NO_ERROR
+ * @brief Reset icalerrno to ::ICAL_NO_ERROR
  * 
  * ### Usage
  * ```c
@@ -199,7 +216,7 @@ typedef enum icalerrorstate
     /** Non-fatal */
     ICAL_ERROR_NONFATAL,
 
-    /** Use the value of icalerror_errors_are_fatal */
+    /** Fatal if icalerror_errors_are_fatal(), non-fatal otherwise. */
     ICAL_ERROR_DEFAULT,
 
     /** Asked state for an unknown error type */
@@ -213,7 +230,7 @@ typedef enum icalerrorstate
  *
  * @par Error handling
  * If the type of error @a e wasn't found, it returns the description
- * for ICAL_UNKNOWN_ERROR. 
+ * for ::ICAL_UNKNOWN_ERROR. 
  *
  * @par Ownership
  * The string that is returned is owned by the library and must not
@@ -229,11 +246,11 @@ typedef enum icalerrorstate
 LIBICAL_ICAL_EXPORT const char *icalerror_strerror(icalerrorenum e);
 
 /**
- * @brief Return the description string for the current error
+ * @brief Return the description string for the current error in ::icalerrno
  *
  * @par Error handling
  * If the type of error @a e wasn't found, it returns the description
- * for ICAL_UNKNOWN_ERROR. 
+ * for ::ICAL_UNKNOWN_ERROR. 
  *
  * @par Ownership
  * The string that is returned is owned by the library and must not
@@ -262,9 +279,12 @@ LIBICAL_ICAL_EXPORT const char *icalerror_perror(void);
 LIBICAL_ICAL_EXPORT void ical_bt(void);
 
 /**
- * @brief Set the error and error state
- * @param error The current error
- * @param state The severity of the error
+ * @brief Set the ::icalerrorstate for a given ::icalerrorenum @a error
+ * @param error The error to change
+ * @param state The new error state of the error
+ *
+ * Sets the severity of a given error. For example, it can be used to
+ * set the severity of an ::ICAL_PARSE_ERROR to be an ::ICAL_ERROR_NONFATAL.
  *
  * ### Usage
  * ```c
@@ -283,11 +303,11 @@ LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state(icalerrorenum error
 /**
  * @brief Read an error from a string
  * @param str The error name string
- * @return An icalerrorenum representing the error
+ * @return An ::icalerrorenum representing the error
  *
  * @par Error handling
  * If the error specified in @a str can't be found, instead
- * ICAL_UNKNOWN_ERROR is returned.
+ * ::ICAL_UNKNOWN_ERROR is returned.
  *
  * ### Usage
  * ```c
@@ -299,12 +319,12 @@ LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
 
 /**
  * @def icalerror_set_errno(x)
- * @brief Sets the @a icalerrno to a given error
- * @param x The error to set @a icalerrno to
+ * @brief Sets the ::icalerrno to a given error
+ * @param x The error to set ::icalerrno to
  *
- * Sets @a icalerrno to the error given in @a x. Additionally, if
- * the error is an ICAL_ERROR_FATAL or if it's an ICAL_ERROR_DEFAULT
- * and ICAL_ERRORS_ARE_FATAL is true, it prints a warning to @a stderr
+ * Sets ::icalerrno to the error given in @a x. Additionally, if
+ * the error is an ::ICAL_ERROR_FATAL or if it's an ::ICAL_ERROR_DEFAULT
+ * and ::ICAL_ERRORS_ARE_FATAL is true, it prints a warning to @a stderr
  * and aborts the process.
  *
  * ### Usage
@@ -323,6 +343,20 @@ if(icalerror_get_error_state(x) == ICAL_ERROR_FATAL || \
    assert(0); \
 } }
 #else
+/**
+ * @brief Sets the ::icalerrno to a given error
+ * @param x The error to set ::icalerrno to
+ *
+ * Sets ::icalerrno to the error given in @a x. Additionally, if
+ * the error is an ::ICAL_ERROR_FATAL or if it's an ::ICAL_ERROR_DEFAULT
+ * and ::ICAL_ERRORS_ARE_FATAL is true, it prints a warning to @a stderr
+ * and aborts the process.
+ *
+ * ### Usage
+ * ```c
+ * icalerror_set_errno(ICAL_PARSE_ERROR);
+ * ```
+ */
 LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
 #endif
 
@@ -359,8 +393,8 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
  * @param message The message to print on failure of assertion
  *
  * Tests the given assertion @a test, and if it fails, prints the
- * @a message given on stderr as a warning and aborts the process.
- * This only works if ICAL_ERRORS_ARE_FATAL is true, otherwise
+ * @a message given on @a stderr as a warning and aborts the process.
+ * This only works if ::ICAL_ERRORS_ARE_FATAL is true, otherwise
  * does nothing.
  */
 #if ICAL_ERRORS_ARE_FATAL == 1
@@ -390,7 +424,7 @@ if (!(test)) { \
  *
  * This function checks the assertion @a test, which is used to
  * test if the parameter @a arg is correct. If the assertion fails,
- * it sets @a icalerrno to ICAL_BADARG_ERROR.
+ * it sets ::icalerrno to ::ICAL_BADARG_ERROR.
  *
  * ### Example
  * ```c
@@ -413,7 +447,7 @@ if (!(test)) { \
  *
  * This function checks the assertion @a test, which is used to
  * test if the parameter @a arg is correct. If the assertion fails,
- * it sets @a icalerrno to ICAL_BADARG_ERROR and causes the enclosing
+ * it sets ::icalerrno to ::ICAL_BADARG_ERROR and causes the enclosing
  * function to return `void`.
  *
  * ### Example
@@ -438,7 +472,7 @@ if (!(test)) { \
  *
  * This function checks the assertion @a test, which is used to
  * test if the parameter @a arg is correct. If the assertion fails,
- * it sets @a icalerrno to ICAL_BADARG_ERROR and causes the enclosing
+ * it sets ::icalerrno to ::ICAL_BADARG_ERROR and causes the enclosing
  * function to return `0`.
  *
  * ### Example
@@ -493,7 +527,7 @@ if (!(test)) { \
  *
  * This function checks the assertion @a test, which is used to
  * test if the parameter @a arg is correct. If the assertion fails,
- * it sets @a icalerrno to ICAL_BADARG_ERROR and causes the enclosing
+ * it sets ::icalerrno to ::ICAL_BADARG_ERROR and causes the enclosing
  * function to return @a x.
  *
  * ### Example
@@ -520,7 +554,7 @@ if (!(test)) { \
  * @return The previous icalerrorstate (severity)
  *
  * Calling this function causes the given error to be listed as
- * ICAL_ERROR_NONFATAL, and thus suppressed. Error states can be
+ * ::ICAL_ERROR_NONFATAL, and thus suppressed. Error states can be
  * restored with icalerror_restore().
  *
  * ### Usage
@@ -536,7 +570,7 @@ LIBICAL_ICAL_EXPORT icalerrorstate icalerror_supress(const char *error);
  * @param error The error in question
  * @param es The icalerrorstate (severity) to set it to
  *
- * Calling the function changes the errorstate of the given error.
+ * Calling the function changes the ::icalerrorstate of the given error.
  *
  * ### Usage
  * ```c
