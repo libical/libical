@@ -30,21 +30,21 @@
  * @file icalerror.h
  * @brief Error handling for libical
  *
- * Most routines will set the global error value ::icalerrno on errors. 
- * This variable is an enumeration; permissible values can be found in 
- * icalerror.h. If the routine returns an enum ::icalerrorenum, then the 
- * return value will be the same as ::icalerrno. You can use icalerror_strerror() 
+ * Most routines will set the global error value ::icalerrno on errors.
+ * This variable is an enumeration; permissible values can be found in
+ * icalerror.h. If the routine returns an enum ::icalerrorenum, then the
+ * return value will be the same as ::icalerrno. You can use icalerror_strerror()
  * to get a string that describes the error, or icalerror_perror() to
  * get a string describing the current error set in ::icalerrno.
  */
 
 #define ICAL_SETERROR_ISFUNC
 
-/** 
+/**
  * @brief Triggered before any error is called
  *
- * This routine is called before any error is triggered. 
- * It is called by icalerror_set_errno(), so it does not 
+ * This routine is called before any error is triggered.
+ * It is called by icalerror_set_errno(), so it does not
  * appear in all of the macros below.
  *
  * This routine can be used while debugging by setting
@@ -68,7 +68,7 @@ LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
  *  can be triggered in libical
  *
  * Each of these values represent a different type of error, which
- * is stored in ::icalerrno on exit of the library function (or 
+ * is stored in ::icalerrno on exit of the library function (or
  * can be returned, but if it is, ::icalerrno is also set).
  */
 typedef enum icalerrorenum
@@ -79,16 +79,16 @@ typedef enum icalerrorenum
     /** A bad argument was passed to a function */
     ICAL_BADARG_ERROR,
 
-    /** An error occured while creating a new object with a `*_new()` routine */
+    /** An error occurred while creating a new object with a `*_new()` routine */
     ICAL_NEWFAILED_ERROR,
 
-    /** An error occured while allocating some memory */
+    /** An error occurred while allocating some memory */
     ICAL_ALLOCATION_ERROR,
 
     /** Malformed data was passed to a function */
     ICAL_MALFORMEDDATA_ERROR,
 
-    /** An error occured while parsing part of an iCal component */
+    /** An error occurred while parsing part of an iCal component */
     ICAL_PARSE_ERROR,
 
     /** An internal error happened in library code */
@@ -103,7 +103,7 @@ typedef enum icalerrorenum
     /** An unimplemented function was called */
     ICAL_UNIMPLEMENTED_ERROR,
 
-    /** An unknown error occured */
+    /** An unknown error occurred */
     ICAL_UNKNOWN_ERROR  /* Used for problems in input to icalerror_strerror() */
 } icalerrorenum;
 #pragma GCC visibility pop
@@ -111,9 +111,9 @@ typedef enum icalerrorenum
 /**
  * @brief Return the current ::icalerrno value
  * @return A pointer to the current ::icalerrno value
- * 
+ *
  * Yields a pointer to the current ::icalerrno value. This can
- * be used to access (read from and write to) it. 
+ * be used to access (read from and write to) it.
  *
  * ### Examples
  * ```c
@@ -140,7 +140,7 @@ LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
  */
 #define icalerrno (*(icalerrno_return()))
 
-/** 
+/**
  * @brief Change if errors are fatal
  * @param fatal If true, libical aborts after a call to icalerror_set_error()
  * @warning NOT THREAD SAFE: it is recommended that you do not change
@@ -192,7 +192,7 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
 
 /**
  * @brief Reset icalerrno to ::ICAL_NO_ERROR
- * 
+ *
  * ### Usage
  * ```c
  * if(icalerrno == ICAL_PARSE_ERROR) {
@@ -225,12 +225,12 @@ typedef enum icalerrorstate
 
 /**
  * @brief Find description string for error
- * @param e The type of error that occured
- * @return A string describing the error that occured
+ * @param e The type of error that occurred
+ * @return A string describing the error that occurred
  *
  * @par Error handling
  * If the type of error @a e wasn't found, it returns the description
- * for ::ICAL_UNKNOWN_ERROR. 
+ * for ::ICAL_UNKNOWN_ERROR.
  *
  * @par Ownership
  * The string that is returned is owned by the library and must not
@@ -250,7 +250,7 @@ LIBICAL_ICAL_EXPORT const char *icalerror_strerror(icalerrorenum e);
  *
  * @par Error handling
  * If the type of error @a e wasn't found, it returns the description
- * for ::ICAL_UNKNOWN_ERROR. 
+ * for ::ICAL_UNKNOWN_ERROR.
  *
  * @par Ownership
  * The string that is returned is owned by the library and must not
@@ -430,7 +430,7 @@ if (!(test)) { \
  * ```c
  * void test_function(icalcomponent *component) {
  *    icalerror_check_arg(component != 0, "component");
- *  
+ *
  *    // use component
  * }
  * ```
@@ -454,7 +454,7 @@ if (!(test)) { \
  * ```c
  * void test_function(icalcomponent *component) {
  *    icalerror_check_arg_rv(component != 0, "component");
- *  
+ *
  *    // use component
  * }
  * ```
@@ -479,7 +479,7 @@ if (!(test)) { \
  * ```c
  * int test_function(icalcomponent *component) {
  *    icalerror_check_arg_rz(component != 0, "component");
- *  
+ *
  *    // use component
  *    return icalcomponent_count_kinds(component, ICAL_ANY_COMPONENT);
  * }
@@ -506,7 +506,7 @@ if (!(test)) { \
  * ```c
  * icalcomponent *test_function(icalcomponent *component) {
  *    icalerror_check_arg_re(component != 0, "component", NULL);
- *  
+ *
  *    // use component
  *    return icalcomponent_get_first_real_component(component);
  * }
@@ -534,7 +534,7 @@ if (!(test)) { \
  * ```c
  * icalcomponent *test_function(icalcomponent *component) {
  *    icalerror_check_arg_rx(component != 0, "component", NULL);
- *  
+ *
  *    // use component
  *    return icalcomponent_get_first_real_component(component);
  * }
