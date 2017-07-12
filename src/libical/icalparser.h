@@ -72,11 +72,12 @@ typedef enum icalparser_state
 } icalparser_state;
 
 /**
- * @brief Creates a new icalparser. 
- * @return An icalparser object
+ * @brief Creates a new ::icalparser. 
+ * @return An ::icalparser object
  *
  * @par Error handling
- * On error, it returns `NULL` and sets an icalerrno.
+ * On error, it returns `NULL` and sets ::icalerrno to
+ * ::ICAL_NEWFILES_ERROR.
  *
  * @par Ownership
  * All icalparser objects created with this function need to be
@@ -96,41 +97,121 @@ typedef enum icalparser_state
 LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
 
 /**
- * @brief Adds a single line to be parsed by the icalparser.
+ * @brief Adds a single line to be parsed by the ::icalparser.
  * @param parser The parser to use
  * @param str A string representing a single line of RFC5545-formatted iCalendar data
  * @return When this was the last line of the component to be parsed,
  *  it returns the icalcomponent, otherwise it returns `NULL`.
+ * @sa icalparser_parse()
  *
  * @par Error handling
- * On error, it sets the icalparser_state.
+ * -   If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to
+ *     ::ICAL_BADARG_ERROR. 
+ * -   If @a line is empty, if retrns `NULL`
+ * -   If @a line is `NULL`, it returns `NULL` and sets the @a parser's ::icalparser_state to
+ *     ::ICALPARSER_ERROR.
+ * -   For errors during parsing, the functions can set the ::icalparser_state to
+ *     ::ICALPARSER_ERROR and/or return components of the type ::ICAL_XLICINVALID_COMPONENT,
+ *     or components with properties of the type ::ICAL_XLICERROR_PROPERTY.
  *
  * @par Ownership
  * Ownership of the @a str is transferred to libical upon calling this
- * method.
+ * method. The returned ::icalcomponent is owned by the caller and needs
+ * to be free'd() with the appropriate method after it's no longer needed.
+ *
+ * ### Example
+ * ```c
+ * char* read_stream(char *s, size_t size, void *d)
+ * {
+       return fgets(s, (int)size, (FILE*)d);
+ * }
+ *
+ * void parse() 
+ * {
+ *     char* line;
+ *     FILE* stream;
+ *     icalcomponent *component;
+ *
+ *     icalparser *parser = icalparser_new();
+ *     stream = fopen(argv[1],"r");
+ *
+ *     icalparser_set_gen_data(parser, stream);
+ *
+ *     do{
+ *         // get a single content line
+ *         line = icalparser_get_line(parser, read_stream);
+ *
+ *         // add that line to the parser
+ *         c = icalparser_add_line(parser,line);
+ *
+ *         // once we parsed a component, print it
+ *         if (c != 0) {
+ *             printf("%s", icalcomponent_as_ical_string(c));
+ *             icalcomponent_free(c);
+ *         }
+ *     } while (line != 0);
+ *
+ *     icalparser_free(parser);
+ * }
+ * ```
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_add_line(icalparser *parser, char *str);
 
 /**
- * @brief Cleans out an icalparser and returns parsed component
- * @param parser The icalparser to clean
- * @return The parsed component
+ * @brief Cleans out an ::icalparser and returns whatever it has parsed so far.
+ * @param parser The ::icalparser to clean
+ * @return The parsed ::icalcomponent
+ *
+ * @par Error handling
+ * If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to 
+ * ::ICAL_BADARG_ERROR. For parsing errors, it inserts an `X-LIC-ERROR`
+ * property into the affected components.
+ *
+ * @par Ownership
+ * The returned ::icalcomponent is property of the caller and needs to be
+ * free'd() with icalcompnent_free() after use.
  *
  * This will parse components even if it hasn't encountered a proper
- * END tag for it yet and return them.
+ * END tag for it yet and return them, as well as clearing any intermediate
+ * state resulting from being in the middle of parsing something so the 
+ * parser can be used to parse something new.
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_clean(icalparser *parser);
 
 /**
  * @brief Returns current state of the icalparser
- * @param parser The icalparser
- * @return The current state of the icalparser
+ * @param parser The (valid, non-NULL) icalparser
+ * @return The current state of the icalparser, as an ::icalparser_state
+ *
+ * ### Example
+ * ```c
+ * icalparser *parser = icalparser_new();
+ *
+ * // use icalparser...
+ *
+ * if(icalparser_get_state(parser) == ICALPARSER_ERROR) {
+ *     // handle error
+ * } else {
+ *     // ...
+ * }
+ * ```
+ *
+ * icalparser_free(parser);
  */
 LIBICAL_ICAL_EXPORT icalparser_state icalparser_get_state(icalparser *parser);
 
 /**
- * @brief Frees an icalparser object.
- * @param parser The icalparser to be freed.
+ * @brief Frees an ::icalparser object.
+ * @param parser The ::icalparser to be freed.
+ *
+ * ### Example
+ * ```c
+ * icalparser *parser = icalparser_new();
+ *
+ * // use parser ...
+ *
+ * icalparser_free(parser);
+ * ```
  */
 LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
 
@@ -139,9 +220,53 @@ LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
  * @param parser The parser to use
  * @param line_gen_func A function that returns one content line per invocation
  * @return The parsed icalcomponent
+ * @sa icalparser_parse_string()
  *
  * Reads an icalcomponent using the supplied line_gen_func, returning the parsed
  * component (or NULL on error).
+ * 
+ * @par Error handling
+ * -   If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to
+ *     ::ICAL_BADARG_ERROR. 
+ * -   If data read by @a line_gen_func is empty, if retrns `NULL`
+ * -   If data read by @a line_gen_func is `NULL`, it returns `NULL` and sets the @a parser's ::icalparser_state to
+ *     ::ICALPARSER_ERROR.
+ * -   For errors during parsing, the functions can set the ::icalparser_state to
+ *     ::ICALPARSER_ERROR and/or return components of the type ::ICAL_XLICINVALID_COMPONENT,
+ *     or components with properties of the type ::ICAL_XLICERROR_PROPERTY.
+ *
+ * @par Ownership
+ * The returned ::icalcomponent is owned by the caller of the function, and
+ * needs to be free'd() with the appropriate method when no longer needed.
+ *
+ * ### Example
+ * ```c
+ * char* read_stream(char *s, size_t size, void *d)
+ * {
+       return fgets(s, (int)size, (FILE*)d);
+ * }
+ *
+ * void parse() 
+ * {
+ *     char* line;
+ *     FILE* stream;
+ *     icalcomponent *component;
+ *
+ *     icalparser *parser = icalparser_new();
+ *     stream = fopen(argv[1],"r");
+ *
+ *     icalparser_set_gen_data(parser, stream);
+ *
+ *     // use the parse method to parse the input data
+ *     component = icalparser_parse(parser, read_stream);
+ *
+ *     // once we parsed a component, print it
+ *     printf("%s", icalcomponent_as_ical_string(c));
+ *     icalcomponent_free(c);
+ *
+ *     icalparser_free(parser);
+ * }
+ * ```
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse(icalparser *parser,
                                                     char *(*line_gen_func) (char *s,
