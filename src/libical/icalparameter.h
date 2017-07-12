@@ -38,8 +38,8 @@
  * @param kind The kind of ::icalparameter to create.
  * @return An ::icalparameter with the given kind.
  *
- * @par Error hadling
- * If there was an interal error regarding
+ * @par Error handling
+ * If there was an internal error regarding
  * memory allocation, it returns `NULL` and sets
  * ::icalerrno to ::ICAL_NEWFAILED_ERROR.
  *
@@ -191,7 +191,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_free(icalparameter *parameter);
  *
  * @par Ownership
  * Strings returned by this method are owned by libical, they must
- * not be free'd and they may be reclaimed with the next call into
+ * not be freed and they may be reclaimed with the next call into
  * the library. A version of this function, which returns strings
  * that are not owned by libical, is icalparameter_as_ical_string_r().
  *
@@ -223,8 +223,8 @@ LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter *parameter)
  *
  * @par Ownership
  * Strings returned by this method are owned by the caller, thus they need
- * to be manually free'd after use. A version of this function which returns
- * strings that do not need to be free'd manually is
+ * to be manually `free()`d after use. A version of this function which returns
+ * strings that do not need to be freed manually is
  * icalparameter_as_ical_string().
  *
  * ### Usage
@@ -270,7 +270,7 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter *paramete
  * @return 1 if the object is an icalparameter, 0 otherwise.
  * @note This function expects to be given an object originating from
  *  libical - if this function is passed anything that is not from
- *  libical, it's behaviour is undefined.
+ *  libical, it's behavior is undefined.
  *
  * @par Error handling
  * When given a `NULL` object, it returns 0.
@@ -333,7 +333,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_xname(icalparameter *param, const cha
  *
  * @par Ownership
  * The string that is returned stays owned by libical and must not
- * be free'd by the caller.
+ * be freed by the caller.
  *
  * ### Usage
  * ```c
@@ -394,7 +394,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_xvalue(icalparameter *param, const ch
  *
  * @par Ownership
  * The string that is returned stays owned by libical and must not
- * be free'd by the caller.
+ * be freed by the caller.
  *
  * ### Usage
  * ```c
@@ -457,7 +457,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_iana_name(icalparameter *param, const
  *
  * @par Ownership
  * The string that is returned stays owned by libical and must not
- * be free'd by the caller.
+ * be freed by the caller.
  *
  * ### Usage
  * ```c
@@ -518,7 +518,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_iana_value(icalparameter *param, cons
  *
  * @par Ownership
  * The string that is returned stays owned by libical and must not
- * be free'd by the caller.
+ * be freed by the caller.
  *
  * ### Usage
  * ```c
@@ -552,10 +552,14 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(icalparameter *para
  *
  * ### Example
  * ```c
+ * // create two parameters
  * icalparameter *param1 = icalparameter_new_from_string("ROLE=CHAIR");
  * icalparameter *param2 = icalparameter_new_from_string("EMAIL=mailto@example.com");
+ *
+ * // compare parameter names for equality
  * assert(icalparameter_has_same_name(param1, param2) == 0);
  *
+ * // release memory
  * icalparameter_free(param1);
  * icalparameter_free(param2);
  * ```
@@ -570,11 +574,11 @@ LIBICAL_ICAL_EXPORT int icalparameter_has_same_name(icalparameter *param1, icalp
  * @return A string representing kind
  *
  * @par Error handling
- * When passed a nonexisting ::icalparameter_kind, it returns `NULL`.
+ * When passed a non-existing ::icalparameter_kind, it returns `NULL`.
  *
  * @par Ownership
  * The string that is returned by this function is owned by libical and
- * must not be free'd by the caller.
+ * must not be freed by the caller.
  *
  * ### Usage
  * ```c
