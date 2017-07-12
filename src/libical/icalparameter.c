@@ -173,7 +173,7 @@ char *icalparameter_as_ical_string(icalparameter *param)
     return buf;
 }
 
-/**
+/*
  * checks whether this character is allowed in a (Q)SAFE-CHAR
  *
  * QSAFE-CHAR   = WSP / %x21 / %x23-7E / NON-US-ASCII
