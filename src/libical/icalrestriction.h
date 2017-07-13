@@ -30,6 +30,9 @@
 #include "icalproperty.h"
 
 /* These must stay in this order for icalrestriction_compare to work */
+/**
+ * @brief The kinds of icalrestrictions there are
+ */
 typedef enum icalrestriction_kind
 {
     ICAL_RESTRICTION_NONE = 0, /* 0 */
@@ -43,8 +46,37 @@ typedef enum icalrestriction_kind
     ICAL_RESTRICTION_UNKNOWN    /* 8 */
 } icalrestriction_kind;
 
+/**
+ * @brief Checks if the given @a count is in accordance with the given restriction, @a restr.
+ * @param restr The restriction to apply to the @a count
+ * @param count The amount present that is to be checked against the restriction
+ * @return 1 if the restriction is met, 0 if not
+ *
+ * ### Example
+ * ```c
+ * assert(icalrestriction_compare(ICALRESTRICTION_ONEPLUS), 5) == true);
+ * assert(icalrestriction_compare(ICALRESTRICTION_NONE),    3) == false);
+ * ```
+ */
 LIBICAL_ICAL_EXPORT int icalrestriction_compare(icalrestriction_kind restr, int count);
 
+/**
+ * @brief Checks if a given `VCALENDAR` meets all the restrictions imposed by the standard.
+ * @param comp The VCALENDAR component to check
+ * @return 1 if the restrictions are met, 0 if not
+ *
+ * @par Error handling
+ * Returns 0 and sets ::icalerrno if `NULL` is passed as @a comp, or if the
+ * component is not a `VCALENDAR`.
+ *
+ * ### Example
+ * ```c
+ * icalcomponent *component = // ...
+ *
+ * // check component
+ * assert(icalrestriction_check(component) == true);
+ * ```
+ */
 LIBICAL_ICAL_EXPORT int icalrestriction_check(icalcomponent *comp);
 
 #endif /* !ICALRESTRICTION_H */
