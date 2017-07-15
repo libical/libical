@@ -85,7 +85,6 @@ typedef void (*icalattach_free_fn_t) (unsigned char *data, void *user_data);
  */
 LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_url(const char *url);
 
-
 /**
  * @brief Create new ::icalattach object from data.
  * @param data The data to create the ::icalattach from
@@ -116,7 +115,7 @@ LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_data(const char *data,
  *
  * @par Error handling
  * If @a attach is `NULL`, or the reference count is smaller than 0,
- * it sets ::icalerrno to ::ICAL_BADARG_ERROR. 
+ * it sets ::icalerrno to ::ICAL_BADARG_ERROR.
  *
  * @par Ownership
  * By increasing the refcount of @a attach, you are signaling that
@@ -131,11 +130,11 @@ LIBICAL_ICAL_EXPORT void icalattach_ref(icalattach *attach);
  * @sa icalattach_ref()
  *
  * Decreases the reference count of @a attach. If this was the
- * last user of the object, it is freed. 
+ * last user of the object, it is freed.
  *
  * @par Error handling
  * If @a attach is `NULL`, or the reference count is smaller than 0,
- * it sets ::icalerrno to ::ICAL_BADARG_ERROR. 
+ * it sets ::icalerrno to ::ICAL_BADARG_ERROR.
  *
  * @par Ownership
  * Calling this function releases the icalattach back to the library,
