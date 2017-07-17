@@ -24,13 +24,19 @@
 
 /**
  * @file icalmemory.h
- * @brief Memory management from libical.
+ * @brief Common memory management routines.
  *
- * Libical manages its own memory with these functions. These enable temporary
- * buffers to be returned by library calls without requiring the user to
- * manually deallocate them.  Temporary memory is kept in a ring buffer and
- * managed library-internally. All methods for working with these temporary
- * buffers are marked with `icalmemory_tmp_*()`.
+ * libical often passes strings back to the caller. To make these
+ * interfaces simple, I did not want the caller to have to pass in a
+ * memory buffer, but having libical pass out newly allocated memory
+ * makes it difficult to de-allocate the memory.
+ *
+ * The ring buffer in this scheme makes it possible for libical to pass out
+ * references to memory which the caller does not own, and be able to
+ * de-allocate the memory later. The ring allows libical to have several buffers
+ * active simultaneously, which is handy when creating string representations of
+ * components. Methods for working with these temporary buffers are marked with
+ * `icalmemory_tmp_*()`.
  *
  * Other memory management routines include wrappers around the system
  * management routines like icalmemory_new_buffer() and icalmemory_free_buffer()

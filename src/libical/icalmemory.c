@@ -30,18 +30,6 @@
 
 /**
  * @file icalmemory.c
- * @brief Common memory management routines.
- *
- * libical often passes strings back to the caller. To make these
- * interfaces simple, I did not want the caller to have to pass in a
- * memory buffer, but having libical pass out newly allocated memory
- * makes it difficult to de-allocate the memory.
- *
- * The ring buffer in this scheme makes it possible for libical to pass
- * out references to memory which the caller does not own, and be able
- * to de-allocate the memory later. The ring allows libical to have
- * several buffers active simultaneously, which is handy when creating
- * string representations of components.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -53,7 +41,16 @@
 
 #include <stdlib.h>
 
+/**
+ * @brief Determines the size of the ring buffer used for keeping track of
+ * temporary buffers.
+ */
 #define BUFFER_RING_SIZE 2500
+
+/**
+ * @brief Determines the minimal size of buffers in the ring that are created
+ * with icalmemory_tmp_buffer().
+ */
 #define MIN_BUFFER_SIZE 200
 
 /* HACK. Not threadsafe */
@@ -65,10 +62,17 @@ typedef struct
 } buffer_ring;
 
 #if !defined(HAVE_PTHREAD)
+/**
+ * @private
+ */
 static buffer_ring *global_buffer_ring = 0;
 #endif
 
-/** get rid of this buffer ring */
+/**
+ * @private
+ *
+ * Get rid of this buffer ring.
+ */
 static void icalmemory_free_ring_byval(buffer_ring * br)
 {
     int i;
@@ -115,6 +119,9 @@ static void icalmemory_free_tmp_buffer(void *buf)
 
 #endif
 
+/**
+ * @private
+ */
 static buffer_ring *buffer_ring_new(void)
 {
     buffer_ring *br;
@@ -130,6 +137,9 @@ static buffer_ring *buffer_ring_new(void)
 }
 
 #if defined(HAVE_PTHREAD)
+/**
+ * @private
+ */
 static buffer_ring *get_buffer_ring_pthread(void)
 {
     buffer_ring *br;
@@ -146,7 +156,11 @@ static buffer_ring *get_buffer_ring_pthread(void)
 }
 
 #else
-/* get buffer ring via a single global for a non-threaded program */
+/**
+ * @private
+ *
+ * Get buffer ring via a single global for a non-threaded program
+ */
 static buffer_ring *get_buffer_ring_global(void)
 {
     if (global_buffer_ring == 0) {
@@ -157,6 +171,9 @@ static buffer_ring *get_buffer_ring_global(void)
 
 #endif
 
+/**
+ * @private
+ */
 static buffer_ring *get_buffer_ring(void)
 {
 #if defined(HAVE_PTHREAD)
@@ -166,7 +183,7 @@ static buffer_ring *get_buffer_ring(void)
 #endif
 }
 
-/** Add an existing buffer to the buffer ring */
+/* Add an existing buffer to the buffer ring */
 void icalmemory_add_tmp_buffer(void *buf)
 {
     buffer_ring *br = get_buffer_ring();
@@ -186,7 +203,7 @@ void icalmemory_add_tmp_buffer(void *buf)
     /* cppcheck-suppress memleak */
 }
 
-/**
+/*
  * Create a new temporary buffer on the ring. Libical owns these and
  * will deallocate them.
  */
@@ -227,7 +244,7 @@ void icalmemory_free_ring()
 #endif
 }
 
-/** Like strdup, but the buffer is on the ring. */
+/* Like strdup, but the buffer is on the ring. */
 char *icalmemory_tmp_copy(const char *str)
 {
     char *b = icalmemory_tmp_buffer(strlen(str) + 1);
