@@ -65,7 +65,12 @@ struct icalperiodtype
  *
  * ### Usage
  * ```c
- * FIXME
+ * // create icalperiodtype
+ * const char *period_string = "20170606T090000/20170607T090000";
+ * struct icalperiodtype period = icalperiodtype_from_string(period_string);
+ *
+ * // print period in iCal format
+ * printf("%s\n", icalperiodtype_as_ical_string(period));
  * ```
  */
 LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_from_string(const char *str);
@@ -81,11 +86,18 @@ LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_from_string(const char 
  * internal error allocating memory.
  *
  * @par Ownership
- * The string returned by this method is owned by the caller and
- * needs to be `free()`d when no longer in use.
+ * The string returned by this method is owned by libical and must not be
+ * `free()` by the caller.
  *
  * ### Example
- * FIXME
+ * ```c
+ * // create icalperiodtype
+ * const char *period_string = "20170606T090000/20170607T090000";
+ * struct icalperiodtype period = icalperiodtype_from_string(period_string);
+ *
+ * // print period in iCal format
+ * printf("%s\n", icalperiodtype_as_ical_string(period));
+ * ```
  */
 LIBICAL_ICAL_EXPORT const char *icalperiodtype_as_ical_string(struct icalperiodtype p);
 
@@ -100,11 +112,20 @@ LIBICAL_ICAL_EXPORT const char *icalperiodtype_as_ical_string(struct icalperiodt
  * internal error allocating memory.
  *
  * @par Ownership
- * The string returned by this method is owned by libical and must
- * not be freed by the user.
+ * The string returned by this method is owned by the caller and must be
+ * released with the appropriate function after use.
  *
  * ### Example
- * FIXME
+ * ```c
+ * // create icalperiodtype
+ * const char *period_string = "20170606T090000/20170607T090000";
+ * struct icalperiodtype period = icalperiodtype_from_string(period_string);
+ *
+ * // print period in iCal format
+ * const char *period_string_gen = icalperiodtype_as_ical_string_r(period);
+ * printf("%s\n", period_string_gen);
+ * icalmemory_free_buffer(period_string_gen);
+ * ```
  */
 LIBICAL_ICAL_EXPORT char *icalperiodtype_as_ical_string_r(struct icalperiodtype p);
 
