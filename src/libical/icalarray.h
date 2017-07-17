@@ -55,8 +55,8 @@ struct _icalarray
  * it involves copying all existing elements).
  *
  * @par Error handling
- * If @a element_size or @a increment_size is not at least 1, using the ::icalarray 
- * object results in undefined behaviour. If there is an error while creating the 
+ * If @a element_size or @a increment_size is not at least 1, using the ::icalarray
+ * object results in undefined behaviour. If there is an error while creating the
  * object, it returns `NULL` and sets ::icalerrno to ::ICAL_NEWFAILED_ERROR.
  *
  * @par Ownership
