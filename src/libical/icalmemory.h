@@ -224,7 +224,6 @@ LIBICAL_ICAL_EXPORT void *icalmemory_resize_buffer(void *buf, size_t size);
  */
 LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void *buf);
 
-
 /* THESE ROUTINES CAN NOT BE USED ON TMP BUFFERS. Only use them on
    normally allocated memory, or on buffers created from
    icalmemory_new_buffer, never with buffers created by
