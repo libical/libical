@@ -16,12 +16,6 @@
     the License at http://www.mozilla.org/MPL/
 ======================================================================*/
 
-/** @file icalarray.c
- *
- *  @brief An array of arbitrarily-sized elements which grows
- *  dynamically as elements are added.
- */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,9 +27,6 @@
 #include <string.h>
 
 static void icalarray_expand(icalarray *array, size_t space_needed);
-
-/** @brief Constructor
- */
 
 icalarray *icalarray_new(size_t element_size, size_t increment_size)
 {
@@ -95,9 +86,6 @@ icalarray *icalarray_copy(icalarray *originalarray)
 
     return array;
 }
-
-/** @brief Destructor
- */
 
 void icalarray_free(icalarray *array)
 {
