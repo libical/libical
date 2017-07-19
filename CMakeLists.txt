@@ -132,6 +132,14 @@ if(NOT STATIC_ONLY AND NOT SHARED_ONLY)
   )
 endif()
 
+if(STATIC_ONLY)
+  add_definitions(
+    -DLIBICAL_ICAL_STATIC_DEFINE
+    -DLIBICAL_ICALSS_STATIC_DEFINE
+    -DLIBICAL_VCAL_STATIC_DEFINE
+  )
+endif()
+
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
 set_package_properties(Perl PROPERTIES
