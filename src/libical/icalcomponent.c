@@ -2556,7 +2556,7 @@ static int prop_compare(void *a, void *b)
     if (r == 0) {
         if (k1 == ICAL_X_PROPERTY) {
             r = strcmp(icalproperty_get_x_name(p1),
-                       icalproperty_get_x_name(p1));
+                       icalproperty_get_x_name(p2));
         }
 
         if (r == 0) {
