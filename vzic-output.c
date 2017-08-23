@@ -537,7 +537,7 @@ output_zone			(char		*directory,
     }
   }
 
-  fprintf (fp, "BEGIN:VCALENDAR\nPRODID:%s\nVERSION:2.0\n", ProductID);
+  fprintf (fp, "BEGIN:VCALENDAR\r\nPRODID:%s\r\nVERSION:2.0\r\n", ProductID);
 
   output_zone_to_files (zone, zone_name, rule_data, fp, changes_fp);
 
@@ -546,7 +546,7 @@ output_zone			(char		*directory,
     exit (1);
   }
 
-  fprintf (fp, "END:VCALENDAR\n");
+  fprintf (fp, "END:VCALENDAR\r\n");
 
   fclose (fp);
 
@@ -1070,13 +1070,13 @@ output_zone_components			(FILE		*fp,
   gboolean only_one_change = FALSE;
   char start_buffer[1024];
 
-  fprintf (fp, "BEGIN:VTIMEZONE\nTZID:%s%s\n", TZIDPrefixExpanded, name);
+  fprintf (fp, "BEGIN:VTIMEZONE\r\nTZID:%s%s\r\n", TZIDPrefixExpanded, name);
 
   if (VzicUrlPrefix != NULL)
-      fprintf (fp, "TZURL:%s/%s\n", VzicUrlPrefix, name);
+      fprintf (fp, "TZURL:%s/%s\r\n", VzicUrlPrefix, name);
 
   /* We use an 'X-' property to place the city name in. */
-  fprintf (fp, "X-LIC-LOCATION:%s\n", name);
+  fprintf (fp, "X-LIC-LOCATION:%s\r\n", name);
 
   /* We try to find any recurring components first, or they may get output
      as lots of RDATES instead. */
@@ -1098,7 +1098,7 @@ output_zone_components			(FILE		*fp,
 #if 0
       printf ("Zone: %s using 2 RRULEs\n", CurrentZoneName);
 #endif
-      fprintf (fp, "END:VTIMEZONE\n");
+      fprintf (fp, "END:VTIMEZONE\r\n");
       return;
     }
   }
@@ -1181,7 +1181,7 @@ output_zone_components			(FILE		*fp,
       break;
   }
 
-  fprintf (fp, "END:VTIMEZONE\n");
+  fprintf (fp, "END:VTIMEZONE\r\n");
 }
 
 
@@ -1455,7 +1455,7 @@ check_for_rdates		(FILE		*fp,
     calculate_actual_time (&tmp_vzictime, TIME_WALL, vzictime->prev_stdoff,
 			   vzictime->prev_walloff);
 
-    fprintf (fp, "RDATE:%s\n", format_time (tmp_vzictime.year,
+    fprintf (fp, "RDATE:%s\r\n", format_time (tmp_vzictime.year,
 					    tmp_vzictime.month,
 					    tmp_vzictime.day_number,
 					    tmp_vzictime.time_seconds));
@@ -1503,7 +1503,7 @@ output_component_start			(char		*buffer,
 				      vzictime->prev_stdoff,
 				      vzictime->prev_walloff);
 
-  sprintf (line1, "BEGIN:%s\n", is_daylight ? "DAYLIGHT" : "STANDARD");
+  sprintf (line1, "BEGIN:%s\r\n", is_daylight ? "DAYLIGHT" : "STANDARD");
 
   /* If the timezone only has one change, that means it uses the same offset
      forever, so we use the same TZOFFSETFROM as the TZOFFSETTO. (If the zone
@@ -1513,23 +1513,23 @@ output_component_start			(char		*buffer,
   else
     prev_walloff = vzictime->prev_walloff;
 
-  sprintf (line2, "TZOFFSETFROM:%s\n",
+  sprintf (line2, "TZOFFSETFROM:%s\r\n",
 	   format_tz_offset (prev_walloff, !VzicPureOutput));
 
-  sprintf (line3, "TZOFFSETTO:%s\n",
+  sprintf (line3, "TZOFFSETTO:%s\r\n",
 	   format_tz_offset (vzictime->walloff, !VzicPureOutput));
 
   if (vzictime->tzname)
-    sprintf (line4, "TZNAME:%s\n", vzictime->tzname);
+    sprintf (line4, "TZNAME:%s\r\n", vzictime->tzname);
   else
     line4[0] = '\0';
 
   formatted_time = format_time (tmp_vzictime.year, tmp_vzictime.month,
 				tmp_vzictime.day_number,
 				tmp_vzictime.time_seconds);
-  sprintf (line5, "DTSTART:%s\n", formatted_time);
+  sprintf (line5, "DTSTART:%s\r\n", formatted_time);
   if (output_rdate)
-    sprintf (line6, "RDATE:%s\n", formatted_time);
+    sprintf (line6, "RDATE:%s\r\n", formatted_time);
   else
     line6[0] = '\0';
 
@@ -1548,7 +1548,7 @@ output_component_end			(FILE		*fp,
 
   is_daylight = (vzictime->stdoff != vzictime->walloff) ? TRUE : FALSE;
 
-  fprintf (fp, "END:%s\n", is_daylight ? "DAYLIGHT" : "STANDARD");
+  fprintf (fp, "END:%s\r\n", is_daylight ? "DAYLIGHT" : "STANDARD");
 }
 
 
@@ -1974,7 +1974,7 @@ output_rrule				(char	        *rrule_buffer,
 		 (month + 1) % 12 + 1,
 		 WeekDays[day_weekday]);
 
-	sprintf (rrule_buffer, "%s%s\n%s%s\n",
+	sprintf (rrule_buffer, "%s%s\n%s%s\r\n",
 		 buffer, until, buffer2, until);
 
 	return TRUE;
@@ -2033,7 +2033,7 @@ output_rrule				(char	        *rrule_buffer,
 		 (month + 1) % 12 + 1,
 		 WeekDays[day_weekday]);
 
-	sprintf (rrule_buffer, "%s%s\n%s%s\n",
+	sprintf (rrule_buffer, "%s%s\r\n%s%s\r\n",
 		 buffer, until, buffer2, until);
 
 	return TRUE;
@@ -2046,7 +2046,7 @@ output_rrule				(char	        *rrule_buffer,
       if (!output_rrule_2 (buffer, month, day_number - 7, day_weekday))
 	return FALSE;
 
-      sprintf (rrule_buffer, "%s%s\n", buffer, until);
+      sprintf (rrule_buffer, "%s%s\r\n", buffer, until);
       return TRUE;
     }
 
@@ -2060,7 +2060,7 @@ output_rrule				(char	        *rrule_buffer,
     exit (1);
   }
 
-  sprintf (rrule_buffer, "%s%s\n", buffer, until);
+  sprintf (rrule_buffer, "%s%s\r\n", buffer, until);
   return TRUE;
 }
 
@@ -2250,7 +2250,7 @@ dump_change				(FILE		*fp,
 
   fprintf (fp, "\t%s", format_tz_offset (vzictime->walloff, FALSE));
 
-  fprintf (fp, "\n");
+  fprintf (fp, "\r\n");
 }
 
 
