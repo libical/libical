@@ -168,8 +168,8 @@ main				(int		 argc,
   convert_olson_file ("southamerica");
 
   /* These are backwards-compatability and weird stuff. */
-#if 0
   convert_olson_file ("backward");
+#if 0
   convert_olson_file ("etcetera");
   convert_olson_file ("leapseconds");
   convert_olson_file ("pacificnew");
