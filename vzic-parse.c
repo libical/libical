@@ -768,6 +768,11 @@ parse_number			(ParsingData	*data,
   printf ("In parse_number p:%s\n", p);
 #endif
 
+  // potential null value where '-' is specified. assume zero.
+  if (!p || !*p) {
+    return 0;
+  }
+
   if (*p < '0' || *p > '9') {
     fprintf (stderr, "%s:%i: Invalid number: %s\n%s\n", data->filename,
 	     data->line_number, *num, data->line);
