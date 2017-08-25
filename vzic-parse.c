@@ -27,9 +27,13 @@
 #include <ctype.h>
 #include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <libgen.h>
 
 #include "vzic.h"
+#include "vzic-output.h"
 #include "vzic-parse.h"
 
 /* This is the maximum line length we allow. */
@@ -38,6 +42,7 @@
 /* The maximum number of fields on a line. */
 #define MAX_FIELDS	12
 
+#define CREATE_SYMLINK	1
 
 typedef enum
 {
@@ -442,6 +447,13 @@ parse_rule_line			(ParsingData	*data)
     exit (1);
   }
 
+  /* We also want to know the maximum year used in any TO/FROM value, so we
+     know where to expand all the infinite Rule data to. */
+  if (rule.to_year != YEAR_MAXIMUM)
+    data->max_until_year = MAX (data->max_until_year, rule.to_year);
+  else if (rule.from_year != YEAR_MINIMUM)
+    data->max_until_year = MAX (data->max_until_year, rule.from_year);
+
   if (!strcmp (data->fields[RULE_TYPE], "-"))
     rule.type = NULL;
   else {
@@ -489,6 +501,35 @@ parse_link_line			(ParsingData	*data)
   printf ("LINK FROM: %s\tTO: %s\n", from, to);
 #endif
 
+#if CREATE_SYMLINK
+  {
+      int len = strnlen(to,254);
+      int dirs = 0;
+      int i;
+      for (i = 0; i < len; i++) {
+	  dirs += to[i] == '/' ? 1 : 0;
+      }
+      if (dirs >= 0) {
+	  char rel_from[255];
+	  char to_dir[255];
+	  char to_path[255];
+	  if (dirs == 0) {
+	      sprintf(rel_from, "%s.ics", from);
+	  } else if (dirs == 1) {
+	      sprintf(rel_from, "../%s.ics", from);
+	  } else if (dirs == 2) {
+	      sprintf(rel_from, "../../%s.ics", from);
+	  } else {
+	      return;
+	  }
+	  sprintf(to_path, "%s/%s.ics", VzicOutputDir, to);
+	  strncpy(to_dir, to_path, 254);
+	  ensure_directory_exists(dirname(to_dir));
+	  //printf("Creating symlink from %s to %s\n", rel_from, to_path);
+	  symlink(rel_from, to_path);
+      }
+  }
+#else
   if (g_hash_table_lookup_extended (data->link_data, from,
 				    (gpointer) &old_from,
 				    (gpointer) &zone_list)) {
@@ -501,6 +542,7 @@ parse_link_line			(ParsingData	*data)
   zone_list = g_list_prepend (zone_list, g_strdup (to));
 
   g_hash_table_insert (data->link_data, from, zone_list);
+#endif
 }
 
 
@@ -539,7 +581,7 @@ parse_year			(ParsingData	*data,
     year = year * 10 + *p - '0';
   }
 
-  if (year < 1000 || year > 2050) {
+  if (year < 1000 || year > 2100) {
 	fprintf (stderr, "%s:%i: Strange year: %s\n%s\n", data->filename,
 		 data->line_number, field, data->line);
 	exit (1);
@@ -714,11 +756,14 @@ parse_time			(ParsingData	*data,
     exit (1);
   }
 
+#if 0
+  /* Hack to work around older libical that doesn't support BYDAY + BYYEARDAY */
   if (hours == 24) {
     hours = 23;
     minutes = 59;
     seconds = 59;
   }
+#endif
 
 #if 0
   printf ("Time: %s -> %i:%02i:%02i\n", field, hours, minutes, seconds);
@@ -766,6 +811,11 @@ parse_number			(ParsingData	*data,
 #if 0
   printf ("In parse_number p:%s\n", p);
 #endif
+
+  // potential null value where '-' is specified. assume zero.
+  if (!p || !*p) {
+    return 0;
+  }
 
   if (*p < '0' || *p > '9') {
     fprintf (stderr, "%s:%i: Invalid number: %s\n%s\n", data->filename,

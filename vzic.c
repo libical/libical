@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "vzic.h"
@@ -167,9 +168,9 @@ main				(int		 argc,
   convert_olson_file ("southamerica");
 
   /* These are backwards-compatability and weird stuff. */
-#if 0
   convert_olson_file ("backward");
   convert_olson_file ("etcetera");
+#if 0
   convert_olson_file ("leapseconds");
   convert_olson_file ("pacificnew");
   convert_olson_file ("solar87");
