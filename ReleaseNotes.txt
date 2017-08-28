@@ -3,13 +3,18 @@ Release Highlights
 
 Version 3.0.0:
 --------------
- * Requires CMake v3.1.0 or higher
+ * Relicense from MPL 1.0 to MPL 2.0 (keep dual license for LGPL v2.1)
+ * Requires CMake v3.1.0 or higher along with various CMake and buildsystem fixes
+ * Added a 'make uninstall'
+ * Fixed use-after-free issues and some memory leaks
+ * Built-in timezones updated to tzdata2017b
  * More accurate VTIMEZONE generation when using the system time zone data (when USE_BUILTIN_TZDATA=False)
  * icalvalue_as_ical_string() returns "TRUE" (non-zero) or "FALSE" (zero) values only.
  * New icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
  * Better value type checking of property values when parsing
  * icalvalue_new/set_date and icalvalue_new/set_datetime now enforce DATE and DATE-TIME values respectively
- * Parameter values are now en/decoded per RFC6868
+ * draft-ietf-calext-extensions (RFC 7986) support added
+ * Parameter values are now en/decoded per RFC 6868
  * New publicly available functions:
      + icalproperty_set_parent (icalproperty_get_parent was already public)
      + icalvalue_get_parent (icalvalue_set_parent was already public)
