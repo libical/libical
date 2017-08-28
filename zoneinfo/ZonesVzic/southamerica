@@ -1,0 +1,318 @@
+Zone	America/Argentina/Buenos_Aires	-3:53:48	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	Arg	-03/-02				
+Zone	America/Argentina/Cordoba	-4:16:48	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1991	Mar	3	
+			-4:00	-	-04	1991	Oct	20	
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	Arg	-03/-02				
+Zone	America/Argentina/Salta	-4:21:40	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1991	Mar	3	
+			-4:00	-	-04	1991	Oct	20	
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	Arg	-03/-02	2008	Oct	18	
+			-3:00	-	-03				
+Zone	America/Argentina/Tucuman	-4:20:52	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1991	Mar	3	
+			-4:00	-	-04	1991	Oct	20	
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	-	-03	2004	Jun		
+			-4:00	-	-04	2004	Jun	13	
+			-3:00	Arg	-03/-02				
+Zone	America/Argentina/La_Rioja	-4:27:24	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1991	Mar		
+			-4:00	-	-04	1991	May	7	
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	-	-03	2004	Jun		
+			-4:00	-	-04	2004	Jun	20	
+			-3:00	Arg	-03/-02	2008	Oct	18	
+			-3:00	-	-03				
+Zone	America/Argentina/San_Juan	-4:34:04	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1991	Mar		
+			-4:00	-	-04	1991	May	7	
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	-	-03	2004	May	31	
+			-4:00	-	-04	2004	Jul	25	
+			-3:00	Arg	-03/-02	2008	Oct	18	
+			-3:00	-	-03				
+Zone	America/Argentina/Jujuy	-4:21:12	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1990	Mar	4	
+			-4:00	-	-04	1990	Oct	28	
+			-4:00	1:00	-03	1991	Mar	17	
+			-4:00	-	-04	1991	Oct	6	
+			-3:00	1:00	-02	1992			
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	Arg	-03/-02	2008	Oct	18	
+			-3:00	-	-03				
+Zone	America/Argentina/Catamarca	-4:23:08	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1991	Mar	3	
+			-4:00	-	-04	1991	Oct	20	
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	-	-03	2004	Jun		
+			-4:00	-	-04	2004	Jun	20	
+			-3:00	Arg	-03/-02	2008	Oct	18	
+			-3:00	-	-03				
+Zone	America/Argentina/Mendoza	-4:35:16	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1990	Mar	4	
+			-4:00	-	-04	1990	Oct	15	
+			-4:00	1:00	-03	1991	Mar		
+			-4:00	-	-04	1991	Oct	15	
+			-4:00	1:00	-03	1992	Mar		
+			-4:00	-	-04	1992	Oct	18	
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	-	-03	2004	May	23	
+			-4:00	-	-04	2004	Sep	26	
+			-3:00	Arg	-03/-02	2008	Oct	18	
+			-3:00	-	-03				
+Zone	America/Argentina/San_Luis	-4:25:24	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1990			
+			-3:00	1:00	-02	1990	Mar	14	
+			-4:00	-	-04	1990	Oct	15	
+			-4:00	1:00	-03	1991	Mar		
+			-4:00	-	-04	1991	Jun		
+			-3:00	-	-03	1999	Oct	3	
+			-4:00	1:00	-03	2000	Mar	3	
+			-3:00	-	-03	2004	May	31	
+			-4:00	-	-04	2004	Jul	25	
+			-3:00	Arg	-03/-02	2008	Jan	21	
+			-4:00	SanLuis	-04/-03	2009	Oct	11	
+			-3:00	-	-03				
+Zone	America/Argentina/Rio_Gallegos	-4:36:52	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	-	-03	2004	Jun		
+			-4:00	-	-04	2004	Jun	20	
+			-3:00	Arg	-03/-02	2008	Oct	18	
+			-3:00	-	-03				
+Zone	America/Argentina/Ushuaia	-4:33:12	-	LMT	1894	Oct	31	
+			-4:16:48	-	CMT	1920	May		
+			-4:00	-	-04	1930	Dec		
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1999	Oct	3	
+			-4:00	Arg	-04/-03	2000	Mar	3	
+			-3:00	-	-03	2004	May	30	
+			-4:00	-	-04	2004	Jun	20	
+			-3:00	Arg	-03/-02	2008	Oct	18	
+			-3:00	-	-03				
+Zone	America/La_Paz	-4:32:36	-	LMT	1890			
+			-4:32:36	-	CMT	1931	Oct	15	
+			-4:32:36	1:00	BOST	1932	Mar	21	
+			-4:00	-	-04				
+Zone	America/Noronha	-2:09:40	-	LMT	1914			
+			-2:00	Brazil	-02/-01	1990	Sep	17	
+			-2:00	-	-02	1999	Sep	30	
+			-2:00	Brazil	-02/-01	2000	Oct	15	
+			-2:00	-	-02	2001	Sep	13	
+			-2:00	Brazil	-02/-01	2002	Oct		
+			-2:00	-	-02				
+Zone	America/Belem	-3:13:56	-	LMT	1914			
+			-3:00	Brazil	-03/-02	1988	Sep	12	
+			-3:00	-	-03				
+Zone	America/Santarem	-3:38:48	-	LMT	1914			
+			-4:00	Brazil	-04/-03	1988	Sep	12	
+			-4:00	-	-04	2008	Jun	24	
+			-3:00	-	-03				
+Zone	America/Fortaleza	-2:34	-	LMT	1914			
+			-3:00	Brazil	-03/-02	1990	Sep	17	
+			-3:00	-	-03	1999	Sep	30	
+			-3:00	Brazil	-03/-02	2000	Oct	22	
+			-3:00	-	-03	2001	Sep	13	
+			-3:00	Brazil	-03/-02	2002	Oct		
+			-3:00	-	-03				
+Zone	America/Recife	-2:19:36	-	LMT	1914			
+			-3:00	Brazil	-03/-02	1990	Sep	17	
+			-3:00	-	-03	1999	Sep	30	
+			-3:00	Brazil	-03/-02	2000	Oct	15	
+			-3:00	-	-03	2001	Sep	13	
+			-3:00	Brazil	-03/-02	2002	Oct		
+			-3:00	-	-03				
+Zone	America/Araguaina	-3:12:48	-	LMT	1914			
+			-3:00	Brazil	-03/-02	1990	Sep	17	
+			-3:00	-	-03	1995	Sep	14	
+			-3:00	Brazil	-03/-02	2003	Sep	24	
+			-3:00	-	-03	2012	Oct	21	
+			-3:00	Brazil	-03/-02	2013	Sep		
+			-3:00	-	-03				
+Zone	America/Maceio	-2:22:52	-	LMT	1914			
+			-3:00	Brazil	-03/-02	1990	Sep	17	
+			-3:00	-	-03	1995	Oct	13	
+			-3:00	Brazil	-03/-02	1996	Sep	4	
+			-3:00	-	-03	1999	Sep	30	
+			-3:00	Brazil	-03/-02	2000	Oct	22	
+			-3:00	-	-03	2001	Sep	13	
+			-3:00	Brazil	-03/-02	2002	Oct		
+			-3:00	-	-03				
+Zone	America/Bahia	-2:34:04	-	LMT	1914			
+			-3:00	Brazil	-03/-02	2003	Sep	24	
+			-3:00	-	-03	2011	Oct	16	
+			-3:00	Brazil	-03/-02	2012	Oct	21	
+			-3:00	-	-03				
+Zone	America/Sao_Paulo	-3:06:28	-	LMT	1914			
+			-3:00	Brazil	-03/-02	1963	Oct	23	
+			-3:00	1:00	-02	1964			
+			-3:00	Brazil	-03/-02				
+Zone	America/Campo_Grande	-3:38:28	-	LMT	1914			
+			-4:00	Brazil	-04/-03				
+Zone	America/Cuiaba	-3:44:20	-	LMT	1914			
+			-4:00	Brazil	-04/-03	2003	Sep	24	
+			-4:00	-	-04	2004	Oct		
+			-4:00	Brazil	-04/-03				
+Zone	America/Porto_Velho	-4:15:36	-	LMT	1914			
+			-4:00	Brazil	-04/-03	1988	Sep	12	
+			-4:00	-	-04				
+Zone	America/Boa_Vista	-4:02:40	-	LMT	1914			
+			-4:00	Brazil	-04/-03	1988	Sep	12	
+			-4:00	-	-04	1999	Sep	30	
+			-4:00	Brazil	-04/-03	2000	Oct	15	
+			-4:00	-	-04				
+Zone	America/Manaus	-4:00:04	-	LMT	1914			
+			-4:00	Brazil	-04/-03	1988	Sep	12	
+			-4:00	-	-04	1993	Sep	28	
+			-4:00	Brazil	-04/-03	1994	Sep	22	
+			-4:00	-	-04				
+Zone	America/Eirunepe	-4:39:28	-	LMT	1914			
+			-5:00	Brazil	-05/-04	1988	Sep	12	
+			-5:00	-	-05	1993	Sep	28	
+			-5:00	Brazil	-05/-04	1994	Sep	22	
+			-5:00	-	-05	2008	Jun	24	
+			-4:00	-	-04	2013	Nov	10	
+			-5:00	-	-05				
+Zone	America/Rio_Branco	-4:31:12	-	LMT	1914			
+			-5:00	Brazil	-05/-04	1988	Sep	12	
+			-5:00	-	-05	2008	Jun	24	
+			-4:00	-	-04	2013	Nov	10	
+			-5:00	-	-05				
+Zone	America/Santiago	-4:42:46	-	LMT	1890			
+			-4:42:46	-	SMT	1910	Jan	10	
+			-5:00	-	-05	1916	Jul		
+			-4:42:46	-	SMT	1918	Sep	10	
+			-4:00	-	-04	1919	Jul		
+			-4:42:46	-	SMT	1927	Sep		
+			-5:00	Chile	-05/-04	1932	Sep		
+			-4:00	-	-04	1942	Jun		
+			-5:00	-	-05	1942	Aug		
+			-4:00	-	-04	1946	Jul	15	
+			-4:00	1:00	-03	1946	Sep		
+			-4:00	-	-04	1947	Apr		
+			-5:00	-	-05	1947	May	21	23:00
+			-4:00	Chile	-04/-03				
+Zone	America/Punta_Arenas	-4:43:40	-	LMT	1890			
+			-4:42:46	-	SMT	1910	Jan	10	
+			-5:00	-	-05	1916	Jul		
+			-4:42:46	-	SMT	1918	Sep	10	
+			-4:00	-	-04	1919	Jul		
+			-4:42:46	-	SMT	1927	Sep		
+			-5:00	Chile	-05/-04	1932	Sep		
+			-4:00	-	-04	1942	Jun		
+			-5:00	-	-05	1942	Aug		
+			-4:00	-	-04	1947	Apr		
+			-5:00	-	-05	1947	May	21	23:00
+			-4:00	Chile	-04/-03	2016	Dec	4	
+			-3:00	-	-03				
+Zone	Pacific/Easter	-7:17:28	-	LMT	1890			
+			-7:17:28	-	EMT	1932	Sep		
+			-7:00	Chile	-07/-06	1982	Mar	14	3:00u
+			-6:00	Chile	-06/-05				
+Zone	Antarctica/Palmer	0:00	-	-00	1965			
+			-4:00	Arg	-04/-03	1969	Oct	5	
+			-3:00	Arg	-03/-02	1982	May		
+			-4:00	Chile	-04/-03	2016	Dec	4	
+			-3:00	-	-03				
+Zone	America/Bogota	-4:56:16	-	LMT	1884	Mar	13	
+			-4:56:16	-	BMT	1914	Nov	23	
+			-5:00	CO	-05/-04				
+Zone	America/Curacao	-4:35:47	-	LMT	1912	Feb	12	
+			-4:30	-	-0430	1965			
+			-4:00	-	AST				
+Zone	America/Guayaquil	-5:19:20	-	LMT	1890			
+			-5:14	-	QMT	1931			
+			-5:00	Ecuador	-05/-04				
+Zone	Pacific/Galapagos	-5:58:24	-	LMT	1931			
+			-5:00	-	-05	1986			
+			-6:00	Ecuador	-06/-05				
+Zone	Atlantic/Stanley	-3:51:24	-	LMT	1890			
+			-3:51:24	-	SMT	1912	Mar	12	
+			-4:00	Falk	-04/-03	1983	May		
+			-3:00	Falk	-03/-02	1985	Sep	15	
+			-4:00	Falk	-04/-03	2010	Sep	5	2:00
+			-3:00	-	-03				
+Zone	America/Cayenne	-3:29:20	-	LMT	1911	Jul		
+			-4:00	-	-04	1967	Oct		
+			-3:00	-	-03				
+Zone	America/Guyana	-3:52:40	-	LMT	1915	Mar		
+			-3:45	-	-0345	1975	Jul	31	
+			-3:00	-	-03	1991			
+			-4:00	-	-04				
+Zone	America/Asuncion	-3:50:40	-	LMT	1890			
+			-3:50:40	-	AMT	1931	Oct	10	
+			-4:00	-	-04	1972	Oct		
+			-3:00	-	-03	1974	Apr		
+			-4:00	Para	-04/-03				
+Zone	America/Lima	-5:08:12	-	LMT	1890			
+			-5:08:36	-	LMT	1908	Jul	28	
+			-5:00	Peru	-05/-04				
+Zone	Atlantic/South_Georgia	-2:26:08	-	LMT	1890			
+			-2:00	-	-02				
+Zone	America/Paramaribo	-3:40:40	-	LMT	1911			
+			-3:40:52	-	PMT	1935			
+			-3:40:36	-	PMT	1945	Oct		
+			-3:30	-	-0330	1984	Oct		
+			-3:00	-	-03				
+Zone	America/Port_of_Spain	-4:06:04	-	LMT	1912	Mar	2	
+			-4:00	-	AST				
+Zone	America/Montevideo	-3:44:44	-	LMT	1898	Jun	28	
+			-3:44:44	-	MMT	1920	May		
+			-3:30	Uruguay	-0330/-03	1942	Dec	14	
+			-3:00	Uruguay	-03/-02	1968			
+			-3:00	Uruguay	-03/-0230	1971			
+			-3:00	Uruguay	-03/-02	1974			
+			-3:00	Uruguay	-03/-0230	1974	Dec	22	
+			-3:00	Uruguay	-03/-02				
+Zone	America/Caracas	-4:27:44	-	LMT	1890			
+			-4:27:40	-	CMT	1912	Feb	12	
+			-4:30	-	-0430	1965			
+			-4:00	-	-04	2007	Dec	9	3:00
+			-4:30	-	-0430	2016	May	1	2:30
+			-4:00	-	-04				

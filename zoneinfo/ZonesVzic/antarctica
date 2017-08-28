@@ -1,0 +1,32 @@
+Zone	Antarctica/Casey	0:00	-	-00	1969			
+			8:00	-	+08	2009	Oct	18	2:00
+			11:00	-	+11	2010	Mar	5	2:00
+			8:00	-	+08	2011	Oct	28	2:00
+			11:00	-	+11	2012	Feb	21	17:00u
+			8:00	-	+08	2016	Oct	22	
+			11:00	-	+11				
+Zone	Antarctica/Davis	0:00	-	-00	1957	Jan	13	
+			7:00	-	+07	1964	Nov		
+			0:00	-	-00	1969	Feb		
+			7:00	-	+07	2009	Oct	18	2:00
+			5:00	-	+05	2010	Mar	10	20:00u
+			7:00	-	+07	2011	Oct	28	2:00
+			5:00	-	+05	2012	Feb	21	20:00u
+			7:00	-	+07				
+Zone	Antarctica/Mawson	0:00	-	-00	1954	Feb	13	
+			6:00	-	+06	2009	Oct	18	2:00
+			5:00	-	+05				
+Zone	Indian/Kerguelen	0:00	-	-00	1950			
+			5:00	-	+05				
+Zone	Antarctica/DumontDUrville	0:00	-	-00	1947			
+			10:00	-	+10	1952	Jan	14	
+			0:00	-	-00	1956	Nov		
+			10:00	-	+10				
+Zone	Antarctica/Syowa	0:00	-	-00	1957	Jan	29	
+			3:00	-	+03				
+Zone	Antarctica/Troll	0:00	-	-00	2005	Feb	12	
+			0:00	Troll	%s				
+Zone	Antarctica/Vostok	0:00	-	-00	1957	Dec	16	
+			6:00	-	+06				
+Zone	Antarctica/Rothera	0:00	-	-00	1976	Dec		
+			-3:00	-	-03				

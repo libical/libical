@@ -1,0 +1,160 @@
+Zone	Australia/Darwin	8:43:20	-	LMT	1895	Feb		
+			9:00	-	ACST	1899	May		
+			9:30	Aus	AC%sT				
+Zone	Australia/Perth	7:43:24	-	LMT	1895	Dec		
+			8:00	Aus	AW%sT	1943	Jul		
+			8:00	AW	AW%sT				
+Zone	Australia/Eucla	8:35:28	-	LMT	1895	Dec		
+			8:45	Aus	+0845/+0945	1943	Jul		
+			8:45	AW	+0845/+0945				
+Zone	Australia/Brisbane	10:12:08	-	LMT	1895			
+			10:00	Aus	AE%sT	1971			
+			10:00	AQ	AE%sT				
+Zone	Australia/Lindeman	9:55:56	-	LMT	1895			
+			10:00	Aus	AE%sT	1971			
+			10:00	AQ	AE%sT	1992	Jul		
+			10:00	Holiday	AE%sT				
+Zone	Australia/Adelaide	9:14:20	-	LMT	1895	Feb		
+			9:00	-	ACST	1899	May		
+			9:30	Aus	AC%sT	1971			
+			9:30	AS	AC%sT				
+Zone	Australia/Hobart	9:49:16	-	LMT	1895	Sep		
+			10:00	-	AEST	1916	Oct	1	2:00
+			10:00	1:00	AEDT	1917	Feb		
+			10:00	Aus	AE%sT	1967			
+			10:00	AT	AE%sT				
+Zone	Australia/Currie	9:35:28	-	LMT	1895	Sep		
+			10:00	-	AEST	1916	Oct	1	2:00
+			10:00	1:00	AEDT	1917	Feb		
+			10:00	Aus	AE%sT	1971	Jul		
+			10:00	AT	AE%sT				
+Zone	Australia/Melbourne	9:39:52	-	LMT	1895	Feb		
+			10:00	Aus	AE%sT	1971			
+			10:00	AV	AE%sT				
+Zone	Australia/Sydney	10:04:52	-	LMT	1895	Feb		
+			10:00	Aus	AE%sT	1971			
+			10:00	AN	AE%sT				
+Zone	Australia/Broken_Hill	9:25:48	-	LMT	1895	Feb		
+			10:00	-	AEST	1896	Aug	23	
+			9:00	-	ACST	1899	May		
+			9:30	Aus	AC%sT	1971			
+			9:30	AN	AC%sT	2000			
+			9:30	AS	AC%sT				
+Zone	Australia/Lord_Howe	10:36:20	-	LMT	1895	Feb		
+			10:00	-	AEST	1981	Mar		
+			10:30	LH	+1030/+1130	1985	Jul		
+			10:30	LH	+1030/+11				
+Zone	Antarctica/Macquarie	0:00	-	-00	1899	Nov		
+			10:00	-	AEST	1916	Oct	1	2:00
+			10:00	1:00	AEDT	1917	Feb		
+			10:00	Aus	AE%sT	1919	Apr	1	0:00s
+			0:00	-	-00	1948	Mar	25	
+			10:00	Aus	AE%sT	1967			
+			10:00	AT	AE%sT	2010	Apr	4	3:00
+			11:00	-	+11				
+Zone	Indian/Christmas	7:02:52	-	LMT	1895	Feb		
+			7:00	-	+07				
+Zone	Indian/Cocos	6:27:40	-	LMT	1900			
+			6:30	-	+0630				
+Zone	Pacific/Fiji	11:55:44	-	LMT	1915	Oct	26	
+			12:00	Fiji	+12/+13				
+Zone	Pacific/Gambier	-8:59:48	-	LMT	1912	Oct		
+			-9:00	-	-09				
+Zone	Pacific/Marquesas	-9:18	-	LMT	1912	Oct		
+			-9:30	-	-0930				
+Zone	Pacific/Tahiti	-9:58:16	-	LMT	1912	Oct		
+			-10:00	-	-10				
+Zone	Pacific/Guam	-14:21	-	LMT	1844	Dec	31	
+			9:39	-	LMT	1901			
+			10:00	-	GST	2000	Dec	23	
+			10:00	-	ChST				
+Zone	Pacific/Tarawa	11:32:04	-	LMT	1901			
+			12:00	-	+12				
+Zone	Pacific/Enderbury	-11:24:20	-	LMT	1901			
+			-12:00	-	-12	1979	Oct		
+			-11:00	-	-11	1995			
+			13:00	-	+13				
+Zone	Pacific/Kiritimati	-10:29:20	-	LMT	1901			
+			-10:40	-	-1040	1979	Oct		
+			-10:00	-	-10	1995			
+			14:00	-	+14				
+Zone	Pacific/Majuro	11:24:48	-	LMT	1901			
+			11:00	-	+11	1969	Oct		
+			12:00	-	+12				
+Zone	Pacific/Kwajalein	11:09:20	-	LMT	1901			
+			11:00	-	+11	1969	Oct		
+			-12:00	-	-12	1993	Aug	20	
+			12:00	-	+12				
+Zone	Pacific/Chuuk	10:07:08	-	LMT	1901			
+			10:00	-	+10				
+Zone	Pacific/Pohnpei	10:32:52	-	LMT	1901			
+			11:00	-	+11				
+Zone	Pacific/Kosrae	10:51:56	-	LMT	1901			
+			11:00	-	+11	1969	Oct		
+			12:00	-	+12	1999			
+			11:00	-	+11				
+Zone	Pacific/Nauru	11:07:40	-	LMT	1921	Jan	15	
+			11:30	-	+1130	1942	Mar	15	
+			9:00	-	+09	1944	Aug	15	
+			11:30	-	+1130	1979	May		
+			12:00	-	+12				
+Zone	Pacific/Noumea	11:05:48	-	LMT	1912	Jan	13	
+			11:00	NC	+11/+12				
+Zone	Pacific/Auckland	11:39:04	-	LMT	1868	Nov	2	
+			11:30	NZ	NZ%sT	1946			
+			12:00	NZ	NZ%sT				
+Zone	Pacific/Chatham	12:13:48	-	LMT	1868	Nov	2	
+			12:15	-	+1215	1946			
+			12:45	Chatham	+1245/+1345				
+Zone	Pacific/Rarotonga	-10:39:04	-	LMT	1901			
+			-10:30	-	-1030	1978	Nov	12	
+			-10:00	Cook	-10/-0930				
+Zone	Pacific/Niue	-11:19:40	-	LMT	1901			
+			-11:20	-	-1120	1951			
+			-11:30	-	-1130	1978	Oct		
+			-11:00	-	-11				
+Zone	Pacific/Norfolk	11:11:52	-	LMT	1901			
+			11:12	-	+1112	1951			
+			11:30	-	+1130	1974	Oct	27	2:00
+			11:30	1:00	+1230	1975	Mar	2	2:00
+			11:30	-	+1130	2015	Oct	4	2:00
+			11:00	-	+11				
+Zone	Pacific/Palau	8:57:56	-	LMT	1901			
+			9:00	-	+09				
+Zone	Pacific/Port_Moresby	9:48:40	-	LMT	1880			
+			9:48:32	-	PMMT	1895			
+			10:00	-	+10				
+Zone	Pacific/Bougainville	10:22:16	-	LMT	1880			
+			9:48:32	-	PMMT	1895			
+			10:00	-	+10	1942	Jul		
+			9:00	-	+09	1945	Aug	21	
+			10:00	-	+10	2014	Dec	28	2:00
+			11:00	-	+11				
+Zone	Pacific/Pitcairn	-8:40:20	-	LMT	1901			
+			-8:30	-	-0830	1998	Apr	27	
+			-8:00	-	-08				
+Zone	Pacific/Pago_Pago	12:37:12	-	LMT	1879	Jul	5	
+			-11:22:48	-	LMT	1911			
+			-11:00	-	SST				
+Zone	Pacific/Apia	12:33:04	-	LMT	1879	Jul	5	
+			-11:26:56	-	LMT	1911			
+			-11:30	-	-1130	1950			
+			-11:00	WS	-11/-10	2011	Dec	29	24:00
+			13:00	WS	+13/+14				
+Zone	Pacific/Guadalcanal	10:39:48	-	LMT	1912	Oct		
+			11:00	-	+11				
+Zone	Pacific/Fakaofo	-11:24:56	-	LMT	1901			
+			-11:00	-	-11	2011	Dec	30	
+			13:00	-	+13				
+Zone	Pacific/Tongatapu	12:19:20	-	LMT	1901			
+			12:20	-	+1220	1941			
+			13:00	-	+13	1999			
+			13:00	Tonga	+13/+14				
+Zone	Pacific/Funafuti	11:56:52	-	LMT	1901			
+			12:00	-	+12				
+Zone	Pacific/Wake	11:06:28	-	LMT	1901			
+			12:00	-	+12				
+Zone	Pacific/Efate	11:13:16	-	LMT	1912	Jan	13	
+			11:00	Vanuatu	+11/+12				
+Zone	Pacific/Wallis	12:15:20	-	LMT	1901			
+			12:00	-	+12				
