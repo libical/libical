@@ -628,6 +628,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             if (rt.freq != ICAL_NO_RECURRENCE) {
                 value = icalvalue_new_recur(rt);
             }
+            free(rt.rscale);
             break;
         }
 

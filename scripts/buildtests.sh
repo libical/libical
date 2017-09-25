@@ -31,6 +31,16 @@ HELP() {
   echo
 }
 
+COMMAND_EXISTS () {
+    command -v $1 >/dev/null 2>&1
+    if ( test $? != 0 )
+    then
+    echo "$1 is not in your PATH. Either install this program or skip the assocatied test"
+    exit 1
+  fi
+}
+
+
 #function SET_GCC
 # setup compiling with gcc
 SET_GCC() {
@@ -140,6 +150,7 @@ GCC_BUILD() {
     echo "===== GCC BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
+  COMMAND_EXISTS "gcc"
   echo "===== START GCC BUILD: $1 ======"
   SET_GCC
   BUILD "$name" "$2"
@@ -157,6 +168,7 @@ CLANG_BUILD() {
     echo "===== CLANG BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
+  COMMAND_EXISTS "clang"
   echo "===== START CLANG BUILD: $1 ======"
   SET_CLANG
   BUILD "$name" "$2"
@@ -191,6 +203,7 @@ CPPCHECK() {
     echo "===== CPPCHECK TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
+  COMMAND_EXISTS "cppcheck"
   echo "===== START SETUP FOR CPPCHECK: $1 ======"
 
   #first build it
@@ -239,6 +252,7 @@ SPLINT() {
     echo "===== SPLIT TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
+  COMMAND_EXISTS "splint"
   echo "===== START SETUP FOR SPLINT: $1 ======"
 
   #first build it
@@ -320,6 +334,7 @@ CLANGTIDY() {
     echo "===== CLANG-TIDY TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
+  COMMAND_EXISTS "clang-tidy"
   echo "===== START CLANG-TIDY: $1 ====="
   cd $TOP
   SET_CLANG
@@ -340,6 +355,7 @@ CLANGSCAN() {
     echo "===== SCAN-BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
+  COMMAND_EXISTS "scan-build"
   echo "===== START SCAN-BUILD: $1 ====="
   cd $TOP
 
@@ -364,6 +380,7 @@ KRAZY() {
     echo "===== KRAZY TEST DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
+  COMMAND_EXISTS "krazy2all"
   echo "===== START KRAZY ====="
   cd $TOP
   krazy2all |& tee krazy.out

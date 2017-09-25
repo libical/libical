@@ -273,6 +273,9 @@ LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                                             span, void *data),
                                                           void *callback_data);
 
+LIBICAL_ICAL_EXPORT void icalcomponent_normalize(icalcomponent *comp);
+
+
 /*************** Type Specific routines ***************/
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vcalendar(void);

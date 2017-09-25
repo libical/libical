@@ -124,4 +124,6 @@ LIBICAL_ICAL_EXPORT icalproperty_status icalproperty_string_to_status(const char
 
 LIBICAL_ICAL_EXPORT int icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e);
 
+LIBICAL_ICAL_EXPORT void icalproperty_normalize(icalproperty *prop);
+
 #endif /*ICALPROPERTY_H */
