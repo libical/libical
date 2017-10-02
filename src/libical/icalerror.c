@@ -87,7 +87,7 @@ void icalerror_crash_here(void)
     int *p = 0;
     /* coverity[var_deref_op] */
     /* cppcheck-suppress nullPointer */
-    *p = 1;
+    *p = 1; /*clang-analyzer false positive. we want a crash*/
 
     /* cppcheck-suppress nullPointer */
     assert(*p);
