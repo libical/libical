@@ -99,6 +99,7 @@ icalparameter *icalparameter_new_clone(icalparameter *old)
     if (old->string != 0) {
         new->string = icalmemory_strdup(old->string);
         if (new->string == 0) {
+            new->parent = 0;
             icalparameter_free(new);
             return 0;
         }
@@ -107,6 +108,7 @@ icalparameter *icalparameter_new_clone(icalparameter *old)
     if (old->x_name != 0) {
         new->x_name = icalmemory_strdup(old->x_name);
         if (new->x_name == 0) {
+            new->parent = 0;
             icalparameter_free(new);
             return 0;
         }

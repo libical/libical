@@ -102,6 +102,7 @@ icalvalue *icalvalue_new_clone(const icalvalue *old)
                 new->data.v_string = icalmemory_strdup(old->data.v_string);
 
                 if (new->data.v_string == 0) {
+                    new->parent = 0;
                     icalvalue_free(new);
                     return 0;
                 }
@@ -118,6 +119,7 @@ icalvalue *icalvalue_new_clone(const icalvalue *old)
                     new->x_value = icalmemory_strdup(old->x_value);
 
                     if (new->x_value == 0) {
+                        new->parent = 0;
                         icalvalue_free(new);
                         return 0;
                     }
@@ -144,6 +146,7 @@ icalvalue *icalvalue_new_clone(const icalvalue *old)
                 new->x_value = icalmemory_strdup(old->x_value);
 
                 if (new->x_value == 0) {
+                    new->parent = 0;
                     icalvalue_free(new);
                     return 0;
                 }
