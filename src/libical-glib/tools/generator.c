@@ -199,6 +199,7 @@ gchar *get_upper_camel_from_lower_snake(const gchar *lowerSnake)
     g_return_val_if_fail(lowerSnake != NULL && *lowerSnake != '\0', NULL);
 
     buffer = g_new(gchar, BUFFER_SIZE);
+    memset(buffer, 0, BUFFER_SIZE);
     buffer[0] = toupper(lowerSnake[0]);
     buffer[1] = '\0';
     for (i = 1; i < (guint)strlen(lowerSnake); i++) {

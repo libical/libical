@@ -1716,6 +1716,7 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
     struct icalgauge_where *where;
     char *compstr, *propstr, *c, *l;
     const char *s;
+    size_t lenstr;
 
     if ( (where = malloc(sizeof(struct icalgauge_where))) ==0){
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -1730,12 +1731,15 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
 
     /* remove enclosing quotes */
     s = value_str;
-    if(*s == '\''){
-        s++;
-    }
-    l = (char *)(s+strlen(s)-1);
-    if(*l == '\''){
-        *l=0;
+    lenstr = strlen(value_str);
+    if (lenstr > 1) {
+        if (*s == '\'') {
+            s++;
+        }
+        l = (char *)(&value_str[lenstr - 1]);
+        if (*l == '\'') {
+            *l=0;
+        }
     }
 
     where->value = strdup(s);
@@ -1753,7 +1757,7 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
 
 
     /* Handle the case where a component was specified */
-    if(compstr != 0){
+    if (compstr != 0){
         where->comp = icalenum_string_to_component_kind(compstr);
     } else {
         where->comp = ICAL_NO_COMPONENT;
