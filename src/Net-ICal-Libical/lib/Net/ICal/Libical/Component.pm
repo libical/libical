@@ -1,26 +1,22 @@
 #!/usr/bin/perl
-# -*- Mode: perl -*-
 #======================================================================
 # FILE: Component.pm
 # CREATOR: eric 1 Mar 01
 #
-# DESCRIPTION:
-#   
+# (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+#     http://www.softwarestudio.org
 #
-#  $Id: Component.pm,v 1.4 2001-04-11 04:45:28 ebusboom Exp $
-#  $Locker:  $
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
 #
-# (C) COPYRIGHT 2000, Eric Busboom, eric@softwarestudio.org
+#    The LGPL as published by the Free Software Foundation, version
+#    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# Or:
 #
-#
+#    The Mozilla Public License Version 2.0. You may obtain a copy of
+#    the License at http://www.mozilla.org/MPL/
 #======================================================================
-
-
 
 package Net::ICal::Libical::Component;
 use Net::ICal::Libical;
@@ -53,13 +49,13 @@ sub new_from_ref {
 # returns NULL
 sub DESTROY {
   my $self = shift;
-  
+
   my $c = $self->{'comp_p'};
-  
+
   if($c && !Net::ICal::Libical::icalcomponent_get_parent($c)){
     Net::ICal::Libical::icalcomponent_free($c);
   }
-  
+
 }
 
 # Return an array of all properties of the given type
@@ -67,9 +63,9 @@ sub properties{
 
   my $self = shift;
   my $prop_name = shift;
-  
+
   my @props;
-  
+
   if(!$prop_name){
     $prop_name = 'ANY';
   }
@@ -80,19 +76,19 @@ sub properties{
   # $p = icallangbind_get_next_property($comp_p,$prop_name)
 
   my $c = $self->{'comp_p'};
-  my $p; 
+  my $p;
 
   for($p = Net::ICal::Libical::icallangbind_get_first_property($c,$prop_name);
      $p;
      $p = Net::ICal::Libical::icallangbind_get_next_property($c,$prop_name)){
-    
+
     my $d_string = Net::ICal::Libical::icallangbind_property_eval_string($p,"=>");
     my %dict = %{eval($d_string)};
-    
+
     $dict{'ref'} = $p;
 
-  # Now, look at $dict{'value_type'} or $dict{'name'} to construct a 
-  # derived class of Property. I'll do this later. 
+  # Now, look at $dict{'value_type'} or $dict{'name'} to construct a
+  # derived class of Property. I'll do this later.
 
     my $prop;
 
@@ -110,23 +106,23 @@ sub properties{
 
 
   return @props;
-  
+
 }
 
-  
+
 sub add_property {
-  
+
   # if there is a 'ref' key in the prop's dict, then it is owned by
   # an icalcomponent, so dont add it again. But, you may check that
   # it is owned by this component with:
   # icalproperty_get_parent(p->{'ref'}') != $self->{'comp_p'}
-  
+
   # If there is no 'ref' key, then create one with $p->{'ref'} =
   # icalproperty_new_from_string($p->as_ical_string)
-  
+
 }
 
-sub remove_property { 
+sub remove_property {
 
 # If $p->{'ref'} is set, then remove the property with
 # icalcomponent_remove_property() }
@@ -137,26 +133,26 @@ sub components {
 
   my $self = shift;
   my $comp_name = shift;
-  
+
   my @comps;
-  
+
   if(!$comp_name){
     $comp_name = 'ANY';
   }
 
   my $c = $self->{'comp_p'};
-  my $p; 
+  my $p;
 
   for($p = Net::ICal::Libical::icallangbind_get_first_component($c,$comp_name);
      $p;
      $p = Net::ICal::Libical::icallangbind_get_next_component($c,$comp_name)){
-    
+
     push(@comps, Net::ICal::Libical::Component->new_from_ref($p));
 
   }
 
   return @comps;
-  
+
 }
 
 

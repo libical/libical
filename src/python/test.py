@@ -1,28 +1,21 @@
-#!/usr/bin/env python 
-# -*- Mode: python -*-
+#!/usr/bin/env python
 #======================================================================
 # FILE: test.py
-# CREATOR: eric 
-#
-# DESCRIPTION:
-#   
-#
-#  $Id: test.py,v 1.24 2002-10-24 13:44:31 acampi Exp $
-#  $Locker:  $
+# CREATOR: eric
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
-# (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>  
+# (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of either: 
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
 #
-#    The LGPL as published by the Free Software Foundation, version
-#    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+#   The LGPL as published by the Free Software Foundation, version
+#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.txt
 #
-#  Or:
+# Or:
 #
-#    The Mozilla Public License Version 1.0. You may obtain a copy of
-#    the License at http://www.mozilla.org/MPL/
+#   The Mozilla Public License Version 2.0. You may obtain a copy of
+#   the License at http://www.mozilla.org/MPL/
 #======================================================================
 
 import LibicalWrap
@@ -39,7 +32,7 @@ PRODID:-//ABC Corporation//NONSGML My Product//EN
 METHOD:REQUEST
 BEGIN:VEVENT
 ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com
-COMMENT: When in the course of writting comments and nonsense text\, it 
+COMMENT: When in the course of writting comments and nonsense text\, it
  becomes necessary to insert a newline
 DTSTART:19972512T120000
 DTSTART:19970101T120000Z
@@ -68,10 +61,10 @@ def test_property():
     print
     print "Parameters:"
     for param in p.parameters():
-	    print "  ", param, " = ", p[param]
+            print "  ", param, " = ", p[param]
     print
     print p['ROLE']
-    
+
     p['ROLE'] = 'INDIVIDUAL'
 
     print p['ROLE']
@@ -99,7 +92,7 @@ def test_property():
     print p.as_ical_string()
     del p['ROLE']
     del p['X-MAN-FAVOURITE']
-    
+
     print p.as_ical_string()
 
 
@@ -132,7 +125,7 @@ def test_time():
     print"-------------------Test Time  --------------------------------"
 
     t = Time("19970325T123010Z",'DTSTART')
-    
+
     assert(t.year == 1997)
     assert(t.month == 3)
     assert(t.day == 25)
@@ -141,7 +134,7 @@ def test_time():
     assert(t.second == 10)
     assert(t.is_utc())
     assert(not t.is_date())
-    
+
     print t
 
     t.timezone("America/Los_Angeles")
@@ -172,19 +165,19 @@ def test_time():
     # test int args
     t = Time(2)
     print t
- 
+
     # test float args
     t = Time(2.5)
     print t
 
-def test_period():    
+def test_period():
 
     print"-------------------Test Period--------------------------------"
 
     p = Period("19970101T180000Z/19970101T233000Z")
 
     print p
-    
+
     assert(str(p) == 'FREEBUSY:19970101T180000Z/19970101T233000Z')
 
     print p.start()
@@ -229,7 +222,7 @@ def test_duration():
     # seconds
 
     d = Duration(-275100)
-           
+
     print str(d)
 
     assert(str(d) == "DURATION:-P3DT4H25M")
@@ -279,10 +272,10 @@ def test_component():
     c = NewComponent(comp_str);
 
     props = c.properties()
-    
-    for p in props: 
+
+    for p in props:
         print p.as_ical_string()
-    
+
     inner = c.components()[0]
 
     print inner
@@ -290,14 +283,14 @@ def test_component():
 
 
     props = inner.properties()
-    
-    for p in props: 
+
+    for p in props:
         print p.as_ical_string()
-        
+
     dtstart = inner.properties('DTSTART')[0]
-        
+
     print dtstart
-    
+
     print "\n Orig hour: ", dtstart.hour
     assert(dtstart.hour == 12)
 
@@ -307,7 +300,7 @@ def test_component():
     assert(dtstart.hour == 17)
 
     attendee = inner.properties('ATTENDEE')[0]
-    
+
     print attendee
 
     t = Time("20011111T123030")
@@ -345,7 +338,7 @@ def test_component():
 
     print inner.as_ical_string()
 
-    # test sequence 
+    # test sequence
     event = Event()
 
     try:
@@ -359,7 +352,7 @@ def test_component():
     event.sequence(1)
     event.sequence(88)
     print event.sequence()
-    
+
 def test_event():
     print "------------ Event Class ----------------------"
 
@@ -388,11 +381,11 @@ def test_event():
     event.dtend(dtend)
     assert (event.dtend() ==dtend )
     assert (event.dtend() == Time('20010401T190000Z'))
-    
+
     att = Attendee()
     att.value('jsmith@nothere.com')
     event.attendees(('ef_hutton@listenup.com', att))
-    
+
     event.x_properties('X-TEST',('foo', 'bar'))
     event.x_properties('X-TEST2',('foo, biz', 'bar, biz'))
 
@@ -404,14 +397,14 @@ def test_event():
 
     event.description("A short description.  Longer ones break things. Really. What does it break. The code is supposed to handle realy long lines, longer, in fact, than any sane person would create except by writting a random text generator or by excerpting text from a less sane person. Actually, it did \"break\" and I had to remove an \n assert to fix it.")
     event.status('TeNtAtIvE')
-    
+
     print event.as_ical_string()
 
-    
+
 def test_derivedprop():
-    
+
     print "------------ Derived Properties -----------------"
-    
+
     p = RDate("20011111T123030")
 
     print str(p)
@@ -427,7 +420,7 @@ def test_derivedprop():
         assert(0)
     except: pass
 
-    
+
     p = Trigger("P3DT4H25M")
 
     print str(p)
@@ -457,7 +450,7 @@ def test_gauge():
     event.dtend(dtend)
     event.description("A short description.")
     event.status('TeNtAtIvE')
-    
+
     print event.as_ical_string()
 
     gauge = Gauge(sql="SELECT * FROM VEVENT WHERE DTSTART > '20010401T180000Z'")
@@ -495,12 +488,12 @@ def do_test_store(storeobj=None, *args):
     #  copy event
     #  munge uid and increment month
     for i in range(1,11):
-	newevent = event.clone()
-	newevent.uid("%d@localhost" % (i,))
-	newevent.dtstart().month = newevent.dtstart().month + i
+        newevent = event.clone()
+        newevent.uid("%d@localhost" % (i,))
+        newevent.dtstart().month = newevent.dtstart().month + i
 
-	#print ne
-	store.add_component(newevent)
+        #print ne
+        store.add_component(newevent)
 
     # commit
     store.commit()
@@ -547,11 +540,11 @@ def do_test_store(storeobj=None, *args):
 
     c = store.first_component()
     while c != None:
-	    print c.uid()
-	    print c.dtstart()
-	    print
-	    count = count + 1
-	    c = store.next_component()
+            print c.uid()
+            print c.dtstart()
+            print
+            count = count + 1
+            c = store.next_component()
 
     store.clearSelect()
 
@@ -560,9 +553,9 @@ def do_test_store(storeobj=None, *args):
     # remove all of them
     c = store.first_component()
     while c != None:
-	    print c.uid()
-	    store.remove_component(c)
-	    c = store.first_component()
+            print c.uid()
+            store.remove_component(c)
+            c = store.first_component()
 
     assert(store.count_components("VCALENDAR") == 0)
     store.commit()
@@ -595,7 +588,7 @@ def run_tests():
     #test_attach()
 
     test_gauge()
-    
+
     test_store()
 
 
@@ -603,4 +596,3 @@ def run_tests():
 
 if __name__ == "__main__":
     run_tests()
-

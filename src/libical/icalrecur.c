@@ -5,7 +5,7 @@
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
- This program is free software; you can redistribute it and/or modify
+ This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
@@ -13,7 +13,7 @@
 
  Or:
 
-    The Mozilla Public License Version 1.0. You may obtain a copy of
+    The Mozilla Public License Version 2.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 ========================================================================*/
 
@@ -1328,7 +1328,7 @@ static int initialize_iterator(icalrecur_iterator *impl)
     struct icaltimetype dtstart = impl->dtstart;
     char locale[ULOC_KEYWORD_AND_VALUES_CAPACITY] = "";
     UErrorCode status = U_ZERO_ERROR;
-    UChar *tzid = NULL;
+    UChar *tzid = (UChar *) UCAL_UNKNOWN_ZONE_ID;
     short is_hebrew = 0;
 
     if (dtstart.zone) {

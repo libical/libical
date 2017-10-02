@@ -2,14 +2,14 @@
 #
 # Once done this will define
 #
-#  INTROSPECTION_FOUND - system has gobject-introspection
-#  INTROSPECTION_SCANNER - the gobject-introspection scanner, g-ir-scanner
-#  INTROSPECTION_COMPILER - the gobject-introspection compiler, g-ir-compiler
-#  INTROSPECTION_GENERATE - the gobject-introspection generate, g-ir-generate
-#  INTROSPECTION_GIRDIR
-#  INTROSPECTION_TYPELIBDIR
-#  INTROSPECTION_CFLAGS
-#  INTROSPECTION_LIBS
+#  GObjectIntrospection_FOUND - system has gobject-introspection
+#  GObjectIntrospection_SCANNER - the gobject-introspection scanner, g-ir-scanner
+#  GObjectIntrospection_COMPILER - the gobject-introspection compiler, g-ir-compiler
+#  GObjectIntrospection_GENERATE - the gobject-introspection generate, g-ir-generate
+#  GObjectIntrospection_GIRDIR
+#  GObjectIntrospection_TYPELIBDIR
+#  GObjectIntrospection_CFLAGS
+#  GObjectIntrospection_LIBS
 #
 # Copyright (C) 2010, Pino Toscano, <pino@kde.org>
 #
@@ -39,23 +39,23 @@ if(PKG_CONFIG_FOUND)
   endif()
   pkg_check_modules(_pc_gir gobject-introspection-1.0${_gir_version_cmp})
   if(_pc_gir_FOUND)
-    set(INTROSPECTION_FOUND TRUE)
-    _gir_get_pkgconfig_var(INTROSPECTION_SCANNER "g_ir_scanner")
-    _gir_get_pkgconfig_var(INTROSPECTION_COMPILER "g_ir_compiler")
-    _gir_get_pkgconfig_var(INTROSPECTION_GENERATE "g_ir_generate")
-    _gir_get_pkgconfig_var(INTROSPECTION_GIRDIR "girdir")
-    _gir_get_pkgconfig_var(INTROSPECTION_TYPELIBDIR "typelibdir")
-    set(INTROSPECTION_CFLAGS "${_pc_gir_CFLAGS}")
-    set(INTROSPECTION_LIBS "${_pc_gir_LIBS}")
+    set(GObjectIntrospection_FOUND TRUE)
+    _gir_get_pkgconfig_var(GObjectIntrospection_SCANNER "g_ir_scanner")
+    _gir_get_pkgconfig_var(GObjectIntrospection_COMPILER "g_ir_compiler")
+    _gir_get_pkgconfig_var(GObjectIntrospection_GENERATE "g_ir_generate")
+    _gir_get_pkgconfig_var(GObjectIntrospection_GIRDIR "girdir")
+    _gir_get_pkgconfig_var(GObjectIntrospection_TYPELIBDIR "typelibdir")
+    set(GObjectIntrospection_CFLAGS "${_pc_gir_CFLAGS}")
+    set(GObjectIntrospection_LIBS "${_pc_gir_LIBS}")
   endif()
 endif()
 
 mark_as_advanced(
-  INTROSPECTION_SCANNER
-  INTROSPECTION_COMPILER
-  INTROSPECTION_GENERATE
-  INTROSPECTION_GIRDIR
-  INTROSPECTION_TYPELIBDIR
-  INTROSPECTION_CFLAGS
-  INTROSPECTION_LIBS
+  GObjectIntrospection_SCANNER
+  GObjectIntrospection_COMPILER
+  GObjectIntrospection_GENERATE
+  GObjectIntrospection_GIRDIR
+  GObjectIntrospection_TYPELIBDIR
+  GObjectIntrospection_CFLAGS
+  GObjectIntrospection_LIBS
 )

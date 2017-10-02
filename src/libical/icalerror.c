@@ -5,7 +5,7 @@
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
- This program is free software; you can redistribute it and/or modify
+ This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
@@ -13,7 +13,7 @@
 
  Or:
 
-    The Mozilla Public License Version 1.0. You may obtain a copy of
+    The Mozilla Public License Version 2.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
   The original code is icalerror.c

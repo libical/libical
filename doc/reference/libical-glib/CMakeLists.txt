@@ -1,7 +1,7 @@
-find_program(GTKDOC_SCAN gtkdoc-scan)
-find_program(GTKDOC_MKDB gtkdoc-mkdb)
-find_program(GTKDOC_MKHTML gtkdoc-mkhtml)
-find_program(GTKDOC_FIXXREF gtkdoc-fixxref)
+find_program(GTKDOC_SCAN gtkdoc-scan DOC "a tool to scan header files for public symbols")
+find_program(GTKDOC_MKDB gtkdoc-mkdb DOC "a tool to generate docbook files")
+find_program(GTKDOC_MKHTML gtkdoc-mkhtml DOC "a tool to generate documentation in html format")
+find_program(GTKDOC_FIXXREF gtkdoc-fixxref DOC "a tool to fix cross references in html files")
 
 if(NOT (GTKDOC_SCAN AND GTKDOC_MKDB AND GTKDOC_MKHTML AND GTKDOC_FIXXREF))
   message(WARNING "Cannot find all gtk-doc binaries, skipping API reference generation for libical-glib")

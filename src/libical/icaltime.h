@@ -5,7 +5,7 @@
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
- This program is free software; you can redistribute it and/or modify
+ This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
@@ -13,7 +13,7 @@
 
  Or:
 
-    The Mozilla Public License Version 1.0. You may obtain a copy of
+    The Mozilla Public License Version 2.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
@@ -199,7 +199,7 @@ LIBICAL_ICAL_EXPORT int icaltime_is_date(const struct icaltimetype t);
 /** @brief Returns true if time is relative to UTC zone */
 LIBICAL_ICAL_EXPORT int icaltime_is_utc(const struct icaltimetype t);
 
-/** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
+/** Return -1, 0, or 1 to indicate that a is less than b, a equals b, or a is greater than b */
 LIBICAL_ICAL_EXPORT int icaltime_compare(const struct icaltimetype a, const struct icaltimetype b);
 
 /** like icaltime_compare, but only use the date parts. */

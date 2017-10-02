@@ -1,16 +1,22 @@
 #!/usr/bin/perl -w
-# -*- Mode: perl -*-
 #======================================================================
+# FILE: Time.pm
+# CREATOR: eric
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+#     http://www.softwarestudio.org
 #
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
 #
+#    The LGPL as published by the Free Software Foundation, version
+#    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+#
+# Or:
+#
+#    The Mozilla Public License Version 2.0. You may obtain a copy of
+#    the License at http://www.mozilla.org/MPL/
 #======================================================================
-
-
 
 =pod
 
@@ -74,10 +80,10 @@ Creates a new time object given one of:
 
 =back
 
-The optional second argument is the timezone in Olsen place name format, 
-which looks like "America/Los_Angeles"; it can be used to get the standard 
-offset from UTC, the dates the location goes to and from Daylight Savings 
-Time, and the magnitude of the Daylight Savings time offset. 
+The optional second argument is the timezone in Olsen place name format,
+which looks like "America/Los_Angeles"; it can be used to get the standard
+offset from UTC, the dates the location goes to and from Daylight Savings
+Time, and the magnitude of the Daylight Savings time offset.
 
 =cut
 
@@ -88,21 +94,21 @@ sub new{
   my $self;
 
   if (ref($arg) == 'HASH'){
-    # Construct from dictionary 
+    # Construct from dictionary
     $self = Net::ICal::Libical::Property::new($package,$arg);
     my $val=Net::ICal::Libical::icalproperty_get_value_as_string($self->{'ref'});
     $self->{'tt'} = Net::ICal::Libical::icaltime_from_string($val);
-    
+
    return $self;
 
   } else {
 
     if ($#_ = 1){
-      # iCalendar string 
+      # iCalendar string
       $self = Net::ICal::Libical::Property::new($package,'DTSTART');
       $self->{'tt'} = Net::ICal::Libical::icaltime_new_from_string($arg);
     } else {
-      # Broken out time 
+      # Broken out time
       die;
     }
 
@@ -123,16 +129,16 @@ sub _update_value {
   $self->value(Net::ICal::Libical::icaltime_as_ical_string($self->{'tt'}));
 
 }
-  
+
 =pod
 
 =head2 clone()
 
-Create a new copy of this time. 
+Create a new copy of this time.
 
 =cut
 
-# clone a Time object. 
+# clone a Time object.
 sub clone {
   my $self = shift;
 
@@ -156,7 +162,7 @@ sub is_valid{
   my $self = shift;
 
   return Net::ICal::Libical::icaltime_is_null_time($self->{'tt'});
-  
+
 }
 
 
@@ -178,8 +184,8 @@ sub is_date {
 
     # Convert to true or false
     Net::ICal::Libical::icaltimetype_is_date_set($self->{'tt'},
-						 !(!($_[0]))); 
-  } 
+                                                 !(!($_[0])));
+  }
 
   return Net::ICal::Libical::icaltimetype_is_date_get($self->{'tt'});
 
@@ -190,7 +196,7 @@ sub is_date {
 
 =head2 is_utc([true|false])
 
-Is_utc indicates if the time should be interpreted in the UTC timezone. 
+Is_utc indicates if the time should be interpreted in the UTC timezone.
 
 =cut
 
@@ -200,8 +206,8 @@ sub is_utc {
 
     # Convert to true or false
     Net::ICal::Libical::icaltimetype_is_utc_set($self->{'tt'},
-						 !(!($_[0]))); 
-  } 
+                                                 !(!($_[0])));
+  }
 
   return Net::ICal::Libical::icaltimetype_is_utc_get($self->{'tt'});
 
@@ -241,7 +247,7 @@ instance, 12:65:00 would become 13:05:00.
 
 sub normalize{
   my $self = shift;
-  
+
   $self->{'tt'} = Net::ICal::Libical::icaltime_normalize($self->{'tt'});
   $self->value(Net::ICal::Libical::icaltime_as_ical_string($self->{'tt'}));
 
@@ -252,7 +258,7 @@ sub normalize{
 
 =head2 hour([$hour])
 
-Accessor to the hour.  Out of range values are normalized. 
+Accessor to the hour.  Out of range values are normalized.
 
 =cut
 
@@ -277,7 +283,7 @@ hour.
 
 =head2 year([$year])
 
-Accessor to the year. Out of range values are normalized. 
+Accessor to the year. Out of range values are normalized.
 
 =cut
 
@@ -285,7 +291,7 @@ Accessor to the year. Out of range values are normalized.
 
 =head2 month([$month])
 
-Accessor to the month.  Out of range values are normalized. 
+Accessor to the month.  Out of range values are normalized.
 
 =cut
 
@@ -294,7 +300,7 @@ Accessor to the month.  Out of range values are normalized.
 
 =head2 day([$day])
 
-Accessor to the month day.  Out of range values are normalized. 
+Accessor to the month day.  Out of range values are normalized.
 
 =cut
 
@@ -303,7 +309,7 @@ no strict;
   my $self = shift;
   my $type = shift;
   my $value = shift;
-  
+
   $type = lc($type);
 
   if($value){
@@ -378,15 +384,15 @@ sub subtract {
 
 =head2 move_to_zone($zone);
 
-Change the time to what it would be in the named timezone. 
+Change the time to what it would be in the named timezone.
 The zone can be an Olsen placename or "UTC".
 
 =cut
 
-# XXX this needs implementing. 
+# XXX this needs implementing.
 sub move_to_zone {
   confess "Not Implemented\n";
-} 
+}
 
 
 
@@ -461,8 +467,7 @@ sub compare {
   } else {
     return 0;
   }
-  
+
 }
 
-1; 
-
+1;

@@ -11,6 +11,12 @@ macro(_join_list _var _sep)
 endmacro()
 
 find_package(Doxygen)
+set_package_properties(Doxygen PROPERTIES
+  TYPE OPTIONAL
+  DESCRIPTION "API Documentation system"
+  URL "http://www.doxygen.org"
+  PURPOSE "Needed to build the API documention."
+)
 if(DOXYGEN_FOUND)
   file(GLOB _dox_deps *.dox *.html)
   file(GLOB _all_hdrs

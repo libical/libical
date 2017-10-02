@@ -19,10 +19,11 @@ Libical implements RFC5545, RFC5546, RFC7529; the iCalendar extensions
 in RFC6638; and some of RFC6047.
 
 This documentation assumes that you are familiar with the iCalendar
-standards RFC5545 and RFC5546. these specifications are online on
-the CALSCH webpage at:
+standards RFC5545 and RFC5546. These specifications are available
+at the IETF tools website:
 
-http://www.imc.org/ietf-calendar/
+https://tools.ietf.org/html/rfc5545
+https://tools.ietf.org/html/rfc5546
 
 1.1 The libical project
 
@@ -32,10 +33,10 @@ to the project, visit http://libical.github.io/libical/
 1.2 License
 
 The code and datafiles in this distribution are licensed under the
-Mozilla Public License. See http://www.mozilla.org/NPL/MPL-1.0.html
+Mozilla Public License version 2.0. See http://www.mozilla.org/MPL
 for a copy of the license. Alternately, you may use libical under
-the terms of the GNU Library General Public License. See
-http://www.fsf.org/copyleft/lesser.html for a copy of the LGPL.
+the terms of the GNU Lesser General Public License, version 2.1.
+See http://www.gnu.org/licenses/lgpl-2.1.html for a copy of the LGPL.
 
 This dual license ensures that the library can be incorporated into
 both proprietary code and GPL'd programs, and will benefit from improvements
@@ -50,9 +51,9 @@ Also look in "src/test" for additional annotated examples.
 
 2 Building the Library
 
-Libical uses autoconf to generate makefiles. It should built with no
+Libical uses autoconf to generate makefiles. It should build with no
 adjustments on Linux, FreeBSD and Solaris under gcc. Some version
-have been successfully been build on MacOS, Solaris, UnixWare, And
+have been successfully built on MacOS, Solaris, UnixWare, and
 Tru64 UNIX without gcc, but you may run into problems with a particular
 later version.
 
@@ -147,13 +148,13 @@ Icalcomponent is a container for a set of other components and properties.
 3.1.3 Values
 
 Values are represented in a similar way to properties; a base class
-and many "derived " classes. A value is essentially a abstract handle
+and many "derived" classes. A value is essentially a abstract handle
 on a single fundamental type, a structure or a union.
 
 3.1.4 Parameters
 
 Parameters are represented in a similar way to properties, except that
-they contain only one value
+they contain only one value.
 
 3.2 Other elements of libical
 
@@ -208,7 +209,7 @@ timezone properties associated with daylight savings time starts with
 but is not defined as a component in RFC5545 (see RFC5545, section 3.6.5)
 In Libical,this grouping is represented by the XDAYLIGHT component.
 Standard iCAL components all start with the letter "V," while pseudo
-components start with"X."
+components start with "X."
 
 There are also pseudo components that are conceptually derived classes
 of VALARM. RFC5546 defines what properties may be included in each
@@ -316,7 +317,7 @@ reference, libical will either silently ignore the error or will abort
 with an error message. This behavior is controlled by a compile time
 flag (ICAL_ERRORS_ARE_FATAL), and will abort by default.
 
-5.1.2 vaargs Constructors
+5.1.2 varargs Constructors
 
 There is another way to create complex components, which is arguably
 more elegant, if you are not horrified by varargs. The varargs constructor
@@ -381,7 +382,7 @@ of code. Here is the previous examples in the vaargs style.
 
             );
 
-This form is similar to the constructor form , except that the constructors
+This form is similar to the constructor form, except that the constructors
 have "vanew" instead of "new" in the name. The arguments are similar
 too, except that the component constructor can have a list of properties,
 and the property constructor can have a list of parameters. Be sure
@@ -442,7 +443,7 @@ main() {
 
   icalparser_set_gen_data(parser,stream);
 
-  do{
+  do {
 
     line = icalparser_get_line(parser,read_stream);
 
@@ -450,17 +451,17 @@ main() {
 
     if (c != 0){
 
-     printf("%s",icalcomponent_as_ical_string(c));
+      printf("%s",icalcomponent_as_ical_string(c));
 
-     icalparser_claim(parser);
+      icalparser_claim(parser);
 
-     printf("\n---------------\n");
+      printf("\n---------------\n");
 
-     icalcomponent_free(c);
+      icalcomponent_free(c);
 
-   }
+    }
 
-  } while ( line != 0);
+  } while (line != 0);
 
 }
 
@@ -481,8 +482,7 @@ is a convenience routine;
 
 icalcomponent* icalparser_parse(icalparser *parser,
 
-               char* (*line_gen_func)(char *s, size_t size,  void*
-d))
+               char* (*line_gen_func)(char *s, size_t size,  void* d))
 
 To use this routine, you still must construct the parser object and
 pass in a reference to a line reading routine. If the parser can create
@@ -717,7 +717,7 @@ void icalproperty_remove_parameter_by_kind(
      icalparameter_kind kind);
 
 Note that since there should be only one parameter of each type in
-a property, you will rarely need to use icalparameter_get_nect_paameter.
+a property, you will rarely need to use icalparameter_get_next_parameter.
 
 5.2.6 Working with values
 
@@ -730,7 +730,7 @@ they properties that contain them. This involves fewer routine calls
 and intermediate variables than working with them independently, and
 it is type-safe.
 
-For each property, there are a _get_ and a _set_ routine that access
+For each property, there are a _get_ and a _set_ routine that accesses
 the internal value. For instanace, for the UID property, the routines
 are:
 
@@ -748,7 +748,7 @@ icalvalue* icalproperty_get_value (icalproperty* prop)
 
 void icalproperty_set_value(icalproperty* prop, icalvalue* value);
 
-Icalproperty_get_value() will return a reference that you can manipulate
+icalproperty_get_value() will return a reference that you can manipulate
 with other icalvalue routines. Most of the time, you will have to
 know what the type of the value is. For instance, if you know that
 the value is a DATETIME type, you can manipulate it with:
@@ -820,7 +820,7 @@ you want to preserve it.
 
 5.3.1 Time structure
 
-LIbical defines it's own time structure for storing all dates and times.
+Libical defines its own time structure for storing all dates and times.
 It would have been nice to re-use the C library's struct tm, but that
 structure does not differentiate between dates and times, and between
 local time and UTC. The libical structure is:
@@ -856,11 +856,11 @@ struct icaltimetype icaltime_from_timet_with_zone(time_t v,
                                                   int is_date,
                                                   icaltimezone* zone);
 
-Icaltime_from_string takes any RFC5545 compliant time string:
+icaltime_from_string takes any RFC5545 compliant time string:
 
 struct icaltimetype tt = icaltime_from_string("19970101T103000");
 
-Icaltime_from_timet_with_zone takes a timet value, representing seconds past
+icaltime_from_timet_with_zone takes a time_t value, representing seconds past
 the POSIX epoch, a flag to indicate if the time is a date, and a time zone.
 Dates have an identical structure to a time, but the time portion (hours,
 minuts and seconds) is always 00:00:00. Dates act differently in
@@ -1145,9 +1145,9 @@ and for the strings used to hold values. Some of this memory the library
 caller owns and must free, and some of the memory is managed by the
 library. Here is a summary of the memory rules.
 
-1) If the function name has "new" in it, the caller gets control
-   of the memory. ( such as icalcomponent_new(), or icalproperty_new_clone()
-   )
+1) If the function name has "new" in it (such as icalcomponent_new(),
+   or icalpropert_new_clone()), the caller gets control
+   of the memory.
 
 2) If you got the memory from a routine with new in it, you must
    call the corresponding *_free routine to free the memory. ( Use
@@ -1200,7 +1200,7 @@ to get a string that describes the error. The enumerations are:
 * ICAL_MALFORMEDDATA_ERROR -- An input string was not in the correct
   format
 
-* ICAL_PARSE_ERROR -- The parser failed to parse an incomming component
+* ICAL_PARSE_ERROR -- The parser failed to parse an incoming component
 
 * ICAL_INTERNAL_ERROR -- Largely equivalent to an assert
 
@@ -1326,7 +1326,7 @@ Names that start with "XLIC" or "X-LIC" are not part of any iCal spec.
 They are used internally by libical.
 
 Enums that identify a component, property, value or parameter end with
-"_COMPONENT," "_PROPERTY," "_VALUE," or "_PARAMETER"s
+"_COMPONENT," "_PROPERTY," "_VALUE," or "_PARAMETER"
 
 Enums that identify a parameter value have the name of the parameter
 as the second word. For instance: ICAL_ROLE_REQPARTICIPANT or ICAL_PARTSTAT_ACCEPTED.

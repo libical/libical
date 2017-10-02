@@ -52,13 +52,6 @@
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
 #
-# -DUSE_INTEROPERABLE_VTIMEZONES=[true|false]
-#  Set to use inter-operable rather than exact vtimezones.
-#  Default=false (build exact vtimezones)
-#  Notes:
-#   Change the behavior at runtime using the icaltzutil_set_exact_vtimezones_support() function.
-#   Query the behavior at runtime using the icaltzutil_get_exact_vtimezones_support() function.
-#
 
 ## Special CMake Options for Developers
 #
@@ -107,31 +100,52 @@ set(LIBICAL_LIB_VERSION_STRING
 set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
 set(PROJECT_URL "http://libical.github.io/libical/")
 
-# compile in Berkeley DB support
-find_package(BDB)
-set_package_properties(BDB PROPERTIES TYPE OPTIONAL PURPOSE "For Berkeley DB storage support")
-add_feature_info("Berkeley DB storage support" BDB_FOUND "requires the Berkeley DB development toolkit")
-if(BDB_FOUND)
-  set(HAVE_BDB True)
-endif()
-
 # library build types
 set(LIBRARY_TYPE SHARED)
 
 option(STATIC_ONLY "Build static libraries only.")
+add_feature_info(
+  "Option STATIC_ONLY"
+  STATIC_ONLY
+  "build static libraries only"
+)
 if(STATIC_ONLY)
   set(LIBRARY_TYPE STATIC)
 endif()
 
 option(SHARED_ONLY "Build shared (dynamic) libraries only. Takes precedence over STATIC_ONLY")
+add_feature_info(
+  "Option SHARED_ONLY"
+  SHARED_ONLY
+  "build shared libraries only"
+)
 if(SHARED_ONLY)
   set(STATIC_ONLY False)
   set(LIBRARY_TYPE SHARED)
 endif()
 
+if(NOT STATIC_ONLY AND NOT SHARED_ONLY)
+  add_feature_info(
+    "Build types"
+    TRUE
+    "build both shared and static libraries"
+  )
+endif()
+
+if(STATIC_ONLY)
+  add_definitions(
+    -DLIBICAL_ICAL_STATIC_DEFINE
+    -DLIBICAL_ICALSS_STATIC_DEFINE
+    -DLIBICAL_VCAL_STATIC_DEFINE
+  )
+endif()
+
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
-set_package_properties(Perl PROPERTIES TYPE REQUIRED PURPOSE "Required by the libical build system.")
+set_package_properties(Perl PROPERTIES
+  TYPE REQUIRED
+  PURPOSE "Required by the libical build system."
+)
 
 # Ensure finding 64bit libs when using 64-bit compilers
 if(CMAKE_CL_64)
@@ -142,8 +156,15 @@ endif()
 #  libicu can be found at http://www.icu-project.org
 #  RSCALE info at http://tools.ietf.org/html/rfc7529
 find_package(ICU)
-set_package_properties(ICU PROPERTIES TYPE RECOMMENDED PURPOSE "For RSCALE (RFC7529) support")
-add_feature_info("RSCALE support (RFC7529)" ICU_FOUND "requires the ICU development libraries (libicu)")
+set_package_properties(ICU PROPERTIES
+  TYPE RECOMMENDED
+  PURPOSE "For RSCALE (RFC7529) support"
+)
+add_feature_info(
+  "RSCALE support (RFC7529)"
+  ICU_FOUND
+  "build in RSCALE support"
+)
 if(ICU_FOUND)
   set(REQUIRES_PRIVATE_ICU "Requires.private: icu-i18n") #for libical.pc
   set(HAVE_LIBICU 1)
@@ -157,11 +178,31 @@ if(ICU_I18N_FOUND)
   set(HAVE_LIBICU_I18N 1)
 endif()
 
+# compile in Berkeley DB support
+find_package(BDB)
+set_package_properties(BDB PROPERTIES
+  TYPE OPTIONAL
+  PURPOSE "For Berkeley DB storage support"
+)
+add_feature_info(
+  "Berkeley DB storage support"
+  BDB_FOUND
+  "build in support for Berkeley DB storage"
+)
+if(BDB_FOUND)
+  set(HAVE_BDB True)
+endif()
+
 # MSVC specific definitions
 if(WIN32)
   if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DYY_NO_UNISTD_H)
     option(USE_32BIT_TIME_T "Build using a 32bit time_t (ignored unless building with MSVC on Windows).")
+    add_feature_info(
+      "Option USE_32BIT_TIME_T"
+      USE_32BIT_TIME_T
+      "build using 32-bit time_t"
+    )
     if(USE_32BIT_TIME_T)
       add_definitions(-D_USE_32BIT_TIME_T)
     endif()
@@ -195,6 +236,11 @@ if(APPLE)
 endif()
 
 option(ICAL_ERRORS_ARE_FATAL "icalerror_* calls will abort instead of internally signaling an error.")
+add_feature_info(
+  "Option ICAL_ERRORS_ARE_FATAL"
+  ICAL_ERRORS_ARE_FATAL
+  "icalerror_* calls will abort instead of internally signaling an error"
+)
 if(ICAL_ERRORS_ARE_FATAL)
   set(ICAL_ERRORS_ARE_FATAL 1)
 else()
@@ -202,6 +248,11 @@ else()
 endif()
 
 option(ICAL_ALLOW_EMPTY_PROPERTIES "Prevent empty properties from being replaced with X-LIC-ERROR properties.")
+add_feature_info(
+  "Option ICAL_ALLOW_EMPTY_PROPERTIES"
+  ICAL_ALLOW_EMPTY_PROPERTIES
+  "prevents empty properties from being replaced with X-LIC-ERROR properties"
+)
 if(ICAL_ALLOW_EMPTY_PROPERTIES)
   set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
 else()
@@ -214,19 +265,19 @@ if(USE_BUILTIN_TZDATA)
 else()
   set(USE_BUILTIN_TZDATA 0)
 endif()
+add_feature_info(
+  "Option USE_BUILTIN_TZDATA"
+  USE_BUILTIN_TZDATA
+  "use our own timezone data rather then the system timezone data"
+)
 if(WIN32 OR WINCE)
   #Always use builtin tzdata on Windows systems.
   if(NOT USE_BUILTIN_TZDATA)
-    message(STATUS "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata")
+    message(STATUS
+      "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata"
+    )
     set(USE_BUILTIN_TZDATA 1)
   endif()
-endif()
-
-option(USE_INTEROPERABLE_VTIMEZONES "use interoperable rather than exact vtimezones." False)
-if(USE_INTEROPERABLE_VTIMEZONES)
-  set(USE_INTEROPERABLE_VTIMEZONES 1)
-else()
-  set(USE_INTEROPERABLE_VTIMEZONES 0)
 endif()
 
 include(ConfigureChecks.cmake)
@@ -241,49 +292,101 @@ set(INSTALL_TARGETS_DEFAULT_ARGS
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
 option(GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher.")
+add_feature_info(
+  "Option GOBJECT_INTROSPECTION"
+  GOBJECT_INTROSPECTION
+  "build GObject introspection \"typelib\" files"
+)
 if(GOBJECT_INTROSPECTION)
   find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
-  if(INTROSPECTION_FOUND)
+  set_package_properties(GObjectIntrospection PROPERTIES
+    TYPE REQUIRED
+    URL "https://wiki.gnome.org/Projects/GObjectIntrospection"
+    PURPOSE "Required in order to build the GObject introspection \"typelib\" files."
+  )
+  if(GObjectIntrospection_FOUND)
     set(HAVE_INTROSPECTION TRUE)
     if(STATIC_ONLY)
-      message(FATAL_ERROR "You are attempting to build with GObject Introspection enabled, however that option is not supported when building static libraries only. Please disable the static only option to CMake (-DSTATIC_ONLY=False) if you really want to build with GObject Introspection. Alternatively, you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to CMake)")
+      message(FATAL_ERROR
+        "You are attempting to build with GObject Introspection enabled, "
+        "however that option is not supported when building static libraries only. "
+        "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
+        "if you really want to build with GObject Introspection. Alternatively, "
+        "you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to cmake)")
     endif()
-  else()
-    message(FATAL_ERROR "You requested to build with GObject Introspection but the necessary development package is missing or too low a version (version ${MIN_GOBJECT_INTROSPECTION} or higher is required)")
   endif()
 endif()
 
 option(ICAL_GLIB_VAPI "Build Vala \"vapi\" files.")
+add_feature_info(
+  "Option ICAL_GLIB_VAPI"
+  ICAL_GLIB_VAPI
+  "build Vala \"vapi\" files"
+)
 if(ICAL_GLIB_VAPI)
   if(NOT GOBJECT_INTROSPECTION)
-    message(FATAL_ERROR "You requested to build the Vapi but have not enabled the GObject Introspection, please retry by passing -DGOBJECT_INTROSPECTION=True to CMake")
+    message(FATAL_ERROR
+      "You requested to build the Vala vapi but have not enabled the GObject Introspection. "
+      "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake"
+    )
   endif()
 
-  find_program(VALAC valac)
+  find_program(VALAC valac DOC "the Vala compiler")
   if(NOT VALAC)
-    message(FATAL_ERROR "The valac not found. Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False")
+    message(FATAL_ERROR
+      "valac, the Vala compiler was not found. "
+      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False"
+    )
   endif()
 
-  find_program(VAPIGEN vapigen)
+  find_program(VAPIGEN vapigen DOC "tool to generate the Vala API")
   if(NOT VAPIGEN)
-    message(FATAL_ERROR "The vapigen not found. Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False")
+    message(FATAL_ERROR
+      "vapigen, the tool for generating the Vala API was not found. "
+      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False"
+    )
   endif()
 endif()
 
 set(MIN_GLIB "2.32")
 set(MIN_LIBXML "2.7.3")
 option(ICAL_GLIB "Build libical-glib interface. Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True)
+add_feature_info(
+  "Option ICAL_GLIB"
+  ICAL_GLIB
+  "build libical-glib interface"
+)
 if(ICAL_GLIB)
   find_package(GLib ${MIN_GLIB})
+  set_package_properties(GLib PROPERTIES
+    TYPE OPTIONAL
+    PURPOSE "For the optional libical-glib interface"
+  )
   find_package(LibXML ${MIN_LIBXML})
+  set_package_properties(LibXML PROPERTIES
+    TYPE OPTIONAL
+    DESCRIPTION "a library providing XML and HTML support"
+    URL "http://xmlsoft.org"
+    PURPOSE "For the optional libical-glib interface"
+  )
   if(GLIB_FOUND AND LIBXML_FOUND)
     set(HAVE_GLIB TRUE)
   elseif(GLIB_FOUND)
-    message(FATAL_ERROR "You requested to build libical-glib, but the necessary development package is missing or too low a version (libxml ${MIN_LIBXML} or higher is required)")
+    message(FATAL_ERROR
+      "You requested to build libical-glib, but the necessary development package "
+      "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required)"
+    )
   elseif(LIBXML_FOUND)
-    message(FATAL_ERROR "You requested to build libical-glib, but the necessary development package is missing or too low a version (glib ${MIN_GLIB} or higher is required)")
+    message(FATAL_ERROR
+      "You requested to build libical-glib, but the necessary development package "
+      "is missing or too low a version (glib ${MIN_GLIB} or higher is required)"
+    )
   else()
-    message(FATAL_ERROR "You requested to build libical-glib, but the necessary development packages are missing or too low a version (glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required)")
+    message(FATAL_ERROR
+      "You requested to build libical-glib, but the necessary development packages "
+      "are missing or too low a version "
+      "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required)"
+    )
   endif()
 endif()
 
@@ -378,11 +481,17 @@ if(ADDRESS_SANITIZER)
       "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
   endif()
   if(GOBJECT_INTROSPECTION)
-    message(STATUS "Warning: Building the address sanitizer with GObject Introspection is is not supported.  Turning-off GObject Introspection")
+    message(STATUS
+      "Warning: Building the address sanitizer with GObject Introspection is is not supported. "
+      "Turning-off GObject Introspection"
+    )
     set(HAVE_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
-    message(STATUS "Warning: Building the address sanitizer with the GObject interface is not supported.  Turning-off the GObject interface")
+    message(STATUS
+      "Warning: Building the address sanitizer with the GObject interface is not supported. "
+      "Turning-off the GObject interface"
+    )
     set(ICAL_GLIB False)
   endif()
 endif()
@@ -390,6 +499,11 @@ endif()
 ########################################################
 
 option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
+add_feature_info(
+  "Option WITH_CXX_BINDINGS"
+  WITH_CXX_BINDINGS
+  "build the C++ bindings"
+)
 if(WITH_CXX_BINDINGS)
   add_definitions(-DWITH_CXX_BINDINGS)
 endif()
@@ -464,5 +578,20 @@ install(
   DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal
   FILE LibIcalTargets.cmake
 )
+
+########## By popular demand, add an uninstall target ##########
+
+if(NOT TARGET uninstall)
+  configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake"
+    IMMEDIATE
+    @ONLY
+  )
+
+  add_custom_target(uninstall
+    COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake"
+  )
+endif()
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

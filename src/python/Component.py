@@ -1,28 +1,32 @@
-#!/usr/bin/env python 
-# -*- Mode: python -*-
+#!/usr/bin/env python
 #======================================================================
 # FILE: Component.py
-# CREATOR: eric 
-#
-# DESCRIPTION:
-#   
-#
-#  $Id: Component.py,v 1.15 2002-10-24 13:41:17 acampi Exp $
-#  $Locker:  $
+# CREATOR: eric
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
-# (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>  
+# (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of either: 
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
 #
-#    The LGPL as published by the Free Software Foundation, version
-#    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+#   The LGPL as published by the Free Software Foundation, version
+#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.txt
 #
-#  Or:
+# Or:
 #
-#    The Mozilla Public License Version 1.0. You may obtain a copy of
-#    the License at http://www.mozilla.org/MPL/
+#   The Mozilla Public License Version 2.0. You may obtain a copy of
+#   the License at http://www.mozilla.org/MPL/
+
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
+#
+#   The LGPL as published by the Free Software Foundation, version
+#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+#
+# Or:
+#
+#   The Mozilla Public License Version 2.0. You may obtain a copy of
+#   the License at http://www.mozilla.org/MPL/
 #======================================================================
 
 from LibicalWrap import *
@@ -41,13 +45,13 @@ WrapperNULL = None
 class SwigRefHash(dict):
     def __getitem__(self, k):
         return dict.__getitem__(self, int(k))
-    
+
     def __setitem__(self, k, v):
         return dict.__setitem__(self, int(k), v)
-    
+
     def __delitem__(self, k):
         dict.__delitem__(self, int(k))
-    
+
     def has_key(self, k):
         return dict.has_key(self, int(k))
 
@@ -63,7 +67,7 @@ class Component(object):
                 icalcomponent_string_to_kind("VCALENDAR"))
             _kind = icalcomponent_string_to_kind(kind)
             inner = icalcomponent_new(_kind)
-            
+
             icalcomponent_add_component(self._ref,inner);
 
         else:
@@ -77,7 +81,7 @@ class Component(object):
 
             for k in self.cached_props.keys():
                 del self.cached_props[k]
-            
+
             icalcomponent_free(self._ref)
             self._ref = None
 
@@ -86,19 +90,19 @@ class Component(object):
         if(p == None or p== WrapperNULL):
             return None;
 
-	d = {}
-	d['value'] = icalproperty_get_value_as_string(p)
-	d['name'] = icalproperty_get_property_name(p)
+        d = {}
+        d['value'] = icalproperty_get_value_as_string(p)
+        d['name'] = icalproperty_get_property_name(p)
 
-	propkind = icalproperty_string_to_kind(d['name'])
-	kind = icalproperty_kind_to_value_kind(propkind)
-	d['value_type'] = icalvalue_kind_to_string(kind)
+        propkind = icalproperty_string_to_kind(d['name'])
+        kind = icalproperty_kind_to_value_kind(propkind)
+        d['value_type'] = icalvalue_kind_to_string(kind)
         d['ref'] = p
 
 
         #~ print p, Property(ref=p).name()
         if not self.cached_props.has_key(p):
-            
+
             if d['value_type'] == 'DATE-TIME' or d['value_type'] == 'DATE':
                 prop = Time(d,)
             elif d['value_type'] == 'PERIOD':
@@ -113,22 +117,22 @@ class Component(object):
                 prop = Organizer(d)
             else:
                 prop=Property(ref=p)
-                
+
             self.cached_props[p] = prop
 
     def property(self, type):
 
-       p = icallangbind_get_first_property(self._ref,type) 
+       p = icallangbind_get_first_property(self._ref,type)
 
        if p !=WrapperNULL:
            self._prop_from_ref(p)
            prop =  self.cached_props[p]
            return prop
-       else :    
+       else :
            return None
 
-    def properties(self,type='ANY'): 
-        """  
+    def properties(self,type='ANY'):
+        """
         Return a list of Property instances, each representing a
         property of the type 'type.'
         """
@@ -145,10 +149,10 @@ class Component(object):
             p = icallangbind_get_next_property(self._ref,type)
 
         return Collection(self,props)
- 
+
     def add_property(self, prop):
         "Adds the property object to the component."
-        
+
         if not isinstance(prop,Property):
             raise TypeError
 
@@ -176,7 +180,7 @@ class Component(object):
             del self.cached_props[prop.ref()]
             icalcomponent_remove_property(self._ref,prop.ref())
 
-    def components(self,type='ANY'):        
+    def components(self,type='ANY'):
         comps = []
 
         kind = icalcomponent_string_to_kind(type)
@@ -184,7 +188,7 @@ class Component(object):
 
         while c != WrapperNULL and c != None:
 
-            if not self.cached_comps.has_key(c):              
+            if not self.cached_comps.has_key(c):
 
                 self.cached_comps[c] = Component(c)
 
@@ -195,7 +199,7 @@ class Component(object):
         return ComponentCollection(self, comps)
 
     def inner_component(self):
-        
+
         inner = icalcomponent_get_inner(self._ref)
 
         if inner == WrapperNULL and inner != None:
@@ -210,7 +214,7 @@ class Component(object):
             raise ValueError("Expected a Component")
 
         if icalcomponent_get_parent(comp._ref) != WrapperNULL:
-           raise "Failed to add child component. Child already has a parent"; 
+           raise "Failed to add child component. Child already has a parent";
 
         icalcomponent_add_component(self._ref,comp._ref)
 
@@ -234,8 +238,8 @@ class Component(object):
         return icalcomponent_kind_to_string(k)
 
     def ref(self):
-	""" Return the internal reference to the libical icalproperty """
-	return self._ref
+        """ Return the internal reference to the libical icalproperty """
+        return self._ref
 
 def CloneComponent(c):
     "Clones a string or C icalcomponent into the right component object."
@@ -256,10 +260,10 @@ def CloneComponent(c):
     kindStr = icalcomponent_kind_to_string(kind)
 
     if kindStr == 'VCALENDAR':
-	inner = icalcomponent_get_inner(comp) 
-    	kind = icalcomponent_isa(inner)
-    	kindStr = icalcomponent_kind_to_string(kind)
-    
+        inner = icalcomponent_get_inner(comp)
+        kind = icalcomponent_isa(inner)
+        kindStr = icalcomponent_kind_to_string(kind)
+
     if kindStr == 'VEVENT':
         newComp = Event(comp)
     elif kindStr == 'VTODO':
@@ -309,15 +313,15 @@ def NewComponent(c):
 class GenericComponent(Component):
 
     def __init__(self,ref=None,kind=None):
-        
+
         if ref != None:
             Component.__init__(self, ref=ref) # Call from subclasses
         elif type != None:
             Component.__init__(self, kind=kind) # Call from subclasses
         else:
             raise ValueError("Expected either a icalcomponent reference or a kind string")
-     
-        
+
+
         self._recurrence_set=None
 
     def _singular_property(self, name, value_type, value=None,
@@ -421,11 +425,11 @@ class GenericComponent(Component):
         Usage:
         created(time_obj)           # Set the value using a Time object
         created('19970101T123000Z') # Set using an iCalendar string
-        created(982362522)          # Set using seconds 
+        created(982362522)          # Set using seconds
         created()                   # Return an iCalendar string
         """
         return self._singular_property("CREATED", "DATE-TIME", v, Time)
-        
+
     def description(self, v=None):
         "Sets or returns the value of the DESCRIPTION property."
         return self._singular_property("DESCRIPTION", "TEXT", v)
@@ -436,7 +440,7 @@ class GenericComponent(Component):
         Usage:
         dtstamp(time_obj)          # Set the value using a Time object
         dtstamp('19970101T123000Z')# Set using an iCalendar string
-        dtstamp(982362522)         # Set using seconds 
+        dtstamp(982362522)         # Set using seconds
         dtstamp()                  # Return an iCalendar string
         """
         return self._singular_property("DTSTAMP", "DATE-TIME", v, Time)
@@ -458,7 +462,7 @@ class GenericComponent(Component):
         Usage:
         last_modified(time_obj)          # Set the value using a Time object
         last_modified('19970101T123000Z')# Set using an iCalendar string
-        last_modified(982362522)         # Set using seconds 
+        last_modified(982362522)         # Set using seconds
         last_modified()                  # Return an iCalendar string
         """
         return self._singular_property("LAST-MODIFIED", "DATE-TIME", v, Time)
@@ -513,7 +517,7 @@ class GenericComponent(Component):
     ####
     # Not quite sure if this is how we want to handle recurrence rules, but
     # this is a start.
-    
+
     def recurrence_set(self):
         "Returns the Events RecurrenceSet object."
         if self._recurrence_set == None:  # i.e haven't initialized one
@@ -555,7 +559,7 @@ class GenericComponent(Component):
             # Delete old properties
             for p in comp.properties(name):
                 comp.remove_property(p)
-                
+
             for v in values:
                 if property_obj:   # Specialized properties
                     if not isinstance(v, property_obj): # Make new object
@@ -564,12 +568,12 @@ class GenericComponent(Component):
                     else:                            # Use existing object
                         new_prop = v
                 else:                  # Generic properties
-                    new_prop=Property(name) 
+                    new_prop=Property(name)
                     # new_prop.value_type(value_type)
                     new_prop.value(v)
-                    
+
                 comp.add_property(new_prop)
-        
+
         # Get value
         else:
             return Collection(self, comp.properties(name))
@@ -647,9 +651,9 @@ class Event(GenericComponent):
     def __init__(self,ref=None):
         if ref != None:
             GenericComponent.__init__(self, ref=ref)
-        else: 
+        else:
             GenericComponent.__init__(self, kind='VEVENT')
-        
+
     def component_type(self):
         "Returns the type of component for the object."
         return "VEVENT"
@@ -671,7 +675,7 @@ class Event(GenericComponent):
             for d in duration:          # Clear DURATION properties
                 self.remove_property(d)
         return self._singular_property("DTEND", "DATE-TIME", v, Time)
-            
+
     def duration(self, v=None):
         """Sets or returns the value of the duration property.
 
@@ -718,7 +722,7 @@ class Event(GenericComponent):
         To get the GEO property represented as a tuple and numbers instead of
         the iCalendar string, use geo_get_tuple().
         """
-        
+
         if isinstance(v, ListType) or isinstance(v, TupleType):
             v = "%s;%s" % (float(v[0]), float(v[1]))
         return self._singular_property("GEO", "FLOAT", v)
@@ -749,7 +753,7 @@ class Todo(GenericComponent):
     def __init__(self,ref=None):
         if ref != None:
             GenericComponent.__init__(self, ref=ref)
-        else: 
+        else:
             GenericComponent.__init__(self, kind='VTODO')
 
 
@@ -803,7 +807,7 @@ class Journal(GenericComponent):
     def __init__(self):
         if ref != None:
             GenericComponent.__init__(self, ref=ref)
-        else: 
+        else:
             GenericComponent.__init__(self, kind='VJOURNAL')
 
     def component_type(self):
@@ -816,4 +820,3 @@ class Journal(GenericComponent):
         ok_values=('DRAFT', 'FINAL', 'CANCELLED')
         return self._singular_property('STATUS', 'TEXT', v,
                                        enumerated_values=ok_values)
-        

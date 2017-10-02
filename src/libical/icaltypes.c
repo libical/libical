@@ -5,7 +5,7 @@
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
      http://www.softwarestudio.org
 
- This program is free software; you can redistribute it and/or modify
+ This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
@@ -13,7 +13,7 @@
 
  Or:
 
-    The Mozilla Public License Version 1.0. You may obtain a copy of
+    The Mozilla Public License Version 2.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
  ======================================================================*/
 #ifdef HAVE_CONFIG_H
@@ -140,7 +140,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
 
     p2 = strchr(p1 + 1, ';');
     if (p2 != 0 && *p2 != 0) {
-        stat.debug = p2 + 1;
+        stat.debug = icalmemory_tmp_copy(p2 + 1);
     }
 
     return stat;

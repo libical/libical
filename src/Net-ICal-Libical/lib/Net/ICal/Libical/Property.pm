@@ -1,23 +1,21 @@
 #!/usr/bin/perl
-# -*- Mode: perl -*-
 #======================================================================
 # FILE: Property.pm
 # CREATOR: eric 1 Mar 01
 #
-# DESCRIPTION:
-#   
+# (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+#     http://www.softwarestudio.org
 #
-#  $Id: Property.pm,v 1.3 2001-03-03 05:44:03 ebusboom Exp $
-#  $Locker:  $
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
 #
-# (C) COPYRIGHT 2000, Eric Busboom, eric@softwarestudio.org
+#    The LGPL as published by the Free Software Foundation, version
+#    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# Or:
 #
-#
+#    The Mozilla Public License Version 2.0. You may obtain a copy of
+#    the License at http://www.mozilla.org/MPL/
 #======================================================================
 
 use Net::ICal::Libical::Property;
@@ -27,7 +25,7 @@ package Net::ICal::Libical::Property;
 use strict;
 
 
-sub new { 
+sub new {
 
   my $class = shift;
   my $arg = shift;
@@ -35,16 +33,16 @@ sub new {
   my $kind;
 
   if(ref($arg) == 'HASH'){
-  
+
     $self->{'ref'} = $arg->{'ref'};
 
   } else {
         $kind = Net::ICal::Libical::icalproperty_string_to_kind($arg);
-	$self->{'ref'} = Net::ICal::Libical::icalproperty_new($kind);
+        $self->{'ref'} = Net::ICal::Libical::icalproperty_new($kind);
   }
 
   die "Did not get icalproperty ref in Net::ICal::Libical::Property::new " if !$self->{'ref'};
-  
+
   bless $self, $class;
 }
 
@@ -66,7 +64,7 @@ sub name {
   die if !$self->{'ref'};
 
   $str = Net::ICal::Libical::icalproperty_as_ical_string($self->{'ref'});
-	
+
   $str =~ /^([A-Z\-]+)\n/;
 
   return $1;
@@ -83,7 +81,7 @@ sub prop_ref {
   }
 
   return $self->{'ref'};
-  
+
 }
 
 
@@ -95,23 +93,23 @@ sub value {
 
   my $vt;
   if($v){
-            
+
     if ($kind) {
       $self->{'VALUE'} = $kind;
       $vt = $kind;
     }
-    elsif ($self->{'VALUE'}) { 
+    elsif ($self->{'VALUE'}) {
       $vt = $self->{'VALUE'};
     }
     else {
       $vt = 'NO'; # Use the kind of the existing value
-    }      
-     
+    }
+
 
     Net::ICal::Libical::icalproperty_set_value_from_string($self->{'ref'},$v,$vt);
-      
+
   }
-      
+
   return Net::ICal::Libical::icalproperty_get_value_as_string($self->{'ref'});
 
 }
@@ -133,7 +131,7 @@ sub get_parameter{
     return undef;
   }
 
-  return $str  
+  return $str
 
 }
 

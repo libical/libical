@@ -1,28 +1,21 @@
-#!/usr/bin/env python 
-# -*- Mode: python -*-
+#!/usr/bin/env python
 #======================================================================
 # FILE: Collection.py
-# CREATOR: eric 
-#
-# DESCRIPTION:
-#   
-#
-#  $Id: Collection.py,v 1.3 2001-03-11 00:46:57 plewis Exp $
-#  $Locker:  $
+# CREATOR: eric
 #
 # (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
-# (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>  
+# (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of either: 
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
 #
-#    The LGPL as published by the Free Software Foundation, version
-#    2.1, available at: http://www.fsf.org/copyleft/lesser.html
+#   The LGPL as published by the Free Software Foundation, version
+#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.txt
 #
-#  Or:
+# Or:
 #
-#    The Mozilla Public License Version 1.0. You may obtain a copy of
-#    the License at http://www.mozilla.org/MPL/
+#   The Mozilla Public License Version 2.0. You may obtain a copy of
+#   the License at http://www.mozilla.org/MPL/
 #======================================================================
 
 from types import *
@@ -58,7 +51,7 @@ class Collection:
         self._properties[beg:end] = sequence
         for p in sequence:
             self._component.add_property(p)
-            
+
     def __getitem__(self, i):
         return self._properties[i]
 
@@ -82,13 +75,13 @@ class Collection:
                 s = "%s, %s" % (s, p)
         s = s + " ]"
         return s
-            
+
     def append(self, property):
         self._properties.append(property)
         self._component.add_property(property)
 
 class ComponentCollection:
-    
+
     def __init__(self, parent, componentSequence):
         self._parent = parent
         self._components = list(componentSequence[:])
@@ -118,11 +111,11 @@ class ComponentCollection:
 
     def __len__(self):
         return len(self._components)
-    
+
     def __add__(self, iterable):
         for i in iterable:
             self.append(i)
-    
+
     def append(self, property):
         self._components.append(property)
         self._parent.add_component(property)

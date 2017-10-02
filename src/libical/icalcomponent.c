@@ -4,7 +4,7 @@
 
  (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
 
- This program is free software; you can redistribute it and/or modify
+ This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
@@ -12,7 +12,7 @@
 
  Or:
 
-    The Mozilla Public License Version 1.0. You may obtain a copy of
+    The Mozilla Public License Version 2.0. You may obtain a copy of
     the License at http://www.mozilla.org/MPL/
 ======================================================================*/
 
@@ -884,12 +884,24 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 
     dtstart = icalcomponent_get_dtstart(comp);
 
+    if (icaltime_is_null_time(dtstart) &&
+        icalcomponent_isa(comp) == ICAL_VTODO_COMPONENT) {
+        /* VTODO with no DTSTART - use DUE */
+        dtstart = icalcomponent_get_due(comp);
+    }
     if (icaltime_is_null_time(dtstart))
         return;
 
     /* The end time could be specified as either a DTEND or a DURATION */
     /* icalcomponent_get_dtend takes care of these cases. */
     dtend = icalcomponent_get_dtend(comp);
+    if (icaltime_is_null_time(dtend) && icaltime_is_date(dtstart)) {
+        /* No DTEND or DURATION and DTSTART is DATE - duration is 1 day */
+        struct icaldurationtype dur = icaldurationtype_null_duration();
+
+        dur.days = 1;
+        dtend = icaltime_add(dtstart, dur);
+    }
 
     /* Now set up the base span for this item, corresponding to the
        base DTSTART and DTEND */

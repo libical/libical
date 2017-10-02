@@ -1,10 +1,20 @@
 #=============================================================================
+# FILE: Duration.pm
+# CREATOR: eric
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty. It may be used, redistributed and/or modified
-# under the same terms as perl itself. (Either the Artistic License or
-# the GPL.)
+# (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+#     http://www.softwarestudio.org
 #
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of either:
+#
+#    The LGPL as published by the Free Software Foundation, version
+#    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+#
+# Or:
+#
+#    The Mozilla Public License Version 2.0. You may obtain a copy of
+#    the License at http://www.mozilla.org/MPL/
 #=============================================================================
 
 =head1 NAME
@@ -54,11 +64,11 @@ sub new {
   my $self;
 
   if (ref($arg) == 'HASH'){
-    # Construct from dictionary 
+    # Construct from dictionary
     $self = Net::ICal::Libical::Property::new($package,$arg);
     my $val=Net::ICal::Libical::icalproperty_get_value_as_string($self->{'ref'});
     $self->{'dur'} = Net::ICal::Libical::icaldurationtype_from_string($val);
-    
+
    return $self;
 
   } elsif ($arg =~ /^[-+]?\d+$/){
@@ -66,13 +76,13 @@ sub new {
     $self = Net::ICal::Libical::Property::new($package,'DURATION');
     $self->{'dur'} = Net::ICal::Libical::icaldurationtype_new_from_int($arg);
   } elsif ($arg) {
-    # iCalendar string 
+    # iCalendar string
     $self = Net::ICal::Libical::Property::new($package,'DURATION');
     $self->{'dur'} = Net::ICal::Libical::icaldurationtype_new_from_string($arg);
   } else {
     die;
   }
-  
+
   $self->_update_value();
   return $self;
 
@@ -94,17 +104,17 @@ Return a new copy of the duration.
 
 sub clone {
   die "Not Implemented";
-  
+
 }
 
 
 =head2 is_valid()
 
-Determine if this is a valid duration (given criteria TBD). 
+Determine if this is a valid duration (given criteria TBD).
 
 =cut
 
-sub is_valid { 
+sub is_valid {
 
   die "Not Implemented;"
 
@@ -112,7 +122,7 @@ sub is_valid {
 
 =head2 seconds()
 
-Set or Get the length of the duration as seconds. 
+Set or Get the length of the duration as seconds.
 
 =cut
 
@@ -121,7 +131,7 @@ sub seconds {
   my $seconds = shift;
 
   if($seconds){
-    $self->{'dur'} =  
+    $self->{'dur'} =
     Net::ICal::Libical::icaldurationtype_from_int($seconds);
     $self->_update_value();
   }

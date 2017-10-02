@@ -5,7 +5,10 @@
 #  BDB_LIBRARY        - Library to link against for the Berkeley DB
 #
 
-set_package_info(BDB "Berkeley DB storage" "http://www.oracle.com/database/berkeley-db")
+set_package_properties(BDB PROPERTIES
+  DESCRIPTION "Berkeley DB storage"
+  URL "http://www.oracle.com/database/berkeley-db"
+)
 
 if(BDB_INCLUDE_DIR AND BDB_LIBRARY)
   # Already in cache, be silent
