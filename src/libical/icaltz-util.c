@@ -456,7 +456,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         types[prev_idx].gmtoff != prev_daylight_gmtoff) {
                     // Set UNTIL of the previous component's recurrence
                     icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff);
-                    prev_daylight_time.is_utc = 1;
+                    prev_daylight_time.zone = icaltimezone_get_utc_timezone();
 
                     daylight_recur.until = prev_daylight_time;
                     icalproperty_set_rrule(cur_daylight_rrule_property, daylight_recur);
@@ -489,7 +489,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         standard_recur.by_day[0] != by_day ||
                         types[prev_idx].gmtoff != prev_standard_gmtoff) {
                     icaltime_adjust(&prev_standard_time, 0, 0, 0, -types[prev_idx].gmtoff);
-                    prev_standard_time.is_utc = 1;
+                    prev_standard_time.zone = icaltimezone_get_utc_timezone();
 
                     standard_recur.until = prev_standard_time;
                     icalproperty_set_rrule(cur_standard_rrule_property, standard_recur);
@@ -503,7 +503,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     if (cur_daylight_comp && daylight_recur.by_month[0] == icaltime.month &&
                             daylight_recur.by_day[0] == by_day) {
                         icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff);
-                        prev_daylight_time.is_utc = 1;
+                        prev_daylight_time.zone = icaltimezone_get_utc_timezone();
 
                         daylight_recur.until = prev_daylight_time;
                         icalproperty_set_rrule(cur_daylight_rrule_property, daylight_recur);
@@ -562,7 +562,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     // and then insert a new component to indicate the time zone doesn't transition anymore
     if (cur_daylight_comp && icaltime_as_timet(prev_daylight_time) < now) {
         icaltime_adjust(&prev_prev_daylight_time, 0, 0, 0, -prev_daylight_gmtoff);
-        prev_prev_daylight_time.is_utc = 1;
+        prev_prev_daylight_time.zone = icaltimezone_get_utc_timezone();
 
         daylight_recur.until = prev_prev_daylight_time;
         icalproperty_set_rrule(cur_daylight_rrule_property, daylight_recur);
@@ -581,7 +581,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     if (cur_standard_comp && icaltime_as_timet(prev_standard_time) < now) {
         icaltime_adjust(&prev_prev_standard_time, 0, 0, 0, -prev_standard_gmtoff);
-        prev_prev_standard_time.is_utc = 1;
+        prev_prev_standard_time.zone = icaltimezone_get_utc_timezone();
 
         standard_recur.until = prev_prev_standard_time;
         icalproperty_set_rrule(cur_standard_rrule_property, standard_recur);
