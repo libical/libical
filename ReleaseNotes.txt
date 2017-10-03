@@ -15,6 +15,9 @@ Version 3.0.0:
  * icalvalue_new/set_date and icalvalue_new/set_datetime now enforce DATE and DATE-TIME values respectively
  * draft-ietf-calext-extensions (RFC 7986) support added
  * Parameter values are now en/decoded per RFC 6868
+ * Removed is_utc from icaltimetype struct
+    * Set icaltimetype.zone to icaltimezone_get_utc_timezone() to change a time to UTC
+    * Use icaltime_is_utc() to check if a time is in UTC
  * New publicly available functions:
      + icalproperty_set_parent (icalproperty_get_parent was already public)
      + icalvalue_get_parent (icalvalue_set_parent was already public)
