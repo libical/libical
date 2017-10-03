@@ -164,7 +164,6 @@ def icaltimetype_from_datetime(dt):
     if dt.tzinfo:
         # TODO: convert to the right timezone, assume for now we are UTC
         tt.zone = 0
-        tt.is_utc = True
     tt.is_date = False
     tt.isdaylight = False
     

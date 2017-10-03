@@ -24,10 +24,9 @@
 	timetype.hour = 0;
 	timetype.minute = 0;
 	timetype.second = 0;
-	timetype.is_utc = 1;
 	timetype.is_date = 0;
 	timetype.is_daylight = 0;
-	timetype.zone = NULL;
+	timetype.zone = icaltimezone_get_utc_timezone();
 	return timetype;</custom>
     </method>
     <method name="i_cal_timetype_new" corresponds="CUSTOM" kind="constructor" since="1.0">
@@ -121,17 +120,10 @@
     </method>
     <method name="i_cal_timetype_is_utc" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
-        <returns type="gint" comment="The is_utc." />
-        <comment xml:space="preserve">Get the is_utc of #ICalTimetype.</comment>
+        <returns type="gint" comment="If the time is in UTC." />
+        <comment xml:space="preserve">Get if the #ICalTimetype is in UTC.</comment>
         <custom>	g_return_val_if_fail (timetype != NULL, 0);
-	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_utc;</custom>
-    </method>
-    <method name="i_cal_timetype_set_is_utc" corresponds="CUSTOM" kind="set" since="1.0">
-        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set."/>
-        <parameter type="gint" name="is_utc" comment="The is_utc."/>
-        <comment>Set the is_utc of #ICalTimetype.</comment>
-        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIMETYPE (timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_utc = is_utc;</custom>
+	return icaltime_is_utc(*(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype));</custom>
     </method>
     <method name="i_cal_timetype_is_date" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>

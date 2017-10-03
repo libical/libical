@@ -44,7 +44,6 @@ void  jni_SetStart_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, J
     jni_SetHour_in_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
     jni_SetMinute_in_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
     jni_SetSecond_in_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
-    jni_SetIs_utc_in_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
     jni_SetIs_date_in_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
     jni_SetZone_in_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
 }
@@ -59,7 +58,6 @@ void jni_GetStart_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, 
     jni_GetHour_from_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
     jni_GetMinute_from_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
     jni_GetSecond_from_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
-    jni_GetIs_utc_from_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
     jni_GetIs_date_from_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
     jni_GetZone_from_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
 }
@@ -74,7 +72,6 @@ void  jni_SetEnd_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNI
     jni_SetHour_in_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
     jni_SetMinute_in_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
     jni_SetSecond_in_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
-    jni_SetIs_utc_in_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
     jni_SetIs_date_in_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
     jni_SetZone_in_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
 }
@@ -89,7 +86,6 @@ void jni_GetEnd_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JN
     jni_GetHour_from_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
     jni_GetMinute_from_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
     jni_GetSecond_from_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
-    jni_GetIs_utc_from_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
     jni_GetIs_date_from_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
     jni_GetZone_from_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
 }
