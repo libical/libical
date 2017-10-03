@@ -41,7 +41,6 @@ void  jni_SetTime_in_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_,
     jni_SetHour_in_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
     jni_SetMinute_in_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
     jni_SetSecond_in_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
-    jni_SetIs_utc_in_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
     jni_SetIs_date_in_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
     jni_SetZone_in_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
 }
@@ -56,7 +55,6 @@ void jni_GetTime_from_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_
     jni_GetHour_from_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
     jni_GetMinute_from_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
     jni_GetSecond_from_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
-    jni_GetIs_utc_from_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
     jni_GetIs_date_from_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
     jni_GetZone_from_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
 }

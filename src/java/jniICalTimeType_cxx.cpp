@@ -27,7 +27,6 @@ static jfieldID ICalTimeType_Day_FID;
 static jfieldID ICalTimeType_Hour_FID;
 static jfieldID ICalTimeType_Minute_FID;
 static jfieldID ICalTimeType_Second_FID;
-static jfieldID ICalTimeType_Is_utc_FID;
 static jfieldID ICalTimeType_Is_date_FID;
 static jfieldID ICalTimeType_Zone_FID;
 
@@ -40,7 +39,6 @@ void initICalTimeTypeFieldIDs(JNIEnv* env, jclass clazz)
     ICalTimeType_Hour_FID = env->GetFieldID(clazz, "hour", "I");
     ICalTimeType_Minute_FID = env->GetFieldID(clazz, "minute", "I");
     ICalTimeType_Second_FID = env->GetFieldID(clazz, "second", "I");
-    ICalTimeType_Is_utc_FID = env->GetFieldID(clazz, "is_utc", "I");
     ICalTimeType_Is_date_FID = env->GetFieldID(clazz, "is_date", "I");
     ICalTimeType_Zone_FID = env->GetFieldID(clazz, "zone", "Ljava/lang/String;");
 }
@@ -105,16 +103,6 @@ void jni_GetSecond_from_ICalTimeType(struct ICalTimeType* __ICalTimeType_, JNIEn
     __ICalTimeType_->second = env->GetIntField(thisICalTimeType, ICalTimeType_Second_FID);
 }
 
-void  jni_SetIs_utc_in_ICalTimeType(struct ICalTimeType* __ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
-{
-    env->SetIntField(thisICalTimeType, ICalTimeType_Is_utc_FID, (jint) __ICalTimeType_->is_utc);
-}
-
-void jni_GetIs_utc_from_ICalTimeType(struct ICalTimeType* __ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
-{
-    __ICalTimeType_->is_utc = env->GetIntField(thisICalTimeType, ICalTimeType_Is_utc_FID);
-}
-
 void  jni_SetIs_date_in_ICalTimeType(struct ICalTimeType* __ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
 {
     env->SetIntField(thisICalTimeType, ICalTimeType_Is_date_FID, (jint) __ICalTimeType_->is_date);
@@ -144,7 +132,6 @@ void jni_SetAll_in_ICalTimeType(struct ICalTimeType* __ICalTimeType_, JNIEnv* en
     jni_SetHour_in_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
     jni_SetMinute_in_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
     jni_SetSecond_in_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
-    jni_SetIs_utc_in_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
     jni_SetIs_date_in_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
     jni_SetZone_in_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
 }
@@ -158,7 +145,6 @@ void jni_GetAll_from_ICalTimeType(struct ICalTimeType* __ICalTimeType_, JNIEnv* 
     jni_GetHour_from_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
     jni_GetMinute_from_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
     jni_GetSecond_from_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
-    jni_GetIs_utc_from_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
     jni_GetIs_date_from_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
     jni_GetZone_from_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
 }

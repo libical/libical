@@ -663,7 +663,7 @@ icalproperty_xlicclass icalclassify(icalcomponent *c, icalcomponent *match, cons
 
     /* Determine if the incoming component is obsoleted by the match */
     if (match != 0 && (comp_parts.method == ICAL_METHOD_REQUEST)) {
-        assert(!((comp_parts.dtstamp.is_utc == 1) ^ (match_parts.dtstamp.is_utc == 1)));
+        assert(!((icaltime_is_utc(comp_parts.dtstamp) == 1) ^ (icaltime_is_utc(match_parts.dtstamp) == 1)));
 
         if (comp_parts.sequence < match_parts.sequence &&
             icaltime_compare(comp_parts.dtstamp, match_parts.dtstamp) > 0) {
