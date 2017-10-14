@@ -17,7 +17,7 @@ endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
-set(TEST_DATADIR "\\\"${CMAKE_SOURCE_DIR}/test-data\\\"")
+set(TEST_DATADIR "\"${CMAKE_SOURCE_DIR}/test-data\"")
 add_definitions(-DTEST_DATADIR=${TEST_DATADIR})
 
 macro(setprops _name)

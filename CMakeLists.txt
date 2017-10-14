@@ -67,7 +67,6 @@ cmake_minimum_required(VERSION 3.1.0) #first line, to shutup a cygwin warning
 project(libical C CXX)
 
 cmake_policy(SET CMP0003 NEW)
-cmake_policy(SET CMP0005 OLD)
 if(POLICY CMP0042)
   cmake_policy(SET CMP0042 NEW)
 endif()
