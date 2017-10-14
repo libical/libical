@@ -20,6 +20,20 @@
 
 from gi.repository import ICalGLib
 
+import os
+import sys
+
+try:
+    zoneinfodir = os.environ['ZONEINFO_DIRECTORY']
+except KeyError:
+    print("Error: The ZONEINFO_DIRECTORY environment variable isn't set")
+    sys.exit(1)
+if not os.path.isdir(zoneinfodir):
+    print("Error: The ZONEINFO_DIRECTORY environment variable isn't properly set")
+    sys.exit(1)
+ICalGLib.Timezone.set_zone_directory(zoneinfodir);
+ICalGLib.Timezone.set_tzid_prefix("/citadel.org/");
+
 la = ICalGLib.Timezone.get_builtin_timezone("America/Los_Angeles");
 chicago = ICalGLib.Timezone.get_builtin_timezone("America/Chicago");
 assert la.get_tzid().find("Los_Angeles") != -1;
@@ -32,7 +46,8 @@ assert la_copy.get_location() == la.get_location();
 
 timezones = ICalGLib.Timezone.get_builtin_timezones();
 timezone = ICalGLib.Timezone.array_element_at(timezones, 0);
-assert timezone.get_display_name() == "Europe/Andorra";
+if not ICalGLib.Timezone.get_builtin_tzdata():
+    assert timezone.get_display_name() == "Europe/Andorra";
 assert timezones.size() > 0;
 
 from_tzid = ICalGLib.Timezone.get_builtin_timezone_from_tzid(la.get_tzid());
