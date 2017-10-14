@@ -60,7 +60,9 @@ static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
 /** The prefix we use to uniquely identify TZIDs.
     It must begin and end with forward slashes.
  */
-static const char *ical_tzid_prefix = "/freeassociation.sourceforge.net/";
+#define BUILTIN_TZID_PREFIX_LEN 256
+#define BUILTIN_TZID_PREFIX     "/freeassociation.sourceforge.net/"
+static char ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN];
 
 /** This is the filename of the file containing the city names and
     coordinates of all the builtin timezones. */
@@ -149,6 +151,9 @@ static const char *get_zone_directory(void);
 
 const char *icaltimezone_tzid_prefix(void)
 {
+    if (ical_tzid_prefix[0] == '\0') {
+        strncpy(ical_tzid_prefix, BUILTIN_TZID_PREFIX, BUILTIN_TZID_PREFIX_LEN-1);
+    }
     return ical_tzid_prefix;
 }
 
@@ -1196,7 +1201,7 @@ const char *icaltimezone_get_display_name(icaltimezone *zone)
            this is one of our TZIDs and if so we jump to the city name
            at the end of it. */
         if (display_name && !strncmp(display_name, ical_tzid_prefix, strlen(ical_tzid_prefix))) {
-#if 0
+#if defined(USE_BUILTIN_TZDATA)
             /* XXX  The code below makes assumptions about the prefix
                which don't even jive with our default declared up top */
             /* Get the location, which is after the 3rd '/' char. */
@@ -1406,7 +1411,7 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset, const ch
 /** Returns a single builtin timezone, given its TZID. */
 icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
 {
-#if 0
+#if defined(USE_BUILTIN_TZDATA)
     int num_slashes = 0;
 #endif
     const char *p, *zone_tzid;
@@ -1423,7 +1428,7 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
     if (strncmp(tzid, ical_tzid_prefix, strlen(ical_tzid_prefix)))
         return NULL;
 
-#if 0
+#if defined(USE_BUILTIN_TZDATA)
     /* XXX  The code below makes assumptions about the prefix
        which don't even jive with our default declared up top */
     /* Get the location, which is after the 3rd '/' character. */
@@ -2055,7 +2060,7 @@ void free_zone_directory(void)
 void icaltimezone_set_tzid_prefix(const char *new_prefix)
 {
     if (new_prefix) {
-        ical_tzid_prefix = new_prefix;
+        strncpy(ical_tzid_prefix, new_prefix, BUILTIN_TZID_PREFIX_LEN-1);
     }
 }
 
