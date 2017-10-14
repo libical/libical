@@ -17,9 +17,6 @@ list(APPEND TEST_FILES
   value.py
 )
 
-message(STATUS "export GI_TYPELIB_PATH=${CMAKE_BINARY_DIR}/src/libical-glib;$ENV{GI_TYPELIB_PATH}")
-message(STATUS "export LD_LIBRARY_PATH=${LIBRARY_OUTPUT_PATH};$ENV{LD_LIBRARY_PATH}")
-
 if(PYTHON3)
   list(APPEND test_env
     "GI_TYPELIB_PATH=${CMAKE_BINARY_DIR}/src/libical-glib;$ENV{GI_TYPELIB_PATH}"
