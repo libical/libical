@@ -100,6 +100,7 @@
 +0533300 -1132800 America/Edmonton
 -0064000 -0695200 America/Eirunepe
 +0134200 -0891200 America/El_Salvador
++0584800 -1224200 America/Fort_Nelson
 -0034300 -0383000 America/Fortaleza
 +0461200 -0595700 America/Glace_Bay
 +0641100 -0514400 America/Godthab
@@ -166,6 +167,7 @@
 +0103900 -0613100 America/Port_of_Spain
 -0084600 -0635400 America/Porto_Velho
 +0182806 -0660622 America/Puerto_Rico
+-0530900 -0705500 America/Punta_Arenas
 +0484300 -0943400 America/Rainy_River
 +0624900 -0920459 America/Rankin_Inlet
 -0080300 -0345400 America/Recife
@@ -218,10 +220,12 @@
 +0443100 +0501600 Asia/Aqtau
 +0501700 +0571000 Asia/Aqtobe
 +0375700 +0582300 Asia/Ashgabat
++0470700 +0515600 Asia/Atyrau
 +0332100 +0442500 Asia/Baghdad
 +0262300 +0503500 Asia/Bahrain
 +0402300 +0495100 Asia/Baku
 +0134500 +1003100 Asia/Bangkok
++0532200 +0834500 Asia/Barnaul
 +0335300 +0353000 Asia/Beirut
 +0425400 +0743600 Asia/Bishkek
 +0045600 +1145500 Asia/Brunei
@@ -235,6 +239,7 @@
 -0083300 +1253500 Asia/Dili
 +0251800 +0551800 Asia/Dubai
 +0383500 +0684800 Asia/Dushanbe
++0350700 +0335700 Asia/Famagusta
 +0313000 +0342800 Asia/Gaza
 +0454500 +1264100 Asia/Harbin
 +0313200 +0350542 Asia/Hebron
@@ -288,12 +293,14 @@
 +0354000 +0512600 Asia/Tehran
 +0272800 +0893900 Asia/Thimphu
 +0353916 +1394441 Asia/Tokyo
++0563000 +0845800 Asia/Tomsk
 +0475500 +1065300 Asia/Ulaanbaatar
 +0434800 +0873500 Asia/Urumqi
 +0643337 +1431336 Asia/Ust-Nera
 +0175800 +1023600 Asia/Vientiane
 +0431000 +1315600 Asia/Vladivostok
 +0620000 +1294000 Asia/Yakutsk
++0164700 +0961000 Asia/Yangon
 +0565100 +0603600 Asia/Yekaterinburg
 +0401100 +0443000 Asia/Yerevan
 +0374400 -0254000 Atlantic/Azores
@@ -321,6 +328,7 @@
 -0335200 +1511300 Australia/Sydney
 +0522200 +0045400 Europe/Amsterdam
 +0423000 +0013100 Europe/Andorra
++0462100 +0480300 Europe/Astrakhan
 +0375800 +0234300 Europe/Athens
 +0445000 +0203000 Europe/Belgrade
 +0523000 +0132200 Europe/Berlin
@@ -340,6 +348,7 @@
 +0491200 -0020700 Europe/Jersey
 +0544300 +0203000 Europe/Kaliningrad
 +0502600 +0303100 Europe/Kiev
++0583600 +0493900 Europe/Kirov
 +0384300 -0090800 Europe/Lisbon
 +0460300 +0143100 Europe/Ljubljana
 +0513030 +0000731 Europe/London
@@ -360,12 +369,14 @@
 +0531200 +0500900 Europe/Samara
 +0435500 +0122800 Europe/San_Marino
 +0435200 +0182500 Europe/Sarajevo
++0513400 +0460200 Europe/Saratov
 +0445700 +0340600 Europe/Simferopol
 +0415900 +0212600 Europe/Skopje
 +0424100 +0231900 Europe/Sofia
 +0592000 +0180300 Europe/Stockholm
 +0592500 +0244500 Europe/Tallinn
 +0412000 +0195000 Europe/Tirane
++0542000 +0482400 Europe/Ulyanovsk
 +0483700 +0221800 Europe/Uzhgorod
 +0470900 +0093100 Europe/Vaduz
 +0415408 +0122711 Europe/Vatican
