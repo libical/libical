@@ -937,3 +937,115 @@ icalcomponent *icalproperty_get_parent(const icalproperty *property)
 
     return property->parent;
 }
+
+static int param_compare(void *a, void *b)
+{
+    /* XXX  Need to sort values for multi-valued parameters (e.g. MEMBER) */
+    return strcmp(icalparameter_as_ical_string((icalparameter *) a),
+                  icalparameter_as_ical_string((icalparameter *) b));
+}
+
+void icalproperty_normalize(icalproperty *prop)
+{
+    icalproperty_kind prop_kind = icalproperty_isa(prop);
+    pvl_list sorted_params = pvl_newlist();
+    icalparameter *param;
+
+    while ((param = pvl_pop(prop->parameters)) != 0) {
+        /* Skip parameters having default values */
+        switch (icalparameter_isa(param)) {
+        case ICAL_VALUE_PARAMETER:
+            /* Skip VALUE parameters for default property value types */
+            switch (prop_kind) {
+            case ICAL_ATTACH_PROPERTY:
+                if (icalparameter_get_value(param) == ICAL_VALUE_URI) {
+                    continue;
+                }
+                break;
+
+            case ICAL_DTEND_PROPERTY:
+            case ICAL_DUE_PROPERTY:
+            case ICAL_DTSTART_PROPERTY:
+            case ICAL_EXDATE_PROPERTY:
+            case ICAL_RDATE_PROPERTY:
+            case ICAL_RECURRENCEID_PROPERTY:
+                if (icalparameter_get_value(param) == ICAL_VALUE_DATETIME) {
+                    continue;
+                }
+                break;
+
+            case ICAL_DURATION_PROPERTY:
+                if (icalparameter_get_value(param) == ICAL_VALUE_DURATION) {
+                    continue;
+                }
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case ICAL_CUTYPE_PARAMETER:
+            if (icalparameter_get_cutype(param) == ICAL_CUTYPE_INDIVIDUAL) {
+                continue;
+            }
+            break;
+
+        case ICAL_ENCODING_PARAMETER:
+            if (icalparameter_get_encoding(param) == ICAL_ENCODING_8BIT) {
+                continue;
+            }
+            break;
+
+        case ICAL_FBTYPE_PARAMETER:
+            if (icalparameter_get_fbtype(param) == ICAL_FBTYPE_BUSY) {
+                continue;
+            }
+            break;
+
+        case ICAL_PARTSTAT_PARAMETER:
+            if (icalparameter_get_partstat(param) == ICAL_PARTSTAT_NEEDSACTION) {
+                continue;
+            }
+            break;
+
+        case ICAL_RELATED_PARAMETER:
+            if (icalparameter_get_related(param) == ICAL_RELATED_START) {
+                continue;
+            }
+            break;
+
+        case ICAL_RELTYPE_PARAMETER:
+            if (icalparameter_get_reltype(param) == ICAL_RELTYPE_PARENT) {
+                continue;
+            }
+            break;
+
+        case ICAL_ROLE_PARAMETER:
+            if (icalparameter_get_role(param) == ICAL_ROLE_REQPARTICIPANT) {
+                continue;
+            }
+            break;
+
+        case ICAL_RSVP_PARAMETER:
+            if (icalparameter_get_rsvp(param) == ICAL_RSVP_FALSE) {
+                continue;
+            }
+            break;
+
+        case ICAL_SCHEDULEAGENT_PARAMETER:
+            if (icalparameter_get_scheduleagent(param) == ICAL_SCHEDULEAGENT_SERVER) {
+                continue;
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        pvl_insert_ordered(sorted_params, param_compare, param);
+    }
+
+    pvl_free(prop->parameters);
+    prop->parameters = sorted_params;
+}

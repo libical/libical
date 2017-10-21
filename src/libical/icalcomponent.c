@@ -605,6 +605,7 @@ icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c)
             kind == ICAL_VFREEBUSY_COMPONENT ||
             kind == ICAL_VAVAILABILITY_COMPONENT ||
             kind == ICAL_VPOLL_COMPONENT ||
+            kind == ICAL_VPATCH_COMPONENT ||
             kind == ICAL_VQUERY_COMPONENT || kind == ICAL_VAGENDA_COMPONENT) {
             return comp;
         }
@@ -1188,6 +1189,10 @@ static const struct icalcomponent_kind_map component_map[] = {
     {ICAL_VPOLL_COMPONENT, "VPOLL"},
     {ICAL_VVOTER_COMPONENT, "VVOTER"},
     {ICAL_XVOTE_COMPONENT, "VOTE"},
+
+    /* VPATCH components */
+    {ICAL_VPATCH_COMPONENT, "VPATCH"},
+    {ICAL_XPATCH_COMPONENT, "PATCH"},
 
     /* End of list */
     {ICAL_NO_COMPONENT, ""},
@@ -1993,6 +1998,16 @@ icalcomponent *icalcomponent_new_xvote(void)
     return icalcomponent_new(ICAL_XVOTE_COMPONENT);
 }
 
+icalcomponent *icalcomponent_new_vpatch(void)
+{
+    return icalcomponent_new(ICAL_VPATCH_COMPONENT);
+}
+
+icalcomponent *icalcomponent_new_xpatch(void)
+{
+    return icalcomponent_new(ICAL_XPATCH_COMPONENT);
+}
+
 /*
  * Timezone stuff.
  */
@@ -2528,4 +2543,199 @@ void icalcomponent_set_due(icalcomponent *comp, struct icaltimetype v)
     if (due_prop && (tzid = icaltime_get_tzid(v)) != NULL && !icaltime_is_utc(v)) {
         icalproperty_set_parameter(due_prop, icalparameter_new_tzid(tzid));
     }
+}
+
+static int prop_compare(void *a, void *b)
+{
+    icalproperty *p1 = (icalproperty*) a;
+    icalproperty *p2 = (icalproperty*) b;
+    icalproperty_kind k1 = icalproperty_isa(p1);
+    icalproperty_kind k2 = icalproperty_isa(p2);
+    int r = k1 - k2;
+
+    if (r == 0) {
+        if (k1 == ICAL_X_PROPERTY) {
+            r = strcmp(icalproperty_get_x_name(p1),
+                       icalproperty_get_x_name(p2));
+        }
+
+        if (r == 0) {
+            r = strcmp(icalproperty_get_value_as_string(p1),
+                       icalproperty_get_value_as_string(p2));
+        }
+    }
+
+    return r;
+}
+
+static int comp_compare(void *a, void *b)
+{
+    icalcomponent *c1 = (icalcomponent*) a;
+    icalcomponent *c2 = (icalcomponent*) b;
+    icalcomponent_kind k1 = icalcomponent_isa(c1);
+    icalcomponent_kind k2 = icalcomponent_isa(c2);
+    int r = k1 - k2;
+
+    if (r == 0) {
+        if (k1 == ICAL_X_COMPONENT) {
+            r = strcmp(c1->x_name, c2->x_name);
+        }
+
+        if (r == 0) {
+            const char *u1 = icalcomponent_get_uid(c1);
+            const char *u2 = icalcomponent_get_uid(c2);
+
+            if (u1 && u2) {
+                r = strcmp(u1, u2);
+
+                if (r == 0) {
+                    r = icaltime_compare(icalcomponent_get_recurrenceid(c1),
+                                         icalcomponent_get_recurrenceid(c2));
+                }
+            }
+            else {
+                icalproperty *p1, *p2;
+
+                switch (k1) {
+                case ICAL_VALARM_COMPONENT:
+                    p1 = icalcomponent_get_first_property(c1,
+                                                          ICAL_TRIGGER_PROPERTY);
+                    p2 = icalcomponent_get_first_property(c2,
+                                                          ICAL_TRIGGER_PROPERTY);
+                    r = strcmp(icalproperty_get_value_as_string(p1),
+                               icalproperty_get_value_as_string(p2));
+
+                    if (r == 0) {
+                        p1 = icalcomponent_get_first_property(c1,
+                                                              ICAL_ACTION_PROPERTY);
+                        p2 = icalcomponent_get_first_property(c2,
+                                                              ICAL_ACTION_PROPERTY);
+                        r = strcmp(icalproperty_get_value_as_string(p1),
+                                   icalproperty_get_value_as_string(p2));
+                    }
+                    break;
+
+                case ICAL_VTIMEZONE_COMPONENT:
+                    p1 = icalcomponent_get_first_property(c1,
+                                                          ICAL_TZID_PROPERTY);
+                    p2 = icalcomponent_get_first_property(c2,
+                                                          ICAL_TZID_PROPERTY);
+                    r = strcmp(icalproperty_get_value_as_string(p1),
+                               icalproperty_get_value_as_string(p2));
+                    break;
+
+                case ICAL_XSTANDARD_COMPONENT:
+                case ICAL_XDAYLIGHT_COMPONENT:
+                    p1 = icalcomponent_get_first_property(c1,
+                                                          ICAL_DTSTART_PROPERTY);
+                    p2 = icalcomponent_get_first_property(c2,
+                                                          ICAL_DTSTART_PROPERTY);
+                    r = strcmp(icalproperty_get_value_as_string(p1),
+                               icalproperty_get_value_as_string(p2));
+                    break;
+
+                case ICAL_VVOTER_COMPONENT:
+                    p1 = icalcomponent_get_first_property(c1,
+                                                          ICAL_VOTER_PROPERTY);
+                    p2 = icalcomponent_get_first_property(c2,
+                                                          ICAL_VOTER_PROPERTY);
+                    r = strcmp(icalproperty_get_value_as_string(p1),
+                               icalproperty_get_value_as_string(p2));
+                    break;
+
+                case ICAL_XVOTE_COMPONENT:
+                    p1 = icalcomponent_get_first_property(c1,
+                                                          ICAL_POLLITEMID_PROPERTY);
+                    p2 = icalcomponent_get_first_property(c2,
+                                                          ICAL_POLLITEMID_PROPERTY);
+                    r = strcmp(icalproperty_get_value_as_string(p1),
+                               icalproperty_get_value_as_string(p2));
+                    break;
+
+                default:
+                    /* XXX  Anything better? */
+                    r = icaltime_compare(icalcomponent_get_dtstamp(c1),
+                                         icalcomponent_get_dtstamp(c2));
+                    break;
+                }
+            }
+        }
+    }
+    /* Always sort VTIMEZONEs first */
+    else if (k1 == ICAL_VTIMEZONE_COMPONENT) return -1;
+    else if (k2 == ICAL_VTIMEZONE_COMPONENT) return 1;
+
+    return r;
+}
+
+void icalcomponent_normalize(icalcomponent *comp)
+{
+    pvl_list sorted_props = pvl_newlist();
+    icalproperty *prop;
+
+    while ((prop = pvl_pop(comp->properties)) != 0) {
+        int nparams = icalproperty_count_parameters(prop);
+
+        /* Skip unparameterized properties having default values */
+        switch (icalproperty_isa(prop)) {
+        case ICAL_CALSCALE_PROPERTY:
+            if ((nparams == 0) &&
+                (strcmp("GREGORIAN", icalproperty_get_calscale(prop)) == 0)) {
+                continue;
+            }
+            break;
+
+        case ICAL_CLASS_PROPERTY:
+            if ((nparams == 0) &&
+                (icalproperty_get_class(prop) == ICAL_CLASS_PUBLIC)) {
+                continue;
+            }
+            break;
+
+        case ICAL_PRIORITY_PROPERTY:
+            if ((nparams == 0) && (icalproperty_get_priority(prop) == 0)) {
+                continue;
+            }
+            break;
+
+        case ICAL_TRANSP_PROPERTY:
+            if ((nparams == 0) &&
+                (icalproperty_get_transp(prop) == ICAL_TRANSP_OPAQUE)) {
+                continue;
+            }
+            break;
+
+        case ICAL_REPEAT_PROPERTY:
+            if ((nparams == 0) && (icalproperty_get_repeat(prop) == 0)) {
+                continue;
+            }
+            break;
+
+        case ICAL_SEQUENCE_PROPERTY:
+            if ((nparams == 0) && (icalproperty_get_sequence(prop) == 0)) {
+                continue;
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        icalproperty_normalize(prop);
+        pvl_insert_ordered(sorted_props, prop_compare, prop);
+    }
+
+    pvl_free(comp->properties);
+    comp->properties = sorted_props;
+
+    pvl_list sorted_comps = pvl_newlist();
+    icalcomponent *mycomp;
+
+    while ((mycomp = pvl_pop(comp->components)) != 0) {
+        icalcomponent_normalize(mycomp);
+        pvl_insert_ordered(sorted_comps, comp_compare, mycomp);
+    }
+
+    pvl_free(comp->components);
+    comp->components = sorted_comps;
 }
