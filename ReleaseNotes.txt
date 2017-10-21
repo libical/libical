@@ -18,6 +18,7 @@ Version 3.0.0:
  * Removed is_utc from icaltimetype struct
     * Set icaltimetype.zone to icaltimezone_get_utc_timezone() to change a time to UTC
     * Use icaltime_is_utc() to check if a time is in UTC
+ * Added support for VPATCH component
  * New publicly available functions:
      + icalproperty_set_parent (icalproperty_get_parent was already public)
      + icalvalue_get_parent (icalvalue_set_parent was already public)
@@ -27,6 +28,8 @@ Version 3.0.0:
      + icalvalue_set_datetimedate
      + icalvalue_get_datetimedate
      + icalrecur_iterator_set_start
+     + icalcomponent_normalize()
+     + icalproperty_normalize()
  * Removed deprecated functions:
     + icaltime_from_timet (use icaltime_from_timet_with_zone)
     + icaltime_start_day_of_week (use icaltime_start_day_week)
