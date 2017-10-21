@@ -33,7 +33,7 @@ TZID_PREFIX = /citadel.org/%D_1/
 # libical library to link with. You only need these if you want to run the
 # tests. You may need to change the '#include <ical.h>' line at the top of
 # test-vzic.c as well.
-LIBICAL_CFLAGS =
+LIBICAL_CFLAGS = -I/usr/local/include/libical -L/usr/local/lib64
 #LIBICAL_LDADD = -lical-evolution
 LIBICAL_LDADD = -lical -lpthread
 

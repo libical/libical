@@ -43,6 +43,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -63,36 +64,36 @@
    the past, since we can't include any historical changes in the files. */
 #if 1
 #define DUMP_START_YEAR 2003
-#define DUMP_END_YEAR	2038
+#define DUMP_END_YEAR   2038
 #else
 #define DUMP_START_YEAR 1970
-#define DUMP_END_YEAR	2038
+#define DUMP_END_YEAR   2038
 #endif
 
 /* The maximum size of any complete pathname. */
-#define PATHNAME_BUFFER_SIZE	1024
+#define PATHNAME_BUFFER_SIZE    1024
 
-#ifndef	FALSE
-#define	FALSE	(0)
+#ifndef FALSE
+#define FALSE   (0)
 #endif
 
-#ifndef	TRUE
-#define	TRUE	(!FALSE)
+#ifndef TRUE
+#define TRUE    (!FALSE)
 #endif
 
-int VzicDumpChanges		= FALSE;
+int VzicDumpChanges             = FALSE;
 
 /* We output beneath the current directory for now. */
 char *directory = "test-output";
 
-static void	usage				(void);
-static int	parse_zone_name			(char		*name,
-						 char	       **directory,
-						 char	       **subdirectory,
-						 char	       **filename);
-static void	ensure_directory_exists		(char		*directory);
-static void	dump_local_times		(icaltimezone	*zone,
-						 FILE		*fp);
+static void     usage                           (void);
+static int      parse_zone_name                 (char           *name,
+                                                 char          **directory,
+                                                 char          **subdirectory,
+                                                 char          **filename);
+static void     ensure_directory_exists         (char           *directory);
+static void     dump_local_times                (icaltimezone   *zone,
+                                                 FILE           *fp);
 
 
 int main(int argc, char* argv[])
@@ -127,7 +128,7 @@ int main(int argc, char* argv[])
   for (i = 0; i < zones->num_elements; i++) {
     zone = icalarray_element_at (zones, i);
 
-    location = icaltimezone_get_location (zone);
+    location = (char *)icaltimezone_get_location (zone);
 
 #if 0
     /* Use this to start at a certain zone. */
@@ -140,18 +141,18 @@ int main(int argc, char* argv[])
     /* Use this to only output data for certain timezones. */
 #if 0
     if (strcmp (location, "America/Cancun")
-	&& strcmp (location, "Asia/Baku")
-	&& strcmp (location, "Asia/Nicosia")
-	&& strcmp (location, "Asia/Novosibirsk")
-	&& strcmp (location, "Asia/Samarkand")
-	&& strcmp (location, "Asia/Tashkent")
-	&& strcmp (location, "Asia/Tbilisi")
-	&& strcmp (location, "Asia/Yerevan")
-	&& strcmp (location, "Australia/Broken_Hill")
-	&& strcmp (location, "Europe/Simferopol")
-	&& strcmp (location, "Europe/Tallinn")
-	&& strcmp (location, "Europe/Zaporozhye")
-	)
+        && strcmp (location, "Asia/Baku")
+        && strcmp (location, "Asia/Nicosia")
+        && strcmp (location, "Asia/Novosibirsk")
+        && strcmp (location, "Asia/Samarkand")
+        && strcmp (location, "Asia/Tashkent")
+        && strcmp (location, "Asia/Tbilisi")
+        && strcmp (location, "Asia/Yerevan")
+        && strcmp (location, "Australia/Broken_Hill")
+        && strcmp (location, "Europe/Simferopol")
+        && strcmp (location, "Europe/Tallinn")
+        && strcmp (location, "Europe/Zaporozhye")
+        )
       continue;
 #endif
 
@@ -160,7 +161,7 @@ int main(int argc, char* argv[])
 #endif
 
     parse_zone_name (location, &zone_directory, &zone_subdirectory,
-		     &zone_filename);
+                     &zone_filename);
 
     sprintf (output_directory, "%s/%s", directory, zone_directory);
     ensure_directory_exists (output_directory);
@@ -168,7 +169,7 @@ int main(int argc, char* argv[])
 
     if (zone_subdirectory) {
       sprintf (output_directory, "%s/%s/%s", directory, zone_directory,
-	       zone_subdirectory);
+               zone_subdirectory);
       ensure_directory_exists (output_directory);
       sprintf (filename, "%s/%s", output_directory, zone_filename);
     }
@@ -200,7 +201,7 @@ int main(int argc, char* argv[])
 
 
 static void
-usage				(void)
+usage                           (void)
 {
   fprintf (stderr, "Usage: test-vzic [--dump-changes]\n");
 
@@ -211,10 +212,10 @@ usage				(void)
 /* This checks that the Zone name only uses the characters in [-+_/a-zA-Z0-9],
    and outputs a warning if it isn't. */
 static int
-parse_zone_name			(char		*name,
-				 char	       **directory,
-				 char	       **subdirectory,
-				 char	       **filename)
+parse_zone_name                 (char           *name,
+                                 char          **directory,
+                                 char          **subdirectory,
+                                 char          **filename)
 {
   static int invalid_zone_num = 1;
 
@@ -223,8 +224,8 @@ parse_zone_name			(char		*name,
 
   for (p = name; (ch = *p) != 0; p++) {
     if ((ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z')
-	&& (ch < '0' || ch > '9') && ch != '/' && ch != '_'
-	&& ch != '-' && ch != '+') {
+        && (ch < '0' || ch > '9') && ch != '/' && ch != '_'
+        && ch != '-' && ch != '+') {
       fprintf (stderr, "Warning: Unusual Zone name: %s\n", name);
       invalid = TRUE;
       break;
@@ -232,20 +233,20 @@ parse_zone_name			(char		*name,
 
     if (ch == '/') {
       if (!first_slash_pos) {
-	first_slash_pos = p;
+        first_slash_pos = p;
       } else if (!second_slash_pos) {
-	second_slash_pos = p;
+        second_slash_pos = p;
       } else {
-	fprintf (stderr, "Warning: More than 2 '/' characters in Zone name: %s\n", name);
-	invalid = TRUE;
-	break;
+        fprintf (stderr, "Warning: More than 2 '/' characters in Zone name: %s\n", name);
+        invalid = TRUE;
+        break;
       }
     }
   }
 
   if (!first_slash_pos) {
-	fprintf (stderr, "No '/' character in Zone name: %s. Skipping.\n", name);
-	return FALSE;
+        fprintf (stderr, "No '/' character in Zone name: %s. Skipping.\n", name);
+        return FALSE;
   }
 
   if (invalid) {
@@ -271,7 +272,7 @@ parse_zone_name			(char		*name,
 
 
 static void
-ensure_directory_exists		(char		*directory)
+ensure_directory_exists         (char           *directory)
 {
   struct stat filestat;
 
@@ -279,8 +280,8 @@ ensure_directory_exists		(char		*directory)
     /* If the directory doesn't exist, try to create it. */
     if (errno == ENOENT) {
       if (mkdir (directory, 0777) != 0) {
-	fprintf (stderr, "Can't create directory: %s\n", directory);
-	exit (1);
+        fprintf (stderr, "Can't create directory: %s\n", directory);
+        exit (1);
       }
     } else {
       fprintf (stderr, "Error calling stat() on directory: %s\n", directory);
@@ -288,7 +289,7 @@ ensure_directory_exists		(char		*directory)
     }
   } else if (!S_ISDIR (filestat.st_mode)) {
     fprintf (stderr, "Can't create directory, already exists: %s\n",
-	     directory);
+             directory);
     exit (1);
   }
 }
@@ -298,7 +299,7 @@ static void
 dump_local_times (icaltimezone *zone, FILE *fp)
 {
   static char *months[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-			    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
   icaltimezone *utc_timezone;
   struct icaltimetype tt, tt_copy;
   struct tm tm, local_tm;
@@ -316,9 +317,8 @@ dump_local_times (icaltimezone *zone, FILE *fp)
   tt.hour = 0;
   tt.minute = 0;
   tt.second = 0;
-  tt.is_utc = 0;
   tt.is_date = 0;
-  tt.zone = "";
+  tt.zone = NULL;
 
   tm.tm_year = tt.year - 1900;
   tm.tm_mon = tt.month - 1;
@@ -332,7 +332,7 @@ dump_local_times (icaltimezone *zone, FILE *fp)
   putenv ("TZ=UTC");
   t = mktime (&tm);
 
-  location = icaltimezone_get_location (zone);
+  location = (char *)icaltimezone_get_location (zone);
   sprintf (tzstring, "TZ=%s", location);
 
   /*printf ("Zone: %s\n", location);*/
@@ -363,11 +363,11 @@ dump_local_times (icaltimezone *zone, FILE *fp)
 
 #if 1
     if (local_tm.tm_year + 1900 != tt_copy.year
-	|| local_tm.tm_mon + 1 != tt_copy.month
-	|| local_tm.tm_mday != tt_copy.day
-	|| local_tm.tm_hour != tt_copy.hour
-	|| local_tm.tm_min != tt_copy.minute
-	|| local_tm.tm_sec != tt_copy.second) {
+        || local_tm.tm_mon + 1 != tt_copy.month
+        || local_tm.tm_mday != tt_copy.day
+        || local_tm.tm_hour != tt_copy.hour
+        || local_tm.tm_min != tt_copy.minute
+        || local_tm.tm_sec != tt_copy.second) {
 
       /* The error format is:
 
@@ -378,35 +378,35 @@ dump_local_times (icaltimezone *zone, FILE *fp)
       total_error++;
 
       fprintf (fp, "ERROR:%2i %s %04i %2i:%02i:%02i UTC",
-	       tt.day, months[tt.month - 1], tt.year,
-	       tt.hour, tt.minute, tt.second);
+               tt.day, months[tt.month - 1], tt.year,
+               tt.hour, tt.minute, tt.second);
       fprintf (fp, " ->%2i %s %04i %2i:%02i:%02i",
-	       local_tm.tm_mday, months[local_tm.tm_mon],
-	       local_tm.tm_year + 1900,
-	       local_tm.tm_hour, local_tm.tm_min, local_tm.tm_sec);
+               local_tm.tm_mday, months[local_tm.tm_mon],
+               local_tm.tm_year + 1900,
+               local_tm.tm_hour, local_tm.tm_min, local_tm.tm_sec);
       fprintf (fp, " Us:%2i %s %04i %2i:%02i:%02i\n",
-	       tt_copy.day, months[tt_copy.month - 1], tt_copy.year,
-	       tt_copy.hour, tt_copy.minute, tt_copy.second);
+               tt_copy.day, months[tt_copy.month - 1], tt_copy.year,
+               tt_copy.hour, tt_copy.minute, tt_copy.second);
     }
 #endif
 
     /* Now convert it back, and check we get the original time. */
     icaltimezone_convert_time (&tt_copy, zone, utc_timezone);
     if (tt.year != tt_copy.year
-	|| tt.month != tt_copy.month
-	|| tt.day != tt_copy.day
-	|| tt.hour != tt_copy.hour
-	|| tt.minute != tt_copy.minute
-	|| tt.second != tt_copy.second) {
+        || tt.month != tt_copy.month
+        || tt.day != tt_copy.day
+        || tt.hour != tt_copy.hour
+        || tt.minute != tt_copy.minute
+        || tt.second != tt_copy.second) {
 
       total_error2++;
 
       fprintf (fp, "ERROR 2: %2i %s %04i %2i:%02i:%02i UTC",
-	       tt.day, months[tt.month - 1], tt.year,
-	       tt.hour, tt.minute, tt.second);
+               tt.day, months[tt.month - 1], tt.year,
+               tt.hour, tt.minute, tt.second);
       fprintf (fp, " Us:%2i %s %04i %2i:%02i:%02i UTC\n",
-	       tt_copy.day, months[tt_copy.month - 1], tt_copy.year,
-	       tt_copy.hour, tt_copy.minute, tt_copy.second);
+               tt_copy.day, months[tt_copy.month - 1], tt_copy.year,
+               tt_copy.hour, tt_copy.minute, tt_copy.second);
     }
 
 
@@ -419,5 +419,5 @@ dump_local_times (icaltimezone *zone, FILE *fp)
   }
 
   printf ("Zone: %40s  Errors: %i (%i)\n", icaltimezone_get_location (zone),
-	  total_error, total_error2);
+          total_error, total_error2);
 }
