@@ -2661,6 +2661,9 @@ static int comp_compare(void *a, void *b)
             }
         }
     }
+    /* Always sort VTIMEZONEs first */
+    else if (k1 == ICAL_VTIMEZONE_COMPONENT) return -1;
+    else if (k2 == ICAL_VTIMEZONE_COMPONENT) return 1;
 
     return r;
 }
