@@ -2592,8 +2592,7 @@ static int comp_compare(void *a, void *b)
                     r = icaltime_compare(icalcomponent_get_recurrenceid(c1),
                                          icalcomponent_get_recurrenceid(c2));
                 }
-            }
-            else {
+            } else {
                 icalproperty *p1, *p2;
 
                 switch (k1) {
@@ -2660,10 +2659,12 @@ static int comp_compare(void *a, void *b)
                 }
             }
         }
-    }
     /* Always sort VTIMEZONEs first */
-    else if (k1 == ICAL_VTIMEZONE_COMPONENT) return -1;
-    else if (k2 == ICAL_VTIMEZONE_COMPONENT) return 1;
+    } else if (k1 == ICAL_VTIMEZONE_COMPONENT) {
+        return -1;
+    } else if (k2 == ICAL_VTIMEZONE_COMPONENT) {
+        return 1;
+    }
 
     return r;
 }
@@ -2671,7 +2672,9 @@ static int comp_compare(void *a, void *b)
 void icalcomponent_normalize(icalcomponent *comp)
 {
     pvl_list sorted_props = pvl_newlist();
+    pvl_list sorted_comps = pvl_newlist();
     icalproperty *prop;
+    icalcomponent *mycomp;
 
     while ((prop = pvl_pop(comp->properties)) != 0) {
         int nparams = icalproperty_count_parameters(prop);
@@ -2727,9 +2730,6 @@ void icalcomponent_normalize(icalcomponent *comp)
 
     pvl_free(comp->properties);
     comp->properties = sorted_props;
-
-    pvl_list sorted_comps = pvl_newlist();
-    icalcomponent *mycomp;
 
     while ((mycomp = pvl_pop(comp->components)) != 0) {
         icalcomponent_normalize(mycomp);
