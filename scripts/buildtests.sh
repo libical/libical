@@ -28,6 +28,7 @@ HELP() {
   echo " -l, --no-clang-build  Don't run any clang-build tests"
   echo " -g, --no-gcc-build    Don't run any gcc-build tests"
   echo " -a, --no-asan-build   Don't run any ASAN-build tests"
+  echo " -d, --no-tsan-build   Don't run any TSAN-build tests"
   echo
 }
 
@@ -195,6 +196,23 @@ ASAN_BUILD() {
   SET_CLANG
   BUILD "$name" "-DADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
+}
+
+#function TSAN_BUILD:
+# runs an clang TSAN build test
+# $1 = the name of the test (which will have "-tsan" appended to it)
+# $2 = CMake options
+TSAN_BUILD() {
+  name="$1-tsan"
+  if ( test $runtsanbuild -eq 0 )
+  then
+    echo "===== TSAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START TSAN BUILD: $1 ======"
+  SET_CLANG
+  BUILD "$name" "-DTHREAD_SANITIZER=True $2"
+  echo "===== END TSAN BUILD: $1 ======"
 }
 
 #function CPPCHECK
@@ -401,7 +419,7 @@ KRAZY() {
 
 ##### END FUNCTIONS #####
 
-TEMP=`getopt -o hkctbslga --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build -- "$@"`
+TEMP=`getopt -o hkctbslgad --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
@@ -413,6 +431,7 @@ runscan=1
 runclangbuild=1
 rungccbuild=1
 runasanbuild=1
+runtsanbuild=1
 runsplint=1
 while true ; do
     case "$1" in
@@ -424,7 +443,8 @@ while true ; do
         -s|--no-splint)      runsplint=0;     shift;;
         -l|--no-clang-build) runclangbuild=0; shift;;
         -g|--no-gcc-build)   rungccbuild=0;   shift;;
-        -a|--no-asan-build)  runasanbuild=0;       shift;;
+        -a|--no-asan-build)  runasanbuild=0;  shift;;
+        -d|--no-tsan-build)  runtsanbuild=0;shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
@@ -466,6 +486,13 @@ CLANG_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i6
 CLANG_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 
 #Address sanitizer
-ASAN_BUILD test ""
+ASAN_BUILD test1asan ""
+ASAN_BUILD test2asan "$CMAKEOPTS"
+ASAN_BUILD test3asan "$TZCMAKEOPTS"
+
+#Thread sanitizer
+TSAN_BUILD test1tsan ""
+TSAN_BUILD test2tsan "$CMAKEOPTS"
+TSAN_BUILD test3tsan "$TZCMAKEOPTS"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"

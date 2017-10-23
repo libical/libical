@@ -62,6 +62,9 @@
 # -DADDRESS_SANITIZER=[true|false]
 #  Build with the address sanitizer (requires gcc or clang)
 #
+# -DTHREAD_SANITIZER=[true|false]
+#  Build with the thread sanitizer (requires gcc or clang)
+#
 
 cmake_minimum_required(VERSION 3.1.0) #first line, to shutup a cygwin warning
 project(libical C CXX)
@@ -489,6 +492,31 @@ if(ADDRESS_SANITIZER)
   if(ICAL_GLIB)
     message(STATUS
       "Warning: Building the address sanitizer with the GObject interface is not supported. "
+      "Turning-off the GObject interface"
+    )
+    set(ICAL_GLIB False)
+  endif()
+endif()
+
+option(THREAD_SANITIZER "Build with the thread sanitizer." False)
+if(THREAD_SANITIZER)
+  if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g")
+  else()
+    message(FATAL_ERROR
+      "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")
+  endif()
+  if(GOBJECT_INTROSPECTION)
+    message(STATUS
+      "Warning: Building the thread sanitizer with GObject Introspection is is not supported. "
+      "Turning-off GObject Introspection"
+    )
+    set(HAVE_INTROSPECTION False)
+  endif()
+  if(ICAL_GLIB)
+    message(STATUS
+      "Warning: Building the thread sanitizer with the GObject interface is not supported. "
       "Turning-off the GObject interface"
     )
     set(ICAL_GLIB False)
