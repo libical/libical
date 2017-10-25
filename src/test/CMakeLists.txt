@@ -128,6 +128,12 @@ if(HAVE_GETOPT) #getopt is required
 endif()
 
 ########### next target ###############
+if(CMAKE_USE_PTHREADS_INIT)
+  set(icaltm_test_SRCS icaltm_test.c)
+  testme(icaltm_test "${icaltm_test_SRCS}")
+endif()
+
+########### next target ###############
 
 if(HAVE_GETOPT) #getopt is required
   set(testmime_SRCS testmime.c)
