@@ -468,8 +468,10 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 
 static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
 {
+#if defined(HAVE_PTHREAD)
     /* Avoid data race in multithreaded when accessing icaltimezone_minimum_expansion_year */
     static pthread_mutex_t year_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
 
     /* When we expand timezone changes we always expand at least up to this
        year, plus ICALTIMEZONE_EXTRA_COVERAGE. */
