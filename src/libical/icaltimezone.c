@@ -45,6 +45,8 @@ static pthread_mutex_t builtin_mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
 #else
 static pthread_mutex_t builtin_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
+// To avoid use-after-free in multithreaded applications when accessing icaltimezone::changes
+static pthread_mutex_t changes_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
 #if defined(_WIN32)
@@ -149,6 +151,34 @@ static char *icaltimezone_load_get_line_fn(char *s, size_t size, void *data);
 static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size);
 static const char *get_zone_directory(void);
 
+static void icaltimezone_builtin_lock(void)
+{
+#if defined(HAVE_PTHREAD)
+    pthread_mutex_lock(&builtin_mutex);
+#endif
+}
+
+static void icaltimezone_builtin_unlock(void)
+{
+#if defined(HAVE_PTHREAD)
+    pthread_mutex_unlock(&builtin_mutex);
+#endif
+}
+
+static void icaltimezone_changes_lock(void)
+{
+#if defined(HAVE_PTHREAD)
+    pthread_mutex_lock(&changes_mutex);
+#endif
+}
+
+static void icaltimezone_changes_unlock(void)
+{
+#if defined(HAVE_PTHREAD)
+    pthread_mutex_unlock(&changes_mutex);
+#endif
+}
+
 const char *icaltimezone_tzid_prefix(void)
 {
     if (ical_tzid_prefix[0] == '\0') {
@@ -193,9 +223,12 @@ icaltimezone *icaltimezone_copy(icaltimezone *originalzone)
     if (zone->tznames != NULL) {
         zone->tznames = strdup(zone->tznames);
     }
+
+    icaltimezone_changes_lock();
     if (zone->changes != NULL) {
         zone->changes = icalarray_copy(zone->changes);
     }
+    icaltimezone_changes_unlock();
 
     /* Let the caller set the component because then they will
        know to be careful not to free this reference twice. */
@@ -227,10 +260,12 @@ static void icaltimezone_reset(icaltimezone *zone)
     if (zone->component)
         icalcomponent_free(zone->component);
 
+    icaltimezone_changes_lock();
     if (zone->changes) {
         icalarray_free(zone->changes);
         zone->changes = NULL;
     }
+    icaltimezone_changes_unlock();
 
     icaltimezone_init(zone);
 }
@@ -246,7 +281,10 @@ static void icaltimezone_init(icaltimezone *zone)
     zone->component = NULL;
     zone->builtin_timezone = NULL;
     zone->end_year = 0;
+
+    icaltimezone_changes_lock();
     zone->changes = NULL;
+    icaltimezone_changes_unlock();
 }
 
 /** Gets the TZID, LOCATION/X-LIC-LOCATION and TZNAME properties of
@@ -430,19 +468,30 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 
 static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
 {
+    /* Avoid data race in multithreaded when accessing icaltimezone_minimum_expansion_year */
+    static pthread_mutex_t year_mutex = PTHREAD_MUTEX_INITIALIZER;
+
     /* When we expand timezone changes we always expand at least up to this
        year, plus ICALTIMEZONE_EXTRA_COVERAGE. */
     static int icaltimezone_minimum_expansion_year = -1;
 
     int changes_end_year;
 
+    icaltimezone_builtin_lock();
     icaltimezone_load_builtin_timezone(zone);
+    icaltimezone_builtin_unlock();
 
+#if defined(HAVE_PTHREAD)
+    pthread_mutex_lock(&year_mutex);
+#endif
     if (icaltimezone_minimum_expansion_year == -1) {
         struct icaltimetype today = icaltime_today();
 
         icaltimezone_minimum_expansion_year = today.year;
     }
+#if defined(HAVE_PTHREAD)
+    pthread_mutex_unlock(&year_mutex);
+#endif
 
     changes_end_year = end_year;
     if (changes_end_year < icaltimezone_minimum_expansion_year)
@@ -450,13 +499,18 @@ static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
 
     changes_end_year += ICALTIMEZONE_EXTRA_COVERAGE;
 
+    icaltimezone_changes_lock();
+
     if (changes_end_year > ICALTIMEZONE_MAX_YEAR)
         changes_end_year = ICALTIMEZONE_MAX_YEAR;
 
     if (!zone->changes || zone->end_year < end_year)
         icaltimezone_expand_changes(zone, changes_end_year);
+
+    icaltimezone_changes_unlock();
 }
 
+/* Hold the icaltimezone_changes_lock(); before calling this function */
 static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
 {
     icalarray *changes;
@@ -788,8 +842,12 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
     /* Make sure the changes array is expanded up to the given time. */
     icaltimezone_ensure_coverage(zone, tt->year);
 
-    if (!zone->changes || zone->changes->num_elements == 0)
+    icaltimezone_changes_lock();
+
+    if (!zone->changes || zone->changes->num_elements == 0) {
+        icaltimezone_changes_unlock();
         return 0;
+    }
 
     /* Copy the time parts of the icaltimetype to an icaltimezonechange so we
        can use our comparison function on it. */
@@ -852,6 +910,9 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
             if (is_daylight) {
                 *is_daylight = ! tmp_change.is_daylight;
             }
+
+            icaltimezone_changes_unlock();
+
             return tmp_change.prev_utc_offset;
         }
 
@@ -906,7 +967,11 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
     if (is_daylight) {
         *is_daylight = zone_change->is_daylight;
     }
-    return zone_change->utc_offset;
+    utc_offset_change = zone_change->utc_offset;
+
+    icaltimezone_changes_unlock();
+
+    return utc_offset_change;
 }
 
 /** Calculates the UTC offset of a given UTC time in the given
@@ -919,7 +984,7 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
     icaltimezonechange *zone_change, tt_change, tmp_change;
     size_t change_num, change_num_to_use;
     int found_change = 1;
-    int step;
+    int step, utc_offset;
 
     if (is_daylight)
         *is_daylight = 0;
@@ -935,8 +1000,12 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
     /* Make sure the changes array is expanded up to the given time. */
     icaltimezone_ensure_coverage(zone, tt->year);
 
-    if (!zone->changes || zone->changes->num_elements == 0)
+    icaltimezone_changes_lock();
+
+    if (!zone->changes || zone->changes->num_elements == 0) {
+        icaltimezone_changes_unlock();
         return 0;
+    }
 
     /* Copy the time parts of the icaltimetype to an icaltimezonechange so we
        can use our comparison function on it. */
@@ -985,6 +1054,9 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
             if (is_daylight) {
                 *is_daylight = ! tmp_change.is_daylight;
             }
+
+            icaltimezone_changes_unlock();
+
             return tmp_change.prev_utc_offset;
         }
 
@@ -1002,12 +1074,17 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
     /* Now we know exactly which timezone change applies to the time, so
        we can return the UTC offset and whether it is a daylight time. */
     zone_change = icalarray_element_at(zone->changes, change_num_to_use);
-    if (is_daylight)
+    if (is_daylight) {
         *is_daylight = zone_change->is_daylight;
+    }
+    utc_offset = zone_change->utc_offset;
 
-    return zone_change->utc_offset;
+    icaltimezone_changes_unlock();
+
+    return utc_offset;
 }
 
+/* Hold icaltimezone_changes_lock(); before calling this function */
 /** Returns the index of a timezone change which is close to the time
    given in change. */
 static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonechange * change)
@@ -1482,15 +1559,11 @@ static void icaltimezone_init_builtin_timezones(void)
     /* Initialize the special UTC timezone. */
     utc_timezone.tzid = (char *)"UTC";
 
-#if defined(HAVE_PTHREAD)
-    pthread_mutex_lock(&builtin_mutex);
-#endif
+    icaltimezone_builtin_lock();
     if (!builtin_timezones) {
         icaltimezone_parse_zone_tab();
     }
-#if defined(HAVE_PTHREAD)
-    pthread_mutex_unlock(&builtin_mutex);
-#endif
+    icaltimezone_builtin_unlock();
 }
 
 static int parse_coord(char *coord, int len, int *degrees, int *minutes, int *seconds)
@@ -1739,17 +1812,15 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 {
     icalcomponent *comp = 0, *subcomp;
 
-    /* If the location isn't set, it isn't a builtin timezone. */
-    if (!zone->location || !zone->location[0])
-        return;
-
     /* Prevent blocking on mutex lock caused by recursive calls */
     if (zone->component)
         return;
 
-#if defined(HAVE_PTHREAD)
-    pthread_mutex_lock(&builtin_mutex);
-#endif
+    icaltimezone_builtin_lock();
+
+    /* If the location isn't set, it isn't a builtin timezone. */
+    if (!zone->location || !zone->location[0])
+        return;
 
     if (use_builtin_tzdata) {
         char *filename;
@@ -1805,9 +1876,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
     }
 
   out:
-#if defined(HAVE_PTHREAD)
-    pthread_mutex_unlock(&builtin_mutex);
-#endif
+    icaltimezone_builtin_unlock();
     return;
 }
 
@@ -1852,6 +1921,8 @@ int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
     printf("Num changes: %i\n", zone->changes->num_elements);
 #endif
 
+    icaltimezone_changes_lock();
+
     for (change_num = 0; change_num < zone->changes->num_elements; change_num++) {
         zone_change = icalarray_element_at(zone->changes, change_num);
 
@@ -1869,6 +1940,9 @@ int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
 
         fprintf(fp, "\n");
     }
+
+    icaltimezone_changes_unlock();
+
     return 1;
 }
 
