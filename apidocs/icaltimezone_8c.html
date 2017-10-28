@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Libical API Documentation
-   &#160;<span id="projectnumber">2.99</span>
+   &#160;<span id="projectnumber">3.0</span>
    </div>
   </td>
  </tr>
@@ -84,6 +84,11 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a43eadc83fdf04a923acfd13bfbabc59b"><td class="memItemLeft" align="right" valign="top"><a id="a43eadc83fdf04a923acfd13bfbabc59b"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>BUILTIN_TZID_PREFIX</b>&#160;&#160;&#160;&quot;/freeassociation.sourceforge.net/&quot;</td></tr>
+<tr class="separator:a43eadc83fdf04a923acfd13bfbabc59b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74f5bbc07ffd92bbe72e27b99209cd1b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icaltimezone_8c.html#a74f5bbc07ffd92bbe72e27b99209cd1b">BUILTIN_TZID_PREFIX_LEN</a>&#160;&#160;&#160;256</td></tr>
+<tr class="separator:a74f5bbc07ffd92bbe72e27b99209cd1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3f96da2c45c082276497fb1722f3236"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icaltimezone_8c.html#ad3f96da2c45c082276497fb1722f3236">ICALTIMEZONE_EXTRA_COVERAGE</a>&#160;&#160;&#160;5</td></tr>
 <tr class="separator:ad3f96da2c45c082276497fb1722f3236"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a484ed3b6e3a11cd73200d1b2f0af8257"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icaltimezone_8c.html#a484ed3b6e3a11cd73200d1b2f0af8257">ICALTIMEZONE_MAX_YEAR</a>&#160;&#160;&#160;2037</td></tr>
@@ -125,6 +130,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_array_fr
 <tr class="memitem:a9bfe00a48ea2014976c31c39f079f0d7"><td class="memItemLeft" align="right" valign="top"><a id="a9bfe00a48ea2014976c31c39f079f0d7"></a>
 <a class="el" href="icalarray_8h.html#ad36143942d5ac4709b68fff41615e598">icalarray</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_array_new</b> (void)</td></tr>
 <tr class="separator:a9bfe00a48ea2014976c31c39f079f0d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85266c011a59410a2597fa3b70136da6"><td class="memItemLeft" align="right" valign="top"><a id="a85266c011a59410a2597fa3b70136da6"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_builtin_lock</b> (void)</td></tr>
+<tr class="separator:a85266c011a59410a2597fa3b70136da6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c2f53f38d40f75e67a39ca68590f1c0"><td class="memItemLeft" align="right" valign="top"><a id="a8c2f53f38d40f75e67a39ca68590f1c0"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_builtin_unlock</b> (void)</td></tr>
+<tr class="separator:a8c2f53f38d40f75e67a39ca68590f1c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d558784323a3ea90959498501a999cb"><td class="memItemLeft" align="right" valign="top"><a id="a8d558784323a3ea90959498501a999cb"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_changes_lock</b> (void)</td></tr>
+<tr class="separator:a8d558784323a3ea90959498501a999cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a249fc204eec385c17ac1208a649397aa"><td class="memItemLeft" align="right" valign="top"><a id="a249fc204eec385c17ac1208a649397aa"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_changes_unlock</b> (void)</td></tr>
+<tr class="separator:a249fc204eec385c17ac1208a649397aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8581acee35f3ddc756e0c8af24619538"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icaltimezone_8c.html#a8581acee35f3ddc756e0c8af24619538">icaltimezone_compare_change_fn</a> (const void *elem1, const void *elem2)</td></tr>
 <tr class="separator:a8581acee35f3ddc756e0c8af24619538"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2d1ee1c58825d3308713fc71387fda8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icaltimezone_8c.html#ad2d1ee1c58825d3308713fc71387fda8">icaltimezone_convert_time</a> (struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *tt, <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *from_zone, <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *to_zone)</td></tr>
@@ -227,8 +244,9 @@ static struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160
 Variables</h2></td></tr>
 <tr class="memitem:a04061cd0947b953741c201a09f36dc2f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="icalarray_8h.html#ad36143942d5ac4709b68fff41615e598">icalarray</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icaltimezone_8c.html#a04061cd0947b953741c201a09f36dc2f">builtin_timezones</a> = NULL</td></tr>
 <tr class="separator:a04061cd0947b953741c201a09f36dc2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aace4e5b5699a9f5dd3e8f3cfecd89bc8"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icaltimezone_8c.html#aace4e5b5699a9f5dd3e8f3cfecd89bc8">ical_tzid_prefix</a> = &quot;/freeassociation.sourceforge.net/&quot;</td></tr>
-<tr class="separator:aace4e5b5699a9f5dd3e8f3cfecd89bc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3f80f94f9cfdc34efad572cf05be5ee"><td class="memItemLeft" align="right" valign="top"><a id="af3f80f94f9cfdc34efad572cf05be5ee"></a>
+static char&#160;</td><td class="memItemRight" valign="bottom"><b>ical_tzid_prefix</b> [256]</td></tr>
+<tr class="separator:af3f80f94f9cfdc34efad572cf05be5ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f2bdb16146340750acd2aa6b1db630e"><td class="memItemLeft" align="right" valign="top"><a id="a1f2bdb16146340750acd2aa6b1db630e"></a>
 static int&#160;</td><td class="memItemRight" valign="bottom"><b>use_builtin_tzdata</b> = 0</td></tr>
 <tr class="separator:a1f2bdb16146340750acd2aa6b1db630e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -241,6 +259,21 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>zone_files_d
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>implementation of timezone handling routines </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a74f5bbc07ffd92bbe72e27b99209cd1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74f5bbc07ffd92bbe72e27b99209cd1b">&#9670;&nbsp;</a></span>BUILTIN_TZID_PREFIX_LEN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BUILTIN_TZID_PREFIX_LEN&#160;&#160;&#160;256</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The prefix we use to uniquely identify TZIDs. It must begin and end with forward slashes. </p>
+
+</div>
+</div>
 <a id="ad3f96da2c45c082276497fb1722f3236"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad3f96da2c45c082276497fb1722f3236">&#9670;&nbsp;</a></span>ICALTIMEZONE_EXTRA_COVERAGE</h2>
 
@@ -1264,29 +1297,6 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>zone_files_d
 </table>
 </div><div class="memdoc">
 <p>An array of icaltimezones for the builtin timezones. </p>
-
-</div>
-</div>
-<a id="aace4e5b5699a9f5dd3e8f3cfecd89bc8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aace4e5b5699a9f5dd3e8f3cfecd89bc8">&#9670;&nbsp;</a></span>ical_tzid_prefix</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const char* ical_tzid_prefix = &quot;/freeassociation.sourceforge.net/&quot;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>The prefix we use to uniquely identify TZIDs. It must begin and end with forward slashes. </p>
 
 </div>
 </div>
