@@ -2,8 +2,12 @@ Release Highlights
 ==================
 
 Version 3.1.0:
+-------------
+ TBD
+
+Version 3.0.1:
 --------------
-Nothing yet
+ * Built-in timezones updated to tzdata2017c
 
 Version 3.0.0:
 --------------
