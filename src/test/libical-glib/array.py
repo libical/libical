@@ -22,7 +22,7 @@ import sys
 from gi.repository import ICalGLib
 from sys import getsizeof
 
-array = ICalGLib.Array.new(100, 100);
+array = ICalGLib.Array.new(256, 100);
 
 element1 = "hello";
 element2 = "world";
