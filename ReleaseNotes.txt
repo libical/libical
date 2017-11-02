@@ -1,6 +1,10 @@
 Release Highlights
 ==================
 
+Version 3.0.1:
+--------------
+ * Built-in timezones updated to tzdata2017c
+
 Version 3.0.0:
 --------------
  * Relicense from MPL 1.0 to MPL 2.0 (keep dual license for LGPL v2.1)

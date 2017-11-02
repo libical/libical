@@ -326,6 +326,40 @@
 -0374900 +1445800 Australia/Melbourne
 -0315700 +1155100 Australia/Perth
 -0335200 +1511300 Australia/Sydney
+CET
+CST6CDT
+EET
+EST
+EST5EDT
+Etc/GMT
+Etc/GMT+1
+Etc/GMT+10
+Etc/GMT+11
+Etc/GMT+12
+Etc/GMT+2
+Etc/GMT+3
+Etc/GMT+4
+Etc/GMT+5
+Etc/GMT+6
+Etc/GMT+7
+Etc/GMT+8
+Etc/GMT+9
+Etc/GMT-1
+Etc/GMT-10
+Etc/GMT-11
+Etc/GMT-12
+Etc/GMT-13
+Etc/GMT-14
+Etc/GMT-2
+Etc/GMT-3
+Etc/GMT-4
+Etc/GMT-5
+Etc/GMT-6
+Etc/GMT-7
+Etc/GMT-8
+Etc/GMT-9
+Etc/UCT
+Etc/UTC
 +0522200 +0045400 Europe/Amsterdam
 +0423000 +0013100 Europe/Andorra
 +0462100 +0480300 Europe/Astrakhan
@@ -387,6 +421,7 @@
 +0454800 +0155800 Europe/Zagreb
 +0475000 +0351000 Europe/Zaporozhye
 +0472300 +0083200 Europe/Zurich
+HST
 -0185500 +0473100 Indian/Antananarivo
 -0072000 +0722500 Indian/Chagos
 -0102500 +1054300 Indian/Christmas
@@ -398,6 +433,10 @@
 -0201000 +0573000 Indian/Mauritius
 -0124700 +0451400 Indian/Mayotte
 -0205200 +0552800 Indian/Reunion
+MET
+MST
+MST7MDT
+PST8PDT
 -0135000 -1714400 Pacific/Apia
 -0365200 +1744600 Pacific/Auckland
 -0061300 +1553400 Pacific/Bougainville
@@ -439,3 +478,4 @@
 +0072500 +1514700 Pacific/Truk
 +0191700 +1663700 Pacific/Wake
 -0131800 -1761000 Pacific/Wallis
+WET
