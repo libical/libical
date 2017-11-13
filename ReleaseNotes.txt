@@ -8,6 +8,7 @@ Version 3.1.0:
 Version 3.0.1:
 --------------
  * Built-in timezones updated to tzdata2017c
+ * Fix a multi-threaded deadlock in icaltimezone_load_builtin_timezone()
 
 Version 3.0.0:
 --------------
