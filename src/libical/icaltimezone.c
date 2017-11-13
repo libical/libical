@@ -1821,8 +1821,10 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
     icaltimezone_builtin_lock();
 
     /* If the location isn't set, it isn't a builtin timezone. */
-    if (!zone->location || !zone->location[0])
+    if (!zone->location || !zone->location[0]) {
+        icaltimezone_builtin_unlock();
         return;
+    }
 
     if (use_builtin_tzdata) {
         char *filename;
