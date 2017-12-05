@@ -37,12 +37,8 @@ def error_type():
 def test_enum(prop,enum):
 
     vkind = icalvalue_string_to_kind(prop)
-    e = icalproperty_kind_and_string_to_enum(vkind, enum)
-
-    if e != 0:
+    if icalproperty_kind_and_string_to_enum(vkind, enum) != 0:
         return 1
-
-    return None
 
 
 class Property(object):
