@@ -344,7 +344,7 @@ class GenericComponent(Component):
 
         # Get the value
         if value==None:
-            if len(curr_properties) == 0:
+            if not curr_properties:
                 return None
             elif len(curr_properties) == 1:
                 return curr_properties[0]
@@ -383,7 +383,7 @@ class GenericComponent(Component):
 
             if len(curr_properties) == 1:
                 comp.remove_property(curr_properties[0])
-            elif len(curr_properties) > 1:
+            elif curr_properties:
                 raise ValueError, "too many properties of type %s" % propType
 
             comp.add_property(p)

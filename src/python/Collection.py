@@ -69,7 +69,7 @@ class Collection:
 
     def __str__(self):
         s = "[ "
-        if len(self._properties) > 0:
+        if self._properties:
             s = s + str(self._properties[0])
             for p in self._properties[1:]:
                 s = "%s, %s" % (s, p)
