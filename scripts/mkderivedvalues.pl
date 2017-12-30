@@ -155,7 +155,7 @@ sub insert_code
     my $count = scalar(keys %h) + 1;
     print "static const struct icalvalue_kind_map value_map[$count]={\n";
 
-    foreach $value (keys %h) {
+    foreach $value (sort keys %h) {
 
       next if $value eq 'NO' or $value eq 'ANY';
 
