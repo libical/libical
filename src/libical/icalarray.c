@@ -178,8 +178,9 @@ static void icalarray_expand(icalarray *array, size_t space_needed)
     new_chunks = malloc((num_chunks + num_new_chunks) * sizeof(void *));
 
     if (new_chunks) {
-        if (array->chunks && num_chunks)
+        if (array->chunks && num_chunks) {
             memcpy(new_chunks, array->chunks, num_chunks * sizeof(void *));
+        }
         for (c = 0; c < num_new_chunks; c++) {
             new_chunks[c + num_chunks] = icalarray_alloc_chunk(array);
         }
