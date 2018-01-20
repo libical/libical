@@ -311,6 +311,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
                 icalmemory_append_char(&str, &str_p, &buf_sz, *p);
                 break;
             }
+            /* falls through */
 /*issue74, we don't escape double quotes
         case '"':
 */
