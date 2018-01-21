@@ -5,6 +5,10 @@ Version 3.1.0:
 -------------
  TBD
 
+Version 3.0.2:
+--------------
+ * No longer attempt to detect the need for -DUSE_32BIT_TIME_T with MSVC
+
 Version 3.0.1:
 --------------
  * Built-in timezones updated to tzdata2017c
