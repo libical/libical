@@ -38,6 +38,10 @@
 #  Requires GObject Introspection development package v0.6.7 or higher
 #  Default=false (do not generate the introspection files)
 #
+# -DICAL_BUILD_DOCS=[true|false]
+#  Configure for the API documentation and User Manual.  The 'docs' target will not be available.
+#  Default=true
+#
 # -DICAL_GLIB_VAPI=[true|false]
 #  Set to build Vala "vapi" files
 #  Requires Vala package
@@ -319,6 +323,13 @@ if(GOBJECT_INTROSPECTION)
   endif()
 endif()
 
+option(ICAL_BUILD_DOCS "Build documentation" True)
+add_feature_info(
+  "Option ICAL_BUILD_DOCS"
+  ICAL_BUILD_DOCS
+  "build API documentation and reference manual"
+)
+
 option(ICAL_GLIB_VAPI "Build Vala \"vapi\" files.")
 add_feature_info(
   "Option ICAL_GLIB_VAPI"
@@ -388,6 +399,7 @@ if(ICAL_GLIB)
       "You requested to build libical-glib, but the necessary development packages "
       "are missing or too low a version "
       "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required)"
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
     )
   endif()
 endif()
@@ -543,7 +555,6 @@ endif()
 ################# build subdirs ########################
 
 add_subdirectory(design-data)
-add_subdirectory(doc)
 add_subdirectory(scripts)
 add_subdirectory(test-data)
 add_subdirectory(src)
@@ -551,6 +562,10 @@ add_subdirectory(examples)
 if(USE_BUILTIN_TZDATA)
   # use our zoneinfo if cmake is passed -DUSE_BUILTIN_TZDATA
   add_subdirectory(zoneinfo)
+endif()
+
+if(ICAL_BUILD_DOCS)
+  add_subdirectory(doc) # needs to go last, for the build source files
 endif()
 
 ########### create and install pkg-config file #########

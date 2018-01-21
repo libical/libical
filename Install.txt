@@ -134,3 +134,7 @@ You can override various installation folders by passing the following variables
  CMAKE_INSTALL_DATAROOTDIR = The fullpath where to want to put the shared files
 
 for example: cmake -DCMAKE_INSTALL_PREFIX=/opt -DCMAKE_INSTALL_LIBDIR=/opt/lib32 ..
+
+== Build the documentation ==
+Run 'make docs' to build the API documentation and reference.
+Disable the docs make target by running CMake with -DICAL_BUILD_DOCS=False option.

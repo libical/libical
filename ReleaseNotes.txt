@@ -8,6 +8,7 @@ Version 3.1.0:
 Version 3.0.2:
 --------------
  * No longer attempt to detect the need for -DUSE_32BIT_TIME_T with MSVC
+ * New CMake option ICAL_BUILD_DOCS which can be used to disable the docs target
 
 Version 3.0.1:
 --------------
