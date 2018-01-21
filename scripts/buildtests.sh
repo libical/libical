@@ -86,7 +86,7 @@ CHECK_WARNINGS() {
 # print warnings found in the compile-stage output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='\(Value[[:space:]]descriptions\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\)'
+  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
@@ -101,7 +101,7 @@ CPPCHECK_WARNINGS() {
 # print warnings find in the clang-tidy output
 # $1 = file with the clang-tidy output
 TIDY_WARNINGS() {
-  whitelist='\(Value[[:space:]]descriptions\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|modernize-\|cppcoreguidelines-pro-type-const-cast\|cppcoreguidelines-pro-type-reinterpret-cast\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-bounds-pointer-arithmetic\|google-build-using-namespace\|llvm-include-order\|hicpp-use-equals-default\|cppcoreguidelines-no-malloc)'
+  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|modernize-\|cppcoreguidelines-pro-type-const-cast\|cppcoreguidelines-pro-type-reinterpret-cast\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-bounds-pointer-arithmetic\|google-build-using-namespace\|llvm-include-order\|hicpp-use-equals-default\|cppcoreguidelines-no-malloc)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
@@ -109,7 +109,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='\(Value[[:space:]]descriptions\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\)'
+  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
@@ -457,8 +457,8 @@ cd ..
 TOP=`pwd`
 BDIR=""
 
-CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True"
-TZCMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DUSE_BUILTIN_TZDATA=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True"
+CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True -DICAL_BUILD_DOCS=False"
+TZCMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DUSE_BUILTIN_TZDATA=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True -DICAL_BUILD_DOCS=False"
 
 #Static code checkers
 KRAZY
