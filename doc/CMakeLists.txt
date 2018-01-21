@@ -22,12 +22,20 @@ if(DOXYGEN_FOUND)
   file(GLOB _all_hdrs
     ${CMAKE_SOURCE_DIR}/src/libical/*.h
     ${CMAKE_SOURCE_DIR}/src/libical/*.c
+    ${CMAKE_SOURCE_DIR}/src/libical/*.cxx
+    ${CMAKE_BINARY_DIR}/src/libical/*.c
     ${CMAKE_BINARY_DIR}/src/libical/*.h
+
     ${CMAKE_SOURCE_DIR}/src/libicalss/*.h
     ${CMAKE_SOURCE_DIR}/src/libicalss/*.c
+    ${CMAKE_SOURCE_DIR}/src/libicalss/*.cxx
+    ${CMAKE_BINARY_DIR}/src/libicalss/*.c
     ${CMAKE_BINARY_DIR}/src/libicalss/*.h
+
     ${CMAKE_SOURCE_DIR}/src/libicalvcal/*.h
     ${CMAKE_SOURCE_DIR}/src/libicalvcal/*.c
+    ${CMAKE_SOURCE_DIR}/src/libicalvcal/*.cxx
+    ${CMAKE_BINARY_DIR}/src/libicalvcal/*.c
     ${CMAKE_BINARY_DIR}/src/libicalvcal/*.h
   )
   list(APPEND _all_hdrs ${_dox_deps})
@@ -48,5 +56,8 @@ if(DOXYGEN_FOUND)
   add_custom_target(docs
     DEPENDS ${CMAKE_BINARY_DIR}/apidocs/html/index.html
   )
-
+  add_dependencies(docs ical icalss icalvcal)
+  if(WITH_CXX_BINDINGS)
+    add_dependencies(docs ical_cxx icalss_cxx)
+  endif()
 endif()
