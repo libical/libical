@@ -539,16 +539,6 @@ endif()
 if(SIZEOF_TIME_T EQUAL 4)
   set(USE_32BIT_TIME_T TRUE)
 endif()
-if(WIN32 AND MSVC)
-  if(SIZEOF_SIZE_T LESS SIZEOF_TIME_T)
-    unset(SIZEOF_SIZE_T CACHE)
-    unset(SIZEOF_TIME_T CACHE)
-    message(FATAL_ERROR
-      "You are using a Microsoft Visual 32-bit compiler with 64-bit time."
-      "Run cmake again with the \"-DUSE_32BIT_TIME_T=true\" command line option."
-    )
-  endif()
-endif()
 
 ################# build subdirs ########################
 
