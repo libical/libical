@@ -388,6 +388,7 @@ if(ICAL_GLIB)
       "You requested to build libical-glib, but the necessary development packages "
       "are missing or too low a version "
       "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required)"
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
     )
   endif()
 endif()
