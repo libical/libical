@@ -22,6 +22,7 @@
 
 #include "icalarray.h"
 #include "icalerror.h"
+#include "qsort_gen.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -133,34 +134,40 @@ void icalarray_remove_element_at(icalarray *array, size_t position)
     array->num_elements--;
 }
 
+struct _icalarray_sort_context {
+
+    icalarray* array;
+    int (*compare) (const void *, const void *);
+};
+
+static int icalarray_fcompare(const void* context, size_t i, size_t j) {
+
+    struct _icalarray_sort_context* sort_context = (struct _icalarray_sort_context*) context;
+    void* pI = icalarray_element_at(sort_context->array, i);
+    void* pJ = icalarray_element_at(sort_context->array, j);
+    return sort_context->compare(pI, pJ);
+}
+
+static void icalarray_fswap(void* context, size_t i, size_t j) {
+
+    struct _icalarray_sort_context* sort_context = (struct _icalarray_sort_context*) context;
+    void* pI = icalarray_element_at(sort_context->array, i);
+    void* pJ = icalarray_element_at(sort_context->array, j);
+
+    qsort_gen_memswap(pI, pJ, sort_context->array->element_size);
+}
+
 void icalarray_sort(icalarray *array, int (*compare) (const void *, const void *))
 {
-    if (array->num_elements == 0) {
+    struct _icalarray_sort_context sort_context;
+    sort_context.array = array;
+    sort_context.compare = compare;
+
+    if (array->num_elements <= 1) {
         return;
     }
 
-    if (array->num_elements <= array->increment_size) {
-        qsort(array->chunks[0], array->num_elements, array->element_size, compare);
-    } else {
-        size_t pos;
-        void *tmp = malloc(array->num_elements * array->element_size);
-
-        if (!tmp) {
-            return;
-        }
-        for (pos = 0; pos < array->num_elements; pos++) {
-            memcpy((char *)tmp + array->element_size * pos,
-                   icalarray_element_at(array, pos), array->element_size);
-        }
-
-        qsort(tmp, array->num_elements, array->element_size, compare);
-
-        for (pos = 0; pos < array->num_elements; pos++) {
-            memcpy(icalarray_element_at(array, pos),
-                   (char *)tmp + array->element_size * pos, array->element_size);
-        }
-        free(tmp);
-    }
+    qsort_gen(&sort_context, array->num_elements, icalarray_fcompare, icalarray_fswap);
 }
 
 static void icalarray_expand(icalarray *array, size_t space_needed)
