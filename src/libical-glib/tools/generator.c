@@ -1096,6 +1096,7 @@ void generate_forward_declarations_header_file(GList *structures)
     gchar *typeName;
     gchar *typeKind;
     GList *link;
+    GList *typeNamesList = NULL;
     GHashTable *typeNames;
     GHashTableIter iter_table;
     gpointer key;
@@ -1156,13 +1157,18 @@ void generate_forward_declarations_header_file(GList *structures)
             if (g_strcmp0(buffer, "forward_declarations") == 0) {
                 g_hash_table_iter_init(&iter_table, typeNames);
                 while (g_hash_table_iter_next(&iter_table, &key, &value)) {
-                    typeName = (gchar *)key;
+                    typeNamesList = g_list_prepend(typeNamesList, g_strdup(key));
+                }
+                typeNamesList = g_list_sort(typeNamesList, (GCompareFunc)g_strcmp0);
+                for (link = g_list_first(typeNamesList); link != NULL; link = g_list_next(link)) {
+                    typeName = link->data;
                     write_str(out, "typedef struct _");
                     write_str(out, typeName);
                     write_str(out, " ");
                     write_str(out, typeName);
                     write_str(out, ";\n");
                 }
+                g_list_free_full(typeNamesList, g_free);
             } else if (g_strcmp0(buffer, "upperSnake") == 0) {
                 write_str(out, "I_CAL_FORWARD_DECLARATIONS");
             } else {
@@ -2156,6 +2162,8 @@ static gint generate_library(const gchar *apis_dir)
     gchar *buffer;
     GList *structures;
     GList *iter_list;
+    GList *filenames = NULL;
+    GList *iter_filenames;
     GDir *dir;
     GError *local_error = NULL;
     gint res = 0;
@@ -2186,6 +2194,11 @@ static gint generate_library(const gchar *apis_dir)
 
     /* Parse the all the XML files into the Structure */
     while (filename = g_dir_read_name(dir), filename) {
+        filenames = g_list_prepend(filenames, g_strdup(filename));
+    }
+    filenames = g_list_sort(filenames, (GCompareFunc)g_strcmp0);
+    for (iter_filenames = g_list_first(filenames); iter_filenames != NULL; iter_filenames = g_list_next(iter_filenames)) {
+        filename = iter_filenames->data;
         gint len = (gint)strlen(filename);
 
         if (len <= 4 || g_ascii_strncasecmp(filename + len - 4, ".xml", 4) != 0)
@@ -2280,6 +2293,7 @@ static gint generate_library(const gchar *apis_dir)
     g_hash_table_destroy(type2structure);
     g_hash_table_destroy(defaultValues);
     g_list_free_full(structures, (GDestroyNotify)structure_free);
+    g_list_free_full(filenames, g_free);
     g_free(buffer);
 
     return res;
