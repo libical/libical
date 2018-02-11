@@ -260,12 +260,12 @@ static void icaltimezone_reset(icaltimezone *zone)
     if (zone->component)
         icalcomponent_free(zone->component);
 
-    icaltimezone_changes_lock();
+    //    icaltimezone_changes_lock();
     if (zone->changes) {
         icalarray_free(zone->changes);
         zone->changes = NULL;
     }
-    icaltimezone_changes_unlock();
+    //    icaltimezone_changes_unlock();
 
     icaltimezone_init(zone);
 }
