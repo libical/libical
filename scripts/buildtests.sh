@@ -89,7 +89,7 @@ CHECK_WARNINGS() {
 # print warnings found in the compile-stage output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|DB_DBM_HSEARCH\|const[[:space:]]DBT\)'
+  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|DB_DBM_HSEARCH\|const[[:space:]]DBT\|db\.h\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
@@ -461,8 +461,8 @@ cd ..
 TOP=`pwd`
 BDIR=""
 
-CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True -DICAL_BUILD_DOCS=False"
-TZCMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DUSE_BUILTIN_TZDATA=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB=True -DICAL_BUILD_DOCS=False"
+CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False"
+TZCMAKEOPTS="$CMAKEOPTS -DUSE_BUILTIN_TZDATA=True"
 
 #Static code checkers
 KRAZY
