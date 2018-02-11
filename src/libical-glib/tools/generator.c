@@ -2167,6 +2167,7 @@ static gint generate_library(const gchar *apis_dir)
     GDir *dir;
     GError *local_error = NULL;
     gint res = 0;
+    gint len;
 
     g_return_val_if_fail(apis_dir != NULL, 1);
     g_return_val_if_fail(g_file_test(apis_dir, G_FILE_TEST_IS_DIR), 1);
@@ -2197,9 +2198,10 @@ static gint generate_library(const gchar *apis_dir)
         filenames = g_list_prepend(filenames, g_strdup(filename));
     }
     filenames = g_list_sort(filenames, (GCompareFunc)g_strcmp0);
-    for (iter_filenames = g_list_first(filenames); iter_filenames != NULL; iter_filenames = g_list_next(iter_filenames)) {
+    for (iter_filenames = g_list_first(filenames); iter_filenames != NULL;
+        iter_filenames = g_list_next(iter_filenames)) {
         filename = iter_filenames->data;
-        gint len = (gint)strlen(filename);
+        len = (gint)strlen(filename);
 
         if (len <= 4 || g_ascii_strncasecmp(filename + len - 4, ".xml", 4) != 0)
             continue;
