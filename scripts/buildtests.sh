@@ -10,6 +10,9 @@ set -o pipefail
 #ensure parallel builds
 export MAKEFLAGS=-j8
 
+#needed to find homebrew's libffi on osx
+export PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig
+
 ##### START FUNCTIONS #####
 
 #function HELP
@@ -86,7 +89,7 @@ CHECK_WARNINGS() {
 # print warnings found in the compile-stage output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\)'
+  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|DB_DBM_HSEARCH\|const[[:space:]]DBT\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
@@ -139,9 +142,9 @@ CLEAN() {
 BUILD() {
   cd $TOP
   CONFIGURE "$1" "$2"
-  make |& tee make.out || exit 1
+  make 2>&1 | tee make.out || exit 1
   COMPILE_WARNINGS make.out
-  make test |& tee make-test.out || exit 1
+  make test 2>&1 | tee make-test.out || exit 1
   CLEAN
 }
 
@@ -233,7 +236,7 @@ CPPCHECK() {
   cd $TOP
   SET_GCC
   CONFIGURE "$name" "$2"
-  make |& tee make.out || exit 1
+  make 2>&1 | tee make.out || exit 1
 
   echo "===== START CPPCHECK: $1 ======"
   cd $TOP
@@ -282,7 +285,7 @@ SPLINT() {
   cd $TOP
   SET_GCC
   CONFIGURE "$name" "$2"
-  make |& tee make.out || exit 1
+  make 2>&1 | tee make.out || exit 1
 
   echo "===== START SPLINT: $1 ======"
   cd $TOP
@@ -335,7 +338,7 @@ SPLINT() {
        -I $TOP/src/libicalss \
        -I $TOP/src/libicalvcal \
        -I $TOP/src/libical-glib | \
-  cat - |& tee splint-$name.out
+  cat - 2>&1 | tee splint-$name.out
   status=${PIPESTATUS[0]}
   if ( test $status -gt 0 )
   then
@@ -362,7 +365,7 @@ CLANGTIDY() {
   cd $TOP
   SET_CLANG
   CONFIGURE "$1-tidy" "$2 -DCMAKE_CXX_CLANG_TIDY=clang-tidy;-checks=*"
-  cmake --build . |& tee make-tidy.out || exit 1
+  cmake --build . 2>&1 | tee make-tidy.out || exit 1
   TIDY_WARNINGS make-tidy.out
   CLEAN
   echo "===== END CLANG-TIDY: $1 ====="
@@ -389,7 +392,7 @@ CLANGSCAN() {
   rm -rf *
   scan-build cmake .. "$2" || exit 1
 
-  scan-build make |& tee make-scan.out || exit 1
+  scan-build make 2>&1 | tee make-scan.out || exit 1
   SCAN_WARNINGS make-scan.out
   CLEAN
   echo "===== END CLANG-SCAN: $1 ====="
@@ -406,7 +409,7 @@ KRAZY() {
   COMMAND_EXISTS "krazy2all"
   echo "===== START KRAZY ====="
   cd $TOP
-  krazy2all |& tee krazy.out
+  krazy2all 2>&1 | tee krazy.out
   status=$?
   if ( test $status -gt 0 )
   then
@@ -419,7 +422,8 @@ KRAZY() {
 
 ##### END FUNCTIONS #####
 
-TEMP=`getopt -o hkctbslgad --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
+#TEMP=`getopt -o hkctbslgad --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
+TEMP=`getopt hkctbslgad: $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
@@ -474,16 +478,22 @@ CLANGTIDY test2builtin "$TZCMAKEOPTS"
 #GCC based build tests
 GCC_BUILD test1 ""
 GCC_BUILD test2 "$CMAKEOPTS"
-GCC_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-GCC_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+if (test "`uname -s`" = "Linux")
+then
+  GCC_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
+  GCC_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+fi
 GCC_BUILD test1builtin "-DUSE_BUILTIN_TZDATA=True"
 GCC_BUILD test2builtin "$TZCMAKEOPTS"
 
 #Clang based build tests
 CLANG_BUILD test1 ""
 CLANG_BUILD test2 "$CMAKEOPTS"
-CLANG_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-CLANG_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+if (test "`uname -s`" = "Linux")
+then
+  CLANG_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
+  CLANG_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+fi
 
 #Address sanitizer
 ASAN_BUILD test1asan ""
