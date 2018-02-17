@@ -27,8 +27,12 @@ macro(setprops _name)
     )
   endif()
   if(WIN32)
+    set(tpath "${CMAKE_BINARY_DIR}/bin;%PATH%")
+    if(ICU_FOUND)
+      set(tpath "${ICU_BINARY_DIR};${tpath}")
+    endif()
     set_tests_properties(${_name} PROPERTIES
-      ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH};${CMAKE_BINARY_DIR}/bin;%PATH%"
+      ENVIRONMENT "PATH=${tpath}"
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
     )
   endif()
