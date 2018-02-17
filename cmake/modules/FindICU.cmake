@@ -52,7 +52,9 @@ find_library(
   ICU_LIBRARY
   NAMES icuuc cygicuuc cygicuuc32
   HINTS
+  ${icu_root}/lib64/
   ${icu_root}/lib/
+  ${_program_FILES_DIR}/icu/lib64/
   ${_program_FILES_DIR}/icu/lib/
   /usr/local/opt/icu4c/lib/
   DOC "Libraries to link against for the common parts of ICU"
@@ -64,7 +66,9 @@ find_program(
   tmp_DIR
   NAMES genccode uconv
   PATHS
+  ${icu_root}/bin64/
   ${icu_root}/bin/
+  ${_program_FILES_DIR}/icu/bin64/
   ${_program_FILES_DIR}/icu/bin/
   /usr/local/opt/icu4c/bin/
 )
