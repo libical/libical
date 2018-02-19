@@ -924,9 +924,12 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     limit_span.start = limit_start;
     limit_span.end = limit_end;
 
-    /* Do the callback for the initial DTSTART entry */
+    rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
 
-    if (!icalproperty_recurrence_is_excluded(comp, &dtstart, &dtstart)) {
+    /* If there is no RRULE present (in which case DTSTART is the only returned instance),
+       do the callback for the initial DTSTART entry. */
+
+    if ((rrule == NULL) && !icalproperty_recurrence_is_excluded(comp, &dtstart, &dtstart)) {
     /** call callback action **/
         if (icaltime_span_overlaps(&basespan, &limit_span))
             (*callback) (comp, &basespan, callback_data);
@@ -936,17 +939,12 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     dtduration = basespan.end - basespan.start;
 
     /* Now cycle through the rrule entries */
-    for (rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+    for (;
          rrule != NULL; rrule = icalcomponent_get_next_property(comp, ICAL_RRULE_PROPERTY)) {
 
         struct icalrecurrencetype recur = icalproperty_get_rrule(rrule);
         icalrecur_iterator *rrule_itr = icalrecur_iterator_new(recur, dtstart);
         struct icaltimetype rrule_time;
-
-        if (rrule_itr)
-            rrule_time = icalrecur_iterator_next(rrule_itr);
-    /** note that icalrecur_iterator_next always returns dtstart
-        the first time.. **/
 
         while (rrule_itr) {
             rrule_time = icalrecur_iterator_next(rrule_itr);
