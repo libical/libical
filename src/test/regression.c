@@ -530,6 +530,150 @@ void test_components()
 	icalerror_set_errors_are_fatal(estate);
 }
 
+static void test_component_foreach_callback(icalcomponent *comp, struct icaltime_span *span, void *data) {
+
+    int* foundExpected = (int*)data;
+    (*foundExpected)++;
+}
+
+int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int expectedFoundInstances) {
+
+    const char* calStr =
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART;20180220T020000Z\n"
+        "DURATION:PT1H\n"
+        "RRULE:FREQ=WEEKLY;BYDAY=TU\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
+    icalcomponent *calendar = icalparser_parse_string(calStr);
+    icalcomponent *event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+
+    struct icaltimetype dtstart = icaltime_from_string("20180220T020000Z");
+    struct icaltimetype it_start = dtstart;
+    struct icaltimetype it_end = dtstart;
+    int foundCnt = 0;
+
+    icaltime_adjust(&it_start, 0, 0, 0, startOffsSec);
+    icaltime_adjust(&it_end, 0, 0, 0, endOffsSec);
+
+    icalcomponent_foreach_recurrence(event, it_start, it_end, test_component_foreach_callback, &foundCnt);
+    icalcomponent_free(calendar);
+
+    ok("icalcomponent_foreach_recurrence yielded the expected number of instances.", foundCnt == expectedFoundInstances);
+
+    return 0;
+}
+
+void test_component_foreach() {
+
+    const char* calStr =
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        /* 14th is NOT a tuesday, so it doesn't conform to the rule. */
+        "DTSTART;20180214T020000Z\n"
+        "DURATION:PT4H\n"
+        "RRULE:FREQ=WEEKLY;COUNT=2;BYDAY=TU\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
+    icalcomponent *calendar = icalparser_parse_string(calStr);
+    icalcomponent *event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+    struct icaltimetype t_start = icaltime_from_string("20180219T000000Z");
+    struct icaltimetype t_end = icaltime_from_string("20180221T000000Z");
+
+    int foundExpectedCnt = 0;
+    int i;
+
+    /* we expect exactly one callback, namely on tu, 20th. */
+    icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &foundExpectedCnt);
+
+    icalcomponent_free(calendar);
+
+    ok("Exactly one instance was returned as expected in a VEVENT where DTSTART doesn't conform to the contained RRULE.", foundExpectedCnt == 1);
+
+
+    calStr =
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        /* Now DTSTART conforms to the RRULE. */
+        "DTSTART;20180220T020000Z\n"
+        "DURATION:PT4H\n"
+        "RRULE:FREQ=WEEKLY;COUNT=2;BYDAY=TU\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
+    calendar = icalparser_parse_string(calStr);
+    event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+    t_start = icaltime_from_string("20180219T000000Z");
+    t_end = icaltime_from_string("20180221T000000Z");
+
+    foundExpectedCnt = 0;
+    /* we expect exactly one callback, namely on tu, 20th. */
+    icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &foundExpectedCnt);
+
+    icalcomponent_free(calendar);
+
+    ok("Exactly one instance was returned as expected in a VEVENT where DTSTART *does* conform to the contained RRULE.", foundExpectedCnt == 1);
+
+
+    /* No RRULE in this VEVENT */
+    calStr =
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        /* Now DTSTART conforms to the RRULE. */
+        "DTSTART;20180220T020000Z\n"
+        "DURATION:PT4H\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
+    calendar = icalparser_parse_string(calStr);
+    event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+    t_start = icaltime_from_string("20180219T000000Z");
+    t_end = icaltime_from_string("20180221T000000Z");
+
+    foundExpectedCnt = 0;
+    icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &foundExpectedCnt);
+    ok("Exactly one instance was returned for an event without a RRULE.", foundExpectedCnt == 1);
+
+    t_start = icaltime_from_string("20180221T000000Z");
+    t_end = icaltime_from_string("20180223T000000Z");
+
+    foundExpectedCnt = 0;
+    icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &foundExpectedCnt);
+    ok("No instance was returned for an event without a RRULE where DTSTART lies outside the iterator limits.", foundExpectedCnt == 0);
+
+    icalcomponent_free(calendar);
+
+
+    for (i = 0; i < 3; i++) {
+
+        /* Add one week with every run, so the first run will address the
+        first recurrence instance, the second run the second instance,
+        etc.
+        */
+        int offs = i * 7 * 24 * 3600;
+
+        test_component_foreach_parameterized(offs + -1, offs + -1, 0);
+        test_component_foreach_parameterized(offs + -1, offs + 0, 0);
+        test_component_foreach_parameterized(offs + -1, offs + 1, 1);
+        test_component_foreach_parameterized(offs + 0, offs + 0, 0);
+        test_component_foreach_parameterized(offs + 0, offs + 1, 1);
+        test_component_foreach_parameterized(offs + 1, offs + 1, 1);
+        test_component_foreach_parameterized(offs + 0, offs + 3600, 1);
+        test_component_foreach_parameterized(offs + 3600 - 1, offs + 3600, 1);
+        test_component_foreach_parameterized(offs + 3600 - 1, offs + 3600 + 1, 1);
+        test_component_foreach_parameterized(offs + 3600, offs + 3600, 0);
+        test_component_foreach_parameterized(offs + 3600, offs + 3600 + 1, 0);
+        test_component_foreach_parameterized(offs + 3600 + 1, offs + 3600 + 1, 0);
+    }
+}
+
 void test_memory()
 {
     size_t bufsize = 256;
@@ -3985,6 +4129,7 @@ int main(int argc, char *argv[])
     test_run("Test Parameters", test_parameters, do_test, do_header);
     test_run("Test Properties", test_properties, do_test, do_header);
     test_run("Test Components", test_components, do_test, do_header);
+    test_run("Test icalcomponent_foreach_recurrence", test_component_foreach, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
