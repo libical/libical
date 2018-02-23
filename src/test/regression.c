@@ -530,14 +530,16 @@ void test_components()
 	icalerror_set_errors_are_fatal(estate);
 }
 
-static void test_component_foreach_callback(icalcomponent *comp, struct icaltime_span *span, void *data) {
-
+static void test_component_foreach_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
+{
+	_unused(comp);
+	_unused(span);
     int* foundExpected = (int*)data;
     (*foundExpected)++;
 }
 
-int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int expectedFoundInstances) {
-
+int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int expectedFoundInstances)
+{
     const char* calStr =
         "BEGIN:VCALENDAR\n"
         "BEGIN:VEVENT\n"
@@ -549,7 +551,6 @@ int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int e
 
     icalcomponent *calendar = icalparser_parse_string(calStr);
     icalcomponent *event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
-
 
     struct icaltimetype dtstart = icaltime_from_string("20180220T020000Z");
     struct icaltimetype it_start = dtstart;
@@ -567,8 +568,8 @@ int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int e
     return 0;
 }
 
-void test_component_foreach() {
-
+void test_component_foreach()
+{
     const char* calStr =
         "BEGIN:VCALENDAR\n"
         "BEGIN:VEVENT\n"
@@ -595,7 +596,6 @@ void test_component_foreach() {
 
     ok("Exactly one instance was returned as expected in a VEVENT where DTSTART doesn't conform to the contained RRULE.", foundExpectedCnt == 1);
 
-
     calStr =
         "BEGIN:VCALENDAR\n"
         "BEGIN:VEVENT\n"
@@ -619,7 +619,6 @@ void test_component_foreach() {
     icalcomponent_free(calendar);
 
     ok("Exactly one instance was returned as expected in a VEVENT where DTSTART *does* conform to the contained RRULE.", foundExpectedCnt == 1);
-
 
     /* No RRULE in this VEVENT */
     calStr =
@@ -649,7 +648,6 @@ void test_component_foreach() {
     ok("No instance was returned for an event without a RRULE where DTSTART lies outside the iterator limits.", foundExpectedCnt == 0);
 
     icalcomponent_free(calendar);
-
 
     for (i = 0; i < 3; i++) {
 
