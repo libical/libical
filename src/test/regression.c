@@ -532,9 +532,11 @@ void test_components()
 
 static void test_component_foreach_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
 {
+    int *foundExpected;
 	_unused(comp);
 	_unused(span);
-    int* foundExpected = (int*)data;
+
+	foundExpected = (int*)data;
     (*foundExpected)++;
 }
 
