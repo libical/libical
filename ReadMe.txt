@@ -1,4 +1,7 @@
-# <a name="title"></a> Libical [![Build Status](https://travis-ci.org/libical/libical.svg?branch=master)](https://travis-ci.org/libical/libical) [![Coverity Scan Build Status](https://scan.coverity.com/projects/2367/badge.svg)](https://scan.coverity.com/projects/2367) [![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
+# <a name="title"></a> Libical [![Travis Build Status](https://travis-ci.org/libical/libical.svg?branch=master)](https://travis-ci.org/libical/libical)
+#[![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/libical/libical?branch=master?svg=true)](https://ci.appveyor.com/api/projects/status/github/libical/libical)
+#[![Coverity Scan Build Status](https://scan.coverity.com/projects/2367/badge.svg)](https://scan.coverity.com/projects/2367)
+#[![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
 
 ## Introduction
 
@@ -13,14 +16,16 @@ and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.
 
-Libical implements [RFC5545][], [RFC5546][], [RFC7529][]; the 
-iCalendar extensions in [RFC6638][]; and some of [RFC6047][].
+Libical implements [RFC5545][], [RFC5546][], [RFC7529][]; the
+CalDav scheduling extensions in [RFC6638][]; iCalendar extensions in [RFC7986][];
+plus the iCalendar iMIP protocol in [RFC6047][].
 
 [RFC5545]: https://tools.ietf.org/html/rfc5545
 [RFC5546]: https://tools.ietf.org/html/rfc5546
 [RFC7529]: https://tools.ietf.org/html/rfc7529
 [RFC6638]: https://tools.ietf.org/html/rfc6638
 [RFC6047]: https://tools.ietf.org/html/rfc6047
+[RFC7986]: https://tools.ietf.org/html/rfc7986
 
 ## License
 
@@ -54,7 +59,7 @@ for libical, which is available [here](http://libical.github.io/libical/apidocs/
 
 Portions of this distribution are (C) Copyright 1996 Apple Computer,
 Inc., AT&T Corp., International Business Machines Corporation and
-Siemens Rolm Communications Inc. See 
+Siemens Rolm Communications Inc. See
 [src/libicalvcal/README.TXT](src/libicalvcal/README.txt) for
 details.
 
