@@ -4,6 +4,7 @@ Release Highlights
 Version 3.0.3:
 --------------
  * VTODO COMPLETED property can be a DATE-TIME or DATE (for backward compatibility)
+ * Improved recurrence iteration
 
 Version 3.0.2:
 --------------
