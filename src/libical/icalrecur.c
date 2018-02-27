@@ -1322,7 +1322,7 @@ static short decode_day(short *day, unsigned int flags)
     return icalrecurrencetype_day_position(*day);
 }
 
-static int initialize_iterator(icalrecur_iterator *impl)
+static int initialize_rscale(icalrecur_iterator *impl)
 {
     struct icalrecurrencetype rule = impl->rule;
     struct icaltimetype dtstart = impl->dtstart;
@@ -1428,17 +1428,6 @@ static int initialize_iterator(icalrecur_iterator *impl)
     /* Get rstart (DTSTART in RSCALE) */
     impl->rstart = occurrence_as_icaltime(impl, 0);
 
-    /* Set up defaults for BY_* arrays */
-    setup_defaults(impl, BY_SECOND, impl->rstart.second);
-
-    setup_defaults(impl, BY_MINUTE, impl->rstart.minute);
-
-    setup_defaults(impl, BY_HOUR, impl->rstart.hour);
-
-    setup_defaults(impl, BY_MONTH_DAY, impl->rstart.day);
-
-    setup_defaults(impl, BY_MONTH, impl->rstart.month);
-
     return 1;
 }
 
@@ -1453,6 +1442,7 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
                      (int32_t) (date.month - 1), /* UCal is 0-based */
                      (int32_t) date.day, &status);
     } else {
+        impl->last.zone = date.zone;
         ucal_setDateTime(impl->greg,
                          (int32_t) date.year,
                          (int32_t) (date.month - 1), /* UCal is 0-based */
@@ -1727,18 +1717,9 @@ static void increment_second(icalrecur_iterator *impl, int inc)
     icaltime_adjust(&impl->last, 0, 0, 0, inc);
 }
 
-static int initialize_iterator(icalrecur_iterator *impl)
+static int initialize_rscale(icalrecur_iterator *impl)
 {
-    /* Set up defaults for BY_* arrays */
-    setup_defaults(impl, BY_SECOND, impl->dtstart.second);
-
-    setup_defaults(impl, BY_MINUTE, impl->dtstart.minute);
-
-    setup_defaults(impl, BY_HOUR, impl->dtstart.hour);
-
-    setup_defaults(impl, BY_MONTH_DAY, impl->dtstart.day);
-
-    setup_defaults(impl, BY_MONTH, impl->dtstart.month);
+    impl->rstart = impl->dtstart;
 
     return 1;
 }
@@ -1757,6 +1738,7 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
             impl->by_ptrs[BY_MINUTE][0] : impl->dtstart.minute;
         impl->last.second = has_by_data(impl, BY_SECOND) ?
             impl->by_ptrs[BY_SECOND][0] : impl->dtstart.second;
+        impl->last.zone = date.zone;
     }
 }
 
@@ -1776,6 +1758,7 @@ static int day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 
 #endif /* HAVE_LIBICU */
 
+static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start);
 static void increment_month(icalrecur_iterator *impl);
 static int expand_month_days(icalrecur_iterator *impl, int year, int month);
 static int expand_year_days(icalrecur_iterator *impl, int year);
@@ -1813,7 +1796,6 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
 {
     icalrecur_iterator *impl;
     icalrecurrencetype_frequency freq = rule.freq;
-    struct icaltimetype last;
     enum byrule byrule;
 
     icalerror_clear_errno();
@@ -1847,11 +1829,6 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     impl->dtstart = dtstart;
     impl->rule = rule;
-    impl->rstart = dtstart;
-    impl->istart = dtstart;
-    impl->last = dtstart;
-    impl->occurrence_no = 0;
-    impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
     /* Set up convenience pointers to make the code simpler. Allows
        us to iterate through all of the BY* arrays in the rule. */
@@ -1903,85 +1880,24 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
         }
     }
 
-    /* Rewrite some of the rules and set up defaults to make later
-       processing easier. Primarily, it involves copying an element
-       from the start time into the corresponding BY_* array when the
-       BY_* array is empty */
-
-    if (initialize_iterator(impl) == 0) {
+    if (initialize_rscale(impl) == 0) {
         icalrecur_iterator_free(impl);
         return 0;
     }
 
-    last = occurrence_as_icaltime(impl, 0);
+    /* Set up defaults for BY_* arrays */
+    setup_defaults(impl, BY_SECOND, impl->rstart.second);
 
-    switch (impl->rule.freq) {
-    case ICAL_WEEKLY_RECURRENCE:
+    setup_defaults(impl, BY_MINUTE, impl->rstart.minute);
 
-        if (impl->by_ptrs[BY_DAY][0] == ICAL_RECURRENCE_ARRAY_MAX) {
+    setup_defaults(impl, BY_HOUR, impl->rstart.hour);
 
-            /* Weekly recurrences with no BY_DAY data should occur on the
-               same day of the week as the start time . */
-            impl->by_ptrs[BY_DAY][0] = (short)get_day_of_week(impl);
+    setup_defaults(impl, BY_MONTH_DAY, impl->rstart.day);
 
-        } else {
-            adjust_to_byday(impl);
-        }
-        break;
+    setup_defaults(impl, BY_MONTH, impl->rstart.month);
 
-    case ICAL_YEARLY_RECURRENCE:
-        /* For YEARLY rule, begin by setting up the year days array.
-           The YEARLY rules work by expanding one year at a time. */
-
-        /* Fail after hitting the year 20000 if no expanded days match */
-        while (last.year < 20000) {
-            expand_year_days(impl, last.year);
-            if (icalerrno != ICAL_NO_ERROR) {
-                icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-                free(impl);
-                return 0;
-            }
-            if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
-                break;  /* break when a matching day is found */
-            }
-            increment_year(impl, impl->rule.interval);
-            last = occurrence_as_icaltime(impl, 0);
-        }
-
-        /* Copy the first day into last. */
-        set_day_of_year(impl, impl->days_index);
-
-        break;
-
-    case ICAL_MONTHLY_RECURRENCE:
-        /* For MONTHLY rule, begin by setting up the year days array.
-           The MONTHLY rules work by expanding one month at a time. */
-
-        /* Fail after hitting the year 20000 if no expanded days match */
-        while (last.year < 20000) {
-            expand_month_days(impl, last.year, last.month);
-            if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
-                break;  /* break when a matching day is found */
-            }
-            increment_month(impl);
-            last = occurrence_as_icaltime(impl, 0);
-        }
-
-        /* Copy the first day into last. */
-        set_day_of_year(impl, impl->days_index);
-
-        break;
-
-    default:
-        break;
-    }
-
-    impl->last = occurrence_as_icaltime(impl, 1);
-
-    /* Fail if first instance exceeds MAX_TIME_T_YEAR */
-    if (impl->last.year > MAX_TIME_T_YEAR) {
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(impl);
+    if (!__iterator_set_start(impl, dtstart)) {
+        icalrecur_iterator_free(impl);
         return 0;
     }
 
@@ -2908,43 +2824,26 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     return impl->last;
 }
 
-int icalrecur_iterator_set_start(icalrecur_iterator *impl,
-                                 struct icaltimetype start)
+static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 {
+    icalrecurrencetype_frequency freq = impl->rule.freq;
     short interval = impl->rule.interval;
     int diff;
 
-    /* We can't adjust start date if we need to count occurrences */
-    if (impl->rule.count > 0) {
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        return 0;
-    }
-
-    /* Convert start to same time zone as DTSTART */
-    impl->istart =
-        icaltime_convert_to_zone(start, (icaltimezone *) impl->dtstart.zone);
-
-    if (icaltime_compare(impl->istart, impl->dtstart) < 0) {
-        /* If start is before DTSTART, use DTSTART */
-        impl->istart = impl->dtstart;
-    }
-    else if (!icaltime_is_null_time(impl->rule.until) &&
-        icaltime_compare(impl->istart, impl->rule.until) > 0) {
-        /* If start is after UNTIL, we're done */
-        impl->last = impl->istart;
-        return 1;
-    }
+    impl->istart = start;
+    impl->occurrence_no = 0;
+    impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
     /* Set Gregorian start date */
-    set_datetime(impl, impl->istart);
+    set_datetime(impl, start);
 
-    /* Get start date as RSCALE date */
-    start = occurrence_as_icaltime(impl, 0);
-
-    switch (impl->rule.freq) {
+    switch (freq) {
     case ICAL_YEARLY_RECURRENCE:
+        /* For YEARLY rule, begin by setting up the year days array.
+           The YEARLY rules work by expanding one year at a time. */
+
         if ((interval > 1) &&
-            (diff = (start.year - impl->rstart.year) % interval)) {
+            (diff = (impl->istart.year - impl->rstart.year) % interval)) {
             /* Specified start year doesn't match interval -
                bump start to first day of next year that matches interval */
             set_day_of_year(impl, 1);
@@ -2954,8 +2853,20 @@ int icalrecur_iterator_set_start(icalrecur_iterator *impl,
         /* Get (adjusted) start date as RSCALE date */
         start = occurrence_as_icaltime(impl, 0);
 
-        /* Expand days array for (adjusted) start year */
-        expand_year_days(impl, start.year);
+        /* Expand days array for (adjusted) start year -
+           fail after hitting the year 20000 if no expanded days match */
+        while (start.year < 20000) {
+            expand_year_days(impl, start.year);
+            if (icalerrno != ICAL_NO_ERROR) {
+                icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+                return 0;
+            }
+            if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
+                break;  /* break when a matching day is found */
+            }
+            increment_year(impl, interval);
+            start = occurrence_as_icaltime(impl, 0);
+        }
 
         /* Copy the first day into last */
         set_day_of_year(impl, impl->days_index);
@@ -2963,19 +2874,30 @@ int icalrecur_iterator_set_start(icalrecur_iterator *impl,
         break;
 
     case ICAL_MONTHLY_RECURRENCE:
+        /* For MONTHLY rule, begin by setting up the year days array.
+           The MONTHLY rules work by expanding one month at a time. */
+
         if ((interval > 1) &&
-            (diff = month_diff(impl, impl->rstart, start) % interval)) {
+            (diff = month_diff(impl, impl->rstart, impl->istart) % interval)) {
             /* Specified month doesn't match interval -
                bump start to first day of next month that matches interval */
-            increment_monthday(impl, -start.day);
+            increment_monthday(impl, -impl->istart.day + 1);
             __increment_month(impl, interval - diff);
         }
 
         /* Get (adjusted) start date as RSCALE date */
         start = occurrence_as_icaltime(impl, 0);
 
-        /* Expand days array for (adjusted) start month */
-        expand_month_days(impl, start.year, start.month);
+        /* Expand days array for (adjusted) start month -
+           fail after hitting the year 20000 if no expanded days match */
+        while (start.year < 20000) {
+            expand_month_days(impl, start.year, start.month);
+            if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
+                break;  /* break when a matching day is found */
+            }
+            increment_month(impl);
+            start = occurrence_as_icaltime(impl, 0);
+        }
 
         /* Copy the first day into last */
         set_day_of_year(impl, impl->days_index);
@@ -2983,23 +2905,29 @@ int icalrecur_iterator_set_start(icalrecur_iterator *impl,
         break;
 
     case ICAL_WEEKLY_RECURRENCE:
+        if (impl->by_ptrs[BY_DAY][0] == ICAL_RECURRENCE_ARRAY_MAX) {
+            /* Weekly recurrences with no BY_DAY data should occur on the
+               same day of the week as the start time . */
+            impl->by_ptrs[BY_DAY][0] = (short)get_day_of_week(impl);
 
-        adjust_to_byday(impl);
+        } else {
+            adjust_to_byday(impl);
 
-        /* Get adjusted start date as RSCALE date */
-        start = occurrence_as_icaltime(impl, 0);
+            /* Get (adjusted) start date as RSCALE date */
+            start = occurrence_as_icaltime(impl, 0);
 
-        if ((interval > 1) &&
-            (diff = (day_diff(impl, impl->rstart, start) + 6) / 7) % interval) {
-            /* Specified day doesn't match interval -
-               bump start to next week that matches interval */
-            increment_monthday(impl, 7 * (interval - diff));
+            if ((interval > 1) &&
+                (diff = (day_diff(impl, impl->rstart, start) + 6) / 7) % interval) {
+                /* Specified week doesn't match interval -
+                   bump start to next week that matches interval */
+                increment_monthday(impl, 7 * (interval - diff));
+            }
         }
         break;
 
     case ICAL_DAILY_RECURRENCE:
         if ((interval > 1) &&
-            (diff = day_diff(impl, impl->rstart, start) % interval)) {
+            (diff = day_diff(impl, impl->rstart, impl->istart) % interval)) {
             /* Specified day doesn't match interval -
                bump start to next day that matches interval */
             increment_monthday(impl, interval - diff);
@@ -3010,12 +2938,42 @@ int icalrecur_iterator_set_start(icalrecur_iterator *impl,
         break;
     }
 
-    /* Re-initialize iterator */
-    impl->occurrence_no = 0;
-    memset(impl->by_indices, 0, sizeof(impl->by_indices));
+    /* Get start date as Gregorian date */
     impl->last = occurrence_as_icaltime(impl, 1);
 
+    /* Fail if first instance exceeds MAX_TIME_T_YEAR */
+    if (impl->last.year > MAX_TIME_T_YEAR) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
     return 1;
+}
+
+int icalrecur_iterator_set_start(icalrecur_iterator *impl,
+                                 struct icaltimetype start)
+{
+    /* We can't adjust start date if we need to count occurrences */
+    if (impl->rule.count > 0) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
+    /* Convert start to same time zone as DTSTART */
+    start = icaltime_convert_to_zone(start, (icaltimezone *) impl->dtstart.zone);
+
+    if (icaltime_compare(start, impl->dtstart) < 0) {
+        /* If start is before DTSTART, use DTSTART */
+        start = impl->dtstart;
+    }
+    else if (!icaltime_is_null_time(impl->rule.until) &&
+        icaltime_compare(start, impl->rule.until) > 0) {
+        /* If start is after UNTIL, we're done */
+        impl->last = start;
+        return 1;
+    }
+
+    return __iterator_set_start(impl, start);
 }
 
 /************************** Type Routines **********************/
