@@ -674,6 +674,17 @@ void test_component_foreach()
     }
 }
 
+void test_recur_iterator_set_start()
+{
+    icaltimetype start = icaltime_from_string("20150526");
+    struct icalrecurrencetype recurrence = icalrecurrencetype_from_string("FREQ=WEEKLY");
+    icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, start);
+
+    icaltimetype next = icalrecur_iterator_next(iterator);
+
+    ok("Next recurrence iterator result should be of type date", next.is_date == 1);
+}
+
 void test_memory()
 {
     size_t bufsize = 256;
@@ -4130,6 +4141,7 @@ int main(int argc, char *argv[])
     test_run("Test Properties", test_properties, do_test, do_header);
     test_run("Test Components", test_components, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence", test_component_foreach, do_test, do_header);
+    test_run("Test icalrecur_iterator_set_start with date", test_recur_iterator_set_start, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
