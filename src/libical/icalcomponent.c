@@ -949,7 +949,13 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 
         if (!rrule_itr) continue;
 
-        if (recur.count == 0) icalrecur_iterator_set_start(rrule_itr, start);
+        if (recur.count == 0) {
+            icaltimetype mystart = start;
+
+            /* make sure we include any recurrence that ends in timespan */
+            icaltime_adjust(&mystart, 0, 0, 0, -dtduration);
+            icalrecur_iterator_set_start(rrule_itr, mystart);
+        }
 
         for (rrule_time = icalrecur_iterator_next(rrule_itr);
              !icaltime_is_null_time(rrule_time);
