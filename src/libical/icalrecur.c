@@ -1436,13 +1436,15 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
 {
     UErrorCode status = U_ZERO_ERROR;
 
+    impl->last.is_date = impl->rstart.is_date;
+    impl->last.zone = impl->rstart.zone;
+
     if (impl->rstart.is_date) {
         ucal_setDate(impl->greg,
                      (int32_t) date.year,
                      (int32_t) (date.month - 1), /* UCal is 0-based */
                      (int32_t) date.day, &status);
     } else {
-        impl->last.zone = date.zone;
         ucal_setDateTime(impl->greg,
                          (int32_t) date.year,
                          (int32_t) (date.month - 1), /* UCal is 0-based */
@@ -1730,6 +1732,8 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
     impl->last.year = date.year;
     impl->last.month = date.month;
     impl->last.day = date.day;
+    impl->last.is_date = impl->dtstart.is_date;
+    impl->last.zone = impl->dtstart.zone;
 
     if (!impl->dtstart.is_date) {
         impl->last.hour = has_by_data(impl, BY_HOUR) ?
@@ -1738,7 +1742,6 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
             impl->by_ptrs[BY_MINUTE][0] : impl->dtstart.minute;
         impl->last.second = has_by_data(impl, BY_SECOND) ?
             impl->by_ptrs[BY_SECOND][0] : impl->dtstart.second;
-        impl->last.zone = date.zone;
     }
 }
 
