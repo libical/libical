@@ -108,7 +108,7 @@ LIBICAL_ICAL_EXPORT int icaldurationtype_as_int(struct icaldurationtype duration
  *
  * @b Ownership
  * The string returned by this function is owned by the caller and needs to be
- * released with `free()` after it's no longer needed.
+ * released with `icalmemory_free_buffer()` after it's no longer needed.
  *
  * @b Usage
  * ```c
@@ -121,7 +121,7 @@ LIBICAL_ICAL_EXPORT int icaldurationtype_as_int(struct icaldurationtype duration
  * printf("%s\n", ical);
  *
  * // release string
- * free(ical);
+ * icalmemory_free_buffer(ical);
  * ```
  */
 LIBICAL_ICAL_EXPORT char *icaldurationtype_as_ical_string(struct icaldurationtype d);
