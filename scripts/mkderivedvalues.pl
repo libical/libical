@@ -227,7 +227,7 @@ $pointer_check_rv\
       if ($union_data eq 'string') {
 
         print
-"    if (impl->data.v_${union_data} != 0) {\n        free((void *)impl->data.v_${union_data});\n    }\n";
+"    if (impl->data.v_${union_data} != 0) {\n        icalmemory_free_buffer((void *)impl->data.v_${union_data});\n    }\n";
       }
 
       print "\

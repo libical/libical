@@ -143,7 +143,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_add_tmp_buffer(void *buf);
 LIBICAL_ICAL_EXPORT void icalmemory_free_ring(void);
 
 /* Non-tmp buffers must be freed. These are mostly wrappers around
- * malloc, etc, but are used so the caller can change the memory
+ * icalmemory_new_buffer, etc, but are used so the caller can change the memory
  * allocators in a future version of the library */
 
 /**
@@ -324,17 +324,19 @@ LIBICAL_ICAL_EXPORT void icalmemory_append_char(char **buf, char **pos, size_t *
  *
  * @par Ownership
  * The returned string is owned by the caller and needs to be released with the
- * appropriate `free()` method.
+ * `icalmemory_free_buffer()` method.
  *
- * A wrapper around `strdup()`.  Partly to trap calls to `strdup()`, partly
- * because in `-ansi`, `gcc` on Red Hat claims that `strdup()` is undeclared.
+ * Replaces `strdup()`. The function uses icalmemory_new_buffer() for memory
+ * allocation. It also helps trapping calls to `strdup()` and solves the
+ * problem that in `-ansi`, `gcc` on Red Hat claims that `strdup()` is
+ * undeclared.
  *
  * ### Usage
  * ```c
  * const char *my_str = "LibIcal";
  * char *dup = icalmemory_strdup(my_str);
  * printf("%s\n", dup);
- * free(dup);
+ * icalmemory_free_buffer(dup);
  * ```
  */
 LIBICAL_ICAL_EXPORT char *icalmemory_strdup(const char *s);

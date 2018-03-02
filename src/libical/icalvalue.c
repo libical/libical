@@ -43,7 +43,7 @@ LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kin
     if (!icalvalue_kind_is_valid(kind))
         return NULL;
 
-    if ((v = (struct icalvalue_impl *)malloc(sizeof(struct icalvalue_impl))) == 0) {
+    if ((v = (struct icalvalue_impl *)icalmemory_new_buffer(sizeof(struct icalvalue_impl))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -170,7 +170,7 @@ icalvalue *icalvalue_new_clone(const icalvalue *old)
 static char *icalmemory_strdup_and_dequote(const char *str)
 {
     const char *p;
-    char *out = (char *)malloc(sizeof(char) * strlen(str) + 1);
+    char *out = (char *)icalmemory_new_buffer(sizeof(char) * strlen(str) + 1);
     char *pout;
     int wroteNull = 0;
 
@@ -561,7 +561,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             char *dequoted_str = icalmemory_strdup_and_dequote(str);
 
             value = icalvalue_new_text(dequoted_str);
-            free(dequoted_str);
+            icalmemory_free_buffer(dequoted_str);
             break;
         }
 
@@ -632,7 +632,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             if (rt.freq != ICAL_NO_RECURRENCE) {
                 value = icalvalue_new_recur(rt);
             }
-            free(rt.rscale);
+            icalmemory_free_buffer(rt.rscale);
             break;
         }
 
@@ -719,7 +719,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             char *dequoted_str = icalmemory_strdup_and_dequote(str);
 
             value = icalvalue_new_x(dequoted_str);
-            free(dequoted_str);
+            icalmemory_free_buffer(dequoted_str);
         }
         break;
 
@@ -773,7 +773,7 @@ void icalvalue_free(icalvalue *v)
     }
 
     if (v->x_value != 0) {
-        free(v->x_value);
+        icalmemory_free_buffer(v->x_value);
     }
 
     switch (v->kind) {
@@ -793,7 +793,7 @@ void icalvalue_free(icalvalue *v)
     case ICAL_QUERY_VALUE:
         {
             if (v->data.v_string != 0) {
-                free((void *)v->data.v_string);
+                icalmemory_free_buffer((void *)v->data.v_string);
                 v->data.v_string = 0;
             }
             break;
@@ -801,8 +801,8 @@ void icalvalue_free(icalvalue *v)
     case ICAL_RECUR_VALUE:
         {
             if (v->data.v_recur != 0) {
-                free(v->data.v_recur->rscale);
-                free((void *)v->data.v_recur);
+                icalmemory_free_buffer(v->data.v_recur->rscale);
+                icalmemory_free_buffer((void *)v->data.v_recur);
                 v->data.v_recur = 0;
             }
             break;
@@ -819,7 +819,7 @@ void icalvalue_free(icalvalue *v)
     v->parent = 0;
     memset(&(v->data), 0, sizeof(v->data));
     v->id[0] = 'X';
-    free(v);
+    icalmemory_free_buffer(v);
 }
 
 int icalvalue_is_valid(const icalvalue *value)
@@ -1067,7 +1067,7 @@ static char *icalvalue_float_as_ical_string_r(const icalvalue *value)
     /* bypass current locale in order to make
        sure snprintf uses a '.' as a separator
        set locate to 'C' and keep old locale */
-    old_locale = strdup(setlocale(LC_NUMERIC, NULL));
+    old_locale = icalmemory_strdup(setlocale(LC_NUMERIC, NULL));
     (void)setlocale(LC_NUMERIC, "C");
 
     str = (char *)icalmemory_new_buffer(40);
@@ -1076,7 +1076,7 @@ static char *icalvalue_float_as_ical_string_r(const icalvalue *value)
 
     /* restore saved locale */
     (void)setlocale(LC_NUMERIC, old_locale);
-    free(old_locale);
+    icalmemory_free_buffer(old_locale);
 
     return str;
 }
@@ -1094,7 +1094,7 @@ static char *icalvalue_geo_as_ical_string_r(const icalvalue *value)
     /* bypass current locale in order to make
      * sure snprintf uses a '.' as a separator
      * set locate to 'C' and keep old locale */
-    old_locale = strdup(setlocale(LC_NUMERIC, NULL));
+    old_locale = icalmemory_strdup(setlocale(LC_NUMERIC, NULL));
     (void)setlocale(LC_NUMERIC, "C");
 
     str = (char *)icalmemory_new_buffer(80);
@@ -1103,7 +1103,7 @@ static char *icalvalue_geo_as_ical_string_r(const icalvalue *value)
 
     /* restore saved locale */
     (void)setlocale(LC_NUMERIC, old_locale);
-    free(old_locale);
+    icalmemory_free_buffer(old_locale);
 
     return str;
 }
@@ -1385,8 +1385,8 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
             temp1 = icalvalue_as_ical_string_r(a);
             temp2 = icalvalue_as_ical_string_r(b);
             r = strcmp(temp1, temp2);
-            free(temp1);
-            free(temp2);
+            icalmemory_free_buffer(temp1);
+            icalmemory_free_buffer(temp2);
 
             if (r > 0) {
                 return ICAL_XLICCOMPARETYPE_GREATER;
@@ -1492,12 +1492,12 @@ int icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBu
 
     if ((int)strlen(ptr) >= nMaxBufferLen) {
         icalvalue_free(value);
-        free(ptr);
+        icalmemory_free_buffer(ptr);
         return 0;
     }
 
     strcpy(szEncText, ptr);
-    free(ptr);
+    icalmemory_free_buffer(ptr);
 
     icalvalue_free((icalvalue *) value);
 

@@ -24,6 +24,7 @@
 #include "icaltz-util.h"
 #include "icalerror.h"
 #include "icaltimezone.h"
+#include "icalmemory.h"
 
 #include <stdlib.h>
 
@@ -165,7 +166,7 @@ static char *zname_from_stridx(char *str, size_t idx)
 
     size = i - idx;
     str += idx;
-    ret = (char *)malloc(size + 1);
+    ret = (char *)icalmemory_new_buffer(size + 1);
     ret = strncpy(ret, str, size);
     ret[size] = '\0';
 
@@ -284,7 +285,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
 
     size = strlen(zonedir) + strlen(location) + 2;
-    full_path = (char *)malloc(size);
+    full_path = (char *)icalmemory_new_buffer(size);
     if (full_path == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -309,12 +310,12 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     num_isstd = (size_t)decode(type_cnts.ttisstdcnt);
     num_types = (size_t)decode(type_cnts.typecnt);
 
-    transitions = calloc(num_trans, sizeof(time_t));
+    transitions = icalmemory_new_buffer(num_trans * sizeof(time_t));
     if (transitions == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
     }
-    r_trans = calloc(num_trans, 4);
+    r_trans = icalmemory_new_buffer(num_trans * 4);
     if (r_trans == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -323,7 +324,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     EFREAD(r_trans, 4, num_trans, f);
     temp = r_trans;
     if (num_trans) {
-        trans_idx = calloc(num_trans, sizeof(int));
+        trans_idx = icalmemory_new_buffer(num_trans * sizeof(int));
         if (trans_idx == NULL) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             goto error;
@@ -336,7 +337,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
     r_trans = temp;
 
-    types = calloc(num_types, sizeof(ttinfo));
+    types = icalmemory_new_buffer(num_types * sizeof(ttinfo));
     if (types == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -355,7 +356,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         types[i].gmtoff = decode(a);
     }
 
-    znames = (char *)malloc(num_chars);
+    znames = (char *)icalmemory_new_buffer(num_chars);
     if (znames == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -364,7 +365,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     /* We got all the information which we need */
 
-    leaps = calloc(num_leaps, sizeof(leap));
+    leaps = icalmemory_new_buffer(num_leaps * sizeof(leap));
     if (leaps == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -409,7 +410,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     /* Add tzid property */
     size = strlen(icaltimezone_tzid_prefix()) + strlen(location) + 1;
-    tzid = (char *)malloc(size);
+    tzid = (char *)icalmemory_new_buffer(size);
     if (tzid == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -631,34 +632,34 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         fclose(f);
 
     if (full_path)
-        free(full_path);
+        icalmemory_free_buffer(full_path);
 
     if (transitions)
-        free(transitions);
+        icalmemory_free_buffer(transitions);
 
     if (r_trans)
-        free(r_trans);
+        icalmemory_free_buffer(r_trans);
 
     if (trans_idx)
-        free(trans_idx);
+        icalmemory_free_buffer(trans_idx);
 
     if (types) {
         for (i = 0; i < num_types; i++) {
             if (types[i].zname) {
-                free(types[i].zname);
+                icalmemory_free_buffer(types[i].zname);
             }
         }
-        free(types);
+        icalmemory_free_buffer(types);
     }
 
     if (znames)
-        free(znames);
+        icalmemory_free_buffer(znames);
 
     if (leaps)
-        free(leaps);
+        icalmemory_free_buffer(leaps);
 
     if (tzid)
-        free(tzid);
+        icalmemory_free_buffer(tzid);
 
     return tz_comp;
 }

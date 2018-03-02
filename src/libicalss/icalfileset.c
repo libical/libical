@@ -27,6 +27,7 @@
 #include "icalfilesetimpl.h"
 #include "icalparser.h"
 #include "icalvalue.h"
+#include "icalmemory.h"
 
 #include <errno.h>
 #include <stdlib.h>
@@ -398,11 +399,11 @@ icalerrorenum icalfileset_commit(icalset *set)
         if (sz != (IO_SSIZE_T) strlen(str)) {
             perror("write");
             icalerror_set_errno(ICAL_FILE_ERROR);
-            free(str);
+            icalmemory_free_buffer(str);
             return ICAL_FILE_ERROR;
         }
 
-        free(str);
+		icalmemory_free_buffer(str);
         write_size += sz;
     }
 

@@ -101,7 +101,7 @@ void icalvalue_set_x(icalvalue *impl, const char *v)
     icalerror_check_arg_rv((v != 0), "v");
 
     if (impl->x_value != 0) {
-        free((void *)impl->x_value);
+        icalmemory_free_buffer((void *)impl->x_value);
     }
 
     impl->x_value = icalmemory_strdup(v);
@@ -134,12 +134,12 @@ void icalvalue_set_recur(icalvalue *impl, struct icalrecurrencetype v)
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
 
     if (impl->data.v_recur != 0) {
-        free(impl->data.v_recur->rscale);
-        free(impl->data.v_recur);
+        icalmemory_free_buffer(impl->data.v_recur->rscale);
+        icalmemory_free_buffer(impl->data.v_recur);
         impl->data.v_recur = 0;
     }
 
-    impl->data.v_recur = malloc(sizeof(struct icalrecurrencetype));
+    impl->data.v_recur = icalmemory_new_buffer(sizeof(struct icalrecurrencetype));
 
     if (impl->data.v_recur == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);

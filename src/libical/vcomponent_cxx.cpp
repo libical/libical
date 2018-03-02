@@ -978,7 +978,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
         }
 
         if (related_param != NULL) {
-            free(related_param);
+            icalmemory_free_buffer(related_param);
         }
 
         // malformed? encapsulating VEVENT or VTODO MUST have DTSTART/DTEND

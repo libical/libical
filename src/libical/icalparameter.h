@@ -223,9 +223,9 @@ LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter *parameter)
  *
  * @par Ownership
  * Strings returned by this method are owned by the caller, thus they need
- * to be manually `free()`d after use. A version of this function which returns
- * strings that do not need to be freed manually is
- * icalparameter_as_ical_string().
+ * to be manually `icalmemory_free_buffer()`d after use.
+ * A version of this function which returns strings that do not
+ * need to be freed manually is icalparameter_as_ical_string().
  *
  * ### Usage
  * ```c
@@ -234,7 +234,7 @@ LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter *parameter)
  * if(param) {
  *     char *str = icalparameter_as_ical_string(param);
  *     printf("%s\n", str);
- *     free(str);
+ *     icalmemory_free_buffer(str);
  * }
  *
  * icalparameter_free(param);

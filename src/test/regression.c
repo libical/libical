@@ -25,6 +25,7 @@
 #endif
 
 #include "regression.h"
+#include "regression-malloc.h"
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
 #include "libicalvcal/icalvcal.h"
@@ -760,7 +761,7 @@ void test_memory()
 
     ok("final buffer size == 806", (bufsize == 806));
 
-    free(f);
+    icalmemory_free_buffer(f);
 
     bufsize = 4;
 
@@ -849,7 +850,7 @@ void test_memory()
     if (VERBOSE)
         printf("Char-by-Char buffer: %s\n", f);
 
-    free(f);
+    icalmemory_free_buffer(f);
 
     for (i = 0; i < 100; i++) {
         f = icalmemory_tmp_buffer(bufsize);

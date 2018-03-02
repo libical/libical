@@ -79,10 +79,10 @@ static void icalmemory_free_ring_byval(buffer_ring * br)
 
     for (i = 0; i < BUFFER_RING_SIZE; i++) {
         if (br->ring[i] != 0) {
-            free(br->ring[i]);
+            icalmemory_free_buffer(br->ring[i]);
         }
     }
-    free(br);
+    icalmemory_free_buffer(br);
 }
 
 #if defined(HAVE_PTHREAD)
@@ -114,7 +114,7 @@ static void icalmemory_free_tmp_buffer(void *buf)
         return;
     }
 
-    free(buf);
+    icalmemory_free_buffer(buf);
 }
 
 #endif
@@ -127,7 +127,7 @@ static buffer_ring *buffer_ring_new(void)
     buffer_ring *br;
     int i;
 
-    br = (buffer_ring *) malloc(sizeof(buffer_ring));
+    br = (buffer_ring *) icalmemory_new_buffer(sizeof(buffer_ring));
 
     for (i = 0; i < BUFFER_RING_SIZE; i++) {
         br->ring[i] = 0;
@@ -195,7 +195,7 @@ void icalmemory_add_tmp_buffer(void *buf)
 
     /* Free buffers as their slots are overwritten */
     if (br->ring[br->pos] != 0) {
-        free(br->ring[br->pos]);
+        icalmemory_free_buffer(br->ring[br->pos]);
     }
 
     /* Assign the buffer to a slot */
@@ -216,7 +216,7 @@ void *icalmemory_tmp_buffer(size_t size)
         size = MIN_BUFFER_SIZE;
     }
 
-    buf = (void *)malloc(size);
+    buf = (void *)icalmemory_new_buffer(size);
 
     if (buf == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -247,16 +247,36 @@ void icalmemory_free_ring()
 /* Like strdup, but the buffer is on the ring. */
 char *icalmemory_tmp_copy(const char *str)
 {
-    char *b = icalmemory_tmp_buffer(strlen(str) + 1);
+	char *b;
+	
+	if (!str)
+		return NULL;
 
-    strcpy(b, str);
+	b = icalmemory_tmp_buffer(strlen(str) + 1);
 
+	if (!b)
+		return NULL;
+
+	strcpy(b, str);
     return b;
 }
 
 char *icalmemory_strdup(const char *s)
 {
-    return strdup(s);
+	size_t l;
+	char *res;
+
+	if (!s)
+		return NULL;
+
+	l = strlen(s) + sizeof(char);
+	res = (char *) icalmemory_new_buffer(l);
+	if (res == NULL)
+		return NULL;
+
+	memcpy(res, s, l);
+
+	return res;
 }
 
 /*
@@ -320,7 +340,7 @@ void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const ch
 
         *buf_size = (*buf_size) * 2 + final_length;
 
-        new_buf = realloc(*buf, *buf_size);
+        new_buf = icalmemory_resize_buffer(*buf, *buf_size);
 
         new_pos = (void *)((size_t) new_buf + data_length);
 
@@ -357,7 +377,7 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
 
         *buf_size = (*buf_size) * 2 + final_length + 1;
 
-        new_buf = realloc(*buf, *buf_size);
+        new_buf = icalmemory_resize_buffer(*buf, *buf_size);
 
         new_pos = (void *)((size_t) new_buf + data_length);
 

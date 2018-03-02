@@ -22,6 +22,7 @@
 
 #include "icalattachimpl.h"
 #include "icalerror.h"
+#include "icalmemory.h"
 
 #include <errno.h>
 #include <stdlib.h>
@@ -33,13 +34,13 @@ icalattach *icalattach_new_from_url(const char *url)
 
     icalerror_check_arg_rz((url != NULL), "url");
 
-    if ((attach = malloc(sizeof(icalattach))) == NULL) {
+    if ((attach = icalmemory_new_buffer(sizeof(icalattach))) == NULL) {
         errno = ENOMEM;
         return NULL;
     }
 
-    if ((url_copy = strdup(url)) == NULL) {
-        free(attach);
+    if ((url_copy = icalmemory_strdup(url)) == NULL) {
+        icalmemory_free_buffer(attach);
         errno = ENOMEM;
         return NULL;
     }
@@ -59,13 +60,13 @@ icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free
 
     icalerror_check_arg_rz((data != NULL), "data");
 
-    if ((attach = malloc(sizeof(icalattach))) == NULL) {
+    if ((attach = icalmemory_new_buffer(sizeof(icalattach))) == NULL) {
         errno = ENOMEM;
         return NULL;
     }
 
-    if ((data_copy = strdup(data)) == NULL) {
-        free(attach);
+    if ((data_copy = icalmemory_strdup(data)) == NULL) {
+        icalmemory_free_buffer(attach);
         errno = ENOMEM;
         return NULL;
     }
@@ -98,16 +99,16 @@ void icalattach_unref(icalattach *attach)
         return;
 
     if (attach->is_url) {
-        free(attach->u.url.url);
+        icalmemory_free_buffer(attach->u.url.url);
     } else {
-        free(attach->u.data.data);
+        icalmemory_free_buffer(attach->u.data.data);
 /* unused for now
         if (attach->u.data.free_fn)
            (* attach->u.data.free_fn) (attach->u.data.data, attach->u.data.free_fn_data);
 */
     }
 
-    free(attach);
+    icalmemory_free_buffer(attach);
 }
 
 int icalattach_get_is_url(icalattach *attach)

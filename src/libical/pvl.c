@@ -23,6 +23,8 @@
 
 #include "pvl.h"
 
+#include "icalmemory.h"
+
 #include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -62,7 +64,7 @@ pvl_list pvl_newlist()
 {
     struct pvl_list_t *L;
 
-    if ((L = (struct pvl_list_t *)malloc(sizeof(struct pvl_list_t))) == 0) {
+    if ((L = (struct pvl_list_t *)icalmemory_new_buffer(sizeof(struct pvl_list_t))) == 0) {
         errno = ENOMEM;
         return 0;
     }
@@ -83,7 +85,7 @@ void pvl_free(pvl_list l)
 
     pvl_clear(l);
 
-    free(L);
+    icalmemory_free_buffer(L);
 }
 
 /**
@@ -105,7 +107,7 @@ pvl_elem pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
 {
     struct pvl_elem_t *E;
 
-    if ((E = (struct pvl_elem_t *)malloc(sizeof(struct pvl_elem_t))) == 0) {
+    if ((E = (struct pvl_elem_t *)icalmemory_new_buffer(sizeof(struct pvl_elem_t))) == 0) {
         errno = ENOMEM;
         return 0;
     }
@@ -363,7 +365,7 @@ void *pvl_remove(pvl_list L, pvl_elem E)
     E->next = 0;
     E->d = 0;
 
-    free(E);
+    icalmemory_free_buffer(E);
 
     return data;
 }
