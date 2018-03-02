@@ -84,7 +84,13 @@ int main(int argc, char *argv[])
     char *line;
     FILE *stream;
     icalcomponent *c;
-    icalparser *parser = icalparser_new();
+    icalparser *parser;
+
+#if ICAL_USE_MALLOC == 0
+    icalmemory_set_mem_alloc_funcs(&malloc, &realloc, &free);
+#endif
+
+    parser = icalparser_new();
 
     if (argc != 2) {
         fprintf(stderr, "Usage: parser [file.ics]\n");

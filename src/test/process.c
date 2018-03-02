@@ -35,16 +35,25 @@ int main(int argc, char *argv[])
     int i = 0;
     int dont_remove;
     icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
-
-    icalset *f = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/process-incoming.ics", &options);
-    icalset *trash = icalset_new_file("trash.ics");
-    icalset *cal = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/process-calendar.ics", &options);
-    icalset *out = icalset_new_file("outgoing.ics");
-
-    const char *this_user = "alice@cal.softwarestudio.org";
+    icalset *f;
+    icalset *trash;
+    icalset *cal;
+    icalset *out;
+    const char *this_user;
 
     _unused(argc);
     _unused(argv);
+
+#if ICAL_USE_MALLOC == 0
+    icalmemory_set_mem_alloc_funcs(&malloc, &realloc, &free);
+#endif
+
+    f = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/process-incoming.ics", &options);
+    trash = icalset_new_file("trash.ics");
+    cal    = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/process-calendar.ics", &options);
+    out = icalset_new_file("outgoing.ics");
+
+    this_user = "alice@cal.softwarestudio.org";
 
     assert(f != 0);
     assert(cal != 0);

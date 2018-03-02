@@ -279,6 +279,33 @@ char *icalmemory_strdup(const char *s)
 	return res;
 }
 
+#if (!defined(ICAL_USE_MALLOC)) || (ICAL_USE_MALLOC != 0)
+static icalmemory_malloc_f global_icalmem_malloc = &malloc;
+static icalmemory_realloc_f global_icalmem_realloc = &realloc;
+static icalmemory_free_f global_icalmem_free = &free;
+#else
+static icalmemory_malloc_f global_icalmem_malloc = NULL;
+static icalmemory_realloc_f global_icalmem_realloc = NULL;
+static icalmemory_free_f global_icalmem_free = NULL;
+#endif
+
+
+void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc, icalmemory_realloc_f f_realloc, icalmemory_free_f f_free)
+{
+	global_icalmem_malloc = f_malloc;
+	global_icalmem_realloc = f_realloc;
+	global_icalmem_free = f_free;
+}
+
+void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f* f_malloc, icalmemory_realloc_f* f_realloc, icalmemory_free_f* f_free) {
+	if (f_malloc)
+		*f_malloc = global_icalmem_malloc;
+	if (f_realloc)
+		*f_realloc = global_icalmem_realloc;
+	if (f_free)
+		*f_free = global_icalmem_free;
+}
+
 /*
  * These buffer routines create memory the old fashioned way -- so the
  * caller will have to deallocate the new memory
@@ -286,7 +313,14 @@ char *icalmemory_strdup(const char *s)
 
 void *icalmemory_new_buffer(size_t size)
 {
-    void *b = malloc(size);
+    void *b;
+
+    if (global_icalmem_malloc == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return 0;
+    }
+
+    b = global_icalmem_malloc(size);
 
     if (b == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -300,7 +334,14 @@ void *icalmemory_new_buffer(size_t size)
 
 void *icalmemory_resize_buffer(void *buf, size_t size)
 {
-    void *b = realloc(buf, size);
+    void *b;
+
+    if (global_icalmem_realloc == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return 0;
+    }
+
+    b = global_icalmem_realloc(buf, size);
 
     if (b == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -312,7 +353,12 @@ void *icalmemory_resize_buffer(void *buf, size_t size)
 
 void icalmemory_free_buffer(void *buf)
 {
-    free(buf);
+    if (global_icalmem_free == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return;
+    }
+
+    global_icalmem_free(buf);
 }
 
 void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const char *string)

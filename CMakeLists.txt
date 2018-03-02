@@ -18,6 +18,11 @@
 #  Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
 #  Default=false
 #
+# -DICAL_USE_MALLOC=[true|false]
+#  If set, the standard system functions (malloc, realloc, free) will be used for memory management by default.
+#  If not set, the user must use icalmemory_set_mem_alloc_funcs function to provide the functions to use.
+#  Default=true (use system malloc, etc. by default).
+#
 # -DUSE_BUILTIN_TZDATA=[true|false]
 #  Set to build using our own timezone data.
 #  Default=false (use the system timezone data on non-Windows systems)
@@ -263,6 +268,18 @@ if(ICAL_ALLOW_EMPTY_PROPERTIES)
   set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
 else()
   set(ICAL_ALLOW_EMPTY_PROPERTIES 0)
+endif()
+
+option(ICAL_USE_MALLOC "Make use of the standard system memory management functions (malloc, realloc, free)." True)
+add_feature_info(
+  "Option ICAL_USE_MALLOC"
+  ICAL_USE_MALLOC
+  "the standard system memory management functions will be used by default"
+)
+if(ICAL_USE_MALLOC)
+  set(ICAL_USE_MALLOC 1)
+else()
+  set(ICAL_USE_MALLOC 0)
 endif()
 
 option(USE_BUILTIN_TZDATA "build using our own timezone data, else use the system timezone data on non-Windows systems. ALWAYS true on Windows.")

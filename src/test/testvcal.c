@@ -50,6 +50,10 @@ int main(int argc, char *argv[])
         file = argv[1];
     }
 
+#if ICAL_USE_MALLOC == 0
+    icalmemory_set_mem_alloc_funcs(&malloc, &realloc, &free);
+#endif
+
     vcal = Parse_MIME_FromFileName(file);
 
     assert(vcal != 0);

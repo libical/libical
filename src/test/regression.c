@@ -4061,6 +4061,9 @@ int main(int argc, char *argv[])
     int do_header = 0;
     int failed_count = 0;
 
+#if ICAL_USE_MALLOC == 0
+    icalmemory_set_mem_alloc_funcs(&malloc, &realloc, &free);
+#endif
     set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 

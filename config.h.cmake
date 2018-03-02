@@ -175,6 +175,10 @@
 /* Define to prevent empty properties from being replaced with X-LIC-ERROR properties */
 #define ICAL_ALLOW_EMPTY_PROPERTIES ${ICAL_ALLOW_EMPTY_PROPERTIES}
 
+/* Define to 1 to use the standard system functions malloc(), etc. for memory management by default. */
+#define ICAL_USE_MALLOC ${ICAL_USE_MALLOC}
+
+
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "${PROJECT_URL}"
 
