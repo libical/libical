@@ -275,7 +275,7 @@ SPLINT() {
   name="$1-splint"
   if ( test $runsplint -eq 0 )
   then
-    echo "===== SPLIT TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    echo "===== SPLINT TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
   COMMAND_EXISTS "splint"
@@ -338,6 +338,8 @@ SPLINT() {
        -I $TOP/src/libicalss \
        -I $TOP/src/libicalvcal \
        -I $TOP/src/libical-glib | \
+  grep -v '[[:space:]]Location[[:space:]]unknown[[:space:]]' | \
+  grep -v '[[:space:]]Code[[:space:]]cannot[[:space:]]be[[:space:]]parsed.' | \
   cat - 2>&1 | tee splint-$name.out
   status=${PIPESTATUS[0]}
   if ( test $status -gt 0 )
@@ -423,7 +425,7 @@ KRAZY() {
 ##### END FUNCTIONS #####
 
 #TEMP=`getopt -o hkctbslgad --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
-TEMP=`getopt hkctbslgad: $*`
+TEMP=`getopt hkctbslgad $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
