@@ -27,6 +27,7 @@
 
 #include "regression.h"
 #include "libical/astime.h"
+#include "test-malloc.h"
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
 #include "libicalvcal/icalvcal.h"
@@ -5204,6 +5205,12 @@ int main(int argc, char *argv[])
     int do_test = 0;
     int do_header = 0;
     int failed_count = 0;
+
+    // We specify special versions of malloc et al. that perform some extra verifications.
+    // Most notably they ensure, that memory allocated with icalmemory_new_buffer() is freed
+    // using icalmemory_free() rather than using free() directly and vice versa. Failing to
+    // do so would cause the test to fail with assertions or access violations.
+    icalmemory_set_mem_alloc_funcs(&test_malloc, &test_realloc, &test_free);
 
     set_zone_directory(TEST_ZONEDIR);
     icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
