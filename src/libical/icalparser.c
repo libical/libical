@@ -477,7 +477,7 @@ static char *parser_get_next_parameter(char *line, char **end)
  * final new line, and include any continuation lines
  */
 char *icalparser_get_line(icalparser *parser, 
-                          icalparser_line_gen_func *line_gen_func)
+                          icalparser_line_gen_func line_gen_func)
 {
     char *line;
     char *line_p;
@@ -626,7 +626,7 @@ static int line_is_blank(char *line)
 }
 
 icalcomponent *icalparser_parse(icalparser *parser,
-                                icalparser_line_gen_func *line_gen_func)
+                                icalparser_line_gen_func line_gen_func)
 {
     char *line;
     icalcomponent *c = 0;
