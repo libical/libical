@@ -69,9 +69,6 @@ icalarray *icalarray_copy(icalarray *originalarray)
         return NULL;
     }
 
-    array->num_elements = originalarray->num_elements;
-    array->space_allocated = originalarray->space_allocated;
-
     array->chunks = icalmemory_new_buffer(chunks * sizeof(void *));
     if (array->chunks) {
         for (chunk = 0; chunk < chunks; chunk++) {
@@ -79,12 +76,23 @@ icalarray *icalarray_copy(icalarray *originalarray)
             if (array->chunks[chunk]) {
                 memcpy(array->chunks[chunk], originalarray->chunks[chunk],
                        array->increment_size * array->element_size);
+
+                array->space_allocated += array->increment_size;
+            }
+            else {
+                icalerror_set_errno(ICAL_ALLOCATION_ERROR);
+                icalarray_free(array);
+                return NULL;
             }
         }
 
     } else {
         icalerror_set_errno(ICAL_ALLOCATION_ERROR);
+        icalarray_free(array);
+        return NULL;
     }
+
+    array->num_elements = originalarray->num_elements;
 
     return array;
 }
@@ -110,6 +118,10 @@ void icalarray_append(icalarray *array, const void *element)
 
     if (array->num_elements >= array->space_allocated) {
         icalarray_expand(array, 1);
+        if (array->num_elements >= array->space_allocated) {
+            /* expansion failed. Error has already been set. */
+            return;
+        }
     }
 
     pos = array->num_elements++;
@@ -189,6 +201,10 @@ static void icalarray_expand(icalarray *array, size_t space_needed)
         }
         for (c = 0; c < num_new_chunks; c++) {
             new_chunks[c + num_chunks] = icalarray_alloc_chunk(array);
+            if (!new_chunks[c + num_chunks]) {
+                num_new_chunks = c;
+                break;
+            }
         }
         if (array->chunks) {
             icalmemory_free_buffer(array->chunks);
