@@ -128,6 +128,8 @@ static buffer_ring *buffer_ring_new(void)
     int i;
 
     br = (buffer_ring *) icalmemory_new_buffer(sizeof(buffer_ring));
+    if (!br)
+        return NULL;
 
     for (i = 0; i < BUFFER_RING_SIZE; i++) {
         br->ring[i] = 0;
@@ -187,6 +189,8 @@ static buffer_ring *get_buffer_ring(void)
 void icalmemory_add_tmp_buffer(void *buf)
 {
     buffer_ring *br = get_buffer_ring();
+    if (!br)
+        return;
 
     /* Wrap around the ring */
     if (++(br->pos) == BUFFER_RING_SIZE) {
@@ -235,6 +239,8 @@ void icalmemory_free_ring()
     buffer_ring *br;
 
     br = get_buffer_ring();
+    if (!br)
+        return;
 
     icalmemory_free_ring_byval(br);
 #if defined(HAVE_PTHREAD)

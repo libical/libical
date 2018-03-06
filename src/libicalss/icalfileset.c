@@ -180,11 +180,14 @@ icalerrorenum icalfileset_read_file(icalfileset *set, int mode)
     _unused(mode);
 
     parser = icalparser_new();
-
-    icalparser_set_gen_data(parser, set);
-    set->cluster = icalparser_parse(parser, icalfileset_read_from_file);
-    icalparser_free(parser);
-
+    if (parser) {
+        icalparser_set_gen_data(parser, set);
+        set->cluster = icalparser_parse(parser, icalfileset_read_from_file);
+        icalparser_free(parser);
+    }
+    else {
+        set->cluster = 0;
+    }
     if (set->cluster == 0 || icalerrno != ICAL_NO_ERROR) {
         icalerror_set_errno(ICAL_PARSE_ERROR);
         /*return ICAL_PARSE_ERROR; */

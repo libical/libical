@@ -242,7 +242,8 @@ char *icalcomponent_as_ical_string(icalcomponent *impl)
     char *buf;
 
     buf = icalcomponent_as_ical_string_r(impl);
-    icalmemory_add_tmp_buffer(buf);
+    if (buf)
+        icalmemory_add_tmp_buffer(buf);
     return buf;
 }
 
@@ -275,6 +276,9 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
 
     buf = icalmemory_new_buffer(buf_size);
+    if (buf == NULL)
+        return NULL;
+
     buf_ptr = buf;
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "BEGIN:");
@@ -295,9 +299,10 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
         c = (icalcomponent *) pvl_data(itr);
 
         tmp_buf = icalcomponent_as_ical_string_r(c);
-
-        icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
-        icalmemory_free_buffer(tmp_buf);
+        if (tmp_buf != NULL) {
+            icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
+            icalmemory_free_buffer(tmp_buf);
+        }
     }
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:");
@@ -474,7 +479,8 @@ void icalcomponent_add_component(icalcomponent *parent, icalcomponent *child)
         if (!parent->timezones)
             parent->timezones = icaltimezone_array_new();
 
-        icaltimezone_array_append_from_vtimezone(parent->timezones, child);
+        if (parent->timezones)
+            icaltimezone_array_append_from_vtimezone(parent->timezones, child);
 
         /* Flag that we need to sort it before doing any binary searches. */
         parent->timezones_sorted = 0;
@@ -788,7 +794,8 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
                   /** exrule_time > recurtime **/
         }
 
-        icalrecur_iterator_free(exrule_itr);
+        if (exrule_itr)
+            icalrecur_iterator_free(exrule_itr);
     }
     comp->property_iterator = property_iterator;
 
@@ -2044,6 +2051,9 @@ void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_m
        For each VTIMEZONE found, check if we need to add it to comp and if we
        need to rename it and all TZID references to it. */
     tzids_to_rename = icalarray_new(sizeof(char *), 16);
+    if (!tzids_to_rename)
+        return;
+
     subcomp = icalcomponent_get_first_component(comp_to_merge, ICAL_VTIMEZONE_COMPONENT);
     while (subcomp) {
         next_subcomp = icalcomponent_get_next_component(comp_to_merge, ICAL_VTIMEZONE_COMPONENT);

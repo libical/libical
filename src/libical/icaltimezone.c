@@ -725,7 +725,8 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 icalarray_append(changes, &change);
             }
 
-            icalrecur_iterator_free(rrule_iterator);
+            if (rrule_iterator)
+                icalrecur_iterator_free(rrule_iterator);
             break;
         default:
             break;
@@ -1663,6 +1664,10 @@ static void icaltimezone_parse_zone_tab(void)
     icalerror_assert(builtin_timezones == NULL, "Parsing zones.tab file multiple times");
 
     builtin_timezones = icalarray_new(sizeof(icaltimezone), 1024);
+    if (!builtin_timezones) {
+        /* allocation failed, error has already been set. */
+        return;
+    }
 
     if (!use_builtin_tzdata) {
         zonedir = icaltzutil_get_zone_directory();
@@ -1837,13 +1842,15 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
          */
 
         parser = icalparser_new();
-        icalparser_set_gen_data(parser, fp);
-        comp = icalparser_parse(parser, icaltimezone_load_get_line_fn);
-        icalparser_free(parser);
+        if (parser) {
+            icalparser_set_gen_data(parser, fp);
+            comp = icalparser_parse(parser, icaltimezone_load_get_line_fn);
+            icalparser_free(parser);
+        }
         fclose(fp);
 
         /* Find the VTIMEZONE component inside the VCALENDAR. There should be 1. */
-        subcomp = icalcomponent_get_first_component(comp, ICAL_VTIMEZONE_COMPONENT);
+        subcomp = comp ? icalcomponent_get_first_component(comp, ICAL_VTIMEZONE_COMPONENT) : NULL;
     } else {
         subcomp = icaltzutil_fetch_timezone(zone->location);
     }
@@ -1855,7 +1862,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 
     icaltimezone_get_vtimezone_properties(zone, subcomp);
 
-    if (use_builtin_tzdata) {
+    if (use_builtin_tzdata && comp) {
         icalcomponent_remove_component(comp, subcomp);
         icalcomponent_free(comp);
     }
@@ -1907,6 +1914,12 @@ int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
 #endif
 
     icaltimezone_changes_lock();
+
+    /* expansion has failed. */
+    if (!zone->changes) {
+        icaltimezone_changes_unlock();
+        return 0;
+    }
 
     for (change_num = 0; change_num < zone->changes->num_elements; change_num++) {
         zone_change = icalarray_element_at(zone->changes, change_num);

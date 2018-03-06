@@ -79,6 +79,16 @@ icalarray *icalarray_copy(icalarray *originalarray)
                 memcpy(array->chunks[chunk], originalarray->chunks[chunk],
                        array->increment_size * array->element_size);
             }
+            else {
+                // a error has already been set. The best thing we can do to
+                // make icalarray robust is to adjust the array size to what
+                // we could allocate.
+                if (array->num_elements > chunk)
+                    array->num_elements = chunk;
+                if (array->space_allocated > chunk * originalarray->increment_size)
+                    array->space_allocated = chunk * originalarray->increment_size;
+                break;
+            }
         }
 
     } else {
@@ -109,6 +119,10 @@ void icalarray_append(icalarray *array, const void *element)
 
     if (array->num_elements >= array->space_allocated) {
         icalarray_expand(array, 1);
+        if (array->num_elements >= array->space_allocated) {
+            /* expansion failed. Error has already been set. */
+            return;
+        }
     }
 
     pos = array->num_elements++;
@@ -184,6 +198,10 @@ static void icalarray_expand(icalarray *array, size_t space_needed)
         }
         for (c = 0; c < num_new_chunks; c++) {
             new_chunks[c + num_chunks] = icalarray_alloc_chunk(array);
+            if (!new_chunks[c + num_chunks]) {
+                num_new_chunks = c;
+                break;
+            }
         }
         if (array->chunks) {
             icalmemory_free_buffer(array->chunks);
