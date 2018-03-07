@@ -25,6 +25,7 @@
 #endif
 
 #include "regression.h"
+#include "regression-malloc.h"
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
 #include "libicalvcal/icalvcal.h"
@@ -760,7 +761,7 @@ void test_memory()
 
     ok("final buffer size == 806", (bufsize == 806));
 
-    free(f);
+    icalmemory_free_buffer(f);
 
     bufsize = 4;
 
@@ -849,7 +850,7 @@ void test_memory()
     if (VERBOSE)
         printf("Char-by-Char buffer: %s\n", f);
 
-    free(f);
+    icalmemory_free_buffer(f);
 
     for (i = 0; i < 100; i++) {
         f = icalmemory_tmp_buffer(bufsize);
@@ -4045,6 +4046,107 @@ void test_comma_in_quoted_value(void)
     icalcomponent_free(c);
 }
 
+static int do_test_out_of_memory(const char* cal_str, struct icaltimetype t_start, struct icaltimetype t_end, int allocAttemptLimit) {
+
+    int foundExpectedCnt = 0;
+    icalcomponent *calendar;
+    int attempts0;
+
+    printf("starting out of memory test; memory allocation will fail after %d successful attempts.\n", allocAttemptLimit);
+    testmalloc_reset();
+
+    calendar = icalparser_parse_string(cal_str);
+    assert((calendar != NULL) || (allocAttemptLimit >= 0));
+
+    attempts0 = global_testmalloc_statistics.malloc_cnt + global_testmalloc_statistics.realloc_cnt;
+    testmalloc_set_max_successful_allocs(allocAttemptLimit);
+
+    if (calendar) {
+        icalcomponent *event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+        /* we expect exactly one callback, namely on tu, 20th. */
+        icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &foundExpectedCnt);
+        icalcomponent_free(calendar);
+    }
+    return global_testmalloc_statistics.malloc_cnt + global_testmalloc_statistics.realloc_cnt - attempts0;
+}
+
+void test_out_of_memory() {
+
+    const char* t_start_str = "20180201T000000Z";
+    const char* t_end_str = "20190201T000000Z";
+
+    /* use a rather complex calendar to increase code coverage. */
+    static const char* cal_str =
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VTIMEZONE\n"
+        "TZID:Custom/Custom\n"
+        "BEGIN:DAYLIGHT\n"
+        "TZOFFSETFROM:+0100\n"
+        "TZOFFSETTO:+0200\n"
+        "TZNAME:CEST\n"
+        "DTSTART:19700329T020000\n"
+        "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\n"
+        "END:DAYLIGHT\n"
+        "BEGIN:STANDARD\n"
+        "TZOFFSETFROM:+0200\n"
+        "TZOFFSETTO:+0100\n"
+        "TZNAME:CET\n"
+        "DTSTART:19701025T030000\n"
+        "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\n"
+        "END:STANDARD\n"
+        "END:VTIMEZONE\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART;TZID=Custom/Custom:20180218T020000\n"
+        "DTEND;TZID=Custom/Custom:20180218T040000\n"
+        "RRULE:FREQ=MONTHLY;BYSECOND=1,2;BYMINUTE=3,4;BYHOUR=5,6;BYDAY=MO,TU;BYMONTHDAY=17,18;BYMONTH=3,4,5,6,7,8,9,10;BYSETPOS=1,2,3\n"
+        "RRULE:FREQ=YEARLY;BYYEARDAY=1,2,3,8,9,10,11\n"
+        "RDATE:20180306T180600,20180307T150000\n"
+        "EXDATE:20180306T180600,20180307T150000\n"
+        "EXRULE:FREQ=YEARLY;BYWEEKNO=1,2,3,4,5,6,7,8,9,10\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
+    int allocations;
+    int i, ef;
+
+    struct icaltimetype t_start = icaltime_from_string(t_start_str);
+    struct icaltimetype t_end = icaltime_from_string(t_end_str);
+
+    ef = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(1);
+
+    allocations = do_test_out_of_memory(cal_str, t_start, t_end, -1);
+
+    // A preassumption for this test is, that the number of allocations is
+    // deterministic.
+    assert(allocations == do_test_out_of_memory(cal_str, t_start, t_end, -1));
+
+    icalerror_set_errors_are_fatal(0);
+
+    printf("testing failure of %d individual memory allocations.\n", allocations);
+
+    for (i = 0; i < allocations; i++) {
+        // We run the test multiple times and limit the number of successful memory
+        // allocations, so each memory allocation fails once. No memory faults
+        // may occur and no leaks should occur.
+        do_test_out_of_memory(cal_str, t_start, t_end, i);
+    }
+
+    testmalloc_reset();
+    icalerror_clear_errno();
+    icalerror_set_errors_are_fatal(ef);
+
+    // The most important thing to note here is that we reached this point
+    // without any access violation.
+    ok("tests ran and didn't abort unexpectedly", i > 0);
+
+    // We could easily test for memory leaks by testing the number of allocated
+    // blocks for 0 in the testmalloc statistics, but sometimes memory
+    // is allocated and cached as side effect (e.g. in the icalmemory ring
+    // buffer) that makes this kind of test hard to implement.
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4060,6 +4162,7 @@ int main(int argc, char *argv[])
     int do_header = 0;
     int failed_count = 0;
 
+    icalmemory_set_mem_alloc_funcs(&test_malloc, &test_realloc, &test_free);
     set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
@@ -4172,6 +4275,7 @@ int main(int argc, char *argv[])
              do_header);
     test_run("Test comma in quoted value of x property", test_comma_in_quoted_value, do_test,
              do_header);
+    test_run("Test out of memory", test_out_of_memory, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

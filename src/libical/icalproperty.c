@@ -67,7 +67,7 @@ icalproperty *icalproperty_new_impl(icalproperty_kind kind)
     if (!icalproperty_kind_is_valid(kind))
         return NULL;
 
-    if ((prop = (icalproperty *) malloc(sizeof(icalproperty))) == 0) {
+    if ((prop = (icalproperty *) icalmemory_new_buffer(sizeof(icalproperty))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -155,7 +155,7 @@ icalproperty *icalproperty_new_from_string(const char *str)
 
     if (comp == 0) {
         icalerror_set_errno(ICAL_PARSE_ERROR);
-        free(buf);
+        icalmemory_free_buffer(buf);
         return 0;
     }
 
@@ -166,7 +166,7 @@ icalproperty *icalproperty_new_from_string(const char *str)
     icalcomponent_remove_property(comp, prop);
 
     icalcomponent_free(comp);
-    free(buf);
+    icalmemory_free_buffer(buf);
 
     if (errors > 0) {
         icalproperty_free(prop);
@@ -198,7 +198,7 @@ void icalproperty_free(icalproperty *p)
     pvl_free(p->parameters);
 
     if (p->x_name != 0) {
-        free(p->x_name);
+        icalmemory_free_buffer(p->x_name);
     }
 
     p->kind = ICAL_NO_PROPERTY;
@@ -208,7 +208,7 @@ void icalproperty_free(icalproperty *p)
     p->x_name = 0;
     p->id[0] = 'X';
 
-    free(p);
+    icalmemory_free_buffer(p);
 }
 
 /* This returns where the start of the next line should be. chars_left does
@@ -417,13 +417,13 @@ char *icalproperty_as_ical_string_r(icalproperty *prop)
         }
 
         if (kind == ICAL_VALUE_PARAMETER) {
-            free((char *)kind_string);
+            icalmemory_free_buffer((char *)kind_string);
             continue;
         }
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, ";");
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
-        free((char *)kind_string);
+        icalmemory_free_buffer((char *)kind_string);
     }
 
     /* Append value */
@@ -442,7 +442,7 @@ char *icalproperty_as_ical_string_r(icalproperty *prop)
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, "ERROR: No Value");
 #endif
         }
-        free(str);
+        icalmemory_free_buffer(str);
     } else {
 #if ICAL_ALLOW_EMPTY_PROPERTIES == 0
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, "ERROR: No Value");
@@ -595,13 +595,13 @@ char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *nam
 
     if (t == 0) {
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
-        free(str);
+        icalmemory_free_buffer(str);
         return 0;
     }
 
     /* Strip the property name and the equal sign */
     pv = icalmemory_strdup(t + 1);
-    free(str);
+    icalmemory_free_buffer(str);
 
     /* Is the string quoted? */
     pvql = strchr(pv, '"');
@@ -611,13 +611,13 @@ char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *nam
 
     /* Strip everything up to the first quote */
     str = icalmemory_strdup(pvql + 1);
-    free(pv);
+    icalmemory_free_buffer(pv);
 
     /* Search for the end quote */
     pvqr = strrchr(str, '"');
     if (pvqr == 0) {
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
-        free(str);
+        icalmemory_free_buffer(str);
         return 0;
     }
 
@@ -866,7 +866,7 @@ void icalproperty_set_x_name(icalproperty *prop, const char *name)
     icalerror_check_arg_rv((prop != 0), "prop");
 
     if (prop->x_name != 0) {
-        free(prop->x_name);
+        icalmemory_free_buffer(prop->x_name);
     }
 
     prop->x_name = icalmemory_strdup(name);

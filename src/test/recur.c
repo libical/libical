@@ -61,6 +61,10 @@ int main(int argc, char *argv[])
     time_t tt;
     const char *file;
 
+#if ICAL_USE_MALLOC == 0
+    icalmemory_set_mem_alloc_funcs(&malloc, &realloc, &free);
+#endif
+
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)

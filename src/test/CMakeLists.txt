@@ -93,6 +93,8 @@ set(regression_SRCS
   regression-utils.c
   regression-recur.c
   regression-storage.c
+  regression-malloc.c
+  regression-malloc.h
 )
 if(WITH_CXX_BINDINGS)
   list(APPEND regression_SRCS regression-cxx.cpp)

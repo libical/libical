@@ -24,6 +24,7 @@
 #endif
 
 #include "icalerror.h"
+#include "icalmemory.h"
 
 #include <stdlib.h>
 
@@ -39,7 +40,7 @@ static pthread_once_t icalerrno_key_once = PTHREAD_ONCE_INIT;
 
 static void icalerrno_destroy(void *buf)
 {
-    free(buf);
+    icalmemory_free_buffer(buf);
     pthread_setspecific(icalerrno_key, NULL);
 }
 
@@ -57,7 +58,7 @@ icalerrorenum *icalerrno_return(void)
     _errno = (icalerrorenum *) pthread_getspecific(icalerrno_key);
 
     if (!_errno) {
-        _errno = malloc(sizeof(icalerrorenum));
+        _errno = icalmemory_new_buffer(sizeof(icalerrorenum));
         *_errno = ICAL_NO_ERROR;
         pthread_setspecific(icalerrno_key, _errno);
     }
@@ -276,6 +277,6 @@ void ical_bt(void)
             fprintf(stderr, "%p\n", stack_frames[i]);
         }
     }
-    free(strings);
+    icalmemory_free_buffer(strings);
 #endif
 }

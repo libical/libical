@@ -31,6 +31,10 @@ int main()
     int dd, hh, zz, tried = 0;
     long zz2 = -1;
 
+#if ICAL_USE_MALLOC == 0
+    icalmemory_set_mem_alloc_funcs(&malloc, &realloc, &free);
+#endif
+
     set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 

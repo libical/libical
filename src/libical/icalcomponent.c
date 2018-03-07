@@ -90,7 +90,7 @@ static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind)
     if (!icalcomponent_kind_is_valid(kind))
         return NULL;
 
-    if ((comp = (icalcomponent *) malloc(sizeof(icalcomponent))) == 0) {
+    if ((comp = (icalcomponent *) icalmemory_new_buffer(sizeof(icalcomponent))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -216,7 +216,7 @@ void icalcomponent_free(icalcomponent *c)
         pvl_free(c->components);
 
         if (c->x_name != 0) {
-            free(c->x_name);
+            icalmemory_free_buffer(c->x_name);
         }
 
         if (c->timezones) {
@@ -233,7 +233,7 @@ void icalcomponent_free(icalcomponent *c)
         c->id[0] = 'X';
         c->timezones = NULL;
 
-        free(c);
+        icalmemory_free_buffer(c);
     }
 }
 
@@ -242,7 +242,8 @@ char *icalcomponent_as_ical_string(icalcomponent *impl)
     char *buf;
 
     buf = icalcomponent_as_ical_string_r(impl);
-    icalmemory_add_tmp_buffer(buf);
+    if (buf)
+        icalmemory_add_tmp_buffer(buf);
     return buf;
 }
 
@@ -275,6 +276,9 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
 
     buf = icalmemory_new_buffer(buf_size);
+    if (buf == NULL)
+        return NULL;
+
     buf_ptr = buf;
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "BEGIN:");
@@ -288,16 +292,17 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
         tmp_buf = icalproperty_as_ical_string_r(p);
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
-        free(tmp_buf);
+        icalmemory_free_buffer(tmp_buf);
     }
 
     for (itr = pvl_head(impl->components); itr != 0; itr = pvl_next(itr)) {
         c = (icalcomponent *) pvl_data(itr);
 
         tmp_buf = icalcomponent_as_ical_string_r(c);
-
-        icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
-        free(tmp_buf);
+        if (tmp_buf != NULL) {
+            icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
+            icalmemory_free_buffer(tmp_buf);
+        }
     }
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:");
@@ -474,7 +479,8 @@ void icalcomponent_add_component(icalcomponent *parent, icalcomponent *child)
         if (!parent->timezones)
             parent->timezones = icaltimezone_array_new();
 
-        icaltimezone_array_append_from_vtimezone(parent->timezones, child);
+        if (parent->timezones)
+            icaltimezone_array_append_from_vtimezone(parent->timezones, child);
 
         /* Flag that we need to sort it before doing any binary searches. */
         parent->timezones_sorted = 0;
@@ -788,7 +794,8 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
                   /** exrule_time > recurtime **/
         }
 
-        icalrecur_iterator_free(exrule_itr);
+        if (exrule_itr)
+            icalrecur_iterator_free(exrule_itr);
     }
     comp->property_iterator = property_iterator;
 
@@ -2044,6 +2051,9 @@ void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_m
        For each VTIMEZONE found, check if we need to add it to comp and if we
        need to rename it and all TZID references to it. */
     tzids_to_rename = icalarray_new(sizeof(char *), 16);
+    if (!tzids_to_rename)
+        return;
+
     subcomp = icalcomponent_get_first_component(comp_to_merge, ICAL_VTIMEZONE_COMPONENT);
     while (subcomp) {
         next_subcomp = icalcomponent_get_next_component(comp_to_merge, ICAL_VTIMEZONE_COMPONENT);
@@ -2061,7 +2071,7 @@ void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_m
 
         /* Now free the tzids_to_rename array. */
         for (i = 0; i < tzids_to_rename->num_elements; i++) {
-            free(icalarray_element_at(tzids_to_rename, i));
+            icalmemory_free_buffer(icalarray_element_at(tzids_to_rename, i));
         }
     }
     icalarray_free(tzids_to_rename);
@@ -2120,7 +2130,7 @@ static void icalcomponent_merge_vtimezone(icalcomponent *comp,
        unique one), so we compare the VTIMEZONE components to see if they are
        the same. If they are, we don't need to do anything. We make a copy of
        the tzid, since the parameter may get modified in these calls. */
-    tzid_copy = strdup(tzid);
+    tzid_copy = icalmemory_strdup(tzid);
     if (!tzid_copy) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return;
@@ -2133,7 +2143,7 @@ static void icalcomponent_merge_vtimezone(icalcomponent *comp,
         icalcomponent_handle_conflicting_vtimezones(comp, vtimezone, tzid_prop,
                                                     tzid_copy, tzids_to_rename);
     }
-    free(tzid_copy);
+    icalmemory_free_buffer(tzid_copy);
 }
 
 static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
@@ -2177,20 +2187,20 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
             if (icalcomponent_compare_vtimezones(icaltimezone_get_component(zone), vtimezone)) {
                 /* The VTIMEZONEs match, so we can use the existing VTIMEZONE. But
                    we have to rename TZIDs to this TZID. */
-                tzid_copy = strdup(tzid);
+                tzid_copy = icalmemory_strdup(tzid);
                 if (!tzid_copy) {
                     icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                     return;
                 }
-                existing_tzid_copy = strdup(existing_tzid);
+                existing_tzid_copy = icalmemory_strdup(existing_tzid);
                 if (!existing_tzid_copy) {
                     icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-                    free(tzid_copy);
+                    icalmemory_free_buffer(tzid_copy);
                 } else {
                     icalarray_append(tzids_to_rename, tzid_copy);
-                    free(tzid_copy);
+                    icalmemory_free_buffer(tzid_copy);
                     icalarray_append(tzids_to_rename, existing_tzid_copy);
-                    free(existing_tzid_copy);
+                    icalmemory_free_buffer(existing_tzid_copy);
                 }
                 return;
             } else {
@@ -2207,17 +2217,17 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
 
     /* We didn't find a VTIMEZONE that matched, so we have to rename the TZID,
        using the maximum numerical suffix found + 1. */
-    tzid_copy = strdup(tzid);
+    tzid_copy = icalmemory_strdup(tzid);
     if (!tzid_copy) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return;
     }
 
     snprintf(suffix_buf, sizeof(suffix_buf), "%i", max_suffix + 1);
-    new_tzid = malloc(tzid_len + strlen(suffix_buf) + 1);
+    new_tzid = icalmemory_new_buffer(tzid_len + strlen(suffix_buf) + 1);
     if (!new_tzid) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-        free(tzid_copy);
+        icalmemory_free_buffer(tzid_copy);
         return;
     }
 
@@ -2225,8 +2235,8 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
     strcpy(new_tzid + tzid_len, suffix_buf);
     icalarray_append(tzids_to_rename, tzid_copy);
     icalarray_append(tzids_to_rename, new_tzid);
-    free(tzid_copy);
-    free(new_tzid);
+    icalmemory_free_buffer(tzid_copy);
+    icalmemory_free_buffer(new_tzid);
 }
 
 /* Returns the length of the TZID, without any trailing digits. */
@@ -2406,7 +2416,7 @@ static int icalcomponent_compare_vtimezones(icalcomponent *vtimezone1, icalcompo
 
     /* Copy the second TZID, and set the property to the same as the first
        TZID, since we don't care if these match of not. */
-    tzid2_copy = strdup(tzid2);
+    tzid2_copy = icalmemory_strdup(tzid2);
     if (!tzid2_copy) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
@@ -2417,25 +2427,25 @@ static int icalcomponent_compare_vtimezones(icalcomponent *vtimezone1, icalcompo
     /* Now convert both VTIMEZONEs to strings and compare them. */
     string1 = icalcomponent_as_ical_string_r(vtimezone1);
     if (!string1) {
-        free(tzid2_copy);
+        icalmemory_free_buffer(tzid2_copy);
         return -1;
     }
 
     string2 = icalcomponent_as_ical_string_r(vtimezone2);
     if (!string2) {
-        free(string1);
-        free(tzid2_copy);
+        icalmemory_free_buffer(string1);
+        icalmemory_free_buffer(tzid2_copy);
         return -1;
     }
 
     cmp = strcmp(string1, string2);
 
-    free(string1);
-    free(string2);
+    icalmemory_free_buffer(string1);
+    icalmemory_free_buffer(string2);
 
     /* Now reset the second TZID. */
     icalproperty_set_tzid(prop2, tzid2_copy);
-    free(tzid2_copy);
+    icalmemory_free_buffer(tzid2_copy);
 
     return (cmp == 0) ? 1 : 0;
 }

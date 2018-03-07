@@ -50,7 +50,7 @@ char *icalclassify_lowercase(const char *str)
         return 0;
     }
 
-    xnew = icalmemory_strdup(str);
+    xnew = strdup(str);
     for (p = xnew; *p != 0; p++) {
         *p = tolower((int)*p);
     }
@@ -293,8 +293,8 @@ int icalssutil_is_rescheduled(icalcomponent *a, icalcomponent *b)
         temp1 = icalproperty_as_ical_string_r(p1);
         temp2 = icalproperty_as_ical_string_r(p2);
         cmp = strcmp(temp1, temp2);
-        free(temp1);
-        free(temp2);
+        icalmemory_free_buffer(temp1);
+		icalmemory_free_buffer(temp2);
 
         if (p1 && cmp != 0) {
             return 1;

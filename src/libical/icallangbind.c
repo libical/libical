@@ -30,14 +30,14 @@
 
 int *icallangbind_new_array(int size)
 {
-    int *p = (int *)malloc(size * sizeof(int));
+    int *p = (int *)icalmemory_new_buffer(size * sizeof(int));
 
     return p;   /* Caller handles failures */
 }
 
 void icallangbind_free_array(int *array)
 {
-    free(array);
+    icalmemory_free_buffer(array);
 }
 
 int icallangbind_access_array(int *array, int index)
@@ -196,7 +196,7 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
         default:
             {
                 char *str = icalvalue_as_ical_string_r(value);
-                char *copy = (char *)malloc(strlen(str) + 1);
+                char *copy = (char *)icalmemory_new_buffer(strlen(str) + 1);
 
                 const char *i;
                 char *j;
@@ -222,8 +222,8 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
                 APPENDS(copy);
                 APPENDC('\'');
 
-                free(copy);
-                free(str);
+                icalmemory_free_buffer(copy);
+                icalmemory_free_buffer(str);
                 break;
             }
         }
@@ -245,7 +245,7 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
         v = strchr(copy, '=');
 
         if (v == 0) {
-            free(copy);
+            icalmemory_free_buffer(copy);
             continue;
         }
 
@@ -261,7 +261,7 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
         APPENDC('\'');
         APPENDS(v);
         APPENDC('\'');
-        free(copy);
+        icalmemory_free_buffer(copy);
     }
 
     APPENDC('}');

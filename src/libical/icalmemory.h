@@ -104,7 +104,11 @@ LIBICAL_ICAL_EXPORT char *icalmemory_tmp_copy(const char *str);
  * Adds an externally allocated buffer to the ring. This ensures that libical
  * will `free()` the buffer automatically, either after ::BUFFER_RING_SIZE other
  * buffers have been created or added, or after ::icalmemory_free_ring() has
- * been called.
+ * been called. Note that freeing the buffers is done using the
+ * icalmemory_free_buffer() function, which by default is a wrapper around the
+ * standard free() function. However, if the memory management functions are
+ * customized by the user, the user has to take care to only pass in buffers
+ * that have been allocated accordingly.
  *
  * @par Error handling
  * No error is raised if @a buf is `NULL`.
@@ -142,10 +146,45 @@ LIBICAL_ICAL_EXPORT void icalmemory_add_tmp_buffer(void *buf);
  */
 LIBICAL_ICAL_EXPORT void icalmemory_free_ring(void);
 
-/* Non-tmp buffers must be freed. These are mostly wrappers around
- * malloc, etc, but are used so the caller can change the memory
- * allocators in a future version of the library */
 
+typedef void* (*icalmemory_malloc_f)(size_t);
+typedef void* (*icalmemory_realloc_f)(void*, size_t);
+typedef void (*icalmemory_free_f)(void*);
+
+/**
+ * @brief Configures the functions to use for memory management.
+ * 
+ * @param f_malloc The function to use for memory allocation.
+ * @param f_realloc The function to use for memory reallocation.
+ * @param f_free The function to use for memory deallocation.
+ * 
+ * This function configures the library to use the specified functions for
+ * memory management. By default the standard system memory management
+ * functions malloc(), realloc() and free() are used.
+ * 
+ * Note on compatibility: The memory management functions configured via this
+ * functions are used throughout the core libical component but not within
+ * other components like libicalvcal yet. In future versions of the library,
+ * use might be extended to other components too. In order to avoid
+ * compatibility issues with future versions, it's recommended either not to
+ * use this functionality when using not only the core libical component but
+ * also other components like libicalvcal or to recheck whether use has been
+ * extended before upgrading to a newer version.
+ */
+LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc, icalmemory_realloc_f f_realloc, icalmemory_free_f f_free);
+
+/**
+ * @brief Returns the functions used for memory management.
+ * 
+ * @param f_malloc A pointer to the function to use for memory allocation.
+ * @param f_realloc A pointer to the function to use for memory reallocation.
+ * @param f_free A pointer to the function to use for memory deallocation.
+ *
+ * Retrieves the functions used by the library for memory management.
+ */
+LIBICAL_ICAL_EXPORT void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f* f_malloc, icalmemory_realloc_f* f_realloc, icalmemory_free_f* f_free);
+
+ 
 /**
  * @brief Creates new buffer with the specified size.
  * @param size The size of the buffer that is to be created.
@@ -157,11 +196,14 @@ LIBICAL_ICAL_EXPORT void icalmemory_free_ring(void);
  * ::ICAL_NEWFAILED_ERROR and returns `NULL`.
  *
  * @par Ownership
- * Buffers created with this method are owned by the caller. The must be
- * released with the appropriate icalmemory_free_buffer() method.
+ * Buffers created with this method are owned by the caller. They must be
+ * released with the icalmemory_free_buffer() method.
  *
  * This creates a new (non-temporary) buffer of the specified @a size. All
  * buffers returned by this method are zeroed-out.
+ *
+ * By default this function is a wrapper around the system malloc() function but
+ * the used function can be configured using icalmemory_set_mem_alloc_funcs().
  *
  * ### Usage
  * ```c
@@ -195,6 +237,9 @@ LIBICAL_ICAL_EXPORT void *icalmemory_new_buffer(size_t size);
  * appropriate icalmemory_free_buffer() method. The old buffer, @a buf, can not
  * be used anymore after calling this method.
  *
+ * By default this function is a wrapper around the system realloc() function but
+ * the used function can be configured using icalmemory_set_mem_alloc_funcs().
+ *
  * ### Usage
  * ```c
  * // create new buffer
@@ -221,6 +266,9 @@ LIBICAL_ICAL_EXPORT void *icalmemory_resize_buffer(void *buf, size_t size);
  * @sa icalmemory_new_buffer()
  *
  * Releases the memory of the buffer.
+ *
+ * By default this function is a wrapper around the system free() function but
+ * the used function can be configured using icalmemory_set_mem_alloc_funcs().
  */
 LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void *buf);
 
@@ -324,17 +372,19 @@ LIBICAL_ICAL_EXPORT void icalmemory_append_char(char **buf, char **pos, size_t *
  *
  * @par Ownership
  * The returned string is owned by the caller and needs to be released with the
- * appropriate `free()` method.
+ * `icalmemory_free_buffer()` method.
  *
- * A wrapper around `strdup()`.  Partly to trap calls to `strdup()`, partly
- * because in `-ansi`, `gcc` on Red Hat claims that `strdup()` is undeclared.
+ * Replaces `strdup()`. The function uses icalmemory_new_buffer() for memory
+ * allocation. It also helps trapping calls to `strdup()` and solves the
+ * problem that in `-ansi`, `gcc` on Red Hat claims that `strdup()` is
+ * undeclared.
  *
  * ### Usage
  * ```c
  * const char *my_str = "LibIcal";
  * char *dup = icalmemory_strdup(my_str);
  * printf("%s\n", dup);
- * free(dup);
+ * icalmemory_free_buffer(dup);
  * ```
  */
 LIBICAL_ICAL_EXPORT char *icalmemory_strdup(const char *s);

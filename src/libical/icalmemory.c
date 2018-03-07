@@ -79,10 +79,10 @@ static void icalmemory_free_ring_byval(buffer_ring * br)
 
     for (i = 0; i < BUFFER_RING_SIZE; i++) {
         if (br->ring[i] != 0) {
-            free(br->ring[i]);
+            icalmemory_free_buffer(br->ring[i]);
         }
     }
-    free(br);
+    icalmemory_free_buffer(br);
 }
 
 #if defined(HAVE_PTHREAD)
@@ -114,7 +114,7 @@ static void icalmemory_free_tmp_buffer(void *buf)
         return;
     }
 
-    free(buf);
+    icalmemory_free_buffer(buf);
 }
 
 #endif
@@ -127,7 +127,9 @@ static buffer_ring *buffer_ring_new(void)
     buffer_ring *br;
     int i;
 
-    br = (buffer_ring *) malloc(sizeof(buffer_ring));
+    br = (buffer_ring *) icalmemory_new_buffer(sizeof(buffer_ring));
+    if (!br)
+        return NULL;
 
     for (i = 0; i < BUFFER_RING_SIZE; i++) {
         br->ring[i] = 0;
@@ -187,6 +189,8 @@ static buffer_ring *get_buffer_ring(void)
 void icalmemory_add_tmp_buffer(void *buf)
 {
     buffer_ring *br = get_buffer_ring();
+    if (!br)
+        return;
 
     /* Wrap around the ring */
     if (++(br->pos) == BUFFER_RING_SIZE) {
@@ -195,7 +199,7 @@ void icalmemory_add_tmp_buffer(void *buf)
 
     /* Free buffers as their slots are overwritten */
     if (br->ring[br->pos] != 0) {
-        free(br->ring[br->pos]);
+        icalmemory_free_buffer(br->ring[br->pos]);
     }
 
     /* Assign the buffer to a slot */
@@ -216,7 +220,7 @@ void *icalmemory_tmp_buffer(size_t size)
         size = MIN_BUFFER_SIZE;
     }
 
-    buf = (void *)malloc(size);
+    buf = (void *)icalmemory_new_buffer(size);
 
     if (buf == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -235,6 +239,8 @@ void icalmemory_free_ring()
     buffer_ring *br;
 
     br = get_buffer_ring();
+    if (!br)
+        return;
 
     icalmemory_free_ring_byval(br);
 #if defined(HAVE_PTHREAD)
@@ -247,16 +253,63 @@ void icalmemory_free_ring()
 /* Like strdup, but the buffer is on the ring. */
 char *icalmemory_tmp_copy(const char *str)
 {
-    char *b = icalmemory_tmp_buffer(strlen(str) + 1);
+	char *b;
+	
+	if (!str)
+		return NULL;
 
-    strcpy(b, str);
+	b = icalmemory_tmp_buffer(strlen(str) + 1);
 
+	if (!b)
+		return NULL;
+
+	strcpy(b, str);
     return b;
 }
 
 char *icalmemory_strdup(const char *s)
 {
-    return strdup(s);
+	size_t l;
+	char *res;
+
+	if (!s)
+		return NULL;
+
+	l = strlen(s) + sizeof(char);
+	res = (char *) icalmemory_new_buffer(l);
+	if (res == NULL)
+		return NULL;
+
+	memcpy(res, s, l);
+
+	return res;
+}
+
+#if (!defined(ICAL_USE_MALLOC)) || (ICAL_USE_MALLOC != 0)
+static icalmemory_malloc_f global_icalmem_malloc = &malloc;
+static icalmemory_realloc_f global_icalmem_realloc = &realloc;
+static icalmemory_free_f global_icalmem_free = &free;
+#else
+static icalmemory_malloc_f global_icalmem_malloc = NULL;
+static icalmemory_realloc_f global_icalmem_realloc = NULL;
+static icalmemory_free_f global_icalmem_free = NULL;
+#endif
+
+
+void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc, icalmemory_realloc_f f_realloc, icalmemory_free_f f_free)
+{
+	global_icalmem_malloc = f_malloc;
+	global_icalmem_realloc = f_realloc;
+	global_icalmem_free = f_free;
+}
+
+void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f* f_malloc, icalmemory_realloc_f* f_realloc, icalmemory_free_f* f_free) {
+	if (f_malloc)
+		*f_malloc = global_icalmem_malloc;
+	if (f_realloc)
+		*f_realloc = global_icalmem_realloc;
+	if (f_free)
+		*f_free = global_icalmem_free;
 }
 
 /*
@@ -266,7 +319,14 @@ char *icalmemory_strdup(const char *s)
 
 void *icalmemory_new_buffer(size_t size)
 {
-    void *b = malloc(size);
+    void *b;
+
+    if (global_icalmem_malloc == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return 0;
+    }
+
+    b = global_icalmem_malloc(size);
 
     if (b == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -280,7 +340,14 @@ void *icalmemory_new_buffer(size_t size)
 
 void *icalmemory_resize_buffer(void *buf, size_t size)
 {
-    void *b = realloc(buf, size);
+    void *b;
+
+    if (global_icalmem_realloc == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return 0;
+    }
+
+    b = global_icalmem_realloc(buf, size);
 
     if (b == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -292,7 +359,12 @@ void *icalmemory_resize_buffer(void *buf, size_t size)
 
 void icalmemory_free_buffer(void *buf)
 {
-    free(buf);
+    if (global_icalmem_free == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return;
+    }
+
+    global_icalmem_free(buf);
 }
 
 void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const char *string)
@@ -320,7 +392,7 @@ void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const ch
 
         *buf_size = (*buf_size) * 2 + final_length;
 
-        new_buf = realloc(*buf, *buf_size);
+        new_buf = icalmemory_resize_buffer(*buf, *buf_size);
 
         new_pos = (void *)((size_t) new_buf + data_length);
 
@@ -357,7 +429,7 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
 
         *buf_size = (*buf_size) * 2 + final_length + 1;
 
-        new_buf = realloc(*buf, *buf_size);
+        new_buf = icalmemory_resize_buffer(*buf, *buf_size);
 
         new_pos = (void *)((size_t) new_buf + data_length);
 

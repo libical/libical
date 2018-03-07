@@ -24,6 +24,8 @@
 
 #include "libical/ical.h"
 
+#include "regression-malloc.h"
+
 #include <stdlib.h>
 
 int QUIET = 0;
@@ -213,9 +215,21 @@ void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int h
         test_header(test_name, test_set);
 
     if (!headeronly && (do_test == 0 || do_test == test_set)) {
+        testmalloc_reset();
         (*test_fcn) ();
+
+        /* TODO: Check for memory leaks here. We could do a check like the
+        following but we would have to implement the test-cases in a way
+        that all memory is freed at the end of each test. This would include
+        freeing built in and cached timezones.
+
+            ok("no memory leaked",
+                (global_testmalloc_statistics.mem_allocated_current == 0)
+                && (global_testmalloc_statistics.blocks_allocated == 0));
+        */
+
         if (!QUIET)
             printf("\n");
-    }
+	}
     test_set++;
 }
