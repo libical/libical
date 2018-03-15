@@ -661,8 +661,8 @@ icalcomponent *icalparser_parse(icalparser *parser,
                 /* This is bad news... assert? */
             }
 
-            assert(parser->root_component == 0);
-            assert(pvl_count(parser->components) == 0);
+            icalassert(parser->root_component == 0);
+            icalassert(pvl_count(parser->components) == 0);
 
             if (root == 0) {
                 /* Just one component */
@@ -682,7 +682,7 @@ icalcomponent *icalparser_parse(icalparser *parser,
 
             } else {
                 /* Badness */
-                assert(0);
+                icalassert(0);
             }
 
             c = 0;
@@ -820,7 +820,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 (void)icalparser_clean(parser); /* may reset parser->root_component */
             }
 
-            assert(pvl_count(parser->components) == 0);
+            icalassert(pvl_count(parser->components) == 0);
 
             parser->state = ICALPARSER_SUCCESS;
             rtrn = parser->root_component;
@@ -1247,7 +1247,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
     if (pvl_data(pvl_tail(parser->components)) == 0 && parser->level == 0) {
         /* HACK. Does this clause ever get executed? */
         parser->state = ICALPARSER_SUCCESS;
-        assert(0);
+        icalassert(0);
         return parser->root_component;
     } else {
         parser->state = ICALPARSER_IN_PROGRESS;

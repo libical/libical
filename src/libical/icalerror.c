@@ -91,7 +91,7 @@ void icalerror_crash_here(void)
     *p = 1;
 
     /* cppcheck-suppress nullPointer */
-    assert(*p);
+    icalassert(*p);
 #endif
 }
 
@@ -124,7 +124,7 @@ void icalerror_set_errno(icalerrorenum x)
         (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && icalerror_errors_are_fatal == 1)) {
         icalerror_warn(icalerror_strerror(x));
         ical_bt();
-        assert(0);
+        icalassert(0);
     }
 }
 
@@ -273,9 +273,9 @@ void ical_bt(void)
     strings = backtrace_symbols(stack_frames, num);
     for (i = 0; i < num; i++) {
         if (strings != NULL) {
-            fprintf(stderr, "%s\n", strings[i]);
+            icalerrprintf("%s\n", strings[i]);
         } else {
-            fprintf(stderr, "%p\n", stack_frames[i]);
+            icalerrprintf("%p\n", stack_frames[i]);
         }
     }
     icalmemory_free_buffer(strings);

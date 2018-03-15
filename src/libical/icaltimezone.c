@@ -1575,7 +1575,7 @@ static int parse_coord(char *coord, int len, int *degrees, int *minutes, int *se
     } else if (len == 8) {
         sscanf(coord + 1, "%3d%2d%2d", degrees, minutes, seconds);
     } else {
-        fprintf(stderr, "Invalid coordinate: %s\n", coord);
+        icalerrprintf("Invalid coordinate: %s\n", coord);
         return 1;
     }
 
@@ -1732,7 +1732,7 @@ static void icaltimezone_parse_zone_tab(void)
                 if (sscanf(buf, "%1000s", location) != 1) {     /*limit location to 1000chars */
                     /*increase as needed */
                     /*see location and buf declarations */
-                    fprintf(stderr, "Invalid timezone description line: %s\n", buf);
+                    icalerrprintf("Invalid timezone description line: %s\n", buf);
                     continue;
                 }
             } else if (sscanf(buf, "%4d%2d%2d %4d%2d%2d %1000s", /*limit location to 1000chars */
@@ -1742,7 +1742,7 @@ static void icaltimezone_parse_zone_tab(void)
                               &latitude_seconds,
                               &longitude_degrees, &longitude_minutes,
                               &longitude_seconds, location) != 7) {
-                fprintf(stderr, "Invalid timezone description line: %s\n", buf);
+                icalerrprintf("Invalid timezone description line: %s\n", buf);
                 continue;
             }
         } else {
@@ -1751,7 +1751,7 @@ static void icaltimezone_parse_zone_tab(void)
                                            &latitude_seconds,
                                            &longitude_degrees, &longitude_minutes,
                                            &longitude_seconds, location)) {
-                fprintf(stderr, "Invalid timezone description line: %s\n", buf);
+                icalerrprintf("Invalid timezone description line: %s\n", buf);
                 continue;
             }
         }
@@ -1856,7 +1856,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 
         /* ##### B.# Sun, 11 Nov 2001 04:04:29 +1100
            this is where the MALFORMEDDATA error is being set, after the call to 'icalparser_parse'
-           fprintf(stderr, "** WARNING ** %s: %d %s\n",
+           icalerrprintf("** WARNING ** %s: %d %s\n",
                    __FILE__, __LINE__, icalerror_strerror(icalerrno));
          */
 
@@ -2003,7 +2003,7 @@ static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size)
        hours, and daylight saving shouldn't change it by more than a few hours.
        (The maximum offset is 15 hours 56 minutes at present.) */
     if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60) {
-        fprintf(stderr, "Warning: Strange timezone offset: H:%i M:%i S:%i\n",
+        icalerrprintf("Warning: Strange timezone offset: H:%i M:%i S:%i\n",
                 hours, minutes, seconds);
     }
 

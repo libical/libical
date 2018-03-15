@@ -399,7 +399,7 @@ static struct sspm_action_map get_action(struct mime_impl *impl,
             return sspm_action_map[i];
         }
     }
-    assert(i < len);    /*should return before now */
+    icalassert(i < len);    /*should return before now */
     return sspm_action_map[0];
 }
 
@@ -654,7 +654,7 @@ static void sspm_read_header(struct mime_impl *impl, struct sspm_header *header)
                 impl->state = IN_HEADER;
                 current_line++;
 
-                assert(strlen(buf) < TMP_BUF_SIZE);
+                icalassert(strlen(buf) < TMP_BUF_SIZE);
 
                 strncpy(header_lines[current_line], buf, TMP_BUF_SIZE);
                 header_lines[current_line][TMP_BUF_SIZE - 1] = '\0';
@@ -686,7 +686,7 @@ static void sspm_read_header(struct mime_impl *impl, struct sspm_header *header)
                     buf_start++;
                 }
 
-                assert(strlen(buf_start) + strlen(last_line) < TMP_BUF_SIZE);
+                icalassert(strlen(buf_start) + strlen(last_line) < TMP_BUF_SIZE);
 
                 strncat(last_line, buf_start, TMP_BUF_SIZE - strlen(last_line) - 1);
 
@@ -745,7 +745,7 @@ static void sspm_make_part(struct mime_impl *impl,
 
                 /* Read until the paired terminating boundary */
                 if ((boundary = (char *)icalmemory_new_buffer(strlen(line) + 5)) == 0) {
-                    fprintf(stderr, "Out of memory");
+                    icalerrprintf("Out of memory");
                     abort();
                 }
                 strcpy(boundary, line);
@@ -783,7 +783,7 @@ static void sspm_make_part(struct mime_impl *impl,
 
                 /* Read until the paired terminating boundary */
                 if ((boundary = (char *)icalmemory_new_buffer(strlen(line) + 5)) == 0) {
-                    fprintf(stderr, "Out of memory");
+                    icalerrprintf("Out of memory");
                     abort();
                 }
                 strcpy(boundary, line);
@@ -802,7 +802,7 @@ static void sspm_make_part(struct mime_impl *impl,
             *size = strlen(line);
 
             data = (char *)icalmemory_new_buffer(*size + 2);
-            assert(data != 0);
+            icalassert(data != 0);
             if (header->encoding == SSPM_BASE64_ENCODING) {
                 rtrn = decode_base64(data, line, size);
             } else if (header->encoding == SSPM_QUOTED_PRINTABLE_ENCODING) {
@@ -882,7 +882,7 @@ static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_hea
         while ((line = sspm_get_next_line(impl)) != 0) {
             if (sspm_is_mime_boundary(line)) {
 
-                assert(parent_header != 0);
+                icalassert(parent_header != 0);
 
                 /* Check if it is the right boundary */
                 if (!sspm_is_mime_terminating_boundary(line) &&
@@ -902,7 +902,7 @@ static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_hea
 
                     /* Read until the paired terminating boundary */
                     if ((boundary = (char *)icalmemory_new_buffer(strlen(line) + 5)) == 0) {
-                        fprintf(stderr, "Out of memory");
+                        icalerrprintf("Out of memory");
                         abort();
                     }
                     strcpy(boundary, line);
@@ -1144,7 +1144,7 @@ char *decode_base64(char *dest, char *src, size_t *size)
             cc = -1;
         }
 
-        assert(cc < 64);
+        icalassert(cc < 64);
 
         /* If we've reached the end, fill the remaining slots in
            the bucket and do a final conversion */
@@ -1352,7 +1352,7 @@ static void sspm_write_base64(struct sspm_buffer *buf, char *inbuf, int size)
         break;
 
     default:
-        assert(0);
+        icalassert(0);
     }
 
     for (i = 0; i < 4; i++) {
@@ -1387,7 +1387,7 @@ static void sspm_encode_base64(struct sspm_buffer *buf, char *data, size_t size)
             inbuf[0] = inbuf[1] = inbuf[2] = 0;
         }
 
-        assert(lpos % 4 == 0);
+        icalassert(lpos % 4 == 0);
 
         if (lpos == 72) {
             sspm_append_string(buf, "\n");
@@ -1425,7 +1425,7 @@ static void sspm_write_header(struct sspm_buffer *buf, struct sspm_header *heade
     minor = sspm_minor_type_string(header->minor);
 
     if (header->minor == SSPM_UNKNOWN_MINOR_TYPE) {
-        assert(header->minor_text != 0);
+        icalassert(header->minor_text != 0);
         minor = header->minor_text;
     }
 
@@ -1473,7 +1473,7 @@ static void sspm_write_part(struct sspm_buffer *buf, struct sspm_part *part, int
     }
 
     if (part->header.encoding == SSPM_BASE64_ENCODING) {
-        assert(part->data_size != 0);
+        icalassert(part->data_size != 0);
         sspm_encode_base64(buf, part->data, part->data_size);
     } else if (part->header.encoding == SSPM_QUOTED_PRINTABLE_ENCODING) {
         sspm_encode_quoted_printable(buf, part->data);
@@ -1501,7 +1501,7 @@ static void sspm_write_multipart_part(struct sspm_buffer *buf,
 
     while (parts[*part_num].header.major != SSPM_NO_MAJOR_TYPE && level == parent_level + 1) {
 
-        assert(header->boundary != NULL);
+        icalassert(header->boundary != NULL);
         sspm_append_string(buf, header->boundary);
         sspm_append_char(buf, '\n');
 

@@ -812,7 +812,7 @@ void icalproperty_set_value_from_string(icalproperty *prop, const char *str, con
 
     if (nval == 0) {
         /* icalvalue_new_from_string sets errno */
-        assert(icalerrno != ICAL_NO_ERROR);
+        icalassert(icalerrno != ICAL_NO_ERROR);
         return;
     }
 

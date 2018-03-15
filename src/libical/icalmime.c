@@ -185,7 +185,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
         const char *minor = sspm_minor_type_string(parts[i].header.minor);
 
         if (parts[i].header.minor == SSPM_UNKNOWN_MINOR_TYPE) {
-            assert(parts[i].header.minor_text != 0);
+            icalassert(parts[i].header.minor_text != 0);
             minor = parts[i].header.minor_text;
         }
 
@@ -195,7 +195,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
 
         if (comp == 0) {
             /* HACK Handle Error */
-            assert(0);
+            icalassert(0);
         }
 
         if (parts[i].header.error != SSPM_NO_ERROR) {
@@ -322,12 +322,12 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
 
             icalcomponent_add_component(parent, comp);
         } else {
-            assert(0);
+            icalassert(0);
         }
 
         last = comp;
         last_level = parts[i].level;
-        assert(parts[i].data == 0);
+        icalassert(parts[i].data == 0);
     }
 
     sspm_free_parts(parts, NUM_PARTS);
