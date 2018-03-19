@@ -3001,7 +3001,7 @@ void icalrecurrencetype_clear(struct icalrecurrencetype *recur)
  * thursday of the year) These routines decode the day values.
  *
  * The day's position in the period ( Nth-ness) and the numerical
- * value of the day are encoded together as: pos*7 + dow
+ * value of the day are encoded together as: pos*8 + sign(pos)*dow
  *
  * A position of 0 means 'any' or 'every'
  */
