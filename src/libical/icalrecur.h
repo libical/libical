@@ -241,6 +241,12 @@ LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurr
 LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_start(icalrecur_iterator *impl,
                                                      struct icaltimetype start);
 
+/** Set the date-time at which the iterator will stop at the latest.
+ *  Values equal to or greater than end will not be returned by the iterator.
+*/
+LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_end(icalrecur_iterator *impl,
+    struct icaltimetype end);
+
 /** Get the next occurrence from an iterator */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *);
 

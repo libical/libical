@@ -829,6 +829,7 @@ struct icalrecur_iterator_impl
 
     struct icaltimetype rstart;      /* DTSTART in RSCALE  */
     struct icaltimetype istart;      /* Gregorian start time for iterator */
+    struct icaltimetype iend;        /* Gregorian end time for iterator */
     struct icaltimetype last;        /* last time returned from iterator */
     int occurrence_no;               /* number of steps made on the iterator */
 
@@ -1832,6 +1833,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     impl->dtstart = dtstart;
     impl->rule = rule;
+    impl->iend = icaltime_null_time();
 
     /* Set up convenience pointers to make the code simpler. Allows
        us to iterate through all of the BY* arrays in the rule. */
@@ -2819,6 +2821,9 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
             return icaltime_null_time();
         }
 
+        if ((!icaltime_is_null_time(impl->iend)) && (icaltime_compare(impl->last, impl->iend) >= 0))
+            return icaltime_null_time();
+
     } while (icaltime_compare(impl->last, impl->istart) < 0 ||
              !check_contracting_rules(impl));
 
@@ -2977,6 +2982,17 @@ int icalrecur_iterator_set_start(icalrecur_iterator *impl,
     }
 
     return __iterator_set_start(impl, start);
+}
+
+int icalrecur_iterator_set_end(icalrecur_iterator *impl,
+    struct icaltimetype end)
+{
+    /* Convert end to same time zone as DTSTART */
+    end = icaltime_convert_to_zone(end, (icaltimezone *)impl->dtstart.zone);
+
+    impl->iend = end;
+
+    return 1;
 }
 
 /************************** Type Routines **********************/
