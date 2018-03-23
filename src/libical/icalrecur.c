@@ -2646,6 +2646,68 @@ static int next_year(icalrecur_iterator *impl)
     return next_yearday(impl, &__next_year);
 }
 
+static void daymask_find_next_bit(unsigned long days[], short* p_days_index) {
+
+    unsigned long v;
+    short startBitIndex;
+    int wordIdx;
+
+    if ((*p_days_index) >= ICAL_YEARDAYS_MASK_SIZE)
+        return;
+
+    // Prepare the first word, where searching might not start at the beginning
+    startBitIndex = *p_days_index + ICAL_YEARDAYS_MASK_OFFSET;
+    wordIdx = startBitIndex / BITS_PER_LONG;
+    v = days[wordIdx];
+    v >>= startBitIndex % BITS_PER_LONG;
+
+    if (!v) {
+        // so the first word didn't contain any bits of interest.
+        *p_days_index += BITS_PER_LONG - startBitIndex % BITS_PER_LONG;
+
+        // Are there more empty words following? Skip them.
+        while ((*p_days_index) < ICAL_YEARDAYS_MASK_SIZE) {
+
+            wordIdx++;
+            v = days[wordIdx];
+
+            if (v)
+                break;
+
+            *p_days_index += BITS_PER_LONG;
+        }
+    }
+
+    if (v) {
+
+        // We found a word containing the next bit but don't know the exact
+        // position yet. Do a b-search to find it.
+
+        unsigned long mask;
+        int maskSize = BITS_PER_LONG / 2;
+        mask = (((unsigned long)1) << maskSize) - 1;
+
+        while (maskSize) {
+
+            if ((v & mask) == 0)
+            {
+                v >>= maskSize;
+                *p_days_index += maskSize;
+            }
+            maskSize /= 2;
+            mask >>= maskSize;
+        }
+    }
+
+    if (*p_days_index >= ICAL_YEARDAYS_MASK_SIZE) {
+
+        // We didn't find anything (or it was after ICAL_YEARDAYS_MASK_SIZE).
+        // ICAL_YEARDAYS_MASK_SIZE isn't aligned with word sizes, so correct
+        // the index accordingly.
+        *p_days_index = ICAL_YEARDAYS_MASK_SIZE;
+    }
+}
+
 static int next_yearday(icalrecur_iterator *impl,
                         void (*next_period)(icalrecur_iterator *))
 {
@@ -2659,9 +2721,10 @@ static int next_yearday(icalrecur_iterator *impl,
        Reset the period start date so we can increment properly */
     (void)get_day_of_year(impl, start.year, start.month, start.day, NULL);
 
+    impl->days_index++;
+
     /* Find next year day that is set */
-    while (++impl->days_index < ICAL_YEARDAYS_MASK_SIZE &&
-           !daysmask_getbit(impl->days, impl->days_index));
+    daymask_find_next_bit(impl->days, &impl->days_index);
 
     if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
 
