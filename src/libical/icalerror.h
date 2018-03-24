@@ -60,7 +60,9 @@ LIBICAL_ICAL_EXPORT void icalerror_stop_here(void);
  */
 LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
 
+#ifndef _MSC_VER
 #pragma GCC visibility push(default)
+#endif
 /**
  * @typedef icalerrorenum
  * @enum icalerrorenum
@@ -106,7 +108,9 @@ typedef enum icalerrorenum
     /** An unknown error occurred */
     ICAL_UNKNOWN_ERROR  /* Used for problems in input to icalerror_strerror() */
 } icalerrorenum;
+#ifndef _MSC_VER
 #pragma GCC visibility pop
+#endif
 
 /**
  * @brief Return the current ::icalerrno value

@@ -945,12 +945,21 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 
         struct icalrecurrencetype recur = icalproperty_get_rrule(rrule);
         icalrecur_iterator *rrule_itr = icalrecur_iterator_new(recur, dtstart);
+        struct icaltimetype rrule_time;
 
-        while (rrule_itr) {
-            struct icaltimetype rrule_time = icalrecur_iterator_next(rrule_itr);
+        if (!rrule_itr) continue;
 
-            if (icaltime_is_null_time(rrule_time))
-                break;
+        if (recur.count == 0) {
+            icaltimetype mystart = start;
+
+            /* make sure we include any recurrence that ends in timespan */
+            icaltime_adjust(&mystart, 0, 0, 0, -dtduration);
+            icalrecur_iterator_set_start(rrule_itr, mystart);
+        }
+
+        for (rrule_time = icalrecur_iterator_next(rrule_itr);
+             !icaltime_is_null_time(rrule_time);
+             rrule_time = icalrecur_iterator_next(rrule_itr)) {
 
             /* if we have iterated past end time,
                then no need to check any further */
