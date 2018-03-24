@@ -683,6 +683,7 @@ void test_recur_iterator_set_start()
     icaltimetype next = icalrecur_iterator_next(iterator);
 
     ok("Next recurrence iterator result should be of type date", next.is_date == 1);
+    icalrecur_iterator_free(iterator);
 }
 
 void test_memory()
