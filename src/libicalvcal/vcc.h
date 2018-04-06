@@ -47,7 +47,7 @@ extern "C"
 {
 #endif
 
-    typedef void (*MimeErrorHandler) (char *);
+    typedef void (*MimeErrorHandler) (const char *);
 
     LIBICAL_VCAL_EXPORT void registerMimeErrorHandler(MimeErrorHandler);
 

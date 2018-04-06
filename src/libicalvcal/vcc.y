@@ -143,14 +143,13 @@ extern "C" {
 #endif
 
     extern void Parse_Debug(const char *s);
-    static void yyerror(char *s);
+    static void yyerror(const char *s);
 
 #if defined(__CPLUSPLUS__)
     };
 #endif
 
 int yylex(void);
-int yyparse(void);
 
 enum LexMode {
         L_NORMAL,
@@ -185,7 +184,7 @@ static void enterAttr(const char *s1, const char *s2);
 static void enterProps(const char *s);
 static void enterValues(const char *value);
 static void finiLex(void);
-static void mime_error_(char *s);
+static void mime_error_(const char *s);
 static VObject* Parse_MIMEHelper(void);
 static VObject* popVObject(void);
 static int pushVObject(const char *prop);
@@ -1197,7 +1196,7 @@ void registerMimeErrorHandler(MimeErrorHandler me)
     mimeErrorHandler = me;
     }
 
-static void mime_error(char *s)
+static void mime_error(const char *s)
     {
     char msg[256];
     if (mimeErrorHandler) {
@@ -1206,7 +1205,7 @@ static void mime_error(char *s)
         }
     }
 
-static void mime_error_(char *s)
+static void mime_error_(const char *s)
     {
     if (mimeErrorHandler) {
         mimeErrorHandler(s);
