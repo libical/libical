@@ -205,7 +205,6 @@ static int pushVObject(const char *prop);
         EQ COLON DOT SEMICOLON SPACE HTAB LINESEP NEWLINE
         BEGIN_VCARD END_VCARD BEGIN_VCAL END_VCAL
         BEGIN_VEVENT END_VEVENT BEGIN_VTODO END_VTODO
-        ID
 
 /*
  * NEWLINE is the token that would occur outside a vCard,
