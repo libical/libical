@@ -476,10 +476,10 @@ static void enterAttr(const char *s1, const char *s2)
         }
     else
         addProp(curProp,p1);
-    if (stricmp(p1,VCBase64Prop) == 0 || (s2 && stricmp(p2,VCBase64Prop)==0))
+    if (strcasecmp(p1,VCBase64Prop) == 0 || (s2 && strcasecmp(p2,VCBase64Prop)==0))
         lexPushMode(L_BASE64);
-    else if (stricmp(p1,VCQuotedPrintableProp) == 0
-            || (s2 && stricmp(p2,VCQuotedPrintableProp)==0))
+    else if (strcasecmp(p1,VCQuotedPrintableProp) == 0
+            || (s2 && strcasecmp(p2,VCQuotedPrintableProp)==0))
         lexPushMode(L_QUOTED_PRINTABLE);
     deleteStr(s1); deleteStr(s2);
     }
@@ -779,10 +779,10 @@ static int match_begin_name(int end) {
     char *n = lexLookaheadWord();
     int token = ID;
     if (n) {
-        if (!stricmp(n,"vcard")) token = end?END_VCARD:BEGIN_VCARD;
-        else if (!stricmp(n,"vcalendar")) token = end?END_VCAL:BEGIN_VCAL;
-        else if (!stricmp(n,"vevent")) token = end?END_VEVENT:BEGIN_VEVENT;
-        else if (!stricmp(n,"vtodo")) token = end?END_VTODO:BEGIN_VTODO;
+        if (!strcasecmp(n,"vcard")) token = end?END_VCARD:BEGIN_VCARD;
+        else if (!strcasecmp(n,"vcalendar")) token = end?END_VCAL:BEGIN_VCAL;
+        else if (!strcasecmp(n,"vevent")) token = end?END_VEVENT:BEGIN_VEVENT;
+        else if (!strcasecmp(n,"vtodo")) token = end?END_VTODO:BEGIN_VTODO;
         deleteStr(n);
         return token;
         }
@@ -1091,10 +1091,10 @@ int yylex() {
                     if (isalpha(c)) {
                         char *t = lexGetWord();
                         yylval.str = t;
-                        if (!stricmp(t, "begin")) {
+                        if (!strcasecmp(t, "begin")) {
                             return match_begin_end_name(0);
                             }
-                        else if (!stricmp(t,"end")) {
+                        else if (!strcasecmp(t,"end")) {
                             return match_begin_end_name(1);
                             }
                         else {
