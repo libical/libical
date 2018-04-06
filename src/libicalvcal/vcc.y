@@ -113,6 +113,10 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #endif
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -426,7 +430,7 @@ static void enterValues(const char *value)
     {
     if (fieldedProp && *fieldedProp) {
         if (value) {
-            addPropValue(curProp,*fieldedProp,value);
+            (void) addPropValue(curProp,*fieldedProp,value);
             }
         /* else this field is empty, advance to next field */
         fieldedProp++;
@@ -435,7 +439,7 @@ static void enterValues(const char *value)
         if (value) {
             char *p1, *p2;
             wchar_t *p3;
-            int i;
+            size_t i;
 
             /* If the property already has a string value, we append this one,
                using ';' to separate the values. */
@@ -448,7 +452,7 @@ static void enterValues(const char *value)
                 p3 = (wchar_t *) vObjectUStringZValue(curProp);
                 free(p3);
                 setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
-                deleteStr(p2);
+                free(p2);
             } else {
             setVObjectUStringZValue_(curProp,fakeUnicode(value,0));
             }
@@ -474,11 +478,11 @@ static void enterAttr(const char *s1, const char *s2)
         setVObjectStringZValue(a,p2);
         }
     else
-        addProp(curProp,p1);
-    if (strcasecmp(p1,VCBase64Prop) == 0 || (s2 && strcasecmp(p2,VCBase64Prop)==0))
+        (void)addProp(curProp,p1);
+    if (strcasecmp(p1,VCBase64Prop) == 0 || (p2 && strcasecmp(p2,VCBase64Prop)==0))
         lexPushMode(L_BASE64);
     else if (strcasecmp(p1,VCQuotedPrintableProp) == 0
-            || (s2 && strcasecmp(p2,VCQuotedPrintableProp)==0))
+            || (p2 && strcasecmp(p2,VCQuotedPrintableProp)==0))
         lexPushMode(L_QUOTED_PRINTABLE);
     deleteStr(s1); deleteStr(s2);
     }
@@ -553,7 +557,7 @@ static char lexGetc_()
         char result;
         return lexBuf.inputFile->Read(&result, 1) == 1 ? result : EOF;
 #else
-        return fgetc(lexBuf.inputFile);
+        return (char)fgetc(lexBuf.inputFile);
 #endif
         }
     }
@@ -671,7 +675,7 @@ static void lexPushLookaheadc(int c) {
     if (c == EOF) return;
     putptr = (int)lexBuf.getPtr - 1;
     if (putptr < 0) putptr += MAX_LEX_LOOKAHEAD;
-    lexBuf.getPtr = putptr;
+    lexBuf.getPtr = (unsigned long)putptr;
     lexBuf.buf[putptr] = c;
     lexBuf.len += 1;
     }
@@ -694,14 +698,14 @@ static char* lexLookaheadWord() {
             lexAppendc(0);
             /* restore lookahead buf. */
             lexBuf.len += len;
-            lexBuf.getPtr = curgetptr;
+            lexBuf.getPtr = (unsigned long)curgetptr;
             return lexStr();
             }
         else
             lexAppendc(c);
         }
     lexBuf.len += len;  /* char that has been moved to lookahead buffer */
-    lexBuf.getPtr = curgetptr;
+    lexBuf.getPtr = (unsigned long)curgetptr;
     return 0;
     }
 
@@ -823,7 +827,7 @@ static void finiLex() {
  */
 static char * lexGetDataFromBase64()
     {
-    unsigned long bytesLen = 0, bytesMax = 0;
+    size_t bytesLen = 0, bytesMax = 0;
     int quadIx = 0, pad = 0;
     unsigned long trip = 0;
     unsigned char b;
@@ -878,13 +882,13 @@ static char * lexGetDataFromBase64()
             trip = (trip << 6) | b;
             if (++quadIx == 4) {
                 unsigned char outBytes[3];
-                int numOut;
+                size_t numOut;
                 int i;
                 for (i = 0; i < 3; i++) {
                     outBytes[2-i] = (unsigned char)(trip & 0xFF);
                     trip >>= 8;
                     }
-                numOut = 3 - pad;
+                numOut = (size_t)(3 - pad);
                 if (bytesLen + numOut > bytesMax) {
                     if (!bytes) {
                         bytesMax = 1024;
@@ -908,15 +912,15 @@ static char * lexGetDataFromBase64()
                 }
             }
         } /* while */
-    DBG_(("db: bytesLen = %d\n",  bytesLen));
+    DBG_(("db: bytesLen = %lu\n", (unsigned long)bytesLen));
     /* kludge: all this won't be necessary if we have tree form
         representation */
     if (bytes) {
-        setValueWithSize(curProp,bytes,(unsigned int)bytesLen);
+        (void)setValueWithSize(curProp,bytes,(unsigned int)bytesLen);
         free(bytes);
         }
     else if (oldBytes) {
-        setValueWithSize(curProp,oldBytes,(unsigned int)bytesLen);
+        (void)setValueWithSize(curProp,oldBytes,(unsigned int)bytesLen);
         free(oldBytes);
         }
     return 0;
@@ -1165,7 +1169,7 @@ VObject* Parse_MIME_FromFile(FILE *file)
     startPos = ftell(file);
     if (!(result = Parse_MIMEHelper())) {
         if (startPos >= 0)
-           fseek(file,startPos,SEEK_SET);
+            (void)fseek(file,startPos,SEEK_SET);
         }
     return result;
     }
