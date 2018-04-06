@@ -1135,7 +1135,7 @@ static VObject* Parse_MIMEHelper()
     return vObjList;
     }
 
-DLLEXPORT(VObject*) Parse_MIME(const char *input, unsigned long len)
+VObject* Parse_MIME(const char *input, unsigned long len)
     {
     initLex(input, len, 0);
     return Parse_MIMEHelper();
@@ -1144,7 +1144,7 @@ DLLEXPORT(VObject*) Parse_MIME(const char *input, unsigned long len)
 
 #ifdef INCLUDEMFC
 
-DLLEXPORT(VObject*) Parse_MIME_FromFile(CFile *file)
+VObject* Parse_MIME_FromFile(CFile *file)
     {
     unsigned long startPos;
     VObject *result;
@@ -1172,7 +1172,7 @@ VObject* Parse_MIME_FromFile(FILE *file)
     return result;
     }
 
-DLLEXPORT(VObject*) Parse_MIME_FromFileName(const char *fname)
+VObject* Parse_MIME_FromFileName(const char *fname)
     {
     FILE *fp = fopen(fname,"r");
     if (fp) {
@@ -1193,7 +1193,7 @@ DLLEXPORT(VObject*) Parse_MIME_FromFileName(const char *fname)
 
 static MimeErrorHandler mimeErrorHandler;
 
-DLLEXPORT(void) registerMimeErrorHandler(MimeErrorHandler me)
+void registerMimeErrorHandler(MimeErrorHandler me)
     {
     mimeErrorHandler = me;
     }
