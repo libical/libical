@@ -1277,12 +1277,14 @@ void test_recur_encode_by_month()
     ok("Encoded value matches", (icalrecurrencetype_encode_month(2, 0) == rt.by_month[0]));
 
     rt = icalrecurrencetype_from_string("FREQ=MONTHLY;BYMONTH=3L");
-    ok("Is monthly recurrence", (rt.freq == ICAL_MONTHLY_RECURRENCE));
-    ok("The by_month[0] is set", (rt.by_month[0] != ICAL_RECURRENCE_ARRAY_MAX));
-    ok("The by_month[1] is not set", (rt.by_month[1] == ICAL_RECURRENCE_ARRAY_MAX));
-    ok("The month is 3", (icalrecurrencetype_month_month(rt.by_month[0]) == 3));
-    ok("Is leap month", (icalrecurrencetype_month_is_leap(rt.by_month[0]) != 0));
-    ok("Encoded value matches", (icalrecurrencetype_encode_month(3, 1) == rt.by_month[0]));
+	if (rt.freq != ICAL_NO_RECURRENCE) {
+        ok("Is monthly recurrence", (rt.freq == ICAL_MONTHLY_RECURRENCE));
+        ok("The by_month[0] is set", (rt.by_month[0] != ICAL_RECURRENCE_ARRAY_MAX));
+        ok("The by_month[1] is not set", (rt.by_month[1] == ICAL_RECURRENCE_ARRAY_MAX));
+        ok("The month is 3", (icalrecurrencetype_month_month(rt.by_month[0]) == 3));
+        ok("Is leap month", (icalrecurrencetype_month_is_leap(rt.by_month[0]) != 0));
+        ok("Encoded value matches", (icalrecurrencetype_encode_month(3, 1) == rt.by_month[0]));
+	}
 
     for (ii = 0; ii <= 1; ii++) {
         for (jj = 1; jj <= 12; jj++) {
