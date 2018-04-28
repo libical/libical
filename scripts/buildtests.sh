@@ -464,6 +464,7 @@ TOP=`pwd`
 BDIR=""
 
 CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False"
+UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DUSE_BUILTIN_TZDATA=True"
 
 #Static code checkers
@@ -480,10 +481,12 @@ CLANGTIDY test2builtin "$TZCMAKEOPTS"
 #GCC based build tests
 GCC_BUILD test1 ""
 GCC_BUILD test2 "$CMAKEOPTS"
+GCC_BUILD test3 "$UUCCMAKEOPTS"
 if (test "`uname -s`" = "Linux")
 then
-  GCC_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-  GCC_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+    echo "Temporarily disable cross-compile tests"
+#  GCC_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
+#  GCC_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 fi
 GCC_BUILD test1builtin "-DUSE_BUILTIN_TZDATA=True"
 GCC_BUILD test2builtin "$TZCMAKEOPTS"
@@ -491,20 +494,24 @@ GCC_BUILD test2builtin "$TZCMAKEOPTS"
 #Clang based build tests
 CLANG_BUILD test1 ""
 CLANG_BUILD test2 "$CMAKEOPTS"
+CLANG_BUILD test3 "$UUCCMAKEOPTS"
 if (test "`uname -s`" = "Linux")
 then
-  CLANG_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-  CLANG_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+    echo "Temporarily disable cross-compile tests"
+#  CLANG_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
+#  CLANG_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 fi
 
 #Address sanitizer
 ASAN_BUILD test1asan ""
 ASAN_BUILD test2asan "$CMAKEOPTS"
 ASAN_BUILD test3asan "$TZCMAKEOPTS"
+ASAN_BUILD test4asan "$UUCCMAKEOPTS"
 
 #Thread sanitizer
 TSAN_BUILD test1tsan ""
 TSAN_BUILD test2tsan "$CMAKEOPTS"
 TSAN_BUILD test3tsan "$TZCMAKEOPTS"
+TSAN_BUILD test4tsan "$UUCCMAKEOPTS"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"
