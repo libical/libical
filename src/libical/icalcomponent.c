@@ -1687,7 +1687,7 @@ void icalcomponent_set_comment(icalcomponent *comp, const char *v)
         icalcomponent_add_property(inner, prop);
     }
 
-    icalproperty_set_summary(prop, v);
+    icalproperty_set_comment(prop, v);
 }
 
 const char *icalcomponent_get_comment(icalcomponent *comp)
@@ -1722,7 +1722,7 @@ void icalcomponent_set_uid(icalcomponent *comp, const char *v)
         icalcomponent_add_property(inner, prop);
     }
 
-    icalproperty_set_summary(prop, v);
+    icalproperty_set_uid(prop, v);
 }
 
 const char *icalcomponent_get_uid(icalcomponent *comp)

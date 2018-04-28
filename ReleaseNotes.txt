@@ -7,6 +7,11 @@ Version 3.1.0:
      + icalrecurrencetype_encode_day
      + icalrecurrencetype_encode_month
 
+Version 3.0.4:
+--------------
+ * Silently fail RSCALE recurrence clauses when RSCALE is disabled
+ * Fixed icalcomponent_set_comment() and icalcomponent_set_uid() 
+
 Version 3.0.3:
 --------------
  * VTODO COMPLETED property can be a DATE-TIME or DATE (for backward compatibility)
