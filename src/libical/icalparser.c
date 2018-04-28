@@ -476,7 +476,7 @@ static char *parser_get_next_parameter(char *line, char **end)
  * Get a single property line, from the property name through the
  * final new line, and include any continuation lines
  */
-char *icalparser_get_line(icalparser *parser, 
+char *icalparser_get_line(icalparser *parser,
                           icalparser_line_gen_func line_gen_func)
 {
     char *line;

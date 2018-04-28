@@ -663,7 +663,9 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             if (r != -2) {
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
             }
-            free(parser.rt.rscale);
+            if (parser.rt.rscale) {
+                free(parser.rt.rscale);
+            }
             icalrecurrencetype_clear(&parser.rt);
             break;
         }
@@ -3096,7 +3098,8 @@ int icalrecur_expand_recurrence(const char *rule,
         }
         icalrecur_iterator_free(ritr);
     }
-    free(recur.rscale);
+    if(recur.rscale)
+        free(recur.rscale);
 
     return 1;
 }
