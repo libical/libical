@@ -1217,6 +1217,88 @@ void test_recur()
 /*    test_increment();*/
 }
 
+void test_recur_encode_by_day()
+{
+    struct icalrecurrencetype rt;
+    int ii;
+
+    rt = icalrecurrencetype_from_string("FREQ=WEEKLY;BYDAY=WE");
+    ok("Is weekly recurrence", (rt.freq == ICAL_WEEKLY_RECURRENCE));
+    ok("The by_day[0] is set", (rt.by_day[0] != ICAL_RECURRENCE_ARRAY_MAX));
+    ok("The by_day[1] is not set", (rt.by_day[1] == ICAL_RECURRENCE_ARRAY_MAX));
+    ok("The day of week is Wednesday", (icalrecurrencetype_day_day_of_week(rt.by_day[0]) == ICAL_WEDNESDAY_WEEKDAY));
+    ok("The position is 0", (icalrecurrencetype_day_position(rt.by_day[0]) == 0));
+    ok("Encoded value matches", (icalrecurrencetype_encode_day(ICAL_WEDNESDAY_WEEKDAY, 0) == rt.by_day[0]));
+
+    rt = icalrecurrencetype_from_string("FREQ=MONTHLY;BYDAY=2FR");
+    ok("Is monthly recurrence", (rt.freq == ICAL_MONTHLY_RECURRENCE));
+    ok("The by_day[0] is set", (rt.by_day[0] != ICAL_RECURRENCE_ARRAY_MAX));
+    ok("The by_day[1] is not set", (rt.by_day[1] == ICAL_RECURRENCE_ARRAY_MAX));
+    ok("The day of week is Friday", (icalrecurrencetype_day_day_of_week(rt.by_day[0]) == ICAL_FRIDAY_WEEKDAY));
+    ok("The position is 2", (icalrecurrencetype_day_position(rt.by_day[0]) == 2));
+    ok("Encoded value matches", (icalrecurrencetype_encode_day(ICAL_FRIDAY_WEEKDAY, 2) == rt.by_day[0]));
+
+    rt = icalrecurrencetype_from_string("FREQ=YEARLY;BYDAY=-3MO");
+    ok("Is yearly recurrence", (rt.freq == ICAL_YEARLY_RECURRENCE));
+    ok("The by_day[0] is set", (rt.by_day[0] != ICAL_RECURRENCE_ARRAY_MAX));
+    ok("The by_day[1] is not set", (rt.by_day[1] == ICAL_RECURRENCE_ARRAY_MAX));
+    ok("The day of week is Monday", (icalrecurrencetype_day_day_of_week(rt.by_day[0]) == ICAL_MONDAY_WEEKDAY));
+    ok("The position is -3", (icalrecurrencetype_day_position(rt.by_day[0]) == -3));
+    ok("Encoded value matches", (icalrecurrencetype_encode_day(ICAL_MONDAY_WEEKDAY, -3) == rt.by_day[0]));
+
+    for (ii = -5; ii <= 5; ii++) {
+        icalrecurrencetype_weekday wd;
+
+        for (wd = ICAL_SUNDAY_WEEKDAY; wd <= ICAL_SATURDAY_WEEKDAY; wd++) {
+            short encoded;
+
+            if (VERBOSE)
+                printf("  Trying weekday %d and position %d\n", wd, ii);
+
+            encoded = icalrecurrencetype_encode_day(wd, ii);
+
+            ok("Decoded day of week matches", (icalrecurrencetype_day_day_of_week(encoded) == wd));
+            ok("Decoded position matches", (icalrecurrencetype_day_position(encoded) == ii));
+        }
+    }
+}
+
+void test_recur_encode_by_month()
+{
+    struct icalrecurrencetype rt;
+    int ii, jj;
+
+    rt = icalrecurrencetype_from_string("FREQ=WEEKLY;BYMONTH=2");
+    ok("Is weekly recurrence", (rt.freq == ICAL_WEEKLY_RECURRENCE));
+    ok("The by_month[0] is set", (rt.by_month[0] != ICAL_RECURRENCE_ARRAY_MAX));
+    ok("The by_month[1] is not set", (rt.by_month[1] == ICAL_RECURRENCE_ARRAY_MAX));
+    ok("The month is 2", (icalrecurrencetype_month_month(rt.by_month[0]) == 2));
+    ok("Is not leap month", (icalrecurrencetype_month_is_leap(rt.by_month[0]) == 0));
+    ok("Encoded value matches", (icalrecurrencetype_encode_month(2, 0) == rt.by_month[0]));
+
+    rt = icalrecurrencetype_from_string("FREQ=MONTHLY;BYMONTH=3L");
+    ok("Is monthly recurrence", (rt.freq == ICAL_MONTHLY_RECURRENCE));
+    ok("The by_month[0] is set", (rt.by_month[0] != ICAL_RECURRENCE_ARRAY_MAX));
+    ok("The by_month[1] is not set", (rt.by_month[1] == ICAL_RECURRENCE_ARRAY_MAX));
+    ok("The month is 3", (icalrecurrencetype_month_month(rt.by_month[0]) == 3));
+    ok("Is leap month", (icalrecurrencetype_month_is_leap(rt.by_month[0]) != 0));
+    ok("Encoded value matches", (icalrecurrencetype_encode_month(3, 1) == rt.by_month[0]));
+
+    for (ii = 0; ii <= 1; ii++) {
+        for (jj = 1; jj <= 12; jj++) {
+            short encoded;
+
+            if (VERBOSE)
+                printf("  Trying month %d as %sleap\n", jj, ii ? "" : "not ");
+
+            encoded = icalrecurrencetype_encode_month(jj, ii);
+
+            ok("Decoded month matches", (icalrecurrencetype_month_month(encoded) == jj));
+            ok("Decoded is-leap matches", ((icalrecurrencetype_month_is_leap(encoded) ? 1 : 0) == ii));
+        }
+    }
+}
+
 void test_expand_recurrence()
 {
     time_t arr[10];
@@ -4109,6 +4191,8 @@ int main(int argc, char *argv[])
     test_run("Test day of year of week start", test_start_of_week, do_test, do_header);
     test_run("Test recur parser", test_recur_parser, do_test, do_header);
     test_run("Test recur", test_recur, do_test, do_header);
+    test_run("Test recur encode by_day", test_recur_encode_by_day, do_test, do_header);
+    test_run("Test recur encode by_month", test_recur_encode_by_month, do_test, do_header);
     test_run("Test Recurring Events File", test_recur_file, do_test, do_header);
     test_run("Test parameter bug", test_recur_parameter_bug, do_test, do_header);
     test_run("Test Array Expansion", test_expand_recurrence, do_test, do_header);

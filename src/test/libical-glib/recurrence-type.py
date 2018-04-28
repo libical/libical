@@ -29,6 +29,26 @@ assert(ICalGLib.RecurrenceType.day_position(15) == 1);
 assert(ICalGLib.RecurrenceType.day_position(16) == 2);
 assert(ICalGLib.RecurrenceType.day_position(25) == 3);
 
+encoded = ICalGLib.RecurrenceType.encode_day(ICalGLib.RecurrenceTypeWeekday.MONDAY_WEEKDAY, 0);
+assert(ICalGLib.RecurrenceType.day_day_of_week(encoded) == ICalGLib.RecurrenceTypeWeekday.MONDAY_WEEKDAY);
+assert(ICalGLib.RecurrenceType.day_position(encoded) == 0);
+
+encoded = ICalGLib.RecurrenceType.encode_day(ICalGLib.RecurrenceTypeWeekday.THURSDAY_WEEKDAY, -3);
+assert(ICalGLib.RecurrenceType.day_day_of_week(encoded) == ICalGLib.RecurrenceTypeWeekday.THURSDAY_WEEKDAY);
+assert(ICalGLib.RecurrenceType.day_position(encoded) == -3);
+
+encoded = ICalGLib.RecurrenceType.encode_day(ICalGLib.RecurrenceTypeWeekday.FRIDAY_WEEKDAY, 2);
+assert(ICalGLib.RecurrenceType.day_day_of_week(encoded) == ICalGLib.RecurrenceTypeWeekday.FRIDAY_WEEKDAY);
+assert(ICalGLib.RecurrenceType.day_position(encoded) == 2);
+
+encoded = ICalGLib.RecurrenceType.encode_month(3, 0);
+assert(ICalGLib.RecurrenceType.month_month(encoded) == 3);
+assert(not ICalGLib.RecurrenceType.month_is_leap(encoded));
+
+encoded = ICalGLib.RecurrenceType.encode_month(12, 1);
+assert(ICalGLib.RecurrenceType.month_month(encoded) == 12);
+assert(ICalGLib.RecurrenceType.month_is_leap(encoded));
+
 string = "COUNT=10;FREQ=DAILY";
 recurrence = ICalGLib.RecurrenceType.from_string(string);
 assert(recurrence.as_string_r() == "FREQ=DAILY;COUNT=10");
