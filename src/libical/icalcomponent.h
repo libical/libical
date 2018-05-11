@@ -183,13 +183,13 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_dtstart(icalcomponent *comp, struct i
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp);
 
 /* For the icalcomponent routines only, dtend and duration are tied
-   together. If you call the set routine for one and the other exists,
-   the routine will calculate the change to the other. That is, if
-   there is a DTEND and you call set_duration, the routine will modify
-   DTEND to be the sum of DTSTART and the duration. If you call a get
-   routine for one and the other exists, the routine will calculate
-   the return value. If you call a set routine and neither exists, the
-   routine will create the apcompriate comperty */
+   together. If you call the get routine for one and the other exists,
+   the routine will calculate the return value. That is, if there is a
+   DTEND and you call get_duration, the routine will return the difference
+   between DTEND and DTSTART. However, if you call a set routine for
+   one and the other exists, no action will be taken and icalerrno will
+   be set to ICAL_MALFORMEDDATA_ERROR. If you call a set routine and
+   neither exists, the routine will create the appropriate property. */
 
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp);
 
