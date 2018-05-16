@@ -1974,31 +1974,23 @@ static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
    available. */
 static void increment_month(icalrecur_iterator *impl)
 {
+    int inc = impl->rule.interval;
+
+    __increment_month(impl, inc);
+
     if (has_by_data(impl, BY_MONTH)) {
-        /* Ignore the frequency and use the byrule data */
+        struct icaltimetype this = occurrence_as_icaltime(impl, 0);
 
-        do {
-            BYMONIDX++;
+        while (this.year < 20000) {
+            for (BYMONIDX = 0;
+                 BYMONPTR[BYMONIDX] != ICAL_RECURRENCE_ARRAY_MAX; BYMONIDX++) {
 
-            if (BYMONPTR[BYMONIDX] == ICAL_RECURRENCE_ARRAY_MAX) {
-                BYMONIDX = 0;
-
-                increment_year(impl, 1);
+                if (this.month == BYMONPTR[BYMONIDX]) return;
             }
 
-        } while (!set_month(impl, BYMONPTR[BYMONIDX]));
-
-    } else {
-
-        int inc;
-
-        if (impl->rule.freq == ICAL_MONTHLY_RECURRENCE) {
-            inc = impl->rule.interval;
-        } else {
-            inc = 1;
+            __increment_month(impl, inc);
+            this = occurrence_as_icaltime(impl, 0);
         }
-
-        __increment_month(impl, inc);
     }
 }
 

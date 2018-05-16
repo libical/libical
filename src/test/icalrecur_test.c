@@ -375,6 +375,11 @@ const struct recur rfc5545[] = {
      "FREQ=HOURLY;INTERVAL=3;UNTIL=20170903T170000Z",
      "20170902T230000"},
 
+    /* Every 13 months, on May 12 */
+    {"20100212T000000",
+     "FREQ=MONTHLY;INTERVAL=13;BYMONTH=5;COUNT=3",
+     NULL},
+
     {NULL, NULL, NULL}
 };
 
