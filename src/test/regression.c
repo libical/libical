@@ -374,6 +374,18 @@ void test_utf8()
         "END:VEVENT\n"
         "END:VCALENDAR\n";
 
+    const char *utf8_marker =
+	"\xEF\xBB\xBF"
+        "BEGIN:VCALENDAR\n"
+        "PRODID:-//Ximian//NONSGML Evolution Calendar//EN\n"
+        "VERSION:2.0\n"
+        "METHOD:PUBLISH\n"
+        "BEGIN:VEVENT\n"
+        "SUMMARY:  áó aáóaáó aáä\n"
+        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá \n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
     prop = icalproperty_new_description(utf8text);
 
     str_is("icalproperty_as_ical_string()", icalproperty_as_ical_string(prop), test_ical_str_good);
@@ -390,6 +402,14 @@ void test_utf8()
     comp = icalcomponent_new_from_string(agenda93);
     ok("parsed", (comp != NULL));
     str_is("summary", icalcomponent_get_summary(comp), "IETF 93 Social Event at the Žofín Palace");
+    icalcomponent_free(comp);
+
+    /* test a string with UTF-8 marker at the beginning */
+    comp = icalcomponent_new_from_string(utf8_marker);
+    ok("parsed", (comp != NULL));
+    ok("kind", (icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT));
+    str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá");
+    str_is("summary", icalcomponent_get_summary(comp), "áó aáóaáó aáä");
     icalcomponent_free(comp);
 }
 
