@@ -13,6 +13,7 @@ Version 3.0.4:
  * Fixed icalcomponent_set_comment() and icalcomponent_set_uid() 
  * fix FREQ=MONTHLY;BYMONTH
  * Skip UTF-8 marker when parsing
+ * CMake discovery module for ICU uses pkg-config now
 
 Version 3.0.3:
 --------------
