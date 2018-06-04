@@ -4066,6 +4066,80 @@ void test_comma_in_quoted_value(void)
     icalcomponent_free(c);
 }
 
+void test_tzid_with_utc_time(void)
+{
+    const char *strcomp =
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VTIMEZONE\r\n"
+        "TZID:my_zone\r\n"
+        "BEGIN:STANDARD\r\n"
+        "TZNAME:my_zone\r\n"
+        "DTSTART:19160429T230000\r\n"
+        "TZOFFSETFROM:+0100\r\n"
+        "TZOFFSETTO:+0200\r\n"
+        "RRULE:FREQ=YEARLY;UNTIL=19160430T220000Z;BYDAY=-1SU;BYMONTH=4\r\n"
+        "END:STANDARD\r\n"
+        "END:VTIMEZONE\r\n"
+        "BEGIN:VEVENT\r\n"
+        "UID:0\r\n"
+        "DTSTART;TZID=my_zone:20180101T010000Z\r\n"
+        "DTEND;TZID=my_zone:20180101T030000\r\n"
+        "DUE:20180101T030000Z\r\n"
+        "RRULE:FREQ=HOURLY;UNTIL=20180505T050000Z;BYHOUR=1\r\n"
+        "EXDATE:20180101T010000\r\n"
+        "EXDATE:20180202T020000Z\r\n"
+        "EXDATE;TZID=my_zone:20180303T030000\r\n"
+        "EXDATE;TZID=my_zone:20180404T040000Z\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    struct _exdate_expected {
+        const char *tzid;
+    } exdate_expected[] = {
+        { "" },
+        { "UTC" },
+        { "my_zone" },
+        { "UTC" },
+        { NULL }
+    };
+    icalcomponent *comp, *subcomp;
+    struct icaltimetype dtstart, dtend, due;
+    icalproperty *prop;
+    int idx;
+
+    comp = icalcomponent_new_from_string(strcomp);
+    ok("icalcomponent_new_from_string()", (comp != NULL));
+    subcomp = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+    ok("get subcomp", (subcomp != NULL));
+
+    dtstart = icalcomponent_get_dtstart(subcomp);
+    dtend = icalcomponent_get_dtend(subcomp);
+    due = icalcomponent_get_due(subcomp);
+
+    ok("DTSTART is UTC", (icaltime_is_utc(dtstart)));
+    ok("DTEND is my_zone", (strcmp(icaltimezone_get_tzid((icaltimezone *) dtend.zone), "my_zone") == 0));
+    ok("DUE is UTC", (icaltime_is_utc(due)));
+
+    for (prop = icalcomponent_get_first_property (subcomp, ICAL_EXDATE_PROPERTY), idx = 0;
+         prop;
+         prop = icalcomponent_get_next_property (subcomp, ICAL_EXDATE_PROPERTY), idx++) {
+        struct icaltimetype exdate = icalproperty_get_exdate (prop);
+
+        ok("EXDATE is not null-time", (!icaltime_is_null_time (exdate)));
+        ok("expected EXDATE not NULL", (exdate_expected[idx].tzid != NULL));
+
+        if (*(exdate_expected[idx].tzid)) {
+            ok("EXDATE zone is not NULL", (exdate.zone != NULL));
+            ok("EXDATE matches timezone", (strcmp(exdate_expected[idx].tzid, icaltimezone_get_tzid((icaltimezone *) exdate.zone)) == 0));
+        } else {
+            ok("EXDATE zone is NULL", (exdate.zone == NULL));
+        }
+
+        ok("EXDATE is excluded", (icalproperty_recurrence_is_excluded(subcomp, &dtstart, &exdate)));
+    }
+
+    icalcomponent_free (comp);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4193,6 +4267,7 @@ int main(int argc, char *argv[])
              do_header);
     test_run("Test comma in quoted value of x property", test_comma_in_quoted_value, do_test,
              do_header);
+    test_run("Test TZID with UTC time", test_tzid_with_utc_time, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

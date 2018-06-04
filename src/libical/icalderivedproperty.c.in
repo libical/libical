@@ -22,10 +22,10 @@
 
 #include "icalderivedproperty.h"
 #include "icalproperty.h"
+#include "icalproperty_p.h"
 #include "icalcomponent.h"
 #include "icalerror.h"
 #include "icalmemory.h"
-#include "icaltimezone.h"
 
 #include <string.h>
 
