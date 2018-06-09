@@ -1446,6 +1446,7 @@ static gboolean is_enum_type(const gchar *type)
         structureKind = g_hash_table_lookup(type2kind, trueType);
         res = g_strcmp0(structureKind, "enum") == 0;
     }
+    g_free (trueType);
 
     return res;
 }
