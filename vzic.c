@@ -41,6 +41,7 @@
 /* By default we output Outlook-compatible output. If --pure is used we
    output pure output, with no changes to be compatible with Outlook. */
 gboolean VzicPureOutput			= FALSE;
+gboolean VzicWithArtifacts		= FALSE;
 
 gboolean VzicDumpOutput			= FALSE;
 gboolean VzicDumpChanges		= FALSE;
@@ -88,6 +89,12 @@ main				(int		 argc,
        as it has problems with certain iCalendar constructs. */
     if (!strcmp (argv[i], "--pure"))
       VzicPureOutput = TRUE;
+
+    /* --with-artifacts: Include tzdata artifacts (transition time types)
+       in the "pure" iCalendar data.
+       These artifacts can be used to construct TZif files from iCalendar. */
+    else if (!strcmp (argv[i], "--with-artifacts"))
+      VzicWithArtifacts = TRUE;
 
     /* --output-dir: specify where to output all the files beneath. The
        default is the current directory. */

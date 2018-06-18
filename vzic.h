@@ -35,6 +35,7 @@
 /* By default we output Outlook-compatible output. If --pure is used we output
    pure output, with no changes to be compatible with Outlook. */
 extern gboolean VzicPureOutput;
+extern gboolean VzicWithArtifacts;
 
 extern gboolean VzicDumpOutput;
 extern gboolean VzicDumpChanges;

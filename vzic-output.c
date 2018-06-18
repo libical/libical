@@ -1538,12 +1538,12 @@ check_for_rdates		(FILE		*fp,
 			   vzictime->prev_walloff);
 
     fputs ("RDATE", fp);
-#if 0  /* This is only for being able to generate binary tzdata from VTIMEZONE */
-    if (vzictime->time_code != TIME_WALL) {
-      fprintf (fp, ";X-OBSERVED-AT=%c",
-               vzictime->time_code == TIME_UNIVERSAL ? 'Z' : 'S');
+    if (VzicPureOutput && VzicWithArtifacts) {
+      if (vzictime->time_code != TIME_WALL) {
+        fprintf (fp, ";X-OBSERVED-AT=%c",
+                 vzictime->time_code == TIME_UNIVERSAL ? 'Z' : 'S');
+      }
     }
-#endif
     fprintf (fp, ":%s\r\n", format_time (tmp_vzictime.year,
                                          tmp_vzictime.month,
                                          tmp_vzictime.day_number,
@@ -1617,12 +1617,12 @@ output_component_start			(char		*buffer,
 				tmp_vzictime.day_number,
 				tmp_vzictime.time_seconds);
   n = sprintf (line5, "DTSTART");
-#if 0  /* This is only for being able to generate binary tzdata from VTIMEZONE */
-  if (vzictime->time_code != TIME_WALL) {
-    n += sprintf (line5+n, ";X-OBSERVED-AT=%c",
-                  vzictime->time_code == TIME_UNIVERSAL ? 'Z' : 'S');
+  if (VzicPureOutput && VzicWithArtifacts) {
+    if (vzictime->time_code != TIME_WALL) {
+      n += sprintf (line5+n, ";X-OBSERVED-AT=%c",
+                    vzictime->time_code == TIME_UNIVERSAL ? 'Z' : 'S');
+    }
   }
-#endif
   sprintf (line5+n, ":%s\r\n", formatted_time);
 #if 0  /* The RDATE matching DTSTART is unnecessary */
   if (output_rdate)
