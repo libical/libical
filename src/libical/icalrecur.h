@@ -233,10 +233,12 @@ typedef struct icalrecur_iterator_impl icalrecur_iterator;
 LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                                                                struct icaltimetype dtstart);
 
-/** Set the date-time at which the iterator will start,
- *  where 'start' is a value between DTSTART and UNTIL.
+/**
+ * Sets the date-time at which the iterator will start,
+ * where @p start is a value between DTSTART and UNTIL.
  *
- *  NOTE: CAN NOT be used with RRULEs that contain COUNT.
+ * NOTE: CAN NOT be used with RRULEs that contain COUNT.
+ * @since 3.0
  */
 LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_start(icalrecur_iterator *impl,
                                                      struct icaltimetype start);

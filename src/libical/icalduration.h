@@ -100,16 +100,16 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
 LIBICAL_ICAL_EXPORT int icaldurationtype_as_int(struct icaldurationtype duration);
 
 /**
- * @brief Converts an ::icaldurationtype into the iCal format as string.
- * @param The ::icaldurationtype to convert to iCal format
- * @return A string representing duration @a d in iCal format
+ * Converts an icaldurationtype into the iCal format as string.
+ * @param The icaldurationtype to convert to iCal format
+ * @return A string representing duration @p d in iCal format
  * @sa icaldurationtype_as_ical_string_r()
  *
- * @par Ownership
+ * @b Ownership
  * The string returned by this function is owned by the caller and needs to be
  * released with `free()` after it's no longer needed.
  *
- * ### Usage
+ * @b Usage
  * ```c
  * // create new duration
  * struct icaldurationtype duration;
@@ -126,16 +126,16 @@ LIBICAL_ICAL_EXPORT int icaldurationtype_as_int(struct icaldurationtype duration
 LIBICAL_ICAL_EXPORT char *icaldurationtype_as_ical_string(struct icaldurationtype d);
 
 /**
- * @brief Converts an ::icaldurationtype into the iCal format as string.
- * @param The ::icaldurationtype to convert to iCal format
- * @return A string representing duration @a d in iCal format
+ * Converts an icaldurationtype into the iCal format as string.
+ * @param The icaldurationtype to convert to iCal format
+ * @return A string representing duration @p d in iCal format
  * @sa icaldurationtype_as_ical_string()
  *
- * @par Ownership
+ * @b Ownership
  * The string returned by this function is owned by libical and must not be
  * released by the caller of the function.
  *
- * ### Usage
+ * @b Usage
  * ```c
  * // create new duration
  * struct icaldurationtype duration;

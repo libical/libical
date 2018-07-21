@@ -183,7 +183,7 @@ LIBICAL_ICAL_EXPORT void *icalmemory_new_buffer(size_t size);
  * @param size The new size of the buffer.
  * @return The new, resized buffer.
  * @sa icalmemory_new_buffer()
- * @warn This method may not be used for temporary buffers (buffers allocated
+ * @warning This method may not be used for temporary buffers (buffers allocated
  * with icalmemory_tmp_buffer() and related functions)!
  *
  * @par Error handling
@@ -238,7 +238,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void *buf);
  * @param buf_size The size of the buffer (will be changed if buffer is
  * reallocated)
  * @param string The string to append to the buffer.
- * @warn This method may not be used for temporary buffers (buffers allocated
+ * @warning This method may not be used for temporary buffers (buffers allocated
  *  with icalmemory_tmp_buffer() and related functions)!
  *
  * @par Error handling
@@ -279,7 +279,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_append_string(char **buf, char **pos, size_t
  * @param buf_size The size of the buffer (will be changed if buffer is
  *  reallocated)
  * @param ch The character to append to the buffer.
- * @warn This method may not be used for temporary buffers (buffers allocated
+ * @warning This method may not be used for temporary buffers (buffers allocated
  *  with icalmemory_tmp_buffer() and related functions)!
  *
  * @par Error handling
