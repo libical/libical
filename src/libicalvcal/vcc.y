@@ -353,7 +353,7 @@ eventitem:
         END_VEVENT
         {
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
         | BEGIN_VEVENT
         {
@@ -363,7 +363,7 @@ eventitem:
         END_VEVENT
         {
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
         ;
 
@@ -377,7 +377,7 @@ todoitem:
         END_VTODO
         {
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
         | BEGIN_VTODO
         {
@@ -387,7 +387,7 @@ todoitem:
         END_VTODO
         {
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
         ;
 

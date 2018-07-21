@@ -84,13 +84,15 @@ void icalerror_stop_here(void)
 
 void icalerror_crash_here(void)
 {
+#if !defined(__clang_analyzer__)
     int *p = 0;
     /* coverity[var_deref_op] */
     /* cppcheck-suppress nullPointer */
-    *p = 1; /*clang-analyzer false positive. we want a crash*/
+    *p = 1;
 
     /* cppcheck-suppress nullPointer */
     assert(*p);
+#endif
 }
 
 void icalerror_clear_errno()

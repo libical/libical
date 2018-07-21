@@ -1472,7 +1472,7 @@ YYPARSE_DECL()
     yynerrs = 0;
     yyerrflag = 0;
     yychar = YYEMPTY;
-    yystate = 0;
+/*    yystate = 0; never read, says scan-view */
 
 #if YYPURE
     memset(&yystack, 0, sizeof(yystack));
@@ -1710,7 +1710,7 @@ case 40:
 #line 354 "vcc.y"
 	{
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
 break;
 case 41:
@@ -1724,7 +1724,7 @@ case 42:
 #line 364 "vcc.y"
 	{
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
 break;
 case 43:
@@ -1738,7 +1738,7 @@ case 44:
 #line 378 "vcc.y"
 	{
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
 break;
 case 45:
@@ -1752,7 +1752,7 @@ case 46:
 #line 388 "vcc.y"
 	{
         lexPopMode(0);
-        popVObject();
+        (void)popVObject();
         }
 break;
 #line 1759 "vcc.c"
