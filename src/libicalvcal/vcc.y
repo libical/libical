@@ -1063,12 +1063,12 @@ int yylex() {
                 case ':': {
                     /* consume all line separator(s) adjacent to each other */
                     /* ignoring linesep immediately after colon. */
-/*                  c = lexLookahead();
+                    c = lexLookahead();
                     while (strchr("\n",c)) {
                         lexSkipLookahead();
                         c = lexLookahead();
                         ++mime_lineNum;
-                        }*/
+                        }
                     DBG_(("db: COLON\n"));
                     return COLON;
                     }
