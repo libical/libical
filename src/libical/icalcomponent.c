@@ -953,7 +953,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
             icaltimetype mystart = start;
 
             /* make sure we include any recurrence that ends in timespan */
-            icaltime_adjust(&mystart, 0, 0, 0, -dtduration);
+            icaltime_adjust(&mystart, 0, 0, 0, -(int)dtduration);
             icalrecur_iterator_set_start(rrule_itr, mystart);
         }
 

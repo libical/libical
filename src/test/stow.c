@@ -33,7 +33,8 @@
 #include <sys/utsname.h>
 #endif
 
-#define TMPSIZE 2048
+#define TMPSIZE 1024
+#define TMPSIZE_PLUS 2500
 #define SENDMAIL "/usr/lib/sendmail -t"
 
 char *program_name;
@@ -154,8 +155,8 @@ char *make_mime(const char *to, const char *from, const char *subject,
         strlen(to) +
         strlen(from) + strlen(subject) + strlen(text_message) + strlen(ical_message) + TMPSIZE;
 
-    char mime_part_1[TMPSIZE];
-    char mime_part_2[TMPSIZE];
+    char mime_part_1[TMPSIZE_PLUS];
+    char mime_part_2[TMPSIZE_PLUS];
     char content_id[TMPSIZE];
     char boundary[TMPSIZE];
     struct utsname uts;
@@ -172,13 +173,13 @@ char *make_mime(const char *to, const char *from, const char *subject,
     snprintf(content_id, TMPSIZE, "%d-%d@%s", (int)time(0), rand(), uts.nodename);
     snprintf(boundary, TMPSIZE, "%d-%d-%s", (int)time(0), rand(), uts.nodename);
 //krazy:cond=style
-    snprintf(mime_part_1, TMPSIZE, "Content-ID: %s\n\
+    snprintf(mime_part_1, TMPSIZE_PLUS, "Content-ID: %s\n\
 Content-type: text/plain\n\
 Content-Description: Text description of error message\n\n\
 %s\n\n--%s", content_id, text_message, boundary);
 
     if (method != 0) {
-        snprintf(mime_part_2, TMPSIZE, "Content-ID: %s\n\
+        snprintf(mime_part_2, TMPSIZE_PLUS, "Content-ID: %s\n\
 Content-type: text/calendar; method=%s\n\
 Content-Description: iCal component reply\n\n\
 %s\n\n--%s--", content_id, method, ical_message, boundary);
