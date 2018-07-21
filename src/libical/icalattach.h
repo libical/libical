@@ -46,7 +46,7 @@ typedef struct icalattach_impl icalattach;
 /**
  * @typedef icalattach_free_fn_t
  * @brief (*unused*) Function to be called to free the data of an ::icalattach object.
- * @warn Currently not used
+ * @warning Currently not used
  *
  * This function type is used to free the data from an ::icalattach object created
  * with icalattach_new_from_data(). It is currently not used

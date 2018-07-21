@@ -570,7 +570,7 @@ if (!(test)) { \
 LIBICAL_ICAL_EXPORT icalerrorstate icalerror_supress(const char *error);
 
 /**
- * @begin Assign the given error the given icalerrorstate (severity)
+ * Assign the given error the given icalerrorstate (severity)
  * @param error The error in question
  * @param es The icalerrorstate (severity) to set it to
  *

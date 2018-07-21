@@ -83,7 +83,15 @@ LIBICAL_ICAL_EXPORT icalvalue *icalproperty_get_value(const icalproperty *prop);
 LIBICAL_ICAL_EXPORT const char *icalproperty_get_value_as_string(const icalproperty *prop);
 LIBICAL_ICAL_EXPORT char *icalproperty_get_value_as_string_r(const icalproperty *prop);
 
+/**
+ * Sets the parent @p icalproperty for the specified @p icalvalue.
+ */
 LIBICAL_ICAL_EXPORT void icalvalue_set_parent(icalvalue *value, icalproperty *property);
+
+/**
+ * Returns the parent @p icalproperty for the specified @p icalvalue.
+ * @since 3.0
+ */
 LIBICAL_ICAL_EXPORT icalproperty *icalvalue_get_parent(icalvalue *value);
 
 /* Deal with X properties */
@@ -100,7 +108,16 @@ LIBICAL_ICAL_EXPORT char *icalproperty_get_property_name_r(const icalproperty *p
 
 LIBICAL_ICAL_EXPORT icalvalue_kind icalparameter_value_to_value_kind(icalparameter_value value);
 
+/**
+ * Sets the parent @p icalproperty for the specified @p icalparameter.
+ * @since 3.0
+ */
 LIBICAL_ICAL_EXPORT void icalparameter_set_parent(icalparameter *param, icalproperty *property);
+
+/**
+ * Returns the parent @p icalproperty for the specified @p icalparameter.
+ * @since 3.0
+ */
 LIBICAL_ICAL_EXPORT icalproperty *icalparameter_get_parent(icalparameter *param);
 
 /* Convert kinds to string and get default value type */
@@ -124,6 +141,10 @@ LIBICAL_ICAL_EXPORT icalproperty_status icalproperty_string_to_status(const char
 
 LIBICAL_ICAL_EXPORT int icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e);
 
+/**
+ * Normalizes (reorders and sorts the parameters) the specified @p icalproperty.
+ * @since 3.0
+ */
 LIBICAL_ICAL_EXPORT void icalproperty_normalize(icalproperty *prop);
 
 #endif /*ICALPROPERTY_H */

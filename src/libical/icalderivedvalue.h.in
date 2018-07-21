@@ -42,8 +42,27 @@ LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_date(struct icaltimetype v);
 LIBICAL_ICAL_EXPORT struct icaltimetype icalvalue_get_date(const icalvalue *value);
 LIBICAL_ICAL_EXPORT void icalvalue_set_date(icalvalue *value, struct icaltimetype v);
 
+/**
+ * Creates a new icalvalue representing the specified icaltimetype.
+ * @param v is an @p icaltimetype
+ * @since 3.0
+ */
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_datetime(struct icaltimetype v);
+
+/**
+ * Returns the icaltimetype corresponding to the specified icalvalue.
+ * @param a pointer to an icalvalue.
+ * @returns the icaltimetype as datetime.
+ * @since 3.0
+ */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalvalue_get_datetime(const icalvalue *value);
+
+/**
+ * Sets an icalvalue for the specified icaltimetype.
+ * @param value is a pointer to an icalvalue.
+ * @param v is
+ * @since 3.0
+ */
 LIBICAL_ICAL_EXPORT void icalvalue_set_datetime(icalvalue *value, struct icaltimetype v);
 
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_datetimedate(struct icaltimetype v);

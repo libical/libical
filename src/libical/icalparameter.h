@@ -243,15 +243,16 @@ LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter *parameter)
 LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string_r(icalparameter *parameter);
 
 /**
- * @brief Returns the icalparameter_kind of parameter
+ * Returns the icalparameter_kind of parameter.
+ *
  * @param parameter The icalparameter whose kind to determine
  * @return The icalparameter_kind of the parameter
  *
- * @par Error handling
- * Returns ::ICAL_NO_PARAMETER when passed `NULL`.
+ * @b Error handling
+ * Returns ICAL_NO_PARAMETER when passed NULL.
  *
- * ### Usage
- * ```c
+ * @b Usage
+ * @code
  * // create parameter
  * icalparameter *param = icalparameter_new_from_string("ROLE=CHAIR");
  *
@@ -260,22 +261,22 @@ LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string_r(icalparameter *paramete
  *
  * // release memory
  * icalparameter_free(param);
- * ```
+ * @endcode
  */
 LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter *parameter);
 
 /**
- * @brief Determine if the given param is an icalparameter
+ * Determine if the given param is an icalparameter
  * @param param The libical-originated object to check
  * @return 1 if the object is an icalparameter, 0 otherwise.
  * @note This function expects to be given an object originating from
  *  libical - if this function is passed anything that is not from
  *  libical, it's behavior is undefined.
  *
- * @par Error handling
+ * @b Error handling
  * When given a `NULL` object, it returns 0.
  *
- * ### Usage
+ * @b Usage
  * ```c
  * // create parameter
  * icalparameter *param = icalparameter_new_from_string("ROLE=CHAIR");
