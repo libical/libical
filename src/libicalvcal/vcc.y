@@ -113,6 +113,10 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #endif
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -143,14 +147,13 @@ extern "C" {
 #endif
 
     extern void Parse_Debug(const char *s);
-    static void yyerror(char *s);
+    static void yyerror(const char *s);
 
 #if defined(__CPLUSPLUS__)
     };
 #endif
 
 int yylex(void);
-int yyparse(void);
 
 enum LexMode {
         L_NORMAL,
@@ -185,7 +188,7 @@ static void enterAttr(const char *s1, const char *s2);
 static void enterProps(const char *s);
 static void enterValues(const char *value);
 static void finiLex(void);
-static void mime_error_(char *s);
+static void mime_error_(const char *s);
 static VObject* Parse_MIMEHelper(void);
 static VObject* popVObject(void);
 static int pushVObject(const char *prop);
@@ -205,7 +208,6 @@ static int pushVObject(const char *prop);
         EQ COLON DOT SEMICOLON SPACE HTAB LINESEP NEWLINE
         BEGIN_VCARD END_VCARD BEGIN_VCAL END_VCAL
         BEGIN_VEVENT END_VEVENT BEGIN_VTODO END_VTODO
-        ID
 
 /*
  * NEWLINE is the token that would occur outside a vCard,
@@ -428,7 +430,7 @@ static void enterValues(const char *value)
     {
     if (fieldedProp && *fieldedProp) {
         if (value) {
-            addPropValue(curProp,*fieldedProp,value);
+            (void) addPropValue(curProp,*fieldedProp,value);
             }
         /* else this field is empty, advance to next field */
         fieldedProp++;
@@ -437,7 +439,7 @@ static void enterValues(const char *value)
         if (value) {
             char *p1, *p2;
             wchar_t *p3;
-            int i;
+            size_t i;
 
             /* If the property already has a string value, we append this one,
                using ';' to separate the values. */
@@ -450,7 +452,7 @@ static void enterValues(const char *value)
                 p3 = (wchar_t *) vObjectUStringZValue(curProp);
                 free(p3);
                 setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
-                deleteStr(p2);
+                free(p2);
             } else {
             setVObjectUStringZValue_(curProp,fakeUnicode(value,0));
             }
@@ -476,11 +478,11 @@ static void enterAttr(const char *s1, const char *s2)
         setVObjectStringZValue(a,p2);
         }
     else
-        addProp(curProp,p1);
-    if (stricmp(p1,VCBase64Prop) == 0 || (s2 && stricmp(p2,VCBase64Prop)==0))
+        (void)addProp(curProp,p1);
+    if (strcasecmp(p1,VCBase64Prop) == 0 || (p2 && strcasecmp(p2,VCBase64Prop)==0))
         lexPushMode(L_BASE64);
-    else if (stricmp(p1,VCQuotedPrintableProp) == 0
-            || (s2 && stricmp(p2,VCQuotedPrintableProp)==0))
+    else if (strcasecmp(p1,VCQuotedPrintableProp) == 0
+            || (p2 && strcasecmp(p2,VCQuotedPrintableProp)==0))
         lexPushMode(L_QUOTED_PRINTABLE);
     deleteStr(s1); deleteStr(s2);
     }
@@ -555,7 +557,7 @@ static char lexGetc_()
         char result;
         return lexBuf.inputFile->Read(&result, 1) == 1 ? result : EOF;
 #else
-        return fgetc(lexBuf.inputFile);
+        return (char)fgetc(lexBuf.inputFile);
 #endif
         }
     }
@@ -673,7 +675,7 @@ static void lexPushLookaheadc(int c) {
     if (c == EOF) return;
     putptr = (int)lexBuf.getPtr - 1;
     if (putptr < 0) putptr += MAX_LEX_LOOKAHEAD;
-    lexBuf.getPtr = putptr;
+    lexBuf.getPtr = (unsigned long)putptr;
     lexBuf.buf[putptr] = c;
     lexBuf.len += 1;
     }
@@ -696,14 +698,14 @@ static char* lexLookaheadWord() {
             lexAppendc(0);
             /* restore lookahead buf. */
             lexBuf.len += len;
-            lexBuf.getPtr = curgetptr;
+            lexBuf.getPtr = (unsigned long)curgetptr;
             return lexStr();
             }
         else
             lexAppendc(c);
         }
     lexBuf.len += len;  /* char that has been moved to lookahead buffer */
-    lexBuf.getPtr = curgetptr;
+    lexBuf.getPtr = (unsigned long)curgetptr;
     return 0;
     }
 
@@ -780,10 +782,10 @@ static int match_begin_name(int end) {
     char *n = lexLookaheadWord();
     int token = ID;
     if (n) {
-        if (!stricmp(n,"vcard")) token = end?END_VCARD:BEGIN_VCARD;
-        else if (!stricmp(n,"vcalendar")) token = end?END_VCAL:BEGIN_VCAL;
-        else if (!stricmp(n,"vevent")) token = end?END_VEVENT:BEGIN_VEVENT;
-        else if (!stricmp(n,"vtodo")) token = end?END_VTODO:BEGIN_VTODO;
+        if (!strcasecmp(n,"vcard")) token = end?END_VCARD:BEGIN_VCARD;
+        else if (!strcasecmp(n,"vcalendar")) token = end?END_VCAL:BEGIN_VCAL;
+        else if (!strcasecmp(n,"vevent")) token = end?END_VEVENT:BEGIN_VEVENT;
+        else if (!strcasecmp(n,"vtodo")) token = end?END_VTODO:BEGIN_VTODO;
         deleteStr(n);
         return token;
         }
@@ -825,7 +827,7 @@ static void finiLex() {
  */
 static char * lexGetDataFromBase64()
     {
-    unsigned long bytesLen = 0, bytesMax = 0;
+    size_t bytesLen = 0, bytesMax = 0;
     int quadIx = 0, pad = 0;
     unsigned long trip = 0;
     unsigned char b;
@@ -880,13 +882,13 @@ static char * lexGetDataFromBase64()
             trip = (trip << 6) | b;
             if (++quadIx == 4) {
                 unsigned char outBytes[3];
-                int numOut;
+                size_t numOut;
                 int i;
                 for (i = 0; i < 3; i++) {
                     outBytes[2-i] = (unsigned char)(trip & 0xFF);
                     trip >>= 8;
                     }
-                numOut = 3 - pad;
+                numOut = (size_t)(3 - pad);
                 if (bytesLen + numOut > bytesMax) {
                     if (!bytes) {
                         bytesMax = 1024;
@@ -910,15 +912,15 @@ static char * lexGetDataFromBase64()
                 }
             }
         } /* while */
-    DBG_(("db: bytesLen = %d\n",  bytesLen));
+    DBG_(("db: bytesLen = %lu\n", (unsigned long)bytesLen));
     /* kludge: all this won't be necessary if we have tree form
         representation */
     if (bytes) {
-        setValueWithSize(curProp,bytes,(unsigned int)bytesLen);
+        (void)setValueWithSize(curProp,bytes,(unsigned int)bytesLen);
         free(bytes);
         }
     else if (oldBytes) {
-        setValueWithSize(curProp,oldBytes,(unsigned int)bytesLen);
+        (void)setValueWithSize(curProp,oldBytes,(unsigned int)bytesLen);
         free(oldBytes);
         }
     return 0;
@@ -1063,12 +1065,12 @@ int yylex() {
                 case ':': {
                     /* consume all line separator(s) adjacent to each other */
                     /* ignoring linesep immediately after colon. */
-/*                  c = lexLookahead();
+                    c = lexLookahead();
                     while (strchr("\n",c)) {
                         lexSkipLookahead();
                         c = lexLookahead();
                         ++mime_lineNum;
-                        }*/
+                    }
                     DBG_(("db: COLON\n"));
                     return COLON;
                     }
@@ -1092,10 +1094,10 @@ int yylex() {
                     if (isalpha(c)) {
                         char *t = lexGetWord();
                         yylval.str = t;
-                        if (!stricmp(t, "begin")) {
+                        if (!strcasecmp(t, "begin")) {
                             return match_begin_end_name(0);
                             }
-                        else if (!stricmp(t,"end")) {
+                        else if (!strcasecmp(t,"end")) {
                             return match_begin_end_name(1);
                             }
                         else {
@@ -1135,7 +1137,7 @@ static VObject* Parse_MIMEHelper()
     return vObjList;
     }
 
-DLLEXPORT(VObject*) Parse_MIME(const char *input, unsigned long len)
+VObject* Parse_MIME(const char *input, unsigned long len)
     {
     initLex(input, len, 0);
     return Parse_MIMEHelper();
@@ -1144,7 +1146,7 @@ DLLEXPORT(VObject*) Parse_MIME(const char *input, unsigned long len)
 
 #ifdef INCLUDEMFC
 
-DLLEXPORT(VObject*) Parse_MIME_FromFile(CFile *file)
+VObject* Parse_MIME_FromFile(CFile *file)
     {
     unsigned long startPos;
     VObject *result;
@@ -1167,12 +1169,12 @@ VObject* Parse_MIME_FromFile(FILE *file)
     startPos = ftell(file);
     if (!(result = Parse_MIMEHelper())) {
         if (startPos >= 0)
-           fseek(file,startPos,SEEK_SET);
+            (void)fseek(file,startPos,SEEK_SET);
         }
     return result;
     }
 
-DLLEXPORT(VObject*) Parse_MIME_FromFileName(const char *fname)
+VObject* Parse_MIME_FromFileName(const char *fname)
     {
     FILE *fp = fopen(fname,"r");
     if (fp) {
@@ -1193,12 +1195,12 @@ DLLEXPORT(VObject*) Parse_MIME_FromFileName(const char *fname)
 
 static MimeErrorHandler mimeErrorHandler;
 
-DLLEXPORT(void) registerMimeErrorHandler(MimeErrorHandler me)
+void registerMimeErrorHandler(MimeErrorHandler me)
     {
     mimeErrorHandler = me;
     }
 
-static void mime_error(char *s)
+static void mime_error(const char *s)
     {
     char msg[256];
     if (mimeErrorHandler) {
@@ -1207,7 +1209,7 @@ static void mime_error(char *s)
         }
     }
 
-static void mime_error_(char *s)
+static void mime_error_(const char *s)
     {
     if (mimeErrorHandler) {
         mimeErrorHandler(s);

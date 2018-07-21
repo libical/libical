@@ -1,24 +1,103 @@
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include "vcc.h"
-#include <ctype.h>
-#include <stddef.h> /* for ptrdiff_t */
+/* original parser id follows */
+/* yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93" */
+/* (use YYMAJOR/YYMINOR for ifdefs dependent on parser version) */
 
 #define YYBYACC 1
 #define YYMAJOR 1
 #define YYMINOR 9
-#define YYPATCH 20070509
+#define YYPATCH 20150711
 
-#define YYEMPTY (-1)
-#define yyclearin    (yychar = YYEMPTY)
-#define yyerrok      (yyerrflag = 0)
-#define YYRECOVERING (yyerrflag != 0)
+#define YYEMPTY        (-1)
+#define yyclearin      (yychar = YYEMPTY)
+#define yyerrok        (yyerrflag = 0)
+#define YYRECOVERING() (yyerrflag != 0)
+#define YYENOMEM       (-2)
+#define YYEOF          0
 
-extern int yyparse(void);
+#ifndef yyparse
+#define yyparse    mime_parse
+#endif /* yyparse */
 
-static int yygrowstack(void);
+#ifndef yylex
+#define yylex      mime_lex
+#endif /* yylex */
+
+#ifndef yyerror
+#define yyerror    mime_error
+#endif /* yyerror */
+
+#ifndef yychar
+#define yychar     mime_char
+#endif /* yychar */
+
+#ifndef yyval
+#define yyval      mime_val
+#endif /* yyval */
+
+#ifndef yylval
+#define yylval     mime_lval
+#endif /* yylval */
+
+#ifndef yydebug
+#define yydebug    mime_debug
+#endif /* yydebug */
+
+#ifndef yynerrs
+#define yynerrs    mime_nerrs
+#endif /* yynerrs */
+
+#ifndef yyerrflag
+#define yyerrflag  mime_errflag
+#endif /* yyerrflag */
+
+#ifndef yylhs
+#define yylhs      mime_lhs
+#endif /* yylhs */
+
+#ifndef yylen
+#define yylen      mime_len
+#endif /* yylen */
+
+#ifndef yydefred
+#define yydefred   mime_defred
+#endif /* yydefred */
+
+#ifndef yydgoto
+#define yydgoto    mime_dgoto
+#endif /* yydgoto */
+
+#ifndef yysindex
+#define yysindex   mime_sindex
+#endif /* yysindex */
+
+#ifndef yyrindex
+#define yyrindex   mime_rindex
+#endif /* yyrindex */
+
+#ifndef yygindex
+#define yygindex   mime_gindex
+#endif /* yygindex */
+
+#ifndef yytable
+#define yytable    mime_table
+#endif /* yytable */
+
+#ifndef yycheck
+#define yycheck    mime_check
+#endif /* yycheck */
+
+#ifndef yyname
+#define yyname     mime_name
+#endif /* yyname */
+
+#ifndef yyrule
+#define yyrule     mime_rule
+#endif /* yyrule */
+#define YYPREFIX "mime_"
+
+#define YYPURE 0
+
+#line 2 "vcc.y"
 
 /***************************************************************************
 (C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International
@@ -76,6 +155,13 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #define DBG_(x)
 #endif
 
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
+#ifdef _MSC_VER
+#define strcasecmp stricmp
+#endif
+
 /****  External Functions  ****/
 
 /* assign local name to parser variables and functions so that
@@ -120,11 +206,21 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 /* undef below if compile with MFC */
 /* #define INCLUDEMFC 1 */
 
-#if defined(_WIN32)
+#if defined(WIN32) || defined(_WIN32)
 #ifdef INCLUDEMFC
 #include <afx.h>
 #endif
 #endif
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include "vcc.h"
 
 /****  Types, Constants  ****/
 
@@ -157,7 +253,6 @@ extern "C" {
 #endif
 
 int yylex(void);
-int yyparse(void);
 
 enum LexMode {
         L_NORMAL,
@@ -192,15 +287,56 @@ static void enterAttr(const char *s1, const char *s2);
 static void enterProps(const char *s);
 static void enterValues(const char *value);
 static void finiLex(void);
-static void mime_error_(char *s);
+static void mime_error_(const char *s);
 static VObject* Parse_MIMEHelper(void);
 static VObject* popVObject(void);
 static int pushVObject(const char *prop);
 
+#line 202 "vcc.y"
+#ifdef YYSTYPE
+#undef  YYSTYPE_IS_DECLARED
+#define YYSTYPE_IS_DECLARED 1
+#endif
+#ifndef YYSTYPE_IS_DECLARED
+#define YYSTYPE_IS_DECLARED 1
 typedef union {
     char *str;
     VObject *vobj;
     } YYSTYPE;
+#endif /* !YYSTYPE_IS_DECLARED */
+#line 308 "vcc.c"
+
+/* compatibility with bison */
+#ifdef YYPARSE_PARAM
+/* compatibility with FreeBSD */
+# ifdef YYPARSE_PARAM_TYPE
+#  define YYPARSE_DECL() yyparse(YYPARSE_PARAM_TYPE YYPARSE_PARAM)
+# else
+#  define YYPARSE_DECL() yyparse(void *YYPARSE_PARAM)
+# endif
+#else
+# define YYPARSE_DECL() yyparse(void)
+#endif
+
+/* Parameters sent to lex. */
+#ifdef YYLEX_PARAM
+# define YYLEX_DECL() yylex(void *YYLEX_PARAM)
+# define YYLEX yylex(YYLEX_PARAM)
+#else
+# define YYLEX_DECL() yylex(void)
+# define YYLEX yylex()
+#endif
+
+/* Parameters sent to yyerror. */
+#ifndef YYERROR_DECL
+#define YYERROR_DECL() yyerror(const char *s)
+#endif
+#ifndef YYERROR_CALL
+#define YYERROR_CALL(msg) yyerror(msg)
+#endif
+
+extern int YYPARSE_DECL();
+
 #define EQ 257
 #define COLON 258
 #define DOT 259
@@ -217,24 +353,25 @@ typedef union {
 #define END_VEVENT 270
 #define BEGIN_VTODO 271
 #define END_VTODO 272
-#define ID 273
-#define STRING 274
+#define STRING 273
+#define ID 274
 #define YYERRCODE 256
-short yylhs[] = {                                        -1,
+typedef short YYINT;
+static const YYINT mime_lhs[] = {                        -1,
     0,    7,    6,    6,    5,    5,    9,    3,   10,    3,
     8,    8,   14,   11,   11,   16,   12,   12,   15,   15,
    17,   18,   18,    1,   19,   13,   13,    2,    2,   21,
     4,   22,    4,   20,   20,   23,   23,   23,   26,   24,
    27,   24,   28,   25,   29,   25,
 };
-short yylen[] = {                                         2,
+static const YYINT mime_len[] = {                         2,
     1,    0,    3,    1,    1,    1,    0,    4,    0,    3,
     2,    1,    0,    5,    1,    0,    3,    1,    2,    1,
     2,    1,    3,    1,    0,    4,    1,    1,    0,    0,
     4,    0,    3,    2,    1,    1,    1,    1,    0,    4,
     0,    3,    0,    4,    0,    3,
 };
-short yydefred[] = {                                      0,
+static const YYINT mime_defred[] = {                      0,
     0,    0,    0,    5,    6,    0,    1,    0,    0,    0,
     0,    0,   15,   24,    0,    0,    0,    0,   10,    0,
     0,   38,    0,    0,   36,   37,   33,    3,    0,    8,
@@ -242,40 +379,40 @@ short yydefred[] = {                                      0,
     0,    0,    0,   42,    0,   46,    0,   21,   19,   28,
     0,    0,   40,   44,    0,   25,   14,   23,    0,   26,
 };
-short yydgoto[] = {                                       3,
+static const YYINT mime_dgoto[] = {                       3,
    15,   51,    4,    5,    6,    7,   12,   22,    8,    9,
    17,   18,   52,   42,   40,   29,   41,   48,   59,   23,
    10,   11,   24,   25,   26,   33,   34,   35,   36,
 };
-short yysindex[] = {                                   -227,
-    0,    0,    0,    0,    0,    0,    0, -249, -262, -253,
- -258, -227,    0,    0,    0, -234, -249, -215,    0,    0,
-    0,    0, -223, -253,    0,    0,    0,    0, -247,    0,
-    0,    0, -249, -222, -249, -225,    0,    0, -224,    0,
- -247, -221, -220,    0, -218,    0, -206,    0,    0,    0,
- -208, -207,    0,    0, -224,    0,    0,    0, -221,    0,
+static const YYINT mime_sindex[] = {                   -227,
+    0,    0,    0,    0,    0,    0,    0, -246, -260, -253,
+ -257, -227,    0,    0,    0, -234, -246, -215,    0,    0,
+    0,    0, -223, -253,    0,    0,    0,    0, -214,    0,
+    0,    0, -246, -222, -246, -225,    0,    0, -224,    0,
+ -214, -221, -217,    0, -218,    0, -208,    0,    0,    0,
+ -209, -207,    0,    0, -224,    0,    0,    0, -221,    0,
 };
-short yyrindex[] = {                                      0,
- -245, -254,    0,    0,    0,    1,    0,    0,    0,    0,
-    0,    0,    0,    0, -219,    0, -235,    0,    0, -244,
- -250,    0,    0, -213,    0,    0,    0,    0,    0,    0,
+static const YYINT mime_rindex[] = {                      0,
+ -244, -254,    0,    0,    0,    1,    0,    0,    0,    0,
+    0,    0,    0,    0, -219,    0, -235,    0,    0, -251,
+ -248,    0,    0, -213,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
- -201, -255,    0,    0,    0,    0, -216,    0,    0,    0,
- -205,    0,    0,    0,    0,    0,    0,    0, -255,    0,
+ -201, -256,    0,    0,    0,    0, -216,    0,    0,    0,
+ -205,    0,    0,    0,    0,    0,    0,    0, -256,    0,
 };
-short yygindex[] = {                                      0,
-   -9,    0,    0,    0,    0,   47,    0,   -8,    0,    0,
+static const YYINT mime_gindex[] = {                      0,
+  -26,    0,    0,    0,    0,   47,    0,   -8,    0,    0,
     0,    0,    2,    0,   19,    0,    0,    0,    0,   38,
     0,    0,    0,    0,    0,    0,    0,    0,    0,
 };
 #define YYTABLESIZE 268
-short yytable[] = {                                      16,
-    4,   30,   13,   19,   29,   43,   13,   29,   31,   27,
-    7,   39,   39,   32,   30,   20,   30,   21,   30,   14,
-    9,   45,   43,   14,   43,   41,   45,    7,   39,   47,
+static const YYINT mime_table[] = {                      16,
+    4,   30,   13,   29,   39,   19,   29,   43,   31,   13,
+   27,    7,   47,   32,   30,   20,   30,   21,   41,   30,
+   14,    9,   39,   45,   43,   43,   45,   14,   58,    7,
    12,   30,   12,   12,   12,   12,   12,    1,   18,    2,
-   16,   22,   32,   22,   37,   58,   46,   44,   14,   53,
-   55,   56,   50,   54,   35,   57,   20,   27,   28,   49,
+   16,   22,   32,   22,   37,   39,   46,   44,   55,   14,
+   56,   50,   53,   54,   35,   57,   20,   27,   28,   49,
    60,   38,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -298,13 +435,13 @@ short yytable[] = {                                      16,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    2,    0,    2,
 };
-short yycheck[] = {                                       8,
-    0,  256,  256,  266,  260,  256,  256,  263,   17,  268,
-  256,  256,  260,  268,  269,  269,  271,  271,  273,  273,
-  266,  272,  273,  273,   33,  270,   35,  273,  273,   39,
+static const YYINT mime_check[] = {                       8,
+    0,  256,  256,  260,  256,  266,  263,  256,   17,  256,
+  268,  256,   39,  268,  269,  269,  271,  271,  270,  274,
+  274,  266,  274,  272,   33,  274,   35,  274,   55,  274,
   266,  266,  268,  269,  270,  271,  272,  265,  258,  267,
-  260,  258,  258,  260,  268,   55,  272,  270,  273,  270,
-  257,  260,  274,  272,  268,  263,  258,  263,   12,   41,
+  260,  258,  258,  260,  268,  260,  272,  270,  257,  274,
+  260,  273,  270,  272,  268,  263,  258,  263,   12,   41,
    59,   24,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -332,8 +469,11 @@ short yycheck[] = {                                       8,
 #define YYDEBUG 0
 #endif
 #define YYMAXTOKEN 274
+#define YYUNDFTOKEN 306
+#define YYTRANSLATE(a) ((a) > YYMAXTOKEN ? YYUNDFTOKEN : (a))
 #if YYDEBUG
-const char *yyname[] = {
+static const char *const mime_name[] = {
+
 "end-of-file",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -342,9 +482,10 @@ const char *yyname[] = {
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"EQ","COLON","DOT","SEMICOLON",
 "SPACE","HTAB","LINESEP","NEWLINE","BEGIN_VCARD","END_VCARD","BEGIN_VCAL",
-"END_VCAL","BEGIN_VEVENT","END_VEVENT","BEGIN_VTODO","END_VTODO","ID","STRING",
+"END_VCAL","BEGIN_VEVENT","END_VEVENT","BEGIN_VTODO","END_VTODO","STRING","ID",
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"illegal-symbol",
 };
-const char *yyrule[] = {
+static const char *const mime_rule[] = {
 "$accept : mime",
 "mime : vobjects",
 "$$1 :",
@@ -392,8 +533,17 @@ const char *yyrule[] = {
 "todoitem : BEGIN_VTODO $$11 items END_VTODO",
 "$$12 :",
 "todoitem : BEGIN_VTODO $$12 END_VTODO",
+
 };
 #endif
+
+int      yydebug;
+int      yynerrs;
+
+int      yyerrflag;
+int      yychar;
+YYSTYPE  yyval;
+YYSTYPE  yylval;
 
 /* define the initial stack-sizes */
 #ifdef YYSTACKSIZE
@@ -403,27 +553,24 @@ const char *yyrule[] = {
 #ifdef YYMAXDEPTH
 #define YYSTACKSIZE YYMAXDEPTH
 #else
-#define YYSTACKSIZE 500
-#define YYMAXDEPTH  500
+#define YYSTACKSIZE 10000
+#define YYMAXDEPTH  10000
 #endif
 #endif
 
-#define YYINITSTACKSIZE 500
+#define YYINITSTACKSIZE 200
 
-int      yydebug;
-int      yynerrs;
-int      yyerrflag;
-int      yychar;
-short   *yyssp;
-YYSTYPE *yyvsp;
-YYSTYPE  yyval;
-YYSTYPE  yylval;
-
+typedef struct {
+    unsigned stacksize;
+    YYINT    *s_base;
+    YYINT    *s_mark;
+    YYINT    *s_last;
+    YYSTYPE  *l_base;
+    YYSTYPE  *l_mark;
+} YYSTACKDATA;
 /* variables for the parser stack */
-static short   *yyss;
-static short   *yysslim;
-static YYSTYPE *yyvs;
-static int      yystacksize;
+static YYSTACKDATA yystack;
+#line 395 "vcc.y"
 static int pushVObject(const char *prop)
     {
     VObject *newObj;
@@ -462,8 +609,8 @@ static void enterValues(const char *value)
     {
     if (fieldedProp && *fieldedProp) {
         if (value) {
-          (void)addPropValue(curProp,*fieldedProp,value);
-        }
+            (void) addPropValue(curProp,*fieldedProp,value);
+            }
         /* else this field is empty, advance to next field */
         fieldedProp++;
         }
@@ -944,7 +1091,7 @@ static char * lexGetDataFromBase64()
                 }
             }
         } /* while */
-    DBG_(("db: bytesLen = %lu\n",  (unsigned long)bytesLen));
+    DBG_(("db: bytesLen = %lu\n", (unsigned long)bytesLen));
     /* kludge: all this won't be necessary if we have tree form
         representation */
     if (bytes) {
@@ -1097,12 +1244,12 @@ int yylex() {
                 case ':': {
                     /* consume all line separator(s) adjacent to each other */
                     /* ignoring linesep immediately after colon. */
-/*                  c = lexLookahead();
+                    c = lexLookahead();
                     while (strchr("\n",c)) {
                         lexSkipLookahead();
                         c = lexLookahead();
                         ++mime_lineNum;
-                        }*/
+                    }
                     DBG_(("db: COLON\n"));
                     return COLON;
                     }
@@ -1201,7 +1348,7 @@ VObject* Parse_MIME_FromFile(FILE *file)
     startPos = ftell(file);
     if (!(result = Parse_MIMEHelper())) {
         if (startPos >= 0)
-          (void)fseek(file,startPos,SEEK_SET);
+            (void)fseek(file,startPos,SEEK_SET);
         }
     return result;
     }
@@ -1241,60 +1388,78 @@ static void mime_error(const char *s)
         }
     }
 
-static void mime_error_(char *s)
+static void mime_error_(const char *s)
     {
     if (mimeErrorHandler) {
         mimeErrorHandler(s);
         }
     }
+#line 1398 "vcc.c"
+
+#if YYDEBUG
+#include <stdio.h>		/* needed for printf */
+#endif
+
+#include <stdlib.h>	/* needed for malloc, etc */
+#include <string.h>	/* needed for memset */
 
 /* allocate initial stack or double stack size, up to YYMAXDEPTH */
-static int yygrowstack(void)
+static int yygrowstack(YYSTACKDATA *data)
 {
-    int newsize;
-    ptrdiff_t i;
-    short *newss;
+    int i;
+    unsigned newsize;
+    YYINT *newss;
     YYSTYPE *newvs;
 
-    if ((newsize = yystacksize) == 0)
+    if ((newsize = data->stacksize) == 0)
         newsize = YYINITSTACKSIZE;
     else if (newsize >= YYMAXDEPTH)
-        return -1;
+        return YYENOMEM;
     else if ((newsize *= 2) > YYMAXDEPTH)
         newsize = YYMAXDEPTH;
 
-    i = (ptrdiff_t)(yyssp - yyss);
-    newss = (yyss != 0)
-          ? (short *)realloc(yyss, newsize * sizeof(*newss))
-          : (short *)malloc(newsize * sizeof(*newss));
+    i = (int) (data->s_mark - data->s_base);
+    newss = (YYINT *)realloc(data->s_base, newsize * sizeof(*newss));
     if (newss == 0)
-        return -1;
+        return YYENOMEM;
 
-    yyss  = newss;
-    yyssp = newss + i;
-    newvs = (yyvs != 0)
-          ? (YYSTYPE *)realloc(yyvs, newsize * sizeof(*newvs))
-          : (YYSTYPE *)malloc(newsize * sizeof(*newvs));
+    data->s_base = newss;
+    data->s_mark = newss + i;
+
+    newvs = (YYSTYPE *)realloc(data->l_base, newsize * sizeof(*newvs));
     if (newvs == 0)
-        return -1;
+        return YYENOMEM;
 
-    yyvs = newvs;
-    yyvsp = newvs + i;
-    yystacksize = newsize;
-    yysslim = yyss + newsize - 1;
+    data->l_base = newvs;
+    data->l_mark = newvs + i;
+
+    data->stacksize = newsize;
+    data->s_last = data->s_base + newsize - 1;
     return 0;
 }
 
-#define YYABORT goto yyabort
+#if YYPURE || defined(YY_NO_LEAKS)
+static void yyfreestack(YYSTACKDATA *data)
+{
+    free(data->s_base);
+    free(data->l_base);
+    memset(data, 0, sizeof(*data));
+}
+#else
+#define yyfreestack(data) /* nothing */
+#endif
+
+#define YYABORT  goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
-#define YYERROR goto yyerrlab
+#define YYERROR  goto yyerrlab
+
 int
-yyparse(void)
+YYPARSE_DECL()
 {
-    register int yym, yyn, yystate;
+    int yym, yyn, yystate;
 #if YYDEBUG
-    register const char *yys;
+    const char *yys;
 
     if ((yys = getenv("YYDEBUG")) != 0)
     {
@@ -1307,23 +1472,27 @@ yyparse(void)
     yynerrs = 0;
     yyerrflag = 0;
     yychar = YYEMPTY;
+    yystate = 0;
 
-    if (yyss == NULL && yygrowstack()) goto yyoverflow;
-    yyssp = yyss;
-    yyvsp = yyvs;
-    *yyssp = yystate = 0;
+#if YYPURE
+    memset(&yystack, 0, sizeof(yystack));
+#endif
+
+    if (yystack.s_base == NULL && yygrowstack(&yystack) == YYENOMEM) goto yyoverflow;
+    yystack.s_mark = yystack.s_base;
+    yystack.l_mark = yystack.l_base;
+    yystate = 0;
+    *yystack.s_mark = 0;
 
 yyloop:
     if ((yyn = yydefred[yystate]) != 0) goto yyreduce;
     if (yychar < 0)
     {
-        if ((yychar = yylex()) < 0) yychar = 0;
+        if ((yychar = YYLEX) < 0) yychar = YYEOF;
 #if YYDEBUG
         if (yydebug)
         {
-            yys = 0;
-            if (yychar <= YYMAXTOKEN) yys = yyname[yychar];
-            if (!yys) yys = "illegal-symbol";
+            yys = yyname[YYTRANSLATE(yychar)];
             printf("%sdebug: state %d, reading %d (%s)\n",
                     YYPREFIX, yystate, yychar, yys);
         }
@@ -1337,12 +1506,13 @@ yyloop:
             printf("%sdebug: state %d, shifting to state %d\n",
                     YYPREFIX, yystate, yytable[yyn]);
 #endif
-        if (yyssp >= yysslim && yygrowstack())
+        if (yystack.s_mark >= yystack.s_last && yygrowstack(&yystack) == YYENOMEM)
         {
             goto yyoverflow;
         }
-        *++yyssp = yystate = yytable[yyn];
-        *++yyvsp = yylval;
+        yystate = yytable[yyn];
+        *++yystack.s_mark = yytable[yyn];
+        *++yystack.l_mark = yylval;
         yychar = YYEMPTY;
         if (yyerrflag > 0)  --yyerrflag;
         goto yyloop;
@@ -1355,11 +1525,9 @@ yyloop:
     }
     if (yyerrflag) goto yyinrecovery;
 
-    yyerror("syntax error");
+    YYERROR_CALL("syntax error");
 
-#ifdef lint
     goto yyerrlab;
-#endif
 
 yyerrlab:
     ++yynerrs;
@@ -1370,20 +1538,21 @@ yyinrecovery:
         yyerrflag = 3;
         for (;;)
         {
-            if ((yyn = yysindex[*yyssp]) && (yyn += YYERRCODE) >= 0 &&
+            if ((yyn = yysindex[*yystack.s_mark]) && (yyn += YYERRCODE) >= 0 &&
                     yyn <= YYTABLESIZE && yycheck[yyn] == YYERRCODE)
             {
 #if YYDEBUG
                 if (yydebug)
                     printf("%sdebug: state %d, error recovery shifting\
- to state %d\n", YYPREFIX, *yyssp, yytable[yyn]);
+ to state %d\n", YYPREFIX, *yystack.s_mark, yytable[yyn]);
 #endif
-                if (yyssp >= yysslim && yygrowstack())
+                if (yystack.s_mark >= yystack.s_last && yygrowstack(&yystack) == YYENOMEM)
                 {
                     goto yyoverflow;
                 }
-                *++yyssp = yystate = yytable[yyn];
-                *++yyvsp = yylval;
+                yystate = yytable[yyn];
+                *++yystack.s_mark = yytable[yyn];
+                *++yystack.l_mark = yylval;
                 goto yyloop;
             }
             else
@@ -1391,23 +1560,21 @@ yyinrecovery:
 #if YYDEBUG
                 if (yydebug)
                     printf("%sdebug: error recovery discarding state %d\n",
-                            YYPREFIX, *yyssp);
+                            YYPREFIX, *yystack.s_mark);
 #endif
-                if (yyssp <= yyss) goto yyabort;
-                --yyssp;
-                --yyvsp;
+                if (yystack.s_mark <= yystack.s_base) goto yyabort;
+                --yystack.s_mark;
+                --yystack.l_mark;
             }
         }
     }
     else
     {
-        if (yychar == 0) goto yyabort;
+        if (yychar == YYEOF) goto yyabort;
 #if YYDEBUG
         if (yydebug)
         {
-            yys = 0;
-            if (yychar <= YYMAXTOKEN) yys = yyname[yychar];
-            if (!yys) yys = "illegal-symbol";
+            yys = yyname[YYTRANSLATE(yychar)];
             printf("%sdebug: state %d, error recovery discards token %d (%s)\n",
                     YYPREFIX, yystate, yychar, yys);
         }
@@ -1424,147 +1591,175 @@ yyreduce:
 #endif
     yym = yylen[yyn];
     if (yym)
-        yyval = yyvsp[1-yym];
+        yyval = yystack.l_mark[1-yym];
     else
         memset(&yyval, 0, sizeof yyval);
     switch (yyn)
     {
 case 2:
-{ addList(&vObjList, yyvsp[0].vobj); curObj = 0; }
+#line 233 "vcc.y"
+	{ addList(&vObjList, yystack.l_mark[0].vobj); curObj = 0; }
 break;
 case 4:
-{ addList(&vObjList, yyvsp[0].vobj); curObj = 0; }
+#line 236 "vcc.y"
+	{ addList(&vObjList, yystack.l_mark[0].vobj); curObj = 0; }
 break;
 case 7:
-{
+#line 245 "vcc.y"
+	{
         lexPushMode(L_VCARD);
         if (!pushVObject(VCCardProp)) YYERROR;
         }
 break;
 case 8:
-{
+#line 250 "vcc.y"
+	{
         lexPopMode(0);
         yyval.vobj = popVObject();
         }
 break;
 case 9:
-{
+#line 255 "vcc.y"
+	{
         lexPushMode(L_VCARD);
         if (!pushVObject(VCCardProp)) YYERROR;
         }
 break;
 case 10:
-{
+#line 260 "vcc.y"
+	{
         lexPopMode(0);
         yyval.vobj = popVObject();
         }
 break;
 case 13:
-{
+#line 271 "vcc.y"
+	{
         lexPushMode(L_VALUES);
         }
 break;
 case 14:
-{
+#line 275 "vcc.y"
+	{
         if (lexWithinMode(L_BASE64) || lexWithinMode(L_QUOTED_PRINTABLE))
            lexPopMode(0);
         lexPopMode(0);
         }
 break;
 case 16:
-{
-        enterProps(yyvsp[0].str);
+#line 284 "vcc.y"
+	{
+        enterProps(yystack.l_mark[0].str);
         }
 break;
 case 18:
-{
-        enterProps(yyvsp[0].str);
+#line 289 "vcc.y"
+	{
+        enterProps(yystack.l_mark[0].str);
         }
 break;
 case 22:
-{
-        enterAttr(yyvsp[0].str,0);
+#line 302 "vcc.y"
+	{
+        enterAttr(yystack.l_mark[0].str,0);
         }
 break;
 case 23:
-{
-        enterAttr(yyvsp[-2].str,yyvsp[0].str);
+#line 306 "vcc.y"
+	{
+        enterAttr(yystack.l_mark[-2].str,yystack.l_mark[0].str);
 
         }
 break;
 case 25:
-{ enterValues(yyvsp[-1].str); }
+#line 315 "vcc.y"
+	{ enterValues(yystack.l_mark[-1].str); }
 break;
 case 27:
-{ enterValues(yyvsp[0].str); }
+#line 317 "vcc.y"
+	{ enterValues(yystack.l_mark[0].str); }
 break;
 case 29:
-{ yyval.str = 0; }
+#line 321 "vcc.y"
+	{ yyval.str = 0; }
 break;
 case 30:
-{ if (!pushVObject(VCCalProp)) YYERROR; }
+#line 326 "vcc.y"
+	{ if (!pushVObject(VCCalProp)) YYERROR; }
 break;
 case 31:
-{ yyval.vobj = popVObject(); }
+#line 329 "vcc.y"
+	{ yyval.vobj = popVObject(); }
 break;
 case 32:
-{ if (!pushVObject(VCCalProp)) YYERROR; }
+#line 331 "vcc.y"
+	{ if (!pushVObject(VCCalProp)) YYERROR; }
 break;
 case 33:
-{ yyval.vobj = popVObject(); }
+#line 333 "vcc.y"
+	{ yyval.vobj = popVObject(); }
 break;
 case 39:
-{
+#line 348 "vcc.y"
+	{
         lexPushMode(L_VEVENT);
         if (!pushVObject(VCEventProp)) YYERROR;
         }
 break;
 case 40:
-{
+#line 354 "vcc.y"
+	{
         lexPopMode(0);
-        (void)popVObject();
+        popVObject();
         }
 break;
 case 41:
-{
+#line 359 "vcc.y"
+	{
         lexPushMode(L_VEVENT);
         if (!pushVObject(VCEventProp)) YYERROR;
         }
 break;
 case 42:
-{
+#line 364 "vcc.y"
+	{
         lexPopMode(0);
-        (void)popVObject();
+        popVObject();
         }
 break;
 case 43:
-{
+#line 372 "vcc.y"
+	{
         lexPushMode(L_VTODO);
         if (!pushVObject(VCTodoProp)) YYERROR;
         }
 break;
 case 44:
-{
+#line 378 "vcc.y"
+	{
         lexPopMode(0);
-        (void)popVObject();
+        popVObject();
         }
 break;
 case 45:
-{
+#line 383 "vcc.y"
+	{
         lexPushMode(L_VTODO);
         if (!pushVObject(VCTodoProp)) YYERROR;
         }
 break;
 case 46:
-{
+#line 388 "vcc.y"
+	{
         lexPopMode(0);
-        (void)popVObject();
+        popVObject();
         }
 break;
+#line 1759 "vcc.c"
     }
-    yyssp -= yym;
-    yystate = *yyssp;
-    yyvsp -= yym;
+    yystack.s_mark -= yym;
+    yystate = *yystack.s_mark;
+    yystack.l_mark -= yym;
     yym = yylhs[yyn];
     if (yystate == 0 && yym == 0)
     {
@@ -1574,23 +1769,21 @@ break;
  state %d\n", YYPREFIX, YYFINAL);
 #endif
         yystate = YYFINAL;
-        *++yyssp = YYFINAL;
-        *++yyvsp = yyval;
+        *++yystack.s_mark = YYFINAL;
+        *++yystack.l_mark = yyval;
         if (yychar < 0)
         {
-            if ((yychar = yylex()) < 0) yychar = 0;
+            if ((yychar = YYLEX) < 0) yychar = YYEOF;
 #if YYDEBUG
             if (yydebug)
             {
-                yys = 0;
-                if (yychar <= YYMAXTOKEN) yys = yyname[yychar];
-                if (!yys) yys = "illegal-symbol";
+                yys = yyname[YYTRANSLATE(yychar)];
                 printf("%sdebug: state %d, reading %d (%s)\n",
                         YYPREFIX, YYFINAL, yychar, yys);
             }
 #endif
         }
-        if (yychar == 0) goto yyaccept;
+        if (yychar == YYEOF) goto yyaccept;
         goto yyloop;
     }
     if ((yyn = yygindex[yym]) && (yyn += yystate) >= 0 &&
@@ -1601,22 +1794,24 @@ break;
 #if YYDEBUG
     if (yydebug)
         printf("%sdebug: after reduction, shifting from state %d \
-to state %d\n", YYPREFIX, *yyssp, yystate);
+to state %d\n", YYPREFIX, *yystack.s_mark, yystate);
 #endif
-    if (yyssp >= yysslim && yygrowstack())
+    if (yystack.s_mark >= yystack.s_last && yygrowstack(&yystack) == YYENOMEM)
     {
         goto yyoverflow;
     }
-    *++yyssp = yystate;
-    *++yyvsp = yyval;
+    *++yystack.s_mark = (YYINT) yystate;
+    *++yystack.l_mark = yyval;
     goto yyloop;
 
 yyoverflow:
-    yyerror("yacc stack overflow");
+    YYERROR_CALL("yacc stack overflow");
 
 yyabort:
+    yyfreestack(&yystack);
     return (1);
 
 yyaccept:
+    yyfreestack(&yystack);
     return (0);
 }
