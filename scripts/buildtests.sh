@@ -426,7 +426,7 @@ KRAZY() {
 
 #TEMP=`getopt -o hkctbslgad --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
 TEMP=`getopt hkctbslgad $*`
-if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
+if [ $? != 0 ]; then echo "Terminating..." >&2; exit 1; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
 
@@ -439,7 +439,7 @@ rungccbuild=1
 runasanbuild=1
 runtsanbuild=1
 runsplint=1
-while true ; do
+while true; do
     case "$1" in
         -h|--help) HELP; exit 1;;
         -k|--no-krazy)       runkrazy=0;      shift;;

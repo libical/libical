@@ -176,7 +176,7 @@ sub insert_code
           if ($e eq "NONE") {
             my ($tbd) = 1;
             $saveidx++;
-            for (; $saveidx < $idx ; $saveidx++, $tbd++) {
+            for (; $saveidx < $idx; $saveidx++, $tbd++) {
               $lines{$saveidx} =
                 "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_NONE, \"\" }, /*$saveidx*/\n";
             }

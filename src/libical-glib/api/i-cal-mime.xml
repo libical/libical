@@ -22,6 +22,6 @@
         <custom>	g_return_val_if_fail (func != NULL, NULL);
 	g_return_val_if_fail (data != NULL, NULL);
 
-	return i_cal_component_new_full (icalmime_parse(func, data), NULL) ;</custom>
+	return i_cal_component_new_full (icalmime_parse(func, data), NULL);</custom>
     </method>
 </structure>

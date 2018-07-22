@@ -120,7 +120,7 @@ typedef enum icalererorstate {
     ICAL_ERROR_NONFATAL,  /* Fatal */
     ICAL_ERROR_DEFAULT,   /* Use the value of icalerror_errors_are_fatal*/
     ICAL_ERROR_UNKNOWN    /* Asked state for an unknown error type */
-} icalerrorstate ;
+} icalerrorstate;
 
 void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
 icalerrorstate icalerror_get_error_state( icalerrorenum error);

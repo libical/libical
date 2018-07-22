@@ -406,7 +406,7 @@ static yyconst flex_int16_t yy_accept[56] =
         6,   11,   21,   21,   14,   21,   21,   13,   21,   21,
        20,   12,   21,   15,   21,   21,   21,    2,   16,   21,
        21,   21,    3,    1,    0
-    } ;
+    };
 
 static yyconst flex_int32_t yy_ec[256] =
     {   0,

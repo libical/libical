@@ -523,7 +523,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
         period = icalproperty_get_freebusy(prop);
         s->start = icaltime_as_timet_with_zone(period.start, icaltimezone_get_utc_timezone());
         s->end = icaltime_as_timet_with_zone(period.end, icaltimezone_get_utc_timezone());
-        ;
+
         pvl_insert_ordered(sl->spans, compare_span, (void *)s);
     }
   /** @todo calculate start/end limits.. fill in holes? **/

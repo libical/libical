@@ -288,7 +288,7 @@ struct icaltimetype atime;
 
 event = icalcomponent_new(ICAL_VEVENT_COMPONENT);
 
-prop = icalproperty_new_dtstamp(atime) ;
+prop = icalproperty_new_dtstamp(atime);
 
 icalcomponent_add_property(event, prop);
 

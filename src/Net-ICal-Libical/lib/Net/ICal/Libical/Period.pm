@@ -331,25 +331,25 @@ sub test {
 
   $p->duration("PT5H30M10S");
   print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/PT5H30M10S" ;
+  die if $p->as_ical() ne "19970101T180000Z/PT5H30M10S";
 
   $p->duration(new Net::ICal::Duration("P10DT30M5S"));
   print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/P10DT30M5S" ;
+  die if $p->as_ical() ne "19970101T180000Z/P10DT30M5S";
 
   $p->end("19970101T183000Z");
   print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/PT30M" ;
+  die if $p->as_ical() ne "19970101T180000Z/PT30M";
 
   $p = new Net::ICal::Period("19970101T180000Z/19970102T070000Z");
 
   $p->end("19970101T183000Z");
   print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/19970101T183000Z" ;
+  die if $p->as_ical() ne "19970101T180000Z/19970101T183000Z";
 
   $p->duration("P1DT1H10M");
   print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/19970102T191000Z" ;
+  die if $p->as_ical() ne "19970101T180000Z/19970102T191000Z";
 
 
 

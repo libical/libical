@@ -93,7 +93,7 @@ sub insert_code
     }
 
     $idx = $h{'NO'}->{"kindEnum"};
-    print "   ICAL_NO_VALUE=$idx\n} icalvalue_kind ;\n\n";
+    print "   ICAL_NO_VALUE=$idx\n} icalvalue_kind;\n\n";
 
     # Now create enumerations for property values
     $lastidx = $idx = 10000;

@@ -483,7 +483,7 @@ XS(_wrap_icalparser_parse_string) {
     icalcomponent * _result;
     char * _arg0;
     int argvi = 0;
-    dXSARGS ;
+    dXSARGS;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
