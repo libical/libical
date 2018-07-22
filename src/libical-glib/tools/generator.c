@@ -1142,7 +1142,6 @@ void generate_forward_declarations_header_file(GList *structures)
         if (c == '$') {
             if ((c = fgetc(in)) != '{' && c != '^') {
                 printf("The following char is not {");
-                g_free (buffer);
                 fclose(in);
                 fclose(out);
                 return;
