@@ -6,6 +6,8 @@ Version 3.1.0:
  * New publicly available functions:
      + icalrecurrencetype_encode_day
      + icalrecurrencetype_encode_month
+     + icaltzutil_set_zone_directory
+ * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
 
 Version 3.0.4:
 --------------

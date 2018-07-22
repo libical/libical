@@ -81,6 +81,7 @@
 #define bswap_64 __builtin_bswap64
 #endif
 
+//@cond PRIVATE
 typedef struct
 {
     char ttisgmtcnt[4];
@@ -91,9 +92,11 @@ typedef struct
     char charcnt[4];
 } tzinfo;
 
-static const char *zdir = NULL;
+/* fullpath to the system zoneinfo directory (where zone.tab lives) */
+static char s_zoneinfopath[MAXPATHLEN] = {0};
 
-static const char *search_paths[] = {
+/* A few well-known locations for system zoneinfo; can be overridden with TZDIR environment */
+static const char *s_zoneinfo_search_paths[] = {
     "/usr/share/zoneinfo",
     "/usr/lib/zoneinfo",
     "/etc/zoneinfo",
@@ -122,6 +125,7 @@ typedef struct
     time_t transition;
     long int change;
 } leap;
+//@endcond
 
 static int decode(const void *ptr)
 {
@@ -172,28 +176,49 @@ static char *zname_from_stridx(char *str, size_t idx)
     return ret;
 }
 
-static void set_zonedir(void)
+static void set_zoneinfopath(void)
 {
     char file_path[MAXPATHLEN];
     const char *fname = ZONES_TAB_SYSTEM_FILENAME;
-    size_t i, num_search_paths;
+    size_t i, num_zi_search_paths;
 
-    num_search_paths = sizeof(search_paths) / sizeof(search_paths[0]);
-    for (i = 0; i < num_search_paths; i++) {
-        snprintf(file_path, MAXPATHLEN, "%s/%s", search_paths[i], fname);
+    /* Search for the zone.tab file in the dir specified by the TZDIR environment */
+    const char *env_tzdir = getenv("TZDIR");
+    if (env_tzdir != NULL) {
+        snprintf(file_path, MAXPATHLEN, "%s/%s", env_tzdir, fname);
+        if (!access (file_path, F_OK|R_OK)) {
+            strncpy(s_zoneinfopath, env_tzdir, MAXPATHLEN-1);
+            return;
+        }
+    }
+
+    /* Else, search for zone.tab in a list of well-known locations */
+    num_zi_search_paths = sizeof(s_zoneinfo_search_paths) / sizeof(s_zoneinfo_search_paths[0]);
+    for (i = 0; i < num_zi_search_paths; i++) {
+        snprintf(file_path, MAXPATHLEN, "%s/%s", s_zoneinfo_search_paths[i], fname);
         if (!access(file_path, F_OK | R_OK)) {
-            zdir = search_paths[i];
+            strncpy(s_zoneinfopath, s_zoneinfo_search_paths[i], MAXPATHLEN-1);
             break;
         }
     }
 }
 
+void icaltzutil_set_zone_directory(const char *zonepath)
+{
+    if ((zonepath == NULL) || (zonepath[0] == '\0')) {
+        memset(s_zoneinfopath, 0, MAXPATHLEN);
+    } else {
+        strncpy(s_zoneinfopath, zonepath, MAXPATHLEN-1);
+    }
+}
+
 const char *icaltzutil_get_zone_directory(void)
 {
-    if (!zdir)
-        set_zonedir();
+    if (s_zoneinfopath[0] == '\0') {
+        set_zoneinfopath();
+    }
 
-    return zdir;
+    return s_zoneinfopath;
 }
 
 static int calculate_pos(icaltimetype icaltime)

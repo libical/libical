@@ -4150,6 +4150,21 @@ void test_comma_in_quoted_value(void)
     icalcomponent_free(c);
 }
 
+void test_zoneinfo_stuff(void)
+{
+ #if defined(HAVE_SETENV)
+    setenv("TZDIR", TEST_DATADIR, 1);
+#else
+    char tzdir[256] = {0};
+    strncat(tzdir, "TZDIR=" TEST_DATADIR, 255);
+    putenv(tzdir);
+#endif
+    icaltzutil_set_zone_directory(NULL); /*resets to empty */
+    str_is("icaltzutil_get_zone_directory by TZDIR", icaltzutil_get_zone_directory(), TEST_DATADIR);
+    icaltzutil_set_zone_directory("foo");
+    str_is("icaltzutil_get_zone_directory", icaltzutil_get_zone_directory(), "foo");
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4279,6 +4294,7 @@ int main(int argc, char *argv[])
              do_header);
     test_run("Test comma in quoted value of x property", test_comma_in_quoted_value, do_test,
              do_header);
+    test_run("Test setting/unsetting zoneinfo dir", test_zoneinfo_stuff, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
