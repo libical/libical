@@ -1020,7 +1020,7 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 # endif
       char *yyfmt;
       char const *yyf;
-      static char const yyunexpected[] = "syntax error, unexpected %s";
+      static char const yyunexpected[] = "libical: syntax error, unexpected %s";
       static char const yyexpecting[] = ", expecting %s";
       static char const yyor[] = " or %s";
       char yyformat[sizeof yyunexpected
