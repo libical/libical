@@ -200,7 +200,6 @@ void icalmemory_add_tmp_buffer(void *buf)
 
     /* Assign the buffer to a slot */
     br->ring[br->pos] = buf;
-    /* cppcheck-suppress memleak */
 }
 
 /*

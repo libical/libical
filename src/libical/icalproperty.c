@@ -1063,7 +1063,8 @@ void icalproperty_normalize(icalproperty *prop)
  *
  *      FIXME this is useless until we can flag the failure
  */
-struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop, icalcomponent *comp)
+struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop,
+                                                             icalcomponent *comp)
 {
     icalcomponent *c;
     icalparameter *param;
