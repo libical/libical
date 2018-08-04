@@ -28,6 +28,7 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icalparser.h"
+#include "icaltimezone.h"
 #include "icalvalue.h"
 #include "pvl.h"
 
@@ -1048,4 +1049,51 @@ void icalproperty_normalize(icalproperty *prop)
 
     pvl_free(prop->parameters);
     prop->parameters = sorted_params;
+}
+
+/**     @brief Get a DATE or DATE-TIME property as an icaltime
+ *
+ *      If the property is a DATE-TIME with a TZID parameter and a
+ *      corresponding VTIMEZONE is present in the component, the
+ *      returned component will already be in the correct timezone;
+ *      otherwise the caller is responsible for converting it.
+ *
+ *      The @a comp can be NULL, in which case the parent of the @a prop
+ *      is used to find the corresponding time zone.
+ *
+ *      FIXME this is useless until we can flag the failure
+ */
+struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop,
+                                                             icalcomponent *comp)
+{
+    icalcomponent *c;
+    icalparameter *param;
+    struct icaltimetype ret;
+
+    ret = icalvalue_get_datetime(icalproperty_get_value(prop));
+
+    if (icaltime_is_utc(ret))
+        return ret;
+
+    if ((param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER)) != NULL) {
+        const char *tzid = icalparameter_get_tzid(param);
+        icaltimezone *tz = NULL;
+
+        if (!comp)
+            comp = icalproperty_get_parent (prop);
+
+        for (c = comp; c != NULL; c = icalcomponent_get_parent(c)) {
+            tz = icalcomponent_get_timezone(c, tzid);
+            if (tz != NULL)
+                break;
+        }
+
+        if (tz == NULL)
+            tz = icaltimezone_get_builtin_timezone_from_tzid(tzid);
+
+        if (tz != NULL)
+            ret = icaltime_set_timezone(&ret, tz);
+    }
+
+    return ret;
 }

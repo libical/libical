@@ -285,29 +285,8 @@ EOM
         print <<EOM;
 $type icalproperty_get_${lc}(const icalproperty *prop)
 {
-#ifndef _MSC_VER
-        struct icaltimetype itt;
-        icalparameter *param;
-        icaltimezone *zone;
-#endif
-        icalerror_check_arg((prop != 0), "prop");
-#ifndef _MSC_VER
-        /*
-         * Code by dirk\@objectpark.net:
-         * Set the time zone manually. I am really puzzled that
-         * it doesnot work automatically like in the other functions
-         * like icalproperty_get_dtstart().
-         */
-        itt = icalvalue_get_datetime(icalproperty_get_value(prop));
-        param = icalproperty_get_first_parameter((icalproperty *)prop, ICAL_TZID_PARAMETER);
-        if (param) {
-                zone = icaltimezone_get_builtin_timezone(icalparameter_get_tzid(param));
-                (void)icaltime_set_timezone(&itt, zone);
-        }
-        return itt;
-#else
-    return icalvalue_get_datetime(icalproperty_get_value(prop));
-#endif
+    icalerror_check_arg((prop != 0), "prop");
+    return icalproperty_get_datetime_with_component((icalproperty *)prop, NULL);
 }
 
 EOM

@@ -24,6 +24,7 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icalparser.h"
+#include "icalproperty_p.h"
 #include "icalrestriction.h"
 #include "icaltimezone.h"
 
@@ -64,7 +65,6 @@ static void icalcomponent_rename_tzids(icalcomponent *comp, icalarray *rename_ta
 static void icalcomponent_rename_tzids_callback(icalparameter *param, void *data);
 static int icalcomponent_compare_vtimezones(icalcomponent *vtimezone1, icalcomponent *vtimezone2);
 static int icalcomponent_compare_timezone_fn(const void *elem1, const void *elem2);
-static struct icaltimetype icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop);
 
 void icalcomponent_add_children(icalcomponent *impl, va_list args)
 {
@@ -749,7 +749,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
     for (exdate = icalcomponent_get_first_property(comp, ICAL_EXDATE_PROPERTY);
          exdate != NULL; exdate = icalcomponent_get_next_property(comp, ICAL_EXDATE_PROPERTY)) {
 
-        struct icaltimetype exdatetime = icalcomponent_get_datetime(comp, exdate);
+        struct icaltimetype exdatetime = icalproperty_get_datetime_with_component(exdate, comp);
 
         if ((icaltime_is_date(exdatetime) &&
              icaltime_compare_date_only(*recurtime, exdatetime) == 0) ||
@@ -1426,43 +1426,6 @@ void icalcomponent_set_dtstart(icalcomponent *comp, struct icaltimetype v)
     }
 }
 
-/**     @brief Get a DATE or DATE-TIME property as an icaltime
- *
- *      If the property is a DATE-TIME with a timezone parameter and a
- *      corresponding VTIMEZONE is present in the component, the
- *      returned component will already be in the correct timezone;
- *      otherwise the caller is responsible for converting it.
- *
- *      FIXME this is useless until we can flag the failure
- */
-static struct icaltimetype icalcomponent_get_datetime(icalcomponent *comp, icalproperty *prop)
-{
-    icalcomponent *c;
-    icalparameter *param;
-    struct icaltimetype ret;
-
-    ret = icalvalue_get_datetime(icalproperty_get_value(prop));
-
-    if ((param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER)) != NULL) {
-        const char *tzid = icalparameter_get_tzid(param);
-        icaltimezone *tz = NULL;
-
-        for (c = comp; c != NULL; c = icalcomponent_get_parent(c)) {
-            tz = icalcomponent_get_timezone(c, tzid);
-            if (tz != NULL)
-                break;
-        }
-
-        if (tz == NULL)
-            tz = icaltimezone_get_builtin_timezone_from_tzid(tzid);
-
-        if (tz != NULL)
-            ret = icaltime_set_timezone(&ret, tz);
-    }
-
-    return ret;
-}
-
 /**     @brief Get DTSTART property as an icaltime
  *
  *      If DTSTART is a DATE-TIME with a timezone parameter and a
@@ -1482,7 +1445,7 @@ struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp)
         return icaltime_null_time();
     }
 
-    return icalcomponent_get_datetime(comp, prop);
+    return icalproperty_get_datetime_with_component(prop, comp);
 }
 
 /**     @brief Get DTEND property as an icaltime
@@ -1505,7 +1468,7 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
     struct icaltimetype ret = icaltime_null_time();
 
     if (end_prop != 0) {
-        ret = icalcomponent_get_datetime(comp, end_prop);
+        ret = icalproperty_get_datetime_with_component(end_prop, comp);
     } else if (dur_prop != 0) {
 
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
@@ -2504,7 +2467,7 @@ struct icaltimetype icalcomponent_get_due(icalcomponent *comp)
     icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
 
     if (due_prop != 0) {
-        return icalcomponent_get_datetime(comp, due_prop);
+        return icalproperty_get_datetime_with_component(due_prop, comp);
     } else if (dur_prop != 0) {
 
         struct icaltimetype start = icalcomponent_get_dtstart(inner);

@@ -2059,7 +2059,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
         if (parameter && parameter->type && parameter->type[strlen(parameter->type) - 1] == '*') {
             trueType = get_true_type(parameter->type);
             for (i = 0;
-                 trueType[i] && i < namespace_len && namespace[i] == trueType[i];
+                 i < namespace_len && trueType[i] && namespace[i] == trueType[i];
                  i++);
 
             if (i == namespace_len) {

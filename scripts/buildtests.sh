@@ -97,7 +97,7 @@ COMPILE_WARNINGS() {
 # print warnings found in the cppcheck output
 # $1 = file with the cppcheck output
 CPPCHECK_WARNINGS() {
-  CHECK_WARNINGS $1 "\(warning\)" ""
+  CHECK_WARNINGS $1 "\(warning\|error\|information\|portability\)" ""
 }
 
 #function TIDY_WARNINGS:
@@ -154,7 +154,7 @@ BUILD() {
 # $2 = CMake options
 GCC_BUILD() {
   name="$1-gcc"
-  if ( test $rungccbuild -eq 0 )
+  if ( test $rungccbuild -ne 1 )
   then
     echo "===== GCC BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
@@ -172,7 +172,7 @@ GCC_BUILD() {
 # $2 = CMake options
 CLANG_BUILD() {
   name="$1-clang"
-  if ( test $runclangbuild -eq 0 )
+  if ( test $runclangbuild -ne 1 )
   then
     echo "===== CLANG BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
@@ -190,7 +190,7 @@ CLANG_BUILD() {
 # $2 = CMake options
 ASAN_BUILD() {
   name="$1-asan"
-  if ( test $runasanbuild -eq 0 )
+  if ( test $runasanbuild -ne 1 )
   then
     echo "===== ASAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
@@ -207,7 +207,7 @@ ASAN_BUILD() {
 # $2 = CMake options
 TSAN_BUILD() {
   name="$1-tsan"
-  if ( test $runtsanbuild -eq 0 )
+  if ( test $runtsanbuild -ne 1 )
   then
     echo "===== TSAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
@@ -224,7 +224,7 @@ TSAN_BUILD() {
 # $2 = CMake options
 CPPCHECK() {
   name="$1-cppcheck"
-  if ( test $runcppcheck -eq 0 )
+  if ( test $runcppcheck -ne 1 )
   then
     echo "===== CPPCHECK TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
@@ -249,6 +249,11 @@ CPPCHECK() {
            -D size_t="unsigned long" \
            -D bswap32="" \
            -D PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP="" \
+           -D _unused="(void)" \
+           -D F_OK=0 \
+           -D R_OK=0 \
+           -U YYSTYPE \
+           -U PVL_USE_MACROS \
            -I $BDIR \
            -I $BDIR/src/libical \
            -I $BDIR/src/libicalss \
@@ -260,7 +265,8 @@ CPPCHECK() {
       grep -v 'cannot find all the include files' | \
       grep -v Net-ICal | \
       grep -v icalssyacc\.c  | \
-      grep -v icalsslexer\.c | tee cppcheck.out
+      grep -v icalsslexer\.c | \
+      grep -v _cxx\. | tee cppcheck.out
   CPPCHECK_WARNINGS cppcheck.out
   rm -f cppcheck.out
   CLEAN
@@ -273,7 +279,7 @@ CPPCHECK() {
 # $2 = CMake options
 SPLINT() {
   name="$1-splint"
-  if ( test $runsplint -eq 0 )
+  if ( test $runsplint -ne 1 )
   then
     echo "===== SPLINT TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
@@ -357,7 +363,7 @@ SPLINT() {
 # $1 = the name of the test (which will have "-tidy" appended)
 # $2 = CMake options
 CLANGTIDY() {
-  if ( test $runtidy -eq 0 )
+  if ( test $runtidy -ne 1 )
   then
     echo "===== CLANG-TIDY TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
@@ -378,7 +384,7 @@ CLANGTIDY() {
 # $1 = the name of the test (which will have "-scan" appended)
 # $2 = CMake options
 CLANGSCAN() {
-  if ( test $runscan -eq 0 )
+  if ( test $runscan -ne 1 )
   then
     echo "===== SCAN-BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
@@ -403,7 +409,7 @@ CLANGSCAN() {
 #function KRAZY
 # runs a krazy2 test
 KRAZY() {
-  if ( test $runkrazy -eq 0 )
+  if ( test $runkrazy -ne 1 )
   then
     echo "===== KRAZY TEST DISABLED DUE TO COMMAND LINE OPTION ====="
     return
@@ -450,7 +456,7 @@ while true; do
         -l|--no-clang-build) runclangbuild=0; shift;;
         -g|--no-gcc-build)   rungccbuild=0;   shift;;
         -a|--no-asan-build)  runasanbuild=0;  shift;;
-        -d|--no-tsan-build)  runtsanbuild=0;shift;;
+        -d|--no-tsan-build)  runtsanbuild=0;  shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
