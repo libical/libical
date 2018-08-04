@@ -8,6 +8,7 @@ Version 3.0.4:
  * fix FREQ=MONTHLY;BYMONTH
  * Skip UTF-8 marker when parsing
  * Fix parsing <CR>?<LF> in VCF files produced by Outlook
+ * Fix TZID on DATE-TIME value can override time specified in UTC
  * CMake discovery module for ICU uses pkg-config now
 
 Version 3.0.3:
