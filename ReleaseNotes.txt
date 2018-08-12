@@ -20,6 +20,7 @@ Version 3.0.4:
  * CMake discovery module for ICU uses pkg-config now
  * New publicly available function:
      + icalparameter_kind_is_valid()
+ * Built-in timezones updated to tzdata2018e
 
 Version 3.0.3:
 --------------
