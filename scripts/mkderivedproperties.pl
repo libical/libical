@@ -86,7 +86,7 @@ sub insert_code
 
       next if !$prop;
 
-      next if $prop eq 'NO';
+      next if $prop eq 'NO' or $prop eq 'ANY';
 
       my ($uc, $lc, $lcvalue, $ucvalue, $type, @comp_types) = fudge_data($prop);
       my $defvalue = $propmap{$prop}->{'default_value'};

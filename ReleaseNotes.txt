@@ -10,6 +10,8 @@ Version 3.0.4:
  * Fix parsing <CR>?<LF> in VCF files produced by Outlook
  * Fix TZID on DATE-TIME value can override time specified in UTC
  * CMake discovery module for ICU uses pkg-config now
+ * New publicly available function:
+     + icalparameter_kind_is_valid()
 
 Version 3.0.3:
 --------------

@@ -613,4 +613,17 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_kind_to_string(icalparameter_kind 
  */
 LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *string);
 
+/**
+ * @brief Checks the validity of a ::icalparameter_kind
+ * @param kind The icalparameter_kind
+ * @return 1 if if the kind is valid, 0 otherwise
+ *
+ * ### Usage
+ * ```c
+ * assert(icalparameter_kind_is_valid(ICAL_ROLE_PARAMETER));
+ * ```
+ * @since 3.0.4
+ */
+LIBICAL_ICAL_EXPORT int icalparameter_kind_is_valid(const icalparameter_kind kind);
+
 #endif

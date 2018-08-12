@@ -110,4 +110,9 @@
         <returns type="ICalParameterKind" comment="The #ICalParameterKind converted from @string" />
         <comment xml:space="preserve">Convert a string to the #ICalParameterKind</comment>
     </method>
+    <method name="i_cal_parameter_kind_is_valid" corresponds="icalparameter_kind_is_valid" since="3.0.4">
+        <parameter type="const ICalParameterKind" name="kind" comment="The #ICalPropertyKind"/>
+        <returns type="gint" comment="1 if valid, 0 if not."/>
+        <comment xml:space="preserve">Check whether #ICalParameterKind is valid.</comment>
+    </method>
 </structure>

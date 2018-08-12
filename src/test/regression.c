@@ -4140,6 +4140,78 @@ void test_tzid_with_utc_time(void)
     icalcomponent_free (comp);
 }
 
+void test_kind_to_string(void)
+{
+    // value testing
+    ok("VALUE_KIND ICAL_ANY_VALUE is NULL",
+       (icalvalue_kind_to_string(ICAL_ANY_VALUE) == NULL));
+    str_is("VALUE_KIND ICAL_POLLCOMPLETION_VALUE",
+           icalvalue_kind_to_string(ICAL_POLLCOMPLETION_VALUE), "POLLCOMPLETION");
+    str_is("VALUE_KIND ICAL_NO_VALUE",
+           icalvalue_kind_to_string(ICAL_NO_VALUE), "");
+
+    ok("VALUE_KIND ICAL_ANY_VALUE is invalid",
+       !icalvalue_kind_is_valid(ICAL_ANY_VALUE));
+    ok("VALUE_KIND ICAL_POLLCOMPLETION_VALUE is valid",
+       icalvalue_kind_is_valid(ICAL_POLLCOMPLETION_VALUE));
+    ok("VALUE_KIND ICAL_NO_VALUE is valid",
+       icalvalue_kind_is_valid(ICAL_NO_VALUE));
+
+    // parameter testing
+    ok("PARAMETER_KIND ICAL_ANY_PARAMETER is NULL",
+       (icalparameter_kind_to_string(ICAL_ANY_PARAMETER) == NULL));
+    str_is("PARAMETER_KIND ICAL_EMAIL_PARAMETER",
+           icalparameter_kind_to_string(ICAL_EMAIL_PARAMETER), "EMAIL");
+    str_is("PARAMETER_KIND ICAL_NO_PARAMETER",
+           icalparameter_kind_to_string(ICAL_NO_PARAMETER), "");
+
+    ok("PARAMETER_KIND ICAL_ANY_PARAMETER is invalid",
+       !icalparameter_kind_is_valid(ICAL_ANY_PARAMETER));
+    ok("PARAMETER_KIND ICAL_EMAIL_PARAMETER is valid",
+       icalparameter_kind_is_valid(ICAL_EMAIL_PARAMETER));
+    ok("PARAMETER_KIND ICAL_NO_PARAMETER is valid",
+       icalparameter_kind_is_valid(ICAL_NO_PARAMETER));
+
+    // property testing
+    ok("PROPERTY_KIND ICAL_ANY_PROPERTY is NULL",
+       (icalproperty_kind_to_string(ICAL_ANY_PROPERTY) == NULL));
+    str_is("PROPERTY_KIND ICAL_VOTER_PROPERTY",
+           icalproperty_kind_to_string(ICAL_VOTER_PROPERTY), "VOTER");
+    str_is("PROPERTY_KIND ICAL_NO_PROPERTY",
+           icalproperty_kind_to_string(ICAL_NO_PROPERTY), "");
+
+    ok("PROPERTY_KIND ICAL_ANY_PROPERTY is invalid",
+       !icalproperty_kind_is_valid(ICAL_ANY_PROPERTY));
+    ok("PROPERTY_KIND ICAL_VOTER_PROPERTY is valid",
+       icalproperty_kind_is_valid(ICAL_VOTER_PROPERTY));
+    ok("PROPERTY_KIND ICAL_NO_PROPERTY is valid",
+       icalproperty_kind_is_valid(ICAL_NO_PROPERTY));
+}
+
+void test_string_to_kind(void)
+{
+    ok("VALUE NULL is ICAL_NO_VALUE",
+       (icalvalue_string_to_kind(NULL) == ICAL_NO_VALUE));
+    int_is("ICAL_POLLCOMPLETION_VALUE is POLLCOMPLETION",
+           icalvalue_string_to_kind("POLLCOMPLETION"), ICAL_POLLCOMPLETION_VALUE);
+    int_is("ICAL_NO_VALUE is empty string",
+           icalvalue_string_to_kind(""), ICAL_NO_VALUE);
+
+    ok("PARAMETER NULL is ICAL_NO_PARAMETER",
+       (icalparameter_string_to_kind(NULL) == ICAL_NO_PARAMETER));
+    int_is("ICAL_EMAIL_PARAMETER is EMAIL",
+           icalparameter_string_to_kind("EMAIL"), ICAL_EMAIL_PARAMETER);
+    int_is("ICAL_NO_PARAMETER is empty string",
+           icalparameter_string_to_kind(""), ICAL_NO_PARAMETER);
+
+    ok("PROPERTY NULL is ICAL_NO_PROPERTY",
+       (icalproperty_string_to_kind(NULL) == ICAL_NO_PROPERTY));
+    int_is("ICAL_VOTER_PROPERTY is VOTER",
+           icalproperty_string_to_kind("VOTER"), ICAL_VOTER_PROPERTY);
+    int_is("ICAL_NO_PROPERTY is empty string",
+           icalproperty_string_to_kind(""), ICAL_NO_PROPERTY);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4268,6 +4340,8 @@ int main(int argc, char *argv[])
     test_run("Test comma in quoted value of x property", test_comma_in_quoted_value, do_test,
              do_header);
     test_run("Test TZID with UTC time", test_tzid_with_utc_time, do_test, do_header);
+    test_run("Test kind_to_string", test_kind_to_string, do_test, do_header);
+    test_run("Test string_to_kind", test_string_to_kind, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
