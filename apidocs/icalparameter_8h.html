@@ -105,6 +105,9 @@ Functions</h2></td></tr>
 <tr class="separator:a0671e8fcd545049a3fbc1b5d5d0f2b2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a960908ba27797c51f965b997be99f284"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a960908ba27797c51f965b997be99f284">icalparameter_isa_parameter</a> (void *param)</td></tr>
 <tr class="separator:a960908ba27797c51f965b997be99f284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a236331311b5c8957e718f6abb205fb66"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a236331311b5c8957e718f6abb205fb66">icalparameter_kind_is_valid</a> (const icalparameter_kind kind)</td></tr>
+<tr class="memdesc:a236331311b5c8957e718f6abb205fb66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the validity of a ::icalparameter_kind.  <a href="#a236331311b5c8957e718f6abb205fb66">More...</a><br /></td></tr>
+<tr class="separator:a236331311b5c8957e718f6abb205fb66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2bc3ace454dda792d4847dcc919d241"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#af2bc3ace454dda792d4847dcc919d241">icalparameter_kind_to_string</a> (icalparameter_kind kind)</td></tr>
 <tr class="memdesc:af2bc3ace454dda792d4847dcc919d241"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string representing the given ::icalparameter_kind.  <a href="#af2bc3ace454dda792d4847dcc919d241">More...</a><br /></td></tr>
 <tr class="separator:af2bc3ace454dda792d4847dcc919d241"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -448,6 +451,34 @@ Functions</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>This function expects to be given an object originating from libical - if this function is passed anything that is not from libical, it's behavior is undefined.</dd></dl>
 <p><b>Error</b> handling When given a <code>NULL</code> object, it returns 0.</p>
 <p><b>Usage</b> </p><div class="fragment"><div class="line"><span class="comment">// create parameter</span></div><div class="line">icalparameter *param = <a class="code" href="icalparameter_8h.html#a742e0609475e48232a0e5208184d3767">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div><div class="line"></div><div class="line"><span class="comment">// check if it&#39;s a parameter</span></div><div class="line">assert(<a class="code" href="icalparameter_8h.html#a960908ba27797c51f965b997be99f284">icalparameter_isa_parameter</a>(param));</div><div class="line"></div><div class="line"><span class="comment">// release memory</span></div><div class="line"><a class="code" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div></div><!-- fragment --> 
+</div>
+</div>
+<a id="a236331311b5c8957e718f6abb205fb66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a236331311b5c8957e718f6abb205fb66">&#9670;&nbsp;</a></span>icalparameter_kind_is_valid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int icalparameter_kind_is_valid </td>
+          <td>(</td>
+          <td class="paramtype">const icalparameter_kind&#160;</td>
+          <td class="paramname"><em>kind</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks the validity of a ::icalparameter_kind. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>The icalparameter_kind </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if if the kind is valid, 0 otherwise</dd></dl>
+<p>### Usage </p><div class="fragment"><div class="line">assert(<a class="code" href="icalparameter_8h.html#a236331311b5c8957e718f6abb205fb66">icalparameter_kind_is_valid</a>(ICAL_ROLE_PARAMETER));</div></div><!-- fragment --> <dl class="section since"><dt>Since</dt><dd>3.0.4 </dd></dl>
+
 </div>
 </div>
 <a id="af2bc3ace454dda792d4847dcc919d241"></a>

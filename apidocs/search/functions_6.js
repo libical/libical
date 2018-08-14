@@ -62,6 +62,7 @@ var searchData=
   ['icalparameter_5fhas_5fsame_5fname',['icalparameter_has_same_name',['../icalparameter_8h.html#add735467f8a84b476f5899e262a072a2',1,'icalparameter.c']]],
   ['icalparameter_5fisa',['icalparameter_isa',['../icalparameter_8h.html#a0671e8fcd545049a3fbc1b5d5d0f2b2b',1,'icalparameter.c']]],
   ['icalparameter_5fisa_5fparameter',['icalparameter_isa_parameter',['../icalparameter_8h.html#a960908ba27797c51f965b997be99f284',1,'icalparameter.c']]],
+  ['icalparameter_5fkind_5fis_5fvalid',['icalparameter_kind_is_valid',['../icalparameter_8h.html#a236331311b5c8957e718f6abb205fb66',1,'icalparameter.h']]],
   ['icalparameter_5fkind_5fto_5fstring',['icalparameter_kind_to_string',['../icalparameter_8h.html#af2bc3ace454dda792d4847dcc919d241',1,'icalparameter.h']]],
   ['icalparameter_5fnew',['icalparameter_new',['../icalparameter_8h.html#a2ac8c2694443398bd6253e4a5ab2c3b0',1,'icalparameter.c']]],
   ['icalparameter_5fnew_5fclone',['icalparameter_new_clone',['../icalparameter_8h.html#a560f57eddaa8d43f28a3b9b758563581',1,'icalparameter.c']]],
