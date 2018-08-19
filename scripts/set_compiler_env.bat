@@ -43,6 +43,7 @@ endlocal & set PATH=%PATH:C:\Program Files\Git\usr\bin;=% & set PATH=c:\MinGW\bi
 :eof
 if "%CMAKE_GENERATOR%"=="Ninja" (
     cinst -y ninja
+    set PATH=C:\tools\ninja;%PATH%
 )
 if "%CMAKE_GENERATOR%"=="NMake Makefiles JOM" (
     cinst -y jom
