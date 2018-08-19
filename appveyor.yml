@@ -71,7 +71,7 @@ build_script:
   - cd c:\dev\libical
   - mkdir build
   - cd build
-  - cmake .. -G "%CMAKE_GENERATOR" -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False
+  - cmake .. -G "%CMAKE_GENERATOR%" -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False
   - cmake --build . --config Debug
   - cmake --build . --config Release
 
