@@ -30,15 +30,15 @@ clone_folder: c:\dev\libical
   #- CMAKE_GENERATOR: "Ninja"
     #PLATFORM: X64
     #COMPILER: msvc2015
+ #- CMAKE_GENERATOR: "Visual Studio 12"
+    #PLATFORM: X86
+    #COMPILER: msvc2013
 
 environment:
   matrix:
   - CMAKE_GENERATOR: "NMake Makefiles"
     PLATFORM: X86
     COMPILER: msvc2008
-  - CMAKE_GENERATOR: "Visual Studio 12"
-    PLATFORM: X86
-    COMPILER: msvc2013
   - CMAKE_GENERATOR: "Visual Studio 12 Win64"
     PLATFORM: X64
     COMPILER: msvc2013
