@@ -103,8 +103,9 @@ For instance:
 
 == Language Bindings ==
 This C library can be built with bindings for these other languages:
-* C++. By default the buildsystem will create and install the C++ bindings API.
+* C++. If a C++ compiler is found the buildsystem will create and install the C++ bindings API.
   Turn this off by passing -DWITH_CXX_BINDINGS=False option to CMake.
+  Don't mix ABI from C and C++ compilers.
 
 * There are Java, Perl, PHP and Python bindings but they are old and haven't
   been tested in a very long time.  Volunteers wanted.
