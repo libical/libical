@@ -1,9 +1,9 @@
 #---------------------------------#
-#      general COMPILER      #
+#      general configuration      #
 #---------------------------------#
 
 # version format
-version: '{build}-{branch}'
+version: 1.0.{build}-{branch}
 
 # branches to build
 branches:
@@ -13,78 +13,65 @@ branches:
 # Do not build on tags (GitHub and BitBucket)
 skip_tags: false
 
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# Build worker image
+image:
+  - Visual Studio 2013
+
+# scripts that are called at very beginning, before repo cloning
 init:
   - git config --global core.autocrlf input
 
-clone_folder: c:\dev\libical
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
 
-  #- CMAKE_GENERATOR: "Ninja"
-    #PLATFORM: X86
-    #COMPILER: msvc2013
-  #- CMAKE_GENERATOR: "Ninja"
-    #PLATFORM: X64
-    #COMPILER: msvc2013
-  #- CMAKE_GENERATOR: "Ninja"
-    #PLATFORM: X86
-    #COMPILER: msvc2015
-  #- CMAKE_GENERATOR: "Ninja"
-    #PLATFORM: X64
-    #COMPILER: msvc2015
- #- CMAKE_GENERATOR: "Visual Studio 12"
-    #PLATFORM: X86
-    #COMPILER: msvc2013
-  #- CMAKE_GENERATOR: "Visual Studio 12 Win64"
-    #PLATFORM: X64
-    #COMPILER: msvc2013
-  #- CMAKE_GENERATOR: "Visual Studio 14"
-    #PLATFORM: X86
-    #COMPILER: msvc2015
-  #- CMAKE_GENERATOR: "Visual Studio 14 Win64"
-    #PLATFORM: X64
-    #COMPILER: msvc2015
-  #- CMAKE_GENERATOR: "NMake Makefiles JOM"
-    #PLATFORM: X86
-    #COMPILER: msvc2013
-  #- CMAKE_GENERATOR: "NMake Makefiles JOM"
-    #PLATFORM: X64
-    #COMPILER: msvc2013
-  #- CMAKE_GENERATOR: "NMake Makefiles JOM"
-    #PLATFORM: X86
-    #COMPILER: msvc2015
-  #- CMAKE_GENERATOR: "NMake Makefiles JOM"
-    #PLATFORM: X64
-    #COMPILER: msvc2015
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform:
+#  - x86 uses 32bit time_t
+  - x64
 
-environment:
-  matrix:
-  - CMAKE_GENERATOR: "NMake Makefiles"
-    PLATFORM: X86
-    COMPILER: msvc2008
-  - CMAKE_GENERATOR: "MinGW Makefiles"
-    PLATFORM: X64
-    COMPILER: MinGW
-
-matrix:
-  fast_finish: true
+# build Configuration, i.e. Debug, Release, etc.
+configuration:
+#  - 2015
+  - 2013
+  - 2012
+#  - MinGW
+#todo: 2010, 2008
 
 build_script:
   - call scripts\set_compiler_env.bat
-  - cd c:\dev\libical
   - mkdir build
   - cd build
-  - cmake .. -G "%CMAKE_GENERATOR%" -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False
-  - cmake --build . --config Debug
-  - cmake --build . --config Release
+  - if "%configuration%" EQU "MinGW" ( cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False .. ) else ( cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False .. )
+  - nmake
 
 # to disable automatic builds
 #build: off
 
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
 test_script:
-  - cmd: ctest --output-on-failure -C "Debug"
-  - cmd: ctest --output-on-failure -C "Release"
+  - nmake test
+
+# to disable automatic tests
+#test: off
+
+
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#
 
 deploy: off
 
+#---------------------------------#
+#         notifications           #
+#---------------------------------#
 notifications:
   # Email
   - provider: Email
