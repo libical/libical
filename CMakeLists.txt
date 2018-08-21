@@ -71,7 +71,7 @@
 #
 
 cmake_minimum_required(VERSION 3.1.0) #first line, to shutup a cygwin warning
-project(libical C CXX)
+project(libical C) #CXX is optional for the bindings
 
 cmake_policy(SET CMP0003 NEW)
 if(POLICY CMP0042)
@@ -538,14 +538,22 @@ endif()
 ########################################################
 
 option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
+if(WITH_CXX_BINDINGS)
+  if(CMAKE_CXX_COMPILER)
+    add_definitions(-DWITH_CXX_BINDINGS)
+  else()
+    message(STATUS
+      "Warning: Building the C++ bindings is not possible since a C++ compiler could not be found. "
+      "Turning-off C++ bindings"
+    )
+    set(WITH_CXX_BINDINGS False)
+  endif()
+endif()
 add_feature_info(
   "Option WITH_CXX_BINDINGS"
   WITH_CXX_BINDINGS
-  "build the C++ bindings"
+  "build the C++ bindings. Requires a C++ compiler"
 )
-if(WITH_CXX_BINDINGS)
-  add_definitions(-DWITH_CXX_BINDINGS)
-endif()
 
 #some test programs need to know if we are using 32-bit time
 if(SIZEOF_TIME_T EQUAL 4)
