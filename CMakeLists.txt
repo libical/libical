@@ -539,6 +539,7 @@ endif()
 
 option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
 if(WITH_CXX_BINDINGS)
+  enable_language(CXX)
   if(CMAKE_CXX_COMPILER)
     add_definitions(-DWITH_CXX_BINDINGS)
   else()
