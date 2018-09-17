@@ -947,6 +947,15 @@ static int match_begin_end_name(int end) {
     return 0;
     }
 
+static int hexdigit_decode(char c)
+{
+	if (c >= '0' && c <= '9')
+		return c - '0';
+	if (c >= 'A' && c <= 'F')
+		return c - 'A' + 10;
+	return -1;
+}
+
 static char* lexGetQuotedPrintable()
     {
     char cur;
@@ -960,12 +969,8 @@ static char* lexGetQuotedPrintable()
                 int next[2];
                 int i;
                 for (i = 0; i < 2; i++) {
-                    next[i] = lexGetc();
-                    if (next[i] >= '0' && next[i] <= '9')
-                        c = c * 16 + next[i] - '0';
-                    else if (next[i] >= 'A' && next[i] <= 'F')
-                        c = c * 16 + next[i] - 'A' + 10;
-                    else
+                    next[i] = hexdigit_decode(lexGetc());
+                    if (next[i] < 0)
                         break;
                     }
                 if (i == 0) {
