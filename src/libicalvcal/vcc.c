@@ -1167,8 +1167,9 @@ static char* lexGetQuotedPrintable()
                 lexAppendc(c | d);
                 break;
                 } /* '=' */
-            case '\n': {
-                lexPushLookaheadc('\n');
+            case '\n':
+            case ';': {
+                lexPushLookaheadc(cur);
                 goto EndString;
                 }
             case (char)EOF:
