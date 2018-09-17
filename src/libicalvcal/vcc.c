@@ -1146,31 +1146,25 @@ static char* lexGetQuotedPrintable()
         cur = lexGetc();
         switch (cur) {
             case '=': {
-                int c = 0;
-                int next[2];
-                int i;
-                for (i = 0; i < 2; i++) {
-                    next[i] = hexdigit_decode(lexGetc());
-                    if (next[i] < 0)
-                        break;
+                int c = 0, d;
+                cur = lexGetc();
+                if (cur == '\n') {
+                    ++mime_lineNum;
+                    break;
                     }
-                if (i == 0) {
-                    /* single '=' follow by LINESEP is continuation sign? */
-                    if (next[0] == '\n') {
-                        ++mime_lineNum;
-                        }
-                    else {
-                        lexPushLookaheadc('=');
-                        goto EndString;
-                        }
+                d = hexdigit_decode(cur);
+                if (d < 0) {
+                    lexAppendc(cur);
+                    break;
                     }
-                else if (i == 1) {
-                    lexPushLookaheadc(next[1]);
-                    lexPushLookaheadc(next[0]);
-                    lexAppendc('=');
-                } else {
-                    lexAppendc(c);
+                c = d << 4;
+                cur = lexGetc();
+                d = hexdigit_decode(cur);
+                if (d < 0) {
+                    lexAppendc(cur);
+                    break;
                     }
+                lexAppendc(c | d);
                 break;
                 } /* '=' */
             case '\n': {
