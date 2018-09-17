@@ -45,6 +45,9 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <errno.h>
+#include <iconv.h>
+#include <stdint.h>
 
 #include "vobject.h"
 
@@ -1414,27 +1417,86 @@ char* writeMemVObjects(char *s, int *len, VObject *list)
 /*----------------------------------------------------------------------
   APIs to do fake Unicode stuff.
   ----------------------------------------------------------------------*/
+/*
+ * Convert UTF-8 to wide chars.
+ *
+ * The only place where this spells Unicode is 1.) in "UTF-8", 2.) when it does
+ * the secondary pass to replace \n and \r with U+2028 and 2029, respectively.
+ * That step blindly pretends wchar_t shares the Unicode codepoints (happens to
+ * work for the important contemporary platforms, but otherwise is nonsense).
+ */
 wchar_t* fakeUnicode(const char *ps, size_t *bytes)
 {
-    wchar_t *r, *pw;
-    size_t len = strlen(ps)+1;
+	/*
+	 * Assuming the input were all ASCII, then
+	 *
+	 * 	method1_out_size = zs * sizeof(wchar_t)
+	 *
+	 * would make sense. But if the input were all 3-byte UTF-8 codepoints,
+	 * then that would be a large wasteful allocation, and
+	 *
+	 * 	method2_out_size = zs * sizeof(wchar_t) / 3
+	 *
+	 * would be more reasonable. Since there is no way of knowing in
+	 * advance what is in @ps, method 1 will be chosen if that is a 1KB
+	 * allocation (or less), and method 2 otherwise. From there, the
+	 * standard exponential progression for realloc is applied.
+	 */
+	size_t zs = strlen(ps), out_size, out_rem;
+	char *out_block, *out_iter;
+	iconv_t conv = iconv_open("wchar_t", "utf-8");
 
-    pw = r = (wchar_t*)malloc(sizeof(wchar_t)*len);
-    if (bytes)
-        *bytes = len * sizeof(wchar_t);
+	if (conv == (iconv_t)-1)
+		return NULL;
+	if (zs >= (SIZE_MAX - sizeof(wchar_t)) / sizeof(wchar_t))
+		/* Input is larger than anything we want to handle */
+		return NULL;
+	/* Initial allocation size as per above. */
+	out_size = out_rem = zs * sizeof(wchar_t);
+	if (out_size >= 1024 - sizeof(wchar_t))
+		out_size /= 3;
+	out_iter = out_block = malloc(out_size + sizeof(wchar_t));
+	if (out_block == NULL) {
+		iconv_close(conv);
+		return NULL;
+	}
 
-    while (*ps) {
-        if (*ps == '\n')
-            *pw = (wchar_t)0x2028;
-        else if (*ps == '\r')
-            *pw = (wchar_t)0x2029;
-        else
-            *pw = (wchar_t)(unsigned char)*ps;
-        ps++; pw++;
-        }
-    *pw = (wchar_t)0;
+	while (zs > 0) {
+		int ret;
+		errno = 0;
+		ret = iconv(conv, (char **)&ps, &zs, &out_iter, &out_rem);
+		if (ret >= 0)
+			continue;
+		if (errno == EILSEQ || errno == EINVAL) {
+			++ps;
+			--zs;
+			continue;
+		}
+		if (errno != E2BIG)
+			break;
+		out_rem  += out_size;
+		out_size *= 2;
+		char *new_block = realloc(out_block, out_size + sizeof(wchar_t));
+		if (new_block == NULL) {
+			free(out_block);
+			iconv_close(conv);
+			return NULL;
+		}
+		out_iter  = new_block + (out_iter - out_block);
+		out_block = new_block;
+	}
 
-    return r;
+	wchar_t *wide = (wchar_t *)out_block, *p = wide;
+	for (; p < (wchar_t *)(out_block + out_size - out_rem); ++p) {
+		if (*p == '\n')
+			*p = 0x2028;
+		else if (*p == '\r')
+			*p = 0x2029;
+	}
+	*p = L'\0';
+	if (bytes != NULL)
+		*bytes = (char *)p - out_block;
+	return wide;
 }
 
 int uStrLen(const wchar_t *u)
