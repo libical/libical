@@ -118,17 +118,13 @@ if(HAVE_INTROSPECTION)
   endforeach()
 
   include(GObjectIntrospectionMacros)
-  set(LIBICAL_GLIB_GIR_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
+  set(LIBICAL_GLIB_GIR_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.0")
+  set(LIB_VERSION "${LIBICAL_LIB_MAJOR_VERSION}_0")
 
   set(GObjectIntrospection_GIRS)
   set(GObjectIntrospection_SCANNER_FLAGS)
   set(GObjectIntrospection_SCANNER_ARGS)
   set(GObjectIntrospection_COMPILER_ARGS)
-  set(LIB_VERSION)
-
-  set(LIB_VERSION ${LIBICAL_GLIB_GIR_VERSION_STRING})
-  string(REPLACE "." "_" LIB_VERSION "${LIB_VERSION}")
-  string(REPLACE "-" "_" LIB_VERSION "${LIB_VERSION}")
 
   set(GObjectIntrospection_SCANNER_ARGS
     --add-include-path=${CMAKE_CURRENT_BINARY_DIR}
