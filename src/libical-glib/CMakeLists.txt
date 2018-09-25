@@ -135,8 +135,8 @@ if(HAVE_INTROSPECTION)
     --add-include-path=${CMAKE_SOURCE_DIR}/src/libical
     --library-path=${LIBRARY_OUTPUT_PATH}
     --identifier-prefix=ICal
-    --pkg-export libical-glib-${LIBICAL_LIB_VERSION_STRING}
-    --c-include="libical-glib/libical-glib.h"
+    --pkg-export libical-glib
+    --c-include=libical-glib/libical-glib.h
     --cflags-begin
     -I${CMAKE_BINARY_DIR}/src
     -I${CMAKE_BINARY_DIR}/src/libical
