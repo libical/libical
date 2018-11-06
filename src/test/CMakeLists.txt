@@ -11,6 +11,10 @@ if(ICU_FOUND)
   include_directories(${ICU_INCLUDE_DIR})
 endif()
 
+if(BDB_FOUND)
+  include_directories(${BDB_INCLUDE_DIR})
+endif()
+
 if(ICAL_GLIB AND HAVE_INTROSPECTION)
   add_subdirectory(libical-glib)
 endif()
