@@ -1,4 +1,8 @@
 /*
+ * This work is based on work from Hiram Clawson and has been modified to the
+ * needs of the libical project. The original copyright notice is as follows:
+ */
+/*
  *	Copyright (c) 1986-2000, Hiram Clawson 
  *	All rights reserved.
  *
@@ -33,6 +37,28 @@
  *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  *	THE POSSIBILITY OF SUCH DAMAGE. 
  */
+/*
+ * The modifications made are licensed as follows (to distinguish between
+ * the original code and the modifications made, refer to the source code
+ * history):
+ */
+/*======================================================================
+
+   (C) COPYRIGHT 2018, Markus Minichmayr
+       https://tapkey.com
+
+   This library is free software; you can redistribute it and/or modify
+   it under the terms of either:
+
+      The LGPL as published by the Free Software Foundation, version
+      2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+
+   Or:
+
+      The Mozilla Public License Version 2.0. You may obtain a copy of
+      the License at http://www.mozilla.org/MPL/
+  ========================================================================*/
+
 
 #include "astime.h"	/*	time structures	*/
 
@@ -175,3 +201,127 @@ struct ut_instant * date;
 	date->weekday = (jd + 1L) % 7L;
 	return( date->j_date );
 }	/*	end of	double juldat( date )	*/
+
+
+/**
+ *	caldat computes the day of the week, the day of the year
+ *	the gregorian (or julian) calendar date
+ *	from the julian decimal date.
+ *	for astronomical purposes, The Gregorian calendar reform occurred
+ *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
+
+ *	Input:	a ut_instant structure pointer, where the j_date element
+ *		has been set. ( = 0 for 01 Jan 4713 B.C.)
+ *
+ *	output:  will set all the other elements of the structure.
+ *		As a convienence, the function will also return the year.
+ *
+ *	Reference: Astronomial formulae for calculators, meeus, p 23
+ *	from fortran program by F. Espenak - April 1982 Page 277,
+ *	50 Year canon of solar eclipses: 1986-2035
+ *
+ */
+
+void caldat_int( date )
+struct ut_instant_int * date;
+{
+	long jd;
+	long ka;
+	long kb;
+	long kc;
+	long kd;
+	long ke;
+	long ialp;
+
+	jd = (long) (date->j_date0 + 1L);	/* integer julian date */
+	ka = (long) jd;
+	if ( jd >= 2299161L )
+	{
+            ialp = (long) (((jd * 100LL) - 186721625LL) / 3652425LL);
+            ka = jd + 1L + ialp - ( ialp >> 2 );
+	}
+	kb = ka + 1524L;
+	kc = (long) ( ((kb * 100LL) - 12210LL) / 36525LL );
+	kd = (long) ( ( kc * 36525LL ) / 100LL );
+	ke = (long) ( (kb - kd) * 10000LL / 306001LL );
+	date->day = kb - kd - ((long) ( (ke * 306001LL) / 10000LL ));
+	if ( ke > 13L )
+		date->month = ke - 13L;
+	else
+		date->month = ke - 1L;
+	if ( (date->month == 2) && (date->day > 28) )
+		date->day = 29;
+	if ( (date->month == 2) && (date->day == 29) && (ke == 3L) )
+		date->year = kc - 4716L;
+	else if ( date->month > 2 )
+		date->year = kc - 4716L;
+	else
+		date->year = kc - 4715L;
+	date->weekday = (jd + 1L) % 7L;	/* day of week */
+	if ( date->year == ((date->year >> 2) << 2) )
+		date->day_of_year =
+			( ( 275 * date->month ) / 9)
+			- ((date->month + 9) / 12)
+			+ date->day - 30;
+	else
+		date->day_of_year =
+			( ( 275 * date->month ) / 9)
+			- (((date->month + 9) / 12) << 1)
+			+ date->day - 30;
+}
+
+/**
+ *	juldat computes the julian decimal date (j_date) from
+ *	the gregorian (or Julian) calendar date.
+ *	for astronomical purposes, The Gregorian calendar reform occurred
+ *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
+ *	Input:  a ut_instant structure pointer where Day, Month, Year
+ *      have been set for the date in question.
+ *
+ *	Output: the j_date and weekday elements of the structure will be set.
+ *		Also, the return value of the function will be the j_date too.
+ *
+ *	Reference: Astronomial formulae for calculators, meeus, p 23
+ *	from fortran program by F. Espenak - April 1982 Page 276,
+ *	50 Year canon of solar eclipses: 1986-2035
+ */
+
+void juldat_int( date )
+struct ut_instant_int * date;
+{
+	long iy0, im0;
+	long ia, ib;
+	long jd;
+
+	/* conversion factors */
+	if ( date->month <= 2 )
+	{
+		iy0 = date->year - 1L;
+		im0 = date->month + 12;
+	}
+	else
+	{
+		iy0 = date->year;
+		im0 = date->month;
+	}
+	ia = iy0 / 100L;
+	ib = 2L - ia + (ia >> 2);
+	/* calculate julian date	*/
+	if ( date->year < 0L )
+		jd = (long) (((36525LL * iy0) - 75) / 100)
+			+ (long) ((306001LL * (im0 + 1L)) / 10000)
+			+ (long) date->day + 1720994L;
+	else
+		jd = (long) ((36525LL * iy0) / 100)
+			+ (long) ((306001LL * (im0 + 1L)) / 10000)
+			+ (long) date->day + 1720994L;
+
+	/* on or after 15 October 1582	*/
+	if ((date->year > 1582)
+			|| ((date->year == 1582) && (((date->month * 100) + date->day) >= 1015))
+		) {
+		jd += ib;
+	}
+	date->j_date0 = jd;
+	date->weekday = (jd + 2L) % 7L;
+}	/*	end of	void juldat( date )	*/
