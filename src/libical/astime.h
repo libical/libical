@@ -1,4 +1,4 @@
-/* 
+/*
  * This work is based on work from Hiram Clawson and has been modified to the
  * needs of the libical project. The original copyright notice is as follows:
  */
@@ -68,6 +68,7 @@
 #define ICAL_ASTIME_H
 
 #include "libical_ical_export.h"
+#include <config.h>
 
 typedef struct ut_instant
 {
@@ -90,13 +91,12 @@ typedef struct ut_instant
 /** converts julian date to year,mo,da
  *  @deprecated use caldat_int() instead
  */
-LIBICAL_ICAL_EXPORT long caldat(UTinstantPtr);
+LIBICAL_ICAL_EXPORT _deprecated(long caldat(UTinstantPtr));
 
 /** returns julian day from year,mo,da
  *  @deprecated use juldat_int() instead
  */
-LIBICAL_ICAL_EXPORT double juldat(UTinstantPtr);
-
+LIBICAL_ICAL_EXPORT _deprecated(double juldat(UTinstantPtr));
 
 typedef struct ut_instant_int
 {

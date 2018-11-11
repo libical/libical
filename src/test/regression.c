@@ -20,6 +20,8 @@
  The original code is regression.c
 ======================================================================*/
 //krazy:skip
+
+# define NO_DEPRECATION_WARNINGS // do not complain about our own deprecated usage
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -2673,7 +2675,7 @@ static int test_juldat_caldat_instance(long year, int month, int day) {
     struct icaltimetype t;
     struct ut_instant originalInstant;
 
-    
+
     memset(&t, 0, sizeof(t));
     t.year = year;
     t.month = month;
@@ -2700,7 +2702,7 @@ static int test_juldat_caldat_instance(long year, int month, int day) {
 }
 
 /*
- * This test verifies the caldat_int and juldat_int functions. The functions are reworked versions 
+ * This test verifies the caldat_int and juldat_int functions. The functions are reworked versions
  * of the original caldat and juldat functions but avoid using floating point arithmetics. As the
  * new functions are not exported, the test cannot access them directly. It therefore checks the
  * output of the icaltime_day_of_week, icaltime_start_doy_week and icaltime_week_number functions
