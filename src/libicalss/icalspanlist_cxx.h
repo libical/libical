@@ -46,25 +46,25 @@ class VComponent;
 class LIBICAL_ICALSS_EXPORT ICalSpanList
 {
 public:
-    ICalSpanList() throw(icalerrorenum);
-    ICalSpanList(const ICalSpanList &v) throw(icalerrorenum);
+    ICalSpanList();
+    ICalSpanList(const ICalSpanList &v);
 
     /** Construct an ICalSpanList from an icalset */
-    ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) throw(icalerrorenum);
+    ICalSpanList(icalset *set, icaltimetype start, icaltimetype end);
 
     /** Construct an ICalSpanList from the VFREEBUSY chunk of a icalcomponent */
-    explicit ICalSpanList(icalcomponent *comp) throw(icalerrorenum);
+    explicit ICalSpanList(icalcomponent *comp);
 
     /** Construct an ICalSpanList from the VFREEBUSY chunk of a vcomponent */
-    explicit ICalSpanList(VComponent &comp) throw(icalerrorenum);
+    explicit ICalSpanList(VComponent &comp);
 
     /** Destructor */
     ~ICalSpanList();
 
     /** Return a VFREEBUSY icalcomponent */
-    VComponent *get_vfreebusy(const char *organizer, const char *attendee) throw(icalerrorenum);
+    VComponent *get_vfreebusy(const char *organizer, const char *attendee);
 
-    ICalSpanList &operator=(const ICalSpanList &) throw(icalerrorenum);
+    ICalSpanList &operator=(const ICalSpanList &);
 
     /** Return the base data when casting */
     operator  icalspanlist *()
@@ -73,7 +73,7 @@ public:
     }
 
     /** Return a vector of the number of events over delta t */
-    std::vector < int >as_vector(int delta_t) throw(icalerrorenum);
+    std::vector < int >as_vector(int delta_t);
 
     /** Dump the spanlist to stdout */
     void dump();

@@ -47,14 +47,14 @@ class ICalProperty;
 class LIBICAL_ICAL_EXPORT VComponent
 {
 public:
-    VComponent() throw(icalerrorenum);
-    VComponent(const VComponent &) throw(icalerrorenum);
-    VComponent &operator=(const VComponent &) throw(icalerrorenum);
+    VComponent();
+    VComponent(const VComponent &);
+    VComponent &operator=(const VComponent &);
     virtual ~VComponent();
 
-    explicit VComponent(icalcomponent *v) throw(icalerrorenum);
-    explicit VComponent(const std::string &str) throw(icalerrorenum);
-    explicit VComponent(const icalcomponent_kind &kind) throw(icalerrorenum);
+    explicit VComponent(icalcomponent *v);
+    explicit VComponent(const std::string &str);
+    explicit VComponent(const icalcomponent_kind &kind);
 
     operator icalcomponent *()
     {
@@ -68,7 +68,7 @@ public:
     void detach();
 
 public:
-    std::string as_ical_string() throw(icalerrorenum);
+    std::string as_ical_string();
     bool is_valid();
     icalcomponent_kind isa();
     int isa_component(void *component);

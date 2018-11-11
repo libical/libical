@@ -41,8 +41,8 @@ class LIBICAL_ICAL_EXPORT ICalProperty
 {
 public:
     ICalProperty();
-    ICalProperty(const ICalProperty &) throw(icalerrorenum);
-    ICalProperty &operator=(const ICalProperty &) throw(icalerrorenum);
+    ICalProperty(const ICalProperty &);
+    ICalProperty &operator=(const ICalProperty &);
     ~ICalProperty();
 
     explicit ICalProperty(icalproperty *v);

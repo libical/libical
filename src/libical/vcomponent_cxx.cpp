@@ -33,19 +33,18 @@ extern "C" {
 
 #include <cstdlib>
 
-VComponent::VComponent() throw(icalerrorenum) : imp(icalcomponent_new(ICAL_ANY_COMPONENT))
+VComponent::VComponent() : imp(icalcomponent_new(ICAL_ANY_COMPONENT))
 {
 }
 
-VComponent::VComponent(const VComponent &v) throw(icalerrorenum)
-    : imp(icalcomponent_new_clone(v.imp))
+VComponent::VComponent(const VComponent &v) : imp(icalcomponent_new_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
     }
 }
 
-VComponent &VComponent::operator=(const VComponent &v) throw(icalerrorenum)
+VComponent &VComponent::operator=(const VComponent &v)
 {
     if (this == &v) {
         return *this;
@@ -74,7 +73,7 @@ VComponent::~VComponent()
     }
 }
 
-VComponent::VComponent(icalcomponent *v) throw (icalerrorenum) : imp(v)
+VComponent::VComponent(icalcomponent *v) : imp(v)
 {
 }
 
@@ -115,7 +114,7 @@ char *VComponent::quote_ical_string(char *str)
  *            Catch this error if you
  *
  */
-VComponent::VComponent(const std::string &str) throw (icalerrorenum)
+VComponent::VComponent(const std::string &str)
     : imp(icalcomponent_new_from_string(str.c_str()))
 {
     if (imp == NULL) {
@@ -126,15 +125,14 @@ VComponent::VComponent(const std::string &str) throw (icalerrorenum)
     }
 }
 
-VComponent::VComponent(const icalcomponent_kind &kind) throw(icalerrorenum)
-    : imp(icalcomponent_new(kind))
+VComponent::VComponent(const icalcomponent_kind &kind) : imp(icalcomponent_new(kind))
 {
     if (imp == NULL) {
         throw icalerrno;
     }
 }
 
-std::string VComponent::as_ical_string() throw(icalerrorenum)
+std::string VComponent::as_ical_string()
 {
     char *str = icalcomponent_as_ical_string(imp);
 

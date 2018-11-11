@@ -35,14 +35,14 @@ namespace LibICal
 class LIBICAL_ICAL_EXPORT ICalValue
 {
 public:
-    ICalValue() throw(icalerrorenum);
-    ICalValue(const ICalValue &) throw(icalerrorenum);
-    ICalValue &operator=(const ICalValue &) throw(icalerrorenum);
+    ICalValue();
+    ICalValue(const ICalValue &);
+    ICalValue &operator=(const ICalValue &);
     ~ICalValue();
 
-    explicit ICalValue(icalvalue *) throw(icalerrorenum);
-    explicit ICalValue(const icalvalue_kind &kind) throw(icalerrorenum);
-    ICalValue(const icalvalue_kind &kind, const std::string &str) throw(icalerrorenum);
+    explicit ICalValue(icalvalue *);
+    explicit ICalValue(const icalvalue_kind &kind);
+    ICalValue(const icalvalue_kind &kind, const std::string &str);
 
     operator  icalvalue *()
     {

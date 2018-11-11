@@ -37,20 +37,19 @@ namespace LibICal
 class LIBICAL_ICAL_EXPORT ICalParameter
 {
 public:
-    ICalParameter() throw(icalerrorenum);
-    ICalParameter(const ICalParameter &) throw(icalerrorenum);
-    ICalParameter &operator=(const ICalParameter &) throw(icalerrorenum);
+    ICalParameter();
+    ICalParameter(const ICalParameter &);
+    ICalParameter &operator=(const ICalParameter &);
     ~ICalParameter();
 
-    explicit ICalParameter(icalparameter *v) throw(icalerrorenum);
+    explicit ICalParameter(icalparameter *v);
 
     // Create from string of form "PARAMNAME=VALUE"
-    explicit ICalParameter(const std::string &str) throw(icalerrorenum);
+    explicit ICalParameter(const std::string &str);
 
     // Create from just the value, the part after the "="
-    explicit ICalParameter(const icalparameter_kind &kind) throw(icalerrorenum);
-    ICalParameter(const icalparameter_kind &kind,
-                  const std::string &str) throw(icalerrorenum);
+    explicit ICalParameter(const icalparameter_kind &kind);
+    ICalParameter(const icalparameter_kind &kind, const std::string &str);
 
     operator  icalparameter *()
     {
@@ -60,7 +59,7 @@ public:
     void detach();
 
 public:
-    std::string as_ical_string() throw(icalerrorenum);
+    std::string as_ical_string();
     bool is_valid();
     icalparameter_kind isa();
     int isa_parameter(void *param);
