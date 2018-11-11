@@ -130,7 +130,7 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
     }
 
     /* load all of the cluster names in the directory list */
-    /* cppcheck-suppress readdirCalled since readdir is recommended */
+    /* cppcheck-suppress readdirCalled */
     for (de = readdir(dp); de != 0; de = readdir(dp)) {
 
         /* Remove known directory names  '.' and '..' */

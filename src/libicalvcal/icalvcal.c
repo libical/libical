@@ -902,7 +902,7 @@ static const char *rrule_parse_weekly_days(const char *s,
         if (found_day == -1)
             break;
 
-        /* cppcheck-suppress arrayIndexOutOfBounds since 'day' can't be >6 */
+        /* cppcheck-suppress arrayIndexOutOfBounds; since 'day' can't be >6 */
         recur->by_day[i] = weekday_codes[day];
 
         s = e;
