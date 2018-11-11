@@ -89,7 +89,7 @@ CHECK_WARNINGS() {
 # print warnings found in the compile-stage output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|DB_DBM_HSEARCH\|const[[:space:]]DBT\|db\.h\)'
+  whitelist='\(dynamic[[:space:]]exception[[:space:]]specifications[[:space:]]are[[:space:]]deprecated\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|DB_DBM_HSEARCH\|const[[:space:]]DBT\|db\.h\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
@@ -112,7 +112,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\)'
+  whitelist='\(dynamic[[:space:]]exception\|Value[[:space:]]descriptions\|unused[[:space]]declarations\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
@@ -266,6 +266,7 @@ CPPCHECK() {
       grep -v Net-ICal | \
       grep -v icalssyacc\.c  | \
       grep -v icalsslexer\.c | \
+      grep -v vcc\.c | grep -v vcc\.y | \
       grep -v _cxx\. | tee cppcheck.out
   CPPCHECK_WARNINGS cppcheck.out
   rm -f cppcheck.out
