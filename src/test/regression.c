@@ -25,6 +25,7 @@
 #endif
 
 #include "regression.h"
+#include "libical/astime.h"
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
 #include "libicalvcal/icalvcal.h"
@@ -2666,6 +2667,90 @@ void test_recur_parser()
     str_is(str, icalrecurrencetype_as_string(&rt), str);
 }
 
+
+static int test_juldat_caldat_instance(long year, int month, int day) {
+
+    struct icaltimetype t;
+    struct ut_instant originalInstant;
+
+    
+    memset(&t, 0, sizeof(t));
+    t.year = year;
+    t.month = month;
+    t.day = day;
+
+    memset(&originalInstant, 0, sizeof(originalInstant));
+    originalInstant.year = year;
+    originalInstant.month = month;
+    originalInstant.day = day;
+
+    juldat(&originalInstant);
+    caldat(&originalInstant);
+
+    if (icaltime_day_of_week(t) != originalInstant.weekday + 1)
+        return -1;
+
+    if (icaltime_start_doy_week(t, 1) != originalInstant.day_of_year - originalInstant.weekday)
+        return -1;
+
+    if (icaltime_week_number(t) != (originalInstant.day_of_year - originalInstant.weekday) / 7)
+        return -1;
+
+    return 0;
+}
+
+/*
+ * This test verifies the caldat_int and juldat_int functions. The functions are reworked versions 
+ * of the original caldat and juldat functions but avoid using floating point arithmetics. As the
+ * new functions are not exported, the test cannot access them directly. It therefore checks the
+ * output of the icaltime_day_of_week, icaltime_start_doy_week and icaltime_week_number functions
+ * which are based on the functions to be tested.
+ */
+void test_juldat_caldat() {
+
+    int i;
+    int failed = 0;
+
+    ok("juldat and caldat return the expected values for specified min input values", test_juldat_caldat_instance(-4713, 1, 1) == 0);
+    ok("juldat and caldat return the expected values for specified max input values", test_juldat_caldat_instance(+32767, 12, 31) == 0);
+
+    ok("juldat and caldat return the expected values before end of julian calendar", test_juldat_caldat_instance(1582, 10, 4) == 0);
+    ok("juldat and caldat return the expected values at end of julian calendar", test_juldat_caldat_instance(1582, 10, 5) == 0);
+    ok("juldat and caldat return the expected values before introduction of gregorian calendar", test_juldat_caldat_instance(1582, 10, 14) == 0);
+    ok("juldat and caldat return the expected values at introduction of gregorian calendar", test_juldat_caldat_instance(1582, 10, 15) == 0);
+    ok("juldat and caldat return the expected values after introduction of gregorian calendar", test_juldat_caldat_instance(1582, 10, 16) == 0);
+
+    for (i = 0; i < 2582; i++) {
+
+        long y = i;
+
+        failed |= (test_juldat_caldat_instance(y, 1, 1) != 0);
+        failed |= (test_juldat_caldat_instance(y, 2, 28) != 0);
+
+        // Not every year has a leap day, but juldat_int/caldat_int should still produce
+        // the same output as the original implementation.
+        failed |= (test_juldat_caldat_instance(y, 2, 29) != 0);
+        failed |= (test_juldat_caldat_instance(y, 3, 1) != 0);
+        failed |= (test_juldat_caldat_instance(y, 12, 31) != 0);
+    }
+    ok("juldat and caldat return the expected values for random input values", failed == 0);
+
+    failed = 0;
+    for (i = 0; i < 10000; i++) {
+        long y = rand() % 2582;
+        int m = rand() % 12 + 1;
+
+        // Might produce some invalid dates, but juldat_int/caldat_int should still produce
+        // the same output as the original implementation.
+        int d = rand() % 31 + 1;
+
+        failed |= (test_juldat_caldat_instance(y, m, d) != 0);
+    }
+
+    ok("juldat and caldat return the expected values for random input values", failed == 0);
+}
+
+
 char *ical_strstr(const char *haystack, const char *needle)
 {
     return strstr(haystack, needle);
@@ -4367,6 +4452,7 @@ int main(int argc, char *argv[])
 
     test_run("Test time parser functions", test_time_parser, do_test, do_header);
     test_run("Test time", test_time, do_test, do_header);
+    test_run("Test calculation of DOY and WD", test_juldat_caldat, do_test, do_header);
     test_run("Test day of Year", test_doy, do_test, do_header);
     test_run("Test duration", test_duration, do_test, do_header);
     test_run("Test period", test_period, do_test, do_header);
