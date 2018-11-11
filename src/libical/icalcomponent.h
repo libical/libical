@@ -286,6 +286,13 @@ LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_normalize(icalcomponent *comp);
 
+/*
+ * Returns the datetime corresponding to the specified @p icalproperty and @p icalcomponent.
+ * @since 3.0.5
+ */
+LIBICAL_ICAL_EXPORT struct icaltimetype icalproperty_get_datetime_with_component(
+                                                                          icalproperty *prop,
+                                                                          icalcomponent *comp);
 /*************** Type Specific routines ***************/
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vcalendar(void);

@@ -29,8 +29,5 @@ LIBICAL_ICAL_NO_EXPORT int icalproperty_value_kind_is_multivalued(icalproperty_k
                                                                   icalvalue_kind *vkind);
 LIBICAL_ICAL_NO_EXPORT int icalproperty_value_kind_is_default(icalproperty_kind pkind,
                                                               icalvalue_kind vkind);
-LIBICAL_ICAL_NO_EXPORT struct icaltimetype icalproperty_get_datetime_with_component(
-                                                                          icalproperty *prop,
-                                                                          icalcomponent *comp);
 
 #endif /* ICALPROPERTY_P_H */
