@@ -187,7 +187,7 @@ int icalset_loaddir(const char *path)
         return 0;
     }
 
-    /* cppcheck-suppress readdirCalled since readdir is recommended */
+    /* cppcheck-suppress readdirCalled */
     while ((dp = readdir(d)) != 0) {
         if (strncmp(dp->d_name, "mod_", 4)) {
             continue;
