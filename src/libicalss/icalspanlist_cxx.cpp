@@ -25,14 +25,12 @@
 
 using namespace LibICal;
 
-ICalSpanList::ICalSpanList() throw(icalerrorenum)
-    : data(0)
+ICalSpanList::ICalSpanList() : data(0)
 {
     throw icalerrno;
 }
 
-ICalSpanList::ICalSpanList(const ICalSpanList &v) throw(icalerrorenum)
-    : data(v.data)
+ICalSpanList::ICalSpanList(const ICalSpanList &v) : data(v.data)
 {
     if (data == NULL) {
         throw icalerrno;
@@ -44,7 +42,7 @@ ICalSpanList::ICalSpanList(const ICalSpanList &v) throw(icalerrorenum)
     @param start   Designated start of the spanlist
     @param end     Designated end of the spanlist
 */
-ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) throw(icalerrorenum)
+ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end)
     : data(icalspanlist_new(set, start, end))
 {
     if (data == NULL) {
@@ -56,8 +54,7 @@ ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end) t
     @param comp  A valid icalcomponent with a VFREEBUSY section
 */
 
-ICalSpanList::ICalSpanList(icalcomponent *comp) throw(icalerrorenum)
-    : data(icalspanlist_from_vfreebusy(comp))
+ICalSpanList::ICalSpanList(icalcomponent *comp) : data(icalspanlist_from_vfreebusy(comp))
 {
     if (data == NULL) {
         throw icalerrno;
@@ -67,7 +64,7 @@ ICalSpanList::ICalSpanList(icalcomponent *comp) throw(icalerrorenum)
 /** @brief Constructor
     @param comp  A valid VComponent with a VFREEBUSY section
 */
-ICalSpanList::ICalSpanList(VComponent &comp) throw(icalerrorenum)
+ICalSpanList::ICalSpanList(VComponent &comp)
     : data(icalspanlist_from_vfreebusy(static_cast<icalcomponent *>(comp)))
 {
     if (data == NULL) {
@@ -94,8 +91,7 @@ ICalSpanList::~ICalSpanList()
  * @see icalspanlist_as_vfreebusy()
  */
 
-VComponent *ICalSpanList::get_vfreebusy(
-    const char *organizer, const char *attendee) throw(icalerrorenum)
+VComponent *ICalSpanList::get_vfreebusy(const char *organizer, const char *attendee)
 {
     icalcomponent *comp;
     VComponent    *vcomp;
@@ -125,7 +121,7 @@ VComponent *ICalSpanList::get_vfreebusy(
  * @see icalspanlist_as_freebusy_matrix()
  */
 
-std::vector<int> ICalSpanList::as_vector(int delta_t) throw(icalerrorenum)
+std::vector<int> ICalSpanList::as_vector(int delta_t)
 {
     int *matrix;
     int i = 0;

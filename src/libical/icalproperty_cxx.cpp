@@ -26,15 +26,14 @@ ICalProperty::ICalProperty() : imp(icalproperty_new(ICAL_ANY_PROPERTY))
 {
 }
 
-ICalProperty::ICalProperty(const ICalProperty &v) throw(icalerrorenum)
-    : imp(icalproperty_new_clone(v.imp))
+ICalProperty::ICalProperty(const ICalProperty &v) : imp(icalproperty_new_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
     }
 }
 
-ICalProperty &ICalProperty::operator=(const ICalProperty &v) throw(icalerrorenum)
+ICalProperty &ICalProperty::operator=(const ICalProperty &v)
 {
     if (this == &v) {
         return *this;

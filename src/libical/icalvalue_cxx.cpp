@@ -22,19 +22,18 @@
 #include "icalvalue_cxx.h"
 using namespace LibICal;
 
-ICalValue::ICalValue() throw(icalerrorenum) : imp(icalvalue_new(ICAL_ANY_VALUE))
+ICalValue::ICalValue() : imp(icalvalue_new(ICAL_ANY_VALUE))
 {
 }
 
-ICalValue::ICalValue(const ICalValue &v) throw (icalerrorenum)
-    : imp(icalvalue_new_clone(v.imp))
+ICalValue::ICalValue(const ICalValue &v) : imp(icalvalue_new_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
     }
 }
 
-ICalValue &ICalValue::operator=(const ICalValue &v) throw(icalerrorenum)
+ICalValue &ICalValue::operator=(const ICalValue &v)
 {
     if (this == &v) {
         return *this;
@@ -63,19 +62,18 @@ ICalValue::~ICalValue()
     }
 }
 
-ICalValue::ICalValue(icalvalue *v) throw(icalerrorenum) : imp(v)
+ICalValue::ICalValue(icalvalue *v) : imp(v)
 {
 }
 
-ICalValue::ICalValue(const icalvalue_kind &kind) throw(icalerrorenum)
-    : imp(icalvalue_new(kind))
+ICalValue::ICalValue(const icalvalue_kind &kind) : imp(icalvalue_new(kind))
 {
     if (imp == NULL) {
         throw icalerrno;
     }
 }
 
-ICalValue::ICalValue(const icalvalue_kind &kind, const std::string &str) throw(icalerrorenum)
+ICalValue::ICalValue(const icalvalue_kind &kind, const std::string &str)
     : imp(icalvalue_new_from_string(kind, str.c_str()))
 {
     if (imp == NULL) {
