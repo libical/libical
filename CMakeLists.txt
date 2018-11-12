@@ -52,6 +52,11 @@
 #  Requires glib development package v2.20 or higher
 #  Default=true (build the libical-glib interface)
 #
+# -DENABLE_GTK_DOC=[true|false]
+#  Set to build libical-glib developer documentation
+#  Requires gtk-doc and ICAL_BUILD_DOCS option to be true.
+#  Default=true (build gtk-doc developer documentation)
+#
 # -DUSE_32BIT_TIME_T=[true|false]
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
