@@ -59,9 +59,10 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
     list(APPEND _filedeps ${_files})
   endforeach()
 
-  set(_mkhtml_prefix "")
   if(APPLE)
-    set(_mkhtml_prefix "${CMAKE_COMMAND} -E env XML_CATALOG_FILES=\"/usr/local/etc/xml/catalog\"")
+    if(NOT DEFINED ENV{XML_CATALOG_FILES})
+      message(FATAL_ERROR "On OSX, please run \'export XML_CATALOG_FILES=/usr/local/etc/xml/catalog\' first; else the gtk entities cannot be located.")
+    endif()
   endif()
 
   set(_scangobj_deps)
@@ -70,8 +71,8 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
   set(_scangobj_ldflags "")
   set(_scangobj_ld_lib_dirs "")
 
-  list(APPEND _scangobj_cflags_list -I${INCLUDE_INSTALL_DIR})
-  list(APPEND _scangobj_ldflags -L${LIB_INSTALL_DIR})
+  list(APPEND _scangobj_cflags_list -I${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR})
+  list(APPEND _scangobj_ldflags -L${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR})
 
   foreach(opt IN LISTS ${_depsvar})
     if(TARGET ${opt})
@@ -164,7 +165,7 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
 
     COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/html"
 
-    COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}/html" ${_mkhtml_prefix} ${GTKDOC_MKHTML} --path=.. ${_module} ../${_module}-docs.sgml
+    COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}/html" ${GTKDOC_MKHTML} --path=.. ${_module} ../${_module}-docs.sgml
 
     COMMAND ${GTKDOC_FIXXREF}
       --module=${_module}
