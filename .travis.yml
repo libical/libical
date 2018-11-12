@@ -1,7 +1,8 @@
 env:
   global:
   - secure: "NlWO/NTPlOU6cowOMuPOvjAprXVwIjmpHHf9CoMR71E2c/eBFFKIHj10kXuyFwz2KihHAIExmo9OlGtGniNWobvIrVrabO3dsOSb6UGbPAQkzQiyQLKsDNQAZx3nMuWEKBtMsVRee6rd7/2uGTY4WB5Ot3VhrUYcN1FoRgQQ9gk="
-  - PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig # needed to find homebrew's libffi on osx
+  - PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig # needed to find homebrew's libxml2 an libffi on osx
+  - XML_CATALOG_FILES=/usr/local/etc/xml/catalog # homebrew installed libxml2 catalog
 
 
 os:

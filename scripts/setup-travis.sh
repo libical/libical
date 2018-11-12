@@ -4,6 +4,7 @@
 
 if ( test "`uname -s`" = "Darwin" )
 then
+  brew install libxml2
   brew install icu4c
   brew install db
   brew install gobject-introspection
