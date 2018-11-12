@@ -10,8 +10,13 @@ set -o pipefail
 #ensure parallel builds
 export MAKEFLAGS=-j8
 
-#needed to find homebrew's libffi on osx
-export PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig
+if (test "`uname -s`" = "Darwin")
+then
+  #needed to find homebrew's libxml2 and libffi on osx
+  export PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig
+  #needed to find the homebrew installed xml2 catalog
+  export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+fi
 
 ##### START FUNCTIONS #####
 
