@@ -89,7 +89,7 @@ CHECK_WARNINGS() {
 # print warnings found in the compile-stage output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|DB_DBM_HSEARCH\|const[[:space:]]DBT\|db\.h\)'
+  whitelist='\(no[[:space:]]link[[:space:]]for:\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|DB_DBM_HSEARCH\|const[[:space:]]DBT\|db\.h\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
@@ -112,7 +112,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\)'
+  whitelist='\(no[[:space:]]link[[:space:]]for:\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 

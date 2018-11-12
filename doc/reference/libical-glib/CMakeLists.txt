@@ -30,4 +30,4 @@ if(ENABLE_GTK_DOC)
 
   add_gtkdoc(libical-glib libical-glib "LIBICAL_GLIB_DISABLE_DEPRECATED" SOURCEDIRS DEPENDENCIES IGNORE_HEADERS)
 
-endif(ENABLE_GTK_DOC)
+endif()

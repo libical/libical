@@ -5,6 +5,7 @@ Version 3.0.5 (NOT RELEASED YET):
 -------------
  * New publicly available function:
      + icalproperty_get_datetime_with_component()
+ * New CMake option ENABLE_GTK_DOC for disabling the libical-glib developer documentation
 
 Version 3.0.4:
 -------------
