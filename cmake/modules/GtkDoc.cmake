@@ -138,7 +138,7 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
   endif()
 
   if(NOT (_scangobj_ldflags STREQUAL ""))
-    set(_scangobj_ldflags --ldflags "${_scangobj_ldflags}")
+    set(_scangobj_ldflags "--ldflags ${_scangobj_ldflags}")
   endif()
 
   add_custom_command(OUTPUT html/index.html
