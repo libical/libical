@@ -133,13 +133,13 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
 
   set(_scangobj_prefix ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH="${_scangobj_ld_lib_dirs}:${LIB_INSTALL_DIR}:$ENV{LD_LIBRARY_PATH}")
 
-  if(NOT (_scangobj_cflags STREQUAL ""))
-    set(_scangobj_cflags --cflags "${_scangobj_cflags}")
-  endif()
+#  if(NOT (_scangobj_cflags STREQUAL ""))
+#    set(_scangobj_cflags --cflags "${_scangobj_cflags}")
+#  endif()
 
-  if(NOT (_scangobj_ldflags STREQUAL ""))
-    set(_scangobj_ldflags "--ldflags ${_scangobj_ldflags}")
-  endif()
+#  if(NOT (_scangobj_ldflags STREQUAL ""))
+#    set(_scangobj_ldflags "--ldflags ${_scangobj_ldflags}")
+#  endif()
 
   add_custom_command(OUTPUT html/index.html
     COMMAND ${GTKDOC_SCAN}
@@ -152,8 +152,8 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
 
     COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}" ${_scangobj_prefix} ${GTKDOC_SCANGOBJ}
       --module=${_module}
-      ${_scangobj_cflags}
-      ${_scangobj_ldflags}
+      --cflags=${_scangobj_cflags}
+      --ldflags=${_scangobj_ldflags}
 
     COMMAND ${GTKDOC_MKDB}
       --module=${_module}
