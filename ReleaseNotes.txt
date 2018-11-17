@@ -18,6 +18,7 @@ Version 3.0.5 (NOT RELEASED YET):
      + icalproperty_get_datetime_with_component()
  * Allow reset DATE/DATE-TIME VALUE parameter for all-day events
  * New CMake option ENABLE_GTK_DOC for disabling the libical-glib developer documentation
+ * GObject Introspection - use $MAJOR-0 versioning
 
 Version 3.0.4:
 --------------
