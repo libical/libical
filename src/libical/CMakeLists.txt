@@ -174,7 +174,8 @@ if(HAVE_INTROSPECTION)
     --pkg-export libical
     --identifier-prefix=ical
     -I${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_BINARY_DIR}/src/libical/ical.h)
+    ${CMAKE_BINARY_DIR}/src/libical/ical.h
+  )
   set(ICal_${LIB_VERSION}_gir_LIBRARY "ical")
   set(ICal_${LIB_VERSION}_gir_INCLUDES GObject-2.0)
   set(_includes ${_includes} "-L${LIBRARY_OUTPUT_PATH}")
