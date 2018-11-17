@@ -800,7 +800,8 @@ void icalproperty_set_value(icalproperty *p, icalvalue *value)
 
         val_param = icalproperty_get_first_parameter(p, ICAL_VALUE_PARAMETER);
 
-        if (val_param && icalparameter_value_to_value_kind(icalparameter_get_value(val_param)) != kind) {
+        if (val_param &&
+            icalparameter_value_to_value_kind(icalparameter_get_value(val_param)) != kind) {
             icalproperty_remove_parameter_by_kind(p, ICAL_VALUE_PARAMETER);
         }
     }
