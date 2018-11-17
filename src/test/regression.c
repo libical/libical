@@ -4398,6 +4398,54 @@ void test_string_to_kind(void)
            icalproperty_string_to_kind(""), ICAL_NO_PROPERTY);
 }
 
+void test_set_date_datetime_value(void)
+{
+    icalproperty *prop;
+    icalparameter *param;
+    struct icaltimetype itt;
+    const char *propstr;
+
+    itt = icaltime_current_time_with_zone(icaltimezone_get_utc_timezone());
+
+    prop = icalproperty_new_dtstart(itt);
+    propstr = icalproperty_as_ical_string(prop);
+    icalproperty_free(prop);
+    prop = icalproperty_new_from_string(propstr);
+    ok("DATE-TIME on DTSTART is saved without VALUE",
+       (icalproperty_get_first_parameter(prop, ICAL_VALUE_PARAMETER) == NULL));
+
+    itt.is_date = 1;
+    icalproperty_set_dtstart(prop, itt);
+    propstr = icalproperty_as_ical_string(prop);
+    icalproperty_free(prop);
+    prop = icalproperty_new_from_string(propstr);
+    param = icalproperty_get_first_parameter(prop, ICAL_VALUE_PARAMETER);
+    ok("DATE on DTSTART is saved with VALUE", (param != NULL));
+    ok("DATE on DTSTART is saved with DATE VALUE", (icalparameter_get_value(param) == ICAL_VALUE_DATE));
+
+    itt.is_date = 0;
+    icalproperty_set_dtstart(prop, itt);
+    ok("VALUE parameter on DTSTART is removed right after set",
+       (icalproperty_get_first_parameter(prop, ICAL_VALUE_PARAMETER) == NULL));
+    propstr = icalproperty_as_ical_string(prop);
+    icalproperty_free(prop);
+    prop = icalproperty_new_from_string(propstr);
+    ok("DATE-TIME on DTSTART is saved without VALUE",
+       (icalproperty_get_first_parameter(prop, ICAL_VALUE_PARAMETER) == NULL));
+
+    /* Try it twice */
+    itt.is_date = 1;
+    icalproperty_set_dtstart(prop, itt);
+    propstr = icalproperty_as_ical_string(prop);
+    icalproperty_free(prop);
+    prop = icalproperty_new_from_string(propstr);
+    param = icalproperty_get_first_parameter(prop, ICAL_VALUE_PARAMETER);
+    ok("DATE on DTSTART is saved with VALUE", (param != NULL));
+    ok("DATE on DTSTART is saved with DATE VALUE", (icalparameter_get_value(param) == ICAL_VALUE_DATE));
+
+    icalproperty_free(prop);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4532,6 +4580,7 @@ int main(int argc, char *argv[])
     test_run("Test TZID with UTC time", test_tzid_with_utc_time, do_test, do_header);
     test_run("Test kind_to_string", test_kind_to_string, do_test, do_header);
     test_run("Test string_to_kind", test_string_to_kind, do_test, do_header);
+    test_run("Test set DATE/DATE-TIME VALUE", test_set_date_datetime_value, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

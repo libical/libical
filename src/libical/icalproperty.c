@@ -779,6 +779,8 @@ icalparameter *icalproperty_get_next_parameter(icalproperty *p, icalparameter_ki
 
 void icalproperty_set_value(icalproperty *p, icalvalue *value)
 {
+    icalvalue_kind kind;
+
     icalerror_check_arg_rv((p != 0), "prop");
     icalerror_check_arg_rv((value != 0), "value");
 
@@ -791,6 +793,18 @@ void icalproperty_set_value(icalproperty *p, icalvalue *value)
     p->value = value;
 
     icalvalue_set_parent(value, p);
+
+    kind = icalvalue_isa(value);
+    if(kind == ICAL_DATE_VALUE || kind == ICAL_DATETIME_VALUE) {
+        icalparameter *val_param;
+
+        val_param = icalproperty_get_first_parameter(p, ICAL_VALUE_PARAMETER);
+
+        if (val_param &&
+            icalparameter_value_to_value_kind(icalparameter_get_value(val_param)) != kind) {
+            icalproperty_remove_parameter_by_kind(p, ICAL_VALUE_PARAMETER);
+        }
+    }
 }
 
 void icalproperty_set_value_from_string(icalproperty *prop, const char *str, const char *type)
