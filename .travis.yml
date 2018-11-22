@@ -1,25 +1,32 @@
 env:
   global:
-  - secure: "NlWO/NTPlOU6cowOMuPOvjAprXVwIjmpHHf9CoMR71E2c/eBFFKIHj10kXuyFwz2KihHAIExmo9OlGtGniNWobvIrVrabO3dsOSb6UGbPAQkzQiyQLKsDNQAZx3nMuWEKBtMsVRee6rd7/2uGTY4WB5Ot3VhrUYcN1FoRgQQ9gk="
-  - PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig # needed to find homebrew's libffi on osx
+    - secure: "NlWO/NTPlOU6cowOMuPOvjAprXVwIjmpHHf9CoMR71E2c/eBFFKIHj10kXuyFwz2KihHAIExmo9OlGtGniNWobvIrVrabO3dsOSb6UGbPAQkzQiyQLKsDNQAZx3nMuWEKBtMsVRee6rd7/2uGTY4WB5Ot3VhrUYcN1FoRgQQ9gk="
 
-
-os:
-- linux
-- osx
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+    - os: osx
+      env:
+        - PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig # needed to find homebrew's libxml2 an libffi on osx
+        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog # homebrew installed libxml2 catalog
+        - EXTRA_BUILD_FLAGS="-DENABLE_GTK_DOC=false" # Disable Gtk-Doc on OSX
 
 before_install: ./scripts/setup-travis.sh
 
 language: c
 compiler:
-- gcc
-- clang
-script: mkdir build && cd build && cmake -DICAL_GLIB=true -DCMAKE_BUILD_TYPE=Release .. && make && make test
+  - gcc
+  - clang
+script:
+  - mkdir build
+  - cd build
+  - cmake -DICAL_GLIB=true $EXTRA_BUILD_FLAGS -DCMAKE_BUILD_TYPE=Release ..
+  - make
+  - make test
 
 addons:
   apt:
-    sources:
-      - george-edison55-precise-backports # cmake 3.2.3 / doxygen 1.8.3
     packages:
       - cmake
       - cmake-data
