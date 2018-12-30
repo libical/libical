@@ -33,6 +33,10 @@
 #  Default=false (build shared and static libs)
 #  Takes precedence over STATIC_ONLY
 #
+# -DENABLE_LTO_BUILD=[true|false]
+#  Build a link-time optimized version (requires gcc or clang)
+#  Default=false (do not build a link time optimized version)
+#
 # -DGOBJECT_INTROSPECTION=[true|false]
 #  Set to build GObject introspection "typelib" files
 #  Requires GObject Introspection development package v0.6.7 or higher
@@ -478,6 +482,32 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
 endif()
 
+########################################################
+
+option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
+if(WITH_CXX_BINDINGS)
+  enable_language(CXX)
+  if(CMAKE_CXX_COMPILER)
+    add_definitions(-DWITH_CXX_BINDINGS)
+  else()
+    message(STATUS
+      "Warning: Building the C++ bindings is not possible since a C++ compiler could not be found. "
+      "Turning-off C++ bindings"
+    )
+    set(WITH_CXX_BINDINGS False)
+  endif()
+endif()
+add_feature_info(
+  "Option WITH_CXX_BINDINGS"
+  WITH_CXX_BINDINGS
+  "build the C++ bindings. Requires a C++ compiler"
+)
+
+#some test programs need to know if we are using 32-bit time
+if(SIZEOF_TIME_T EQUAL 4)
+  set(USE_32BIT_TIME_T TRUE)
+endif()
+
 ################ Developer Options #####################
 option(ABI_DUMPER "Build for abi-dumper." False)
 if(ABI_DUMPER)
@@ -540,30 +570,33 @@ if(THREAD_SANITIZER)
   endif()
 endif()
 
-########################################################
-
-option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
-if(WITH_CXX_BINDINGS)
-  enable_language(CXX)
-  if(CMAKE_CXX_COMPILER)
-    add_definitions(-DWITH_CXX_BINDINGS)
+option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
+if(ENABLE_LTO_BUILD)
+  if(CMAKE_COMPILER_IS_GNUCC)
+    include(CheckCCompilerFlag)
+    check_c_compiler_flag(-flto HAVE_CC_COMPILER_LTO)
+    if(HAVE_CC_COMPILER_LTO)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlto-type-mismatch -flto -fuse-linker-plugin")
+      set(CMAKE_AR "gcc-ar")
+      set(CMAKE_RANLIB "gcc-ranlib")
+    else()
+      message(FATAL_ERROR
+        "Your C compiler ${CMAKE_C_COMPILER_ID} does not support the LTO building.")
+    endif()
+    if(WITH_CXX_BINDINGS AND CMAKE_COMPILER_IS_GNUCXX)
+      include(CheckCXXCompilerFlag)
+      check_cxx_compiler_flag(-flto HAVE_CXX_COMPILER_LTO)
+      if(HAVE_CXX_COMPILER_LTO)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlto-type-mismatch -flto -fuse-linker-plugin")
+      else()
+        message(FATAL_ERROR
+          "Your C++ compiler ${CMAKE_CXX_COMPILER_ID} does not support LTO building.")
+      endif()
+    endif()
   else()
-    message(STATUS
-      "Warning: Building the C++ bindings is not possible since a C++ compiler could not be found. "
-      "Turning-off C++ bindings"
-    )
-    set(WITH_CXX_BINDINGS False)
+    message(FATAL_ERROR
+      "Build link-time optimization using a non-GCC compiler is currently not supported.")
   endif()
-endif()
-add_feature_info(
-  "Option WITH_CXX_BINDINGS"
-  WITH_CXX_BINDINGS
-  "build the C++ bindings. Requires a C++ compiler"
-)
-
-#some test programs need to know if we are using 32-bit time
-if(SIZEOF_TIME_T EQUAL 4)
-  set(USE_32BIT_TIME_T TRUE)
 endif()
 
 ################# build subdirs ########################
