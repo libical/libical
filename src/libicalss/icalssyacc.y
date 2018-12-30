@@ -31,8 +31,8 @@
 
 extern struct icalgauge_impl *icalss_yy_gauge;
 
-#define YYPARSE_PARAM yy_globals
-#define YYLEX_PARAM yy_globals
+//#define YYPARSE_PARAM yy_globals
+//#define YYLEX_PARAM yy_globals
 #define YY_EXTRA_TYPE  icalgauge_impl*
 
 
