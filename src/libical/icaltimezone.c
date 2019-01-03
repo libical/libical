@@ -1800,6 +1800,12 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 
     icaltimezone_builtin_lock();
 
+    /* Try again, maybe it had been set by other thread while waiting for the lock */
+    if (zone->component) {
+        icaltimezone_builtin_unlock();
+        return;
+    }
+
     /* If the location isn't set, it isn't a builtin timezone. */
     if (!zone->location || !zone->location[0]) {
         icaltimezone_builtin_unlock();
