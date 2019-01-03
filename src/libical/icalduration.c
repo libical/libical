@@ -267,13 +267,13 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
     return buf;
 }
 
-/* From Russel Steinthal */
 int icaldurationtype_as_int(struct icaldurationtype dur)
 {
     return (int)((dur.seconds +
-                  (60 * dur.minutes) +
-                  (60 * 60 * dur.hours) +
-                  (60 * 60 * 24 * dur.days) + (60 * 60 * 24 * 7 * dur.weeks))
+                  60 * (dur.minutes +
+                        60 * (dur.hours +
+                              24 * (dur.days +
+                                    7 * dur.weeks))))
                  * (dur.is_neg == 1 ? -1 : 1));
 }
 
