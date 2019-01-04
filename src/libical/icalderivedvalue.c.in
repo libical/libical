@@ -171,6 +171,7 @@ struct icalrecurrencetype icalvalue_get_recur(const icalvalue *value)
     icalrecurrencetype_clear(&rt);
 
     icalerror_check_arg_rx((value != 0), "value", rt);
+    icalerror_check_arg_rx((value->data.v_recur != 0), "value", rt);
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
 
     return *(value->data.v_recur);
