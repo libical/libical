@@ -145,7 +145,7 @@ icalcomponent *icalcomponent_new_from_string(const char *str)
 
 /** @brief Constructor
  */
-icalcomponent *icalcomponent_new_clone(icalcomponent *old)
+icalcomponent *icalcomponent_new_clone(const icalcomponent *old)
 {
     icalcomponent *new;
     icalproperty *p;

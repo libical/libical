@@ -29,7 +29,7 @@ LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new(icalproperty_kind kind);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_impl(icalproperty_kind kind);
 
-LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_clone(icalproperty *prop);
+LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_clone(const icalproperty *prop);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_from_string(const char *str);
 

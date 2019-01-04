@@ -93,7 +93,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
  * icalparameter_free(clone);
  * ```
  */
-LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_clone(icalparameter *p);
+LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_clone(const icalparameter *p);
 
 /**
  * @brief Create ::icalparameter object from string

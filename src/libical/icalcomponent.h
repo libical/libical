@@ -38,7 +38,7 @@ typedef struct icalcompiter
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new(icalcomponent_kind kind);
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_clone(icalcomponent *component);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_clone(const icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_from_string(const char *str);
 
