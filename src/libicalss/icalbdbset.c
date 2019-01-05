@@ -547,7 +547,7 @@ int icalbdbset_delete(DB *dbp, DBT *key)
             } else {
                 char *strError = db_strerror(ret);
 
-                icalerror_warn("icalbdbset_delete faild: ");
+                icalerror_warn("icalbdbset_delete failed: ");
                 icalerror_warn(strError);
                 tid->abort(tid);
                 return ICAL_FILE_ERROR;
@@ -642,7 +642,7 @@ int icalbdbset_put(DB *dbp, DBT *key, DBT *data, u_int32_t access_method)
             } else {
                 char *strError = db_strerror(ret);
 
-                icalerror_warn("icalbdbset_put faild: ");
+                icalerror_warn("icalbdbset_put failed: ");
                 icalerror_warn(strError);
                 tid->abort(tid);
                 return ICAL_FILE_ERROR;
