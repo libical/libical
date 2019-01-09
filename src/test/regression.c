@@ -706,6 +706,20 @@ void test_recur_iterator_set_start()
     icalrecur_iterator_free(iterator);
 }
 
+void test_recur_iterator_on_jan_1()
+{
+    icaltimetype start = icaltime_from_string("20190101");
+    struct icalrecurrencetype recurrence = icalrecurrencetype_from_string("FREQ=WEEKLY;WKST=SU;INTERVAL=2;BYDAY=MO,TU,WE,TH,FR");
+    icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, start);
+
+    icaltimetype next = icalrecur_iterator_next(iterator);
+    ok("Next recurrence iterator result should be January 1", next.year == 2019 && next.month == 1 && next.day == 1);
+
+    next = icalrecur_iterator_next(iterator);
+    ok("Next recurrence iterator result should be January 2", next.year == 2019 && next.month == 1 && next.day == 2);
+    icalrecur_iterator_free(iterator);
+}
+
 void test_memory()
 {
     size_t bufsize = 256;
@@ -4357,6 +4371,7 @@ int main(int argc, char *argv[])
     test_run("Test Components", test_components, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence", test_component_foreach, do_test, do_header);
     test_run("Test icalrecur_iterator_set_start with date", test_recur_iterator_set_start, do_test, do_header);
+    test_run("Test weekly icalrecur_iterator on January 1", test_recur_iterator_on_jan_1, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
