@@ -1959,6 +1959,17 @@ static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
         diff = get_day_of_year(impl, b.year, b.month, b.day, NULL) -
             get_day_of_year(impl, a.year, a.month, a.day, NULL);
     } else {
+        /* Swap a and b if a is greater than b */
+        int flipped = 0;
+
+        if (a.year > b.year) {
+            icaltimetype temp = a;
+
+            a = b;
+            b = temp;
+            flipped = 1;
+        }
+
         /* Count days in each year to account for leap days/months */
         int year = a.year;
 
@@ -1966,6 +1977,11 @@ static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
             get_day_of_year(impl, a.year, a.month, a.day, NULL);
         while (++year < b.year) diff += get_days_in_year(impl, year);
         diff += get_day_of_year(impl, b.year, b.month, b.day, NULL);
+
+        if (flipped) {
+            /* The difference is negative because a was greater than b */
+            diff = -diff;
+        }
     }
 
     return diff;
