@@ -366,7 +366,7 @@ static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char
  * The code is locale *independent* and does *not* change the locale.
  * It should be thread safe.
  * If you want a code that that does the same job with a decimal separator
- * dependant on the current locale, then use strtof() from libc.
+ * dependent on the current locale, then use strtof() from libc.
  */
 static int simple_str_to_double(const char *from, double *result, char **to)
 {
@@ -385,17 +385,16 @@ static int simple_str_to_double(const char *from, double *result, char **to)
     }
 
     /*skip the white spaces at the beginning */
-    while (cur && isspace((int)*cur))
+    while (*cur && isspace((int)*cur))
         cur++;
 
     start = cur;
-    /*
-     * copy the part that looks like a double into tmp_buf
+    /* copy the part that looks like a double into tmp_buf
      * so that we can call strtof() on it.
      * during the copy, we give ourselves a chance to convert the '.'
      * into the decimal separator of the current locale.
      */
-    while (cur && (isdigit((int)*cur) || *cur == '.' || *cur == '+' || *cur == '-')) {
+    while (*cur && (isdigit((int)*cur) || *cur == '.' || *cur == '+' || *cur == '-')) {
         ++cur;
     }
     end = cur;
@@ -405,8 +404,7 @@ static int simple_str_to_double(const char *from, double *result, char **to)
     }
     memset(tmp_buf, 0, TMP_NUM_SIZE + 1);
 
-    /*
-     * copy the float number string into tmp_buf, and take
+    /* copy the float number string into tmp_buf, and take
      * care to have the (optional) decimal separator be the one
      * of the current locale.
      */
