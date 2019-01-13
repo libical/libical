@@ -22,6 +22,11 @@
     <method name="i_cal_property_new_clone" corresponds="icalproperty_new_clone" kind="clone" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be cloned."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty deeply cloned from @prop."/>
+        <comment xml:space="preserve">Deprecated function to clone a #ICalProperty. Use i_cal_property_clone instead.</comment>
+    </method>
+    <method name="i_cal_property_clone" corresponds="icalproperty_clone" kind="clone" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be cloned."/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty deeply cloned from @prop."/>
         <comment xml:space="preserve">Deeply clone a #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_from_string" corresponds="icalproperty_new_from_string" kind="constructor" since="1.0">

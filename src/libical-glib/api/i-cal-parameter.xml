@@ -22,6 +22,11 @@
     <method name="i_cal_parameter_new_clone" corresponds="icalparameter_new_clone" kind="clone" since="1.0">
         <parameter type="ICalParameter *" name="p" annotation="in" comment="The #ICalParameter to be cloned"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter with the same properties as the @p." />
+        <comment xml:space="preserve">Deprecated method to clone a #ICalParameter. Use i_cal_parameter_clone instead</comment>
+    </method>
+    <method name="i_cal_parameter_clone" corresponds="icalparameter_clone" kind="clone" since="3.1">
+        <parameter type="const ICalParameter *" name="p" annotation="in" comment="The #ICalParameter to be cloned"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter with the same properties as the @p." />
         <comment xml:space="preserve">Deep clone a #ICalParameter</comment>
     </method>
     <method name="i_cal_parameter_new_from_string" corresponds="icalparameter_new_from_string" kind="constructor" since="1.0">
