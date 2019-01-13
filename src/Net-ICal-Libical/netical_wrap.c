@@ -515,7 +515,7 @@ XS(_wrap_icalcomponent_new) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalcomponent_new_clone) {
+XS(_wrap_icalcomponent_clone) {
 
     icalcomponent * _result;
     icalcomponent * _arg0;
@@ -524,12 +524,12 @@ XS(_wrap_icalcomponent_new_clone) {
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_new_clone(component);");
+        croak("Usage: icalcomponent_clone(component);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_new_clone. Expected icalcomponentPtr.");
+        croak("Type error in argument 1 of icalcomponent_clone. Expected icalcomponentPtr.");
         XSRETURN(1);
     }
-    _result = (icalcomponent *)icalcomponent_new_clone(_arg0);
+    _result = (icalcomponent *)icalcomponent_clone(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
     XSRETURN(argvi);
@@ -2901,7 +2901,8 @@ XS(boot_Net__ICal__Libical) {
 	 newXS("Net::ICal::Libical::var_Net__ICal__Libical_init", _wrap_perl5_Net__ICal__Libical_var_init, file);
 	 newXS("Net::ICal::Libical::icalparser_parse_string", _wrap_icalparser_parse_string, file);
 	 newXS("Net::ICal::Libical::icalcomponent_new", _wrap_icalcomponent_new, file);
-	 newXS("Net::ICal::Libical::icalcomponent_new_clone", _wrap_icalcomponent_new_clone, file);
+	 newXS("Net::ICal::Libical::icalcomponent_new_clone", _wrap_icalcomponent_clone, file);
+	 newXS("Net::ICal::Libical::icalcomponent_clone", _wrap_icalcomponent_clone, file);
 	 newXS("Net::ICal::Libical::icalcomponent_new_from_string", _wrap_icalcomponent_new_from_string, file);
 	 newXS("Net::ICal::Libical::icalcomponent_as_ical_string", _wrap_icalcomponent_as_ical_string, file);
 	 newXS("Net::ICal::Libical::icalcomponent_free", _wrap_icalcomponent_free, file);

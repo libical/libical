@@ -40,7 +40,7 @@ icalcomponent* icalparser_parse_string(char* str);
 
 
 icalcomponent* icalcomponent_new(icalcomponent_kind kind);
-icalcomponent* icalcomponent_new_clone(icalcomponent* component);
+icalcomponent* icalcomponent_clone(icalcomponent* component);
 icalcomponent* icalcomponent_new_from_string(char* str);
 
 char* icalcomponent_as_ical_string(icalcomponent* component);
