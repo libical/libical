@@ -19,7 +19,7 @@
         <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
         <comment xml:space="preserve">Create a new #ICalValue with specific kind.</comment>
     </method>
-    <method name="i_cal_value_new_clone" corresponds="icalvalue_new_clone" kind="clone" since="1.0">
+    <method name="i_cal_value_new_clone" corresponds="icalvalue_clone" kind="clone" since="1.0">
         <parameter type="const ICalValue *" name="value" comment="The #ICalValue to be cloned."/>
         <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue with the same property as @value."/>
         <comment xml:space="preserve">Deprecated function to clone a #ICalValue. Use i_cal_value_clone instead.</comment>
