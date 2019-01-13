@@ -547,17 +547,3 @@ typedef ssize_t IO_SSIZE_T;
 #endif
 #endif
 
-#/* Deprecated function macro */
-#if defined(NO_DEPRECATION_WARNINGS)
-#define _deprecated(x) x
-#else
-#if !defined(_deprecated)
-#ifdef __GNUC__
-#define _deprecated(x) x __attribute__((deprecated))
-#elif defined(_MSC_VER)
-#define _deprecated(x) __declspec(deprecated) x
-#else
-#define _deprecated(x) x
-#endif
-#endif
-#endif
