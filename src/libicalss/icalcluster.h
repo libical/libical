@@ -61,6 +61,6 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_next_component(icalcluster 
  *  This function is outdated because because it uses the wrong naming convention
  *  @deprecated use icalcluster_clone() instead
  */
-LIBICAL_ICALSS_EXPORT _deprecated(icalcluster *icalcluster_new_clone(const icalcluster *cluster));
+LIBICAL_ICALSS_EXPORT LIBICAL_DEPRECATED(icalcluster *icalcluster_new_clone(const icalcluster *cluster));
 
 #endif /* !ICALCLUSTER_H */
