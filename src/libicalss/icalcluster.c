@@ -72,7 +72,7 @@ icalcluster *icalcluster_new(const char *key, icalcomponent *data)
             impl->data = icalcomponent_new(ICAL_XROOT_COMPONENT);
             icalcomponent_add_component(impl->data, data);
         } else {
-            impl->data = icalcomponent_new_clone(data);
+            impl->data = icalcomponent_clone(data);
         }
     } else {
         impl->data = icalcomponent_new(ICAL_XROOT_COMPONENT);
@@ -85,7 +85,7 @@ icalcluster *icalcluster_new(const char *key, icalcomponent *data)
  * Deep clone an icalcluster to a new one
  */
 
-icalcluster *icalcluster_new_clone(const icalcluster *data)
+icalcluster *icalcluster_clone(const icalcluster *data)
 {
     struct icalcluster_impl *old = (struct icalcluster_impl *)data;
     struct icalcluster_impl *impl = icalcluster_new_impl();
@@ -95,6 +95,15 @@ icalcluster *icalcluster_new_clone(const icalcluster *data)
     impl->changed = 0;
 
     return impl;
+}
+
+/**
+ * Deprecated function to clone a cluster
+ * @deprecated use ucalcluster_clone() instead
+ */
+icalcluster_new_clone(const icalcluster *data)
+{
+    return icalcluster_clone(data);
 }
 
 void icalcluster_free(icalcluster *impl)

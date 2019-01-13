@@ -290,11 +290,11 @@ icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
             icalproperty_new_method(ICAL_METHOD_REPLY),
             icalcomponent_vanew(
                 ICAL_VEVENT_COMPONENT,
-                icalproperty_new_clone(
+                icalproperty_clone(
                     icalcomponent_get_first_property(inner, ICAL_DTSTAMP_PROPERTY)),
-                icalproperty_new_clone(
+                icalproperty_clone(
                     icalcomponent_get_first_property(inner, ICAL_ORGANIZER_PROPERTY)),
-                icalproperty_new_clone(
+                icalproperty_clone(
                     icalcomponent_get_first_property(inner, ICAL_UID_PROPERTY)),
                 icalproperty_new_attendee(attendee),
                 0),
@@ -310,7 +310,7 @@ icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
     for (p = icalcomponent_get_first_property(inner, ICAL_REQUESTSTATUS_PROPERTY);
          p != 0;
          p = icalcomponent_get_next_property(inner, ICAL_REQUESTSTATUS_PROPERTY)) {
-        icalcomponent_add_property(rinner, icalproperty_new_clone(p));
+        icalcomponent_add_property(rinner, icalproperty_clone(p));
     }
 
     if (return_status != 0) {

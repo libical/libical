@@ -90,7 +90,7 @@ icalcomponent *icalclassify_find_overlaps(icalset *set, icalcomponent *comp)
 
         if (compspan.start < span.end && compspan.end > span.start) {
 
-            icalcomponent *clone = icalcomponent_new_clone(c);
+            icalcomponent *clone = icalcomponent_clone(c);
 
             icalcomponent_add_component(return_set, clone);
         }
