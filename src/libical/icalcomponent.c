@@ -177,7 +177,7 @@ icalcomponent *icalcomponent_clone(const icalcomponent *old)
  */
 icalcomponent *icalcomponent_new_clone(icalcomponent *old)
 {
-    return icalcomponetn_clone(old);
+    return icalcomponent_clone(old);
 }
 
 /** @brief Constructor
