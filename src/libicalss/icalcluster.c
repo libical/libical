@@ -100,7 +100,7 @@ icalcluster *icalcluster_clone(const icalcluster *data)
  * Deprecated function to clone a cluster
  * @deprecated use ucalcluster_clone() instead
  */
-icalcluster_new_clone(const icalcluster *data)
+icalcluster *icalcluster_new_clone(const icalcluster *data)
 {
     return icalcluster_clone(data);
 }

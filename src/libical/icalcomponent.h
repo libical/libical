@@ -62,8 +62,9 @@ LIBICAL_ICAL_EXPORT int icalcomponent_isa_component(void *component);
  *  Outdated way to clone a component
  *  This function is deprecated because it incorrectly requires the paramater to be non-const
  *  @deprecated use icalcomponent_clone() instead
+ *  @todo add _deprecated macro
  */
-LIBICAL_ICAL_EXPORT _deprecated(icalcomponent *icalcomponent_new_clone(icalcomponent *component));
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_clone(icalcomponent *component);
 
 /*
  * Working with properties

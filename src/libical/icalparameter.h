@@ -99,8 +99,9 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_clone(const icalparameter *p);
  *  Outdated function to clone a parameter
  *  This function is deprecated because it incorrectly requires the param to be non-const
  *  @deprecated use icalparameter_clone()
+ *  @todo add _deprecated macro
  */
-LIBICAL_ICAL_EXPORT _deprecated(icalparameter *icalparameter_new_clone(icalparameter *p));
+LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_clone(icalparameter *p);
 
 /**
  * @brief Create ::icalparameter object from string
