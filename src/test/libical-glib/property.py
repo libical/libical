@@ -21,12 +21,12 @@
 from gi.repository import ICalGLib
 
 action_property = ICalGLib.Property.new(ICalGLib.PropertyKind.ACKNOWLEDGED_PROPERTY);
-action_property_clone = action_property.new_clone();
+action_property_clone = action_property.clone();
 assert(action_property_clone.as_ical_string_r() == action_property.as_ical_string_r());
 
 property_string = "SUMMARY:Bastille Day Party";
 string_property = ICalGLib.Property.new_from_string(property_string);
-string_property_clone = string_property.new_clone();
+string_property_clone = string_property.clone();
 assert(string_property.as_ical_string_r() == string_property_clone.as_ical_string_r());
 assert(string_property.isa() == ICalGLib.PropertyKind.SUMMARY_PROPERTY);
 assert(string_property.isa_property() == 1);

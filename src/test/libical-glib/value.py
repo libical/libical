@@ -33,7 +33,7 @@ assert(value_from_string.is_valid() == 1);
 assert(value_from_string.isa() == kind);
 assert(value_from_string.isa_value() == 1);
 
-value_from_string_clone = value_from_string.new_clone();
+value_from_string_clone = value_from_string.clone();
 assert(value_from_string_clone.as_ical_string_r() == string);
 assert(value_from_string_clone.is_valid() == 1);
 assert(value_from_string_clone.isa() == kind);

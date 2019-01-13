@@ -47,7 +47,7 @@ assert(parameter.isa() == kind);
 assert(parameter.isa_parameter() == 1);
 string = parameter.as_ical_string_r();
 assert(string == None);
-clone = parameter.new_clone();
+clone = parameter.clone();
 assert(clone.isa() == kind);
 assert(clone.isa_parameter() == 1);
 string = clone.as_ical_string_r();

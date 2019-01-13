@@ -126,8 +126,8 @@ def main():
     comp = ICalGLib.Component.new_from_string(event_str1);
     string = comp.as_ical_string_r();
 
-    #Test new_clone
-    clone = comp.new_clone();
+    #Test clone
+    clone = comp.clone();
     string1 = clone.as_ical_string_r();
     assert(string == string1);
     assert(comp.is_valid() == 1);
