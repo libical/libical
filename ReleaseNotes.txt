@@ -3,14 +3,23 @@ Release Highlights
 
 Version 3.1.0 (NOT RELEASED YET):
 --------------
+ * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
  * New publicly available functions:
      + icalrecurrencetype_encode_day
      + icalrecurrencetype_encode_month
      + icaltzutil_set_zone_directory
+     + icalcomponent_clone
+     + icalproperty_clone
+     + icalparameter_clone
+     + icalvalue_clone
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
  * Deprecated functions:
      + caldat
      + juldat
+     + icalcomponent_new_clone
+     + icalproperty_new_clone
+     + icalparameter_new_clone
+     + icalvalue_new_clone
 
 Version 3.0.5 (NOT RELEASED YET):
 -------------
