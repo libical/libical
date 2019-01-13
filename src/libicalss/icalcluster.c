@@ -56,7 +56,6 @@ static icalcluster *icalcluster_new_impl(void)
  *
  * @todo Always do a deep copy.
  */
-
 icalcluster *icalcluster_new(const char *key, icalcomponent *data)
 {
     struct icalcluster_impl *impl = icalcluster_new_impl();
@@ -91,7 +90,7 @@ icalcluster *icalcluster_clone(const icalcluster *data)
     struct icalcluster_impl *impl = icalcluster_new_impl();
 
     impl->key = strdup(old->key);
-    impl->data = icalcomponent_new_clone(old->data);
+    impl->data = icalcomponent_clone(old->data);
     impl->changed = 0;
 
     return impl;

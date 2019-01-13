@@ -100,7 +100,7 @@ static void icalmessage_copy_properties(icalcomponent *to, icalcomponent *from,
 
     icalcomponent_add_property(
         to_inner,
-        icalproperty_new_clone(icalcomponent_get_first_property(from_inner, kind)));
+        icalproperty_clone(icalcomponent_get_first_property(from_inner, kind)));
 }
 
 static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
@@ -144,7 +144,7 @@ static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
         return 0;
     }
 
-    icalcomponent_add_property(inner, icalproperty_new_clone(attendee));
+    icalcomponent_add_property(inner, icalproperty_clone(attendee));
 
     /* Add PRODID and VERSION */
 
@@ -309,7 +309,7 @@ icalcomponent *icalmessage_new_error_reply(icalcomponent *c,
         for (p = icalcomponent_get_first_property(cinner, ICAL_REQUESTSTATUS_PROPERTY);
              p != 0;
              p = icalcomponent_get_next_property(cinner, ICAL_REQUESTSTATUS_PROPERTY)) {
-            icalcomponent_add_property(inner, icalproperty_new_clone(p));
+            icalcomponent_add_property(inner, icalproperty_clone(p));
         }
     }
 

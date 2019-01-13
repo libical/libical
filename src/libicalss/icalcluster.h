@@ -27,7 +27,7 @@ typedef struct icalcluster_impl icalcluster;
 
 LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_new(const char *key, icalcomponent *data);
 
-LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_new_clone(const icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_clone(const icalcluster *cluster);
 
 LIBICAL_ICALSS_EXPORT void icalcluster_free(icalcluster *cluster);
 
@@ -55,5 +55,12 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_current_component(icalclust
 LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_first_component(icalcluster *cluster);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_next_component(icalcluster *cluster);
+
+/**
+ *  Deprecated function to clone a cluster
+ *  This function is outdated because because it uses the wrong naming convention
+ *  @deprecated use icalcluster_clone() instead
+ */
+LIBICAL_ICALSS_EXPORT _deprecated(icalcluster *icalcluster_new_clone(const icalcluster *cluster));
 
 #endif /* !ICALCLUSTER_H */

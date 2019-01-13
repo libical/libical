@@ -113,7 +113,7 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
     }
 
     if (options->cluster) {
-        fset->cluster = icalcomponent_new_clone(icalcluster_get_component(options->cluster));
+        fset->cluster = icalcomponent_clone(icalcluster_get_component(options->cluster));
         fset->changed = 1;
     }
 
