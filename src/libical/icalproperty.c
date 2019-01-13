@@ -92,7 +92,7 @@ icalproperty *icalproperty_new(icalproperty_kind kind)
     return (icalproperty *) icalproperty_new_impl(kind);
 }
 
-icalproperty *icalproperty_new_clone(const icalproperty *old)
+icalproperty *icalproperty_new_clone(icalproperty *old)
 {
     icalproperty *new;
     pvl_elem p;
