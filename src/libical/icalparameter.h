@@ -82,7 +82,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
  * icalparameter *param = icalparameter_new_from_string("ROLE=CHAIR");
  *
  * // clone the parameter
- * icalparameter *clone = icalparameter_new_clone(param);
+ * icalparameter *clone = icalparameter_clone(param);
  *
  * if(clone) {
  *     // use clone ...
@@ -93,7 +93,14 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
  * icalparameter_free(clone);
  * ```
  */
-LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_clone(icalparameter *p);
+LIBICAL_ICAL_EXPORT icalparameter *icalparameter_clone(const icalparameter *p);
+
+/**
+ *  Outdated function to clone a parameter
+ *  This function is deprecated because it incorrectly requires the param to be non-const
+ *  @deprecated use icalparameter_clone()
+ */
+LIBICAL_ICAL_EXPORT _deprecated(icalparameter *icalparameter_new_clone(icalparameter *p));
 
 /**
  * @brief Create ::icalparameter object from string
@@ -158,9 +165,10 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_value_string(icalparam
  * @param parameter The icalparameter to free
  *
  * This method needs to be used on all parameter objects returned
- * from any of the `_new()` methods including icalparameter_new(), icalparameter_new_clone(),
- * icalparameter_new_from_string() and icalparameter_new_from_value_string(),
- * when they are not needed anymore and to be released.
+ * from any of the `_new()` methods including icalparameter_new(), 
+ * icalparameter_new_from_string() and icalparameter_new_from_value_string()
+ * and on cloned parameter objects returned by icalparameter_clone()
+ * when these object are not needed anymore and to be released.
  *
  * ### Usage
  * ```c

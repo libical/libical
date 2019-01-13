@@ -64,7 +64,7 @@ icalvalue *icalvalue_new(icalvalue_kind kind)
     return (icalvalue *) icalvalue_new_impl(kind);
 }
 
-icalvalue *icalvalue_new_clone(const icalvalue *old)
+icalvalue *icalvalue_clone(const icalvalue *old)
 {
     struct icalvalue_impl *new;
 
@@ -165,6 +165,15 @@ icalvalue *icalvalue_new_clone(const icalvalue *old)
     }
 
     return new;
+}
+
+/**
+ *  Deprecated function to clone a value
+ *  @deprecated use icalvalue_clone() instead
+ */
+icalvalue *icalvalue_new_clone(const icalvalue *old)
+{
+    return icalvalue_clone(old);
 }
 
 static char *icalmemory_strdup_and_dequote(const char *str)

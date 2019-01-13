@@ -145,7 +145,7 @@ icalcomponent *icalcomponent_new_from_string(const char *str)
 
 /** @brief Constructor
  */
-icalcomponent *icalcomponent_new_clone(icalcomponent *old)
+icalcomponent *icalcomponent_clone(const icalcomponent *old)
 {
     icalcomponent *new;
     icalproperty *p;
@@ -162,15 +162,22 @@ icalcomponent *icalcomponent_new_clone(icalcomponent *old)
 
     for (itr = pvl_head(old->properties); itr != 0; itr = pvl_next(itr)) {
         p = (icalproperty *) pvl_data(itr);
-        icalcomponent_add_property(new, icalproperty_new_clone(p));
+        icalcomponent_add_property(new, icalproperty_clone(p));
     }
 
     for (itr = pvl_head(old->components); itr != 0; itr = pvl_next(itr)) {
         c = (icalcomponent *) pvl_data(itr);
-        icalcomponent_add_component(new, icalcomponent_new_clone(c));
+        icalcomponent_add_component(new, icalcomponent_clone(c));
     }
 
     return new;
+}
+
+/** @brief Deprecated constructor
+ */
+icalcomponent *icalcomponent_new_clone(icalcomponent *old)
+{
+    return icalcomponetn_clone(old);
 }
 
 /** @brief Constructor

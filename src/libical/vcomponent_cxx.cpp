@@ -37,7 +37,7 @@ VComponent::VComponent() : imp(icalcomponent_new(ICAL_ANY_COMPONENT))
 {
 }
 
-VComponent::VComponent(const VComponent &v) : imp(icalcomponent_new_clone(v.imp))
+VComponent::VComponent(const VComponent &v) : imp(icalcomponent_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -52,7 +52,7 @@ VComponent &VComponent::operator=(const VComponent &v)
 
     if (imp != NULL) {
         icalcomponent_free(imp);
-        imp = icalcomponent_new_clone(v.imp);
+        imp = icalcomponent_clone(v.imp);
         if (imp == NULL) {
             throw icalerrno;
         }

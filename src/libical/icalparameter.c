@@ -82,7 +82,7 @@ void icalparameter_free(icalparameter *param)
     free(param);
 }
 
-icalparameter *icalparameter_new_clone(icalparameter *old)
+icalparameter *icalparameter_clone(const icalparameter *old)
 {
     struct icalparameter_impl *new;
 
@@ -115,6 +115,15 @@ icalparameter *icalparameter_new_clone(icalparameter *old)
     }
 
     return new;
+}
+
+/**
+ *  Deprecated clone function
+ *  @deprecated use icalparameter_clone()
+ */
+icalparameter *icalparameter_new_clone(icalparameter *old)
+{
+    return icalparameter_clone(old);
 }
 
 icalparameter *icalparameter_new_from_string(const char *str)

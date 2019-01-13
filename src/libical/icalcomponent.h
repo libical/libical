@@ -38,7 +38,7 @@ typedef struct icalcompiter
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new(icalcomponent_kind kind);
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_clone(icalcomponent *component);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_clone(const icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_from_string(const char *str);
 
@@ -57,6 +57,13 @@ LIBICAL_ICAL_EXPORT int icalcomponent_is_valid(icalcomponent *component);
 LIBICAL_ICAL_EXPORT icalcomponent_kind icalcomponent_isa(const icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT int icalcomponent_isa_component(void *component);
+
+/** 
+ *  Outdated way to clone a component
+ *  This function is deprecated because it incorrectly requires the paramater to be non-const
+ *  @deprecated use icalcomponent_clone() instead
+ */
+LIBICAL_ICAL_EXPORT _deprecated(icalcomponent *icalcomponent_new_clone(icalcomponent *component));
 
 /*
  * Working with properties

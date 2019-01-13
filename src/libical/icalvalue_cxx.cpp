@@ -26,7 +26,7 @@ ICalValue::ICalValue() : imp(icalvalue_new(ICAL_ANY_VALUE))
 {
 }
 
-ICalValue::ICalValue(const ICalValue &v) : imp(icalvalue_new_clone(v.imp))
+ICalValue::ICalValue(const ICalValue &v) : imp(icalvalue_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -41,7 +41,7 @@ ICalValue &ICalValue::operator=(const ICalValue &v)
 
     if (imp != NULL) {
         icalvalue_free(imp);
-        imp = icalvalue_new_clone(v.imp);
+        imp = icalvalue_clone(v.imp);
         if (imp == NULL) {
             throw icalerrno;
         }

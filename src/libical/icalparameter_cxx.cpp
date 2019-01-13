@@ -24,7 +24,7 @@ ICalParameter::ICalParameter() : imp(icalparameter_new(ICAL_ANY_PARAMETER))
 {
 }
 
-ICalParameter::ICalParameter(const ICalParameter &v) : imp(icalparameter_new_clone(v.imp))
+ICalParameter::ICalParameter(const ICalParameter &v) : imp(icalparameter_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -39,7 +39,7 @@ ICalParameter &ICalParameter::operator=(const ICalParameter &v)
 
     if (imp != NULL) {
         icalparameter_free(imp);
-        imp = icalparameter_new_clone(v.imp);
+        imp = icalparameter_clone(v.imp);
         if (imp == NULL) {
             throw icalerrno;
         }

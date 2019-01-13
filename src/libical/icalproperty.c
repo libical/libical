@@ -92,7 +92,7 @@ icalproperty *icalproperty_new(icalproperty_kind kind)
     return (icalproperty *) icalproperty_new_impl(kind);
 }
 
-icalproperty *icalproperty_new_clone(icalproperty *old)
+icalproperty *icalproperty_clone(const icalproperty *old)
 {
     icalproperty *new;
     pvl_elem p;
@@ -102,7 +102,7 @@ icalproperty *icalproperty_new_clone(icalproperty *old)
     icalerror_check_arg_rz((new != 0), "new");
 
     if (old->value != 0) {
-        new->value = icalvalue_new_clone(old->value);
+        new->value = icalvalue_clone(old->value);
     }
 
     if (old->x_name != 0) {
@@ -117,7 +117,7 @@ icalproperty *icalproperty_new_clone(icalproperty *old)
     }
 
     for (p = pvl_head(old->parameters); p != 0; p = pvl_next(p)) {
-        icalparameter *param = icalparameter_new_clone(pvl_data(p));
+        icalparameter *param = icalparameter_clone(pvl_data(p));
 
         if (param == 0) {
             icalproperty_free(new);
@@ -129,6 +129,15 @@ icalproperty *icalproperty_new_clone(icalproperty *old)
     }
 
     return new;
+}
+
+/**
+ *  Deprecated function to clone a property
+ *  @deprecated use icalproperty_clone()
+ */
+icalproperty *icalproperty_new_clone(icalproperty *old)
+{
+    return icalproperty_clone(old);
 }
 
 icalproperty *icalproperty_new_from_string(const char *str)
