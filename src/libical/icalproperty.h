@@ -20,6 +20,7 @@
 #ifndef ICALPROPERTY_H
 #define ICALPROPERTY_H
 
+#include "libical_deprecated.h"
 #include "libical_ical_export.h"
 #include "icalderivedproperty.h"        /* To get icalproperty_kind enumerations */
 
@@ -151,9 +152,8 @@ LIBICAL_ICAL_EXPORT void icalproperty_normalize(icalproperty *prop);
  *  Outdated function to clone a property
  *  This function is outdated because it incorrectly requires the parameter to be non-const
  *  @deprecated use icalproperty_clone() instead
- *  @todo add _deprecated macro
  */
-LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_clone(icalproperty *prop);
+LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalproperty *icalproperty_new_clone(icalproperty *prop));
 
 
 #endif /*ICALPROPERTY_H */

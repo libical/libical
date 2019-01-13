@@ -67,6 +67,7 @@
 #ifndef ICAL_ASTIME_H
 #define ICAL_ASTIME_H
 
+#include "libical_deprecated.h"
 #include "libical_ical_export.h"
 #include <config.h>
 
@@ -91,12 +92,12 @@ typedef struct ut_instant
 /** converts julian date to year,mo,da
  *  @deprecated use caldat_int() instead
  */
-LIBICAL_ICAL_EXPORT _deprecated(long caldat(UTinstantPtr));
+LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(long caldat(UTinstantPtr));
 
 /** returns julian day from year,mo,da
  *  @deprecated use juldat_int() instead
  */
-LIBICAL_ICAL_EXPORT _deprecated(double juldat(UTinstantPtr));
+LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(double juldat(UTinstantPtr));
 
 typedef struct ut_instant_int
 {
