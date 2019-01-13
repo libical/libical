@@ -134,7 +134,7 @@ void test_properties()
     free(str);
 
     /* Make a copy of the property. Caller owns the memory */
-    clone = icalproperty_new_clone(prop);
+    clone = icalproperty_clone(prop);
 
     /* Get a reference to the value within the clone property */
     value = icalproperty_get_value(clone);
