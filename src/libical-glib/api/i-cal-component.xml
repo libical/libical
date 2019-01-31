@@ -60,8 +60,18 @@
     </method>
     <method name="i_cal_component_add_property" corresponds="icalcomponent_add_property" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
-        <parameter type="ICalProperty *" name="property" translator_argus="component" comment="A #ICalProperty."/>
-        <comment xml:space="preserve">Add a #ICalProperty into #ICalComponent.</comment>
+        <parameter type="ICalProperty *" name="property" translator_argus="component" comment="An #ICalProperty."/>
+        <comment xml:space="preserve">Add an #ICalProperty into #ICalComponent.</comment>
+    </method>
+    <method name="i_cal_component_take_property" corresponds="CUSTOM" annotation="skip" since="1.0">
+        <parameter type="ICalComponent *" name="component" comment="An #ICalComponent."/>
+        <parameter type="ICalProperty *" name="property" annotation="transfer full" comment="An #ICalProperty."/>
+        <comment xml:space="preserve">Add the @property into the @component and unrefs the @property.</comment>
+        <custom>    g_return_if_fail(I_CAL_IS_COMPONENT(component));
+    g_return_if_fail(I_CAL_IS_PROPERTY(property));
+
+    i_cal_component_add_property(component, property);
+    g_object_unref(property);</custom>
     </method>
     <method name="i_cal_component_remove_property" corresponds="icalcomponent_remove_property" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
@@ -110,6 +120,16 @@
         <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent."/>
         <parameter type="ICalComponent *" name="child" translator_argus="(GObject*) parent" comment="A child #ICalComponent."/>
         <comment xml:space="preserve">Add a #ICalComponent into another #ICalComponent as a child component.</comment>
+    </method>
+    <method name="i_cal_component_take_component" corresponds="CUSTOM" annotation="skip" since="1.0">
+        <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent."/>
+        <parameter type="ICalComponent *" name="child" annotation="transfer full" comment="A child #ICalComponent."/>
+        <comment xml:space="preserve">Add the @child into the @parent as a child component and unrefs the @child.</comment>
+        <custom>    g_return_if_fail(I_CAL_IS_COMPONENT(parent));
+    g_return_if_fail(I_CAL_IS_COMPONENT(child));
+
+    i_cal_component_add_component(parent, child);
+    g_object_unref(child);</custom>
     </method>
     <method name="i_cal_component_remove_component" corresponds="icalcomponent_remove_component" since="1.0">
         <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent."/>
