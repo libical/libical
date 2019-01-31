@@ -22,6 +22,11 @@
 	datetimeperiodtype.period = icalperiodtype_null_period ();
 	return datetimeperiodtype;</custom>
     </method>
+    <method name="i_cal_datetimeperiod_type_new" corresponds="CUSTOM" kind="constructor" since="1.0">
+        <returns type="ICalDatetimeperiodType *" annotation="transfer full" comment="The newly created #ICalDatetimeperiodType." />
+        <comment xml:space="preserve">Create a new #ICalDatetimeperiodType.</comment>
+        <custom>	return i_cal_datetimeperiod_type_new_full(i_cal_datetimeperiod_type_new_default());</custom>
+    </method>
     <method name="i_cal_datetimeperiod_type_get_time" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalDatetimeperiodType *" name="dtp" comment="The #ICalDatetimeperiodType to be queried"/>
         <returns type="ICalTimetype *" annotation="transfer full" comment="The time attribute of @dtp."/>
