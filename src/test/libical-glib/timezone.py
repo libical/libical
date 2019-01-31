@@ -63,6 +63,10 @@ before = time.get_hour();
 ICalGLib.Timezone.convert_time(time, la, chicago);
 after = time.get_hour();
 assert abs(after - before) == 2;
+ICalGLib.Timetype.set_zone(time, utc);
+assert ICalGLib.Timetype.get_zone(time) == utc;
+ICalGLib.Timetype.set_zone(time, la);
+assert ICalGLib.Timetype.get_zone(time) == la;
 
 component = la.get_component();
 timezone = ICalGLib.Timezone.new();

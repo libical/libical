@@ -155,9 +155,18 @@
     </method>
     <method name="i_cal_timetype_get_zone" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
-        <returns type="const ICalTimezone *" translator="i_cal_timezone_new_full" translator_argus="NULL, TRUE" comment="The timezone." />
-        <comment xml:space="preserve">Get the is_daylight of #ICalTimetype.</comment>
-        <custom>	g_return_val_if_fail (timetype != NULL, 0);
-	return i_cal_timezone_new_full ((icaltimezone *)(((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->zone), NULL, TRUE);</custom>
+        <returns type="ICalTimezone *" annotation="transfer none, nullable" comment="The set timezone." />
+        <comment xml:space="preserve">Get the timezone of the #ICalTimetype. Returns %NULL when none is set.</comment>
+        <custom>    icaltimezone *zone;
+    g_return_val_if_fail (timetype != NULL, NULL);
+    zone = (icaltimezone *)(((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->zone);
+    return zone ? i_cal_timezone_new_full (zone, NULL, TRUE) : NULL;</custom>
+    </method>
+    <method name="i_cal_timetype_set_zone" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be set to."/>
+        <parameter type="const ICalTimezone *" name="zone" annotation="transfer none, nullable" comment="The timezone." />
+        <comment xml:space="preserve">Set the timezone of the #ICalTimetype. It can be %NULL to unset it. The passed-in @zone object should stay alaive for the whole life time of the @timetype, because the @timetype doesn't reference it.</comment>
+        <custom>    g_return_if_fail (timetype != NULL);
+    ((struct icaltimetype *)i_cal_object_get_native((ICalObject *)timetype))->zone = i_cal_object_get_native((ICalObject *)zone);</custom>
     </method>
 </structure>
