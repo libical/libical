@@ -85,6 +85,28 @@ assert ICalGLib.Timetype.get_is_daylight(time) == ICalGLib.Timetype.get_is_dayli
 assert ICalGLib.Timetype.get_zone(time) == ICalGLib.Timetype.get_zone(timeclone);
 assert ICalGLib.Timetype.is_utc(time) == ICalGLib.Timetype.is_utc(timeclone);
 
+time.set_date(2019, 1, 24)
+assert time.get_year() == 2019
+assert time.get_month() == 1
+assert time.get_day() == 24
+
+array = time.get_date()
+assert len(array) == 3
+assert array[0] == 2019
+assert array[1] == 1
+assert array[2] == 24
+
+time.set_time(12, 11, 10)
+assert time.get_hour() == 12
+assert time.get_minute() == 11
+assert time.get_second() == 10
+
+array = time.get_time()
+assert len(array) == 3
+assert array[0] == 12
+assert array[1] == 11
+assert array[2] == 10
+
 component = la.get_component();
 timezone = ICalGLib.Timezone.new();
 timezone.set_component(ICalGLib.Component.new_clone(component));
