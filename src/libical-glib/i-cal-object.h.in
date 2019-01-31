@@ -81,10 +81,10 @@ struct _ICalObjectClass
 
 LIBICAL_ICAL_EXPORT GType i_cal_object_get_type(void);
 
-LIBICAL_ICAL_EXPORT void i_cal_object_construct(ICalObject *iobject,
-                                                gpointer native,
-                                                GDestroyNotify native_destroy_func,
-                                                gboolean is_global_memory, GObject *owner);
+LIBICAL_ICAL_EXPORT gpointer i_cal_object_construct(GType object_type,
+                                                    gpointer native,
+                                                    GDestroyNotify native_destroy_func,
+                                                    gboolean is_global_memory, GObject *owner);
 
 LIBICAL_ICAL_EXPORT gpointer i_cal_object_get_native(ICalObject *iobject);
 
@@ -106,6 +106,8 @@ LIBICAL_ICAL_EXPORT void i_cal_object_remove_owner(ICalObject *iobject);
 LIBICAL_ICAL_EXPORT void i_cal_object_add_depender(ICalObject *iobject, GObject *depender);
 
 LIBICAL_ICAL_EXPORT void i_cal_object_remove_depender(ICalObject *iobject, GObject *depender);
+
+LIBICAL_ICAL_EXPORT void i_cal_object_free_global_objects(void);
 
 G_END_DECLS
 #endif /* I_CAL_OBJECT_H */

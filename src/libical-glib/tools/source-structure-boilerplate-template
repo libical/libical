@@ -27,10 +27,10 @@ ${new_full}
     ${native} *clone;^$$^!${isBare}
     if (native == NULL)
         return NULL;^$
-    object = g_object_new (${upperSnake}_TYPE, NULL);$^${isBare}
+    $^${isBare}
     clone = g_new (${native}, 1);
     *clone = native;^$
-    i_cal_object_construct ((ICalObject *)object,
+    object = i_cal_object_construct (${upperSnake}_TYPE,
                             $^!${isBare}(gpointer) native^$$^${isBare}(gpointer) clone^$,
                             (GDestroyNotify) ${destroyFunc},
                             $^${isPossibleGlobal}is_global_memory^$$^!${isPossibleGlobal}FALSE^$,

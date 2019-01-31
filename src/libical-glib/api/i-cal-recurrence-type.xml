@@ -49,7 +49,7 @@
 	<comment xml:space="preserve">Check whether rscale is supported.</comment>
     </method>
     <method name="i_cal_recurrence_type_rscale_supported_calendars" corresponds="icalrecurrencetype_rscale_supported_calendars" kind="other" since="2.0">
-	<returns type="ICalArray *" annotation="transfer full" comment="Array of calendars. Currently always NULL."/>
+	<returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="Array of calendars. Currently always NULL."/>
 	<comment xml:space="preserve">Get an array of calendars supporting rscale (currently always return NULL).</comment>
     </method>
     <method name="i_cal_recurrence_type_new" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
