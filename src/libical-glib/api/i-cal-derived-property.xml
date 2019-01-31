@@ -196,14 +196,13 @@
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
         <custom>	ICalProperty *property;
-	g_return_val_if_fail (v != NULL &amp;&amp; I_CAL_IS_ATTACH (v), NULL);
+	g_return_val_if_fail (I_CAL_IS_ATTACH (v), NULL);
 	property = i_cal_property_new_full (icalproperty_new_attach (i_cal_object_get_native ((ICalObject *)v)), NULL);
-	i_cal_object_set_owner ((ICalObject *)v, (GObject *)property);
 	return property;</custom>
     </method>
     <method name="i_cal_property_set_attach" corresponds="icalproperty_set_attach" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalAttach *" name="v" translator_argus="prop" comment="The attach."/>
+        <parameter type="ICalAttach *" name="v" annotation="transfer none" comment="The attach."/>
         <comment>Set the attach for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_attach" corresponds="icalproperty_get_attach" kind="get" since="1.0">
