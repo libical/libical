@@ -158,7 +158,9 @@
 	<enum name="ICalPropertyTransp" native_name="icalproperty_transp" default_native="I_CAL_TRANSP_NONE">
 	    <element name="ICAL_TRANSP_X"/>
 	    <element name="ICAL_TRANSP_OPAQUE"/>
+	    <element name="ICAL_TRANSP_OPAQUENOCONFLICT"/>
 	    <element name="ICAL_TRANSP_TRANSPARENT"/>
+	    <element name="ICAL_TRANSP_TRANSPARENTNOCONFLICT"/>
 	    <element name="ICAL_TRANSP_NONE"/>
 	</enum>
 	<enum name="ICalPropertyXlicclass" native_name="icalproperty_xlicclass" default_native="I_CAL_XLICCLASS_NONE">
