@@ -72,6 +72,19 @@ assert ICalGLib.Timetype.get_zone(time) == utc;
 ICalGLib.Timetype.set_zone(time, la);
 assert ICalGLib.Timetype.get_zone(time) == la;
 
+timeclone = ICalGLib.Timetype.new_clone(time);
+assert time != timeclone;
+assert ICalGLib.Timetype.get_year(time) == ICalGLib.Timetype.get_year(timeclone);
+assert ICalGLib.Timetype.get_month(time) == ICalGLib.Timetype.get_month(timeclone);
+assert ICalGLib.Timetype.get_day(time) == ICalGLib.Timetype.get_day(timeclone);
+assert ICalGLib.Timetype.get_hour(time) == ICalGLib.Timetype.get_hour(timeclone);
+assert ICalGLib.Timetype.get_minute(time) == ICalGLib.Timetype.get_minute(timeclone);
+assert ICalGLib.Timetype.get_second(time) == ICalGLib.Timetype.get_second(timeclone);
+assert ICalGLib.Timetype.get_is_date(time) == ICalGLib.Timetype.get_is_date(timeclone);
+assert ICalGLib.Timetype.get_is_daylight(time) == ICalGLib.Timetype.get_is_daylight(timeclone);
+assert ICalGLib.Timetype.get_zone(time) == ICalGLib.Timetype.get_zone(timeclone);
+assert ICalGLib.Timetype.is_utc(time) == ICalGLib.Timetype.is_utc(timeclone);
+
 component = la.get_component();
 timezone = ICalGLib.Timezone.new();
 timezone.set_component(ICalGLib.Component.new_clone(component));
