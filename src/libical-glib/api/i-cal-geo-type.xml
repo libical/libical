@@ -14,13 +14,39 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="GeoType" native="struct icalgeotype" is_bare="true" default_native="i_cal_geo_type_new_default ()">
-	<method name="i_cal_geo_type_new_default" corresponds="CUSTOM" annotation="skip" kind="constructor" since="1.0">
+    <method name="i_cal_geo_type_new_default" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
         <returns type="struct icalgeotype" annotation="transfer full" comment="The newly created #ICalGeoType" />
         <comment xml:space="preserve">Create a new default #ICalGeoType.</comment>
         <custom>	struct icalgeotype geotype;
 	geotype.lat = 0;
 	geotype.lon = 0;
 	return geotype;</custom>
+    </method>
+    <method name="i_cal_geo_type_new" corresponds="CUSTOM" kind="constructor" since="1.0">
+        <parameter type="gdouble" name="lat" comment="Latitude."/>
+        <parameter type="gdouble" name="lon" comment="Longitude."/>
+        <returns type="ICalGeoType *" annotation="transfer full" comment="The newly created #ICalGeoType." />
+        <comment xml:space="preserve">Create a new #ICalGeoType.</comment>
+        <custom>    struct icalgeotype geo;
+
+    geo = i_cal_geo_type_new_default();
+    geo.lat = lat;
+    geo.lon = lon;
+
+    return i_cal_geo_type_new_full(geo);</custom>
+    </method>
+    <method name="i_cal_geo_type_new_clone" corresponds="CUSTOM" kind="constructor" since="1.0">
+        <parameter type="const ICalGeoType *" name="geo" comment="The #ICalGeoType to clone."/>
+        <returns type="ICalGeoType *" annotation="transfer full" comment="The newly created #ICalGeoType, copy of @geo." />
+        <comment xml:space="preserve">Create a new #ICalGeoType, copy of @geo.</comment>
+        <custom>    struct icalgeotype *src;
+
+    g_return_val_if_fail(I_CAL_IS_GEO_TYPE(geo), NULL);
+
+    src = (struct icalgeotype *)i_cal_object_get_native((ICalObject *)geo);
+    g_return_val_if_fail(src != NULL, NULL);
+
+    return i_cal_geo_type_new_full(*src);</custom>
     </method>
     <method name="i_cal_geo_type_get_lat" corresponds="CUSTOM" kind="get" since="1.0">
 	<parameter type="ICalGeoType *" name="geo_type" comment="The #ICalGeoType to be queried."/>
