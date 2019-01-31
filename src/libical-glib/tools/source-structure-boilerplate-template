@@ -30,7 +30,7 @@ ${new_full}
     $^${isBare}
     clone = g_new (${native}, 1);
     *clone = native;^$
-    object = i_cal_object_construct (${upperSnake}_TYPE,
+    object = i_cal_object_construct (${namespaceLowerSnake}_TYPE_${nameLowerSnake},
                             $^!${isBare}(gpointer) native^$$^${isBare}(gpointer) clone^$,
                             (GDestroyNotify) ${destroyFunc},
                             $^${isPossibleGlobal}is_global_memory^$$^!${isPossibleGlobal}FALSE^$,
