@@ -173,7 +173,7 @@
         <parameter type="const ICalTimezone *" name="zone" annotation="transfer none, nullable" comment="The timezone." />
         <comment xml:space="preserve">Set the timezone of the #ICalTimetype. It can be %NULL to unset it. The passed-in @zone object should stay alaive for the whole life time of the @timetype, because the @timetype doesn't reference it.</comment>
         <custom>    g_return_if_fail (timetype != NULL);
-    ((struct icaltimetype *)i_cal_object_get_native((ICalObject *)timetype))->zone = i_cal_object_get_native((ICalObject *)zone);</custom>
+    ((struct icaltimetype *)i_cal_object_get_native((ICalObject *)timetype))->zone = zone ? i_cal_object_get_native((ICalObject *)zone) : NULL;</custom>
     </method>
     <method name="i_cal_timetype_is_utc" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimetype *" name="timetype" comment="The #ICalTimetype to be queried."/>
