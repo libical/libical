@@ -22,7 +22,7 @@
     </method>
     <method name="i_cal_recur_iterator_next" corresponds="icalrecur_iterator_next" since="1.0">
         <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator."/>
-        <returns type="ICalTimetype *" annotation="transfer none" comment="The next occurrence according to this recurrence rule."/>
+        <returns type="ICalTimetype *" annotation="transfer full" comment="The next occurrence according to this recurrence rule."/>
         <comment xml:space="preserve">Get the next occurrence from an iterator.</comment>
     </method>
     <method name="i_cal_recur_iterator_set_start" corresponds="icalrecur_iterator_set_start" since="3.0">
