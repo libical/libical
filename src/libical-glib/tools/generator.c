@@ -2101,14 +2101,16 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
                 (void)g_stpcpy(buffer + strlen(buffer), "\n");
             }
 
-            for (jter = g_list_first(parameter->annotations); jter != NULL;
+            for (jter = g_list_first(parameter->annotations);
+	         jter && i != namespace_len;
                  jter = g_list_next(jter)) {
-                if (g_strcmp0((gchar *)jter->data, "allow-none") == 0) {
+                if (g_strcmp0((gchar *)jter->data, "allow-none") == 0 ||
+                    g_strcmp0((gchar *)jter->data, "nullable") == 0) {
                     break;
                 }
             }
 
-            if (jter == NULL) {
+            if (i != namespace_len && jter == NULL) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
                 if (method->ret != NULL) {
                     (void)g_stpcpy(buffer + strlen(buffer), "g_return_val_if_fail (");
