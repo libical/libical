@@ -15,22 +15,12 @@
 -->
 <structure namespace="ICal" name="Timetype" native="struct icaltimetype" is_bare="true" default_native="i_cal_timetype_new_default ()">
     <method name="i_cal_timetype_new_default" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
-        <returns type="struct icaltimetype" comment="The newly created #ICalTimetype. It is the epoch time (1970-01-01 00:00:00 UTC)" />
+        <returns type="struct icaltimetype" comment="The newly created #ICalTimetype. It is a null time" />
         <comment xml:space="preserve">Create a new #ICalTimetype.</comment>
-        <custom>	struct icaltimetype timetype;
-	timetype.year = 1970;
-	timetype.month = 1;
-	timetype.day = 1;
-	timetype.hour = 0;
-	timetype.minute = 0;
-	timetype.second = 0;
-	timetype.is_date = 0;
-	timetype.is_daylight = 0;
-	timetype.zone = icaltimezone_get_utc_timezone();
-	return timetype;</custom>
+        <custom>    return icaltime_null_time();</custom>
     </method>
     <method name="i_cal_timetype_new" corresponds="CUSTOM" kind="constructor" since="1.0">
-        <returns type="ICalTimetype *" annotation="transfer full" comment="The newly created #ICalTimetype. It is the epoch time (1970-01-01 00:00:00 UTC)" />
+        <returns type="ICalTimetype *" annotation="transfer full" comment="The newly created #ICalTimetype. It is a null time" />
         <comment xml:space="preserve">Create a new #ICalTimetype.</comment>
         <custom>	return i_cal_timetype_new_full (i_cal_timetype_new_default());</custom>
     </method>
