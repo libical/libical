@@ -21,6 +21,10 @@
 
 #include <glib-object.h>
 
+#if !defined(LIBICAL_GLIB_UNSTABLE_API) && !defined(LIBICAL_GLIB_COMPILATION)
+#error "Define LIBICAL_GLIB_UNSTABLE_API, to indicate it's understood the libical-glib API is currently unstable"
+#endif
+
 #define __LIBICAL_GLIB_H_INSIDE__
 
 #include <libical-glib/i-cal-forward-declarations.h>
