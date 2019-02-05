@@ -197,7 +197,7 @@ static void i_cal_object_finalize(GObject *object)
     /* todo: Need to devise a way to check destroy_func and native */
     ICalObject *iobject = I_CAL_OBJECT(object);
 
-    if (!iobject->priv->owner && !iobject->priv->is_global_memory) {
+    if (!iobject->priv->owner && !iobject->priv->is_global_memory && iobject->priv->native) {
         iobject->priv->native_destroy_func(iobject->priv->native);
     }
 

@@ -38,3 +38,5 @@ ${new_full}
 
     return object;
 }
+
+${body_declaration}

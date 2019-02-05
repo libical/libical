@@ -384,47 +384,93 @@
         <returns type="ICalPropertyStatus" comment="A #ICalPropertyStatus."/>
         <comment xml:space="preserve">Get the status of the #ICalComponent.</comment>
     </method>
-    <method name="i_cal_component_foreach_tzid" corresponds="CUSTOM" annotation="skip" kind="other" since="1.0">
-        <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be queried."/>
-        <parameter type="void" name="(*callback)(ICalParameter *param, void *user_data)" comment="FULL: @callback: The callback function."/>
-        <parameter type="void *" name="user_data" annotation="nullable" comment="The data for callback function"/>
-        <comment>Apply the same manipulation on every tzid in #ICalComponent. It cannot be used by Python yet. For convenience, a python version of this API is defined in tests/component.py.</comment>
-        <custom>    ICalProperty *prop;
-    ICalPropertyKind kind;
-    ICalParameter *param;
-    ICalComponent *subcomp;
+    <declaration position="header" content="typedef void (*ICalComponentForeachTZIDFunc)(ICalParameter *param, gpointer user_data);"/>
+    <declaration position="body">
+struct ForeachTZIDData {
+    void (* callback)(ICalParameter *param, void *user_data);
+    void *user_data;
+};
 
-    g_return_if_fail (comp != NULL &amp;&amp; I_CAL_IS_COMPONENT (comp));
+static void foreach_tzid_cb(icalparameter *in_param, void *user_data)
+{
+    ICalParameter *param;
+    struct ForeachTZIDData *data = user_data;
+
+    g_return_if_fail (data != NULL);
+
+    param = i_cal_parameter_new_full(in_param, NULL);
+    (*(data->callback))(param, data->user_data);
+    i_cal_object_steal_native((ICalObject *) param);
+    g_object_unref(param);
+}</declaration>
+    <method name="i_cal_component_foreach_tzid" corresponds="CUSTOM" kind="other" since="3.0.5">
+        <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be queried."/>
+        <parameter type="ICalComponentForeachTZIDFunc" name="callback" annotation="scope call" comment="The callback function."/>
+        <parameter type="gpointer" name="user_data" annotation="nullable, closure callback" comment="The data for callback function"/>
+        <comment>Apply the same manipulation on every tzid in #ICalComponent.</comment>
+        <custom>    struct ForeachTZIDData data;
+    icalcomponent *native_comp;
+
+    g_return_if_fail (I_CAL_IS_COMPONENT (comp));
     g_return_if_fail (callback != NULL);
 
-    /* First look for any TZID parameters used in this component itself. */
-    for (prop = i_cal_component_get_first_property(comp, I_CAL_ANY_PROPERTY);
-         prop;
-         g_object_unref(prop), prop = i_cal_component_get_next_property(comp, I_CAL_ANY_PROPERTY)) {
-        kind = i_cal_property_isa(prop);
+    native_comp = i_cal_object_get_native((ICalObject *) comp);
+    g_return_if_fail (native_comp != NULL);
 
-        /* These are the only properties that can have a TZID. Note that
-           COMPLETED, CREATED, DTSTAMP and LASTMODIFIED must be in UTC. */
-        if (kind == I_CAL_DTSTART_PROPERTY ||
-            kind == I_CAL_DTEND_PROPERTY ||
-            kind == I_CAL_DUE_PROPERTY ||
-            kind == I_CAL_EXDATE_PROPERTY ||
-            kind == I_CAL_RDATE_PROPERTY) {
-            param = i_cal_property_get_first_parameter(prop, I_CAL_TZID_PARAMETER);
+    data.callback = callback;
+    data.user_data = user_data;
 
-            if (param) {
-                (*callback) (param, user_data);
-                g_object_unref(param);
-            }
-        }
-    }
+    icalcomponent_foreach_tzid(native_comp, foreach_tzid_cb, &amp;data);</custom>
+    </method>
+    <declaration position="header" content="typedef void (*ICalComponentForeachRecurrenceFunc)(ICalComponent *comp, ICalTimeSpan *span, gpointer user_data);"/>
+    <declaration position="body">
+struct ForeachRecurrenceData {
+    ICalComponent *comp;
+    void (* callback)(ICalComponent *comp, ICalTimeSpan *span, void *user_data);
+    void *user_data;
+};
 
-    /* Now recursively check child components. */
-    for (subcomp = i_cal_component_get_first_component(comp, I_CAL_ANY_COMPONENT);
-         subcomp;
-         g_object_unref(subcomp), subcomp = i_cal_component_get_next_component(comp, I_CAL_ANY_COMPONENT)) {
-        i_cal_component_foreach_tzid(subcomp, callback, user_data);
-    }</custom>
+static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *in_span, void *user_data)
+{
+    ICalTimeSpan *span;
+    struct ForeachRecurrenceData *data = user_data;
+
+    g_return_if_fail (data != NULL);
+    g_return_if_fail (in_span != NULL);
+    g_warn_if_fail (i_cal_object_get_native ((ICalObject *)data->comp) == (gpointer) in_comp);
+
+    span = i_cal_time_span_new_full(*in_span);
+    (*(data->callback))(data->comp, span, data->user_data);
+    g_object_unref(span);
+}</declaration>
+    <method name="i_cal_component_foreach_recurrence" corresponds="CUSTOM" kind="other" since="3.0.5">
+        <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be queried."/>
+        <parameter type="ICalTimetype *" name="start" comment="Ignore timespans before this"/>
+        <parameter type="ICalTimetype *" name="end" comment="Ignore timespans after this"/>
+        <parameter type="ICalComponentForeachRecurrenceFunc" name="callback" annotation="scope call" comment="Function called for each timespan within the range."/>
+        <parameter type="gpointer" name="user_data" annotation="nullable, closure callback" comment="The user data for callback function"/>
+        <comment>Cycle through all recurrances of an event. This function will call the specified callback function for once for the base value of DTSTART, and foreach recurring date/time value. It will filter out events that are specified as an EXDATE or an EXRULE.</comment>
+        <custom>    struct ForeachRecurrenceData data;
+    icalcomponent *native_comp;
+    struct icaltimetype *native_start, *native_end;
+
+    g_return_if_fail (I_CAL_IS_COMPONENT (comp));
+    g_return_if_fail (I_CAL_IS_TIMETYPE (start));
+    g_return_if_fail (I_CAL_IS_TIMETYPE (end));
+    g_return_if_fail (callback != NULL);
+
+    native_comp = i_cal_object_get_native((ICalObject *) comp);
+    native_start = i_cal_object_get_native((ICalObject *) start);
+    native_end = i_cal_object_get_native((ICalObject *) end);
+    g_return_if_fail (native_comp != NULL);
+    g_return_if_fail (native_start != NULL);
+    g_return_if_fail (native_end != NULL);
+
+    data.comp = comp;
+    data.callback = callback;
+    data.user_data = user_data;
+
+    icalcomponent_foreach_recurrence(native_comp, *native_start, *native_end, foreach_recurrence_cb, &amp;data);</custom>
     </method>
     <method name="i_cal_component_get_timezone" corresponds="icalcomponent_get_timezone" kind="get" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>

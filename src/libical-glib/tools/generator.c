@@ -905,6 +905,8 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                     generate_source_includes(out, structure);
                 } else if (g_strcmp0(buffer, "header_declaration") == 0) {
                     generate_header_header_declaration(out, structure);
+                } else if (g_strcmp0(buffer, "body_declaration") == 0) {
+                    generate_source_body_declaration(out, structure);
                 } else if (g_hash_table_contains(table, buffer)) {
                     val = g_hash_table_lookup(table, buffer);
                     write_str(out, val);
@@ -2303,7 +2305,7 @@ static gint generate_library(const gchar *apis_dir)
     return res;
 }
 
-void generate_header_header_declaration(FILE *out, Structure *structure)
+static void generate_declarations(FILE *out, Structure *structure, const gchar *position)
 {
     GList *list_iter;
     Declaration *declaration;
@@ -2314,12 +2316,22 @@ void generate_header_header_declaration(FILE *out, Structure *structure)
          list_iter = g_list_next(list_iter)) {
         declaration = (Declaration *)list_iter->data;
 
-        if (g_strcmp0(declaration->position, "header") == 0) {
+        if (g_strcmp0(declaration->position, position) == 0) {
             write_str(out, declaration->content);
             write_str(out, "\n");
         }
         declaration = NULL;
     }
+}
+
+void generate_header_header_declaration(FILE *out, Structure *structure)
+{
+    generate_declarations(out, structure, "header");
+}
+
+void generate_source_body_declaration(FILE *out, Structure *structure)
+{
+    generate_declarations(out, structure, "body");
 }
 
 void generate_header_header_file(GList *structures)
