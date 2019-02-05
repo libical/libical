@@ -9,6 +9,7 @@ list(APPEND TEST_FILES
   comprehensive.py
   duration-type.py
   error.py
+  misc.py
   parameter.py
   period-type.py
   property.py

@@ -75,10 +75,3 @@ assert(result == after_encoded_szText);
 
 result = ICalGLib.Value.decode_ical_string(before_decoded_szText);
 assert(result == szText);
-
-geo = ICalGLib.GeoType.new(10.0, 20.0)
-assert geo.get_lat() == 10.0
-assert geo.get_lon() == 20.0
-geo_clone = geo.new_clone()
-assert geo.get_lat() == geo_clone.get_lat()
-assert geo.get_lon() == geo_clone.get_lon()
