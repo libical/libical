@@ -1,8 +1,7 @@
 G_DEFINE_TYPE (${upperCamel}, ${lowerSnake}, I_CAL_TYPE_OBJECT)
 
-static void ${lowerSnake}_class_init (${upperCamel}Class *klass)
+static void ${lowerSnake}_class_init (G_GNUC_UNUSED ${upperCamel}Class *klass)
 {
-    g_type_class_add_private (klass, sizeof (${upperCamel}));
 }
 
 static void ${lowerSnake}_init (G_GNUC_UNUSED ${upperCamel} *self)
