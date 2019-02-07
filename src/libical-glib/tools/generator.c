@@ -1587,11 +1587,29 @@ gchar *get_translator_for_return(Ret *ret)
     return res;
 }
 
+static gboolean
+annotation_contains_nullable(GList *annotations) /* gchar * */
+{
+    GList *link;
+
+    for(link = annotations; link; link = g_list_next(link)) {
+        if(g_strcmp0(link->data, "allow-none") == 0 ||
+           g_strcmp0(link->data, "nullable") == 0)
+            break;
+    }
+
+    return link != NULL;
+}
+
 gchar *get_inline_parameter(Parameter *para)
 {
     gchar *buffer;
     gchar *ret;
     gchar *translator;
+    gboolean is_nullable;
+
+    is_nullable = !para->translator && !is_enum_type(para->type) &&
+                  annotation_contains_nullable(para->annotations);
 
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
@@ -1605,6 +1623,11 @@ gchar *get_inline_parameter(Parameter *para)
     }
 
     if (translator != NULL) {
+        if(is_nullable) {
+            (void)g_stpcpy(buffer + strlen(buffer), "((");
+            (void)g_stpcpy(buffer + strlen(buffer), para->name);
+            (void)g_stpcpy(buffer + strlen(buffer), ")?(");
+        }
         (void)g_stpcpy(buffer + strlen(buffer), translator);
         (void)g_stpcpy(buffer + strlen(buffer), " (");
         if (para->translator == NULL && !is_enum_type(para->type))
@@ -1618,31 +1641,11 @@ gchar *get_inline_parameter(Parameter *para)
             (void)g_stpcpy(buffer + strlen(buffer), ")");
         }
         (void)g_stpcpy(buffer + strlen(buffer), ")");
+        if(is_nullable) {
+            (void)g_stpcpy(buffer + strlen(buffer), "):NULL)");
+        }
     }
 
-    /*
-       if (translator != NULL) {
-       if (para->translatorArgus != NULL) {
-       for (iter = g_list_first (para->translatorArgus); iter != NULL; iter = g_list_next (iter)) {
-       (void)g_stpcpy (buffer + strlen (buffer), ", ");
-       (void)g_stpcpy (buffer + strlen (buffer), (gchar *)iter->data);
-       }
-       }
-
-       else if (para->translator == NULL) {
-       trueType = get_true_type (para->type);
-       if (g_hash_table_contains (type2structure, trueType)) {
-       structure = g_hash_table_lookup (type2structure, trueType);
-       if (structure->isBare == FALSE) {
-       (void)g_stpcpy (buffer + strlen (buffer), ", NULL");
-       }
-       }
-       g_free (trueType);
-       }
-       (void)g_stpcpy (buffer + strlen (buffer), ")");
-       g_free (translator);
-       }
-     */
     ret = g_new(gchar, strlen(buffer) + 1);
     (void)g_stpcpy(ret, buffer);
     g_free(buffer);
@@ -2034,7 +2037,6 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
 gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
 {
     GList *iter;
-    GList *jter;
     Parameter *parameter;
     guint i;
     gchar *buffer;
@@ -2066,6 +2068,11 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
 
             if (i == namespace_len) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
+                if(annotation_contains_nullable(parameter->annotations)) {
+                    (void)g_stpcpy(buffer + strlen(buffer), "if(");
+                    (void)g_stpcpy(buffer + strlen(buffer), parameter->name);
+                    (void)g_stpcpy(buffer + strlen(buffer), ")\n\t\t");
+                }
                 nameSpaceUpperSnake = get_upper_snake_from_upper_camel(namespace);
                 nameUpperSnake = get_upper_snake_from_upper_camel(trueType + i);
                 typeCheck =
@@ -2103,16 +2110,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
                 (void)g_stpcpy(buffer + strlen(buffer), "\n");
             }
 
-            for (jter = g_list_first(parameter->annotations);
-	         jter && i != namespace_len;
-                 jter = g_list_next(jter)) {
-                if (g_strcmp0((gchar *)jter->data, "allow-none") == 0 ||
-                    g_strcmp0((gchar *)jter->data, "nullable") == 0) {
-                    break;
-                }
-            }
-
-            if (i != namespace_len && jter == NULL) {
+            if (i != namespace_len && !annotation_contains_nullable(parameter->annotations)) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
                 if (method->ret != NULL) {
                     (void)g_stpcpy(buffer + strlen(buffer), "g_return_val_if_fail (");
