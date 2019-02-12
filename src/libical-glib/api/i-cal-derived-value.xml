@@ -146,6 +146,10 @@
 	    <element name="ICAL_STATUS_INPROCESS"/>
 	    <element name="ICAL_STATUS_DRAFT"/>
 	    <element name="ICAL_STATUS_FINAL"/>
+	    <element name="ICAL_STATUS_SUBMITTED"/>
+	    <element name="ICAL_STATUS_PENDING"/>
+	    <element name="ICAL_STATUS_FAILED"/>
+	    <element name="ICAL_STATUS_DELETED"/>
 	    <element name="ICAL_STATUS_NONE"/>
 	</enum>
 	<enum name="ICalPropertyTaskmode" native_name="icalproperty_taskmode" default_native="I_CAL_TASKMODE_NONE">
