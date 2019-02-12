@@ -31,7 +31,7 @@
     </method>
     <method name="i_cal_property_as_ical_string_r" corresponds="icalproperty_as_ical_string_r" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be converted."/>
-        <returns type="const gchar *" annotation="transfer full" comment="The string representation of @prop."/>
+        <returns type="gchar *" annotation="transfer full" comment="The string representation of @prop."/>
         <comment xml:space="preserve">Convert a #ICalProperty to a string representation.</comment>
     </method>
     <method name="i_cal_property_free" corresponds="icalproperty_free" annotation="skip" kind="destructor" since="1.0">
