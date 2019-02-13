@@ -142,6 +142,16 @@
         <returns type="gint" comment="The count of child #ICalComponent in the parent one."/>
         <comment xml:space="preserve">Count the child #ICalComponent with the target kind in the parent one.</comment>
     </method>
+    <method name="i_cal_component_get_parent" corresponds="icalcomponent_get_parent" since="3.0">
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent."/>
+        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)component" comment="The parent #ICalComponent of the @component."/>
+        <comment xml:space="preserve">Get the parent component of the @component.</comment>
+    </method>
+    <method name="i_cal_component_set_parent" corresponds="icalcomponent_set_parent" since="3.0">
+        <parameter type="ICalComponent *" name="component" comment="An #ICalComponent, a child."/>
+        <parameter type="ICalComponent *" name="parent" comment="An #ICalComponent, a new parent."/>
+        <comment xml:space="preserve">Set the @parent #ICalComponent of the specified @component.</comment>
+    </method>
     <method name="i_cal_component_merge_component" corresponds="icalcomponent_merge_component" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent."/>
         <parameter type="ICalComponent *" name="comp_to_merge" annotation="in" native_op="STEAL" comment="A #ICalComponent. After merged it will not exist any more."/>
