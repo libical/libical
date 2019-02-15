@@ -79,41 +79,42 @@
         <parameter type="const gchar *" name="szText" comment="A string."/>
         <returns type="gchar *" annotation="allow-none, transfer full" comment="The encoded string. NULL if fail."/>
         <comment xml:space="preserve">Encode a character string in ical format, escape certain characters, etc.</comment>
-        <custom>	gchar *szEncText;
-	gchar *buffer;
-	gint result;
+        <custom>    gchar *szEncText;
+    gchar *buffer = NULL;
+    gsize bufSize;
+    gint result;
 
-	g_return_val_if_fail (szText != NULL, 0);
+    g_return_val_if_fail(szText != NULL, NULL);
 
-	szEncText = g_new (gchar, 2 * strlen (szText) + 1);
-	result = icalvalue_encode_ical_string (szText, szEncText, 2*strlen (szText)-1);
-	if (result == 0) {
-		g_free (szEncText);
-		return NULL;
-	} else {
-		buffer = g_strdup (szEncText);
-		g_free (szEncText);
-		return buffer;
-	}</custom>
+    bufSize = 2 * strlen(szText);
+    szEncText = g_new0(gchar, bufSize + 1);
+
+    result = icalvalue_encode_ical_string(szText, szEncText, bufSize);
+    if (result)
+        buffer = g_strdup(szEncText);
+    g_free(szEncText);
+
+    return buffer;</custom>
     </method>
     <method name="i_cal_value_decode_ical_string" corresponds="CUSTOM" since="1.0">
         <parameter type="const gchar *" name="szText" comment="A string."/>
         <returns type="gchar *" annotation="allow-none, transfer full" comment="The decoded string. NULL if fail."/>
         <comment xml:space="preserve">Extract the original character string encoded by the above function</comment>
-        <custom>	gchar *szDecText;
-	gchar *buffer;
-	gint result;
-	g_return_val_if_fail (szText != NULL, 0);
-	szDecText = g_new (gchar, strlen (szText));
+        <custom>    gchar *szDecText;
+    gchar *buffer = NULL;
+    gsize bufSize;
+    gint result;
 
-	result = icalvalue_decode_ical_string (szText, szDecText, strlen (szText)-1);
-	if (result == 0) {
-		g_free (szDecText);
-		return NULL;
-	} else {
-		buffer = g_strdup (szDecText);
-		g_free (szDecText);
-		return buffer;
-	}</custom>
+    g_return_val_if_fail (szText != NULL, NULL);
+
+    bufSize = strlen(szText);
+    szDecText = g_new0(gchar, bufSize + 1);
+
+    result = icalvalue_decode_ical_string(szText, szDecText, bufSize);
+    if (result)
+        buffer = g_strdup(szDecText);
+    g_free (szDecText);
+
+    return buffer;</custom>
     </method>
 </structure>
