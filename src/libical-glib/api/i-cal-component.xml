@@ -86,12 +86,12 @@
     </method>
     <method name="i_cal_property_get_parent" corresponds="icalproperty_get_parent" since="2.0">
         <parameter type="ICalProperty *" name="property" comment="The #ICalProperty."/>
-        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)property" comment="The parent #ICalComponent of #ICalProperty."/>
+        <returns type="ICalComponent *" annotation="transfer full, nullable" translator_argus="(GObject *)property" comment="The parent #ICalComponent of #ICalProperty."/>
         <comment xml:space="preserve">Get the parent component of the property. Use with caution. When icalproperty is deallocated, it won't deallocate its parent. However the #ICalComponent object created using this method will be deallocated (if no reference in other places). So You need to make sure there is another reference except the one in #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_parent" corresponds="icalproperty_set_parent" since="3.0">
         <parameter type="ICalProperty *" name="property" comment="An #ICalProperty."/>
-        <parameter type="ICalComponent *" name="component" comment="An #ICalComponent."/>
+        <parameter type="ICalComponent *" name="component" annotation="nullable" comment="An #ICalComponent."/>
         <comment xml:space="preserve">Set the parent #ICalComponent of the specified #ICalProperty.</comment>
     </method>
     <method name="i_cal_component_get_current_property" corresponds="icalcomponent_get_current_property" since="1.0">
@@ -102,18 +102,18 @@
     <method name="i_cal_component_get_first_property" corresponds="icalcomponent_get_first_property" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
         <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind."/>
-        <returns type="ICalProperty *" annotation="transfer full" translator_argus="(GObject *)component" comment="The first #ICalProperty."/>
+        <returns type="ICalProperty *" annotation="transfer full, nullable" translator_argus="(GObject *)component" comment="The first #ICalProperty."/>
         <comment xml:space="preserve">Get the first #ICalProperty with specific kind in #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_get_next_property" corresponds="icalcomponent_get_next_property" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
         <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind."/>
-        <returns type="ICalProperty *" annotation="transfer full" translator_argus="(GObject *)component" comment="The next #ICalProperty."/>
+        <returns type="ICalProperty *" annotation="transfer full, nullable" translator_argus="(GObject *)component" comment="The next #ICalProperty."/>
         <comment xml:space="preserve">Get the next #ICalProperty with specific kind in #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_get_inner" corresponds="icalcomponent_get_inner" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)comp" comment="The first VEVENT, VTODO or VJOURNAL sub-component."/>
+        <returns type="ICalComponent *" annotation="transfer full, nullable" translator_argus="(GObject *)comp" comment="The first VEVENT, VTODO or VJOURNAL sub-component."/>
         <comment xml:space="preserve">Return the first VEVENT, VTODO or VJOURNAL sub-component of cop, or comp if it is one of those types.</comment>
     </method>
     <method name="i_cal_component_add_component" corresponds="icalcomponent_add_component" since="1.0">
@@ -144,12 +144,12 @@
     </method>
     <method name="i_cal_component_get_parent" corresponds="icalcomponent_get_parent" since="3.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent."/>
-        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)component" comment="The parent #ICalComponent of the @component."/>
+        <returns type="ICalComponent *" annotation="transfer full, nullable" translator_argus="(GObject *)component" comment="The parent #ICalComponent of the @component."/>
         <comment xml:space="preserve">Get the parent component of the @component.</comment>
     </method>
     <method name="i_cal_component_set_parent" corresponds="icalcomponent_set_parent" since="3.0">
         <parameter type="ICalComponent *" name="component" comment="An #ICalComponent, a child."/>
-        <parameter type="ICalComponent *" name="parent" comment="An #ICalComponent, a new parent."/>
+        <parameter type="ICalComponent *" name="parent" annotation="nullable" comment="An #ICalComponent, a new parent."/>
         <comment xml:space="preserve">Set the @parent #ICalComponent of the specified @component.</comment>
     </method>
     <method name="i_cal_component_merge_component" corresponds="icalcomponent_merge_component" since="1.0">
@@ -165,13 +165,13 @@
     <method name="i_cal_component_get_first_component" corresponds="icalcomponent_get_first_component" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
         <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind."/>
-        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)component" comment="The first #ICalComponent."/>
+        <returns type="ICalComponent *" annotation="transfer full, nullable" translator_argus="(GObject *)component" comment="The first #ICalComponent."/>
         <comment xml:space="preserve">Get the first #ICalComponent with specific kind in #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_get_next_component" corresponds="icalcomponent_get_next_component" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
         <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind."/>
-        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)component" comment="The next #ICalComponent."/>
+        <returns type="ICalComponent *" annotation="transfer full, nullable" translator_argus="(GObject *)component" comment="The next #ICalComponent."/>
         <comment xml:space="preserve">Get the next #ICalComponent with specific kind in #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_begin_component" corresponds="icalcomponent_begin_component" since="1.0">

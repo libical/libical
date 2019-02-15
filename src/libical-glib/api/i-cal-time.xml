@@ -56,7 +56,7 @@
     </method>
     <method name="i_cal_time_as_timet_with_zone" corresponds="icaltime_as_timet_with_zone" since="1.0">
         <parameter type="ICalTimetype *" name="tt" comment="The #ICalTimetype to be converted"/>
-        <parameter type="ICalTimezone *" name="zone" annotation="in, transfer none" comment="The timezone"/>
+        <parameter type="ICalTimezone *" name="zone" annotation="in, transfer none, nullable" comment="The timezone"/>
         <returns type="time_t" comment="the time as seconds past the UNIX epoch" />
         <comment xml:space="preserve">Return the time as seconds past the UNIX epoch, using timezones.</comment>
     </method>
@@ -156,7 +156,7 @@
     </method>
     <method name="i_cal_time_convert_to_zone" corresponds="icaltime_convert_to_zone" since="1.0">
         <parameter type="ICalTimetype *" name="t" annotation="in, transfer none" comment="The #ICalTimetype to be normalized"/>
-        <parameter type="ICalTimezone *" name="zone" annotation="transfer full" comment="The target timezone"/>
+        <parameter type="ICalTimezone *" name="zone" annotation="transfer none, nullable" comment="The target timezone"/>
         <returns type="ICalTimetype *" annotation="transfer full" comment="The converted #ICalTimetype" />
         <comment xml:space="preserve">Convert tt, of timezone tzid, into a utc time. Does nothing if the time is already UTC.</comment>
     </method>
