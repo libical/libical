@@ -129,7 +129,7 @@ LIBICAL_ICAL_EXPORT char *icalenum_reqstat_code_r(icalrequeststatus stat);
  * Conversion functions
 **********************************************************************/
 
-/* Thse routines used to be in icalenums.c, but were moved into the
+/* These routines used to be in icalenums.c, but were moved into the
    icalproperty, icalparameter, icalvalue, or icalcomponent modules. */
 
 /*const char* icalproperty_kind_to_string(icalproperty_kind kind);*/
