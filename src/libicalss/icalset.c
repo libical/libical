@@ -145,6 +145,7 @@ static int load(const char *file)
 {
     void *modh;
     fptr inith;
+    char *dlerr;
     icalset *icalset_init_ptr;
 
     if ((modh = dlopen(file, RTLD_NOW)) == 0) {
@@ -152,8 +153,13 @@ static int load(const char *file)
         return 0;
     }
 
-    if ((inith = (fptr)dlsym(modh, "InitModule")) == 0) {
-        perror("dlsym");
+    (void)dlerror(); /* clear */
+    inith = (fptr)dlsym(modh, "InitModule");
+    dlerr = dlerror();
+    if (dlerr != NULL) {
+        fprintf(stderr, "dlsym error: %s\n", dlerr);
+        dlclose(modh);
+       /* cppcheck-suppress resourceLeak */
         return 0;
     }
 
@@ -161,6 +167,8 @@ static int load(const char *file)
         pvl_push(icalset_kinds, &icalset_init_ptr);
     }
 
+    (void)dlerror(); /* clear */
+    dlclose(modh);
     return 1;
 }
 
@@ -214,8 +222,6 @@ static void icalset_init(void)
     pvl_push(icalset_kinds, &icalset_dirset_init);
 #if defined(HAVE_BDB)
     pvl_push(icalset_kinds, &icalset_bdb4set_init);
-#else
-#error 3
 #endif
 
     icalset_init_done++;
