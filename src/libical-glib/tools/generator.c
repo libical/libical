@@ -1587,15 +1587,15 @@ gchar *get_translator_for_return(Ret *ret)
     return res;
 }
 
-static gboolean
-annotation_contains_nullable(GList *annotations) /* gchar * */
+static gboolean annotation_contains_nullable(GList *annotations) /* gchar * */
 {
     GList *link;
 
-    for(link = annotations; link; link = g_list_next(link)) {
-        if(g_strcmp0(link->data, "allow-none") == 0 ||
-           g_strcmp0(link->data, "nullable") == 0)
-            break;
+    for (link = annotations; link; link = g_list_next(link)) {
+        if (g_strcmp0(link->data, "allow-none") == 0 ||
+            g_strcmp0(link->data, "nullable") == 0) {
+              break;
+        }
     }
 
     return link != NULL;
@@ -1623,7 +1623,7 @@ gchar *get_inline_parameter(Parameter *para)
     }
 
     if (translator != NULL) {
-        if(is_nullable) {
+        if (is_nullable) {
             (void)g_stpcpy(buffer + strlen(buffer), "((");
             (void)g_stpcpy(buffer + strlen(buffer), para->name);
             (void)g_stpcpy(buffer + strlen(buffer), ")?(");
@@ -1641,7 +1641,7 @@ gchar *get_inline_parameter(Parameter *para)
             (void)g_stpcpy(buffer + strlen(buffer), ")");
         }
         (void)g_stpcpy(buffer + strlen(buffer), ")");
-        if(is_nullable) {
+        if (is_nullable) {
             (void)g_stpcpy(buffer + strlen(buffer), "):NULL)");
         }
     }
@@ -2068,7 +2068,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
 
             if (i == namespace_len) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
-                if(annotation_contains_nullable(parameter->annotations)) {
+                if (annotation_contains_nullable(parameter->annotations)) {
                     (void)g_stpcpy(buffer + strlen(buffer), "if(");
                     (void)g_stpcpy(buffer + strlen(buffer), parameter->name);
                     (void)g_stpcpy(buffer + strlen(buffer), ")\n\t\t");

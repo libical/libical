@@ -28,46 +28,42 @@ typedef struct _GlobalData {
     gpointer native;
 } GlobalData;
 
-static guint
-global_data_hash(gconstpointer ptr)
+static guint global_data_hash(gconstpointer ptr)
 {
     const GlobalData *gd = ptr;
 
-    if(!gd)
+    if (!gd) {
         return 0;
-
+    }
     return g_direct_hash(GINT_TO_POINTER(gd->object_type)) ^ g_direct_hash(gd->native);
 }
 
-static gboolean
-global_data_equal(gconstpointer ptr1,
-                  gconstpointer ptr2)
+static gboolean global_data_equal(gconstpointer ptr1, gconstpointer ptr2)
 {
     const GlobalData *gd1 = ptr1, *gd2 = ptr2;
 
-    if(!gd1 || !gd2)
+    if (!gd1 || !gd2) {
         return gd1 == gd2;
-
+    }
     return gd1->object_type == gd2->object_type && gd1->native == gd2->native;
 }
 
 G_LOCK_DEFINE_STATIC(global_objects);
 static GHashTable *global_objects; /* GlobalData * ~> ICalObject * */
 
-static void
-global_data_object_freed_cb(gpointer user_data,
-                            G_GNUC_UNUSED GObject *freed_object)
+static void global_data_object_freed_cb(gpointer user_data, G_GNUC_UNUSED GObject *freed_object)
 {
     GlobalData *gd = user_data;
 
     G_LOCK(global_objects);
 
-    if(global_objects) {
-        if(g_hash_table_steal(global_objects, gd))
+    if (global_objects) {
+        if (g_hash_table_steal(global_objects, gd)) {
             g_free(gd);
+        }
 
-        if(!g_hash_table_size(global_objects)) {
-            g_hash_table_destroy(global_objects);
+        if (!g_hash_table_size(global_objects)) {
+             g_hash_table_destroy(global_objects);
             global_objects = NULL;
         }
     }
@@ -94,12 +90,12 @@ void i_cal_object_free_global_objects(void)
 
     G_UNLOCK(global_objects);
 
-    if(objects) {
+    if (objects) {
         GHashTableIter iter;
         gpointer key, value;
 
         g_hash_table_iter_init(&iter, objects);
-        while(g_hash_table_iter_next(&iter, &key, &value)) {
+        while (g_hash_table_iter_next(&iter, &key, &value)) {
             g_object_weak_unref(value, global_data_object_freed_cb, key);
         }
 
@@ -334,10 +330,10 @@ i_cal_object_construct(GType object_type,
     if (owner)
         g_return_val_if_fail(G_IS_OBJECT(owner), NULL);
 
-    if(is_global_memory) {
+    if (is_global_memory) {
         G_LOCK(global_objects);
 
-        if(global_objects) {
+        if (global_objects) {
             GlobalData tmp_gd;
 
             tmp_gd.object_type = object_type;
@@ -345,14 +341,14 @@ i_cal_object_construct(GType object_type,
 
             iobject = g_hash_table_lookup(global_objects, &tmp_gd);
 
-            if(iobject) {
+            if (iobject) {
                 G_UNLOCK(global_objects);
                 return iobject;
             }
         }
     }
 
-    iobject = g_object_new (object_type, NULL);
+    iobject = g_object_new(object_type, NULL);
 
     /* LOCK_PROPS (iobject); */
 
@@ -365,18 +361,21 @@ i_cal_object_construct(GType object_type,
 
     /* UNLOCK_PROPS (iobject); */
 
-    if(is_global_memory) {
-        if(iobject) {
+    if (is_global_memory) {
+        if (iobject) {
             GlobalData *gd;
 
-            gd = g_new0 (GlobalData, 1);
+            gd = g_new0(GlobalData, 1);
             gd->object_type = object_type;
             gd->native = native;
 
-            g_object_weak_ref(G_OBJECT (iobject), global_data_object_freed_cb, gd);
+            g_object_weak_ref(G_OBJECT(iobject), global_data_object_freed_cb, gd);
 
-            if(!global_objects)
-                global_objects = g_hash_table_new_full (global_data_hash, global_data_equal, g_free, g_object_unref);
+            if (!global_objects) {
+                global_objects =
+                    g_hash_table_new_full(global_data_hash, global_data_equal,
+                                          g_free, g_object_unref);
+            }
 
             g_hash_table_insert(global_objects, gd, iobject);
         }
