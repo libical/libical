@@ -879,10 +879,6 @@ icalerrorenum icalbdbset_commit(icalset *set)
             }
         }
 
-        if (str) {
-            free(str);
-        }
-
         if (deadlocked) {
             dbcp->c_close(dbcp);
             tid->abort(tid);
