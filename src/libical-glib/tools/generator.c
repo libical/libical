@@ -232,7 +232,7 @@ gchar *get_upper_snake_from_lower_snake(const gchar *lowerSnake)
     g_return_val_if_fail(lowerSnake != NULL && *lowerSnake != '\0', NULL);
 
     ret = g_new(gchar, BUFFER_SIZE);
-    ret[0] = '\0';
+    memset(ret, 0, BUFFER_SIZE);
 
     for (i = 0; i < (guint)strlen(lowerSnake); i++) {
         if (lowerSnake[i] == '_') {
