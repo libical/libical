@@ -32,6 +32,7 @@
         <element name="ICAL_CATEGORIES_PROPERTY"/>
         <element name="ICAL_CLASS_PROPERTY"/>
         <element name="ICAL_CMD_PROPERTY"/>
+        <element name="ICAL_COLOR_PROPERTY"/>
         <element name="ICAL_COMMENT_PROPERTY"/>
         <element name="ICAL_COMPLETED_PROPERTY"/>
         <element name="ICAL_COMPONENTS_PROPERTY"/>
@@ -384,6 +385,21 @@
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
         <parameter type="const gchar *" name="v" comment="The comment."/>
         <comment>Set the comment for the #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_property_get_color" corresponds="icalproperty_get_color" kind="get" since="3.0.5">
+        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
+        <returns type="const gchar *" annotation="transfer none" comment="Get the color property."/>
+        <comment>Get the color property of the @prop.</comment>
+    </method>
+    <method name="i_cal_property_new_color" corresponds="icalproperty_new_color" kind="constructor" since="1.0">
+        <parameter type="const gchar *" name="v" comment="The color."/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <comment xml:space="preserve">Create a new color #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_property_set_color" corresponds="icalproperty_set_color" kind="set" since="1.0">
+        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
+        <parameter type="const gchar *" name="v" comment="The color."/>
+        <comment>Set the color for the @prop.</comment>
     </method>
     <method name="i_cal_property_get_comment" corresponds="icalproperty_get_comment" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
