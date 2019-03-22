@@ -114,21 +114,21 @@
         <comment xml:space="preserve">Get the display name of the @zone.</comment>
     </method>
     <method name="i_cal_timezone_convert_time" corresponds="icaltimezone_convert_time" kind="other" since="1.0">
-        <parameter type="ICalTimetype *" name="tt" native_op="POINTER" comment="The time to be converted"/>
+        <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The time to be converted"/>
         <parameter type="ICalTimezone *" name="from_zone" annotation="nullable" comment="from timezone"/>
         <parameter type="ICalTimezone *" name="to_zone" annotation="nullable" comment="to timezone"/>
         <comment>Convert time from one timezone to another.</comment>
     </method>
     <method name="i_cal_timezone_get_utc_offset" corresponds="icaltimezone_get_utc_offset" kind="get" since="1.0">
         <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The given #ICalTimezone."/>
-        <parameter type="ICalTimetype *" name="tt" annotation="nullable" native_op="POINTER" comment="The local time."/>
+        <parameter type="ICalTime *" name="tt" annotation="nullable" native_op="POINTER" comment="The local time."/>
         <parameter type="gint *" name="is_daylight" comment="whether it is day light."/>
         <returns type="gint" comment="UTC offset of the @zone"/>
         <comment>Calculates the UTC offset of a given local time in the given timezone.  It is the number of seconds to add to UTC to get local time.  The is_daylight flag is set to 1 if the time is in daylight-savings time.</comment>
     </method>
     <method name="i_cal_timezone_get_utc_offset_of_utc_time" corresponds="icaltimezone_get_utc_offset_of_utc_time" kind="get" since="1.0">
         <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The given #ICalTimezone."/>
-        <parameter type="ICalTimetype *" name="tt" native_op="POINTER" comment="The local time."/>
+        <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The local time."/>
         <parameter type="gint *" name="is_daylight" annotation="nullable" comment="whether it is day light, can be %NULL"/>
         <returns type="gint" comment="UTC offset of the @zone"/>
         <comment>Calculates the UTC offset of a given UTC time in the given timezone.  It is the number of seconds to add to UTC to get local time.  The is_daylight flag is set to 1 if the time is in daylight-savings time.</comment>

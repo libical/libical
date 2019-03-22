@@ -274,20 +274,20 @@ while day != 0:
     day = timetype.get_day()
 
 recurrence = ICalGLib.RecurrenceType.from_string("FREQ=YEARLY;COUNT=10")
-start = ICalGLib.time_from_string("20161224T000000Z")
+start = ICalGLib.Time.from_string("20161224T000000Z")
 
 iter = ICalGLib.RecurIterator.new(recurrence, start)
 
-start = ICalGLib.time_from_string("20181224T000000Z")
+start = ICalGLib.Time.from_string("20181224T000000Z")
 
 assert ICalGLib.RecurIterator.set_start(iter, start) == 0
 
 recurrence = ICalGLib.RecurrenceType.from_string("FREQ=YEARLY")
-start = ICalGLib.time_from_string("20161224T000000Z")
+start = ICalGLib.Time.from_string("20161224T000000Z")
 
 iter = ICalGLib.RecurIterator.new(recurrence, start)
 
-start = ICalGLib.time_from_string("20181224T000000Z")
+start = ICalGLib.Time.from_string("20181224T000000Z")
 
 assert ICalGLib.RecurIterator.set_start(iter, start) == 1
 timetype = iter.next()

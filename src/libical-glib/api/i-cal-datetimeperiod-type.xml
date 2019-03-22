@@ -13,12 +13,12 @@
   You should have received a copy of the GNU Lesser General Public License
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
-<structure namespace="ICal" name="DatetimeperiodType" native="struct icaldatetimeperiodtype" is_bare="true" default_native="i_cal_datetimeperiod_type_new_default ()" includes="libical-glib/i-cal-timetype.h, libical-glib/i-cal-period-type.h">
+<structure namespace="ICal" name="DatetimeperiodType" native="struct icaldatetimeperiodtype" is_bare="true" default_native="i_cal_datetimeperiod_type_new_default ()" includes="libical-glib/i-cal-time.h, libical-glib/i-cal-period-type.h">
 	<method name="i_cal_datetimeperiod_type_new_default" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
         <returns type="struct icaldatetimeperiodtype" annotation="transfer full" comment="The newly created #ICalDatetimeperiodType" />
         <comment xml:space="preserve">Create a new default #ICalDatetimeperiodType</comment>
         <custom>	struct icaldatetimeperiodtype datetimeperiodtype;
-	datetimeperiodtype.time = i_cal_timetype_new_default ();
+	datetimeperiodtype.time = icaltime_null_time ();
 	datetimeperiodtype.period = icalperiodtype_null_period ();
 	return datetimeperiodtype;</custom>
     </method>
@@ -29,17 +29,17 @@
     </method>
     <method name="i_cal_datetimeperiod_type_get_time" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalDatetimeperiodType *" name="dtp" comment="The #ICalDatetimeperiodType to be queried"/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="The time attribute of @dtp."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="The time attribute of @dtp."/>
         <comment>Get the time attribute of #ICalDatetimeperiodType.</comment>
         <custom>	g_return_val_if_fail (dtp != NULL &amp;&amp; I_CAL_IS_DATETIMEPERIOD_TYPE (dtp), NULL);
-	return i_cal_timetype_new_full (((struct icaldatetimeperiodtype *)i_cal_object_get_native ((ICalObject *)dtp))->time);</custom>
+	return i_cal_time_new_full (((struct icaldatetimeperiodtype *)i_cal_object_get_native ((ICalObject *)dtp))->time);</custom>
     </method>
     <method name="i_cal_datetimeperiod_type_set_time" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalDatetimeperiodType *" name="dtp" comment="The #ICalDatetimeperiodType to be set"/>
-        <parameter type="ICalTimetype *" name="time" comment="The time attribute of @dtp."/>
+        <parameter type="ICalTime *" name="time" comment="The time attribute of @dtp."/>
         <comment>Set the time attribute of #ICalDatetimeperiodType.</comment>
         <custom>	g_return_if_fail (dtp != NULL &amp;&amp; I_CAL_IS_DATETIMEPERIOD_TYPE (dtp));
-	g_return_if_fail (time != NULL &amp;&amp; I_CAL_IS_TIMETYPE (time));
+	g_return_if_fail (time != NULL &amp;&amp; I_CAL_IS_TIME(time));
 	((struct icaldatetimeperiodtype *)i_cal_object_get_native ((ICalObject *)dtp))->time = *(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)time);</custom>
     </method>
     <method name="i_cal_datetimeperiod_type_get_period" corresponds="CUSTOM" kind="get" since="1.0">

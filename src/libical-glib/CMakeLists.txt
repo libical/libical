@@ -37,7 +37,6 @@ list(APPEND API_FILES
   api/i-cal-reqstat-type.xml
   api/i-cal-restriction.xml
   api/i-cal-time-span.xml
-  api/i-cal-timetype.xml
   api/i-cal-time.xml
   api/i-cal-timezone-phase.xml
   api/i-cal-timezonetype.xml

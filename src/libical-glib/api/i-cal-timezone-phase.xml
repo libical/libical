@@ -13,14 +13,14 @@
   You should have received a copy of the GNU Lesser General Public License
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
-<structure namespace="ICal" name="TimezonePhase" native="struct icaltimezonephase" is_bare="true" default_native="i_cal_timezone_phase_new_default ()" includes="libical-glib/i-cal-timetype.h, libical-glib/i-cal-datetimeperiod-type.h">
+<structure namespace="ICal" name="TimezonePhase" native="struct icaltimezonephase" is_bare="true" default_native="i_cal_timezone_phase_new_default ()" includes="libical-glib/i-cal-time.h, libical-glib/i-cal-datetimeperiod-type.h">
     <method name="i_cal_timezone_phase_new_default" corresponds="CUSTOM" kind="private" since="1.0">
         <returns type="struct icaltimezonephase" annotation="transfer full" comment="The newly created #ICalTimezonePhase" />
         <comment xml:space="preserve">Create a new default #ICalTimezonePhase</comment>
         <custom>        struct icaltimezonephase timezonephase;
         timezonephase.tzname = NULL;
         timezonephase.is_stdandard = 1;
-        timezonephase.dtstart = i_cal_timetype_new_default ();
+        timezonephase.dtstart = icaltime_null_time();
         timezonephase.offsetto = 0;
         timezonephase.tzoffsetfrom = 0;
         timezonephase.comment = NULL;
@@ -51,17 +51,17 @@
     </method>
     <method name="i_cal_timezone_phase_get_dtstart" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="The dtstart of #ICalTimezonePhase."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="The dtstart of #ICalTimezonePhase."/>
         <comment>Get the dtstart from #ICalTimezonePhase.</comment>
         <custom>        g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
-        return i_cal_timetype_new_full (((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->dtstart);</custom>
+        return i_cal_time_new_full (((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->dtstart);</custom>
     </method>
     <method name="i_cal_timezone_phase_set_dtstart" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
-        <parameter type="ICalTimetype *" name="dtstart" comment="The dtstart of #ICalTimezonePhase."/>
+        <parameter type="ICalTime *" name="dtstart" comment="The dtstart of #ICalTimezonePhase."/>
         <comment>Set the dtstart from #ICalTimezonePhase.</comment>
         <custom>        g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
-    g_return_if_fail (dtstart != NULL &amp;&amp; I_CAL_IS_TIMETYPE (dtstart));
+    g_return_if_fail (dtstart != NULL &amp;&amp; I_CAL_IS_TIME(dtstart));
         ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->dtstart = *(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)dtstart);</custom>
     </method>
     <method name="i_cal_timezone_phase_get_offsetto" corresponds="CUSTOM" kind="get" since="1.0">

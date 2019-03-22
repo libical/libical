@@ -16,44 +16,44 @@
 <structure namespace="ICal" name="PeriodType" native="struct icalperiodtype" is_bare="true" default_native="icalperiodtype_null_period ()">
 	<method name="i_cal_period_type_get_start" corresponds="CUSTOM" kind="get" since="1.0">
 		<parameter type="ICalPeriodType *" name="period" comment="The #ICalPeriodType to be queried."/>
-		<returns type="ICalTimetype *" annotation="transfer full" comment="The start of @period."/>
+		<returns type="ICalTime *" annotation="transfer full" comment="The start of @period."/>
 		<comment>Get the start time from an #ICalPeriodType.</comment>
 		<custom>	g_return_val_if_fail (period != NULL, NULL);
 	g_return_val_if_fail (I_CAL_IS_PERIOD_TYPE (period), NULL);
 
-	return i_cal_timetype_new_full ((* (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period)).start);</custom>
+	return i_cal_time_new_full ((* (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period)).start);</custom>
 	</method>
 	<method name="i_cal_period_type_set_start" corresponds="CUSTOM" kind="set" since="1.0">
 		<parameter type="ICalPeriodType *" name="period" comment="The #ICalPeriodType to be set."/>
-		<parameter type="ICalTimetype *" name="start" comment="The start of @period."/>
+		<parameter type="ICalTime *" name="start" comment="The start of @period."/>
 		<comment>Set the start time of an #ICalPeriodType.</comment>
 		<custom>	struct icalperiodtype *periodtype;
 	g_return_if_fail (period != NULL);
 	g_return_if_fail (I_CAL_IS_PERIOD_TYPE (period));
 	g_return_if_fail (start != NULL);
-	g_return_if_fail (I_CAL_IS_TIMETYPE (start));
+	g_return_if_fail (I_CAL_IS_TIME(start));
 
 	periodtype = (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period);
 	periodtype->start = * (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)start);</custom>
 	</method>
 	<method name="i_cal_period_type_get_end" corresponds="CUSTOM" kind="get" since="1.0">
 		<parameter type="ICalPeriodType *" name="period" comment="The #ICalPeriodType to be queried."/>
-		<returns type="ICalTimetype *" annotation="transfer full" comment="The end of @period."/>
+		<returns type="ICalTime *" annotation="transfer full" comment="The end of @period."/>
 		<comment>Get the end time from an #ICalPeriodType.</comment>
 		<custom>	g_return_val_if_fail (period != NULL, NULL);
 	g_return_val_if_fail (I_CAL_IS_PERIOD_TYPE (period), NULL);
 
-	return i_cal_timetype_new_full ((* (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period)).end);</custom>
+	return i_cal_time_new_full ((* (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period)).end);</custom>
 	</method>
 	<method name="i_cal_period_type_set_end" corresponds="CUSTOM" kind="set" since="1.0">
 		<parameter type="ICalPeriodType *" name="period" comment="The #ICalPeriodType to be set."/>
-		<parameter type="ICalTimetype *" name="end" comment="The end of @period."/>
+		<parameter type="ICalTime *" name="end" comment="The end of @period."/>
 		<comment>Set the end time of an #ICalPeriodType.</comment>
 		<custom>	struct icalperiodtype *periodtype;
 	g_return_if_fail (period != NULL);
 	g_return_if_fail (I_CAL_IS_PERIOD_TYPE (period));
 	g_return_if_fail (end != NULL);
-	g_return_if_fail (I_CAL_IS_TIMETYPE (end));
+	g_return_if_fail (I_CAL_IS_TIME(end));
 
 	periodtype = (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period);
 	periodtype->end = (* (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)end));</custom>

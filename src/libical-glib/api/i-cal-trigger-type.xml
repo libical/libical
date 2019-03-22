@@ -36,17 +36,17 @@
     </method>
     <method name="i_cal_trigger_type_get_time" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTriggerType *" name="trigger" comment="The #ICalTriggerType."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="The time of #ICalTriggerType."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="The time of #ICalTriggerType."/>
         <comment>Get the time from #ICalTriggerType.</comment>
         <custom>	g_return_val_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER_TYPE (trigger), NULL);
-	return i_cal_timetype_new_full (((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->time);</custom>
+	return i_cal_time_new_full (((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->time);</custom>
     </method>
     <method name="i_cal_trigger_type_set_time" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTriggerType *" name="trigger" comment="The #ICalTriggerType."/>
-        <parameter type="ICalTimetype *" name="time" comment="The time of #ICalTriggerType."/>
+        <parameter type="ICalTime *" name="time" comment="The time of #ICalTriggerType."/>
         <comment>Set the time from #ICalTriggerType.</comment>
         <custom>	g_return_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER_TYPE (trigger));
-	g_return_if_fail (time != NULL &amp;&amp; I_CAL_IS_TIMETYPE (time));
+	g_return_if_fail (time != NULL &amp;&amp; I_CAL_IS_TIME(time));
 	((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->time = *(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)time);</custom>
     </method>
     <method name="i_cal_trigger_type_get_duration" corresponds="CUSTOM" kind="get" since="1.0">

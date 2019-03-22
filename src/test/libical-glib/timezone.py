@@ -62,43 +62,43 @@ assert utc.get_display_name() == "UTC";
 utc2 = ICalGLib.Timezone.get_utc_timezone();
 assert utc == utc2
 
-time = ICalGLib.Timetype.new();
+time = ICalGLib.Time.new();
 before = time.get_hour();
-ICalGLib.Timezone.convert_time(time, la, chicago);
+ICalGLib.timezone_convert_time(time, la, chicago);
 after = time.get_hour();
 assert abs(after - before) == 2;
-ICalGLib.Timetype.set_zone(time, utc);
-assert ICalGLib.Timetype.get_zone(time) == utc;
-ICalGLib.Timetype.set_zone(time, la);
-assert ICalGLib.Timetype.get_zone(time) == la;
+ICalGLib.Time.set_timezone(time, utc);
+assert ICalGLib.Time.get_timezone(time) == utc;
+ICalGLib.Time.set_timezone(time, la);
+assert ICalGLib.Time.get_timezone(time) == la;
 
 timeclone = time.new_clone()
 assert time != timeclone
-time = ICalGLib.time_convert_to_zone(time, chicago)
-ICalGLib.time_convert_to_zone_inplace(timeclone, chicago)
+time = ICalGLib.Time.convert_to_zone(time, chicago)
+timeclone.convert_to_zone_inplace(chicago)
 assert time.get_year() == timeclone.get_year();
 assert time.get_month() == timeclone.get_month();
 assert time.get_day() == timeclone.get_day();
 assert time.get_hour() == timeclone.get_hour();
 assert time.get_minute() == timeclone.get_minute();
 assert time.get_second() == timeclone.get_second();
-assert time.get_is_date() == timeclone.get_is_date();
-assert time.get_is_daylight() == timeclone.get_is_daylight();
-assert time.get_zone() == timeclone.get_zone();
+assert time.get_timezone() == timeclone.get_timezone();
+assert time.is_date() == timeclone.is_date();
+assert time.is_daylight() == timeclone.is_daylight();
 assert time.is_utc() == timeclone.is_utc();
 
-timeclone = ICalGLib.Timetype.new_clone(time);
+timeclone = ICalGLib.Time.new_clone(time);
 assert time != timeclone;
-assert ICalGLib.Timetype.get_year(time) == ICalGLib.Timetype.get_year(timeclone);
-assert ICalGLib.Timetype.get_month(time) == ICalGLib.Timetype.get_month(timeclone);
-assert ICalGLib.Timetype.get_day(time) == ICalGLib.Timetype.get_day(timeclone);
-assert ICalGLib.Timetype.get_hour(time) == ICalGLib.Timetype.get_hour(timeclone);
-assert ICalGLib.Timetype.get_minute(time) == ICalGLib.Timetype.get_minute(timeclone);
-assert ICalGLib.Timetype.get_second(time) == ICalGLib.Timetype.get_second(timeclone);
-assert ICalGLib.Timetype.get_is_date(time) == ICalGLib.Timetype.get_is_date(timeclone);
-assert ICalGLib.Timetype.get_is_daylight(time) == ICalGLib.Timetype.get_is_daylight(timeclone);
-assert ICalGLib.Timetype.get_zone(time) == ICalGLib.Timetype.get_zone(timeclone);
-assert ICalGLib.Timetype.is_utc(time) == ICalGLib.Timetype.is_utc(timeclone);
+assert ICalGLib.Time.get_year(time) == ICalGLib.Time.get_year(timeclone);
+assert ICalGLib.Time.get_month(time) == ICalGLib.Time.get_month(timeclone);
+assert ICalGLib.Time.get_day(time) == ICalGLib.Time.get_day(timeclone);
+assert ICalGLib.Time.get_hour(time) == ICalGLib.Time.get_hour(timeclone);
+assert ICalGLib.Time.get_minute(time) == ICalGLib.Time.get_minute(timeclone);
+assert ICalGLib.Time.get_second(time) == ICalGLib.Time.get_second(timeclone);
+assert ICalGLib.Time.get_timezone(time) == ICalGLib.Time.get_timezone(timeclone);
+assert ICalGLib.Time.is_date(time) == ICalGLib.Time.is_date(timeclone);
+assert ICalGLib.Time.is_daylight(time) == ICalGLib.Time.is_daylight(timeclone);
+assert ICalGLib.Time.is_utc(time) == ICalGLib.Time.is_utc(timeclone);
 
 time.set_date(2019, 1, 24)
 assert time.get_year() == 2019

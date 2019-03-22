@@ -127,17 +127,17 @@
     </method>
     <method name="i_cal_recurrence_type_get_until" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrenceType *" name="recur" comment="The #ICalRecurrenceType."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="The until of #ICalRecurrenceType."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="The until of #ICalRecurrenceType."/>
         <comment>Get the until from #ICalRecurrenceType.</comment>
         <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE_TYPE (recur), NULL);
-	return i_cal_timetype_new_full (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->until);</custom>
+	return i_cal_time_new_full (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->until);</custom>
     </method>
     <method name="i_cal_recurrence_type_set_until" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalRecurrenceType *" name="recur" comment="The #ICalRecurrenceType."/>
-        <parameter type="ICalTimetype *" name="until" comment="The until of #ICalRecurrenceType."/>
+        <parameter type="ICalTime *" name="until" comment="The until of #ICalRecurrenceType."/>
         <comment>Set the until from #ICalRecurrenceType.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE_TYPE (recur));
-	g_return_if_fail (until != NULL &amp;&amp; I_CAL_IS_TIMETYPE (until));
+	g_return_if_fail (until != NULL &amp;&amp; I_CAL_IS_TIME(until));
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->until = *(icaltimetype *)i_cal_object_get_native ((ICalObject *)until);</custom>
     </method>
     <method name="i_cal_recurrence_type_get_freq" corresponds="CUSTOM" kind="get" since="1.0">

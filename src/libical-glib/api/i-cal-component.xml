@@ -246,32 +246,32 @@
     </method>
     <method name="i_cal_component_set_dtstart" corresponds="icalcomponent_set_dtstart" kind="set" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <parameter type="ICalTimetype *" name="v" comment="A #ICalTimetype."/>
+        <parameter type="ICalTime *" name="v" comment="A #ICalTime."/>
         <comment xml:space="preserve">Set the dtstart of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_get_dtstart" corresponds="icalcomponent_get_dtstart" kind="get" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="A #ICalTimetype."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="A #ICalTime."/>
         <comment xml:space="preserve">Get the dtstart of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_set_dtend" corresponds="icalcomponent_set_dtend" kind="set" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <parameter type="ICalTimetype *" name="v" comment="A #ICalTimetype."/>
+        <parameter type="ICalTime *" name="v" comment="A #ICalTime."/>
         <comment xml:space="preserve">Set the dtend of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_get_dtend" corresponds="icalcomponent_get_dtend" kind="get" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="A #ICalTimetype."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="A #ICalTime."/>
         <comment xml:space="preserve">Get the dtend of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_set_due" corresponds="icalcomponent_set_due" kind="set" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <parameter type="ICalTimetype *" name="v" comment="A #ICalTimetype."/>
+        <parameter type="ICalTime *" name="v" comment="A #ICalTime."/>
         <comment xml:space="preserve">Set the due of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_get_due" corresponds="icalcomponent_get_due" kind="get" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="A #ICalTimetype."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="A #ICalTime."/>
         <comment xml:space="preserve">Get the due of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_set_duration" corresponds="icalcomponent_set_duration" kind="set" since="1.0">
@@ -296,12 +296,12 @@
     </method>
     <method name="i_cal_component_set_dtstamp" corresponds="icalcomponent_set_dtstamp" kind="set" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <parameter type="ICalTimetype *" name="v" comment="A #ICalTimetype."/>
+        <parameter type="ICalTime *" name="v" comment="A #ICalTime."/>
         <comment xml:space="preserve">Set the dtstamp of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_get_dtstamp" corresponds="icalcomponent_get_dtstamp" kind="get" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="A #ICalTimetype."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="A #ICalTime."/>
         <comment xml:space="preserve">Get the dtstamp of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_set_summary" corresponds="icalcomponent_set_summary" kind="set" since="1.0">
@@ -346,12 +346,12 @@
     </method>
     <method name="i_cal_component_set_recurrenceid" corresponds="icalcomponent_set_recurrenceid" kind="set" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <parameter type="ICalTimetype *" name="v" comment="A #ICalTimetype."/>
+        <parameter type="ICalTime *" name="v" comment="A #ICalTime."/>
         <comment xml:space="preserve">Set the recurrenceid of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_get_recurrenceid" corresponds="icalcomponent_get_recurrenceid" kind="get" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="A #ICalTimetype."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="A #ICalTime."/>
         <comment xml:space="preserve">Get the recurrenceid of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_set_description" corresponds="icalcomponent_set_description" kind="set" since="1.0">
@@ -455,8 +455,8 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
 }</declaration>
     <method name="i_cal_component_foreach_recurrence" corresponds="CUSTOM" kind="other" since="3.0.5">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be queried."/>
-        <parameter type="ICalTimetype *" name="start" comment="Ignore timespans before this"/>
-        <parameter type="ICalTimetype *" name="end" comment="Ignore timespans after this"/>
+        <parameter type="ICalTime *" name="start" comment="Ignore timespans before this"/>
+        <parameter type="ICalTime *" name="end" comment="Ignore timespans after this"/>
         <parameter type="ICalComponentForeachRecurrenceFunc" name="callback" annotation="scope call" comment="Function called for each timespan within the range."/>
         <parameter type="gpointer" name="user_data" annotation="nullable, closure callback" comment="The user data for callback function"/>
         <comment>Cycle through all recurrances of an event. This function will call the specified callback function for once for the base value of DTSTART, and foreach recurring date/time value. It will filter out events that are specified as an EXDATE or an EXRULE.</comment>
@@ -465,8 +465,8 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
     struct icaltimetype *native_start, *native_end;
 
     g_return_if_fail (I_CAL_IS_COMPONENT (comp));
-    g_return_if_fail (I_CAL_IS_TIMETYPE (start));
-    g_return_if_fail (I_CAL_IS_TIMETYPE (end));
+    g_return_if_fail (I_CAL_IS_TIME(start));
+    g_return_if_fail (I_CAL_IS_TIME(end));
     g_return_if_fail (callback != NULL);
 
     native_comp = i_cal_object_get_native((ICalObject *) comp);
@@ -490,8 +490,8 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
     </method>
     <method name="i_cal_property_recurrence_is_excluded" corresponds="icalproperty_recurrence_is_excluded" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <parameter type="ICalTimetype *" name="dtstart" native_op="POINTER" comment="The base dtstart value for this component."/>
-        <parameter type="ICalTimetype *" name="recurtime" native_op="POINTER" comment="The time to test against."/>
+        <parameter type="ICalTime *" name="dtstart" native_op="POINTER" comment="The base dtstart value for this component."/>
+        <parameter type="ICalTime *" name="recurtime" native_op="POINTER" comment="The time to test against."/>
         <returns type="gint" comment="1 if yes, 0 if not."/>
         <comment xml:space="preserve">Decide if this recurrance is acceptable. This function decides if a specific recurrence value is excluded by EXRULE or EXDATE properties.</comment>
     </method>
