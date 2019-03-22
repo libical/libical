@@ -164,7 +164,7 @@
         <parameter type="ICalArray *" name="timezones" native_op="STEAL" comment="Free an array."/>
         <comment xml:space="preserve">Free an array of timezones.</comment>
     </method>
-    <method name="i_cal_time_tiemzone_expand_vtimezone" corresponds="icaltimezone_expand_vtimezone" kind="other" since="2.0">
+    <method name="i_cal_time_timezone_expand_vtimezone" corresponds="icaltimezone_expand_vtimezone" kind="other" since="2.0">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent."/>
         <parameter type="gint" name="end_year" comment="The end year."/>
         <parameter type="ICalArray *" name="changes" comment="The changes to be applies."/>
