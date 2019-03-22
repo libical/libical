@@ -155,10 +155,25 @@
         <comment xml:space="preserve">Normalize the icaltime, so that all fields are within the normal range.</comment>
     </method>
     <method name="i_cal_time_convert_to_zone" corresponds="icaltime_convert_to_zone" since="1.0">
-        <parameter type="ICalTimetype *" name="t" annotation="in, transfer none" comment="The #ICalTimetype to be normalized"/>
+        <parameter type="ICalTimetype *" name="tt" annotation="in, transfer none" comment="The #ICalTimetype to be converted"/>
         <parameter type="ICalTimezone *" name="zone" annotation="transfer none, nullable" comment="The target timezone"/>
         <returns type="ICalTimetype *" annotation="transfer full" comment="The converted #ICalTimetype" />
-        <comment xml:space="preserve">Convert tt, of timezone tzid, into a utc time. Does nothing if the time is already UTC.</comment>
+        <comment xml:space="preserve">Convert @tt to @zone and return new %ICalTimetype object.</comment>
+    </method>
+    <method name="i_cal_time_convert_to_zone_inplace" corresponds="CUSTOM" since="3.0.5">
+        <parameter type="ICalTimetype *" name="tt" comment="The #ICalTimetype to be converted"/>
+        <parameter type="ICalTimezone *" name="zone" annotation="transfer none, nullable" comment="The target timezone"/>
+        <comment xml:space="preserve">Convert @tt to @zone and store the result into @tt.</comment>
+	<custom xml:space="preserve">    icaltimetype *itt;
+
+    g_return_if_fail (I_CAL_IS_TIMETYPE (tt));
+    if(zone)
+        g_return_if_fail (I_CAL_IS_TIMEZONE (zone));
+
+    itt = i_cal_object_get_native (I_CAL_OBJECT (tt));
+    g_return_if_fail (itt != NULL);
+
+    *itt = icaltime_convert_to_zone (*itt, ((zone)?((icaltimezone *)i_cal_object_get_native (I_CAL_OBJECT (zone))):NULL));</custom>
     </method>
     <method name="i_cal_time_days_in_month" corresponds="icaltime_days_in_month" since="1.0">
         <parameter type="const gint" name="month" comment="The target month"/>

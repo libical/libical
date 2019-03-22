@@ -72,6 +72,21 @@ assert ICalGLib.Timetype.get_zone(time) == utc;
 ICalGLib.Timetype.set_zone(time, la);
 assert ICalGLib.Timetype.get_zone(time) == la;
 
+timeclone = time.new_clone()
+assert time != timeclone
+time = ICalGLib.time_convert_to_zone(time, chicago)
+ICalGLib.time_convert_to_zone_inplace(timeclone, chicago)
+assert time.get_year() == timeclone.get_year();
+assert time.get_month() == timeclone.get_month();
+assert time.get_day() == timeclone.get_day();
+assert time.get_hour() == timeclone.get_hour();
+assert time.get_minute() == timeclone.get_minute();
+assert time.get_second() == timeclone.get_second();
+assert time.get_is_date() == timeclone.get_is_date();
+assert time.get_is_daylight() == timeclone.get_is_daylight();
+assert time.get_zone() == timeclone.get_zone();
+assert time.is_utc() == timeclone.is_utc();
+
 timeclone = ICalGLib.Timetype.new_clone(time);
 assert time != timeclone;
 assert ICalGLib.Timetype.get_year(time) == ICalGLib.Timetype.get_year(timeclone);
