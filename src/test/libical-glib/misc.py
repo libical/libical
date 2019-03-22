@@ -24,7 +24,7 @@ gi.require_version('ICalGLib', '3.0')
 
 from gi.repository import ICalGLib
 
-geo = ICalGLib.GeoType.new(10.0, 20.0)
+geo = ICalGLib.Geo.new(10.0, 20.0)
 assert geo.get_lat() == 10.0
 assert geo.get_lon() == 20.0
 geo_clone = geo.new_clone()

@@ -1,0 +1,67 @@
+<!--
+  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+
+  This library is free software: you can redistribute it and/or modify it
+  under the terms of version 2.1. of the GNU Lesser General Public License
+  as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+  for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library. If not, see <http://www.gnu.org/licenses/>.
+-->
+<structure namespace="ICal" name="Trigger" native="struct icaltriggertype" is_bare="true" default_native="icaltriggertype_from_int (0)">
+    <method name="i_cal_trigger_from_int" corresponds="icaltriggertype_from_int" kind="constructor" since="">
+        <parameter type="const gint" name="reltime" comment="An integer."/>
+        <returns type="ICalTrigger *" annotation="transfer full" comment="The newly created #ICalTrigger."/>
+        <comment xml:space="preserve">Create a #ICalTrigger from integer.</comment>
+    </method>
+    <method name="i_cal_trigger_from_string" corresponds="icaltriggertype_from_string" kind="constructor" since="">
+        <parameter type="const gchar *" name="str" comment="A string."/>
+        <returns type="ICalTrigger *" annotation="transfer full" comment="The newly created #ICalTrigger."/>
+        <comment xml:space="preserve">Create a #ICalTrigger from a string.</comment>
+    </method>
+    <method name="i_cal_trigger_is_null_trigger" corresponds="icaltriggertype_is_null_trigger" since="">
+        <parameter type="ICalTrigger *" name="tr" comment="A #ICalTrigger."/>
+        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <comment xml:space="preserve">Check if a #ICalTrigger is a null trigger.</comment>
+    </method>
+    <method name="i_cal_trigger_is_bad_trigger" corresponds="icaltriggertype_is_bad_trigger" since="">
+        <parameter type="ICalTrigger *" name="tr" comment="A #ICalTrigger."/>
+        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <comment xml:space="preserve">Check if a #ICalTrigger is a bad trigger.</comment>
+    </method>
+    <method name="i_cal_trigger_get_time" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="The time of #ICalTrigger."/>
+        <comment>Get the time from #ICalTrigger.</comment>
+        <custom>	g_return_val_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger), NULL);
+	return i_cal_time_new_full (((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->time);</custom>
+    </method>
+    <method name="i_cal_trigger_set_time" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger."/>
+        <parameter type="ICalTime *" name="time" comment="The time of #ICalTrigger."/>
+        <comment>Set the time from #ICalTrigger.</comment>
+        <custom>	g_return_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger));
+	g_return_if_fail (time != NULL &amp;&amp; I_CAL_IS_TIME(time));
+	((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->time = *(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)time);</custom>
+    </method>
+    <method name="i_cal_trigger_get_duration" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger."/>
+        <returns type="ICalDuration *" annotation="transfer full" comment="The duration of #ICalTrigger."/>
+        <comment>Get the duration from #ICalTrigger.</comment>
+        <custom>	g_return_val_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger), NULL);
+	return i_cal_duration_new_full (((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->duration);</custom>
+    </method>
+    <method name="i_cal_trigger_set_duration" corresponds="CUSTOM" kind="set" since="1.0">
+        <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger."/>
+        <parameter type="ICalDuration *" name="duration" comment="The duration of #ICalTrigger."/>
+        <comment>Set the duration from #ICalTrigger.</comment>
+        <custom>	g_return_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger));
+	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
+	((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->duration = *(struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration);</custom>
+    </method>
+</structure>

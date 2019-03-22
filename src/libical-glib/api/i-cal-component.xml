@@ -276,12 +276,12 @@
     </method>
     <method name="i_cal_component_set_duration" corresponds="icalcomponent_set_duration" kind="set" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <parameter type="ICalDurationType *" name="v" comment="A #ICalDurationType."/>
+        <parameter type="ICalDuration *" name="v" comment="A #ICalDuration."/>
         <comment xml:space="preserve">Set the duration of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_get_duration" corresponds="icalcomponent_get_duration" kind="get" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
-        <returns type="ICalDurationType *" annotation="transfer full" comment="A #ICalDurationType."/>
+        <returns type="ICalDuration *" annotation="transfer full" comment="An #ICalDuration."/>
         <comment xml:space="preserve">Get the duration of the #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_set_method" corresponds="icalcomponent_set_method" kind="set" since="1.0">

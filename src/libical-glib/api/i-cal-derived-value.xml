@@ -215,32 +215,32 @@
 	</method>
 	<method name="i_cal_value_set_recur" corresponds="icalvalue_set_recur" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue."/>
-		<parameter type="ICalRecurrenceType *" name="v" comment="The recur value."/>
+		<parameter type="ICalRecurrence *" name="v" comment="The recur value."/>
 		<comment>Set the recur in the #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_new_recur" corresponds="icalvalue_new_recur" kind="constructor" since="1.0">
-		<parameter type="ICalRecurrenceType *" name="v" comment="The recur value"/>
+		<parameter type="ICalRecurrence *" name="v" comment="The recur value"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
 		<comment>Create a new #ICalValue with the type recur.</comment>
 	</method>
 	<method name="i_cal_value_get_recur" corresponds="icalvalue_get_recur" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried."/>
-		<returns type="ICalRecurrenceType *" annotation="allow-none, transfer full" comment="The recur within #ICalValue"/>
+		<returns type="ICalRecurrence *" annotation="allow-none, transfer full" comment="The recur within #ICalValue"/>
 		<comment>Get the recur of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_trigger" corresponds="icalvalue_set_trigger" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue."/>
-		<parameter type="ICalTriggerType *" name="v" comment="The trigger value."/>
+		<parameter type="ICalTrigger *" name="v" comment="The trigger value."/>
 		<comment>Set the trigger in the #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_new_trigger" corresponds="icalvalue_new_trigger" kind="constructor" since="1.0">
-		<parameter type="ICalTriggerType *" name="v" comment="The trigger value"/>
+		<parameter type="ICalTrigger *" name="v" comment="The trigger value"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
 		<comment>Create a new #ICalValue with the type trigger.</comment>
 	</method>
 	<method name="i_cal_value_get_trigger" corresponds="icalvalue_get_trigger" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried."/>
-		<returns type="ICalTriggerType *" annotation="allow-none, transfer full" comment="The trigger within #ICalValue"/>
+		<returns type="ICalTrigger *" annotation="allow-none, transfer full" comment="The trigger within #ICalValue"/>
 		<comment>Get the trigger of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_datetime" corresponds="icalvalue_set_datetime" kind="set" since="1.0">
@@ -275,32 +275,32 @@
 	</method>
 	<method name="i_cal_value_set_datetimeperiod" corresponds="icalvalue_set_datetimeperiod" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue."/>
-		<parameter type="ICalDatetimeperiodType *" name="v" comment="The datetimeperiod value."/>
+		<parameter type="ICalDatetimeperiod *" name="v" comment="The datetimeperiod value."/>
 		<comment>Set the datetimeperiod in the #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_new_datetimeperiod" corresponds="icalvalue_new_datetimeperiod" kind="constructor" since="1.0">
-		<parameter type="ICalDatetimeperiodType *" name="v" comment="The datetimeperiod value"/>
+		<parameter type="ICalDatetimeperiod *" name="v" comment="The datetimeperiod value"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
 		<comment>Create a new #ICalValue with the type datetimeperiod.</comment>
 	</method>
 	<method name="i_cal_value_get_datetimeperiod" corresponds="icalvalue_get_datetimeperiod" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried."/>
-		<returns type="ICalDatetimeperiodType *" annotation="allow-none, transfer full" comment="The datetimeperiod within #ICalValue"/>
+		<returns type="ICalDatetimeperiod *" annotation="allow-none, transfer full" comment="The datetimeperiod within #ICalValue"/>
 		<comment>Get the datetimeperiod of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_geo" corresponds="icalvalue_set_geo" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue."/>
-		<parameter type="ICalGeoType *" name="v" comment="The geo value."/>
+		<parameter type="ICalGeo *" name="v" comment="The geo value."/>
 		<comment>Set the geo in the #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_new_geo" corresponds="icalvalue_new_geo" kind="constructor" since="1.0">
-		<parameter type="ICalGeoType *" name="v" comment="The geo value"/>
+		<parameter type="ICalGeo *" name="v" comment="The geo value"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
 		<comment>Create a new #ICalValue with the type geo.</comment>
 	</method>
 	<method name="i_cal_value_get_geo" corresponds="icalvalue_get_geo" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried."/>
-		<returns type="ICalGeoType *" annotation="allow-none, transfer full" comment="The geo within #ICalValue"/>
+		<returns type="ICalGeo *" annotation="allow-none, transfer full" comment="The geo within #ICalValue"/>
 		<comment>Get the geo of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_attach" corresponds="icalvalue_set_attach" kind="set" since="1.0">
@@ -459,17 +459,17 @@
 	</method>
 	<method name="i_cal_value_set_period" corresponds="icalvalue_set_period" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue."/>
-		<parameter type="ICalPeriodType *" name="v" comment="The period value."/>
+		<parameter type="ICalPeriod *" name="v" comment="The period value."/>
 		<comment>Set the period in the #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_new_period" corresponds="icalvalue_new_period" kind="constructor" since="1.0">
-		<parameter type="ICalPeriodType *" name="v" comment="The period value"/>
+		<parameter type="ICalPeriod *" name="v" comment="The period value"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
 		<comment>Create a new #ICalValue with the type period.</comment>
 	</method>
 	<method name="i_cal_value_get_period" corresponds="icalvalue_get_period" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried."/>
-		<returns type="ICalPeriodType *" annotation="allow-none, transfer full" comment="The period within #ICalValue"/>
+		<returns type="ICalPeriod *" annotation="allow-none, transfer full" comment="The period within #ICalValue"/>
 		<comment>Get the period of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_status" corresponds="icalvalue_set_status" kind="set" since="1.0">
@@ -519,17 +519,17 @@
 	</method>
 	<method name="i_cal_value_set_duration" corresponds="icalvalue_set_duration" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue."/>
-		<parameter type="ICalDurationType *" name="v" comment="The duration value."/>
+		<parameter type="ICalDuration *" name="v" comment="The duration value."/>
 		<comment>Set the duration in the #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_new_duration" corresponds="icalvalue_new_duration" kind="constructor" since="1.0">
-		<parameter type="ICalDurationType *" name="v" comment="The duration value"/>
+		<parameter type="ICalDuration *" name="v" comment="The duration value"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
 		<comment>Create a new #ICalValue with the type duration.</comment>
 	</method>
 	<method name="i_cal_value_get_duration" corresponds="icalvalue_get_duration" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried."/>
-		<returns type="ICalDurationType *" annotation="allow-none, transfer full" comment="The duration within #ICalValue"/>
+		<returns type="ICalDuration *" annotation="allow-none, transfer full" comment="The duration within #ICalValue"/>
 		<comment>Get the duration of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_integer" corresponds="icalvalue_set_integer" kind="set" since="1.0">
@@ -639,17 +639,17 @@
 	</method>
 	<method name="i_cal_value_set_requeststatus" corresponds="icalvalue_set_requeststatus" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue."/>
-		<parameter type="ICalReqstatType *" name="v" comment="The requeststatus value."/>
+		<parameter type="ICalReqstat *" name="v" comment="The requeststatus value."/>
 		<comment>Set the requeststatus in the #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_new_requeststatus" corresponds="icalvalue_new_requeststatus" kind="constructor" since="1.0">
-		<parameter type="ICalReqstatType *" name="v" comment="The requeststatus value"/>
+		<parameter type="ICalReqstat *" name="v" comment="The requeststatus value"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
 		<comment>Create a new #ICalValue with the type requeststatus.</comment>
 	</method>
 	<method name="i_cal_value_get_requeststatus" corresponds="icalvalue_get_requeststatus" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried."/>
-		<returns type="ICalReqstatType *" annotation="allow-none, transfer full" comment="The requeststatus within #ICalValue"/>
+		<returns type="ICalReqstat *" annotation="allow-none, transfer full" comment="The requeststatus within #ICalValue"/>
 		<comment>Get the requeststatus of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_date" corresponds="icalvalue_set_date" kind="set" since="1.0">

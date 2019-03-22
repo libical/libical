@@ -13,7 +13,7 @@
   You should have received a copy of the GNU Lesser General Public License
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
-<structure namespace="ICal" name="TimezonePhase" native="struct icaltimezonephase" is_bare="true" default_native="i_cal_timezone_phase_new_default ()" includes="libical-glib/i-cal-time.h, libical-glib/i-cal-datetimeperiod-type.h">
+<structure namespace="ICal" name="TimezonePhase" native="struct icaltimezonephase" is_bare="true" default_native="i_cal_timezone_phase_new_default ()" includes="libical-glib/i-cal-time.h, libical-glib/i-cal-datetimeperiod.h">
     <method name="i_cal_timezone_phase_new_default" corresponds="CUSTOM" kind="private" since="1.0">
         <returns type="struct icaltimezonephase" annotation="transfer full" comment="The newly created #ICalTimezonePhase" />
         <comment xml:space="preserve">Create a new default #ICalTimezonePhase</comment>
@@ -24,7 +24,7 @@
         timezonephase.offsetto = 0;
         timezonephase.tzoffsetfrom = 0;
         timezonephase.comment = NULL;
-        timezonephase.rdate = i_cal_datetimeperiod_type_new_default ();
+        timezonephase.rdate = i_cal_datetimeperiod_new_default ();
         timezonephase.rrule = NULL;
         return timezonephase;</custom>
         </method>
@@ -101,17 +101,17 @@
     </method>
     <method name="i_cal_timezone_phase_get_rdate" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
-        <returns type="ICalDatetimeperiodType *" annotation="transfer full" comment="The rdate of #ICalTimezonePhase."/>
+        <returns type="ICalDatetimeperiod *" annotation="transfer full" comment="The rdate of #ICalTimezonePhase."/>
         <comment>Get the rdate from #ICalTimezonePhase.</comment>
         <custom>        g_return_val_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase), NULL);
-        return i_cal_datetimeperiod_type_new_full (((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->rdate);</custom>
+        return i_cal_datetimeperiod_new_full (((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->rdate);</custom>
     </method>
     <method name="i_cal_timezone_phase_set_rdate" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimezonePhase *" name="phase" comment="The #ICalTimezonePhase."/>
-        <parameter type="ICalDatetimeperiodType *" name="rdate" comment="The rdate of #ICalTimezonePhase."/>
+        <parameter type="ICalDatetimeperiod *" name="rdate" comment="The rdate of #ICalTimezonePhase."/>
         <comment>Set the rdate from #ICalTimezonePhase.</comment>
         <custom>        g_return_if_fail (phase != NULL &amp;&amp; I_CAL_IS_TIMEZONE_PHASE (phase));
-    g_return_if_fail (rdate != NULL &amp;&amp; I_CAL_IS_DATETIMEPERIOD_TYPE (rdate));
+    g_return_if_fail (rdate != NULL &amp;&amp; I_CAL_IS_DATETIMEPERIOD (rdate));
         ((struct icaltimezonephase *)i_cal_object_get_native ((ICalObject *)phase))->rdate = *(struct icaldatetimeperiodtype *)i_cal_object_get_native ((ICalObject *)rdate);</custom>
     </method>
     <method name="i_cal_timezone_phase_get_rrule" corresponds="CUSTOM" kind="get" since="1.0">

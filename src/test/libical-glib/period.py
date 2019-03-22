@@ -26,11 +26,11 @@ from gi.repository import ICalGLib
 
 string = "19970101T183248Z/19970102T071625Z";
 
-period = ICalGLib.PeriodType.from_string(string);
+period = ICalGLib.Period.from_string(string);
 retrieved_string = period.as_ical_string_r();
 assert(retrieved_string == string);
 
-null_period = ICalGLib.PeriodType.null_period();
+null_period = ICalGLib.Period.null_period();
 assert(null_period.is_null_period() == 1);
 assert(period.is_null_period() == 0);
 
@@ -57,7 +57,7 @@ duration = period.get_duration();
 assert(duration.as_int() == 0);
 
 string = "19970101T182346Z/PT5H30M";
-period = ICalGLib.PeriodType.from_string(string);
+period = ICalGLib.Period.from_string(string);
 retrieved_string = period.as_ical_string_r();
 assert(retrieved_string == string);
 

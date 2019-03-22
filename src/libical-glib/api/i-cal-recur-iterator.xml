@@ -15,7 +15,7 @@
 -->
 <structure namespace="ICal" name="RecurIterator" native="icalrecur_iterator" destroy_func="icalrecur_iterator_free">
     <method name="i_cal_recur_iterator_new" corresponds="icalrecur_iterator_new" kind="constructor" since="1.0">
-        <parameter type="ICalRecurrenceType *" name="rule" comment="The rule applied on the #ICalRecurIterator."/>
+        <parameter type="ICalRecurrence *" name="rule" comment="The rule applied on the #ICalRecurIterator."/>
         <parameter type="ICalTime *" name="dtstart" comment="The start time of the recurrence."/>
         <returns type="ICalRecurIterator *" annotation="transfer full" comment="The newly created #ICalRecurIterator"/>
         <comment xml:space="preserve">Create an #ICalRecurIterator.</comment>

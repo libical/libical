@@ -16,32 +16,32 @@ list(APPEND API_FILES
   api/i-cal-attach.xml
   api/i-cal-comp-iter.xml
   api/i-cal-component.xml
-  api/i-cal-datetimeperiod-type.xml
+  api/i-cal-datetimeperiod.xml
   api/i-cal-derived-parameter.xml
   api/i-cal-derived-property.xml
   api/i-cal-derived-value.xml
-  api/i-cal-duration-type.xml
+  api/i-cal-duration.xml
   api/i-cal-enums.xml
   api/i-cal-error.xml
-  api/i-cal-geo-type.xml
+  api/i-cal-geo.xml
   api/i-cal-langbind.xml
   api/i-cal-memory.xml
   api/i-cal-mime.xml
   api/i-cal-parameter.xml
   api/i-cal-parser.xml
-  api/i-cal-period-type.xml
+  api/i-cal-period.xml
   api/i-cal-property.xml
   api/i-cal-recur-iterator.xml
-  api/i-cal-recurrence-type.xml
+  api/i-cal-recurrence.xml
   api/i-cal-recur.xml
-  api/i-cal-reqstat-type.xml
+  api/i-cal-reqstat.xml
   api/i-cal-restriction.xml
   api/i-cal-time-span.xml
   api/i-cal-time.xml
   api/i-cal-timezone-phase.xml
   api/i-cal-timezonetype.xml
   api/i-cal-timezone.xml
-  api/i-cal-trigger-type.xml
+  api/i-cal-trigger.xml
   api/i-cal-unknowntokenhandling.xml
   api/i-cal-value.xml
 )
