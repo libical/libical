@@ -14,22 +14,22 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Trigger" native="struct icaltriggertype" is_bare="true" default_native="icaltriggertype_from_int (0)">
-    <method name="i_cal_trigger_from_int" corresponds="icaltriggertype_from_int" kind="constructor" since="">
+    <method name="i_cal_trigger_from_int" corresponds="icaltriggertype_from_int" kind="constructor" since="1.0">
         <parameter type="const gint" name="reltime" comment="An integer."/>
         <returns type="ICalTrigger *" annotation="transfer full" comment="The newly created #ICalTrigger."/>
         <comment xml:space="preserve">Create a #ICalTrigger from integer.</comment>
     </method>
-    <method name="i_cal_trigger_from_string" corresponds="icaltriggertype_from_string" kind="constructor" since="">
+    <method name="i_cal_trigger_from_string" corresponds="icaltriggertype_from_string" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="str" comment="A string."/>
         <returns type="ICalTrigger *" annotation="transfer full" comment="The newly created #ICalTrigger."/>
         <comment xml:space="preserve">Create a #ICalTrigger from a string.</comment>
     </method>
-    <method name="i_cal_trigger_is_null_trigger" corresponds="icaltriggertype_is_null_trigger" since="">
+    <method name="i_cal_trigger_is_null_trigger" corresponds="icaltriggertype_is_null_trigger" since="1.0">
         <parameter type="ICalTrigger *" name="tr" comment="A #ICalTrigger."/>
         <returns type="gint" comment="1 if yes, 0 if not."/>
         <comment xml:space="preserve">Check if a #ICalTrigger is a null trigger.</comment>
     </method>
-    <method name="i_cal_trigger_is_bad_trigger" corresponds="icaltriggertype_is_bad_trigger" since="">
+    <method name="i_cal_trigger_is_bad_trigger" corresponds="icaltriggertype_is_bad_trigger" since="1.0">
         <parameter type="ICalTrigger *" name="tr" comment="A #ICalTrigger."/>
         <returns type="gint" comment="1 if yes, 0 if not."/>
         <comment xml:space="preserve">Check if a #ICalTrigger is a bad trigger.</comment>

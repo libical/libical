@@ -93,7 +93,7 @@
         <returns type="gint" comment="The decoded day of the week. 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc"/>
         <comment xml:space="preserve">Decode a day to a position of the weekday.</comment>
     </method>
-    <method name="i_cal_recurrence_encode_day" corresponds="icalrecurrencetype_encode_day" since="3.1">
+    <method name="i_cal_recurrence_encode_day" corresponds="icalrecurrencetype_encode_day" since="3.0.5">
         <parameter type="ICalRecurrenceWeekday" name="weekday" comment="The #ICalRecurrenceWeekday to use."/>
         <parameter type="gint" name="position" comment="The position to use. 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc"/>
         <returns type="gshort" comment="Encoded @weekday and @position into a single value"/>
@@ -109,7 +109,7 @@
         <returns type="gint" comment="The actual month number regardless of the leap flag."/>
         <comment xml:space="preserve">Decode a month from an encoded value by i_cal_recurrence_encode_month().</comment>
     </method>
-    <method name="i_cal_recurrence_encode_month" corresponds="icalrecurrencetype_encode_month" since="3.1">
+    <method name="i_cal_recurrence_encode_month" corresponds="icalrecurrencetype_encode_month" since="3.0.5">
         <parameter type="gint" name="month" comment="The month to be encoded."/>
         <parameter type="gboolean" name="is_leap" comment="%TRUE, when the month is leap, %FALSE otherwise."/>
         <returns type="gshort" comment="Encoded @month and @is_leap."/>

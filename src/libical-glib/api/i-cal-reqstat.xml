@@ -14,12 +14,12 @@
   along with this library. If not, see <http://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Reqstat" native="struct icalreqstattype" is_bare="true" default_native="i_cal_reqstat_new_default ()">
-    <method name="i_cal_reqstat_from_string" corresponds="icalreqstattype_from_string" kind="constructor" since="">
+    <method name="i_cal_reqstat_from_string" corresponds="icalreqstattype_from_string" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="str" comment="A string."/>
         <returns type="ICalReqstat *" annotation="transfer full" comment="The newly created #ICalReqstat."/>
         <comment xml:space="preserve">Create a #ICalReqstat from string.</comment>
     </method>
-    <method name="i_cal_reqstat_as_string_r" corresponds="icalreqstattype_as_string_r" since="">
+    <method name="i_cal_reqstat_as_string_r" corresponds="icalreqstattype_as_string_r" since="1.0">
         <parameter type="ICalReqstat *" name="stat" comment="A #ICalReqstat."/>
         <returns type="gchar *" annotation="transfer full" comment="A string."/>
         <comment xml:space="preserve">Convert #ICalReqstat to a string representation.</comment>
