@@ -38,8 +38,6 @@ list(APPEND API_FILES
   api/i-cal-restriction.xml
   api/i-cal-time-span.xml
   api/i-cal-time.xml
-  api/i-cal-timezone-phase.xml
-  api/i-cal-timezonetype.xml
   api/i-cal-timezone.xml
   api/i-cal-trigger.xml
   api/i-cal-unknowntokenhandling.xml

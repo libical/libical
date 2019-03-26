@@ -75,28 +75,6 @@ LIBICAL_ICAL_EXPORT const char *icalreqstattype_as_string(struct icalreqstattype
 
 LIBICAL_ICAL_EXPORT char *icalreqstattype_as_string_r(struct icalreqstattype);
 
-struct icaltimezonephase
-{
-    const char *tzname;
-    int is_stdandard;   /* 1 = standard tme, 0 = daylight savings time */
-    struct icaltimetype dtstart;
-    int offsetto;
-    int tzoffsetfrom;
-    const char *comment;
-    struct icaldatetimeperiodtype rdate;
-    const char *rrule;
-};
-
-struct icaltimezonetype
-{
-    const char *tzid;
-    struct icaltimetype last_mod;
-    const char *tzurl;
-
-    /* Array of phases. The end of the array is a phase with tzname == 0 */
-    struct icaltimezonephase *phases;
-};
-
 /* ical_unknown_token_handling :
  *    How should the ICAL library handle components, properties and parameters with
  *    unknown names?

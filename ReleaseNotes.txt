@@ -11,6 +11,10 @@ Version 3.1.0 (NOT RELEASED YET):
  * Deprecated functions:
      + caldat
      + juldat
+ * Removed unused declarations:
+     (in the public headers but not used at all)
+     + struct icaltimezonetype
+     + struct icaltimezonephase
 
 Version 3.0.5 (NOT RELEASED YET):
 -------------
