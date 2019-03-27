@@ -7,12 +7,13 @@ list(APPEND TEST_FILES
   attach.py
   component.py
   comprehensive.py
-  duration-type.py
+  duration.py
   error.py
+  misc.py
   parameter.py
-  period-type.py
+  period.py
   property.py
-  recurrence-type.py
+  recurrence.py
   timezone.py
   value.py
 )

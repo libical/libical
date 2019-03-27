@@ -18,6 +18,10 @@
 #
 ###############################################################################
 
+import gi
+
+gi.require_version('ICalGLib', '3.0')
+
 from gi.repository import ICalGLib
 
 event_str1 = \
@@ -95,29 +99,30 @@ event_str5 = \
     "LOCATION;LANGUAGE=en-US:Location\n"            \
     "END:VCALENDAR\n"
 
+recurring_str = \
+    "BEGIN:VEVENT\r\n"                              \
+    "UID:recurring\r\n"                             \
+    "DTSTAMP:20180403T101443Z\r\n"                  \
+    "DTSTART:20180320T150000Z\r\n"                  \
+    "DTEND:20180320T153000Z\r\n"                    \
+    "SUMMARY:Recurring event\r\n"                   \
+    "CREATED:20180403T113809Z\r\n"                  \
+    "LAST-MODIFIED:20180403T113905Z\r\n"            \
+    "RRULE:FREQ=DAILY;COUNT=10;INTERVAL=1\r\n"      \
+    "END:VEVENT\r\n"
+
 #############################################################
-#The implementation of i_cal_component_foreach_tzid in Python
-def comp_foreach_tzid(comp, callback, data):
-    prop = ICalGLib.Component.get_first_property(comp, ICalGLib.PropertyKind.ANY_PROPERTY);
-    while prop != None:
-        kind = prop.isa();
-        if (kind == ICalGLib.PropertyKind.DTSTART_PROPERTY
-        or kind == ICalGLib.PropertyKind.DTEND_PROPERTY
-        or kind == ICalGLib.PropertyKind.DUE_PROPERTY
-        or kind == ICalGLib.PropertyKind.EXDATE_PROPERTY
-        or kind == ICalGLib.PropertyKind.RDATE_PROPERTY):
-            param = prop.get_first_parameter(ICalGLib.ParameterKind.TZID_PARAMETER);
-            if param != None:
-                callback(param, data);
-        prop = comp.get_next_property(ICalGLib.PropertyKind.ANY_PROPERTY);
 
-    subcomp = comp.get_first_component(ICalGLib.ComponentKind.ANY_COMPONENT);
-    while (subcomp != None):
-        comp_foreach_tzid(subcomp, callback, data);
-        subcomp = comp.get_next_component();
+class TestCounter:
+    counter = 0
+    def inc(self):
+        self.counter = self.counter + 1
 
-def setParam(param, data):
-    ICalGLib.Parameter.set_tzid(param, data);
+def foreachTZIDCb(param, user_data):
+    user_data.inc()
+
+def foreachRecurrenceCb(comp, span, user_data):
+    user_data.inc()
 
 #############################################################
 
@@ -232,24 +237,24 @@ def main():
     #Test get_dtstart and get_dtend
     comp = ICalGLib.Component.new_from_string(event_str1);
     dtstart = comp.get_dtstart();
-    start_string = ICalGLib.time_as_ical_string_r(dtstart);
+    start_string = ICalGLib.Time.as_ical_string_r(dtstart);
     assert(start_string == "20140306T090000");
     dtend = comp.get_dtend();
-    end_string = ICalGLib.time_as_ical_string_r(dtend);
+    end_string = dtend.as_ical_string_r();
     assert(end_string == "20140306T093000");
 
     #Test span
     span = comp.get_span();
     assert(span.get_start() == 1394096400);
     assert(span.get_end() == 1394098200);
-    assert(span.is_busy() == 1);
+    assert(span.get_is_busy() == 1);
     utc = ICalGLib.Timezone.get_utc_timezone();
-    comp.set_dtstart(ICalGLib.time_from_timet_with_zone(1494096400, 0, utc));
-    comp.set_dtend(ICalGLib.time_from_timet_with_zone(1494098200, 0, utc));
+    comp.set_dtstart(ICalGLib.Time.from_timet_with_zone(1494096400, 0, utc));
+    comp.set_dtend(ICalGLib.Time.from_timet_with_zone(1494098200, 0, utc));
     span = comp.get_span();
     assert(span.get_start() == 1494096400);
     assert(span.get_end() == 1494098200);
-    assert(span.is_busy() == 1);
+    assert(span.get_is_busy() == 1);
 
     #Test set_summary/get_summary
     assert(comp.get_summary() == "test1");
@@ -287,7 +292,15 @@ def main():
     assert(comp.get_sequence() == 5);
 
     #Call comp_foreach_tzid
-    comp_foreach_tzid(comp, setParam, "America/Chicago");
+    comp = ICalGLib.Component.new_from_string(event_str1);
+    counter = TestCounter()
+    comp.foreach_tzid(foreachTZIDCb, counter);
+    assert counter.counter == 2
+
+    counter = TestCounter()
+    comp = ICalGLib.Component.new_from_string(recurring_str)
+    comp.foreach_recurrence(ICalGLib.Time.from_string("20180321T000000Z"), ICalGLib.Time.from_string("20180323T235959Z"), foreachRecurrenceCb, counter)
+    assert counter.counter == 3
 
 if __name__ == "__main__":
     main()

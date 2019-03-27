@@ -41,12 +41,15 @@
     </method>
     <method name="i_cal_attach_get_url" corresponds="icalattach_get_url" kind="others" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be queried"/>
-        <returns type="const gchar *" annotation="allow-none, transfer none" comment="The url component of the @attach. NULL if it is built from data or there is an error." />
-        <comment xml:space="preserve">Get the url if the #ICalAttach is built from the url. NULL if else.</comment>
+        <returns type="const gchar *" annotation="allow-none, transfer none" comment="The url component of the @attach. %NULL if it is built from data or there is an error." />
+        <comment xml:space="preserve">Get the url, if the #ICalAttach is built from the url.</comment>
     </method>
-    <method name="i_cal_attach_get_data" corresponds="icalattach_get_data" kind="others" since="1.0">
+    <method name="i_cal_attach_get_data" corresponds="CUSTOM" kind="others" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be queried"/>
-        <returns type="guchar *" annotation="type utf8, allow-none, transfer none" comment="The data component of the @attach. NULL if it is built from url or there is an error." />
-        <comment xml:space="preserve">Get the data if the #ICalAttach is built from the data. NULL if else.</comment>
+        <returns type="const gchar *" annotation="nullable, transfer none" comment="The data component of the @attach. %NULL if it is built from url or there is an error." />
+        <comment xml:space="preserve">Get the data, if the #ICalAttach is built from the data.</comment>
+        <custom>    g_return_val_if_fail (I_CAL_IS_ATTACH (attach), NULL);
+
+    return (const gchar *) (icalattach_get_data ((icalattach *)i_cal_object_get_native (I_CAL_OBJECT (attach))));</custom>
     </method>
 </structure>

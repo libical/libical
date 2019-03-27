@@ -67,7 +67,11 @@ icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
 
 int icalgauge_get_expand(icalgauge *gauge)
 {
-    return (gauge->expand);
+    icalerror_check_arg_rz((gauge != 0), "gauge");
+    if (gauge != 0) {
+        return gauge->expand;
+    }
+    return -1;
 }
 
 void icalgauge_free(icalgauge *gauge)

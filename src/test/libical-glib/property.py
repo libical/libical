@@ -18,6 +18,10 @@
 #
 ###############################################################################
 
+import gi
+
+gi.require_version('ICalGLib', '3.0')
+
 from gi.repository import ICalGLib
 
 action_property = ICalGLib.Property.new(ICalGLib.PropertyKind.ACKNOWLEDGED_PROPERTY);

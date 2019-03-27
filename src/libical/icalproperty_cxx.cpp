@@ -66,7 +66,7 @@ ICalProperty::ICalProperty(icalproperty *v) : imp(v)
 {
 }
 
-ICalProperty::ICalProperty(std::string str)
+ICalProperty::ICalProperty(std::string str) //NOLINT TODO:V3.1:pass const ref
     : imp(icalproperty_new_from_string(str.c_str()))
 {
 }

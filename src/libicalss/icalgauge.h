@@ -34,6 +34,10 @@ typedef struct icalgauge_impl icalgauge;
 
 LIBICAL_ICALSS_EXPORT icalgauge *icalgauge_new_from_sql(const char *sql, int expand);
 
+/**
+ * Returns the expand value for the specified icalgauge.
+ * If @p gauge is NULL a value of -1 is returned.
+ */
 LIBICAL_ICALSS_EXPORT int icalgauge_get_expand(icalgauge *gauge);
 
 LIBICAL_ICALSS_EXPORT void icalgauge_free(icalgauge *gauge);

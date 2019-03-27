@@ -36,7 +36,7 @@
     </method>
     <method name="i_cal_property_as_ical_string_r" corresponds="icalproperty_as_ical_string_r" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be converted."/>
-        <returns type="const gchar *" annotation="transfer full" comment="The string representation of @prop."/>
+        <returns type="gchar *" annotation="transfer full" comment="The string representation of @prop."/>
         <comment xml:space="preserve">Convert a #ICalProperty to a string representation.</comment>
     </method>
     <method name="i_cal_property_free" corresponds="icalproperty_free" annotation="skip" kind="destructor" since="1.0">
@@ -57,6 +57,16 @@
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set."/>
         <parameter type="ICalParameter *" name="parameter" annotation="transfer full" owner_op="prop" comment="The parameter to be added into @prop."/>
         <comment xml:space="preserve">Add a #ICalParameter into the #ICalProperty. It behaves like set the copy of the #ICalParameter. Upon completion the native part of #ICalParameter will be set to NULL.</comment>
+    </method>
+    <method name="i_cal_property_take_parameter" corresponds="CUSTOM" annotation="skip" since="1.0">
+        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set."/>
+        <parameter type="ICalParameter *" name="parameter" annotation="transfer full" comment="The parameter to be added into @prop."/>
+        <comment xml:space="preserve">Add the @parameter into the @prop and free the @parameter.</comment>
+        <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
+    g_return_if_fail(I_CAL_IS_PARAMETER(parameter));
+
+    i_cal_property_add_parameter(prop, parameter);
+    g_object_unref(parameter);</custom>
     </method>
     <method name="i_cal_property_set_parameter" corresponds="icalproperty_set_parameter" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set."/>
@@ -111,6 +121,16 @@
         <parameter type="ICalProperty *" name="prop" translator_argus="value" comment="The target #ICalProperty."/>
         <parameter type="ICalValue *" name="value" owner_op="prop" comment="The #ICalValue will be set as the property of @prop."/>
         <comment xml:space="preserve">Set the #ICalProperty with the #ICalValue.</comment>
+    </method>
+    <method name="i_cal_property_take_value" corresponds="CUSTOM" annotation="skip" since="1.0">
+        <parameter type="ICalProperty *" name="prop" comment="The target #ICalProperty."/>
+        <parameter type="ICalValue *" name="value" annotation="transfer full" comment="The #ICalValue will be set as the property of @prop."/>
+        <comment xml:space="preserve">Set the @prop with the @value and unrefs the @value.</comment>
+        <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
+    g_return_if_fail(I_CAL_IS_VALUE(value));
+
+    i_cal_property_set_value(prop, value);
+    g_object_unref(value);</custom>
     </method>
     <method name="i_cal_property_set_value_from_string" corresponds="icalproperty_set_value_from_string" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set."/>

@@ -18,6 +18,10 @@
 #
 ###############################################################################
 
+import gi
+
+gi.require_version('ICalGLib', '3.0')
+
 from gi.repository import ICalGLib
 
 kind = ICalGLib.ValueKind.ATTACH_VALUE;
@@ -71,3 +75,9 @@ assert(result == after_encoded_szText);
 
 result = ICalGLib.Value.decode_ical_string(before_decoded_szText);
 assert(result == szText);
+
+szText = "Simple text";
+result = ICalGLib.Value.encode_ical_string(szText);
+assert result == szText
+result = ICalGLib.Value.decode_ical_string(result);
+assert result == szText

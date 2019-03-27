@@ -23,6 +23,86 @@
 #define LOCK_PROPS(x) g_mutex_lock (&((x)->priv->props_lock))
 #define UNLOCK_PROPS(x) g_mutex_unlock (&((x)->priv->props_lock))
 
+typedef struct _GlobalData {
+    GType object_type;
+    gpointer native;
+} GlobalData;
+
+static guint global_data_hash(gconstpointer ptr)
+{
+    const GlobalData *gd = ptr;
+
+    if (!gd) {
+        return 0;
+    }
+    return g_direct_hash(GINT_TO_POINTER(gd->object_type)) ^ g_direct_hash(gd->native);
+}
+
+static gboolean global_data_equal(gconstpointer ptr1, gconstpointer ptr2)
+{
+    const GlobalData *gd1 = ptr1, *gd2 = ptr2;
+
+    if (!gd1 || !gd2) {
+        return gd1 == gd2;
+    }
+    return gd1->object_type == gd2->object_type && gd1->native == gd2->native;
+}
+
+G_LOCK_DEFINE_STATIC(global_objects);
+static GHashTable *global_objects; /* GlobalData * ~> ICalObject * */
+
+static void global_data_object_freed_cb(gpointer user_data, G_GNUC_UNUSED GObject *freed_object)
+{
+    GlobalData *gd = user_data;
+
+    G_LOCK(global_objects);
+
+    if (global_objects) {
+        if (g_hash_table_steal(global_objects, gd)) {
+            g_free(gd);
+        }
+
+        if (!g_hash_table_size(global_objects)) {
+             g_hash_table_destroy(global_objects);
+            global_objects = NULL;
+        }
+    }
+
+    G_UNLOCK(global_objects);
+}
+
+/**
+ * i_cal_object_free_global_objects:
+ *
+ * Frees all global objects. Any references to them are invalidated
+ * by this call, unless they had been g_object_ref()-ed manually.
+ *
+ * Since: 3.0.5
+ **/
+void i_cal_object_free_global_objects(void)
+{
+    GHashTable *objects;
+
+    G_LOCK(global_objects);
+
+    objects = global_objects;
+    global_objects = NULL;
+
+    G_UNLOCK(global_objects);
+
+    if (objects) {
+        GHashTableIter iter;
+        gpointer key, value;
+
+        g_hash_table_iter_init(&iter, objects);
+        while (g_hash_table_iter_next(&iter, &key, &value)) {
+            g_object_weak_unref(value, global_data_object_freed_cb, key);
+        }
+
+        g_hash_table_destroy (objects);
+    }
+}
+
 struct _ICalObjectPrivate
 {
     GMutex props_lock;  /* to guard all the below members */
@@ -110,10 +190,10 @@ static void i_cal_object_get_property(GObject *object, guint property_id,
 
 static void i_cal_object_finalize(GObject *object)
 {
-    /* todo: Need to devise a way to check destroy_func and native */
     ICalObject *iobject = I_CAL_OBJECT(object);
 
-    if (!iobject->priv->owner && !iobject->priv->is_global_memory) {
+    if (!iobject->priv->owner && !iobject->priv->is_global_memory &&
+        iobject->priv->native && iobject->priv->native_destroy_func) {
         iobject->priv->native_destroy_func(iobject->priv->native);
     }
 
@@ -215,30 +295,60 @@ static void i_cal_object_init(ICalObject *iobject)
 }
 
 /**
- * i_cal_object_construct:
- * @iobject: an #ICalObject
+ * i_cal_object_construct: (skip)
+ * @object_type: a GType of an #ICalObject descendat to construct
  * @native: a native libical structure
  * @native_destroy_func: a function to be called on @native when it should be freed
  * @is_global_memory: whether @native is a global shared memory structure
  * @owner: (allow-none): an owner of @native
  *
- * Initialize private members of #iobject at once. The descendants should
- * call this function in their _new() function, or use corresponding properties
- * during the construction time. This should not be mixed, either use
- * properties or this function.
+ * Creates an #ICalObject descendant of type @type and initialize private members
+ * of it. The descendants should call this function in their _new() function, or use
+ * corresponding properties during the construction time. This should not be mixed,
+ * either use properties or this function.
+ *
+ * The @is_global_memory defines whether the returned object is a singleton,
+ * in which case the object is owned by the libical-glib and should not be freed,
+ * or, when %FALSE, the returned object is a newly created object and the caller
+ * is responsible to free it with g_object_unref().
+ *
+ * Returns: (transfer full): an #ICalObject descendant of type @type
  *
  * Since: 1.0
  **/
-void
-i_cal_object_construct(ICalObject *iobject,
+gpointer
+i_cal_object_construct(GType object_type,
                        gpointer native,
                        GDestroyNotify native_destroy_func,
-                       gboolean is_global_memory, GObject *owner)
+                       gboolean is_global_memory,
+                       GObject *owner)
 {
-    g_return_if_fail(I_CAL_IS_OBJECT(iobject));
-    g_return_if_fail(native != NULL);
+    ICalObject *iobject;
+
+    g_return_val_if_fail(object_type != G_TYPE_INVALID, NULL);
+    g_return_val_if_fail(native != NULL, NULL);
     if (owner)
-        g_return_if_fail(G_IS_OBJECT(owner));
+        g_return_val_if_fail(G_IS_OBJECT(owner), NULL);
+
+    if (is_global_memory) {
+        G_LOCK(global_objects);
+
+        if (global_objects) {
+            GlobalData tmp_gd;
+
+            tmp_gd.object_type = object_type;
+            tmp_gd.native = native;
+
+            iobject = g_hash_table_lookup(global_objects, &tmp_gd);
+
+            if (iobject) {
+                G_UNLOCK(global_objects);
+                return iobject;
+            }
+        }
+    }
+
+    iobject = g_object_new(object_type, NULL);
 
     /* LOCK_PROPS (iobject); */
 
@@ -250,6 +360,30 @@ i_cal_object_construct(ICalObject *iobject,
     i_cal_object_set_owner(iobject, owner);
 
     /* UNLOCK_PROPS (iobject); */
+
+    if (is_global_memory) {
+        if (iobject) {
+            GlobalData *gd;
+
+            gd = g_new0(GlobalData, 1);
+            gd->object_type = object_type;
+            gd->native = native;
+
+            g_object_weak_ref(G_OBJECT(iobject), global_data_object_freed_cb, gd);
+
+            if (!global_objects) {
+                global_objects =
+                    g_hash_table_new_full(global_data_hash, global_data_equal,
+                                          g_free, g_object_unref);
+            }
+
+            g_hash_table_insert(global_objects, gd, iobject);
+        }
+
+        G_UNLOCK(global_objects);
+    }
+
+    return iobject;
 }
 
 /**
