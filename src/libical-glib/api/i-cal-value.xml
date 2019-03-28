@@ -36,7 +36,7 @@
     </method>
     <method name="i_cal_value_is_valid" corresponds="icalvalue_is_valid" since="1.0">
         <parameter type="const ICalValue *" name="value" comment="The #ICalValue to be checked."/>
-        <returns type="gint" comment="1 if valid, 0 if not."/>
+        <returns type="gboolean" comment="1 if valid, 0 if not."/>
         <comment xml:space="preserve">Check if #ICalValue is valid.</comment>
     </method>
     <method name="i_cal_value_as_ical_string_r" corresponds="icalvalue_as_ical_string_r" since="1.0">
@@ -72,7 +72,7 @@
     </method>
     <method name="i_cal_value_kind_is_valid" corresponds="icalvalue_kind_is_valid" since="1.0">
         <parameter type="const ICalValueKind" name="kind" comment="The #ICalValueKind to be checked."/>
-        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="1 if yes, 0 if not."/>
         <comment xml:space="preserve">Check whether the #ICalValueKind is valid.</comment>
     </method>
     <method name="i_cal_value_encode_ical_string" corresponds="CUSTOM" since="1.0">

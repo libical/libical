@@ -121,22 +121,22 @@
     </method>
     <method name="i_cal_time_is_null_time" corresponds="icaltime_is_null_time" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-        <returns type="gint" comment="Whether @tt is null_time. 1 if yes, 0 if not." />
+        <returns type="gboolean" comment="Whether @tt is null_time. 1 if yes, 0 if not." />
         <comment xml:space="preserve">Return true of the time is null.</comment>
     </method>
     <method name="i_cal_time_is_valid_time" corresponds="icaltime_is_valid_time" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-        <returns type="gint" comment="Whether @tt is null_time. 1 if yes, 0 if not." />
+        <returns type="gboolean" comment="Whether @tt is null_time. 1 if yes, 0 if not." />
         <comment xml:space="preserve">Return true of the time is null.</comment>
     </method>
     <method name="i_cal_time_is_date" corresponds="icaltime_is_date" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-        <returns type="gint" comment="true if time is of DATE type, false if DATE-TIME." />
+        <returns type="gboolean" comment="true if time is of DATE type, false if DATE-TIME." />
         <comment xml:space="preserve">Returns true if time is of DATE type, false if DATE-TIME.</comment>
     </method>
     <method name="i_cal_time_is_utc" corresponds="icaltime_is_utc" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-        <returns type="gint" comment="true if time is relative to UTC zone." />
+        <returns type="gboolean" comment="true if time is relative to UTC zone." />
         <comment xml:space="preserve">Returns true if time is relative to UTC zone.</comment>
     </method>
     <method name="i_cal_time_compare" corresponds="icaltime_compare" since="1.0">
@@ -212,7 +212,7 @@
     </method>
     <method name="i_cal_time_days_is_leap_year" corresponds="icaltime_is_leap_year" since="1.0">
         <parameter type="gint" name="year" comment="The target year"/>
-        <returns type="gint" comment="1 if @year is leap year, 0 if not." />
+        <returns type="gboolean" comment="whether the @year is a leap year" />
         <comment xml:space="preserve">Check whether a year is a leap year.</comment>
     </method>
     <method name="i_cal_time_days_in_year" corresponds="icaltime_days_in_year" since="2.0">
@@ -337,24 +337,24 @@
     </method>
     <method name="i_cal_time_set_is_date" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set."/>
-        <parameter type="gint" name="is_date" comment="The is_date."/>
+        <parameter type="gboolean" name="is_date" comment="The is_date."/>
         <comment>Set the is_date of #ICalTime.</comment>
         <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_date = is_date;</custom>
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_date = is_date ? 1 : 0;</custom>
     </method>
     <method name="i_cal_time_is_daylight" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried."/>
-        <returns type="gint" comment="The is_daylight." />
+        <returns type="gboolean" comment="The is_daylight." />
         <comment xml:space="preserve">Get the is_daylight of #ICalTime.</comment>
         <custom>	g_return_val_if_fail (timetype != NULL, 0);
 	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_daylight;</custom>
     </method>
     <method name="i_cal_time_set_is_daylight" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set."/>
-        <parameter type="gint" name="is_daylight" comment="The is_daylight."/>
+        <parameter type="gboolean" name="is_daylight" comment="The is_daylight."/>
         <comment>Set the is_daylight of #ICalTime.</comment>
         <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_daylight = is_daylight;</custom>
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_daylight = is_daylight ? 1 : 0;</custom>
     </method>
     <method name="i_cal_time_get_date" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried."/>

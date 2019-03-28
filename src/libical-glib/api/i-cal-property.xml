@@ -205,7 +205,7 @@
     </method>
     <method name="i_cal_property_kind_is_valid" corresponds="icalproperty_kind_is_valid" since="1.0">
         <parameter type="const ICalPropertyKind" name="kind" comment="The #ICalPropertyKind"/>
-        <returns type="gint" comment="1 if valid, 0 if not."/>
+        <returns type="gboolean" comment="1 if valid, 0 if not."/>
         <comment xml:space="preserve">Check whether #ICalPropertyKind is valid.</comment>
     </method>
     <method name="i_cal_property_string_to_method" corresponds="icalproperty_string_to_method" since="1.0">

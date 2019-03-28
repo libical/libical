@@ -61,7 +61,7 @@
         <element name="ICAL_BY_DAY_SIZE"/>
     </enum>
     <method name="i_cal_recurrence_rscale_is_supported" corresponds="icalrecurrencetype_rscale_is_supported" kind="get" since="2.0">
-	<returns type="gint" comment="Whether rscale is supported"/>
+	<returns type="gboolean" comment="Whether rscale is supported"/>
 	<comment xml:space="preserve">Check whether rscale is supported.</comment>
     </method>
     <method name="i_cal_recurrence_rscale_supported_calendars" corresponds="icalrecurrencetype_rscale_supported_calendars" kind="other" since="2.0">
@@ -101,7 +101,7 @@
     </method>
     <method name="i_cal_recurrence_month_is_leap" corresponds="icalrecurrencetype_month_is_leap" since="2.0">
         <parameter type="gshort" name="month" comment="The month to be decoded."/>
-        <returns type="gint" comment="Whether this month is a leap month."/>
+        <returns type="gboolean" comment="Whether this month is a leap month."/>
         <comment xml:space="preserve">Decode a month and check whether it is a leap month.</comment>
     </method>
     <method name="i_cal_recurrence_month_month" corresponds="icalrecurrencetype_month_month" since="2.0">

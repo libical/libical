@@ -36,7 +36,7 @@
     </method>
     <method name="i_cal_attach_get_is_url" corresponds="icalattach_get_is_url" kind="others" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be queried"/>
-        <returns type="gint" comment="1 if the @attach is built from url and 0 if not." />
+        <returns type="gboolean" comment="whether the @attach is built from url" />
         <comment xml:space="preserve">Check whether the #ICalAttach is built from url</comment>
     </method>
     <method name="i_cal_attach_get_url" corresponds="icalattach_get_url" kind="others" since="1.0">
