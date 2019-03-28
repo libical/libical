@@ -750,7 +750,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
         icalmemory_append_string(&str, &str_p, &buf_sz, temp);
     }
 
-    if (recur->count != 0 && recur->until.year != 0) {
+    if (recur->count != 0 && recur->until.year == 0) {
         snprintf(temp, sizeof(temp), "%d", recur->count);
         icalmemory_append_string(&str, &str_p, &buf_sz, ";COUNT=");
         icalmemory_append_string(&str, &str_p, &buf_sz, temp);
