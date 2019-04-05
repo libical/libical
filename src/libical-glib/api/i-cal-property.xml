@@ -50,7 +50,7 @@
     </method>
     <method name="i_cal_property_add_parameter" corresponds="icalproperty_add_parameter" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set."/>
-        <parameter type="ICalParameter *" name="parameter" annotation="transfer full" owner_op="prop" comment="The parameter to be added into @prop."/>
+        <parameter type="ICalParameter *" name="parameter" annotation="transfer none" owner_op="prop" comment="The parameter to be added into @prop."/>
         <comment xml:space="preserve">Add a #ICalParameter into the #ICalProperty. It behaves like set the copy of the #ICalParameter. Upon completion the native part of #ICalParameter will be set to NULL.</comment>
     </method>
     <method name="i_cal_property_take_parameter" corresponds="CUSTOM" annotation="skip" since="1.0">
@@ -145,22 +145,22 @@
     </method>
     <method name="i_cal_value_set_parent" corresponds="icalvalue_set_parent" since="2.0">
         <parameter type="ICalValue *" name="value" comment="The child #ICalValue"/>
-        <parameter type="ICalProperty *" name="property" comment="The parent #ICalProperty"/>
+        <parameter type="ICalProperty *" name="property" annotation="nullable" comment="The parent #ICalProperty"/>
         <comment xml:space="preserve">Set the parent property of a value.</comment>
     </method>
     <method name="i_cal_value_get_parent" corresponds="icalvalue_get_parent" since="3.0">
         <parameter type="ICalValue *" name="value" comment="The child #ICalValue"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The parent #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full, nullable" comment="The parent #ICalProperty"/>
         <comment xml:space="preserve">Get the parent #ICalProperty of the specified #ICalValue.</comment>
     </method>
     <method name="i_cal_parameter_set_parent" corresponds="icalparameter_set_parent" since="3.0">
         <parameter type="ICalParameter *" name="param" comment="The child #ICalParameter"/>
-        <parameter type="ICalProperty *" name="property" comment="The parent #ICalProperty"/>
+        <parameter type="ICalProperty *" name="property" annotation="nullable" comment="The parent #ICalProperty"/>
         <comment xml:space="preserve">Set the parent #ICalProperty of an #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_get_parent" corresponds="icalparameter_get_parent" since="3.0">
         <parameter type="ICalParameter *" name="param" comment="The child #ICalParameter"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The parent #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full, nullable" comment="The parent #ICalProperty"/>
         <comment xml:space="preserve">Get the parent #ICalProperty of the specified #ICalParameter.</comment>
     </method>
     <method name="i_cal_property_set_x_name" corresponds="icalproperty_set_x_name" since="1.0">
