@@ -444,6 +444,10 @@ gboolean parse_declaration(xmlNode * node, Declaration * declaration)
         }
     }
 
+    if (!declaration->content) {
+        declaration->content = (gchar *) xmlNodeGetContent(node);
+    }
+
     return TRUE;
 }
 

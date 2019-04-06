@@ -85,6 +85,7 @@ void generate_header_structure_boilerplate(FILE *out, Structure *structure, GHas
 void generate_header(FILE *out, Structure *structure, GHashTable *table);
 void generate_source(FILE *out, Structure *structure, GHashTable *table);
 void generate_source_structure_boilerplate(FILE *out, Structure *structure, GHashTable *table);
+void generate_source_body_declaration(FILE *out, Structure *structure);
 void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHashTable *table);
 void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHashTable *table);
 void generate_header_and_source(Structure *structure, gchar *dir);

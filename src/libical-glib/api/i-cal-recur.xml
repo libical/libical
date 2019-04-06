@@ -32,36 +32,37 @@
         } else {
                 garray = g_array_new (FALSE, FALSE, sizeof (time_t));
                 g_array_append_vals (garray, array, count);
+                g_free (array);
                 return garray;
         }</custom>
     </method>
     <method name="i_cal_recur_string_to_weekday" corresponds="icalrecur_string_to_weekday" since="1.0">
         <parameter type="const gchar *" name="str" comment="The string representation of the weekday."/>
-        <returns type="ICalRecurrenceTypeWeekday" comment="The enum representation of the weekday."/>
+        <returns type="ICalRecurrenceWeekday" comment="The enum representation of the weekday."/>
         <comment xml:space="preserve">Convert a string representation to an enum representation for the weekday.</comment>
     </method>
     <method name="i_cal_recur_weekday_to_string" corresponds="icalrecur_weekday_to_string" since="2.0">
-        <parameter type="ICalRecurrenceTypeWeekday" name="kind" comment="The freqeuncy enum"/>
+        <parameter type="ICalRecurrenceWeekday" name="kind" comment="The freqeuncy enum"/>
         <returns type="const gchar *" comment="The string representation of weekday"/>
         <comment xml:space="preserve">Convert a enum representation to a string representation for the weekday.</comment>
         </method>
     <method name="i_cal_recur_string_to_freq" corresponds="icalrecur_string_to_freq" since="2.0">
         <parameter type="const gchar *" name="str" comment="The string representation of the frequency."/>
-        <returns type="ICalRecurrenceTypeFrequency" comment="The enum representation of the frequency."/>
+        <returns type="ICalRecurrenceFrequency" comment="The enum representation of the frequency."/>
         <comment xml:space="preserve">Convert a string representation to an enum representation for the frequency.</comment>
     </method>
     <method name="i_cal_recur_freq_to_string" corresponds="icalrecur_freq_to_string" since="2.0">
-        <parameter type="ICalRecurrenceTypeFrequency" name="kind" comment="The freqeuncy enum"/>
+        <parameter type="ICalRecurrenceFrequency" name="kind" comment="The freqeuncy enum"/>
         <returns type="const gchar *" comment="The string representation of frequency"/>
         <comment xml:space="preserve">Convert a enum representation to a string representation for the frequency.</comment>
         </method>
         <method name="i_cal_recur_string_to_skip" corresponds="icalrecur_string_to_skip" since="2.0">
         <parameter type="const gchar *" name="str" comment="The string representation of the skip."/>
-        <returns type="ICalRecurrenceTypeSkip" comment="The enum representation of the skip."/>
+        <returns type="ICalRecurrenceSkip" comment="The enum representation of the skip."/>
         <comment xml:space="preserve">Convert a string representation to an enum representation for the skip.</comment>
     </method>
     <method name="i_cal_recur_skip_to_string" corresponds="icalrecur_skip_to_string" since="2.0">
-        <parameter type="ICalRecurrenceTypeSkip" name="kind" comment="The freqeuncy enum"/>
+        <parameter type="ICalRecurrenceSkip" name="kind" comment="The freqeuncy enum"/>
         <returns type="const gchar *" comment="The string representation of skip"/>
         <comment xml:space="preserve">Convert a enum representation to a string representation for the skip.</comment>
         </method>

@@ -32,6 +32,7 @@
         <element name="ICAL_CATEGORIES_PROPERTY"/>
         <element name="ICAL_CLASS_PROPERTY"/>
         <element name="ICAL_CMD_PROPERTY"/>
+        <element name="ICAL_COLOR_PROPERTY"/>
         <element name="ICAL_COMMENT_PROPERTY"/>
         <element name="ICAL_COMPLETED_PROPERTY"/>
         <element name="ICAL_COMPONENTS_PROPERTY"/>
@@ -147,18 +148,18 @@
         <comment>Get the acceptresponse of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_acknowledged" corresponds="icalproperty_new_acknowledged" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of acknowledgement."/>
+        <parameter type="ICalTime *" name="v" comment="The time of acknowledgement."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_acknowledged" corresponds="icalproperty_set_acknowledged" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The acknowledgement time."/>
+        <parameter type="ICalTime *" name="v" comment="The acknowledgement time."/>
         <comment>Set the acknowledged time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_acknowledged" corresponds="icalproperty_get_acknowledged" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the acknowledged time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the acknowledged time of #ICalProperty."/>
         <comment>Get the acknowledged time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_action" corresponds="icalproperty_new_action" kind="constructor" since="1.0">
@@ -196,14 +197,13 @@
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
         <custom>	ICalProperty *property;
-	g_return_val_if_fail (v != NULL &amp;&amp; I_CAL_IS_ATTACH (v), NULL);
+	g_return_val_if_fail (I_CAL_IS_ATTACH (v), NULL);
 	property = i_cal_property_new_full (icalproperty_new_attach (i_cal_object_get_native ((ICalObject *)v)), NULL);
-	i_cal_object_set_owner ((ICalObject *)v, (GObject *)property);
 	return property;</custom>
     </method>
     <method name="i_cal_property_set_attach" corresponds="icalproperty_set_attach" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalAttach *" name="v" translator_argus="prop" comment="The attach."/>
+        <parameter type="ICalAttach *" name="v" annotation="transfer none" comment="The attach."/>
         <comment>Set the attach for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_attach" corresponds="icalproperty_get_attach" kind="get" since="1.0">
@@ -386,24 +386,39 @@
         <parameter type="const gchar *" name="v" comment="The comment."/>
         <comment>Set the comment for the #ICalProperty.</comment>
     </method>
+    <method name="i_cal_property_get_color" corresponds="icalproperty_get_color" kind="get" since="3.0.5">
+        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
+        <returns type="const gchar *" annotation="transfer none" comment="Get the color property."/>
+        <comment>Get the color property of the @prop.</comment>
+    </method>
+    <method name="i_cal_property_new_color" corresponds="icalproperty_new_color" kind="constructor" since="1.0">
+        <parameter type="const gchar *" name="v" comment="The color."/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <comment xml:space="preserve">Create a new color #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_property_set_color" corresponds="icalproperty_set_color" kind="set" since="1.0">
+        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
+        <parameter type="const gchar *" name="v" comment="The color."/>
+        <comment>Set the color for the @prop.</comment>
+    </method>
     <method name="i_cal_property_get_comment" corresponds="icalproperty_get_comment" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
         <returns type="const gchar *" annotation="transfer none" comment="Get the comment of #ICalProperty."/>
         <comment>Get the comment of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_completed" corresponds="icalproperty_new_completed" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of completed."/>
+        <parameter type="ICalTime *" name="v" comment="The time of completed."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_completed" corresponds="icalproperty_set_completed" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The completed time."/>
+        <parameter type="ICalTime *" name="v" comment="The completed time."/>
         <comment>Set the completed time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_completed" corresponds="icalproperty_get_completed" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the completed time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the completed time of #ICalProperty."/>
         <comment>Get the completed time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_components" corresponds="icalproperty_new_components" kind="constructor" since="1.0">
@@ -437,18 +452,18 @@
         <comment>Get the contact of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_created" corresponds="icalproperty_new_created" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of created."/>
+        <parameter type="ICalTime *" name="v" comment="The time of created."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_created" corresponds="icalproperty_set_created" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The created time."/>
+        <parameter type="ICalTime *" name="v" comment="The created time."/>
         <comment>Set the created time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_created" corresponds="icalproperty_get_created" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the created time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the created time of #ICalProperty."/>
         <comment>Get the created time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_csid" corresponds="icalproperty_new_csid" kind="constructor" since="1.0">
@@ -467,33 +482,33 @@
         <comment>Get the csid of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_datemax" corresponds="icalproperty_new_datemax" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of datemax."/>
+        <parameter type="ICalTime *" name="v" comment="The time of datemax."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_datemax" corresponds="icalproperty_set_datemax" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The datemax time."/>
+        <parameter type="ICalTime *" name="v" comment="The datemax time."/>
         <comment>Set the datemax time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_datemax" corresponds="icalproperty_get_datemax" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the datemax time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the datemax time of #ICalProperty."/>
         <comment>Get the datemax time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_datemin" corresponds="icalproperty_new_datemin" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of datemin."/>
+        <parameter type="ICalTime *" name="v" comment="The time of datemin."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_datemin" corresponds="icalproperty_set_datemin" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The datemin time."/>
+        <parameter type="ICalTime *" name="v" comment="The datemin time."/>
         <comment>Set the datemin time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_datemin" corresponds="icalproperty_get_datemin" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the datemin time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the datemin time of #ICalProperty."/>
         <comment>Get the datemin time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_decreed" corresponds="icalproperty_new_decreed" kind="constructor" since="1.0">
@@ -602,108 +617,108 @@
         <comment>Get the description of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_dtend" corresponds="icalproperty_new_dtend" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of dtend."/>
+        <parameter type="ICalTime *" name="v" comment="The time of dtend."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_dtend" corresponds="icalproperty_set_dtend" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The dtend time."/>
+        <parameter type="ICalTime *" name="v" comment="The dtend time."/>
         <comment>Set the dtend time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_dtend" corresponds="icalproperty_get_dtend" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the dtend time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the dtend time of #ICalProperty."/>
         <comment>Get the dtend time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_dtstamp" corresponds="icalproperty_new_dtstamp" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of dtstamp."/>
+        <parameter type="ICalTime *" name="v" comment="The time of dtstamp."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_dtstamp" corresponds="icalproperty_set_dtstamp" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The dtstamp time."/>
+        <parameter type="ICalTime *" name="v" comment="The dtstamp time."/>
         <comment>Set the dtstamp time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_dtstamp" corresponds="icalproperty_get_dtstamp" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the dtstamp time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the dtstamp time of #ICalProperty."/>
         <comment>Get the dtstamp time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_dtstart" corresponds="icalproperty_new_dtstart" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of dtstart."/>
+        <parameter type="ICalTime *" name="v" comment="The time of dtstart."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_dtstart" corresponds="icalproperty_set_dtstart" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The dtstart time."/>
+        <parameter type="ICalTime *" name="v" comment="The dtstart time."/>
         <comment>Set the dtstart time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_dtstart" corresponds="icalproperty_get_dtstart" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the dtstart time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the dtstart time of #ICalProperty."/>
         <comment>Get the dtstart time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_due" corresponds="icalproperty_new_due" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of due."/>
+        <parameter type="ICalTime *" name="v" comment="The time of due."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_due" corresponds="icalproperty_set_due" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The due time."/>
+        <parameter type="ICalTime *" name="v" comment="The due time."/>
         <comment>Set the due time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_due" corresponds="icalproperty_get_due" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the due time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the due time of #ICalProperty."/>
         <comment>Get the due time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_duration" corresponds="icalproperty_new_duration" kind="constructor" since="1.0">
-        <parameter type="ICalDurationType *" name="v" comment="The duration."/>
+        <parameter type="ICalDuration *" name="v" comment="The duration."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_duration" corresponds="icalproperty_set_duration" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalDurationType *" name="v" comment="The duration."/>
+        <parameter type="ICalDuration *" name="v" comment="The duration."/>
         <comment>Set the duration for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_duration" corresponds="icalproperty_get_duration" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalDurationType *" annotation="transfer full" comment="Get the duration of #ICalProperty."/>
+        <returns type="ICalDuration *" annotation="transfer full" comment="Get the duration of #ICalProperty."/>
         <comment>Get the duration of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_estimatedduration" corresponds="icalproperty_new_estimatedduration" kind="constructor" since="1.0">
-        <parameter type="ICalDurationType *" name="v" comment="The estimatedduration."/>
+        <parameter type="ICalDuration *" name="v" comment="The estimatedduration."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_estimatedduration" corresponds="icalproperty_set_estimatedduration" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalDurationType *" name="v" comment="The estimatedduration."/>
+        <parameter type="ICalDuration *" name="v" comment="The estimatedduration."/>
         <comment>Set the estimatedduration for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_estimatedduration" corresponds="icalproperty_get_estimatedduration" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalDurationType *" annotation="transfer full" comment="Get the estimatedduration of #ICalProperty."/>
+        <returns type="ICalDuration *" annotation="transfer full" comment="Get the estimatedduration of #ICalProperty."/>
         <comment>Get the estimatedduration of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_exdate" corresponds="icalproperty_new_exdate" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of exdate."/>
+        <parameter type="ICalTime *" name="v" comment="The time of exdate."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_exdate" corresponds="icalproperty_set_exdate" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The exdate time."/>
+        <parameter type="ICalTime *" name="v" comment="The exdate time."/>
         <comment>Set the exdate time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_exdate" corresponds="icalproperty_get_exdate" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the exdate time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the exdate time of #ICalProperty."/>
         <comment>Get the exdate time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_expand" corresponds="icalproperty_new_expand" kind="constructor" since="1.0">
@@ -722,48 +737,48 @@
         <comment>Get the expand of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_exrule" corresponds="icalproperty_new_exrule" kind="constructor" since="1.0">
-        <parameter type="ICalRecurrenceType *" name="v" comment="The exrule recurrence type."/>
+        <parameter type="ICalRecurrence *" name="v" comment="The exrule recurrence type."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_exrule" corresponds="icalproperty_set_exrule" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalRecurrenceType *" name="v" comment="The exrule recurrence type."/>
+        <parameter type="ICalRecurrence *" name="v" comment="The exrule recurrence type."/>
         <comment>Set the exrule time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_exrule" corresponds="icalproperty_get_exrule" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalRecurrenceType *" annotation="transfer full" comment="Get the exrule recurrence type of #ICalProperty."/>
+        <returns type="ICalRecurrence *" annotation="transfer full" comment="Get the exrule recurrence type of #ICalProperty."/>
         <comment>Get the exrule recurrence type of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_freebusy" corresponds="icalproperty_new_freebusy" kind="constructor" since="1.0">
-        <parameter type="ICalPeriodType *" name="v" comment="The freebusy period type."/>
+        <parameter type="ICalPeriod *" name="v" comment="The freebusy period type."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_freebusy" corresponds="icalproperty_set_freebusy" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPeriodType *" name="v" comment="The freebusy period type."/>
+        <parameter type="ICalPeriod *" name="v" comment="The freebusy period type."/>
         <comment>Set the freebusy time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_freebusy" corresponds="icalproperty_get_freebusy" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalPeriodType *" annotation="transfer full" comment="Get the freebusy period type of #ICalProperty."/>
+        <returns type="ICalPeriod *" annotation="transfer full" comment="Get the freebusy period type of #ICalProperty."/>
         <comment>Get the freebusy period type of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_geo" corresponds="icalproperty_new_geo" kind="constructor" since="1.0">
-        <parameter type="ICalGeoType *" name="v" comment="The geo type."/>
+        <parameter type="ICalGeo *" name="v" comment="The geo type."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_geo" corresponds="icalproperty_set_geo" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalGeoType *" name="v" comment="The geo type."/>
+        <parameter type="ICalGeo *" name="v" comment="The geo type."/>
         <comment>Set the geo for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_geo" corresponds="icalproperty_get_geo" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalGeoType *" annotation="transfer full" comment="Get the geo type of #ICalProperty."/>
+        <returns type="ICalGeo *" annotation="transfer full" comment="Get the geo type of #ICalProperty."/>
         <comment>Get the geo type of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_grant" corresponds="icalproperty_new_grant" kind="constructor" since="1.0">
@@ -797,18 +812,18 @@
         <comment>Get the itipversion of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_lastmodified" corresponds="icalproperty_new_lastmodified" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of lastmodified."/>
+        <parameter type="ICalTime *" name="v" comment="The time of lastmodified."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_lastmodified" corresponds="icalproperty_set_lastmodified" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The lastmodified time."/>
+        <parameter type="ICalTime *" name="v" comment="The lastmodified time."/>
         <comment>Set the lastmodified time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_lastmodified" corresponds="icalproperty_get_lastmodified" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the lastmodified time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the lastmodified time of #ICalProperty."/>
         <comment>Get the lastmodified time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_location" corresponds="icalproperty_new_location" kind="constructor" since="1.0">
@@ -842,18 +857,18 @@
         <comment>Get the maxcomponentsize of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_maxdate" corresponds="icalproperty_new_maxdate" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of maxdate."/>
+        <parameter type="ICalTime *" name="v" comment="The time of maxdate."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_maxdate" corresponds="icalproperty_set_maxdate" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The maxdate time."/>
+        <parameter type="ICalTime *" name="v" comment="The maxdate time."/>
         <comment>Set the maxdate time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_maxdate" corresponds="icalproperty_get_maxdate" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the maxdate time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the maxdate time of #ICalProperty."/>
         <comment>Get the maxdate time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_maxresults" corresponds="icalproperty_new_maxresults" kind="constructor" since="1.0">
@@ -902,18 +917,18 @@
         <comment>Get the method of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_mindate" corresponds="icalproperty_new_mindate" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of mindate."/>
+        <parameter type="ICalTime *" name="v" comment="The time of mindate."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_mindate" corresponds="icalproperty_set_mindate" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The mindate time."/>
+        <parameter type="ICalTime *" name="v" comment="The mindate time."/>
         <comment>Set the mindate time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_mindate" corresponds="icalproperty_get_mindate" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the mindate time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the mindate time of #ICalProperty."/>
         <comment>Get the mindate time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_multipart" corresponds="icalproperty_new_multipart" kind="constructor" since="1.0">
@@ -1172,18 +1187,18 @@
         <comment>Get the queryname of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_rdate" corresponds="icalproperty_new_rdate" kind="constructor" since="1.0">
-        <parameter type="ICalDatetimeperiodType *" name="v" comment="The rdate."/>
+        <parameter type="ICalDatetimeperiod *" name="v" comment="The rdate."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_rdate" corresponds="icalproperty_set_rdate" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalDatetimeperiodType *" name="v" comment="The rdate."/>
+        <parameter type="ICalDatetimeperiod *" name="v" comment="The rdate."/>
         <comment>Set the rdate for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_rdate" corresponds="icalproperty_get_rdate" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalDatetimeperiodType *" annotation="transfer full" comment="Get the rdate  of #ICalProperty."/>
+        <returns type="ICalDatetimeperiod *" annotation="transfer full" comment="Get the rdate  of #ICalProperty."/>
         <comment>Get the rdate  of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_recuraccepted" corresponds="icalproperty_new_recuraccepted" kind="constructor" since="1.0">
@@ -1232,18 +1247,18 @@
         <comment>Get the recurlimit of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_recurrenceid" corresponds="icalproperty_new_recurrenceid" kind="constructor" since="1.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of recurrenceid."/>
+        <parameter type="ICalTime *" name="v" comment="The time of recurrenceid."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_recurrenceid" corresponds="icalproperty_set_recurrenceid" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The recurrenceid time."/>
+        <parameter type="ICalTime *" name="v" comment="The recurrenceid time."/>
         <comment>Set the recurrenceid time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_recurrenceid" corresponds="icalproperty_get_recurrenceid" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the recurrenceid time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the recurrenceid time of #ICalProperty."/>
         <comment>Get the recurrenceid time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_relatedto" corresponds="icalproperty_new_relatedto" kind="constructor" since="1.0">
@@ -1307,18 +1322,18 @@
         <comment>Get the replyurl of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_requeststatus" corresponds="icalproperty_new_requeststatus" kind="constructor" since="1.0">
-        <parameter type="ICalReqstatType *" name="v" comment="The requeststatus."/>
+        <parameter type="ICalReqstat *" name="v" comment="The requeststatus."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_requeststatus" corresponds="icalproperty_set_requeststatus" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalReqstatType *" name="v" comment="The requeststatus."/>
+        <parameter type="ICalReqstat *" name="v" comment="The requeststatus."/>
         <comment>Set the requeststatus for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_requeststatus" corresponds="icalproperty_get_requeststatus" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalReqstatType *" annotation="transfer full" comment="Get the requeststatus of #ICalProperty."/>
+        <returns type="ICalReqstat *" annotation="transfer full" comment="Get the requeststatus of #ICalProperty."/>
         <comment>Get the requeststatus of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_resources" corresponds="icalproperty_new_resources" kind="constructor" since="1.0">
@@ -1367,18 +1382,18 @@
         <comment>Get the restriction of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_rrule" corresponds="icalproperty_new_rrule" kind="constructor" since="1.0">
-        <parameter type="ICalRecurrenceType *" name="v" comment="The rrule recurrence type."/>
+        <parameter type="ICalRecurrence *" name="v" comment="The rrule recurrence type."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_rrule" corresponds="icalproperty_set_rrule" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalRecurrenceType *" name="v" comment="The rrule recurrence type."/>
+        <parameter type="ICalRecurrence *" name="v" comment="The rrule recurrence type."/>
         <comment>Set the rrule for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_rrule" corresponds="icalproperty_get_rrule" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalRecurrenceType *" annotation="transfer full" comment="Get the rrule recurrence type of #ICalProperty."/>
+        <returns type="ICalRecurrence *" annotation="transfer full" comment="Get the rrule recurrence type of #ICalProperty."/>
         <comment>Get the rrule recurrence type of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_scope" corresponds="icalproperty_new_scope" kind="constructor" since="1.0">
@@ -1502,18 +1517,18 @@
         <comment>Get the transp of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_trigger" corresponds="icalproperty_new_trigger" kind="constructor" since="1.0">
-        <parameter type="ICalTriggerType *" name="v" comment="The trigger period type."/>
+        <parameter type="ICalTrigger *" name="v" comment="The trigger period type."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_trigger" corresponds="icalproperty_set_trigger" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTriggerType *" name="v" comment="The trigger period type."/>
+        <parameter type="ICalTrigger *" name="v" comment="The trigger period type."/>
         <comment>Set the trigger time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_trigger" corresponds="icalproperty_get_trigger" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTriggerType *" annotation="transfer full" comment="Get the trigger period type of #ICalProperty."/>
+        <returns type="ICalTrigger *" annotation="transfer full" comment="Get the trigger period type of #ICalProperty."/>
         <comment>Get the trigger period type of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_tzid" corresponds="icalproperty_new_tzid" kind="constructor" since="1.0">
@@ -1592,18 +1607,18 @@
         <comment>Get the tzoffsetto of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_tzuntil" corresponds="icalproperty_new_tzuntil" kind="constructor" since="2.0">
-        <parameter type="ICalTimetype *" name="v" comment="The time of acknowledgement."/>
+        <parameter type="ICalTime *" name="v" comment="The time of acknowledgement."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_tzuntil" corresponds="icalproperty_set_tzuntil" kind="set" since="2.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTimetype *" name="v" comment="The acknowledgement time."/>
+        <parameter type="ICalTime *" name="v" comment="The acknowledgement time."/>
         <comment>Set the tzuntil time for the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_get_tzuntil" corresponds="icalproperty_get_tzuntil" kind="get" since="2.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTimetype *" annotation="transfer full" comment="Get the tzuntil time of #ICalProperty."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get the tzuntil time of #ICalProperty."/>
         <comment>Get the tzuntil time of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_tzurl" corresponds="icalproperty_new_tzurl" kind="constructor" since="1.0">
