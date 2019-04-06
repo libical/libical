@@ -18,6 +18,10 @@
 #
 ###############################################################################
 
+import gi
+
+gi.require_version('ICalGLib', '3.0')
+
 from gi.repository import ICalGLib
 
 action_property = ICalGLib.Property.new(ICalGLib.PropertyKind.ACKNOWLEDGED_PROPERTY);
@@ -63,7 +67,7 @@ string_from_property_api = string_property.get_value_as_string_r();
 assert(string_from_property_api == string);
 value_got_from_property = string_property.get_value();
 assert(value_got_from_property.as_ical_string_r() == string);
-string_property.set_value_from_string(ICalGLib.Value.kind_to_string(kind), string);
+string_property.set_value_from_string(string, ICalGLib.Value.kind_to_string(kind));
 string_from_property_api = string_property.get_value_as_string_r();
 assert(string_from_property_api == string);
 value_got_from_property = string_property.get_value();
@@ -97,3 +101,4 @@ kind = ICalGLib.ValueKind.ATTACH_VALUE
 string = "This is a link"
 value_from_string = ICalGLib.Value.new_from_string(kind, string)
 value_from_string.set_parent(string_property)
+value_from_string.set_parent(None)
