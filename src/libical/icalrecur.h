@@ -80,14 +80,15 @@ typedef enum icalrecurrencetype_frequency
     /* These enums are used to index an array, so don't change the
        order or the integers */
 
-    ICAL_SECONDLY_RECURRENCE = 0,
-    ICAL_MINUTELY_RECURRENCE = 1,
-    ICAL_HOURLY_RECURRENCE = 2,
-    ICAL_DAILY_RECURRENCE = 3,
-    ICAL_WEEKLY_RECURRENCE = 4,
-    ICAL_MONTHLY_RECURRENCE = 5,
-    ICAL_YEARLY_RECURRENCE = 6,
-    ICAL_NO_RECURRENCE = 7
+    ICAL_MSEC_RECURRENCE = 0,
+    ICAL_SECONDLY_RECURRENCE = 1,
+    ICAL_MINUTELY_RECURRENCE = 2,
+    ICAL_HOURLY_RECURRENCE = 3,
+    ICAL_DAILY_RECURRENCE = 4,
+    ICAL_WEEKLY_RECURRENCE = 5,
+    ICAL_MONTHLY_RECURRENCE = 6,
+    ICAL_YEARLY_RECURRENCE = 7,
+    ICAL_NO_RECURRENCE = 8
 } icalrecurrencetype_frequency;
 
 typedef enum icalrecurrencetype_weekday
@@ -138,6 +139,7 @@ LIBICAL_ICAL_EXPORT icalrecurrencetype_weekday icalrecur_string_to_weekday(const
  *
  * The maximums below are based on lunisolar leap years (13 months)
  */
+#define ICAL_BY_MSEC_SIZE     1002    /* 0 to 1000 */
 #define ICAL_BY_SECOND_SIZE     62      /* 0 to 60 */
 #define ICAL_BY_MINUTE_SIZE     61      /* 0 to 59 */
 #define ICAL_BY_HOUR_SIZE       25      /* 0 to 23 */
@@ -170,6 +172,7 @@ struct icalrecurrencetype
      * ICAL_RECURRENCE_ARRAY_MAX unless the list is full.
      */
 
+    short by_msec[ICAL_BY_MSEC_SIZE];
     short by_second[ICAL_BY_SECOND_SIZE];
     short by_minute[ICAL_BY_MINUTE_SIZE];
     short by_hour[ICAL_BY_HOUR_SIZE];

@@ -72,7 +72,7 @@
  *      - icaltime_compare_date_only(struct icaltimetype a,
  *              struct icaltimetype b)
  *      - icaltime_adjust(struct icaltimetype *tt, int days, int hours,
- *              int minutes, int seconds);
+ *              int minutes, int seconds, int msecs);
  *      - icaltime_normalize(struct icaltimetype t);
  *      - icaltime_convert_to_zone(const struct icaltimetype tt,
  *              icaltimezone *zone);
@@ -110,6 +110,7 @@ struct icaltimetype
     int hour;
     int minute;
     int second;
+    int msec;
 
     int is_date;        /**< 1 -> interpret this as date. */
 
@@ -161,6 +162,11 @@ LIBICAL_ICAL_EXPORT time_t icaltime_as_timet_with_zone(const struct icaltimetype
 LIBICAL_ICAL_EXPORT const char *icaltime_as_ical_string(const struct icaltimetype tt);
 
 LIBICAL_ICAL_EXPORT char *icaltime_as_ical_string_r(const struct icaltimetype tt);
+
+/** Return a string represention of the time, in ISO 8601 format. */
+LIBICAL_ICAL_EXPORT const char *icaltime_as_iso_string(const struct icaltimetype tt);
+
+LIBICAL_ICAL_EXPORT char *icaltime_as_iso_string_r(const struct icaltimetype tt);
 
 /** @brief Return the timezone */
 LIBICAL_ICAL_EXPORT const icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
@@ -214,7 +220,8 @@ LIBICAL_ICAL_EXPORT int icaltime_compare_date_only_tz(const struct icaltimetype 
 /** Adds or subtracts a number of days, hours, minutes and seconds. */
 LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt,
                                          const int days, const int hours,
-                                         const int minutes, const int seconds);
+                                         const int minutes, const int seconds,
+                                         const int msecs);
 
 /** Normalize the icaltime, so that all fields are within the normal range. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltimetype t);

@@ -377,6 +377,44 @@ char *icaltime_as_ical_string_r(const struct icaltimetype tt)
 }
 
 /**
+ * Return a string represention of the time, in ISO 8601 format. The
+ * string is owned by libical.
+ */
+const char *icaltime_as_iso_string(const struct icaltimetype tt)
+{
+    char *buf;
+
+    buf = icaltime_as_iso_string_r(tt);
+    icalmemory_add_tmp_buffer(buf);
+    return buf;
+}
+
+/**
+ * Return a string represention of the time, in ISO 8601 format. The
+ * string is owned by the caller.
+ */
+char *icaltime_as_iso_string_r(const struct icaltimetype tt)
+{
+    size_t size = 25;
+    char *buf = icalmemory_new_buffer(size);
+
+    if (tt.is_date) {
+        snprintf(buf, size, "%04d-%02d-%02d", tt.year, tt.month, tt.day);
+    } else {
+        const char *fmt;
+
+        if (icaltime_is_utc(tt)) {
+            fmt = "%04d-%02d-%02dT%02d:%02d:%02d.%03dZ";
+        } else {
+            fmt = "%04d-%02d-%02dT%02d:%02d:%02d.%03d";
+        }
+        snprintf(buf, size, fmt, tt.year, tt.month, tt.day, tt.hour, tt.minute, tt.second, tt.msec);
+    }
+
+    return buf;
+}
+
+/**
  *      Reset all of the time components to be in their normal ranges. For
  *      instance, given a time with minutes=70, the minutes will be reduces
  *      to 10, and the hour incremented. This allows the caller to do
@@ -389,7 +427,7 @@ struct icaltimetype icaltime_normalize(const struct icaltimetype tt)
 {
     struct icaltimetype ret = tt;
 
-    icaltime_adjust(&ret, 0, 0, 0, 0);
+    icaltime_adjust(&ret, 0, 0, 0, 0, 0);
     return ret;
 }
 
@@ -411,9 +449,9 @@ struct icaltimetype icaltime_from_string(const char *str)
 
     size = strlen(str);
 
-    if ((size == 15) || (size == 19)) { /* floating time with/without separators */
+    if ((size == 15) || (size == 19) || (size == 23)) { /* floating time with/without separators */
         tt.is_date = 0;
-    } else if ((size == 16) || (size == 20)) {  /* UTC time, ends in 'Z' */
+    } else if ((size == 16) || (size == 20) || (size == 24)) {  /* UTC time, ends in 'Z' */
         if ((str[size-1] != 'Z'))
             goto FAIL;
 
@@ -441,7 +479,22 @@ struct icaltimetype icaltime_from_string(const char *str)
             goto FAIL;
         }
     } else {
-        if (size > 16) {
+        if (size > 20) {
+            char dsep1, dsep2, tsep, tsep1, tsep2, tsep3;
+
+            if (sscanf(str, "%04d%c%02d%c%02d%c%02d%c%02d%c%02d%c%03d",
+                       &tt.year, &dsep1, &tt.month, &dsep2, &tt.day, &tsep,
+                       &tt.hour, &tsep1, &tt.minute, &tsep2, &tt.second,
+                       &tsep3, &tt.msec) < 13) {
+                goto FAIL;
+            }
+
+            if ((tsep != 'T') ||
+                (dsep1 != '-') || (dsep2 != '-') ||
+                (tsep1 != ':') || (tsep2 != ':') || (tsep3 != '.')) {
+                goto FAIL;
+            }
+        } else if (size > 16) {
             char dsep1, dsep2, tsep, tsep1, tsep2;
 
             if (sscanf(str, "%04d%c%02d%c%02d%c%02d%c%02d%c%02d",
@@ -665,6 +718,7 @@ struct icaltimetype icaltime_null_date(void)
     t.hour = -1;
     t.minute = -1;
     t.second = -1;
+    t.msec = -1;
 
     return t;
 }
@@ -704,7 +758,7 @@ int icaltime_is_utc(const struct icaltimetype t)
  */
 int icaltime_is_null_time(const struct icaltimetype t)
 {
-    if (t.second + t.minute + t.hour + t.day + t.month + t.year == 0) {
+    if (t.msec + t.second + t.minute + t.hour + t.day + t.month + t.year == 0) {
         return 1;
     }
 
@@ -766,6 +820,10 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
     } else if (a.second > b.second) {
         return 1;
     } else if (a.second < b.second) {
+        return -1;
+    } else if (a.msec > b.msec) {
+        return 1;
+    } else if (a.msec < b.msec) {
         return -1;
     }
 
@@ -855,18 +913,29 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
  */
 void icaltime_adjust(struct icaltimetype *tt,
                      const int days, const int hours,
-                     const int minutes, const int seconds)
+                     const int minutes, const int seconds,
+                     const int msecs)
 {
-    int second, minute, hour, day;
-    int minutes_overflow, hours_overflow, days_overflow = 0, years_overflow;
+    int msec, second, minute, hour, day;
+    int seconds_overflow, minutes_overflow, hours_overflow,
+	days_overflow = 0, years_overflow;
     int days_in_month;
 
     /* If we are passed a date make sure to ignore hour minute and second */
     if (tt->is_date)
         goto IS_DATE;
 
+    /* Add on the milliseconds. */
+    msec = tt->msec + msecs;
+    tt->msec = msec % 1000;
+    seconds_overflow = msec / 1000;
+    if (tt->msec < 0) {
+        tt->msec += 1000;
+        seconds_overflow--;
+    }
+
     /* Add on the seconds. */
-    second = tt->second + seconds;
+    second = tt->second + seconds + seconds_overflow;
     tt->second = second % 60;
     minutes_overflow = second / 60;
     if (tt->second < 0) {

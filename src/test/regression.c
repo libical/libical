@@ -582,8 +582,8 @@ int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int e
     struct icaltimetype it_end = dtstart;
     int foundCnt = 0;
 
-    icaltime_adjust(&it_start, 0, 0, 0, startOffsSec);
-    icaltime_adjust(&it_end, 0, 0, 0, endOffsSec);
+    icaltime_adjust(&it_start, 0, 0, 0, startOffsSec, 0);
+    icaltime_adjust(&it_end, 0, 0, 0, endOffsSec, 0);
 
     icalcomponent_foreach_recurrence(event, it_start, it_end, test_component_foreach_callback, &foundCnt);
     icalcomponent_free(calendar);

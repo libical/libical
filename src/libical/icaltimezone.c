@@ -675,7 +675,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 /* To convert from UTC to a local time, we use the TZOFFSETFROM
                    since that is the offset from UTC that will be in effect
                    when each of the RRULE occurrences happens. */
-                icaltime_adjust(&rrule.until, 0, 0, 0, change.prev_utc_offset);
+                icaltime_adjust(&rrule.until, 0, 0, 0, change.prev_utc_offset, 0);
                 rrule.until.zone = NULL;
             }
 
@@ -788,13 +788,13 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
 
     /* Convert the time to UTC by getting the UTC offset and subtracting it. */
     utc_offset = icaltimezone_get_utc_offset(from_zone, tt, NULL);
-    icaltime_adjust(tt, 0, 0, 0, -utc_offset);
+    icaltime_adjust(tt, 0, 0, 0, -utc_offset, 0);
 
     /* Now we convert the time to the new timezone by getting the UTC offset
        of our UTC time and adding it. */
     utc_offset = icaltimezone_get_utc_offset_of_utc_time(to_zone, tt, &is_daylight);
     tt->is_daylight = is_daylight;
-    icaltime_adjust(tt, 0, 0, 0, utc_offset);
+    icaltime_adjust(tt, 0, 0, 0, utc_offset, 0);
 }
 
 /* Calculates the UTC offset of a given local time in the given
