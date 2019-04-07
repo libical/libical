@@ -49,6 +49,25 @@ const char *ical_timet_string(const time_t t)
     return ictt_str;
 }
 
+const char *ical_timespec_string(const timespec_t t)
+{
+    struct tm tmp, stm;
+
+    /* cppcheck-suppress uninitvar */
+    if (gmtime_r(&t.tv_sec, &tmp)) {
+        stm = tmp;
+    } else {
+        memset(&stm, 0, sizeof(stm));
+    }
+
+    snprintf(ictt_str, sizeof(ictt_str),
+             "%02d-%02d-%02d %02d:%02d:%02d.%03d Z",
+             stm.tm_year + 1900, stm.tm_mon + 1, stm.tm_mday,
+             stm.tm_hour, stm.tm_min, stm.tm_sec, (int)(t.tv_nsec / 1000));
+
+    return ictt_str;
+}
+
 const char *ictt_as_string(struct icaltimetype t)
 {
     const char *zone = icaltimezone_get_tzid((icaltimezone *) t.zone);
@@ -136,13 +155,13 @@ void _is(const char *test_name, const char *str1, const char *str2, char *file, 
     }
 }
 
-void _int_is(char *test_name, int i1, int i2, char *file, int linenum)
+void _int_is(char *test_name, int64_t i1, int64_t i2, char *file, int linenum)
 {
     _ok(test_name, (i1 == i2), file, linenum, "");
 
     if (i1 != i2) {
-        printf("#      got: %d\n", i1);
-        printf("# expected: %d\n", i2);
+        printf("#      got: %ld\n", i1);
+        printf("# expected: %ld\n", i2);
     }
 }
 

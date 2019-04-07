@@ -48,9 +48,9 @@ static int compare_span(void *a, void *b)
     struct icaltime_span *span_a = (struct icaltime_span *)a;
     struct icaltime_span *span_b = (struct icaltime_span *)b;
 
-    if (span_a->start == span_b->start) {
+    if (icaltime_timespec_cmp(span_a->start, span_b->start) == 0) {
         return 0;
-    } else if (span_a->start < span_b->start) {
+    } else if (icaltime_timespec_cmp(span_a->start, span_b->start) < 0) {
         return -1;
     } else {    /*if(span_a->start > span->b.start) */
         return 1;
@@ -118,8 +118,8 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     sl->start = start;
     sl->end = end;
 
-    range.start = icaltime_as_timet(start);
-    range.end = icaltime_as_timet(end);
+    range.start = icaltime_as_timespec(start);
+    range.end = icaltime_as_timespec(end);
 
     /* Get a list of spans of busy time from the events in the set
        and order the spans based on the start time */
@@ -161,7 +161,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
             return 0;
         }
 
-        if (range.start < s->start) {
+        if (icaltime_timespec_cmp(range.start, s->start) < 0) {
             freetime->start = range.start;
             freetime->end = s->start;
 
@@ -238,8 +238,8 @@ void icalspanlist_dump(icalspanlist *sl)
     for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
         struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
         if (s) {
-            printf("#%02d %d start: %s", ++i, s->is_busy, ctime(&s->start));
-            printf("      end  : %s", ctime(&s->end));
+            printf("#%02d %d start: %s", ++i, s->is_busy, icaltime_timespec_as_string(s->start));
+            printf("      end  : %s", icaltime_timespec_as_string(s->end));
         }
     }
 }
@@ -261,7 +261,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
     struct icalperiodtype period;
     struct icaltime_span *s;
 
-    time_t rangett = icaltime_as_timet(t);
+    timespec_t rangett = icaltime_as_timespec(t);
 
     period.start = icaltime_null_time();
     period.end = icaltime_null_time();
@@ -276,15 +276,15 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
 
     /* Is the reference time before the first span? If so, assume
        that the reference time is free */
-    if (rangett < s->start) {
+    if (icaltime_timespec_cmp(rangett, s->start) < 0) {
         /* End of period is start of first span if span is busy, end
            of the span if it is free */
         period.start = t;
 
         if (s->is_busy == 1) {
-            period.end = icaltime_from_timet_with_zone(s->start, 0, NULL);
+            period.end = icaltime_from_timespec_with_zone(s->start, 0, NULL);
         } else {
-            period.end = icaltime_from_timet_with_zone(s->end, 0, NULL);
+            period.end = icaltime_from_timespec_with_zone(s->end, 0, NULL);
         }
 
         return period;
@@ -298,15 +298,19 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
         if (!s)
             continue;
 
-        if (s->is_busy == 0 && s->start >= rangett && (rangett < s->end || s->end == s->start)) {
+        if (s->is_busy == 0 &&
+            (icaltime_timespec_cmp(s->start, rangett) > 0 ||
+             icaltime_timespec_cmp(s->start, rangett) == 0) &&
+	    (icaltime_timespec_cmp(rangett, s->end) < 0 ||
+	     icaltime_timespec_cmp(s->end, s->start) == 0)) {
 
-            if (rangett < s->start) {
-                period.start = icaltime_from_timet_with_zone(s->start, 0, NULL);
+            if (icaltime_timespec_cmp(rangett, s->start) < 0) {
+                period.start = icaltime_from_timespec_with_zone(s->start, 0, NULL);
             } else {
-                period.start = icaltime_from_timet_with_zone(rangett, 0, NULL);
+                period.start = icaltime_from_timespec_with_zone(rangett, 0, NULL);
             }
 
-            period.end = icaltime_from_timet_with_zone(s->end, 0, NULL);
+            period.end = icaltime_from_timespec_with_zone(s->end, 0, NULL);
 
             return period;
         }
@@ -341,34 +345,39 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
 int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
 {
     pvl_elem itr;
-    time_t spanduration_secs;
+    int64_t spanduration_ms;
     int *matrix;
     time_t matrix_slots;
-    time_t sl_start, sl_end;
+    timespec_t sl_start, sl_end;
+    int64_t sl_start_ms, sl_end_ms;
 
     icalerror_check_arg_rz((sl != 0), "spanlist");
 
     if (!delta_t)
         delta_t = 3600;
+    /* convert to ms */
+    delta_t *= 1000;
 
   /** calculate the start and end time as time_t **/
-    sl_start = icaltime_as_timet_with_zone(sl->start, icaltimezone_get_utc_timezone());
-    sl_end = icaltime_as_timet_with_zone(sl->end, icaltimezone_get_utc_timezone());
+    sl_start = icaltime_as_timespec_with_zone(sl->start, icaltimezone_get_utc_timezone());
+    sl_end = icaltime_as_timespec_with_zone(sl->end, icaltimezone_get_utc_timezone());
 
   /** insure that the time period falls on a time boundary divisable
       by delta_t */
 
-    sl_start /= delta_t;
-    sl_start *= delta_t;
+    sl_start_ms = icaltime_timespec_to_msec(sl_start);
+    sl_start_ms /= delta_t;
+    sl_start_ms *= delta_t;
 
-    sl_end /= delta_t;
-    sl_end *= delta_t;
+    sl_end_ms = icaltime_timespec_to_msec(sl_end);
+    sl_end_ms /= delta_t;
+    sl_end_ms *= delta_t;
 
   /** find the duration of this spanlist **/
-    spanduration_secs = sl_end - sl_start;
+    spanduration_ms = sl_end_ms - sl_start_ms;
 
   /** malloc our matrix, add one extra slot for a final -1 **/
-    matrix_slots = spanduration_secs / delta_t + 1;
+    matrix_slots = spanduration_ms / delta_t + 1000;
 
     matrix = (int *)malloc((size_t)(sizeof(int) * matrix_slots));
     if (matrix == NULL) {
@@ -384,8 +393,10 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
         struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
 
         if (s && s->is_busy == 1) {
-            time_t offset_start = s->start / delta_t - sl_start / delta_t;
-            time_t offset_end = (s->end - 1) / delta_t - sl_start / delta_t + 1;
+            time_t offset_start = icaltime_timespec_to_msec(s->start) / delta_t -
+                                  sl_start_ms / delta_t;
+            time_t offset_end = (icaltime_timespec_to_msec(s->end) - 1000) / delta_t -
+                                sl_start_ms / delta_t + 1;
             time_t i;
 
             if (offset_end >= matrix_slots)
@@ -419,7 +430,8 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 {
     icalcomponent *comp;
     icalproperty *p;
-    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    timespec_t ts_zero = icaltime_msec_to_timespec(0);
+    struct icaltimetype atime = icaltime_from_timespec_with_zone(ts_zero, 0, NULL);
     pvl_elem itr;
     icaltimezone *utc_zone;
     icalparameter *param;
@@ -450,8 +462,8 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 
         if (s && s->is_busy == 1) {
 
-            period.start = icaltime_from_timet_with_zone(s->start, 0, utc_zone);
-            period.end = icaltime_from_timet_with_zone(s->end, 0, utc_zone);
+            period.start = icaltime_from_timespec_with_zone(s->start, 0, utc_zone);
+            period.end = icaltime_from_timespec_with_zone(s->end, 0, utc_zone);
             period.duration = icaldurationtype_null_duration();
 
             p = icalproperty_new_freebusy(period);
@@ -521,8 +533,8 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
         }
 
         period = icalproperty_get_freebusy(prop);
-        s->start = icaltime_as_timet_with_zone(period.start, icaltimezone_get_utc_timezone());
-        s->end = icaltime_as_timet_with_zone(period.end, icaltimezone_get_utc_timezone());
+        s->start = icaltime_as_timespec_with_zone(period.start, icaltimezone_get_utc_timezone());
+        s->end = icaltime_as_timespec_with_zone(period.end, icaltimezone_get_utc_timezone());
 
         pvl_insert_ordered(sl->spans, compare_span, (void *)s);
     }

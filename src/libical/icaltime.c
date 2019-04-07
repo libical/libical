@@ -224,6 +224,7 @@ struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_
     tt.hour = t.tm_hour;
     tt.minute = t.tm_min;
     tt.second = t.tm_sec;
+    tt.msec = 0;
     tt.is_date = 0;
     tt.is_daylight = 0;
     tt.zone = (zone == NULL) ? NULL : utc_zone;
@@ -240,6 +241,20 @@ struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_
         tt.second = 0;
     }
 
+    return tt;
+}
+
+struct icaltimetype icaltime_from_timespec_with_zone(const timespec_t ts, const int is_date,
+                                                  const icaltimezone *zone)
+{
+    struct icaltimetype tt;
+    time_t tm = ts.tv_sec;
+    tt = icaltime_from_timet_with_zone(tm, is_date, zone);
+
+    /* If it is a DATE value, make sure hour, minute & second are 0. */
+    if (is_date) {
+        tt.msec = ts.tv_nsec / 1000;
+    }
     return tt;
 }
 
@@ -292,6 +307,14 @@ time_t icaltime_as_timet(const struct icaltimetype tt)
     return t;
 }
 
+timespec_t icaltime_as_timespec(const struct icaltimetype tt)
+{
+    timespec_t ts;
+    ts.tv_sec = icaltime_as_timet(tt);
+    ts.tv_nsec = tt.msec * 1000;
+    return ts;
+}
+
 /**     Return the time as seconds past the UNIX epoch, using the
  *      given timezone.
  *
@@ -336,6 +359,14 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icaltimez
     t = icaltime_timegm(&stm);
 
     return t;
+}
+
+timespec_t icaltime_as_timespec_with_zone(const struct icaltimetype tt, const icaltimezone *zone)
+{
+    timespec_t ts;
+    ts.tv_sec = icaltime_as_timet_with_zone(tt, zone);
+    ts.tv_nsec = tt.msec * 1000;
+    return ts;
 }
 
 /**
@@ -530,6 +561,51 @@ struct icaltimetype icaltime_from_string(const char *str)
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     return icaltime_null_time();
 }
+
+int64_t icaltime_timespec_to_msec(const timespec_t ts)
+{
+    return ts.tv_sec * 1000 + ts.tv_nsec / 1000;
+}
+
+timespec_t icaltime_msec_to_timespec(const int64_t ms)
+{
+    timespec_t ts;
+    ts.tv_sec = ms / 1000;
+    ts.tv_nsec = (ms - ts.tv_sec * 1000) * 1000;
+    return ts;
+}
+
+timespec_t icaltime_timespec_adjust(const timespec_t ts, const int64_t ms)
+{
+    return icaltime_msec_to_timespec(icaltime_timespec_to_msec(ts) + ms);
+}
+
+int icaltime_timespec_cmp(const timespec_t ts1, const timespec_t ts2)
+{
+    int64_t ms1 = icaltime_timespec_to_msec(ts1);
+    int64_t ms2 = icaltime_timespec_to_msec(ts2);
+    if (ms1 > ms2) return 1;
+    if (ms1 < ms2) return -1;
+    return 0;
+}
+
+/**
+ * Return a string represention of the time. The
+ * string is owned by libical.
+ */
+const char* icaltime_timespec_as_string(const timespec_t ts)
+{
+    size_t size = 25;
+    char buf_tm[25];
+    char *buf = icalmemory_new_buffer(size);
+    strftime (buf_tm, size, "%a %b %d %H:%M:%S", gmtime(&ts.tv_sec));
+    sprintf(buf, "%s.%03d", buf_tm, (int)(ts.tv_nsec / 1000));
+
+    icalmemory_add_tmp_buffer(buf);
+
+    return buf;
+}
+
 
 /* Returns whether the specified year is a leap year. Year is the normal year,
    e.g. 2001. */
@@ -1100,7 +1176,7 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
 
     span.is_busy = is_busy;
 
-    span.start = icaltime_as_timet_with_zone(dtstart,
+    span.start = icaltime_as_timespec_with_zone(dtstart,
                                              dtstart.zone ? dtstart.
                                              zone : icaltimezone_get_utc_timezone());
 
@@ -1115,13 +1191,13 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
         }
     }
 
-    span.end = icaltime_as_timet_with_zone(dtend,
+    span.end = icaltime_as_timespec_with_zone(dtend,
                                            dtend.zone ? dtend.
                                            zone : icaltimezone_get_utc_timezone());
 
     if (icaltime_is_date(dtstart)) {
         /* no time specified, go until the end of the day.. */
-        span.end += 60 * 60 * 24 - 1;
+        span.end = icaltime_timespec_adjust(span.end, 1000 * 60 * 60 * 24 - 1);
     }
     return span;
 }
@@ -1143,22 +1219,27 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
 int icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2)
 {
     /* s1->start in s2 */
-    if (s1->start > s2->start && s1->start < s2->end)
+    if (icaltime_timespec_cmp(s1->start, s2->start) > 0 &&
+        icaltime_timespec_cmp(s1->start, s2->end) < 0)
         return 1;
 
     /* s1->end in s2 */
-    if (s1->end > s2->start && s1->end < s2->end)
+    if (icaltime_timespec_cmp(s1->end, s2->start) > 0 &&
+        icaltime_timespec_cmp(s1->end, s2->end) < 0)
         return 1;
 
     /* s2->start in s1 */
-    if (s2->start > s1->start && s2->start < s1->end)
+    if (icaltime_timespec_cmp(s2->start, s1->start) > 0 &&
+        icaltime_timespec_cmp(s2->start, s1->end) < 0)
         return 1;
 
     /* s2->end in s1 */
-    if (s2->end > s1->start && s2->end < s1->end)
+    if (icaltime_timespec_cmp(s2->end, s1->start) > 0 &&
+        icaltime_timespec_cmp(s2->end, s1->end) < 0)
         return 1;
 
-    if (s1->start == s2->start && s1->end == s2->end)
+    if (icaltime_timespec_cmp(s1->start, s2->start) == 0 &&
+        icaltime_timespec_cmp(s1->end, s2->end) == 0)
         return 1;
 
     return 0;
@@ -1175,8 +1256,9 @@ int icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2)
 
 int icaltime_span_contains(icaltime_span *s, icaltime_span *container)
 {
-    if ((s->start >= container->start && s->start < container->end) &&
-        (s->end <= container->end && s->end > container->start)) {
+    if ((icaltime_timespec_cmp(s->start, container->start) == 0 ||
+         icaltime_timespec_cmp(s->start, container->start) > 0) &&
+        icaltime_timespec_cmp(s->start, container->end) < 0) {
         return 1;
     }
 

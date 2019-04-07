@@ -88,7 +88,8 @@ icalcomponent *icalclassify_find_overlaps(icalset *set, icalcomponent *comp)
             continue;
         }
 
-        if (compspan.start < span.end && compspan.end > span.start) {
+        if (icaltime_timespec_cmp(compspan.start, span.end) < 0 &&
+            icaltime_timespec_cmp(compspan.end, span.start) > 0) {
 
             icalcomponent *clone = icalcomponent_new_clone(c);
 

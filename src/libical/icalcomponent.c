@@ -637,8 +637,7 @@ icaltime_span icalcomponent_get_span(icalcomponent *comp)
     icaltime_span span;
     struct icaltimetype start, end;
 
-    span.start = 0;
-    span.end = 0;
+    span.start = span.end = (timespec_t){.tv_sec=0, .tv_nsec=0};
     span.is_busy = 1;
 
     /* initial Error checking */
@@ -683,7 +682,7 @@ or empty VCALENDAR component"); */
     if (icaltime_is_null_time(start)) {
         return span;
     }
-    span.start = icaltime_as_timet_with_zone(start, icaltimezone_get_utc_timezone());
+    span.start = icaltime_as_timespec_with_zone(start, icaltimezone_get_utc_timezone());
 
     /* The end time could be specified as either a DTEND or a DURATION */
     /* icalcomponent_get_dtend takes care of these cases. */
@@ -692,17 +691,18 @@ or empty VCALENDAR component"); */
         if (!icaltime_is_date(start)) {
             /* If dtstart is a DATE-TIME and there is no DTEND nor DURATION
                it takes no time */
-            span.start = 0;
+            span.start = (timespec_t){.tv_sec=0, .tv_nsec=0};
             return span;
         } else {
             end = start;
         }
     }
 
-    span.end = icaltime_as_timet_with_zone(end, icaltimezone_get_utc_timezone());
+    span.end = icaltime_as_timespec_with_zone(end, icaltimezone_get_utc_timezone());
     if (icaltime_is_date(start)) {
         /* Until the end of the day */
-        span.end += 60 * 60 * 24 - 1;
+        span.end.tv_sec += 60 * 60 * 24 - 1;
+        span.end.tv_nsec += 1000 - 1;
     }
 
     return span;
@@ -875,8 +875,8 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 {
     struct icaltimetype dtstart, dtend;
     icaltime_span recurspan, basespan, limit_span;
-    time_t limit_start, limit_end;
-    time_t dtduration;
+    timespec_t limit_start, limit_end;
+    int64_t dtduration_ms;
     icalproperty *rrule, *rdate;
     pvl_elem property_iterator; /* for saving the iterator */
 
@@ -911,16 +911,16 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     basespan.is_busy = icalcomponent_is_busy(comp);
 
     /** Calculate the ceiling and floor values.. **/
-    limit_start = icaltime_as_timet_with_zone(start,
+    limit_start = icaltime_as_timespec_with_zone(start,
                                               icaltimezone_get_utc_timezone());
     if (!icaltime_is_null_time(end)) {
-        limit_end = icaltime_as_timet_with_zone(end,
+        limit_end = icaltime_as_timespec_with_zone(end,
                                                 icaltimezone_get_utc_timezone());
     } else {
 #if (SIZEOF_TIME_T > 4)
-        limit_end = (time_t) LONG_MAX;
+        limit_end.tv_sec = (time_t) LONG_MAX;
 #else
-        limit_end = (time_t) INT_MAX;
+        limit_end.tv_sec = (time_t) INT_MAX;
 #endif
     }
     limit_span.start = limit_start;
@@ -937,7 +937,8 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     }
 
     recurspan = basespan;
-    dtduration = basespan.end - basespan.start;
+    dtduration_ms = icaltime_timespec_to_msec(basespan.end) -
+                    icaltime_timespec_to_msec(basespan.start);
 
     /* Now cycle through the rrule entries */
     for (; rrule != NULL;
@@ -953,7 +954,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
             icaltimetype mystart = start;
 
             /* make sure we include any recurrence that ends in timespan */
-            icaltime_adjust(&mystart, 0, 0, 0, -(int)dtduration, 0);
+            icaltime_adjust(&mystart, 0, 0, 0, 0, -dtduration_ms);
             icalrecur_iterator_set_start(rrule_itr, mystart);
         }
 
@@ -967,10 +968,10 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                 break;
 
             recurspan.start =
-                icaltime_as_timet_with_zone(rrule_time,
+                icaltime_as_timespec_with_zone(rrule_time,
                                             rrule_time.zone ? rrule_time.zone :
                                             icaltimezone_get_utc_timezone());
-            recurspan.end = recurspan.start + dtduration;
+            recurspan.end = icaltime_timespec_adjust(recurspan.start, dtduration_ms);
 
             /** save the iterator ICK! **/
             property_iterator = comp->property_iterator;
@@ -1004,11 +1005,11 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
             continue;
 
         recurspan.start =
-            icaltime_as_timet_with_zone(rdate_period.time,
+            icaltime_as_timespec_with_zone(rdate_period.time,
                                         rdate_period.time.zone ?
                                         rdate_period.time.zone :
                                         icaltimezone_get_utc_timezone());
-        recurspan.end = recurspan.start + dtduration;
+        recurspan.end = icaltime_timespec_adjust(recurspan.start, dtduration_ms);
 
         /** save the iterator ICK! **/
         property_iterator = comp->property_iterator;

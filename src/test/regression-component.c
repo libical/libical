@@ -90,13 +90,16 @@ void create_new_component()
     icalcomponent *timezone;
     icalcomponent *tzc;
     icalcomponent *event;
-    struct icaltimetype atime = icaltime_from_timet_with_zone(1023398689, 0, NULL);
+    struct icaltimetype atime = icaltime_from_timespec_with_zone(
+                                          icaltime_msec_to_timespec(1023398689 * 1000LL), 0, NULL);
     struct icaldatetimeperiodtype rtime;
     icalproperty *property;
     char *calendar_as_string;
 
-    rtime.period.start = icaltime_from_timet_with_zone(1023398689, 0, NULL);
-    rtime.period.end = icaltime_from_timet_with_zone(1023409689, 0, NULL);
+    rtime.period.start = icaltime_from_timespec_with_zone(
+                                          icaltime_msec_to_timespec(1023398689 * 1000LL), 0, NULL);
+    rtime.period.end = icaltime_from_timespec_with_zone(
+                                          icaltime_msec_to_timespec(1023409689 * 1000LL), 0, NULL);
     rtime.period.end.hour++;
     rtime.time = icaltime_null_time();
 
@@ -216,11 +219,14 @@ void create_new_component()
 void create_new_component_with_va_args()
 {
     icalcomponent *calendar;
-    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    struct icaltimetype atime = icaltime_from_timespec_with_zone(
+                                          icaltime_msec_to_timespec(0), 0, NULL);
     struct icaldatetimeperiodtype rtime;
 
-    rtime.period.start = icaltime_from_timet_with_zone(time(0), 0, NULL);
-    rtime.period.end = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    rtime.period.start = icaltime_from_timespec_with_zone(
+                                          icaltime_msec_to_timespec(0), 0, NULL);
+    rtime.period.end = icaltime_from_timespec_with_zone(
+                                          icaltime_msec_to_timespec(0), 0, NULL);
     rtime.period.end.hour++;
     rtime.time = icaltime_null_time();
 
@@ -290,17 +296,19 @@ void create_new_component_with_va_args()
 
 static void print_span(int c, struct icaltime_span span)
 {
-    printf("span-->%d, %d\n", (int)span.start, (int)span.end);
-    if (span.start == 0) {
+    timespec_t t_zero = icaltime_msec_to_timespec(0);
+    printf("span-->%.3f, %.3f\n", icaltime_timespec_to_msec(span.start) / 1000.0,
+                                  icaltime_timespec_to_msec(span.end) / 1000.0);
+    if (icaltime_timespec_cmp(span.start, t_zero) == 0) {
         printf("#%02d start: (empty)\n", c);
     } else {
-        printf("#%02d start: %s\n", c, ical_timet_string(span.start));
+        printf("#%02d start: %s\n", c, ical_timespec_string(span.start));
     }
 
-    if (span.end == 0) {
+    if (icaltime_timespec_cmp(span.end, t_zero) == 0) {
         printf("    end  : (empty)\n");
     } else {
-        printf("    end  : %s\n", ical_timet_string(span.end));
+        printf("    end  : %s\n", ical_timespec_string(span.end));
     }
 }
 
@@ -309,9 +317,9 @@ static void print_span(int c, struct icaltime_span span)
  */
 void test_icalcomponent_get_span()
 {
-    time_t tm1 = 973378800;     /*Sat Nov  4 23:00:00 UTC 2000,
+    timespec_t tm1 = icaltime_msec_to_timespec(973378800 * 1000LL);     /*Sat Nov  4 23:00:00 UTC 2000,
                                    Sat Nov  4 15:00:00 PST 2000 */
-    time_t tm2 = 973382400;     /*Sat Nov  5 00:00:00 UTC 2000
+    timespec_t tm2 = icaltime_msec_to_timespec(973382400 * 1000LL);     /*Sat Nov  5 00:00:00 UTC 2000
                                    Sat Nov  4 16:00:00 PST 2000 */
     struct icaldurationtype dur;
     struct icaltime_span span;
@@ -334,9 +342,9 @@ void test_icalcomponent_get_span()
     azone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
+            icalproperty_vanew_dtstart(icaltime_from_timespec_with_zone(tm1, 0, azone),
                                        icalparameter_new_tzid("America/Los_Angeles"), 0),
-            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
+            icalproperty_vanew_dtend(icaltime_from_timespec_with_zone(tm2, 0, azone),
                                      icalparameter_new_tzid("America/Los_Angeles"), 0),
             (void *)0);
 
@@ -345,7 +353,8 @@ void test_icalcomponent_get_span()
         print_span(tnum++, span);
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
-    int_is("America/Los_Angeles", span.start, 973350000);
+    int_is("America/Los_Angeles", icaltime_timespec_to_msec(span.start),
+                                  973350000 * 1000LL);
 #endif
     icalcomponent_free(c);
 
@@ -355,15 +364,16 @@ void test_icalcomponent_get_span()
      */
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL), 0),
-            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), 0),
+            icalproperty_vanew_dtstart(icaltime_from_timespec_with_zone(tm1, 0, NULL), 0),
+            icalproperty_vanew_dtend(icaltime_from_timespec_with_zone(tm2, 0, NULL), 0),
             (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)
         print_span(tnum++, span);
 
-    int_is("floating time", (int)span.start, (int)tm1);
+    int_is("floating time", icaltime_timespec_to_msec(span.start),
+                            icaltime_timespec_to_msec(tm1));
 
     icalcomponent_free(c);
 
@@ -373,9 +383,9 @@ void test_icalcomponent_get_span()
     azone = icaltimezone_get_builtin_timezone("America/New_York");
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
+            icalproperty_vanew_dtstart(icaltime_from_timespec_with_zone(tm1, 0, azone),
                                        icalparameter_new_tzid("America/New_York"), 0),
-            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
+            icalproperty_vanew_dtend(icaltime_from_timespec_with_zone(tm2, 0, azone),
                                      icalparameter_new_tzid("America/New_York"), 0),
             (void *)0);
 
@@ -384,7 +394,7 @@ void test_icalcomponent_get_span()
         print_span(tnum++, span);
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
-    int_is("America/New_York", span.start, 973360800);
+    int_is("America/New_York", icaltime_timespec_to_msec(span.start), 973360800 * 1000LL);
 #endif
     icalcomponent_free(c);
 
@@ -396,9 +406,9 @@ void test_icalcomponent_get_span()
     bzone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
+            icalproperty_vanew_dtstart(icaltime_from_timespec_with_zone(tm1, 0, azone),
                                        icalparameter_new_tzid("America/New_York"), 0),
-            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, bzone),
+            icalproperty_vanew_dtend(icaltime_from_timespec_with_zone(tm2, 0, bzone),
                                      icalparameter_new_tzid("America/Los_Angeles"), 0),
             (void *)0);
 
@@ -407,7 +417,7 @@ void test_icalcomponent_get_span()
         print_span(tnum++, span);
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
-    int_is("America/New_York", span.start, 973360800);
+    int_is("America/New_York", icaltime_timespec_to_msec(span.start), 973360800 * 1000LL);
 #endif
     icalcomponent_free(c);
 
@@ -420,7 +430,7 @@ void test_icalcomponent_get_span()
     dur.minutes = 30;
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
+            icalproperty_vanew_dtstart(icaltime_from_timespec_with_zone(tm1, 0, azone),
                                        icalparameter_new_tzid("America/Los_Angeles"), 0),
             icalproperty_new_duration(dur),
             (void *)0);
@@ -430,7 +440,8 @@ void test_icalcomponent_get_span()
         print_span(tnum++, span);
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
-    int_is("America/Los_Angeles w/ duration", span.end, 973351800);
+    int_is("America/Los_Angeles w/ duration", icaltime_timespec_to_msec(span.end),
+                                              973351800 * 1000L);
 #endif
     icalcomponent_free(c);
 
@@ -440,14 +451,14 @@ void test_icalcomponent_get_span()
      */
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL)),
+            icalproperty_new_dtstart(icaltime_from_timespec_with_zone(tm1, 0, NULL)),
             (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)
         print_span(tnum++, span);
 
-    int_is("null span", (int)span.start, 0);
+    int_is("null span", icaltime_timespec_to_msec(span.start), 0);
     icalcomponent_free(c);
 
     /** test 7
@@ -455,27 +466,27 @@ void test_icalcomponent_get_span()
      */
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
-            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm1, 1, NULL)),
+            icalproperty_new_dtstart(icaltime_from_timespec_with_zone(tm1, 1, NULL)),
+            icalproperty_new_dtend(icaltime_from_timespec_with_zone(tm1, 1, NULL)),
             (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)
         print_span(tnum++, span);
 
-    int_is("UTC", (int)span.start, 973296000);
+    int_is("UTC", icaltime_timespec_to_msec(span.start), 973296000 * 1000LL);
     icalcomponent_free(c);
 
     /** test 8
      *  We specify start and end date
      */
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
-                            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm2, 1, NULL)),
+                            icalproperty_new_dtstart(icaltime_from_timespec_with_zone(tm1, 1, NULL)),
+                            icalproperty_new_dtend(icaltime_from_timespec_with_zone(tm2, 1, NULL)),
                             (void *)0);
 
     span = icalcomponent_get_span(c);
-    int_is("UTC #2", (int)span.start, 973296000);
+    int_is("UTC #2", icaltime_timespec_to_msec(span.start), 973296000 * 1000LL);
     if (VERBOSE)
         print_span(tnum++, span);
 
@@ -485,14 +496,14 @@ void test_icalcomponent_get_span()
      *  We specify start date
      */
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
+                            icalproperty_new_dtstart(icaltime_from_timespec_with_zone(tm1, 1, NULL)),
                             (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)
         print_span(tnum++, span);
 
-    int_is("start date only", (int)span.end, 973382399);
+    int_is("start date only", icaltime_timespec_to_msec(span.end), 973382399 * 1000LL);
 
     icalcomponent_free(c);
 

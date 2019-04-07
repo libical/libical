@@ -70,8 +70,8 @@ static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void
     _unused(comp);
 
     if (VERBOSE) {
-        printf("recur: %s", ctime(&span->start));
-        printf("       %s", ctime(&span->end));
+        printf("recur: %s", icaltime_timespec_as_string(span->start));
+        printf("       %s", icaltime_timespec_as_string(span->end));
     }
     *num_recurs = *num_recurs + 1;
 }
