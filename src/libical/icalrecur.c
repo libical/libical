@@ -779,7 +779,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
 
             for (i = 0;
                  i < limit && array[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
-                if (j == 3) { /* BYDAY */
+                if (j == ICAL_DAILY_RECURRENCE) {
                     int pos = icalrecurrencetype_day_position(array[i]);
                     int dow = icalrecurrencetype_day_day_of_week(array[i]);
                     const char *daystr = icalrecur_weekday_to_string(dow);
@@ -791,7 +791,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
                         icalmemory_append_string(&str, &str_p, &buf_sz, temp);
                     }
 
-                } else if (j == 7 /* BYMONTH */ &&
+                } else if (j == ICAL_MONTHLY_RECURRENCE &&
                            icalrecurrencetype_month_is_leap(array[i])) {
                     snprintf(temp, sizeof(temp), "%dL",
                              icalrecurrencetype_month_month(array[i]));
