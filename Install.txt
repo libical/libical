@@ -73,6 +73,20 @@ For example, say you want to use Clang to build on Linux.
 Then you can set the C and C++ compilers at CMake time, like so:
 % CC=clang CXX=clang++ cmake ..
 
+== Building for OSX (Mac) ==
+Homebrew:
+  A couple of necessary dependencies do not have their headers
+  and development libraries linked into /usr/local/{include,lib} due
+  to possible contamination with the operating system versions of the
+  same name.  This is known to be the case with libffi and libxml2
+  Fix is to export PKG_CONFIG_PATH so CMake can find them, as in:
+    export PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig:\
+                           /usr/local/opt/libxml2/lib/pkgconfig
+
+  Also, if building the gtkdocs you'll need to say where the xml
+  catalog files can be found so the gtk entities are located, like so:
+    export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+
 == Optional Dependencies ==
 * libicu "International Components for Unicode" development libraries.
   Highly recommended for RSCALE support.
