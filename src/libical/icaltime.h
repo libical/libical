@@ -95,6 +95,14 @@
 typedef struct _icaltimezone icaltimezone;
 #endif
 
+#ifndef HAVE_TIMESPEC
+struct timespec {
+    time_t  tv_sec;
+    long    tv_nsec;
+};
+#endif
+
+
 typedef struct timespec timespec_t;
 
 /** icaltime_span is returned by icalcomponent_get_span() */
