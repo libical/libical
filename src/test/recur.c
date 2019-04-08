@@ -46,8 +46,8 @@ static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void
 {
     _unused(comp);
     _unused(data);
-    printf("cb: %s", ctime(&span->start));
-    printf("    %s\n", ctime(&span->end));
+    printf("cb: %s", icaltime_timespec_as_string(span->start));
+    printf("    %s\n", icaltime_timespec_as_string(span->end));
 }
 
 int main(int argc, char *argv[])
