@@ -94,7 +94,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 
 #Include CMake capabilities
 include(FeatureSummary)
-include(CheckTypeSize)
 
 # Enable the test harness
 enable_testing()
@@ -166,12 +165,6 @@ set_package_properties(Perl PROPERTIES
 # Ensure finding 64bit libs when using 64-bit compilers
 if(CMAKE_CL_64)
   set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS True)
-endif()
-
-CHECK_TYPE_SIZE("struct timespec" TIMESPEC)
-
-if(HAVE_TIMESPEC)
-    add_definitions(-DHAVE_TIMESPEC)
 endif()
 
 # libicu is highly recommended for RSCALE support

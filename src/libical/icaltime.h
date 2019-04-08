@@ -95,7 +95,9 @@
 typedef struct _icaltimezone icaltimezone;
 #endif
 
-#ifndef HAVE_TIMESPEC
+#if !defined(_STRUCT_TIMESPEC) && !defined(__timespec_defined)
+#define __timespec_defined
+#define _STRUCT_TIMESPEC
 struct timespec {
     time_t  tv_sec;
     long    tv_nsec;
