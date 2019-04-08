@@ -887,10 +887,10 @@ struct icalrecur_iterator_impl
     short days_index;
 
     enum byrule byrule;
-    short by_indices[9];
-    short orig_data[9]; /**< 1 if there was data in the byrule */
+    short by_indices[BY_SET_POS + 1];
+    short orig_data[BY_SET_POS + 1]; /**< 1 if there was data in the byrule */
 
-    short *by_ptrs[9]; /**< Pointers into the by_* array elements of the rule */
+    short *by_ptrs[BY_SET_POS + 1]; /**< Pointers into the by_* array elements of the rule */
 
 };
 
@@ -1915,7 +1915,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
     impl->by_ptrs[BY_MSEC] = impl->rule.by_msec;
     impl->by_ptrs[BY_SET_POS] = impl->rule.by_set_pos;
 
-    memset(impl->orig_data, 0, 9 * sizeof(short));
+    memset(impl->orig_data, 0, sizeof(impl->orig_data));
 
     /* Note which by rules had data in them when the iterator was
        created. We can't use the actual by_x arrays, because the
