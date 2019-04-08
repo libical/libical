@@ -241,10 +241,9 @@ LIBICAL_ICAL_EXPORT int icaltime_compare_date_only_tz(const struct icaltimetype 
                                                       icaltimezone *tz);
 
 /** Adds or subtracts a number of days, hours, minutes and seconds. */
-LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt,
-                                         const int days, const int hours,
-                                         const int minutes, const int seconds,
-                                         const int msecs);
+LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt, const int64_t days,
+                                         const int64_t hours, const int64_t minutes,
+                                         const int64_t seconds, const int64_t msecs);
 
 /** Normalize the icaltime, so that all fields are within the normal range. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltimetype t);

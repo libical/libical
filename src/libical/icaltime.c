@@ -987,13 +987,12 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
  *      NOTE: This function is exactly the same as icaltimezone_adjust_change()
  *      except for the type of the first parameter.
  */
-void icaltime_adjust(struct icaltimetype *tt,
-                     const int days, const int hours,
-                     const int minutes, const int seconds,
-                     const int msecs)
+void icaltime_adjust(struct icaltimetype *tt, const int64_t days,
+                     const int64_t hours, const int64_t minutes,
+                     const int64_t seconds, const int64_t msecs)
 {
-    int msec, second, minute, hour, day;
-    int seconds_overflow, minutes_overflow, hours_overflow,
+    int64_t msec, second, minute, hour, day;
+    int64_t seconds_overflow, minutes_overflow, hours_overflow,
 	days_overflow = 0, years_overflow;
     int days_in_month;
 
