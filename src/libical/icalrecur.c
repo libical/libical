@@ -2735,7 +2735,7 @@ static int next_year(icalrecur_iterator *impl)
     return next_yearday(impl, &__next_year);
 }
 
-static void daymask_find_next_bit(unsigned long days[], short* p_days_index) {
+static void daymask_find_next_bit(unsigned long days[], short *p_days_index) {
 
     unsigned long v;
     short startBitIndex;
@@ -2746,7 +2746,7 @@ static void daymask_find_next_bit(unsigned long days[], short* p_days_index) {
 
     // Prepare the first word, where searching might not start at the beginning
     startBitIndex = *p_days_index + ICAL_YEARDAYS_MASK_OFFSET;
-    wordIdx = startBitIndex / BITS_PER_LONG;
+    wordIdx = (int)(startBitIndex / BITS_PER_LONG);
     v = days[wordIdx];
     v >>= startBitIndex % BITS_PER_LONG;
 
@@ -2773,13 +2773,12 @@ static void daymask_find_next_bit(unsigned long days[], short* p_days_index) {
         // position yet. Do a b-search to find it.
 
         unsigned long mask;
-        int maskSize = BITS_PER_LONG / 2;
+        int maskSize = (int)(BITS_PER_LONG / 2);
         mask = (((unsigned long)1) << maskSize) - 1;
 
         while (maskSize) {
 
-            if ((v & mask) == 0)
-            {
+            if ((v & mask) == 0) {
                 v >>= maskSize;
                 *p_days_index += maskSize;
             }
