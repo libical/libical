@@ -874,7 +874,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                         void *data), void *callback_data)
 {
     struct icaltimetype dtstart, dtend;
-    icaltime_span recurspan, basespan, limit_span;
+    volatile icaltime_span recurspan, basespan, limit_span;
     timespec_t limit_start, limit_end;
     int64_t dtduration_ms;
     icalproperty *rrule, *rdate;
