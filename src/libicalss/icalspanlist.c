@@ -349,35 +349,36 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     int *matrix;
     time_t matrix_slots;
     timespec_t sl_start, sl_end;
-    int64_t sl_start_ms, sl_end_ms;
+    int64_t sl_start_ms, sl_end_ms, delta_ms;
 
     icalerror_check_arg_rz((sl != 0), "spanlist");
 
-    if (!delta_t)
-        delta_t = 3600;
-    /* convert to ms */
-    delta_t *= 1000;
+    if (!delta_t) {
+        delta_ms = 3600;
+    } else {
+        delta_ms = delta_t * 1000;
+    }
 
   /** calculate the start and end time as time_t **/
     sl_start = icaltime_as_timespec_with_zone(sl->start, icaltimezone_get_utc_timezone());
     sl_end = icaltime_as_timespec_with_zone(sl->end, icaltimezone_get_utc_timezone());
 
   /** insure that the time period falls on a time boundary divisable
-      by delta_t */
+      by delta_ms */
 
     sl_start_ms = icaltime_timespec_to_msec(sl_start);
-    sl_start_ms /= delta_t;
-    sl_start_ms *= delta_t;
+    sl_start_ms /= delta_ms;
+    sl_start_ms *= delta_ms;
 
     sl_end_ms = icaltime_timespec_to_msec(sl_end);
-    sl_end_ms /= delta_t;
-    sl_end_ms *= delta_t;
+    sl_end_ms /= delta_ms;
+    sl_end_ms *= delta_ms;
 
   /** find the duration of this spanlist **/
     spanduration_ms = sl_end_ms - sl_start_ms;
 
   /** malloc our matrix, add one extra slot for a final -1 **/
-    matrix_slots = spanduration_ms / delta_t + 1000;
+    matrix_slots = spanduration_ms / delta_ms + 1;
 
     matrix = (int *)malloc((size_t)(sizeof(int) * matrix_slots));
     if (matrix == NULL) {
@@ -393,10 +394,10 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
         struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
 
         if (s && s->is_busy == 1) {
-            time_t offset_start = icaltime_timespec_to_msec(s->start) / delta_t -
-                                  sl_start_ms / delta_t;
-            time_t offset_end = (icaltime_timespec_to_msec(s->end) - 1000) / delta_t -
-                                sl_start_ms / delta_t + 1;
+            time_t offset_start = icaltime_timespec_to_msec(s->start) / delta_ms -
+                                  sl_start_ms / delta_ms;
+            time_t offset_end = (icaltime_timespec_to_msec(s->end) - 1000) / delta_ms -
+                                sl_start_ms / delta_ms + 1;
             time_t i;
 
             if (offset_end >= matrix_slots)

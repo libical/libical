@@ -918,7 +918,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                 icaltimezone_get_utc_timezone());
     } else {
 #if (SIZEOF_TIME_T > 4)
-        limit_end.tv_sec = (time_t) LONG_MAX;
+        limit_end.tv_sec = (time_t) LONG_MAX / 1000;
 #else
         limit_end.tv_sec = (time_t) INT_MAX;
 #endif
