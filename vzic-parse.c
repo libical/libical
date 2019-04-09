@@ -747,10 +747,12 @@ parse_time			(ParsingData	*data,
     }
   }
 
-  if (hours < 0 || hours > 24
+  /* Japan can use a 30-hour clock, per
+     https://en.wikipedia.org/wiki/Date_and_time_notation_in_Japan */
+  if (hours < 0 || hours > 30
       || minutes < 0 || minutes > 59
       || seconds < 0 || seconds > 59
-      || (hours == 24 && (minutes != 0 || seconds != 0))) {
+      || (hours >= 24 && (minutes != 0 || seconds != 0))) {
     fprintf (stderr, "%s:%i: Invalid time: %s\n%s\n", data->filename,
 	     data->line_number, field, data->line);
     exit (1);
