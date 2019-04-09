@@ -771,6 +771,10 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         str = parser_get_next_value(end, &end, value_kind);
 
         /* Pop last component off of list and add it to the second-to-last */
+        if (parser->root_component) {
+            // TODO this is probably an error condition, log it somehow?
+            icalcomponent_free(parser->root_component);
+        }
         parser->root_component = pvl_pop(parser->components);
 
         tail = pvl_data(pvl_tail(parser->components));
