@@ -104,7 +104,6 @@ struct timespec {
 };
 #endif
 
-
 typedef struct timespec timespec_t;
 
 /** icaltime_span is returned by icalcomponent_get_span() */
@@ -174,13 +173,13 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy,
  */
 LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);
 
-LIBICAL_ICAL_EXPORT struct timespec icaltime_as_timespec(const struct icaltimetype);
+LIBICAL_ICAL_EXPORT timespec_t icaltime_as_timespec(const struct icaltimetype);
 
 /** Return the time as seconds past the UNIX epoch, using timezones. */
 LIBICAL_ICAL_EXPORT time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
                                                        const icaltimezone *zone);
 
-LIBICAL_ICAL_EXPORT struct timespec icaltime_as_timespec_with_zone(const struct icaltimetype tt,
+LIBICAL_ICAL_EXPORT timespec_t icaltime_as_timespec_with_zone(const struct icaltimetype tt,
                                                        const icaltimezone *zone);
 
 /** Return a string represention of the time, in RFC5545 format. */

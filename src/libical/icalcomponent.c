@@ -637,7 +637,7 @@ icaltime_span icalcomponent_get_span(icalcomponent *comp)
     icaltime_span span;
     struct icaltimetype start, end;
 
-    span.start = span.end = (timespec_t){.tv_sec=0, .tv_nsec=0};
+    span.start = span.end = icaltime_msec_to_timespec(0);
     span.is_busy = 1;
 
     /* initial Error checking */
@@ -691,7 +691,7 @@ or empty VCALENDAR component"); */
         if (!icaltime_is_date(start)) {
             /* If dtstart is a DATE-TIME and there is no DTEND nor DURATION
                it takes no time */
-            span.start = (timespec_t){.tv_sec=0, .tv_nsec=0};
+            span.start = icaltime_msec_to_timespec(0);;
             return span;
         } else {
             end = start;
@@ -874,7 +874,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                         void *data), void *callback_data)
 {
     struct icaltimetype dtstart, dtend;
-    volatile icaltime_span recurspan, basespan, limit_span;
+    icaltime_span recurspan, basespan, limit_span;
     timespec_t limit_start, limit_end;
     int64_t dtduration_ms;
     icalproperty *rrule, *rdate;
@@ -918,9 +918,9 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                 icaltimezone_get_utc_timezone());
     } else {
 #if (SIZEOF_TIME_T > 4)
-        limit_end.tv_sec = (time_t) LONG_MAX / 1000;
+        limit_end = icaltime_msec_to_timespec(LLONG_MAX / 1000);
 #else
-        limit_end.tv_sec = (time_t) INT_MAX;
+        limit_end = icaltime_msec_to_timespec(INT_MAX * 1000);
 #endif
     }
     limit_span.start = limit_start;
