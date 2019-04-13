@@ -33,26 +33,6 @@ assert(ICalGLib.Recurrence.day_position(15) == 1)
 assert(ICalGLib.Recurrence.day_position(16) == 2)
 assert(ICalGLib.Recurrence.day_position(25) == 3)
 
-encoded = ICalGLib.Recurrence.encode_day(ICalGLib.RecurrenceWeekday.MONDAY_WEEKDAY, 0)
-assert(ICalGLib.Recurrence.day_day_of_week(encoded) == ICalGLib.RecurrenceWeekday.MONDAY_WEEKDAY)
-assert(ICalGLib.Recurrence.day_position(encoded) == 0)
-
-encoded = ICalGLib.Recurrence.encode_day(ICalGLib.RecurrenceWeekday.THURSDAY_WEEKDAY, -3)
-assert(ICalGLib.Recurrence.day_day_of_week(encoded) == ICalGLib.RecurrenceWeekday.THURSDAY_WEEKDAY)
-assert(ICalGLib.Recurrence.day_position(encoded) == -3)
-
-encoded = ICalGLib.Recurrence.encode_day(ICalGLib.RecurrenceWeekday.FRIDAY_WEEKDAY, 2)
-assert(ICalGLib.Recurrence.day_day_of_week(encoded) == ICalGLib.RecurrenceWeekday.FRIDAY_WEEKDAY)
-assert(ICalGLib.Recurrence.day_position(encoded) == 2)
-
-encoded = ICalGLib.Recurrence.encode_month(3, 0)
-assert(ICalGLib.Recurrence.month_month(encoded) == 3)
-assert(not ICalGLib.Recurrence.month_is_leap(encoded))
-
-encoded = ICalGLib.Recurrence.encode_month(12, 1)
-assert(ICalGLib.Recurrence.month_month(encoded) == 12)
-assert(ICalGLib.Recurrence.month_is_leap(encoded))
-
 string = "COUNT=10;FREQ=DAILY"
 recurrence = ICalGLib.Recurrence.from_string(string)
 assert(recurrence.as_string_r() == "FREQ=DAILY;COUNT=10")

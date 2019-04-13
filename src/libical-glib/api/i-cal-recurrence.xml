@@ -101,7 +101,6 @@
     <method name="i_cal_recurrence_month_month" corresponds="icalrecurrencetype_month_month" since="2.0">
         <parameter type="gshort" name="month" comment="The month to be decoded."/>
         <returns type="gint" comment="The actual month number regardless of the leap flag."/>
-        <comment xml:space="preserve">Decode a month from an encoded value by i_cal_recurrence_encode_month().</comment>
     </method>
     <method name="i_cal_recurrence_from_string" corresponds="icalrecurrencetype_from_string" since="1.0">
         <parameter type="const gchar *" name="str" comment="The string representation of the #ICalRecurrence"/>
