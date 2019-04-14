@@ -32,6 +32,12 @@
         <comment xml:space="preserve">Set the date-time at which the iterator will start, where 'start' is a value between DTSTART and UNTIL.
 Note: CAN NOT be used with RRULEs that contain COUNT.</comment>
     </method>
+    <method name="i_cal_recur_iterator_set_end" corresponds="icalrecur_iterator_set_end" since="3.1">
+        <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator."/>
+        <parameter type="ICalTime *" name="end" comment="The date-time at which the iterator will stop."/>
+        <returns type="gint" comment="1 if succeeded, 0 if failed."/>
+        <comment xml:space="preserve">Set the date-time at which the iterator will stop at the latest. Values equal to or greater than end will not be returned by the iterator.</comment>
+    </method>
     <method name="i_cal_recur_iterator_free" corresponds="icalrecur_iterator_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator to be freed."/>
         <comment xml:space="preserve">Free an iterator.</comment>
