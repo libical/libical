@@ -598,9 +598,9 @@ int test_component_foreach_parameterized_msec(int64_t startOffsMSec, int64_t end
     const char* calStr =
             "BEGIN:VCALENDAR\n"
             "BEGIN:VEVENT\n"
-            "DTSTART:2019-04-08T12:30:00.250\n"
-            "DURATION:PT50m\n"
-            "RRULE:FREQ=MSEC;INTERVAL=250;COUNT=10\n"
+            "X-DTSTART:2019-04-08T12:30:00.250\n"
+            "X-DURATION:PT50m\n"
+            "X-RRULE:FREQ=MSEC;INTERVAL=250;COUNT=10\n"
             "END:VEVENT\n"
             "END:VCALENDAR\n";
 
@@ -729,9 +729,9 @@ void test_component_foreach()
     calStr =
         "BEGIN:VCALENDAR\n"
         "BEGIN:VEVENT\n"
-        "DTSTART:2019-04-08T12:30:00.250\n"
-        "DURATION:PT50m\n"
-        "RRULE:FREQ=MSEC;INTERVAL=250;COUNT=10\n"
+        "X-DTSTART:2019-04-08T12:30:00.250\n"
+        "X-DURATION:PT50m\n"
+        "X-RRULE:FREQ=MSEC;INTERVAL=250;COUNT=10\n"
         "END:VEVENT\n"
         "END:VCALENDAR\n";
 

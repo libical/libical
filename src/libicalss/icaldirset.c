@@ -360,7 +360,10 @@ icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
         for (inner = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
              inner != 0; inner = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
 
-            dt = icalcomponent_get_first_property(inner, ICAL_DTSTART_PROPERTY);
+            dt = icalcomponent_get_first_property(inner, ICAL_XDTSTART_PROPERTY);
+            if (!dt) {
+                dt = icalcomponent_get_first_property(inner, ICAL_DTSTART_PROPERTY);
+            }
 
             if (dt != 0) {
                 break;

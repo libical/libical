@@ -247,6 +247,9 @@ extern "C"
 
 #define XPilotIdProp                    "X-PILOTID"
 #define XPilotStatusProp                "X-PILOTSTAT"
+#define XRRuleProp                      "X-RRULE"
+#define XDTstartProp                    "X-DTSTART"
+#define XDTendProp                      "X-DTEND"
 
     typedef struct VObject VObject;
 

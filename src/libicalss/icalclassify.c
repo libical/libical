@@ -272,6 +272,12 @@ int icalssutil_is_rescheduled(icalcomponent *a, icalcomponent *b)
         ICAL_RDATE_PROPERTY,
         ICAL_EXRULE_PROPERTY,
         ICAL_EXDATE_PROPERTY,
+        /* Extensions*/
+        ICAL_XDTSTART_PROPERTY,
+        ICAL_XDTEND_PROPERTY,
+        ICAL_XDURATION_PROPERTY,
+        ICAL_XRRULE_PROPERTY,
+
         ICAL_NO_PROPERTY
     };
 

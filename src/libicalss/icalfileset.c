@@ -790,14 +790,20 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
 
         /* check if it is a recurring component and with guage expand, if so
            we need to add recurrence-id property to the given component */
-        rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+        rrule = icalcomponent_get_first_property(comp, ICAL_XRRULE_PROPERTY);
+        if (!rrule) {
+            rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+        }
         g = icalgauge_get_expand(gauge);
 
         if (rrule != 0 && g == 1) {
 
             recur = icalproperty_get_rrule(rrule);
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
-                dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+                dtstart = icalcomponent_get_first_property(comp, ICAL_XDTSTART_PROPERTY);
+                if (!dtstart) {
+                    dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+                }
                 if (dtstart) {
                     start = icalproperty_get_dtstart(dtstart);
                 }
@@ -862,12 +868,18 @@ icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *itr)
         return NULL;
     }
 
-    rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+    rrule = icalcomponent_get_first_property(comp, ICAL_XRRULE_PROPERTY);
+    if (!rrule) {
+        rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+    }
 
     recur = icalproperty_get_rrule(rrule);
 
     if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
-        dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+        dtstart = icalcomponent_get_first_property(comp, ICAL_XDTSTART_PROPERTY);
+        if (!dtstart) {
+            dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+        }
         if (dtstart) {
             start = icalproperty_get_dtstart(dtstart);
         }
@@ -934,7 +946,10 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
             return c;
         }
 
-        rrule = icalcomponent_get_first_property(c, ICAL_RRULE_PROPERTY);
+        rrule = icalcomponent_get_first_property(c, ICAL_XRRULE_PROPERTY);
+        if (!rrule) {
+            rrule = icalcomponent_get_first_property(c, ICAL_RRULE_PROPERTY);
+        }
         g = icalgauge_get_expand(i->gauge);
 
         /* a recurring component with expand query */
@@ -943,7 +958,10 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
             recur = icalproperty_get_rrule(rrule);
 
             if (icalcomponent_isa(c) == ICAL_VEVENT_COMPONENT) {
-                dtstart = icalcomponent_get_first_property(c, ICAL_DTSTART_PROPERTY);
+                dtstart = icalcomponent_get_first_property(c, ICAL_XDTSTART_PROPERTY);
+                if (!dtstart) {
+                    dtstart = icalcomponent_get_first_property(c, ICAL_DTSTART_PROPERTY);
+                }
                 if (dtstart) {
                     start = icalproperty_get_dtstart(dtstart);
                 }

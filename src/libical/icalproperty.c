@@ -979,8 +979,10 @@ void icalproperty_normalize(icalproperty *prop)
                 break;
 
             case ICAL_DTEND_PROPERTY:
+            case ICAL_XDTEND_PROPERTY:
             case ICAL_DUE_PROPERTY:
             case ICAL_DTSTART_PROPERTY:
+            case ICAL_XDTSTART_PROPERTY:
             case ICAL_EXDATE_PROPERTY:
             case ICAL_RDATE_PROPERTY:
             case ICAL_RECURRENCEID_PROPERTY:
@@ -990,6 +992,7 @@ void icalproperty_normalize(icalproperty *prop)
                 break;
 
             case ICAL_DURATION_PROPERTY:
+            case ICAL_XDURATION_PROPERTY:
                 if (icalparameter_get_value(param) == ICAL_VALUE_DURATION) {
                     continue;
                 }

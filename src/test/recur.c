@@ -96,8 +96,14 @@ int main(int argc, char *argv[])
         struct icaltimetype end = icaltime_today();
 
         desc = icalcomponent_get_first_property(itr, ICAL_DESCRIPTION_PROPERTY);
-        dtstart = icalcomponent_get_first_property(itr, ICAL_DTSTART_PROPERTY);
-        rrule = icalcomponent_get_first_property(itr, ICAL_RRULE_PROPERTY);
+        dtstart = icalcomponent_get_first_property(itr, ICAL_XDTSTART_PROPERTY);
+        if (!dtstart) {
+            dtstart = icalcomponent_get_first_property(itr, ICAL_DTSTART_PROPERTY);
+        }
+        rrule = icalcomponent_get_first_property(itr, ICAL_XRRULE_PROPERTY);
+        if (!rrule) {
+            rrule = icalcomponent_get_first_property(itr, ICAL_RRULE_PROPERTY);
+        }
 
         if (desc == 0 || dtstart == 0 || rrule == 0) {
             printf("\n******** Error in input component ********\n");

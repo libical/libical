@@ -187,6 +187,7 @@ LIBICAL_ICAL_EXPORT struct icaltime_span icalcomponent_get_span(icalcomponent *c
 /******************** Convenience routines **********************/
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_dtstart(icalcomponent *comp, struct icaltimetype v);
+LIBICAL_ICAL_EXPORT void icalcomponent_set_xdtstart(icalcomponent *comp, struct icaltimetype v);
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp);
 
 /* For the icalcomponent routines only, dtend and duration are tied
@@ -202,11 +203,16 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtend(icalcomponent *c
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_dtend(icalcomponent *comp, struct icaltimetype v);
 
+LIBICAL_ICAL_EXPORT void icalcomponent_set_xdtend(icalcomponent *comp, struct icaltimetype v);
+
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_due(icalcomponent *comp);
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_due(icalcomponent *comp, struct icaltimetype v);
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_duration(icalcomponent *comp,
+                                                    struct icaldurationtype v);
+
+LIBICAL_ICAL_EXPORT void icalcomponent_set_xduration(icalcomponent *comp,
                                                     struct icaldurationtype v);
 
 LIBICAL_ICAL_EXPORT struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp);

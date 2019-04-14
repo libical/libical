@@ -928,7 +928,10 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 
     /* Do the callback for the DTSTART entry, ONLY if there is no RRULE.
        Otherwise, the initial occurrence will be handled by the RRULE. */
-    rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+    rrule = icalcomponent_get_first_property(comp, ICAL_XRRULE_PROPERTY);
+    if (!rrule) {
+        rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+    }
     if ((rrule == NULL) &&
         !icalproperty_recurrence_is_excluded(comp, &dtstart, &dtstart)) {
         /** call callback action **/
@@ -941,9 +944,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                     icaltime_timespec_to_msec(basespan.start);
 
     /* Now cycle through the rrule entries */
-    for (; rrule != NULL;
-         rrule = icalcomponent_get_next_property(comp, ICAL_RRULE_PROPERTY)) {
-
+    while (rrule != NULL) {
         struct icalrecurrencetype recur = icalproperty_get_rrule(rrule);
         icalrecur_iterator *rrule_itr = icalrecur_iterator_new(recur, dtstart);
         struct icaltimetype rrule_time;
@@ -986,6 +987,10 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         }   /* end of iteration over a specific RRULE */
 
         icalrecur_iterator_free(rrule_itr);
+        rrule = icalcomponent_get_next_property(comp, ICAL_XRRULE_PROPERTY);
+        if (!rrule) {
+            rrule = icalcomponent_get_next_property(comp, ICAL_RRULE_PROPERTY);
+        }
     }   /* end of RRULE loop */
 
     /** Now process RDATE entries **/
@@ -1427,6 +1432,31 @@ void icalcomponent_set_dtstart(icalcomponent *comp, struct icaltimetype v)
     }
 }
 
+/**     @brief Set X-DTSTART property to given icaltime
+ *
+ *      This method respects the icaltime type (DATE vs DATE-TIME) and
+ *      timezone (or lack thereof).
+ */
+void icalcomponent_set_xdtstart(icalcomponent *comp, struct icaltimetype v)
+{
+    const char *tzid;
+
+    ICALSETUPSET(ICAL_XDTSTART_PROPERTY);
+
+    if (prop == 0) {
+        prop = icalproperty_new_xdtstart(v);
+        icalcomponent_add_property(inner, prop);
+    } else {
+        icalproperty_remove_parameter_by_kind(prop, ICAL_TZID_PARAMETER);
+    }
+
+    icalproperty_set_xdtstart(prop, v);
+
+    if ((tzid = icaltime_get_tzid(v)) != NULL && !icaltime_is_utc(v)) {
+        icalproperty_add_parameter(prop, icalparameter_new_tzid(tzid));
+    }
+}
+
 /**     @brief Get DTSTART property as an icaltime
  *
  *      If DTSTART is a DATE-TIME with a timezone parameter and a
@@ -1441,7 +1471,10 @@ struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp)
     icalcomponent *inner = icalcomponent_get_inner(comp);
     icalproperty *prop;
 
-    prop = icalcomponent_get_first_property(inner, ICAL_DTSTART_PROPERTY);
+    prop = icalcomponent_get_first_property(inner, ICAL_XDTSTART_PROPERTY);
+    if (!prop) {
+        prop = icalcomponent_get_first_property(inner, ICAL_DTSTART_PROPERTY);
+    }
     if (prop == 0) {
         return icaltime_null_time();
     }
@@ -1464,8 +1497,14 @@ struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp)
 struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp);
-    icalproperty *end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
-    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+    icalproperty *end_prop = icalcomponent_get_first_property(inner, ICAL_XDTEND_PROPERTY);
+    if (!end_prop) {
+        end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
+    }
+    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_XDURATION_PROPERTY);
+    if (!dur_prop) {
+        dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+    }
     struct icaltimetype ret = icaltime_null_time();
 
     if (end_prop != 0) {
@@ -1522,6 +1561,40 @@ void icalcomponent_set_dtend(icalcomponent *comp, struct icaltimetype v)
     }
 }
 
+/**     @brief Set X-DTEND property to given icaltime
+ *
+ *      This method respects the icaltime type (DATE vs DATE-TIME) and
+ *      timezone (or lack thereof).
+ *
+ *      This also checks that a DURATION property isn't already there,
+ *      and returns an error if it is. It's the caller's responsibility
+ *      to remove it.
+ */
+void icalcomponent_set_xdtend(icalcomponent *comp, struct icaltimetype v)
+{
+    const char *tzid;
+
+    ICALSETUPSET(ICAL_XDTEND_PROPERTY);
+
+    if (icalcomponent_get_first_property(inner, ICAL_XDURATION_PROPERTY) != NULL) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return;
+    }
+
+    if (prop == 0) {
+        prop = icalproperty_new_xdtend(v);
+        icalcomponent_add_property(inner, prop);
+    } else {
+        icalproperty_remove_parameter_by_kind(prop, ICAL_TZID_PARAMETER);
+    }
+
+    icalproperty_set_xdtend(prop, v);
+
+    if ((tzid = icaltime_get_tzid(v)) != NULL && !icaltime_is_utc(v)) {
+        icalproperty_add_parameter(prop, icalparameter_new_tzid(tzid));
+    }
+}
+
 /**     @brief Set DURATION property to given icalduration
  *
  *      This method respects the icaltime type (DATE vs DATE-TIME) and
@@ -1548,6 +1621,32 @@ void icalcomponent_set_duration(icalcomponent *comp, struct icaldurationtype v)
     }
 }
 
+/**     @brief Set X-DURATION property to given icalduration
+ *
+ *      This method respects the icaltime type (DATE vs DATE-TIME) and
+ *      timezone (or lack thereof).
+ *
+ *      This also checks that a DTEND property isn't already there,
+ *      and returns an error if it is. It's the caller's responsibility
+ *      to remove it.
+ */
+void icalcomponent_set_xduration(icalcomponent *comp, struct icaldurationtype v)
+{
+    ICALSETUPSET(ICAL_XDURATION_PROPERTY);
+
+    if (icalcomponent_get_first_property(inner, ICAL_XDTEND_PROPERTY) != NULL) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return;
+    }
+
+    if (prop == 0) {
+        prop = icalproperty_new_xduration(v);
+        icalcomponent_add_property(inner, prop);
+    } else {
+        icalproperty_set_xduration(prop, v);
+    }
+}
+
 /**     @brief Get DURATION property as an icalduration
  *
  *      If a DURATION property is not present but a DTEND is, we use
@@ -1557,9 +1656,15 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp);
 
-    icalproperty *end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
+    icalproperty *end_prop = icalcomponent_get_first_property(inner, ICAL_XDTEND_PROPERTY);
+    if (!end_prop) {
+        end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
+    }
 
-    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_XDURATION_PROPERTY);
+    if (!dur_prop) {
+        dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+    }
 
     struct icaldurationtype ret = icaldurationtype_null_duration();
 
@@ -2259,7 +2364,9 @@ void icalcomponent_foreach_tzid(icalcomponent *comp,
         /* These are the only properties that can have a TZID. Note that
            COMPLETED, CREATED, DTSTAMP & LASTMODIFIED must be in UTC. */
         if (kind == ICAL_DTSTART_PROPERTY ||
+            kind == ICAL_XDTSTART_PROPERTY ||
             kind == ICAL_DTEND_PROPERTY ||
+            kind == ICAL_XDTEND_PROPERTY ||
             kind == ICAL_DUE_PROPERTY ||
             kind == ICAL_EXDATE_PROPERTY ||
             kind == ICAL_RDATE_PROPERTY) {
@@ -2465,7 +2572,10 @@ struct icaltimetype icalcomponent_get_due(icalcomponent *comp)
 
     icalproperty *due_prop = icalcomponent_get_first_property(inner, ICAL_DUE_PROPERTY);
 
-    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_XDURATION_PROPERTY);
+    if (!dur_prop) {
+        dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+    }
 
     if (due_prop != 0) {
         return icalproperty_get_datetime_with_component(due_prop, comp);
@@ -2500,7 +2610,10 @@ void icalcomponent_set_due(icalcomponent *comp, struct icaltimetype v)
 
     icalproperty *due_prop = icalcomponent_get_first_property(inner, ICAL_DUE_PROPERTY);
 
-    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_XDURATION_PROPERTY);
+    if (!dur_prop) {
+        dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+    }
 
     if (due_prop == 0 && dur_prop == 0) {
         due_prop = icalproperty_new_due(v);
@@ -2603,9 +2716,17 @@ static int comp_compare(void *a, void *b)
                 case ICAL_XSTANDARD_COMPONENT:
                 case ICAL_XDAYLIGHT_COMPONENT:
                     p1 = icalcomponent_get_first_property(c1,
-                                                          ICAL_DTSTART_PROPERTY);
+                                                          ICAL_XDTSTART_PROPERTY);
+                    if (!p1) {
+                        p1 = icalcomponent_get_first_property(c1,
+                                                              ICAL_DTSTART_PROPERTY);
+                    }
                     p2 = icalcomponent_get_first_property(c2,
-                                                          ICAL_DTSTART_PROPERTY);
+                                                          ICAL_XDTSTART_PROPERTY);
+                    if (!p2) {
+                        p2 = icalcomponent_get_first_property(c2,
+                                                              ICAL_DTSTART_PROPERTY);
+                    }
                     r = strcmp(icalproperty_get_value_as_string(p1),
                                icalproperty_get_value_as_string(p2));
                     break;

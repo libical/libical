@@ -31,6 +31,7 @@
 #include "icalerror.h"
 #include "icalparser.h"
 #include "icaltz-util.h"
+#include "icaltime.h"
 
 #include <ctype.h>
 #include <stddef.h>     /* for ptrdiff_t */
@@ -102,6 +103,7 @@ struct _icaltimezonechange
     int hour;
     int minute;
     int second;
+    int msec;
     /**< The time that the change came into effect, in UTC.
        Note that the prev_utc_offset applies to this local time,
        since we haven't changed to the new offset yet. */
@@ -395,6 +397,7 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
                     break;
 
                 case ICAL_DTSTART_PROPERTY:
+                case ICAL_XDTSTART_PROPERTY:
                     dtstart = icalproperty_get_dtstart(prop);
                     if (icaltime_compare(dtstart, current_max_date) > 0)
                         current_max_date = dtstart;
@@ -556,6 +559,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
     while (prop) {
         switch (icalproperty_isa(prop)) {
         case ICAL_DTSTART_PROPERTY:
+        case ICAL_XDTSTART_PROPERTY:
             dtstart = icalproperty_get_dtstart(prop);
             found_dtstart = 1;
             break;
@@ -573,6 +577,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
             has_rdate = 1;
             break;
         case ICAL_RRULE_PROPERTY:
+        case ICAL_XRRULE_PROPERTY:
             has_rrule = 1;
             break;
         default:
@@ -662,6 +667,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
             icalarray_append(changes, &change);
             break;
         case ICAL_RRULE_PROPERTY:
+        case ICAL_XRRULE_PROPERTY:
             rrule = icalproperty_get_rrule(prop);
 
             /* If the rrule UNTIL value is set and is in UTC, we convert it to
@@ -687,6 +693,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
             change.hour = dtstart.hour;
             change.minute = dtstart.minute;
             change.second = dtstart.second;
+            change.msec = dtstart.msec;
 
 #if 0
             printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
@@ -714,6 +721,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 change.hour = occ.hour;
                 change.minute = occ.minute;
                 change.second = occ.second;
+                change.msec = occ.msec;
 
 #if 0
                 printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
