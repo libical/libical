@@ -593,6 +593,36 @@ int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int e
     return 0;
 }
 
+int test_component_foreach_parameterized_msec(int64_t startOffsMSec, int64_t endOffsMSec, int expectedFoundInstances)
+{
+    const char* calStr =
+            "BEGIN:VCALENDAR\n"
+            "BEGIN:VEVENT\n"
+            "DTSTART:2019-04-08T12:30:00.250\n"
+            "DURATION:PT50m\n"
+            "RRULE:FREQ=MSEC;INTERVAL=250;COUNT=10\n"
+            "END:VEVENT\n"
+            "END:VCALENDAR\n";
+
+    icalcomponent *calendar = icalparser_parse_string(calStr);
+    icalcomponent *event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+    struct icaltimetype dtstart = icaltime_from_string("2019-04-08T12:30:00.250");
+    struct icaltimetype it_start = dtstart;
+    struct icaltimetype it_end = dtstart;
+    int foundCnt = 0;
+
+    icaltime_adjust(&it_start, 0, 0, 0, 0, startOffsMSec);
+    icaltime_adjust(&it_end, 0, 0, 0, 0, endOffsMSec);
+
+    icalcomponent_foreach_recurrence(event, it_start, it_end, test_component_foreach_callback, &foundCnt);
+    icalcomponent_free(calendar);
+
+    ok("icalcomponent_foreach_recurrence yielded the expected number of instances (ms prevision).", foundCnt == expectedFoundInstances);
+
+    return 0;
+}
+
 void test_component_foreach()
 {
     const char* calStr =
@@ -695,6 +725,51 @@ void test_component_foreach()
         test_component_foreach_parameterized(offs + 3600, offs + 3600 + 1, 0);
         test_component_foreach_parameterized(offs + 3600 + 1, offs + 3600 + 1, 0);
     }
+
+    calStr =
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART:2019-04-08T12:30:00.250\n"
+        "DURATION:PT50m\n"
+        "RRULE:FREQ=MSEC;INTERVAL=250;COUNT=10\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
+    calendar = icalparser_parse_string(calStr);
+    event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+    t_start = icaltime_from_string("2019-04-08T12:30:00.250");
+    t_end = icaltime_from_string("2019-04-08T12:30:00.750");
+
+    foundExpectedCnt = 0;
+    icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &foundExpectedCnt);
+    ok("Exactly two instances was returned for an event (ms precision).", foundExpectedCnt == 2);
+
+    t_start = icaltime_from_string("2019-04-08T12:32:00.230");
+    t_end = icaltime_from_string("2019-04-08T12:34:00.230");
+
+    foundExpectedCnt = 0;
+    icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &foundExpectedCnt);
+    ok("No instance was returned for an event where DTSTART lies outside the iterator limits (ms precision).", foundExpectedCnt == 0);
+
+    icalcomponent_free(calendar);
+
+    for (i = 0; i < 10; i++) {
+
+      /* Add 250ms with every run, so the first run will address the
+      first recurrence instance, the second run the second instance,
+      etc.
+      */
+      int offs = i * 250;
+
+      test_component_foreach_parameterized_msec(offs + -1, offs + -1, 0);
+      test_component_foreach_parameterized_msec(offs + -1, offs + 0, 0);
+      test_component_foreach_parameterized_msec(offs + -1, offs + 1, 1);
+      test_component_foreach_parameterized_msec(offs + 0, offs + 0, 0);
+      test_component_foreach_parameterized_msec(offs + 0, offs + 1, 1);
+      test_component_foreach_parameterized_msec(offs + 1, offs + 1, 1);
+    }
+
 }
 
 void test_recur_iterator_set_start()
@@ -1357,20 +1432,6 @@ void test_expand_recurrence()
     int_is("Get an array of 5 items", numfound, 5);
 }
 
-enum byrule
-{
-    NO_CONTRACTION = -1,
-    BY_SECOND = 0,
-    BY_MINUTE = 1,
-    BY_HOUR = 2,
-    BY_DAY = 3,
-    BY_MONTH_DAY = 4,
-    BY_YEAR_DAY = 5,
-    BY_WEEK_NO = 6,
-    BY_MONTH = 7,
-    BY_SET_POS
-};
-
 void icalrecurrencetype_test()
 {
     icalvalue *v =
@@ -1470,6 +1531,12 @@ void test_duration()
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("PT10H10M10S", icaldurationtype_as_int(d), 36610);
+
+    d = icaldurationtype_from_string("PT10H10M10S150m");
+    if (VERBOSE) {
+        printf("%s\n", icaldurationtype_as_ical_string(d));
+    }
+    int_is("PT10H10M10S150m", icaldurationtype_as_msec(d), 36610150);
 
     d = icaldurationtype_from_string("P7W");
     if (VERBOSE) {

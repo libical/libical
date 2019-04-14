@@ -60,6 +60,38 @@ struct icaldurationtype icaldurationtype_from_int(int t)
     return dur;
 }
 
+struct icaldurationtype icaldurationtype_from_msec(int64_t t)
+{
+    struct icaldurationtype dur;
+    uint64_t ut;
+    uint64_t used = 0;
+
+    dur = icaldurationtype_null_duration();
+
+    if (t < 0) {
+        dur.is_neg = 1;
+        t = -t;
+    }
+
+    ut = (uint64_t)t;
+    if (ut % (1000LL * 60 * 60 * 24 * 7) == 0) {
+        dur.weeks = ut / (60 * 60 * 24 * 7);
+    } else {
+        used += dur.weeks * (1000LL * 60 * 60 * 24 * 7);
+        dur.days = (ut - used) / (60 * 60 * 24);
+        used += dur.days * (1000LL * 60 * 60 * 24);
+        dur.hours = (ut - used) / (1000LL * 60 * 60);
+        used += dur.hours * (1000LL * 60 * 60);
+        dur.minutes = (ut - used) / (1000LL * 60);
+        used += dur.minutes * (1000LL * 60);
+        dur.seconds = (ut - used) / (1000LL);
+        used += dur.seconds * (1000LL);
+        dur.msecs = (ut - used);
+    }
+
+    return dur;
+}
+
 struct icaldurationtype icaldurationtype_from_string(const char *str)
 {
     int i;
@@ -165,6 +197,15 @@ struct icaldurationtype icaldurationtype_from_string(const char *str)
                 digits = -1;
                 break;
             }
+        case 'm':
+            {
+                if (time_flag == 0 || d.msecs != 0 || digits == -1) {
+                    goto error;
+                }
+                d.msecs = (unsigned int)digits;
+                digits = -1;
+                break;
+            }
         case 'W':
             {
                 if (time_flag == 1 || date_flag == 1 || d.weeks != 0 || digits == -1) {
@@ -223,14 +264,14 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
     char *buf;
     size_t buf_size = 256;
     char *buf_ptr = 0;
-    int seconds;
+    int64_t msecs;
 
     buf = (char *)icalmemory_new_buffer(buf_size);
     buf_ptr = buf;
 
-    seconds = icaldurationtype_as_int(d);
+    msecs = icaldurationtype_as_msec(d);
 
-    if (seconds != 0) {
+    if (msecs != 0) {
 
         if (d.is_neg == 1) {
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, '-');
@@ -246,7 +287,7 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
             append_duration_segment(&buf, &buf_ptr, &buf_size, "D", d.days);
         }
 
-        if (d.hours != 0 || d.minutes != 0 || d.seconds != 0) {
+        if (d.hours != 0 || d.minutes != 0 || d.seconds != 0 || d.msecs != 0) {
 
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, "T");
 
@@ -258,6 +299,9 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
             }
             if (d.seconds != 0) {
                 append_duration_segment(&buf, &buf_ptr, &buf_size, "S", d.seconds);
+            }
+            if (d.msecs != 0) {
+                append_duration_segment(&buf, &buf_ptr, &buf_size, "m", d.msecs);
             }
         }
     } else {
@@ -277,6 +321,17 @@ int icaldurationtype_as_int(struct icaldurationtype dur)
                  * (dur.is_neg == 1 ? -1 : 1));
 }
 
+int64_t icaldurationtype_as_msec(struct icaldurationtype dur)
+{
+  return (int64_t)((dur.msecs +
+                      1000LL * (dur.seconds +
+                          60 * (dur.minutes +
+                              60 * (dur.hours +
+                                  24 * (dur.days +
+                                      7 * dur.weeks)))))
+               * (dur.is_neg == 1 ? -1 : 1));
+}
+
 struct icaldurationtype icaldurationtype_null_duration(void)
 {
     struct icaldurationtype d;
@@ -288,7 +343,7 @@ struct icaldurationtype icaldurationtype_null_duration(void)
 
 int icaldurationtype_is_null_duration(struct icaldurationtype d)
 {
-    if (icaldurationtype_as_int(d) == 0) {
+    if (icaldurationtype_as_msec(d) == 0) {
         return 1;
     } else {
         return 0;
@@ -319,12 +374,14 @@ int icaldurationtype_is_bad_duration(struct icaldurationtype d)
 struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype d)
 {
     if (!d.is_neg) {
+        t.msec += d.msecs;
         t.second += d.seconds;
         t.minute += d.minutes;
         t.hour += d.hours;
         t.day += d.days;
         t.day += d.weeks * 7;
     } else {
+        t.msec -= d.msecs;
         t.second -= d.seconds;
         t.minute -= d.minutes;
         t.hour -= d.hours;
