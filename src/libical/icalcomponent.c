@@ -1496,16 +1496,19 @@ struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp)
  */
 struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
 {
+    icalproperty *end_prop, *dur_prop;
     icalcomponent *inner = icalcomponent_get_inner(comp);
-    icalproperty *end_prop = icalcomponent_get_first_property(inner, ICAL_XDTEND_PROPERTY);
+    struct icaltimetype ret = icaltime_null_time();
+
+    end_prop = icalcomponent_get_first_property(inner, ICAL_XDTEND_PROPERTY);
     if (!end_prop) {
         end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
     }
-    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_XDURATION_PROPERTY);
+
+    dur_prop = icalcomponent_get_first_property(inner, ICAL_XDURATION_PROPERTY);
     if (!dur_prop) {
         dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
     }
-    struct icaltimetype ret = icaltime_null_time();
 
     if (end_prop != 0) {
         ret = icalproperty_get_datetime_with_component(end_prop, comp);
@@ -1654,19 +1657,19 @@ void icalcomponent_set_xduration(icalcomponent *comp, struct icaldurationtype v)
  */
 struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
 {
+    icalproperty *end_prop, *dur_prop;
     icalcomponent *inner = icalcomponent_get_inner(comp);
+    struct icaldurationtype ret = icaldurationtype_null_duration();
 
-    icalproperty *end_prop = icalcomponent_get_first_property(inner, ICAL_XDTEND_PROPERTY);
+    end_prop = icalcomponent_get_first_property(inner, ICAL_XDTEND_PROPERTY);
     if (!end_prop) {
         end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
     }
 
-    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_XDURATION_PROPERTY);
+    dur_prop = icalcomponent_get_first_property(inner, ICAL_XDURATION_PROPERTY);
     if (!dur_prop) {
         dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
     }
-
-    struct icaldurationtype ret = icaldurationtype_null_duration();
 
     if (dur_prop != 0 && end_prop == 0) {
         ret = icalproperty_get_duration(dur_prop);
