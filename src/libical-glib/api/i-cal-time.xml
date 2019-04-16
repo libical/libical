@@ -41,7 +41,7 @@
         <comment xml:space="preserve">Create a null date, which indicates no time has been set</comment>
     </method>
     <method name="i_cal_time_current_time_with_zone" corresponds="icaltime_current_time_with_zone" kind="others" since="1.0">
-        <parameter type="ICalTimezone *" name="zone" annotation="in, transfer none" comment="The timezone used to create a #ICalTime according to the current time"/>
+        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The timezone used to create a #ICalTime according to the current time"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
         <comment xml:space="preserve">Create a #ICalTime according to the timezone and current time</comment>
     </method>
@@ -74,7 +74,7 @@
     </method>
     <method name="i_cal_time_as_timet_with_zone" corresponds="icaltime_as_timet_with_zone" since="1.0">
         <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
-        <parameter type="const ICalTimezone *" name="zone" annotation="in, transfer none, nullable" comment="The timezone"/>
+        <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The timezone"/>
         <returns type="time_t" comment="the time as seconds past the UNIX epoch" />
         <comment xml:space="preserve">Return the time as seconds past the UNIX epoch, using timezones.</comment>
     </method>
@@ -90,7 +90,7 @@
     </method>
     <method name="i_cal_time_set_timezone" corresponds="icaltime_set_timezone" kind="set" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime"/>
-        <parameter type="const ICalTimezone *" name="zone" annotation="transfer none, nullable" comment="The timezone"/>
+        <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The timezone"/>
         <comment xml:space="preserve">Set the timezone of the @tt</comment>
     </method>
     <method name="i_cal_time_get_tzid" corresponds="icaltime_get_tzid" kind="get" since="1.0">
@@ -149,14 +149,14 @@
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">like icaltime_compare, but only use the date parts.</comment>
+        <comment xml:space="preserve">like i_cal_time_compare, but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_compare_date_only_tz" corresponds="icaltime_compare_date_only_tz" since="1.0">
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
-	<parameter type="ICalTimezone *" name="zone" annotation="transfer full" comment="The target timezone"/>
+	<parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">like icaltime_compare_tz, but only use the date parts.</comment>
+        <comment xml:space="preserve">like i_cal_time_compare_tz, but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_adjust" corresponds="icaltime_adjust" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime to be set"/>
@@ -164,7 +164,7 @@
         <parameter type="const gint" name="hours" comment="difference of hours adjusted"/>
         <parameter type="const gint" name="minutes" comment="difference of minutes adjusted"/>
         <parameter type="const gint" name="seconds" comment="difference of seconds adjusted"/>
-        <comment xml:space="preserve">like icaltime_compare_tz, but only use the date parts.</comment>
+        <comment xml:space="preserve">like i_cal_time_compare_tz, but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">
         <parameter type="const ICalTime *" name="t" annotation="in, transfer none" comment="The #ICalTime to be normalized"/>
@@ -185,13 +185,13 @@
     </method>
     <method name="i_cal_time_convert_to_zone" corresponds="icaltime_convert_to_zone" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be converted"/>
-        <parameter type="ICalTimezone *" name="zone" annotation="transfer none, nullable" comment="The target timezone"/>
+        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The converted #ICalTime" />
         <comment xml:space="preserve">Convert @tt to @zone and return new %ICalTime object.</comment>
     </method>
     <method name="i_cal_time_convert_to_zone_inplace" corresponds="CUSTOM" since="3.0.5">
         <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
-        <parameter type="ICalTimezone *" name="zone" annotation="transfer none, nullable" comment="The target timezone"/>
+        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
         <comment xml:space="preserve">Convert @tt to @zone and store the result into @tt.</comment>
 	<custom xml:space="preserve">    icaltimetype *itt;
 
