@@ -302,5 +302,23 @@ def main():
     comp.foreach_recurrence(ICalGLib.Time.from_string("20180321T000000Z"), ICalGLib.Time.from_string("20180323T235959Z"), foreachRecurrenceCb, counter)
     assert counter.counter == 3
 
+    comp = ICalGLib.Component.new_from_string(event_str1);
+    prop = comp.get_first_property(ICalGLib.PropertyKind.DTSTART_PROPERTY)
+    prop.remove_parameter_by_kind(ICalGLib.ParameterKind.TZID_PARAMETER)
+    tz = ICalGLib.Timezone.get_builtin_timezone("Europe/Prague")
+    prop.set_parameter(ICalGLib.Parameter.new_tzid(tz.get_tzid()))
+
+    itt = prop.get_datetime_with_component(comp)
+    assert itt.get_timezone() != None
+    assert itt.get_timezone().get_location() == "Europe/Prague"
+
+    itt = prop.get_datetime_with_component(None)
+    assert itt.get_timezone() != None
+    assert itt.get_timezone().get_location() == "Europe/Prague"
+
+    itt = comp.get_dtstart()
+    assert itt.get_timezone() != None
+    assert itt.get_timezone().get_location() == "Europe/Prague"
+
 if __name__ == "__main__":
     main()
