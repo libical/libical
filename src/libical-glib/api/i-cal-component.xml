@@ -94,6 +94,14 @@
         <parameter type="ICalComponent *" name="component" annotation="nullable" comment="An #ICalComponent."/>
         <comment xml:space="preserve">Set the parent #ICalComponent of the specified #ICalProperty.</comment>
     </method>
+    <method name="i_cal_property_get_datetime_with_component" corresponds="icalproperty_get_datetime_with_component" kind="get" since="3.0.5">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty."/>
+        <parameter type="ICalComponent *" name="comp" annotation="nullable" comment="An #ICalComponent."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get a DATE or DATE-TIME property as an #ICalTime."/>
+        <comment xml:space="preserve">If the property is a DATE-TIME with a TZID parameter and a corresponding VTIMEZONE is present in the component, the returned component will already be in the correct timezone; otherwise the caller is responsible for converting it.
+ *
+ * The @comp can be NULL, in which case the parent of the @prop is used to find the corresponding time zone.</comment>
+    </method>
     <method name="i_cal_component_get_current_property" corresponds="icalcomponent_get_current_property" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
         <returns type="ICalProperty *" annotation="transfer full" translator_argus="(GObject *)component" comment="The current #ICalProperty."/>
