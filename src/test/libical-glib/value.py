@@ -32,13 +32,13 @@ assert(value.isa_value() == 1);
 
 string = "This is a link";
 value_from_string = ICalGLib.Value.new_from_string(kind, string);
-assert(value_from_string.as_ical_string_r() == string);
+assert(value_from_string.as_ical_string() == string);
 assert(value_from_string.is_valid() == 1);
 assert(value_from_string.isa() == kind);
 assert(value_from_string.isa_value() == 1);
 
-value_from_string_clone = value_from_string.new_clone();
-assert(value_from_string_clone.as_ical_string_r() == string);
+value_from_string_clone = value_from_string.clone();
+assert(value_from_string_clone.as_ical_string() == string);
 assert(value_from_string_clone.is_valid() == 1);
 assert(value_from_string_clone.isa() == kind);
 assert(value_from_string_clone.isa_value() == 1);
@@ -64,7 +64,7 @@ assert(compare_result == ICalGLib.ParameterXliccomparetype.NOTEQUAL);
 
 kind_string = ICalGLib.Value.kind_to_string(kind);
 assert(kind_string == "ATTACH");
-converted_kind = ICalGLib.Value.string_to_kind(kind_string);
+converted_kind = ICalGLib.Value.kind_from_string(kind_string);
 assert(converted_kind == kind);
 
 szText = "This is a text\nand this is a new line";

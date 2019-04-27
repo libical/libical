@@ -102,12 +102,12 @@
         <parameter type="gshort" name="month" comment="The month to be decoded."/>
         <returns type="gint" comment="The actual month number regardless of the leap flag."/>
     </method>
-    <method name="i_cal_recurrence_from_string" corresponds="icalrecurrencetype_from_string" since="1.0">
+    <method name="i_cal_recurrence_new_from_string" corresponds="icalrecurrencetype_from_string" since="1.0">
         <parameter type="const gchar *" name="str" comment="The string representation of the #ICalRecurrence"/>
         <returns type="ICalRecurrence *" annotation="transfer full" comment="The #ICalRecurrence converted from @str."/>
         <comment xml:space="preserve">Convert a string to a #ICalRecurrence.</comment>
     </method>
-    <method name="i_cal_recurrence_as_string_r" corresponds="icalrecurrencetype_as_string_r" since="1.0">
+    <method name="i_cal_recurrence_to_string" corresponds="icalrecurrencetype_as_string_r" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" native_op="POINTER" comment="The #ICalRecurrence to be converted."/>
         <returns type="gchar *" annotation="transfer full" comment="The string representation of @recur."/>
         <comment xml:space="preserve">Convert a #ICalRecurrence to a string.</comment>
