@@ -127,13 +127,13 @@ def foreachRecurrenceCb(comp, span, user_data):
 #############################################################
 
 def main():
-    #Test as_ical_string_r
+    #Test as_ical_string
     comp = ICalGLib.Component.new_from_string(event_str1);
-    string = comp.as_ical_string_r();
+    string = comp.as_ical_string();
 
     #Test new_clone
-    clone = comp.new_clone();
-    string1 = clone.as_ical_string_r();
+    clone = comp.clone();
+    string1 = clone.as_ical_string();
     assert(string == string1);
     assert(comp.is_valid() == 1);
     assert(comp.isa_component() == 1);
@@ -150,7 +150,7 @@ def main():
 
     #Test kind_to_string
     kind_string = ICalGLib.Component.kind_to_string(ICalGLib.ComponentKind.VEVENT_COMPONENT);
-    assert(ICalGLib.Component.string_to_kind(kind_string) == ICalGLib.ComponentKind.VEVENT_COMPONENT);
+    assert(ICalGLib.Component.kind_from_string(kind_string) == ICalGLib.ComponentKind.VEVENT_COMPONENT);
 
     #Test child component manipulation
     parent = ICalGLib.Component.new_from_string(event_str1);
@@ -227,20 +227,20 @@ def main():
     component.add_property(ICalGLib.Property.new_from_string("SUMMARY:20140306T090000"));
     assert(component.count_properties(ICalGLib.PropertyKind.SUMMARY_PROPERTY) == 3);
     property1 = component.get_first_property(ICalGLib.PropertyKind.SUMMARY_PROPERTY);
-    assert(property1.as_ical_string_r().split('\n', 1)[0] == "SUMMARY:Bastille Day Party\r");
+    assert(property1.as_ical_string().split('\n', 1)[0] == "SUMMARY:Bastille Day Party\r");
     property2 = component.get_next_property(ICalGLib.PropertyKind.SUMMARY_PROPERTY);
-    assert(property2.as_ical_string_r().split('\n', 1)[0] == "SUMMARY:event-uid-123\r");
+    assert(property2.as_ical_string().split('\n', 1)[0] == "SUMMARY:event-uid-123\r");
     property3 = component.get_next_property(ICalGLib.PropertyKind.SUMMARY_PROPERTY);
-    assert(property3.as_ical_string_r().split('\n', 1)[0] == "SUMMARY:20140306T090000\r");
+    assert(property3.as_ical_string().split('\n', 1)[0] == "SUMMARY:20140306T090000\r");
 
     #Test getters and setters
     #Test get_dtstart and get_dtend
     comp = ICalGLib.Component.new_from_string(event_str1);
     dtstart = comp.get_dtstart();
-    start_string = ICalGLib.Time.as_ical_string_r(dtstart);
+    start_string = ICalGLib.Time.as_ical_string(dtstart);
     assert(start_string == "20140306T090000");
     dtend = comp.get_dtend();
-    end_string = dtend.as_ical_string_r();
+    end_string = dtend.as_ical_string();
     assert(end_string == "20140306T093000");
 
     #Test span
@@ -249,8 +249,8 @@ def main():
     assert(span.get_end() == 1394098200);
     assert(span.get_is_busy() == 1);
     utc = ICalGLib.Timezone.get_utc_timezone();
-    comp.set_dtstart(ICalGLib.Time.from_timet_with_zone(1494096400, 0, utc));
-    comp.set_dtend(ICalGLib.Time.from_timet_with_zone(1494098200, 0, utc));
+    comp.set_dtstart(ICalGLib.Time.new_from_timet_with_zone(1494096400, 0, utc));
+    comp.set_dtend(ICalGLib.Time.new_from_timet_with_zone(1494098200, 0, utc));
     span = comp.get_span();
     assert(span.get_start() == 1494096400);
     assert(span.get_end() == 1494098200);
@@ -299,7 +299,7 @@ def main():
 
     counter = TestCounter()
     comp = ICalGLib.Component.new_from_string(recurring_str)
-    comp.foreach_recurrence(ICalGLib.Time.from_string("20180321T000000Z"), ICalGLib.Time.from_string("20180323T235959Z"), foreachRecurrenceCb, counter)
+    comp.foreach_recurrence(ICalGLib.Time.new_from_string("20180321T000000Z"), ICalGLib.Time.new_from_string("20180323T235959Z"), foreachRecurrenceCb, counter)
     assert counter.counter == 3
 
     comp = ICalGLib.Component.new_from_string(event_str1);

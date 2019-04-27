@@ -179,7 +179,7 @@ def main():
     parent.add_component(comp3);
     parent.add_component(comp4);
 
-    assert parent.as_ical_string_r() == combined_string;
+    assert parent.as_ical_string() == combined_string;
 
     count = parent.count_components(ICalGLib.ComponentKind.VEVENT_COMPONENT);
     child_component = parent.get_first_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
@@ -187,8 +187,8 @@ def main():
         if (child_component.get_summary() == "childEvent2"):
             child_component.set_summary("childEventTwo");
 
-            start = ICalGLib.Time.from_string("20141115T211923");
-            end = ICalGLib.Time.from_string("20141115T221923");
+            start = ICalGLib.Time.new_from_string("20141115T211923");
+            end = ICalGLib.Time.new_from_string("20141115T221923");
             child_component.set_dtstart(start);
             child_component.set_dtend(end);
 
@@ -202,7 +202,7 @@ def main():
         if (i != count-1):
             child_component = parent.get_next_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
 
-    modifiedCombinedString = parent.as_ical_string_r();
+    modifiedCombinedString = parent.as_ical_string();
     newParent = ICalGLib.Component.new_from_string(modifiedCombinedString);
 
     count = parent.count_components(ICalGLib.ComponentKind.VEVENT_COMPONENT);
@@ -212,19 +212,19 @@ def main():
             child_component.set_summary("childEventTwo");
 
             dtstart = child_component.get_dtstart();
-            start_string = ICalGLib.Time.as_ical_string_r(dtstart);
+            start_string = ICalGLib.Time.as_ical_string(dtstart);
             assert(start_string == "20141115T211923");
             dtend = child_component.get_dtend();
-            end_string = ICalGLib.Time.as_ical_string_r(dtend);
+            end_string = ICalGLib.Time.as_ical_string(dtend);
             assert(end_string == "20141115T221923");
 
             timestamp = child_component.get_dtstamp();
-            assert(ICalGLib.Time.as_ical_string_r(timestamp) == "20141115T211923");
+            assert(ICalGLib.Time.as_ical_string(timestamp) == "20141115T211923");
             assert(child_component.get_location() == "East Lansing, MI, US");
             assert(child_component.get_relcalid() == "relcalid for childEventTwo");
 
             recurProperty = child_component.get_first_property(ICalGLib.PropertyKind.RRULE_PROPERTY);
-            assert recurProperty.as_ical_string_r() == "RRULE:FREQ=DAILY;COUNT=5;INTERVAL=10\r\n";
+            assert recurProperty.as_ical_string() == "RRULE:FREQ=DAILY;COUNT=5;INTERVAL=10\r\n";
         if (i != count-1):
             child_component = parent.get_next_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
 
