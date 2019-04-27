@@ -1,0 +1,2 @@
+_* skip=true
+memory_* parent="ICal.Memory" name="memory_(.+)"
