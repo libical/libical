@@ -22,6 +22,7 @@ Version 3.0.5 (NOT RELEASED YET):
  * New publicly available function:
      + icalproperty_get_datetime_with_component()
  * Allow reset DATE/DATE-TIME VALUE parameter for all-day events
+ * icalproperty_get_datetime_with_component() will use location as TZID fallback.
  * New CMake option ENABLE_GTK_DOC for disabling the libical-glib developer documentation
  * GObject Introspection - use $MAJOR-0 versioning
  * libical-glib API is considered unstable, define LIBICAL_GLIB_UNSTABLE_API=1 before
