@@ -4274,6 +4274,46 @@ void test_set_date_datetime_value(void)
     icalproperty_free(prop);
 }
 
+void test_timezone_from_builtin(void)
+{
+    const char *strcomp =
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VTIMEZONE\r\n"
+        "TZID:my_zone\r\n"
+        "BEGIN:STANDARD\r\n"
+        "TZNAME:my_zone\r\n"
+        "DTSTART:19160429T230000\r\n"
+        "TZOFFSETFROM:+0100\r\n"
+        "TZOFFSETTO:+0200\r\n"
+        "RRULE:FREQ=YEARLY;UNTIL=19160430T220000Z;BYDAY=-1SU;BYMONTH=4\r\n"
+        "END:STANDARD\r\n"
+        "END:VTIMEZONE\r\n"
+        "BEGIN:VEVENT\r\n"
+        "UID:0\r\n"
+        "DTSTART;TZID=my_zone:20180101T010000\r\n"
+        "DTEND;TZID=/softwarestudio.org/America/New_York:20180101T030000\r\n"
+        "DUE;TZID=Europe/Berlin:20180101T030000\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    icalcomponent *comp, *subcomp;
+    struct icaltimetype dtstart, dtend, due;
+
+    comp = icalcomponent_new_from_string(strcomp);
+    ok("icalcomponent_new_from_string()", (comp != NULL));
+    subcomp = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+    ok("get subcomp", (subcomp != NULL));
+
+    dtstart = icalcomponent_get_dtstart(subcomp);
+    dtend = icalcomponent_get_dtend(subcomp);
+    due = icalcomponent_get_due(subcomp);
+
+    ok("DTSTART is my_zone", (strcmp(icaltimezone_get_tzid((icaltimezone *) dtstart.zone), "my_zone") == 0));
+    ok("DTEND is America/New_York", (strcmp(icaltimezone_get_location((icaltimezone *) dtend.zone), "America/New_York") == 0));
+    ok("DUE is Europe/Berlin", (strcmp(icaltimezone_get_location((icaltimezone *) due.zone), "Europe/Berlin") == 0));
+
+    icalcomponent_free(comp);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4406,6 +4446,9 @@ int main(int argc, char *argv[])
     test_run("Test kind_to_string", test_kind_to_string, do_test, do_header);
     test_run("Test string_to_kind", test_string_to_kind, do_test, do_header);
     test_run("Test set DATE/DATE-TIME VALUE", test_set_date_datetime_value, do_test, do_header);
+    if (!icaltimezone_get_builtin_tzdata()) {
+        test_run("Test timezone from builtin", test_timezone_from_builtin, do_test, do_header);
+    }
 
     /** OPTIONAL TESTS go here... **/
 
