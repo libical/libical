@@ -24,7 +24,6 @@ list(APPEND API_FILES
   api/i-cal-enums.xml
   api/i-cal-error.xml
   api/i-cal-geo.xml
-  api/i-cal-langbind.xml
   api/i-cal-memory.xml
   api/i-cal-mime.xml
   api/i-cal-parameter.xml
