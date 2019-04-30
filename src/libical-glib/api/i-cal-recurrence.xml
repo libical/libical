@@ -190,7 +190,7 @@
         <custom>	GArray *array;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, TRUE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_second, ICAL_BY_SECOND_SIZE);
+	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_second, I_CAL_BY_SECOND_SIZE);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_second_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -206,10 +206,10 @@
     rt = (struct icalrecurrencetype *)i_cal_object_get_native((ICalObject *)recur);
     g_return_if_fail(rt != NULL);
 
-    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; ICAL_BY_SECOND_SIZE; ii++) {
+    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; I_CAL_BY_SECOND_SIZE; ii++) {
         rt->by_second[ii] = g_array_index(values, gshort, ii);
     }
-    if(ii &lt; ICAL_BY_SECOND_SIZE)
+    if(ii &lt; I_CAL_BY_SECOND_SIZE)
         rt->by_second[ii] = I_CAL_RECURRENCE_ARRAY_MAX;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_second" corresponds="CUSTOM" kind="get" since="1.0">
@@ -217,8 +217,8 @@
         <parameter type="guint" name="index" comment="The index in by_second of #ICalRecurrence, less than %I_CAL_BY_SECOND_SIZE."/>
         <returns type="gshort" comment="The by_second of #ICalRecurrence at index @index."/>
         <comment>Get the by_second value at index @index. The index should be less than %I_CAL_BY_SECOND_SIZE.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), ICAL_RECURRENCE_ARRAY_MAX);
-    g_return_val_if_fail (index &lt; ICAL_BY_SECOND_SIZE, ICAL_RECURRENCE_ARRAY_MAX);
+        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_RECURRENCE_ARRAY_MAX);
+    g_return_val_if_fail (index &lt; I_CAL_BY_SECOND_SIZE, I_CAL_RECURRENCE_ARRAY_MAX);
     return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_second[index];</custom>
     </method>
     <method name="i_cal_recurrence_set_by_second" corresponds="CUSTOM" kind="set" since="1.0">
@@ -227,17 +227,17 @@
         <parameter type="gshort" name="value" comment="The value to be set into by_second of #ICalRecurrence."/>
         <comment>Set the by_second array from #ICalRecurrence at the given index. The array size is I_CAL_BY_SECOND_SIZE.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	g_return_if_fail (index &lt; ICAL_BY_SECOND_SIZE);
+	g_return_if_fail (index &lt; I_CAL_BY_SECOND_SIZE);
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_second[index] = value;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_minute_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence."/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_minute of #ICalRecurrence."/>
-        <comment>Get the by_minute array from #ICalRecurrence. The array size is ICAL_BY_MINUTE_SIZE.</comment>
+        <comment>Get the by_minute array from #ICalRecurrence. The array size is I_CAL_BY_MINUTE_SIZE.</comment>
         <custom>	GArray *array;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_minute, ICAL_BY_MINUTE_SIZE);
+	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_minute, I_CAL_BY_MINUTE_SIZE);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_minute_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -253,10 +253,10 @@
     rt = (struct icalrecurrencetype *)i_cal_object_get_native((ICalObject *)recur);
     g_return_if_fail(rt != NULL);
 
-    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; ICAL_BY_MINUTE_SIZE; ii++) {
+    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; I_CAL_BY_MINUTE_SIZE; ii++) {
         rt->by_minute[ii] = g_array_index(values, gshort, ii);
     }
-    if(ii &lt; ICAL_BY_MINUTE_SIZE)
+    if(ii &lt; I_CAL_BY_MINUTE_SIZE)
         rt->by_minute[ii] = I_CAL_RECURRENCE_ARRAY_MAX;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_minute" corresponds="CUSTOM" kind="get" since="1.0">
@@ -264,17 +264,17 @@
         <parameter type="guint" name="index" comment="The index in by_minute of #ICalRecurrence, less than %I_CAL_BY_MINUTE_SIZE."/>
         <returns type="gshort" comment="The by_minute of #ICalRecurrence at index @index."/>
         <comment>Get the by_minute value at index @index. The index should be less than %I_CAL_BY_MINUTE_SIZE.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), ICAL_RECURRENCE_ARRAY_MAX);
-    g_return_val_if_fail (index &lt; ICAL_BY_MINUTE_SIZE, ICAL_RECURRENCE_ARRAY_MAX);
+        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_RECURRENCE_ARRAY_MAX);
+    g_return_val_if_fail (index &lt; I_CAL_BY_MINUTE_SIZE, I_CAL_RECURRENCE_ARRAY_MAX);
     return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_minute[index];</custom>
     </method>
     <method name="i_cal_recurrence_set_by_minute" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence."/>
         <parameter type="guint" name="index" comment="The index in by_minute of #ICalRecurrence."/>
         <parameter type="gshort" name="value" comment="The value to be set into by_minute of #ICalRecurrence."/>
-        <comment>Set the by_minute array from #ICalRecurrence at the given index. The array size is ICAL_BY_MINUTE_SIZE.</comment>
+        <comment>Set the by_minute array from #ICalRecurrence at the given index. The array size is I_CAL_BY_MINUTE_SIZE.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	g_return_if_fail (index &lt; ICAL_BY_MINUTE_SIZE);
+	g_return_if_fail (index &lt; I_CAL_BY_MINUTE_SIZE);
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_minute[index] = value;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_hour_array" corresponds="CUSTOM" kind="get" since="1.0">
@@ -284,7 +284,7 @@
         <custom>	GArray *array;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_hour, ICAL_BY_HOUR_SIZE);
+	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_hour, I_CAL_BY_HOUR_SIZE);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_hour_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -300,10 +300,10 @@
     rt = (struct icalrecurrencetype *)i_cal_object_get_native((ICalObject *)recur);
     g_return_if_fail(rt != NULL);
 
-    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; ICAL_BY_HOUR_SIZE; ii++) {
+    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; I_CAL_BY_HOUR_SIZE; ii++) {
         rt->by_hour[ii] = g_array_index(values, gshort, ii);
     }
-    if(ii &lt; ICAL_BY_HOUR_SIZE)
+    if(ii &lt; I_CAL_BY_HOUR_SIZE)
         rt->by_hour[ii] = I_CAL_RECURRENCE_ARRAY_MAX;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_hour" corresponds="CUSTOM" kind="get" since="1.0">
@@ -311,8 +311,8 @@
         <parameter type="guint" name="index" comment="The index in by_hour of #ICalRecurrence, less than %I_CAL_BY_HOUR_SIZE."/>
         <returns type="gshort" comment="The by_hour of #ICalRecurrence at index @index."/>
         <comment>Get the by_hour value at index @index. The index should be less than %I_CAL_BY_HOUR_SIZE.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), ICAL_RECURRENCE_ARRAY_MAX);
-    g_return_val_if_fail (index &lt; ICAL_BY_HOUR_SIZE, ICAL_RECURRENCE_ARRAY_MAX);
+        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_RECURRENCE_ARRAY_MAX);
+    g_return_val_if_fail (index &lt; I_CAL_BY_HOUR_SIZE, I_CAL_RECURRENCE_ARRAY_MAX);
     return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_hour[index];</custom>
     </method>
     <method name="i_cal_recurrence_set_by_hour" corresponds="CUSTOM" kind="set" since="1.0">
@@ -321,17 +321,17 @@
         <parameter type="gshort" name="value" comment="The value to be set into by_hour of #ICalRecurrence."/>
         <comment>Set the by_hour array from #ICalRecurrence at the given index. The array size is I_CAL_BY_HOUR_SIZE.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	g_return_if_fail (index &lt; ICAL_BY_HOUR_SIZE);
+	g_return_if_fail (index &lt; I_CAL_BY_HOUR_SIZE);
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_hour[index] = value;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_day_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence."/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_day of #ICalRecurrence."/>
-        <comment>Get the by_day array from #ICalRecurrence. The array size is ICAL_BY_DAY_SIZE.</comment>
+        <comment>Get the by_day array from #ICalRecurrence. The array size is I_CAL_BY_DAY_SIZE.</comment>
         <custom>	GArray *array;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_day, ICAL_BY_DAY_SIZE);
+	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_day, I_CAL_BY_DAY_SIZE);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_day_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -347,10 +347,10 @@
     rt = (struct icalrecurrencetype *)i_cal_object_get_native((ICalObject *)recur);
     g_return_if_fail(rt != NULL);
 
-    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; ICAL_BY_DAY_SIZE; ii++) {
+    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; I_CAL_BY_DAY_SIZE; ii++) {
         rt->by_day[ii] = g_array_index(values, gshort, ii);
     }
-    if(ii &lt; ICAL_BY_DAY_SIZE)
+    if(ii &lt; I_CAL_BY_DAY_SIZE)
         rt->by_day[ii] = I_CAL_RECURRENCE_ARRAY_MAX;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_day" corresponds="CUSTOM" kind="get" since="1.0">
@@ -358,17 +358,17 @@
         <parameter type="guint" name="index" comment="The index in by_day of #ICalRecurrence, less than %I_CAL_BY_DAY_SIZE."/>
         <returns type="gshort" comment="The by_day of #ICalRecurrence at index @index."/>
         <comment>Get the by_day value at index @index. The index should be less than %I_CAL_BY_DAY_SIZE.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), ICAL_RECURRENCE_ARRAY_MAX);
-    g_return_val_if_fail (index &lt; ICAL_BY_DAY_SIZE, ICAL_RECURRENCE_ARRAY_MAX);
+        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_RECURRENCE_ARRAY_MAX);
+    g_return_val_if_fail (index &lt; I_CAL_BY_DAY_SIZE, I_CAL_RECURRENCE_ARRAY_MAX);
     return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_day[index];</custom>
     </method>
     <method name="i_cal_recurrence_set_by_day" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence."/>
         <parameter type="guint" name="index" comment="The index in by_day of #ICalRecurrence."/>
         <parameter type="gshort" name="value" comment="The value to be set into by_day of #ICalRecurrence."/>
-        <comment>Set the by_day array from #ICalRecurrence at the given index. The array size if ICAL_BY_DAY_SIZE.</comment>
+        <comment>Set the by_day array from #ICalRecurrence at the given index. The array size if I_CAL_BY_DAY_SIZE.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	g_return_if_fail (index &lt; ICAL_BY_DAY_SIZE);
+	g_return_if_fail (index &lt; I_CAL_BY_DAY_SIZE);
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_day[index] = value;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_month_day_array" corresponds="CUSTOM" kind="get" since="1.0">
@@ -378,7 +378,7 @@
         <custom>	GArray *array;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_month_day, ICAL_BY_MONTHDAY_SIZE);
+	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_month_day, I_CAL_BY_MONTHDAY_SIZE);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_month_day_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -394,10 +394,10 @@
     rt = (struct icalrecurrencetype *)i_cal_object_get_native((ICalObject *)recur);
     g_return_if_fail(rt != NULL);
 
-    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; ICAL_BY_MONTHDAY_SIZE; ii++) {
+    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; I_CAL_BY_MONTHDAY_SIZE; ii++) {
         rt->by_month_day[ii] = g_array_index(values, gshort, ii);
     }
-    if(ii &lt; ICAL_BY_MONTHDAY_SIZE)
+    if(ii &lt; I_CAL_BY_MONTHDAY_SIZE)
         rt->by_month_day[ii] = I_CAL_RECURRENCE_ARRAY_MAX;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_month_day" corresponds="CUSTOM" kind="get" since="1.0">
@@ -405,17 +405,17 @@
         <parameter type="guint" name="index" comment="The index in by_month_day of #ICalRecurrence, less than %I_CAL_BY_MONTHDAY_SIZE."/>
         <returns type="gshort" comment="The by_month_day of #ICalRecurrence at index @index."/>
         <comment>Get the by_month_day value at index @index. The index should be less than %I_CAL_BY_MONTHDAY_SIZE.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), ICAL_RECURRENCE_ARRAY_MAX);
-    g_return_val_if_fail (index &lt; ICAL_BY_MONTHDAY_SIZE, ICAL_RECURRENCE_ARRAY_MAX);
+        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_RECURRENCE_ARRAY_MAX);
+    g_return_val_if_fail (index &lt; I_CAL_BY_MONTHDAY_SIZE, I_CAL_RECURRENCE_ARRAY_MAX);
     return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_month_day[index];</custom>
     </method>
     <method name="i_cal_recurrence_set_by_month_day" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence."/>
         <parameter type="guint" name="index" comment="The index in by_month_day of #ICalRecurrence."/>
         <parameter type="gshort" name="value" comment="The value to be set into by_month_day of #ICalRecurrence."/>
-        <comment>Set the by_month_day array from #ICalRecurrence at the given index. The array size if ICAL_BY_MONTHDAY_SIZE.</comment>
+        <comment>Set the by_month_day array from #ICalRecurrence at the given index. The array size if I_CAL_BY_MONTHDAY_SIZE.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	g_return_if_fail (index &lt; ICAL_BY_MONTHDAY_SIZE);
+	g_return_if_fail (index &lt; I_CAL_BY_MONTHDAY_SIZE);
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_month_day[index] = value;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_year_day_array" corresponds="CUSTOM" kind="get" since="1.0">
@@ -425,7 +425,7 @@
         <custom>	GArray *array;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_year_day, ICAL_BY_YEARDAY_SIZE);
+	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_year_day, I_CAL_BY_YEARDAY_SIZE);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_year_day_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -441,10 +441,10 @@
     rt = (struct icalrecurrencetype *)i_cal_object_get_native((ICalObject *)recur);
     g_return_if_fail(rt != NULL);
 
-    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; ICAL_BY_YEARDAY_SIZE; ii++) {
+    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; I_CAL_BY_YEARDAY_SIZE; ii++) {
         rt->by_year_day[ii] = g_array_index(values, gshort, ii);
     }
-    if(ii &lt; ICAL_BY_YEARDAY_SIZE)
+    if(ii &lt; I_CAL_BY_YEARDAY_SIZE)
         rt->by_year_day[ii] = I_CAL_RECURRENCE_ARRAY_MAX;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_year_day" corresponds="CUSTOM" kind="get" since="1.0">
@@ -452,17 +452,17 @@
         <parameter type="guint" name="index" comment="The index in by_year_day of #ICalRecurrence, less than %I_CAL_BY_YEARDAY_SIZE."/>
         <returns type="gshort" comment="The by_year_day of #ICalRecurrence at index @index."/>
         <comment>Get the by_year_day value at index @index. The index should be less than %I_CAL_BY_YEARDAY_SIZE.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), ICAL_RECURRENCE_ARRAY_MAX);
-    g_return_val_if_fail (index &lt; ICAL_BY_YEARDAY_SIZE, ICAL_RECURRENCE_ARRAY_MAX);
+        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_RECURRENCE_ARRAY_MAX);
+    g_return_val_if_fail (index &lt; I_CAL_BY_YEARDAY_SIZE, I_CAL_RECURRENCE_ARRAY_MAX);
     return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_year_day[index];</custom>
     </method>
     <method name="i_cal_recurrence_set_by_year_day" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence."/>
         <parameter type="guint" name="index" comment="The index in by_year_day of #ICalRecurrence."/>
         <parameter type="gshort" name="value" comment="The value to be set into by_year_day of #ICalRecurrence."/>
-        <comment>Set the by_year_day array from #ICalRecurrence at the given index. The array size if ICAL_BY_YEARDAY_SIZE.</comment>
+        <comment>Set the by_year_day array from #ICalRecurrence at the given index. The array size if I_CAL_BY_YEARDAY_SIZE.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	g_return_if_fail (index &lt; ICAL_BY_YEARDAY_SIZE);
+	g_return_if_fail (index &lt; I_CAL_BY_YEARDAY_SIZE);
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_year_day[index] = value;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_week_no_array" corresponds="CUSTOM" kind="get" since="1.0">
@@ -472,7 +472,7 @@
         <custom>	GArray *array;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_week_no, ICAL_BY_WEEKNO_SIZE);
+	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_week_no, I_CAL_BY_WEEKNO_SIZE);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_week_no_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -488,10 +488,10 @@
     rt = (struct icalrecurrencetype *)i_cal_object_get_native((ICalObject *)recur);
     g_return_if_fail(rt != NULL);
 
-    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; ICAL_BY_WEEKNO_SIZE; ii++) {
+    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; I_CAL_BY_WEEKNO_SIZE; ii++) {
         rt->by_week_no[ii] = g_array_index(values, gshort, ii);
     }
-    if(ii &lt; ICAL_BY_WEEKNO_SIZE)
+    if(ii &lt; I_CAL_BY_WEEKNO_SIZE)
         rt->by_week_no[ii] = I_CAL_RECURRENCE_ARRAY_MAX;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_week_no" corresponds="CUSTOM" kind="get" since="1.0">
@@ -499,8 +499,8 @@
         <parameter type="guint" name="index" comment="The index in by_week_no of #ICalRecurrence, less than %I_CAL_BY_WEEKNO_SIZE."/>
         <returns type="gshort" comment="The by_week_no of #ICalRecurrence at index @index."/>
         <comment>Get the by_week_no value at index @index. The index should be less than %I_CAL_BY_WEEKNO_SIZE.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), ICAL_RECURRENCE_ARRAY_MAX);
-    g_return_val_if_fail (index &lt; ICAL_BY_WEEKNO_SIZE, ICAL_RECURRENCE_ARRAY_MAX);
+        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_RECURRENCE_ARRAY_MAX);
+    g_return_val_if_fail (index &lt; I_CAL_BY_WEEKNO_SIZE, I_CAL_RECURRENCE_ARRAY_MAX);
     return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_week_no[index];</custom>
     </method>
     <method name="i_cal_recurrence_set_by_week_no" corresponds="CUSTOM" kind="set" since="1.0">
@@ -509,7 +509,7 @@
         <parameter type="gshort" name="value" comment="The value to be set into by_week_no of #ICalRecurrence."/>
         <comment>Set the by_week_no array from #ICalRecurrence at the given index. The array size is I_CAL_BY_WEEKNO_SIZE.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	g_return_if_fail (index &lt; ICAL_BY_WEEKNO_SIZE);
+	g_return_if_fail (index &lt; I_CAL_BY_WEEKNO_SIZE);
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_week_no[index] = value;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_month_array" corresponds="CUSTOM" kind="get" since="1.0">
@@ -519,7 +519,7 @@
         <custom>	GArray *array;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_month, ICAL_BY_MONTH_SIZE);
+	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_month, I_CAL_BY_MONTH_SIZE);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_month_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -535,10 +535,10 @@
     rt = (struct icalrecurrencetype *)i_cal_object_get_native((ICalObject *)recur);
     g_return_if_fail(rt != NULL);
 
-    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; ICAL_BY_MONTH_SIZE; ii++) {
+    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; I_CAL_BY_MONTH_SIZE; ii++) {
         rt->by_month[ii] = g_array_index(values, gshort, ii);
     }
-    if(ii &lt; ICAL_BY_MONTH_SIZE)
+    if(ii &lt; I_CAL_BY_MONTH_SIZE)
         rt->by_month[ii] = I_CAL_RECURRENCE_ARRAY_MAX;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_month" corresponds="CUSTOM" kind="get" since="1.0">
@@ -546,8 +546,8 @@
         <parameter type="guint" name="index" comment="The index in by_month of #ICalRecurrence, less than %I_CAL_BY_MONTH_SIZE."/>
         <returns type="gshort" comment="The by_month of #ICalRecurrence at index @index."/>
         <comment>Get the by_month value at index @index. The index should be less than %I_CAL_BY_MONTH_SIZE.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), ICAL_RECURRENCE_ARRAY_MAX);
-    g_return_val_if_fail (index &lt; ICAL_BY_MONTH_SIZE, ICAL_RECURRENCE_ARRAY_MAX);
+        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_RECURRENCE_ARRAY_MAX);
+    g_return_val_if_fail (index &lt; I_CAL_BY_MONTH_SIZE, I_CAL_RECURRENCE_ARRAY_MAX);
     return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_month[index];</custom>
     </method>
     <method name="i_cal_recurrence_set_by_month" corresponds="CUSTOM" kind="set" since="1.0">
@@ -556,7 +556,7 @@
         <parameter type="gshort" name="value" comment="The value to be set into by_month of #ICalRecurrence."/>
         <comment>Set the by_month array from #ICalRecurrence at the given index. The array size is I_CAL_BY_MONTH_SIZE.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	g_return_if_fail (index &lt; ICAL_BY_MONTH_SIZE);
+	g_return_if_fail (index &lt; I_CAL_BY_MONTH_SIZE);
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_month[index] = value;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_set_pos_array" corresponds="CUSTOM" kind="get" since="1.0">
@@ -566,7 +566,7 @@
         <custom>	GArray *array;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_set_pos, ICAL_BY_SETPOS_SIZE);
+	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_set_pos, I_CAL_BY_SETPOS_SIZE);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_set_pos_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -582,10 +582,10 @@
     rt = (struct icalrecurrencetype *)i_cal_object_get_native((ICalObject *)recur);
     g_return_if_fail(rt != NULL);
 
-    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; ICAL_BY_SETPOS_SIZE; ii++) {
+    for(ii = 0; ii &lt; values-&gt;len &amp;&amp; ii &lt; I_CAL_BY_SETPOS_SIZE; ii++) {
         rt->by_set_pos[ii] = g_array_index(values, gshort, ii);
     }
-    if(ii &lt; ICAL_BY_SETPOS_SIZE)
+    if(ii &lt; I_CAL_BY_SETPOS_SIZE)
         rt->by_set_pos[ii] = I_CAL_RECURRENCE_ARRAY_MAX;</custom>
     </method>
     <method name="i_cal_recurrence_get_by_set_pos" corresponds="CUSTOM" kind="get" since="1.0">
@@ -593,8 +593,8 @@
         <parameter type="guint" name="index" comment="The index in by_set_pos of #ICalRecurrence, less than %I_CAL_BY_SETPOS_SIZE."/>
         <returns type="gshort" comment="The by_week_no of #ICalRecurrence at index @index."/>
         <comment>Get the by_set_pos value at index @index. The index should be less than %I_CAL_BY_SETPOS_SIZE.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), ICAL_RECURRENCE_ARRAY_MAX);
-    g_return_val_if_fail (index &lt; ICAL_BY_SETPOS_SIZE, ICAL_RECURRENCE_ARRAY_MAX);
+        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_RECURRENCE_ARRAY_MAX);
+    g_return_val_if_fail (index &lt; I_CAL_BY_SETPOS_SIZE, I_CAL_RECURRENCE_ARRAY_MAX);
     return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_set_pos[index];</custom>
     </method>
     <method name="i_cal_recurrence_set_by_set_pos" corresponds="CUSTOM" kind="set" since="1.0">
@@ -603,7 +603,7 @@
         <parameter type="gshort" name="value" comment="The value to be set into by_set_pos of #ICalRecurrence."/>
         <comment>Set the by_set_pos array from #ICalRecurrence at the given index. The array size is I_CAL_BY_SETPOS_SIZE.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	g_return_if_fail (index &lt; ICAL_BY_SETPOS_SIZE);
+	g_return_if_fail (index &lt; I_CAL_BY_SETPOS_SIZE);
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_set_pos[index] = value;</custom>
     </method>
 </structure>
