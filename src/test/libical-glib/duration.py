@@ -27,16 +27,16 @@ from gi.repository import ICalGLib
 length = 1000000000;
 bad_string = "This is a bad string";
 
-duration = ICalGLib.Duration.from_int(length);
+duration = ICalGLib.Duration.new_from_int(length);
 assert(duration.as_int() == length);
-length_in_string = duration.as_ical_string_r();
-duration1 = ICalGLib.Duration.from_string(length_in_string);
-assert(duration1.as_ical_string_r() == length_in_string);
+length_in_string = duration.as_ical_string();
+duration1 = ICalGLib.Duration.new_from_string(length_in_string);
+assert(duration1.as_ical_string() == length_in_string);
 assert(length == duration1.as_int());
 
-duration = ICalGLib.Duration.from_string(bad_string);
-duration_bad = ICalGLib.Duration.bad_duration();
-assert(duration.as_ical_string_r() == duration_bad.as_ical_string_r());
+duration = ICalGLib.Duration.new_from_string(bad_string);
+duration_bad = ICalGLib.Duration.new_bad_duration();
+assert(duration.as_ical_string() == duration_bad.as_ical_string());
 assert(duration.is_bad_duration() == 1);
-duration_null = ICalGLib.Duration.null_duration();
+duration_null = ICalGLib.Duration.new_null_duration();
 assert(duration_null.is_null_duration() == 1);

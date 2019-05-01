@@ -1,0 +1,38 @@
+_* skip=true
+memory_* parent="ICal.Memory" name="memory_(.+)"
+Component
+  .kind_from_string parent="ICal.ComponentKind" name="from_string"
+  .kind_is_valid parent="ICal.ComponentKind" symbol_type="method" instance_idx=0 name="is_valid"
+  .kind_to_string parent="ICal.ComponentKind" symbol_type="method" instance_idx=0 name="to_string"
+Property
+  .status_from_string parent="ICal.PropertyStatus" name="from_string"
+  .status_to_string parent="ICal.PropertyStatus" symbol_type="method" instance_idx=0 name="to_string"
+  .kind_from_string parent="ICal.PropertyKind" name="from_string"
+  .kind_is_valid parent="ICal.PropertyKind" symbol_type="method" instance_idx=0 name="is_valid"
+  .kind_to_string parent="ICal.PropertyKind" symbol_type="method" instance_idx=0 name="to_string"
+  .kind_to_value_kind parent="ICal.PropertyKind" symbol_type="method" instance_idx=0 name="to_value_kind"
+  .kind_has_property parent="ICal.PropertyKind" symbol_type="method" instance_idx=0 name="has_property"
+  .method_from_string parent="ICal.PropertyMethod" name="from_string"
+  .method_to_string parent="ICal.PropertyMethod" symbol_type="method" instance_idx=0 name="to_string"
+Parameter
+  .kind_from_string parent="ICal.ParameterKind" name="from_string"
+  .kind_is_valid parent="ICal.ParameterKind" symbol_type="method" instance_idx=0 name="is_valid"
+  .kind_to_string parent="ICal.ParameterKind" symbol_type="method" instance_idx=0 name="to_string"
+  .value_to_value_kind parent="ICal.ParameterValue" symbol_type="method" instance_idx=0 name="to_value_kind"
+Value
+  .kind_from_string parent="ICal.ValueKind" name="from_string"
+  .kind_is_valid parent="ICal.ValueKind" symbol_type="method" instance_idx=0 name="is_valid"
+  .kind_to_string parent="ICal.ValueKind" symbol_type="method" instance_idx=0 name="to_string"
+  .kind_to_property_kind parent="ICal.ValueKind" symbol_type="method" instance_idx=0 name="to_property_kind"
+Timezone
+  .array_append_from_vtimezone parent="ICal.Array" symbol_type="method" instance_idx=0 name="append_timezone_from_vtimezone"
+  .array_element_at parent="ICal.Array" symbol_type="method" instance_idx=0 name="timezone_element_at"
+  .array_new parent="ICal.Array" name="new_timezone"
+  .dump_changes.fp type="GLib.FileStream"
+Recurrence
+  .frequency_to_string parent="ICal.RecurrenceFrequency" symbol_type="method" instance_idx=0 name="to_string"
+  .frequency_from_string parent="ICal.RecurrenceFrequency" name="from_string"
+  .skip_to_string parent="ICal.RecurrenceSkip" symbol_type="method" instance_idx=0 name="to_string"
+  .skip_from_string parent="ICal.RecurrenceSkip" name="from_string"
+  .weekday_to_string parent="ICal.RecurrenceWeekday" symbol_type="method" instance_idx=0 name="to_string"
+  .weekday_from_string parent="ICal.RecurrenceWeekday" name="from_string"

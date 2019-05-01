@@ -54,8 +54,8 @@ assert(ICalGLib.Recurrence.month_month(encoded) == 12)
 assert(ICalGLib.Recurrence.month_is_leap(encoded))
 
 string = "COUNT=10;FREQ=DAILY"
-recurrence = ICalGLib.Recurrence.from_string(string)
-assert(recurrence.as_string_r() == "FREQ=DAILY;COUNT=10")
+recurrence = ICalGLib.Recurrence.new_from_string(string)
+assert(recurrence.to_string() == "FREQ=DAILY;COUNT=10")
 
 by_second = recurrence.get_by_second_array()
 # The value is dependent on the libical version.
@@ -248,9 +248,9 @@ recurrence.set_by_second(0, 13)
 by_second = recurrence.get_by_second_array()
 assert by_second[0] == 13
 
-recurrence = ICalGLib.Recurrence.from_string(string)
+recurrence = ICalGLib.Recurrence.new_from_string(string)
 
-assert(ICalGLib.recur_string_to_weekday("MO") == ICalGLib.RecurrenceWeekday.MONDAY_WEEKDAY)
+assert(ICalGLib.Recurrence.weekday_from_string("MO") == ICalGLib.RecurrenceWeekday.MONDAY_WEEKDAY)
 
 start = 100000
 result = ICalGLib.recur_expand_recurrence(string, start, 10)
@@ -260,7 +260,7 @@ for i in range(0, 9):
 
 string = "19970101T183248Z/19970102T071625Z"
 
-period = ICalGLib.Period.from_string(string)
+period = ICalGLib.Period.new_from_string(string)
 start = period.get_start()
 
 iter = ICalGLib.RecurIterator.new(recurrence, start)
@@ -273,21 +273,21 @@ while day != 0:
     timetype = iter.next()
     day = timetype.get_day()
 
-recurrence = ICalGLib.Recurrence.from_string("FREQ=YEARLY;COUNT=10")
-start = ICalGLib.Time.from_string("20161224T000000Z")
+recurrence = ICalGLib.Recurrence.new_from_string("FREQ=YEARLY;COUNT=10")
+start = ICalGLib.Time.new_from_string("20161224T000000Z")
 
 iter = ICalGLib.RecurIterator.new(recurrence, start)
 
-start = ICalGLib.Time.from_string("20181224T000000Z")
+start = ICalGLib.Time.new_from_string("20181224T000000Z")
 
 assert ICalGLib.RecurIterator.set_start(iter, start) == 0
 
-recurrence = ICalGLib.Recurrence.from_string("FREQ=YEARLY")
-start = ICalGLib.Time.from_string("20161224T000000Z")
+recurrence = ICalGLib.Recurrence.new_from_string("FREQ=YEARLY")
+start = ICalGLib.Time.new_from_string("20161224T000000Z")
 
 iter = ICalGLib.RecurIterator.new(recurrence, start)
 
-start = ICalGLib.Time.from_string("20181224T000000Z")
+start = ICalGLib.Time.new_from_string("20181224T000000Z")
 
 assert ICalGLib.RecurIterator.set_start(iter, start) == 1
 timetype = iter.next()
