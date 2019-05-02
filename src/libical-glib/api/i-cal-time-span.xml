@@ -26,7 +26,7 @@
     span.is_busy = is_busy ? 1 : 0;
     return i_cal_time_span_new_full(span);</custom>
     </method>
-    <method name="i_cal_time_span_new_clone" corresponds="CUSTOM" kind="constructor" since="3.0.5">
+    <method name="i_cal_time_span_clone" corresponds="CUSTOM" kind="constructor" since="3.0.5">
         <parameter type="const ICalTimeSpan *" name="src" comment="A time span to clone."/>
         <returns type="ICalTimeSpan *" annotation="transfer full" comment="The newly created #ICalTimeSpan, clone of @src." />
         <comment xml:space="preserve">Create a new #ICalTimeSpan, clone of @src. Free it with g_object_unref(), when no longer needed.</comment>

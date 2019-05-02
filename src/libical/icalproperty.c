@@ -1083,8 +1083,6 @@ void icalproperty_normalize(icalproperty *prop)
  *
  *      The @a comp can be NULL, in which case the parent of the @a prop
  *      is used to find the corresponding time zone.
- *
- *      FIXME this is useless until we can flag the failure
  */
 struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop,
                                                              icalcomponent *comp)
@@ -1113,6 +1111,9 @@ struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop,
 
         if (tz == NULL)
             tz = icaltimezone_get_builtin_timezone_from_tzid(tzid);
+
+        if (!icaltimezone_get_builtin_tzdata() && tz == NULL)
+            tz = icaltimezone_get_builtin_timezone(tzid);
 
         if (tz != NULL)
             ret = icaltime_set_timezone(&ret, tz);

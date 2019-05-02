@@ -35,7 +35,7 @@
 
     return i_cal_geo_new_full(geo);</custom>
     </method>
-    <method name="i_cal_geo_new_clone" corresponds="CUSTOM" kind="constructor" since="1.0">
+    <method name="i_cal_geo_clone" corresponds="CUSTOM" kind="clone" since="1.0">
         <parameter type="const ICalGeo *" name="geo" comment="The #ICalGeo to clone."/>
         <returns type="ICalGeo *" annotation="transfer full" comment="The newly created #ICalGeo, copy of @geo." />
         <comment xml:space="preserve">Create a new #ICalGeo, copy of @geo.</comment>

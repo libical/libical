@@ -80,28 +80,28 @@
 	periodtype = (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period);
 	periodtype->duration = (* (struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration));</custom>
 	</method>
-    <method name="i_cal_period_from_string" corresponds="icalperiodtype_from_string" kind="constructor" since="1.0">
+    <method name="i_cal_period_new_from_string" corresponds="icalperiodtype_from_string" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="str" comment="The string used to create the #ICalPeriod"/>
         <returns type="ICalPeriod *" annotation="transfer full" comment="The newly created #ICalPeriod"/>
         <comment xml:space="preserve">Create a #ICalPeriod from a string.</comment>
     </method>
-    <method name="i_cal_period_as_ical_string_r" corresponds="icalperiodtype_as_ical_string_r" since="1.0">
+    <method name="i_cal_period_as_ical_string" corresponds="icalperiodtype_as_ical_string_r" since="1.0">
         <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be translated."/>
         <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalPeriod."/>
         <comment xml:space="preserve">Translate #ICalPeriod to string.</comment>
     </method>
-    <method name="i_cal_period_null_period" corresponds="icalperiodtype_null_period" since="1.0">
+    <method name="i_cal_period_new_null_period" corresponds="icalperiodtype_null_period" kind="constructor" since="1.0">
         <returns type="ICalPeriod *" annotation="transfer full" comment="The newly created default #ICalPeriod"/>
         <comment xml:space="preserve">Create a default #ICalPeriod.</comment>
     </method>
     <method name="i_cal_period_is_null_period" corresponds="icalperiodtype_is_null_period" since="1.0">
         <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be checked."/>
-        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="1 if yes, 0 if not."/>
         <comment xml:space="preserve">Check the #ICalPeriod is null_period.</comment>
     </method>
     <method name="i_cal_period_is_valid_period" corresponds="icalperiodtype_is_valid_period" since="1.0">
         <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be checked."/>
-        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="1 if yes, 0 if not."/>
         <comment xml:space="preserve">Check the #ICalPeriod is valid_period.</comment>
     </method>
 </structure>

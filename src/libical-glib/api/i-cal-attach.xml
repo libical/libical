@@ -26,6 +26,24 @@
         <returns type="ICalAttach *" annotation="transfer full" comment="The newly created #ICalAttach" />
         <comment xml:space="preserve">Create a new #ICalAttach from the data.</comment>
     </method>
+    <declaration position="body">
+static void unref_g_bytes(unsigned char *data, void *user_data)
+{
+    GBytes *bytes = user_data;
+
+    g_return_if_fail (data != NULL);
+    g_return_if_fail (bytes != NULL);
+
+    g_bytes_unref (bytes);
+}</declaration>
+    <method name="i_cal_attach_new_from_bytes" corresponds="CUSTOM" kind="constructor" since="1.0">
+        <parameter type="GBytes *" annotation="transfer full" name="bytes" comment="The #GBytes holding the data used to create the #ICalAttach"/>
+        <returns type="ICalAttach *" annotation="transfer full" comment="The newly created #ICalAttach" />
+        <comment xml:space="preserve">Create a new #ICalAttach from the data in bytes. Takes a reference of @bytes, increase the reference before calling this function if you with to use it afterward.</comment>
+        <custom>    g_return_val_if_fail (bytes != NULL, NULL);
+
+    return i_cal_attach_new_full (icalattach_new_from_data (g_bytes_get_data (bytes, NULL), unref_g_bytes, bytes), NULL);</custom>
+    </method>
     <method name="i_cal_attach_ref" corresponds="icalattach_ref" annotation="skip" kind="others" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be referenced by once"/>
         <comment xml:space="preserve">Increase the ref counter by 1 for the @attach</comment>
@@ -36,7 +54,7 @@
     </method>
     <method name="i_cal_attach_get_is_url" corresponds="icalattach_get_is_url" kind="others" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be queried"/>
-        <returns type="gint" comment="1 if the @attach is built from url and 0 if not." />
+        <returns type="gboolean" comment="whether the @attach is built from url" />
         <comment xml:space="preserve">Check whether the #ICalAttach is built from url</comment>
     </method>
     <method name="i_cal_attach_get_url" corresponds="icalattach_get_url" kind="others" since="1.0">

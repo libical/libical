@@ -19,13 +19,8 @@
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve">Create a new #ICalParameter according to the kind type</comment>
     </method>
-    <method name="i_cal_parameter_new_clone" corresponds="icalparameter_clone" kind="clone" since="1.0">
+    <method name="i_cal_parameter_clone" corresponds="icalparameter_clone" kind="clone" since="1.0">
         <parameter type="ICalParameter *" name="p" annotation="in" comment="The #ICalParameter to be cloned"/>
-        <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter with the same properties as the @p." />
-        <comment xml:space="preserve">Deprecated method to clone a #ICalParameter. Use i_cal_parameter_clone instead</comment>
-    </method>
-    <method name="i_cal_parameter_clone" corresponds="icalparameter_clone" kind="clone" since="3.1">
-        <parameter type="const ICalParameter *" name="p" annotation="in" comment="The #ICalParameter to be cloned"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter with the same properties as the @p." />
         <comment xml:space="preserve">Deep clone a #ICalParameter</comment>
     </method>
@@ -44,7 +39,7 @@
         <parameter type="ICalParameter *" name="parameter" annotation="in" comment="The #ICalParameter to be freeed."/>
         <comment xml:space="preserve">Free the native part of the ICalParameter.</comment>
     </method>
-    <method name="i_cal_parameter_as_ical_string_r" corresponds="icalparameter_as_ical_string_r" kind="others" since="1.0">
+    <method name="i_cal_parameter_as_ical_string" corresponds="icalparameter_as_ical_string_r" kind="others" since="1.0">
         <parameter type="ICalParameter *" name="parameter" annotation="in" comment="The #ICalParameter to be converted."/>
         <returns type="gchar *" annotation="transfer full" comment="The string representation of the @parameter." />
         <comment xml:space="preserve">Convert an #ICalParameter to the string representation.</comment>
@@ -110,14 +105,14 @@
         <returns type="const gchar *" comment="The string representation of @kind." />
         <comment xml:space="preserve">Convert the #ICalParameter to the string representation</comment>
     </method>
-    <method name="i_cal_parameter_string_to_kind" corresponds="icalparameter_string_to_kind" kind="others" since="1.0">
+    <method name="i_cal_parameter_kind_from_string" corresponds="icalparameter_string_to_kind" kind="others" since="1.0">
         <parameter type="const gchar *" name="string" comment="The string representation of the #ICalParameter"/>
         <returns type="ICalParameterKind" comment="The #ICalParameterKind converted from @string" />
         <comment xml:space="preserve">Convert a string to the #ICalParameterKind</comment>
     </method>
     <method name="i_cal_parameter_kind_is_valid" corresponds="icalparameter_kind_is_valid" since="3.0.5">
         <parameter type="const ICalParameterKind" name="kind" comment="The #ICalPropertyKind"/>
-        <returns type="gint" comment="1 if valid, 0 if not."/>
+        <returns type="gboolean" comment="1 if valid, 0 if not."/>
         <comment xml:space="preserve">Check whether #ICalParameterKind is valid.</comment>
     </method>
 </structure>

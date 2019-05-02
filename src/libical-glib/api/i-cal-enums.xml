@@ -88,30 +88,30 @@
         <element name="ICAL_6_1_CONTAINER_NOT_FOUND"/>
 		<element name="ICAL_9_0_UNRECOGNIZED_COMMAND"/>
     </enum>
-    <method name="i_cal_enum_reqstat_desc" corresponds="icalenum_reqstat_desc" since="1.0">
+    <method name="i_cal_request_status_desc" corresponds="icalenum_reqstat_desc" since="1.0">
         <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be translated"/>
         <returns type="const gchar *" comment="The description of the @stat" />
         <comment xml:space="preserve">Return the descriptive text for a request status</comment>
     </method>
-    <method name="i_cal_enum_reqstat_major" corresponds="icalenum_reqstat_major" since="1.0">
+    <method name="i_cal_request_status_major" corresponds="icalenum_reqstat_major" since="1.0">
         <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be queried"/>
         <returns type="gshort" comment="The major number for a request status" />
         <comment xml:space="preserve">Return the major number for a request status</comment>
     </method>
-    <method name="i_cal_enum_reqstat_minor" corresponds="icalenum_reqstat_minor" since="1.0">
+    <method name="i_cal_request_status_minor" corresponds="icalenum_reqstat_minor" since="1.0">
         <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be queried"/>
         <returns type="gshort" comment="The minor number for a request status" />
         <comment xml:space="preserve">Return the minor number for a request status</comment>
     </method>
-    <method name="i_cal_enum_num_to_reqstat" corresponds="icalenum_num_to_reqstat" since="1.0">
+    <method name="i_cal_request_status_from_num" corresponds="icalenum_num_to_reqstat" since="1.0">
         <parameter type="gshort" name="major" comment="The major number"/>
         <parameter type="gshort" name="minor" comment="The minor number"/>
         <returns type="ICalRequestStatus" comment="The corresponding #ICalRequestStatus" />
         <comment xml:space="preserve">Return a request status for major/minor status numbers</comment>
     </method>
-    <method name="i_cal_enum_reqstat_code_r" corresponds="icalenum_reqstat_code_r" since="1.0">
+    <method name="i_cal_request_status_code" corresponds="icalenum_reqstat_code_r" since="1.0">
         <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be queried"/>
         <returns type="gchar *" annotation="transfer full" comment="The code for a request status" />
-        <comment xml:space="preserve">eturn the code for a request status</comment>
+        <comment xml:space="preserve">Return the code for a request status</comment>
     </method>
 </structure>
