@@ -477,7 +477,6 @@ BDIR=""
 CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DUSE_BUILTIN_TZDATA=True"
-LTOCMAKEOPTS="$CMAKEOPTS -DENABLE_LTO_BUILD=True"
 
 #Static code checkers
 KRAZY
@@ -494,7 +493,6 @@ CLANGTIDY test2builtin "$TZCMAKEOPTS"
 GCC_BUILD test1 ""
 GCC_BUILD test2 "$CMAKEOPTS"
 GCC_BUILD test3 "$UUCCMAKEOPTS"
-GCC_BUILD test4 "$LTOCMAKEOPTS"
 if (test "`uname -s`" = "Linux")
 then
     echo "Temporarily disable cross-compile tests"
@@ -508,7 +506,6 @@ GCC_BUILD test2builtin "$TZCMAKEOPTS"
 CLANG_BUILD test1 ""
 CLANG_BUILD test2 "$CMAKEOPTS"
 CLANG_BUILD test3 "$UUCCMAKEOPTS"
-#CLANG_BUILD test4 "$LTOCMAKEOPTS"
 if (test "`uname -s`" = "Linux")
 then
     echo "Temporarily disable cross-compile tests"
