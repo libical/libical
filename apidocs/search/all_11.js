@@ -4,7 +4,7 @@ var searchData=
   ['second',['second',['../struct__icaltimezonechange.html#a2edcc09f485b5a8c121a1499fe686adb',1,'_icaltimezonechange']]],
   ['select',['select',['../structicalgauge__impl.html#ab31e8cb692ce58d7a267731744fc67ec',1,'icalgauge_impl']]],
   ['set_5fvalue',['set_value',['../classLibICal_1_1ICalProperty.html#af229f40785452ed3893399e1dc4df356',1,'LibICal::ICalProperty']]],
-  ['set_5fzone_5fdirectory',['set_zone_directory',['../icaltimezone_8h.html#af35f72898e3992529e12c07c62659b22',1,'set_zone_directory(const char *path):&#160;icaltimezone.c'],['../icaltimezone_8c.html#af35f72898e3992529e12c07c62659b22',1,'set_zone_directory(const char *path):&#160;icaltimezone.c']]],
+  ['set_5fzone_5fdirectory',['set_zone_directory',['../icaltimezone_8c.html#af35f72898e3992529e12c07c62659b22',1,'set_zone_directory(const char *path):&#160;icaltimezone.c'],['../icaltimezone_8h.html#af35f72898e3992529e12c07c62659b22',1,'set_zone_directory(const char *path):&#160;icaltimezone.c']]],
   ['skip_5fmap',['skip_map',['../structskip__map.html',1,'']]],
   ['slg_5fdata',['slg_data',['../structslg__data.html',1,'']]],
   ['spans',['spans',['../structicalspanlist__impl.html#a236b22c48fe250e53a67fcccc70eacb3',1,'icalspanlist_impl']]],

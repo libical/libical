@@ -97,8 +97,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ical
 <tr class="memitem:a1f29a1f14146a67013121226c0d77cd1"><td class="memItemLeft" align="right" valign="top"><a id="a1f29a1f14146a67013121226c0d77cd1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalgauge_free</b> (<a class="el" href="structicalgauge__impl.html">icalgauge</a> *gauge)</td></tr>
 <tr class="separator:a1f29a1f14146a67013121226c0d77cd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e3a08b481636446b7d1cbefeba82998"><td class="memItemLeft" align="right" valign="top"><a id="a0e3a08b481636446b7d1cbefeba82998"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>icalgauge_get_expand</b> (<a class="el" href="structicalgauge__impl.html">icalgauge</a> *gauge)</td></tr>
+<tr class="memitem:a0e3a08b481636446b7d1cbefeba82998"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalgauge_8h.html#a0e3a08b481636446b7d1cbefeba82998">icalgauge_get_expand</a> (<a class="el" href="structicalgauge__impl.html">icalgauge</a> *gauge)</td></tr>
 <tr class="separator:a0e3a08b481636446b7d1cbefeba82998"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af778ad3c44051f7cf02de6e05d8ee15f"><td class="memItemLeft" align="right" valign="top"><a id="af778ad3c44051f7cf02de6e05d8ee15f"></a>
 <a class="el" href="structicalgauge__impl.html">icalgauge</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalgauge_new_from_sql</b> (const char *sql, int expand)</td></tr>
@@ -136,6 +135,25 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalgauge_get_expand</
 <p>Return true if comp matches the gauge. </p>
 <p>The component must be in cannonical form &ndash; a VCALENDAR with one VEVENT, VTODO or VJOURNAL sub component </p>
 <p>needs to use recurrence-id to do comparison </p>
+
+</div>
+</div>
+<a id="a0e3a08b481636446b7d1cbefeba82998"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e3a08b481636446b7d1cbefeba82998">&#9670;&nbsp;</a></span>icalgauge_get_expand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int icalgauge_get_expand </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structicalgauge__impl.html">icalgauge</a> *&#160;</td>
+          <td class="paramname"><em>gauge</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the expand value for the specified icalgauge. If <code>gauge</code> is NULL a value of -1 is returned. </p>
 
 </div>
 </div>

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['magic',['MAGIC',['../structpvl__elem__t.html#a259a4f64c59afeaca3a95aa77f4731d5',1,'pvl_elem_t::MAGIC()'],['../structpvl__list__t.html#ae810b262dbf64bbdfb437979151d2eba',1,'pvl_list_t::MAGIC()']]],
+  ['magic',['MAGIC',['../structpvl__list__t.html#ae810b262dbf64bbdfb437979151d2eba',1,'pvl_list_t::MAGIC()'],['../structpvl__elem__t.html#a259a4f64c59afeaca3a95aa77f4731d5',1,'pvl_elem_t::MAGIC()']]],
   ['major_5fcontent_5ftype_5fmap',['major_content_type_map',['../structmajor__content__type__map.html',1,'']]],
   ['max_5ftime_5ft_5fyear',['MAX_TIME_T_YEAR',['../icalrecur_8c.html#a338642cc0e931bd6faa613b0b9d4bc51',1,'icalrecur.c']]],
   ['mime_5fimpl',['mime_impl',['../structmime__impl.html',1,'']]],
