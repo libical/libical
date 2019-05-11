@@ -783,8 +783,15 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         icalmemory_free_buffer(str);
         str = NULL;
 
-        /* Return the component if we are back to the 0th level */
-        if (parser->level == 0) {
+        if (parser->level < 0) {
+            // Encountered an END before any BEGIN, this must be invalid data
+            icalerror_warn("Encountered END before BEGIN");
+
+            parser->state = ICALPARSER_ERROR;
+            parser->level = 0;
+            return 0;
+        } else if (parser->level == 0) {
+            /* Return the component if we are back to the 0th level */
             icalcomponent *rtrn;
 
             if (pvl_count(parser->components) != 0) {
