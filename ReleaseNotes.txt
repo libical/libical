@@ -13,7 +13,6 @@ Version 3.0.5 (14 May 2019):
    including <libical-glib/libical-glib.h> to be able to use it.
  * Built-in timezones updated to tzdata2019a
  
-
 Version 3.0.4 (14 Aug 2018):
 ---------------------------
  * Silently fail RSCALE recurrence clauses when RSCALE is disabled
