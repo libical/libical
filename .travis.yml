@@ -26,10 +26,6 @@ script:
   - make test
 
 addons:
-  apt:
-    packages:
-      - cmake
-      - cmake-data
   coverity_scan:
     project:
       name: libical/libical
