@@ -25,6 +25,7 @@ script:
   - make
   - make test
 
+dist: xenial
 addons:
   coverity_scan:
     project:
