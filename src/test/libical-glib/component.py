@@ -24,6 +24,9 @@ gi.require_version('ICalGLib', '3.0')
 
 from gi.repository import ICalGLib
 
+import os
+import sys
+
 event_str1 = \
     "BEGIN:VEVENT\n"                                \
     "UID:event-uid-123\n"                           \
@@ -306,6 +309,9 @@ def main():
     prop = comp.get_first_property(ICalGLib.PropertyKind.DTSTART_PROPERTY)
     prop.remove_parameter_by_kind(ICalGLib.ParameterKind.TZID_PARAMETER)
     tz = ICalGLib.Timezone.get_builtin_timezone("Europe/Prague")
+
+    ICalGLib.Timezone.set_tzid_prefix(tz.get_tzid().replace("Europe/Prague", ""))
+
     prop.set_parameter(ICalGLib.Parameter.new_tzid(tz.get_tzid()))
 
     itt = prop.get_datetime_with_component(comp)
