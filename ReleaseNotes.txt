@@ -17,7 +17,7 @@ Version 3.1.0 (NOT RELEASED YET):
      + struct icaltimezonephase
  * Improved performance of recurrence iterators
 
-Version 3.0.5 (NOT RELEASED YET):
+Version 3.0.5:
 -------------
  * New publicly available function:
      + icalproperty_get_datetime_with_component()
@@ -27,6 +27,7 @@ Version 3.0.5 (NOT RELEASED YET):
  * GObject Introspection - use $MAJOR-0 versioning
  * libical-glib API is considered unstable, define LIBICAL_GLIB_UNSTABLE_API=1 before
    including <libical-glib/libical-glib.h> to be able to use it.
+ * Built-in timezones updated to tzdata2019a
 
 Version 3.0.4:
 --------------
