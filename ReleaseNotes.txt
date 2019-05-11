@@ -2,7 +2,7 @@ Release Highlights
 ==================
 
 Version 3.1.0 (NOT RELEASED YET):
---------------
+--------------------------------
  * Requires CMake v3.11.0 or higher
  * New publicly available functions:
      + icalrecurrencetype_encode_day
@@ -18,8 +18,8 @@ Version 3.1.0 (NOT RELEASED YET):
      + struct icaltimezonephase
  * Improved performance of recurrence iterators
 
-Version 3.0.5:
--------------
+Version 3.0.5 (14 May 2019):
+---------------------------
  * New publicly available function:
      + icalproperty_get_datetime_with_component()
  * Allow reset DATE/DATE-TIME VALUE parameter for all-day events
@@ -30,8 +30,8 @@ Version 3.0.5:
    including <libical-glib/libical-glib.h> to be able to use it.
  * Built-in timezones updated to tzdata2019a
 
-Version 3.0.4:
---------------
+Version 3.0.4 (14 Aug 2018):
+---------------------------
  * Silently fail RSCALE recurrence clauses when RSCALE is disabled
  * Fixed icalcomponent_set_comment() and icalcomponent_set_uid()
  * fix FREQ=MONTHLY;BYMONTH
@@ -43,26 +43,26 @@ Version 3.0.4:
      + icalparameter_kind_is_valid()
  * Built-in timezones updated to tzdata2018e
 
-Version 3.0.3:
---------------
+Version 3.0.3 (27 Feb 2018):
+---------------------------
  * VTODO COMPLETED property can be a DATE-TIME or DATE (for backward compatibility)
  * Improved recurrence iteration
 
-Version 3.0.2:
---------------
+Version 3.0.2 (17 Feb 2018):
+---------------------------
  * No longer attempt to detect the need for -DUSE_32BIT_TIME_T with MSVC
  * New CMake option ICAL_BUILD_DOCS which can be used to disable the docs target
  * Fix threading hang in BSD type systems (OpenBSD, MacOS,...)
  * Build with Ninja improvements
 
-Version 3.0.1:
---------------
+Version 3.0.1 (18 Nov 2017):
+---------------------------
  * Built-in timezones updated to tzdata2017c
  * Fix a multi-threaded deadlock in icaltimezone_load_builtin_timezone()
  * Fix a CMake problem with parallel builds
 
-Version 3.0.0:
---------------
+Version 3.0.0 (28 Oct 2017):
+---------------------------
  * Relicense from MPL 1.0 to MPL 2.0 (keep dual license for LGPL v2.1)
  * Requires CMake v3.1.0 or higher along with various CMake and buildsystem fixes
  * Added a 'make uninstall'
@@ -104,8 +104,8 @@ Version 3.0.0:
     + icalcalendar *icalcalendar_new(const char *dir)
     + int icalrecur_expand_recurrence(const char *rule, time_t start, int count, time_t *array)
 
-Version 2.0.0:
---------------
+Version 2.0.0 (28 Dec 2015):
+---------------------------
  * WARNING: Version 2 IS NOT Binary Compatible with Older Versions
  * Version 2 is Source Compatible with Older Versions
  * Lots of source code scrubbing
@@ -116,8 +116,8 @@ Version 2.0.0:
  * Handle RRULEs better
  * Handle threading better
 
-Version 1.0.1:
---------------
+Version 1.0.1 (11 Oct 2014):
+---------------------------
  * [Bug] issue74: Do not escape double quote character
  * [Bug] issue80,issue92: fix crashes using icaltimezone_load_builtin_timezone() recursively
  * [Bug] Fix icalcomponent_foreach_recurrence() and large durations between recurrences (e.g. FREQ=YEARLY)
@@ -144,3 +144,7 @@ Version 1.0.1:
  * [Quality] More regression tests added, in particular for recurrence
  * [Quality] Almost all compile warnings silenced
  * [Quality] A bunch of Coverity Scan warnings silenced
+
+Version 1.0.0 (28 Jun 2014):
+---------------------------
+ * Reborn
