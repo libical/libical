@@ -329,6 +329,7 @@ SPLINT() {
        -D"strdup"="" \
        -D"strcasecmp"="strcmp" \
        -D"strncasecmp"="strncmp" \
+       -D"strnlen"="" \
        -D"putenv"="" \
        -D"unsetenv"="" \
        -D"tzset()"=";" \
