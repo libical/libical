@@ -997,6 +997,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                                                  pvalue_stack, sizeof(pvalue_stack))) {
                     if (pvalue_heap) {
                         icalmemory_free_buffer(pvalue_heap);
+                        pvalue_heap = 0;
                         pvalue = 0;
                     }
                     if (name_heap) {
