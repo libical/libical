@@ -45,6 +45,8 @@
 #include <stdlib.h>
 
 #define TMP_BUF_SIZE 80
+#define MAXIMUM_ALLOWED_PARAMETERS 100
+#define MAXIMUM_ALLOWED_MULTIPLE_VALUES 500
 
 struct icalparser_impl
 {
@@ -689,6 +691,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 {
     char *str;
     char *end;
+    int pcount = 0;
     int vcount = 0;
     icalproperty *prop;
     icalproperty_kind prop_kind;
@@ -871,7 +874,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
     /* Now, add any parameters to the last property */
 
-    while (1) {
+    while (pcount < MAXIMUM_ALLOWED_PARAMETERS) {
         if (*(end - 1) == ':') {
             /* if the last separator was a ":" and the value is a
                URL, icalparser_get_next_parameter will find the
@@ -1103,6 +1106,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             tail = 0;
             icalmemory_free_buffer(str);
             str = NULL;
+            pcount++;
 
         } else {
             /* str is NULL */
@@ -1120,7 +1124,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
        parameter and add one part of the value to each clone */
 
     vcount = 0;
-    while (1) {
+    while (vcount < MAXIMUM_ALLOWED_MULTIPLE_VALUES) {
         /* Only some properties can have multiple values. This list was taken
            from rfc5545. Also added the x-properties, because the spec actually
            says that commas should be escaped. For x-properties, other apps may
