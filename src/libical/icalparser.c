@@ -45,7 +45,6 @@
 #include <stdlib.h>
 
 #define TMP_BUF_SIZE 80
-#define MAX_LINE_LENGTH 8192 /* the maximum number of chars per parser line */
 
 struct icalparser_impl
 {
@@ -642,15 +641,7 @@ icalcomponent *icalparser_parse(icalparser *parser,
     do {
         line = icalparser_get_line(parser, line_gen_func);
 
-        if (line != 0 && strnlen(line, MAX_LINE_LENGTH) >= MAX_LINE_LENGTH) {
-            // Encountered a line that is longer than is reasonable
-            // RFC 5545 Section 3.1 says lines should not be more than 75 octets
-            // A large maximum length allows for lenient parsing but also prevents unbounded memory usage
-            // when parsing intentionally malformed data
-            icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-            icalmemory_free_buffer(line);
-            line = 0;
-        } else if ((c = icalparser_add_line(parser, line)) != 0) {
+        if ((c = icalparser_add_line(parser, line)) != 0) {
 
             if (icalcomponent_get_parent(c) != 0) {
                 /* This is bad news... assert? */
