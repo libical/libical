@@ -4339,6 +4339,48 @@ void test_timezone_from_builtin(void)
     free(strcomp);
 }
 
+void test_icalvalue_decode_ical_string(void)
+{
+    char buff[12];
+    const char *defvalue, *value;
+
+    /* Without escape characters */
+    defvalue = "xxxxx|VALUE";
+    strcpy(buff, defvalue);
+    value = buff + 6;
+
+    ok("Fails to decode into too small buffer", (icalvalue_decode_ical_string(value, buff, 4) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Fails to decode into small buffer (only without nul-terminator)", (icalvalue_decode_ical_string(value, buff, 5) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Decodes into large-enough buffer", (icalvalue_decode_ical_string(value, buff, 6) != 0));
+    ok("Properly decoded", (strcmp(buff, value) == 0));
+
+    /* With escape character */
+    defvalue = "xxxxx|a\\\\b!";
+    strcpy(buff, defvalue);
+    value = buff + 6;
+
+    ok("Fails to decode into too small buffer", (icalvalue_decode_ical_string(value, buff, 3) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Fails to decode into small buffer (only without nul-terminator)", (icalvalue_decode_ical_string(value, buff, 4) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Decodes into large-enough buffer", (icalvalue_decode_ical_string(value, buff, 5) != 0));
+    ok("Properly decoded", (strcmp(buff, "a\\b!") == 0));
+
+    /* With ending escape character, which will be ignored */
+    defvalue = "xxxxx|a\\\\\\";
+    strcpy(buff, defvalue);
+    value = buff + 6;
+
+    ok("Fails to decode into too small buffer", (icalvalue_decode_ical_string(value, buff, 1) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Fails to decode into small buffer (only without nul-terminator)", (icalvalue_decode_ical_string(value, buff, 2) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Decodes into large-enough buffer", (icalvalue_decode_ical_string(value, buff, 3) != 0));
+    ok("Properly decoded", (strcmp(buff, "a\\") == 0));
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4472,6 +4514,7 @@ int main(int argc, char *argv[])
     test_run("Test string_to_kind", test_string_to_kind, do_test, do_header);
     test_run("Test set DATE/DATE-TIME VALUE", test_set_date_datetime_value, do_test, do_header);
     test_run("Test timezone from builtin", test_timezone_from_builtin, do_test, do_header);
+    test_run("Test icalvalue_decode_ical_string", test_icalvalue_decode_ical_string, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
