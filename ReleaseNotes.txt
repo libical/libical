@@ -1,6 +1,10 @@
 Release Highlights
 ==================
 
+Version 3.0.6 (UNRELEASED):
+---------------------------
+ *
+
 Version 3.0.5 (14 May 2019):
 ----------------------------
  * New publicly available function:
