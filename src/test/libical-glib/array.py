@@ -22,54 +22,59 @@ import gi
 
 gi.require_version('ICalGLib', '3.0')
 
-import sys
 from gi.repository import ICalGLib
-from sys import getsizeof
 
-array = ICalGLib.Array.new(256, 100);
-
-element1 = "hello";
-element2 = "world";
-element3 = "how";
-element4 = "are";
-element5 = "you";
+array = ICalGLib.Timezone.array_new();
 
 #TEST APPEND
-attach1 = ICalGLib.Attach.new_from_url(element1);
-attach2 = ICalGLib.Attach.new_from_url(element2);
-attach3 = ICalGLib.Attach.new_from_url(element3);
-attach4 = ICalGLib.Attach.new_from_url(element4);
-attach5 = ICalGLib.Attach.new_from_url(element5);
+zone0 = ICalGLib.Timezone.get_builtin_timezone("Pacific/Midway");
+zone1 = ICalGLib.Timezone.get_builtin_timezone("America/Vancouver");
+zone2 = ICalGLib.Timezone.get_builtin_timezone("Atlantic/Bermuda");
+zone3 = ICalGLib.Timezone.get_builtin_timezone("Africa/Casablanca");
+zone4 = ICalGLib.Timezone.get_builtin_timezone("Asia/Irkutsk");
 
-array.append(attach1);
-array.append(attach2);
-array.append(attach3);
-array.append(attach4);
-array.append(attach5);
+ICalGLib.Timezone.array_append_from_vtimezone(array, zone0.get_component());
+ICalGLib.Timezone.array_append_from_vtimezone(array, zone1.get_component());
+ICalGLib.Timezone.array_append_from_vtimezone(array, zone2.get_component());
+ICalGLib.Timezone.array_append_from_vtimezone(array, zone3.get_component());
+ICalGLib.Timezone.array_append_from_vtimezone(array, zone4.get_component());
 
-a1 = array.element_at(0);
-assert(a1 == attach1);
-a2 = array.element_at(1);
-assert(a2 == attach2);
-a3 = array.element_at(2);
-assert(a3 == attach3);
-a4 = array.element_at(3);
-assert(a4 == attach4);
-a5 = array.element_at(4);
-assert(a5 == attach5);
+assert array.size() == 5
 
-array = array.copy();
-a1 = array.element_at(0);
-assert(a1 == attach1);
-a2 = array.element_at(1);
-assert(a2 == attach2);
-a3 = array.element_at(2);
-assert(a3 == attach3);
-a4 = array.element_at(3);
-assert(a4 == attach4);
-a5 = array.element_at(4);
-assert(a5 == attach5);
+z0 = ICalGLib.Timezone.array_element_at(array, 0);
+assert(z0.get_location() == zone0.get_location());
+z1 = ICalGLib.Timezone.array_element_at(array, 1);
+assert(z1.get_location() == zone1.get_location());
+z2 = ICalGLib.Timezone.array_element_at(array, 2);
+assert(z2.get_location() == zone2.get_location());
+z3 = ICalGLib.Timezone.array_element_at(array, 3);
+assert(z3.get_location() == zone3.get_location());
+z4 = ICalGLib.Timezone.array_element_at(array, 4);
+assert(z4.get_location() == zone4.get_location());
+
+array2 = array.copy();
+
+assert array2.size() == 5
+
+z0 = ICalGLib.Timezone.array_element_at(array2, 0);
+assert(z0.get_location() == zone0.get_location());
+z1 = ICalGLib.Timezone.array_element_at(array2, 1);
+assert(z1.get_location() == zone1.get_location());
+z2 = ICalGLib.Timezone.array_element_at(array2, 2);
+assert(z2.get_location() == zone2.get_location());
+z3 = ICalGLib.Timezone.array_element_at(array2, 3);
+assert(z3.get_location() == zone3.get_location());
+z4 = ICalGLib.Timezone.array_element_at(array2, 4);
+assert(z4.get_location() == zone4.get_location());
 
 array.remove_element_at(2);
-a3 = array.element_at(2);
-assert(a3 == attach4);
+assert array.size() == 4
+
+z0 = ICalGLib.Timezone.array_element_at(array, 0);
+assert(z0.get_location() == zone0.get_location());
+z1 = ICalGLib.Timezone.array_element_at(array, 1);
+assert(z1.get_location() == zone1.get_location());
+z3 = ICalGLib.Timezone.array_element_at(array, 2);
+assert(z3.get_location() == zone3.get_location());
+z4 = ICalGLib.Timezone.array_element_at(array, 3);
+assert(z4.get_location() == zone4.get_location());
