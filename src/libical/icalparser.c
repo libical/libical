@@ -45,6 +45,8 @@
 #include <stdlib.h>
 
 #define TMP_BUF_SIZE 80
+#define MAXIMUM_ALLOWED_PARAMETERS 100
+#define MAXIMUM_ALLOWED_MULTIPLE_VALUES 500
 
 struct icalparser_impl
 {
@@ -689,6 +691,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 {
     char *str;
     char *end;
+    int pcount = 0;
     int vcount = 0;
     icalproperty *prop;
     icalproperty_kind prop_kind;
@@ -783,8 +786,15 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         icalmemory_free_buffer(str);
         str = NULL;
 
-        /* Return the component if we are back to the 0th level */
-        if (parser->level == 0) {
+        if (parser->level < 0) {
+            // Encountered an END before any BEGIN, this must be invalid data
+            icalerror_warn("Encountered END before BEGIN");
+
+            parser->state = ICALPARSER_ERROR;
+            parser->level = 0;
+            return 0;
+        } else if (parser->level == 0) {
+            /* Return the component if we are back to the 0th level */
             icalcomponent *rtrn;
 
             if (pvl_count(parser->components) != 0) {
@@ -864,7 +874,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
     /* Now, add any parameters to the last property */
 
-    while (1) {
+    while (pcount < MAXIMUM_ALLOWED_PARAMETERS) {
         if (*(end - 1) == ':') {
             /* if the last separator was a ":" and the value is a
                URL, icalparser_get_next_parameter will find the
@@ -985,6 +995,11 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 /* Reparse the parameter name and value with the new segment */
                 if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack),
                                                  pvalue_stack, sizeof(pvalue_stack))) {
+                    if (pvalue_heap) {
+                        icalmemory_free_buffer(pvalue_heap);
+                        pvalue_heap = 0;
+                        pvalue = 0;
+                    }
                     if (name_heap) {
                         icalmemory_free_buffer(name_heap);
                         name = 0;
@@ -1092,6 +1107,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             tail = 0;
             icalmemory_free_buffer(str);
             str = NULL;
+            pcount++;
 
         } else {
             /* str is NULL */
@@ -1109,7 +1125,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
        parameter and add one part of the value to each clone */
 
     vcount = 0;
-    while (1) {
+    while (vcount < MAXIMUM_ALLOWED_MULTIPLE_VALUES) {
         /* Only some properties can have multiple values. This list was taken
            from rfc5545. Also added the x-properties, because the spec actually
            says that commas should be escaped. For x-properties, other apps may

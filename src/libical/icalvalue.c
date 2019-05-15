@@ -1520,8 +1520,8 @@ int icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBu
     if ((szText == 0) || (szDecText == 0))
         return 0;
 
-    buf_sz = strlen(szText);
-    str_p = str = (char *)icalmemory_new_buffer(buf_sz + 1);
+    buf_sz = strlen(szText) + 1;
+    str_p = str = (char *)icalmemory_new_buffer(buf_sz);
 
     if (str_p == 0) {
         return 0;
@@ -1534,11 +1534,14 @@ int icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBu
         } else {
             icalmemory_append_char(&str, &str_p, &buf_sz, *p);
         }
+
+        if (str_p - str > nMaxBufferLen)
+            break;
     }
 
     icalmemory_append_char(&str, &str_p, &buf_sz, '\0');
 
-    if ((int)strlen(str) > nMaxBufferLen) {
+    if ((int)strlen(str) >= nMaxBufferLen) {
         icalmemory_free_buffer(str);
         return 0;
     }

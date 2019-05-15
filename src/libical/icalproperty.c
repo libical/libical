@@ -1112,7 +1112,7 @@ struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop,
         if (tz == NULL)
             tz = icaltimezone_get_builtin_timezone_from_tzid(tzid);
 
-        if (!icaltimezone_get_builtin_tzdata() && tz == NULL)
+        if (tz == NULL)
             tz = icaltimezone_get_builtin_timezone(tzid);
 
         if (tz != NULL)
