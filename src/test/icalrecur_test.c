@@ -364,6 +364,12 @@ const struct recur rfc5545[] = {
      "FREQ=WEEKLY;UNTIL=20170127T000000Z;WKST=MO;BYDAY=SU,TU,TH;INTERVAL=2",
      "20161231T090000"},
 
+    /* Bi-weekly on Sunday, Tuesday, and Thursday until January 27, 2017,
+       starting second day of 2017 */
+    {"20161229T090000",
+     "FREQ=WEEKLY;UNTIL=20170127T000000Z;WKST=MO;BYDAY=SU,TU,TH;INTERVAL=2",
+     "20170102T090000"},
+
     /* Every 3rd day in January, starting on the 10th */
     {"20170101T090000",
      "FREQ=DAILY;UNTIL=20170131T140000Z;BYMONTH=1;INTERVAL=3",
@@ -378,6 +384,11 @@ const struct recur rfc5545[] = {
     /* Every 13 months, on May 12 */
     {"20100212T000000",
      "FREQ=MONTHLY;INTERVAL=13;BYMONTH=5;COUNT=3",
+     NULL},
+
+    /* github issue376 */
+    {"20190101T100000",
+     "FREQ=WEEKLY;BYDAY=WE,FR;INTERVAL=2;COUNT=4",
      NULL},
 
     {NULL, NULL, NULL}
