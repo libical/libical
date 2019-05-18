@@ -2949,6 +2949,11 @@ static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
         } else {
             adjust_to_byday(impl);
 
+            /* If start == DTSTART, adjust rstart */
+            if (icaltime_compare(start, impl->dtstart) == 0) {
+                impl->rstart = occurrence_as_icaltime(impl, 0);
+            }
+
             /* Get (adjusted) start date as RSCALE date */
             start = occurrence_as_icaltime(impl, 0);
 
