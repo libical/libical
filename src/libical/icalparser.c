@@ -1098,6 +1098,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
                     icalmemory_free_buffer(str);
                     str = NULL;
+                    pcount++;
                     continue;
                 }
             }

@@ -86,8 +86,8 @@
 
     g_return_val_if_fail(szText != NULL, NULL);
 
-    bufSize = 2 * strlen(szText);
-    szEncText = g_new0(gchar, bufSize + 1);
+    bufSize = 2 * strlen(szText) + 1;
+    szEncText = g_new0(gchar, bufSize);
 
     result = icalvalue_encode_ical_string(szText, szEncText, bufSize);
     if (result)
@@ -107,8 +107,8 @@
 
     g_return_val_if_fail (szText != NULL, NULL);
 
-    bufSize = strlen(szText);
-    szDecText = g_new0(gchar, bufSize + 1);
+    bufSize = strlen(szText) + 1;
+    szDecText = g_new0(gchar, bufSize);
 
     result = icalvalue_decode_ical_string(szText, szDecText, bufSize);
     if (result)
