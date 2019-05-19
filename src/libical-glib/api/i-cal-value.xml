@@ -19,7 +19,7 @@
         <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
         <comment xml:space="preserve">Create a new #ICalValue with specific kind.</comment>
     </method>
-    <method name="i_cal_value_new_clone" corresponds="icalvalue_new_clone" kind="clone" since="1.0">
+    <method name="i_cal_value_clone" corresponds="icalvalue_new_clone" kind="clone" since="1.0">
         <parameter type="const ICalValue *" name="value" comment="The #ICalValue to be cloned."/>
         <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue with the same property as @value."/>
         <comment xml:space="preserve">Deeply clone a #ICalValue.</comment>
@@ -39,7 +39,7 @@
         <returns type="gboolean" comment="1 if valid, 0 if not."/>
         <comment xml:space="preserve">Check if #ICalValue is valid.</comment>
     </method>
-    <method name="i_cal_value_as_ical_string_r" corresponds="icalvalue_as_ical_string_r" since="1.0">
+    <method name="i_cal_value_as_ical_string" corresponds="icalvalue_as_ical_string_r" since="1.0">
         <parameter type="const ICalValue *" name="value" comment="A #ICalValue."/>
         <returns type="gchar *" annotation="transfer full" comment="The string representation."/>
         <comment xml:space="preserve">Convert the #ICalValue to a string.</comment>
@@ -60,7 +60,7 @@
         <returns type="ICalParameterXliccomparetype" comment="The compare result."/>
         <comment xml:space="preserve">Compare two #ICalValue.</comment>
     </method>
-    <method name="i_cal_value_string_to_kind" corresponds="icalvalue_string_to_kind" since="1.0">
+    <method name="i_cal_value_kind_from_string" corresponds="icalvalue_string_to_kind" since="1.0">
         <parameter type="const gchar *" name="str" comment="A string."/>
         <returns type="ICalValueKind" comment="A #ICalValueKind."/>
         <comment xml:space="preserve">Convert a string to #ICalValueKind.</comment>
@@ -86,8 +86,8 @@
 
     g_return_val_if_fail(szText != NULL, NULL);
 
-    bufSize = 2 * strlen(szText);
-    szEncText = g_new0(gchar, bufSize + 1);
+    bufSize = 2 * strlen(szText) + 1;
+    szEncText = g_new0(gchar, bufSize);
 
     result = icalvalue_encode_ical_string(szText, szEncText, bufSize);
     if (result)
@@ -107,8 +107,8 @@
 
     g_return_val_if_fail (szText != NULL, NULL);
 
-    bufSize = strlen(szText);
-    szDecText = g_new0(gchar, bufSize + 1);
+    bufSize = strlen(szText) + 1;
+    szDecText = g_new0(gchar, bufSize);
 
     result = icalvalue_decode_ical_string(szText, szDecText, bufSize);
     if (result)

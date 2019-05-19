@@ -293,7 +293,13 @@ LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
 LIBICAL_ICAL_EXPORT void icalcomponent_normalize(icalcomponent *comp);
 
 /*
- * Returns the datetime corresponding to the specified @p icalproperty and @p icalcomponent.
+ * Computes the datetime corresponding to the specified @p icalproperty and @p icalcomponent.
+ * If the property is a DATE-TIME with a TZID parameter and a corresponding VTIMEZONE
+ * is present in the component, the returned component will already be in the correct
+ * timezone; otherwise the caller is responsible for converting it.
+ *
+ * Call icaltime_is_null_time() on the returned value to detect failures.
+ *
  * @since 3.0.5
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalproperty_get_datetime_with_component(

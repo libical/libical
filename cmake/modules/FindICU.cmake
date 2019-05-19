@@ -71,7 +71,7 @@ find_program(
   /usr/local/opt/icu4c/bin/
 )
 get_filename_component(tmp_DIR ${tmp_DIR} DIRECTORY)
-set(ICU_BINARY_DIR ${tmp_DIR} CACHE DOC "Runtime binaries directory for the ICU library")
+set(ICU_BINARY_DIR ${tmp_DIR} CACHE DOC STRING "Runtime binaries directory for the ICU library")
 mark_as_advanced(ICU_BINARY_DIR)
 
 # Copy the results to the output variables.

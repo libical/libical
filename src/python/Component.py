@@ -615,7 +615,7 @@ class GenericComponent(Component):
         Examples:
         # Set using string[s]
         categories(('APPOINTMENT', 'EDUCATION'))
-        # Returns a list of Category properites
+        # Returns a list of Category properties
         categories()
 
         When setting the attendees, any previous category Properties in the
@@ -793,7 +793,7 @@ class Todo(GenericComponent):
 
     def duration(self, value=None):
         if value != None:
-            due = self.properites('DUE')
+            due = self.properties('DUE')
             for d in due:
                 self.remove_property(d)  # Clear DUE properties
         return self._singular_property("DURATION", "DURATION", value, Duration)

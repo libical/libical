@@ -49,24 +49,24 @@ kind = ICalGLib.ParameterKind.ACTIONPARAM_PARAMETER;
 parameter = ICalGLib.Parameter.new(kind);
 assert(parameter.isa() == kind);
 assert(parameter.isa_parameter() == 1);
-string = parameter.as_ical_string_r();
+string = parameter.as_ical_string();
 assert(string == None);
-clone = parameter.new_clone();
+clone = parameter.clone();
 assert(clone.isa() == kind);
 assert(clone.isa_parameter() == 1);
-string = clone.as_ical_string_r();
+string = clone.as_ical_string();
 assert(string == None);
 
 string = ICalGLib.Parameter.kind_to_string(kind);
 assert(string == "ACTIONPARAM");
-assert(ICalGLib.Parameter.string_to_kind(string) == kind);
+assert(ICalGLib.Parameter.kind_from_string(string) == kind);
 
 value = "This is a value";
 typevalue = string + "=" + value;
 parameter = ICalGLib.Parameter.new_from_string(typevalue);
-assert(parameter.as_ical_string_r() == typevalue);
+assert(parameter.as_ical_string() == typevalue);
 assert(parameter.isa() == kind);
 assert(parameter.isa_parameter() == 1);
 
 another_parameter = ICalGLib.Parameter.new_from_value_string(kind, value);
-assert(another_parameter.as_ical_string_r() == typevalue);
+assert(another_parameter.as_ical_string() == typevalue);

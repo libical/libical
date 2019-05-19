@@ -22,7 +22,7 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 set(TEST_DATADIR "\"${CMAKE_SOURCE_DIR}/test-data\"")
-add_definitions(-DTEST_DATADIR=${TEST_DATADIR})
+add_definitions(-DTEST_DATADIR=${TEST_DATADIR} -DTEST_ZONEDIR="${CMAKE_SOURCE_DIR}/zoneinfo")
 
 macro(setprops _name)
   if(UNIX)

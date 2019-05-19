@@ -23,7 +23,7 @@
 -0243900 +0255500 Africa/Gaborone
 -0175000 +0310300 Africa/Harare
 -0261500 +0280000 Africa/Johannesburg
-+0045100 +0313600 Africa/Juba
++0045100 +0313700 Africa/Juba
 +0001900 +0322500 Africa/Kampala
 +0153600 +0323200 Africa/Khartoum
 -0015700 +0300400 Africa/Kigali
@@ -147,7 +147,7 @@
 +0470300 -0562000 America/Miquelon
 +0460600 -0644700 America/Moncton
 +0254000 -1001900 America/Monterrey
--0345300 -0561100 America/Montevideo
+-0345433 -0561245 America/Montevideo
 +0453100 -0733400 America/Montreal
 +0164300 -0621300 America/Montserrat
 +0250500 -0772100 America/Nassau
@@ -263,7 +263,7 @@
 +0031000 +1014200 Asia/Kuala_Lumpur
 +0013300 +1102000 Asia/Kuching
 +0292000 +0475900 Asia/Kuwait
-+0221400 +1133500 Asia/Macau
++0221150 +1133230 Asia/Macau
 +0593400 +1504800 Asia/Magadan
 -0050700 +1192400 Asia/Makassar
 +0143500 +1210000 Asia/Manila
@@ -277,6 +277,7 @@
 +0000200 +1092000 Asia/Pontianak
 +0390100 +1254500 Asia/Pyongyang
 +0251700 +0513200 Asia/Qatar
++0531200 +0633700 Asia/Qostanay
 +0444800 +0652800 Asia/Qyzylorda
 +0164700 +0961000 Asia/Rangoon
 +0243800 +0464300 Asia/Riyadh

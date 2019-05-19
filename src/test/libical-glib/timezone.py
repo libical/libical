@@ -64,7 +64,7 @@ assert utc == utc2
 
 time = ICalGLib.Time.new();
 before = time.get_hour();
-ICalGLib.timezone_convert_time(time, la, chicago);
+ICalGLib.Time.convert_timezone(time, la, chicago);
 after = time.get_hour();
 assert abs(after - before) == 2;
 ICalGLib.Time.set_timezone(time, utc);
@@ -72,7 +72,7 @@ assert ICalGLib.Time.get_timezone(time) == utc;
 ICalGLib.Time.set_timezone(time, la);
 assert ICalGLib.Time.get_timezone(time) == la;
 
-timeclone = time.new_clone()
+timeclone = time.clone()
 assert time != timeclone
 time = ICalGLib.Time.convert_to_zone(time, chicago)
 timeclone.convert_to_zone_inplace(chicago)
@@ -87,7 +87,7 @@ assert time.is_date() == timeclone.is_date();
 assert time.is_daylight() == timeclone.is_daylight();
 assert time.is_utc() == timeclone.is_utc();
 
-timeclone = ICalGLib.Time.new_clone(time);
+timeclone = ICalGLib.Time.clone(time);
 assert time != timeclone;
 assert ICalGLib.Time.get_year(time) == ICalGLib.Time.get_year(timeclone);
 assert ICalGLib.Time.get_month(time) == ICalGLib.Time.get_month(timeclone);
@@ -124,12 +124,12 @@ assert array[2] == 10
 
 component = la.get_component();
 timezone = ICalGLib.Timezone.new();
-timezone.set_component(ICalGLib.Component.new_clone(component));
+timezone.set_component(ICalGLib.Component.clone(component));
 assert timezone.get_location() == la.get_location();
 
 array = ICalGLib.Timezone.array_new();
-ICalGLib.Timezone.array_append_from_vtimezone(array, ICalGLib.Component.new_clone(la.get_component()));
-ICalGLib.Timezone.array_append_from_vtimezone(array, ICalGLib.Component.new_clone(chicago.get_component()));
+ICalGLib.Timezone.array_append_from_vtimezone(array, ICalGLib.Component.clone(la.get_component()));
+ICalGLib.Timezone.array_append_from_vtimezone(array, ICalGLib.Component.clone(chicago.get_component()));
 assert array.size() == 2;
 timezone1 = ICalGLib.Timezone.array_element_at(array, 0);
 assert timezone1.get_display_name() == la.get_display_name();

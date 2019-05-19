@@ -362,23 +362,21 @@ i_cal_object_construct(GType object_type,
     /* UNLOCK_PROPS (iobject); */
 
     if (is_global_memory) {
-        if (iobject) {
-            GlobalData *gd;
+        GlobalData *gd;
 
-            gd = g_new0(GlobalData, 1);
-            gd->object_type = object_type;
-            gd->native = native;
+        gd = g_new0(GlobalData, 1);
+        gd->object_type = object_type;
+        gd->native = native;
 
-            g_object_weak_ref(G_OBJECT(iobject), global_data_object_freed_cb, gd);
+        g_object_weak_ref(G_OBJECT(iobject), global_data_object_freed_cb, gd);
 
-            if (!global_objects) {
-                global_objects =
-                    g_hash_table_new_full(global_data_hash, global_data_equal,
-                                          g_free, g_object_unref);
-            }
-
-            g_hash_table_insert(global_objects, gd, iobject);
+        if (!global_objects) {
+            global_objects =
+                g_hash_table_new_full(global_data_hash, global_data_equal,
+                                      g_free, g_object_unref);
         }
+
+        g_hash_table_insert(global_objects, gd, iobject);
 
         G_UNLOCK(global_objects);
     }

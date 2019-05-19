@@ -19,7 +19,7 @@
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Create a new #ICalComponent with specific type.</comment>
     </method>
-    <method name="i_cal_component_new_clone" corresponds="icalcomponent_new_clone" kind="clone" since="1.0">
+    <method name="i_cal_component_clone" corresponds="icalcomponent_new_clone" kind="clone" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be created."/>
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly deeply cloned #ICalComponent."/>
         <comment xml:space="preserve">Deeply clone a #ICalComponent.</comment>
@@ -38,7 +38,7 @@
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be freed."/>
         <comment xml:space="preserve">Free a #ICalComponent.</comment>
     </method>
-    <method name="i_cal_component_as_ical_string_r" corresponds="icalcomponent_as_ical_string_r" since="1.0">
+    <method name="i_cal_component_as_ical_string" corresponds="icalcomponent_as_ical_string_r" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be converted."/>
         <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalComponent."/>
         <comment xml:space="preserve">Convert a #ICalComponent to a string.</comment>
@@ -93,6 +93,14 @@
         <parameter type="ICalProperty *" name="property" comment="An #ICalProperty."/>
         <parameter type="ICalComponent *" name="component" annotation="nullable" comment="An #ICalComponent."/>
         <comment xml:space="preserve">Set the parent #ICalComponent of the specified #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_property_get_datetime_with_component" corresponds="icalproperty_get_datetime_with_component" kind="get" since="3.0.5">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty."/>
+        <parameter type="ICalComponent *" name="comp" annotation="nullable" comment="An #ICalComponent."/>
+        <returns type="ICalTime *" annotation="transfer full" comment="Get a DATE or DATE-TIME property as an #ICalTime."/>
+        <comment xml:space="preserve">If the property is a DATE-TIME with a TZID parameter and a corresponding VTIMEZONE is present in the component, the returned component will already be in the correct timezone; otherwise the caller is responsible for converting it.
+ *
+ * The @comp can be NULL, in which case the parent of the @prop is used to find the corresponding time zone.</comment>
     </method>
     <method name="i_cal_component_get_current_property" corresponds="icalcomponent_get_current_property" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
@@ -224,7 +232,7 @@
         <returns type="gboolean" comment="1 if @kind id a #ICalComponent but not the I_CAL_NO_COMPONENT, 0 if not."/>
         <comment xml:space="preserve">Check if a #ICalComponentKind is valid.</comment>
     </method>
-    <method name="i_cal_component_string_to_kind" corresponds="icalcomponent_string_to_kind" since="1.0">
+    <method name="i_cal_component_kind_from_string" corresponds="icalcomponent_string_to_kind" since="1.0">
         <parameter type="const gchar *" name="string" comment="A string."/>
         <returns type="ICalComponentKind" error_return_value="I_CAL_NO_COMPONENT" comment="A #ICalComponentKind"/>
         <comment xml:space="preserve">Convert a string to a #ICalComponentKind.</comment>

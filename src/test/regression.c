@@ -37,6 +37,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#define TESTS_TZID_PREFIX "/softwarestudio.org/tests/"
+
 /* For GNU libc, strcmp appears to be a macro, so using strcmp in
  assert results in incomprehansible assertion messages. This
  eliminates the problem */
@@ -2690,10 +2692,10 @@ void test_convenience()
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     ok("Start is 1997-08-01 12:00:00 Europe/Rome",
-       (0 == strcmp("1997-08-01 12:00:00 /softwarestudio.org/Europe/Rome",
+       (0 == strcmp("1997-08-01 12:00:00 " TESTS_TZID_PREFIX "Europe/Rome",
                     ictt_as_string(icalcomponent_get_dtstart(c)))));
     ok("End is 1997-08-01 13:30:00 Europe/Rome",
-       (0 == strcmp("1997-08-01 13:30:00 /softwarestudio.org/Europe/Rome",
+       (0 == strcmp("1997-08-01 13:30:00 " TESTS_TZID_PREFIX "Europe/Rome",
                     ictt_as_string(icalcomponent_get_dtend(c)))));
 #endif
     ok("Duration is 90 m", (duration == 90));
@@ -4527,6 +4529,111 @@ void test_set_date_datetime_value(void)
     icalproperty_free(prop);
 }
 
+void test_timezone_from_builtin(void)
+{
+    const char *strcomp_fmt =
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VTIMEZONE\r\n"
+        "TZID:my_zone\r\n"
+        "BEGIN:STANDARD\r\n"
+        "TZNAME:my_zone\r\n"
+        "DTSTART:19160429T230000\r\n"
+        "TZOFFSETFROM:+0100\r\n"
+        "TZOFFSETTO:+0200\r\n"
+        "RRULE:FREQ=YEARLY;UNTIL=19160430T220000Z;BYDAY=-1SU;BYMONTH=4\r\n"
+        "END:STANDARD\r\n"
+        "END:VTIMEZONE\r\n"
+        "BEGIN:VEVENT\r\n"
+        "UID:0\r\n"
+        "DTSTART;TZID=my_zone:20180101T010000\r\n"
+        "DTEND;TZID=%s:20180101T030000\r\n"
+        "DUE;TZID=Europe/Berlin:20180101T030000\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    icalcomponent *comp, *subcomp;
+    icaltimezone *zone;
+    struct icaltimetype dtstart, dtend, due;
+    char *strcomp, *tzidprefix, *prevslash = NULL, *prevprevslash = NULL, *p;
+    int len;
+
+    zone = icaltimezone_get_builtin_timezone("America/New_York");
+    tzidprefix = strdup(icaltimezone_get_tzid (zone));
+    p = tzidprefix;
+    while(p = strchr(p + 1, '/'), p) {
+        prevprevslash = prevslash;
+        prevslash = p;
+    }
+    if(prevprevslash)
+	prevprevslash[1] = 0;
+
+    icaltimezone_set_tzid_prefix(tzidprefix);
+
+    len = strlen(strcomp_fmt) + strlen(icaltimezone_get_tzid(zone)) + 2;
+    strcomp = (char *) malloc(len + 1);
+    snprintf(strcomp, len, strcomp_fmt, icaltimezone_get_tzid(zone));
+
+    comp = icalcomponent_new_from_string(strcomp);
+    ok("icalcomponent_new_from_string()", (comp != NULL));
+    subcomp = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+    ok("get subcomp", (subcomp != NULL));
+
+    dtstart = icalcomponent_get_dtstart(subcomp);
+    dtend = icalcomponent_get_dtend(subcomp);
+    due = icalcomponent_get_due(subcomp);
+
+    ok("DTSTART is my_zone", (strcmp(icaltimezone_get_tzid((icaltimezone *) dtstart.zone), "my_zone") == 0));
+    ok("DTEND is America/New_York", (strcmp(icaltimezone_get_location((icaltimezone *) dtend.zone), "America/New_York") == 0));
+    ok("DUE is Europe/Berlin", (strcmp(icaltimezone_get_location((icaltimezone *) due.zone), "Europe/Berlin") == 0));
+
+    icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
+
+    icalcomponent_free(comp);
+    free(tzidprefix);
+    free(strcomp);
+}
+
+void test_icalvalue_decode_ical_string(void)
+{
+    char buff[12];
+    const char *defvalue, *value;
+
+    /* Without escape characters */
+    defvalue = "xxxxx|VALUE";
+    strcpy(buff, defvalue);
+    value = buff + 6;
+
+    ok("Fails to decode into too small buffer", (icalvalue_decode_ical_string(value, buff, 4) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Fails to decode into small buffer (only without nul-terminator)", (icalvalue_decode_ical_string(value, buff, 5) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Decodes into large-enough buffer", (icalvalue_decode_ical_string(value, buff, 6) != 0));
+    ok("Properly decoded", (strcmp(buff, value) == 0));
+
+    /* With escape character */
+    defvalue = "xxxxx|a\\\\b!";
+    strcpy(buff, defvalue);
+    value = buff + 6;
+
+    ok("Fails to decode into too small buffer", (icalvalue_decode_ical_string(value, buff, 3) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Fails to decode into small buffer (only without nul-terminator)", (icalvalue_decode_ical_string(value, buff, 4) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Decodes into large-enough buffer", (icalvalue_decode_ical_string(value, buff, 5) != 0));
+    ok("Properly decoded", (strcmp(buff, "a\\b!") == 0));
+
+    /* With ending escape character, which will be ignored */
+    defvalue = "xxxxx|a\\\\\\";
+    strcpy(buff, defvalue);
+    value = buff + 6;
+
+    ok("Fails to decode into too small buffer", (icalvalue_decode_ical_string(value, buff, 1) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Fails to decode into small buffer (only without nul-terminator)", (icalvalue_decode_ical_string(value, buff, 2) == 0));
+    ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
+    ok("Decodes into large-enough buffer", (icalvalue_decode_ical_string(value, buff, 3) != 0));
+    ok("Properly decoded", (strcmp(buff, "a\\") == 0));
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4542,8 +4649,8 @@ int main(int argc, char *argv[])
     int do_header = 0;
     int failed_count = 0;
 
-    set_zone_directory("../../zoneinfo");
-    icaltimezone_set_tzid_prefix("/softwarestudio.org/");
+    set_zone_directory(TEST_ZONEDIR);
+    icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
 
     test_start(0);
 
@@ -4663,6 +4770,8 @@ int main(int argc, char *argv[])
     test_run("Test kind_to_string", test_kind_to_string, do_test, do_header);
     test_run("Test string_to_kind", test_string_to_kind, do_test, do_header);
     test_run("Test set DATE/DATE-TIME VALUE", test_set_date_datetime_value, do_test, do_header);
+    test_run("Test timezone from builtin", test_timezone_from_builtin, do_test, do_header);
+    test_run("Test icalvalue_decode_ical_string", test_icalvalue_decode_ical_string, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
