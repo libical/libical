@@ -497,8 +497,8 @@ CLANGTIDY test2builtin "$TZCMAKEOPTS"
 GCC_BUILD test1 ""
 GCC_BUILD test2 "$CMAKEOPTS"
 GCC_BUILD test3 "$UUCCMAKEOPTS"
-GCC_BUILD test4 "$LTOCMAKEOPTS"
-GCC_BUILD test4 "$GLIBOPTS"
+GCC_BUILD test4lto "$LTOCMAKEOPTS"
+GCC_BUILD test4glib "$GLIBOPTS"
 if (test "`uname -s`" = "Linux")
 then
     echo "Temporarily disable cross-compile tests"
@@ -512,8 +512,8 @@ GCC_BUILD test2builtin "$TZCMAKEOPTS"
 CLANG_BUILD test1 ""
 CLANG_BUILD test2 "$CMAKEOPTS"
 CLANG_BUILD test3 "$UUCCMAKEOPTS"
-#CLANG_BUILD test4 "$LTOCMAKEOPTS"
-CLANG_BUILD test4 "$GLIBOPTS"
+#broken with clang7 on Fedora29 CLANG_BUILD test4lto "$LTOCMAKEOPTS"
+#broken with clang7 on Fedora29 CLANG_BUILD test4glib "$GLIBOPTS"
 if (test "`uname -s`" = "Linux")
 then
     echo "Temporarily disable cross-compile tests"
