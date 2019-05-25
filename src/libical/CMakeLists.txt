@@ -238,6 +238,8 @@ set(ical_LIB_SRCS
   pvl.h
   sspm.c
   sspm.h
+  qsort_gen.c
+  qsort_gen.h
   icallangbind.h
   icallangbind.c
   caldate.c

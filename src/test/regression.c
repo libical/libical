@@ -4567,6 +4567,39 @@ void test_icalvalue_decode_ical_string(void)
     ok("Properly decoded", (strcmp(buff, "a\\") == 0));
 }
 
+static int test_icalarray_sort_compare_char(const void* p1, const void* p2) {
+
+    char c1 = *((char*)p1);
+    char c2 = *((char*)p2);
+
+    return (c1 < c2) ? -1 : ((c1 > c2) ? 1 : 0);
+}
+
+void test_icalarray_sort(void)
+{
+    /* this test is based on the work from the PDCLib project */
+
+    char presort[] = { "shreicnyjqpvozxmbt" };
+    char sorted1[] = { "bcehijmnopqrstvxyz" };
+    unsigned int i;
+
+    icalarray * array = icalarray_new(1, 2);
+
+    for (i = 0; i < sizeof(presort)-1; i++) {
+        icalarray_append(array, &presort[i]);
+    }
+
+    icalarray_sort(array, test_icalarray_sort_compare_char);
+
+    for (i = 0; i < sizeof(presort)-1; i++) {
+        void* pItem = icalarray_element_at(array, i);
+        char c = *((char*)pItem);
+        ok("icalarray_sort - item sorted as expected", c == sorted1[i]);
+    }
+
+    icalarray_free(array);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4705,6 +4738,8 @@ int main(int argc, char *argv[])
     test_run("Test set DATE/DATE-TIME VALUE", test_set_date_datetime_value, do_test, do_header);
     test_run("Test timezone from builtin", test_timezone_from_builtin, do_test, do_header);
     test_run("Test icalvalue_decode_ical_string", test_icalvalue_decode_ical_string, do_test, do_header);
+
+    test_run("Test icalarray_sort", test_icalarray_sort, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
