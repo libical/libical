@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 
                 if (overlaps == 0) {
                     /* No overlaps, book the meeting */
-/*                  icalset_add_component(cal,icalcomponent_new_clone(c));*/
+/*                  icalset_add_component(cal,icalcomponent_clone(c));*/
 
                     /* Return a reply */
                     reply =
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
                         next_time =
                             icalspanlist_next_free_time(spanl, icalcomponent_get_dtstart(c));
 
-                        newc = icalcomponent_new_clone(c);
+                        newc = icalcomponent_clone(c);
 
                         icalcomponent_set_dtstart(newc, next_time.start);
 

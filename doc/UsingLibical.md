@@ -1225,13 +1225,14 @@ caller owns and must free, and some of the memory is managed by the
 library. Here is a summary of the memory rules.
 
 1.  If the function name has "new" in it (such as `icalcomponent_new()`,
-    or `icalpropert_new_clone()`), the caller gets control
-    of the memory.
+    or `icalproperty_new_from_string()`), the caller gets control
+    of the memory. The caller also gets control over an object that is
+    cloned via a function that ends with "_clone" (like `icalcomponent_clone()`)
 
-2.  If you got the memory from a routine with new in it, you must
-    call the corresponding `*_free()` routine to free the memory, for
-    example use `icalcomponent_free()` to free objects created with 
-    `icalcomponent_new()`)
+2.  If you got the memory from a routine with "clone" or "new" in it, you
+    must call the corresponding `*_free()` routine to free the memory,
+    for example use `icalcomponent_free()` to free objects created with
+    `icalcomponent_new()` or `icalcomponent_clone()`
 
 3.  If the function name has "add" in it, the caller is transferring
     control of the memory to the routine, for example the function

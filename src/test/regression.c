@@ -190,9 +190,9 @@ void test_values()
 
     str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "cap://value/2");
 
-    copy = icalvalue_new_clone(v);
+    copy = icalvalue_clone(v);
 
-    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "cap://value/2");
+    str_is("icalvalue_clone()", icalvalue_as_ical_string(copy), "cap://value/2");
     icalvalue_free(v);
     icalvalue_free(copy);
 
@@ -203,8 +203,8 @@ void test_values()
     ok("icalvalue_set_boolean(2)", (2 == icalvalue_get_boolean(v)));
     str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "TRUE");
 
-    copy = icalvalue_new_clone(v);
-    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "TRUE");
+    copy = icalvalue_clone(v);
+    str_is("icalvalue_clone()", icalvalue_as_ical_string(copy), "TRUE");
 
     icalvalue_free(v);
     icalvalue_free(copy);
@@ -215,8 +215,8 @@ void test_values()
     str_is("icalvalue_set_x(test2)", icalvalue_get_x(v), "test2");
     str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "test2");
 
-    copy = icalvalue_new_clone(v);
-    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "test2");
+    copy = icalvalue_clone(v);
+    str_is("icalvalue_clone()", icalvalue_as_ical_string(copy), "test2");
 
     icalvalue_free(v);
     icalvalue_free(copy);
@@ -226,8 +226,8 @@ void test_values()
     icalvalue_set_datetime(v, icaltime_from_timet_with_zone(1023404802 - 3600, 0, NULL));
     str_is("icalvalue_set_datetime()", icalvalue_as_ical_string(v), "20020606T220642");
 
-    copy = icalvalue_new_clone(v);
-    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(v), "20020606T220642");
+    copy = icalvalue_clone(v);
+    str_is("icalvalue_clone()", icalvalue_as_ical_string(v), "20020606T220642");
 
     icalvalue_free(v);
     icalvalue_free(copy);
@@ -323,12 +323,12 @@ void test_properties()
     }
     str_is("icalproperty_as_ical_string()", icalproperty_as_ical_string(prop), test_ical_str_good);
 
-    clone = icalproperty_new_clone(prop);
+    clone = icalproperty_clone(prop);
 
     if (VERBOSE) {
         printf("Clone:\n %s\n", icalproperty_as_ical_string(prop));
     }
-    str_is("icalproperty_new_clone()", icalproperty_as_ical_string(prop), test_ical_str_good);
+    str_is("icalproperty_clone()", icalproperty_as_ical_string(prop), test_ical_str_good);
 
     icalproperty_free(clone);
     icalproperty_free(prop);
@@ -954,7 +954,7 @@ void test_dirset()
             /* Change the dtstart and dtend times in the component
                pointed to by Itr */
 
-            clone = icalcomponent_new_clone(itr);
+            clone = icalcomponent_clone(itr);
             assert(icalerrno == ICAL_NO_ERROR);
             assert(clone != 0);
 
@@ -1026,7 +1026,7 @@ void test_compare()
     icalvalue *v1, *v2;
 
     v1 = icalvalue_new_caladdress("cap://value/1");
-    v2 = icalvalue_new_clone(v1);
+    v2 = icalvalue_clone(v1);
 
     ok("compare value and clone", (icalvalue_compare(v1, v2) == ICAL_XLICCOMPARETYPE_EQUAL));
 
@@ -1194,7 +1194,7 @@ void test_calendar()
 
     c = icalcalendar_get_properties(calendar);
 
-    error = icalfileset_add_component(c, icalcomponent_new_clone(comp));
+    error = icalfileset_add_component(c, icalcomponent_clone(comp));
 
     ok("Adding Clone Component to dirset", (error == ICAL_NO_ERROR));
 
@@ -2247,7 +2247,7 @@ void test_icalset()
 
         icalcomponent *clone;
 
-        clone = icalcomponent_new_clone(c);
+        clone = icalcomponent_clone(c);
 
         (void)icalset_add_component(d, clone);
 
@@ -3403,7 +3403,7 @@ void test_file_locks()
 
         (void)icalfileset_add_component(fs, c);
 
-        c2 = icalcomponent_new_clone(c);
+        c2 = icalcomponent_clone(c);
 
         (void)icalfileset_add_component(fs, c2);
 
@@ -3439,7 +3439,7 @@ void test_file_locks()
             icalcomponent_set_duration(c, d);
             icalcomponent_set_summary(c, "Child");
 
-            c2 = icalcomponent_new_clone(c);
+            c2 = icalcomponent_clone(c);
             icalcomponent_set_summary(c2, "Child");
             (void)icalfileset_add_component(fs, c2);
 
@@ -3472,7 +3472,7 @@ void test_file_locks()
             icalcomponent_set_duration(c, d);
             icalcomponent_set_summary(c, "Parent");
 
-            c2 = icalcomponent_new_clone(c);
+            c2 = icalcomponent_clone(c);
             icalcomponent_set_summary(c2, "Parent");
             (void)icalfileset_add_component(fs, c2);
 

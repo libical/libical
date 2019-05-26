@@ -20,6 +20,7 @@
 #ifndef ICALCOMPONENT_H
 #define ICALCOMPONENT_H
 
+#include "libical_deprecated.h"
 #include "libical_ical_export.h"
 #include "icalenums.h"  /* defines icalcomponent_kind */
 #include "icalproperty.h"
@@ -36,9 +37,14 @@ typedef struct icalcompiter
 
 } icalcompiter;
 
+/**
+ * Deeply clone an icalcomponent.
+ * Returns a pointer to the memory for the newly cloned icalcomponent.
+ * @since 3.1.0
+ */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new(icalcomponent_kind kind);
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_clone(icalcomponent *component);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_clone(const icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_from_string(const char *str);
 
@@ -58,9 +64,14 @@ LIBICAL_ICAL_EXPORT icalcomponent_kind icalcomponent_isa(const icalcomponent *co
 
 LIBICAL_ICAL_EXPORT int icalcomponent_isa_component(void *component);
 
-/*
- * Working with properties
+/**
+ * @copydoc icalcomponent_clone()
+ * @deprecated use icalcomponent_clone() instead
  */
+LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalcomponent *icalcomponent_new_clone(
+                                           icalcomponent *component));
+
+/***** Working with Properties *****/
 
 LIBICAL_ICAL_EXPORT void icalcomponent_add_property(icalcomponent *component,
                                                     icalproperty *property);
@@ -91,9 +102,7 @@ LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_first_property(icalcomponent
 LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_next_property(icalcomponent *component,
                                                                   icalproperty_kind kind);
 
-/*
- * Working with components
- */
+/***** Working with Components *****/
 
 /* Return the first VEVENT, VTODO or VJOURNAL sub-component of cop, or
    comp if it is one of those types */
@@ -141,7 +150,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_prior(icalcompiter * i);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter * i);
 
-/* Working with embedded error properties */
+/***** Working with embedded error properties *****/
 
 /* Check the component against itip rules and insert error properties*/
 /* Working with embedded error properties */

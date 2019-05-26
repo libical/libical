@@ -104,7 +104,7 @@ int main(int c, char *argv[])
         if (tostdout) {
             printf("--------------\n%s\n", icalcomponent_as_ical_string(itr));
         } else {
-            (void)icalfileset_add_component(clusterout, icalcomponent_new_clone(itr));
+            (void)icalfileset_add_component(clusterout, icalcomponent_clone(itr));
         }
         count++;
     }

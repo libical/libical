@@ -4,16 +4,27 @@ Release Highlights
 Version 3.1.0 (NOT RELEASED YET):
 --------------------------------
  * Requires CMake v3.11.0 or higher
+ * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
  * New publicly available functions:
      + icalrecurrencetype_encode_day
      + icalrecurrencetype_encode_month
      + icaltzutil_set_zone_directory
+     + icalcomponent_clone
+     + icalproperty_clone
+     + icalparameter_clone
+     + icalvalue_clone
+     + icalcluster_clone
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
  * Deprecated functions:
-     + caldat
-     + juldat
+     + caldat (replaced by internal function icaldat_int())
+     + juldat (replaced by internal function juldat_int())
+     + icalcomponent_new_clone
+     + icalproperty_new_clone
+     + icalparameter_new_clone
+     + icalvalue_new_clone
+     + icalcluster_new_clone
  * Removed unused declarations:
-     (in the public headers but not used at all)
+     (were in the public headers but not used at all)
      + struct icaltimezonetype
      + struct icaltimezonephase
  * Improved performance of recurrence iterators
@@ -30,7 +41,7 @@ Version 3.0.5 (14 May 2019):
    including <libical-glib/libical-glib.h> to be able to use it.
  * Built-in timezones updated to tzdata2019a
  * De-fuzzifications and Coverity fixes
- 
+
 Version 3.0.4 (14 Aug 2018):
 ----------------------------
  * Silently fail RSCALE recurrence clauses when RSCALE is disabled

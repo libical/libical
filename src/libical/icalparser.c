@@ -1146,7 +1146,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
             if (vcount > 0) {
                 /* Actually, only clone after the second value */
-                icalproperty *clone = icalproperty_new_clone(prop);
+                icalproperty *clone = icalproperty_clone(prop);
                 icalcomponent *tail = pvl_data(pvl_tail(parser->components));
 
                 icalcomponent_add_property(tail, clone);
