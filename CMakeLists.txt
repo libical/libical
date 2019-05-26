@@ -170,7 +170,10 @@ endif()
 # libicu is highly recommended for RSCALE support
 #  libicu can be found at http://www.icu-project.org
 #  RSCALE info at http://tools.ietf.org/html/rfc7529
-find_package(ICU)
+if(NOT "$ENV{ICU_BASE}" STREQUAL "") #support the old ICU_BASE env
+  set(ICU_ROOT $ENV{ICU_BASE})
+endif()
+find_package(ICU COMPONENTS uc i18n)
 set_package_properties(ICU PROPERTIES
   TYPE RECOMMENDED
   PURPOSE "For RSCALE (RFC7529) support"
@@ -183,14 +186,26 @@ add_feature_info(
 if(ICU_FOUND)
   set(REQUIRES_PRIVATE_ICU "Requires.private: icu-i18n") #for libical.pc
   set(HAVE_LIBICU 1)
-  if(ICU_MAJOR_VERSION VERSION_GREATER 50)
+  if(ICU_VERSION VERSION_GREATER 50)
     set(HAVE_ICU_DANGI TRUE)
   else()
     set(HAVE_ICU_DANGI FALSE)
   endif()
-endif()
-if(ICU_I18N_FOUND)
-  set(HAVE_LIBICU_I18N 1)
+  if(ICU_GENCCODE_EXECUTABLE)
+    get_filename_component(ICU_EXEC ${ICU_GENCCODE_EXECUTABLE} DIRECTORY)
+  elseif(ICU_UCONV_EXECUTABLE)
+    get_filename_component(ICU_EXEC ${ICU_UCONV_EXECUTABLE} DIRECTORY)
+  elseif(ICU_ICUINFO_EXECUTABLE)
+    get_filename_component(ICU_EXEC ${ICU_ICUINFO_EXECUTABLE} DIRECTORY)
+  elseif(ICU_ICU-CONFIG_EXECUTABLE)
+    get_filename_component(ICU_EXEC ${ICU_ICU-CONFIG_EXECUTABLE} DIRECTORY)
+  elseif(ICU_MAKECONV_EXECUTABLE)
+    get_filename_component(ICU_EXEC ${ICU_MAKECONV_EXECUTABLE} DIRECTORY)
+  else()
+    message(FATAL_ERROR
+      "Unable find locate the ICU runtime path. Is your ICU installation broken?")
+  endif()
+  set(ICU_BINARY_DIR ${ICU_EXEC} CACHE DOC "Runtime binaries directory for the ICU library")
 endif()
 
 # compile in Berkeley DB support

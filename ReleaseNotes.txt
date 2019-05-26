@@ -4,6 +4,7 @@ Release Highlights
 Version 3.1.0 (NOT RELEASED YET):
 --------------------------------
  * Requires CMake v3.11.0 or higher
+ * Improved FindICU (from the official CMake)
  * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
  * New publicly available functions:
      + icalrecurrencetype_encode_day

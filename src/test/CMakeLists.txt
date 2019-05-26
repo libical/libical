@@ -8,7 +8,7 @@ include_directories(
 )
 
 if(ICU_FOUND)
-  include_directories(${ICU_INCLUDE_DIR})
+  include_directories(${ICU_INCLUDE_DIRS})
 endif()
 
 if(BDB_FOUND)
@@ -66,10 +66,7 @@ macro(buildme _name _srcs)
 
   target_link_libraries(${_name} ${CMAKE_THREAD_LIBS_INIT})
   if(ICU_FOUND)
-    target_link_libraries(${_name} ${ICU_LIBRARY})
-  endif()
-  if(ICU_I18N_FOUND)
-    target_link_libraries(${_name} ${ICU_I18N_LIBRARY})
+    target_link_libraries(${_name} ${ICU_LIBRARIES})
   endif()
   if(BDB_FOUND)
     target_link_libraries(${_name} ${BDB_LIBRARY})
