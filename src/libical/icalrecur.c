@@ -611,9 +611,13 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             parser.rt.count = atoi(value);
             /* don't allow count to be less than 1 */
             if (parser.rt.count < 1) r = -1;
+            /* don't allow both count and until */
+            else if (!icaltime_is_null_time(parser.rt.until)) r = -1;
         } else if (strcasecmp(name, "UNTIL") == 0) {
             parser.rt.until = icaltime_from_string(value);
             if (icaltime_is_null_time(parser.rt.until)) r = -1;
+            /* don't allow both count and until */
+            else if (parser.rt.count > 0) r = -1;
         } else if (strcasecmp(name, "INTERVAL") == 0) {
             parser.rt.interval = (short)atoi(value);
             /* don't allow an interval to be less than 1
@@ -720,7 +724,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
     char temp[20];
     int i, j;
 
-    if (recur->freq == ICAL_NO_RECURRENCE) {
+    if (recur == 0 || recur->freq == ICAL_NO_RECURRENCE) {
         return 0;
     }
 
