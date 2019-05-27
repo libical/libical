@@ -66,6 +66,7 @@
 #  Default=false (use the default size of time_t)
 #
 
+# ## DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!!
 ## Special CMake Options for Developers
 #
 # -DABI_DUMPER=[true|false]
@@ -74,9 +75,11 @@
 #
 # -DADDRESS_SANITIZER=[true|false]
 #  Build with the address sanitizer (requires gcc or clang)
+#  Default=false
 #
 # -DTHREAD_SANITIZER=[true|false]
 #  Build with the thread sanitizer (requires gcc or clang)
+#  Default=false
 #
 
 cmake_minimum_required(VERSION 3.11.0) #first line, to shutup a cygwin warning
@@ -93,6 +96,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 #Include CMake capabilities
+include(LibIcalMacrosInternal)
 include(FeatureSummary)
 
 # Enable the test harness
@@ -205,7 +209,7 @@ if(ICU_FOUND)
     message(FATAL_ERROR
       "Unable find locate the ICU runtime path. Is your ICU installation broken?")
   endif()
-  set(ICU_BINARY_DIR ${ICU_EXEC} CACHE DOC "Runtime binaries directory for the ICU library")
+  set(ICU_BINARY_DIR ${ICU_EXEC} CACHE DOC STRING "Runtime binaries directory for the ICU library")
 endif()
 
 # compile in Berkeley DB support
@@ -432,28 +436,12 @@ endif()
 # Compiler settings
 #
 if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
-  include(CheckCCompilerFlag)
-  check_c_compiler_flag(-Wunused-but-set-variable HAVE_GCC_UNUSED_BUT_SET)
-  check_c_compiler_flag(-Wlogical-op HAVE_GCC_LOGICAL_OP)
-  check_c_compiler_flag(-Wsizeof-pointer-memaccess HAVE_GCC_POINTER_MEMACCESS)
-  check_c_compiler_flag(-Wformat-security HAVE_GCC_FORMAT_SECURITY)
-  check_c_compiler_flag(-Wredundant-decls HAVE_GCC_REDUNDANT_DECLS)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type")
-  if(HAVE_GCC_UNUSED_BUT_SET)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-but-set-variable")
-  endif()
-  if(HAVE_GCC_LOGICAL_OP)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlogical-op")
-  endif()
-  if(HAVE_GCC_POINTER_MEMACCESS)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsizeof-pointer-memaccess")
-  endif()
-  if(HAVE_GCC_FORMAT_SECURITY)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat -Wformat-security")
-  endif()
-  if(HAVE_GCC_REDUNDANT_DECLS)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wredundant-decls")
-  endif()
+  libical_add_cflag(-Wunused-but-set-variable UNUSED_BUT_SET)
+  libical_add_cflag(-Wlogical-op LOGICAL_OP)
+  libical_add_cflag(-Wsizeof-pointer-memaccess POINTER_MEMACCESS)
+  libical_add_cflag(-Wformat-security FORMAT_SECURITY)
+  libical_add_cflag(-Wredundant-decls REDUNDANT_DECLS)
   if(CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -D_GNU_SOURCE")
   endif()
@@ -463,32 +451,13 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-  include(CheckCXXCompilerFlag)
-  check_cxx_compiler_flag(-Wunused-but-set-variable HAVE_GXX_UNUSED_BUT_SET)
-  check_cxx_compiler_flag(-Wlogical-op HAVE_GXX_LOGICAL_OP)
-  check_cxx_compiler_flag(-Wsizeof-pointer-memaccess HAVE_GXX_POINTER_MEMACCESS)
-  check_cxx_compiler_flag(-Wreorder HAVE_GXX_REORDER)
-  check_cxx_compiler_flag(-Wformat-security HAVE_GXX_FORMAT_SECURITY)
-  check_cxx_compiler_flag(-Wredundant-decls HAVE_GXX_REDUNDANT_DECLS)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type")
-  if(HAVE_GXX_UNUSED_BUT_SET)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-but-set-variable")
-  endif()
-  if(HAVE_GXX_LOGICAL_OP)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlogical-op")
-  endif()
-  if(HAVE_GXX_POINTER_MEMACCESS)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsizeof-pointer-memaccess")
-  endif()
-  if(HAVE_GXX_REORDER)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wreorder")
-  endif()
-  if(HAVE_GXX_FORMAT_SECURITY)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat -Wformat-security")
-  endif()
-  if(HAVE_GXX_REDUNDANT_DECLS)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wredundant-decls")
-  endif()
+  libical_add_cxxflag(-Wunused-but-set-variable UNUSED_BUT_SET)
+  libical_add_cxxflag(-Wlogical-op LOGICAL_OP)
+  libical_add_cxxflag(-Wsizeof-pointer-memaccess POINTER_MEMACCESS)
+  libical_add_cxxflag(-Wreorder REORDER)
+  libical_add_cxxflag(-Wformat-security FORMAT_SECURITY)
+  libical_add_cxxflag(-Wredundant-decls REDUNDANT_DECLS)
   if(CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -D_GNU_SOURCE")
   endif()
@@ -588,10 +557,9 @@ endif()
 option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
 if(ENABLE_LTO_BUILD)
   if(CMAKE_COMPILER_IS_GNUCC)
-    include(CheckCCompilerFlag)
-    check_c_compiler_flag(-flto HAVE_CC_COMPILER_LTO)
-    if(HAVE_CC_COMPILER_LTO)
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlto-type-mismatch -flto -fuse-linker-plugin")
+    libical_add_cflag(-flto LTO)
+    if(C_SUPPORTS_LTO)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlto-type-mismatch -fuse-linker-plugin")
       set(CMAKE_AR "gcc-ar")
       set(CMAKE_RANLIB "gcc-ranlib")
     else()
@@ -600,9 +568,9 @@ if(ENABLE_LTO_BUILD)
     endif()
     if(WITH_CXX_BINDINGS AND CMAKE_COMPILER_IS_GNUCXX)
       include(CheckCXXCompilerFlag)
-      check_cxx_compiler_flag(-flto HAVE_CXX_COMPILER_LTO)
-      if(HAVE_CXX_COMPILER_LTO)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlto-type-mismatch -flto -fuse-linker-plugin")
+      libical_add_cxxflag(-flto LTO)
+      if(CXX_SUPPORTS_LTO)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlto-type-mismatch -fuse-linker-plugin")
       else()
         message(FATAL_ERROR
           "Your C++ compiler ${CMAKE_CXX_COMPILER_ID} does not support LTO building.")
