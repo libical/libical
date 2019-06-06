@@ -728,6 +728,10 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
         return 0;
     }
 
+    if (recur->until.year != 0 && recur->count != 0) {
+        return 0;
+    }
+
     str = (char *)icalmemory_new_buffer(buf_sz);
     str_p = str;
 
