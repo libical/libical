@@ -598,19 +598,11 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 r = -1;
             }
         } else if (strcasecmp(name, "RSCALE") == 0) {
-            if (icalrecurrencetype_rscale_is_supported()) {
-                parser.rt.rscale = icalmemory_strdup(value);
-            } else {
-                r = -2; // RSCALE clause name without RSCALE support
-            }
+            parser.rt.rscale = icalmemory_strdup(value);
         } else if (strcasecmp(name, "SKIP") == 0) {
-            if (icalrecurrencetype_rscale_is_supported()) {
-                parser.rt.skip = icalrecur_string_to_skip(value);
-                if (parser.rt.skip == ICAL_SKIP_UNDEFINED) {
-                    r = -1;
-                }
-            } else {
-                r = -2; // RSCALE clause name without RSCALE support
+            parser.rt.skip = icalrecur_string_to_skip(value);
+            if (parser.rt.skip == ICAL_SKIP_UNDEFINED) {
+                r = -1;
             }
         } else if (strcasecmp(name, "COUNT") == 0) {
             parser.rt.count = atoi(value);
@@ -672,7 +664,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
         }
 
         if (r) {
-            /* Note: silently ignore when we have an RSCALE rule, yet don't have RSCALE support.
+            /* Note: silently ignore when we have a leap month, yet don't have RSCALE support.
                The magic value "-2" indicates when that happens.
             */
             if (r != -2) {
@@ -1565,6 +1557,13 @@ static int day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
     return diff;
 }
 
+static void reset_period_start(icalrecur_iterator *impl)
+{
+    struct icaltimetype start = impl->period_start;
+
+    (void)get_day_of_year(impl, start.year, start.month, start.day, NULL);
+}
+
 #else /* !HAVE_LIBICU */
 
 /*
@@ -1760,6 +1759,11 @@ static void increment_second(icalrecur_iterator *impl, int inc)
 
 static int initialize_rscale(icalrecur_iterator *impl)
 {
+    if (impl->rule.rscale && strcasecmp(impl->rule.rscale, "GREGORIAN")) {
+        icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
+        return 0;
+    }
+
     impl->rstart = impl->dtstart;
 
     return 1;
@@ -1796,6 +1800,11 @@ static int month_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 static int day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 {
     return __day_diff(impl, a, b);
+}
+
+static void reset_period_start(icalrecur_iterator *impl)
+{
+    set_datetime(impl, impl->period_start);
 }
 
 #endif /* HAVE_LIBICU */
@@ -2799,15 +2808,13 @@ static void daymask_find_next_bit(unsigned long days[], short *p_days_index) {
 static int next_yearday(icalrecur_iterator *impl,
                         void (*next_period)(icalrecur_iterator *))
 {
-    struct icaltimetype start = impl->period_start;
-
     if (next_hour(impl) == 0) {
         return 0;
     }
 
     /* We may have skipped fwd/bwd a month/year with previous occurrence.
        Reset the period start date so we can increment properly */
-    (void)get_day_of_year(impl, start.year, start.month, start.day, NULL);
+    reset_period_start(impl);
 
     impl->days_index++;
 
