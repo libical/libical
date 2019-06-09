@@ -401,6 +401,7 @@ const struct recur rscale[] = {
      "RSCALE=RUSSIAN;FREQ=YEARLY",
      NULL},
 
+#if defined(HAVE_LIBICU)
     /* Ethiopic last day of year */
     {"20140910",
      "RSCALE=ETHIOPIC;FREQ=YEARLY;BYMONTH=13;BYMONTHDAY=-1;COUNT=6",
@@ -460,6 +461,11 @@ const struct recur rscale[] = {
      "RSCALE=CHINESE;FREQ=YEARLY;BYMONTHDAY=10;BYMONTH=9,9L;SKIP=BACKWARD;COUNT=4",
      NULL},
 
+    /* Every other Chinese New Year, starting at Jan 1, 2016 */
+    {"20130210",
+     "RSCALE=CHINESE;FREQ=YEARLY;UNTIL=20200101;INTERVAL=2",
+     "20160101"},
+
     /* Jewish leap month (omit) */
     {"20140205",
      "RSCALE=HEBREW;FREQ=YEARLY;COUNT=4",
@@ -494,6 +500,7 @@ const struct recur rscale[] = {
     {"20140302",
      "RSCALE=HEBREW;FREQ=YEARLY;BYMONTH=5L;BYMONTHDAY=-1;SKIP=BACKWARD;COUNT=5",
      NULL},
+#endif /* HAVE_LIBICU */
 
     /* Gregorian leap day (omit) */
     {"20120229",
@@ -560,11 +567,6 @@ const struct recur rscale[] = {
      "RSCALE=GREGORIAN;FREQ=YEARLY;BYYEARDAY=-366;SKIP=BACKWARD;COUNT=9",
      NULL},
 
-    /* Every other Chinese New Year, starting at Jan 1, 2016 */
-    {"20130210",
-     "RSCALE=CHINESE;FREQ=YEARLY;UNTIL=20200101;INTERVAL=2",
-     "20160101"},
-
     {NULL, NULL, NULL}
 };
 
@@ -584,16 +586,9 @@ int main(int argc, char *argv[])
 
     while ((opt = getopt(argc, argv, "rv")) != EOF) {
         switch (opt) {
-#if defined(HAVE_LIBICU)
         case 'r':      /* Do RSCALE tests */
-            if (!icalrecurrencetype_rscale_is_supported()) {
-                fprintf(stderr, "error: RSCALE not supported\n");
-                fclose(fp);
-                return (1);
-            }
             r = rscale;
             break;
-#endif
 
         case 'v':      /* Verbose output to stdout */
             verbose = 1;
