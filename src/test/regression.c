@@ -2672,6 +2672,8 @@ void test_time_parser()
 void test_recur_parser()
 {
     struct icalrecurrencetype rt;
+    icalvalue *v = NULL;
+    icalerrorstate es;
     const char *str;
 
     str =
@@ -2683,6 +2685,25 @@ void test_recur_parser()
 
     rt = icalrecurrencetype_from_string(str);
     str_is(str, icalrecurrencetype_as_string(&rt), str);
+
+    /* Add UNTIL and make sure we output a NULL string */
+    rt.until = icaltime_today();
+    ok("COUNT + UNTIL not allowed", icalrecurrencetype_as_string(&rt) == NULL);
+
+    /* Try to create a new RRULE value with UNTIL + COUNT */
+    es = icalerror_supress("BADARG");
+    v = icalvalue_new_recur(rt);
+    rt = icalvalue_get_recur(v);
+    icalerror_restore("BADARG", es);
+    ok("COUNT + UNTIL not allowed", rt.freq == ICAL_NO_RECURRENCE);
+
+    /* Try to parse an RRULE value with UNTIL + COUNT */
+    str = "FREQ=YEARLY;UNTIL=20000131T090000Z;COUNT=3";
+
+    es = icalerror_supress("MALFORMEDDATA");
+    rt = icalrecurrencetype_from_string(str);
+    icalerror_restore("MALFORMEDDATA", es);
+    ok(str, rt.freq == ICAL_NO_RECURRENCE);
 }
 
 
