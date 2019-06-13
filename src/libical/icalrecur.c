@@ -146,9 +146,6 @@
 #if defined(HAVE_LIBICU)
 #include <unicode/ucal.h>
 #include <unicode/ustring.h>
-#define RSCALE_IS_SUPPORTED 1
-#else
-#define RSCALE_IS_SUPPORTED 0
 #endif
 
 #if (SIZEOF_TIME_T > 4)
@@ -180,7 +177,7 @@
 
 int icalrecurrencetype_rscale_is_supported(void)
 {
-    return RSCALE_IS_SUPPORTED;
+    return 1;
 }
 
 /****************** Enumeration Routines ******************/
@@ -1547,7 +1544,12 @@ static void reset_period_start(icalrecur_iterator *impl)
 
 icalarray *icalrecurrencetype_rscale_supported_calendars(void)
 {
-    return NULL;
+    icalarray *calendars = icalarray_new(sizeof(const char **), 1);
+    const char *cal = "gregorian";
+
+    icalarray_append(calendars, &cal);
+
+    return calendars;
 }
 
 static void set_second(icalrecur_iterator *impl, int second)
