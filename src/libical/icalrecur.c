@@ -151,9 +151,7 @@
 #define false 0
 #define true 1
 #endif
-#define RSCALE_IS_SUPPORTED 1
 #else
-#define RSCALE_IS_SUPPORTED 0
 
 /* The maximums below are based on Gregorian leap years */
 #undef ICAL_BY_MONTH_SIZE
@@ -193,7 +191,7 @@
 
 int icalrecurrencetype_rscale_is_supported(void)
 {
-    return RSCALE_IS_SUPPORTED;
+    return 1;
 }
 
 /****************** Enumeration Routines ******************/
@@ -1572,7 +1570,12 @@ static void reset_period_start(icalrecur_iterator *impl)
 
 icalarray *icalrecurrencetype_rscale_supported_calendars(void)
 {
-    return NULL;
+    icalarray *calendars = icalarray_new(sizeof(const char **), 1);
+    const char *cal = "gregorian";
+
+    icalarray_append(calendars, &cal);
+
+    return calendars;
 }
 
 static void set_second(icalrecur_iterator *impl, int second)
