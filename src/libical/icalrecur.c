@@ -582,6 +582,9 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 r = -1;
             }
         } else if (strcasecmp(name, "RSCALE") == 0) {
+            if (parser.rt.rscale) {
+                free(parser.rt.rscale);
+            }
             parser.rt.rscale = icalmemory_strdup(value);
         } else if (strcasecmp(name, "SKIP") == 0) {
             parser.rt.skip = icalrecur_string_to_skip(value);
