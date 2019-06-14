@@ -2247,7 +2247,12 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 break;
 
             case ICAL_RDATE_PROPERTY: {
-                struct rdate rdate = { prop, icalproperty_get_rdate(prop) };
+                struct icaldatetimeperiodtype dtp = icalproperty_get_rdate(prop);
+                struct rdate rdate;
+
+                rdate.prop = prop;
+                rdate.date.time = dtp.time;
+                rdate.date.period = dtp.period;
 
                 icalarray_append(rdates, &rdate);
                 break;
