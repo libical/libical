@@ -146,6 +146,15 @@
 #if defined(HAVE_LIBICU)
 #include <unicode/ucal.h>
 #include <unicode/ustring.h>
+#else
+
+/* The maximums below are based on Gregorian leap years */
+#undef ICAL_BY_MONTH_SIZE
+#undef ICAL_BY_WEEKNO_SIZE
+#undef ICAL_BY_YEARDAY_SIZE
+#define ICAL_BY_MONTH_SIZE      13      /* 1 to 12 */
+#define ICAL_BY_WEEKNO_SIZE     54      /* 1 to 53 */
+#define ICAL_BY_YEARDAY_SIZE    367     /* 1 to 366 */
 #endif
 
 #if (SIZEOF_TIME_T > 4)
