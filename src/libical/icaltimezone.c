@@ -2370,10 +2370,10 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
                             if (ydiff) {
                                 /* Add previous onset as RDATE */
-                                struct icaldatetimeperiodtype rdate = {
-                                    prev_onset,
-                                    icalperiodtype_null_period()
-                                };
+                                struct icaldatetimeperiodtype rdate;
+                                rdate.time = prev_onset;
+                                rdate.period = icalperiodtype_null_period();
+
                                 prop = icalproperty_new_rdate(rdate);
                                 icalcomponent_add_property(comp, prop);
                             }
@@ -2427,10 +2427,10 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
                                 if (ydiff) {
                                     /* Add UNTIL as RDATE */
-                                    struct icaldatetimeperiodtype rdate = {
-                                        rrule.until,
-                                        icalperiodtype_null_period()
-                                    };
+                                    struct icaldatetimeperiodtype rdate;
+                                    rdate.time = rrule.until;
+                                    rdate.period = icalperiodtype_null_period();
+
                                     prop = icalproperty_new_rdate(rdate);
                                     icalcomponent_add_property(comp, prop);
                                 }
