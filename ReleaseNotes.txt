@@ -11,6 +11,7 @@ Version 3.0.9 (UNRELEASED):
  * Several fixes for recurrences containing BYWEEKNO
  * Fix reading TZif files with empty v1 data (use v2+ whenever possible)
  * Built-in timezones updated to tzdata2020d
+ * icalrecurrencetype_from_string() will reject any RRULE that contains a rule-part that occurs more than once
 
 Version 3.0.8 (07 March 2020):
 ------------------------------

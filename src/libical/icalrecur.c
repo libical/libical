@@ -591,72 +591,142 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 break;
             }
         } else if (strcasecmp(name, "FREQ") == 0) {
-            parser.rt.freq = icalrecur_string_to_freq(value);
-            if (parser.rt.freq == ICAL_NO_RECURRENCE) {
-                r = -1;
-            }
-        } else if (strcasecmp(name, "RSCALE") == 0) {
-            parser.rt.rscale = icalmemory_strdup(value);
-        } else if (strcasecmp(name, "SKIP") == 0) {
-            parser.rt.skip = icalrecur_string_to_skip(value);
-            if (parser.rt.skip == ICAL_SKIP_UNDEFINED) {
-                r = -1;
-            }
-        } else if (strcasecmp(name, "COUNT") == 0) {
-            parser.rt.count = atoi(value);
-            if (parser.rt.count < 1) {
-                /* don't allow count to be less than 1 */
-                r = -1;
-            } else if (!icaltime_is_null_time(parser.rt.until)) {
-                /* don't allow both count and until */
-                r = -1;
-            }
-        } else if (strcasecmp(name, "UNTIL") == 0) {
-            parser.rt.until = icaltime_from_string(value);
-            if (icaltime_is_null_time(parser.rt.until)) {
-                r = -1;
-            } else if (parser.rt.count > 0) {
-               /* don't allow both count and until */
-               r = -1;
-            }
-        } else if (strcasecmp(name, "INTERVAL") == 0) {
-            parser.rt.interval = (short)atoi(value);
-            /* don't allow an interval to be less than 1
-               (RFC specifies an interval must be a positive integer) */
-            if (parser.rt.interval < 1) r = -1;
-        } else if (strcasecmp(name, "WKST") == 0) {
-            parser.rt.week_start = icalrecur_string_to_weekday(value);
-            if (parser.rt.week_start == ICAL_NO_WEEKDAY) {
+            if (parser.rt.freq != ICAL_NO_RECURRENCE) {
+                /* Don't allow multiple FREQs */
                 r = -1;
             } else {
-                sort_bydayrules(&parser);
+                parser.rt.freq = icalrecur_string_to_freq(value);
+                if (parser.rt.freq == ICAL_NO_RECURRENCE) {
+                    r = -1;
+                }
+            }
+        } else if (strcasecmp(name, "RSCALE") == 0) {
+            if (parser.rt.rscale != NULL) {
+                /* Don't allow multiple RSCALEs */
+                r = -1;
+            } else {
+                parser.rt.rscale = icalmemory_strdup(value);
+            }
+        } else if (strcasecmp(name, "SKIP") == 0) {
+            if (parser.rt.skip != ICAL_SKIP_OMIT) {
+                /* Don't allow multiple SKIPs */
+                r = -1;
+            } else {
+                parser.rt.skip = icalrecur_string_to_skip(value);
+                if (parser.rt.skip == ICAL_SKIP_UNDEFINED) {
+                    r = -1;
+                }
+            }
+        } else if (strcasecmp(name, "COUNT") == 0) {
+            if (parser.rt.count > 0 || !icaltime_is_null_time(parser.rt.until)) {
+                /* Don't allow multiple COUNTs, or both COUNT and UNTIL */
+                r = -1;
+            } else {
+                parser.rt.count = atoi(value);
+                /* don't allow count to be less than 1 */
+                if (parser.rt.count < 1) r = -1;
+            }
+        } else if (strcasecmp(name, "UNTIL") == 0) {
+            if (parser.rt.count > 0 || !icaltime_is_null_time(parser.rt.until)) {
+                /* Don't allow multiple COUNTs, or both COUNT and UNTIL */
+                r = -1;
+            } else {
+                parser.rt.until = icaltime_from_string(value);
+                if (icaltime_is_null_time(parser.rt.until)) r = -1;
+            }
+        } else if (strcasecmp(name, "INTERVAL") == 0) {
+            if (parser.rt.interval > 1) {
+                /* Don't allow multiple INTERVALs */
+                r = -1;
+            } else {
+                parser.rt.interval = (short)atoi(value);
+                /* don't allow an interval to be less than 1
+                   (RFC specifies an interval must be a positive integer) */
+                if (parser.rt.interval < 1) r = -1;
+            }
+        } else if (strcasecmp(name, "WKST") == 0) {
+            if (parser.rt.week_start != ICAL_MONDAY_WEEKDAY) {
+                /* Don't allow multiple WKSTs */
+                r = -1;
+            } else {
+                parser.rt.week_start = icalrecur_string_to_weekday(value);
+                if (parser.rt.week_start == ICAL_NO_WEEKDAY) {
+                    r = -1;
+                } else {
+                    sort_bydayrules(&parser);
+                }
             }
         } else if (strcasecmp(name, "BYSECOND") == 0) {
-            r = icalrecur_add_byrules(&parser, parser.rt.by_second,
-                                      0, ICAL_BY_SECOND_SIZE, value);
+            if (parser.rt.by_second[0] != ICAL_RECURRENCE_ARRAY_MAX) {
+                /* Don't allow multiple BYSECONDs */
+                r = -1;
+            } else {
+                r = icalrecur_add_byrules(&parser, parser.rt.by_second,
+                                          0, ICAL_BY_SECOND_SIZE, value);
+            }
         } else if (strcasecmp(name, "BYMINUTE") == 0) {
-            r = icalrecur_add_byrules(&parser, parser.rt.by_minute,
-                                      0, ICAL_BY_MINUTE_SIZE, value);
+            if (parser.rt.by_minute[0] != ICAL_RECURRENCE_ARRAY_MAX) {
+                /* Don't allow multiple BYMINUTEs */
+                r = -1;
+            } else {
+                r = icalrecur_add_byrules(&parser, parser.rt.by_minute,
+                                          0, ICAL_BY_MINUTE_SIZE, value);
+            }
         } else if (strcasecmp(name, "BYHOUR") == 0) {
-            r = icalrecur_add_byrules(&parser, parser.rt.by_hour,
-                                      0, ICAL_BY_HOUR_SIZE, value);
+            if (parser.rt.by_hour[0] != ICAL_RECURRENCE_ARRAY_MAX) {
+                /* Don't allow multiple BYHOURs */
+                r = -1;
+            } else {
+                r = icalrecur_add_byrules(&parser, parser.rt.by_hour,
+                                          0, ICAL_BY_HOUR_SIZE, value);
+            }
         } else if (strcasecmp(name, "BYDAY") == 0) {
-            r = icalrecur_add_bydayrules(&parser, value);
+            if (parser.rt.by_day[0] != ICAL_RECURRENCE_ARRAY_MAX) {
+                /* Don't allow multiple BYDAYs */
+                r = -1;
+            } else {
+                r = icalrecur_add_bydayrules(&parser, value);
+            }
         } else if (strcasecmp(name, "BYMONTHDAY") == 0) {
-            r = icalrecur_add_byrules(&parser, parser.rt.by_month_day,
-                                      -1, ICAL_BY_MONTHDAY_SIZE, value);
+            if (parser.rt.by_month_day[0] != ICAL_RECURRENCE_ARRAY_MAX) {
+                /* Don't allow multiple BYMONTHDAYs */
+                r = -1;
+            } else {
+                r = icalrecur_add_byrules(&parser, parser.rt.by_month_day,
+                                          -1, ICAL_BY_MONTHDAY_SIZE, value);
+            }
         } else if (strcasecmp(name, "BYYEARDAY") == 0) {
-            r = icalrecur_add_byrules(&parser, parser.rt.by_year_day,
-                                      -1, ICAL_BY_YEARDAY_SIZE, value);
+            if (parser.rt.by_year_day[0] != ICAL_RECURRENCE_ARRAY_MAX) {
+                /* Don't allow multiple BYYEARDAYs */
+                r = -1;
+            } else {
+                r = icalrecur_add_byrules(&parser, parser.rt.by_year_day,
+                                          -1, ICAL_BY_YEARDAY_SIZE, value);
+            }
         } else if (strcasecmp(name, "BYWEEKNO") == 0) {
-            r = icalrecur_add_byrules(&parser, parser.rt.by_week_no,
-                                      -1, ICAL_BY_WEEKNO_SIZE, value);
+            if (parser.rt.by_week_no[0] != ICAL_RECURRENCE_ARRAY_MAX) {
+                /* Don't allow multiple BYWEEKNOs */
+                r = -1;
+            } else {
+                r = icalrecur_add_byrules(&parser, parser.rt.by_week_no,
+                                          -1, ICAL_BY_WEEKNO_SIZE, value);
+            }
         } else if (strcasecmp(name, "BYMONTH") == 0) {
-            r = icalrecur_add_byrules(&parser, parser.rt.by_month,
-                                      1, ICAL_BY_MONTH_SIZE, value);
+            if (parser.rt.by_month[0] != ICAL_RECURRENCE_ARRAY_MAX) {
+                /* Don't allow multiple BYMONTHs */
+                r = -1;
+            } else {
+                r = icalrecur_add_byrules(&parser, parser.rt.by_month,
+                                          1, ICAL_BY_MONTH_SIZE, value);
+            }
         } else if (strcasecmp(name, "BYSETPOS") == 0) {
-            r = icalrecur_add_byrules(&parser, parser.rt.by_set_pos,
-                                      -1, ICAL_BY_SETPOS_SIZE, value);
+            if (parser.rt.by_set_pos[0] != ICAL_RECURRENCE_ARRAY_MAX) {
+                /* Don't allow multiple BYSETPOSs */
+                r = -1;
+            } else {
+                r = icalrecur_add_byrules(&parser, parser.rt.by_set_pos,
+                                          -1, ICAL_BY_SETPOS_SIZE, value);
+            }
         } else {
             r = -1;
         }
@@ -3071,7 +3141,7 @@ void icalrecurrencetype_clear(struct icalrecurrencetype *recur)
     recur->week_start = ICAL_MONDAY_WEEKDAY;
     recur->freq = ICAL_NO_RECURRENCE;
     recur->interval = 1;
-    memset(&(recur->until), 0, sizeof(struct icaltimetype));
+    recur->until = icaltime_null_time();
     recur->count = 0;
     recur->rscale = NULL;
     recur->skip = ICAL_SKIP_OMIT;
