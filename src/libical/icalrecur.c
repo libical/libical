@@ -1883,7 +1883,7 @@ static void reset_period_start(icalrecur_iterator *impl)
 #endif /* HAVE_LIBICU */
 
 static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start);
-static void increment_month(icalrecur_iterator *impl);
+static void increment_month(icalrecur_iterator *impl, int inc);
 static int expand_month_days(icalrecur_iterator *impl, int year, int month);
 static int expand_year_days(icalrecur_iterator *impl, int year);
 static int next_yearday(icalrecur_iterator *impl,
@@ -2087,10 +2087,8 @@ static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 /** Increment month is different that the other increment_* routines --
    it figures out the interval for itself, and uses BYMONTH data if
    available. */
-static void increment_month(icalrecur_iterator *impl)
+static void increment_month(icalrecur_iterator *impl, int inc)
 {
-    int inc = impl->rule.interval;
-
     __increment_month(impl, inc);
 
     if (has_by_data(impl, BY_MONTH)) {
@@ -2453,7 +2451,7 @@ static void __next_month(icalrecur_iterator *impl)
     struct icaltimetype this;
 
     /* Increment to and expand the next month */
-    increment_month(impl);
+    increment_month(impl, impl->rule.interval);
     this = occurrence_as_icaltime(impl, 0);
     expand_month_days(impl, this.year, this.month);
 }
@@ -3014,7 +3012,7 @@ static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
             if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
                 break;  /* break when a matching day is found */
             }
-            increment_month(impl);
+            increment_month(impl, impl->rule.interval);
             start = occurrence_as_icaltime(impl, 0);
         }
 
