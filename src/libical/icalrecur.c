@@ -2198,11 +2198,9 @@ static int next_hour(icalrecur_iterator *impl)
 
 static int next_day(icalrecur_iterator *impl)
 {
-    int has_by_day = (impl->by_ptrs[BY_DAY][0] != ICAL_RECURRENCE_ARRAY_MAX);
     int this_frequency = (impl->rule.freq == ICAL_DAILY_RECURRENCE);
 
-    assert(has_by_day || this_frequency);
-    _unused(has_by_day);
+    assert(this_frequency);
 
     if (next_hour(impl) == 0) {
         return 0;
@@ -2212,11 +2210,7 @@ static int next_day(icalrecur_iterator *impl)
        called by any other next_* routine, and the days that are
        excluded will be taken care of by restriction filtering */
 
-    if (this_frequency) {
-        increment_monthday(impl, impl->rule.interval);
-    } else {
-        increment_monthday(impl, 1);
-    }
+    increment_monthday(impl, impl->rule.interval);
 
     return 0;
 }
