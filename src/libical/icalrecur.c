@@ -1803,6 +1803,10 @@ static void __increment_month(icalrecur_iterator *impl, int inc)
 
     impl->last.month = impl->last.month % 12;
 
+    if (impl->last.month < 0) {
+        impl->last.month = impl->last.month + 12;
+    }
+
     impl->last.month++;
 
     if (years != 0) {
