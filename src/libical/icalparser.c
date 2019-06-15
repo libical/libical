@@ -220,20 +220,28 @@ static void parser_decode_param_value(char *value)
     char *in, *out;
 
     for (in = out = value; *in; in++, out++) {
-        if (*in == '^' && strspn(in+1, "n^'")) {
-            switch (*++in) {
+        int found_escaped_char = 0;
+
+        if (*in == '^') {
+            switch (*(in + 1)) {
             case 'n':
                 *out = '\n';
+                found_escaped_char = 1;
                 break;
-
             case '^':
                 *out = '^';
+                found_escaped_char = 1;
                 break;
 
             case '\'':
                 *out = '"';
+                found_escaped_char = 1;
                 break;
             }
+        }
+
+        if (found_escaped_char) {
+            ++in;
         } else {
             *out = *in;
         }
