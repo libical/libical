@@ -2071,148 +2071,76 @@ void test_increment()
 
 #endif
 
-static int next_second(icalrecur_iterator *impl)
+static int next_unit(icalrecur_iterator *impl,
+                     int by_unit, icalrecurrencetype_frequency frequency,
+                     int (*next_sub_unit)(icalrecur_iterator *),
+                     void (*set_unit)(icalrecur_iterator *, int),
+                     void (*increment_unit)(icalrecur_iterator *, int),
+                     void (*increment_super_unit)(icalrecur_iterator *, int))
 {
-    int has_by_second =
-        (impl->by_ptrs[BY_SECOND][0] != ICAL_RECURRENCE_ARRAY_MAX);
-    int this_frequency = (impl->rule.freq == ICAL_SECONDLY_RECURRENCE);
+    int has_by_unit = (by_unit > NO_CONTRACTION) &&
+        (impl->by_ptrs[by_unit][0] != ICAL_RECURRENCE_ARRAY_MAX);
+    int this_frequency = (impl->rule.freq == frequency);
 
     int end_of_data = 0;
 
-    assert(has_by_second || this_frequency);
+    assert(has_by_unit || this_frequency);
 
-    if (has_by_second) {
+    if (next_sub_unit && next_sub_unit(impl) == 0) {
+        return 0;
+    }
+
+    if (has_by_unit) {
         /* Ignore the frequency and use the byrule data */
 
-        impl->by_indices[BY_SECOND]++;
+        impl->by_indices[by_unit]++;
 
-        if (impl->by_ptrs[BY_SECOND][impl->by_indices[BY_SECOND]] ==
+        if (impl->by_ptrs[by_unit][impl->by_indices[by_unit]] ==
             ICAL_RECURRENCE_ARRAY_MAX) {
-            impl->by_indices[BY_SECOND] = 0;
+            impl->by_indices[by_unit] = 0;
 
             end_of_data = 1;
         }
 
-        set_second(impl, impl->by_ptrs[BY_SECOND][impl->by_indices[BY_SECOND]]);
+        set_unit(impl, impl->by_ptrs[by_unit][impl->by_indices[by_unit]]);
 
-    } else if (!has_by_second && this_frequency) {
+    } else if (!has_by_unit && this_frequency) {
         /* Compute the next value from the last time and the freq interval */
-        increment_second(impl, impl->rule.interval);
+        increment_unit(impl, impl->rule.interval);
     }
 
-    /* If we have gone through all of the seconds on the BY list, then we
-       need to move to the next minute */
+    /* If we have gone through all of the units on the BY list, then we
+       need to move to the next larger unit */
 
-    if (has_by_second && end_of_data && this_frequency) {
-        increment_minute(impl, 1);
+    if (has_by_unit && end_of_data && this_frequency) {
+        increment_super_unit(impl, 1);
     }
 
     return end_of_data;
+}
+
+static int next_second(icalrecur_iterator *impl)
+{
+    return next_unit(impl, BY_SECOND, ICAL_SECONDLY_RECURRENCE, NULL,
+                     &set_second, &increment_second, &increment_minute);
 }
 
 static int next_minute(icalrecur_iterator *impl)
 {
-    int has_by_minute =
-        (impl->by_ptrs[BY_MINUTE][0] != ICAL_RECURRENCE_ARRAY_MAX);
-    int this_frequency = (impl->rule.freq == ICAL_MINUTELY_RECURRENCE);
-
-    int end_of_data = 0;
-
-    assert(has_by_minute || this_frequency);
-
-    if (next_second(impl) == 0) {
-        return 0;
-    }
-
-    if (has_by_minute) {
-        /* Ignore the frequency and use the byrule data */
-
-        impl->by_indices[BY_MINUTE]++;
-
-        if (impl->by_ptrs[BY_MINUTE][impl->by_indices[BY_MINUTE]]
-            == ICAL_RECURRENCE_ARRAY_MAX) {
-
-            impl->by_indices[BY_MINUTE] = 0;
-
-            end_of_data = 1;
-        }
-
-        set_minute(impl, impl->by_ptrs[BY_MINUTE][impl->by_indices[BY_MINUTE]]);
-
-    } else if (!has_by_minute && this_frequency) {
-        /* Compute the next value from the last time and the freq interval */
-        increment_minute(impl, impl->rule.interval);
-    }
-
-    /* If we have gone through all of the minutes on the BY list, then we
-       need to move to the next hour */
-
-    if (has_by_minute && end_of_data && this_frequency) {
-        increment_hour(impl, 1);
-    }
-
-    return end_of_data;
+    return next_unit(impl, BY_MINUTE, ICAL_MINUTELY_RECURRENCE, &next_second,
+                     &set_minute, &increment_minute, &increment_hour);
 }
 
 static int next_hour(icalrecur_iterator *impl)
 {
-    int has_by_hour = (impl->by_ptrs[BY_HOUR][0] != ICAL_RECURRENCE_ARRAY_MAX);
-    int this_frequency = (impl->rule.freq == ICAL_HOURLY_RECURRENCE);
-
-    int end_of_data = 0;
-
-    assert(has_by_hour || this_frequency);
-
-    if (next_minute(impl) == 0) {
-        return 0;
-    }
-
-    if (has_by_hour) {
-        /* Ignore the frequency and use the byrule data */
-
-        impl->by_indices[BY_HOUR]++;
-
-        if (impl->by_ptrs[BY_HOUR][impl->by_indices[BY_HOUR]] ==
-            ICAL_RECURRENCE_ARRAY_MAX) {
-            impl->by_indices[BY_HOUR] = 0;
-
-            end_of_data = 1;
-        }
-
-        set_hour(impl, impl->by_ptrs[BY_HOUR][impl->by_indices[BY_HOUR]]);
-
-    } else if (!has_by_hour && this_frequency) {
-        /* Compute the next value from the last time and the freq interval */
-        increment_hour(impl, impl->rule.interval);
-    }
-
-    /* If we have gone through all of the hours on the BY list, then we
-       need to move to the next day */
-
-    if (has_by_hour && end_of_data && this_frequency) {
-        increment_monthday(impl, 1);
-    }
-
-    return end_of_data;
+    return next_unit(impl, BY_HOUR, ICAL_HOURLY_RECURRENCE, &next_minute,
+                     &set_hour, &increment_hour, &increment_monthday);
 }
 
 static int next_day(icalrecur_iterator *impl)
 {
-    int this_frequency = (impl->rule.freq == ICAL_DAILY_RECURRENCE);
-
-    assert(this_frequency);
-
-    if (next_hour(impl) == 0) {
-        return 0;
-    }
-
-    /* Always increment through the interval, since this routine is not
-       called by any other next_* routine, and the days that are
-       excluded will be taken care of by restriction filtering */
-
-    increment_monthday(impl, impl->rule.interval);
-
-    return 0;
+    return next_unit(impl, NO_CONTRACTION, ICAL_DAILY_RECURRENCE, &next_hour,
+                     NULL, &increment_monthday, NULL);
 }
 
 static int check_set_position(icalrecur_iterator *impl, int set_pos)
