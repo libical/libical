@@ -2923,19 +2923,15 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
 
         impl->last = occurrence_as_icaltime(impl, 1);
 
-        /* Ignore times that are after the MAX year or the UNTIL time */
+        /* Ignore times that are after the MAX year,
+           or the UNTIL time, or the end time */
         if (impl->last.year > MAX_TIME_T_YEAR ||
             (!icaltime_is_null_time(impl->rule.until) &&
-             icaltime_compare(impl->last, impl->rule.until) > 0)) {
+             icaltime_compare(impl->last, impl->rule.until) > 0) ||
+            (!icaltime_is_null_time(impl->iend) &&
+             icaltime_compare(impl->last, impl->iend) >= 0)) {
             return icaltime_null_time();
         }
-        if (impl->last.year > MAX_TIME_T_YEAR) {
-            /* HACK */
-            return icaltime_null_time();
-        }
-
-        if ((!icaltime_is_null_time(impl->iend)) && (icaltime_compare(impl->last, impl->iend) >= 0))
-            return icaltime_null_time();
 
     } while (icaltime_compare(impl->last, impl->istart) < 0 ||
              !check_contracting_rules(impl));
