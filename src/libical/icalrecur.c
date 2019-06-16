@@ -1891,7 +1891,7 @@ static void increment_month(icalrecur_iterator *impl, int inc);
 static int expand_month_days(icalrecur_iterator *impl, int year, int month);
 static int expand_year_days(icalrecur_iterator *impl, int year);
 static int next_yearday(icalrecur_iterator *impl,
-                        void (*next_period)(icalrecur_iterator *));
+                        void (*next_period)(icalrecur_iterator *, int));
 
 static void adjust_to_byday(icalrecur_iterator *impl)
 {
@@ -2450,12 +2450,12 @@ static int expand_month_days(icalrecur_iterator *impl, int year, int month)
     return 0;
 }
 
-static void __next_month(icalrecur_iterator *impl)
+static void __next_month(icalrecur_iterator *impl, int inc)
 {
     struct icaltimetype this;
 
     /* Increment to and expand the next month */
-    increment_month(impl, impl->rule.interval);
+    increment_month(impl, inc);
     this = occurrence_as_icaltime(impl, 0);
     expand_month_days(impl, this.year, this.month);
 }
@@ -2686,12 +2686,12 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
     return 0;
 }
 
-static void __next_year(icalrecur_iterator *impl)
+static void __next_year(icalrecur_iterator *impl, int inc)
 {
     struct icaltimetype this;
 
     /* Increment to and expand the next year */
-    increment_year(impl, impl->rule.interval);
+    increment_year(impl, inc);
     this = occurrence_as_icaltime(impl, 0);
     expand_year_days(impl, this.year);
 }
@@ -2763,7 +2763,7 @@ static void daymask_find_next_bit(unsigned long days[], short *p_days_index) {
 }
 
 static int next_yearday(icalrecur_iterator *impl,
-                        void (*next_period)(icalrecur_iterator *))
+                        void (*next_period)(icalrecur_iterator *, int))
 {
     if (next_hour(impl) == 0) {
         return 0;
@@ -2782,7 +2782,7 @@ static int next_yearday(icalrecur_iterator *impl,
 
         for (;;) {
             /* Increment to and expand the next period */
-            next_period(impl);
+            next_period(impl, impl->rule.interval);
 
             if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
                 break;  /* break when a matching day is found */
