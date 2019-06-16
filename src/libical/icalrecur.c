@@ -2678,7 +2678,7 @@ static short daymask_find_next_bit(icalrecur_iterator *impl)
     int wordIdx;
 
     if (days_index >= ICAL_YEARDAYS_MASK_SIZE)
-        return;
+        return ICAL_YEARDAYS_MASK_SIZE;
 
     // Prepare the first word, where searching might not start at the beginning
     startBitIndex = days_index + ICAL_YEARDAYS_MASK_OFFSET;
