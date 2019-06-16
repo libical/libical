@@ -2669,27 +2669,29 @@ static int next_year(icalrecur_iterator *impl)
     return next_yearday(impl, &__next_year);
 }
 
-static void daymask_find_next_bit(unsigned long days[], short *p_days_index) {
-
+static short daymask_find_next_bit(icalrecur_iterator *impl)
+{
+    unsigned long *days = impl->days;
+    short days_index = impl->days_index + 1;
     unsigned long v;
     short startBitIndex;
     int wordIdx;
 
-    if ((*p_days_index) >= ICAL_YEARDAYS_MASK_SIZE)
+    if (days_index >= ICAL_YEARDAYS_MASK_SIZE)
         return;
 
     // Prepare the first word, where searching might not start at the beginning
-    startBitIndex = *p_days_index + ICAL_YEARDAYS_MASK_OFFSET;
+    startBitIndex = days_index + ICAL_YEARDAYS_MASK_OFFSET;
     wordIdx = (int)(startBitIndex / BITS_PER_LONG);
     v = days[wordIdx];
     v >>= startBitIndex % BITS_PER_LONG;
 
     if (!v) {
         // so the first word didn't contain any bits of interest.
-        *p_days_index += BITS_PER_LONG - startBitIndex % BITS_PER_LONG;
+        days_index += BITS_PER_LONG - startBitIndex % BITS_PER_LONG;
 
         // Are there more empty words following? Skip them.
-        while ((*p_days_index) < ICAL_YEARDAYS_MASK_SIZE) {
+        while (days_index < ICAL_YEARDAYS_MASK_SIZE) {
 
             wordIdx++;
             v = days[wordIdx];
@@ -2697,7 +2699,7 @@ static void daymask_find_next_bit(unsigned long days[], short *p_days_index) {
             if (v)
                 break;
 
-            *p_days_index += BITS_PER_LONG;
+            days_index += BITS_PER_LONG;
         }
     }
 
@@ -2714,20 +2716,22 @@ static void daymask_find_next_bit(unsigned long days[], short *p_days_index) {
 
             if ((v & mask) == 0) {
                 v >>= maskSize;
-                *p_days_index += maskSize;
+                days_index += maskSize;
             }
             maskSize /= 2;
             mask >>= maskSize;
         }
     }
 
-    if (*p_days_index >= ICAL_YEARDAYS_MASK_SIZE) {
+    if (days_index >= ICAL_YEARDAYS_MASK_SIZE) {
 
         // We didn't find anything (or it was after ICAL_YEARDAYS_MASK_SIZE).
         // ICAL_YEARDAYS_MASK_SIZE isn't aligned with word sizes, so correct
         // the index accordingly.
-        *p_days_index = ICAL_YEARDAYS_MASK_SIZE;
+        days_index = ICAL_YEARDAYS_MASK_SIZE;
     }
+
+    return days_index;
 }
 
 static int next_yearday(icalrecur_iterator *impl,
@@ -2741,10 +2745,8 @@ static int next_yearday(icalrecur_iterator *impl,
        Reset the period start date so we can increment properly */
     reset_period_start(impl);
 
-    impl->days_index++;
-
     /* Find next year day that is set */
-    daymask_find_next_bit(impl->days, &impl->days_index);
+    impl->days_index = daymask_find_next_bit(impl);
 
     if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
 
