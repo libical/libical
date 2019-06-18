@@ -2723,14 +2723,6 @@ static short daymask_find_next_bit(icalrecur_iterator *impl)
         }
     }
 
-    if (days_index >= ICAL_YEARDAYS_MASK_SIZE) {
-
-        // We didn't find anything (or it was after ICAL_YEARDAYS_MASK_SIZE).
-        // ICAL_YEARDAYS_MASK_SIZE isn't aligned with word sizes, so correct
-        // the index accordingly.
-        days_index = ICAL_YEARDAYS_MASK_SIZE;
-    }
-
     return days_index;
 }
 
