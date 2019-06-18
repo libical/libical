@@ -637,6 +637,17 @@ int main(int argc, char *argv[])
                 sep = ",";
             }
             fprintf(fp, "\n");
+
+            sep = "";
+            fprintf(fp, "PREV-INSTANCES:");
+            for (next = icalrecur_iterator_prev(ritr);
+                 !icaltime_is_null_time(next);
+                 next = icalrecur_iterator_prev(ritr)) {
+
+                fprintf(fp, "%s%s", sep, icaltime_as_ical_string(next));
+                sep = ",";
+            }
+            fprintf(fp, "\n");
         }
 
         icalrecur_iterator_free(ritr);

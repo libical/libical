@@ -1893,6 +1893,8 @@ static int expand_month_days(icalrecur_iterator *impl, int year, int month);
 static int expand_year_days(icalrecur_iterator *impl, int year);
 static int next_yearday(icalrecur_iterator *impl,
                         void (*next_period)(icalrecur_iterator *, int));
+static int prev_yearday(icalrecur_iterator *impl,
+                        void (*next_period)(icalrecur_iterator *, int));
 
 static void adjust_to_byday(icalrecur_iterator *impl)
 {
@@ -2217,6 +2219,78 @@ static int next_day(icalrecur_iterator *impl)
                      NULL, &increment_monthday, NULL);
 }
 
+static int prev_unit(icalrecur_iterator *impl,
+                     int by_unit, icalrecurrencetype_frequency frequency,
+                     int (*prev_sub_unit)(icalrecur_iterator *),
+                     void (*set_unit)(icalrecur_iterator *, int),
+                     void (*increment_unit)(icalrecur_iterator *, int),
+                     void (*increment_super_unit)(icalrecur_iterator *, int))
+{
+    int has_by_unit = (by_unit > NO_CONTRACTION) &&
+        (impl->by_ptrs[by_unit][0] != ICAL_RECURRENCE_ARRAY_MAX);
+    int this_frequency = (impl->rule.freq == frequency);
+
+    int end_of_data = 0;
+
+    assert(has_by_unit || this_frequency);
+
+    if (prev_sub_unit && prev_sub_unit(impl) == 0) {
+        return 0;
+    }
+
+    if (has_by_unit) {
+        /* Ignore the frequency and use the byrule data */
+
+        impl->by_indices[by_unit]--;
+
+        if (impl->by_indices[by_unit] < 0) {
+            impl->by_indices[by_unit] =
+                icalrecur_iterator_sizeof_byarray(impl->by_ptrs[by_unit]) - 1;
+
+            end_of_data = 1;
+        }
+
+        set_unit(impl, impl->by_ptrs[by_unit][impl->by_indices[by_unit]]);
+
+    } else if (!has_by_unit && this_frequency) {
+        /* Compute the next value from the last time and the freq interval */
+        increment_unit(impl, -impl->rule.interval);
+    }
+
+    /* If we have gone through all of the units on the BY list, then we
+       need to move to the next larger unit */
+
+    if (has_by_unit && end_of_data && this_frequency) {
+        increment_super_unit(impl, -1);
+    }
+
+    return end_of_data;
+}
+
+static int prev_second(icalrecur_iterator *impl)
+{
+    return prev_unit(impl, BY_SECOND, ICAL_SECONDLY_RECURRENCE, NULL,
+                     &set_second, &increment_second, &increment_minute);
+}
+
+static int prev_minute(icalrecur_iterator *impl)
+{
+    return prev_unit(impl, BY_MINUTE, ICAL_MINUTELY_RECURRENCE, &prev_second,
+                     &set_minute, &increment_minute, &increment_hour);
+}
+
+static int prev_hour(icalrecur_iterator *impl)
+{
+    return prev_unit(impl, BY_HOUR, ICAL_HOURLY_RECURRENCE, &prev_minute,
+                     &set_hour, &increment_hour, &increment_monthday);
+}
+
+static int prev_day(icalrecur_iterator *impl)
+{
+    return prev_unit(impl, NO_CONTRACTION, ICAL_DAILY_RECURRENCE, &prev_hour,
+                     NULL, &increment_monthday, NULL);
+}
+
 static int check_set_position(icalrecur_iterator *impl, int set_pos)
 {
     int i;
@@ -2466,6 +2540,11 @@ static int next_month(icalrecur_iterator *impl)
     return next_yearday(impl, &__next_month);
 }
 
+static int prev_month(icalrecur_iterator *impl)
+{
+    return prev_yearday(impl, &__next_month);
+}
+
 static int next_weekday_by_week(icalrecur_iterator *impl)
 {
     int end_of_data = 0;
@@ -2532,6 +2611,70 @@ static int next_week(icalrecur_iterator *impl)
 
     /* Jump to the next week */
     increment_monthday(impl, 7 * impl->rule.interval);
+
+    return end_of_data;
+}
+
+static int prev_weekday_by_week(icalrecur_iterator *impl)
+{
+    int end_of_data = 0;
+    int start_of_week, dow;
+
+    if (prev_hour(impl) == 0) {
+        return 0;
+    }
+
+    if (!has_by_data(impl, BY_DAY)) {
+        return 1;
+    }
+
+    /* If we get here, we need to step to the previous day */
+
+    BYDAYIDX--;     /* Look at previous elem in BYDAY array */
+
+    /* Are we at the end of the BYDAY array? */
+    if (BYDAYIDX < 0) {
+        BYDAYIDX = icalrecur_iterator_sizeof_byarray(impl->by_ptrs[BY_DAY]) - 1;
+        end_of_data = 1;    /* Signal that we're at the end */
+    }
+
+    /* Add the day of week offset to the start of this week, and use
+       that to get the next day */
+    /* ignore position of dow ("4FR"), only use dow ("FR") */
+    dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[BYDAYIDX]);
+    dow -= impl->rule.week_start;   /* Set Sunday to be 0 */
+    if (dow < 0) {
+        dow += 7;
+    }
+
+    start_of_week = get_start_of_week(impl);
+
+    if (dow + start_of_week < 1) {
+        /* The selected date is in the previous year. */
+        increment_year(impl, -1);
+        start_of_week--;    /* set_day_of_year() assumes last doy == -1 */
+    }
+
+    set_day_of_year(impl, start_of_week + dow);
+
+    return end_of_data;
+}
+
+static int prev_week(icalrecur_iterator *impl)
+{
+    int end_of_data = 0;
+
+    /* Decrement to the previous week day,
+       if there is data at a level less than a week */
+    if (prev_weekday_by_week(impl) == 0) {
+        return 0;       /* Have not reached start of week yet */
+    }
+
+    /* If we get here, we have decremented through the entire week, and
+       can decrement to the previous week */
+
+    /* Jump to the previous week */
+    increment_monthday(impl, 7 * -impl->rule.interval);
 
     return end_of_data;
 }
@@ -2702,6 +2845,11 @@ static int next_year(icalrecur_iterator *impl)
     return next_yearday(impl, &__next_year);
 }
 
+static int prev_year(icalrecur_iterator *impl)
+{
+    return prev_yearday(impl, &__next_year);
+}
+
 static short daymask_find_next_bit(icalrecur_iterator *impl)
 {
     unsigned long *days = impl->days;
@@ -2759,6 +2907,63 @@ static short daymask_find_next_bit(icalrecur_iterator *impl)
     return days_index;
 }
 
+static short daymask_find_prev_bit(icalrecur_iterator *impl)
+{
+    unsigned long *days = impl->days;
+    short days_index = impl->days_index - 1;
+    unsigned long v;
+    short startBitIndex;
+    int wordIdx;
+
+    if (days_index <= -ICAL_YEARDAYS_MASK_OFFSET)
+        return -ICAL_YEARDAYS_MASK_OFFSET;
+
+    // Prepare the first word, where searching might not start at the beginning
+    startBitIndex = days_index + ICAL_YEARDAYS_MASK_OFFSET;
+    wordIdx = (int)(startBitIndex / BITS_PER_LONG);
+    v = days[wordIdx];
+    v <<= BITS_PER_LONG - (startBitIndex % BITS_PER_LONG) - 1;
+
+    if (!v) {
+        // so the first word didn't contain any bits of interest.
+        days_index -= (startBitIndex % BITS_PER_LONG) +1;
+
+        // Are there more empty words leading? Skip them.
+        while (days_index > -ICAL_YEARDAYS_MASK_OFFSET) {
+
+            wordIdx--;
+            v = days[wordIdx];
+
+            if (v)
+                break;
+
+            days_index -= BITS_PER_LONG;
+        }
+    }
+
+    if (v) {
+
+        // We found a word containing the next bit but don't know the exact
+        // position yet. Do a b-search to find it.
+
+        unsigned long mask;
+        int maskSize = (int)(BITS_PER_LONG / 2);
+        mask = ((((unsigned long)1) << maskSize) - 1) << maskSize;
+
+        while (maskSize) {
+
+            if ((v & mask) == 0) {
+                v <<= maskSize;
+                days_index -= maskSize;
+            }
+            maskSize /= 2;
+            mask <<= maskSize;
+        }
+    }
+ 
+    return days_index;
+ }
+ 
 static int next_yearday(icalrecur_iterator *impl,
                         void (*next_period)(icalrecur_iterator *, int))
 {
@@ -2783,6 +2988,38 @@ static int next_yearday(icalrecur_iterator *impl,
                 break;  /* break when a matching day is found */
             }
         }
+    }
+
+    if (impl->days_index < 0) {
+        /* Day is in previous year */
+        increment_year(impl, -1);
+    }
+
+    set_day_of_year(impl, impl->days_index);
+
+    return 1;
+}
+
+static int prev_yearday(icalrecur_iterator *impl,
+                        void (*next_period)(icalrecur_iterator *, int))
+{
+    if (prev_hour(impl) == 0) {
+        return 0;
+    }
+
+    /* We may have skipped fwd/bwd a month/year with previous occurrence.
+       Reset the period start date so we can decrement properly */
+    reset_period_start(impl);
+
+    /* Find previous year day that is set */
+    impl->days_index = daymask_find_prev_bit(impl);
+
+     while (impl->days_index <= -ICAL_YEARDAYS_MASK_OFFSET) {
+        /* Decrement to and expand the previous period */
+        next_period(impl, -impl->rule.interval);
+
+        impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
+        impl->days_index = daymask_find_prev_bit(impl);
     }
 
     if (impl->days_index < 0) {
@@ -2932,6 +3169,83 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
              !check_contracting_rules(impl));
 
     impl->occurrence_no++;
+
+    return impl->last;
+}
+
+struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
+{
+    /* Quit if last time is before the DTSTART time */
+    if (!impl || icaltime_compare(impl->last, impl->dtstart) < 0) {
+        return icaltime_null_time();
+    }
+
+#if 0  //  Mostly for testing -- users probably don't want/expect this
+    /* If last time is valid, return it */
+    if (impl->rule.count != 0 && impl->occurrence_no == impl->rule.count &&
+        (icaltime_is_null_time(impl->iend) ||
+         icaltime_compare(impl->last, impl->iend) <= 0) &&
+        check_contracting_rules(impl)) {
+
+        impl->occurrence_no--;
+        return impl->last;
+    }
+#endif
+
+    /* Iterate until we get the next valid time */
+    do {
+        switch (impl->rule.freq) {
+
+        case ICAL_SECONDLY_RECURRENCE:
+            prev_second(impl);
+            break;
+
+        case ICAL_MINUTELY_RECURRENCE:
+            prev_minute(impl);
+            break;
+
+        case ICAL_HOURLY_RECURRENCE:
+            prev_hour(impl);
+            break;
+
+        case ICAL_DAILY_RECURRENCE:
+            prev_day(impl);
+            break;
+
+        case ICAL_WEEKLY_RECURRENCE:
+            prev_week(impl);
+            break;
+
+        case ICAL_MONTHLY_RECURRENCE:
+            prev_month(impl);
+            break;
+
+        case ICAL_YEARLY_RECURRENCE:
+            prev_year(impl);
+            break;
+
+        default:
+            icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+            return icaltime_null_time();
+        }
+
+        impl->last = occurrence_as_icaltime(impl, 1);
+
+        /* Ignore times that are before the DTSTART time */
+        if (icaltime_compare(impl->last, impl->dtstart) < 0 ||
+            (!icaltime_is_null_time(impl->istart) &&
+             icaltime_compare(impl->last, impl->istart) < 0)) {
+            return icaltime_null_time();
+        }
+
+    } while (impl->last.year > MAX_TIME_T_YEAR ||
+             (!icaltime_is_null_time(impl->rule.until) &&
+              icaltime_compare(impl->last, impl->rule.until) > 0) ||
+             (!icaltime_is_null_time(impl->iend) &&
+              icaltime_compare(impl->last, impl->iend) > 0) ||
+             !check_contracting_rules(impl));
+
+    impl->occurrence_no--;
 
     return impl->last;
 }
