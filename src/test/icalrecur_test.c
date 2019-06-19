@@ -624,8 +624,10 @@ int main(int argc, char *argv[])
         if (!ritr) {
             fprintf(fp, " *** %s\n", icalerror_strerror(icalerrno));
         } else {
+            struct icaltimetype start;
+
             if (r->start_at) {
-                struct icaltimetype start = icaltime_from_string(r->start_at);
+                start = icaltime_from_string(r->start_at);
                 icalrecur_iterator_set_start(ritr, start);
             }
 
@@ -637,6 +639,10 @@ int main(int argc, char *argv[])
                 sep = ",";
             }
             fprintf(fp, "\n");
+
+            if (r->start_at) {
+                icalrecur_iterator_set_range(ritr, start, dtstart);
+            }
 
             sep = "";
             fprintf(fp, "PREV-INSTANCES:");

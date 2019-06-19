@@ -3408,12 +3408,69 @@ int icalrecur_iterator_set_start(icalrecur_iterator *impl,
 }
 
 int icalrecur_iterator_set_end(icalrecur_iterator *impl,
-    struct icaltimetype end)
+                               struct icaltimetype end)
 {
     /* Convert end to same time zone as DTSTART */
     end = icaltime_convert_to_zone(end, (icaltimezone *)impl->dtstart.zone);
 
     impl->iend = end;
+
+    return 1;
+}
+
+int icalrecur_iterator_set_range(icalrecur_iterator *impl,
+                                 struct icaltimetype from,
+                                 struct icaltimetype to)
+{
+    if (impl->rule.count > 0 || icaltime_is_null_time(from)) {
+        /* Can't set a range without 'from' or if we need to count occurrences */
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
+    if (!icaltime_is_null_time(to) && icaltime_compare(to, from) < 0) {
+        /* Setting up for the reverse iterator */
+        const icaltimezone *zone = impl->dtstart.zone;
+
+        /* Convert 'from' to same time zone as DTSTART */
+        from = icaltime_convert_to_zone(from, (icaltimezone *) zone);
+
+        if (icaltime_compare(from, impl->rule.until) > 0) {
+            /* If 'from' is after UNTIL, use UNTIL */
+            from = impl->rule.until;
+        }
+        else if (icaltime_compare(from, impl->dtstart) < 0) {
+            /* If 'from' is before START, we're done */
+            impl->last = from;
+            return 1;
+        }
+
+        if (!__iterator_set_start(impl, from)) return 0;
+
+        /* __iterator_set_start() may back us up earlier than 'from'
+           Iterate forward until we are later than 'from'.
+        */
+        while (icaltime_compare(impl->last, from) < 0) {
+            icalrecur_iterator_next(impl);
+        }
+
+        /* Convert 'to' to same time zone as DTSTART */
+        to = icaltime_convert_to_zone(to, (icaltimezone *) zone);
+
+        if (icaltime_compare(to, impl->dtstart) < 0) {
+            /* If 'to' is before DTSTART, use DTSTART */
+            to = impl->dtstart;
+        }
+
+        impl->istart = to;
+        impl->iend = from;
+        impl->days_index = 0;
+    }
+    else {
+        if (!icalrecur_iterator_set_start(impl, from)) return 0;
+
+        icalrecur_iterator_set_end(impl, to);
+    }
 
     return 1;
 }
