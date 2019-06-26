@@ -4277,7 +4277,7 @@ void test_comma_in_quoted_value(void)
 
 void test_zoneinfo_stuff(void)
 {
- #if defined(HAVE_SETENV)
+#if defined(HAVE_SETENV)
     setenv("TZDIR", TEST_DATADIR, 1);
 #else
     char tzdir[256] = {0};
