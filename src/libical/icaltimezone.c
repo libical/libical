@@ -2290,12 +2290,13 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         r = icaltime_compare(obs.onset, start);
         if (r < 0) {
             /* DTSTART is prior to our window open - check it vs tombstone */
-            if (need_tomb) check_tombstone(&tombstone, &obs);
+            if (need_tomb) {
+                check_tombstone(&tombstone, &obs);
+            }
 
             /* Adjust it */
             trunc_dtstart = 1;
-        }
-        else if (r == 0) {
+        } else if (r == 0) {
             /* DTSTART is on/after our window open */
             need_tomb = 0;
         }
@@ -2311,13 +2312,14 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 /* RRULE ends prior to our window open -
                    check UNTIL vs tombstone */
                 obs.onset = rrule.until;
-                if (need_tomb) check_tombstone(&tombstone, &obs);
+                if (need_tomb) {
+                    check_tombstone(&tombstone, &obs);
+                }
 
                 /* Remove RRULE */
                 icalcomponent_remove_property(comp, rrule_prop);
                 icalproperty_free(rrule_prop);
-            }
-            else {
+            } else {
                 /* RRULE ends on/after our window open */
                 if (need_tzuntil &&
                     (eternal || icaltime_compare(rrule.until, end) >= 0)) {
@@ -2377,8 +2379,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                                 prop = icalproperty_new_rdate(rdate);
                                 icalcomponent_add_property(comp, prop);
                             }
-                        }
-                        else {
+                        } else {
                             /* Set UNTIL to previous onset */
                             rrule.until = prev_onset;
                             icalproperty_set_rrule(rrule_prop, rrule);
@@ -2406,9 +2407,10 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                                 proleptic_prop = NULL;
                             }
                         }
-                        if (need_tomb) check_tombstone(&tombstone, &obs);
-                    }
-                    else {
+                        if (need_tomb) {
+                            check_tombstone(&tombstone, &obs);
+                        }
+                    } else {
                         /* Observance is on/after our window open */
                         if (r == 0) need_tomb = 0;
 
@@ -2445,8 +2447,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                         /* Check if observance is outside 1yr of window close */
                         ydiff = end.year - recur.year;
                         if (ydiff > 1) {
-                            /* Bump RRULE to restart at
-                               1 year prior to our window close */
+                            /* Bump RRULE to restart at 1 year prior to our window close */
                             icaltimetype newstart = recur;
                             newstart.year  = end.year - 1;
                             newstart.month = end.month;
@@ -2499,13 +2500,14 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
             r = icaltime_compare(obs.onset, start);
             if (r < 0) {
                 /* RDATE is prior to window open - check it vs tombstone */
-                if (need_tomb) check_tombstone(&tombstone, &obs);
+                if (need_tomb) {
+                    check_tombstone(&tombstone, &obs);
+                }
 
                 /* Remove it */
                 icalcomponent_remove_property(comp, rdate->prop);
                 icalproperty_free(rdate->prop);
-            }
-            else {
+            } else {
                 /* RDATE is on/after our window open */
                 if (r == 0) need_tomb = 0;
 
@@ -2554,8 +2556,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         if (tombstone.onset.is_daylight) {
             tomb = tomb_day;
             tomb_day = NULL;
-        }
-        else {
+        } else {
             tomb = tomb_std;
             tomb_std = NULL;
         }
@@ -2611,7 +2612,10 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         /* Add TZUNTIL to VTIMEZONE */
         prop = icalcomponent_get_first_property(vtz, ICAL_TZUNTIL_PROPERTY);
 
-        if (prop) icalproperty_set_tzuntil(prop, end);
-        else icalcomponent_add_property(vtz, icalproperty_new_tzuntil(end));
+        if (prop) {
+            icalproperty_set_tzuntil(prop, end);
+        } else {
+            icalcomponent_add_property(vtz, icalproperty_new_tzuntil(end));
+        }
     }
 }
