@@ -2704,6 +2704,7 @@ void test_recur_parser()
     rt = icalrecurrencetype_from_string(str);
     icalerror_restore("MALFORMEDDATA", es);
     ok(str, rt.freq == ICAL_NO_RECURRENCE);
+    free(v);
 }
 
 
