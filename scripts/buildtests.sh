@@ -491,29 +491,31 @@ CLANGTIDY test2 "$CMAKEOPTS"
 CLANGTIDY test2builtin "$TZCMAKEOPTS"
 
 #GCC based build tests
-GCC_BUILD test1 ""
-GCC_BUILD test2 "$CMAKEOPTS"
-GCC_BUILD test3 "$UUCCMAKEOPTS"
-GCC_BUILD test4 "$GLIBOPTS"
+GCC_BUILD testgcc1 ""
+GCC_BUILD testgcc2 "$CMAKEOPTS"
+GCC_BUILD testgcc3 "$UUCCMAKEOPTS"
+GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
+GCC_BUILD testgcc4glib "$GLIBOPTS"
 if (test "`uname -s`" = "Linux")
 then
     echo "Temporarily disable cross-compile tests"
-#  GCC_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-#  GCC_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+#  GCC_BUILD testgcc1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
+#  GCC_BUILD testgcc2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 fi
-GCC_BUILD test1builtin "-DUSE_BUILTIN_TZDATA=True"
-GCC_BUILD test2builtin "$TZCMAKEOPTS"
+GCC_BUILD testgcc1builtin "-DUSE_BUILTIN_TZDATA=True"
+GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
 
 #Clang based build tests
-CLANG_BUILD test1 ""
-CLANG_BUILD test2 "$CMAKEOPTS"
-CLANG_BUILD test3 "$UUCCMAKEOPTS"
-#broken with clang7 on Fedora29 CLANG_BUILD test4 "$GLIBOPTS"
+CLANG_BUILD testclang1 ""
+CLANG_BUILD testclang2 "$CMAKEOPTS"
+CLANG_BUILD testclang3 "$UUCCMAKEOPTS"
+#broken with clang7 on Fedora29 CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
+#broken with clang7 on Fedora29 CLANG_BUILD testclang4glib "$GLIBOPTS"
 if (test "`uname -s`" = "Linux")
 then
     echo "Temporarily disable cross-compile tests"
-#  CLANG_BUILD test1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-#  CLANG_BUILD test2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+#  CLANG_BUILD testclang1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
+#  CLANG_BUILD testclang2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 fi
 
 #Address sanitizer
