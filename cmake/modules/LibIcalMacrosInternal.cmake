@@ -3,6 +3,18 @@
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)
 
+function(libical_option option description)
+  set(extra_option_arguments ${ARGN})
+  option(${option} "${description}" ${extra_option_arguments})
+  add_feature_info("Option ${option}" ${option} "${description}")
+endfunction()
+
+function(libical_deprecated_option deprecated_option option description)
+  set(extra_option_arguments ${ARGN})
+  message(STATUS "WARNING: ${deprecated_option} is deprecated. Use ${option} instead")
+  libical_option(${option} "${description}" ${extra_option_arguments})
+endfunction()
+
 function(libical_append_if condition value)
   if(${condition})
     foreach(variable ${ARGN})
