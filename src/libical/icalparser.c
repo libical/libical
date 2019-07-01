@@ -610,11 +610,11 @@ char *icalparser_get_line(icalparser *parser,
 static void insert_error(icalparser *parser, icalcomponent *comp, const char *text,
                          const char *message, icalparameter_xlicerrortype type)
 {
+    char temp[1024];
+
     if (parser->error_count > MAXIMUM_ALLOWED_ERRORS) {
         return;
     }
-
-    char temp[1024];
 
     if (text == 0) {
         snprintf(temp, 1024, "%s:", message);
