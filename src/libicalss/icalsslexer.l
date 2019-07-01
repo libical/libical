@@ -27,8 +27,6 @@
 #include "icalgaugeimpl.h"
 #include "assert.h"
 
-#include <string.h> /* For strdup() */
-
 const char* input_buffer;
 const char* input_buffer_p;
 
