@@ -1734,8 +1734,9 @@ calculate_actual_time		(VzicTime	*vzictime,
     }
 
     if (vzictime->day_number <= 0) {
-      fprintf (stderr, "Day overflow: %i\n", vzictime->day_number);
-      exit (1);
+      vzictime->month--;
+      days_in_month = g_date_days_in_month (vzictime->month + 1, vzictime->year);
+      vzictime->day_number += days_in_month;
     }
   }
 
@@ -2055,7 +2056,6 @@ output_rrule				(char	        *rrule_buffer,
 
   case DAY_WEEKDAY_ON_OR_AFTER:
     if (day_number > DaysInMonth[month] - 6) {
-      /* This isn't actually needed at present. */
 #if 0
       fprintf (stderr, "DAY_WEEKDAY_ON_OR_AFTER: %i %i\n", day_number,
 	       month + 1);
@@ -2106,9 +2106,27 @@ output_rrule				(char	        *rrule_buffer,
 
   case DAY_WEEKDAY_ON_OR_BEFORE:
     if (day_number < 7) {
-      /* FIXME: This is unimplemented, but it isn't needed at present anway. */
-      fprintf (stderr, "DAY_WEEKDAY_ON_OR_BEFORE: %i. Unimplemented. Exiting...\n", day_number);
-      exit (0);
+#if 0
+      fprintf (stderr, "DAY_WEEKDAY_ON_OR_BEFORE: %i %i\n", day_number,
+	       month + 1);
+#endif
+
+      if (!VzicPureOutput) {
+	printf ("ERROR: %s: Couldn't output RRULE (day<=x) compatible with Outlook\n", CurrentZoneName);
+	exit (1);
+      } else {
+        /* We do this day and 6 previous days */
+        day_number = -(day_number - 1);
+	int i;
+	for (i = month; i < 12; i++) {
+	  day_number += DaysInMonth[i];
+	}
+	sprintf (rrule_buffer, "RRULE:FREQ=YEARLY;BYYEARDAY=-%i,-%i,-%i,-%i,-%i,-%i,-%i;BYDAY=%s%s\r\n",
+		 day_number, day_number+1, day_number+2, day_number+3,
+		 day_number+4, day_number+5, day_number+6, WeekDays[day_weekday], until);
+
+	return TRUE;
+      }
     }
 
     if (!output_rrule_2 (buffer, month, day_number - 6, day_weekday))
