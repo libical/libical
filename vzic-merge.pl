@@ -35,8 +35,8 @@ use Getopt::Long;
 #
 
 # Set these to the toplevel directories of the 2 sets of VTIMEZONE files.
-$MASTER_ZONEINFO_DIR = "/home/allen/projects/libical/libical/zoneinfo";
-$NEW_ZONEINFO_DIR    = "/home/allen/projects/libical/vzic/zoneinfo";
+$MASTER_ZONEINFO_DIR = $ENV{'VZIC_ZONEINFO_MASTER'};
+$NEW_ZONEINFO_DIR    = $ENV{'VZIC_ZONEINFO_NEW'};
 
 # Set this to 1 if you have version numbers in the TZID like libical.
 $LIBICAL_VERSIONING = 1;
