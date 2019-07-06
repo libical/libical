@@ -4,9 +4,10 @@
 
 Libical — an implementation of iCalendar protocols and data formats
 
-Most of the code in here was written by Eric Busboom with help from
-dozens of contributors.  It is currently maintained by Art Cancro
-and Wilfried Goesgens.
+Most of the code in here was written by Eric Busboom at the end
+of the last millennium with help from dozens of contributors.
+It is currently maintained by Allen Winter and the libical team
+at https://github.com/libical/libical.
 
 Libical is an Open Source implementation of the iCalendar protocols
 and protocol data units. The iCalendar specification describes how
@@ -54,8 +55,8 @@ There is rudimentary, unfinished documentation in the `doc/` directory,
 see [UsingLibical.md](doc/UsingLibical.md)
 and annotated examples in `examples/` and the test code in `src/test/`.
 
-Additionally, progress is underway to add Doxygen documentation
-for libical, which is available [here](http://libical.github.io/libical/apidocs/index.html)
+Additionally, progress is underway to add API documentation,
+which is available [here](http://libical.github.io/libical/apidocs/index.html)
 
 ## Acknowledgments
 
@@ -66,23 +67,24 @@ Siemens Rolm Communications Inc. See
 details.
 
 ## Libical Users
+
 In no particular order:
 
- * [Cyrus Email/Calendars/Contacts Server](https://www.cyrusimap.org)
- * [syncEvolution](https://syncevolution.org)
- * [Fantastical](https://flexibits.com/fantastical)
+* [Cyrus Email/Calendars/Contacts Server](https://www.cyrusimap.org)
+* [syncEvolution](https://syncevolution.org)
+* [Fantastical](https://flexibits.com/fantastical)
 
- * GNOME's EDS (evolution-data-server) which serves data to:
-   * [Evolution](https://wiki.gnome.org/Apps/Evolution)
-   * [GNOME Calendar](https://wiki.gnome.org/Apps/Calendar)
-   * [GNOME Notes](https://wiki.gnome.org/action/show/Apps/Notes)
-   * [GNOME Todo](https://wiki.gnome.org/Apps/Todo)
-   * and more GNOME apps...
+* GNOME's EDS (evolution-data-server) which serves data to:
+  * [Evolution](https://wiki.gnome.org/Apps/Evolution)
+  * [GNOME Calendar](https://wiki.gnome.org/Apps/Calendar)
+  * [GNOME Notes](https://wiki.gnome.org/action/show/Apps/Notes)
+  * [GNOME Todo](https://wiki.gnome.org/Apps/Todo)
+  * and more GNOME apps...
 
-  * KDE's [Kontact Suite](https://kontact.kde.org)
-    * [Akonadi framework](https://kontact.kde.org/components/akonadi.html)
-    * [KOrganizer calendar and scheduling component](https://kontact.kde.org/components/korganizer.html)
-    * and more KDE apps...
+ * KDE's [Kontact Suite](https://kontact.kde.org)
+   * [Akonadi framework](https://kontact.kde.org/components/akonadi.html)
+   * [KOrganizer calendar and scheduling component](https://kontact.kde.org/components/korganizer.html)
+   * and more KDE apps...
 
 ## Get Involved
 
