@@ -63,20 +63,20 @@ details.
 ## Libical Users
 In no particular order:
 
- * [Cyrus Email/Calendars/Contacts Server][https://www.cyrusimap.org]
- * [syncEvolution][https://syncevolution.org]
- * [Fantastical][https://flexibits.com/fantastical]
+ * [Cyrus Email/Calendars/Contacts Server](https://www.cyrusimap.org)
+ * [syncEvolution](https://syncevolution.org)
+ * [Fantastical](https://flexibits.com/fantastical)
 
  * GNOME's EDS (evolution-data-server) which serves data to:
-   * [Evolution][https://wiki.gnome.org/Apps/Evolution]
-   * [GNOME Calendar][https://wiki.gnome.org/Apps/Calendar]
-   * [GNOME Notes][https://wiki.gnome.org/action/show/Apps/Notes]
-   * [GNOME Todo][https://wiki.gnome.org/Apps/Todo]
+   * [Evolution](https://wiki.gnome.org/Apps/Evolution)
+   * [GNOME Calendar](https://wiki.gnome.org/Apps/Calendar)
+   * [GNOME Notes](https://wiki.gnome.org/action/show/Apps/Notes)
+   * [GNOME Todo](https://wiki.gnome.org/Apps/Todo)
    * and more GNOME apps...
 
-  * KDE's [Kontact Suite][https://kontact.kde.org]
-    * [Akonadi framework][https://kontact.kde.org/components/akonadi.html]
-    * [KOrganizer calendar and scheduling component][https://kontact.kde.org/components/korganizer.html]
+  * KDE's [Kontact Suite](https://kontact.kde.org)
+    * [Akonadi framework](https://kontact.kde.org/components/akonadi.html)
+    * [KOrganizer calendar and scheduling component](https://kontact.kde.org/components/korganizer.html)
     * and more KDE apps...
 
 ## Get Involved
