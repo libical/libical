@@ -2175,8 +2175,8 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
     icalcomponent *comp, *nextc, *tomb_std = NULL, *tomb_day = NULL;
     icalproperty *prop, *proleptic_prop = NULL;
     struct observance tombstone;
-    unsigned need_tomb = !icaltime_is_null_time(start);
-    unsigned need_tzuntil = !icaltime_is_null_time(end);
+    unsigned need_tomb = (unsigned)!icaltime_is_null_time(start);
+    unsigned need_tzuntil = (unsigned)!icaltime_is_null_time(end);
 
     if (!need_tomb && !need_tzuntil) {
         /* Nothing to do */
@@ -2209,7 +2209,8 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         icalarray *rdates = icalarray_new(sizeof(struct rdate), 10);
         icaltimetype dtstart;
         struct observance obs;
-        unsigned n, trunc_dtstart = 0;
+        size_t n;
+        unsigned trunc_dtstart = 0;
         int r;
 
         nextc = icalcomponent_get_next_component(vtz, ICAL_ANY_COMPONENT);
@@ -2273,7 +2274,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
         /* Adjust DTSTART observance to UTC */
         icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
-        icaltime_set_timezone(&obs.onset, icaltimezone_get_utc_timezone());
+        (void)icaltime_set_timezone(&obs.onset, icaltimezone_get_utc_timezone());
 
         /* Check DTSTART vs window close */
         if (need_tzuntil && icaltime_compare(obs.onset, end) >= 0) {
@@ -2290,19 +2291,20 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         r = icaltime_compare(obs.onset, start);
         if (r < 0) {
             /* DTSTART is prior to our window open - check it vs tombstone */
-            if (need_tomb) check_tombstone(&tombstone, &obs);
+            if (need_tomb) {
+                check_tombstone(&tombstone, &obs);
+            }
 
             /* Adjust it */
             trunc_dtstart = 1;
-        }
-        else if (r == 0) {
+        } else if (r == 0) {
             /* DTSTART is on/after our window open */
             need_tomb = 0;
         }
 
         if (rrule_prop) {
             struct icalrecurrencetype rrule = icalproperty_get_rrule(rrule_prop);
-            unsigned eternal = icaltime_is_null_time(rrule.until);
+            unsigned eternal = (unsigned)icaltime_is_null_time(rrule.until);
             icalrecur_iterator *ritr = NULL;
             unsigned trunc_until = 0;
 
@@ -2311,13 +2313,14 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 /* RRULE ends prior to our window open -
                    check UNTIL vs tombstone */
                 obs.onset = rrule.until;
-                if (need_tomb) check_tombstone(&tombstone, &obs);
+                if (need_tomb) {
+                    check_tombstone(&tombstone, &obs);
+                }
 
                 /* Remove RRULE */
                 icalcomponent_remove_property(comp, rrule_prop);
                 icalproperty_free(rrule_prop);
-            }
-            else {
+            } else {
                 /* RRULE ends on/after our window open */
                 if (need_tzuntil &&
                     (eternal || icaltime_compare(rrule.until, end) >= 0)) {
@@ -2328,7 +2331,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 if (!eternal) {
                     /* Adjust UNTIL to local time (for iterator) */
                     icaltime_adjust(&rrule.until, 0, 0, 0, obs.offset_from);
-                    icaltime_set_timezone(&rrule.until, NULL);
+                    (void)icaltime_set_timezone(&rrule.until, NULL);
                 }
 
                 ritr = icalrecur_iterator_new(rrule, dtstart);
@@ -2339,7 +2342,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                     newstart.year  = start.year - 1;
                     newstart.month = start.month;
                     newstart.day   = start.day;
-                    icaltime_normalize(newstart);
+                    (void)icaltime_normalize(newstart);
                     icalrecur_iterator_set_start(ritr, newstart);
                 }
             }
@@ -2355,14 +2358,14 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
                     /* Adjust observance to UTC */
                     icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
-                    icaltime_set_timezone(&obs.onset,
-                                          icaltimezone_get_utc_timezone());
+                    (void)icaltime_set_timezone(&obs.onset,
+                                                icaltimezone_get_utc_timezone());
 
                     if (trunc_until && icaltime_compare(obs.onset, end) >= 0) {
                         /* Observance is on/after window close */
 
                         /* Check if DSTART is within 1yr of prev onset */
-                        ydiff = prev_onset.year - dtstart.year;
+                        ydiff = (unsigned)(prev_onset.year - dtstart.year);
                         if (ydiff <= 1) {
                             /* Remove RRULE */
                             icalcomponent_remove_property(comp, rrule_prop);
@@ -2377,8 +2380,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                                 prop = icalproperty_new_rdate(rdate);
                                 icalcomponent_add_property(comp, prop);
                             }
-                        }
-                        else {
+                        } else {
                             /* Set UNTIL to previous onset */
                             rrule.until = prev_onset;
                             icalproperty_set_rrule(rrule_prop, rrule);
@@ -2406,9 +2408,10 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                                 proleptic_prop = NULL;
                             }
                         }
-                        if (need_tomb) check_tombstone(&tombstone, &obs);
-                    }
-                    else {
+                        if (need_tomb) {
+                            check_tombstone(&tombstone, &obs);
+                        }
+                    } else {
                         /* Observance is on/after our window open */
                         if (r == 0) need_tomb = 0;
 
@@ -2419,7 +2422,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                             trunc_dtstart = 0;
 
                             /* Check if new DSTART is within 1yr of UNTIL */
-                            ydiff = rrule.until.year - recur.year;
+                            ydiff = (unsigned)(rrule.until.year - recur.year);
                             if (!trunc_until && ydiff <= 1) {
                                 /* Remove RRULE */
                                 icalcomponent_remove_property(comp, rrule_prop);
@@ -2443,15 +2446,14 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                         }
 
                         /* Check if observance is outside 1yr of window close */
-                        ydiff = end.year - recur.year;
+                        ydiff = (unsigned)(end.year - recur.year);
                         if (ydiff > 1) {
-                            /* Bump RRULE to restart at
-                               1 year prior to our window close */
+                            /* Bump RRULE to restart at 1 year prior to our window close */
                             icaltimetype newstart = recur;
                             newstart.year  = end.year - 1;
                             newstart.month = end.month;
                             newstart.day   = end.day;
-                            icaltime_normalize(newstart);
+                            (void)icaltime_normalize(newstart);
                             icalrecur_iterator_set_start(ritr, newstart);
                         }
                     }
@@ -2486,7 +2488,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
             /* Adjust observance to UTC */
             icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
-            icaltime_set_timezone(&obs.onset, icaltimezone_get_utc_timezone());
+            (void)icaltime_set_timezone(&obs.onset, icaltimezone_get_utc_timezone());
 
             if (need_tzuntil && icaltime_compare(obs.onset, end) >= 0) {
                 /* RDATE is after our window close - remove it */
@@ -2499,13 +2501,14 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
             r = icaltime_compare(obs.onset, start);
             if (r < 0) {
                 /* RDATE is prior to window open - check it vs tombstone */
-                if (need_tomb) check_tombstone(&tombstone, &obs);
+                if (need_tomb) {
+                    check_tombstone(&tombstone, &obs);
+                }
 
                 /* Remove it */
                 icalcomponent_remove_property(comp, rdate->prop);
                 icalproperty_free(rdate->prop);
-            }
-            else {
+            } else {
                 /* RDATE is on/after our window open */
                 if (r == 0) need_tomb = 0;
 
@@ -2554,8 +2557,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         if (tombstone.onset.is_daylight) {
             tomb = tomb_day;
             tomb_day = NULL;
-        }
-        else {
+        } else {
             tomb = tomb_std;
             tomb_std = NULL;
         }
@@ -2579,7 +2581,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
             case ICAL_DTSTART_PROPERTY:
                 /* Adjust window open to local time */
                 icaltime_adjust(&start, 0, 0, 0, tombstone.offset_from);
-                icaltime_set_timezone(&start, NULL);
+                (void)icaltime_set_timezone(&start, NULL);
 
                 icalproperty_set_dtstart(prop, start);
                 break;
@@ -2611,7 +2613,10 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         /* Add TZUNTIL to VTIMEZONE */
         prop = icalcomponent_get_first_property(vtz, ICAL_TZUNTIL_PROPERTY);
 
-        if (prop) icalproperty_set_tzuntil(prop, end);
-        else icalcomponent_add_property(vtz, icalproperty_new_tzuntil(end));
+        if (prop) {
+            icalproperty_set_tzuntil(prop, end);
+        } else {
+            icalcomponent_add_property(vtz, icalproperty_new_tzuntil(end));
+        }
     }
 }

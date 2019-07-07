@@ -122,22 +122,12 @@ set(PROJECT_URL "http://libical.github.io/libical/")
 # library build types
 set(LIBRARY_TYPE SHARED)
 
-option(STATIC_ONLY "Build static libraries only.")
-add_feature_info(
-  "Option STATIC_ONLY"
-  STATIC_ONLY
-  "build static libraries only"
-)
+libical_option(STATIC_ONLY "Build static libraries only." False)
 if(STATIC_ONLY)
   set(LIBRARY_TYPE STATIC)
 endif()
 
-option(SHARED_ONLY "Build shared (dynamic) libraries only. Takes precedence over STATIC_ONLY")
-add_feature_info(
-  "Option SHARED_ONLY"
-  SHARED_ONLY
-  "build shared libraries only"
-)
+libical_option(SHARED_ONLY "Build shared (dynamic) libraries only. Takes precedence over STATIC_ONLY." False)
 if(SHARED_ONLY)
   set(STATIC_ONLY False)
   set(LIBRARY_TYPE SHARED)
@@ -231,12 +221,7 @@ endif()
 if(WIN32)
   if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DYY_NO_UNISTD_H)
-    option(USE_32BIT_TIME_T "Build using a 32bit time_t (ignored unless building with MSVC on Windows).")
-    add_feature_info(
-      "Option USE_32BIT_TIME_T"
-      USE_32BIT_TIME_T
-      "build using 32-bit time_t"
-    )
+    libical_option(USE_32BIT_TIME_T "Build using a 32bit time_t (ignored unless building with MSVC on Windows)." False)
     if(USE_32BIT_TIME_T)
       add_definitions(-D_USE_32BIT_TIME_T)
     endif()
@@ -269,41 +254,31 @@ if(APPLE)
   set(CMAKE_INSTALL_NAME_DIR ${LIB_DESTINATION})
 endif()
 
-option(ICAL_ERRORS_ARE_FATAL "icalerror_* calls will abort instead of internally signaling an error.")
-add_feature_info(
-  "Option ICAL_ERRORS_ARE_FATAL"
-  ICAL_ERRORS_ARE_FATAL
-  "icalerror_* calls will abort instead of internally signaling an error"
-)
+libical_option(ICAL_ERRORS_ARE_FATAL "icalerror_* calls will abort instead of internally signaling an error." False)
 if(ICAL_ERRORS_ARE_FATAL)
   set(ICAL_ERRORS_ARE_FATAL 1)
 else()
   set(ICAL_ERRORS_ARE_FATAL 0)
 endif()
 
-option(ICAL_ALLOW_EMPTY_PROPERTIES "Prevent empty properties from being replaced with X-LIC-ERROR properties.")
-add_feature_info(
-  "Option ICAL_ALLOW_EMPTY_PROPERTIES"
-  ICAL_ALLOW_EMPTY_PROPERTIES
-  "prevents empty properties from being replaced with X-LIC-ERROR properties"
-)
+libical_option(ICAL_ALLOW_EMPTY_PROPERTIES "Prevents empty properties from being replaced with X-LIC-ERROR properties." False)
 if(ICAL_ALLOW_EMPTY_PROPERTIES)
   set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
 else()
   set(ICAL_ALLOW_EMPTY_PROPERTIES 0)
 endif()
 
-option(USE_BUILTIN_TZDATA "build using our own timezone data, else use the system timezone data on non-Windows systems. ALWAYS true on Windows.")
+if(WIN32 OR WINCE)
+  set(DEF_USE_BUILTIN_TZDATA False)
+else()
+  set(DEF_USE_BUILTIN_TZDATA True)
+endif()
+libical_option(USE_BUILTIN_TZDATA "Build using our builtin timezone data, else use the system timezone data. ALWAYS true on Windows." ${DEF_USE_BUILTIN_TZDATA})
 if(USE_BUILTIN_TZDATA)
   set(USE_BUILTIN_TZDATA 1)
 else()
   set(USE_BUILTIN_TZDATA 0)
 endif()
-add_feature_info(
-  "Option USE_BUILTIN_TZDATA"
-  USE_BUILTIN_TZDATA
-  "use our own timezone data rather then the system timezone data"
-)
 if(WIN32 OR WINCE)
   #Always use builtin tzdata on Windows systems.
   if(NOT USE_BUILTIN_TZDATA)
@@ -325,12 +300,7 @@ set(INSTALL_TARGETS_DEFAULT_ARGS
 )
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
-option(GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher.")
-add_feature_info(
-  "Option GOBJECT_INTROSPECTION"
-  GOBJECT_INTROSPECTION
-  "build GObject introspection \"typelib\" files"
-)
+libical_option(GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher." False)
 if(GOBJECT_INTROSPECTION)
   find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
   set_package_properties(GObjectIntrospection PROPERTIES
@@ -351,19 +321,7 @@ if(GOBJECT_INTROSPECTION)
   endif()
 endif()
 
-option(ICAL_BUILD_DOCS "Build documentation" True)
-add_feature_info(
-  "Option ICAL_BUILD_DOCS"
-  ICAL_BUILD_DOCS
-  "build API documentation and reference manual"
-)
-
-option(ICAL_GLIB_VAPI "Build Vala \"vapi\" files.")
-add_feature_info(
-  "Option ICAL_GLIB_VAPI"
-  ICAL_GLIB_VAPI
-  "build Vala \"vapi\" files"
-)
+libical_option(ICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
 if(ICAL_GLIB_VAPI)
   if(NOT GOBJECT_INTROSPECTION)
     message(FATAL_ERROR
@@ -391,12 +349,7 @@ endif()
 
 set(MIN_GLIB "2.32")
 set(MIN_LIBXML "2.7.3")
-option(ICAL_GLIB "Build libical-glib interface. Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True)
-add_feature_info(
-  "Option ICAL_GLIB"
-  ICAL_GLIB
-  "build libical-glib interface"
-)
+libical_option(ICAL_GLIB "Build libical-glib interface. Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True)
 if(ICAL_GLIB)
   find_package(GLib ${MIN_GLIB})
   set_package_properties(GLib PROPERTIES
@@ -468,7 +421,7 @@ endif()
 
 ########################################################
 
-option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
+libical_option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
 if(WITH_CXX_BINDINGS)
   enable_language(CXX)
   if(CMAKE_CXX_COMPILER)
@@ -481,11 +434,6 @@ if(WITH_CXX_BINDINGS)
     set(WITH_CXX_BINDINGS False)
   endif()
 endif()
-add_feature_info(
-  "Option WITH_CXX_BINDINGS"
-  WITH_CXX_BINDINGS
-  "build the C++ bindings. Requires a C++ compiler"
-)
 
 #some test programs need to know if we are using 32-bit time
 if(SIZEOF_TIME_T EQUAL 4)
@@ -493,7 +441,7 @@ if(SIZEOF_TIME_T EQUAL 4)
 endif()
 
 ################ Developer Options #####################
-option(ABI_DUMPER "Build for abi-dumper." False)
+libical_option(ABI_DUMPER "Build for abi-dumper (developer-only option)." False)
 if(ABI_DUMPER)
   if(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_C_FLAGS "-g -Og")
@@ -504,7 +452,7 @@ if(ABI_DUMPER)
   endif()
 endif()
 
-option(ADDRESS_SANITIZER "Build with the address sanitizer." False)
+libical_option(ADDRESS_SANITIZER "Build with the address sanitizer (developer-only option)." False)
 if(ADDRESS_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g")
@@ -529,7 +477,7 @@ if(ADDRESS_SANITIZER)
   endif()
 endif()
 
-option(THREAD_SANITIZER "Build with the thread sanitizer." False)
+libical_option(THREAD_SANITIZER "Build with the thread sanitizer (developer-only option)." False)
 if(THREAD_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g")
@@ -554,7 +502,7 @@ if(THREAD_SANITIZER)
   endif()
 endif()
 
-option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
+libical_option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
 if(ENABLE_LTO_BUILD)
   if(CMAKE_COMPILER_IS_GNUCC)
     libical_add_cflag(-flto LTO)
@@ -594,6 +542,7 @@ if(USE_BUILTIN_TZDATA)
   add_subdirectory(zoneinfo)
 endif()
 
+libical_option(ICAL_BUILD_DOCS "Build documentation" True)
 if(ICAL_BUILD_DOCS)
   add_subdirectory(doc) # needs to go last, for the build source files
 endif()

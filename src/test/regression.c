@@ -2704,6 +2704,7 @@ void test_recur_parser()
     rt = icalrecurrencetype_from_string(str);
     icalerror_restore("MALFORMEDDATA", es);
     ok(str, rt.freq == ICAL_NO_RECURRENCE);
+    free(v);
 }
 
 
@@ -4276,7 +4277,7 @@ void test_comma_in_quoted_value(void)
 
 void test_zoneinfo_stuff(void)
 {
- #if defined(HAVE_SETENV)
+#if defined(HAVE_SETENV)
     setenv("TZDIR", TEST_DATADIR, 1);
 #else
     char tzdir[256] = {0};

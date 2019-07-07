@@ -557,8 +557,6 @@ char *yytext_ptr;
 #include "icalssyacc.h"
 #include "icalmemory.h"
 
-#include <string.h> /* For strdup() */
-
 const char* input_buffer;
 const char* input_buffer_p;
 
