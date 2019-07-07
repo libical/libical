@@ -2930,7 +2930,6 @@ static short daymask_find_prev_bit(icalrecur_iterator *impl)
 
         // Are there more empty words leading? Skip them.
         while (days_index > -ICAL_YEARDAYS_MASK_OFFSET) {
-
             wordIdx--;
             v = days[wordIdx];
 
@@ -2960,10 +2959,10 @@ static short daymask_find_prev_bit(icalrecur_iterator *impl)
             mask <<= maskSize;
         }
     }
- 
+
     return days_index;
- }
- 
+}
+
 static int next_yearday(icalrecur_iterator *impl,
                         void (*next_period)(icalrecur_iterator *, int))
 {
@@ -3014,7 +3013,7 @@ static int prev_yearday(icalrecur_iterator *impl,
     /* Find previous year day that is set */
     impl->days_index = daymask_find_prev_bit(impl);
 
-     while (impl->days_index <= -ICAL_YEARDAYS_MASK_OFFSET) {
+    while (impl->days_index <= -ICAL_YEARDAYS_MASK_OFFSET) {
         /* Decrement to and expand the previous period */
         next_period(impl, -impl->rule.interval);
 
@@ -3438,20 +3437,20 @@ int icalrecur_iterator_set_range(icalrecur_iterator *impl,
         if (icaltime_compare(from, impl->rule.until) > 0) {
             /* If 'from' is after UNTIL, use UNTIL */
             from = impl->rule.until;
-        }
-        else if (icaltime_compare(from, impl->dtstart) < 0) {
+        } else if (icaltime_compare(from, impl->dtstart) < 0) {
             /* If 'from' is before START, we're done */
             impl->last = from;
             return 1;
         }
 
-        if (!__iterator_set_start(impl, from)) return 0;
+        if (!__iterator_set_start(impl, from))
+            return 0;
 
         /* __iterator_set_start() may back us up earlier than 'from'
            Iterate forward until we are later than 'from'.
         */
         while (icaltime_compare(impl->last, from) < 0) {
-            icalrecur_iterator_next(impl);
+            (void)icalrecur_iterator_next(impl);
         }
 
         /* Convert 'to' to same time zone as DTSTART */
@@ -3465,9 +3464,9 @@ int icalrecur_iterator_set_range(icalrecur_iterator *impl,
         impl->istart = to;
         impl->iend = from;
         impl->days_index = 0;
-    }
-    else {
-        if (!icalrecur_iterator_set_start(impl, from)) return 0;
+    } else {
+        if (!icalrecur_iterator_set_start(impl, from))
+            return 0;
 
         icalrecur_iterator_set_end(impl, to);
     }

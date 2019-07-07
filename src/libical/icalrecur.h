@@ -285,10 +285,15 @@ LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_range(icalrecur_iterator *impl,
                                                      struct icaltimetype from,
                                                      struct icaltimetype to);
 
-/** Get the next occurrence from an iterator */
+/**
+ * Gets the next occurrence from an iterator
+ */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *);
 
-/** Get the previous occurrence from an iterator */
+/**
+ * Gets the previous occurrence from an iterator
+ * @since 3.1
+ */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *);
 
 /** Free the iterator */

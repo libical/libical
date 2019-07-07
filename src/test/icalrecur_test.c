@@ -625,6 +625,7 @@ int main(int argc, char *argv[])
             fprintf(fp, " *** %s\n", icalerror_strerror(icalerrno));
         } else {
             struct icaltimetype start;
+            start = icaltime_null_time();
 
             if (r->start_at) {
                 start = icaltime_from_string(r->start_at);

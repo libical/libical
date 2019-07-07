@@ -5,6 +5,7 @@ Version 3.1.0 (NOT RELEASED YET):
 --------------------------------
  * Requires CMake v3.11.0 or higher
  * Improved FindICU (from the official CMake)
+ * Allow previous recurrence iteration
  * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
  * New publicly available functions:
      + icalrecurrencetype_encode_day
@@ -15,6 +16,7 @@ Version 3.1.0 (NOT RELEASED YET):
      + icalparameter_clone
      + icalvalue_clone
      + icalcluster_clone
+     + icalrecur_iterator_prev
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
  * Deprecated functions:
      + caldat (replaced by internal function icaldat_int())
