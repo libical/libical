@@ -72,7 +72,7 @@ In no particular order:
 * GNOME's EDS (evolution-data-server) which serves data to:
   * [Evolution](https://wiki.gnome.org/Apps/Evolution)
   * [GNOME Calendar](https://wiki.gnome.org/Apps/Calendar)
-  * [GNOME Notes](https://wiki.gnome.org/action/show/Apps/Notes)
+  * [GNOME Notes](https://wiki.gnome.org/Apps/Notes)
   * [GNOME Todo](https://wiki.gnome.org/Apps/Todo)
   * and more GNOME apps...
 
