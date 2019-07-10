@@ -3,7 +3,7 @@ Release Highlights
 
 Version 3.0.6 (UNRELEASED):
 ---------------------------
- *
+ * Handle both COUNT and UNTIL in RRULEs
 
 Version 3.0.5 (14 May 2019):
 ----------------------------

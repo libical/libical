@@ -144,6 +144,9 @@ icalvalue *icalvalue_new_recur(struct icalrecurrencetype v)
 void icalvalue_set_recur(icalvalue *impl, struct icalrecurrencetype v)
 {
     icalerror_check_arg_rv((impl != 0), "value");
+    /* don't allow both count and until */
+    icalerror_check_arg_rv(v.count == 0 || icaltime_is_null_time(v.until),
+                           "recurrencetype");
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
 
     if (impl->data.v_recur != 0) {
@@ -171,6 +174,7 @@ struct icalrecurrencetype icalvalue_get_recur(const icalvalue *value)
     icalrecurrencetype_clear(&rt);
 
     icalerror_check_arg_rx((value != 0), "value", rt);
+    icalerror_check_arg_rx((value->data.v_recur != 0), "value", rt);
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
 
     return *(value->data.v_recur);
