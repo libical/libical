@@ -1155,7 +1155,7 @@ output_zone_components			(FILE		*fp,
 
   /* We use an 'X-' property to place the proleptic tzname in. */
   vzictime = &g_array_index (changes, VzicTime, 0);
-  if (vzictime->tzname) {
+  if (VzicPureOutput && vzictime->tzname) {
     fputs("X-PROLEPTIC-TZNAME", fp);
     if (!vzictime->is_infinite) fputs(";X-NO-BIG-BANG=TRUE", fp);
     fprintf(fp, ":%s\r\n", vzictime->tzname);
@@ -1218,9 +1218,8 @@ output_zone_components			(FILE		*fp,
     vzictime = &g_array_index (changes, VzicTime, i);
 
     /* If this has been flagged as an RRULE, then output it now */
-    if (vzictime->until) {
+    if (VzicPureOutput && vzictime->until) {
       char until[256], rrule_buffer[2048];
-      VzicTime vzictime_start_copy;
       int day_offset;
 
       if (vzictime->until->is_infinite) {
@@ -1237,19 +1236,14 @@ output_zone_components			(FILE		*fp,
 						   t1.time_seconds));
       }
 
-      /* Change the year to our minimum start year. */
-      vzictime_start_copy = *vzictime;
-      if (!VzicPureOutput)
-	vzictime_start_copy.year = RRULE_START_YEAR;
-
-      day_offset = output_component_start (start_buffer, &vzictime_start_copy,
+      day_offset = output_component_start (start_buffer, vzictime,
 					   FALSE, FALSE);
       fprintf (fp, "%s", start_buffer);
 
-      if (output_rrule (rrule_buffer, vzictime_start_copy.month,
-			vzictime_start_copy.day_code,
-			vzictime_start_copy.day_number,
-			vzictime_start_copy.day_weekday, day_offset, until)) {
+      if (output_rrule (rrule_buffer, vzictime->month,
+			vzictime->day_code,
+			vzictime->day_number,
+			vzictime->day_weekday, day_offset, until)) {
 	fprintf (fp, "%s", rrule_buffer);
       }
 
@@ -1348,9 +1342,10 @@ check_for_recurrence		(FILE		*fp,
 				 GArray		*changes,
 				 int		 idx)
 {
-  VzicTime *vzictime_start, *vzictime;
+  VzicTime *vzictime_start, *vzictime, vzictime_start_copy;
   gboolean is_daylight_start, is_daylight;
-  int last_match, i, next_year;
+  int last_match, i, next_year, day_offset;
+  char until[256], rrule_buffer[2048], start_buffer[1024];
   GList *matching_elements = NULL, *elem;
 
   vzictime_start = &g_array_index (changes, VzicTime, idx);
@@ -1375,6 +1370,28 @@ check_for_recurrence		(FILE		*fp,
   /* If this is an infinitely recurring change, output the RRULE and return.
      There won't be any changes after it that we could merge. */
   if (vzictime_start->is_infinite) {
+    if (!VzicPureOutput) {
+      /* Change the year to our minimum start year. */
+      vzictime_start_copy = *vzictime_start;
+      vzictime_start_copy.year = RRULE_START_YEAR;
+
+      day_offset = output_component_start (start_buffer, &vzictime_start_copy,
+                                           FALSE, FALSE);
+
+      if (!output_rrule (rrule_buffer, vzictime_start_copy.month,
+                         vzictime_start_copy.day_code,
+                         vzictime_start_copy.day_number,
+                         vzictime_start_copy.day_weekday, day_offset, "")) {
+        if (vzictime_start->year != MAX_TIME_T_YEAR) {
+          fprintf (stderr, "WARNING: Failed to output infinite recurrence with start year: %i\n", vzictime_start->year);
+        }
+        return TRUE;
+      }
+
+      fprintf (fp, "%s%s", start_buffer, rrule_buffer);
+      output_component_end (fp, vzictime_start);
+    }
+
     vzictime_start->until = vzictime_start;
     vzictime_start->output = TRUE;
     return TRUE;
@@ -1458,10 +1475,42 @@ check_for_recurrence		(FILE		*fp,
 #if 0
     printf ("RRULE Years: %i\n", years);
 #endif
-    if (years < MIN_RRULE_OCCURRENCES)
+    if (!VzicPureOutput || years < MIN_RRULE_OCCURRENCES)
       return FALSE;
   }
 
+  if (!VzicPureOutput) {
+    if (vzictime->is_infinite) {
+      until[0] = '\0';
+    } else {
+      VzicTime t1 = *vzictime;
+
+      printf ("RRULE with UNTIL - aborting\n");
+      abort ();
+
+      calculate_actual_time (&t1, TIME_UNIVERSAL, vzictime->prev_stdoff,
+                             vzictime->prev_walloff);
+
+      /* Output UNTIL, in UTC. */
+      sprintf (until, ";UNTIL=%sZ", format_time (t1.year, t1.month,
+                                                 t1.day_number,
+                                                 t1.time_seconds));
+    }
+
+    /* Change the year to our minimum start year. */
+    vzictime_start_copy = *vzictime_start;
+    vzictime_start_copy.year = RRULE_START_YEAR;
+
+    day_offset = output_component_start (start_buffer, &vzictime_start_copy,
+                                         FALSE, FALSE);
+    if (output_rrule (rrule_buffer, vzictime_start_copy.month,
+                      vzictime_start_copy.day_code,
+                      vzictime_start_copy.day_number,
+                      vzictime_start_copy.day_weekday, day_offset, until)) {
+      fprintf (fp, "%s%s", start_buffer, rrule_buffer);
+      output_component_end (fp, vzictime_start);
+    }
+  }
   vzictime_start->until = vzictime;
 
   /* Mark all the changes as output. */
