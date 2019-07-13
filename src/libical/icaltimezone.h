@@ -160,6 +160,7 @@ LIBICAL_ICAL_EXPORT char *icaltimezone_get_tznames_from_vtimezone(icalcomponent 
  * If either time is non-null, then it MUST be specified as UTC.
  * If the start time is non-null and ms_compatible is zero,
  * then the DTSTART of RRULEs will be adjusted to occur after the start time.
+ * @since 3.0.6
  */
 LIBICAL_ICAL_EXPORT void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                                                          icaltimetype start,
