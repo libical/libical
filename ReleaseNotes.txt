@@ -4,6 +4,8 @@ Release Highlights
 Version 3.0.6 (UNRELEASED):
 ---------------------------
  * Handle both COUNT and UNTIL in RRULEs
+ * New publicly available function:
+     + icaltimezone_truncate_vtimezone()
 
 Version 3.0.5 (14 May 2019):
 ----------------------------
