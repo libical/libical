@@ -494,7 +494,6 @@ CLANGTIDY test2builtin "$TZCMAKEOPTS"
 GCC_BUILD testgcc1 ""
 GCC_BUILD testgcc2 "$CMAKEOPTS"
 GCC_BUILD testgcc3 "$UUCCMAKEOPTS"
-GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
 GCC_BUILD testgcc4glib "$GLIBOPTS"
 if (test "`uname -s`" = "Linux")
 then
@@ -509,7 +508,6 @@ GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
 CLANG_BUILD testclang1 ""
 CLANG_BUILD testclang2 "$CMAKEOPTS"
 CLANG_BUILD testclang3 "$UUCCMAKEOPTS"
-#broken with clang7 on Fedora29 CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
 #broken with clang7 on Fedora29 CLANG_BUILD testclang4glib "$GLIBOPTS"
 if (test "`uname -s`" = "Linux")
 then
