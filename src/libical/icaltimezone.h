@@ -155,6 +155,19 @@ LIBICAL_ICAL_EXPORT char *icaltimezone_get_location_from_vtimezone(icalcomponent
 LIBICAL_ICAL_EXPORT char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component);
 
 /*
+ * Truncate a VTIMEZONE component to the given start and end times.
+ * If either time is null, then no truncation will occur at that point.
+ * If either time is non-null, then it MUST be specified as UTC.
+ * If the start time is non-null and ms_compatible is zero,
+ * then the DTSTART of RRULEs will be adjusted to occur after the start time.
+ * @since 3.0.6
+ */
+LIBICAL_ICAL_EXPORT void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
+                                                         icaltimetype start,
+                                                         icaltimetype end,
+                                                         int ms_compatible);
+
+/*
  * @par Handling the default location the timezone files
  */
 
