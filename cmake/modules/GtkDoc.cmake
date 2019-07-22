@@ -94,9 +94,8 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
     list(APPEND _scangobj_deps ${opt})
   endforeach()
 
-  # Add them as the last, thus in-tree headers/libs have precedence
+  # Add it as the last, thus in-tree headers have precedence
   list(APPEND _scangobj_cflags_list -I${INCLUDE_INSTALL_DIR})
-  list(APPEND _scangobj_ldflags -L${LIB_INSTALL_DIR})
 
   if(_scangobj_deps)
     list(REMOVE_DUPLICATES _scangobj_deps)
@@ -119,7 +118,7 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
         if(NOT _output_name)
           set(_output_name ${opt})
         endif()
-        set(_scangobj_ldflags "-L$<TARGET_FILE_DIR:${opt}> -l${_output_name} ${_scangobj_ldflags}")
+        set(_scangobj_ldflags "${_scangobj_ldflags} -L$<TARGET_FILE_DIR:${opt}> -l${_output_name}")
 
         if(_target_type STREQUAL "SHARED_LIBRARY" OR (_target_type STREQUAL "MODULE_LIBRARY"))
           set(_scangobj_ld_lib_dirs "${_scangobj_ld_lib_dirs}:$<TARGET_FILE_DIR:${opt}>")
@@ -127,10 +126,20 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
         unset(_output_name)
       endif()
       unset(_target_type)
-    else()
-      set(_scangobj_ldflags "${opt} ${_scangobj_ldflags}")
     endif()
   endforeach()
+
+  # Add extra flags from LDFLAGS environment variable
+  set(_scangobj_ldflags "${_scangobj_ldflags} ${CMAKE_SHARED_LINKER_FLAGS}")
+
+  foreach(opt IN LISTS _scangobj_deps)
+    if(NOT TARGET ${opt})
+      set(_scangobj_ldflags "${_scangobj_ldflags} ${opt}")
+    endif()
+  endforeach()
+
+  # Add it as the last, thus in-tree libs have precedence
+  set(_scangobj_ldflags "${_scangobj_ldflags} -L${LIB_INSTALL_DIR}")
 
   set(_scangobj_prefix ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH="${_scangobj_ld_lib_dirs}:${LIB_INSTALL_DIR}:$ENV{LD_LIBRARY_PATH}")
 
