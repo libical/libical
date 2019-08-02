@@ -245,9 +245,10 @@ CPPCHECK() {
 
   echo "===== START CPPCHECK: $1 ======"
   cd $TOP
-  cppcheck --quiet --std=posix --language=c \
+  cppcheck --quiet --language=c \
            --force --error-exitcode=1 --inline-suppr \
            --enable=warning,performance,portability,information \
+           --template='{file}:{line},{severity},{id},{message}' \
            -D sleep="" \
            -D localtime_r="" \
            -D gmtime_r="" \
