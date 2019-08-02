@@ -31,7 +31,6 @@ Version 3.1.0 (NOT RELEASED YET):
      + struct icaltimezonetype
      + struct icaltimezonephase
  * Improved performance of recurrence iterators
- * Add option to disable building the test suite
 
 Version 3.0.6 (UNRELEASED):
 ---------------------------
@@ -40,6 +39,7 @@ Version 3.0.6 (UNRELEASED):
  * Various fuzzification fixes
  * New publicly available function:
      + icaltimezone_truncate_vtimezone()
+ * Add option to disable building the test suite
 
 Version 3.0.5 (14 May 2019):
 ----------------------------
