@@ -79,7 +79,7 @@ int main()
          * the current zone and first day of first month in the year
          */
         start_time = time(NULL);
-        localtime_r(&start_time, &start_tm);
+        (void)localtime_r(&start_time, &start_tm);
         start_tm.tm_hour = 12;
         start_tm.tm_min = 0;
         start_tm.tm_sec = 0;
