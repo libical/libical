@@ -530,6 +530,8 @@ if(ENABLE_LTO_BUILD)
   endif()
 endif()
 
+libical_option(BUILD_TESTING "Build tests." True)
+
 ################# build subdirs ########################
 
 add_subdirectory(design-data)
