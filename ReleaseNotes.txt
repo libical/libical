@@ -31,6 +31,7 @@ Version 3.1.0 (NOT RELEASED YET):
      + struct icaltimezonetype
      + struct icaltimezonephase
  * Improved performance of recurrence iterators
+ * Add option to disable building the test suite
 
 Version 3.0.6 (UNRELEASED):
 ---------------------------

@@ -65,6 +65,10 @@
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
 #
+# -DLIBICAL_BUILD_TESTING=[true|false]
+#  Set to build the test suite
+#  Default=true
+#
 
 # ## DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!!
 ## Special CMake Options for Developers
@@ -529,6 +533,8 @@ if(ENABLE_LTO_BUILD)
       "Build link-time optimization using a non-GCC compiler is currently not supported.")
   endif()
 endif()
+
+libical_option(LIBICAL_BUILD_TESTING "Build tests." True)
 
 ################# build subdirs ########################
 
