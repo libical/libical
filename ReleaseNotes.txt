@@ -8,6 +8,7 @@ Version 3.0.6 (UNRELEASED):
  * Various fuzzification fixes
  * New publicly available function:
      + icaltimezone_truncate_vtimezone()
+ * Add option to disable building the test suite
 
 Version 3.0.5 (14 May 2019):
 ----------------------------
