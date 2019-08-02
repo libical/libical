@@ -159,7 +159,6 @@ static int load(const char *file)
     if (dlerr != NULL) {
         fprintf(stderr, "dlsym error: %s\n", dlerr);
         dlclose(modh);
-       /* cppcheck-suppress resourceLeak */
         return 0;
     }
 
@@ -195,7 +194,6 @@ int icalset_loaddir(const char *path)
         return 0;
     }
 
-    /* cppcheck-suppress readdirCalled */
     while ((dp = readdir(d)) != 0) {
         if (strncmp(dp->d_name, "mod_", 4)) {
             continue;
