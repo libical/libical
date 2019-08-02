@@ -117,7 +117,7 @@ endforeach()
 
 ########### next target ###############
 
-if(NOT WIN32)
+if(NOT WIN32 AND NOT ANDROID)
   #stow is very Unix specific
   set(stow_SRCS stow.c)
   buildme(stow "${stow_SRCS}")
