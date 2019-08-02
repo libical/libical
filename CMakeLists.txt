@@ -566,6 +566,8 @@ if(SIZEOF_TIME_T EQUAL 4)
   set(USE_32BIT_TIME_T TRUE)
 endif()
 
+libical_option(BUILD_TESTING "Build tests." True)
+
 ################# build subdirs ########################
 
 add_subdirectory(design-data)
