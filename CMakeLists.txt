@@ -570,7 +570,12 @@ if(SIZEOF_TIME_T EQUAL 4)
   set(USE_32BIT_TIME_T TRUE)
 endif()
 
-libical_option(LIBICAL_BUILD_TESTING "Build tests." True)
+option(LIBICAL_BUILD_TESTING "Build tests." True)
+add_feature_info(
+  "Option LIBICAL_BUILD_TESTING"
+  LIBICAL_BUILD_TESTING
+  "build tests"
+)
 
 ################# build subdirs ########################
 
