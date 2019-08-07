@@ -2660,6 +2660,8 @@ void icalcomponent_normalize(icalcomponent *comp)
     while ((prop = pvl_pop(comp->properties)) != 0) {
         int nparams = icalproperty_count_parameters(prop);
 
+        icalproperty_set_parent(prop, 0);
+
         /* Skip unparameterized properties having default values */
         if (nparams == 0) {
             switch (icalproperty_isa(prop)) {
