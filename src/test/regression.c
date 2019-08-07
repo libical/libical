@@ -4622,6 +4622,80 @@ void test_icalarray_sort(void)
     icalarray_free(array);
 }
 
+void test_icalcomponent_normalize(void)
+{
+	const char *calStr1 =
+		"BEGIN:VCALENDAR\n"
+		"PRODID:-//ACME//NONSGML ACME Calendar//EN\n"
+		"VERSION:2.0\n"
+		"CALSCALE:GREGORIAN\n"
+		"BEGIN:VTIMEZONE\n"
+		"TZID:America/New_York\n"
+		"BEGIN:DAYLIGHT\n"
+		"TZNAME:EDT\n"
+		"TZOFFSETFROM:-0500\n"
+		"TZOFFSETTO:-0400\n"
+		"DTSTART:20070311T020000\n"
+		"RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\n"
+		"END:DAYLIGHT\n"
+		"BEGIN:STANDARD\n"
+		"TZNAME:EST\n"
+		"TZOFFSETFROM:-0400\n"
+		"TZOFFSETTO:-0500\n"
+		"DTSTART:20071104T020000\n"
+		"RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\n"
+		"END:STANDARD\n"
+		"END:VTIMEZONE\n"
+		"BEGIN:VEVENT\n"
+		"DTSTART;VALUE=DATE-TIME:20180220T020000Z\n"
+		"DURATION:PT1H\n"
+		"END:VEVENT\n"
+		"END:VCALENDAR\n";
+	const char *calStr2 =
+		"BEGIN:VCALENDAR\n"
+		"VERSION:2.0\n"
+		"PRODID:-//ACME//NONSGML ACME Calendar//EN\n"
+		"BEGIN:VEVENT\n"
+		"TRANSP:OPAQUE\n"
+		"DURATION:PT1H\n"
+		"DTSTART;VALUE=DATE-TIME:20180220T020000Z\n"
+		"END:VEVENT\n"
+		"BEGIN:VTIMEZONE\n"
+		"TZID:America/New_York\n"
+		"BEGIN:STANDARD\n"
+		"TZNAME:EST\n"
+		"TZOFFSETFROM:-0400\n"
+		"TZOFFSETTO:-0500\n"
+		"DTSTART:20071104T020000\n"
+		"RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\n"
+		"END:STANDARD\n"
+		"BEGIN:DAYLIGHT\n"
+		"TZNAME:EDT\n"
+		"TZOFFSETFROM:-0500\n"
+		"TZOFFSETTO:-0400\n"
+		"DTSTART:20070311T020000\n"
+		"RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\n"
+		"END:DAYLIGHT\n"
+		"END:VTIMEZONE\n"
+		"END:VCALENDAR\n";
+
+	icalcomponent *ical1 = icalcomponent_new_from_string(calStr1);
+	icalcomponent *ical2 = icalcomponent_new_from_string(calStr2);
+
+	icalcomponent_normalize(ical1);
+	icalcomponent_normalize(ical2);
+
+	calStr1 = icalcomponent_as_ical_string(ical1);
+	calStr2 = icalcomponent_as_ical_string(ical2);
+
+	if (VERBOSE) {
+        printf("iCal1:\n%s\n\n", calStr1);
+        printf("iCal2:\n%s\n\n", calStr2);
+	}
+
+	str_is("Normalized components match", calStr1, calStr2);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4762,6 +4836,8 @@ int main(int argc, char *argv[])
     test_run("Test icalvalue_decode_ical_string", test_icalvalue_decode_ical_string, do_test, do_header);
 
     test_run("Test icalarray_sort", test_icalarray_sort, do_test, do_header);
+
+    test_run("Test icalcomponent_normalize", test_icalcomponent_normalize, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
