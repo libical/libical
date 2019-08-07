@@ -2665,6 +2665,7 @@ void icalcomponent_normalize(icalcomponent *comp)
         case ICAL_CALSCALE_PROPERTY:
             if ((nparams == 0) &&
                 (strcmp("GREGORIAN", icalproperty_get_calscale(prop)) == 0)) {
+                icalproperty_free(prop);
                 continue;
             }
             break;
@@ -2672,12 +2673,14 @@ void icalcomponent_normalize(icalcomponent *comp)
         case ICAL_CLASS_PROPERTY:
             if ((nparams == 0) &&
                 (icalproperty_get_class(prop) == ICAL_CLASS_PUBLIC)) {
+                icalproperty_free(prop);
                 continue;
             }
             break;
 
         case ICAL_PRIORITY_PROPERTY:
             if ((nparams == 0) && (icalproperty_get_priority(prop) == 0)) {
+                icalproperty_free(prop);
                 continue;
             }
             break;
@@ -2685,18 +2688,21 @@ void icalcomponent_normalize(icalcomponent *comp)
         case ICAL_TRANSP_PROPERTY:
             if ((nparams == 0) &&
                 (icalproperty_get_transp(prop) == ICAL_TRANSP_OPAQUE)) {
+                icalproperty_free(prop);
                 continue;
             }
             break;
 
         case ICAL_REPEAT_PROPERTY:
             if ((nparams == 0) && (icalproperty_get_repeat(prop) == 0)) {
+                icalproperty_free(prop);
                 continue;
             }
             break;
 
         case ICAL_SEQUENCE_PROPERTY:
             if ((nparams == 0) && (icalproperty_get_sequence(prop) == 0)) {
+                icalproperty_free(prop);
                 continue;
             }
             break;
