@@ -4469,6 +4469,9 @@ void test_icalcomponent_normalize(void)
 	calStr1 = icalcomponent_as_ical_string(ical1);
 	calStr2 = icalcomponent_as_ical_string(ical2);
 
+	icalcomponent_free(ical1);
+	icalcomponent_free(ical2);
+
 	if (VERBOSE) {
         printf("iCal1:\n%s\n\n", calStr1);
         printf("iCal2:\n%s\n\n", calStr2);
