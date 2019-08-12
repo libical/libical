@@ -967,6 +967,8 @@ void icalproperty_normalize(icalproperty *prop)
     icalparameter *param;
 
     while ((param = pvl_pop(prop->parameters)) != 0) {
+        icalparameter_set_parent(param, 0);
+
         /* Skip parameters having default values */
         switch (icalparameter_isa(param)) {
         case ICAL_VALUE_PARAMETER:
