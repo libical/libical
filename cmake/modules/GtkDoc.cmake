@@ -96,6 +96,7 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
 
   # Add it as the last, thus in-tree headers have precedence
   list(APPEND _scangobj_cflags_list -I${INCLUDE_INSTALL_DIR})
+  list(APPEND _scangobj_cflags_list ${CMAKE_C_FLAGS})
 
   if(_scangobj_deps)
     list(REMOVE_DUPLICATES _scangobj_deps)
