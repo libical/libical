@@ -84,6 +84,10 @@ $(function() {
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__icaltimezonechange.html">_icaltimezonechange</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structobservance.html">observance</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrdate.html">rdate</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -109,6 +113,9 @@ typedef struct <a class="el" href="struct__icaltimezonechange.html">_icaltimezon
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ad502007584577a8d2c03e3eb9d05dad6"><td class="memItemLeft" align="right" valign="top"><a id="ad502007584577a8d2c03e3eb9d05dad6"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>check_tombstone</b> (struct <a class="el" href="structobservance.html">observance</a> *tombstone, struct <a class="el" href="structobservance.html">observance</a> *obs)</td></tr>
+<tr class="separator:ad502007584577a8d2c03e3eb9d05dad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47a63052f768c6c2004d053159dd9498"><td class="memItemLeft" align="right" valign="top"><a id="a47a63052f768c6c2004d053159dd9498"></a>
 static int&#160;</td><td class="memItemRight" valign="bottom"><b>fetch_lat_long_from_string</b> (const char *str, int *latitude_degrees, int *latitude_minutes, int *latitude_seconds, int *longitude_degrees, int *longitude_minutes, int *longitude_seconds, char *location)</td></tr>
 <tr class="separator:a47a63052f768c6c2004d053159dd9498"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,12 +238,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_set_buil
 <tr class="separator:ac06a9a060f021b7f4bdff282b2638357"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04849ce67c1a529f19d695b74cb238fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icaltimezone_8c.html#a04849ce67c1a529f19d695b74cb238fe">icaltimezone_set_tzid_prefix</a> (const char *new_prefix)</td></tr>
 <tr class="separator:a04849ce67c1a529f19d695b74cb238fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3f7b3e1e9e500c4a7c2deb194507204"><td class="memItemLeft" align="right" valign="top"><a id="af3f7b3e1e9e500c4a7c2deb194507204"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate_vtimezone</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *vtz, <a class="el" href="structicaltimetype.html">icaltimetype</a> start, <a class="el" href="structicaltimetype.html">icaltimetype</a> end, int ms_compatible)</td></tr>
+<tr class="separator:af3f7b3e1e9e500c4a7c2deb194507204"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa91ac94068e5562fef581305551b2b24"><td class="memItemLeft" align="right" valign="top"><a id="aa91ac94068e5562fef581305551b2b24"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_tzid_prefix</b> (void)</td></tr>
 <tr class="separator:aa91ac94068e5562fef581305551b2b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8022792f3805335773dfb0a328ef5085"><td class="memItemLeft" align="right" valign="top"><a id="a8022792f3805335773dfb0a328ef5085"></a>
 static int&#160;</td><td class="memItemRight" valign="bottom"><b>parse_coord</b> (char *coord, int len, int *degrees, int *minutes, int *seconds)</td></tr>
 <tr class="separator:a8022792f3805335773dfb0a328ef5085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8c1aa81fb458ac9d6c5dec2ae2a3606"><td class="memItemLeft" align="right" valign="top"><a id="af8c1aa81fb458ac9d6c5dec2ae2a3606"></a>
+static int&#160;</td><td class="memItemRight" valign="bottom"><b>rdate_compare</b> (const void *rdate1, const void *rdate2)</td></tr>
+<tr class="separator:af8c1aa81fb458ac9d6c5dec2ae2a3606"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af35f72898e3992529e12c07c62659b22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icaltimezone_8c.html#af35f72898e3992529e12c07c62659b22">set_zone_directory</a> (const char *path)</td></tr>
 <tr class="separator:af35f72898e3992529e12c07c62659b22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7cd42cf92a023d97c2a55073e64d700"><td class="memItemLeft" align="right" valign="top"><a id="aa7cd42cf92a023d97c2a55073e64d700"></a>
