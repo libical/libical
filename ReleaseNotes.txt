@@ -9,6 +9,7 @@ Version 3.0.6 (UNRELEASED):
  * New publicly available function:
      + icaltimezone_truncate_vtimezone()
  * Add option to disable building the test suite
+ * Built-in timezones updated to tzdata2019c
 
 Version 3.0.5 (14 May 2019):
 ----------------------------
