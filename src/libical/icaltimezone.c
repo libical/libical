@@ -2281,7 +2281,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         }
 
         /* Adjust DTSTART observance to UTC */
-        icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
+        icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from, 0);
         (void)icaltime_set_timezone(&obs.onset, icaltimezone_get_utc_timezone());
 
         /* Check DTSTART vs window close */
@@ -2338,7 +2338,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
                 if (!eternal) {
                     /* Adjust UNTIL to local time (for iterator) */
-                    icaltime_adjust(&rrule.until, 0, 0, 0, obs.offset_from);
+                    icaltime_adjust(&rrule.until, 0, 0, 0, obs.offset_from, 0);
                     (void)icaltime_set_timezone(&rrule.until, NULL);
                 }
 
@@ -2365,7 +2365,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                     obs.onset = recur;
 
                     /* Adjust observance to UTC */
-                    icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
+                    icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from, 0);
                     (void)icaltime_set_timezone(&obs.onset,
                                                 icaltimezone_get_utc_timezone());
 
@@ -2495,7 +2495,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
             obs.onset = rdate->date.time;
 
             /* Adjust observance to UTC */
-            icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
+            icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from, 0);
             (void)icaltime_set_timezone(&obs.onset, icaltimezone_get_utc_timezone());
 
             if (need_tzuntil && icaltime_compare(obs.onset, end) >= 0) {
@@ -2588,7 +2588,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 break;
             case ICAL_DTSTART_PROPERTY:
                 /* Adjust window open to local time */
-                icaltime_adjust(&start, 0, 0, 0, tombstone.offset_from);
+                icaltime_adjust(&start, 0, 0, 0, tombstone.offset_from, 0);
                 (void)icaltime_set_timezone(&start, NULL);
 
                 icalproperty_set_dtstart(prop, start);
