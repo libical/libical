@@ -59,7 +59,6 @@ class Component(object):
 
     def __init__(self,ref=None,kind=None):
 
-        self._ref = None
         if ref != None:
             self._ref = ref
         elif kind != None:
@@ -71,7 +70,7 @@ class Component(object):
             icalcomponent_add_component(self._ref,inner);
 
         else:
-            raise "Could not construct component of with an unspecified kind"
+            raise "Could not construct component with an unspecified kind"
 
         self.cached_props = SwigRefHash()
         self.cached_comps = SwigRefHash()
@@ -126,10 +125,7 @@ class Component(object):
 
        if p !=WrapperNULL:
            self._prop_from_ref(p)
-           prop =  self.cached_props[p]
-           return prop
-       else :
-           return None
+           return self.cached_props[p]
 
     def properties(self,type='ANY'):
         """
@@ -202,10 +198,8 @@ class Component(object):
 
         inner = icalcomponent_get_inner(self._ref)
 
-        if inner == WrapperNULL and inner != None:
-            return None
-
-        return NewComponent(inner)
+        if inner != WrapperNULL or inner is None:
+            return NewComponent(inner)
 
     def add_component(self, comp):
         "Adds a child component."

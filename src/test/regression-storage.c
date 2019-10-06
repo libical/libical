@@ -168,7 +168,7 @@ void test_fileset_extended(void)
         start.month = month;
         end.month = month;
 
-        clone = icalcomponent_new_clone(c);
+        clone = icalcomponent_clone(c);
         ok("Making clone of output file", (clone != 0));
         assert(clone != 0);
 
@@ -349,7 +349,7 @@ void test_bdbset()
         start.month = month;
         end.month = month;
 
-        clone = icalcomponent_new_clone(c);
+        clone = icalcomponent_clone(c);
         assert(clone != 0);
         event = icalcomponent_get_first_component(clone, ICAL_VEVENT_COMPONENT);
         assert(event != 0);
@@ -670,7 +670,7 @@ void test_dirset_extended(void)
             /* Change the dtstart and dtend times in the component
                pointed to by Itr */
 
-            (void)icalcomponent_new_clone(itr);
+            (void)icalcomponent_clone(itr);
             inner = icalcomponent_get_first_component(itr, ICAL_VEVENT_COMPONENT);
 
             ok("Duplicating component...", (icalerrno == ICAL_NO_ERROR) && (inner != 0));
@@ -710,7 +710,7 @@ void test_dirset_extended(void)
             if (VERBOSE)
                 printf("\n----------\n%s\n---------\n", icalcomponent_as_ical_string(inner));
 
-            error = icaldirset_add_component(s, icalcomponent_new_clone(itr));
+            error = icaldirset_add_component(s, icalcomponent_clone(itr));
 
             ok("Adding component to dirset", (icalerrno == ICAL_NO_ERROR));
             assert(error == ICAL_NO_ERROR);

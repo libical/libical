@@ -65,7 +65,12 @@
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
 #
+# -DLIBICAL_BUILD_TESTING=[true|false]
+#  Set to build the test suite
+#  Default=true
+#
 
+# ## DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!!
 ## Special CMake Options for Developers
 #
 # -DABI_DUMPER=[true|false]
@@ -74,9 +79,11 @@
 #
 # -DADDRESS_SANITIZER=[true|false]
 #  Build with the address sanitizer (requires gcc or clang)
+#  Default=false
 #
 # -DTHREAD_SANITIZER=[true|false]
 #  Build with the thread sanitizer (requires gcc or clang)
+#  Default=false
 #
 
 cmake_minimum_required(VERSION 3.11.0) #first line, to shutup a cygwin warning
@@ -93,6 +100,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 #Include CMake capabilities
+include(LibIcalMacrosInternal)
 include(FeatureSummary)
 
 # Enable the test harness
@@ -118,22 +126,12 @@ set(PROJECT_URL "http://libical.github.io/libical/")
 # library build types
 set(LIBRARY_TYPE SHARED)
 
-option(STATIC_ONLY "Build static libraries only.")
-add_feature_info(
-  "Option STATIC_ONLY"
-  STATIC_ONLY
-  "build static libraries only"
-)
+libical_option(STATIC_ONLY "Build static libraries only." False)
 if(STATIC_ONLY)
   set(LIBRARY_TYPE STATIC)
 endif()
 
-option(SHARED_ONLY "Build shared (dynamic) libraries only. Takes precedence over STATIC_ONLY")
-add_feature_info(
-  "Option SHARED_ONLY"
-  SHARED_ONLY
-  "build shared libraries only"
-)
+libical_option(SHARED_ONLY "Build shared (dynamic) libraries only. Takes precedence over STATIC_ONLY." False)
 if(SHARED_ONLY)
   set(STATIC_ONLY False)
   set(LIBRARY_TYPE SHARED)
@@ -170,7 +168,10 @@ endif()
 # libicu is highly recommended for RSCALE support
 #  libicu can be found at http://www.icu-project.org
 #  RSCALE info at http://tools.ietf.org/html/rfc7529
-find_package(ICU)
+if(NOT "$ENV{ICU_BASE}" STREQUAL "") #support the old ICU_BASE env
+  set(ICU_ROOT $ENV{ICU_BASE})
+endif()
+find_package(ICU COMPONENTS uc i18n)
 set_package_properties(ICU PROPERTIES
   TYPE RECOMMENDED
   PURPOSE "For RSCALE (RFC7529) support"
@@ -183,14 +184,26 @@ add_feature_info(
 if(ICU_FOUND)
   set(REQUIRES_PRIVATE_ICU "Requires.private: icu-i18n") #for libical.pc
   set(HAVE_LIBICU 1)
-  if(ICU_MAJOR_VERSION VERSION_GREATER 50)
+  if(ICU_VERSION VERSION_GREATER 50)
     set(HAVE_ICU_DANGI TRUE)
   else()
     set(HAVE_ICU_DANGI FALSE)
   endif()
-endif()
-if(ICU_I18N_FOUND)
-  set(HAVE_LIBICU_I18N 1)
+  if(ICU_GENCCODE_EXECUTABLE)
+    get_filename_component(ICU_EXEC ${ICU_GENCCODE_EXECUTABLE} DIRECTORY)
+  elseif(ICU_UCONV_EXECUTABLE)
+    get_filename_component(ICU_EXEC ${ICU_UCONV_EXECUTABLE} DIRECTORY)
+  elseif(ICU_ICUINFO_EXECUTABLE)
+    get_filename_component(ICU_EXEC ${ICU_ICUINFO_EXECUTABLE} DIRECTORY)
+  elseif(ICU_ICU-CONFIG_EXECUTABLE)
+    get_filename_component(ICU_EXEC ${ICU_ICU-CONFIG_EXECUTABLE} DIRECTORY)
+  elseif(ICU_MAKECONV_EXECUTABLE)
+    get_filename_component(ICU_EXEC ${ICU_MAKECONV_EXECUTABLE} DIRECTORY)
+  else()
+    message(FATAL_ERROR
+      "Unable find locate the ICU runtime path. Is your ICU installation broken?")
+  endif()
+  set(ICU_BINARY_DIR ${ICU_EXEC} CACHE DOC STRING "Runtime binaries directory for the ICU library")
 endif()
 
 # compile in Berkeley DB support
@@ -212,12 +225,7 @@ endif()
 if(WIN32)
   if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DYY_NO_UNISTD_H)
-    option(USE_32BIT_TIME_T "Build using a 32bit time_t (ignored unless building with MSVC on Windows).")
-    add_feature_info(
-      "Option USE_32BIT_TIME_T"
-      USE_32BIT_TIME_T
-      "build using 32-bit time_t"
-    )
+    libical_option(USE_32BIT_TIME_T "Build using a 32bit time_t (ignored unless building with MSVC on Windows)." False)
     if(USE_32BIT_TIME_T)
       add_definitions(-D_USE_32BIT_TIME_T)
     endif()
@@ -250,41 +258,31 @@ if(APPLE)
   set(CMAKE_INSTALL_NAME_DIR ${LIB_DESTINATION})
 endif()
 
-option(ICAL_ERRORS_ARE_FATAL "icalerror_* calls will abort instead of internally signaling an error.")
-add_feature_info(
-  "Option ICAL_ERRORS_ARE_FATAL"
-  ICAL_ERRORS_ARE_FATAL
-  "icalerror_* calls will abort instead of internally signaling an error"
-)
+libical_option(ICAL_ERRORS_ARE_FATAL "icalerror_* calls will abort instead of internally signaling an error." False)
 if(ICAL_ERRORS_ARE_FATAL)
   set(ICAL_ERRORS_ARE_FATAL 1)
 else()
   set(ICAL_ERRORS_ARE_FATAL 0)
 endif()
 
-option(ICAL_ALLOW_EMPTY_PROPERTIES "Prevent empty properties from being replaced with X-LIC-ERROR properties.")
-add_feature_info(
-  "Option ICAL_ALLOW_EMPTY_PROPERTIES"
-  ICAL_ALLOW_EMPTY_PROPERTIES
-  "prevents empty properties from being replaced with X-LIC-ERROR properties"
-)
+libical_option(ICAL_ALLOW_EMPTY_PROPERTIES "Prevents empty properties from being replaced with X-LIC-ERROR properties." False)
 if(ICAL_ALLOW_EMPTY_PROPERTIES)
   set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
 else()
   set(ICAL_ALLOW_EMPTY_PROPERTIES 0)
 endif()
 
-option(USE_BUILTIN_TZDATA "build using our own timezone data, else use the system timezone data on non-Windows systems. ALWAYS true on Windows.")
+if(WIN32 OR WINCE)
+  set(DEF_USE_BUILTIN_TZDATA False)
+else()
+  set(DEF_USE_BUILTIN_TZDATA True)
+endif()
+libical_option(USE_BUILTIN_TZDATA "Build using our builtin timezone data, else use the system timezone data. ALWAYS true on Windows." ${DEF_USE_BUILTIN_TZDATA})
 if(USE_BUILTIN_TZDATA)
   set(USE_BUILTIN_TZDATA 1)
 else()
   set(USE_BUILTIN_TZDATA 0)
 endif()
-add_feature_info(
-  "Option USE_BUILTIN_TZDATA"
-  USE_BUILTIN_TZDATA
-  "use our own timezone data rather then the system timezone data"
-)
 if(WIN32 OR WINCE)
   #Always use builtin tzdata on Windows systems.
   if(NOT USE_BUILTIN_TZDATA)
@@ -306,12 +304,7 @@ set(INSTALL_TARGETS_DEFAULT_ARGS
 )
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
-option(GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher.")
-add_feature_info(
-  "Option GOBJECT_INTROSPECTION"
-  GOBJECT_INTROSPECTION
-  "build GObject introspection \"typelib\" files"
-)
+libical_option(GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher." False)
 if(GOBJECT_INTROSPECTION)
   find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
   set_package_properties(GObjectIntrospection PROPERTIES
@@ -332,19 +325,7 @@ if(GOBJECT_INTROSPECTION)
   endif()
 endif()
 
-option(ICAL_BUILD_DOCS "Build documentation" True)
-add_feature_info(
-  "Option ICAL_BUILD_DOCS"
-  ICAL_BUILD_DOCS
-  "build API documentation and reference manual"
-)
-
-option(ICAL_GLIB_VAPI "Build Vala \"vapi\" files.")
-add_feature_info(
-  "Option ICAL_GLIB_VAPI"
-  ICAL_GLIB_VAPI
-  "build Vala \"vapi\" files"
-)
+libical_option(ICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
 if(ICAL_GLIB_VAPI)
   if(NOT GOBJECT_INTROSPECTION)
     message(FATAL_ERROR
@@ -372,12 +353,7 @@ endif()
 
 set(MIN_GLIB "2.32")
 set(MIN_LIBXML "2.7.3")
-option(ICAL_GLIB "Build libical-glib interface. Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True)
-add_feature_info(
-  "Option ICAL_GLIB"
-  ICAL_GLIB
-  "build libical-glib interface"
-)
+libical_option(ICAL_GLIB "Build libical-glib interface. Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True)
 if(ICAL_GLIB)
   find_package(GLib ${MIN_GLIB})
   set_package_properties(GLib PROPERTIES
@@ -417,28 +393,12 @@ endif()
 # Compiler settings
 #
 if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
-  include(CheckCCompilerFlag)
-  check_c_compiler_flag(-Wunused-but-set-variable HAVE_GCC_UNUSED_BUT_SET)
-  check_c_compiler_flag(-Wlogical-op HAVE_GCC_LOGICAL_OP)
-  check_c_compiler_flag(-Wsizeof-pointer-memaccess HAVE_GCC_POINTER_MEMACCESS)
-  check_c_compiler_flag(-Wformat-security HAVE_GCC_FORMAT_SECURITY)
-  check_c_compiler_flag(-Wredundant-decls HAVE_GCC_REDUNDANT_DECLS)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type")
-  if(HAVE_GCC_UNUSED_BUT_SET)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-but-set-variable")
-  endif()
-  if(HAVE_GCC_LOGICAL_OP)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlogical-op")
-  endif()
-  if(HAVE_GCC_POINTER_MEMACCESS)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsizeof-pointer-memaccess")
-  endif()
-  if(HAVE_GCC_FORMAT_SECURITY)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat -Wformat-security")
-  endif()
-  if(HAVE_GCC_REDUNDANT_DECLS)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wredundant-decls")
-  endif()
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type")
+  libical_add_cflag(-Wunused-but-set-variable UNUSED_BUT_SET)
+  libical_add_cflag(-Wlogical-op LOGICAL_OP)
+  libical_add_cflag(-Wsizeof-pointer-memaccess POINTER_MEMACCESS)
+  libical_add_cflag(-Wformat-security FORMAT_SECURITY)
+  libical_add_cflag(-Wredundant-decls REDUNDANT_DECLS)
   if(CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -D_GNU_SOURCE")
   endif()
@@ -448,32 +408,13 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-  include(CheckCXXCompilerFlag)
-  check_cxx_compiler_flag(-Wunused-but-set-variable HAVE_GXX_UNUSED_BUT_SET)
-  check_cxx_compiler_flag(-Wlogical-op HAVE_GXX_LOGICAL_OP)
-  check_cxx_compiler_flag(-Wsizeof-pointer-memaccess HAVE_GXX_POINTER_MEMACCESS)
-  check_cxx_compiler_flag(-Wreorder HAVE_GXX_REORDER)
-  check_cxx_compiler_flag(-Wformat-security HAVE_GXX_FORMAT_SECURITY)
-  check_cxx_compiler_flag(-Wredundant-decls HAVE_GXX_REDUNDANT_DECLS)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wmissing-include-dirs -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type")
-  if(HAVE_GXX_UNUSED_BUT_SET)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-but-set-variable")
-  endif()
-  if(HAVE_GXX_LOGICAL_OP)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlogical-op")
-  endif()
-  if(HAVE_GXX_POINTER_MEMACCESS)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsizeof-pointer-memaccess")
-  endif()
-  if(HAVE_GXX_REORDER)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wreorder")
-  endif()
-  if(HAVE_GXX_FORMAT_SECURITY)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat -Wformat-security")
-  endif()
-  if(HAVE_GXX_REDUNDANT_DECLS)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wredundant-decls")
-  endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type")
+  libical_add_cxxflag(-Wunused-but-set-variable UNUSED_BUT_SET)
+  libical_add_cxxflag(-Wlogical-op LOGICAL_OP)
+  libical_add_cxxflag(-Wsizeof-pointer-memaccess POINTER_MEMACCESS)
+  libical_add_cxxflag(-Wreorder REORDER)
+  libical_add_cxxflag(-Wformat-security FORMAT_SECURITY)
+  libical_add_cxxflag(-Wredundant-decls REDUNDANT_DECLS)
   if(CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -D_GNU_SOURCE")
   endif()
@@ -484,7 +425,7 @@ endif()
 
 ########################################################
 
-option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
+libical_option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
 if(WITH_CXX_BINDINGS)
   enable_language(CXX)
   if(CMAKE_CXX_COMPILER)
@@ -497,11 +438,6 @@ if(WITH_CXX_BINDINGS)
     set(WITH_CXX_BINDINGS False)
   endif()
 endif()
-add_feature_info(
-  "Option WITH_CXX_BINDINGS"
-  WITH_CXX_BINDINGS
-  "build the C++ bindings. Requires a C++ compiler"
-)
 
 #some test programs need to know if we are using 32-bit time
 if(SIZEOF_TIME_T EQUAL 4)
@@ -509,7 +445,7 @@ if(SIZEOF_TIME_T EQUAL 4)
 endif()
 
 ################ Developer Options #####################
-option(ABI_DUMPER "Build for abi-dumper." False)
+libical_option(ABI_DUMPER "Build for abi-dumper (developer-only option)." False)
 if(ABI_DUMPER)
   if(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_C_FLAGS "-g -Og")
@@ -520,7 +456,7 @@ if(ABI_DUMPER)
   endif()
 endif()
 
-option(ADDRESS_SANITIZER "Build with the address sanitizer." False)
+libical_option(ADDRESS_SANITIZER "Build with the address sanitizer (developer-only option)." False)
 if(ADDRESS_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g")
@@ -545,7 +481,7 @@ if(ADDRESS_SANITIZER)
   endif()
 endif()
 
-option(THREAD_SANITIZER "Build with the thread sanitizer." False)
+libical_option(THREAD_SANITIZER "Build with the thread sanitizer (developer-only option)." False)
 if(THREAD_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g")
@@ -570,13 +506,12 @@ if(THREAD_SANITIZER)
   endif()
 endif()
 
-option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
+libical_option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
 if(ENABLE_LTO_BUILD)
   if(CMAKE_COMPILER_IS_GNUCC)
-    include(CheckCCompilerFlag)
-    check_c_compiler_flag(-flto HAVE_CC_COMPILER_LTO)
-    if(HAVE_CC_COMPILER_LTO)
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlto-type-mismatch -flto -fuse-linker-plugin")
+    libical_add_cflag(-flto LTO)
+    if(C_SUPPORTS_LTO)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlto-type-mismatch -fuse-linker-plugin")
       set(CMAKE_AR "gcc-ar")
       set(CMAKE_RANLIB "gcc-ranlib")
     else()
@@ -585,9 +520,9 @@ if(ENABLE_LTO_BUILD)
     endif()
     if(WITH_CXX_BINDINGS AND CMAKE_COMPILER_IS_GNUCXX)
       include(CheckCXXCompilerFlag)
-      check_cxx_compiler_flag(-flto HAVE_CXX_COMPILER_LTO)
-      if(HAVE_CXX_COMPILER_LTO)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlto-type-mismatch -flto -fuse-linker-plugin")
+      libical_add_cxxflag(-flto LTO)
+      if(CXX_SUPPORTS_LTO)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlto-type-mismatch -fuse-linker-plugin")
       else()
         message(FATAL_ERROR
           "Your C++ compiler ${CMAKE_CXX_COMPILER_ID} does not support LTO building.")
@@ -598,6 +533,8 @@ if(ENABLE_LTO_BUILD)
       "Build link-time optimization using a non-GCC compiler is currently not supported.")
   endif()
 endif()
+
+libical_option(LIBICAL_BUILD_TESTING "Build tests." True)
 
 ################# build subdirs ########################
 
@@ -611,6 +548,7 @@ if(USE_BUILTIN_TZDATA)
   add_subdirectory(zoneinfo)
 endif()
 
+libical_option(ICAL_BUILD_DOCS "Build documentation" True)
 if(ICAL_BUILD_DOCS)
   add_subdirectory(doc) # needs to go last, for the build source files
 endif()

@@ -8,7 +8,7 @@ include_directories(
 )
 
 if(ICU_FOUND)
-  include_directories(${ICU_INCLUDE_DIR})
+  include_directories(${ICU_INCLUDE_DIRS})
 endif()
 
 if(BDB_FOUND)
@@ -66,10 +66,7 @@ macro(buildme _name _srcs)
 
   target_link_libraries(${_name} ${CMAKE_THREAD_LIBS_INIT})
   if(ICU_FOUND)
-    target_link_libraries(${_name} ${ICU_LIBRARY})
-  endif()
-  if(ICU_I18N_FOUND)
-    target_link_libraries(${_name} ${ICU_I18N_LIBRARY})
+    target_link_libraries(${_name} ${ICU_LIBRARIES})
   endif()
   if(BDB_FOUND)
     target_link_libraries(${_name} ${BDB_LIBRARY})
@@ -117,7 +114,7 @@ endforeach()
 
 ########### next target ###############
 
-if(NOT WIN32)
+if(NOT WIN32 AND NOT ANDROID)
   #stow is very Unix specific
   set(stow_SRCS stow.c)
   buildme(stow "${stow_SRCS}")
@@ -180,24 +177,24 @@ if(NOT WIN32) #since we currently do not have a Windows reference file
       target_link_libraries(icalrecurtest ical icalss icalvcal)
       set(test_cmd "${CMAKE_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
 
-      if(ICU_FOUND)
-        #test rscale capable rrules
-        set(test_args "-r")
-        if(HAVE_ICU_DANGI)
-          set(reference_data "icalrecur_withicu_dangi_test.out")
-        else()
-          set(reference_data "icalrecur_withicu_test.out")
-        endif()
-        add_test(NAME icalrecurtest-r
-          COMMAND ${CMAKE_COMMAND}
-          -D test_cmd=${test_cmd}
-          -D test_args:string=${test_args}
-          -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
-          -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
-          -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
-        )
-        setprops(icalrecurtest-r)
+      #test rscale capable rrules
+      set(test_args "-r")
+      if(HAVE_ICU_DANGI)
+        set(reference_data "icalrecur_withicu_dangi_test.out")
+      elseif(ICU_FOUND)
+        set(reference_data "icalrecur_withicu_test.out")
+      else()
+        set(reference_data "icalrecur_withouticu_test.out")
       endif()
+      add_test(NAME icalrecurtest-r
+        COMMAND ${CMAKE_COMMAND}
+        -D test_cmd=${test_cmd}
+        -D test_args:string=${test_args}
+        -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
+        -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
+        -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
+      )
+      setprops(icalrecurtest-r)
 
       #test non-rscale rrules
       set(test_args "")

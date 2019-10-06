@@ -117,9 +117,6 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #include <config.h>
 #endif
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
 #include "vcc.h"
 

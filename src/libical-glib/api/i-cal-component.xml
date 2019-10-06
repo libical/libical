@@ -19,8 +19,8 @@
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Create a new #ICalComponent with specific type.</comment>
     </method>
-    <method name="i_cal_component_clone" corresponds="icalcomponent_new_clone" kind="clone" since="1.0">
-        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be created."/>
+    <method name="i_cal_component_clone" corresponds="icalcomponent_clone" kind="clone" since="3.1">
+        <parameter type="const ICalComponent *" name="component" comment="The #ICalComponent to be created."/>
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly deeply cloned #ICalComponent."/>
         <comment xml:space="preserve">Deeply clone a #ICalComponent.</comment>
     </method>

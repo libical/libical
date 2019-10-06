@@ -160,7 +160,8 @@ PREDEFINED             = LIBICAL_ICAL_EXPORT="" \
                          LIBICAL_VCAL_EXPORT="" \
                          LIBICAL_ICAL_NO_EXPORT="" \
                          LIBICAL_ICALS_NO_EXPORT="" \
-                         LIBICAL_VCAL_NO_EXPORT=""
+                         LIBICAL_VCAL_NO_EXPORT="" \
+                         LIBICAL_DEPRECATED=
 EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------

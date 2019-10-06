@@ -92,7 +92,7 @@ icalproperty *icalproperty_new(icalproperty_kind kind)
     return (icalproperty *) icalproperty_new_impl(kind);
 }
 
-icalproperty *icalproperty_new_clone(icalproperty *old)
+icalproperty *icalproperty_clone(const icalproperty *old)
 {
     icalproperty *new;
     pvl_elem p;
@@ -102,7 +102,7 @@ icalproperty *icalproperty_new_clone(icalproperty *old)
     icalerror_check_arg_rz((new != 0), "new");
 
     if (old->value != 0) {
-        new->value = icalvalue_new_clone(old->value);
+        new->value = icalvalue_clone(old->value);
     }
 
     if (old->x_name != 0) {
@@ -117,7 +117,7 @@ icalproperty *icalproperty_new_clone(icalproperty *old)
     }
 
     for (p = pvl_head(old->parameters); p != 0; p = pvl_next(p)) {
-        icalparameter *param = icalparameter_new_clone(pvl_data(p));
+        icalparameter *param = icalparameter_clone(pvl_data(p));
 
         if (param == 0) {
             icalproperty_free(new);
@@ -129,6 +129,11 @@ icalproperty *icalproperty_new_clone(icalproperty *old)
     }
 
     return new;
+}
+
+icalproperty *icalproperty_new_clone(icalproperty *old)
+{
+    return icalproperty_clone(old);
 }
 
 icalproperty *icalproperty_new_from_string(const char *str)
@@ -967,6 +972,8 @@ void icalproperty_normalize(icalproperty *prop)
     icalparameter *param;
 
     while ((param = pvl_pop(prop->parameters)) != 0) {
+        icalparameter_set_parent(param, 0);
+
         /* Skip parameters having default values */
         switch (icalparameter_isa(param)) {
         case ICAL_VALUE_PARAMETER:
@@ -974,6 +981,7 @@ void icalproperty_normalize(icalproperty *prop)
             switch (prop_kind) {
             case ICAL_ATTACH_PROPERTY:
                 if (icalparameter_get_value(param) == ICAL_VALUE_URI) {
+                    icalparameter_free(param);
                     continue;
                 }
                 break;
@@ -987,6 +995,7 @@ void icalproperty_normalize(icalproperty *prop)
             case ICAL_RDATE_PROPERTY:
             case ICAL_RECURRENCEID_PROPERTY:
                 if (icalparameter_get_value(param) == ICAL_VALUE_DATETIME) {
+                    icalparameter_free(param);
                     continue;
                 }
                 break;
@@ -994,6 +1003,7 @@ void icalproperty_normalize(icalproperty *prop)
             case ICAL_DURATION_PROPERTY:
             case ICAL_XDURATION_PROPERTY:
                 if (icalparameter_get_value(param) == ICAL_VALUE_DURATION) {
+                    icalparameter_free(param);
                     continue;
                 }
                 break;
@@ -1005,54 +1015,63 @@ void icalproperty_normalize(icalproperty *prop)
 
         case ICAL_CUTYPE_PARAMETER:
             if (icalparameter_get_cutype(param) == ICAL_CUTYPE_INDIVIDUAL) {
+                icalparameter_free(param);
                 continue;
             }
             break;
 
         case ICAL_ENCODING_PARAMETER:
             if (icalparameter_get_encoding(param) == ICAL_ENCODING_8BIT) {
+                icalparameter_free(param);
                 continue;
             }
             break;
 
         case ICAL_FBTYPE_PARAMETER:
             if (icalparameter_get_fbtype(param) == ICAL_FBTYPE_BUSY) {
+                icalparameter_free(param);
                 continue;
             }
             break;
 
         case ICAL_PARTSTAT_PARAMETER:
             if (icalparameter_get_partstat(param) == ICAL_PARTSTAT_NEEDSACTION) {
+                icalparameter_free(param);
                 continue;
             }
             break;
 
         case ICAL_RELATED_PARAMETER:
             if (icalparameter_get_related(param) == ICAL_RELATED_START) {
+                icalparameter_free(param);
                 continue;
             }
             break;
 
         case ICAL_RELTYPE_PARAMETER:
             if (icalparameter_get_reltype(param) == ICAL_RELTYPE_PARENT) {
+                icalparameter_free(param);
                 continue;
             }
             break;
 
         case ICAL_ROLE_PARAMETER:
             if (icalparameter_get_role(param) == ICAL_ROLE_REQPARTICIPANT) {
+                icalparameter_free(param);
                 continue;
             }
             break;
 
         case ICAL_RSVP_PARAMETER:
             if (icalparameter_get_rsvp(param) == ICAL_RSVP_FALSE) {
+                icalparameter_free(param);
                 continue;
             }
             break;
 
         case ICAL_SCHEDULEAGENT_PARAMETER:
             if (icalparameter_get_scheduleagent(param) == ICAL_SCHEDULEAGENT_SERVER) {
+                icalparameter_free(param);
                 continue;
             }
             break;

@@ -26,7 +26,7 @@ ICalProperty::ICalProperty() : imp(icalproperty_new(ICAL_ANY_PROPERTY))
 {
 }
 
-ICalProperty::ICalProperty(const ICalProperty &v) : imp(icalproperty_new_clone(v.imp))
+ICalProperty::ICalProperty(const ICalProperty &v) : imp(icalproperty_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -41,7 +41,7 @@ ICalProperty &ICalProperty::operator=(const ICalProperty &v)
 
     if (imp != NULL) {
         icalproperty_free(imp);
-        imp = icalproperty_new_clone(v.imp);
+        imp = icalproperty_clone(v.imp);
         if (imp == NULL) {
             throw icalerrno;
         }

@@ -334,17 +334,21 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     num_isstd = (size_t)decode(type_cnts.ttisstdcnt);
     num_types = (size_t)decode(type_cnts.typecnt);
 
-    transitions = calloc(num_trans, sizeof(time_t));
-    if (transitions == NULL) {
-        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+    if (num_trans > 0) {
+        transitions = calloc(num_trans, sizeof(time_t));
+        if (transitions == NULL) {
+            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+            goto error;
+        }
+        r_trans = calloc(num_trans, 4);
+        if (r_trans == NULL) {
+            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+            goto error;
+        }
+    } else {
+        icalerror_set_errno(ICAL_FILE_ERROR);
         goto error;
     }
-    r_trans = calloc(num_trans, 4);
-    if (r_trans == NULL) {
-        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-        goto error;
-    }
-
     EFREAD(r_trans, 4, num_trans, f);
     temp = r_trans;
     if (num_trans) {

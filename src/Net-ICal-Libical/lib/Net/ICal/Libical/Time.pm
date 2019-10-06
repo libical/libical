@@ -144,7 +144,7 @@ sub clone {
 
   bless( {%$self},ref($self));
 
-  $self->{'ref'} = Net::ICal::Libical::icalproperty_new_clone($self->{'ref'});
+  $self->{'ref'} = Net::ICal::Libical::icalproperty_clone($self->{'ref'});
 
 }
 

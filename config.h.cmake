@@ -3,9 +3,6 @@
 /* Define if you have the ICU library. */
 #cmakedefine HAVE_LIBICU 1
 
-/* Define if you have the ICU internationalization library. */
-#cmakedefine HAVE_LIBICU_I18N 1
-
 /* Define if you have the Berkeley DB library. */
 #cmakedefine HAVE_BDB 1
 
@@ -544,20 +541,5 @@ typedef ssize_t IO_SSIZE_T;
 #define _unused(x) /*@unused@*/ x
 #else
 #define _unused(x) (void)x
-#endif
-#endif
-
-#/* Deprecated function macro */
-#if defined(NO_DEPRECATION_WARNINGS)
-#define _deprecated(x) x
-#else
-#if !defined(_deprecated)
-#ifdef __GNUC__
-#define _deprecated(x) x __attribute__((deprecated))
-#elif defined(_MSC_VER)
-#define _deprecated(x) __declspec(deprecated) x
-#else
-#define _deprecated(x) x
-#endif
 #endif
 #endif

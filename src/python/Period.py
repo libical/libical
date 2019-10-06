@@ -70,15 +70,11 @@ class Period(Property):
 
     def _end_is_duration(self):
         dur = self.pt.duration
-        if not icaldurationtype_is_null_duration(dur):
-            return 1
-        return 0
+        return 0 if icaldurationtype_is_null_duration(dur) else 1
 
     def _end_is_time(self):
         end = self.pt.end
-        if not icaltime_is_null_time(end):
-            return 1
-        return 0
+        return 0 if icaltime_is_null_time(end) else 1
 
     def _update_value(self):
 
@@ -122,7 +118,7 @@ class Period(Property):
         If the Period has a duration set, but not an end time, this
         method will caluculate the end time from the duration.  """
 
-        if(v != None):
+        if v != None:
 
             if isinstance(t,Time):
                 t = v
@@ -174,7 +170,7 @@ class Period(Property):
             else:
                 raise TypeError
 
-            if(self._end_is_time()):
+            if self._end_is_time():
                 start = self.pt.start.as_timet()
                 end = start + d.seconds()
 
@@ -182,7 +178,7 @@ class Period(Property):
             else:
                 self.pt.duration = d.dur
 
-        if(self._end_is_time()):
+        if self._end_is_time():
             start = self.pt.start.as_timet()
             end = self.pt.end.as_timet()
 
@@ -190,14 +186,12 @@ class Period(Property):
 
             return Duration(end-start,"DURATION")
 
-        elif(self._end_is_duration()):
+        if self._end_is_duration():
             dur = icaldurationtype_as_int(self.pt.duration)
 
             return Duration(dur,"DURATION")
-        else:
 
-
-            return Duration(0,"DURATION")
+        return Duration(0,"DURATION")
 
 
     def timezone(self,v=None):

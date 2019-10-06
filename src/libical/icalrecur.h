@@ -265,10 +265,39 @@ LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_start(icalrecur_iterator *impl,
  *  Values equal to or greater than end will not be returned by the iterator.
 */
 LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_end(icalrecur_iterator *impl,
-    struct icaltimetype end);
+                                                   struct icaltimetype end);
 
-/** Get the next occurrence from an iterator */
+/**
+ * Sets the date-times over which the iterator will run,
+ * where @p from is a value between DTSTART and UNTIL.
+ *
+ * If @p to is null time, the forward iterator will return values
+ * up to and including UNTIL (if present), otherwise up to the year 2582.
+ *
+ * if @p to is non-null time and later than @p from,
+ * the forward iterator will return values up to and including 'to'.
+ *
+ * If @p to is non-null time and earlier than @p from,
+ * the reverse iterator will be set to start at @p from
+ * and will return values down to and including @p to.
+ *
+ * NOTE: CAN NOT be used with RRULEs that contain COUNT.
+ * @since 3.1
+ */
+LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_range(icalrecur_iterator *impl,
+                                                     struct icaltimetype from,
+                                                     struct icaltimetype to);
+
+/**
+ * Gets the next occurrence from an iterator
+ */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *);
+
+/**
+ * Gets the previous occurrence from an iterator
+ * @since 3.1
+ */
+LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *);
 
 /** Free the iterator */
 LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator *);

@@ -14,7 +14,7 @@ include_directories(
 )
 
 if(ICU_FOUND)
-  include_directories(${ICU_INCLUDE_DIR})
+  include_directories(${ICU_INCLUDE_DIRS})
 endif()
 
 set(PACKAGE_DATA_DIR "\\\"${CMAKE_INSTALL_PREFIX}/share/libical\\\"")
@@ -238,6 +238,8 @@ set(ical_LIB_SRCS
   pvl.h
   sspm.c
   sspm.h
+  qsort_gen.c
+  qsort_gen.h
   icallangbind.h
   icallangbind.c
   caldate.c
@@ -266,10 +268,7 @@ endif()
 target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
 
 if(ICU_FOUND)
-  target_link_libraries(ical ${ICU_LIBRARY})
-endif()
-if(ICU_I18N_FOUND)
-  target_link_libraries(ical ${ICU_I18N_LIBRARY})
+  target_link_libraries(ical ${ICU_LIBRARIES})
 endif()
 
 if(WINCE)
@@ -397,6 +396,7 @@ install(FILES
   icaltimezone.h
   icaltypes.h
   icalvalue.h
+  libical_deprecated.h
   libical_ical_export.h
   pvl.h
   sspm.h

@@ -9,7 +9,7 @@ icalparser_parse_string(str);
 icalcomponent_new(kind);
         [ returns icalcomponent * ]
 
-icalcomponent_new_clone(component);
+icalcomponent_clone(component);
         [ returns icalcomponent * ]
 
 icalcomponent_new_from_string(str);

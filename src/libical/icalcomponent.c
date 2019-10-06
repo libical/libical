@@ -145,7 +145,7 @@ icalcomponent *icalcomponent_new_from_string(const char *str)
 
 /** @brief Constructor
  */
-icalcomponent *icalcomponent_new_clone(icalcomponent *old)
+icalcomponent *icalcomponent_clone(const icalcomponent *old)
 {
     icalcomponent *new;
     icalproperty *p;
@@ -162,15 +162,20 @@ icalcomponent *icalcomponent_new_clone(icalcomponent *old)
 
     for (itr = pvl_head(old->properties); itr != 0; itr = pvl_next(itr)) {
         p = (icalproperty *) pvl_data(itr);
-        icalcomponent_add_property(new, icalproperty_new_clone(p));
+        icalcomponent_add_property(new, icalproperty_clone(p));
     }
 
     for (itr = pvl_head(old->components); itr != 0; itr = pvl_next(itr)) {
         c = (icalcomponent *) pvl_data(itr);
-        icalcomponent_add_component(new, icalcomponent_new_clone(c));
+        icalcomponent_add_component(new, icalcomponent_clone(c));
     }
 
     return new;
+}
+
+icalcomponent *icalcomponent_new_clone(icalcomponent *old)
+{
+    return icalcomponent_clone(old);
 }
 
 /** @brief Constructor
@@ -2780,49 +2785,56 @@ void icalcomponent_normalize(icalcomponent *comp)
     while ((prop = pvl_pop(comp->properties)) != 0) {
         int nparams = icalproperty_count_parameters(prop);
 
+        icalproperty_set_parent(prop, 0);
+
         /* Skip unparameterized properties having default values */
-        switch (icalproperty_isa(prop)) {
-        case ICAL_CALSCALE_PROPERTY:
-            if ((nparams == 0) &&
-                (strcmp("GREGORIAN", icalproperty_get_calscale(prop)) == 0)) {
-                continue;
-            }
-            break;
+        if (nparams == 0) {
+            switch (icalproperty_isa(prop)) {
+            case ICAL_CALSCALE_PROPERTY:
+                if (strcmp("GREGORIAN", icalproperty_get_calscale(prop)) == 0) {
+                    icalproperty_free(prop);
+                    continue;
+                }
+                break;
 
-        case ICAL_CLASS_PROPERTY:
-            if ((nparams == 0) &&
-                (icalproperty_get_class(prop) == ICAL_CLASS_PUBLIC)) {
-                continue;
-            }
-            break;
+            case ICAL_CLASS_PROPERTY:
+                if (icalproperty_get_class(prop) == ICAL_CLASS_PUBLIC) {
+                    icalproperty_free(prop);
+                    continue;
+                }
+                break;
 
-        case ICAL_PRIORITY_PROPERTY:
-            if ((nparams == 0) && (icalproperty_get_priority(prop) == 0)) {
-                continue;
-            }
-            break;
+            case ICAL_PRIORITY_PROPERTY:
+                if (icalproperty_get_priority(prop) == 0) {
+                    icalproperty_free(prop);
+                    continue;
+                }
+                break;
 
-        case ICAL_TRANSP_PROPERTY:
-            if ((nparams == 0) &&
-                (icalproperty_get_transp(prop) == ICAL_TRANSP_OPAQUE)) {
-                continue;
-            }
-            break;
+            case ICAL_TRANSP_PROPERTY:
+                if (icalproperty_get_transp(prop) == ICAL_TRANSP_OPAQUE) {
+                    icalproperty_free(prop);
+                    continue;
+                }
+                break;
 
-        case ICAL_REPEAT_PROPERTY:
-            if ((nparams == 0) && (icalproperty_get_repeat(prop) == 0)) {
-                continue;
-            }
-            break;
+            case ICAL_REPEAT_PROPERTY:
+                if (icalproperty_get_repeat(prop) == 0) {
+                    icalproperty_free(prop);
+                    continue;
+                }
+                break;
 
-        case ICAL_SEQUENCE_PROPERTY:
-            if ((nparams == 0) && (icalproperty_get_sequence(prop) == 0)) {
-                continue;
-            }
-            break;
+            case ICAL_SEQUENCE_PROPERTY:
+                if (icalproperty_get_sequence(prop) == 0) {
+                    icalproperty_free(prop);
+                    continue;
+                }
+                break;
 
-        default:
-            break;
+            default:
+                break;
+            }
         }
 
         icalproperty_normalize(prop);

@@ -190,9 +190,9 @@ void test_values()
 
     str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "cap://value/2");
 
-    copy = icalvalue_new_clone(v);
+    copy = icalvalue_clone(v);
 
-    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "cap://value/2");
+    str_is("icalvalue_clone()", icalvalue_as_ical_string(copy), "cap://value/2");
     icalvalue_free(v);
     icalvalue_free(copy);
 
@@ -203,8 +203,8 @@ void test_values()
     ok("icalvalue_set_boolean(2)", (2 == icalvalue_get_boolean(v)));
     str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "TRUE");
 
-    copy = icalvalue_new_clone(v);
-    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "TRUE");
+    copy = icalvalue_clone(v);
+    str_is("icalvalue_clone()", icalvalue_as_ical_string(copy), "TRUE");
 
     icalvalue_free(v);
     icalvalue_free(copy);
@@ -215,8 +215,8 @@ void test_values()
     str_is("icalvalue_set_x(test2)", icalvalue_get_x(v), "test2");
     str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "test2");
 
-    copy = icalvalue_new_clone(v);
-    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(copy), "test2");
+    copy = icalvalue_clone(v);
+    str_is("icalvalue_clone()", icalvalue_as_ical_string(copy), "test2");
 
     icalvalue_free(v);
     icalvalue_free(copy);
@@ -226,8 +226,8 @@ void test_values()
     icalvalue_set_datetime(v, icaltime_from_timet_with_zone(1023404802 - 3600, 0, NULL));
     str_is("icalvalue_set_datetime()", icalvalue_as_ical_string(v), "20020606T220642");
 
-    copy = icalvalue_new_clone(v);
-    str_is("icalvalue_new_clone()", icalvalue_as_ical_string(v), "20020606T220642");
+    copy = icalvalue_clone(v);
+    str_is("icalvalue_clone()", icalvalue_as_ical_string(v), "20020606T220642");
 
     icalvalue_free(v);
     icalvalue_free(copy);
@@ -323,12 +323,12 @@ void test_properties()
     }
     str_is("icalproperty_as_ical_string()", icalproperty_as_ical_string(prop), test_ical_str_good);
 
-    clone = icalproperty_new_clone(prop);
+    clone = icalproperty_clone(prop);
 
     if (VERBOSE) {
         printf("Clone:\n %s\n", icalproperty_as_ical_string(prop));
     }
-    str_is("icalproperty_new_clone()", icalproperty_as_ical_string(prop), test_ical_str_good);
+    str_is("icalproperty_clone()", icalproperty_as_ical_string(prop), test_ical_str_good);
 
     icalproperty_free(clone);
     icalproperty_free(prop);
@@ -1029,7 +1029,7 @@ void test_dirset()
             /* Change the dtstart and dtend times in the component
                pointed to by Itr */
 
-            clone = icalcomponent_new_clone(itr);
+            clone = icalcomponent_clone(itr);
             assert(icalerrno == ICAL_NO_ERROR);
             assert(clone != 0);
 
@@ -1101,7 +1101,7 @@ void test_compare()
     icalvalue *v1, *v2;
 
     v1 = icalvalue_new_caladdress("cap://value/1");
-    v2 = icalvalue_new_clone(v1);
+    v2 = icalvalue_clone(v1);
 
     ok("compare value and clone", (icalvalue_compare(v1, v2) == ICAL_XLICCOMPARETYPE_EQUAL));
 
@@ -1269,7 +1269,7 @@ void test_calendar()
 
     c = icalcalendar_get_properties(calendar);
 
-    error = icalfileset_add_component(c, icalcomponent_new_clone(comp));
+    error = icalfileset_add_component(c, icalcomponent_clone(comp));
 
     ok("Adding Clone Component to dirset", (error == ICAL_NO_ERROR));
 
@@ -2314,7 +2314,7 @@ void test_icalset()
 
         icalcomponent *clone;
 
-        clone = icalcomponent_new_clone(c);
+        clone = icalcomponent_clone(c);
 
         (void)icalset_add_component(d, clone);
 
@@ -2739,6 +2739,8 @@ void test_time_parser()
 void test_recur_parser()
 {
     struct icalrecurrencetype rt;
+    icalvalue *v = NULL;
+    icalerrorstate es;
     const char *str;
 
     str =
@@ -2750,6 +2752,26 @@ void test_recur_parser()
 
     rt = icalrecurrencetype_from_string(str);
     str_is(str, icalrecurrencetype_as_string(&rt), str);
+
+    /* Add UNTIL and make sure we output a NULL string */
+    rt.until = icaltime_today();
+    ok("COUNT + UNTIL not allowed", icalrecurrencetype_as_string(&rt) == NULL);
+
+    /* Try to create a new RRULE value with UNTIL + COUNT */
+    es = icalerror_supress("BADARG");
+    v = icalvalue_new_recur(rt);
+    rt = icalvalue_get_recur(v);
+    icalerror_restore("BADARG", es);
+    ok("COUNT + UNTIL not allowed", rt.freq == ICAL_NO_RECURRENCE);
+
+    /* Try to parse an RRULE value with UNTIL + COUNT */
+    str = "FREQ=YEARLY;UNTIL=20000131T090000Z;COUNT=3";
+
+    es = icalerror_supress("MALFORMEDDATA");
+    rt = icalrecurrencetype_from_string(str);
+    icalerror_restore("MALFORMEDDATA", es);
+    ok(str, rt.freq == ICAL_NO_RECURRENCE);
+    free(v);
 }
 
 
@@ -3470,7 +3492,7 @@ void test_file_locks()
 
         (void)icalfileset_add_component(fs, c);
 
-        c2 = icalcomponent_new_clone(c);
+        c2 = icalcomponent_clone(c);
 
         (void)icalfileset_add_component(fs, c2);
 
@@ -3506,7 +3528,7 @@ void test_file_locks()
             icalcomponent_set_duration(c, d);
             icalcomponent_set_summary(c, "Child");
 
-            c2 = icalcomponent_new_clone(c);
+            c2 = icalcomponent_clone(c);
             icalcomponent_set_summary(c2, "Child");
             (void)icalfileset_add_component(fs, c2);
 
@@ -3539,7 +3561,7 @@ void test_file_locks()
             icalcomponent_set_duration(c, d);
             icalcomponent_set_summary(c, "Parent");
 
-            c2 = icalcomponent_new_clone(c);
+            c2 = icalcomponent_clone(c);
             icalcomponent_set_summary(c2, "Parent");
             (void)icalfileset_add_component(fs, c2);
 
@@ -4322,7 +4344,7 @@ void test_comma_in_quoted_value(void)
 
 void test_zoneinfo_stuff(void)
 {
- #if defined(HAVE_SETENV)
+#if defined(HAVE_SETENV)
     setenv("TZDIR", TEST_DATADIR, 1);
 #else
     char tzdir[256] = {0};
@@ -4634,6 +4656,116 @@ void test_icalvalue_decode_ical_string(void)
     ok("Properly decoded", (strcmp(buff, "a\\") == 0));
 }
 
+static int test_icalarray_sort_compare_char(const void* p1, const void* p2) {
+
+    char c1 = *((char*)p1);
+    char c2 = *((char*)p2);
+
+    return (c1 < c2) ? -1 : ((c1 > c2) ? 1 : 0);
+}
+
+void test_icalarray_sort(void)
+{
+    /* this test is based on the work from the PDCLib project */
+
+    char presort[] = { "shreicnyjqpvozxmbt" };
+    char sorted1[] = { "bcehijmnopqrstvxyz" };
+    unsigned int i;
+
+    icalarray * array = icalarray_new(1, 2);
+
+    for (i = 0; i < sizeof(presort)-1; i++) {
+        icalarray_append(array, &presort[i]);
+    }
+
+    icalarray_sort(array, test_icalarray_sort_compare_char);
+
+    for (i = 0; i < sizeof(presort)-1; i++) {
+        void* pItem = icalarray_element_at(array, i);
+        char c = *((char*)pItem);
+        ok("icalarray_sort - item sorted as expected", c == sorted1[i]);
+    }
+
+    icalarray_free(array);
+}
+
+void test_icalcomponent_normalize(void)
+{
+	const char *calStr1 =
+		"BEGIN:VCALENDAR\n"
+		"PRODID:-//ACME//NONSGML ACME Calendar//EN\n"
+		"VERSION:2.0\n"
+		"CALSCALE:GREGORIAN\n"
+		"BEGIN:VTIMEZONE\n"
+		"TZID:America/New_York\n"
+		"BEGIN:DAYLIGHT\n"
+		"TZNAME:EDT\n"
+		"TZOFFSETFROM:-0500\n"
+		"TZOFFSETTO:-0400\n"
+		"DTSTART:20070311T020000\n"
+		"RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\n"
+		"END:DAYLIGHT\n"
+		"BEGIN:STANDARD\n"
+		"TZNAME:EST\n"
+		"TZOFFSETFROM:-0400\n"
+		"TZOFFSETTO:-0500\n"
+		"DTSTART:20071104T020000\n"
+		"RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\n"
+		"END:STANDARD\n"
+		"END:VTIMEZONE\n"
+		"BEGIN:VEVENT\n"
+		"DTSTART;VALUE=DATE-TIME:20180220T020000Z\n"
+		"DURATION:PT1H\n"
+		"END:VEVENT\n"
+		"END:VCALENDAR\n";
+	const char *calStr2 =
+		"BEGIN:VCALENDAR\n"
+		"VERSION:2.0\n"
+		"PRODID:-//ACME//NONSGML ACME Calendar//EN\n"
+		"BEGIN:VEVENT\n"
+		"TRANSP:OPAQUE\n"
+		"DURATION:PT1H\n"
+		"DTSTART;VALUE=DATE-TIME:20180220T020000Z\n"
+		"END:VEVENT\n"
+		"BEGIN:VTIMEZONE\n"
+		"TZID:America/New_York\n"
+		"BEGIN:STANDARD\n"
+		"TZNAME:EST\n"
+		"TZOFFSETFROM:-0400\n"
+		"TZOFFSETTO:-0500\n"
+		"DTSTART:20071104T020000\n"
+		"RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\n"
+		"END:STANDARD\n"
+		"BEGIN:DAYLIGHT\n"
+		"TZNAME:EDT\n"
+		"TZOFFSETFROM:-0500\n"
+		"TZOFFSETTO:-0400\n"
+		"DTSTART:20070311T020000\n"
+		"RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\n"
+		"END:DAYLIGHT\n"
+		"END:VTIMEZONE\n"
+		"END:VCALENDAR\n";
+
+	icalcomponent *ical1 = icalcomponent_new_from_string(calStr1);
+	icalcomponent *ical2 = icalcomponent_new_from_string(calStr2);
+
+	icalcomponent_normalize(ical1);
+	icalcomponent_normalize(ical2);
+
+	calStr1 = icalcomponent_as_ical_string(ical1);
+	calStr2 = icalcomponent_as_ical_string(ical2);
+
+	icalcomponent_free(ical1);
+	icalcomponent_free(ical2);
+
+	if (VERBOSE) {
+        printf("iCal1:\n%s\n\n", calStr1);
+        printf("iCal2:\n%s\n\n", calStr2);
+	}
+
+	str_is("Normalized components match", calStr1, calStr2);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4772,6 +4904,10 @@ int main(int argc, char *argv[])
     test_run("Test set DATE/DATE-TIME VALUE", test_set_date_datetime_value, do_test, do_header);
     test_run("Test timezone from builtin", test_timezone_from_builtin, do_test, do_header);
     test_run("Test icalvalue_decode_ical_string", test_icalvalue_decode_ical_string, do_test, do_header);
+
+    test_run("Test icalarray_sort", test_icalarray_sort, do_test, do_header);
+
+    test_run("Test icalcomponent_normalize", test_icalcomponent_normalize, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
