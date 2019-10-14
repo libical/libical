@@ -269,6 +269,23 @@ static gchar *dup_attribute_value(xmlDocPtr doc, const xmlNode * list, int inLin
     return glib_value;
 }
 
+static gchar *dup_node_content(xmlNodePtr node)
+{
+    xmlChar *xml_value;
+    gchar *glib_value;
+
+    xml_value = xmlNodeGetContent(node);
+
+    if (!xml_value)
+        return NULL;
+
+    glib_value = g_strdup((const gchar *) xml_value);
+
+    xmlFree(xml_value);
+
+    return glib_value;
+}
+
 GList *get_list_from_string(const gchar * str)
 {
     gchar **ret;
@@ -291,8 +308,6 @@ gboolean parse_parameters(xmlNode * node, Method * method)
 {
     xmlAttr *attr;
     Parameter *para;
-    gchar *anno;
-    gchar *argus;
 
     if (xmlStrcmp(node->name, (xmlChar *) "parameter") != 0)
         return FALSE;
@@ -303,27 +318,31 @@ gboolean parse_parameters(xmlNode * node, Method * method)
 
         for (attr = node->properties; attr != NULL; attr = attr->next) {
             if (xmlStrcmp(attr->name, (xmlChar *) "type") == 0) {
-                para->type = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+                para->type = dup_attribute_value(attr->doc, attr->children, 1);
             } else if (xmlStrcmp(attr->name, (xmlChar *) "name") == 0) {
-                para->name = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+                para->name = dup_attribute_value(attr->doc, attr->children, 1);
             } else if (xmlStrcmp(attr->name, (xmlChar *) "comment") == 0) {
-                para->comment = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+                para->comment = dup_attribute_value(attr->doc, attr->children, 1);
             } else if (xmlStrcmp(attr->name, (xmlChar *) "annotation") == 0) {
-                anno = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
-                para->annotations = get_list_from_string((gchar *) anno);
+                xmlChar *anno;
+
+                anno = xmlNodeListGetString(attr->doc, attr->children, 1);
+                para->annotations = get_list_from_string((const gchar *) anno);
                 xmlFree(anno);
             } else if (xmlStrcmp(attr->name, (xmlChar *) "translator_argus") == 0) {
-                argus = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
-                para->translatorArgus = get_list_from_string((gchar *) argus);
+                xmlChar *argus;
+
+                argus = xmlNodeListGetString(attr->doc, attr->children, 1);
+                para->translatorArgus = get_list_from_string((const gchar *) argus);
                 xmlFree(argus);
             } else if (xmlStrcmp(attr->name, (xmlChar *) "translator") == 0) {
-                para->translator = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+                para->translator = dup_attribute_value(attr->doc, attr->children, 1);
             } else if (xmlStrcmp(attr->name, (xmlChar *) "autofill") == 0) {
-                para->autofill = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+                para->autofill = dup_attribute_value(attr->doc, attr->children, 1);
             } else if (xmlStrcmp(attr->name, (xmlChar *) "native_op") == 0) {
-                para->native_op = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+                para->native_op = dup_attribute_value(attr->doc, attr->children, 1);
             } else if (xmlStrcmp(attr->name, (xmlChar *) "owner_op") == 0) {
-                para->owner_op = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+                para->owner_op = dup_attribute_value(attr->doc, attr->children, 1);
             } else {
                 fprintf(stderr,
                         "The tag name of %s in parameter cannot be finished\n",
@@ -339,8 +358,6 @@ gboolean parse_parameters(xmlNode * node, Method * method)
 gboolean parse_return(xmlNode * node, Method * method)
 {
     xmlAttr *attr;
-    gchar *anno;
-    gchar *argus;
 
     if (xmlStrcmp(node->name, (xmlChar *) "returns") != 0) {
         return FALSE;
@@ -350,22 +367,25 @@ gboolean parse_return(xmlNode * node, Method * method)
 
     for (attr = node->properties; attr != NULL; attr = attr->next) {
         if (xmlStrcmp(attr->name, (xmlChar *) "type") == 0) {
-            method->ret->type = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->ret->type = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "comment") == 0) {
-            method->ret->comment = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->ret->comment = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "annotation") == 0) {
-            anno = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
-            method->ret->annotations = get_list_from_string((gchar *) anno);
+            xmlChar *anno;
+
+            anno = xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->ret->annotations = get_list_from_string((const gchar *) anno);
             xmlFree(anno);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "translator") == 0) {
-            method->ret->translator = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->ret->translator = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "translator_argus") == 0) {
-            argus = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
-            method->ret->translatorArgus = get_list_from_string((gchar *) argus);
+            xmlChar *argus;
+
+            argus = xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->ret->translatorArgus = get_list_from_string((const gchar *) argus);
             xmlFree(argus);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "error_return_value") == 0) {
-            method->ret->errorReturnValue =
-                (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->ret->errorReturnValue = dup_attribute_value(attr->doc, attr->children, 1);
         } else {
             fprintf(stderr,
                     "The tag name of '%s' in 'returns' cannot be finished\n",
@@ -382,7 +402,7 @@ gboolean parse_comment(xmlNode * node, Method * method)
     }
 
     g_free(method->comment);
-    method->comment = (gchar *) xmlNodeGetContent(node);
+    method->comment = dup_node_content(node);
     return TRUE;
 }
 
@@ -393,7 +413,7 @@ gboolean parse_custom(xmlNode * node, Method * method)
     }
 
     g_free(method->custom);
-    method->custom = (gchar *) xmlNodeGetContent(node);
+    method->custom = dup_node_content (node);
     return TRUE;
 }
 
@@ -401,7 +421,6 @@ gboolean parse_method(xmlNode * node, Method * method)
 {
     xmlNode *child;
     xmlAttr *attr;
-    gchar *anno;
 
     if (xmlStrcmp(node->name, (xmlChar *) "method") != 0) {
         return FALSE;
@@ -409,16 +428,18 @@ gboolean parse_method(xmlNode * node, Method * method)
 
     for (attr = node->properties; attr != NULL; attr = attr->next) {
         if (xmlStrcmp(attr->name, (xmlChar *) "name") == 0) {
-            method->name = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->name = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "corresponds") == 0) {
-            method->corresponds = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->corresponds = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "kind") == 0) {
-            method->kind = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->kind = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "since") == 0) {
-            method->since = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->since = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "annotation") == 0) {
-            anno = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
-            method->annotations = get_list_from_string(anno);
+            xmlChar *anno;
+
+            anno = xmlNodeListGetString(attr->doc, attr->children, 1);
+            method->annotations = get_list_from_string((const gchar *) anno);
             xmlFree(anno);
         } else {
             fprintf(stderr, "The attribute '%s' in method '%s' cannot be parsed",
@@ -452,9 +473,9 @@ gboolean parse_declaration(xmlNode * node, Declaration * declaration)
 
     for (attr = node->properties; attr != NULL; attr = attr->next) {
         if (xmlStrcmp(attr->name, (xmlChar *) "position") == 0) {
-            declaration->position = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            declaration->position = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "content") == 0) {
-            declaration->content = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            declaration->content = dup_attribute_value(attr->doc, attr->children, 1);
         } else {
             fprintf(stderr,
                     "The node named '%s' in declaration cannot be parsed\n",
@@ -463,7 +484,7 @@ gboolean parse_declaration(xmlNode * node, Declaration * declaration)
     }
 
     if (!declaration->content) {
-        declaration->content = (gchar *) xmlNodeGetContent(node);
+        declaration->content = dup_node_content(node);
     }
 
     return TRUE;
@@ -482,14 +503,13 @@ gboolean parse_enumeration(xmlNode * node, Enumeration * enumeration)
 
     for (attr = node->properties; attr != NULL; attr = attr->next) {
         if (xmlStrcmp(attr->name, (xmlChar *) "name") == 0) {
-            enumeration->name = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            enumeration->name = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "native_name") == 0) {
-            enumeration->nativeName = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            enumeration->nativeName = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "default_native") == 0) {
-            enumeration->defaultNative =
-                (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            enumeration->defaultNative = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "comment") == 0) {
-            enumeration->comment = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            enumeration->comment = dup_attribute_value(attr->doc, attr->children, 1);
         } else {
             fprintf(stderr,
                     "The node named '%s' in enum '%s' cannot be parsed\n",
@@ -504,8 +524,7 @@ gboolean parse_enumeration(xmlNode * node, Enumeration * enumeration)
                     (char *)child->name, enumeration->name);
             continue;
         }
-        elementName =
-            (gchar *) xmlNodeListGetString(child->properties->doc, child->properties->children, 1);
+        elementName = dup_attribute_value(child->properties->doc, child->properties->children, 1);
         enumeration->elements = g_list_append(enumeration->elements, elementName);
         elementName = NULL;
     }
@@ -518,9 +537,6 @@ gboolean parse_structure(xmlNode * node, Structure * structure)
     xmlNode *child;
     Method *method;
     Enumeration *enumeration;
-    gchar *strIsPossibleGlobal;
-    gchar *strIsBare;
-    gchar *includes;
     Declaration *declaration;
 
     if (xmlStrcmp(node->name, (xmlChar *) "structure") != 0) {
@@ -529,35 +545,41 @@ gboolean parse_structure(xmlNode * node, Structure * structure)
 
     for (attr = node->properties; attr != NULL; attr = attr->next) {
         if (xmlStrcmp(attr->name, (xmlChar *) "namespace") == 0) {
-            structure->nameSpace = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            structure->nameSpace = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "name") == 0) {
-            structure->name = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            structure->name = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "native") == 0) {
-            structure->native = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            structure->native = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "includes") == 0) {
-            includes = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
-            structure->includes = get_list_from_string((gchar *) includes);
+            xmlChar *includes;
+
+            includes = xmlNodeListGetString(attr->doc, attr->children, 1);
+            structure->includes = get_list_from_string((const gchar *) includes);
             xmlFree(includes);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "is_possible_global") == 0) {
-            strIsPossibleGlobal = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
-            if (g_strcmp0(strIsPossibleGlobal, "true") == 0) {
+            xmlChar *strIsPossibleGlobal;
+
+            strIsPossibleGlobal = xmlNodeListGetString(attr->doc, attr->children, 1);
+            if (g_strcmp0((const gchar *) strIsPossibleGlobal, "true") == 0) {
                 structure->isPossibleGlobal = TRUE;
             }
-            g_free(strIsPossibleGlobal);
+            xmlFree(strIsPossibleGlobal);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "destroy_func") == 0) {
-            structure->destroyFunc = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            structure->destroyFunc = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "clone_func") == 0) {
-            structure->cloneFunc = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            structure->cloneFunc = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "new_full_extra_code") == 0) {
             structure->new_full_extraCode = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "default_native") == 0) {
-            structure->defaultNative = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+            structure->defaultNative = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "is_bare") == 0) {
-            strIsBare = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
-            if (g_strcmp0(strIsBare, "true") == 0) {
+            xmlChar *strIsBare;
+
+            strIsBare = xmlNodeListGetString(attr->doc, attr->children, 1);
+            if (g_strcmp0((const gchar *) strIsBare, "true") == 0) {
                 structure->isBare = TRUE;
             }
-            g_free(strIsBare);
+            xmlFree(strIsBare);
         } else {
             fprintf(stderr,
                     "The attribute of %s in structure '%s' cannot be parsed\n",
