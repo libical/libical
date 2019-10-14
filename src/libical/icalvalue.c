@@ -433,6 +433,12 @@ static int simple_str_to_double(const char *from, double *result, char **to)
     return 0;
 }
 
+static void free_icalvalue_attach_data(char *data, void *user_data)
+{
+    _unused(user_data);
+    free(data);
+}
+
 static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                                                        const char *str, icalproperty ** error)
 {
@@ -463,7 +469,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         {
             icalattach *attach;
 
-            attach = icalattach_new_from_data(str, NULL, 0);
+            attach = icalattach_new_from_data(strdup(str), free_icalvalue_attach_data, 0);
             if (!attach)
               break;
 

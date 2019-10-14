@@ -499,6 +499,12 @@ icalvalue *icalvalue_new_binary(const char * v)
     return (icalvalue*)impl;
 }
 
+static void free_icalvalue_attach_data(char *data, void *user_data)
+{
+    _unused(user_data);
+    free(data);
+}
+
 void icalvalue_set_binary(icalvalue *value, const char * v)
 {
     struct icalvalue_impl *impl;
@@ -512,7 +518,7 @@ void icalvalue_set_binary(icalvalue *value, const char * v)
     if (impl->data.v_attach)
         icalattach_unref(impl->data.v_attach);
 
-    impl->data.v_attach = icalattach_new_from_data(v, NULL, 0);
+    impl->data.v_attach = icalattach_new_from_data(strdup(v), free_icalvalue_attach_data, 0);
 }
 
 const char *icalvalue_get_binary(const icalvalue *value)

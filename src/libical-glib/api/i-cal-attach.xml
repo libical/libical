@@ -19,27 +19,41 @@
         <returns type="ICalAttach *" annotation="transfer full" comment="The newly created #ICalAttach from the @url" />
         <comment xml:space="preserve">Create a new #ICalAttach from the url</comment>
     </method>
-    <method name="i_cal_attach_new_from_data" corresponds="icalattach_new_from_data" kind="constructor" since="1.0">
+    <declaration position="body">
+static void icalglib_free_attach_data(gpointer data, gpointer user_data)
+{
+    _unused(user_data);
+    g_free (data);
+}</declaration>
+    <method name="i_cal_attach_new_from_data" corresponds="CUSTOM" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="data" comment="The data used to create the #ICalAttach"/>
         <parameter type="GFunc" name="free_fn" translator="(icalattach_free_fn_t)" annotation="scope call, allow-none" comment="The function used to free the data when the create #ICalAttach is detroyed."/>
         <parameter type="void *" name="free_fn_data" annotation="allow-none" comment="The userdata used for the free function @free_fn"/>
         <returns type="ICalAttach *" annotation="transfer full" comment="The newly created #ICalAttach" />
         <comment xml:space="preserve">Create a new #ICalAttach from the data.</comment>
+        <custom>    g_return_val_if_fail (data != NULL, NULL);
+
+    if (!free_fn) {
+        data = g_strdup(data);
+        free_fn = icalglib_free_attach_data;
+    }
+
+    return i_cal_attach_new_full (icalattach_new_from_data (data, (icalattach_free_fn_t) (free_fn), free_fn_data), NULL);</custom>
     </method>
     <declaration position="body">
-static void unref_g_bytes(unsigned char *data, void *user_data)
+static void unref_g_bytes(char *data, void *user_data)
 {
     GBytes *bytes = user_data;
 
     g_return_if_fail (data != NULL);
     g_return_if_fail (bytes != NULL);
 
-    g_bytes_unref (bytes);
+    g_bytes_unref(bytes);
 }</declaration>
     <method name="i_cal_attach_new_from_bytes" corresponds="CUSTOM" kind="constructor" since="1.0">
         <parameter type="GBytes *" annotation="transfer full" name="bytes" comment="The #GBytes holding the data used to create the #ICalAttach"/>
         <returns type="ICalAttach *" annotation="transfer full" comment="The newly created #ICalAttach" />
-        <comment xml:space="preserve">Create a new #ICalAttach from the data in bytes. Takes a reference of @bytes, increase the reference before calling this function if you with to use it afterward.</comment>
+        <comment xml:space="preserve">Create a new #ICalAttach from the data in bytes. Takes a reference of @bytes, increase the reference before calling this function if you with to use it afterward. The stored bytes should be already encoded with used encoding (like base64).</comment>
         <custom>    g_return_val_if_fail (bytes != NULL, NULL);
 
     return i_cal_attach_new_full (icalattach_new_from_data (g_bytes_get_data (bytes, NULL), unref_g_bytes, bytes), NULL);</custom>
