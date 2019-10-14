@@ -27,6 +27,7 @@ Structure *structure_new()
     structure->methods = NULL;
     structure->isBare = FALSE;
     structure->isPossibleGlobal = FALSE;
+    structure->new_full_extraCode = NULL;
     structure->enumerations = NULL;
     structure->destroyFunc = NULL;
     structure->cloneFunc = NULL;
@@ -68,6 +69,7 @@ void structure_free(Structure * structure)
     g_free(structure->destroyFunc);
     g_free(structure->cloneFunc);
     g_free(structure->defaultNative);
+    g_free(structure->new_full_extraCode);
     g_hash_table_destroy(structure->dependencies);
     g_free(structure);
 }
@@ -249,6 +251,22 @@ void enumeration_free(Enumeration * enumeration)
     g_free(enumeration->defaultNative);
     g_free(enumeration->comment);
     g_free(enumeration);
+}
+
+static gchar *dup_attribute_value(xmlDocPtr doc, const xmlNode * list, int inLine)
+{
+    xmlChar *xml_value;
+    gchar *glib_value;
+
+    xml_value = xmlNodeListGetString(doc, list, inLine);
+    if (!xml_value)
+        return NULL;
+
+    glib_value = g_strdup((const gchar *) xml_value);
+
+    xmlFree(xml_value);
+
+    return glib_value;
 }
 
 GList *get_list_from_string(const gchar * str)
@@ -530,6 +548,8 @@ gboolean parse_structure(xmlNode * node, Structure * structure)
             structure->destroyFunc = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "clone_func") == 0) {
             structure->cloneFunc = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
+        } else if (xmlStrcmp(attr->name, (xmlChar *) "new_full_extra_code") == 0) {
+            structure->new_full_extraCode = dup_attribute_value(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "default_native") == 0) {
             structure->defaultNative = (gchar *) xmlNodeListGetString(attr->doc, attr->children, 1);
         } else if (xmlStrcmp(attr->name, (xmlChar *) "is_bare") == 0) {

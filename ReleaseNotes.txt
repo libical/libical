@@ -3,7 +3,7 @@ Release Highlights
 
 Version 3.0.7 (UNRELEASED):
 ---------------------------
- *
+ * libical-glib: Fix ICalAttach handling of the icalattach native structure
 
 Version 3.0.6 (14 Sep 2019):
 ----------------------------

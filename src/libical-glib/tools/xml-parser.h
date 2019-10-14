@@ -61,6 +61,7 @@ typedef struct Structure {
     GList *methods;
     gboolean isBare;
     gboolean isPossibleGlobal;
+    gchar *new_full_extraCode;
     GList *enumerations;
     GHashTable *dependencies;
     gchar *destroyFunc;
