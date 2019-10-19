@@ -2650,55 +2650,52 @@ void icalcomponent_normalize(icalcomponent *comp)
     pvl_list sorted_props = pvl_newlist();
     pvl_list sorted_comps = pvl_newlist();
     icalproperty *prop;
-    icalcomponent *mycomp;
+    icalcomponent *sub;
 
+    /* Normalize properties into sorted list */
     while ((prop = pvl_pop(comp->properties)) != 0) {
-        int nparams = icalproperty_count_parameters(prop);
+        int nparams, remove = 0;
 
-        icalproperty_set_parent(prop, 0);
+        icalproperty_normalize(prop);
 
-        /* Skip unparameterized properties having default values */
+        nparams = icalproperty_count_parameters(prop);
+
+        /* Remove unparameterized properties having default values */
         if (nparams == 0) {
             switch (icalproperty_isa(prop)) {
             case ICAL_CALSCALE_PROPERTY:
                 if (strcmp("GREGORIAN", icalproperty_get_calscale(prop)) == 0) {
-                    icalproperty_free(prop);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
             case ICAL_CLASS_PROPERTY:
                 if (icalproperty_get_class(prop) == ICAL_CLASS_PUBLIC) {
-                    icalproperty_free(prop);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
             case ICAL_PRIORITY_PROPERTY:
                 if (icalproperty_get_priority(prop) == 0) {
-                    icalproperty_free(prop);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
             case ICAL_TRANSP_PROPERTY:
                 if (icalproperty_get_transp(prop) == ICAL_TRANSP_OPAQUE) {
-                    icalproperty_free(prop);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
             case ICAL_REPEAT_PROPERTY:
                 if (icalproperty_get_repeat(prop) == 0) {
-                    icalproperty_free(prop);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
             case ICAL_SEQUENCE_PROPERTY:
                 if (icalproperty_get_sequence(prop) == 0) {
-                    icalproperty_free(prop);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
@@ -2707,16 +2704,21 @@ void icalcomponent_normalize(icalcomponent *comp)
             }
         }
 
-        icalproperty_normalize(prop);
-        pvl_insert_ordered(sorted_props, prop_compare, prop);
+        if (remove) {
+            icalproperty_set_parent(prop, 0); // MUST NOT have a parent to free
+            icalproperty_free(prop);
+        } else {
+            pvl_insert_ordered(sorted_props, prop_compare, prop);
+        }
     }
 
     pvl_free(comp->properties);
     comp->properties = sorted_props;
 
-    while ((mycomp = pvl_pop(comp->components)) != 0) {
-        icalcomponent_normalize(mycomp);
-        pvl_insert_ordered(sorted_comps, comp_compare, mycomp);
+    /* Normalize sub-components into sorted list */
+    while ((sub = pvl_pop(comp->components)) != 0) {
+        icalcomponent_normalize(sub);
+        pvl_insert_ordered(sorted_comps, comp_compare, sub);
     }
 
     pvl_free(comp->components);

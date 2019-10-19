@@ -966,18 +966,18 @@ void icalproperty_normalize(icalproperty *prop)
     pvl_list sorted_params = pvl_newlist();
     icalparameter *param;
 
+    /* Normalize parameters into sorted list */
     while ((param = pvl_pop(prop->parameters)) != 0) {
-        icalparameter_set_parent(param, 0);
+        int remove = 0;
 
-        /* Skip parameters having default values */
+        /* Remove parameters having default values */
         switch (icalparameter_isa(param)) {
         case ICAL_VALUE_PARAMETER:
             /* Skip VALUE parameters for default property value types */
             switch (prop_kind) {
             case ICAL_ATTACH_PROPERTY:
                 if (icalparameter_get_value(param) == ICAL_VALUE_URI) {
-                    icalparameter_free(param);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
@@ -988,15 +988,13 @@ void icalproperty_normalize(icalproperty *prop)
             case ICAL_RDATE_PROPERTY:
             case ICAL_RECURRENCEID_PROPERTY:
                 if (icalparameter_get_value(param) == ICAL_VALUE_DATETIME) {
-                    icalparameter_free(param);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
             case ICAL_DURATION_PROPERTY:
                 if (icalparameter_get_value(param) == ICAL_VALUE_DURATION) {
-                    icalparameter_free(param);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
@@ -1007,64 +1005,55 @@ void icalproperty_normalize(icalproperty *prop)
 
         case ICAL_CUTYPE_PARAMETER:
             if (icalparameter_get_cutype(param) == ICAL_CUTYPE_INDIVIDUAL) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_ENCODING_PARAMETER:
             if (icalparameter_get_encoding(param) == ICAL_ENCODING_8BIT) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_FBTYPE_PARAMETER:
             if (icalparameter_get_fbtype(param) == ICAL_FBTYPE_BUSY) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_PARTSTAT_PARAMETER:
             if (icalparameter_get_partstat(param) == ICAL_PARTSTAT_NEEDSACTION) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_RELATED_PARAMETER:
             if (icalparameter_get_related(param) == ICAL_RELATED_START) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_RELTYPE_PARAMETER:
             if (icalparameter_get_reltype(param) == ICAL_RELTYPE_PARENT) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_ROLE_PARAMETER:
             if (icalparameter_get_role(param) == ICAL_ROLE_REQPARTICIPANT) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_RSVP_PARAMETER:
             if (icalparameter_get_rsvp(param) == ICAL_RSVP_FALSE) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_SCHEDULEAGENT_PARAMETER:
             if (icalparameter_get_scheduleagent(param) == ICAL_SCHEDULEAGENT_SERVER) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
@@ -1072,7 +1061,12 @@ void icalproperty_normalize(icalproperty *prop)
             break;
         }
 
-        pvl_insert_ordered(sorted_params, param_compare, param);
+        if (remove) {
+            icalparameter_set_parent(param, 0); // MUST NOT have a parent to free
+            icalparameter_free(param);
+        } else {
+            pvl_insert_ordered(sorted_params, param_compare, param);
+        }
     }
 
     pvl_free(prop->parameters);
