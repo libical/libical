@@ -2712,8 +2712,7 @@ void icalcomponent_normalize(icalcomponent *comp)
         if (remove) {
             icalproperty_set_parent(prop, 0); // MUST NOT have a parent to free
             icalproperty_free(prop);
-        }
-        else {
+        } else {
             pvl_insert_ordered(sorted_props, prop_compare, prop);
         }
     }

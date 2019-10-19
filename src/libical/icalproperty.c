@@ -1069,8 +1069,7 @@ void icalproperty_normalize(icalproperty *prop)
         if (remove) {
             icalparameter_set_parent(param, 0); // MUST NOT have a parent to free
             icalparameter_free(param);
-        }
-        else {
+        } else {
             pvl_insert_ordered(sorted_params, param_compare, param);
         }
     }
