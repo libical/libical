@@ -3938,11 +3938,23 @@ void test_attach_url()
     icalcomponent_free(ac);
 }
 
+static void test_free_attach_data(char *data, void *user_data)
+{
+    int *pbeen_called = (int *) user_data;
+
+    free(data);
+
+    (*pbeen_called)++;
+}
+
 void test_attach_data()
 {
     static const char test_icalcomp_str_attachwithdata[] =
         "BEGIN:VALARM\r\n" "ATTACH;VALUE=BINARY:foofile\r\n" "END:VALARM\r\n";
+    static const char test_icalcomp_str_attachwithencodingdata[] =
+        "BEGIN:VALARM\r\n" "ATTACH;VALUE=BINARY;ENCODING=BASE64:YQECAAACAWEK\r\n" "END:VALARM\r\n";
 
+    int free_been_called = 0;
     icalattach *attach = icalattach_new_from_data("foofile", NULL, 0);
     icalcomponent *ac = icalcomponent_new(ICAL_VALARM_COMPONENT);
     icalproperty *ap = icalproperty_new_attach(attach);
@@ -3953,8 +3965,40 @@ void test_attach_data()
     }
     str_is("attach data", (const char *) icalattach_get_data(attach), "foofile");
     str_is("attach with data", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
-	icalattach_unref(attach);
-    icalproperty_free(ap);
+
+    icalattach_unref(attach);
+    icalcomponent_free(ac);
+
+    ac = icalcomponent_new_from_string(test_icalcomp_str_attachwithdata);
+    ap = icalcomponent_get_first_property(ac, ICAL_ATTACH_PROPERTY);
+    attach = icalproperty_get_attach(ap);
+    str_is("attach data 2", (const char *) icalattach_get_data(attach), "foofile");
+    str_is("attach with data 2", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
+
+    icalcomponent_free(ac);
+
+    attach = icalattach_new_from_data(strdup("foofile"), test_free_attach_data, &free_been_called);
+    ac = icalcomponent_new(ICAL_VALARM_COMPONENT);
+    ap = icalproperty_new_attach(attach);
+
+    icalcomponent_add_property(ac, ap);
+    if (VERBOSE) {
+        printf("%s\n", icalcomponent_as_ical_string(ac));
+    }
+    str_is("attach data 3", (const char *) icalattach_get_data(attach), "foofile");
+    str_is("attach with data 3", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
+
+    icalattach_unref(attach);
+    ok("Free should not be called yet", (!free_been_called));
+    icalcomponent_free(ac);
+    ok("Free should be called now", (free_been_called == 1));
+
+    ac = icalcomponent_new_from_string(test_icalcomp_str_attachwithencodingdata);
+    ap = icalcomponent_get_first_property(ac, ICAL_ATTACH_PROPERTY);
+    attach = icalproperty_get_attach(ap);
+    str_is("attach data 4", (const char *) icalattach_get_data(attach), "YQECAAACAWEK");
+    str_is("attach with data 4", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithencodingdata);
+
     icalcomponent_free(ac);
 }
 

@@ -65,7 +65,7 @@
     </method>
     <method name="i_cal_property_set_parameter" corresponds="icalproperty_set_parameter" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set."/>
-        <parameter type="ICalParameter *" name="parameter" annotation="transfer full" owner_op="prop" comment="The parameter to be set into @prop."/>
+        <parameter type="ICalParameter *" name="parameter" annotation="transfer none" owner_op="prop" comment="The parameter to be set into @prop."/>
         <comment xml:space="preserve">Set a #ICalParameter into the #ICalProperty. It behaves like set the copy of the #ICalParameter. Upon completion the native part of #ICalParameter will be set to NULL.</comment>
     </method>
     <method name="i_cal_property_set_parameter_from_string" corresponds="icalproperty_set_parameter_from_string" since="1.0">
