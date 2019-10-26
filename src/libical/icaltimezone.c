@@ -982,10 +982,10 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
     if (zone->builtin_timezone)
         zone = zone->builtin_timezone;
 
+    icaltimezone_changes_lock();
+
     /* Make sure the changes array is expanded up to the given time. */
     icaltimezone_ensure_coverage(zone, tt->year);
-
-    icaltimezone_changes_lock();
 
     if (!zone->changes || zone->changes->num_elements == 0) {
         icaltimezone_changes_unlock();
