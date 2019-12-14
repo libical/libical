@@ -113,7 +113,7 @@ set(LIBICAL_LIB_VERSION_STRING
 )
 
 set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
-set(PROJECT_URL "http://libical.github.io/libical/")
+set(PROJECT_URL "https://libical.github.io/libical/")
 
 # library build types
 set(LIBRARY_TYPE SHARED)
@@ -169,7 +169,7 @@ endif()
 
 # libicu is highly recommended for RSCALE support
 #  libicu can be found at http://www.icu-project.org
-#  RSCALE info at http://tools.ietf.org/html/rfc7529
+#  RSCALE info at https://tools.ietf.org/html/rfc7529
 find_package(ICU)
 set_package_properties(ICU PROPERTIES
   TYPE RECOMMENDED

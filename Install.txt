@@ -98,7 +98,7 @@ Homebrew:
 
 * Berkeley DB storage.
   Optional for the Berkeley Database storage support.
-  The development toolkit can be found at http://www.oracle.com/database/berkeley-db
+  The development toolkit can be found at https://www.oracle.com/database/berkeley-db
 
   ** This code path has not been fully tested.
   ** Don't be surprised if there are bugs.
@@ -141,7 +141,7 @@ Use these CMake options to adjust the library behavior as follows:
 
 == Tweaking the Installation Directories ==
 By default, the installation layout is according to the GNU standard installation directories.
-http://www.gnu.org/prep/standards/html_node/Directory-Variables.html
+https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
 
 You can override various installation folders by passing the following variables to CMake:
  CMAKE_INSTALL_LIBDIR = The fullpath where you want the put the installed libraries

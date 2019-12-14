@@ -1,4 +1,4 @@
-2001-04-04  Eric Busboom  <eric@softwarestudio.org>
+2001-04-04  Eric Busboom  <eric@civicknowledge.com>
 
 	* Component.py Added Calendar class. 
 
@@ -7,7 +7,7 @@
  	string into a component.
 
 	
-2001-04-02  Eric Busboom  <eric@softwarestudio.org>
+2001-04-02  Eric Busboom  <eric@civicknowledge.com>
 
 	* Component.py removed arguments from the Event constructor, since
  	I presume that the Component derived classes will always be
@@ -18,7 +18,7 @@
  	Properties.pm
 
 	
-2001-03-13  Eric Busboom  <eric@softwarestudio.org>
+2001-03-13  Eric Busboom  <eric@civicknowledge.com>
 
 	* Component.py Added Component.property()
 
@@ -39,7 +39,7 @@
 	* Added test function for an Event
 
 
-2001-03-05  Eric Busboom  <eric@softwarestudio.org>
+2001-03-05  Eric Busboom  <eric@civicknowledge.com>
 
 	* Property.py Added a lot of exception code to signal failure to
  	create a Property.
@@ -48,7 +48,7 @@
  	and TRIGGER, two properties that can have one of two value types. 
 
 
-2001-03-04  Eric Busboom  <eric@softwarestudio.org>
+2001-03-04  Eric Busboom  <eric@civicknowledge.com>
 
 	* Property.pm Added Property.ConstructorFailedError exception
 
@@ -70,7 +70,7 @@
 
 	* Added Todo and Journal events
 
-2001-02-28  Eric Busboom  <eric@softwarestudio.org>
+2001-02-28  Eric Busboom  <eric@civicknowledge.com>
 
 	* Property Remove most internal data. The property now work
  	alsmost entirely off of the icalproperty that it holds a reference
@@ -86,7 +86,7 @@
 	* Property Added Property.__cmp__ to test equality of properties
  	based on ical string values
 
-2001-02-27  Eric Busboom  <eric@softwarestudio.org>
+2001-02-27  Eric Busboom  <eric@civicknowledge.com>
 
 	* Property Added Property.ref() to set/get the reference to the
  	Property's internal icalproperty
@@ -104,7 +104,7 @@
 	* Backed out changes to Component removing comp_p; 
 	  Component.comp_p should be restored
 
-2001-02-26  Eric Busboom  <eric@softwarestudio.org>
+2001-02-26  Eric Busboom  <eric@civicknowledge.com>
 
 	* Period Added test routine,test_period()
 
@@ -112,7 +112,7 @@
 
 	* Time Addedd addition and subtraction operators
 
-2001-02-25  Eric Busboom  <eric@softwarestudio.org>
+2001-02-25  Eric Busboom  <eric@civicknowledge.com>
 
 	* Libical.py Added test routine for time, time_test()
 

@@ -11,7 +11,7 @@
   for more details.
 
   You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <http://www.gnu.org/licenses/>.
+  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="TimeSpan" native="struct icaltime_span" is_bare="true" default_native="icaltime_span_new(icaltime_null_time(), icaltime_null_time(), 0)" includes="libical-glib/i-cal-time.h">
     <method name="i_cal_time_span_new_timet" corresponds="CUSTOM" kind="constructor" since="3.0.5">

@@ -2,19 +2,18 @@
  FILE: icalvalue.c
  CREATOR: eric 02 May 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
   Contributions from:
      Graham Davison <g.m.davison@computer.org>
@@ -304,7 +303,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
         case ',':
             /* unescaped COMMA is allowed in CATEGORIES property as its
                considered a list delimiter here, see:
-               http://tools.ietf.org/html/rfc5545#section-3.8.1.2 */
+               https://tools.ietf.org/html/rfc5545#section-3.8.1.2 */
             if ((icalproperty_isa(value->parent) == ICAL_CATEGORIES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_RESOURCES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_POLLPROPERTIES_PROPERTY)) {

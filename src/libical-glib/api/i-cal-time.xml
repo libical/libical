@@ -11,7 +11,7 @@
   for more details.
 
   You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <http://www.gnu.org/licenses/>.
+  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Time" native="struct icaltimetype" is_bare="true" default_native="icaltime_null_time()">
     <method name="i_cal_time_new" corresponds="CUSTOM" kind="constructor" since="1.0">

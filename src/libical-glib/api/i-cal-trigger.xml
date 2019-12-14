@@ -11,7 +11,7 @@
   for more details.
 
   You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <http://www.gnu.org/licenses/>.
+  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Trigger" native="struct icaltriggertype" is_bare="true" default_native="icaltriggertype_from_int (0)">
     <method name="i_cal_trigger_new_from_int" corresponds="icaltriggertype_from_int" kind="constructor" since="1.0">
