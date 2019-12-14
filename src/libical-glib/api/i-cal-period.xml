@@ -11,7 +11,7 @@
   for more details.
 
   You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <http://www.gnu.org/licenses/>.
+  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Period" native="struct icalperiodtype" is_bare="true" default_native="icalperiodtype_null_period ()">
 	<method name="i_cal_period_get_start" corresponds="CUSTOM" kind="get" since="1.0">

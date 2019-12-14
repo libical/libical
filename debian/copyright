@@ -4,7 +4,7 @@ Wed, 27 Dec 2006 12:19:06 +0100.
 It was downloaded from http://www.aurore.net/projects/libical/
 
 This is a modified version of the original libical project from softwarestudio
-and the original author is Eric Busboom <eric@softwarestudio.org>.
+and the original author is Eric Busboom <eric@civicknowledge.com>.
 
 Upstream Authors:
    John Gray <gray@agora-net.com>
@@ -12,14 +12,14 @@ Upstream Authors:
    Omar Kilani <omar@tinysofa.org>
 
 Copyright for generated icalderivedproperties:
-   (C) 1999 Eric Busboom <eric@softwarestudio.org>
+   (C) 1999 Eric Busboom <eric@civicknowledge.com>
 
 Copyright for generated restrictionrecords and parameterrestrictions:
    (C) 1999 Graham Davison <g.m.davison@computer.org>
 
 Copyright for sspm based on code from the mimelite distribution:
    (C) 1994 Gisle Hannemyr <gisle@oslonett.no>
-   (C) 2000 Eric Busboom <eric@softwarestudio.org>
+   (C) 2000 Eric Busboom <eric@civicknowledge.com>
 
 Copyright for snprintf:
    (C) 1997 Theo de Raadt

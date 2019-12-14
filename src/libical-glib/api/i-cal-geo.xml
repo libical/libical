@@ -11,7 +11,7 @@
   for more details.
 
   You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <http://www.gnu.org/licenses/>.
+  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Geo" native="struct icalgeotype" is_bare="true" default_native="i_cal_geo_new_default ()">
     <method name="i_cal_geo_new_default" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">

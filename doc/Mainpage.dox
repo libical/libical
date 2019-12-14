@@ -16,11 +16,11 @@ plus the iCalendar iMIP protocol in RFC6047.
 @section license License
 
 The code and datafiles in this distribution are licensed under the
-Mozilla Public License (MPL) v2.0. See http://www.mozilla.org/MPL
+Mozilla Public License (MPL) v2.0. See https://www.mozilla.org/MPL
 for a copy of the license.
 
 Alternately, you may use libical under the terms of the GNU Library
-General Public License (LGPL) v2.1. See http://www.gnu.org/licenses/lgpl-2.1.txt
+General Public License (LGPL) v2.1. See https://www.gnu.org/licenses/lgpl-2.1.txt
 for a copy of the license.
 
 This dual license ensures that the library can be incorporated into

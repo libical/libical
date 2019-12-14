@@ -121,7 +121,7 @@ set(LIBICAL_LIB_VERSION_STRING
 )
 
 set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
-set(PROJECT_URL "http://libical.github.io/libical/")
+set(PROJECT_URL "https://libical.github.io/libical/")
 
 # library build types
 set(LIBRARY_TYPE SHARED)

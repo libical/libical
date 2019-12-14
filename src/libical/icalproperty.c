@@ -2,19 +2,18 @@
  FILE: icalproperty.c
  CREATOR: eric 28 April 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
   The original code is icalproperty.c
 ======================================================================*/
@@ -243,7 +242,7 @@ static char *get_next_line_start(char *line_start, size_t chars_left)
     }
     /* Now try to split on a UTF-8 boundary defined as a 7-bit
        value or as a byte with the two high-most bits set:
-       11xxxxxx.  See http://czyborra.com/utf/ */
+       11xxxxxx.  See https://czyborra.com/utf/ */
 
     pos = line_start + MAX_LINE_LEN - 1;
     while (pos > line_start) {

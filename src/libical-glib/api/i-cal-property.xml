@@ -11,7 +11,7 @@
   for more details.
 
   You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <http://www.gnu.org/licenses/>.
+  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Property" native="icalproperty" destroy_func="icalproperty_free">
     <method name="i_cal_property_new" corresponds="icalproperty_new" kind="constructor" since="1.0">

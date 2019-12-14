@@ -2,19 +2,18 @@
  FILE: icalrecur.c
  CREATOR: eric 16 May 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 ========================================================================*/
 
 /**
@@ -1692,7 +1691,7 @@ static int get_day_of_week(icalrecur_iterator *impl)
 }
 
 /* Calculate ISO weeks per year
-   http://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year */
+   https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year */
 static int weeks_in_year(int year)
 {
     /* Long years occur when year starts on Thu or leap year starts on Wed */
@@ -1703,7 +1702,7 @@ static int weeks_in_year(int year)
 }
 
 /* Calculate ISO week number
-   http://en.wikipedia.org/wiki/ISO_week_date#Calculation */
+   https://en.wikipedia.org/wiki/ISO_week_date#Calculation */
 static int get_week_number(icalrecur_iterator *impl, struct icaltimetype tt)
 {
     int dow, week;

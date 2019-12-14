@@ -11,7 +11,7 @@
   for more details.
 
   You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <http://www.gnu.org/licenses/>.
+  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Datetimeperiod" native="struct icaldatetimeperiodtype" is_bare="true" default_native="i_cal_datetimeperiod_new_default ()" includes="libical-glib/i-cal-time.h, libical-glib/i-cal-period.h">
 	<method name="i_cal_datetimeperiod_new_default" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
