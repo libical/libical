@@ -1,8 +1,12 @@
 Release Highlights
 ==================
 
-Version 3.0.7 (15 December 2019):
+Version 3.0.8 (UNRELEASED):
 ---------------------------
+ *
+
+Version 3.0.7 (15 December 2019):
+---------------------------------
  * libical-glib: Fix ICalAttach handling of the icalattach native structure
  * Let icalattach_new_from_data() use the 'free_fn' argument again
  * Fix memory leaks in attachment handling and elsewhere
