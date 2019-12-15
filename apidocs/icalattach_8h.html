@@ -84,9 +84,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a56d5623c8bd51231d464b50cc69a72c5"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structicalattach__impl.html">icalattach_impl</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5">icalattach</a></td></tr>
 <tr class="memdesc:a56d5623c8bd51231d464b50cc69a72c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">An iCal attach object representing a link to a document object.  <a href="#a56d5623c8bd51231d464b50cc69a72c5">More...</a><br /></td></tr>
 <tr class="separator:a56d5623c8bd51231d464b50cc69a72c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5594d24dde2b625bf4bf299f7e579190"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalattach_8h.html#a5594d24dde2b625bf4bf299f7e579190">icalattach_free_fn_t</a>) (unsigned char *data, void *user_data)</td></tr>
-<tr class="memdesc:a5594d24dde2b625bf4bf299f7e579190"><td class="mdescLeft">&#160;</td><td class="mdescRight">(<em>unused</em>) Function to be called to free the data of an <a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5" title="An iCal attach object representing a link to a document object. ">icalattach</a> object.  <a href="#a5594d24dde2b625bf4bf299f7e579190">More...</a><br /></td></tr>
-<tr class="separator:a5594d24dde2b625bf4bf299f7e579190"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a331647f68081555d5dad37e6ebb96f41"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">icalattach_free_fn_t</a>) (char *data, void *user_data)</td></tr>
+<tr class="memdesc:a331647f68081555d5dad37e6ebb96f41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to be called to free the data of an <a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5" title="An iCal attach object representing a link to a document object. ">icalattach</a> object.  <a href="#a331647f68081555d5dad37e6ebb96f41">More...</a><br /></td></tr>
+<tr class="separator:a331647f68081555d5dad37e6ebb96f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -99,7 +99,7 @@ Functions</h2></td></tr>
 <tr class="memitem:ace086024b7d9e24e0052ccd7a6fc1d60"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalattach_8h.html#ace086024b7d9e24e0052ccd7a6fc1d60">icalattach_get_url</a> (<a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5">icalattach</a> *attach)</td></tr>
 <tr class="memdesc:ace086024b7d9e24e0052ccd7a6fc1d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the URL of the <a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5" title="An iCal attach object representing a link to a document object. ">icalattach</a> object.  <a href="#ace086024b7d9e24e0052ccd7a6fc1d60">More...</a><br /></td></tr>
 <tr class="separator:ace086024b7d9e24e0052ccd7a6fc1d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6274ba5df22dde512aaa5bb07f08464"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5">icalattach</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalattach_8h.html#ab6274ba5df22dde512aaa5bb07f08464">icalattach_new_from_data</a> (const char *data, <a class="el" href="icalattach_8h.html#a5594d24dde2b625bf4bf299f7e579190">icalattach_free_fn_t</a> free_fn, void *free_fn_data)</td></tr>
+<tr class="memitem:ab6274ba5df22dde512aaa5bb07f08464"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5">icalattach</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalattach_8h.html#ab6274ba5df22dde512aaa5bb07f08464">icalattach_new_from_data</a> (const char *data, <a class="el" href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">icalattach_free_fn_t</a> free_fn, void *free_fn_data)</td></tr>
 <tr class="memdesc:ab6274ba5df22dde512aaa5bb07f08464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create new <a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5" title="An iCal attach object representing a link to a document object. ">icalattach</a> object from data.  <a href="#ab6274ba5df22dde512aaa5bb07f08464">More...</a><br /></td></tr>
 <tr class="separator:ab6274ba5df22dde512aaa5bb07f08464"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fd3cb99bf67d17f3f11cc7b5f78f13b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5">icalattach</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalattach_8h.html#a8fd3cb99bf67d17f3f11cc7b5f78f13b">icalattach_new_from_url</a> (const char *url)</td></tr>
@@ -134,8 +134,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5594d24dde2b625bf4bf299f7e579190"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5594d24dde2b625bf4bf299f7e579190">&#9670;&nbsp;</a></span>icalattach_free_fn_t</h2>
+<a id="a331647f68081555d5dad37e6ebb96f41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a331647f68081555d5dad37e6ebb96f41">&#9670;&nbsp;</a></span>icalattach_free_fn_t</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -146,7 +146,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>(<em>unused</em>) Function to be called to free the data of an <a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5" title="An iCal attach object representing a link to a document object. ">icalattach</a> object. </p>
+<p>Function to be called to free the data of an <a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5" title="An iCal attach object representing a link to a document object. ">icalattach</a> object. </p>
 <dl class="section warning"><dt>Warning</dt><dd>Currently not used</dd></dl>
 <p>This function type is used to free the data from an <a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5" title="An iCal attach object representing a link to a document object. ">icalattach</a> object created with <a class="el" href="icalattach_8h.html#ab6274ba5df22dde512aaa5bb07f08464" title="Create new icalattach object from data. ">icalattach_new_from_data()</a>. It is currently not used </p>
 
@@ -261,7 +261,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="icalattach_8h.html#a5594d24dde2b625bf4bf299f7e579190">icalattach_free_fn_t</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">icalattach_free_fn_t</a>&#160;</td>
           <td class="paramname"><em>free_fn</em>, </td>
         </tr>
         <tr>
@@ -282,8 +282,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>The data to create the <a class="el" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5" title="An iCal attach object representing a link to a document object. ">icalattach</a> from </td></tr>
-    <tr><td class="paramname">free_fn</td><td>(<em>unused</em>) The function to free the data </td></tr>
-    <tr><td class="paramname">free_fn_data</td><td>(<em>unused</em>) Data to pass to the <em>free_fn</em> </td></tr>
+    <tr><td class="paramname">free_fn</td><td>The function to free the data </td></tr>
+    <tr><td class="paramname">free_fn_data</td><td>Data to pass to the <em>free_fn</em> </td></tr>
   </table>
   </dd>
 </dl>
