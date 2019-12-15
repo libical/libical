@@ -1,10 +1,13 @@
 Release Highlights
 ==================
 
-Version 3.0.7 (UNRELEASED):
+Version 3.0.7 (15 December 2019):
 ---------------------------
  * libical-glib: Fix ICalAttach handling of the icalattach native structure
  * Let icalattach_new_from_data() use the 'free_fn' argument again
+ * Fix memory leaks in attachment handling and elsewhere
+ * Fix a multithreading race condition
+ * More fuzzification fixes
 
 Version 3.0.6 (14 Sep 2019):
 ----------------------------
@@ -28,7 +31,7 @@ Version 3.0.5 (14 May 2019):
    including <libical-glib/libical-glib.h> to be able to use it.
  * Built-in timezones updated to tzdata2019a
  * De-fuzzifications and Coverity fixes
- 
+
 Version 3.0.4 (14 Aug 2018):
 ----------------------------
  * Silently fail RSCALE recurrence clauses when RSCALE is disabled
