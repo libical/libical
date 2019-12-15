@@ -32,6 +32,10 @@ Version 3.1.0 (NOT RELEASED YET):
      + struct icaltimezonephase
  * Improved performance of recurrence iterators
 
+Version 3.0.8 (UNRELEASED):
+---------------------------
+ *
+
 Version 3.0.7 (15 December 2019):
 ---------------------------------
  * libical-glib: Fix ICalAttach handling of the icalattach native structure
