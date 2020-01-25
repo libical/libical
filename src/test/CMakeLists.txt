@@ -12,6 +12,7 @@ if(ICU_FOUND)
 endif()
 
 if(BDB_FOUND)
+  add_definitions(-DDB_DBM_HSEARCH=0) #set to 1 if hsearch support is needed
   include_directories(${BDB_INCLUDE_DIR})
 endif()
 
