@@ -51,6 +51,12 @@ icalattach *icalattach_new_from_url(const char *url)
     return attach;
 }
 
+static void attach_data_free(char *data, void *free_fn_data)
+{
+    _unused(free_fn_data);
+    free(data);
+}
+
 icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn,
                                      void *free_fn_data)
 {
@@ -61,6 +67,16 @@ icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free
     if ((attach = malloc(sizeof(icalattach))) == NULL) {
         errno = ENOMEM;
         return NULL;
+    }
+
+    if (!free_fn) {
+        data = strdup(data);
+        if (!data) {
+            free(attach);
+            errno = ENOMEM;
+            return NULL;
+        }
+        free_fn = attach_data_free;
     }
 
     attach->refcount = 1;
