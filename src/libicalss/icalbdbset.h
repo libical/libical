@@ -21,6 +21,7 @@
 #include "libical_icalss_export.h"
 #include "icalset.h"
 
+#define DB_DBM_HSEARCH 0 //set to 1 if hsearch support is needed
 #include <db.h>
 
 typedef struct icalbdbset_impl icalbdbset;

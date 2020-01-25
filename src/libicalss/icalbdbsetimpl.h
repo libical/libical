@@ -19,6 +19,7 @@
 #define ICALBDBSETIMPL_H
 
 #include "icalset.h"
+#define DB_DBM_HSEARCH 0 //set to 1 if hsearch support is needed
 #include <db.h>
 
 /* This definition is in its own file so it can be kept out of the
