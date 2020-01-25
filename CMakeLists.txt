@@ -219,6 +219,7 @@ add_feature_info(
 )
 if(BDB_FOUND)
   set(HAVE_BDB True)
+  add_definitions(-DDB_DBM_HSEARCH=0) #set to 1 if hsearch support is needed
 endif()
 
 # MSVC specific definitions
