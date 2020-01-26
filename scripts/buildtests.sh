@@ -117,7 +117,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='\(no[[:space:]]link[[:space:]]for:\|g_type_class_add_private.*is[[:space:]]deprecated\|/vcc\.c\|/vobject\.c\|/icalsslexer\.c\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\)'
+  whitelist='\(no[[:space:]]link[[:space:]]for:\|G_ADD_PRIVATE\|g_type_class_add_private.*is[[:space:]]deprecated\|/stow\.c\|/testmime\.c\|/vcc\.c\|/vobject\.c\|/icalsslexer\.c\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
