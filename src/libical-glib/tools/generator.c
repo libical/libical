@@ -22,17 +22,16 @@ static const gchar *templates_dir = NULL;
 static FILE *open_file(const gchar *dir, const gchar *filename)
 {
     gchar *path;
-    FILE *tmpl;
+    FILE *tmpl = NULL;
 
     path = g_build_filename(dir, filename, NULL);
-    g_return_val_if_fail(path != NULL, NULL);
+    if (path) {
+      tmpl = fopen(path, "rb");
+      if (!tmpl)
+          fprintf(stderr, "generator: Failed to open %s: %s\n", path, strerror(errno));
 
-    tmpl = fopen(path, "rb");
-    if (!tmpl)
-        fprintf(stderr, "Failed to open '%s'\n", path);
-
-    g_free(path);
-
+      g_free(path);
+    }
     return tmpl;
 }
 
