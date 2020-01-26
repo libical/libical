@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
         int stress;
         int base64;
         int qp;
-        int sleep;
+        int sleepy;
         int count;
         char *input_file;
     } opt;
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
             }
         case 'S':{
                 /* sleep at end of run */
-                opt.sleep = atoi(optarg);
+                opt.sleepy = atoi(optarg);
                 break;
             }
 
@@ -292,8 +292,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (opt.sleep != 0) {
-        sleep((unsigned int)opt.sleep);
+    if (opt.sleepy != 0) {
+        sleep((unsigned int)opt.sleepy);
     }
 
     if (opt.input_file != 0) {
