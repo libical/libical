@@ -560,6 +560,9 @@ static void sspm_build_header(struct sspm_header *header, char *line)
     } else if (strcasecmp(prop, "Content-Id") == 0) {
         char *cid = sspm_value(line);
 
+        if (header->content_id != 0) {
+            free(header->content_id);
+        }
         header->content_id = sspm_strdup(cid);
         header->def = 0;
     }
