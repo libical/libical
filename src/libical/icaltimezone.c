@@ -36,6 +36,7 @@
 #include <ctype.h>
 #include <stddef.h>     /* for ptrdiff_t */
 #include <stdlib.h>
+#include <limits.h>
 
 #if defined(HAVE_PTHREAD)
 #include <pthread.h>

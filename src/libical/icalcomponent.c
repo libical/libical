@@ -30,6 +30,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <limits.h>
 
 struct icalcomponent_impl
 {
