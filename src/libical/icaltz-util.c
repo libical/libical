@@ -26,6 +26,7 @@
 #include "icaltimezone.h"
 
 #include <stdlib.h>
+#include <limits.h>
 
 #if defined(sun) && defined(__SVR4)
 #include <sys/types.h>
