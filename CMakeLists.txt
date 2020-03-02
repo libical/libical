@@ -118,6 +118,27 @@ set(PROJECT_URL "https://libical.github.io/libical/")
 # library build types
 set(LIBRARY_TYPE SHARED)
 
+########################################################
+
+option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
+if(WITH_CXX_BINDINGS)
+  enable_language(CXX)
+  if(CMAKE_CXX_COMPILER)
+    add_definitions(-DWITH_CXX_BINDINGS)
+  else()
+    message(STATUS
+      "Warning: Building the C++ bindings is not possible since a C++ compiler could not be found. "
+      "Turning-off C++ bindings"
+    )
+    set(WITH_CXX_BINDINGS False)
+  endif()
+endif()
+add_feature_info(
+  "Option WITH_CXX_BINDINGS"
+  WITH_CXX_BINDINGS
+  "build the C++ bindings. Requires a C++ compiler"
+)
+
 option(STATIC_ONLY "Build static libraries only.")
 add_feature_info(
   "Option STATIC_ONLY"
@@ -544,27 +565,6 @@ if(THREAD_SANITIZER)
     set(ICAL_GLIB False)
   endif()
 endif()
-
-########################################################
-
-option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
-if(WITH_CXX_BINDINGS)
-  enable_language(CXX)
-  if(CMAKE_CXX_COMPILER)
-    add_definitions(-DWITH_CXX_BINDINGS)
-  else()
-    message(STATUS
-      "Warning: Building the C++ bindings is not possible since a C++ compiler could not be found. "
-      "Turning-off C++ bindings"
-    )
-    set(WITH_CXX_BINDINGS False)
-  endif()
-endif()
-add_feature_info(
-  "Option WITH_CXX_BINDINGS"
-  WITH_CXX_BINDINGS
-  "build the C++ bindings. Requires a C++ compiler"
-)
 
 #some test programs need to know if we are using 32-bit time
 if(SIZEOF_TIME_T EQUAL 4)
