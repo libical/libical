@@ -109,7 +109,7 @@ CPPCHECK_WARNINGS() {
 # print warnings find in the clang-tidy output
 # $1 = file with the clang-tidy output
 TIDY_WARNINGS() {
-  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|modernize-\|cppcoreguidelines-pro-type-const-cast\|cppcoreguidelines-pro-type-reinterpret-cast\|cppcoreguidelines-owning-memory\|fuchsia.*\|hicpp-use-auto\|hicpp-no-malloc\|hicpp-use-nullptr\|hicpp-exception-baseclass\|hicpp-vararg\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-bounds-pointer-arithmetic\|google-build-using-namespace\|llvm-include-order\|hicpp-use-equals-default\|cppcoreguidelines-no-malloc\|g_type_class_add_private.*is[[:space:]]deprecated\)'
+  whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|modernize-\|cppcoreguidelines-pro-type-const-cast\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-type-reinterpret-cast\|cppcoreguidelines-owning-memory\|fuchsia.*\|hicpp-use-auto\|hicpp-no-malloc\|hicpp-use-nullptr\|hicpp-exception-baseclass\|hicpp-vararg\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-bounds-pointer-arithmetic\|google-build-using-namespace\|llvm-include-order\|hicpp-use-equals-default\|cppcoreguidelines-no-malloc\|g_type_class_add_private.*is[[:space:]]deprecated\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
@@ -500,6 +500,7 @@ GCC_BUILD testgcc2 "$CMAKEOPTS"
 GCC_BUILD testgcc3 "$UUCCMAKEOPTS"
 GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
 GCC_BUILD testgcc4glib "$GLIBOPTS"
+GCC_BUILD testgccnocxx "$CMAKEOPTS -DWITH_CXX_BINDINGS=off"
 if (test "`uname -s`" = "Linux")
 then
     echo "Temporarily disable cross-compile tests"
