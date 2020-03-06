@@ -2680,14 +2680,9 @@ void test_recur_parser()
     rt = icalrecurrencetype_from_string(str);
     str_is(str, icalrecurrencetype_as_string(&rt), str);
 
-    str = "FREQ=DAILY;COUNT=3;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
-
-    rt = icalrecurrencetype_from_string(str);
+    /* Add COUNT and make sure its ignored in lieu of UNTIL */
+    rt.count = 3;
     str_is(str, icalrecurrencetype_as_string(&rt), str);
-
-    /* Add UNTIL and make sure we output a NULL string */
-    rt.until = icaltime_today();
-    ok("COUNT + UNTIL not allowed", icalrecurrencetype_as_string(&rt) == NULL);
 
     /* Try to create a new RRULE value with UNTIL + COUNT */
     es = icalerror_supress("BADARG");
@@ -2695,6 +2690,11 @@ void test_recur_parser()
     rt = icalvalue_get_recur(v);
     icalerror_restore("BADARG", es);
     ok("COUNT + UNTIL not allowed", rt.freq == ICAL_NO_RECURRENCE);
+
+    str = "FREQ=DAILY;COUNT=3;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
+
+    rt = icalrecurrencetype_from_string(str);
+    str_is(str, icalrecurrencetype_as_string(&rt), str);
 
     /* Try to parse an RRULE value with UNTIL + COUNT */
     str = "FREQ=YEARLY;UNTIL=20000131T090000Z;COUNT=3";

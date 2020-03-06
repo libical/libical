@@ -793,10 +793,6 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
         return 0;
     }
 
-    if (recur->until.year != 0 && recur->count != 0) {
-        return 0;
-    }
-
     str = (char *)icalmemory_new_buffer(buf_sz);
     str_p = str;
 
@@ -823,7 +819,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
         icalmemory_append_string(&str, &str_p, &buf_sz, temp);
     }
 
-    if (recur->count != 0) {
+    else if (recur->count != 0) {
         snprintf(temp, sizeof(temp), "%d", recur->count);
         icalmemory_append_string(&str, &str_p, &buf_sz, ";COUNT=");
         icalmemory_append_string(&str, &str_p, &buf_sz, temp);
