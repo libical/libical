@@ -1,6 +1,10 @@
 Release Highlights
 ==================
 
+Version 3.0.9 (UNRELEASED):
+---------------------------
+ *
+
 Version 3.0.8 (07 March 2020):
 ------------------------------
  * Fix for icalattach_new_from_data() and the 'free_fn' argument
