@@ -1,8 +1,8 @@
 Release Highlights
 ==================
 
-Version 3.0.8 (UNRELEASED):
----------------------------
+Version 3.0.8 (07 March 2020):
+------------------------------
  * Fix for icalattach_new_from_data() and the 'free_fn' argument
  * Fix if recurrencetype contains both COUNT and UNTIL (only output UNTIL in the RRULE)
  * libical-glib now requires glib 2.38 or higher
