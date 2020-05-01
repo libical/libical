@@ -994,7 +994,8 @@ enum expand_table
     UNKNOWN = 0,
     CONTRACT = 1,
     EXPAND = 2,
-    ILLEGAL = 3
+    ILLEGAL = 3,
+    IGNORE = 4
 };
 
 /**
@@ -1021,7 +1022,7 @@ static const struct expand_split_map_struct expand_map[] = {
     {ICAL_HOURLY_RECURRENCE,   { 2, 2, 1, 1, 1, 1, 3, 1, 1 }},
     {ICAL_DAILY_RECURRENCE,    { 2, 2, 2, 1, 1, 3, 3, 1, 1 }},
     {ICAL_WEEKLY_RECURRENCE,   { 2, 2, 2, 2, 3, 3, 3, 1, 1 }},
-    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 3, 3, 1, 1 }},
+    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 4, 3, 1, 1 }},
     {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2, 1 }},
     {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }} //krazy:exclude=style
 };
@@ -2000,10 +2001,13 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     for (byrule = BY_SECOND; byrule <= BY_SET_POS; byrule++) {
         if (expand_map[freq].map[byrule] == ILLEGAL &&
-            impl->by_ptrs[byrule][0] != ICAL_RECURRENCE_ARRAY_MAX) {
+            has_by_data(impl, byrule)) {
             icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
             free(impl);
             return 0;
+        }
+        else if (expand_map[freq].map[byrule] == IGNORE) {
+            impl->orig_data[byrule] = 0;
         }
     }
 
