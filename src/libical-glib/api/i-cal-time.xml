@@ -34,11 +34,12 @@
     </method>
     <method name="i_cal_time_new_null_time" corresponds="icaltime_null_time" kind="constructor" since="1.0">
         <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Create a default time which is an epoch time</comment>
+        <comment xml:space="preserve">Create a null time, which indicates no time has been set.
+            This time represents the beginning of the epoch.</comment>
     </method>
     <method name="i_cal_time_new_null_date" corresponds="icaltime_null_date" kind="constructor" since="1.0">
         <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Create a null date, which indicates no time has been set</comment>
+        <comment xml:space="preserve">Create a null date, which indicates no time has been set.</comment>
     </method>
     <method name="i_cal_time_new_current_with_zone" corresponds="icaltime_current_time_with_zone" kind="others" since="1.0">
         <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The timezone used to create a #ICalTime according to the current time"/>
@@ -76,7 +77,7 @@
         <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
         <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The timezone"/>
         <returns type="time_t" comment="the time as seconds past the UNIX epoch" />
-        <comment xml:space="preserve">Return the time as seconds past the UNIX epoch, using timezones.</comment>
+        <comment xml:space="preserve">Return the time as seconds past the UNIX epoch, using the given timezone.</comment>
     </method>
     <method name="i_cal_time_as_ical_string" corresponds="icaltime_as_ical_string_r" since="1.0">
         <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
@@ -122,12 +123,13 @@
     <method name="i_cal_time_is_null_time" corresponds="icaltime_is_null_time" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
         <returns type="gboolean" comment="Whether @tt is null_time. 1 if yes, 0 if not." />
-        <comment xml:space="preserve">Return true of the time is null.</comment>
+        <comment xml:space="preserve">Return true if the time is null.</comment>
     </method>
     <method name="i_cal_time_is_valid_time" corresponds="icaltime_is_valid_time" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
         <returns type="gboolean" comment="Whether @tt is null_time. 1 if yes, 0 if not." />
-        <comment xml:space="preserve">Return true of the time is null.</comment>
+        <comment xml:space="preserve">Returns false if the time is clearly invalid, but is not null. 
+            This is usually the result of creating a new time type buy not clearing it, or setting one of the flags to an illegal value.</comment>
     </method>
     <method name="i_cal_time_is_date" corresponds="icaltime_is_date" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
@@ -143,20 +145,20 @@
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">Return -1, 0, or 1 to indicate that a less than b, a==b or a larger than b.</comment>
+        <comment xml:space="preserve">Return -1, 0, or 1 to indicate that a is less than b, a equals b, or a is greater than b.</comment>
     </method>
     <method name="i_cal_time_compare_date_only" corresponds="icaltime_compare_date_only" since="1.0">
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">like i_cal_time_compare, but only use the date parts.</comment>
+        <comment xml:space="preserve">Like i_cal_time_compare, but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_compare_date_only_tz" corresponds="icaltime_compare_date_only_tz" since="1.0">
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
 	<parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">like i_cal_time_compare_tz, but only use the date parts.</comment>
+        <comment xml:space="preserve">Like icaltime_compare, but only use the date parts; accepts timezone.</comment>
     </method>
     <method name="i_cal_time_adjust" corresponds="icaltime_adjust" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime to be set"/>

@@ -582,7 +582,7 @@ int icaltime_week_number(const struct icaltimetype ictt)
 }
 
 /**
- *      Returns the day of the year, counting from 1 (Jan 1st).
+ *      Return the day of the year of the given time, counting from 1 (Jan 1st).
  */
 int icaltime_day_of_year(const struct icaltimetype t)
 {
@@ -711,7 +711,8 @@ int icaltime_is_null_time(const struct icaltimetype t)
 }
 
 /**
- *      Return -1, 0, or 1 to indicate that a<b, a==b, or a>b.
+ *      Return -1, 0, or 1 to indicate that a is less than b, a equals b, or 
+ *      a is greater than b.
  *      This calls icaltime_compare function after converting them to the utc
  *      timezone.
  */
@@ -772,7 +773,7 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
 }
 
 /**
- *      like icaltime_compare, but only use the date parts.
+ *      Like icaltime_compare, but only use the date parts.
  */
 
 int icaltime_compare_date_only(const struct icaltimetype a_in,
@@ -806,7 +807,7 @@ int icaltime_compare_date_only(const struct icaltimetype a_in,
 }
 
 /**
- *      like icaltime_compare, but only use the date parts; accepts timezone.
+ *      Like icaltime_compare, but only use the date parts; accepts timezone.
  */
 
 int icaltime_compare_date_only_tz(const struct icaltimetype a_in,
@@ -1013,7 +1014,7 @@ struct icaltimetype icaltime_set_timezone(struct icaltimetype *t, const icaltime
 }
 
 /**
- *  @brief builds an icaltimespan given a start time, end time and busy value.
+ *  @brief Builds an icaltimespan given a start time, end time and busy value.
  *
  *  @param dtstart   The beginning time of the span, can be a date-time
  *                   or just a date.

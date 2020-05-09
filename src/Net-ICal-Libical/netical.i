@@ -221,7 +221,7 @@ struct icaltimetype icaltime_as_zone(struct icaltimetype tt,
 /* Return a null time, which indicates no time has been set. This time represent the beginning of the epoch */
 struct icaltimetype icaltime_null_time(void);
 
-/* Return true of the time is null. */
+/* Return true if the time is null. */
 int icaltime_is_null_time(struct icaltimetype t);
 
 /* Returns false if the time is clearly invalid, but is not null. This
@@ -255,10 +255,10 @@ char* icaltime_as_ctime(struct icaltimetype);
 /* Return the week number for the week the given time is within */
 short icaltime_week_number(struct icaltimetype t);
 
-/* Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
+/* Return -1, 0, or 1 to indicate that a is less than b, a equals b, or a is greater than b. */
 int icaltime_compare(struct icaltimetype a,struct icaltimetype b);
 
-/* like icaltime_compare, but only use the date parts. */
+/* Like icaltime_compare, but only use the date parts. */
 int icaltime_compare_date_only(struct icaltimetype a, struct icaltimetype b);
 
 /* Return the number of days in the given month */
