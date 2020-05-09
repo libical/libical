@@ -60,6 +60,7 @@
     <method name="i_cal_time_new_from_string" corresponds="icaltime_from_string" kind="others" since="1.0">
         <parameter type="const gchar *" name="str" comment="The ISO format string"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
+        <comment xml:space="preserve">Create a time from an ISO format string</comment>
     </method>
     <method name="i_cal_time_new_from_day_of_year" corresponds="icaltime_from_day_of_year" kind="constructor" since="1.0">
         <parameter type="const gint" name="day" comment="The day of a year"/>
