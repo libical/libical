@@ -144,7 +144,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_string(const char *str);
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy, const int year);
 
 /**
- * Returns the time as seconds past the UNIX epoch
+ * Returns the time as seconds past the UNIX epoch.
  *
  * This function probably won't do what you expect.  In particular, you should
  * only pass an icaltime in UTC, since no conversion is done.  Even in that case,
@@ -161,20 +161,20 @@ LIBICAL_ICAL_EXPORT const char *icaltime_as_ical_string(const struct icaltimetyp
 
 LIBICAL_ICAL_EXPORT char *icaltime_as_ical_string_r(const struct icaltimetype tt);
 
-/** @brief Return the timezone */
+/** @brief Return the timezone. */
 LIBICAL_ICAL_EXPORT const icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
 
-/** @brief Return the tzid, or NULL for a floating time */
+/** @brief Return the tzid, or NULL for a floating time. */
 LIBICAL_ICAL_EXPORT const char *icaltime_get_tzid(const struct icaltimetype t);
 
-/** @brief Set the timezone */
+/** @brief Set the timezone. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_set_timezone(struct icaltimetype *t,
                                                               const icaltimezone *zone);
 
 /** Return the day of the year of the given time, counting from 1 (Jan 1st). */
 LIBICAL_ICAL_EXPORT int icaltime_day_of_year(const struct icaltimetype t);
 
-/** Return the day of the week of the given time. Sunday is 1 */
+/** Return the day of the week of the given time. Sunday is 1. */
 LIBICAL_ICAL_EXPORT int icaltime_day_of_week(const struct icaltimetype t);
 
 /** Return the day of the year for the first day of the week that the

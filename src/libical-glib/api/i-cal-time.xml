@@ -44,7 +44,7 @@
     <method name="i_cal_time_new_current_with_zone" corresponds="icaltime_current_time_with_zone" kind="others" since="1.0">
         <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The timezone used to create a #ICalTime according to the current time"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Create a #ICalTime according to the timezone and current time</comment>
+        <comment xml:space="preserve">Create a #ICalTime according to the timezone and current time.</comment>
     </method>
     <method name="i_cal_time_new_today" corresponds="icaltime_today" kind="others" since="1.0">
         <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
@@ -60,7 +60,7 @@
     <method name="i_cal_time_new_from_string" corresponds="icaltime_from_string" kind="others" since="1.0">
         <parameter type="const gchar *" name="str" comment="The ISO format string"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Create a time from an ISO format string</comment>
+        <comment xml:space="preserve">Create a time from an ISO format string.</comment>
     </method>
     <method name="i_cal_time_new_from_day_of_year" corresponds="icaltime_from_day_of_year" kind="constructor" since="1.0">
         <parameter type="const gint" name="day" comment="The day of a year"/>
@@ -71,7 +71,7 @@
     <method name="i_cal_time_as_timet" corresponds="icaltime_as_timet" since="1.0">
         <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
         <returns type="time_t" comment="the time as seconds past the UNIX epoch" />
-        <comment xml:space="preserve">Return the time as seconds past the UNIX epoch</comment>
+        <comment xml:space="preserve">Return the time as seconds past the UNIX epoch.</comment>
     </method>
     <method name="i_cal_time_as_timet_with_zone" corresponds="icaltime_as_timet_with_zone" since="1.0">
         <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
@@ -87,27 +87,27 @@
     <method name="i_cal_time_get_timezone" corresponds="(void *)icaltime_get_timezone" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
         <returns type="ICalTimezone *" annotation="transfer none" translator_argus="(GObject *)tt, TRUE" comment="The timezone information" />
-        <comment xml:space="preserve">Return the timezone</comment>
+        <comment xml:space="preserve">Return the timezone.</comment>
     </method>
     <method name="i_cal_time_set_timezone" corresponds="icaltime_set_timezone" kind="set" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime"/>
         <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The timezone"/>
-        <comment xml:space="preserve">Set the timezone of @tt</comment>
+        <comment xml:space="preserve">Set the timezone of @tt.</comment>
     </method>
     <method name="i_cal_time_get_tzid" corresponds="icaltime_get_tzid" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
         <returns type="const gchar *" annotation="allow-none, transfer none" comment="The tzid of #ICalTime, or NULL if floating type" />
-        <comment xml:space="preserve">Return the tzid, or NULL for a floating time</comment>
+        <comment xml:space="preserve">Return the tzid, or NULL for a floating time.</comment>
     </method>
     <method name="i_cal_time_day_of_year" corresponds="icaltime_day_of_year" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
         <returns type="gint" comment="the day of the year of the given time" />
-        <comment xml:space="preserve">Return the day of the year of the given time</comment>
+        <comment xml:space="preserve">Return the day of the year of the given time.</comment>
     </method>
     <method name="i_cal_time_day_of_week" corresponds="icaltime_day_of_week" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
         <returns type="gint" comment="the day of the week of the given time. Sunday is 1." />
-        <comment xml:space="preserve">Return the day of the week of the given time. Sunday is 1</comment>
+        <comment xml:space="preserve">Return the day of the week of the given time. Sunday is 1.</comment>
     </method>
     <method name="i_cal_time_start_doy_week" corresponds="icaltime_start_doy_week" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
