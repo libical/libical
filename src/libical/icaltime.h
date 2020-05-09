@@ -181,7 +181,7 @@ LIBICAL_ICAL_EXPORT int icaltime_day_of_week(const struct icaltimetype t);
    given time is within. */
 LIBICAL_ICAL_EXPORT int icaltime_start_doy_week(const struct icaltimetype t, int fdow);
 
-/** Return the week number for the week the given time is within */
+/** Return the week number for the week the given time is within. */
 LIBICAL_ICAL_EXPORT int icaltime_week_number(const struct icaltimetype t);
 
 /** Return true if the time is null. */
@@ -232,13 +232,13 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltime
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
                                                                  icaltimezone *zone);
 
-/** Return the number of days in the given month */
+/** Return the number of days in the given month. */
 LIBICAL_ICAL_EXPORT int icaltime_days_in_month(const int month, const int year);
 
 /** Return whether you've specified a leapyear or not. */
 LIBICAL_ICAL_EXPORT int icaltime_is_leap_year(const int year);
 
-/** Return the number of days in this year */
+/** Return the number of days in this year. */
 LIBICAL_ICAL_EXPORT int icaltime_days_in_year(const int year);
 
 /** @brief Builds an icaltimespan given a start time, end time and busy value. */
