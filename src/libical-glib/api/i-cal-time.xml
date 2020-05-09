@@ -48,7 +48,7 @@
     </method>
     <method name="i_cal_time_new_today" corresponds="icaltime_today" kind="others" since="1.0">
         <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Create a #ICalTime representing today</comment>
+        <comment xml:space="preserve">Create a #ICalTime representing today, with #ICalTime.is_date set.</comment>
     </method>
     <method name="i_cal_time_new_from_timet_with_zone" corresponds="icaltime_from_timet_with_zone" kind="others" since="1.0">
         <parameter type="const time_t" name="v" comment="The seconds past since epoch time"/>
