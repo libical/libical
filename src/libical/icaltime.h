@@ -212,7 +212,9 @@ LIBICAL_ICAL_EXPORT int icaltime_compare_date_only_tz(const struct icaltimetype 
                                                       const struct icaltimetype b,
                                                       icaltimezone *tz);
 
-/** Adds or subtracts a number of days, hours, minutes and seconds. */
+/** Add or subtract a number of days, hours, minutes and seconds from an icaltimetype. 
+    NOTE: This function is exactly the same as icaltimezone_adjust_change()
+    except for the type of the first parameter.*/
 LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt,
                                          const int days, const int hours,
                                          const int minutes, const int seconds);

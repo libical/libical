@@ -849,7 +849,7 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
 
 /**     @brief Internal, shouldn't be part of the public API
  *
- *      Adds (or subtracts) a time from a icaltimetype.
+ *      Add or subtract a number of days, hours, minutes and seconds from an icaltimetype.
  *      NOTE: This function is exactly the same as icaltimezone_adjust_change()
  *      except for the type of the first parameter.
  */
