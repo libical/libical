@@ -92,7 +92,7 @@
     <method name="i_cal_time_set_timezone" corresponds="icaltime_set_timezone" kind="set" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime"/>
         <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The timezone"/>
-        <comment xml:space="preserve">Set the timezone of the @tt</comment>
+        <comment xml:space="preserve">Set the timezone of @tt</comment>
     </method>
     <method name="i_cal_time_get_tzid" corresponds="icaltime_get_tzid" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
@@ -169,13 +169,13 @@
         <comment xml:space="preserve">Add or subtract a number of days, hours, minutes and seconds from @tt.</comment>
     </method>
     <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">
-        <parameter type="const ICalTime *" name="t" annotation="in, transfer none" comment="The #ICalTime to be normalized"/>
+        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be normalized"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The #ICalTime normalized"/>
-        <comment xml:space="preserve">Normalize the icaltime, so that all fields are within the normal range.</comment>
+        <comment xml:space="preserve">Normalize @tt, so that all fields are within the normal range.</comment>
     </method>
     <method name="i_cal_time_normalize_inplace" corresponds="CUSTOM" since="3.0.5">
         <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be normalized"/>
-        <comment xml:space="preserve">Normalize the @tt, so that all fields are within the normal range.</comment>
+        <comment xml:space="preserve">Normalize @tt, so that all fields are within the normal range.</comment>
 	<custom xml:space="preserve">    icaltimetype *itt;
 
     g_return_if_fail(I_CAL_IS_TIME (tt));
@@ -363,7 +363,7 @@
         <parameter type="gint *" name="year" annotation="out caller-allocates, optional" comment="Out parameter for the 'year' part of the date."/>
         <parameter type="gint *" name="month" annotation="out caller-allocates, optional" comment="Out parameter for the 'month' part of the date."/>
         <parameter type="gint *" name="day" annotation="out caller-allocates, optional" comment="Out parameter for the 'day' part of the date."/>
-        <comment xml:space="preserve">Get the year/month/date parts of the @timetype in one call.</comment>
+        <comment xml:space="preserve">Get the year/month/date parts of @timetype in one call.</comment>
         <custom>    icaltimetype *itt;
     g_return_if_fail(timetype != NULL);
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
@@ -380,7 +380,7 @@
         <parameter type="gint" name="year" comment="The 'year' part of the date." />
         <parameter type="gint" name="month" comment="The 'month' part of the date." />
         <parameter type="gint" name="day" comment="The 'day' part of the date." />
-        <comment xml:space="preserve">Set the year/month/date parts of the @timetype in one call. This doesn't verify validity of the given date.</comment>
+        <comment xml:space="preserve">Set the year/month/date parts of @timetype in one call. This doesn't verify validity of the given date.</comment>
         <custom>    icaltimetype *itt;
     g_return_if_fail(timetype != NULL);
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
@@ -394,7 +394,7 @@
         <parameter type="gint *" name="hour" annotation="out caller-allocates, optional" comment="Out parameter for the 'hour' part of the time."/>
         <parameter type="gint *" name="minute" annotation="out caller-allocates, optional" comment="Out parameter for the 'minute' part of the time."/>
         <parameter type="gint *" name="second" annotation="out caller-allocates, optional" comment="Out parameter for the 'second' part of the time."/>
-        <comment xml:space="preserve">Get the hour/minute/second parts of the @timetype in one call.</comment>
+        <comment xml:space="preserve">Get the hour/minute/second parts of @timetype in one call.</comment>
         <custom>    icaltimetype *itt;
     g_return_if_fail(timetype != NULL);
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
@@ -411,7 +411,7 @@
         <parameter type="gint" name="hour" comment="The 'hour' part of the time." />
         <parameter type="gint" name="minute" comment="The 'minute' part of the time." />
         <parameter type="gint" name="second" comment="The 'second' part of the time." />
-        <comment xml:space="preserve">Set the hour/minute/second parts of the @timetype in one call. This doesn't verify validity of the given time.</comment>
+        <comment xml:space="preserve">Set the hour/minute/second parts of @timetype in one call. This doesn't verify validity of the given time.</comment>
         <custom>    icaltimetype *itt;
     g_return_if_fail(timetype != NULL);
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
