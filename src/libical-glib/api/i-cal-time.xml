@@ -166,7 +166,7 @@
         <parameter type="const gint" name="hours" comment="difference of hours adjusted"/>
         <parameter type="const gint" name="minutes" comment="difference of minutes adjusted"/>
         <parameter type="const gint" name="seconds" comment="difference of seconds adjusted"/>
-        <comment xml:space="preserve">Add or subtract a number of days, hours, minutes and seconds from an icaltimetype.</comment>
+        <comment xml:space="preserve">Add or subtract a number of days, hours, minutes and seconds from the @timetype.</comment>
     </method>
     <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">
         <parameter type="const ICalTime *" name="t" annotation="in, transfer none" comment="The #ICalTime to be normalized"/>
