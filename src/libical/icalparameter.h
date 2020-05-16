@@ -270,7 +270,7 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter *paramete
  * @return 1 if the object is an icalparameter, 0 otherwise.
  * @note This function expects to be given an object originating from
  *  libical - if this function is passed anything that is not from
- *  libical, it's behavior is undefined.
+ *  libical, its behavior is undefined.
  *
  * @b Error handling
  * When given a `NULL` object, it returns 0.

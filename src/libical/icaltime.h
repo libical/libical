@@ -184,7 +184,7 @@ LIBICAL_ICAL_EXPORT int icaltime_start_doy_week(const struct icaltimetype t, int
 /** Return the week number for the week the given time is within */
 LIBICAL_ICAL_EXPORT int icaltime_week_number(const struct icaltimetype t);
 
-/** Return true of the time is null. */
+/** Return true if the time is null. */
 LIBICAL_ICAL_EXPORT int icaltime_is_null_time(const struct icaltimetype t);
 
 /** Returns false if the time is clearly invalid, but is not null. This

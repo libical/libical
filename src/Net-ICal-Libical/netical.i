@@ -221,7 +221,7 @@ struct icaltimetype icaltime_as_zone(struct icaltimetype tt,
 /* Return a null time, which indicates no time has been set. This time represent the beginning of the epoch */
 struct icaltimetype icaltime_null_time(void);
 
-/* Return true of the time is null. */
+/* Return true if the time is null. */
 int icaltime_is_null_time(struct icaltimetype t);
 
 /* Returns false if the time is clearly invalid, but is not null. This

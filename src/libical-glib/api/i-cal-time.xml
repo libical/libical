@@ -122,12 +122,12 @@
     <method name="i_cal_time_is_null_time" corresponds="icaltime_is_null_time" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
         <returns type="gboolean" comment="Whether @tt is null_time. 1 if yes, 0 if not." />
-        <comment xml:space="preserve">Return true of the time is null.</comment>
+        <comment xml:space="preserve">Return true if the time is null.</comment>
     </method>
     <method name="i_cal_time_is_valid_time" corresponds="icaltime_is_valid_time" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
         <returns type="gboolean" comment="Whether @tt is null_time. 1 if yes, 0 if not." />
-        <comment xml:space="preserve">Return true of the time is null.</comment>
+        <comment xml:space="preserve">Return true if the time is null.</comment>
     </method>
     <method name="i_cal_time_is_date" corresponds="icaltime_is_date" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
