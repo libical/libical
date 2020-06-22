@@ -448,6 +448,13 @@ void test_parameters()
 
     icalparameter_free(p);
 
+    p = icalparameter_new_cn("");
+
+    str_is("icalparameter_new_cn()", icalparameter_get_cn(p), "");
+	str_is("icalparameter_as_ical_string()", icalparameter_as_ical_string(p), "CN=\"\"");
+
+    icalparameter_free(p);
+
     p = icalparameter_new_from_string("PARTSTAT=ACCEPTED");
     ok("PARTSTAT_PARAMETER", (icalparameter_isa(p) == ICAL_PARTSTAT_PARAMETER));
     ok("PARTSTAT_ACCEPTED", (icalparameter_get_partstat(p) == ICAL_PARTSTAT_ACCEPTED));
@@ -3762,6 +3769,34 @@ void test_value_parameter()
     icalcomponent_free(c);
 }
 
+void test_empty_parameter()
+{
+    icalcomponent *c;
+    icalproperty *p;
+    icalparameter *param;
+
+    static const char test_icalcomp_str[] =
+        "BEGIN:VEVENT\n"
+        "ATTENDEE;CN=\"\";RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com\n"
+        "END:VEVENT\n";
+
+    c = icalparser_parse_string((char *)test_icalcomp_str);
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+        exit(EXIT_FAILURE);
+    }
+
+    if (VERBOSE)
+        printf("%s", icalcomponent_as_ical_string(c));
+
+    p = icalcomponent_get_first_property(c, ICAL_ATTENDEE_PROPERTY);
+    param = icalproperty_get_first_parameter(p, ICAL_CN_PARAMETER);
+
+    ok("icalparameter_get_cn()", (0 == strcmp("", icalparameter_get_cn(param))));
+
+    icalcomponent_free(c);
+}
+
 void test_x_parameter()
 {
     icalcomponent *c;
@@ -4610,6 +4645,7 @@ int main(int argc, char *argv[])
     test_run("Test property parser", test_property_parse, do_test, do_header);
     test_run("Test Action", test_action, do_test, do_header);
     test_run("Test Value Parameter", test_value_parameter, do_test, do_header);
+    test_run("Test Empty Parameter", test_empty_parameter, do_test, do_header);
     test_run("Test X property", test_x_property, do_test, do_header);
     test_run("Test X parameter", test_x_parameter, do_test, do_header);
     test_run("Test request status", test_requeststat, do_test, do_header);
