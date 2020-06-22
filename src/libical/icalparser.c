@@ -274,7 +274,7 @@ static int parser_get_param_name_stack(char *line, char *name, size_t name_lengt
         /* Dequote the value */
         next++;
 
-        end_quote = parser_get_next_char('"', next, 0);
+        end_quote = (*next == '"') ? next : parser_get_next_char('"', next, 0);
 
         if (end_quote == 0) {
             return 0;
@@ -321,7 +321,7 @@ static char *parser_get_param_name_heap(char *line, char **end)
     *end = next + 1;
     if (**end == '"') {
         *end = *end + 1;
-        next = parser_get_next_char('"', *end, 0);
+        next = (**end == '"') ? *end : parser_get_next_char('"', *end, 0);
         if (next == 0) {
             free(str);
             *end = NULL;

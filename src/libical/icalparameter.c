@@ -225,7 +225,7 @@ static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
     const char *p;
 
     /* Encapsulate the property in quotes if necessary */
-    if (strpbrk(value, ";:,") != 0) {
+    if (!*value || strpbrk(value, ";:,") != 0) {
         icalmemory_append_char(buf, buf_ptr, buf_size, '"');
         qm = 1;
     }
