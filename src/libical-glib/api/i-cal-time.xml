@@ -149,14 +149,14 @@
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">like i_cal_time_compare, but only use the date parts.</comment>
+        <comment xml:space="preserve">like i_cal_time_compare(), but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_compare_date_only_tz" corresponds="icaltime_compare_date_only_tz" since="1.0">
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
 	<parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">like i_cal_time_compare_tz, but only use the date parts.</comment>
+        <comment xml:space="preserve">like i_cal_time_compare_tz(), but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_adjust" corresponds="icaltime_adjust" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime to be set"/>
@@ -187,7 +187,7 @@
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be converted"/>
         <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The converted #ICalTime" />
-        <comment xml:space="preserve">Convert @tt to @zone and return new %ICalTime object.</comment>
+        <comment xml:space="preserve">Convert @tt to @zone and return new #ICalTime object.</comment>
     </method>
     <method name="i_cal_time_convert_to_zone_inplace" corresponds="CUSTOM" since="3.0.5">
         <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
