@@ -25,38 +25,38 @@
         <comment xml:space="preserve">Deep clone a #ICalParameter</comment>
     </method>
     <method name="i_cal_parameter_new_from_string" corresponds="icalparameter_new_from_string" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="value" annotation="in, transfer none" comment="The string from which the #ICalParameter is created."/>
+        <parameter type="const gchar *" name="value" annotation="in, transfer none" comment="The string from which the #ICalParameter is created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created $ICalParameter with the properties specified in the @value." />
         <comment xml:space="preserve">Creates a #ICalParameter from a string of form "PARAMNAME=VALUE".</comment>
     </method>
     <method name="i_cal_parameter_new_from_value_string" corresponds="icalparameter_new_from_value_string" kind="constructor" since="1.0">
-        <parameter type="ICalParameterKind" name="kind" comment="The kind of #ICalParameter to be created."/>
-        <parameter type="const gchar *" name="value" comment="The string from which #ICalParameter to be created."/>
+        <parameter type="ICalParameterKind" name="kind" comment="The kind of #ICalParameter to be created"/>
+        <parameter type="const gchar *" name="value" comment="The string from which #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
         <comment xml:space="preserve">Creates a new #ICalParameter from just the value, the part after the "="</comment>
     </method>
     <method name="i_cal_parameter_free" corresponds="icalparameter_free" annotation="skip" kind="destructor" since="1.0">
-        <parameter type="ICalParameter *" name="parameter" annotation="in" comment="The #ICalParameter to be freeed."/>
+        <parameter type="ICalParameter *" name="parameter" annotation="in" comment="The #ICalParameter to be freeed"/>
         <comment xml:space="preserve">Frees the native part of the ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_as_ical_string" corresponds="icalparameter_as_ical_string_r" kind="others" since="1.0">
-        <parameter type="ICalParameter *" name="parameter" annotation="in" comment="The #ICalParameter to be converted."/>
+        <parameter type="ICalParameter *" name="parameter" annotation="in" comment="The #ICalParameter to be converted"/>
         <returns type="gchar *" annotation="transfer full" comment="The string representation of the @parameter." />
         <comment xml:space="preserve">Converts an #ICalParameter to the string representation.</comment>
     </method>
     <method name="i_cal_parameter_isa" corresponds="icalparameter_isa" kind="others" since="1.0">
-        <parameter type="ICalParameter *" name="parameter" comment="The #ICalParameter to be determined for the type."/>
+        <parameter type="ICalParameter *" name="parameter" comment="The #ICalParameter to be determined for the type"/>
         <returns type="ICalParameterKind" comment="The type of the @parameter." />
         <comment xml:space="preserve">Checks the type of a #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_isa_parameter" corresponds="icalparameter_isa_parameter" kind="others" since="1.0">
-        <parameter type="ICalParameter *" name="param" annotation="in" comment="The #ICalParameter to be checked."/>
+        <parameter type="ICalParameter *" name="param" annotation="in" comment="The #ICalParameter to be checked"/>
         <returns type="gint" comment="1 if the native part is of type icalparameter, 0 if not." />
         <comment xml:space="preserve">Checks whether the native part of the #ICalParameter is of type icalparameter.</comment>
     </method>
     <method name="i_cal_parameter_set_xname" corresponds="icalparameter_set_xname" kind="set" since="1.0">
-        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter of which the xname to be set."/>
-        <parameter type="const gchar *" name="v" comment="The name to be set into the @param."/>
+        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter of which the xname to be set"/>
+        <parameter type="const gchar *" name="v" comment="The name to be set into the @param"/>
         <comment xml:space="preserve">Sets the xname property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_get_xname" corresponds="icalparameter_get_xname" kind="get" since="1.0">
@@ -65,8 +65,8 @@
         <comment xml:space="preserve">Gets the xname property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_set_xvalue" corresponds="icalparameter_set_xvalue" kind="set" since="1.0">
-        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter of which the xvalue to be set."/>
-        <parameter type="const gchar *" name="v" comment="The value to be set into the @param."/>
+        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter of which the xvalue to be set"/>
+        <parameter type="const gchar *" name="v" comment="The value to be set into the @param"/>
         <comment xml:space="preserve">Sets the xvalue property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_get_xvalue" corresponds="icalparameter_get_xvalue" kind="get" since="1.0">
@@ -75,8 +75,8 @@
         <comment xml:space="preserve">Gets the xvalue property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_set_iana_name" corresponds="icalparameter_set_iana_name" kind="set" since="1.0">
-        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter of which the iana_name to be set."/>
-        <parameter type="const gchar *" name="v" comment="The name to be set into the @param."/>
+        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter of which the iana_name to be set"/>
+        <parameter type="const gchar *" name="v" comment="The name to be set into the @param"/>
         <comment xml:space="preserve">Sets the iana_name property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_get_iana_name" corresponds="icalparameter_get_iana_name" kind="get" since="1.0">
@@ -85,8 +85,8 @@
         <comment xml:space="preserve">Gets the iana_name property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_set_iana_value" corresponds="icalparameter_set_iana_value" kind="set" since="1.0">
-        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter of which the iana_value to be set."/>
-        <parameter type="const gchar *" name="v" comment="The value to be set into the @param."/>
+        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter of which the iana_value to be set"/>
+        <parameter type="const gchar *" name="v" comment="The value to be set into the @param"/>
         <comment xml:space="preserve">Sets the iana_value property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_get_iana_value" corresponds="icalparameter_get_iana_value" kind="get" since="1.0">

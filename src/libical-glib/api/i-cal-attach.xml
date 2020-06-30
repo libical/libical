@@ -21,7 +21,7 @@
     </method>
     <method name="i_cal_attach_new_from_data" corresponds="CUSTOM" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="data" comment="The data used to create the #ICalAttach"/>
-        <parameter type="GFunc" name="free_fn" translator="(icalattach_free_fn_t)" annotation="scope call, allow-none" comment="The function used to free the data when the create #ICalAttach is detroyed."/>
+        <parameter type="GFunc" name="free_fn" translator="(icalattach_free_fn_t)" annotation="scope call, allow-none" comment="The function used to free the data when the create #ICalAttach is detroyed"/>
         <parameter type="void *" name="free_fn_data" annotation="allow-none" comment="The userdata used for the free function @free_fn"/>
         <returns type="ICalAttach *" annotation="transfer full" comment="The newly created #ICalAttach" />
         <comment xml:space="preserve">Creates a new #ICalAttach from the data.</comment>

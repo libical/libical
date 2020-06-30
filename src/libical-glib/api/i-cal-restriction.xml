@@ -32,7 +32,7 @@
         <comment xml:space="preserve">Compares the kind of restriction and the count to determine whether it is valid.</comment>
     </method>
     <method name="i_cal_restriction_check" corresponds="icalrestriction_check" since="1.0">
-        <parameter type="ICalComponent *" name="comp" comment="The component to be checked."/>
+        <parameter type="ICalComponent *" name="comp" comment="The component to be checked"/>
         <returns type="gint" comment="Whether the @comp is valid."/>
         <comment xml:space="preserve">Checks whether the #ICalComponent is valid.</comment>
     </method>

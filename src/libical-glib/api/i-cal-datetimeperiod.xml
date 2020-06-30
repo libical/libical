@@ -36,7 +36,7 @@
     </method>
     <method name="i_cal_datetimeperiod_set_time" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalDatetimeperiod *" name="dtp" comment="The #ICalDatetimeperiod to be set"/>
-        <parameter type="ICalTime *" name="time" comment="The time attribute of @dtp."/>
+        <parameter type="ICalTime *" name="time" comment="The time attribute of @dtp"/>
         <comment>Sets the time attribute of #ICalDatetimeperiod.</comment>
         <custom>	g_return_if_fail (dtp != NULL &amp;&amp; I_CAL_IS_DATETIMEPERIOD (dtp));
 	g_return_if_fail (time != NULL &amp;&amp; I_CAL_IS_TIME(time));
@@ -51,7 +51,7 @@
     </method>
     <method name="i_cal_datetimeperiod_set_period" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalDatetimeperiod *" name="dtp" comment="The #ICalDatetimeperiod to be set"/>
-        <parameter type="ICalPeriod *" name="period" comment="The period attribute of @dtp."/>
+        <parameter type="ICalPeriod *" name="period" comment="The period attribute of @dtp"/>
         <comment>Sets the period attribute of #ICalDatetimeperiod.</comment>
         <custom>	g_return_if_fail (dtp != NULL &amp;&amp; I_CAL_IS_DATETIMEPERIOD (dtp));
 	g_return_if_fail (period != NULL &amp;&amp; I_CAL_IS_PERIOD(period));

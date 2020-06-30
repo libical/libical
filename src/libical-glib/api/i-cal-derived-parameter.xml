@@ -297,7 +297,7 @@
     </method>
     <method name="i_cal_parameter_set_cutype" corresponds="icalparameter_set_cutype" kind="set" since="1.0">
         <parameter type="ICalParameter *" name="value" comment="The #ICalParameter to be set"/>
-        <parameter type="ICalParameterCutype" name="v" comment="The @ICalParameterCutype used to set @value."/>
+        <parameter type="ICalParameterCutype" name="v" comment="The @ICalParameterCutype used to set @value"/>
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_new_delegatedfrom" corresponds="icalparameter_new_delegatedfrom" kind="constructor" since="1.0">
