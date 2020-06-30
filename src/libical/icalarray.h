@@ -166,8 +166,8 @@ LIBICAL_ICAL_EXPORT void icalarray_append(icalarray *array, const void *element)
 
 /**
  * @brief Removes a given element from an array.
- * @brief array The array from which to remove the element
- * @brief position The position of the element to remove
+ * @param array The array from which to remove the element
+ * @param position The position of the element to remove
  *
  * Removes the element at the given position from the array.
  *
