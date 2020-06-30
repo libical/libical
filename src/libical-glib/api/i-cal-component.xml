@@ -467,7 +467,7 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
         <parameter type="ICalTime *" name="end" comment="Ignore timespans after this"/>
         <parameter type="ICalComponentForeachRecurrenceFunc" name="callback" annotation="scope call" comment="Function called for each timespan within the range"/>
         <parameter type="gpointer" name="user_data" annotation="nullable, closure callback" comment="The user data for callback function"/>
-        <comment>Cycles through all recurrances of an event. This function will call the specified callback function for once for the base value of DTSTART, and foreach recurring date/time value. It will filter out events that are specified as an EXDATE or an EXRULE.</comment>
+        <comment>Cycles through all recurrences of an event. This function will call the specified callback function for once for the base value of DTSTART, and foreach recurring date/time value. It will filter out events that are specified as an EXDATE or an EXRULE.</comment>
         <custom>    struct ForeachRecurrenceData data;
     icalcomponent *native_comp;
     struct icaltimetype *native_start, *native_end;
@@ -501,7 +501,7 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
         <parameter type="ICalTime *" name="dtstart" native_op="POINTER" comment="The base dtstart value for this component"/>
         <parameter type="ICalTime *" name="recurtime" native_op="POINTER" comment="The time to test against"/>
         <returns type="gboolean" comment="1 if yes, 0 if not."/>
-        <comment xml:space="preserve">Decides if this recurrance is acceptable. This function decides if a specific recurrence value is excluded by EXRULE or EXDATE properties.</comment>
+        <comment xml:space="preserve">Decides if this recurrence is acceptable. This function decides if a specific recurrence value is excluded by EXRULE or EXDATE properties.</comment>
     </method>
     <method name="i_cal_component_new_vcalendar" corresponds="icalcomponent_new_vcalendar" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>

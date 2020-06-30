@@ -215,7 +215,7 @@ LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_is_leap(short month);
 
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_month(short month);
 
-/** Recurrance rule parser */
+/** Recurrence rule parser */
 
 /** Convert between strings and recurrencetype structures. */
 LIBICAL_ICAL_EXPORT struct icalrecurrencetype icalrecurrencetype_from_string(const char *str);

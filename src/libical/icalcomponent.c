@@ -710,7 +710,7 @@ or empty VCALENDAR component"); */
 }
 
 /**
- * Decide if this recurrance is acceptable
+ * Decide if this recurrence is acceptable
  *
  * @param comp       A valid icalcomponent.
  * @param dtstart    The base dtstart value for this component.
