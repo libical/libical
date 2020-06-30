@@ -291,7 +291,7 @@ time_t icaltime_as_timet(const struct icaltimetype tt)
     return t;
 }
 
-/**     Return the time as seconds past the UNIX epoch, using the
+/**     Returns the time as seconds past the UNIX epoch, using the
  *      given timezone.
  *
  *      This convenience method combines a call to icaltime_convert_to_zone()
@@ -708,7 +708,7 @@ int icaltime_is_utc(const struct icaltimetype t)
 }
 
 /**
- *      Return true if the time is null.
+ *      Returns true if the time is null.
  */
 int icaltime_is_null_time(const struct icaltimetype t)
 {
@@ -720,7 +720,7 @@ int icaltime_is_null_time(const struct icaltimetype t)
 }
 
 /**
- *      Return -1, 0, or 1 to indicate that a<b, a==b, or a>b.
+ *      Returns -1, 0, or 1 to indicate that a<b, a==b, or a>b.
  *      This calls icaltime_compare function after converting them to the utc
  *      timezone.
  */
@@ -946,9 +946,9 @@ void icaltime_adjust(struct icaltimetype *tt,
     tt->day = day;
 }
 
-/**     @brief Convert time to a given timezone
+/**     @brief Converts time to a given timezone
  *
- *      Convert a time from its native timezone to a given timezone.
+ *      Converts a time from its native timezone to a given timezone.
  *
  *      If tt is a date, the returned time is an exact
  *      copy of the input. If it's a floating time, the returned object
@@ -999,9 +999,9 @@ const char *icaltime_get_tzid(const struct icaltimetype t)
     }
 }
 
-/**     @brief Set the timezone
+/**     @brief Sets the timezone
  *
- *      Force the icaltime to be interpreted relative to another timezone.
+ *      Forces the icaltime to be interpreted relative to another timezone.
  *      If you need to do timezone conversion, applying offset adjustments,
  *      then you should use icaltime_convert_to_zone instead.
  */

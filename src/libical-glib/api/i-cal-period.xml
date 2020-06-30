@@ -17,7 +17,7 @@
 	<method name="i_cal_period_get_start" corresponds="CUSTOM" kind="get" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried."/>
 		<returns type="ICalTime *" annotation="transfer full" comment="The start of @period."/>
-		<comment>Get the start time from an #ICalPeriod.</comment>
+		<comment>Gets the start time from an #ICalPeriod.</comment>
 		<custom>	g_return_val_if_fail (period != NULL, NULL);
 	g_return_val_if_fail (I_CAL_IS_PERIOD (period), NULL);
 
@@ -26,7 +26,7 @@
 	<method name="i_cal_period_set_start" corresponds="CUSTOM" kind="set" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set."/>
 		<parameter type="ICalTime *" name="start" comment="The start of @period."/>
-		<comment>Set the start time of an #ICalPeriod.</comment>
+		<comment>Sets the start time of an #ICalPeriod.</comment>
 		<custom>	struct icalperiodtype *periodtype;
 	g_return_if_fail (period != NULL);
 	g_return_if_fail (I_CAL_IS_PERIOD (period));
@@ -39,7 +39,7 @@
 	<method name="i_cal_period_get_end" corresponds="CUSTOM" kind="get" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried."/>
 		<returns type="ICalTime *" annotation="transfer full" comment="The end of @period."/>
-		<comment>Get the end time from an #ICalPeriod.</comment>
+		<comment>Gets the end time from an #ICalPeriod.</comment>
 		<custom>	g_return_val_if_fail (period != NULL, NULL);
 	g_return_val_if_fail (I_CAL_IS_PERIOD (period), NULL);
 
@@ -48,7 +48,7 @@
 	<method name="i_cal_period_set_end" corresponds="CUSTOM" kind="set" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set."/>
 		<parameter type="ICalTime *" name="end" comment="The end of @period."/>
-		<comment>Set the end time of an #ICalPeriod.</comment>
+		<comment>Sets the end time of an #ICalPeriod.</comment>
 		<custom>	struct icalperiodtype *periodtype;
 	g_return_if_fail (period != NULL);
 	g_return_if_fail (I_CAL_IS_PERIOD (period));
@@ -61,7 +61,7 @@
 	<method name="i_cal_period_get_duration" corresponds="CUSTOM" kind="get" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried."/>
 		<returns type="ICalDuration *" annotation="transfer full" comment="The duration of @period."/>
-		<comment>Get the duration from an #ICalPeriod.</comment>
+		<comment>Gets the duration from an #ICalPeriod.</comment>
 		<custom>	g_return_val_if_fail (period != NULL, NULL);
 	g_return_val_if_fail (I_CAL_IS_PERIOD (period), NULL);
 
@@ -70,7 +70,7 @@
 	<method name="i_cal_period_set_duration" corresponds="CUSTOM" kind="set" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set."/>
 		<parameter type="ICalDuration *" name="duration" comment="The duration of @period."/>
-		<comment>Set the duration of an #ICalPeriod.</comment>
+		<comment>Sets the duration of an #ICalPeriod.</comment>
 		<custom>	struct icalperiodtype *periodtype;
 	g_return_if_fail (period != NULL);
 	g_return_if_fail (I_CAL_IS_PERIOD (period));
@@ -83,7 +83,7 @@
     <method name="i_cal_period_new_from_string" corresponds="icalperiodtype_from_string" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="str" comment="The string used to create the #ICalPeriod"/>
         <returns type="ICalPeriod *" annotation="transfer full" comment="The newly created #ICalPeriod"/>
-        <comment xml:space="preserve">Create a #ICalPeriod from a string.</comment>
+        <comment xml:space="preserve">Creates a #ICalPeriod from a string.</comment>
     </method>
     <method name="i_cal_period_as_ical_string" corresponds="icalperiodtype_as_ical_string_r" since="1.0">
         <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be translated."/>
@@ -92,7 +92,7 @@
     </method>
     <method name="i_cal_period_new_null_period" corresponds="icalperiodtype_null_period" kind="constructor" since="1.0">
         <returns type="ICalPeriod *" annotation="transfer full" comment="The newly created default #ICalPeriod"/>
-        <comment xml:space="preserve">Create a default #ICalPeriod.</comment>
+        <comment xml:space="preserve">Creates a default #ICalPeriod.</comment>
     </method>
     <method name="i_cal_period_is_null_period" corresponds="icalperiodtype_is_null_period" since="1.0">
         <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be checked."/>

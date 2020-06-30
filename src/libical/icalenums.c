@@ -77,7 +77,7 @@ static const struct
     {ICAL_UNKNOWN_STATUS, 0, 0, "Error: Unknown request status"}
 };
 
-/*** @brief Return the descriptive text for a request status
+/*** @brief Returns the descriptive text for a request status
  */
 const char *icalenum_reqstat_desc(icalrequeststatus stat)
 {

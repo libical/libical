@@ -207,7 +207,7 @@ ICalProperty *VComponent::get_next_property(const icalproperty_kind &kind)
 }
 
 /* Working with components */
-/* Return the first VEVENT, VTODO or VJOURNAL sub-component if it is one of those types */
+/* Returns the first VEVENT, VTODO or VJOURNAL sub-component if it is one of those types */
 VComponent *VComponent::get_inner()
 {
     return new VComponent(icalcomponent_get_inner(imp));

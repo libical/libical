@@ -17,7 +17,7 @@
 	<method name="i_cal_array_size" corresponds="CUSTOM" kind="other" since="1.0">
 		<parameter type="ICalArray *" name="array" comment="The #ICalArray"/>
 		<returns type="gint" comment="The size of current array."/>
-		<comment>Get the size of the array.</comment>
+		<comment>Gets the size of the array.</comment>
 		<custom>	icalarray *native;
 	gint ret;
 	g_return_val_if_fail (array != NULL &amp;&amp; I_CAL_IS_ARRAY (array), -1);
@@ -30,12 +30,12 @@
         <parameter type="gint" name="element_size" comment="The size of the element of the array"/>
         <parameter type="gint" name="increment_size" comment="The incremental size when the array is full"/>
         <returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="The newly create #ICalArray with the properties set by @element_size and @increment_size"/>
-        <comment xml:space="preserve">Create a #ICalArray with the element size to be @element_size and increment size to be @increment_size</comment>
+        <comment xml:space="preserve">Creates a #ICalArray with the element size to be @element_size and increment size to be @increment_size</comment>
     </method> -->
     <method name="i_cal_array_copy" corresponds="icalarray_copy" kind="clone" since="1.0">
         <parameter type="ICalArray *" name="array" annotation="in" comment="The #ICalArray to be cloned."/>
         <returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="The newly cloned #ICalArray with the same value as the @array"/>
-        <comment xml:space="preserve">Create a deep copy of #ICalArray with the same properties as the @array</comment>
+        <comment xml:space="preserve">Creates a deep copy of #ICalArray with the same properties as the @array</comment>
     </method>
     <method name="i_cal_array_free" corresponds="icalarray_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalArray *" name="array" comment="The #ICalArray to be freed."/>
@@ -55,7 +55,7 @@
         <parameter type="ICalArray *" name="array" comment="The #ICalArray to be queried."/>
         <parameter type="gint" name="position" comment="The position the target element is located"/>
         <returns type="GObject *" annotation="transfer none, allow-none" comment="The element located at the @position in the @array"/>
-        <comment xml:space="preserve">Get the element located in the @position in the @array. NULL if position if out of bound</comment>
+        <comment xml:space="preserve">Gets the element located in the @position in the @array. NULL if position if out of bound</comment>
     </method>
     <method name="i_cal_array_sort" corresponds="CUSTOM" annotation="skip" kind="others" since="1.0">
         <parameter type="ICalArray *" name="array" comment="The #ICalArray to be sorted."/>

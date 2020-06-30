@@ -1464,7 +1464,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
     return 1;
 }
 
-/* Set Gregorian date and convert to RSCALE */
+/* Sets Gregorian date and convert to RSCALE */
 static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -1759,7 +1759,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
     return 1;
 }
 
-/* Set Gregorian date */
+/* Sets Gregorian date */
 static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
 {
     impl->last.year = date.year;

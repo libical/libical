@@ -131,7 +131,7 @@ LIBICAL_ICALSS_EXPORT int icalset_count_components(icalset *set, icalcomponent_k
     that pass the gauge. */
 LIBICAL_ICALSS_EXPORT icalerrorenum icalset_select(icalset *set, icalgauge *gauge);
 
-/** Get a component by uid */
+/** Gets a component by uid */
 LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch(icalset *set, const char *uid);
 
 LIBICAL_ICALSS_EXPORT int icalset_has_uid(icalset *set, const char *uid);

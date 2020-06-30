@@ -678,7 +678,7 @@ int icalbdbset_get(DB *dbp, DB_TXN *tid, DBT *key, DBT *data, u_int32_t flags)
     return dbp->get(dbp, tid, key, data, flags);
 }
 
-/** Return the path of the database file **/
+/** Returns the path of the database file **/
 
 const char *icalbdbset_path(icalset *set)
 {
@@ -982,7 +982,7 @@ int icalbdbset_count_components(icalset *set, icalcomponent_kind kind)
     return icalcomponent_count_components(bset->cluster, kind);
 }
 
-/** Set the gauge **/
+/** Sets the gauge **/
 
 icalerrorenum icalbdbset_select(icalset *set, icalgauge *gauge)
 {

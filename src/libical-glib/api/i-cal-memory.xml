@@ -17,7 +17,7 @@
     <method name="i_cal_memory_tmp_buffer" corresponds="icalmemory_tmp_buffer" since="1.0">
         <parameter type="size_t" name="size" comment="The size of the buffer to be created."/>
         <returns type="void *" annotation="transfer full" comment="The newly created buffer"/>
-        <comment xml:space="preserve">Create a buffer with target size.</comment>
+        <comment xml:space="preserve">Creates a buffer with target size.</comment>
     </method>
     <method name="i_cal_memory_tmp_copy" corresponds="icalmemory_tmp_copy" since="1.0">
         <parameter type="const gchar *" name="str" comment="The string to be copied"/>
@@ -34,7 +34,7 @@
     <method name="i_cal_memory_new_buffer" corresponds="icalmemory_new_buffer" since="1.0">
         <parameter type="size_t" name="size" comment="The size of the new buffer to be created."/>
         <returns type="void *" annotation="transfer full" comment="The newly created buffer with the target size."/>
-        <comment xml:space="preserve">Create a new buffer with target size. The caller should deallocate it when necessary.</comment>
+        <comment xml:space="preserve">Creates a new buffer with target size. The caller should deallocate it when necessary.</comment>
     </method>
     <method name="i_cal_memory_resize_buffer" corresponds="icalmemory_resize_buffer" since="1.0">
         <parameter type="void *" name="buf" annotation="transfer full" comment="The buffer needs to be resized."/>

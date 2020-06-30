@@ -625,7 +625,7 @@ char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *nam
     return str;
 }
 
-/** @brief Remove all parameters with the specified kind.
+/** @brief Removes all parameters with the specified kind.
  *
  *  @param prop   A valid icalproperty.
  *  @param kind   The kind to remove (ex. ICAL_TZID_PARAMETER)
@@ -652,7 +652,7 @@ void icalproperty_remove_parameter_by_kind(icalproperty *prop, icalparameter_kin
     }
 }
 
-/** @brief Remove all parameters with the specified name.
+/** @brief Removes all parameters with the specified name.
  *
  *  @param prop   A valid icalproperty.
  *  @param name   The name of the parameter to remove
@@ -695,7 +695,7 @@ void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
     }
 }
 
-/** @brief Remove the specified parameter reference from the property.
+/** @brief Removes the specified parameter reference from the property.
  *
  *  @param prop   A valid icalproperty.
  *  @param parameter   A reference to a specific icalparameter.
@@ -1072,7 +1072,7 @@ void icalproperty_normalize(icalproperty *prop)
     prop->parameters = sorted_params;
 }
 
-/**     @brief Get a DATE or DATE-TIME property as an icaltime
+/**     @brief Gets a DATE or DATE-TIME property as an icaltime
  *
  *      If the property is a DATE-TIME with a TZID parameter and a
  *      corresponding VTIMEZONE is present in the component, the

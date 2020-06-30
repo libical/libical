@@ -112,7 +112,7 @@ typedef enum icalerrorenum
 #endif
 
 /**
- * @brief Return the current ::icalerrno value
+ * @brief Returns the current ::icalerrno value
  * @return A pointer to the current ::icalerrno value
  *
  * Yields a pointer to the current ::icalerrno value. This can
@@ -194,7 +194,7 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
 #endif /* __GNU_C__ */
 
 /**
- * @brief Reset icalerrno to ::ICAL_NO_ERROR
+ * @brief Resets icalerrno to ::ICAL_NO_ERROR
  *
  * ### Usage
  * ```c
@@ -227,7 +227,7 @@ typedef enum icalerrorstate
 } icalerrorstate;
 
 /**
- * @brief Find description string for error
+ * @brief Finds description string for error
  * @param e The type of error that occurred
  * @return A string describing the error that occurred
  *
@@ -249,7 +249,7 @@ typedef enum icalerrorstate
 LIBICAL_ICAL_EXPORT const char *icalerror_strerror(icalerrorenum e);
 
 /**
- * @brief Return the description string for the current error in ::icalerrno
+ * @brief Returns the description string for the current error in ::icalerrno
  *
  * @par Error handling
  * If the type of error @a e wasn't found, it returns the description
@@ -282,7 +282,7 @@ LIBICAL_ICAL_EXPORT const char *icalerror_perror(void);
 LIBICAL_ICAL_EXPORT void ical_bt(void);
 
 /**
- * @brief Set the ::icalerrorstate for a given ::icalerrorenum @a error
+ * @brief Sets the ::icalerrorstate for a given ::icalerrorenum @a error
  * @param error The error to change
  * @param state The new error state of the error
  *
@@ -297,14 +297,14 @@ LIBICAL_ICAL_EXPORT void ical_bt(void);
 LIBICAL_ICAL_EXPORT void icalerror_set_error_state(icalerrorenum error, icalerrorstate state);
 
 /**
- * @brief Get the error state (severity) for a given error
+ * @brief Gets the error state (severity) for a given error
  * @param error The error to examine
  * @return Returns the severity of the error
  */
 LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state(icalerrorenum error);
 
 /**
- * @brief Read an error from a string
+ * @brief Reads an error from a string
  * @param str The error name string
  * @return An ::icalerrorenum representing the error
  *
@@ -569,7 +569,7 @@ if (!(test)) { \
 LIBICAL_ICAL_EXPORT icalerrorstate icalerror_supress(const char *error);
 
 /**
- * Assign the given error the given icalerrorstate (severity)
+ * Assigns the given error the given icalerrorstate (severity)
  * @param error The error in question
  * @param es The icalerrorstate (severity) to set it to
  *

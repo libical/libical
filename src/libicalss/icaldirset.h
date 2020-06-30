@@ -42,7 +42,7 @@ LIBICAL_ICALSS_EXPORT void icaldirset_free(icalset *set);
 
 LIBICAL_ICALSS_EXPORT const char *icaldirset_path(icalset *set);
 
-/* Mark the cluster as changed, so it will be written to disk when it
+/* Marks the cluster as changed, so it will be written to disk when it
    is freed. Commit writes to disk immediately*/
 LIBICAL_ICALSS_EXPORT void icaldirset_mark(icalset *set);
 
@@ -54,13 +54,13 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_remove_component(icalset *store,
 
 LIBICAL_ICALSS_EXPORT int icaldirset_count_components(icalset *store, icalcomponent_kind kind);
 
-/* Restrict the component returned by icaldirset_first, _next to those
+/* Restricts the component returned by icaldirset_first, _next to those
    that pass the gauge. _clear removes the gauge. */
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_select(icalset *store, icalgauge *gauge);
 
 LIBICAL_ICALSS_EXPORT void icaldirset_clear(icalset *store);
 
-/* Get a component by uid */
+/* Gets a component by uid */
 LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch(icalset *store,
                                                       icalcomponent_kind kind, const char *uid);
 
@@ -68,12 +68,12 @@ LIBICAL_ICALSS_EXPORT int icaldirset_has_uid(icalset *store, const char *uid);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch_match(icalset *set, icalcomponent *c);
 
-/* Modify components according to the MODIFY method of CAP. Works on
+/* Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_modify(icalset *store,
                                                       icalcomponent *oldc, icalcomponent *newc);
 
-/* Iterate through the components. If a gauge has been defined, these
+/* Iterates through the components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_current_component(icalset *store);

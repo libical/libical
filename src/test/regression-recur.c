@@ -38,7 +38,7 @@ static void sig_alrm(int i)
 
 #endif
 
-/* Get the expected result about the purpose of the property*/
+/* Gets the expected result about the purpose of the property*/
 
 static int get_expected_numevents(icalcomponent *c)
 {

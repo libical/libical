@@ -284,7 +284,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse(icalparser *parser,
 LIBICAL_ICAL_EXPORT void icalparser_set_gen_data(icalparser *parser, void *data);
 
 /**
- * @brief Parse a string and return the parsed ::icalcomponent.
+ * @brief Parses a string and returns the parsed ::icalcomponent.
  * @param str The iCal formatted data to be parsed
  * @return An ::icalcomponent representing the iCalendar
  *
@@ -317,8 +317,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
  ***********************************************************************/
 
 /**
- * @brief Given a line generator function, return a single iCal content line.
- * @return Aa pointer to a single line of data or `NULL` if it reached
+ * @brief Given a line generator function, returns a single iCal content line.
  *  end of file reading from the @a line_gen_func. Note that the pointer
  *  returned is owned by libical and must not be `free()`d by the user.
  * @param parser The parser object to use

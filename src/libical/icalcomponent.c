@@ -849,7 +849,7 @@ static int icalcomponent_is_busy(icalcomponent *comp)
 }
 
 /**
- * @brief cycle through all recurrances of an event
+ * @brief cycles through all recurrances of an event
  *
  * @param comp           A valid VEVENT component
  * @param start          Ignore timespans before this
@@ -1402,7 +1402,7 @@ if (inner == 0) { \
 } \
 prop = icalcomponent_get_first_property(inner, p_kind);
 
-/**     @brief Set DTSTART property to given icaltime
+/**     @brief Sets DTSTART property to given icaltime
  *
  *      This method respects the icaltime type (DATE vs DATE-TIME) and
  *      timezone (or lack thereof).
@@ -1427,7 +1427,7 @@ void icalcomponent_set_dtstart(icalcomponent *comp, struct icaltimetype v)
     }
 }
 
-/**     @brief Get DTSTART property as an icaltime
+/**     @brief Gets DTSTART property as an icaltime
  *
  *      If DTSTART is a DATE-TIME with a timezone parameter and a
  *      corresponding VTIMEZONE is present in the component, the
@@ -2405,7 +2405,7 @@ static int icalcomponent_compare_vtimezones(icalcomponent *vtimezone1, icalcompo
 }
 
 /**
- * @brief set the RELCALID property of a component.
+ * @brief Sets the RELCALID property of a component.
  *
  * @param comp    Valid calendar component.
  * @param v       Relcalid URL value
@@ -2424,7 +2424,7 @@ void icalcomponent_set_relcalid(icalcomponent *comp, const char *v)
 }
 
 /**
- * @brief get the RELCALID property of a component.
+ * @brief Gets the RELCALID property of a component.
  *
  * @param comp    Valid calendar component.
  */
@@ -2451,7 +2451,7 @@ const char *icalcomponent_get_relcalid(icalcomponent *comp)
     return icalproperty_get_relcalid(prop);
 }
 
-/** @brief Return the time a TODO task is DUE.
+/** @brief Returns the time a TODO task is DUE.
  *
  *  @param comp Valid calendar component.
  *

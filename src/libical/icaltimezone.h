@@ -60,7 +60,7 @@ LIBICAL_ICAL_EXPORT void icaltimezone_set_tzid_prefix(const char *new_prefix);
  * @par Accessing timezones.
  */
 
-/** Free any builtin timezone information **/
+/** Frees any builtin timezone information **/
 LIBICAL_ICAL_EXPORT void icaltimezone_free_builtin_timezones(void);
 
 /** Returns the array of builtin icaltimezones. */
@@ -171,10 +171,10 @@ LIBICAL_ICAL_EXPORT void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
  * @par Handling the default location the timezone files
  */
 
-/** Set the directory to look for the zonefiles */
+/** Sets the directory to look for the zonefiles */
 LIBICAL_ICAL_EXPORT void set_zone_directory(const char *path);
 
-/** Free memory dedicated to the zonefile directory */
+/** Frees memory dedicated to the zonefile directory */
 LIBICAL_ICAL_EXPORT void free_zone_directory(void);
 
 LIBICAL_ICAL_EXPORT void icaltimezone_release_zone_tab(void);

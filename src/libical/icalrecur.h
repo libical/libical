@@ -242,10 +242,10 @@ LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurr
 LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_start(icalrecur_iterator *impl,
                                                      struct icaltimetype start);
 
-/** Get the next occurrence from an iterator */
+/** Gets the next occurrence from an iterator */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *);
 
-/** Free the iterator */
+/** Frees the iterator */
 LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator *);
 
 /**

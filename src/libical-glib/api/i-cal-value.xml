@@ -17,7 +17,7 @@
     <method name="i_cal_value_new" corresponds="icalvalue_new" kind="constructor" since="1.0">
         <parameter type="ICalValueKind" name="kind" comment="A #ICalValueKind"/>
         <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-        <comment xml:space="preserve">Create a new #ICalValue with specific kind.</comment>
+        <comment xml:space="preserve">Creates a new #ICalValue with specific kind.</comment>
     </method>
     <method name="i_cal_value_clone" corresponds="icalvalue_new_clone" kind="clone" since="1.0">
         <parameter type="const ICalValue *" name="value" comment="The #ICalValue to be cloned."/>
@@ -28,7 +28,7 @@
         <parameter type="ICalValueKind" name="kind" comment="A #ICalValueKind"/>
         <parameter type="const gchar *" name="str" comment="A string."/>
         <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue based on the @kind and @str."/>
-        <comment xml:space="preserve">Create a new #ICalValue based on the #ICalValueKind and a string.</comment>
+        <comment xml:space="preserve">Creates a new #ICalValue based on the #ICalValueKind and a string.</comment>
     </method>
     <method name="i_cal_value_free" corresponds="icalvalue_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalValue *" name="value" comment="The #ICalValue to be freed."/>
@@ -47,7 +47,7 @@
     <method name="i_cal_value_isa" corresponds="icalvalue_isa" since="1.0">
         <parameter type="const ICalValue *" name="value" comment="A #ICalValue."/>
         <returns type="ICalValueKind" comment="The kind of @value."/>
-        <comment xml:space="preserve">Get the kind of #ICalValue.</comment>
+        <comment xml:space="preserve">Gets the kind of #ICalValue.</comment>
     </method>
     <method name="i_cal_value_isa_value" corresponds="icalvalue_isa_value" since="1.0">
         <parameter type="ICalValue *" name="value" comment="A #ICalValue"/>

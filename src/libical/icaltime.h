@@ -119,11 +119,11 @@ struct icaltimetype
 
 typedef struct icaltimetype icaltimetype;
 
-/** Return a null time, which indicates no time has been set.
+/** Returns a null time, which indicates no time has been set.
     This time represent the beginning of the epoch */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_null_time(void);
 
-/** Return a null date */
+/** Returns a null date */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_null_date(void);
 
 /** Returns the current time in the given timezone, as an icaltimetype. */
@@ -152,11 +152,11 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy,
  */
 LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);
 
-/** Return the time as seconds past the UNIX epoch, using timezones. */
+/** Returns the time as seconds past the UNIX epoch, using timezones. */
 LIBICAL_ICAL_EXPORT time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
                                                        const icaltimezone *zone);
 
-/** Return a string represention of the time, in RFC5545 format. */
+/** Returns a string represention of the time, in RFC5545 format. */
 LIBICAL_ICAL_EXPORT const char *icaltime_as_ical_string(const struct icaltimetype tt);
 
 LIBICAL_ICAL_EXPORT char *icaltime_as_ical_string_r(const struct icaltimetype tt);
@@ -171,20 +171,20 @@ LIBICAL_ICAL_EXPORT const char *icaltime_get_tzid(const struct icaltimetype t);
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_set_timezone(struct icaltimetype *t,
                                                               const icaltimezone *zone);
 
-/** Return the day of the year of the given time */
+/** Returns the day of the year of the given time */
 LIBICAL_ICAL_EXPORT int icaltime_day_of_year(const struct icaltimetype t);
 
-/** Return the day of the week of the given time. Sunday is 1 */
+/** Returns the day of the week of the given time. Sunday is 1 */
 LIBICAL_ICAL_EXPORT int icaltime_day_of_week(const struct icaltimetype t);
 
-/** Return the day of the year for the first day of the week that the
+/** Returns the day of the year for the first day of the week that the
    given time is within. */
 LIBICAL_ICAL_EXPORT int icaltime_start_doy_week(const struct icaltimetype t, int fdow);
 
-/** Return the week number for the week the given time is within */
+/** Returns the week number for the week the given time is within */
 LIBICAL_ICAL_EXPORT int icaltime_week_number(const struct icaltimetype t);
 
-/** Return true if the time is null. */
+/** Returns true if the time is null. */
 LIBICAL_ICAL_EXPORT int icaltime_is_null_time(const struct icaltimetype t);
 
 /** Returns false if the time is clearly invalid, but is not null. This
@@ -198,7 +198,7 @@ LIBICAL_ICAL_EXPORT int icaltime_is_date(const struct icaltimetype t);
 /** @brief Returns true if time is relative to UTC zone */
 LIBICAL_ICAL_EXPORT int icaltime_is_utc(const struct icaltimetype t);
 
-/** Return -1, 0, or 1 to indicate that a is less than b, a equals b, or a is greater than b */
+/** Returns -1, 0, or 1 to indicate that a is less than b, a equals b, or a is greater than b */
 LIBICAL_ICAL_EXPORT int icaltime_compare(const struct icaltimetype a, const struct icaltimetype b);
 
 /** like icaltime_compare, but only use the date parts. */
@@ -223,13 +223,13 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltime
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
                                                                  icaltimezone *zone);
 
-/** Return the number of days in the given month */
+/** Returns the number of days in the given month */
 LIBICAL_ICAL_EXPORT int icaltime_days_in_month(const int month, const int year);
 
-/** Return whether you've specified a leapyear or not. */
+/** Returns whether you've specified a leapyear or not. */
 LIBICAL_ICAL_EXPORT int icaltime_is_leap_year(const int year);
 
-/** Return the number of days in this year */
+/** Returns the number of days in this year */
 LIBICAL_ICAL_EXPORT int icaltime_days_in_year(const int year);
 
 /** @brief calculate an icaltimespan given a start and end time. */

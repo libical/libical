@@ -18,18 +18,18 @@
         <parameter type="ICalRecurrence *" name="rule" comment="The rule applied on the #ICalRecurIterator."/>
         <parameter type="ICalTime *" name="dtstart" comment="The start time of the recurrence."/>
         <returns type="ICalRecurIterator *" annotation="transfer full" comment="The newly created #ICalRecurIterator"/>
-        <comment xml:space="preserve">Create an #ICalRecurIterator.</comment>
+        <comment xml:space="preserve">Creates an #ICalRecurIterator.</comment>
     </method>
     <method name="i_cal_recur_iterator_next" corresponds="icalrecur_iterator_next" since="1.0">
         <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator."/>
         <returns type="ICalTime *" annotation="transfer full" comment="The next occurrence according to this recurrence rule."/>
-        <comment xml:space="preserve">Get the next occurrence from an iterator.</comment>
+        <comment xml:space="preserve">Gets the next occurrence from an iterator.</comment>
     </method>
     <method name="i_cal_recur_iterator_set_start" corresponds="icalrecur_iterator_set_start" since="3.0">
         <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator."/>
         <parameter type="ICalTime *" name="start" comment="The date-time to move the iterator to."/>
         <returns type="gint" comment="1 if succeeded, 0 if failed, like when the recurrence type is unsupported."/>
-        <comment xml:space="preserve">Set the date-time at which the iterator will start, where 'start' is a value between DTSTART and UNTIL.
+        <comment xml:space="preserve">Sets the date-time at which the iterator will start, where 'start' is a value between DTSTART and UNTIL.
 Note: CAN NOT be used with RRULEs that contain COUNT.</comment>
     </method>
     <method name="i_cal_recur_iterator_free" corresponds="icalrecur_iterator_free" annotation="skip" kind="destructor" since="1.0">

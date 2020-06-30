@@ -61,18 +61,18 @@ public:
     /** Destructor */
     ~ICalSpanList();
 
-    /** Return a VFREEBUSY icalcomponent */
+    /** Returns a VFREEBUSY icalcomponent */
     VComponent *get_vfreebusy(const char *organizer, const char *attendee);
 
     ICalSpanList &operator=(const ICalSpanList &);
 
-    /** Return the base data when casting */
+    /** Returns the base data when casting */
     operator  icalspanlist *()
     {
         return data;
     }
 
-    /** Return a vector of the number of events over delta t */
+    /** Returns a vector of the number of events over delta t */
     std::vector < int >as_vector(int delta_t);
 
     /** Dump the spanlist to stdout */

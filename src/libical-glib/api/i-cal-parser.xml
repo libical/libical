@@ -32,7 +32,7 @@
 typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user_data);</declaration>
     <method name="i_cal_parser_new" corresponds="icalparser_new" kind="constructor" since="1.0">
         <returns type="ICalParser *" annotation="transfer full" comment="The newly created #ICalParser."/>
-        <comment xml:space="preserve">Create a default #ICalParser.</comment>
+        <comment xml:space="preserve">Creates a default #ICalParser.</comment>
     </method>
     <method name="i_cal_parser_add_line" corresponds="icalparser_add_line" since="1.0">
         <parameter type="ICalParser *" name="parser" annotation="in, transfer full" comment="The #ICalParser used to parse the string into the #ICalComponent."/>
@@ -48,7 +48,7 @@ typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user
     <method name="i_cal_parser_get_state" corresponds="icalparser_get_state" kind="get" since="1.0">
         <parameter type="ICalParser *" name="parser" comment="The #ICalParser to be queried."/>
         <returns type="ICalParserState" comment="The parser state stored in the #ICalParser."/>
-        <comment xml:space="preserve">Get the state of the target parser.</comment>
+        <comment xml:space="preserve">Gets the state of the target parser.</comment>
     </method>
     <method name="i_cal_parser_free" corresponds="icalparser_free" kind="destructor" since="1.0">
         <parameter type="ICalParser *" name="parser" comment="The #ICalParser to be freed."/>

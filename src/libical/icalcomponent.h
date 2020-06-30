@@ -146,13 +146,13 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter * i);
 /* Working with embedded error properties */
 LIBICAL_ICAL_EXPORT int icalcomponent_check_restrictions(icalcomponent *comp);
 
-/** Count embedded errors. */
+/** Counts embedded errors. */
 LIBICAL_ICAL_EXPORT int icalcomponent_count_errors(icalcomponent *component);
 
-/** Remove all X-LIC-ERROR properties*/
+/** Removes all X-LIC-ERROR properties*/
 LIBICAL_ICAL_EXPORT void icalcomponent_strip_errors(icalcomponent *component);
 
-/** Convert some X-LIC-ERROR properties into RETURN-STATUS properties*/
+/** Converts some X-LIC-ERROR properties into RETURN-STATUS properties*/
 LIBICAL_ICAL_EXPORT void icalcomponent_convert_errors(icalcomponent *component);
 
 /* Internal operations. They are private, and you should not be using them. */

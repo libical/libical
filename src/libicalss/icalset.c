@@ -369,7 +369,7 @@ icalset *icalset_new_dir_reader(const char *path)
 /* Functions for built-in methods */
 
 /**
- *  free memory associated with this icalset
+ *  frees memory associated with this icalset
  *  automatically calls the implementation specific free routine
  */
 

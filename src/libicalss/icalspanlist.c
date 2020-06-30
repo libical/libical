@@ -120,7 +120,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     range.start = icaltime_as_timet(start);
     range.end = icaltime_as_timet(end);
 
-    /* Get a list of spans of busy time from the events in the set
+    /* Gets a list of spans of busy time from the events in the set
        and order the spans based on the start time */
 
     for (c = icalset_get_first_component(set);

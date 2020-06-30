@@ -257,7 +257,7 @@ static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
 }
 
 /**
- * Return a string representation of the parameter according to RFC5445/RFC6868.
+ * Returns a string representation of the parameter according to RFC5445/RFC6868.
  *
  * param        = param-name "=" param-value
  * param-name   = iana-token / x-token
