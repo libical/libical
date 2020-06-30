@@ -69,13 +69,13 @@
     </method>
     <method name="i_cal_time_as_timet" corresponds="icaltime_as_timet" since="1.0">
         <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
-        <returns type="time_t" comment="the time as seconds past the UNIX epoch" />
+        <returns type="time_t" comment="The time as seconds past the UNIX epoch" />
         <comment xml:space="preserve">Returns the time as seconds past the UNIX epoch</comment>
     </method>
     <method name="i_cal_time_as_timet_with_zone" corresponds="icaltime_as_timet_with_zone" since="1.0">
         <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
         <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The timezone"/>
-        <returns type="time_t" comment="the time as seconds past the UNIX epoch" />
+        <returns type="time_t" comment="The time as seconds past the UNIX epoch" />
         <comment xml:space="preserve">Returns the time as seconds past the UNIX epoch, using timezones.</comment>
     </method>
     <method name="i_cal_time_as_ical_string" corresponds="icaltime_as_ical_string_r" since="1.0">
@@ -100,23 +100,23 @@
     </method>
     <method name="i_cal_time_day_of_year" corresponds="icaltime_day_of_year" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="the day of the year of the given time" />
+        <returns type="gint" comment="The day of the year of the given time" />
         <comment xml:space="preserve">Returns the day of the year of the given time</comment>
     </method>
     <method name="i_cal_time_day_of_week" corresponds="icaltime_day_of_week" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="the day of the week of the given time. Sunday is 1." />
+        <returns type="gint" comment="The day of the week of the given time. Sunday is 1." />
         <comment xml:space="preserve">Returns the day of the week of the given time. Sunday is 1.</comment>
     </method>
     <method name="i_cal_time_start_doy_week" corresponds="icaltime_start_doy_week" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
         <parameter type="gint" name="fdow" comment="The first day of the week" />
-        <returns type="gint" comment="the day of the year for the Sunday of the week that the given time is within." />
+        <returns type="gint" comment="The day of the year for the Sunday of the week that the given time is within." />
         <comment xml:space="preserve">Returns the day of the year for the first day of the week that the given time is within.</comment>
     </method>
     <method name="i_cal_time_week_number" corresponds="icaltime_week_number" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="the week number for the week the given time is within." />
+        <returns type="gint" comment="The week number for the week the given time is within." />
         <comment xml:space="preserve">Returns the week number for the week the given time is within.</comment>
     </method>
     <method name="i_cal_time_is_null_time" corresponds="icaltime_is_null_time" since="1.0">
@@ -131,12 +131,12 @@
     </method>
     <method name="i_cal_time_is_date" corresponds="icaltime_is_date" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-        <returns type="gboolean" comment="true if time is of DATE type, false if DATE-TIME." />
+        <returns type="gboolean" comment="True if time is of DATE type, false if DATE-TIME." />
         <comment xml:space="preserve">Returns true if time is of DATE type, false if DATE-TIME.</comment>
     </method>
     <method name="i_cal_time_is_utc" corresponds="icaltime_is_utc" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-        <returns type="gboolean" comment="true if time is relative to UTC zone." />
+        <returns type="gboolean" comment="True if time is relative to UTC zone." />
         <comment xml:space="preserve">Returns true if time is relative to UTC zone.</comment>
     </method>
     <method name="i_cal_time_compare" corresponds="icaltime_compare" since="1.0">
@@ -160,10 +160,10 @@
     </method>
     <method name="i_cal_time_adjust" corresponds="icaltime_adjust" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime to be set"/>
-        <parameter type="const gint" name="days" comment="difference of days adjusted"/>
-        <parameter type="const gint" name="hours" comment="difference of hours adjusted"/>
-        <parameter type="const gint" name="minutes" comment="difference of minutes adjusted"/>
-        <parameter type="const gint" name="seconds" comment="difference of seconds adjusted"/>
+        <parameter type="const gint" name="days" comment="Difference of days adjusted"/>
+        <parameter type="const gint" name="hours" comment="Difference of hours adjusted"/>
+        <parameter type="const gint" name="minutes" comment="Difference of minutes adjusted"/>
+        <parameter type="const gint" name="seconds" comment="Difference of seconds adjusted"/>
         <comment xml:space="preserve">like i_cal_time_compare_tz, but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">
@@ -212,7 +212,7 @@
     </method>
     <method name="i_cal_time_days_is_leap_year" corresponds="icaltime_is_leap_year" since="1.0">
         <parameter type="gint" name="year" comment="The target year"/>
-        <returns type="gboolean" comment="whether the @year is a leap year" />
+        <returns type="gboolean" comment="Whether the @year is a leap year" />
         <comment xml:space="preserve">Checks whether a year is a leap year.</comment>
     </method>
     <method name="i_cal_time_days_in_year" corresponds="icaltime_days_in_year" since="2.0">

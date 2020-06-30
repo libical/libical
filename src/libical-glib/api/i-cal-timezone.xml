@@ -91,7 +91,7 @@
     </method>
     <method name="i_cal_timezone_get_component" corresponds="icaltimezone_get_component" kind="get" since="1.0">
         <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The #ICalTimezone to be queried"/>
-        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)zone" comment="the VTIMEZONE component of the @zone."/>
+        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)zone" comment="The VTIMEZONE component of the @zone."/>
         <comment xml:space="preserve">Returns the VTIMEZONE component of a timezone.</comment>
     </method>
     <method name="i_cal_timezone_set_component" corresponds="CUSTOM" kind="set" since="1.0">
@@ -115,21 +115,21 @@
     </method>
     <method name="i_cal_time_convert_timezone" corresponds="icaltimezone_convert_time" kind="other" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The time to be converted"/>
-        <parameter type="ICalTimezone *" name="from_zone" annotation="nullable" comment="from timezone"/>
-        <parameter type="ICalTimezone *" name="to_zone" annotation="nullable" comment="to timezone"/>
+        <parameter type="ICalTimezone *" name="from_zone" annotation="nullable" comment="From timezone"/>
+        <parameter type="ICalTimezone *" name="to_zone" annotation="nullable" comment="To timezone"/>
         <comment>Convert time from one timezone to another.</comment>
     </method>
     <method name="i_cal_timezone_get_utc_offset" corresponds="icaltimezone_get_utc_offset" kind="get" since="1.0">
         <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The given #ICalTimezone"/>
         <parameter type="ICalTime *" name="tt" annotation="nullable" native_op="POINTER" comment="The local time"/>
-        <parameter type="gint *" name="is_daylight" annotation="out, optional" comment="whether it is day light"/>
+        <parameter type="gint *" name="is_daylight" annotation="out, optional" comment="Whether it is day light"/>
         <returns type="gint" comment="UTC offset of the @zone"/>
         <comment>Calculates the UTC offset of a given local time in the given timezone.  It is the number of seconds to add to UTC to get local time.  The is_daylight flag is set to 1 if the time is in daylight-savings time.</comment>
     </method>
     <method name="i_cal_timezone_get_utc_offset_of_utc_time" corresponds="icaltimezone_get_utc_offset_of_utc_time" kind="get" since="1.0">
         <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The given #ICalTimezone"/>
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The local time"/>
-        <parameter type="gint *" name="is_daylight" annotation="out, optional" comment="whether it is day light, can be %NULL"/>
+        <parameter type="gint *" name="is_daylight" annotation="out, optional" comment="Whether it is day light, can be %NULL"/>
         <returns type="gint" comment="UTC offset of the @zone"/>
         <comment>Calculates the UTC offset of a given UTC time in the given timezone.  It is the number of seconds to add to UTC to get local time.  The is_daylight flag is set to 1 if the time is in daylight-savings time.</comment>
     </method>
@@ -200,7 +200,7 @@
     </method>
     <method name="i_cal_timezone_dump_changes" corresponds="icaltimezone_dump_changes" kind="other" since="1.0">
         <parameter type="ICalTimezone *" name="zone" comment="The timezone to be queried"/>
-        <parameter type="gint" name="max_year" comment="max year"/>
+        <parameter type="gint" name="max_year" comment="Max year"/>
         <parameter type="FILE *" name="fp" comment="The file handle"/>
         <returns type="gint" comment="1 if success."/>
         <comment>Outputs a list of timezone changes for the given timezone to the given file, up to the maximum year given.</comment>

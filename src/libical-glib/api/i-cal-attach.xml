@@ -49,15 +49,15 @@ static void unref_g_bytes(char *data, void *user_data)
     </method>
     <method name="i_cal_attach_ref" corresponds="icalattach_ref" annotation="skip" kind="others" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be referenced by once"/>
-        <comment xml:space="preserve">Increases the ref counter by 1 for the @attach.</comment>
+        <comment xml:space="preserve">Increases the reference counter by 1 for the @attach.</comment>
     </method>
     <method name="i_cal_attach_unref" corresponds="icalattach_unref" annotation="skip" kind="others" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be unreferenced by once"/>
-        <comment xml:space="preserve">Decreses the ref counter by 1 for the @attach.</comment>
+        <comment xml:space="preserve">Decreases the reference counter by 1 for the @attach.</comment>
     </method>
     <method name="i_cal_attach_get_is_url" corresponds="icalattach_get_is_url" kind="others" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be queried"/>
-        <returns type="gboolean" comment="whether the @attach is built from url" />
+        <returns type="gboolean" comment="Whether the @attach is built from url" />
         <comment xml:space="preserve">Checks whether the #ICalAttach is built from url.</comment>
     </method>
     <method name="i_cal_attach_get_url" corresponds="icalattach_get_url" kind="others" since="1.0">
