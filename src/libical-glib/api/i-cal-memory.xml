@@ -26,7 +26,7 @@
     </method>
     <method name="i_cal_memory_add_tmp_buffer" corresponds="icalmemory_add_tmp_buffer" since="1.0">
         <parameter type="void *" name="buf" annotation="transfer full" comment="The existing buffer to be added into the ical"/>
-        <comment xml:space="preserve">Adds an existing buffer to the buffer ring</comment>
+        <comment xml:space="preserve">Adds an existing buffer to the buffer ring.</comment>
     </method>
     <method name="i_cal_memory_free_ring" annotation="skip" corresponds="icalmemory_free_ring" since="1.0">
         <comment xml:space="preserve">Frees all the memory used in the ring.</comment>
@@ -63,6 +63,6 @@
     <method name="i_cal_memory_strdup" corresponds="icalmemory_strdup" since="1.0">
         <parameter type="const gchar *" name="s" comment="The string to be cloned"/>
         <returns type="gchar *" annotation="transfer full" comment="The cloned string."/>
-        <comment xml:space="preserve">A wrapper around strdup. Partly to trap calls to strdup, partly because in -ansi, gcc on Red Hat claims that strdup is undeclared</comment>
+        <comment xml:space="preserve">A wrapper around strdup. Partly to trap calls to strdup, partly because in -ansi, gcc on Red Hat claims that strdup is undeclared.</comment>
     </method>
 </structure>

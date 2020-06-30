@@ -17,12 +17,12 @@
     <method name="i_cal_parameter_new" corresponds="icalparameter_new" kind="constructor" since="1.0">
         <parameter type="ICalParameterKind" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the kind type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the kind type.</comment>
     </method>
     <method name="i_cal_parameter_clone" corresponds="icalparameter_new_clone" kind="clone" since="1.0">
         <parameter type="ICalParameter *" name="p" annotation="in" comment="The #ICalParameter to be cloned"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter with the same properties as the @p." />
-        <comment xml:space="preserve">Deep clone a #ICalParameter</comment>
+        <comment xml:space="preserve">Deep clone a #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_new_from_string" corresponds="icalparameter_new_from_string" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="value" annotation="in, transfer none" comment="The string from which the #ICalParameter is created"/>
@@ -98,17 +98,17 @@
         <parameter type="ICalParameter *" name="param1" comment="The #ICalParameter to be checked"/>
         <parameter type="ICalParameter *" name="param2" comment="The #ICalParameter to be checked"/>
         <returns type="gint" comment="1 if the parameters have the same name, 0 or not." />
-        <comment xml:space="preserve">Checks whether native parts of two #ICalParameters have the same name</comment>
+        <comment xml:space="preserve">Checks whether native parts of two #ICalParameters have the same name.</comment>
     </method>
     <method name="i_cal_parameter_kind_to_string" corresponds="icalparameter_kind_to_string" kind="others" since="1.0">
         <parameter type="ICalParameterKind" name="kind" comment="The #ICalParameterKind to be converted"/>
         <returns type="const gchar *" comment="The string representation of @kind." />
-        <comment xml:space="preserve">Converts the #ICalParameter to the string representation</comment>
+        <comment xml:space="preserve">Converts the #ICalParameter to the string representation.</comment>
     </method>
     <method name="i_cal_parameter_kind_from_string" corresponds="icalparameter_string_to_kind" kind="others" since="1.0">
         <parameter type="const gchar *" name="string" comment="The string representation of the #ICalParameter"/>
         <returns type="ICalParameterKind" comment="The #ICalParameterKind converted from @string" />
-        <comment xml:space="preserve">Converts a string to the #ICalParameterKind</comment>
+        <comment xml:space="preserve">Converts a string to the #ICalParameterKind.</comment>
     </method>
     <method name="i_cal_parameter_kind_is_valid" corresponds="icalparameter_kind_is_valid" since="3.0.5">
         <parameter type="const ICalParameterKind" name="kind" comment="The #ICalPropertyKind"/>

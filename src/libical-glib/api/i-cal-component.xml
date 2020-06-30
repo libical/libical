@@ -212,7 +212,7 @@
     <method name="i_cal_component_check_restrictions" corresponds="icalcomponent_check_restrictions" kind="other" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be checked"/>
         <returns type="gint" comment="The number of restrictions in @comp"/>
-        <comment xml:space="preserve">Checks the number of restrictions in #ICalComponent</comment>
+        <comment xml:space="preserve">Checks the number of restrictions in #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_count_errors" corresponds="icalcomponent_count_errors" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
@@ -250,7 +250,7 @@
     <method name="i_cal_component_get_span" corresponds="icalcomponent_get_span" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
         <returns type="ICalTimeSpan *" annotation="transfer full" comment="A #ICalTimeSpan."/>
-        <comment xml:space="preserve">For VEVENT, VTODO, VJOURNAL and VTIMEZONE: reports the start and end times of an event in UTC</comment>
+        <comment xml:space="preserve">For VEVENT, VTODO, VJOURNAL and VTIMEZONE: reports the start and end times of an event in UTC.</comment>
     </method>
     <method name="i_cal_component_set_dtstart" corresponds="icalcomponent_set_dtstart" kind="set" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
@@ -505,66 +505,66 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
     </method>
     <method name="i_cal_component_new_vcalendar" corresponds="icalcomponent_new_vcalendar" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vcalendar</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vcalendar.</comment>
     </method>
     <method name="i_cal_component_new_vevent" corresponds="icalcomponent_new_vevent" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vevent</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vevent.</comment>
     </method>
     <method name="i_cal_component_new_vtodo" corresponds="icalcomponent_new_vtodo" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vtodo</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vtodo.</comment>
     </method>
     <method name="i_cal_component_new_vjournal" corresponds="icalcomponent_new_vjournal" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vjournal</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vjournal.</comment>
     </method>
     <method name="i_cal_component_new_valarm" corresponds="icalcomponent_new_valarm" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be valarm</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be valarm.</comment>
     </method>
     <method name="i_cal_component_new_vfreebusy" corresponds="icalcomponent_new_vfreebusy" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vfreebusy</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vfreebusy.</comment>
     </method>
     <method name="i_cal_component_new_vtimezone" corresponds="icalcomponent_new_vtimezone" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vtimezone</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vtimezone.</comment>
     </method>
     <method name="i_cal_component_new_xstandard" corresponds="icalcomponent_new_xstandard" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be xstandard</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be xstandard.</comment>
     </method>
     <method name="i_cal_component_new_xdaylight" corresponds="icalcomponent_new_xdaylight" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be xdaylight</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be xdaylight.</comment>
     </method>
     <method name="i_cal_component_new_vagenda" corresponds="icalcomponent_new_vagenda" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vagenda</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vagenda.</comment>
     </method>
     <method name="i_cal_component_new_vquery" corresponds="icalcomponent_new_vquery" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vquery</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vquery.</comment>
     </method>
     <method name="i_cal_component_new_vavailability" corresponds="icalcomponent_new_vavailability" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vavailability</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vavailability.</comment>
     </method>
     <method name="i_cal_component_new_xavailable" corresponds="icalcomponent_new_xavailable" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be xavailable</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be xavailable.</comment>
     </method>
     <method name="i_cal_component_new_vpoll" corresponds="icalcomponent_new_vpoll" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vpoll</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vpoll.</comment>
     </method>
     <method name="i_cal_component_new_vvoter" corresponds="icalcomponent_new_vvoter" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vvoter</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be vvoter.</comment>
     </method>
     <method name="i_cal_component_new_xvote" corresponds="icalcomponent_new_xvote" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
-        <comment xml:space="preserve">Creates a #ICalComponent with the type to be xvote</comment>
+        <comment xml:space="preserve">Creates a #ICalComponent with the type to be xvote.</comment>
     </method>
 </structure>
