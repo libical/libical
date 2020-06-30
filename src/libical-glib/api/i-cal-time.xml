@@ -149,14 +149,14 @@
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">like i_cal_time_compare(), but only use the date parts.</comment>
+        <comment xml:space="preserve">Like i_cal_time_compare(), but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_compare_date_only_tz" corresponds="icaltime_compare_date_only_tz" since="1.0">
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
 	<parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">like i_cal_time_compare_tz(), but only use the date parts.</comment>
+        <comment xml:space="preserve">Like i_cal_time_compare_tz(), but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_adjust" corresponds="icaltime_adjust" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime to be set"/>
@@ -164,7 +164,7 @@
         <parameter type="const gint" name="hours" comment="Difference of hours adjusted"/>
         <parameter type="const gint" name="minutes" comment="Difference of minutes adjusted"/>
         <parameter type="const gint" name="seconds" comment="Difference of seconds adjusted"/>
-        <comment xml:space="preserve">like i_cal_time_compare_tz, but only use the date parts.</comment>
+        <comment xml:space="preserve">Like i_cal_time_compare_tz, but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">
         <parameter type="const ICalTime *" name="t" annotation="in, transfer none" comment="The #ICalTime to be normalized"/>
