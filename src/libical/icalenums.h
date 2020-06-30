@@ -54,7 +54,7 @@ typedef enum icalcomponent_kind
     ICAL_VCAR_COMPONENT,
     ICAL_VCOMMAND_COMPONENT,
     ICAL_XLICINVALID_COMPONENT,
-    ICAL_XLICMIMEPART_COMPONENT, /* a non-stardard component that mirrors
+    ICAL_XLICMIMEPART_COMPONENT, /* A non-stardard component that mirrors
                                            structure of MIME data */
     ICAL_VAVAILABILITY_COMPONENT,
     ICAL_XAVAILABLE_COMPONENT,

@@ -105,7 +105,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_form_a_matched_recurrence_compo
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_component(icalset *cluster);
 
 /**
- * @brief options for opening an icalfileset.
+ * @brief Options for opening an icalfileset.
  *
  * These options should be passed to the icalset_new() function
  */

@@ -781,7 +781,7 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
 }
 
 /**
- *      like icaltime_compare, but only use the date parts.
+ *      Like icaltime_compare, but only use the date parts.
  */
 
 int icaltime_compare_date_only(const struct icaltimetype a_in,
@@ -815,7 +815,7 @@ int icaltime_compare_date_only(const struct icaltimetype a_in,
 }
 
 /**
- *      like icaltime_compare, but only use the date parts; accepts timezone.
+ *      Like icaltime_compare, but only use the date parts; accepts timezone.
  */
 
 int icaltime_compare_date_only_tz(const struct icaltimetype a_in,
@@ -1022,7 +1022,7 @@ struct icaltimetype icaltime_set_timezone(struct icaltimetype *t, const icaltime
 }
 
 /**
- *  @brief builds an icaltimespan given a start time, end time and busy value.
+ *  @brief Builds an icaltimespan given a start time, end time and busy value.
  *
  *  @param dtstart   The beginning time of the span, can be a date-time
  *                   or just a date.
@@ -1030,7 +1030,7 @@ struct icaltimetype icaltime_set_timezone(struct icaltimetype *t, const icaltime
  *  @param is_busy   A boolean value, 0/1.
  *  @return          A span using the supplied values.
  *
- *  returned span contains times specified in UTC.
+ *  Returned span contains times specified in UTC.
  */
 
 icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype dtend, int is_busy)

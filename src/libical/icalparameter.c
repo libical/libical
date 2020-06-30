@@ -175,7 +175,7 @@ char *icalparameter_as_ical_string(icalparameter *param)
 }
 
 /*
- * checks whether this character is allowed in a (Q)SAFE-CHAR
+ * Checks whether this character is allowed in a (Q)SAFE-CHAR
  *
  * QSAFE-CHAR   = WSP / %x21 / %x23-7E / NON-US-ASCII
  * ; any character except CTLs and DQUOTE
@@ -423,7 +423,7 @@ icalproperty *icalparameter_get_parent(icalparameter *param)
     return param->parent;
 }
 
-/* returns 1 if parameters have same name in ICAL, otherwise 0 */
+/* Returns 1 if parameters have same name in ICAL, otherwise 0 */
 int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
 {
     icalparameter_kind kind1;

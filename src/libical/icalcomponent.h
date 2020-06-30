@@ -20,7 +20,7 @@
 #define ICALCOMPONENT_H
 
 #include "libical_ical_export.h"
-#include "icalenums.h"  /* defines icalcomponent_kind */
+#include "icalenums.h"  /* Defines icalcomponent_kind */
 #include "icalproperty.h"
 #include "pvl.h"
 

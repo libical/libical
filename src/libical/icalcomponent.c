@@ -849,7 +849,7 @@ static int icalcomponent_is_busy(icalcomponent *comp)
 }
 
 /**
- * @brief cycles through all recurrances of an event
+ * @brief Cycles through all recurrances of an event
  *
  * @param comp           A valid VEVENT component
  * @param start          Ignore timespans before this
@@ -1030,7 +1030,7 @@ int icalcomponent_check_restrictions(icalcomponent *comp)
     return icalrestriction_check(comp);
 }
 
-/** @brief returns the number of errors encountered parsing the data
+/** @brief Returns the number of errors encountered parsing the data
  *
  * This function counts the number times the X-LIC-ERROR occurs
  * in the data structure.
@@ -1362,7 +1362,7 @@ icalcomponent *icalcomponent_get_inner(icalcomponent *comp)
     }
 }
 
-/** @brief sets the METHOD property to the given method
+/** @brief Sets the METHOD property to the given method
  */
 
 void icalcomponent_set_method(icalcomponent *comp, icalproperty_method method)
@@ -1377,7 +1377,7 @@ void icalcomponent_set_method(icalcomponent *comp, icalproperty_method method)
     icalproperty_set_method(prop, method);
 }
 
-/** @brief returns the METHOD property
+/** @brief Returns the METHOD property
  */
 
 icalproperty_method icalcomponent_get_method(icalcomponent *comp)

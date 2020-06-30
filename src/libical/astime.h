@@ -46,7 +46,7 @@
 
 typedef struct ut_instant
 {
-    double j_date;      /**< julian decimal date, 0 = 01 Jan 4713 BC 12 HR UT */
+    double j_date;      /**< Julian decimal date, 0 = 01 Jan 4713 BC 12 HR UT */
     long year;          /**< year, valid range [-4,713, +2,147,483,647] */
     int month;          /**<    [1-12]  */
     int day;            /**<    [1-31]  */
@@ -62,8 +62,8 @@ typedef struct ut_instant
 
 /*      Functions in caldate.c  */
 
-LIBICAL_ICAL_EXPORT long caldat(UTinstantPtr);      /** Converts julian date to year,mo,da */
+LIBICAL_ICAL_EXPORT long caldat(UTinstantPtr);      /** Converts Julian date to year,mo,da */
 
-LIBICAL_ICAL_EXPORT double juldat(UTinstantPtr);    /** Returns julian day from year,mo,da */
+LIBICAL_ICAL_EXPORT double juldat(UTinstantPtr);    /** Returns Julian day from year,mo,da */
 
 #endif
