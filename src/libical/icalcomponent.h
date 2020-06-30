@@ -285,7 +285,7 @@ LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_normalize(icalcomponent *comp);
 
-/*
+/**
  * Computes the datetime corresponding to the specified @p icalproperty and @p icalcomponent.
  * If the property is a DATE-TIME with a TZID parameter and a corresponding VTIMEZONE
  * is present in the component, the returned component will already be in the correct
