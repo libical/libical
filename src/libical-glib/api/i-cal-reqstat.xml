@@ -26,7 +26,7 @@
     </method>
     <method name="i_cal_reqstat_new_default" corresponds="CUSTOM" kind="private" annotation="skip" since="1.0">
         <returns type="struct icalreqstattype" annotation="transfer full" comment="The newly created #ICalReqstat" />
-        <comment xml:space="preserve">Creates a new default #ICalReqstat</comment>
+        <comment xml:space="preserve">Creates a new default #ICalReqstat.</comment>
         <custom>        struct icalreqstattype reqstattype;
         reqstattype.code = ICAL_UNKNOWN_STATUS;
         reqstattype.desc = NULL;

@@ -106,7 +106,7 @@
     <method name="i_cal_time_day_of_week" corresponds="icaltime_day_of_week" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
         <returns type="gint" comment="the day of the week of the given time. Sunday is 1." />
-        <comment xml:space="preserve">Returns the day of the week of the given time. Sunday is 1</comment>
+        <comment xml:space="preserve">Returns the day of the week of the given time. Sunday is 1.</comment>
     </method>
     <method name="i_cal_time_start_doy_week" corresponds="icaltime_start_doy_week" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>

@@ -52,7 +52,7 @@
     <method name="i_cal_value_isa_value" corresponds="icalvalue_isa_value" since="1.0">
         <parameter type="ICalValue *" name="value" comment="A #ICalValue"/>
         <returns type="gint" comment="1 if yes, 0 if not."/>
-        <comment xml:space="preserve">Check whether the native part of #ICalValue is an icalvalue</comment>
+        <comment xml:space="preserve">Check whether the native part of #ICalValue is an icalvalue.</comment>
     </method>
     <method name="i_cal_value_compare" corresponds="icalvalue_compare" since="1.0">
         <parameter type="const ICalValue *" name="a" comment="A #ICalValue."/>
@@ -99,7 +99,7 @@
     <method name="i_cal_value_decode_ical_string" corresponds="CUSTOM" since="1.0">
         <parameter type="const gchar *" name="szText" comment="A string."/>
         <returns type="gchar *" annotation="allow-none, transfer full" comment="The decoded string. NULL if fail."/>
-        <comment xml:space="preserve">Extract the original character string encoded by the above function</comment>
+        <comment xml:space="preserve">Extract the original character string encoded by the above function.</comment>
         <custom>    gchar *szDecText;
     gchar *buffer = NULL;
     gsize bufSize;

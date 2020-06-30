@@ -228,7 +228,7 @@
     <method name="i_cal_parameter_new_actionparam" corresponds="icalparameter_new_actionparam" kind="constructor" since="1.0">
         <parameter type="ICalParameterAction" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the action type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the action type.</comment>
     </method>
     <method name="i_cal_parameter_get_actionparam" corresponds="icalparameter_get_actionparam" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -348,7 +348,7 @@
     <method name="i_cal_parameter_new_enable" corresponds="icalparameter_new_enable" kind="constructor" since="1.0">
         <parameter type="ICalParameterEnable" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the enable type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the enable type.</comment>
     </method>
     <method name="i_cal_parameter_get_enable" corresponds="icalparameter_get_enable" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -363,7 +363,7 @@
     <method name="i_cal_parameter_new_encoding" corresponds="icalparameter_new_encoding" kind="constructor" since="1.0">
         <parameter type="ICalParameterEncoding" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the encoding type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the encoding type.</comment>
     </method>
     <method name="i_cal_parameter_get_encoding" corresponds="icalparameter_get_encoding" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -378,7 +378,7 @@
     <method name="i_cal_parameter_new_fbtype" corresponds="icalparameter_new_fbtype" kind="constructor" since="1.0">
         <parameter type="ICalParameterFbtype" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the fbtype type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the fbtype type.</comment>
     </method>
     <method name="i_cal_parameter_get_fbtype" corresponds="icalparameter_get_fbtype" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -483,7 +483,7 @@
     <method name="i_cal_parameter_new_local" corresponds="icalparameter_new_local" kind="constructor" since="1.0">
         <parameter type="ICalParameterLocal" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the local type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the local type.</comment>
     </method>
     <method name="i_cal_parameter_get_local" corresponds="icalparameter_get_local" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -573,7 +573,7 @@
     <method name="i_cal_parameter_new_partstat" corresponds="icalparameter_new_partstat" kind="constructor" since="1.0">
         <parameter type="ICalParameterPartstat" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the partstat type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the partstat type.</comment>
     </method>
     <method name="i_cal_parameter_get_partstat" corresponds="icalparameter_get_partstat" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -603,7 +603,7 @@
     <method name="i_cal_parameter_new_range" corresponds="icalparameter_new_range" kind="constructor" since="1.0">
         <parameter type="ICalParameterRange" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the range type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the range type.</comment>
     </method>
     <method name="i_cal_parameter_get_range" corresponds="icalparameter_get_range" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -633,7 +633,7 @@
     <method name="i_cal_parameter_new_related" corresponds="icalparameter_new_related" kind="constructor" since="1.0">
         <parameter type="ICalParameterRelated" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the related type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the related type.</comment>
     </method>
     <method name="i_cal_parameter_get_related" corresponds="icalparameter_get_related" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -648,7 +648,7 @@
     <method name="i_cal_parameter_new_reltype" corresponds="icalparameter_new_reltype" kind="constructor" since="1.0">
         <parameter type="ICalParameterReltype" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the reltype type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the reltype type.</comment>
     </method>
     <method name="i_cal_parameter_get_reltype" corresponds="icalparameter_get_reltype" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -663,7 +663,7 @@
     <method name="i_cal_parameter_new_required" corresponds="icalparameter_new_required" kind="constructor" since="2.0">
         <parameter type="ICalParameterRequired" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the required type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the required type.</comment>
     </method>
     <method name="i_cal_parameter_get_required" corresponds="icalparameter_get_required" kind="get" since="2.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -678,7 +678,7 @@
     <method name="i_cal_parameter_new_response" corresponds="icalparameter_new_response" kind="constructor" since="2.0">
         <parameter type="gint" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the response type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the response type.</comment>
     </method>
     <method name="i_cal_parameter_get_response" corresponds="icalparameter_get_response" kind="get" since="2.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -693,7 +693,7 @@
     <method name="i_cal_parameter_new_role" corresponds="icalparameter_new_role" kind="constructor" since="1.0">
     <parameter type="ICalParameterRole" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the role type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the role type.</comment>
     </method>
     <method name="i_cal_parameter_get_role" corresponds="icalparameter_get_role" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -708,7 +708,7 @@
     <method name="i_cal_parameter_new_rsvp" corresponds="icalparameter_new_rsvp" kind="constructor" since="1.0">
         <parameter type="ICalParameterRsvp" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the rsvp type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the rsvp type.</comment>
     </method>
     <method name="i_cal_parameter_get_rsvp" corresponds="icalparameter_get_rsvp" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -723,7 +723,7 @@
     <method name="i_cal_parameter_new_scheduleagent" corresponds="icalparameter_new_scheduleagent" kind="constructor" since="1.0">
         <parameter type="ICalParameterScheduleagent" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the scheduleagent type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the scheduleagent type.</comment>
     </method>
     <method name="i_cal_parameter_get_scheduleagent" corresponds="icalparameter_get_scheduleagent" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -738,7 +738,7 @@
     <method name="i_cal_parameter_new_scheduleforcesend" corresponds="icalparameter_new_scheduleforcesend" kind="constructor" since="1.0">
         <parameter type="ICalParameterScheduleforcesend" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the scheduleforcesend type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the scheduleforcesend type.</comment>
     </method>
     <method name="i_cal_parameter_get_scheduleforcesend" corresponds="icalparameter_get_scheduleforcesend" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -798,7 +798,7 @@
     <method name="i_cal_parameter_new_stayinformed" corresponds="icalparameter_new_stayinformed" kind="constructor" since="2.0">
         <parameter type="ICalParameterStayinformed" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the stayinformed type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the stayinformed type.</comment>
     </method>
     <method name="i_cal_parameter_get_stayinformed" corresponds="icalparameter_get_stayinformed" kind="get" since="2.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -813,7 +813,7 @@
     <method name="i_cal_parameter_new_substate" corresponds="icalparameter_new_substate" kind="constructor" since="1.0">
         <parameter type="ICalParameterSubstate" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the substate type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the substate type.</comment>
     </method>
     <method name="i_cal_parameter_get_substate" corresponds="icalparameter_get_substate" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -843,7 +843,7 @@
     <method name="i_cal_parameter_new_value" corresponds="icalparameter_new_value" kind="constructor" since="1.0">
         <parameter type="ICalParameterValue" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the value type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the value type.</comment>
     </method>
     <method name="i_cal_parameter_get_value" corresponds="icalparameter_get_value" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -873,7 +873,7 @@
     <method name="i_cal_parameter_new_xliccomparetype" corresponds="icalparameter_new_xliccomparetype" kind="constructor" since="1.0">
         <parameter type="ICalParameterXliccomparetype" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the xliccomparetype type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the xliccomparetype type.</comment>
     </method>
     <method name="i_cal_parameter_get_xliccomparetype" corresponds="icalparameter_get_xliccomparetype" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
@@ -888,7 +888,7 @@
     <method name="i_cal_parameter_new_xlicerrortype" corresponds="icalparameter_new_xlicerrortype" kind="constructor" since="1.0">
         <parameter type="ICalParameterXlicerrortype" name="v" comment="The type of #ICalParameter to be created"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
-        <comment xml:space="preserve">Creates a new #ICalParameter according to the xlicerrortype type</comment>
+        <comment xml:space="preserve">Creates a new #ICalParameter according to the xlicerrortype type.</comment>
     </method>
     <method name="i_cal_parameter_get_xlicerrortype" corresponds="icalparameter_get_xlicerrortype" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
