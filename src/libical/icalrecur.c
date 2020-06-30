@@ -1995,7 +1995,7 @@ static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
     return diff;
 }
 
-/** Increment month is different that the other increment_* routines --
+/** increment_month is different than the other increment_* routines --
    it figures out the interval for itself, and uses BYMONTH data if
    available. */
 static void increment_month(icalrecur_iterator *impl)

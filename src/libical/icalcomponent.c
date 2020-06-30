@@ -849,7 +849,7 @@ static int icalcomponent_is_busy(icalcomponent *comp)
 }
 
 /**
- * @brief Cycles through all recurrances of an event
+ * @brief Cycles through all recurrences of an event
  *
  * @param comp           A valid VEVENT component
  * @param start          Ignore timespans before this
