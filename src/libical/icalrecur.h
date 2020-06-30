@@ -202,7 +202,7 @@ LIBICAL_ICAL_EXPORT void icalrecurrencetype_clear(struct icalrecurrencetype *r);
 /** 1 == Monday, etc. */
 LIBICAL_ICAL_EXPORT enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day);
 
-/** 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc */
+/** 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc. */
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_day_position(short day);
 
 /**
@@ -228,7 +228,7 @@ LIBICAL_ICAL_EXPORT char *icalrecurrencetype_as_string_r(struct icalrecurrencety
 
 typedef struct icalrecur_iterator_impl icalrecur_iterator;
 
-/** Creates a new recurrence rule iterator, starting at DTSTART */
+/** Creates a new recurrence rule iterator, starting at DTSTART. */
 LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                                                                struct icaltimetype dtstart);
 
@@ -242,15 +242,15 @@ LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurr
 LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_start(icalrecur_iterator *impl,
                                                      struct icaltimetype start);
 
-/** Gets the next occurrence from an iterator */
+/** Gets the next occurrence from an iterator. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *);
 
-/** Frees the iterator */
+/** Frees the iterator. */
 LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator *);
 
 /**
  * Fills array up with at most 'count' time_t values, each
- *  representing an occurrence time in seconds past the POSIX epoch
+ *  representing an occurrence time in seconds past the POSIX epoch.
  */
 LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(const char *rule, time_t start,
                                                     int count, time_t *array);

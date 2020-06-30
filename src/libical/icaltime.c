@@ -946,7 +946,7 @@ void icaltime_adjust(struct icaltimetype *tt,
     tt->day = day;
 }
 
-/**     @brief Converts time to a given timezone
+/**     @brief Converts time to a given timezone.
  *
  *      Converts a time from its native timezone to a given timezone.
  *
@@ -999,7 +999,7 @@ const char *icaltime_get_tzid(const struct icaltimetype t)
     }
 }
 
-/**     @brief Sets the timezone
+/**     @brief Sets the timezone.
  *
  *      Forces the icaltime to be interpreted relative to another timezone.
  *      If you need to do timezone conversion, applying offset adjustments,

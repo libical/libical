@@ -74,37 +74,37 @@ LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
  */
 typedef enum icalerrorenum
 {
-    /** No error happened */
+    /** No error happened. */
     ICAL_NO_ERROR = 0,
 
-    /** A bad argument was passed to a function */
+    /** A bad argument was passed to a function. */
     ICAL_BADARG_ERROR,
 
-    /** An error occurred while creating a new object with a `*_new()` routine */
+    /** An error occurred while creating a new object with a `*_new()` routine. */
     ICAL_NEWFAILED_ERROR,
 
-    /** An error occurred while allocating some memory */
+    /** An error occurred while allocating some memory. */
     ICAL_ALLOCATION_ERROR,
 
-    /** Malformed data was passed to a function */
+    /** Malformed data was passed to a function. */
     ICAL_MALFORMEDDATA_ERROR,
 
-    /** An error occurred while parsing part of an iCal component */
+    /** An error occurred while parsing part of an iCal component. */
     ICAL_PARSE_ERROR,
 
-    /** An internal error happened in library code */
+    /** An internal error happened in library code. */
     ICAL_INTERNAL_ERROR, /* Like assert --internal consist. prob */
 
-    /** An error happened while working with a file */
+    /** An error happened while working with a file. */
     ICAL_FILE_ERROR,
 
-    /** Failure to properly sequence calls to a set of interfaces */
+    /** Failure to properly sequence calls to a set of interfaces. */
     ICAL_USAGE_ERROR,
 
-    /** An unimplemented function was called */
+    /** An unimplemented function was called. */
     ICAL_UNIMPLEMENTED_ERROR,
 
-    /** An unknown error occurred */
+    /** An unknown error occurred. */
     ICAL_UNKNOWN_ERROR  /* Used for problems in input to icalerror_strerror() */
 } icalerrorenum;
 #ifndef _MSC_VER
@@ -213,16 +213,16 @@ LIBICAL_ICAL_EXPORT void icalerror_clear_errno(void);
  */
 typedef enum icalerrorstate
 {
-    /** Fatal */
+    /** Fatal. */
     ICAL_ERROR_FATAL,
 
-    /** Non-fatal */
+    /** Non-fatal. */
     ICAL_ERROR_NONFATAL,
 
     /** Fatal if icalerror_errors_are_fatal(), non-fatal otherwise. */
     ICAL_ERROR_DEFAULT,
 
-    /** Asked state for an unknown error type */
+    /** Asked state for an unknown error type. */
     ICAL_ERROR_UNKNOWN
 } icalerrorstate;
 
@@ -569,7 +569,7 @@ if (!(test)) { \
 LIBICAL_ICAL_EXPORT icalerrorstate icalerror_supress(const char *error);
 
 /**
- * Assigns the given error the given icalerrorstate (severity)
+ * Assigns the given error the given icalerrorstate (severity).
  * @param error The error in question
  * @param es The icalerrorstate (severity) to set it to
  *

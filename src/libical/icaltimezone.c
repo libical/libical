@@ -1336,7 +1336,7 @@ icalarray *icaltimezone_get_builtin_timezones(void)
     return builtin_timezones;
 }
 
-/** Releases builtin timezone memory */
+/** Releases builtin timezone memory. */
 void icaltimezone_free_builtin_timezones(void)
 {
     icaltimezone_array_free(builtin_timezones);
@@ -1442,7 +1442,7 @@ static int get_offset(icaltimezone *zone)
     return offset;
 }
 
-/** Returns a single builtin timezone, given its offset from UTC */
+/** Returns a single builtin timezone, given its offset from UTC. */
 icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset, const char *tzname)
 {
     icaltimezone *zone = NULL;
