@@ -29,7 +29,7 @@
         <comment xml:space="preserve">Add an existing buffer to the buffer ring</comment>
     </method>
     <method name="i_cal_memory_free_ring" annotation="skip" corresponds="icalmemory_free_ring" since="1.0">
-        <comment xml:space="preserve">Free all the memory used in the ring.</comment>
+        <comment xml:space="preserve">Frees all the memory used in the ring.</comment>
     </method>
     <method name="i_cal_memory_new_buffer" corresponds="icalmemory_new_buffer" since="1.0">
         <parameter type="size_t" name="size" comment="The size of the new buffer to be created."/>
@@ -44,7 +44,7 @@
     </method>
     <method name="i_cal_memory_free_buffer" corresponds="icalmemory_free_buffer" since="1.0">
         <parameter type="void *" name="buf" annotation="transfer full" comment="The buffer to be freed."/>
-        <comment xml:space="preserve">Free the buffer.</comment>
+        <comment xml:space="preserve">Frees the buffer.</comment>
     </method>
     <method name="i_cal_memory_append_string" corresponds="icalmemory_append_string" since="1.0">
         <parameter type="gchar **" name="buf" annotation="array length=buf_size, element-type gchar, inout" comment="The buffer to be appended. It should not be the memory in ical."/>

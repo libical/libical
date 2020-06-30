@@ -52,7 +52,7 @@ typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user
     </method>
     <method name="i_cal_parser_free" corresponds="icalparser_free" kind="destructor" since="1.0">
         <parameter type="ICalParser *" name="parser" comment="The #ICalParser to be freed."/>
-        <comment xml:space="preserve">Free a #ICalParser.</comment>
+        <comment xml:space="preserve">Frees a #ICalParser.</comment>
     </method>
     <method name="i_cal_parser_parse" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalParser *" name="parser" comment="The parser used to parse the string and output the #ICalComponent."/>

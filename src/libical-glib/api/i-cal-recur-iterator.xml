@@ -34,6 +34,6 @@ Note: CAN NOT be used with RRULEs that contain COUNT.</comment>
     </method>
     <method name="i_cal_recur_iterator_free" corresponds="icalrecur_iterator_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator to be freed."/>
-        <comment xml:space="preserve">Free an iterator.</comment>
+        <comment xml:space="preserve">Frees an iterator.</comment>
     </method>
 </structure>

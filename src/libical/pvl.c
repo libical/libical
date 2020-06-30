@@ -146,7 +146,7 @@ void pvl_unshift(pvl_list L, void *d)
 }
 
 /**
- * @brief Remove an element from the front of the list
+ * @brief Removes an element from the front of the list
  *
  * @param L     The list to operate on
  *
@@ -193,7 +193,7 @@ void pvl_push(pvl_list L, void *d)
 }
 
 /**
- * @brief Remove an element from the tail of the list
+ * @brief Removes an element from the tail of the list
  *
  * @param L     The list to operate on
  */
@@ -317,7 +317,7 @@ void pvl_insert_before(pvl_list L, pvl_elem P, void *d)
 }
 
 /**
- * @brief Remove the referenced item from the list.
+ * @brief Removes the referenced item from the list.
  *
  * This routine will free the element, but not the data item that the
  * element contains.
@@ -423,7 +423,7 @@ pvl_elem pvl_find_next(pvl_list l, pvl_findf f, void *v)
 }
 
 /**
- * @brief Remove the all the elements in the list. The does not free
+ * @brief Removes the all the elements in the list. The does not free
  * the data items the elements hold.
  */
 

@@ -36,7 +36,7 @@
     </method>
     <method name="i_cal_property_free" corresponds="icalproperty_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalProperty *" name="prop" annotation="transfer full" comment="The #ICalProperty to be freed."/>
-        <comment xml:space="preserve">Free a #ICalProperty.</comment>
+        <comment xml:space="preserve">Frees a #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_isa" corresponds="icalproperty_isa" since="1.0">
         <parameter type="ICalProperty *" name="property" comment="The #ICalProperty which type is to be determined."/>
@@ -83,17 +83,17 @@
     <method name="i_cal_property_remove_parameter_by_kind" corresponds="icalproperty_remove_parameter_by_kind" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated."/>
         <parameter type="ICalParameterKind" name="kind" comment="The #ICalParameterKind to be removed."/>
-        <comment xml:space="preserve">Remove the target kind of the parameters in the #ICalProperty.</comment>
+        <comment xml:space="preserve">Removes the target kind of the parameters in the #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_remove_parameter_by_name" corresponds="icalproperty_remove_parameter_by_name" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated."/>
         <parameter type="const gchar *" name="name" comment="The name of the parameter to be removed."/>
-        <comment xml:space="preserve">Remove parameter in the #ICalProperty by name.</comment>
+        <comment xml:space="preserve">Removes parameter in the #ICalProperty by name.</comment>
     </method>
     <method name="i_cal_property_remove_parameter_by_ref" corresponds="icalproperty_remove_parameter_by_ref" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated."/>
         <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be removed."/>
-        <comment xml:space="preserve">Remove the parameter in the #ICalProperty by ref.</comment>
+        <comment xml:space="preserve">Removes the parameter in the #ICalProperty by ref.</comment>
     </method>
     <method name="i_cal_property_count_parameters" corresponds="icalproperty_count_parameters" since="1.0">
         <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be checked."/>

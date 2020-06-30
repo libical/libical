@@ -38,7 +38,7 @@
         <comment xml:space="preserve">Sets the prefix to be used for tzid's generated from system tzdata. Must be globally unique (such as a domain name owned by the developer of the calling application), and begin and end with forward slashes. Do not change or de-allocate the string buffer after calling this.</comment>
     </method>
     <method name="i_cal_timezone_free_builtin_timezones" corresponds="icaltimezone_free_builtin_timezones" kind="others" since="1.0">
-        <comment xml:space="preserve">Free any builtin timezone information</comment>
+        <comment xml:space="preserve">Frees any builtin timezone information</comment>
     </method>
     <method name="i_cal_timezone_get_builtin_timezone" corresponds="icaltimezone_get_builtin_timezone" kind="get" since="1.0">
         <parameter type="const gchar *" name="location" annotation="nullable" comment="The location representing the timezone."/>
@@ -162,7 +162,7 @@
     </method>
     <method name="i_cal_timezone_array_free" corresponds="icaltimezone_array_free" annotation="skip" kind="other" since="1.0">
         <parameter type="ICalArray *" name="timezones" native_op="STEAL" comment="Free an array."/>
-        <comment xml:space="preserve">Free an array of timezones.</comment>
+        <comment xml:space="preserve">Frees an array of timezones.</comment>
     </method>
     <method name="i_cal_time_timezone_expand_vtimezone" corresponds="icaltimezone_expand_vtimezone" kind="other" since="2.0">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent."/>
@@ -185,10 +185,10 @@
         <comment xml:space="preserve">Sets the directory to look for the zonefiles</comment>
     </method>
     <method name="i_cal_timezone_free_zone_directory" corresponds="free_zone_directory" kind="others" since="1.0">
-        <comment xml:space="preserve">Free memory dedicated to the zonefile directory</comment>
+        <comment xml:space="preserve">Frees memory dedicated to the zonefile directory</comment>
     </method>
     <method name="i_cal_timezone_release_zone_tab" corresponds="icaltimezone_release_zone_tab" kind="others" since="1.0">
-        <comment xml:space="preserve">Free memory dedicated to the zonefile directory</comment>
+        <comment xml:space="preserve">Frees memory dedicated to the zonefile directory</comment>
     </method>
     <method name="i_cal_timezone_set_builtin_tzdata" corresponds="icaltimezone_set_builtin_tzdata" kind="set" since="2.0">
         <parameter type="gboolean" name="set" comment="Whether to use builtin timezones files."/>

@@ -39,7 +39,7 @@
     </method>
     <method name="i_cal_array_free" corresponds="icalarray_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalArray *" name="array" comment="The #ICalArray to be freed."/>
-        <comment xml:space="preserve">Free the #ICalArray</comment>
+        <comment xml:space="preserve">Frees the #ICalArray</comment>
     </method>
     <!-- <method name="i_cal_array_append" corresponds="icalarray_append" kind="others" since="1.0">
         <parameter type="ICalArray *" name="array" comment="The #ICalArray to be appended."/>
@@ -49,7 +49,7 @@
     <method name="i_cal_array_remove_element_at" corresponds="icalarray_remove_element_at" kind="others" since="1.0">
         <parameter type="ICalArray *" name="array"  comment="The #ICalArray to be modified."/>
         <parameter type="gint" name="position" comment="The position in which the element will be removed from the array"/>
-        <comment xml:space="preserve">Remove the element at the @position from the array</comment>
+        <comment xml:space="preserve">Removes the element at the @position from the array</comment>
     </method>
     <method name="i_cal_array_element_at" corresponds="icalarray_element_at" annotation="skip" kind="private" since="1.0">
         <parameter type="ICalArray *" name="array" comment="The #ICalArray to be queried."/>

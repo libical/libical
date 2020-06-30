@@ -204,7 +204,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
 /** @brief Destructor.
  *  @param s A valid icalspanlist
  *
- *  Free memory associated with the spanlist
+ *  Frees memory associated with the spanlist
  */
 
 void icalspanlist_free(icalspanlist *s)

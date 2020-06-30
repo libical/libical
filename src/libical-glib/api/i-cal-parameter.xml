@@ -37,7 +37,7 @@
     </method>
     <method name="i_cal_parameter_free" corresponds="icalparameter_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalParameter *" name="parameter" annotation="in" comment="The #ICalParameter to be freeed."/>
-        <comment xml:space="preserve">Free the native part of the ICalParameter.</comment>
+        <comment xml:space="preserve">Frees the native part of the ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_as_ical_string" corresponds="icalparameter_as_ical_string_r" kind="others" since="1.0">
         <parameter type="ICalParameter *" name="parameter" annotation="in" comment="The #ICalParameter to be converted."/>

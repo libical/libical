@@ -36,7 +36,7 @@
     </method>
     <method name="i_cal_component_free" corresponds="icalcomponent_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be freed."/>
-        <comment xml:space="preserve">Free a #ICalComponent.</comment>
+        <comment xml:space="preserve">Frees a #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_as_ical_string" corresponds="icalcomponent_as_ical_string_r" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be converted."/>
@@ -76,7 +76,7 @@
     <method name="i_cal_component_remove_property" corresponds="icalcomponent_remove_property" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
         <parameter type="ICalProperty *" name="property" owner_op="REMOVE" comment="A #ICalProperty."/>
-        <comment xml:space="preserve">Remove #ICalProperty from #ICalComponent. Caution: The compare is based on address. So you must use the original #ICalProperty as the target.</comment>
+        <comment xml:space="preserve">Removes #ICalProperty from #ICalComponent. Caution: The compare is based on address. So you must use the original #ICalProperty as the target.</comment>
     </method>
     <method name="i_cal_component_count_properties" corresponds="icalcomponent_count_properties" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent."/>
@@ -142,7 +142,7 @@
     <method name="i_cal_component_remove_component" corresponds="icalcomponent_remove_component" since="1.0">
         <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent."/>
         <parameter type="ICalComponent *" name="child" owner_op="REMOVE" comment="A child #ICalComponent."/>
-        <comment xml:space="preserve">Remove a child #ICalComponent from another #ICalComponent.</comment>
+        <comment xml:space="preserve">Removes a child #ICalComponent from another #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_count_components" corresponds="icalcomponent_count_components" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be checked."/>
@@ -221,7 +221,7 @@
     </method>
     <method name="i_cal_component_strip_errors" corresponds="icalcomponent_strip_errors" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
-        <comment xml:space="preserve">Remove all X-LIC-ERROR properties.</comment>
+        <comment xml:space="preserve">Removes all X-LIC-ERROR properties.</comment>
     </method>
     <method name="i_cal_component_convert_errors" corresponds="icalcomponent_convert_errors" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>

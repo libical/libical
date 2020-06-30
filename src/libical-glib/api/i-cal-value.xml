@@ -32,7 +32,7 @@
     </method>
     <method name="i_cal_value_free" corresponds="icalvalue_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalValue *" name="value" comment="The #ICalValue to be freed."/>
-        <comment xml:space="preserve">Free a #ICalValue.</comment>
+        <comment xml:space="preserve">Frees a #ICalValue.</comment>
     </method>
     <method name="i_cal_value_is_valid" corresponds="icalvalue_is_valid" since="1.0">
         <parameter type="const ICalValue *" name="value" comment="The #ICalValue to be checked."/>
