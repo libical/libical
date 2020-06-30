@@ -187,7 +187,7 @@ static time_t make_time(struct tm *tm, int tzm)
  *      @param zone The timezone tm is in, NULL means to treat tm as a
  *              floating time
  *
- *      Return a new icaltime instance, initialized to the given time
+ *      Returns a new icaltime instance, initialized to the given time
  *      expressed as seconds past UNIX epoch, optionally using the given
  *      timezone.
  *
@@ -338,7 +338,7 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icaltimez
 }
 
 /**
- * Return a string represention of the time, in RFC5545 format. The
+ * Returns a string represention of the time, in RFC5545 format. The
  * string is owned by libical.
  */
 const char *icaltime_as_ical_string(const struct icaltimetype tt)
@@ -351,7 +351,7 @@ const char *icaltime_as_ical_string(const struct icaltimetype tt)
 }
 
 /**
- * Return a string represention of the time, in RFC5545 format. The
+ * Returns a string represention of the time, in RFC5545 format. The
  * string is owned by the caller.
  */
 char *icaltime_as_ical_string_r(const struct icaltimetype tt)
@@ -376,7 +376,7 @@ char *icaltime_as_ical_string_r(const struct icaltimetype tt)
 }
 
 /**
- *      Reset all of the time components to be in their normal ranges. For
+ *      Resets all of the time components to be in their normal ranges. For
  *      instance, given a time with minutes=70, the minutes will be reduces
  *      to 10, and the hour incremented. This allows the caller to do
  *      arithmetic on times without worrying about overflow or
@@ -394,7 +394,7 @@ struct icaltimetype icaltime_normalize(const struct icaltimetype tt)
 
 /**     @brief Contructor.
  *
- * Create a time from an ISO format string.
+ * Creates a time from an ISO format string.
  *
  * @todo If the given string specifies a DATE-TIME not in UTC, there
  *       is no way to know if this is a floating time or really refers to a
@@ -602,7 +602,7 @@ int icaltime_day_of_year(const struct icaltimetype t)
 
 /**     @brief Contructor.
  *
- *      Create a new time, given a day of year and a year.
+ *      Creates a new time, given a day of year and a year.
  */
 /* Jan 1 is day #1, not 0 */
 struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
@@ -642,7 +642,7 @@ struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
 
 /**     @brief Constructor.
  *
- *      Return a null time, which indicates no time has been set.
+ *      Returns a null time, which indicates no time has been set.
  *      This time represents the beginning of the epoch.
  */
 struct icaltimetype icaltime_null_time(void)
@@ -656,7 +656,7 @@ struct icaltimetype icaltime_null_time(void)
 
 /**     @brief Constructor.
  *
- *      Return a null date, which indicates no time has been set.
+ *      Returns a null date, which indicates no time has been set.
  */
 struct icaltimetype icaltime_null_date(void)
 {

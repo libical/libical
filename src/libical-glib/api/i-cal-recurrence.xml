@@ -62,7 +62,7 @@
     </enum>
     <method name="i_cal_recurrence_rscale_is_supported" corresponds="icalrecurrencetype_rscale_is_supported" kind="get" since="2.0">
 	<returns type="gboolean" comment="Whether rscale is supported"/>
-	<comment xml:space="preserve">Check whether rscale is supported.</comment>
+	<comment xml:space="preserve">Checks whether rscale is supported.</comment>
     </method>
     <method name="i_cal_recurrence_rscale_supported_calendars" corresponds="icalrecurrencetype_rscale_supported_calendars" kind="other" since="2.0">
 	<returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="Array of calendars. Currently always NULL."/>
@@ -81,22 +81,22 @@
     </method>
     <method name="i_cal_recurrence_clear" corresponds="icalrecurrencetype_clear" since="1.0">
         <parameter type="ICalRecurrence *" name="r" native_op="POINTER" comment="The #ICalRecurrence to be reset."/>
-        <comment xml:space="preserve">Reset an #ICalRecurrence.</comment>
+        <comment xml:space="preserve">Resets an #ICalRecurrence.</comment>
     </method>
     <method name="i_cal_recurrence_day_day_of_week" corresponds="icalrecurrencetype_day_day_of_week" since="1.0">
         <parameter type="gshort" name="day" comment="The encoded day which represents the day of the week and Nth day of the week."/>
         <returns type="ICalRecurrenceWeekday" comment="The decoded weekday with Monday to be 1."/>
-        <comment xml:space="preserve">Decode a day to a weekday in a week.</comment>
+        <comment xml:space="preserve">Decodes a day to a weekday in a week.</comment>
     </method>
     <method name="i_cal_recurrence_day_position" corresponds="icalrecurrencetype_day_position" since="1.0">
         <parameter type="gshort" name="day" comment="The encoded day which represents the day of the week and Nth day of the week."/>
         <returns type="gint" comment="The decoded day of the week. 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc"/>
-        <comment xml:space="preserve">Decode a day to a position of the weekday.</comment>
+        <comment xml:space="preserve">Decodes a day to a position of the weekday.</comment>
     </method>
     <method name="i_cal_recurrence_month_is_leap" corresponds="icalrecurrencetype_month_is_leap" since="2.0">
         <parameter type="gshort" name="month" comment="The month to be decoded."/>
         <returns type="gboolean" comment="Whether this month is a leap month."/>
-        <comment xml:space="preserve">Decode a month and check whether it is a leap month.</comment>
+        <comment xml:space="preserve">Decodes a month and check whether it is a leap month.</comment>
     </method>
     <method name="i_cal_recurrence_month_month" corresponds="icalrecurrencetype_month_month" since="2.0">
         <parameter type="gshort" name="month" comment="The month to be decoded."/>
@@ -105,12 +105,12 @@
     <method name="i_cal_recurrence_new_from_string" corresponds="icalrecurrencetype_from_string" since="1.0">
         <parameter type="const gchar *" name="str" comment="The string representation of the #ICalRecurrence"/>
         <returns type="ICalRecurrence *" annotation="transfer full" comment="The #ICalRecurrence converted from @str."/>
-        <comment xml:space="preserve">Convert a string to a #ICalRecurrence.</comment>
+        <comment xml:space="preserve">Converts a string to a #ICalRecurrence.</comment>
     </method>
     <method name="i_cal_recurrence_to_string" corresponds="icalrecurrencetype_as_string_r" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" native_op="POINTER" comment="The #ICalRecurrence to be converted."/>
         <returns type="gchar *" annotation="transfer full" comment="The string representation of @recur."/>
-        <comment xml:space="preserve">Convert a #ICalRecurrence to a string.</comment>
+        <comment xml:space="preserve">Converts a #ICalRecurrence to a string.</comment>
     </method>
     <method name="i_cal_recurrence_get_until" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence."/>

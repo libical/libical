@@ -228,7 +228,7 @@ LIBICAL_ICAL_EXPORT char *icalrecurrencetype_as_string_r(struct icalrecurrencety
 
 typedef struct icalrecur_iterator_impl icalrecur_iterator;
 
-/** Create a new recurrence rule iterator, starting at DTSTART */
+/** Creates a new recurrence rule iterator, starting at DTSTART */
 LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                                                                struct icaltimetype dtstart);
 

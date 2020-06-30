@@ -41,12 +41,12 @@
     <method name="i_cal_component_as_ical_string" corresponds="icalcomponent_as_ical_string_r" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be converted."/>
         <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalComponent."/>
-        <comment xml:space="preserve">Convert a #ICalComponent to a string.</comment>
+        <comment xml:space="preserve">Converts a #ICalComponent to a string.</comment>
     </method>
     <method name="i_cal_component_is_valid" corresponds="icalcomponent_is_valid" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be checked."/>
         <returns type="gboolean" comment="1 if yes, 0 if not."/>
-        <comment xml:space="preserve">Check whether #ICalComponent is valid.</comment>
+        <comment xml:space="preserve">Checks whether #ICalComponent is valid.</comment>
     </method>
     <method name="i_cal_component_isa" corresponds="icalcomponent_isa" since="1.0">
         <parameter type="const ICalComponent *" name="component" comment="The #ICalComponent to be checked."/>
@@ -56,17 +56,17 @@
     <method name="i_cal_component_isa_component" corresponds="icalcomponent_isa_component" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be checked."/>
         <returns type="gint" comment="1 if yes, 0 if not."/>
-        <comment xml:space="preserve">Check whether the native part of #ICalComponent is icalcomponent.</comment>
+        <comment xml:space="preserve">Checks whether the native part of #ICalComponent is icalcomponent.</comment>
     </method>
     <method name="i_cal_component_add_property" corresponds="icalcomponent_add_property" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
         <parameter type="ICalProperty *" name="property" translator_argus="component" comment="An #ICalProperty."/>
-        <comment xml:space="preserve">Add an #ICalProperty into #ICalComponent.</comment>
+        <comment xml:space="preserve">Adds an #ICalProperty into #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_take_property" corresponds="CUSTOM" annotation="skip" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="An #ICalComponent."/>
         <parameter type="ICalProperty *" name="property" annotation="transfer full" comment="An #ICalProperty."/>
-        <comment xml:space="preserve">Add the @property into the @component and unrefs the @property.</comment>
+        <comment xml:space="preserve">Adds the @property into the @component and unrefs the @property.</comment>
         <custom>    g_return_if_fail(I_CAL_IS_COMPONENT(component));
     g_return_if_fail(I_CAL_IS_PROPERTY(property));
 
@@ -82,7 +82,7 @@
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent."/>
         <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind."/>
         <returns type="gint" comment="The number of #ICalProperty."/>
-        <comment xml:space="preserve">Count the #ICalProperty in #ICalComponent.</comment>
+        <comment xml:space="preserve">Counts the number of #ICalProperty in #ICalComponent.</comment>
     </method>
     <method name="i_cal_property_get_parent" corresponds="icalproperty_get_parent" since="2.0">
         <parameter type="ICalProperty *" name="property" comment="The #ICalProperty."/>
@@ -127,12 +127,12 @@
     <method name="i_cal_component_add_component" corresponds="icalcomponent_add_component" since="1.0">
         <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent."/>
         <parameter type="ICalComponent *" name="child" translator_argus="(GObject*) parent" comment="A child #ICalComponent."/>
-        <comment xml:space="preserve">Add a #ICalComponent into another #ICalComponent as a child component.</comment>
+        <comment xml:space="preserve">Adds a #ICalComponent into another #ICalComponent as a child component.</comment>
     </method>
     <method name="i_cal_component_take_component" corresponds="CUSTOM" annotation="skip" since="1.0">
         <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent."/>
         <parameter type="ICalComponent *" name="child" annotation="transfer full" comment="A child #ICalComponent."/>
-        <comment xml:space="preserve">Add the @child into the @parent as a child component and unrefs the @child.</comment>
+        <comment xml:space="preserve">Adds the @child into the @parent as a child component and unrefs the @child.</comment>
         <custom>    g_return_if_fail(I_CAL_IS_COMPONENT(parent));
     g_return_if_fail(I_CAL_IS_COMPONENT(child));
 
@@ -148,7 +148,7 @@
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be checked."/>
         <parameter type="ICalComponentKind" name="kind" comment="The target #ICalComponentKind"/>
         <returns type="gint" comment="The count of child #ICalComponent in the parent one."/>
-        <comment xml:space="preserve">Count the child #ICalComponent with the target kind in the parent one.</comment>
+        <comment xml:space="preserve">Counts the child #ICalComponent with the target kind in the parent one.</comment>
     </method>
     <method name="i_cal_component_get_parent" corresponds="icalcomponent_get_parent" since="3.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent."/>
@@ -163,7 +163,7 @@
     <method name="i_cal_component_merge_component" corresponds="icalcomponent_merge_component" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent."/>
         <parameter type="ICalComponent *" name="comp_to_merge" annotation="in" native_op="STEAL" comment="A #ICalComponent. After merged it will not exist any more."/>
-        <comment xml:space="preserve">This takes 2 VCALENDAR components and merges the second one into the first, resolving any problems with conflicting TZIDs. comp_to_merge will no longer exist after calling this function.</comment>
+        <comment xml:space="preserve">Takes 2 VCALENDAR components and merges the second one into the first, resolving any problems with conflicting TZIDs. comp_to_merge will no longer exist after calling this function.</comment>
     </method>
     <method name="i_cal_component_get_current_component" corresponds="icalcomponent_get_current_component" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent."/>
@@ -212,12 +212,12 @@
     <method name="i_cal_component_check_restrictions" corresponds="icalcomponent_check_restrictions" kind="other" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be checked"/>
         <returns type="gint" comment="The number of restrictions in @comp"/>
-        <comment xml:space="preserve">Check the number of restrictions in #ICalComponent</comment>
+        <comment xml:space="preserve">Checks the number of restrictions in #ICalComponent</comment>
     </method>
     <method name="i_cal_component_count_errors" corresponds="icalcomponent_count_errors" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
         <returns type="gint" comment="The count of errors."/>
-        <comment xml:space="preserve">Count the number of errors in #ICalComponent.</comment>
+        <comment xml:space="preserve">Counts the number of errors in #ICalComponent.</comment>
     </method>
     <method name="i_cal_component_strip_errors" corresponds="icalcomponent_strip_errors" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
@@ -225,32 +225,32 @@
     </method>
     <method name="i_cal_component_convert_errors" corresponds="icalcomponent_convert_errors" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
-        <comment xml:space="preserve">Convert some X-LIC-ERROR properties into RETURN-STATUS properties.</comment>
+        <comment xml:space="preserve">Converts some X-LIC-ERROR properties into RETURN-STATUS properties.</comment>
     </method>
     <method name="i_cal_component_kind_is_valid" corresponds="icalcomponent_kind_is_valid" since="1.0">
         <parameter type="const ICalComponentKind" name="kind" comment="A #ICalComponentKind."/>
         <returns type="gboolean" comment="1 if @kind id a #ICalComponent but not the I_CAL_NO_COMPONENT, 0 if not."/>
-        <comment xml:space="preserve">Check if a #ICalComponentKind is valid.</comment>
+        <comment xml:space="preserve">Checks if a #ICalComponentKind is valid.</comment>
     </method>
     <method name="i_cal_component_kind_from_string" corresponds="icalcomponent_string_to_kind" since="1.0">
         <parameter type="const gchar *" name="string" comment="A string."/>
         <returns type="ICalComponentKind" error_return_value="I_CAL_NO_COMPONENT" comment="A #ICalComponentKind"/>
-        <comment xml:space="preserve">Convert a string to a #ICalComponentKind.</comment>
+        <comment xml:space="preserve">Converts a string to a #ICalComponentKind.</comment>
     </method>
     <method name="i_cal_component_kind_to_string" corresponds="icalcomponent_kind_to_string" since="1.0">
         <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind."/>
         <returns type="const gchar *" annotation="transfer none" comment="The string representation of @kind."/>
-        <comment xml:space="preserve">Convert a #ICalComponentKind to a string.</comment>
+        <comment xml:space="preserve">Converts a #ICalComponentKind to a string.</comment>
     </method>
     <method name="i_cal_component_get_first_real_component" corresponds="icalcomponent_get_first_real_component" since="1.0">
         <parameter type="ICalComponent *" name="c" comment="A VCOMPONENT type of #ICalComponent."/>
         <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)c" comment="A reference to the first VEVENT, VTODO or VJOURNAL"/>
-        <comment xml:space="preserve">For VCOMPONENT: Return a reference to the first VEVENT, VTODO or VJOURNAL.</comment>
+        <comment xml:space="preserve">For VCOMPONENT: Returns a reference to the first VEVENT, VTODO or VJOURNAL.</comment>
     </method>
     <method name="i_cal_component_get_span" corresponds="icalcomponent_get_span" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
         <returns type="ICalTimeSpan *" annotation="transfer full" comment="A #ICalTimeSpan."/>
-        <comment xml:space="preserve">For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the start and end times of an event in UTC</comment>
+        <comment xml:space="preserve">For VEVENT, VTODO, VJOURNAL and VTIMEZONE: reports the start and end times of an event in UTC</comment>
     </method>
     <method name="i_cal_component_set_dtstart" corresponds="icalcomponent_set_dtstart" kind="set" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent."/>
@@ -425,7 +425,7 @@ static void foreach_tzid_cb(icalparameter *in_param, void *user_data)
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be queried."/>
         <parameter type="ICalComponentForeachTZIDFunc" name="callback" annotation="scope call" comment="The callback function."/>
         <parameter type="gpointer" name="user_data" annotation="nullable, closure callback" comment="The data for callback function"/>
-        <comment>Apply the same manipulation on every tzid in #ICalComponent.</comment>
+        <comment>Applies the same manipulation on every tzid in #ICalComponent.</comment>
         <custom>    struct ForeachTZIDData data;
     icalcomponent *native_comp;
 
@@ -467,7 +467,7 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
         <parameter type="ICalTime *" name="end" comment="Ignore timespans after this"/>
         <parameter type="ICalComponentForeachRecurrenceFunc" name="callback" annotation="scope call" comment="Function called for each timespan within the range."/>
         <parameter type="gpointer" name="user_data" annotation="nullable, closure callback" comment="The user data for callback function"/>
-        <comment>Cycle through all recurrances of an event. This function will call the specified callback function for once for the base value of DTSTART, and foreach recurring date/time value. It will filter out events that are specified as an EXDATE or an EXRULE.</comment>
+        <comment>Cycles through all recurrances of an event. This function will call the specified callback function for once for the base value of DTSTART, and foreach recurring date/time value. It will filter out events that are specified as an EXDATE or an EXRULE.</comment>
         <custom>    struct ForeachRecurrenceData data;
     icalcomponent *native_comp;
     struct icaltimetype *native_start, *native_end;
@@ -501,7 +501,7 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
         <parameter type="ICalTime *" name="dtstart" native_op="POINTER" comment="The base dtstart value for this component."/>
         <parameter type="ICalTime *" name="recurtime" native_op="POINTER" comment="The time to test against."/>
         <returns type="gboolean" comment="1 if yes, 0 if not."/>
-        <comment xml:space="preserve">Decide if this recurrance is acceptable. This function decides if a specific recurrence value is excluded by EXRULE or EXDATE properties.</comment>
+        <comment xml:space="preserve">Decides if this recurrance is acceptable. This function decides if a specific recurrence value is excluded by EXRULE or EXDATE properties.</comment>
     </method>
     <method name="i_cal_component_new_vcalendar" corresponds="icalcomponent_new_vcalendar" kind="constructor" since="1.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>

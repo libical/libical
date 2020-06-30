@@ -22,7 +22,7 @@
     <method name="i_cal_reqstat_to_string" corresponds="icalreqstattype_as_string_r" since="1.0">
         <parameter type="ICalReqstat *" name="stat" comment="A #ICalReqstat."/>
         <returns type="gchar *" annotation="transfer full" comment="A string."/>
-        <comment xml:space="preserve">Convert #ICalReqstat to a string representation.</comment>
+        <comment xml:space="preserve">Converts #ICalReqstat to a string representation.</comment>
     </method>
     <method name="i_cal_reqstat_new_default" corresponds="CUSTOM" kind="private" annotation="skip" since="1.0">
         <returns type="struct icalreqstattype" annotation="transfer full" comment="The newly created #ICalReqstat" />

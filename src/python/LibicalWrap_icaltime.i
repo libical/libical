@@ -81,7 +81,7 @@
         return icaltime_adjust($self, days, hours, minutes, seconds);
     }
 
-    /** Normalize the icaltime, so that all fields are within the normal range. */
+    /** Normalizes the icaltime, so that all fields are within the normal range. */
     icaltimetype normalize() { return icaltime_normalize(*($self)); }
 
     icaltimetype convert_to_zone(icaltimezone *zone) {

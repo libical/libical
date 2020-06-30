@@ -26,7 +26,7 @@
     </method>
     <method name="i_cal_memory_add_tmp_buffer" corresponds="icalmemory_add_tmp_buffer" since="1.0">
         <parameter type="void *" name="buf" annotation="transfer full" comment="The existing buffer to be added into the ical"/>
-        <comment xml:space="preserve">Add an existing buffer to the buffer ring</comment>
+        <comment xml:space="preserve">Adds an existing buffer to the buffer ring</comment>
     </method>
     <method name="i_cal_memory_free_ring" annotation="skip" corresponds="icalmemory_free_ring" since="1.0">
         <comment xml:space="preserve">Frees all the memory used in the ring.</comment>
@@ -40,7 +40,7 @@
         <parameter type="void *" name="buf" annotation="transfer full" comment="The buffer needs to be resized."/>
         <parameter type="size_t" name="size" comment="The target size the buffer to be resized to."/>
         <returns type="void *" annotation="transfer full" comment="The buffer after being resized."/>
-        <comment xml:space="preserve">Resize the buffer to the target size.</comment>
+        <comment xml:space="preserve">Resizes the buffer to the target size.</comment>
     </method>
     <method name="i_cal_memory_free_buffer" corresponds="icalmemory_free_buffer" since="1.0">
         <parameter type="void *" name="buf" annotation="transfer full" comment="The buffer to be freed."/>
@@ -51,7 +51,7 @@
         <parameter type="gchar **" name="pos" annotation="array, element-type gchar, inout" comment="The position at which the new string to be appended."/>
         <parameter type="size_t *" name="buf_size" comment="The size of the buffer before appended"/>
         <parameter type="const gchar *" name="str" comment="The string to be allocated"/>
-        <comment xml:space="preserve">Append the string to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_string has to resize a buffer on the ring, the ring will loose track of it an you will have memory problems.</comment>
+        <comment xml:space="preserve">Appends the string to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_string has to resize a buffer on the ring, the ring will loose track of it an you will have memory problems.</comment>
     </method>
     <method name="i_cal_memory_append_char" corresponds="icalmemory_append_char" since="1.0">
         <parameter type="gchar **" name="buf" annotation="array length=buf_size, element-type gchar, inout" comment="The buffer to be appended. It should not be the memory in ical."/>

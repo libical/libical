@@ -797,7 +797,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 }
 
 /**
- * @brief Return the busy status based on the TRANSP property.
+ * @brief Returns the busy status based on the TRANSP property.
  *
  * @param comp   A valid icalcomponent.
  *

@@ -82,7 +82,7 @@ class Period(Property):
 
 
     def valid(self):
-        "Return true if this is a valid period"
+        "Returns true if this is a valid period"
 
         return not icalperiodtype_is_null_period(self.dur)
 

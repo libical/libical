@@ -54,7 +54,7 @@
         <parameter type="gint" name="is_date" comment="Whether it is a date type, 1 if yes, 0 if not."/>
         <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The timezone, or %NULL"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Convert seconds past UNIX epoch to a timetype, using timezones.</comment>
+        <comment xml:space="preserve">Converts seconds past UNIX epoch to a timetype, using timezones.</comment>
     </method>
     <method name="i_cal_time_new_from_string" corresponds="icaltime_from_string" kind="others" since="1.0">
         <parameter type="const gchar *" name="str" comment="The ISO format string"/>
@@ -169,11 +169,11 @@
     <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">
         <parameter type="const ICalTime *" name="t" annotation="in, transfer none" comment="The #ICalTime to be normalized"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The #ICalTime normalized"/>
-        <comment xml:space="preserve">Normalize the icaltime, so that all fields are within the normal range.</comment>
+        <comment xml:space="preserve">Normalizes the icaltime, so that all fields are within the normal range.</comment>
     </method>
     <method name="i_cal_time_normalize_inplace" corresponds="CUSTOM" since="3.0.5">
         <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be normalized"/>
-        <comment xml:space="preserve">Normalize the @tt, so that all fields are within the normal range.</comment>
+        <comment xml:space="preserve">Normalizes the @tt, so that all fields are within the normal range.</comment>
 	<custom xml:space="preserve">    icaltimetype *itt;
 
     g_return_if_fail(I_CAL_IS_TIME (tt));
@@ -187,12 +187,12 @@
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be converted"/>
         <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The converted #ICalTime" />
-        <comment xml:space="preserve">Convert @tt to @zone and return new #ICalTime object.</comment>
+        <comment xml:space="preserve">Converts @tt to @zone and return new #ICalTime object.</comment>
     </method>
     <method name="i_cal_time_convert_to_zone_inplace" corresponds="CUSTOM" since="3.0.5">
         <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
         <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
-        <comment xml:space="preserve">Convert @tt to @zone and store the result into @tt.</comment>
+        <comment xml:space="preserve">Converts @tt to @zone and store the result into @tt.</comment>
 	<custom xml:space="preserve">    icaltimetype *itt;
 
     g_return_if_fail(I_CAL_IS_TIME(tt));
@@ -213,7 +213,7 @@
     <method name="i_cal_time_days_is_leap_year" corresponds="icaltime_is_leap_year" since="1.0">
         <parameter type="gint" name="year" comment="The target year"/>
         <returns type="gboolean" comment="whether the @year is a leap year" />
-        <comment xml:space="preserve">Check whether a year is a leap year.</comment>
+        <comment xml:space="preserve">Checks whether a year is a leap year.</comment>
     </method>
     <method name="i_cal_time_days_in_year" corresponds="icaltime_days_in_year" since="2.0">
         <parameter type="gint" name="year" comment="The target year"/>
@@ -231,19 +231,19 @@
         <parameter type="ICalTimeSpan *" name="s1" native_op="POINTER" comment="The first #ICalTimeSpan"/>
         <parameter type="ICalTimeSpan *" name="s2" native_op="POINTER" comment="The second #ICalTimeSpan"/>
         <returns type="gint" comment="Whether these two span are overlapped."/>
-        <comment xml:space="preserve">Check whether two spans overlap.</comment>
+        <comment xml:space="preserve">Checks whether two spans overlap.</comment>
     </method>
     <method name="i_cal_time_span_contains" corresponds="icaltime_span_contains" kind="other" since="1.0">
         <parameter type="ICalTimeSpan *" name="s" native_op="POINTER" comment="The test #ICalTimeSpan"/>
         <parameter type="ICalTimeSpan *" name="container" native_op="POINTER" comment="The target container of #ICalTimeSpan"/>
         <returns type="gint" comment="Whether one #ICalTimeSpan is contained in another #ICalTimeSpan."/>
-        <comment xml:space="preserve">Check whether one #ICalTimeSpan is contained in another #ICalTimeSpan.</comment>
+        <comment xml:space="preserve">Checks whether one #ICalTimeSpan is contained in another #ICalTimeSpan.</comment>
     </method>
     <method name="i_cal_time_add" corresponds="icaltime_add" kind="other" since="2.0">
         <parameter type="ICalTime *" name="t" comment="A #ICalTime to be operated on."/>
         <parameter type="ICalDuration *" name="d" comment="A #ICalDuration as the difference."/>
         <returns type="ICalTime *" annotation="transfer full" comment="The #ICalTime results. The native object is the same. But since it is a bare object, so it won't cause segmentation."/>
-        <comment xml:space="preserve">Add a time duration on the time.</comment>
+        <comment xml:space="preserve">Adds a time duration on the time.</comment>
     </method>
     <method name="i_cal_time_subtract" corresponds="icaltime_subtract" kind="other" since="2.0">
         <parameter type="ICalTime *" name="t1" comment="The subtracted #ICalTime."/>

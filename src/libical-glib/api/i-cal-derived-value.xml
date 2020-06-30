@@ -320,7 +320,7 @@
 	</method>
 	<method name="i_cal_value_reset_kind" corresponds="icalvalue_reset_kind" kind="other" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue's kind to be reset."/>
-		<comment>Reset the kind of #ICalValue.</comment>
+		<comment>Resets the kind of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_xlicclass" corresponds="icalvalue_set_xlicclass" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue."/>

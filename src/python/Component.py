@@ -129,7 +129,7 @@ class Component(object):
 
     def properties(self,type='ANY'):
         """
-        Return a list of Property instances, each representing a
+        Returns a list of Property instances, each representing a
         property of the type 'type.'
         """
 
@@ -232,7 +232,7 @@ class Component(object):
         return icalcomponent_kind_to_string(k)
 
     def ref(self):
-        """ Return the internal reference to the libical icalproperty """
+        """ Returns the internal reference to the libical icalproperty """
         return self._ref
 
 def CloneComponent(c):

@@ -120,7 +120,7 @@ struct icaltimetype
 typedef struct icaltimetype icaltimetype;
 
 /** Returns a null time, which indicates no time has been set.
-    This time represent the beginning of the epoch */
+    This time represents the beginning of the epoch */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_null_time(void);
 
 /** Returns a null date */
@@ -132,15 +132,15 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_current_time_with_zone(const ic
 /** Returns the current day as an icaltimetype, with is_date set. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_today(void);
 
-/** Convert seconds past UNIX epoch to a timetype, using timezones. */
+/** Converts seconds past UNIX epoch to a timetype, using timezones. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const time_t tm,
                                                                       const int is_date,
                                                                       const icaltimezone *zone);
 
-/** create a time from an ISO format string */
+/** creates a time from an ISO format string. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_string(const char *str);
 
-/** Create a new time, given a day of year and a year. */
+/** Creates a new time, given a day of year and a year. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy, const int year);
 
 /**
@@ -161,13 +161,13 @@ LIBICAL_ICAL_EXPORT const char *icaltime_as_ical_string(const struct icaltimetyp
 
 LIBICAL_ICAL_EXPORT char *icaltime_as_ical_string_r(const struct icaltimetype tt);
 
-/** @brief Return the timezone */
+/** @brief Returns the timezone */
 LIBICAL_ICAL_EXPORT const icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
 
-/** @brief Return the tzid, or NULL for a floating time */
+/** @brief Returns the tzid, or NULL for a floating time */
 LIBICAL_ICAL_EXPORT const char *icaltime_get_tzid(const struct icaltimetype t);
 
-/** @brief Set the timezone */
+/** @brief Sets the timezone */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_set_timezone(struct icaltimetype *t,
                                                               const icaltimezone *zone);
 
@@ -215,10 +215,10 @@ LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt,
                                          const int days, const int hours,
                                          const int minutes, const int seconds);
 
-/** Normalize the icaltime, so that all fields are within the normal range. */
+/** Normalizes the icaltime, so that all fields are within the normal range. */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltimetype t);
 
-/** convert tt, of timezone tzid, into a utc time. Does nothing if the
+/** converts tt, of timezone tzid, into a utc time. Does nothing if the
    time is already UTC.  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
                                                                  icaltimezone *zone);
@@ -232,7 +232,7 @@ LIBICAL_ICAL_EXPORT int icaltime_is_leap_year(const int year);
 /** Returns the number of days in this year */
 LIBICAL_ICAL_EXPORT int icaltime_days_in_year(const int year);
 
-/** @brief calculate an icaltimespan given a start and end time. */
+/** @brief calculates an icaltimespan given a start and end time. */
 LIBICAL_ICAL_EXPORT struct icaltime_span icaltime_span_new(struct icaltimetype dtstart,
                                                            struct icaltimetype dtend, int is_busy);
 

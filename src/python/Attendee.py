@@ -105,11 +105,11 @@ class Organizer(Property):
         return self[parameter]
 
     def name(self):
-        "Return the name of the property."
+        "Returns the name of the property."
         return Property.name(self)
 
     def value_type(self):
-        "Return the value type of the property."
+        "Returns the value type of the property."
         return self._desc['value_type']
 
     # Methods for accessing enumerated parameters

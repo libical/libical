@@ -68,14 +68,14 @@ typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user
     <method name="i_cal_parser_parse_string" corresponds="icalparser_parse_string" since="1.0">
         <parameter type="const gchar *" name="str" comment="The string to be parsed"/>
         <returns type="ICalComponent *" annotation="transfer full" comment="The #ICalComponent parsed from str."/>
-        <comment xml:space="preserve">Parse the string into a #ICalComponent.</comment>
+        <comment xml:space="preserve">Parses the string into a #ICalComponent.</comment>
     </method>
     <method name="i_cal_parser_get_line" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalParser *" name="parser" comment="The parser to be queried."/>
         <parameter type="ICalParserLineGenFunc" name="func" annotation="scope call" comment="A line generator function."/>
         <parameter type="gpointer" name="user_data" annotation="closure" comment="The data given to @func."/>
         <returns type="gchar *" annotation="transfer full" comment="A single iCal content line."/>
-        <comment xml:space="preserve">Given a line generator function, return a single iCal content line.</comment>
+        <comment xml:space="preserve">Given a line generator function, returns a single iCal content line.</comment>
         <custom>	g_return_val_if_fail (parser != NULL &amp;&amp; func != NULL, NULL);
 
 	icalparser_set_gen_data ((icalparser *)i_cal_object_get_native ((ICalObject *)parser), user_data);

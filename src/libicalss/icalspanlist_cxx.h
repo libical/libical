@@ -49,13 +49,13 @@ public:
     ICalSpanList();
     ICalSpanList(const ICalSpanList &v);
 
-    /** Construct an ICalSpanList from an icalset */
+    /** Constructs an ICalSpanList from an icalset */
     ICalSpanList(icalset *set, icaltimetype start, icaltimetype end);
 
-    /** Construct an ICalSpanList from the VFREEBUSY chunk of a icalcomponent */
+    /** Constructs an ICalSpanList from the VFREEBUSY chunk of a icalcomponent */
     explicit ICalSpanList(icalcomponent *comp);
 
-    /** Construct an ICalSpanList from the VFREEBUSY chunk of a vcomponent */
+    /** Constructs an ICalSpanList from the VFREEBUSY chunk of a vcomponent */
     explicit ICalSpanList(VComponent &comp);
 
     /** Destructor */
@@ -75,7 +75,7 @@ public:
     /** Returns a vector of the number of events over delta t */
     std::vector < int >as_vector(int delta_t);
 
-    /** Dump the spanlist to stdout */
+    /** Dumps the spanlist to stdout */
     void dump();
 
 private:

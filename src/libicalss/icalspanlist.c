@@ -87,7 +87,7 @@ static void icalspanlist_new_callback(icalcomponent *comp, struct icaltime_span 
     pvl_insert_ordered(sl->spans, compare_span, (void *)s);
 }
 
-/** @brief Make a free list from a set of VEVENT components.
+/** @brief Makes a free list from a set of VEVENT components.
  *
  *  @param set    A valid icalset containing VEVENTS
  *  @param start  The free list starts at this date/time
@@ -245,7 +245,7 @@ void icalspanlist_dump(icalspanlist *sl)
 
 icalcomponent *icalspanlist_make_busy_list(icalspanlist *sl);
 
-/** @brief Find next free time span in a spanlist.
+/** @brief Finds next free time span in a spanlist.
  *
  *  @param  sl     The spanlist to search.
  *  @param  t      The time to start looking.
@@ -464,7 +464,7 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
     return comp;
 }
 
-/** @brief Return a spanlist corresponding to the VFREEBUSY portion of
+/** @brief Returns a spanlist corresponding to the VFREEBUSY portion of
  *         an icalcomponent.
  *
  *   @param   comp     A valid icalcomponent.

@@ -45,7 +45,7 @@
     <method name="i_cal_error_strerror" corresponds="icalerror_strerror" since="1.0">
         <parameter type="ICalErrorEnum" name="e" comment="The #ICalErrorEnum to be translated"/>
         <returns type="const gchar *" annotation="transfer none" comment="The string representation of @e" />
-        <comment xml:space="preserve">Translate the #ICalErrorEnum to the string representation.</comment>
+        <comment xml:space="preserve">Translates the #ICalErrorEnum to the string representation.</comment>
     </method>
     <method name="i_cal_error_perror" corresponds="icalerror_perror" since="1.0">
         <returns type="const gchar *" annotation="transfer none" comment="The string representation of the current error" />
@@ -69,11 +69,11 @@
     <method name="i_cal_error_supress" corresponds="icalerror_supress" since="1.0">
         <parameter type="const gchar *" name="error" comment="The error to be suppressed"/>
         <returns type="ICalErrorState" comment="The error state suppressed" />
-        <comment xml:space="preserve">Suppress the error.</comment>
+        <comment xml:space="preserve">Suppresses the error.</comment>
     </method>
     <method name="i_cal_error_restore" corresponds="icalerror_restore" since="1.0">
         <parameter type="const gchar *" name="error" comment="The error to be restored"/>
         <parameter type="ICalErrorState" name="es" comment="The error state to be restored"/>
-        <comment xml:space="preserve">Restore the error to specified state.</comment>
+        <comment xml:space="preserve">Restores the error to specified state.</comment>
     </method>
 </structure>

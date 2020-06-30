@@ -28,7 +28,7 @@
 typedef struct icalspanlist_impl icalspanlist;
 
 /** @brief Constructor
- * Make a free list from a set of component. Start and end should be in UTC
+ * Makes a free list from a set of component. Start and end should be in UTC
  */
 
 LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_new(icalset *set,
@@ -45,15 +45,15 @@ LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_free_time(icalspan
 
 LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist *s);
 
-/** @brief Return a valid VFREEBUSY component for this span */
+/** @brief Returns a valid VFREEBUSY component for this span */
 LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
                                                                const char *organizer,
                                                                const char *attendee);
 
-/** @brief Return an integer matrix of total events per delta_t timespan */
+/** @brief Returns an integer matrix of total events per delta_t timespan */
 LIBICAL_ICALSS_EXPORT int *icalspanlist_as_freebusy_matrix(icalspanlist *span, int delta_t);
 
-/** @brief Construct an icalspanlist from a VFREEBUSY component */
+/** @brief Constructs an icalspanlist from a VFREEBUSY component */
 LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp);
 
 #endif

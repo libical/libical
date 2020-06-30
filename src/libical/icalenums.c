@@ -101,7 +101,7 @@ char *icalenum_reqstat_code(icalrequeststatus stat)
     return buf;
 }
 
-/*** @brief Return the code for a request status
+/*** @brief Returns the code for a request status
  */
 char *icalenum_reqstat_code_r(icalrequeststatus stat)
 {
@@ -119,7 +119,7 @@ char *icalenum_reqstat_code_r(icalrequeststatus stat)
     return NULL;
 }
 
-/*** @brief Return the major number for a request status
+/*** @brief Returns the major number for a request status
  */
 short icalenum_reqstat_major(icalrequeststatus stat)
 {
@@ -133,7 +133,7 @@ short icalenum_reqstat_major(icalrequeststatus stat)
     return -1;
 }
 
-/*** @brief Return the minor number for a request status
+/*** @brief Returns the minor number for a request status
  */
 short icalenum_reqstat_minor(icalrequeststatus stat)
 {
@@ -147,7 +147,7 @@ short icalenum_reqstat_minor(icalrequeststatus stat)
     return -1;
 }
 
-/*** @brief Return a request status for major/minor status numbers
+/*** @brief Returns a request status for major/minor status numbers
  */
 icalrequeststatus icalenum_num_to_reqstat(short major, short minor)
 {
