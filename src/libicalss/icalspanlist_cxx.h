@@ -75,7 +75,7 @@ public:
     /** Returns a vector of the number of events over delta t */
     std::vector < int >as_vector(int delta_t);
 
-    /** Dumps the spanlist to stdout */
+    /** Dumps the spanlist to STDOUT */
     void dump();
 
 private:

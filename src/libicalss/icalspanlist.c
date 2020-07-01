@@ -225,7 +225,7 @@ void icalspanlist_free(icalspanlist *s)
     free(s);
 }
 
-/** @brief (Debug) print out spanlist to stdout.
+/** @brief (Debug) print out spanlist to STDOUT.
  *  @param sl A valid icalspanlist.
  */
 

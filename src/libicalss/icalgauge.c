@@ -428,7 +428,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 }
 
 /** @brief Debug
- * Print gauge information to stdout.
+ * Print gauge information to STDOUT.
  */
 
 void icalgauge_dump(icalgauge *gauge)
