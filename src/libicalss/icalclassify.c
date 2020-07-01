@@ -57,7 +57,7 @@ char *icalclassify_lowercase(const char *str)
     return xnew;
 }
 
-/* Returns a set of components that intersect in time with comp. For
+/** Returns a set of components that intersect in time with comp. For
 component X and Y to intersect:
     X.DTSTART < Y.DTEND && X.DTEND > Y.DTSTART
 */

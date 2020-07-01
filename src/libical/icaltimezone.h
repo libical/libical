@@ -17,7 +17,7 @@
 ======================================================================*/
 /**
  * @file icaltimezone.h
- * @brief timezone handling routines
+ * @brief Timezone handling routines
  */
 
 #ifndef ICALTIMEZONE_H
@@ -36,8 +36,8 @@
 typedef struct _icaltimezone icaltimezone;
 #endif
 
-/**
- * @par Creating/Destroying individual icaltimezones.
+/*
+ * Creating/Destroying individual icaltimezones.
  */
 
 /** Creates a new icaltimezone. */
@@ -56,8 +56,8 @@ LIBICAL_ICAL_EXPORT void icaltimezone_free(icaltimezone *zone, int free_struct);
  */
 LIBICAL_ICAL_EXPORT void icaltimezone_set_tzid_prefix(const char *new_prefix);
 
-/**
- * @par Accessing timezones.
+/*
+ * Accessing timezones.
  */
 
 /** Frees any builtin timezone information **/
@@ -107,16 +107,16 @@ LIBICAL_ICAL_EXPORT int icaltimezone_set_component(icaltimezone *zone, icalcompo
 
 LIBICAL_ICAL_EXPORT const char *icaltimezone_get_display_name(icaltimezone *zone);
 
-/**
- * @par Converting times between timezones.
+/*
+ * Converting times between timezones.
  */
 
 LIBICAL_ICAL_EXPORT void icaltimezone_convert_time(struct icaltimetype *tt,
                                                    icaltimezone *from_zone,
                                                    icaltimezone *to_zone);
 
-/**
- * @par Getting offsets from UTC.
+/*
+ * Getting offsets from UTC.
  */
 
 /** Calculates the UTC offset of a given local time in the given

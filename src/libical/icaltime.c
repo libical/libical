@@ -477,8 +477,10 @@ struct icaltimetype icaltime_from_string(const char *str)
     return icaltime_null_time();
 }
 
-/* Returns whether the specified year is a leap year. Year is the normal year,
-   e.g. 2001. */
+/**
+ * Returns whether the specified year is a leap year. Year is the normal year,
+ * e.g. 2001.
+ */
 int icaltime_is_leap_year(const int year)
 {
     if (year <= 1752) {
@@ -603,8 +605,9 @@ int icaltime_day_of_year(const struct icaltimetype t)
 /**     @brief Contructor.
  *
  *      Creates a new time, given a day of year and a year.
+ *
+ *      Note that Jan 1 is day #1, not 0.
  */
-/* Jan 1 is day #1, not 0 */
 struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
 {
     struct icaltimetype tt = icaltime_null_date();

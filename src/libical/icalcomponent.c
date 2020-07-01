@@ -793,7 +793,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
     }
     comp->property_iterator = property_iterator;
 
-    return 0;/** no matches **/
+    return 0; /* no matches */
 }
 
 /**
@@ -911,7 +911,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 
     basespan.is_busy = icalcomponent_is_busy(comp);
 
-    /** Calculate the ceiling and floor values.. **/
+    /* Calculate the ceiling and floor values.. */
     limit_start = icaltime_as_timet_with_zone(start,
                                               icaltimezone_get_utc_timezone());
     if (!icaltime_is_null_time(end)) {
@@ -932,7 +932,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
     if ((rrule == NULL) &&
         !icalproperty_recurrence_is_excluded(comp, &dtstart, &dtstart)) {
-        /** call callback action **/
+        /* call callback action */
         if (icaltime_span_overlaps(&basespan, &limit_span))
             (*callback) (comp, &basespan, callback_data);
     }
@@ -973,12 +973,12 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                             icaltimezone_get_utc_timezone());
             recurspan.end = recurspan.start + dtduration;
 
-            /** save the iterator ICK! **/
+            /* save the iterator ICK! */
             property_iterator = comp->property_iterator;
 
             if (!icalproperty_recurrence_is_excluded(comp,
                                                      &dtstart, &rrule_time)) {
-                /** call callback action **/
+                /* call callback action */
                 if (icaltime_span_overlaps(&recurspan, &limit_span))
                     (*callback) (comp, &recurspan, callback_data);
             }
@@ -988,7 +988,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         icalrecur_iterator_free(rrule_itr);
     }   /* end of RRULE loop */
 
-    /** Now process RDATE entries **/
+    /* Now process RDATE entries */
     for (rdate = icalcomponent_get_first_property(comp, ICAL_RDATE_PROPERTY);
          rdate != NULL;
          rdate = icalcomponent_get_next_property(comp, ICAL_RDATE_PROPERTY)) {
@@ -996,10 +996,10 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         struct icaldatetimeperiodtype rdate_period =
             icalproperty_get_rdate(rdate);
 
-        /** RDATES can specify raw datetimes, periods, or dates.
+        /* RDATES can specify raw datetimes, periods, or dates.
             we only support raw datetimes for now..
 
-            @todo Add support for other types **/
+            @todo Add support for other types */
 
         if (icaltime_is_null_time(rdate_period.time))
             continue;
@@ -1011,12 +1011,12 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                         icaltimezone_get_utc_timezone());
         recurspan.end = recurspan.start + dtduration;
 
-        /** save the iterator ICK! **/
+        /* save the iterator ICK! */
         property_iterator = comp->property_iterator;
 
         if (!icalproperty_recurrence_is_excluded(comp,
                                                  &dtstart, &rdate_period.time)) {
-            /** call callback action **/
+            /* call callback action */
             if (icaltime_span_overlaps(&recurspan, &limit_span))
                 (*callback) (comp, &recurspan, callback_data);
         }

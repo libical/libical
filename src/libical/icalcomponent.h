@@ -16,6 +16,10 @@
     the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
+/**
+ *      @file icalcomponent.h
+ */
+
 #ifndef ICALCOMPONENT_H
 #define ICALCOMPONENT_H
 
@@ -94,9 +98,8 @@ LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_next_property(icalcomponent 
  * Working with components
  */
 
-/* Return the first VEVENT, VTODO or VJOURNAL sub-component of cop, or
+/** Return the first VEVENT, VTODO or VJOURNAL sub-component of cop, or
    comp if it is one of those types */
-
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_inner(icalcomponent *comp);
 
 LIBICAL_ICAL_EXPORT void icalcomponent_add_component(icalcomponent *parent, icalcomponent *child);

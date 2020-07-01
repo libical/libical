@@ -799,7 +799,7 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
     icaltime_adjust(tt, 0, 0, 0, utc_offset);
 }
 
-/* Calculates the UTC offset of a given local time in the given
+/** Calculates the UTC offset of a given local time in the given
    timezone.  It is the number of seconds to add to UTC to get local
    time.  The is_daylight flag is set to 1 if the time is in
    daylight-savings time. */
@@ -1070,9 +1070,11 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
     return utc_offset;
 }
 
-/* Hold icaltimezone_changes_lock(); before calling this function */
-/** Returns the index of a timezone change which is close to the time
-   given in change. */
+/** Returns the index of a timezone change which is close to the time given in
+ * change.
+ *
+ * Hold icaltimezone_changes_lock(); before calling this function.
+*/
 static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonechange * change)
 {
     icaltimezonechange *zone_change;
@@ -1245,7 +1247,7 @@ int icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp)
     return icaltimezone_get_vtimezone_properties(zone, comp);
 }
 
-/* Returns the timezone name to display to the user. We prefer to use the
+/** Returns the timezone name to display to the user. We prefer to use the
    Olson city name, but fall back on the TZNAME, or finally the TZID. We don't
    want to use "" as it may be wrongly interpreted as a floating time.
    Do not free the returned string. */

@@ -19,6 +19,32 @@
  Code is Eric Busboom
 ======================================================================*/
 
+/**
+   @file   icaldirset.h
+
+   @brief  icaldirset manages a database of ical components and offers
+  interfaces for reading, writing and searching for components.
+
+  icaldirset groups components in to clusters based on their DTSTAMP
+  time -- all components that start in the same month are grouped
+  together in a single file. All files in a sotre are kept in a single
+  directory.
+
+  The primary interfaces are icaldirset__get_first_component and
+  icaldirset_get_next_component. These routine iterate through all of
+  the components in the store, subject to the current gauge. A gauge
+  is an icalcomponent that is tested against other componets for a
+  match. If a gauge has been set with icaldirset_select,
+  icaldirset_first and icaldirset_next will only return componentes
+  that match the gauge.
+
+  The Store generated UIDs for all objects that are stored if they do
+  not already have a UID. The UID is the name of the cluster (month &
+  year as MMYYYY) plus a unique serial number. The serial number is
+  stored as a property of the cluster.
+
+*/
+
 #ifndef ICALDIRSET_H
 #define ICALDIRSET_H
 
