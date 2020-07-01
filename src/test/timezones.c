@@ -1,6 +1,8 @@
 /*
 ======================================================================
 
+ (C) COPYRIGHT 2008, Eric Busboom <eric@civicknowledge.com>
+
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
