@@ -2240,7 +2240,7 @@ static void icalcomponent_rename_tzids_callback(icalparameter *param, void *data
 }
 
 /**
- * Calls the given function for each TZID parameter found in the component.
+ * @brief Calls the given function for each TZID parameter found in the component.
  */
 void icalcomponent_foreach_tzid(icalcomponent *comp,
                                 void (*callback) (icalparameter *param, void *data),
@@ -2280,7 +2280,7 @@ void icalcomponent_foreach_tzid(icalcomponent *comp,
 }
 
 /**
- *  Returns the icaltimezone from the component corresponding to the given
+ *  @brief Returns the icaltimezone from the component corresponding to the given
  *  TZID, or NULL if the component does not have a corresponding VTIMEZONE.
  */
 icaltimezone *icalcomponent_get_timezone(icalcomponent *comp, const char *tzid)

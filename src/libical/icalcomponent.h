@@ -75,14 +75,14 @@ LIBICAL_ICAL_EXPORT int icalcomponent_count_properties(icalcomponent *component,
                                                        icalproperty_kind kind);
 
 /**
- * Sets the parent icalcomponent for the specified icalproperty @p property.
+ * @brief Sets the parent icalcomponent for the specified icalproperty @p property.
  * @since 3.0
  */
 LIBICAL_ICAL_EXPORT void icalproperty_set_parent(icalproperty *property,
                                                  icalcomponent *component);
 
 /**
- * Returns the parent @p icalcomponent for the specified @p icalproperty.
+ * @brief Returns the parent icalcomponent for the specified @p property.
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalproperty_get_parent(const icalproperty *property);
 
@@ -149,13 +149,13 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter * i);
 /* Working with embedded error properties */
 LIBICAL_ICAL_EXPORT int icalcomponent_check_restrictions(icalcomponent *comp);
 
-/** Counts embedded errors. */
+/** @brief Counts embedded errors. */
 LIBICAL_ICAL_EXPORT int icalcomponent_count_errors(icalcomponent *component);
 
-/** Removes all X-LIC-ERROR properties*/
+/** @brief Removes all X-LIC-ERROR properties*/
 LIBICAL_ICAL_EXPORT void icalcomponent_strip_errors(icalcomponent *component);
 
-/** Converts some X-LIC-ERROR properties into RETURN-STATUS properties*/
+/** @brief Converts some X-LIC-ERROR properties into RETURN-STATUS properties*/
 LIBICAL_ICAL_EXPORT void icalcomponent_convert_errors(icalcomponent *component);
 
 /* Internal operations. They are private, and you should not be using them. */
@@ -178,11 +178,11 @@ If the code was in an OO language, the remaining routines would be
 members of classes derived from icalcomponent. Don't call them on the
 wrong component subtypes. */
 
-/** For VCOMPONENT: Return a reference to the first VEVENT, VTODO or
+/** @brief For VCOMPONENT: Return a reference to the first VEVENT, VTODO or
    VJOURNAL */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c);
 
-/** For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the start and end
+/** @brief For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the start and end
    times of an event in UTC */
 LIBICAL_ICAL_EXPORT struct icaltime_span icalcomponent_get_span(icalcomponent *comp);
 
@@ -258,14 +258,14 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_status(icalcomponent *comp, enum ical
 
 LIBICAL_ICAL_EXPORT enum icalproperty_status icalcomponent_get_status(icalcomponent *comp);
 
-/** Calls the given function for each TZID parameter found in the
+/** @brief Calls the given function for each TZID parameter found in the
     component, and any subcomponents. */
 LIBICAL_ICAL_EXPORT void icalcomponent_foreach_tzid(icalcomponent *comp,
                                                     void (*callback) (icalparameter *param,
                                                                       void *data),
                                                     void *callback_data);
 
-/** Returns the icaltimezone in the component corresponding to the
+/** @brief Returns the icaltimezone in the component corresponding to the
     TZID, or NULL if it can't be found. */
 LIBICAL_ICAL_EXPORT icaltimezone *icalcomponent_get_timezone(icalcomponent *comp,
                                                              const char *tzid);
@@ -283,7 +283,7 @@ LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                           void *callback_data);
 
 /**
- * Normalizes (reorders and sorts the properties) the specified icalcomponent @p comp.
+ * @brief Normalizes (reorders and sorts the properties) the specified icalcomponent @p comp.
  * @since 3.0
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_normalize(icalcomponent *comp);

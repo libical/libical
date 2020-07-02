@@ -62,10 +62,10 @@ typedef struct ut_instant
 
 /*      Functions in caldate.c  */
 
-/** Converts Julian date to year,mo,da. */
+/** @brief Converts Julian date to year,mo,da. */
 LIBICAL_ICAL_EXPORT long caldat(UTinstantPtr);
 
-/** Returns Julian day from year,mo,da. */
+/** @brief Returns Julian day from year,mo,da. */
 LIBICAL_ICAL_EXPORT double juldat(UTinstantPtr);
 
 #endif

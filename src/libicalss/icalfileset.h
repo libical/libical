@@ -61,10 +61,10 @@ LIBICAL_ICALSS_EXPORT int icalfileset_count_components(icalset *set, icalcompone
  */
 LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_select(icalset *set, icalgauge *gauge);
 
-/** Clears the gauge **/
+/** @brief Clears the gauge **/
 LIBICAL_ICALSS_EXPORT void icalfileset_clear(icalset *set);
 
-/** Gets and searches for a component by uid **/
+/** @brief Gets and searches for a component by uid **/
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch(icalset *set,
                                                        icalcomponent_kind kind, const char *uid);
 
@@ -73,8 +73,9 @@ LIBICAL_ICALSS_EXPORT int icalfileset_has_uid(icalset *set, const char *uid);
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *c);
 
 /**
- *  Modifies components according to the MODIFY method of CAP. Works on the
- *  currently selected components.
+ *  @brief Modifies components according to the MODIFY method of CAP.
+ *
+ *  Works on the currently selected components.
  */
 LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_modify(icalset *set,
                                                        icalcomponent *oldcomp,
@@ -99,8 +100,8 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalfilesetiter_to_next(icalset *set, icals
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *
                                                                                      itr);
 
-/** Returns a reference to the internal component. You probably should
-   not be using this. */
+/** Returns a reference to the internal component. **You probably should
+   not be using this.** */
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_component(icalset *cluster);
 

@@ -244,7 +244,7 @@ struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_
 
 /**     @brief Convenience constructor.
  *
- * Returns the current time in the given timezone, as an icaltimetype.
+ * @returns The current time in the given timezone, as an icaltimetype.
  */
 struct icaltimetype icaltime_current_time_with_zone(const icaltimezone *zone)
 {
@@ -253,7 +253,7 @@ struct icaltimetype icaltime_current_time_with_zone(const icaltimezone *zone)
 
 /**     @brief Convenience constructor.
  *
- * Returns the current day as an icaltimetype, with is_date set.
+ * @returns The current day as an icaltimetype, with is_date set.
  */
 struct icaltimetype icaltime_today(void)
 {
@@ -291,7 +291,7 @@ time_t icaltime_as_timet(const struct icaltimetype tt)
     return t;
 }
 
-/**     Returns the time as seconds past the UNIX epoch, using the
+/**     @brief Returns the time as seconds past the UNIX epoch, using the
  *      given timezone.
  *
  *      This convenience method combines a call to icaltime_convert_to_zone()
@@ -338,8 +338,9 @@ time_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icaltimez
 }
 
 /**
- * Returns a string represention of the time, in RFC5545 format. The
- * string is owned by libical.
+ * @brief Returns a string represention of the time, in RFC5545 format.
+ *
+ * The string is owned by libical.
  */
 const char *icaltime_as_ical_string(const struct icaltimetype tt)
 {
@@ -351,8 +352,9 @@ const char *icaltime_as_ical_string(const struct icaltimetype tt)
 }
 
 /**
- * Returns a string represention of the time, in RFC5545 format. The
- * string is owned by the caller.
+ * @brief Returns a string represention of the time, in RFC5545 format.
+ *
+ * The string is owned by the caller.
  */
 char *icaltime_as_ical_string_r(const struct icaltimetype tt)
 {
@@ -376,10 +378,11 @@ char *icaltime_as_ical_string_r(const struct icaltimetype tt)
 }
 
 /**
- *      Resets all of the time components to be in their normal ranges. For
- *      instance, given a time with minutes=70, the minutes will be reduces
- *      to 10, and the hour incremented. This allows the caller to do
- *      arithmetic on times without worrying about overflow or
+ *      @brief Resets all of the time components to be in their normal ranges.
+ *
+ *      For instance, given a time with minutes=70, the minutes will be
+ *      reduces to 10, and the hour incremented. This allows the caller
+ *      to do arithmetic on times without worrying about overflow or
  *      underflow.
  *
  *      Implementation note: we call icaltime_adjust() with no adjustment.
@@ -478,8 +481,9 @@ struct icaltimetype icaltime_from_string(const char *str)
 }
 
 /**
- * Returns whether the specified year is a leap year. Year is the normal year,
- * e.g. 2001.
+ * @brief Returns whether the specified year is a leap year.
+ *
+ * Year is the normal year, e.g. 2001.
  */
 int icaltime_is_leap_year(const int year)
 {
@@ -543,7 +547,8 @@ int icaltime_day_of_week(const struct icaltimetype t)
     return jt.weekday + 1;
 }
 
-/** Day of the year that the first day of the week (Sunday) is on.
+/** @brief Returns the day of the year that the first day of the week (Sunday)
+ * is on.
  */
 int icaltime_start_doy_week(const struct icaltimetype t, int fdow)
 {
@@ -593,7 +598,7 @@ int icaltime_week_number(const struct icaltimetype ictt)
 }
 
 /**
- *      Returns the day of the year, counting from 1 (Jan 1st).
+ *      @brief Returns the day of the year, counting from 1 (Jan 1st).
  */
 int icaltime_day_of_year(const struct icaltimetype t)
 {
@@ -645,7 +650,7 @@ struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
 
 /**     @brief Constructor.
  *
- *      Returns a null time, which indicates no time has been set.
+ *      @returns A null time, which indicates no time has been set.
  *      This time represents the beginning of the epoch.
  */
 struct icaltimetype icaltime_null_time(void)
@@ -659,7 +664,7 @@ struct icaltimetype icaltime_null_time(void)
 
 /**     @brief Constructor.
  *
- *      Returns a null date, which indicates no time has been set.
+ *      @returns A null date, which indicates no time has been set.
  */
 struct icaltimetype icaltime_null_date(void)
 {
@@ -681,9 +686,10 @@ struct icaltimetype icaltime_null_date(void)
 }
 
 /**
- *      Returns false if the time is clearly invalid, but is not null. This
- *      is usually the result of creating a new time type buy not clearing
- *      it, or setting one of the flags to an illegal value.
+ *      @brief Returns false if the time is clearly invalid, but is not null.
+ *
+ *      This is usually the result of creating a new time type but not
+ *      clearing it, or setting one of the flags to an illegal value.
  */
 int icaltime_is_valid_time(const struct icaltimetype t)
 {
@@ -694,16 +700,16 @@ int icaltime_is_valid_time(const struct icaltimetype t)
     }
 }
 
-/**     @brief Returns true if time is a DATE
+/**     @brief Returns true if time is a DATE.
  */
 int icaltime_is_date(const struct icaltimetype t)
 {
     return t.is_date;
 }
 
-/**     @brief Returns true if time is relative to UTC zone
+/**     @brief Returns true if time is relative to UTC zone.
  *
- *      @todo  We should only check the zone
+ *      @todo  We should only check the zone.
  */
 int icaltime_is_utc(const struct icaltimetype t)
 {
@@ -723,7 +729,8 @@ int icaltime_is_null_time(const struct icaltimetype t)
 }
 
 /**
- *      Returns -1, 0, or 1 to indicate that a<b, a==b, or a>b.
+ *      @brief Returns -1, 0, or 1 to indicate that a<b, a==b, or a>b.
+ *
  *      This calls icaltime_compare function after converting them to the utc
  *      timezone.
  */
@@ -784,7 +791,7 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
 }
 
 /**
- *      Like icaltime_compare, but only use the date parts.
+ *      @brief Like icaltime_compare, but only use the date parts.
  */
 
 int icaltime_compare_date_only(const struct icaltimetype a_in,
@@ -818,7 +825,8 @@ int icaltime_compare_date_only(const struct icaltimetype a_in,
 }
 
 /**
- *      Like icaltime_compare, but only use the date parts; accepts timezone.
+ *      @brief Like icaltime_compare, but only use the date parts;
+ *      accepts timezone.
  */
 
 int icaltime_compare_date_only_tz(const struct icaltimetype a_in,
@@ -1031,9 +1039,7 @@ struct icaltimetype icaltime_set_timezone(struct icaltimetype *t, const icaltime
  *                   or just a date.
  *  @param dtend     The end time of the span.
  *  @param is_busy   A boolean value, 0/1.
- *  @return          A span using the supplied values.
- *
- *  Returned span contains times specified in UTC.
+ *  @returns          A span using the supplied values. The times are specified in UTC.
  */
 
 icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype dtend, int is_busy)
