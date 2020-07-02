@@ -205,7 +205,7 @@
 	</method>
 	<method name="i_cal_value_new_x" corresponds="icalvalue_new_x" kind="constructor" since="1.0">
 		<parameter type="const gchar *" name="v" comment="The x value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type x.</comment>
 	</method>
 	<method name="i_cal_value_get_x" corresponds="icalvalue_get_x" kind="get" since="1.0">
@@ -220,7 +220,7 @@
 	</method>
 	<method name="i_cal_value_new_recur" corresponds="icalvalue_new_recur" kind="constructor" since="1.0">
 		<parameter type="ICalRecurrence *" name="v" comment="The recur value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type recur.</comment>
 	</method>
 	<method name="i_cal_value_get_recur" corresponds="icalvalue_get_recur" kind="get" since="1.0">
@@ -235,7 +235,7 @@
 	</method>
 	<method name="i_cal_value_new_trigger" corresponds="icalvalue_new_trigger" kind="constructor" since="1.0">
 		<parameter type="ICalTrigger *" name="v" comment="The trigger value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type trigger.</comment>
 	</method>
 	<method name="i_cal_value_get_trigger" corresponds="icalvalue_get_trigger" kind="get" since="1.0">
@@ -250,7 +250,7 @@
 	</method>
 	<method name="i_cal_value_new_datetime" corresponds="icalvalue_new_datetime" kind="constructor" since="1.0">
 		<parameter type="ICalTime *" name="v" comment="The datetime value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type datetime.</comment>
 	</method>
 	<method name="i_cal_value_get_datetime" corresponds="icalvalue_get_datetime" kind="get" since="1.0">
@@ -265,7 +265,7 @@
 	</method>
 	<method name="i_cal_value_new_datetimedate" corresponds="icalvalue_new_datetimedate" kind="constructor" since="3.0">
 		<parameter type="ICalTime *" name="v" comment="The DATE-TIME or DATE value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type datetimedate (DATE-TIME or DATE).</comment>
 	</method>
 	<method name="i_cal_value_get_datetimedate" corresponds="icalvalue_get_datetimedate" kind="get" since="3.0">
@@ -280,7 +280,7 @@
 	</method>
 	<method name="i_cal_value_new_datetimeperiod" corresponds="icalvalue_new_datetimeperiod" kind="constructor" since="1.0">
 		<parameter type="ICalDatetimeperiod *" name="v" comment="The datetimeperiod value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type datetimeperiod.</comment>
 	</method>
 	<method name="i_cal_value_get_datetimeperiod" corresponds="icalvalue_get_datetimeperiod" kind="get" since="1.0">
@@ -295,7 +295,7 @@
 	</method>
 	<method name="i_cal_value_new_geo" corresponds="icalvalue_new_geo" kind="constructor" since="1.0">
 		<parameter type="ICalGeo *" name="v" comment="The geo value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type geo.</comment>
 	</method>
 	<method name="i_cal_value_get_geo" corresponds="icalvalue_get_geo" kind="get" since="1.0">
@@ -310,7 +310,7 @@
 	</method>
 	<method name="i_cal_value_new_attach" corresponds="icalvalue_new_attach" kind="constructor" since="1.0">
 		<parameter type="ICalAttach *" name="v" comment="The attach value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type attach.</comment>
 	</method>
 	<method name="i_cal_value_get_attach" corresponds="icalvalue_get_attach" kind="get" since="1.0">
@@ -329,7 +329,7 @@
 	</method>
 	<method name="i_cal_value_new_xlicclass" corresponds="icalvalue_new_xlicclass" kind="constructor" since="1.0">
 		<parameter type="ICalPropertyXlicclass" name="v" comment="The xlicclass value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type xlicclass.</comment>
 	</method>
 	<method name="i_cal_value_get_xlicclass" corresponds="icalvalue_get_xlicclass" kind="get" since="1.0">
@@ -344,7 +344,7 @@
 	</method>
 	<method name="i_cal_value_new_boolean" corresponds="icalvalue_new_boolean" kind="constructor" since="1.0">
 		<parameter type="gint" name="v" comment="The boolean value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type boolean.</comment>
 	</method>
 	<method name="i_cal_value_get_boolean" corresponds="icalvalue_get_boolean" kind="get" since="1.0">
@@ -359,7 +359,7 @@
 	</method>
 	<method name="i_cal_value_new_busytype" corresponds="icalvalue_new_busytype" kind="constructor" since="2.0">
 		<parameter type="ICalPropertyBusytype" name="v" comment="The busytype value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type busytype.</comment>
 	</method>
 	<method name="i_cal_value_get_busytype" corresponds="icalvalue_get_busytype" kind="get" since="2.0">
@@ -374,7 +374,7 @@
 	</method>
 	<method name="i_cal_value_new_pollcompletion" corresponds="icalvalue_new_pollcompletion" kind="constructor" since="2.0">
 		<parameter type="ICalPropertyPollcompletion" name="v" comment="The pollcompletion value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type pollcompletion.</comment>
 	</method>
 	<method name="i_cal_value_get_pollcompletion" corresponds="icalvalue_get_pollcompletion" kind="get" since="2.0">
@@ -389,7 +389,7 @@
 	</method>
 	<method name="i_cal_value_new_taskmode" corresponds="icalvalue_new_taskmode" kind="constructor" since="2.0">
 		<parameter type="ICalPropertyTaskmode" name="v" comment="The taskmode value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type taskmode.</comment>
 	</method>
 	<method name="i_cal_value_get_taskmode" corresponds="icalvalue_get_taskmode" kind="get" since="2.0">
@@ -404,7 +404,7 @@
 	</method>
 	<method name="i_cal_value_new_pollmode" corresponds="icalvalue_new_pollmode" kind="constructor" since="2.0">
 		<parameter type="ICalPropertyPollmode" name="v" comment="The pollmode value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type pollmode.</comment>
 	</method>
 	<method name="i_cal_value_get_pollmode" corresponds="icalvalue_get_pollmode" kind="get" since="2.0">
@@ -419,7 +419,7 @@
 	</method>
 	<method name="i_cal_value_new_utcoffset" corresponds="icalvalue_new_utcoffset" kind="constructor" since="1.0">
 		<parameter type="gint" name="v" comment="The utcoffset value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type utcoffset.</comment>
 	</method>
 	<method name="i_cal_value_get_utcoffset" corresponds="icalvalue_get_utcoffset" kind="get" since="1.0">
@@ -434,7 +434,7 @@
 	</method>
 	<method name="i_cal_value_new_method" corresponds="icalvalue_new_method" kind="constructor" since="1.0">
 		<parameter type="ICalPropertyMethod" name="v" comment="The method value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type method.</comment>
 	</method>
 	<method name="i_cal_value_get_method" corresponds="icalvalue_get_method" kind="get" since="1.0">
@@ -449,7 +449,7 @@
 	</method>
 	<method name="i_cal_value_new_caladdress" corresponds="icalvalue_new_caladdress" kind="constructor" since="1.0">
 		<parameter type="const gchar *" name="v" comment="The caladdress value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type caladdress.</comment>
 	</method>
 	<method name="i_cal_value_get_caladdress" corresponds="icalvalue_get_caladdress" kind="get" since="1.0">
@@ -464,7 +464,7 @@
 	</method>
 	<method name="i_cal_value_new_period" corresponds="icalvalue_new_period" kind="constructor" since="1.0">
 		<parameter type="ICalPeriod *" name="v" comment="The period value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type period.</comment>
 	</method>
 	<method name="i_cal_value_get_period" corresponds="icalvalue_get_period" kind="get" since="1.0">
@@ -479,7 +479,7 @@
 	</method>
 	<method name="i_cal_value_new_status" corresponds="icalvalue_new_status" kind="constructor" since="1.0">
 		<parameter type="ICalPropertyStatus" name="v" comment="The status value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type status.</comment>
 	</method>
 	<method name="i_cal_value_get_status" corresponds="icalvalue_get_status" kind="get" since="1.0">
@@ -494,7 +494,7 @@
 	</method>
 	<method name="i_cal_value_new_binary" corresponds="icalvalue_new_binary" kind="constructor" since="1.0">
 		<parameter type="const gchar *" name="v" comment="The binary value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type binary.</comment>
 	</method>
 	<method name="i_cal_value_get_binary" corresponds="icalvalue_get_binary" kind="get" since="1.0">
@@ -509,7 +509,7 @@
 	</method>
 	<method name="i_cal_value_new_text" corresponds="icalvalue_new_text" kind="constructor" since="1.0">
 		<parameter type="const gchar *" name="v" comment="The text value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type text.</comment>
 	</method>
 	<method name="i_cal_value_get_text" corresponds="icalvalue_get_text" kind="get" since="1.0">
@@ -524,7 +524,7 @@
 	</method>
 	<method name="i_cal_value_new_duration" corresponds="icalvalue_new_duration" kind="constructor" since="1.0">
 		<parameter type="ICalDuration *" name="v" comment="The duration value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type duration.</comment>
 	</method>
 	<method name="i_cal_value_get_duration" corresponds="icalvalue_get_duration" kind="get" since="1.0">
@@ -539,7 +539,7 @@
 	</method>
 	<method name="i_cal_value_new_integer" corresponds="icalvalue_new_integer" kind="constructor" since="1.0">
 		<parameter type="gint" name="v" comment="The integer value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type integer.</comment>
 	</method>
 	<method name="i_cal_value_get_integer" corresponds="icalvalue_get_integer" kind="get" since="1.0">
@@ -554,7 +554,7 @@
 	</method>
 	<method name="i_cal_value_new_uri" corresponds="icalvalue_new_uri" kind="constructor" since="1.0">
 		<parameter type="const gchar *" name="v" comment="The uri value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type uri.</comment>
 	</method>
 	<method name="i_cal_value_get_uri" corresponds="icalvalue_get_uri" kind="get" since="1.0">
@@ -569,7 +569,7 @@
 	</method>
 	<method name="i_cal_value_new_class" corresponds="icalvalue_new_class" kind="constructor" since="1.0">
 		<parameter type="ICalProperty_Class" name="v" comment="The class value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type class.</comment>
 	</method>
 	<method name="i_cal_value_get_class" corresponds="icalvalue_get_class" kind="get" since="1.0">
@@ -584,7 +584,7 @@
 	</method>
 	<method name="i_cal_value_new_float" corresponds="icalvalue_new_float" kind="constructor" since="1.0">
 		<parameter type="gdouble" name="v" comment="The float value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type float.</comment>
 	</method>
 	<method name="i_cal_value_get_float" corresponds="icalvalue_get_float" kind="get" since="1.0">
@@ -599,7 +599,7 @@
 	</method>
 	<method name="i_cal_value_new_query" corresponds="icalvalue_new_query" kind="constructor" since="1.0">
 		<parameter type="const gchar *" name="v" comment="The query value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type query.</comment>
 	</method>
 	<method name="i_cal_value_get_query" corresponds="icalvalue_get_query" kind="get" since="1.0">
@@ -614,7 +614,7 @@
 	</method>
 	<method name="i_cal_value_new_string" corresponds="icalvalue_new_string" kind="constructor" since="1.0">
 		<parameter type="const gchar *" name="v" comment="The string value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type string.</comment>
 	</method>
 	<method name="i_cal_value_get_string" corresponds="icalvalue_get_string" kind="get" since="1.0">
@@ -629,7 +629,7 @@
 	</method>
 	<method name="i_cal_value_new_transp" corresponds="icalvalue_new_transp" kind="constructor" since="1.0">
 		<parameter type="ICalPropertyTransp" name="v" comment="The transp value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type transp.</comment>
 	</method>
 	<method name="i_cal_value_get_transp" corresponds="icalvalue_get_transp" kind="get" since="1.0">
@@ -644,7 +644,7 @@
 	</method>
 	<method name="i_cal_value_new_requeststatus" corresponds="icalvalue_new_requeststatus" kind="constructor" since="1.0">
 		<parameter type="ICalReqstat *" name="v" comment="The requeststatus value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type requeststatus.</comment>
 	</method>
 	<method name="i_cal_value_get_requeststatus" corresponds="icalvalue_get_requeststatus" kind="get" since="1.0">
@@ -659,7 +659,7 @@
 	</method>
 	<method name="i_cal_value_new_date" corresponds="icalvalue_new_date" kind="constructor" since="1.0">
 		<parameter type="ICalTime *" name="v" comment="The date value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type date.</comment>
 	</method>
 	<method name="i_cal_value_get_date" corresponds="icalvalue_get_date" kind="get" since="1.0">
@@ -674,7 +674,7 @@
 	</method>
 	<method name="i_cal_value_new_action" corresponds="icalvalue_new_action" kind="constructor" since="1.0">
 		<parameter type="ICalPropertyAction" name="v" comment="The action value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type action.</comment>
 	</method>
 	<method name="i_cal_value_get_action" corresponds="icalvalue_get_action" kind="get" since="1.0">
@@ -689,7 +689,7 @@
 	</method>
 	<method name="i_cal_value_new_cmd" corresponds="icalvalue_new_cmd" kind="constructor" since="1.0">
 		<parameter type="ICalPropertyCmd" name="v" comment="The cmd value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type cmd.</comment>
 	</method>
 	<method name="i_cal_value_get_cmd" corresponds="icalvalue_get_cmd" kind="get" since="1.0">
@@ -704,7 +704,7 @@
 	</method>
 	<method name="i_cal_value_new_querylevel" corresponds="icalvalue_new_querylevel" kind="constructor" since="1.0">
 		<parameter type="ICalPropertyQuerylevel" name="v" comment="The querylevel value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type querylevel.</comment>
 	</method>
 	<method name="i_cal_value_get_querylevel" corresponds="icalvalue_get_querylevel" kind="get" since="1.0">
@@ -719,7 +719,7 @@
 	</method>
 	<method name="i_cal_value_new_carlevel" corresponds="icalvalue_new_carlevel" kind="constructor" since="1.0">
 		<parameter type="ICalPropertyCarlevel" name="v" comment="The carlevel value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly create #ICalValue."/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type carlevel.</comment>
 	</method>
 	<method name="i_cal_value_get_carlevel" corresponds="icalvalue_get_carlevel" kind="get" since="1.0">

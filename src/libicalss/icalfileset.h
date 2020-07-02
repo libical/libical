@@ -57,7 +57,7 @@ LIBICAL_ICALSS_EXPORT int icalfileset_count_components(icalset *set, icalcompone
 
 /**
  * Restricts the component returned by icalfileset_first, _next to those
- * that pass the gauge. _clear removes the gauge
+ * that pass the gauge. _clear removes the gauge.
  */
 LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_select(icalset *set, icalgauge *gauge);
 

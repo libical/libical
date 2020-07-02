@@ -614,7 +614,7 @@ icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c)
     return 0;
 }
 
-/**     @brief Get the timespan covered by this component, in UTC
+/**     @brief Gets the timespan covered by this component, in UTC.
  *
  *      see icalcomponent_foreach_recurrence() for a better way to
  *      extract spans from an component.
@@ -1449,7 +1449,7 @@ struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp)
     return icalproperty_get_datetime_with_component(prop, comp);
 }
 
-/**     @brief Get DTEND property as an icaltime
+/**     @brief Gets DTEND property as an icaltime.
  *
  *      If a DTEND property is not present but a DURATION is, we use
  *      that to determine the proper end.
@@ -1488,7 +1488,7 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
     return ret;
 }
 
-/**     @brief Set DTEND property to given icaltime
+/**     @brief Sets DTEND property to given icaltime.
  *
  *      This method respects the icaltime type (DATE vs DATE-TIME) and
  *      timezone (or lack thereof).
@@ -1522,7 +1522,7 @@ void icalcomponent_set_dtend(icalcomponent *comp, struct icaltimetype v)
     }
 }
 
-/**     @brief Set DURATION property to given icalduration
+/**     @brief Sets DURATION property to given icalduration.
  *
  *      This method respects the icaltime type (DATE vs DATE-TIME) and
  *      timezone (or lack thereof).
@@ -1548,7 +1548,7 @@ void icalcomponent_set_duration(icalcomponent *comp, struct icaldurationtype v)
     }
 }
 
-/**     @brief Get DURATION property as an icalduration
+/**     @brief Gets DURATION property as an icalduration
  *
  *      If a DURATION property is not present but a DTEND is, we use
  *      that to determine the proper end.
@@ -2481,7 +2481,7 @@ struct icaltimetype icalcomponent_get_due(icalcomponent *comp)
     return icaltime_null_time();
 }
 
-/** @brief Set the due date of a VTODO task.
+/** @brief Sets the due date of a VTODO task.
  *
  *  @param comp Valid VTODO component.
  *  @param v    Valid due date time.

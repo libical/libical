@@ -224,7 +224,7 @@
         <parameter type="ICalTime *" name="dtstart" comment="The start of #ICalTimeSpan"/>
         <parameter type="ICalTime *" name="dtend" comment="The end of #ICalTimeSpan"/>
         <parameter type="gint" name="is_busy" comment="Whether this span is busy"/>
-        <returns type="ICalTimeSpan *" annotation="transfer full" comment="The newly create #ICalTimeSpan"/>
+        <returns type="ICalTimeSpan *" annotation="transfer full" comment="The newly created #ICalTimeSpan"/>
         <comment xml:space="preserve">Creates a new #ICalTimeSpan.</comment>
     </method>
     <method name="i_cal_time_span_overlaps" corresponds="icaltime_span_overlaps" kind="other" since="1.0">

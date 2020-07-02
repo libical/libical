@@ -134,7 +134,7 @@
     </enum>
     <method name="i_cal_property_new_acceptresponse" corresponds="icalproperty_new_acceptresponse" kind="constructor" since="2.0">
         <parameter type="const gchar *" name="v" comment="The acceptresponse"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_acceptresponse" corresponds="icalproperty_set_acceptresponse" kind="set" since="2.0">
@@ -149,7 +149,7 @@
     </method>
     <method name="i_cal_property_new_acknowledged" corresponds="icalproperty_new_acknowledged" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of acknowledgement"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_acknowledged" corresponds="icalproperty_set_acknowledged" kind="set" since="1.0">
@@ -164,7 +164,7 @@
     </method>
     <method name="i_cal_property_new_action" corresponds="icalproperty_new_action" kind="constructor" since="1.0">
         <parameter type="ICalPropertyAction" name="v" comment="The action"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_action" corresponds="icalproperty_set_action" kind="set" since="1.0">
@@ -179,7 +179,7 @@
     </method>
     <method name="i_cal_property_new_allowconflict" corresponds="icalproperty_new_allowconflict" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The allowconflict"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_allowconflict" corresponds="icalproperty_set_allowconflict" kind="set" since="1.0">
@@ -213,7 +213,7 @@
     </method>
     <method name="i_cal_property_new_attendee" corresponds="icalproperty_new_attendee" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The attendee"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_attendee" corresponds="icalproperty_set_attendee" kind="set" since="1.0">
@@ -228,7 +228,7 @@
     </method>
     <method name="i_cal_property_new_busytype" corresponds="icalproperty_new_busytype" kind="constructor" since="2.0">
         <parameter type="ICalPropertyBusytype" name="v" comment="The busytype"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_busytype" corresponds="icalproperty_set_busytype" kind="set" since="2.0">
@@ -243,7 +243,7 @@
     </method>
     <method name="i_cal_property_new_calid" corresponds="icalproperty_new_calid" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The calid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_calid" corresponds="icalproperty_set_calid" kind="set" since="1.0">
@@ -258,7 +258,7 @@
     </method>
     <method name="i_cal_property_new_calmaster" corresponds="icalproperty_new_calmaster" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The calmaster"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_calmaster" corresponds="icalproperty_set_calmaster" kind="set" since="1.0">
@@ -273,7 +273,7 @@
     </method>
     <method name="i_cal_property_new_calscale" corresponds="icalproperty_new_calscale" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The calscale"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_calscale" corresponds="icalproperty_set_calscale" kind="set" since="1.0">
@@ -288,7 +288,7 @@
     </method>
     <method name="i_cal_property_new_capversion" corresponds="icalproperty_new_capversion" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The capversion"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_capversion" corresponds="icalproperty_set_capversion" kind="set" since="1.0">
@@ -303,7 +303,7 @@
     </method>
     <method name="i_cal_property_new_carlevel" corresponds="icalproperty_new_carlevel" kind="constructor" since="1.0">
         <parameter type="ICalPropertyCarlevel" name="v" comment="The carlevel"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_carlevel" corresponds="icalproperty_set_carlevel" kind="set" since="1.0">
@@ -318,7 +318,7 @@
     </method>
     <method name="i_cal_property_new_carid" corresponds="icalproperty_new_carid" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The carid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_carid" corresponds="icalproperty_set_carid" kind="set" since="1.0">
@@ -333,7 +333,7 @@
     </method>
     <method name="i_cal_property_new_categories" corresponds="icalproperty_new_categories" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The categories"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_categories" corresponds="icalproperty_set_categories" kind="set" since="1.0">
@@ -348,7 +348,7 @@
     </method>
     <method name="i_cal_property_new_class" corresponds="icalproperty_new_class" kind="constructor" since="1.0">
         <parameter type="ICalProperty_Class" name="v" comment="The class"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_class" corresponds="icalproperty_set_class" kind="set" since="1.0">
@@ -363,7 +363,7 @@
     </method>
     <method name="i_cal_property_new_cmd" corresponds="icalproperty_new_cmd" kind="constructor" since="1.0">
         <parameter type="ICalPropertyCmd" name="v" comment="The cmd"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_cmd" corresponds="icalproperty_set_cmd" kind="set" since="1.0">
@@ -378,7 +378,7 @@
     </method>
     <method name="i_cal_property_new_comment" corresponds="icalproperty_new_comment" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The comment"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_comment" corresponds="icalproperty_set_comment" kind="set" since="1.0">
@@ -393,7 +393,7 @@
     </method>
     <method name="i_cal_property_new_color" corresponds="icalproperty_new_color" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The color"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new color #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_color" corresponds="icalproperty_set_color" kind="set" since="1.0">
@@ -408,7 +408,7 @@
     </method>
     <method name="i_cal_property_new_completed" corresponds="icalproperty_new_completed" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of completed"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_completed" corresponds="icalproperty_set_completed" kind="set" since="1.0">
@@ -423,7 +423,7 @@
     </method>
     <method name="i_cal_property_new_components" corresponds="icalproperty_new_components" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The components"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_components" corresponds="icalproperty_set_components" kind="set" since="1.0">
@@ -438,7 +438,7 @@
     </method>
     <method name="i_cal_property_new_contact" corresponds="icalproperty_new_contact" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The contact"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_contact" corresponds="icalproperty_set_contact" kind="set" since="1.0">
@@ -453,7 +453,7 @@
     </method>
     <method name="i_cal_property_new_created" corresponds="icalproperty_new_created" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of created"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_created" corresponds="icalproperty_set_created" kind="set" since="1.0">
@@ -468,7 +468,7 @@
     </method>
     <method name="i_cal_property_new_csid" corresponds="icalproperty_new_csid" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The csid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_csid" corresponds="icalproperty_set_csid" kind="set" since="1.0">
@@ -483,7 +483,7 @@
     </method>
     <method name="i_cal_property_new_datemax" corresponds="icalproperty_new_datemax" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of datemax"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_datemax" corresponds="icalproperty_set_datemax" kind="set" since="1.0">
@@ -498,7 +498,7 @@
     </method>
     <method name="i_cal_property_new_datemin" corresponds="icalproperty_new_datemin" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of datemin"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_datemin" corresponds="icalproperty_set_datemin" kind="set" since="1.0">
@@ -513,7 +513,7 @@
     </method>
     <method name="i_cal_property_new_decreed" corresponds="icalproperty_new_decreed" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The decreed"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_decreed" corresponds="icalproperty_set_decreed" kind="set" since="1.0">
@@ -528,7 +528,7 @@
     </method>
     <method name="i_cal_property_new_defaultcharset" corresponds="icalproperty_new_defaultcharset" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The defaultcharset"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_defaultcharset" corresponds="icalproperty_set_defaultcharset" kind="set" since="1.0">
@@ -543,7 +543,7 @@
     </method>
     <method name="i_cal_property_new_defaultlocale" corresponds="icalproperty_new_defaultlocale" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The defaultlocale"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_defaultlocale" corresponds="icalproperty_set_defaultlocale" kind="set" since="1.0">
@@ -558,7 +558,7 @@
     </method>
     <method name="i_cal_property_new_defaulttzid" corresponds="icalproperty_new_defaulttzid" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The defaulttzid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_defaulttzid" corresponds="icalproperty_set_defaulttzid" kind="set" since="1.0">
@@ -573,7 +573,7 @@
     </method>
     <method name="i_cal_property_new_defaultvcars" corresponds="icalproperty_new_defaultvcars" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The defaultvcars"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_defaultvcars" corresponds="icalproperty_set_defaultvcars" kind="set" since="1.0">
@@ -588,7 +588,7 @@
     </method>
     <method name="i_cal_property_new_deny" corresponds="icalproperty_new_deny" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The deny"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_deny" corresponds="icalproperty_set_deny" kind="set" since="1.0">
@@ -603,7 +603,7 @@
     </method>
     <method name="i_cal_property_new_description" corresponds="icalproperty_new_description" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The description"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_description" corresponds="icalproperty_set_description" kind="set" since="1.0">
@@ -618,7 +618,7 @@
     </method>
     <method name="i_cal_property_new_dtend" corresponds="icalproperty_new_dtend" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of dtend"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_dtend" corresponds="icalproperty_set_dtend" kind="set" since="1.0">
@@ -633,7 +633,7 @@
     </method>
     <method name="i_cal_property_new_dtstamp" corresponds="icalproperty_new_dtstamp" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of dtstamp"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_dtstamp" corresponds="icalproperty_set_dtstamp" kind="set" since="1.0">
@@ -648,7 +648,7 @@
     </method>
     <method name="i_cal_property_new_dtstart" corresponds="icalproperty_new_dtstart" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of dtstart"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_dtstart" corresponds="icalproperty_set_dtstart" kind="set" since="1.0">
@@ -663,7 +663,7 @@
     </method>
     <method name="i_cal_property_new_due" corresponds="icalproperty_new_due" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of due"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_due" corresponds="icalproperty_set_due" kind="set" since="1.0">
@@ -678,7 +678,7 @@
     </method>
     <method name="i_cal_property_new_duration" corresponds="icalproperty_new_duration" kind="constructor" since="1.0">
         <parameter type="ICalDuration *" name="v" comment="The duration"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_duration" corresponds="icalproperty_set_duration" kind="set" since="1.0">
@@ -693,7 +693,7 @@
     </method>
     <method name="i_cal_property_new_estimatedduration" corresponds="icalproperty_new_estimatedduration" kind="constructor" since="1.0">
         <parameter type="ICalDuration *" name="v" comment="The estimatedduration"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_estimatedduration" corresponds="icalproperty_set_estimatedduration" kind="set" since="1.0">
@@ -708,7 +708,7 @@
     </method>
     <method name="i_cal_property_new_exdate" corresponds="icalproperty_new_exdate" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of exdate"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_exdate" corresponds="icalproperty_set_exdate" kind="set" since="1.0">
@@ -723,7 +723,7 @@
     </method>
     <method name="i_cal_property_new_expand" corresponds="icalproperty_new_expand" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The expand"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_expand" corresponds="icalproperty_set_expand" kind="set" since="1.0">
@@ -738,7 +738,7 @@
     </method>
     <method name="i_cal_property_new_exrule" corresponds="icalproperty_new_exrule" kind="constructor" since="1.0">
         <parameter type="ICalRecurrence *" name="v" comment="The exrule recurrence type"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_exrule" corresponds="icalproperty_set_exrule" kind="set" since="1.0">
@@ -753,7 +753,7 @@
     </method>
     <method name="i_cal_property_new_freebusy" corresponds="icalproperty_new_freebusy" kind="constructor" since="1.0">
         <parameter type="ICalPeriod *" name="v" comment="The freebusy period type"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_freebusy" corresponds="icalproperty_set_freebusy" kind="set" since="1.0">
@@ -768,7 +768,7 @@
     </method>
     <method name="i_cal_property_new_geo" corresponds="icalproperty_new_geo" kind="constructor" since="1.0">
         <parameter type="ICalGeo *" name="v" comment="The geo type"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_geo" corresponds="icalproperty_set_geo" kind="set" since="1.0">
@@ -783,7 +783,7 @@
     </method>
     <method name="i_cal_property_new_grant" corresponds="icalproperty_new_grant" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The grant"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_grant" corresponds="icalproperty_set_grant" kind="set" since="1.0">
@@ -798,7 +798,7 @@
     </method>
     <method name="i_cal_property_new_itipversion" corresponds="icalproperty_new_itipversion" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The itipversion"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_itipversion" corresponds="icalproperty_set_itipversion" kind="set" since="1.0">
@@ -813,7 +813,7 @@
     </method>
     <method name="i_cal_property_new_lastmodified" corresponds="icalproperty_new_lastmodified" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of lastmodified"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_lastmodified" corresponds="icalproperty_set_lastmodified" kind="set" since="1.0">
@@ -828,7 +828,7 @@
     </method>
     <method name="i_cal_property_new_location" corresponds="icalproperty_new_location" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The location"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_location" corresponds="icalproperty_set_location" kind="set" since="1.0">
@@ -843,7 +843,7 @@
     </method>
     <method name="i_cal_property_new_maxcomponentsize" corresponds="icalproperty_new_maxcomponentsize" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The maxcomponentsize"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_maxcomponentsize" corresponds="icalproperty_set_maxcomponentsize" kind="set" since="1.0">
@@ -858,7 +858,7 @@
     </method>
     <method name="i_cal_property_new_maxdate" corresponds="icalproperty_new_maxdate" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of maxdate"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_maxdate" corresponds="icalproperty_set_maxdate" kind="set" since="1.0">
@@ -873,7 +873,7 @@
     </method>
     <method name="i_cal_property_new_maxresults" corresponds="icalproperty_new_maxresults" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The maxresults"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_maxresults" corresponds="icalproperty_set_maxresults" kind="set" since="1.0">
@@ -888,7 +888,7 @@
     </method>
     <method name="i_cal_property_new_maxresultssize" corresponds="icalproperty_new_maxresultssize" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The maxresultssize"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_maxresultssize" corresponds="icalproperty_set_maxresultssize" kind="set" since="1.0">
@@ -903,7 +903,7 @@
     </method>
     <method name="i_cal_property_new_method" corresponds="icalproperty_new_method" kind="constructor" since="1.0">
         <parameter type="ICalPropertyMethod" name="v" comment="The method"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_method" corresponds="icalproperty_set_method" kind="set" since="1.0">
@@ -918,7 +918,7 @@
     </method>
     <method name="i_cal_property_new_mindate" corresponds="icalproperty_new_mindate" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of mindate"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_mindate" corresponds="icalproperty_set_mindate" kind="set" since="1.0">
@@ -933,7 +933,7 @@
     </method>
     <method name="i_cal_property_new_multipart" corresponds="icalproperty_new_multipart" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The multipart"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_multipart" corresponds="icalproperty_set_multipart" kind="set" since="1.0">
@@ -948,7 +948,7 @@
     </method>
     <method name="i_cal_property_new_name" corresponds="icalproperty_new_name" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The name"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_name" corresponds="icalproperty_set_name" kind="set" since="1.0">
@@ -963,7 +963,7 @@
     </method>
     <method name="i_cal_property_new_organizer" corresponds="icalproperty_new_organizer" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The organizer"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_organizer" corresponds="icalproperty_set_organizer" kind="set" since="1.0">
@@ -978,7 +978,7 @@
     </method>
     <method name="i_cal_property_new_owner" corresponds="icalproperty_new_owner" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The owner"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_owner" corresponds="icalproperty_set_owner" kind="set" since="1.0">
@@ -993,7 +993,7 @@
     </method>
     <method name="i_cal_property_new_percentcomplete" corresponds="icalproperty_new_percentcomplete" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The percentcomplete"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_percentcomplete" corresponds="icalproperty_set_percentcomplete" kind="set" since="1.0">
@@ -1008,7 +1008,7 @@
     </method>
     <method name="i_cal_property_new_permission" corresponds="icalproperty_new_permission" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The permission"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_permission" corresponds="icalproperty_set_permission" kind="set" since="1.0">
@@ -1023,7 +1023,7 @@
     </method>
     <method name="i_cal_property_new_pollcompletion" corresponds="icalproperty_new_pollcompletion" kind="constructor" since="1.0">
         <parameter type="ICalPropertyPollcompletion" name="v" comment="The pollcompletion"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_pollcompletion" corresponds="icalproperty_set_pollcompletion" kind="set" since="1.0">
@@ -1038,7 +1038,7 @@
     </method>
     <method name="i_cal_property_new_pollitemid" corresponds="icalproperty_new_pollitemid" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The pollitemid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_pollitemid" corresponds="icalproperty_set_pollitemid" kind="set" since="1.0">
@@ -1053,7 +1053,7 @@
     </method>
     <method name="i_cal_property_new_pollmode" corresponds="icalproperty_new_pollmode" kind="constructor" since="1.0">
         <parameter type="ICalPropertyPollmode" name="v" comment="The pollmode"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_pollmode" corresponds="icalproperty_set_pollmode" kind="set" since="1.0">
@@ -1068,7 +1068,7 @@
     </method>
     <method name="i_cal_property_new_pollproperties" corresponds="icalproperty_new_pollproperties" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The pollproperties"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_pollproperties" corresponds="icalproperty_set_pollproperties" kind="set" since="1.0">
@@ -1083,7 +1083,7 @@
     </method>
     <method name="i_cal_property_new_pollwinner" corresponds="icalproperty_new_pollwinner" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The pollwinner"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_pollwinner" corresponds="icalproperty_set_pollwinner" kind="set" since="1.0">
@@ -1098,7 +1098,7 @@
     </method>
     <method name="i_cal_property_new_priority" corresponds="icalproperty_new_priority" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The priority"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_priority" corresponds="icalproperty_set_priority" kind="set" since="1.0">
@@ -1113,7 +1113,7 @@
     </method>
     <method name="i_cal_property_new_prodid" corresponds="icalproperty_new_prodid" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The prodid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_prodid" corresponds="icalproperty_set_prodid" kind="set" since="1.0">
@@ -1128,7 +1128,7 @@
     </method>
     <method name="i_cal_property_new_query" corresponds="icalproperty_new_query" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The query"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_query" corresponds="icalproperty_set_query" kind="set" since="1.0">
@@ -1143,7 +1143,7 @@
     </method>
     <method name="i_cal_property_new_querylevel" corresponds="icalproperty_new_querylevel" kind="constructor" since="1.0">
         <parameter type="ICalPropertyQuerylevel" name="v" comment="The querylevel"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_querylevel" corresponds="icalproperty_set_querylevel" kind="set" since="1.0">
@@ -1158,7 +1158,7 @@
     </method>
     <method name="i_cal_property_new_queryid" corresponds="icalproperty_new_queryid" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The queryid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_queryid" corresponds="icalproperty_set_queryid" kind="set" since="1.0">
@@ -1173,7 +1173,7 @@
     </method>
     <method name="i_cal_property_new_queryname" corresponds="icalproperty_new_queryname" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The queryname"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_queryname" corresponds="icalproperty_set_queryname" kind="set" since="1.0">
@@ -1188,7 +1188,7 @@
     </method>
     <method name="i_cal_property_new_rdate" corresponds="icalproperty_new_rdate" kind="constructor" since="1.0">
         <parameter type="ICalDatetimeperiod *" name="v" comment="The rdate"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_rdate" corresponds="icalproperty_set_rdate" kind="set" since="1.0">
@@ -1203,7 +1203,7 @@
     </method>
     <method name="i_cal_property_new_recuraccepted" corresponds="icalproperty_new_recuraccepted" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The recuraccepted"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_recuraccepted" corresponds="icalproperty_set_recuraccepted" kind="set" since="1.0">
@@ -1218,7 +1218,7 @@
     </method>
     <method name="i_cal_property_new_recurexpand" corresponds="icalproperty_new_recurexpand" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The recurexpand"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_recurexpand" corresponds="icalproperty_set_recurexpand" kind="set" since="1.0">
@@ -1233,7 +1233,7 @@
     </method>
     <method name="i_cal_property_new_recurlimit" corresponds="icalproperty_new_recurlimit" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The recurlimit"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_recurlimit" corresponds="icalproperty_set_recurlimit" kind="set" since="1.0">
@@ -1248,7 +1248,7 @@
     </method>
     <method name="i_cal_property_new_recurrenceid" corresponds="icalproperty_new_recurrenceid" kind="constructor" since="1.0">
         <parameter type="ICalTime *" name="v" comment="The time of recurrenceid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_recurrenceid" corresponds="icalproperty_set_recurrenceid" kind="set" since="1.0">
@@ -1263,7 +1263,7 @@
     </method>
     <method name="i_cal_property_new_relatedto" corresponds="icalproperty_new_relatedto" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The relatedto"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_relatedto" corresponds="icalproperty_set_relatedto" kind="set" since="1.0">
@@ -1278,7 +1278,7 @@
     </method>
     <method name="i_cal_property_new_relcalid" corresponds="icalproperty_new_relcalid" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The relcalid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_relcalid" corresponds="icalproperty_set_relcalid" kind="set" since="1.0">
@@ -1293,7 +1293,7 @@
     </method>
     <method name="i_cal_property_new_repeat" corresponds="icalproperty_new_repeat" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The repeat"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_repeat" corresponds="icalproperty_set_repeat" kind="set" since="1.0">
@@ -1308,7 +1308,7 @@
     </method>
     <method name="i_cal_property_new_replyurl" corresponds="icalproperty_new_replyurl" kind="constructor" since="2.0">
         <parameter type="const gchar *" name="v" comment="The replyurl"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_replyurl" corresponds="icalproperty_set_replyurl" kind="set" since="2.0">
@@ -1323,7 +1323,7 @@
     </method>
     <method name="i_cal_property_new_requeststatus" corresponds="icalproperty_new_requeststatus" kind="constructor" since="1.0">
         <parameter type="ICalReqstat *" name="v" comment="The requeststatus"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_requeststatus" corresponds="icalproperty_set_requeststatus" kind="set" since="1.0">
@@ -1338,7 +1338,7 @@
     </method>
     <method name="i_cal_property_new_resources" corresponds="icalproperty_new_resources" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The resources"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_resources" corresponds="icalproperty_set_resources" kind="set" since="1.0">
@@ -1353,7 +1353,7 @@
     </method>
     <method name="i_cal_property_new_response" corresponds="icalproperty_new_response" kind="constructor" since="2.0">
         <parameter type="gint" name="v" comment="The response"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_response" corresponds="icalproperty_set_response" kind="set" since="2.0">
@@ -1368,7 +1368,7 @@
     </method>
     <method name="i_cal_property_new_restriction" corresponds="icalproperty_new_restriction" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The restriction"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_restriction" corresponds="icalproperty_set_restriction" kind="set" since="1.0">
@@ -1383,7 +1383,7 @@
     </method>
     <method name="i_cal_property_new_rrule" corresponds="icalproperty_new_rrule" kind="constructor" since="1.0">
         <parameter type="ICalRecurrence *" name="v" comment="The rrule recurrence type"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_rrule" corresponds="icalproperty_set_rrule" kind="set" since="1.0">
@@ -1398,7 +1398,7 @@
     </method>
     <method name="i_cal_property_new_scope" corresponds="icalproperty_new_scope" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The scope"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_scope" corresponds="icalproperty_set_scope" kind="set" since="1.0">
@@ -1413,7 +1413,7 @@
     </method>
     <method name="i_cal_property_new_sequence" corresponds="icalproperty_new_sequence" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The sequence"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_sequence" corresponds="icalproperty_set_sequence" kind="set" since="1.0">
@@ -1428,7 +1428,7 @@
     </method>
     <method name="i_cal_property_new_status" corresponds="icalproperty_new_status" kind="constructor" since="1.0">
         <parameter type="ICalPropertyStatus" name="v" comment="The status"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_status" corresponds="icalproperty_set_status" kind="set" since="1.0">
@@ -1443,7 +1443,7 @@
     </method>
     <method name="i_cal_property_new_storesexpanded" corresponds="icalproperty_new_storesexpanded" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The storesexpanded"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_storesexpanded" corresponds="icalproperty_set_storesexpanded" kind="set" since="1.0">
@@ -1458,7 +1458,7 @@
     </method>
     <method name="i_cal_property_new_summary" corresponds="icalproperty_new_summary" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The summary"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_summary" corresponds="icalproperty_set_summary" kind="set" since="1.0">
@@ -1473,7 +1473,7 @@
     </method>
     <method name="i_cal_property_new_target" corresponds="icalproperty_new_target" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The target"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_target" corresponds="icalproperty_set_target" kind="set" since="1.0">
@@ -1488,7 +1488,7 @@
     </method>
     <method name="i_cal_property_new_taskmode" corresponds="icalproperty_new_taskmode" kind="constructor" since="2.0">
         <parameter type="ICalPropertyTaskmode" name="v" comment="The taskmode"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_taskmode" corresponds="icalproperty_set_taskmode" kind="set" since="2.0">
@@ -1503,7 +1503,7 @@
     </method>
     <method name="i_cal_property_new_transp" corresponds="icalproperty_new_transp" kind="constructor" since="1.0">
         <parameter type="ICalPropertyTransp" name="v" comment="The transp"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_transp" corresponds="icalproperty_set_transp" kind="set" since="1.0">
@@ -1518,7 +1518,7 @@
     </method>
     <method name="i_cal_property_new_trigger" corresponds="icalproperty_new_trigger" kind="constructor" since="1.0">
         <parameter type="ICalTrigger *" name="v" comment="The trigger period type"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_trigger" corresponds="icalproperty_set_trigger" kind="set" since="1.0">
@@ -1533,7 +1533,7 @@
     </method>
     <method name="i_cal_property_new_tzid" corresponds="icalproperty_new_tzid" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The tzid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_tzid" corresponds="icalproperty_set_tzid" kind="set" since="1.0">
@@ -1548,7 +1548,7 @@
     </method>
     <method name="i_cal_property_new_tzidaliasof" corresponds="icalproperty_new_tzidaliasof" kind="constructor" since="2.0">
         <parameter type="const gchar *" name="v" comment="The tzidaliasof"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_tzidaliasof" corresponds="icalproperty_set_tzidaliasof" kind="set" since="2.0">
@@ -1563,7 +1563,7 @@
     </method>
     <method name="i_cal_property_new_tzname" corresponds="icalproperty_new_tzname" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The tzname"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_tzname" corresponds="icalproperty_set_tzname" kind="set" since="1.0">
@@ -1578,7 +1578,7 @@
     </method>
     <method name="i_cal_property_new_tzoffsetfrom" corresponds="icalproperty_new_tzoffsetfrom" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The tzoffsetfrom"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_tzoffsetfrom" corresponds="icalproperty_set_tzoffsetfrom" kind="set" since="1.0">
@@ -1593,7 +1593,7 @@
     </method>
     <method name="i_cal_property_new_tzoffsetto" corresponds="icalproperty_new_tzoffsetto" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The tzoffsetto"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_tzoffsetto" corresponds="icalproperty_set_tzoffsetto" kind="set" since="1.0">
@@ -1608,7 +1608,7 @@
     </method>
     <method name="i_cal_property_new_tzuntil" corresponds="icalproperty_new_tzuntil" kind="constructor" since="2.0">
         <parameter type="ICalTime *" name="v" comment="The time of acknowledgement"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_tzuntil" corresponds="icalproperty_set_tzuntil" kind="set" since="2.0">
@@ -1623,7 +1623,7 @@
     </method>
     <method name="i_cal_property_new_tzurl" corresponds="icalproperty_new_tzurl" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The tzurl"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_tzurl" corresponds="icalproperty_set_tzurl" kind="set" since="1.0">
@@ -1638,7 +1638,7 @@
     </method>
     <method name="i_cal_property_new_uid" corresponds="icalproperty_new_uid" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The uid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_uid" corresponds="icalproperty_set_uid" kind="set" since="1.0">
@@ -1653,7 +1653,7 @@
     </method>
     <method name="i_cal_property_new_url" corresponds="icalproperty_new_url" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The url"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_url" corresponds="icalproperty_set_url" kind="set" since="1.0">
@@ -1668,7 +1668,7 @@
     </method>
     <method name="i_cal_property_new_version" corresponds="icalproperty_new_version" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The version"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_version" corresponds="icalproperty_set_version" kind="set" since="1.0">
@@ -1683,7 +1683,7 @@
     </method>
     <method name="i_cal_property_new_voter" corresponds="icalproperty_new_voter" kind="constructor" since="2.0">
         <parameter type="const gchar *" name="v" comment="The voter"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_voter" corresponds="icalproperty_set_voter" kind="set" since="2.0">
@@ -1698,7 +1698,7 @@
     </method>
     <method name="i_cal_property_new_x" corresponds="icalproperty_new_x" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The x"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_x" corresponds="icalproperty_set_x" kind="set" since="1.0">
@@ -1713,7 +1713,7 @@
     </method>
     <method name="i_cal_property_new_xlicclass" corresponds="icalproperty_new_xlicclass" kind="constructor" since="1.0">
         <parameter type="ICalPropertyXlicclass" name="v" comment="The xlicclass"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_xlicclass" corresponds="icalproperty_set_xlicclass" kind="set" since="1.0">
@@ -1728,7 +1728,7 @@
     </method>
     <method name="i_cal_property_new_xlicclustercount" corresponds="icalproperty_new_xlicclustercount" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The xlicclustercount"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_xlicclustercount" corresponds="icalproperty_set_xlicclustercount" kind="set" since="1.0">
@@ -1743,7 +1743,7 @@
     </method>
     <method name="i_cal_property_new_xlicerror" corresponds="icalproperty_new_xlicerror" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The xlicerror"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_xlicerror" corresponds="icalproperty_set_xlicerror" kind="set" since="1.0">
@@ -1758,7 +1758,7 @@
     </method>
     <method name="i_cal_property_new_xlicmimecharset" corresponds="icalproperty_new_xlicmimecharset" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The xlicmimecharset"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_xlicmimecharset" corresponds="icalproperty_set_xlicmimecharset" kind="set" since="1.0">
@@ -1773,7 +1773,7 @@
     </method>
     <method name="i_cal_property_new_xlicmimecid" corresponds="icalproperty_new_xlicmimecid" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The xlicmimecid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_xlicmimecid" corresponds="icalproperty_set_xlicmimecid" kind="set" since="1.0">
@@ -1788,7 +1788,7 @@
     </method>
     <method name="i_cal_property_new_xlicmimecontenttype" corresponds="icalproperty_new_xlicmimecontenttype" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The xlicmimecontenttype"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_xlicmimecontenttype" corresponds="icalproperty_set_xlicmimecontenttype" kind="set" since="1.0">
@@ -1803,7 +1803,7 @@
     </method>
     <method name="i_cal_property_new_xlicmimeencoding" corresponds="icalproperty_new_xlicmimeencoding" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The xlicmimeencoding"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_xlicmimeencoding" corresponds="icalproperty_set_xlicmimeencoding" kind="set" since="1.0">
@@ -1818,7 +1818,7 @@
     </method>
     <method name="i_cal_property_new_xlicmimefilename" corresponds="icalproperty_new_xlicmimefilename" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The xlicmimefilename"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_xlicmimefilename" corresponds="icalproperty_set_xlicmimefilename" kind="set" since="1.0">
@@ -1833,7 +1833,7 @@
     </method>
     <method name="i_cal_property_new_xlicmimeoptinfo" corresponds="icalproperty_new_xlicmimeoptinfo" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The xlicmimeoptinfo"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
         <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_xlicmimeoptinfo" corresponds="icalproperty_set_xlicmimeoptinfo" kind="set" since="1.0">

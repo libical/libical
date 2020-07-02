@@ -29,7 +29,7 @@
     <!-- <method name="i_cal_array_new" corresponds="icalarray_new" kind="constructor" since="1.0">
         <parameter type="gint" name="element_size" comment="The size of the element of the array"/>
         <parameter type="gint" name="increment_size" comment="The incremental size when the array is full"/>
-        <returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="The newly create #ICalArray with the properties set by @element_size and @increment_size"/>
+        <returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="The newly created #ICalArray with the properties set by @element_size and @increment_size"/>
         <comment xml:space="preserve">Creates a #ICalArray with the element size to be @element_size and increment size to be @increment_size.</comment>
     </method> -->
     <method name="i_cal_array_copy" corresponds="icalarray_copy" kind="clone" since="1.0">

@@ -1913,7 +1913,7 @@ static char *icaltimezone_load_get_line_fn(char *s, size_t size, void *data)
  */
 
 /**
- * This outputs a list of timezone changes for the given timezone to the
+ * Outputs a list of timezone changes for the given timezone to the
  * given file, up to the maximum year given. We compare this output with the
  * output from 'vzic --dump-changes' to make sure that we are consistent.
  * (vzic is the Olson timezone database to VTIMEZONE converter.)
