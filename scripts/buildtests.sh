@@ -85,7 +85,7 @@ CHECK_WARNINGS() {
   then
     echo "EXITING. $w warnings encountered"
     echo
-    if ( test -z "$3")
+    if ( test -n "$3")
     then
       cat $1 | grep "$2" | grep -v "$3" | sort | uniq
     else
@@ -123,8 +123,8 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='\(no[[:space:]]link[[:space:]]for:\|G_ADD_PRIVATE\|g_type_class_add_private.*is[[:space:]]deprecated\|/stow\.c\|/testmime\.c\|/vcc\.c\|/vobject\.c\|/icalsslexer\.c\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\)'
-  CHECK_WARNINGS $1 "warning:" "$whitelist"
+  whitelist='\(no[[:space:]]link[[:space:]]for:\|g_type_class_add_private.*is[[:space:]]deprecated\|/vcc\.c\|/vobject\.c\|/icalsslexer\.c\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\|G_ADD_PRIVATE\)'
+  CHECK_WARNINGS $1 "warning:" $whitelist
 }
 
 #function CONFIGURE:
