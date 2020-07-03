@@ -96,10 +96,15 @@ int main(int argc, char *argv[])
     program_name = (char *)strrchr((char *)argv[0], '/');
     program_name++;
 
+    opt.input_file = NULL;
+
     while ((c = getopt(argc, argv, "nsbqi:S:c:")) != -1) {
         switch (c) {
         case 'i':{
                 /* Input comes from named file */
+                if (opt.input_file) {
+                    free(opt.input_file);
+                }
                 opt.input_file = strdup(optarg);
                 break;
             }
