@@ -105,7 +105,21 @@ enum file_type test_file(char *path)
     return type;
 }
 
-char *lowercase(const char *str)
+static void byebye(int code, struct options_struct *opt)
+{
+    if (opt->output_file) {
+        free(opt->output_file);
+    }
+    if (opt->input_file) {
+        free(opt->input_file);
+    }
+    if (opt->calid) {
+        free(opt->calid);
+    }
+    exit(code);
+}
+
+static char *lowercase(const char *str)
 {
     char *new;
     char *p = 0;
@@ -236,7 +250,7 @@ void return_failure(icalcomponent *comp, char *message, struct options_struct *o
     if (p == 0) {
         fprintf(stderr,
                 "%s: fatal. Could not open pipe to sendmail (\"%s\") \n", program_name, SENDMAIL);
-        exit(1);
+        byebye(1, opt);
     }
 
     mime = make_mime(org_addr, local_attendee, "iMIP error",
@@ -284,8 +298,8 @@ icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
     reply =
         icalcomponent_vanew(
             ICAL_VCALENDAR_COMPONENT,
-            icalproperty_new_version(strdup("2.0")),
-            icalproperty_new_prodid(strdup(prodid)),
+            icalproperty_new_version("2.0"),
+            icalproperty_new_prodid(prodid),
             icalproperty_new_method(ICAL_METHOD_REPLY),
             icalcomponent_vanew(
                 ICAL_VEVENT_COMPONENT,
@@ -343,7 +357,7 @@ int check_attendee(icalproperty *p, struct options_struct *opt)
 }
 
 char static_component_error_str[MAXPATHLEN];
-char *check_component(icalcomponent *comp, icalproperty ** return_status,
+char *check_component(icalcomponent *comp, icalproperty **return_status,
                       struct options_struct *opt)
 {
     char *component_error_str = 0;
@@ -359,8 +373,8 @@ char *check_component(icalcomponent *comp, icalproperty ** return_status,
 
     /*{
        icalrequeststatus code;
-       const char* desc;
-       const char* debug;
+       const char *desc;
+       const char *debug;
        }; */
 
     *return_status = 0;
@@ -503,18 +517,24 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
         case 'i':{
                 /* Input comes from named file */
                 opt->input_source = INPUT_FROM_FILE;
+                if (opt->input_file) {
+                    free(opt->input_file);
+                }
                 opt->input_file = strdup(optarg);
                 break;
             }
         case 'o':{
                 /* Output goes to named file. Default */
+                if (opt->output_file) {
+                    free(opt->output_file);
+                }
                 opt->output_file = strdup(optarg);
                 opt->storage = STORE_IN_FILE;
                 break;
             }
         case 'd':{
                 /* Output goes to database */
-                fprintf(stderr, "%s: option -d is unimplmented\n", program_name);
+                fprintf(stderr, "%s: option -d is unimplemented\n", program_name);
                 opt->storage = STORE_IN_DB;
                 errflg++;
                 break;
@@ -527,6 +547,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
                 /* Set the calid for the output database or
                    file. Default is user name of user running
                    program */
+                free(opt->calid);
                 opt->calid = strdup(optarg);
                 break;
             }
@@ -551,9 +572,8 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
         }
 
         if (errflg > 0) {
-            usage("");
-            exit(1);
-        }
+            byebye(1, opt);
+         }
     }
 
     if (opt->calid == 0) {
@@ -578,7 +598,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
             fprintf(stderr,
                     "%s: Can't get username. Try explicitly specifying the output file with -o",
                     program_name);
-            exit(1);
+            byebye(1, opt);
         }
 
         /* Find password entry for user */
@@ -593,7 +613,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
                     "%s: Can't get get password entry for user \"%s\" "
                     "Try explicitly specifying the output file with -o",
                     program_name, user);
-            exit(1);
+            byebye(1, opt);
         }
 
         if (pw->pw_dir == 0) {
@@ -601,7 +621,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
                     "%s: User \"%s\" has no home directory. "
                     "Try explicitly specifying the output file with -o",
                     program_name, user);
-            exit(1);
+            byebye(1, opt);
         }
 
         snprintf(file, MAXPATHLEN, "%s/.facs/%s", pw->pw_dir, opt->calid);
@@ -635,7 +655,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
                             "%s: Failed to create calendar directory %s: %s\n",
                             program_name, facspath, strerror(errno));
                     free(facspath);
-                    exit(1);
+                    byebye(1, opt);
                 } else {
                     fprintf(stderr, "%s: Creating calendar directory %s\n", program_name, facspath);
                 }
@@ -644,7 +664,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
                 fprintf(stderr, "%s: Cannot create calendar directory %s\n",
                         program_name, facspath);
                 free(facspath);
-                exit(1);
+                byebye(1, opt);
             }
         }
         free(facspath);
@@ -668,7 +688,7 @@ void store_component(icalcomponent *comp, struct options_struct *opt)
             fprintf(stderr,
                     "%s: Failed to get incoming component directory: %s\n",
                     program_name, icalerror_strerror(icalerrno));
-            exit(1);
+            byebye(1, opt);
         }
 
         error = icalfileset_add_component(fs, comp);
@@ -676,7 +696,7 @@ void store_component(icalcomponent *comp, struct options_struct *opt)
         if (error != ICAL_NO_ERROR) {
             fprintf(stderr, "%s: Failed to write incoming component: %s\n",
                     program_name, icalerror_strerror(icalerrno));
-            exit(1);
+            byebye(1, opt);
         }
 
         error = icalfileset_commit(fs);
@@ -684,7 +704,7 @@ void store_component(icalcomponent *comp, struct options_struct *opt)
         if (error != ICAL_NO_ERROR) {
             fprintf(stderr, "%s: Failed to commit incoming cluster: %s\n",
                     program_name, icalerror_strerror(icalerrno));
-            exit(1);
+            byebye(1, opt);
         }
 
         icalset_free(fs);
@@ -702,7 +722,7 @@ char *read_stream(char *s, size_t size, void *d)
     return c;
 }
 
-icalcomponent *read_nonmime_component(struct options_struct * opt)
+icalcomponent *read_nonmime_component(struct options_struct *opt)
 {
     FILE *stream;
     icalcomponent *comp;
@@ -715,7 +735,7 @@ icalcomponent *read_nonmime_component(struct options_struct * opt)
 
         if (stream == 0) {
             perror("Can't open input file");
-            exit(1);
+            byebye(1, opt);
         }
 
     } else {
@@ -767,7 +787,7 @@ icalcomponent *find_vcalendar(icalcomponent *comp)
     return 0;
 }
 
-icalcomponent *read_mime_component(struct options_struct * opt)
+icalcomponent *read_mime_component(struct options_struct *opt)
 {
     icalcomponent *comp, *mimecomp;
     FILE *stream;
@@ -777,7 +797,7 @@ icalcomponent *read_mime_component(struct options_struct * opt)
 
         if (stream == 0) {
             perror("Can't open input file");
-            exit(1);
+            byebye(1, opt);
         }
 
     } else {
@@ -798,7 +818,7 @@ icalcomponent *read_mime_component(struct options_struct * opt)
     return comp;
 }
 
-icalcomponent *read_component(struct options_struct * opt)
+icalcomponent *read_component(struct options_struct *opt)
 {
     if (opt->input_type == INPUT_IS_MIME) {
         return read_mime_component(opt);
@@ -806,8 +826,9 @@ icalcomponent *read_component(struct options_struct * opt)
         return read_nonmime_component(opt);
     } else {
         fprintf(stderr, "%s: Internal Error; unknown option for input_type\n", program_name);
-        exit(1);
+        byebye(1, opt);
     }
+    return (icalcomponent *)NULL;
 }
 
 int main(int argc, char *argv[])
@@ -824,7 +845,7 @@ int main(int argc, char *argv[])
 
     if ((options_error_str = check_options(&opt)) != 0) {
         usage(options_error_str);
-        exit(1);
+        byebye(1, &opt);
     }
 
     comp = read_component(&opt);
@@ -837,7 +858,7 @@ int main(int argc, char *argv[])
 
         return_failure(reply, component_error_str, &opt);
         icalcomponent_free(reply);
-        exit(0);
+        byebye(0, &opt);
     }
 
     store_component(comp, &opt);
@@ -845,5 +866,5 @@ int main(int argc, char *argv[])
     /* Don't free the component comp, since it is now part of the
        store, and will be freed there */
 
-    exit(0);
+    byebye(0, &opt);
 }
