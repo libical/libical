@@ -27,10 +27,6 @@
     the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
-/**
- * @file icalmemory.c
- */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

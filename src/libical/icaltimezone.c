@@ -17,10 +17,6 @@
 ======================================================================*/
 //krazy:excludeall=cpp
 
-/** @file icaltimezone.c
- *  @brief implementation of timezone handling routines
- **/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

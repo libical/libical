@@ -17,7 +17,7 @@
 ========================================================================*/
 
 /**
-  @file icalrecur.c
+  icalrecur.c
   @brief Implementation of routines for dealing with recurring time
 
   How this code works:

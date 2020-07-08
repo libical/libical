@@ -24,6 +24,8 @@
 
 #include <stdarg.h>     /* for va_... */
 
+/** @file icalproperty.h */
+
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new(icalproperty_kind kind);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_impl(icalproperty_kind kind);

@@ -22,6 +22,8 @@
 #include "libical_ical_export.h"
 #include "icalvalueimpl.h"
 
+/** @file icalvalue.h */
+
 #define ICAL_BOOLEAN_TRUE  1
 #define ICAL_BOOLEAN_FALSE 0
 
