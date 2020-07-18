@@ -18,7 +18,7 @@
  The original code is icalvcal.c
 
  The icalvcal_convert routine calls icalvcal_traverse_objects to do
- its work.s his routine steps through through all of the properties
+ its work.s his routine steps through all of the properties
  and components of a VObject. For each name of a property or a
  component, icalvcal_traverse_objects looks up the name in
  conversion_table[]. This table indicates whether the name is of a

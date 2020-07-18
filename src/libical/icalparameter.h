@@ -615,7 +615,7 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *
 /**
  * @brief Checks the validity of a ::icalparameter_kind
  * @param kind The icalparameter_kind
- * @return 1 if if @a kind is valid, 0 otherwise
+ * @return 1 if @a kind is valid, 0 otherwise
  *
  * ### Usage
  * ```c

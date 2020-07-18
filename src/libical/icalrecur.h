@@ -58,7 +58,7 @@ Or, just make them up:
         }
 @endcode
 
-Note that that the time returned by icalrecur_iterator_next is in
+Note that the time returned by icalrecur_iterator_next is in
 whatever timezone that dtstart is in.
 
 */

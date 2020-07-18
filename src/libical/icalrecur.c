@@ -2476,7 +2476,7 @@ static int next_weekday_by_week(icalrecur_iterator *impl)
             end_of_data = 1;    /* Signal that we're at the end */
         }
 
-        /* Add the day of week offset to to the start of this week, and use
+        /* Add the day of week offset to the start of this week, and use
            that to get the next day */
         /* ignore position of dow ("4FR"), only use dow ("FR") */
         dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[BYDAYIDX]);
