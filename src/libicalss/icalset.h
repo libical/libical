@@ -110,6 +110,10 @@ LIBICAL_ICALSS_EXPORT icalset *icalset_new_file_writer(const char *path);
 
 LIBICAL_ICALSS_EXPORT icalset *icalset_new_dir(const char *path);
 
+/**
+ *  Frees memory associated with this icalset
+ *  automatically calls the implementation specific free routine
+ */
 LIBICAL_ICALSS_EXPORT void icalset_free(icalset *set);
 
 LIBICAL_ICALSS_EXPORT const char *icalset_path(icalset *set);

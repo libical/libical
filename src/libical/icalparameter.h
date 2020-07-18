@@ -208,9 +208,9 @@ LIBICAL_ICAL_EXPORT void icalparameter_free(icalparameter *parameter);
 LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter *parameter);
 
 /**
- * @brief Converts ::icalparameter into an string representation
+ * @brief Converts ::icalparameter into an string representation according to RFC5445/RFC6868.
  * @param parameter The ::icalparameter to convert
- * @return A string representing the parameter according to RFC5445/RFC6868.
+ * @return A string representing the parameter
  * @sa icalparameter_as_ical_string()
  *
  * @par Error handling

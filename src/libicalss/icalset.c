@@ -368,11 +368,6 @@ icalset *icalset_new_dir_reader(const char *path)
 
 /* Functions for built-in methods */
 
-/**
- *  Frees memory associated with this icalset
- *  automatically calls the implementation specific free routine
- */
-
 void icalset_free(icalset *set)
 {
     if (set->free) {

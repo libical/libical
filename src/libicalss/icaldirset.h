@@ -74,6 +74,11 @@ LIBICAL_ICALSS_EXPORT void icaldirset_mark(icalset *set);
 
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_commit(icalset *set);
 
+/**
+  This assumes that the top level component is a VCALENDAR, and there
+   is an inner component of type VEVENT, VTODO or VJOURNAL. The inner
+  component must have a DSTAMP property
+*/
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_add_component(icalset *store, icalcomponent *comp);
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_remove_component(icalset *store,
                                                                 icalcomponent *comp);

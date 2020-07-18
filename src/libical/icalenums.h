@@ -114,16 +114,26 @@ typedef enum icalrequeststatus
     ICAL_9_0_UNRECOGNIZED_COMMAND
 } icalrequeststatus;
 
+/** @brief Returns the descriptive text for a request status.
+ */
 LIBICAL_ICAL_EXPORT const char *icalenum_reqstat_desc(icalrequeststatus stat);
 
+/** @brief Returns the major number for a request status
+ */
 LIBICAL_ICAL_EXPORT short icalenum_reqstat_major(icalrequeststatus stat);
 
+/** @brief Returns the minor number for a request status
+ */
 LIBICAL_ICAL_EXPORT short icalenum_reqstat_minor(icalrequeststatus stat);
 
+/** @brief Returns a request status for major/minor status numbers
+ */
 LIBICAL_ICAL_EXPORT icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
 
 LIBICAL_ICAL_EXPORT char *icalenum_reqstat_code(icalrequeststatus stat);
 
+/** @brief Returns the code for a request status.
+ */
 LIBICAL_ICAL_EXPORT char *icalenum_reqstat_code_r(icalrequeststatus stat);
 
 /***********************************************************************

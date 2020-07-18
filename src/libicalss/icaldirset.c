@@ -295,12 +295,6 @@ static void icaldirset_add_uid(icalcomponent *comp)
     }
 }
 
-/**
-  This assumes that the top level component is a VCALENDAR, and there
-   is an inner component of type VEVENT, VTODO or VJOURNAL. The inner
-  component must have a DSTAMP property
-*/
-
 icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
 {
     char clustername[MAXPATHLEN] = { 0 };

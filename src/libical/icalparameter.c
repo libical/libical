@@ -256,16 +256,14 @@ static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
     }
 }
 
-/**
- * Returns a string representation of the parameter according to RFC5445/RFC6868.
- *
- * param        = param-name "=" param-value
- * param-name   = iana-token / x-token
- * param-value  = paramtext /quoted-string
- * paramtext    = *SAFE-CHAR
- * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
- * QSAFE-CHAR   = any character except CTLs and DQUOTE
- * SAFE-CHAR    = any character except CTLs, DQUOTE. ";", ":", ","
+/*
+ * - param        = param-name "=" param-value
+ * - param-name   = iana-token / x-token
+ * - param-value  = paramtext /quoted-string
+ * - paramtext    = *SAFE-CHAR
+ * - quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
+ * - QSAFE-CHAR   = any character except CTLs and DQUOTE
+ * - SAFE-CHAR    = any character except CTLs, DQUOTE. ";", ":", ","
  */
 char *icalparameter_as_ical_string_r(icalparameter *param)
 {
@@ -423,7 +421,6 @@ icalproperty *icalparameter_get_parent(icalparameter *param)
     return param->parent;
 }
 
-/* Returns 1 if parameters have same name in ICAL, otherwise 0 */
 int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
 {
     icalparameter_kind kind1;

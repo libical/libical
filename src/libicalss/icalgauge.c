@@ -427,10 +427,6 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
     return last_clause;
 }
 
-/** @brief Debug
- * Print gauge information to STDOUT.
- */
-
 void icalgauge_dump(icalgauge *gauge)
 {
     pvl_elem p;

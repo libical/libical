@@ -326,6 +326,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
  *
  * This function uses the supplied @a line_gen_func to read data in,
  * until it has read a full line, and returns the full line.
+ * It includes any continuation lines, which start with a space after a newline.
  * To supply arbitrary data (as the parameter @a d) to your @a line_gen_func,
  * call icalparser_set_gen_data().
  */

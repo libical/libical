@@ -213,7 +213,7 @@ static char *parser_get_prop_name(char *line, char **end)
     return str;
 }
 
-/* Decode parameter value per RFC6868 */
+/** Decode parameter value per RFC6868 */
 static void parser_decode_param_value(char *value)
 {
     char *in, *out;
@@ -473,10 +473,6 @@ static char *parser_get_next_parameter(char *line, char **end)
     }
 }
 
-/**
- * Get a single property line, from the property name through the
- * final new line, and include any continuation lines
- */
 char *icalparser_get_line(icalparser *parser,
                           icalparser_line_gen_func line_gen_func)
 {

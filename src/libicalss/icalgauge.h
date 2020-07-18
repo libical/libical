@@ -41,6 +41,10 @@ LIBICAL_ICALSS_EXPORT int icalgauge_get_expand(icalgauge *gauge);
 
 LIBICAL_ICALSS_EXPORT void icalgauge_free(icalgauge *gauge);
 
+/** @brief Debug
+ *
+ * Prints gauge information to STDOUT.
+ */
 LIBICAL_ICALSS_EXPORT void icalgauge_dump(icalgauge *gauge);
 
 /** @brief Returns true if comp matches the gauge.
