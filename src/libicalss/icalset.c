@@ -368,11 +368,6 @@ icalset *icalset_new_dir_reader(const char *path)
 
 /* Functions for built-in methods */
 
-/**
- *  free memory associated with this icalset
- *  automatically calls the implementation specific free routine
- */
-
 void icalset_free(icalset *set)
 {
     if (set->free) {
@@ -508,7 +503,7 @@ icalcomponent *icalsetiter_deref(icalsetiter *i)
     return (icalcompiter_deref(&(i->iter)));
 }
 
-/* for subclasses that use multiple clusters that require specialized cluster traversal */
+/* For subclasses that use multiple clusters that require specialized cluster traversal */
 icalcomponent *icalsetiter_to_next(icalset *set, icalsetiter *i)
 {
     return set->icalsetiter_to_next(set, i);

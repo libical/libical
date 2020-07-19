@@ -90,7 +90,7 @@ END:BOOGA\
 END:VCALENDAR";
 */
 
-/* Return a list of all attendees who are required. */
+/* Returns a list of all attendees who are required. */
 /*
 static char** get_required_attendees(icalcomponent* event)
 {

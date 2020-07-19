@@ -625,16 +625,6 @@ char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *nam
     return str;
 }
 
-/** @brief Remove all parameters with the specified kind.
- *
- *  @param prop   A valid icalproperty.
- *  @param kind   The kind to remove (ex. ICAL_TZID_PARAMETER)
- *
- *  See icalproperty_remove_parameter_by_name() and
- *  icalproperty_remove_parameter_by_ref() for alternate ways of
- *  removing parameters
- */
-
 void icalproperty_remove_parameter_by_kind(icalproperty *prop, icalparameter_kind kind)
 {
     pvl_elem p;
@@ -651,20 +641,6 @@ void icalproperty_remove_parameter_by_kind(icalproperty *prop, icalparameter_kin
         }
     }
 }
-
-/** @brief Remove all parameters with the specified name.
- *
- *  @param prop   A valid icalproperty.
- *  @param name   The name of the parameter to remove
- *
- *  This function removes parameters with the given name.  The name
- *  corresponds to either a built-in name (TZID, etc.) or the name of
- *  an extended parameter (X-FOO)
- *
- *  See icalproperty_remove_parameter_by_kind() and
- *  icalproperty_remove_parameter_by_ref() for alternate ways of removing
- *  parameters
- */
 
 void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
 {
@@ -694,15 +670,6 @@ void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
         }
     }
 }
-
-/** @brief Remove the specified parameter reference from the property.
- *
- *  @param prop   A valid icalproperty.
- *  @param parameter   A reference to a specific icalparameter.
- *
- *  This function removes the specified parameter reference from the
- *  property.
- */
 
 void icalproperty_remove_parameter_by_ref(icalproperty *prop, icalparameter *parameter)
 {
@@ -1072,7 +1039,7 @@ void icalproperty_normalize(icalproperty *prop)
     prop->parameters = sorted_params;
 }
 
-/**     @brief Get a DATE or DATE-TIME property as an icaltime
+/**     @brief Gets a DATE or DATE-TIME property as an icaltime
  *
  *      If the property is a DATE-TIME with a TZID parameter and a
  *      corresponding VTIMEZONE is present in the component, the

@@ -35,7 +35,7 @@ macro(gir_add_introspections introspections_girs)
       string(REGEX REPLACE ".*-([^-]+).gir" "\\1" _gir_version "${gir}")
     endif ()
 
-    # _PROGRAM is an optional variable which needs it's own --program argument
+    # _PROGRAM is an optional variable which needs its own --program argument
     set(_gir_program "${${_gir_name}_PROGRAM}")
     if (NOT _gir_program STREQUAL "")
       set(_gir_program "--program=${_gir_program}")

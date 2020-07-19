@@ -90,7 +90,7 @@ public class ICalParameter
 	}
 
 	/**
-	 * Create instance from a string of form "PARAMNAME=VALUE"
+	 * Creates instance from a string of form "PARAMNAME=VALUE"
 	 */
 	public ICalParameter(String str)
 	{
@@ -98,7 +98,7 @@ public class ICalParameter
 	}
 
 	/**
-	 * Create from just the value, the part after the "="
+	 * Creates from just the value, the part after the "="
 	 */
 	public ICalParameter(/* ICalParameterKind */ int kind, String  str)
 	{
@@ -106,7 +106,7 @@ public class ICalParameter
 	}
 
 	/**
-	 * Create empty value for specified kind
+	 * Creates empty value for specified kind
 	 */
 	public ICalParameter(/* ICalParameterKind */ int kind)
 	{
@@ -114,22 +114,22 @@ public class ICalParameter
 	}
 
 	/**
-	 * Return ical String representation
+	 * Returns ical String representation
 	 */
 	public native String as_ical_string();
 
 	/**
-	 * Return true if this instance is valid
+	 * Returns true if this instance is valid
 	 */
 	//public native boolean is_valid();
 
 	/**
-	 * Return what kind of parameter this instance represents
+	 * Returns what kind of parameter this instance represents
 	 */
 	public native /* ICalParameterKind */ int isa();
 
 	/**
-	 * Return true if this is a parameter
+	 * Returns true if this is a parameter
 	 */
 	public native boolean isa_parameter(Object parameter);
 

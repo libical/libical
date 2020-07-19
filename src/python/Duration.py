@@ -73,7 +73,7 @@ class Duration(Property):
         self.value(icaldurationtype_as_ical_string(self.dur),"DURATION")
 
     def valid(self):
-        "Return true if this is a valid duration"
+        "Returns true if this is a valid duration"
 
         return not icaldurationtype_is_null_duration(self.dur)
 

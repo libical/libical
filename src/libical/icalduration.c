@@ -294,7 +294,7 @@ int icaldurationtype_is_null_duration(struct icaldurationtype d)
     }
 }
 
-/* in icalvalue_new_from_string_with_error, we should not call
+/* In icalvalue_new_from_string_with_error, we should not call
    icaldurationtype_is_null_duration() to see if there is an error
    condition. Null duration is perfectly valid for an alarm.
    We cannot depend on the caller to check icalerrno either,

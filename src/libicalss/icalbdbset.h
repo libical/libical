@@ -107,7 +107,7 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_select(icalset *store, icalgauge 
 
 LIBICAL_ICALSS_EXPORT void icalbdbset_clear(icalset *store);
 
-/* Get and search for a component by uid */
+/* Gets and searches for a component by uid */
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch(icalset *set,
                                                       icalcomponent_kind kind, const char *uid);
 

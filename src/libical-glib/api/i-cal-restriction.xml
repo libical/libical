@@ -29,11 +29,11 @@
         <parameter type="ICalRestrictionKind" name="restr" comment="The restriction kind"/>
         <parameter type="gint" name="count" comment="The number of restrictions"/>
         <returns type="gint" comment="Whether it is valid or not. -1 indicates invalid or more analysis. 1 indicates pass and 0 or 2+ indicates fail."/>
-        <comment xml:space="preserve">Compare the kind of restriction and the count to determine whether it is valid.</comment>
+        <comment xml:space="preserve">Compares the kind of restriction and the count to determine whether it is valid.</comment>
     </method>
     <method name="i_cal_restriction_check" corresponds="icalrestriction_check" since="1.0">
-        <parameter type="ICalComponent *" name="comp" comment="The component to be checked."/>
+        <parameter type="ICalComponent *" name="comp" comment="The component to be checked"/>
         <returns type="gint" comment="Whether the @comp is valid."/>
-        <comment xml:space="preserve">Check whether the #ICalComponent is valid.</comment>
+        <comment xml:space="preserve">Checks whether the #ICalComponent is valid.</comment>
     </method>
 </structure>

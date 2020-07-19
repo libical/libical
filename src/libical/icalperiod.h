@@ -148,6 +148,7 @@ LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_null_period(void);
 
 /**
  * Checks if a given ::icalperiodtype is a null period.
+ * @param p The time period to check
  * @return 1 if @a p is a null period, 0 otherwise
  * @sa icalperiodtype_null_period()
  *
@@ -164,6 +165,7 @@ LIBICAL_ICAL_EXPORT int icalperiodtype_is_null_period(struct icalperiodtype p);
 
 /**
  * Checks if a given ::icalperiodtype is a valid period.
+ * @param p The time period to check
  * @return 1 if @a p is a valid period, 0 otherwise
  *
  * ### Usage

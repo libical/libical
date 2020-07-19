@@ -19,7 +19,7 @@
  * stack based object.  The class holds a pointer to the C++ Wrapper.
  * The destructor set the imp to null before deleting the pointer.
  *
- * Each C++ Wrapper instantiates a template class in it's corresponding .h file.
+ * Each C++ Wrapper instantiates a template class in its corresponding .h file.
  *
  * Usage example:
  *   VComponentTmpPtr p;// VComponentTmpPtr is an instantiation of this template

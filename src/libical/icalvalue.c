@@ -364,7 +364,7 @@ static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char
  * The decimal separator (if any) of the double has to be '.'
  * The code is locale *independent* and does *not* change the locale.
  * It should be thread safe.
- * If you want a code that that does the same job with a decimal separator
+ * If you want a code that does the same job with a decimal separator
  * dependent on the current locale, then use strtof() from libc.
  */
 static int simple_str_to_double(const char *from, double *result, char **to)
@@ -542,7 +542,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         {
             int t, utcoffset, hours, minutes, seconds;
 
-            /* treat the UTCOFSET string a a decimal number, disassemble its digits
+            /* treat the UTCOFSET string as a decimal number, disassemble its digits
                and reconstruct it as sections */
             t = strtol(str, 0, 10);
             /* add phantom seconds field */

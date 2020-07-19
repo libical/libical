@@ -19,6 +19,32 @@
  Code is Eric Busboom
 ======================================================================*/
 
+/**
+   @file   icaldirset.h
+
+   @brief  icaldirset manages a database of ical components and offers
+  interfaces for reading, writing and searching for components.
+
+  icaldirset groups components in to clusters based on their DTSTAMP
+  time -- all components that start in the same month are grouped
+  together in a single file. All files in a sotre are kept in a single
+  directory.
+
+  The primary interfaces are icaldirset__get_first_component and
+  icaldirset_get_next_component. These routine iterate through all of
+  the components in the store, subject to the current gauge. A gauge
+  is an icalcomponent that is tested against other componets for a
+  match. If a gauge has been set with icaldirset_select,
+  icaldirset_first and icaldirset_next will only return componentes
+  that match the gauge.
+
+  The Store generated UIDs for all objects that are stored if they do
+  not already have a UID. The UID is the name of the cluster (month &
+  year as MMYYYY) plus a unique serial number. The serial number is
+  stored as a property of the cluster.
+
+*/
+
 #ifndef ICALDIRSET_H
 #define ICALDIRSET_H
 
@@ -42,25 +68,30 @@ LIBICAL_ICALSS_EXPORT void icaldirset_free(icalset *set);
 
 LIBICAL_ICALSS_EXPORT const char *icaldirset_path(icalset *set);
 
-/* Mark the cluster as changed, so it will be written to disk when it
+/* Marks the cluster as changed, so it will be written to disk when it
    is freed. Commit writes to disk immediately*/
 LIBICAL_ICALSS_EXPORT void icaldirset_mark(icalset *set);
 
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_commit(icalset *set);
 
+/**
+  This assumes that the top level component is a VCALENDAR, and there
+   is an inner component of type VEVENT, VTODO or VJOURNAL. The inner
+  component must have a DSTAMP property
+*/
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_add_component(icalset *store, icalcomponent *comp);
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_remove_component(icalset *store,
                                                                 icalcomponent *comp);
 
 LIBICAL_ICALSS_EXPORT int icaldirset_count_components(icalset *store, icalcomponent_kind kind);
 
-/* Restrict the component returned by icaldirset_first, _next to those
+/* Restricts the component returned by icaldirset_first, _next to those
    that pass the gauge. _clear removes the gauge. */
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_select(icalset *store, icalgauge *gauge);
 
 LIBICAL_ICALSS_EXPORT void icaldirset_clear(icalset *store);
 
-/* Get a component by uid */
+/* Gets a component by uid */
 LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch(icalset *store,
                                                       icalcomponent_kind kind, const char *uid);
 
@@ -68,12 +99,12 @@ LIBICAL_ICALSS_EXPORT int icaldirset_has_uid(icalset *store, const char *uid);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch_match(icalset *set, icalcomponent *c);
 
-/* Modify components according to the MODIFY method of CAP. Works on
+/* Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_modify(icalset *store,
                                                       icalcomponent *oldc, icalcomponent *newc);
 
-/* Iterate through the components. If a gauge has been defined, these
+/* Iterates through the components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_current_component(icalset *store);

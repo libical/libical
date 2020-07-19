@@ -54,7 +54,7 @@ typedef struct icalattach_impl icalattach;
 typedef void (*icalattach_free_fn_t) (char *data, void *user_data);
 
 /**
- * @brief Create new ::icalattach object from a URL.
+ * @brief Creates new ::icalattach object from a URL.
  * @param url The URL to create the object from
  * @return An ::icalattach object with the given URL as association
  * @sa icalattach_unref()
@@ -86,7 +86,7 @@ typedef void (*icalattach_free_fn_t) (char *data, void *user_data);
 LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_url(const char *url);
 
 /**
- * @brief Create new ::icalattach object from data.
+ * @brief Creates new ::icalattach object from data.
  * @param data The data to create the ::icalattach from
  * @param free_fn The function to free the data
  * @param free_fn_data Data to pass to the @a free_fn

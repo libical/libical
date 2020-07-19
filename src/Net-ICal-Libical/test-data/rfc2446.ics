@@ -327,7 +327,7 @@ ATTENDEE;CUTYPE=INDIVIDUAL:Mailto:A@example.com
 ATTENDEE;CUTYPE=INDIVIDUAL:Mailto:B@example.com
 ATTENDEE;CUTYPE=INDIVIDUAL:Mailto:C@example.com
 ATTENDEE;CUTYPE=INDIVIDUAL:Mailto:D@example.com
-COMMENT:Mr. B cannot attend. It's raining. Lets cancel.
+COMMENT:Mr. B cannot attend. It's raining. Let's cancel.
 UID:calsrv.example.com-873970198738777@example.com
 SEQUENCE:1
 STATUS:CANCELLED

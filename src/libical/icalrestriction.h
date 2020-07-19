@@ -41,31 +41,31 @@
  */
 typedef enum icalrestriction_kind
 {
-    /** No restriction */
+    /** No restriction. */
     ICAL_RESTRICTION_NONE = 0, /* 0 */
 
-    /** Zero */
+    /** Zero. */
     ICAL_RESTRICTION_ZERO, /* 1 */
 
-    /** One */
+    /** One. */
     ICAL_RESTRICTION_ONE, /* 2 */
 
-    /** Zero or more */
+    /** Zero or more. */
     ICAL_RESTRICTION_ZEROPLUS, /* 3 */
 
-    /** One or more */
+    /** One or more. */
     ICAL_RESTRICTION_ONEPLUS, /* 4 */
 
-    /** Zero or one */
+    /** Zero or one. */
     ICAL_RESTRICTION_ZEROORONE, /* 5 */
 
-    /** Zero or one, exclusive with another property */
+    /** Zero or one, exclusive with another property. */
     ICAL_RESTRICTION_ONEEXCLUSIVE, /* 6 */
 
-    /** Zero or one, mutual with another property */
+    /** Zero or one, mutual with another property. */
     ICAL_RESTRICTION_ONEMUTUAL, /* 7 */
 
-    /** Unknown */
+    /** Unknown. */
     ICAL_RESTRICTION_UNKNOWN    /* 8 */
 } icalrestriction_kind;
 
