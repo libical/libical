@@ -25,6 +25,6 @@
     </method>
     <method name="i_cal_set_unknown_token_handling_setting" corresponds="ical_set_unknown_token_handling_setting" kind="set" since="1.0">
         <parameter type="ICalUnknowntokenhandling" name="newSetting" comment="A #ICalUnknowntokenhandling"/>
-        <comment>Sets the setting of #ICalUnknowntokenhandling.</comment>
+        <comment>Sets #ICalUnknowntokenhandling.</comment>
     </method>
 </structure>
