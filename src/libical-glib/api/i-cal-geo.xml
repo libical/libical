@@ -50,29 +50,29 @@
     </method>
     <method name="i_cal_geo_get_lat" corresponds="CUSTOM" kind="get" since="1.0">
 	<parameter type="ICalGeo *" name="geo" comment="The #ICalGeo to be queried"/>
-        <returns type="gdouble" comment="The lat." />
-        <comment xml:space="preserve">Gets the lat of #ICalGeo.</comment>
+        <returns type="gdouble" comment="The latitude." />
+        <comment xml:space="preserve">Gets the latitude of #ICalGeo.</comment>
         <custom>	g_return_val_if_fail (geo != NULL, 0);
 	return ((struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo))->lat;</custom>
     </method>
     <method name="i_cal_geo_set_lat" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalGeo *" name="geo" comment="The #ICalGeo to be set"/>
-        <parameter type="gdouble" name="lat" comment="The lat"/>
-        <comment>Sets the lat of #ICalGeo.</comment>
+        <parameter type="gdouble" name="lat" comment="The latitude"/>
+        <comment>Sets the latitude of #ICalGeo.</comment>
         <custom>	g_return_if_fail (geo != NULL &amp;&amp; I_CAL_IS_GEO (geo));
 	((struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo))->lat = lat;</custom>
     </method>
     <method name="i_cal_geo_get_lon" corresponds="CUSTOM" kind="get" since="1.0">
 	<parameter type="ICalGeo *" name="geo" comment="The #ICalGeo to be queried"/>
-        <returns type="gdouble" comment="The lon." />
-        <comment xml:space="preserve">Gets the lon of #ICalGeo.</comment>
+        <returns type="gdouble" comment="The longitude." />
+        <comment xml:space="preserve">Gets the longitude of #ICalGeo.</comment>
         <custom>	g_return_val_if_fail (geo != NULL, 0);
 	return ((struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo))->lon;</custom>
     </method>
     <method name="i_cal_geo_set_lon" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalGeo *" name="geo" comment="The #ICalGeo to be set"/>
-        <parameter type="gdouble" name="lon" comment="The lon"/>
-        <comment>Sets the lon of #ICalGeo.</comment>
+        <parameter type="gdouble" name="lon" comment="The longitude"/>
+        <comment>Sets the longitude of #ICalGeo.</comment>
         <custom>	g_return_if_fail (geo != NULL &amp;&amp; I_CAL_IS_GEO (geo));
 	((struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo))->lon = lon;</custom>
     </method>
