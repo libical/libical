@@ -8,8 +8,8 @@ var indexSectionsWithContent =
   5: "i",
   6: "i",
   7: "i",
-  8: "bimz",
-  9: "l"
+  8: "i",
+  9: "lt"
 };
 
 var indexSectionNames =
