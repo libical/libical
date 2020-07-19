@@ -220,14 +220,14 @@ LIBICAL_ICAL_EXPORT struct icaltime_span icalcomponent_get_span(icalcomponent *c
 
 /******************** Convenience routines **********************/
 
-/**     @brief Sets DTSTART property to the given icaltime,
+/**     @brief Sets the DTSTART property to the given icaltime,
  *
  *      This method respects the icaltime type (DATE vs DATE-TIME) and
  *      timezone (or lack thereof).
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_set_dtstart(icalcomponent *comp, struct icaltimetype v);
 
-/**     @brief Gets DTSTART property as an icaltime
+/**     @brief Gets the DTSTART property as an icaltime
  *
  *      If DTSTART is a DATE-TIME with a timezone parameter and a
  *      corresponding VTIMEZONE is present in the component, the
@@ -247,7 +247,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstart(icalcomponent 
    be set to ICAL_MALFORMEDDATA_ERROR. If you call a set routine and
    neither exists, the routine will create the appropriate property. */
 
-/**     @brief Gets DTEND property as an icaltime.
+/**     @brief Gets the DTEND property as an icaltime.
  *
  *      If a DTEND property is not present but a DURATION is, we use
  *      that to determine the proper end.
@@ -267,7 +267,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstart(icalcomponent 
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp);
 
-/**     @brief Sets DTEND property to given icaltime.
+/**     @brief Sets the DTEND property to given icaltime.
  *
  *      This method respects the icaltime type (DATE vs DATE-TIME) and
  *      timezone (or lack thereof).
@@ -306,7 +306,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_due(icalcomponent *com
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_set_due(icalcomponent *comp, struct icaltimetype v);
 
-/**     @brief Sets DURATION property to given icalduration.
+/**     @brief Sets the DURATION property to given icalduration.
  *
  *      This method respects the icaltime type (DATE vs DATE-TIME) and
  *      timezone (or lack thereof).
@@ -324,7 +324,7 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_due(icalcomponent *comp, struct icalt
 LIBICAL_ICAL_EXPORT void icalcomponent_set_duration(icalcomponent *comp,
                                                     struct icaldurationtype v);
 
-/**     @brief Gets DURATION property as an icalduration
+/**     @brief Gets the DURATION property as an icalduration
  *
  *      For the icalcomponent routines only, DTEND and DURATION are tied
  *      together.

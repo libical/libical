@@ -227,7 +227,7 @@ typedef enum icalerrorstate
 } icalerrorstate;
 
 /**
- * @brief Finds description string for error
+ * @brief Finds the description string for error
  * @param e The type of error that occurred
  * @return A string describing the error that occurred
  *

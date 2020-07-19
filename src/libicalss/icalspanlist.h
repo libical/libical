@@ -46,11 +46,11 @@ LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_new(icalset *set,
 /** @brief Destructor.
  *  @param s A valid icalspanlist
  *
- *  Frees memory associated with the spanlist.
+ *  Frees the memory associated with the spanlist.
  */
 LIBICAL_ICALSS_EXPORT void icalspanlist_free(icalspanlist *spl);
 
-/** @brief Finds next free time span in a spanlist.
+/** @brief Finds the next free time span in a spanlist.
  *
  *  @param  sl     The spanlist to search.
  *  @param  t      The time to start looking.

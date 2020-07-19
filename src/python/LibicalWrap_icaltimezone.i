@@ -121,7 +121,7 @@ int icaltimezone_get_utc_offset_of_utc_time (icaltimezone *zone,
 /** Sets the directory to look for the zonefiles */
 void set_zone_directory(const char *path);
 
-/** Frees memory dedicated to the zonefile directory */
+/** Frees the memory dedicated to the zonefile directory */
 void free_zone_directory(void);
 void icaltimezone_release_zone_tab(void);
 
