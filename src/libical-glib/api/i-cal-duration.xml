@@ -15,6 +15,7 @@
 -->
 <structure namespace="ICal" name="Duration" native="struct icaldurationtype" is_bare="true" default_native="icaldurationtype_null_duration()">
     <method name="i_cal_duration_is_neg" corresponds="CUSTOM" kind="get" since="1.0">
+       <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried."/>
         <returns type="gboolean" comment="The is_neg." />
         <comment xml:space="preserve">Gets the is_neg of #ICalDuration.</comment>
         <custom>	g_return_val_if_fail (duration != NULL, 0);
@@ -115,6 +116,7 @@
     <method name="i_cal_duration_as_ical_string" corresponds="icaldurationtype_as_ical_string_r" kind="others" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>
         <returns type="gchar *" annotation="transfer full" comment="The duration in string" />
+        <comment xml:space="preserve">Converts the #ICalDuration to the representation in string</comment>
     </method>
     <method name="i_cal_duration_new_null_duration" corresponds="icaldurationtype_null_duration" kind="constructor" since="1.0">
         <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration" />

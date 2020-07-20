@@ -466,7 +466,7 @@ int icaltime_day_of_week(const struct icaltimetype t)
     jt.month = t.month;
     jt.day = t.day;
 
-    (void)juldat_int(&jt);
+    juldat_int(&jt);
 
     return jt.weekday + 1;
 }
@@ -482,8 +482,8 @@ int icaltime_start_doy_week(const struct icaltimetype t, int fdow)
     jt.month = t.month;
     jt.day = t.day;
 
-    (void)juldat_int(&jt);
-    (void)caldat_int(&jt);
+    juldat_int(&jt);
+    caldat_int(&jt);
 
     delta = jt.weekday - (fdow - 1);
     if (delta < 0) {
@@ -502,8 +502,8 @@ int icaltime_week_number(const struct icaltimetype ictt)
     jt.month = ictt.month;
     jt.day = ictt.day;
 
-    (void)juldat_int(&jt);
-    (void)caldat_int(&jt);
+    juldat_int(&jt);
+    caldat_int(&jt);
 
     return (jt.day_of_year - jt.weekday) / 7;
 }

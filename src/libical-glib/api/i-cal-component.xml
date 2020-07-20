@@ -19,8 +19,8 @@
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Creates a new #ICalComponent with specific type.</comment>
     </method>
-    <method name="i_cal_component_clone" corresponds="icalcomponent_new_clone" kind="clone" since="1.0">
-        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be created"/>
+    <method name="i_cal_component_clone" corresponds="icalcomponent_clone" kind="clone" since="3.1">
+        <parameter type="const ICalComponent *" name="component" comment="The #ICalComponent to be created."/>
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly deeply cloned #ICalComponent."/>
         <comment xml:space="preserve">Deeply clone a #ICalComponent.</comment>
     </method>
@@ -102,14 +102,6 @@
  *
  * The @comp can be NULL, in which case the parent of the @prop is used to find the corresponding time zone.</comment>
     </method>
-    <method name="i_cal_property_get_datetime_with_component" corresponds="icalproperty_get_datetime_with_component" kind="get" since="3.0.5">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty."/>
-        <parameter type="ICalComponent *" name="comp" annotation="nullable" comment="An #ICalComponent."/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get a DATE or DATE-TIME property as an #ICalTime."/>
-        <comment xml:space="preserve">If the property is a DATE-TIME with a TZID parameter and a corresponding VTIMEZONE is present in the component, the returned component will already be in the correct timezone; otherwise the caller is responsible for converting it.
- *
- * The @comp can be NULL, in which case the parent of the @prop is used to find the corresponding time zone.</comment>
-    </method>
     <method name="i_cal_component_get_current_property" corresponds="icalcomponent_get_current_property" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent"/>
         <returns type="ICalProperty *" annotation="transfer full" translator_argus="(GObject *)component" comment="The current #ICalProperty."/>
@@ -138,16 +130,6 @@
         <comment xml:space="preserve">Adds a #ICalComponent into another #ICalComponent as a child component.</comment>
     </method>
     <method name="i_cal_component_take_component" corresponds="CUSTOM" annotation="skip" since="1.0">
-        <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent"/>
-        <parameter type="ICalComponent *" name="child" annotation="transfer full" comment="A child #ICalComponent"/>
-        <comment xml:space="preserve">Adds the @child into the @parent as a child component and unrefs the @child.</comment>
-        <custom>    g_return_if_fail(I_CAL_IS_COMPONENT(parent));
-    g_return_if_fail(I_CAL_IS_COMPONENT(child));
-
-    i_cal_component_add_component(parent, child);
-    g_object_unref(child);</custom>
-    </method>
-    <method name="i_cal_component_take_component" corresponds="CUSTOM" annotation="skip" since="1.0">
         <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent."/>
         <parameter type="ICalComponent *" name="child" annotation="transfer full" comment="A child #ICalComponent."/>
         <comment xml:space="preserve">Add the @child into the @parent as a child component and unrefs the @child.</comment>
@@ -167,16 +149,6 @@
         <parameter type="ICalComponentKind" name="kind" comment="The target #ICalComponentKind"/>
         <returns type="gint" comment="The count of child #ICalComponent in the parent one."/>
         <comment xml:space="preserve">Counts the child #ICalComponent with the target kind in the parent one.</comment>
-    </method>
-    <method name="i_cal_component_get_parent" corresponds="icalcomponent_get_parent" since="3.0">
-        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent"/>
-        <returns type="ICalComponent *" annotation="transfer full, nullable" translator_argus="(GObject *)component" comment="The parent #ICalComponent of the @component."/>
-        <comment xml:space="preserve">Gets the parent component of the @component.</comment>
-    </method>
-    <method name="i_cal_component_set_parent" corresponds="icalcomponent_set_parent" since="3.0">
-        <parameter type="ICalComponent *" name="component" comment="An #ICalComponent, a child"/>
-        <parameter type="ICalComponent *" name="parent" annotation="nullable" comment="An #ICalComponent, a new parent"/>
-        <comment xml:space="preserve">Sets the @parent #ICalComponent of the specified @component.</comment>
     </method>
     <method name="i_cal_component_get_parent" corresponds="icalcomponent_get_parent" since="3.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent."/>

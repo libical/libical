@@ -19,8 +19,8 @@
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty with the type @kind."/>
         <comment xml:space="preserve">Creates a #ICalProperty of the target type.</comment>
     </method>
-    <method name="i_cal_property_clone" corresponds="icalproperty_new_clone" kind="clone" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be cloned"/>
+    <method name="i_cal_property_clone" corresponds="icalproperty_clone" kind="clone" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be cloned."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty deeply cloned from @prop."/>
         <comment xml:space="preserve">Deeply clone a #ICalProperty.</comment>
     </method>
@@ -57,16 +57,6 @@
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
         <parameter type="ICalParameter *" name="parameter" annotation="transfer full" comment="The parameter to be added into @prop"/>
         <comment xml:space="preserve">Adds the @parameter into the @prop and free the @parameter.</comment>
-        <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
-    g_return_if_fail(I_CAL_IS_PARAMETER(parameter));
-
-    i_cal_property_add_parameter(prop, parameter);
-    g_object_unref(parameter);</custom>
-    </method>
-    <method name="i_cal_property_take_parameter" corresponds="CUSTOM" annotation="skip" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set."/>
-        <parameter type="ICalParameter *" name="parameter" annotation="transfer full" comment="The parameter to be added into @prop."/>
-        <comment xml:space="preserve">Add the @parameter into the @prop and free the @parameter.</comment>
         <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
     g_return_if_fail(I_CAL_IS_PARAMETER(parameter));
 
@@ -131,16 +121,6 @@
         <parameter type="ICalProperty *" name="prop" comment="The target #ICalProperty"/>
         <parameter type="ICalValue *" name="value" annotation="transfer full" comment="The #ICalValue will be set as the property of @prop"/>
         <comment xml:space="preserve">Sets the @prop with the @value and unrefs the @value.</comment>
-        <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
-    g_return_if_fail(I_CAL_IS_VALUE(value));
-
-    i_cal_property_set_value(prop, value);
-    g_object_unref(value);</custom>
-    </method>
-    <method name="i_cal_property_take_value" corresponds="CUSTOM" annotation="skip" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The target #ICalProperty."/>
-        <parameter type="ICalValue *" name="value" annotation="transfer full" comment="The #ICalValue will be set as the property of @prop."/>
-        <comment xml:space="preserve">Set the @prop with the @value and unrefs the @value.</comment>
         <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
     g_return_if_fail(I_CAL_IS_VALUE(value));
 

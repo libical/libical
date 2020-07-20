@@ -164,29 +164,17 @@
         <parameter type="const gint" name="hours" comment="Difference of hours adjusted"/>
         <parameter type="const gint" name="minutes" comment="Difference of minutes adjusted"/>
         <parameter type="const gint" name="seconds" comment="Difference of seconds adjusted"/>
-        <comment xml:space="preserve">Adds or subtracts a number of days, hours, minutes and seconds from @tt.</comment>
+        <comment xml:space="preserve">like i_cal_time_compare_tz, but only use the date parts.</comment>
     </method>
     <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">
         <parameter type="const ICalTime *" name="t" annotation="in, transfer none" comment="The #ICalTime to be normalized"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The #ICalTime normalized"/>
-        <comment xml:space="preserve">Normalizes the icaltime, so that all fields are within the normal range.</comment>
-    </method>
-    <method name="i_cal_time_normalize_inplace" corresponds="CUSTOM" since="3.0.5">
-        <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be normalized"/>
-        <comment xml:space="preserve">Normalizes the @tt, so that all fields are within the normal range.</comment>
-	<custom xml:space="preserve">    icaltimetype *itt;
-
-    g_return_if_fail(I_CAL_IS_TIME (tt));
-
-    itt = i_cal_object_get_native(I_CAL_OBJECT (tt));
-    g_return_if_fail (itt != NULL);
-
-    *itt = icaltime_normalize(*itt);</custom>
+        <comment xml:space="preserve">Normalize the icaltime, so that all fields are within the normal range.</comment>
     </method>
     <method name="i_cal_time_normalize_inplace" corresponds="CUSTOM" since="3.0.5">
         <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be normalized"/>
         <comment xml:space="preserve">Normalize the @tt, so that all fields are within the normal range.</comment>
-	<custom xml:space="preserve">    icaltimetype *itt;
+       <custom xml:space="preserve">    icaltimetype *itt;
 
     g_return_if_fail(I_CAL_IS_TIME (tt));
 
@@ -355,6 +343,7 @@
 	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_date = is_date ? 1 : 0;</custom>
     </method>
     <method name="i_cal_time_is_daylight" corresponds="CUSTOM" kind="get" since="1.0">
+        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
         <returns type="gboolean" comment="The is_daylight." />
         <comment xml:space="preserve">Gets the is_daylight of #ICalTime.</comment>
         <custom>	g_return_val_if_fail (timetype != NULL, 0);

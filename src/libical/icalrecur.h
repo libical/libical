@@ -233,10 +233,23 @@ LIBICAL_ICAL_EXPORT enum icalrecurrencetype_weekday icalrecurrencetype_day_day_o
  */
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_day_position(short day);
 
+/** Encodes the @p weekday and @p position into a form, which can be stored
+ *  to icalrecurrencetype::by_day array. Use icalrecurrencetype_day_day_of_week()
+ *  and icalrecurrencetype_day_position() to split the encoded value back into the parts.
+ * @since 3.1
+ */
+LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_day(enum icalrecurrencetype_weekday weekday,
+                                                        int position);
+
 /*
  * Routines to decode the 'month' element of the by_month array
  */
 
+/**
+ * The @p month element of the by_month array is encoded to allow
+ * representation of the "L" leap suffix (RFC 7529).
+ * These routines decode the month values.
+ */
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_is_leap(short month);
 
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_month(short month);

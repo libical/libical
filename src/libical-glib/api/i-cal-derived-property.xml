@@ -392,21 +392,6 @@
         <comment>Gets the color property of the @prop.</comment>
     </method>
     <method name="i_cal_property_new_color" corresponds="icalproperty_new_color" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The color"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new color #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_color" corresponds="icalproperty_set_color" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The color"/>
-        <comment>Sets the color for the @prop.</comment>
-    </method>
-    <method name="i_cal_property_get_color" corresponds="icalproperty_get_color" kind="get" since="3.0.5">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the color property."/>
-        <comment>Get the color property of the @prop.</comment>
-    </method>
-    <method name="i_cal_property_new_color" corresponds="icalproperty_new_color" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The color."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new color #ICalProperty.</comment>
@@ -435,7 +420,6 @@
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
         <returns type="ICalTime *" annotation="transfer full" comment="Get the completed time of #ICalProperty."/>
         <comment>Gets the completed time of #ICalProperty.</comment>
->>>>>>> 3.0
     </method>
     <method name="i_cal_property_new_components" corresponds="icalproperty_new_components" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The components"/>
@@ -471,20 +455,6 @@
         <parameter type="ICalTime *" name="v" comment="The time of created."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly create #ICalProperty"/>
         <comment xml:space="preserve">Create a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_created" corresponds="icalproperty_set_created" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The created time."/>
-        <comment>Set the created time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_created" corresponds="icalproperty_get_created" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried."/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the created time of #ICalProperty."/>
-        <comment>Get the created time of #ICalProperty.</comment>
-=======
-        <parameter type="ICalTime *" name="v" comment="The time of created"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_set_created" corresponds="icalproperty_set_created" kind="set" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
