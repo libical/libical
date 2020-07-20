@@ -17,7 +17,7 @@
 ========================================================================*/
 
 /**
-  @file icalrecur.c
+  icalrecur.c
   @brief Implementation of routines for dealing with recurring time
 
   How this code works:
@@ -613,7 +613,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             }
         } else if (strcasecmp(name, "COUNT") == 0) {
             if (parser.rt.count > 0 || !icaltime_is_null_time(parser.rt.until)) {
-                /* Don't allow multiple COUNTs, or both COUNT and UNTIL */
+                /* don't allow multiple COUNTs, or both COUNT and UNTIL */
                 r = -1;
             } else {
                 parser.rt.count = atoi(value);
@@ -622,7 +622,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             }
         } else if (strcasecmp(name, "UNTIL") == 0) {
             if (parser.rt.count > 0 || !icaltime_is_null_time(parser.rt.until)) {
-                /* Don't allow multiple COUNTs, or both COUNT and UNTIL */
+                /* don't allow multiple COUNTs, or both COUNT and UNTIL */
                 r = -1;
             } else {
                 parser.rt.until = icaltime_from_string(value);
@@ -1046,7 +1046,7 @@ static void setup_defaults(icalrecur_iterator *impl,
     }
 }
 
-/* Calculate the number of Gregorian months between 2 dates */
+/** Calculate the number of Gregorian months between 2 dates */
 static int __greg_month_diff(icaltimetype a, icaltimetype b)
 {
     return (12 * (b.year - a.year) + (b.month - a.month));
@@ -1525,7 +1525,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
     return 1;
 }
 
-/* Set Gregorian date and convert to RSCALE */
+/** Sets the Gregorian date and convert to RSCALE */
 static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -1558,7 +1558,7 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
     }
 }
 
-/* Calculate the number of RSCALE months between 2 dates */
+/** Calculate the number of RSCALE months between 2 dates */
 static int month_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 {
     int diff;
@@ -1589,7 +1589,7 @@ static int month_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
     return diff;
 }
 
-/* Calculate the number of RSCALE days between 2 dates */
+/** Calculate the number of RSCALE days between 2 dates */
 static int day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -1686,7 +1686,7 @@ static int get_day_of_week(icalrecur_iterator *impl)
     return icaltime_day_of_week(impl->last);
 }
 
-/* Calculate ISO weeks per year
+/** Calculate ISO weeks per year
    https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year */
 static int weeks_in_year(int year)
 {
@@ -1697,7 +1697,7 @@ static int weeks_in_year(int year)
     return (52 + is_long);
 }
 
-/* Calculate ISO week number
+/** Calculate ISO week number
    https://en.wikipedia.org/wiki/ISO_week_date#Calculation */
 static int get_week_number(icalrecur_iterator *impl, struct icaltimetype tt)
 {
@@ -1842,7 +1842,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
     return 1;
 }
 
-/* Set Gregorian date */
+/** Sets the Gregorian date */
 static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
 {
     impl->last.year = date.year;
@@ -1861,7 +1861,7 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
     }
 }
 
-/* Calculate the number of Gregorian months between 2 dates */
+/** Calculate the number of Gregorian months between 2 dates */
 static int month_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 {
     _unused(impl);
@@ -1869,7 +1869,7 @@ static int month_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
     return __greg_month_diff(a, b);
 }
 
-/* Calculate the number of Gregorian days between 2 dates */
+/** Calculate the number of Gregorian days between 2 dates */
 static int day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 {
     return __day_diff(impl, a, b);
@@ -2048,7 +2048,7 @@ void icalrecur_iterator_free(icalrecur_iterator *i)
     free(i);
 }
 
-/* Calculate the number of days between 2 dates */
+/** Calculate the number of days between 2 dates */
 static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 {
     int diff;
@@ -2086,7 +2086,7 @@ static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
     return diff;
 }
 
-/** Increment month is different that the other increment_* routines --
+/** increment_month is different than the other increment_* routines --
    it figures out the interval for itself, and uses BYMONTH data if
    available. */
 static void increment_month(icalrecur_iterator *impl, int inc)
@@ -2303,7 +2303,7 @@ static int check_set_position(icalrecur_iterator *impl, int set_pos)
     return found;
 }
 
-/* Add each BYMONTHDAY to the year days bitmask */
+/** Add each BYMONTHDAY to the year days bitmask */
 static int expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
 {
     int i, set_pos_total = 0;
@@ -2359,7 +2359,7 @@ static int expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
     return set_pos_total;
 }
 
-/* Expand the BYDAY rule part and apply it to the year days map. */
+/** Expand the BYDAY rule part and apply it to the year days map. */
 static int expand_by_day(icalrecur_iterator *impl, int year,
                          int doy_offset, int last_day,
                          int first_dow, int last_dow,
@@ -2455,7 +2455,7 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
     return set_pos_total;
 }
 
-/* "Filter" the year days bitmask with each BYSETPOS */
+/** "Filter" the year days bitmask with each BYSETPOS */
 static void filter_bysetpos(icalrecur_iterator *impl, int pos_total,
                             int start_doy, int end_doy)
 {
@@ -2479,7 +2479,7 @@ static void filter_bysetpos(icalrecur_iterator *impl, int pos_total,
     }
 }
 
-/* For INTERVAL=MONTHLY, set up the year days bitmask in the iterator to
+/** For INTERVAL=MONTHLY, set up the year days bitmask in the iterator to
    list all of the days of the current month that are specified in this
    rule. */
 static int expand_month_days(icalrecur_iterator *impl, int year, int month)
@@ -2564,7 +2564,7 @@ static int next_weekday_by_week(icalrecur_iterator *impl)
             end_of_data = 1;    /* Signal that we're at the end */
         }
 
-        /* Add the day of week offset to to the start of this week, and use
+        /* Add the day of week offset to the start of this week, and use
            that to get the next day */
         /* ignore position of dow ("4FR"), only use dow ("FR") */
         dow = icalrecurrencetype_day_day_of_week(BYDAYPTR[BYDAYIDX]);
@@ -3522,7 +3522,7 @@ short icalrecurrencetype_encode_day(enum icalrecurrencetype_weekday weekday, int
  * representation of the "L" leap suffix (RFC 7529).
  * These routines decode the month values.
  *
- * The "L" suffix is encoded by setting a high-order bit
+ * The "L" suffix is encoded by setting a high-order bit.
  */
 
 int icalrecurrencetype_month_is_leap(short month)

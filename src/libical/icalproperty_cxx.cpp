@@ -167,7 +167,7 @@ std::string ICalProperty::get_value_as_string()
     return static_cast<std::string>(icalproperty_get_value_as_string(imp));
 }
 
-/** Return the name of the property -- the type name converted to a
+/** Returns the name of the property -- the type name converted to a
  *  string, or the value of get_x_name if the type is X property
  */
 std::string ICalProperty::get_name() const

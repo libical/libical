@@ -610,7 +610,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
 
         if (pw == 0) {
             fprintf(stderr,
-                    "%s: Can't get get password entry for user \"%s\" "
+                    "%s: Can't get password entry for user \"%s\" "
                     "Try explicitly specifying the output file with -o",
                     program_name, user);
             byebye(1, opt);

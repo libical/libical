@@ -16,12 +16,16 @@
     the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
+/**
+ *      @file icalcomponent.h
+ */
+
 #ifndef ICALCOMPONENT_H
 #define ICALCOMPONENT_H
 
 #include "libical_deprecated.h"
 #include "libical_ical_export.h"
-#include "icalenums.h"  /* defines icalcomponent_kind */
+#include "icalenums.h"  /* Defines icalcomponent_kind */
 #include "icalproperty.h"
 #include "pvl.h"
 
@@ -37,6 +41,7 @@ typedef struct icalcompiter
 } icalcompiter;
 
 /**
+ * @brief Constructor
  * Deeply clone an icalcomponent.
  * Returns a pointer to the memory for the newly cloned icalcomponent.
  * @since 3.1.0
@@ -45,12 +50,20 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new(icalcomponent_kind kind);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_clone(const icalcomponent *component);
 
+/** @brief Constructor
+ */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_from_string(const char *str);
 
+/** @brief Constructor
+ */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...);
 
+/** @brief Constructor
+ */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_x(const char *x_name);
 
+/*** @brief Destructor
+ */
 LIBICAL_ICAL_EXPORT void icalcomponent_free(icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string(icalcomponent *component);
@@ -82,14 +95,14 @@ LIBICAL_ICAL_EXPORT int icalcomponent_count_properties(icalcomponent *component,
                                                        icalproperty_kind kind);
 
 /**
- * Sets the parent icalcomponent for the specified icalproperty @p property.
+ * @brief Sets the parent icalcomponent for the specified icalproperty @p property.
  * @since 3.0
  */
 LIBICAL_ICAL_EXPORT void icalproperty_set_parent(icalproperty *property,
                                                  icalcomponent *component);
 
 /**
- * Returns the parent @p icalcomponent for the specified @p icalproperty.
+ * @brief Returns the parent icalcomponent for the specified @p property.
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalproperty_get_parent(const icalproperty *property);
 
@@ -103,9 +116,8 @@ LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_next_property(icalcomponent 
 
 /***** Working with Components *****/
 
-/* Return the first VEVENT, VTODO or VJOURNAL sub-component of cop, or
+/** Return the first VEVENT, VTODO or VJOURNAL sub-component of cop, or
    comp if it is one of those types */
-
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_inner(icalcomponent *comp);
 
 LIBICAL_ICAL_EXPORT void icalcomponent_add_component(icalcomponent *parent, icalcomponent *child);
@@ -117,9 +129,10 @@ LIBICAL_ICAL_EXPORT int icalcomponent_count_components(icalcomponent *component,
                                                        icalcomponent_kind kind);
 
 /**
-   This takes 2 VCALENDAR components and merges the second one into the first,
-   resolving any problems with conflicting TZIDs. comp_to_merge will no
-   longer exist after calling this function. */
+ *  This takes 2 VCALENDAR components and merges the second one into the first,
+ *  resolving any problems with conflicting TZIDs. comp_to_merge will no
+ *  longer exist after calling this function.
+ */
 LIBICAL_ICAL_EXPORT void icalcomponent_merge_component(icalcomponent *comp,
                                                        icalcomponent *comp_to_merge);
 
@@ -155,13 +168,17 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter * i);
 /* Working with embedded error properties */
 LIBICAL_ICAL_EXPORT int icalcomponent_check_restrictions(icalcomponent *comp);
 
-/** Count embedded errors. */
+/** @brief Returns the number of errors encountered parsing the data.
+ *
+ * This function counts the number times the X-LIC-ERROR occurs
+ * in the data structure.
+ */
 LIBICAL_ICAL_EXPORT int icalcomponent_count_errors(icalcomponent *component);
 
-/** Remove all X-LIC-ERROR properties*/
+/** @brief Removes all X-LIC-ERROR properties*/
 LIBICAL_ICAL_EXPORT void icalcomponent_strip_errors(icalcomponent *component);
 
-/** Convert some X-LIC-ERROR properties into RETURN-STATUS properties*/
+/** @brief Converts some X-LIC-ERROR properties into RETURN-STATUS properties*/
 LIBICAL_ICAL_EXPORT void icalcomponent_convert_errors(icalcomponent *component);
 
 /* Internal operations. They are private, and you should not be using them. */
@@ -184,17 +201,47 @@ If the code was in an OO language, the remaining routines would be
 members of classes derived from icalcomponent. Don't call them on the
 wrong component subtypes. */
 
-/** For VCOMPONENT: Return a reference to the first VEVENT, VTODO or
-   VJOURNAL */
+/** @brief Returns a reference to the first VEVENT, VTODO or
+ * VJOURNAL in the component.
+ */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c);
 
-/** For VEVENT, VTODO, VJOURNAL and VTIMEZONE: report the start and end
-   times of an event in UTC */
+/**     @brief Gets the timespan covered by this component, in UTC.
+ *
+ *      See icalcomponent_foreach_recurrence() for a better way to
+ *      extract spans from an component.
+ *
+ *      This method can be called on either a VCALENDAR or any real
+ *      component. If the VCALENDAR contains no real component, but
+ *      contains a VTIMEZONE, we return that span instead.
+ *      This might not be a desirable behavior; we keep it for now
+ *      for backward compatibility, but it might be deprecated at a
+ *      future time.
+ *
+ *      FIXME this API needs to be clarified. DTEND is defined as the
+ *      first available time after the end of this event, so the span
+ *      should actually end 1 second before DTEND.
+ */
 LIBICAL_ICAL_EXPORT struct icaltime_span icalcomponent_get_span(icalcomponent *comp);
 
 /******************** Convenience routines **********************/
 
+/**     @brief Sets the DTSTART property to the given icaltime,
+ *
+ *      This method respects the icaltime type (DATE vs DATE-TIME) and
+ *      timezone (or lack thereof).
+ */
 LIBICAL_ICAL_EXPORT void icalcomponent_set_dtstart(icalcomponent *comp, struct icaltimetype v);
+
+/**     @brief Gets the DTSTART property as an icaltime
+ *
+ *      If DTSTART is a DATE-TIME with a timezone parameter and a
+ *      corresponding VTIMEZONE is present in the component, the
+ *      returned component will already be in the correct timezone;
+ *      otherwise the caller is responsible for converting it.
+ *
+ *      FIXME this is useless until we can flag the failure
+ */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp);
 
 /* For the icalcomponent routines only, dtend and duration are tied
@@ -206,21 +253,104 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstart(icalcomponent 
    be set to ICAL_MALFORMEDDATA_ERROR. If you call a set routine and
    neither exists, the routine will create the appropriate property. */
 
+/**     @brief Gets the DTEND property as an icaltime.
+ *
+ *      If a DTEND property is not present but a DURATION is, we use
+ *      that to determine the proper end.
+ *
+ *      If DTSTART is a DATE-TIME with a timezone parameter and a
+ *      corresponding VTIMEZONE is present in the component, the
+ *      returned component will already be in the correct timezone;
+ *      otherwise the caller is responsible for converting it.
+ *
+ *      For the icalcomponent routines only, dtend and duration are tied
+ *      together. If you call the get routine for one and the other
+ *      exists, the routine will calculate the return value. That is, if
+ *      there is a DTEND and you call get_duration, the routine will
+ *      return the difference between DTEND and DTSTART.
+ *
+ *      FIXME this is useless until we can flag the failure
+ */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp);
 
+/**     @brief Sets the DTEND property to given icaltime.
+ *
+ *      This method respects the icaltime type (DATE vs DATE-TIME) and
+ *      timezone (or lack thereof).
+ *
+ *      This also checks that a DURATION property isn't already there,
+ *      and returns an error if it is. It's the caller's responsibility
+ *      to remove it.
+ *
+ *      For the icalcomponent routines only, DTEND and DURATION are tied
+ *      together. If you call this routine and DURATION exists, no action
+ *      will be taken and icalerrno will be set to ICAL_MALFORMEDDATA_ERROR.
+ *      If neither exists, the routine will create the appropriate
+ *      property.
+ */
 LIBICAL_ICAL_EXPORT void icalcomponent_set_dtend(icalcomponent *comp, struct icaltimetype v);
 
+/** @brief Returns the time a VTODO task is DUE.
+ *
+ *  @param comp Valid calendar component.
+ *
+ *  Uses the DUE: property if it exists, otherwise we calculate the DUE
+ *  value by adding the task's duration to the DTSTART time.
+ */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_due(icalcomponent *comp);
 
+/** @brief Sets the due date of a VTODO task.
+ *
+ *  @param comp Valid VTODO component.
+ *  @param v    Valid due date time.
+ *
+ *  The DUE and DURATION properties are tied together:
+ *  - If no duration or due properties then sets the DUE property.
+ *  - If a DUE property is already set, then resets it to the value v.
+ *  - If a DURATION property is already set, then calculates the new
+ *    duration based on the supplied value of @p v.
+ */
 LIBICAL_ICAL_EXPORT void icalcomponent_set_due(icalcomponent *comp, struct icaltimetype v);
 
+/**     @brief Sets the DURATION property to given icalduration.
+ *
+ *      This method respects the icaltime type (DATE vs DATE-TIME) and
+ *      timezone (or lack thereof).
+ *
+ *      This also checks that a DTEND property isn't already there,
+ *      and returns an error if it is. It's the caller's responsibility
+ *      to remove it.
+ *
+ *      For the icalcomponent routines only, DTEND and DURATION are tied
+ *      together. If you call this routine and DTEND exists, no action
+ *      will be taken and icalerrno will be set to ICAL_MALFORMEDDATA_ERROR.
+ *      If neither exists, the routine will create the appropriate
+ *      property.
+ */
 LIBICAL_ICAL_EXPORT void icalcomponent_set_duration(icalcomponent *comp,
                                                     struct icaldurationtype v);
 
+/**     @brief Gets the DURATION property as an icalduration
+ *
+ *      For the icalcomponent routines only, DTEND and DURATION are tied
+ *      together.
+ *      If a DURATION property is not present but a DTEND is, we use
+ *      that to determine the proper end.
+ *
+ *      For the icalcomponent routines only, dtend and duration are tied
+ *      together. If you call the get routine for one and the other
+ *      exists, the routine will calculate the return value. That is, if
+ *      there is a DTEND and you call get_duration, the routine will
+ *      return the difference between DTEND and DTSTART.
+ */
 LIBICAL_ICAL_EXPORT struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp);
 
+/** @brief Sets the METHOD property to the given method.
+ */
 LIBICAL_ICAL_EXPORT void icalcomponent_set_method(icalcomponent *comp, icalproperty_method method);
 
+/** @brief Returns the METHOD property.
+ */
 LIBICAL_ICAL_EXPORT icalproperty_method icalcomponent_get_method(icalcomponent *comp);
 
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstamp(icalcomponent *comp);
@@ -264,22 +394,64 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_status(icalcomponent *comp, enum ical
 
 LIBICAL_ICAL_EXPORT enum icalproperty_status icalcomponent_get_status(icalcomponent *comp);
 
-/** Calls the given function for each TZID parameter found in the
-    component, and any subcomponents. */
+/** @brief Calls the given function for each TZID parameter found in the
+ *  component, and any subcomponents.
+ */
 LIBICAL_ICAL_EXPORT void icalcomponent_foreach_tzid(icalcomponent *comp,
                                                     void (*callback) (icalparameter *param,
                                                                       void *data),
                                                     void *callback_data);
 
-/** Returns the icaltimezone in the component corresponding to the
-    TZID, or NULL if it can't be found. */
+/** @brief Returns the icaltimezone in the component corresponding to the
+ *  TZID, or NULL if it can't be found.
+ */
 LIBICAL_ICAL_EXPORT icaltimezone *icalcomponent_get_timezone(icalcomponent *comp,
                                                              const char *tzid);
 
+/**
+ * @brief Decides if a recurrence is acceptable.
+ *
+ * @param comp       A valid icalcomponent.
+ * @param dtstart    The base dtstart value for this component.
+ * @param recurtime  The time to test against.
+ *
+ * @return true if the recurrence value is excluded, false otherwise.
+ *
+ * This function decides if a specific recurrence value is
+ * excluded by EXRULE or EXDATE properties.
+ *
+ * It's not the most efficient code.  You might get better performance
+ * if you assume that recurtime is always increasing for each
+ * call. Then you could:
+ *
+ *   - sort the EXDATE values
+ *   - save the state of each EXRULE iterator for the next call.
+ *
+ * In this case though you don't need to worry how you call this
+ * function.  It will always return the correct result.
+ */
 LIBICAL_ICAL_EXPORT int icalproperty_recurrence_is_excluded(icalcomponent *comp,
                                                             struct icaltimetype *dtstart,
                                                             struct icaltimetype *recurtime);
 
+/**
+ * @brief Cycles through all recurrences of an event.
+ *
+ * @param comp           A valid VEVENT component
+ * @param start          Ignore timespans before this
+ * @param end            Ignore timespans after this
+ * @param callback       Function called for each timespan within the range
+ * @param callback_data  Pointer passed back to the callback function
+ *
+ * This function will call the specified callback function for once
+ * for the base value of DTSTART, and foreach recurring date/time
+ * value.
+ *
+ * It will filter out events that are specified as an EXDATE or an EXRULE.
+ *
+ * @todo We do not filter out duplicate RRULES/RDATES
+ * @todo We do not handle RDATEs with explicit periods
+ */
 LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                           struct icaltimetype start,
                                                           struct icaltimetype end,
@@ -289,12 +461,12 @@ LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                           void *callback_data);
 
 /**
- * Normalizes (reorders and sorts the properties) the specified icalcomponent @p comp.
+ * @brief Normalizes (reorders and sorts the properties) the specified icalcomponent @p comp.
  * @since 3.0
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_normalize(icalcomponent *comp);
 
-/*
+/**
  * Computes the datetime corresponding to the specified @p icalproperty and @p icalcomponent.
  * If the property is a DATE-TIME with a TZID parameter and a corresponding VTIMEZONE
  * is present in the component, the returned component will already be in the correct

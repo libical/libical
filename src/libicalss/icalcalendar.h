@@ -25,11 +25,14 @@
 #include "libical_icalss_export.h"
 #include "icalset.h"
 
-/* icalcalendar
- * Routines for storing calendar data in a file system. The calendar
- * has two icaldirsets, one for incoming components and one for booked
- * components. It also has interfaces to access the free/busy list
- * and a list of calendar properties */
+/** @file icalcalendar.h
+ *
+ * @brief Routines for storing calendar data in a file system.
+ *
+ * The calendar has two icaldirsets, one for incoming components and one for
+ * booked components. It also has interfaces to access the free/busy list and a
+ * list of calendar properties
+ */
 
 typedef struct icalcalendar_impl icalcalendar;
 

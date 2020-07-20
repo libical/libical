@@ -189,7 +189,7 @@ public class ICalProperty
         public native ICalValue get_value();
         public native String get_value_as_string();
 
-        /* Return the name of the property -- the type name converted to a
+        /* Returns the name of the property -- the type name converted to a
        String, or the value of get_x_name if the type is X property
         */
         public native String get_name();

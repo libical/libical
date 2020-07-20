@@ -81,7 +81,7 @@ public:
     ICalValue *get_value();
     std::string get_value_as_string();
 
-    /** Return the name of the property -- the type name converted
+    /** Returns the name of the property -- the type name converted
      *  to a string, or the value of get_x_name if the type is X
      *  property
      */

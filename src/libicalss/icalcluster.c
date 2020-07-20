@@ -52,7 +52,7 @@ static icalcluster *icalcluster_new_impl(void)
 }
 
 /**
- * Create a cluster with a key/value pair.
+ * @brief Create a cluster with a key/value pair.
  *
  * @todo Always do a deep copy.
  */
@@ -81,7 +81,7 @@ icalcluster *icalcluster_new(const char *key, icalcomponent *data)
 }
 
 /**
- * Deep clone an icalcluster to a new one
+ * @brief Deep clone an icalcluster to a new one
  */
 
 icalcluster *icalcluster_clone(const icalcluster *data)
@@ -196,7 +196,8 @@ int icalcluster_count_components(icalcluster *impl, icalcomponent_kind kind)
     return icalcomponent_count_components(impl->data, kind);
 }
 
-/** Iterate through components **/
+/** @brief Iterate through components
+ */
 icalcomponent *icalcluster_get_current_component(icalcluster *impl)
 {
     icalerror_check_arg_rz((impl != 0), "cluster");

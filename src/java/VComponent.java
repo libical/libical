@@ -80,7 +80,7 @@ public class VComponent
 
 	/* Working with components */
 
-	/* Return the first VEVENT, VTODO or VJOURNAL sub-component if it is one of those types */
+	/* Returns the first VEVENT, VTODO or VJOURNAL sub-component if it is one of those types */
 	public native VComponent get_inner();
 
 	public native void add_component(VComponent child);

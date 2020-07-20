@@ -27,7 +27,7 @@
 #include <libicalss/icalss.h>
 #include "regression.h"
 
-/* Get a note about the purpose of the property*/
+/* Gets a note about the purpose of the property*/
 static const char *get_note(icalcomponent *c)
 {
     icalproperty *p;
@@ -49,7 +49,7 @@ static const char *get_note(icalcomponent *c)
     return note;
 }
 
-/* Get the expected result about the purpose of the property*/
+/* Gets the expected result about the purpose of the property*/
 
 static const char *get_expect(icalcomponent *c)
 {

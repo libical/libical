@@ -5,7 +5,7 @@ the differences between the old API and this one.
 
 ----------------------------------------------------------------
 
-The vCard/vCalendar C interface is implemented in the set 
+The vCard/vCalendar C interface is implemented in the set
 of files as follows:
 
 vcc.y, yacc source, and vcc.c, the yacc output you will use
@@ -25,15 +25,15 @@ test.c is a standalone test driver that exercises some of
 the features of the APIs provided. Invoke test.exe on a
 VCARD/VCALENDAR input text file and you will see the pretty
 print output of the internal representation (this pretty print
-output should give you a good idea of how the internal 
-representation looks like -- there is one such output in the 
-following too). Also, a file with the .out suffix is generated 
-to show that the internal representation can be written back 
+output should give you a good idea of how the internal
+representation looks like -- there is one such output in the
+following too). Also, a file with the .out suffix is generated
+to show that the internal representation can be written back
 in the original text format.
 
 -----------------------------------------------------------------
-			
-			  
+
+
 				VObject for VCard/VCalendar
 
 Table of Contents
@@ -68,7 +68,7 @@ Since a property is represented as a VObject, each of these properties
 can have a name, a list of properties, and a value.
 
 For example, the input file "vobject.vcf":
-	
+
 BEGIN:VCARD
 N:Alden;Roland
 FN:Roland H. Alden
@@ -146,14 +146,14 @@ END:VCALENDAR
 END:VCARD
 
 
-will conceptually be be represented as
+will conceptually be represented as
     vcard
 	VCNameProp
 	    VCFamilyNameProp=Alden
 	    VCGivenNameProp=Roland
 	VCFullNameProp=Roland H.Alden
 	....
-	
+
 note that
     EMAIL;WORK;PREF;INTERNET:sf!rincon!ralden@alden.attmail.com
 will be represented as:
@@ -206,7 +206,7 @@ all properties of a vobject, o:
     initPropIterator(&i,o);
     while (moreIteration(&i)) {
 	VObject *each = nextVObject(&i);
-	// ... do something with "each" property 
+	// ... do something with "each" property
 	}
 
 Use the API vObjectName() to access a VObject's name.
@@ -448,7 +448,7 @@ d. properties name (id) are case incensitive.
 		used externally, its use is mainly limited to the
 		construction of top level object (e.g. an object
 		with VCCardProp or VCCalendarProp id).
-	
+
 	void deleteVObject(VObject *p);
 	    -- to deallocate single VObject, for most user, use
 		cleanVObject(VObject *o) instead for freeing all
@@ -456,7 +456,7 @@ d. properties name (id) are case incensitive.
 
 	char* dupStr(const char *s, unsigned int size);
 	    -- duplicate a string s. If size is 0, the string is
-		assume to be a null-terminated. 
+		assume to be a null-terminated.
 
 	void deleteStr(const char *p);
 	    -- used to deallocate a string allocated by dupStr();
@@ -492,7 +492,7 @@ d. properties name (id) are case incensitive.
 		i.e. the value val will be attached to the VObject prop
 		and a property of VCDataSize whose value is size
 		is also added to the object.
-		
+
 	void setVObjectVObjectValue(VObject *o, VObject *p);
 	    -- set a VObject as the value of another VObject.
 
@@ -548,7 +548,7 @@ d. properties name (id) are case incensitive.
 			   VCGroupingProp=b
 			       VCGroupingProp=a
 		and the object c is returned.
-		
+
 	VObject* isAPropertyOf(VObject *o, const char *id);
 	     -- query if a property by the name id is in o and
 		return the VObject that represent that property.
@@ -635,7 +635,7 @@ of Example.vcf and its VObject Representation
     to do with a VCard or a VCalendar, a recursive walk
     of the VObject tree may or may not be desirable. An example
     template of a non-recursive walk is shown below:
-	
+
     void processVCardVCalendar(char *inputFile)
     {
 	VObject *t, *v;
@@ -711,7 +711,7 @@ of Example.vcf and its VObject Representation
     void do_Event(VObject *vevent) { ... }
 
     ...
-    
+
 * Property's Values and Properties
     The VObject APIs do not attempt to check for the
     correctness of the values of a property. Nor do they
@@ -720,7 +720,7 @@ of Example.vcf and its VObject Representation
     the example of line [11] of the example, "O.K" is not
     a valid value of VCStatusProp.  It is up to the application
     to accept or reject the value of a property.
-    
+
 * Output of printVObject
     PrintVObject pretty prints a VObject tree in human
     readable form. See the listing at the end of the file
@@ -748,20 +748,20 @@ of Example.vcf and its VObject Representation
 	    VObject *p2 = addProp(p1,VCDataSizeProp);
 	    (void) setVObjectLongValue(p2,1482);
 	    setVObjectAnyValue(vcard,...pointer to binary data);
-	
+
     Note the presence of VCBase64Prop will cause the
     writeVObject API to output the binary data as BASE64 text.
     For VCard/VCalendar application, having the VCBase64Prop
     property is practically always necessary for property with
     binary data as its value.
-	
+
 * Note on Quoted-Printable String
     String value with embedded newline are written out as
     quoted-prinatable string. It is therefore important
     to mark a property with a string value that has
     one or more embedded newlines, with the VCQutedPrintableProp
     property. e.g.
-			
+
 	// VObject *root;
 	char *msg="To be\nor\nnot to be";
 	VObject *p = addPropValue(root,VCDescriptionProp,msg);
@@ -805,7 +805,7 @@ of Example.vcf and its VObject Representation
     in the textual representation of VCard/VCalendar. So, there
     is no version of writeVObject and the parser to output and
     input Unicode textual representation of VCard/VCalendar.
-   
+
 
 Example.vcf
 -----------

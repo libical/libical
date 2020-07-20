@@ -78,11 +78,11 @@ class Time(Property):
         self.value(icaltime_as_ical_string(self.tt),"DATE-TIME")
 
     def valid(self):
-        " Return true if this is a valid time "
+        " Returns true if this is a valid time "
         return not icaltime_is_null_time(self.tt)
 
     def utc_seconds(self,v=None):
-        """ Return or set time in seconds past POSIX epoch"""
+        """ Returns or sets time in seconds past POSIX epoch"""
         tz = icaltimezone_get_builtin_timezone(self.timezone())
         if (v!=None):
             self.tt = icaltime_from_timet_with_zone(v,0,tz)
@@ -91,15 +91,15 @@ class Time(Property):
         return icaltime_as_timet_with_zone(self.tt, tz)
 
     def is_utc(self):
-        """ Return a boolean indicating if time is in UTC """
+        """ Returns a boolean indicating if time is in UTC """
         return icaltime_is_utc(self.tt)
 
     def is_date(self):
-        """ Return a boolean indicating if time is actually a date """
+        """ Returns a boolean indicating if time is actually a date """
         return icaltime_is_date(self.tt)
 
     def timezone(self,v=None):
-        """ Return, set (if none) or alter the timezone for this time """
+        """ Returns, set (if none) or alter the timezone for this time """
 
         origtz = icaltime_get_tzid(self.tt)
 

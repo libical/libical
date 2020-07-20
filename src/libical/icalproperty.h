@@ -25,6 +25,8 @@
 
 #include <stdarg.h>     /* for va_... */
 
+/** @file icalproperty.h */
+
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new(icalproperty_kind kind);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_impl(icalproperty_kind kind);
@@ -63,12 +65,42 @@ LIBICAL_ICAL_EXPORT const char *icalproperty_get_parameter_as_string(icalpropert
 LIBICAL_ICAL_EXPORT char *icalproperty_get_parameter_as_string_r(icalproperty *prop,
                                                                  const char *name);
 
+/** @brief Removes all parameters with the specified kind.
+ *
+ *  @param prop   A valid icalproperty.
+ *  @param kind   The kind to remove (ex. ICAL_TZID_PARAMETER)
+ *
+ *  See icalproperty_remove_parameter_by_name() and
+ *  icalproperty_remove_parameter_by_ref() for alternate ways of
+ *  removing parameters
+ */
 LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_kind(icalproperty *prop,
                                                                icalparameter_kind kind);
 
+/** @brief Removes all parameters with the specified name.
+ *
+ *  @param prop   A valid icalproperty.
+ *  @param name   The name of the parameter to remove
+ *
+ *  This function removes parameters with the given name.  The name
+ *  corresponds to either a built-in name (TZID, etc.) or the name of
+ *  an extended parameter (X-FOO)
+ *
+ *  See icalproperty_remove_parameter_by_kind() and
+ *  icalproperty_remove_parameter_by_ref() for alternate ways of removing
+ *  parameters
+ */
 LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_name(icalproperty *prop,
                                                                const char *name);
 
+/** @brief Removes the specified parameter reference from the property.
+ *
+ *  @param prop   A valid icalproperty.
+ *  @param parameter   A reference to a specific icalparameter.
+ *
+ *  This function removes the specified parameter reference from the
+ *  property.
+ */
 LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_ref(icalproperty *prop,
                                                               icalparameter *param);
 
@@ -104,7 +136,7 @@ LIBICAL_ICAL_EXPORT icalproperty *icalvalue_get_parent(icalvalue *value);
 LIBICAL_ICAL_EXPORT void icalproperty_set_x_name(icalproperty *prop, const char *name);
 LIBICAL_ICAL_EXPORT const char *icalproperty_get_x_name(icalproperty *prop);
 
-/** Return the name of the property -- the type name converted to a
+/** Returns the name of the property -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X
  *  property
  */

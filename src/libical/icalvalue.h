@@ -23,6 +23,8 @@
 #include "libical_ical_export.h"
 #include "icalvalueimpl.h"
 
+/** @file icalvalue.h */
+
 #define ICAL_BOOLEAN_TRUE  1
 #define ICAL_BOOLEAN_FALSE 0
 
@@ -92,7 +94,9 @@ LIBICAL_ICAL_EXPORT int icalvalue_decode_ical_string(const char *szText,
                                                      char *szDecText, int nMaxBufferLen);
 
 /* For the library only -- do not make visible */
+/// @cond
 extern void print_date_to_string(char *str, const struct icaltimetype *data);
 extern void print_datetime_to_string(char *str, const struct icaltimetype *data);
+/// @endcond
 
 #endif /*ICALVALUE_H */

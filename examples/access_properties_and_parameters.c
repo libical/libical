@@ -3,7 +3,7 @@
 #include <libical/ical.h>
 #include <stdlib.h>
 
-/* Get a particular parameter out of a component. This routine will
+/* Gets a particular parameter out of a component. This routine will
    return a list of strings of all attendees who are required. Note
    that this routine assumes that the component that we pass in is a
    VEVENT.  */
@@ -143,7 +143,7 @@ void test_properties()
     printf("Value: %s", str);
     free(str);
 
-    /* Free the original and the clone */
+    /* Frees the original and the clone */
     icalproperty_free(clone);
     icalproperty_free(prop);
 

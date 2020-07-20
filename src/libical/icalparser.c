@@ -172,7 +172,7 @@ static char *parser_get_next_char(char c, char *str, int qm)
     return 0;
 }
 
-/** make a new tmp buffer out of a substring */
+/** Makes a new tmp buffer out of a substring. */
 static char *make_segment(char *start, char *end)
 {
     char *buf, *tmp;
@@ -216,7 +216,7 @@ static char *parser_get_prop_name(char *line, char **end)
     return str;
 }
 
-/* Decode parameter value per RFC6868 */
+/** Decode parameter value per RFC6868 */
 static void parser_decode_param_value(char *value)
 {
     char *in, *out;
@@ -484,10 +484,6 @@ static char *parser_get_next_parameter(char *line, char **end)
     }
 }
 
-/**
- * Get a single property line, from the property name through the
- * final new line, and include any continuation lines
- */
 char *icalparser_get_line(icalparser *parser,
                           icalparser_line_gen_func line_gen_func)
 {

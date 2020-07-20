@@ -60,13 +60,13 @@ typedef enum icalparser_state
     /** Parsing was successful. */
     ICALPARSER_SUCCESS,
 
-    /** Currently parsing the begin of a component */
+    /** Currently parsing the begin of a component. */
     ICALPARSER_BEGIN_COMP,
 
-    /** Currently parsing the end of the component */
+    /** Currently parsing the end of the component. */
     ICALPARSER_END_COMP,
 
-    /** Parsing is currently in progress */
+    /** Parsing is currently in progress. */
     ICALPARSER_IN_PROGRESS
 } icalparser_state;
 
@@ -284,7 +284,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse(icalparser *parser,
 LIBICAL_ICAL_EXPORT void icalparser_set_gen_data(icalparser *parser, void *data);
 
 /**
- * @brief Parse a string and return the parsed ::icalcomponent.
+ * @brief Parses a string and returns the parsed ::icalcomponent.
  * @param str The iCal formatted data to be parsed
  * @return An ::icalcomponent representing the iCalendar
  *
@@ -317,8 +317,8 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
  ***********************************************************************/
 
 /**
- * @brief Given a line generator function, return a single iCal content line.
- * @return Aa pointer to a single line of data or `NULL` if it reached
+ * @brief Given a line generator function, returns a single iCal content line.
+ * @return A pointer to a single line of data or `NULL` if it reached
  *  end of file reading from the @a line_gen_func. Note that the pointer
  *  returned is owned by libical and must not be `free()`d by the user.
  * @param parser The parser object to use
@@ -326,6 +326,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
  *
  * This function uses the supplied @a line_gen_func to read data in,
  * until it has read a full line, and returns the full line.
+ * It includes any continuation lines, which start with a space after a newline.
  * To supply arbitrary data (as the parameter @a d) to your @a line_gen_func,
  * call icalparser_set_gen_data().
  */

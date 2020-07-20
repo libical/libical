@@ -42,7 +42,7 @@ struct _icalarray
 };
 
 /**
- * @brief Creates new ::icalarray object.
+ * @brief Creates a new ::icalarray object.
  * @param element_size The size of the elements to be held by the array
  * @param increment_size How many extra elements worth of space to allocate on expansion
  * @return The new ::icalarray object
@@ -81,12 +81,12 @@ struct _icalarray
 LIBICAL_ICAL_EXPORT icalarray *icalarray_new(size_t element_size, size_t increment_size);
 
 /**
- * @brief Copies an existing ::icalarray and it's elements, creating a new one.
+ * @brief Copies an existing ::icalarray and its elements, creating a new one.
  * @param array The array to copy
  * @return A new array, holding all the elements of @a array
  *
  * Creates a new ::icalarray object, copying all the existing elements from
- * @a array as well as it's properties (such as @a element_size and
+ * @a array as well as its properties (such as @a element_size and
  * @a increment_size) over.
  *
  * @par Error handling
@@ -166,8 +166,8 @@ LIBICAL_ICAL_EXPORT void icalarray_append(icalarray *array, const void *element)
 
 /**
  * @brief Removes a given element from an array.
- * @brief array The array from which to remove the element
- * @brief position The position of the element to remove
+ * @param array The array from which to remove the element
+ * @param position The position of the element to remove
  *
  * Removes the element at the given position from the array.
  *

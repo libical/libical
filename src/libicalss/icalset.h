@@ -86,7 +86,7 @@ struct icalset_impl
     icalcomponent *(*icalsetiter_to_prior) (icalset *set, icalsetiter *i);
 };
 
-/** @brief Register a new derived class */
+/** @brief Registers a new derived class */
 LIBICAL_ICALSS_EXPORT int icalset_register_class(icalset *set);
 
 /** @brief Generic icalset constructor
@@ -110,15 +110,19 @@ LIBICAL_ICALSS_EXPORT icalset *icalset_new_file_writer(const char *path);
 
 LIBICAL_ICALSS_EXPORT icalset *icalset_new_dir(const char *path);
 
+/**
+ *  Frees the memory associated with this icalset
+ *  automatically calls the implementation specific free routine
+ */
 LIBICAL_ICALSS_EXPORT void icalset_free(icalset *set);
 
 LIBICAL_ICALSS_EXPORT const char *icalset_path(icalset *set);
 
-/** Mark the cluster as changed, so it will be written to disk when it
+/** Marks the cluster as changed, so it will be written to disk when it
     is freed. **/
 LIBICAL_ICALSS_EXPORT void icalset_mark(icalset *set);
 
-/** Write changes to disk immediately */
+/** Writes changes to disk immediately */
 LIBICAL_ICALSS_EXPORT icalerrorenum icalset_commit(icalset *set);
 
 LIBICAL_ICALSS_EXPORT icalerrorenum icalset_add_component(icalset *set, icalcomponent *comp);
@@ -127,23 +131,23 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icalset_remove_component(icalset *set, icalc
 
 LIBICAL_ICALSS_EXPORT int icalset_count_components(icalset *set, icalcomponent_kind kind);
 
-/** Restrict the component returned by icalset_first, _next to those
+/** Restricts the component returned by icalset_first, _next to those
     that pass the gauge. */
 LIBICAL_ICALSS_EXPORT icalerrorenum icalset_select(icalset *set, icalgauge *gauge);
 
-/** Get a component by uid */
+/** Gets a component by uid */
 LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch(icalset *set, const char *uid);
 
 LIBICAL_ICALSS_EXPORT int icalset_has_uid(icalset *set, const char *uid);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch_match(icalset *set, icalcomponent *c);
 
-/** Modify components according to the MODIFY method of CAP. Works on
+/** Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */
 LIBICAL_ICALSS_EXPORT icalerrorenum icalset_modify(icalset *set,
                                                    icalcomponent *oldc, icalcomponent *newc);
 
-/** Iterate through the components. If a guage has been defined, these
+/** Iterates through the components. If a guage has been defined, these
    will skip over components that do not pass the gauge */
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalset_get_current_component(icalset *set);

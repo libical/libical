@@ -161,7 +161,7 @@ icalcomponent* icallangbind_get_next_component(icalcomponent *c,
                                               const char* comp);
 
 
-/* Return a string that can be evaluated in perl or python to
+/* Returns a string that can be evaluated in perl or python to
    generated a hash that holds the property's name, value and
    parameters. Sep is the hash seperation string, "=>" for perl and
    ":" for python */
@@ -192,12 +192,12 @@ struct icaltimetype
 /* Convert seconds past UNIX epoch to a timetype*/
 struct icaltimetype icaltime_from_timet_with_zone(int v, int is_date, const char* tzid);
 
-/* Return the time as seconds past the UNIX epoch */
+/* Returns the time as seconds past the UNIX epoch */
 /* Normally, this returns a time_t, but SWIG tries to turn that type
    into a pointer */
 int icaltime_as_timet(struct icaltimetype);
 
-/* Return a string represention of the time, in RFC2445 format. The
+/* Returns a string represention of the time, in RFC2445 format. The
    string is owned by libical */
 char* icaltime_as_ical_string(struct icaltimetype tt);
 
@@ -205,7 +205,7 @@ char* icaltime_as_ical_string(struct icaltimetype tt);
 struct icaltimetype icaltime_from_string(const char* str);
 
 /* Routines for handling timezones */
-/* Return the offset of the named zone as seconds. tt is a time
+/* Returns the offset of the named zone as seconds. tt is a time
    indicating the date for which you want the offset */
 int icaltime_utc_offset(struct icaltimetype tt, const char* tzid);
 
@@ -218,10 +218,10 @@ struct icaltimetype icaltime_as_utc(struct icaltimetype tt,
 struct icaltimetype icaltime_as_zone(struct icaltimetype tt,
                      const char* tzid);
 
-/* Return a null time, which indicates no time has been set. This time represent the beginning of the epoch */
+/* Returns a null time, which indicates no time has been set. This time represent the beginning of the epoch */
 struct icaltimetype icaltime_null_time(void);
 
-/* Return true of the time is null. */
+/* Returns true if the time is null. */
 int icaltime_is_null_time(struct icaltimetype t);
 
 /* Returns false if the time is clearly invalid, but is not null. This
@@ -236,32 +236,32 @@ int icaltime_is_valid_time(struct icaltimetype t);
    underflow. */
 struct icaltimetype icaltime_normalize(struct icaltimetype t);
 
-/* Return the day of the year of the given time */
+/* Returns the day of the year of the given time */
 short icaltime_day_of_year(struct icaltimetype t);
 
 /* Create a new time, given a day of year and a year. */
 struct icaltimetype icaltime_from_day_of_year(short doy,  short year);
 
-/* Return the day of the week of the given time. Sunday is 0 */
+/* Returns the day of the week of the given time. Sunday is 0 */
 short icaltime_day_of_week(struct icaltimetype t);
 
-/* Return the day of the year for the first day of the week that the
+/* Returns the day of the year for the first day of the week that the
    given time is within. */
 short icaltime_start_doy_week(struct icaltimetype t, int fdow);
 
-/* Return a string with the time represented in the same format as ctime(). THe string is owned by libical */
+/* Returns a string with the time represented in the same format as ctime(). THe string is owned by libical */
 char* icaltime_as_ctime(struct icaltimetype);
 
-/* Return the week number for the week the given time is within */
+/* Returns the week number for the week the given time is within */
 short icaltime_week_number(struct icaltimetype t);
 
-/* Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
+/* Returns -1, 0, or 1 to indicate that a<b, a==b or a>b */
 int icaltime_compare(struct icaltimetype a,struct icaltimetype b);
 
 /* like icaltime_compare, but only use the date parts. */
 int icaltime_compare_date_only(struct icaltimetype a, struct icaltimetype b);
 
-/* Return the number of days in the given month */
+/* Returns the number of days in the given month */
 short icaltime_days_in_month(short month,short year);
 
 

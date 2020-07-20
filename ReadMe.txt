@@ -25,6 +25,11 @@ plus the iCalendar iMIP protocol in [RFC6047][].
 [RFC6047]: https://tools.ietf.org/html/rfc6047
 [RFC7986]: https://tools.ietf.org/html/rfc7986
 
+The libical-glib API is currently unstable and can change with any release.
+Until it is considered stable, there should be defined LIBICAL_GLIB_UNSTABLE_API=1
+before including <libical-glib/libical-glib.h>, to indicate that the library user
+is aware of it and is prepared to change the calls anytime.
+
 ## License
 
 The code and datafiles in this distribution are licensed under the

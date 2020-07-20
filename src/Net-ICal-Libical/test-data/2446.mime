@@ -1140,7 +1140,7 @@ X-LIC-ERROR
  ;X-LIC-ERRORTYPE=PARAMETER_PARSE_ERROR
  :Can't parse parameter name: 'TYPE=INDIVIDUAL'
 COMMENT
- :Mr. B cannot attend. It's raining. Lets cancel.
+ :Mr. B cannot attend. It's raining. Let's cancel.
 UID
  :calsrv.example.com-873970198738777@example.com
 SEQUENCE

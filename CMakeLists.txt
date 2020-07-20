@@ -33,10 +33,6 @@
 #  Default=false (build shared and static libs)
 #  Takes precedence over STATIC_ONLY
 #
-# -DENABLE_LTO_BUILD=[true|false]
-#  Build a link-time optimized version (requires gcc or clang)
-#  Default=false (do not build a link time optimized version)
-#
 # -DGOBJECT_INTROSPECTION=[true|false]
 #  Set to build GObject introspection "typelib" files
 #  Requires GObject Introspection development package v0.6.7 or higher

@@ -78,7 +78,7 @@ void icaltimezone_set_tzid_prefix(const char *new_prefix);
  * @par Accessing timezones.
  */
 
-/** Free any builtin timezone information **/
+/** Frees any builtin timezone information **/
 void icaltimezone_free_builtin_timezones(void);
 
 /** Returns the array of builtin icaltimezones. */
@@ -118,10 +118,10 @@ int icaltimezone_get_utc_offset_of_utc_time (icaltimezone *zone,
  * @par Handling the default location the timezone files
  */
 
-/** Set the directory to look for the zonefiles */
+/** Sets the directory to look for the zonefiles */
 void set_zone_directory(const char *path);
 
-/** Free memory dedicated to the zonefile directory */
+/** Frees the memory dedicated to the zonefile directory */
 void free_zone_directory(void);
 void icaltimezone_release_zone_tab(void);
 

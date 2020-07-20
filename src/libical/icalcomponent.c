@@ -108,15 +108,11 @@ static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind)
     return comp;
 }
 
-/** @brief Constructor
- */
 icalcomponent *icalcomponent_new(icalcomponent_kind kind)
 {
     return icalcomponent_new_impl(kind);
 }
 
-/** @brief Constructor
- */
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wvarargs"
 icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...)
@@ -137,8 +133,6 @@ icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...)
 }
 #pragma clang diagnostic pop
 
-/** @brief Constructor
- */
 icalcomponent *icalcomponent_new_from_string(const char *str)
 {
     return icalparser_parse_string(str);
@@ -192,8 +186,6 @@ icalcomponent *icalcomponent_new_x(const char *x_name)
     return comp;
 }
 
-/*** @brief Destructor
- */
 void icalcomponent_free(icalcomponent *c)
 {
     icalproperty *prop;
@@ -619,23 +611,6 @@ icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c)
     return 0;
 }
 
-/**     @brief Get the timespan covered by this component, in UTC
- *
- *      see icalcomponent_foreach_recurrence() for a better way to
- *      extract spans from an component.
- *
- *      This method can be called on either a VCALENDAR or any real
- *      component. If the VCALENDAR contains no real component, but
- *      contains a VTIMEZONE, we return that span instead.
- *      This might not be a desirable behavior; we keep it for now
- *      for backward compatibility, but it might be deprecated at a
- *      future time.
- *
- *      FIXME this API needs to be clarified. DTEND is defined as the
- *      first available time after the end of this event, so the span
- *      should actually end 1 second before DTEND.
- */
-
 icaltime_span icalcomponent_get_span(icalcomponent *comp)
 {
     icalcomponent *inner;
@@ -714,29 +689,6 @@ or empty VCALENDAR component"); */
     return span;
 }
 
-/**
- * Decide if this recurrance is acceptable
- *
- * @param comp       A valid icalcomponent.
- * @param dtstart    The base dtstart value for this component.
- * @param recurtime  The time to test against.
- *
- * @return true if the recurrence value is excluded, false otherwise.
- *
- * This function decides if a specific recurrence value is
- * excluded by EXRULE or EXDATE properties.
- *
- * It's not the most efficient code.  You might get better performance
- * if you assume that recurtime is always increasing for each
- * call. Then you could:
- *
- *   - sort the EXDATE values
- *   - save the state of each EXRULE iterator for the next call.
- *
- * In this case though you don't need to worry how you call this
- * function.  It will always return the correct result.
- */
-
 int icalproperty_recurrence_is_excluded(icalcomponent *comp,
                                         struct icaltimetype *dtstart,
                                         struct icaltimetype *recurtime)
@@ -798,17 +750,16 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
     }
     comp->property_iterator = property_iterator;
 
-    return 0;/** no matches **/
+    return 0; /* no matches */
 }
 
 /**
- * @brief Return the busy status based on the TRANSP property.
+ * @brief Returns the busy status based on the TRANSP property.
  *
  * @param comp   A valid icalcomponent.
  *
  * @return 1 if the event is a busy item, 0 if it is not.
  */
-
 static int icalcomponent_is_busy(icalcomponent *comp)
 {
     icalproperty *transp;
@@ -852,25 +803,6 @@ static int icalcomponent_is_busy(icalcomponent *comp)
     }
     return (ret);
 }
-
-/**
- * @brief cycle through all recurrances of an event
- *
- * @param comp           A valid VEVENT component
- * @param start          Ignore timespans before this
- * @param end            Ignore timespans after this
- * @param callback       Function called for each timespan within the range
- * @param callback_data  Pointer passed back to the callback function
- *
- * This function will call the specified callback function for once
- * for the base value of DTSTART, and foreach recurring date/time
- * value.
- *
- * It will filter out events that are specified as an EXDATE or an EXRULE.
- *
- * @todo We do not filter out duplicate RRULES/RDATES
- * @todo We do not handle RDATEs with explicit periods
- */
 
 void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                       struct icaltimetype start,
@@ -916,7 +848,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 
     basespan.is_busy = icalcomponent_is_busy(comp);
 
-    /** Calculate the ceiling and floor values.. **/
+    /* Calculate the ceiling and floor values.. */
     limit_start = icaltime_as_timet_with_zone(start,
                                               icaltimezone_get_utc_timezone());
     if (!icaltime_is_null_time(end)) {
@@ -937,7 +869,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
     if ((rrule == NULL) &&
         !icalproperty_recurrence_is_excluded(comp, &dtstart, &dtstart)) {
-        /** call callback action **/
+        /* call callback action */
         if (icaltime_span_overlaps(&basespan, &limit_span))
             (*callback) (comp, &basespan, callback_data);
     }
@@ -978,12 +910,12 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                             icaltimezone_get_utc_timezone());
             recurspan.end = recurspan.start + dtduration;
 
-            /** save the iterator ICK! **/
+            /* save the iterator ICK! */
             property_iterator = comp->property_iterator;
 
             if (!icalproperty_recurrence_is_excluded(comp,
                                                      &dtstart, &rrule_time)) {
-                /** call callback action **/
+                /* call callback action */
                 if (icaltime_span_overlaps(&recurspan, &limit_span))
                     (*callback) (comp, &recurspan, callback_data);
             }
@@ -993,7 +925,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         icalrecur_iterator_free(rrule_itr);
     }   /* end of RRULE loop */
 
-    /** Now process RDATE entries **/
+    /* Now process RDATE entries */
     for (rdate = icalcomponent_get_first_property(comp, ICAL_RDATE_PROPERTY);
          rdate != NULL;
          rdate = icalcomponent_get_next_property(comp, ICAL_RDATE_PROPERTY)) {
@@ -1001,10 +933,10 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         struct icaldatetimeperiodtype rdate_period =
             icalproperty_get_rdate(rdate);
 
-        /** RDATES can specify raw datetimes, periods, or dates.
+        /* RDATES can specify raw datetimes, periods, or dates.
             we only support raw datetimes for now..
 
-            @todo Add support for other types **/
+            @todo Add support for other types */
 
         if (icaltime_is_null_time(rdate_period.time))
             continue;
@@ -1016,12 +948,12 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                         icaltimezone_get_utc_timezone());
         recurspan.end = recurspan.start + dtduration;
 
-        /** save the iterator ICK! **/
+        /* save the iterator ICK! */
         property_iterator = comp->property_iterator;
 
         if (!icalproperty_recurrence_is_excluded(comp,
                                                  &dtstart, &rdate_period.time)) {
-            /** call callback action **/
+            /* call callback action */
             if (icaltime_span_overlaps(&recurspan, &limit_span))
                 (*callback) (comp, &recurspan, callback_data);
         }
@@ -1034,12 +966,6 @@ int icalcomponent_check_restrictions(icalcomponent *comp)
     icalerror_check_arg_rz(comp != 0, "comp");
     return icalrestriction_check(comp);
 }
-
-/** @brief returns the number of errors encountered parsing the data
- *
- * This function counts the number times the X-LIC-ERROR occurs
- * in the data structure.
- */
 
 int icalcomponent_count_errors(icalcomponent *component)
 {
@@ -1367,9 +1293,6 @@ icalcomponent *icalcomponent_get_inner(icalcomponent *comp)
     }
 }
 
-/** @brief sets the METHOD property to the given method
- */
-
 void icalcomponent_set_method(icalcomponent *comp, icalproperty_method method)
 {
     icalproperty *prop = icalcomponent_get_first_property(comp, ICAL_METHOD_PROPERTY);
@@ -1381,9 +1304,6 @@ void icalcomponent_set_method(icalcomponent *comp, icalproperty_method method)
 
     icalproperty_set_method(prop, method);
 }
-
-/** @brief returns the METHOD property
- */
 
 icalproperty_method icalcomponent_get_method(icalcomponent *comp)
 {
@@ -1407,11 +1327,6 @@ if (inner == 0) { \
 } \
 prop = icalcomponent_get_first_property(inner, p_kind);
 
-/**     @brief Set DTSTART property to given icaltime
- *
- *      This method respects the icaltime type (DATE vs DATE-TIME) and
- *      timezone (or lack thereof).
- */
 void icalcomponent_set_dtstart(icalcomponent *comp, struct icaltimetype v)
 {
     const char *tzid;
@@ -1432,15 +1347,6 @@ void icalcomponent_set_dtstart(icalcomponent *comp, struct icaltimetype v)
     }
 }
 
-/**     @brief Get DTSTART property as an icaltime
- *
- *      If DTSTART is a DATE-TIME with a timezone parameter and a
- *      corresponding VTIMEZONE is present in the component, the
- *      returned component will already be in the correct timezone;
- *      otherwise the caller is responsible for converting it.
- *
- *      FIXME this is useless until we can flag the failure
- */
 struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp);
@@ -1454,18 +1360,6 @@ struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp)
     return icalproperty_get_datetime_with_component(prop, comp);
 }
 
-/**     @brief Get DTEND property as an icaltime
- *
- *      If a DTEND property is not present but a DURATION is, we use
- *      that to determine the proper end.
- *
- *      If DTSTART is a DATE-TIME with a timezone parameter and a
- *      corresponding VTIMEZONE is present in the component, the
- *      returned component will already be in the correct timezone;
- *      otherwise the caller is responsible for converting it.
- *
- *      FIXME this is useless until we can flag the failure
- */
 struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp);
@@ -1493,15 +1387,6 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
     return ret;
 }
 
-/**     @brief Set DTEND property to given icaltime
- *
- *      This method respects the icaltime type (DATE vs DATE-TIME) and
- *      timezone (or lack thereof).
- *
- *      This also checks that a DURATION property isn't already there,
- *      and returns an error if it is. It's the caller's responsibility
- *      to remove it.
- */
 void icalcomponent_set_dtend(icalcomponent *comp, struct icaltimetype v)
 {
     const char *tzid;
@@ -1527,15 +1412,6 @@ void icalcomponent_set_dtend(icalcomponent *comp, struct icaltimetype v)
     }
 }
 
-/**     @brief Set DURATION property to given icalduration
- *
- *      This method respects the icaltime type (DATE vs DATE-TIME) and
- *      timezone (or lack thereof).
- *
- *      This also checks that a DTEND property isn't already there,
- *      and returns an error if it is. It's the caller's responsibility
- *      to remove it.
- */
 void icalcomponent_set_duration(icalcomponent *comp, struct icaldurationtype v)
 {
     ICALSETUPSET(ICAL_DURATION_PROPERTY);
@@ -1553,11 +1429,6 @@ void icalcomponent_set_duration(icalcomponent *comp, struct icaldurationtype v)
     }
 }
 
-/**     @brief Get DURATION property as an icalduration
- *
- *      If a DURATION property is not present but a DTEND is, we use
- *      that to determine the proper end.
- */
 struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp);
@@ -1994,11 +1865,6 @@ icalcomponent *icalcomponent_new_xpatch(void)
  * Timezone stuff.
  */
 
-/**
- *  This takes 2 VCALENDAR components and merges the second one into the first,
- *  resolving any problems with conflicting TZIDs. comp_to_merge will no
- *  longer exist after calling this function.
- */
 void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_merge)
 {
     icalcomponent *subcomp, *next_subcomp;
@@ -2244,9 +2110,6 @@ static void icalcomponent_rename_tzids_callback(icalparameter *param, void *data
     }
 }
 
-/**
- * Calls the given function for each TZID parameter found in the component.
- */
 void icalcomponent_foreach_tzid(icalcomponent *comp,
                                 void (*callback) (icalparameter *param, void *data),
                                 void *callback_data)
@@ -2284,10 +2147,6 @@ void icalcomponent_foreach_tzid(icalcomponent *comp,
     }
 }
 
-/**
- *  Returns the icaltimezone from the component corresponding to the given
- *  TZID, or NULL if the component does not have a corresponding VTIMEZONE.
- */
 icaltimezone *icalcomponent_get_timezone(icalcomponent *comp, const char *tzid)
 {
     icaltimezone *zone;
@@ -2410,7 +2269,7 @@ static int icalcomponent_compare_vtimezones(icalcomponent *vtimezone1, icalcompo
 }
 
 /**
- * @brief set the RELCALID property of a component.
+ * @brief Sets the RELCALID property of a component.
  *
  * @param comp    Valid calendar component.
  * @param v       Relcalid URL value
@@ -2429,7 +2288,7 @@ void icalcomponent_set_relcalid(icalcomponent *comp, const char *v)
 }
 
 /**
- * @brief get the RELCALID property of a component.
+ * @brief Gets the RELCALID property of a component.
  *
  * @param comp    Valid calendar component.
  */
@@ -2456,14 +2315,6 @@ const char *icalcomponent_get_relcalid(icalcomponent *comp)
     return icalproperty_get_relcalid(prop);
 }
 
-/** @brief Return the time a TODO task is DUE.
- *
- *  @param comp Valid calendar component.
- *
- *  Uses the DUE: property if it exists, otherwise we calculate the DUE
- *  value by adding the task's duration to the DTSTART time
- */
-
 struct icaltimetype icalcomponent_get_due(icalcomponent *comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp);
@@ -2485,17 +2336,6 @@ struct icaltimetype icalcomponent_get_due(icalcomponent *comp)
     }
     return icaltime_null_time();
 }
-
-/** @brief Set the due date of a VTODO task.
- *
- *  @param comp Valid VTODO component.
- *  @param v    Valid due date time.
- *
- *  - If no duration or due properties then set the DUE property.
- *  - If a DUE property is already set, then reset it to the value v.
- *  - If a DURATION property is already set, then calculate the new
- *    duration based on the supplied value of v.
- */
 
 void icalcomponent_set_due(icalcomponent *comp, struct icaltimetype v)
 {

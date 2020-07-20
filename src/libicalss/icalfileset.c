@@ -225,7 +225,7 @@ long icalfileset_filesize(icalfileset *fset)
             icalerror_set_errno(ICAL_FILE_ERROR);
             return -1;
         } else {
-            /* Lets assume that it is a file of the right type */
+            /* Let's assume that it is a file of the right type */
             return (long)sbuf.st_size;
         }
     }
