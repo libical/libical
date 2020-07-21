@@ -522,6 +522,9 @@ static void sspm_build_header(struct sspm_header *header, char *line)
         if (header->minor == SSPM_UNKNOWN_MINOR_TYPE) {
             char *p = strchr(val, '/');
 
+            if (header->minor_text != 0) {
+                free(header->minor_text);
+            }
             if (p != 0) {
                 p++;    /* Skip the '/' */
 
@@ -532,6 +535,9 @@ static void sspm_build_header(struct sspm_header *header, char *line)
             }
         }
         if (boundary != 0) {
+            if (header->boundary != 0) {
+                free(header->boundary);
+            }
             header->boundary = sspm_strdup(boundary);
         }
 
@@ -863,7 +869,7 @@ static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_hea
 
         sspm_set_error(parent_header, SSPM_NO_BOUNDARY_ERROR, 0);
         /* read all of the reamining lines */
-        while ((line = sspm_get_next_line(impl)) != 0) {
+        while (sspm_get_next_line(impl) != 0) {
         }
 
         return 0;
