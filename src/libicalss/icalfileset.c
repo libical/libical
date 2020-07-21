@@ -104,9 +104,8 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
     (void)icalfileset_lock(fset);
 
     if (cluster_file_size > 0) {
-        icalerrorenum error;
 
-        if ((error = icalfileset_read_file(fset, mode)) != ICAL_NO_ERROR) {
+        if (icalfileset_read_file(fset, mode) != ICAL_NO_ERROR) {
             icalfileset_free(set);
             return 0;
         }

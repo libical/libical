@@ -181,8 +181,7 @@ static icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc) (
 
     bset->cluster = icalcomponent_new(ICAL_XROOT_COMPONENT);
 
-    if ((ret = ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, NULL, &tid, 0)) != 0) {
-        /*char *foo = db_strerror(ret); */
+    if (ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, NULL, &tid, 0) != 0) {
         abort();
     }
 
@@ -244,13 +243,11 @@ static icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc) (
         more_mem = NULL;
     }
 
-    if ((ret = dbcp->c_close(dbcp)) != 0) {
-        /*char *foo = db_strerror(ret); */
+    if (dbcp->c_close(dbcp) != 0) {
         abort();        /* should retry in case of DB_LOCK_DEADLOCK */
     }
 
-    if ((ret = tid->commit(tid, 0)) != 0) {
-        /*char *foo = db_strerror(ret); */
+    if (tid->commit(tid, 0) != 0) {
         abort();
     }
 
@@ -274,7 +271,6 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
 {
     icalbdbset *bset = (icalbdbset *) set;
     icalbdbset_options *options = (icalbdbset_options *) options_in;
-    int ret;
     DB *cal_db;
     const char *subdb_name = NULL;
 
@@ -310,7 +306,7 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
     bset->gauge = 0;
     bset->cluster = 0;
 
-    if ((ret = icalbdbset_read_database(bset, options->pfunc)) != ICAL_NO_ERROR) {
+    if (icalbdbset_read_database(bset, options->pfunc) != ICAL_NO_ERROR) {
         return NULL;
     }
 
@@ -408,7 +404,7 @@ DB *icalbdbset_bdb_open(const char *path, const char *subdb, int dbtype, int mod
     }
 
     /* Create and initialize database object, open the database. */
-    if ((ret = db_create(&dbp, ICAL_DB_ENV, 0)) != 0) {
+    if (db_create(&dbp, ICAL_DB_ENV, 0) != 0) {
         return NULL;
     }
 
@@ -452,7 +448,6 @@ char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc) (const DBT *dbt))
 void icalbdbset_free(icalset *set)
 {
     icalbdbset *bset = (icalbdbset *) set;
-    int ret;
 
     icalerror_check_arg_rv((bset != 0), "bset");
 
@@ -476,7 +471,8 @@ void icalbdbset_free(icalset *set)
         bset->sindex = 0;
     }
 
-    if (bset->dbp && ((ret = bset->dbp->close(bset->dbp, 0)) != 0)) {
+    if (bset->dbp && (bset->dbp->close(bset->dbp, 0) != 0)) {
+        /* ?? */
     }
     bset->dbp = NULL;
 }
@@ -579,13 +575,11 @@ int icalbdbset_delete(DB *dbp, DBT *key)
 
 int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method)
 {
-    int ret = 0;
-
     key->flags |= DB_DBT_MALLOC;        /* change these to DB_DBT_USERMEM */
     data->flags |= DB_DBT_MALLOC;
 
     /* fetch the key/data pair */
-    if ((ret = dbcp->c_get(dbcp, key, data, access_method)) != 0) {
+    if (dbcp->c_get(dbcp, key, data, access_method) != 0) {
         goto err1;
     }
 
@@ -597,15 +591,13 @@ int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method)
 
 int icalbdbset_cput(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method)
 {
-    int ret = 0;
-
     _unused(access_method);
 
     key->flags |= DB_DBT_MALLOC;        /* change these to DB_DBT_USERMEM */
     data->flags |= DB_DBT_MALLOC;
 
     /* fetch the key/data pair */
-    if ((ret = dbcp->c_put(dbcp, key, data, 0)) != 0) {
+    if (dbcp->c_put(dbcp, key, data, 0) != 0) {
         goto err1;
     }
 

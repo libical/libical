@@ -2155,7 +2155,7 @@ icaltimezone *icalcomponent_get_timezone(icalcomponent *comp, const char *tzid)
     }
 
     /* Do a simple binary search. */
-    lower = middle = 0;
+    lower = 0;
     upper = comp->timezones->num_elements;
 
     while (lower < upper) {

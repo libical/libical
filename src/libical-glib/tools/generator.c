@@ -1372,7 +1372,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
             } else {
                 c = expression[iter];
                 if (c == '$') {
-                    if ((c = expression[++iter]) != '{') {
+                    if (expression[++iter] != '{') {
                         printf("The following char is not {");
                         g_free(expression);
                         g_free(var);
