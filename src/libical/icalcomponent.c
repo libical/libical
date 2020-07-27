@@ -138,8 +138,6 @@ icalcomponent *icalcomponent_new_from_string(const char *str)
     return icalparser_parse_string(str);
 }
 
-/** @brief Constructor
- */
 icalcomponent *icalcomponent_clone(const icalcomponent *old)
 {
     icalcomponent *new;
@@ -173,8 +171,6 @@ icalcomponent *icalcomponent_new_clone(icalcomponent *old)
     return icalcomponent_clone(old);
 }
 
-/** @brief Constructor
- */
 icalcomponent *icalcomponent_new_x(const char *x_name)
 {
     icalcomponent *comp = icalcomponent_new_impl(ICAL_X_COMPONENT);

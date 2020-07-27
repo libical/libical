@@ -110,9 +110,9 @@
         <comment xml:space="preserve">Decode a month from an encoded value by i_cal_recurrence_encode_month().</comment>
     </method>
     <method name="i_cal_recurrence_encode_month" corresponds="icalrecurrencetype_encode_month" since="3.0.5">
-        <parameter type="gint" name="month" comment="The month to be encoded."/>
-        <parameter type="gboolean" name="is_leap" comment="%TRUE, when the month is leap, %FALSE otherwise."/>
-        <returns type="gshort" comment="Encoded @month and @is_leap."/>
+        <parameter type="gint" name="month" comment="The month to be encoded"/>
+        <parameter type="gboolean" name="is_leap" comment="%TRUE, when the month is leap, %FALSE otherwise"/>
+        <returns type="gshort" comment="Encoded @month and @is_leap"/>
         <comment xml:space="preserve">Encodes the @month and the @is_leap flag into a single value, which can be split by i_cal_recurrence_month_is_leap() and i_cal_recurrence_month_month().</comment>
     </method>
     <method name="i_cal_recurrence_new_from_string" corresponds="icalrecurrencetype_from_string" since="1.0">
@@ -148,7 +148,7 @@
 	return (ICalRecurrenceFrequency) (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->freq);</custom>
     </method>
     <method name="i_cal_recurrence_set_freq" corresponds="CUSTOM" kind="set" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence."/>
+        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="ICalRecurrenceFrequency" name="freq" comment="The freq of #ICalRecurrence"/>
         <comment>Sets the freq from #ICalRecurrence.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));

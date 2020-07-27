@@ -98,7 +98,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_clone(const icalparameter *p);
 
 /**
  * @copydoc icalparameter_clone()
- * @deprecated use icalparameter_clone() instead
+ * @deprecated Use icalparameter_clone() instead
  */
 LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalparameter *icalparameter_new_clone(icalparameter *p));
 

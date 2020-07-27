@@ -28,13 +28,13 @@
 #define ICAL_BOOLEAN_TRUE  1
 #define ICAL_BOOLEAN_FALSE 0
 
-/**
- * Deeply clone an icalvalue.
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);
+
+/** @brief Deeply clones an icalvalue.
+ *
  * Returns a pointer to the memory for the newly cloned icalvalue.
  * @since 3.1.0
  */
-LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);
-
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_clone(const icalvalue *value);
 
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_from_string(icalvalue_kind kind, const char *str);
@@ -56,7 +56,7 @@ LIBICAL_ICAL_EXPORT icalparameter_xliccomparetype icalvalue_compare(const icalva
 
 /**
  * @copydoc icalvalue_clone()
- * @deprecated use icalvalue_clone() instead
+ * @deprecated Use icalvalue_clone() instead
  */
 LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalvalue *icalvalue_new_clone(const icalvalue *value));
 

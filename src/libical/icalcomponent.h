@@ -40,14 +40,15 @@ typedef struct icalcompiter
 
 } icalcompiter;
 
-/**
- * @brief Constructor
- * Deeply clone an icalcomponent.
- * Returns a pointer to the memory for the newly cloned icalcomponent.
- * @since 3.1.0
+/** @brief Constructor
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new(icalcomponent_kind kind);
 
+/**
+ * @brief Deeply clones an icalcomponent.
+ * Returns a pointer to the memory for the newly cloned icalcomponent.
+ * @since 3.1.0
+ */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_clone(const icalcomponent *component);
 
 /** @brief Constructor
@@ -78,7 +79,7 @@ LIBICAL_ICAL_EXPORT int icalcomponent_isa_component(void *component);
 
 /**
  * @copydoc icalcomponent_clone()
- * @deprecated use icalcomponent_clone() instead
+ * @deprecated Use icalcomponent_clone() instead
  */
 LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalcomponent *icalcomponent_new_clone(
                                            icalcomponent *component));

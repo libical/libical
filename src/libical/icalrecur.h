@@ -222,6 +222,13 @@ LIBICAL_ICAL_EXPORT void icalrecurrencetype_clear(struct icalrecurrencetype *r);
  *
  * The day's position in the period ( Nth-ness) and the numerical
  * value of the day are encoded together as: pos*7 + dow.
+ * *****************************************************************************************TODO
+ * Other comment says:
+ *
+ * The day's position in the period ( Nth-ness) and the numerical
+ * value of the day are encoded together as: pos*8 + sign(pos)*dow.
+ *
+ * A position of 0 means 'any' or 'every'.
  */
 LIBICAL_ICAL_EXPORT enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week(short day);
 
@@ -249,6 +256,8 @@ LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_day(enum icalrecurrencetype_
  * The @p month element of the by_month array is encoded to allow
  * representation of the "L" leap suffix (RFC 7529).
  * These routines decode the month values.
+ *
+ * The "L" suffix is encoded by setting a high-order bit.
  */
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_is_leap(short month);
 
