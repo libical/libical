@@ -222,11 +222,6 @@ LIBICAL_ICAL_EXPORT void icalrecurrencetype_clear(struct icalrecurrencetype *r);
  *
  * The day's position in the period ( Nth-ness) and the numerical
  * value of the day are encoded together as: pos*7 + dow.
- * *****************************************************************************************TODO
- * Other comment says:
- *
- * The day's position in the period ( Nth-ness) and the numerical
- * value of the day are encoded together as: pos*8 + sign(pos)*dow.
  *
  * A position of 0 means 'any' or 'every'.
  */
