@@ -51,11 +51,6 @@ static icalcluster *icalcluster_new_impl(void)
     return impl;
 }
 
-/**
- * @brief Create a cluster with a key/value pair.
- *
- * @todo Always do a deep copy.
- */
 icalcluster *icalcluster_new(const char *key, icalcomponent *data)
 {
     struct icalcluster_impl *impl = icalcluster_new_impl();
@@ -96,10 +91,6 @@ icalcluster *icalcluster_clone(const icalcluster *data)
     return impl;
 }
 
-/**
- * Deprecated function to clone a cluster
- * @deprecated use ucalcluster_clone() instead
- */
 icalcluster *icalcluster_new_clone(const icalcluster *data)
 {
     return icalcluster_clone(data);

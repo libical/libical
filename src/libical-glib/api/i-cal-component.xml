@@ -130,9 +130,9 @@
         <comment xml:space="preserve">Adds a #ICalComponent into another #ICalComponent as a child component.</comment>
     </method>
     <method name="i_cal_component_take_component" corresponds="CUSTOM" annotation="skip" since="1.0">
-        <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent."/>
-        <parameter type="ICalComponent *" name="child" annotation="transfer full" comment="A child #ICalComponent."/>
-        <comment xml:space="preserve">Add the @child into the @parent as a child component and unrefs the @child.</comment>
+        <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent"/>
+        <parameter type="ICalComponent *" name="child" annotation="transfer full" comment="A child #ICalComponent"/>
+        <comment xml:space="preserve">Adds the @child into the @parent as a child component and unrefs the @child.</comment>
         <custom>    g_return_if_fail(I_CAL_IS_COMPONENT(parent));
     g_return_if_fail(I_CAL_IS_COMPONENT(child));
 
@@ -151,14 +151,14 @@
         <comment xml:space="preserve">Counts the child #ICalComponent with the target kind in the parent one.</comment>
     </method>
     <method name="i_cal_component_get_parent" corresponds="icalcomponent_get_parent" since="3.0">
-        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent."/>
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent"/>
         <returns type="ICalComponent *" annotation="transfer full, nullable" translator_argus="(GObject *)component" comment="The parent #ICalComponent of the @component."/>
-        <comment xml:space="preserve">Get the parent component of the @component.</comment>
+        <comment xml:space="preserve">Gets the parent component of the @component.</comment>
     </method>
     <method name="i_cal_component_set_parent" corresponds="icalcomponent_set_parent" since="3.0">
-        <parameter type="ICalComponent *" name="component" comment="An #ICalComponent, a child."/>
-        <parameter type="ICalComponent *" name="parent" annotation="nullable" comment="An #ICalComponent, a new parent."/>
-        <comment xml:space="preserve">Set the @parent #ICalComponent of the specified @component.</comment>
+        <parameter type="ICalComponent *" name="component" comment="An #ICalComponent, a child"/>
+        <parameter type="ICalComponent *" name="parent" annotation="nullable" comment="An #ICalComponent, a new parent"/>
+        <comment xml:space="preserve">Sets the @parent #ICalComponent of the specified @component.</comment>
     </method>
     <method name="i_cal_component_merge_component" corresponds="icalcomponent_merge_component" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent"/>

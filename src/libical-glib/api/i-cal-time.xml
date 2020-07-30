@@ -164,17 +164,17 @@
         <parameter type="const gint" name="hours" comment="Difference of hours adjusted"/>
         <parameter type="const gint" name="minutes" comment="Difference of minutes adjusted"/>
         <parameter type="const gint" name="seconds" comment="Difference of seconds adjusted"/>
-        <comment xml:space="preserve">like i_cal_time_compare_tz, but only use the date parts.</comment>
+        <comment xml:space="preserve">Adds or subtracts a number of days, hours, minutes and seconds from @tt.</comment>
     </method>
     <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">
         <parameter type="const ICalTime *" name="t" annotation="in, transfer none" comment="The #ICalTime to be normalized"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The #ICalTime normalized"/>
-        <comment xml:space="preserve">Normalize the icaltime, so that all fields are within the normal range.</comment>
+        <comment xml:space="preserve">Normalizes the icaltime, so that all fields are within the normal range.</comment>
     </method>
     <method name="i_cal_time_normalize_inplace" corresponds="CUSTOM" since="3.0.5">
         <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be normalized"/>
-        <comment xml:space="preserve">Normalize the @tt, so that all fields are within the normal range.</comment>
-       <custom xml:space="preserve">    icaltimetype *itt;
+        <comment xml:space="preserve">Normalizes the @tt, so that all fields are within the normal range.</comment>
+        <custom xml:space="preserve">    icaltimetype *itt;
 
     g_return_if_fail(I_CAL_IS_TIME (tt));
 

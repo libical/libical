@@ -110,10 +110,41 @@ typedef struct ut_instant_int
 
 /*      Functions in caldate.c  */
 
-/** @brief Converts Julian date to year,mo,da. */
+/**
+ *	caldat computes the day of the week, the day of the year
+ *	the gregorian (or julian) calendar date
+ *	from the julian decimal date.
+ *	for astronomical purposes, The Gregorian calendar reform occurred
+ *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
+
+ *	Input:	a ut_instant structure pointer, where the j_date element
+ *		has been set. ( = 0 for 01 Jan 4713 B.C.)
+ *
+ *	output:  will set all the other elements of the structure.
+ *		As a convienence, the function will also return the year.
+ *
+ *	Reference: Astronomial formulae for calculators, meeus, p 23
+ *	from fortran program by F. Espenak - April 1982 Page 277,
+ *	50 Year canon of solar eclipses: 1986-2035
+ *
+ */
 void caldat_int(UTinstantIntPtr);
 
-/** @brief Sets Julian day from year,mo,da. */
+/**
+ *	juldat computes the julian decimal date (j_date) from
+ *	the gregorian (or Julian) calendar date.
+ *	for astronomical purposes, The Gregorian calendar reform occurred
+ *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
+ *	Input:  a ut_instant structure pointer where Day, Month, Year
+ *      have been set for the date in question.
+ *
+ *	Output: the j_date and weekday elements of the structure will be set.
+ *		Also, the return value of the function will be the j_date too.
+ *
+ *	Reference: Astronomial formulae for calculators, meeus, p 23
+ *	from fortran program by F. Espenak - April 1982 Page 276,
+ *	50 Year canon of solar eclipses: 1986-2035
+ */
 void juldat_int(UTinstantIntPtr);
 
 #endif
