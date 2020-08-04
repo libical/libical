@@ -31,7 +31,7 @@ if(PYTHON3)
 
     add_test(
       NAME ${test_name}
-      COMMAND ${PYTHON3} ${CMAKE_CURRENT_SOURCE_DIR}/${test_file}
+      COMMAND ${PYTHON3} -I ${CMAKE_CURRENT_SOURCE_DIR}/${test_file}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 
