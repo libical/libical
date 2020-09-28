@@ -1,15 +1,26 @@
 add_definitions(-Dlibical_ical_EXPORTS)
 
-# build the src-generator
-add_executable(src-generator
+# build ical-glib-src-generator
+add_executable(ical-glib-src-generator
   tools/generator.c
   tools/generator.h
   tools/xml-parser.c
   tools/xml-parser.h
 )
 
-target_compile_options(src-generator PUBLIC ${GLIB_CFLAGS} ${LIBXML_CFLAGS} -DG_LOG_DOMAIN=\"src-generator\")
-target_link_libraries(src-generator ${GLIB_LIBRARIES} ${LIBXML_LIBRARIES})
+target_compile_options(ical-glib-src-generator PUBLIC ${GLIB_CFLAGS} ${LIBXML_CFLAGS} -DG_LOG_DOMAIN=\"src-generator\")
+target_link_libraries(ical-glib-src-generator ${GLIB_LIBRARIES} ${LIBXML_LIBRARIES})
+
+install(
+  TARGETS ical-glib-src-generator
+  EXPORT GlibSrcGenerator
+  DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
+)
+install(
+  EXPORT GlibSrcGenerator
+  NAMESPACE native-
+  DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal
+)
 
 list(APPEND API_FILES
   api/i-cal-array.xml
@@ -61,10 +72,22 @@ foreach(file IN LISTS API_FILES)
   list(APPEND xml_files ${xml_file_fullpath})
 endforeach()
 
+if(CMAKE_CROSSCOMPILING)
+  # import native ical-glib-src-generator when cross-compiling
+  set(IMPORT_GLIB_SRC_GENERATOR "GLIB_SRC_GENERATOR-NOTFOUND"
+    CACHE FILEPATH
+    "Path to exported ical-glib-src-generator target from native build"
+  )
+  include(${IMPORT_GLIB_SRC_GENERATOR})
+  set(ical-glib-src-generator_EXE native-ical-glib-src-generator)
+else()
+  set(ical-glib-src-generator_EXE ical-glib-src-generator)
+endif()
+
 add_custom_command (
   OUTPUT ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
-  COMMAND ${EXECUTABLE_OUTPUT_PATH}/src-generator "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
-  DEPENDS ${EXECUTABLE_OUTPUT_PATH}/src-generator ${xml_files}
+  COMMAND ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
+  DEPENDS ${ical-glib-src-generator_EXE} ${xml_files}
 )
 
 configure_file(
