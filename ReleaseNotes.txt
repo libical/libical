@@ -4,6 +4,7 @@ Release Highlights
 Version 3.0.9 (UNRELEASED):
 ---------------------------
  * Add support for empty parameters, e.g. CN=""
+ * Fix cross-compile support in libical-glib
 
 Version 3.0.8 (07 March 2020):
 ------------------------------
