@@ -175,7 +175,7 @@ struct icalrecurrencetype
     short by_day[ICAL_BY_DAY_SIZE];             /**< @brief Encoded value
         *
         * The 'day' element of the by_day array is encoded to allow
-        * representation of both the day of the week ( Monday, Tueday), but
+        * representation of both the day of the week ( Monday, Tuesday), but
         * also the Nth day of the week (first Tuesday of the month, last
         * Thursday of the year).
         *
