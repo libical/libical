@@ -58,7 +58,7 @@ By default it outputs VTIMEZONEs that try to be compatible with Outlook
 VTIMEZONEs, such as RRULEs using BYMONTHDAY, so it has to adjust the RRULEs
 slightly to get Outlook to parse them. Unfortunately this means they are
 slightly wrong. If given the --pure option, vzic outputs the exact data,
-without worrying about compatability.
+without worrying about compatibility.
 
 NOTE: We don't convert all the IANA files. We skip 'backward', 'etcetera',
 'leapseconds', 'pacificnew', 'solar87', 'solar88' and 'solar89', 'factory'
@@ -98,7 +98,7 @@ should be able to cope with this.
 
 
 
-COMPATABILITY NOTES
+COMPATIBILITY NOTES
 ===================
 
 It seems that Microsoft Outlook is very picky about the iCalendar files it
