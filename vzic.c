@@ -174,7 +174,7 @@ main				(int		 argc,
   convert_olson_file ("northamerica");
   convert_olson_file ("southamerica");
 
-  /* These are backwards-compatability and weird stuff. */
+  /* These are backwards-compatibility and weird stuff. */
   convert_olson_file ("backward");
   convert_olson_file ("etcetera");
 #if 0
