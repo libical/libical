@@ -991,7 +991,7 @@ int icalrecur_iterator_sizeof_byarray(short *byarray)
 
 enum expand_table
 {
-    UNKNOWN = 0,  // can be used to ignore an otherwise illegal BYxxx rule
+    IGNORE = 0,
     CONTRACT = 1,
     EXPAND = 2,
     ILLEGAL = 3
