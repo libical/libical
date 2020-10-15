@@ -142,6 +142,13 @@
 #include <stddef.h>     /* For offsetof() macro */
 #include <stdlib.h>
 
+#if defined(HAVE_PTHREAD)
+#include <pthread.h>
+static pthread_mutex_t invalid_rrule_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
+
+static ical_invalid_rrule_handling invalidRruleHandling = ICAL_RRULE_TREAT_AS_ERROR;
+
 #if defined(HAVE_LIBICU)
 #include <unicode/ucal.h>
 #include <unicode/ustring.h>
@@ -2006,10 +2013,17 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
 
     for (byrule = BY_SECOND; byrule <= BY_SET_POS; byrule++) {
         if (expand_map[freq].map[byrule] == ILLEGAL &&
-            impl->by_ptrs[byrule][0] != ICAL_RECURRENCE_ARRAY_MAX) {
-            icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-            free(impl);
-            return 0;
+            has_by_data(impl, byrule)) {
+            ical_invalid_rrule_handling rruleHandlingSetting =
+                ical_get_invalid_rrule_handling_setting();
+            if (rruleHandlingSetting == ICAL_RRULE_IGNORE_INVALID) {
+                impl->orig_data[byrule] = 0;
+            }
+            else {
+                icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+                free(impl);
+                return 0;
+            }
         }
     }
 
@@ -3599,4 +3613,34 @@ int icalrecur_expand_recurrence(const char *rule,
         free(recur.rscale);
 
     return 1;
+}
+
+ical_invalid_rrule_handling ical_get_invalid_rrule_handling_setting(void)
+{
+    ical_invalid_rrule_handling myHandling;
+
+#if defined(HAVE_PTHREAD)
+    pthread_mutex_lock(&invalid_rrule_mutex);
+#endif
+
+    myHandling = invalidRruleHandling;
+
+#if defined(HAVE_PTHREAD)
+    pthread_mutex_unlock(&invalid_rrule_mutex);
+#endif
+
+    return myHandling;
+}
+
+void ical_set_invalid_rrule_handling_setting(ical_invalid_rrule_handling newSetting)
+{
+#if defined(HAVE_PTHREAD)
+    pthread_mutex_lock(&invalid_rrule_mutex);
+#endif
+
+    invalidRruleHandling = newSetting;
+
+#if defined(HAVE_PTHREAD)
+    pthread_mutex_unlock(&invalid_rrule_mutex);
+#endif
 }

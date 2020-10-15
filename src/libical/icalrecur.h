@@ -350,4 +350,18 @@ LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator *);
 LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(const char *rule, time_t start,
                                                     int count, time_t *array);
 
-#endif
+/* ical_invalid_rrule_handling :
+ *    How should the ICAL library handle RRULEs with invalid BYxxx part combos?
+ */
+typedef enum ical_invalid_rrule_handling
+{
+    ICAL_RRULE_TREAT_AS_ERROR = 0,
+    ICAL_RRULE_IGNORE_INVALID = 1
+} ical_invalid_rrule_handling;
+
+LIBICAL_ICAL_EXPORT ical_invalid_rrule_handling ical_get_invalid_rrule_handling_setting(void);
+
+LIBICAL_ICAL_EXPORT void ical_set_invalid_rrule_handling_setting(
+    ical_invalid_rrule_handling newSetting);
+
+#endif /* ICALRECUR_H */
