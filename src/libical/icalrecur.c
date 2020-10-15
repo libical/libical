@@ -991,7 +991,7 @@ int icalrecur_iterator_sizeof_byarray(short *byarray)
 
 enum expand_table
 {
-    UNKNOWN = 0,
+    UNKNOWN = 0,  // can be used to ignore an otherwise illegal BYxxx rule
     CONTRACT = 1,
     EXPAND = 2,
     ILLEGAL = 3
@@ -1021,7 +1021,7 @@ static const struct expand_split_map_struct expand_map[] = {
     {ICAL_HOURLY_RECURRENCE,   { 2, 2, 1, 1, 1, 1, 3, 1, 1 }},
     {ICAL_DAILY_RECURRENCE,    { 2, 2, 2, 1, 1, 3, 3, 1, 1 }},
     {ICAL_WEEKLY_RECURRENCE,   { 2, 2, 2, 2, 3, 3, 3, 1, 1 }},
-    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 3, 3, 1, 1 }},
+    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 0, 3, 1, 1 }},
     {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2, 1 }},
     {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }} //krazy:exclude=style
 };
