@@ -224,7 +224,7 @@ const char *icaltzutil_get_zone_directory(void)
 
 static int calculate_pos(icaltimetype icaltime)
 {
-   static int r_pos[] = {1, 2, 3, -2, -1};
+   static const int r_pos[] = {1, 2, 3, -2, -1};
    int pos;
 
    pos = (icaltime.day - 1) / 7;
