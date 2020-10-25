@@ -213,7 +213,7 @@ void icalproperty_free(icalproperty *p)
 
 /* This returns where the start of the next line should be. chars_left does
    not include the trailing '\0'. */
-static size_t MAX_LINE_LEN = 75;
+static const size_t MAX_LINE_LEN = 75;
 
 static char *get_next_line_start(char *line_start, size_t chars_left)
 {

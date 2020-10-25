@@ -430,7 +430,7 @@ int icaltime_days_in_year(const int year)
     }
 }
 
-static int _days_in_month[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+static const int _days_in_month[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 int icaltime_days_in_month(const int month, const int year)
 {

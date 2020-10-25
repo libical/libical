@@ -1863,7 +1863,7 @@ static char *icaltimezone_load_get_line_fn(char *s, size_t size, void *data)
 
 int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
 {
-    static const char *months[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    static const char months[][4] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     };
     icaltimezonechange *zone_change;
