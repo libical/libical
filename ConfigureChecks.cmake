@@ -10,6 +10,7 @@ check_include_files(sys/utsname.h HAVE_SYS_UTSNAME_H)
 check_include_files(fcntl.h HAVE_FCNTL_H)
 check_include_files(unistd.h HAVE_UNISTD_H)
 check_include_files(wctype.h HAVE_WCTYPE_H)
+check_include_files(stdbool.h HAVE_STDBOOL_H)
 
 include(CheckFunctionExists)
 if(WIN32 AND MSVC)

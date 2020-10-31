@@ -6,6 +6,7 @@ Version 3.0.9 (UNRELEASED):
  * Add support for empty parameters, e.g. CN=""
  * Accept VTIMEZONE with more than one X- property
  * Fix cross-compile support in libical-glib
+ * Fix build with newer libicu
 
 Version 3.0.8 (07 March 2020):
 ------------------------------
