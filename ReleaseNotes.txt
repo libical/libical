@@ -39,6 +39,7 @@ Version 3.0.9 (UNRELEASED):
  * Accept VTIMEZONE with more than one X- property
  * Fix cross-compile support in libical-glib
  * Fix build with newer libicu
+ * Fix compiled-in path for the built-in timezone data
 
 Version 3.0.8 (07 March 2020):
 ------------------------------
