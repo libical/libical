@@ -55,9 +55,9 @@ enum datatype
 };
 
 /* The indices must match between the strings and the codes. */
-static const char *weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
+static const char weekdays[][3] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
 
-static int weekday_codes[] = {
+static const int weekday_codes[] = {
     ICAL_SUNDAY_WEEKDAY,
     ICAL_MONDAY_WEEKDAY,
     ICAL_TUESDAY_WEEKDAY,
