@@ -285,7 +285,6 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
             errno = ENOMEM;
             return 0;
         }
-        memset(data, 0, sizeof(icalfileset));
         *data = icalset_fileset_init;
         break;
     }
@@ -298,7 +297,6 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
             errno = ENOMEM;
             return 0;
         }
-        memset(data, 0, sizeof(icaldirset));
         *data = icalset_dirset_init;
         break;
     }
@@ -312,7 +310,6 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
             errno = ENOMEM;
             return 0;
         }
-        memset(data, 0, sizeof(icalbdbset));
         *data = icalset_bdbset_init;
         break;
     }
