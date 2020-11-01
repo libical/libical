@@ -270,10 +270,10 @@ const char *icalrecur_skip_to_string(icalrecurrencetype_skip kind)
     return 0;
 }
 
-static struct wd_map
+static const struct wd_map
 {
     icalrecurrencetype_weekday wd;
-    const char *str;
+    const char str[3];
 } wd_map[] = {
     {ICAL_SUNDAY_WEEKDAY, "SU"},
     {ICAL_MONDAY_WEEKDAY, "MO"},
@@ -282,7 +282,7 @@ static struct wd_map
     {ICAL_THURSDAY_WEEKDAY, "TH"},
     {ICAL_FRIDAY_WEEKDAY, "FR"},
     {ICAL_SATURDAY_WEEKDAY, "SA"},
-    {ICAL_NO_WEEKDAY, 0}
+    {ICAL_NO_WEEKDAY, "  "}
 };
 
 const char *icalrecur_weekday_to_string(icalrecurrencetype_weekday kind)
