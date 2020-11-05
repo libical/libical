@@ -2334,7 +2334,7 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
 
         /* Add instance(s) of the weekday within the period */
         do {
-            int valid = 1;
+            int valid = 0;
 
             if (has_by_data(impl, BY_WEEK_NO)) {
                 /* Make sure our day falls in one of the BYWEEKNO */
@@ -2343,9 +2343,13 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
                 for (j = 0; BYWEEKPTR[j] != ICAL_RECURRENCE_ARRAY_MAX; j++) {
                     int weekno = BYWEEKPTR[j];
 
-                    if (weekno != this_weekno) valid = 0;
+                    if (weekno == this_weekno) {
+                        valid = 1;
+                        break;
+                    }
                 }
             }
+            else valid = 1;
 
             if (valid) {
                 daysmask_setbit(bydays, day + doy_offset, 1);
