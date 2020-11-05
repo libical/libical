@@ -2748,7 +2748,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
         }
     }
     else if (has_by_data(impl, BY_WEEK_NO)) {
-        int nweeks, weekno, start_doy;
+        int weekno, start_doy;
 
         /* We only support BYWEEKNO + BYDAY */
         if (has_by_data(impl, BY_YEAR_DAY) ||
@@ -2760,7 +2760,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
 
         /* BYWEEKNO + BYDAY handled below */
         if (!has_by_data(impl, BY_DAY)) {
-            nweeks = weeks_in_year(year);
+            int nweeks = weeks_in_year(year);
 
             /* Calculate location of DTSTART day in weekno 1 */
             doy = get_day_of_year(impl, year,
