@@ -1138,8 +1138,8 @@ static int get_days_in_year(icalrecur_iterator *impl, int year)
 
 static void set_day_of_year(icalrecur_iterator *impl, int doy)
 {
-    if (doy < 0) {
-        doy += get_days_in_year(impl, 0) + 1;
+    if (doy < 1) {
+        doy += get_days_in_year(impl, 0);
     }
 
     ucal_set(impl->rscale, UCAL_DAY_OF_YEAR, (int32_t) doy);
@@ -1609,8 +1609,8 @@ static void set_day_of_year(icalrecur_iterator *impl, int doy)
 {
     struct icaltimetype next;
 
-    if (doy < 0) {
-        doy += get_days_in_year(impl, impl->last.year) + 1;
+    if (doy < 1) {
+        doy += get_days_in_year(impl, impl->last.year);
     }
 
     next = icaltime_from_day_of_year(doy, impl->last.year);
@@ -2233,7 +2233,7 @@ static int expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
     int days_in_month = get_days_in_month(impl, month, year);
 
     for (i = 0; BYMDPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
-        short doy = 0, mday = BYMDPTR[i];
+        short doy = ICAL_BY_YEARDAY_SIZE, mday = BYMDPTR[i];
         int this_month = month;
 
         if (abs(mday) > days_in_month) {
@@ -2262,7 +2262,7 @@ static int expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
                 }
 
                 if (this_month == 0) {
-                    doy = -1;      /* Last day of prev year */
+                    doy = 0;       /* Last day of prev year */
                 } else {
                     mday = -1;     /* Last day of month */
                 }
@@ -2270,7 +2270,7 @@ static int expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
             }
         }
 
-        if (!doy) {
+        if (doy == ICAL_BY_YEARDAY_SIZE) {
             doy = get_day_of_year(impl, year, this_month, mday, NULL);
         }
 
@@ -2507,7 +2507,6 @@ static int next_weekday_by_week(icalrecur_iterator *impl)
             }
 
             increment_year(impl, -1);
-            start_of_week--;    /* set_day_of_year() assumes last doy == -1 */
         }
 
         set_day_of_year(impl, start_of_week + dow);
@@ -2582,7 +2581,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
 
                 case ICAL_SKIP_BACKWARD:
                     if (doy < 0) {
-                        doy = -1;                /* Last day of prev year */
+                        doy = 0;                 /* Last day of prev year */
                     } else {
                         doy = days_in_year;      /* Last day of this year */
                     }
@@ -2737,7 +2736,7 @@ static int next_yearday(icalrecur_iterator *impl,
         }
     }
 
-    if (impl->days_index < 0) {
+    if (impl->days_index < 1) {
         /* Day is in previous year */
         increment_year(impl, -1);
     }
