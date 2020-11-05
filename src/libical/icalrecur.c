@@ -2753,22 +2753,25 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             return 0;
         }
 
-        /* Calculate location of DTSTART day in weekno 1 */
-        doy = get_day_of_year(impl, year,
-                              impl->dtstart.month, impl->dtstart.day, NULL);
-        (void)__icaltime_from_day_of_year(impl, doy, year, &weekno);
-        if (weekno > doy) weekno = 0;
-        start_doy = doy - 7 * (weekno - 1);
+        /* BYWEEKNO + BYDAY handled below */
+        if (!has_by_data(impl, BY_DAY)) {
+            /* Calculate location of DTSTART day in weekno 1 */
+            doy = get_day_of_year(impl, year,
+                                  impl->dtstart.month, impl->dtstart.day, NULL);
+            (void)__icaltime_from_day_of_year(impl, doy, year, &weekno);
+            if (weekno > doy) weekno = 0;
+            start_doy = doy - 7 * (weekno - 1);
 
-        /* Add day of week in each BYWEEKNO to the year days bitmask */
-        for (i = 0; BYWEEKPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
-            weekno = BYWEEKPTR[i];
+            /* Add day of week in each BYWEEKNO to the year days bitmask */
+            for (i = 0; BYWEEKPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
+                weekno = BYWEEKPTR[i];
 
-            doy = start_doy + 7 * (weekno - 1);
+                doy = start_doy + 7 * (weekno - 1);
 
-            daysmask_setbit(impl->days, doy, 1);
-            set_pos_total++;
-            if (doy < impl->days_index) impl->days_index = doy;
+                daysmask_setbit(impl->days, doy, 1);
+                set_pos_total++;
+                if (doy < impl->days_index) impl->days_index = doy;
+            }
         }
     } else {
         /* Add each BYMONTHDAY in each BYMONTH to the year days bitmask */
