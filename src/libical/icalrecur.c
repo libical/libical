@@ -1052,6 +1052,17 @@ static void setup_defaults(icalrecur_iterator *impl,
     }
 }
 
+/** Calculate ISO weeks per year
+   https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year */
+static int weeks_in_year(int year)
+{
+    /* Long years occur when year starts on Thu or leap year starts on Wed */
+    int dow = icaltime_day_of_week(icaltime_from_day_of_year(1, year));
+    int is_long = (dow == 5 || (dow == 4 && icaltime_is_leap_year(year)));
+
+    return (52 + is_long);
+}
+
 /** Calculate the number of Gregorian months between 2 dates */
 static int __greg_month_diff(icaltimetype a, icaltimetype b)
 {
@@ -1690,17 +1701,6 @@ static int get_start_of_week(icalrecur_iterator *impl)
 static int get_day_of_week(icalrecur_iterator *impl)
 {
     return icaltime_day_of_week(impl->last);
-}
-
-/** Calculate ISO weeks per year
-   https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year */
-static int weeks_in_year(int year)
-{
-    /* Long years occur when year starts on Thu or leap year starts on Wed */
-    int dow = icaltime_day_of_week(icaltime_from_day_of_year(1, year));
-    int is_long = (dow == 5 || (dow == 4 && icaltime_is_leap_year(year)));
-
-    return (52 + is_long);
 }
 
 /** Calculate ISO week number
@@ -2421,10 +2421,13 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
 
             if (has_by_data(impl, BY_WEEK_NO)) {
                 /* Make sure our day falls in one of the BYWEEKNO */
+                int nweeks = weeks_in_year(year);
                 int j;
 
                 for (j = 0; BYWEEKPTR[j] != ICAL_RECURRENCE_ARRAY_MAX; j++) {
                     int weekno = BYWEEKPTR[j];
+
+                    if (weekno < 0) weekno += nweeks + 1;
 
                     if (weekno == this_weekno) {
                         valid = 1;
@@ -2747,7 +2750,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
         }
     }
     else if (has_by_data(impl, BY_WEEK_NO)) {
-        int weekno, start_doy;
+        int nweeks, weekno, start_doy;
 
         /* We only support BYWEEKNO + BYDAY */
         if (has_by_data(impl, BY_YEAR_DAY) ||
@@ -2759,6 +2762,8 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
 
         /* BYWEEKNO + BYDAY handled below */
         if (!has_by_data(impl, BY_DAY)) {
+            nweeks = weeks_in_year(year);
+
             /* Calculate location of DTSTART day in weekno 1 */
             doy = get_day_of_year(impl, year,
                                   impl->dtstart.month, impl->dtstart.day, NULL);
@@ -2769,6 +2774,8 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             /* Add day of week in each BYWEEKNO to the year days bitmask */
             for (i = 0; BYWEEKPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
                 weekno = BYWEEKPTR[i];
+
+                if (weekno < 0) weekno += nweeks + 1;
 
                 doy = start_doy + 7 * (weekno - 1);
 
