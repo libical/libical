@@ -196,10 +196,10 @@ int icalrecurrencetype_rscale_is_supported(void)
 
 /****************** Enumeration Routines ******************/
 
-static struct freq_map
+static const struct freq_map
 {
     icalrecurrencetype_frequency kind;
-    const char *str;
+    const char str[9];
 } freq_map[] = {
     {ICAL_SECONDLY_RECURRENCE, "SECONDLY"},
     {ICAL_MINUTELY_RECURRENCE, "MINUTELY"},
@@ -208,7 +208,7 @@ static struct freq_map
     {ICAL_WEEKLY_RECURRENCE, "WEEKLY"},
     {ICAL_MONTHLY_RECURRENCE, "MONTHLY"},
     {ICAL_YEARLY_RECURRENCE, "YEARLY"},
-    {ICAL_NO_RECURRENCE, 0}
+    {ICAL_NO_RECURRENCE, ""}
 };
 
 icalrecurrencetype_frequency icalrecur_string_to_freq(const char *str)
@@ -235,15 +235,15 @@ const char *icalrecur_freq_to_string(icalrecurrencetype_frequency kind)
     return 0;
 }
 
-static struct skip_map
+static const struct skip_map
 {
     icalrecurrencetype_skip kind;
-    const char *str;
+    const char str[9];
 } skip_map[] = {
     {ICAL_SKIP_BACKWARD, "BACKWARD"},
     {ICAL_SKIP_FORWARD, "FORWARD"},
     {ICAL_SKIP_OMIT, "OMIT"},
-    {ICAL_SKIP_UNDEFINED, 0}
+    {ICAL_SKIP_UNDEFINED, ""}
 };
 
 icalrecurrencetype_skip icalrecur_string_to_skip(const char *str)
@@ -270,10 +270,10 @@ const char *icalrecur_skip_to_string(icalrecurrencetype_skip kind)
     return 0;
 }
 
-static struct wd_map
+static const struct wd_map
 {
     icalrecurrencetype_weekday wd;
-    const char *str;
+    const char str[3];
 } wd_map[] = {
     {ICAL_SUNDAY_WEEKDAY, "SU"},
     {ICAL_MONDAY_WEEKDAY, "MO"},
@@ -282,7 +282,7 @@ static struct wd_map
     {ICAL_THURSDAY_WEEKDAY, "TH"},
     {ICAL_FRIDAY_WEEKDAY, "FR"},
     {ICAL_SATURDAY_WEEKDAY, "SA"},
-    {ICAL_NO_WEEKDAY, 0}
+    {ICAL_NO_WEEKDAY, ""}
 };
 
 const char *icalrecur_weekday_to_string(icalrecurrencetype_weekday kind)
