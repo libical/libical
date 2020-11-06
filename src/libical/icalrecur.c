@@ -2769,8 +2769,8 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             doy = get_day_of_year(impl, year,
                                   impl->dtstart.month, impl->dtstart.day, NULL);
             (void)__icaltime_from_day_of_year(impl, doy, year, &weekno);
-            if (weekno > doy) weekno = 0;
-            start_doy = doy - 7 * (weekno - 1);
+            if (weekno > doy) doy += 7;
+            start_doy = doy + get_start_of_week(impl);
 
             /* Add day of week in each BYWEEKNO to the year days bitmask */
             for (i = 0; BYWEEKPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
