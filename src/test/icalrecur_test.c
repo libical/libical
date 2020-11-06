@@ -390,6 +390,16 @@ const struct recur rfc5545[] = {
      "FREQ=WEEKLY;BYDAY=WE,FR;INTERVAL=2;COUNT=4",
      NULL},
 
+    /* First 2 and last 2 ISO weeks of the year on Tue */
+    {"20130101T000000",
+     "FREQ=YEARLY;BYWEEKNO=1,2,-1,-2;BYDAY=TU;UNTIL=20170101T000000Z",
+     NULL},
+
+    /* 53rd ISO week of the year on Tue and Sat */
+    {"20130101T000000",
+     "FREQ=YEARLY;BYWEEKNO=53;BYDAY=TU,SA;UNTIL=20170101T000000Z",
+     NULL},
+
     {NULL, NULL, NULL}
 };
 

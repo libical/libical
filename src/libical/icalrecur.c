@@ -2412,8 +2412,11 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
             }
         }
 
-        (void)__icaltime_from_day_of_year(impl, day + doy_offset, year,
-                                          &this_weekno);
+        if (doy_offset < 0) this_weekno = 1;
+        else {
+            (void)__icaltime_from_day_of_year(impl, day + doy_offset, year,
+                                              &this_weekno);
+        }
 
         /* Add instance(s) of the weekday within the period */
         do {
@@ -2822,15 +2825,37 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             }
         } else {
             /* Numeric BYDAY are within the year */
+            short doy_offset = 0, last_day;
 
-            /* Get day of week of first day of year */
-            (void)get_day_of_year(impl, year, 1, 1, &first_dow);
+            if (has_by_data(impl, BY_WEEK_NO)) {
+                int weekno;
 
-            /* Get day of week of last day of year */
-            set_day_of_year(impl, days_in_year);
-            last_dow = get_day_of_week(impl);
+                /* See which week contains Jan 1 */
+                (void)__icaltime_from_day_of_year(impl, 1, year, &weekno);
+                if (weekno > 1) {
+                    /* Jan 1 is in last week of previous year - jump ahead */
+                    doy_offset += 7;
+                }
 
-            set_pos_total += expand_by_day(impl, year, 0, days_in_year,
+                /* Set start and end of ISO week-numbering year */
+                doy_offset += get_start_of_week(impl) - 1;
+                last_day = (7 * weeks_in_year(year));
+
+                first_dow = impl->rule.week_start;
+                last_dow = (first_dow + 6) % 7;
+            }
+            else {
+                /* Get day of week of first day of year */
+                (void)get_day_of_year(impl, year, 1, 1, &first_dow);
+
+                /* Get day of week of last day of year */
+                set_day_of_year(impl, days_in_year);
+                last_dow = get_day_of_week(impl);
+
+                last_day = days_in_year;
+            }
+
+            set_pos_total += expand_by_day(impl, year, doy_offset, last_day,
                                            first_dow, last_dow, limiting);
         }
     }
