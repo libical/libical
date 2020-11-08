@@ -2698,8 +2698,16 @@ void test_recur_parser()
     icalerror_restore("BADARG", es);
     ok("COUNT + UNTIL not allowed", rt.freq == ICAL_NO_RECURRENCE);
 
+    /* Try to parse a RRULE with illegal BY* part combination */
     str = "FREQ=DAILY;COUNT=3;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
 
+    es = icalerror_supress("MALFORMEDDATA");
+    rt = icalrecurrencetype_from_string(str);
+    icalerror_restore("MALFORMEDDATA", es);
+    ok("DAILY + BYYEARDAY not allowed", rt.freq == ICAL_NO_RECURRENCE);
+
+    /* Parse the same RRULE but ignore invalid BY* parts */
+    ical_set_invalid_rrule_handling_setting(ICAL_RRULE_IGNORE_INVALID);
     rt = icalrecurrencetype_from_string(str);
     str_is(str, icalrecurrencetype_as_string(&rt), str);
 

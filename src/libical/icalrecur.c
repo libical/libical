@@ -330,6 +330,57 @@ struct icalrecur_parser
     struct icalrecurrencetype rt;
 };
 
+enum byrule
+{
+    NO_CONTRACTION = -1,
+    BY_SECOND = 0,
+    BY_MINUTE = 1,
+    BY_HOUR = 2,
+    BY_DAY = 3,
+    BY_MONTH_DAY = 4,
+    BY_YEAR_DAY = 5,
+    BY_WEEK_NO = 6,
+    BY_MONTH = 7,
+    BY_SET_POS
+};
+
+enum expand_table
+{
+    UNKNOWN = 0,
+    CONTRACT = 1,
+    EXPAND = 2,
+    ILLEGAL = 3
+};
+
+struct expand_split_map_struct
+{
+    icalrecurrencetype_frequency frequency;
+
+    /* Elements of the 'map' array correspond to the BYxxx rules:
+       Second,Minute,Hour,Day,Month Day,Year Day,Week No,Month,SetPos */
+
+    short map[BY_SET_POS+1];
+};
+
+/**
+ * The split map indicates, for a particular interval, whether a BY_*
+ * rule part expands the number of instances in the occurrence set or
+ * contracts it. 1=> contract, 2=>expand, and 3 means the pairing is
+ * not allowed.
+ */
+
+static const struct expand_split_map_struct expand_map[] = {
+    /*                           s  m  h  D  MD YD W  M  P */
+    {ICAL_SECONDLY_RECURRENCE, { 1, 1, 1, 1, 1, 1, 3, 1, 1 }},
+    {ICAL_MINUTELY_RECURRENCE, { 2, 1, 1, 1, 1, 1, 3, 1, 1 }},
+    {ICAL_HOURLY_RECURRENCE,   { 2, 2, 1, 1, 1, 1, 3, 1, 1 }},
+    {ICAL_DAILY_RECURRENCE,    { 2, 2, 2, 1, 1, 3, 3, 1, 1 }},
+    {ICAL_WEEKLY_RECURRENCE,   { 2, 2, 2, 2, 3, 3, 3, 1, 1 }},
+    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 3, 3, 1, 1 }},
+    {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2, 1 }},
+    {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }} //krazy:exclude=style
+};
+
 static const char *icalrecur_first_clause(struct icalrecur_parser *parser)
 {
     char *idx;
@@ -562,9 +613,13 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
 struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
 {
     struct icalrecur_parser parser;
+    short bydata[9]; /**< 1 if there was data in the byrule */
+    enum byrule byrule;
 
     memset(&parser, 0, sizeof(parser));
     icalrecurrencetype_clear(&parser.rt);
+
+    memset(bydata, 0, 9 * sizeof(short));
 
     icalerror_check_arg_re(str != 0, "str", parser.rt);
 
@@ -668,6 +723,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYSECONDs */
                 r = -1;
             } else {
+                bydata[BY_SECOND] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_second,
                                           0, ICAL_BY_SECOND_SIZE, value);
             }
@@ -676,6 +732,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYMINUTEs */
                 r = -1;
             } else {
+                bydata[BY_MINUTE] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_minute,
                                           0, ICAL_BY_MINUTE_SIZE, value);
             }
@@ -684,6 +741,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYHOURs */
                 r = -1;
             } else {
+                bydata[BY_HOUR] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_hour,
                                           0, ICAL_BY_HOUR_SIZE, value);
             }
@@ -692,6 +750,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYDAYs */
                 r = -1;
             } else {
+                bydata[BY_DAY] = 1;
                 r = icalrecur_add_bydayrules(&parser, value);
             }
         } else if (strcasecmp(name, "BYMONTHDAY") == 0) {
@@ -699,6 +758,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYMONTHDAYs */
                 r = -1;
             } else {
+                bydata[BY_MONTH_DAY] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_month_day,
                                           -1, ICAL_BY_MONTHDAY_SIZE, value);
             }
@@ -707,6 +767,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYYEARDAYs */
                 r = -1;
             } else {
+                bydata[BY_YEAR_DAY] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_year_day,
                                           -1, ICAL_BY_YEARDAY_SIZE, value);
             }
@@ -715,6 +776,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYWEEKNOs */
                 r = -1;
             } else {
+                bydata[BY_WEEK_NO] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_week_no,
                                           -1, ICAL_BY_WEEKNO_SIZE, value);
             }
@@ -723,6 +785,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYMONTHs */
                 r = -1;
             } else {
+                bydata[BY_MONTH] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_month,
                                           1, ICAL_BY_MONTH_SIZE, value);
             }
@@ -731,6 +794,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYSETPOSs */
                 r = -1;
             } else {
+                bydata[BY_SET_POS] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_set_pos,
                                           -1, ICAL_BY_SETPOS_SIZE, value);
             }
@@ -750,6 +814,23 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             }
             icalrecurrencetype_clear(&parser.rt);
             break;
+        }
+    }
+
+    for (byrule = BY_SECOND; byrule <= BY_SET_POS; byrule++) {
+        if (bydata[byrule] &&
+            expand_map[parser.rt.freq].map[byrule] == ILLEGAL) {
+            ical_invalid_rrule_handling rruleHandlingSetting =
+                ical_get_invalid_rrule_handling_setting();
+
+            if (rruleHandlingSetting == ICAL_RRULE_TREAT_AS_ERROR) {
+                icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+                if (parser.rt.rscale) {
+                    free(parser.rt.rscale);
+                }
+                icalrecurrencetype_clear(&parser.rt);
+                break;
+            }
         }
     }
 
@@ -905,20 +986,6 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
 
 /************************* occurrence iteration routines ******************/
 
-enum byrule
-{
-    NO_CONTRACTION = -1,
-    BY_SECOND = 0,
-    BY_MINUTE = 1,
-    BY_HOUR = 2,
-    BY_DAY = 3,
-    BY_MONTH_DAY = 4,
-    BY_YEAR_DAY = 5,
-    BY_WEEK_NO = 6,
-    BY_MONTH = 7,
-    BY_SET_POS
-};
-
 /* Number of bits in an unsigned long */
 #define BITS_PER_LONG      (8 * sizeof(unsigned long))
 
@@ -1001,43 +1068,6 @@ int icalrecur_iterator_sizeof_byarray(short *byarray)
 
     return array_itr;
 }
-
-enum expand_table
-{
-    UNKNOWN = 0,
-    CONTRACT = 1,
-    EXPAND = 2,
-    ILLEGAL = 3
-};
-
-/**
- * The split map indicates, for a particular interval, whether a BY_*
- * rule part expands the number of instances in the occurrence set or
- * contracts it. 1=> contract, 2=>expand, and 3 means the pairing is
- * not allowed.
- */
-
-struct expand_split_map_struct
-{
-    icalrecurrencetype_frequency frequency;
-
-    /* Elements of the 'map' array correspond to the BYxxx rules:
-       Second,Minute,Hour,Day,Month Day,Year Day,Week No,Month,SetPos */
-
-    short map[BY_SET_POS+1];
-};
-
-static const struct expand_split_map_struct expand_map[] = {
-    /*                           s  m  h  D  MD YD W  M  P */
-    {ICAL_SECONDLY_RECURRENCE, { 1, 1, 1, 1, 1, 1, 3, 1, 1 }},
-    {ICAL_MINUTELY_RECURRENCE, { 2, 1, 1, 1, 1, 1, 3, 1, 1 }},
-    {ICAL_HOURLY_RECURRENCE,   { 2, 2, 1, 1, 1, 1, 3, 1, 1 }},
-    {ICAL_DAILY_RECURRENCE,    { 2, 2, 2, 1, 1, 3, 3, 1, 1 }},
-    {ICAL_WEEKLY_RECURRENCE,   { 2, 2, 2, 2, 3, 3, 3, 1, 1 }},
-    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 3, 3, 1, 1 }},
-    {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2, 1 }},
-    {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }} //krazy:exclude=style
-};
 
 static int has_by_data(icalrecur_iterator *impl, enum byrule byrule)
 {
