@@ -77,6 +77,17 @@ LIBICAL_ICAL_EXPORT icalcomponent_kind icalcomponent_isa(const icalcomponent *co
 
 LIBICAL_ICAL_EXPORT int icalcomponent_isa_component(void *component);
 
+/* Deal with X components */
+
+LIBICAL_ICAL_EXPORT void icalcomponent_set_x_name(icalcomponent *comp, const char *name);
+LIBICAL_ICAL_EXPORT const char *icalcomponent_get_x_name(icalcomponent *comp);
+
+/** Returns the name of the component -- the type name converted to a
+ *  string, or the value of _get_x_name if the type is and X component
+ */
+LIBICAL_ICAL_EXPORT const char *icalcomponent_get_component_name(const icalcomponent *comp);
+LIBICAL_ICAL_EXPORT char *icalcomponent_get_component_name_r(const icalcomponent *comp);
+
 /**
  * @copydoc icalcomponent_clone()
  * @deprecated Use icalcomponent_clone() instead

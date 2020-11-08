@@ -762,7 +762,11 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
         comp_kind = icalenum_string_to_component_kind(str);
 
-        c = icalcomponent_new(comp_kind);
+        if (comp_kind == ICAL_X_COMPONENT) {
+            c = icalcomponent_new_x(str);
+        } else {
+            c = icalcomponent_new(comp_kind);
+        }
 
         if (c == 0) {
             c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);

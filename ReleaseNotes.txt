@@ -18,6 +18,10 @@ Version 3.1.0 (NOT RELEASED YET):
      + icalvalue_clone
      + icalcluster_clone
      + icalrecur_iterator_prev
+     + icalcomponent_set_x_name
+     + icalcomponent_get_x_name
+     + icalcomponent_get_component_name
+     + icalcomponent_get_component_name_r
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
  * Deprecated functions:
      + caldat (replaced by internal function icaldat_int())

@@ -330,6 +330,70 @@ int icalcomponent_isa_component(void *component)
     }
 }
 
+void icalcomponent_set_x_name(icalcomponent *comp, const char *name)
+{
+    icalerror_check_arg_rv((name != 0), "name");
+    icalerror_check_arg_rv((comp != 0), "comp");
+
+    if (comp->x_name != 0) {
+        free(comp->x_name);
+    }
+
+    comp->x_name = icalmemory_strdup(name);
+
+    if (comp->x_name == 0) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+    }
+}
+
+const char *icalcomponent_get_x_name(icalcomponent *comp)
+{
+    icalerror_check_arg_rz((comp != 0), "comp");
+
+    return comp->x_name;
+}
+
+const char *icalcomponent_get_component_name(const icalcomponent *comp)
+{
+    char *buf;
+
+    buf = icalcomponent_get_component_name_r(comp);
+    icalmemory_add_tmp_buffer(buf);
+    return buf;
+}
+
+char *icalcomponent_get_component_name_r(const icalcomponent *comp)
+{
+    const char *component_name = 0;
+    size_t buf_size = 256;
+    char *buf;
+    char *buf_ptr;
+
+    icalerror_check_arg_rz((comp != 0), "comp");
+
+    buf = icalmemory_new_buffer(buf_size);
+    buf_ptr = buf;
+
+    if (comp->kind == ICAL_X_COMPONENT && comp->x_name != 0) {
+        component_name = comp->x_name;
+    } else {
+        component_name = icalcomponent_kind_to_string(comp->kind);
+    }
+
+    if (component_name == 0) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        icalmemory_free_buffer(buf);
+        return 0;
+
+    } else {
+        /* _append_string will automatically grow the buffer if
+           component_name is longer than the initial buffer size */
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, component_name);
+    }
+
+    return buf;
+}
+
 void icalcomponent_add_property(icalcomponent *component, icalproperty *property)
 {
     icalerror_check_arg_rv((component != 0), "component");
