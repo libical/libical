@@ -4432,11 +4432,25 @@ void test_timezone_from_builtin(void)
     ok("DTEND is America/New_York", (strcmp(icaltimezone_get_location((icaltimezone *) dtend.zone), "America/New_York") == 0));
     ok("DUE is Europe/Berlin", (strcmp(icaltimezone_get_location((icaltimezone *) due.zone), "Europe/Berlin") == 0));
 
-    icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
-
     icalcomponent_free(comp);
     free(tzidprefix);
     free(strcomp);
+
+    zone = icaltimezone_get_builtin_timezone("Pacific/Midway");
+    ok("builtin location is Pacific/Midway", (strcmp(icaltimezone_get_location((icaltimezone *) zone), "Pacific/Midway") == 0));
+    comp = icaltimezone_get_component(zone);
+    strcomp = icalcomponent_as_ical_string_r(comp);
+    comp = icalcomponent_new_from_string(strcomp);
+    free(strcomp);
+
+    ok("VTIMEZONE icalcomponent_new_from_string()", (comp != NULL));
+
+    zone = icaltimezone_new();
+    ok("set icaltimezone component", (icaltimezone_set_component(zone, comp)));
+    ok("read from string builtin location is still Pacific/Midway", (strcmp(icaltimezone_get_location((icaltimezone *) zone), "Pacific/Midway") == 0));
+    icaltimezone_free(zone, 1);
+
+    icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
 }
 
 void test_icalvalue_decode_ical_string(void)

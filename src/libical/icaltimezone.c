@@ -1830,6 +1830,48 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 
         /* Find the VTIMEZONE component inside the VCALENDAR. There should be 1. */
         subcomp = icalcomponent_get_first_component(comp, ICAL_VTIMEZONE_COMPONENT);
+
+        if (subcomp) {
+            icalproperty *prop;
+
+            /* Ensure expected TZID */
+            prop = icalcomponent_get_first_property(subcomp, ICAL_TZID_PROPERTY);
+            if(prop) {
+                char *new_tzid;
+                size_t new_tzid_len;
+                const char *tzid_prefix = icaltimezone_tzid_prefix();
+
+                new_tzid_len = strlen(tzid_prefix) + strlen(zone->location) + 1;
+                new_tzid = (char *)malloc(sizeof(char)*(new_tzid_len + 1));
+                if(new_tzid) {
+                    snprintf(new_tzid, new_tzid_len, "%s%s", tzid_prefix, zone->location);
+                    icalproperty_set_tzid(prop, new_tzid);
+                    free(new_tzid);
+                } else {
+                    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+                }
+            }
+
+            /* Ensure expected Location - it's for cases where one VTIMEZONE is shared
+               between different locations (like Pacific/Midway is Pacific/Pago_Pago).
+               This updates the properties, thus when the component is converted to
+               the string and back to the component the Location will still match. */
+            prop = icalcomponent_get_first_property(subcomp, ICAL_LOCATION_PROPERTY);
+            if (prop)
+                icalproperty_set_location(prop, zone->location);
+
+            for (prop = icalcomponent_get_first_property(subcomp, ICAL_X_PROPERTY);
+                 prop;
+                 prop = icalcomponent_get_next_property(subcomp, ICAL_X_PROPERTY)) {
+                const char *name;
+
+                name = icalproperty_get_x_name(prop);
+                if (name && !strcasecmp(name, "X-LIC-LOCATION")) {
+                    icalproperty_set_x(prop, zone->location);
+                    break;
+                }
+            }
+        }
     } else {
         subcomp = icaltzutil_fetch_timezone(zone->location);
     }
