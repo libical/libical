@@ -63,6 +63,17 @@ static pthread_mutex_t changes_mutex = PTHREAD_MUTEX_INITIALIZER;
 #define BUILTIN_TZID_PREFIX_LEN 256
 #define BUILTIN_TZID_PREFIX     "/freeassociation.sourceforge.net/"
 
+/* Known prefixes from the old versions of libical */
+static struct _compat_tzids {
+    const char *tzid;
+    int slashes;
+} glob_compat_tzids[] = {
+    { "/freeassociation.sourceforge.net/Tzfile/", 3 },
+    { "/freeassociation.sourceforge.net/", 2 },
+    { "/citadel.org/", 3 }, /* Full TZID for this can be: "/citadel.org/20190914_1/" */
+    { NULL, -1 }
+};
+
 /* The prefix to be used for tzid's generated from system tzdata */
 static char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
 
@@ -1232,6 +1243,25 @@ int icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp)
     return icaltimezone_get_vtimezone_properties(zone, comp);
 }
 
+static const char *skip_slashes(const char *text, int n_slashes)
+{
+    const char *pp;
+    int num_slashes = 0;
+
+    if(!text)
+        return NULL;
+
+    for (pp = text; *pp; pp++) {
+        if(*pp == '/') {
+            num_slashes++;
+            if(num_slashes == n_slashes)
+                return pp + 1;
+        }
+    }
+
+    return NULL;
+}
+
 const char *icaltimezone_get_display_name(icaltimezone *zone)
 {
     const char *display_name;
@@ -1250,24 +1280,8 @@ const char *icaltimezone_get_display_name(icaltimezone *zone)
            at the end of it. */
         if (display_name &&
             !strncmp(display_name, tzid_prefix, strlen(tzid_prefix))) {
-#if defined(USE_BUILTIN_TZDATA)
-            /* XXX  The code below makes assumptions about the prefix
-               which don't even jive with our default declared up top */
-            /* Get the location, which is after the 3rd '/' char. */
-            const char *p;
-            int num_slashes = 0;
-
-            for (p = display_name; *p; p++) {
-                if (*p == '/') {
-                    num_slashes++;
-                    if (num_slashes == 3)
-                        return p + 1;
-                }
-            }
-#else
             /* Skip past our prefix */
             display_name += strlen(tzid_prefix);
-#endif
         }
     }
 
@@ -1452,11 +1466,9 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset, const ch
 
 icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
 {
-#if defined(USE_BUILTIN_TZDATA)
-    int num_slashes = 0;
-#endif
     const char *p, *zone_tzid, *tzid_prefix;
     icaltimezone *zone;
+    int compat = 0;
 
     if (!tzid || !tzid[0])
         return NULL;
@@ -1467,35 +1479,45 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
 
     tzid_prefix = icaltimezone_tzid_prefix();
     /* Check that the TZID starts with our unique prefix. */
-    if (strncmp(tzid, tzid_prefix, strlen(tzid_prefix)))
-        return NULL;
+    if (strncmp(tzid, tzid_prefix, strlen(tzid_prefix))) {
+        int ii;
 
-#if defined(USE_BUILTIN_TZDATA)
-    /* XXX  The code below makes assumptions about the prefix
-       which don't even jive with our default declared up top */
-    /* Get the location, which is after the 3rd '/' character. */
-    for (p = tzid; *p; p++) {
-        if (*p == '/') {
-            num_slashes++;
-            if (num_slashes == 3)
+        for (ii = 0; glob_compat_tzids[ii].tzid; ii++) {
+            if(strncmp(tzid, glob_compat_tzids[ii].tzid, strlen(glob_compat_tzids[ii].tzid)) == 0) {
+                p = skip_slashes(tzid, glob_compat_tzids[ii].slashes);
+                if(p) {
+                    zone = icaltimezone_get_builtin_timezone(p);
+                    /* Do not recheck the TZID matches exactly, it does not, because
+                       fallbacking with the compatibility timezone prefix here. */
+                    return zone;
+                }
                 break;
+            }
         }
+
+        return NULL;
     }
 
-    if (num_slashes != 3)
-        return NULL;
-
-    p++;
-#else
     /* Skip past our prefix */
     p = tzid + strlen(tzid_prefix);
-#endif
+
+    /* Special-case "/freeassociation.sourceforge.net/Tzfile/", because it shares prefix with BUILTIN_TZID_PREFIX */
+    if (strcmp(tzid_prefix, BUILTIN_TZID_PREFIX) == 0 &&
+        strncmp(p, "Tzfile/", 7) == 0) {
+        p += 7;
+        compat = 1;
+    }
 
     /* Now we can use the function to get the builtin timezone from the
        location string. */
     zone = icaltimezone_get_builtin_timezone(p);
-    if (!zone)
-        return NULL;
+    if (!zone || compat)
+        return zone;
+
+#if defined(USE_BUILTIN_TZDATA)
+    if (use_builtin_tzdata)
+        return zone;
+#endif
 
     /* Check that the builtin TZID matches exactly. We don't want to return
        a different version of the VTIMEZONE. */

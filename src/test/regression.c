@@ -4572,6 +4572,57 @@ void test_icalcomponent_normalize(void)
 	str_is("Normalized components match", calStr1, calStr2);
 }
 
+static void test_builtin_compat_tzid (void)
+{
+    struct _cases {
+        const char *name;
+        const char *tzid;
+        int should_match;
+    } cases[] = {
+        { "Matches current TZID", "/freeassociation.sourceforge.net/Europe/London", 1 },
+        { "Matches Tzfile compat TZID", "/freeassociation.sourceforge.net/Tzfile/Europe/London", 1 },
+        { "Matches citadel.org TZID", "/citadel.org/20190914_1/Europe/London", 1 },
+        { "Does not match custom TZID", "/custom/test/tzid/Europe/London", 0 },
+        { NULL, NULL, 0 }
+    };
+    int ii, jj;
+    icaltimezone *tz;
+
+    for (jj = 0; jj < 2; jj++) {
+        if(jj == 1) {
+            icaltimezone_set_tzid_prefix("");
+            icaltimezone_free_builtin_timezones();
+        }
+
+        tz = icaltimezone_get_builtin_timezone("Europe/London");
+
+        for (ii = 0; cases[ii].tzid; ii++) {
+            icaltimezone *zone;
+
+            if(cases[ii].should_match) {
+                zone = icaltimezone_get_builtin_timezone_from_tzid(cases[ii].tzid);
+                ok(cases[ii].name, (zone == tz));
+                if(zone != tz && VERBOSE) {
+                    printf("Returned builtin zone (%s) doesn't match expected zone for TZID '%s'\n",
+                        zone ? icaltimezone_get_location(zone) : "NULL",
+                        cases[ii].tzid);
+                }
+            } else {
+                zone = icaltimezone_get_builtin_timezone_from_tzid(cases[ii].tzid);
+                ok(cases[ii].name, (!zone));
+                if(zone != NULL && VERBOSE) {
+                    printf("Returned builtin zone (%s), but it should fail for TZID '%s'\n",
+                        icaltimezone_get_location(zone),
+                        cases[ii].tzid);
+                }
+            }
+        }
+    }
+
+    icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
+    icaltimezone_free_builtin_timezones();
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4709,6 +4760,7 @@ int main(int argc, char *argv[])
     test_run("Test icalvalue_decode_ical_string", test_icalvalue_decode_ical_string, do_test, do_header);
 
     test_run("Test icalcomponent_normalize", test_icalcomponent_normalize, do_test, do_header);
+    test_run("Test builtin compat TZID", test_builtin_compat_tzid, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
