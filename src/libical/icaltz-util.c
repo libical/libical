@@ -84,6 +84,9 @@
 
 typedef struct
 {
+    char magic[4];
+    char version;
+    char unused[15];
     char ttisgmtcnt[4];
     char ttisstdcnt[4];
     char leapcnt[4];
@@ -151,6 +154,23 @@ static int decode(const void *ptr)
 
         return result;
     }
+}
+
+static long long int decode64(const void *ptr)
+{
+#if defined(sun) && defined(__SVR4)
+#if defined(_BIG_ENDIAN)
+    return *(const long long int *)ptr;
+#else
+    return BSWAP_64(*(const long long int *)ptr);
+#endif
+#else
+    if ((BYTE_ORDER == BIG_ENDIAN)) {
+        return *(const long long int *)ptr;
+    } else {
+        return (int)bswap_64(*(const long long int *)ptr);
+    }
+#endif
 }
 
 static char *zname_from_stridx(char *str, size_t idx)
@@ -239,12 +259,13 @@ static void adjust_dtstart_day_to_rrule(icalcomponent *comp, struct icalrecurren
 
 icalcomponent *icaltzutil_fetch_timezone(const char *location)
 {
-    tzinfo type_cnts;
+    tzinfo header;
     size_t i, num_trans, num_chars, num_leaps, num_isstd, num_isgmt;
     size_t num_types = 0;
     size_t size;
     int pos, sign;
     time_t now = time(NULL);
+    int trans_size = 4;
 
     const char *zonedir;
     FILE *f = NULL;
@@ -296,27 +317,65 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         goto error;
     }
 
-    if (fseek(f, 20, SEEK_SET) != 0) {
-        icalerror_set_errno(ICAL_FILE_ERROR);
+    /* read version 1 header */
+    EFREAD(&header, 44, 1, f);
+    if (memcmp(header.magic, "TZif", 4)) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        goto error;
+    }
+    switch (header.version) {
+    case 0:
+        break;
+    case '2':
+    case '3':
+        if (sizeof(time_t) == 8)
+            trans_size = 8;
+        break;
+    default:
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         goto error;
     }
 
-    EFREAD(&type_cnts, 24, 1, f);
+    num_isgmt = (size_t)decode(header.ttisgmtcnt);
+    num_leaps = (size_t)decode(header.leapcnt);
+    num_chars = (size_t)decode(header.charcnt);
+    num_trans = (size_t)decode(header.timecnt);
+    num_isstd = (size_t)decode(header.ttisstdcnt);
+    num_types = (size_t)decode(header.typecnt);
 
-    num_isgmt = (size_t)decode(type_cnts.ttisgmtcnt);
-    num_leaps = (size_t)decode(type_cnts.leapcnt);
-    num_chars = (size_t)decode(type_cnts.charcnt);
-    num_trans = (size_t)decode(type_cnts.timecnt);
-    num_isstd = (size_t)decode(type_cnts.ttisstdcnt);
-    num_types = (size_t)decode(type_cnts.typecnt);
+    if (trans_size == 8) {
+        long skip = num_trans * 5 + num_types * 6 +
+            num_chars + num_leaps * 8 + num_isstd + num_isgmt;
+            
+        /* skip version 1 data block */
+        if (fseek(f, skip, SEEK_CUR) != 0) {
+            icalerror_set_errno(ICAL_FILE_ERROR);
+            goto error;
+        }
 
+        /* read version 2+ header */
+        EFREAD(&header, 44, 1, f);
+        if (memcmp(header.magic, "TZif", 4)) {
+            icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+            goto error;
+        }
+
+        num_isgmt = (size_t)decode(header.ttisgmtcnt);
+        num_leaps = (size_t)decode(header.leapcnt);
+        num_chars = (size_t)decode(header.charcnt);
+        num_trans = (size_t)decode(header.timecnt);
+        num_isstd = (size_t)decode(header.ttisstdcnt);
+        num_types = (size_t)decode(header.typecnt);
+    }
+
+    /* read data block */
     if (num_trans > 0) {
         transitions = calloc(num_trans, sizeof(time_t));
         if (transitions == NULL) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             goto error;
         }
-        r_trans = calloc(num_trans, 4);
+        r_trans = calloc(num_trans, trans_size);
         if (r_trans == NULL) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             goto error;
@@ -325,7 +384,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         icalerror_set_errno(ICAL_FILE_ERROR);
         goto error;
     }
-    EFREAD(r_trans, 4, num_trans, f);
+    EFREAD(r_trans, trans_size, num_trans, f);
     temp = r_trans;
     if (num_trans) {
         trans_idx = calloc(num_trans, sizeof(int));
@@ -335,8 +394,11 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         }
         for (i = 0; i < num_trans; i++) {
             trans_idx[i] = fgetc(f);
-            transitions[i] = (time_t) decode(r_trans);
-            r_trans += 4;
+            if (trans_size == 8)
+                transitions[i] = (time_t) decode64(r_trans);
+            else
+                transitions[i] = (time_t) decode(r_trans);
+            r_trans += trans_size;
         }
     }
     r_trans = temp;
@@ -375,10 +437,13 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         goto error;
     }
     for (i = 0; i < num_leaps; i++) {
-        char c[4];
+        char c[8];
 
-        EFREAD(c, 4, 1, f);
-        leaps[i].transition = (time_t)decode(c);
+        EFREAD(c, trans_size, 1, f);
+        if (trans_size == 8)
+            leaps[i].transition = (time_t)decode64(c);
+        else
+            leaps[i].transition = (time_t)decode(c);
 
         EFREAD(c, 4, 1, f);
         leaps[i].change = decode(c);
@@ -401,6 +466,10 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     while (i < num_types) {
         types[i++].isgmt = 0;
+    }
+
+    if (trans_size == 8) {
+        /* XXX  Do we need/want to read and use the footer? */
     }
 
     /* Read all the contents now */
