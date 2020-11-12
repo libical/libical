@@ -155,13 +155,6 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #define DBG_(x)
 #endif
 
-#ifdef WIN32
-#define snprintf _snprintf
-#endif
-#ifdef _MSC_VER
-#define strcasecmp stricmp
-#endif
-
 /****  External Functions  ****/
 
 /* assign local name to parser variables and functions so that
