@@ -44,6 +44,8 @@ Version 3.0.9 (UNRELEASED):
  * Fix cross-compile support in libical-glib
  * Fix build with newer libicu
  * Fix compiled-in path for the built-in timezone data
+ * Several fixes for recurrences containing BYWEEKNO
+ * Fix reading TZif files with empty v1 data (use v2+ whenever possible)
 
 Version 3.0.8 (07 March 2020):
 ------------------------------
