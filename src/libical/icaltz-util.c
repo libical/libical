@@ -328,8 +328,9 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         break;
     case '2':
     case '3':
-        if (sizeof(time_t) == 8)
+        if (sizeof(time_t) == 8) {
             trans_size = 8;
+        }
         break;
     default:
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
@@ -394,10 +395,11 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         }
         for (i = 0; i < num_trans; i++) {
             trans_idx[i] = fgetc(f);
-            if (trans_size == 8)
+            if (trans_size == 8) {
                 transitions[i] = (time_t) decode64(r_trans);
-            else
+            } else {
                 transitions[i] = (time_t) decode(r_trans);
+            }
             r_trans += trans_size;
         }
     }
@@ -440,10 +442,11 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         char c[8];
 
         EFREAD(c, (size_t)trans_size, 1, f);
-        if (trans_size == 8)
+        if (trans_size == 8) {
             leaps[i].transition = (time_t)decode64(c);
-        else
+        } else {
             leaps[i].transition = (time_t)decode(c);
+        }
 
         EFREAD(c, 4, 1, f);
         leaps[i].change = decode(c);
