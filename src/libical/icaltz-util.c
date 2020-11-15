@@ -168,7 +168,7 @@ static long long int decode64(const void *ptr)
     if ((BYTE_ORDER == BIG_ENDIAN)) {
         return *(const long long int *)ptr;
     } else {
-        return (int)bswap_64(*(const long long int *)ptr);
+        return (int)bswap_64(*(const unsigned long long int *)ptr);
     }
 #endif
 }
@@ -344,11 +344,11 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     num_types = (size_t)decode(header.typecnt);
 
     if (trans_size == 8) {
-        long skip = num_trans * 5 + num_types * 6 +
+        size_t skip = num_trans * 5 + num_types * 6 +
             num_chars + num_leaps * 8 + num_isstd + num_isgmt;
-            
+
         /* skip version 1 data block */
-        if (fseek(f, skip, SEEK_CUR) != 0) {
+        if (fseek(f, (long)skip, SEEK_CUR) != 0) {
             icalerror_set_errno(ICAL_FILE_ERROR);
             goto error;
         }
@@ -375,7 +375,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             goto error;
         }
-        r_trans = calloc(num_trans, trans_size);
+        r_trans = calloc(num_trans, (size_t)trans_size);
         if (r_trans == NULL) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             goto error;
@@ -384,7 +384,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         icalerror_set_errno(ICAL_FILE_ERROR);
         goto error;
     }
-    EFREAD(r_trans, trans_size, num_trans, f);
+    EFREAD(r_trans, (size_t)trans_size, num_trans, f);
     temp = r_trans;
     if (num_trans) {
         trans_idx = calloc(num_trans, sizeof(int));
@@ -439,7 +439,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     for (i = 0; i < num_leaps; i++) {
         char c[8];
 
-        EFREAD(c, trans_size, 1, f);
+        EFREAD(c, (size_t)trans_size, 1, f);
         if (trans_size == 8)
             leaps[i].transition = (time_t)decode64(c);
         else
