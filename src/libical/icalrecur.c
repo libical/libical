@@ -2412,8 +2412,9 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
             }
         }
 
-        if (doy_offset < 0) this_weekno = 1;
-        else {
+        if (doy_offset < 0) {
+            this_weekno = 1;
+        } else {
             (void)__icaltime_from_day_of_year(impl, day + doy_offset, year,
                                               &this_weekno);
         }
@@ -2437,8 +2438,9 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
                         break;
                     }
                 }
+            } else {
+                valid = 1;
             }
-            else valid = 1;
 
             if (valid) {
                 daysmask_setbit(bydays, day + doy_offset, 1);
@@ -2776,7 +2778,9 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             for (i = 0; BYWEEKPTR[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
                 weekno = BYWEEKPTR[i];
 
-                if (weekno < 0) weekno += nweeks + 1;
+                if (weekno < 0) {
+                    weekno += nweeks + 1;
+                }
 
                 doy = start_doy + 7 * (weekno - 1);
 
@@ -2843,8 +2847,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
 
                 first_dow = impl->rule.week_start;
                 last_dow = (first_dow + 6) % 7;
-            }
-            else {
+            } else {
                 /* Get day of week of first day of year */
                 (void)get_day_of_year(impl, year, 1, 1, &first_dow);
 
