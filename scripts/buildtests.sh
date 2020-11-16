@@ -155,6 +155,13 @@ BUILD() {
   CONFIGURE "$1" "$2"
   make 2>&1 | tee make.out || exit 1
   COMPILE_WARNINGS make.out
+
+  if (test "`uname -s`" = "Darwin")
+  then
+    export DYLD_LIBRARY_PATH=$BDIR/lib
+  else
+    export LD_LIBRARY_PATH=$BDIR/lib
+  fi
   make test 2>&1 | tee make-test.out || exit 1
   CLEAN
 }
