@@ -381,6 +381,33 @@ static const struct expand_split_map_struct expand_map[] = {
     {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }} //krazy:exclude=style
 };
 
+static struct recur_map
+{
+    const char *str;
+    size_t offset;
+    int limit;
+} recur_map[] = {
+    { ";BYSECOND=", offsetof(struct icalrecurrencetype, by_second),
+      ICAL_BY_SECOND_SIZE - 1 },
+    { ";BYMINUTE=", offsetof(struct icalrecurrencetype, by_minute),
+      ICAL_BY_MINUTE_SIZE - 1 },
+    { ";BYHOUR=", offsetof(struct icalrecurrencetype, by_hour),
+      ICAL_BY_HOUR_SIZE - 1 },
+    { ";BYDAY=", offsetof(struct icalrecurrencetype, by_day),
+      ICAL_BY_DAY_SIZE - 1 },
+    { ";BYMONTHDAY=", offsetof(struct icalrecurrencetype, by_month_day),
+      ICAL_BY_MONTHDAY_SIZE - 1 },
+    { ";BYYEARDAY=", offsetof(struct icalrecurrencetype, by_year_day),
+      ICAL_BY_YEARDAY_SIZE - 1 },
+    { ";BYWEEKNO=", offsetof(struct icalrecurrencetype, by_week_no),
+      ICAL_BY_WEEKNO_SIZE - 1 },
+    { ";BYMONTH=", offsetof(struct icalrecurrencetype, by_month),
+      ICAL_BY_MONTH_SIZE - 1 },
+    { ";BYSETPOS=", offsetof(struct icalrecurrencetype, by_set_pos),
+      ICAL_BY_SETPOS_SIZE - 1 },
+    { 0, 0, 0 }
+};
+
 static const char *icalrecur_first_clause(struct icalrecur_parser *parser)
 {
     char *idx;
@@ -613,13 +640,10 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
 struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
 {
     struct icalrecur_parser parser;
-    short bydata[9]; /**< 1 if there was data in the byrule */
     enum byrule byrule;
 
     memset(&parser, 0, sizeof(parser));
     icalrecurrencetype_clear(&parser.rt);
-
-    memset(bydata, 0, 9 * sizeof(short));
 
     icalerror_check_arg_re(str != 0, "str", parser.rt);
 
@@ -723,7 +747,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYSECONDs */
                 r = -1;
             } else {
-                bydata[BY_SECOND] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_second,
                                           0, ICAL_BY_SECOND_SIZE, value);
             }
@@ -732,7 +755,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYMINUTEs */
                 r = -1;
             } else {
-                bydata[BY_MINUTE] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_minute,
                                           0, ICAL_BY_MINUTE_SIZE, value);
             }
@@ -741,7 +763,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYHOURs */
                 r = -1;
             } else {
-                bydata[BY_HOUR] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_hour,
                                           0, ICAL_BY_HOUR_SIZE, value);
             }
@@ -750,7 +771,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYDAYs */
                 r = -1;
             } else {
-                bydata[BY_DAY] = 1;
                 r = icalrecur_add_bydayrules(&parser, value);
             }
         } else if (strcasecmp(name, "BYMONTHDAY") == 0) {
@@ -758,7 +778,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYMONTHDAYs */
                 r = -1;
             } else {
-                bydata[BY_MONTH_DAY] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_month_day,
                                           -1, ICAL_BY_MONTHDAY_SIZE, value);
             }
@@ -767,7 +786,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYYEARDAYs */
                 r = -1;
             } else {
-                bydata[BY_YEAR_DAY] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_year_day,
                                           -1, ICAL_BY_YEARDAY_SIZE, value);
             }
@@ -776,7 +794,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYWEEKNOs */
                 r = -1;
             } else {
-                bydata[BY_WEEK_NO] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_week_no,
                                           -1, ICAL_BY_WEEKNO_SIZE, value);
             }
@@ -785,7 +802,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYMONTHs */
                 r = -1;
             } else {
-                bydata[BY_MONTH] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_month,
                                           1, ICAL_BY_MONTH_SIZE, value);
             }
@@ -794,7 +810,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 /* Don't allow multiple BYSETPOSs */
                 r = -1;
             } else {
-                bydata[BY_SET_POS] = 1;
                 r = icalrecur_add_byrules(&parser, parser.rt.by_set_pos,
                                           -1, ICAL_BY_SETPOS_SIZE, value);
             }
@@ -818,7 +833,9 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
     }
 
     for (byrule = BY_SECOND; byrule <= BY_SET_POS; byrule++) {
-        if (bydata[byrule] &&
+        short *array = (short *)(recur_map[byrule].offset + (size_t) &parser.rt);
+
+        if (array[0] != ICAL_RECURRENCE_ARRAY_MAX &&
             expand_map[parser.rt.freq].map[byrule] == ILLEGAL) {
             ical_invalid_rrule_handling rruleHandlingSetting =
                 ical_get_invalid_rrule_handling_setting();
@@ -831,6 +848,9 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 icalrecurrencetype_clear(&parser.rt);
                 break;
             }
+            else {
+                array[0] = ICAL_RECURRENCE_ARRAY_MAX;
+            }
         }
     }
 
@@ -838,33 +858,6 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
 
     return parser.rt;
 }
-
-static struct recur_map
-{
-    const char *str;
-    size_t offset;
-    int limit;
-} recur_map[] = {
-    { ";BYSECOND=", offsetof(struct icalrecurrencetype, by_second),
-      ICAL_BY_SECOND_SIZE - 1 },
-    { ";BYMINUTE=", offsetof(struct icalrecurrencetype, by_minute),
-      ICAL_BY_MINUTE_SIZE - 1 },
-    { ";BYHOUR=", offsetof(struct icalrecurrencetype, by_hour),
-      ICAL_BY_HOUR_SIZE - 1 },
-    { ";BYDAY=", offsetof(struct icalrecurrencetype, by_day),
-      ICAL_BY_DAY_SIZE - 1 },
-    { ";BYMONTHDAY=", offsetof(struct icalrecurrencetype, by_month_day),
-      ICAL_BY_MONTHDAY_SIZE - 1 },
-    { ";BYYEARDAY=", offsetof(struct icalrecurrencetype, by_year_day),
-      ICAL_BY_YEARDAY_SIZE - 1 },
-    { ";BYWEEKNO=", offsetof(struct icalrecurrencetype, by_week_no),
-      ICAL_BY_WEEKNO_SIZE - 1 },
-    { ";BYMONTH=", offsetof(struct icalrecurrencetype, by_month),
-      ICAL_BY_MONTH_SIZE - 1 },
-    { ";BYSETPOS=", offsetof(struct icalrecurrencetype, by_set_pos),
-      ICAL_BY_SETPOS_SIZE - 1 },
-    { 0, 0, 0 }
-};
 
 char *icalrecurrencetype_as_string(struct icalrecurrencetype *recur)
 {

@@ -2709,7 +2709,8 @@ void test_recur_parser()
     /* Parse the same RRULE but ignore invalid BY* parts */
     ical_set_invalid_rrule_handling_setting(ICAL_RRULE_IGNORE_INVALID);
     rt = icalrecurrencetype_from_string(str);
-    str_is(str, icalrecurrencetype_as_string(&rt), str);
+    str_is(str, icalrecurrencetype_as_string(&rt),
+		   "FREQ=DAILY;COUNT=3;BYDAY=-1TU,3WE,-4FR,SA,SU;BYMONTH=1,2,3,4,8");
 
     /* Try to parse an RRULE value with UNTIL + COUNT */
     str = "FREQ=YEARLY;UNTIL=20000131T090000Z;COUNT=3";
