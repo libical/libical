@@ -201,11 +201,7 @@ if(NOT WIN32) #since we currently do not have a Windows reference file
 
       #test non-rscale rrules
       set(test_args "")
-      if(ICU_FOUND)
-        set(reference_data "icalrecur_test.out")
-      else()
-        set(reference_data "icalrecur_withouticu_test.out")
-      endif()
+      set(reference_data "icalrecur_test.out")
       add_test(NAME icalrecurtest
         COMMAND ${CMAKE_COMMAND}
         -D test_cmd=${test_cmd}
