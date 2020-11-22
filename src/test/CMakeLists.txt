@@ -172,7 +172,12 @@ testme(builtin_timezones "${builtin_timezones_SRCS}")
 
 ########### next target ###############
 
-if(NOT WIN32) #since we currently do not have a Windows reference file
+#cmake v3.14 compare_files can ignore line endings => needed on Windows
+set(CMAKE_COMPARE_FILES_IGNORE_EOL FALSE)
+if(NOT ${CMAKE_VERSION} VERSION_LESS 3.14)
+  set(CMAKE_COMPARE_FILES_IGNORE_EOL TRUE)
+endif()
+if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
   if(NOT USE_32BIT_TIME_T) #tests for years greater than 2037 will fail
     set(icalrecurtest_SRCS icalrecur_test.c)
     add_executable(icalrecurtest ${icalrecurtest_SRCS})

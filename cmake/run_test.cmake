@@ -28,8 +28,13 @@ if(test_not_successful)
   message(SEND_ERROR "Unable to run test '${test_cmd}': ${err} : shell output: ${test_not_successful}!")
 endif()
 
+#cmake v3.14 compare_files can ignore line endings
+set(ignore_eol "")
+if(NOT CMAKE_VERSION VERSION_LESS 3.14)
+  set(ignore_eol "--ignore-eol")
+endif()
 execute_process(
-  COMMAND ${CMAKE_COMMAND} -E compare_files ${output_blessed} ${output_test}
+  COMMAND ${CMAKE_COMMAND} -E compare_files ${ignore_eol} ${output_blessed} ${output_test}
   RESULT_VARIABLE test_not_successful
   ERROR_VARIABLE err
 )
