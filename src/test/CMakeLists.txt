@@ -181,24 +181,24 @@ if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
     target_link_libraries(icalrecurtest ical icalss icalvcal)
     set(test_cmd "${CMAKE_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
 
-    if(ICU_FOUND)
-      #test rscale capable rrules
-      set(test_args "-r")
-      if(HAVE_ICU_DANGI)
-        set(reference_data "icalrecur_withicu_dangi_test.out")
-      else()
-        set(reference_data "icalrecur_withicu_test.out")
-      endif()
-      add_test(NAME icalrecurtest-r
-        COMMAND ${CMAKE_COMMAND}
-        -D test_cmd=${test_cmd}
-        -D test_args:string=${test_args}
-        -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
-        -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
-        -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
-      )
-      setprops(icalrecurtest-r)
+    #test rscale capable rrules
+    set(test_args "-r")
+    if(HAVE_ICU_DANGI)
+      set(reference_data "icalrecur_withicu_dangi_test.out")
+    elseif(ICU_FOUND)
+      set(reference_data "icalrecur_withicu_test.out")
+    else()
+      set(reference_data "icalrecur_withouticu_test.out")
     endif()
+    add_test(NAME icalrecurtest-r
+      COMMAND ${CMAKE_COMMAND}
+      -D test_cmd=${test_cmd}
+      -D test_args:string=${test_args}
+      -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
+      -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
+      -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
+    )
+    setprops(icalrecurtest-r)
 
     #test non-rscale rrules
     set(test_args "")

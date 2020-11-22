@@ -593,17 +593,11 @@ int main(int argc, char *argv[])
 
     /* Do not use getopt for command line parsing -- for portability on Windows */
     for (int i = 1; i < argc; ++i) {
-#if defined(HAVE_LIBICU)
         if (strncmp(argv[i], "-r", 2) == 0) { /* Do RSCALE tests */
-            if (!icalrecurrencetype_rscale_is_supported()) {
-                fprintf(stderr, "error: RSCALE not supported\n");
-                fclose(fp);
-                return (1);
-            }
             r = rscale;
             continue;
         }
-#endif
+
         if (strncmp(argv[i], "-v", 2) == 0) { /* Verbose output to stdout */
             verbose = 1;
             continue;
