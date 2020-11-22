@@ -581,8 +581,6 @@ const struct recur rscale[] = {
 
 int main(int argc, char *argv[])
 {
-    int opt;
-
     /* Default to RFC 5545 tests */
     const struct recur *r = rfc5545;
     FILE *fp = fopen("test.out", "w");
@@ -593,22 +591,27 @@ int main(int argc, char *argv[])
         return (1);
     }
 
-    while ((opt = getopt(argc, argv, "rv")) != EOF) {
-        switch (opt) {
-        case 'r':      /* Do RSCALE tests */
+    /* Do not use getopt for command line parsing -- for portability on Windows */
+    for (int i = 1; i < argc; ++i) {
+#if defined(HAVE_LIBICU)
+        if (strncmp(argv[i], "-r", 2) == 0) { /* Do RSCALE tests */
+            if (!icalrecurrencetype_rscale_is_supported()) {
+                fprintf(stderr, "error: RSCALE not supported\n");
+                fclose(fp);
+                return (1);
+            }
             r = rscale;
-            break;
-
-        case 'v':      /* Verbose output to stdout */
-            verbose = 1;
-            break;
-
-        default:
-            fprintf(stderr, "usage: %s [-r]\n", argv[0]);
-            fclose(fp);
-            return (1);
-            break;
+            continue;
         }
+#endif
+        if (strncmp(argv[i], "-v", 2) == 0) { /* Verbose output to stdout */
+            verbose = 1;
+            continue;
+        }
+
+        fprintf(stderr, "usage: %s [-r]\n", argv[0]);
+        fclose(fp);
+        return (1);
     }
 
     for (; r->dtstart; r++) {
