@@ -329,26 +329,6 @@ gchar *get_lower_train_from_upper_camel(const gchar *upperCamel)
     return ret;
 }
 
-void generate_header_method_get_type(FILE *out, Structure *structure)
-{
-    gchar *upperCamel;
-    gchar *lowerSnake;
-    Method *get_type;
-
-    g_return_if_fail(out != NULL && structure != NULL);
-    upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
-    lowerSnake = get_lower_snake_from_upper_camel(upperCamel);
-    g_free(upperCamel);
-
-    get_type = method_new();
-    get_type->ret = ret_new();
-    get_type->ret->type = g_strdup("GType");
-    get_type->name = g_strconcat(lowerSnake, "_get_type", NULL);
-    g_free(lowerSnake);
-    generate_header_method_proto(out, get_type, FALSE);
-    method_free(get_type);
-}
-
 void generate_header_method_new_full(FILE *out, Structure *structure)
 {
     gchar *upperCamel;
@@ -705,8 +685,6 @@ void generate_header_method_protos(FILE *out, Structure *structure)
         privateHeader = open_private_header();
         write_str(privateHeader, privateHeaderComment);
         generate_header_method_new_full(privateHeader, structure);
-
-        generate_header_method_get_type(out, structure);
     }
 
     for (iter = g_list_first(structure->methods); iter != NULL; iter = g_list_next(iter)) {
@@ -1640,7 +1618,7 @@ gchar *get_inline_parameter(Parameter *para)
         (void)g_stpcpy(buffer + strlen(buffer), translator);
         (void)g_stpcpy(buffer + strlen(buffer), " (");
         if (para->translator == NULL && !is_enum_type(para->type))
-            (void)g_stpcpy(buffer + strlen(buffer), "I_CAL_OBJECT (");
+            (void)g_stpcpy(buffer + strlen(buffer), "I_CAL_OBJECT ((ICalObject *)");
     }
 
     (void)g_stpcpy(buffer + strlen(buffer), para->name);
@@ -2085,7 +2063,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
                 nameSpaceUpperSnake = get_upper_snake_from_upper_camel(namespace);
                 nameUpperSnake = get_upper_snake_from_upper_camel(trueType + i);
                 typeCheck =
-                    g_strconcat(nameSpaceUpperSnake, "_IS_", nameUpperSnake, " (", parameter->name,
+                    g_strconcat(nameSpaceUpperSnake, "_IS_", nameUpperSnake, " ((", trueType, "*)", parameter->name,
                                 ")", NULL);
                 defaultValue = NULL;
                 if (method->ret != NULL) {

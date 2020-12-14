@@ -41,7 +41,7 @@
         <comment xml:space="preserve">Creates a new #ICalGeo, copy of @geo.</comment>
         <custom>    struct icalgeotype *src;
 
-    g_return_val_if_fail(I_CAL_IS_GEO(geo), NULL);
+    g_return_val_if_fail(I_CAL_IS_GEO((ICalGeo *)geo), NULL);
 
     src = (struct icalgeotype *)i_cal_object_get_native((ICalObject *)geo);
     g_return_val_if_fail(src != NULL, NULL);

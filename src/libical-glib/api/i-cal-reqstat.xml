@@ -51,14 +51,14 @@
         <parameter type="const ICalReqstat *" name="reqstat" comment="The #ICalReqstat"/>
         <returns type="const gchar *" annotation="transfer none" comment="The desc of @reqstat."/>
         <comment>Gets the desc of #ICalReqstat.</comment>
-        <custom>        g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT (reqstat), NULL);
+        <custom>        g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT ((ICalReqstat *)reqstat), NULL);
         return ((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))->desc;</custom>
     </method>
     <method name="i_cal_reqstat_get_debug" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="const ICalReqstat *" name="reqstat" comment="The #ICalReqstat"/>
         <returns type="const gchar *" annotation="transfer none" comment="The debug of @reqstat."/>
         <comment>Gets the debug of #ICalReqstat.</comment>
-        <custom>        g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT (reqstat), NULL);
+        <custom>        g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT ((ICalReqstat *)reqstat), NULL);
         return ((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))->debug;</custom>
     </method>
 </structure>

@@ -31,7 +31,7 @@
         <returns type="ICalTimeSpan *" annotation="transfer full" comment="The newly created #ICalTimeSpan, clone of @src." />
         <comment xml:space="preserve">Creates a new #ICalTimeSpan, clone of @src. Free it with g_object_unref(), when no longer needed.</comment>
         <custom>    struct icaltime_span *span;
-    g_return_val_if_fail(I_CAL_IS_TIME_SPAN(src), NULL);
+    g_return_val_if_fail(I_CAL_IS_TIME_SPAN((ICalTimeSpan *)src), NULL);
     span = ((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)src));
     g_return_val_if_fail (span != NULL, NULL);
     return i_cal_time_span_new_full(*span);</custom>
