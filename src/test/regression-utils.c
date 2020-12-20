@@ -34,7 +34,7 @@ const char *ical_timet_string(const time_t t)
 {
     struct tm tmp, stm;
 
-    /* cppcheck-suppress uninitvar */
+    memset(&tmp, 0, sizeof(tmp));
     if (gmtime_r(&t, &tmp)) {
         stm = tmp;
     } else {
