@@ -72,7 +72,7 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
 
         p.duration = icaldurationtype_from_string(end);
 
-        if (icaldurationtype_as_int(p.duration) == 0)
+        if (icaldurationtype_as_msec(p.duration) == 0)
             goto error;
     }
 

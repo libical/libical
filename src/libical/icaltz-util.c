@@ -557,7 +557,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         daylight_recur.by_day[0] != by_day ||
                         types[prev_idx].gmtoff != prev_daylight_gmtoff) {
                     // Set UNTIL of the previous component's recurrence
-                    icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff);
+                    icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff, 0);
                     prev_daylight_time.zone = icaltimezone_get_utc_timezone();
 
                     daylight_recur.until = prev_daylight_time;
@@ -590,7 +590,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 if (standard_recur.by_month[0] != icaltime.month ||
                         standard_recur.by_day[0] != by_day ||
                         types[prev_idx].gmtoff != prev_standard_gmtoff) {
-                    icaltime_adjust(&prev_standard_time, 0, 0, 0, -types[prev_idx].gmtoff);
+                    icaltime_adjust(&prev_standard_time, 0, 0, 0, -types[prev_idx].gmtoff, 0);
                     prev_standard_time.zone = icaltimezone_get_utc_timezone();
 
                     standard_recur.until = prev_standard_time;
@@ -604,7 +604,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     // We need to set UNTIL for the daylight component
                     if (cur_daylight_comp && daylight_recur.by_month[0] == icaltime.month &&
                             daylight_recur.by_day[0] == by_day) {
-                        icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff);
+                        icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff, 0);
                         prev_daylight_time.zone = icaltimezone_get_utc_timezone();
 
                         daylight_recur.until = prev_daylight_time;
@@ -663,7 +663,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     // If so, set the UNTIL date to the second-to-last transition date
     // and then insert a new component to indicate the time zone doesn't transition anymore
     if (cur_daylight_comp && icaltime_as_timet(prev_daylight_time) < now) {
-        icaltime_adjust(&prev_prev_daylight_time, 0, 0, 0, -prev_daylight_gmtoff);
+        icaltime_adjust(&prev_prev_daylight_time, 0, 0, 0, -prev_daylight_gmtoff, 0);
         prev_prev_daylight_time.zone = icaltimezone_get_utc_timezone();
 
         daylight_recur.until = prev_prev_daylight_time;
@@ -682,7 +682,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
 
     if (cur_standard_comp && icaltime_as_timet(prev_standard_time) < now) {
-        icaltime_adjust(&prev_prev_standard_time, 0, 0, 0, -prev_standard_gmtoff);
+        icaltime_adjust(&prev_prev_standard_time, 0, 0, 0, -prev_standard_gmtoff, 0);
         prev_prev_standard_time.zone = icaltimezone_get_utc_timezone();
 
         standard_recur.until = prev_prev_standard_time;

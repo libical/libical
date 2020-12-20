@@ -70,7 +70,7 @@ int main()
             for (hh = 0; hh < 60 * 60 * 24; hh += 567) {
                 int zz2cnt;
 
-                icaltime_adjust(&tt, 0, 0, 0, 1);
+                icaltime_adjust(&tt, 0, 0, 0, 1, 0);
 
                 for (zz2cnt = 0; zz2cnt < 15; zz2cnt++) {
                     icaltimezone *zone2;

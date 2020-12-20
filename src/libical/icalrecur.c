@@ -201,6 +201,7 @@ static const struct freq_map
     icalrecurrencetype_frequency kind;
     const char str[9];
 } freq_map[] = {
+    {ICAL_MSEC_RECURRENCE, "MSEC"},
     {ICAL_SECONDLY_RECURRENCE, "SECONDLY"},
     {ICAL_MINUTELY_RECURRENCE, "MINUTELY"},
     {ICAL_HOURLY_RECURRENCE, "HOURLY"},
@@ -656,6 +657,9 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                     sort_bydayrules(&parser);
                 }
             }
+        } else if (strcasecmp(name, "BYMSEC") == 0) {
+            r = icalrecur_add_byrules(&parser, parser.rt.by_msec,
+                                      0, ICAL_BY_MSEC_SIZE, value);
         } else if (strcasecmp(name, "BYSECOND") == 0) {
             if (parser.rt.by_second[0] != ICAL_RECURRENCE_ARRAY_MAX) {
                 /* Don't allow multiple BYSECONDs */
@@ -757,6 +761,8 @@ static struct recur_map
     size_t offset;
     int limit;
 } recur_map[] = {
+    { ";BYMSEC=", offsetof(struct icalrecurrencetype, by_msec),
+      ICAL_BY_MSEC_SIZE - 1 },
     { ";BYSECOND=", offsetof(struct icalrecurrencetype, by_second),
       ICAL_BY_SECOND_SIZE - 1 },
     { ";BYMINUTE=", offsetof(struct icalrecurrencetype, by_minute),
@@ -848,7 +854,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
 
             for (i = 0;
                  i < limit && array[i] != ICAL_RECURRENCE_ARRAY_MAX; i++) {
-                if (j == 3) { /* BYDAY */
+                if (j == ICAL_DAILY_RECURRENCE) {
                     int pos = icalrecurrencetype_day_position(array[i]);
                     int dow = icalrecurrencetype_day_day_of_week(array[i]);
                     const char *daystr = icalrecur_weekday_to_string(dow);
@@ -860,7 +866,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
                         icalmemory_append_string(&str, &str_p, &buf_sz, temp);
                     }
 
-                } else if (j == 7 /* BYMONTH */ &&
+                } else if (j == ICAL_MONTHLY_RECURRENCE &&
                            icalrecurrencetype_month_is_leap(array[i])) {
                     snprintf(temp, sizeof(temp), "%dL",
                              icalrecurrencetype_month_month(array[i]));
@@ -901,14 +907,15 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
 enum byrule
 {
     NO_CONTRACTION = -1,
-    BY_SECOND = 0,
-    BY_MINUTE = 1,
-    BY_HOUR = 2,
-    BY_DAY = 3,
-    BY_MONTH_DAY = 4,
-    BY_YEAR_DAY = 5,
-    BY_WEEK_NO = 6,
-    BY_MONTH = 7,
+    BY_MSEC = 0,
+    BY_SECOND = 1,
+    BY_MINUTE = 2,
+    BY_HOUR = 3,
+    BY_DAY = 4,
+    BY_MONTH_DAY = 5,
+    BY_YEAR_DAY = 6,
+    BY_WEEK_NO = 7,
+    BY_MONTH = 8,
     BY_SET_POS
 };
 
@@ -955,10 +962,10 @@ struct icalrecur_iterator_impl
     short days_index;
 
     enum byrule byrule;
-    short by_indices[9];
-    short orig_data[9]; /**< 1 if there was data in the byrule */
+    short by_indices[BY_SET_POS + 1];
+    short orig_data[BY_SET_POS + 1]; /**< 1 if there was data in the byrule */
 
-    short *by_ptrs[9]; /**< Pointers into the by_* array elements of the rule */
+    short *by_ptrs[BY_SET_POS + 1]; /**< Pointers into the by_* array elements of the rule */
 
 };
 
@@ -1021,15 +1028,16 @@ struct expand_split_map_struct
 };
 
 static const struct expand_split_map_struct expand_map[] = {
-    /*                           s  m  h  D  MD YD W  M  P */
-    {ICAL_SECONDLY_RECURRENCE, { 1, 1, 1, 1, 1, 1, 3, 1, 1 }},
-    {ICAL_MINUTELY_RECURRENCE, { 2, 1, 1, 1, 1, 1, 3, 1, 1 }},
-    {ICAL_HOURLY_RECURRENCE,   { 2, 2, 1, 1, 1, 1, 3, 1, 1 }},
-    {ICAL_DAILY_RECURRENCE,    { 2, 2, 2, 1, 1, 3, 3, 1, 1 }},
-    {ICAL_WEEKLY_RECURRENCE,   { 2, 2, 2, 2, 3, 3, 3, 1, 1 }},
-    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 3, 3, 1, 1 }},
-    {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2, 1 }},
-    {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }} //krazy:exclude=style
+    /*                           ms s  m  h  D  MD YD W  M  P */
+    {ICAL_MSEC_RECURRENCE,     { 1, 1, 1, 1, 1, 1, 1, 3, 1, 1 }},
+    {ICAL_SECONDLY_RECURRENCE, { 2, 1, 1, 1, 1, 1, 1, 3, 1, 1 }},
+    {ICAL_MINUTELY_RECURRENCE, { 2, 2, 1, 1, 1, 1, 1, 3, 1, 1 }},
+    {ICAL_HOURLY_RECURRENCE,   { 2, 2, 2, 1, 1, 1, 1, 3, 1, 1 }},
+    {ICAL_DAILY_RECURRENCE,    { 2, 2, 2, 2, 1, 1, 3, 3, 1, 1 }},
+    {ICAL_WEEKLY_RECURRENCE,   { 2, 2, 2, 2, 2, 3, 3, 3, 1, 1 }},
+    {ICAL_MONTHLY_RECURRENCE,  { 2, 2, 2, 2, 2, 2, 3, 3, 1, 1 }},
+    {ICAL_YEARLY_RECURRENCE,   { 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 }},
+    {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }} //krazy:exclude=style
 };
 
 static int has_by_data(icalrecur_iterator *impl, enum byrule byrule)
@@ -1104,6 +1112,11 @@ icalarray *icalrecurrencetype_rscale_supported_calendars(void)
     uenum_close(en);
 
     return calendars;
+}
+
+static void set_msec(icalrecur_iterator *impl, int msec)
+{
+    ucal_set(impl->rscale, UCAL_MILLISECOND, (int32_t) msec);
 }
 
 static void set_second(icalrecur_iterator *impl, int second)
@@ -1325,6 +1338,7 @@ static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator *impl,
         tt.hour = (int)ucal_get(cal, UCAL_HOUR_OF_DAY, &status);
         tt.minute = (int)ucal_get(cal, UCAL_MINUTE, &status);
         tt.second = (int)ucal_get(cal, UCAL_SECOND, &status);
+        tt.msec = (int)ucal_get(cal, UCAL_MILLISECOND, &status);
     }
 
     return tt;
@@ -1389,6 +1403,13 @@ static void increment_second(icalrecur_iterator *impl, int inc)
     UErrorCode status = U_ZERO_ERROR;
 
     ucal_add(impl->rscale, UCAL_SECOND, (int32_t) inc, &status);
+}
+
+static void increment_msec(icalrecur_iterator *impl, int inc)
+{
+    UErrorCode status = U_ZERO_ERROR;
+
+    ucal_add(impl->rscale, UCAL_MILLISECOND, (int32_t) inc, &status);
 }
 
 static int validate_byrule(icalrecur_iterator *impl,
@@ -1469,6 +1490,11 @@ static int initialize_rscale(icalrecur_iterator *impl)
                          (int32_t) dtstart.hour,
                          (int32_t) dtstart.minute,
                          (int32_t) dtstart.second, &status);
+        if (U_FAILURE(status)) {
+            icalerror_set_errno(ICAL_INTERNAL_ERROR);
+            return 0;
+        }
+        ucal_set(impl->greg, UCAL_MILLISECOND, dtstart.msec);
     }
     if (!impl->greg || U_FAILURE(status)) {
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
@@ -1567,6 +1593,10 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
                          (int32_t) (has_by_data(impl, BY_SECOND) ?
                                     impl->by_ptrs[BY_SECOND][0] : impl->rstart.second),
                          &status);
+
+        ucal_set(impl->greg, UCAL_MILLISECOND,
+                         (int32_t) (has_by_data(impl, BY_MSEC) ?
+                                    impl->by_ptrs[BY_MSEC][0] : impl->rstart.msec));
     }
 
     if (impl->rscale != impl->greg) {
@@ -1647,6 +1677,11 @@ icalarray *icalrecurrencetype_rscale_supported_calendars(void)
     icalarray_append(calendars, &cal);
 
     return calendars;
+}
+
+static void set_msec(icalrecur_iterator *impl, int msec)
+{
+    impl->last.msec = msec;
 }
 
 static void set_second(icalrecur_iterator *impl, int second)
@@ -1818,22 +1853,27 @@ static void __increment_month(icalrecur_iterator *impl, int inc)
 
 static void increment_monthday(icalrecur_iterator *impl, int inc)
 {
-    icaltime_adjust(&impl->last, inc, 0, 0, 0);
+    icaltime_adjust(&impl->last, inc, 0, 0, 0, 0);
 }
 
 static void increment_hour(icalrecur_iterator *impl, int inc)
 {
-    icaltime_adjust(&impl->last, 0, inc, 0, 0);
+    icaltime_adjust(&impl->last, 0, inc, 0, 0, 0);
 }
 
 static void increment_minute(icalrecur_iterator *impl, int inc)
 {
-    icaltime_adjust(&impl->last, 0, 0, inc, 0);
+    icaltime_adjust(&impl->last, 0, 0, inc, 0, 0);
 }
 
 static void increment_second(icalrecur_iterator *impl, int inc)
 {
-    icaltime_adjust(&impl->last, 0, 0, 0, inc);
+    icaltime_adjust(&impl->last, 0, 0, 0, inc, 0);
+}
+
+static void increment_msec(icalrecur_iterator *impl, int inc)
+{
+    icaltime_adjust(&impl->last, 0, 0, 0, 0, inc);
 }
 
 static int initialize_rscale(icalrecur_iterator *impl)
@@ -1864,6 +1904,8 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
             impl->by_ptrs[BY_MINUTE][0] : impl->dtstart.minute;
         impl->last.second = has_by_data(impl, BY_SECOND) ?
             impl->by_ptrs[BY_SECOND][0] : impl->dtstart.second;
+        impl->last.msec = has_by_data(impl, BY_MSEC) ?
+            impl->by_ptrs[BY_MSEC][0] : impl->dtstart.msec;
     }
 }
 
@@ -1974,9 +2016,10 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
     impl->by_ptrs[BY_HOUR] = impl->rule.by_hour;
     impl->by_ptrs[BY_MINUTE] = impl->rule.by_minute;
     impl->by_ptrs[BY_SECOND] = impl->rule.by_second;
+    impl->by_ptrs[BY_MSEC] = impl->rule.by_msec;
     impl->by_ptrs[BY_SET_POS] = impl->rule.by_set_pos;
 
-    memset(impl->orig_data, 0, 9 * sizeof(short));
+    memset(impl->orig_data, 0, sizeof(impl->orig_data));
 
     /* Note which by rules had data in them when the iterator was
        created. We can't use the actual by_x arrays, because the
@@ -1999,12 +2042,14 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
       (short)(impl->rule.by_minute[0] != ICAL_RECURRENCE_ARRAY_MAX);
     impl->orig_data[BY_SECOND] =
       (short)(impl->rule.by_second[0] != ICAL_RECURRENCE_ARRAY_MAX);
+    impl->orig_data[BY_MSEC] =
+      (short)(impl->rule.by_msec[0] != ICAL_RECURRENCE_ARRAY_MAX);
     impl->orig_data[BY_SET_POS] =
       (short)(impl->rule.by_set_pos[0] != ICAL_RECURRENCE_ARRAY_MAX);
 
     /* Check if the recurrence rule is legal */
 
-    for (byrule = BY_SECOND; byrule <= BY_SET_POS; byrule++) {
+    for (byrule = BY_MSEC; byrule <= BY_SET_POS; byrule++) {
         if (expand_map[freq].map[byrule] == ILLEGAL &&
             impl->by_ptrs[byrule][0] != ICAL_RECURRENCE_ARRAY_MAX) {
             icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
@@ -2019,6 +2064,8 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
     }
 
     /* Set up defaults for BY_* arrays */
+    setup_defaults(impl, BY_MSEC, impl->rstart.msec);
+
     setup_defaults(impl, BY_SECOND, impl->rstart.second);
 
     setup_defaults(impl, BY_MINUTE, impl->rstart.minute);
@@ -2194,6 +2241,12 @@ static int next_unit(icalrecur_iterator *impl,
     }
 
     return end_of_data;
+}
+
+static int next_msec(icalrecur_iterator *impl)
+{
+  return next_unit(impl, BY_MSEC, ICAL_MSEC_RECURRENCE, NULL,
+                   &set_msec, &increment_msec, &increment_second);
 }
 
 static int next_second(icalrecur_iterator *impl)
@@ -3122,7 +3175,8 @@ static int check_contracting_rules(icalrecur_iterator *impl)
     int year_day =
         get_day_of_year(impl, last.year, last.month, last.day, &day_of_week);
 
-    if (check_contract_restriction(impl, BY_SECOND, last.second) &&
+    if (check_contract_restriction(impl, BY_MSEC, last.msec) &&
+        check_contract_restriction(impl, BY_SECOND, last.second) &&
         check_contract_restriction(impl, BY_MINUTE, last.minute) &&
         check_contract_restriction(impl, BY_HOUR, last.hour) &&
         check_contract_restriction(impl, BY_DAY, day_of_week) &&
@@ -3159,6 +3213,10 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     /* Iterate until we get the next valid time */
     do {
         switch (impl->rule.freq) {
+
+        case ICAL_MSEC_RECURRENCE:
+            next_msec(impl);
+            break;
 
         case ICAL_SECONDLY_RECURRENCE:
             next_second(impl);
