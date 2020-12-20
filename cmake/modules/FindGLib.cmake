@@ -8,7 +8,7 @@
 
 set_package_properties(GLib PROPERTIES
   DESCRIPTION "A library of handy utility functions"
-  URL "http://www.gtk.org"
+  URL "https://www.gtk.org"
 )
 
 find_package(PkgConfig)

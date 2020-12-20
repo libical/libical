@@ -182,7 +182,7 @@ DTSTART
  :19671029T020000
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=YEARLY\;BYDAY=-1SU\;BYMONTH=10'
 TZOFFSETFROM
  :-050000
@@ -196,7 +196,7 @@ DTSTART
  :19870405T020000
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=YEARLY\;BYDAY=1SU\;BYMONTH=4'
 TZOFFSETFROM
  :-060000
@@ -305,7 +305,7 @@ DTSTART
  :19970714
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=YEARLY\;INTERVAL=1'
 SUMMARY
  : Bastille Day
@@ -665,7 +665,7 @@ SUMMARY
 LOCATION
  :Green Conference Room
 COMMENT
- :This time works much better and I think the big conference room is 
+ :This time works much better and I think the big conference room is
  too big
 UID
  :calsrv.example.com-873970198738777a@example.com
@@ -1334,7 +1334,7 @@ DTEND
  :19970701T203000Z
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=WEEKLY'
 SUMMARY
  :Phone Conference
@@ -1503,7 +1503,7 @@ UID
  :calsrv.example.com-873970198738777@example.com
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as PERIOD value in FREEBUSY property. Removing entire 
+ :Can't parse as PERIOD value in FREEBUSY property. Removing entire
  property: '19970701T090000Z/PT1H'
 DTSTAMP
  :19970613T190030Z
@@ -1552,7 +1552,7 @@ DTSTART
  :19671029T020000
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=YEARLY\;BYDAY=-1SU\;BYMONTH=10'
 TZOFFSETFROM
  :-070000
@@ -1566,7 +1566,7 @@ DTSTART
  :19870405T020000
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=YEARLY\;BYDAY=1SU\;BYMONTH=4'
 TZOFFSETFROM
  :-080000
@@ -1608,7 +1608,7 @@ DTEND
  :19970701T150000
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=WEEKLY\;INTERVAL=20\;WKST=SU\;BYDAY=TU'
 RDATE
  ;TZID=America-SanJose
@@ -1669,7 +1669,7 @@ SEQUENCE
  :0
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=MONTHLY\;BYMONTHDAY=1\;UNTIL=19980901T210000Z'
 ORGANIZER
  :Mailto:A@example.com
@@ -2078,7 +2078,7 @@ SEQUENCE
  :0
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'WKST=SU\;BYDAY=TU\;FREQ=WEEKLY'
 ORGANIZER
  :Mailto:A@example.com
@@ -2143,7 +2143,7 @@ SEQUENCE
  :7
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'WKST=SU\;BYDAY=TH\;FREQ=WEEKLY'
 ORGANIZER
  :Mailto:A@example.com
@@ -2208,7 +2208,7 @@ SEQUENCE
  :7
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'WKST=SU\;BYDAY=TU'
 ORGANIZER
  :Mailto:A@example.com
@@ -2470,7 +2470,7 @@ RDATE
  :19980315T180000Z
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=COMPONENT_PARSE_ERROR
- :Got a data line\, but could not find a property name or component 
+ :Got a data line\, but could not find a property name or component
  begin tag: 'Error! Bookmark not defined.'
 ORGANIZER
  :Mailto:A@example.com
@@ -2497,7 +2497,7 @@ END:VEVENT
 BEGIN:VEVENT
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=COMPONENT_PARSE_ERROR
- :Got a data line\, but could not find a property name or component 
+ :Got a data line\, but could not find a property name or component
  begin tag: 'Error! Bookmark not defined.'
 SEQUENCE
  :2
@@ -2505,7 +2505,7 @@ RECURRENCE-ID
  :19980311T160000Z
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=COMPONENT_PARSE_ERROR
- :Got a data line\, but could not find a property name or component 
+ :Got a data line\, but could not find a property name or component
  begin tag: 'Error! Bookmark not defined.'
 ATTENDEE
  :ROLE=CHAIR;Error! Bookmark not defined.
@@ -2638,7 +2638,7 @@ SEQUENCE
  :0
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=MONTHLY\;BYMONTHDAY=1'
 ORGANIZER
  :Mailto:A@example.com
@@ -3130,15 +3130,15 @@ X-LIC-ERROR
  :Can't parse parameter name: 'TYPE=INDIVIDUAL'
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=MONTHLY\;COUNT=10\;BYDAY=1FR'
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as DATE-TIME value in DTSTART property. Removing entire 
+ :Can't parse as DATE-TIME value in DTSTART property. Removing entire
  property: '19980101T100000-0700'
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as DATE-TIME value in DUE property. Removing entire property: 
+ :Can't parse as DATE-TIME value in DUE property. Removing entire property:
  '19980103T100000-0700'
 SUMMARY
  :Send Status Reports to Area Managers
@@ -3347,7 +3347,7 @@ SEQUENCE
  :3
 X-LIC-ERROR
  ;X-LIC-ERRORTYPE=VALUE_PARSE_ERROR
- :Can't parse as RECUR value in RRULE property. Removing entire property: 
+ :Can't parse as RECUR value in RRULE property. Removing entire property:
  'FREQ=WEEKLY'
 RDATE
  ;VALUE=PERIOD

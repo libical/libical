@@ -2,18 +2,18 @@
  FILE: icalfileset.h
  CREATOR: eric 23 December 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -56,15 +56,15 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_remove_component(icalset *set,
 LIBICAL_ICALSS_EXPORT int icalfileset_count_components(icalset *set, icalcomponent_kind kind);
 
 /**
- * Restrict the component returned by icalfileset_first, _next to those
- * that pass the gauge. _clear removes the gauge
+ * Restricts the component returned by icalfileset_first, _next to those
+ * that pass the gauge. _clear removes the gauge.
  */
 LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_select(icalset *set, icalgauge *gauge);
 
-/** clear the gauge **/
+/** @brief Clears the gauge **/
 LIBICAL_ICALSS_EXPORT void icalfileset_clear(icalset *set);
 
-/** Get and search for a component by uid **/
+/** @brief Gets and searches for a component by uid **/
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch(icalset *set,
                                                        icalcomponent_kind kind, const char *uid);
 
@@ -73,14 +73,15 @@ LIBICAL_ICALSS_EXPORT int icalfileset_has_uid(icalset *set, const char *uid);
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *c);
 
 /**
- *  Modify components according to the MODIFY method of CAP. Works on the
- *  currently selected components.
+ *  @brief Modifies components according to the MODIFY method of CAP.
+ *
+ *  Works on the currently selected components.
  */
 LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_modify(icalset *set,
                                                        icalcomponent *oldcomp,
                                                        icalcomponent *newcomp);
 
-/* Iterate through components. If a gauge has been defined, these
+/* Iterates through components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_current_component(icalset *cluster);
@@ -99,13 +100,13 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalfilesetiter_to_next(icalset *set, icals
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *
                                                                                      itr);
 
-/** Return a reference to the internal component. You probably should
-   not be using this. */
+/** Returns a reference to the internal component. **You probably should
+   not be using this.** */
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_component(icalset *cluster);
 
 /**
- * @brief options for opening an icalfileset.
+ * @brief Options for opening an icalfileset.
  *
  * These options should be passed to the icalset_new() function
  */

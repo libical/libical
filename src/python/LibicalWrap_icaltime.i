@@ -7,7 +7,7 @@
   The contents of this file are subject to the Mozilla Public License
   Version 1.0 (the "License"); you may not use this file except in
   compliance with the License. You may obtain a copy of the License at
-  http://www.mozilla.org/MPL/
+  https://www.mozilla.org/MPL/
 
   Software distributed under the License is distributed on an "AS IS"
   basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
@@ -18,7 +18,7 @@
 
   Contributions from:
 
-  ======================================================================*/  
+  ======================================================================*/
 
 // Add some methods to the icaltimetype struct
 %extend icaltimetype {
@@ -26,32 +26,32 @@
     /* ***** Special methods ***** */
 
     int __cmp__(const icaltimetype b) { return icaltime_compare(*($self), b); }
-    
+
     /* ***** Conversion methods ***** */
 
     const char* as_ical_string() { return icaltime_as_ical_string(*($self)); }
     time_t as_timet(const icaltimezone *zone=NULL) {
         return icaltime_as_timet_with_zone(*($self), zone);
     }
-    
+
     /* ***** Accessor methods ***** */
-    
+
     const char *get_tzid() { return icaltime_get_tzid(*($self)); }
     int day_of_year() { return icaltime_day_of_year(*($self)); }
     int day_of_week() { return icaltime_day_of_week(*($self)); }
 
-    /** Return the day of the year for the first day of the week that the
+    /** Returns the day of the year for the first day of the week that the
        given time is within. */
     int start_doy_week(int fdow) {
         return icaltime_start_doy_week(*($self), fdow);
     }
 
-    /** Return the week number for the week the given time is within */
+    /** Returns the week number for the week the given time is within */
     int week_number() { return icaltime_week_number(*($self)); }
-    
-    
+
+
     /* ***** Query methods ***** */
-    
+
     int is_null_time() { return icaltime_is_null_time(*($self)); }
 
     /** Returns false if the time is clearly invalid, but is not null. This
@@ -63,10 +63,10 @@
        but they do the same thing. */
     int is_date() { return icaltime_is_date(*($self)); }
     int is_utc() { return icaltime_is_utc(*($self)); }
-    
+
     /* ***** Modify, compare and utility methods ***** */
-    
-    /** Return -1, 0, or 1 to indicate that a<b, a==b or a>b */
+
+    /** Returns -1, 0, or 1 to indicate that a<b, a==b or a>b */
     int compare(const icaltimetype b) { return icaltime_compare(*($self), b); }
 
     /** like icaltime_compare, but only use the date parts. */
@@ -81,7 +81,7 @@
         return icaltime_adjust($self, days, hours, minutes, seconds);
     }
 
-    /** Normalize the icaltime, so that all fields are within the normal range. */
+    /** Normalizes the icaltime, so that all fields are within the normal range. */
     icaltimetype normalize() { return icaltime_normalize(*($self)); }
 
     icaltimetype convert_to_zone(icaltimezone *zone) {
@@ -89,12 +89,12 @@
     }
 
     /* ***** Static methods ***** */
-    
+
     static icaltimetype from_timet(const time_t tm,
             const int is_date=0, const icaltimezone *zone=NULL) {
         return icaltime_from_timet_with_zone(tm, is_date, zone);
     }
-    
+
     static icaltimetype null_time(void) { return icaltime_null_time(); }
     static icaltimetype null_date(void) { return icaltime_null_date(); }
 
@@ -117,18 +117,18 @@
         return icaltime_from_string(str);
     }
 #endif
-    
-    /** Return the number of days in the given month */
+
+    /** Returns the number of days in the given month */
     static int days_in_month(const int month, const int year) {
         return icaltime_days_in_month(month, year);
     }
 
-    /** Return whether you've specified a leapyear or not. */
+    /** Returns whether you've specified a leapyear or not. */
     static int is_leap_year (const int year) {
         return icaltime_is_leap_year(year);
     }
 
-    /** Return the number of days in this year */
+    /** Returns the number of days in this year */
     /* static int days_in_year (const int year) { return icaltime_days_in_year(year); } */
 
 }
@@ -154,7 +154,7 @@ icaltimetype.as_datetime = icaltimetype_as_datetime
 def icaltimetype_from_datetime(dt):
     "from_datetime() -> returns icaltimetype object"
     tt = icaltimetype()
-    
+
     tt.year = dt.year
     tt.month = dt.month
     tt.day = dt.day
@@ -166,7 +166,7 @@ def icaltimetype_from_datetime(dt):
         tt.zone = 0
     tt.is_date = False
     tt.isdaylight = False
-    
+
     return tt
 icaltimetype.from_datetime = staticmethod(icaltimetype_from_datetime)
 

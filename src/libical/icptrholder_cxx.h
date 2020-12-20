@@ -19,7 +19,7 @@
  * stack based object.  The class holds a pointer to the C++ Wrapper.
  * The destructor set the imp to null before deleting the pointer.
  *
- * Each C++ Wrapper instantiates a template class in it's corresponding .h file.
+ * Each C++ Wrapper instantiates a template class in its corresponding .h file.
  *
  * Usage example:
  *   VComponentTmpPtr p;// VComponentTmpPtr is an instantiation of this template
@@ -31,12 +31,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
  */
 
 #ifndef ICPTRHOLDER_CXX_H

@@ -2,19 +2,18 @@
  FILE: pvl.c
  CREATOR: eric November, 1995
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -147,7 +146,7 @@ void pvl_unshift(pvl_list L, void *d)
 }
 
 /**
- * @brief Remove an element from the front of the list
+ * @brief Removes an element from the front of the list
  *
  * @param L     The list to operate on
  *
@@ -194,7 +193,7 @@ void pvl_push(pvl_list L, void *d)
 }
 
 /**
- * @brief Remove an element from the tail of the list
+ * @brief Removes an element from the tail of the list
  *
  * @param L     The list to operate on
  */
@@ -318,7 +317,7 @@ void pvl_insert_before(pvl_list L, pvl_elem P, void *d)
 }
 
 /**
- * @brief Remove the referenced item from the list.
+ * @brief Removes the referenced item from the list.
  *
  * This routine will free the element, but not the data item that the
  * element contains.
@@ -424,7 +423,7 @@ pvl_elem pvl_find_next(pvl_list l, pvl_findf f, void *v)
 }
 
 /**
- * @brief Remove the all the elements in the list. The does not free
+ * @brief Removes the all the elements in the list. The does not free
  * the data items the elements hold.
  */
 

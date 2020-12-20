@@ -246,7 +246,7 @@ SUMMARY:VERSIT PDI PR Teleconference/Interview
 CATEGORIES:PHONE CALL
 STATUS:CONFIRMED
 TRANSP:19960523T100522-4000F100582713-009251
-UID:http://www.ibm.com/raleigh/fdawson/~c:\or2\orgfiles\versit.or2
+UID:https://www.ibm.com/raleigh/fdawson/~c:\or2\orgfiles\versit.or2
 DALARM:19960523T114500;5;3;Your Telecon Starts At Noon!!!;
 MALARM:19960522T120000;;;fdawson@raleigh.ibm.com;Remember 05/23 Noon Telecon!!!;
 PALARM:19960523T115500;;;c:\or2\organize.exe c:\or2\orgfiles\versit.or2;
@@ -282,7 +282,7 @@ void testVcalAPIs() {
         0,
         "CONFIRMED",
         "19960523T100522-4000F100582713-009251",
-        "http://www.ibm.com/raleigh/fdawson/~c:\\or2\\orgfiles\\versit.or2",
+        "https://www.ibm.com/raleigh/fdawson/~c:\\or2\\orgfiles\\versit.or2",
         0
         );
 

@@ -3,48 +3,22 @@
  FILE: icaldirset.c
  CREATOR: eric 28 November 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
  ======================================================================*/
-
-/**
-   @file   icaldirset.c
-
-   @brief  icaldirset manages a database of ical components and offers
-  interfaces for reading, writing and searching for components.
-
-  icaldirset groups components in to clusters based on their DTSTAMP
-  time -- all components that start in the same month are grouped
-  together in a single file. All files in a sotre are kept in a single
-  directory.
-
-  The primary interfaces are icaldirset__get_first_component and
-  icaldirset_get_next_component. These routine iterate through all of
-  the components in the store, subject to the current gauge. A gauge
-  is an icalcomponent that is tested against other componets for a
-  match. If a gauge has been set with icaldirset_select,
-  icaldirset_first and icaldirset_next will only return componentes
-  that match the gauge.
-
-  The Store generated UIDs for all objects that are stored if they do
-  not already have a UID. The UID is the name of the cluster (month &
-  year as MMYYYY) plus a unique serial number. The serial number is
-  stored as a property of the cluster.
-
-*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -319,12 +293,6 @@ static void icaldirset_add_uid(icalcomponent *comp)
         uidstring[MAXPATHLEN - 1] = '\0';
     }
 }
-
-/**
-  This assumes that the top level component is a VCALENDAR, and there
-   is an inner component of type VEVENT, VTODO or VJOURNAL. The inner
-  component must have a DSTAMP property
-*/
 
 icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
 {

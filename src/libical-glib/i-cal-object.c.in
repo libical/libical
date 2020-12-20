@@ -11,7 +11,7 @@
  * for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this library. If not, see <http://www.gnu.org/licenses/>.
+ * along with this library. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -114,7 +114,7 @@ struct _ICalObjectPrivate
     GSList *dependers;  /* referenced GObject-s */
 };
 
-G_DEFINE_ABSTRACT_TYPE(ICalObject, i_cal_object, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(ICalObject, i_cal_object, G_TYPE_OBJECT)
 
 enum
 {
@@ -213,8 +213,6 @@ static void i_cal_object_class_init(ICalObjectClass * class)
 {
     GObjectClass *object_class;
 
-    g_type_class_add_private(class, sizeof(ICalObjectPrivate));
-
     object_class = G_OBJECT_CLASS(class);
     object_class->set_property = i_cal_object_set_property;
     object_class->get_property = i_cal_object_get_property;
@@ -289,7 +287,7 @@ static void i_cal_object_class_init(ICalObjectClass * class)
 
 static void i_cal_object_init(ICalObject *iobject)
 {
-    iobject->priv = G_TYPE_INSTANCE_GET_PRIVATE(iobject, I_CAL_TYPE_OBJECT, ICalObjectPrivate);
+    iobject->priv = i_cal_object_get_instance_private(iobject);
 
     g_mutex_init(&iobject->priv->props_lock);
 }

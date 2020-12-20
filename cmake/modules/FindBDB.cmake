@@ -7,7 +7,7 @@
 
 set_package_properties(BDB PROPERTIES
   DESCRIPTION "Berkeley DB storage"
-  URL "http://www.oracle.com/database/berkeley-db"
+  URL "https://www.oracle.com/database/berkeley-db"
 )
 
 if(BDB_INCLUDE_DIR AND BDB_LIBRARY)

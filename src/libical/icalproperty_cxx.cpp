@@ -9,12 +9,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
  */
 
 #include "icalproperty_cxx.h"
@@ -167,7 +167,7 @@ std::string ICalProperty::get_value_as_string()
     return static_cast<std::string>(icalproperty_get_value_as_string(imp));
 }
 
-/** Return the name of the property -- the type name converted to a
+/** Returns the name of the property -- the type name converted to a
  *  string, or the value of get_x_name if the type is X property
  */
 std::string ICalProperty::get_name() const

@@ -2,19 +2,18 @@
  FILE: icalspanlist.c
  CREATOR: ebusboom 23 aug 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -83,22 +82,10 @@ static void icalspanlist_new_callback(icalcomponent *comp, struct icaltime_span 
         return;
     }
 
-  /** copy span data into allocated memory.. **/
+  /* copy span data into allocated memory.. **/
     *s = *span;
     pvl_insert_ordered(sl->spans, compare_span, (void *)s);
 }
-
-/** @brief Make a free list from a set of VEVENT components.
- *
- *  @param set    A valid icalset containing VEVENTS
- *  @param start  The free list starts at this date/time
- *  @param end    The free list ends at this date/time
- *
- *  @return        A spanlist corresponding to the VEVENTS
- *
- * Given a set of components, a start time and an end time
- * return a spanlist that contains the free/busy times.
- */
 
 icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct icaltimetype end)
 {
@@ -121,7 +108,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     range.start = icaltime_as_timespec(start);
     range.end = icaltime_as_timespec(end);
 
-    /* Get a list of spans of busy time from the events in the set
+    /* Gets a list of spans of busy time from the events in the set
        and order the spans based on the start time */
 
     for (c = icalset_get_first_component(set);
@@ -202,12 +189,6 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     return sl;
 }
 
-/** @brief Destructor.
- *  @param s A valid icalspanlist
- *
- *  Free memory associated with the spanlist
- */
-
 void icalspanlist_free(icalspanlist *s)
 {
     struct icaltime_span *span;
@@ -226,10 +207,6 @@ void icalspanlist_free(icalspanlist *s)
     free(s);
 }
 
-/** @brief (Debug) print out spanlist to stdout.
- *  @param sl A valid icalspanlist.
- */
-
 void icalspanlist_dump(icalspanlist *sl)
 {
     int i = 0;
@@ -245,15 +222,6 @@ void icalspanlist_dump(icalspanlist *sl)
 }
 
 icalcomponent *icalspanlist_make_busy_list(icalspanlist *sl);
-
-/** @brief Find next free time span in a spanlist.
- *
- *  @param  sl     The spanlist to search.
- *  @param  t      The time to start looking.
- *
- *  Given a spanlist and a time, find the next period of time
- *  that is free
- */
 
 struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icaltimetype t)
 {
@@ -322,26 +290,6 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
     return period;
 }
 
-/** @brief Returns an hour-by-hour array of free/busy times over a
- *         given period.
- *
- *  @param sl        A valid icalspanlist
- *  @param delta_t   The time slice to divide by, in seconds.  Default 3600.
- *
- *  @return A pointer to an array of integers containing the number of
- *       busy events in each delta_t time period.  The final entry
- *       contains the value -1.
- *
- *  This calculation is somewhat tricky.  This is due to the fact that
- *  the time range contains the start time, but does not contain the
- *  end time.  To perform a proper calculation we subtract one second
- *  off the end times to get a true containing time.
- *
- *  Also note that if you supplying a spanlist that does not start or
- *  end on a time boundary divisible by delta_t you may get results
- *  that are not quite what you expect.
- */
-
 int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
 {
     pvl_elem itr;
@@ -359,11 +307,11 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
         delta_ms = delta_t * 1000;
     }
 
-  /** calculate the start and end time as time_t **/
+  /* calculate the start and end time as time_t **/
     sl_start = icaltime_as_timespec_with_zone(sl->start, icaltimezone_get_utc_timezone());
     sl_end = icaltime_as_timespec_with_zone(sl->end, icaltimezone_get_utc_timezone());
 
-  /** insure that the time period falls on a time boundary divisable
+  /* insure that the time period falls on a time boundary divisable
       by delta_ms */
 
     sl_start_ms = icaltime_timespec_to_msec(sl_start);
@@ -374,10 +322,10 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     sl_end_ms /= delta_ms;
     sl_end_ms *= delta_ms;
 
-  /** find the duration of this spanlist **/
+  /* find the duration of this spanlist **/
     spanduration_ms = sl_end_ms - sl_start_ms;
 
-  /** malloc our matrix, add one extra slot for a final -1 **/
+  /* malloc our matrix, add one extra slot for a final -1 **/
     matrix_slots = spanduration_ms / delta_ms + 1;
 
     matrix = (int *)malloc((size_t)(sizeof(int) * matrix_slots));
@@ -410,21 +358,6 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     }
     return matrix;
 }
-
-/** @brief Return a VFREEBUSY component for the corresponding spanlist
- *
- *   @param sl         A valid icalspanlist, from icalspanlist_new()
- *   @param organizer  The organizer specified as "MAILTO:user@domain"
- *   @param attendee   The attendee specified as "MAILTO:user@domain"
- *
- *   @return            A valid icalcomponent or NULL.
- *
- * This function returns a VFREEBUSY component for the given spanlist.
- * The start time is mapped to DTSTART, the end time to DTEND.
- * Each busy span is represented as a separate FREEBUSY entry.
- * An attendee parameter is required, and organizer parameter is
- * optional.
- */
 
 icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
                                          const char *organizer, const char *attendee)
@@ -477,15 +410,6 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 
     return comp;
 }
-
-/** @brief Return a spanlist corresponding to the VFREEBUSY portion of
- *         an icalcomponent.
- *
- *   @param   comp     A valid icalcomponent.
- *
- *   @return           A valid icalspanlist or NULL if no VFREEBUSY section.
- *
- */
 
 icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
 {

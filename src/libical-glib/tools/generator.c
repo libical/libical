@@ -5,12 +5,12 @@
  * it under the terms of either:
  *
  *   The LGPL as published by the Free Software Foundation, version
- *   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+ *   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
  *
  * Or:
  *
  *   The Mozilla Public License Version 2.0. You may obtain a copy of
- *   the License at http://www.mozilla.org/MPL/
+ *   the License at https://www.mozilla.org/MPL/
  */
 
 #include "generator.h"
@@ -22,17 +22,16 @@ static const gchar *templates_dir = NULL;
 static FILE *open_file(const gchar *dir, const gchar *filename)
 {
     gchar *path;
-    FILE *tmpl;
+    FILE *tmpl = NULL;
 
     path = g_build_filename(dir, filename, NULL);
-    g_return_val_if_fail(path != NULL, NULL);
+    if (path) {
+      tmpl = fopen(path, "rb");
+      if (!tmpl)
+          fprintf(stderr, "generator: Failed to open %s: %s\n", path, strerror(errno));
 
-    tmpl = fopen(path, "rb");
-    if (!tmpl)
-        fprintf(stderr, "Failed to open '%s'\n", path);
-
-    g_free(path);
-
+      g_free(path);
+    }
     return tmpl;
 }
 
@@ -911,6 +910,12 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                     val = g_hash_table_lookup(table, buffer);
                     write_str(out, val);
                     val = NULL;
+
+                    if (g_strcmp0(buffer, "new_full_extraCode") == 0)
+                        write_str(out, "\n    ");
+                } else if (g_strcmp0(buffer, "new_full_extraCode") == 0) {
+                    /* For simplicity, after lookup in the 'table', to
+                       not force declaration of it in every .xml file */
                 } else if (g_strcmp0(buffer, "structure_boilerplate") == 0) {
                     if (structure->native != NULL)
                         generate_header_structure_boilerplate(out, structure, table);
@@ -1266,6 +1271,10 @@ GHashTable *get_hash_table_from_structure(Structure *structure)
             (void)g_hash_table_insert(table, (gchar *)"defaultNative",
                                       g_strdup(structure->defaultNative));
         }
+        if (structure->new_full_extraCode && *structure->new_full_extraCode) {
+            (void)g_hash_table_insert(table, (gchar *)"new_full_extraCode",
+                                      g_strdup(structure->new_full_extraCode));
+        }
     }
 
     (void)g_hash_table_insert(table, (char *)"native", g_strdup(structure->native));
@@ -1363,7 +1372,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
             } else {
                 c = expression[iter];
                 if (c == '$') {
-                    if ((c = expression[++iter]) != '{') {
+                    if (expression[++iter] != '{') {
                         printf("The following char is not {");
                         g_free(expression);
                         g_free(var);

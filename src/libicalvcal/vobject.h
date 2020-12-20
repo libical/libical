@@ -64,12 +64,6 @@ in the original text format.
 
 For more information on this API see the readme.txt file
 which accompanied this distribution.
-
-  Also visit:
-
-                http://www.versit.com
-                http://www.ralden.com
-
 */
 
 #ifndef VOBJECT_H

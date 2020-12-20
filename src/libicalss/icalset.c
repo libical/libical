@@ -2,7 +2,7 @@
  FILE: icalset.c
  CREATOR: eric 17 Jul 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  Icalset is the "base class" for representations of a collection of
  iCal components. Derived classes (actually delegates) include:
@@ -16,12 +16,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -368,11 +368,6 @@ icalset *icalset_new_dir_reader(const char *path)
 
 /* Functions for built-in methods */
 
-/**
- *  free memory associated with this icalset
- *  automatically calls the implementation specific free routine
- */
-
 void icalset_free(icalset *set)
 {
     if (set->free) {
@@ -508,7 +503,7 @@ icalcomponent *icalsetiter_deref(icalsetiter *i)
     return (icalcompiter_deref(&(i->iter)));
 }
 
-/* for subclasses that use multiple clusters that require specialized cluster traversal */
+/* For subclasses that use multiple clusters that require specialized cluster traversal */
 icalcomponent *icalsetiter_to_next(icalset *set, icalsetiter *i)
 {
     return set->icalsetiter_to_next(set, i);

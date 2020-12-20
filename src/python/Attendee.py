@@ -3,31 +3,31 @@
 # FILE: Property.py
 # CREATOR: eric
 #
-# (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
+# (C) COPYRIGHT 2001, Eric Busboom <eric@civicknowledge.com>
 # (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>
 #
 # This library is free software; you can redistribute it and/or modify
 # it under the terms of either:
 #
 #   The LGPL as published by the Free Software Foundation, version
-#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.txt
+#   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.txt
 #
 # Or:
 #
 #   The Mozilla Public License Version 2.0. You may obtain a copy of
-#   the License at http://www.mozilla.org/MPL/
+#   the License at https://www.mozilla.org/MPL/
 
 
 # This library is free software; you can redistribute it and/or modify
 # it under the terms of either:
 #
 #    The LGPL as published by the Free Software Foundation, version
-#    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+#    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 #
 #  Or:
 #
 #    The Mozilla Public License Version 2.0. You may obtain a copy of
-#    the License at http://www.mozilla.org/MPL/
+#    the License at https://www.mozilla.org/MPL/
 #======================================================================
 
 from LibicalWrap import *
@@ -105,11 +105,11 @@ class Organizer(Property):
         return self[parameter]
 
     def name(self):
-        "Return the name of the property."
+        "Returns the name of the property."
         return Property.name(self)
 
     def value_type(self):
-        "Return the value type of the property."
+        "Returns the value type of the property."
         return self._desc['value_type']
 
     # Methods for accessing enumerated parameters

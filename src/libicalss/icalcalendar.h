@@ -2,18 +2,18 @@
  FILE: icalcalendar.h
  CREATOR: eric 23 December 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -25,11 +25,14 @@
 #include "libical_icalss_export.h"
 #include "icalset.h"
 
-/* icalcalendar
- * Routines for storing calendar data in a file system. The calendar
- * has two icaldirsets, one for incoming components and one for booked
- * components. It also has interfaces to access the free/busy list
- * and a list of calendar properties */
+/** @file icalcalendar.h
+ *
+ * @brief Routines for storing calendar data in a file system.
+ *
+ * The calendar has two icaldirsets, one for incoming components and one for
+ * booked components. It also has interfaces to access the free/busy list and a
+ * list of calendar properties
+ */
 
 typedef struct icalcalendar_impl icalcalendar;
 

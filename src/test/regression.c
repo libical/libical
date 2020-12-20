@@ -2,19 +2,18 @@
  FILE: regression.c
  CREATOR: eric 03 April 1999
 
- (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 1999 Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The original author is Eric Busboom
  The original code is regression.c
@@ -94,7 +93,7 @@ END:BOOGA\
 END:VCALENDAR";
 */
 
-/* Return a list of all attendees who are required. */
+/* Returns a list of all attendees who are required. */
 /*
 static char** get_required_attendees(icalcomponent* event)
 {
@@ -449,6 +448,13 @@ void test_parameters()
 
     str_is("icalparameter_new_cn()", icalparameter_get_cn(p), str1);
     str_is("icalparameter_as_ical_string()", icalparameter_as_ical_string(p), "CN=A Common Name");
+
+    icalparameter_free(p);
+
+    p = icalparameter_new_cn("");
+
+    str_is("icalparameter_new_cn()", icalparameter_get_cn(p), "");
+	str_is("icalparameter_as_ical_string()", icalparameter_as_ical_string(p), "CN=\"\"");
 
     icalparameter_free(p);
 
@@ -2748,14 +2754,9 @@ void test_recur_parser()
     rt = icalrecurrencetype_from_string(str);
     str_is(str, icalrecurrencetype_as_string(&rt), str);
 
-    str = "FREQ=DAILY;COUNT=3;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
-
-    rt = icalrecurrencetype_from_string(str);
+    /* Add COUNT and make sure its ignored in lieu of UNTIL */
+    rt.count = 3;
     str_is(str, icalrecurrencetype_as_string(&rt), str);
-
-    /* Add UNTIL and make sure we output a NULL string */
-    rt.until = icaltime_today();
-    ok("COUNT + UNTIL not allowed", icalrecurrencetype_as_string(&rt) == NULL);
 
     /* Try to create a new RRULE value with UNTIL + COUNT */
     es = icalerror_supress("BADARG");
@@ -2763,6 +2764,11 @@ void test_recur_parser()
     rt = icalvalue_get_recur(v);
     icalerror_restore("BADARG", es);
     ok("COUNT + UNTIL not allowed", rt.freq == ICAL_NO_RECURRENCE);
+
+    str = "FREQ=DAILY;COUNT=3;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
+
+    rt = icalrecurrencetype_from_string(str);
+    str_is(str, icalrecurrencetype_as_string(&rt), str);
 
     /* Try to parse an RRULE value with UNTIL + COUNT */
     str = "FREQ=YEARLY;UNTIL=20000131T090000Z;COUNT=3";
@@ -4001,6 +4007,34 @@ void test_value_parameter()
     icalcomponent_free(c);
 }
 
+void test_empty_parameter()
+{
+    icalcomponent *c;
+    icalproperty *p;
+    icalparameter *param;
+
+    static const char test_icalcomp_str[] =
+        "BEGIN:VEVENT\n"
+        "ATTENDEE;CN=\"\";RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com\n"
+        "END:VEVENT\n";
+
+    c = icalparser_parse_string((char *)test_icalcomp_str);
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+        exit(EXIT_FAILURE);
+    }
+
+    if (VERBOSE)
+        printf("%s", icalcomponent_as_ical_string(c));
+
+    p = icalcomponent_get_first_property(c, ICAL_ATTENDEE_PROPERTY);
+    param = icalproperty_get_first_parameter(p, ICAL_CN_PARAMETER);
+
+    ok("icalparameter_get_cn()", (0 == strcmp("", icalparameter_get_cn(param))));
+
+    icalcomponent_free(c);
+}
+
 void test_x_parameter()
 {
     icalcomponent *c;
@@ -4176,11 +4210,23 @@ void test_attach_url()
     icalcomponent_free(ac);
 }
 
+static void test_free_attach_data(char *data, void *user_data)
+{
+    int *pbeen_called = (int *) user_data;
+
+    free(data);
+
+    (*pbeen_called)++;
+}
+
 void test_attach_data()
 {
     static const char test_icalcomp_str_attachwithdata[] =
         "BEGIN:VALARM\r\n" "ATTACH;VALUE=BINARY:foofile\r\n" "END:VALARM\r\n";
+    static const char test_icalcomp_str_attachwithencodingdata[] =
+        "BEGIN:VALARM\r\n" "ATTACH;VALUE=BINARY;ENCODING=BASE64:YQECAAACAWEK\r\n" "END:VALARM\r\n";
 
+    int free_been_called = 0;
     icalattach *attach = icalattach_new_from_data("foofile", NULL, 0);
     icalcomponent *ac = icalcomponent_new(ICAL_VALARM_COMPONENT);
     icalproperty *ap = icalproperty_new_attach(attach);
@@ -4191,8 +4237,40 @@ void test_attach_data()
     }
     str_is("attach data", (const char *) icalattach_get_data(attach), "foofile");
     str_is("attach with data", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
-	icalattach_unref(attach);
-    icalproperty_free(ap);
+
+    icalattach_unref(attach);
+    icalcomponent_free(ac);
+
+    ac = icalcomponent_new_from_string(test_icalcomp_str_attachwithdata);
+    ap = icalcomponent_get_first_property(ac, ICAL_ATTACH_PROPERTY);
+    attach = icalproperty_get_attach(ap);
+    str_is("attach data 2", (const char *) icalattach_get_data(attach), "foofile");
+    str_is("attach with data 2", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
+
+    icalcomponent_free(ac);
+
+    attach = icalattach_new_from_data(strdup("foofile"), test_free_attach_data, &free_been_called);
+    ac = icalcomponent_new(ICAL_VALARM_COMPONENT);
+    ap = icalproperty_new_attach(attach);
+
+    icalcomponent_add_property(ac, ap);
+    if (VERBOSE) {
+        printf("%s\n", icalcomponent_as_ical_string(ac));
+    }
+    str_is("attach data 3", (const char *) icalattach_get_data(attach), "foofile");
+    str_is("attach with data 3", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
+
+    icalattach_unref(attach);
+    ok("Free should not be called yet", (!free_been_called));
+    icalcomponent_free(ac);
+    ok("Free should be called now", (free_been_called == 1));
+
+    ac = icalcomponent_new_from_string(test_icalcomp_str_attachwithencodingdata);
+    ap = icalcomponent_get_first_property(ac, ICAL_ATTACH_PROPERTY);
+    attach = icalproperty_get_attach(ap);
+    str_is("attach data 4", (const char *) icalattach_get_data(attach), "YQECAAACAWEK");
+    str_is("attach with data 4", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithencodingdata);
+
     icalcomponent_free(ac);
 }
 
@@ -4856,6 +4934,7 @@ int main(int argc, char *argv[])
     test_run("Test property parser", test_property_parse, do_test, do_header);
     test_run("Test Action", test_action, do_test, do_header);
     test_run("Test Value Parameter", test_value_parameter, do_test, do_header);
+    test_run("Test Empty Parameter", test_empty_parameter, do_test, do_header);
     test_run("Test X property", test_x_property, do_test, do_header);
     test_run("Test X parameter", test_x_parameter, do_test, do_header);
     test_run("Test request status", test_requeststat, do_test, do_header);

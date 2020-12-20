@@ -2,19 +2,18 @@
  FILE: icalvalue.h
  CREATOR: eric 20 March 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
  ======================================================================*/
 
 #ifndef ICALVALUE_H
@@ -24,16 +23,18 @@
 #include "libical_ical_export.h"
 #include "icalvalueimpl.h"
 
+/** @file icalvalue.h */
+
 #define ICAL_BOOLEAN_TRUE  1
 #define ICAL_BOOLEAN_FALSE 0
 
-/**
- * Deeply clone an icalvalue.
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);
+
+/** @brief Deeply clones an icalvalue.
+ *
  * Returns a pointer to the memory for the newly cloned icalvalue.
  * @since 3.1.0
  */
-LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);
-
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_clone(const icalvalue *value);
 
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_from_string(icalvalue_kind kind, const char *str);
@@ -55,7 +56,7 @@ LIBICAL_ICAL_EXPORT icalparameter_xliccomparetype icalvalue_compare(const icalva
 
 /**
  * @copydoc icalvalue_clone()
- * @deprecated use icalvalue_clone() instead
+ * @deprecated Use icalvalue_clone() instead
  */
 LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalvalue *icalvalue_new_clone(const icalvalue *value));
 
@@ -93,7 +94,9 @@ LIBICAL_ICAL_EXPORT int icalvalue_decode_ical_string(const char *szText,
                                                      char *szDecText, int nMaxBufferLen);
 
 /* For the library only -- do not make visible */
+/// @cond
 extern void print_date_to_string(char *str, const struct icaltimetype *data);
 extern void print_datetime_to_string(char *str, const struct icaltimetype *data);
+/// @endcond
 
 #endif /*ICALVALUE_H */

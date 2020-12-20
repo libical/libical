@@ -8,12 +8,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 /**
@@ -45,16 +45,16 @@ typedef struct icalattach_impl icalattach;
 
 /**
  * @typedef icalattach_free_fn_t
- * @brief (*unused*) Function to be called to free the data of an ::icalattach object.
+ * @brief Function to be called to free the data of an ::icalattach object.
  * @warning Currently not used
  *
  * This function type is used to free the data from an ::icalattach object created
  * with icalattach_new_from_data(). It is currently not used
  */
-typedef void (*icalattach_free_fn_t) (unsigned char *data, void *user_data);
+typedef void (*icalattach_free_fn_t) (char *data, void *user_data);
 
 /**
- * @brief Create new ::icalattach object from a URL.
+ * @brief Creates new ::icalattach object from a URL.
  * @param url The URL to create the object from
  * @return An ::icalattach object with the given URL as association
  * @sa icalattach_unref()
@@ -86,10 +86,10 @@ typedef void (*icalattach_free_fn_t) (unsigned char *data, void *user_data);
 LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_url(const char *url);
 
 /**
- * @brief Create new ::icalattach object from data.
+ * @brief Creates new ::icalattach object from data.
  * @param data The data to create the ::icalattach from
- * @param free_fn (*unused*) The function to free the data
- * @param free_fn_data (*unused*) Data to pass to the @a free_fn
+ * @param free_fn The function to free the data
+ * @param free_fn_data Data to pass to the @a free_fn
  * @return An ::icalattach object with the given data
  * @sa icalattach_unref()
  *

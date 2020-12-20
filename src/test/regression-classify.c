@@ -7,12 +7,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -27,7 +27,7 @@
 #include <libicalss/icalss.h>
 #include "regression.h"
 
-/* Get a note about the purpose of the property*/
+/* Gets a note about the purpose of the property*/
 static const char *get_note(icalcomponent *c)
 {
     icalproperty *p;
@@ -49,7 +49,7 @@ static const char *get_note(icalcomponent *c)
     return note;
 }
 
-/* Get the expected result about the purpose of the property*/
+/* Gets the expected result about the purpose of the property*/
 
 static const char *get_expect(icalcomponent *c)
 {

@@ -2,19 +2,18 @@
  FILE: icalperiod.h
  CREATOR: eric 26 Jan 2001
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -149,6 +148,7 @@ LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_null_period(void);
 
 /**
  * Checks if a given ::icalperiodtype is a null period.
+ * @param p The time period to check
  * @return 1 if @a p is a null period, 0 otherwise
  * @sa icalperiodtype_null_period()
  *
@@ -165,6 +165,7 @@ LIBICAL_ICAL_EXPORT int icalperiodtype_is_null_period(struct icalperiodtype p);
 
 /**
  * Checks if a given ::icalperiodtype is a valid period.
+ * @param p The time period to check
  * @return 1 if @a p is a valid period, 0 otherwise
  *
  * ### Usage

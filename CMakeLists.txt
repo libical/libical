@@ -121,10 +121,31 @@ set(LIBICAL_LIB_VERSION_STRING
 )
 
 set(PROJECT_VERSION "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}")
-set(PROJECT_URL "http://libical.github.io/libical/")
+set(PROJECT_URL "https://libical.github.io/libical/")
 
 # library build types
 set(LIBRARY_TYPE SHARED)
+
+########################################################
+
+option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
+if(WITH_CXX_BINDINGS)
+  enable_language(CXX)
+  if(CMAKE_CXX_COMPILER)
+    add_definitions(-DWITH_CXX_BINDINGS)
+  else()
+    message(STATUS
+      "Warning: Building the C++ bindings is not possible since a C++ compiler could not be found. "
+      "Turning-off C++ bindings"
+    )
+    set(WITH_CXX_BINDINGS False)
+  endif()
+endif()
+add_feature_info(
+  "Option WITH_CXX_BINDINGS"
+  WITH_CXX_BINDINGS
+  "build the C++ bindings. Requires a C++ compiler"
+)
 
 libical_option(STATIC_ONLY "Build static libraries only." False)
 if(STATIC_ONLY)
@@ -219,6 +240,7 @@ add_feature_info(
 )
 if(BDB_FOUND)
   set(HAVE_BDB True)
+  add_definitions(-DDB_DBM_HSEARCH=0) #set to 1 if hsearch support is needed
 endif()
 
 # MSVC specific definitions
@@ -277,7 +299,8 @@ if(WIN32 OR WINCE)
 else()
   set(DEF_USE_BUILTIN_TZDATA True)
 endif()
-libical_option(USE_BUILTIN_TZDATA "Build using our builtin timezone data, else use the system timezone data. ALWAYS true on Windows." ${DEF_USE_BUILTIN_TZDATA})
+libical_option(USE_BUILTIN_TZDATA "(Careful) Build using libical's built-in timezone data, else use the system timezone data on non-Windows systems. ALWAYS true on Windows. Non-Windows users should know what they're doing if they choose not to use system provided timezone data. The libical project does not guarantee that the built-in timezone data is up-to-date." ${DEF_USE_BUILTIN_TZDATA})
+mark_as_advanced(USE_BUILTIN_TZDATA)
 if(USE_BUILTIN_TZDATA)
   set(USE_BUILTIN_TZDATA 1)
 else()
@@ -351,7 +374,7 @@ if(ICAL_GLIB_VAPI)
   endif()
 endif()
 
-set(MIN_GLIB "2.32")
+set(MIN_GLIB "2.38")
 set(MIN_LIBXML "2.7.3")
 libical_option(ICAL_GLIB "Build libical-glib interface. Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True)
 if(ICAL_GLIB)
@@ -423,29 +446,14 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
 endif()
 
-########################################################
-
-libical_option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
-if(WITH_CXX_BINDINGS)
-  enable_language(CXX)
-  if(CMAKE_CXX_COMPILER)
-    add_definitions(-DWITH_CXX_BINDINGS)
-  else()
-    message(STATUS
-      "Warning: Building the C++ bindings is not possible since a C++ compiler could not be found. "
-      "Turning-off C++ bindings"
-    )
-    set(WITH_CXX_BINDINGS False)
-  endif()
-endif()
-
 #some test programs need to know if we are using 32-bit time
 if(SIZEOF_TIME_T EQUAL 4)
   set(USE_32BIT_TIME_T TRUE)
 endif()
 
 ################ Developer Options #####################
-libical_option(ABI_DUMPER "Build for abi-dumper (developer-only option)." False)
+libical_option(ABI_DUMPER "(Developer-only) Build for abi-dumper." False)
+mark_as_advanced(ABI_DUMPER)
 if(ABI_DUMPER)
   if(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_C_FLAGS "-g -Og")
@@ -456,7 +464,8 @@ if(ABI_DUMPER)
   endif()
 endif()
 
-libical_option(ADDRESS_SANITIZER "Build with the address sanitizer (developer-only option)." False)
+libical_option(ADDRESS_SANITIZER "(Developer-only) Build with the address sanitizer." False)
+mark_as_advanced(ADDRESS_SANITIZER)
 if(ADDRESS_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g")
@@ -481,7 +490,8 @@ if(ADDRESS_SANITIZER)
   endif()
 endif()
 
-libical_option(THREAD_SANITIZER "Build with the thread sanitizer (developer-only option)." False)
+libical_option(THREAD_SANITIZER "(Developer-only) Build with the thread sanitizer." False)
+mark_as_advanced(THREAD_SANITIZER)
 if(THREAD_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g")

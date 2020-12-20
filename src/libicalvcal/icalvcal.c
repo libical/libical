@@ -2,23 +2,23 @@
  FILE: icalvcal.c
  CREATOR: eric 25 May 00
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The original code is icalvcal.c
 
  The icalvcal_convert routine calls icalvcal_traverse_objects to do
- its work.s his routine steps through through all of the properties
+ its work.s his routine steps through all of the properties
  and components of a VObject. For each name of a property or a
  component, icalvcal_traverse_objects looks up the name in
  conversion_table[]. This table indicates whether the name is of a
@@ -55,9 +55,9 @@ enum datatype
 };
 
 /* The indices must match between the strings and the codes. */
-static const char *weekdays[] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
+static const char weekdays[][3] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
 
-static int weekday_codes[] = {
+static const int weekday_codes[] = {
     ICAL_SUNDAY_WEEKDAY,
     ICAL_MONDAY_WEEKDAY,
     ICAL_TUESDAY_WEEKDAY,

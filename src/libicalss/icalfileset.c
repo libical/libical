@@ -2,18 +2,18 @@
  FILE: icalfileset.c
  CREATOR: eric 23 December 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -104,9 +104,8 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
     (void)icalfileset_lock(fset);
 
     if (cluster_file_size > 0) {
-        icalerrorenum error;
 
-        if ((error = icalfileset_read_file(fset, mode)) != ICAL_NO_ERROR) {
+        if (icalfileset_read_file(fset, mode) != ICAL_NO_ERROR) {
             icalfileset_free(set);
             return 0;
         }
@@ -225,7 +224,7 @@ long icalfileset_filesize(icalfileset *fset)
             icalerror_set_errno(ICAL_FILE_ERROR);
             return -1;
         } else {
-            /* Lets assume that it is a file of the right type */
+            /* Let's assume that it is a file of the right type */
             return (long)sbuf.st_size;
         }
     }

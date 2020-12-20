@@ -1,6 +1,6 @@
 # Using Libical
 
->   Author: Eric Busboom <eric@softwarestudio.org>
+>   Author: Eric Busboom <eric@civicknowledge.com>
 >   
 >   Date: January 2001
 
@@ -29,15 +29,15 @@ at the [IETF Tools][] website:
 ### 1.1 The libical project
 
 This code is under active development. If you would like to contribute
-to the project, visit <http://libical.github.io/libical/>
+to the project, visit <https://libical.github.io/libical/>
 
 ### 1.2 License
 
 The code and datafiles in this distribution are licensed under the
-Mozilla Public License version 2.0. See <http://www.mozilla.org/MPL>
+Mozilla Public License version 2.0. See <https://www.mozilla.org/MPL>
 for a copy of the license. Alternately, you may use libical under
 the terms of the GNU Lesser General Public License, version 2.1.
-See <http://www.gnu.org/licenses/lgpl-2.1.html> for a copy of the LGPL.
+See <https://www.gnu.org/licenses/lgpl-2.1.html> for a copy of the LGPL.
 
 This dual license ensures that the library can be incorporated into
 both proprietary code and GPL'd programs, and will benefit from improvements

@@ -11,12 +11,12 @@
   for more details.
 
   You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <http://www.gnu.org/licenses/>.
+  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Timezone" native="icaltimezone" is_possible_global="true" destroy_func="i_cal_timezone_destroy">
     <method name="i_cal_timezone_new" corresponds="icaltimezone_new" kind="constructor" since="1.0">
         <returns type="ICalTimezone *" annotation="transfer full, allow-none" translator="i_cal_timezone_new_full" translator_argus="NULL, FALSE" comment="The newly created object of the type #ICalTimezone." />
-        <comment xml:space="preserve">The constructor of the type #ICalTimezone</comment>
+        <comment xml:space="preserve">The constructor of the type #ICalTimezone.</comment>
     </method>
     <method name="i_cal_timezone_destroy" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
         <parameter type="icaltimezone *" name="zone" comment="The #ICalTimezone to be freed"/>
@@ -24,24 +24,24 @@
         <custom>        icaltimezone_free (zone, 1);</custom>
     </method>
     <method name="i_cal_timezone_copy" corresponds="icaltimezone_copy" kind="clone" since="1.0">
-        <parameter type="const ICalTimezone *" name="zone" comment="The #ICalTimezone needs to be cloned."/>
+        <parameter type="const ICalTimezone *" name="zone" comment="The #ICalTimezone needs to be cloned"/>
         <returns type="ICalTimezone *" annotation="transfer full" translator="i_cal_timezone_new_full" translator_argus="NULL, FALSE" comment="The newly created #ICalTimezone with the same values as @zone"/>
-        <comment xml:space="preserve">The clone method for #ICalTimezone</comment>
+        <comment xml:space="preserve">The clone method for #ICalTimezone.</comment>
     </method>
     <method name="i_cal_timezone_free" corresponds="icaltimezone_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalTimezone *" name="zone" comment="The #ICalTimezone to be freed"/>
         <parameter type="gint" name="free_struct" autofill="1" comment="Whether to free it or reset it. 1 to free and 0 to reset"/>
-        <comment xml:space="preserve">The destructor of #ICalTimezone</comment>
+        <comment xml:space="preserve">The destructor of #ICalTimezone.</comment>
     </method>
     <method name="i_cal_timezone_set_tzid_prefix" corresponds="icaltimezone_set_tzid_prefix" kind="set" since="1.0">
         <parameter type="const gchar *" name="new_prefix" comment="The #ICalTimezone to be set"/>
         <comment xml:space="preserve">Sets the prefix to be used for tzid's generated from system tzdata. Must be globally unique (such as a domain name owned by the developer of the calling application), and begin and end with forward slashes. Do not change or de-allocate the string buffer after calling this.</comment>
     </method>
     <method name="i_cal_timezone_free_builtin_timezones" corresponds="icaltimezone_free_builtin_timezones" kind="others" since="1.0">
-        <comment xml:space="preserve">Free any builtin timezone information</comment>
+        <comment xml:space="preserve">Frees any builtin timezone information.</comment>
     </method>
     <method name="i_cal_timezone_get_builtin_timezone" corresponds="icaltimezone_get_builtin_timezone" kind="get" since="1.0">
-        <parameter type="const gchar *" name="location" annotation="nullable" comment="The location representing the timezone."/>
+        <parameter type="const gchar *" name="location" annotation="nullable" comment="The location representing the timezone"/>
         <returns type="ICalTimezone *" translator="i_cal_timezone_new_full" translator_argus="NULL, TRUE" annotation="transfer none, nullable" comment="The builtin #ICalTimezone with the name of @location"/>
         <comment xml:space="preserve">Returns a single builtin timezone, given its Olson city name.</comment>
     </method>
@@ -91,15 +91,15 @@
     </method>
     <method name="i_cal_timezone_get_component" corresponds="icaltimezone_get_component" kind="get" since="1.0">
         <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The #ICalTimezone to be queried"/>
-        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)zone" comment="the VTIMEZONE component of the @zone."/>
+        <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)zone" comment="The VTIMEZONE component of the @zone."/>
         <comment xml:space="preserve">Returns the VTIMEZONE component of a timezone.</comment>
     </method>
     <method name="i_cal_timezone_set_component" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimezone *" name="zone" comment="The #ICalTimezone to be set"/>
-        <parameter type="ICalComponent *" name="comp" comment="The VTIMEZONE component of an #ICalTimezone, initializing the tzid, location and tzname fields."/>
+        <parameter type="ICalComponent *" name="comp" comment="The VTIMEZONE component of an #ICalTimezone, initializing the tzid, location and tzname fields"/>
         <returns type="gint" comment="Whether the action is successful. 1 for success, 0 for failure."/>
         <comment xml:space="preserve">Sets the VTIMEZONE component of #ICalTimezone, initializing the tzid, location and tzname fields. It returns 1 on success or 0 on failure, i.e. no TZID was found.
- * 
+ *
  * @note The @zone assumes ownership of the @comp, thus make sure you pass an unowned #ICalComponent.</comment>
 	<custom xml:space="preserve">    g_return_val_if_fail(I_CAL_IS_TIMEZONE(zone), 0);
     g_return_val_if_fail(I_CAL_IS_COMPONENT(comp), 0);
@@ -111,31 +111,31 @@
     <method name="i_cal_timezone_get_display_name" corresponds="icaltimezone_get_display_name" kind="get" since="1.0">
         <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The #ICalTimezone to be queried"/>
         <returns type="const gchar *" comment="The display name of @zone"/>
-        <comment xml:space="preserve">Get the display name of the @zone.</comment>
+        <comment xml:space="preserve">Gets the display name of the @zone.</comment>
     </method>
     <method name="i_cal_time_convert_timezone" corresponds="icaltimezone_convert_time" kind="other" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The time to be converted"/>
-        <parameter type="ICalTimezone *" name="from_zone" annotation="nullable" comment="from timezone"/>
-        <parameter type="ICalTimezone *" name="to_zone" annotation="nullable" comment="to timezone"/>
+        <parameter type="ICalTimezone *" name="from_zone" annotation="nullable" comment="From timezone"/>
+        <parameter type="ICalTimezone *" name="to_zone" annotation="nullable" comment="To timezone"/>
         <comment>Convert time from one timezone to another.</comment>
     </method>
     <method name="i_cal_timezone_get_utc_offset" corresponds="icaltimezone_get_utc_offset" kind="get" since="1.0">
-        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The given #ICalTimezone."/>
-        <parameter type="ICalTime *" name="tt" annotation="nullable" native_op="POINTER" comment="The local time."/>
-        <parameter type="gint *" name="is_daylight" annotation="out, optional" comment="whether it is day light."/>
+        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The given #ICalTimezone"/>
+        <parameter type="ICalTime *" name="tt" annotation="nullable" native_op="POINTER" comment="The local time"/>
+        <parameter type="gint *" name="is_daylight" annotation="out, optional" comment="Whether it is day light"/>
         <returns type="gint" comment="UTC offset of the @zone"/>
         <comment>Calculates the UTC offset of a given local time in the given timezone.  It is the number of seconds to add to UTC to get local time.  The is_daylight flag is set to 1 if the time is in daylight-savings time.</comment>
     </method>
     <method name="i_cal_timezone_get_utc_offset_of_utc_time" corresponds="icaltimezone_get_utc_offset_of_utc_time" kind="get" since="1.0">
-        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The given #ICalTimezone."/>
-        <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The local time."/>
-        <parameter type="gint *" name="is_daylight" annotation="out, optional" comment="whether it is day light, can be %NULL"/>
+        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The given #ICalTimezone"/>
+        <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The local time"/>
+        <parameter type="gint *" name="is_daylight" annotation="out, optional" comment="Whether it is day light, can be %NULL"/>
         <returns type="gint" comment="UTC offset of the @zone"/>
         <comment>Calculates the UTC offset of a given UTC time in the given timezone.  It is the number of seconds to add to UTC to get local time.  The is_daylight flag is set to 1 if the time is in daylight-savings time.</comment>
     </method>
     <method name="i_cal_timezone_array_new" corresponds="CUSTOM" kind="other" since="1.0">
         <returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="Create a new array."/>
-        <comment xml:space="preserve">Create a new array of timezones.</comment>
+        <comment xml:space="preserve">Creates a new array of timezones.</comment>
         <custom>    ICalArray *zones_array;
 
     zones_array = i_cal_array_new_full(icaltimezone_array_new (), NULL, FALSE);
@@ -149,9 +149,9 @@
     </method>
     <method name="i_cal_timezone_array_append_from_vtimezone" corresponds="CUSTOM" kind="other" since="1.0">
         <parameter type="ICalArray *" name="timezones" comment="The timezones to be populated"/>
-        <parameter type="ICalComponent *" name="child" comment="The component to be appended to @timezones."/>
+        <parameter type="ICalComponent *" name="child" comment="The component to be appended to @timezones"/>
         <comment>Populate the array of timezones with a component.
- * 
+ *
  * @note The @timezones assumes ownership of the @child, thus make sure you pass an unowned #ICalComponent.</comment>
 	<custom xml:space="preserve">    g_return_if_fail(I_CAL_IS_ARRAY(timezones));
     g_return_if_fail(I_CAL_IS_COMPONENT(child));
@@ -161,55 +161,55 @@
     icaltimezone_array_append_from_vtimezone ((icalarray *)i_cal_object_get_native (I_CAL_OBJECT (timezones)), (icalcomponent *)i_cal_object_get_native (I_CAL_OBJECT (child)));</custom>
     </method>
     <method name="i_cal_timezone_array_free" corresponds="icaltimezone_array_free" annotation="skip" kind="other" since="1.0">
-        <parameter type="ICalArray *" name="timezones" native_op="STEAL" comment="Free an array."/>
-        <comment xml:space="preserve">Free an array of timezones.</comment>
+        <parameter type="ICalArray *" name="timezones" native_op="STEAL" comment="Free an array"/>
+        <comment xml:space="preserve">Frees an array of timezones.</comment>
     </method>
     <method name="i_cal_time_timezone_expand_vtimezone" corresponds="icaltimezone_expand_vtimezone" kind="other" since="2.0">
-        <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent."/>
-        <parameter type="gint" name="end_year" comment="The end year."/>
-        <parameter type="ICalArray *" name="changes" comment="The changes to be applies."/>
-        <comment xml:space="preserve">Apply a list of timezone changes on the array of components until the end year.</comment>
+        <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent"/>
+        <parameter type="gint" name="end_year" comment="The end year"/>
+        <parameter type="ICalArray *" name="changes" comment="The changes to be applies"/>
+        <comment xml:space="preserve">Applies a list of timezone changes on the array of components until the end year.</comment>
     </method>
     <method name="i_cal_timezone_get_location_from_vtimezone" corresponds="icaltimezone_get_location_from_vtimezone" kind="get" since="2.0">
-        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be queried."/>
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be queried"/>
         <returns type="gchar *" comment="The location of vtimezone."/>
-        <comment xml:space="preserve">Get the location of the vtimezone in component.</comment>
+        <comment xml:space="preserve">Gets the location of the vtimezone in component.</comment>
     </method>
     <method name="i_cal_timezone_get_tznames_from_vtimezone" corresponds="icaltimezone_get_tznames_from_vtimezone" kind="get" since="2.0">
-        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be queried."/>
+        <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be queried"/>
         <returns type="gchar *" comment="The name of vtimezone."/>
-        <comment xml:space="preserve">Get the name of the vtimezone in component.</comment>
+        <comment xml:space="preserve">Gets the name of the vtimezone in component.</comment>
     </method>
     <method name="i_cal_timezone_set_zone_directory" corresponds="set_zone_directory" kind="others" since="1.0">
         <parameter type="const gchar *" name="path" comment="The path to look for the zonefiles"/>
-        <comment xml:space="preserve">Set the directory to look for the zonefiles</comment>
+        <comment xml:space="preserve">Sets the directory to look for the zonefiles.</comment>
     </method>
     <method name="i_cal_timezone_free_zone_directory" corresponds="free_zone_directory" kind="others" since="1.0">
-        <comment xml:space="preserve">Free memory dedicated to the zonefile directory</comment>
+        <comment xml:space="preserve">Frees memory dedicated to the zonefile directory.</comment>
     </method>
     <method name="i_cal_timezone_release_zone_tab" corresponds="icaltimezone_release_zone_tab" kind="others" since="1.0">
-        <comment xml:space="preserve">Free memory dedicated to the zonefile directory</comment>
+        <comment xml:space="preserve">Frees memory dedicated to the zonefile directory.</comment>
     </method>
     <method name="i_cal_timezone_set_builtin_tzdata" corresponds="icaltimezone_set_builtin_tzdata" kind="set" since="2.0">
-        <parameter type="gboolean" name="set" comment="Whether to use builtin timezones files."/>
-        <comment xml:space="preserve">Set whether to use builtin timezones files.</comment>
+        <parameter type="gboolean" name="set" comment="Whether to use builtin timezones files"/>
+        <comment xml:space="preserve">Sets whether to use builtin timezones files.</comment>
     </method>
     <method name="i_cal_timezone_get_builtin_tzdata" corresponds="icaltimezone_get_builtin_tzdata" kind="get" since="2.0">
         <returns type="gboolean" comment="Whether to use builtin timezones files."/>
-        <comment xml:space="preserve">Get whether to use builtin timezones files.</comment>
+        <comment xml:space="preserve">Gets whether to use builtin timezones files.</comment>
     </method>
     <method name="i_cal_timezone_dump_changes" corresponds="icaltimezone_dump_changes" kind="other" since="1.0">
-        <parameter type="ICalTimezone *" name="zone" comment="The timezone to be queried."/>
-        <parameter type="gint" name="max_year" comment="max year"/>
-        <parameter type="FILE *" name="fp" comment="The file handle."/>
+        <parameter type="ICalTimezone *" name="zone" comment="The timezone to be queried"/>
+        <parameter type="gint" name="max_year" comment="Max year"/>
+        <parameter type="FILE *" name="fp" comment="The file handle"/>
         <returns type="gint" comment="1 if success."/>
-        <comment>This outputs a list of timezone changes for the given timezone to the given file, up to the maximum year given.</comment>
+        <comment>Outputs a list of timezone changes for the given timezone to the given file, up to the maximum year given.</comment>
     </method>
     <method name="i_cal_timezone_array_element_at" corresponds="CUSTOM" kind="other" since="1.0">
-        <parameter type="ICalArray *" name="timezones" comment="The array to be visited."/>
+        <parameter type="ICalArray *" name="timezones" comment="The array to be visited"/>
         <parameter type="guint" name="index" comment="The index"/>
         <returns type="ICalTimezone *" annotation="transfer full" translator_argus="timezones, FALSE" comment="The #ICalTimezone at the position @index in @timezones."/>
-        <comment>Get the #ICalTimezone at specified position in array.</comment>
+        <comment>Gets the #ICalTimezone at specified position in array.</comment>
         <custom>        return i_cal_timezone_new_full ((gpointer)i_cal_array_element_at (timezones, index), (GObject *)timezones, FALSE);</custom>
     </method>
 </structure>

@@ -8,12 +8,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -51,11 +51,16 @@ icalattach *icalattach_new_from_url(const char *url)
     return attach;
 }
 
+static void attach_data_free(char *data, void *free_fn_data)
+{
+    _unused(free_fn_data);
+    free(data);
+}
+
 icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn,
                                      void *free_fn_data)
 {
     icalattach *attach;
-    char *data_copy;
 
     icalerror_check_arg_rz((data != NULL), "data");
 
@@ -64,15 +69,19 @@ icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free
         return NULL;
     }
 
-    if ((data_copy = strdup(data)) == NULL) {
-        free(attach);
-        errno = ENOMEM;
-        return NULL;
+    if (!free_fn) {
+        data = strdup(data);
+        if (!data) {
+            free(attach);
+            errno = ENOMEM;
+            return NULL;
+        }
+        free_fn = attach_data_free;
     }
 
     attach->refcount = 1;
     attach->is_url = 0;
-    attach->u.data.data = data_copy;
+    attach->u.data.data = (char *) data;
     attach->u.data.free_fn = free_fn;
     attach->u.data.free_fn_data = free_fn_data;
 
@@ -99,12 +108,8 @@ void icalattach_unref(icalattach *attach)
 
     if (attach->is_url) {
         free(attach->u.url.url);
-    } else {
-        free(attach->u.data.data);
-/* unused for now
-        if (attach->u.data.free_fn)
-           (* attach->u.data.free_fn) (attach->u.data.data, attach->u.data.free_fn_data);
-*/
+    } else if (attach->u.data.free_fn) {
+        (* attach->u.data.free_fn) (attach->u.data.data, attach->u.data.free_fn_data);
     }
 
     free(attach);

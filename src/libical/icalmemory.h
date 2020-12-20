@@ -2,19 +2,18 @@
  FILE: icalmemory.h
  CREATOR: eric 30 June 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The Initial Developer of the Original Code is Eric Busboom
 ======================================================================*/
@@ -98,7 +97,7 @@ LIBICAL_ICAL_EXPORT void *icalmemory_tmp_buffer(size_t size);
 LIBICAL_ICAL_EXPORT char *icalmemory_tmp_copy(const char *str);
 
 /**
- * @brief Add an externally allocated buffer to the ring.
+ * @brief Adds an externally allocated buffer to the ring.
  * @param buf The externally allocated buffer to add to the ring
  *
  * Adds an externally allocated buffer to the ring. This ensures that libical
@@ -124,7 +123,7 @@ LIBICAL_ICAL_EXPORT char *icalmemory_tmp_copy(const char *str);
 LIBICAL_ICAL_EXPORT void icalmemory_add_tmp_buffer(void *buf);
 
 /**
- * @brief Free all memory used in the ring
+ * @brief Frees all memory used in the ring
  *
  * Frees all memory used in the ring. Depending on if ::HAVE_PTHREAD is set or
  * not, the ring buffer is allocated on a per-thread basis, meaning that if all
@@ -232,7 +231,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void *buf);
    have memory problems. */
 
 /**
- * @brief Append a string to a buffer.
+ * @brief Appends a string to a buffer.
  * @param buf The buffer to append the string to.
  * @param pos The position to append the string at.
  * @param buf_size The size of the buffer (will be changed if buffer is
@@ -273,7 +272,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_append_string(char **buf, char **pos, size_t
                                                   const char *string);
 
 /**
- * @brief Append a character to a buffer.
+ * @brief Appends a character to a buffer.
  * @param buf The buffer to append the character to.
  * @param pos The position to append the character at.
  * @param buf_size The size of the buffer (will be changed if buffer is
@@ -314,7 +313,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_append_string(char **buf, char **pos, size_t
 LIBICAL_ICAL_EXPORT void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch);
 
 /**
- * @brief Create a duplicate of a string.
+ * @brief Creates a duplicate of a string.
  * @param s The string to duplicate.
  * @return A pointer to a string containing the same data as @a s
  *

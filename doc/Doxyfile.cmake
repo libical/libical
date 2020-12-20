@@ -136,6 +136,7 @@ HTML_FILE_EXTENSION    = .html
 HTML_HEADER            =
 HTML_FOOTER            =
 HTML_STYLESHEET        =
+HTML_TIMESTAMP         = YES
 GENERATE_HTMLHELP      = NO
 CHM_FILE               =
 HHC_LOCATION           =

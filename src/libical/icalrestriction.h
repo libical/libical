@@ -2,19 +2,18 @@
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The original code is icalrestriction.h
 
@@ -42,31 +41,31 @@
  */
 typedef enum icalrestriction_kind
 {
-    /** No restriction */
+    /** No restriction. */
     ICAL_RESTRICTION_NONE = 0, /* 0 */
 
-    /** Zero */
+    /** Zero. */
     ICAL_RESTRICTION_ZERO, /* 1 */
 
-    /** One */
+    /** One. */
     ICAL_RESTRICTION_ONE, /* 2 */
 
-    /** Zero or more */
+    /** Zero or more. */
     ICAL_RESTRICTION_ZEROPLUS, /* 3 */
 
-    /** One or more */
+    /** One or more. */
     ICAL_RESTRICTION_ONEPLUS, /* 4 */
 
-    /** Zero or one */
+    /** Zero or one. */
     ICAL_RESTRICTION_ZEROORONE, /* 5 */
 
-    /** Zero or one, exclusive with another property */
+    /** Zero or one, exclusive with another property. */
     ICAL_RESTRICTION_ONEEXCLUSIVE, /* 6 */
 
-    /** Zero or one, mutual with another property */
+    /** Zero or one, mutual with another property. */
     ICAL_RESTRICTION_ONEMUTUAL, /* 7 */
 
-    /** Unknown */
+    /** Unknown. */
     ICAL_RESTRICTION_UNKNOWN    /* 8 */
 } icalrestriction_kind;
 

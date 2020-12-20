@@ -2,19 +2,18 @@
  FILE: icalclassify.c
  CREATOR: ebusboom 23 aug 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -58,7 +57,7 @@ char *icalclassify_lowercase(const char *str)
     return xnew;
 }
 
-/* Return a set of components that intersect in time with comp. For
+/** Returns a set of components that intersect in time with comp. For
 component X and Y to intersect:
     X.DTSTART < Y.DTEND && X.DTEND > Y.DTSTART
 */

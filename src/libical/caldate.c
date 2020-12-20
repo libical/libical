@@ -64,15 +64,15 @@
 
 /**
  *	caldat computes the day of the week, the day of the year
- *	the gregorian (or julian) calendar date and the universal
- *	time from the julian decimal date.
- *	for astronomical purposes, The Gregorian calendar reform occurred
- *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
+ *	the Gregorian (or Julian) calendar date and the universal
+ *	time from the Julian decimal date.
+ *	For astronomical purposes, The Gregorian calendar reform occurred
+ *	on 15 Oct. 1582.  This is 05 Oct 1582 by the Julian calendar.
 
  *	Input:	a ut_instant structure pointer, where the j_date element
  *		has been set. ( = 0 for 01 Jan 4713 B.C. 12 HR UT )
  *
- *	output:  will set all the other elements of the structure.
+ *	Output:  will set all the other elements of the structure.
  *		As a convienence, the function will also return the year.
  *
  *	Reference: Astronomial formulae for calculators, meeus, p 23
@@ -93,7 +93,7 @@ struct ut_instant * date;
 	long ke;
 	long ialp;
 
-	jd = (long) (date->j_date + 0.5);	/* integer julian date */
+	jd = (long) (date->j_date + 0.5);	/* integer Julian date */
 	frac = date->j_date + 0.5 - (double) jd + 1.0e-10; /* day fraction */
 	ka = (long) jd;
 	if ( jd >= 2299161L )
@@ -139,10 +139,10 @@ struct ut_instant * date;
 }
 
 /**
- *	juldat computes the julian decimal date (j_date) from
- *	the gregorian (or Julian) calendar date.
- *	for astronomical purposes, The Gregorian calendar reform occurred
- *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
+ *	juldat computes the Julian decimal date (j_date) from
+ *	the Gregorian (or Julian) calendar date.
+ *	For astronomical purposes, The Gregorian calendar reform occurred
+ *	on 15 Oct. 1582.  This is 05 Oct 1582 by the Julian calendar.
  *	Input:  a ut_instant structure pointer where Day, Month, Year and
  *		i_hour, i_minute, d_second have been set for the date
  *		in question.
@@ -185,7 +185,7 @@ struct ut_instant * date;
 	}
 	ia = iy0 / 100L;
 	ib = 2L - ia + (ia >> 2);
-	/* calculate julian date	*/
+	/* calculate Julian date	*/
 	if ( date->year < 0L )
 		jd = (long) ((365.25 * (double) iy0) - 0.75)
 			+ (long) (30.6001 * (im0 + 1L) )
@@ -201,26 +201,6 @@ struct ut_instant * date;
 	date->weekday = (jd + 1L) % 7L;
 	return( date->j_date );
 }	/*	end of	double juldat( date )	*/
-
-
-/**
- *	caldat computes the day of the week, the day of the year
- *	the gregorian (or julian) calendar date
- *	from the julian decimal date.
- *	for astronomical purposes, The Gregorian calendar reform occurred
- *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
-
- *	Input:	a ut_instant structure pointer, where the j_date element
- *		has been set. ( = 0 for 01 Jan 4713 B.C.)
- *
- *	output:  will set all the other elements of the structure.
- *		As a convienence, the function will also return the year.
- *
- *	Reference: Astronomial formulae for calculators, meeus, p 23
- *	from fortran program by F. Espenak - April 1982 Page 277,
- *	50 Year canon of solar eclipses: 1986-2035
- *
- */
 
 void caldat_int( date )
 struct ut_instant_int * date;
@@ -269,22 +249,6 @@ struct ut_instant_int * date;
 			- (((date->month + 9) / 12) << 1)
 			+ date->day - 30;
 }
-
-/**
- *	juldat computes the julian decimal date (j_date) from
- *	the gregorian (or Julian) calendar date.
- *	for astronomical purposes, The Gregorian calendar reform occurred
- *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
- *	Input:  a ut_instant structure pointer where Day, Month, Year
- *      have been set for the date in question.
- *
- *	Output: the j_date and weekday elements of the structure will be set.
- *		Also, the return value of the function will be the j_date too.
- *
- *	Reference: Astronomial formulae for calculators, meeus, p 23
- *	from fortran program by F. Espenak - April 1982 Page 276,
- *	50 Year canon of solar eclipses: 1986-2035
- */
 
 void juldat_int( date )
 struct ut_instant_int * date;

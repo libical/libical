@@ -9,12 +9,12 @@
  * it under the terms of either:
  *
  *   The LGPL as published by the Free Software Foundation, version
- *   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+ *   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
  *
  * Or:
  *
  *   The Mozilla Public License Version 2.0. You may obtain a copy of
- *   the License at http://www.mozilla.org/MPL/
+ *   the License at https://www.mozilla.org/MPL/
  */
 
 #ifndef ICALSPANLIST_CXX_H
@@ -49,33 +49,33 @@ public:
     ICalSpanList();
     ICalSpanList(const ICalSpanList &v);
 
-    /** Construct an ICalSpanList from an icalset */
+    /** Constructs an ICalSpanList from an icalset */
     ICalSpanList(icalset *set, icaltimetype start, icaltimetype end);
 
-    /** Construct an ICalSpanList from the VFREEBUSY chunk of a icalcomponent */
+    /** Constructs an ICalSpanList from the VFREEBUSY chunk of a icalcomponent */
     explicit ICalSpanList(icalcomponent *comp);
 
-    /** Construct an ICalSpanList from the VFREEBUSY chunk of a vcomponent */
+    /** Constructs an ICalSpanList from the VFREEBUSY chunk of a vcomponent */
     explicit ICalSpanList(VComponent &comp);
 
     /** Destructor */
     ~ICalSpanList();
 
-    /** Return a VFREEBUSY icalcomponent */
+    /** Returns a VFREEBUSY icalcomponent */
     VComponent *get_vfreebusy(const char *organizer, const char *attendee);
 
     ICalSpanList &operator=(const ICalSpanList &);
 
-    /** Return the base data when casting */
+    /** Returns the base data when casting */
     operator  icalspanlist *()
     {
         return data;
     }
 
-    /** Return a vector of the number of events over delta t */
+    /** Returns a vector of the number of events over delta t */
     std::vector < int >as_vector(int delta_t);
 
-    /** Dump the spanlist to stdout */
+    /** Dumps the spanlist to STDOUT */
     void dump();
 
 private:

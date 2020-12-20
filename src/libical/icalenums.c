@@ -2,19 +2,18 @@
  FILE: icalenum.c
  CREATOR: eric 29 April 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -78,8 +77,6 @@ static const struct
     {ICAL_UNKNOWN_STATUS, 0, 0, "Error: Unknown request status"}
 };
 
-/*** @brief Return the descriptive text for a request status
- */
 const char *icalenum_reqstat_desc(icalrequeststatus stat)
 {
     int i;
@@ -102,8 +99,6 @@ char *icalenum_reqstat_code(icalrequeststatus stat)
     return buf;
 }
 
-/*** @brief Return the code for a request status
- */
 char *icalenum_reqstat_code_r(icalrequeststatus stat)
 {
     int i, major, minor;
@@ -120,8 +115,6 @@ char *icalenum_reqstat_code_r(icalrequeststatus stat)
     return NULL;
 }
 
-/*** @brief Return the major number for a request status
- */
 short icalenum_reqstat_major(icalrequeststatus stat)
 {
     int i;
@@ -134,8 +127,6 @@ short icalenum_reqstat_major(icalrequeststatus stat)
     return -1;
 }
 
-/*** @brief Return the minor number for a request status
- */
 short icalenum_reqstat_minor(icalrequeststatus stat)
 {
     int i;
@@ -148,8 +139,6 @@ short icalenum_reqstat_minor(icalrequeststatus stat)
     return -1;
 }
 
-/*** @brief Return a request status for major/minor status numbers
- */
 icalrequeststatus icalenum_num_to_reqstat(short major, short minor)
 {
     int i;

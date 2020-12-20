@@ -17,7 +17,7 @@ if(ICU_FOUND)
   include_directories(${ICU_INCLUDE_DIRS})
 endif()
 
-set(PACKAGE_DATA_DIR "\\\"${CMAKE_INSTALL_PREFIX}/share/libical\\\"")
+set(PACKAGE_DATA_DIR "${CMAKE_INSTALL_PREFIX}/share/libical")
 add_definitions(-DPACKAGE_DATA_DIR="${PACKAGE_DATA_DIR}")
 
 set(ICALSCRIPTS ${CMAKE_SOURCE_DIR}/scripts/)

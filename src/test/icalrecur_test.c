@@ -2,19 +2,18 @@
  FILE: icalrecur_test.c
  CREATOR: Ken Murchison 26 September 2014
 
- (C) COPYRIGHT 2000 Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000 Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 /*
@@ -391,6 +390,16 @@ const struct recur rfc5545[] = {
      "FREQ=WEEKLY;BYDAY=WE,FR;INTERVAL=2;COUNT=4",
      NULL},
 
+    /* First 2 and last 2 ISO weeks of the year on Tue */
+    {"20130101T000000",
+     "FREQ=YEARLY;BYWEEKNO=1,2,-1,-2;BYDAY=TU;UNTIL=20170101T000000Z",
+     NULL},
+
+    /* 53rd ISO week of the year on Tue and Sat */
+    {"20130101T000000",
+     "FREQ=YEARLY;BYWEEKNO=53;BYDAY=TU,SA;UNTIL=20170101T000000Z",
+     NULL},
+
     {NULL, NULL, NULL}
 };
 
@@ -572,8 +581,6 @@ const struct recur rscale[] = {
 
 int main(int argc, char *argv[])
 {
-    int opt;
-
     /* Default to RFC 5545 tests */
     const struct recur *r = rfc5545;
     FILE *fp = fopen("test.out", "w");
@@ -584,22 +591,21 @@ int main(int argc, char *argv[])
         return (1);
     }
 
-    while ((opt = getopt(argc, argv, "rv")) != EOF) {
-        switch (opt) {
-        case 'r':      /* Do RSCALE tests */
+    /* Do not use getopt for command line parsing -- for portability on Windows */
+    for (int i = 1; i < argc; ++i) {
+        if (strncmp(argv[i], "-r", 2) == 0) { /* Do RSCALE tests */
             r = rscale;
-            break;
-
-        case 'v':      /* Verbose output to stdout */
-            verbose = 1;
-            break;
-
-        default:
-            fprintf(stderr, "usage: %s [-r]\n", argv[0]);
-            fclose(fp);
-            return (1);
-            break;
+            continue;
         }
+
+        if (strncmp(argv[i], "-v", 2) == 0) { /* Verbose output to stdout */
+            verbose = 1;
+            continue;
+        }
+
+        fprintf(stderr, "usage: %s [-r]\n", argv[0]);
+        fclose(fp);
+        return (1);
     }
 
     for (; r->dtstart; r++) {

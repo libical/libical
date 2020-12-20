@@ -8,12 +8,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifndef ICALCLUSTER_H
@@ -26,6 +26,11 @@
 
 typedef struct icalcluster_impl icalcluster;
 
+/**
+ * @brief Create a cluster with a key/value pair.
+ *
+ * @todo Always do a deep copy.
+ */
 LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_new(const char *key, icalcomponent *data);
 
 /**
@@ -63,7 +68,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_first_component(icalcluster
 LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_next_component(icalcluster *cluster);
 
 /**
- * @copydoc icalcluster_new()
+ * @copydoc icalcluster_clone()
  * @deprecated use icalcluster_clone() instead
  */
 LIBICAL_ICALSS_EXPORT LIBICAL_DEPRECATED(icalcluster *icalcluster_new_clone(

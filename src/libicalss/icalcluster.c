@@ -8,12 +8,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 /**
@@ -51,11 +51,6 @@ static icalcluster *icalcluster_new_impl(void)
     return impl;
 }
 
-/**
- * Create a cluster with a key/value pair.
- *
- * @todo Always do a deep copy.
- */
 icalcluster *icalcluster_new(const char *key, icalcomponent *data)
 {
     struct icalcluster_impl *impl = icalcluster_new_impl();
@@ -81,7 +76,7 @@ icalcluster *icalcluster_new(const char *key, icalcomponent *data)
 }
 
 /**
- * Deep clone an icalcluster to a new one
+ * @brief Deep clone an icalcluster to a new one
  */
 
 icalcluster *icalcluster_clone(const icalcluster *data)
@@ -96,10 +91,6 @@ icalcluster *icalcluster_clone(const icalcluster *data)
     return impl;
 }
 
-/**
- * Deprecated function to clone a cluster
- * @deprecated use ucalcluster_clone() instead
- */
 icalcluster *icalcluster_new_clone(const icalcluster *data)
 {
     return icalcluster_clone(data);
@@ -196,7 +187,8 @@ int icalcluster_count_components(icalcluster *impl, icalcomponent_kind kind)
     return icalcomponent_count_components(impl->data, kind);
 }
 
-/** Iterate through components **/
+/** @brief Iterate through components
+ */
 icalcomponent *icalcluster_get_current_component(icalcluster *impl)
 {
     icalerror_check_arg_rz((impl != 0), "cluster");

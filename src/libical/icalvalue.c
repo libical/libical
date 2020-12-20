@@ -2,19 +2,18 @@
  FILE: icalvalue.c
  CREATOR: eric 02 May 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
   Contributions from:
      Graham Davison <g.m.davison@computer.org>
@@ -309,7 +308,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
         case ',':
             /* unescaped COMMA is allowed in CATEGORIES property as its
                considered a list delimiter here, see:
-               http://tools.ietf.org/html/rfc5545#section-3.8.1.2 */
+               https://tools.ietf.org/html/rfc5545#section-3.8.1.2 */
             if ((icalproperty_isa(value->parent) == ICAL_CATEGORIES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_RESOURCES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_POLLPROPERTIES_PROPERTY)) {
@@ -370,7 +369,7 @@ static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char
  * The decimal separator (if any) of the double has to be '.'
  * The code is locale *independent* and does *not* change the locale.
  * It should be thread safe.
- * If you want a code that that does the same job with a decimal separator
+ * If you want a code that does the same job with a decimal separator
  * dependent on the current locale, then use strtof() from libc.
  */
 static int simple_str_to_double(const char *from, double *result, char **to)
@@ -433,6 +432,12 @@ static int simple_str_to_double(const char *from, double *result, char **to)
     return 0;
 }
 
+static void free_icalvalue_attach_data(char *data, void *user_data)
+{
+    _unused(user_data);
+    free(data);
+}
+
 static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                                                        const char *str, icalproperty ** error)
 {
@@ -463,7 +468,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         {
             icalattach *attach;
 
-            attach = icalattach_new_from_data(str, NULL, 0);
+            attach = icalattach_new_from_data(strdup(str), free_icalvalue_attach_data, 0);
             if (!attach)
               break;
 
@@ -542,7 +547,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         {
             int t, utcoffset, hours, minutes, seconds;
 
-            /* treat the UTCOFSET string a a decimal number, disassemble its digits
+            /* treat the UTCOFSET string as a decimal number, disassemble its digits
                and reconstruct it as sections */
             t = strtol(str, 0, 10);
             /* add phantom seconds field */

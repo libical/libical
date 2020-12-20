@@ -72,7 +72,7 @@
 
 typedef struct ut_instant
 {
-    double j_date;      /**< julian decimal date, 0 = 01 Jan 4713 BC 12 HR UT */
+    double j_date;      /**< Julian decimal date, 0 = 01 Jan 4713 BC 12 HR UT */
     long year;          /**< year, valid range [-4,713, +2,147,483,647] */
     int month;          /**<    [1-12]  */
     int day;            /**<    [1-31]  */
@@ -88,12 +88,12 @@ typedef struct ut_instant
 
 /*      Functions in caldate.c  */
 
-/** converts julian date to year,mo,da
+/** Converts julian date to year,mo,da
  *  @deprecated use caldat_int() instead
  */
 LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(long caldat(UTinstantPtr));
 
-/** returns julian day from year,mo,da
+/** Returns julian day from year,mo,da
  *  @deprecated use juldat_int() instead
  */
 LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(double juldat(UTinstantPtr));
@@ -110,10 +110,41 @@ typedef struct ut_instant_int
 
 /*      Functions in caldate.c  */
 
-/** converts julian date to year,mo,da */
+/**
+ *	caldat computes the day of the week, the day of the year
+ *	the gregorian (or julian) calendar date
+ *	from the julian decimal date.
+ *	for astronomical purposes, The Gregorian calendar reform occurred
+ *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
+
+ *	Input:	a ut_instant structure pointer, where the j_date element
+ *		has been set. ( = 0 for 01 Jan 4713 B.C.)
+ *
+ *	output:  will set all the other elements of the structure.
+ *		As a convienence, the function will also return the year.
+ *
+ *	Reference: Astronomial formulae for calculators, meeus, p 23
+ *	from fortran program by F. Espenak - April 1982 Page 277,
+ *	50 Year canon of solar eclipses: 1986-2035
+ *
+ */
 void caldat_int(UTinstantIntPtr);
 
-/** returns julian day from year,mo,da */
+/**
+ *	juldat computes the julian decimal date (j_date) from
+ *	the gregorian (or Julian) calendar date.
+ *	for astronomical purposes, The Gregorian calendar reform occurred
+ *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
+ *	Input:  a ut_instant structure pointer where Day, Month, Year
+ *      have been set for the date in question.
+ *
+ *	Output: the j_date and weekday elements of the structure will be set.
+ *		Also, the return value of the function will be the j_date too.
+ *
+ *	Reference: Astronomial formulae for calculators, meeus, p 23
+ *	from fortran program by F. Espenak - April 1982 Page 276,
+ *	50 Year canon of solar eclipses: 1986-2035
+ */
 void juldat_int(UTinstantIntPtr);
 
 #endif

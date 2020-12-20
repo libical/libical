@@ -2,19 +2,18 @@
  FILE:
  CREATOR: eric 25 June 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The Initial Developer of the Original Code is Eric Busboom
 ======================================================================*/
@@ -87,7 +86,7 @@ int main(int argc, char *argv[])
         int stress;
         int base64;
         int qp;
-        int sleep;
+        int sleepy;
         int count;
         char *input_file;
     } opt;
@@ -97,10 +96,15 @@ int main(int argc, char *argv[])
     program_name = (char *)strrchr((char *)argv[0], '/');
     program_name++;
 
+    opt.input_file = NULL;
+
     while ((c = getopt(argc, argv, "nsbqi:S:c:")) != -1) {
         switch (c) {
         case 'i':{
                 /* Input comes from named file */
+                if (opt.input_file) {
+                    free(opt.input_file);
+                }
                 opt.input_file = strdup(optarg);
                 break;
             }
@@ -139,7 +143,7 @@ int main(int argc, char *argv[])
             }
         case 'S':{
                 /* sleep at end of run */
-                opt.sleep = atoi(optarg);
+                opt.sleepy = atoi(optarg);
                 break;
             }
 
@@ -293,8 +297,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (opt.sleep != 0) {
-        sleep((unsigned int)opt.sleep);
+    if (opt.sleepy != 0) {
+        sleep((unsigned int)opt.sleepy);
     }
 
     if (opt.input_file != 0) {

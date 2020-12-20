@@ -2,19 +2,18 @@
  FILE: icaltime.c
  CREATOR: eric 02 June 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-   http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -350,7 +349,7 @@ int icaldurationtype_is_null_duration(struct icaldurationtype d)
     }
 }
 
-/* in icalvalue_new_from_string_with_error, we should not call
+/* In icalvalue_new_from_string_with_error, we should not call
    icaldurationtype_is_null_duration() to see if there is an error
    condition. Null duration is perfectly valid for an alarm.
    We cannot depend on the caller to check icalerrno either,

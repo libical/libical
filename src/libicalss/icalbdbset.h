@@ -7,12 +7,12 @@
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifndef ICALBDBSET_H
@@ -107,7 +107,7 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_select(icalset *store, icalgauge 
 
 LIBICAL_ICALSS_EXPORT void icalbdbset_clear(icalset *store);
 
-/* Get and search for a component by uid */
+/* Gets and searches for a component by uid */
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch(icalset *set,
                                                       icalcomponent_kind kind, const char *uid);
 

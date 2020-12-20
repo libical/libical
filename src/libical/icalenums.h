@@ -1,19 +1,18 @@
 /*======================================================================
  FILE: icalenums.h
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  Contributions from:
     Graham Davison <g.m.davison@computer.org>
@@ -23,6 +22,8 @@
 #define ICALENUMS_H
 
 #include "libical_ical_export.h"
+
+/** @file icalenums.h */
 
 /***********************************************************************
  * Component enumerations
@@ -55,7 +56,7 @@ typedef enum icalcomponent_kind
     ICAL_VCAR_COMPONENT,
     ICAL_VCOMMAND_COMPONENT,
     ICAL_XLICINVALID_COMPONENT,
-    ICAL_XLICMIMEPART_COMPONENT, /* a non-stardard component that mirrors
+    ICAL_XLICMIMEPART_COMPONENT, /* A non-stardard component that mirrors
                                            structure of MIME data */
     ICAL_VAVAILABILITY_COMPONENT,
     ICAL_XAVAILABLE_COMPONENT,
@@ -113,16 +114,26 @@ typedef enum icalrequeststatus
     ICAL_9_0_UNRECOGNIZED_COMMAND
 } icalrequeststatus;
 
+/** @brief Returns the descriptive text for a request status.
+ */
 LIBICAL_ICAL_EXPORT const char *icalenum_reqstat_desc(icalrequeststatus stat);
 
+/** @brief Returns the major number for a request status
+ */
 LIBICAL_ICAL_EXPORT short icalenum_reqstat_major(icalrequeststatus stat);
 
+/** @brief Returns the minor number for a request status
+ */
 LIBICAL_ICAL_EXPORT short icalenum_reqstat_minor(icalrequeststatus stat);
 
+/** @brief Returns a request status for major/minor status numbers
+ */
 LIBICAL_ICAL_EXPORT icalrequeststatus icalenum_num_to_reqstat(short major, short minor);
 
 LIBICAL_ICAL_EXPORT char *icalenum_reqstat_code(icalrequeststatus stat);
 
+/** @brief Returns the code for a request status.
+ */
 LIBICAL_ICAL_EXPORT char *icalenum_reqstat_code_r(icalrequeststatus stat);
 
 /***********************************************************************

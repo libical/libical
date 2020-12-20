@@ -1,18 +1,17 @@
 #!/usr/bin/env perl
 ################################################################################
-# (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-#     http://www.softwarestudio.org
+# (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 #
 # This library is free software; you can redistribute it and/or modify
 # it under the terms of either:
 #
 #   The LGPL as published by the Free Software Foundation, version
-#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.txt
+#   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.txt
 #
 # Or:
 #
 #   The Mozilla Public License Version 2.0. You may obtain a copy of
-#   the License at http://www.mozilla.org/MPL/
+#   the License at https://www.mozilla.org/MPL/
 ################################################################################
 
 use Getopt::Std;
@@ -70,13 +69,12 @@ if ($opt_c or $opt_h and !$opt_i) {
 
   \044Id:\044
 
-  (C) COPYRIGHT 1999 Eric Busboom <eric@softwarestudio.org>
-  http://www.softwarestudio.org
+  (C) COPYRIGHT 1999 Eric Busboom <eric@civicknowledge.com>
 
   The contents of this file are subject to the Mozilla Public License
   Version 1.0 (the "License"); you may not use this file except in
   compliance with the License. You may obtain a copy of the License at
-  http://www.mozilla.org/MPL/
+  https://www.mozilla.org/MPL/
 
   Software distributed under the License is distributed on an "AS IS"
   basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See

@@ -2,30 +2,29 @@
  FILE: icalparser.c
  CREATOR: eric 04 August 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
   The Initial Developer of the Original Code is Eric Busboom
  ======================================================================*/
@@ -173,7 +172,7 @@ static char *parser_get_next_char(char c, char *str, int qm)
     return 0;
 }
 
-/** make a new tmp buffer out of a substring */
+/** Makes a new tmp buffer out of a substring. */
 static char *make_segment(char *start, char *end)
 {
     char *buf, *tmp;
@@ -217,7 +216,7 @@ static char *parser_get_prop_name(char *line, char **end)
     return str;
 }
 
-/* Decode parameter value per RFC6868 */
+/** Decode parameter value per RFC6868 */
 static void parser_decode_param_value(char *value)
 {
     char *in, *out;
@@ -275,7 +274,7 @@ static int parser_get_param_name_stack(char *line, char *name, size_t name_lengt
         /* Dequote the value */
         next++;
 
-        end_quote = parser_get_next_char('"', next, 0);
+        end_quote = (*next == '"') ? next : parser_get_next_char('"', next, 0);
 
         if (end_quote == 0) {
             return 0;
@@ -322,7 +321,7 @@ static char *parser_get_param_name_heap(char *line, char **end)
     *end = next + 1;
     if (**end == '"') {
         *end = *end + 1;
-        next = parser_get_next_char('"', *end, 0);
+        next = (**end == '"') ? *end : parser_get_next_char('"', *end, 0);
         if (next == 0) {
             free(str);
             *end = NULL;
@@ -485,10 +484,6 @@ static char *parser_get_next_parameter(char *line, char **end)
     }
 }
 
-/**
- * Get a single property line, from the property name through the
- * final new line, and include any continuation lines
- */
 char *icalparser_get_line(icalparser *parser,
                           icalparser_line_gen_func line_gen_func)
 {
@@ -767,7 +762,11 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
         comp_kind = icalenum_string_to_component_kind(str);
 
-        c = icalcomponent_new(comp_kind);
+        if (comp_kind == ICAL_X_COMPONENT) {
+            c = icalcomponent_new_x(str);
+        } else {
+            c = icalcomponent_new(comp_kind);
+        }
 
         if (c == 0) {
             c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);

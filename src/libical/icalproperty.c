@@ -2,19 +2,18 @@
  FILE: icalproperty.c
  CREATOR: eric 28 April 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
   The original code is icalproperty.c
 ======================================================================*/
@@ -219,7 +218,7 @@ void icalproperty_free(icalproperty *p)
 
 /* This returns where the start of the next line should be. chars_left does
    not include the trailing '\0'. */
-static size_t MAX_LINE_LEN = 75;
+static const size_t MAX_LINE_LEN = 75;
 
 static char *get_next_line_start(char *line_start, size_t chars_left)
 {
@@ -243,7 +242,7 @@ static char *get_next_line_start(char *line_start, size_t chars_left)
     }
     /* Now try to split on a UTF-8 boundary defined as a 7-bit
        value or as a byte with the two high-most bits set:
-       11xxxxxx.  See http://czyborra.com/utf/ */
+       11xxxxxx.  See https://czyborra.com/utf/ */
 
     pos = line_start + MAX_LINE_LEN - 1;
     while (pos > line_start) {
@@ -631,16 +630,6 @@ char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *nam
     return str;
 }
 
-/** @brief Remove all parameters with the specified kind.
- *
- *  @param prop   A valid icalproperty.
- *  @param kind   The kind to remove (ex. ICAL_TZID_PARAMETER)
- *
- *  See icalproperty_remove_parameter_by_name() and
- *  icalproperty_remove_parameter_by_ref() for alternate ways of
- *  removing parameters
- */
-
 void icalproperty_remove_parameter_by_kind(icalproperty *prop, icalparameter_kind kind)
 {
     pvl_elem p;
@@ -657,20 +646,6 @@ void icalproperty_remove_parameter_by_kind(icalproperty *prop, icalparameter_kin
         }
     }
 }
-
-/** @brief Remove all parameters with the specified name.
- *
- *  @param prop   A valid icalproperty.
- *  @param name   The name of the parameter to remove
- *
- *  This function removes parameters with the given name.  The name
- *  corresponds to either a built-in name (TZID, etc.) or the name of
- *  an extended parameter (X-FOO)
- *
- *  See icalproperty_remove_parameter_by_kind() and
- *  icalproperty_remove_parameter_by_ref() for alternate ways of removing
- *  parameters
- */
 
 void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
 {
@@ -700,15 +675,6 @@ void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
         }
     }
 }
-
-/** @brief Remove the specified parameter reference from the property.
- *
- *  @param prop   A valid icalproperty.
- *  @param parameter   A reference to a specific icalparameter.
- *
- *  This function removes the specified parameter reference from the
- *  property.
- */
 
 void icalproperty_remove_parameter_by_ref(icalproperty *prop, icalparameter *parameter)
 {
@@ -971,18 +937,18 @@ void icalproperty_normalize(icalproperty *prop)
     pvl_list sorted_params = pvl_newlist();
     icalparameter *param;
 
+    /* Normalize parameters into sorted list */
     while ((param = pvl_pop(prop->parameters)) != 0) {
-        icalparameter_set_parent(param, 0);
+        int remove = 0;
 
-        /* Skip parameters having default values */
+        /* Remove parameters having default values */
         switch (icalparameter_isa(param)) {
         case ICAL_VALUE_PARAMETER:
             /* Skip VALUE parameters for default property value types */
             switch (prop_kind) {
             case ICAL_ATTACH_PROPERTY:
                 if (icalparameter_get_value(param) == ICAL_VALUE_URI) {
-                    icalparameter_free(param);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
@@ -995,16 +961,14 @@ void icalproperty_normalize(icalproperty *prop)
             case ICAL_RDATE_PROPERTY:
             case ICAL_RECURRENCEID_PROPERTY:
                 if (icalparameter_get_value(param) == ICAL_VALUE_DATETIME) {
-                    icalparameter_free(param);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
             case ICAL_DURATION_PROPERTY:
             case ICAL_XDURATION_PROPERTY:
                 if (icalparameter_get_value(param) == ICAL_VALUE_DURATION) {
-                    icalparameter_free(param);
-                    continue;
+                    remove = 1;
                 }
                 break;
 
@@ -1015,64 +979,55 @@ void icalproperty_normalize(icalproperty *prop)
 
         case ICAL_CUTYPE_PARAMETER:
             if (icalparameter_get_cutype(param) == ICAL_CUTYPE_INDIVIDUAL) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_ENCODING_PARAMETER:
             if (icalparameter_get_encoding(param) == ICAL_ENCODING_8BIT) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_FBTYPE_PARAMETER:
             if (icalparameter_get_fbtype(param) == ICAL_FBTYPE_BUSY) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_PARTSTAT_PARAMETER:
             if (icalparameter_get_partstat(param) == ICAL_PARTSTAT_NEEDSACTION) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_RELATED_PARAMETER:
             if (icalparameter_get_related(param) == ICAL_RELATED_START) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_RELTYPE_PARAMETER:
             if (icalparameter_get_reltype(param) == ICAL_RELTYPE_PARENT) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_ROLE_PARAMETER:
             if (icalparameter_get_role(param) == ICAL_ROLE_REQPARTICIPANT) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_RSVP_PARAMETER:
             if (icalparameter_get_rsvp(param) == ICAL_RSVP_FALSE) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
         case ICAL_SCHEDULEAGENT_PARAMETER:
             if (icalparameter_get_scheduleagent(param) == ICAL_SCHEDULEAGENT_SERVER) {
-                icalparameter_free(param);
-                continue;
+                remove = 1;
             }
             break;
 
@@ -1080,14 +1035,19 @@ void icalproperty_normalize(icalproperty *prop)
             break;
         }
 
-        pvl_insert_ordered(sorted_params, param_compare, param);
+        if (remove) {
+            icalparameter_set_parent(param, 0); // MUST NOT have a parent to free
+            icalparameter_free(param);
+        } else {
+            pvl_insert_ordered(sorted_params, param_compare, param);
+        }
     }
 
     pvl_free(prop->parameters);
     prop->parameters = sorted_params;
 }
 
-/**     @brief Get a DATE or DATE-TIME property as an icaltime
+/**     @brief Gets a DATE or DATE-TIME property as an icaltime
  *
  *      If the property is a DATE-TIME with a TZID parameter and a
  *      corresponding VTIMEZONE is present in the component, the

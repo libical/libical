@@ -2,19 +2,18 @@
  FILE: icalgauge.h
  CREATOR: eric 23 December 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -42,9 +41,13 @@ LIBICAL_ICALSS_EXPORT int icalgauge_get_expand(icalgauge *gauge);
 
 LIBICAL_ICALSS_EXPORT void icalgauge_free(icalgauge *gauge);
 
+/** @brief Debug
+ *
+ * Prints gauge information to STDOUT.
+ */
 LIBICAL_ICALSS_EXPORT void icalgauge_dump(icalgauge *gauge);
 
-/** @brief Return true if comp matches the gauge.
+/** @brief Returns true if comp matches the gauge.
  *
  * The component must be in
  * cannonical form -- a VCALENDAR with one VEVENT, VTODO or VJOURNAL

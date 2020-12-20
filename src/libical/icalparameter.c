@@ -2,19 +2,18 @@
  FILE: icalderivedparameters.{c,h}
  CREATOR: eric 09 May 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@softwarestudio.org>
-     http://www.softwarestudio.org
+ (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
 
  This library is free software; you can redistribute it and/or modify
  it under the terms of either:
 
     The LGPL as published by the Free Software Foundation, version
-    2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
+    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
  Or:
 
     The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at http://www.mozilla.org/MPL/
+    the License at https://www.mozilla.org/MPL/
 
   The original code is icalderivedparameters.{c,h}
 
@@ -181,7 +180,7 @@ char *icalparameter_as_ical_string(icalparameter *param)
 }
 
 /*
- * checks whether this character is allowed in a (Q)SAFE-CHAR
+ * Checks whether this character is allowed in a (Q)SAFE-CHAR
  *
  * QSAFE-CHAR   = WSP / %x21 / %x23-7E / NON-US-ASCII
  * ; any character except CTLs and DQUOTE
@@ -226,7 +225,7 @@ static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
     const char *p;
 
     /* Encapsulate the property in quotes if necessary */
-    if (strpbrk(value, ";:,") != 0) {
+    if (!*value || strpbrk(value, ";:,") != 0) {
         icalmemory_append_char(buf, buf_ptr, buf_size, '"');
         qm = 1;
     }
@@ -262,16 +261,14 @@ static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
     }
 }
 
-/**
- * Return a string representation of the parameter according to RFC5445/RFC6868.
- *
- * param        = param-name "=" param-value
- * param-name   = iana-token / x-token
- * param-value  = paramtext /quoted-string
- * paramtext    = *SAFE-CHAR
- * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
- * QSAFE-CHAR   = any character except CTLs and DQUOTE
- * SAFE-CHAR    = any character except CTLs, DQUOTE. ";", ":", ","
+/*
+ * - param        = param-name "=" param-value
+ * - param-name   = iana-token / x-token
+ * - param-value  = paramtext /quoted-string
+ * - paramtext    = *SAFE-CHAR
+ * - quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
+ * - QSAFE-CHAR   = any character except CTLs and DQUOTE
+ * - SAFE-CHAR    = any character except CTLs, DQUOTE. ";", ":", ","
  */
 char *icalparameter_as_ical_string_r(icalparameter *param)
 {
@@ -429,7 +426,6 @@ icalproperty *icalparameter_get_parent(icalparameter *param)
     return param->parent;
 }
 
-/* returns 1 if parameters have same name in ICAL, otherwise 0 */
 int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
 {
     icalparameter_kind kind1;

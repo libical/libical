@@ -3,19 +3,19 @@
 # FILE: Property.py
 # CREATOR: eric
 #
-# (C) COPYRIGHT 2001, Eric Busboom <eric@softwarestudio.org>
+# (C) COPYRIGHT 2001, Eric Busboom <eric@civicknowledge.com>
 # (C) COPYRIGHT 2001, Patrick Lewis <plewis@inetarena.com>
 #
 # This library is free software; you can redistribute it and/or modify
 # it under the terms of either:
 #
 #   The LGPL as published by the Free Software Foundation, version
-#   2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.txt
+#   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.txt
 #
 # Or:
 #
 #   The Mozilla Public License Version 2.0. You may obtain a copy of
-#   the License at http://www.mozilla.org/MPL/
+#   the License at https://www.mozilla.org/MPL/
 #======================================================================
 
 from LibicalWrap import *
@@ -95,11 +95,11 @@ class Property(object):
             icalproperty_free(self.ref())
 
     def name(self,v=None):
-        """ Return the name of the property """
+        """ Returns the name of the property """
         return icalproperty_get_property_name(self._ref)
 
     def ref(self,v=None):
-        """ Return the internal reference to the libical icalproperty """
+        """ Returns the internal reference to the libical icalproperty """
         if(v != None):
 
             if not self._deleted and self._ref and \
@@ -113,7 +113,7 @@ class Property(object):
 
 
     def value(self,v=None, kind = None):
-        """ Return the RFC2445 representation of the value """
+        """ Returns the RFC2445 representation of the value """
 
         if(v != None):
 
@@ -154,7 +154,7 @@ class Property(object):
 
     def parameters(self):
         """
-        Return a list of parameters
+        Returns a list of parameters
         """
 
         params = []
@@ -169,11 +169,11 @@ class Property(object):
         return params
 
     def as_ical_string(self):
-        "Return the property in iCalendar text format."
+        "Returns the property in iCalendar text format."
         return icalproperty_as_ical_string(self._ref)
 
     def __getitem__(self,key):
-        """ Return property values by name """
+        """ Returns property values by name """
         key = upper(key)
         str = icalproperty_get_parameter_as_string(self._ref,key)
 
@@ -251,6 +251,6 @@ class RecurrenceSet:
 
     def occurrences(self, count=None):
         """
-        Return 'count' occurrences as a tuple of Time instances.
+        Returns 'count' occurrences as a tuple of Time instances.
         """
         pass
