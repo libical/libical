@@ -1501,7 +1501,8 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
     /* Skip past our prefix */
     p = tzid + strlen(tzid_prefix);
 
-    /* Special-case "/freeassociation.sourceforge.net/Tzfile/", because it shares prefix with BUILTIN_TZID_PREFIX */
+    /* Special-case "/freeassociation.sourceforge.net/Tzfile/"
+       because it shares prefix with BUILTIN_TZID_PREFIX */
     if (strcmp(tzid_prefix, BUILTIN_TZID_PREFIX) == 0 &&
         strncmp(p, "Tzfile/", 7) == 0) {
         p += 7;
@@ -1864,7 +1865,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
                 const char *tzid_prefix = icaltimezone_tzid_prefix();
 
                 new_tzid_len = strlen(tzid_prefix) + strlen(zone->location) + 1;
-                new_tzid = (char *)malloc(sizeof(char)*(new_tzid_len + 1));
+                new_tzid = (char *)malloc(sizeof(char) * (new_tzid_len + 1));
                 if(new_tzid) {
                     snprintf(new_tzid, new_tzid_len, "%s%s", tzid_prefix, zone->location);
                     icalproperty_set_tzid(prop, new_tzid);
