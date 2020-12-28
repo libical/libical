@@ -405,7 +405,7 @@ static struct recur_map
     { "BYMONTH",    offsetof(struct icalrecurrencetype, by_month),
       ICAL_BY_MONTH_SIZE,     1 },
     { "BYSETPOS",   offsetof(struct icalrecurrencetype, by_set_pos),
-      ICAL_BY_SETPOS_SIZE,   -1 }
+      ICAL_BY_SETPOS_SIZE,   -1 },
 };
 
 static const char *icalrecur_first_clause(struct icalrecur_parser *parser)
@@ -750,9 +750,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                     if (byrule == BY_DAY) {
                         r = icalrecur_add_bydayrules(&parser, value);
                     } else {
-                        short *array = (short *)(recur_map[byrule].offset
-                                                 + (size_t) &parser.rt);
-
+                        short *array = (short *)(recur_map[byrule].offset + (size_t) &parser.rt);
                         r = icalrecur_add_byrules(&parser, array,
                                                   recur_map[byrule].min,
                                                   recur_map[byrule].size,
@@ -795,8 +793,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 }
                 icalrecurrencetype_clear(&parser.rt);
                 break;
-            }
-            else {
+            } else {
                 array[0] = ICAL_RECURRENCE_ARRAY_MAX;
             }
         }
@@ -1991,8 +1988,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                 ical_get_invalid_rrule_handling_setting();
             if (rruleHandlingSetting == ICAL_RRULE_IGNORE_INVALID) {
                 impl->orig_data[byrule] = 0;
-            }
-            else {
+            } else {
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
                 free(impl);
                 return 0;
