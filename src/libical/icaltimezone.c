@@ -63,6 +63,17 @@ static pthread_mutex_t changes_mutex = PTHREAD_MUTEX_INITIALIZER;
 #define BUILTIN_TZID_PREFIX_LEN 256
 #define BUILTIN_TZID_PREFIX     "/freeassociation.sourceforge.net/"
 
+/* Known prefixes from the old versions of libical */
+static struct _compat_tzids {
+    const char *tzid;
+    int slashes;
+} glob_compat_tzids[] = {
+    { "/freeassociation.sourceforge.net/Tzfile/", 3 },
+    { "/freeassociation.sourceforge.net/", 2 },
+    { "/citadel.org/", 3 }, /* Full TZID for this can be: "/citadel.org/20190914_1/" */
+    { NULL, -1 }
+};
+
 /* The prefix to be used for tzid's generated from system tzdata */
 static char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
 
@@ -1232,6 +1243,25 @@ int icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp)
     return icaltimezone_get_vtimezone_properties(zone, comp);
 }
 
+static const char *skip_slashes(const char *text, int n_slashes)
+{
+    const char *pp;
+    int num_slashes = 0;
+
+    if(!text)
+        return NULL;
+
+    for (pp = text; *pp; pp++) {
+        if(*pp == '/') {
+            num_slashes++;
+            if(num_slashes == n_slashes)
+                return pp + 1;
+        }
+    }
+
+    return NULL;
+}
+
 const char *icaltimezone_get_display_name(icaltimezone *zone)
 {
     const char *display_name;
@@ -1250,24 +1280,8 @@ const char *icaltimezone_get_display_name(icaltimezone *zone)
            at the end of it. */
         if (display_name &&
             !strncmp(display_name, tzid_prefix, strlen(tzid_prefix))) {
-#if defined(USE_BUILTIN_TZDATA)
-            /* XXX  The code below makes assumptions about the prefix
-               which don't even jive with our default declared up top */
-            /* Get the location, which is after the 3rd '/' char. */
-            const char *p;
-            int num_slashes = 0;
-
-            for (p = display_name; *p; p++) {
-                if (*p == '/') {
-                    num_slashes++;
-                    if (num_slashes == 3)
-                        return p + 1;
-                }
-            }
-#else
             /* Skip past our prefix */
             display_name += strlen(tzid_prefix);
-#endif
         }
     }
 
@@ -1452,11 +1466,9 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset, const ch
 
 icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
 {
-#if defined(USE_BUILTIN_TZDATA)
-    int num_slashes = 0;
-#endif
     const char *p, *zone_tzid, *tzid_prefix;
     icaltimezone *zone;
+    int compat = 0;
 
     if (!tzid || !tzid[0])
         return NULL;
@@ -1467,35 +1479,46 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
 
     tzid_prefix = icaltimezone_tzid_prefix();
     /* Check that the TZID starts with our unique prefix. */
-    if (strncmp(tzid, tzid_prefix, strlen(tzid_prefix)))
-        return NULL;
+    if (strncmp(tzid, tzid_prefix, strlen(tzid_prefix))) {
+        int ii;
 
-#if defined(USE_BUILTIN_TZDATA)
-    /* XXX  The code below makes assumptions about the prefix
-       which don't even jive with our default declared up top */
-    /* Get the location, which is after the 3rd '/' character. */
-    for (p = tzid; *p; p++) {
-        if (*p == '/') {
-            num_slashes++;
-            if (num_slashes == 3)
+        for (ii = 0; glob_compat_tzids[ii].tzid; ii++) {
+            if(strncmp(tzid, glob_compat_tzids[ii].tzid, strlen(glob_compat_tzids[ii].tzid)) == 0) {
+                p = skip_slashes(tzid, glob_compat_tzids[ii].slashes);
+                if(p) {
+                    zone = icaltimezone_get_builtin_timezone(p);
+                    /* Do not recheck the TZID matches exactly, it does not, because
+                       fallbacking with the compatibility timezone prefix here. */
+                    return zone;
+                }
                 break;
+            }
         }
+
+        return NULL;
     }
 
-    if (num_slashes != 3)
-        return NULL;
-
-    p++;
-#else
     /* Skip past our prefix */
     p = tzid + strlen(tzid_prefix);
-#endif
+
+    /* Special-case "/freeassociation.sourceforge.net/Tzfile/"
+       because it shares prefix with BUILTIN_TZID_PREFIX */
+    if (strcmp(tzid_prefix, BUILTIN_TZID_PREFIX) == 0 &&
+        strncmp(p, "Tzfile/", 7) == 0) {
+        p += 7;
+        compat = 1;
+    }
 
     /* Now we can use the function to get the builtin timezone from the
        location string. */
     zone = icaltimezone_get_builtin_timezone(p);
-    if (!zone)
-        return NULL;
+    if (!zone || compat)
+        return zone;
+
+#if defined(USE_BUILTIN_TZDATA)
+    if (use_builtin_tzdata)
+        return zone;
+#endif
 
     /* Check that the builtin TZID matches exactly. We don't want to return
        a different version of the VTIMEZONE. */
@@ -1830,6 +1853,48 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 
         /* Find the VTIMEZONE component inside the VCALENDAR. There should be 1. */
         subcomp = icalcomponent_get_first_component(comp, ICAL_VTIMEZONE_COMPONENT);
+
+        if (subcomp) {
+            icalproperty *prop;
+
+            /* Ensure expected TZID */
+            prop = icalcomponent_get_first_property(subcomp, ICAL_TZID_PROPERTY);
+            if(prop) {
+                char *new_tzid;
+                size_t new_tzid_len;
+                const char *tzid_prefix = icaltimezone_tzid_prefix();
+
+                new_tzid_len = strlen(tzid_prefix) + strlen(zone->location) + 1;
+                new_tzid = (char *)malloc(sizeof(char) * (new_tzid_len + 1));
+                if(new_tzid) {
+                    snprintf(new_tzid, new_tzid_len, "%s%s", tzid_prefix, zone->location);
+                    icalproperty_set_tzid(prop, new_tzid);
+                    free(new_tzid);
+                } else {
+                    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+                }
+            }
+
+            /* Ensure expected Location - it's for cases where one VTIMEZONE is shared
+               between different locations (like Pacific/Midway is Pacific/Pago_Pago).
+               This updates the properties, thus when the component is converted to
+               the string and back to the component the Location will still match. */
+            prop = icalcomponent_get_first_property(subcomp, ICAL_LOCATION_PROPERTY);
+            if (prop)
+                icalproperty_set_location(prop, zone->location);
+
+            for (prop = icalcomponent_get_first_property(subcomp, ICAL_X_PROPERTY);
+                 prop;
+                 prop = icalcomponent_get_next_property(subcomp, ICAL_X_PROPERTY)) {
+                const char *name;
+
+                name = icalproperty_get_x_name(prop);
+                if (name && !strcasecmp(name, "X-LIC-LOCATION")) {
+                    icalproperty_set_x(prop, zone->location);
+                    break;
+                }
+            }
+        }
     } else {
         subcomp = icaltzutil_fetch_timezone(zone->location);
     }

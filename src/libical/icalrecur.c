@@ -705,7 +705,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             }
         } else if (strcasecmp(name, "COUNT") == 0) {
             if (parser.rt.count > 0 || !icaltime_is_null_time(parser.rt.until)) {
-                /* don't allow multiple COUNTs, or both COUNT and UNTIL */
+                /* Don't allow multiple COUNTs, or both COUNT and UNTIL */
                 r = -1;
             } else {
                 parser.rt.count = atoi(value);
@@ -714,7 +714,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             }
         } else if (strcasecmp(name, "UNTIL") == 0) {
             if (parser.rt.count > 0 || !icaltime_is_null_time(parser.rt.until)) {
-                /* don't allow multiple COUNTs, or both COUNT and UNTIL */
+                /* Don't allow multiple COUNTs, or both COUNT and UNTIL */
                 r = -1;
             } else {
                 parser.rt.until = icaltime_from_string(value);
