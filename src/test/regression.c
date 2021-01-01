@@ -1,4 +1,3 @@
-//krazy:skip
 /*======================================================================
  FILE: regression.c
  CREATOR: eric 03 April 1999
@@ -19,6 +18,7 @@
  The original author is Eric Busboom
  The original code is regression.c
 ======================================================================*/
+//krazy:skip
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
