@@ -1,4 +1,3 @@
-//krazy:skip
 /*======================================================================
  FILE: regression.c
  CREATOR: eric 03 April 1999
@@ -20,6 +19,8 @@
  The original code is regression.c
 ======================================================================*/
 //krazy:skip
+
+# define NO_DEPRECATION_WARNINGS // do not complain about our own deprecated usage
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
