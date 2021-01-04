@@ -1921,8 +1921,8 @@ void generate_header_and_source(Structure *structure, gchar *dir)
     lowerTrain = get_lower_train_from_upper_camel(upperCamel);
     g_free(upperCamel);
 
-    headerName = g_strconcat (dir, lowerTrain, ".h", NULL);
-    sourceName = g_strconcat (dir, lowerTrain, ".c", NULL);
+    headerName = g_strconcat(dir, lowerTrain, ".h", NULL);
+    sourceName = g_strconcat(dir, lowerTrain, ".c", NULL);
     g_free(lowerTrain);
 
     header = fopen(headerName, "w");
