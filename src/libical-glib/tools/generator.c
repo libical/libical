@@ -694,8 +694,6 @@ void generate_header_method_protos(FILE *out, Structure *structure)
     gchar *privateHeaderComment;
 
     privateHeader = NULL;
-    typeName = g_strconcat(structure->nameSpace, structure->name, NULL);
-    privateHeaderComment = g_strconcat("\n/* Private methods for ", typeName, " */\n", NULL);
 
     if (structure->native != NULL) {
         /** Open or create the private header file if it does not exist.
@@ -703,7 +701,11 @@ void generate_header_method_protos(FILE *out, Structure *structure)
          * Create the new_full method in it.
          */
         privateHeader = open_private_header();
+        typeName = g_strconcat(structure->nameSpace, structure->name, NULL);
+        privateHeaderComment = g_strconcat("\n/* Private methods for ", typeName, " */\n", NULL);
+        g_free(typeName);
         write_str(privateHeader, privateHeaderComment);
+        g_free(privateHeaderComment);
         generate_header_method_new_full(privateHeader, structure);
 
         generate_header_method_get_type(out, structure);
@@ -723,8 +725,6 @@ void generate_header_method_protos(FILE *out, Structure *structure)
             generate_header_method_proto(out, method, FALSE);
         }
     }
-
-    g_free(typeName);
 
     if (privateHeader != NULL) {
         fclose(privateHeader);
@@ -1010,11 +1010,11 @@ void generate_header_includes(FILE *out, Structure *structure)
                 continue;
             }
 
+            g_free(ownUpperCamel);
             kind = g_strdup(g_hash_table_lookup(type2kind, typeName));
             if (g_strcmp0(kind, "enum") != 0) {
                 g_free(kind);
                 g_free(upperCamel);
-                g_free(ownUpperCamel);
                 continue;
             }
             g_free(kind);
@@ -1078,6 +1078,7 @@ void generate_source_includes(FILE *out, Structure *structure)
             }
             lowerTrain = get_lower_train_from_upper_camel(upperCamel);
             g_free(upperCamel);
+            g_free(ownUpperCamel);
             (void)g_hash_table_insert(includeNames, lowerTrain, NULL);
             lowerTrain = NULL;
         }
@@ -1653,6 +1654,8 @@ gchar *get_inline_parameter(Parameter *para)
         if (is_nullable) {
             (void)g_stpcpy(buffer + strlen(buffer), "):NULL)");
         }
+
+        g_free (translator);
     }
 
     ret = g_new(gchar, strlen(buffer) + 1);
@@ -1914,24 +1917,19 @@ void generate_header_and_source(Structure *structure, gchar *dir)
 
     g_return_if_fail(structure != NULL);
 
-    headerName = g_new(gchar, BUFFER_SIZE);
-    *headerName = '\0';
-    sourceName = g_new(gchar, BUFFER_SIZE);
-    *sourceName = '\0';
-
     upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
     lowerTrain = get_lower_train_from_upper_camel(upperCamel);
     g_free(upperCamel);
 
-    (void)g_stpcpy(headerName + strlen(headerName), dir);
-    (void)g_stpcpy(headerName + strlen(headerName), lowerTrain);
-    (void)g_stpcpy(headerName + strlen(headerName), ".h");
-    (void)g_stpcpy(sourceName + strlen(sourceName), dir);
-    (void)g_stpcpy(sourceName + strlen(sourceName), lowerTrain);
-    (void)g_stpcpy(sourceName + strlen(sourceName), ".c");
+    headerName = g_strconcat(dir, lowerTrain, ".h", NULL);
+    sourceName = g_strconcat(dir, lowerTrain, ".c", NULL);
+    g_free(lowerTrain);
 
     header = fopen(headerName, "w");
     source = fopen(sourceName, "w");
+
+    g_free(headerName);
+    g_free(sourceName);
 
     table = get_hash_table_from_structure(structure);
     generate_header(header, structure, table);
