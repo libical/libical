@@ -277,7 +277,7 @@ gchar *get_lower_snake_from_upper_camel(const gchar *upperCamel)
     *buffer = '\0';
 
     for (i = 0; i < (guint)strlen(upperCamel); i++) {
-        if (isupper(upperCamel[i]) && i != 0) {
+        if (isupper((int)upperCamel[i]) && i != 0) {
             len = (guint)strlen(buffer);
             buffer[len] = '_';
             buffer[len + 1] = tolower(upperCamel[i]);
