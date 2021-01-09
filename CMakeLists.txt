@@ -424,18 +424,20 @@ if(ICAL_GLIB)
   elseif(GLIB_FOUND)
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
-      "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required)"
+      "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
     )
   elseif(LIBXML_FOUND)
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
-      "is missing or too low a version (glib ${MIN_GLIB} or higher is required)"
+      "is missing or too low a version (glib ${MIN_GLIB} or higher is required. "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
     )
   else()
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development packages "
       "are missing or too low a version "
-      "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required)"
+      "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required). "
       "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
     )
   endif()
