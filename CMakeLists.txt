@@ -522,8 +522,8 @@ option(ADDRESS_SANITIZER "(Developer-only) Build with the address sanitizer." Fa
 mark_as_advanced(ADDRESS_SANITIZER)
 if(ADDRESS_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
   else()
     message(FATAL_ERROR
       "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
@@ -548,8 +548,8 @@ option(THREAD_SANITIZER "(Developer-only) Build with the thread sanitizer." Fals
 mark_as_advanced(THREAD_SANITIZER)
 if(THREAD_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
   else()
     message(FATAL_ERROR
       "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")

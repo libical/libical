@@ -149,9 +149,17 @@ static void icaltimezone_init(icaltimezone *zone);
  *
  * @returns 1 on success, or 0 if the TZID can't be found.
  */
-static int icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcomponent *component);
+static int icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcomponent *component)
+#if defined(THREAD_SANITIZER)
+__attribute__((no_sanitize("thread")))
+#endif
+;
 
-static void icaltimezone_load_builtin_timezone(icaltimezone *zone);
+static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
+#if defined(THREAD_SANITIZER)
+__attribute__((no_sanitize("thread")))
+#endif
+;
 
 static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year);
 

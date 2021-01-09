@@ -36,21 +36,22 @@
 static pthread_mutex_t thread_comp_mutex = PTHREAD_MUTEX_INITIALIZER;
 static const void *thread_comp = NULL;
 
-static void *
-thread_func(void *user_data)
+static void *thread_func(void *user_data)
 {
     icaltimezone *zone = user_data;
     icalcomponent *icalcomp;
 
-    if(!zone)
+    if (!zone) {
         return NULL;
+    }
 
     icalcomp = icaltimezone_get_component(zone);
     pthread_mutex_lock(&thread_comp_mutex);
-    if(!thread_comp)
+    if (!thread_comp) {
         thread_comp = icalcomp;
-    else
+    } else {
         assert(thread_comp == icalcomp);
+    }
     pthread_mutex_unlock(&thread_comp_mutex);
     icalcomp = icalcomponent_new_clone(icalcomp);
     icalcomponent_free(icalcomp);
@@ -58,8 +59,7 @@ thread_func(void *user_data)
     return NULL;
 }
 
-static void
-test_get_component_threadsafety(void)
+static void test_get_component_threadsafety(void)
 {
     pthread_t thread[N_THREADS];
     icaltimezone *zone;
@@ -67,11 +67,11 @@ test_get_component_threadsafety(void)
 
     zone = icaltimezone_get_builtin_timezone("Europe/London");
 
-    for(ii = 0; ii < N_THREADS; ii++) {
+    for (ii = 0; ii < N_THREADS; ii++) {
         pthread_create(&thread[ii], NULL, thread_func, zone);
     }
 
-    for(ii = 0; ii < N_THREADS; ii++) {
+    for (ii = 0; ii < N_THREADS; ii++) {
         pthread_join(thread[ii], NULL);
     }
 }
@@ -87,9 +87,9 @@ int main()
     set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
-    #if defined(HAVE_PTHREAD_H) && defined(HAVE_PTHREAD) && defined(HAVE_PTHREAD_CREATE)
+#if defined(HAVE_PTHREAD_H) && defined(HAVE_PTHREAD) && defined(HAVE_PTHREAD_CREATE)
     test_get_component_threadsafety();
-    #endif
+#endif
 
     tt = icaltime_current_time_with_zone(icaltimezone_get_builtin_timezone("America/New_York"));
 
