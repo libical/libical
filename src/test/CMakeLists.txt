@@ -180,7 +180,7 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS 3.14)
   set(CMAKE_COMPARE_FILES_IGNORE_EOL TRUE)
 endif()
 if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
-  if(NOT USE_32BIT_TIME_T) #tests for years greater than 2037 will fail
+  if(NOT CYGWIN AND NOT USE_32BIT_TIME_T) #ignore_eol doesn't work on Cygwin. tests for years greater than 2037 will fail
     set(icalrecurtest_SRCS icalrecur_test.c)
     add_executable(icalrecurtest ${icalrecurtest_SRCS})
     target_link_libraries(icalrecurtest ical icalss icalvcal)
