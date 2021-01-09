@@ -32,9 +32,8 @@ if(PYTHON3)
     add_test(
       NAME ${test_name}
       COMMAND ${PYTHON3} -I ${CMAKE_CURRENT_SOURCE_DIR}/${test_file}
-      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
-
+    setprops(${test_name})
     set_tests_properties(${test_name} PROPERTIES ENVIRONMENT "${test_env}")
 
   endforeach()

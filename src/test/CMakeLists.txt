@@ -39,6 +39,7 @@ macro(setprops _name)
   if(CYGWIN OR MSYS)
     set_tests_properties(${_name} PROPERTIES
       ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     )
   endif()
 endmacro()
