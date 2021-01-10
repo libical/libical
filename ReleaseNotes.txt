@@ -45,6 +45,7 @@ Version 3.0.9 (UNRELEASED):
  * Accept VTIMEZONE with more than one X- property
  * Several fixes for recurrences containing BYWEEKNO
  * icalrecurrencetype_from_string() will reject any RRULE that contains a rule-part that occurs more than once
+ * Improve thread safety
  * Fix compiled-in path for the built-in timezone data
  * Fix reading TZif files with empty v1 data (use v2+ whenever possible)
  * Backwards compatability for previous TZIDs

@@ -331,7 +331,7 @@ libical_option(GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" fi
 if(GOBJECT_INTROSPECTION)
   find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
   set_package_properties(GObjectIntrospection PROPERTIES
-    TYPE REQUIRED
+    TYPE OPTIONAL
     URL "https://wiki.gnome.org/Projects/GObjectIntrospection"
     PURPOSE "Required in order to build the GObject introspection \"typelib\" files."
   )
@@ -343,8 +343,13 @@ if(GOBJECT_INTROSPECTION)
         "however that option is not supported when building static libraries only. "
         "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
         "if you really want to build with GObject Introspection. Alternatively, "
-        "you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to cmake)")
+        "you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to cmake).")
     endif()
+  else()
+    message(FATAL_ERROR
+      "You requested to build with GObject introspection, but the necessary development package "
+      "is missing or too low a version (GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION} or higher is required). "
+      "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake.")
   endif()
 endif()
 
@@ -395,18 +400,20 @@ if(ICAL_GLIB)
   elseif(GLIB_FOUND)
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
-      "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required)"
+      "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
     )
   elseif(LIBXML_FOUND)
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
-      "is missing or too low a version (glib ${MIN_GLIB} or higher is required)"
+      "is missing or too low a version (glib ${MIN_GLIB} or higher is required. "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
     )
   else()
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development packages "
       "are missing or too low a version "
-      "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required)"
+      "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required). "
       "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
     )
   endif()
@@ -468,8 +475,8 @@ libical_option(ADDRESS_SANITIZER "(Developer-only) Build with the address saniti
 mark_as_advanced(ADDRESS_SANITIZER)
 if(ADDRESS_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
   else()
     message(FATAL_ERROR
       "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
@@ -494,8 +501,8 @@ libical_option(THREAD_SANITIZER "(Developer-only) Build with the thread sanitize
 mark_as_advanced(THREAD_SANITIZER)
 if(THREAD_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
   else()
     message(FATAL_ERROR
       "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")
