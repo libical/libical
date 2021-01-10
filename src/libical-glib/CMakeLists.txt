@@ -1,23 +1,23 @@
 add_definitions(-Dlibical_ical_EXPORTS)
 
-# build glib-src-generator
-add_executable(glib-src-generator
+# build ical-glib-src-generator
+add_executable(ical-glib-src-generator
   tools/generator.c
   tools/generator.h
   tools/xml-parser.c
   tools/xml-parser.h
 )
 
-target_compile_options(glib-src-generator PUBLIC ${GLIB_CFLAGS} ${LIBXML_CFLAGS} -DG_LOG_DOMAIN=\"src-generator\")
-target_link_libraries(glib-src-generator ${GLIB_LIBRARIES} ${LIBXML_LIBRARIES})
+target_compile_options(ical-glib-src-generator PUBLIC ${GLIB_CFLAGS} ${LIBXML_CFLAGS} -DG_LOG_DOMAIN=\"src-generator\")
+target_link_libraries(ical-glib-src-generator ${GLIB_LIBRARIES} ${LIBXML_LIBRARIES})
 
 install(
-  TARGETS glib-src-generator
-  EXPORT GlibSrcGenerator
-  RUNTIME DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/ical
+  TARGETS ical-glib-src-generator
+  EXPORT IcalGlibSrcGenerator
+  RUNTIME DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/libical
 )
 install(
-  EXPORT GlibSrcGenerator
+  EXPORT IcalGlibSrcGenerator
   NAMESPACE native-
   DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal
 )
@@ -74,20 +74,20 @@ endforeach()
 
 if(CMAKE_CROSSCOMPILING)
   # import native ical-glib-src-generator when cross-compiling
-  set(IMPORT_GLIB_SRC_GENERATOR "GLIB_SRC_GENERATOR-NOTFOUND"
+  set(IMPORT_ICAL_GLIB_SRC_GENERATOR "ICAL_GLIB_SRC_GENERATOR-NOTFOUND"
     CACHE FILEPATH
-    "Path to exported glib-src-generator target from native build"
+    "Path to exported ical-glib-src-generator target from native build"
   )
-  include(${IMPORT_GLIB_SRC_GENERATOR})
-  set(glib-src-generator_EXE native-glib-src-generator)
+  include(${IMPORT_ICAL_GLIB_SRC_GENERATOR})
+  set(ical-glib-src-generator_EXE native-ical-glib-src-generator)
 else()
-  set(glib-src-generator_EXE glib-src-generator)
+  set(ical-glib-src-generator_EXE ical-glib-src-generator)
 endif()
 
 add_custom_command (
   OUTPUT ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
-  COMMAND ${glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
-  DEPENDS ${glib-src-generator_EXE} ${xml_files}
+  COMMAND ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
+  DEPENDS ${ical-glib-src-generator_EXE} ${xml_files}
 )
 
 configure_file(
