@@ -129,7 +129,7 @@ if(WITH_CXX_BINDINGS)
   else()
     message(STATUS
       "Warning: Building the C++ bindings is not possible since a C++ compiler could not be found. "
-      "Turning-off C++ bindings"
+      "Turning-off C++ bindings."
     )
     set(WITH_CXX_BINDINGS False)
   endif()
@@ -313,7 +313,7 @@ if(WIN32 OR WINCE)
   #Always use builtin tzdata on Windows systems.
   if(NOT USE_BUILTIN_TZDATA)
     message(STATUS
-      "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata"
+      "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata."
     )
     set(USE_BUILTIN_TZDATA 1)
   endif()
@@ -329,6 +329,11 @@ set(INSTALL_TARGETS_DEFAULT_ARGS
   ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
 )
 
+#Look for PkgConfig
+#if not found then cannot proceed for GLib+LibXML or GObjectIntrospection.
+#(unless/until they can be handled without pkg-config some day)
+find_package(PkgConfig QUIET)
+
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
 option(GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher.")
 add_feature_info(
@@ -337,6 +342,13 @@ add_feature_info(
   "build GObject introspection \"typelib\" files"
 )
 if(GOBJECT_INTROSPECTION)
+  if(NOT PKG_CONFIG_FOUND)
+    message(FATAL_ERROR
+      "You are attempting to build with GObject Introspection enabled, however that option is "
+      "not supported unless pkg-config can be found.  Please install pkg-config and try again. "
+      "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake.")
+  endif()
+
   find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
   set_package_properties(GObjectIntrospection PROPERTIES
     TYPE OPTIONAL
@@ -378,24 +390,21 @@ if(ICAL_GLIB_VAPI)
   if(NOT GOBJECT_INTROSPECTION)
     message(FATAL_ERROR
       "You requested to build the Vala vapi but have not enabled the GObject Introspection. "
-      "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake"
-    )
+      "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake.")
   endif()
 
   find_program(VALAC valac DOC "the Vala compiler")
   if(NOT VALAC)
     message(FATAL_ERROR
       "valac, the Vala compiler was not found. "
-      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False"
-    )
+      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False.")
   endif()
 
   find_program(VAPIGEN vapigen DOC "tool to generate the Vala API")
   if(NOT VAPIGEN)
     message(FATAL_ERROR
       "vapigen, the tool for generating the Vala API was not found. "
-      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False"
-    )
+      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False.")
   endif()
 endif()
 
@@ -408,6 +417,13 @@ add_feature_info(
   "build libical-glib interface"
 )
 if(ICAL_GLIB)
+  if(NOT PKG_CONFIG_FOUND)
+    message(FATAL_ERROR
+      "You requested to build libical-glib, however that option is not supported "
+      "unless pkg-config can be found. Please install pkg-config and try again. "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
+  endif()
+
   find_package(GLib ${MIN_GLIB})
   set_package_properties(GLib PROPERTIES
     TYPE OPTIONAL
@@ -426,21 +442,18 @@ if(ICAL_GLIB)
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
       "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
-    )
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
   elseif(LIBXML_FOUND)
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
       "is missing or too low a version (glib ${MIN_GLIB} or higher is required. "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
-    )
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
   else()
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development packages "
       "are missing or too low a version "
       "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required). "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
-    )
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
   endif()
 endif()
 
@@ -539,14 +552,14 @@ if(ADDRESS_SANITIZER)
   if(GOBJECT_INTROSPECTION)
     message(STATUS
       "Warning: Building the address sanitizer with GObject Introspection is is not supported. "
-      "Turning-off GObject Introspection"
+      "Turning-off GObject Introspection."
     )
     set(HAVE_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
     message(STATUS
       "Warning: Building the address sanitizer with the GObject interface is not supported. "
-      "Turning-off the GObject interface"
+      "Turning-off the GObject interface."
     )
     set(ICAL_GLIB False)
   endif()
@@ -565,14 +578,14 @@ if(THREAD_SANITIZER)
   if(GOBJECT_INTROSPECTION)
     message(STATUS
       "Warning: Building the thread sanitizer with GObject Introspection is is not supported. "
-      "Turning-off GObject Introspection"
+      "Turning-off GObject Introspection."
     )
     set(HAVE_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
     message(STATUS
       "Warning: Building the thread sanitizer with the GObject interface is not supported. "
-      "Turning-off the GObject interface"
+      "Turning-off the GObject interface."
     )
     set(ICAL_GLIB False)
   endif()

@@ -1,4 +1,4 @@
-# - try to find gobject-introspection
+# - try to find gobject-introspection 1.0
 #
 # Once done this will define
 #
@@ -34,19 +34,20 @@ endmacro(_GIR_GET_PKGCONFIG_VAR)
 
 find_package(PkgConfig)
 if(PKG_CONFIG_FOUND)
-  if(PACKAGE_FIND_VERSION_COUNT GREATER 0)
-    set(_gir_version_cmp ">=${PACKAGE_FIND_VERSION}")
-  endif()
-  pkg_check_modules(_pc_gir gobject-introspection-1.0${_gir_version_cmp})
-  if(_pc_gir_FOUND)
-    set(GObjectIntrospection_FOUND TRUE)
-    _gir_get_pkgconfig_var(GObjectIntrospection_SCANNER "g_ir_scanner")
-    _gir_get_pkgconfig_var(GObjectIntrospection_COMPILER "g_ir_compiler")
-    _gir_get_pkgconfig_var(GObjectIntrospection_GENERATE "g_ir_generate")
-    _gir_get_pkgconfig_var(GObjectIntrospection_GIRDIR "girdir")
-    _gir_get_pkgconfig_var(GObjectIntrospection_TYPELIBDIR "typelibdir")
-    set(GObjectIntrospection_CFLAGS "${_pc_gir_CFLAGS}")
-    set(GObjectIntrospection_LIBS "${_pc_gir_LIBS}")
+  if(DEFINED GObjectIntrospection_FIND_VERSION)
+    set(_gir_version_cmp "${GObjectIntrospection_FIND_VERSION}")
+    set(_gir_version_cmp ">=${_gir_version_cmp}")
+    pkg_check_modules(_pc_gir gobject-introspection-1.0${_gir_version_cmp})
+    if(_pc_gir_FOUND)
+      set(GObjectIntrospection_FOUND TRUE)
+      _gir_get_pkgconfig_var(GObjectIntrospection_SCANNER "g_ir_scanner")
+      _gir_get_pkgconfig_var(GObjectIntrospection_COMPILER "g_ir_compiler")
+      _gir_get_pkgconfig_var(GObjectIntrospection_GENERATE "g_ir_generate")
+      _gir_get_pkgconfig_var(GObjectIntrospection_GIRDIR "girdir")
+      _gir_get_pkgconfig_var(GObjectIntrospection_TYPELIBDIR "typelibdir")
+      set(GObjectIntrospection_CFLAGS "${_pc_gir_CFLAGS}")
+      set(GObjectIntrospection_LIBS "${_pc_gir_LIBS}")
+    endif()
   endif()
 endif()
 
