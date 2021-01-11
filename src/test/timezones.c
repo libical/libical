@@ -25,9 +25,9 @@
 #include <stdlib.h>
 
 #if !defined(__APPLE__) //krazy:exclude=cpp
-unsigned static int maxFailurePct = 1;
+#define MAX_FAILURE_RATE 1
 #else
-static unsigned int maxFailurePct = 3;  //TODO: why is the expected error rate higher on Mac?
+#define MAX_FAILURE_RATE 3 //TODO: why is the expected error rate higher on Mac?
 #endif
 
 int main()
@@ -169,7 +169,7 @@ int main()
                (unsigned long)timezones->num_elements, total_failed, total_okay, percent_failed);
     }
 
-    if (percent_failed <= maxFailurePct && total_failed) {
+    if (percent_failed <= MAX_FAILURE_RATE && total_failed) {
         ret = 0;
         printf(" *** Expect some small error rate with inter-operable vtimezones *** \n");
     }
