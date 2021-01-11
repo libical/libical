@@ -35,7 +35,7 @@
 #
 # -DGOBJECT_INTROSPECTION=[true|false]
 #  Set to build GObject introspection "typelib" files
-#  Requires GObject Introspection development package v0.6.7 or higher
+#  Requires GObject Introspection development package (version MIN_GOBJECT_INTROSPECTION)
 #  Default=false (do not generate the introspection files)
 #
 # -DICAL_BUILD_DOCS=[true|false]
@@ -49,7 +49,8 @@
 #
 # -DICAL_GLIB=[true|false]
 #  Set to build libical-glib (GObject) interface
-#  Requires glib development package v2.20 or higher
+#  Requires glib 2.0 development package (version MIN_GLIB).
+#  Requires libxml2.0 development package (version MIN_LIBXML).
 #  Default=true (build the libical-glib interface)
 #
 # -DENABLE_GTK_DOC=[true|false]
@@ -340,7 +341,7 @@ if(GOBJECT_INTROSPECTION)
   set_package_properties(GObjectIntrospection PROPERTIES
     TYPE OPTIONAL
     URL "https://wiki.gnome.org/Projects/GObjectIntrospection"
-    PURPOSE "Required in order to build the GObject introspection \"typelib\" files."
+    PURPOSE "Needed in order to build the GObject introspection \"typelib\" files."
   )
   if(GObjectIntrospection_FOUND)
     set(HAVE_INTROSPECTION TRUE)
