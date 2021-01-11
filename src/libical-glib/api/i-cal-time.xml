@@ -25,7 +25,7 @@
         <comment xml:space="preserve">Creates a new #ICalTime, copy of @timetype.</comment>
         <custom>    struct icaltimetype *itt;
 
-    g_return_val_if_fail(I_CAL_IS_TIME(timetype), NULL);
+    g_return_val_if_fail(I_CAL_IS_TIME((ICalTime *)timetype), NULL);
 
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
     g_return_val_if_fail(itt != NULL, NULL);

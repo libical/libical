@@ -1,21 +1,8 @@
+
 #define ${namespaceLowerSnake}_TYPE_${nameLowerSnake} \
     (${lowerSnake}_get_type ())
-
-#define ${upperSnake}(obj) \
-    (G_TYPE_CHECK_INSTANCE_CAST \
-    ((obj), ${namespaceLowerSnake}_TYPE_${nameLowerSnake}, ${upperCamel}))
-
-#define ${upperSnake}_CLASS(klass) \
-    (G_TYPE_CHECK_CLASS_CAST \
-    ((klass), ${namespaceLowerSnake}_TYPE_${nameLowerSnake}, ${upperCamel}Class))
-
-#define ${namespaceLowerSnake}_IS_${nameLowerSnake}(obj) \
-    (G_TYPE_CHECK_INSTANCE_TYPE \
-    ((obj), ${namespaceLowerSnake}_TYPE_${nameLowerSnake}))
-
-#define ${namespaceLowerSnake}_IS_${nameLowerSnake}_CLASS(klass) \
-    (G_TYPE_CHECK_CLASS_TYPE \
-    ((klass), ${namespaceLowerSnake}_TYPE_${nameLowerSnake}))
+LIBICAL_ICAL_EXPORT
+G_DECLARE_DERIVABLE_TYPE(${upperCamel}, ${lowerSnake}, ${namespaceLowerSnake}, ${nameLowerSnake}, ICalObject)
 
 /**
  * ${upperCamel}:
@@ -28,13 +15,6 @@
  *
  * This is the ${upperCamel} class.
  */
-typedef struct _${upperCamel}Class ${upperCamel}Class;
-
-struct _${upperCamel} {
-    /*< private >*/
-    ICalObject parent;
-};
-
 struct _${upperCamel}Class {
     /*< private >*/
     ICalObjectClass parent;

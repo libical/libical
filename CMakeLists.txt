@@ -379,7 +379,7 @@ if(ICAL_GLIB_VAPI)
   endif()
 endif()
 
-set(MIN_GLIB "2.38")
+set(MIN_GLIB "2.44")
 set(MIN_LIBXML "2.7.3")
 libical_option(ICAL_GLIB "Build libical-glib interface. Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True)
 if(ICAL_GLIB)
