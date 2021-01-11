@@ -7,7 +7,7 @@
 #define LIBICAL_ICAL_EXPORT
 #define LIBICAL_ICAL_NO_EXPORT
 #else
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined(__CYGWIN__)
 #if defined(libical_ical_EXPORTS)
        /* We are building this library */
 #define LIBICAL_ICAL_EXPORT __declspec(dllexport)
