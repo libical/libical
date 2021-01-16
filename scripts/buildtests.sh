@@ -28,15 +28,16 @@ HELP() {
   echo
   echo "Run build tests"
   echo "Options:"
-  echo " -k, --no-krazy        Don't run any Krazy tests"
-  echo " -c, --no-cppcheck     Don't run any cppcheck tests"
-  echo " -t, --no-tidy         Don't run any clang-tidy tests"
-  echo " -b, --no-scan         Don't run any scan-build tests"
-  echo " -s, --no-splint       Don't run any splint tests"
-  echo " -l, --no-clang-build  Don't run any clang-build tests"
-  echo " -g, --no-gcc-build    Don't run any gcc-build tests"
-  echo " -a, --no-asan-build   Don't run any ASAN-build tests"
-  echo " -d, --no-tsan-build   Don't run any TSAN-build tests"
+  echo " -m, --no-cmake-compat  Don't require CMake version compatibility"
+  echo " -k, --no-krazy         Don't run any Krazy tests"
+  echo " -c, --no-cppcheck      Don't run any cppcheck tests"
+  echo " -t, --no-tidy          Don't run any clang-tidy tests"
+  echo " -b, --no-scan          Don't run any scan-build tests"
+  echo " -s, --no-splint        Don't run any splint tests"
+  echo " -l, --no-clang-build   Don't run any clang-build tests"
+  echo " -g, --no-gcc-build     Don't run any gcc-build tests"
+  echo " -a, --no-asan-build    Don't run any ASAN-build tests"
+  echo " -d, --no-tsan-build    Don't run any TSAN-build tests"
   echo
 }
 
@@ -451,12 +452,13 @@ KRAZY() {
 
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hkctbslgad --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
-TEMP=`getopt hkctbslgad $*`
-if [ $? != 0 ]; then echo "Terminating..." >&2; exit 1; fi
+#TEMP=`getopt -o hmkctbslgad --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
+TEMP=`getopt hmkctbslgad $*`
+if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
 
+cmakecompat=1
 runkrazy=1
 runcppcheck=1
 runtidy=1
@@ -469,15 +471,16 @@ runsplint=1
 while true; do
     case "$1" in
         -h|--help) HELP; exit 1;;
-        -k|--no-krazy)       runkrazy=0;      shift;;
-        -c|--no-cppcheck)    runcppcheck=0;   shift;;
-        -t|--no-tidy)        runtidy=0;       shift;;
-        -b|--no-scan)        runscan=0;       shift;;
-        -s|--no-splint)      runsplint=0;     shift;;
-        -l|--no-clang-build) runclangbuild=0; shift;;
-        -g|--no-gcc-build)   rungccbuild=0;   shift;;
-        -a|--no-asan-build)  runasanbuild=0;  shift;;
-        -d|--no-tsan-build)  runtsanbuild=0;  shift;;
+        -m|--no-cmake-compat) cmakecompat=0;   shift;;
+        -k|--no-krazy)        runkrazy=0;      shift;;
+        -c|--no-cppcheck)     runcppcheck=0;   shift;;
+        -t|--no-tidy)         runtidy=0;       shift;;
+        -b|--no-scan)         runscan=0;       shift;;
+        -s|--no-splint)       runsplint=0;     shift;;
+        -l|--no-clang-build)  runclangbuild=0; shift;;
+        -g|--no-gcc-build)    rungccbuild=0;   shift;;
+        -a|--no-asan-build)   runasanbuild=0;  shift;;
+        -d|--no-tsan-build)   runtsanbuild=0;  shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
@@ -489,6 +492,27 @@ cd $TOP
 cd ..
 TOP=`pwd`
 BDIR=""
+
+#use minimum cmake version unless the --no-cmake-compat option is specified
+if ( test $cmakecompat -eq 1 )
+then
+  if ( test ! -e $TOP/CMakeLists.txt )
+  then
+    echo "Unable to locate the project top-level CMakeLists.txt.  Fix me"
+    exit 1
+  fi
+  # read the min required CMake version from the top-level CMake file
+  minCMakeVers=`grep -i cmake_minimum_required $TOP/CMakeLists.txt | grep VERSION | sed 's/^.*VERSION\s*//i' | cut -d. -f1-2 | sed 's/\s*).*$//'`
+  # adjust PATH
+  export PATH=/usr/local/opt/cmake-$minCMakeVers/bin:$PATH
+  # check the version
+  if ( test `cmake --version | head -1 | grep -c $minCMakeVers` -ne 1 )
+  then
+    echo "Not using cmake version $minCMakeVers"
+    echo "Maybe you need to install it into /usr/local/opt/cmake-$minCMakeVers"
+    exit 1
+  fi
+fi
 
 CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"

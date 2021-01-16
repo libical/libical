@@ -39,8 +39,8 @@ Version 3.1.0 (NOT RELEASED YET):
      + struct icaltimezonephase
  * Improved performance of recurrence iterators
 
-Version 3.0.9 (UNRELEASED):
----------------------------
+Version 3.0.9 (16 January 2021):
+--------------------------------
  * Add support for empty parameters, e.g. CN=""
  * Accept VTIMEZONE with more than one X- property
  * Several fixes for recurrences containing BYWEEKNO
@@ -48,7 +48,7 @@ Version 3.0.9 (UNRELEASED):
  * Improve thread safety
  * Fix compiled-in path for the built-in timezone data
  * Fix reading TZif files with empty v1 data (use v2+ whenever possible)
- * Backwards compatability for previous TZIDs
+ * Add backwards compatibility for previous TZIDs
  * Built-in timezones updated to tzdata2020d
  * icalrecurrencetype_from_string() will reject any RRULE that contains a rule-part that occurs more than once
  * Fix build with newer libicu
