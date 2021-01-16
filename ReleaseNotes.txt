@@ -1,6 +1,10 @@
 Release Highlights
 ==================
 
+Version 3.0.10 (UNRELEASED):
+----------------------------
+ *
+
 Version 3.0.9 (16 January 2021):
 --------------------------------
  * Add support for empty parameters, e.g. CN=""
