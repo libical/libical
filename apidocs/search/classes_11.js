@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['xdaylight_587',['XDaylight',['../classLibICal_1_1XDaylight.html',1,'LibICal']]],
-  ['xstandard_588',['XStandard',['../classLibICal_1_1XStandard.html',1,'LibICal']]]
+  ['xdaylight_588',['XDaylight',['../classLibICal_1_1XDaylight.html',1,'LibICal']]],
+  ['xstandard_589',['XStandard',['../classLibICal_1_1XStandard.html',1,'LibICal']]]
 ];
