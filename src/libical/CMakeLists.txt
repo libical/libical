@@ -258,9 +258,11 @@ add_custom_command(
 
 add_library(ical ${LIBRARY_TYPE} ${ical_LIB_SRCS})
 add_dependencies(ical ical-header)
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(ical-static STATIC ${ical_LIB_SRCS})
   add_dependencies(ical-static ical-header)
+elseif(STATIC_ONLY)
+  add_library(ical-static ALIAS ical)
 endif()
 
 target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
@@ -278,11 +280,11 @@ endif()
 
 if(MSVC)
   set_target_properties(ical PROPERTIES PREFIX "lib")
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(ical-static PROPERTIES PREFIX "lib")
   endif()
 else()
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(ical-static PROPERTIES OUTPUT_NAME "ical")
   endif()
 endif()
@@ -291,7 +293,7 @@ set_target_properties(ical PROPERTIES
   SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
 )
 set_target_properties(ical PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   set_target_properties(ical-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 endif()
 
@@ -300,7 +302,7 @@ install(
   EXPORT icalTargets
   DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
 )
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   install(
     TARGETS ical-static
     EXPORT icalTargets
@@ -327,19 +329,21 @@ if(WITH_CXX_BINDINGS)
 
   add_library(ical_cxx ${LIBRARY_TYPE} ${icalcxx_LIB_SRCS})
   add_dependencies(ical_cxx ical-header)
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     add_library(ical_cxx-static STATIC ${icalcxx_LIB_SRCS})
     add_dependencies(ical_cxx-static ical-header)
+  elseif(STATIC_ONLY)
+    add_library(ical_cxx-static ALIAS ical_cxx)
   endif()
   target_link_libraries(ical_cxx ical ${CMAKE_THREAD_LIBS_INIT})
 
   if(MSVC)
     set_target_properties(ical_cxx PROPERTIES PREFIX "lib")
-    if(NOT SHARED_ONLY)
+    if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
       set_target_properties(ical_cxx-static PROPERTIES PREFIX "lib")
     endif()
   else()
-    if(NOT SHARED_ONLY)
+    if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
       set_target_properties(ical_cxx-static PROPERTIES OUTPUT_NAME "ical_cxx")
     endif()
   endif()
@@ -349,7 +353,7 @@ if(WITH_CXX_BINDINGS)
     SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
   )
   set_target_properties(ical_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(ical_cxx-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
   endif()
 
@@ -358,7 +362,7 @@ if(WITH_CXX_BINDINGS)
     EXPORT icalTargets
     DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
   )
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     install(
       TARGETS ical_cxx-static
       EXPORT icalTargets
