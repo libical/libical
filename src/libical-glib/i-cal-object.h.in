@@ -30,7 +30,7 @@
 #define I_CAL_TYPE_OBJECT \
     (i_cal_object_get_type ())
 LIBICAL_ICAL_EXPORT
-G_DECLARE_DERIVABLE_TYPE (ICalObject, i_cal_object, I_CAL, OBJECT, GObject)
+G_DECLARE_DERIVABLE_TYPE(ICalObject, i_cal_object, I_CAL, OBJECT, GObject)
 
 G_BEGIN_DECLS
 /**

@@ -192,10 +192,10 @@ static void i_cal_object_finalize(GObject *object)
 
     if (!priv->owner && !priv->is_global_memory &&
         priv->native && priv->native_destroy_func) {
-        g_clear_pointer (&priv->native, priv->native_destroy_func);
+        g_clear_pointer(&priv->native, priv->native_destroy_func);
     }
 
-    g_clear_object (&priv->owner);
+    g_clear_object(&priv->owner);
 
     g_slist_free_full(priv->dependers, g_object_unref);
 
@@ -426,7 +426,7 @@ gpointer i_cal_object_steal_native(ICalObject *iobject)
 
     LOCK_PROPS(priv);
 
-    native = g_steal_pointer (&priv->native);
+    native = g_steal_pointer(&priv->native);
 
     UNLOCK_PROPS(priv);
 
@@ -541,7 +541,7 @@ void i_cal_object_set_owner(ICalObject *iobject, GObject *owner)
         return;
     }
 
-    g_set_object (&priv->owner, owner);
+    g_set_object(&priv->owner, owner);
 
     UNLOCK_PROPS(priv);
 
@@ -595,7 +595,7 @@ void i_cal_object_remove_owner(ICalObject *iobject)
 
     LOCK_PROPS(priv);
 
-    g_clear_object (&priv->owner);
+    g_clear_object(&priv->owner);
 
     UNLOCK_PROPS(priv);
 }

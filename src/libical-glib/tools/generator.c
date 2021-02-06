@@ -2061,8 +2061,8 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
                 nameSpaceUpperSnake = get_upper_snake_from_upper_camel(namespace);
                 nameUpperSnake = get_upper_snake_from_upper_camel(trueType + i);
                 typeCheck =
-                    g_strconcat(nameSpaceUpperSnake, "_IS_", nameUpperSnake, " ((", trueType, "*)", parameter->name,
-                                ")", NULL);
+                    g_strconcat(nameSpaceUpperSnake, "_IS_", nameUpperSnake, " ((", trueType, "*)",
+                                parameter->name, ")", NULL);
                 defaultValue = NULL;
                 if (method->ret != NULL) {
                     retTrueType = get_true_type(method->ret->type);
