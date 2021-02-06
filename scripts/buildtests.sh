@@ -34,6 +34,7 @@ HELP() {
   echo " -t, --no-tidy          Don't run any clang-tidy tests"
   echo " -b, --no-scan          Don't run any scan-build tests"
   echo " -s, --no-splint        Don't run any splint tests"
+  echo " -n, --no-ninja         Don't run any build tests with ninja"
   echo " -l, --no-clang-build   Don't run any clang-build tests"
   echo " -g, --no-gcc-build     Don't run any gcc-build tests"
   echo " -a, --no-asan-build    Don't run any ASAN-build tests"
@@ -154,7 +155,12 @@ CLEAN() {
 BUILD() {
   cd $TOP
   CONFIGURE "$1" "$2"
-  make 2>&1 | tee make.out || exit 1
+  MAKE=make
+  if ( test `echo $2 | grep -ci Ninja` -gt 0 )
+  then
+    MAKE=ninja
+  fi
+  $MAKE 2>&1 | tee make.out || exit 1
   COMPILE_WARNINGS make.out
 
   if (test "`uname -s`" = "Darwin")
@@ -163,7 +169,7 @@ BUILD() {
   else
     export LD_LIBRARY_PATH=$BDIR/lib
   fi
-  make test 2>&1 | tee make-test.out || exit 1
+  $MAKE test 2>&1 | tee make-test.out || exit 1
   CLEAN
 }
 
@@ -183,6 +189,24 @@ GCC_BUILD() {
   SET_GCC
   BUILD "$name" "$2"
   echo "===== END GCC BUILD: $1 ======"
+}
+
+#function NINJA_GCC_BUILD:
+# runs a build test using gcc using the Ninja cmake generator
+# $1 = the name of the test (which will have "-ninjagcc" appended to it)
+# $2 = CMake options
+NINJA_GCC_BUILD() {
+  name="$1-ninjagcc"
+  if ( test $runninja -ne 1 )
+  then
+    echo "===== NINJA_GCC BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  COMMAND_EXISTS "gcc"
+  echo "===== START NINJA_GCC BUILD: $1 ======"
+  SET_GCC
+  BUILD "$name" "$2 -G Ninja"
+  echo "===== END NINJA_GCC BUILD: $1 ======"
 }
 
 #function CLANG_BUILD:
@@ -452,7 +476,7 @@ KRAZY() {
 
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hmkctbslgad --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
+#TEMP=`getopt -o hmkctbsnlgad --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
 TEMP=`getopt hmkctbslgad $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
@@ -463,6 +487,7 @@ runkrazy=1
 runcppcheck=1
 runtidy=1
 runscan=1
+runninja=1
 runclangbuild=1
 rungccbuild=1
 runasanbuild=1
@@ -477,6 +502,7 @@ while true; do
         -t|--no-tidy)         runtidy=0;       shift;;
         -b|--no-scan)         runscan=0;       shift;;
         -s|--no-splint)       runsplint=0;     shift;;
+        -n|--non-ninja)       runninja=0;      shift;;
         -l|--no-clang-build)  runclangbuild=0; shift;;
         -g|--no-gcc-build)    rungccbuild=0;   shift;;
         -a|--no-asan-build)   runasanbuild=0;  shift;;
@@ -547,7 +573,11 @@ fi
 GCC_BUILD testgcc1builtin "-DUSE_BUILTIN_TZDATA=True"
 GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
 
-#Clang based build tests
+#Ninja build tests
+NINJA_GCC_BUILD testninjagcc1 ""
+NINJA_GCC_BUILD testninjagcc2 "-DSHARED_ONLY=True"
+NINJA_GCC_BUILD testninjagcc3 "-DSTATIC_ONLY=True -DICAL_GLIB=False"
+
 CLANG_BUILD testclang1 ""
 CLANG_BUILD testclang2 "$CMAKEOPTS"
 CLANG_BUILD testclang3 "$UUCCMAKEOPTS"
