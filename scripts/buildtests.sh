@@ -530,6 +530,18 @@ then
   # read the min required CMake version from the top-level CMake file
   minCMakeVers=`grep -i cmake_minimum_required $TOP/CMakeLists.txt | grep VERSION | sed 's/^.*VERSION\s*//i' | cut -d. -f1-2 | sed 's/\s*).*$//'`
   # adjust PATH
+  X=`echo $minCMakeVers | cut -d. -f1`
+  Y=`echo $minCMakeVers | cut -d. -f2`
+  if ( test -z $X -o -z $Y )
+  then
+    echo "Bad CMake version encountered in the $TOP/CMakeLists.txt"
+    exit 1
+  fi
+  Z=`echo $minCMakeVers | cut -d. -f3`
+  if ( test -z $Z )
+  then
+    minCMakeVers="$minCMakeVers.0"
+  fi
   export PATH=/usr/local/opt/cmake-$minCMakeVers/bin:$PATH
   # check the version
   if ( test `cmake --version | head -1 | grep -c $minCMakeVers` -ne 1 )
