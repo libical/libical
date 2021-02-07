@@ -28,17 +28,18 @@ HELP() {
   echo
   echo "Run build tests"
   echo "Options:"
-  echo " -m, --no-cmake-compat  Don't require CMake version compatibility"
-  echo " -k, --no-krazy         Don't run any Krazy tests"
-  echo " -c, --no-cppcheck      Don't run any cppcheck tests"
-  echo " -t, --no-tidy          Don't run any clang-tidy tests"
-  echo " -b, --no-scan          Don't run any scan-build tests"
-  echo " -s, --no-splint        Don't run any splint tests"
-  echo " -n, --no-ninja         Don't run any build tests with ninja"
-  echo " -l, --no-clang-build   Don't run any clang-build tests"
-  echo " -g, --no-gcc-build     Don't run any gcc-build tests"
-  echo " -a, --no-asan-build    Don't run any ASAN-build tests"
-  echo " -d, --no-tsan-build    Don't run any TSAN-build tests"
+  echo " -m, --no-cmake-compat    Don't require CMake version compatibility"
+  echo " -k, --no-krazy           Don't run any Krazy tests"
+  echo " -c, --no-cppcheck        Don't run any cppcheck tests"
+  echo " -t, --no-tidy            Don't run any clang-tidy tests"
+  echo " -b, --no-scan            Don't run any scan-build tests"
+  echo " -s, --no-splint          Don't run any splint tests"
+  echo " -n, --no-ninja           Don't run any build tests with ninja"
+  echo " -l, --no-clang-build     Don't run any clang-build tests"
+  echo " -g, --no-gcc-build       Don't run any gcc-build tests"
+  echo " -a, --no-asan-build      Don't run any ASAN-build (sanitize-address) tests"
+  echo " -d, --no-tsan-build      Don't run any TSAN-build (sanitize-threads) tests"
+  echo " -u, --no-ubsan-build     Don't run any UBSAN-build (sanitize-undefined) tests"
   echo
 }
 
@@ -261,6 +262,22 @@ TSAN_BUILD() {
   echo "===== END TSAN BUILD: $1 ======"
 }
 
+#function UBSAN_BUILD:
+# runs an clang UBSAN build test
+# $1 = the name of the test (which will have "-ubsan" appended to it)
+# $2 = CMake options
+UBSAN_BUILD() {
+  name="$1-ubsan"
+  if ( test $runubsanbuild -ne 1 )
+  then
+    echo "===== UBSAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START UBSAN BUILD: $1 ======"
+  SET_CLANG
+  BUILD "$name" "-DUNDEFINED_SANITIZER=True $2"
+  echo "===== END UBSAN BUILD: $1 ======"
+}
 #function CPPCHECK
 # runs a cppcheck test, which means: configure, compile, link and run cppcheck
 # $1 = the name of the test (which will have "-cppcheck" appended to it)
@@ -476,8 +493,8 @@ KRAZY() {
 
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hmkctbsnlgad --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
-TEMP=`getopt hmkctbslgad $*`
+#TEMP=`getopt -o hmkctbsnlgadu --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build -- "$@"`
+TEMP=`getopt hmkctbsnlgadu $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
@@ -492,6 +509,7 @@ runclangbuild=1
 rungccbuild=1
 runasanbuild=1
 runtsanbuild=1
+runubsanbuild=1
 runsplint=1
 while true; do
     case "$1" in
@@ -507,6 +525,7 @@ while true; do
         -g|--no-gcc-build)    rungccbuild=0;   shift;;
         -a|--no-asan-build)   runasanbuild=0;  shift;;
         -d|--no-tsan-build)   runtsanbuild=0;  shift;;
+        -u|--no-ubsan-build)  runubsanbuild=0; shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
@@ -557,6 +576,7 @@ UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DUSE_BUILTIN_TZDATA=True"
 LTOCMAKEOPTS="$CMAKEOPTS -DENABLE_LTO_BUILD=True"
 GLIBOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=True -DUSE_BUILTIN_TZDATA=OFF -DICAL_GLIB_VAPI=ON"
+GLIBOPTS="-DCMAKE_BUILD_TYPE=Debug -DUSE_BUILTIN_TZDATA=OFF"
 
 #Static code checkers
 KRAZY
@@ -574,7 +594,7 @@ GCC_BUILD testgcc1 ""
 GCC_BUILD testgcc2 "$CMAKEOPTS"
 GCC_BUILD testgcc3 "$UUCCMAKEOPTS"
 GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
-GCC_BUILD testgcc4glib "$GLIBOPTS"
+#GCC_BUILD testgcc4glib "$GLIBOPTS"
 GCC_BUILD testgccnocxx "$CMAKEOPTS -DWITH_CXX_BINDINGS=off"
 if (test "`uname -s`" = "Linux")
 then
@@ -615,5 +635,12 @@ TSAN_BUILD test2tsan "$CMAKEOPTS"
 TSAN_BUILD test3tsan "$TZCMAKEOPTS"
 TSAN_BUILD test4tsan "$UUCCMAKEOPTS"
 TSAN_BUILD test5tsan "$GLIBOPTS"
+
+#Undefined sanitizer
+UBSAN_BUILD test1ubsan ""
+UBSAN_BUILD test2ubsan "$CMAKEOPTS"
+UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
+UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
+UBSAN_BUILD test5ubsan "$GLIBOPTS"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"

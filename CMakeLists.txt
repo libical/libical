@@ -86,6 +86,10 @@
 #  Build with the thread sanitizer (requires gcc or clang)
 #  Default=false
 #
+# -DUNDEFINED_SANITIZER=[true|false]
+#  Build with the undefined sanitizer (requires gcc or clang)
+#  Default=false
+#
 
 cmake_minimum_required(VERSION 3.11.0) #first line, to shutup a cygwin warning
 project(libical C) #CXX is optional for the bindings
@@ -531,6 +535,32 @@ if(THREAD_SANITIZER)
   if(ICAL_GLIB)
     message(STATUS
       "Warning: Building the thread sanitizer with the GObject interface is not supported. "
+      "Turning-off the GObject interface."
+    )
+    set(ICAL_GLIB False)
+  endif()
+endif()
+
+libical_option(UNDEFINED_SANITIZER "(Developer-only) Build with the undefined sanitizer." False)
+mark_as_advanced(UNDEFINED_SANITIZER)
+if(UNDEFINED_SANITIZER)
+  if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+  else()
+    message(FATAL_ERROR
+      "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
+  endif()
+  if(GOBJECT_INTROSPECTION)
+    message(STATUS
+      "Warning: Building the undefined sanitizer with GObject Introspection is is not supported. "
+      "Turning-off GObject Introspection."
+    )
+    set(HAVE_INTROSPECTION False)
+  endif()
+  if(ICAL_GLIB)
+    message(STATUS
+      "Warning: Building the undefined sanitizer with the GObject interface is not supported. "
       "Turning-off the GObject interface."
     )
     set(ICAL_GLIB False)
