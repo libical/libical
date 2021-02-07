@@ -520,7 +520,7 @@ while true; do
         -t|--no-tidy)         runtidy=0;       shift;;
         -b|--no-scan)         runscan=0;       shift;;
         -s|--no-splint)       runsplint=0;     shift;;
-        -n|--non-ninja)       runninja=0;      shift;;
+        -n|--no-ninja)        runninja=0;      shift;;
         -l|--no-clang-build)  runclangbuild=0; shift;;
         -g|--no-gcc-build)    rungccbuild=0;   shift;;
         -a|--no-asan-build)   runasanbuild=0;  shift;;
