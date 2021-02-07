@@ -475,7 +475,7 @@ KRAZY() {
 ##### END FUNCTIONS #####
 
 #TEMP=`getopt -o hmkctbsnlgad --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
-TEMP=`getopt hmkctbslgad $*`
+TEMP=`getopt hmkctbsnlgad $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
@@ -500,7 +500,7 @@ while true ; do
         -t|--no-tidy)         runtidy=0;       shift;;
         -b|--no-scan)         runscan=0;       shift;;
         -s|--no-splint)       runsplint=0;     shift;;
-        -n|--non-ninja)       runninja=0;      shift;;
+        -n|--no-ninja)        runninja=0;      shift;;
         -l|--no-clang-build)  runclangbuild=0; shift;;
         -g|--no-gcc-build)    rungccbuild=0;   shift;;
         -a|--no-asan-build)   runasanbuild=0;  shift;;
