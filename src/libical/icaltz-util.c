@@ -555,7 +555,10 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 // If it has, create a new component and update UNTIL of previous component's RRULE
                 if (daylight_recur.by_month[0] != icaltime.month ||
                         daylight_recur.by_day[0] != by_day ||
-                        types[prev_idx].gmtoff != prev_daylight_gmtoff) {
+                        types[prev_idx].gmtoff != prev_daylight_gmtoff ||
+                        prev_daylight_time.hour != icaltime.hour ||
+                        prev_daylight_time.minute != icaltime.minute ||
+                        prev_daylight_time.second != icaltime.second) {
                     // Set UNTIL of the previous component's recurrence
                     icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff);
                     prev_daylight_time.zone = icaltimezone_get_utc_timezone();
@@ -589,7 +592,10 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 // of the previous component's RRULE
                 if (standard_recur.by_month[0] != icaltime.month ||
                         standard_recur.by_day[0] != by_day ||
-                        types[prev_idx].gmtoff != prev_standard_gmtoff) {
+                        types[prev_idx].gmtoff != prev_standard_gmtoff ||
+                        prev_standard_time.hour != icaltime.hour ||
+                        prev_standard_time.minute != icaltime.minute ||
+                        prev_standard_time.second != icaltime.second) {
                     icaltime_adjust(&prev_standard_time, 0, 0, 0, -types[prev_idx].gmtoff);
                     prev_standard_time.zone = icaltimezone_get_utc_timezone();
 

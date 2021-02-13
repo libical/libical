@@ -42,6 +42,7 @@ Version 3.1.0 (NOT RELEASED YET):
 Version 3.0.10 (UNRELEASED):
 ----------------------------
  * Fix building -DSTATIC_ONLY=True with Ninja
+ * Fix generating wrong recurrence rules (#478)
 
 Version 3.0.9 (16 January 2021):
 --------------------------------
