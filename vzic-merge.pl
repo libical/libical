@@ -1,4 +1,5 @@
 #!/usr/bin/perl -w
+use Getopt::Long;
 
 #
 # Vzic - a program to convert Olson timezone database files into VZTIMEZONE
@@ -40,6 +41,11 @@ $LIBICAL_VERSIONING = 1;
 
 # Set this to 0 for dry-runs, and 1 to actually update.
 $DO_UPDATES = 1;
+
+GetOptions(
+    'master-zoneinfo-dir=s' => \$MASTER_ZONEINFO_DIR,
+    'new-zoneinfo-dir=s'    => \$NEW_ZONEINFO_DIR,
+) or die 'Invalid command-line arguments';
 
 # Save this so we can restore it later.
 $input_record_separator = $/;
