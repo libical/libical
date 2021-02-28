@@ -97,6 +97,7 @@ void create_new_component()
     rtime.period.start = icaltime_from_timet_with_zone(1023398689, 0, NULL);
     rtime.period.end = icaltime_from_timet_with_zone(1023409689, 0, NULL);
     rtime.period.end.hour++;
+    rtime.period.duration = icaldurationtype_null_duration();
     rtime.time = icaltime_null_time();
 
     /* Create calendar and add properties */
@@ -221,6 +222,7 @@ void create_new_component_with_va_args()
     rtime.period.start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     rtime.period.end = icaltime_from_timet_with_zone(time(0), 0, NULL);
     rtime.period.end.hour++;
+    rtime.period.duration = icaldurationtype_null_duration();
     rtime.time = icaltime_null_time();
 
     calendar =
