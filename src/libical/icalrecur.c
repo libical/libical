@@ -2880,14 +2880,14 @@ static short daymask_find_next_bit(icalrecur_iterator *impl)
     short days_index = impl->days_index + 1;
     unsigned long v;
     short startBitIndex;
-    int wordIdx;
+    unsigned short wordIdx, maxWordIdx;
 
     if (days_index >= ICAL_YEARDAYS_MASK_SIZE)
         return ICAL_YEARDAYS_MASK_SIZE;
 
     // Prepare the first word, where searching might not start at the beginning
     startBitIndex = days_index + ICAL_YEARDAYS_MASK_OFFSET;
-    wordIdx = (int)(startBitIndex / BITS_PER_LONG);
+    wordIdx = (unsigned short)(startBitIndex / BITS_PER_LONG);
     v = days[wordIdx];
     v >>= startBitIndex % BITS_PER_LONG;
 
@@ -2896,7 +2896,8 @@ static short daymask_find_next_bit(icalrecur_iterator *impl)
         days_index += BITS_PER_LONG - startBitIndex % BITS_PER_LONG;
 
         // Are there more empty words following? Skip them.
-        while (days_index < ICAL_YEARDAYS_MASK_SIZE) {
+        maxWordIdx = (unsigned short)(LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE)) - 1;
+        while (days_index < ICAL_YEARDAYS_MASK_SIZE && wordIdx < maxWordIdx) {
 
             wordIdx++;
             v = days[wordIdx];
@@ -2909,7 +2910,6 @@ static short daymask_find_next_bit(icalrecur_iterator *impl)
     }
 
     if (v) {
-
         // We found a word containing the next bit but don't know the exact
         // position yet. Do a b-search to find it.
 
@@ -2918,7 +2918,6 @@ static short daymask_find_next_bit(icalrecur_iterator *impl)
         mask = (((unsigned long)1) << maskSize) - 1;
 
         while (maskSize) {
-
             if ((v & mask) == 0) {
                 v >>= maskSize;
                 days_index += maskSize;

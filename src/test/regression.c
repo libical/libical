@@ -1093,6 +1093,7 @@ void test_restriction()
     rtime.period.start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     rtime.period.end = icaltime_from_timet_with_zone(time(0), 0, NULL);
     rtime.period.end.hour++;
+    rtime.period.duration = icaldurationtype_null_duration();
     rtime.time = icaltime_null_time();
 
     comp =
@@ -1144,8 +1145,7 @@ void test_restriction()
                 icalproperty_vanew_dtend(atime,
                                          icalparameter_new_tzid("America/New_York"),
                                          (void *)0),
-                icalproperty_new_location("1CP Conference Room 4350"), (void *)0),
-            (void *)0);
+                icalproperty_new_location("1CP Conference Room 4350"), (void *)0), (void *)0);
 
     valid = icalrestriction_check(comp);
 

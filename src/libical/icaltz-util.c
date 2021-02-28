@@ -412,21 +412,19 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
     EFREAD(r_trans, (size_t)trans_size, num_trans, f);
     temp = r_trans;
-    if (num_trans) {
-        trans_idx = calloc(num_trans, sizeof(int));
-        if (trans_idx == NULL) {
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            goto error;
+    trans_idx = calloc(num_trans, sizeof(int));
+    if (trans_idx == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        goto error;
+    }
+    for (i = 0; i < num_trans; i++) {
+        trans_idx[i] = fgetc(f);
+        if (trans_size == 8) {
+            transitions[i] = (time_t) decode64(r_trans);
+        } else {
+            transitions[i] = (time_t) decode(r_trans);
         }
-        for (i = 0; i < num_trans; i++) {
-            trans_idx[i] = fgetc(f);
-            if (trans_size == 8) {
-                transitions[i] = (time_t) decode64(r_trans);
-            } else {
-                transitions[i] = (time_t) decode(r_trans);
-            }
-            r_trans += trans_size;
-        }
+        r_trans += trans_size;
     }
     r_trans = temp;
 
@@ -525,11 +523,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     icalcomponent_add_property(tz_comp, icalprop);
 
     prev_idx = 0;
-    if (num_trans == 0) {
-        prev_idx = idx = 0;
-    } else {
-        idx = trans_idx[0];
-    }
+    idx = trans_idx[0];
 
     for (i = 1; i < num_trans; i++) {
         int by_day;
@@ -706,14 +700,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         icalcomponent_add_component(tz_comp, comp);
     }
 
-    if (num_trans <= 1) {
-        time_t start;
-
-        if (num_trans == 1) {
-            start = transitions[0] + types[prev_idx].gmtoff;
-        } else {
-            start = 0;
-        }
+    if (num_trans == 1) {
+        time_t start = transitions[0] + types[prev_idx].gmtoff;
 
         // This time zone doesn't transition, insert a single VTIMEZONE component
         if (types[idx].isdst) {
