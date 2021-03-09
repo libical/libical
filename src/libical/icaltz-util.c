@@ -172,7 +172,7 @@ static long long int decode64(const void *ptr)
     if ((BYTE_ORDER == BIG_ENDIAN)) {
         return *(const long long int *)ptr;
     } else {
-        return (int)bswap_64(*(const unsigned long long int *)ptr);
+        return (const long long int)bswap_64(*(const unsigned long long int *)ptr);
     }
 #endif
 }
