@@ -24,11 +24,7 @@
 
 #include <stdlib.h>
 
-#if !defined(__APPLE__) //krazy:exclude=cpp
 #define MAX_FAILURE_RATE 1
-#else
-#define MAX_FAILURE_RATE 3 //TODO: why is the expected error rate higher on Mac?
-#endif
 
 int main()
 {
