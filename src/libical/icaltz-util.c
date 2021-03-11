@@ -263,8 +263,10 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     icaltimetype prev_daylight_time = icaltime_null_time();
     icaltimetype prev_prev_standard_time;
     icaltimetype prev_prev_daylight_time;
-    long prev_standard_gmtoff = 0;
-    long prev_daylight_gmtoff = 0;
+    long prev_standard_gmtoff = LONG_MIN;
+    long prev_daylight_gmtoff = LONG_MIN;
+    const char *prev_standard_name = NULL;
+    const char *prev_daylight_name = NULL;
     icalcomponent *cur_standard_comp = NULL;
     icalcomponent *cur_daylight_comp = NULL;
     icalproperty *cur_standard_rrule_property = NULL;
@@ -496,13 +498,16 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         if (types[idx].isdst) {
             if (cur_daylight_comp) {
                 // Check if the pattern for daylight has changed
-                // If it has, create a new component and update UNTIL of previous component's RRULE
+                // If it has, create a new component and update UNTIL
+                // of previous component's RRULE
                 if (daylight_recur.by_month[0] != icaltime.month ||
-                        daylight_recur.by_day[0] != by_day ||
-                        types[prev_idx].gmtoff != prev_daylight_gmtoff ||
-                        prev_daylight_time.hour != icaltime.hour ||
-                        prev_daylight_time.minute != icaltime.minute ||
-                        prev_daylight_time.second != icaltime.second) {
+                    daylight_recur.by_day[0] != by_day ||
+                    types[prev_idx].gmtoff != prev_daylight_gmtoff ||
+                    prev_daylight_time.hour != icaltime.hour ||
+                    prev_daylight_time.minute != icaltime.minute ||
+                    prev_daylight_time.second != icaltime.second ||
+                    strcmp(types[idx].zname, prev_daylight_name)) {
+
                     if (icaltime_compare(prev_daylight_time, prev_prev_daylight_time)) {
                         // Set UNTIL of the previous component's recurrence
                         icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff);
@@ -526,6 +531,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 cur_daylight_comp = icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
                 is_new_comp = 1;
 
+                prev_daylight_name = types[idx].zname;
                 prev_daylight_time = icaltime_null_time();
             }
 
@@ -546,11 +552,13 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 // If it has, create a new component and update UNTIL
                 // of the previous component's RRULE
                 if (standard_recur.by_month[0] != icaltime.month ||
-                        standard_recur.by_day[0] != by_day ||
-                        types[prev_idx].gmtoff != prev_standard_gmtoff ||
-                        prev_standard_time.hour != icaltime.hour ||
-                        prev_standard_time.minute != icaltime.minute ||
-                        prev_standard_time.second != icaltime.second) {
+                    standard_recur.by_day[0] != by_day ||
+                    types[prev_idx].gmtoff != prev_standard_gmtoff ||
+                    prev_standard_time.hour != icaltime.hour ||
+                    prev_standard_time.minute != icaltime.minute ||
+                    prev_standard_time.second != icaltime.second ||
+                    strcmp(types[idx].zname, prev_standard_name)) {
+
                     if (icaltime_compare(prev_standard_time, prev_prev_standard_time)) {
                         icaltime_adjust(&prev_standard_time, 0, 0, 0, -types[prev_idx].gmtoff);
                         prev_standard_time.zone = icaltimezone_get_utc_timezone();
@@ -572,6 +580,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 cur_standard_comp = icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
                 is_new_comp = 1;
 
+                prev_standard_name = types[idx].zname;
                 prev_standard_time = icaltime_null_time();
             }
 
