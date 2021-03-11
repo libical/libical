@@ -528,19 +528,30 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         prev_daylight_time.hour != icaltime.hour ||
                         prev_daylight_time.minute != icaltime.minute ||
                         prev_daylight_time.second != icaltime.second) {
-                    // Set UNTIL of the previous component's recurrence
-                    icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff);
-                    prev_daylight_time.zone = icaltimezone_get_utc_timezone();
+                    if (icaltime_compare(prev_daylight_time, prev_prev_daylight_time)) {
+                        // Set UNTIL of the previous component's recurrence
+                        icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff);
+                        prev_daylight_time.zone = icaltimezone_get_utc_timezone();
 
-                    daylight_recur.until = prev_daylight_time;
-                    icalproperty_set_rrule(cur_daylight_rrule_property, daylight_recur);
+                        daylight_recur.until = prev_daylight_time;
+                        icalproperty_set_rrule(cur_daylight_rrule_property, daylight_recur);
+                    }
+                    else {
+                        // Don't set UNTIL for a single instance
+                        // Remove the RRULE
+                        icalcomponent_remove_property(cur_daylight_comp, cur_daylight_rrule_property);
+                        icalproperty_free(cur_daylight_rrule_property);
+                    }
 
-                    cur_daylight_comp = icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
-                    is_new_comp = 1;
+                    cur_daylight_comp = NULL;
                 }
-            } else {
+            }
+
+            if (!cur_daylight_comp) {
                 cur_daylight_comp = icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
                 is_new_comp = 1;
+
+                prev_daylight_time = icaltime_null_time();
             }
 
             comp = cur_daylight_comp;
@@ -565,30 +576,28 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         prev_standard_time.hour != icaltime.hour ||
                         prev_standard_time.minute != icaltime.minute ||
                         prev_standard_time.second != icaltime.second) {
-                    icaltime_adjust(&prev_standard_time, 0, 0, 0, -types[prev_idx].gmtoff);
-                    prev_standard_time.zone = icaltimezone_get_utc_timezone();
+                    if (icaltime_compare(prev_standard_time, prev_prev_standard_time)) {
+                        icaltime_adjust(&prev_standard_time, 0, 0, 0, -types[prev_idx].gmtoff);
+                        prev_standard_time.zone = icaltimezone_get_utc_timezone();
 
-                    standard_recur.until = prev_standard_time;
-                    icalproperty_set_rrule(cur_standard_rrule_property, standard_recur);
-
-                    cur_standard_comp = icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
-                    is_new_comp = 1;
-
-                    // Are we transitioning on the daylight date?
-                    // If so, that means the time zone is switching off of DST
-                    // We need to set UNTIL for the daylight component
-                    if (cur_daylight_comp && daylight_recur.by_month[0] == icaltime.month &&
-                            daylight_recur.by_day[0] == by_day) {
-                        icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff);
-                        prev_daylight_time.zone = icaltimezone_get_utc_timezone();
-
-                        daylight_recur.until = prev_daylight_time;
-                        icalproperty_set_rrule(cur_daylight_rrule_property, daylight_recur);
+                        standard_recur.until = prev_standard_time;
+                        icalproperty_set_rrule(cur_standard_rrule_property, standard_recur);
                     }
+                    else {
+                        // Don't set UNTIL for a single instance
+                        // Remove the RRULE
+                        icalcomponent_remove_property(cur_standard_comp, cur_standard_rrule_property);
+                        icalproperty_free(cur_standard_rrule_property);
+                    }
+
+                    cur_standard_comp = NULL;
                 }
-            } else {
+            }
+            if (!cur_standard_comp) {
                 cur_standard_comp = icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
                 is_new_comp = 1;
+
+                prev_standard_time = icaltime_null_time();
             }
 
             comp = cur_standard_comp;
