@@ -232,31 +232,6 @@ static int calculate_pos(icaltimetype icaltime)
    return r_pos[pos];
 }
 
-static void adjust_dtstart_day_to_rrule(icalcomponent *comp, struct icalrecurrencetype rule)
-{
-    time_t now, year_start;
-    struct icaltimetype start, comp_start, iter_start, itime;
-    icalrecur_iterator *iter;
-
-    now = time(NULL);
-    itime = icaltime_from_timet_with_zone(now, 0, NULL);
-    itime.month = itime.day = 1;
-    itime.hour = itime.minute = itime.second = 0;
-    year_start = icaltime_as_timet(itime);
-
-    comp_start = icalcomponent_get_dtstart(comp);
-    start = icaltime_from_timet_with_zone(year_start, 0, NULL);
-
-    iter = icalrecur_iterator_new(rule, start);
-    iter_start = icalrecur_iterator_next(iter);
-    icalrecur_iterator_free(iter);
-
-    if (iter_start.day != comp_start.day) {
-        comp_start.day = iter_start.day;
-        icalcomponent_set_dtstart(comp, comp_start);
-    }
-}
-
 icalcomponent *icaltzutil_fetch_timezone(const char *location)
 {
     tzinfo header;
@@ -627,8 +602,6 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             } else {
                 cur_standard_rrule_property = icalprop;
             }
-
-            adjust_dtstart_day_to_rrule(comp, *recur);
 
             icalcomponent_add_component(tz_comp, comp);
         }
