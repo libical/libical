@@ -588,7 +588,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     /* Read the footer */
     if (trans_size == 8 &&
         (footer[0] = fgetc(f)) == '\n' &&
-        fgets(footer+1, sizeof(footer)-1, f) &&
+        fgets(footer+1, (int) sizeof(footer)-1, f) &&
         footer[strlen(footer)-1] == '\n') {
         tzstr = footer+1;
     }
@@ -638,7 +638,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     std_trans = icalrecur_iterator_next(iter);
                     icaltime_adjust(&std_trans, 0, 0, 0, -dst_type->gmtoff);
                     transitions[num_trans] = icaltime_as_timet(std_trans);
-                    trans_idx[num_trans++] = num_types-2;
+                    trans_idx[num_trans++] = (int) num_types-2;
                     icalrecur_iterator_free(iter);
                 }
                 else {
@@ -650,7 +650,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     dst_trans = icalrecur_iterator_next(iter);
                     icaltime_adjust(&dst_trans, 0, 0, 0, -std_type->gmtoff);
                     transitions[num_trans] = icaltime_as_timet(dst_trans);
-                    trans_idx[num_trans++] = num_types-1;
+                    trans_idx[num_trans++] = (int) num_types-1;
                     icalrecur_iterator_free(iter);
                 }
             }
