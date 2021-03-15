@@ -318,8 +318,10 @@ static char *parse_posix_rule(char *p,
     else {
         /* The zero-based Julian day (0 <= n <= 365).
            Leap days shall be counted, and it is possible to refer to February 29. 
+
+           Flag this by adding 1001 to the day.
         */
-        /* XXX  Currently not used by any zone */
+        day = strtol(++p, &p, 10) + 1001;
     }
 
     /* Parse time */
@@ -345,7 +347,9 @@ static char *parse_posix_rule(char *p,
         }
         if (month) {
             if (week == -1) {
-                monthday = icaltime_days_in_month(month, -1) + days_adjust - 7;
+                int days_in_month = icaltime_days_in_month(month, 1 /* non-leap */);
+
+                monthday = days_in_month + days_adjust - 7;
             }
             else {
                 monthday = 1 + (week - 1) * 7 + days_adjust;
@@ -369,8 +373,15 @@ static char *parse_posix_rule(char *p,
             }
         }
     }
+    else if (day > 1000) {
+        recur->by_year_day[0] = day - 1000;
+    }
     else {
-        recur->by_year_day[0] = day;
+        /* Convert day-of-non-leap-year into month/day */
+        icaltimetype t = icaltime_from_day_of_year(day, 1 /* non-leap */);
+
+        recur->by_month[0] = t.month;
+        recur->by_month_day[0] = t.day;
     }
 
     return p;
