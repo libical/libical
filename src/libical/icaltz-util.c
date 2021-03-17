@@ -292,7 +292,7 @@ static char *parse_posix_rule(char *p,
     }
     else {
         /* The zero-based Julian day (0 <= n <= 365).
-           Leap days shall be counted, and it is possible to refer to February 29. 
+           Leap days shall be counted, and it is possible to refer to February 29.
 
            Flag this by adding 1001 to the day.
         */
@@ -410,12 +410,16 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         { ICAL_XSTANDARD_COMPONENT, NULL, LONG_MIN, LONG_MIN,
           icaltime_null_time(), icaltime_null_time(),
           NULL, NULL, NULL,
-          { .freq = ICAL_NO_RECURRENCE }, { .freq = ICAL_NO_RECURRENCE } };
+          icalrecurrencetype_from_string("0"),
+          icalrecurrencetype_from_string("0")
+        };
     struct zone_context daylight =
         { ICAL_XDAYLIGHT_COMPONENT, NULL, LONG_MIN, LONG_MIN,
           icaltime_null_time(), icaltime_null_time(),
           NULL, NULL, NULL,
-          { .freq = ICAL_NO_RECURRENCE }, { .freq = ICAL_NO_RECURRENCE } };
+          icalrecurrencetype_from_string("0"),
+          icalrecurrencetype_from_string("0")
+        };
     struct zone_context *zone;
 
     if (icaltimezone_get_builtin_tzdata()) {
@@ -774,7 +778,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     icaltime_adjust(&zone->time,
                                     0, 0, 0, -types[prev_idx].gmtoff);
                     zone->time.zone = icaltimezone_get_utc_timezone();
-                            
+
                     zone->recur.until = zone->time;
                     icalproperty_set_rrule(zone->rrule_prop, zone->recur);
 
@@ -822,7 +826,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                                     icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff),
                                     icalproperty_new_tzoffsetto(types[idx].gmtoff),
                                     icalproperty_new_dtstart(icaltime),
-                                    NULL);
+                                    0);
             icalcomponent_add_component(tz_comp, zone->rrule_comp);
 
             if (last_trans) {
