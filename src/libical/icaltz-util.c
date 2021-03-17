@@ -434,11 +434,13 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     struct zone_context standard =
         { ICAL_XSTANDARD_COMPONENT, NULL, LONG_MIN, LONG_MIN,
           icaltime_null_time(), icaltime_null_time(),
-          NULL, NULL, NULL, {}, {} };
+          NULL, NULL, NULL,
+          { .freq = ICAL_NO_RECURRENCE }, { .freq = ICAL_NO_RECURRENCE } };
     struct zone_context daylight =
         { ICAL_XDAYLIGHT_COMPONENT, NULL, LONG_MIN, LONG_MIN,
           icaltime_null_time(), icaltime_null_time(),
-          NULL, NULL, NULL, {}, {} };
+          NULL, NULL, NULL,
+          { .freq = ICAL_NO_RECURRENCE }, { .freq = ICAL_NO_RECURRENCE } };
     struct zone_context *zone;
 
     if (icaltimezone_get_builtin_tzdata()) {
