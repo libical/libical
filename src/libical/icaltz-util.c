@@ -371,6 +371,7 @@ struct zone_context {
     icaltimetype time;
     icaltimetype prev_time;
 
+    icalcomponent *rdate_comp;
     icalcomponent *rrule_comp;
     icalproperty *rrule_prop;
     struct icalrecurrencetype recur;
@@ -408,11 +409,11 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     struct zone_context standard =
         { ICAL_XSTANDARD_COMPONENT, NULL, LONG_MIN, LONG_MIN,
           icaltime_null_time(), icaltime_null_time(),
-          NULL, NULL, {}, {} };
+          NULL, NULL, NULL, {}, {} };
     struct zone_context daylight =
         { ICAL_XDAYLIGHT_COMPONENT, NULL, LONG_MIN, LONG_MIN,
           icaltime_null_time(), icaltime_null_time(),
-          NULL, NULL, {}, {} };
+          NULL, NULL, NULL, {}, {} };
     struct zone_context *zone;
 
     if (icaltimezone_get_builtin_tzdata()) {
@@ -691,6 +692,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     for (i = 1; i < num_trans; i++) {
         int last_trans = 0;
         int terminate = 0;
+        int rdate = 0;
         int by_day;
         time_t start;
 
@@ -742,13 +744,13 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     zone->recur.by_day[0] = ICAL_RECURRENCE_ARRAY_MAX;
                 }
                 else {
-                    // Different BYDAY and BYMONTHDAY
-                    terminate = 1;
+                    // Different BYDAY and BYMONTHDAY - possible RDATE
+                    rdate = terminate = 1;
                 }
             }
             else {
-                // Different recurrence pattern entirely
-                terminate = 1;
+                // Different recurrence pattern entirely - possible RDATE
+                rdate = terminate = 1;
             }
 
             if (terminate) {
@@ -762,12 +764,30 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                             
                     zone->recur.until = zone->time;
                     icalproperty_set_rrule(zone->rrule_prop, zone->recur);
+
+                    zone->rdate_comp = NULL;
+                }
+                else if (rdate && zone->rdate_comp) {
+                    // Add an RDATE to the previous component
+                    // Remove the current component
+                    struct icaldatetimeperiodtype dtp =
+                        { zone->time, icalperiodtype_null_period() };
+
+                    icalprop = icalproperty_new_rdate(dtp);
+                    icalcomponent_add_property(zone->rdate_comp, icalprop);
+
+                    icalcomponent_remove_component(tz_comp, zone->rrule_comp);
+                    icalcomponent_free(zone->rrule_comp);
                 }
                 else {
                     // Remove the RRULE from the previous component
                     icalcomponent_remove_property(zone->rrule_comp,
                                                   zone->rrule_prop);
                     icalproperty_free(zone->rrule_prop);
+
+                    if (rdate) {
+                        zone->rdate_comp = zone->rrule_comp;
+                    }
                 }
 
                 zone->rrule_comp = NULL;
