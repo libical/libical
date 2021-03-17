@@ -366,6 +366,7 @@ struct zone_context {
     enum icalcomponent_kind kind;
     const char *name;
     long gmtoff_from;
+    long gmtoff_to;
 
     icaltimetype time;
     icaltimetype prev_time;
@@ -405,11 +406,11 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     icaltimetype icaltime;
 
     struct zone_context standard =
-        { ICAL_XSTANDARD_COMPONENT, NULL, LONG_MIN,
+        { ICAL_XSTANDARD_COMPONENT, NULL, LONG_MIN, LONG_MIN,
           icaltime_null_time(), icaltime_null_time(),
           NULL, NULL, {}, {} };
     struct zone_context daylight =
-        { ICAL_XDAYLIGHT_COMPONENT, NULL, LONG_MIN,
+        { ICAL_XDAYLIGHT_COMPONENT, NULL, LONG_MIN, LONG_MIN,
           icaltime_null_time(), icaltime_null_time(),
           NULL, NULL, {}, {} };
     struct zone_context *zone;
@@ -720,6 +721,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             }
             // Check if the zone name or the offset has changed
             else if (types[prev_idx].gmtoff != zone->gmtoff_from ||
+                     types[idx].gmtoff      != zone->gmtoff_to   ||
                      strcmp(types[idx].zname, zone->name)) {
 
                 terminate = 1;
@@ -766,6 +768,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         zone->prev_time = zone->time;
         zone->time = icaltime;
         zone->gmtoff_from = types[prev_idx].gmtoff;
+        zone->gmtoff_to = types[idx].gmtoff;
 
         if (!zone->rrule_comp) {
             zone->name = types[idx].zname;
