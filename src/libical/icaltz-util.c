@@ -361,7 +361,21 @@ static char *parse_posix_rule(char *p,
 
     return p;
 }
- 
+
+struct zone_context {
+    enum icalcomponent_kind kind;
+    const char *name;
+    long gmtoff_from;
+
+    icaltimetype time;
+    icaltimetype prev_time;
+
+    icalcomponent *rrule_comp;
+    icalproperty *rrule_prop;
+    struct icalrecurrencetype recur;
+    struct icalrecurrencetype final_recur;
+};
+
 icalcomponent *icaltzutil_fetch_timezone(const char *location)
 {
     tzinfo header;
@@ -389,22 +403,16 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     icalcomponent *tz_comp = NULL, *comp = NULL;
     icalproperty *icalprop;
     icaltimetype icaltime;
-    struct icalrecurrencetype standard_recur;
-    struct icalrecurrencetype daylight_recur;
-    struct icalrecurrencetype final_standard_recur;
-    struct icalrecurrencetype final_daylight_recur;
-    icaltimetype prev_standard_time = icaltime_null_time();
-    icaltimetype prev_daylight_time = icaltime_null_time();
-    icaltimetype prev_prev_standard_time;
-    icaltimetype prev_prev_daylight_time;
-    long prev_standard_gmtoff = LONG_MIN;
-    long prev_daylight_gmtoff = LONG_MIN;
-    const char *prev_standard_name = NULL;
-    const char *prev_daylight_name = NULL;
-    icalcomponent *cur_standard_comp = NULL;
-    icalcomponent *cur_daylight_comp = NULL;
-    icalproperty *cur_standard_rrule_property = NULL;
-    icalproperty *cur_daylight_rrule_property = NULL;
+
+    struct zone_context standard =
+        { ICAL_XSTANDARD_COMPONENT, NULL, LONG_MIN,
+          icaltime_null_time(), icaltime_null_time(),
+          NULL, NULL, {}, {} };
+    struct zone_context daylight =
+        { ICAL_XDAYLIGHT_COMPONENT, NULL, LONG_MIN,
+          icaltime_null_time(), icaltime_null_time(),
+          NULL, NULL, {}, {} };
+    struct zone_context *zone;
 
     if (icaltimezone_get_builtin_tzdata()) {
         goto error;
@@ -622,11 +630,11 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
                 /* Parse std->dst rule */
                 p = parse_posix_rule(++p /* skip ',' */,
-                                     &final_daylight_recur, &dst_trans);
+                                     &daylight.final_recur, &dst_trans);
 
                 /* Parse dst->std rule */
                 p = parse_posix_rule(++p /* skip ',' */,
-                                     &final_standard_recur, &std_trans);
+                                     &standard.final_recur, &std_trans);
 
                 last_trans = icaltime_from_timet_with_zone(transitions[num_trans-1], 0, NULL);
                 if (types[trans_idx[num_trans-1]].isdst) {
@@ -634,7 +642,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     std_trans.year  = last_trans.year;
                     std_trans.month = last_trans.month;
                     std_trans.day   = last_trans.day;
-                    iter = icalrecur_iterator_new(final_standard_recur, std_trans);
+                    iter = icalrecur_iterator_new(standard.final_recur, std_trans);
                     std_trans = icalrecur_iterator_next(iter);
                     icaltime_adjust(&std_trans, 0, 0, 0, -dst_type->gmtoff);
                     transitions[num_trans] = icaltime_as_timet(std_trans);
@@ -646,7 +654,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     dst_trans.year  = last_trans.year;
                     dst_trans.month = last_trans.month;
                     dst_trans.day   = last_trans.day;
-                    iter = icalrecur_iterator_new(final_daylight_recur, dst_trans);
+                    iter = icalrecur_iterator_new(daylight.final_recur, dst_trans);
                     dst_trans = icalrecur_iterator_next(iter);
                     icaltime_adjust(&dst_trans, 0, 0, 0, -std_type->gmtoff);
                     transitions[num_trans] = icaltime_as_timet(dst_trans);
@@ -682,9 +690,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     for (i = 1; i < num_trans; i++) {
         int last_trans = 0;
         int by_day;
-        int is_new_comp = 0;
         time_t start;
-        struct icalrecurrencetype *recur;
 
         prev_idx = idx;
         idx = trans_idx[i];
@@ -700,172 +706,96 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             by_day = sign * ((abs(pos) * 8) + icaltime_day_of_week(icaltime));
         }
 
+        if (types[idx].isdst) {
+            zone = &daylight;
+        }
+        else {
+            zone = &standard;
+        }
+
         // Figure out if the rule has changed since the previous year
         // If it has, update the recurrence rule of the current component and create a new component
         // If it the current component was only valid for one year then remove the recurrence rule
-        if (types[idx].isdst) {
-            if (cur_daylight_comp) {
-                // Check if the pattern for daylight has changed
-                // If it has, create a new component and update UNTIL
-                // of previous component's RRULE
-                if (last_trans ||
-                    daylight_recur.by_month[0] != icaltime.month ||
-                    daylight_recur.by_day[0] != by_day ||
-                    types[prev_idx].gmtoff != prev_daylight_gmtoff ||
-                    prev_daylight_time.hour != icaltime.hour ||
-                    prev_daylight_time.minute != icaltime.minute ||
-                    prev_daylight_time.second != icaltime.second ||
-                    strcmp(types[idx].zname, prev_daylight_name)) {
+        if (zone->rrule_comp) {
+            // Check if the pattern for daylight has changed
+            // If it has, create a new component and update UNTIL
+            // of previous component's RRULE
+            if (last_trans ||
+                zone->recur.by_month[0] != icaltime.month ||
+                zone->recur.by_day[0] != by_day ||
+                types[prev_idx].gmtoff != zone->gmtoff_from ||
+                zone->time.hour != icaltime.hour ||
+                zone->time.minute != icaltime.minute ||
+                zone->time.second != icaltime.second ||
+                strcmp(types[idx].zname, zone->name)) {
 
-                    if (icaltime_compare(prev_daylight_time, prev_prev_daylight_time)) {
-                        // Set UNTIL of the previous component's recurrence
-                        icaltime_adjust(&prev_daylight_time, 0, 0, 0, -types[prev_idx].gmtoff);
-                        prev_daylight_time.zone = icaltimezone_get_utc_timezone();
+                if (icaltime_compare(zone->time, zone->prev_time)) {
+                    // Set UNTIL of the previous component's recurrence
+                    icaltime_adjust(&zone->time, 0, 0, 0, -types[prev_idx].gmtoff);
+                    zone->time.zone = icaltimezone_get_utc_timezone();
 
-                        daylight_recur.until = prev_daylight_time;
-                        icalproperty_set_rrule(cur_daylight_rrule_property, daylight_recur);
-                    }
-                    else {
-                        // Don't set UNTIL for a single instance
-                        // Remove the RRULE
-                        icalcomponent_remove_property(cur_daylight_comp, cur_daylight_rrule_property);
-                        icalproperty_free(cur_daylight_rrule_property);
-                    }
-
-                    cur_daylight_comp = NULL;
+                    zone->recur.until = zone->time;
+                    icalproperty_set_rrule(zone->rrule_prop, zone->recur);
                 }
-            }
-
-            if (!cur_daylight_comp) {
-                cur_daylight_comp = icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
-                is_new_comp = 1;
-
-                prev_daylight_name = types[idx].zname;
-                prev_daylight_time = icaltime_null_time();
-            }
-
-            comp = cur_daylight_comp;
-            if (last_trans) {
-                /* This rule will take us into the future */
-                recur = &final_daylight_recur;
-                prev_daylight_time = icaltime_from_day_of_year(1, 9999);
-            }
-            else {
-                recur = &daylight_recur;
-
-                if (icaltime_is_null_time(prev_daylight_time)) {
-                    prev_prev_daylight_time = icaltime;
-                } else {
-                    prev_prev_daylight_time = prev_daylight_time;
+                else {
+                    // Don't set UNTIL for a single instance
+                    // Remove the RRULE
+                    icalcomponent_remove_property(zone->rrule_comp, zone->rrule_prop);
+                    icalproperty_free(zone->rrule_prop);
                 }
 
-                prev_daylight_time = icaltime;
-                prev_daylight_gmtoff = types[prev_idx].gmtoff;
-            }
-        } else {
-            if (cur_standard_comp) {
-                // Check if the pattern for standard has changed
-                // If it has, create a new component and update UNTIL
-                // of the previous component's RRULE
-                if (last_trans || 
-                    standard_recur.by_month[0] != icaltime.month ||
-                    standard_recur.by_day[0] != by_day ||
-                    types[prev_idx].gmtoff != prev_standard_gmtoff ||
-                    prev_standard_time.hour != icaltime.hour ||
-                    prev_standard_time.minute != icaltime.minute ||
-                    prev_standard_time.second != icaltime.second ||
-                    strcmp(types[idx].zname, prev_standard_name)) {
-
-                    if (icaltime_compare(prev_standard_time, prev_prev_standard_time)) {
-                        icaltime_adjust(&prev_standard_time, 0, 0, 0, -types[prev_idx].gmtoff);
-                        prev_standard_time.zone = icaltimezone_get_utc_timezone();
-
-                        standard_recur.until = prev_standard_time;
-                        icalproperty_set_rrule(cur_standard_rrule_property, standard_recur);
-                    }
-                    else {
-                        // Don't set UNTIL for a single instance
-                        // Remove the RRULE
-                        icalcomponent_remove_property(cur_standard_comp, cur_standard_rrule_property);
-                        icalproperty_free(cur_standard_rrule_property);
-                    }
-
-                    cur_standard_comp = NULL;
-                }
-            }
-            if (!cur_standard_comp) {
-                cur_standard_comp = icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
-                is_new_comp = 1;
-
-                prev_standard_name = types[idx].zname;
-                prev_standard_time = icaltime_null_time();
-            }
-
-            comp = cur_standard_comp;
-            if (last_trans) {
-                /* This rule will take us into the future */
-                recur = &final_standard_recur;
-                prev_standard_time = icaltime_from_day_of_year(1, 9999);
-            }
-            else {
-                recur = &standard_recur;
-
-                if (icaltime_is_null_time(prev_standard_time)) {
-                    prev_prev_standard_time = icaltime;
-                } else {
-                    prev_prev_standard_time = prev_standard_time;
-                }
-
-                prev_standard_time = icaltime;
-                prev_standard_gmtoff = types[prev_idx].gmtoff;
+                zone->rrule_comp = NULL;
             }
         }
 
-        if (is_new_comp) {
-            icalprop = icalproperty_new_tzname(types[idx].zname);
-            icalcomponent_add_property(comp, icalprop);
-            icalprop = icalproperty_new_dtstart(icaltime);
-            icalcomponent_add_property(comp, icalprop);
-            icalprop = icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff);
-            icalcomponent_add_property(comp, icalprop);
-            icalprop = icalproperty_new_tzoffsetto(types[idx].gmtoff);
-            icalcomponent_add_property(comp, icalprop);
+        zone->prev_time = zone->time;
+        zone->time = icaltime;
+        zone->gmtoff_from = types[prev_idx].gmtoff;
 
-            if (!last_trans) {
-                // Determine the recurrence rule for the current set of changes
-                icalrecurrencetype_clear(recur);
-                recur->freq = ICAL_YEARLY_RECURRENCE;
-                recur->by_month[0] = icaltime.month;
-                recur->by_day[0] = by_day;
+        if (!zone->rrule_comp) {
+            zone->name = types[idx].zname;
+            zone->prev_time = icaltime;
+ 
+            zone->rrule_comp =
+                icalcomponent_vanew(zone->kind,
+                                    icalproperty_new_tzname(types[idx].zname),
+                                    icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff),
+                                    icalproperty_new_tzoffsetto(types[idx].gmtoff),
+                                    icalproperty_new_dtstart(icaltime),
+                                    NULL);
+            icalcomponent_add_component(tz_comp, zone->rrule_comp);
+
+            if (last_trans) {
+                /* This rule will take us into the future */
+                zone->time = icaltime_from_day_of_year(1, 9999);
+                zone->rrule_prop = icalproperty_new_rrule(zone->final_recur);
             }
-
-            icalprop = icalproperty_new_rrule(*recur);
-            icalcomponent_add_property(comp, icalprop);
-
-            if (types[idx].isdst) {
-                cur_daylight_rrule_property = icalprop;
-            } else {
-                cur_standard_rrule_property = icalprop;
+            else {
+                // Create a recurrence rule for the current set of changes
+                icalrecurrencetype_clear(&zone->recur);
+                zone->recur.freq = ICAL_YEARLY_RECURRENCE;
+                zone->recur.by_day[0] = by_day;
+                zone->recur.by_month[0] = icaltime.month;
+                zone->rrule_prop = icalproperty_new_rrule(zone->recur);
             }
-
-            icalcomponent_add_component(tz_comp, comp);
+            icalcomponent_add_property(zone->rrule_comp, zone->rrule_prop);
         }
     }
 
     // Check if the last daylight or standard date was before now
     // If so, set the UNTIL date to the second-to-last transition date
     // and then insert a new component to indicate the time zone doesn't transition anymore
-    if (cur_daylight_comp && icaltime_as_timet(prev_daylight_time) < now) {
-        icaltime_adjust(&prev_prev_daylight_time, 0, 0, 0, -prev_daylight_gmtoff);
-        prev_prev_daylight_time.zone = icaltimezone_get_utc_timezone();
+    if (daylight.rrule_comp && icaltime_as_timet(daylight.time) < now) {
+        icaltime_adjust(&daylight.prev_time, 0, 0, 0, -daylight.gmtoff_from);
+        daylight.prev_time.zone = icaltimezone_get_utc_timezone();
 
-        daylight_recur.until = prev_prev_daylight_time;
-        icalproperty_set_rrule(cur_daylight_rrule_property, daylight_recur);
+        daylight.recur.until = daylight.prev_time;
+        icalproperty_set_rrule(daylight.rrule_prop, daylight.recur);
 
         comp = icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
         icalprop = icalproperty_new_tzname(types[idx].zname);
         icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_dtstart(prev_daylight_time);
+        icalprop = icalproperty_new_dtstart(daylight.time);
         icalcomponent_add_property(comp, icalprop);
         icalprop = icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff);
         icalcomponent_add_property(comp, icalprop);
@@ -874,17 +804,17 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         icalcomponent_add_component(tz_comp, comp);
     }
 
-    if (cur_standard_comp && icaltime_as_timet(prev_standard_time) < now) {
-        icaltime_adjust(&prev_prev_standard_time, 0, 0, 0, -prev_standard_gmtoff);
-        prev_prev_standard_time.zone = icaltimezone_get_utc_timezone();
+    if (standard.rrule_comp && icaltime_as_timet(standard.time) < now) {
+        icaltime_adjust(&standard.prev_time, 0, 0, 0, -standard.gmtoff_from);
+        standard.prev_time.zone = icaltimezone_get_utc_timezone();
 
-        standard_recur.until = prev_prev_standard_time;
-        icalproperty_set_rrule(cur_standard_rrule_property, standard_recur);
+        standard.recur.until = standard.prev_time;
+        icalproperty_set_rrule(standard.rrule_prop, standard.recur);
 
         comp = icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
         icalprop = icalproperty_new_tzname(types[idx].zname);
         icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_dtstart(prev_standard_time);
+        icalprop = icalproperty_new_dtstart(standard.time);
         icalcomponent_add_property(comp, icalprop);
         icalprop = icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff);
         icalcomponent_add_property(comp, icalprop);
