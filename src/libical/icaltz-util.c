@@ -689,6 +689,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     for (i = 1; i < num_trans; i++) {
         int last_trans = 0;
+        int terminate = 0;
         int by_day;
         time_t start;
 
@@ -713,34 +714,48 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             zone = &standard;
         }
 
-        // Figure out if the rule has changed since the previous year
-        // If it has, update the recurrence rule of the current component and create a new component
-        // If it the current component was only valid for one year then remove the recurrence rule
         if (zone->rrule_comp) {
-            // Check if the pattern for daylight has changed
-            // If it has, create a new component and update UNTIL
-            // of previous component's RRULE
-            if (last_trans ||
-                zone->recur.by_month[0] != icaltime.month ||
-                zone->recur.by_day[0] != by_day ||
-                types[prev_idx].gmtoff != zone->gmtoff_from ||
-                zone->time.hour != icaltime.hour ||
-                zone->time.minute != icaltime.minute ||
-                zone->time.second != icaltime.second ||
-                strcmp(types[idx].zname, zone->name)) {
+            if (last_trans) {
+                terminate = 1;
+            }
+            // Check if the zone name or the offset has changed
+            else if (types[prev_idx].gmtoff != zone->gmtoff_from ||
+                     strcmp(types[idx].zname, zone->name)) {
 
+                terminate = 1;
+            }
+            // Check if most of the recurrence pattern is the same
+            else if (icaltime.month  == zone->time.month    &&
+                     icaltime.hour   == zone->time.hour     &&
+                     icaltime.minute == zone->time.minute   &&
+                     icaltime.second == zone->time.second) {
+
+                if (by_day != zone->recur.by_day[0]) {
+                    // Different BYDAY
+                    terminate = 1;
+                }
+            }
+            else {
+                // Different recurrence pattern entirely
+                terminate = 1;
+            }
+
+            if (terminate) {
+                // Terminate the current RRULE
                 if (icaltime_compare(zone->time, zone->prev_time)) {
+                    // Multiple instances
                     // Set UNTIL of the previous component's recurrence
-                    icaltime_adjust(&zone->time, 0, 0, 0, -types[prev_idx].gmtoff);
+                    icaltime_adjust(&zone->time,
+                                    0, 0, 0, -types[prev_idx].gmtoff);
                     zone->time.zone = icaltimezone_get_utc_timezone();
-
+                            
                     zone->recur.until = zone->time;
                     icalproperty_set_rrule(zone->rrule_prop, zone->recur);
                 }
                 else {
-                    // Don't set UNTIL for a single instance
-                    // Remove the RRULE
-                    icalcomponent_remove_property(zone->rrule_comp, zone->rrule_prop);
+                    // Remove the RRULE from the previous component
+                    icalcomponent_remove_property(zone->rrule_comp,
+                                                  zone->rrule_prop);
                     icalproperty_free(zone->rrule_prop);
                 }
 
@@ -755,7 +770,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         if (!zone->rrule_comp) {
             zone->name = types[idx].zname;
             zone->prev_time = icaltime;
- 
+
             zone->rrule_comp =
                 icalcomponent_vanew(zone->kind,
                                     icalproperty_new_tzname(types[idx].zname),
