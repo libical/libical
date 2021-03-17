@@ -733,8 +733,16 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                      icaltime.minute == zone->time.minute   &&
                      icaltime.second == zone->time.second) {
 
-                if (by_day != zone->recur.by_day[0]) {
-                    // Different BYDAY
+                if (by_day == zone->recur.by_day[0]) {
+                    // Same week and day - remove BYMONTHDAY
+                    zone->recur.by_month_day[0] = ICAL_RECURRENCE_ARRAY_MAX;
+                }
+                else if (icaltime.day == zone->recur.by_month_day[0]) {
+                    // Same monthday - remove BYDAY
+                    zone->recur.by_day[0] = ICAL_RECURRENCE_ARRAY_MAX;
+                }
+                else {
+                    // Different BYDAY and BYMONTHDAY
                     terminate = 1;
                 }
             }
@@ -795,6 +803,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 zone->recur.freq = ICAL_YEARLY_RECURRENCE;
                 zone->recur.by_day[0] = by_day;
                 zone->recur.by_month[0] = icaltime.month;
+                zone->recur.by_month_day[0] = icaltime.day;
                 zone->rrule_prop = icalproperty_new_rrule(zone->recur);
             }
             icalcomponent_add_property(zone->rrule_comp, zone->rrule_prop);
