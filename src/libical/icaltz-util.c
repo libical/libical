@@ -654,8 +654,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 tzstr = NULL;
             }
             else {
-                struct icaltimetype std_trans, dst_trans, last_trans;
-                icalrecur_iterator *iter;
+                struct icaltimetype std_trans, dst_trans;
 
                 /* Parse std->dst rule */
                 p = parse_posix_rule(++p /* skip ',' */,
@@ -665,30 +664,42 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 p = parse_posix_rule(++p /* skip ',' */,
                                      &standard.final_recur, &std_trans);
 
-                last_trans = icaltime_from_timet_with_zone(transitions[num_trans-1], 0, NULL);
-                if (types[trans_idx[num_trans-1]].isdst) {
-                    /* Add next dst->std transition */
-                    std_trans.year  = last_trans.year;
-                    std_trans.month = last_trans.month;
-                    std_trans.day   = last_trans.day;
-                    iter = icalrecur_iterator_new(standard.final_recur, std_trans);
-                    std_trans = icalrecur_iterator_next(iter);
-                    icaltime_adjust(&std_trans, 0, 0, 0, -dst_type->gmtoff);
-                    transitions[num_trans] = icaltime_as_timet(std_trans);
-                    trans_idx[num_trans++] = (int) num_types-2;
-                    icalrecur_iterator_free(iter);
+                if (*p != '\n') {
+                    /* Trailing junk, so ignore the TZ string */
+                    tzstr = NULL;
                 }
                 else {
-                    /* Add next std->dst transition */
-                    dst_trans.year  = last_trans.year;
-                    dst_trans.month = last_trans.month;
-                    dst_trans.day   = last_trans.day;
-                    iter = icalrecur_iterator_new(daylight.final_recur, dst_trans);
-                    dst_trans = icalrecur_iterator_next(iter);
-                    icaltime_adjust(&dst_trans, 0, 0, 0, -std_type->gmtoff);
-                    transitions[num_trans] = icaltime_as_timet(dst_trans);
-                    trans_idx[num_trans++] = (int) num_types-1;
-                    icalrecur_iterator_free(iter);
+                    struct icaltimetype last_trans =
+                        icaltime_from_timet_with_zone(transitions[num_trans-1],
+                                                      0, NULL);
+                    icalrecur_iterator *iter;
+
+                    if (types[trans_idx[num_trans-1]].isdst) {
+                        /* Add next dst->std transition */
+                        std_trans.year  = last_trans.year;
+                        std_trans.month = last_trans.month;
+                        std_trans.day   = last_trans.day;
+                        iter = icalrecur_iterator_new(standard.final_recur,
+                                                      std_trans);
+                        std_trans = icalrecur_iterator_next(iter);
+                        icaltime_adjust(&std_trans, 0, 0, 0, -dst_type->gmtoff);
+                        transitions[num_trans] = icaltime_as_timet(std_trans);
+                        trans_idx[num_trans++] = (int) num_types-2;
+                        icalrecur_iterator_free(iter);
+                    }
+                    else {
+                        /* Add next std->dst transition */
+                        dst_trans.year  = last_trans.year;
+                        dst_trans.month = last_trans.month;
+                        dst_trans.day   = last_trans.day;
+                        iter = icalrecur_iterator_new(daylight.final_recur,
+                                                      dst_trans);
+                        dst_trans = icalrecur_iterator_next(iter);
+                        icaltime_adjust(&dst_trans, 0, 0, 0, -std_type->gmtoff);
+                        transitions[num_trans] = icaltime_as_timet(dst_trans);
+                        trans_idx[num_trans++] = (int) num_types-1;
+                        icalrecur_iterator_free(iter);
+                    }
                 }
             }
         }
