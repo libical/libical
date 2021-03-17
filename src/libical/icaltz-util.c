@@ -727,7 +727,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 terminate = 1;
             }
             // Check if most of the recurrence pattern is the same
-            else if (icaltime.month  == zone->time.month    &&
+            else if (icaltime.year   == zone->time.year + 1 &&
+                     icaltime.month  == zone->time.month    &&
                      icaltime.hour   == zone->time.hour     &&
                      icaltime.minute == zone->time.minute   &&
                      icaltime.second == zone->time.second) {
