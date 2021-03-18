@@ -200,6 +200,25 @@ struct icalrecurrencetype
     icalrecurrencetype_skip skip;
 };
 
+#define ICALRECURRENCETYPE_INITIALIZER {                    \
+    ICAL_NO_RECURRENCE,                  /* freq         */ \
+    ICALTIMETYPE_INITIALIZER,            /* until        */ \
+    0,                                   /* count        */ \
+    1,                                   /* interval     */ \
+    ICAL_MONDAY_WEEKDAY,                 /* week_start   */ \
+    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_second    */ \
+    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_minute    */ \
+    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_hour      */ \
+    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_day       */ \
+    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_month_day */ \
+    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_year_day  */ \
+    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_week_no   */ \
+    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_month     */ \
+    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_set_pos   */ \
+    NULL,                                /* rscale       */ \
+    ICAL_SKIP_OMIT                       /* skip         */ \
+}
+
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_rscale_is_supported(void);
 
 LIBICAL_ICAL_EXPORT icalarray *icalrecurrencetype_rscale_supported_calendars(void);

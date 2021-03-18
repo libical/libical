@@ -41,6 +41,12 @@ struct icalperiodtype
     struct icaldurationtype duration;
 };
 
+#define ICALPERIODTYPE_INITIALIZER { \
+    ICALTIMETYPE_INITIALIZER,        \
+    ICALTIMETYPE_INITIALIZER,        \
+    ICALDURATIONTYPE_INITIALIZER     \
+}
+
 /**
  * @brief Constructs a new ::icalperiodtype from @a str
  * @param str The string from which to construct a time period
