@@ -411,7 +411,6 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     size_t i, num_trans, num_chars, num_leaps, num_isstd, num_isgmt;
     size_t num_types = 0;
     size_t size;
-    time_t now = time(NULL);
     int trans_size = 4;
 
     const char *zonedir;
@@ -428,7 +427,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     char footer[100], *tzstr = NULL;
 
     int idx, prev_idx;
-    icalcomponent *tz_comp = NULL, *comp = NULL;
+    icalcomponent *tz_comp = NULL;
     icalproperty *icalprop;
     icaltimetype icaltime;
 
@@ -742,11 +741,20 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         start = transitions[i] + types[prev_idx].gmtoff;
 
         icaltime = icaltime_from_timet_with_zone(start, 0, NULL);
-        if (tzstr && (i >= num_trans - 2)) {
+        /* Flag this as the last transition time for the zone, if:
+           this is the last transition time overall, OR
+           this is the penultimate transition time, AND either
+           we have a TZ string for future transitions, OR
+           the last two transitions have different time types
+        */
+        if ((i == num_trans - 1) ||
+            ((i == num_trans - 2) &&
+             (tzstr || (types[idx].isdst != types[trans_idx[i+1]].isdst)))) {
             last_trans = 1;
         }
         else {
-            by_day = nth_weekday(calculate_pos(icaltime), icaltime_day_of_week(icaltime));
+            by_day = nth_weekday(calculate_pos(icaltime),
+                                 icaltime_day_of_week(icaltime));
         }
 
         if (types[idx].isdst) {
@@ -851,12 +859,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                                     0);
             icalcomponent_add_component(tz_comp, zone->rrule_comp);
 
-            if (last_trans) {
-                /* This rule will take us into the future */
-                zone->time = icaltime_from_day_of_year(1, 9999);
-                zone->rrule_prop = icalproperty_new_rrule(zone->final_recur);
-            }
-            else {
+            if (!last_trans) {
                 // Create a recurrence rule for the current set of changes
                 icalrecurrencetype_clear(&zone->recur);
                 zone->recur.freq = ICAL_YEARLY_RECURRENCE;
@@ -864,72 +867,14 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 zone->recur.by_month[0] = icaltime.month;
                 zone->recur.by_month_day[0] = icaltime.day;
                 zone->rrule_prop = icalproperty_new_rrule(zone->recur);
+                icalcomponent_add_property(zone->rrule_comp, zone->rrule_prop);
             }
-            icalcomponent_add_property(zone->rrule_comp, zone->rrule_prop);
+            else if (tzstr) {
+                // Use the recurrence rule derived from the TZ string
+                zone->rrule_prop = icalproperty_new_rrule(zone->final_recur);
+                icalcomponent_add_property(zone->rrule_comp, zone->rrule_prop);
+            }
         }
-    }
-
-    // Check if the last daylight or standard date was before now
-    // If so, set the UNTIL date to the second-to-last transition date
-    // and then insert a new component to indicate the time zone doesn't transition anymore
-    if (daylight.rrule_comp && icaltime_as_timet(daylight.time) < now) {
-        icaltime_adjust(&daylight.prev_time, 0, 0, 0, -daylight.gmtoff_from);
-        daylight.prev_time.zone = icaltimezone_get_utc_timezone();
-
-        daylight.recur.until = daylight.prev_time;
-        icalproperty_set_rrule(daylight.rrule_prop, daylight.recur);
-
-        comp = icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
-        icalprop = icalproperty_new_tzname(types[idx].zname);
-        icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_dtstart(daylight.time);
-        icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff);
-        icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_tzoffsetto(types[idx].gmtoff);
-        icalcomponent_add_property(comp, icalprop);
-        icalcomponent_add_component(tz_comp, comp);
-    }
-
-    if (standard.rrule_comp && icaltime_as_timet(standard.time) < now) {
-        icaltime_adjust(&standard.prev_time, 0, 0, 0, -standard.gmtoff_from);
-        standard.prev_time.zone = icaltimezone_get_utc_timezone();
-
-        standard.recur.until = standard.prev_time;
-        icalproperty_set_rrule(standard.rrule_prop, standard.recur);
-
-        comp = icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
-        icalprop = icalproperty_new_tzname(types[idx].zname);
-        icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_dtstart(standard.time);
-        icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff);
-        icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_tzoffsetto(types[idx].gmtoff);
-        icalcomponent_add_property(comp, icalprop);
-        icalcomponent_add_component(tz_comp, comp);
-    }
-
-    if (num_trans == 1) {
-        time_t start = transitions[0] + types[prev_idx].gmtoff;
-
-        // This time zone doesn't transition, insert a single VTIMEZONE component
-        if (types[idx].isdst) {
-            comp = icalcomponent_new(ICAL_XDAYLIGHT_COMPONENT);
-        } else {
-            comp = icalcomponent_new(ICAL_XSTANDARD_COMPONENT);
-        }
-
-        icalprop = icalproperty_new_tzname(types[idx].zname);
-        icalcomponent_add_property(comp, icalprop);
-        icaltime = icaltime_from_timet_with_zone(start, 0, NULL);
-        icalprop = icalproperty_new_dtstart(icaltime);
-        icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff);
-        icalcomponent_add_property(comp, icalprop);
-        icalprop = icalproperty_new_tzoffsetto(types[idx].gmtoff);
-        icalcomponent_add_property(comp, icalprop);
-        icalcomponent_add_component(tz_comp, comp);
     }
 
   error:
