@@ -701,10 +701,9 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     icalproperty_set_x_name(icalprop, "X-LIC-LOCATION");
     icalcomponent_add_property(tz_comp, icalprop);
 
-    prev_idx = 0;
-    idx = trans_idx[0];
+    idx = 0;  // time type 0 is always time prior to first transition
 
-    for (i = 1; i < num_trans; i++) {
+    for (i = 0; i < num_trans; i++) {
         int last_trans = 0;
         int terminate = 0;
         int rdate = 0;
