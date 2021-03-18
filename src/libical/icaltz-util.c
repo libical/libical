@@ -263,6 +263,8 @@ static char *parse_posix_zone(char *p, ttinfo *type)
     return p;
 }
 
+#define nth_weekday(week, day) (icalrecurrencetype_encode_day(day, week))
+
 static char *parse_posix_rule(char *p,
                               struct icalrecurrencetype *recur, icaltimetype *t)
 {
@@ -338,7 +340,7 @@ static char *parse_posix_rule(char *p,
     recur->freq = ICAL_YEARLY_RECURRENCE;
 
     if (month) {
-        recur->by_day[0] = icalrecurrencetype_encode_day((day % 7) + 1, week);
+        recur->by_day[0] = nth_weekday(week, (day % 7) + 1);
         recur->by_month[0] = month;
 
         if (monthday) {
@@ -384,7 +386,6 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     size_t i, num_trans, num_chars, num_leaps, num_isstd, num_isgmt;
     size_t num_types = 0;
     size_t size;
-    int pos, sign;
     time_t now = time(NULL);
     int trans_size = 4;
 
@@ -720,9 +721,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             last_trans = 1;
         }
         else {
-            pos = calculate_pos(icaltime);
-            pos < 0 ? (sign = -1): (sign = 1);
-            by_day = sign * ((abs(pos) * 8) + icaltime_day_of_week(icaltime));
+            by_day = nth_weekday(calculate_pos(icaltime), icaltime_day_of_week(icaltime));
         }
 
         if (types[idx].isdst) {
