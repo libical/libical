@@ -433,17 +433,15 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     struct zone_context standard =
         { ICAL_XSTANDARD_COMPONENT, NULL, LONG_MIN, LONG_MIN,
-          icaltime_null_time(), icaltime_null_time(),
+          ICALTIMETYPE_INITIALIZER, ICALTIMETYPE_INITIALIZER,
           NULL, NULL, NULL,
-          icalrecurrencetype_from_string("0"),
-          icalrecurrencetype_from_string("0")
+          ICALRECURRENCETYPE_INITIALIZER, ICALRECURRENCETYPE_INITIALIZER
         };
     struct zone_context daylight =
         { ICAL_XDAYLIGHT_COMPONENT, NULL, LONG_MIN, LONG_MIN,
-          icaltime_null_time(), icaltime_null_time(),
+          ICALTIMETYPE_INITIALIZER, ICALTIMETYPE_INITIALIZER,
           NULL, NULL, NULL,
-          icalrecurrencetype_from_string("0"),
-          icalrecurrencetype_from_string("0")
+          ICALRECURRENCETYPE_INITIALIZER, ICALRECURRENCETYPE_INITIALIZER
         };
     struct zone_context *zone;
 
@@ -813,7 +811,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     // Add an RDATE to the previous component
                     // Remove the current component
                     struct icaldatetimeperiodtype dtp =
-                        { zone->time, icalperiodtype_null_period() };
+                        { zone->time, ICALPERIODTYPE_INITIALIZER };
 
                     icalprop = icalproperty_new_rdate(dtp);
                     icalcomponent_add_property(zone->rdate_comp, icalprop);
