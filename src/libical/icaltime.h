@@ -119,6 +119,8 @@ struct icaltimetype
 
 typedef struct icaltimetype icaltimetype;
 
+#define ICALTIMETYPE_INITIALIZER { 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
 /**     @brief Constructor.
  *
  *      @returns A null time, which indicates no time has been set.
