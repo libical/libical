@@ -520,38 +520,40 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
 
     /* read data block */
-    if (num_trans > 0) {
-        transitions = calloc(num_trans+1, sizeof(time_t));  // +1 for TZ string
-        if (transitions == NULL) {
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            goto error;
-        }
-        r_trans = calloc(num_trans, (size_t)trans_size);
-        if (r_trans == NULL) {
-            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-            goto error;
-        }
-    } else {
-        icalerror_set_errno(ICAL_FILE_ERROR);
+    transitions = calloc(num_trans+1, sizeof(time_t));  // +1 for TZ string
+    if (transitions == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
     }
-    EFREAD(r_trans, (size_t)trans_size, num_trans, f);
-    temp = r_trans;
+    r_trans = calloc(num_trans, (size_t)trans_size);
+    if (r_trans == NULL) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        goto error;
+    }
     trans_idx = calloc(num_trans+1, sizeof(int));  // +1 for TZ string
     if (trans_idx == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
     }
-    for (i = 0; i < num_trans; i++) {
-        trans_idx[i] = fgetc(f);
-        if (trans_size == 8) {
-            transitions[i] = (time_t) decode64(r_trans);
-        } else {
-            transitions[i] = (time_t) decode(r_trans);
+    if (num_trans == 0) {
+        // Add one transition using time type 0 at 19011213T204552Z
+        transitions[0] = INT_MIN;
+        trans_idx[0] = 0;
+        num_trans = 1;
+    } else {
+        EFREAD(r_trans, (size_t)trans_size, num_trans, f);
+        temp = r_trans;
+        for (i = 0; i < num_trans; i++) {
+            trans_idx[i] = fgetc(f);
+            if (trans_size == 8) {
+                transitions[i] = (time_t) decode64(r_trans);
+            } else {
+                transitions[i] = (time_t) decode(r_trans);
+            }
+            r_trans += trans_size;
         }
-        r_trans += trans_size;
+        r_trans = temp;
     }
-    r_trans = temp;
 
     types = calloc(num_types+2, sizeof(ttinfo));  // +2 for TZ string
     if (types == NULL) {
