@@ -792,6 +792,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                      types[idx].gmtoff      != zone->gmtoff_to   ||
                      strcmp(types[idx].zname, zone->name)) {
 
+                zone->rdate_comp = NULL;
                 terminate = 1;
             }
             // Check if most of the recurrence pattern is the same
