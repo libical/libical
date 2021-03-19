@@ -785,10 +785,10 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                      icaltime.second == zone->time.second) {
 
                 if (by_day == zone->recur.by_day[0]) {
-                    // Same week and day - continue
+                    // Same nth weekday of the month - continue
                 }
                 else if (dow == icalrecurrencetype_day_day_of_week(zone->recur.by_day[0])) {
-                    // Same weekday
+                    // Same weekday in the month
                     if (icaltime.day >= zone->recur.by_month_day[0] + 7 ||
                         icaltime.day + 7 <= zone->recur.by_month_day[zone->num_monthdays-1]) {
                         // Different week - possible RDATE
@@ -816,7 +816,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     }
                 }
                 else if (icaltime.day == zone->recur.by_month_day[0]) {
-                    // Same monthday - remove BYDAY
+                    // Same day of the month - remove BYDAY
                     zone->recur.by_day[0] = ICAL_RECURRENCE_ARRAY_MAX;
                 }
                 else {
