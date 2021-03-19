@@ -405,6 +405,26 @@ struct zone_context {
     struct icalrecurrencetype final_recur;
 };
 
+static void terminate_rrule(struct zone_context *zone, long int gmtoff)
+{
+    if (icaltime_compare(zone->time, zone->prev_time)) {
+        // Multiple instances
+        // Set UNTIL of the component's recurrence
+        icaltime_adjust(&zone->time, 0, 0, 0, gmtoff);
+        zone->time.zone = icaltimezone_get_utc_timezone();
+
+        zone->recur.until = zone->time;
+        icalproperty_set_rrule(zone->rrule_prop, zone->recur);
+
+        zone->rdate_comp = zone->rrule_comp = NULL;
+    }
+    else {
+        // Remove the RRULE from the component
+        icalcomponent_remove_property(zone->rrule_comp, zone->rrule_prop);
+        icalproperty_free(zone->rrule_prop);
+    }
+}
+
 icalcomponent *icaltzutil_fetch_timezone(const char *location)
 {
     tzinfo header;
@@ -748,9 +768,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
            we have a TZ string for future transitions, OR
            the last two transitions have different time types
         */
-        if ((i == num_trans - 1) ||
-            ((i == num_trans - 2) &&
-             (tzstr || (types[idx].isdst != types[trans_idx[i+1]].isdst)))) {
+        if (tzstr && (i >= num_trans - 2)) {
             last_trans = 1;
         }
         else {
@@ -803,41 +821,25 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
             if (terminate) {
                 // Terminate the current RRULE
-                if (icaltime_compare(zone->time, zone->prev_time)) {
-                    // Multiple instances
-                    // Set UNTIL of the previous component's recurrence
-                    icaltime_adjust(&zone->time,
-                                    0, 0, 0, -types[prev_idx].gmtoff);
-                    zone->time.zone = icaltimezone_get_utc_timezone();
+                terminate_rrule(zone, -types[prev_idx].gmtoff);
 
-                    zone->recur.until = zone->time;
-                    icalproperty_set_rrule(zone->rrule_prop, zone->recur);
+                if (rdate) {
+                    if (zone->rdate_comp) {
+                        // Add an RDATE to the previous component
+                        // Remove the current RRULE component
+                        struct icaldatetimeperiodtype dtp =
+                            { zone->time, ICALPERIODTYPE_INITIALIZER };
 
-                    zone->rdate_comp = NULL;
-                }
-                else if (rdate && zone->rdate_comp) {
-                    // Add an RDATE to the previous component
-                    // Remove the current component
-                    struct icaldatetimeperiodtype dtp =
-                        { zone->time, ICALPERIODTYPE_INITIALIZER };
+                        icalprop = icalproperty_new_rdate(dtp);
+                        icalcomponent_add_property(zone->rdate_comp, icalprop);
 
-                    icalprop = icalproperty_new_rdate(dtp);
-                    icalcomponent_add_property(zone->rdate_comp, icalprop);
-
-                    icalcomponent_remove_component(tz_comp, zone->rrule_comp);
-                    icalcomponent_free(zone->rrule_comp);
-                }
-                else {
-                    // Remove the RRULE from the previous component
-                    icalcomponent_remove_property(zone->rrule_comp,
-                                                  zone->rrule_prop);
-                    icalproperty_free(zone->rrule_prop);
-
-                    if (rdate) {
+                        icalcomponent_remove_component(tz_comp, zone->rrule_comp);
+                        icalcomponent_free(zone->rrule_comp);
+                    }
+                    else {
                         zone->rdate_comp = zone->rrule_comp;
                     }
                 }
-
                 zone->rrule_comp = NULL;
             }
         }
@@ -851,30 +853,38 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             zone->name = types[idx].zname;
             zone->prev_time = icaltime;
 
+            // Create a recurrence rule for the current set of changes
+            icalrecurrencetype_clear(&zone->recur);
+            zone->recur.freq = ICAL_YEARLY_RECURRENCE;
+            zone->recur.by_day[0] = by_day;
+            zone->recur.by_month[0] = icaltime.month;
+            zone->recur.by_month_day[0] = icaltime.day;
+            zone->rrule_prop = icalproperty_new_rrule(zone->recur);
+
             zone->rrule_comp =
                 icalcomponent_vanew(zone->kind,
-                                    icalproperty_new_tzname(types[idx].zname),
-                                    icalproperty_new_tzoffsetfrom(types[prev_idx].gmtoff),
-                                    icalproperty_new_tzoffsetto(types[idx].gmtoff),
-                                    icalproperty_new_dtstart(icaltime),
+                                    icalproperty_new_tzname(zone->name),
+                                    icalproperty_new_tzoffsetfrom(zone->gmtoff_from),
+                                    icalproperty_new_tzoffsetto(zone->gmtoff_to),
+                                    icalproperty_new_dtstart(zone->time),
+                                    zone->rrule_prop,
                                     0);
             icalcomponent_add_component(tz_comp, zone->rrule_comp);
+        }
+    }
 
-            if (!last_trans) {
-                // Create a recurrence rule for the current set of changes
-                icalrecurrencetype_clear(&zone->recur);
-                zone->recur.freq = ICAL_YEARLY_RECURRENCE;
-                zone->recur.by_day[0] = by_day;
-                zone->recur.by_month[0] = icaltime.month;
-                zone->recur.by_month_day[0] = icaltime.day;
-                zone->rrule_prop = icalproperty_new_rrule(zone->recur);
-                icalcomponent_add_property(zone->rrule_comp, zone->rrule_prop);
-            }
-            else if (tzstr) {
-                // Use the recurrence rule derived from the TZ string
-                zone->rrule_prop = icalproperty_new_rrule(zone->final_recur);
-                icalcomponent_add_property(zone->rrule_comp, zone->rrule_prop);
-            }
+    if (tzstr) {
+        // Replace the last recurrence rules with those from the TZ string
+        icalproperty_set_rrule(standard.rrule_prop, standard.final_recur);
+        icalproperty_set_rrule(daylight.rrule_prop, daylight.final_recur);
+    }
+    else {
+        // Terminate the last recurrence rules
+        if (standard.rrule_comp) {
+            terminate_rrule(&standard, -standard.gmtoff_from);
+        }
+        if (daylight.rrule_comp) {
+            terminate_rrule(&daylight, -daylight.gmtoff_from);
         }
     }
 
