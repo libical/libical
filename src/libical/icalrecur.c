@@ -832,38 +832,28 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
         icalmemory_append_string(&str, &str_p, &buf_sz, "RSCALE=");
         icalmemory_append_string(&str, &str_p, &buf_sz, recur->rscale);
         icalmemory_append_char(&str, &str_p, &buf_sz, ';');
+
+        if (recur->skip != ICAL_SKIP_OMIT) {
+            const char *skipstr = icalrecur_skip_to_string(recur->skip);
+            icalmemory_append_string(&str, &str_p, &buf_sz, ";SKIP=");
+            icalmemory_append_string(&str, &str_p, &buf_sz, skipstr);
+        }
     }
 
     icalmemory_append_string(&str, &str_p, &buf_sz, "FREQ=");
     icalmemory_append_string(&str, &str_p, &buf_sz,
                              icalrecur_freq_to_string(recur->freq));
 
-    if (recur->until.year != 0) {
-
-        temp[0] = 0;
-        if (recur->until.is_date) {
-            print_date_to_string(temp, &(recur->until));
-        } else {
-            print_datetime_to_string(temp, &(recur->until));
-        }
-
-        icalmemory_append_string(&str, &str_p, &buf_sz, ";UNTIL=");
-        icalmemory_append_string(&str, &str_p, &buf_sz, temp);
+    /* Monday is the default, so no need to write that out */
+    if (recur->week_start != ICAL_MONDAY_WEEKDAY &&
+        recur->week_start != ICAL_NO_WEEKDAY) {
+        int dow = icalrecurrencetype_day_day_of_week(recur->week_start);
+        const char *daystr = icalrecur_weekday_to_string(dow);
+        icalmemory_append_string(&str, &str_p, &buf_sz, ";WKST=");
+        icalmemory_append_string(&str, &str_p, &buf_sz, daystr);
     }
 
-    else if (recur->count != 0) {
-        snprintf(temp, sizeof(temp), "%d", recur->count);
-        icalmemory_append_string(&str, &str_p, &buf_sz, ";COUNT=");
-        icalmemory_append_string(&str, &str_p, &buf_sz, temp);
-    }
-
-    if (recur->interval != 1) {
-        snprintf(temp, sizeof(temp), "%d", recur->interval);
-        icalmemory_append_string(&str, &str_p, &buf_sz, ";INTERVAL=");
-        icalmemory_append_string(&str, &str_p, &buf_sz, temp);
-    }
-
-    for (j = BY_SECOND; j <= BY_SET_POS; j++) {
+    for (j = BY_SET_POS; j >= BY_SECOND; j--) {
         short *array = (short *)(recur_map[j].offset + (size_t) recur);
         int limit = recur_map[j].size - 1;
 
@@ -906,19 +896,29 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
         }
     }
 
-    /* Monday is the default, so no need to write that out */
-    if (recur->week_start != ICAL_MONDAY_WEEKDAY &&
-        recur->week_start != ICAL_NO_WEEKDAY) {
-        int dow = icalrecurrencetype_day_day_of_week(recur->week_start);
-        const char *daystr = icalrecur_weekday_to_string(dow);
-        icalmemory_append_string(&str, &str_p, &buf_sz, ";WKST=");
-        icalmemory_append_string(&str, &str_p, &buf_sz, daystr);
+    if (recur->interval != 1) {
+        snprintf(temp, sizeof(temp), "%d", recur->interval);
+        icalmemory_append_string(&str, &str_p, &buf_sz, ";INTERVAL=");
+        icalmemory_append_string(&str, &str_p, &buf_sz, temp);
     }
 
-    if (recur->rscale != 0 && recur->skip != ICAL_SKIP_OMIT) {
-        const char *skipstr = icalrecur_skip_to_string(recur->skip);
-        icalmemory_append_string(&str, &str_p, &buf_sz, ";SKIP=");
-        icalmemory_append_string(&str, &str_p, &buf_sz, skipstr);
+    if (recur->until.year != 0) {
+
+        temp[0] = 0;
+        if (recur->until.is_date) {
+            print_date_to_string(temp, &(recur->until));
+        } else {
+            print_datetime_to_string(temp, &(recur->until));
+        }
+
+        icalmemory_append_string(&str, &str_p, &buf_sz, ";UNTIL=");
+        icalmemory_append_string(&str, &str_p, &buf_sz, temp);
+    }
+
+    else if (recur->count != 0) {
+        snprintf(temp, sizeof(temp), "%d", recur->count);
+        icalmemory_append_string(&str, &str_p, &buf_sz, ";COUNT=");
+        icalmemory_append_string(&str, &str_p, &buf_sz, temp);
     }
 
     return str;
