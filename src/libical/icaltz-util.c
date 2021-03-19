@@ -376,6 +376,7 @@ struct zone_context {
     icalcomponent *rdate_comp;
     icalcomponent *rrule_comp;
     icalproperty *rrule_prop;
+    short num_monthdays;
     struct icalrecurrencetype recur;
     struct icalrecurrencetype final_recur;
 };
@@ -385,10 +386,15 @@ static void terminate_rrule(struct zone_context *zone, long int gmtoff)
     if (icaltime_compare(zone->time, zone->prev_time)) {
         // Multiple instances
         // Set UNTIL of the component's recurrence
-        icaltime_adjust(&zone->time, 0, 0, 0, gmtoff);
-        zone->time.zone = icaltimezone_get_utc_timezone();
-
         zone->recur.until = zone->time;
+        icaltime_adjust(&zone->recur.until, 0, 0, 0, gmtoff);
+        zone->recur.until.zone = icaltimezone_get_utc_timezone();
+
+        // Remove BYMONTHDAY if BYDAY week != 0
+        if (icalrecurrencetype_day_position(zone->recur.by_day[0])) {
+            zone->recur.by_month_day[0] = ICAL_RECURRENCE_ARRAY_MAX;
+        }
+
         icalproperty_set_rrule(zone->rrule_prop, zone->recur);
 
         zone->rdate_comp = zone->rrule_comp = NULL;
@@ -429,13 +435,13 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     struct zone_context standard =
         { ICAL_XSTANDARD_COMPONENT, NULL, LONG_MIN, LONG_MIN,
           ICALTIMETYPE_INITIALIZER, ICALTIMETYPE_INITIALIZER,
-          NULL, NULL, NULL,
+          NULL, NULL, NULL, 0,
           ICALRECURRENCETYPE_INITIALIZER, ICALRECURRENCETYPE_INITIALIZER
         };
     struct zone_context daylight =
         { ICAL_XDAYLIGHT_COMPONENT, NULL, LONG_MIN, LONG_MIN,
           ICALTIMETYPE_INITIALIZER, ICALTIMETYPE_INITIALIZER,
-          NULL, NULL, NULL,
+          NULL, NULL, NULL, 0,
           ICALRECURRENCETYPE_INITIALIZER, ICALRECURRENCETYPE_INITIALIZER
         };
     struct zone_context *zone;
@@ -731,6 +737,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         int rdate = 0;
         int by_day;
         time_t start;
+        enum icalrecurrencetype_weekday dow;
 
         prev_idx = idx;
         idx = trans_idx[i];
@@ -747,8 +754,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             last_trans = 1;
         }
         else {
-            by_day = nth_weekday(calculate_pos(icaltime),
-                                 icaltime_day_of_week(icaltime));
+            dow = icaltime_day_of_week(icaltime);
+            by_day = nth_weekday(calculate_pos(icaltime), dow);
         }
 
         if (types[idx].isdst) {
@@ -778,8 +785,35 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                      icaltime.second == zone->time.second) {
 
                 if (by_day == zone->recur.by_day[0]) {
-                    // Same week and day - remove BYMONTHDAY
-                    zone->recur.by_month_day[0] = ICAL_RECURRENCE_ARRAY_MAX;
+                    // Same week and day - continue
+                }
+                else if (dow == icalrecurrencetype_day_day_of_week(zone->recur.by_day[0])) {
+                    // Same weekday
+                    if (icaltime.day >= zone->recur.by_month_day[0] + 7 ||
+                        icaltime.day + 7 <= zone->recur.by_month_day[zone->num_monthdays-1]) {
+                        // Different week - possible RDATE
+                        rdate = terminate = 1;
+                    }
+                    else {
+                        // Insert MONTHDAY into the array
+                        int j;
+                        for (j = 0; j < zone->num_monthdays; j++) {
+                            if (icaltime.day <= zone->recur.by_month_day[j]) {
+                                break;
+                            }
+                        }
+                        if (icaltime.day < zone->recur.by_month_day[j]) {
+                            memmove(&zone->recur.by_month_day[j+1],
+                                    &zone->recur.by_month_day[j],
+                                    (zone->num_monthdays - j) *
+                                    sizeof(zone->recur.by_month_day[0]));
+                            zone->recur.by_month_day[j] = icaltime.day;
+                            zone->num_monthdays++;
+                        }
+
+                        // Remove week from BYDAY
+                        zone->recur.by_day[0] = nth_weekday(0, dow);
+                    }
                 }
                 else if (icaltime.day == zone->recur.by_month_day[0]) {
                     // Same monthday - remove BYDAY
@@ -835,6 +869,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             zone->recur.by_day[0] = by_day;
             zone->recur.by_month[0] = icaltime.month;
             zone->recur.by_month_day[0] = icaltime.day;
+            zone->num_monthdays = 1;
             zone->rrule_prop = icalproperty_new_rrule(zone->recur);
 
             zone->rrule_comp =
