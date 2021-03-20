@@ -406,13 +406,13 @@ struct zone_context {
     struct icalrecurrencetype final_recur;
 };
 
-static void terminate_rrule(struct zone_context *zone, long int gmtoff)
+static void terminate_rrule(struct zone_context *zone)
 {
     if (icaltime_compare(zone->time, zone->prev_time)) {
         // Multiple instances
         // Set UNTIL of the component's recurrence
         zone->recur.until = zone->time;
-        icaltime_adjust(&zone->recur.until, 0, 0, 0, gmtoff);
+        icaltime_adjust(&zone->recur.until, 0, 0, 0, -zone->gmtoff_from);
         zone->recur.until.zone = icaltimezone_get_utc_timezone();
 
         // Remove BYMONTHDAY if BYDAY week != 0
@@ -856,7 +856,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
             if (terminate) {
                 // Terminate the current RRULE
-                terminate_rrule(zone, -types[prev_idx].gmtoff);
+                terminate_rrule(zone);
 
                 if (rdate) {
                     if (zone->rdate_comp) {
@@ -917,10 +917,10 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     else {
         // Terminate the last recurrence rules
         if (standard.rrule_comp) {
-            terminate_rrule(&standard, -standard.gmtoff_from);
+            terminate_rrule(&standard);
         }
         if (daylight.rrule_comp) {
-            terminate_rrule(&daylight, -daylight.gmtoff_from);
+            terminate_rrule(&daylight);
         }
     }
 
