@@ -538,7 +538,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
     if (num_trans == 0) {
         // Add one transition using time type 0 at 19011213T204552Z
-        transitions[0] = INT_MIN;
+        transitions[0] = (time_t)INT_MIN;
         trans_idx[0] = 0;
         num_trans = 1;
     } else {
@@ -732,7 +732,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     idx = 0;  // time type 0 is always time prior to first transition
 
     for (i = 0; i < num_trans; i++) {
-        int by_day;
+        int by_day = 0;
         time_t start;
         enum icalrecurrencetype_weekday dow;
 
@@ -765,7 +765,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             // Check if the zone name or either of the offsets have changed
             if (types[prev_idx].gmtoff != zone->gmtoff_from ||
                 types[idx].gmtoff      != zone->gmtoff_to   ||
-                strcmp(types[idx].zname, zone->name)) {
+                (types[idx].zname != NULL &&
+                 strcmp(types[idx].zname, zone->name))) {
 
                 zone->rdate_comp = NULL;
                 terminate = 1;
