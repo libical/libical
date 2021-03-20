@@ -769,12 +769,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         start = transitions[i] + types[prev_idx].gmtoff;
 
         icaltime = icaltime_from_timet_with_zone(start, 0, NULL);
-        /* Flag this as the last transition time for the zone, if:
-           this is the last transition time overall, OR
-           this is the penultimate transition time, AND either
-           we have a TZ string for future transitions, OR
-           the last two transitions have different time types
-        */
+        // The last two transition times are DTSTART for the TZ string RRULEs
         if (tzstr && (i >= num_trans - 2)) {
             last_trans = 1;
         }
