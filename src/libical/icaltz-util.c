@@ -732,9 +732,6 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     idx = 0;  // time type 0 is always time prior to first transition
 
     for (i = 0; i < num_trans; i++) {
-        int last_trans = 0;
-        int terminate = 0;
-        int rdate = 0;
         int by_day;
         time_t start;
         enum icalrecurrencetype_weekday dow;
@@ -742,16 +739,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         prev_idx = idx;
         idx = trans_idx[i];
         start = transitions[i] + types[prev_idx].gmtoff;
-
         icaltime = icaltime_from_timet_with_zone(start, 0, NULL);
-        // The last two transition times are DTSTART for the TZ string RRULEs
-        if (tzstr && (i >= num_trans - 2)) {
-            last_trans = 1;
-        }
-        else {
-            dow = icaltime_day_of_week(icaltime);
-            by_day = nth_weekday(calculate_pos(icaltime), dow);
-        }
 
         if (types[idx].isdst) {
             zone = &daylight;
@@ -760,14 +748,24 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             zone = &standard;
         }
 
+        // The last two transition times are DTSTART for the TZ string RRULEs
+        if (tzstr && (i >= num_trans - 2)) {
+            terminate_rrule(zone);
+            zone->rrule_comp = NULL;
+        }
+        else {
+            dow = icaltime_day_of_week(icaltime);
+            by_day = nth_weekday(calculate_pos(icaltime), dow);
+        }
+
         if (zone->rrule_comp) {
-            if (last_trans) {
-                terminate = 1;
-            }
-            // Check if the zone name or the offset has changed
-            else if (types[prev_idx].gmtoff != zone->gmtoff_from ||
-                     types[idx].gmtoff      != zone->gmtoff_to   ||
-                     strcmp(types[idx].zname, zone->name)) {
+            int terminate = 0;
+            int rdate = 0;
+
+            // Check if the zone name or either of the offsets have changed
+            if (types[prev_idx].gmtoff != zone->gmtoff_from ||
+                types[idx].gmtoff      != zone->gmtoff_to   ||
+                strcmp(types[idx].zname, zone->name)) {
 
                 zone->rdate_comp = NULL;
                 terminate = 1;
@@ -786,11 +784,12 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     // Same weekday in the month
                     if (icaltime.day >= zone->recur.by_month_day[0] + 7 ||
                         icaltime.day + 7 <= zone->recur.by_month_day[zone->num_monthdays-1]) {
-                        // Different week - possible RDATE
+                        // Don't allow two month days with the same weekday -
+                        // possible RDATE
                         rdate = terminate = 1;
                     }
                     else {
-                        // Insert MONTHDAY into the array
+                        // Insert day of month into the array
                         int j;
                         for (j = 0; j < zone->num_monthdays; j++) {
                             if (icaltime.day <= zone->recur.by_month_day[j]) {
@@ -806,7 +805,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                             zone->num_monthdays++;
                         }
 
-                        // Remove week from BYDAY
+                        // Remove week number from BYDAY
                         zone->recur.by_day[0] = nth_weekday(0, dow);
                     }
                 }
