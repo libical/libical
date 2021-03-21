@@ -4391,6 +4391,15 @@ void test_zoneinfo_stuff(void)
     str_is("icaltzutil_get_zone_directory by TZDIR", icaltzutil_get_zone_directory(), TEST_DATADIR);
     icaltzutil_set_zone_directory("foo");
     str_is("icaltzutil_get_zone_directory", icaltzutil_get_zone_directory(), "foo");
+
+    /* reset the environment */
+#if defined(HAVE_SETENV)
+    unsetenv("TZDIR");
+#else
+    strcpy(tzdir, "TZDIR=");
+    putenv(tzdir);
+#endif
+    icaltzutil_set_zone_directory(NULL);
 }
 
 void test_tzid_with_utc_time(void)
