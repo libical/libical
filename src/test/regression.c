@@ -1415,7 +1415,7 @@ void test_recur_parameter_bug()
 {
     static const char test_icalcomp_str[] =
         "BEGIN:VEVENT\r\n"
-        "RRULE;X-EVOLUTION-ENDDATE=20030209T081500:FREQ=DAILY;COUNT=10;INTERVAL=6\r\n"
+        "RRULE;X-EVOLUTION-ENDDATE=20030209T081500:FREQ=DAILY;INTERVAL=6;COUNT=10\r\n"
         "END:VEVENT\r\n";
 
     icalcomponent *icalcomp;
@@ -2686,7 +2686,7 @@ void test_recur_parser()
     const char *str;
 
     str =
-        "FREQ=YEARLY;UNTIL=20000131T090000Z;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
+        "FREQ=YEARLY;BYMONTH=1,2,3,4,8;BYYEARDAY=34,65,76,78;BYDAY=-1TU,3WE,-4FR,SA,SU;UNTIL=20000131T090000Z";
     rt = icalrecurrencetype_from_string(str);
     str_is(str, icalrecurrencetype_as_string(&rt), str);
 
@@ -2713,7 +2713,7 @@ void test_recur_parser()
     ical_set_invalid_rrule_handling_setting(ICAL_RRULE_IGNORE_INVALID);
     rt = icalrecurrencetype_from_string(str);
     str_is(str, icalrecurrencetype_as_string(&rt),
-		   "FREQ=DAILY;COUNT=3;BYDAY=-1TU,3WE,-4FR,SA,SU;BYMONTH=1,2,3,4,8");
+		   "FREQ=DAILY;BYMONTH=1,2,3,4,8;BYDAY=-1TU,3WE,-4FR,SA,SU;COUNT=3");
 
     /* Try to parse an RRULE value with UNTIL + COUNT */
     str = "FREQ=YEARLY;UNTIL=20000131T090000Z;COUNT=3";
