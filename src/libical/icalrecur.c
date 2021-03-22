@@ -831,13 +831,13 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
     if (recur->rscale != 0) {
         icalmemory_append_string(&str, &str_p, &buf_sz, "RSCALE=");
         icalmemory_append_string(&str, &str_p, &buf_sz, recur->rscale);
-        icalmemory_append_char(&str, &str_p, &buf_sz, ';');
 
         if (recur->skip != ICAL_SKIP_OMIT) {
             const char *skipstr = icalrecur_skip_to_string(recur->skip);
             icalmemory_append_string(&str, &str_p, &buf_sz, ";SKIP=");
             icalmemory_append_string(&str, &str_p, &buf_sz, skipstr);
         }
+        icalmemory_append_char(&str, &str_p, &buf_sz, ';');
     }
 
     icalmemory_append_string(&str, &str_p, &buf_sz, "FREQ=");
