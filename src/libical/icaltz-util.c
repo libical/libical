@@ -270,7 +270,7 @@ static char *parse_posix_zone(char *p, ttinfo *type)
     return p;
 }
 
-#define nth_weekday(week, day) (icalrecurrencetype_encode_day(day, week))
+#define nth_weekday(week, day) ((day + (8 * abs(week))) * ((week < 0) ? -1 : 1))
 
 static char *parse_posix_rule(char *p,
                               struct icalrecurrencetype *recur, icaltimetype *t)
