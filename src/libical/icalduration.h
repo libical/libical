@@ -43,6 +43,8 @@ struct icaldurationtype
     unsigned int seconds;
 };
 
+#define ICALDURATIONTYPE_INITIALIZER { 0, 0, 0, 0, 0, 0 }
+
 /**
  * @brief Creates a new ::icaldurationtype from a duration in seconds.
  * @param t The duration in seconds
