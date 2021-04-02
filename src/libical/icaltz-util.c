@@ -240,8 +240,7 @@ static char *parse_posix_zone(char *p, ttinfo *type)
     if (*p == '<') {
         /* Alphanumeric, '-', or '+' */
         size = strcspn(++p, ">");
-    }
-    else {
+    } else {
         /* Alpha ONLY */
         size = strcspn(p, "-+0123456789,\n");
     }
@@ -251,14 +250,22 @@ static char *parse_posix_zone(char *p, ttinfo *type)
     type->zname[size] = '\0';
     p += size;
 
-    if (*p == '>') p++;
+    if (*p == '>') {
+        p++;
+    }
 
-    if (*p == ',') return p;
+    if (*p == ',') {
+        return p;
+    }
 
     /* Zone offset: hh[:mm[:ss]] */
     type->gmtoff = strtol(p, &p, 10) * -3600;  /* sign of offset is reversed */
-    if (*p == ':') type->gmtoff += strtol(++p, &p, 10) * 60;
-    if (*p == ':') type->gmtoff += strtol(++p, &p, 10);
+    if (*p == ':') {
+        type->gmtoff += strtol(++p, &p, 10) * 60;
+    }
+    if (*p == ':') {
+        type->gmtoff += strtol(++p, &p, 10);
+    }
 
     return p;
 }
@@ -278,8 +285,7 @@ static char *parse_posix_rule(char *p,
            It is impossible to refer explicitly to the occasional February 29.
         */
         day = strtol(++p, &p, 10);
-    }
-    else if (*p == 'M') {
+    } else if (*p == 'M') {
         /* The d'th day (0 <= d <= 6)
            of week n of month m of the year (1 <= n <= 5, 1 <= m <= 12,
            where week 5 means "the last d day in month m"
@@ -290,9 +296,10 @@ static char *parse_posix_rule(char *p,
         month = strtol(++p, &p, 10);
         week = strtol(++p, &p, 10);
         day = strtol(++p, &p, 10);
-        if (week == 5) week = -1;
-    }
-    else {
+        if (week == 5) {
+            week = -1;
+        }
+    } else {
         /* The zero-based Julian day (0 <= n <= 365).
            Leap days shall be counted, and it is possible to refer to February 29.
 
@@ -327,8 +334,7 @@ static char *parse_posix_rule(char *p,
                 int days_in_month = icaltime_days_in_month(month, 1 /* non-leap */);
 
                 monthday = days_in_month + days_adjust - 7;
-            }
-            else {
+            } else {
                 monthday = 1 + (week - 1) * 7 + days_adjust;
             }
             week = 0;
@@ -349,11 +355,9 @@ static char *parse_posix_rule(char *p,
                 recur->by_month_day[i] = monthday++;
             }
         }
-    }
-    else if (day > 1000) {
+    } else if (day > 1000) {
         recur->by_year_day[0] = day - 1000;
-    }
-    else {
+    } else {
         /* Convert day-of-non-leap-year into month/day */
         icaltimetype t = icaltime_from_day_of_year(day, 1 /* non-leap */);
 
@@ -398,8 +402,7 @@ static void terminate_rrule(struct zone_context *zone)
         icalproperty_set_rrule(zone->rrule_prop, zone->recur);
 
         zone->rdate_comp = zone->rrule_comp = NULL;
-    }
-    else {
+    } else {
         // Remove the RRULE from the component
         icalcomponent_remove_property(zone->rrule_comp, zone->rrule_prop);
         icalproperty_free(zone->rrule_prop);
@@ -647,8 +650,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         if (*p == '\n') {
             /* No DST, so ignore the TZ string */
             tzstr = NULL;
-        }
-        else {
+        } else {
             /* Parse DST zone */
             dst_type->isdst = 1;
             dst_type->gmtoff = std_type->gmtoff + 3600;  /* default is +1hr */
@@ -657,23 +659,21 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             if (*p != ',') {
                 /* No rule, so ignore the TZ string */
                 tzstr = NULL;
-            }
-            else {
+            } else {
                 struct icaltimetype std_trans, dst_trans;
 
                 /* Parse std->dst rule */
-                p = parse_posix_rule(++p /* skip ',' */,
+                p = parse_posix_rule(++p, /* skip ',' */
                                      &daylight.final_recur, &dst_trans);
 
                 /* Parse dst->std rule */
-                p = parse_posix_rule(++p /* skip ',' */,
+                p = parse_posix_rule(++p, /* skip ',' */
                                      &standard.final_recur, &std_trans);
 
                 if (*p != '\n') {
                     /* Trailing junk, so ignore the TZ string */
                     tzstr = NULL;
-                }
-                else {
+                } else {
                     struct icaltimetype last_trans =
                         icaltime_from_timet_with_zone(transitions[num_trans-1],
                                                       0, NULL);
@@ -691,8 +691,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         transitions[num_trans] = icaltime_as_timet(std_trans);
                         trans_idx[num_trans++] = (int) num_types-2;
                         icalrecur_iterator_free(iter);
-                    }
-                    else {
+                    } else {
                         /* Add next std->dst transition */
                         dst_trans.year  = last_trans.year;
                         dst_trans.month = last_trans.month;
@@ -743,8 +742,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
         if (types[idx].isdst) {
             zone = &daylight;
-        }
-        else {
+        } else {
             zone = &standard;
         }
 
@@ -752,8 +750,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         if (tzstr && (i >= num_trans - 2)) {
             terminate_rrule(zone);
             zone->rrule_comp = NULL;
-        }
-        else {
+        } else {
             dow = icaltime_day_of_week(icaltime);
             by_day = nth_weekday(calculate_pos(icaltime), dow);
         }
@@ -780,16 +777,14 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
                 if (by_day == zone->recur.by_day[0]) {
                     // Same nth weekday of the month - continue
-                }
-                else if (dow == icalrecurrencetype_day_day_of_week(zone->recur.by_day[0])) {
+                } else if (dow == icalrecurrencetype_day_day_of_week(zone->recur.by_day[0])) {
                     // Same weekday in the month
                     if (icaltime.day >= zone->recur.by_month_day[0] + 7 ||
                         icaltime.day + 7 <= zone->recur.by_month_day[zone->num_monthdays-1]) {
                         // Don't allow two month days with the same weekday -
                         // possible RDATE
                         rdate = terminate = 1;
-                    }
-                    else {
+                    } else {
                         // Insert day of month into the array
                         int j;
                         for (j = 0; j < zone->num_monthdays; j++) {
@@ -809,17 +804,14 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         // Remove week number from BYDAY
                         zone->recur.by_day[0] = nth_weekday(0, dow);
                     }
-                }
-                else if (icaltime.day == zone->recur.by_month_day[0]) {
+                } else if (icaltime.day == zone->recur.by_month_day[0]) {
                     // Same day of the month - remove BYDAY
                     zone->recur.by_day[0] = ICAL_RECURRENCE_ARRAY_MAX;
-                }
-                else {
+                } else {
                     // Different BYDAY and BYMONTHDAY - possible RDATE
                     rdate = terminate = 1;
                 }
-            }
-            else {
+            } else {
                 // Different recurrence pattern entirely - possible RDATE
                 rdate = terminate = 1;
             }
@@ -833,15 +825,16 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         // Add an RDATE to the previous component
                         // Remove the current RRULE component
                         struct icaldatetimeperiodtype dtp =
-                            { zone->time, ICALPERIODTYPE_INITIALIZER };
+                            { zone->time,
+                              ICALPERIODTYPE_INITIALIZER
+                            };
 
                         icalprop = icalproperty_new_rdate(dtp);
                         icalcomponent_add_property(zone->rdate_comp, icalprop);
 
                         icalcomponent_remove_component(tz_comp, zone->rrule_comp);
                         icalcomponent_free(zone->rrule_comp);
-                    }
-                    else {
+                    } else {
                         zone->rdate_comp = zone->rrule_comp;
                     }
                 }
@@ -883,8 +876,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         // Replace the last recurrence rules with those from the TZ string
         icalproperty_set_rrule(standard.rrule_prop, standard.final_recur);
         icalproperty_set_rrule(daylight.rrule_prop, daylight.final_recur);
-    }
-    else {
+    } else {
         // Terminate the last recurrence rules
         if (standard.rrule_comp) {
             terminate_rrule(&standard);
