@@ -266,7 +266,6 @@ static char *parse_posix_zone(char *p, ttinfo *type)
     if (*p == ':') {
         type->gmtoff += strtol(++p, &p, 10);
     }
-
     return p;
 }
 

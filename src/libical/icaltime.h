@@ -358,8 +358,8 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltime
  *
  *      Converts a time from its native timezone to a given timezone.
  *
- *      If @p tt is a date, the timezone is not converted and the returned 
- *      time is an exact copy of @p tt. 
+ *      If @p tt is a date, the timezone is not converted and the returned
+ *      time is an exact copy of @p tt.
  *
  *      If it's a floating time, the returned object
  *      represents the same time relative to @p zone.
