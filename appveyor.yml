@@ -36,11 +36,9 @@ platform:
 
 # build Configuration, i.e. Debug, Release, etc.
 configuration:
-#  - 2015
   - 2013
-  - 2012
+#  - 2012
 #  - MinGW
-#todo: 2010, 2008
 
 build_script:
   - call scripts\set_compiler_env.bat
