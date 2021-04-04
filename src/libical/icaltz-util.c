@@ -867,7 +867,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                                     icalproperty_new_tzoffsetto(zone->gmtoff_to),
                                     icalproperty_new_dtstart(zone->time),
                                     zone->rrule_prop,
-                                    0);
+                                    (void *)0);
             icalcomponent_add_component(tz_comp, zone->rrule_comp);
         }
     }
