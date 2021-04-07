@@ -224,7 +224,7 @@ def main():
             assert(child_component.get_relcalid() == "relcalid for childEventTwo");
 
             recurProperty = child_component.get_first_property(ICalGLib.PropertyKind.RRULE_PROPERTY);
-            assert recurProperty.as_ical_string() == "RRULE:FREQ=DAILY;COUNT=5;INTERVAL=10\r\n";
+            assert recurProperty.as_ical_string() == "RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5\r\n";
         if (i != count-1):
             child_component = parent.get_next_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
 
