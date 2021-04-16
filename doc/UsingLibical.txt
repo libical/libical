@@ -72,7 +72,7 @@ content line
 
 ORGANIZER;ROLE=CHAIR:MAILTO:mrbig@host.com
 
-The property name is "ORGANIZER," the value of the property is "mrbig@host.com"
+The property name is "ORGANIZER", the value of the property is "mrbig@host.com"
 and the "ROLE" parameter specifies that Mr Big is the chair of the
 meetings associated with this property.
 

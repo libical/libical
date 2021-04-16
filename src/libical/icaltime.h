@@ -119,6 +119,8 @@ struct icaltimetype
 
 typedef struct icaltimetype icaltimetype;
 
+#define ICALTIMETYPE_INITIALIZER { 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
 /**     @brief Constructor.
  *
  *      @returns A null time, which indicates no time has been set.
@@ -235,8 +237,16 @@ LIBICAL_ICAL_EXPORT const char *icaltime_get_tzid(const struct icaltimetype t);
 /**     @brief Sets the timezone.
  *
  *      Forces the icaltime to be interpreted relative to another timezone.
+ *      The returned time represents the same time as @p t, but relative to
+ *      the new @p zone.
+ *      For example, modifying July 20 1969, 8:17 PM UTC to the EDT time zone
+ *      would return a time representing July 20 1969, 8:17 PM EDT.
+ *
  *      If you need to do timezone conversion, applying offset adjustments,
  *      then you should use icaltime_convert_to_zone instead.
+ *
+ *      If @p t is of type `DATE`, its timezone is not modified and the returned
+ *      time is an exact copy of @p t.
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_set_timezone(struct icaltimetype *t,
                                                               const icaltimezone *zone);
@@ -348,11 +358,18 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltime
  *
  *      Converts a time from its native timezone to a given timezone.
  *
- *      If tt is a date, the returned time is an exact
- *      copy of the input. If it's a floating time, the returned object
- *      represents the same time translated to the given timezone.
- *      Otherwise the time will be converted to the new
- *      time zone, and its native timezone set to the right timezone.
+ *      If @p tt is a date, the timezone is not converted and the returned
+ *      time is an exact copy of @p tt.
+ *
+ *      If it's a floating time, the returned object
+ *      represents the same time relative to @p zone.
+ *      For example, if @tt represents 9:30 AM floating and @p zone
+ *      is the GMT timezone, the returned object will represent 9:30 AM GMT.
+ *
+ *      Otherwise, the time will be converted to @p zone, and its timezone
+ *      property updated to @p zone.
+ *      For example, July 20 1969, 8:17 PM UTC would be converted to July 20
+ *      1969, 4:17 PM EDT.
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
                                                                  icaltimezone *zone);

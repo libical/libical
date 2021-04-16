@@ -3,7 +3,12 @@ Release Highlights
 
 Version 3.0.10 (UNRELEASED):
 ----------------------------
- *
+ * Fix building -DSTATIC_ONLY=True with Ninja
+ * Fix generating wrong recurrence rules (#478)
+ * Fix a bug computing transitions in tzfiles
+ * Fix reading TZif files to use TZ string in the footer as the last (non-terminating) transitions
+ * Fix reading TZif files to use more RRULEs and/or RDATEs whevever possible
+ * Built-in timezones updated to tzdata2021a
 
 Version 3.0.9 (16 January 2021):
 --------------------------------

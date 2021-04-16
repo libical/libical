@@ -27,20 +27,22 @@ set(icalvcal_LIB_SRCS
 
 add_library(icalvcal ${LIBRARY_TYPE} ${icalvcal_LIB_SRCS})
 add_dependencies(icalvcal ical-header)
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})
   add_dependencies(icalvcal-static ical-header)
+elseif(STATIC_ONLY)
+  add_library(icalvcal-static ALIAS icalvcal)
 endif()
 
 target_link_libraries(icalvcal ical)
 
 if(MSVC)
   set_target_properties(icalvcal PROPERTIES PREFIX "lib")
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(icalvcal-static PROPERTIES PREFIX "lib")
   endif()
 else()
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(icalvcal-static PROPERTIES OUTPUT_NAME "icalvcal")
   endif()
 endif()
@@ -49,7 +51,7 @@ set_target_properties(icalvcal PROPERTIES
   SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
 )
 set_target_properties(icalvcal PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   set_target_properties(icalvcal-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 endif()
 
@@ -58,7 +60,7 @@ install(
   EXPORT icalTargets
   DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
 )
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   install(
     TARGETS icalvcal-static
     EXPORT icalTargets
