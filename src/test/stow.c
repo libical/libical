@@ -867,4 +867,6 @@ int main(int argc, char *argv[])
        store, and will be freed there */
 
     byebye(0, &opt);
+
+    return(0); //to avoid -Werror=return-type
 }

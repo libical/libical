@@ -320,7 +320,9 @@ static char *parse_posix_rule(char *p,
         month = strtol(++p, &p, 10);
         week = strtol(++p, &p, 10);
         day = strtol(++p, &p, 10);
-        if (week == 5) week = -1;
+        if (week == 5) {
+            week = -1;
+        }
     } else {
         /* The zero-based Julian day (0 <= n <= 365).
            Leap days shall be counted, and it is possible to refer to February 29.
