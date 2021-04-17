@@ -1,6 +1,10 @@
 Release Highlights
 ==================
 
+Version 3.0.11 (UNRELEASED):
+----------------------------
+ *
+
 Version 3.0.10 (17 April 2021):
 -------------------------------
  * Fix building -DSTATIC_ONLY=True with Ninja
