@@ -107,31 +107,33 @@ $(function() {
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> seconds;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaldurationtype.html">icaldurationtype</a> <a class="code" href="icalduration_8h.html#a88157a8ae61263ea15af92a416889301">icaldurationtype_from_int</a>(int t);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaldurationtype.html">icaldurationtype</a> <a class="code" href="icalduration_8h.html#a0d6d8cc773e19242448eaffb1368fef4">icaldurationtype_from_string</a>(const char *dur);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalduration_8h.html#a1828c484b9efb3cb1f08ec5eb58c7a18">icaldurationtype_as_int</a>(<span class="keyword">struct</span> <a class="code" href="structicaldurationtype.html">icaldurationtype</a> duration);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">char</span> *<a class="code" href="icalduration_8h.html#a7ebae580ab5bab4e9ffe822ff1dee9c8">icaldurationtype_as_ical_string</a>(<span class="keyword">struct</span> <a class="code" href="structicaldurationtype.html">icaldurationtype</a> d);</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">char</span> *<a class="code" href="icalduration_8h.html#a758d27dc5433c570f5ea5995c5001e79">icaldurationtype_as_ical_string_r</a>(<span class="keyword">struct</span> <a class="code" href="structicaldurationtype.html">icaldurationtype</a> d);</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaldurationtype.html">icaldurationtype</a> <a class="code" href="icalduration_8h.html#ad716774a6570e0be2eb11868deb86595">icaldurationtype_null_duration</a>(void);</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaldurationtype.html">icaldurationtype</a> <a class="code" href="icalduration_8h.html#a2578535a23fc5c6d4d61c09c880f03fd">icaldurationtype_bad_duration</a>(void);</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalduration_8h.html#afcdeddc439488d8f586db0702593c270">icaldurationtype_is_null_duration</a>(<span class="keyword">struct</span> <a class="code" href="structicaldurationtype.html">icaldurationtype</a> d);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalduration_8h.html#a88c5b90b57f9e1f79c00a544746687d6">icaldurationtype_is_bad_duration</a>(<span class="keyword">struct</span> <a class="code" href="structicaldurationtype.html">icaldurationtype</a> d);</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaltimetype.html">icaltimetype</a> <a class="code" href="icalduration_8h.html#aacc4e7db2c4b8dd96fd428edee73acf5">icaltime_add</a>(struct <a class="code" href="structicaltimetype.html">icaltimetype</a> t,</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                                                     struct <a class="code" href="structicaldurationtype.html">icaldurationtype</a> d);</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaldurationtype.html">icaldurationtype</a> <a class="code" href="icalduration_8h.html#aaafcb16e5d2aaa6eb0e20fdac419fc0d">icaltime_subtract</a>(struct <a class="code" href="structicaltimetype.html">icaltimetype</a> t1,</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                                                              struct <a class="code" href="structicaltimetype.html">icaltimetype</a> t2);</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* !ICALDURATION_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#define ICALDURATIONTYPE_INITIALIZER { 0, 0, 0, 0, 0, 0 }</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaldurationtype.html">icaldurationtype</a> <a class="code" href="icalduration_8h.html#a88157a8ae61263ea15af92a416889301">icaldurationtype_from_int</a>(int t);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaldurationtype.html">icaldurationtype</a> <a class="code" href="icalduration_8h.html#a0d6d8cc773e19242448eaffb1368fef4">icaldurationtype_from_string</a>(const char *dur);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalduration_8h.html#a1828c484b9efb3cb1f08ec5eb58c7a18">icaldurationtype_as_int</a>(<span class="keyword">struct</span> <a class="code" href="structicaldurationtype.html">icaldurationtype</a> duration);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">char</span> *<a class="code" href="icalduration_8h.html#a7ebae580ab5bab4e9ffe822ff1dee9c8">icaldurationtype_as_ical_string</a>(<span class="keyword">struct</span> <a class="code" href="structicaldurationtype.html">icaldurationtype</a> d);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">char</span> *<a class="code" href="icalduration_8h.html#a758d27dc5433c570f5ea5995c5001e79">icaldurationtype_as_ical_string_r</a>(<span class="keyword">struct</span> <a class="code" href="structicaldurationtype.html">icaldurationtype</a> d);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaldurationtype.html">icaldurationtype</a> <a class="code" href="icalduration_8h.html#ad716774a6570e0be2eb11868deb86595">icaldurationtype_null_duration</a>(void);</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaldurationtype.html">icaldurationtype</a> <a class="code" href="icalduration_8h.html#a2578535a23fc5c6d4d61c09c880f03fd">icaldurationtype_bad_duration</a>(void);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalduration_8h.html#afcdeddc439488d8f586db0702593c270">icaldurationtype_is_null_duration</a>(<span class="keyword">struct</span> <a class="code" href="structicaldurationtype.html">icaldurationtype</a> d);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalduration_8h.html#a88c5b90b57f9e1f79c00a544746687d6">icaldurationtype_is_bad_duration</a>(<span class="keyword">struct</span> <a class="code" href="structicaldurationtype.html">icaldurationtype</a> d);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaltimetype.html">icaltimetype</a> <a class="code" href="icalduration_8h.html#aacc4e7db2c4b8dd96fd428edee73acf5">icaltime_add</a>(struct <a class="code" href="structicaltimetype.html">icaltimetype</a> t,</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                                                     struct <a class="code" href="structicaldurationtype.html">icaldurationtype</a> d);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code" href="structicaldurationtype.html">icaldurationtype</a> <a class="code" href="icalduration_8h.html#aaafcb16e5d2aaa6eb0e20fdac419fc0d">icaltime_subtract</a>(struct <a class="code" href="structicaltimetype.html">icaltimetype</a> t1,</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                                                              struct <a class="code" href="structicaltimetype.html">icaltimetype</a> t2);</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* !ICALDURATION_H */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aicalduration_8h_html_aacc4e7db2c4b8dd96fd428edee73acf5"><div class="ttname"><a href="icalduration_8h.html#aacc4e7db2c4b8dd96fd428edee73acf5">icaltime_add</a></div><div class="ttdeci">struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype d)</div><div class="ttdoc">Adds a duration to an ::icaltime object and returns the result.</div><div class="ttdef"><b>Definition:</b> icalduration.c:318</div></div>
 <div class="ttc" id="aicalduration_8h_html_a7ebae580ab5bab4e9ffe822ff1dee9c8"><div class="ttname"><a href="icalduration_8h.html#a7ebae580ab5bab4e9ffe822ff1dee9c8">icaldurationtype_as_ical_string</a></div><div class="ttdeci">char * icaldurationtype_as_ical_string(struct icaldurationtype d)</div><div class="ttdef"><b>Definition:</b> icalduration.c:211</div></div>
@@ -149,7 +151,7 @@ $(function() {
 <div class="ttc" id="astructicaldurationtype_html"><div class="ttname"><a href="structicaldurationtype.html">icaldurationtype</a></div><div class="ttdoc">A struct representing a duration.</div><div class="ttdef"><b>Definition:</b> icalduration.h:37</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jan 16 2021 17:20:59 for Libical API Documentation by&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20
+Generated on Sat Apr 17 2021 09:18:41 for Libical API Documentation by&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20
 </small></address>
 </body>
 </html>

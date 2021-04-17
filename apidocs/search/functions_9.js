@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['remove_867',['remove',['../classLibICal_1_1VComponent.html#ae251ebedad802b6d982af2926ff289a2',1,'LibICal::VComponent']]]
+  ['remove_869',['remove',['../classLibICal_1_1VComponent.html#ae251ebedad802b6d982af2926ff289a2',1,'LibICal::VComponent']]]
 ];

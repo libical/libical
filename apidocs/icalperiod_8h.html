@@ -68,6 +68,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">icalperiod.h File Reference</div>  </div>
@@ -84,6 +85,11 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structicalperiodtype.html">icalperiodtype</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct to represent a period in time.  <a href="structicalperiodtype.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ac369ae6f4dd1b5a6e0f9b2f4cf6e2e34"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>ICALPERIODTYPE_INITIALIZER</b></td></tr>
+<tr class="separator:ac369ae6f4dd1b5a6e0f9b2f4cf6e2e34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -105,7 +111,27 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Functions for working with iCal periods (of time). </p>
-</div><h2 class="groupheader">Function Documentation</h2>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ac369ae6f4dd1b5a6e0f9b2f4cf6e2e34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac369ae6f4dd1b5a6e0f9b2f4cf6e2e34">&#9670;&nbsp;</a></span>ICALPERIODTYPE_INITIALIZER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ICALPERIODTYPE_INITIALIZER</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    { \</div>
+<div class="line">    ICALTIMETYPE_INITIALIZER,        \</div>
+<div class="line">    ICALTIMETYPE_INITIALIZER,        \</div>
+<div class="line">    ICALDURATIONTYPE_INITIALIZER     \</div>
+<div class="line">}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
 <a id="ac84e7fc00fa25286c1f109eb35a10883"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac84e7fc00fa25286c1f109eb35a10883">&#9670;&nbsp;</a></span>icalperiodtype_as_ical_string()</h2>
 
@@ -334,7 +360,7 @@ Usage</h3>
 <div class="ttc" id="aicalperiod_8h_html_ac84e7fc00fa25286c1f109eb35a10883"><div class="ttname"><a href="icalperiod_8h.html#ac84e7fc00fa25286c1f109eb35a10883">icalperiodtype_as_ical_string</a></div><div class="ttdeci">const char * icalperiodtype_as_ical_string(struct icalperiodtype p)</div><div class="ttdoc">Converts an icalperiodtype into an iCal-formatted string.</div><div class="ttdef"><b>Definition:</b> icalperiod.c:94</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jan 16 2021 17:20:59 for Libical API Documentation by&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20
+Generated on Sat Apr 17 2021 09:18:41 for Libical API Documentation by&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20
 </small></address>
 </body>
 </html>
