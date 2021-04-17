@@ -1,8 +1,8 @@
 Release Highlights
 ==================
 
-Version 3.0.10 (UNRELEASED):
-----------------------------
+Version 3.0.10 (17 April 2021):
+-------------------------------
  * Fix building -DSTATIC_ONLY=True with Ninja
  * Fix generating wrong recurrence rules (#478)
  * Fix a bug computing transitions in tzfiles
