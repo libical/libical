@@ -584,6 +584,7 @@ int main(int argc, char *argv[])
     /* Default to RFC 5545 tests */
     const struct recur *r = rfc5545;
     FILE *fp = fopen("test.out", "w");
+    int i;
     int verbose = 0;
 
     if (fp == NULL) {
@@ -592,7 +593,7 @@ int main(int argc, char *argv[])
     }
 
     /* Do not use getopt for command line parsing -- for portability on Windows */
-    for (int i = 1; i < argc; ++i) {
+    for (i = 1; i < argc; ++i) {
         if (strncmp(argv[i], "-r", 2) == 0) { /* Do RSCALE tests */
             r = rscale;
             continue;
