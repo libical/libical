@@ -1068,6 +1068,33 @@ static int __greg_month_diff(icaltimetype a, icaltimetype b)
     return (12 * (b.year - a.year) + (b.month - a.month));
 }
 
+static void __get_start_time(icalrecur_iterator *impl, icaltimetype date,
+                             int *hour, int *minute, int *second)
+{
+    icalrecurrencetype_frequency freq = impl->rule.freq;
+
+    if (freq == ICAL_HOURLY_RECURRENCE)
+        *hour = date.hour;
+    else if (has_by_data(impl, BY_HOUR))
+        *hour = impl->by_ptrs[BY_HOUR][0];
+    else
+        *hour = impl->rstart.hour;
+
+    if (freq == ICAL_MINUTELY_RECURRENCE)
+        *minute = date.minute;
+    else if (has_by_data(impl, BY_MINUTE))
+        *minute = impl->by_ptrs[BY_MINUTE][0];
+    else
+        *minute = impl->rstart.minute;
+
+    if (freq == ICAL_SECONDLY_RECURRENCE)
+        *second = date.second;
+    else if (has_by_data(impl, BY_SECOND))
+        *second = impl->by_ptrs[BY_SECOND][0];
+    else
+        *second = impl->rstart.second;
+}
+
 static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b);
 
 #if defined(HAVE_LIBICU)
@@ -1555,16 +1582,15 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
                      (int32_t) (date.month - 1), /* UCal is 0-based */
                      (int32_t) date.day, &status);
     } else {
+        int32_t hour, minute, second;
+
+        __get_start_time(impl, date, &hour, &minute, &second);
+
         ucal_setDateTime(impl->greg,
                          (int32_t) date.year,
                          (int32_t) (date.month - 1), /* UCal is 0-based */
                          (int32_t) date.day,
-                         (int32_t) (has_by_data(impl, BY_HOUR) ?
-                                    impl->by_ptrs[BY_HOUR][0] : impl->rstart.hour),
-                         (int32_t) (has_by_data(impl, BY_MINUTE) ?
-                                    impl->by_ptrs[BY_MINUTE][0] : impl->rstart.minute),
-                         (int32_t) (has_by_data(impl, BY_SECOND) ?
-                                    impl->by_ptrs[BY_SECOND][0] : impl->rstart.second),
+                         hour, minute, second,
                          &status);
     }
 
@@ -1852,12 +1878,8 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
     impl->last.zone = impl->dtstart.zone;
 
     if (!impl->dtstart.is_date) {
-        impl->last.hour = has_by_data(impl, BY_HOUR) ?
-            impl->by_ptrs[BY_HOUR][0] : impl->dtstart.hour;
-        impl->last.minute = has_by_data(impl, BY_MINUTE) ?
-            impl->by_ptrs[BY_MINUTE][0] : impl->dtstart.minute;
-        impl->last.second = has_by_data(impl, BY_SECOND) ?
-            impl->by_ptrs[BY_SECOND][0] : impl->dtstart.second;
+        __get_start_time(impl, date, &impl->last.hour,
+                         &impl->last.minute, &impl->last.second);
     }
 }
 
@@ -3085,6 +3107,33 @@ static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
             /* Specified day doesn't match interval -
                bump start to next day that matches interval */
             increment_monthday(impl, interval - diff);
+        }
+        break;
+
+    case ICAL_HOURLY_RECURRENCE:
+        if ((interval > 1) &&
+            (diff = abs(impl->istart.hour - impl->rstart.hour) % interval)) {
+            /* Specified hour doesn't match interval -
+               bump start to next hour that matches interval */
+            increment_hour(impl, interval - diff);
+        }
+        break;
+
+    case ICAL_MINUTELY_RECURRENCE:
+        if ((interval > 1) &&
+            (diff = abs(impl->istart.minute - impl->rstart.minute) % interval)) {
+            /* Specified minute doesn't match interval -
+               bump start to next minute that matches interval */
+            increment_minute(impl, interval - diff);
+        }
+        break;
+
+    case ICAL_SECONDLY_RECURRENCE:
+        if ((interval > 1) &&
+            (diff = abs(impl->istart.second - impl->rstart.second) % interval)) {
+            /* Specified second doesn't match interval -
+               bump start to next second that matches interval */
+            increment_second(impl, interval - diff);
         }
         break;
 
