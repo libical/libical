@@ -1583,7 +1583,7 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
                      (int32_t) (date.month - 1), /* UCal is 0-based */
                      (int32_t) date.day, &status);
     } else {
-        int32_t hour, minute, second;
+        int hour, minute, second;
 
         __get_start_time(impl, date, &hour, &minute, &second);
 
@@ -1591,7 +1591,9 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
                          (int32_t) date.year,
                          (int32_t) (date.month - 1), /* UCal is 0-based */
                          (int32_t) date.day,
-                         hour, minute, second,
+                         (int32_t) hour,
+                         (int32_t) minute,
+                         (int32_t) second,
                          &status);
     }
 
