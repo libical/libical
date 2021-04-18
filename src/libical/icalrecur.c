@@ -1073,26 +1073,29 @@ static void __get_start_time(icalrecur_iterator *impl, icaltimetype date,
 {
     icalrecurrencetype_frequency freq = impl->rule.freq;
 
-    if (freq == ICAL_HOURLY_RECURRENCE)
+    if (freq == ICAL_HOURLY_RECURRENCE) {
         *hour = date.hour;
-    else if (has_by_data(impl, BY_HOUR))
+    } else if (has_by_data(impl, BY_HOUR)) {
         *hour = impl->by_ptrs[BY_HOUR][0];
-    else
+    } else {
         *hour = impl->rstart.hour;
+    }
 
-    if (freq == ICAL_MINUTELY_RECURRENCE)
+    if (freq == ICAL_MINUTELY_RECURRENCE) {
         *minute = date.minute;
-    else if (has_by_data(impl, BY_MINUTE))
+    } else if (has_by_data(impl, BY_MINUTE)) {
         *minute = impl->by_ptrs[BY_MINUTE][0];
-    else
+    } else {
         *minute = impl->rstart.minute;
+    }
 
-    if (freq == ICAL_SECONDLY_RECURRENCE)
+    if (freq == ICAL_SECONDLY_RECURRENCE) {
         *second = date.second;
-    else if (has_by_data(impl, BY_SECOND))
+    } else if (has_by_data(impl, BY_SECOND)) {
         *second = impl->by_ptrs[BY_SECOND][0];
-    else
+    } else {
         *second = impl->rstart.second;
+    }
 }
 
 static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b);
@@ -1307,8 +1310,7 @@ static int get_day_of_year(icalrecur_iterator *impl,
 
     if (!day) {
         day = impl->rstart.day;
-    }
-    else if (day < 0) {
+    } else if (day < 0) {
         day += 1 + (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
                                       UCAL_ACTUAL_MAXIMUM, &status);
     }
@@ -1344,8 +1346,9 @@ static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator *impl,
     tt.day = (int)ucal_get(cal, UCAL_DATE, &status);
     tt.month = 1 +  /* UCal is 0-based */
         (int)ucal_get(cal, UCAL_MONTH, &status);
-    if (is_leap_month)
+    if (is_leap_month) {
         tt.month |= LEAP_MONTH;
+    }
 
     if (!tt.is_date) {
         tt.hour = (int)ucal_get(cal, UCAL_HOUR_OF_DAY, &status);
@@ -1485,8 +1488,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
                                locale, sizeof(locale), &status);
 
     /* Create Gregorian calendar and set to DTSTART */
-    impl->greg =
-        ucal_open(tzid, -1, locale, UCAL_DEFAULT, &status);
+    impl->greg = ucal_open(tzid, -1, locale, UCAL_DEFAULT, &status);
     if (impl->greg) {
         ucal_setDateTime(impl->greg,
                          (int32_t) dtstart.year,
@@ -1533,8 +1535,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
                                    locale, sizeof(locale), &status);
 
         /* Create RSCALE calendar and set to DTSTART */
-        impl->rscale =
-            ucal_open(tzid, -1, locale, UCAL_DEFAULT, &status);
+        impl->rscale = ucal_open(tzid, -1, locale, UCAL_DEFAULT, &status);
         if (impl->rscale) {
             UDate millis = ucal_getMillis(impl->greg, &status);
 
