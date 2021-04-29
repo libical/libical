@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "vzic.h"
@@ -40,6 +41,7 @@
 /* By default we output Outlook-compatible output. If --pure is used we
    output pure output, with no changes to be compatible with Outlook. */
 gboolean VzicPureOutput			= FALSE;
+gboolean VzicWithArtifacts		= FALSE;
 
 gboolean VzicDumpOutput			= FALSE;
 gboolean VzicDumpChanges		= FALSE;
@@ -87,6 +89,12 @@ main				(int		 argc,
        as it has problems with certain iCalendar constructs. */
     if (!strcmp (argv[i], "--pure"))
       VzicPureOutput = TRUE;
+
+    /* --with-artifacts: Include tzdata artifacts (transition time types)
+       in the "pure" iCalendar data.
+       These artifacts can be used to construct TZif files from iCalendar. */
+    else if (!strcmp (argv[i], "--with-artifacts"))
+      VzicWithArtifacts = TRUE;
 
     /* --output-dir: specify where to output all the files beneath. The
        default is the current directory. */
@@ -166,10 +174,10 @@ main				(int		 argc,
   convert_olson_file ("northamerica");
   convert_olson_file ("southamerica");
 
-  /* These are backwards-compatability and weird stuff. */
-#if 0
+  /* These are backwards-compatibility and weird stuff. */
   convert_olson_file ("backward");
   convert_olson_file ("etcetera");
+#if 0
   convert_olson_file ("leapseconds");
   convert_olson_file ("pacificnew");
   convert_olson_file ("solar87");

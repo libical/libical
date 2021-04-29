@@ -78,7 +78,7 @@ char TZIDPrefixExpanded[1024];
    since otherwise RDATEs are more efficient. Actually, I've set this high
    so we only use RRULEs for infinite recurrences. Since expanding RRULEs is
    very time-consuming, this seems sensible. */
-#define MIN_RRULE_OCCURRENCES	100
+#define MIN_RRULE_OCCURRENCES   2
 
 
 /* The year we go up to when dumping the list of timezone changes (used
@@ -87,7 +87,7 @@ char TZIDPrefixExpanded[1024];
 
 /* This is the maximum year that time_t value can typically hold on 32-bit
    systems. */
-#define MAX_TIME_T_YEAR		2037
+#define MAX_TIME_T_YEAR		2038
 
 
 /* The year we use to start RRULEs. */
@@ -132,6 +132,9 @@ struct _VzicTime
 
   /* TRUE if the time change recurs every year to infinity. */
   gboolean	is_infinite;
+
+  /* The last instance of a recurring time change, if not infinite */
+  VzicTime	*until;
 
   /* TRUE if the change has already been output. */
   gboolean	output;
@@ -498,16 +501,6 @@ output_zone			(char		*directory,
 					g_strdup (zone_name));
   }
 
-  sprintf (output_directory, "%s/%s", directory, zone_directory);
-  ensure_directory_exists (output_directory);
-  sprintf (filename, "%s/%s.ics", output_directory, zone_filename);
-
-  if (VzicDumpChanges) {
-    sprintf (output_directory, "%s/ChangesVzic/%s", directory, zone_directory);
-    ensure_directory_exists (output_directory);
-    sprintf (changes_filename, "%s/%s", output_directory, zone_filename);
-  }
-
   if (zone_subdirectory) {
     sprintf (output_directory, "%s/%s/%s", directory, zone_directory,
 	     zone_subdirectory);
@@ -521,6 +514,29 @@ output_zone			(char		*directory,
       sprintf (changes_filename, "%s/%s", output_directory, zone_filename);
     }
   }
+  else if (zone_directory) {
+    sprintf (output_directory, "%s/%s", directory, zone_directory);
+    ensure_directory_exists (output_directory);
+    sprintf (filename, "%s/%s.ics", output_directory, zone_filename);
+
+    if (VzicDumpChanges) {
+      sprintf (output_directory, "%s/ChangesVzic/%s", directory, zone_directory);
+      ensure_directory_exists (output_directory);
+      sprintf (changes_filename, "%s/%s", output_directory, zone_filename);
+    }
+  }
+  else {
+    sprintf (output_directory, "%s", directory);
+    ensure_directory_exists (output_directory);
+    sprintf (filename, "%s/%s.ics", output_directory, zone_filename);
+
+    if (VzicDumpChanges) {
+      sprintf (output_directory, "%s/ChangesVzic", directory);
+      ensure_directory_exists (output_directory);
+      sprintf (changes_filename, "%s/%s", output_directory, zone_filename);
+    }
+  }
+
 
   /* Create the files. */
   fp = fopen (filename, "w");
@@ -537,7 +553,7 @@ output_zone			(char		*directory,
     }
   }
 
-  fprintf (fp, "BEGIN:VCALENDAR\nPRODID:%s\nVERSION:2.0\n", ProductID);
+  fprintf (fp, "BEGIN:VCALENDAR\r\nPRODID:%s\r\nVERSION:2.0\r\n", ProductID);
 
   output_zone_to_files (zone, zone_name, rule_data, fp, changes_fp);
 
@@ -546,7 +562,7 @@ output_zone			(char		*directory,
     exit (1);
   }
 
-  fprintf (fp, "END:VCALENDAR\n");
+  fprintf (fp, "END:VCALENDAR\r\n");
 
   fclose (fp);
 
@@ -590,17 +606,21 @@ parse_zone_name			(char		*name,
       }
     }
   }
-
+#if 0
   if (!first_slash_pos) {
 #if 0
 	fprintf (stderr, "No '/' character in Zone name: %s. Skipping.\n", name);
 #endif
 	return FALSE;
   }
-
+#endif
   if (invalid) {
     *directory = g_strdup ("Invalid");
     *filename = g_strdup_printf ("Zone%i", invalid_zone_num++);
+  } else if (!first_slash_pos) {
+      *directory = NULL;
+      *subdirectory = NULL;
+      *filename = g_strdup (name);
   } else {
     *first_slash_pos = '\0';
     *directory = g_strdup (name);
@@ -646,6 +666,8 @@ output_zone_to_files		(ZoneData	*zone,
 
   for (i = 0; i < zone->zone_line_data->len; i++) {
     zone_line = &g_array_index (zone->zone_line_data, ZoneLineData, i);
+
+    if (i == 0) start.is_infinite = (zone_line->rules == NULL);
 
     /* This is the local standard time offset from GMT for this period. */
     start.stdoff = stdoff = zone_line->stdoff_seconds;
@@ -796,6 +818,8 @@ add_rule_changes			(ZoneLineData	*zone_line,
 
 
   for (i = 0; i < rule_array->len; i++) {
+    int r;
+
     rule = &g_array_index (rule_array, RuleData, i);
 
     is_daylight = rule->save_seconds != 0 ? TRUE : FALSE;
@@ -812,10 +836,33 @@ add_rule_changes			(ZoneLineData	*zone_line,
     vzictime.walloff = stdoff + rule->save_seconds;
     vzictime.is_infinite = (rule->to_year == YEAR_MAXIMUM) ? TRUE : FALSE;
 
-    /* If the rule time is before the given start time, skip it. */
-    if (compare_times (&vzictime, stdoff, walloff,
-		       start, prev_stdoff, prev_walloff) < 0)
-      continue;
+    /* If the rule time is before or on the given start time, skip it. */
+    r = compare_times (&vzictime, stdoff, walloff,
+                       start, prev_stdoff, prev_walloff);
+    if (r <= 0) {
+      /* Our next rule may start while this one is in effect
+	 so we keep track of its name.
+
+	 This seems to eliminate the need to guess in expand_tzname()
+	 but hasn't had enough testing to prove foolproof as of yet. */
+      found_start_letter_s = TRUE;
+      *start_letter_s = rule->letter_s;
+
+      if (r == 0 && vzictime.time_code != start->time_code) {
+        /* Rule time is on the given start time.
+           We want to keep the rule time (for the time_code) but we need to
+           adjust the time to be based on the last change before this period */
+        if (vzictime.time_code == TIME_WALL) {
+          /* Adjust for rule possibly starting during DST */
+          vzictime.time_seconds += prev_walloff - walloff;
+        }
+        else if (vzictime.time_code == TIME_STANDARD) {
+          /* Adjust for rule possibly starting at UTC change */
+          vzictime.time_seconds += prev_stdoff - stdoff;
+        }
+      }
+      else continue;
+    }
 
     /* If the previous Rule was a daylight Rule, then we may want to use the
        walloff from that. */
@@ -857,6 +904,13 @@ add_rule_changes			(ZoneLineData	*zone_line,
     /* Now that we have added the Rule, the new walloff comes into effect
        for any following Rules. */
     walloff = vzictime.walloff;
+  }
+
+  /* If last Rule is terminating, flag it */
+  if (end->year == YEAR_MAXIMUM &&
+      rule->to_year >= 2037 && rule->to_year < YEAR_MAXIMUM) {
+    VzicTime *v = &g_array_index (changes, VzicTime, changes->len - 1);
+    v->until = v;
   }
 
   return found_start_letter_s;
@@ -1069,14 +1123,43 @@ output_zone_components			(FILE		*fp,
   int i, start_index = 0;
   gboolean only_one_change = FALSE;
   char start_buffer[1024];
+  time_t now = time(0);
+  struct tm *tm = gmtime(&now);
 
-  fprintf (fp, "BEGIN:VTIMEZONE\nTZID:%s%s\n", TZIDPrefixExpanded, name);
+  fprintf (fp, "BEGIN:VTIMEZONE\r\nTZID:%s%s\r\n", TZIDPrefixExpanded, name);
+
+  vzictime = &g_array_index (changes, VzicTime, changes->len - 1);
+  if (vzictime->until) {
+    /* Add TZUNTIL */
+    VzicTime until = *vzictime->until;
+
+    until.time_seconds++;  /* TZUNTIL is exclusive */
+    calculate_actual_time(&until, TIME_UNIVERSAL,
+                          until.prev_stdoff, until.prev_walloff);
+    fprintf (fp, "TZUNTIL:%sZ\r\n", format_time(until.year, until.month,
+                                                until.day_number,
+                                                until.time_seconds));
+    vzictime->until = NULL;
+  }
+
+  /* Use current time as LAST-MODIFIED */
+  fprintf (fp, "LAST-MODIFIED:%04i%02i%02iT%02i%02i%02iZ\r\n",
+	   tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
+	   tm->tm_hour, tm->tm_min, tm->tm_sec);
 
   if (VzicUrlPrefix != NULL)
-      fprintf (fp, "TZURL:%s/%s\n", VzicUrlPrefix, name);
+      fprintf (fp, "TZURL:%s/%s\r\n", VzicUrlPrefix, name);
 
   /* We use an 'X-' property to place the city name in. */
-  fprintf (fp, "X-LIC-LOCATION:%s\n", name);
+  fprintf (fp, "X-LIC-LOCATION:%s\r\n", name);
+
+  /* We use an 'X-' property to place the proleptic tzname in. */
+  vzictime = &g_array_index (changes, VzicTime, 0);
+  if (VzicPureOutput && vzictime->tzname) {
+    fputs("X-PROLEPTIC-TZNAME", fp);
+    if (!vzictime->is_infinite) fputs(";X-NO-BIG-BANG=TRUE", fp);
+    fprintf(fp, ":%s\r\n", vzictime->tzname);
+  }
 
   /* We try to find any recurring components first, or they may get output
      as lots of RDATES instead. */
@@ -1098,7 +1181,7 @@ output_zone_components			(FILE		*fp,
 #if 0
       printf ("Zone: %s using 2 RRULEs\n", CurrentZoneName);
 #endif
-      fprintf (fp, "END:VTIMEZONE\n");
+      fprintf (fp, "END:VTIMEZONE\r\n");
       return;
     }
   }
@@ -1134,6 +1217,41 @@ output_zone_components			(FILE		*fp,
 
     vzictime = &g_array_index (changes, VzicTime, i);
 
+    /* If this has been flagged as an RRULE, then output it now */
+    if (VzicPureOutput && vzictime->until) {
+      char until[256], rrule_buffer[2048];
+      int day_offset;
+
+      if (vzictime->until->is_infinite) {
+	until[0] = '\0';
+      } else {
+	VzicTime t1 = *vzictime->until;
+
+	calculate_actual_time (&t1, TIME_UNIVERSAL, vzictime->prev_stdoff,
+			       vzictime->prev_walloff);
+
+	/* Output UNTIL, in UTC. */
+	sprintf (until, ";UNTIL=%sZ", format_time (t1.year, t1.month,
+						   t1.day_number,
+						   t1.time_seconds));
+      }
+
+      day_offset = output_component_start (start_buffer, vzictime,
+					   FALSE, FALSE);
+      fprintf (fp, "%s", start_buffer);
+
+      if (output_rrule (rrule_buffer, vzictime->month,
+			vzictime->day_code,
+			vzictime->day_number,
+			vzictime->day_weekday, day_offset, until)) {
+	fprintf (fp, "%s", rrule_buffer);
+      }
+
+      output_component_end (fp, vzictime);
+
+      continue;
+    }
+
     /* If we have already output this component as part of an RRULE or RDATE,
        then we skip it. */
     if (vzictime->output)
@@ -1154,7 +1272,7 @@ output_zone_components			(FILE		*fp,
     if (VzicPureOutput) {
       output_component_start (start_buffer, vzictime, TRUE, only_one_change);
     } else {
-    /* For Outlook compatability we don't output the RDATE and use the same
+    /* For Outlook compatibility we don't output the RDATE and use the same
        TZOFFSET for TZOFFSETFROM and TZOFFSETTO. */
       vzictime->year         = RDATE_YEAR;
       vzictime->month        = 0;
@@ -1181,7 +1299,7 @@ output_zone_components			(FILE		*fp,
       break;
   }
 
-  fprintf (fp, "END:VTIMEZONE\n");
+  fprintf (fp, "END:VTIMEZONE\r\n");
 }
 
 
@@ -1200,6 +1318,15 @@ set_previous_offsets		(GArray		*changes)
 
   for (i = 1; i < changes->len; i++) {
     vzictime = &g_array_index (changes, VzicTime, i);
+
+    if (vzictime->stdoff == prev_vzictime->stdoff &&
+	vzictime->walloff == prev_vzictime->walloff &&
+        vzictime->time_code == prev_vzictime->time_code &&
+	!strcmp(vzictime->tzname, prev_vzictime->tzname)) {
+      /* Ignore no-op transitions */
+      vzictime->output = TRUE;
+      continue;
+    }
 
     vzictime->prev_stdoff = prev_vzictime->stdoff;
     vzictime->prev_walloff = prev_vzictime->walloff;
@@ -1243,27 +1370,29 @@ check_for_recurrence		(FILE		*fp,
   /* If this is an infinitely recurring change, output the RRULE and return.
      There won't be any changes after it that we could merge. */
   if (vzictime_start->is_infinite) {
-
-    /* Change the year to our minimum start year. */
-    vzictime_start_copy = *vzictime_start;
-    if (!VzicPureOutput)
+    if (!VzicPureOutput) {
+      /* Change the year to our minimum start year. */
+      vzictime_start_copy = *vzictime_start;
       vzictime_start_copy.year = RRULE_START_YEAR;
 
-    day_offset = output_component_start (start_buffer, &vzictime_start_copy,
-					 FALSE, FALSE);
+      day_offset = output_component_start (start_buffer, &vzictime_start_copy,
+                                           FALSE, FALSE);
 
-    if (!output_rrule (rrule_buffer, vzictime_start_copy.month,
-		       vzictime_start_copy.day_code,
-		       vzictime_start_copy.day_number,
-		       vzictime_start_copy.day_weekday, day_offset, "")) {
-      if (vzictime_start->year != MAX_TIME_T_YEAR) {
-	fprintf (stderr, "WARNING: Failed to output infinite recurrence with start year: %i\n", vzictime_start->year);
+      if (!output_rrule (rrule_buffer, vzictime_start_copy.month,
+                         vzictime_start_copy.day_code,
+                         vzictime_start_copy.day_number,
+                         vzictime_start_copy.day_weekday, day_offset, "")) {
+        if (vzictime_start->year != MAX_TIME_T_YEAR) {
+          fprintf (stderr, "WARNING: Failed to output infinite recurrence with start year: %i\n", vzictime_start->year);
+        }
+        return TRUE;
       }
-      return TRUE;
+
+      fprintf (fp, "%s%s", start_buffer, rrule_buffer);
+      output_component_end (fp, vzictime_start);
     }
 
-    fprintf (fp, "%s%s", start_buffer, rrule_buffer);
-    output_component_end (fp, vzictime_start);
+    vzictime_start->until = vzictime_start;
     vzictime_start->output = TRUE;
     return TRUE;
   }
@@ -1346,47 +1475,49 @@ check_for_recurrence		(FILE		*fp,
 #if 0
     printf ("RRULE Years: %i\n", years);
 #endif
-    if (years < MIN_RRULE_OCCURRENCES)
+    if (!VzicPureOutput || years < MIN_RRULE_OCCURRENCES)
       return FALSE;
   }
 
-  if (vzictime->is_infinite) {
-    until[0] = '\0';
-  } else {
-    VzicTime t1 = *vzictime;
+  if (!VzicPureOutput) {
+    if (vzictime->is_infinite) {
+      until[0] = '\0';
+    } else {
+      VzicTime t1 = *vzictime;
 
-    printf ("RRULE with UNTIL - aborting\n");
-    abort ();
+      printf ("RRULE with UNTIL - aborting\n");
+      abort ();
 
-    calculate_actual_time (&t1, TIME_UNIVERSAL, vzictime->prev_stdoff,
-			   vzictime->prev_walloff);
+      calculate_actual_time (&t1, TIME_UNIVERSAL, vzictime->prev_stdoff,
+                             vzictime->prev_walloff);
 
-    /* Output UNTIL, in UTC. */
-    sprintf (until, ";UNTIL=%sZ", format_time (t1.year, t1.month,
-					       t1.day_number,
-					       t1.time_seconds));
-  }
+      /* Output UNTIL, in UTC. */
+      sprintf (until, ";UNTIL=%sZ", format_time (t1.year, t1.month,
+                                                 t1.day_number,
+                                                 t1.time_seconds));
+    }
 
-  /* Change the year to our minimum start year. */
-  vzictime_start_copy = *vzictime_start;
-  if (!VzicPureOutput)
+    /* Change the year to our minimum start year. */
+    vzictime_start_copy = *vzictime_start;
     vzictime_start_copy.year = RRULE_START_YEAR;
 
-  day_offset = output_component_start (start_buffer, &vzictime_start_copy,
-				       FALSE, FALSE);
-  if (output_rrule (rrule_buffer, vzictime_start_copy.month,
-		    vzictime_start_copy.day_code,
-		    vzictime_start_copy.day_number,
-		    vzictime_start_copy.day_weekday, day_offset, until)) {
-    fprintf (fp, "%s%s", start_buffer, rrule_buffer);
-    output_component_end (fp, vzictime_start);
-
-    /* Mark all the changes as output. */
-    vzictime_start->output = TRUE;
-    for (elem = matching_elements; elem; elem = elem->next) {
-      vzictime = elem->data;
-      vzictime->output = TRUE;
+    day_offset = output_component_start (start_buffer, &vzictime_start_copy,
+                                         FALSE, FALSE);
+    if (output_rrule (rrule_buffer, vzictime_start_copy.month,
+                      vzictime_start_copy.day_code,
+                      vzictime_start_copy.day_number,
+                      vzictime_start_copy.day_weekday, day_offset, until)) {
+      fprintf (fp, "%s%s", start_buffer, rrule_buffer);
+      output_component_end (fp, vzictime_start);
     }
+  }
+  vzictime_start->until = vzictime;
+
+  /* Mark all the changes as output. */
+  vzictime_start->output = TRUE;
+  for (elem = matching_elements; elem; elem = elem->next) {
+    vzictime = elem->data;
+    vzictime->output = TRUE;
   }
 
   g_list_free (matching_elements);
@@ -1415,7 +1546,7 @@ check_for_rdates		(FILE		*fp,
 	  is_daylight_start ? "DAYLIGHT" : "");
 #endif
 
-  /* We want to go backwards through the array now, for Outlook compatability.
+  /* We want to go backwards through the array now, for Outlook compatibility.
      (It only looks at the first DTSTART/RDATE.) */
   for (i = idx + 1; i < changes->len; i++) {
     vzictime = &g_array_index (changes, VzicTime, i);
@@ -1455,10 +1586,17 @@ check_for_rdates		(FILE		*fp,
     calculate_actual_time (&tmp_vzictime, TIME_WALL, vzictime->prev_stdoff,
 			   vzictime->prev_walloff);
 
-    fprintf (fp, "RDATE:%s\n", format_time (tmp_vzictime.year,
-					    tmp_vzictime.month,
-					    tmp_vzictime.day_number,
-					    tmp_vzictime.time_seconds));
+    fputs ("RDATE", fp);
+    if (VzicPureOutput && VzicWithArtifacts) {
+      if (vzictime->time_code != TIME_WALL) {
+        fprintf (fp, ";X-OBSERVED-AT=%c",
+                 vzictime->time_code == TIME_UNIVERSAL ? 'Z' : 'S');
+      }
+    }
+    fprintf (fp, ":%s\r\n", format_time (tmp_vzictime.year,
+                                         tmp_vzictime.month,
+                                         tmp_vzictime.day_number,
+                                         tmp_vzictime.time_seconds));
 
     vzictime->output = TRUE;
   }
@@ -1494,7 +1632,7 @@ output_component_start			(char		*buffer,
   char line1[1024], line2[1024], line3[1024];
   char line4[1024], line5[1024], line6[1024];
   VzicTime tmp_vzictime;
-  int prev_walloff;
+  int prev_walloff, n;
 
   is_daylight = (vzictime->stdoff != vzictime->walloff) ? TRUE : FALSE;
 
@@ -1503,7 +1641,7 @@ output_component_start			(char		*buffer,
 				      vzictime->prev_stdoff,
 				      vzictime->prev_walloff);
 
-  sprintf (line1, "BEGIN:%s\n", is_daylight ? "DAYLIGHT" : "STANDARD");
+  sprintf (line1, "BEGIN:%s\r\n", is_daylight ? "DAYLIGHT" : "STANDARD");
 
   /* If the timezone only has one change, that means it uses the same offset
      forever, so we use the same TZOFFSETFROM as the TZOFFSETTO. (If the zone
@@ -1513,24 +1651,33 @@ output_component_start			(char		*buffer,
   else
     prev_walloff = vzictime->prev_walloff;
 
-  sprintf (line2, "TZOFFSETFROM:%s\n",
+  if (vzictime->tzname)
+    sprintf (line2, "TZNAME:%s\r\n", vzictime->tzname);
+  else
+    line2[0] = '\0';
+
+  sprintf (line3, "TZOFFSETFROM:%s\r\n",
 	   format_tz_offset (prev_walloff, !VzicPureOutput));
 
-  sprintf (line3, "TZOFFSETTO:%s\n",
+  sprintf (line4, "TZOFFSETTO:%s\r\n",
 	   format_tz_offset (vzictime->walloff, !VzicPureOutput));
-
-  if (vzictime->tzname)
-    sprintf (line4, "TZNAME:%s\n", vzictime->tzname);
-  else
-    line4[0] = '\0';
 
   formatted_time = format_time (tmp_vzictime.year, tmp_vzictime.month,
 				tmp_vzictime.day_number,
 				tmp_vzictime.time_seconds);
-  sprintf (line5, "DTSTART:%s\n", formatted_time);
+  n = sprintf (line5, "DTSTART");
+  if (VzicPureOutput && VzicWithArtifacts) {
+    if (vzictime->time_code != TIME_WALL) {
+      n += sprintf (line5+n, ";X-OBSERVED-AT=%c",
+                    vzictime->time_code == TIME_UNIVERSAL ? 'Z' : 'S');
+    }
+  }
+  sprintf (line5+n, ":%s\r\n", formatted_time);
+#if 0  /* The RDATE matching DTSTART is unnecessary */
   if (output_rdate)
-    sprintf (line6, "RDATE:%s\n", formatted_time);
+    sprintf (line6, "RDATE:%s\r\n", formatted_time);
   else
+#endif
     line6[0] = '\0';
 
   sprintf (buffer, "%s%s%s%s%s%s", line1, line2, line3, line4, line5, line6);
@@ -1548,7 +1695,7 @@ output_component_end			(FILE		*fp,
 
   is_daylight = (vzictime->stdoff != vzictime->walloff) ? TRUE : FALSE;
 
-  fprintf (fp, "END:%s\n", is_daylight ? "DAYLIGHT" : "STANDARD");
+  fprintf (fp, "END:%s\r\n", is_daylight ? "DAYLIGHT" : "STANDARD");
 }
 
 
@@ -1567,6 +1714,7 @@ vzictime_init				(VzicTime	*vzictime)
   vzictime->stdoff = 0;
   vzictime->walloff = 0;
   vzictime->is_infinite = FALSE;
+  vzictime->until = NULL;
   vzictime->output = FALSE;
   vzictime->prev_stdoff = 0;
   vzictime->prev_walloff = 0;
@@ -1629,9 +1777,15 @@ calculate_actual_time		(VzicTime	*vzictime,
 
     vzictime->day_code = DAY_SIMPLE;
 
-    if (vzictime->day_number <= 0 || vzictime->day_number > days_in_month) {
-      fprintf (stderr, "Day overflow: %i\n", vzictime->day_number);
-      exit (1);
+    if (vzictime->day_number > days_in_month) {
+      vzictime->month++;
+      vzictime->day_number -= days_in_month;
+    }
+
+    if (vzictime->day_number <= 0) {
+      vzictime->month--;
+      days_in_month = g_date_days_in_month (vzictime->month + 1, vzictime->year);
+      vzictime->day_number += days_in_month;
     }
   }
 
@@ -1722,7 +1876,9 @@ calculate_wall_time			(int		 time,
 
   switch (time_code) {
   case TIME_WALL:
-    return time;
+    /* We don't just return here so we can handle 24:00:00 below */
+    result = time;
+    break;
   case TIME_STANDARD:
     /* We have a local standard time, so we have to subtract stdoff to get
        back to UTC, then add walloff to get wall time. */
@@ -1927,15 +2083,15 @@ output_rrule				(char	        *rrule_buffer,
        at the moment anyway, so that isn't a big loss). */
     if (!VzicPureOutput) {
       if (day_number < 8) {
-	printf ("WARNING: %s: Outputting BYDAY=1SU instead of BYMONTHDAY=1-7 for Outlook compatability\n", CurrentZoneName);
+	printf ("WARNING: %s: Outputting BYDAY=1SU instead of BYMONTHDAY=1-7 for Outlook compatibility\n", CurrentZoneName);
 	sprintf (buffer, "RRULE:FREQ=YEARLY;BYMONTH=%i;BYDAY=1SU",
 		 month + 1);
       } else if (day_number < 15) {
-	printf ("WARNING: %s: Outputting BYDAY=2SU instead of BYMONTHDAY=8-14 for Outlook compatability\n", CurrentZoneName);
+	printf ("WARNING: %s: Outputting BYDAY=2SU instead of BYMONTHDAY=8-14 for Outlook compatibility\n", CurrentZoneName);
 	sprintf (buffer, "RRULE:FREQ=YEARLY;BYMONTH=%i;BYDAY=2SU",
 		 month + 1);
       } else if (day_number < 22) {
-	printf ("WARNING: %s: Outputting BYDAY=3SU instead of BYMONTHDAY=15-21 for Outlook compatability\n", CurrentZoneName);
+	printf ("WARNING: %s: Outputting BYDAY=3SU instead of BYMONTHDAY=15-21 for Outlook compatibility\n", CurrentZoneName);
 	sprintf (buffer, "RRULE:FREQ=YEARLY;BYMONTH=%i;BYDAY=3SU",
 		 month + 1);
       } else {
@@ -1949,7 +2105,6 @@ output_rrule				(char	        *rrule_buffer,
 
   case DAY_WEEKDAY_ON_OR_AFTER:
     if (day_number > DaysInMonth[month] - 6) {
-      /* This isn't actually needed at present. */
 #if 0
       fprintf (stderr, "DAY_WEEKDAY_ON_OR_AFTER: %i %i\n", day_number,
 	       month + 1);
@@ -1960,8 +2115,9 @@ output_rrule				(char	        *rrule_buffer,
 	exit (1);
       } else {
 	/* We do 6 days at the end of this month, and 1 at the start of the
-	   next. We can't do this if we want Outlook compatability, as it
+	   next. We can't do this if we want Outlook compatibility, as it
 	   needs BYMONTHDAY, which Outlook doesn't support. */
+/*
 	sprintf (buffer,
 		 "RRULE:FREQ=YEARLY;BYMONTH=%i;BYMONTHDAY=%i,%i,%i,%i,%i,%i;BYDAY=%s",
 		 month + 1,
@@ -1974,8 +2130,19 @@ output_rrule				(char	        *rrule_buffer,
 		 (month + 1) % 12 + 1,
 		 WeekDays[day_weekday]);
 
-	sprintf (rrule_buffer, "%s%s\n%s%s\n",
+	sprintf (rrule_buffer, "%s%s\n%s%s\r\n",
 		 buffer, until, buffer2, until);
+*/
+	/* Multiple RRULEs within the component are illegal according to new iCal RFC 5545,
+	   so combine the above RRULEs (commented) into a single RRULE using BYYEARDAY */
+	day_number = 0;
+	int i;
+	for (i = month+1; i < 12; i++) {
+	  day_number += DaysInMonth[i];
+	}
+	sprintf (rrule_buffer, "RRULE:FREQ=YEARLY;BYYEARDAY=-%i,-%i,-%i,-%i,-%i,-%i,-%i;BYDAY=%s%s\r\n",
+		 day_number, day_number+1, day_number+2, day_number+3,
+		 day_number+4, day_number+5, day_number+6, WeekDays[day_weekday], until);
 
 	return TRUE;
       }
@@ -1988,9 +2155,27 @@ output_rrule				(char	        *rrule_buffer,
 
   case DAY_WEEKDAY_ON_OR_BEFORE:
     if (day_number < 7) {
-      /* FIXME: This is unimplemented, but it isn't needed at present anway. */
-      fprintf (stderr, "DAY_WEEKDAY_ON_OR_BEFORE: %i. Unimplemented. Exiting...\n", day_number);
-      exit (0);
+#if 0
+      fprintf (stderr, "DAY_WEEKDAY_ON_OR_BEFORE: %i %i\n", day_number,
+	       month + 1);
+#endif
+
+      if (!VzicPureOutput) {
+	printf ("ERROR: %s: Couldn't output RRULE (day<=x) compatible with Outlook\n", CurrentZoneName);
+	exit (1);
+      } else {
+        /* We do this day and 6 previous days */
+        day_number = -(day_number - 1);
+	int i;
+	for (i = month; i < 12; i++) {
+	  day_number += DaysInMonth[i];
+	}
+	sprintf (rrule_buffer, "RRULE:FREQ=YEARLY;BYYEARDAY=-%i,-%i,-%i,-%i,-%i,-%i,-%i;BYDAY=%s%s\r\n",
+		 day_number, day_number+1, day_number+2, day_number+3,
+		 day_number+4, day_number+5, day_number+6, WeekDays[day_weekday], until);
+
+	return TRUE;
+      }
     }
 
     if (!output_rrule_2 (buffer, month, day_number - 6, day_weekday))
@@ -2011,15 +2196,16 @@ output_rrule				(char	        *rrule_buffer,
 #endif
 
       if (!VzicPureOutput) {
-	printf ("WARNING: %s: Modifying RRULE (last weekday) for Outlook compatability\n", CurrentZoneName);
+	printf ("WARNING: %s: Modifying RRULE (last weekday) for Outlook compatibility\n", CurrentZoneName);
 	sprintf (buffer,
 		 "RRULE:FREQ=YEARLY;BYMONTH=%i;BYDAY=-1%s",
 		 month + 1, WeekDays[day_weekday]);
 	printf ("  Outputting: %s\n", buffer);
       } else {
 	/* We do 6 days at the end of this month, and 1 at the start of the
-	   next. We can't do this if we want Outlook compatability, as it needs
+	   next. We can't do this if we want Outlook compatibility, as it needs
 	   BYMONTHDAY, which Outlook doesn't support. */
+/*
 	day_number = DaysInMonth[month];
 	sprintf (buffer,
 		 "RRULE:FREQ=YEARLY;BYMONTH=%i;BYMONTHDAY=%i,%i,%i,%i,%i,%i;BYDAY=%s",
@@ -2033,8 +2219,19 @@ output_rrule				(char	        *rrule_buffer,
 		 (month + 1) % 12 + 1,
 		 WeekDays[day_weekday]);
 
-	sprintf (rrule_buffer, "%s%s\n%s%s\n",
+	sprintf (rrule_buffer, "%s%s\r\n%s%s\r\n",
 		 buffer, until, buffer2, until);
+*/
+	/* Multiple RRULEs within the component are illegal according to new iCal RFC 5545,
+	   so combine the above RRULEs (commented) into a single RRULE using BYYEARDAY */
+	day_number = 0;
+	int i;
+	for (i = month+1; i < 12; i++) {
+	  day_number += DaysInMonth[i];
+	}
+	sprintf (rrule_buffer, "RRULE:FREQ=YEARLY;BYYEARDAY=-%i,-%i,-%i,-%i,-%i,-%i,-%i;BYDAY=%s%s\r\n",
+		 day_number, day_number+1, day_number+2, day_number+3,
+		 day_number+4, day_number+5, day_number+6, WeekDays[day_weekday], until);
 
 	return TRUE;
       }
@@ -2046,7 +2243,7 @@ output_rrule				(char	        *rrule_buffer,
       if (!output_rrule_2 (buffer, month, day_number - 7, day_weekday))
 	return FALSE;
 
-      sprintf (rrule_buffer, "%s%s\n", buffer, until);
+      sprintf (rrule_buffer, "%s%s\r\n", buffer, until);
       return TRUE;
     }
 
@@ -2060,7 +2257,7 @@ output_rrule				(char	        *rrule_buffer,
     exit (1);
   }
 
-  sprintf (rrule_buffer, "%s%s\n", buffer, until);
+  sprintf (rrule_buffer, "%s%s\r\n", buffer, until);
   return TRUE;
 }
 
@@ -2101,7 +2298,7 @@ output_rrule_2				(char		*buffer,
 	     month + 1, WeekDays[day_weekday]);
 
   } else {
-    /* Can't convert to a correct RRULE. If we want Outlook compatability we
+    /* Can't convert to a correct RRULE. If we want Outlook compatibility we
        have to use a slightly incorrect RRULE, so the time change will be 1
        week out every 7 or so years. Alternatively we could possibly move the
        change by an hour or so so we would always be 1 or 2 hours out, but
@@ -2119,7 +2316,12 @@ output_rrule_2				(char		*buffer,
 	   This is needed for Antarctica/Palmer & America/Santiago. */
 	sprintf (buffer, "RRULE:FREQ=YEARLY;BYMONTH=%i;BYDAY=2%s",
 		 month + 1, WeekDays[day_weekday]);
-      } else if (month != 1 && day_number == DaysInMonth[month] - 7) {
+      } else if (month != 1 && day_number <= DaysInMonth[month] - 14) {
+        /* Convert it to a BYDAY=-2SU type of RRULE. (But never for February.)
+           This is needed for Pacific/Fiji. */
+        sprintf (buffer, "RRULE:FREQ=YEARLY;BYMONTH=%i;BYDAY=-2%s",
+                 month + 1, WeekDays[day_weekday]);
+      } else if (month != 1 && day_number <= DaysInMonth[month] - 7) {
 	/* Convert it to a BYDAY=-1SU type of RRULE. (But never for February.)
 	   This is needed for America/Godthab. */
 	sprintf (buffer, "RRULE:FREQ=YEARLY;BYMONTH=%i;BYDAY=-1%s",
@@ -2250,7 +2452,7 @@ dump_change				(FILE		*fp,
 
   fprintf (fp, "\t%s", format_tz_offset (vzictime->walloff, FALSE));
 
-  fprintf (fp, "\n");
+  fprintf (fp, "\r\n");
 }
 
 
