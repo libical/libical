@@ -1650,7 +1650,7 @@ static void reset_period_start(icalrecur_iterator *impl)
 icalarray *icalrecurrencetype_rscale_supported_calendars(void)
 {
     icalarray *calendars = icalarray_new(sizeof(const char **), 1);
-    const char *cal = "gregorian";
+    const char *cal = "GREGORIAN";
 
     icalarray_append(calendars, &cal);
 
