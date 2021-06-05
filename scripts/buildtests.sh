@@ -139,7 +139,7 @@ CONFIGURE() {
   mkdir -p $BDIR
   cd $BDIR
   rm -rf *
-  cmake .. $2 || exit 1
+  cmake --warn-uninitialized -Werror=dev .. $2 || exit 1
 }
 
 #function CLEAN:
