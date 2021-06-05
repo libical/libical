@@ -13,6 +13,7 @@ check_include_files(wctype.h HAVE_WCTYPE_H)
 check_include_files(stdbool.h HAVE_STDBOOL_H)
 
 include(CheckFunctionExists)
+include(CheckSymbolExists)
 if(WIN32 AND MSVC)
   check_function_exists(_access HAVE__ACCESS) #Windows <io.h>
   check_function_exists(_getpid HAVE__GETPID) #Windows <process.h>
@@ -36,7 +37,7 @@ else()
   check_function_exists(mkdir HAVE_MKDIR) #Unix <sys/stat.h>,<sys/types.h>
   check_function_exists(open HAVE_OPEN) #Unix <sys/stat.h>,<sys/types.h>,<fcntl.h>
   check_function_exists(nanosleep HAVE_NANOSLEEP) #Unix <time.h>
-  check_function_exists(signal HAVE_SIGNAL) #Unix <signal.h>
+  check_symbol_exists(signal signal.h HAVE_SIGNAL) #Unix <signal.h>
   check_function_exists(stat HAVE_STAT) #Unix <sys/stat.h>,<sys/types.h>,<unistd.h>
   check_function_exists(strdup HAVE_STRDUP) #Unix <string.h>
   check_function_exists(strcasecmp HAVE_STRCASECMP) #Unix <strings.h>
