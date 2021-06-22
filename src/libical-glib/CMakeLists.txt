@@ -64,8 +64,8 @@ list(APPEND LIBICAL_GLIB_HEADERS
 foreach(file IN LISTS API_FILES)
   string(REPLACE "api/" "${CMAKE_CURRENT_SOURCE_DIR}/api/" xml_file_fullpath ${file})
   string(REPLACE "api/" "${CMAKE_CURRENT_BINARY_DIR}/" bin_file ${file})
-  string(REPLACE ".xml" ".h" h_file ${bin_file})
-  string(REPLACE ".xml" ".c" c_file ${bin_file})
+  string(REGEX REPLACE ".xml$" ".h" h_file ${bin_file})
+  string(REGEX REPLACE ".xml$" ".c" c_file ${bin_file})
 
   list(APPEND LIBICAL_GLIB_SOURCES ${h_file} ${c_file})
   list(APPEND LIBICAL_GLIB_HEADERS ${h_file})
