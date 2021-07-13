@@ -38,7 +38,7 @@
 "LOCALIZE","17","const char*",
 "OPTIONS","19","const char*",
 "NO","32",,
-"#In practice any unknown paramater that is not an xparam is treated as an ianaparam"
+"#In practice any unknown parameter that is not an xparam is treated as an ianaparam"
 "IANA","33","const char*",
 "ANY","0",,
 "#VPOLL Parameters","draft-york-vpoll","PUBLIC-COMMENT and RESPONSE are deprecated"

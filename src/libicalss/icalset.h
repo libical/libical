@@ -147,7 +147,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch_match(icalset *set, icalcompo
 LIBICAL_ICALSS_EXPORT icalerrorenum icalset_modify(icalset *set,
                                                    icalcomponent *oldc, icalcomponent *newc);
 
-/** Iterates through the components. If a guage has been defined, these
+/** Iterates through the components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalset_get_current_component(icalset *set);

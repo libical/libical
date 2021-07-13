@@ -50,7 +50,7 @@ LIBICAL_ICALSS_EXPORT void icalgauge_dump(icalgauge *gauge);
 /** @brief Returns true if comp matches the gauge.
  *
  * The component must be in
- * cannonical form -- a VCALENDAR with one VEVENT, VTODO or VJOURNAL
+ * canonical form -- a VCALENDAR with one VEVENT, VTODO or VJOURNAL
  * sub component
  */
 LIBICAL_ICALSS_EXPORT int icalgauge_compare(icalgauge *g, icalcomponent *comp);

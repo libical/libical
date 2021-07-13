@@ -47,7 +47,7 @@ set (CMAKE_C_OSX_CURRENT_VERSION_FLAG "-current_version ")
 set (CMAKE_CXX_OSX_COMPATIBILITY_VERSION_FLAG "${CMAKE_C_OSX_COMPATIBILITY_VERSION_FLAG}")
 set (CMAKE_CXX_OSX_CURRENT_VERSION_FLAG "${CMAKE_C_OSX_CURRENT_VERSION_FLAG}")
 
-# Hidden visibilty is required for cxx on iOS
+# Hidden visibility is required for cxx on iOS
 set (CMAKE_C_FLAGS "")
 set (CMAKE_CXX_FLAGS "-headerpad_max_install_names -fvisibility=hidden -fvisibility-inlines-hidden")
 
@@ -98,7 +98,7 @@ if (NOT DEFINED CMAKE_IOS_SDK_ROOT)
                 list (REVERSE _CMAKE_IOS_SDKS)
                 list (GET _CMAKE_IOS_SDKS 0 CMAKE_IOS_SDK_ROOT)
         else (_CMAKE_IOS_SDKS)
-                message (FATAL_ERROR "No iOS SDK's found in default seach path ${CMAKE_IOS_DEVELOPER_ROOT}. Manually set CMAKE_IOS_SDK_ROOT or install the iOS SDK.")
+                message (FATAL_ERROR "No iOS SDKs found in default search path ${CMAKE_IOS_DEVELOPER_ROOT}. Manually set CMAKE_IOS_SDK_ROOT or install the iOS SDK.")
         endif (_CMAKE_IOS_SDKS)
         message (STATUS "Toolchain using default iOS SDK: ${CMAKE_IOS_SDK_ROOT}")
 endif (NOT DEFINED CMAKE_IOS_SDK_ROOT)

@@ -75,7 +75,7 @@ LIBICAL_ICAL_EXPORT void pvl_clear(pvl_list);   /* Remove all elements, de-alloc
 
 LIBICAL_ICAL_EXPORT int pvl_count(pvl_list);
 
-/* Navagate the list */
+/* Navigate the list */
 LIBICAL_ICAL_EXPORT pvl_elem pvl_next(pvl_elem e);
 
 LIBICAL_ICAL_EXPORT pvl_elem pvl_prior(pvl_elem e);

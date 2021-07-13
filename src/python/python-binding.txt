@@ -92,14 +92,14 @@ component. But, if the component already has a DURATION property, then
 this is an error -- a component can't have both.
 
 icalcomponent_set_dtend determines if the component already has a
-DURATION. If it does, it substracts the dtstart time from the new
+DURATION. If it does, it subtracts the dtstart time from the new
 dtend time and sets the duration to that. Otherwise, it creates aor
 changes the DTEND.
 
 Also, icalcomponent_set_duration works the same regardless if the
 component is a VCALENDAR or a VEVENT. If it is a VCALENDAR, the
 routine descends into the VEVENT before making any changes. If it is
-allready a VEVENT ( or VTODO or VJOURNAL ) the routine just makes the
+already a VEVENT ( or VTODO or VJOURNAL ) the routine just makes the
 changes. With icalcomponent_add_property, you need to do this check
 yourself.
 

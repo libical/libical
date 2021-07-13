@@ -46,7 +46,7 @@ Net::ICal::Time -- represent a time and date
 
 I<Time> represents a time, but can also hold the time zone for the
 time and indicate if the time should be treated as a date. The time
-can be constructed from a variey of formats.
+can be constructed from a variety of formats.
 
 =head1 METHODS
 
@@ -443,7 +443,7 @@ sub as_gmtime {
 
 Compare a time to this one and return -1 if the argument is earlier
 than this one, 1 if it is later, and 0 if it is the same. The routine
-does the comparision after converting the time to UTC. It converts
+does the comparison after converting the time to UTC. It converts
 floating times using the system notion of the timezone.
 
 =cut

@@ -69,7 +69,7 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_int(int t);
  *
  * @par Error handling
  * When given bad input, it sets ::icalerrno to ::ICAL_MALFORMEDDATA_ERROR and
- * returnes icaldurationtype_bad_duration().
+ * returns icaldurationtype_bad_duration().
  *
  * ### Usage
  * ```c

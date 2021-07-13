@@ -173,7 +173,7 @@ LIBICAL_ICAL_EXPORT void icalarray_append(icalarray *array, const void *element)
  *
  * @par Error handling
  * If @a array is `NULL`, using this function results in undefined behaviour.
- * If the array is empty, using this functino results in undefined behaviour.
+ * If the array is empty, using this function results in undefined behaviour.
  * If the @a position is non-existent, it removes the last element.
  *
  * ### Usage

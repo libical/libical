@@ -4,7 +4,7 @@ Allan Clark <allanc@atlas.platypus.bc.ca> for testing libical against
 UnixWare.
 
 Graham Davison <g.m.davison@computer.org> for MacOS support and
-miscelaneous code bits
+miscellaneous code bits
 
 Seth Alves <alves@hungry.com> for the first cut at the Makefile.am
 files and various utility functions.
@@ -27,7 +27,7 @@ The Evolution team at Helixcode ( Federico Mena Quintero
 <federico@helixcode.com>, JP Rosevear <jpr@helixcode.com>, Ettore
 Perazzoli <ettore@helixcode.com>, Christopher James Lahey
 <clahey@helixcode.com>, Peter Williams <peterw@helixcode.com>) for
-miscelaneous patches and adjustments to the build system.
+miscellaneous patches and adjustments to the build system.
 
 Cornelius Schumacher <schumacher@kde.org> for many insightful
 suggestions and a few patches.

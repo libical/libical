@@ -32,7 +32,7 @@ PRODID:-//ABC Corporation//NONSGML My Product//EN
 METHOD:REQUEST
 BEGIN:VEVENT
 ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com
-COMMENT: When in the course of writting comments and nonsense text\, it
+COMMENT: When in the course of writing comments and nonsense text\, it
  becomes necessary to insert a newline
 DTSTART:19972512T120000
 DTSTART:19970101T120000Z
@@ -395,7 +395,7 @@ def test_event():
 
     assert(len(event.x_properties('X-TEST'))==2)
 
-    event.description("A short description.  Longer ones break things. Really. What does it break. The code is supposed to handle realy long lines, longer, in fact, than any sane person would create except by writting a random text generator or by excerpting text from a less sane person. Actually, it did \"break\" and I had to remove an \n assert to fix it.")
+    event.description("A short description.  Longer ones break things. Really. What does it break. The code is supposed to handle really long lines, longer, in fact, than any sane person would create except by writing a random text generator or by excerpting text from a less sane person. Actually, it did \"break\" and I had to remove an \n assert to fix it.")
     event.status('TeNtAtIvE')
 
     print event.as_ical_string()

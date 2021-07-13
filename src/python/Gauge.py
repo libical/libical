@@ -28,7 +28,7 @@ class Gauge:
     """
 
     class ConstructorFailedError(LibicalError):
-        "Failed to create a Guage "
+        "Failed to create a Gauge "
 
     class CloneFailedError(LibicalError):
         "Failed to clone a component given Gauge "

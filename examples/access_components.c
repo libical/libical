@@ -17,7 +17,7 @@ void do_something(icalcomponent *c);
    style is show in create_new_component()
 
    The second variation uses vargs lists to nest many primitive part
-   constructors, resulting in a compact, neatly formated way to create
+   constructors, resulting in a compact, neatly formatted way to create
    components. This style is shown in create_new_component_with_va_args()
 
 
@@ -49,7 +49,7 @@ icalcomponent* create_new_component()
        of that class. So, icalcomponent_ functions will all take
        icalcomponent* as their first argument. */
 
-    /* The next call creates a new proeprty and immediately adds it to the
+    /* The next call creates a new property and immediately adds it to the
        'calendar' component. */
 
     icalcomponent_add_property(

@@ -73,9 +73,9 @@
 2001-02-28  Eric Busboom  <eric@civicknowledge.com>
 
 	* Property Remove most internal data. The property now work
- 	alsmost entirely off of the icalproperty that it holds a reference
- 	to. Made changes in all derived Properties to accomodate the
- 	change.
+	almost entirely off of the icalproperty that it holds a reference
+	to. Made changes in all derived Properties to accommodate the
+	change.
 
 	* Property Added __del__ 
 
@@ -110,7 +110,7 @@
 
 	* Period implemented methods in period
 
-	* Time Addedd addition and subtraction operators
+	* Time Added addition and subtraction operators
 
 2001-02-25  Eric Busboom  <eric@civicknowledge.com>
 

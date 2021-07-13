@@ -2759,7 +2759,7 @@ static int test_juldat_caldat_instance(long year, int month, int day) {
 
 /*
  * This test verifies the caldat_int and juldat_int functions. The functions are reworked versions
- * of the original caldat and juldat functions but avoid using floating point arithmetics. As the
+ * of the original caldat and juldat functions but avoid using floating point arithmetic. As the
  * new functions are not exported, the test cannot access them directly. It therefore checks the
  * output of the icaltime_day_of_week, icaltime_start_doy_week and icaltime_week_number functions
  * which are based on the functions to be tested.

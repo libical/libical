@@ -58,7 +58,7 @@ namespace LibICal
         VComponent *fetch_match(icalcomponent *c);
         int has_uid(std::string &uid);
 
-        // Iterate through components. If a guage has been defined, these
+        // Iterate through components. If a gauge has been defined, these
         // will skip over components that do not pass the gauge
         VComponent *get_current_component();
         VComponent *get_first_component();

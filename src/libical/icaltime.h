@@ -85,7 +85,7 @@
 #include <time.h>
 
 /* An opaque struct representing a timezone. We declare this here to avoid
-   a circular dependancy. */
+   a circular dependency. */
 #if !defined(ICALTIMEZONE_DEFINED)
 #define ICALTIMEZONE_DEFINED
 typedef struct _icaltimezone icaltimezone;
@@ -173,7 +173,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const time
                                                                       const int is_date,
                                                                       const icaltimezone *zone);
 
-/**     @brief Contructor.
+/**     @brief Constructor.
  *
  * Creates a time from an ISO format string.
  *
@@ -184,7 +184,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const time
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_string(const char *str);
 
-/**     @brief Contructor.
+/**     @brief Constructor.
  *
  *      Creates a new time, given a day of year and a year.
  *

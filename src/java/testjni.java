@@ -330,7 +330,7 @@ public class testjni
                 // AFTER the event or task start or due date, which is useless.
                 duration.setIs_neg(1);
 
-                // 2. Create a ICalTriggerType oject and set the duration on it.
+                // 2. Create a ICalTriggerType object and set the duration on it.
                 ICalTriggerType trigger = new ICalTriggerType();
                 trigger.setDuration(duration);
                 System.out.println("set trigger to duration object");
