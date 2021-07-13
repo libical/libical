@@ -175,7 +175,7 @@ sub start {}
 #The return value is an instance of Time.
 
 #If the Period has a duration set, but not an end time, this
-#method will caluculate the end time from the duration.
+#method will calculate the end time from the duration.
 sub end {}
 
 #Return or set the duration of the period. The duration may be

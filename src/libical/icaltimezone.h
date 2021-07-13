@@ -31,7 +31,7 @@
 #if !defined(ICALTIMEZONE_DEFINED)
 #define ICALTIMEZONE_DEFINED
 /** @brief An opaque struct representing a timezone.
- * We declare this here to avoid a circular dependancy.
+ * We declare this here to avoid a circular dependency.
  */
 typedef struct _icaltimezone icaltimezone;
 #endif

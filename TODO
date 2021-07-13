@@ -4,7 +4,7 @@ TODOs for libical
 fix Coverity Scan issues
 
 libical treats properties with multiple values incorrecty -- it always
-seperates multiple values into multiple properties. This is not
+separates multiple values into multiple properties. This is not
 acceptable for CATEGORIES and RESOURCES.
 
 Some TEXT valued properties, like METHOD, have a limited set of valid
@@ -31,7 +31,7 @@ For some value types, if there illegal characters in the value ( like
 4.56 in an integer value), the parser will output the characters to
 stdout.
 
-Check all uses of strcpy and sprinf for buffer overflows
+Check all uses of strcpy and sprintf for buffer overflows
 
 Make the mime parsing code in sspm grow the list of parts as needed,
 rather than having a hard limit.

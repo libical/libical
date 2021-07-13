@@ -396,8 +396,8 @@ b. vobject.h -- contains basic interfaces to the VObject APIs.
 
 c. values of a property is determined by the property definition
 	itself. The vobject APIs does not attempt to enforce
-	any of such definition. It is the consumer responsibility
-	to know what value is expected from a property. e.g
+	any of such definition. It is the consumer's responsibility
+	to know what value is expected from a property. E.g.
 	most properties have unicode string value, so to access
 	the value of these type of properties, you will use
 	the vObjectUStringZValue() to read the value and
@@ -405,7 +405,7 @@ c. values of a property is determined by the property definition
 	Refer to the VCard and VCalendar specifications for
 	the definition of each property.
 
-d. properties name (id) are case incensitive.
+d. properties name (id) are case insensitive.
 
 8. Brief descriptions of each APIs
    ===============================
@@ -565,7 +565,7 @@ d. properties name (id) are case incensitive.
 		write it to memory. If s is 0, then memory required
 		to hold the textual representation will be allocated
 		by this API. If a variable len is passed, len will
-		be overwriten with the byte size of the textual
+		be overwritten with the byte size of the textual
 		representation. If s is non-zero, then s has to
 		be a user allocated buffer whose size has be passed
 		in len as a variable. Memory allocated by the API
@@ -663,7 +663,7 @@ of Example.vcf and its VObject Representation
 	initPropIterator(&t,vcard);
 	while (moreIteration(&t)) {
 	    VObject *eachProp = nextVObject(&t);
-	    //	The primarly purpose of this example is to
+	    //	The primary purpose of this example is to
 	    //  show how to iterate through a VCard VObject,
 	    //	it is not meant to be efficient at all.
 	    char *n = vObjectName(eachProp);
@@ -686,7 +686,7 @@ of Example.vcf and its VObject Representation
 	initPropIterator(&t,vcard);
 	while (moreIteration(&t)) {
 	    VObject *eachProp = nextVObject(&t);
-	    //	The primarly purpose of this example is to
+	    //	The primary purpose of this example is to
 	    //  show how to iterate through a VCalendar VObject,
 	    //	it is not meant to be efficient at all.
 	    char *n = vObjectName(eachProp);

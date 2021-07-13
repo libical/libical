@@ -2,7 +2,7 @@
 2.0.1 STARTSENDATA Start ICAL input; end with <CRLF>.<CRLF>
 2.0.11 OKDATAFOLLOWS The request was processed successfully. Reply data follows on the next line and terminates with <CRLF>.<CRLF>
 2.0.2 REPLYPENDING A timeout has occurred. The server is still working on the reply. Use CONTINUE to continue waiting for the reply or ABORT to terminate the command.
-2.0.3 ABORTED The  command currently underway was successsfully aborted.
+2.0.3 ABORTED The  command currently underway was successfully aborted.
 2.0.4 WILLATTEMPT The specified Calendar is not here but an attempt will be made to deliver the request or reply to the Calendar anyway.
 2.0.5 TRUSTEDWILLQUEUE The request or reply will be queued and delivered to the target calendar when its iRIP server contacts this server and issues the SWITCH command. 
 2.0.6 WILLATTEMPT The specified Calendar is not here but an attempt will be made to deliver the request or reply to the Calendar anyway. 

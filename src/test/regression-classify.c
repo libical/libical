@@ -147,7 +147,7 @@ void test_classify(void)
 
         if (this_uid != 0) {
             /* Look in the calendar for a component with the same UID
-               as the incoming component. We should reall also be
+               as the incoming component. We should really also be
                checking the RECURRENCE-ID. Another way to do this
                operation is to us icalset_find_match(), which does use
                the RECURRENCE-ID. */
