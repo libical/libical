@@ -715,10 +715,10 @@ else()
  message( SEND_ERROR "Unknown ANDROID_ABI=\"${ANDROID_ABI}\" is specified." )
 endif()
 
-if( CMAKE_BINARY_DIR AND EXISTS "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeSystem.cmake" )
+if( PROJECT_BINARY_DIR AND EXISTS "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeSystem.cmake" )
  # really dirty hack
  # it is not possible to change CMAKE_SYSTEM_PROCESSOR after the first run...
- file( APPEND "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeSystem.cmake" "SET(CMAKE_SYSTEM_PROCESSOR \"${CMAKE_SYSTEM_PROCESSOR}\")\n" )
+ file( APPEND "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeSystem.cmake" "SET(CMAKE_SYSTEM_PROCESSOR \"${CMAKE_SYSTEM_PROCESSOR}\")\n" )
 endif()
 
 if( ANDROID_ARCH_NAME STREQUAL "arm" AND NOT ARMEABI_V6 )
@@ -1164,8 +1164,8 @@ add_definitions( -DANDROID )
 if( ANDROID_SYSROOT MATCHES "[ ;\"]" )
  if( CMAKE_HOST_WIN32 )
   # try to convert path to 8.3 form
-  file( WRITE "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cvt83.cmd" "@echo %~s1" )
-  execute_process( COMMAND "$ENV{ComSpec}" /c "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cvt83.cmd" "${ANDROID_SYSROOT}"
+  file( WRITE "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cvt83.cmd" "@echo %~s1" )
+  execute_process( COMMAND "$ENV{ComSpec}" /c "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cvt83.cmd" "${ANDROID_SYSROOT}"
                    OUTPUT_VARIABLE __path OUTPUT_STRIP_TRAILING_WHITESPACE
                    RESULT_VARIABLE __result ERROR_QUIET )
   if( __result EQUAL 0 )
@@ -1458,7 +1458,7 @@ if( NOT DEFINED ANDROID_EXPLICIT_CRT_LINK )
  string( REPLACE "<CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS>" "-shared" __cmd "${__cmd}" )
  string( REPLACE "<CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG>" "" __cmd "${__cmd}" )
  string( REPLACE "<TARGET_SONAME>" "" __cmd "${__cmd}" )
- string( REPLACE "<TARGET>" "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/toolchain_crtlink_test.so" __cmd "${__cmd}" )
+ string( REPLACE "<TARGET>" "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/toolchain_crtlink_test.so" __cmd "${__cmd}" )
  string( REPLACE "<OBJECTS>" "\"${ANDROID_SYSROOT}/usr/lib/crtbegin_so.o\"" __cmd "${__cmd}" )
  string( REPLACE "<LINK_LIBRARIES>" "" __cmd "${__cmd}" )
  separate_arguments( __cmd )
@@ -1488,11 +1488,11 @@ endif()
 set( CMAKE_INSTALL_PREFIX "${ANDROID_TOOLCHAIN_ROOT}/user" CACHE STRING "path for installing" )
 
 if( DEFINED LIBRARY_OUTPUT_PATH_ROOT
-      OR EXISTS "${CMAKE_SOURCE_DIR}/AndroidManifest.xml"
-      OR (EXISTS "${CMAKE_SOURCE_DIR}/../AndroidManifest.xml" AND EXISTS "${CMAKE_SOURCE_DIR}/../jni/") )
-  set( LIBRARY_OUTPUT_PATH_ROOT ${CMAKE_SOURCE_DIR} CACHE PATH "Root for binaries output, set this to change where Android libs are installed to" )
+      OR EXISTS "${PROJECT_SOURCE_DIR}/AndroidManifest.xml"
+      OR (EXISTS "${PROJECT_SOURCE_DIR}/../AndroidManifest.xml" AND EXISTS "${PROJECT_SOURCE_DIR}/../jni/") )
+  set( LIBRARY_OUTPUT_PATH_ROOT ${PROJECT_SOURCE_DIR} CACHE PATH "Root for binaries output, set this to change where Android libs are installed to" )
   if( NOT _CMAKE_IN_TRY_COMPILE )
-    if( EXISTS "${CMAKE_SOURCE_DIR}/jni/CMakeLists.txt" )
+    if( EXISTS "${PROJECT_SOURCE_DIR}/jni/CMakeLists.txt" )
       set( EXECUTABLE_OUTPUT_PATH "${LIBRARY_OUTPUT_PATH_ROOT}/bin/${ANDROID_NDK_ABI_NAME}" CACHE PATH "Output directory for applications" )
     else()
       set( EXECUTABLE_OUTPUT_PATH "${LIBRARY_OUTPUT_PATH_ROOT}/bin" CACHE PATH "Output directory for applications" )
@@ -1602,7 +1602,7 @@ if( NOT _CMAKE_IN_TRY_COMPILE )
    endif()
   endif()
  endforeach()
- file( WRITE "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/android.toolchain.config.cmake" "${__toolchain_config}" )
+ file( WRITE "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/android.toolchain.config.cmake" "${__toolchain_config}" )
  unset( __toolchain_config )
 endif()
 

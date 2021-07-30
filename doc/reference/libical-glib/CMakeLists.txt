@@ -17,7 +17,7 @@ include(GtkDoc)
 if(ENABLE_GTK_DOC)
 
   set(SOURCEDIRS
-    ${CMAKE_BINARY_DIR}/src/libical-glib
+    ${PROJECT_BINARY_DIR}/src/libical-glib
   )
 
   set(DEPENDENCIES
