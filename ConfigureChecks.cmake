@@ -63,7 +63,9 @@ endif()
 
 set(_SAVE_RQL ${CMAKE_REQUIRED_LIBRARIES})
 set(CMAKE_REQUIRED_LIBRARIES kernel32.lib)
-check_function_exists(GetNumberFormat HAVE_GETNUMBERFORMAT) #Windows <windows.h>
+if(WIN32)
+  check_function_exists(GetNumberFormat HAVE_GETNUMBERFORMAT) #Windows <windows.h>
+endif()
 set(CMAKE_REQUIRED_LIBRARIES ${_SAVE_RQL})
 
 include(CheckTypeSize)
