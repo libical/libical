@@ -262,6 +262,17 @@ add_custom_command(
 )
 
 add_library(ical ${LIBRARY_TYPE} ${ical_LIB_SRCS})
+
+target_include_directories(ical
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  PRIVATE
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+)
+
 add_dependencies(ical ical-header)
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(ical-static STATIC ${ical_LIB_SRCS})
@@ -330,6 +341,16 @@ if(WITH_CXX_BINDINGS)
   add_definitions(-DBUILD_LIBICALDLL)
 
   add_library(ical_cxx ${LIBRARY_TYPE} ${icalcxx_LIB_SRCS})
+  target_include_directories(ical_cxx
+    PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    PRIVATE
+      $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
+      $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+  )
+
   add_dependencies(ical_cxx ical-header)
   if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     add_library(ical_cxx-static STATIC ${icalcxx_LIB_SRCS})
