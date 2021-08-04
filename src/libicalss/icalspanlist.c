@@ -233,6 +233,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
 
     period.start = icaltime_null_time();
     period.end = icaltime_null_time();
+    period.duration = icaldurationtype_null_duration();
 
     itr = pvl_head(sl->spans);
     s = (struct icaltime_span *)pvl_data(itr);

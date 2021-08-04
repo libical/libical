@@ -220,7 +220,7 @@ void test_values()
     icalvalue_free(v);
     icalvalue_free(copy);
 
-		v = icalvalue_new_datetime(icaltime_from_timet_with_zone(1023404802, 0, NULL));
+    v = icalvalue_new_datetime(icaltime_from_timet_with_zone(1023404802, 0, NULL));
     str_is("icalvalue_new_datetime()", icalvalue_as_ical_string(v), "20020606T230642");
     icalvalue_set_datetime(v, icaltime_from_timet_with_zone(1023404802 - 3600, 0, NULL));
     str_is("icalvalue_set_datetime()", icalvalue_as_ical_string(v), "20020606T220642");
@@ -379,7 +379,7 @@ void test_utf8()
         "END:VCALENDAR\n";
 
     const char *utf8_marker =
-	"\xEF\xBB\xBF"
+        "\xEF\xBB\xBF"
         "BEGIN:VCALENDAR\n"
         "PRODID:-//Ximian//NONSGML Evolution Calendar//EN\n"
         "VERSION:2.0\n"
@@ -454,7 +454,7 @@ void test_parameters()
     p = icalparameter_new_cn("");
 
     str_is("icalparameter_new_cn()", icalparameter_get_cn(p), "");
-	str_is("icalparameter_as_ical_string()", icalparameter_as_ical_string(p), "CN=\"\"");
+    str_is("icalparameter_as_ical_string()", icalparameter_as_ical_string(p), "CN=\"\"");
 
     icalparameter_free(p);
 
@@ -500,20 +500,20 @@ const char *good_child =
     "X-LIC-ERROR;X-LIC-ERRORTYPE=COMPONENT-PARSE-ERROR:This is only a test\r\n" "END:VEVENT\r\n";
 
 const char *bad_child =
-	"BEGIN;\r\n"
-	"TZNAME:\\r\n"
-	"TZNAME:\\r\n"
-	"TZNAME:\\r\n"
-	"TZNAME:\\r\n"
-	"TZNAME:\\r\n"
-	"TZNAME:\\r\n"
-	"TZNAME:\\r\n";
+    "BEGIN;\r\n"
+    "TZNAME:\\r\n"
+    "TZNAME:\\r\n"
+    "TZNAME:\\r\n"
+    "TZNAME:\\r\n"
+    "TZNAME:\\r\n"
+    "TZNAME:\\r\n"
+    "TZNAME:\\r\n";
 
 void test_components()
 {
     icalcomponent *c;
     icalcomponent *child;
-	int estate;
+    int estate;
 
     c = icalcomponent_vanew(
             ICAL_VCALENDAR_COMPONENT,
@@ -553,27 +553,27 @@ void test_components()
 
     icalcomponent_free(c);
 
-	estate = icalerror_get_errors_are_fatal();
-	icalerror_set_errors_are_fatal(0);
+    estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(0);
     c = icalcomponent_new_from_string(bad_child);
     ok("parse failed as expected", (c == NULL));
-	icalcomponent_free(c);
-	icalerror_set_errors_are_fatal(estate);
+    icalcomponent_free(c);
+    icalerror_set_errors_are_fatal(estate);
 }
 
 static void test_component_foreach_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
 {
     int *foundExpected;
-	_unused(comp);
-	_unused(span);
+    _unused(comp);
+    _unused(span);
 
-	foundExpected = (int*)data;
+    foundExpected = (int*)data;
     (*foundExpected)++;
 }
 
 int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int expectedFoundInstances)
 {
-    const char* calStr =
+    const char *calStr =
         "BEGIN:VCALENDAR\n"
         "BEGIN:VEVENT\n"
         "DTSTART;20180220T020000Z\n"
@@ -633,7 +633,7 @@ int test_component_foreach_parameterized_msec(int64_t startOffsMSec, int64_t end
 
 void test_component_foreach()
 {
-    const char* calStr =
+    const char *calStr =
         "BEGIN:VCALENDAR\n"
         "BEGIN:VEVENT\n"
         /* 14th is NOT a tuesday, so it doesn't conform to the rule. */
@@ -1072,20 +1072,20 @@ void test_dirset()
     }
 
     gauge = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE "
-								   "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
-								   "VEVENT.SUMMARY = 'Bastille Day Party'",
-								   0);
+                   "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
+                   "VEVENT.SUMMARY = 'Bastille Day Party'",
+                   0);
 
     (void)icaldirset_select(s, gauge);
 
     for (c = icaldirset_get_first_component(s); c != 0; c = icaldirset_get_next_component(s)) {
         printf("Got one! (%d)\n", count++);
 
-		printf("%s", icalcomponent_as_ical_string(c));
-		if (icaldirset_add_component(s2, c) == 0) {
-			printf("Failed to write!\n");
-		}
-		icalcomponent_free(c);
+        printf("%s", icalcomponent_as_ical_string(c));
+        if (icaldirset_add_component(s2, c) == 0) {
+            printf("Failed to write!\n");
+        }
+        icalcomponent_free(c);
     }
 
     icalset_free(s2);
@@ -1168,6 +1168,7 @@ void test_restriction()
     rtime.period.start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     rtime.period.end = icaltime_from_timet_with_zone(time(0), 0, NULL);
     rtime.period.end.hour++;
+    rtime.period.duration = icaldurationtype_null_duration();
     rtime.time = icaltime_null_time();
 
     comp =
@@ -1219,8 +1220,7 @@ void test_restriction()
                 icalproperty_vanew_dtend(atime,
                                          icalparameter_new_tzid("America/New_York"),
                                          (void *)0),
-                icalproperty_new_location("1CP Conference Room 4350"), (void *)0),
-            (void *)0);
+                icalproperty_new_location("1CP Conference Room 4350"), (void *)0), (void *)0);
 
     valid = icalrestriction_check(comp);
 
@@ -1319,21 +1319,23 @@ void test_recur()
              "FREQ=MONTHLY;UNTIL=19971224T000000Z;INTERVAL=1;BYDAY=TU,2FR,3SA");
     start = icaltime_from_string("19970905T090000Z");
 
-    if (VERBOSE)
+    if (VERBOSE) {
         print_occur(rt, start);
+    }
 
-    if (VERBOSE)
+    if (VERBOSE) {
         printf("\n  Using icalrecur_expand_recurrence\n");
+    }
 
     icalrecur_expand_recurrence(
-		"FREQ=MONTHLY;UNTIL=19971224T000000Z;INTERVAL=1;BYDAY=TU,2FR,3SA",
+        "FREQ=MONTHLY;UNTIL=19971224T000000Z;INTERVAL=1;BYDAY=TU,2FR,3SA",
         icaltime_as_timet(start), 25, array);
 
     for (i = 0; i < 25 && array[i] != 0; i++) {
-        if (VERBOSE)
+        if (VERBOSE) {
             printf("  %s", ctime(&(array[i])));
+        }
     }
-
 /*    test_increment();*/
 }
 
@@ -1474,7 +1476,7 @@ void test_recur_parameter_bug()
 {
     static const char test_icalcomp_str[] =
         "BEGIN:VEVENT\r\n"
-        "RRULE;X-EVOLUTION-ENDDATE=20030209T081500:FREQ=DAILY;COUNT=10;INTERVAL=6\r\n"
+        "RRULE;X-EVOLUTION-ENDDATE=20030209T081500:FREQ=DAILY;INTERVAL=6;COUNT=10\r\n"
         "END:VEVENT\r\n";
 
     icalcomponent *icalcomp;
@@ -1780,7 +1782,7 @@ void test_requeststat()
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT);
 
     icalproperty_free(p);
-	icalcomponent_free(c);
+    icalcomponent_free(c);
 }
 
 void test_dtstart()
@@ -2448,9 +2450,9 @@ void test_fblist()
            "19980102T010000");
 
     if (VERBOSE) {
-		fbcomp = icalspanlist_as_vfreebusy(sl, "a@foo.com", "b@foo.com");
+        fbcomp = icalspanlist_as_vfreebusy(sl, "a@foo.com", "b@foo.com");
         printf("%s\n", icalcomponent_as_ical_string(fbcomp));
-		icalcomponent_free(fbcomp);
+        icalcomponent_free(fbcomp);
     }
 
     foo = icalspanlist_as_freebusy_matrix(sl, 3600);
@@ -2474,7 +2476,7 @@ void test_fblist()
 
     ok("Calculating daily freebusy matrix", (foo != NULL));
 
-	if (foo) {
+    if (foo) {
         char out_str[80] = "";
         char *strp = out_str;
 
@@ -2484,21 +2486,22 @@ void test_fblist()
         }
         str_is("Checking freebusy validity", out_str, "1121110");
 
-		if (VERBOSE) {
-			for (i = 0; foo[i] != -1; i++) {
-				printf("%d", foo[i]);
-				if ((i % 7) == 6)
-					printf("\n");
-			}
-			printf("\n\n");
-		}
-		free(foo);
-	}
+    if (VERBOSE) {
+        for (i = 0; foo[i] != -1; i++) {
+            printf("%d", foo[i]);
+            if ((i % 7) == 6)
+                printf("\n");
+            }
+            printf("\n\n");
+        }
+        free(foo);
+    }
 
     icalspanlist_free(sl);
 
-    if (VERBOSE)
+    if (VERBOSE) {
         printf("Unrestricted spanlist\n");
+    }
 
     sl = icalspanlist_new(set, icaltime_from_string("19970324T120000Z"), icaltime_null_time());
 
@@ -2534,11 +2537,11 @@ void test_fblist()
         icalspanlist_dump(new_sl);
     }
 
-	icalspanlist_free(sl);
+    icalspanlist_free(sl);
 
-	icalspanlist_free(new_sl);
+    icalspanlist_free(new_sl);
 
-	icalcomponent_free(comp);
+    icalcomponent_free(comp);
 
     icalset_free(set);
 }
@@ -2750,7 +2753,7 @@ void test_recur_parser()
     const char *str;
 
     str =
-        "FREQ=YEARLY;UNTIL=20000131T090000Z;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
+        "FREQ=YEARLY;BYMONTH=1,2,3,4,8;BYYEARDAY=34,65,76,78;BYDAY=-1TU,3WE,-4FR,SA,SU;UNTIL=20000131T090000Z";
     rt = icalrecurrencetype_from_string(str);
     str_is(str, icalrecurrencetype_as_string(&rt), str);
 
@@ -2765,10 +2768,19 @@ void test_recur_parser()
     icalerror_restore("BADARG", es);
     ok("COUNT + UNTIL not allowed", rt.freq == ICAL_NO_RECURRENCE);
 
+    /* Try to parse a RRULE with illegal BY* part combination */
     str = "FREQ=DAILY;COUNT=3;BYDAY=-1TU,3WE,-4FR,SA,SU;BYYEARDAY=34,65,76,78;BYMONTH=1,2,3,4,8";
 
+    es = icalerror_supress("MALFORMEDDATA");
     rt = icalrecurrencetype_from_string(str);
-    str_is(str, icalrecurrencetype_as_string(&rt), str);
+    icalerror_restore("MALFORMEDDATA", es);
+    ok("DAILY + BYYEARDAY not allowed", rt.freq == ICAL_NO_RECURRENCE);
+
+    /* Parse the same RRULE but ignore invalid BY* parts */
+    ical_set_invalid_rrule_handling_setting(ICAL_RRULE_IGNORE_INVALID);
+    rt = icalrecurrencetype_from_string(str);
+    str_is(str, icalrecurrencetype_as_string(&rt),
+		   "FREQ=DAILY;BYMONTH=1,2,3,4,8;BYDAY=-1TU,3WE,-4FR,SA,SU;COUNT=3");
 
     /* Try to parse an RRULE value with UNTIL + COUNT */
     str = "FREQ=YEARLY;UNTIL=20000131T090000Z;COUNT=3";
@@ -3115,7 +3127,7 @@ void test_gauge_compare()
                 icalproperty_new_dtstart(icaltime_from_string("20000101T000002")), 0),
             (void *)0);
 
-	str = "SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'";
+    str = "SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (c != 0 && g != 0));
@@ -3124,10 +3136,10 @@ void test_gauge_compare()
 
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
-
-	str = "SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'";
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
+    str = "SELECT * FROM VEVENT WHERE DTSTART = '20000101T000001'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (g != 0));
@@ -3137,7 +3149,7 @@ void test_gauge_compare()
 
     icalgauge_free(g);
 
-	str = "SELECT * FROM VEVENT WHERE DTSTART != '20000101T000003'";
+    str = "SELECT * FROM VEVENT WHERE DTSTART != '20000101T000003'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (c != 0 && g != 0));
@@ -3145,12 +3157,13 @@ void test_gauge_compare()
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
     /* Less than */
 
-	str = "SELECT * FROM VEVENT WHERE DTSTART < '20000101T000003'";
+    str = "SELECT * FROM VEVENT WHERE DTSTART < '20000101T000003'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (c != 0 && g != 0));
@@ -3158,10 +3171,10 @@ void test_gauge_compare()
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
-
-	str = "SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'";
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
+    str = "SELECT * FROM VEVENT WHERE DTSTART < '20000101T000002'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (g != 0));
@@ -3173,7 +3186,7 @@ void test_gauge_compare()
 
     /* Greater than */
 
-	str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000001'";
+    str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000001'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (g != 0));
@@ -3181,10 +3194,11 @@ void test_gauge_compare()
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
-	str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'";
+    str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000002'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (g != 0));
@@ -3196,17 +3210,18 @@ void test_gauge_compare()
 
     /* Greater than or Equal to */
 
-	str = "SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000002'";
+    str = "SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000002'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (g != 0));
 
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
-	str = "SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'";
+    str = "SELECT * FROM VEVENT WHERE DTSTART >= '20000101T000003'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (g != 0));
@@ -3217,7 +3232,7 @@ void test_gauge_compare()
 
     /* Less than or Equal to */
 
-	str = "SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000002'";
+    str = "SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000002'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (g != 0));
@@ -3225,10 +3240,11 @@ void test_gauge_compare()
     assert(g != 0);
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
-	str = "SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'";
+    str = "SELECT * FROM VEVENT WHERE DTSTART <= '20000101T000001'";
     g = icalgauge_new_from_sql(str, 0);
 
     ok(str, (g != 0));
@@ -3254,8 +3270,9 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
 
@@ -3271,8 +3288,9 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
     icalcomponent_free(c);
 
@@ -3288,8 +3306,9 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000102T000000'";
 
@@ -3305,9 +3324,9 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
-
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
     icalcomponent_free(c);
 
     /* Complex comparisons */
@@ -3332,24 +3351,27 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo'";
     g = icalgauge_new_from_sql(str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'foo' AND  VALARM.DTSTART = '20000101T120000'";
     g = icalgauge_new_from_sql(str, 0);
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
     str = "SELECT * FROM VEVENT WHERE COMMENT = 'bar' AND  VALARM.DTSTART = '20000101T120000'";
     g = icalgauge_new_from_sql(str, 0);
@@ -3363,8 +3385,9 @@ void test_gauge_compare()
     ok(str, (g != 0));
     int_is("compare", icalgauge_compare(g, c), 1);
 
-	if (g != NULL)
-		icalgauge_free(g);
+    if (g != NULL) {
+        icalgauge_free(g);
+    }
 
     icalcomponent_free(c);
 }
@@ -3399,7 +3422,7 @@ void test_fileset()
     const char *path = "test_fileset.ics";
     icalgauge *g =
         icalgauge_new_from_sql(
-			"SELECT * FROM VEVENT "
+            "SELECT * FROM VEVENT "
             "WHERE DTSTART > '20000103T120000Z' AND "
             "DTSTART <= '20000106T120000Z'",
             0);
@@ -3660,7 +3683,7 @@ void test_trigger()
 #ifdef NEEDS_REVIEW /* latest output code will suppress VALUE= for default type */
         "TRIGGER;VALUE=DURATION:-PT15M\r\n"
 #endif
-		"END:VEVENT\r\n";
+        "END:VEVENT\r\n";
 
     c = icalparser_parse_string((char *)test_icalcomp_str);
     ok("icalparser_parse_string()", (c != NULL));
@@ -3972,7 +3995,7 @@ void test_property_parse()
         printf("%s\n", str);
 
     icalproperty_free(p);
-	icalcomponent_free(c);
+    icalcomponent_free(c);
 }
 
 void test_value_parameter()
@@ -4205,7 +4228,7 @@ void test_attach_url()
     }
     str_is("attach url", icalattach_get_url(attach), "foofile");
     str_is("attach with url", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithurl);
-	icalattach_unref(attach);
+    icalattach_unref(attach);
     icalproperty_free(ap);
     icalcomponent_free(ac);
 }
@@ -4284,17 +4307,19 @@ void test_vcal(void)
 
     ok("Parsing " TEST_DATADIR "/user-cal.vcf", (vcal != 0));
 
-	if (vcal) {
-		comp = icalvcal_convert(vcal);
+    if (vcal) {
+        comp = icalvcal_convert(vcal);
 
-		ok("Converting to ical component", (comp != 0));
+        ok("Converting to ical component", (comp != 0));
 
-		if (VERBOSE && comp)
-			printf("%s\n", icalcomponent_as_ical_string(comp));
+        if (VERBOSE && comp) {
+            printf("%s\n", icalcomponent_as_ical_string(comp));
+        }
 
-		if (comp)
-			icalcomponent_free(comp);
-	}
+        if (comp) {
+            icalcomponent_free(comp);
+        }
+    }
 }
 
 /*
@@ -4350,7 +4375,7 @@ void test_recurrenceexcluded(void)
     recurtime = icaltime_from_string("20080819T180000Z");
     ok("Recurrence is excluded for UTC EXDATE",
        icalproperty_recurrence_is_excluded(event, &dtstart, &recurtime));
-	icalcomponent_free(calendar);
+    icalcomponent_free(calendar);
 }
 
 void test_bad_dtstart_in_timezone(void)
@@ -4433,6 +4458,15 @@ void test_zoneinfo_stuff(void)
     str_is("icaltzutil_get_zone_directory by TZDIR", icaltzutil_get_zone_directory(), TEST_DATADIR);
     icaltzutil_set_zone_directory("foo");
     str_is("icaltzutil_get_zone_directory", icaltzutil_get_zone_directory(), "foo");
+
+    /* reset the environment */
+#if defined(HAVE_SETENV)
+    unsetenv("TZDIR");
+#else
+    strcpy(tzdir, "TZDIR=");
+    putenv(tzdir);
+#endif
+    icaltzutil_set_zone_directory(NULL);
 }
 
 void test_tzid_with_utc_time(void)
@@ -4488,9 +4522,9 @@ void test_tzid_with_utc_time(void)
     ok("DTEND is my_zone", (strcmp(icaltimezone_get_tzid((icaltimezone *) dtend.zone), "my_zone") == 0));
     ok("DUE is UTC", (icaltime_is_utc(due)));
 
-    for (prop = icalcomponent_get_first_property (subcomp, ICAL_EXDATE_PROPERTY), idx = 0;
+    for (prop = icalcomponent_get_first_property(subcomp, ICAL_EXDATE_PROPERTY), idx = 0;
          prop;
-         prop = icalcomponent_get_next_property (subcomp, ICAL_EXDATE_PROPERTY), idx++) {
+         prop = icalcomponent_get_next_property(subcomp, ICAL_EXDATE_PROPERTY), idx++) {
         struct icaltimetype exdate = icalproperty_get_exdate (prop);
 
         ok("EXDATE is not null-time", (!icaltime_is_null_time (exdate)));
@@ -4659,12 +4693,13 @@ void test_timezone_from_builtin(void)
     zone = icaltimezone_get_builtin_timezone("America/New_York");
     tzidprefix = strdup(icaltimezone_get_tzid (zone));
     p = tzidprefix;
-    while(p = strchr(p + 1, '/'), p) {
+    while (p = strchr(p + 1, '/'), p) {
         prevprevslash = prevslash;
         prevslash = p;
     }
-    if(prevprevslash)
-	prevprevslash[1] = 0;
+    if (prevprevslash) {
+        prevprevslash[1] = 0;
+    }
 
     icaltimezone_set_tzid_prefix(tzidprefix);
 
@@ -4685,11 +4720,25 @@ void test_timezone_from_builtin(void)
     ok("DTEND is America/New_York", (strcmp(icaltimezone_get_location((icaltimezone *) dtend.zone), "America/New_York") == 0));
     ok("DUE is Europe/Berlin", (strcmp(icaltimezone_get_location((icaltimezone *) due.zone), "Europe/Berlin") == 0));
 
-    icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
-
     icalcomponent_free(comp);
     free(tzidprefix);
     free(strcomp);
+
+    zone = icaltimezone_get_builtin_timezone("Pacific/Midway");
+    ok("builtin location is Pacific/Midway", (strcmp(icaltimezone_get_location((icaltimezone *) zone), "Pacific/Midway") == 0));
+    comp = icaltimezone_get_component(zone);
+    strcomp = icalcomponent_as_ical_string_r(comp);
+    comp = icalcomponent_new_from_string(strcomp);
+    free(strcomp);
+
+    ok("VTIMEZONE icalcomponent_new_from_string()", (comp != NULL));
+
+    zone = icaltimezone_new();
+    ok("set icaltimezone component", (icaltimezone_set_component(zone, comp)));
+    ok("read from string builtin location is still Pacific/Midway", (strcmp(icaltimezone_get_location((icaltimezone *) zone), "Pacific/Midway") == 0));
+    icaltimezone_free(zone, 1);
+
+    icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
 }
 
 void test_icalvalue_decode_ical_string(void)
@@ -4769,79 +4818,130 @@ void test_icalarray_sort(void)
 
 void test_icalcomponent_normalize(void)
 {
-	const char *calStr1 =
-		"BEGIN:VCALENDAR\n"
-		"PRODID:-//ACME//NONSGML ACME Calendar//EN\n"
-		"VERSION:2.0\n"
-		"CALSCALE:GREGORIAN\n"
-		"BEGIN:VTIMEZONE\n"
-		"TZID:America/New_York\n"
-		"BEGIN:DAYLIGHT\n"
-		"TZNAME:EDT\n"
-		"TZOFFSETFROM:-0500\n"
-		"TZOFFSETTO:-0400\n"
-		"DTSTART:20070311T020000\n"
-		"RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\n"
-		"END:DAYLIGHT\n"
-		"BEGIN:STANDARD\n"
-		"TZNAME:EST\n"
-		"TZOFFSETFROM:-0400\n"
-		"TZOFFSETTO:-0500\n"
-		"DTSTART:20071104T020000\n"
-		"RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\n"
-		"END:STANDARD\n"
-		"END:VTIMEZONE\n"
-		"BEGIN:VEVENT\n"
-		"DTSTART;VALUE=DATE-TIME:20180220T020000Z\n"
-		"DURATION:PT1H\n"
-		"END:VEVENT\n"
-		"END:VCALENDAR\n";
-	const char *calStr2 =
-		"BEGIN:VCALENDAR\n"
-		"VERSION:2.0\n"
-		"PRODID:-//ACME//NONSGML ACME Calendar//EN\n"
-		"BEGIN:VEVENT\n"
-		"TRANSP:OPAQUE\n"
-		"DURATION:PT1H\n"
-		"DTSTART;VALUE=DATE-TIME:20180220T020000Z\n"
-		"END:VEVENT\n"
-		"BEGIN:VTIMEZONE\n"
-		"TZID:America/New_York\n"
-		"BEGIN:STANDARD\n"
-		"TZNAME:EST\n"
-		"TZOFFSETFROM:-0400\n"
-		"TZOFFSETTO:-0500\n"
-		"DTSTART:20071104T020000\n"
-		"RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\n"
-		"END:STANDARD\n"
-		"BEGIN:DAYLIGHT\n"
-		"TZNAME:EDT\n"
-		"TZOFFSETFROM:-0500\n"
-		"TZOFFSETTO:-0400\n"
-		"DTSTART:20070311T020000\n"
-		"RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\n"
-		"END:DAYLIGHT\n"
-		"END:VTIMEZONE\n"
-		"END:VCALENDAR\n";
+    const char *calStr1 =
+        "BEGIN:VCALENDAR\n"
+        "PRODID:-//ACME//NONSGML ACME Calendar//EN\n"
+        "VERSION:2.0\n"
+        "CALSCALE:GREGORIAN\n"
+        "BEGIN:VTIMEZONE\n"
+        "TZID:America/New_York\n"
+        "BEGIN:DAYLIGHT\n"
+        "TZNAME:EDT\n"
+        "TZOFFSETFROM:-0500\n"
+        "TZOFFSETTO:-0400\n"
+        "DTSTART:20070311T020000\n"
+        "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\n"
+        "END:DAYLIGHT\n"
+        "BEGIN:STANDARD\n"
+        "TZNAME:EST\n"
+        "TZOFFSETFROM:-0400\n"
+        "TZOFFSETTO:-0500\n"
+        "DTSTART:20071104T020000\n"
+        "RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\n"
+        "END:STANDARD\n"
+        "END:VTIMEZONE\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART;VALUE=DATE-TIME:20180220T020000Z\n"
+        "DURATION:PT1H\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+    const char *calStr2 =
+        "BEGIN:VCALENDAR\n"
+        "VERSION:2.0\n"
+        "PRODID:-//ACME//NONSGML ACME Calendar//EN\n"
+        "BEGIN:VEVENT\n"
+        "TRANSP:OPAQUE\n"
+        "DURATION:PT1H\n"
+        "DTSTART;VALUE=DATE-TIME:20180220T020000Z\n"
+        "END:VEVENT\n"
+        "BEGIN:VTIMEZONE\n"
+        "TZID:America/New_York\n"
+        "BEGIN:STANDARD\n"
+        "TZNAME:EST\n"
+        "TZOFFSETFROM:-0400\n"
+        "TZOFFSETTO:-0500\n"
+        "DTSTART:20071104T020000\n"
+        "RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\n"
+        "END:STANDARD\n"
+        "BEGIN:DAYLIGHT\n"
+        "TZNAME:EDT\n"
+        "TZOFFSETFROM:-0500\n"
+        "TZOFFSETTO:-0400\n"
+        "DTSTART:20070311T020000\n"
+        "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\n"
+        "END:DAYLIGHT\n"
+        "END:VTIMEZONE\n"
+        "END:VCALENDAR\n";
 
-	icalcomponent *ical1 = icalcomponent_new_from_string(calStr1);
-	icalcomponent *ical2 = icalcomponent_new_from_string(calStr2);
+    icalcomponent *ical1 = icalcomponent_new_from_string(calStr1);
+    icalcomponent *ical2 = icalcomponent_new_from_string(calStr2);
 
-	icalcomponent_normalize(ical1);
-	icalcomponent_normalize(ical2);
+    icalcomponent_normalize(ical1);
+    icalcomponent_normalize(ical2);
 
-	calStr1 = icalcomponent_as_ical_string(ical1);
-	calStr2 = icalcomponent_as_ical_string(ical2);
+    calStr1 = icalcomponent_as_ical_string(ical1);
+    calStr2 = icalcomponent_as_ical_string(ical2);
 
-	icalcomponent_free(ical1);
-	icalcomponent_free(ical2);
+    icalcomponent_free(ical1);
+    icalcomponent_free(ical2);
 
-	if (VERBOSE) {
+    if (VERBOSE) {
         printf("iCal1:\n%s\n\n", calStr1);
         printf("iCal2:\n%s\n\n", calStr2);
-	}
+    }
 
-	str_is("Normalized components match", calStr1, calStr2);
+    str_is("Normalized components match", calStr1, calStr2);
+}
+
+static void test_builtin_compat_tzid (void)
+{
+    struct _cases {
+        const char *name;
+        const char *tzid;
+        int should_match;
+    } cases[] = {
+        { "Matches current TZID", "/freeassociation.sourceforge.net/Europe/London", 1 },
+        { "Matches Tzfile compat TZID", "/freeassociation.sourceforge.net/Tzfile/Europe/London", 1 },
+        { "Matches citadel.org TZID", "/citadel.org/20190914_1/Europe/London", 1 },
+        { "Does not match custom TZID", "/custom/test/tzid/Europe/London", 0 },
+        { NULL, NULL, 0 }
+    };
+    int ii, jj;
+    icaltimezone *tz;
+
+    for (jj = 0; jj < 2; jj++) {
+        if(jj == 1) {
+            icaltimezone_set_tzid_prefix("");
+            icaltimezone_free_builtin_timezones();
+        }
+
+        tz = icaltimezone_get_builtin_timezone("Europe/London");
+
+        for (ii = 0; cases[ii].tzid; ii++) {
+            icaltimezone *zone;
+
+            if(cases[ii].should_match) {
+                zone = icaltimezone_get_builtin_timezone_from_tzid(cases[ii].tzid);
+                ok(cases[ii].name, (zone == tz));
+                if(zone != tz && VERBOSE) {
+                    printf("Returned builtin zone (%s) doesn't match expected zone for TZID '%s'\n",
+                        zone ? icaltimezone_get_location(zone) : "NULL",
+                        cases[ii].tzid);
+                }
+            } else {
+                zone = icaltimezone_get_builtin_timezone_from_tzid(cases[ii].tzid);
+                ok(cases[ii].name, (!zone));
+                if(zone != NULL && VERBOSE) {
+                    printf("Returned builtin zone (%s), but it should fail for TZID '%s'\n",
+                        icaltimezone_get_location(zone),
+                        cases[ii].tzid);
+                }
+            }
+        }
+    }
+
+    icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
+    icaltimezone_free_builtin_timezones();
 }
 
 int main(int argc, char *argv[])
@@ -4880,7 +4980,7 @@ int main(int argc, char *argv[])
         case 'l':
         {
             do_header = 1;
-			break;
+            break;
         }
         case '?':
         {
@@ -4987,6 +5087,7 @@ int main(int argc, char *argv[])
     test_run("Test icalarray_sort", test_icalarray_sort, do_test, do_header);
 
     test_run("Test icalcomponent_normalize", test_icalcomponent_normalize, do_test, do_header);
+    test_run("Test builtin compat TZID", test_builtin_compat_tzid, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

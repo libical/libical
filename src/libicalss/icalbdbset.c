@@ -108,9 +108,9 @@ void icalbdbset_rmdbLog(void)
 {
     char **listp;
 
-    /* remove log files that are archivable (ie. no longer needed) */
+    /* remove log files that are can be archived (ie. no longer needed) */
     if (ICAL_DB_ENV->log_archive(ICAL_DB_ENV, &listp, DB_ARCH_ABS) == 0) {
-        if (listp != NULL) {
+        if (*listp != NULL) {
             int ii = 0;
 
             while (listp[ii] != NULL) {

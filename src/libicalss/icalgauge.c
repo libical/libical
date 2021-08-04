@@ -28,6 +28,7 @@
 #include "icalerror.h"
 #include "icalvalue.h"
 
+#include <stddef.h>     /* for ptrdiff_t */
 #include <stdlib.h>
 
 extern int ssparse(void);
@@ -67,10 +68,7 @@ icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
 int icalgauge_get_expand(icalgauge *gauge)
 {
     icalerror_check_arg_rz((gauge != 0), "gauge");
-    if (gauge != 0) {
-        return gauge->expand;
-    }
-    return -1;
+    return gauge->expand;
 }
 
 void icalgauge_free(icalgauge *gauge)
@@ -292,7 +290,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
     /* Check that this component is one of the FROM types */
     local_pass = 0;
     for (e = pvl_head(gauge->from); e != 0; e = pvl_next(e)) {
-        icalcomponent_kind k = (icalcomponent_kind) pvl_data(e);
+        icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)pvl_data(e);
 
         if (k == icalcomponent_isa(inner)) {
             local_pass = 1;
@@ -463,7 +461,7 @@ void icalgauge_dump(icalgauge *gauge)
 
     printf("--- From ---\n");
     for (p = pvl_head(gauge->from); p != 0; p = pvl_next(p)) {
-        icalcomponent_kind k = (icalcomponent_kind) pvl_data(p);
+        icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)pvl_data(p);
 
         printf("%s\n", icalenum_component_kind_to_string(k));
     }

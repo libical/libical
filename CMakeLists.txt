@@ -39,7 +39,7 @@
 #
 # -DGOBJECT_INTROSPECTION=[true|false]
 #  Set to build GObject introspection "typelib" files
-#  Requires GObject Introspection development package v0.6.7 or higher
+#  Requires GObject Introspection development package (version MIN_GOBJECT_INTROSPECTION)
 #  Default=false (do not generate the introspection files)
 #
 # -DICAL_BUILD_DOCS=[true|false]
@@ -53,7 +53,8 @@
 #
 # -DICAL_GLIB=[true|false]
 #  Set to build libical-glib (GObject) interface
-#  Requires glib development package v2.20 or higher
+#  Requires glib 2.0 development package (version MIN_GLIB).
+#  Requires libxml2.0 development package (version MIN_LIBXML).
 #  Default=true (build the libical-glib interface)
 #
 # -DENABLE_GTK_DOC=[true|false]
@@ -85,6 +86,10 @@
 #  Build with the thread sanitizer (requires gcc or clang)
 #  Default=false
 #
+# -DUNDEFINED_SANITIZER=[true|false]
+#  Build with the undefined sanitizer (requires gcc or clang)
+#  Default=false
+#
 
 cmake_minimum_required(VERSION 3.11.0) #first line, to shutup a cygwin warning
 project(libical C) #CXX is optional for the bindings
@@ -102,6 +107,18 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 #Include CMake capabilities
 include(LibIcalMacrosInternal)
 include(FeatureSummary)
+
+# Exit for blacklisted compilers that don't support necessary C standards
+#  MSVC++ < 2013 aka 1800
+set(BAD_C_MESSAGE "")
+if(MSVC)
+  if(MSVC_VERSION LESS 1800)
+    set(BAD_C_MESSAGE "MSVC 2013 or higher")
+  endif()
+endif()
+if(BAD_C_MESSAGE)
+  message(FATAL_ERROR "\nSorry, ${BAD_C_MESSAGE} is required to build this software. Please retry using a modern C compiler that supports the C99 standard.")
+endif()
 
 # Enable the test harness
 enable_testing()
@@ -136,7 +153,7 @@ if(WITH_CXX_BINDINGS)
   else()
     message(STATUS
       "Warning: Building the C++ bindings is not possible since a C++ compiler could not be found. "
-      "Turning-off C++ bindings"
+      "Turning-off C++ bindings."
     )
     set(WITH_CXX_BINDINGS False)
   endif()
@@ -310,7 +327,7 @@ if(WIN32 OR WINCE)
   #Always use builtin tzdata on Windows systems.
   if(NOT USE_BUILTIN_TZDATA)
     message(STATUS
-      "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata"
+      "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata."
     )
     set(USE_BUILTIN_TZDATA 1)
   endif()
@@ -326,14 +343,26 @@ set(INSTALL_TARGETS_DEFAULT_ARGS
   ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
 )
 
+#Look for PkgConfig
+#if not found then cannot proceed for GLib+LibXML or GObjectIntrospection.
+#(unless/until they can be handled without pkg-config some day)
+find_package(PkgConfig QUIET)
+
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
 libical_option(GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher." False)
 if(GOBJECT_INTROSPECTION)
+  if(NOT PKG_CONFIG_FOUND)
+    message(FATAL_ERROR
+      "You are attempting to build with GObject Introspection enabled, however that option is "
+      "not supported unless pkg-config can be found.  Please install pkg-config and try again. "
+      "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake.")
+  endif()
+
   find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
   set_package_properties(GObjectIntrospection PROPERTIES
-    TYPE REQUIRED
+    TYPE OPTIONAL
     URL "https://wiki.gnome.org/Projects/GObjectIntrospection"
-    PURPOSE "Required in order to build the GObject introspection \"typelib\" files."
+    PURPOSE "Needed in order to build the GObject introspection \"typelib\" files."
   )
   if(GObjectIntrospection_FOUND)
     set(HAVE_INTROSPECTION TRUE)
@@ -343,8 +372,13 @@ if(GOBJECT_INTROSPECTION)
         "however that option is not supported when building static libraries only. "
         "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
         "if you really want to build with GObject Introspection. Alternatively, "
-        "you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to cmake)")
+        "you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to cmake).")
     endif()
+  else()
+    message(FATAL_ERROR
+      "You requested to build with GObject introspection, but the necessary development package "
+      "is missing or too low a version (GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION} or higher is required). "
+      "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake.")
   endif()
 endif()
 
@@ -353,31 +387,35 @@ if(ICAL_GLIB_VAPI)
   if(NOT GOBJECT_INTROSPECTION)
     message(FATAL_ERROR
       "You requested to build the Vala vapi but have not enabled the GObject Introspection. "
-      "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake"
-    )
+      "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake.")
   endif()
 
   find_program(VALAC valac DOC "the Vala compiler")
   if(NOT VALAC)
     message(FATAL_ERROR
       "valac, the Vala compiler was not found. "
-      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False"
-    )
+      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False.")
   endif()
 
   find_program(VAPIGEN vapigen DOC "tool to generate the Vala API")
   if(NOT VAPIGEN)
     message(FATAL_ERROR
       "vapigen, the tool for generating the Vala API was not found. "
-      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False"
-    )
+      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False.")
   endif()
 endif()
 
-set(MIN_GLIB "2.38")
+set(MIN_GLIB "2.44")
 set(MIN_LIBXML "2.7.3")
 libical_option(ICAL_GLIB "Build libical-glib interface. Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True)
 if(ICAL_GLIB)
+  if(NOT PKG_CONFIG_FOUND)
+    message(FATAL_ERROR
+      "You requested to build libical-glib, however that option is not supported "
+      "unless pkg-config can be found. Please install pkg-config and try again. "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
+  endif()
+
   find_package(GLib ${MIN_GLIB})
   set_package_properties(GLib PROPERTIES
     TYPE OPTIONAL
@@ -395,20 +433,19 @@ if(ICAL_GLIB)
   elseif(GLIB_FOUND)
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
-      "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required)"
-    )
+      "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
   elseif(LIBXML_FOUND)
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
-      "is missing or too low a version (glib ${MIN_GLIB} or higher is required)"
-    )
+      "is missing or too low a version (glib ${MIN_GLIB} or higher is required. "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
   else()
     message(FATAL_ERROR
       "You requested to build libical-glib, but the necessary development packages "
       "are missing or too low a version "
-      "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required)"
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)"
-    )
+      "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required). "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
   endif()
 endif()
 
@@ -468,8 +505,8 @@ libical_option(ADDRESS_SANITIZER "(Developer-only) Build with the address saniti
 mark_as_advanced(ADDRESS_SANITIZER)
 if(ADDRESS_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
   else()
     message(FATAL_ERROR
       "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
@@ -477,14 +514,14 @@ if(ADDRESS_SANITIZER)
   if(GOBJECT_INTROSPECTION)
     message(STATUS
       "Warning: Building the address sanitizer with GObject Introspection is is not supported. "
-      "Turning-off GObject Introspection"
+      "Turning-off GObject Introspection."
     )
     set(HAVE_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
     message(STATUS
       "Warning: Building the address sanitizer with the GObject interface is not supported. "
-      "Turning-off the GObject interface"
+      "Turning-off the GObject interface."
     )
     set(ICAL_GLIB False)
   endif()
@@ -494,8 +531,8 @@ libical_option(THREAD_SANITIZER "(Developer-only) Build with the thread sanitize
 mark_as_advanced(THREAD_SANITIZER)
 if(THREAD_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
   else()
     message(FATAL_ERROR
       "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")
@@ -503,14 +540,40 @@ if(THREAD_SANITIZER)
   if(GOBJECT_INTROSPECTION)
     message(STATUS
       "Warning: Building the thread sanitizer with GObject Introspection is is not supported. "
-      "Turning-off GObject Introspection"
+      "Turning-off GObject Introspection."
     )
     set(HAVE_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
     message(STATUS
       "Warning: Building the thread sanitizer with the GObject interface is not supported. "
-      "Turning-off the GObject interface"
+      "Turning-off the GObject interface."
+    )
+    set(ICAL_GLIB False)
+  endif()
+endif()
+
+libical_option(UNDEFINED_SANITIZER "(Developer-only) Build with the undefined sanitizer." False)
+mark_as_advanced(UNDEFINED_SANITIZER)
+if(UNDEFINED_SANITIZER)
+  if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+  else()
+    message(FATAL_ERROR
+      "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
+  endif()
+  if(GOBJECT_INTROSPECTION)
+    message(STATUS
+      "Warning: Building the undefined sanitizer with GObject Introspection is is not supported. "
+      "Turning-off GObject Introspection."
+    )
+    set(HAVE_INTROSPECTION False)
+  endif()
+  if(ICAL_GLIB)
+    message(STATUS
+      "Warning: Building the undefined sanitizer with the GObject interface is not supported. "
+      "Turning-off the GObject interface."
     )
     set(ICAL_GLIB False)
   endif()

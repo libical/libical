@@ -400,6 +400,11 @@ const struct recur rfc5545[] = {
      "FREQ=YEARLY;BYWEEKNO=53;BYDAY=TU,SA;UNTIL=20170101T000000Z",
      NULL},
 
+    /* github issue491 */
+    {"20210301T142000",
+     "FREQ=HOURLY;UNTIL=20210303T000000Z",
+     "20210302T100000"},
+
     {NULL, NULL, NULL}
 };
 
@@ -584,6 +589,7 @@ int main(int argc, char *argv[])
     /* Default to RFC 5545 tests */
     const struct recur *r = rfc5545;
     FILE *fp = fopen("test.out", "w");
+    int i;
     int verbose = 0;
 
     if (fp == NULL) {
@@ -592,7 +598,7 @@ int main(int argc, char *argv[])
     }
 
     /* Do not use getopt for command line parsing -- for portability on Windows */
-    for (int i = 1; i < argc; ++i) {
+    for (i = 1; i < argc; ++i) {
         if (strncmp(argv[i], "-r", 2) == 0) { /* Do RSCALE tests */
             r = rscale;
             continue;

@@ -3,6 +3,7 @@ Release Highlights
 
 Version 3.1.0 (NOT RELEASED YET):
 --------------------------------
+ * MSVC 2013 or higher (when building on Windows with MSVC)
  * Requires CMake v3.11.0 or higher
  * libical-glib now requires glib 2.38 or higher
  * Improved FindICU (from the official CMake)
@@ -22,6 +23,8 @@ Version 3.1.0 (NOT RELEASED YET):
      + icalcomponent_get_x_name
      + icalcomponent_get_component_name
      + icalcomponent_get_component_name_r
+     * ical_set_invalid_rrule_handling_setting
+     * ical_get_invalid_rrule_handling_setting
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
  * Deprecated functions:
      + caldat (replaced by internal function icaldat_int())
@@ -37,17 +40,33 @@ Version 3.1.0 (NOT RELEASED YET):
      + struct icaltimezonephase
  * Improved performance of recurrence iterators
 
-Version 3.0.9 (UNRELEASED):
----------------------------
+Version 3.0.11 (UNRELEASED):
+----------------------------
+ * Fix icalrecur_iterator_set_start() for hourly, minutely, and secondly recurrences
+
+Version 3.0.10 (17 April 2021):
+-------------------------------
+ * Fix building -DSTATIC_ONLY=True with Ninja
+ * Fix generating wrong recurrence rules (#478)
+ * Fix a bug computing transitions in tzfiles
+ * Fix reading TZif files to use TZ string in the footer as the last (non-terminating) transitions
+ * Fix reading TZif files to use more RRULEs and/or RDATEs whevever possible
+ * Built-in timezones updated to tzdata2021a
+
+Version 3.0.9 (16 January 2021):
+--------------------------------
  * Add support for empty parameters, e.g. CN=""
  * Accept VTIMEZONE with more than one X- property
- * Fix cross-compile support in libical-glib
- * Fix build with newer libicu
- * Fix compiled-in path for the built-in timezone data
  * Several fixes for recurrences containing BYWEEKNO
+ * icalrecurrencetype_from_string() will reject any RRULE that contains a rule-part that occurs more than once
+ * Improve thread safety
+ * Fix compiled-in path for the built-in timezone data
  * Fix reading TZif files with empty v1 data (use v2+ whenever possible)
+ * Add backwards compatibility for previous TZIDs
  * Built-in timezones updated to tzdata2020d
  * icalrecurrencetype_from_string() will reject any RRULE that contains a rule-part that occurs more than once
+ * Fix build with newer libicu
+ * Fix cross-compile support in libical-glib
 
 Version 3.0.8 (07 March 2020):
 ------------------------------

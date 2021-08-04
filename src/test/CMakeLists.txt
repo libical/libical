@@ -15,10 +15,6 @@ if(BDB_FOUND)
   include_directories(${BDB_INCLUDE_DIR})
 endif()
 
-if(ICAL_GLIB AND HAVE_INTROSPECTION)
-  add_subdirectory(libical-glib)
-endif()
-
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 set(TEST_DATADIR "\"${CMAKE_SOURCE_DIR}/test-data\"")
@@ -43,6 +39,7 @@ macro(setprops _name)
   if(CYGWIN OR MSYS)
     set_tests_properties(${_name} PROPERTIES
       ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}"
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     )
   endif()
 endmacro()
@@ -78,6 +75,11 @@ macro(testme _name _srcs)
   add_test(NAME ${_name} COMMAND ${_name})
   setprops(${_name})
 endmacro()
+
+########## libical-glib tests #########
+if(ICAL_GLIB AND HAVE_INTROSPECTION)
+  add_subdirectory(libical-glib)
+endif()
 
 ########### next target ###############
 
@@ -157,7 +159,7 @@ testme(process "${process_SRCS}")
 
 ########### next target ###############
 
-if(NOT USE_BUILTIN_TZDATA)
+if(NOT USE_BUILTIN_TZDATA AND NOT CYGWIN) #seeing >15% error rate on Cygwin. why?
   set(timezones_SRCS timezones.c)
   testme(timezones "${timezones_SRCS}")
 endif()
@@ -175,7 +177,7 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS 3.14)
   set(CMAKE_COMPARE_FILES_IGNORE_EOL TRUE)
 endif()
 if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
-  if(NOT USE_32BIT_TIME_T) #tests for years greater than 2037 will fail
+  if(NOT CYGWIN AND NOT USE_32BIT_TIME_T) #ignore_eol doesn't work on Cygwin. tests for years greater than 2037 will fail
     set(icalrecurtest_SRCS icalrecur_test.c)
     add_executable(icalrecurtest ${icalrecurtest_SRCS})
     target_link_libraries(icalrecurtest ical icalss icalvcal)

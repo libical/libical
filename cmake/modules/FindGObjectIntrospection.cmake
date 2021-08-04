@@ -1,4 +1,4 @@
-# - try to find gobject-introspection
+# - try to find gobject-introspection 1.0
 #
 # Once done this will define
 #
@@ -34,8 +34,10 @@ endmacro(_GIR_GET_PKGCONFIG_VAR)
 
 find_package(PkgConfig)
 if(PKG_CONFIG_FOUND)
-  if(PACKAGE_FIND_VERSION_COUNT GREATER 0)
-    set(_gir_version_cmp ">=${PACKAGE_FIND_VERSION}")
+  set(_gir_version_cmp)
+  if(DEFINED GObjectIntrospection_FIND_VERSION)
+    set(_gir_version_cmp "${GObjectIntrospection_FIND_VERSION}")
+    set(_gir_version_cmp ">=${_gir_version_cmp}")
   endif()
   pkg_check_modules(_pc_gir gobject-introspection-1.0${_gir_version_cmp})
   if(_pc_gir_FOUND)

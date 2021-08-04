@@ -29,26 +29,8 @@
 
 #define I_CAL_TYPE_OBJECT \
     (i_cal_object_get_type ())
-
-#define I_CAL_OBJECT(obj)       \
-    (G_TYPE_CHECK_INSTANCE_CAST \
-    ((obj), I_CAL_TYPE_OBJECT, ICalObject))
-
-#define I_CAL_OBJECT_CLASS(cls)                 \
-    (G_TYPE_CHECK_CLASS_CAST \
-    ((cls), I_CAL_TYPE_OBJECT, ICalObjectClass))
-
-#define I_CAL_IS_OBJECT(obj)    \
-    (G_TYPE_CHECK_INSTANCE_TYPE \
-    ((obj), I_CAL_TYPE_OBJECT))
-
-#define I_CAL_IS_OBJECT_CLASS(cls)              \
-    (G_TYPE_CHECK_CLASS_TYPE \
-    ((cls), I_CAL_TYPE_OBJECT))
-
-#define I_CAL_OBJECT_GET_CLASS(obj)             \
-    (G_TYPE_INSTANCE_GET_CLASS \
-    ((obj), I_CAL_TYPE_OBJECT, ICalObjectClass))
+LIBICAL_ICAL_EXPORT
+G_DECLARE_DERIVABLE_TYPE(ICalObject, i_cal_object, I_CAL, OBJECT, GObject)
 
 G_BEGIN_DECLS
 /**
@@ -56,30 +38,18 @@ G_BEGIN_DECLS
  *
  * This is an ICalObject instance struct.
  */
-typedef struct _ICalObject ICalObject;
 
 /**
  * ICalObjectClass:
  *
  * This is an ICalObject class struct.
  */
-typedef struct _ICalObjectClass ICalObjectClass;
-typedef struct _ICalObjectPrivate ICalObjectPrivate;
-
-struct _ICalObject
-{
-    /*< private > */
-    GObject parent;
-    ICalObjectPrivate *priv;
-};
 
 struct _ICalObjectClass
 {
     /*< private > */
     GObjectClass parent_class;
 };
-
-LIBICAL_ICAL_EXPORT GType i_cal_object_get_type(void);
 
 LIBICAL_ICAL_EXPORT gpointer i_cal_object_construct(GType object_type,
                                                     gpointer native,

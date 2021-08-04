@@ -79,9 +79,11 @@ add_custom_command(
 
 add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
 add_dependencies(icalss ical-header icalss-header)
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(icalss-static STATIC ${icalss_LIB_SRCS})
   add_dependencies(icalss-static ical-header icalss-header)
+elseif(STATIC_ONLY)
+  add_library(icalss-static ALIAS icalss)
 endif()
 
 target_link_libraries(icalss ical)
@@ -91,11 +93,11 @@ endif()
 
 if(MSVC)
   set_target_properties(icalss PROPERTIES PREFIX "lib")
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(icalss-static PROPERTIES PREFIX "lib")
   endif()
 else()
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(icalss-static PROPERTIES OUTPUT_NAME "icalss")
   endif()
 endif()
@@ -104,7 +106,7 @@ set_target_properties(icalss PROPERTIES
   SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
 )
 set_target_properties(icalss PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   set_target_properties(icalss-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 endif()
 
@@ -113,7 +115,7 @@ install(
   EXPORT icalTargets
   DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
 )
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   install(
     TARGETS icalss-static
     EXPORT icalTargets
@@ -135,20 +137,22 @@ if(WITH_CXX_BINDINGS)
   endif()
   add_library(icalss_cxx ${LIBRARY_TYPE} ${icalsscxx_LIB_SRCS})
   add_dependencies(icalss_cxx ical-header icalss-header)
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     add_library(icalss_cxx-static STATIC ${icalsscxx_LIB_SRCS})
     add_dependencies(icalss_cxx-static ical-header icalss-header)
+  elseif(STATIC_ONLY)
+    add_library(icalss_cxx-static ALIAS icalss_cxx)
   endif()
 
   target_link_libraries(icalss_cxx icalss ical_cxx ${CMAKE_THREAD_LIBS_INIT})
 
   if(MSVC)
     set_target_properties(icalss_cxx PROPERTIES PREFIX "lib")
-    if(NOT SHARED_ONLY)
+    if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
       set_target_properties(icalss_cxx-static PROPERTIES PREFIX "lib")
     endif()
   else()
-    if(NOT SHARED_ONLY)
+    if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
       set_target_properties(icalss_cxx-static PROPERTIES OUTPUT_NAME "icalss_cxx")
     endif()
   endif()
@@ -157,7 +161,7 @@ if(WITH_CXX_BINDINGS)
     SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
   )
   set_target_properties(icalss_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(icalss_cxx-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
   endif()
 
@@ -166,7 +170,7 @@ if(WITH_CXX_BINDINGS)
     EXPORT icalTargets
     DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
   )
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     install(
       TARGETS icalss_cxx-static
       EXPORT icalTargets

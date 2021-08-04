@@ -24,6 +24,8 @@
 
 #include <stdlib.h>
 
+#define MAX_FAILURE_RATE 1
+
 int main()
 {
     icalarray *timezones;
@@ -163,7 +165,7 @@ int main()
                (unsigned long)timezones->num_elements, total_failed, total_okay, percent_failed);
     }
 
-    if (percent_failed <= 1 && total_failed) {
+    if (percent_failed <= MAX_FAILURE_RATE && total_failed) {
         ret = 0;
         printf(" *** Expect some small error rate with inter-operable vtimezones *** \n");
     }

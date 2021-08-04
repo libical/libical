@@ -28,15 +28,18 @@ HELP() {
   echo
   echo "Run build tests"
   echo "Options:"
-  echo " -k, --no-krazy        Don't run any Krazy tests"
-  echo " -c, --no-cppcheck     Don't run any cppcheck tests"
-  echo " -t, --no-tidy         Don't run any clang-tidy tests"
-  echo " -b, --no-scan         Don't run any scan-build tests"
-  echo " -s, --no-splint       Don't run any splint tests"
-  echo " -l, --no-clang-build  Don't run any clang-build tests"
-  echo " -g, --no-gcc-build    Don't run any gcc-build tests"
-  echo " -a, --no-asan-build   Don't run any ASAN-build tests"
-  echo " -d, --no-tsan-build   Don't run any TSAN-build tests"
+  echo " -m, --no-cmake-compat    Don't require CMake version compatibility"
+  echo " -k, --no-krazy           Don't run any Krazy tests"
+  echo " -c, --no-cppcheck        Don't run any cppcheck tests"
+  echo " -t, --no-tidy            Don't run any clang-tidy tests"
+  echo " -b, --no-scan            Don't run any scan-build tests"
+  echo " -s, --no-splint          Don't run any splint tests"
+  echo " -n, --no-ninja           Don't run any build tests with ninja"
+  echo " -l, --no-clang-build     Don't run any clang-build tests"
+  echo " -g, --no-gcc-build       Don't run any gcc-build tests"
+  echo " -a, --no-asan-build      Don't run any ASAN-build (sanitize-address) tests"
+  echo " -d, --no-tsan-build      Don't run any TSAN-build (sanitize-threads) tests"
+  echo " -u, --no-ubsan-build     Don't run any UBSAN-build (sanitize-undefined) tests"
   echo
 }
 
@@ -99,7 +102,7 @@ CHECK_WARNINGS() {
 # print warnings found in the compile-stage output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='\(i-cal-object\.c\|no[[:space:]]link[[:space:]]for:\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|G_ADD_PRIVATE\|g_type_class_add_private.*is[[:space:]]deprecated\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|const[[:space:]]DBT\)'
+  whitelist='\(i-cal-object\.c\|libical-glib-scan\.c\|no[[:space:]]link[[:space:]]for:\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|G_ADD_PRIVATE\|g_type_class_add_private.*is[[:space:]]deprecated\|g-ir-scanner:\|/gobject/gtype\.h\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|const[[:space:]]DBT\|-Llib\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
@@ -136,7 +139,7 @@ CONFIGURE() {
   mkdir -p $BDIR
   cd $BDIR
   rm -rf *
-  cmake .. $2 || exit 1
+  cmake --warn-uninitialized -Werror=dev .. $2 || exit 1
 }
 
 #function CLEAN:
@@ -153,7 +156,12 @@ CLEAN() {
 BUILD() {
   cd $TOP
   CONFIGURE "$1" "$2"
-  make 2>&1 | tee make.out || exit 1
+  MAKE=make
+  if ( test `echo $2 | grep -ci Ninja` -gt 0 )
+  then
+    MAKE=ninja
+  fi
+  $MAKE 2>&1 | tee make.out || exit 1
   COMPILE_WARNINGS make.out
 
   if (test "`uname -s`" = "Darwin")
@@ -162,7 +170,7 @@ BUILD() {
   else
     export LD_LIBRARY_PATH=$BDIR/lib
   fi
-  make test 2>&1 | tee make-test.out || exit 1
+  $MAKE test 2>&1 | tee make-test.out || exit 1
   CLEAN
 }
 
@@ -182,6 +190,24 @@ GCC_BUILD() {
   SET_GCC
   BUILD "$name" "$2"
   echo "===== END GCC BUILD: $1 ======"
+}
+
+#function NINJA_GCC_BUILD:
+# runs a build test using gcc using the Ninja cmake generator
+# $1 = the name of the test (which will have "-ninjagcc" appended to it)
+# $2 = CMake options
+NINJA_GCC_BUILD() {
+  name="$1-ninjagcc"
+  if ( test $runninja -ne 1 )
+  then
+    echo "===== NINJA_GCC BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  COMMAND_EXISTS "gcc"
+  echo "===== START NINJA_GCC BUILD: $1 ======"
+  SET_GCC
+  BUILD "$name" "$2 -G Ninja"
+  echo "===== END NINJA_GCC BUILD: $1 ======"
 }
 
 #function CLANG_BUILD:
@@ -236,6 +262,22 @@ TSAN_BUILD() {
   echo "===== END TSAN BUILD: $1 ======"
 }
 
+#function UBSAN_BUILD:
+# runs an clang UBSAN build test
+# $1 = the name of the test (which will have "-ubsan" appended to it)
+# $2 = CMake options
+UBSAN_BUILD() {
+  name="$1-ubsan"
+  if ( test $runubsanbuild -ne 1 )
+  then
+    echo "===== UBSAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START UBSAN BUILD: $1 ======"
+  SET_CLANG
+  BUILD "$name" "-DUNDEFINED_SANITIZER=True $2"
+  echo "===== END UBSAN BUILD: $1 ======"
+}
 #function CPPCHECK
 # runs a cppcheck test, which means: configure, compile, link and run cppcheck
 # $1 = the name of the test (which will have "-cppcheck" appended to it)
@@ -451,33 +493,39 @@ KRAZY() {
 
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hkctbslgad --long help,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build -- "$@"`
-TEMP=`getopt hkctbslgad $*`
-if [ $? != 0 ]; then echo "Terminating..." >&2; exit 1; fi
+#TEMP=`getopt -o hmkctbsnlgadu --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build -- "$@"`
+TEMP=`getopt hmkctbsnlgadu $*`
+if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
 
+cmakecompat=1
 runkrazy=1
 runcppcheck=1
 runtidy=1
 runscan=1
+runninja=1
 runclangbuild=1
 rungccbuild=1
 runasanbuild=1
 runtsanbuild=1
+runubsanbuild=1
 runsplint=1
 while true; do
     case "$1" in
         -h|--help) HELP; exit 1;;
-        -k|--no-krazy)       runkrazy=0;      shift;;
-        -c|--no-cppcheck)    runcppcheck=0;   shift;;
-        -t|--no-tidy)        runtidy=0;       shift;;
-        -b|--no-scan)        runscan=0;       shift;;
-        -s|--no-splint)      runsplint=0;     shift;;
-        -l|--no-clang-build) runclangbuild=0; shift;;
-        -g|--no-gcc-build)   rungccbuild=0;   shift;;
-        -a|--no-asan-build)  runasanbuild=0;  shift;;
-        -d|--no-tsan-build)  runtsanbuild=0;  shift;;
+        -m|--no-cmake-compat) cmakecompat=0;   shift;;
+        -k|--no-krazy)        runkrazy=0;      shift;;
+        -c|--no-cppcheck)     runcppcheck=0;   shift;;
+        -t|--no-tidy)         runtidy=0;       shift;;
+        -b|--no-scan)         runscan=0;       shift;;
+        -s|--no-splint)       runsplint=0;     shift;;
+        -n|--no-ninja)        runninja=0;      shift;;
+        -l|--no-clang-build)  runclangbuild=0; shift;;
+        -g|--no-gcc-build)    rungccbuild=0;   shift;;
+        -a|--no-asan-build)   runasanbuild=0;  shift;;
+        -d|--no-tsan-build)   runtsanbuild=0;  shift;;
+        -u|--no-ubsan-build)  runubsanbuild=0; shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
@@ -489,6 +537,39 @@ cd $TOP
 cd ..
 TOP=`pwd`
 BDIR=""
+
+#use minimum cmake version unless the --no-cmake-compat option is specified
+if ( test $cmakecompat -eq 1 )
+then
+  if ( test ! -e $TOP/CMakeLists.txt )
+  then
+    echo "Unable to locate the project top-level CMakeLists.txt.  Fix me"
+    exit 1
+  fi
+  # read the min required CMake version from the top-level CMake file
+  minCMakeVers=`grep -i cmake_minimum_required $TOP/CMakeLists.txt | grep VERSION | sed 's/^.*VERSION\s*//i' | cut -d. -f1-2 | sed 's/\s*).*$//'`
+  # adjust PATH
+  X=`echo $minCMakeVers | cut -d. -f1`
+  Y=`echo $minCMakeVers | cut -d. -f2`
+  if ( test -z $X -o -z $Y )
+  then
+    echo "Bad CMake version encountered in the $TOP/CMakeLists.txt"
+    exit 1
+  fi
+  Z=`echo $minCMakeVers | cut -d. -f3`
+  if ( test -z $Z )
+  then
+    minCMakeVers="$minCMakeVers.0"
+  fi
+  export PATH=/usr/local/opt/cmake-$minCMakeVers/bin:$PATH
+  # check the version
+  if ( test `cmake --version | head -1 | grep -c $minCMakeVers` -ne 1 )
+  then
+    echo "Not using cmake version $minCMakeVers"
+    echo "Maybe you need to install it into /usr/local/opt/cmake-$minCMakeVers"
+    exit 1
+  fi
+fi
 
 CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
@@ -523,7 +604,11 @@ fi
 GCC_BUILD testgcc1builtin "-DUSE_BUILTIN_TZDATA=True"
 GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
 
-#Clang based build tests
+#Ninja build tests
+NINJA_GCC_BUILD testninjagcc1 ""
+NINJA_GCC_BUILD testninjagcc2 "-DSHARED_ONLY=True"
+NINJA_GCC_BUILD testninjagcc3 "-DSTATIC_ONLY=True -DICAL_GLIB=False"
+
 CLANG_BUILD testclang1 ""
 CLANG_BUILD testclang2 "$CMAKEOPTS"
 CLANG_BUILD testclang3 "$UUCCMAKEOPTS"
@@ -549,5 +634,12 @@ TSAN_BUILD test2tsan "$CMAKEOPTS"
 TSAN_BUILD test3tsan "$TZCMAKEOPTS"
 TSAN_BUILD test4tsan "$UUCCMAKEOPTS"
 TSAN_BUILD test5tsan "$GLIBOPTS"
+
+#Undefined sanitizer
+UBSAN_BUILD test1ubsan ""
+UBSAN_BUILD test2ubsan "$CMAKEOPTS"
+UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
+UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
+UBSAN_BUILD test5ubsan "$GLIBOPTS"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"

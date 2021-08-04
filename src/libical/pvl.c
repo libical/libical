@@ -26,6 +26,25 @@
 #include <errno.h>
 #include <stdlib.h>
 
+/* To mute a ThreadSanitizer claim */
+#if defined(HAVE_PTHREAD) && defined(THREAD_SANITIZER)
+#include <pthread.h>
+static pthread_mutex_t pvl_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+static void pvl_global_lock(void)
+{
+    pthread_mutex_lock(&pvl_mutex);
+}
+
+static void pvl_global_unlock(void)
+{
+    pthread_mutex_unlock(&pvl_mutex);
+}
+#else
+#define pvl_global_lock()
+#define pvl_global_unlock()
+#endif
+
 /**
  * Globals incremented for each call to pvl_new_element(); each list gets a unique id.
  */
@@ -66,8 +85,9 @@ pvl_list pvl_newlist()
         return 0;
     }
 
-    L->MAGIC = pvl_list_count;
-    pvl_list_count++;
+    pvl_global_lock();
+    L->MAGIC = pvl_list_count++;
+    pvl_global_unlock();
     L->head = 0;
     L->tail = 0;
     L->count = 0;
@@ -109,7 +129,9 @@ pvl_elem pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
         return 0;
     }
 
+    pvl_global_lock();
     E->MAGIC = pvl_elem_count++;
+    pvl_global_unlock();
     E->d = d;
     E->next = next;
     E->prior = prior;

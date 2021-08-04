@@ -277,7 +277,7 @@ gchar *get_lower_snake_from_upper_camel(const gchar *upperCamel)
     *buffer = '\0';
 
     for (i = 0; i < (guint)strlen(upperCamel); i++) {
-        if (isupper(upperCamel[i]) && i != 0) {
+        if (isupper((int)upperCamel[i]) && i != 0) {
             len = (guint)strlen(buffer);
             buffer[len] = '_';
             buffer[len + 1] = tolower(upperCamel[i]);
@@ -327,26 +327,6 @@ gchar *get_lower_train_from_upper_camel(const gchar *upperCamel)
     }
 
     return ret;
-}
-
-void generate_header_method_get_type(FILE *out, Structure *structure)
-{
-    gchar *upperCamel;
-    gchar *lowerSnake;
-    Method *get_type;
-
-    g_return_if_fail(out != NULL && structure != NULL);
-    upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
-    lowerSnake = get_lower_snake_from_upper_camel(upperCamel);
-    g_free(upperCamel);
-
-    get_type = method_new();
-    get_type->ret = ret_new();
-    get_type->ret->type = g_strdup("GType");
-    get_type->name = g_strconcat(lowerSnake, "_get_type", NULL);
-    g_free(lowerSnake);
-    generate_header_method_proto(out, get_type, FALSE);
-    method_free(get_type);
 }
 
 void generate_header_method_new_full(FILE *out, Structure *structure)
@@ -694,8 +674,6 @@ void generate_header_method_protos(FILE *out, Structure *structure)
     gchar *privateHeaderComment;
 
     privateHeader = NULL;
-    typeName = g_strconcat(structure->nameSpace, structure->name, NULL);
-    privateHeaderComment = g_strconcat("\n/* Private methods for ", typeName, " */\n", NULL);
 
     if (structure->native != NULL) {
         /** Open or create the private header file if it does not exist.
@@ -703,10 +681,12 @@ void generate_header_method_protos(FILE *out, Structure *structure)
          * Create the new_full method in it.
          */
         privateHeader = open_private_header();
+        typeName = g_strconcat(structure->nameSpace, structure->name, NULL);
+        privateHeaderComment = g_strconcat("\n/* Private methods for ", typeName, " */\n", NULL);
+        g_free(typeName);
         write_str(privateHeader, privateHeaderComment);
+        g_free(privateHeaderComment);
         generate_header_method_new_full(privateHeader, structure);
-
-        generate_header_method_get_type(out, structure);
     }
 
     for (iter = g_list_first(structure->methods); iter != NULL; iter = g_list_next(iter)) {
@@ -723,8 +703,6 @@ void generate_header_method_protos(FILE *out, Structure *structure)
             generate_header_method_proto(out, method, FALSE);
         }
     }
-
-    g_free(typeName);
 
     if (privateHeader != NULL) {
         fclose(privateHeader);
@@ -1010,11 +988,11 @@ void generate_header_includes(FILE *out, Structure *structure)
                 continue;
             }
 
+            g_free(ownUpperCamel);
             kind = g_strdup(g_hash_table_lookup(type2kind, typeName));
             if (g_strcmp0(kind, "enum") != 0) {
                 g_free(kind);
                 g_free(upperCamel);
-                g_free(ownUpperCamel);
                 continue;
             }
             g_free(kind);
@@ -1078,6 +1056,7 @@ void generate_source_includes(FILE *out, Structure *structure)
             }
             lowerTrain = get_lower_train_from_upper_camel(upperCamel);
             g_free(upperCamel);
+            g_free(ownUpperCamel);
             (void)g_hash_table_insert(includeNames, lowerTrain, NULL);
             lowerTrain = NULL;
         }
@@ -1640,7 +1619,7 @@ gchar *get_inline_parameter(Parameter *para)
         (void)g_stpcpy(buffer + strlen(buffer), translator);
         (void)g_stpcpy(buffer + strlen(buffer), " (");
         if (para->translator == NULL && !is_enum_type(para->type))
-            (void)g_stpcpy(buffer + strlen(buffer), "I_CAL_OBJECT (");
+            (void)g_stpcpy(buffer + strlen(buffer), "I_CAL_OBJECT ((ICalObject *)");
     }
 
     (void)g_stpcpy(buffer + strlen(buffer), para->name);
@@ -1653,6 +1632,8 @@ gchar *get_inline_parameter(Parameter *para)
         if (is_nullable) {
             (void)g_stpcpy(buffer + strlen(buffer), "):NULL)");
         }
+
+        g_free (translator);
     }
 
     ret = g_new(gchar, strlen(buffer) + 1);
@@ -1914,24 +1895,19 @@ void generate_header_and_source(Structure *structure, gchar *dir)
 
     g_return_if_fail(structure != NULL);
 
-    headerName = g_new(gchar, BUFFER_SIZE);
-    *headerName = '\0';
-    sourceName = g_new(gchar, BUFFER_SIZE);
-    *sourceName = '\0';
-
     upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
     lowerTrain = get_lower_train_from_upper_camel(upperCamel);
     g_free(upperCamel);
 
-    (void)g_stpcpy(headerName + strlen(headerName), dir);
-    (void)g_stpcpy(headerName + strlen(headerName), lowerTrain);
-    (void)g_stpcpy(headerName + strlen(headerName), ".h");
-    (void)g_stpcpy(sourceName + strlen(sourceName), dir);
-    (void)g_stpcpy(sourceName + strlen(sourceName), lowerTrain);
-    (void)g_stpcpy(sourceName + strlen(sourceName), ".c");
+    headerName = g_strconcat(dir, lowerTrain, ".h", NULL);
+    sourceName = g_strconcat(dir, lowerTrain, ".c", NULL);
+    g_free(lowerTrain);
 
     header = fopen(headerName, "w");
     source = fopen(sourceName, "w");
+
+    g_free(headerName);
+    g_free(sourceName);
 
     table = get_hash_table_from_structure(structure);
     generate_header(header, structure, table);
@@ -2085,8 +2061,8 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
                 nameSpaceUpperSnake = get_upper_snake_from_upper_camel(namespace);
                 nameUpperSnake = get_upper_snake_from_upper_camel(trueType + i);
                 typeCheck =
-                    g_strconcat(nameSpaceUpperSnake, "_IS_", nameUpperSnake, " (", parameter->name,
-                                ")", NULL);
+                    g_strconcat(nameSpaceUpperSnake, "_IS_", nameUpperSnake, " ((", trueType, "*)",
+                                parameter->name, ")", NULL);
                 defaultValue = NULL;
                 if (method->ret != NULL) {
                     retTrueType = get_true_type(method->ret->type);
