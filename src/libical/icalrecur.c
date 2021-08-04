@@ -342,10 +342,11 @@ enum byrule
     BY_HOUR        =  5,
     BY_MINUTE      =  6,
     BY_SECOND      =  7,
-    BY_SET_POS     =  8
+    BY_MSEC        =  8,
+    BY_SET_POS     =  9
 };
 
-#define NUM_BY_PARTS  9
+#define NUM_BY_PARTS  10
 
 enum expand_table
 {
@@ -408,6 +409,8 @@ static struct recur_map
       ICAL_BY_MINUTE_SIZE,    0 },
     { "BYSECOND",   offsetof(struct icalrecurrencetype, by_second),
       ICAL_BY_SECOND_SIZE,    0 },
+    { "BYSEC",      offsetof(struct icalrecurrencetype, by_msec),
+      ICAL_BY_MSEC_SIZE,      0 },
     { "BYSETPOS",   offsetof(struct icalrecurrencetype, by_set_pos),
       ICAL_BY_SETPOS_SIZE,   -1 },
 };
@@ -1054,7 +1057,7 @@ static int __greg_month_diff(icaltimetype a, icaltimetype b)
 }
 
 static void __get_start_time(icalrecur_iterator *impl, icaltimetype date,
-                             int *hour, int *minute, int *second)
+                             int *hour, int *minute, int *second, int *msec)
 {
     icalrecurrencetype_frequency freq = impl->rule.freq;
 
@@ -1080,6 +1083,14 @@ static void __get_start_time(icalrecur_iterator *impl, icaltimetype date,
         *second = impl->by_ptrs[BY_SECOND][0];
     } else {
         *second = impl->rstart.second;
+    }
+
+    if (freq == ICAL_MSEC_RECURRENCE) {
+        *msec = date.msec;
+    } else if (has_by_data(impl, BY_MSEC)) {
+        *msec = impl->by_ptrs[BY_MSEC][0];
+    } else {
+        *msec = impl->rstart.msec;
     }
 }
 
@@ -1586,9 +1597,9 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
                      (int32_t) (date.month - 1), /* UCal is 0-based */
                      (int32_t) date.day, &status);
     } else {
-        int hour, minute, second;
+        int hour, minute, second, msec;
 
-        __get_start_time(impl, date, &hour, &minute, &second);
+        __get_start_time(impl, date, &hour, &minute, &second, &msec);
 
         ucal_setDateTime(impl->greg,
                          (int32_t) date.year,
@@ -1599,9 +1610,7 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
                          (int32_t) second,
                          &status);
 
-        ucal_set(impl->greg, UCAL_MILLISECOND,
-                         (int32_t) (has_by_data(impl, BY_MSEC) ?
-                                    impl->by_ptrs[BY_MSEC][0] : impl->rstart.msec));
+        ucal_set(impl->greg, UCAL_MILLISECOND, (int32_t) msec);
     }
 
     if (impl->rscale != impl->greg) {
@@ -1904,9 +1913,7 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
 
     if (!impl->dtstart.is_date) {
         __get_start_time(impl, date, &impl->last.hour,
-                         &impl->last.minute, &impl->last.second);
-        impl->last.msec = has_by_data(impl, BY_MSEC) ?
-            impl->by_ptrs[BY_MSEC][0] : impl->dtstart.msec;
+                         &impl->last.minute, &impl->last.second, &impl->last.msec);
     }
 }
 
@@ -2328,9 +2335,15 @@ static int prev_unit(icalrecur_iterator *impl,
     return end_of_data;
 }
 
+static int prev_msec(icalrecur_iterator *impl)
+{
+    return prev_unit(impl, BY_MSEC, ICAL_MSEC_RECURRENCE, NULL,
+                   &set_msec, &increment_msec, &increment_second);
+}
+
 static int prev_second(icalrecur_iterator *impl)
 {
-    return prev_unit(impl, BY_SECOND, ICAL_SECONDLY_RECURRENCE, NULL,
+    return prev_unit(impl, BY_SECOND, ICAL_SECONDLY_RECURRENCE, &prev_msec,
                      &set_second, &increment_second, &increment_minute);
 }
 
@@ -3300,6 +3313,10 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
     do {
         switch (impl->rule.freq) {
 
+        case ICAL_MSEC_RECURRENCE:
+            prev_msec(impl);
+            break;
+
         case ICAL_SECONDLY_RECURRENCE:
             prev_second(impl);
             break;
@@ -3493,6 +3510,15 @@ static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
             /* Specified second doesn't match interval -
                bump start to next second that matches interval */
             increment_second(impl, interval - diff);
+        }
+        break;
+
+    case ICAL_MSEC_RECURRENCE:
+        if ((interval > 1) &&
+            (diff = abs(impl->istart.msec - impl->rstart.msec) % interval)) {
+            /* Specified second doesn't match interval -
+               bump start to next second that matches interval */
+            increment_msec(impl, interval - diff);
         }
         break;
 

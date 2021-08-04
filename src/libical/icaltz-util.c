@@ -415,7 +415,7 @@ static void terminate_rrule(struct zone_context *zone)
         // Multiple instances
         // Set UNTIL of the component's recurrence
         zone->recur.until = zone->time;
-        icaltime_adjust(&zone->recur.until, 0, 0, 0, -zone->gmtoff_from);
+        icaltime_adjust(&zone->recur.until, 0, 0, 0, -zone->gmtoff_from, 0);
         zone->recur.until.zone = icaltimezone_get_utc_timezone();
 
         // Remove BYMONTHDAY if BYDAY week != 0
@@ -711,7 +711,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         iter = icalrecur_iterator_new(standard.final_recur,
                                                       std_trans);
                         std_trans = icalrecur_iterator_next(iter);
-                        icaltime_adjust(&std_trans, 0, 0, 0, -dst_type->gmtoff);
+                        icaltime_adjust(&std_trans, 0, 0, 0, -dst_type->gmtoff, 0);
                         transitions[num_trans] = icaltime_as_timet(std_trans);
                         trans_idx[num_trans++] = (int) num_types-2;
                         icalrecur_iterator_free(iter);
@@ -723,7 +723,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         iter = icalrecur_iterator_new(daylight.final_recur,
                                                       dst_trans);
                         dst_trans = icalrecur_iterator_next(iter);
-                        icaltime_adjust(&dst_trans, 0, 0, 0, -std_type->gmtoff);
+                        icaltime_adjust(&dst_trans, 0, 0, 0, -std_type->gmtoff, 0);
                         transitions[num_trans] = icaltime_as_timet(dst_trans);
                         trans_idx[num_trans++] = (int) num_types-1;
                         icalrecur_iterator_free(iter);
