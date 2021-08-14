@@ -102,7 +102,7 @@ if(POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
 endif()
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 #Include CMake capabilities
 include(LibIcalMacrosInternal)
@@ -206,8 +206,10 @@ endif()
 # libicu is highly recommended for RSCALE support
 #  libicu can be found at http://www.icu-project.org
 #  RSCALE info at http://tools.ietf.org/html/rfc7529
-if(NOT "$ENV{ICU_BASE}" STREQUAL "") #support the old ICU_BASE env
-  set(ICU_ROOT $ENV{ICU_BASE})
+if(DEFINED ICU_BASE) #to make --warn-uninitialized happy
+  if(NOT "$ENV{ICU_BASE}" STREQUAL "") #support the old ICU_BASE env
+    set(ICU_ROOT $ENV{ICU_BASE})
+  endif()
 endif()
 find_package(ICU COMPONENTS uc i18n)
 set_package_properties(ICU PROPERTIES
@@ -279,6 +281,7 @@ endif()
 # Use GNUInstallDirs
 
 include(GNUInstallDirs)
+set(BIN_INSTALL_DIR ${CMAKE_INSTALL_BINDIR} CACHE STRING "User exectuables directory name" FORCE)
 set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR} CACHE STRING "Library directory name" FORCE)
 set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE STRING "Include directory name" FORCE)
 set(SHARE_INSTALL_DIR ${CMAKE_INSTALL_DATAROOTDIR} CACHE STRING "Share directory name")

@@ -61,6 +61,9 @@ if(MSVC_VERSION GREATER 1899)
   set(HAVE_SNPRINTF true)
 endif()
 
+if(NOT DEFINED CMAKE_REQUIRED_LIBRARIES)
+  set(CMAKE_REQUIRED_LIBRARIES "")
+endif()
 set(_SAVE_RQL ${CMAKE_REQUIRED_LIBRARIES})
 set(CMAKE_REQUIRED_LIBRARIES kernel32.lib)
 check_function_exists(GetNumberFormat HAVE_GETNUMBERFORMAT) #Windows <windows.h>

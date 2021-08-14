@@ -162,8 +162,6 @@ add_custom_target(
 if(HAVE_INTROSPECTION)
   include(GObjectIntrospectionMacros)
   set(GObjectIntrospection_GIRS)
-  #set(GObjectIntrospection_SCANNER_ARGS "--add-include-path=${CMAKE_CURRENT_SOURCE_DIR}")
-  #set(GObjectIntrospection_COMPILER_ARGS "--includedir=${CMAKE_CURRENT_SOURCE_DIR}")
 
   set(LIBICAL_GIR_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.0")
   set(LIB_VERSION "${LIBICAL_LIB_MAJOR_VERSION}_0")
@@ -178,7 +176,7 @@ if(HAVE_INTROSPECTION)
   )
   set(ICal_${LIB_VERSION}_gir_LIBRARY "ical")
   set(ICal_${LIB_VERSION}_gir_INCLUDES GObject-2.0)
-  set(_includes ${_includes} "-L${LIBRARY_OUTPUT_PATH}")
+  set(_includes "-L${LIBRARY_OUTPUT_PATH}")
   set(ICal_${LIB_VERSION}_gir_CFLAGS ${_includes})
   set(ICal_${LIB_VERSION}_gir_LIBS ical)
 
