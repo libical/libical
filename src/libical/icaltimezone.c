@@ -1412,6 +1412,7 @@ static struct icaltimetype tm_to_icaltimetype(struct tm *tm)
 
     memset(&itt, 0, sizeof(struct icaltimetype));
 
+    /* cppcheck-suppress ctuuninitvar */
     itt.second = tm->tm_sec;
     itt.minute = tm->tm_min;
     itt.hour = tm->tm_hour;
