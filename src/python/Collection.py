@@ -20,7 +20,6 @@
 
 from types import *
 
-
 class Collection:
     """A group of components that can be modified somewhat like a list.
 
