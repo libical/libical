@@ -102,6 +102,7 @@ icalcalendar *icalcalendar_new(const char *dir)
     impl->incoming = 0;
 
     if (icalcalendar_create(impl) != ICAL_NO_ERROR) {
+        free(impl->dir);
         free(impl);
         return 0;
     }

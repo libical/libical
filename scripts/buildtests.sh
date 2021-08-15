@@ -547,7 +547,7 @@ then
     exit 1
   fi
   # read the min required CMake version from the top-level CMake file
-  minCMakeVers=`grep -i cmake_minimum_required $TOP/CMakeLists.txt | grep VERSION | sed 's/^.*VERSION\s*//i' | cut -d. -f1-2 | sed 's/\s*).*$//'`
+  minCMakeVers=`grep -i cmake_minimum_required $TOP/CMakeLists.txt | grep VERSION | sed 's/^.*VERSION\s*//' | cut -d. -f1-2 | sed 's/\s*).*$//'`
   # adjust PATH
   X=`echo $minCMakeVers | cut -d. -f1`
   Y=`echo $minCMakeVers | cut -d. -f2`
@@ -566,7 +566,7 @@ then
   if ( test `cmake --version | head -1 | grep -c $minCMakeVers` -ne 1 )
   then
     echo "Not using cmake version $minCMakeVers"
-    echo "Maybe you need to install it into /usr/local/opt/cmake-$minCMakeVers"
+    echo "Maybe you need to install it into /usr/local/opt/cmake-$minCMakeVers (or use the -m option)"
     exit 1
   fi
 fi
