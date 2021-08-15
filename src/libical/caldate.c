@@ -73,7 +73,7 @@
  *		has been set. ( = 0 for 01 Jan 4713 B.C. 12 HR UT )
  *
  *	Output:  will set all the other elements of the structure.
- *		As a convienence, the function will also return the year.
+ *		As a convenience, the function will also return the year.
  *
  *	Reference: Astronomial formulae for calculators, meeus, p 23
  *	from fortran program by F. Espenak - April 1982 Page 277,

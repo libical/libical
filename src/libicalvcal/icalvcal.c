@@ -1258,7 +1258,7 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
     return (void *)prop;
 }
 
-/* directly convertable property. The string representation of vcal is
+/* directly convertible property. The string representation of vcal is
    the same as ical */
 
 void *dc_prop(int icaltype, VObject *object, icalcomponent *comp, icalvcal_defaults *defaults)

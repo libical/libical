@@ -586,7 +586,7 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
                 // recursively go down the components
                 c->remove(*comp, ignoreValue);
                 // if all properties are removed and there is no sub-components, then
-                // remove this compoent
+                // remove this component
                 if ((c->count_properties(ICAL_ANY_PROPERTY) == 0) &&
                     (c->count_components(ICAL_ANY_COMPONENT) == 0)) {
                     this->remove_component(c);

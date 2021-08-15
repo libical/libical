@@ -15,7 +15,7 @@ set_package_properties(Doxygen PROPERTIES
   TYPE OPTIONAL
   DESCRIPTION "API Documentation system"
   URL "http://www.doxygen.org"
-  PURPOSE "Needed to build the API documention."
+  PURPOSE "Needed to build the API documentation."
 )
 if(DOXYGEN_FOUND)
   file(GLOB _dox_deps *.dox *.html)
