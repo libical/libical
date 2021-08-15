@@ -9,6 +9,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_BINARY_DIR}/src/libical
   ${PROJECT_SOURCE_DIR}/src/libical
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 if(BDB_FOUND)
   include_directories(${BDB_INCLUDE_DIR})
@@ -32,7 +33,6 @@ add_custom_target(
 
 ########### next target ###############
 
-#these are generated sources, but we keep them in the repo
 set(
   icalss_LIB_DEVSRCS
   icalsslexer.c
@@ -65,8 +65,18 @@ set(
   icalspanlist.h
   icalmessage.c
   icalmessage.h
-  ${icalss_LIB_DEVSRCS}
 )
+flex_target(icalssLexer
+  icalsslexer.l
+  ${CMAKE_CURRENT_BINARY_DIR}/icalsslexer.c
+)
+bison_target(icalssParser
+  icalssyacc.y
+  ${CMAKE_CURRENT_BINARY_DIR}/icalssyacc.c
+)
+add_flex_bison_dependency(icalssLexer icalssParser)
+list(APPEND icalss_LIB_SRCS ${BISON_icalssParser_OUTPUTS} ${FLEX_icalssLexer_OUTPUTS})
+
 if(BDB_FOUND)
   list(
     APPEND
@@ -104,7 +114,6 @@ target_link_libraries(icalss ical)
 if(BDB_FOUND)
   target_link_libraries(icalss ${BDB_LIBRARY})
 endif()
-
 if(MSVC)
   set_target_properties(
     icalss

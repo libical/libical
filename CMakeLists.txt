@@ -315,6 +315,21 @@ set_package_properties(
     PURPOSE
       "Required by the libical build system."
 )
+find_package(FLEX REQUIRED)
+set_package_properties(FLEX PROPERTIES
+    URL "http://flex.sourceforge.net"
+    DESCRIPTION "Fast Lexical Analyzer"
+    TYPE REQUIRED
+    PURPOSE "Required by the libicalss library"
+)
+
+find_package(BISON REQUIRED)
+set_package_properties(BISON PROPERTIES
+    URL "http://www.gnu.org/software/bison"
+    DESCRIPTION "general-purpose parser generator"
+    TYPE REQUIRED
+    PURPOSE "Required by the libicalss library"
+)
 
 # Ensure finding 64bit libs when using 64-bit compilers
 if(CMAKE_CL_64)

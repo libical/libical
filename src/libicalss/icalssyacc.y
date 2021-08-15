@@ -24,23 +24,13 @@ extern struct icalgauge_impl *icalss_yy_gauge;
 //#define YYLEX_PARAM yy_globals
 #define YY_EXTRA_TYPE  icalgauge_impl*
 
-
-void sserror(char *s);
-
 static void ssyacc_add_where(struct icalgauge_impl* impl, char* prop,
-            icalgaugecompare compare , char* value);
+            icalgaugecompare compare , const char* value);
 static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1);
 static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1);
 static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l);
-
-/* Don't know why I need this....  */
-
-/* older flex version (such as included in OpenBSD) takes a different calling syntax */
-#ifdef YYPARSE_PARAM
-int sslex(void *YYPARSE_PARAM);
-#else
-int sslex(void);
-#endif
+void yyerror(const char *s);
+int yylex(void);
 %}
 
 %union {
@@ -95,7 +85,7 @@ where_list:
 %%
 
 static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
-    icalgaugecompare compare , char* value_str)
+    icalgaugecompare compare , const char* value_str)
 {
 
     struct icalgauge_where *where;
@@ -113,7 +103,7 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
     where->prop = ICAL_NO_PROPERTY;
 
     /* remove enclosing quotes */
-    s = value_str;
+    s = (char *)value_str;
     if(*s == '\''){
     s++;
     }
@@ -236,7 +226,7 @@ static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
 }
 
 
-void sserror(char *s){
+void yyerror(const char *s){
   fprintf(stderr,"Parse error \'%s\'\n", s);
   icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 }
