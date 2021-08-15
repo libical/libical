@@ -472,8 +472,6 @@ CPPCHECK() {
     -I "$TOP/src/libical-glib" \
     -i "$TOP/src/Net-ICal-Libical/" \
     "$TOP/src" "$BDIR"/src/libical/icalderived* 2>&1 |
-    grep -v "icalssyacc.c:" |
-    grep -v "icalsslexer.c:" |
     grep -v "vcc.c:" |
     grep -v "vcc.y:" |
     tee cppcheck.out

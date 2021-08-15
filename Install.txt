@@ -15,6 +15,7 @@ To build libical you will need:
  - a C++11 compliant compiler for C++ bindings
  - CMake version 3.20.0 or higher
  - Perl
+ - Flex and Bison (on Windows we recommend winflexbison)
  - libicu (not required but strongly recommended)
 
 Building on Unix with gcc or clang:
