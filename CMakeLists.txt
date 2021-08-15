@@ -281,7 +281,7 @@ endif()
 # Use GNUInstallDirs
 
 include(GNUInstallDirs)
-set(BIN_INSTALL_DIR ${CMAKE_INSTALL_BINDIR} CACHE STRING "User exectuables directory name" FORCE)
+set(BIN_INSTALL_DIR ${CMAKE_INSTALL_BINDIR} CACHE STRING "User executables directory name" FORCE)
 set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR} CACHE STRING "Library directory name" FORCE)
 set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE STRING "Include directory name" FORCE)
 set(SHARE_INSTALL_DIR ${CMAKE_INSTALL_DATAROOTDIR} CACHE STRING "Share directory name")
