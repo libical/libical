@@ -126,7 +126,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='\(no[[:space:]]link[[:space:]]for:\|g_type_class_add_private.*is[[:space:]]deprecated\|libical-glib-scan\.c\|/i-cal-object\.c\|/vcc\.c\|/vobject\.c\|/icalsslexer\.c\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\|G_ADD_PRIVATE\)'
+  whitelist='\(no[[:space:]]link[[:space:]]for:\|g_type_class_add_private.*is[[:space:]]deprecated\|libical-glib-scan\.c\|/i-cal-object\.c\|/vcc\.c\|/vobject\.c\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\|G_ADD_PRIVATE\)'
   CHECK_WARNINGS $1 "warning:" $whitelist
 }
 
@@ -326,8 +326,6 @@ CPPCHECK() {
       grep -v 'Found a statement that begins with numeric constant' | \
       grep -v 'cannot find all the include files' | \
       grep -v Net-ICal | \
-      grep -v icalssyacc\.c  | \
-      grep -v icalsslexer\.c | \
       grep -v vcc\.c | grep -v vcc\.y | \
       grep -v _cxx\. | tee cppcheck.out
   CPPCHECK_WARNINGS cppcheck.out
@@ -361,8 +359,6 @@ SPLINT() {
   files=`find src -name "*.c" -o -name "*.h" | \
   # skip C++
   grep -v _cxx | grep -v /Net-ICal-Libical |
-  # skip lex/yacc
-  grep -v /icalssyacc | grep -v /icalsslexer | \
   # skip test programs
   grep -v /test/ | grep -v /vcaltest\.c | grep -v /vctest\.c | \
   # skip builddirs

@@ -12,6 +12,7 @@ To build a debug version pass -DCMAKE_BUILD_TYPE=Debug to cmake.
 To build libical you will need:
  - CMake version 3.11.0 or higher
  - Perl
+ - Flex and Bison (on Windows we recommend winflexbison)
  - libicu (not required but strongly recommended)
  - a C compiler (let us know if the build fails with your C compiler)
 

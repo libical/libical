@@ -26,6 +26,8 @@
 #include "icalgaugeimpl.h"
 #include "assert.h"
 
+YYSTYPE sslval;
+
 const char* input_buffer;
 const char* input_buffer_p;
 
