@@ -24,7 +24,7 @@ class Collection:
     """A group of components that can be modified somewhat like a list.
 
     Usage:
-        Collection(componet, propSequence)
+        Collection(component, propSequence)
 
     component is a Component object
     propSequence is a list or tuple of Property (or subclass of Property)
@@ -40,7 +40,7 @@ class Collection:
 
     def __setslice__(self, beg, end, sequence):
 
-        if  not isinstance(sequence,ListType):
+        if not isinstance(sequence, ListType):
             raise TypeError, "must assign list (not instance) to slice"
 
         oldProps = self._properties[beg:end]
@@ -58,7 +58,7 @@ class Collection:
     def __setitem__(self, i, prop):
         self._component.remove_property(self._properties[i])
         self._component.add_property(prop)
-        self._properties[i]=prop
+        self._properties[i] = prop
 
     def __delitem__(self, i):
         self._component.remove_property(self._properties[i])
@@ -79,6 +79,7 @@ class Collection:
     def append(self, property):
         self._properties.append(property)
         self._component.add_property(property)
+
 
 class ComponentCollection:
 
@@ -103,7 +104,7 @@ class ComponentCollection:
     def __setitem__(self, i, prop):
         self._parent.remove_component(self._components[i])
         self._parent.add_property(prop)
-        self._components[i]=prop
+        self._components[i] = prop
 
     def __delitem__(self, i):
         self._parent.remove_component(self._components[i])

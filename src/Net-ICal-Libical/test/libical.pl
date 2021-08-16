@@ -52,7 +52,7 @@ ORGANIZER:mailto:a\@example.com
 DTSTAMP:19970612T190000Z
 DTSTART:19970701T210000Z
 DTEND:19970701T230000Z
-SEQENCE:1
+SEQUENCE:1
 UID:0981234-1234234-23\@example.com
 SUMMARY:ST. PAUL SAINTS -VS- DULUTH-SUPERIOR DUKES
 END:VEVENT
@@ -80,7 +80,7 @@ foreach $i (@occur){
   my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($i);
 
   printf("%s %s %2d %02d:%02d:%02d %d\n",
-         (Sun,Mon,Tue,Wed,Thur,Fri,Sat)[$wday],
+         (Sun,Mon,Tue,Wed,Thu,Fri,Sat)[$wday],
          (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)[$mon],
          $mday,
          $hour,$min,$sec,

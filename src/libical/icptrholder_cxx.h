@@ -5,13 +5,13 @@
  *          VComponent::get_..._component, VComponent::get_..._property,
  *          ICalProperty::get_..._value.
  *
- * @remarks VComponent::get... functions returns a C++ oject that wraps the
+ * @remarks VComponent::get... functions returns a C++ object that wraps the
  * libical implementation. It is important to note that the wrapped
  * implementation still belongs to the original component. To stop memory leak,
  * caller must delete the pointer. However, the destructor will call the
  * appropriate free function. eg. ~VComponent calls icalcomponent_free(imp).
  *
- * As stated previously, imp stil belongs to the original component. To avoid
+ * As stated previously, imp still belongs to the original component. To avoid
  * freeing the wrapped "imp", caller must set the "imp" to null before deleting
  * the pointer.
  *

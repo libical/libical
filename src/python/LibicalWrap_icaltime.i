@@ -123,7 +123,7 @@
         return icaltime_days_in_month(month, year);
     }
 
-    /** Returns whether you've specified a leapyear or not. */
+    /** Returns whether you've specified a leap year or not. */
     static int is_leap_year (const int year) {
         return icaltime_is_leap_year(year);
     }

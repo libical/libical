@@ -50,7 +50,7 @@ struct icalperiodtype
 /**
  * @brief Constructs a new ::icalperiodtype from @a str
  * @param str The string from which to construct a time period
- * @return An ::icalperiodtype representing the peroid @a str
+ * @return An ::icalperiodtype representing the period @a str
  * @sa icaltime_from_string(), icaldurationtype_from_string()
  *
  * @par Error handling
