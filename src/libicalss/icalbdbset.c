@@ -31,6 +31,10 @@
 
 #define MAX_RETRY 5
 
+#if !defined(DB_VERSION_MAJOR)
+#define DB_VERSION_MAJOR 1 //assume ancient version
+#endif
+
 static int _compare_ids(const char *compid, const char *matchid);
 #if DB_VERSION_MAJOR > 5
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b, size_t *locp);
@@ -1620,7 +1624,7 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
 
     _unused(dbp);
 #if DB_VERSION_MAJOR > 5
-    _unused(locp);
+    locp = NULL;
 #endif
     return strncmp(ac, bc, a->size);
 }
