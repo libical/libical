@@ -32,7 +32,11 @@
 #define MAX_RETRY 5
 
 static int _compare_ids(const char *compid, const char *matchid);
+#if DB_VERSION_MAJOR > 5
+static int _compare_keys(DB *dbp, const DBT *a, const DBT *b, size_t *locp);
+#else
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b);
+#endif
 
 /** Default options used when NULL is passed to icalset_new() **/
 static icalbdbset_options icalbdbset_options_default =
@@ -1598,7 +1602,11 @@ int icalbdbset_commit_transaction(DB_TXN *txnid)
     return txnid->commit(txnid, 0);
 }
 
+#if DB_VERSION_MAJOR > 5
+static int _compare_keys(DB *dbp, const DBT *a, const DBT *b, size_t *locp)
+#else
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
+#endif
 {
     /*
      * Returns:
@@ -1611,5 +1619,8 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
     char *bc = (char *)b->data;
 
     _unused(dbp);
+#if DB_VERSION_MAJOR > 5
+    _unused(locp);
+#endif
     return strncmp(ac, bc, a->size);
 }
