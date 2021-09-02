@@ -4877,6 +4877,90 @@ static void test_builtin_compat_tzid (void)
     icaltimezone_free_builtin_timezones();
 }
 
+static void test_vcc_vcard_parse (void)
+{
+    /* Two VCARD-s, because some arches can parse the first and some the second. */
+    const char *vcard1 =
+	"BEGIN:VCARD\r\n"
+	"VERSION:3.0\r\n"
+	"NOTE:\r\n"
+	"FN:Xxxx\r\n"
+	"N:;Xxxx;;;\r\n"
+	"END:VCARD";
+    const char *vcard2 =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "X-XXX-ORIGINAL-VCARD:\r\n"
+        "X-XXX-KIND:XX_XXXXXXXX\r\n"
+        "NOTE:\r\n"
+        "X-XXXXXXXXX-FILE-AS:Xxxxxx\r\n"
+        "FN:Xxxxxx\r\n"
+        "N:;Xxxxxx;;;\r\n"
+        "X-XXX-XXXXXXXXX:\r\n"
+        "END:VCARD";
+    const char *vcalendar =
+	"BEGIN:VCALENDAR\r\n"
+	"BEGIN:VEVENT\r\n"
+	"UID:123\r\n"
+	"SUMMARY:Summary\r\n"
+	"DTSTAMP:20210803T063522Z\r\n"
+	"DTSTART;VALUE=DATE:20210902\r\n"
+	"END:VEVENT\r\n"
+	"END:VCALENDAR\r\n";
+    VObject *vcal;
+
+    vcal = Parse_MIME(vcard1, strlen(vcard1));
+    if(vcal) {
+        icalcomponent *icalcomp;
+
+        icalcomp = icalvcal_convert (vcal);
+        ok("vCard1 is not iCalendar", (icalcomp == NULL));
+        if(icalcomp)
+            icalcomponent_free (icalcomp);
+
+        cleanVObject (vcal);
+    } else {
+        ok("vCard1 cannot be parsed", (vcal == NULL));
+    }
+
+    vcal = Parse_MIME(vcard2, strlen(vcard2));
+    if(vcal) {
+        icalcomponent *icalcomp;
+
+        icalcomp = icalvcal_convert (vcal);
+        ok("vCard2 is not iCalendar", (icalcomp == NULL));
+        if(icalcomp)
+            icalcomponent_free (icalcomp);
+
+        cleanVObject (vcal);
+    } else {
+        ok("vCard2 cannot be parsed", (vcal == NULL));
+    }
+
+    vcal = Parse_MIME(vcalendar, strlen(vcalendar));
+    ok("vCalendar can be parsed", (vcal != NULL));
+    if(vcal) {
+        icalcomponent *icalcomp;
+
+        icalcomp = icalvcal_convert (vcal);
+        ok("vCalendar can be converted", (icalcomp != NULL));
+        if(icalcomp) {
+            icalcomponent *child;
+
+            ok("vCalendar is VCALENDAR", (icalcomponent_isa(icalcomp) == ICAL_VCALENDAR_COMPONENT));
+            ok("vCalendar has one child", (icalcomponent_count_components(icalcomp, ICAL_ANY_COMPONENT) == 1));
+            child = icalcomponent_get_inner(icalcomp);
+            ok("vCalendar has inner comp", (child != NULL && child != icalcomp));
+            ok("vCalendar child is VEVENT", (icalcomponent_isa(child) == ICAL_VEVENT_COMPONENT));
+            ok("vCalendar child UID matches", (strcmp(icalcomponent_get_uid(child), "123") == 0));
+            ok("vCalendar child SUMMARY matches", (strcmp(icalcomponent_get_summary(child), "Summary") == 0));
+            icalcomponent_free (icalcomp);
+	}
+
+        cleanVObject (vcal);
+    }
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -5021,6 +5105,7 @@ int main(int argc, char *argv[])
 
     test_run("Test icalcomponent_normalize", test_icalcomponent_normalize, do_test, do_header);
     test_run("Test builtin compat TZID", test_builtin_compat_tzid, do_test, do_header);
+    test_run("Test VCC vCard parse", test_vcc_vcard_parse, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

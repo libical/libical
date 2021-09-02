@@ -572,7 +572,7 @@ static int lexGeta_(int i)
     }
 
 static void lexSkipLookahead() {
-    if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=EOF) {
+    if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=((char) EOF)) {
         /* don't skip EOF. */
         lexBuf.getPtr = (lexBuf.getPtr + 1) % MAX_LEX_LOOKAHEAD;
         lexBuf.len--;
@@ -607,7 +607,7 @@ static int lexLookahead() {
 
 static int lexGetc() {
     int c = lexLookahead();
-    if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=EOF) {
+    if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=((char) EOF)) {
         /* EOF will remain in lookahead buffer */
         lexBuf.getPtr = (lexBuf.getPtr + 1) % MAX_LEX_LOOKAHEAD;
         lexBuf.len--;
@@ -657,7 +657,7 @@ static char* lexGetWord() {
     lexSkipWhite();
     lexClearToken();
     c = lexLookahead();
-    while (c != EOF && !strchr("\t\n ;:=",c)) {
+    while (c != ((char) EOF) && !strchr("\t\n ;:=",c)) {
         lexAppendc(c);
         lexSkipLookahead();
         c = lexLookahead();
@@ -669,7 +669,7 @@ static char* lexGetWord() {
 static void lexPushLookaheadc(int c) {
     int putptr;
     /* can't putback EOF, because it never leaves lookahead buffer */
-    if (c == EOF) return;
+    if (((char) c) == ((char) EOF)) return;
     putptr = (int)lexBuf.getPtr - 1;
     if (putptr < 0) putptr += MAX_LEX_LOOKAHEAD;
     lexBuf.getPtr = (unsigned long)putptr;
@@ -691,7 +691,7 @@ static char* lexLookaheadWord() {
     while (len < (MAX_LEX_LOOKAHEAD_0)) {
         c = lexGetc();
         len++;
-        if (c == EOF || strchr("\t\n ;:=", c)) {
+        if (c == ((char) EOF) || strchr("\t\n ;:=", c)) {
             lexAppendc(0);
             /* restore lookahead buf. */
             lexBuf.len += len;
@@ -748,7 +748,7 @@ static char* lexGet1Value() {
     lexSkipWhite();
     c = lexLookahead();
     lexClearToken();
-    while (c != EOF && c != ';') {
+    while (c != ((char) EOF) && c != ';') {
         if (c == '\n') {
             int a;
             lexSkipLookahead();
@@ -770,7 +770,7 @@ static char* lexGet1Value() {
         }
     lexAppendc(0);
     handleMoreRFC822LineBreak(c);
-    return c==EOF?0:lexStr();
+    return c==((char) EOF)?0:lexStr();
     }
 #endif
 
@@ -864,9 +864,9 @@ static char * lexGetDataFromBase64()
                 else if (oldBytes) free(oldBytes);
                 /* error recovery: skip until 2 adjacent newlines. */
                 DBG_(("db: invalid character 0x%x '%c'\n", c,c));
-                if (c != EOF)  {
+                if (c != ((char) EOF))  {
                     c = lexGetc();
-                    while (c != EOF) {
+                    while (c != ((char) EOF)) {
                         if (c == '\n' && lexLookahead() == '\n') {
                             ++mime_lineNum;
                             break;
@@ -1084,7 +1084,7 @@ int yylex() {
                     ++mime_lineNum;
                     continue;
                     }
-                case EOF: return 0;
+                case ((char) EOF): return 0;
                     break;
                 default: {
                     lexPushLookaheadc(c);
