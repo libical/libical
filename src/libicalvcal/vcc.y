@@ -815,6 +815,10 @@ void initLex(const char *inputstring, unsigned long inputlen, FILE *inputfile)
     }
 
 static void finiLex() {
+    VObject* vobj;
+    while(vobj = popVObject(), vobj) {
+        cleanVObject(vobj);
+    }
     free(lexBuf.strs);
     }
 
@@ -1126,9 +1130,12 @@ static VObject* Parse_MIMEHelper()
     mime_lineNum = 1;
     vObjList = 0;
     curObj = 0;
+    curProp = 0;
 
-    if (yyparse() != 0)
+    if (yyparse() != 0) {
+        finiLex();
         return 0;
+    }
 
     finiLex();
     return vObjList;
