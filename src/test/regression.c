@@ -4072,6 +4072,8 @@ void test_vcal(void)
         if (comp) {
             icalcomponent_free(comp);
         }
+
+        cleanVObject(vcal);
     }
 }
 
