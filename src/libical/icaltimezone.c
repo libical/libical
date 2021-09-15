@@ -75,7 +75,7 @@ static struct _compat_tzids {
 };
 
 /* The prefix to be used for tzid's generated from system tzdata */
-static char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
+static char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = BUILTIN_TZID_PREFIX;
 
 /** This is the filename of the file containing the city names and
     coordinates of all the builtin timezones. */
@@ -202,9 +202,6 @@ static void icaltimezone_changes_unlock(void)
 
 const char *icaltimezone_tzid_prefix(void)
 {
-    if (s_ical_tzid_prefix[0] == '\0') {
-        strncpy(s_ical_tzid_prefix, BUILTIN_TZID_PREFIX, BUILTIN_TZID_PREFIX_LEN-1);
-    }
     return s_ical_tzid_prefix;
 }
 
