@@ -1471,9 +1471,18 @@ static int initialize_rscale(icalrecur_iterator *impl)
     UChar *tzid = (UChar *) UCAL_UNKNOWN_ZONE_ID;
     short is_hebrew = 0;
 
-    if (dtstart.zone) {
-        /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
-        const char *src = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
+    /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
+    const char *src = icaltimezone_get_location((icaltimezone *) dtstart.zone);
+    if (!src) {
+        const char *prefix = icaltimezone_tzid_prefix();
+
+        src = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
+        if (src && !strncmp(src, prefix, strlen(prefix))) {
+            /* Skip past our prefix */
+            src += strlen(prefix);
+        }
+    }
+    if (src) {
         size_t len = (strlen(src) + 1) * U_SIZEOF_UCHAR;
         tzid = icalmemory_tmp_buffer(len);
         tzid = u_strFromUTF8Lenient(tzid, (int32_t)len, NULL, src, -1, &status);
