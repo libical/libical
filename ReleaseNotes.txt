@@ -46,6 +46,7 @@ Version 3.0.11 (UNRELEASED):
  * Fix build for Berkeley DB version greater than 5
  * Fix vcal for some architectures (like aarch64, ppc64le and s390x)
  * Fix memory leaks in vcal
+ * Prevent crash when looking for tzid in initialize_rscale
 
 Version 3.0.10 (17 April 2021):
 -------------------------------
