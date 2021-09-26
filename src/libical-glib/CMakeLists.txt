@@ -257,8 +257,16 @@ install(FILES ${LIBICAL_GLIB_HEADERS}
 
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 set(exec_prefix "\${prefix}")
-set(libdir "\${exec_prefix}/lib")
-set(includedir "\${prefix}/include")
+if(IS_ABSOLUTE ${LIB_INSTALL_DIR})
+  set(libdir "${LIB_INSTALL_DIR}")
+else()
+  set(libdir "\${exec_prefix}/${LIB_INSTALL_DIR}")
+endif()
+if(IS_ABSOLUTE ${INCLUDE_INSTALL_DIR})
+  set(includedir "${INCLUDE_INSTALL_DIR}")
+else()
+  set(includedir "\${prefix}/include")
+endif()
 
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/libical-glib.pc.in
