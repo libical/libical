@@ -2048,29 +2048,33 @@ output_rrule				(char	        *rrule_buffer,
      was on the 19th of the month, but DTSTART was moved 1 day forward, then
      we output the 20th of the month instead. */
   if (day_offset == 1) {
-    if (day_code != DAY_LAST_WEEKDAY)
-      day_number++;
     day_weekday = (day_weekday + 1) % 7;
 
-    /* Check we don't use February 29th. */
-    if (month == 1 && day_number > 28) {
-      fprintf (stderr, "Can't format RRULE - out of bounds. Month: %i Day number: %i\n", month + 1, day_number);
-      exit (0);
-    }
+    if (day_code != DAY_LAST_WEEKDAY) {
+      day_number++;
 
-    /* If we go past the end of the month, move to the next month. */
-    if (day_code != DAY_LAST_WEEKDAY && day_number > DaysInMonth[month]) {
-      month++;
-      day_number = 1;
+      /* Check we don't use February 29th. */
+      if (month == 1 && day_number > 28) {
+        fprintf (stderr, "Can't format RRULE - out of bounds. Month: %i Day number: %i\n", month + 1, day_number);
+        exit (0);
+      }
+
+      /* If we go past the end of the month, move to the next month. */
+      if (day_number > DaysInMonth[month]) {
+        month++;
+        day_number = 1;
+      }
     }
 
   } else if (day_offset == -1) {
-    if (day_code != DAY_LAST_WEEKDAY)
-      day_number--;
     day_weekday = (day_weekday + 6) % 7;
 
-    if (day_code != DAY_LAST_WEEKDAY && day_number < 1)
-      fprintf (stderr, "Month: %i Day number: %i\n", month + 1, day_number);
+    if (day_code != DAY_LAST_WEEKDAY) {
+      day_number--;
+
+      if (day_number < 1)
+        fprintf (stderr, "Month: %i Day number: %i\n", month + 1, day_number);
+    }
   }
 
   switch (day_code) {
@@ -2185,11 +2189,12 @@ output_rrule				(char	        *rrule_buffer,
 
   case DAY_LAST_WEEKDAY:
     if (day_offset == 1) {
+#if 0  /* Need to allow this for Asia/Amman as of tzdata 2021c */
       if (month == 1) {
 	fprintf (stderr, "DAY_LAST_WEEKDAY - day moved, in February - can't fix\n");
 	exit (0);
       }
-
+#endif
       /* This is only used once at present, for Africa/Cairo. */
 #if 0
       fprintf (stderr, "DAY_LAST_WEEKDAY - day moved\n");
