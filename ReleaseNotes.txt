@@ -40,14 +40,19 @@ Version 3.1.0 (NOT RELEASED YET):
      + struct icaltimezonephase
  * Improved performance of recurrence iterators
 
-Version 3.0.11 (UNRELEASED):
+Version 3.0.12 (UNRELEASED):
 ----------------------------
+ *
+
+Version 3.0.11 (09 October 2021):
+---------------------------------
  * Fix icalrecur_iterator_set_start() for hourly, minutely, and secondly recurrences
  * Fix build for Berkeley DB version greater than 5
  * Fix vcal for some architectures (like aarch64, ppc64le and s390x)
  * Fix memory leaks in vcal
  * Prevent crash when looking for tzid in initialize_rscale
  * Adjust libdir and includedir in generated pkgconfig files
+ * Built-in timezones updated to tzdata2021c
 
 Version 3.0.10 (17 April 2021):
 -------------------------------
