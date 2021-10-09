@@ -9,6 +9,7 @@ Version 3.0.11 (UNRELEASED):
  * Fix memory leaks in vcal
  * Prevent crash when looking for tzid in initialize_rscale
  * Adjust libdir and includedir in generated pkgconfig files
+ * Built-in timezones updated to tzdata2021c
 
 Version 3.0.10 (17 April 2021):
 -------------------------------
