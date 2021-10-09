@@ -1,6 +1,10 @@
 Release Highlights
 ==================
 
+Version 3.0.12 (UNRELEASED):
+---------------------------------
+ *
+
 Version 3.0.11 (09 October 2021):
 ---------------------------------
  * Fix icalrecur_iterator_set_start() for hourly, minutely, and secondly recurrences
