@@ -265,6 +265,8 @@ elseif(STATIC_ONLY)
   add_library(ical-static ALIAS ical)
 endif()
 
+target_include_directories(ical INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
+
 target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
 
 if(ICU_FOUND)
