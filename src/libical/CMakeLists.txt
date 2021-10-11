@@ -257,6 +257,7 @@ add_custom_command(
 )
 
 add_library(ical ${LIBRARY_TYPE} ${ical_LIB_SRCS})
+target_include_directories(ical PUBLIC $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>)
 add_dependencies(ical ical-header)
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(ical-static STATIC ${ical_LIB_SRCS})
