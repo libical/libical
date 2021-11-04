@@ -182,32 +182,89 @@
         <returns type="ICalComponent *" annotation="transfer full, nullable" translator_argus="(GObject *)component" comment="The next #ICalComponent."/>
         <comment xml:space="preserve">Gets the next #ICalComponent with specific kind in #ICalComponent.</comment>
     </method>
-    <method name="i_cal_component_begin_component" corresponds="icalcomponent_begin_component" since="1.0">
+    <method name="i_cal_component_begin_component" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent"/>
         <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind"/>
         <returns type="ICalCompIter *" annotation="transfer full" comment="A #ICalCompIter"/>
-        <comment xml:space="preserve">Gets the #ICalCompIter pointing to the first child #ICalComponent. Use #ICalCompIter when you need remove the child component from the parent. For traversing, i_cal_object_set_owner needs to be called after this API. See component.py in tests for details.</comment>
+        <comment xml:space="preserve">Gets the #ICalCompIter pointing to the first child #ICalComponent.</comment>
+        <custom>    ICalCompIter *iter;
+
+    g_return_val_if_fail (I_CAL_IS_COMPONENT (component), NULL);
+
+    iter = i_cal_comp_iter_new_full(icalcomponent_begin_component((icalcomponent *)i_cal_object_get_native(I_CAL_OBJECT (component)), (icalcomponent_kind) (kind)));
+    if (iter) {
+        i_cal_object_set_owner(I_CAL_OBJECT(iter), G_OBJECT(component));
+        i_cal_object_set_always_destroy(I_CAL_OBJECT(iter), TRUE);
+    }
+
+    return iter;</custom>
     </method>
-    <method name="i_cal_component_end_component" corresponds="icalcomponent_end_component" since="1.0">
+    <method name="i_cal_component_end_component" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent"/>
         <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind"/>
         <returns type="ICalCompIter *" annotation="transfer full" comment="A #ICalCompIter"/>
-        <comment xml:space="preserve">Gets the #ICalCompIter pointing to the end child #ICalComponent. Use #ICalCompIter when you need remove the child component from the parent. For traversing, i_cal_object_set_owner needs to be called after this API. See component.py in tests for details.</comment>
+        <comment xml:space="preserve">Gets the #ICalCompIter pointing to the end child #ICalComponent.</comment>
+        <custom>    ICalCompIter *iter;
+    g_return_val_if_fail (I_CAL_IS_COMPONENT (component), NULL);
+
+    iter = i_cal_comp_iter_new_full(icalcomponent_end_component((icalcomponent *)i_cal_object_get_native(I_CAL_OBJECT (component)), (icalcomponent_kind) (kind)));
+    if (iter) {
+        i_cal_object_set_owner(I_CAL_OBJECT(iter), G_OBJECT(component));
+        i_cal_object_set_always_destroy(I_CAL_OBJECT(iter), TRUE);
+    }
+
+    return iter;</custom>
     </method>
-    <method name="i_cal_comp_iter_next" corresponds="icalcompiter_next" since="1.0">
+    <method name="i_cal_comp_iter_next" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter"/>
         <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalCompIter"/>
-        <comment xml:space="preserve">Gets the next #ICalComponent pointed by #ICalCompIter. Use #ICalCompIter when you need remove the child component from the parent. For traversing, i_cal_object_set_owner needs to be called after this API. See component.py in tests for details.</comment>
+        <comment xml:space="preserve">Gets the next #ICalComponent pointed by #ICalCompIter.</comment>
+        <custom>    ICalComponent *comp;
+
+    g_return_val_if_fail (I_CAL_IS_COMP_ITER (i), NULL);
+
+    comp = i_cal_component_new_full(icalcompiter_next((struct icalcompiter *)i_cal_object_get_native(I_CAL_OBJECT (i))), NULL);
+    if (comp) {
+        GObject *owner = i_cal_object_ref_owner(I_CAL_OBJECT(i));
+        i_cal_object_set_owner(I_CAL_OBJECT(comp), owner);
+        g_clear_object(&amp;owner);
+    }
+
+    return comp;</custom>
     </method>
-    <method name="i_cal_comp_iter_prior" corresponds="icalcompiter_prior" since="1.0">
+    <method name="i_cal_comp_iter_prior" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter"/>
         <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalCompIter"/>
-        <comment xml:space="preserve">Gets the prior #ICalComponent pointed by #ICalCompIter. Use #ICalCompIter when you need remove the child component from the parent. For traversing, i_cal_object_set_owner needs to be called after this API. See component.py in tests for details.</comment>
+        <comment xml:space="preserve">Gets the prior #ICalComponent pointed by #ICalCompIter.</comment>
+        <custom>    ICalComponent *comp;
+
+    g_return_val_if_fail (I_CAL_IS_COMP_ITER (i), NULL);
+
+    comp = i_cal_component_new_full(icalcompiter_prior((struct icalcompiter *)i_cal_object_get_native(I_CAL_OBJECT (i))), NULL);
+    if (comp) {
+        GObject *owner = i_cal_object_ref_owner(I_CAL_OBJECT(i));
+        i_cal_object_set_owner(I_CAL_OBJECT(comp), owner);
+        g_clear_object(&amp;owner);
+    }
+
+    return comp;</custom>
     </method>
-    <method name="i_cal_comp_iter_deref" corresponds="icalcompiter_deref" since="1.0">
+    <method name="i_cal_comp_iter_deref" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter"/>
         <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalComponent"/>
-        <comment xml:space="preserve">Gets the current #ICalComponent pointed by #ICalCompIter. Use #ICalCompIter when you need remove the child component from the parent. For traversing, i_cal_object_set_owner needs to be called after this API. See component.py in tests for details.</comment>
+        <comment xml:space="preserve">Gets the current #ICalComponent pointed by #ICalCompIter.</comment>
+        <custom>    ICalComponent *comp;
+
+    g_return_val_if_fail (I_CAL_IS_COMP_ITER (i), NULL);
+
+    comp = i_cal_component_new_full(icalcompiter_deref((struct icalcompiter *)i_cal_object_get_native(I_CAL_OBJECT (i))), NULL);
+    if (comp) {
+        GObject *owner = i_cal_object_ref_owner(I_CAL_OBJECT(i));
+        i_cal_object_set_owner(I_CAL_OBJECT(comp), owner);
+        g_clear_object(&amp;owner);
+    }
+
+    return comp;</custom>
     </method>
     <method name="i_cal_component_check_restrictions" corresponds="icalcomponent_check_restrictions" kind="other" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be checked"/>

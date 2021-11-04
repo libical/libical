@@ -183,25 +183,21 @@ def main():
     #Traverse with external API.
     iter = parent.begin_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
     child_component = iter.deref();
-    child_component.set_owner(parent);
     for i in range(0, count):
         prefix = "test"
         index = i+2;
         assert(child_component.get_summary() == prefix + str(index));
         if (i != count-1):
             child_component = iter.next();
-            child_component.set_owner(parent);
 
     iter = parent.end_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
     child_component = iter.prior();
-    child_component.set_owner(parent);
     for i in range(0, count):
         prefix = "test"
         index = count + 1 - i;
         assert(child_component.get_summary() == prefix + str(index));
         if (i != count - 1):
             child_component = iter.prior();
-            child_component.set_owner(parent);
 
     #Traverse and remove with external API.
     iter = parent.begin_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
