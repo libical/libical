@@ -85,8 +85,8 @@
     </method>
     <method name="i_cal_time_get_timezone" corresponds="(void *)icaltime_get_timezone" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="ICalTimezone *" annotation="transfer full" translator_argus="(GObject *)tt, TRUE" comment="The timezone information" />
-        <comment xml:space="preserve">Returns the timezone.</comment>
+        <returns type="ICalTimezone *" annotation="transfer none" translator_argus="(GObject *)tt, TRUE" comment="The timezone information" />
+        <comment xml:space="preserve">Returns the timezone, the #ICalTimezone object is cached and can be either unreferenced once the last instance is used or can be kept until i_cal_object_free_global_objects() is called (usually at the very end of the program).</comment>
     </method>
     <method name="i_cal_time_set_timezone" corresponds="icaltime_set_timezone" kind="set" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime"/>
