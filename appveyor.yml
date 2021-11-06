@@ -50,7 +50,7 @@ install:
 build_script:
   - mkdir build
   - cd build
-  - cmd: cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DENABLE_GTK_DOC=OFF -DICAL_GLIB=False ..
+  - cmd: cmake -G Ninja -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DENABLE_GTK_DOC=OFF -DICAL_GLIB=False ..
   - sh: cmake -G Ninja -DCMAKE_BUILD_TYPE=$CONFIGURATION ..
   - cmake --build .
   - cmd: cmake --build . --target install
