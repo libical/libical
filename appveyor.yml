@@ -42,12 +42,12 @@ configuration:
   - Debug
 
 install:
-  - sh: if [ "`uname -s`" = "Darwin" ]; then brew install ninja; fi
+  - sh: if [ "`uname -s`" = "Darwin" ]; then brew install ninja gtk-doc; else sudo apt-get install gtk-doc; fi
 
 build_script:
   - mkdir build
   - cd build
-  - cmd: cmake -G Ninja -DCMAKE_BUILD_TYPE=%CONFIGURATION% ..
+  - cmd: cmake -G Ninja -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DENABLE_GTK_DOC=OFF ..
   - sh: cmake -G Ninja -DCMAKE_BUILD_TYPE=$CONFIGURATION ..
   - cmake --build .
   - cmd: cmake --build . --target install
