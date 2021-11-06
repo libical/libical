@@ -45,7 +45,7 @@ environment:
   XML_CATALOG_FILES: /usr/local/etc/xml/catalog
 
 install:
-  - sh: if [ "`uname -s`" = "Darwin" ]; then export XML_CATALOG_FILES=/usr/local/etc/xml/catalog; brew install ninja gtk-doc glib libxml2 icu4c berkeley-db vala; else sudo apt-get -y install gtk-doc-tools docbook-xsl libdb-dev valac; fi
+  - sh: if [ "`uname -s`" = "Darwin" ]; then export XML_CATALOG_FILES=/usr/local/etc/xml/catalog; brew install ninja gtk-doc glib libxml2 icu4c berkeley-db gobject-introspection vala; else sudo apt-get -y install gtk-doc-tools docbook-xsl libdb-dev gobject-introspection valac; fi
 
 build_script:
   - mkdir build
