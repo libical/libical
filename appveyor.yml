@@ -45,12 +45,12 @@ environment:
   XML_CATALOG_FILES: /usr/local/etc/xml/catalog
 
 install:
-  - sh: if [ "`uname -s`" = "Darwin" ]; then export XML_CATALOG_FILES=/usr/local/etc/xml/catalog; brew install ninja gtk-doc; else sudo apt-get install gtk-doc-tools; fi
+  - sh: if [ "`uname -s`" = "Darwin" ]; then export XML_CATALOG_FILES=/usr/local/etc/xml/catalog; brew install ninja gtk-doc; else sudo apt-get -y install gtk-doc-tools; fi
 
 build_script:
   - mkdir build
   - cd build
-  - cmd: cmake -G Ninja -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DENABLE_GTK_DOC=OFF -DICAL_GLIB=False ..
+  - cmd: cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DENABLE_GTK_DOC=OFF -DICAL_GLIB=False ..
   - sh: cmake -G Ninja -DCMAKE_BUILD_TYPE=$CONFIGURATION ..
   - cmake --build .
   - cmd: cmake --build . --target install
