@@ -34,19 +34,36 @@ init:
 
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
 platform:
-  - Any CPU
+  - x86
+  - x64
 
 # build Configuration, i.e. Debug, Release, etc.
 configuration:
   - Release
   - Debug
 
+environment:
+    VCVAR2013: 'C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat'
+    VCVAR2019: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat'
+
 install:
   - sh: if [ "`uname -s`" = "Darwin" ]; then export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig; export XML_CATALOG_FILES=/usr/local/etc/xml/catalog; brew install pkg-config ninja gtk-doc glib libxml2 icu4c berkeley-db gobject-introspection vala; else sudo apt-get -y install gtk-doc-tools xml-core libdb-dev gobject-introspection libgirepository1.0-dev valac; fi
+
+before_build:
+  - ps: |
+    # ...example script to set the proper flags for vcvarsall ...
+    # syntax: vcvarsall.bat [architecture] [platform_type] [winsdk_version] [-vcvars_ver=vcversion]
+    $Architecture = $env:PLATFORM # simplified, works for x86 and x64
+    if ("$env:APPVEYOR_BUILD_WORKER_IMAGE" -eq "Visual Studio 2013") {
+      $env:VCVARSALL = "`"$env:VCVAR2013`" $Architecture"
+    } else {
+      $env:VCVARSALL = "`"$env:VCVAR2019`" $Architecture"
+    }
 
 build_script:
   - mkdir build
   - cd build
+  - cmd: call %VCVARSALL%
   - cmd: cmake -G Ninja -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DLIBICAL_BUILD_TESTING=True -DENABLE_GTK_DOC=True -DICAL_GLIB=False ..
   - sh: if [ "`uname -s`" = "Darwin" ]; then BUILD_EXTRAS="False"; else BUILD_EXTRAS="True"; fi; cmake -G Ninja -DCMAKE_BUILD_TYPE=$CONFIGURATION -DLIBICAL_BUILD_TESTING=True -DENABLE_GTK_DOC=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=$BUILD_EXTRAS -DICAL_GLIB_VAPI=$BUILD_EXTRAS ..
   - cmake --build .
