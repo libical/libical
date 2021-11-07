@@ -42,7 +42,7 @@ configuration:
   - Debug
 
 install:
-  - sh: if [ "`uname -s`" = "Darwin" ]; then export XML_CATALOG_FILES=/usr/local/etc/xml/catalog; brew install pkg-config ninja gtk-doc glib libxml2 icu4c berkeley-db gobject-introspection vala; else sudo apt-get -y install gtk-doc-tools xml-core libdb-dev gobject-introspection libgirepository1.0-dev valac; fi
+  - sh: if [ "`uname -s`" = "Darwin" ]; then export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig; export XML_CATALOG_FILES=/usr/local/etc/xml/catalog; brew install pkg-config ninja gtk-doc glib libxml2 icu4c berkeley-db gobject-introspection vala; else sudo apt-get -y install gtk-doc-tools xml-core libdb-dev gobject-introspection libgirepository1.0-dev valac; fi
 
 build_script:
   - mkdir build
