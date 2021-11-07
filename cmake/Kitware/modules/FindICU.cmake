@@ -331,7 +331,7 @@ endfunction()
 
 _ICU_FIND()
 
-include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
+#include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(ICU
                                   FOUND_VAR ICU_FOUND
                                   REQUIRED_VARS ICU_INCLUDE_DIR
