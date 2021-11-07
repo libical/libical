@@ -93,8 +93,8 @@ Homebrew:
   libicu can be found at http://www.icu-project.org
 
   If CMake doesn't locate your libicu installation try setting the
-  ICU_BASE environment variable to the top folder where its installed
-  and run cmake again.
+  ICU_ROOT or ICU_BASE environment variable to the top folder where
+  libicu is installed and run cmake again.
 
 * Berkeley DB storage.
   Optional for the Berkeley Database storage support.
