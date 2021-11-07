@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #Exit if any undefined variable is used.
 set -u
