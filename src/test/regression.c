@@ -4419,7 +4419,7 @@ void test_timezone_from_builtin(void)
     icaltimezone *zone;
     struct icaltimetype dtstart, dtend, due;
     char *strcomp, *tzidprefix, *prevslash = NULL, *prevprevslash = NULL, *p;
-    int len;
+    size_t len;
 
     zone = icaltimezone_get_builtin_timezone("America/New_York");
     tzidprefix = strdup(icaltimezone_get_tzid (zone));
@@ -4642,7 +4642,7 @@ static void test_builtin_compat_tzid (void)
     icaltimezone_free_builtin_timezones();
 }
 
-static void test_vcc_vcard_parse (void)
+static void test_vcc_vcard_parse(void)
 {
     /* Two VCARD-s, because some arches can parse the first and some the second. */
     const char *vcard1 =
@@ -4674,40 +4674,40 @@ static void test_vcc_vcard_parse (void)
 	"END:VCALENDAR\r\n";
     VObject *vcal;
 
-    vcal = Parse_MIME(vcard1, strlen(vcard1));
+    vcal = Parse_MIME(vcard1, (unsigned long)strlen(vcard1));
     if(vcal) {
         icalcomponent *icalcomp;
 
-        icalcomp = icalvcal_convert (vcal);
+        icalcomp = icalvcal_convert(vcal);
         ok("vCard1 is not iCalendar", (icalcomp == NULL));
         if(icalcomp)
-            icalcomponent_free (icalcomp);
+            icalcomponent_free(icalcomp);
 
         cleanVObject (vcal);
     } else {
         ok("vCard1 cannot be parsed", (vcal == NULL));
     }
 
-    vcal = Parse_MIME(vcard2, strlen(vcard2));
+    vcal = Parse_MIME(vcard2, (unsigned long)strlen(vcard2));
     if(vcal) {
         icalcomponent *icalcomp;
 
-        icalcomp = icalvcal_convert (vcal);
+        icalcomp = icalvcal_convert(vcal);
         ok("vCard2 is not iCalendar", (icalcomp == NULL));
         if(icalcomp)
-            icalcomponent_free (icalcomp);
+            icalcomponent_free(icalcomp);
 
-        cleanVObject (vcal);
+        cleanVObject(vcal);
     } else {
         ok("vCard2 cannot be parsed", (vcal == NULL));
     }
 
-    vcal = Parse_MIME(vcalendar, strlen(vcalendar));
+    vcal = Parse_MIME(vcalendar, (unsigned long)strlen(vcalendar));
     ok("vCalendar can be parsed", (vcal != NULL));
     if(vcal) {
         icalcomponent *icalcomp;
 
-        icalcomp = icalvcal_convert (vcal);
+        icalcomp = icalvcal_convert(vcal);
         ok("vCalendar can be converted", (icalcomp != NULL));
         if(icalcomp) {
             icalcomponent *child;
@@ -4719,10 +4719,10 @@ static void test_vcc_vcard_parse (void)
             ok("vCalendar child is VEVENT", (icalcomponent_isa(child) == ICAL_VEVENT_COMPONENT));
             ok("vCalendar child UID matches", (strcmp(icalcomponent_get_uid(child), "123") == 0));
             ok("vCalendar child SUMMARY matches", (strcmp(icalcomponent_get_summary(child), "Summary") == 0));
-            icalcomponent_free (icalcomp);
+            icalcomponent_free(icalcomp);
 	}
 
-        cleanVObject (vcal);
+        cleanVObject(vcal);
     }
 }
 
