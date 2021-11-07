@@ -27,6 +27,7 @@ SKIP /src/libicalvcal/vobject\.
 #Skip contributed files
 SKIP /src/libical/astime\.h
 SKIP /src/libical/caldate\.c
+SKIP /cmake/Kitware/
 SKIP /cmake/modules/GObjectIntrospectionMacros\.cmake|/cmake/modules/FindGObjectIntrospection\.cmake
 SKIP /doc/Doxyfile\.cmake
 SKIP /cmake/Toolchain-iOS.cmake|/cmake/Toolchain-QNX65.cmake|/cmake/Toolchain-QNX66.cmake|/cmake/Toolchain-android.cmake
