@@ -19,7 +19,10 @@ skip_tags: false
 
 # Build worker image
 image:
-  - Visual Studio 2013
+  #- Visual Studio 2013 #disable since Ninja is not available
+  - Visual Studio 2019
+  - macos
+  - Ubuntu
 
 # scripts that are called at very beginning, before repo cloning
 init:
@@ -31,21 +34,29 @@ init:
 
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
 platform:
-#  - x86 uses 32bit time_t
+  - x86
   - x64
 
 # build Configuration, i.e. Debug, Release, etc.
 configuration:
-  - 2013
-#  - 2012
-#  - MinGW
+  - Release
+  - Debug
+
+install:
+  - sh: if [ "`uname -s`" = "Darwin" ]; then export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig; export XML_CATALOG_FILES=/usr/local/etc/xml/catalog; brew install pkg-config ninja gtk-doc glib libxml2 icu4c berkeley-db gobject-introspection vala; else sudo apt-get -y install gtk-doc-tools xml-core libdb-dev gobject-introspection libgirepository1.0-dev valac; fi
+
+before_build:
+  - cmd: call scripts\set_compiler_env.bat
 
 build_script:
-  - call scripts\set_compiler_env.bat
   - mkdir build
   - cd build
-  - if "%configuration%" EQU "MinGW" ( cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False .. ) else ( cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False .. )
-  - nmake
+  - cmd: cmake -G Ninja -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DLIBICAL_BUILD_TESTING=True -DENABLE_GTK_DOC=True -DICAL_GLIB=False ..
+  - sh: if [ "`uname -s`" = "Darwin" ]; then BUILD_EXTRAS="False"; else BUILD_EXTRAS="True"; fi; cmake -G Ninja -DCMAKE_BUILD_TYPE=$CONFIGURATION -DLIBICAL_BUILD_TESTING=True -DENABLE_GTK_DOC=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=$BUILD_EXTRAS -DICAL_GLIB_VAPI=$BUILD_EXTRAS ..
+  - cmake --build .
+  - cmd: cmake --build . --target install
+  - sh: sudo cmake --build . --target install
+  - ctest --test-dir .
 
 # to disable automatic builds
 #build: off
@@ -54,12 +65,8 @@ build_script:
 #       tests configuration       #
 #---------------------------------#
 
-test_script:
-  - nmake test
-
 # to disable automatic tests
-#test: off
-
+test: off
 
 #---------------------------------#
 #     deployment configuration    #
@@ -74,5 +81,6 @@ notifications:
   # Email
   - provider: Email
     to:
-      - allen.winter@kdab.com
-    on_build_status_changed: true
+      - winter@kde.org
+    on_build_success: false
+    on_build_failure: true

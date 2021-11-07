@@ -77,6 +77,10 @@ LIBICAL_ICAL_EXPORT void i_cal_object_add_depender(ICalObject *iobject, GObject 
 
 LIBICAL_ICAL_EXPORT void i_cal_object_remove_depender(ICalObject *iobject, GObject *depender);
 
+LIBICAL_ICAL_EXPORT void i_cal_object_set_always_destroy(ICalObject *iobject, gboolean value);
+
+LIBICAL_ICAL_EXPORT gboolean i_cal_object_get_always_destroy(ICalObject *iobject);
+
 LIBICAL_ICAL_EXPORT void i_cal_object_free_global_objects(void);
 
 G_END_DECLS

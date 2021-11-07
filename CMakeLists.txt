@@ -101,8 +101,11 @@ endif()
 if(POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
 endif()
+if(POLICY CMP0074)
+  cmake_policy(SET CMP0074 NEW) #don't warn about ICU_ROOT envvar
+endif()
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 #Include CMake capabilities
 include(LibIcalMacrosInternal)
@@ -241,9 +244,9 @@ if(ICU_FOUND)
     get_filename_component(ICU_EXEC ${ICU_MAKECONV_EXECUTABLE} DIRECTORY)
   else()
     message(FATAL_ERROR
-      "Unable find locate the ICU runtime path. Is your ICU installation broken?")
+      "Unable to locate the ICU runtime path. Is your ICU installation broken?")
   endif()
-  set(ICU_BINARY_DIR ${ICU_EXEC} CACHE DOC STRING "Runtime binaries directory for the ICU library")
+  set(ICU_BINARY_DIR ${ICU_EXEC} CACHE STRING DOC "Runtime binaries directory for the ICU library")
 endif()
 
 # compile in Berkeley DB support

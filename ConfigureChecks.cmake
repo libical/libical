@@ -64,10 +64,16 @@ endif()
 if(NOT DEFINED CMAKE_REQUIRED_LIBRARIES)
   set(CMAKE_REQUIRED_LIBRARIES "")
 endif()
-set(_SAVE_RQL ${CMAKE_REQUIRED_LIBRARIES})
-set(CMAKE_REQUIRED_LIBRARIES kernel32.lib)
-check_function_exists(GetNumberFormat HAVE_GETNUMBERFORMAT) #Windows <windows.h>
-set(CMAKE_REQUIRED_LIBRARIES ${_SAVE_RQL})
+#GetNumberFormat is not implemented on wine correctly
+#(see https://forum.winehq.org/viewtopic.php?t=27809) which results in
+#error when building. That means if linux user has installed wine,
+#the build of libical will fail.
+if(WIN32)
+  set(_SAVE_RQL ${CMAKE_REQUIRED_LIBRARIES})
+  set(CMAKE_REQUIRED_LIBRARIES kernel32.lib)
+  check_function_exists(GetNumberFormat HAVE_GETNUMBERFORMAT) #Windows <windows.h>
+  set(CMAKE_REQUIRED_LIBRARIES ${_SAVE_RQL})
+endif()
 
 include(CheckTypeSize)
 check_type_size(intptr_t SIZEOF_INTPTR_T)
