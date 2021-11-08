@@ -1506,7 +1506,7 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
         /**
          * FIXME
          * We assume DTSTART and DTEND are not in different time zones.
-         * Does the standard actually guarantee this?
+         * The standard actually allows different time zones.
          */
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         struct icaltimetype end = icalcomponent_get_dtend(inner);
