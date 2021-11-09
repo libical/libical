@@ -20,9 +20,9 @@ skip_tags: false
 # Build worker image
 image:
   #- Visual Studio 2013 #disable since Ninja is not available
+  - Ubuntu
   - Visual Studio 2019
   - macos
-  - Ubuntu
 
 # scripts that are called at very beginning, before repo cloning
 init:
