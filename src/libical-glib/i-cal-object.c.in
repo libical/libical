@@ -200,10 +200,10 @@ static void i_cal_object_finalize(GObject *object)
     ICalObject *iobject = I_CAL_OBJECT(object);
     ICalObjectPrivate *priv = i_cal_object_get_instance_private(iobject);
 
-    if ((iobject->priv->always_destroy || !iobject->priv->owner) &&
-        !iobject->priv->is_global_memory &&
-        iobject->priv->native && iobject->priv->native_destroy_func) {
-        iobject->priv->native_destroy_func(iobject->priv->native);
+    if ((priv->always_destroy || !priv->owner) &&
+        !priv->is_global_memory &&
+        priv->native && priv->native_destroy_func) {
+        g_clear_pointer(&priv->native, priv->native_destroy_func);
     }
 
     g_clear_object(&priv->owner);
@@ -706,17 +706,18 @@ void i_cal_object_remove_depender(ICalObject *iobject, GObject *depender)
  **/
 void i_cal_object_set_always_destroy(ICalObject *iobject, gboolean value)
 {
+    ICalObjectPrivate *priv = i_cal_object_get_instance_private(iobject);
     gboolean changed;
 
     g_return_if_fail(I_CAL_IS_OBJECT(iobject));
 
-    LOCK_PROPS(iobject);
+    LOCK_PROPS(priv);
 
-    changed = (value ? 1 : 0) != (iobject->priv->always_destroy ? 1 : 0);
+    changed = (value ? 1 : 0) != (priv->always_destroy ? 1 : 0);
     if (changed)
-        iobject->priv->always_destroy = value;
+        priv->always_destroy = value;
 
-    UNLOCK_PROPS(iobject);
+    UNLOCK_PROPS(priv);
 
     if (changed)
         g_object_notify(G_OBJECT(iobject), "always-destroy");
@@ -734,15 +735,16 @@ void i_cal_object_set_always_destroy(ICalObject *iobject, gboolean value)
  **/
 gboolean i_cal_object_get_always_destroy(ICalObject *iobject)
 {
+    ICalObjectPrivate *priv = i_cal_object_get_instance_private(iobject);
     gboolean value;
 
     g_return_val_if_fail(I_CAL_IS_OBJECT(iobject), FALSE);
 
-    LOCK_PROPS(iobject);
+    LOCK_PROPS(priv);
 
-    value = iobject->priv->always_destroy;
+    value = priv->always_destroy;
 
-    UNLOCK_PROPS(iobject);
+    UNLOCK_PROPS(priv);
 
     return value;
 }
