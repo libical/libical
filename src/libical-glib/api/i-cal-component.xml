@@ -550,7 +550,7 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
     <method name="i_cal_component_get_timezone" corresponds="icalcomponent_get_timezone" kind="get" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
         <parameter type="const gchar *" name="tzid" comment="A string representing timezone"/>
-        <returns type="ICalTimezone *" annotation="transfer full, allow-none" translator_argus="(GObject *)comp, FALSE" comment="A #ICalTimezone."/>
+        <returns type="ICalTimezone *" annotation="transfer full, nullable" translator_argus="(GObject *)comp, FALSE" comment="A #ICalTimezone."/>
         <comment xml:space="preserve">Returns the icaltimezone in the component corresponding to the TZID, or NULL if it can't be found.</comment>
     </method>
     <method name="i_cal_property_recurrence_is_excluded" corresponds="icalproperty_recurrence_is_excluded" since="1.0">

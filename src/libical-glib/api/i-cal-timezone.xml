@@ -15,7 +15,7 @@
 -->
 <structure namespace="ICal" name="Timezone" native="icaltimezone" is_possible_global="true" destroy_func="i_cal_timezone_destroy">
     <method name="i_cal_timezone_new" corresponds="icaltimezone_new" kind="constructor" since="1.0">
-        <returns type="ICalTimezone *" annotation="transfer full, allow-none" translator="i_cal_timezone_new_full" translator_argus="NULL, FALSE" comment="The newly created object of the type #ICalTimezone." />
+        <returns type="ICalTimezone *" annotation="transfer full, nullable" translator="i_cal_timezone_new_full" translator_argus="NULL, FALSE" comment="The newly created object of the type #ICalTimezone." />
         <comment xml:space="preserve">The constructor of the type #ICalTimezone.</comment>
     </method>
     <method name="i_cal_timezone_destroy" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
