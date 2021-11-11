@@ -58,6 +58,7 @@ list(APPEND LIBICAL_GLIB_HEADERS
   ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.h
   ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.h
   ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/i-cal-time-format.h
 )
 
 # add the command to generate the source code from the api files
@@ -106,6 +107,8 @@ list(APPEND LIBICAL_GLIB_SOURCES
   ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
   ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.c
   ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/i-cal-time-format.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/i-cal-time-format.h
 )
 
 include_directories(

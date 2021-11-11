@@ -339,6 +339,70 @@ if(WIN32 OR WINCE)
   endif()
 endif()
 
+# Check for nl_langinfo and LC_TIME parts that are needed in i-cal-time-format.c
+include(CheckCSourceCompiles)
+check_c_source_compiles(
+"#include <langinfo.h>
+int main (int argc, char ** argv) {
+ char *str;
+ str = nl_langinfo (PM_STR);
+ str = nl_langinfo (D_T_FMT);
+ str = nl_langinfo (D_FMT);
+ str = nl_langinfo (T_FMT);
+ str = nl_langinfo (T_FMT_AMPM);
+ str = nl_langinfo (MON_1);
+ str = nl_langinfo (ABMON_12);
+ str = nl_langinfo (DAY_1);
+ str = nl_langinfo (ABDAY_7);
+ return 0;
+}" HAVE_LANGINFO_TIME)
+
+# Check for nl_langinfo and alternative month names
+check_c_source_compiles(
+"#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
+#include <langinfo.h>
+int main (int argc, char ** argv) {
+ char *str;
+ str = nl_langinfo (ALTMON_1);
+ str = nl_langinfo (ALTMON_2);
+ str = nl_langinfo (ALTMON_3);
+ str = nl_langinfo (ALTMON_4);
+ str = nl_langinfo (ALTMON_5);
+ str = nl_langinfo (ALTMON_6);
+ str = nl_langinfo (ALTMON_7);
+ str = nl_langinfo (ALTMON_8);
+ str = nl_langinfo (ALTMON_9);
+ str = nl_langinfo (ALTMON_10);
+ str = nl_langinfo (ALTMON_11);
+ str = nl_langinfo (ALTMON_12);
+ return 0;
+}" HAVE_LANGINFO_ALTMON)
+
+# Check for nl_langinfo and abbreviated alternative month names
+check_c_source_compiles(
+"#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
+#include <langinfo.h>
+int main (int argc, char ** argv) {
+ char *str;
+ str = nl_langinfo (_NL_ABALTMON_1);
+ str = nl_langinfo (_NL_ABALTMON_2);
+ str = nl_langinfo (_NL_ABALTMON_3);
+ str = nl_langinfo (_NL_ABALTMON_4);
+ str = nl_langinfo (_NL_ABALTMON_5);
+ str = nl_langinfo (_NL_ABALTMON_6);
+ str = nl_langinfo (_NL_ABALTMON_7);
+ str = nl_langinfo (_NL_ABALTMON_8);
+ str = nl_langinfo (_NL_ABALTMON_9);
+ str = nl_langinfo (_NL_ABALTMON_10);
+ str = nl_langinfo (_NL_ABALTMON_11);
+ str = nl_langinfo (_NL_ABALTMON_12);
+ return 0;
+}" HAVE_LANGINFO_ABALTMON)
+
 include(ConfigureChecks.cmake)
 add_definitions(-DHAVE_CONFIG_H)
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)

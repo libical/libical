@@ -168,6 +168,15 @@
 /* Define to 1 if you have the <wctype.h> header file. */
 #cmakedefine HAVE_WCTYPE_H 1
 
+/* Define to 1 if you have the needed nl_langinfo and LC_TIME parts. */
+#cmakedefine HAVE_LANGINFO_TIME ${HAVE_LANGINFO_TIME}
+
+/* Define to 1 if you have nl_langinfo and alternative month names. */
+#cmakedefine HAVE_LANGINFO_ALTMON ${HAVE_LANGINFO_ALTMON}
+
+/* Define to 1 if you have nl_langinfo and abbreviated alternative month names. */
+#cmakedefine HAVE_LANGINFO_ABALTMON ${HAVE_LANGINFO_ABALTMON}
+
 /* Define to make icalerror_* calls abort instead of internally signalling an
    error */
 #define ICAL_ERRORS_ARE_FATAL ${ICAL_ERRORS_ARE_FATAL}
