@@ -1616,8 +1616,7 @@ static gboolean annotation_contains_nullable(GList *annotations) /* gchar * */
     GList *link;
 
     for (link = annotations; link; link = g_list_next(link)) {
-        if (g_strcmp0(link->data, "allow-none") == 0 ||
-            g_strcmp0(link->data, "nullable") == 0) {
+        if (g_strcmp0(link->data, "nullable") == 0) {
               break;
         }
     }

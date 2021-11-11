@@ -54,7 +54,7 @@
     <method name="i_cal_array_element_at" corresponds="icalarray_element_at" annotation="skip" kind="private" since="1.0">
         <parameter type="ICalArray *" name="array" comment="The #ICalArray to be queried"/>
         <parameter type="gint" name="position" comment="The position the target element is located"/>
-        <returns type="GObject *" annotation="transfer none, allow-none" comment="The element located at the @position in the @array"/>
+        <returns type="GObject *" annotation="transfer none, nullable" comment="The element located at the @position in the @array"/>
         <comment xml:space="preserve">Gets the element located in the @position in the @array. NULL if position if out of bound.</comment>
     </method>
     <method name="i_cal_array_sort" corresponds="CUSTOM" annotation="skip" kind="others" since="1.0">

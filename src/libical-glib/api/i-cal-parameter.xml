@@ -61,7 +61,7 @@
     </method>
     <method name="i_cal_parameter_get_xname" corresponds="icalparameter_get_xname" kind="get" since="1.0">
         <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve">Gets the xname property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_set_xvalue" corresponds="icalparameter_set_xvalue" kind="set" since="1.0">
@@ -71,7 +71,7 @@
     </method>
     <method name="i_cal_parameter_get_xvalue" corresponds="icalparameter_get_xvalue" kind="get" since="1.0">
         <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve">Gets the xvalue property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_set_iana_name" corresponds="icalparameter_set_iana_name" kind="set" since="1.0">
@@ -81,7 +81,7 @@
     </method>
     <method name="i_cal_parameter_get_iana_name" corresponds="icalparameter_get_iana_name" kind="get" since="1.0">
         <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve">Gets the iana_name property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_set_iana_value" corresponds="icalparameter_set_iana_value" kind="set" since="1.0">
@@ -91,7 +91,7 @@
     </method>
     <method name="i_cal_parameter_get_iana_value" corresponds="icalparameter_get_iana_value" kind="get" since="1.0">
         <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve">Gets the iana_value property of the native part of the #ICalParameter.</comment>
     </method>
     <method name="i_cal_parameter_has_same_name" corresponds="icalparameter_has_same_name" kind="others" since="1.0">

@@ -330,7 +330,7 @@ static void i_cal_object_init(ICalObject *iobject)
  * @native: a native libical structure
  * @native_destroy_func: a function to be called on @native when it should be freed
  * @is_global_memory: whether @native is a global shared memory structure
- * @owner: (allow-none): an owner of @native
+ * @owner: (nullable): an owner of @native
  *
  * Creates an #ICalObject descendant of type @type and initialize private members
  * of it. The descendants should call this function in their _new() function, or use
@@ -587,8 +587,8 @@ void i_cal_object_set_owner(ICalObject *iobject, GObject *owner)
  * if not NULL, is referenced for thread safety. Unref it with g_object_unref
  * when done with it.
  *
- * Returns: (transfer full) (allow-none): Current owner of the libical
- *    native structure. returns NULL, when there is no owner.
+ * Returns: (transfer full) (nullable): Current owner of the libical
+ *    native structure. Returns %NULL when there is no owner.
  *
  * Since: 1.0
  **/

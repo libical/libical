@@ -77,7 +77,7 @@
     </method>
     <method name="i_cal_value_encode_ical_string" corresponds="CUSTOM" since="1.0">
         <parameter type="const gchar *" name="szText" comment="A string"/>
-        <returns type="gchar *" annotation="allow-none, transfer full" comment="The encoded string. NULL if fail."/>
+        <returns type="gchar *" annotation="nullable, transfer full" comment="The encoded string. NULL if fail."/>
         <comment xml:space="preserve">Encodes a character string in ical format, escape certain characters, etc.</comment>
         <custom>    gchar *szEncText;
     gchar *buffer = NULL;
@@ -98,7 +98,7 @@
     </method>
     <method name="i_cal_value_decode_ical_string" corresponds="CUSTOM" since="1.0">
         <parameter type="const gchar *" name="szText" comment="A string"/>
-        <returns type="gchar *" annotation="allow-none, transfer full" comment="The decoded string. NULL if fail."/>
+        <returns type="gchar *" annotation="nullable, transfer full" comment="The decoded string. NULL if fail."/>
         <comment xml:space="preserve">Extracts the original character string encoded by the above function.</comment>
         <custom>    gchar *szDecText;
     gchar *buffer = NULL;

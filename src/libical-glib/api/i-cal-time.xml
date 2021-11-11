@@ -95,7 +95,7 @@
     </method>
     <method name="i_cal_time_get_tzid" corresponds="icaltime_get_tzid" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="const gchar *" annotation="allow-none, transfer none" comment="The tzid of #ICalTime, or NULL if floating type" />
+        <returns type="const gchar *" annotation="nullable, transfer none" comment="The tzid of #ICalTime, or NULL if floating type" />
         <comment xml:space="preserve">Returns the tzid, or NULL for a floating time.</comment>
     </method>
     <method name="i_cal_time_day_of_year" corresponds="icaltime_day_of_year" since="1.0">
