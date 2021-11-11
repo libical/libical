@@ -1597,6 +1597,20 @@ gchar *get_translator_for_return(Ret *ret)
     return res;
 }
 
+static gboolean parameter_is_out(Parameter *para)
+{
+    GList *link;
+    for (link = para->annotations; link; link = g_list_next(link)) {
+        if (g_strcmp0(link->data, "out") == 0 ||
+            g_strcmp0(link->data, "inout") == 0 ||
+            g_str_has_prefix(link->data, "out ")) {
+              break;
+        }
+    }
+
+    return link != NULL;
+}
+
 static gboolean annotation_contains_nullable(GList *annotations) /* gchar * */
 {
     GList *link;
@@ -1604,6 +1618,19 @@ static gboolean annotation_contains_nullable(GList *annotations) /* gchar * */
     for (link = annotations; link; link = g_list_next(link)) {
         if (g_strcmp0(link->data, "allow-none") == 0 ||
             g_strcmp0(link->data, "nullable") == 0) {
+              break;
+        }
+    }
+
+    return link != NULL;
+}
+
+static gboolean annotation_contains_optional(GList *annotations) /* gchar * */
+{
+    GList *link;
+
+    for (link = annotations; link; link = g_list_next(link)) {
+        if (g_strcmp0(link->data, "optional") == 0) {
               break;
         }
     }
@@ -2055,6 +2082,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
     gchar *defaultValue;
     gchar *retTrueType;
     guint namespace_len;
+    gboolean param_is_out;
 
     g_return_val_if_fail(method != NULL, NULL);
     g_return_val_if_fail(namespace != NULL && *namespace != '\0', NULL);
@@ -2117,7 +2145,10 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
                 (void)g_stpcpy(buffer + strlen(buffer), "\n");
             }
 
-            if (i != namespace_len && !annotation_contains_nullable(parameter->annotations)) {
+            param_is_out = parameter_is_out(parameter);
+            if (i != namespace_len && (
+                (!param_is_out && !annotation_contains_nullable(parameter->annotations)) ||
+                (param_is_out && !annotation_contains_optional(parameter->annotations)))) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
                 if (method->ret != NULL) {
                     (void)g_stpcpy(buffer + strlen(buffer), "g_return_val_if_fail (");
