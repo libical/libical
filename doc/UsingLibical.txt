@@ -186,7 +186,7 @@ returned from the library.
 
 3.2.5 Storage classes
 
-The library also offers several classes to store components to flies,
+The library also offers several classes to store components to files,
 memory or databases.
 
 4 Differences From RFCs
@@ -726,7 +726,7 @@ their own. You can manipulate them either as part of the property
 or independently.
 
 The most common way to work with values to is to manipulate them from
-they properties that contain them. This involves fewer routine calls
+the properties that contain them. This involves fewer routine calls
 and intermediate variables than working with them independently, and
 it is type-safe.
 
@@ -1022,7 +1022,7 @@ icalfileset* icalfileset_new(const char* path);
 icalfileset* icalfileset_new_open(const char* path, int flags, int mode);
 
 icalset_new_file is identical to icalfileset_new. Both routines will
-open an existing file for readinga and writing, or create a new file
+open an existing file for reading and writing, or create a new file
 if it does not exist. Icalfileset_new_open takes the same arguments
 as the open() system routine and behaves in the same way.
 
@@ -1194,7 +1194,7 @@ libical/icalerror.h. If the routine returns an enum icalerrorenum,
 then the return value will be the same as icalerrno. You can use icalerror_strerror()
 to get a string that describes the error. The enumerations are:
 
-* ICAL_BADARG_ERROR -- One of the argument to a routine was bad. Typically
+* ICAL_BADARG_ERROR -- One of the arguments to a routine was bad. Typically
   for a null pointer.
 
 * ICAL_NEWFAILED_ERROR -- A new() or malloc() failed
@@ -1227,7 +1227,7 @@ The library handles semantic and syntactic errors in components by
 inserting errors properties into the components. If the parser cannot
 parse incoming text ( a syntactic error ) or if the icalrestriction_check()
 routine indicates that the component does not meet the requirements
-of RFC5546 ( a semantic error) the library will insert properties
+of RFC5546 ( a semantic error ) the library will insert properties
 of the type X-LIC-ERROR to describe the error. Here is an example
 of the error property:
 
@@ -1333,7 +1333,7 @@ Enums that identify a component, property, value or parameter end with
 Enums that identify a parameter value have the name of the parameter
 as the second word. For instance: ICAL_ROLE_REQPARTICIPANT or ICAL_PARTSTAT_ACCEPTED.
 
-The enums for the parts of a recurarance rule and request statuses
+The enums for the parts of a recurrence rule and request statuses
 are irregular.
 
 6 Hacks and Bugs
