@@ -712,7 +712,7 @@ their own. You can manipulate them either as part of the property
 or independently.
 
 The most common way to work with values to is to manipulate them from
-they properties that contain them. This involves fewer routine calls
+the properties that contain them. This involves fewer routine calls
 and intermediate variables than working with them independently, and
 it is type-safe.
 
@@ -1109,8 +1109,8 @@ icalfileset* icalfileset_new_open(
 ```
 
 `icalset_new_file()` is identical to `icalfileset_new()`. Both routines will
-open an existing file for readinga and writing, or create a new file
-if it does not exist. `icalfilset_new_open()` takes the same arguments
+open an existing file for reading and writing, or create a new file
+if it does not exist. `icalfileset_new_open()` takes the same arguments
 as the open() system routine and behaves in the same way.
 
 The icalset and icalfilset objects are somewhat interchangable -- you
@@ -1274,7 +1274,7 @@ then the return value will be the same as icalerrno. You can use
 `icalerror_strerror()` to get a string that describes the error. 
 The enumerations are:
 
--   `ICAL_BADARG_ERROR`: One of the argument to a routine was bad. 
+-   `ICAL_BADARG_ERROR`: One of the arguments to a routine was bad.
     Typically for a null pointer.
 
 -   `ICAL_NEWFAILED_ERROR`: A `new()` or `malloc()` failed.
@@ -1409,7 +1409,7 @@ Enums that identify a parameter value have the name of the parameter
 as the second word. For instance: `ICAL_ROLE_REQPARTICIPANT` or 
 `ICAL_PARTSTAT_ACCEPTED`.
 
-The enums for the parts of a recurarance rule and request statuses
+The enums for the parts of a recurrence rule and request statuses
 are irregular.
 
 ## 6 Hacks and Bugs
