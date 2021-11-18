@@ -2359,6 +2359,12 @@ void icalcomponent_set_due(icalcomponent *comp, struct icaltimetype v)
     }
 }
 
+static int strcmpsafe(const char *a, const char *b)
+{
+    return strcmp((a == NULL ? "" : a),
+                  (b == NULL ? "" : b));
+}
+
 static int prop_compare(void *a, void *b)
 {
     icalproperty *p1 = (icalproperty*) a;
@@ -2374,8 +2380,8 @@ static int prop_compare(void *a, void *b)
         }
 
         if (r == 0) {
-            r = strcmp(icalproperty_get_value_as_string(p1),
-                       icalproperty_get_value_as_string(p2));
+            r = strcmpsafe(icalproperty_get_value_as_string(p1),
+                           icalproperty_get_value_as_string(p2));
         }
     }
 
