@@ -1,7 +1,7 @@
 # This is the top-level CMakeLists.txt file for the libical project.
 #
 # Pass the following variables to cmake to control the build:
-# (See doc/UsingLibical.txt for more information)
+# (See doc/UsingLibical.md for more information)
 #
 # -DWITH_CXX_BINDINGS=[true|false]
 #  Build the C++ bindings.
