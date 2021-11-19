@@ -1365,8 +1365,8 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
 
     case ICAL_DURATION_VALUE:
         {
-            int dur_a = icaldurationtype_as_int(a->data.v_duration);
-            int dur_b = icaldurationtype_as_int(b->data.v_duration);
+            int64_t dur_a = icaldurationtype_as_msec(a->data.v_duration);
+            int64_t dur_b = icaldurationtype_as_msec(b->data.v_duration);
 
             if (dur_a > dur_b) {
                 return ICAL_XLICCOMPARETYPE_GREATER;

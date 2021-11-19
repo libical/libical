@@ -15,8 +15,8 @@
 -->
 <structure namespace="ICal" name="TimeSpan" native="struct icaltime_span" is_bare="true" default_native="icaltime_span_new(icaltime_null_time(), icaltime_null_time(), 0)" includes="libical-glib/i-cal-time.h">
     <method name="i_cal_time_span_new_timet" corresponds="CUSTOM" kind="constructor" since="3.0.5">
-        <parameter type="time_t" name="start" comment="Start of the time span"/>
-        <parameter type="time_t" name="end" comment="End of the time span"/>
+        <parameter type="timespec_t" name="start" comment="Start of the time span"/>
+        <parameter type="timespec_t" name="end" comment="End of the time span"/>
         <parameter type="gboolean" name="is_busy" comment="Whether the time span is busy"/>
         <returns type="ICalTimeSpan *" annotation="transfer full" comment="The newly created #ICalTimeSpan." />
         <comment xml:space="preserve">Creates a new #ICalTimeSpan. Free it with g_object_unref(), when no longer needed.</comment>
@@ -38,28 +38,28 @@
     </method>
     <method name="i_cal_time_span_get_start" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimeSpan *" name="timespan" comment="The #ICalTimeSpan to be queried"/>
-        <returns type="time_t" comment="The start." />
+        <returns type="timespec_t" comment="The start." />
         <comment xml:space="preserve">Gets the start of #ICalTimeSpan.</comment>
-        <custom>	g_return_val_if_fail (timespan != NULL, 0);
+        <custom>	g_return_val_if_fail (timespan != NULL, icaltime_msec_to_timespec(0));
 	return ((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)timespan))->start;</custom>
     </method>
     <method name="i_cal_time_span_set_start" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimeSpan *" name="timespan" comment="The #ICalTimeSpan to be set"/>
-        <parameter type="time_t" name="start" comment="The start" />
+        <parameter type="timespec_t" name="start" comment="The start" />
         <comment xml:space="preserve">Sets the start of #ICalTimeSpan.</comment>
         <custom>	g_return_if_fail (timespan != NULL);
 	((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)timespan))->start = start;</custom>
     </method>
     <method name="i_cal_time_span_get_end" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalTimeSpan *" name="timespan" comment="The #ICalTimeSpan to be queried"/>
-        <returns type="time_t" comment="The end." />
+        <returns type="timespec_t" comment="The end." />
         <comment xml:space="preserve">Gets the end of #ICalTimeSpan.</comment>
-        <custom>	g_return_val_if_fail (timespan != NULL, 0);
+        <custom>	g_return_val_if_fail (timespan != NULL, icaltime_msec_to_timespec(0));
 	return ((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)timespan))->end;</custom>
     </method>
     <method name="i_cal_time_span_set_end" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalTimeSpan *" name="timespan" comment="The #ICalTimeSpan to be set"/>
-        <parameter type="time_t" name="end" comment="The end" />
+        <parameter type="timespec_t" name="end" comment="The end" />
         <comment xml:space="preserve">Sets the end of #ICalTimeSpan.</comment>
         <custom>	g_return_if_fail (timespan != NULL);
 	((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)timespan))->end = end;</custom>

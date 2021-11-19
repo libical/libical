@@ -39,6 +39,8 @@
  *      - icaltime_today()
  *      - icaltime_from_timet_with_zone(time_t tm, int is_date,
  *              icaltimezone *zone)
+ *      - icaltime_from_timespec_with_zone(timespec_t ts, int is_date,
+ *              icaltimezone *zone)
  *      - icaltime_from_day_of_year(int doy, int year)
  *
  *      italtimetype objects can be converted to different formats:
@@ -71,7 +73,7 @@
  *      - icaltime_compare_date_only(struct icaltimetype a,
  *              struct icaltimetype b)
  *      - icaltime_adjust(struct icaltimetype *tt, int days, int hours,
- *              int minutes, int seconds);
+ *              int minutes, int seconds, int msecs);
  *      - icaltime_normalize(struct icaltimetype t);
  *      - icaltime_convert_to_zone(const struct icaltimetype tt,
  *              icaltimezone *zone);
@@ -83,6 +85,7 @@
 #include "libical_ical_export.h"
 
 #include <time.h>
+#include <stdint.h>
 
 /* An opaque struct representing a timezone. We declare this here to avoid
    a circular dependency. */
@@ -91,11 +94,22 @@
 typedef struct _icaltimezone icaltimezone;
 #endif
 
+#if !defined(_STRUCT_TIMESPEC) && !defined(__timespec_defined)
+#define __timespec_defined
+#define _STRUCT_TIMESPEC
+struct timespec {
+    time_t  tv_sec;
+    long    tv_nsec;
+};
+#endif
+
+typedef struct timespec timespec_t;
+
 /** icaltime_span is returned by icalcomponent_get_span() */
 struct icaltime_span
 {
-    time_t start;       /**< in UTC */
-    time_t end;         /**< in UTC */
+    timespec_t start;       /**< in UTC */
+    timespec_t end;         /**< in UTC */
     int is_busy;        /**< 1->busy time, 0-> free time */
 };
 
@@ -109,6 +123,7 @@ struct icaltimetype
     int hour;
     int minute;
     int second;
+    int msec;
 
     int is_date;        /**< 1 -> interpret this as date. */
 
@@ -173,6 +188,11 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const time
                                                                       const int is_date,
                                                                       const icaltimezone *zone);
 
+/** Converts timespec to a timetype, using timezones. */
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timespec_with_zone(const timespec_t ts,
+                                                                         const int is_date,
+                                                                         const icaltimezone *zone);
+
 /**     @brief Constructor.
  *
  * Creates a time from an ISO format string.
@@ -201,6 +221,8 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy,
  */
 LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);
 
+LIBICAL_ICAL_EXPORT timespec_t icaltime_as_timespec(const struct icaltimetype);
+
 /**     @brief Returns the time as seconds past the UNIX epoch, using the
  *      given timezone.
  *
@@ -210,6 +232,9 @@ LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);
  *      time is simply returned as time_t in its native timezone.
  */
 LIBICAL_ICAL_EXPORT time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
+                                                       const icaltimezone *zone);
+
+LIBICAL_ICAL_EXPORT timespec_t icaltime_as_timespec_with_zone(const struct icaltimetype tt,
                                                        const icaltimezone *zone);
 
 /**
@@ -227,6 +252,11 @@ LIBICAL_ICAL_EXPORT const char *icaltime_as_ical_string(const struct icaltimetyp
  * The string is owned by the caller.
  */
 LIBICAL_ICAL_EXPORT char *icaltime_as_ical_string_r(const struct icaltimetype tt);
+
+/** Return a string represention of the time, in ISO 8601 format. */
+LIBICAL_ICAL_EXPORT const char *icaltime_as_iso_string(const struct icaltimetype tt);
+
+LIBICAL_ICAL_EXPORT char *icaltime_as_iso_string_r(const struct icaltimetype tt);
 
 /** @brief Returns the timezone. */
 LIBICAL_ICAL_EXPORT const icaltimezone *icaltime_get_timezone(const struct icaltimetype t);
@@ -339,9 +369,9 @@ LIBICAL_ICAL_EXPORT int icaltime_compare_date_only_tz(const struct icaltimetype 
  *      icaltimezone_adjust_change() except for the type of the first
  *      parameter.
  */
-LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt,
-                                         const int days, const int hours,
-                                         const int minutes, const int seconds);
+LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt, const int64_t days,
+                                         const int64_t hours, const int64_t minutes,
+                                         const int64_t seconds, const int64_t msecs);
 
 /**
  *      @brief Normalizes the icaltime, so all of the time components
@@ -373,6 +403,21 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltime
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt,
                                                                  icaltimezone *zone);
+
+/** Convert timespec_t to milliseconds since epoch */
+LIBICAL_ICAL_EXPORT int64_t icaltime_timespec_to_msec(const timespec_t ts);
+
+/** Convert milliseconds since epoch to timespec_t */
+LIBICAL_ICAL_EXPORT timespec_t icaltime_msec_to_timespec(const int64_t ms);
+
+/** Adjust timespec with specified milliseconds */
+LIBICAL_ICAL_EXPORT timespec_t icaltime_timespec_adjust(const timespec_t ts, const int64_t ms);
+
+/** Compare timespec values */
+LIBICAL_ICAL_EXPORT int icaltime_timespec_cmp(const timespec_t ts1, const timespec_t ts2);
+
+/** Format timespec to string */
+LIBICAL_ICAL_EXPORT const char* icaltime_timespec_as_string(const timespec_t ts);
 
 /** Returns the number of days in the given month. */
 LIBICAL_ICAL_EXPORT int icaltime_days_in_month(const int month, const int year);

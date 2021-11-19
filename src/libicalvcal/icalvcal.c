@@ -1245,7 +1245,9 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
         }
         prop = create_parse_error_property(error_message, property_name, s);
     } else {
-        if (!strcmp(property_name, "RRULE")) {
+        if (!strcmp(property_name, "X-RRULE")) {
+            prop = icalproperty_new_xrrule(recur);
+        } else if (!strcmp(property_name, "RRULE")) {
             prop = icalproperty_new_rrule(recur);
         } else {
             prop = icalproperty_new_exrule(recur);
@@ -1473,6 +1475,12 @@ static const struct conversion_table_struct conversion_table[] = {
     {VCWorkProp, DT_UNSUPPORTED, NULL, 0},
     {VCX400Prop, DT_UNSUPPORTED, NULL, 0},
     {VCX509Prop, DT_UNSUPPORTED, NULL, 0},
+
+    /* Extensions */
+    {XRRuleProp, DT_PROPERTY, rule_prop, ICAL_XRRULE_PROPERTY},
+    {XDTstartProp, DT_PROPERTY, dc_prop, ICAL_XDTSTART_PROPERTY},
+    {XDTendProp, DT_PROPERTY, dc_prop, ICAL_XDTEND_PROPERTY},
+
     {0, 0, NULL, 0}
 };
 

@@ -28,6 +28,7 @@
 #include "icalparser.h"
 #include "icalmemory.h"
 #include "icaltz-util.h"
+#include "icaltime.h"
 
 #include <ctype.h>
 #include <stddef.h>     /* for ptrdiff_t */
@@ -111,6 +112,7 @@ struct _icaltimezonechange
     int hour;
     int minute;
     int second;
+    int msec;
     /**< The time that the change came into effect, in UTC.
        Note that the prev_utc_offset applies to this local time,
        since we haven't changed to the new offset yet. */
@@ -411,6 +413,7 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
                     break;
 
                 case ICAL_DTSTART_PROPERTY:
+                case ICAL_XDTSTART_PROPERTY:
                     dtstart = icalproperty_get_dtstart(prop);
                     if (icaltime_compare(dtstart, current_max_date) > 0)
                         current_max_date = dtstart;
@@ -572,6 +575,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
     while (prop) {
         switch (icalproperty_isa(prop)) {
         case ICAL_DTSTART_PROPERTY:
+        case ICAL_XDTSTART_PROPERTY:
             dtstart = icalproperty_get_dtstart(prop);
             found_dtstart = 1;
             break;
@@ -589,6 +593,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
             has_rdate = 1;
             break;
         case ICAL_RRULE_PROPERTY:
+        case ICAL_XRRULE_PROPERTY:
             has_rrule = 1;
             break;
         default:
@@ -678,6 +683,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
             icalarray_append(changes, &change);
             break;
         case ICAL_RRULE_PROPERTY:
+        case ICAL_XRRULE_PROPERTY:
             rrule = icalproperty_get_rrule(prop);
 
             /* If the rrule UNTIL value is set and is in UTC, we convert it to
@@ -691,7 +697,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 /* To convert from UTC to a local time, we use the TZOFFSETFROM
                    since that is the offset from UTC that will be in effect
                    when each of the RRULE occurrences happens. */
-                icaltime_adjust(&rrule.until, 0, 0, 0, change.prev_utc_offset);
+                icaltime_adjust(&rrule.until, 0, 0, 0, change.prev_utc_offset, 0);
                 rrule.until.zone = NULL;
             }
 
@@ -703,6 +709,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
             change.hour = dtstart.hour;
             change.minute = dtstart.minute;
             change.second = dtstart.second;
+            change.msec = dtstart.msec;
 
 #if 0
             printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
@@ -730,6 +737,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 change.hour = occ.hour;
                 change.minute = occ.minute;
                 change.second = occ.second;
+                change.msec = occ.msec;
 
 #if 0
                 printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
@@ -806,13 +814,13 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
 
     /* Convert the time to UTC by getting the UTC offset and subtracting it. */
     utc_offset = icaltimezone_get_utc_offset(from_zone, tt, NULL);
-    icaltime_adjust(tt, 0, 0, 0, -utc_offset);
+    icaltime_adjust(tt, 0, 0, 0, -utc_offset, 0);
 
     /* Now we convert the time to the new timezone by getting the UTC offset
        of our UTC time and adding it. */
     utc_offset = icaltimezone_get_utc_offset_of_utc_time(to_zone, tt, &is_daylight);
     tt->is_daylight = is_daylight;
-    icaltime_adjust(tt, 0, 0, 0, utc_offset);
+    icaltime_adjust(tt, 0, 0, 0, utc_offset, 0);
 }
 
 int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int *is_daylight)
@@ -2319,7 +2327,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         }
 
         /* Adjust DTSTART observance to UTC */
-        icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
+        icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from, 0);
         (void)icaltime_set_timezone(&obs.onset, icaltimezone_get_utc_timezone());
 
         /* Check DTSTART vs window close */
@@ -2376,7 +2384,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
                 if (!eternal) {
                     /* Adjust UNTIL to local time (for iterator) */
-                    icaltime_adjust(&rrule.until, 0, 0, 0, obs.offset_from);
+                    icaltime_adjust(&rrule.until, 0, 0, 0, obs.offset_from, 0);
                     (void)icaltime_set_timezone(&rrule.until, NULL);
                 }
 
@@ -2403,7 +2411,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                     obs.onset = recur;
 
                     /* Adjust observance to UTC */
-                    icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
+                    icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from, 0);
                     (void)icaltime_set_timezone(&obs.onset,
                                                 icaltimezone_get_utc_timezone());
 
@@ -2533,7 +2541,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
             obs.onset = rdate->date.time;
 
             /* Adjust observance to UTC */
-            icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
+            icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from, 0);
             (void)icaltime_set_timezone(&obs.onset, icaltimezone_get_utc_timezone());
 
             if (need_tzuntil && icaltime_compare(obs.onset, end) >= 0) {
@@ -2626,7 +2634,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 break;
             case ICAL_DTSTART_PROPERTY:
                 /* Adjust window open to local time */
-                icaltime_adjust(&start, 0, 0, 0, tombstone.offset_from);
+                icaltime_adjust(&start, 0, 0, 0, tombstone.offset_from, 0);
                 (void)icaltime_set_timezone(&start, NULL);
 
                 icalproperty_set_dtstart(prop, start);

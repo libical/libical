@@ -347,12 +347,16 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
         }
 
         /* check if it is a recurring */
-        rrule = icalcomponent_get_first_property(sub_comp, ICAL_RRULE_PROPERTY);
+        rrule = icalcomponent_get_first_property(sub_comp, ICAL_XRRULE_PROPERTY);
+        if (!rrule) {
+            rrule = icalcomponent_get_first_property(sub_comp, ICAL_RRULE_PROPERTY);
+        }
 
         if (gauge->expand && rrule) {
 
-            if (w->prop == ICAL_DTSTART_PROPERTY ||
-                w->prop == ICAL_DTEND_PROPERTY || w->prop == ICAL_DUE_PROPERTY) {
+            if (w->prop == ICAL_DTSTART_PROPERTY || w->prop == ICAL_XDTSTART_PROPERTY ||
+                w->prop == ICAL_DTEND_PROPERTY || w->prop == ICAL_XDTEND_PROPERTY ||
+                w->prop == ICAL_DUE_PROPERTY) {
                 /** needs to use recurrence-id to do comparison */
                 compare_recur = 1;
             }

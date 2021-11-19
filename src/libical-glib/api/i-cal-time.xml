@@ -164,6 +164,7 @@
         <parameter type="const gint" name="hours" comment="Difference of hours adjusted"/>
         <parameter type="const gint" name="minutes" comment="Difference of minutes adjusted"/>
         <parameter type="const gint" name="seconds" comment="Difference of seconds adjusted"/>
+        <parameter type="const gint" name="msecs" comment="difference of milliseconds adjusted"/>
         <comment xml:space="preserve">Adds or subtracts a number of days, hours, minutes and seconds from @tt.</comment>
     </method>
     <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">

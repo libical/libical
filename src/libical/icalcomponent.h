@@ -256,6 +256,13 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_dtstart(icalcomponent *comp, struct i
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp);
 
+/**     @brief Set X-DTSTART property to given icaltime
+ *
+ *      This method respects the icaltime type (DATE vs DATE-TIME) and
+ *      timezone (or lack thereof).
+ */
+LIBICAL_ICAL_EXPORT void icalcomponent_set_xdtstart(icalcomponent *comp, struct icaltimetype v);
+
 /* For the icalcomponent routines only, dtend and duration are tied
    together. If you call the get routine for one and the other exists,
    the routine will calculate the return value. That is, if there is a
@@ -302,6 +309,17 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtend(icalcomponent *c
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_set_dtend(icalcomponent *comp, struct icaltimetype v);
 
+/**     @brief Set X-DTEND property to given icaltime
+ *
+ *      This method respects the icaltime type (DATE vs DATE-TIME) and
+ *      timezone (or lack thereof).
+ *
+ *      This also checks that a DURATION property isn't already there,
+ *      and returns an error if it is. It's the caller's responsibility
+ *      to remove it.
+ */
+LIBICAL_ICAL_EXPORT void icalcomponent_set_xdtend(icalcomponent *comp, struct icaltimetype v);
+
 /** @brief Returns the time a VTODO task is DUE.
  *
  *  @param comp Valid calendar component.
@@ -340,6 +358,9 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_due(icalcomponent *comp, struct icalt
  *      property.
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_set_duration(icalcomponent *comp,
+                                                    struct icaldurationtype v);
+
+LIBICAL_ICAL_EXPORT void icalcomponent_set_xduration(icalcomponent *comp,
                                                     struct icaldurationtype v);
 
 /**     @brief Gets the DURATION property as an icalduration

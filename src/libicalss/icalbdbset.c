@@ -1273,7 +1273,10 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
 
         /* check if it is a recurring component and with gauge expand, if so
          * we need to add recurrence-id property to the given component */
-        rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+        rrule = icalcomponent_get_first_property(comp, ICAL_XRRULE_PROPERTY);
+        if (!rrule) {
+            rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+        }
         g = icalgauge_get_expand(gauge);
 
         if (rrule != 0 && g == 1) {
@@ -1291,7 +1294,10 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
             start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
-                dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+                dtstart = icalcomponent_get_first_property(comp, ICAL_XDTSTART_PROPERTY);
+                if (!dtstart) {
+                    dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+                }
                 if (dtstart) {
                     start = icalproperty_get_dtstart(dtstart);
                 }
@@ -1382,7 +1388,10 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
         return NULL;
     }
 
-    rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+    rrule = icalcomponent_get_first_property(comp, ICAL_XRRULE_PROPERTY);
+    if (!rrule) {
+        rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+    }
     /* if there is no RRULE, simply return to the caller */
     if (rrule == NULL) {
         return NULL;
@@ -1399,7 +1408,10 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
     start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
     if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
-        dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+        dtstart = icalcomponent_get_first_property(comp, ICAL_XDTSTART_PROPERTY);
+        if (!dtstart) {
+            dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+        }
         if (dtstart) {
             start = icalproperty_get_dtstart(dtstart);
         }
@@ -1496,7 +1508,10 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
 
         /* finding the next matched component and return it to the caller */
 
-        rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+        rrule = icalcomponent_get_first_property(comp, ICAL_XRRULE_PROPERTY);
+        if (!rrule) {
+            rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+        }
         g = icalgauge_get_expand(i->gauge);
 
         /* a recurring component with expand query */
@@ -1513,7 +1528,10 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
             start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
-                dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+                dtstart = icalcomponent_get_first_property(comp, ICAL_XDTSTART_PROPERTY);
+                if (!dtstart) {
+                    dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+                }
                 if (dtstart) {
                     start = icalproperty_get_dtstart(dtstart);
                 }

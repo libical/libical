@@ -934,6 +934,12 @@ static const struct PreDefProp propNames[] = {
     { VCX400Prop, 0, 0, 0 },
     { VCX509Prop, 0, 0, 0 },
     { VCXRuleProp, 0, 0, 0 },
+
+    /* Extensions */
+    { XRRuleProp, 0, 0, 0 },
+    { XDTstartProp, 0, 0, 0 },
+    { XDTendProp, 0, 0, 0 },
+
     { 0,0,0,0 }
     };
 

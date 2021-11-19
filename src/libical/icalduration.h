@@ -41,6 +41,7 @@ struct icaldurationtype
     unsigned int hours;
     unsigned int minutes;
     unsigned int seconds;
+    unsigned int msecs;
 };
 
 #define ICALDURATIONTYPE_INITIALIZER { 0, 0, 0, 0, 0, 0 }
@@ -61,6 +62,23 @@ struct icaldurationtype
  * ```
  */
 LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_int(int t);
+
+/**
+ * @brief Creates a new ::icaldurationtype from a duration in milliseconds.
+ * @param t The duration in seconds
+ * @return An ::icaldurationtype representing the duration @a t in milliseconds
+ *
+ * ### Example
+ * ```c
+ * // create a new icaldurationtype with a duration of 1200 milliseconds
+ * struct icaldurationtype duration;
+ * duration = icaldurationtype_from_msec(1200);
+ *
+ * // verify that the duration is one second
+ * assert(duration.seconds == 1);
+ * ```
+ */
+LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_msec(int64_t t);
 
 /**
  * @brief Creates a new ::icaldurationtype from a duration given as a string.
@@ -99,6 +117,23 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
  * ```
  */
 LIBICAL_ICAL_EXPORT int icaldurationtype_as_int(struct icaldurationtype duration);
+
+/**
+ * @brief Converts an ::icaldurationtype into the duration in milliseconds as `int64_t`.
+ * @param duration The duration to convert to milliseconds
+ * @return An `int64_t` representing the duration in milliseconds
+ *
+ * ### Usage
+ * ```c
+ * // create icaldurationtype with given duration
+ * struct icaldurationtype duration;
+ * duration = icaldurationtype_from_msec(3532342000);
+ *
+ * // get the duration in milliseconds and verify it
+ * assert(icaldurationtype_as_msec(duration) == 3532342000);
+ * ```
+ */
+LIBICAL_ICAL_EXPORT int64_t icaldurationtype_as_msec(struct icaldurationtype duration);
 
 /**
  * Converts an icaldurationtype into the iCal format as string.
@@ -165,6 +200,7 @@ LIBICAL_ICAL_EXPORT char *icaldurationtype_as_ical_string_r(struct icaldurationt
  * assert(duration.hours    == 0);
  * assert(duration.minutes  == 0);
  * assert(duration.seconds  == 0);
+ * assert(duration.msecs  == 0);
  * assert(icalduration_is_null_duration(duration));
  * assert(icalduration_as_int(duration) == 0);
  * ```
