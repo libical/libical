@@ -8,6 +8,9 @@ Version 3.1.0 (NOT RELEASED YET):
  * libical-glib now requires glib 2.38 or higher
  * Improved FindICU (from the official CMake)
  * Allow previous recurrence iteration
+ * Improved performance of recurrence iterators
+ * METHOD:DECLINECOUNTER must have DTEND or DURATION
+ * Handle if DTEND and DURATION are both missing
  * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
  * New publicly available functions:
      + icalrecurrencetype_encode_day
@@ -38,7 +41,6 @@ Version 3.1.0 (NOT RELEASED YET):
      (were in the public headers but not used at all)
      + struct icaltimezonetype
      + struct icaltimezonephase
- * Improved performance of recurrence iterators
 
 Version 3.0.12 (UNRELEASED):
 ----------------------------
