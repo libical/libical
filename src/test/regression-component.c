@@ -448,7 +448,7 @@ void test_icalcomponent_get_span()
     if (VERBOSE)
         print_span(tnum++, span);
 
-    int_is("null span", (int)span.start, 0);
+    int_is("start == end", (int)span.start, span.end);
     icalcomponent_free(c);
 
     /** test 7

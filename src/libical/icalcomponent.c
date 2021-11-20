@@ -726,24 +726,14 @@ or empty VCALENDAR component"); */
     }
     span.start = icaltime_as_timet_with_zone(start, icaltimezone_get_utc_timezone());
 
-    /* The end time could be specified as either a DTEND or a DURATION */
+    /* The end time could be specified as either a DTEND, a DURATION, or be missing */
     /* icalcomponent_get_dtend takes care of these cases. */
     end = icalcomponent_get_dtend(comp);
-    if (icaltime_is_null_time(end)) {
-        if (!icaltime_is_date(start)) {
-            /* If dtstart is a DATE-TIME and there is no DTEND nor DURATION
-               it takes no time */
-            span.start = 0;
-            return span;
-        } else {
-            end = start;
-        }
-    }
 
     span.end = icaltime_as_timet_with_zone(end, icaltimezone_get_utc_timezone());
     if (icaltime_is_date(start)) {
         /* Until the end of the day */
-        span.end += 60 * 60 * 24 - 1;
+        span.end -= 1;
     }
 
     return span;
@@ -891,16 +881,9 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     if (icaltime_is_null_time(dtstart))
         return;
 
-    /* The end time could be specified as either a DTEND or a DURATION */
+    /* The end time could be specified as either a DTEND, a DURATION or be missing */
     /* icalcomponent_get_dtend takes care of these cases. */
     dtend = icalcomponent_get_dtend(comp);
-    if (icaltime_is_null_time(dtend) && icaltime_is_date(dtstart)) {
-        /* No DTEND or DURATION and DTSTART is DATE - duration is 1 day */
-        struct icaldurationtype dur = icaldurationtype_null_duration();
-
-        dur.days = 1;
-        dtend = icaltime_add(dtstart, dur);
-    }
 
     /* Now set up the base span for this item, corresponding to the
        base DTSTART and DTEND */
@@ -1425,11 +1408,11 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
     icalcomponent *inner = icalcomponent_get_inner(comp);
     icalproperty *end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
     icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
-    struct icaltimetype ret = icaltime_null_time();
+    struct icaltimetype ret;
 
-    if (end_prop != 0) {
+    if (end_prop != 0 && dur_prop == 0) {
         ret = icalproperty_get_datetime_with_component(end_prop, comp);
-    } else if (dur_prop != 0) {
+    } else if (end_prop == 0 && dur_prop != 0) {
 
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         struct icaldurationtype duration;
@@ -1442,6 +1425,19 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
         }
 
         ret = icaltime_add(start, duration);
+    } else if (end_prop == 0 && dur_prop == 0) {
+        struct icaltimetype start = icalcomponent_get_dtstart(inner);
+        if (icaltime_is_date(start)) {
+            struct icaldurationtype duration = icaldurationtype_null_duration();
+            duration.days = 1;
+            ret = icaltime_add(start, duration);
+        } else {
+            ret = start;
+        }
+    } else {
+        /* Error, both duration and dtend have been specified */
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        ret = icaltime_null_time();
     }
 
     return ret;
@@ -1512,6 +1508,11 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
         struct icaltimetype end = icalcomponent_get_dtend(inner);
 
         ret = icaltime_subtract(end, start);
+    } else if (end_prop == 0 && dur_prop == 0) {
+        struct icaltimetype start = icalcomponent_get_dtstart(inner);
+        if (icaltime_is_date(start)) {
+            ret.days = 1;
+        }
     } else {
         /* Error, both duration and dtend have been specified */
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
