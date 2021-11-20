@@ -9,8 +9,6 @@ Version 3.1.0 (NOT RELEASED YET):
  * Improved FindICU (from the official CMake)
  * Allow previous recurrence iteration
  * Improved performance of recurrence iterators
- * METHOD:DECLINECOUNTER must have DTEND or DURATION
- * Handle if DTEND and DURATION are both missing
  * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
  * New publicly available functions:
      + icalrecurrencetype_encode_day
@@ -45,6 +43,8 @@ Version 3.1.0 (NOT RELEASED YET):
 Version 3.0.12 (UNRELEASED):
 ----------------------------
  * Improved FindICU (copied from official CMake.  see files in cmake/Kitware)
+ * METHOD:DECLINECOUNTER must have DTEND or DURATION
+ * Handle if DTEND and DURATION are both missing
 
 Version 3.0.11 (09 October 2021):
 ---------------------------------
