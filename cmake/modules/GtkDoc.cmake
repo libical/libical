@@ -18,12 +18,6 @@
 # It also adds custom target gtkdoc-rebuild-${_module}-sgml to rebuild the sgml.in
 # file based on the current sources.
 
-option(ENABLE_GTK_DOC "Use gtk-doc to build documentation" True)
-
-if(NOT ENABLE_GTK_DOC)
-  return()
-endif()
-
 find_program(GTKDOC_SCAN gtkdoc-scan)
 find_program(GTKDOC_SCANGOBJ gtkdoc-scangobj)
 find_program(GTKDOC_MKDB gtkdoc-mkdb)
