@@ -25,7 +25,7 @@
 #
 # -DSTATIC_ONLY=[true|false]
 #  Set to build static libraries only.
-#  Turns-off GObject Introspection.
+#  Not available for GObject Introspection and Vala "vapi"
 #  Default=false (build shared and static libs)
 #
 # -DSHARED_ONLY=[true|false]
@@ -390,6 +390,14 @@ endif()
 
 libical_option(ICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
 if(ICAL_GLIB_VAPI)
+  if(STATIC_ONLY)
+    message(FATAL_ERROR
+      "You are attempting to build the Vala api, however that option is not supported "
+      "when building static libraries only. "
+      "Please disable the static only option (-DSTATIC_ONLY=False) "
+      "if you really want to build the Vala api. Alternatively, "
+      "you can disable this feature (by passing -DICAL_GLIB_VAPI=False to cmake).")
+  endif()
   if(NOT GOBJECT_INTROSPECTION)
     message(FATAL_ERROR
       "You requested to build the Vala vapi but have not enabled the GObject Introspection. "

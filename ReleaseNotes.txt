@@ -45,6 +45,7 @@ Version 3.0.12 (UNRELEASED):
  * Improved FindICU (copied from official CMake.  see files in cmake/Kitware)
  * METHOD:DECLINECOUNTER must have DTEND or DURATION
  * Handle if DTEND and DURATION are both missing
+ * Buildsystem fixes (especially for the Ninja generator)
 
 Version 3.0.11 (09 October 2021):
 ---------------------------------
