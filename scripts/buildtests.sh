@@ -372,6 +372,7 @@ SPLINT() {
   files="$files $BDIR/src/libical/*.c $BDIR/src/libical/*.h"
 
   splint $files \
+       -badflag \
        -weak -warnposix \
        -modobserver -initallelements -redef \
        -linelen 1000 \
