@@ -524,7 +524,7 @@ void i_cal_object_set_native_destroy_func(ICalObject *iobject, GDestroyNotify na
  * @iobject: an #ICalObject
  *
  * Obtains whether the native libical structure is a global shared memory,
- * thus should not be destroyed. This can be set only during contruction time.
+ * thus should not be destroyed. This can be set only during construction time.
  *
  * Returns: Whether the native libical structure is a global shared memory.
  *

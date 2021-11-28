@@ -24,7 +24,7 @@ class Collection:
     """A group of components that can be modified somewhat like a list.
 
     Usage:
-        Collection(componet, propSequence)
+        Collection(component, propSequence)
 
     component is a Component object
     propSequence is a list or tuple of Property (or subclass of Property)

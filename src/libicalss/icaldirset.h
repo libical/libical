@@ -33,9 +33,9 @@
   The primary interfaces are icaldirset__get_first_component and
   icaldirset_get_next_component. These routine iterate through all of
   the components in the store, subject to the current gauge. A gauge
-  is an icalcomponent that is tested against other componets for a
+  is an icalcomponent that is tested against other components for a
   match. If a gauge has been set with icaldirset_select,
-  icaldirset_first and icaldirset_next will only return componentes
+  icaldirset_first and icaldirset_next will only return components
   that match the gauge.
 
   The Store generated UIDs for all objects that are stored if they do

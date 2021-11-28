@@ -565,7 +565,7 @@ d. properties name (id) are case incensitive.
 		write it to memory. If s is 0, then memory required
 		to hold the textual representation will be allocated
 		by this API. If a variable len is passed, len will
-		be overwriten with the byte size of the textual
+		be overwritten with the byte size of the textual
 		representation. If s is non-zero, then s has to
 		be a user allocated buffer whose size has be passed
 		in len as a variable. Memory allocated by the API
@@ -663,7 +663,7 @@ of Example.vcf and its VObject Representation
 	initPropIterator(&t,vcard);
 	while (moreIteration(&t)) {
 	    VObject *eachProp = nextVObject(&t);
-	    //	The primarly purpose of this example is to
+	    //	The primary purpose of this example is to
 	    //  show how to iterate through a VCard VObject,
 	    //	it is not meant to be efficient at all.
 	    char *n = vObjectName(eachProp);
@@ -686,7 +686,7 @@ of Example.vcf and its VObject Representation
 	initPropIterator(&t,vcard);
 	while (moreIteration(&t)) {
 	    VObject *eachProp = nextVObject(&t);
-	    //	The primarly purpose of this example is to
+	    //	The primary purpose of this example is to
 	    //  show how to iterate through a VCalendar VObject,
 	    //	it is not meant to be efficient at all.
 	    char *n = vObjectName(eachProp);

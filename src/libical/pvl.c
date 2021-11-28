@@ -55,7 +55,7 @@ static int pvl_list_count = 0;
 /**
   struct pvl_list_t
 
-  The list structure. This is the hanlde for the entire list
+  The list structure. This is the handle for the entire list
 
   This type is also private. Use pvl_list instead
 
@@ -392,7 +392,7 @@ void *pvl_remove(pvl_list L, pvl_elem E)
 /**
  * @brief Return a pointer to data that satisfies a function.
  *
- * This routine will interate through the entire list and call the
+ * This routine will iterate through the entire list and call the
  * find function for each item. It will break and return a pointer to the
  * data that causes the find function to return 1.
  *

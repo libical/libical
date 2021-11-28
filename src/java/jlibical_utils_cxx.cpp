@@ -399,7 +399,7 @@ jobject createNewICalPeriodType(JNIEnv *env, icalperiodtype* source)
 }
 
 //-------------------------------------------------------
-// Creat a new surrogate of the given type for the given subject.
+// Create a new surrogate of the given type for the given subject.
 //-------------------------------------------------------
 jobject doCreateNewSurrogate(JNIEnv *env, jclass surrogateClass, jlong subject)
 {

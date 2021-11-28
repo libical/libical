@@ -116,7 +116,7 @@ class Period(Property):
         The return value is an instance of Time.
 
         If the Period has a duration set, but not an end time, this
-        method will caluculate the end time from the duration.  """
+        method will calculate the end time from the duration.  """
 
         if v != None:
 

@@ -163,7 +163,7 @@ icalcomponent* icallangbind_get_next_component(icalcomponent *c,
 
 /* Returns a string that can be evaluated in perl or python to
    generated a hash that holds the property's name, value and
-   parameters. Sep is the hash seperation string, "=>" for perl and
+   parameters. Sep is the hash separation string, "=>" for perl and
    ":" for python */
 const char* icallangbind_property_eval_string(icalproperty* prop, const char* sep);
 

@@ -1271,7 +1271,7 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
     /* if there is a gauge, the first matched component is returned */
     while (comp != 0) {
 
-        /* check if it is a recurring component and with guage expand, if so
+        /* check if it is a recurring component and with gauge expand, if so
          * we need to add recurrence-id property to the given component */
         rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
         g = icalgauge_get_expand(gauge);

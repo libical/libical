@@ -1595,7 +1595,7 @@ static int fetch_lat_long_from_string(const char *str,
     size_t len;
     char *sptr, *lat, *lon, *loc, *temp;
 
-    /* We need to parse the latitude/longitude co-ordinates and location fields  */
+    /* We need to parse the latitude/longitude coordinates and location fields  */
     sptr = (char *)str;
     while ((*sptr != '\t') && (*sptr != '\0')) {
         sptr++;

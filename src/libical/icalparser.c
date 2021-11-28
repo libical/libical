@@ -392,7 +392,7 @@ static char *parser_get_next_value(char *line, char **end, icalvalue_kind kind)
 
         next = parser_get_next_char(',', p, 1);
 
-        /* Unforunately, RFC2445 allowed that for the RECUR value, COMMA
+        /* Unfortunately, RFC2445 allowed that for the RECUR value, COMMA
            could both separate digits in a list, and it could separate
            multiple recurrence specifications. This is not a friendly
            part of the spec and was deprecated in RFC5545. The following
@@ -901,7 +901,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
                 if (name_heap == 0) {
                     /* 'tail' defined above */
-                    insert_error(tail, str, "Cant parse parameter name",
+                    insert_error(tail, str, "Can't parse parameter name",
                                  ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
                     tail = 0;
                     break;
@@ -1012,7 +1012,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 /* Change for mozilla */
                 /* have the option of being flexible towards unsupported parameters */
 #if ICAL_ERRORS_ARE_FATAL == 1
-                insert_error(tail, str, "Cant parse parameter name",
+                insert_error(tail, str, "Can't parse parameter name",
                              ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
                 tail = 0;
                 parser->state = ICALPARSER_ERROR;
@@ -1054,7 +1054,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
             if (param == 0) {
                 /* 'tail' defined above */
-                insert_error(tail, str, "Cant parse parameter value",
+                insert_error(tail, str, "Can't parse parameter value",
                              ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR);
 
                 tail = 0;

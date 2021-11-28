@@ -57,7 +57,7 @@ void component_errors(icalcomponent *comp)
 
     /* Since there are iTIP restriction errors, it may be impossible
        to process this component as an iTIP request. In this case, the
-       X-LIC-ERROR proeprties should be expressed as REQUEST-STATUS
+       X-LIC-ERROR properties should be expressed as REQUEST-STATUS
        properties in the reply. This following routine makes this
        conversion */
 

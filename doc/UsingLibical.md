@@ -168,7 +168,7 @@ errors and component usage errors.
 #### 3.2.4 Memory Management
 
 Since many of libicals interfaces return strings, the library has its
-own memory management system to elimiate the need to free every string
+own memory management system to eliminate the need to free every string
 returned from the library.
 
 #### 3.2.5 Storage classes
@@ -395,7 +395,7 @@ icalparser_set_gen_data(
 
 These routines will construct a parser object to which you can add
 lines of input and retrieve any components that the parser creates
-from the input. These routines work by specifing an adaptor routine
+from the input. These routines work by specifying an adaptor routine
 to get string data from a source. For example:
 
 ```c
@@ -562,7 +562,7 @@ for(c = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
 }
 ```
 
-This code bit wil iterate through all of the subcomponents in `comp`
+This code bit will iterate through all of the subcomponents in `comp`
 but you can select a specific type of component by changing `ICAL_ANY_COMPONENT`
 to another component type.
 
@@ -859,7 +859,7 @@ hold the broken-out
 time values. The `is_utc` field distinguishes between times in UTC and
 a local time zone. The `is_date` field indicates if the time should
 be interpreted only as a date. If it is a date, the hour, minute and
-second fields are assumed to be zero, regardless of their actual vaules.
+second fields are assumed to be zero, regardless of their actual values.
 
 #### 5.3.2 Creating time structures
 
@@ -884,8 +884,8 @@ struct icaltimetype tt = icaltime_from_string("19970101T103000");
 `icaltime_from_timet_with_zone()` takes a `time_t` value, representing seconds past
 the POSIX epoch, a flag to indicate if the time is a date, and a time zone.
 Dates have an identical structure to a time, but the time portion (hours,
-minuts and seconds) is always 00:00:00. Dates act differently in
-sorting and comparision, and they have a different string representation
+minutes and seconds) is always 00:00:00. Dates act differently in
+sorting and comparison, and they have a different string representation
 in [RFC5545][].
 
 #### 5.3.3 Time manipulating routines
@@ -1009,11 +1009,11 @@ struct icaltimetype icaltime_as_local(
 The libical distribution includes a separate library, libicalss, that
 allows you to store iCal component data to disk in a variety of ways.
 
-The file storage routines are organized in an inheritance heirarchy
+The file storage routines are organized in an inheritance hierarchy
 that is rooted in icalset, with the derived class icalfileset and
 icaldirset. Icalfileset stores components to a file, while icaldirset
 stores components to multiple files, one per month based on DTSTAMP.
-Other storages classess, for storage to a heap or a mysql database
+Other storages classes, for storage to a heap or a mysql database
 for example, could be added in the future.
 
 All of the icalset derived classes have the same interface:
@@ -1113,11 +1113,11 @@ open an existing file for reading and writing, or create a new file
 if it does not exist. `icalfileset_new_open()` takes the same arguments
 as the open() system routine and behaves in the same way.
 
-The icalset and icalfilset objects are somewhat interchangable -- you
+The icalset and icalfilset objects are somewhat interchangeable -- you
 can use an `icalfileset*` as an argument to any of the icalset routines.
 
 The following examples will all use icalfileset routines; using the
-other icalset derived classess will be similar.
+other icalset derived classes will be similar.
 
 #### 5.4.2 Adding, Finding and Removing Components
 
@@ -1130,7 +1130,7 @@ icalerrorenum icalfileset_add_component(
 ```
 
 The fileset keeps an inmemory copy of the components, and this set
-must be written back to the file ocassionally. There are two routines
+must be written back to the file occasionally. There are two routines
 to manage this:
 
 ```c
@@ -1325,7 +1325,7 @@ RFC5545.
 There are a few routines to manipulate error properties:
 
 [ The following data is supposed to be in a table. It looks OK in LyX,
-but does not format propertly in output. ]
+but does not format properly in output. ]
 
 +-------------------------------------+---------------------------------------------------------+
 | Routine                             | Purpose                                                 |

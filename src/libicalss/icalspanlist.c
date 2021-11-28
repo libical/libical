@@ -304,7 +304,7 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     sl_start = icaltime_as_timet_with_zone(sl->start, icaltimezone_get_utc_timezone());
     sl_end = icaltime_as_timet_with_zone(sl->end, icaltimezone_get_utc_timezone());
 
-  /* insure that the time period falls on a time boundary divisable
+  /* insure that the time period falls on a time boundary divisible
       by delta_t */
 
     sl_start /= delta_t;
