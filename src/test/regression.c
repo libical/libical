@@ -4909,6 +4909,49 @@ static void test_vcc_vcard_parse(void)
 	"DTSTART;VALUE=DATE:20210902\r\n"
 	"END:VEVENT\r\n"
 	"END:VCALENDAR\r\n";
+    const char *vcalendar_broken =
+	"BEGIN:VCALENDAR\r\n"
+	"BEGIN:VTIMEZONE\r\n"
+	"TZID:tz/id\r\n"
+	"BEGIN:STANDARD\r\n"
+	"TZNAME:PMT\r\n"
+	"TZOFFSETFROM:+005744\r\n"
+	"TZOFFSETTO:+005744\r\n"
+	"DTSTART:18500101T000000\r\n"
+	"END:STANDARD\r\n"
+	"BEGIN:STANDARD\r\n"
+	"TZNAME:CET\r\n"
+	"TZOFFSETFROM:+005744\r\n"
+	"TZOFFSETTO:+0100\r\n"
+	"DTSTART:18911001T000000\r\n"
+	"END:STANDARD\r\n"
+	"BEGIN:DAYLIGHT\r\n"
+	"TZNAME:CEST\r\n"
+	"TZOFFSETFROM:+0100\r\n"
+	"TZOFFSETTO:+0200\r\n"
+	"DTSTART:19160430T230000\r\n"
+	"END:DAYLIGHT\r\n"
+	"END:VTIMEZONE\r\n"
+	"BEGIN:VEVENT\r\n"
+	"UID:321\r\n"
+	"SUMMARY:Summary\r\n"
+	"DTSTAMP:20210803T063522Z\r\n"
+	"DTSTART;VALUE=DATE:20210902\r\n"
+	"END:VEVENT\r\n"
+	"BEGIN:VEVENT\r\n"
+	"UID:123\r\n"
+	"DTSTAMP:20210803T063522Z\r\n"
+	"DTSTART;VALUE=DATE:20210902\r\n"
+	"BEGIN:VALARM\r\n"
+	"ACTION:DISPLAY\r\n"
+	"TRIGGER:-PT15M\r\n"
+	"END:VALARM\r\n"
+	"DESCRIPTION:aaa \r\n"
+	"\r\n"
+	" aaa\\naaa 1\\n \r\n"
+	"SUMMARY:Summary\r\n"
+	"END:VEVENT\r\n"
+	"END:VCALENDAR\r\n";
     VObject *vcal;
 
     vcal = Parse_MIME(vcard1, (unsigned long)strlen(vcard1));
@@ -4961,6 +5004,9 @@ static void test_vcc_vcard_parse(void)
 
         cleanVObject(vcal);
     }
+
+    vcal = Parse_MIME(vcalendar_broken, (unsigned long)strlen(vcalendar_broken));
+    ok("vCalendar-broken cannot be parsed", (vcal == NULL));
 }
 
 int main(int argc, char *argv[])

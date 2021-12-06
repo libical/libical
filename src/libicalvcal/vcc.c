@@ -987,10 +987,12 @@ void initLex(const char *inputstring, unsigned long inputlen, FILE *inputfile)
     }
 
 static void finiLex() {
-    VObject* vobj;
+    VObject* vobj, *topobj = 0;
     while(vobj = popVObject(), vobj) {
-        cleanVObject(vobj);
+        topobj = vobj;
     }
+    if(topobj)
+        cleanVObject(topobj);
     free(lexBuf.strs);
     }
 
