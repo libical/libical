@@ -3,10 +3,12 @@ Release Highlights
 
 Version 3.0.12 (UNRELEASED):
 ----------------------------
- * Improved FindICU (copied from official CMake.  see files in cmake/Kitware)
+ * Fix a libicalval crash in cleanVObject
  * METHOD:DECLINECOUNTER must have DTEND or DURATION
  * Handle if DTEND and DURATION are both missing
+ * Improved FindICU (copied from official CMake.  see files in cmake/Kitware)
  * Buildsystem fixes (especially for the Ninja generator)
+ * Built-in timezones updated to tzdata2021e
 
 Version 3.0.11 (09 October 2021):
 ---------------------------------
