@@ -1,6 +1,10 @@
 Release Highlights
 ==================
 
+Version 3.0.13 (UNRELEASED):
+----------------------------
+ *
+
 Version 3.0.12 (08 December 2021):
 ----------------------------------
  * Fix a libicalval crash in cleanVObject
