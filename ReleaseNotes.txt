@@ -40,12 +40,18 @@ Version 3.1.0 (NOT RELEASED YET):
      + struct icaltimezonetype
      + struct icaltimezonephase
 
-Version 3.0.12 (UNRELEASED):
+Version 3.0.13 (UNRELEASED):
 ----------------------------
- * Improved FindICU (copied from official CMake.  see files in cmake/Kitware)
+ *
+
+Version 3.0.12 (08 December 2021):
+----------------------------------
+ * Fix a libicalval crash in cleanVObject
  * METHOD:DECLINECOUNTER must have DTEND or DURATION
  * Handle if DTEND and DURATION are both missing
+ * Improved FindICU (copied from official CMake.  see files in cmake/Kitware)
  * Buildsystem fixes (especially for the Ninja generator)
+ * Built-in timezones updated to tzdata2021e
 
 Version 3.0.11 (09 October 2021):
 ---------------------------------
