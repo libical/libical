@@ -4772,6 +4772,66 @@ static void test_vcc_vcard_parse(void)
     ok("vCalendar-broken cannot be parsed", (vcal == NULL));
 }
 
+static void test_implicit_dtend_duration(void)
+{
+    const struct icaltimetype start1 = icaltime_from_string("20220108");
+    icalcomponent* c = icalcomponent_vanew(
+            ICAL_VCALENDAR_COMPONENT,
+            icalcomponent_vanew(
+                ICAL_VEVENT_COMPONENT,
+                icalproperty_vanew_dtstart(start1, 0),
+                0),
+            0);
+    struct icaldurationtype d = icalcomponent_get_duration(c);
+    struct icaltimetype end = icalcomponent_get_dtend(c),
+        start = icaltime_from_string("20220108T101010Z");
+    if (VERBOSE) {
+        printf("%s\n", icaldurationtype_as_ical_string(d));
+    }
+    str_is("icaldurationtype_as_ical_string(d)", "P1D", icaldurationtype_as_ical_string(d));
+
+    if (VERBOSE) {
+        printf("%s\n", icaltime_as_ical_string(end));
+    }
+    str_is("icaltime_as_ical_string(end)", "20220109", icaltime_as_ical_string(end));
+
+    icalcomponent_set_dtstart(c, start);
+    d = icalcomponent_get_duration(c);
+    end = icalcomponent_get_dtend(c);
+    if (VERBOSE) {
+        printf("%s\n", icaldurationtype_as_ical_string(d));
+    }
+    int_is("icaldurationtype_as_int(d)", 0, icaldurationtype_as_int(d));
+
+    if (VERBOSE) {
+        printf("%s\n", icaltime_as_ical_string(end));
+    }
+    int_is("icaltime_compare(start, end)", 0, icaltime_compare(start, end));
+    icalcomponent_free(c);
+
+
+    c = icalcomponent_vanew(
+            ICAL_VCALENDAR_COMPONENT,
+                icalcomponent_vanew(
+                    ICAL_VTODO_COMPONENT,
+                    icalproperty_vanew_dtstart(start1, 0),
+                    0),
+            0);
+    icalcomponent_set_due(c, icaltime_from_string("20220109"));
+    d = icalcomponent_get_duration(c);
+    end = icalcomponent_get_dtend(c);
+    if (VERBOSE) {
+        printf("%s\n", icaldurationtype_as_ical_string(d));
+    }
+    str_is("P1D", "P1D", icaldurationtype_as_ical_string(d));
+
+    if (VERBOSE) {
+        printf("%i\n", icaltime_is_null_time(end));
+    }
+    int_is("icaltime_is_null_time(end)", 1, icaltime_is_null_time(end));
+    icalcomponent_free(c);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4911,6 +4971,7 @@ int main(int argc, char *argv[])
     test_run("Test icalcomponent_normalize", test_icalcomponent_normalize, do_test, do_header);
     test_run("Test builtin compat TZID", test_builtin_compat_tzid, do_test, do_header);
     test_run("Test VCC vCard parse", test_vcc_vcard_parse, do_test, do_header);
+    test_run("Test implicit DTEND and DURATION for VEVENT and VTODO", test_implicit_dtend_duration, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

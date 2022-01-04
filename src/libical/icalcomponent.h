@@ -263,6 +263,13 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstart(icalcomponent 
  *      there is a DTEND and you call get_duration, the routine will
  *      return the difference between DTEND and DTSTART.
  *
+ *      When DURATION and DTEND are both missing, for VEVENT an implicit
+ *      DTEND is calculated based of DTSTART; for AVAILABLE, VAVAILABILITY,
+ *      and VFREEBUSY null-time is returned.
+ *
+ *      Returns null-time, unless called on AVAILABLE, VEVENT,
+ *      VAVAILABILITY, or VFREEBUSY components.
+ *
  *      FIXME this is useless until we can flag the failure
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp);
@@ -327,15 +334,14 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_duration(icalcomponent *comp,
 /**     @brief Gets the DURATION property as an icalduration
  *
  *      For the icalcomponent routines only, DTEND and DURATION are tied
- *      together.
- *      If a DURATION property is not present but a DTEND is, we use
- *      that to determine the proper end.
- *
- *      For the icalcomponent routines only, dtend and duration are tied
  *      together. If you call the get routine for one and the other
  *      exists, the routine will calculate the return value. That is, if
- *      there is a DTEND and you call get_duration, the routine will
- *      return the difference between DTEND and DTSTART.
+ *      there is a DTEND and you call get_duration, the routine will return
+ *      the difference between DTEND and DTSTART in AVAILABLE, VEVENT, or
+ *      VAVAILABILITY; and the difference between DUE and DTSTART in VTODO.
+ *      When both DURATION and DTEND are missing from VEVENT an implicit
+ *      duration is returned, based on the value-type of DTSTART. Otherwise
+ *      null-duration is returned.
  */
 LIBICAL_ICAL_EXPORT struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp);
 
