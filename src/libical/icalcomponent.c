@@ -1406,9 +1406,22 @@ struct icaltimetype icalcomponent_get_dtstart(icalcomponent *comp)
 struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp);
-    icalproperty *end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
-    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
+    const icalcomponent_kind kind = icalcomponent_isa(inner);
+    icalproperty *end_prop, *dur_prop;
     struct icaltimetype ret;
+
+    switch(kind) {
+    case ICAL_VAVAILABILITY_COMPONENT:
+    case ICAL_VEVENT_COMPONENT:
+    case ICAL_VFREEBUSY_COMPONENT:
+    case ICAL_XAVAILABLE_COMPONENT:
+        break;
+    default:
+        return icaltime_null_time();
+    }
+
+    end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
+    dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
 
     if (end_prop != 0 && dur_prop == 0) {
         ret = icalproperty_get_datetime_with_component(end_prop, comp);
@@ -1426,13 +1439,17 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
 
         ret = icaltime_add(start, duration);
     } else if (end_prop == 0 && dur_prop == 0) {
-        struct icaltimetype start = icalcomponent_get_dtstart(inner);
-        if (icaltime_is_date(start)) {
-            struct icaldurationtype duration = icaldurationtype_null_duration();
-            duration.days = 1;
-            ret = icaltime_add(start, duration);
+        if (kind == ICAL_VEVENT_COMPONENT) {
+            struct icaltimetype start = icalcomponent_get_dtstart(inner);
+            if (icaltime_is_date(start)) {
+                struct icaldurationtype duration = icaldurationtype_null_duration();
+                duration.days = 1;
+                ret = icaltime_add(start, duration);
+            } else {
+                ret = start;
+            }
         } else {
-            ret = start;
+            ret = icaltime_null_time();
         }
     } else {
         /* Error, both duration and dtend have been specified */
@@ -1488,12 +1505,32 @@ void icalcomponent_set_duration(icalcomponent *comp, struct icaldurationtype v)
 struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
 {
     icalcomponent *inner = icalcomponent_get_inner(comp);
+    const icalcomponent_kind kind = icalcomponent_isa(inner);
+    icalproperty *end_prop, *dur_prop;
+    struct icaltimetype end;
+    struct icaldurationtype ret;
 
-    icalproperty *end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
+    switch(kind) {
+    case ICAL_VAVAILABILITY_COMPONENT:
+    case ICAL_VEVENT_COMPONENT:
+    case ICAL_XAVAILABLE_COMPONENT:
+        end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
+        if (end_prop) {
+            end = icalcomponent_get_dtend(inner);
+        }
+        break;
+    case ICAL_VTODO_COMPONENT:
+        end_prop = icalcomponent_get_first_property(inner, ICAL_DUE_PROPERTY);
+        if (end_prop) {
+            end = icalcomponent_get_due(inner);
+        }
+        break;
+    default:
+        /* The libical API is used incorrectly */
+        return icaldurationtype_null_duration();
+    }
 
-    icalproperty *dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
-
-    struct icaldurationtype ret = icaldurationtype_null_duration();
+    dur_prop = icalcomponent_get_first_property(inner, ICAL_DURATION_PROPERTY);
 
     if (dur_prop != 0 && end_prop == 0) {
         ret = icalproperty_get_duration(dur_prop);
@@ -1505,15 +1542,16 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
          * The standard actually allows different time zones.
          */
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
-        struct icaltimetype end = icalcomponent_get_dtend(inner);
 
         ret = icaltime_subtract(end, start);
     } else if (end_prop == 0 && dur_prop == 0) {
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
-        if (icaltime_is_date(start)) {
+        ret = icaldurationtype_null_duration();
+        if (kind == ICAL_VEVENT_COMPONENT && icaltime_is_date(start)) {
             ret.days = 1;
         }
     } else {
+        ret = icaldurationtype_null_duration();
         /* Error, both duration and dtend have been specified */
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     }

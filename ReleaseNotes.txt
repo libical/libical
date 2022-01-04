@@ -39,6 +39,8 @@ Version 3.1.0 (NOT RELEASED YET):
      (were in the public headers but not used at all)
      + struct icaltimezonetype
      + struct icaltimezonephase
+ * icalcomponent_get_dtend() return icaltime_null_time(), unless called on VEVENT, VAVAILABILITY or VFREEBUSY
+ * icalcomponent_get_duration() for VTODO calculate with DUE instead of DTEND
 
 Version 3.0.13 (UNRELEASED):
 ----------------------------
