@@ -44,6 +44,8 @@
 "POLLCOMPLETION","5034","(a)enum icalproperty_pollcompletion","string","unitary","X=10600;SERVER;SERVER-SUBMIT;SERVER-CHOICE;CLIENT;NONE=10699"
 "#Task Extension types","draft-apthorp-ical-tasks",,,
 "TASKMODE","5035","(a)enum icalproperty_taskmode","string","unitary","X=11200;AUTOMATIC-COMPLETION;AUTOMATIC-FAILURE;AUTOMATIC-STATUS;NONE=11299"
+"#VALARM Extension types","RFC 9074 Section 8.1",,,
+"PROXIMITY","5036","(a)enum icalproperty_proximity","string","unitary","X=11300;ARRIVE;DEPART;CONNECT;DISCONNECT;NONE=11399"
 "#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"
 "# New Enum values for an existing icalvalue_kind should be inserted before the corresponding NONE value"
 "# New icalvalue_kind types should start their Enum value after the highest NONE value (currently 11299)"

@@ -77,3 +77,4 @@ PATCH-ORDER          X
 PATCH-TARGET         X
 PATCH-DELETE         X
 PATCH-PARAMETER      ANY
+PROXIMITY            X

@@ -109,8 +109,9 @@
 "X-LIC-CLASS","91","X-LIC-CLASS","X-LIC-CLASS"
 "ANY","0","NO","NO"
 "NO","100","NO","NO"
-"#VALARM Extension Properties","draft-daboo-valarm-extensions Section 13.1",
+"#VALARM Extension Properties", "RFC 9073 Sections 6.1, 8.1",
 "ACKNOWLEDGED","1","DATE-TIME","DATE-TIME"
+"PROXIMITY","126","PROXIMITY","PROXIMITY"
 "#VAVAILABILITY Properties","RFC 7953 Section 3.2",
 "BUSYTYPE","101","BUSYTYPE","BUSYTYPE"
 "#VPOLL Properties","draft-york-vpoll",
