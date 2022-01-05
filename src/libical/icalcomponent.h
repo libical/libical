@@ -535,4 +535,10 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vpatch(void);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_xpatch(void);
 
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_participant(void);
+
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vlocation(void);
+
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vresource(void);
+
 #endif /* !ICALCOMPONENT_H */

@@ -55,6 +55,10 @@
 "#VALARM Extension types","RFC 9074 Section 8.1",,,
 "PROXIMITY","5036","(a)enum icalproperty_proximity","string","unitary","X=11300;ARRIVE;DEPART;CONNECT;DISCONNECT;NONE=11399"
 
+"#Event Publication Extension types","RFC 9073 Section 6",,,
+"PARTICIPANTTYPE","5037","(a)enum icalproperty_participanttype","string","unitary","X=11400;ACTIVE;INACTIVE;SPONSOR;CONTACT;BOOKING-CONTACT;EMERGENCY-CONTACT;PUBLICITY-CONTACT;PLANNER-CONTACT;PERFORMER;SPEAKER;NONE=11499"
+"RESOURCETYPE","5038","(a)enum icalproperty_resourcetype","string","unitary","X=11500;ROOM;PROJECTOR;REMOTE-CONFERENCE-AUDIO;REMOTE-CONFERENCE-VIDEO;NONE=11599"
+
 "#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"
 "# New Enum values for an existing icalvalue_kind should be inserted before the corresponding NONE value"
-"# New icalvalue_kind types should start their Enum value after the highest NONE value (currently 11399)"
+"# New icalvalue_kind types should start their Enum value after the highest NONE value (currently 11599)"

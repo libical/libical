@@ -23,6 +23,8 @@
 "TZID","27","const char*",
 "VALUE","28","icalparameter_value","X=21600;BINARY;BOOLEAN;DATE;DURATION;FLOAT;INTEGER;PERIOD;RECUR;TEXT;URI;ERROR;DATE-TIME;UTC-OFFSET;CAL-ADDRESS;NONE=21699"
 "X","29","const char*",
+
+"#libical Internal Properties"
 "X-LIC-ERRORTYPE","31","icalparameter_xlicerrortype","X=21800;COMPONENT-PARSE-ERROR;PROPERTY-PARSE-ERROR;PARAMETER-NAME-PARSE-ERROR;PARAMETER-VALUE-PARSE-ERROR;VALUE-PARSE-ERROR;INVALID-ITIP;UNKNOWN-VCAL-PROP-ERROR;MIME-PARSE-ERROR;VCAL-PROP-PARSE-ERROR;NONE=21899"
 "X-LIC-COMPARETYPE","30","icalparameter_xliccomparetype","X=21700;EQUAL;NOTEQUAL;LESS;GREATER;LESSEQUAL;GREATEREQUAL;REGEX;ISNULL;ISNOTNULL;NONE=21799"
 
@@ -72,6 +74,11 @@
 "#VPATCH Extension Parameters","draft-daboo-icalendar-vpatch"
 "PATCH-ACTION","51","icalparameter_patchaction",X=22200;CREATE;BYNAME;BYVALUE;BYPARAM;NONE=22299",
 
+"#Event Publishing Extensions Parameters","RFC 9073 Section 5"
+"ORDER","52","int",
+"SCHEMA","53","const char*",
+"DERIVED","54","icalparameter_derived","X=22300;TRUE;FALSE;NONE=22399"
+
 "#NOTE for updaters.  Preserve the icalparameter_kind Enum values to aid forward compatibility"
 "# New Enum values for an existing icalparameter_kind should be inserted before the corresponding NONE value"
-"# New icalparamter_kind types should start their Enum value after the highest NONE value (currently 22299)"
+"# New icalparamter_kind types should start their Enum value after the highest NONE value (currently 22399)"

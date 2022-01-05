@@ -1182,6 +1182,11 @@ static const struct icalcomponent_kind_map component_map[] = {
     {ICAL_VPATCH_COMPONENT, "VPATCH"},
     {ICAL_XPATCH_COMPONENT, "PATCH"},
 
+    /* Event Publishing components */
+    {ICAL_PARTICIPANT_COMPONENT, "PARTICIPANT"},
+    {ICAL_VLOCATION_COMPONENT, "VLOCATION"},
+    {ICAL_VRESOURCE_COMPONENT, "VRESOURCE"},
+
     /* End of list */
     {ICAL_NO_COMPONENT, ""},
 };

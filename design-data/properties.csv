@@ -156,4 +156,12 @@
 "PATCH-DELETE","124","TEXT","TEXT"
 "PATCH-PARAMETER","125","TEXT","TEXT"
 
+"#Event Publication Extensions Properies","RFC 9073 Section 6",
+"LOCATION-TYPE","127","TEXT","TEXT"
+"PARTICIPANT-TYPE","128","PARTICIPANTTYPE","PARTICIPANTTYPE"
+"RESOURCE-TYPE","129","RESOURCETYPE","RESOURCETYPE"
+"CALENDAR-ADDRESS","130","CAL-ADDRESS","CAL-ADDRESS"
+"STYLED-DESCRIPTION","131","TEXT","NO"
+"STRUCTURED-DATA","132","ATTACH","NO",is_structured
+
 "#NOTE for updaters.  Preserve the icalproperty_kind Enum values to aid forward compatibility"
