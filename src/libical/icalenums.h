@@ -64,7 +64,8 @@ typedef enum icalcomponent_kind
     ICAL_VVOTER_COMPONENT,
     ICAL_XVOTE_COMPONENT,
     ICAL_VPATCH_COMPONENT,
-    ICAL_XPATCH_COMPONENT
+    ICAL_XPATCH_COMPONENT,
+    ICAL_NUM_COMPONENT_TYPES /* MUST be last (unless we can put NO_COMP last) */
 } icalcomponent_kind;
 
 /***********************************************************************
