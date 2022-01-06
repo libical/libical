@@ -1965,6 +1965,21 @@ icalcomponent *icalcomponent_new_xpatch(void)
     return icalcomponent_new(ICAL_XPATCH_COMPONENT);
 }
 
+icalcomponent *icalcomponent_new_participant(void)
+{
+    return icalcomponent_new(ICAL_PARTICIPANT_COMPONENT);
+}
+
+icalcomponent *icalcomponent_new_vlocation(void)
+{
+    return icalcomponent_new(ICAL_VLOCATION_COMPONENT);
+}
+
+icalcomponent *icalcomponent_new_vresource(void)
+{
+    return icalcomponent_new(ICAL_VRESOURCE_COMPONENT);
+}
+
 /*
  * Timezone stuff.
  */
