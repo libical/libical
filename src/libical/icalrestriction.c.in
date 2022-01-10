@@ -99,105 +99,87 @@ int icalrestriction_compare(icalrestriction_kind restr, int count)
 
 /* Special case routines */
 
-static const char *icalrestriction_may_be_draft_final_canceled(
+static const char *icalrestriction_validate_status_value(
     const icalrestriction_record *rec, icalcomponent *comp, icalproperty *prop)
 {
     icalproperty_status stat = icalproperty_get_status(prop);
 
-    _unused(rec);
     _unused(comp);
 
-    if (!(stat == ICAL_STATUS_DRAFT ||
-          stat == ICAL_STATUS_FINAL ||
-          stat == ICAL_STATUS_CANCELLED)) {
-        return
-            "Failed iTIP restrictions for STATUS property. "
-            "Value must be one of DRAFT, FINAL, or CANCELED";
+    if (rec->method == ICAL_METHOD_CANCEL) {
+        switch (rec->component) {
+        case ICAL_VEVENT_COMPONENT:
+        case ICAL_VTODO_COMPONENT:
+            /* Hack. see rfc5546, 3.2.5 CANCEL for property STATUS. I don't
+               understand the note */
+            break;
+
+        case ICAL_VJOURNAL_COMPONENT:
+        case ICAL_VPOLL_COMPONENT:
+            if (stat != ICAL_STATUS_CANCELLED) {
+                return
+                    "Failed iTIP restrictions for STATUS property. "
+                    "Value must be CANCELLED";
+            }
+            break;
+
+        default:
+            break;
+        }
     }
+    else {
+        switch (rec->component) {
+        case ICAL_VEVENT_COMPONENT:
+            switch (rec->method) {
+            case ICAL_METHOD_PUBLISH:
+            case ICAL_METHOD_COUNTER:
+                if (!(stat == ICAL_STATUS_TENTATIVE ||
+                      stat == ICAL_STATUS_CONFIRMED ||
+                      stat == ICAL_STATUS_CANCELLED)) {
+                    return
+                        "Failed iTIP restrictions for STATUS property. "
+                        "Value must be one of TENTATIVE, CONFIRMED or CANCELED";
+                }
+                break;
 
-    return 0;
-}
+            case ICAL_METHOD_REQUEST:
+            case ICAL_METHOD_ADD:
+                if (!(stat == ICAL_STATUS_TENTATIVE ||
+                      stat == ICAL_STATUS_CONFIRMED)) {
+                    return
+                        "Failed iTIP restrictions for STATUS property. "
+                        "Value must be one of TENTATIVE or CONFIRMED";
+                }
+                break;
 
-static const char *icalrestriction_may_be_comp_need_process(const icalrestriction_record *
-                                                            rec, icalcomponent *comp,
-                                                            icalproperty *prop)
-{
-    icalproperty_status stat = icalproperty_get_status(prop);
+            default:
+                break;
+            }
+            break;
 
-    _unused(rec);
-    _unused(comp);
+        case ICAL_VTODO_COMPONENT:
+            switch (rec->method) {
+            case ICAL_METHOD_REQUEST:
+            case ICAL_METHOD_ADD:
+            case ICAL_METHOD_COUNTER:
+                if (!(stat == ICAL_STATUS_COMPLETED ||
+                      stat == ICAL_STATUS_NEEDSACTION ||
+                      stat == ICAL_STATUS_INPROCESS)) {
+                    return
+                        "Failed iTIP restrictions for STATUS property. "
+                        "Value must be one of COMPLETED, NEEDS-ACTION or IN-PROCESS";
+                }
+                break;
 
-    if (!(stat == ICAL_STATUS_COMPLETED ||
-          stat == ICAL_STATUS_NEEDSACTION || stat == ICAL_STATUS_INPROCESS)) {
-        return
-            "Failed iTIP restrictions for STATUS property. "
-            "Value must be one of COMPLETED, NEEDS-ACTION or IN-PROCESS";
+            default:
+                break;
+            }
+            break;
+
+        default:
+            break;
+        }
     }
-
-    return 0;
-}
-
-static const char *icalrestriction_may_be_tent_conf(const icalrestriction_record * rec,
-                                                    icalcomponent *comp, icalproperty *prop)
-{
-    icalproperty_status stat = icalproperty_get_status(prop);
-
-    _unused(rec);
-    _unused(comp);
-
-    if (!(stat == ICAL_STATUS_TENTATIVE || stat == ICAL_STATUS_CONFIRMED)) {
-        return
-            "Failed iTIP restrictions for STATUS property. "
-            "Value must be one of TENTATIVE or CONFIRMED";
-    }
-
-    return 0;
-}
-
-static const char *icalrestriction_may_be_tent_conf_cancel(const icalrestriction_record *
-                                                           rec, icalcomponent *comp,
-                                                           icalproperty *prop)
-{
-    icalproperty_status stat = icalproperty_get_status(prop);
-
-    _unused(rec);
-    _unused(comp);
-
-    if (!(stat == ICAL_STATUS_TENTATIVE ||
-          stat == ICAL_STATUS_CONFIRMED || stat == ICAL_STATUS_CANCELLED)) {
-        return
-            "Failed iTIP restrictions for STATUS property. "
-            "Value must be one of TENTATIVE, CONFIRMED or CANCELED";
-    }
-
-    return 0;
-}
-
-static const char *icalrestriction_must_be_cancel_if_present(
-    const icalrestriction_record *rec, icalcomponent *comp, icalproperty *prop)
-{
-    /* This routine will not be called if prop == 0 */
-    icalproperty_status stat = icalproperty_get_status(prop);
-
-    _unused(rec);
-    _unused(comp);
-
-    if (stat != ICAL_STATUS_CANCELLED) {
-        return "Failed iTIP restrictions for STATUS property. Value must be CANCELLED";
-    }
-
-    return 0;
-}
-
-static const char *icalrestriction_must_be_canceled_no_attendee(
-    const icalrestriction_record *rec, icalcomponent *comp, icalproperty *prop)
-{
-    _unused(rec);
-    _unused(comp);
-    _unused(prop);
-
-    /* Hack. see rfc5546, 3.2.5 CANCEL for property STATUS. I don't
-       understand the note */
 
     return 0;
 }
