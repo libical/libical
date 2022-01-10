@@ -364,6 +364,7 @@ static int icalrestriction_check_component(icalproperty_method method,
     const icalrestriction_record *start_record;
     icalproperty *method_prop = NULL;
     icalcomponent *inner_comp;
+    const char *errStr = NULL;
     int count;
     int compare;
     int valid = 1;
@@ -372,16 +373,41 @@ static int icalrestriction_check_component(icalproperty_method method,
 
     switch (comp_kind) {
     case ICAL_VCALENDAR_COMPONENT:
-        /* Get the Method value from the component */
+        if (!icalcomponent_get_first_real_component(comp)) {
+
+            errStr = "Failed iTIP restrictions for VCALENDAR component. "
+                "Expected one or more \"real\" sub-components and got 0";
+        }
+
+        /* Get the Method property from the component */
         method_prop = icalcomponent_get_first_property(comp, ICAL_METHOD_PROPERTY);
         break;
 
     case ICAL_VTIMEZONE_COMPONENT:
+        if (!icalcomponent_get_first_component(comp, ICAL_XSTANDARD_COMPONENT) &&
+            !icalcomponent_get_first_component(comp, ICAL_XDAYLIGHT_COMPONENT)) {
+
+            errStr = "Failed iTIP restrictions for VTIMEZONE component. "
+                "Expected one or more STANDARD/DAYLIGHT sub-components and got 0";
+        }
+
         method = ICAL_METHOD_NONE;
         break;
 
     default:
         break;
+    }
+
+    if (errStr != NULL) {
+        icalproperty *errProp;
+        icalparameter *errParam;
+
+        errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
+        errProp = icalproperty_vanew_xlicerror(errStr, errParam, 0);
+        icalcomponent_add_property(comp, errProp);
+        icalproperty_free(errProp);
+
+        valid = 0;
     }
 
     /* Check all of the properties in this component */
