@@ -438,7 +438,9 @@ static int icalrestriction_check_component(icalproperty_method method,
          inner_comp != 0;
          inner_comp = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
 
-        valid = valid && icalrestriction_check_component(method, inner_comp);
+        compare = icalrestriction_check_component(method, inner_comp);
+
+        valid = valid && compare;
     }
 
     return valid;
