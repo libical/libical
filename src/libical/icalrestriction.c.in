@@ -102,6 +102,8 @@ int icalrestriction_compare(icalrestriction_kind restr, int count)
 static const char *icalrestriction_validate_status_value(
     const icalrestriction_record *rec, icalcomponent *comp, icalproperty *prop)
 {
+    if (!prop) return 0;
+
     icalproperty_status stat = icalproperty_get_status(prop);
 
     _unused(comp);
@@ -193,34 +195,6 @@ static const char *icalrestriction_must_be_recurring(const icalrestriction_recor
     return 0;
 }
 
-static const char *icalrestriction_must_have_duration(const icalrestriction_record * rec,
-                                                      icalcomponent *comp, icalproperty *prop)
-{
-    _unused(rec);
-    _unused(prop);
-    if (!icalcomponent_get_first_property(comp, ICAL_DURATION_PROPERTY)) {
-        return
-            "Failed iTIP restrictions for DURATION property. "
-            "This component must have a DURATION property";
-    }
-
-    return 0;
-}
-
-static const char *icalrestriction_must_have_repeat(const icalrestriction_record * rec,
-                                                    icalcomponent *comp, icalproperty *prop)
-{
-    _unused(rec);
-    _unused(prop);
-    if (!icalcomponent_get_first_property(comp, ICAL_REPEAT_PROPERTY)) {
-        return
-            "Failed iTIP restrictions for REPEAT property. "
-            "This component must have a REPEAT property";
-    }
-
-    return 0;
-}
-
 const char *icalrestriction_must_if_tz_ref(const icalrestriction_record * rec,
                                            icalcomponent *comp, icalproperty *prop)
 {
@@ -255,21 +229,6 @@ static const char *icalrestriction_no_duration(const icalrestriction_record * re
     return 0;
 }
 
-static const char *icalrestriction_must_be_email(const icalrestriction_record * rec,
-                                                 icalcomponent *comp, icalproperty *prop)
-{
-    icalproperty_action stat = icalproperty_get_action(prop);
-
-    _unused(rec);
-    _unused(comp);
-
-    if (!(stat == ICAL_ACTION_EMAIL)) {
-        return "Failed iTIP restrictions for ACTION property. Value must be EMAIL.";
-    }
-
-    return 0;
-}
-
 static int _check_restriction(icalcomponent *comp,
                               const icalrestriction_record *record,
                               int count, icalproperty *prop)
@@ -280,16 +239,14 @@ static int _check_restriction(icalcomponent *comp,
 
     restr = record->restriction;
 
-    if (restr == ICAL_RESTRICTION_ONEEXCLUSIVE || restr == ICAL_RESTRICTION_ONEMUTUAL) {
+    if (restr == ICAL_RESTRICTION_ONEEXCLUSIVE ||
+        restr == ICAL_RESTRICTION_ONEMUTUAL) {
 
         /* First treat is as a 0/1 restriction */
         restr = ICAL_RESTRICTION_ZEROORONE;
-        compare = icalrestriction_compare(restr, count);
-
-    } else {
-
-        compare = icalrestriction_compare(restr, count);
     }
+
+    compare = icalrestriction_compare(restr, count);
 
     assert(compare != -1);
 
@@ -318,8 +275,7 @@ static int _check_restriction(icalcomponent *comp,
         icalproperty_free(errProp);
     }
 
-    if (record->function != NULL &&
-        (prop || record->subcomponent != ICAL_NO_COMPONENT)) {
+    if (record->function != NULL) {
         funcr = record->function(record, comp, prop);
     }
 
@@ -477,6 +433,170 @@ int icalrestriction_check(icalcomponent *outer_comp)
     valid = icalrestriction_check_component(ICAL_METHOD_NONE, outer_comp);
 
     return valid;
+}
+
+static const char *icalrestriction_validate_valarm_prop(
+    const icalrestriction_record *rec, icalcomponent *comp, icalproperty *prop)
+{
+    icalrestriction_record record =
+        { ICAL_METHOD_NONE, ICAL_VALARM_COMPONENT,
+          rec->property, ICAL_NO_COMPONENT, ICAL_RESTRICTION_UNKNOWN, NULL };
+    const icalrestriction_record *myrec = NULL;
+    enum icalproperty_action action = ICAL_ACTION_NONE;
+    icalproperty *action_prop;
+    int count = 0;
+
+    switch (rec->subcomponent) {
+    case ICAL_NO_COMPONENT:
+        action_prop = icalcomponent_get_first_property(comp, ICAL_ACTION_PROPERTY);
+
+        if (action_prop) {
+            action = icalproperty_get_action(action_prop);
+        }
+
+        if (prop) {
+            if (rec->restriction == ICAL_RESTRICTION_ZEROPLUS ||
+                rec->restriction == ICAL_RESTRICTION_ONEPLUS) {
+                count = icalcomponent_count_properties(comp, rec->property);
+            }
+            else {
+                count = 1;
+            }
+        }
+
+        switch (rec->property) {
+        case ICAL_DURATION_PROPERTY:
+            if (count &&
+                !icalcomponent_get_first_property(comp, ICAL_DURATION_PROPERTY)) {
+                return
+                    "Failed iTIP restrictions for REPEAT property. "
+                    "This component must have a REPEAT property "
+                    "if it has a DURATION property";
+            }
+            break;
+
+        case ICAL_REPEAT_PROPERTY:
+            if (count &&
+                !icalcomponent_get_first_property(comp, ICAL_DURATION_PROPERTY)) {
+                return
+                    "Failed iTIP restrictions for DURATION property. "
+                    "This component must have a DURATION property "
+                    "if it has a REPEAT property";
+            }
+            break;
+
+        case ICAL_ATTACH_PROPERTY:
+            if (count) {
+                switch (action) {
+                case ICAL_ACTION_AUDIO:
+                case ICAL_ACTION_PROCEDURE:
+                    record.restriction = ICAL_RESTRICTION_ZEROORONE;
+                    myrec = &record;
+                    break;
+
+                case ICAL_ACTION_DISPLAY:
+                    record.restriction = ICAL_RESTRICTION_ZERO;
+                    myrec = &record;
+                    break;
+
+                default:
+                    break;
+                }
+                break;
+            }
+            break;
+
+        case ICAL_ATTENDEE_PROPERTY:
+            switch (action) {
+            case ICAL_ACTION_AUDIO:
+            case ICAL_ACTION_DISPLAY:
+            case ICAL_ACTION_PROCEDURE:
+                if (count) {
+                    record.restriction = ICAL_RESTRICTION_ZERO;
+                    myrec = &record;
+                }
+                break;
+
+            case ICAL_ACTION_EMAIL:
+                if (!count) {
+                    record.restriction = ICAL_RESTRICTION_ONEPLUS;
+                    myrec = &record;
+                }
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case ICAL_DESCRIPTION_PROPERTY:
+            switch (action) {
+            case ICAL_ACTION_AUDIO:
+                if (count) {
+                    record.restriction = ICAL_RESTRICTION_ZERO;
+                    myrec = &record;
+                }
+                break;
+
+            case ICAL_ACTION_DISPLAY:
+            case ICAL_ACTION_EMAIL:
+                if (!count) {
+                    record.restriction = ICAL_RESTRICTION_ONE;
+                    myrec = &record;
+                }
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case ICAL_SUMMARY_PROPERTY:
+            switch (action) {
+            case ICAL_ACTION_AUDIO:
+            case ICAL_ACTION_DISPLAY:
+            case ICAL_ACTION_PROCEDURE:
+                if (count) {
+                    record.restriction = ICAL_RESTRICTION_ZERO;
+                    myrec = &record;
+                }
+                break;
+
+            case ICAL_ACTION_EMAIL:
+                if (!count) {
+                    record.restriction = ICAL_RESTRICTION_ONE;
+                    myrec = &record;
+                }
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        default:
+            break;
+        }
+        break;
+
+    case ICAL_VLOCATION_COMPONENT:
+        if (!icalcomponent_get_first_property(comp, ICAL_PROXIMITY_PROPERTY)) {
+            return
+                "Failed iTIP restrictions for VLOCATION component. "
+                "This component must only appear in a VALARM component "
+                "if the VALARM has a PROXIMITY property.";
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    if (myrec) {
+        _check_restriction(comp, myrec, count, NULL);
+    }
+
+    return 0;
 }
 
 <insert_code_here>
