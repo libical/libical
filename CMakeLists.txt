@@ -202,7 +202,7 @@ endif()
 if(NOT "$ENV{ICU_ROOT}")
   #Use the homebrew version. MacOS provided ICU doesn't provide development files
   if(APPLE)
-    set(ICU_ROOT "/usr/local/opt/icu4c") #look for the homebrew version first
+    set(ICU_ROOT "/usr/local/opt/icu4c")
   endif()
 endif()
 find_package(ICU COMPONENTS uc i18n)
@@ -241,6 +241,12 @@ if(ICU_FOUND)
 endif()
 
 # compile in Berkeley DB support
+if(NOT "$ENV{BerkeleyDB_ROOT_DIR}")
+  if(APPLE)
+    #Use the homebrew version. Xcode's version doesn't work for us.
+    set(BerkeleyDB_ROOT_DIR "/usr/local/opt/berkeley-db")
+  endif()
+endif()
 find_package(BerkeleyDB)
 set_package_properties(BerkeleyDB PROPERTIES
   TYPE OPTIONAL
