@@ -29,14 +29,14 @@
 
 # Checks if environment paths are empty, set them if they aren't
 if(NOT "$ENV{BERKELEYDB_ROOT}" STREQUAL "")
-	set(_BERKELEYDB_HINTS "$ENV{BERKELEYDB_ROOT}")
+	set(_BERKELEYDB_PATHS "$ENV{BERKELEYDB_ROOT}")
 elseif(NOT "$ENV{Berkeleydb_ROOT}" STREQUAL "")
-	set(_BERKELEYDB_HINTS "$ENV{Berkeleydb_ROOT}")
+	set(_BERKELEYDB_PATHS "$ENV{Berkeleydb_ROOT}")
 elseif(NOT "$ENV{BERKELEYDBROOT}" STREQUAL "")
-	set(_BERKELEYDB_HINTS "$ENV{BERKELEYDBROOT}")
+	set(_BERKELEYDB_PATHS "$ENV{BERKELEYDBROOT}")
 else()
 	# Set just in case, as it's used regardless if it's empty or not
-	set(_BERKELEYDB_HINTS "")
+	set(_BERKELEYDB_PATHS "")
 endif()
 
 # Allow user to pass a path instead of guessing
@@ -46,7 +46,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES ".*[wW]indows.*")
 	# MATCHES is used to work on any devies with windows in the name
 	# Shameless copy-paste from FindOpenSSL.cmake v3.8
 	file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _programfiles)
-	list(APPEND _BERKELEYDB_HINTS "${_programfiles}")
+	list(APPEND _BERKELEYDB_PATHS "${_programfiles}")
 
 	# There's actually production release and version numbers in the file path.
 	# For example, if they're on v6.2.32: C:/Program Files/Oracle/Berkeley DB 12cR1 6.2.32/
@@ -75,9 +75,8 @@ endif()
 # Find includes path
 find_path(BerkeleyDB_INCLUDE_DIRS
 	NAMES "db.h"
-	HINTS ${_BERKELEYDB_HINTS}
+	HINTS ${_BERKELEYDB_PATHS}
 	PATH_SUFFIXES "include" "includes"
-	PATHS ${_BERKELEYDB_PATHS}
 )
 
 # Checks if the version file exists, save the version file to a var, and fail if there's no version file
@@ -123,9 +122,8 @@ macro(findpackage_berkeleydb_get_lib _BERKELEYDB_OUTPUT_VARNAME _TARGET_BERKELEY
 		"lib${_TARGET_BERKELEYDB_LIB}${BerkeleyDB_VERSION_MAJOR}"
 		"lib${_TARGET_BERKELEYDB_LIB}-${BerkeleyDB_VERSION_MAJOR}"
 		"lib${_TARGET_BERKELEYDB_LIB}_${BerkeleyDB_VERSION_MAJOR}"
-		HINTS ${_BERKELEYDB_HINTS}
+		HINTS ${_BERKELEYDB_PATHS}
 		PATH_SUFFIXES "lib" "lib64" "libs" "libs64"
-		PATHS ${_BERKELEYDB_PATHS}
 	)
 	# If the library was found, add it to our list of libraries
 	if(${_BERKELEYDB_OUTPUT_VARNAME})
