@@ -83,7 +83,11 @@ int icalbdbset_init_dbenv(char *db_env_dir,
 
     flags = (u_int32_t) (DB_INIT_LOCK | DB_INIT_TXN | DB_CREATE | DB_THREAD |
                          DB_RECOVER | DB_INIT_LOG | DB_INIT_MPOOL);
+#if defined(_WIN32) //krazy2:exclude=cpp
+    ret = ICAL_DB_ENV->open(ICAL_DB_ENV, db_env_dir, flags, 0 /*ignored on Windows*/);
+#else
     ret = ICAL_DB_ENV->open(ICAL_DB_ENV, db_env_dir, flags, S_IRUSR | S_IWUSR);
+#endif
 
     if (ret) {
         /*char *foo = db_strerror(ret); */
