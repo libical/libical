@@ -199,6 +199,12 @@ endif()
 if(NOT "$ENV{ICU_BASE}" STREQUAL "") #support the old ICU_BASE env
   set(ICU_ROOT $ENV{ICU_BASE})
 endif()
+if(NOT "$ENV{ICU_ROOT}")
+  #Use the homebrew version. MacOS provided ICU doesn't provide development files
+  if(APPLE)
+    set(ICU_ROOT "/usr/local/opt/icu4c") #look for the homebrew version first
+  endif()
+endif()
 find_package(ICU COMPONENTS uc i18n)
 set_package_properties(ICU PROPERTIES
   TYPE RECOMMENDED
