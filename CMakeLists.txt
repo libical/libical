@@ -235,19 +235,23 @@ if(ICU_FOUND)
 endif()
 
 # compile in Berkeley DB support
-find_package(BDB)
-set_package_properties(BDB PROPERTIES
+find_package(BerkeleyDB)
+set_package_properties(BerkeleyDB PROPERTIES
   TYPE OPTIONAL
   PURPOSE "For Berkeley DB storage support"
 )
 add_feature_info(
   "Berkeley DB storage support"
-  BDB_FOUND
+  BerkeleyDB_FOUND
   "build in support for Berkeley DB storage"
 )
-if(BDB_FOUND)
+if(BerkeleyDB_FOUND)
   set(HAVE_BDB True)
   add_definitions(-DDB_DBM_HSEARCH=0) #set to 1 if hsearch support is needed
+  #for compatibility to our old FindBDB
+  set(BDB_FOUND True)
+  set(BDB_INCLUDE_DIR ${BerkeleyDB_INCLUDE_DIRS})
+  set(BDB_LIBRARY ${BerkeleyDB_LIBRARIES})
 endif()
 
 # MSVC specific definitions

@@ -5,6 +5,7 @@ Version 3.0.13 (UNRELEASED):
 ----------------------------
  * icalcomponent_get_dtend() return icaltime_null_time(), unless called on VEVENT, VAVAILABILITY or VFREEBUSY
  * icalcomponent_get_duration() for VTODO calculate with DUE instead of DTEND
+ * Replace CMake FindBDB with FindBerleyDB (https://github.com/sum01/FindBerkeleyDB)
 
 Version 3.0.12 (08 December 2021):
 ----------------------------------
