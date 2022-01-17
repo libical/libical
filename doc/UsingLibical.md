@@ -11,8 +11,10 @@ and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.
 
-Libical implements [RFC5545][], [RFC5546][], [RFC7529][]; the 
-iCalendar extensions in [RFC6638][]; and some of [RFC6047][].
+Libical implements [RFC5545][], [RFC5546][], [RFC7529][];
+the CalDav scheduling extensions in [RFC6638][];
+the iCalendar extensions in [RFC7986][], [RFC9073][], [RFC9074][];
+and some of [RFC6047][].
 
 
 This documentation assumes that you are familiar with the iCalendar
@@ -24,6 +26,9 @@ at the [IETF Tools][] website:
 [RFC7529]: https://tools.ietf.org/html/rfc7529
 [RFC6638]: https://tools.ietf.org/html/rfc6638
 [RFC6047]: https://tools.ietf.org/html/rfc6047
+[RFC6638]: https://tools.ietf.org/html/rfc7986
+[RFC9073]: https://tools.ietf.org/html/rfc9073
+[RFC9074]: https://tools.ietf.org/html/rfc9074
 [IETF Tools]: https://tools.ietf.org/
 
 ### 1.1 The libical project
