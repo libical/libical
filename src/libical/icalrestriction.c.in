@@ -445,8 +445,6 @@ static int icalrestriction_check_component(icalproperty_method method,
             icalrestriction_get_restriction(start_record, method, comp_kind,
                                             ICAL_NO_PROPERTY, inner_kind);
 
-        inner_comp = icalcomponent_get_first_component(comp, inner_kind);
-
         count = icalcomponent_count_components(comp, inner_kind);
 
         compare = _check_restriction(comp, record, count, NULL);
