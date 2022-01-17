@@ -416,20 +416,24 @@ static int icalrestriction_check_component(icalproperty_method method,
                                                    ICAL_ANY_PROPERTY,
                                                    ICAL_NO_COMPONENT);
 
-    for (prop_kind = ICAL_ANY_PROPERTY + 1;
-         prop_kind != ICAL_NO_PROPERTY; prop_kind++) {
+    if (start_record != &null_restriction_record) {
 
-        const icalrestriction_record *record =
-            icalrestriction_get_restriction(start_record, method, comp_kind,
-                                            prop_kind, ICAL_NO_COMPONENT);
+        for (prop_kind = ICAL_ANY_PROPERTY + 1;
+             prop_kind != ICAL_NO_PROPERTY; prop_kind++) {
 
-        icalproperty *prop = icalcomponent_get_first_property(comp, prop_kind);
+            const icalrestriction_record *record =
+                icalrestriction_get_restriction(start_record, method, comp_kind,
+                                                prop_kind, ICAL_NO_COMPONENT);
 
-        count = icalcomponent_count_properties(comp, prop_kind);
+            icalproperty *prop =
+                icalcomponent_get_first_property(comp, prop_kind);
 
-        compare = _check_restriction(comp, record, count, prop);
+            count = icalcomponent_count_properties(comp, prop_kind);
 
-        valid = valid && compare;
+            compare = _check_restriction(comp, record, count, prop);
+
+            valid = valid && compare;
+        }
     }
 
     /* Now check the inner components */
@@ -438,18 +442,21 @@ static int icalrestriction_check_component(icalproperty_method method,
                                                    ICAL_NO_PROPERTY,
                                                    ICAL_ANY_COMPONENT);
 
-    for (inner_kind = ICAL_NO_COMPONENT + 3;
-         inner_kind != ICAL_NUM_COMPONENT_TYPES; inner_kind++) {
+    if (start_record != &null_restriction_record) {
 
-        const icalrestriction_record *record =
-            icalrestriction_get_restriction(start_record, method, comp_kind,
-                                            ICAL_NO_PROPERTY, inner_kind);
+        for (inner_kind = ICAL_NO_COMPONENT + 3;
+             inner_kind != ICAL_NUM_COMPONENT_TYPES; inner_kind++) {
 
-        count = icalcomponent_count_components(comp, inner_kind);
+            const icalrestriction_record *record =
+                icalrestriction_get_restriction(start_record, method, comp_kind,
+                                                ICAL_NO_PROPERTY, inner_kind);
 
-        compare = _check_restriction(comp, record, count, NULL);
+            count = icalcomponent_count_components(comp, inner_kind);
 
-        valid = valid && compare;
+            compare = _check_restriction(comp, record, count, NULL);
+
+            valid = valid && compare;
+        }
     }
 
     if (method_prop == 0) {
