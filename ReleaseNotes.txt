@@ -1,6 +1,10 @@
 Release Highlights
 ==================
 
+Version 3.0.13 (UNRELEASED):
+----------------------------
+ *
+
 Version 3.0.13 (17 January 2022):
 ---------------------------------
  * icalcomponent_get_dtend() return icaltime_null_time(), unless called on VEVENT, VAVAILABILITY or VFREEBUSY
