@@ -498,6 +498,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ical
 <p>If a DTEND property is not present but a DURATION is, we use that to determine the proper end.</p>
 <p>If DTSTART is a DATE-TIME with a timezone parameter and a corresponding VTIMEZONE is present in the component, the returned component will already be in the correct timezone; otherwise the caller is responsible for converting it.</p>
 <p>For the icalcomponent routines only, dtend and duration are tied together. If you call the get routine for one and the other exists, the routine will calculate the return value. That is, if there is a DTEND and you call get_duration, the routine will return the difference between DTEND and DTSTART.</p>
+<p>When DURATION and DTEND are both missing, for VEVENT an implicit DTEND is calculated based of DTSTART; for AVAILABLE, VAVAILABILITY, and VFREEBUSY null-time is returned.</p>
+<p>Returns null-time, unless called on AVAILABLE, VEVENT, VAVAILABILITY, or VFREEBUSY components.</p>
 <p>FIXME this is useless until we can flag the failure </p>
 
 </div>
@@ -568,8 +570,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ical
 </div><div class="memdoc">
 
 <p>Gets the DURATION property as an icalduration. </p>
-<p>For the icalcomponent routines only, DTEND and DURATION are tied together. If a DURATION property is not present but a DTEND is, we use that to determine the proper end.</p>
-<p>For the icalcomponent routines only, dtend and duration are tied together. If you call the get routine for one and the other exists, the routine will calculate the return value. That is, if there is a DTEND and you call get_duration, the routine will return the difference between DTEND and DTSTART. </p>
+<p>For the icalcomponent routines only, DTEND and DURATION are tied together. If you call the get routine for one and the other exists, the routine will calculate the return value. That is, if there is a DTEND and you call get_duration, the routine will return the difference between DTEND and DTSTART in AVAILABLE, VEVENT, or VAVAILABILITY; and the difference between DUE and DTSTART in VTODO. When both DURATION and DTEND are missing from VEVENT an implicit duration is returned, based on the value-type of DTSTART. Otherwise null-duration is returned. </p>
 <p>FIXME We assume DTSTART and DTEND are not in different time zones. The standard actually allows different time zones.</p>
 
 </div>
@@ -994,7 +995,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ical
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 8 2021 18:45:20 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Mon Jan 17 2022 12:18:56 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>
