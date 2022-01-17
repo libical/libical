@@ -211,7 +211,9 @@ typedef unsigned long size_t;
 /* Typedef ssize_t if needed */
 #cmakedefine HAVE_SIZEOF_SSIZE_T
 #if !defined(HAVE_SIZEOF_SSIZE_T)
+#if !defined(HAVE_BDB) && !defined(_WIN32)
 typedef long ssize_t;
+#endif
 #endif
 
 /* Typedef pid_t if needed */

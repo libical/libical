@@ -214,6 +214,12 @@ if(DEFINED ICU_BASE) #to make --warn-uninitialized happy
     set(ICU_ROOT $ENV{ICU_BASE})
   endif()
 endif()
+if(NOT "$ENV{ICU_ROOT}")
+  #Use the homebrew version. MacOS provided ICU doesn't provide development files
+  if(APPLE)
+    set(ICU_ROOT "/usr/local/opt/icu4c")
+  endif()
+endif()
 find_package(ICU COMPONENTS uc i18n)
 set_package_properties(ICU PROPERTIES
   TYPE RECOMMENDED
@@ -250,19 +256,29 @@ if(ICU_FOUND)
 endif()
 
 # compile in Berkeley DB support
-find_package(BDB)
-set_package_properties(BDB PROPERTIES
+if(NOT "$ENV{BerkeleyDB_ROOT_DIR}")
+  if(APPLE)
+    #Use the homebrew version. Xcode's version doesn't work for us.
+    set(BerkeleyDB_ROOT_DIR "/usr/local/opt/berkeley-db")
+  endif()
+endif()
+find_package(BerkeleyDB)
+set_package_properties(BerkeleyDB PROPERTIES
   TYPE OPTIONAL
   PURPOSE "For Berkeley DB storage support"
 )
 add_feature_info(
   "Berkeley DB storage support"
-  BDB_FOUND
+  BerkeleyDB_FOUND
   "build in support for Berkeley DB storage"
 )
-if(BDB_FOUND)
+if(BerkeleyDB_FOUND)
   set(HAVE_BDB True)
   add_definitions(-DDB_DBM_HSEARCH=0) #set to 1 if hsearch support is needed
+  #for compatibility to our old FindBDB
+  set(BDB_FOUND True)
+  set(BDB_INCLUDE_DIR ${BerkeleyDB_INCLUDE_DIRS})
+  set(BDB_LIBRARY ${BerkeleyDB_LIBRARIES})
 endif()
 
 # MSVC specific definitions
