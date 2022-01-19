@@ -3,7 +3,7 @@ Release Highlights
 
 Version 3.0.14 (UNRELEASED):
 ----------------------------
- *
+ * icalvalue: Reset non-UTC icaltimetype::zone on set
 
 Version 3.0.13 (17 January 2022):
 ---------------------------------
