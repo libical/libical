@@ -210,8 +210,9 @@ static const char *icalrestriction_no_dtend(const icalrestriction_record * rec,
                                             icalcomponent *comp, icalproperty *prop)
 {
     _unused(rec);
-    _unused(prop);
-    if (icalcomponent_get_first_property(comp, ICAL_DTEND_PROPERTY)) {
+
+    if (prop != NULL &&
+        icalcomponent_get_first_property(comp, ICAL_DTEND_PROPERTY)) {
         return
             "Failed iTIP restrictions for DTEND property. "
             "The component must not have both DURATION and DTEND";
@@ -224,10 +225,15 @@ static const char *icalrestriction_no_duration(const icalrestriction_record * re
                                                icalcomponent *comp, icalproperty *prop)
 {
     _unused(rec);
-    _unused(comp);
-    _unused(prop);
 
-    /* _no_dtend takes care of this one */
+    if (prop != NULL &&
+        icalcomponent_get_first_property(comp, ICAL_DURATION_PROPERTY)) {
+        return
+            "Failed iTIP restrictions for DURATION property. "
+            "The component must not have both DTEND and DURATION";
+    }
+
+
     return 0;
 }
 
