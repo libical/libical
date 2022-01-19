@@ -102,11 +102,13 @@ int icalrestriction_compare(icalrestriction_kind restr, int count)
 static const char *icalrestriction_validate_status_value(
     const icalrestriction_record *rec, icalcomponent *comp, icalproperty *prop)
 {
-    if (!prop) return 0;
-
-    icalproperty_status stat = icalproperty_get_status(prop);
+    icalproperty_status stat;
 
     _unused(comp);
+
+    if (!prop) return 0;
+
+    stat = icalproperty_get_status(prop);
 
     if (rec->method == ICAL_METHOD_CANCEL) {
         switch (rec->component) {
