@@ -301,9 +301,10 @@ void icalvalue_set_datetimedate(icalvalue *value, struct icaltimetype v)
     impl->data.v_time = v;
 
     /* preserve only built-in UTC time zone, otherwise unset any set on the 'v' */
-    if(impl->data.v_time.zone != NULL &&
-       impl->data.v_time.zone != icaltimezone_get_utc_timezone())
-       impl->data.v_time.zone = NULL;
+    if (impl->data.v_time.zone != NULL &&
+        impl->data.v_time.zone != icaltimezone_get_utc_timezone()) {
+        impl->data.v_time.zone = NULL;
+    }
 
     icalvalue_reset_kind(impl);
 }
