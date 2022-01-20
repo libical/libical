@@ -4832,6 +4832,98 @@ static void test_implicit_dtend_duration(void)
     icalcomponent_free(c);
 }
 
+static void
+test_icalvalue_resets_timezone_on_set(void)
+{
+    const char *strcomp =
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VTIMEZONE\r\n"
+        "TZID:my_zone\r\n"
+        "BEGIN:STANDARD\r\n"
+        "TZNAME:my_zone\r\n"
+        "DTSTART:19160429T230000\r\n"
+        "TZOFFSETFROM:+0100\r\n"
+        "TZOFFSETTO:+0200\r\n"
+        "RRULE:FREQ=YEARLY;UNTIL=19160430T220000Z;BYDAY=-1SU;BYMONTH=4\r\n"
+        "END:STANDARD\r\n"
+        "END:VTIMEZONE\r\n"
+        "BEGIN:VEVENT\r\n"
+        "UID:0\r\n"
+        "DTSTART;TZID=my_zone:20180101T010000\r\n"
+        "DTEND:20180202T020000Z\r\n"
+        "DUE:20180302T030000\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    icalcomponent *comp, *clone, *inner;
+    icaltimetype comp_dtstart, comp_dtend, comp_due;
+    icaltimetype clone_dtstart, clone_dtend, clone_due;
+    const char *orig_str, *clone_str;
+    int estate;
+
+    estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(0);
+
+    /* First try without calling 'set' */
+    comp = icalcomponent_new_from_string(strcomp);
+    ok("1st - vCalendar can be parsed", (comp != NULL));
+    inner = icalcomponent_get_inner(comp);
+    ok("1st - inner exists", (inner != NULL));
+    orig_str = icalcomponent_as_ical_string(inner);
+    comp_dtstart = icalcomponent_get_dtstart(inner);
+    comp_dtend = icalcomponent_get_dtend(inner);
+    comp_due = icalcomponent_get_due(inner);
+    ok("1st - comp dtstart is non-UTC zone", (comp_dtstart.zone != NULL && comp_dtstart.zone != icaltimezone_get_utc_timezone()));
+    ok("1st - comp dtend is UTC zone", (comp_dtend.zone == icaltimezone_get_utc_timezone()));
+    ok("1st - comp due is floating", (comp_due.zone == NULL));
+    clone = icalcomponent_new_clone(inner);
+    icalcomponent_free(comp);
+    /* note the comp_dtstart.zone points to a freed memory now (it was freed with the 'comp') */
+    clone_dtstart = icalcomponent_get_dtstart(clone);
+    clone_dtend = icalcomponent_get_dtend(clone);
+    clone_due = icalcomponent_get_due(clone);
+    ok("1st - clone dtstart is null zone", (clone_dtstart.zone == NULL));
+    ok("1st - clone dtend is UTC zone", (clone_dtend.zone == icaltimezone_get_utc_timezone()));
+    ok("1st - clone due is floating", (clone_due.zone == NULL));
+    clone_str = icalcomponent_as_ical_string(clone);
+    ok("1st - clone and orig components match", (strcmp(orig_str, clone_str) == 0));
+    icalcomponent_free(clone);
+
+    /* Second try with calling 'set' */
+    comp = icalcomponent_new_from_string(strcomp);
+    inner = icalcomponent_get_inner(comp);
+    orig_str = icalcomponent_as_ical_string(inner);
+    comp_dtstart = icalcomponent_get_dtstart(inner);
+    comp_dtend = icalcomponent_get_dtend(inner);
+    comp_due = icalcomponent_get_due(inner);
+    ok("2nd - comp dtstart is non-UTC zone", (comp_dtstart.zone != NULL && comp_dtstart.zone != icaltimezone_get_utc_timezone()));
+    ok("2nd - comp dtend is UTC zone", (comp_dtend.zone == icaltimezone_get_utc_timezone()));
+    ok("2nd - comp due is floating", (comp_due.zone == NULL));
+    icalcomponent_set_dtstart(inner, comp_dtstart);
+    icalcomponent_set_dtend(inner, comp_dtend);
+    icalcomponent_set_due(inner, comp_due);
+    comp_dtstart = icalcomponent_get_dtstart(inner);
+    comp_dtend = icalcomponent_get_dtend(inner);
+    comp_due = icalcomponent_get_due(inner);
+    ok("2nd - comp dtstart is non-UTC zone", (comp_dtstart.zone != NULL && comp_dtstart.zone != icaltimezone_get_utc_timezone()));
+    ok("2nd - comp dtend is UTC zone after set", (comp_dtend.zone == icaltimezone_get_utc_timezone()));
+    ok("2nd - comp due is floating after set", (comp_due.zone == NULL));
+    clone = icalcomponent_new_clone(inner);
+    icalcomponent_free(comp);
+    /* note the comp_dtstart.zone points to a freed memory now (it was freed with the 'comp') */
+    clone_dtstart = icalcomponent_get_dtstart(clone);
+    clone_dtend = icalcomponent_get_dtend(clone);
+    clone_due = icalcomponent_get_due(clone);
+    ok("2nd - clone dtstart is null zone", (clone_dtstart.zone == NULL));
+    ok("2nd - clone dtend is UTC zone", (clone_dtend.zone == icaltimezone_get_utc_timezone()));
+    ok("2nd - clone due is floating", (clone_due.zone == NULL));
+    clone_str = icalcomponent_as_ical_string(clone);
+    ok("2nd - clone and orig components match", (strcmp(orig_str, clone_str) == 0));
+    icalcomponent_free(clone);
+
+    icalerror_set_errors_are_fatal(estate);
+    icalerror_clear_errno();
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -4972,6 +5064,7 @@ int main(int argc, char *argv[])
     test_run("Test builtin compat TZID", test_builtin_compat_tzid, do_test, do_header);
     test_run("Test VCC vCard parse", test_vcc_vcard_parse, do_test, do_header);
     test_run("Test implicit DTEND and DURATION for VEVENT and VTODO", test_implicit_dtend_duration, do_test, do_header);
+    test_run("Test icalvalue resets timezone on set", test_icalvalue_resets_timezone_on_set, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
