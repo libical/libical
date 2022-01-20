@@ -106,7 +106,9 @@ static const char *icalrestriction_validate_status_value(
 
     _unused(comp);
 
-    if (!prop) return 0;
+    if (!prop) {
+        return 0;
+    }
 
     stat = icalproperty_get_status(prop);
 
@@ -130,8 +132,7 @@ static const char *icalrestriction_validate_status_value(
         default:
             break;
         }
-    }
-    else {
+    } else {
         switch (rec->component) {
         case ICAL_VEVENT_COMPONENT:
             switch (rec->method) {
@@ -232,7 +233,6 @@ static const char *icalrestriction_no_duration(const icalrestriction_record * re
             "Failed iTIP restrictions for DURATION property. "
             "The component must not have both DTEND and DURATION";
     }
-
 
     return 0;
 }
@@ -466,8 +466,7 @@ static const char *icalrestriction_validate_valarm_prop(
             if (rec->restriction == ICAL_RESTRICTION_ZEROPLUS ||
                 rec->restriction == ICAL_RESTRICTION_ONEPLUS) {
                 count = icalcomponent_count_properties(comp, rec->property);
-            }
-            else {
+            } else {
                 count = 1;
             }
         }
