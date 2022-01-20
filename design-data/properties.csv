@@ -1,5 +1,6 @@
 ,,
 "#Property Name","C icalproperty_kind Enum","libical Value type","iCalendar default value",Property Flags
+
 "#iCalendar Properties","RFC 5545 Sections 3.7 and 3.8",
 "CALSCALE","8","TEXT","TEXT"
 "METHOD","48","METHOD","METHOD"
@@ -48,8 +49,10 @@
 "SEQUENCE","75","INTEGER","INTEGER"
 "REQUEST-STATUS","70","REQUEST-STATUS","REQUEST-STATUS"
 "X","90","X","X",is_multivalued
+
 "#Deprecated RFC 2445 Properties","See RFC 5545 Section A.3",
 "EXRULE","37","RECUR","RECUR"
+
 "#CAP Properties","RFC 4324 Section 2.1.2",
 ,"FIXME","Should be BOOLEAN"
 "ALLOW-CONFLICT","3","TEXT","TEXT"
@@ -90,6 +93,7 @@
 "SCOPE","74","TEXT","TEXT"
 "STORES-EXPANDED","77","TEXT","TEXT"
 "TARGET","79","CAL-ADDRESS","CAL-ADDRESS"
+
 "#Miscellaneous Properties","Origin Unknown",
 "MAXRESULTS","46","INTEGER","INTEGER"
 "MAXRESULTSSIZE","47","INTEGER","INTEGER"
@@ -97,6 +101,7 @@
 "RELCALID","68","TEXT","TEXT"
 "DATE-MAX","21","DATE-TIME","DATE-TIME"
 "DATE-MIN","22","DATE-TIME","DATE-TIME"
+
 "#libical Internal Properties",,
 "X-LIC-ERROR","93","TEXT","TEXT"
 "X-LIC-CLUSTERCOUNT","92","STRING","STRING"
@@ -109,10 +114,14 @@
 "X-LIC-CLASS","91","X-LIC-CLASS","X-LIC-CLASS"
 "ANY","0","NO","NO"
 "NO","100","NO","NO"
-"#VALARM Extension Properties","draft-daboo-valarm-extensions Section 13.1",
+
+"#VALARM Extension Properties", "RFC 9073 Sections 6.1, 8.1",
 "ACKNOWLEDGED","1","DATE-TIME","DATE-TIME"
+"PROXIMITY","126","PROXIMITY","PROXIMITY"
+
 "#VAVAILABILITY Properties","RFC 7953 Section 3.2",
 "BUSYTYPE","101","BUSYTYPE","BUSYTYPE"
+
 "#VPOLL Properties","draft-york-vpoll",
 "ACCEPT-RESPONSE","102","TEXT,"TEXT",is_multivalued
 "POLL-COMPLETION","110","POLLCOMPLETION,"POLLCOMPLETION"
@@ -123,12 +132,15 @@
 "REPLY-URL","111","URI,"URI"
 "RESPONSE","112","INTEGER,"INTEGER"
 "VOTER","107","CAL-ADDRESS,"CAL-ADDRESS"
+
 "#TZdist Properties","RFC 7808 Section 7",
 "TZID-ALIAS-OF","108","TEXT","TEXT"
 "TZUNTIL","109","DATE-TIME","DATE-TIME"
+
 "#Task Extension Properties","draft-apthorp-ical-tasks",
 "ESTIMATED-DURATION","113","DURATION","DURATION"
 "TASK-MODE","114","TASKMODE","TASKMODE"
+
 "#New Properties for iCalendar","RFC 7986 Section 5",
 "NAME","115","TEXT","TEXT"
 "REFRESH-INTERVAL","116","DURATION","NO"
@@ -136,10 +148,20 @@
 "COLOR","118","TEXT","TEXT"
 "IMAGE","119","ATTACH","NO",is_structured
 "CONFERENCE","120","URI","NO"
+
 "#VPATCH Extension Properties", "draft-daboo_icalendar-vpatch Section 4",
 "PATCH-VERSION","121","TEXT","TEXT"
 "PATCH-ORDER","122","INTEGER","INTEGER"
 "PATCH-TARGET","123","TEXT","TEXT"
 "PATCH-DELETE","124","TEXT","TEXT"
 "PATCH-PARAMETER","125","TEXT","TEXT"
+
+"#Event Publication Extensions Properies","RFC 9073 Section 6",
+"LOCATION-TYPE","127","TEXT","TEXT",is_multivalued
+"PARTICIPANT-TYPE","128","PARTICIPANTTYPE","PARTICIPANTTYPE"
+"RESOURCE-TYPE","129","RESOURCETYPE","RESOURCETYPE"
+"CALENDAR-ADDRESS","130","CAL-ADDRESS","CAL-ADDRESS"
+"STYLED-DESCRIPTION","131","TEXT","NO"
+"STRUCTURED-DATA","132","ATTACH","NO",is_structured
+
 "#NOTE for updaters.  Preserve the icalproperty_kind Enum values to aid forward compatibility"

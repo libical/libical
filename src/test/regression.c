@@ -1145,7 +1145,15 @@ void test_restriction()
                 icalproperty_vanew_dtend(atime,
                                          icalparameter_new_tzid("America/New_York"),
                                          (void *)0),
-                icalproperty_new_location("1CP Conference Room 4350"), (void *)0), (void *)0);
+                icalproperty_new_location("1CP Conference Room 4350"),
+                icalcomponent_vanew(ICAL_VALARM_COMPONENT,
+                                    icalproperty_new_action(ICAL_ACTION_EMAIL),
+                                    icalproperty_new_repeat(0),
+                                    icalcomponent_vanew(ICAL_VLOCATION_COMPONENT,
+                                                        (void *)0),
+                                    (void *)0),
+				(void *)0),
+			(void *)0);
 
     valid = icalrestriction_check(comp);
 

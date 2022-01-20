@@ -1182,6 +1182,11 @@ static const struct icalcomponent_kind_map component_map[] = {
     {ICAL_VPATCH_COMPONENT, "VPATCH"},
     {ICAL_XPATCH_COMPONENT, "PATCH"},
 
+    /* Event Publishing components */
+    {ICAL_PARTICIPANT_COMPONENT, "PARTICIPANT"},
+    {ICAL_VLOCATION_COMPONENT, "VLOCATION"},
+    {ICAL_VRESOURCE_COMPONENT, "VRESOURCE"},
+
     /* End of list */
     {ICAL_NO_COMPONENT, ""},
 };
@@ -1958,6 +1963,21 @@ icalcomponent *icalcomponent_new_vpatch(void)
 icalcomponent *icalcomponent_new_xpatch(void)
 {
     return icalcomponent_new(ICAL_XPATCH_COMPONENT);
+}
+
+icalcomponent *icalcomponent_new_participant(void)
+{
+    return icalcomponent_new(ICAL_PARTICIPANT_COMPONENT);
+}
+
+icalcomponent *icalcomponent_new_vlocation(void)
+{
+    return icalcomponent_new(ICAL_VLOCATION_COMPONENT);
+}
+
+icalcomponent *icalcomponent_new_vresource(void)
+{
+    return icalcomponent_new(ICAL_VRESOURCE_COMPONENT);
 }
 
 /*
