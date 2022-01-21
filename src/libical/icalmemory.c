@@ -250,7 +250,20 @@ char *icalmemory_tmp_copy(const char *str)
 
 char *icalmemory_strdup(const char *s)
 {
-    return strdup(s);
+    size_t l;
+    char *res;
+
+    if (!s)
+        return NULL;
+
+    l = (strlen(s) + 1) * sizeof(char);
+    res = (char *) icalmemory_new_buffer(l);
+    if (res == NULL)
+        return NULL;
+
+    memcpy(res, s, l);
+
+    return res;
 }
 
 /*
