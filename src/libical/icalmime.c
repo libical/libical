@@ -49,7 +49,7 @@ static void *icalmime_text_new_part(void)
 
     struct text_part *impl;
 
-    if ((impl = (struct text_part *)malloc(sizeof(struct text_part))) == 0) {
+    if ((impl = (struct text_part *)icalmemory_new_buffer(sizeof(struct text_part))) == 0) {
         return 0;
     }
 
@@ -77,7 +77,7 @@ static void *icalmime_textcalendar_end_part(void *part)
     icalcomponent *c = icalparser_parse_string(impl->buf);
 
     icalmemory_free_buffer(impl->buf);
-    free(impl);
+    icalmemory_free_buffer(impl);
 
     return c;
 }
@@ -88,7 +88,7 @@ static void *icalmime_text_end_part_r(void *part)
     struct text_part *impl = (struct text_part *)part;
 
     buf = impl->buf;
-    free(impl);
+    icalmemory_free_buffer(impl);
 
     return buf;
 }
@@ -166,7 +166,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
     int i, last_level = 0;
     icalcomponent *root = 0, *parent = 0, *comp = 0, *last = 0;
 
-    if ((parts = (struct sspm_part *)malloc(NUM_PARTS * sizeof(struct sspm_part))) == 0) {
+    if ((parts = (struct sspm_part *)icalmemory_new_buffer(NUM_PARTS * sizeof(struct sspm_part))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -245,7 +245,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
             icalcomponent_add_property(
                 comp,
                 icalproperty_new_xlicmimecontenttype(mimeTypeCopy));
-            free(mimeTypeCopy);
+            icalmemory_free_buffer(mimeTypeCopy);
         }
 
         if (parts[i].header.encoding != SSPM_NO_ENCODING) {
@@ -288,7 +288,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
             icalcomponent_add_property(
                 comp,
                 icalproperty_new_description(descStr));
-            free(descStr);
+            icalmemory_free_buffer(descStr);
             parts[i].data = 0;
         }
 
@@ -331,7 +331,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
     }
 
     sspm_free_parts(parts, NUM_PARTS);
-    free(parts);
+    icalmemory_free_buffer(parts);
 
     return root;
 }
@@ -342,7 +342,7 @@ int icalmime_test(char *(*get_string) (char *s, size_t size, void *d), void *dat
     struct sspm_part *parts;
     int i;
 
-    if ((parts = (struct sspm_part *)malloc(NUM_PARTS * sizeof(struct sspm_part))) == 0) {
+    if ((parts = (struct sspm_part *)icalmemory_new_buffer(NUM_PARTS * sizeof(struct sspm_part))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -363,7 +363,7 @@ int icalmime_test(char *(*get_string) (char *s, size_t size, void *d), void *dat
     sspm_write_mime(parts, NUM_PARTS, &out, "To: bob@bob.org");
 
     printf("%s\n", out);
-    free(out);
+    icalmemory_free_buffer(out);
 
     return 0;
 }

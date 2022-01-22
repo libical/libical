@@ -593,7 +593,7 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
         icalrecurrencetype_weekday wd;
 
         if (i == ICAL_BY_DAY_SIZE) {
-            free(vals_copy);
+            icalmemory_free_buffer(vals_copy);
             return -1;
         }
 
@@ -624,7 +624,7 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
 
         /* Sanity check value */
         if (wd == ICAL_NO_WEEKDAY || weekno >= ICAL_BY_WEEKNO_SIZE) {
-            free(vals_copy);
+            icalmemory_free_buffer(vals_copy);
             return -1;
         }
 
@@ -632,7 +632,7 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
         array[i] = ICAL_RECURRENCE_ARRAY_MAX;
     }
 
-    free(vals_copy);
+    icalmemory_free_buffer(vals_copy);
 
     sort_bydayrules(parser);
 
@@ -773,7 +773,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
             }
             if (parser.rt.rscale) {
-                free(parser.rt.rscale);
+                icalmemory_free_buffer(parser.rt.rscale);
             }
             icalrecurrencetype_clear(&parser.rt);
             break;
@@ -791,7 +791,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             if (rruleHandlingSetting == ICAL_RRULE_TREAT_AS_ERROR) {
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
                 if (parser.rt.rscale) {
-                    free(parser.rt.rscale);
+                    icalmemory_free_buffer(parser.rt.rscale);
                 }
                 icalrecurrencetype_clear(&parser.rt);
                 break;
@@ -801,7 +801,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
         }
     }
 
-    free(parser.copy);
+    icalmemory_free_buffer(parser.copy);
 
     return parser.rt;
 }
@@ -1965,7 +1965,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
         return 0;
     }
 
-    if (!(impl = (icalrecur_iterator *)malloc(sizeof(icalrecur_iterator)))) {
+    if (!(impl = (icalrecur_iterator *)icalmemory_new_buffer(sizeof(icalrecur_iterator)))) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -2026,7 +2026,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                 impl->orig_data[byrule] = 0;
             } else {
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-                free(impl);
+                icalmemory_free_buffer(impl);
                 return 0;
             }
         }
@@ -2070,7 +2070,7 @@ void icalrecur_iterator_free(icalrecur_iterator *i)
     }
 #endif
 
-    free(i);
+    icalmemory_free_buffer(i);
 }
 
 /** Calculate the number of days between 2 dates */
@@ -3641,7 +3641,7 @@ int icalrecur_expand_recurrence(const char *rule,
         icalrecur_iterator_free(ritr);
     }
     if(recur.rscale)
-        free(recur.rscale);
+        icalmemory_free_buffer(recur.rscale);
 
     return 1;
 }

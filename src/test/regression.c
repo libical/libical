@@ -806,7 +806,7 @@ void test_memory()
 
     ok("final buffer size == 806", (bufsize == 806));
 
-    free(f);
+    icalmemory_free_buffer(f);
 
     bufsize = 4;
 
@@ -895,7 +895,7 @@ void test_memory()
     if (VERBOSE)
         printf("Char-by-Char buffer: %s\n", f);
 
-    free(f);
+    icalmemory_free_buffer(f);
 
     for (i = 0; i < 100; i++) {
         f = icalmemory_tmp_buffer(bufsize);
@@ -2730,7 +2730,7 @@ void test_recur_parser()
     rt = icalrecurrencetype_from_string(str);
     icalerror_restore("MALFORMEDDATA", es);
     ok(str, rt.freq == ICAL_NO_RECURRENCE);
-    free(v);
+    icalmemory_free_buffer(v);
 }
 
 
@@ -4672,7 +4672,7 @@ void test_timezone_from_builtin(void)
     comp = icaltimezone_get_component(zone);
     strcomp = icalcomponent_as_ical_string_r(comp);
     comp = icalcomponent_new_from_string(strcomp);
-    free(strcomp);
+    icalmemory_free_buffer(strcomp);
 
     ok("VTIMEZONE icalcomponent_new_from_string()", (comp != NULL));
 

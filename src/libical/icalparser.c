@@ -102,7 +102,7 @@ icalparser *icalparser_new(void)
 {
     struct icalparser_impl *impl = 0;
 
-    if ((impl = (struct icalparser_impl *)malloc(sizeof(struct icalparser_impl))) == 0) {
+    if ((impl = (struct icalparser_impl *)icalmemory_new_buffer(sizeof(struct icalparser_impl))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -135,7 +135,7 @@ void icalparser_free(icalparser *parser)
 
     pvl_free(parser->components);
 
-    free(parser);
+    icalmemory_free_buffer(parser);
 }
 
 void icalparser_set_gen_data(icalparser *parser, void *data)
@@ -323,7 +323,7 @@ static char *parser_get_param_name_heap(char *line, char **end)
         *end = *end + 1;
         next = (**end == '"') ? *end : parser_get_next_char('"', *end, 0);
         if (next == 0) {
-            free(str);
+            icalmemory_free_buffer(str);
             *end = NULL;
             return 0;
         }
@@ -557,7 +557,7 @@ char *icalparser_get_line(icalparser *parser,
                 } else {
                     /* No data in output; return and signal that there
                        is no more input */
-                    free(line);
+                    icalmemory_free_buffer(line);
                     return 0;
                 }
             }
