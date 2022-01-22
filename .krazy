@@ -37,5 +37,5 @@ SKIP /cmake/Toolchain-iOS.cmake|/cmake/Toolchain-QNX65.cmake|/cmake/Toolchain-QN
 #Skip zoneinfo
 SKIP /zoneinfo/
 
-STYLE_LINEMAX 100
+STYLE_LINEMAX 120
 STYLE_PYTHONSTYLE_OFFSET 4
