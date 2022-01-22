@@ -548,3 +548,6 @@ typedef ssize_t IO_SSIZE_T;
 #define _unused(x) (void)x
 #endif
 #endif
+
+#define icalassert(...) assert(__VA_ARGS__)
+#define icalerrprintf(...) fprintf(stderr, __VA_ARGS__)

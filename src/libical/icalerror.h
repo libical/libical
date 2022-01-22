@@ -187,10 +187,10 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
 
 #ifdef __GNUC__ca
 #define icalerror_warn(message) \
-{fprintf(stderr, "%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message);}
+{icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message);}
 #else /* __GNU_C__ */
 #define icalerror_warn(message) \
-{fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, message);}
+{icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message);}
 #endif /* __GNU_C__ */
 
 /**
@@ -343,7 +343,7 @@ if(icalerror_get_error_state(x) == ICAL_ERROR_FATAL || \
     icalerror_get_errors_are_fatal() == 1)){              \
    icalerror_warn(icalerror_strerror(x)); \
    ical_bt(); \
-   assert(0); \
+   icalassert(0); \
 } }
 #else
 /**
@@ -405,13 +405,13 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
 #ifdef __GNUC__
 #define icalerror_assert(test,message) \
 if (!(test)) { \
-    fprintf(stderr, "%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
+    icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
     icalerror_stop_here(); \
     abort();}
 #else /*__GNUC__*/
 #define icalerror_assert(test,message) \
 if (!(test)) { \
-    fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, message); \
+    icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message); \
     icalerror_stop_here(); \
     abort();}
 #endif /*__GNUC__*/
@@ -518,7 +518,7 @@ if (!(test)) { \
 #define icalerror_check_arg_re(test,arg,error) \
 if (!(test)) { \
     icalerror_stop_here(); \
-    assert(0); \
+    icalassert(0); \
     return error; \
 }
 

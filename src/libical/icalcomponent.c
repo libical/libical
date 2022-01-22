@@ -73,7 +73,7 @@ void icalcomponent_add_children(icalcomponent *impl, va_list args)
 
     while ((vp = va_arg(args, void *)) != 0)
     {
-        assert(icalcomponent_isa_component(vp) != 0 || icalproperty_isa_property(vp) != 0);
+        icalassert(icalcomponent_isa_component(vp) != 0 || icalproperty_isa_property(vp) != 0);
 
         if (icalcomponent_isa_component(vp) != 0) {
             icalcomponent_add_component(impl, (icalcomponent *) vp);
@@ -1991,8 +1991,8 @@ void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_m
     size_t i;
 
     /* Check that both components are VCALENDAR components. */
-    assert(icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT);
-    assert(icalcomponent_isa(comp_to_merge) == ICAL_VCALENDAR_COMPONENT);
+    icalassert(icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT);
+    icalassert(icalcomponent_isa(comp_to_merge) == ICAL_VCALENDAR_COMPONENT);
 
     /* Step through each subcomponent of comp_to_merge, looking for VTIMEZONEs.
        For each VTIMEZONE found, check if we need to add it to comp and if we

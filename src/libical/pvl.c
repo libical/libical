@@ -277,7 +277,7 @@ void pvl_insert_ordered(pvl_list L, pvl_comparef f, void *d)
 
     /* badness, choke */
 #if !defined(lint)
-    assert(0);
+    icalassert(0);
 #endif
 }
 

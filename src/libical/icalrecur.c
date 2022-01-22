@@ -2180,7 +2180,7 @@ static int next_unit(icalrecur_iterator *impl,
 
     int end_of_data = 0;
 
-    assert(has_by_unit || this_frequency);
+    icalassert(has_by_unit || this_frequency);
 
     if (next_sub_unit && next_sub_unit(impl) == 0) {
         return 0;
@@ -2252,7 +2252,7 @@ static int prev_unit(icalrecur_iterator *impl,
 
     int end_of_data = 0;
 
-    assert(has_by_unit || this_frequency);
+    icalassert(has_by_unit || this_frequency);
 
     if (prev_sub_unit && prev_sub_unit(impl) == 0) {
         return 0;

@@ -106,13 +106,13 @@ public:
 
     T *operator->() const
     {
-        assert(ptr);
+        icalassert(ptr);
         return ptr;
     }
 
     T &operator*()
     {
-        assert(ptr);
+        icalassert(ptr);
         return *ptr;
     }
 
