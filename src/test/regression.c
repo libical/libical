@@ -4924,6 +4924,27 @@ test_icalvalue_resets_timezone_on_set(void)
     icalerror_clear_errno();
 }
 
+static void test_remove_tzid_from_due(void)
+{
+    icalproperty *due = icalproperty_vanew_due(icaltime_from_string("20220120T120000"), 0);
+    icalcomponent *c;
+
+    icalproperty_add_parameter(due, icalparameter_new_tzid("America/New_York"));
+
+    c = icalcomponent_vanew(
+            ICAL_VCALENDAR_COMPONENT,
+                icalcomponent_vanew(
+                    ICAL_VTODO_COMPONENT,
+                    due,
+                    0),
+            0);
+
+    icalcomponent_set_due(c, icaltime_from_string("20220120"));
+    str_is("icalproperty_as_ical_string()", "DUE;VALUE=DATE:20220120\r\n", icalproperty_as_ical_string(icalcomponent_get_first_property(icalcomponent_get_inner(c), ICAL_DUE_PROPERTY)));
+
+    icalcomponent_free(c);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -5065,6 +5086,7 @@ int main(int argc, char *argv[])
     test_run("Test VCC vCard parse", test_vcc_vcard_parse, do_test, do_header);
     test_run("Test implicit DTEND and DURATION for VEVENT and VTODO", test_implicit_dtend_duration, do_test, do_header);
     test_run("Test icalvalue resets timezone on set", test_icalvalue_resets_timezone_on_set, do_test, do_header);
+    test_run("Test removing TZID from DUE with icalcomponent_set_due", test_remove_tzid_from_due, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

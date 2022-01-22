@@ -2382,6 +2382,7 @@ void icalcomponent_set_due(icalcomponent *comp, struct icaltimetype v)
         icalcomponent_add_property(inner, due_prop);
     } else if (due_prop != 0) {
         icalproperty_set_due(due_prop, v);
+        icalproperty_remove_parameter_by_kind(due_prop, ICAL_TZID_PARAMETER);
     } else if (dur_prop != 0) {
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
 
