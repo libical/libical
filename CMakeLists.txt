@@ -281,6 +281,10 @@ if(BerkeleyDB_FOUND)
   set(BDB_LIBRARY ${BerkeleyDB_LIBRARIES})
 endif()
 
+# C99 compliant compiler is required
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
 # MSVC specific definitions
 if(WIN32)
   if(MSVC)

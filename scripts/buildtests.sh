@@ -373,6 +373,7 @@ SPLINT() {
 
   splint $files \
        -badflag \
+       -preproc \
        -weak -warnposix \
        -modobserver -initallelements -redef \
        -linelen 1000 \

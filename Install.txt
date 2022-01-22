@@ -13,7 +13,7 @@ To build libical you will need:
  - CMake version 3.11.0 or higher
  - Perl
  - libicu (not required but strongly recommended)
- - a C compiler (let us know if the build fails with your C compiler)
+ - a C99-compliant C compiler (let us know if the build fails with your C compiler)
 
 Building on Unix with gcc or clang:
 % mkdir build
