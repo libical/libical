@@ -123,6 +123,8 @@ static buffer_ring *buffer_ring_new(void)
     int i;
 
     br = (buffer_ring *) icalmemory_new_buffer(sizeof(buffer_ring));
+    if (!br)
+        return NULL;
 
     for (i = 0; i < BUFFER_RING_SIZE; i++) {
         br->ring[i] = 0;
@@ -182,6 +184,9 @@ static buffer_ring *get_buffer_ring(void)
 void icalmemory_add_tmp_buffer(void *buf)
 {
     buffer_ring *br = get_buffer_ring();
+    if (!br) {
+        return;
+    }
 
     /* Wrap around the ring */
     if (++(br->pos) == BUFFER_RING_SIZE) {
@@ -229,6 +234,8 @@ void icalmemory_free_ring()
     buffer_ring *br;
 
     br = get_buffer_ring();
+    if (!br)
+        return;
 
     icalmemory_free_ring_byval(br);
 #if defined(HAVE_PTHREAD)
@@ -241,7 +248,15 @@ void icalmemory_free_ring()
 /* Like strdup, but the buffer is on the ring. */
 char *icalmemory_tmp_copy(const char *str)
 {
-    char *b = icalmemory_tmp_buffer(strlen(str) + 1);
+    char *b;
+    
+    if (!str)
+        return NULL;
+
+    b = icalmemory_tmp_buffer(strlen(str) + 1);
+
+    if (!b)
+        return NULL;
 
     strcpy(b, str);
 
@@ -328,6 +343,10 @@ void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const ch
         *buf_size = (*buf_size) * 2 + final_length;
 
         new_buf = icalmemory_resize_buffer(*buf, *buf_size);
+        if (!new_buf) {
+            // an error was set in the resize function, so we just return here.
+            return;
+        }
 
         new_pos = (void *)((size_t) new_buf + data_length);
 
@@ -365,6 +384,10 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
         *buf_size = (*buf_size) * 2 + final_length + 1;
 
         new_buf = icalmemory_resize_buffer(*buf, *buf_size);
+        if (!new_buf) {
+            // an error was set in the resize function, so we just return here.
+            return;
+        }
 
         new_pos = (void *)((size_t) new_buf + data_length);
 

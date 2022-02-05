@@ -1365,6 +1365,9 @@ icalcomponent *icalparser_parse_string(const char *str)
     d.str = str;
 
     p = icalparser_new();
+    if (!p)
+        return NULL;
+
     icalparser_set_gen_data(p, &d);
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
