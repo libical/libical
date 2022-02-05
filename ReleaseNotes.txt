@@ -4,6 +4,7 @@ Release Highlights
 Version 3.1.0 (NOT RELEASED YET):
 --------------------------------
  * MSVC 2013 or higher (when building on Windows with MSVC)
+ * For the C++ bindings, a C++11 compliant complier is required
  * Requires CMake v3.11.0 or higher
  * libical-glib now requires glib 2.38 or higher
  * draft-ietf-calext-eventpub-extensions-19 (RFC 9073) support added

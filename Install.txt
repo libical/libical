@@ -14,6 +14,7 @@ To build libical you will need:
  - Perl
  - libicu (not required but strongly recommended)
  - a C99-compliant C compiler (let us know if the build fails with your C compiler)
+ - for C++ bindings, a C++11 compliant compiler
 
 Building on Unix with gcc or clang:
 % mkdir build
