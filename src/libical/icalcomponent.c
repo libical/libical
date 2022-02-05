@@ -236,8 +236,9 @@ char *icalcomponent_as_ical_string(icalcomponent *impl)
     char *buf;
 
     buf = icalcomponent_as_ical_string_r(impl);
-    if (buf)
+    if (buf) {
         icalmemory_add_tmp_buffer(buf);
+    }
     return buf;
 }
 

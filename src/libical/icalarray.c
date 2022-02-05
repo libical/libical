@@ -78,8 +78,7 @@ icalarray *icalarray_copy(icalarray *originalarray)
                        array->increment_size * array->element_size);
 
                 array->space_allocated += array->increment_size;
-            }
-            else {
+            } else {
                 icalerror_set_errno(ICAL_ALLOCATION_ERROR);
                 icalarray_free(array);
                 return NULL;
