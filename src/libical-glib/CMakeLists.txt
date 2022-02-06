@@ -1,5 +1,9 @@
 add_definitions(-Dlibical_ical_EXPORTS)
 
+# a C11 compliant compiler is required to build this library
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
 # build ical-glib-src-generator
 add_executable(ical-glib-src-generator
   tools/generator.c
