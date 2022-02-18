@@ -314,6 +314,9 @@ CPPCHECK() {
            -D PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=0 \
            -D _unused="(void)" \
            -D _deprecated="(void)" \
+           -D ICALMEMORY_DEFAULT_FREE="free" \
+           -D ICALMEMORY_DEFAULT_MALLOC="malloc" \
+           -D ICALMEMORY_DEFAULT_REALLOC="realloc" \
            -D F_OK=0 \
            -D R_OK=0 \
            -U YYSTYPE \
