@@ -20,7 +20,6 @@ FILE: test-malloc.c
 #endif
 
 #include "test-malloc.h"
-#include "regression.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -146,8 +145,8 @@ void test_free(void *p) {
         //   icalmemory, e.g. via malloc().
         // * The header in front of the memory block being freed has been corrupted.
 
-        ok("freed memory was allocated via icalmemory and has not been corrupted",
-           hdr->magic_no == TESTMALLOC_MAGIC_NO);
+        //ok("freed memory was allocated via icalmemory and has not been corrupted",
+        //   hdr->magic_no == TESTMALLOC_MAGIC_NO);
         assert(hdr->magic_no == TESTMALLOC_MAGIC_NO);
         global_testmalloc_statistics.free_failed_cnt++;
         return;

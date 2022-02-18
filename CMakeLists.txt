@@ -78,6 +78,14 @@
 #  Build for the abi-dumper (requires gcc)
 #  Default=false
 #
+# -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=[true|false]
+#  Build using special memory consistency versions of malloc(), realloc() and free()
+#  that perform some extra verifications. Most notably they ensure that memory allocated
+#  with icalmemory_new_buffer() is freed using icalmemory_free() rather than using free()
+#  directly and vice versa. Failing to do so would cause the test to fail with assertions
+#  or access violations.
+#  Default=false
+#
 # -DADDRESS_SANITIZER=[true|false]
 #  Build with the address sanitizer (requires gcc or clang)
 #  Default=false
@@ -536,6 +544,12 @@ if(ABI_DUMPER)
       "You are trying to build for the abi-dumper using a non-GCC compiler.")
   endif()
 endif()
+
+libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY "(Developer-only) Build with memory consistency functions." False)
+if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
+  add_definitions(-DMEMORY_CONSISTENCY)
+endif()
+mark_as_advanced(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
 
 libical_option(ADDRESS_SANITIZER "(Developer-only) Build with the address sanitizer." False)
 mark_as_advanced(ADDRESS_SANITIZER)

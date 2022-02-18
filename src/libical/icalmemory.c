@@ -33,6 +33,9 @@
 
 #include "icalmemory.h"
 #include "icalerror.h"
+#if defined(MEMORY_CONSISTENCY)
+#include "test-malloc.h"
+#endif
 
 #include <stdlib.h>
 
@@ -281,19 +284,25 @@ char *icalmemory_strdup(const char *s)
     return res;
 }
 
-#if defined(ICALMEMORY_DEFAULT_MALLOC) && !defined(S_SPLINT_S)
+#if defined(MEMORY_CONSISTENCY)
+static icalmemory_malloc_f global_icalmem_malloc = &test_malloc;
+#elif defined(ICALMEMORY_DEFAULT_MALLOC) && !defined(S_SPLINT_S)
 static icalmemory_malloc_f global_icalmem_malloc = &ICALMEMORY_DEFAULT_MALLOC;
 #else
 static icalmemory_malloc_f global_icalmem_malloc = NULL;
 #endif
 
-#if defined(ICALMEMORY_DEFAULT_REALLOC) && !defined(S_SPLINT_S)
+#if defined(MEMORY_CONSISTENCY)
+static icalmemory_realloc_f global_icalmem_realloc = &test_realloc;
+#elif defined(ICALMEMORY_DEFAULT_REALLOC) && !defined(S_SPLINT_S)
 static icalmemory_realloc_f global_icalmem_realloc = &ICALMEMORY_DEFAULT_REALLOC;
 #else
 static icalmemory_realloc_f global_icalmem_realloc = NULL;
 #endif
 
-#if defined(ICALMEMORY_DEFAULT_FREE) && !defined(S_SPLINT_S)
+#if defined(MEMORY_CONSISTENCY)
+static icalmemory_free_f global_icalmem_free = &test_free;
+#elif defined(ICALMEMORY_DEFAULT_FREE) && !defined(S_SPLINT_S)
 static icalmemory_free_f global_icalmem_free = &ICALMEMORY_DEFAULT_FREE;
 #else
 static icalmemory_free_f global_icalmem_free = NULL;

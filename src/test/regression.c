@@ -5206,11 +5206,16 @@ int main(int argc, char *argv[])
     int do_header = 0;
     int failed_count = 0;
 
+#if !defined(MEMORY_CONSISTENCY)
+    // With MEMORY_CONSISTENCY we are building the entire library using the
+    // test_* functions; therefore, no need to set them here again.
+
     // We specify special versions of malloc et al. that perform some extra verifications.
     // Most notably they ensure, that memory allocated with icalmemory_new_buffer() is freed
     // using icalmemory_free() rather than using free() directly and vice versa. Failing to
     // do so would cause the test to fail with assertions or access violations.
     icalmemory_set_mem_alloc_funcs(&test_malloc, &test_realloc, &test_free);
+#endif
 
     set_zone_directory(TEST_ZONEDIR);
     icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
