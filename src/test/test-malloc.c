@@ -74,7 +74,6 @@ void *test_malloc(size_t size) {
         global_testmalloc_remaining_attempts--;
     }
 
-    // cppcheck-suppress memleak
     return (void*) &((struct testmalloc_hdrlayout *) hdr)->data;
 }
 
