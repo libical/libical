@@ -271,7 +271,7 @@ static char *parse_posix_zone(char *p, ttinfo *type)
         size = strcspn(p, "-+0123456789,\n");
     }
 
-    type->zname = (char *) malloc(size + 1);
+    type->zname = (char *) icalmemory_new_buffer(size + 1);
     strncpy(type->zname, p, size);
     type->zname[size] = '\0';
     p += size;
