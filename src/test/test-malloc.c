@@ -26,8 +26,6 @@ FILE: test-malloc.c
 #include <string.h>
 #include <assert.h>
 
-
-
 struct testmalloc_statistics global_testmalloc_statistics;
 static int global_testmalloc_remaining_attempts = -1;
 
@@ -38,18 +36,16 @@ struct testmalloc_hdr {
 };
 
 struct testmalloc_hdrlayout {
-
     struct testmalloc_hdr hdr;
     int data;
 };
 
 #define TESTMALLOC_HDR_SIZE ((size_t) &((struct testmalloc_hdrlayout*) 0)->data)
 
-
 void *test_malloc(size_t size) {
 
-    void* block;
-    struct testmalloc_hdr* hdr;
+    void *block;
+    struct testmalloc_hdr *hdr;
 
     global_testmalloc_statistics.malloc_cnt++;
     if (global_testmalloc_remaining_attempts == 0) {
@@ -63,7 +59,7 @@ void *test_malloc(size_t size) {
         return NULL;
     }
 
-    hdr = (struct testmalloc_hdr*) block;
+    hdr = (struct testmalloc_hdr *)block;
     hdr->magic_no = TESTMALLOC_MAGIC_NO;
     hdr->size = size;
 
@@ -82,9 +78,9 @@ void *test_malloc(size_t size) {
     return (void*) &((struct testmalloc_hdrlayout *) hdr)->data;
 }
 
-void *test_realloc(void* p, size_t size) {
+void *test_realloc(void *p, size_t size) {
 
-    struct testmalloc_hdr* hdr;
+    struct testmalloc_hdr *hdr;
     size_t old_size;
 
     global_testmalloc_statistics.realloc_cnt++;
@@ -108,7 +104,7 @@ void *test_realloc(void* p, size_t size) {
     hdr->magic_no = 0;
 
     // cppcheck-suppress memleakOnRealloc; the mem block p passed to this function stays valid.
-    hdr = (struct testmalloc_hdr*) realloc(hdr, size + TESTMALLOC_HDR_SIZE);
+    hdr = (struct testmalloc_hdr *)realloc(hdr, size + TESTMALLOC_HDR_SIZE);
     if (hdr == NULL) {
         global_testmalloc_statistics.realloc_failed_cnt++;
         return NULL;
@@ -126,12 +122,12 @@ void *test_realloc(void* p, size_t size) {
         global_testmalloc_remaining_attempts--;
     }
 
-    return (void*) &((struct testmalloc_hdrlayout*)hdr)->data;
+    return (void *) &((struct testmalloc_hdrlayout *)hdr)->data;
 }
 
-void test_free(void* p) {
+void test_free(void *p) {
 
-    struct testmalloc_hdr* hdr;
+    struct testmalloc_hdr *hdr;
     size_t old_size;
 
     if (p == NULL) {
@@ -151,7 +147,8 @@ void test_free(void* p) {
         //   icalmemory, e.g. via malloc().
         // * The header in front of the memory block being freed has been corrupted.
 
-        ok("freed memory was allocated via icalmemory and has not been corrupted", hdr->magic_no == TESTMALLOC_MAGIC_NO);
+        ok("freed memory was allocated via icalmemory and has not been corrupted",
+           hdr->magic_no == TESTMALLOC_MAGIC_NO);
         assert(hdr->magic_no == TESTMALLOC_MAGIC_NO);
         global_testmalloc_statistics.free_failed_cnt++;
         return;
@@ -165,8 +162,6 @@ void test_free(void* p) {
     global_testmalloc_statistics.mem_allocated_current -= old_size;
     global_testmalloc_statistics.blocks_allocated--;
 }
-
-
 
 void testmalloc_reset() {
     memset(&global_testmalloc_statistics, 0, sizeof(global_testmalloc_statistics));

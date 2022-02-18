@@ -20,7 +20,6 @@ FILE: test-malloc.h
 
 #include <stdint.h>
 
-
 struct testmalloc_statistics {
     int malloc_cnt;
     int realloc_cnt;
@@ -47,19 +46,19 @@ void *test_malloc(size_t size);
 /** Resizes the specified buffer.
  * Can only be used with memory that has previously been allocated using test_malloc().
  */
-void *test_realloc(void* p, size_t size);
+void *test_realloc(void *p, size_t size);
 
 /** Frees a block of memory that has previously been allocated via the test_malloc() function. Specifying memory that
  * has not been allocated via test_malloc() causes an assertion.
  */
-void test_free(void* p);
+void test_free(void *p);
 
 /** Resets the memory management statistics and sets the number of successful
   * allocations limit to infinite.
   */
 void testmalloc_reset();
 
-/** Sets the maximum number of malloc or realloc attemts that will succeed. If 
+/** Sets the maximum number of malloc or realloc attemts that will succeed. If
   * the number is negative, no limit will be applied.
   */
 void testmalloc_set_max_successful_allocs(int n);

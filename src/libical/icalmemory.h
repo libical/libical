@@ -145,32 +145,33 @@ LIBICAL_ICAL_EXPORT void icalmemory_add_tmp_buffer(void *buf);
  */
 LIBICAL_ICAL_EXPORT void icalmemory_free_ring(void);
 
-
-typedef void* (*icalmemory_malloc_f)(size_t);
-typedef void* (*icalmemory_realloc_f)(void*, size_t);
-typedef void (*icalmemory_free_f)(void*);
+typedef void *(*icalmemory_malloc_f)(size_t);
+typedef void *(*icalmemory_realloc_f)(void *, size_t);
+typedef void (*icalmemory_free_f)(void *);
 
 /**
  * @brief Configures the functions to use for memory management.
- * 
+ *
  * @param f_malloc The function to use for memory allocation.
  * @param f_realloc The function to use for memory reallocation.
  * @param f_free The function to use for memory deallocation.
- * 
+ *
  * This function configures the library to use the specified functions for
  * memory management. By default the standard system memory management
  * functions malloc(), realloc() and free() are used.
- * 
+ *
  * Note: The memory management functions configured via this
  * functions are used throughout the core libical component but not within
  * other components like libicalvcal.
  * @since 3.1.0
  */
-LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc, icalmemory_realloc_f f_realloc, icalmemory_free_f f_free);
+LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc,
+                                                        icalmemory_realloc_f f_realloc,
+                                                        icalmemory_free_f f_free);
 
 /**
  * @brief Returns the functions used for memory management.
- * 
+ *
  * @param f_malloc A pointer to the function to use for memory allocation.
  * @param f_realloc A pointer to the function to use for memory reallocation.
  * @param f_free A pointer to the function to use for memory deallocation.
@@ -178,9 +179,9 @@ LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_ma
  * Retrieves the functions used by the library for memory management.
  * @since 3.1.0
  */
-LIBICAL_ICAL_EXPORT void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f* f_malloc, icalmemory_realloc_f* f_realloc, icalmemory_free_f* f_free);
+LIBICAL_ICAL_EXPORT void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f *f_malloc,
+                                                        icalmemory_realloc_f *f_realloc, icalmemory_free_f *f_free);
 
- 
 /**
  * @brief Creates new buffer with the specified size.
  * @param size The size of the buffer that is to be created.
