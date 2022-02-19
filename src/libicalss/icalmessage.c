@@ -22,7 +22,6 @@
 
 #include "icalmessage.h"
 #include "icalerror.h"
-#include "icalmemory.h"
 #include "icalversion.h"        /* for ICAL_PACKAGE, ICAL_VERSION */
 
 #include <ctype.h>
@@ -46,7 +45,7 @@ static char *lowercase(const char *str)
         return 0;
     }
 
-    n = icalmemory_strdup(str);
+    n = strdup(str);
 
     for (p = n; *p != 0; p++) {
         *p = tolower((int)*p);
