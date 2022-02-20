@@ -547,6 +547,7 @@ endif()
 
 libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY "(Developer-only) Build with memory consistency functions." False)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
+  set(CMAKE_BUILD_TYPE "Debug")
   add_definitions(-DMEMORY_CONSISTENCY)
 endif()
 mark_as_advanced(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
