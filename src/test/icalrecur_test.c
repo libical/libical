@@ -670,7 +670,7 @@ int main(int argc, char *argv[])
         }
 
         icalrecur_iterator_free(ritr);
-        free(rrule.rscale);
+        icalmemory_free_buffer(rrule.rscale);
     }
     fclose(fp);
 

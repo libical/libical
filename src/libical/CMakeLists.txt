@@ -12,6 +12,9 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
 )
+if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
+  include_directories(${CMAKE_SOURCE_DIR}/src/test)
+endif()
 
 if(ICU_FOUND)
   include_directories(${ICU_INCLUDE_DIRS})
@@ -243,6 +246,9 @@ set(ical_LIB_SRCS
   caldate.c
   astime.h
 )
+if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
+  list(APPEND ical_LIB_SRCS ${PROJECT_SOURCE_DIR}/src/test/test-malloc.c)
+endif()
 
 add_custom_command(
   OUTPUT
