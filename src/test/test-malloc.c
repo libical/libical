@@ -20,10 +20,13 @@ FILE: test-malloc.c
 #endif
 
 #include "test-malloc.h"
+#include "icalerror.h"
+#if !defined(MEMORY_CONSISTENCY)
+#include "regression.h"
+#endif
 
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 struct testmalloc_statistics global_testmalloc_statistics;
 static int global_testmalloc_remaining_attempts = -1;
@@ -145,9 +148,12 @@ void test_free(void *p) {
         //   icalmemory, e.g. via malloc().
         // * The header in front of the memory block being freed has been corrupted.
 
-        //ok("freed memory was allocated via icalmemory and has not been corrupted",
-        //   hdr->magic_no == TESTMALLOC_MAGIC_NO);
-        assert(hdr->magic_no == TESTMALLOC_MAGIC_NO);
+#if !defined(MEMORY_CONSISTENCY)
+        ok("freed memory was allocated via icalmemory and has not been corrupted",
+           hdr->magic_no == TESTMALLOC_MAGIC_NO);
+#endif
+        icalerror_assert(hdr->magic_no == TESTMALLOC_MAGIC_NO,
+                         "freed memory was allocated via icalmemory and has been corrupted");
         global_testmalloc_statistics.free_failed_cnt++;
         return;
     }
