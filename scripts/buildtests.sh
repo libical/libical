@@ -260,7 +260,7 @@ ASAN_BUILD() {
   fi
   echo "===== START ASAN BUILD: $1 ======"
   SET_CLANG
-  BUILD "$name" "-DADDRESS_SANITIZER=True $2"
+  BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
 }
 
@@ -277,7 +277,7 @@ TSAN_BUILD() {
   fi
   echo "===== START TSAN BUILD: $1 ======"
   SET_CLANG
-  BUILD "$name" "-DTHREAD_SANITIZER=True $2"
+  BUILD "$name" "-DLIBICAL_DEVMODE_THREAD_SANITIZER=True $2"
   echo "===== END TSAN BUILD: $1 ======"
 }
 
@@ -294,7 +294,7 @@ UBSAN_BUILD() {
   fi
   echo "===== START UBSAN BUILD: $1 ======"
   SET_CLANG
-  BUILD "$name" "-DUNDEFINED_SANITIZER=True $2"
+  BUILD "$name" "-DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True $2"
   echo "===== END UBSAN BUILD: $1 ======"
 }
 
