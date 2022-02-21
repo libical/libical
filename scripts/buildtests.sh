@@ -40,6 +40,7 @@ HELP() {
   echo " -a, --no-asan-build      Don't run any ASAN-build (sanitize-address) tests"
   echo " -d, --no-tsan-build      Don't run any TSAN-build (sanitize-threads) tests"
   echo " -u, --no-ubsan-build     Don't run any UBSAN-build (sanitize-undefined) tests"
+  echo " -x, --no-memc-build      Don't run any MEMCONSIST-build (memory consistency) tests"
   echo
 }
 
@@ -230,8 +231,24 @@ CLANG_BUILD() {
   echo "===== END CLANG BUILD: $1 ======"
 }
 
+#function MEMCONSIST_BUILD:
+# runs a gcc memory consistency build test
+# $1 = the name of the test (which will have "-mem" appended to it)
+# $2 = CMake options
+MEMCONSIST_BUILD() {
+  name="$1-mem"
+  if ( test $runmemcbuild -ne 1 )
+  then
+    echo "===== MEMCONSIST BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START MEMCONSIST BUILD: $1 ======"
+  BUILD "$name" "-DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True $2"
+  echo "===== END MEMCONSIST BUILD: $1 ======"
+}
+
 #function ASAN_BUILD:
-# runs an clang ASAN build test
+# runs a clang ASAN build test
 # $1 = the name of the test (which will have "-asan" appended to it)
 # $2 = CMake options
 ASAN_BUILD() {
@@ -248,7 +265,7 @@ ASAN_BUILD() {
 }
 
 #function TSAN_BUILD:
-# runs an clang TSAN build test
+# runs a clang TSAN build test
 # $1 = the name of the test (which will have "-tsan" appended to it)
 # $2 = CMake options
 TSAN_BUILD() {
@@ -265,7 +282,7 @@ TSAN_BUILD() {
 }
 
 #function UBSAN_BUILD:
-# runs an clang UBSAN build test
+# runs a clang UBSAN build test
 # $1 = the name of the test (which will have "-ubsan" appended to it)
 # $2 = CMake options
 UBSAN_BUILD() {
@@ -280,6 +297,7 @@ UBSAN_BUILD() {
   BUILD "$name" "-DUNDEFINED_SANITIZER=True $2"
   echo "===== END UBSAN BUILD: $1 ======"
 }
+
 #function CPPCHECK
 # runs a cppcheck test, which means: configure, compile, link and run cppcheck
 # $1 = the name of the test (which will have "-cppcheck" appended to it)
@@ -500,8 +518,8 @@ KRAZY() {
 
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hmkctbsnlgadu --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build -- "$@"`
-TEMP=`getopt hmkctbsnlgadu $*`
+#TEMP=`getopt -o hmkctbsnlgadu --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build -- "$@"`
+TEMP=`getopt hmkctbsnlgadux $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
@@ -517,6 +535,7 @@ rungccbuild=1
 runasanbuild=1
 runtsanbuild=1
 runubsanbuild=1
+runmemcbuild=1
 runsplint=1
 while true; do
     case "$1" in
@@ -533,6 +552,7 @@ while true; do
         -a|--no-asan-build)   runasanbuild=0;  shift;;
         -d|--no-tsan-build)   runtsanbuild=0;  shift;;
         -u|--no-ubsan-build)  runubsanbuild=0; shift;;
+        -x|--no-memc-build)   runmemcbuild=0;  shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
@@ -632,6 +652,14 @@ then
 #  CLANG_BUILD testclang1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
 #  CLANG_BUILD testclang2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 fi
+
+#Memory consistency check
+MEMCONSIST_BUILD test1memc ""
+MEMCONSIST_BUILD test2memc "$CMAKEOPTS"
+MEMCONSIST_BUILD test3memc "$TZCMAKEOPTS"
+MEMCONSIST_BUILD test4memc "$UUCCMAKEOPTS"
+#FIXME: the python test scripts needs for introspection need some love
+#MEMCONSIST_BUILD test5memc "$GLIBOPTS"
 
 #Address sanitizer
 ASAN_BUILD test1asan ""
