@@ -74,7 +74,7 @@
 # ## DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!!
 ## Special CMake Options for Developers
 #
-# -DABI_DUMPER=[true|false]
+# -DLIBICAL_DEVMODE_ABI_DUMPER=[true|false]
 #  Build for the abi-dumper (requires gcc)
 #  Default=false
 #
@@ -86,15 +86,15 @@
 #  or access violations.
 #  Default=false
 #
-# -DADDRESS_SANITIZER=[true|false]
+# -DLIBICAL_DEVMODE_ADDRESS_SANITIZER=[true|false]
 #  Build with the address sanitizer (requires gcc or clang)
 #  Default=false
 #
-# -DTHREAD_SANITIZER=[true|false]
+# -DLIBICAL_DEVMODE_THREAD_SANITIZER=[true|false]
 #  Build with the thread sanitizer (requires gcc or clang)
 #  Default=false
 #
-# -DUNDEFINED_SANITIZER=[true|false]
+# -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=[true|false]
 #  Build with the undefined sanitizer (requires gcc or clang)
 #  Default=false
 #
@@ -533,9 +533,9 @@ if(SIZEOF_TIME_T EQUAL 4)
 endif()
 
 ################ Developer Options #####################
-libical_option(ABI_DUMPER "(Developer-only) Build for abi-dumper." False)
-mark_as_advanced(ABI_DUMPER)
-if(ABI_DUMPER)
+libical_deprecated_option(ABI_DUMPER LIBICAL_DEVMODE_ABI_DUMPER "(Developer-only) Build for abi-dumper." False)
+mark_as_advanced(LIBICAL_DEVMODE_ABI_DUMPER)
+if(LIBICAL_DEVMODE_ABI_DUMPER)
   if(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_C_FLAGS "-g -Og")
     set(CMAKE_CXX_FLAGS "-g -Og")
@@ -552,9 +552,9 @@ if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
 endif()
 mark_as_advanced(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
 
-libical_option(ADDRESS_SANITIZER "(Developer-only) Build with the address sanitizer." False)
-mark_as_advanced(ADDRESS_SANITIZER)
-if(ADDRESS_SANITIZER)
+libical_deprecated_option(ADDRESS_SANITIZER LIBICAL_DEVMODE_ADDRESS_SANITIZER "(Developer-only) Build with the address sanitizer." False)
+mark_as_advanced(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
+if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
@@ -578,9 +578,9 @@ if(ADDRESS_SANITIZER)
   endif()
 endif()
 
-libical_option(THREAD_SANITIZER "(Developer-only) Build with the thread sanitizer." False)
-mark_as_advanced(THREAD_SANITIZER)
-if(THREAD_SANITIZER)
+libical_deprecated_option(THREAD_SANITIZER LIBICAL_DEVMODE_THREAD_SANITIZER "(Developer-only) Build with the thread sanitizer." False)
+mark_as_advanced(LIBICAL_DEVMODE_THREAD_SANITIZER)
+if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
@@ -604,9 +604,9 @@ if(THREAD_SANITIZER)
   endif()
 endif()
 
-libical_option(UNDEFINED_SANITIZER "(Developer-only) Build with the undefined sanitizer." False)
-mark_as_advanced(UNDEFINED_SANITIZER)
-if(UNDEFINED_SANITIZER)
+libical_deprecated_option(UNDEFINED_SANITIZER LIBICAL_DEVMODE_UNDEFINED_SANITIZER "(Developer-only) Build with the undefined sanitizer." False)
+mark_as_advanced(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
+if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
