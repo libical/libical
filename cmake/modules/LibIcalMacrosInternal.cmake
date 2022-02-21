@@ -11,7 +11,10 @@ endfunction()
 
 function(libical_deprecated_option deprecated_option option description)
   set(extra_option_arguments ${ARGN})
-  message(STATUS "WARNING: ${deprecated_option} is deprecated. Use ${option} instead")
+  if(${deprecated_option})
+    message(WARNING "${deprecated_option} is deprecated. Use ${option} instead")
+    set(${option} ${deprecated_option} CACHE BOOL "${description}")
+  endif()
   libical_option(${option} "${description}" ${extra_option_arguments})
 endfunction()
 
