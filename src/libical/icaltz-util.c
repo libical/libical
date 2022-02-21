@@ -657,7 +657,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     /* Read the footer */
     if (trans_size == 8 &&
-        (footer[0] = fgetc(f)) == '\n' &&
+        (footer[0] = (char)fgetc(f)) == '\n' &&
         fgets(footer+1, (int) sizeof(footer)-1, f) &&
         footer[strlen(footer)-1] == '\n') {
         tzstr = footer+1;
