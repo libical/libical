@@ -392,6 +392,7 @@ endif()
 
 include(ConfigureChecks.cmake)
 add_definitions(-DHAVE_CONFIG_H)
+configure_file(config_public.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_public.h)
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(INSTALL_TARGETS_DEFAULT_ARGS
