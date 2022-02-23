@@ -27,6 +27,8 @@
 
 #include "libical_ical_export.h"
 
+#include <stddef.h>
+
 /**
  * @typedef icalarray
  * @brief A struct representing an icalarray object
