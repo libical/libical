@@ -39,9 +39,9 @@ int main()
     int verbose = 0;
 
     int day;
-    time_t start_time;
+    icaltime_t start_time;
     struct tm start_tm;
-    time_t curr_time;
+    icaltime_t curr_time;
     struct tm curr_tm;
     struct icaltimetype curr_tt;
     int failed = 0;
@@ -82,7 +82,7 @@ int main()
          * determine current local time and date: always use midday in
          * the current zone and first day of first month in the year
          */
-        start_time = time(NULL);
+        start_time = icaltime(NULL);
         (void)localtime_r(&start_time, &start_tm);
         start_tm.tm_hour = 12;
         start_tm.tm_min = 0;
@@ -114,7 +114,7 @@ int main()
             if (verbose || curr_failed != failed) {
                 struct tm utc_tm;
 
-                if (!gmtime_r(&curr_time, &utc_tm))
+                if (!icalgmtime_r(&curr_time, &utc_tm))
                     memset(&utc_tm, 0, sizeof(utc_tm));
 
                 printf(

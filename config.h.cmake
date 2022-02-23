@@ -522,7 +522,18 @@ typedef ssize_t IO_SSIZE_T;
 /* FYI: The localtime() in Microsoft's C library is MT-safe */
 #define localtime_r(tp,tmp) (localtime(tp)?(*(tmp)=*localtime(tp),(tmp)):0)
 #endif
-#include <time.h>
+
+#define SIZEOF_ICALTIME_T SIZEOF_TIME_T
+
+/* 
+ * Substitute functions for those from time.h but working with icaltime_t instead of time_t.
+ * icaltime_t is defined in config_public.h.cmake.
+ */
+#define icaltime(timer) time(timer)
+#define icalctime(timer) ctime(timer)
+#define icalmktime(timeptr) mktime(timeptr)
+#define icalgmtime_r(timer, buf) gmtime_r(timer, buf)
+#define icallocaltime_r(timer, buf) localtime_r(timer, buf)
 
 /* define MAXPATHLEN */
 #if defined(_WIN32)

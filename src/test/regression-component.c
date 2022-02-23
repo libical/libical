@@ -310,9 +310,9 @@ static void print_span(int c, struct icaltime_span span)
  */
 void test_icalcomponent_get_span()
 {
-    time_t tm1 = 973378800;     /*Sat Nov  4 23:00:00 UTC 2000,
+    icaltime_t tm1 = 973378800;     /*Sat Nov  4 23:00:00 UTC 2000,
                                    Sat Nov  4 15:00:00 PST 2000 */
-    time_t tm2 = 973382400;     /*Sat Nov  5 00:00:00 UTC 2000
+    icaltime_t tm2 = 973382400;     /*Sat Nov  5 00:00:00 UTC 2000
                                    Sat Nov  4 16:00:00 PST 2000 */
     struct icaldurationtype dur;
     struct icaltime_span span;
@@ -321,7 +321,7 @@ void test_icalcomponent_get_span()
     int tnum = 0;
 
     /** test 0
-     *  Direct assigning time_t means they will be interpreted as UTC
+     *  Direct assigning icaltime_t means they will be interpreted as UTC
      */
     span.start = tm1;
     span.end = tm2;

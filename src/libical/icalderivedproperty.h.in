@@ -19,7 +19,6 @@
 #ifndef ICALDERIVEDPROPERTY_H
 #define ICALDERIVEDPROPERTY_H
 
-#include <time.h>
 #include "icalparameter.h"
 #include "icalderivedvalue.h"
 #include "icalrecur.h"

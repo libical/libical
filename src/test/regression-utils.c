@@ -33,12 +33,12 @@ int VERBOSE = 1;
 
 static char ictt_str[1024];
 
-const char *ical_timet_string(const time_t t)
+const char *ical_timet_string(const icaltime_t t)
 {
     struct tm tmp, stm;
 
     memset(&tmp, 0, sizeof(tmp));
-    if (gmtime_r(&t, &tmp)) {
+    if (icalgmtime_r(&t, &tmp)) {
         stm = tmp;
     } else {
         memset(&stm, 0, sizeof(stm));
@@ -71,7 +71,7 @@ const char *ictt_as_string(struct icaltimetype t)
 
 char *icaltime_as_ctime(struct icaltimetype t)
 {
-    time_t tt;
+    icaltime_t tt;
 
     tt = icaltime_as_timet(t);
     snprintf(ictt_str, sizeof(ictt_str), "%s", ctime(&tt));

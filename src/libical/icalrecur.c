@@ -169,12 +169,12 @@ static ical_invalid_rrule_handling invalidRruleHandling = ICAL_RRULE_TREAT_AS_ER
 #define ICAL_BY_YEARDAY_SIZE    367     /* 1 to 366 */
 #endif
 
-#if (SIZEOF_TIME_T > 4)
+#if (SIZEOF_ICALTIME_T > 4)
 /** Arbitrarily go up to 1000th anniversary of Gregorian calendar, since
-    64-bit time_t values get us up to the tm_year limit of 2+ billion years. */
+    64-bit icaltime_t values get us up to the tm_year limit of 2+ billion years. */
 #define MAX_TIME_T_YEAR 2582
 #else
-/** This is the last year we will go up to, since 32-bit time_t values
+/** This is the last year we will go up to, since 32-bit icaltime_t values
    only go up to the start of 2038. */
 #define MAX_TIME_T_YEAR 2037
 #endif
@@ -3613,15 +3613,15 @@ short icalrecurrencetype_encode_month(int month, int is_leap)
 }
 
 int icalrecur_expand_recurrence(const char *rule,
-                                time_t start, int count, time_t *array)
+    icaltime_t start, int count, icaltime_t*array)
 {
     struct icalrecurrencetype recur;
     icalrecur_iterator *ritr;
-    time_t tt;
+    icaltime_t tt;
     struct icaltimetype icstart, next;
     int i = 0;
 
-    memset(array, 0, count * sizeof(time_t));
+    memset(array, 0, count * sizeof(icaltime_t));
 
     icstart = icaltime_from_timet_with_zone(start, 0, 0);
 

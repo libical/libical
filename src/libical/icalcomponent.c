@@ -871,8 +871,8 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 {
     struct icaltimetype dtstart, dtend;
     icaltime_span recurspan, basespan, limit_span;
-    time_t limit_start, limit_end;
-    time_t dtduration;
+    icaltime_t limit_start, limit_end;
+    icaltime_t dtduration;
     icalproperty *rrule, *rdate;
     pvl_elem property_iterator; /* for saving the iterator */
 
@@ -906,10 +906,10 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         limit_end = icaltime_as_timet_with_zone(end,
                                                 icaltimezone_get_utc_timezone());
     } else {
-#if (SIZEOF_TIME_T > 4)
-        limit_end = (time_t) LONG_MAX;
+#if (SIZEOF_ICALTIME_T > 4)
+        limit_end = (icaltime_t) LONG_MAX;
 #else
-        limit_end = (time_t) INT_MAX;
+        limit_end = (icaltime_t) INT_MAX;
 #endif
     }
     limit_span.start = limit_start;

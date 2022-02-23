@@ -876,7 +876,7 @@ struct icaltimetype icaltime_from_string(
     const char* str);
 
 struct icaltimetype icaltime_from_timet_with_zone(
-    time_t v,
+    icaltime_t v,
     int is_date,
     icaltimezone* zone);
 ```
@@ -887,7 +887,7 @@ struct icaltimetype icaltime_from_timet_with_zone(
 struct icaltimetype tt = icaltime_from_string("19970101T103000");
 ```
 
-`icaltime_from_timet_with_zone()` takes a `time_t` value, representing seconds past
+`icaltime_from_timet_with_zone()` takes a `icaltime_t` value, representing seconds past
 the POSIX epoch, a flag to indicate if the time is a date, and a time zone.
 Dates have an identical structure to a time, but the time portion (hours,
 minutes and seconds) is always 00:00:00. Dates act differently in
@@ -960,11 +960,11 @@ the hour, minute and second fields should be used in the conversion.
 
 ```c
 struct icaltimetype icaltime_from_timet_with_zone(
-    time_t v,
+    icaltime_t v,
     int is_date,
     icaltimezone* zone);
 
-time_t icaltime_as_timet(
+icaltime_t icaltime_as_timet(
     struct icaltimetype);
 ```
 

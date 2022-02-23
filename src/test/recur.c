@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     icalproperty *desc, *dtstart, *rrule;
     struct icalrecurrencetype recur;
     icalrecur_iterator *ritr;
-    time_t tt;
+    icaltime_t tt;
     const char *file;
 
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);

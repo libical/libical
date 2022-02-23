@@ -338,8 +338,8 @@ struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype 
 
 struct icaldurationtype icaltime_subtract(struct icaltimetype t1, struct icaltimetype t2)
 {
-    time_t t1t = icaltime_as_timet(t1);
-    time_t t2t = icaltime_as_timet(t2);
+    icaltime_t t1t = icaltime_as_timet(t1);
+    icaltime_t t2t = icaltime_as_timet(t2);
 
     return icaldurationtype_from_int((int)(t1t - t2t));
 }

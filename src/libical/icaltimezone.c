@@ -85,12 +85,12 @@ static char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
     the timezone changes. */
 #define ICALTIMEZONE_EXTRA_COVERAGE     5
 
-#if (SIZEOF_TIME_T > 4)
+#if (SIZEOF_ICALTIME_T > 4)
 /** Arbitrarily go up to 1000th anniversary of Gregorian calendar, since
-    64-bit time_t values get us up to the tm_year limit of 2+ billion years. */
+    64-bit icaltime_t values get us up to the tm_year limit of 2+ billion years. */
 #define ICALTIMEZONE_MAX_YEAR           2582
 #else
-/** This is the maximum year we will expand to, since 32-bit time_t values
+/** This is the maximum year we will expand to, since 32-bit icaltime_t values
     only go up to the start of 2038. */
 #define ICALTIMEZONE_MAX_YEAR           2037
 #endif
@@ -1431,9 +1431,9 @@ static int get_offset(icaltimezone *zone)
     struct tm local;
     struct icaltimetype tt;
     int offset;
-    const time_t now = time(NULL);
+    const icaltime_t now = icaltime(NULL);
 
-    if (!gmtime_r(&now, &local))
+    if (!icalgmtime_r(&now, &local))
         return 0;
 
     tt = tm_to_icaltimetype(&local);
