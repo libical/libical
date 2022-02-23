@@ -1226,7 +1226,7 @@ void print_occur(struct icalrecurrencetype recur, struct icaltimetype start)
     struct icaltimetype next;
     icalrecur_iterator *ritr;
 
-    time_t tt = icaltime_as_timet(start);
+    icaltime_t tt = icaltime_as_timet(start);
 
     printf("#### %s\n", icalrecurrencetype_as_string(&recur));
     printf("#### %s\n", ctime(&tt));
@@ -1246,7 +1246,7 @@ void test_recur()
 {
     struct icalrecurrencetype rt;
     struct icaltimetype start;
-    time_t array[25];
+    icaltime_t array[25];
     int i;
 
     rt = icalrecurrencetype_from_string(
@@ -1359,8 +1359,8 @@ void test_recur_encode_by_month()
 
 void test_expand_recurrence()
 {
-    time_t arr[10];
-    time_t now = 931057385;
+    icaltime_t arr[10];
+    icaltime_t now = 931057385;
     int i, numfound = 0;
 
     icalrecur_expand_recurrence("FREQ=MONTHLY;BYDAY=MO,WE", now, 5, arr);
@@ -1400,7 +1400,7 @@ void icalrecurrencetype_test()
     struct icalrecurrencetype r = icalvalue_get_recur(v);
     struct icaltimetype t = icaltime_from_timet_with_zone(time(0), 0, NULL);
     struct icaltimetype next;
-    time_t tt;
+    icaltime_t tt;
 
     struct icalrecur_iterator_impl *itr =
         (struct icalrecur_iterator_impl *)icalrecur_iterator_new(r, t);
@@ -1776,8 +1776,8 @@ void do_test_time(const char *zone)
 {
     struct icaltimetype ictt, icttutc, icttzone, icttdayl,
         icttla, icttny, icttphoenix, icttlocal, icttnorm;
-    time_t tt, tt2, tt_p200;
-    time_t offset_tz;
+    icaltime_t tt, tt2, tt_p200;
+    icaltime_t offset_tz;
     icalvalue *v;
     short day_of_week, start_day_of_week, day_of_year;
     icaltimezone *azone, *utczone;
@@ -1790,7 +1790,7 @@ void do_test_time(const char *zone)
 
     /* Test new API */
     if (VERBOSE) {
-        printf("\n---> From time_t \n");
+        printf("\n---> From icaltime_t \n");
     }
 
     tt = 1025127869;    /* stick with a constant... Wed, 26 Jun 2002 21:44:29 GMT */
@@ -1800,7 +1800,7 @@ void do_test_time(const char *zone)
     }
 
     ictt = icaltime_from_timet_with_zone(tt, 0, NULL);
-    str_is("Floating time from time_t", ictt_as_string(ictt), "2002-06-26 21:44:29 (floating)");
+    str_is("Floating time from icaltime_t", ictt_as_string(ictt), "2002-06-26 21:44:29 (floating)");
 
     ictt = icaltime_from_timet_with_zone(tt, 0, azone);
 #if ADD_TESTS_REQUIRING_INVESTIGATION
@@ -1878,7 +1878,7 @@ void do_test_time(const char *zone)
 
     tt = icaltime_as_timet(ictt);
 
-    ok("test icaltime -> time_t for 20001103T183030Z", (tt == 973276230));
+    ok("test icaltime -> icaltime_t for 20001103T183030Z", (tt == 973276230));
     /* Fri Nov  3 10:30:30 PST 2000 in PST
        Fri Nov  3 18:30:30 PST 2000 in UTC */
 
@@ -1903,7 +1903,7 @@ void do_test_time(const char *zone)
     /** add test case here.. **/
 
     if (VERBOSE) {
-        printf("\n As time_t \n");
+        printf("\n As icaltime_t \n");
     }
 
     tt2 = icaltime_as_timet(ictt);
@@ -1923,7 +1923,7 @@ void do_test_time(const char *zone)
         printf("20001103T183030         : %s\n", ictt_as_string(icttlocal));
     }
 
-    offset_tz = (time_t) (-icaltimezone_get_utc_offset_of_utc_time(azone, &ictt, 0));
+    offset_tz = (icaltime_t) (-icaltimezone_get_utc_offset_of_utc_time(azone, &ictt, 0));
     if (VERBOSE)
         printf("offset_tz               : %ld\n", (long)offset_tz);
 
@@ -2279,12 +2279,12 @@ void test_overlaps()
 {
     icalcomponent *cset, *c;
     icalset *set;
-    time_t tm1 = 973378800;     /*Sat Nov  4 23:00:00 UTC 2000,
+    icaltime_t tm1 = 973378800;     /*Sat Nov  4 23:00:00 UTC 2000,
                                    Sat Nov  4 15:00:00 PST 2000 */
-    time_t tm2 = 973382400;     /*Sat Nov  5 00:00:00 UTC 2000
+    icaltime_t tm2 = 973382400;     /*Sat Nov  5 00:00:00 UTC 2000
                                    Sat Nov  4 16:00:00 PST 2000 */
 
-    time_t hh = 1800;   /* one half hour */
+    icaltime_t hh = 1800;   /* one half hour */
 
     icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
     set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/overlaps.ics", &options);

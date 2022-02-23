@@ -37,7 +37,7 @@
  *      - icaltime_null_date()
  *      - icaltime_current_time_with_zone()
  *      - icaltime_today()
- *      - icaltime_from_timet_with_zone(time_t tm, int is_date,
+ *      - icaltime_from_timet_with_zone(icaltime_t tm, int is_date,
  *              icaltimezone *zone)
  *      - icaltime_from_day_of_year(int doy, int year)
  *
@@ -82,7 +82,7 @@
 
 #include "libical_ical_export.h"
 
-#include <time.h>
+#include "config_public.h"
 
 /* An opaque struct representing a timezone. We declare this here to avoid
    a circular dependency. */
@@ -94,8 +94,8 @@ typedef struct _icaltimezone icaltimezone;
 /** icaltime_span is returned by icalcomponent_get_span() */
 struct icaltime_span
 {
-    time_t start;       /**< in UTC */
-    time_t end;         /**< in UTC */
+    icaltime_t start;       /**< in UTC */
+    icaltime_t end;         /**< in UTC */
     int is_busy;        /**< 1->busy time, 0-> free time */
 };
 
@@ -169,7 +169,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_today(void);
  *      target timezone with no need to store the source timezone.
  *
  */
-LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const time_t tm,
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm,
                                                                       const int is_date,
                                                                       const icaltimezone *zone);
 
@@ -199,7 +199,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy,
  * only pass an icaltime in UTC, since no conversion is done.  Even in that case,
  * it's probably better to just use icaltime_as_timet_with_zone().
  */
-LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);
+LIBICAL_ICAL_EXPORT icaltime_t icaltime_as_timet(const struct icaltimetype);
 
 /**     @brief Returns the time as seconds past the UNIX epoch, using the
  *      given timezone.
@@ -207,9 +207,9 @@ LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);
  *      This convenience method combines a call to icaltime_convert_to_zone()
  *      with a call to icaltime_as_timet().
  *      If the input timezone is null, no conversion is done; that is, the
- *      time is simply returned as time_t in its native timezone.
+ *      time is simply returned as icaltime_t in its native timezone.
  */
-LIBICAL_ICAL_EXPORT time_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
+LIBICAL_ICAL_EXPORT icaltime_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
                                                        const icaltimezone *zone);
 
 /**

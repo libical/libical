@@ -52,7 +52,7 @@ extern "C"
     void test_bdbset(void);
 
 /* regression-utils.c */
-    const char *ical_timet_string(const time_t t);
+    const char *ical_timet_string(const icaltime_t t);
     const char *ictt_as_string(struct icaltimetype t);
     char *icaltime_as_ctime(struct icaltimetype t);
 

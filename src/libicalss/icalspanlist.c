@@ -229,7 +229,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
     struct icalperiodtype period;
     struct icaltime_span *s;
 
-    time_t rangett = icaltime_as_timet(t);
+    icaltime_t rangett = icaltime_as_timet(t);
 
     period.start = icaltime_null_time();
     period.end = icaltime_null_time();
@@ -290,17 +290,17 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
 int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
 {
     pvl_elem itr;
-    time_t spanduration_secs;
+    icaltime_t spanduration_secs;
     int *matrix;
-    time_t matrix_slots;
-    time_t sl_start, sl_end;
+    icaltime_t matrix_slots;
+    icaltime_t sl_start, sl_end;
 
     icalerror_check_arg_rz((sl != 0), "spanlist");
 
     if (!delta_t)
         delta_t = 3600;
 
-  /* calculate the start and end time as time_t **/
+  /* calculate the start and end time as icaltime_t **/
     sl_start = icaltime_as_timet_with_zone(sl->start, icaltimezone_get_utc_timezone());
     sl_end = icaltime_as_timet_with_zone(sl->end, icaltimezone_get_utc_timezone());
 
@@ -333,9 +333,9 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
         struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
 
         if (s && s->is_busy == 1) {
-            time_t offset_start = s->start / delta_t - sl_start / delta_t;
-            time_t offset_end = (s->end - 1) / delta_t - sl_start / delta_t + 1;
-            time_t i;
+            icaltime_t offset_start = s->start / delta_t - sl_start / delta_t;
+            icaltime_t offset_end = (s->end - 1) / delta_t - sl_start / delta_t + 1;
+            icaltime_t i;
 
             if (offset_end >= matrix_slots)
                 offset_end = matrix_slots - 1;

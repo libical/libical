@@ -118,11 +118,11 @@ static const char *get_string_value(VObject *object, int *free_string)
 static void convert_floating_time_to_utc(struct icaltimetype *itt)
 {
     struct tm tmp_tm, utc_tm;
-    time_t t;
+    icaltime_t t;
 
     /* We assume the floating time is using the current Unix timezone.
-       So we convert to a time_t using mktime(), and then back to a struct tm
-       using gmtime, so it is the UTC time. */
+       So we convert to a icaltime_t using icalmktime(), and then back to a struct tm
+       using icalgmtime_r, so it is the UTC time. */
     tmp_tm.tm_year = itt->year - 1900;
     tmp_tm.tm_mon = itt->month - 1;
     tmp_tm.tm_mday = itt->day;
@@ -131,11 +131,11 @@ static void convert_floating_time_to_utc(struct icaltimetype *itt)
     tmp_tm.tm_sec = itt->second;
     tmp_tm.tm_isdst = -1;
 
-    /* Convert to a time_t. */
+    /* Convert to a icaltime_t. */
     t = mktime(&tmp_tm);
 
     /* Now convert back to a struct tm, but with a UTC time. */
-    if (!gmtime_r(&t, &utc_tm)) {
+    if (!icalgmtime_r(&t, &utc_tm)) {
         *itt = itt->is_date ? icaltime_null_date () : icaltime_null_time ();
         return;
     }

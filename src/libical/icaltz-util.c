@@ -127,7 +127,7 @@ typedef struct
 
 typedef struct
 {
-    time_t transition;
+    icaltime_t transition;
     long int change;
 } leap;
 //@endcond
@@ -445,7 +445,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     const char *zonedir;
     FILE *f = NULL;
     char *full_path = NULL;
-    time_t *transitions = NULL;
+    icaltime_t*transitions = NULL;
     char *r_trans = NULL, *temp;
     int *trans_idx = NULL;
     ttinfo *types = NULL;
@@ -507,7 +507,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         break;
     case '2':
     case '3':
-        if (sizeof(time_t) == 8) {
+        if (sizeof(icaltime_t) == 8) {
             trans_size = 8;
         }
         break;
@@ -549,7 +549,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
 
     /* read data block */
-    transitions = icalmemory_new_buffer((num_trans+1) * sizeof(time_t));  // +1 for TZ string
+    transitions = icalmemory_new_buffer((num_trans+1) * sizeof(icaltime_t));  // +1 for TZ string
     if (transitions == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -566,7 +566,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
     if (num_trans == 0) {
         // Add one transition using time type 0 at 19011213T204552Z
-        transitions[0] = (time_t)INT_MIN;
+        transitions[0] = (icaltime_t)INT_MIN;
         trans_idx[0] = 0;
         num_trans = 1;
     } else {
@@ -575,9 +575,9 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         for (i = 0; i < num_trans; i++) {
             trans_idx[i] = fgetc(f);
             if (trans_size == 8) {
-                transitions[i] = (time_t) decode64(r_trans);
+                transitions[i] = (icaltime_t) decode64(r_trans);
             } else {
-                transitions[i] = (time_t) decode(r_trans);
+                transitions[i] = (icaltime_t) decode(r_trans);
             }
             r_trans += trans_size;
         }
@@ -622,9 +622,9 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
         EFREAD(c, (size_t)trans_size, 1, f);
         if (trans_size == 8) {
-            leaps[i].transition = (time_t)decode64(c);
+            leaps[i].transition = (icaltime_t)decode64(c);
         } else {
-            leaps[i].transition = (time_t)decode(c);
+            leaps[i].transition = (icaltime_t)decode(c);
         }
 
         EFREAD(c, 4, 1, f);
@@ -757,7 +757,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     for (i = 0; i < num_trans; i++) {
         int by_day = 0;
-        time_t start;
+        icaltime_t start;
         enum icalrecurrencetype_weekday dow;
 
         prev_idx = idx;

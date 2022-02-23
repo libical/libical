@@ -77,16 +77,16 @@ static int icaltime_leap_days(int y1, int y2)
 /*
  * Code adapted from Python 2.4.1 sources (Lib/calendar.py).
  */
-static time_t icaltime_timegm(const struct tm *tm)
+static icaltime_t icaltime_timegm(const struct tm *tm)
 {
     int year;
-    time_t days;
-    time_t hours;
-    time_t minutes;
-    time_t seconds;
+    icaltime_t days;
+    icaltime_t hours;
+    icaltime_t minutes;
+    icaltime_t seconds;
 
     year = 1900 + tm->tm_year;
-    days = (time_t)(365 * (year - 1970) + icaltime_leap_days(1970, year));
+    days = (icaltime_t)(365 * (year - 1970) + icaltime_leap_days(1970, year));
     days += days_in_year_passed_month[0][tm->tm_mon];
 
     if (tm->tm_mon > 1 && icaltime_is_leap_year(year))
@@ -102,40 +102,40 @@ static time_t icaltime_timegm(const struct tm *tm)
 
 /*
  *  Function to convert a struct tm time specification
- *  to an ANSI time_t using the specified time zone.
+ *  to an ANSI-compatible icaltime_t using the specified time zone.
  *  This is different from the standard mktime() function
  *  in that we don't want the automatic adjustments for
  *  local daylight savings time applied to the result.
  *  This function expects well-formed input.
  */
-static time_t make_time(struct tm *tm, int tzm)
+static icaltime_t make_time(struct tm *tm, int tzm)
 {
-    time_t tim;
+    icaltime_t tim;
 
     static int days[] = { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 };
 
     /* check that month specification within range */
 
     if (tm->tm_mon < 0 || tm->tm_mon > 11)
-        return ((time_t) - 1);
+        return ((icaltime_t) - 1);
 
-#if (SIZEOF_TIME_T == 4)
+#if (SIZEOF_ICALTIME_T == 4)
     /* check that year specification within range */
 
     if (tm->tm_year < 70 || tm->tm_year > 138)
-        return ((time_t) - 1);
+        return ((icaltime_t) - 1);
 
     /* check for upper bound of Jan 17, 2038 (to avoid possibility of
        32-bit arithmetic overflow) */
 
     if (tm->tm_year == 138) {
         if (tm->tm_mon > 0) {
-            return ((time_t) - 1);
+            return ((icaltime_t) - 1);
         } else if (tm->tm_mday > 17) {
-            return ((time_t) - 1);
+            return ((icaltime_t) - 1);
         }
     }
-#endif /* SIZEOF_TIME_T */
+#endif /* SIZEOF_ICALTIME_T */
 
     /*
      *  calculate elapsed days since start of the epoch (midnight Jan
@@ -143,7 +143,7 @@ static time_t make_time(struct tm *tm, int tzm)
      *  (number of leap days to subtract)
      */
 
-    tim = (time_t) ((tm->tm_year - 70) * 365 + ((tm->tm_year - 1) / 4) - 17);
+    tim = (icaltime_t) ((tm->tm_year - 70) * 365 + ((tm->tm_year - 1) / 4) - 17);
 
     /* add number of days elapsed in the current year */
 
@@ -180,7 +180,7 @@ static time_t make_time(struct tm *tm, int tzm)
     return (tim);
 }
 
-struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_date,
+struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const int is_date,
                                                   const icaltimezone *zone)
 {
     struct icaltimetype tt;
@@ -189,8 +189,8 @@ struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_
 
     utc_zone = icaltimezone_get_utc_timezone();
 
-    /* Convert the time_t to a struct tm in UTC time. We can trust gmtime for this. */
-    if (!gmtime_r(&tm, &t))
+    /* Convert the icaltime_t to a struct tm in UTC time. We can trust gmtime for this. */
+    if (!icalgmtime_r(&tm, &t))
         return is_date ? icaltime_null_date () : icaltime_null_time ();
 
     tt.year = t.tm_year + 1900;
@@ -220,18 +220,18 @@ struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_
 
 struct icaltimetype icaltime_current_time_with_zone(const icaltimezone *zone)
 {
-    return icaltime_from_timet_with_zone(time(NULL), 0, zone);
+    return icaltime_from_timet_with_zone(icaltime(NULL), 0, zone);
 }
 
 struct icaltimetype icaltime_today(void)
 {
-    return icaltime_from_timet_with_zone(time(NULL), 1, NULL);
+    return icaltime_from_timet_with_zone(icaltime(NULL), 1, NULL);
 }
 
-time_t icaltime_as_timet(const struct icaltimetype tt)
+icaltime_t icaltime_as_timet(const struct icaltimetype tt)
 {
     struct tm stm;
-    time_t t;
+    icaltime_t t;
 
     /* If the time is the special null time, return 0. */
     if (icaltime_is_null_time(tt)) {
@@ -259,11 +259,11 @@ time_t icaltime_as_timet(const struct icaltimetype tt)
     return t;
 }
 
-time_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icaltimezone *zone)
+icaltime_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icaltimezone *zone)
 {
     icaltimezone *utc_zone;
     struct tm stm;
-    time_t t;
+    icaltime_t t;
     struct icaltimetype local_tt;
 
     utc_zone = icaltimezone_get_utc_timezone();
