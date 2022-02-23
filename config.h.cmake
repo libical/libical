@@ -551,7 +551,3 @@ typedef ssize_t IO_SSIZE_T;
 
 #define icalassert(...) assert(__VA_ARGS__)
 #define icalerrprintf(...) fprintf(stderr, __VA_ARGS__)
-
-#define ICALMEMORY_DEFAULT_MALLOC malloc
-#define ICALMEMORY_DEFAULT_REALLOC realloc
-#define ICALMEMORY_DEFAULT_FREE free
