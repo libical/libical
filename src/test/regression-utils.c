@@ -24,6 +24,7 @@
 #include "libical/ical.h"
 
 #include "test-malloc.h"
+#include "regression.h"
 
 #include <stdlib.h>
 
@@ -206,6 +207,24 @@ int test_end(void)
     return failed;
 }
 
+/** 
+  * Bring all memory that is allocated as side effect into a stable state, so we can calculate
+  * stable memory allocation statistics.
+  */
+static void cleanup_nondeterministic_memory() {
+    
+    // icalerrno_return() allocates a buffer on it's first use per thread. Let's allocate it
+    // now, so it doesn't disturb our test statistics.
+    icalerrno_return();
+
+    // Built-in timezones are cached by libical. By freeing them, they don't influence our statistics.
+    icaltimezone_free_builtin_timezones();
+
+    // Memory that was added to the ring buffer is not required to be freed by the caller, so
+    // we free it here to keep our statistics clean.
+    icalmemory_free_ring();
+}
+
 void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int headeronly)
 {
     static int test_set = 1;
@@ -214,18 +233,28 @@ void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int h
         test_header(test_name, test_set);
 
     if (!headeronly && (do_test == 0 || do_test == test_set)) {
+
+        struct testmalloc_statistics mem_statistics;
+
+        // Clean up cached and other kind of non-deterministic memory.
+        cleanup_nondeterministic_memory();
+
+        // Now that we are in a stable state, reset the memory statistics and start counting.
         testmalloc_reset();
+
+        // Run the test.
         (*test_fcn) ();
 
-        /* TODO: Check for memory leaks here. We could do a check like the
-        following but we would have to implement the test-cases in a way
-        that all memory is freed at the end of each test. This would include
-        freeing built in and cached timezones.
+        // Before getting the statistics, clean up any non-deterministic memory again, so it
+        // doesn't influence the statistics.
+        cleanup_nondeterministic_memory();
 
-            ok("no memory leaked",
-                (global_testmalloc_statistics.mem_allocated_current == 0)
-                && (global_testmalloc_statistics.blocks_allocated == 0));
-        */
+        // Now we should get clean statistics.
+        testmalloc_get_statistics(&mem_statistics);
+
+        ok("no memory leaked",
+            (mem_statistics.mem_allocated_current == 0)
+            && (mem_statistics.blocks_allocated == 0));
 
         if (!QUIET)
             printf("\n");
