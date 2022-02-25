@@ -95,7 +95,7 @@ void die_on_errors_set(int val)
     die_on_errors = val;
 }
 
-void _ok(const char *test_name, int success, char *file, int linenum, const char *test)
+void _ok(const char *test_name, int success, const char *file, int linenum, const char *test)
 {
     testnumber++;
 
@@ -116,7 +116,7 @@ void _ok(const char *test_name, int success, char *file, int linenum, const char
     }
 }
 
-void _is(const char *test_name, const char *str1, const char *str2, char *file, int linenum)
+void _is(const char *test_name, const char *str1, const char *str2, const char *file, int linenum)
 {
     int diff;
 
@@ -137,7 +137,7 @@ void _is(const char *test_name, const char *str1, const char *str2, char *file, 
     }
 }
 
-void _int_is(char *test_name, int i1, int i2, char *file, int linenum)
+void _int_is(const char *test_name, int i1, int i2, const char *file, int linenum)
 {
     _ok(test_name, (i1 == i2), file, linenum, "");
 
