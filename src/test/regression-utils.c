@@ -199,7 +199,6 @@ int test_end(void)
             printf("%s%d/%d ", prefix, this_set, failed_tests[i].test);
         }
         printf("\n");
-
     } else {
         printf("\n        All Tests Successful.\n");
     }
@@ -207,12 +206,12 @@ int test_end(void)
     return failed;
 }
 
-/** 
+/**
   * Bring all memory that is allocated as side effect into a stable state, so we can calculate
   * stable memory allocation statistics.
   */
 static void cleanup_nondeterministic_memory() {
-    
+
     // icalerrno_return() allocates a buffer on it's first use per thread. Let's allocate it
     // now, so it doesn't disturb our test statistics.
     icalerrno_return();
@@ -253,8 +252,8 @@ void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int h
         testmalloc_get_statistics(&mem_statistics);
 
         ok("no memory leaked",
-            (mem_statistics.mem_allocated_current == 0)
-            && (mem_statistics.blocks_allocated == 0));
+            (mem_statistics.mem_allocated_current == 0) &&
+            (mem_statistics.blocks_allocated == 0));
 
         if (!QUIET)
             printf("\n");

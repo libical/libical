@@ -178,7 +178,7 @@ void testmalloc_set_max_successful_allocs(int n) {
     global_testmalloc_remaining_attempts = n;
 }
 
-void testmalloc_get_statistics(struct testmalloc_statistics* statistics) {
+void testmalloc_get_statistics(struct testmalloc_statistics *statistics) {
 
     if (statistics) {
         *statistics = global_testmalloc_statistics;
