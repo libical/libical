@@ -50,8 +50,7 @@ macro(gir_add_introspections introspections_girs)
     set(_gir_libtool "--no-libtool")
 
     add_custom_command(
-      COMMAND ${CMAKE_COMMAND} -E env "CC='${CMAKE_C_COMPILER}'"
-              ${GObjectIntrospection_SCANNER}
+      COMMAND ${GObjectIntrospection_SCANNER}
               ${GObjectIntrospection_SCANNER_ARGS}
               --namespace=${_gir_namespace}
               --nsversion=${_gir_version}
