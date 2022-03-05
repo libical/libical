@@ -28,7 +28,9 @@ else()
     icalss-static
     icalvcal-static
   )
-  target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
+  if(DEFINED CMAKE_THREAD_LIBS_INIT)
+    target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
+  endif()
   if(ICU_FOUND)
     target_link_libraries(doesnothing ${ICU_LIBRARIES})
   endif()

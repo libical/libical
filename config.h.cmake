@@ -543,7 +543,7 @@ typedef ssize_t IO_SSIZE_T;
 /* Unused argument macro */
 #if !defined(_unused)
 #if defined(__LCLINT__) || defined(S_SPLINT_S)
-#define _unused(x) /*@unused@*/ x
+#define _unused(x) x
 #else
 #define _unused(x) (void)x
 #endif

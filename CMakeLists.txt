@@ -286,6 +286,7 @@ add_feature_info(
   BerkeleyDB_FOUND
   "build in support for Berkeley DB storage"
 )
+set(BDB_FOUND False)
 if(BerkeleyDB_FOUND)
   set(HAVE_BDB True)
   add_definitions(-DDB_DBM_HSEARCH=0) #set to 1 if hsearch support is needed
@@ -714,7 +715,9 @@ if(IS_ABSOLUTE ${INCLUDE_INSTALL_DIR})
 else()
   set(includedir "\${prefix}/include")
 endif()
-set(PTHREAD_LIBS "${CMAKE_THREAD_LIBS_INIT}")
+if(DEFINED CMAKE_THREAD_LIBS_INIT)
+  set(PTHREAD_LIBS "${CMAKE_THREAD_LIBS_INIT}")
+endif()
 
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in

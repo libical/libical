@@ -273,8 +273,9 @@ endif()
 
 target_include_directories(ical INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
 
-target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
-
+if(DEFINED CMAKE_THREAD_LIBS_INIT)
+  target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
+endif()
 if(ICU_FOUND)
   target_link_libraries(ical ${ICU_LIBRARIES})
 endif()
@@ -340,7 +341,9 @@ if(WITH_CXX_BINDINGS)
   elseif(STATIC_ONLY)
     add_library(ical_cxx-static ALIAS ical_cxx)
   endif()
-  target_link_libraries(ical_cxx ical ${CMAKE_THREAD_LIBS_INIT})
+  if(${CMAKE_THREAD_LIBS_INIT})
+    target_link_libraries(ical_cxx ical ${CMAKE_THREAD_LIBS_INIT})
+  endif()
 
   if(MSVC)
     set_target_properties(ical_cxx PROPERTIES PREFIX "lib")
