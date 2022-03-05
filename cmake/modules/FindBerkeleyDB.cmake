@@ -140,6 +140,7 @@ macro(findpackage_berkeleydb_get_lib _BERKELEYDB_OUTPUT_VARNAME _TARGET_BERKELEY
 	endif()
 endmacro()
 
+list(APPEND BerkeleyDB_LIBRARIES)
 # Find and set the paths of the specific library to the variable
 findpackage_berkeleydb_get_lib(BerkeleyDB_LIBRARY "db")
 # NOTE: Windows doesn't have a db_cxx lib, but instead compiles the cxx code into the "db" lib

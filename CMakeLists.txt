@@ -243,7 +243,6 @@ add_feature_info(
   "build in RSCALE support"
 )
 if(ICU_FOUND)
-  set(REQUIRES_PRIVATE_ICU "Requires.private: icu-i18n") #for libical.pc
   set(HAVE_LIBICU 1)
   if(ICU_VERSION VERSION_GREATER 50)
     set(HAVE_ICU_DANGI TRUE)
@@ -276,6 +275,7 @@ if(DEFINED BerkeleyDB_ROOT_DIR) #to make --warn-uninitialized happy
     endif()
   endif()
 endif()
+set(BerkeleyDB_FIND_QUIETLY True)
 find_package(BerkeleyDB)
 set_package_properties(BerkeleyDB PROPERTIES
   TYPE OPTIONAL
@@ -332,10 +332,6 @@ if(WIN32)
   set(BIN_INSTALL_DIR bin)
 else()
   set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-endif()
-
-if(APPLE)
-  set(CMAKE_INSTALL_NAME_DIR ${LIB_DESTINATION})
 endif()
 
 libical_option(ICAL_ERRORS_ARE_FATAL "icalerror_* calls will abort instead of internally signaling an error." False)
@@ -717,6 +713,13 @@ else()
 endif()
 if(DEFINED CMAKE_THREAD_LIBS_INIT)
   set(PTHREAD_LIBS "${CMAKE_THREAD_LIBS_INIT}")
+else()
+  set(PTHREAD_LIBS "")
+endif()
+if(ICU_FOUND)
+  set(REQUIRES_PRIVATE_ICU "Requires.private: icu-i18n") #for libical.pc
+else()
+  set(REQUIRES_PRIVATE_ICU "")
 endif()
 
 configure_file(
