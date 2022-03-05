@@ -144,8 +144,9 @@ if(WITH_CXX_BINDINGS)
     add_library(icalss_cxx-static ALIAS icalss_cxx)
   endif()
 
+  target_link_libraries(icalss_cxx icalss ical_cxx)
   if(DEFINED CMAKE_THREAD_LIBS_INIT)
-    target_link_libraries(icalss_cxx icalss ical_cxx ${CMAKE_THREAD_LIBS_INIT})
+    target_link_libraries(icalss_cxx ${CMAKE_THREAD_LIBS_INIT})
   endif()
 
   if(MSVC)
