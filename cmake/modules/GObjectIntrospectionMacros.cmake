@@ -26,20 +26,45 @@ macro(gir_add_introspections introspections_girs)
 
     # Namespace and Version is either fetched from the gir filename
     # or the _NAMESPACE/_VERSION variable combo
-    set(_gir_namespace "${${_gir_name}_NAMESPACE}")
+    set(_gir_namespace "")
+    if(DEFINED ${_gir_name}_NAMESPACE)
+      set(_gir_namespace "${${_gir_name}_NAMESPACE}")
+    endif()
     if (_gir_namespace STREQUAL "")
       string(REGEX REPLACE "([^-]+)-.*" "\\1" _gir_namespace "${gir}")
     endif ()
-    set(_gir_version "${${_gir_name}_VERSION}")
+
+    set(_gir_version "")
+    if(DEFINED ${_gir_name}_VERSION)
+      set(_gir_version "${${_gir_name}_VERSION}")
+    endif()
     if (_gir_version STREQUAL "")
       string(REGEX REPLACE ".*-([^-]+).gir" "\\1" _gir_version "${gir}")
     endif ()
 
     # _PROGRAM is an optional variable which needs its own --program argument
-    set(_gir_program "${${_gir_name}_PROGRAM}")
+    set(_gir_program "")
+    if(DEFINED ${_gir_name}_PROGRAM)
+      set(_gir_program "${${_gir_name}_PROGRAM}")
+    endif()
     if (NOT _gir_program STREQUAL "")
       set(_gir_program "--program=${_gir_program}")
-    endif ()
+    endif()
+
+    # _SCANNERFLAGS is optional
+    set(_gir_scannerflags "")
+    if(DEFINED ${_gir_name}_SCANNERFLAGS)
+      set(_gir_scannerflags "${${_gir_name}_SCANNERFLAGS}")
+    endif()
+
+    # _FILES
+    set(_gir_files "")
+    if(DEFINED ${_gir_name}_FILES)
+      set(_gir_files "${${_gir_name}_FILES}")
+    else()
+      message(ERROR "Unspecified or empty ${_gir_name}_FILES variable")
+    endif()
+
 
     # Variables which provides a list of things
     _gir_list_prefix(_gir_libraries ${_gir_name}_LIBS "--library=")
@@ -60,12 +85,12 @@ macro(gir_add_introspections introspections_girs)
               ${_gir_libraries}
               ${_gir_packages}
               ${_gir_includes}
-              ${${_gir_name}_SCANNERFLAGS}
+              ${_gir_scannerflags}
               ${${_gir_name}_CFLAGS}
-              ${${_gir_name}_FILES}
+              ${_gir_files}
               --output ${CMAKE_CURRENT_BINARY_DIR}/${gir}
               --accept-unprefixed
-      DEPENDS ${${_gir_name}_FILES}
+      DEPENDS ${_gir_files}
               ${${_gir_name}_LIBS}
       OUTPUT ${gir}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -77,7 +102,6 @@ macro(gir_add_introspections introspections_girs)
     string(REPLACE ".gir" ".typelib" _typelib "${gir}")
     add_custom_command(
       COMMAND ${GObjectIntrospection_COMPILER}
-              ${GObjectIntrospection_COMPILER_ARGS}
               --includedir=.
               ${CMAKE_CURRENT_BINARY_DIR}/${gir}
               -o ${CMAKE_CURRENT_BINARY_DIR}/${_typelib}

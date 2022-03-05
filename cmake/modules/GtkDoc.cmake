@@ -210,7 +210,7 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
       ${GTKDOC_SCAN}
       --module=${_module}
       --deprecated-guards="${_deprecated_guards}"
-      --ignore-headers="${_ignore_headers}"
+      --ignore-headers="${${_ignoreheadersvar}}"
       --rebuild-sections
       --rebuild-types
       ${_srcdirs}
