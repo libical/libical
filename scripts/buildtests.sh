@@ -310,6 +310,7 @@ CPPCHECK() {
       grep -v Net-ICal | \
       grep -v icalssyacc\.c  | \
       grep -v icalsslexer\.c | \
+      grep -v vcc\.c | \
       grep -v _cxx\. | tee cppcheck.out
   CPPCHECK_WARNINGS cppcheck.out
   rm -f cppcheck.out
