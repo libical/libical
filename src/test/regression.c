@@ -1229,14 +1229,14 @@ void print_occur(struct icalrecurrencetype recur, struct icaltimetype start)
     icaltime_t tt = icaltime_as_timet(start);
 
     printf("#### %s\n", icalrecurrencetype_as_string(&recur));
-    printf("#### %s\n", ctime(&tt));
+    printf("#### %s\n", icalctime(&tt));
 
     ritr = icalrecur_iterator_new(recur, start);
     for (next = icalrecur_iterator_next(ritr);
          !icaltime_is_null_time(next);
          next = icalrecur_iterator_next(ritr)) {
         tt = icaltime_as_timet(next);
-        printf("  %s", ctime(&tt));
+        printf("  %s", icalctime(&tt));
     }
 
     icalrecur_iterator_free(ritr);
@@ -1267,7 +1267,7 @@ void test_recur()
 
     for (i = 0; i < 25 && array[i] != 0; i++) {
         if (VERBOSE) {
-            printf("  %s", ctime(&(array[i])));
+            printf("  %s", icalctime(&(array[i])));
         }
     }
 /*    test_increment();*/
@@ -1366,12 +1366,12 @@ void test_expand_recurrence()
     icalrecur_expand_recurrence("FREQ=MONTHLY;BYDAY=MO,WE", now, 5, arr);
 
     if (VERBOSE)
-        printf("Start %s", ctime(&now));
+        printf("Start %s", icalctime(&now));
 
     for (i = 0; i < 5; i++) {
         numfound++;
         if (VERBOSE)
-            printf("i=%d  %s\n", i, ctime(&arr[i]));
+            printf("i=%d  %s\n", i, icalctime(&arr[i]));
     }
     int_is("Get an array of 5 items", numfound, 5);
 }
@@ -1410,7 +1410,7 @@ void icalrecurrencetype_test()
         next = icalrecur_iterator_next(itr);
         tt = icaltime_as_timet(next);
 
-        printf("%s", ctime(&tt));
+        printf("%s", icalctime(&tt));
 
     } while (!icaltime_is_null_time(next));
 
@@ -2021,7 +2021,7 @@ void do_test_time(const char *zone)
                                            icaltimezone_get_builtin_timezone("America/Phoenix"));
 
     if (VERBOSE) {
-        printf("Orig (ctime): %s\n", ical_timet_string(tt));
+        printf("Orig (icalctime): %s\n", ical_timet_string(tt));
         printf("Orig (ical) : %s\n", ictt_as_string(ictt));
         printf("UTC         : %s\n", ictt_as_string(icttutc));
         printf("Los Angeles : %s\n", ictt_as_string(icttla));
@@ -2034,7 +2034,7 @@ void do_test_time(const char *zone)
     if (VERBOSE) {
         printf("\n Daylight Savings \n");
 
-        printf("Orig (ctime): %s\n", ical_timet_string(tt));
+        printf("Orig (icalctime): %s\n", ical_timet_string(tt));
         printf("Orig (ical) : %s\n", ictt_as_string(ictt));
         printf("NY          : %s\n", ictt_as_string(icttny));
     }
@@ -2062,7 +2062,7 @@ void do_test_time(const char *zone)
                                       icaltimezone_get_builtin_timezone("America/Los_Angeles"));
 
     if (VERBOSE) {
-        printf("\nOrig (ctime): %s\n", ical_timet_string(tt));
+        printf("\nOrig (icalctime): %s\n", ical_timet_string(tt));
         printf("Orig (ical) : %s\n", ictt_as_string(ictt));
         printf("LA          : %s\n", ictt_as_string(icttla));
     }
@@ -2881,7 +2881,7 @@ void test_doy()
         stm.tm_year = tt1.year - 1900;
         stm.tm_isdst = -1;
 
-        (void)mktime(&stm);
+        (void)icalmktime(&stm);
 
         doy = icaltime_day_of_year(tt1);
 

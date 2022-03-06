@@ -83,18 +83,18 @@ int main()
          * the current zone and first day of first month in the year
          */
         start_time = icaltime(NULL);
-        (void)localtime_r(&start_time, &start_tm);
+        (void)icallocaltime_r(&start_time, &start_tm);
         start_tm.tm_hour = 12;
         start_tm.tm_min = 0;
         start_tm.tm_sec = 0;
         start_tm.tm_mday = 1;
         start_tm.tm_mon = 0;
-        start_time = mktime(&start_tm);
+        start_time = icalmktime(&start_tm);
 
         /* check time conversion for the next 365 days */
         for (day = 0, curr_time = start_time; day < 365; day++, curr_time += 24 * 60 * 60) {
             /* determine date/time with glibc */
-            localtime_r(&curr_time, &curr_tm);
+            icallocaltime_r(&curr_time, &curr_tm);
             /* determine date/time with libical */
             curr_tt = icaltime_from_timet_with_zone(curr_time, 0, utc_zone);
             curr_tt.zone = utc_zone;    /* workaround: icaltime_from_timet_with_zone()

@@ -74,7 +74,7 @@ char *icaltime_as_ctime(struct icaltimetype t)
     icaltime_t tt;
 
     tt = icaltime_as_timet(t);
-    snprintf(ictt_str, sizeof(ictt_str), "%s", ctime(&tt));
+    snprintf(ictt_str, sizeof(ictt_str), "%s", icalctime(&tt));
 
     return ictt_str;
 }

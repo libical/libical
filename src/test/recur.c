@@ -45,8 +45,8 @@ static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void
 {
     _unused(comp);
     _unused(data);
-    printf("cb: %s", ctime(&span->start));
-    printf("    %s\n", ctime(&span->end));
+    printf("cb: %s", icalctime(&span->start));
+    printf("    %s\n", icalctime(&span->end));
 }
 
 int main(int argc, char *argv[])
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 
         tt = icaltime_as_timet(start);
 
-        printf("#### %s\n", ctime(&tt));
+        printf("#### %s\n", icalctime(&tt));
 
         icalrecur_iterator_free(ritr);
 
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
              !icaltime_is_null_time(next);
              next = icalrecur_iterator_next(ritr)) {
             tt = icaltime_as_timet(next);
-            printf("  %s", ctime(&tt));
+            printf("  %s", icalctime(&tt));
         }
         icalrecur_iterator_free(ritr);
 

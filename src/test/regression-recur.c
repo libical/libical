@@ -69,8 +69,8 @@ static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void
     _unused(comp);
 
     if (VERBOSE) {
-        printf("recur: %s", ctime(&span->start));
-        printf("       %s", ctime(&span->end));
+        printf("recur: %s", icalctime(&span->start));
+        printf("       %s", icalctime(&span->end));
     }
     *num_recurs = *num_recurs + 1;
 }
@@ -147,7 +147,7 @@ void test_recur_file()
         tt = icaltime_as_timet(start);
 
         if (VERBOSE)
-            printf("#### %s\n", ctime(&tt));
+            printf("#### %s\n", icalctime(&tt));
 
         icalrecur_iterator_free(ritr);
 
@@ -157,7 +157,7 @@ void test_recur_file()
              next = icalrecur_iterator_next(ritr)) {
             tt = icaltime_as_timet(next);
             if (VERBOSE)
-                printf("  %s", ctime(&tt));
+                printf("  %s", icalctime(&tt));
         }
 
         icalrecur_iterator_free(ritr);
