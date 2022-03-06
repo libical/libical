@@ -132,7 +132,7 @@ static void convert_floating_time_to_utc(struct icaltimetype *itt)
     tmp_tm.tm_isdst = -1;
 
     /* Convert to a icaltime_t. */
-    t = mktime(&tmp_tm);
+    t = icalmktime(&tmp_tm);
 
     /* Now convert back to a struct tm, but with a UTC time. */
     if (!icalgmtime_r(&t, &utc_tm)) {

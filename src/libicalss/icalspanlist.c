@@ -215,8 +215,8 @@ void icalspanlist_dump(icalspanlist *sl)
     for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
         struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
         if (s) {
-            printf("#%02d %d start: %s", ++i, s->is_busy, ctime(&s->start));
-            printf("      end  : %s", ctime(&s->end));
+            printf("#%02d %d start: %s", ++i, s->is_busy, icalctime(&s->start));
+            printf("      end  : %s", icalctime(&s->end));
         }
     }
 }
