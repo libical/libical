@@ -66,6 +66,10 @@
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
 #
+# -DUSE_64BIT_ICALTIME_T=[true|false]
+#  Experimental: Redirect icaltime_t (and related functions) to a 64-bit version of time_t rather than to time_t.
+#  Default=false (use plain time_t)
+#
 # -DLIBICAL_BUILD_TESTING=[true|false]
 #  Set to build the test suite
 #  Default=true
@@ -311,6 +315,19 @@ if(WIN32)
   add_definitions(-DBIG_ENDIAN=0 -DLITTLE_ENDIAN=1 -DBYTE_ORDER=BIG_ENDIAN)
 endif()
 
+# define icaltime_t
+libical_option(USE_64BIT_ICALTIME_T "Experimental: Redirect icaltime_t (and related functions) to a 64-bit version of time_t rather than to time_t." False)
+if(USE_64BIT_ICALTIME_T)
+  if(MSVC)
+    set(ICAL_ICALTIME_T_TYPE "__time64_t")
+  else()
+    message(FATAL_ERROR
+      "Option USE_64BIT_ICALTIME_T is not supported with this compiler or architecture.")
+  endif()
+else()
+  set(ICAL_ICALTIME_T_TYPE "time_t")
+endif()
+
 # Use GNUInstallDirs
 
 include(GNUInstallDirs)
@@ -371,7 +388,6 @@ endif()
 
 include(ConfigureChecks.cmake)
 add_definitions(-DHAVE_CONFIG_H)
-configure_file(config_public.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_public.h)
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(INSTALL_TARGETS_DEFAULT_ARGS

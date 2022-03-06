@@ -82,7 +82,8 @@
 
 #include "libical_ical_export.h"
 
-#include "config_public.h"
+#include <time.h>
+#define icaltime_t ${ICAL_ICALTIME_T_TYPE}
 
 /* An opaque struct representing a timezone. We declare this here to avoid
    a circular dependency. */

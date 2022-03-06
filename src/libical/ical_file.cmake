@@ -1,7 +1,6 @@
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering.
 # It is required to make the combined header ical.h properly.
 set(COMBINEDHEADERSICAL
-  ${TOPB}/config_public.h
   ${TOPB}/src/libical/icalversion.h
   ${TOPB}/src/libical/icaltime.h
   ${TOPS}/src/libical/icalduration.h
