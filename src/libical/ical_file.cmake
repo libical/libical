@@ -3,7 +3,7 @@
 set(COMBINEDHEADERSICAL
   ${TOPB}/config_public.h
   ${TOPB}/src/libical/icalversion.h
-  ${TOPS}/src/libical/icaltime.h
+  ${TOPB}/src/libical/icaltime.h
   ${TOPS}/src/libical/icalduration.h
   ${TOPS}/src/libical/icalperiod.h
   ${TOPS}/src/libical/icalenums.h
