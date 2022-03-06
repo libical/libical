@@ -110,6 +110,7 @@ endif()
 # The actual returned/output version variable (the others can be used if needed)
 set(BerkeleyDB_VERSION "${BerkeleyDB_VERSION_MAJOR}.${BerkeleyDB_VERSION_MINOR}.${BerkeleyDB_VERSION_PATCH}")
 
+set(BerkeleyDB_LIBRARIES "")
 # Finds the target library for berkeley db, since they all follow the same naming conventions
 macro(findpackage_berkeleydb_get_lib _BERKELEYDB_OUTPUT_VARNAME _TARGET_BERKELEYDB_LIB)
 	# Different systems sometimes have a version in the lib name...
@@ -140,7 +141,6 @@ macro(findpackage_berkeleydb_get_lib _BERKELEYDB_OUTPUT_VARNAME _TARGET_BERKELEY
 	endif()
 endmacro()
 
-list(APPEND BerkeleyDB_LIBRARIES)
 # Find and set the paths of the specific library to the variable
 findpackage_berkeleydb_get_lib(BerkeleyDB_LIBRARY "db")
 # NOTE: Windows doesn't have a db_cxx lib, but instead compiles the cxx code into the "db" lib
