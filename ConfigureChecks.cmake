@@ -81,6 +81,7 @@ check_type_size(pid_t SIZEOF_PID_T)
 check_type_size(size_t SIZEOF_SIZE_T)
 check_type_size(ssize_t SIZEOF_SSIZE_T)
 check_type_size(time_t SIZEOF_TIME_T)
+check_type_size(${ICAL_ICALTIME_T_TYPE} SIZEOF_ICALTIME_T)
 check_type_size(wint_t SIZEOF_WINT_T)
 
 include(FindThreads)
