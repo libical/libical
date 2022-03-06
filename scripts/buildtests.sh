@@ -617,7 +617,10 @@ CLANGTIDY test2builtin "$TZCMAKEOPTS"
 GCC_BUILD testgcc1 ""
 GCC_BUILD testgcc2 "$CMAKEOPTS"
 GCC_BUILD testgcc3 "$UUCCMAKEOPTS"
-GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
+if (test "`uname -s`" = "Linux")
+then
+  GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
+fi
 GCC_BUILD testgcc4glib "$GLIBOPTS"
 GCC_BUILD testgccnocxx "$CMAKEOPTS -DWITH_CXX_BINDINGS=off"
 if (test "`uname -s`" = "Linux")
@@ -642,8 +645,8 @@ NINJA_GCC_BUILD testninjagcc9 "-DSHARED_ONLY=True -DICAL_GLIB=True -DGOBJECT_INT
 CLANG_BUILD testclang1 ""
 CLANG_BUILD testclang2 "$CMAKEOPTS"
 CLANG_BUILD testclang3 "$UUCCMAKEOPTS"
-#broken with clang7 on Fedora29 CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
-#broken with clang7 on Fedora29 CLANG_BUILD testclang4glib "$GLIBOPTS"
+#not supported with clang yet CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
+CLANG_BUILD testclang4glib "$GLIBOPTS"
 if (test "`uname -s`" = "Linux")
 then
     echo "Temporarily disable cross-compile tests"
