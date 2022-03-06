@@ -6,6 +6,11 @@ configure_file(
   @ONLY
 )
 
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/icaltime.h.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/icaltime.h
+)
+
 include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/src
@@ -405,7 +410,7 @@ install(FILES
   icalproperty.h
   icalrecur.h
   icalrestriction.h
-  icaltime.h
+  ${CMAKE_BINARY_DIR}/src/libical/icaltime.h
   icaltz-util.h
   icaltimezone.h
   icaltypes.h
