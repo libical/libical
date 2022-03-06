@@ -136,7 +136,18 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
   # Add it as the last, thus in-tree libs have precedence
   set(_scangobj_ldflags "${_scangobj_ldflags} -L${LIB_INSTALL_DIR}")
 
-  set(_scangobj_prefix ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH="${_scangobj_ld_lib_dirs}:${LIB_INSTALL_DIR}:$ENV{LD_LIBRARY_PATH}")
+  if(APPLE)
+    set(ld_lib_path "DYLD_LIBRARY_PATH=${_scangobj_ld_lib_dirs}:${LIB_INSTALL_DIR}")
+    if(DEFINED DYLD_LIBRARY_PATH)
+      set(ld_lib_path "${ld_lib_path}:$ENV{DYLD_LIBRARY_PATH}")
+    endif()
+  elseif(NOT WIN32 AND NOT WINCE) #ie. unix-like
+    set(ld_lib_path "LD_LIBRARY_PATH=${_scangobj_ld_lib_dirs}:${LIB_INSTALL_DIR}")
+    if(DEFINED LD_LIBRARY_PATH)
+      set(ld_lib_path "${ld_lib_path}:$ENV{LD_LIBRARY_PATH}")
+    endif()
+  endif()
+  set(_scangobj_prefix ${CMAKE_COMMAND} -E env "${ld_lib_path}")
 
 #  if(NOT (_scangobj_cflags STREQUAL ""))
 #    set(_scangobj_cflags --cflags "${_scangobj_cflags}")
