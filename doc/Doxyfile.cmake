@@ -86,6 +86,7 @@ FILE_PATTERNS          = *.cpp \
                          *.hh \
                          *.hxx \
                          *.hpp \
+                         *.md \
                          *.dox
 RECURSIVE              = YES
 EXCLUDE                = @CMAKE_SOURCE_DIR@/src/java \
@@ -106,7 +107,7 @@ EXCLUDE_PATTERNS       = */.svn/* \
 EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO
-IMAGE_PATH             = @CMAKE_SOURCE_DIR@/docs
+IMAGE_PATH             = @CMAKE_SOURCE_DIR@/doc
 INPUT_FILTER           =
 FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO

@@ -13,6 +13,9 @@ the CalDav scheduling extensions in RFC6638;
 iCalendar extensions in RFC7986, RFC9073, RFC9074;
 plus the iCalendar iMIP protocol in RFC6047.
 
+For a conceptual overview of the library, see 
+[Using Libical](@ref UsingLibical).
+
 @section license License
 
 The code and datafiles in this distribution are licensed under the
