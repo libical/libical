@@ -34,7 +34,7 @@ at the [IETF Tools][] website:
 ### 1.1 The libical project
 
 This code is under active development. If you would like to contribute
-to the project, visit <https://libical.github.io/libical/>
+to the project, visit <https://libical.github.io/libical/>.
 
 ### 1.2 License
 
@@ -1330,30 +1330,12 @@ RFC5545.
 
 There are a few routines to manipulate error properties:
 
-[ The following data is supposed to be in a table. It looks OK in LyX,
-but does not format properly in output. ]
-
-+-------------------------------------+---------------------------------------------------------+
-| Routine                             | Purpose                                                 |
-+-------------------------------------+---------------------------------------------------------+
-| void icalrestriction_check()        | Check a component against RFC5546 and insert            |
-+-------------------------------------+---------------------------------------------------------+
-|                                     | error properties to indicate non compliance             |
-+-------------------------------------+---------------------------------------------------------+
-| int icalcomponent_count_errors()    | Return the number of error properties                   |
-+-------------------------------------+---------------------------------------------------------+
-|                                     | in a component                                          |
-+-------------------------------------+---------------------------------------------------------+
-| void icalcomponent_strip_errors()   | Remove all error properties in as                       |
-+-------------------------------------+---------------------------------------------------------+
-|                                     | component                                               |
-+-------------------------------------+---------------------------------------------------------+
-| void icalcomponent_convert_errors() | Convert some error properties into                      |
-+-------------------------------------+---------------------------------------------------------+
-|                                     | REQUESTS-STATUS proprties to indicate the inability to  |
-+-------------------------------------+---------------------------------------------------------+
-|                                     | process the component as an iTIP request.               |
-+-------------------------------------+---------------------------------------------------------+
+| Routine | Purpose |
+|---------|---------|
+| `void icalrestriction_check()` | Check a component against RFC5546 and insert error properties to indicate non compliance |
+| `int icalcomponent_count_errors()` | Return the number of error properties in a component |
+| `void icalcomponent_strip_errors()` | Remove all error properties in a component |
+| `void icalcomponent_convert_errors()` | Convert some error properties into REQUESTS-STATUS proprties to indicate the inability to process the component as an iTIP request. |
 
 
 The types of errors are listed in icalerror.h. They are:
