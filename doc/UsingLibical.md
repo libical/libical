@@ -1,4 +1,4 @@
-# Using Libical
+# Using Libical {#UsingLibical}
 
 >   Author: Eric Busboom <eric@civicknowledge.com>
 >   
