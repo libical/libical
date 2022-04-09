@@ -210,7 +210,7 @@ Example</h3>
 <div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span> *period_string_gen = <a class="code" href="icalperiod_8h.html#ac71be7790d778145a59ad9626458ccd5">icalperiodtype_as_ical_string_r</a>(period);</div>
 <div class="line">printf(<span class="stringliteral">&quot;%s\n&quot;</span>, period_string_gen);</div>
 <div class="line"><a class="code" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(period_string_gen);</div>
-<div class="ttc" id="aicalmemory_8h_html_a2f164cb87c67f06b5dc04a5f21384879"><div class="ttname"><a href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a></div><div class="ttdeci">void icalmemory_free_buffer(void *buf)</div><div class="ttdoc">Releases a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:287</div></div>
+<div class="ttc" id="aicalmemory_8h_html_a2f164cb87c67f06b5dc04a5f21384879"><div class="ttname"><a href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a></div><div class="ttdeci">void icalmemory_free_buffer(void *buf)</div><div class="ttdoc">Releases a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:379</div></div>
 <div class="ttc" id="aicalperiod_8h_html_ac71be7790d778145a59ad9626458ccd5"><div class="ttname"><a href="icalperiod_8h.html#ac71be7790d778145a59ad9626458ccd5">icalperiodtype_as_ical_string_r</a></div><div class="ttdeci">char * icalperiodtype_as_ical_string_r(struct icalperiodtype p)</div><div class="ttdoc">Converts an icalperiodtype into an iCal-formatted string.</div><div class="ttdef"><b>Definition:</b> icalperiod.c:103</div></div>
 </div><!-- fragment --> 
 </div>
@@ -353,14 +353,14 @@ Usage</h3>
 <div class="line">assert(<a class="code" href="icaltime_8h.html#a97483d9daf2fc8f8b1bbdc0c75ced095">icaltime_is_null_time</a>(period.start));</div>
 <div class="line">assert(<a class="code" href="icaltime_8h.html#a97483d9daf2fc8f8b1bbdc0c75ced095">icaltime_is_null_time</a>(period.end));</div>
 <div class="line">assert(icaldurationtype_is_null_duratino(period.duration));</div>
-<div class="ttc" id="aicaltime_8h_html_a97483d9daf2fc8f8b1bbdc0c75ced095"><div class="ttname"><a href="icaltime_8h.html#a97483d9daf2fc8f8b1bbdc0c75ced095">icaltime_is_null_time</a></div><div class="ttdeci">int icaltime_is_null_time(const struct icaltimetype t)</div><div class="ttdoc">Returns true if the time is null.</div><div class="ttdef"><b>Definition:</b> icaltime.c:609</div></div>
+<div class="ttc" id="aicaltime_8h_html_a97483d9daf2fc8f8b1bbdc0c75ced095"><div class="ttname"><a href="icaltime_8h.html#a97483d9daf2fc8f8b1bbdc0c75ced095">icaltime_is_null_time</a></div><div class="ttdeci">int icaltime_is_null_time(const struct icaltimetype t)</div><div class="ttdoc">Returns true if the time is null.</div><div class="ttdef"><b>Definition:</b> icaltime.c:600</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 5 2022 09:12:49 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sat Apr 9 2022 08:34:57 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -96,6 +96,9 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_
 <tr class="memitem:abc7eb81345d20ba2664ffaf9f2037536"><td class="memItemLeft" align="right" valign="top"><a id="abc7eb81345d20ba2664ffaf9f2037536"></a>
 char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_as_ical_string_r</b> (icalproperty *prop)</td></tr>
 <tr class="separator:abc7eb81345d20ba2664ffaf9f2037536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0113ed6e9787bb9416f5c1fffc8cc0e9"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalproperty_8h.html#a0113ed6e9787bb9416f5c1fffc8cc0e9">icalproperty_clone</a> (const icalproperty *prop)</td></tr>
+<tr class="memdesc:a0113ed6e9787bb9416f5c1fffc8cc0e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deeply clones an icalproperty.  <a href="icalproperty_8h.html#a0113ed6e9787bb9416f5c1fffc8cc0e9">More...</a><br /></td></tr>
+<tr class="separator:a0113ed6e9787bb9416f5c1fffc8cc0e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bb5d91a569763150fb74553e21f200c"><td class="memItemLeft" align="right" valign="top"><a id="a5bb5d91a569763150fb74553e21f200c"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_count_parameters</b> (const icalproperty *prop)</td></tr>
 <tr class="separator:a5bb5d91a569763150fb74553e21f200c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,9 +166,9 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_
 <tr class="memitem:ab1b31e497e4d480325a56ca7346470fa"><td class="memItemLeft" align="right" valign="top"><a id="ab1b31e497e4d480325a56ca7346470fa"></a>
 icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_new</b> (icalproperty_kind kind)</td></tr>
 <tr class="separator:ab1b31e497e4d480325a56ca7346470fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac63bc3bf27d46e6c2eaaf74eefab8ba"><td class="memItemLeft" align="right" valign="top"><a id="aac63bc3bf27d46e6c2eaaf74eefab8ba"></a>
-icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_new_clone</b> (icalproperty *prop)</td></tr>
-<tr class="separator:aac63bc3bf27d46e6c2eaaf74eefab8ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d22b70d4090ee5f6d05719539c3aa6a"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalproperty_8h.html#a8d22b70d4090ee5f6d05719539c3aa6a">icalproperty_new_clone</a> (icalproperty *prop))</td></tr>
+<tr class="memdesc:a8d22b70d4090ee5f6d05719539c3aa6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deeply clones an icalproperty.  <a href="icalproperty_8h.html#a8d22b70d4090ee5f6d05719539c3aa6a">More...</a><br /></td></tr>
+<tr class="separator:a8d22b70d4090ee5f6d05719539c3aa6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c3831d34e102407a74a539e3d2eb9cb"><td class="memItemLeft" align="right" valign="top"><a id="a3c3831d34e102407a74a539e3d2eb9cb"></a>
 icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_new_from_string</b> (const char *str)</td></tr>
 <tr class="separator:a3c3831d34e102407a74a539e3d2eb9cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -267,6 +270,27 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
 
 </div>
 </div>
+<a id="a0113ed6e9787bb9416f5c1fffc8cc0e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0113ed6e9787bb9416f5c1fffc8cc0e9">&#9670;&nbsp;</a></span>icalproperty_clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty* icalproperty_clone </td>
+          <td>(</td>
+          <td class="paramtype">const icalproperty *&#160;</td>
+          <td class="paramname"><em>prop</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Deeply clones an icalproperty. </p>
+<p>Returns a pointer to the memory for the newly cloned icalproperty. </p><dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
+
+</div>
+</div>
 <a id="a3caefa5ff2dec002606c6faf3bb13867"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3caefa5ff2dec002606c6faf3bb13867">&#9670;&nbsp;</a></span>icalproperty_get_property_name()</h2>
 
@@ -302,6 +326,28 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
       </table>
 </div><div class="memdoc">
 <p>Check validity of a specific icalproperty_kind </p>
+
+</div>
+</div>
+<a id="a8d22b70d4090ee5f6d05719539c3aa6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d22b70d4090ee5f6d05719539c3aa6a">&#9670;&nbsp;</a></span>icalproperty_new_clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty* icalproperty_new_clone </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *&#160;</td>
+          <td class="paramname"><em>prop</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Deeply clones an icalproperty. </p>
+<p>Returns a pointer to the memory for the newly cloned icalproperty. </p><dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated:</a></b></dt><dd>use <a class="el" href="icalproperty_8h.html#a0113ed6e9787bb9416f5c1fffc8cc0e9" title="Deeply clones an icalproperty.">icalproperty_clone()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -490,7 +536,7 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 5 2022 09:12:49 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sat Apr 9 2022 08:34:57 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

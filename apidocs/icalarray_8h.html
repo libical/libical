@@ -167,9 +167,9 @@ Usage</h3>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release array</span></div>
 <div class="line"><a class="code" href="icalarray_8h.html#a725724cdff58a12520abc7d6bfdf5e0f">icalarray_free</a>(array);</div>
-<div class="ttc" id="aicalarray_8h_html_a0254b829a5b491bf42d19afa3b2d6f1e"><div class="ttname"><a href="icalarray_8h.html#a0254b829a5b491bf42d19afa3b2d6f1e">icalarray_new</a></div><div class="ttdeci">icalarray * icalarray_new(size_t element_size, size_t increment_size)</div><div class="ttdoc">Creates a new icalarray object.</div><div class="ttdef"><b>Definition:</b> icalarray.c:31</div></div>
-<div class="ttc" id="aicalarray_8h_html_a725724cdff58a12520abc7d6bfdf5e0f"><div class="ttname"><a href="icalarray_8h.html#a725724cdff58a12520abc7d6bfdf5e0f">icalarray_free</a></div><div class="ttdeci">void icalarray_free(icalarray *array)</div><div class="ttdoc">Frees an array object and everything that it contains.</div><div class="ttdef"><b>Definition:</b> icalarray.c:90</div></div>
-<div class="ttc" id="aicalarray_8h_html_a9a11feb130b619af9dd7f4003d52d242"><div class="ttname"><a href="icalarray_8h.html#a9a11feb130b619af9dd7f4003d52d242">icalarray_append</a></div><div class="ttdeci">void icalarray_append(icalarray *array, const void *element)</div><div class="ttdoc">Appends an element to an array.</div><div class="ttdef"><b>Definition:</b> icalarray.c:105</div></div>
+<div class="ttc" id="aicalarray_8h_html_a0254b829a5b491bf42d19afa3b2d6f1e"><div class="ttname"><a href="icalarray_8h.html#a0254b829a5b491bf42d19afa3b2d6f1e">icalarray_new</a></div><div class="ttdeci">icalarray * icalarray_new(size_t element_size, size_t increment_size)</div><div class="ttdoc">Creates a new icalarray object.</div><div class="ttdef"><b>Definition:</b> icalarray.c:33</div></div>
+<div class="ttc" id="aicalarray_8h_html_a725724cdff58a12520abc7d6bfdf5e0f"><div class="ttname"><a href="icalarray_8h.html#a725724cdff58a12520abc7d6bfdf5e0f">icalarray_free</a></div><div class="ttdeci">void icalarray_free(icalarray *array)</div><div class="ttdoc">Frees an array object and everything that it contains.</div><div class="ttdef"><b>Definition:</b> icalarray.c:99</div></div>
+<div class="ttc" id="aicalarray_8h_html_a9a11feb130b619af9dd7f4003d52d242"><div class="ttname"><a href="icalarray_8h.html#a9a11feb130b619af9dd7f4003d52d242">icalarray_append</a></div><div class="ttdeci">void icalarray_append(icalarray *array, const void *element)</div><div class="ttdoc">Appends an element to an array.</div><div class="ttdef"><b>Definition:</b> icalarray.c:114</div></div>
 <div class="ttc" id="astruct__icalarray_html"><div class="ttname"><a href="struct__icalarray.html">_icalarray</a></div><div class="ttdef"><b>Definition:</b> icalarray.h:36</div></div>
 </div><!-- fragment --> 
 </div>
@@ -217,8 +217,8 @@ Usage</h3>
 <div class="line"><span class="comment">// release arrays</span></div>
 <div class="line"><a class="code" href="icalarray_8h.html#a725724cdff58a12520abc7d6bfdf5e0f">icalarray_free</a>(array);</div>
 <div class="line"><a class="code" href="icalarray_8h.html#a725724cdff58a12520abc7d6bfdf5e0f">icalarray_free</a>(copy);</div>
-<div class="ttc" id="aicalarray_8h_html_a8d76fb1a34690980421b6c82c40d5f9c"><div class="ttname"><a href="icalarray_8h.html#a8d76fb1a34690980421b6c82c40d5f9c">icalarray_element_at</a></div><div class="ttdeci">void * icalarray_element_at(icalarray *array, size_t position)</div><div class="ttdoc">Access an array element.</div><div class="ttdef"><b>Definition:</b> icalarray.c:117</div></div>
-<div class="ttc" id="aicalarray_8h_html_aa4bcd6fa2682deef8bdfd0d3b59be567"><div class="ttname"><a href="icalarray_8h.html#aa4bcd6fa2682deef8bdfd0d3b59be567">icalarray_copy</a></div><div class="ttdeci">icalarray * icalarray_copy(icalarray *array)</div><div class="ttdoc">Copies an existing icalarray and its elements, creating a new one.</div><div class="ttdef"><b>Definition:</b> icalarray.c:60</div></div>
+<div class="ttc" id="aicalarray_8h_html_a8d76fb1a34690980421b6c82c40d5f9c"><div class="ttname"><a href="icalarray_8h.html#a8d76fb1a34690980421b6c82c40d5f9c">icalarray_element_at</a></div><div class="ttdeci">void * icalarray_element_at(icalarray *array, size_t position)</div><div class="ttdoc">Access an array element.</div><div class="ttdef"><b>Definition:</b> icalarray.c:130</div></div>
+<div class="ttc" id="aicalarray_8h_html_aa4bcd6fa2682deef8bdfd0d3b59be567"><div class="ttname"><a href="icalarray_8h.html#aa4bcd6fa2682deef8bdfd0d3b59be567">icalarray_copy</a></div><div class="ttdeci">icalarray * icalarray_copy(icalarray *array)</div><div class="ttdoc">Copies an existing icalarray and its elements, creating a new one.</div><div class="ttdef"><b>Definition:</b> icalarray.c:62</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -438,7 +438,7 @@ Usage</h3>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release array</span></div>
 <div class="line"><a class="code" href="icalarray_8h.html#a725724cdff58a12520abc7d6bfdf5e0f">icalarray_free</a>(array);</div>
-<div class="ttc" id="aicalarray_8h_html_afeff7fd9edc32284b5fb34fb61ec8c0a"><div class="ttname"><a href="icalarray_8h.html#afeff7fd9edc32284b5fb34fb61ec8c0a">icalarray_remove_element_at</a></div><div class="ttdeci">void icalarray_remove_element_at(icalarray *array, size_t position)</div><div class="ttdoc">Removes a given element from an array.</div><div class="ttdef"><b>Definition:</b> icalarray.c:125</div></div>
+<div class="ttc" id="aicalarray_8h_html_afeff7fd9edc32284b5fb34fb61ec8c0a"><div class="ttname"><a href="icalarray_8h.html#afeff7fd9edc32284b5fb34fb61ec8c0a">icalarray_remove_element_at</a></div><div class="ttdeci">void icalarray_remove_element_at(icalarray *array, size_t position)</div><div class="ttdoc">Removes a given element from an array.</div><div class="ttdef"><b>Definition:</b> icalarray.c:138</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -503,14 +503,14 @@ Usage</h3>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalarray_8h_html_a7552d72058960fe92eeae36531275913"><div class="ttname"><a href="icalarray_8h.html#a7552d72058960fe92eeae36531275913">icalarray_sort</a></div><div class="ttdeci">void icalarray_sort(icalarray *array, int(*compare)(const void *, const void *))</div><div class="ttdoc">Sorts the elements of an icalarray using the given comparison function.</div><div class="ttdef"><b>Definition:</b> icalarray.c:136</div></div>
+<div class="ttc" id="aicalarray_8h_html_a7552d72058960fe92eeae36531275913"><div class="ttname"><a href="icalarray_8h.html#a7552d72058960fe92eeae36531275913">icalarray_sort</a></div><div class="ttdeci">void icalarray_sort(icalarray *array, int(*compare)(const void *, const void *))</div><div class="ttdoc">Sorts the elements of an icalarray using the given comparison function.</div><div class="ttdef"><b>Definition:</b> icalarray.c:170</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 5 2022 09:12:49 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sat Apr 9 2022 08:34:56 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

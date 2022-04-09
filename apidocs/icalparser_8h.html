@@ -268,13 +268,13 @@ Example</h3>
 <div class="line"> </div>
 <div class="line">    <a class="code" href="icalparser_8h.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a>(parser);</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalparser_8h_html_a1138735cde70554bcdfc17dc8a595a6a"><div class="ttname"><a href="icalparser_8h.html#a1138735cde70554bcdfc17dc8a595a6a">icalparser_add_line</a></div><div class="ttdeci">icalcomponent * icalparser_add_line(icalparser *parser, char *str)</div><div class="ttdoc">Adds a single line to be parsed by the icalparser.</div><div class="ttdef"><b>Definition:</b> icalparser.c:685</div></div>
-<div class="ttc" id="aicalparser_8h_html_a1cb8b8678b781d3d2ede0fbce613b90d"><div class="ttname"><a href="icalparser_8h.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a></div><div class="ttdeci">void icalparser_free(icalparser *parser)</div><div class="ttdoc">Frees an icalparser object.</div><div class="ttdef"><b>Definition:</b> icalparser.c:121</div></div>
-<div class="ttc" id="aicalparser_8h_html_a1e9b165c1aa2ba82605bcccadf85f74c"><div class="ttname"><a href="icalparser_8h.html#a1e9b165c1aa2ba82605bcccadf85f74c">icalparser_get_line</a></div><div class="ttdeci">char * icalparser_get_line(icalparser *parser, icalparser_line_gen_func line_gen_func)</div><div class="ttdoc">Given a line generator function, returns a single iCal content line.</div><div class="ttdef"><b>Definition:</b> icalparser.c:476</div></div>
-<div class="ttc" id="aicalparser_8h_html_a3a7a45307a9ff90ec23d632501c0bd00"><div class="ttname"><a href="icalparser_8h.html#a3a7a45307a9ff90ec23d632501c0bd00">icalparser_new</a></div><div class="ttdeci">icalparser * icalparser_new(void)</div><div class="ttdoc">Creates a new icalparser.</div><div class="ttdef"><b>Definition:</b> icalparser.c:99</div></div>
-<div class="ttc" id="aicalparser_8h_html_aae6d08b4084610e225621a25dddd7689"><div class="ttname"><a href="icalparser_8h.html#aae6d08b4084610e225621a25dddd7689">icalparser_set_gen_data</a></div><div class="ttdeci">void icalparser_set_gen_data(icalparser *parser, void *data)</div><div class="ttdoc">Sets the data that icalparser_parse will give to the line_gen_func as the parameter 'd'.</div><div class="ttdef"><b>Definition:</b> icalparser.c:138</div></div>
+<div class="ttc" id="aicalparser_8h_html_a1138735cde70554bcdfc17dc8a595a6a"><div class="ttname"><a href="icalparser_8h.html#a1138735cde70554bcdfc17dc8a595a6a">icalparser_add_line</a></div><div class="ttdeci">icalcomponent * icalparser_add_line(icalparser *parser, char *str)</div><div class="ttdoc">Adds a single line to be parsed by the icalparser.</div><div class="ttdef"><b>Definition:</b> icalparser.c:702</div></div>
+<div class="ttc" id="aicalparser_8h_html_a1cb8b8678b781d3d2ede0fbce613b90d"><div class="ttname"><a href="icalparser_8h.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a></div><div class="ttdeci">void icalparser_free(icalparser *parser)</div><div class="ttdoc">Frees an icalparser object.</div><div class="ttdef"><b>Definition:</b> icalparser.c:124</div></div>
+<div class="ttc" id="aicalparser_8h_html_a1e9b165c1aa2ba82605bcccadf85f74c"><div class="ttname"><a href="icalparser_8h.html#a1e9b165c1aa2ba82605bcccadf85f74c">icalparser_get_line</a></div><div class="ttdeci">char * icalparser_get_line(icalparser *parser, icalparser_line_gen_func line_gen_func)</div><div class="ttdoc">Given a line generator function, returns a single iCal content line.</div><div class="ttdef"><b>Definition:</b> icalparser.c:487</div></div>
+<div class="ttc" id="aicalparser_8h_html_a3a7a45307a9ff90ec23d632501c0bd00"><div class="ttname"><a href="icalparser_8h.html#a3a7a45307a9ff90ec23d632501c0bd00">icalparser_new</a></div><div class="ttdeci">icalparser * icalparser_new(void)</div><div class="ttdoc">Creates a new icalparser.</div><div class="ttdef"><b>Definition:</b> icalparser.c:101</div></div>
+<div class="ttc" id="aicalparser_8h_html_aae6d08b4084610e225621a25dddd7689"><div class="ttname"><a href="icalparser_8h.html#aae6d08b4084610e225621a25dddd7689">icalparser_set_gen_data</a></div><div class="ttdeci">void icalparser_set_gen_data(icalparser *parser, void *data)</div><div class="ttdoc">Sets the data that icalparser_parse will give to the line_gen_func as the parameter 'd'.</div><div class="ttdef"><b>Definition:</b> icalparser.c:141</div></div>
 <div class="ttc" id="astructicalcomponent__impl_html"><div class="ttname"><a href="structicalcomponent__impl.html">icalcomponent_impl</a></div><div class="ttdef"><b>Definition:</b> icalcomponent.c:36</div></div>
-<div class="ttc" id="astructicalparser__impl_html"><div class="ttname"><a href="structicalparser__impl.html">icalparser_impl</a></div><div class="ttdef"><b>Definition:</b> icalparser.c:51</div></div>
+<div class="ttc" id="astructicalparser__impl_html"><div class="ttname"><a href="structicalparser__impl.html">icalparser_impl</a></div><div class="ttdef"><b>Definition:</b> icalparser.c:52</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -415,7 +415,7 @@ Example</h3>
 <div class="line">} <span class="keywordflow">else</span> {</div>
 <div class="line">    <span class="comment">// ...</span></div>
 <div class="line">}</div>
-<div class="ttc" id="aicalparser_8h_html_a9a27d19ac53219bb65aeb9a031dbf027"><div class="ttname"><a href="icalparser_8h.html#a9a27d19ac53219bb65aeb9a031dbf027">icalparser_get_state</a></div><div class="ttdeci">icalparser_state icalparser_get_state(icalparser *parser)</div><div class="ttdoc">Returns current state of the icalparser.</div><div class="ttdef"><b>Definition:</b> icalparser.c:1237</div></div>
+<div class="ttc" id="aicalparser_8h_html_a9a27d19ac53219bb65aeb9a031dbf027"><div class="ttname"><a href="icalparser_8h.html#a9a27d19ac53219bb65aeb9a031dbf027">icalparser_get_state</a></div><div class="ttdeci">icalparser_state icalparser_get_state(icalparser *parser)</div><div class="ttdoc">Returns current state of the icalparser.</div><div class="ttdef"><b>Definition:</b> icalparser.c:1258</div></div>
 <div class="ttc" id="aicalparser_8h_html_aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8"><div class="ttname"><a href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a></div><div class="ttdeci">@ ICALPARSER_ERROR</div><div class="ttdef"><b>Definition:</b> icalparser.h:58</div></div>
 </div><!-- fragment --><p>icalparser_free(parser); </p>
 
@@ -525,7 +525,7 @@ Example</h3>
 <div class="line"> </div>
 <div class="line">    <a class="code" href="icalparser_8h.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a>(parser);</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalparser_8h_html_aab80e10c3636d6476bc4920ae72d4b70"><div class="ttname"><a href="icalparser_8h.html#aab80e10c3636d6476bc4920ae72d4b70">icalparser_parse</a></div><div class="ttdeci">icalcomponent * icalparser_parse(icalparser *parser, icalparser_line_gen_func line_gen_func)</div><div class="ttdoc">Message oriented parsing.</div><div class="ttdef"><b>Definition:</b> icalparser.c:625</div></div>
+<div class="ttc" id="aicalparser_8h_html_aab80e10c3636d6476bc4920ae72d4b70"><div class="ttname"><a href="icalparser_8h.html#aab80e10c3636d6476bc4920ae72d4b70">icalparser_parse</a></div><div class="ttdeci">icalcomponent * icalparser_parse(icalparser *parser, icalparser_line_gen_func line_gen_func)</div><div class="ttdoc">Message oriented parsing.</div><div class="ttdef"><b>Definition:</b> icalparser.c:642</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -569,7 +569,7 @@ Example</h3>
 <div class="line"><span class="comment">// release component</span></div>
 <div class="line">icalcomponent_free(component);</div>
 <div class="ttc" id="aicalerror_8h_html_ad2562706150f5c5a4d9b0ca149d78e37"><div class="ttname"><a href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37">icalerrno</a></div><div class="ttdeci">#define icalerrno</div><div class="ttdoc">Access the current icalerrno value.</div><div class="ttdef"><b>Definition:</b> icalerror.h:144</div></div>
-<div class="ttc" id="aicalparser_8h_html_a966f6fd4bc931c06b2c596daeadb692f"><div class="ttname"><a href="icalparser_8h.html#a966f6fd4bc931c06b2c596daeadb692f">icalparser_parse_string</a></div><div class="ttdeci">icalcomponent * icalparser_parse_string(const char *str)</div><div class="ttdoc">Parses a string and returns the parsed ::icalcomponent.</div><div class="ttdef"><b>Definition:</b> icalparser.c:1335</div></div>
+<div class="ttc" id="aicalparser_8h_html_a966f6fd4bc931c06b2c596daeadb692f"><div class="ttname"><a href="icalparser_8h.html#a966f6fd4bc931c06b2c596daeadb692f">icalparser_parse_string</a></div><div class="ttdeci">icalcomponent * icalparser_parse_string(const char *str)</div><div class="ttdoc">Parses a string and returns the parsed ::icalcomponent.</div><div class="ttdef"><b>Definition:</b> icalparser.c:1356</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -614,7 +614,7 @@ Example</h3>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 5 2022 09:12:49 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sat Apr 9 2022 08:34:57 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

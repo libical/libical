@@ -122,7 +122,7 @@ Macros</h2></td></tr>
 <tr class="memitem:a562f30d7c8d087861c9406405889ad2e"><td class="memItemLeft" align="right" valign="top"><a id="a562f30d7c8d087861c9406405889ad2e"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>icalerror_check_value_type</b>(value,  type)&#160;&#160;&#160;;</td></tr>
 <tr class="separator:a562f30d7c8d087861c9406405889ad2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ab760137cd4f66d205ef00235a0ecd4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalerror_8h.html#a2ab760137cd4f66d205ef00235a0ecd4">icalerror_warn</a>(message)&#160;&#160;&#160;{fprintf(stderr, &quot;%s:%d: %s\n&quot;, __FILE__, __LINE__, message);}</td></tr>
+<tr class="memitem:a2ab760137cd4f66d205ef00235a0ecd4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalerror_8h.html#a2ab760137cd4f66d205ef00235a0ecd4">icalerror_warn</a>(message)&#160;&#160;&#160;{icalerrprintf(&quot;%s:%d: %s\n&quot;, __FILE__, __LINE__, message);}</td></tr>
 <tr class="memdesc:a2ab760137cd4f66d205ef00235a0ecd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a formatted warning message to stderr.  <a href="icalerror_8h.html#a2ab760137cd4f66d205ef00235a0ecd4">More...</a><br /></td></tr>
 <tr class="separator:a2ab760137cd4f66d205ef00235a0ecd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -383,7 +383,7 @@ Example</h3>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span> (!(test)) { \</div>
 <div class="line">    icalerror_stop_here(); \</div>
-<div class="line">    assert(0); \</div>
+<div class="line">    icalassert(0); \</div>
 <div class="line">    return error; \</div>
 <div class="line">}</div>
 </div><!-- fragment -->
@@ -405,7 +405,7 @@ Example</h3>
 <div class="line">   <span class="comment">// use component</span></div>
 <div class="line">   <span class="keywordflow">return</span> <a class="code" href="icalcomponent_8h.html#af7b5953c513748cd41b40fdb50d88b66">icalcomponent_get_first_real_component</a>(component);</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalcomponent_8h_html_af7b5953c513748cd41b40fdb50d88b66"><div class="ttname"><a href="icalcomponent_8h.html#af7b5953c513748cd41b40fdb50d88b66">icalcomponent_get_first_real_component</a></div><div class="ttdeci">icalcomponent * icalcomponent_get_first_real_component(icalcomponent *c)</div><div class="ttdoc">Returns a reference to the first VEVENT, VTODO or VJOURNAL in the component.</div><div class="ttdef"><b>Definition:</b> icalcomponent.c:582</div></div>
+<div class="ttc" id="aicalcomponent_8h_html_af7b5953c513748cd41b40fdb50d88b66"><div class="ttname"><a href="icalcomponent_8h.html#af7b5953c513748cd41b40fdb50d88b66">icalcomponent_get_first_real_component</a></div><div class="ttdeci">icalcomponent * icalcomponent_get_first_real_component(icalcomponent *c)</div><div class="ttdoc">Returns a reference to the first VEVENT, VTODO or VJOURNAL in the component.</div><div class="ttdef"><b>Definition:</b> icalcomponent.c:658</div></div>
 <div class="ttc" id="aicalerror_8h_html_ae163052ebae24e2026bf54108b10b914"><div class="ttname"><a href="icalerror_8h.html#ae163052ebae24e2026bf54108b10b914">icalerror_check_arg_re</a></div><div class="ttdeci">#define icalerror_check_arg_re(test, arg, error)</div><div class="ttdoc">Checks the assertion test and raises error on failure, returns error.</div><div class="ttdef"><b>Definition:</b> icalerror.h:518</div></div>
 </div><!-- fragment --> 
 </div>
@@ -580,7 +580,7 @@ Example</h3>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">message</td><td>)</td>
-          <td>&#160;&#160;&#160;{fprintf(stderr, &quot;%s:%d: %s\n&quot;, __FILE__, __LINE__, message);}</td>
+          <td>&#160;&#160;&#160;{icalerrprintf(&quot;%s:%d: %s\n&quot;, __FILE__, __LINE__, message);}</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -691,7 +691,7 @@ Usage</h3>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span>(<a class="code" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37">icalerrno</a> != <a class="code" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6748acb6af24f11fe6efbe1a19602d0b">ICAL_NO_ERROR</a>) {</div>
 <div class="line">    <a class="code" href="icalerror_8h.html#a1c741ef8219eebc325e53851aa9e8f00">ical_bt</a>();</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalerror_8h_html_a1c741ef8219eebc325e53851aa9e8f00"><div class="ttname"><a href="icalerror_8h.html#a1c741ef8219eebc325e53851aa9e8f00">ical_bt</a></div><div class="ttdeci">void ical_bt(void)</div><div class="ttdoc">Prints backtrace.</div><div class="ttdef"><b>Definition:</b> icalerror.c:260</div></div>
+<div class="ttc" id="aicalerror_8h_html_a1c741ef8219eebc325e53851aa9e8f00"><div class="ttname"><a href="icalerror_8h.html#a1c741ef8219eebc325e53851aa9e8f00">ical_bt</a></div><div class="ttdeci">void ical_bt(void)</div><div class="ttdoc">Prints backtrace.</div><div class="ttdef"><b>Definition:</b> icalerror.c:263</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -717,7 +717,7 @@ Usage</h3>
 <h3><a class="anchor" id="autotoc_md20"></a>
 Examples</h3>
 <div class="fragment"><div class="line">assert(*<a class="code" href="icalerror_8h.html#aafe7575af3bfd0754deaad7eecae38e5">icalerrno_return</a>() == <a class="code" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37">icalerrno</a>);</div>
-<div class="ttc" id="aicalerror_8h_html_aafe7575af3bfd0754deaad7eecae38e5"><div class="ttname"><a href="icalerror_8h.html#aafe7575af3bfd0754deaad7eecae38e5">icalerrno_return</a></div><div class="ttdeci">icalerrorenum * icalerrno_return(void)</div><div class="ttdoc">Returns the current icalerrno value.</div><div class="ttdef"><b>Definition:</b> icalerror.c:70</div></div>
+<div class="ttc" id="aicalerror_8h_html_aafe7575af3bfd0754deaad7eecae38e5"><div class="ttname"><a href="icalerror_8h.html#aafe7575af3bfd0754deaad7eecae38e5">icalerrno_return</a></div><div class="ttdeci">icalerrorenum * icalerrno_return(void)</div><div class="ttdoc">Returns the current icalerrno value.</div><div class="ttdef"><b>Definition:</b> icalerror.c:71</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -744,7 +744,7 @@ Usage</h3>
 <div class="line">    <span class="comment">// ignore parsing errors</span></div>
 <div class="line">    <a class="code" href="icalerror_8h.html#ae87b46acb90ce9fee0fa377fd9b57c28">icalerror_clear_errno</a>();</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalerror_8h_html_ae87b46acb90ce9fee0fa377fd9b57c28"><div class="ttname"><a href="icalerror_8h.html#ae87b46acb90ce9fee0fa377fd9b57c28">icalerror_clear_errno</a></div><div class="ttdeci">void icalerror_clear_errno(void)</div><div class="ttdoc">Resets icalerrno to ICAL_NO_ERROR.</div><div class="ttdef"><b>Definition:</b> icalerror.c:95</div></div>
+<div class="ttc" id="aicalerror_8h_html_ae87b46acb90ce9fee0fa377fd9b57c28"><div class="ttname"><a href="icalerror_8h.html#ae87b46acb90ce9fee0fa377fd9b57c28">icalerror_clear_errno</a></div><div class="ttdeci">void icalerror_clear_errno(void)</div><div class="ttdoc">Resets icalerrno to ICAL_NO_ERROR.</div><div class="ttdef"><b>Definition:</b> icalerror.c:98</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -799,7 +799,7 @@ Usage</h3>
 <div class="fragment"><div class="line">assert(<a class="code" href="icalerror_8h.html#a9b60700869241af095f0604f35b1c446">icalerror_error_from_string</a>(<span class="stringliteral">&quot;PARSE&quot;</span>) == <a class="code" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833ac7e8ee36834bde1f2ee7b680700a8deb">ICAL_PARSE_ERROR</a>);</div>
 <div class="line">assert(<a class="code" href="icalerror_8h.html#a9b60700869241af095f0604f35b1c446">icalerror_error_from_string</a>(<span class="stringliteral">&quot;NONSENSE&quot;</span>) == <a class="code" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833ab2452506d4ad884b16da429749bfb551">ICAL_UNKNOWN_ERROR</a>);</div>
 <div class="ttc" id="aicalerror_8h_html_a601c122fcea522513b1b7732fa23e833ab2452506d4ad884b16da429749bfb551"><div class="ttname"><a href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833ab2452506d4ad884b16da429749bfb551">ICAL_UNKNOWN_ERROR</a></div><div class="ttdeci">@ ICAL_UNKNOWN_ERROR</div><div class="ttdef"><b>Definition:</b> icalerror.h:108</div></div>
-<div class="ttc" id="aicalerror_8h_html_a9b60700869241af095f0604f35b1c446"><div class="ttname"><a href="icalerror_8h.html#a9b60700869241af095f0604f35b1c446">icalerror_error_from_string</a></div><div class="ttdeci">icalerrorenum icalerror_error_from_string(const char *str)</div><div class="ttdoc">Reads an error from a string.</div><div class="ttdef"><b>Definition:</b> icalerror.c:181</div></div>
+<div class="ttc" id="aicalerror_8h_html_a9b60700869241af095f0604f35b1c446"><div class="ttname"><a href="icalerror_8h.html#a9b60700869241af095f0604f35b1c446">icalerror_error_from_string</a></div><div class="ttdeci">icalerrorenum icalerror_error_from_string(const char *str)</div><div class="ttdoc">Reads an error from a string.</div><div class="ttdef"><b>Definition:</b> icalerror.c:184</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -855,8 +855,8 @@ Usage</h3>
 <div class="line">    <span class="comment">// program.</span></div>
 <div class="line">    <a class="code" href="icalerror_8h.html#a8266eaa216926b6703a0ef31cd99f0b2">icalerror_set_errno</a>(<a class="code" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833ac7e8ee36834bde1f2ee7b680700a8deb">ICAL_PARSE_ERROR</a>);</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalerror_8h_html_a44fa677ba623cdcebe9e38b03cd08389"><div class="ttname"><a href="icalerror_8h.html#a44fa677ba623cdcebe9e38b03cd08389">icalerror_get_errors_are_fatal</a></div><div class="ttdeci">int icalerror_get_errors_are_fatal(void)</div><div class="ttdoc">Determine if errors are fatal.</div><div class="ttdef"><b>Definition:</b> icalerror.c:111</div></div>
-<div class="ttc" id="aicalerror_8h_html_a8266eaa216926b6703a0ef31cd99f0b2"><div class="ttname"><a href="icalerror_8h.html#a8266eaa216926b6703a0ef31cd99f0b2">icalerror_set_errno</a></div><div class="ttdeci">void icalerror_set_errno(icalerrorenum x)</div><div class="ttdoc">Sets the icalerrno to a given error.</div><div class="ttdef"><b>Definition:</b> icalerror.c:117</div></div>
+<div class="ttc" id="aicalerror_8h_html_a44fa677ba623cdcebe9e38b03cd08389"><div class="ttname"><a href="icalerror_8h.html#a44fa677ba623cdcebe9e38b03cd08389">icalerror_get_errors_are_fatal</a></div><div class="ttdeci">int icalerror_get_errors_are_fatal(void)</div><div class="ttdoc">Determine if errors are fatal.</div><div class="ttdef"><b>Definition:</b> icalerror.c:114</div></div>
+<div class="ttc" id="aicalerror_8h_html_a8266eaa216926b6703a0ef31cd99f0b2"><div class="ttname"><a href="icalerror_8h.html#a8266eaa216926b6703a0ef31cd99f0b2">icalerror_set_errno</a></div><div class="ttdeci">void icalerror_set_errno(icalerrorenum x)</div><div class="ttdoc">Sets the icalerrno to a given error.</div><div class="ttdef"><b>Definition:</b> icalerror.c:120</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -884,7 +884,7 @@ Usage</h3>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span>(<a class="code" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37">icalerrno</a> != <a class="code" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6748acb6af24f11fe6efbe1a19602d0b">ICAL_NO_ERROR</a>) {</div>
 <div class="line">    printf(<span class="stringliteral">&quot;%s\n&quot;</span>, <a class="code" href="icalerror_8h.html#a55b38314ff59cf335de4b0d32ebff149">icalerror_perror</a>());</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalerror_8h_html_a55b38314ff59cf335de4b0d32ebff149"><div class="ttname"><a href="icalerror_8h.html#a55b38314ff59cf335de4b0d32ebff149">icalerror_perror</a></div><div class="ttdeci">const char * icalerror_perror(void)</div><div class="ttdoc">Returns the description string for the current error in icalerrno.</div><div class="ttdef"><b>Definition:</b> icalerror.c:209</div></div>
+<div class="ttc" id="aicalerror_8h_html_a55b38314ff59cf335de4b0d32ebff149"><div class="ttname"><a href="icalerror_8h.html#a55b38314ff59cf335de4b0d32ebff149">icalerror_perror</a></div><div class="ttdeci">const char * icalerror_perror(void)</div><div class="ttdoc">Returns the description string for the current error in icalerrno.</div><div class="ttdef"><b>Definition:</b> icalerror.c:212</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -931,8 +931,8 @@ Usage</h3>
 <div class="line"><span class="comment">// restore internal errors</span></div>
 <div class="line"><a class="code" href="icalerror_8h.html#a8377dadcd17bf305d1931aa2518c321a">icalerror_restore</a>(<span class="stringliteral">&quot;INTERNAL&quot;</span>, <a class="code" href="icalerror_8h.html#a3cb9a92508be773fbb4dba7c658443d3aa8624e525ff7c52b30310134230ba1e6">ICAL_ERROR_DEFAULT</a>);</div>
 <div class="ttc" id="aicalerror_8h_html_a3cb9a92508be773fbb4dba7c658443d3aa8624e525ff7c52b30310134230ba1e6"><div class="ttname"><a href="icalerror_8h.html#a3cb9a92508be773fbb4dba7c658443d3aa8624e525ff7c52b30310134230ba1e6">ICAL_ERROR_DEFAULT</a></div><div class="ttdeci">@ ICAL_ERROR_DEFAULT</div><div class="ttdef"><b>Definition:</b> icalerror.h:223</div></div>
-<div class="ttc" id="aicalerror_8h_html_a8377dadcd17bf305d1931aa2518c321a"><div class="ttname"><a href="icalerror_8h.html#a8377dadcd17bf305d1931aa2518c321a">icalerror_restore</a></div><div class="ttdeci">void icalerror_restore(const char *error, icalerrorstate es)</div><div class="ttdef"><b>Definition:</b> icalerror.c:214</div></div>
-<div class="ttc" id="aicalerror_8h_html_af226f2c41272dabecd03ec9807d3a1e2"><div class="ttname"><a href="icalerror_8h.html#af226f2c41272dabecd03ec9807d3a1e2">icalerror_supress</a></div><div class="ttdeci">icalerrorstate icalerror_supress(const char *error)</div><div class="ttdoc">Suppresses a given error.</div><div class="ttdef"><b>Definition:</b> icalerror.c:194</div></div>
+<div class="ttc" id="aicalerror_8h_html_a8377dadcd17bf305d1931aa2518c321a"><div class="ttname"><a href="icalerror_8h.html#a8377dadcd17bf305d1931aa2518c321a">icalerror_restore</a></div><div class="ttdeci">void icalerror_restore(const char *error, icalerrorstate es)</div><div class="ttdef"><b>Definition:</b> icalerror.c:217</div></div>
+<div class="ttc" id="aicalerror_8h_html_af226f2c41272dabecd03ec9807d3a1e2"><div class="ttname"><a href="icalerror_8h.html#af226f2c41272dabecd03ec9807d3a1e2">icalerror_supress</a></div><div class="ttdeci">icalerrorstate icalerror_supress(const char *error)</div><div class="ttdoc">Suppresses a given error.</div><div class="ttdef"><b>Definition:</b> icalerror.c:197</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -1005,7 +1005,7 @@ Usage</h3>
 Usage</h3>
 <div class="fragment"><div class="line"><a class="code" href="icalerror_8h.html#a777a41722836b68ffb27ae5a746a14b4">icalerror_set_error_state</a>(<a class="code" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833ac7e8ee36834bde1f2ee7b680700a8deb">ICAL_PARSE_ERROR</a>, <a class="code" href="icalerror_8h.html#a3cb9a92508be773fbb4dba7c658443d3aee5a5c75923a46b30105a272b75339b6">ICAL_ERROR_NONFATAL</a>);</div>
 <div class="ttc" id="aicalerror_8h_html_a3cb9a92508be773fbb4dba7c658443d3aee5a5c75923a46b30105a272b75339b6"><div class="ttname"><a href="icalerror_8h.html#a3cb9a92508be773fbb4dba7c658443d3aee5a5c75923a46b30105a272b75339b6">ICAL_ERROR_NONFATAL</a></div><div class="ttdeci">@ ICAL_ERROR_NONFATAL</div><div class="ttdef"><b>Definition:</b> icalerror.h:220</div></div>
-<div class="ttc" id="aicalerror_8h_html_a777a41722836b68ffb27ae5a746a14b4"><div class="ttname"><a href="icalerror_8h.html#a777a41722836b68ffb27ae5a746a14b4">icalerror_set_error_state</a></div><div class="ttdeci">void icalerror_set_error_state(icalerrorenum error, icalerrorstate state)</div><div class="ttdoc">Sets the icalerrorstate for a given icalerrorenum error.</div><div class="ttdef"><b>Definition:</b> icalerror.c:223</div></div>
+<div class="ttc" id="aicalerror_8h_html_a777a41722836b68ffb27ae5a746a14b4"><div class="ttname"><a href="icalerror_8h.html#a777a41722836b68ffb27ae5a746a14b4">icalerror_set_error_state</a></div><div class="ttdeci">void icalerror_set_error_state(icalerrorenum error, icalerrorstate state)</div><div class="ttdoc">Sets the icalerrorstate for a given icalerrorenum error.</div><div class="ttdef"><b>Definition:</b> icalerror.c:226</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -1037,7 +1037,7 @@ Usage</h3>
 Usage</h3>
 <div class="fragment"><div class="line"><a class="code" href="icalerror_8h.html#a05941b21472c45d4b3654cb7d94bf3e8">icalerror_set_errors_are_fatal</a>(<span class="keyword">true</span>); <span class="comment">// default</span></div>
 <div class="line"><a class="code" href="icalerror_8h.html#a05941b21472c45d4b3654cb7d94bf3e8">icalerror_set_errors_are_fatal</a>(<span class="keyword">false</span>);</div>
-<div class="ttc" id="aicalerror_8h_html_a05941b21472c45d4b3654cb7d94bf3e8"><div class="ttname"><a href="icalerror_8h.html#a05941b21472c45d4b3654cb7d94bf3e8">icalerror_set_errors_are_fatal</a></div><div class="ttdeci">void icalerror_set_errors_are_fatal(int fatal)</div><div class="ttdoc">Change if errors are fatal.</div><div class="ttdef"><b>Definition:</b> icalerror.c:106</div></div>
+<div class="ttc" id="aicalerror_8h_html_a05941b21472c45d4b3654cb7d94bf3e8"><div class="ttname"><a href="icalerror_8h.html#a05941b21472c45d4b3654cb7d94bf3e8">icalerror_set_errors_are_fatal</a></div><div class="ttdeci">void icalerror_set_errors_are_fatal(int fatal)</div><div class="ttdoc">Change if errors are fatal.</div><div class="ttdef"><b>Definition:</b> icalerror.c:109</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -1094,7 +1094,7 @@ Usage</h3>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span>(<a class="code" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37">icalerrno</a> != <a class="code" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6748acb6af24f11fe6efbe1a19602d0b">ICAL_NO_ERROR</a>) {</div>
 <div class="line">    printf(<span class="stringliteral">&quot;%s\n&quot;</span>, <a class="code" href="icalerror_8h.html#ace2dcbae58882ed326b4716bf54842cc">icalerror_strerror</a>(<a class="code" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37">icalerrno</a>));</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalerror_8h_html_ace2dcbae58882ed326b4716bf54842cc"><div class="ttname"><a href="icalerror_8h.html#ace2dcbae58882ed326b4716bf54842cc">icalerror_strerror</a></div><div class="ttdeci">const char * icalerror_strerror(icalerrorenum e)</div><div class="ttdoc">Finds the description string for error.</div><div class="ttdef"><b>Definition:</b> icalerror.c:247</div></div>
+<div class="ttc" id="aicalerror_8h_html_ace2dcbae58882ed326b4716bf54842cc"><div class="ttname"><a href="icalerror_8h.html#ace2dcbae58882ed326b4716bf54842cc">icalerror_strerror</a></div><div class="ttdeci">const char * icalerror_strerror(icalerrorenum e)</div><div class="ttdoc">Finds the description string for error.</div><div class="ttdef"><b>Definition:</b> icalerror.c:250</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -1133,7 +1133,7 @@ Usage</h3>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 5 2022 09:12:49 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sat Apr 9 2022 08:34:57 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

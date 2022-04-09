@@ -91,76 +91,81 @@ $(function() {
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#ifndef ICALVALUE_H</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define ICALVALUE_H</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;icalvalueimpl.h&quot;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#define ICAL_BOOLEAN_TRUE  1</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#define ICAL_BOOLEAN_FALSE 0</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_clone(<span class="keyword">const</span> icalvalue *value);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_from_string(icalvalue_kind kind, <span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalvalue_free(icalvalue *value);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> icalvalue_is_valid(<span class="keyword">const</span> icalvalue *value);</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;libical_deprecated.h&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;icalvalueimpl.h&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#define ICAL_BOOLEAN_TRUE  1</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#define ICAL_BOOLEAN_FALSE 0</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;LIBICAL_ICAL_EXPORT icalvalue *<a class="code" href="icalvalue_8h.html#a4c8d48febe00d31d13e559d74822dd1b">icalvalue_clone</a>(<span class="keyword">const</span> icalvalue *value);</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalvalue_as_ical_string(<span class="keyword">const</span> icalvalue *value);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_from_string(icalvalue_kind kind, <span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">char</span> *icalvalue_as_ical_string_r(<span class="keyword">const</span> icalvalue *value);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalvalue_free(icalvalue *value);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_isa(<span class="keyword">const</span> icalvalue *value);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> icalvalue_is_valid(<span class="keyword">const</span> icalvalue *value);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> icalvalue_isa_value(<span class="keywordtype">void</span> *);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalvalue_as_ical_string(<span class="keyword">const</span> icalvalue *value);</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;LIBICAL_ICAL_EXPORT icalparameter_xliccomparetype icalvalue_compare(<span class="keyword">const</span> icalvalue *a,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                                                                    <span class="keyword">const</span> icalvalue *b);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">/* Special, non autogenerated value accessors */</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">/* Defined in icalderivedvalue.h */</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">/* icalvalue* icalvalue_new_recur (struct icalrecurrencetype v); */</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">/* void icalvalue_set_recur(icalvalue* value, struct icalrecurrencetype v); */</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">/* struct icalrecurrencetype icalvalue_get_recur(const icalvalue* value); */</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">/* icalvalue* icalvalue_new_trigger (struct icaltriggertype v); */</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">/* void icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v); */</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">/* struct icaltriggertype icalvalue_get_trigger(const icalvalue* value); */</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">/* icalvalue* icalvalue_new_datetimeperiod (struct icaldatetimeperiodtype v); */</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">/* void icalvalue_set_datetimeperiod(icalvalue* value, */</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">/*                                struct icaldatetimeperiodtype v); */</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">/* struct icaldatetimeperiodtype icalvalue_get_datetimeperiod(const icalvalue* value); */</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">/* Convert enumerations */</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_string_to_kind(<span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalvalue_kind_to_string(<span class="keyword">const</span> icalvalue_kind kind);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a">   74</a></span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a">icalvalue_kind_is_valid</a>(<span class="keyword">const</span> icalvalue_kind kind);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalvalue_8h.html#a47037dfa87d634a358c39055c01b9f79">icalvalue_encode_ical_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *szText,</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                                                     <span class="keywordtype">char</span> *szEncText, <span class="keywordtype">int</span> MaxBufferLen);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalvalue_8h.html#ad809218d40ebb1e356f00c563e34e3d6">icalvalue_decode_ical_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *szText,</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                                                     <span class="keywordtype">char</span> *szDecText, <span class="keywordtype">int</span> nMaxBufferLen);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment">/* For the library only -- do not make visible */</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> print_date_to_string(<span class="keywordtype">char</span> *str, <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structicaltimetype.html">icaltimetype</a> *data);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> print_datetime_to_string(<span class="keywordtype">char</span> *str, <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structicaltimetype.html">icaltimetype</a> *data);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/*ICALVALUE_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="aicalvalue_8h_html_a47037dfa87d634a358c39055c01b9f79"><div class="ttname"><a href="icalvalue_8h.html#a47037dfa87d634a358c39055c01b9f79">icalvalue_encode_ical_string</a></div><div class="ttdeci">int icalvalue_encode_ical_string(const char *szText, char *szEncText, int MaxBufferLen)</div><div class="ttdef"><b>Definition:</b> icalvalue.c:1479</div></div>
-<div class="ttc" id="aicalvalue_8h_html_ad809218d40ebb1e356f00c563e34e3d6"><div class="ttname"><a href="icalvalue_8h.html#ad809218d40ebb1e356f00c563e34e3d6">icalvalue_decode_ical_string</a></div><div class="ttdeci">int icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen)</div><div class="ttdef"><b>Definition:</b> icalvalue.c:1510</div></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">char</span> *icalvalue_as_ical_string_r(<span class="keyword">const</span> icalvalue *value);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_isa(<span class="keyword">const</span> icalvalue *value);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> icalvalue_isa_value(<span class="keywordtype">void</span> *);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;LIBICAL_ICAL_EXPORT icalparameter_xliccomparetype icalvalue_compare(<span class="keyword">const</span> icalvalue *a,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                                                    <span class="keyword">const</span> icalvalue *b);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalvalue *<a class="code" href="icalvalue_8h.html#a24fdba9bdbbfd57ede6146ae3cfb8281">icalvalue_new_clone</a>(<span class="keyword">const</span> icalvalue *value));</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">/* Special, non autogenerated value accessors */</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">/* Defined in icalderivedvalue.h */</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">/* icalvalue* icalvalue_new_recur (struct icalrecurrencetype v); */</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">/* void icalvalue_set_recur(icalvalue* value, struct icalrecurrencetype v); */</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">/* struct icalrecurrencetype icalvalue_get_recur(const icalvalue* value); */</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">/* icalvalue* icalvalue_new_trigger (struct icaltriggertype v); */</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">/* void icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v); */</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">/* struct icaltriggertype icalvalue_get_trigger(const icalvalue* value); */</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">/* icalvalue* icalvalue_new_datetimeperiod (struct icaldatetimeperiodtype v); */</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">/* void icalvalue_set_datetimeperiod(icalvalue* value, */</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">/*                                struct icaldatetimeperiodtype v); */</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">/* struct icaldatetimeperiodtype icalvalue_get_datetimeperiod(const icalvalue* value); */</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment">/* Convert enumerations */</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_string_to_kind(<span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalvalue_kind_to_string(<span class="keyword">const</span> icalvalue_kind kind);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a">   86</a></span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a">icalvalue_kind_is_valid</a>(<span class="keyword">const</span> icalvalue_kind kind);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalvalue_8h.html#a47037dfa87d634a358c39055c01b9f79">icalvalue_encode_ical_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *szText,</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                                                     <span class="keywordtype">char</span> *szEncText, <span class="keywordtype">int</span> MaxBufferLen);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code" href="icalvalue_8h.html#ad809218d40ebb1e356f00c563e34e3d6">icalvalue_decode_ical_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *szText,</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                                                     <span class="keywordtype">char</span> *szDecText, <span class="keywordtype">int</span> nMaxBufferLen);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment">/* For the library only -- do not make visible */</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> print_date_to_string(<span class="keywordtype">char</span> *str, <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structicaltimetype.html">icaltimetype</a> *data);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> print_datetime_to_string(<span class="keywordtype">char</span> *str, <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structicaltimetype.html">icaltimetype</a> *data);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/*ICALVALUE_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aicalvalue_8h_html_a24fdba9bdbbfd57ede6146ae3cfb8281"><div class="ttname"><a href="icalvalue_8h.html#a24fdba9bdbbfd57ede6146ae3cfb8281">icalvalue_new_clone</a></div><div class="ttdeci">icalvalue * icalvalue_new_clone(const icalvalue *value))</div><div class="ttdoc">Deeply clones an icalvalue.</div><div class="ttdef"><b>Definition:</b> icalvalue.c:169</div></div>
+<div class="ttc" id="aicalvalue_8h_html_a47037dfa87d634a358c39055c01b9f79"><div class="ttname"><a href="icalvalue_8h.html#a47037dfa87d634a358c39055c01b9f79">icalvalue_encode_ical_string</a></div><div class="ttdeci">int icalvalue_encode_ical_string(const char *szText, char *szEncText, int MaxBufferLen)</div><div class="ttdef"><b>Definition:</b> icalvalue.c:1485</div></div>
+<div class="ttc" id="aicalvalue_8h_html_a4c8d48febe00d31d13e559d74822dd1b"><div class="ttname"><a href="icalvalue_8h.html#a4c8d48febe00d31d13e559d74822dd1b">icalvalue_clone</a></div><div class="ttdeci">icalvalue * icalvalue_clone(const icalvalue *value)</div><div class="ttdoc">Deeply clones an icalvalue.</div><div class="ttdef"><b>Definition:</b> icalvalue.c:66</div></div>
+<div class="ttc" id="aicalvalue_8h_html_ad809218d40ebb1e356f00c563e34e3d6"><div class="ttname"><a href="icalvalue_8h.html#ad809218d40ebb1e356f00c563e34e3d6">icalvalue_decode_ical_string</a></div><div class="ttdeci">int icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen)</div><div class="ttdef"><b>Definition:</b> icalvalue.c:1516</div></div>
 <div class="ttc" id="aicalvalue_8h_html_ada00c51fccf5a71ec7e43fb6207b634a"><div class="ttname"><a href="icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a">icalvalue_kind_is_valid</a></div><div class="ttdeci">int icalvalue_kind_is_valid(const icalvalue_kind kind)</div></div>
 <div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> icaltime.h:105</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 5 2022 09:12:49 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sat Apr 9 2022 08:34:56 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>
