@@ -18,7 +18,7 @@ set_package_properties(Doxygen PROPERTIES
   PURPOSE "Needed to build the API documentation."
 )
 if(DOXYGEN_FOUND)
-  file(GLOB _dox_deps *.dox *.html *.md)
+  file(GLOB _dox_deps *.dox *.html *.md ${CMAKE_SOURCE_DIR}/README.md)
   file(GLOB _all_hdrs
     ${CMAKE_SOURCE_DIR}/src/libical/*.h
     ${CMAKE_SOURCE_DIR}/src/libical/*.c
