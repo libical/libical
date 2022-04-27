@@ -4,7 +4,7 @@ Release Highlights
 Version 3.1.0 (NOT RELEASED YET):
 --------------------------------
  * MSVC 2013 or higher (when building on Windows with MSVC)
- * For the C++ bindings, a C++11 compliant complier is required
+ * For the C++ bindings, a C++11 compliant compiler is required
  * Requires CMake v3.11.0 or higher
  * libical-glib requires glib 2.38 or higher
  * libical-glib requires a C11 compliant compiler
@@ -46,7 +46,7 @@ Version 3.1.0 (NOT RELEASED YET):
 
 Version 3.0.15 (UNRELEASED):
 ----------------------------
- *
+ * Add missing property parameters into libical-glib
 
 Version 3.0.14 (05 February 2022):
 ----------------------------------
