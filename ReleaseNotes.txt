@@ -3,7 +3,7 @@ Release Highlights
 
 Version 3.0.15 (UNRELEASED):
 ----------------------------
- *
+ * Add missing property parameters into libical-glib
 
 Version 3.0.14 (05 February 2022):
 ----------------------------------
