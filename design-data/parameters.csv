@@ -60,16 +60,15 @@
 "FILENAME","42","const char*",
 
 "#Task Extension Parameters","draft-apthorp-ical-tasks"
-"REASON","43","const char*",
+"REASON","47","const char*",
 "MODIFIED","44","const char*",
 "SUBSTATE","45","icalparameter_substate",X=21900;OK;ERROR;SUSPENDED;NONE=21999",
 
 "#Parameters from New Properties for iCalendar","RFC 7986 Section 6"
 "DISPLAY","46","icalparameter_display",X=22000;BADGE;GRAPHIC;FULLSIZE;THUMBNAIL;NONE=22099",
-"EMAIL","47","const char*",
+"EMAIL","50","const char*",
 "FEATURE","48","icalparameter_feature",X=22100;AUDIO;CHAT;FEED;MODERATOR;PHONE;SCREEN;VIDEO;NONE=22199",
 "LABEL","49","const char*",
-"EMAIL","50","const char*",
 
 "#VPATCH Extension Parameters","draft-daboo-icalendar-vpatch"
 "PATCH-ACTION","51","icalparameter_patchaction",X=22200;CREATE;BYNAME;BYVALUE;BYPARAM;NONE=22299",
