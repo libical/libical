@@ -80,7 +80,7 @@
 "MAX-COMPONENT-SIZE","44","INTEGER","INTEGER"
 "MINDATE","49","DATE-TIME","DATE-TIME"
 "MULTIPART","50","TEXT","TEXT"
-"NAME","51","TEXT","TEXT"
+"NAME","115","TEXT","TEXT"
 "OWNER","53","TEXT","TEXT"
 "PERMISSION","55","TEXT","TEXT"
 "QUERY","58","QUERY","QUERY"
@@ -142,7 +142,7 @@
 "TASK-MODE","114","TASKMODE","TASKMODE"
 
 "#New Properties for iCalendar","RFC 7986 Section 5",
-"NAME","115","TEXT","TEXT"
+#"NAME","115","TEXT","TEXT" (conflicts with NAME from rfc4324#section-2.1.2)
 "REFRESH-INTERVAL","116","DURATION","NO"
 "SOURCE","117","URI","NO"
 "COLOR","118","TEXT","TEXT"
@@ -156,7 +156,7 @@
 "PATCH-DELETE","124","TEXT","TEXT"
 "PATCH-PARAMETER","125","TEXT","TEXT"
 
-"#Event Publication Extensions Properies","RFC 9073 Section 6",
+"#Event Publication Extensions Properties","RFC 9073 Section 6",
 "LOCATION-TYPE","127","TEXT","TEXT",is_multivalued
 "PARTICIPANT-TYPE","128","PARTICIPANTTYPE","PARTICIPANTTYPE"
 "RESOURCE-TYPE","129","RESOURCETYPE","RESOURCETYPE"
