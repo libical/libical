@@ -128,7 +128,10 @@ if(MSVC)
   endif()
 endif()
 if(BAD_C_MESSAGE)
-  message(FATAL_ERROR "\nSorry, ${BAD_C_MESSAGE} is required to build this software. Please retry using a modern C compiler that supports the C99 standard.")
+  message(FATAL_ERROR
+    "\nSorry, ${BAD_C_MESSAGE} is required to build this software. "
+    "Please retry using a modern C compiler that supports the C99 standard."
+  )
 endif()
 
 # Enable the test harness
@@ -182,7 +185,10 @@ if(STATIC_ONLY)
   set(LIBRARY_TYPE STATIC)
 endif()
 
-libical_option(SHARED_ONLY "Build shared (dynamic) libraries only. Takes precedence over STATIC_ONLY." False)
+libical_option(SHARED_ONLY
+  "Build shared (dynamic) libraries only. Takes precedence over STATIC_ONLY."
+  False
+)
 if(SHARED_ONLY)
   set(STATIC_ONLY False)
   set(LIBRARY_TYPE SHARED)
@@ -263,7 +269,7 @@ if(ICU_FOUND)
     message(FATAL_ERROR
       "Unable to locate the ICU runtime path. Is your ICU installation broken?")
   endif()
-  set(ICU_BINARY_DIR ${ICU_EXEC} CACHE STRING DOC "Runtime binaries directory for the ICU library")
+  set(ICU_BINARY_DIR ${ICU_EXEC} CACHE STRING "Runtime binaries directory for the ICU library")
 endif()
 
 # compile in Berkeley DB support
@@ -304,7 +310,10 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 if(WIN32)
   if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DYY_NO_UNISTD_H)
-    libical_option(USE_32BIT_TIME_T "Build using a 32bit time_t (ignored unless building with MSVC on Windows)." False)
+    libical_option(USE_32BIT_TIME_T
+      "Build using a 32bit time_t (ignored unless building with MSVC on Windows)."
+      False
+    )
     if(USE_32BIT_TIME_T)
       add_definitions(-D_USE_32BIT_TIME_T)
     endif()
@@ -334,14 +343,20 @@ else()
   set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 endif()
 
-libical_option(ICAL_ERRORS_ARE_FATAL "icalerror_* calls will abort instead of internally signaling an error." False)
+libical_option(ICAL_ERRORS_ARE_FATAL
+  "icalerror_* calls will abort instead of internally signaling an error."
+  False
+)
 if(ICAL_ERRORS_ARE_FATAL)
   set(ICAL_ERRORS_ARE_FATAL 1)
 else()
   set(ICAL_ERRORS_ARE_FATAL 0)
 endif()
 
-libical_option(ICAL_ALLOW_EMPTY_PROPERTIES "Prevents empty properties from being replaced with X-LIC-ERROR properties." False)
+libical_option(ICAL_ALLOW_EMPTY_PROPERTIES
+  "Prevents empty properties from being replaced with X-LIC-ERROR properties."
+  False
+)
 if(ICAL_ALLOW_EMPTY_PROPERTIES)
   set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
 else()
@@ -353,7 +368,12 @@ if(WIN32 OR WINCE)
 else()
   set(DEF_USE_BUILTIN_TZDATA False)
 endif()
-libical_option(USE_BUILTIN_TZDATA "(Careful) Build using libical's built-in timezone data, else use the system timezone data on non-Windows systems. ALWAYS true on Windows. Non-Windows users should know what they're doing if they choose not to use system provided timezone data. The libical project does not guarantee that the built-in timezone data is up-to-date." ${DEF_USE_BUILTIN_TZDATA})
+libical_option(USE_BUILTIN_TZDATA
+  "(Careful) Build using libical's built-in timezone data, else use the system timezone data on non-Windows systems. "
+  "ALWAYS true on Windows. Non-Windows users should know what they're doing if they choose not to use system provided "
+  "timezone data. The libical project does not guarantee that the built-in timezone data is up-to-date."
+  ${DEF_USE_BUILTIN_TZDATA}
+)
 mark_as_advanced(USE_BUILTIN_TZDATA)
 if(USE_BUILTIN_TZDATA)
   set(USE_BUILTIN_TZDATA 1)
@@ -386,7 +406,11 @@ set(INSTALL_TARGETS_DEFAULT_ARGS
 find_package(PkgConfig QUIET)
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
-libical_option(GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher." False)
+libical_option(GOBJECT_INTROSPECTION
+  "Build GObject introspection \"typelib\" files. "
+  "Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher."
+  False
+)
 if(GOBJECT_INTROSPECTION)
   if(NOT PKG_CONFIG_FOUND)
     message(FATAL_ERROR
@@ -452,7 +476,11 @@ endif()
 
 set(MIN_GLIB "2.44")
 set(MIN_LIBXML "2.7.3")
-libical_option(ICAL_GLIB "Build libical-glib interface. Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True)
+libical_option(ICAL_GLIB
+  "Build libical-glib interface. "
+  "Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher."
+  True
+)
 if(ICAL_GLIB)
   if(NOT PKG_CONFIG_FOUND)
     message(FATAL_ERROR
@@ -507,7 +535,11 @@ if(DEFINED CMAKE_C_COMPILER_ID)
   endif()
 endif()
 if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type")
+  set(CMAKE_C_FLAGS
+    "${CMAKE_C_FLAGS} -fvisibility=hidden "
+    "-Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero "
+    "-Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type"
+  )
   libical_add_cflag(-Wunused-but-set-variable UNUSED_BUT_SET)
   libical_add_cflag(-Wlogical-op LOGICAL_OP)
   libical_add_cflag(-Wsizeof-pointer-memaccess POINTER_MEMACCESS)
@@ -531,7 +563,11 @@ if(DEFINED CMAKE_CXX_COMPILER_ID)
   endif()
 endif()
 if(CMAKE_CXX_COMPILER_IS_GCC OR CMAKE_CXX_COMPILER_IS_CLANG)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type")
+  set(CMAKE_CXX_FLAGS
+    "${CMAKE_CXX_FLAGS} -fvisibility=hidden "
+    "-Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wunused "
+    "-Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type"
+  )
   libical_add_cxxflag(-Wunused-but-set-variable UNUSED_BUT_SET)
   libical_add_cxxflag(-Wlogical-op LOGICAL_OP)
   libical_add_cxxflag(-Wsizeof-pointer-memaccess POINTER_MEMACCESS)
@@ -552,7 +588,11 @@ if(SIZEOF_TIME_T EQUAL 4)
 endif()
 
 ################ Developer Options #####################
-libical_deprecated_option(ABI_DUMPER LIBICAL_DEVMODE_ABI_DUMPER "(Developer-only) Build for abi-dumper." False)
+libical_deprecated_option(ABI_DUMPER
+  LIBICAL_DEVMODE_ABI_DUMPER
+  "(Developer-only) Build for abi-dumper."
+  False
+)
 mark_as_advanced(LIBICAL_DEVMODE_ABI_DUMPER)
 if(LIBICAL_DEVMODE_ABI_DUMPER)
   if(CMAKE_C_COMPILER_IS_GCC)
@@ -564,14 +604,21 @@ if(LIBICAL_DEVMODE_ABI_DUMPER)
   endif()
 endif()
 
-libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY "(Developer-only) Build with memory consistency functions." False)
+libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY
+  "(Developer-only) Build with memory consistency functions."
+  False
+)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
   set(CMAKE_BUILD_TYPE "Debug")
   add_definitions(-DMEMORY_CONSISTENCY)
 endif()
 mark_as_advanced(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
 
-libical_deprecated_option(ADDRESS_SANITIZER LIBICAL_DEVMODE_ADDRESS_SANITIZER "(Developer-only) Build with the address sanitizer." False)
+libical_deprecated_option(ADDRESS_SANITIZER
+  LIBICAL_DEVMODE_ADDRESS_SANITIZER
+  "(Developer-only) Build with the address sanitizer."
+  False
+)
 mark_as_advanced(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
 if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
@@ -597,7 +644,11 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
   endif()
 endif()
 
-libical_deprecated_option(THREAD_SANITIZER LIBICAL_DEVMODE_THREAD_SANITIZER "(Developer-only) Build with the thread sanitizer." False)
+libical_deprecated_option(THREAD_SANITIZER
+  LIBICAL_DEVMODE_THREAD_SANITIZER
+  "(Developer-only) Build with the thread sanitizer."
+  False
+)
 mark_as_advanced(LIBICAL_DEVMODE_THREAD_SANITIZER)
 if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
@@ -623,7 +674,11 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   endif()
 endif()
 
-libical_deprecated_option(UNDEFINED_SANITIZER LIBICAL_DEVMODE_UNDEFINED_SANITIZER "(Developer-only) Build with the undefined sanitizer." False)
+libical_deprecated_option(UNDEFINED_SANITIZER
+  LIBICAL_DEVMODE_UNDEFINED_SANITIZER
+  "(Developer-only) Build with the undefined sanitizer."
+  False
+)
 mark_as_advanced(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
 if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
@@ -768,6 +823,7 @@ if(NOT TARGET uninstall)
 
   add_custom_target(uninstall
     COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake"
+    COMMENT "Target for uninstalling everything"
   )
 endif()
 
