@@ -369,9 +369,9 @@ else()
   set(DEF_USE_BUILTIN_TZDATA False)
 endif()
 libical_option(USE_BUILTIN_TZDATA
-  "(Careful) Build using libical's built-in timezone data, else use the system timezone data on non-Windows systems. "
-  "ALWAYS true on Windows. Non-Windows users should know what they're doing if they choose not to use system provided "
-  "timezone data. The libical project does not guarantee that the built-in timezone data is up-to-date."
+  "(Careful) Build using libical's built-in timezone data, else use the system timezone data on non-Windows systems. \
+  ALWAYS true on Windows. Non-Windows users should know what they're doing if they choose not to use system provided \
+  timezone data. The libical project does not guarantee that the built-in timezone data is up-to-date."
   ${DEF_USE_BUILTIN_TZDATA}
 )
 mark_as_advanced(USE_BUILTIN_TZDATA)
@@ -407,8 +407,8 @@ find_package(PkgConfig QUIET)
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
 libical_option(GOBJECT_INTROSPECTION
-  "Build GObject introspection \"typelib\" files. "
-  "Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher."
+  "Build GObject introspection \"typelib\" files. \
+  Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher."
   False
 )
 if(GOBJECT_INTROSPECTION)
@@ -477,8 +477,8 @@ endif()
 set(MIN_GLIB "2.44")
 set(MIN_LIBXML "2.7.3")
 libical_option(ICAL_GLIB
-  "Build libical-glib interface. "
-  "Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher."
+  "Build libical-glib interface. \
+  Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher."
   True
 )
 if(ICAL_GLIB)
@@ -536,9 +536,9 @@ if(DEFINED CMAKE_C_COMPILER_ID)
 endif()
 if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   set(CMAKE_C_FLAGS
-    "${CMAKE_C_FLAGS} -fvisibility=hidden "
-    "-Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero "
-    "-Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type"
+    "${CMAKE_C_FLAGS} -fvisibility=hidden \
+    -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
+    -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type"
   )
   libical_add_cflag(-Wunused-but-set-variable UNUSED_BUT_SET)
   libical_add_cflag(-Wlogical-op LOGICAL_OP)
@@ -564,9 +564,9 @@ if(DEFINED CMAKE_CXX_COMPILER_ID)
 endif()
 if(CMAKE_CXX_COMPILER_IS_GCC OR CMAKE_CXX_COMPILER_IS_CLANG)
   set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -fvisibility=hidden "
-    "-Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wunused "
-    "-Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type"
+    "${CMAKE_CXX_FLAGS} -fvisibility=hidden \
+    -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wunused \
+    -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type"
   )
   libical_add_cxxflag(-Wunused-but-set-variable UNUSED_BUT_SET)
   libical_add_cxxflag(-Wlogical-op LOGICAL_OP)
