@@ -22,3 +22,10 @@ repos:
   rev: v2.1.0
   hooks:
   - id: codespell
+- repo: https://github.com/markdownlint/markdownlint
+  rev: v0.11.0
+  hooks:
+  - id: markdownlint
+    entry: mdl
+    language: ruby
+    files: \.(md|mdown|markdown)$
