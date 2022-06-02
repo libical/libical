@@ -905,10 +905,13 @@ static char *icalvalue_utcoffset_as_ical_string_r(const icalvalue *value)
     m = (data - (h * 3600)) / 60;
     s = (data - (h * 3600) - (m * 60));
 
+    h = MIN(abs(h), 23);
+    m = MIN(abs(m), 59);
+    s = MIN(abs(s), 59);
     if (s != 0) {
-        snprintf(str, 9, "%c%02d%02d%02d", sign, abs(h), abs(m), abs(s));
+        snprintf(str, 9, "%c%02d%02d%02d", sign, h, m, s);
     } else {
-        snprintf(str, 9, "%c%02d%02d", sign, abs(h), abs(m));
+        snprintf(str, 9, "%c%02d%02d", sign, h, m);
     }
 
     return str;

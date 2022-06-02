@@ -328,6 +328,7 @@ CPPCHECK() {
            -D size_t="unsigned long" \
            -D bswap32="" \
            -D PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=0 \
+           -D MIN="" \
            -D _unused="(void)" \
            -D _deprecated="(void)" \
            -D ICALMEMORY_DEFAULT_FREE="free" \
