@@ -22,9 +22,15 @@ repos:
   rev: v2.1.0
   hooks:
   - id: codespell
-repos:
-  - repo: https://github.com/cheshirekow/cmake-format-precommit
-    rev: v0.6.13
-    hooks:
-    - id: cmake-lint
-      exclude: cmake/Toolchain-*
+- repo: https://github.com/cheshirekow/cmake-format-precommit
+  rev: v0.6.13
+  hooks:
+  - id: cmake-lint
+    exclude: cmake/Toolchain-*
+- repo: https://github.com/markdownlint/markdownlint
+  rev: v0.11.0
+  hooks:
+  - id: markdownlint
+    entry: mdl
+    language: ruby
+    files: \.(md|mdown|markdown)$
