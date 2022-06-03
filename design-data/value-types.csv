@@ -53,7 +53,7 @@
 "TASKMODE","5035","(a)enum icalproperty_taskmode","string","unitary","X=11200;AUTOMATIC-COMPLETION;AUTOMATIC-FAILURE;AUTOMATIC-STATUS;NONE=11299"
 
 "#VALARM Extension types","RFC 9074 Section 8.1",,,
-"PROXIMITY","5036","(a)enum icalproperty_proximity","string","unitary","X=11300;ARRIVE;DEPART;CONNECT;DISCONNECT;NONE=11399"
+"PROXIMITY","5039","(a)enum icalproperty_proximity","string","unitary","X=11300;ARRIVE;DEPART;CONNECT;DISCONNECT;NONE=11399"
 
 "#Event Publication Extension types","RFC 9073 Section 6",,,
 "PARTICIPANTTYPE","5037","(a)enum icalproperty_participanttype","string","unitary","X=11400;ACTIVE;INACTIVE;SPONSOR;CONTACT;BOOKING-CONTACT;EMERGENCY-CONTACT;PUBLICITY-CONTACT;PLANNER-CONTACT;PERFORMER;SPEAKER;NONE=11499"

@@ -434,7 +434,7 @@ static const int _days_in_month[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31,
 
 int icaltime_days_in_month(const int month, const int year)
 {
-    int days = _days_in_month[month];
+    int days;
 
 /* The old code aborting if it was passed a parameter like BYMONTH=0
  * Unfortunately it's not practical right now to pass an error all
@@ -447,6 +447,8 @@ int icaltime_days_in_month(const int month, const int year)
     if ((month < 1) || (month > 12)) {
         return 30;
     }
+
+    days = _days_in_month[month];
 
     if (month == 2) {
         days += icaltime_is_leap_year(year);

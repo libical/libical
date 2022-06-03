@@ -1,6 +1,7 @@
 # Libical — an implementation of iCalendar protocols and data formats {#mainpage}
 
-[![Appveyor status](https://ci.appveyor.com/api/projects/status/github/libical/libical?branch=master?svg=true)](https://ci.appveyor.com/api/projects/status/github/libical/libical) [![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
+[![Appveyor status](https://ci.appveyor.com/api/projects/status/github/libical/libical?branch=master?svg=true)](https://ci.appveyor.com/api/projects/status/github/libical/libical)
+[![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
 
 ## About
 
@@ -9,7 +10,7 @@ Libical — an implementation of iCalendar protocols and data formats
 Most of the code in here was written by Eric Busboom at the end
 of the last millennium with help from dozens of contributors.
 It is currently maintained by Allen Winter and the libical team
-at https://github.com/libical/libical.
+at <https://github.com/libical/libical>.
 
 Libical is an Open Source implementation of the iCalendar protocols
 and protocol data units. The iCalendar specification describes how
@@ -81,15 +82,13 @@ In no particular order:
 * [Cyrus Email/Calendars/Contacts Server](https://www.cyrusimap.org)
 * [syncEvolution](https://syncevolution.org)
 * [Fantastical](https://flexibits.com/fantastical)
-
 * GNOME's EDS (evolution-data-server) which serves data to:
   * [Evolution](https://wiki.gnome.org/Apps/Evolution)
   * [GNOME Calendar](https://wiki.gnome.org/Apps/Calendar)
   * [GNOME Notes](https://wiki.gnome.org/Apps/Notes)
   * [GNOME Todo](https://wiki.gnome.org/Apps/Todo)
   * and more GNOME apps...
-
-* KDE's [Kontact Suite](https://kontact.kde.org)
+* KDE's [Kontact Suite](https://kontact.kde.org) including:
   * [Akonadi framework](https://kontact.kde.org/components/akonadi.html)
   * [KOrganizer calendar and scheduling component](https://kontact.kde.org/components/korganizer.html)
   * and more KDE apps...

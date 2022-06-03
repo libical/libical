@@ -3,6 +3,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+# Generate list from another list, but with each item prepended with a prefix
 macro(_gir_list_prefix _outvar _listvar _prefix)
   set(${_outvar})
   foreach(_item IN LISTS ${_listvar})
@@ -10,13 +11,12 @@ macro(_gir_list_prefix _outvar _listvar _prefix)
   endforeach()
 endmacro(_gir_list_prefix)
 
+# cmake-lint: disable=R0915
 macro(gir_add_introspections introspections_girs)
-
   set(_gir_girs)
   set(_gir_typelibs)
 
   foreach(gir IN LISTS ${introspections_girs})
-
     set(_gir_name "${gir}")
 
     ## Transform the gir filename to something which can reference through a variable
@@ -65,7 +65,6 @@ macro(gir_add_introspections introspections_girs)
       message(ERROR "Unspecified or empty ${_gir_name}_FILES variable")
     endif()
 
-
     # Variables which provides a list of things
     _gir_list_prefix(_gir_libraries ${_gir_name}_LIBS "--library=")
     _gir_list_prefix(_gir_packages ${_gir_name}_PACKAGES "--pkg=")
@@ -75,45 +74,54 @@ macro(gir_add_introspections introspections_girs)
     set(_gir_libtool "--no-libtool")
 
     add_custom_command(
-      COMMAND ${GObjectIntrospection_SCANNER}
-              ${GObjectIntrospection_SCANNER_ARGS}
-              --namespace=${_gir_namespace}
-              --nsversion=${_gir_version}
-              ${_gir_libtool}
-              ${_gir_program}
-              ${_gir_libraries}
-              ${_gir_packages}
-              ${_gir_includes}
-              ${_gir_scannerflags}
-              ${${_gir_name}_CFLAGS}
-              ${_gir_files}
-              --output ${CMAKE_CURRENT_BINARY_DIR}/${gir}
-              --accept-unprefixed
-      DEPENDS ${_gir_files}
-              ${${_gir_name}_LIBS}
       OUTPUT ${gir}
+      COMMAND ${GObjectIntrospection_SCANNER}
+        ${GObjectIntrospection_SCANNER_ARGS}
+        --namespace=${_gir_namespace}
+        --nsversion=${_gir_version}
+        ${_gir_libtool}
+        ${_gir_program}
+        ${_gir_libraries}
+        ${_gir_packages}
+        ${_gir_includes}
+        ${_gir_scannerflags}
+        ${${_gir_name}_CFLAGS}
+        ${_gir_files}
+        --output ${CMAKE_CURRENT_BINARY_DIR}/${gir}
+        --accept-unprefixed
+      DEPENDS ${_gir_files} ${${_gir_name}_LIBS}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       VERBATIM
+      COMMENT "Run the gobject introspection scanner"
     )
     list(APPEND _gir_girs ${CMAKE_CURRENT_BINARY_DIR}/${gir})
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${gir} DESTINATION ${SHARE_INSTALL_DIR}/gir-1.0)
 
     string(REPLACE ".gir" ".typelib" _typelib "${gir}")
     add_custom_command(
-      COMMAND ${GObjectIntrospection_COMPILER}
-              --includedir=.
-              ${CMAKE_CURRENT_BINARY_DIR}/${gir}
-              -o ${CMAKE_CURRENT_BINARY_DIR}/${_typelib}
-      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${gir}
       OUTPUT ${_typelib}
+      COMMAND ${GObjectIntrospection_COMPILER}
+        --includedir=.
+        ${CMAKE_CURRENT_BINARY_DIR}/${gir}
+        -o ${CMAKE_CURRENT_BINARY_DIR}/${_typelib}
+      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${gir}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT "Run the gobject introspection compiler"
     )
     list(APPEND _gir_typelibs ${CMAKE_CURRENT_BINARY_DIR}/${_typelib})
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${_typelib} DESTINATION ${LIB_INSTALL_DIR}/girepository-1.0)
 
   endforeach()
 
-  add_custom_target(gir-girs-${_gir_name} ALL DEPENDS ${_gir_girs})
-  add_custom_target(gir-typelibs-${_gir_name} ALL DEPENDS ${_gir_typelibs})
+  add_custom_target(gir-girs-${_gir_name}
+    ALL
+    DEPENDS ${_gir_girs}
+    COMMENT "Target for the gobject introspection compiler"
+  )
+  add_custom_target(gir-typelibs-${_gir_name}
+    ALL
+    DEPENDS ${_gir_typelibs}
+    COMMENT "Target for the gobject introspection typelibs"
+  )
 
 endmacro(gir_add_introspections)

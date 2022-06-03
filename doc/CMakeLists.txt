@@ -52,9 +52,11 @@ if(DOXYGEN_FOUND)
     COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
     DEPENDS ${_all_hdrs} ${_dox_deps} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.cmake
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Run Doxygen"
   )
   add_custom_target(docs
     DEPENDS ${CMAKE_BINARY_DIR}/apidocs/html/index.html
+    COMMENT "Target to build the documentation"
   )
   add_dependencies(docs ical icalss icalvcal)
   if(WITH_CXX_BINDINGS)
