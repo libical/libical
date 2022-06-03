@@ -1,9 +1,9 @@
-# Libical
+# Libical — an implementation of iCalendar protocols and data formats {#mainpage}
 
 [![Appveyor status](https://ci.appveyor.com/api/projects/status/github/libical/libical?branch=master?svg=true)](https://ci.appveyor.com/api/projects/status/github/libical/libical)
 [![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
 
-## Introduction
+## About
 
 Libical — an implementation of iCalendar protocols and data formats
 
@@ -32,8 +32,8 @@ plus the iCalendar iMIP protocol in [RFC6047][].
 [RFC9074]: https://tools.ietf.org/html/rfc9074
 
 The libical-glib API is currently unstable and can change with any release.
-Until it is considered stable, there should be defined LIBICAL_GLIB_UNSTABLE_API=1
-before including <libical-glib/libical-glib.h>, to indicate that the library user
+Until it is considered stable, there should be defined `LIBICAL_GLIB_UNSTABLE_API=1`
+before including `<libical-glib/libical-glib.h>`, to indicate that the library user
 is aware of it and is prepared to change the calls anytime.
 
 ## License
@@ -57,12 +57,15 @@ See the top-level [Install.txt](Install.txt) file.
 
 ## Documentation
 
-There is rudimentary, unfinished documentation in the `doc/` directory,
-see [UsingLibical.md](doc/UsingLibical.md)
+Documentation is hosted at <https://libical.github.io/libical/apidocs/>.
+
+For a conceptual overview of the library, see [UsingLibical.md](@ref UsingLibical).
+There is other rudimentary, unfinished documentation in the `doc/` directory of
+the source distribution,
 and annotated examples in `examples/` and the test code in `src/test/`.
 
 Additionally, progress is underway to add API documentation,
-which is available [here](https://libical.github.io/libical/apidocs/index.html)
+which is available at the apidocs site.
 
 ## Acknowledgments
 
@@ -85,8 +88,7 @@ In no particular order:
   * [GNOME Notes](https://wiki.gnome.org/Apps/Notes)
   * [GNOME Todo](https://wiki.gnome.org/Apps/Todo)
   * and more GNOME apps...
-* KDE:
-  * [Kontact](https://kontact.kde.org):
+* KDE's [Kontact Suite](https://kontact.kde.org) including:
   * [Akonadi framework](https://kontact.kde.org/components/akonadi.html)
   * [KOrganizer calendar and scheduling component](https://kontact.kde.org/components/korganizer.html)
   * and more KDE apps...
