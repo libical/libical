@@ -3613,7 +3613,7 @@ short icalrecurrencetype_encode_month(int month, int is_leap)
 }
 
 int icalrecur_expand_recurrence(const char *rule,
-    icaltime_t start, int count, icaltime_t*array)
+    icaltime_t start, int count, icaltime_t *array)
 {
     struct icalrecurrencetype recur;
     icalrecur_iterator *ritr;

@@ -367,7 +367,7 @@ LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator *);
  * back into local time before using them.
  */
 LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(const char *rule, icaltime_t start,
-                                                    int count, icaltime_t*array);
+                                                    int count, icaltime_t *array);
 
 /* ical_invalid_rrule_handling :
  *    How should the ICAL library handle RRULEs with invalid BYxxx part combos?

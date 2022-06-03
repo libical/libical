@@ -522,11 +522,10 @@ typedef ssize_t IO_SSIZE_T;
 #define localtime_r(tp,tmp) (localtime(tp)?(*(tmp)=*localtime(tp),(tmp)):0)
 #endif
 
-/* 
+/*
  * Substitute functions for those from time.h but working with icaltime_t instead of time_t.
- * icaltime_t is defined in config_public.h.cmake.
  */
- #cmakedefine USE_64BIT_ICALTIME_T 1
+#cmakedefine USE_64BIT_ICALTIME_T 1
 #if (defined(USE_64BIT_ICALTIME_T) && (SIZEOF_TIME_T != 8))
 #if defined(_MSC_VER)
 #define icaltime(timer) _time64(timer)

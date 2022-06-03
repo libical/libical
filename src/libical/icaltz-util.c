@@ -445,7 +445,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     const char *zonedir;
     FILE *f = NULL;
     char *full_path = NULL;
-    icaltime_t*transitions = NULL;
+    icaltime_t *transitions = NULL;
     char *r_trans = NULL, *temp;
     int *trans_idx = NULL;
     ttinfo *types = NULL;

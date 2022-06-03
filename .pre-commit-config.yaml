@@ -26,7 +26,7 @@ repos:
   rev: v0.6.13
   hooks:
   - id: cmake-lint
-    exclude: cmake/Toolchain-*
+    exclude: cmake/Toolchain-*|config.h.cmake
 - repo: https://github.com/markdownlint/markdownlint
   rev: v0.11.0
   hooks:
