@@ -24,10 +24,11 @@ at the [IETF Tools][] website:
 [RFC5546]: https://tools.ietf.org/html/rfc5546
 [RFC7529]: https://tools.ietf.org/html/rfc7529
 [RFC6638]: https://tools.ietf.org/html/rfc6638
-[RFC6047]: https://tools.ietf.org/html/rfc6047
-[RFC6638]: https://tools.ietf.org/html/rfc7986
+[RFC7986]: https://tools.ietf.org/html/rfc7986
 [RFC9073]: https://tools.ietf.org/html/rfc9073
 [RFC9074]: https://tools.ietf.org/html/rfc9074
+[RFC6047]: https://tools.ietf.org/html/rfc6047
+
 [IETF Tools]: https://tools.ietf.org/
 
 ### 1.1 The libical project
@@ -1221,7 +1222,8 @@ DTSTART <= '20000106T120000Z'");
 There are several other routines in the icalset interface, but they
 not fully implemented yet.
 
-#### <a id="memory"></a>5.5 Memory Management
+<a id="memory"></a>
+#### 5.5 Memory Management
 
 Libical relies heavily on dynamic allocation for both the core objects
 and for the strings used to hold values. Some of this memory the library
@@ -1328,14 +1330,11 @@ RFC5545.
 There are a few routines to manipulate error properties:
 
 | Routine                               | Purpose                                              |
-|---------------------------------------|------------------------------------------------------|
-| `void icalrestriction_check()`        | Check a component against RFC5546 and insert error   |
-|                                       | properties to indicate non compliance                |
+|:--------------------------------------|:-----------------------------------------------------|
+| `void icalrestriction_check()`        | Check a component against RFC5546 and insert error properties to indicate non compliance |
 | `int icalcomponent_count_errors()`    | Return the number of error properties in a component |
 | `void icalcomponent_strip_errors()`   | Remove all error properties in a component           |
-| `void icalcomponent_convert_errors()` | Convert some error properties into REQUESTS-STATUS   |
-|                                       | properties to indicate the inability to process the  |
-|                                       | component as an iTIP request.                        |
+| `void icalcomponent_convert_errors()` | Convert some error properties into REQUESTS-STATUS properties to indicate the inability to process the component as an iTIP request |
 
 The types of errors are listed in icalerror.h. They are:
 
