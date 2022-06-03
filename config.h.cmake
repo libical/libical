@@ -525,8 +525,8 @@ typedef ssize_t IO_SSIZE_T;
 /*
  * Substitute functions for those from time.h but working with icaltime_t instead of time_t.
  */
-#cmakedefine USE_64BIT_ICALTIME_T 1
-#if (defined(USE_64BIT_ICALTIME_T) && (SIZEOF_TIME_T != 8))
+#cmakedefine LIBICAL_ENABLE_64BIT_ICALTIME_T 1
+#if (defined(LIBICAL_ENABLE_64BIT_ICALTIME_T) && (SIZEOF_TIME_T != 8))
 #if defined(_MSC_VER)
 #define icaltime(timer) _time64(timer)
 #define icalctime(timer) _ctime64(timer)
@@ -534,7 +534,7 @@ typedef ssize_t IO_SSIZE_T;
 #define icalgmtime_r(tp,tmp) (_gmtime64(tp)?(*(tmp)=*_gmtime64(tp),(tmp)):0)
 #define icallocaltime_r(tp,tmp) (_localtime64(tp)?(*(tmp)=*_localtime64(tp),(tmp)):0)
 #else
-#error "This compiler is not supported together with the 'USE_64BIT_ICALTIME_T' option."
+#error "This compiler is not supported together with the 'LIBICAL_ENABLE_64BIT_ICALTIME_T' option."
 #endif
 #else
 #define icaltime(timer) time(timer)
