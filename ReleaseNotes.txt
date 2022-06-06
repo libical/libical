@@ -34,6 +34,8 @@ Version 3.1.0 (NOT RELEASED YET):
      * ical_set_invalid_rrule_handling_setting
      * ical_get_invalid_rrule_handling_setting
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
+ * libical-glib API is considered stable; no longer need to define LIBICAL_GLIB_UNSTABLE_API=1
+   before including <libical-glib/libical-glib.h>.
  * Deprecated functions:
      + caldat (replaced by internal function icaldat_int())
      + juldat (replaced by internal function juldat_int())

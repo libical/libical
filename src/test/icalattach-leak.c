@@ -14,9 +14,7 @@
 
 #include <stdio.h>
 
-#define LIBICAL_GLIB_UNSTABLE_API
 #include "libical-glib/libical-glib.h"
-#undef LIBICAL_GLIB_UNSTABLE_API
 
 static GSList *get_attachments(ICalComponent *comp)
 {
