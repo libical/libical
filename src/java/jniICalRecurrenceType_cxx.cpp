@@ -1,17 +1,8 @@
 /*======================================================================
  FILE: jniICalRecurrenceType_cxx.cpp
  CREATOR: structConverter
-
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-FileCopyrightText: 2002, Critical Path
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
 #include <jni.h>
@@ -34,7 +25,6 @@ static jfieldID ICalRecurrenceType_By_year_day_FID;
 static jfieldID ICalRecurrenceType_By_week_no_FID;
 static jfieldID ICalRecurrenceType_By_month_FID;
 static jfieldID ICalRecurrenceType_By_set_pos_FID;
-
 
 void initICalRecurrenceTypeFieldIDs(JNIEnv* env, jclass clazz)
 {
@@ -343,7 +333,6 @@ void jni_GetAll_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurre
     jni_GetBy_week_no_from_ICalRecurrenceType(__ICalRecurrenceType_, env, thisICalRecurrenceType);
     jni_GetBy_month_from_ICalRecurrenceType(__ICalRecurrenceType_, env, thisICalRecurrenceType);
     jni_GetBy_set_pos_from_ICalRecurrenceType(__ICalRecurrenceType_, env, thisICalRecurrenceType);
-
 }
 
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalRecurrenceType_init__J(JNIEnv* env, jobject thisICalRecurrenceType, jlong data) {

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 include(CheckIncludeFiles)
 check_include_files(byteswap.h HAVE_BYTESWAP_H)
 check_include_files(dirent.h HAVE_DIRENT_H)

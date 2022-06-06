@@ -1,7 +1,5 @@
-# Copyright (C) 2010, Pino Toscano, <pino at kde.org>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-FileCopyrightText: 2010, Pino Toscano, <pino at kde.org>
+# SPDX-License-Identifier: BSD-3-Clause
 
 # Generate list from another list, but with each item prepended with a prefix
 macro(_gir_list_prefix _outvar _listvar _prefix)

@@ -1,18 +1,17 @@
 #
-# (C) Copyright 2009 Johns Hopkins University (JHU), All Rights
-# Reserved.
-#
+# SPDX-FileCopyrightText: 2009 Johns Hopkins University (JHU), All Rights Reserved.
+# SPDX-License-Identifier: LicenseRef-CISST
+
 # --- begin cisst license - do not edit ---
 #
-# This software is provided "as is" under an open source license, with
-# no warranty.  The complete license can be found in license.txt and
-# https://www.cisst.org/cisst/license.txt.
+# This software is provided "as is" under an open source license, with no warranty.
+# The complete license can be found in LICENSES/LicenseRef-CISST.txt.
 #
 # --- end cisst license ---
 
 SET(CMAKE_SYSTEM_NAME QNX)
 SET(CMAKE_SYSTEM_VERSION 6.5.0)
-SET(CMAKE_SYSTEM_PROCESSOR x86)
+SET(CMAKE_SYSTEM_PROCESSOR armv7)
 SET(TOOLCHAIN QNX)
 
 #SET(CMAKE_IMPORT_LIBRARY_SUFFIX ".a")
@@ -67,22 +66,23 @@ SET(CMAKE_OBJDUMP      "${QNX_HOST}/usr/bin/nto${CMAKE_SYSTEM_PROCESSOR}-objdump
 SET(CMAKE_LINKER       "${QNX_HOST}/usr/bin/nto${CMAKE_SYSTEM_PROCESSOR}-ld"     CACHE PATH "QNX Linker Program")
 SET(CMAKE_STRIP        "${QNX_HOST}/usr/bin/nto${CMAKE_SYSTEM_PROCESSOR}-strip${HOST_EXECUTABLE_SUFFIX}"   CACHE PATH "QNX Strip Program")
 
-SET(CMAKE_C_COMPILER ${QNX_HOST}/usr/bin/qcc)
+SET(CMAKE_C_COMPILER ${QNX_HOST}/usr/bin/qcc${HOST_EXECUTABLE_SUFFIX})
 SET(CMAKE_C_FLAGS_DEBUG "-g")
 SET(CMAKE_C_FLAGS_MINSIZEREL "-Os -DNDEBUG")
 SET(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
 SET(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
 
-SET(CMAKE_CXX_COMPILER ${QNX_HOST}/usr/bin/qcc)
+SET(CMAKE_CXX_COMPILER ${QNX_HOST}/usr/bin/qcc${HOST_EXECUTABLE_SUFFIX})
 SET(CMAKE_CXX_FLAGS_DEBUG "-g")
 SET(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
 SET(CMAKE_FIND_ROOT_PATH ${QNX_TARGET})
-SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 SET(CMAKE_C_FLAGS "-Vgcc_ntoarmv7le" CACHE STRING "qcc c flags" FORCE)
 SET(CMAKE_CXX_FLAGS "-Vgcc_ntoarmv7le -lang-c++" CACHE STRING "qcc cxx flags" FORCE)

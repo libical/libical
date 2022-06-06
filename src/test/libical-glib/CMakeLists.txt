@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Milan Crha <mcrha@redhat.com>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 find_program(PYTHON3 python3)
 set_package_properties(PYTHON3 PROPERTIES TYPE REQUIRED PURPOSE "Required by the libical build system.")
 add_feature_info("libical-glib testing" PYTHON3 "python3 is required to run the regression tests")

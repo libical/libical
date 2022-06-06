@@ -1,5 +1,8 @@
-# - try to find glib
 #
+# SPDX-FileCopyrightText: Milan Crha <mcrha@redhat.com>
+# SPDX-License-Identifier: BSD-3-Clause
+#
+# - try to find glib
 # Once done this will define
 #
 #  GLIB_FOUND - system has GLib 2.0

@@ -1,0 +1,23 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: libical
+Upstream-Contact: Allen Winter <winter@kde.org>
+Source: https://github.com/libical/libical
+
+Files: zoneinfo/*
+Copyright: The libical developers
+License: CC0-1.0
+
+#design data
+Files: design-data/*
+Copyright: The libical developers
+License: LGPL-2.1-only OR MPL-2.0
+
+#testing data
+Files: test-data/*.ics test-data/*.vcf test-data/*.data test-data/*.tab test-data/*.txt src/test/*.ics src/test/*.out src/Net-ICal-Libical/test-data/*
+Copyright: The libical developers
+License: LGPL-2.1-only OR MPL-2.0
+
+#debian packaging
+Files: debian/*
+Copyright: The libical developers
+License: LGPL-2.1-only OR MPL-2.0

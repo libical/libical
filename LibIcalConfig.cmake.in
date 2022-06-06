@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Christophe Giboudeaux <cgiboudeaux@gmx.com>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 @PACKAGE_INIT@
 
 set_and_check(LibIcal_INCLUDE_DIR    "@PACKAGE_INCLUDE_INSTALL_DIR@")

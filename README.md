@@ -48,8 +48,8 @@ for a copy of this license.
 
 This dual license ensures that the library can be incorporated into
 both proprietary code and GPL'd programs, and will benefit from improvements
-made by programmers in both realms. I will only accept changes into
-my version of the library if they are similarly dual-licensed.
+made by programmers in both realms. We (the libical developers) will only
+accept changes to this library if they are similarly dual-licensed.
 
 ## Building
 

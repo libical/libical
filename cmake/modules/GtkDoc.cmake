@@ -1,5 +1,8 @@
 # GtkDoc.cmake
 #
+# SPDX-FileCopyrightText: Milan Crha <mcrha@redhat.com>
+# SPDX-License-Identifier: BSD-3-Clause
+#
 # Macros to support develper documentation build from sources with gtk-doc.
 #
 # Note that every target and dependency should be defined before the macro is

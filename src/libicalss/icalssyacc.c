@@ -2,8 +2,8 @@
 
 /* Skeleton implementation for Bison's Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
+   SPDX-FileCopyrightText: 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -125,18 +125,12 @@
 /*  FILE: icalssyacc.y                                                     */
 /*  CREATOR: eric 08 Aug 2000                                              */
 /*                                                                         */
-/*  (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>             */
+/*  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>             */
 /*                                                                         */
 /* This program is free software; you can redistribute it and/or modify    */
-/* it under the terms of either:                                           */
 /*                                                                         */
-/*    The LGPL as published by the Free Software Foundation, version       */
-/*    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html         */
 /*                                                                         */
-/*  Or:                                                                    */
 /*                                                                         */
-/*    The Mozilla Public License Version 2.0. You may obtain a copy of     */
-/*    the License at https://www.mozilla.org/MPL/                           */
 /*                                                                         */
 /* The Original Code is eric. The Initial Developer of the Original        */
 /* Code is Eric Busboom                                                    */

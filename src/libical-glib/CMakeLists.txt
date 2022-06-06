@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Milan Crha <mcrha@redhat.com>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 add_definitions(-Dlibical_ical_EXPORTS)
 
 # a C11 compliant compiler is required to build this library

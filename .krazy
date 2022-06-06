@@ -2,6 +2,7 @@ CHECKSETS foss,c++
 
 EXCLUDE dpointer
 
+EXTRA copyright-reuse,license-reuse
 EXTRA crud,camelcase
 EXTRA style
 
@@ -33,7 +34,7 @@ SKIP /src/libical/caldate\.c
 SKIP /cmake/Kitware/
 SKIP /cmake/modules/GObjectIntrospectionMacros\.cmake|/cmake/modules/FindGObjectIntrospection\.cmake
 SKIP /doc/Doxyfile\.cmake
-SKIP /cmake/Toolchain-iOS.cmake|/cmake/Toolchain-QNX65.cmake|/cmake/Toolchain-QNX66.cmake|/cmake/Toolchain-android.cmake|/cmake/modules/FindBerkeleyDB.cmake
+SKIP /cmake/Toolchain-QNX|/cmake/modules/FindBerkeleyDB.cmake|/uninstall.cmake.in
 
 #Skip zoneinfo
 SKIP /zoneinfo/

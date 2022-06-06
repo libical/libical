@@ -11,10 +11,9 @@
 #  GObjectIntrospection_CFLAGS
 #  GObjectIntrospection_LIBS
 #
-# Copyright (C) 2010, Pino Toscano, <pino@kde.org>
+# SPDX-FileCopyrightText: 2010, Pino Toscano, <pino@kde.org>
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 # Get gobject-introspection's specified pkg-config variable
 macro(_GIR_GET_PKGCONFIG_VAR _outvar _varname)

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Milan Crha <mcrha@redhat.com>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
 option(ENABLE_GTK_DOC "Use gtk-doc to build documentation" True)
 

@@ -1,4 +1,8 @@
-/* Access_component.c */
+/* Access_component.c
+
+  SPDX-FileCopyrightText: <eric@civicknowledge.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+*/
 
 #include <libical/ical.h>
 
@@ -20,13 +24,10 @@ void do_something(icalcomponent *c);
    constructors, resulting in a compact, neatly formatted way to create
    components. This style is shown in create_new_component_with_va_args()
 
-
-
 */
 
 icalcomponent* create_new_component()
 {
-
     /* variable definitions */
     icalcomponent* calendar;
     icalcomponent* event;
@@ -56,7 +57,6 @@ icalcomponent* create_new_component()
         calendar,
         icalproperty_new_version("2.0")
         );
-
 
     /* Here is the short version of the memory rules:
 
@@ -132,7 +132,6 @@ icalcomponent* create_new_component()
 
     icalcomponent_add_property(event,property);
 
-
     /* more properties */
 
     icalcomponent_add_property(
@@ -169,7 +168,6 @@ icalcomponent* create_new_component()
 
     icalcomponent_add_property(event,property);
 
-
     property = icalproperty_new_dtend(atime);
 
     icalproperty_add_parameter(
@@ -189,13 +187,11 @@ icalcomponent* create_new_component()
     return calendar;
 }
 
-
 /* Now, create the same component as in the previous routine, but use
 the constructor style. */
 
 icalcomponent* create_new_component_with_va_args()
 {
-
     /* This is a similar set up to the last routine */
     icalcomponent* calendar;
     struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, icaltimezone_get_utc_timezone());
@@ -254,7 +250,6 @@ icalcomponent* create_new_component_with_va_args()
             0
             );
 
-
     /* Note that properties with no parameters can use the regular
        'new' constructor, while those with parameters use the 'vanew'
        constructor. And, be sure that the last argument in the 'vanew'
@@ -262,7 +257,6 @@ icalcomponent* create_new_component_with_va_args()
 
     return calendar;
 }
-
 
 void find_sub_components(icalcomponent* comp)
 {
@@ -286,7 +280,6 @@ void find_sub_components(icalcomponent* comp)
 
         do_something(c);
     }
-
 }
 
 /* Ical components only have one internal iterator, so removing the
@@ -307,5 +300,4 @@ void remove_vevent_sub_components(icalcomponent* comp){
 
         do_something(c);
     }
-
 }

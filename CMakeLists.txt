@@ -1,5 +1,8 @@
 # This is the top-level CMakeLists.txt file for the libical project.
 #
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+#
 # Pass the following variables to cmake to control the build:
 # (See doc/UsingLibical.md for more information)
 #

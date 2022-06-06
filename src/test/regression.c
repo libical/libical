@@ -2,18 +2,9 @@
  FILE: regression.c
  CREATOR: eric 03 April 1999
 
- (C) COPYRIGHT 1999 Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original author is Eric Busboom
  The original code is regression.c
@@ -2734,12 +2725,10 @@ void test_recur_parser()
     icalmemory_free_buffer(v);
 }
 
-
 static int test_juldat_caldat_instance(long year, int month, int day) {
 
     struct icaltimetype t;
     struct ut_instant originalInstant;
-
 
     memset(&t, 0, sizeof(t));
     t.year = year;
@@ -2816,7 +2805,6 @@ void test_juldat_caldat() {
 
     ok("juldat and caldat return the expected values for random input values", failed == 0);
 }
-
 
 char *ical_strstr(const char *haystack, const char *needle)
 {
@@ -5054,7 +5042,6 @@ static void test_implicit_dtend_duration(void)
     }
     int_is("icaltime_compare(start, end)", 0, icaltime_compare(start, end));
     icalcomponent_free(c);
-
 
     c = icalcomponent_vanew(
             ICAL_VCALENDAR_COMPONENT,
