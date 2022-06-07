@@ -92,9 +92,14 @@ else()
 endif()
 
 add_custom_command (
-  OUTPUT ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
-  COMMAND ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
+  OUTPUT
+    ${LIBICAL_GLIB_SOURCES}
+    ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
+    ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
+  COMMAND
+    ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
   DEPENDS ${ical-glib-src-generator_EXE} ${xml_files}
+  COMMENT "Generate libical-glib headers"
 )
 
 configure_file(
@@ -131,7 +136,11 @@ target_link_libraries(ical-glib PRIVATE ical ${GLIB_LIBRARIES})
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(ical-glib-static STATIC ${LIBICAL_GLIB_SOURCES})
   add_dependencies(ical-glib-static ical-header)
-  target_compile_options(ical-glib-static PUBLIC ${GLIB_CFLAGS} -DG_LOG_DOMAIN="libical-glib" -DLIBICAL_GLIB_COMPILATION)
+  target_compile_options(ical-glib-static
+    PUBLIC ${GLIB_CFLAGS}
+    -DG_LOG_DOMAIN="libical-glib"
+    -DLIBICAL_GLIB_COMPILATION
+  )
   target_link_libraries(ical-glib-static ${GLIB_LIBRARIES})
 endif()
 
@@ -179,7 +188,14 @@ if(HAVE_INTROSPECTION)
   set(ICalGLib_${LIB_VERSION}_gir_VERSION ${LIBICAL_GLIB_GIR_VERSION_STRING})
   set(ICalGLib_${LIB_VERSION}_gir_LIBRARY "ICalGLib")
   set(ICalGLib_${LIB_VERSION}_gir_INCLUDES GObject-2.0 GLib-2.0)
-  set(ICalGLib_${LIB_VERSION}_gir_CFLAGS ${GLIB_CFLAGS} -DLIBICAL_GLIB_COMPILATION -I${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_BINARY_DIR}/src/libical -I${CMAKE_SOURCE_DIR}/src/libical -I${CMAKE_BINARY_DIR}/src/libical-glib)
+  set(ICalGLib_${LIB_VERSION}_gir_CFLAGS ${GLIB_CFLAGS}
+    -DLIBICAL_GLIB_COMPILATION
+    -I${CMAKE_CURRENT_BINARY_DIR}
+    -I${CMAKE_CURRENT_SOURCE_DIR}
+    -I${CMAKE_BINARY_DIR}/src/libical
+    -I${CMAKE_SOURCE_DIR}/src/libical
+    -I${CMAKE_BINARY_DIR}/src/libical-glib
+  )
   set(ICalGLib_${LIB_VERSION}_gir_LIBS ical-glib)
   set(ICalGLib_${LIB_VERSION}_gir_FILES ${LIBICAL_GLIB_GIR_SOURCES})
 
@@ -189,7 +205,7 @@ if(HAVE_INTROSPECTION)
 endif()
 
 if(ICAL_GLIB_VAPI)
-  add_custom_target(vala ALL)
+  add_custom_target(vala ALL COMMENT "Target to run vala")
   set(gir_fullname ${CMAKE_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
   set(metadata_fullname ${CMAKE_CURRENT_BINARY_DIR}/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.metadata)
   set(vapi_file ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.vapi)
@@ -213,9 +229,10 @@ if(ICAL_GLIB_VAPI)
     DEPENDS
       ${gir_fullname}
       ${metadata_fullname}
+    COMMENT "Run the tool to generate the Vala API"
   )
 
-  add_custom_target(valafile DEPENDS ${vapi_file})
+  add_custom_target(valafile DEPENDS ${vapi_file} COMMENT "Target to run valafile")
 
   add_dependencies(vala valafile)
 

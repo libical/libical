@@ -53,6 +53,7 @@ add_custom_command(
   DEPENDS
     ${PROPERTYDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.h.in
+  COMMENT "Generate icalderivedproperty.h"
 )
 list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.h)
 
@@ -68,6 +69,7 @@ add_custom_command(
   DEPENDS
     ${PROPERTYDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.c.in
+  COMMENT "Generate icalderivedproperty.c"
 )
 list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.c)
 
@@ -87,6 +89,7 @@ add_custom_command(
   DEPENDS
     ${PARAMETERDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.h.in
+  COMMENT "Generate icalderivedparameter.h"
 )
 list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.h)
 
@@ -101,6 +104,7 @@ add_custom_command(
   DEPENDS
     ${PARAMETERDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.c.in
+  COMMENT "Generate icalderivedparameter.c"
 )
 list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.c)
 
@@ -120,6 +124,7 @@ add_custom_command(
   DEPENDS
     ${RESTRICTIONDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalrestriction.c.in
+  COMMENT "Generate icalrestriction.c"
 )
 list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c)
 
@@ -139,6 +144,7 @@ add_custom_command(
   DEPENDS
     ${VALUEDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.h.in
+  COMMENT "Generate icalderivedvalue.h"
 )
 list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h)
 
@@ -153,6 +159,7 @@ add_custom_command(
   DEPENDS
     ${VALUEDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.c.in
+  COMMENT "Generate icalderivedvalue.c"
 )
 list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.c)
 
@@ -167,6 +174,7 @@ endif()
 add_custom_target(
   ical-header ALL
   DEPENDS ${CMAKE_BINARY_DIR}/src/libical/ical.h
+  COMMENT "Target to generate the aggregate ical.h header"
 )
 
 # GObject Introspection
@@ -268,6 +276,7 @@ add_custom_command(
       -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libical/ical.h
       -P ${CMAKE_CURRENT_SOURCE_DIR}/ical_file.cmake
   DEPENDS ${ical_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/ical_file.cmake
+  COMMENT "Generate the aggregate ical.h header"
 )
 
 add_library(ical ${LIBRARY_TYPE} ${ical_LIB_SRCS})

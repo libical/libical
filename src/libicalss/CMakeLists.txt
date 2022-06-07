@@ -25,6 +25,7 @@ endif()
 add_custom_target(
   icalss-header ALL
   DEPENDS ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+  COMMENT "Target to generate the aggregate libicalss header"
 )
 
 ########### next target ###############
@@ -78,6 +79,7 @@ add_custom_command(
     -DBDB_FOUND=${BDB_FOUND}
     -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   DEPENDS ${icalss_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
+  COMMENT "Generate the aggregate libicalss header"
 )
 
 add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
