@@ -1,5 +1,8 @@
 <?php
 
+// SPDX-FileCopyrightText: Copyright Contributors to the libical project
+// SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 // '../../../../' is a dirty hack to be able to store LibicalWrap.so in my
 // homedir instead of in the machine-global directory
 

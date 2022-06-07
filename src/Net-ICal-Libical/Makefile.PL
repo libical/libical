@@ -1,4 +1,8 @@
 #!/usr/bin/perl
+#
+# SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+#
 
 use ExtUtils::MakeMaker;
 WriteMakefile(
