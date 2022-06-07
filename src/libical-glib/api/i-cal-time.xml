@@ -143,7 +143,7 @@
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">Returns -1, 0, or 1 to indicate that a less than b, a==b or a larger than b.</comment>
+        <comment xml:space="preserve">i_cal_time_compare returns an integer indicating the result of the comparison, as follow:</comment>
     </method>
     <method name="i_cal_time_compare_date_only" corresponds="icaltime_compare_date_only" since="1.0">
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
