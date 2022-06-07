@@ -44,7 +44,9 @@ LIBICAL_ICAL_EXPORT void icaltzutil_set_zone_directory(const char *zonepath);
  *
  * @param location is a string containing the name of a location with a timezone file
  *        found under the zoneinfo data.
+ *
+ * @since 3.1 no longer publicly accessible
  */
-LIBICAL_ICAL_EXPORT icalcomponent *icaltzutil_fetch_timezone(const char *location);
+LIBICAL_ICAL_NO_EXPORT icalcomponent *icaltzutil_fetch_timezone(const char *location);
 
 #endif

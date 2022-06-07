@@ -13,41 +13,43 @@ Version 3.1.0 (NOT RELEASED YET):
  * libical-glib requires a C11 compliant compiler
  * draft-ietf-calext-eventpub-extensions-19 (RFC 9073) support added
  * draft-ietf-calext-valarm-extensions-07 (RFC 9074) support added
+ * libical-glib API is considered stable; no longer need to define LIBICAL_GLIB_UNSTABLE_API=1
+   before including <libical-glib/libical-glib.h>
  * Allow previous recurrence iteration
  * Improved performance of recurrence iterators
  * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
  * Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions
- * New publicly available functions:
-     + icalrecurrencetype_encode_day
-     + icalrecurrencetype_encode_month
-     + icaltzutil_set_zone_directory
-     + icalcomponent_clone
-     + icalproperty_clone
-     + icalparameter_clone
-     + icalvalue_clone
-     + icalcluster_clone
-     + icalrecur_iterator_prev
-     + icalcomponent_set_x_name
-     + icalcomponent_get_x_name
-     + icalcomponent_get_component_name
-     + icalcomponent_get_component_name_r
-     * ical_set_invalid_rrule_handling_setting
-     * ical_get_invalid_rrule_handling_setting
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
- * libical-glib API is considered stable; no longer need to define LIBICAL_GLIB_UNSTABLE_API=1
-   before including <libical-glib/libical-glib.h>.
+ * New publicly available functions:
+    + icalrecurrencetype_encode_day
+    + icalrecurrencetype_encode_month
+    + icaltzutil_set_zone_directory
+    + icalcomponent_clone
+    + icalproperty_clone
+    + icalparameter_clone
+    + icalvalue_clone
+    + icalcluster_clone
+    + icalrecur_iterator_prev
+    + icalcomponent_set_x_name
+    + icalcomponent_get_x_name
+    + icalcomponent_get_component_name
+    + icalcomponent_get_component_name_r
+    + ical_set_invalid_rrule_handling_setting
+    + ical_get_invalid_rrule_handling_setting
  * Deprecated functions:
-     + caldat (replaced by internal function icaldat_int())
-     + juldat (replaced by internal function juldat_int())
-     + icalcomponent_new_clone
-     + icalproperty_new_clone
-     + icalparameter_new_clone
-     + icalvalue_new_clone
-     + icalcluster_new_clone
+    + caldat (replaced by internal function icaldat_int())
+    + juldat (replaced by internal function juldat_int())
+    + icalcomponent_new_clone
+    + icalproperty_new_clone
+    + icalparameter_new_clone
+    + icalvalue_new_clone
+    + icalcluster_new_clone
+ * No longer publicly available functions:
+    + icaltzutil_fetch_timezone
  * Removed unused declarations:
-     (were in the public headers but not used at all)
-     + struct icaltimezonetype
-     + struct icaltimezonephase
+    (were in the public headers but not used at all)
+    + struct icaltimezonetype
+    + struct icaltimezonephase
 
 Version 3.0.15 (UNRELEASED):
 ----------------------------
