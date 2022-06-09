@@ -81,6 +81,7 @@ WARN_LOGFILE           = doxygen.log
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = @DOXYGEN_INPUT@
+USE_MDFILE_AS_MAINPAGE = README.md
 FILE_PATTERNS          = *.cpp \
                          *.c \
                          *.cc \
