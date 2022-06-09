@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['zone_513',['zone',['../structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c',1,'icaltimetype']]],
-  ['zone_5fcontext_514',['zone_context',['../structzone__context.html',1,'']]]
+  ['_7eicalspanlist_0',['~ICalSpanList',['../classLibICal_1_1ICalSpanList.html#aa60a6309d691037928c20d06709e47c2',1,'LibICal::ICalSpanList']]]
 ];
