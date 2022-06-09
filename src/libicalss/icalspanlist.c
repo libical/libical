@@ -181,22 +181,22 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     return sl;
 }
 
-void icalspanlist_free(icalspanlist *s)
+void icalspanlist_free(icalspanlist *sl)
 {
     struct icaltime_span *span;
 
-    if (s == NULL)
+    if (sl == NULL)
         return;
 
-    while ((span = pvl_pop(s->spans)) != 0) {
+    while ((span = pvl_pop(sl->spans)) != 0) {
         free(span);
     }
 
-    pvl_free(s->spans);
+    pvl_free(sl->spans);
 
-    s->spans = 0;
+    sl->spans = 0;
 
-    free(s);
+    free(sl);
 }
 
 void icalspanlist_dump(icalspanlist *sl)

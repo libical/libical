@@ -344,7 +344,7 @@ LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt,
  *      to do arithmetic on times without worrying about overflow or
  *      underflow.
  */
-LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltimetype tt);
 
 /**     @brief Converts time to a given timezone.
  *
@@ -355,7 +355,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_normalize(const struct icaltime
  *
  *      If it's a floating time, the returned object
  *      represents the same time relative to @p zone.
- *      For example, if @tt represents 9:30 AM floating and @p zone
+ *      For example, if @p tt represents 9:30 AM floating and @p zone
  *      is the GMT timezone, the returned object will represent 9:30 AM GMT.
  *
  *      Otherwise, the time will be converted to @p zone, and its timezone

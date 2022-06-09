@@ -88,7 +88,7 @@ LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_name(icalproperty *pro
 /** @brief Removes the specified parameter reference from the property.
  *
  *  @param prop   A valid icalproperty.
- *  @param parameter   A reference to a specific icalparameter.
+ *  @param param  A reference to a specific icalparameter.
  *
  *  This function removes the specified parameter reference from the
  *  property.

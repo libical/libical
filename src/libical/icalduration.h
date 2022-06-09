@@ -41,7 +41,7 @@ struct icaldurationtype
  * @param t The duration in seconds
  * @return An ::icaldurationtype representing the duration @a t in seconds
  *
- * ### Example
+ * @par Example
  * ```c
  * // create a new icaldurationtype with a duration of 60 seconds
  * struct icaldurationtype duration;
@@ -62,7 +62,7 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_int(int t);
  * When given bad input, it sets ::icalerrno to ::ICAL_MALFORMEDDATA_ERROR and
  * returns icaldurationtype_bad_duration().
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create a new icaldurationtype
  * struct icaldurationtype duration;
@@ -79,7 +79,7 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
  * @param duration The duration to convert to seconds
  * @return An `int` representing the duration in seconds
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create icaldurationtype with given duration
  * struct icaldurationtype duration;
@@ -93,15 +93,15 @@ LIBICAL_ICAL_EXPORT int icaldurationtype_as_int(struct icaldurationtype duration
 
 /**
  * Converts an icaldurationtype into the iCal format as string.
- * @param The icaldurationtype to convert to iCal format
+ * @param d is the icaldurationtype to convert to iCal format
  * @return A string representing duration @p d in iCal format
  * @sa icaldurationtype_as_ical_string_r()
  *
- * @b Ownership
+ * @par Ownership
  * The string returned by this function is owned by the caller and needs to be
  * released with `icalmemory_free_buffer()` after it's no longer needed.
  *
- * @b Usage
+ * @par Usage
  * ```c
  * // create new duration
  * struct icaldurationtype duration;
@@ -119,15 +119,15 @@ LIBICAL_ICAL_EXPORT char *icaldurationtype_as_ical_string(struct icaldurationtyp
 
 /**
  * Converts an icaldurationtype into the iCal format as string.
- * @param The icaldurationtype to convert to iCal format
+ * @param d is the icaldurationtype to convert to iCal format
  * @return A string representing duration @p d in iCal format
  * @sa icaldurationtype_as_ical_string()
  *
- * @b Ownership
+ * @par Ownership
  * The string returned by this function is owned by libical and must not be
  * released by the caller of the function.
  *
- * @b Usage
+ * @par Usage
  * ```c
  * // create new duration
  * struct icaldurationtype duration;
@@ -144,7 +144,7 @@ LIBICAL_ICAL_EXPORT char *icaldurationtype_as_ical_string_r(struct icaldurationt
  * @return An ::icaldurationtype with a zero length
  * @sa icaldurationtype_is_null_duration()
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create null duration
  * struct icaldurationtype duration;
@@ -167,7 +167,7 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_null_duration(void)
  * @return A bad duration
  * @sa icaldurationtype_is_bad_duration()
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create bad duration
  * struct icaldurationtype duration;
@@ -185,7 +185,7 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_bad_duration(void);
  * @return 1 if the duration is a null duration, 0 otherwise
  * @sa icalduration_null_duration()
  *
- * ### Usage
+ * @par Usage
  * ```
  * // make null duration
  * struct icaldurationtype duration;
@@ -203,7 +203,7 @@ LIBICAL_ICAL_EXPORT int icaldurationtype_is_null_duration(struct icaldurationtyp
  * @return 1 if the duration is a bad duration, 0 otherwise
  * @sa icalduration_bad_duration()
  *
- * ### Usage
+ * @par Usage
  * ```
  * // make bad duration
  * struct icaldurationtype duration;
@@ -216,12 +216,12 @@ LIBICAL_ICAL_EXPORT int icaldurationtype_is_null_duration(struct icaldurationtyp
 LIBICAL_ICAL_EXPORT int icaldurationtype_is_bad_duration(struct icaldurationtype d);
 
 /**
- * @brief Adds a duration to an ::icaltime object and returns the result.
+ * @brief Adds a duration to an icaltime object and returns the result.
  * @param t The time object to add the duration to
  * @param d The duration to add to the time object
  * @return The new ::icaltimetype which has been added the duration to
  *
- * ### Example
+ * @par Example
  * ```c
  * struct icaltimetype time;
  * struct icaldurationtype duration;
@@ -244,7 +244,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_add(struct icaltimetype t,
  * @return An ::icaldurationtype representing the duration the elapsed between
  * @a t1 and @a t2
  *
- * ### Usage
+ * @par Usage
  * ```c
  * struct icaltimetype t1 = icaltime_from_day_of_year(111, 2018);
  * struct icaltimetype t2 = icaltime_from_day_of_year(112, 2018);

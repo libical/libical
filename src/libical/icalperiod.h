@@ -48,7 +48,7 @@ struct icalperiodtype
  * If @a str is not properly formatted, it sets ::icalerrno to
  * ::ICAL_MALFORMEDDATA_ERROR and returns icalperiodtype_null_period().
  *
- * ### Data format
+ * @par Data format
  * There are two ways to specify a duration; either a start time
  * and an end time can be specified, or a start time and a duration.
  * The format for there is as such:
@@ -59,7 +59,7 @@ struct icalperiodtype
  * icaltime_from_string(), and the format for the duration
  * is the same as that used by icaldurationtype_from_string().
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create icalperiodtype
  * const char *period_string = "20170606T090000/20170607T090000";
@@ -85,7 +85,7 @@ LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_from_string(const char 
  * The string returned by this method is owned by libical and must not be
  * `free()` by the caller.
  *
- * ### Example
+ * @par Example
  * ```c
  * // create icalperiodtype
  * const char *period_string = "20170606T090000/20170607T090000";
@@ -111,7 +111,7 @@ LIBICAL_ICAL_EXPORT const char *icalperiodtype_as_ical_string(struct icalperiodt
  * The string returned by this method is owned by the caller and must be
  * released with the appropriate function after use.
  *
- * ### Example
+ * @par Example
  * ```c
  * // create icalperiodtype
  * const char *period_string = "20170606T090000/20170607T090000";
@@ -130,7 +130,7 @@ LIBICAL_ICAL_EXPORT char *icalperiodtype_as_ical_string_r(struct icalperiodtype 
  * @return An ::icalperiodtype representing a null period
  * @sa icalperiodtype_is_null_period()
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // creates null period
  * struct icalperiodtype period = icalperiodtype_null_period();
@@ -149,7 +149,7 @@ LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_null_period(void);
  * @return 1 if @a p is a null period, 0 otherwise
  * @sa icalperiodtype_null_period()
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // creates null period
  * struct icalperiodtype period = icalperiodtype_null_period();
@@ -165,7 +165,7 @@ LIBICAL_ICAL_EXPORT int icalperiodtype_is_null_period(struct icalperiodtype p);
  * @param p The time period to check
  * @return 1 if @a p is a valid period, 0 otherwise
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // creates null period
  * struct icalperiodtype period = icalperiodtype_null_period();
