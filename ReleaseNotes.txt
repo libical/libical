@@ -17,6 +17,7 @@ Version 3.1.0 (NOT RELEASED YET):
    before including <libical-glib/libical-glib.h>
  * Allow previous recurrence iteration
  * Improved performance of recurrence iterators
+ * GEO property has arbitrary precision (values are internally stored as strings, not doubles)
  * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
  * Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo

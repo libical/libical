@@ -22,10 +22,11 @@ struct icaldatetimeperiodtype
     struct icalperiodtype period;
 };
 
+#define ICAL_GEO_LEN 16
 struct icalgeotype
 {
-    double lat;
-    double lon;
+    char lat[ICAL_GEO_LEN];
+    char lon[ICAL_GEO_LEN];
 };
 
 struct icaltriggertype
