@@ -23,7 +23,7 @@
  * With the `ATTACH` property, the iCal standard defines a way to
  * associate a document object with a calendar component.
  *
- * These are represented with ::icalattach objects in libical.
+ * These are represented with icalattach objects in libical.
  * This file contains functions to create and work with these
  * objects.
  */
@@ -37,7 +37,7 @@
  * @typedef icalattach
  * @brief An iCal attach object representing a link to a document object.
  *
- * Represents an association with a document object. ::icalattach objects
+ * Represents an association with a document object. icalattach objects
  * are reference counted, meaning that if the last reference to them is
  * removed (with icalattach_unref()), they are destroyed.
  */
@@ -54,9 +54,9 @@ typedef struct icalattach_impl icalattach;
 typedef void (*icalattach_free_fn_t) (char *data, void *user_data);
 
 /**
- * @brief Creates new ::icalattach object from a URL.
+ * @brief Creates new icalattach object from a URL.
  * @param url The URL to create the object from
- * @return An ::icalattach object with the given URL as association
+ * @return An icalattach object with the given URL as association
  * @sa icalattach_unref()
  *
  * @par Error handling
@@ -65,12 +65,12 @@ typedef void (*icalattach_free_fn_t) (char *data, void *user_data);
  * returns `NULL` and sets `errno` to `ENOMEM`.
  *
  * @par Ownership
- * The returned ::icalattach object is owned by the caller of the function.
- * ::icalattach objects are reference counted, which means that after
+ * The returned icalattach object is owned by the caller of the function.
+ * icalattach objects are reference counted, which means that after
  * use, icalattach_unref() needs to be called to signal that they are
  * not used anymore.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // creates new
  * icalattach *attach = icalattach_new_from_url("http://example.com");
@@ -86,11 +86,11 @@ typedef void (*icalattach_free_fn_t) (char *data, void *user_data);
 LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_url(const char *url);
 
 /**
- * @brief Creates new ::icalattach object from data.
- * @param data The data to create the ::icalattach from
+ * @brief Creates new icalattach object from data.
+ * @param data The data to create the icalattach from
  * @param free_fn The function to free the data
  * @param free_fn_data Data to pass to the @a free_fn
- * @return An ::icalattach object with the given data
+ * @return An icalattach object with the given data
  * @sa icalattach_unref()
  *
  * @par Error handling
@@ -99,8 +99,8 @@ LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_url(const char *url);
  * returns `NULL` and sets `errno` to `ENOMEM`.
  *
  * @par Ownership
- * The returned ::icalattach object is owned by the caller of the function.
- * ::icalattach objects are reference counted, which means that after
+ * The returned icalattach object is owned by the caller of the function.
+ * icalattach objects are reference counted, which means that after
  * use, icalattach_unref() needs to be called to signal that they are
  * not used anymore.
  */
@@ -109,7 +109,7 @@ LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_data(const char *data,
                                                          void *free_fn_data);
 
 /**
- * @brief Increments reference count of the ::icalattach.
+ * @brief Increments reference count of the icalattach.
  * @param attach The object to increase the reference count of
  * @sa icalattach_unref()
  *
@@ -125,7 +125,7 @@ LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_data(const char *data,
 LIBICAL_ICAL_EXPORT void icalattach_ref(icalattach *attach);
 
 /**
- * @brief Decrements reference count of the ::icalattach.
+ * @brief Decrements reference count of the icalattach.
  * @param attach The object to decrease the reference count of
  * @sa icalattach_ref()
  *
@@ -140,7 +140,7 @@ LIBICAL_ICAL_EXPORT void icalattach_ref(icalattach *attach);
  * Calling this function releases the icalattach back to the library,
  * and it must not be used afterwards.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // creates new
  * icalattach *attach = icalattach_new_from_url("http://example.com");
@@ -153,7 +153,7 @@ LIBICAL_ICAL_EXPORT void icalattach_unref(icalattach *attach);
 
 /**
  * @brief Determines if @a attach is an URL.
- * @param attach the ::icalattach object to check
+ * @param attach the icalattach object to check
  * @return 1 if it is a URL, otherwise 0.
  * @sa icalattach_get_url()
  *
@@ -161,7 +161,7 @@ LIBICAL_ICAL_EXPORT void icalattach_unref(icalattach *attach);
  * Returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR if
  * @a attach is `NULL`.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // creates new
  * icalattach *attach = icalattach_new_from_url("http://example.com");
@@ -176,12 +176,12 @@ LIBICAL_ICAL_EXPORT void icalattach_unref(icalattach *attach);
 LIBICAL_ICAL_EXPORT int icalattach_get_is_url(icalattach *attach);
 
 /**
- * @brief Returns the URL of the ::icalattach object.
+ * @brief Returns the URL of the icalattach object.
  * @param attach The object from which to return the URL
  * @return The URL of the object
  * @sa icalattach_get_is_url()
  *
- * Returns the URL of the ::icalattach object.
+ * Returns the URL of the icalattach object.
  *
  * @par Error handling
  * Returns `NULL` and set ::icalerrno to ::ICAL_BADARG_ERROR if
@@ -192,7 +192,7 @@ LIBICAL_ICAL_EXPORT int icalattach_get_is_url(icalattach *attach);
  * The string returned is owned by libical and must not be freed
  * by the caller.
  *
- * # Usage
+ * @par Usage
  * ```c
  * // creates new
  * icalattach *attach = icalattach_new_from_url("http://example.com");
@@ -208,12 +208,12 @@ LIBICAL_ICAL_EXPORT int icalattach_get_is_url(icalattach *attach);
 LIBICAL_ICAL_EXPORT const char *icalattach_get_url(icalattach *attach);
 
 /**
- * @brief Returns the data of the ::icalattach object.
+ * @brief Returns the data of the icalattach object.
  * @param attach The object from which to return the data
  * @return The data of the object
  * @sa icalattach_get_is_url()
  *
- * Returns the URL of the ::icalattach object.
+ * Returns the URL of the icalattach object.
  *
  * @par Error handling
  * Returns `NULL` and set ::icalerrno to ::ICAL_BADARG_ERROR if

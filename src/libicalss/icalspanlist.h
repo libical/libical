@@ -44,11 +44,11 @@ LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_new(icalset *set,
                                                      struct icaltimetype end);
 
 /** @brief Destructor.
- *  @param s A valid icalspanlist
+ *  @param sl A valid icalspanlist
  *
  *  Frees the memory associated with the spanlist.
  */
-LIBICAL_ICALSS_EXPORT void icalspanlist_free(icalspanlist *spl);
+LIBICAL_ICALSS_EXPORT void icalspanlist_free(icalspanlist *sl);
 
 /** @brief Finds the next free time span in a spanlist.
  *
@@ -64,7 +64,7 @@ LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_free_time(icalspan
 /** @brief (Debug) print out spanlist to STDOUT.
  *  @param sl A valid icalspanlist.
  */
-LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist *s);
+LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist *sl);
 
 /** @brief Returns a VFREEBUSY component for a spanlist.
  *
@@ -87,7 +87,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 /** @brief Returns an hour-by-hour array of free/busy times over a
  *         given period.
  *
- *  @param sl        A valid icalspanlist
+ *  @param span      A valid icalspanlist
  *  @param delta_t   The time slice to divide by, in seconds.  Default 3600.
  *
  *  @return A pointer to an array of integers containing the number of

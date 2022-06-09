@@ -118,7 +118,7 @@ typedef enum icalerrorenum
  * Yields a pointer to the current ::icalerrno value. This can
  * be used to access (read from and write to) it.
  *
- * ### Examples
+ * @par Examples
  * ```c
  * assert(*icalerrno_return() == icalerrno);
  * ```
@@ -131,7 +131,7 @@ LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
  * @note Pseudo-variable that can be used to access the current
  *  ::icalerrno.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * if(icalerrno == ICAL_PARSE_ERROR) {
  *     // ...
@@ -149,7 +149,7 @@ LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
  * @warning NOT THREAD SAFE: it is recommended that you do not change
  *  this in a multithreaded program.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * icalerror_set_errors_are_fatal(true); // default
  * icalerror_set_errors_are_fatal(false);
@@ -161,7 +161,7 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(int fatal);
  * @brief Determine if errors are fatal
  * @return True if libical errors are fatal
  *
- * ### Usage
+ * @par Usage
  * ```c
  * if(icalerror_get_errors_are_fatal()) {
  *     // since errors are fatal, this will abort the
@@ -179,7 +179,7 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
  * @brief Prints a formatted warning message to stderr
  * @param message Warning message to print
  *
- * ### Usage
+ * @par Usage
  * ```c
  * icalerror_warn("Non-standard tag encountered");
  * ```
@@ -196,7 +196,7 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
 /**
  * @brief Resets icalerrno to ::ICAL_NO_ERROR
  *
- * ### Usage
+ * @par Usage
  * ```c
  * if(icalerrno == ICAL_PARSE_ERROR) {
  *     // ignore parsing errors
@@ -239,7 +239,7 @@ typedef enum icalerrorstate
  * The string that is returned is owned by the library and must not
  * be free'd() by the user.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * if(icalerrno != ICAL_NO_ERROR) {
  *     printf("%s\n", icalerror_strerror(icalerrno));
@@ -259,7 +259,7 @@ LIBICAL_ICAL_EXPORT const char *icalerror_strerror(icalerrorenum e);
  * The string that is returned is owned by the library and must not
  * be free'd() by the user.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * if(icalerrno != ICAL_NO_ERROR) {
  *     printf("%s\n", icalerror_perror());
@@ -272,7 +272,7 @@ LIBICAL_ICAL_EXPORT const char *icalerror_perror(void);
  * @brief Prints backtrace
  * @note Only works on systems that support it (HAVE_BACKTRACE enabled).
  *
- * ### Usage
+ * @par Usage
  * ```
  * if(icalerrno != ICAL_NO_ERROR) {
  *     ical_bt();
@@ -289,7 +289,7 @@ LIBICAL_ICAL_EXPORT void ical_bt(void);
  * Sets the severity of a given error. For example, it can be used to
  * set the severity of an ::ICAL_PARSE_ERROR to be an ::ICAL_ERROR_NONFATAL.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
  * ```
@@ -312,7 +312,7 @@ LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state(icalerrorenum error
  * If the error specified in @a str can't be found, instead
  * ::ICAL_UNKNOWN_ERROR is returned.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * assert(icalerror_error_from_string("PARSE") == ICAL_PARSE_ERROR);
  * assert(icalerror_error_from_string("NONSENSE") == ICAL_UNKNOWN_ERROR);
@@ -330,7 +330,7 @@ LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
  * and ::ICAL_ERRORS_ARE_FATAL is true, it prints a warning to @a stderr
  * and aborts the process.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * icalerror_set_errno(ICAL_PARSE_ERROR);
  * ```
@@ -355,7 +355,7 @@ if(icalerror_get_error_state(x) == ICAL_ERROR_FATAL || \
  * and ::ICAL_ERRORS_ARE_FATAL is true, it prints a warning to @a stderr
  * and aborts the process.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * icalerror_set_errno(ICAL_PARSE_ERROR);
  * ```
@@ -429,7 +429,7 @@ if (!(test)) { \
  * test if the parameter @a arg is correct. If the assertion fails,
  * it sets ::icalerrno to ::ICAL_BADARG_ERROR.
  *
- * ### Example
+ * @par Example
  * ```c
  * void test_function(icalcomponent *component) {
  *    icalerror_check_arg(component != 0, "component");
@@ -453,7 +453,7 @@ if (!(test)) { \
  * it sets ::icalerrno to ::ICAL_BADARG_ERROR and causes the enclosing
  * function to return `void`.
  *
- * ### Example
+ * @par Example
  * ```c
  * void test_function(icalcomponent *component) {
  *    icalerror_check_arg_rv(component != 0, "component");
@@ -478,7 +478,7 @@ if (!(test)) { \
  * it sets ::icalerrno to ::ICAL_BADARG_ERROR and causes the enclosing
  * function to return `0`.
  *
- * ### Example
+ * @par Example
  * ```c
  * int test_function(icalcomponent *component) {
  *    icalerror_check_arg_rz(component != 0, "component");
@@ -505,7 +505,7 @@ if (!(test)) { \
  * it aborts the process with `assert(0)` and causes the enclosing
  * function to return @a error.
  *
- * ### Example
+ * @par Example
  * ```c
  * icalcomponent *test_function(icalcomponent *component) {
  *    icalerror_check_arg_re(component != 0, "component", NULL);
@@ -533,7 +533,7 @@ if (!(test)) { \
  * it sets ::icalerrno to ::ICAL_BADARG_ERROR and causes the enclosing
  * function to return @a x.
  *
- * ### Example
+ * @par Example
  * ```c
  * icalcomponent *test_function(icalcomponent *component) {
  *    icalerror_check_arg_rx(component != 0, "component", NULL);
@@ -560,7 +560,7 @@ if (!(test)) { \
  * ::ICAL_ERROR_NONFATAL, and thus suppressed. Error states can be
  * restored with icalerror_restore().
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // suppresses internal errors
  * icalerror_supress("INTERNAL");
@@ -575,7 +575,7 @@ LIBICAL_ICAL_EXPORT icalerrorstate icalerror_supress(const char *error);
  *
  * Calling the function changes the ::icalerrorstate of the given error.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // suppress internal errors
  * icalerror_supress("INTERNAL");

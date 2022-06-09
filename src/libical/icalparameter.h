@@ -33,9 +33,9 @@
 /*typedef struct icalparameter_impl icalparameter;*/
 
 /**
- * @brief Creates new ::icalparameter object.
- * @param kind The kind of ::icalparameter to create.
- * @return An ::icalparameter with the given kind.
+ * @brief Creates new icalparameter object.
+ * @param kind The kind of icalparameter to create.
+ * @return An icalparameter with the given kind.
  *
  * @par Error handling
  * If there was an internal error regarding
@@ -46,7 +46,7 @@
  * Objects created by this method are owned by the caller and
  * must be released with the icalparameter_free() method.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new parameter
  * icalparameter *parameter = icalparameter_new();
@@ -62,9 +62,9 @@
 LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
 
 /**
- * @brief Creates new ::icalparameter as a clone of the given one.
+ * @brief Creates new icalparameter as a clone of the given one.
  * @param p The existing, non-`NULL` parameter to clone.
- * @return An ::icalparameter that is a clone of the given one.
+ * @return An icalparameter that is a clone of the given one.
  *
  * @par Error handling
  * If @a p is `NULL`, it returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR.
@@ -75,7 +75,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
  * Objects created by this method are owned by the caller and
  * must be released with the icalparameter_free() method.
  *
- * ### Usage
+ * @par Usage
  * ```x
  * // create an icalparameter
  * icalparameter *param = icalparameter_new_from_string("ROLE=CHAIR");
@@ -95,9 +95,9 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
 LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_clone(icalparameter *p);
 
 /**
- * @brief Creates new ::icalparameter object from string
- * @param value The string from which to create the ::icalparameter, in the form `"PARAMNAME=VALUE"`
- * @return An ::icalparameter that corresponds to the given string.
+ * @brief Creates new icalparameter object from string
+ * @param value The string from which to create the icalparameter, in the form `"PARAMNAME=VALUE"`
+ * @return An icalparameter that corresponds to the given string.
  *
  * @par Error handling
  * If there was an internal error copying data, it returns `NULL` and sets
@@ -109,7 +109,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_clone(icalparameter *p);
  * Objects created by this method are owned by the caller and
  * must be released with the icalparameter_free() method.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * icalparameter *param = icalparameter_new_from_string("ROLE=CHAIR");
  *
@@ -123,10 +123,10 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_clone(icalparameter *p);
 LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_string(const char *value);
 
 /**
- * @brief Creates new ::icalparameter of a given @a kind with a given @a value
- * @param kind The kind of ::icalparameter to create
+ * @brief Creates new icalparameter of a given @a kind with a given @a value
+ * @param kind The kind of icalparameter to create
  * @param value The value of the parameter
- * @return An ::icalparameter with the given kind and value.
+ * @return An icalparameter with the given kind and value.
  *
  * @par Error handling
  * If value is `NULL`, it returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR.
@@ -135,7 +135,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_string(const char *val
  * Objects created by this method are owned by the caller and
  * must be released with the icalparameter_free() method.
  *
- * ### Example
+ * @par Example
  * ```c
  * // create new parameter
  * icalparameter *param;
@@ -153,7 +153,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_value_string(icalparam
                                                                        const char *value);
 
 /**
- * @brief Frees an ::icalparameter object.
+ * @brief Frees an icalparameter object.
  * @param parameter The icalparameter to free
  *
  * This method needs to be used on all parameter objects returned
@@ -161,7 +161,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_value_string(icalparam
  * icalparameter_new_from_string() and icalparameter_new_from_value_string(),
  * when they are not needed anymore and to be released.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * icalparameter *param = icalparameter_new();
  *
@@ -176,8 +176,8 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_value_string(icalparam
 LIBICAL_ICAL_EXPORT void icalparameter_free(icalparameter *parameter);
 
 /**
- * @brief Converts ::icalparameter into a string representation
- * @param parameter The ::icalparameter to convert
+ * @brief Converts icalparameter into a string representation
+ * @param parameter The icalparameter to convert
  * @return A string representing the parameter according to RFC5445/RFC6868.
  * @sa icalparameter_as_ical_string_r()
  *
@@ -194,7 +194,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_free(icalparameter *parameter);
  * the library. A version of this function, which returns strings
  * that are not owned by libical, is icalparameter_as_ical_string_r().
  *
- * ### Usage
+ * @par Usage
  * ```c
  * icalparameter *param = icalparameter_new_from_string("ROLE=CHAIR");
  *
@@ -208,8 +208,8 @@ LIBICAL_ICAL_EXPORT void icalparameter_free(icalparameter *parameter);
 LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter *parameter);
 
 /**
- * @brief Converts ::icalparameter into an string representation according to RFC5445/RFC6868.
- * @param parameter The ::icalparameter to convert
+ * @brief Converts icalparameter into an string representation according to RFC5445/RFC6868.
+ * @param parameter The icalparameter to convert
  * @return A string representing the parameter
  * @sa icalparameter_as_ical_string()
  *
@@ -226,7 +226,7 @@ LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter *parameter)
  * strings that do not need to be freed manually is
  * icalparameter_as_ical_string().
  *
- * ### Usage
+ * @par Usage
  * ```c
  * icalparameter *param = icalparameter_new_from_string("ROLE=CHAIR");
  *
@@ -293,19 +293,19 @@ LIBICAL_ICAL_EXPORT int icalparameter_isa_parameter(void *param);
 
 /**
  * @brief Sets the X-name of @a param to @a v
- * @param param The ::icalparameter to change
+ * @param param The icalparameter to change
  * @param v The X-name to set @a param to
  * @sa icalparameter_get_xname()
  *
  * @par Error handling
- * If either @a param or @a v are `NULL`, it sets ::icalerrno to ::ICAL_BARARG_ERROR.
+ * If either @a param or @a v are `NULL`, it sets ::icalerrno to ICAL_BARARG_ERROR.
  * If there is an error acquiring memory, it sets `errno` to `ENOMEM`.
  *
  * @par Ownership
  * The passed string @a v stays in the ownership of the caller - libical
  * creates a copy of it.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // creates new parameter
  * icalparameter *param = icalparameter_new();
@@ -323,19 +323,19 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_xname(icalparameter *param, const cha
 
 /**
  * @brief Returns the X-name of @a param
- * @param param The ::icalparameter whose X-name is to be returned
+ * @param param The icalparameter whose X-name is to be returned
  * @return A string representing the X-name of @a param
  * @sa icalparameter_set_xname()
  *
  * @par Error handling
  * Returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR when a `NULL`
- * is passed instead of an ::icalparameter.
+ * is passed instead of an icalparameter.
  *
  * @par Ownership
  * The string that is returned stays owned by libical and must not
  * be freed by the caller.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // creates new parameter
  * icalparameter *param = icalparameter_new();
@@ -353,19 +353,19 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_get_xname(icalparameter *param);
 
 /**
  * @brief Sets the X-value of @a param to @a v
- * @param param The ::icalparameter to change
+ * @param param The icalparameter to change
  * @param v The X-value to set @a param to
  * @sa icalparameter_get_xvalue()
  *
  * @par Error handling
- * If either @a param or @a v are `NULL`, it sets ::icalerrno to ::ICAL_BARARG_ERROR.
+ * If either @a param or @a v are `NULL`, it sets ::icalerrno to ICAL_BARARG_ERROR.
  * If there is an error acquiring memory, it sets `errno` to `ENOMEM`.
  *
  * @par Ownership
  * The passed string @a v stays in the ownership of the caller - libical
  * creates a copy of it.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new parameter
  * icalparameter *param = icalparameter_new_from_string("X-TEST=FAIL");
@@ -384,19 +384,19 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_xvalue(icalparameter *param, const ch
 
 /**
  * @brief Returns the X-value of @a param
- * @param param The ::icalparameter whose X-value is to be returned
+ * @param param The icalparameter whose X-value is to be returned
  * @return A string representing the X-value of @a param
  * @sa icalparameter_set_xvalue()
  *
  * @par Error handling
  * Returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR when a `NULL`
- * is passed instead of an ::icalparameter.
+ * is passed instead of an icalparameter.
  *
  * @par Ownership
  * The string that is returned stays owned by libical and must not
  * be freed by the caller.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new parameter
  * icalparameter *param = icalparameter_new_from_string("X-TEST=FAIL");
@@ -422,14 +422,14 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_get_xvalue(icalparameter *param);
  * @sa icalparameter_get_iana_name()
  *
  * @par Error handling
- * If either @a param or @a v are `NULL`, it sets ::icalerrno to ::ICAL_BARARG_ERROR.
+ * If either @a param or @a v are `NULL`, it sets :calerrno to ICAL_BARARG_ERROR.
  * If there is an error acquiring memory, it sets `errno` to `ENOMEM`.
  *
  * @par Ownership
  * The passed string @a v stays in the ownership of the caller - libical
  * creates a copy of it.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // creates new parameter
  * icalparameter *param = icalparameter_new();
@@ -447,19 +447,19 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_iana_name(icalparameter *param, const
 
 /**
  * @brief Returns the IANA name of @a param
- * @param param The ::icalparameter whose IANA name is to be returned
+ * @param param The icalparameter whose IANA name is to be returned
  * @return A string representing the IANA name of @a param
  * @sa icalparameter_set_iana_name()
  *
  * @par Error handling
  * Returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR when a `NULL`
- * is passed instead of an ::icalparameter.
+ * is passed instead of an icalparameter.
  *
  * @par Ownership
  * The string that is returned stays owned by libical and must not
  * be freed by the caller.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // creates new parameter
  * icalparameter *param = icalparameter_new();
@@ -477,19 +477,19 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_name(icalparameter *param
 
 /**
  * @brief Sets the IANA value of @a param to @a v
- * @param param The ::icalparameter to change
+ * @param param The icalparameter to change
  * @param v The IANA value to set @a param to
  * @sa icalparameter_get_iana_value()
  *
  * @par Error handling
- * If either @a param or @a v are `NULL`, it sets ::icalerrno to ::ICAL_BARARG_ERROR.
+ * If either @a param or @a v are `NULL`, it sets ::icalerrno to ICAL_BARARG_ERROR.
  * If there is an error acquiring memory, it sets `errno` to `ENOMEM`.
  *
  * @par Ownership
  * The passed string @a v stays in the ownership of the caller - libical
  * creates a copy of it.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new parameter
  * icalparameter *param = icalparameter_new_from_string("ROLE=ATTENDEE");
@@ -508,19 +508,19 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_iana_value(icalparameter *param, cons
 
 /**
  * @brief Returns the IANA value of @a param
- * @param param The ::icalparameter whose value is to be returned
+ * @param param The icalparameter whose value is to be returned
  * @return A string representing the value of @a param
  * @sa icalparameter_set_iana_value()
  *
  * @par Error handling
  * Returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR when a `NULL`
- * is passed instead of an ::icalparameter.
+ * is passed instead of an icalparameter.
  *
  * @par Ownership
  * The string that is returned stays owned by libical and must not
  * be freed by the caller.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new parameter
  * icalparameter *param = icalparameter_new_from_string("ROLE=ATTENDEE");
@@ -548,9 +548,9 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(icalparameter *para
  * ::icalerrno to ::ICAL_BADARG_ERROR.
  *
  * @par Ownership
- * Does not take ownership of either ::icalparameter.
+ * Does not take ownership of either icalparameter.
  *
- * ### Example
+ * @par Example
  * ```c
  * // create two parameters
  * icalparameter *param1 = icalparameter_new_from_string("ROLE=CHAIR");
@@ -569,18 +569,18 @@ LIBICAL_ICAL_EXPORT int icalparameter_has_same_name(icalparameter *param1, icalp
 /* Convert enumerations */
 
 /**
- * @brief Returns a string representing the given ::icalparameter_kind
+ * @brief Returns a string representing the given icalparameter_kind
  * @param kind The icalparameter_kind
  * @return A string representing @a kind
  *
  * @par Error handling
- * When passed a non-existing ::icalparameter_kind, it returns `NULL`.
+ * When passed a non-existing icalparameter_kind, it returns `NULL`.
  *
  * @par Ownership
  * The string that is returned by this function is owned by libical and
  * must not be freed by the caller.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * assert(0 == strcmp(icalparameter_kind_to_string(ICAL_ROLE_PARAMETER), "ROLE"));
  * assert(0 == strcmp(icalparameter_kind_to_string(ICAL_EMAIL_PARAMETER), "EMAIL));
@@ -590,20 +590,20 @@ LIBICAL_ICAL_EXPORT int icalparameter_has_same_name(icalparameter *param1, icalp
 LIBICAL_ICAL_EXPORT const char *icalparameter_kind_to_string(icalparameter_kind kind);
 
 /**
- * @brief Returns the ::icalparameter_kind for a given string
+ * @brief Returns the icalparameter_kind for a given string
  * @param string A string describing an icalparameter_kind
  * @return An icalparameter_kind
  *
  * @par Error handling
- * Returns ::ICAL_NO_PARAMETER if @a string is `NULL`.
+ * Returns ICAL_NO_PARAMETER if @a string is `NULL`.
  * If it can't find the parameter, depending on
  * the ical_get_unknown_token_handling_setting(), it returns either
- * ::ICAL_NO_PARAMETER or ::ICAL_IANA_PARAMETER.
+ * ICAL_NO_PARAMETER or ICAL_IANA_PARAMETER.
  *
  * @par Ownership
  * Does not take ownership of @a string.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * assert(icalparameter_string_to_kind("ROLE")  == ICAL_ROLE_PARAMETER);
  * assert(icalparameter_string_to_kind("EMAIL") == ICAL_EMAIL_PARAMETER);
@@ -613,11 +613,11 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_kind_to_string(icalparameter_kind 
 LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *string);
 
 /**
- * @brief Checks the validity of a ::icalparameter_kind
+ * @brief Checks the validity of a icalparameter_kind
  * @param kind The icalparameter_kind
  * @return 1 if @a kind is valid, 0 otherwise
  *
- * ### Usage
+ * @par Usage
  * ```c
  * assert(icalparameter_kind_is_valid(ICAL_ROLE_PARAMETER));
  * ```
