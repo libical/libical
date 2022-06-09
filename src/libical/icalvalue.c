@@ -357,23 +357,20 @@ static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char
 }
 
 /**
- * Transforms a simple float number string into a double.
+ * Extracts a simple floating point number as a substring.
  * The decimal separator (if any) of the double has to be '.'
  * The code is locale *independent* and does *not* change the locale.
  * It should be thread safe.
- * If you want a code that does the same job with a decimal separator
- * dependent on the current locale, then use strtof() from libc.
  */
-static int simple_str_to_double(const char *from, double *result, char **to)
+static int simple_str_to_doublestr(const char *from, char *result, char **to)
 {
-#define TMP_NUM_SIZE 100
     char *start = NULL, *end = NULL, *cur = (char *)from;
-    char tmp_buf[TMP_NUM_SIZE + 1];     /*hack */
 
 #if !defined(HAVE_GETNUMBERFORMAT)
     struct lconv *loc_data = localeconv();
 #endif
     int i = 0;
+    double dtest;
 
     /*sanity checks */
     if (!from || !result) {
@@ -385,8 +382,7 @@ static int simple_str_to_double(const char *from, double *result, char **to)
         cur++;
 
     start = cur;
-    /* copy the part that looks like a double into tmp_buf
-     * so that we can call strtof() on it.
+    /* copy the part that looks like a double into result.
      * during the copy, we give ourselves a chance to convert the '.'
      * into the decimal separator of the current locale.
      */
@@ -398,7 +394,6 @@ static int simple_str_to_double(const char *from, double *result, char **to)
         /*huh hoh, number is too big. getting out */
         return 1;
     }
-    memset(tmp_buf, 0, TMP_NUM_SIZE + 1);
 
     /* copy the float number string into tmp_buf, and take
      * care to have the (optional) decimal separator be the one
@@ -409,18 +404,22 @@ static int simple_str_to_double(const char *from, double *result, char **to)
         if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0]
             && loc_data->decimal_point[0] != '.') {
             /*replace '.' by the digit separator of the current locale */
-            tmp_buf[i] = loc_data->decimal_point[0];
+            result[i] = loc_data->decimal_point[0];
         } else {
-            tmp_buf[i] = start[i];
+            result[i] = start[i];
         }
     }
 #else
-    GetNumberFormat(LOCALE_SYSTEM_DEFAULT, 0, start, NULL, tmp_buf, TMP_NUM_SIZE);
+    GetNumberFormat(LOCALE_SYSTEM_DEFAULT, 0, start, NULL, result, TMP_NUM_SIZE);
 #endif
     if (to) {
         *to = end;
     }
-    *result = atof(tmp_buf);
+
+    /* now try to convert to a floating point number, to check for validity only */
+    if (sscanf(result, "%lf", &dtest) != 1) {
+        return 1;
+    }
     return 0;
 }
 
@@ -580,13 +579,14 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
     case ICAL_GEO_VALUE:
         {
             char *cur = NULL;
-            struct icalgeotype geo = { 0.0, 0.0 };
+            struct icalgeotype geo;
+            memset(geo.lat, 0, ICAL_GEO_LEN);
+            memset(geo.lon, 0, ICAL_GEO_LEN);
 
-            if (simple_str_to_double(str, &geo.lat, &cur)) {
+            if (simple_str_to_doublestr(str, geo.lat, &cur)) {
                 goto geo_parsing_error;
             }
-
-            /*skip white spaces */
+            /* skip white spaces */
             while (cur && isspace((int)*cur)) {
                 ++cur;
             }
@@ -598,12 +598,12 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
             ++cur;
 
-            /*skip white spaces */
+            /* skip white spaces */
             while (cur && isspace((int)*cur)) {
                 ++cur;
             }
 
-            if (simple_str_to_double(cur, &geo.lon, &cur)) {
+            if (simple_str_to_doublestr(cur, geo.lon, &cur)) {
                 goto geo_parsing_error;
             }
             value = icalvalue_new_geo(geo);
@@ -1102,7 +1102,7 @@ static char *icalvalue_geo_as_ical_string_r(const icalvalue *value)
 
     str = (char *)icalmemory_new_buffer(80);
 
-    snprintf(str, 80, "%f;%f", data.lat, data.lon);
+    snprintf(str, 80, "%s;%s", data.lat, data.lon);
 
     /* restore saved locale */
     (void)setlocale(LC_NUMERIC, old_locale);

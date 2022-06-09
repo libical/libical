@@ -4377,6 +4377,50 @@ void test_comma_in_quoted_value(void)
     icalcomponent_free(c);
 }
 
+void test_geo_props(void)
+{
+    int estate;
+    icalcomponent *c;
+    icalproperty *p;
+
+    c = icalparser_parse_string("BEGIN:VEVENT\n" "GEO:49.42612;7.75473\n" "END:VEVENT\n");
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+        exit(EXIT_FAILURE);
+    }
+    if (VERBOSE)
+        printf("%s", icalcomponent_as_ical_string(c));
+    p = icalcomponent_get_first_property(c, ICAL_GEO_PROPERTY);
+    str_is("icalproperty_get_value_as_string() works",
+           icalproperty_get_value_as_string(p), "49.42612;7.75473");
+    icalcomponent_free(c);
+
+    c = icalparser_parse_string("BEGIN:VEVENT\n" "GEO:-0;+0\n" "END:VEVENT\n");
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+        exit(EXIT_FAILURE);
+    }
+    if (VERBOSE)
+        printf("%s", icalcomponent_as_ical_string(c));
+    p = icalcomponent_get_first_property(c, ICAL_GEO_PROPERTY);
+    str_is("icalproperty_get_value_as_string() works",
+           icalproperty_get_value_as_string(p), "-0;+0");
+    icalcomponent_free(c);
+
+    estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(0);
+    c = icalparser_parse_string("BEGIN:VEVENT\n" "GEO:-0a;+0\n" "END:VEVENT\n");
+    if (!c) {
+        exit(EXIT_FAILURE);
+    }
+    if (VERBOSE)
+        printf("%s", icalcomponent_as_ical_string(c));
+    p = icalcomponent_get_first_property(c, ICAL_GEO_PROPERTY);
+    ok("expected fail icalcomponent_get_first_property()", (p == NULL));
+    icalcomponent_free(c);
+    icalerror_set_errors_are_fatal(estate);
+}
+
 void test_zoneinfo_stuff(void)
 {
 #if defined(HAVE_SETENV)
@@ -5337,6 +5381,7 @@ int main(int argc, char *argv[])
     test_run("Test implicit DTEND and DURATION for VEVENT and VTODO", test_implicit_dtend_duration, do_test, do_header);
     test_run("Test icalvalue resets timezone on set", test_icalvalue_resets_timezone_on_set, do_test, do_header);
     test_run("Test removing TZID from DUE with icalcomponent_set_due", test_remove_tzid_from_due, do_test, do_header);
+    test_run("Test geo precision", test_geo_props, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

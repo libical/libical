@@ -430,9 +430,8 @@ void icalvalue_set_geo(icalvalue *value, struct icalgeotype v)
 struct icalgeotype icalvalue_get_geo(const icalvalue *value)
 {
     struct icalgeotype gt;
-
-    gt.lat = 255.0;
-    gt.lon = 255.0;
+    strcpy(gt.lat, "255.0");
+    strcpy(gt.lon, "255.0");
 
     icalerror_check_arg_rx((value != 0), "value", gt);
     icalerror_check_value_type(value, ICAL_GEO_VALUE);
