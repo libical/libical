@@ -1,4 +1,4 @@
-# Libical — an implementation of iCalendar protocols and data formats {#mainpage}
+# Libical — an implementation of iCalendar protocols and data formats
 
 [![Appveyor status](https://ci.appveyor.com/api/projects/status/github/libical/libical?branch=master?svg=true)](https://ci.appveyor.com/api/projects/status/github/libical/libical)
 [![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
