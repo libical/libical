@@ -11,11 +11,11 @@
 #  GObjectIntrospection_CFLAGS
 #  GObjectIntrospection_LIBS
 #
-# Copyright (C) 2010, Pino Toscano, <pino@kde.org>
+# SPDX-FileCopyrightText: 2010, Pino Toscano, <pino@kde.org>
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+# Get gobject-introspection's specified pkg-config variable
 macro(_GIR_GET_PKGCONFIG_VAR _outvar _varname)
   execute_process(
     COMMAND ${PKG_CONFIG_EXECUTABLE} --variable=${_varname} gobject-introspection-1.0
@@ -27,7 +27,7 @@ macro(_GIR_GET_PKGCONFIG_VAR _outvar _varname)
   else()
     string(REGEX REPLACE "[\r\n]" " " _result "${_result}")
     string(REGEX REPLACE " +$" ""  _result "${_result}")
-    separate_arguments(_result)
+    separate_arguments(_result UNIX_COMMAND ${_result})
     set(${_outvar} ${_result} CACHE INTERNAL "")
   endif()
 endmacro(_GIR_GET_PKGCONFIG_VAR)

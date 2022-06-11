@@ -2,18 +2,10 @@
  FILE: icalattach.c
  CREATOR: acampi 28 May 02
 
- (C) COPYRIGHT 2002, Andrea Campi <a.campi@inet.it>
+ SPDX-FileCopyrightText: 2002, Andrea Campi <a.campi@inet.it>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -22,6 +14,7 @@
 
 #include "icalattachimpl.h"
 #include "icalerror.h"
+#include "icalmemory.h"
 
 #include <errno.h>
 #include <stdlib.h>
@@ -33,13 +26,13 @@ icalattach *icalattach_new_from_url(const char *url)
 
     icalerror_check_arg_rz((url != NULL), "url");
 
-    if ((attach = malloc(sizeof(icalattach))) == NULL) {
+    if ((attach = icalmemory_new_buffer(sizeof(icalattach))) == NULL) {
         errno = ENOMEM;
         return NULL;
     }
 
-    if ((url_copy = strdup(url)) == NULL) {
-        free(attach);
+    if ((url_copy = icalmemory_strdup(url)) == NULL) {
+        icalmemory_free_buffer(attach);
         errno = ENOMEM;
         return NULL;
     }
@@ -54,7 +47,7 @@ icalattach *icalattach_new_from_url(const char *url)
 static void attach_data_free(char *data, void *free_fn_data)
 {
     _unused(free_fn_data);
-    free(data);
+    icalmemory_free_buffer(data);
 }
 
 icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn,
@@ -64,15 +57,15 @@ icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free
 
     icalerror_check_arg_rz((data != NULL), "data");
 
-    if ((attach = malloc(sizeof(icalattach))) == NULL) {
+    if ((attach = icalmemory_new_buffer(sizeof(icalattach))) == NULL) {
         errno = ENOMEM;
         return NULL;
     }
 
     if (!free_fn) {
-        data = strdup(data);
+        data = icalmemory_strdup(data);
         if (!data) {
-            free(attach);
+            icalmemory_free_buffer(attach);
             errno = ENOMEM;
             return NULL;
         }
@@ -107,12 +100,12 @@ void icalattach_unref(icalattach *attach)
         return;
 
     if (attach->is_url) {
-        free(attach->u.url.url);
+        icalmemory_free_buffer(attach->u.url.url);
     } else if (attach->u.data.free_fn) {
         (* attach->u.data.free_fn) (attach->u.data.data, attach->u.data.free_fn_data);
     }
 
-    free(attach);
+    icalmemory_free_buffer(attach);
 }
 
 int icalattach_get_is_url(icalattach *attach)

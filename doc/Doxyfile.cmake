@@ -1,3 +1,6 @@
+#SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+#SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
@@ -78,6 +81,7 @@ WARN_LOGFILE           = doxygen.log
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = @DOXYGEN_INPUT@
+USE_MDFILE_AS_MAINPAGE = README.md
 FILE_PATTERNS          = *.cpp \
                          *.c \
                          *.cc \
@@ -86,6 +90,7 @@ FILE_PATTERNS          = *.cpp \
                          *.hh \
                          *.hxx \
                          *.hpp \
+                         *.md \
                          *.dox
 RECURSIVE              = YES
 EXCLUDE                = @CMAKE_SOURCE_DIR@/src/java \
@@ -106,7 +111,7 @@ EXCLUDE_PATTERNS       = */.svn/* \
 EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO
-IMAGE_PATH             = @CMAKE_SOURCE_DIR@/docs
+IMAGE_PATH             = @CMAKE_SOURCE_DIR@/doc
 INPUT_FILTER           =
 FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO

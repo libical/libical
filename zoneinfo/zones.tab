@@ -456,6 +456,7 @@ PST8PDT
 +0132800 +1444500 Pacific/Guam
 +0211825 -1575130 Pacific/Honolulu
 +0164500 -1693100 Pacific/Johnston
+-0024700 -1714300 Pacific/Kanton
 +0015200 -1572000 Pacific/Kiritimati
 +0051900 +1625900 Pacific/Kosrae
 +0090500 +1672000 Pacific/Kwajalein
@@ -476,7 +477,7 @@ PST8PDT
 +0151200 +1454500 Pacific/Saipan
 -0173200 -1493400 Pacific/Tahiti
 +0012500 +1730000 Pacific/Tarawa
--0211000 -1751000 Pacific/Tongatapu
+-0210800 -1751200 Pacific/Tongatapu
 +0072500 +1514700 Pacific/Truk
 +0191700 +1663700 Pacific/Wake
 -0131800 -1761000 Pacific/Wallis

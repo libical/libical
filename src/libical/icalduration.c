@@ -2,18 +2,9 @@
  FILE: icaltime.c
  CREATOR: eric 02 June 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -338,8 +329,8 @@ struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype 
 
 struct icaldurationtype icaltime_subtract(struct icaltimetype t1, struct icaltimetype t2)
 {
-    time_t t1t = icaltime_as_timet(t1);
-    time_t t2t = icaltime_as_timet(t2);
+    icaltime_t t1t = icaltime_as_timet(t1);
+    icaltime_t t2t = icaltime_as_timet(t2);
 
     return icaldurationtype_from_int((int)(t1t - t2t));
 }

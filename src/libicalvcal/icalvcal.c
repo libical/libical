@@ -2,18 +2,9 @@
  FILE: icalvcal.c
  CREATOR: eric 25 May 00
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original code is icalvcal.c
 
@@ -118,11 +109,11 @@ static const char *get_string_value(VObject *object, int *free_string)
 static void convert_floating_time_to_utc(struct icaltimetype *itt)
 {
     struct tm tmp_tm, utc_tm;
-    time_t t;
+    icaltime_t t;
 
     /* We assume the floating time is using the current Unix timezone.
-       So we convert to a time_t using mktime(), and then back to a struct tm
-       using gmtime, so it is the UTC time. */
+       So we convert to a icaltime_t using icalmktime(), and then back to a struct tm
+       using icalgmtime_r, so it is the UTC time. */
     tmp_tm.tm_year = itt->year - 1900;
     tmp_tm.tm_mon = itt->month - 1;
     tmp_tm.tm_mday = itt->day;
@@ -131,11 +122,11 @@ static void convert_floating_time_to_utc(struct icaltimetype *itt)
     tmp_tm.tm_sec = itt->second;
     tmp_tm.tm_isdst = -1;
 
-    /* Convert to a time_t. */
-    t = mktime(&tmp_tm);
+    /* Convert to a icaltime_t. */
+    t = icalmktime(&tmp_tm);
 
     /* Now convert back to a struct tm, but with a UTC time. */
-    if (!gmtime_r(&t, &utc_tm)) {
+    if (!icalgmtime_r(&t, &utc_tm)) {
         *itt = itt->is_date ? icaltime_null_date () : icaltime_null_time ();
         return;
     }

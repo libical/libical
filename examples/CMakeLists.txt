@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_SOURCE_DIR}/src
@@ -28,7 +31,9 @@ else()
     icalss-static
     icalvcal-static
   )
-  target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
+  if(DEFINED CMAKE_THREAD_LIBS_INIT)
+    target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
+  endif()
   if(ICU_FOUND)
     target_link_libraries(doesnothing ${ICU_LIBRARIES})
   endif()

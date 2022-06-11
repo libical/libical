@@ -14,36 +14,10 @@ Note on APIs:
 */
 
 /***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International
+SPDX-FileCopyrightText: 1996 Apple Computer, Inc., AT&T Corp., International
 Business Machines Corporation and Siemens Rolm Communications Inc.
 
-For purposes of this license notice, the term Licensors shall mean,
-collectively, Apple Computer, Inc., AT&T Corp., International
-Business Machines Corporation and Siemens Rolm Communications Inc.
-The term Licensor shall mean any of the Licensors.
-
-Subject to acceptance of the following conditions, permission is hereby
-granted by Licensors without the need for written agreement and without
-license or royalty fees, to use, copy, modify and distribute this
-software for any purpose.
-
-The above copyright notice and the following four paragraphs must be
-reproduced in all copies of this software and any software including
-this software.
-
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR
-MODIFICATIONS.
-
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGE.
-
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE.
+SPDX-License-Identifier: LicenseRef-APPLEMIT
 
 The software is provided with RESTRICTED RIGHTS.  Use, duplication, or
 disclosure by the government are subject to restrictions set forth in
@@ -75,7 +49,6 @@ VObject* vcsCreateVCal(
 #undef Z
     return vcal;
     }
-
 
 VObject* vcsAddEvent(
         VObject *vcal,
@@ -111,7 +84,6 @@ VObject* vcsAddEvent(
     return vevent;
     }
 
-
 VObject* vcsAddTodo(
         VObject *vcal,
         char *start_date_time,
@@ -146,7 +118,6 @@ VObject* vcsAddTodo(
     return vtodo;
     }
 
-
 VObject* vcsAddAAlarm(
         VObject *vevent,
         char *run_time,
@@ -164,7 +135,6 @@ VObject* vcsAddAAlarm(
 #undef Z
     return aalarm;
     }
-
 
 VObject* vcsAddMAlarm(
         VObject *vevent,
@@ -186,7 +156,6 @@ VObject* vcsAddMAlarm(
     return malarm;
     }
 
-
 VObject* vcsAddDAlarm(
         VObject *vevent,
         char *run_time,
@@ -205,7 +174,6 @@ VObject* vcsAddDAlarm(
     return dalarm;
     }
 
-
 VObject* vcsAddPAlarm(
         VObject *vevent,
         char *run_time,
@@ -223,7 +191,6 @@ VObject* vcsAddPAlarm(
 #undef Z
     return palarm;
     }
-
 
 #ifdef _TEST
 
@@ -332,6 +299,5 @@ void main() {
     }
 
 #endif
-
 
 /* end of source file vcaltmp.c */

@@ -2,18 +2,9 @@
  * Authors :
  *  Chenthill Palanisamy <pchenthill@novell.com>
  *
- * Copyright 2007, Novell, Inc.
+ * SPDX-FileCopyrightText: 2007, Novell, Inc.
  *
- * This library is free software; you can redistribute it and/or modify
- * it under the terms of either:
- *
- *   The LGPL as published by the Free Software Foundation, version
- *   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
- *
- * Or:
- *
- *   The Mozilla Public License Version 2.0. You may obtain a copy of
- *   the License at https://www.mozilla.org/MPL/
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 //krazy:excludeall=cpp
 
@@ -24,6 +15,7 @@
 #include "icaltz-util.h"
 #include "icalerror.h"
 #include "icaltimezone.h"
+#include "icalmemory.h"
 
 #include <stdlib.h>
 #include <limits.h>
@@ -126,7 +118,7 @@ typedef struct
 
 typedef struct
 {
-    time_t transition;
+    icaltime_t transition;
     long int change;
 } leap;
 //@endcond
@@ -190,7 +182,7 @@ static char *zname_from_stridx(char *str, size_t idx)
 
     size = i - idx;
     str += idx;
-    ret = (char *)malloc(size + 1);
+    ret = (char *)icalmemory_new_buffer(size + 1);
     ret = strncpy(ret, str, size);
     ret[size] = '\0';
 
@@ -270,7 +262,7 @@ static char *parse_posix_zone(char *p, ttinfo *type)
         size = strcspn(p, "-+0123456789,\n");
     }
 
-    type->zname = (char *) malloc(size + 1);
+    type->zname = (char *) icalmemory_new_buffer(size + 1);
     strncpy(type->zname, p, size);
     type->zname[size] = '\0';
     p += size;
@@ -444,7 +436,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     const char *zonedir;
     FILE *f = NULL;
     char *full_path = NULL;
-    time_t *transitions = NULL;
+    icaltime_t *transitions = NULL;
     char *r_trans = NULL, *temp;
     int *trans_idx = NULL;
     ttinfo *types = NULL;
@@ -484,7 +476,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
 
     size = strlen(zonedir) + strlen(location) + 2;
-    full_path = (char *)malloc(size);
+    full_path = (char *)icalmemory_new_buffer(size);
     if (full_path == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -506,7 +498,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         break;
     case '2':
     case '3':
-        if (sizeof(time_t) == 8) {
+        if (sizeof(icaltime_t) == 8) {
             trans_size = 8;
         }
         break;
@@ -548,24 +540,24 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
 
     /* read data block */
-    transitions = calloc(num_trans+1, sizeof(time_t));  // +1 for TZ string
+    transitions = icalmemory_new_buffer((num_trans+1) * sizeof(icaltime_t));  // +1 for TZ string
     if (transitions == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
     }
-    r_trans = calloc(num_trans, (size_t)trans_size);
+    r_trans = icalmemory_new_buffer(num_trans * (size_t)trans_size);
     if (r_trans == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
     }
-    trans_idx = calloc(num_trans+1, sizeof(int));  // +1 for TZ string
+    trans_idx = icalmemory_new_buffer((num_trans+1) * sizeof(int));  // +1 for TZ string
     if (trans_idx == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
     }
     if (num_trans == 0) {
         // Add one transition using time type 0 at 19011213T204552Z
-        transitions[0] = (time_t)INT_MIN;
+        transitions[0] = (icaltime_t)INT_MIN;
         trans_idx[0] = 0;
         num_trans = 1;
     } else {
@@ -574,16 +566,16 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         for (i = 0; i < num_trans; i++) {
             trans_idx[i] = fgetc(f);
             if (trans_size == 8) {
-                transitions[i] = (time_t) decode64(r_trans);
+                transitions[i] = (icaltime_t) decode64(r_trans);
             } else {
-                transitions[i] = (time_t) decode(r_trans);
+                transitions[i] = (icaltime_t) decode(r_trans);
             }
             r_trans += trans_size;
         }
         r_trans = temp;
     }
 
-    types = calloc(num_types+2, sizeof(ttinfo));  // +2 for TZ string
+    types = icalmemory_new_buffer((num_types+2) * sizeof(ttinfo));  // +2 for TZ string
     if (types == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -602,7 +594,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         types[i].gmtoff = decode(a);
     }
 
-    znames = (char *)malloc(num_chars);
+    znames = (char *)icalmemory_new_buffer(num_chars);
     if (znames == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -611,7 +603,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     /* We got all the information which we need */
 
-    leaps = calloc(num_leaps, sizeof(leap));
+    leaps = icalmemory_new_buffer(num_leaps * sizeof(leap));
     if (leaps == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -621,9 +613,9 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
         EFREAD(c, (size_t)trans_size, 1, f);
         if (trans_size == 8) {
-            leaps[i].transition = (time_t)decode64(c);
+            leaps[i].transition = (icaltime_t)decode64(c);
         } else {
-            leaps[i].transition = (time_t)decode(c);
+            leaps[i].transition = (icaltime_t)decode(c);
         }
 
         EFREAD(c, 4, 1, f);
@@ -656,7 +648,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     /* Read the footer */
     if (trans_size == 8 &&
-        (footer[0] = fgetc(f)) == '\n' &&
+        (footer[0] = (char)fgetc(f)) == '\n' &&
         fgets(footer+1, (int) sizeof(footer)-1, f) &&
         footer[strlen(footer)-1] == '\n') {
         tzstr = footer+1;
@@ -739,7 +731,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     /* Add tzid property */
     size = strlen(icaltimezone_tzid_prefix()) + strlen(location) + 1;
-    tzid = (char *)malloc(size);
+    tzid = (char *)icalmemory_new_buffer(size);
     if (tzid == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -756,7 +748,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     for (i = 0; i < num_trans; i++) {
         int by_day = 0;
-        time_t start;
+        icaltime_t start;
         enum icalrecurrencetype_weekday dow;
 
         prev_idx = idx;
@@ -915,34 +907,34 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         fclose(f);
 
     if (full_path)
-        free(full_path);
+        icalmemory_free_buffer(full_path);
 
     if (transitions)
-        free(transitions);
+        icalmemory_free_buffer(transitions);
 
     if (r_trans)
-        free(r_trans);
+        icalmemory_free_buffer(r_trans);
 
     if (trans_idx)
-        free(trans_idx);
+        icalmemory_free_buffer(trans_idx);
 
     if (types) {
         for (i = 0; i < num_types; i++) {
             if (types[i].zname) {
-                free(types[i].zname);
+                icalmemory_free_buffer(types[i].zname);
             }
         }
-        free(types);
+        icalmemory_free_buffer(types);
     }
 
     if (znames)
-        free(znames);
+        icalmemory_free_buffer(znames);
 
     if (leaps)
-        free(leaps);
+        icalmemory_free_buffer(leaps);
 
     if (tzid)
-        free(tzid);
+        icalmemory_free_buffer(tzid);
 
     return tz_comp;
 }

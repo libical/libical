@@ -4,18 +4,9 @@
   FILE: icalsslexer.l
   CREATOR: eric 8 Aug 2000
 
-(C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This program is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
-  Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -24,24 +15,28 @@
 
 #include "icalssyacc.h"
 #include "icalgaugeimpl.h"
+#include "icalmemory.h"
 #include "assert.h"
 
 YYSTYPE sslval;
 
-const char* input_buffer;
-const char* input_buffer_p;
+const char *input_buffer;
+const char *input_buffer_p;
 
-int icalss_input(char* buf, int max_size)
+int icalss_input(const char *buf, int max_size)
 {
     int n;
     int l;
 
     l = strlen(input_buffer_p);
-    if (max_size<l) n = max_size;
-    else n = l;
+    if (max_size < l) {
+        n = max_size;
+    } else {
+        n = l;
+    }
 
-    if (n > 0){
-        memcpy(buf, input_buffer_p, n);
+    if (n > 0) {
+        memcpy((void *)buf, input_buffer_p, n);
         input_buffer_p += n;
         return n;
     } else {

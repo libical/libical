@@ -1,17 +1,7 @@
 /*
- * Copyright (C) 2015 William Yu <williamyu@gnome.org>
+ * SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
  *
- * This library is free software: you can redistribute it and/or modify it
- * under the terms of version 2.1. of the GNU Lesser General Public License
- * as published by the Free Software Foundation.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
- * for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library. If not, see <https://www.gnu.org/licenses/>.
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifdef HAVE_CONFIG_H
@@ -107,6 +97,7 @@ typedef struct
     gpointer native;
     GDestroyNotify native_destroy_func;
     gboolean is_global_memory;
+    gboolean always_destroy;
     GObject *owner;
     GSList *dependers;  /* referenced GObject-s */
 } ICalObjectPrivate;
@@ -122,6 +113,7 @@ enum
     PROP_NATIVE,
     PROP_NATIVE_DESTROY_FUNC,
     PROP_IS_GLOBAL_MEMORY,
+    PROP_ALWAYS_DESTROY,
     PROP_OWNER
 };
 
@@ -147,6 +139,10 @@ static void i_cal_object_set_property(GObject *object, guint property_id,
     case PROP_IS_GLOBAL_MEMORY:
         /* no need for LOCK_PROPS() here, these can be set only during construction time */
         priv->is_global_memory = g_value_get_boolean(value);
+        return;
+
+    case PROP_ALWAYS_DESTROY:
+        i_cal_object_set_always_destroy(iobject, g_value_get_boolean(value));
         return;
 
     case PROP_OWNER:
@@ -177,6 +173,10 @@ static void i_cal_object_get_property(GObject *object, guint property_id,
         g_value_set_boolean(value, i_cal_object_get_is_global_memory(iobject));
         return;
 
+    case PROP_ALWAYS_DESTROY:
+        g_value_set_boolean(value, i_cal_object_get_always_destroy(iobject));
+        return;
+
     case PROP_OWNER:
         g_value_take_object(value, i_cal_object_ref_owner(iobject));
         return;
@@ -190,7 +190,8 @@ static void i_cal_object_finalize(GObject *object)
     ICalObject *iobject = I_CAL_OBJECT(object);
     ICalObjectPrivate *priv = i_cal_object_get_instance_private(iobject);
 
-    if (!priv->owner && !priv->is_global_memory &&
+    if ((priv->always_destroy || !priv->owner) &&
+        !priv->is_global_memory &&
         priv->native && priv->native_destroy_func) {
         g_clear_pointer(&priv->native, priv->native_destroy_func);
     }
@@ -264,6 +265,25 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             G_PARAM_STATIC_STRINGS));
 
     /**
+     * ICalObject:always-destroy:
+     *
+     * Whether free the native libical structure on #ICalObject's finalize even
+     * if the object has set an owner.
+     *
+     * Since: 3.0.11
+     **/
+    g_object_class_install_property(
+        object_class,
+        PROP_ALWAYS_DESTROY,
+        g_param_spec_boolean(
+            "always-destroy",
+            "Always-Destroy",
+            "Whether the native libical structure is freed even when the owner is set",
+            FALSE,
+            G_PARAM_READWRITE |
+            G_PARAM_STATIC_STRINGS));
+
+    /**
      * ICalObject:owner:
      *
      * Owner of the native libical structure. If set, then it is
@@ -294,7 +314,7 @@ static void i_cal_object_init(ICalObject *iobject)
  * @native: a native libical structure
  * @native_destroy_func: a function to be called on @native when it should be freed
  * @is_global_memory: whether @native is a global shared memory structure
- * @owner: (allow-none): an owner of @native
+ * @owner: (nullable): an owner of @native
  *
  * Creates an #ICalObject descendant of type @type and initialize private members
  * of it. The descendants should call this function in their _new() function, or use
@@ -556,8 +576,8 @@ void i_cal_object_set_owner(ICalObject *iobject, GObject *owner)
  * if not NULL, is referenced for thread safety. Unref it with g_object_unref
  * when done with it.
  *
- * Returns: (transfer full) (allow-none): Current owner of the libical
- *    native structure. returns NULL, when there is no owner.
+ * Returns: (transfer full) (nullable): Current owner of the libical
+ *    native structure. Returns %NULL when there is no owner.
  *
  * Since: 1.0
  **/
@@ -662,4 +682,59 @@ void i_cal_object_remove_depender(ICalObject *iobject, GObject *depender)
     g_object_unref(depender);
 
     UNLOCK_PROPS(priv);
+}
+
+/**
+ * i_cal_object_set_always_destroy:
+ * @iobject: an #ICalObject
+ * @value: value to set
+ *
+ * Sets the @ICalObject::always-destroy property value. When %TRUE, the native
+ * libical structure is always freed, even when an owner of the @iobject is set.
+ *
+ * Since: 3.0.11
+ **/
+void i_cal_object_set_always_destroy(ICalObject *iobject, gboolean value)
+{
+    ICalObjectPrivate *priv = i_cal_object_get_instance_private(iobject);
+    gboolean changed;
+
+    g_return_if_fail(I_CAL_IS_OBJECT(iobject));
+
+    LOCK_PROPS(priv);
+
+    changed = (value ? 1 : 0) != (priv->always_destroy ? 1 : 0);
+    if (changed)
+        priv->always_destroy = value;
+
+    UNLOCK_PROPS(priv);
+
+    if (changed)
+        g_object_notify(G_OBJECT(iobject), "always-destroy");
+}
+
+/**
+ * i_cal_object_get_always_destroy:
+ * @iobject: an #ICalObject
+ *
+ * Obtain the @ICalObject::always-destroy property value.
+ *
+ * Returns: Whether the native libical structure is freed even when an owner is set.
+ *
+ * Since: 3.0.11
+ **/
+gboolean i_cal_object_get_always_destroy(ICalObject *iobject)
+{
+    ICalObjectPrivate *priv = i_cal_object_get_instance_private(iobject);
+    gboolean value;
+
+    g_return_val_if_fail(I_CAL_IS_OBJECT(iobject), FALSE);
+
+    LOCK_PROPS(priv);
+
+    value = priv->always_destroy;
+
+    UNLOCK_PROPS(priv);
+
+    return value;
 }

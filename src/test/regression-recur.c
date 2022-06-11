@@ -2,20 +2,12 @@
  FILE: regression-recur.c
  CREATOR: ebusboom 8jun00
 
- (C) COPYRIGHT 1999 Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
 
  DESCRIPTION:
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -69,8 +61,8 @@ static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void
     _unused(comp);
 
     if (VERBOSE) {
-        printf("recur: %s", ctime(&span->start));
-        printf("       %s", ctime(&span->end));
+        printf("recur: %s", icalctime(&span->start));
+        printf("       %s", icalctime(&span->end));
     }
     *num_recurs = *num_recurs + 1;
 }
@@ -83,7 +75,7 @@ void test_recur_file()
     icalproperty *desc, *dtstart, *rrule;
     struct icalrecurrencetype recur;
     icalrecur_iterator *ritr;
-    time_t tt;
+    icaltime_t tt;
     const char *file;
     int num_recurs_found = 0;
     icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
@@ -147,7 +139,7 @@ void test_recur_file()
         tt = icaltime_as_timet(start);
 
         if (VERBOSE)
-            printf("#### %s\n", ctime(&tt));
+            printf("#### %s\n", icalctime(&tt));
 
         icalrecur_iterator_free(ritr);
 
@@ -157,7 +149,7 @@ void test_recur_file()
              next = icalrecur_iterator_next(ritr)) {
             tt = icaltime_as_timet(next);
             if (VERBOSE)
-                printf("  %s", ctime(&tt));
+                printf("  %s", icalctime(&tt));
         }
 
         icalrecur_iterator_free(ritr);

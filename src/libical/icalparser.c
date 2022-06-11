@@ -2,31 +2,11 @@
  FILE: icalparser.c
  CREATOR: eric 04 August 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
-
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
-
-  The Initial Developer of the Original Code is Eric Busboom
+ The Initial Developer of the Original Code is Eric Busboom
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -102,7 +82,7 @@ icalparser *icalparser_new(void)
 {
     struct icalparser_impl *impl = 0;
 
-    if ((impl = (struct icalparser_impl *)malloc(sizeof(struct icalparser_impl))) == 0) {
+    if ((impl = (struct icalparser_impl *)icalmemory_new_buffer(sizeof(struct icalparser_impl))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -135,7 +115,7 @@ void icalparser_free(icalparser *parser)
 
     pvl_free(parser->components);
 
-    free(parser);
+    icalmemory_free_buffer(parser);
 }
 
 void icalparser_set_gen_data(icalparser *parser, void *data)
@@ -323,7 +303,7 @@ static char *parser_get_param_name_heap(char *line, char **end)
         *end = *end + 1;
         next = (**end == '"') ? *end : parser_get_next_char('"', *end, 0);
         if (next == 0) {
-            free(str);
+            icalmemory_free_buffer(str);
             *end = NULL;
             return 0;
         }
@@ -557,7 +537,7 @@ char *icalparser_get_line(icalparser *parser,
                 } else {
                     /* No data in output; return and signal that there
                        is no more input */
-                    free(line);
+                    icalmemory_free_buffer(line);
                     return 0;
                 }
             }
@@ -661,8 +641,8 @@ icalcomponent *icalparser_parse(icalparser *parser,
                 /* This is bad news... assert? */
             }
 
-            assert(parser->root_component == 0);
-            assert(pvl_count(parser->components) == 0);
+            icalassert(parser->root_component == 0);
+            icalassert(pvl_count(parser->components) == 0);
 
             if (root == 0) {
                 /* Just one component */
@@ -682,7 +662,7 @@ icalcomponent *icalparser_parse(icalparser *parser,
 
             } else {
                 /* Badness */
-                assert(0);
+                icalassert(0);
             }
 
             c = 0;
@@ -820,7 +800,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 (void)icalparser_clean(parser); /* may reset parser->root_component */
             }
 
-            assert(pvl_count(parser->components) == 0);
+            icalassert(pvl_count(parser->components) == 0);
 
             parser->state = ICALPARSER_SUCCESS;
             rtrn = parser->root_component;
@@ -1247,7 +1227,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
     if (pvl_data(pvl_tail(parser->components)) == 0 && parser->level == 0) {
         /* HACK. Does this clause ever get executed? */
         parser->state = ICALPARSER_SUCCESS;
-        assert(0);
+        icalassert(0);
         return parser->root_component;
     } else {
         parser->state = ICALPARSER_IN_PROGRESS;
@@ -1365,6 +1345,9 @@ icalcomponent *icalparser_parse_string(const char *str)
     d.str = str;
 
     p = icalparser_new();
+    if (!p)
+        return NULL;
+
     icalparser_set_gen_data(p, &d);
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);

@@ -1,17 +1,9 @@
 <!--
-  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+  SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
-  This library is free software: you can redistribute it and/or modify it
-  under the terms of version 2.1. of the GNU Lesser General Public License
-  as published by the Free Software Foundation.
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
-  for more details.
 
-  You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Time" native="struct icaltimetype" is_bare="true" default_native="icaltime_null_time()">
     <method name="i_cal_time_new" corresponds="CUSTOM" kind="constructor" since="1.0">
@@ -86,7 +78,7 @@
     <method name="i_cal_time_get_timezone" corresponds="(void *)icaltime_get_timezone" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
         <returns type="ICalTimezone *" annotation="transfer none" translator_argus="(GObject *)tt, TRUE" comment="The timezone information" />
-        <comment xml:space="preserve">Returns the timezone.</comment>
+        <comment xml:space="preserve">Returns the timezone, the #ICalTimezone object is cached and can be either unreferenced once the last instance is used or can be kept until i_cal_object_free_global_objects() is called (usually at the very end of the program).</comment>
     </method>
     <method name="i_cal_time_set_timezone" corresponds="icaltime_set_timezone" kind="set" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime"/>
@@ -95,7 +87,7 @@
     </method>
     <method name="i_cal_time_get_tzid" corresponds="icaltime_get_tzid" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="const gchar *" annotation="allow-none, transfer none" comment="The tzid of #ICalTime, or NULL if floating type" />
+        <returns type="const gchar *" annotation="nullable, transfer none" comment="The tzid of #ICalTime, or NULL if floating type" />
         <comment xml:space="preserve">Returns the tzid, or NULL for a floating time.</comment>
     </method>
     <method name="i_cal_time_day_of_year" corresponds="icaltime_day_of_year" since="1.0">
@@ -143,7 +135,7 @@
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">Returns -1, 0, or 1 to indicate that a less than b, a==b or a larger than b.</comment>
+        <comment xml:space="preserve">i_cal_time_compare returns an integer indicating the result of the comparison, as follow:</comment>
     </method>
     <method name="i_cal_time_compare_date_only" corresponds="icaltime_compare_date_only" since="1.0">
         <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>

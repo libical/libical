@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 add_definitions(-Dlibical_icalss_EXPORTS)
 
 include_directories(
@@ -23,6 +26,7 @@ endif()
 add_custom_target(
   icalss-header ALL
   DEPENDS ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+  COMMENT "Target to generate the aggregate libicalss header"
 )
 
 ########### next target ###############
@@ -83,6 +87,7 @@ add_custom_command(
     -DBDB_FOUND=${BDB_FOUND}
     -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   DEPENDS ${icalss_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
+  COMMENT "Generate the aggregate libicalss header"
 )
 
 add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
@@ -151,7 +156,10 @@ if(WITH_CXX_BINDINGS)
     add_library(icalss_cxx-static ALIAS icalss_cxx)
   endif()
 
-  target_link_libraries(icalss_cxx icalss ical_cxx ${CMAKE_THREAD_LIBS_INIT})
+  target_link_libraries(icalss_cxx icalss ical_cxx)
+  if(DEFINED CMAKE_THREAD_LIBS_INIT)
+    target_link_libraries(icalss_cxx ${CMAKE_THREAD_LIBS_INIT})
+  endif()
 
   if(MSVC)
     set_target_properties(icalss_cxx PROPERTIES PREFIX "lib")

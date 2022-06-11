@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_SOURCE_DIR}/src
@@ -20,6 +23,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 set(TEST_DATADIR "\"${CMAKE_SOURCE_DIR}/test-data\"")
 add_definitions(-DTEST_DATADIR=${TEST_DATADIR} -DTEST_ZONEDIR="${CMAKE_SOURCE_DIR}/zoneinfo")
 
+# Set properties for the test
 macro(setprops _name)
   if(UNIX)
     set_tests_properties(${_name} PROPERTIES
@@ -61,7 +65,9 @@ macro(buildme _name _srcs)
     target_link_libraries(${_name} ical_cxx icalss_cxx)
   endif()
 
-  target_link_libraries(${_name} ${CMAKE_THREAD_LIBS_INIT})
+  if(DEFINED CMAKE_THREAD_LIBS_INIT)
+    target_link_libraries(${_name} ${CMAKE_THREAD_LIBS_INIT})
+  endif()
   if(ICU_FOUND)
     target_link_libraries(${_name} ${ICU_LIBRARIES})
   endif()
@@ -70,6 +76,7 @@ macro(buildme _name _srcs)
   endif()
 endmacro()
 
+# Build the test and add the test, making sure the test properties are set
 macro(testme _name _srcs)
   buildme(${_name} "${_srcs}")
   add_test(NAME ${_name} COMMAND ${_name})
@@ -96,6 +103,8 @@ set(regression_SRCS
   regression-utils.c
   regression-recur.c
   regression-storage.c
+  test-malloc.c
+  test-malloc.h
 )
 if(WITH_CXX_BINDINGS)
   list(APPEND regression_SRCS regression-cxx.cpp)
@@ -108,10 +117,10 @@ set(parser_SRCS icaltestparser.c)
 buildme(parser "${parser_SRCS}")
 
 file(GLOB TEST_FILES ${CMAKE_SOURCE_DIR}/test-data/*.ics)
-foreach(TEST_FILE ${TEST_FILES})
-  get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
-  add_test(NAME parser-${TEST_NAME} COMMAND parser ${TEST_FILE})
-  setprops(parser-${TEST_NAME})
+foreach(test_file ${TEST_FILES})
+  get_filename_component(test_name ${test_file} NAME_WE)
+  add_test(NAME parser-${test_name} COMMAND parser ${test_file})
+  setprops(parser-${test_name})
 endforeach()
 
 ########### next target ###############
@@ -177,7 +186,8 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS 3.14)
   set(CMAKE_COMPARE_FILES_IGNORE_EOL TRUE)
 endif()
 if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
-  if(NOT CYGWIN AND NOT USE_32BIT_TIME_T) #ignore_eol doesn't work on Cygwin. tests for years greater than 2037 will fail
+  #ignore_eol doesn't work on Cygwin. testing years greater than 2037 will fail
+  if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
     set(icalrecurtest_SRCS icalrecur_test.c)
     add_executable(icalrecurtest ${icalrecurtest_SRCS})
     target_link_libraries(icalrecurtest ical icalss icalvcal)

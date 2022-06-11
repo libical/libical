@@ -2,18 +2,10 @@
  FILE: pvl.c
  CREATOR: eric November, 1995
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -21,6 +13,8 @@
 #endif
 
 #include "pvl.h"
+
+#include "icalmemory.h"
 
 #include <assert.h>
 #include <errno.h>
@@ -80,7 +74,7 @@ pvl_list pvl_newlist()
 {
     struct pvl_list_t *L;
 
-    if ((L = (struct pvl_list_t *)malloc(sizeof(struct pvl_list_t))) == 0) {
+    if ((L = (struct pvl_list_t *)icalmemory_new_buffer(sizeof(struct pvl_list_t))) == 0) {
         errno = ENOMEM;
         return 0;
     }
@@ -102,7 +96,7 @@ void pvl_free(pvl_list l)
 
     pvl_clear(l);
 
-    free(L);
+    icalmemory_free_buffer(L);
 }
 
 /**
@@ -124,7 +118,7 @@ pvl_elem pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
 {
     struct pvl_elem_t *E;
 
-    if ((E = (struct pvl_elem_t *)malloc(sizeof(struct pvl_elem_t))) == 0) {
+    if ((E = (struct pvl_elem_t *)icalmemory_new_buffer(sizeof(struct pvl_elem_t))) == 0) {
         errno = ENOMEM;
         return 0;
     }
@@ -275,7 +269,7 @@ void pvl_insert_ordered(pvl_list L, pvl_comparef f, void *d)
 
     /* badness, choke */
 #if !defined(lint)
-    assert(0);
+    icalassert(0);
 #endif
 }
 
@@ -384,7 +378,7 @@ void *pvl_remove(pvl_list L, pvl_elem E)
     E->next = 0;
     E->d = 0;
 
-    free(E);
+    icalmemory_free_buffer(E);
 
     return data;
 }

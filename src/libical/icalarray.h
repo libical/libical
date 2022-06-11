@@ -2,18 +2,10 @@
  FILE: icalarray.h
  CREATOR: Damon Chaplin 07 March 2001
 
- (C) COPYRIGHT 2001, Ximian, Inc.
+ SPDX-FileCopyrightText: 2001, Ximian, Inc.
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 /** @file icalarray.h
@@ -26,6 +18,8 @@
 #define ICALARRAY_H
 
 #include "libical_ical_export.h"
+
+#include <stddef.h>
 
 /**
  * @typedef icalarray
@@ -42,29 +36,29 @@ struct _icalarray
 };
 
 /**
- * @brief Creates a new ::icalarray object.
+ * @brief Creates a new icalarray object.
  * @param element_size The size of the elements to be held by the array
  * @param increment_size How many extra elements worth of space to allocate on expansion
- * @return The new ::icalarray object
+ * @return The new icalarray object
  * @sa icalarray_free()
  *
- * Creates a new ::icalarray object. The parameter @a element_size determines
+ * Creates a new icalarray object. The parameter @a element_size determines
  * the size of the elements that the array will hold (in bytes). The parameter
  * @a increment_size determines how many extra elements to be allocated when
  * expanding the array for performance reasons (expansions are expensive, since
  * it involves copying all existing elements).
  *
  * @par Error handling
- * If @a element_size or @a increment_size is not at least 1, using the ::icalarray
+ * If @a element_size or @a increment_size is not at least 1, using the icalarray
  * object results in undefined behaviour. If there is an error while creating the
  * object, it returns `NULL` and sets ::icalerrno to ::ICAL_NEWFAILED_ERROR.
  *
  * @par Ownership
- * The returned ::icalarray object is owned by the caller of the function,
+ * The returned icalarray object is owned by the caller of the function,
  * and needs to be released properly after it's no longer needed with
  * icalarray_free().
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new array
  * icalarray *array = icalarray_new(sizeof(int), 1);
@@ -81,11 +75,11 @@ struct _icalarray
 LIBICAL_ICAL_EXPORT icalarray *icalarray_new(size_t element_size, size_t increment_size);
 
 /**
- * @brief Copies an existing ::icalarray and its elements, creating a new one.
+ * @brief Copies an existing icalarray and its elements, creating a new one.
  * @param array The array to copy
  * @return A new array, holding all the elements of @a array
  *
- * Creates a new ::icalarray object, copying all the existing elements from
+ * Creates a new icalarray object, copying all the existing elements from
  * @a array as well as its properties (such as @a element_size and
  * @a increment_size) over.
  *
@@ -98,7 +92,7 @@ LIBICAL_ICAL_EXPORT icalarray *icalarray_new(size_t element_size, size_t increme
  * The created copy is owned by the caller of the function, and needs to
  * be released with icalarray_free() after it's no longer being used.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new array
  * icalarray *array = icalarray_new(sizeof(int), 1);
@@ -122,7 +116,7 @@ LIBICAL_ICAL_EXPORT icalarray *icalarray_copy(icalarray *array);
  * @brief Frees an array object and everything that it contains.
  * @param array The array to release
  *
- * ### Example
+ * @par Example
  * ```c
  * // creating an array
  * icalarray *array = icalarray_new(sizeof(int), 1);
@@ -149,7 +143,7 @@ LIBICAL_ICAL_EXPORT void icalarray_free(icalarray *array);
  * The @a element does not get consumed by the method, since it creates
  * a copy of it
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new array
  * icalarray *array = icalarray_new(sizeof(int), 1);
@@ -176,7 +170,7 @@ LIBICAL_ICAL_EXPORT void icalarray_append(icalarray *array, const void *element)
  * If the array is empty, using this function results in undefined behaviour.
  * If the @a position is non-existent, it removes the last element.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new array
  * icalarray *array = icalarray_new(sizeof(int), 2);
@@ -227,10 +221,10 @@ LIBICAL_ICAL_EXPORT void icalarray_remove_element_at(icalarray *array, size_t po
  * results in undefined behaviour.
  *
  * @par Ownership
- * The element is owned by the ::icalarray, it must not be freed by
+ * The element is owned by the icalarray, it must not be freed by
  * the user.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new array
  * icalarray *array = icalarray_new(sizeof(int), 1);
@@ -255,7 +249,7 @@ LIBICAL_ICAL_EXPORT void icalarray_remove_element_at(icalarray *array, size_t po
 LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray *array, size_t position);
 
 /**
- * @brief Sorts the elements of an ::icalarray using the given comparison function.
+ * @brief Sorts the elements of an icalarray using the given comparison function.
  * @param array The array to sort
  * @param compare The comparison function to use
  *
@@ -263,7 +257,7 @@ LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray *array, size_t position
  * Passing `NULL` as either @a array or @a compare results in undefined
  * behaviour.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * int compare_ints(const void *a, const void *b) {
  *     return *((int*)a) - *((int*)b);

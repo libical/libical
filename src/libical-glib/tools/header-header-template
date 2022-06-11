@@ -1,29 +1,15 @@
 /* Generated file (by generator) */
 
 /*
- * Copyright (C) 2015 William Yu <williamyu@gnome.org>
+ * SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
  *
- * This library is free software: you can redistribute it and/or modify it
- * under the terms of version 2.1. of the GNU Lesser General Public License
- * as published by the Free Software Foundation.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
- * for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library. If not, see <https://www.gnu.org/licenses/>.
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifndef LIBICAL_GLIB_H
 #define LIBICAL_GLIB_H
 
 #include <glib-object.h>
-
-#if !defined(LIBICAL_GLIB_UNSTABLE_API) && !defined(LIBICAL_GLIB_COMPILATION)
-#error "Define LIBICAL_GLIB_UNSTABLE_API, to indicate it's understood the libical-glib API is currently unstable"
-#endif
 
 #define __LIBICAL_GLIB_H_INSIDE__
 

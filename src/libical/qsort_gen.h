@@ -1,18 +1,9 @@
 /*======================================================================
  FILE: qsort_gen.h
 
- (C) COPYRIGHT 2018, Markus Minichmayr <markus@tapkey.com>
+ SPDX-FileCopyrightText: 2018, Markus Minichmayr <markus@tapkey.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Initial Developer of the Original Code is Markus Minichmayr.
 ======================================================================*/
@@ -31,7 +22,6 @@
 
 /**
  * @brief Sort an arbitrary list of items using the qsort algorithm.
- * @param context A pointer representing the list to be sorted. Won't be
  * interpreted by this function but passed to the compar and swapr functions.
  * @param nitems The number of items in the list.
  * @param compar The comparator function. The function receives the pointer

@@ -1,18 +1,10 @@
 /*======================================================================
  FILE: icalbdbset.c
 
- (C) COPYRIGHT 2001, Critical Path
+ SPDX-FileCopyrightText: 2001, Critical Path
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -31,8 +23,16 @@
 
 #define MAX_RETRY 5
 
+#if !defined(DB_VERSION_MAJOR)
+#define DB_VERSION_MAJOR 1 //assume ancient version
+#endif
+
 static int _compare_ids(const char *compid, const char *matchid);
+#if DB_VERSION_MAJOR > 5
+static int _compare_keys(DB *dbp, const DBT *a, const DBT *b, size_t *locp);
+#else
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b);
+#endif
 
 /** Default options used when NULL is passed to icalset_new() **/
 static icalbdbset_options icalbdbset_options_default =
@@ -75,7 +75,11 @@ int icalbdbset_init_dbenv(char *db_env_dir,
 
     flags = (u_int32_t) (DB_INIT_LOCK | DB_INIT_TXN | DB_CREATE | DB_THREAD |
                          DB_RECOVER | DB_INIT_LOG | DB_INIT_MPOOL);
+#if defined(_WIN32) //krazy:exclude=cpp
+    ret = ICAL_DB_ENV->open(ICAL_DB_ENV, db_env_dir, flags, 0 /*ignored on Windows*/);
+#else
     ret = ICAL_DB_ENV->open(ICAL_DB_ENV, db_env_dir, flags, S_IRUSR | S_IWUSR);
+#endif
 
     if (ret) {
         /*char *foo = db_strerror(ret); */
@@ -1598,7 +1602,11 @@ int icalbdbset_commit_transaction(DB_TXN *txnid)
     return txnid->commit(txnid, 0);
 }
 
+#if DB_VERSION_MAJOR > 5
+static int _compare_keys(DB *dbp, const DBT *a, const DBT *b, size_t *locp)
+#else
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
+#endif
 {
     /*
      * Returns:
@@ -1611,5 +1619,8 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
     char *bc = (char *)b->data;
 
     _unused(dbp);
+#if DB_VERSION_MAJOR > 5
+    locp = NULL;
+#endif
     return strncmp(ac, bc, a->size);
 }

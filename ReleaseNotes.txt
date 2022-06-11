@@ -3,46 +3,90 @@ Release Highlights
 
 Version 3.1.0 (NOT RELEASED YET):
 --------------------------------
- * MSVC 2013 or higher (when building on Windows with MSVC)
+ * REUSE compliant licensing
+ * Requires MSVC 2013 or higher (when building on Windows with MSVC)
  * Requires CMake v3.11.0 or higher
- * libical-glib now requires glib 2.38 or higher
- * Improved FindICU (from the official CMake)
+ * For the C++ bindings, requires a C++11 compliant compiler
+ * New CMake option "LIBICAL_ENABLE_64BIT_ICALTIME_T" to use 64-bit time_t implementations
+   on 32-bit systems (where available and supported.  Windows-only so far)
+ * libical-glib requires glib 2.38 or higher
+ * libical-glib requires a C11 compliant compiler
+ * draft-ietf-calext-eventpub-extensions-19 (RFC 9073) support added
+ * draft-ietf-calext-valarm-extensions-07 (RFC 9074) support added
+ * libical-glib API is considered stable; no longer need to define LIBICAL_GLIB_UNSTABLE_API=1
+   before including <libical-glib/libical-glib.h>
  * Allow previous recurrence iteration
- * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
- * New publicly available functions:
-     + icalrecurrencetype_encode_day
-     + icalrecurrencetype_encode_month
-     + icaltzutil_set_zone_directory
-     + icalcomponent_clone
-     + icalproperty_clone
-     + icalparameter_clone
-     + icalvalue_clone
-     + icalcluster_clone
-     + icalrecur_iterator_prev
-     + icalcomponent_set_x_name
-     + icalcomponent_get_x_name
-     + icalcomponent_get_component_name
-     + icalcomponent_get_component_name_r
-     * ical_set_invalid_rrule_handling_setting
-     * ical_get_invalid_rrule_handling_setting
- * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
- * Deprecated functions:
-     + caldat (replaced by internal function icaldat_int())
-     + juldat (replaced by internal function juldat_int())
-     + icalcomponent_new_clone
-     + icalproperty_new_clone
-     + icalparameter_new_clone
-     + icalvalue_new_clone
-     + icalcluster_new_clone
- * Removed unused declarations:
-     (were in the public headers but not used at all)
-     + struct icaltimezonetype
-     + struct icaltimezonephase
  * Improved performance of recurrence iterators
+ * GEO property has arbitrary precision (values are internally stored as strings, not doubles)
+ * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
+ * Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions
+ * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
+ * New publicly available functions:
+    + icalrecurrencetype_encode_day
+    + icalrecurrencetype_encode_month
+    + icaltzutil_set_zone_directory
+    + icalcomponent_clone
+    + icalproperty_clone
+    + icalparameter_clone
+    + icalvalue_clone
+    + icalcluster_clone
+    + icalrecur_iterator_prev
+    + icalcomponent_set_x_name
+    + icalcomponent_get_x_name
+    + icalcomponent_get_component_name
+    + icalcomponent_get_component_name_r
+    + ical_set_invalid_rrule_handling_setting
+    + ical_get_invalid_rrule_handling_setting
+ * Deprecated functions:
+    + caldat (replaced by internal function icaldat_int())
+    + juldat (replaced by internal function juldat_int())
+    + icalcomponent_new_clone
+    + icalproperty_new_clone
+    + icalparameter_new_clone
+    + icalvalue_new_clone
+    + icalcluster_new_clone
+ * No longer publicly available functions:
+    + icaltzutil_fetch_timezone
+ * Removed unused declarations:
+    (were in the public headers but not used at all)
+    + struct icaltimezonetype
+    + struct icaltimezonephase
 
-Version 3.0.11 (UNRELEASED):
+Version 3.0.15 (UNRELEASED):
 ----------------------------
+ * Add missing property parameters into libical-glib
+ * Fix CMake option USE_32BIT_TIME_T actually uses a 32-bit time_t value
+
+Version 3.0.14 (05 February 2022):
+----------------------------------
+ * icalvalue: Reset non-UTC icaltimetype::zone on set
+ * Fix icalcomponent_set_due not removing TZID when necessary
+
+Version 3.0.13 (17 January 2022):
+---------------------------------
+ * icalcomponent_get_dtend() return icaltime_null_time(), unless called on VEVENT, VAVAILABILITY or VFREEBUSY
+ * icalcomponent_get_duration() for VTODO calculate with DUE instead of DTEND
+ * Replace CMake FindBDB with FindBerleyDB (https://github.com/sum01/FindBerkeleyDB)
+ * Fix finding ICU and BerkeleyDB on Mac (look for homebrew installs first)
+
+Version 3.0.12 (08 December 2021):
+----------------------------------
+ * Fix a libicalval crash in cleanVObject
+ * METHOD:DECLINECOUNTER must have DTEND or DURATION
+ * Handle if DTEND and DURATION are both missing
+ * Improved FindICU (copied from official CMake.  see files in cmake/Kitware)
+ * Buildsystem fixes (especially for the Ninja generator)
+ * Built-in timezones updated to tzdata2021e
+
+Version 3.0.11 (09 October 2021):
+---------------------------------
  * Fix icalrecur_iterator_set_start() for hourly, minutely, and secondly recurrences
+ * Fix build for Berkeley DB version greater than 5
+ * Fix vcal for some architectures (like aarch64, ppc64le and s390x)
+ * Fix memory leaks in vcal
+ * Prevent crash when looking for tzid in initialize_rscale
+ * Adjust libdir and includedir in generated pkgconfig files
+ * Built-in timezones updated to tzdata2021c
 
 Version 3.0.10 (17 April 2021):
 -------------------------------

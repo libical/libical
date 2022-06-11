@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
 #Exit if any undefined variable is used.
 set -u
@@ -40,6 +43,7 @@ HELP() {
   echo " -a, --no-asan-build      Don't run any ASAN-build (sanitize-address) tests"
   echo " -d, --no-tsan-build      Don't run any TSAN-build (sanitize-threads) tests"
   echo " -u, --no-ubsan-build     Don't run any UBSAN-build (sanitize-undefined) tests"
+  echo " -x, --no-memc-build      Don't run any MEMCONSIST-build (memory consistency) tests"
   echo
 }
 
@@ -228,8 +232,24 @@ CLANG_BUILD() {
   echo "===== END CLANG BUILD: $1 ======"
 }
 
+#function MEMCONSIST_BUILD:
+# runs a gcc memory consistency build test
+# $1 = the name of the test (which will have "-mem" appended to it)
+# $2 = CMake options
+MEMCONSIST_BUILD() {
+  name="$1-mem"
+  if ( test $runmemcbuild -ne 1 )
+  then
+    echo "===== MEMCONSIST BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START MEMCONSIST BUILD: $1 ======"
+  BUILD "$name" "-DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True $2"
+  echo "===== END MEMCONSIST BUILD: $1 ======"
+}
+
 #function ASAN_BUILD:
-# runs an clang ASAN build test
+# runs a clang ASAN build test
 # $1 = the name of the test (which will have "-asan" appended to it)
 # $2 = CMake options
 ASAN_BUILD() {
@@ -241,12 +261,12 @@ ASAN_BUILD() {
   fi
   echo "===== START ASAN BUILD: $1 ======"
   SET_CLANG
-  BUILD "$name" "-DADDRESS_SANITIZER=True $2"
+  BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
 }
 
 #function TSAN_BUILD:
-# runs an clang TSAN build test
+# runs a clang TSAN build test
 # $1 = the name of the test (which will have "-tsan" appended to it)
 # $2 = CMake options
 TSAN_BUILD() {
@@ -258,12 +278,12 @@ TSAN_BUILD() {
   fi
   echo "===== START TSAN BUILD: $1 ======"
   SET_CLANG
-  BUILD "$name" "-DTHREAD_SANITIZER=True $2"
+  BUILD "$name" "-DLIBICAL_DEVMODE_THREAD_SANITIZER=True $2"
   echo "===== END TSAN BUILD: $1 ======"
 }
 
 #function UBSAN_BUILD:
-# runs an clang UBSAN build test
+# runs a clang UBSAN build test
 # $1 = the name of the test (which will have "-ubsan" appended to it)
 # $2 = CMake options
 UBSAN_BUILD() {
@@ -275,9 +295,10 @@ UBSAN_BUILD() {
   fi
   echo "===== START UBSAN BUILD: $1 ======"
   SET_CLANG
-  BUILD "$name" "-DUNDEFINED_SANITIZER=True $2"
+  BUILD "$name" "-DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True $2"
   echo "===== END UBSAN BUILD: $1 ======"
 }
+
 #function CPPCHECK
 # runs a cppcheck test, which means: configure, compile, link and run cppcheck
 # $1 = the name of the test (which will have "-cppcheck" appended to it)
@@ -310,8 +331,12 @@ CPPCHECK() {
            -D size_t="unsigned long" \
            -D bswap32="" \
            -D PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=0 \
+           -D MIN="" \
            -D _unused="(void)" \
            -D _deprecated="(void)" \
+           -D ICALMEMORY_DEFAULT_FREE="free" \
+           -D ICALMEMORY_DEFAULT_MALLOC="malloc" \
+           -D ICALMEMORY_DEFAULT_REALLOC="realloc" \
            -D F_OK=0 \
            -D R_OK=0 \
            -U YYSTYPE \
@@ -366,6 +391,8 @@ SPLINT() {
   files="$files $BDIR/src/libical/*.c $BDIR/src/libical/*.h"
 
   splint $files \
+       -badflag \
+       -preproc \
        -weak -warnposix \
        -modobserver -initallelements -redef \
        -linelen 1000 \
@@ -489,8 +516,8 @@ KRAZY() {
 
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hmkctbsnlgadu --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build -- "$@"`
-TEMP=`getopt hmkctbsnlgadu $*`
+#TEMP=`getopt -o hmkctbsnlgadu --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build -- "$@"`
+TEMP=`getopt hmkctbsnlgadux $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
@@ -506,6 +533,7 @@ rungccbuild=1
 runasanbuild=1
 runtsanbuild=1
 runubsanbuild=1
+runmemcbuild=1
 runsplint=1
 while true; do
     case "$1" in
@@ -522,6 +550,7 @@ while true; do
         -a|--no-asan-build)   runasanbuild=0;  shift;;
         -d|--no-tsan-build)   runtsanbuild=0;  shift;;
         -u|--no-ubsan-build)  runubsanbuild=0; shift;;
+        -x|--no-memc-build)   runmemcbuild=0;  shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
@@ -588,7 +617,10 @@ CLANGTIDY test2builtin "$TZCMAKEOPTS"
 GCC_BUILD testgcc1 ""
 GCC_BUILD testgcc2 "$CMAKEOPTS"
 GCC_BUILD testgcc3 "$UUCCMAKEOPTS"
-GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
+if (test "`uname -s`" = "Linux")
+then
+  GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
+fi
 GCC_BUILD testgcc4glib "$GLIBOPTS"
 GCC_BUILD testgccnocxx "$CMAKEOPTS -DWITH_CXX_BINDINGS=off"
 if (test "`uname -s`" = "Linux")
@@ -602,20 +634,33 @@ GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
 
 #Ninja build tests
 NINJA_GCC_BUILD testninjagcc1 ""
-NINJA_GCC_BUILD testninjagcc2 "-DSHARED_ONLY=True"
-NINJA_GCC_BUILD testninjagcc3 "-DSTATIC_ONLY=True -DICAL_GLIB=False"
+NINJA_GCC_BUILD testninjagcc2 "-DICAL_GLIB=True"
+NINJA_GCC_BUILD testninjagcc3 "-DICAL_GLIB=True -DICAL_GLIB_VAPI=ON -DGOBJECT_INTROSPECTION=True"
+NINJA_GCC_BUILD testninjagcc4 "-DSHARED_ONLY=True -DICAL_GLIB=False"
+NINJA_GCC_BUILD testninjagcc5 "-DSHARED_ONLY=True -DICAL_GLIB=True"
+NINJA_GCC_BUILD testninjagcc6 "-DSTATIC_ONLY=True -DICAL_GLIB=False"
+NINJA_GCC_BUILD testninjagcc7 "-DSTATIC_ONLY=True -DICAL_GLIB=True -DENABLE_GTK_DOC=False"
+NINJA_GCC_BUILD testninjagcc9 "-DSHARED_ONLY=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB_VAPI=ON"
 
 CLANG_BUILD testclang1 ""
 CLANG_BUILD testclang2 "$CMAKEOPTS"
 CLANG_BUILD testclang3 "$UUCCMAKEOPTS"
-#broken with clang7 on Fedora29 CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
-#broken with clang7 on Fedora29 CLANG_BUILD testclang4glib "$GLIBOPTS"
+#not supported with clang yet CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
+CLANG_BUILD testclang4glib "$GLIBOPTS"
 if (test "`uname -s`" = "Linux")
 then
     echo "Temporarily disable cross-compile tests"
 #  CLANG_BUILD testclang1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
 #  CLANG_BUILD testclang2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 fi
+
+#Memory consistency check
+MEMCONSIST_BUILD test1memc ""
+MEMCONSIST_BUILD test2memc "$CMAKEOPTS"
+MEMCONSIST_BUILD test3memc "$TZCMAKEOPTS"
+MEMCONSIST_BUILD test4memc "$UUCCMAKEOPTS"
+#FIXME: the python test scripts needs for introspection need some love
+#MEMCONSIST_BUILD test5memc "$GLIBOPTS"
 
 #Address sanitizer
 ASAN_BUILD test1asan ""

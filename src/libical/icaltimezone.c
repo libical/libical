@@ -2,18 +2,10 @@
  FILE: icaltimezone.c
  CREATOR: Damon Chaplin 15 March 2001
 
- (C) COPYRIGHT 2001, Damon Chaplin <damon@ximian.com>
+ SPDX-FileCopyrightText: 2001, Damon Chaplin <damon@ximian.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 //krazy:excludeall=cpp
 
@@ -85,12 +77,12 @@ static char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
     the timezone changes. */
 #define ICALTIMEZONE_EXTRA_COVERAGE     5
 
-#if (SIZEOF_TIME_T > 4)
+#if (SIZEOF_ICALTIME_T > 4)
 /** Arbitrarily go up to 1000th anniversary of Gregorian calendar, since
-    64-bit time_t values get us up to the tm_year limit of 2+ billion years. */
+    64-bit icaltime_t values get us up to the tm_year limit of 2+ billion years. */
 #define ICALTIMEZONE_MAX_YEAR           2582
 #else
-/** This is the maximum year we will expand to, since 32-bit time_t values
+/** This is the maximum year we will expand to, since 32-bit icaltime_t values
     only go up to the start of 2038. */
 #define ICALTIMEZONE_MAX_YEAR           2037
 #endif
@@ -212,7 +204,7 @@ icaltimezone *icaltimezone_new(void)
 {
     icaltimezone *zone;
 
-    zone = (icaltimezone *) malloc(sizeof(icaltimezone));
+    zone = (icaltimezone *) icalmemory_new_buffer(sizeof(icaltimezone));
     if (!zone) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return NULL;
@@ -227,7 +219,7 @@ icaltimezone *icaltimezone_copy(icaltimezone *originalzone)
 {
     icaltimezone *zone;
 
-    zone = (icaltimezone *) malloc(sizeof(icaltimezone));
+    zone = (icaltimezone *) icalmemory_new_buffer(sizeof(icaltimezone));
     if (!zone) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return NULL;
@@ -235,13 +227,13 @@ icaltimezone *icaltimezone_copy(icaltimezone *originalzone)
 
     memcpy(zone, originalzone, sizeof(icaltimezone));
     if (zone->tzid != NULL) {
-        zone->tzid = strdup(zone->tzid);
+        zone->tzid = icalmemory_strdup(zone->tzid);
     }
     if (zone->location != NULL) {
-        zone->location = strdup(zone->location);
+        zone->location = icalmemory_strdup(zone->location);
     }
     if (zone->tznames != NULL) {
-        zone->tznames = strdup(zone->tznames);
+        zone->tznames = icalmemory_strdup(zone->tznames);
     }
 
     icaltimezone_changes_lock();
@@ -261,7 +253,7 @@ void icaltimezone_free(icaltimezone *zone, int free_struct)
 {
     icaltimezone_reset(zone);
     if (free_struct)
-        free(zone);
+        icalmemory_free_buffer(zone);
 }
 
 /** @brief Resets the icaltimezone to the initial state, freeing most of the
@@ -270,13 +262,13 @@ void icaltimezone_free(icaltimezone *zone, int free_struct)
 static void icaltimezone_reset(icaltimezone *zone)
 {
     if (zone->tzid)
-        free(zone->tzid);
+        icalmemory_free_buffer(zone->tzid);
 
     if (zone->location)
-        free(zone->location);
+        icalmemory_free_buffer(zone->location);
 
     if (zone->tznames)
-        free(zone->tznames);
+        icalmemory_free_buffer(zone->tznames);
 
     if (zone->component)
         icalcomponent_free(zone->component);
@@ -329,9 +321,9 @@ static int icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcompone
     }
 
     if (zone->tzid) {
-        free(zone->tzid);
+        icalmemory_free_buffer(zone->tzid);
     }
-    zone->tzid = strdup(tzid);
+    zone->tzid = icalmemory_strdup(tzid);
 
     if (zone->component) {
         icalcomponent_free(zone->component);
@@ -339,12 +331,12 @@ static int icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcompone
     zone->component = component;
 
     if (zone->location) {
-        free(zone->location);
+        icalmemory_free_buffer(zone->location);
     }
     zone->location = icaltimezone_get_location_from_vtimezone(component);
 
     if (zone->tznames) {
-        free(zone->tznames);
+        icalmemory_free_buffer(zone->tznames);
     }
     zone->tznames = icaltimezone_get_tznames_from_vtimezone(component);
 
@@ -361,7 +353,7 @@ char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
     if (prop) {
         location = icalproperty_get_location(prop);
         if (location)
-            return strdup(location);
+            return icalmemory_strdup(location);
     }
 
     prop = icalcomponent_get_first_property(component, ICAL_X_PROPERTY);
@@ -370,7 +362,7 @@ char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
         if (name && !strcasecmp(name, "X-LIC-LOCATION")) {
             location = icalproperty_get_x(prop);
             if (location)
-                return strdup(location);
+                return icalmemory_strdup(location);
         }
         prop = icalcomponent_get_next_property(component, ICAL_X_PROPERTY);
     }
@@ -463,11 +455,11 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
         char *tznames;
 
         if (!strcmp(standard_tzname, daylight_tzname))
-            return strdup(standard_tzname);
+            return icalmemory_strdup(standard_tzname);
 
         standard_len = strlen(standard_tzname);
         daylight_len = strlen(daylight_tzname);
-        tznames = malloc(standard_len + daylight_len + 2);
+        tznames = icalmemory_new_buffer(standard_len + daylight_len + 2);
         strcpy(tznames, standard_tzname);
         tznames[standard_len] = '/';
         strcpy(tznames + standard_len + 1, daylight_tzname);
@@ -477,7 +469,7 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 
         /* If either of the TZNAMEs was found just return that, else NULL. */
         tznames = standard_tzname ? standard_tzname : daylight_tzname;
-        return tznames ? strdup(tznames) : NULL;
+        return tznames ? icalmemory_strdup(tznames) : NULL;
     }
 }
 
@@ -1431,9 +1423,9 @@ static int get_offset(icaltimezone *zone)
     struct tm local;
     struct icaltimetype tt;
     int offset;
-    const time_t now = time(NULL);
+    const icaltime_t now = icaltime(NULL);
 
-    if (!gmtime_r(&now, &local))
+    if (!icalgmtime_r(&now, &local))
         return 0;
 
     tt = tm_to_icaltimetype(&local);
@@ -1575,7 +1567,7 @@ static int parse_coord(char *coord, int len, int *degrees, int *minutes, int *se
     } else if (len == 8) {
         sscanf(coord + 1, "%3d%2d%2d", degrees, minutes, seconds);
     } else {
-        fprintf(stderr, "Invalid coordinate: %s\n", coord);
+        icalerrprintf("Invalid coordinate: %s\n", coord);
         return 1;
     }
 
@@ -1605,7 +1597,7 @@ static int fetch_lat_long_from_string(const char *str,
         sptr++;
     }
     len = (ptrdiff_t) (sptr - temp);
-    lat = (char *)malloc(len + 1);
+    lat = (char *)icalmemory_new_buffer(len + 1);
     memset(lat, '\0', len + 1);
     strncpy(lat, temp, len);
     lat[len] = '\0';
@@ -1647,11 +1639,11 @@ static int fetch_lat_long_from_string(const char *str,
                     latitude_seconds) == 1 ||
         parse_coord(lon, (int)strlen(lon),
                     longitude_degrees, longitude_minutes, longitude_seconds) == 1) {
-        free(lat);
+        icalmemory_free_buffer(lat);
         return 1;
     }
 
-    free(lat);
+    icalmemory_free_buffer(lat);
 
     return 0;
 }
@@ -1704,7 +1696,7 @@ static void icaltimezone_parse_zone_tab(void)
     filename_len += strlen(zonetab);
     filename_len += 2; /* for dir separator and final '\0' */
 
-    filename = (char *)malloc(filename_len);
+    filename = (char *)icalmemory_new_buffer(filename_len);
     if (!filename) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return;
@@ -1712,7 +1704,7 @@ static void icaltimezone_parse_zone_tab(void)
     snprintf(filename, filename_len, "%s/%s", zonedir, zonetab);
 
     fp = fopen(filename, "r");
-    free(filename);
+    icalmemory_free_buffer(filename);
     icalerror_assert(fp, "Cannot open the zonetab file for reading");
     if (!fp) {
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
@@ -1732,7 +1724,7 @@ static void icaltimezone_parse_zone_tab(void)
                 if (sscanf(buf, "%1000s", location) != 1) {     /*limit location to 1000chars */
                     /*increase as needed */
                     /*see location and buf declarations */
-                    fprintf(stderr, "Invalid timezone description line: %s\n", buf);
+                    icalerrprintf("Invalid timezone description line: %s\n", buf);
                     continue;
                 }
             } else if (sscanf(buf, "%4d%2d%2d %4d%2d%2d %1000s", /*limit location to 1000chars */
@@ -1742,7 +1734,7 @@ static void icaltimezone_parse_zone_tab(void)
                               &latitude_seconds,
                               &longitude_degrees, &longitude_minutes,
                               &longitude_seconds, location) != 7) {
-                fprintf(stderr, "Invalid timezone description line: %s\n", buf);
+                icalerrprintf("Invalid timezone description line: %s\n", buf);
                 continue;
             }
         } else {
@@ -1751,13 +1743,13 @@ static void icaltimezone_parse_zone_tab(void)
                                            &latitude_seconds,
                                            &longitude_degrees, &longitude_minutes,
                                            &longitude_seconds, location)) {
-                fprintf(stderr, "Invalid timezone description line: %s\n", buf);
+                icalerrprintf("Invalid timezone description line: %s\n", buf);
                 continue;
             }
         }
 
         icaltimezone_init(&zone);
-        zone.location = strdup(location);
+        zone.location = icalmemory_strdup(location);
 
         if (latitude_degrees >= 0) {
             zone.latitude =
@@ -1803,7 +1795,7 @@ void icaltimezone_release_zone_tab(void)
 
     builtin_timezones = NULL;
     for (i = 0; i < mybuiltin_timezones->num_elements; i++) {
-        free(((icaltimezone *) icalarray_element_at(mybuiltin_timezones, i))->location);
+        icalmemory_free_buffer(((icaltimezone *) icalarray_element_at(mybuiltin_timezones, i))->location);
     }
     icalarray_free(mybuiltin_timezones);
 }
@@ -1839,7 +1831,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 
         filename_len = strlen(get_zone_directory()) + strlen(zone->location) + 6;
 
-        filename = (char *)malloc(filename_len);
+        filename = (char *)icalmemory_new_buffer(filename_len);
         if (!filename) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             goto out;
@@ -1848,7 +1840,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
         snprintf(filename, filename_len, "%s/%s.ics", get_zone_directory(), zone->location);
 
         fp = fopen(filename, "r");
-        free(filename);
+        icalmemory_free_buffer(filename);
         if (!fp) {
             icalerror_set_errno(ICAL_FILE_ERROR);
             goto out;
@@ -1856,7 +1848,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 
         /* ##### B.# Sun, 11 Nov 2001 04:04:29 +1100
            this is where the MALFORMEDDATA error is being set, after the call to 'icalparser_parse'
-           fprintf(stderr, "** WARNING ** %s: %d %s\n",
+           icalerrprintf("** WARNING ** %s: %d %s\n",
                    __FILE__, __LINE__, icalerror_strerror(icalerrno));
          */
 
@@ -1880,11 +1872,11 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
                 const char *tzid_prefix = icaltimezone_tzid_prefix();
 
                 new_tzid_len = strlen(tzid_prefix) + strlen(zone->location) + 1;
-                new_tzid = (char *)malloc(sizeof(char) * (new_tzid_len + 1));
+                new_tzid = (char *)icalmemory_new_buffer(sizeof(char) * (new_tzid_len + 1));
                 if(new_tzid) {
                     snprintf(new_tzid, new_tzid_len, "%s%s", tzid_prefix, zone->location);
                     icalproperty_set_tzid(prop, new_tzid);
-                    free(new_tzid);
+                    icalmemory_free_buffer(new_tzid);
                 } else {
                     icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                 }
@@ -2003,7 +1995,7 @@ static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size)
        hours, and daylight saving shouldn't change it by more than a few hours.
        (The maximum offset is 15 hours 56 minutes at present.) */
     if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60) {
-        fprintf(stderr, "Warning: Strange timezone offset: H:%i M:%i S:%i\n",
+        icalerrprintf("Warning: Strange timezone offset: H:%i M:%i S:%i\n",
                 hours, minutes, seconds);
     }
 
@@ -2139,7 +2131,7 @@ static const char *get_zone_directory(void)
             zislashp1 = zislash + 1;
             strcat(dirname, (char *)zislashp1);
             if (stat(dirname, &st) == 0 && S_ISDIR(st.st_mode)) {
-                cache = strdup(dirname);
+                cache = icalmemory_strdup(dirname);
                 return cache;
             }
         }
@@ -2154,7 +2146,7 @@ void set_zone_directory(const char *path)
     if (zone_files_directory)
         free_zone_directory();
 
-    zone_files_directory = malloc(strlen(path) + 1);
+    zone_files_directory = icalmemory_new_buffer(strlen(path) + 1);
 
     if (zone_files_directory != NULL)
         strcpy(zone_files_directory, path);
@@ -2163,7 +2155,7 @@ void set_zone_directory(const char *path)
 void free_zone_directory(void)
 {
     if (zone_files_directory != NULL) {
-        free(zone_files_directory);
+        icalmemory_free_buffer(zone_files_directory);
         zone_files_directory = NULL;
     }
 }

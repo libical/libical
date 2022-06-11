@@ -1,8 +1,8 @@
-# Using Libical
+# Using Libical {#UsingLibical}
 
->   Author: Eric Busboom <eric@civicknowledge.com>
->   
->   Date: January 2001
+> Author: Eric Busboom <eric@civicknowledge.com>
+>
+> Date: January 2001
 
 ## 1 Introduction
 
@@ -11,9 +11,10 @@ and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.
 
-Libical implements [RFC5545][], [RFC5546][], [RFC7529][]; the 
-iCalendar extensions in [RFC6638][]; and some of [RFC6047][].
-
+Libical implements [RFC5545][], [RFC5546][], [RFC7529][];
+the CalDav scheduling extensions in [RFC6638][];
+the iCalendar extensions in [RFC7986][], [RFC9073][], [RFC9074][];
+and some of [RFC6047][].
 
 This documentation assumes that you are familiar with the iCalendar
 standards RFC5545 and RFC5546. These specifications are available
@@ -23,13 +24,17 @@ at the [IETF Tools][] website:
 [RFC5546]: https://tools.ietf.org/html/rfc5546
 [RFC7529]: https://tools.ietf.org/html/rfc7529
 [RFC6638]: https://tools.ietf.org/html/rfc6638
+[RFC7986]: https://tools.ietf.org/html/rfc7986
+[RFC9073]: https://tools.ietf.org/html/rfc9073
+[RFC9074]: https://tools.ietf.org/html/rfc9074
 [RFC6047]: https://tools.ietf.org/html/rfc6047
+
 [IETF Tools]: https://tools.ietf.org/
 
 ### 1.1 The libical project
 
 This code is under active development. If you would like to contribute
-to the project, visit <https://libical.github.io/libical/>
+to the project, visit <https://libical.github.io/libical/>.
 
 ### 1.2 License
 
@@ -41,8 +46,8 @@ See <https://www.gnu.org/licenses/lgpl-2.1.html> for a copy of the LGPL.
 
 This dual license ensures that the library can be incorporated into
 both proprietary code and GPL'd programs, and will benefit from improvements
-made by programmers in both realms. I will only accept changes into
-my version of the library if they are similarly dual-licensed.
+made by programmers in both realms. We (the libical developers) will only
+accept changes to this library if they are similarly dual-licensed.
 
 ### 1.3 Example Code
 
@@ -156,7 +161,7 @@ or union.
 
 #### 3.2.2 The parser
 
-The libical parser offers a variety of ways to convert [RFC5545][] text 
+The libical parser offers a variety of ways to convert [RFC5545][] text
 into a libical internal component structure. The parser can parse
 blocks of text as a string, or it can parse line-by-line.
 
@@ -169,7 +174,7 @@ errors and component usage errors.
 
 Since many of libical's interfaces return strings, the library has its
 own memory management system to eliminate the need to free every string
-returned from the library.
+returned from the library.  See [Memory Management](#memory).
 
 #### 3.2.5 Storage classes
 
@@ -190,7 +195,7 @@ by maintaining a self-similar interface.
 Libical defines components for groups of properties that look and act
 like components, but are not defined as components in the specification.
 `XDAYLIGHT` and `XSTANDARD` are notable examples. These pseudo components
-group properties within the `VTIMEZONE` components. For instanace, the
+group properties within the `VTIMEZONE` components. For instance, the
 timezone properties associated with daylight savings time starts with
 `BEGIN:DAYLIGHT` and ends with `END:DAYLIGHT`, just like other components,
 but is not defined as a component in [RFC5545][] (see [section 3.6.5][RFC5545 3.6.5])
@@ -225,7 +230,7 @@ It is natural to have interfaces that would return the value of a property,
 but it is cumbersome for a single routine to return multiple types.
 So, in libical, properties that can have multiple types are given
 a single type that is the union of their RFC5545 types. For instance,
-in libical, the value of the `TRIGGER` property resolves to struct 
+in libical, the value of the `TRIGGER` property resolves to struct
 `icaltriggertype`. This type is a union of a `DURATION` and a `DATE-TIME`.
 
 ### 4.3 Multi-Valued Properties
@@ -261,10 +266,11 @@ into one.
 
 ### 5.1 Creating Components
 
-There are three ways to create components in Libical: 
-1.  creating individual objects and assembling them, 
-2.  building entire objects in massive vaargs calls, 
-3.  and parsing a text file containing iCalendar data.
+There are three ways to create components in Libical:
+
+1. creating individual objects and assembling them,
+2. building entire objects in massive vargs calls,
+3. parsing a text file containing iCalendar data.
 
 #### 5.1.1 Constructor Interfaces
 
@@ -300,7 +306,7 @@ Most things you work with are objects, that are instantiated with
 a constructor that has "new" in the name. Also note that, other than
 the object reference, most structure data is passed in to libical
 routines by value. Libical has some complex but very regular memory
-handling rules. These are detailed in section [sec:memory].
+handling rules. These are detailed in section [Memory Management](#memory).
 
 If any of the constructors fail, they will return 0. If you try to
 insert 0 into a property or component, or use a zero-valued object
@@ -349,9 +355,9 @@ calendar =
 This form is similar to the constructor form, except that the constructors
 have `vanew` instead of `new` in the name. The arguments are similar
 too, except that the component constructor can have a list of properties,
-and the property constructor can have a list of parameters. 
+and the property constructor can have a list of parameters.
 
-*Be sure to terminate every list with a `NULL` (or a *`(void 0)`*, or your code 
+*Be sure to terminate every list with a `NULL` (or a *`(void 0)`*, or your code
 will crash, if you are lucky*. The reason you can't use 0 itself is that
 depending on what platform you are on, `sizeof(int) ≠ sizeof(void*)`.
 
@@ -367,7 +373,7 @@ icalcomponent* icalparser_parse_string(char* str);
 
 If the string contains only one component, the parser will return the
 component in libical form. If the string contains multiple components,
-the multiple components will be returned as the children of an 
+the multiple components will be returned as the children of an
 `ICAL_XROOT_COMPONENT` component.
 
 Parsing a whole string may seem wasteful if you want to pull a large
@@ -404,7 +410,7 @@ char* read_stream(char *s, size_t size, void *d)
     return fgets(s, size, (FILE*)d);
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     char *line;
     icalcomponent *component;
@@ -474,7 +480,7 @@ char* read_stream(char *s, size_t size, void *d)
     return fgets(s, size, (FILE*)d);
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     char* line;
     icalcomponent *component;
@@ -522,13 +528,13 @@ icalcomponent* icalcomponent_get_first_component(
 This routine will return a reference to the first component of the
 type `kind`. The key kind values, listed in icalenums.h are:
 
--   `ICAL_ANY_COMPONENT`
--   `ICAL_VEVENT_COMPONENT`
--   `ICAL_VTODO_COMPONENT`
--   `ICAL_VJOURNAL_COMPONENT`
--   `ICAL_VCALENDAR_COMPONENT`
--   `ICAL_VFREEBUSY_COMPONENT`
--   `ICAL_VALARM_COMPONENT`
+- `ICAL_ANY_COMPONENT`
+- `ICAL_VEVENT_COMPONENT`
+- `ICAL_VTODO_COMPONENT`
+- `ICAL_VJOURNAL_COMPONENT`
+- `ICAL_VCALENDAR_COMPONENT`
+- `ICAL_VFREEBUSY_COMPONENT`
+- `ICAL_VALARM_COMPONENT`
 
 These are only the most common components; there are many more listed
 in icalenums.h.
@@ -613,7 +619,7 @@ Here is an example of a loop using these routines:
 ```c
 for(i = icalcomponent_begin_component(impl->cluster, ICAL_ANY_COMPONENT);
     icalcompiter_deref(&i)!= 0;
-    icalcompiter_next(&i)) 
+    icalcompiter_next(&i))
 {
     icalcomponent *this = icalcompiter_deref(&i);
 }
@@ -640,7 +646,7 @@ for(c = icalcomponent_get_first_component(parent_comp, ICAL_ANY_COMPONENT);
 }
 ```
 
-Another way to remove components is to rely on the side effect of 
+Another way to remove components is to rely on the side effect of
 `icalcomponent_remove_component()`:
 if component iterator in the parent component is pointing to the child
 that will be removed, it will move the iterator to the component after
@@ -712,17 +718,17 @@ their own. You can manipulate them either as part of the property
 or independently.
 
 The most common way to work with values to is to manipulate them from
-they properties that contain them. This involves fewer routine calls
+the properties that contain them. This involves fewer routine calls
 and intermediate variables than working with them independently, and
 it is type-safe.
 
-For each property, there are a `_get_()` and a `_set_()` routine that 
-accesses the internal value. For instanace, for the `UID` property, the 
+For each property, there are a `_get_()` and a `_set_()` routine that
+accesses the internal value. For instanace, for the `UID` property, the
 routines are:
 
 ```c
 void icalproperty_set_uid(
-    icalproperty* prop, 
+    icalproperty* prop,
     const char* v);
 
 const char* icalproperty_get_uid(
@@ -740,7 +746,7 @@ icalvalue* icalproperty_get_value(
     icalproperty* prop);
 
 void icalproperty_set_value(
-    icalproperty* prop, 
+    icalproperty* prop,
     icalvalue* value);
 ```
 
@@ -754,7 +760,7 @@ struct icaltimetype icalvalue_get_datetime(
     icalvalue* value);
 
 void icalvalue_set_datetime(
-    icalvalue* value, 
+    icalvalue* value,
     struct icaltimetype v);
 ```
 
@@ -764,7 +770,7 @@ always a string. To get and set the value, use:
 
 ```x
 void icalproperty_set_x(
-    icalproperty* prop, 
+    icalproperty* prop,
     char* v);
 
 char* icalproperty_get_x(
@@ -779,7 +785,7 @@ char* icalproperty_get_x_name(
     icalproperty* prop)
 
 void icalproperty_set_x_name(
-    icalproperty* prop, 
+    icalproperty* prop,
     char* name);
 ```
 
@@ -792,7 +798,7 @@ declares what operation a remote receiver should use to process a
 component. For instance, if the `METHOD` is `REQUEST` and the component
 is a `VEVENT`, the sender is probably asking the receiver to join in
 a meeting. In this case, RFC5546 says that the component must specify
-a start time (`DTSTART`) and list the receiver as an attendee 
+a start time (`DTSTART`) and list the receiver as an attendee
 (`ATTENDEE`).
 
 Libical can check these restrictions with the routine:
@@ -850,11 +856,11 @@ struct icaltimetype {
   int minute;
   int second;
   int is_utc; /* 1-> time is in UTC timezone */
-  int is_date; /* 1 -> interpret this as date. */ 
+  int is_date; /* 1 -> interpret this as date. */
 };
 ```
 
-The `year`, `month`, `day`, `hour`, `minute` and `second` fields 
+The `year`, `month`, `day`, `hour`, `minute` and `second` fields
 hold the broken-out
 time values. The `is_utc` field distinguishes between times in UTC and
 a local time zone. The `is_date` field indicates if the time should
@@ -870,7 +876,7 @@ struct icaltimetype icaltime_from_string(
     const char* str);
 
 struct icaltimetype icaltime_from_timet_with_zone(
-    time_t v,
+    icaltime_t v,
     int is_date,
     icaltimezone* zone);
 ```
@@ -881,7 +887,7 @@ struct icaltimetype icaltime_from_timet_with_zone(
 struct icaltimetype tt = icaltime_from_string("19970101T103000");
 ```
 
-`icaltime_from_timet_with_zone()` takes a `time_t` value, representing seconds past
+`icaltime_from_timet_with_zone()` takes a `icaltime_t` value, representing seconds past
 the POSIX epoch, a flag to indicate if the time is a date, and a time zone.
 Dates have an identical structure to a time, but the time portion (hours,
 minutes and seconds) is always 00:00:00. Dates act differently in
@@ -928,19 +934,19 @@ short icaltime_day_of_year(
     struct icaltimetype t);
 
 struct icaltimetype icaltime_from_day_of_year(
-    short doy, 
+    short doy,
     short year);
 
 short icaltime_day_of_week(
     struct icaltimetype t);
 
 short icaltime_start_doy_week(
-    struct icaltimetype t, 
+    struct icaltimetype t,
     int fdow);
 
 short icaltime_week_number(
-    short day_of_month, 
-    short month, 
+    short day_of_month,
+    short month,
     short year);
 
 short icaltime_days_in_month(
@@ -954,11 +960,11 @@ the hour, minute and second fields should be used in the conversion.
 
 ```c
 struct icaltimetype icaltime_from_timet_with_zone(
-    time_t v,
+    icaltime_t v,
     int is_date,
     icaltimezone* zone);
 
-time_t icaltime_as_timet(
+icaltime_t icaltime_as_timet(
     struct icaltimetype);
 ```
 
@@ -966,7 +972,7 @@ The compare routine works exactly like `strcmp()`, but on time structures.
 
 ```c
 int icaltime_compare(
-    struct icaltimetype a, 
+    struct icaltimetype a,
     struct icaltimetype b);
 ```
 
@@ -987,17 +993,17 @@ time all year.
 
 ```c
 int icaltime_utc_offset(
-    struct icaltimetype tt, 
+    struct icaltimetype tt,
     char* tzid);
 
 int icaltime_local_utc_offset();
 
 struct icaltimetype icaltime_as_utc(
-    struct icaltimetype tt, 
+    struct icaltimetype tt,
     char* tzid);
 
 struct icaltimetype icaltime_as_zone(
-    struct icaltimetype tt, 
+    struct icaltimetype tt,
     char* tzid);
 
 struct icaltimetype icaltime_as_local(
@@ -1035,38 +1041,38 @@ icalerrorenum icaldirset_commit(
     icaldirset* store);
 
 icalerrorenum icaldirset_add_component(
-    icaldirset* store, 
+    icaldirset* store,
     icalcomponent* comp);
 
 icalerrorenum icaldirset_remove_component(
-    icaldirset* store, 
+    icaldirset* store,
     icalcomponent* comp);
 
 int icaldirset_count_components(
-    icaldirset* store, 
+    icaldirset* store,
     icalcomponent_kind kind);
 
 icalerrorenum icaldirset_select(
-    icaldirset* store, 
+    icaldirset* store,
     icalcomponent* gauge);
 
 void icaldirset_clear(
     icaldirset* store);
 
 icalcomponent* icaldirset_fetch(
-    icaldirset* store, 
+    icaldirset* store,
     const char* uid);
 
 int icaldirset_has_uid(
-    icaldirset* store, 
+    icaldirset* store,
     const char* uid);
 
 icalcomponent* icaldirset_fetch_match(
-    icaldirset* set, 
+    icaldirset* set,
     icalcomponent *c);
 
 icalerrorenum icaldirset_modify(
-    icaldirset* store, 
+    icaldirset* store,
     icalcomponent *oldc,
     icalcomponent *newc);
 
@@ -1103,13 +1109,13 @@ icalfileset* icalfileset_new(
     const char* path);
 
 icalfileset* icalfileset_new_open(
-    const char* path, 
-    int flags, 
+    const char* path,
+    int flags,
     int mode);
 ```
 
 `icalset_new_file()` is identical to `icalfileset_new()`. Both routines will
-open an existing file for readinga and writing, or create a new file
+open an existing file for reading and writing, or create a new file
 if it does not exist. `icalfileset_new_open()` takes the same arguments
 as the open() system routine and behaves in the same way.
 
@@ -1125,7 +1131,7 @@ To add components to a set, use:
 
 ```c
 icalerrorenum icalfileset_add_component(
-    icalfileset* cluster, 
+    icalfileset* cluster,
     icalcomponent* child);
 ```
 
@@ -1170,7 +1176,7 @@ Then, you can add the gauge to the set with :
 
 ```c
 icalerrorenum icalfileset_select(
-    icalfileset* store, 
+    icalfileset* store,
     icalgauge* gauge);
 ```
 
@@ -1191,8 +1197,7 @@ DTSTART <= '20000106T120000Z'");
     fs = icalfileset_new(path);
 
     for (i = 0; i!= 10; i++){
-        c = make_component(i); /* Make a new component where DTSTART
-has month of i */
+        c = make_component(i); /* Make a new component where DTSTART has month of i */
         icalfileset_add_component(fs,c);
     }
 
@@ -1217,6 +1222,7 @@ has month of i */
 There are several other routines in the icalset interface, but they
 not fully implemented yet.
 
+<a id="memory"></a>
 #### 5.5 Memory Management
 
 Libical relies heavily on dynamic allocation for both the core objects
@@ -1224,35 +1230,35 @@ and for the strings used to hold values. Some of this memory the library
 caller owns and must free, and some of the memory is managed by the
 library. Here is a summary of the memory rules.
 
-1.  If the function name has "new" in it (such as `icalcomponent_new()`,
-    or `icalproperty_new_from_string()`), the caller gets control
-    of the memory. The caller also gets control over an object that is
-    cloned via a function that ends with "_clone" (like `icalcomponent_clone()`)
+1. If the function name has "new" in it (such as `icalcomponent_new()`,
+   or `icalproperty_new_from_string()`), the caller gets control
+   of the memory. The caller also gets control over an object that is
+   cloned via a function that ends with "_clone" (like `icalcomponent_clone()`)
 
-2.  If you got the memory from a routine with "clone" or "new" in it, you
-    must call the corresponding `*_free()` routine to free the memory,
-    for example use `icalcomponent_free()` to free objects created with
-    `icalcomponent_new()` or `icalcomponent_clone()`
+2. If you got the memory from a routine with "clone" or "new" in it, you
+   must call the corresponding `*_free()` routine to free the memory,
+   for example use `icalcomponent_free()` to free objects created with
+   `icalcomponent_new()` or `icalcomponent_clone()`
 
-3.  If the function name has "add" in it, the caller is transferring
-    control of the memory to the routine, for example the function
-    ` icalproperty_add_parameter()`
+3. If the function name has "add" in it, the caller is transferring
+   control of the memory to the routine, for example the function
+   ` icalproperty_add_parameter()`
 
-4.  If the function name has "remove" in it, the caller passes in
-    a pointer to an object and after the call returns, the caller owns
-    the object. So, before you call `icalcomponent_remove_property(comp, foo)`,
-    you do not own "foo" and after the call returns, you do.
+4. If the function name has "remove" in it, the caller passes in
+   a pointer to an object and after the call returns, the caller owns
+   the object. So, before you call `icalcomponent_remove_property(comp, foo)`,
+   you do not own "foo" and after the call returns, you do.
 
-5.  If the routine returns a string and its name does NOT end in `_r`,
-    libical owns the memory and will put it on a ring buffer to reclaim
-    later. For example, `icalcomponent_as_ical_string()`. You better
-    `strdup()` it if you want to keep it, and you don't have to delete it.
+5. If the routine returns a string and its name does NOT end in `_r`,
+   libical owns the memory and will put it on a ring buffer to reclaim
+   later. For example, `icalcomponent_as_ical_string()`. You better
+   `strdup()` it if you want to keep it, and you don't have to delete it.
 
-6.  If the routine returns a string and its name *does* end in `_r`, the
-    caller gets control of the memory and is responsible for freeing it.
-    For example, `icalcomponent_as_ical_string_r()` does the same thing as
-    `icalcomponent_as_ical_string()`, except you now have control of the
-    string buffer it returns.
+6. If the routine returns a string and its name *does* end in `_r`, the
+   caller gets control of the memory and is responsible for freeing it.
+   For example, `icalcomponent_as_ical_string_r()` does the same thing as
+   `icalcomponent_as_ical_string()`, except you now have control of the
+   string buffer it returns.
 
 ### 5.6 Error Handling
 
@@ -1271,36 +1277,34 @@ of enum `icalerrorenum`.
 Most routines will set the global error value `icalerrno` on errors.
 This variable is an enumeration; permissible values can be found in
 `libical/icalerror.h`. If the routine returns an enum icalerrorenum,
-then the return value will be the same as icalerrno. You can use 
-`icalerror_strerror()` to get a string that describes the error. 
+then the return value will be the same as icalerrno. You can use
+`icalerror_strerror()` to get a string that describes the error.
 The enumerations are:
 
--   `ICAL_BADARG_ERROR`: One of the argument to a routine was bad. 
-    Typically for a null pointer.
+- `ICAL_BADARG_ERROR`: One of the arguments to a routine was bad.
+  Typically for a null pointer.
 
--   `ICAL_NEWFAILED_ERROR`: A `new()` or `malloc()` failed.
+- `ICAL_NEWFAILED_ERROR`: A `new()` or `malloc()` failed.
 
--   `ICAL_MALFORMEDDATA_ERROR`: An input string was not in the correct
-    format
+- `ICAL_MALFORMEDDATA_ERROR`: An input string was not in the correct format
 
--   `ICAL_PARSE_ERROR`: The parser failed to parse an incoming component
+- `ICAL_PARSE_ERROR`: The parser failed to parse an incoming component
 
--   `ICAL_INTERNAL_ERROR`: Largely equivalent to an assert
+- `ICAL_INTERNAL_ERROR`: Largely equivalent to an assert
 
--   `ICAL_FILE_ERROR`: A file operation failed. Check errno for more
-    detail.
+- `ICAL_FILE_ERROR`: A file operation failed. Check errno for more detail.
 
--   `ICAL_ALLOCATION_ERROR`: ?
+- `ICAL_ALLOCATION_ERROR`: ?
 
--   `ICAL_USAGE_ERROR`: ?
+- `ICAL_USAGE_ERROR`: ?
 
--   `ICAL_NO_ERROR`: No error
+- `ICAL_NO_ERROR`: No error
 
--   `ICAL_MULTIPLEINCLUSION_ERROR`: ?
+- `ICAL_MULTIPLEINCLUSION_ERROR`: ?
 
--   `ICAL_TIMEDOUT_ERROR`: For CSTP and acquiring locks
+- `ICAL_TIMEDOUT_ERROR`: For CSTP and acquiring locks
 
--   `ICAL_UNKNOWN_ERROR`: ?
+- `ICAL_UNKNOWN_ERROR`: ?
 
 #### 5.6.3 `X-LIC-ERROR` and `X-LIC-INVALID-COMPONENT`
 
@@ -1325,41 +1329,22 @@ RFC5545.
 
 There are a few routines to manipulate error properties:
 
-[ The following data is supposed to be in a table. It looks OK in LyX,
-but does not format properly in output. ]
-
-+-------------------------------------+---------------------------------------------------------+
-| Routine                             | Purpose                                                 |
-+-------------------------------------+---------------------------------------------------------+
-| void icalrestriction_check()        | Check a component against RFC5546 and insert            |
-+-------------------------------------+---------------------------------------------------------+
-|                                     | error properties to indicate non compliance             |
-+-------------------------------------+---------------------------------------------------------+
-| int icalcomponent_count_errors()    | Return the number of error properties                   |
-+-------------------------------------+---------------------------------------------------------+
-|                                     | in a component                                          |
-+-------------------------------------+---------------------------------------------------------+
-| void icalcomponent_strip_errors()   | Remove all error properties in as                       |
-+-------------------------------------+---------------------------------------------------------+
-|                                     | component                                               |
-+-------------------------------------+---------------------------------------------------------+
-| void icalcomponent_convert_errors() | Convert some error properties into                      |
-+-------------------------------------+---------------------------------------------------------+
-|                                     | REQUESTS-STATUS proprties to indicate the inability to  |
-+-------------------------------------+---------------------------------------------------------+
-|                                     | process the component as an iTIP request.               |
-+-------------------------------------+---------------------------------------------------------+
-
+| Routine                               | Purpose                                              |
+|:--------------------------------------|:-----------------------------------------------------|
+| `void icalrestriction_check()`        | Check a component against RFC5546 and insert error properties to indicate non compliance |
+| `int icalcomponent_count_errors()`    | Return the number of error properties in a component |
+| `void icalcomponent_strip_errors()`   | Remove all error properties in a component           |
+| `void icalcomponent_convert_errors()` | Convert some error properties into REQUESTS-STATUS properties to indicate the inability to process the component as an iTIP request |
 
 The types of errors are listed in icalerror.h. They are:
 
--   `ICAL_XLICERRORTYPE_COMPONENTPARSEERROR`
--   `ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR`
--   `ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR`
--   `ICAL_XLICERRORTYPE_PROPERTYPARSEERROR`
--   `ICAL_XLICERRORTYPE_VALUEPARSEERROR`
--   `ICAL_XLICERRORTYPE_UNKVCALPROP`
--   `ICAL_XLICERRORTYPE_INVALIDITIP`
+- `ICAL_XLICERRORTYPE_COMPONENTPARSEERROR`
+- `ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR`
+- `ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR`
+- `ICAL_XLICERRORTYPE_PROPERTYPARSEERROR`
+- `ICAL_XLICERRORTYPE_VALUEPARSEERROR`
+- `ICAL_XLICERRORTYPE_UNKVCALPROP`
+- `ICAL_XLICERRORTYPE_INVALIDITIP`
 
 The libical parser will generate the error that end in `PARSEERROR` when
 it encounters garbage in the input steam. `ICAL_XLICERRORTYPE_INVALIDITIP`
@@ -1407,10 +1392,10 @@ Enums that identify a component, property, value or parameter end with
 `_COMPONENT`, `_PROPERTY`, `_VALUE`, or `_PARAMETER`"
 
 Enums that identify a parameter value have the name of the parameter
-as the second word. For instance: `ICAL_ROLE_REQPARTICIPANT` or 
+as the second word. For instance: `ICAL_ROLE_REQPARTICIPANT` or
 `ICAL_PARTSTAT_ACCEPTED`.
 
-The enums for the parts of a recurarance rule and request statuses
+The enums for the parts of a recurrence rule and request statuses
 are irregular.
 
 ## 6 Hacks and Bugs

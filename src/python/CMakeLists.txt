@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 include_directories(
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/libical
@@ -21,4 +24,3 @@ set_target_properties(LibicalWrap PROPERTIES
 install(TARGETS LibicalWrap DESTINATION lib)
 
 ########### install files ###############
-

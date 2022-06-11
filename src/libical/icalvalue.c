@@ -2,18 +2,9 @@
  FILE: icalvalue.c
  CREATOR: eric 02 May 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
   Contributions from:
      Graham Davison <g.m.davison@computer.org>
@@ -42,7 +33,7 @@ LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kin
     if (!icalvalue_kind_is_valid(kind))
         return NULL;
 
-    if ((v = (struct icalvalue_impl *)malloc(sizeof(struct icalvalue_impl))) == 0) {
+    if ((v = (struct icalvalue_impl *)icalmemory_new_buffer(sizeof(struct icalvalue_impl))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -174,7 +165,7 @@ icalvalue *icalvalue_new_clone(const icalvalue *old)
 static char *icalmemory_strdup_and_dequote(const char *str)
 {
     const char *p;
-    char *out = (char *)malloc(sizeof(char) * strlen(str) + 1);
+    char *out = (char *)icalmemory_new_buffer(sizeof(char) * strlen(str) + 1);
     char *pout;
     int wroteNull = 0;
 
@@ -311,7 +302,8 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
                https://tools.ietf.org/html/rfc5545#section-3.8.1.2 */
             if ((icalproperty_isa(value->parent) == ICAL_CATEGORIES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_RESOURCES_PROPERTY) ||
-                (icalproperty_isa(value->parent) == ICAL_POLLPROPERTIES_PROPERTY)) {
+                (icalproperty_isa(value->parent) == ICAL_POLLPROPERTIES_PROPERTY) ||
+                (icalproperty_isa(value->parent) == ICAL_LOCATIONTYPE_PROPERTY)) {
                 icalmemory_append_char(&str, &str_p, &buf_sz, *p);
                 break;
             }
@@ -365,23 +357,20 @@ static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char
 }
 
 /**
- * Transforms a simple float number string into a double.
+ * Extracts a simple floating point number as a substring.
  * The decimal separator (if any) of the double has to be '.'
  * The code is locale *independent* and does *not* change the locale.
  * It should be thread safe.
- * If you want a code that does the same job with a decimal separator
- * dependent on the current locale, then use strtof() from libc.
  */
-static int simple_str_to_double(const char *from, double *result, char **to)
+static int simple_str_to_doublestr(const char *from, char *result, char **to)
 {
-#define TMP_NUM_SIZE 100
     char *start = NULL, *end = NULL, *cur = (char *)from;
-    char tmp_buf[TMP_NUM_SIZE + 1];     /*hack */
 
 #if !defined(HAVE_GETNUMBERFORMAT)
     struct lconv *loc_data = localeconv();
 #endif
     int i = 0;
+    double dtest;
 
     /*sanity checks */
     if (!from || !result) {
@@ -393,8 +382,7 @@ static int simple_str_to_double(const char *from, double *result, char **to)
         cur++;
 
     start = cur;
-    /* copy the part that looks like a double into tmp_buf
-     * so that we can call strtof() on it.
+    /* copy the part that looks like a double into result.
      * during the copy, we give ourselves a chance to convert the '.'
      * into the decimal separator of the current locale.
      */
@@ -406,7 +394,6 @@ static int simple_str_to_double(const char *from, double *result, char **to)
         /*huh hoh, number is too big. getting out */
         return 1;
     }
-    memset(tmp_buf, 0, TMP_NUM_SIZE + 1);
 
     /* copy the float number string into tmp_buf, and take
      * care to have the (optional) decimal separator be the one
@@ -417,18 +404,22 @@ static int simple_str_to_double(const char *from, double *result, char **to)
         if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0]
             && loc_data->decimal_point[0] != '.') {
             /*replace '.' by the digit separator of the current locale */
-            tmp_buf[i] = loc_data->decimal_point[0];
+            result[i] = loc_data->decimal_point[0];
         } else {
-            tmp_buf[i] = start[i];
+            result[i] = start[i];
         }
     }
 #else
-    GetNumberFormat(LOCALE_SYSTEM_DEFAULT, 0, start, NULL, tmp_buf, TMP_NUM_SIZE);
+    GetNumberFormat(LOCALE_SYSTEM_DEFAULT, 0, start, NULL, result, TMP_NUM_SIZE);
 #endif
     if (to) {
         *to = end;
     }
-    *result = atof(tmp_buf);
+
+    /* now try to convert to a floating point number, to check for validity only */
+    if (sscanf(result, "%lf", &dtest) != 1) {
+        return 1;
+    }
     return 0;
 }
 
@@ -569,7 +560,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             char *dequoted_str = icalmemory_strdup_and_dequote(str);
 
             value = icalvalue_new_text(dequoted_str);
-            free(dequoted_str);
+            icalmemory_free_buffer(dequoted_str);
             break;
         }
 
@@ -588,13 +579,14 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
     case ICAL_GEO_VALUE:
         {
             char *cur = NULL;
-            struct icalgeotype geo = { 0.0, 0.0 };
+            struct icalgeotype geo;
+            memset(geo.lat, 0, ICAL_GEO_LEN);
+            memset(geo.lon, 0, ICAL_GEO_LEN);
 
-            if (simple_str_to_double(str, &geo.lat, &cur)) {
+            if (simple_str_to_doublestr(str, geo.lat, &cur)) {
                 goto geo_parsing_error;
             }
-
-            /*skip white spaces */
+            /* skip white spaces */
             while (cur && isspace((int)*cur)) {
                 ++cur;
             }
@@ -606,12 +598,12 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
             ++cur;
 
-            /*skip white spaces */
+            /* skip white spaces */
             while (cur && isspace((int)*cur)) {
                 ++cur;
             }
 
-            if (simple_str_to_double(cur, &geo.lon, &cur)) {
+            if (simple_str_to_doublestr(cur, geo.lon, &cur)) {
                 goto geo_parsing_error;
             }
             value = icalvalue_new_geo(geo);
@@ -640,7 +632,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             if (rt.freq != ICAL_NO_RECURRENCE) {
                 value = icalvalue_new_recur(rt);
             }
-            free(rt.rscale);
+            icalmemory_free_buffer(rt.rscale);
             break;
         }
 
@@ -727,7 +719,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             char *dequoted_str = icalmemory_strdup_and_dequote(str);
 
             value = icalvalue_new_x(dequoted_str);
-            free(dequoted_str);
+            icalmemory_free_buffer(dequoted_str);
         }
         break;
 
@@ -781,7 +773,7 @@ void icalvalue_free(icalvalue *v)
     }
 
     if (v->x_value != 0) {
-        free(v->x_value);
+        icalmemory_free_buffer(v->x_value);
     }
 
     switch (v->kind) {
@@ -801,7 +793,7 @@ void icalvalue_free(icalvalue *v)
     case ICAL_QUERY_VALUE:
         {
             if (v->data.v_string != 0) {
-                free((void *)v->data.v_string);
+                icalmemory_free_buffer((void *)v->data.v_string);
                 v->data.v_string = 0;
             }
             break;
@@ -809,8 +801,8 @@ void icalvalue_free(icalvalue *v)
     case ICAL_RECUR_VALUE:
         {
             if (v->data.v_recur != 0) {
-                free(v->data.v_recur->rscale);
-                free((void *)v->data.v_recur);
+                icalmemory_free_buffer(v->data.v_recur->rscale);
+                icalmemory_free_buffer((void *)v->data.v_recur);
                 v->data.v_recur = 0;
             }
             break;
@@ -827,7 +819,7 @@ void icalvalue_free(icalvalue *v)
     v->parent = 0;
     memset(&(v->data), 0, sizeof(v->data));
     v->id[0] = 'X';
-    free(v);
+    icalmemory_free_buffer(v);
 }
 
 int icalvalue_is_valid(const icalvalue *value)
@@ -904,10 +896,13 @@ static char *icalvalue_utcoffset_as_ical_string_r(const icalvalue *value)
     m = (data - (h * 3600)) / 60;
     s = (data - (h * 3600) - (m * 60));
 
+    h = MIN(abs(h), 23);
+    m = MIN(abs(m), 59);
+    s = MIN(abs(s), 59);
     if (s != 0) {
-        snprintf(str, 9, "%c%02d%02d%02d", sign, abs(h), abs(m), abs(s));
+        snprintf(str, 9, "%c%02d%02d%02d", sign, h, m, s);
     } else {
-        snprintf(str, 9, "%c%02d%02d", sign, abs(h), abs(m));
+        snprintf(str, 9, "%c%02d%02d", sign, h, m);
     }
 
     return str;
@@ -1075,7 +1070,7 @@ static char *icalvalue_float_as_ical_string_r(const icalvalue *value)
     /* bypass current locale in order to make
        sure snprintf uses a '.' as a separator
        set locate to 'C' and keep old locale */
-    old_locale = strdup(setlocale(LC_NUMERIC, NULL));
+    old_locale = icalmemory_strdup(setlocale(LC_NUMERIC, NULL));
     (void)setlocale(LC_NUMERIC, "C");
 
     str = (char *)icalmemory_new_buffer(40);
@@ -1084,7 +1079,7 @@ static char *icalvalue_float_as_ical_string_r(const icalvalue *value)
 
     /* restore saved locale */
     (void)setlocale(LC_NUMERIC, old_locale);
-    free(old_locale);
+    icalmemory_free_buffer(old_locale);
 
     return str;
 }
@@ -1102,16 +1097,16 @@ static char *icalvalue_geo_as_ical_string_r(const icalvalue *value)
     /* bypass current locale in order to make
      * sure snprintf uses a '.' as a separator
      * set locate to 'C' and keep old locale */
-    old_locale = strdup(setlocale(LC_NUMERIC, NULL));
+    old_locale = icalmemory_strdup(setlocale(LC_NUMERIC, NULL));
     (void)setlocale(LC_NUMERIC, "C");
 
     str = (char *)icalmemory_new_buffer(80);
 
-    snprintf(str, 80, "%f;%f", data.lat, data.lon);
+    snprintf(str, 80, "%s;%s", data.lat, data.lon);
 
     /* restore saved locale */
     (void)setlocale(LC_NUMERIC, old_locale);
-    free(old_locale);
+    icalmemory_free_buffer(old_locale);
 
     return str;
 }
@@ -1393,8 +1388,8 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
             temp1 = icalvalue_as_ical_string_r(a);
             temp2 = icalvalue_as_ical_string_r(b);
             r = strcmp(temp1, temp2);
-            free(temp1);
-            free(temp2);
+            icalmemory_free_buffer(temp1);
+            icalmemory_free_buffer(temp2);
 
             if (r > 0) {
                 return ICAL_XLICCOMPARETYPE_GREATER;
@@ -1500,12 +1495,12 @@ int icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBu
 
     if ((int)strlen(ptr) >= nMaxBufferLen) {
         icalvalue_free(value);
-        free(ptr);
+        icalmemory_free_buffer(ptr);
         return 0;
     }
 
     strcpy(szEncText, ptr);
-    free(ptr);
+    icalmemory_free_buffer(ptr);
 
     icalvalue_free((icalvalue *) value);
 

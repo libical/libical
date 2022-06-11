@@ -3,19 +3,19 @@
 	* Component.py Added Calendar class. 
 
 	* Componeny.py Changed all component constructor so they cannot
- 	take string arguments. Now, only NewComponent() can turn an iCal
- 	string into a component.
+	take string arguments. Now, only NewComponent() can turn an iCal
+	string into a component.
 
 	
 2001-04-02  Eric Busboom  <eric@civicknowledge.com>
 
 	* Component.py removed arguments from the Event constructor, since
- 	I presume that the Component derived classes will always be
- 	constructed with no arguments.
+	I presume that the Component derived classes will always be
+	constructed with no arguments.
 
 	* Property.py Split out Attendee, Organizer, Time, Duration and
- 	Period into their own files. Moved remaining classes to Derived
- 	Properties.pm
+	Period into their own files. Moved remaining classes to Derived
+	Properties.pm
 
 	
 2001-03-13  Eric Busboom  <eric@civicknowledge.com>
@@ -42,10 +42,10 @@
 2001-03-05  Eric Busboom  <eric@civicknowledge.com>
 
 	* Property.py Added a lot of exception code to signal failure to
- 	create a Property.
+	create a Property.
 
 	* DerivedProperties.py Added derived property classes for RDATE
- 	and TRIGGER, two properties that can have one of two value types. 
+	and TRIGGER, two properties that can have one of two value types.
 
 
 2001-03-04  Eric Busboom  <eric@civicknowledge.com>
@@ -53,7 +53,7 @@
 	* Property.pm Added Property.ConstructorFailedError exception
 
 	* Component.pm fixed bug in Collection.__setslice__. "," used
- 	instead of ":"
+	instead of ":"
 
 2001-03-04  Patrick Lewis <plewis@inetarena.com>
 	
@@ -80,23 +80,23 @@
 	* Property Added __del__ 
 
 	* Component Component.properties() now caches properties that it
- 	constructs, so two calls to properties() to that get the same
- 	icalproperty will also get the same Property.
+	constructs, so two calls to properties() to that get the same
+	icalproperty will also get the same Property.
 
 	* Property Added Property.__cmp__ to test equality of properties
- 	based on ical string values
+	based on ical string values
 
 2001-02-27  Eric Busboom  <eric@civicknowledge.com>
 
 	* Property Added Property.ref() to set/get the reference to the
- 	Property's internal icalproperty
+	Property's internal icalproperty
 
 	* Property Property._update_value now changes the icalproperty
- 	value if a reference has been set.
+	value if a reference has been set.
 
 	* Component re-instituted Component.properties(). The routine now
- 	adds a 'ref' key to the dict that holds the python pointer
- 	string. The C hex value of the pointer is in the 'pid' key
+	adds a 'ref' key to the dict that holds the python pointer
+	string. The C hex value of the pointer is in the 'pid' key
 	
 
 2001-02-27  Patrick Lewis  <plewis@inetarena.com>
@@ -117,10 +117,10 @@
 	* Libical.py Added test routine for time, time_test()
 
 	* Libical.py Remove end of line chars ('\r\n" ) from
- 	Property._str__. Caller should add these lines itself
+	Property._str__. Caller should add these lines itself
 
 	* Liical.py CHanges Time._update_values to set time VALUE type
- 	based on use of is_date, rather than length of string.
+	based on use of is_date, rather than length of string.
 
 	* Libical.py Removed call to _update_value in TIme::timezone
 	

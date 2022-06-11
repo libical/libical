@@ -1,18 +1,9 @@
 /*======================================================================
  FILE: icalenums.h
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  Contributions from:
     Graham Davison <g.m.davison@computer.org>
@@ -64,7 +55,11 @@ typedef enum icalcomponent_kind
     ICAL_VVOTER_COMPONENT,
     ICAL_XVOTE_COMPONENT,
     ICAL_VPATCH_COMPONENT,
-    ICAL_XPATCH_COMPONENT
+    ICAL_XPATCH_COMPONENT,
+    ICAL_PARTICIPANT_COMPONENT,
+    ICAL_VLOCATION_COMPONENT,
+    ICAL_VRESOURCE_COMPONENT,
+    ICAL_NUM_COMPONENT_TYPES /* MUST be last (unless we can put NO_COMP last) */
 } icalcomponent_kind;
 
 /***********************************************************************

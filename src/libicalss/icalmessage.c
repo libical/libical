@@ -2,18 +2,10 @@
  FILE: icalmessage.c
  CREATOR: ebusboom 07 Nov 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -22,7 +14,6 @@
 
 #include "icalmessage.h"
 #include "icalerror.h"
-#include "icalmemory.h"
 #include "icalversion.h"        /* for ICAL_PACKAGE, ICAL_VERSION */
 
 #include <ctype.h>
@@ -46,7 +37,7 @@ static char *lowercase(const char *str)
         return 0;
     }
 
-    n = icalmemory_strdup(str);
+    n = strdup(str);
 
     for (p = n; *p != 0; p++) {
         *p = tolower((int)*p);

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 #-------------------------------------------------
 # some argument checking:
 # test_cmd is the command to run with all its arguments
@@ -16,7 +19,7 @@ if(NOT output_test)
 endif()
 
 # convert the space-separated string to a list
-separate_arguments(test_args)
+separate_arguments(test_args UNIX_COMMAND ${test_args})
 
 execute_process(
   COMMAND ${test_cmd} ${test_args}
@@ -40,5 +43,7 @@ execute_process(
 )
 
 if(test_not_successful)
-  message(SEND_ERROR "Output does not match for ${output_blessed} and ${output_test}: ${err} : shell output: ${test_not_successful}!")
+  message(SEND_ERROR
+    "Output does not match for ${output_blessed} and ${output_test}: ${err} : shell output: ${test_not_successful}!"
+  )
 endif()

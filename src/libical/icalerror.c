@@ -2,18 +2,9 @@
  FILE: icalerror.c
  CREATOR: eric 16 May 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
   The original code is icalerror.c
 ======================================================================*/
@@ -23,6 +14,7 @@
 #endif
 
 #include "icalerror.h"
+#include "icalmemory.h"
 
 #include <stdlib.h>
 
@@ -38,7 +30,7 @@ static pthread_once_t icalerrno_key_once = PTHREAD_ONCE_INIT;
 
 static void icalerrno_destroy(void *buf)
 {
-    free(buf);
+    icalmemory_free_buffer(buf);
     pthread_setspecific(icalerrno_key, NULL);
 }
 
@@ -56,7 +48,7 @@ icalerrorenum *icalerrno_return(void)
     _errno = (icalerrorenum *) pthread_getspecific(icalerrno_key);
 
     if (!_errno) {
-        _errno = malloc(sizeof(icalerrorenum));
+        _errno = icalmemory_new_buffer(sizeof(icalerrorenum));
         *_errno = ICAL_NO_ERROR;
         pthread_setspecific(icalerrno_key, _errno);
     }
@@ -90,7 +82,7 @@ void icalerror_crash_here(void)
     *p = 1;
 
     /* cppcheck-suppress nullPointer */
-    assert(*p);
+    icalassert(*p);
 #endif
 }
 
@@ -123,7 +115,7 @@ void icalerror_set_errno(icalerrorenum x)
         (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && icalerror_errors_are_fatal == 1)) {
         icalerror_warn(icalerror_strerror(x));
         ical_bt();
-        assert(0);
+        icalassert(0);
     }
 }
 
@@ -272,11 +264,11 @@ void ical_bt(void)
     strings = backtrace_symbols(stack_frames, num);
     for (i = 0; i < num; i++) {
         if (strings != NULL) {
-            fprintf(stderr, "%s\n", strings[i]);
+            icalerrprintf("%s\n", strings[i]);
         } else {
-            fprintf(stderr, "%p\n", stack_frames[i]);
+            icalerrprintf("%p\n", stack_frames[i]);
         }
     }
-    free(strings);
+    icalmemory_free_buffer(strings);
 #endif
 }

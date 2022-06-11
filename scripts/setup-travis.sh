@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 # things to do for travis-ci in the before_install section
 
 if [[ $TRAVIS_OS_NAME == 'osx' ]]; then

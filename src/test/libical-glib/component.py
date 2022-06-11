@@ -3,18 +3,12 @@
 
 ###############################################################################
 #
-# Copyright (C) 2015 William Yu <williamyu@gnome.org>
+# SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 #
-# This library is free software; you can redistribute it and/or modify
-# it under the terms of either:
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 #
-#   The LGPL as published by the Free Software Foundation, version
-#   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.txt
 #
-# Or:
 #
-#   The Mozilla Public License Version 2.0. You may obtain a copy of
-#   the License at https://www.mozilla.org/MPL/
 #
 ###############################################################################
 
@@ -183,25 +177,21 @@ def main():
     #Traverse with external API.
     iter = parent.begin_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
     child_component = iter.deref();
-    child_component.set_owner(parent);
     for i in range(0, count):
         prefix = "test"
         index = i+2;
         assert(child_component.get_summary() == prefix + str(index));
         if (i != count-1):
             child_component = iter.next();
-            child_component.set_owner(parent);
 
     iter = parent.end_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
     child_component = iter.prior();
-    child_component.set_owner(parent);
     for i in range(0, count):
         prefix = "test"
         index = count + 1 - i;
         assert(child_component.get_summary() == prefix + str(index));
         if (i != count - 1):
             child_component = iter.prior();
-            child_component.set_owner(parent);
 
     #Traverse and remove with external API.
     iter = parent.begin_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);

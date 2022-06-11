@@ -1,17 +1,9 @@
 <!--
-  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+  SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
-  This library is free software: you can redistribute it and/or modify it
-  under the terms of version 2.1. of the GNU Lesser General Public License
-  as published by the Free Software Foundation.
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
-  for more details.
 
-  You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="DerivedValue">
 	<enum name="ICalValueKind" native_name="icalvalue_kind" default_native="I_CAL_NO_VALUE">
@@ -210,7 +202,7 @@
 	</method>
 	<method name="i_cal_value_get_x" corresponds="icalvalue_get_x" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="allow-none, transfer none" comment="The x within #ICalValue"/>
+		<returns type="const gchar *" annotation="nullable, transfer none" comment="The x within #ICalValue"/>
 		<comment>Gets the x of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_recur" corresponds="icalvalue_set_recur" kind="set" since="1.0">
@@ -225,7 +217,7 @@
 	</method>
 	<method name="i_cal_value_get_recur" corresponds="icalvalue_get_recur" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalRecurrence *" annotation="allow-none, transfer full" comment="The recur within #ICalValue"/>
+		<returns type="ICalRecurrence *" annotation="nullable, transfer full" comment="The recur within #ICalValue"/>
 		<comment>Gets the recur of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_trigger" corresponds="icalvalue_set_trigger" kind="set" since="1.0">
@@ -240,7 +232,7 @@
 	</method>
 	<method name="i_cal_value_get_trigger" corresponds="icalvalue_get_trigger" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalTrigger *" annotation="allow-none, transfer full" comment="The trigger within #ICalValue"/>
+		<returns type="ICalTrigger *" annotation="nullable, transfer full" comment="The trigger within #ICalValue"/>
 		<comment>Gets the trigger of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_datetime" corresponds="icalvalue_set_datetime" kind="set" since="1.0">
@@ -255,7 +247,7 @@
 	</method>
 	<method name="i_cal_value_get_datetime" corresponds="icalvalue_get_datetime" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalTime *" annotation="allow-none, transfer full" comment="The datetime within #ICalValue"/>
+		<returns type="ICalTime *" annotation="nullable, transfer full" comment="The datetime within #ICalValue"/>
 		<comment>Gets the datetime of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_datetimedate" corresponds="icalvalue_set_datetimedate" kind="set" since="3.0">
@@ -270,7 +262,7 @@
 	</method>
 	<method name="i_cal_value_get_datetimedate" corresponds="icalvalue_get_datetimedate" kind="get" since="3.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalTime *" annotation="allow-none, transfer full" comment="The datetimedate within #ICalValue"/>
+		<returns type="ICalTime *" annotation="nullable, transfer full" comment="The datetimedate within #ICalValue"/>
 		<comment>Gets the datetimedate (DATE-TIME or DATE) of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_datetimeperiod" corresponds="icalvalue_set_datetimeperiod" kind="set" since="1.0">
@@ -285,7 +277,7 @@
 	</method>
 	<method name="i_cal_value_get_datetimeperiod" corresponds="icalvalue_get_datetimeperiod" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalDatetimeperiod *" annotation="allow-none, transfer full" comment="The datetimeperiod within #ICalValue"/>
+		<returns type="ICalDatetimeperiod *" annotation="nullable, transfer full" comment="The datetimeperiod within #ICalValue"/>
 		<comment>Gets the datetimeperiod of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_geo" corresponds="icalvalue_set_geo" kind="set" since="1.0">
@@ -300,7 +292,7 @@
 	</method>
 	<method name="i_cal_value_get_geo" corresponds="icalvalue_get_geo" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalGeo *" annotation="allow-none, transfer full" comment="The geo within #ICalValue"/>
+		<returns type="ICalGeo *" annotation="nullable, transfer full" comment="The geo within #ICalValue"/>
 		<comment>Gets the geo of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_attach" corresponds="icalvalue_set_attach" kind="set" since="1.0">
@@ -315,7 +307,7 @@
 	</method>
 	<method name="i_cal_value_get_attach" corresponds="icalvalue_get_attach" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalAttach *" annotation="allow-none, transfer none" translator_argus="(GObject *)value" comment="The attach within #ICalValue"/>
+		<returns type="ICalAttach *" annotation="nullable, transfer none" translator_argus="(GObject *)value" comment="The attach within #ICalValue"/>
 		<comment>Gets the attach of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_reset_kind" corresponds="icalvalue_reset_kind" kind="other" since="1.0">
@@ -454,7 +446,7 @@
 	</method>
 	<method name="i_cal_value_get_caladdress" corresponds="icalvalue_get_caladdress" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="allow-none, transfer none" comment="The caladdress within #ICalValue"/>
+		<returns type="const gchar *" annotation="nullable, transfer none" comment="The caladdress within #ICalValue"/>
 		<comment>Gets the caladdress of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_period" corresponds="icalvalue_set_period" kind="set" since="1.0">
@@ -469,7 +461,7 @@
 	</method>
 	<method name="i_cal_value_get_period" corresponds="icalvalue_get_period" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPeriod *" annotation="allow-none, transfer full" comment="The period within #ICalValue"/>
+		<returns type="ICalPeriod *" annotation="nullable, transfer full" comment="The period within #ICalValue"/>
 		<comment>Gets the period of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_status" corresponds="icalvalue_set_status" kind="set" since="1.0">
@@ -499,7 +491,7 @@
 	</method>
 	<method name="i_cal_value_get_binary" corresponds="icalvalue_get_binary" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="allow-none, transfer none" comment="The binary within #ICalValue"/>
+		<returns type="const gchar *" annotation="nullable, transfer none" comment="The binary within #ICalValue"/>
 		<comment>Gets the binary of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_text" corresponds="icalvalue_set_text" kind="set" since="1.0">
@@ -514,7 +506,7 @@
 	</method>
 	<method name="i_cal_value_get_text" corresponds="icalvalue_get_text" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="allow-none, transfer none" comment="The text within #ICalValue"/>
+		<returns type="const gchar *" annotation="nullable, transfer none" comment="The text within #ICalValue"/>
 		<comment>Gets the text of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_duration" corresponds="icalvalue_set_duration" kind="set" since="1.0">
@@ -529,7 +521,7 @@
 	</method>
 	<method name="i_cal_value_get_duration" corresponds="icalvalue_get_duration" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalDuration *" annotation="allow-none, transfer full" comment="The duration within #ICalValue"/>
+		<returns type="ICalDuration *" annotation="nullable, transfer full" comment="The duration within #ICalValue"/>
 		<comment>Gets the duration of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_integer" corresponds="icalvalue_set_integer" kind="set" since="1.0">
@@ -559,7 +551,7 @@
 	</method>
 	<method name="i_cal_value_get_uri" corresponds="icalvalue_get_uri" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="allow-none, transfer none" comment="The uri within #ICalValue"/>
+		<returns type="const gchar *" annotation="nullable, transfer none" comment="The uri within #ICalValue"/>
 		<comment>Gets the uri of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_class" corresponds="icalvalue_set_class" kind="set" since="1.0">
@@ -604,7 +596,7 @@
 	</method>
 	<method name="i_cal_value_get_query" corresponds="icalvalue_get_query" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="allow-none, transfer none" comment="The query within #ICalValue"/>
+		<returns type="const gchar *" annotation="nullable, transfer none" comment="The query within #ICalValue"/>
 		<comment>Gets the query of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_string" corresponds="icalvalue_set_string" kind="set" since="1.0">
@@ -619,7 +611,7 @@
 	</method>
 	<method name="i_cal_value_get_string" corresponds="icalvalue_get_string" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="allow-none, transfer none" comment="The string within #ICalValue"/>
+		<returns type="const gchar *" annotation="nullable, transfer none" comment="The string within #ICalValue"/>
 		<comment>Gets the string of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_transp" corresponds="icalvalue_set_transp" kind="set" since="1.0">
@@ -649,7 +641,7 @@
 	</method>
 	<method name="i_cal_value_get_requeststatus" corresponds="icalvalue_get_requeststatus" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalReqstat *" annotation="allow-none, transfer full" comment="The requeststatus within #ICalValue"/>
+		<returns type="ICalReqstat *" annotation="nullable, transfer full" comment="The requeststatus within #ICalValue"/>
 		<comment>Gets the requeststatus of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_date" corresponds="icalvalue_set_date" kind="set" since="1.0">
@@ -664,7 +656,7 @@
 	</method>
 	<method name="i_cal_value_get_date" corresponds="icalvalue_get_date" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalTime *" annotation="allow-none, transfer full" comment="The date within #ICalValue"/>
+		<returns type="ICalTime *" annotation="nullable, transfer full" comment="The date within #ICalValue"/>
 		<comment>Gets the date of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_action" corresponds="icalvalue_set_action" kind="set" since="1.0">

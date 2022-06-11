@@ -2,18 +2,10 @@
  FILE: icalcomponent.h
  CREATOR: eric 20 March 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 /**
@@ -281,6 +273,13 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtstart(icalcomponent 
  *      there is a DTEND and you call get_duration, the routine will
  *      return the difference between DTEND and DTSTART.
  *
+ *      When DURATION and DTEND are both missing, for VEVENT an implicit
+ *      DTEND is calculated based of DTSTART; for AVAILABLE, VAVAILABILITY,
+ *      and VFREEBUSY null-time is returned.
+ *
+ *      Returns null-time, unless called on AVAILABLE, VEVENT,
+ *      VAVAILABILITY, or VFREEBUSY components.
+ *
  *      FIXME this is useless until we can flag the failure
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp);
@@ -345,15 +344,14 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_duration(icalcomponent *comp,
 /**     @brief Gets the DURATION property as an icalduration
  *
  *      For the icalcomponent routines only, DTEND and DURATION are tied
- *      together.
- *      If a DURATION property is not present but a DTEND is, we use
- *      that to determine the proper end.
- *
- *      For the icalcomponent routines only, dtend and duration are tied
  *      together. If you call the get routine for one and the other
  *      exists, the routine will calculate the return value. That is, if
- *      there is a DTEND and you call get_duration, the routine will
- *      return the difference between DTEND and DTSTART.
+ *      there is a DTEND and you call get_duration, the routine will return
+ *      the difference between DTEND and DTSTART in AVAILABLE, VEVENT, or
+ *      VAVAILABILITY; and the difference between DUE and DTSTART in VTODO.
+ *      When both DURATION and DTEND are missing from VEVENT an implicit
+ *      duration is returned, based on the value-type of DTSTART. Otherwise
+ *      null-duration is returned.
  */
 LIBICAL_ICAL_EXPORT struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp);
 
@@ -461,8 +459,8 @@ LIBICAL_ICAL_EXPORT int icalproperty_recurrence_is_excluded(icalcomponent *comp,
  *
  * It will filter out events that are specified as an EXDATE or an EXRULE.
  *
- * @todo We do not filter out duplicate RRULES/RDATES
- * @todo We do not handle RDATEs with explicit periods
+ * TODO: We do not filter out duplicate RRULES/RDATES
+ * TODO: We do not handle RDATEs with explicit periods
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                           struct icaltimetype start,
@@ -528,5 +526,11 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_xvote(void);
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vpatch(void);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_xpatch(void);
+
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_participant(void);
+
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vlocation(void);
+
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vresource(void);
 
 #endif /* !ICALCOMPONENT_H */

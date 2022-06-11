@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 add_definitions(-Dlibical_ical_EXPORTS)
 
 configure_file(
@@ -6,12 +9,20 @@ configure_file(
   @ONLY
 )
 
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/icaltime.h.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/icaltime.h
+)
+
 include_directories(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/src
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
 )
+if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
+  include_directories(${CMAKE_SOURCE_DIR}/src/test)
+endif()
 
 if(ICU_FOUND)
   include_directories(${ICU_INCLUDE_DIRS})
@@ -42,6 +53,7 @@ add_custom_command(
   DEPENDS
     ${PROPERTYDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.h.in
+  COMMENT "Generate icalderivedproperty.h"
 )
 list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.h)
 
@@ -57,6 +69,7 @@ add_custom_command(
   DEPENDS
     ${PROPERTYDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.c.in
+  COMMENT "Generate icalderivedproperty.c"
 )
 list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.c)
 
@@ -76,6 +89,7 @@ add_custom_command(
   DEPENDS
     ${PARAMETERDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.h.in
+  COMMENT "Generate icalderivedparameter.h"
 )
 list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.h)
 
@@ -90,6 +104,7 @@ add_custom_command(
   DEPENDS
     ${PARAMETERDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.c.in
+  COMMENT "Generate icalderivedparameter.c"
 )
 list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.c)
 
@@ -109,6 +124,7 @@ add_custom_command(
   DEPENDS
     ${RESTRICTIONDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalrestriction.c.in
+  COMMENT "Generate icalrestriction.c"
 )
 list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c)
 
@@ -128,6 +144,7 @@ add_custom_command(
   DEPENDS
     ${VALUEDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.h.in
+  COMMENT "Generate icalderivedvalue.h"
 )
 list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h)
 
@@ -142,6 +159,7 @@ add_custom_command(
   DEPENDS
     ${VALUEDEPS}
     ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.c.in
+  COMMENT "Generate icalderivedvalue.c"
 )
 list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.c)
 
@@ -156,6 +174,7 @@ endif()
 add_custom_target(
   ical-header ALL
   DEPENDS ${CMAKE_BINARY_DIR}/src/libical/ical.h
+  COMMENT "Target to generate the aggregate ical.h header"
 )
 
 # GObject Introspection
@@ -243,6 +262,9 @@ set(ical_LIB_SRCS
   caldate.c
   astime.h
 )
+if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
+  list(APPEND ical_LIB_SRCS ${PROJECT_SOURCE_DIR}/src/test/test-malloc.c)
+endif()
 
 add_custom_command(
   OUTPUT
@@ -254,6 +276,7 @@ add_custom_command(
       -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libical/ical.h
       -P ${CMAKE_CURRENT_SOURCE_DIR}/ical_file.cmake
   DEPENDS ${ical_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/ical_file.cmake
+  COMMENT "Generate the aggregate ical.h header"
 )
 
 add_library(ical ${LIBRARY_TYPE} ${ical_LIB_SRCS})
@@ -265,8 +288,11 @@ elseif(STATIC_ONLY)
   add_library(ical-static ALIAS ical)
 endif()
 
-target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
+target_include_directories(ical INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
 
+if(DEFINED CMAKE_THREAD_LIBS_INIT)
+  target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
+endif()
 if(ICU_FOUND)
   target_link_libraries(ical ${ICU_LIBRARIES})
 endif()
@@ -332,7 +358,10 @@ if(WITH_CXX_BINDINGS)
   elseif(STATIC_ONLY)
     add_library(ical_cxx-static ALIAS ical_cxx)
   endif()
-  target_link_libraries(ical_cxx ical ${CMAKE_THREAD_LIBS_INIT})
+  target_link_libraries(ical_cxx ical)
+  if(DEFINED CMAKE_THREAD_LIBS_INIT)
+    target_link_libraries(ical_cxx ${CMAKE_THREAD_LIBS_INIT})
+  endif()
 
   if(MSVC)
     set_target_properties(ical_cxx PROPERTIES PREFIX "lib")
@@ -393,7 +422,7 @@ install(FILES
   icalproperty.h
   icalrecur.h
   icalrestriction.h
-  icaltime.h
+  ${CMAKE_BINARY_DIR}/src/libical/icaltime.h
   icaltz-util.h
   icaltimezone.h
   icaltypes.h

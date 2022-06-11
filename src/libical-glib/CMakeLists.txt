@@ -1,4 +1,11 @@
+# SPDX-FileCopyrightText: Milan Crha <mcrha@redhat.com>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 add_definitions(-Dlibical_ical_EXPORTS)
+
+# a C11 compliant compiler is required to build this library
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # build ical-glib-src-generator
 add_executable(ical-glib-src-generator
@@ -85,9 +92,14 @@ else()
 endif()
 
 add_custom_command (
-  OUTPUT ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
-  COMMAND ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
+  OUTPUT
+    ${LIBICAL_GLIB_SOURCES}
+    ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
+    ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
+  COMMAND
+    ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
   DEPENDS ${ical-glib-src-generator_EXE} ${xml_files}
+  COMMENT "Generate libical-glib headers"
 )
 
 configure_file(
@@ -121,10 +133,14 @@ add_dependencies(ical-glib ical-header)
 target_compile_options(ical-glib PRIVATE ${GLIB_CFLAGS})
 target_compile_definitions(ical-glib PRIVATE -DG_LOG_DOMAIN="libical-glib" -DLIBICAL_GLIB_COMPILATION)
 target_link_libraries(ical-glib PRIVATE ical ${GLIB_LIBRARIES})
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(ical-glib-static STATIC ${LIBICAL_GLIB_SOURCES})
   add_dependencies(ical-glib-static ical-header)
-  target_compile_options(ical-glib-static PUBLIC ${GLIB_CFLAGS} -DG_LOG_DOMAIN="libical-glib" -DLIBICAL_GLIB_COMPILATION)
+  target_compile_options(ical-glib-static
+    PUBLIC ${GLIB_CFLAGS}
+    -DG_LOG_DOMAIN="libical-glib"
+    -DLIBICAL_GLIB_COMPILATION
+  )
   target_link_libraries(ical-glib-static ${GLIB_LIBRARIES})
 endif()
 
@@ -172,7 +188,14 @@ if(HAVE_INTROSPECTION)
   set(ICalGLib_${LIB_VERSION}_gir_VERSION ${LIBICAL_GLIB_GIR_VERSION_STRING})
   set(ICalGLib_${LIB_VERSION}_gir_LIBRARY "ICalGLib")
   set(ICalGLib_${LIB_VERSION}_gir_INCLUDES GObject-2.0 GLib-2.0)
-  set(ICalGLib_${LIB_VERSION}_gir_CFLAGS ${_includes} ${GLIB_CFLAGS} -DLIBICAL_GLIB_COMPILATION -I${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_BINARY_DIR}/src/libical -I${CMAKE_SOURCE_DIR}/src/libical -I${CMAKE_BINARY_DIR}/src/libical-glib)
+  set(ICalGLib_${LIB_VERSION}_gir_CFLAGS ${GLIB_CFLAGS}
+    -DLIBICAL_GLIB_COMPILATION
+    -I${CMAKE_CURRENT_BINARY_DIR}
+    -I${CMAKE_CURRENT_SOURCE_DIR}
+    -I${CMAKE_BINARY_DIR}/src/libical
+    -I${CMAKE_SOURCE_DIR}/src/libical
+    -I${CMAKE_BINARY_DIR}/src/libical-glib
+  )
   set(ICalGLib_${LIB_VERSION}_gir_LIBS ical-glib)
   set(ICalGLib_${LIB_VERSION}_gir_FILES ${LIBICAL_GLIB_GIR_SOURCES})
 
@@ -182,7 +205,7 @@ if(HAVE_INTROSPECTION)
 endif()
 
 if(ICAL_GLIB_VAPI)
-  add_custom_target(vala ALL)
+  add_custom_target(vala ALL COMMENT "Target to run vala")
   set(gir_fullname ${CMAKE_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
   set(metadata_fullname ${CMAKE_CURRENT_BINARY_DIR}/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.metadata)
   set(vapi_file ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.vapi)
@@ -206,9 +229,10 @@ if(ICAL_GLIB_VAPI)
     DEPENDS
       ${gir_fullname}
       ${metadata_fullname}
+    COMMENT "Run the tool to generate the Vala API"
   )
 
-  add_custom_target(valafile DEPENDS ${vapi_file})
+  add_custom_target(valafile DEPENDS ${vapi_file} COMMENT "Target to run valafile")
 
   add_dependencies(vala valafile)
 
@@ -217,11 +241,11 @@ endif()
 
 if(MSVC)
   set_target_properties(ical-glib PROPERTIES PREFIX "lib")
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(ical-glib-static PROPERTIES PREFIX "lib")
   endif()
 else()
-  if(NOT SHARED_ONLY)
+  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(ical-glib-static PROPERTIES OUTPUT_NAME "ical-glib")
   endif()
 endif()
@@ -230,7 +254,7 @@ set_target_properties(ical-glib PROPERTIES
   SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
 )
 set_target_properties(ical-glib PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   set_target_properties(ical-glib-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 endif()
 
@@ -239,7 +263,7 @@ install(
   EXPORT icalTargets
   DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS}
 )
-if(NOT SHARED_ONLY)
+if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   install(
     TARGETS ical-glib-static
     EXPORT icalTargets
@@ -257,8 +281,16 @@ install(FILES ${LIBICAL_GLIB_HEADERS}
 
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 set(exec_prefix "\${prefix}")
-set(libdir "\${exec_prefix}/lib")
-set(includedir "\${prefix}/include")
+if(IS_ABSOLUTE ${LIB_INSTALL_DIR})
+  set(libdir "${LIB_INSTALL_DIR}")
+else()
+  set(libdir "\${exec_prefix}/${LIB_INSTALL_DIR}")
+endif()
+if(IS_ABSOLUTE ${INCLUDE_INSTALL_DIR})
+  set(includedir "${INCLUDE_INSTALL_DIR}")
+else()
+  set(includedir "\${prefix}/include")
+endif()
 
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/libical-glib.pc.in

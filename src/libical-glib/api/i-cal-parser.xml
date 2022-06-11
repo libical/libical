@@ -1,17 +1,9 @@
 <!--
-  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+  SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
-  This library is free software: you can redistribute it and/or modify it
-  under the terms of version 2.1. of the GNU Lesser General Public License
-  as published by the Free Software Foundation.
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
-  for more details.
 
-  You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Parser" native="icalparser" destroy_func="icalparser_free">
     <enum name="ICalParserState" native_name="icalparserstate" default_native="I_CAL_PARSER_ERROR">
@@ -36,13 +28,13 @@ typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user
     </method>
     <method name="i_cal_parser_add_line" corresponds="icalparser_add_line" since="1.0">
         <parameter type="ICalParser *" name="parser" annotation="in, transfer full" comment="The #ICalParser used to parse the string into the #ICalComponent"/>
-        <parameter type="gchar *" name="str" annotation="allow-none, transfer none" comment="A line of string representation of the #ICalComponent"/>
-        <returns type="ICalComponent *" annotation="allow-none, transfer full" translator_argus="(gpointer) parser" comment="The complete #ICalComponent."/>
+        <parameter type="gchar *" name="str" annotation="nullable, transfer none" comment="A line of string representation of the #ICalComponent"/>
+        <returns type="ICalComponent *" annotation="nullable, transfer full" translator_argus="(gpointer) parser" comment="The complete #ICalComponent."/>
         <comment xml:space="preserve">Add a line at one time into the #ICalParser until the parsing is complete and #ICalComponent will be returned.</comment>
     </method>
     <method name="i_cal_parser_clean" corresponds="icalparser_clean" since="1.0">
         <parameter type="ICalParser *" name="parser" comment="The parser to be cleaned and queried"/>
-        <returns type="ICalComponent *" annotation="allow-none, transfer full" translator_argus="(gpointer) parser" comment="The root #ICalComponent in @parser."/>
+        <returns type="ICalComponent *" annotation="nullable, transfer full" translator_argus="(gpointer) parser" comment="The root #ICalComponent in @parser."/>
         <comment xml:space="preserve">We won't get a clean exit if some components did not have an "END" tag. Clear off any component that may be left in the list.</comment>
     </method>
     <method name="i_cal_parser_get_state" corresponds="icalparser_get_state" kind="get" since="1.0">

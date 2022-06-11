@@ -2,18 +2,10 @@
  FILE: jniICalPeriodType_cxx.h
  CREATOR: structConverter
 
- (C) COPYRIGHT 2002, Critical Path
+ SPDX-FileCopyrightText: 2002, Critical Path
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 #ifndef _jni_ICalPeriodType_H
 #define _jni_ICalPeriodType_H
@@ -21,7 +13,6 @@
 
 // I forgot how to do this using a typedef in c++!!!!
 #define ICalPeriodType icalperiodtype
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,7 +34,6 @@ void jni_GetAll_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JN
 
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalPeriodType_init__J(JNIEnv* env, jobject thisICalPeriodType, jlong data);
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalPeriodType_initFIDs(JNIEnv *env, jclass clazz);
-
 
 #ifdef __cplusplus
 }

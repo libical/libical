@@ -1,18 +1,17 @@
 #
-# (C) Copyright 2009 Johns Hopkins University (JHU), All Rights
-# Reserved.
-#
+# SPDX-FileCopyrightText: 2009 Johns Hopkins University (JHU), All Rights Reserved.
+# SPDX-License-Identifier: LicenseRef-CISST
+
 # --- begin cisst license - do not edit ---
 #
-# This software is provided "as is" under an open source license, with
-# no warranty.  The complete license can be found in license.txt and
-# https://www.cisst.org/cisst/license.txt.
+# This software is provided "as is" under an open source license, with no warranty.
+# The complete license can be found in LICENSES/LicenseRef-CISST.txt.
 #
 # --- end cisst license ---
 
 SET(CMAKE_SYSTEM_NAME QNX)
-SET(CMAKE_SYSTEM_VERSION 6.6.0)
-SET(CMAKE_SYSTEM_PROCESSOR armv7)
+SET(CMAKE_SYSTEM_VERSION 6.5.0)
+SET(CMAKE_SYSTEM_PROCESSOR x86)
 SET(TOOLCHAIN QNX)
 
 #SET(CMAKE_IMPORT_LIBRARY_SUFFIX ".a")
@@ -28,14 +27,14 @@ ENDIF(CMAKE_HOST_WIN32)
 
 FIND_PATH(QNX_HOST
   NAME usr/bin/qcc${HOST_EXECUTABLE_SUFFIX}
-  PATHS $ENV{QNX_HOST} C:/qnx660/host/win32/x86
+  PATHS $ENV{QNX_HOST} C:/QNX650/host/win32/x86
   NO_CMAKE_PATH
   NO_CMAKE_ENVIRONMENT_PATH
 )
 
 FIND_PATH(QNX_TARGET
-  NAME usr/include/qconfig.mk
-  PATHS $ENV{QNX_TARGET} C:/qnx660/target/qnx6
+  NAME usr/include/qnx_errno.h
+  PATHS $ENV{QNX_TARGET} C:/QNX650/target/qnx6
   NO_CMAKE_PATH
   NO_CMAKE_ENVIRONMENT_PATH
 )
@@ -52,7 +51,6 @@ ENDIF(CMAKE_HOST_WIN32)
 
 SET(ENV{QNX_HOST} ${QNX_HOST})
 SET(ENV{QNX_TARGET} ${QNX_TARGET})
-
 IF(CMAKE_HOST_WIN32)
   SET(ENV{QNX_CONFIGURATION} ${QNX_CONFIGURATION})
   SET(ENV{PATH} "$ENV{PATH};${QNX_HOST}/usr/bin")
@@ -65,7 +63,7 @@ SET(CMAKE_RANLIB       "${QNX_HOST}/usr/bin/nto${CMAKE_SYSTEM_PROCESSOR}-ranlib$
 SET(CMAKE_NM           "${QNX_HOST}/usr/bin/nto${CMAKE_SYSTEM_PROCESSOR}-nm${HOST_EXECUTABLE_SUFFIX}"      CACHE PATH "QNX nm Program")
 SET(CMAKE_OBJCOPY      "${QNX_HOST}/usr/bin/nto${CMAKE_SYSTEM_PROCESSOR}-objcopy${HOST_EXECUTABLE_SUFFIX}" CACHE PATH "QNX objcopy Program")
 SET(CMAKE_OBJDUMP      "${QNX_HOST}/usr/bin/nto${CMAKE_SYSTEM_PROCESSOR}-objdump${HOST_EXECUTABLE_SUFFIX}" CACHE PATH "QNX objdump Program")
-SET(CMAKE_LINKER       "${QNX_HOST}/usr/bin/nto${CMAKE_SYSTEM_PROCESSOR}-ld${HOST_EXECUTABLE_SUFFIX}"     CACHE PATH "QNX Linker Program")
+SET(CMAKE_LINKER       "${QNX_HOST}/usr/bin/nto${CMAKE_SYSTEM_PROCESSOR}-ld"     CACHE PATH "QNX Linker Program")
 SET(CMAKE_STRIP        "${QNX_HOST}/usr/bin/nto${CMAKE_SYSTEM_PROCESSOR}-strip${HOST_EXECUTABLE_SUFFIX}"   CACHE PATH "QNX Strip Program")
 
 SET(CMAKE_C_COMPILER ${QNX_HOST}/usr/bin/qcc${HOST_EXECUTABLE_SUFFIX})
@@ -81,9 +79,10 @@ SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
 SET(CMAKE_FIND_ROOT_PATH ${QNX_TARGET})
-SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
-SET(CMAKE_C_FLAGS "-Vgcc_ntoarmv7le" CACHE STRING "qcc c flags" FORCE)
-SET(CMAKE_CXX_FLAGS "-Vgcc_ntoarmv7le -lang-c++" CACHE STRING "qcc cxx flags" FORCE)
+SET(CMAKE_C_FLAGS "-Vgcc_ntox86" CACHE STRING "qcc c flags" FORCE)
+SET(CMAKE_CXX_FLAGS "-Vgcc_ntox86 -lang-c++" CACHE STRING "qcc cxx flags" FORCE)

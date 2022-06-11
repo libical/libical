@@ -2,18 +2,10 @@
  FILE: icalspanlist.h
  CREATOR: eric 21 Aug 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 =========================================================================*/
 #ifndef ICALSPANLIST_H
 #define ICALSPANLIST_H
@@ -44,11 +36,11 @@ LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_new(icalset *set,
                                                      struct icaltimetype end);
 
 /** @brief Destructor.
- *  @param s A valid icalspanlist
+ *  @param sl A valid icalspanlist
  *
  *  Frees the memory associated with the spanlist.
  */
-LIBICAL_ICALSS_EXPORT void icalspanlist_free(icalspanlist *spl);
+LIBICAL_ICALSS_EXPORT void icalspanlist_free(icalspanlist *sl);
 
 /** @brief Finds the next free time span in a spanlist.
  *
@@ -64,7 +56,7 @@ LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_free_time(icalspan
 /** @brief (Debug) print out spanlist to STDOUT.
  *  @param sl A valid icalspanlist.
  */
-LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist *s);
+LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist *sl);
 
 /** @brief Returns a VFREEBUSY component for a spanlist.
  *
@@ -87,7 +79,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 /** @brief Returns an hour-by-hour array of free/busy times over a
  *         given period.
  *
- *  @param sl        A valid icalspanlist
+ *  @param span      A valid icalspanlist
  *  @param delta_t   The time slice to divide by, in seconds.  Default 3600.
  *
  *  @return A pointer to an array of integers containing the number of

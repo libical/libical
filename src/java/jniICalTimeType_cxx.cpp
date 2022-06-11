@@ -1,18 +1,10 @@
 /*======================================================================
  FILE: jniICalTimeType_cxx.cpp
  CREATOR: structConverter
- (C) COPYRIGHT 2002, Critical Path
+ SPDX-FileCopyrightText: 2002, Critical Path
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #include <jni.h>
@@ -29,7 +21,6 @@ static jfieldID ICalTimeType_Minute_FID;
 static jfieldID ICalTimeType_Second_FID;
 static jfieldID ICalTimeType_Is_date_FID;
 static jfieldID ICalTimeType_Zone_FID;
-
 
 void initICalTimeTypeFieldIDs(JNIEnv* env, jclass clazz)
 {

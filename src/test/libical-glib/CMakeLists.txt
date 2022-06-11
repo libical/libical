@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Milan Crha <mcrha@redhat.com>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 find_program(PYTHON3 python3)
 set_package_properties(PYTHON3 PROPERTIES TYPE REQUIRED PURPOSE "Required by the libical build system.")
 add_feature_info("libical-glib testing" PYTHON3 "python3 is required to run the regression tests")
@@ -19,9 +22,22 @@ list(APPEND TEST_FILES
 )
 
 if(PYTHON3)
+  set(GI_TYPELIB_PATH_STR "${CMAKE_BINARY_DIR}/src/libical-glib")
+  if(DEFINED GI_TYPELIB_PATH)
+    if($ENV{GI_TYPELIB_PATH})
+      set(GI_TYPELIB_PATH_STR "${GI_TYPELIB_PATH_STR}:$ENV{GI_TYPELIB_PATH}")
+    endif()
+  endif()
+  set(LD_LIBRARY_PATH_STR "${LIBRARY_OUTPUT_PATH}")
+  if(DEFINED LD_LIBRARY_PATH)
+    if($ENV{LD_LIBRARY_PATH})
+      set(LD_LIBRARY_PATH_STR "${LD_LIBRARY_PATH_STR}:$ENV{LD_LIBRARY_PATH}")
+    endif()
+  endif()
+
   list(APPEND test_env
-    "GI_TYPELIB_PATH=${CMAKE_BINARY_DIR}/src/libical-glib;$ENV{GI_TYPELIB_PATH}"
-    "LD_LIBRARY_PATH=${LIBRARY_OUTPUT_PATH};$ENV{LD_LIBRARY_PATH}"
+    "GI_TYPELIB_PATH=${GI_TYPELIB_PATH_STR}"
+    "LD_LIBRARY_PATH=${LD_LIBRARY_PATH_STR}"
     "ZONEINFO_DIRECTORY=${CMAKE_SOURCE_DIR}/zoneinfo"
   )
 

@@ -2,18 +2,10 @@
  FILE: icalrecur.c
  CREATOR: eric 16 May 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ========================================================================*/
 
 /**
@@ -169,12 +161,12 @@ static ical_invalid_rrule_handling invalidRruleHandling = ICAL_RRULE_TREAT_AS_ER
 #define ICAL_BY_YEARDAY_SIZE    367     /* 1 to 366 */
 #endif
 
-#if (SIZEOF_TIME_T > 4)
+#if (SIZEOF_ICALTIME_T > 4)
 /** Arbitrarily go up to 1000th anniversary of Gregorian calendar, since
-    64-bit time_t values get us up to the tm_year limit of 2+ billion years. */
+    64-bit icaltime_t values get us up to the tm_year limit of 2+ billion years. */
 #define MAX_TIME_T_YEAR 2582
 #else
-/** This is the last year we will go up to, since 32-bit time_t values
+/** This is the last year we will go up to, since 32-bit icaltime_t values
    only go up to the start of 2038. */
 #define MAX_TIME_T_YEAR 2037
 #endif
@@ -593,7 +585,7 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
         icalrecurrencetype_weekday wd;
 
         if (i == ICAL_BY_DAY_SIZE) {
-            free(vals_copy);
+            icalmemory_free_buffer(vals_copy);
             return -1;
         }
 
@@ -624,7 +616,7 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
 
         /* Sanity check value */
         if (wd == ICAL_NO_WEEKDAY || weekno >= ICAL_BY_WEEKNO_SIZE) {
-            free(vals_copy);
+            icalmemory_free_buffer(vals_copy);
             return -1;
         }
 
@@ -632,7 +624,7 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
         array[i] = ICAL_RECURRENCE_ARRAY_MAX;
     }
 
-    free(vals_copy);
+    icalmemory_free_buffer(vals_copy);
 
     sort_bydayrules(parser);
 
@@ -773,7 +765,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
             }
             if (parser.rt.rscale) {
-                free(parser.rt.rscale);
+                icalmemory_free_buffer(parser.rt.rscale);
             }
             icalrecurrencetype_clear(&parser.rt);
             break;
@@ -791,7 +783,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
             if (rruleHandlingSetting == ICAL_RRULE_TREAT_AS_ERROR) {
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
                 if (parser.rt.rscale) {
-                    free(parser.rt.rscale);
+                    icalmemory_free_buffer(parser.rt.rscale);
                 }
                 icalrecurrencetype_clear(&parser.rt);
                 break;
@@ -801,7 +793,7 @@ struct icalrecurrencetype icalrecurrencetype_from_string(const char *str)
         }
     }
 
-    free(parser.copy);
+    icalmemory_free_buffer(parser.copy);
 
     return parser.rt;
 }
@@ -1451,9 +1443,18 @@ static int initialize_rscale(icalrecur_iterator *impl)
     UChar *tzid = (UChar *) UCAL_UNKNOWN_ZONE_ID;
     short is_hebrew = 0;
 
-    if (dtstart.zone) {
-        /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
-        const char *src = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
+    /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
+    const char *src = icaltimezone_get_location((icaltimezone *) dtstart.zone);
+    if (!src) {
+        const char *prefix = icaltimezone_tzid_prefix();
+
+        src = icaltimezone_get_tzid((icaltimezone *) dtstart.zone);
+        if (src && !strncmp(src, prefix, strlen(prefix))) {
+            /* Skip past our prefix */
+            src += strlen(prefix);
+        }
+    }
+    if (src) {
         size_t len = (strlen(src) + 1) * U_SIZEOF_UCHAR;
         tzid = icalmemory_tmp_buffer(len);
         tzid = u_strFromUTF8Lenient(tzid, (int32_t)len, NULL, src, -1, &status);
@@ -1956,7 +1957,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
         return 0;
     }
 
-    if (!(impl = (icalrecur_iterator *)malloc(sizeof(icalrecur_iterator)))) {
+    if (!(impl = (icalrecur_iterator *)icalmemory_new_buffer(sizeof(icalrecur_iterator)))) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -2017,7 +2018,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
                 impl->orig_data[byrule] = 0;
             } else {
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-                free(impl);
+                icalmemory_free_buffer(impl);
                 return 0;
             }
         }
@@ -2061,7 +2062,7 @@ void icalrecur_iterator_free(icalrecur_iterator *i)
     }
 #endif
 
-    free(i);
+    icalmemory_free_buffer(i);
 }
 
 /** Calculate the number of days between 2 dates */
@@ -2171,7 +2172,7 @@ static int next_unit(icalrecur_iterator *impl,
 
     int end_of_data = 0;
 
-    assert(has_by_unit || this_frequency);
+    icalassert(has_by_unit || this_frequency);
 
     if (next_sub_unit && next_sub_unit(impl) == 0) {
         return 0;
@@ -2243,7 +2244,7 @@ static int prev_unit(icalrecur_iterator *impl,
 
     int end_of_data = 0;
 
-    assert(has_by_unit || this_frequency);
+    icalassert(has_by_unit || this_frequency);
 
     if (prev_sub_unit && prev_sub_unit(impl) == 0) {
         return 0;
@@ -3604,15 +3605,15 @@ short icalrecurrencetype_encode_month(int month, int is_leap)
 }
 
 int icalrecur_expand_recurrence(const char *rule,
-                                time_t start, int count, time_t *array)
+    icaltime_t start, int count, icaltime_t *array)
 {
     struct icalrecurrencetype recur;
     icalrecur_iterator *ritr;
-    time_t tt;
+    icaltime_t tt;
     struct icaltimetype icstart, next;
     int i = 0;
 
-    memset(array, 0, count * sizeof(time_t));
+    memset(array, 0, count * sizeof(icaltime_t));
 
     icstart = icaltime_from_timet_with_zone(start, 0, 0);
 
@@ -3632,7 +3633,7 @@ int icalrecur_expand_recurrence(const char *rule,
         icalrecur_iterator_free(ritr);
     }
     if(recur.rscale)
-        free(recur.rscale);
+        icalmemory_free_buffer(recur.rscale);
 
     return 1;
 }

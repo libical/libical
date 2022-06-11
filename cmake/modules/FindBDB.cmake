@@ -1,3 +1,7 @@
+#
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: BSD-3-Clause
+#
 # Finds the Berkeley DB Library
 #
 #  BDB_FOUND          - True if Berkeley DB found.
