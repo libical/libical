@@ -22,7 +22,6 @@
 
 /**
  * @brief Sort an arbitrary list of items using the qsort algorithm.
- * @param context A pointer representing the list to be sorted. Won't be
  * interpreted by this function but passed to the compar and swapr functions.
  * @param nitems The number of items in the list.
  * @param compar The comparator function. The function receives the pointer
