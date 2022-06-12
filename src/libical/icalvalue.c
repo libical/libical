@@ -362,7 +362,7 @@ static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char
  * The code is locale *independent* and does *not* change the locale.
  * It should be thread safe.
  */
-static int simple_str_to_doublestr(const char *from, char *result, char **to)
+static int simple_str_to_doublestr(const char *from, char *result, int result_len, char **to)
 {
     char *start = NULL, *end = NULL, *cur = (char *)from;
 
@@ -390,7 +390,7 @@ static int simple_str_to_doublestr(const char *from, char *result, char **to)
         ++cur;
     }
     end = cur;
-    if (end - start + 1 > 100) {
+    if (end - start + 1 > result_len) {
         /*huh hoh, number is too big. getting out */
         return 1;
     }
@@ -400,7 +400,7 @@ static int simple_str_to_doublestr(const char *from, char *result, char **to)
      * of the current locale.
      */
 #if !defined(HAVE_GETNUMBERFORMAT)
-    for (i = 0; i < end - from; ++i) {
+    for (i = 0; i < end - start; ++i) {
         if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0]
             && loc_data->decimal_point[0] != '.') {
             /*replace '.' by the digit separator of the current locale */
@@ -410,7 +410,7 @@ static int simple_str_to_doublestr(const char *from, char *result, char **to)
         }
     }
 #else
-    GetNumberFormat(LOCALE_SYSTEM_DEFAULT, 0, start, NULL, result, TMP_NUM_SIZE);
+    GetNumberFormat(LOCALE_SYSTEM_DEFAULT, 0, start, NULL, result, result_len);
 #endif
     if (to) {
         *to = end;
@@ -583,7 +583,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             memset(geo.lat, 0, ICAL_GEO_LEN);
             memset(geo.lon, 0, ICAL_GEO_LEN);
 
-            if (simple_str_to_doublestr(str, geo.lat, &cur)) {
+            if (simple_str_to_doublestr(str, geo.lat, ICAL_GEO_LEN, &cur)) {
                 goto geo_parsing_error;
             }
             /* skip white spaces */
@@ -603,7 +603,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                 ++cur;
             }
 
-            if (simple_str_to_doublestr(cur, geo.lon, &cur)) {
+            if (simple_str_to_doublestr(cur, geo.lon, ICAL_GEO_LEN, &cur)) {
                 goto geo_parsing_error;
             }
             value = icalvalue_new_geo(geo);

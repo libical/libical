@@ -4407,6 +4407,7 @@ void test_geo_props(void)
            icalproperty_get_value_as_string(p), "-0;+0");
     icalcomponent_free(c);
 
+    /* failure situations */
     estate = icalerror_get_errors_are_fatal();
     icalerror_set_errors_are_fatal(0);
     c = icalparser_parse_string("BEGIN:VEVENT\n" "GEO:-0a;+0\n" "END:VEVENT\n");
@@ -4418,6 +4419,17 @@ void test_geo_props(void)
     p = icalcomponent_get_first_property(c, ICAL_GEO_PROPERTY);
     ok("expected fail icalcomponent_get_first_property()", (p == NULL));
     icalcomponent_free(c);
+
+    c = icalparser_parse_string("BEGIN:VEVENT\n" "GEO:16.815151515151515151;+0\n" "END:VEVENT\n");
+    if (!c) {
+        exit(EXIT_FAILURE);
+    }
+    if (VERBOSE)
+        printf("%s", icalcomponent_as_ical_string(c));
+    p = icalcomponent_get_first_property(c, ICAL_GEO_PROPERTY);
+    ok("expected fail icalcomponent_get_first_property()", (p == NULL));
+    icalcomponent_free(c);
+
     icalerror_set_errors_are_fatal(estate);
 }
 
