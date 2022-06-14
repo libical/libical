@@ -20,14 +20,9 @@
         <returns type="ICalGeo *" annotation="transfer full" comment="The newly created #ICalGeo." />
         <comment xml:space="preserve">Creates a new #ICalGeo.</comment>
         <custom>    struct icalgeotype geo;
-    char dval[ICAL_GEO_LEN];
     geo = i_cal_geo_new_default();
-    memset(dval, 0, ICAL_GEO_LEN);
-    snprintf(dval, ICAL_GEO_LEN, "%lf", lat);
-    strncpy(geo.lat, dval, ICAL_GEO_LEN-1);
-    memset(dval, 0, ICAL_GEO_LEN);
-    snprintf(dval, ICAL_GEO_LEN, "%lf", lon);
-    strncpy(geo.lon, dval, ICAL_GEO_LEN-1);
+    g_ascii_dtostr(geo.lat, ICAL_GEO_LEN, lat);
+    g_ascii_dtostr(geo.lon, ICAL_GEO_LEN, lon);
 
     return i_cal_geo_new_full(geo);</custom>
     </method>
@@ -48,34 +43,36 @@
 	<parameter type="ICalGeo *" name="geo" comment="The #ICalGeo to be queried"/>
         <returns type="gdouble" comment="The latitude." />
         <comment xml:space="preserve">Gets the latitude of #ICalGeo.</comment>
-        <custom>	g_return_val_if_fail (geo != NULL, 0);
-	return atof(((struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo))->lat);</custom>
+        <custom>    struct icalgeotype *native;
+    g_return_val_if_fail (geo != NULL, 0);
+    native = (struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo);
+    return g_ascii_strtod(native->lat, NULL);</custom>
     </method>
     <method name="i_cal_geo_set_lat" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalGeo *" name="geo" comment="The #ICalGeo to be set"/>
         <parameter type="gdouble" name="lat" comment="The latitude"/>
         <comment>Sets the latitude of #ICalGeo.</comment>
-        <custom>	char dval[ICAL_GEO_LEN];
-  g_return_if_fail (geo != NULL &amp;&amp; I_CAL_IS_GEO (geo));
-  memset(dval, 0, ICAL_GEO_LEN);
-  snprintf(dval, ICAL_GEO_LEN, "%lf", lat);
-	strncpy(((struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo))->lat, dval, ICAL_GEO_LEN-1);</custom>
+        <custom>    struct icalgeotype *native;
+    g_return_if_fail (geo != NULL &amp;&amp; I_CAL_IS_GEO (geo));
+    native = (struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo);
+    g_ascii_dtostr(native->lat, ICAL_GEO_LEN, lat);</custom>
     </method>
     <method name="i_cal_geo_get_lon" corresponds="CUSTOM" kind="get" since="1.0">
 	<parameter type="ICalGeo *" name="geo" comment="The #ICalGeo to be queried"/>
         <returns type="gdouble" comment="The longitude." />
         <comment xml:space="preserve">Gets the longitude of #ICalGeo.</comment>
-        <custom>	g_return_val_if_fail (geo != NULL, 0);
-	return atof(((struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo))->lon);</custom>
+        <custom>    struct icalgeotype *native;
+    g_return_val_if_fail (geo != NULL, 0);
+    native = (struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo);
+    return g_ascii_strtod(native->lon, NULL);</custom>
     </method>
     <method name="i_cal_geo_set_lon" corresponds="CUSTOM" kind="set" since="1.0">
         <parameter type="ICalGeo *" name="geo" comment="The #ICalGeo to be set"/>
         <parameter type="gdouble" name="lon" comment="The longitude"/>
         <comment>Sets the longitude of #ICalGeo.</comment>
-        <custom>	char dval[ICAL_GEO_LEN];
-  g_return_if_fail (geo != NULL &amp;&amp; I_CAL_IS_GEO (geo));
-  memset(dval, 0, ICAL_GEO_LEN);
-  snprintf(dval, ICAL_GEO_LEN, "%lf", lon);
-	strncpy(((struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo))->lon, dval, ICAL_GEO_LEN-1);</custom>
+        <custom>    struct icalgeotype *native;
+    g_return_if_fail (geo != NULL &amp;&amp; I_CAL_IS_GEO (geo));
+    native = (struct icalgeotype *)i_cal_object_get_native ((ICalObject *)geo);
+    g_ascii_dtostr(native->lon, ICAL_GEO_LEN, lon);</custom>
     </method>
 </structure>
