@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.1</span>
    </div>
   </td>
  </tr>
@@ -81,24 +81,35 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ae380f8acbf3acc9650130ce17aa755f9"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1">icalrestriction_kind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalrestriction_8h.html#ae380f8acbf3acc9650130ce17aa755f9">icalrestriction_kind</a></td></tr>
+<tr class="memitem:ae380f8acbf3acc9650130ce17aa755f9"><td class="memItemLeft" align="right" valign="top">typedef enum icalrestriction_kind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalrestriction_8h.html#ae380f8acbf3acc9650130ce17aa755f9">icalrestriction_kind</a></td></tr>
 <tr class="memdesc:ae380f8acbf3acc9650130ce17aa755f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The kinds of icalrestrictions there are.  <a href="icalrestriction_8h.html#ae380f8acbf3acc9650130ce17aa755f9">More...</a><br /></td></tr>
 <tr class="separator:ae380f8acbf3acc9650130ce17aa755f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ac6d836f345770d880b446d964f685db1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1">icalrestriction_kind</a> { <br />
-&#160;&#160;<a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a8919e63bb091b6a78f508a212e3d2a36">ICAL_RESTRICTION_NONE</a> = 0
+&#160;&#160;<a class="el" href="ical_8h.html#ac6d836f345770d880b446d964f685db1a8919e63bb091b6a78f508a212e3d2a36">ICAL_RESTRICTION_NONE</a> = 0
+, <a class="el" href="ical_8h.html#ac6d836f345770d880b446d964f685db1aace01bc6164411a18933716916c6c7ef">ICAL_RESTRICTION_ZERO</a>
+, <a class="el" href="ical_8h.html#ac6d836f345770d880b446d964f685db1a4bc2d60b26b48e795abf26e05dd2fe17">ICAL_RESTRICTION_ONE</a>
+, <a class="el" href="ical_8h.html#ac6d836f345770d880b446d964f685db1a15c781ad15f9a8392a620559c278199e">ICAL_RESTRICTION_ZEROPLUS</a>
+, <br />
+&#160;&#160;<a class="el" href="ical_8h.html#ac6d836f345770d880b446d964f685db1a772dd4b4cdfe5d5a264ec237a63e6c21">ICAL_RESTRICTION_ONEPLUS</a>
+, <a class="el" href="ical_8h.html#ac6d836f345770d880b446d964f685db1a941349ba77c59b895acc1f7133421a94">ICAL_RESTRICTION_ZEROORONE</a>
+, <a class="el" href="ical_8h.html#ac6d836f345770d880b446d964f685db1a6689f5056a7239a1f7d90eed1697d4f9">ICAL_RESTRICTION_ONEEXCLUSIVE</a>
+, <a class="el" href="ical_8h.html#ac6d836f345770d880b446d964f685db1aa27388029f05e9a1fae601d0ccbf69d9">ICAL_RESTRICTION_ONEMUTUAL</a>
+, <br />
+&#160;&#160;<a class="el" href="ical_8h.html#ac6d836f345770d880b446d964f685db1a166b57120ae7e1f7b2d321d36bbb7bce">ICAL_RESTRICTION_UNKNOWN</a>
+, <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a8919e63bb091b6a78f508a212e3d2a36">ICAL_RESTRICTION_NONE</a> = 0
 , <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1aace01bc6164411a18933716916c6c7ef">ICAL_RESTRICTION_ZERO</a>
 , <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a4bc2d60b26b48e795abf26e05dd2fe17">ICAL_RESTRICTION_ONE</a>
-, <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a15c781ad15f9a8392a620559c278199e">ICAL_RESTRICTION_ZEROPLUS</a>
 , <br />
-&#160;&#160;<a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a772dd4b4cdfe5d5a264ec237a63e6c21">ICAL_RESTRICTION_ONEPLUS</a>
+&#160;&#160;<a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a15c781ad15f9a8392a620559c278199e">ICAL_RESTRICTION_ZEROPLUS</a>
+, <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a772dd4b4cdfe5d5a264ec237a63e6c21">ICAL_RESTRICTION_ONEPLUS</a>
 , <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a941349ba77c59b895acc1f7133421a94">ICAL_RESTRICTION_ZEROORONE</a>
 , <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a6689f5056a7239a1f7d90eed1697d4f9">ICAL_RESTRICTION_ONEEXCLUSIVE</a>
-, <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1aa27388029f05e9a1fae601d0ccbf69d9">ICAL_RESTRICTION_ONEMUTUAL</a>
 , <br />
-&#160;&#160;<a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a166b57120ae7e1f7b2d321d36bbb7bce">ICAL_RESTRICTION_UNKNOWN</a>
+&#160;&#160;<a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1aa27388029f05e9a1fae601d0ccbf69d9">ICAL_RESTRICTION_ONEMUTUAL</a>
+, <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1a166b57120ae7e1f7b2d321d36bbb7bce">ICAL_RESTRICTION_UNKNOWN</a>
 <br />
  }</td></tr>
 <tr class="memdesc:ac6d836f345770d880b446d964f685db1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The kinds of icalrestrictions there are.  <a href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1">More...</a><br /></td></tr>
@@ -109,7 +120,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a36eeedfdce2344da44fd09d9e3f18b57"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57">icalrestriction_check</a> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *comp)</td></tr>
 <tr class="memdesc:a36eeedfdce2344da44fd09d9e3f18b57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a given <code>VCALENDAR</code> meets all the restrictions imposed by the standard.  <a href="icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57">More...</a><br /></td></tr>
 <tr class="separator:a36eeedfdce2344da44fd09d9e3f18b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd3882ab8b58bf0e12cb9ed48234ce2d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalrestriction_8h.html#acd3882ab8b58bf0e12cb9ed48234ce2d">icalrestriction_compare</a> (<a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1">icalrestriction_kind</a> restr, int count)</td></tr>
+<tr class="memitem:acd3882ab8b58bf0e12cb9ed48234ce2d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalrestriction_8h.html#acd3882ab8b58bf0e12cb9ed48234ce2d">icalrestriction_compare</a> (<a class="el" href="icalrestriction_8h.html#ae380f8acbf3acc9650130ce17aa755f9">icalrestriction_kind</a> restr, int count)</td></tr>
 <tr class="memdesc:acd3882ab8b58bf0e12cb9ed48234ce2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the given <em>count</em> is in accordance with the given restriction, <em>restr</em>.  <a href="icalrestriction_8h.html#acd3882ab8b58bf0e12cb9ed48234ce2d">More...</a><br /></td></tr>
 <tr class="separator:acd3882ab8b58bf0e12cb9ed48234ce2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -123,7 +134,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef enum <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1">icalrestriction_kind</a> <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1">icalrestriction_kind</a></td>
+          <td class="memname">typedef enum icalrestriction_kind icalrestriction_kind</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -141,7 +152,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1">icalrestriction_kind</a></td>
+          <td class="memname">enum icalrestriction_kind</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -201,8 +212,8 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// check component</span></div>
 <div class="line">assert(<a class="code hl_function" href="icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57">icalrestriction_check</a>(component) == <span class="keyword">true</span>);</div>
-<div class="ttc" id="aicalrestriction_8h_html_a36eeedfdce2344da44fd09d9e3f18b57"><div class="ttname"><a href="icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57">icalrestriction_check</a></div><div class="ttdeci">int icalrestriction_check(icalcomponent *comp)</div><div class="ttdoc">Checks if a given VCALENDAR meets all the restrictions imposed by the standard.</div></div>
-<div class="ttc" id="astructicalcomponent__impl_html"><div class="ttname"><a href="structicalcomponent__impl.html">icalcomponent_impl</a></div><div class="ttdef"><b>Definition:</b> icalcomponent.c:36</div></div>
+<div class="ttc" id="aicalrestriction_8h_html_a36eeedfdce2344da44fd09d9e3f18b57"><div class="ttname"><a href="icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57">icalrestriction_check</a></div><div class="ttdeci">int icalrestriction_check(icalcomponent *comp)</div><div class="ttdoc">Checks if a given VCALENDAR meets all the restrictions imposed by the standard.</div><div class="ttdef"><b>Definition:</b> icalrestriction.c:418</div></div>
+<div class="ttc" id="astructicalcomponent__impl_html"><div class="ttname"><a href="structicalcomponent__impl.html">icalcomponent_impl</a></div><div class="ttdef"><b>Definition:</b> icalcomponent.c:28</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -216,7 +227,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int icalrestriction_compare </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1">icalrestriction_kind</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="icalrestriction_8h.html#ae380f8acbf3acc9650130ce17aa755f9">icalrestriction_kind</a>&#160;</td>
           <td class="paramname"><em>restr</em>, </td>
         </tr>
         <tr>
@@ -244,7 +255,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>1 if the restriction is met, 0 if not</dd></dl>
 <dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line">assert(<a class="code hl_function" href="icalrestriction_8h.html#acd3882ab8b58bf0e12cb9ed48234ce2d">icalrestriction_compare</a>(ICALRESTRICTION_ONEPLUS, 5) == <span class="keyword">true</span>);</div>
 <div class="line">assert(<a class="code hl_function" href="icalrestriction_8h.html#acd3882ab8b58bf0e12cb9ed48234ce2d">icalrestriction_compare</a>(ICALRESTRICTION_NONE,    3) == <span class="keyword">false</span>);</div>
-<div class="ttc" id="aicalrestriction_8h_html_acd3882ab8b58bf0e12cb9ed48234ce2d"><div class="ttname"><a href="icalrestriction_8h.html#acd3882ab8b58bf0e12cb9ed48234ce2d">icalrestriction_compare</a></div><div class="ttdeci">int icalrestriction_compare(icalrestriction_kind restr, int count)</div><div class="ttdoc">Checks if the given count is in accordance with the given restriction, restr.</div></div>
+<div class="ttc" id="aicalrestriction_8h_html_acd3882ab8b58bf0e12cb9ed48234ce2d"><div class="ttname"><a href="icalrestriction_8h.html#acd3882ab8b58bf0e12cb9ed48234ce2d">icalrestriction_compare</a></div><div class="ttdeci">int icalrestriction_compare(icalrestriction_kind restr, int count)</div><div class="ttdoc">Checks if the given count is in accordance with the given restriction, restr.</div><div class="ttdef"><b>Definition:</b> icalrestriction.c:77</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -252,7 +263,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 10 2022 08:27:16 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 18 2022 10:19:41 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

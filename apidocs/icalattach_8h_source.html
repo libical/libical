@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.1</span>
    </div>
   </td>
  </tr>
@@ -73,59 +73,50 @@ $(function() {
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> FILE: icalattach.h</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> CREATOR: acampi 28 May 02</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"></span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> (C) COPYRIGHT 2002, Andrea Campi &lt;a.campi@inet.it&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> SPDX-FileCopyrightText: 2002, Andrea Campi &lt;a.campi@inet.it&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"></span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> This library is free software; you can redistribute it and/or modify</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> it under the terms of either:</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"></span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">    The LGPL as published by the Free Software Foundation, version</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"></span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment"> Or:</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment"></span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">    The Mozilla Public License Version 2.0. You may obtain a copy of</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">    the License at https://www.mozilla.org/MPL/</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">======================================================================*/</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#ifndef ICALATTACH_H</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#define ICALATTACH_H</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5">   44</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalattach__impl.html">icalattach_impl</a> <a class="code hl_struct" href="structicalattach__impl.html">icalattach</a>;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">   54</a></span><span class="keyword">typedef</span> void (*<a class="code hl_typedef" href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">icalattach_free_fn_t</a>) (<span class="keywordtype">char</span> *data, <span class="keywordtype">void</span> *user_data);</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *<a class="code hl_function" href="icalattach_8h.html#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *url);</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *<a class="code hl_function" href="icalattach_8h.html#a02add24fd5d06a4753df5e7b9e9ce94b">icalattach_new_from_data</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *data,</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>                                                         <a class="code hl_typedef" href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">icalattach_free_fn_t</a> free_fn,</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                                                         <span class="keywordtype">void</span> *free_fn_data);</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalattach_8h.html#aa442cd17e95dd605f5df40194d910002">icalattach_ref</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalattach_8h.html#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code hl_function" href="icalattach_8h.html#a87aa30954aa1f901d90ab816abdfebd1">icalattach_get_is_url</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_function" href="icalattach_8h.html#abff756d83d05c46417c8cbdaa7e0fa04">icalattach_get_url</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<a class="code hl_function" href="icalattach_8h.html#ab2039dd2691006e33174e39fedb4adca">icalattach_get_data</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALATTACH_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="aicalattach_8h_html_a02add24fd5d06a4753df5e7b9e9ce94b"><div class="ttname"><a href="icalattach_8h.html#a02add24fd5d06a4753df5e7b9e9ce94b">icalattach_new_from_data</a></div><div class="ttdeci">icalattach * icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn, void *free_fn_data)</div><div class="ttdoc">Creates new icalattach object from data.</div><div class="ttdef"><b>Definition:</b> icalattach.c:60</div></div>
-<div class="ttc" id="aicalattach_8h_html_a331647f68081555d5dad37e6ebb96f41"><div class="ttname"><a href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">icalattach_free_fn_t</a></div><div class="ttdeci">void(* icalattach_free_fn_t)(char *data, void *user_data)</div><div class="ttdoc">Function to be called to free the data of an icalattach object.</div><div class="ttdef"><b>Definition:</b> icalattach.h:54</div></div>
-<div class="ttc" id="aicalattach_8h_html_a4f9e8fe048e58d1035f82ca47e51024f"><div class="ttname"><a href="icalattach_8h.html#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a></div><div class="ttdeci">void icalattach_unref(icalattach *attach)</div><div class="ttdoc">Decrements reference count of the icalattach.</div><div class="ttdef"><b>Definition:</b> icalattach.c:99</div></div>
-<div class="ttc" id="aicalattach_8h_html_a87aa30954aa1f901d90ab816abdfebd1"><div class="ttname"><a href="icalattach_8h.html#a87aa30954aa1f901d90ab816abdfebd1">icalattach_get_is_url</a></div><div class="ttdeci">int icalattach_get_is_url(icalattach *attach)</div><div class="ttdoc">Determines if attach is an URL.</div><div class="ttdef"><b>Definition:</b> icalattach.c:118</div></div>
-<div class="ttc" id="aicalattach_8h_html_aa442cd17e95dd605f5df40194d910002"><div class="ttname"><a href="icalattach_8h.html#aa442cd17e95dd605f5df40194d910002">icalattach_ref</a></div><div class="ttdeci">void icalattach_ref(icalattach *attach)</div><div class="ttdoc">Increments reference count of the icalattach.</div><div class="ttdef"><b>Definition:</b> icalattach.c:91</div></div>
-<div class="ttc" id="aicalattach_8h_html_ab2039dd2691006e33174e39fedb4adca"><div class="ttname"><a href="icalattach_8h.html#ab2039dd2691006e33174e39fedb4adca">icalattach_get_data</a></div><div class="ttdeci">unsigned char * icalattach_get_data(icalattach *attach)</div><div class="ttdoc">Returns the data of the icalattach object.</div><div class="ttdef"><b>Definition:</b> icalattach.c:133</div></div>
-<div class="ttc" id="aicalattach_8h_html_abff756d83d05c46417c8cbdaa7e0fa04"><div class="ttname"><a href="icalattach_8h.html#abff756d83d05c46417c8cbdaa7e0fa04">icalattach_get_url</a></div><div class="ttdeci">const char * icalattach_get_url(icalattach *attach)</div><div class="ttdoc">Returns the URL of the icalattach object.</div><div class="ttdef"><b>Definition:</b> icalattach.c:125</div></div>
-<div class="ttc" id="aicalattach_8h_html_ae01e1b8479c7f4f6205d05271a4a8021"><div class="ttname"><a href="icalattach_8h.html#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a></div><div class="ttdeci">icalattach * icalattach_new_from_url(const char *url)</div><div class="ttdoc">Creates new icalattach object from a URL.</div><div class="ttdef"><b>Definition:</b> icalattach.c:29</div></div>
-<div class="ttc" id="astructicalattach__impl_html"><div class="ttname"><a href="structicalattach__impl.html">icalattach_impl</a></div><div class="ttdef"><b>Definition:</b> icalattachimpl.h:26</div></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"></span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">======================================================================*/</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#ifndef ICALATTACH_H</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#define ICALATTACH_H</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalattach__impl.html">icalattach_impl</a> <a class="code hl_struct" href="structicalattach__impl.html">icalattach</a>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keyword">typedef</span> void (*icalattach_free_fn_t) (<span class="keywordtype">char</span> *data, <span class="keywordtype">void</span> *user_data);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *<a class="code hl_function" href="icalattach_8h.html#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *url);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *<a class="code hl_function" href="icalattach_8h.html#a02add24fd5d06a4753df5e7b9e9ce94b">icalattach_new_from_data</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *data,</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>                                                         icalattach_free_fn_t free_fn,</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>                                                         <span class="keywordtype">void</span> *free_fn_data);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalattach_8h.html#aa442cd17e95dd605f5df40194d910002">icalattach_ref</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalattach_8h.html#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code hl_function" href="icalattach_8h.html#a87aa30954aa1f901d90ab816abdfebd1">icalattach_get_is_url</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_function" href="icalattach_8h.html#abff756d83d05c46417c8cbdaa7e0fa04">icalattach_get_url</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<a class="code hl_function" href="icalattach_8h.html#ab2039dd2691006e33174e39fedb4adca">icalattach_get_data</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALATTACH_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aicalattach_8h_html_a02add24fd5d06a4753df5e7b9e9ce94b"><div class="ttname"><a href="icalattach_8h.html#a02add24fd5d06a4753df5e7b9e9ce94b">icalattach_new_from_data</a></div><div class="ttdeci">icalattach * icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn, void *free_fn_data)</div><div class="ttdoc">Creates new icalattach object from data.</div><div class="ttdef"><b>Definition:</b> icalattach.c:53</div></div>
+<div class="ttc" id="aicalattach_8h_html_a4f9e8fe048e58d1035f82ca47e51024f"><div class="ttname"><a href="icalattach_8h.html#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a></div><div class="ttdeci">void icalattach_unref(icalattach *attach)</div><div class="ttdoc">Decrements reference count of the icalattach.</div><div class="ttdef"><b>Definition:</b> icalattach.c:92</div></div>
+<div class="ttc" id="aicalattach_8h_html_a87aa30954aa1f901d90ab816abdfebd1"><div class="ttname"><a href="icalattach_8h.html#a87aa30954aa1f901d90ab816abdfebd1">icalattach_get_is_url</a></div><div class="ttdeci">int icalattach_get_is_url(icalattach *attach)</div><div class="ttdoc">Determines if attach is an URL.</div><div class="ttdef"><b>Definition:</b> icalattach.c:111</div></div>
+<div class="ttc" id="aicalattach_8h_html_aa442cd17e95dd605f5df40194d910002"><div class="ttname"><a href="icalattach_8h.html#aa442cd17e95dd605f5df40194d910002">icalattach_ref</a></div><div class="ttdeci">void icalattach_ref(icalattach *attach)</div><div class="ttdoc">Increments reference count of the icalattach.</div><div class="ttdef"><b>Definition:</b> icalattach.c:84</div></div>
+<div class="ttc" id="aicalattach_8h_html_ab2039dd2691006e33174e39fedb4adca"><div class="ttname"><a href="icalattach_8h.html#ab2039dd2691006e33174e39fedb4adca">icalattach_get_data</a></div><div class="ttdeci">unsigned char * icalattach_get_data(icalattach *attach)</div><div class="ttdoc">Returns the data of the icalattach object.</div><div class="ttdef"><b>Definition:</b> icalattach.c:126</div></div>
+<div class="ttc" id="aicalattach_8h_html_abff756d83d05c46417c8cbdaa7e0fa04"><div class="ttname"><a href="icalattach_8h.html#abff756d83d05c46417c8cbdaa7e0fa04">icalattach_get_url</a></div><div class="ttdeci">const char * icalattach_get_url(icalattach *attach)</div><div class="ttdoc">Returns the URL of the icalattach object.</div><div class="ttdef"><b>Definition:</b> icalattach.c:118</div></div>
+<div class="ttc" id="aicalattach_8h_html_ae01e1b8479c7f4f6205d05271a4a8021"><div class="ttname"><a href="icalattach_8h.html#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a></div><div class="ttdeci">icalattach * icalattach_new_from_url(const char *url)</div><div class="ttdoc">Creates new icalattach object from a URL.</div><div class="ttdef"><b>Definition:</b> icalattach.c:22</div></div>
+<div class="ttc" id="astructicalattach__impl_html"><div class="ttname"><a href="structicalattach__impl.html">icalattach_impl</a></div><div class="ttdef"><b>Definition:</b> icalattachimpl.h:18</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 10 2022 08:27:16 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 18 2022 10:19:40 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

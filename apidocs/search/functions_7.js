@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['juldat_0',['juldat',['../astime_8h.html#adaeb2db35e791e5539b565e85e697cab',1,'astime.h']]]
+  ['juldat_0',['juldat',['../astime_8h.html#a1c6a160930d1c125892a81813a0d8d4b',1,'astime.h']]],
+  ['juldat_5fint_1',['juldat_int',['../astime_8h.html#a3cc1a455b453977f754842b9666440a2',1,'astime.h']]]
 ];

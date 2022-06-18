@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.1</span>
    </div>
   </td>
  </tr>
@@ -76,31 +76,34 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab8222d0c7236fee6e6ae47a79955db45"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45">icalparameter_as_ical_string</a> (icalparameter *parameter)</td></tr>
+<tr class="memitem:ab8222d0c7236fee6e6ae47a79955db45"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45">icalparameter_as_ical_string</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *parameter)</td></tr>
 <tr class="memdesc:ab8222d0c7236fee6e6ae47a79955db45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts icalparameter into a string representation.  <a href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45">More...</a><br /></td></tr>
 <tr class="separator:ab8222d0c7236fee6e6ae47a79955db45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe13c2029af7332593df37d1ebbd8b3c"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#afe13c2029af7332593df37d1ebbd8b3c">icalparameter_as_ical_string_r</a> (icalparameter *parameter)</td></tr>
+<tr class="memitem:afe13c2029af7332593df37d1ebbd8b3c"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#afe13c2029af7332593df37d1ebbd8b3c">icalparameter_as_ical_string_r</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *parameter)</td></tr>
 <tr class="memdesc:afe13c2029af7332593df37d1ebbd8b3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts icalparameter into an string representation according to RFC5445/RFC6868.  <a href="icalparameter_8h.html#afe13c2029af7332593df37d1ebbd8b3c">More...</a><br /></td></tr>
 <tr class="separator:afe13c2029af7332593df37d1ebbd8b3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafadb9fd4172bab0d17252d251c69800"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a> (icalparameter *parameter)</td></tr>
+<tr class="memitem:a736a5b4f88c51ba730fddb29981c57de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a736a5b4f88c51ba730fddb29981c57de">icalparameter_clone</a> (const <a class="el" href="structicalparameter__impl.html">icalparameter</a> *p)</td></tr>
+<tr class="memdesc:a736a5b4f88c51ba730fddb29981c57de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates new icalparameter as a clone of the given one.  <a href="icalparameter_8h.html#a736a5b4f88c51ba730fddb29981c57de">More...</a><br /></td></tr>
+<tr class="separator:a736a5b4f88c51ba730fddb29981c57de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafadb9fd4172bab0d17252d251c69800"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *parameter)</td></tr>
 <tr class="memdesc:aafadb9fd4172bab0d17252d251c69800"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees an icalparameter object.  <a href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">More...</a><br /></td></tr>
 <tr class="separator:aafadb9fd4172bab0d17252d251c69800"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab644f9bab546eea75306f349914af05a"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#ab644f9bab546eea75306f349914af05a">icalparameter_get_iana_name</a> (icalparameter *param)</td></tr>
+<tr class="memitem:ab644f9bab546eea75306f349914af05a"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#ab644f9bab546eea75306f349914af05a">icalparameter_get_iana_name</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param)</td></tr>
 <tr class="memdesc:ab644f9bab546eea75306f349914af05a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the IANA name of <em>param</em>.  <a href="icalparameter_8h.html#ab644f9bab546eea75306f349914af05a">More...</a><br /></td></tr>
 <tr class="separator:ab644f9bab546eea75306f349914af05a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93de301878e702d08cf89dae83c071f7"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a93de301878e702d08cf89dae83c071f7">icalparameter_get_iana_value</a> (icalparameter *param)</td></tr>
+<tr class="memitem:a93de301878e702d08cf89dae83c071f7"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a93de301878e702d08cf89dae83c071f7">icalparameter_get_iana_value</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param)</td></tr>
 <tr class="memdesc:a93de301878e702d08cf89dae83c071f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the IANA value of <em>param</em>.  <a href="icalparameter_8h.html#a93de301878e702d08cf89dae83c071f7">More...</a><br /></td></tr>
 <tr class="separator:a93de301878e702d08cf89dae83c071f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28c4415b82455f7551aa4c48b36be438"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a28c4415b82455f7551aa4c48b36be438">icalparameter_get_xname</a> (icalparameter *param)</td></tr>
+<tr class="memitem:a28c4415b82455f7551aa4c48b36be438"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a28c4415b82455f7551aa4c48b36be438">icalparameter_get_xname</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param)</td></tr>
 <tr class="memdesc:a28c4415b82455f7551aa4c48b36be438"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the X-name of <em>param</em>.  <a href="icalparameter_8h.html#a28c4415b82455f7551aa4c48b36be438">More...</a><br /></td></tr>
 <tr class="separator:a28c4415b82455f7551aa4c48b36be438"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e2ee9baea3213f18d2b93cdf3892c72"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a1e2ee9baea3213f18d2b93cdf3892c72">icalparameter_get_xvalue</a> (icalparameter *param)</td></tr>
+<tr class="memitem:a1e2ee9baea3213f18d2b93cdf3892c72"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a1e2ee9baea3213f18d2b93cdf3892c72">icalparameter_get_xvalue</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param)</td></tr>
 <tr class="memdesc:a1e2ee9baea3213f18d2b93cdf3892c72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the X-value of <em>param</em>.  <a href="icalparameter_8h.html#a1e2ee9baea3213f18d2b93cdf3892c72">More...</a><br /></td></tr>
 <tr class="separator:a1e2ee9baea3213f18d2b93cdf3892c72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add735467f8a84b476f5899e262a072a2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#add735467f8a84b476f5899e262a072a2">icalparameter_has_same_name</a> (icalparameter *param1, icalparameter *param2)</td></tr>
+<tr class="memitem:add735467f8a84b476f5899e262a072a2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#add735467f8a84b476f5899e262a072a2">icalparameter_has_same_name</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param1, <a class="el" href="structicalparameter__impl.html">icalparameter</a> *param2)</td></tr>
 <tr class="memdesc:add735467f8a84b476f5899e262a072a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if two parameters have the same name.  <a href="icalparameter_8h.html#add735467f8a84b476f5899e262a072a2">More...</a><br /></td></tr>
 <tr class="separator:add735467f8a84b476f5899e262a072a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0671e8fcd545049a3fbc1b5d5d0f2b2b"><td class="memItemLeft" align="right" valign="top">icalparameter_kind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a0671e8fcd545049a3fbc1b5d5d0f2b2b">icalparameter_isa</a> (icalparameter *parameter)</td></tr>
+<tr class="memitem:a0671e8fcd545049a3fbc1b5d5d0f2b2b"><td class="memItemLeft" align="right" valign="top">icalparameter_kind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a0671e8fcd545049a3fbc1b5d5d0f2b2b">icalparameter_isa</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *parameter)</td></tr>
 <tr class="separator:a0671e8fcd545049a3fbc1b5d5d0f2b2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a960908ba27797c51f965b997be99f284"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a960908ba27797c51f965b997be99f284">icalparameter_isa_parameter</a> (void *param)</td></tr>
 <tr class="separator:a960908ba27797c51f965b997be99f284"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -110,28 +113,28 @@ Functions</h2></td></tr>
 <tr class="memitem:a6a172a9cc1bc5cc1315f96e6cad70438"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a6a172a9cc1bc5cc1315f96e6cad70438">icalparameter_kind_to_string</a> (icalparameter_kind kind)</td></tr>
 <tr class="memdesc:a6a172a9cc1bc5cc1315f96e6cad70438"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string representing the given icalparameter_kind.  <a href="icalparameter_8h.html#a6a172a9cc1bc5cc1315f96e6cad70438">More...</a><br /></td></tr>
 <tr class="separator:a6a172a9cc1bc5cc1315f96e6cad70438"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a252cdad9d54b31b898ff273ce5439429"><td class="memItemLeft" align="right" valign="top">icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a> (icalparameter_kind kind)</td></tr>
+<tr class="memitem:a252cdad9d54b31b898ff273ce5439429"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a> (icalparameter_kind kind)</td></tr>
 <tr class="memdesc:a252cdad9d54b31b898ff273ce5439429"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates new icalparameter object.  <a href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">More...</a><br /></td></tr>
 <tr class="separator:a252cdad9d54b31b898ff273ce5439429"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e31c5f1e180763dccdeaa94b180cad1"><td class="memItemLeft" align="right" valign="top">icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a1e31c5f1e180763dccdeaa94b180cad1">icalparameter_new_clone</a> (icalparameter *p)</td></tr>
-<tr class="memdesc:a1e31c5f1e180763dccdeaa94b180cad1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates new icalparameter as a clone of the given one.  <a href="icalparameter_8h.html#a1e31c5f1e180763dccdeaa94b180cad1">More...</a><br /></td></tr>
-<tr class="separator:a1e31c5f1e180763dccdeaa94b180cad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3f2cce04d344d002ca83e797c05dd8b"><td class="memItemLeft" align="right" valign="top">icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a> (const char *value)</td></tr>
+<tr class="memitem:a913f1e9184b211c0c59a7b36e2710264"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a913f1e9184b211c0c59a7b36e2710264">icalparameter_new_clone</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *p))</td></tr>
+<tr class="memdesc:a913f1e9184b211c0c59a7b36e2710264"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates new icalparameter as a clone of the given one.  <a href="icalparameter_8h.html#a913f1e9184b211c0c59a7b36e2710264">More...</a><br /></td></tr>
+<tr class="separator:a913f1e9184b211c0c59a7b36e2710264"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3f2cce04d344d002ca83e797c05dd8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a> (const char *value)</td></tr>
 <tr class="memdesc:aa3f2cce04d344d002ca83e797c05dd8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates new icalparameter object from string.  <a href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">More...</a><br /></td></tr>
 <tr class="separator:aa3f2cce04d344d002ca83e797c05dd8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe33daa839d72261aab283d0f44f711f"><td class="memItemLeft" align="right" valign="top">icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f">icalparameter_new_from_value_string</a> (icalparameter_kind kind, const char *value)</td></tr>
+<tr class="memitem:abe33daa839d72261aab283d0f44f711f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f">icalparameter_new_from_value_string</a> (icalparameter_kind kind, const char *value)</td></tr>
 <tr class="memdesc:abe33daa839d72261aab283d0f44f711f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates new icalparameter of a given <em>kind</em> with a given <em>value</em>.  <a href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f">More...</a><br /></td></tr>
 <tr class="separator:abe33daa839d72261aab283d0f44f711f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab70ecf438e02384a5a13ca6a71e7793"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#aab70ecf438e02384a5a13ca6a71e7793">icalparameter_set_iana_name</a> (icalparameter *param, const char *v)</td></tr>
+<tr class="memitem:aab70ecf438e02384a5a13ca6a71e7793"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#aab70ecf438e02384a5a13ca6a71e7793">icalparameter_set_iana_name</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param, const char *v)</td></tr>
 <tr class="memdesc:aab70ecf438e02384a5a13ca6a71e7793"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the IANA name of <em>param</em> to <em>v</em>.  <a href="icalparameter_8h.html#aab70ecf438e02384a5a13ca6a71e7793">More...</a><br /></td></tr>
 <tr class="separator:aab70ecf438e02384a5a13ca6a71e7793"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf6329d175597783232853ff1ca53e24"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#adf6329d175597783232853ff1ca53e24">icalparameter_set_iana_value</a> (icalparameter *param, const char *v)</td></tr>
+<tr class="memitem:adf6329d175597783232853ff1ca53e24"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#adf6329d175597783232853ff1ca53e24">icalparameter_set_iana_value</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param, const char *v)</td></tr>
 <tr class="memdesc:adf6329d175597783232853ff1ca53e24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the IANA value of <em>param</em> to <em>v</em>.  <a href="icalparameter_8h.html#adf6329d175597783232853ff1ca53e24">More...</a><br /></td></tr>
 <tr class="separator:adf6329d175597783232853ff1ca53e24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e77cb0c365e67a65487f916ece223da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a2e77cb0c365e67a65487f916ece223da">icalparameter_set_xname</a> (icalparameter *param, const char *v)</td></tr>
+<tr class="memitem:a2e77cb0c365e67a65487f916ece223da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a2e77cb0c365e67a65487f916ece223da">icalparameter_set_xname</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param, const char *v)</td></tr>
 <tr class="memdesc:a2e77cb0c365e67a65487f916ece223da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the X-name of <em>param</em> to <em>v</em>.  <a href="icalparameter_8h.html#a2e77cb0c365e67a65487f916ece223da">More...</a><br /></td></tr>
 <tr class="separator:a2e77cb0c365e67a65487f916ece223da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf0fbf906d011f5af3ce38b626906691"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#aaf0fbf906d011f5af3ce38b626906691">icalparameter_set_xvalue</a> (icalparameter *param, const char *v)</td></tr>
+<tr class="memitem:aaf0fbf906d011f5af3ce38b626906691"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#aaf0fbf906d011f5af3ce38b626906691">icalparameter_set_xvalue</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param, const char *v)</td></tr>
 <tr class="memdesc:aaf0fbf906d011f5af3ce38b626906691"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the X-value of <em>param</em> to <em>v</em>.  <a href="icalparameter_8h.html#aaf0fbf906d011f5af3ce38b626906691">More...</a><br /></td></tr>
 <tr class="separator:aaf0fbf906d011f5af3ce38b626906691"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e659bfa64d0c6c7cc3da29aadc5d3d6"><td class="memItemLeft" align="right" valign="top">icalparameter_kind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalparameter_8h.html#a4e659bfa64d0c6c7cc3da29aadc5d3d6">icalparameter_string_to_kind</a> (const char *string)</td></tr>
@@ -150,7 +153,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">char * icalparameter_as_ical_string </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>parameter</em></td><td>)</td>
           <td></td>
         </tr>
@@ -168,16 +171,17 @@ Functions</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="icalparameter_8h.html#afe13c2029af7332593df37d1ebbd8b3c" title="Converts icalparameter into an string representation according to RFC5445/RFC6868.">icalparameter_as_ical_string_r()</a></dd></dl>
 <dl class="section user"><dt>Error handling</dt><dd>If there is any error, the method returns <code>NULL</code>. Furthermore, if <em>parameter</em> is <code>NULL</code>, it also sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. If it doesn't recognize the kind of the parameter, it sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> it <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. If the parameter is otherwise malformed, it sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>Strings returned by this method are owned by libical, they must not be freed and they may be reclaimed with the next call into the library. A version of this function, which returns strings that are not owned by libical, is <a class="el" href="icalparameter_8h.html#afe13c2029af7332593df37d1ebbd8b3c" title="Converts icalparameter into an string representation according to RFC5445/RFC6868.">icalparameter_as_ical_string_r()</a>.</dd></dl>
-<dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
+<dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">if</span>(param) {</div>
 <div class="line">    printf(<span class="stringliteral">&quot;%s\n&quot;</span>, <a class="code hl_function" href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45">icalparameter_as_ical_string</a>(param));</div>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div>
-<div class="ttc" id="aicalparameter_8h_html_aa3f2cce04d344d002ca83e797c05dd8b"><div class="ttname"><a href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a></div><div class="ttdeci">icalparameter * icalparameter_new_from_string(const char *value)</div><div class="ttdoc">Creates new icalparameter object from string.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:119</div></div>
-<div class="ttc" id="aicalparameter_8h_html_aafadb9fd4172bab0d17252d251c69800"><div class="ttname"><a href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a></div><div class="ttdeci">void icalparameter_free(icalparameter *parameter)</div><div class="ttdoc">Frees an icalparameter object.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:60</div></div>
-<div class="ttc" id="aicalparameter_8h_html_ab8222d0c7236fee6e6ae47a79955db45"><div class="ttname"><a href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45">icalparameter_as_ical_string</a></div><div class="ttdeci">char * icalparameter_as_ical_string(icalparameter *parameter)</div><div class="ttdoc">Converts icalparameter into a string representation.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:168</div></div>
+<div class="ttc" id="aicalparameter_8h_html_aa3f2cce04d344d002ca83e797c05dd8b"><div class="ttname"><a href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a></div><div class="ttdeci">icalparameter * icalparameter_new_from_string(const char *value)</div><div class="ttdoc">Creates new icalparameter object from string.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:115</div></div>
+<div class="ttc" id="aicalparameter_8h_html_aafadb9fd4172bab0d17252d251c69800"><div class="ttname"><a href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a></div><div class="ttdeci">void icalparameter_free(icalparameter *parameter)</div><div class="ttdoc">Frees an icalparameter object.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:51</div></div>
+<div class="ttc" id="aicalparameter_8h_html_ab8222d0c7236fee6e6ae47a79955db45"><div class="ttname"><a href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45">icalparameter_as_ical_string</a></div><div class="ttdeci">char * icalparameter_as_ical_string(icalparameter *parameter)</div><div class="ttdoc">Converts icalparameter into a string representation.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:164</div></div>
+<div class="ttc" id="astructicalparameter__impl_html"><div class="ttname"><a href="structicalparameter__impl.html">icalparameter_impl</a></div><div class="ttdef"><b>Definition:</b> icalparameterimpl.h:21</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -191,7 +195,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">char * icalparameter_as_ical_string_r </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>parameter</em></td><td>)</td>
           <td></td>
         </tr>
@@ -208,17 +212,62 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>A string representing the parameter </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45" title="Converts icalparameter into a string representation.">icalparameter_as_ical_string()</a></dd></dl>
 <dl class="section user"><dt>Error handling</dt><dd>If there is any error, the method returns <code>NULL</code>. Furthermore, if parameter is <code>NULL</code>, it also sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. If it doesn't recognize the kind of the parameter, it sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. If the parameter is otherwise malformed, it sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>.</dd></dl>
-<dl class="section user"><dt>Ownership</dt><dd>Strings returned by this method are owned by the caller, thus they need to be manually <code>free()</code>d after use. A version of this function which returns strings that do not need to be freed manually is <a class="el" href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45" title="Converts icalparameter into a string representation.">icalparameter_as_ical_string()</a>.</dd></dl>
-<dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
+<dl class="section user"><dt>Ownership</dt><dd>Strings returned by this method are owned by the caller, thus they need to be manually <code><a class="el" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879" title="Releases a buffer.">icalmemory_free_buffer()</a></code>d after use. A version of this function which returns strings that do not need to be freed manually is <a class="el" href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45" title="Converts icalparameter into a string representation.">icalparameter_as_ical_string()</a>.</dd></dl>
+<dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">if</span>(param) {</div>
 <div class="line">    <span class="keywordtype">char</span> *str = <a class="code hl_function" href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45">icalparameter_as_ical_string</a>(param);</div>
 <div class="line">    printf(<span class="stringliteral">&quot;%s\n&quot;</span>, str);</div>
-<div class="line">    free(str);</div>
+<div class="line">    <a class="code hl_function" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(str);</div>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div>
+<div class="ttc" id="aicalmemory_8h_html_a2f164cb87c67f06b5dc04a5f21384879"><div class="ttname"><a href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a></div><div class="ttdeci">void icalmemory_free_buffer(void *buf)</div><div class="ttdoc">Releases a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:359</div></div>
 </div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="a736a5b4f88c51ba730fddb29981c57de" name="a736a5b4f88c51ba730fddb29981c57de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a736a5b4f88c51ba730fddb29981c57de">&#9670;&nbsp;</a></span>icalparameter_clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structicalparameter__impl.html">icalparameter</a> * icalparameter_clone </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates new icalparameter as a clone of the given one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>The existing, non-<code>NULL</code> parameter to clone. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An icalparameter that is a clone of the given one.</dd></dl>
+<dl class="section user"><dt>Error handling</dt><dd>If <em>p</em> is <code>NULL</code>, it returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. If there was an internal error cloning the data, it returns <code>NULL</code> without reporting any error in <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a>.</dd></dl>
+<dl class="section user"><dt>Ownership</dt><dd>Objects created by this method are owned by the caller and must be released with the <a class="el" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800" title="Frees an icalparameter object.">icalparameter_free()</a> method.</dd></dl>
+<dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line">// create an icalparameter</div>
+<div class="line">icalparameter *param = icalparameter_new_from_string(&quot;ROLE=CHAIR&quot;);</div>
+<div class="line"> </div>
+<div class="line">// clone the parameter</div>
+<div class="line">icalparameter *clone = icalparameter_clone(param);</div>
+<div class="line"> </div>
+<div class="line">if(clone) {</div>
+<div class="line">    // use clone ...</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">// release parameters</div>
+<div class="line">icalparameter_free(param);</div>
+<div class="line">icalparameter_free(clone);</div>
+</div><!-- fragment --> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
 
 </div>
 </div>
@@ -231,7 +280,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void icalparameter_free </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>parameter</em></td><td>)</td>
           <td></td>
         </tr>
@@ -245,8 +294,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>This method needs to be used on all parameter objects returned from any of the <code>_new()</code> methods including <a class="el" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429" title="Creates new icalparameter object.">icalparameter_new()</a>, <a class="el" href="icalparameter_8h.html#a1e31c5f1e180763dccdeaa94b180cad1" title="Creates new icalparameter as a clone of the given one.">icalparameter_new_clone()</a>, <a class="el" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b" title="Creates new icalparameter object from string.">icalparameter_new_from_string()</a> and <a class="el" href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f" title="Creates new icalparameter of a given kind with a given value.">icalparameter_new_from_value_string()</a>, when they are not needed anymore and to be released.</p>
-<dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
+<p>This method needs to be used on all parameter objects returned from any of the <code>_new()</code> methods including <a class="el" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429" title="Creates new icalparameter object.">icalparameter_new()</a>, <a class="el" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b" title="Creates new icalparameter object from string.">icalparameter_new_from_string()</a> and <a class="el" href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f" title="Creates new icalparameter of a given kind with a given value.">icalparameter_new_from_value_string()</a> and on cloned parameter objects returned by <a class="el" href="icalparameter_8h.html#a736a5b4f88c51ba730fddb29981c57de" title="Creates new icalparameter as a clone of the given one.">icalparameter_clone()</a> when these object are not needed anymore and to be released.</p>
+<dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">if</span>(param) {</div>
 <div class="line">    <span class="comment">// use param...</span></div>
@@ -254,7 +303,7 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// after use, release it</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div>
-<div class="ttc" id="aicalparameter_8h_html_a252cdad9d54b31b898ff273ce5439429"><div class="ttname"><a href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a></div><div class="ttdeci">icalparameter * icalparameter_new(icalparameter_kind kind)</div><div class="ttdoc">Creates new icalparameter object.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:53</div></div>
+<div class="ttc" id="aicalparameter_8h_html_a252cdad9d54b31b898ff273ce5439429"><div class="ttname"><a href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a></div><div class="ttdeci">icalparameter * icalparameter_new(icalparameter_kind kind)</div><div class="ttdoc">Creates new icalparameter object.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:44</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -268,7 +317,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">const char * icalparameter_get_iana_name </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>param</em></td><td>)</td>
           <td></td>
         </tr>
@@ -287,7 +336,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>Returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a> when a <code>NULL</code> is passed instead of an icalparameter.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The string that is returned stays owned by libical and must not be freed by the caller.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// creates new parameter</span></div>
-<div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// sets iana name</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aab70ecf438e02384a5a13ca6a71e7793">icalparameter_set_iana_name</a>(param, <span class="stringliteral">&quot;X-TEST&quot;</span>);</div>
@@ -296,8 +345,8 @@ Functions</h2></td></tr>
 <div class="line">assert(0 == strcmp(<a class="code hl_function" href="icalparameter_8h.html#ab644f9bab546eea75306f349914af05a">icalparameter_get_iana_name</a>(param), <span class="stringliteral">&quot;X-TEST&quot;</span>));</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div>
-<div class="ttc" id="aicalparameter_8h_html_aab70ecf438e02384a5a13ca6a71e7793"><div class="ttname"><a href="icalparameter_8h.html#aab70ecf438e02384a5a13ca6a71e7793">icalparameter_set_iana_name</a></div><div class="ttdeci">void icalparameter_set_iana_name(icalparameter *param, const char *v)</div><div class="ttdoc">Sets the IANA name of param to v.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:400</div></div>
-<div class="ttc" id="aicalparameter_8h_html_ab644f9bab546eea75306f349914af05a"><div class="ttname"><a href="icalparameter_8h.html#ab644f9bab546eea75306f349914af05a">icalparameter_get_iana_name</a></div><div class="ttdeci">const char * icalparameter_get_iana_name(icalparameter *param)</div><div class="ttdoc">Returns the IANA name of param.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:405</div></div>
+<div class="ttc" id="aicalparameter_8h_html_aab70ecf438e02384a5a13ca6a71e7793"><div class="ttname"><a href="icalparameter_8h.html#aab70ecf438e02384a5a13ca6a71e7793">icalparameter_set_iana_name</a></div><div class="ttdeci">void icalparameter_set_iana_name(icalparameter *param, const char *v)</div><div class="ttdoc">Sets the IANA name of param to v.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:396</div></div>
+<div class="ttc" id="aicalparameter_8h_html_ab644f9bab546eea75306f349914af05a"><div class="ttname"><a href="icalparameter_8h.html#ab644f9bab546eea75306f349914af05a">icalparameter_get_iana_name</a></div><div class="ttdeci">const char * icalparameter_get_iana_name(icalparameter *param)</div><div class="ttdoc">Returns the IANA name of param.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:401</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -311,7 +360,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">const char * icalparameter_get_iana_value </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>param</em></td><td>)</td>
           <td></td>
         </tr>
@@ -330,7 +379,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>Returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a> when a <code>NULL</code> is passed instead of an icalparameter.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The string that is returned stays owned by libical and must not be freed by the caller.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// create new parameter</span></div>
-<div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=ATTENDEE&quot;</span>);</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=ATTENDEE&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// set role to chair</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#adf6329d175597783232853ff1ca53e24">icalparameter_set_iana_value</a>(param, <span class="stringliteral">&quot;CHAIR&quot;</span>);</div>
@@ -340,8 +389,8 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release memory</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div>
-<div class="ttc" id="aicalparameter_8h_html_a93de301878e702d08cf89dae83c071f7"><div class="ttname"><a href="icalparameter_8h.html#a93de301878e702d08cf89dae83c071f7">icalparameter_get_iana_value</a></div><div class="ttdeci">const char * icalparameter_get_iana_value(icalparameter *param)</div><div class="ttdoc">Returns the IANA value of param.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:395</div></div>
-<div class="ttc" id="aicalparameter_8h_html_adf6329d175597783232853ff1ca53e24"><div class="ttname"><a href="icalparameter_8h.html#adf6329d175597783232853ff1ca53e24">icalparameter_set_iana_value</a></div><div class="ttdeci">void icalparameter_set_iana_value(icalparameter *param, const char *v)</div><div class="ttdoc">Sets the IANA value of param to v.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:390</div></div>
+<div class="ttc" id="aicalparameter_8h_html_a93de301878e702d08cf89dae83c071f7"><div class="ttname"><a href="icalparameter_8h.html#a93de301878e702d08cf89dae83c071f7">icalparameter_get_iana_value</a></div><div class="ttdeci">const char * icalparameter_get_iana_value(icalparameter *param)</div><div class="ttdoc">Returns the IANA value of param.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:391</div></div>
+<div class="ttc" id="aicalparameter_8h_html_adf6329d175597783232853ff1ca53e24"><div class="ttname"><a href="icalparameter_8h.html#adf6329d175597783232853ff1ca53e24">icalparameter_set_iana_value</a></div><div class="ttdeci">void icalparameter_set_iana_value(icalparameter *param, const char *v)</div><div class="ttdoc">Sets the IANA value of param to v.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:386</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -355,7 +404,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">const char * icalparameter_get_xname </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>param</em></td><td>)</td>
           <td></td>
         </tr>
@@ -374,7 +423,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>Returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a> when a <code>NULL</code> is passed instead of an icalparameter.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The string that is returned stays owned by libical and must not be freed by the caller.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// creates new parameter</span></div>
-<div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// sets xname</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#a2e77cb0c365e67a65487f916ece223da">icalparameter_set_xname</a>(param, <span class="stringliteral">&quot;X-TEST&quot;</span>);</div>
@@ -383,8 +432,8 @@ Functions</h2></td></tr>
 <div class="line">assert(0 == strcmp(<a class="code hl_function" href="icalparameter_8h.html#a28c4415b82455f7551aa4c48b36be438">icalparameter_get_xname</a>(param), <span class="stringliteral">&quot;X-TEST&quot;</span>));</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div>
-<div class="ttc" id="aicalparameter_8h_html_a28c4415b82455f7551aa4c48b36be438"><div class="ttname"><a href="icalparameter_8h.html#a28c4415b82455f7551aa4c48b36be438">icalparameter_get_xname</a></div><div class="ttdeci">const char * icalparameter_get_xname(icalparameter *param)</div><div class="ttdoc">Returns the X-name of param.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:360</div></div>
-<div class="ttc" id="aicalparameter_8h_html_a2e77cb0c365e67a65487f916ece223da"><div class="ttname"><a href="icalparameter_8h.html#a2e77cb0c365e67a65487f916ece223da">icalparameter_set_xname</a></div><div class="ttdeci">void icalparameter_set_xname(icalparameter *param, const char *v)</div><div class="ttdoc">Sets the X-name of param to v.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:344</div></div>
+<div class="ttc" id="aicalparameter_8h_html_a28c4415b82455f7551aa4c48b36be438"><div class="ttname"><a href="icalparameter_8h.html#a28c4415b82455f7551aa4c48b36be438">icalparameter_get_xname</a></div><div class="ttdeci">const char * icalparameter_get_xname(icalparameter *param)</div><div class="ttdoc">Returns the X-name of param.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:356</div></div>
+<div class="ttc" id="aicalparameter_8h_html_a2e77cb0c365e67a65487f916ece223da"><div class="ttname"><a href="icalparameter_8h.html#a2e77cb0c365e67a65487f916ece223da">icalparameter_set_xname</a></div><div class="ttdeci">void icalparameter_set_xname(icalparameter *param, const char *v)</div><div class="ttdoc">Sets the X-name of param to v.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:340</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -398,7 +447,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">const char * icalparameter_get_xvalue </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>param</em></td><td>)</td>
           <td></td>
         </tr>
@@ -417,7 +466,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>Returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a> when a <code>NULL</code> is passed instead of an icalparameter.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The string that is returned stays owned by libical and must not be freed by the caller.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// create new parameter</span></div>
-<div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;X-TEST=FAIL&quot;</span>);</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;X-TEST=FAIL&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// set test to success</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aaf0fbf906d011f5af3ce38b626906691">icalparameter_set_xvalue</a>(param, <span class="stringliteral">&quot;SUCCESS&quot;</span>);</div>
@@ -427,8 +476,8 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release memory</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div>
-<div class="ttc" id="aicalparameter_8h_html_a1e2ee9baea3213f18d2b93cdf3892c72"><div class="ttname"><a href="icalparameter_8h.html#a1e2ee9baea3213f18d2b93cdf3892c72">icalparameter_get_xvalue</a></div><div class="ttdeci">const char * icalparameter_get_xvalue(icalparameter *param)</div><div class="ttdoc">Returns the X-value of param.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:383</div></div>
-<div class="ttc" id="aicalparameter_8h_html_aaf0fbf906d011f5af3ce38b626906691"><div class="ttname"><a href="icalparameter_8h.html#aaf0fbf906d011f5af3ce38b626906691">icalparameter_set_xvalue</a></div><div class="ttdeci">void icalparameter_set_xvalue(icalparameter *param, const char *v)</div><div class="ttdoc">Sets the X-value of param to v.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:367</div></div>
+<div class="ttc" id="aicalparameter_8h_html_a1e2ee9baea3213f18d2b93cdf3892c72"><div class="ttname"><a href="icalparameter_8h.html#a1e2ee9baea3213f18d2b93cdf3892c72">icalparameter_get_xvalue</a></div><div class="ttdeci">const char * icalparameter_get_xvalue(icalparameter *param)</div><div class="ttdoc">Returns the X-value of param.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:379</div></div>
+<div class="ttc" id="aicalparameter_8h_html_aaf0fbf906d011f5af3ce38b626906691"><div class="ttname"><a href="icalparameter_8h.html#aaf0fbf906d011f5af3ce38b626906691">icalparameter_set_xvalue</a></div><div class="ttdeci">void icalparameter_set_xvalue(icalparameter *param, const char *v)</div><div class="ttdoc">Sets the X-value of param to v.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:363</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -442,13 +491,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int icalparameter_has_same_name </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>param1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>param2</em>&#160;</td>
         </tr>
         <tr>
@@ -471,8 +520,8 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>If either of <em>param1</em> or <em>param2</em> are <code>NULL</code>, it returns 0 and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>Does not take ownership of either icalparameter.</dd></dl>
 <dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line"><span class="comment">// create two parameters</span></div>
-<div class="line">icalparameter *param1 = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
-<div class="line">icalparameter *param2 = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;EMAIL=mailto@example.com&quot;</span>);</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param1 = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param2 = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;EMAIL=mailto@example.com&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// compare parameter names for equality</span></div>
 <div class="line">assert(<a class="code hl_function" href="icalparameter_8h.html#add735467f8a84b476f5899e262a072a2">icalparameter_has_same_name</a>(param1, param2) == 0);</div>
@@ -480,7 +529,7 @@ Functions</h2></td></tr>
 <div class="line"><span class="comment">// release memory</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param1);</div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param2);</div>
-<div class="ttc" id="aicalparameter_8h_html_add735467f8a84b476f5899e262a072a2"><div class="ttname"><a href="icalparameter_8h.html#add735467f8a84b476f5899e262a072a2">icalparameter_has_same_name</a></div><div class="ttdeci">int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)</div><div class="ttdoc">Determines if two parameters have the same name.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:424</div></div>
+<div class="ttc" id="aicalparameter_8h_html_add735467f8a84b476f5899e262a072a2"><div class="ttname"><a href="icalparameter_8h.html#add735467f8a84b476f5899e262a072a2">icalparameter_has_same_name</a></div><div class="ttdeci">int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)</div><div class="ttdoc">Determines if two parameters have the same name.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:420</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -494,7 +543,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">icalparameter_kind icalparameter_isa </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>parameter</em></td><td>)</td>
           <td></td>
         </tr>
@@ -510,14 +559,14 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The icalparameter_kind of the parameter</dd></dl>
 <p><b>Error</b> handling Returns ICAL_NO_PARAMETER when passed NULL.</p>
 <p ><b>Usage</b> </p><div class="fragment"><div class="line"><span class="comment">// create parameter</span></div>
-<div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// check what type of parameter this is</span></div>
 <div class="line">assert(<a class="code hl_function" href="icalparameter_8h.html#a0671e8fcd545049a3fbc1b5d5d0f2b2b">icalparameter_isa</a>(param) == ICAL_ROLE_PARAMETER);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release memory</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div>
-<div class="ttc" id="aicalparameter_8h_html_a0671e8fcd545049a3fbc1b5d5d0f2b2b"><div class="ttname"><a href="icalparameter_8h.html#a0671e8fcd545049a3fbc1b5d5d0f2b2b">icalparameter_isa</a></div><div class="ttdeci">icalparameter_kind icalparameter_isa(icalparameter *parameter)</div><div class="ttdef"><b>Definition:</b> icalparameter.c:320</div></div>
+<div class="ttc" id="aicalparameter_8h_html_a0671e8fcd545049a3fbc1b5d5d0f2b2b"><div class="ttname"><a href="icalparameter_8h.html#a0671e8fcd545049a3fbc1b5d5d0f2b2b">icalparameter_isa</a></div><div class="ttdeci">icalparameter_kind icalparameter_isa(icalparameter *parameter)</div><div class="ttdef"><b>Definition:</b> icalparameter.c:316</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -546,14 +595,14 @@ Functions</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>This function expects to be given an object originating from libical - if this function is passed anything that is not from libical, its behavior is undefined.</dd></dl>
 <p><b>Error</b> handling When given a <code>NULL</code> object, it returns 0.</p>
 <p ><b>Usage</b> </p><div class="fragment"><div class="line"><span class="comment">// create parameter</span></div>
-<div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// check if it&#39;s a parameter</span></div>
 <div class="line">assert(<a class="code hl_function" href="icalparameter_8h.html#a960908ba27797c51f965b997be99f284">icalparameter_isa_parameter</a>(param));</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release memory</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div>
-<div class="ttc" id="aicalparameter_8h_html_a960908ba27797c51f965b997be99f284"><div class="ttname"><a href="icalparameter_8h.html#a960908ba27797c51f965b997be99f284">icalparameter_isa_parameter</a></div><div class="ttdeci">int icalparameter_isa_parameter(void *param)</div><div class="ttdef"><b>Definition:</b> icalparameter.c:329</div></div>
+<div class="ttc" id="aicalparameter_8h_html_a960908ba27797c51f965b997be99f284"><div class="ttname"><a href="icalparameter_8h.html#a960908ba27797c51f965b997be99f284">icalparameter_isa_parameter</a></div><div class="ttdeci">int icalparameter_isa_parameter(void *param)</div><div class="ttdef"><b>Definition:</b> icalparameter.c:325</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -582,7 +631,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if <em>kind</em> is valid, 0 otherwise</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line">assert(<a class="code hl_function" href="icalparameter_8h.html#a236331311b5c8957e718f6abb205fb66">icalparameter_kind_is_valid</a>(ICAL_ROLE_PARAMETER));</div>
-<div class="ttc" id="aicalparameter_8h_html_a236331311b5c8957e718f6abb205fb66"><div class="ttname"><a href="icalparameter_8h.html#a236331311b5c8957e718f6abb205fb66">icalparameter_kind_is_valid</a></div><div class="ttdeci">int icalparameter_kind_is_valid(const icalparameter_kind kind)</div><div class="ttdoc">Checks the validity of a icalparameter_kind.</div></div>
+<div class="ttc" id="aicalparameter_8h_html_a236331311b5c8957e718f6abb205fb66"><div class="ttname"><a href="icalparameter_8h.html#a236331311b5c8957e718f6abb205fb66">icalparameter_kind_is_valid</a></div><div class="ttdeci">int icalparameter_kind_is_valid(const icalparameter_kind kind)</div><div class="ttdoc">Checks the validity of a icalparameter_kind.</div><div class="ttdef"><b>Definition:</b> icalderivedparameter.c:2516</div></div>
 </div><!-- fragment --> </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.0.4 </dd></dl>
 
@@ -617,7 +666,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line">assert(0 == strcmp(<a class="code hl_function" href="icalparameter_8h.html#a6a172a9cc1bc5cc1315f96e6cad70438">icalparameter_kind_to_string</a>(ICAL_ROLE_PARAMETER), <span class="stringliteral">&quot;ROLE&quot;</span>));</div>
 <div class="line">assert(0 == strcmp(<a class="code hl_function" href="icalparameter_8h.html#a6a172a9cc1bc5cc1315f96e6cad70438">icalparameter_kind_to_string</a>(ICAL_EMAIL_PARAMETER), <span class="stringliteral">&quot;EMAIL));</span></div>
 <div class="line"><span class="stringliteral">assert(0 == strcmp(icalparameter_kind_to_string(ICAL_ID_PARAMETER), &quot;</span>ID<span class="stringliteral">&quot;));</span></div>
-<div class="ttc" id="aicalparameter_8h_html_a6a172a9cc1bc5cc1315f96e6cad70438"><div class="ttname"><a href="icalparameter_8h.html#a6a172a9cc1bc5cc1315f96e6cad70438">icalparameter_kind_to_string</a></div><div class="ttdeci">const char * icalparameter_kind_to_string(icalparameter_kind kind)</div><div class="ttdoc">Returns a string representing the given icalparameter_kind.</div></div>
+<div class="ttc" id="aicalparameter_8h_html_a6a172a9cc1bc5cc1315f96e6cad70438"><div class="ttname"><a href="icalparameter_8h.html#a6a172a9cc1bc5cc1315f96e6cad70438">icalparameter_kind_to_string</a></div><div class="ttdeci">const char * icalparameter_kind_to_string(icalparameter_kind kind)</div><div class="ttdoc">Returns a string representing the given icalparameter_kind.</div><div class="ttdef"><b>Definition:</b> icalderivedparameter.c:2534</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -629,7 +678,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">icalparameter * icalparameter_new </td>
+          <td class="memname"><a class="el" href="structicalparameter__impl.html">icalparameter</a> * icalparameter_new </td>
           <td>(</td>
           <td class="paramtype">icalparameter_kind&#160;</td>
           <td class="paramname"><em>kind</em></td><td>)</td>
@@ -649,7 +698,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>If there was an internal error regarding memory allocation, it returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a055394ffaf6701aa12491dc10767f07d">ICAL_NEWFAILED_ERROR</a>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>Objects created by this method are owned by the caller and must be released with the <a class="el" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800" title="Frees an icalparameter object.">icalparameter_free()</a> method.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// create new parameter</span></div>
-<div class="line">icalparameter *parameter = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *parameter = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">if</span>(parameter) {</div>
 <div class="line">    <span class="comment">// use parameter ...</span></div>
@@ -661,16 +710,16 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1e31c5f1e180763dccdeaa94b180cad1" name="a1e31c5f1e180763dccdeaa94b180cad1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e31c5f1e180763dccdeaa94b180cad1">&#9670;&nbsp;</a></span>icalparameter_new_clone()</h2>
+<a id="a913f1e9184b211c0c59a7b36e2710264" name="a913f1e9184b211c0c59a7b36e2710264"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a913f1e9184b211c0c59a7b36e2710264">&#9670;&nbsp;</a></span>icalparameter_new_clone()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">icalparameter * icalparameter_new_clone </td>
+          <td class="memname"><a class="el" href="structicalparameter__impl.html">icalparameter</a> * icalparameter_new_clone </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>p</em></td><td>)</td>
           <td></td>
         </tr>
@@ -691,7 +740,7 @@ Functions</h2></td></tr>
 <div class="line">icalparameter *param = icalparameter_new_from_string(&quot;ROLE=CHAIR&quot;);</div>
 <div class="line"> </div>
 <div class="line">// clone the parameter</div>
-<div class="line">icalparameter *clone = icalparameter_new_clone(param);</div>
+<div class="line">icalparameter *clone = icalparameter_clone(param);</div>
 <div class="line"> </div>
 <div class="line">if(clone) {</div>
 <div class="line">    // use clone ...</div>
@@ -701,6 +750,33 @@ Functions</h2></td></tr>
 <div class="line">icalparameter_free(param);</div>
 <div class="line">icalparameter_free(clone);</div>
 </div><!-- fragment --> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>Use <a class="el" href="icalparameter_8h.html#a736a5b4f88c51ba730fddb29981c57de" title="Creates new icalparameter as a clone of the given one.">icalparameter_clone()</a> instead </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>The existing, non-<code>NULL</code> parameter to clone. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An icalparameter that is a clone of the given one.</dd></dl>
+<dl class="section user"><dt>Error handling</dt><dd>If <em>p</em> is <code>NULL</code>, it returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. If there was an internal error cloning the data, it returns <code>NULL</code> without reporting any error in <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a>.</dd></dl>
+<dl class="section user"><dt>Ownership</dt><dd>Objects created by this method are owned by the caller and must be released with the <a class="el" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800" title="Frees an icalparameter object.">icalparameter_free()</a> method.</dd></dl>
+<dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line">// create an icalparameter</div>
+<div class="line">icalparameter *param = icalparameter_new_from_string(&quot;ROLE=CHAIR&quot;);</div>
+<div class="line"> </div>
+<div class="line">// clone the parameter</div>
+<div class="line">icalparameter *clone = icalparameter_clone(param);</div>
+<div class="line"> </div>
+<div class="line">if(clone) {</div>
+<div class="line">    // use clone ...</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">// release parameters</div>
+<div class="line">icalparameter_free(param);</div>
+<div class="line">icalparameter_free(clone);</div>
+</div><!-- fragment --> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd>Use <a class="el" href="icalparameter_8h.html#a736a5b4f88c51ba730fddb29981c57de" title="Creates new icalparameter as a clone of the given one.">icalparameter_clone()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -711,7 +787,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">icalparameter * icalparameter_new_from_string </td>
+          <td class="memname"><a class="el" href="structicalparameter__impl.html">icalparameter</a> * icalparameter_new_from_string </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
@@ -730,7 +806,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An icalparameter that corresponds to the given string.</dd></dl>
 <dl class="section user"><dt>Error handling</dt><dd>If there was an internal error copying data, it returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a055394ffaf6701aa12491dc10767f07d">ICAL_NEWFAILED_ERROR</a>. If <em>value</em> was <code>NULL</code>, it returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. If <em>value</em> was malformed, it returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>Objects created by this method are owned by the caller and must be released with the <a class="el" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800" title="Frees an icalparameter object.">icalparameter_free()</a> method.</dd></dl>
-<dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
+<dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=CHAIR&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">if</span>(param) {</div>
 <div class="line">    <span class="comment">// use param ...</span></div>
@@ -748,7 +824,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">icalparameter * icalparameter_new_from_value_string </td>
+          <td class="memname"><a class="el" href="structicalparameter__impl.html">icalparameter</a> * icalparameter_new_from_value_string </td>
           <td>(</td>
           <td class="paramtype">icalparameter_kind&#160;</td>
           <td class="paramname"><em>kind</em>, </td>
@@ -779,7 +855,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>If value is <code>NULL</code>, it returns <code>NULL</code> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>Objects created by this method are owned by the caller and must be released with the <a class="el" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800" title="Frees an icalparameter object.">icalparameter_free()</a> method.</dd></dl>
 <dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line"><span class="comment">// create new parameter</span></div>
-<div class="line">icalparameter *param;</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param;</div>
 <div class="line">param = <a class="code hl_function" href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f">icalparameter_new_from_value_string</a>(ICAL_ROLE_PARAMETER, <span class="stringliteral">&quot;CHAIR&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// check parameter</span></div>
@@ -788,7 +864,7 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release memory</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aafadb9fd4172bab0d17252d251c69800">icalparameter_free</a>(param);</div>
-<div class="ttc" id="aicalparameter_8h_html_abe33daa839d72261aab283d0f44f711f"><div class="ttname"><a href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f">icalparameter_new_from_value_string</a></div><div class="ttdeci">icalparameter * icalparameter_new_from_value_string(icalparameter_kind kind, const char *value)</div><div class="ttdoc">Creates new icalparameter of a given kind with a given value.</div></div>
+<div class="ttc" id="aicalparameter_8h_html_abe33daa839d72261aab283d0f44f711f"><div class="ttname"><a href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f">icalparameter_new_from_value_string</a></div><div class="ttdeci">icalparameter * icalparameter_new_from_value_string(icalparameter_kind kind, const char *value)</div><div class="ttdoc">Creates new icalparameter of a given kind with a given value.</div><div class="ttdef"><b>Definition:</b> icalderivedparameter.c:2632</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -802,7 +878,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void icalparameter_set_iana_name </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>param</em>, </td>
         </tr>
         <tr>
@@ -831,7 +907,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>If either <em>param</em> or <em>v</em> are <code>NULL</code>, it sets :calerrno to ICAL_BARARG_ERROR. If there is an error acquiring memory, it sets <code>errno</code> to <code>ENOMEM</code>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The passed string <em>v</em> stays in the ownership of the caller - libical creates a copy of it.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// creates new parameter</span></div>
-<div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// sets iana name</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aab70ecf438e02384a5a13ca6a71e7793">icalparameter_set_iana_name</a>(param, <span class="stringliteral">&quot;ROLE&quot;</span>);</div>
@@ -853,7 +929,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void icalparameter_set_iana_value </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>param</em>, </td>
         </tr>
         <tr>
@@ -882,7 +958,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>If either <em>param</em> or <em>v</em> are <code>NULL</code>, it sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to ICAL_BARARG_ERROR. If there is an error acquiring memory, it sets <code>errno</code> to <code>ENOMEM</code>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The passed string <em>v</em> stays in the ownership of the caller - libical creates a copy of it.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// create new parameter</span></div>
-<div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=ATTENDEE&quot;</span>);</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;ROLE=ATTENDEE&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// set role to chair</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#adf6329d175597783232853ff1ca53e24">icalparameter_set_iana_value</a>(param, <span class="stringliteral">&quot;CHAIR&quot;</span>);</div>
@@ -905,7 +981,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void icalparameter_set_xname </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>param</em>, </td>
         </tr>
         <tr>
@@ -934,7 +1010,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>If either <em>param</em> or <em>v</em> are <code>NULL</code>, it sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to ICAL_BARARG_ERROR. If there is an error acquiring memory, it sets <code>errno</code> to <code>ENOMEM</code>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The passed string <em>v</em> stays in the ownership of the caller - libical creates a copy of it.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// creates new parameter</span></div>
-<div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#a252cdad9d54b31b898ff273ce5439429">icalparameter_new</a>();</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// sets xname</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#a2e77cb0c365e67a65487f916ece223da">icalparameter_set_xname</a>(param, <span class="stringliteral">&quot;X-TEST&quot;</span>);</div>
@@ -956,7 +1032,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void icalparameter_set_xvalue </td>
           <td>(</td>
-          <td class="paramtype">icalparameter *&#160;</td>
+          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td>
           <td class="paramname"><em>param</em>, </td>
         </tr>
         <tr>
@@ -985,7 +1061,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>If either <em>param</em> or <em>v</em> are <code>NULL</code>, it sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to ICAL_BARARG_ERROR. If there is an error acquiring memory, it sets <code>errno</code> to <code>ENOMEM</code>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The passed string <em>v</em> stays in the ownership of the caller - libical creates a copy of it.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// create new parameter</span></div>
-<div class="line">icalparameter *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;X-TEST=FAIL&quot;</span>);</div>
+<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param = <a class="code hl_function" href="icalparameter_8h.html#aa3f2cce04d344d002ca83e797c05dd8b">icalparameter_new_from_string</a>(<span class="stringliteral">&quot;X-TEST=FAIL&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// set test to success</span></div>
 <div class="line"><a class="code hl_function" href="icalparameter_8h.html#aaf0fbf906d011f5af3ce38b626906691">icalparameter_set_xvalue</a>(param, <span class="stringliteral">&quot;SUCCESS&quot;</span>);</div>
@@ -1028,7 +1104,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line">assert(<a class="code hl_function" href="icalparameter_8h.html#a4e659bfa64d0c6c7cc3da29aadc5d3d6">icalparameter_string_to_kind</a>(<span class="stringliteral">&quot;ROLE&quot;</span>)  == ICAL_ROLE_PARAMETER);</div>
 <div class="line">assert(<a class="code hl_function" href="icalparameter_8h.html#a4e659bfa64d0c6c7cc3da29aadc5d3d6">icalparameter_string_to_kind</a>(<span class="stringliteral">&quot;EMAIL&quot;</span>) == ICAL_EMAIL_PARAMETER);</div>
 <div class="line">assert(<a class="code hl_function" href="icalparameter_8h.html#a4e659bfa64d0c6c7cc3da29aadc5d3d6">icalparameter_string_to_kind</a>(<span class="stringliteral">&quot;ID&quot;</span>)    == ICAL_ID_PARAMETER);</div>
-<div class="ttc" id="aicalparameter_8h_html_a4e659bfa64d0c6c7cc3da29aadc5d3d6"><div class="ttname"><a href="icalparameter_8h.html#a4e659bfa64d0c6c7cc3da29aadc5d3d6">icalparameter_string_to_kind</a></div><div class="ttdeci">icalparameter_kind icalparameter_string_to_kind(const char *string)</div><div class="ttdoc">Returns the icalparameter_kind for a given string.</div></div>
+<div class="ttc" id="aicalparameter_8h_html_a4e659bfa64d0c6c7cc3da29aadc5d3d6"><div class="ttname"><a href="icalparameter_8h.html#a4e659bfa64d0c6c7cc3da29aadc5d3d6">icalparameter_string_to_kind</a></div><div class="ttdeci">icalparameter_kind icalparameter_string_to_kind(const char *string)</div><div class="ttdoc">Returns the icalparameter_kind for a given string.</div><div class="ttdef"><b>Definition:</b> icalderivedparameter.c:2554</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -1036,7 +1112,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 10 2022 08:27:16 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 18 2022 10:19:41 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

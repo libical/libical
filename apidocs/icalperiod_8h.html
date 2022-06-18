@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.1</span>
    </div>
   </td>
  </tr>
@@ -164,9 +164,9 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// print period in iCal format</span></div>
 <div class="line">printf(<span class="stringliteral">&quot;%s\n&quot;</span>, <a class="code hl_function" href="icalperiod_8h.html#a28a5aa968b36182e39d7f3fd3491ecb3">icalperiodtype_as_ical_string</a>(period));</div>
-<div class="ttc" id="aicalperiod_8h_html_a28a5aa968b36182e39d7f3fd3491ecb3"><div class="ttname"><a href="icalperiod_8h.html#a28a5aa968b36182e39d7f3fd3491ecb3">icalperiodtype_as_ical_string</a></div><div class="ttdeci">const char * icalperiodtype_as_ical_string(struct icalperiodtype p)</div><div class="ttdoc">Converts an icalperiodtype into an iCal-formatted string.</div><div class="ttdef"><b>Definition:</b> icalperiod.c:94</div></div>
-<div class="ttc" id="aicalperiod_8h_html_a827e35abf4d6349e15aeaa9a483064fd"><div class="ttname"><a href="icalperiod_8h.html#a827e35abf4d6349e15aeaa9a483064fd">icalperiodtype_from_string</a></div><div class="ttdeci">struct icalperiodtype icalperiodtype_from_string(const char *str)</div><div class="ttdoc">Constructs a new icalperiodtype from str.</div><div class="ttdef"><b>Definition:</b> icalperiod.c:30</div></div>
-<div class="ttc" id="astructicalperiodtype_html"><div class="ttname"><a href="structicalperiodtype.html">icalperiodtype</a></div><div class="ttdoc">Struct to represent a period in time.</div><div class="ttdef"><b>Definition:</b> icalperiod.h:38</div></div>
+<div class="ttc" id="aicalperiod_8h_html_a28a5aa968b36182e39d7f3fd3491ecb3"><div class="ttname"><a href="icalperiod_8h.html#a28a5aa968b36182e39d7f3fd3491ecb3">icalperiodtype_as_ical_string</a></div><div class="ttdeci">const char * icalperiodtype_as_ical_string(struct icalperiodtype p)</div><div class="ttdoc">Converts an icalperiodtype into an iCal-formatted string.</div><div class="ttdef"><b>Definition:</b> icalperiod.c:85</div></div>
+<div class="ttc" id="aicalperiod_8h_html_a827e35abf4d6349e15aeaa9a483064fd"><div class="ttname"><a href="icalperiod_8h.html#a827e35abf4d6349e15aeaa9a483064fd">icalperiodtype_from_string</a></div><div class="ttdeci">struct icalperiodtype icalperiodtype_from_string(const char *str)</div><div class="ttdoc">Constructs a new icalperiodtype from str.</div><div class="ttdef"><b>Definition:</b> icalperiod.c:21</div></div>
+<div class="ttc" id="astructicalperiodtype_html"><div class="ttname"><a href="structicalperiodtype.html">icalperiodtype</a></div><div class="ttdoc">Struct to represent a period in time.</div><div class="ttdef"><b>Definition:</b> ical.h:753</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -206,8 +206,8 @@ Functions</h2></td></tr>
 <div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span> *period_string_gen = <a class="code hl_function" href="icalperiod_8h.html#a2f7c3f3e1623c9774596d1ef68789171">icalperiodtype_as_ical_string_r</a>(period);</div>
 <div class="line">printf(<span class="stringliteral">&quot;%s\n&quot;</span>, period_string_gen);</div>
 <div class="line"><a class="code hl_function" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(period_string_gen);</div>
-<div class="ttc" id="aicalmemory_8h_html_a2f164cb87c67f06b5dc04a5f21384879"><div class="ttname"><a href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a></div><div class="ttdeci">void icalmemory_free_buffer(void *buf)</div><div class="ttdoc">Releases a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:287</div></div>
-<div class="ttc" id="aicalperiod_8h_html_a2f7c3f3e1623c9774596d1ef68789171"><div class="ttname"><a href="icalperiod_8h.html#a2f7c3f3e1623c9774596d1ef68789171">icalperiodtype_as_ical_string_r</a></div><div class="ttdeci">char * icalperiodtype_as_ical_string_r(struct icalperiodtype p)</div><div class="ttdoc">Converts an icalperiodtype into an iCal-formatted string.</div><div class="ttdef"><b>Definition:</b> icalperiod.c:103</div></div>
+<div class="ttc" id="aicalmemory_8h_html_a2f164cb87c67f06b5dc04a5f21384879"><div class="ttname"><a href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a></div><div class="ttdeci">void icalmemory_free_buffer(void *buf)</div><div class="ttdoc">Releases a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:359</div></div>
+<div class="ttc" id="aicalperiod_8h_html_a2f7c3f3e1623c9774596d1ef68789171"><div class="ttname"><a href="icalperiod_8h.html#a2f7c3f3e1623c9774596d1ef68789171">icalperiodtype_as_ical_string_r</a></div><div class="ttdeci">char * icalperiodtype_as_ical_string_r(struct icalperiodtype p)</div><div class="ttdoc">Converts an icalperiodtype into an iCal-formatted string.</div><div class="ttdef"><b>Definition:</b> icalperiod.c:94</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -282,8 +282,8 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// checks if it&#39;s a null period</span></div>
 <div class="line">assert(<a class="code hl_function" href="icalperiod_8h.html#ae184bb1351602b7763044c5167a96bdf">icalperiodtype_is_null_period</a>(period));</div>
-<div class="ttc" id="aicalperiod_8h_html_a60e59a9f46a1efa9885829a4d23eddfa"><div class="ttname"><a href="icalperiod_8h.html#a60e59a9f46a1efa9885829a4d23eddfa">icalperiodtype_null_period</a></div><div class="ttdeci">struct icalperiodtype icalperiodtype_null_period(void)</div><div class="ttdef"><b>Definition:</b> icalperiod.c:133</div></div>
-<div class="ttc" id="aicalperiod_8h_html_ae184bb1351602b7763044c5167a96bdf"><div class="ttname"><a href="icalperiod_8h.html#ae184bb1351602b7763044c5167a96bdf">icalperiodtype_is_null_period</a></div><div class="ttdeci">int icalperiodtype_is_null_period(struct icalperiodtype p)</div><div class="ttdef"><b>Definition:</b> icalperiod.c:144</div></div>
+<div class="ttc" id="aicalperiod_8h_html_a60e59a9f46a1efa9885829a4d23eddfa"><div class="ttname"><a href="icalperiod_8h.html#a60e59a9f46a1efa9885829a4d23eddfa">icalperiodtype_null_period</a></div><div class="ttdeci">struct icalperiodtype icalperiodtype_null_period(void)</div><div class="ttdef"><b>Definition:</b> icalperiod.c:124</div></div>
+<div class="ttc" id="aicalperiod_8h_html_ae184bb1351602b7763044c5167a96bdf"><div class="ttname"><a href="icalperiod_8h.html#ae184bb1351602b7763044c5167a96bdf">icalperiodtype_is_null_period</a></div><div class="ttdeci">int icalperiodtype_is_null_period(struct icalperiodtype p)</div><div class="ttdef"><b>Definition:</b> icalperiod.c:135</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -315,7 +315,7 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// a null period isn&#39;t a valid period</span></div>
 <div class="line">assert(<a class="code hl_function" href="icalperiod_8h.html#af7feaf12370cd37d66d160c4d8fbf0c7">icalperiodtype_is_valid_period</a>(period) == 0);</div>
-<div class="ttc" id="aicalperiod_8h_html_af7feaf12370cd37d66d160c4d8fbf0c7"><div class="ttname"><a href="icalperiod_8h.html#af7feaf12370cd37d66d160c4d8fbf0c7">icalperiodtype_is_valid_period</a></div><div class="ttdeci">int icalperiodtype_is_valid_period(struct icalperiodtype p)</div><div class="ttdef"><b>Definition:</b> icalperiod.c:154</div></div>
+<div class="ttc" id="aicalperiod_8h_html_af7feaf12370cd37d66d160c4d8fbf0c7"><div class="ttname"><a href="icalperiod_8h.html#af7feaf12370cd37d66d160c4d8fbf0c7">icalperiodtype_is_valid_period</a></div><div class="ttdeci">int icalperiodtype_is_valid_period(struct icalperiodtype p)</div><div class="ttdef"><b>Definition:</b> icalperiod.c:145</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -344,7 +344,7 @@ Functions</h2></td></tr>
 <div class="line">assert(<a class="code hl_function" href="icaltime_8h.html#a97483d9daf2fc8f8b1bbdc0c75ced095">icaltime_is_null_time</a>(period.start));</div>
 <div class="line">assert(<a class="code hl_function" href="icaltime_8h.html#a97483d9daf2fc8f8b1bbdc0c75ced095">icaltime_is_null_time</a>(period.end));</div>
 <div class="line">assert(icaldurationtype_is_null_duratino(period.duration));</div>
-<div class="ttc" id="aicaltime_8h_html_a97483d9daf2fc8f8b1bbdc0c75ced095"><div class="ttname"><a href="icaltime_8h.html#a97483d9daf2fc8f8b1bbdc0c75ced095">icaltime_is_null_time</a></div><div class="ttdeci">int icaltime_is_null_time(const struct icaltimetype t)</div><div class="ttdoc">Returns true if the time is null.</div><div class="ttdef"><b>Definition:</b> icaltime.c:611</div></div>
+<div class="ttc" id="aicaltime_8h_html_a97483d9daf2fc8f8b1bbdc0c75ced095"><div class="ttname"><a href="icaltime_8h.html#a97483d9daf2fc8f8b1bbdc0c75ced095">icaltime_is_null_time</a></div><div class="ttdeci">int icaltime_is_null_time(const struct icaltimetype t)</div><div class="ttdoc">Returns true if the time is null.</div><div class="ttdef"><b>Definition:</b> icaltime.c:593</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -352,7 +352,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 10 2022 08:27:16 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 18 2022 10:19:41 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

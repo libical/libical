@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.1</span>
    </div>
   </td>
  </tr>
@@ -87,26 +87,29 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:afcde44ce941d8b6b5ffaad6095bfd778"><td class="memItemLeft" align="right" valign="top"><a id="afcde44ce941d8b6b5ffaad6095bfd778" name="afcde44ce941d8b6b5ffaad6095bfd778"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_as_ical_string</b> (const icalvalue *value)</td></tr>
+const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_as_ical_string</b> (const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *value)</td></tr>
 <tr class="separator:afcde44ce941d8b6b5ffaad6095bfd778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac91b3fc364d5b55aec8be75a3542c966"><td class="memItemLeft" align="right" valign="top"><a id="ac91b3fc364d5b55aec8be75a3542c966" name="ac91b3fc364d5b55aec8be75a3542c966"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_as_ical_string_r</b> (const icalvalue *value)</td></tr>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_as_ical_string_r</b> (const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *value)</td></tr>
 <tr class="separator:ac91b3fc364d5b55aec8be75a3542c966"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab56b7fc4448d25a22d3d446b45ca31a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structicalvalue__impl.html">icalvalue</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalvalue_8h.html#ab56b7fc4448d25a22d3d446b45ca31a8">icalvalue_clone</a> (const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *value)</td></tr>
+<tr class="memdesc:ab56b7fc4448d25a22d3d446b45ca31a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deeply clones an icalvalue.  <a href="icalvalue_8h.html#ab56b7fc4448d25a22d3d446b45ca31a8">More...</a><br /></td></tr>
+<tr class="separator:ab56b7fc4448d25a22d3d446b45ca31a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa45db6fe2256b8ec5b2d8b0414ffe279"><td class="memItemLeft" align="right" valign="top"><a id="aa45db6fe2256b8ec5b2d8b0414ffe279" name="aa45db6fe2256b8ec5b2d8b0414ffe279"></a>
-icalparameter_xliccomparetype&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_compare</b> (const icalvalue *a, const icalvalue *b)</td></tr>
+icalparameter_xliccomparetype&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_compare</b> (const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *a, const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *b)</td></tr>
 <tr class="separator:aa45db6fe2256b8ec5b2d8b0414ffe279"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad809218d40ebb1e356f00c563e34e3d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalvalue_8h.html#ad809218d40ebb1e356f00c563e34e3d6">icalvalue_decode_ical_string</a> (const char *szText, char *szDecText, int nMaxBufferLen)</td></tr>
 <tr class="separator:ad809218d40ebb1e356f00c563e34e3d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47037dfa87d634a358c39055c01b9f79"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalvalue_8h.html#a47037dfa87d634a358c39055c01b9f79">icalvalue_encode_ical_string</a> (const char *szText, char *szEncText, int MaxBufferLen)</td></tr>
 <tr class="separator:a47037dfa87d634a358c39055c01b9f79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab29cce43ac9ec5c6f5171623637cc9d1"><td class="memItemLeft" align="right" valign="top"><a id="ab29cce43ac9ec5c6f5171623637cc9d1" name="ab29cce43ac9ec5c6f5171623637cc9d1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_free</b> (icalvalue *value)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_free</b> (<a class="el" href="structicalvalue__impl.html">icalvalue</a> *value)</td></tr>
 <tr class="separator:ab29cce43ac9ec5c6f5171623637cc9d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af02906ef08055b58979b5f890e1acbe9"><td class="memItemLeft" align="right" valign="top"><a id="af02906ef08055b58979b5f890e1acbe9" name="af02906ef08055b58979b5f890e1acbe9"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_is_valid</b> (const icalvalue *value)</td></tr>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_is_valid</b> (const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *value)</td></tr>
 <tr class="separator:af02906ef08055b58979b5f890e1acbe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40eb9f352254723b582ab0a7749c1765"><td class="memItemLeft" align="right" valign="top"><a id="a40eb9f352254723b582ab0a7749c1765" name="a40eb9f352254723b582ab0a7749c1765"></a>
-icalvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_isa</b> (const icalvalue *value)</td></tr>
+icalvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_isa</b> (const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *value)</td></tr>
 <tr class="separator:a40eb9f352254723b582ab0a7749c1765"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55d5a64f8a2ddfff279e6668f2fec6df"><td class="memItemLeft" align="right" valign="top"><a id="a55d5a64f8a2ddfff279e6668f2fec6df" name="a55d5a64f8a2ddfff279e6668f2fec6df"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_isa_value</b> (void *)</td></tr>
@@ -117,19 +120,40 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_isa_value</b
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_kind_to_string</b> (const icalvalue_kind kind)</td></tr>
 <tr class="separator:afcccc542744366eb285409b280610045"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa51a22037f2382474c2403623a1d03ce"><td class="memItemLeft" align="right" valign="top"><a id="aa51a22037f2382474c2403623a1d03ce" name="aa51a22037f2382474c2403623a1d03ce"></a>
-icalvalue *&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_new</b> (icalvalue_kind kind)</td></tr>
+<a class="el" href="structicalvalue__impl.html">icalvalue</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_new</b> (icalvalue_kind kind)</td></tr>
 <tr class="separator:aa51a22037f2382474c2403623a1d03ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fa0127631ceba7627035ef2adbf2771"><td class="memItemLeft" align="right" valign="top"><a id="a4fa0127631ceba7627035ef2adbf2771" name="a4fa0127631ceba7627035ef2adbf2771"></a>
-icalvalue *&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_new_clone</b> (const icalvalue *value)</td></tr>
-<tr class="separator:a4fa0127631ceba7627035ef2adbf2771"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71a024314438b3fa83c2db66e618a09f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structicalvalue__impl.html">icalvalue</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalvalue_8h.html#a71a024314438b3fa83c2db66e618a09f">icalvalue_new_clone</a> (const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *value))</td></tr>
+<tr class="memdesc:a71a024314438b3fa83c2db66e618a09f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deeply clones an icalvalue.  <a href="icalvalue_8h.html#a71a024314438b3fa83c2db66e618a09f">More...</a><br /></td></tr>
+<tr class="separator:a71a024314438b3fa83c2db66e618a09f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7beb7ae1bd33f608a279448e892fd675"><td class="memItemLeft" align="right" valign="top"><a id="a7beb7ae1bd33f608a279448e892fd675" name="a7beb7ae1bd33f608a279448e892fd675"></a>
-icalvalue *&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_new_from_string</b> (icalvalue_kind kind, const char *str)</td></tr>
+<a class="el" href="structicalvalue__impl.html">icalvalue</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_new_from_string</b> (icalvalue_kind kind, const char *str)</td></tr>
 <tr class="separator:a7beb7ae1bd33f608a279448e892fd675"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28f65485ba8c5f8270cae8ea2e091de1"><td class="memItemLeft" align="right" valign="top"><a id="a28f65485ba8c5f8270cae8ea2e091de1" name="a28f65485ba8c5f8270cae8ea2e091de1"></a>
 icalvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_string_to_kind</b> (const char *str)</td></tr>
 <tr class="separator:a28f65485ba8c5f8270cae8ea2e091de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ab56b7fc4448d25a22d3d446b45ca31a8" name="ab56b7fc4448d25a22d3d446b45ca31a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab56b7fc4448d25a22d3d446b45ca31a8">&#9670;&nbsp;</a></span>icalvalue_clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structicalvalue__impl.html">icalvalue</a> * icalvalue_clone </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Deeply clones an icalvalue. </p>
+<p >Returns a pointer to the memory for the newly cloned icalvalue. </p><dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
+
+</div>
+</div>
 <a id="ad809218d40ebb1e356f00c563e34e3d6" name="ad809218d40ebb1e356f00c563e34e3d6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad809218d40ebb1e356f00c563e34e3d6">&#9670;&nbsp;</a></span>icalvalue_decode_ical_string()</h2>
 
@@ -219,10 +243,34 @@ icalvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalvalue_s
 
 </div>
 </div>
+<a id="a71a024314438b3fa83c2db66e618a09f" name="a71a024314438b3fa83c2db66e618a09f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71a024314438b3fa83c2db66e618a09f">&#9670;&nbsp;</a></span>icalvalue_new_clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structicalvalue__impl.html">icalvalue</a> * icalvalue_new_clone </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Deeply clones an icalvalue. </p>
+<p >Returns a pointer to the memory for the newly cloned icalvalue. </p><dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated:</a></b></dt><dd>Use <a class="el" href="icalvalue_8h.html#ab56b7fc4448d25a22d3d446b45ca31a8" title="Deeply clones an icalvalue.">icalvalue_clone()</a> instead </dd></dl>
+<p >Returns a pointer to the memory for the newly cloned icalvalue. </p><dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>Use <a class="el" href="icalvalue_8h.html#ab56b7fc4448d25a22d3d446b45ca31a8" title="Deeply clones an icalvalue.">icalvalue_clone()</a> instead </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 10 2022 08:27:16 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 18 2022 10:19:41 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

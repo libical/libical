@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.1</span>
    </div>
   </td>
  </tr>
@@ -62,7 +62,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b7a0ea939f6e83384f3c571d31a84be9.html">libical</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_5330c68354327086ecc8df050e51eedc.html">src</a></li><li class="navelem"><a class="el" href="dir_8e427daf5a9f830cf32cf5e679910194.html">libical</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -89,6 +89,9 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a99d6de087ca533dead2cc2d8dfe695fa"><td class="memItemLeft" align="right" valign="top"><a id="a99d6de087ca533dead2cc2d8dfe695fa" name="a99d6de087ca533dead2cc2d8dfe695fa"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_t</b>&#160;&#160;&#160;time_t</td></tr>
+<tr class="separator:a99d6de087ca533dead2cc2d8dfe695fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa707f3723c2aa852e398aa480728f6e9"><td class="memItemLeft" align="right" valign="top"><a id="aa707f3723c2aa852e398aa480728f6e9" name="aa707f3723c2aa852e398aa480728f6e9"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>ICALTIMETYPE_INITIALIZER</b>&#160;&#160;&#160;{ 0, 0, 0, 0, 0, 0, 0, 0, 0}</td></tr>
 <tr class="separator:aa707f3723c2aa852e398aa480728f6e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,7 +227,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time<
 <li><a class="el" href="icaltime_8h.html#a7c210823a8ad13687089f12ad285df25" title="Constructor.">icaltime_null_date()</a></li>
 <li><a class="el" href="icaltime_8h.html#a35ab8c2fdc5766e30d3dd6c873af0151" title="Convenience constructor.">icaltime_current_time_with_zone()</a></li>
 <li><a class="el" href="icaltime_8h.html#a78f4440633835d80c182488b11df9372" title="Convenience constructor.">icaltime_today()</a></li>
-<li>icaltime_from_timet_with_zone(time_t tm, int is_date,
+<li>icaltime_from_timet_with_zone(icaltime_t tm, int is_date,
         icaltimezone *zone)</li>
 <li><a class="el" href="icaltime_8h.html#a2915233b392cc2a68aa5a9acf39e2307" title="Constructor.">icaltime_from_day_of_year(int doy, int year)</a></li>
 </ul>
@@ -404,7 +407,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time<
 </div><div class="memdoc">
 
 <p>Returns the time as seconds past the UNIX epoch, using the given timezone. </p>
-<p >This convenience method combines a call to <a class="el" href="icaltime_8h.html#a9fd9b6de943eec5733b74d958951a9c8" title="Converts time to a given timezone.">icaltime_convert_to_zone()</a> with a call to <a class="el" href="icaltime_8h.html#a7b39742d0f786f41df391c62ee56ec10">icaltime_as_timet()</a>. If the input timezone is null, no conversion is done; that is, the time is simply returned as time_t in its native timezone. </p>
+<p >This convenience method combines a call to <a class="el" href="icaltime_8h.html#a9fd9b6de943eec5733b74d958951a9c8" title="Converts time to a given timezone.">icaltime_convert_to_zone()</a> with a call to <a class="el" href="icaltime_8h.html#a7b39742d0f786f41df391c62ee56ec10">icaltime_as_timet()</a>. If the input timezone is null, no conversion is done; that is, the time is simply returned as icaltime_t in its native timezone. </p>
 
 </div>
 </div>
@@ -680,6 +683,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time<
 </div><div class="memdoc">
 
 <p>Constructor. </p>
+<p >Creates a time from an ISO format string.</p>
 <p >Creates a time from an ISO format string.</p>
 
 </div>
@@ -1109,7 +1113,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time<
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 10 2022 08:27:16 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 18 2022 10:19:40 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

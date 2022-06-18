@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.1</span>
    </div>
   </td>
  </tr>
@@ -67,6 +67,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">icalmemory.h File Reference</div></div>
 </div><!--header-->
@@ -77,6 +78,18 @@ $(function() {
 
 <p><a href="icalmemory_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a996b3b0b54aed95641e212bd9e0c6ae5"><td class="memItemLeft" align="right" valign="top"><a id="a996b3b0b54aed95641e212bd9e0c6ae5" name="a996b3b0b54aed95641e212bd9e0c6ae5"></a>
+typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><b>icalmemory_free_f</b>) (void *)</td></tr>
+<tr class="separator:a996b3b0b54aed95641e212bd9e0c6ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ea138c477dcd2ca3d2a7eaa7cb68de4"><td class="memItemLeft" align="right" valign="top"><a id="a6ea138c477dcd2ca3d2a7eaa7cb68de4" name="a6ea138c477dcd2ca3d2a7eaa7cb68de4"></a>
+typedef void *(*&#160;</td><td class="memItemRight" valign="bottom"><b>icalmemory_malloc_f</b>) (size_t)</td></tr>
+<tr class="separator:a6ea138c477dcd2ca3d2a7eaa7cb68de4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88463c5fd869f65b1a8cc1bc0a166244"><td class="memItemLeft" align="right" valign="top"><a id="a88463c5fd869f65b1a8cc1bc0a166244" name="a88463c5fd869f65b1a8cc1bc0a166244"></a>
+typedef void *(*&#160;</td><td class="memItemRight" valign="bottom"><b>icalmemory_realloc_f</b>) (void *, size_t)</td></tr>
+<tr class="separator:a88463c5fd869f65b1a8cc1bc0a166244"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ae9f1799733a1577748a028181098be48"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalmemory_8h.html#ae9f1799733a1577748a028181098be48">icalmemory_add_tmp_buffer</a> (void *buf)</td></tr>
@@ -94,12 +107,18 @@ Functions</h2></td></tr>
 <tr class="memitem:a175daa67f089bae6aefd4360fcd0d664"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalmemory_8h.html#a175daa67f089bae6aefd4360fcd0d664">icalmemory_free_ring</a> (void)</td></tr>
 <tr class="memdesc:a175daa67f089bae6aefd4360fcd0d664"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees all memory used in the ring.  <a href="icalmemory_8h.html#a175daa67f089bae6aefd4360fcd0d664">More...</a><br /></td></tr>
 <tr class="separator:a175daa67f089bae6aefd4360fcd0d664"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1659b63eaac2744cae912c727655721"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalmemory_8h.html#ae1659b63eaac2744cae912c727655721">icalmemory_get_mem_alloc_funcs</a> (icalmemory_malloc_f *f_malloc, icalmemory_realloc_f *f_realloc, icalmemory_free_f *f_free)</td></tr>
+<tr class="memdesc:ae1659b63eaac2744cae912c727655721"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the functions used for memory management.  <a href="icalmemory_8h.html#ae1659b63eaac2744cae912c727655721">More...</a><br /></td></tr>
+<tr class="separator:ae1659b63eaac2744cae912c727655721"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b645edbcc1a05dbb64df5d86adbc367"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalmemory_8h.html#a9b645edbcc1a05dbb64df5d86adbc367">icalmemory_new_buffer</a> (size_t size)</td></tr>
 <tr class="memdesc:a9b645edbcc1a05dbb64df5d86adbc367"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates new buffer with the specified size.  <a href="icalmemory_8h.html#a9b645edbcc1a05dbb64df5d86adbc367">More...</a><br /></td></tr>
 <tr class="separator:a9b645edbcc1a05dbb64df5d86adbc367"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cf9578649d6f12bf8eae97e4ef537e9"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalmemory_8h.html#a6cf9578649d6f12bf8eae97e4ef537e9">icalmemory_resize_buffer</a> (void *buf, size_t size)</td></tr>
 <tr class="memdesc:a6cf9578649d6f12bf8eae97e4ef537e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes a buffer created with <a class="el" href="icalmemory_8h.html#a9b645edbcc1a05dbb64df5d86adbc367" title="Creates new buffer with the specified size.">icalmemory_new_buffer()</a>.  <a href="icalmemory_8h.html#a6cf9578649d6f12bf8eae97e4ef537e9">More...</a><br /></td></tr>
 <tr class="separator:a6cf9578649d6f12bf8eae97e4ef537e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaa82604d4c5ccf150ecd2fb6bfca30d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalmemory_8h.html#aeaa82604d4c5ccf150ecd2fb6bfca30d">icalmemory_set_mem_alloc_funcs</a> (icalmemory_malloc_f f_malloc, icalmemory_realloc_f f_realloc, icalmemory_free_f f_free)</td></tr>
+<tr class="memdesc:aeaa82604d4c5ccf150ecd2fb6bfca30d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures the functions to use for memory management.  <a href="icalmemory_8h.html#aeaa82604d4c5ccf150ecd2fb6bfca30d">More...</a><br /></td></tr>
+<tr class="separator:aeaa82604d4c5ccf150ecd2fb6bfca30d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a313a5fd91cb6100f9ecc1b8f24acc336"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalmemory_8h.html#a313a5fd91cb6100f9ecc1b8f24acc336">icalmemory_strdup</a> (const char *s)</td></tr>
 <tr class="memdesc:a313a5fd91cb6100f9ecc1b8f24acc336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a duplicate of a string.  <a href="icalmemory_8h.html#a313a5fd91cb6100f9ecc1b8f24acc336">More...</a><br /></td></tr>
 <tr class="separator:a313a5fd91cb6100f9ecc1b8f24acc336"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,13 +158,13 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Adds an externally allocated buffer to the ring. This ensures that libical will <code>free()</code> the buffer automatically, either after BUFFER_RING_SIZE other buffers have been created or added, or after <a class="el" href="icalmemory_8h.html#a175daa67f089bae6aefd4360fcd0d664" title="Frees all memory used in the ring.">icalmemory_free_ring()</a> has been called.</p>
+<p>Adds an externally allocated buffer to the ring. This ensures that libical will <code>free()</code> the buffer automatically, either after BUFFER_RING_SIZE other buffers have been created or added, or after <a class="el" href="icalmemory_8h.html#a175daa67f089bae6aefd4360fcd0d664" title="Frees all memory used in the ring.">icalmemory_free_ring()</a> has been called. Note that freeing the buffers is done using the <a class="el" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879" title="Releases a buffer.">icalmemory_free_buffer()</a> function, which by default is a wrapper around stdlib's free() function. However, if the memory management functions are customized by the user, the user must make sure to only pass in buffers that have been allocated in a compatible manner.</p>
 <dl class="section user"><dt>Error handling</dt><dd>No error is raised if <em>buf</em> is <code>NULL</code>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>After adding <em>buf</em> to the ring, it becomes owned by icalmemory and must not be <code>free()</code>d manually anymore, it leads to a double-<code>free()</code> when icalmemory reclaims the memory.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="keywordtype">char</span> *buf = calloc(256, <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>));</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_function" href="icalmemory_8h.html#ae9f1799733a1577748a028181098be48">icalmemory_add_tmp_buffer</a>(buf);</div>
-<div class="ttc" id="aicalmemory_8h_html_ae9f1799733a1577748a028181098be48"><div class="ttname"><a href="icalmemory_8h.html#ae9f1799733a1577748a028181098be48">icalmemory_add_tmp_buffer</a></div><div class="ttdeci">void icalmemory_add_tmp_buffer(void *buf)</div><div class="ttdoc">Adds an externally allocated buffer to the ring.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:182</div></div>
+<div class="ttc" id="aicalmemory_8h_html_ae9f1799733a1577748a028181098be48"><div class="ttname"><a href="icalmemory_8h.html#ae9f1799733a1577748a028181098be48">icalmemory_add_tmp_buffer</a></div><div class="ttdeci">void icalmemory_add_tmp_buffer(void *buf)</div><div class="ttdoc">Adds an externally allocated buffer to the ring.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:167</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -216,9 +235,9 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release memory</span></div>
 <div class="line"><a class="code hl_function" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(buffer);</div>
-<div class="ttc" id="aicalmemory_8h_html_a2f164cb87c67f06b5dc04a5f21384879"><div class="ttname"><a href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a></div><div class="ttdeci">void icalmemory_free_buffer(void *buf)</div><div class="ttdoc">Releases a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:287</div></div>
-<div class="ttc" id="aicalmemory_8h_html_a9b645edbcc1a05dbb64df5d86adbc367"><div class="ttname"><a href="icalmemory_8h.html#a9b645edbcc1a05dbb64df5d86adbc367">icalmemory_new_buffer</a></div><div class="ttdeci">void * icalmemory_new_buffer(size_t size)</div><div class="ttdoc">Creates new buffer with the specified size.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:261</div></div>
-<div class="ttc" id="aicalmemory_8h_html_addac122edb16bc41a193895c86bd5ff5"><div class="ttname"><a href="icalmemory_8h.html#addac122edb16bc41a193895c86bd5ff5">icalmemory_append_char</a></div><div class="ttdeci">void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)</div><div class="ttdoc">Appends a character to a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:330</div></div>
+<div class="ttc" id="aicalmemory_8h_html_a2f164cb87c67f06b5dc04a5f21384879"><div class="ttname"><a href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a></div><div class="ttdeci">void icalmemory_free_buffer(void *buf)</div><div class="ttdoc">Releases a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:359</div></div>
+<div class="ttc" id="aicalmemory_8h_html_a9b645edbcc1a05dbb64df5d86adbc367"><div class="ttname"><a href="icalmemory_8h.html#a9b645edbcc1a05dbb64df5d86adbc367">icalmemory_new_buffer</a></div><div class="ttdeci">void * icalmemory_new_buffer(size_t size)</div><div class="ttdoc">Creates new buffer with the specified size.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:319</div></div>
+<div class="ttc" id="aicalmemory_8h_html_addac122edb16bc41a193895c86bd5ff5"><div class="ttname"><a href="icalmemory_8h.html#addac122edb16bc41a193895c86bd5ff5">icalmemory_append_char</a></div><div class="ttdeci">void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)</div><div class="ttdoc">Appends a character to a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:411</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -289,7 +308,7 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release memory</span></div>
 <div class="line"><a class="code hl_function" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(buffer);</div>
-<div class="ttc" id="aicalmemory_8h_html_a647bf5dab81fc5b83a0ed8f8ad769ea6"><div class="ttname"><a href="icalmemory_8h.html#a647bf5dab81fc5b83a0ed8f8ad769ea6">icalmemory_append_string</a></div><div class="ttdeci">void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const char *string)</div><div class="ttdoc">Appends a string to a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:292</div></div>
+<div class="ttc" id="aicalmemory_8h_html_a647bf5dab81fc5b83a0ed8f8ad769ea6"><div class="ttname"><a href="icalmemory_8h.html#a647bf5dab81fc5b83a0ed8f8ad769ea6">icalmemory_append_string</a></div><div class="ttdeci">void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const char *string)</div><div class="ttdoc">Appends a string to a buffer.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:369</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -318,7 +337,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="icalmemory_8h.html#a9b645edbcc1a05dbb64df5d86adbc367" title="Creates new buffer with the specified size.">icalmemory_new_buffer()</a></dd></dl>
-<p>Releases the memory of the buffer. </p>
+<p>Releases the memory of the buffer.</p>
+<p >By default this function delegates to stdlib's free() but the used function can be configured via <a class="el" href="icalmemory_8h.html#aeaa82604d4c5ccf150ecd2fb6bfca30d" title="Configures the functions to use for memory management.">icalmemory_set_mem_alloc_funcs()</a>. </p>
 
 </div>
 </div>
@@ -346,9 +366,54 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release buf and all other memory in the ring buffer</span></div>
 <div class="line"><a class="code hl_function" href="icalmemory_8h.html#a175daa67f089bae6aefd4360fcd0d664">icalmemory_free_ring</a>();</div>
-<div class="ttc" id="aicalmemory_8h_html_a175daa67f089bae6aefd4360fcd0d664"><div class="ttname"><a href="icalmemory_8h.html#a175daa67f089bae6aefd4360fcd0d664">icalmemory_free_ring</a></div><div class="ttdeci">void icalmemory_free_ring(void)</div><div class="ttdoc">Frees all memory used in the ring.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:227</div></div>
-<div class="ttc" id="aicalmemory_8h_html_aeaf6a28b3908f695bb0a7e35d1dfc8f7"><div class="ttname"><a href="icalmemory_8h.html#aeaf6a28b3908f695bb0a7e35d1dfc8f7">icalmemory_tmp_buffer</a></div><div class="ttdeci">void * icalmemory_tmp_buffer(size_t size)</div><div class="ttdoc">Creates a new temporary buffer on the ring and returns it.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:205</div></div>
+<div class="ttc" id="aicalmemory_8h_html_a175daa67f089bae6aefd4360fcd0d664"><div class="ttname"><a href="icalmemory_8h.html#a175daa67f089bae6aefd4360fcd0d664">icalmemory_free_ring</a></div><div class="ttdeci">void icalmemory_free_ring(void)</div><div class="ttdoc">Frees all memory used in the ring.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:215</div></div>
+<div class="ttc" id="aicalmemory_8h_html_aeaf6a28b3908f695bb0a7e35d1dfc8f7"><div class="ttname"><a href="icalmemory_8h.html#aeaf6a28b3908f695bb0a7e35d1dfc8f7">icalmemory_tmp_buffer</a></div><div class="ttdeci">void * icalmemory_tmp_buffer(size_t size)</div><div class="ttdoc">Creates a new temporary buffer on the ring and returns it.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:193</div></div>
 </div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="ae1659b63eaac2744cae912c727655721" name="ae1659b63eaac2744cae912c727655721"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1659b63eaac2744cae912c727655721">&#9670;&nbsp;</a></span>icalmemory_get_mem_alloc_funcs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalmemory_get_mem_alloc_funcs </td>
+          <td>(</td>
+          <td class="paramtype">icalmemory_malloc_f *&#160;</td>
+          <td class="paramname"><em>f_malloc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalmemory_realloc_f *&#160;</td>
+          <td class="paramname"><em>f_realloc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalmemory_free_f *&#160;</td>
+          <td class="paramname"><em>f_free</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the functions used for memory management. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f_malloc</td><td>A pointer to the function to use for memory allocation. </td></tr>
+    <tr><td class="paramname">f_realloc</td><td>A pointer to the function to use for memory reallocation. </td></tr>
+    <tr><td class="paramname">f_free</td><td>A pointer to the function to use for memory deallocation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Retrieves the functions used by the library for memory management. </p><dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
 
 </div>
 </div>
@@ -378,8 +443,9 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the newly-created buffer. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879" title="Releases a buffer.">icalmemory_free_buffer()</a></dd></dl>
 <dl class="section user"><dt>Error handling</dt><dd>If there is a problem allocating memory, it sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a055394ffaf6701aa12491dc10767f07d">ICAL_NEWFAILED_ERROR</a> and returns <code>NULL</code>.</dd></dl>
-<dl class="section user"><dt>Ownership</dt><dd>Buffers created with this method are owned by the caller. The must be released with the appropriate <a class="el" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879" title="Releases a buffer.">icalmemory_free_buffer()</a> method.</dd></dl>
+<dl class="section user"><dt>Ownership</dt><dd>Buffers created with this method are owned by the caller. They must be released with the <a class="el" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879" title="Releases a buffer.">icalmemory_free_buffer()</a> method.</dd></dl>
 <p>This creates a new (non-temporary) buffer of the specified <em>size</em>. All buffers returned by this method are zeroed-out.</p>
+<p >By default this function delegates to stdlib's malloc() but the used function can be changed via <a class="el" href="icalmemory_8h.html#aeaa82604d4c5ccf150ecd2fb6bfca30d" title="Configures the functions to use for memory management.">icalmemory_set_mem_alloc_funcs()</a>.</p>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// create buffer</span></div>
 <div class="line"><span class="keywordtype">char</span> *buffer = <a class="code hl_function" href="icalmemory_8h.html#a9b645edbcc1a05dbb64df5d86adbc367">icalmemory_new_buffer</a>(50);</div>
 <div class="line"> </div>
@@ -431,6 +497,7 @@ Functions</h2></td></tr>
 <dl class="section warning"><dt>Warning</dt><dd>This method may not be used for temporary buffers (buffers allocated with <a class="el" href="icalmemory_8h.html#aeaf6a28b3908f695bb0a7e35d1dfc8f7" title="Creates a new temporary buffer on the ring and returns it.">icalmemory_tmp_buffer()</a> and related functions)!</dd></dl>
 <dl class="section user"><dt>Error handling</dt><dd>If there is a problem while reallocating the buffer, the method sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a055394ffaf6701aa12491dc10767f07d">ICAL_NEWFAILED_ERROR</a> and returns <code>NULL</code>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The returned buffer is owned by the caller and needs to be released with the appropriate <a class="el" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879" title="Releases a buffer.">icalmemory_free_buffer()</a> method. The old buffer, <em>buf</em>, can not be used anymore after calling this method.</dd></dl>
+<p>By default this function delegates to stdlib's realloc() but the used function can be configured via <a class="el" href="icalmemory_8h.html#aeaa82604d4c5ccf150ecd2fb6bfca30d" title="Configures the functions to use for memory management.">icalmemory_set_mem_alloc_funcs()</a>.</p>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// create new buffer</span></div>
 <div class="line"><span class="keywordtype">char</span> *buffer = <a class="code hl_function" href="icalmemory_8h.html#a9b645edbcc1a05dbb64df5d86adbc367">icalmemory_new_buffer</a>(10);</div>
 <div class="line"> </div>
@@ -445,8 +512,54 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release</span></div>
 <div class="line"><a class="code hl_function" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(buffer);</div>
-<div class="ttc" id="aicalmemory_8h_html_a6cf9578649d6f12bf8eae97e4ef537e9"><div class="ttname"><a href="icalmemory_8h.html#a6cf9578649d6f12bf8eae97e4ef537e9">icalmemory_resize_buffer</a></div><div class="ttdeci">void * icalmemory_resize_buffer(void *buf, size_t size)</div><div class="ttdoc">Resizes a buffer created with icalmemory_new_buffer().</div><div class="ttdef"><b>Definition:</b> icalmemory.c:275</div></div>
+<div class="ttc" id="aicalmemory_8h_html_a6cf9578649d6f12bf8eae97e4ef537e9"><div class="ttname"><a href="icalmemory_8h.html#a6cf9578649d6f12bf8eae97e4ef537e9">icalmemory_resize_buffer</a></div><div class="ttdeci">void * icalmemory_resize_buffer(void *buf, size_t size)</div><div class="ttdoc">Resizes a buffer created with icalmemory_new_buffer().</div><div class="ttdef"><b>Definition:</b> icalmemory.c:340</div></div>
 </div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="aeaa82604d4c5ccf150ecd2fb6bfca30d" name="aeaa82604d4c5ccf150ecd2fb6bfca30d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaa82604d4c5ccf150ecd2fb6bfca30d">&#9670;&nbsp;</a></span>icalmemory_set_mem_alloc_funcs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalmemory_set_mem_alloc_funcs </td>
+          <td>(</td>
+          <td class="paramtype">icalmemory_malloc_f&#160;</td>
+          <td class="paramname"><em>f_malloc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalmemory_realloc_f&#160;</td>
+          <td class="paramname"><em>f_realloc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalmemory_free_f&#160;</td>
+          <td class="paramname"><em>f_free</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Configures the functions to use for memory management. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f_malloc</td><td>The function to use for memory allocation. </td></tr>
+    <tr><td class="paramname">f_realloc</td><td>The function to use for memory reallocation. </td></tr>
+    <tr><td class="paramname">f_free</td><td>The function to use for memory deallocation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This function configures the library to use the specified functions for memory management. By default the standard system memory management functions malloc(), realloc() and free() are used.</p>
+<p >Note: The memory management functions configured via this functions are used throughout the core libical component but not within other components like libicalvcal. </p><dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
 
 </div>
 </div>
@@ -475,13 +588,13 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to a string containing the same data as <em>s</em> </dd></dl>
 <dl class="section user"><dt>Error handling</dt><dd>The string <em>s</em> must not be <code>NULL</code>, otherwise depending on the <code>libc</code> used, it might lead to undefined behaviour (read: segfaults).</dd></dl>
-<dl class="section user"><dt>Ownership</dt><dd>The returned string is owned by the caller and needs to be released with the appropriate <code>free()</code> method.</dd></dl>
-<p>A wrapper around <code>strdup()</code>. Partly to trap calls to <code>strdup()</code>, partly because in <code>-ansi</code>, <code>gcc</code> on Red Hat claims that <code>strdup()</code> is undeclared.</p>
+<dl class="section user"><dt>Ownership</dt><dd>The returned string is owned by the caller and needs to be released with the <code><a class="el" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879" title="Releases a buffer.">icalmemory_free_buffer()</a></code> method.</dd></dl>
+<p>Replaces <code>strdup()</code>. The function uses <a class="el" href="icalmemory_8h.html#a9b645edbcc1a05dbb64df5d86adbc367" title="Creates new buffer with the specified size.">icalmemory_new_buffer()</a> for memory allocation. It also helps trapping calls to <code>strdup()</code> and solves the problem that in <code>-ansi</code>, <code>gcc</code> on Red Hat claims that <code>strdup()</code> is undeclared.</p>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span> *my_str = <span class="stringliteral">&quot;LibIcal&quot;</span>;</div>
 <div class="line"><span class="keywordtype">char</span> *dup = <a class="code hl_function" href="icalmemory_8h.html#a313a5fd91cb6100f9ecc1b8f24acc336">icalmemory_strdup</a>(my_str);</div>
 <div class="line">printf(<span class="stringliteral">&quot;%s\n&quot;</span>, dup);</div>
-<div class="line">free(dup);</div>
-<div class="ttc" id="aicalmemory_8h_html_a313a5fd91cb6100f9ecc1b8f24acc336"><div class="ttname"><a href="icalmemory_8h.html#a313a5fd91cb6100f9ecc1b8f24acc336">icalmemory_strdup</a></div><div class="ttdeci">char * icalmemory_strdup(const char *s)</div><div class="ttdoc">Creates a duplicate of a string.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:251</div></div>
+<div class="line"><a class="code hl_function" href="icalmemory_8h.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(dup);</div>
+<div class="ttc" id="aicalmemory_8h_html_a313a5fd91cb6100f9ecc1b8f24acc336"><div class="ttname"><a href="icalmemory_8h.html#a313a5fd91cb6100f9ecc1b8f24acc336">icalmemory_strdup</a></div><div class="ttdeci">char * icalmemory_strdup(const char *s)</div><div class="ttdoc">Creates a duplicate of a string.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:249</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -549,7 +662,7 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Ownership</dt><dd>The returned string is owned by icalmemory. It must not be freed by the caller, and it will be automatically reclaimed as more items are added to the buffer.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span> *str = <span class="stringliteral">&quot;Example string&quot;</span>;</div>
 <div class="line"><span class="keywordtype">char</span> *tmp_copy = <a class="code hl_function" href="icalmemory_8h.html#aa5f6b34db6cc88a33bd1cd745d44f977">icalmemory_tmp_copy</a>(str);</div>
-<div class="ttc" id="aicalmemory_8h_html_aa5f6b34db6cc88a33bd1cd745d44f977"><div class="ttname"><a href="icalmemory_8h.html#aa5f6b34db6cc88a33bd1cd745d44f977">icalmemory_tmp_copy</a></div><div class="ttdeci">char * icalmemory_tmp_copy(const char *str)</div><div class="ttdoc">Creates a copy of the given string, stored on the ring buffer, and returns it.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:242</div></div>
+<div class="ttc" id="aicalmemory_8h_html_aa5f6b34db6cc88a33bd1cd745d44f977"><div class="ttname"><a href="icalmemory_8h.html#aa5f6b34db6cc88a33bd1cd745d44f977">icalmemory_tmp_copy</a></div><div class="ttdeci">char * icalmemory_tmp_copy(const char *str)</div><div class="ttdoc">Creates a copy of the given string, stored on the ring buffer, and returns it.</div><div class="ttdef"><b>Definition:</b> icalmemory.c:232</div></div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -557,7 +670,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 10 2022 08:27:16 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 18 2022 10:19:41 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

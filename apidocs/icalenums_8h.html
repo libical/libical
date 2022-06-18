@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;3.1</span>
    </div>
   </td>
  </tr>
@@ -166,6 +166,57 @@ Enumerations</h2></td></tr>
 , <b>ICAL_VPATCH_COMPONENT</b>
 , <br />
 &#160;&#160;<b>ICAL_XPATCH_COMPONENT</b>
+, <b>ICAL_PARTICIPANT_COMPONENT</b>
+, <b>ICAL_VLOCATION_COMPONENT</b>
+, <b>ICAL_VRESOURCE_COMPONENT</b>
+, <br />
+&#160;&#160;<b>ICAL_NUM_COMPONENT_TYPES</b>
+, <b>ICAL_NO_COMPONENT</b>
+, <b>ICAL_ANY_COMPONENT</b>
+, <b>ICAL_XROOT_COMPONENT</b>
+, <br />
+&#160;&#160;<b>ICAL_XATTACH_COMPONENT</b>
+, <b>ICAL_VEVENT_COMPONENT</b>
+, <b>ICAL_VTODO_COMPONENT</b>
+, <b>ICAL_VJOURNAL_COMPONENT</b>
+, <br />
+&#160;&#160;<b>ICAL_VCALENDAR_COMPONENT</b>
+, <b>ICAL_VAGENDA_COMPONENT</b>
+, <b>ICAL_VFREEBUSY_COMPONENT</b>
+, <b>ICAL_VALARM_COMPONENT</b>
+, <br />
+&#160;&#160;<b>ICAL_XAUDIOALARM_COMPONENT</b>
+, <b>ICAL_XDISPLAYALARM_COMPONENT</b>
+, <b>ICAL_XEMAILALARM_COMPONENT</b>
+, <b>ICAL_XPROCEDUREALARM_COMPONENT</b>
+, <br />
+&#160;&#160;<b>ICAL_VTIMEZONE_COMPONENT</b>
+, <b>ICAL_XSTANDARD_COMPONENT</b>
+, <b>ICAL_XDAYLIGHT_COMPONENT</b>
+, <b>ICAL_X_COMPONENT</b>
+, <br />
+&#160;&#160;<b>ICAL_VSCHEDULE_COMPONENT</b>
+, <b>ICAL_VQUERY_COMPONENT</b>
+, <b>ICAL_VREPLY_COMPONENT</b>
+, <b>ICAL_VCAR_COMPONENT</b>
+, <br />
+&#160;&#160;<b>ICAL_VCOMMAND_COMPONENT</b>
+, <b>ICAL_XLICINVALID_COMPONENT</b>
+, <b>ICAL_XLICMIMEPART_COMPONENT</b>
+, <b>ICAL_VAVAILABILITY_COMPONENT</b>
+, <br />
+&#160;&#160;<b>ICAL_XAVAILABLE_COMPONENT</b>
+, <b>ICAL_VPOLL_COMPONENT</b>
+, <b>ICAL_VVOTER_COMPONENT</b>
+, <b>ICAL_XVOTE_COMPONENT</b>
+, <br />
+&#160;&#160;<b>ICAL_VPATCH_COMPONENT</b>
+, <b>ICAL_XPATCH_COMPONENT</b>
+, <b>ICAL_PARTICIPANT_COMPONENT</b>
+, <b>ICAL_VLOCATION_COMPONENT</b>
+, <br />
+&#160;&#160;<b>ICAL_VRESOURCE_COMPONENT</b>
+, <b>ICAL_NUM_COMPONENT_TYPES</b>
 <br />
  }</td></tr>
 <tr class="separator:a7cc82bf2af2050ddf53017fd3d4f7ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,6 +269,55 @@ Enumerations</h2></td></tr>
 &#160;&#160;<b>ICAL_5_3_NOSCHED_STATUS</b>
 , <b>ICAL_6_1_CONTAINER_NOT_FOUND</b>
 , <b>ICAL_9_0_UNRECOGNIZED_COMMAND</b>
+, <b>ICAL_UNKNOWN_STATUS</b>
+, <br />
+&#160;&#160;<b>ICAL_2_0_SUCCESS_STATUS</b>
+, <b>ICAL_2_1_FALLBACK_STATUS</b>
+, <b>ICAL_2_2_IGPROP_STATUS</b>
+, <b>ICAL_2_3_IGPARAM_STATUS</b>
+, <br />
+&#160;&#160;<b>ICAL_2_4_IGXPROP_STATUS</b>
+, <b>ICAL_2_5_IGXPARAM_STATUS</b>
+, <b>ICAL_2_6_IGCOMP_STATUS</b>
+, <b>ICAL_2_7_FORWARD_STATUS</b>
+, <br />
+&#160;&#160;<b>ICAL_2_8_ONEEVENT_STATUS</b>
+, <b>ICAL_2_9_TRUNC_STATUS</b>
+, <b>ICAL_2_10_ONETODO_STATUS</b>
+, <b>ICAL_2_11_TRUNCRRULE_STATUS</b>
+, <br />
+&#160;&#160;<b>ICAL_3_0_INVPROPNAME_STATUS</b>
+, <b>ICAL_3_1_INVPROPVAL_STATUS</b>
+, <b>ICAL_3_2_INVPARAM_STATUS</b>
+, <b>ICAL_3_3_INVPARAMVAL_STATUS</b>
+, <br />
+&#160;&#160;<b>ICAL_3_4_INVCOMP_STATUS</b>
+, <b>ICAL_3_5_INVTIME_STATUS</b>
+, <b>ICAL_3_6_INVRULE_STATUS</b>
+, <b>ICAL_3_7_INVCU_STATUS</b>
+, <br />
+&#160;&#160;<b>ICAL_3_8_NOAUTH_STATUS</b>
+, <b>ICAL_3_9_BADVERSION_STATUS</b>
+, <b>ICAL_3_10_TOOBIG_STATUS</b>
+, <b>ICAL_3_11_MISSREQCOMP_STATUS</b>
+, <br />
+&#160;&#160;<b>ICAL_3_12_UNKCOMP_STATUS</b>
+, <b>ICAL_3_13_BADCOMP_STATUS</b>
+, <b>ICAL_3_14_NOCAP_STATUS</b>
+, <b>ICAL_3_15_INVCOMMAND</b>
+, <br />
+&#160;&#160;<b>ICAL_4_0_BUSY_STATUS</b>
+, <b>ICAL_4_1_STORE_ACCESS_DENIED</b>
+, <b>ICAL_4_2_STORE_FAILED</b>
+, <b>ICAL_4_3_STORE_NOT_FOUND</b>
+, <br />
+&#160;&#160;<b>ICAL_5_0_MAYBE_STATUS</b>
+, <b>ICAL_5_1_UNAVAIL_STATUS</b>
+, <b>ICAL_5_2_NOSERVICE_STATUS</b>
+, <b>ICAL_5_3_NOSCHED_STATUS</b>
+, <br />
+&#160;&#160;<b>ICAL_6_1_CONTAINER_NOT_FOUND</b>
+, <b>ICAL_9_0_UNRECOGNIZED_COMMAND</b>
 <br />
  }</td></tr>
 <tr class="separator:af155b8c4c213cc359e893cda6e7e443d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -251,7 +351,7 @@ short&#160;</td><td class="memItemRight" valign="bottom"><b>icalenum_reqstat_min
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 10 2022 08:27:16 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 18 2022 10:19:40 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>
