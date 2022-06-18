@@ -50,9 +50,15 @@ if(DOXYGEN_FOUND)
     ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
   )
 
+  set(DOXYGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/apidocs/html)
   add_custom_command(
-    OUTPUT ${CMAKE_BINARY_DIR}/apidocs/html/index.html
+    OUTPUT ${DOXYGEN_OUTPUT_DIR}/index.html
     COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+    #copy some files by-hand that are referred to by the markdown README
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/Install.txt ${DOXYGEN_OUTPUT_DIR}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${DOXYGEN_OUTPUT_DIR}/src/libicalvcal
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_SOURCE_DIR}/src/libicalvcal/README.txt ${DOXYGEN_OUTPUT_DIR}/src/libicalvcal
     DEPENDS ${_all_hdrs} ${_dox_deps} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.cmake
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Run Doxygen"
