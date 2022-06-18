@@ -55,20 +55,14 @@ See the top-level [Install.txt](Install.txt) file.
 Documentation is hosted at <https://libical.github.io/libical/apidocs/>.
 
 For a conceptual overview of the library, see [Using Libical](doc/UsingLibical.md).
-There is other rudimentary, unfinished documentation in the `doc/` directory of
-the source distribution,
-and annotated examples in `examples/` and the test code in `src/test/`.
-
-Additionally, progress is underway to add API documentation,
-which is available at the apidocs site.
+There is other rudimentary, unfinished documentation in the `doc/` directory of the
+source distribution, annotated examples in `examples/` and the test code in `src/test/`.
 
 ## Acknowledgments
 
-Portions of this distribution are (C) Copyright 1996 Apple Computer,
-Inc., AT&T Corp., International Business Machines Corporation and
-Siemens Rolm Communications Inc. See
-[src/libicalvcal/README.TXT](src/libicalvcal/README.txt) for
-details.
+Portions of this distribution are (C) Copyright 1996 Apple Computer,Inc., AT&T Corp.,
+International Business Machines Corporation and Siemens Rolm Communications Inc.
+See [src/libicalvcal/README.TXT](src/libicalvcal/README.txt) for details.
 
 ## Libical Users
 
