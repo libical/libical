@@ -50,7 +50,7 @@ LIBICAL_ICAL_EXPORT void test_free(void *p);
   */
 LIBICAL_ICAL_EXPORT void testmalloc_reset();
 
-/** Sets the maximum number of malloc or realloc attemts that will succeed. If
+/** Sets the maximum number of malloc or realloc attempts that will succeed. If
   * the number is negative, no limit will be applied.
   */
 LIBICAL_ICAL_EXPORT void testmalloc_set_max_successful_allocs(int n);

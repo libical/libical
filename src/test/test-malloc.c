@@ -164,7 +164,7 @@ void testmalloc_reset() {
     global_testmalloc_remaining_attempts = -1;
 }
 
-/** Sets the maximum number of malloc or realloc attemts that will succeed. If
+/** Sets the maximum number of malloc or realloc attempts that will succeed. If
 * the number is negative, no limit will be applied. */
 void testmalloc_set_max_successful_allocs(int n) {
     global_testmalloc_remaining_attempts = n;
