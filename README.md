@@ -17,6 +17,8 @@ and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.
 
+## RFCs {#rfcs}
+
 Libical implements [RFC5545][], [RFC5546][], [RFC7529][];
 the CalDav scheduling extensions in [RFC6638][];
 iCalendar extensions in [RFC7986][], [RFC9073][], [RFC9074][];
