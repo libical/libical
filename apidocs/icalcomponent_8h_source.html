@@ -92,7 +92,7 @@ $(function() {
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">/* This is exposed so that callers will not have to allocate and</span></div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">   deallocate iterators. Pretend that you can&#39;t see it. */</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalcompiter.html">icalcompiter</a></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="structicalcompiter.html">   28</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalcompiter.html">icalcompiter</a></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>{</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    icalcomponent_kind kind;</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <a class="code hl_struct" href="structpvl__elem__t.html">pvl_elem</a> iter;</div>
@@ -137,25 +137,25 @@ $(function() {
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">/***** Working with Properties *****/</span></div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalcomponent_add_property(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *component,</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>                                                    <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a> *property);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>                                                    icalproperty *property);</div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalcomponent_remove_property(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *component,</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>                                                       <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a> *property);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>                                                       icalproperty *property);</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> icalcomponent_count_properties(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *component,</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>                                                       icalproperty_kind kind);</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalcomponent_8h.html#a81bb4666b9d6bdbc62a4fe9ef682e0e2">icalproperty_set_parent</a>(<a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a> *property,</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalcomponent_8h.html#a81bb4666b9d6bdbc62a4fe9ef682e0e2">icalproperty_set_parent</a>(icalproperty *property,</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>                                                 <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *component);</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *<a class="code hl_function" href="icalcomponent_8h.html#a3d9f076b73a18e740c426329a6b969c7">icalproperty_get_parent</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a> *property);</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *<a class="code hl_function" href="icalcomponent_8h.html#a3d9f076b73a18e740c426329a6b969c7">icalproperty_get_parent</a>(<span class="keyword">const</span> icalproperty *property);</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">/* Iterate through the properties */</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a> *icalcomponent_get_current_property(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *component);</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_current_property(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *component);</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a> *icalcomponent_get_first_property(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *component,</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_first_property(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *component,</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>                                                                   icalproperty_kind kind);</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a> *icalcomponent_get_next_property(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *component,</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_next_property(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *component,</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>                                                                  icalproperty_kind kind);</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">/***** Working with Components *****/</span></div>
@@ -309,7 +309,7 @@ $(function() {
 <div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>LIBICAL_ICAL_EXPORT <span class="keyword">enum</span> icalproperty_status icalcomponent_get_status(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *comp);</div>
 <div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span> </div>
 <div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalcomponent_8h.html#addacbedbeccb2e2d31ae9a6963e19e49">icalcomponent_foreach_tzid</a>(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *comp,</div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>                                                    <span class="keywordtype">void</span> (*callback) (<a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param,</div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>                                                    <span class="keywordtype">void</span> (*callback) (icalparameter *param,</div>
 <div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>                                                                      <span class="keywordtype">void</span> *data),</div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>                                                    <span class="keywordtype">void</span> *callback_data);</div>
 <div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span> </div>
@@ -331,7 +331,7 @@ $(function() {
 <div class="line"><a id="l00477" name="l00477"></a><span class="lineno">  477</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalcomponent_8h.html#a56150641c4d33ad4ec365c77a257e153">icalcomponent_normalize</a>(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *comp);</div>
 <div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span> </div>
 <div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span>LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> <a class="code hl_function" href="icalcomponent_8h.html#a611f811f8f86a6499077e6e03291a721">icalproperty_get_datetime_with_component</a>(</div>
-<div class="line"><a id="l00490" name="l00490"></a><span class="lineno">  490</span>                                                                          <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a> *prop,</div>
+<div class="line"><a id="l00490" name="l00490"></a><span class="lineno">  490</span>                                                                          icalproperty *prop,</div>
 <div class="line"><a id="l00491" name="l00491"></a><span class="lineno">  491</span>                                                                          <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *comp);</div>
 <div class="line"><a id="l00492" name="l00492"></a><span class="lineno">  492</span><span class="comment">/*************** Type Specific routines ***************/</span></div>
 <div class="line"><a id="l00493" name="l00493"></a><span class="lineno">  493</span> </div>
@@ -415,18 +415,16 @@ $(function() {
 <div class="ttc" id="aicalenums_8h_html"><div class="ttname"><a href="icalenums_8h.html">icalenums.h</a></div></div>
 <div class="ttc" id="aicalproperty_8h_html"><div class="ttname"><a href="icalproperty_8h.html">icalproperty.h</a></div></div>
 <div class="ttc" id="astruct__icaltimezone_html"><div class="ttname"><a href="struct__icaltimezone.html">_icaltimezone</a></div><div class="ttdef"><b>Definition:</b> icaltimezoneimpl.h:15</div></div>
-<div class="ttc" id="astructicalcompiter_html"><div class="ttname"><a href="structicalcompiter.html">icalcompiter</a></div><div class="ttdef"><b>Definition:</b> ical.h:5061</div></div>
+<div class="ttc" id="astructicalcompiter_html"><div class="ttname"><a href="structicalcompiter.html">icalcompiter</a></div><div class="ttdef"><b>Definition:</b> icalcomponent.h:29</div></div>
 <div class="ttc" id="astructicalcomponent__impl_html"><div class="ttname"><a href="structicalcomponent__impl.html">icalcomponent_impl</a></div><div class="ttdef"><b>Definition:</b> icalcomponent.c:28</div></div>
-<div class="ttc" id="astructicaldurationtype_html"><div class="ttname"><a href="structicaldurationtype.html">icaldurationtype</a></div><div class="ttdoc">A struct representing a duration.</div><div class="ttdef"><b>Definition:</b> ical.h:492</div></div>
-<div class="ttc" id="astructicalparameter__impl_html"><div class="ttname"><a href="structicalparameter__impl.html">icalparameter_impl</a></div><div class="ttdef"><b>Definition:</b> icalparameterimpl.h:21</div></div>
-<div class="ttc" id="astructicalproperty__impl_html"><div class="ttname"><a href="structicalproperty__impl.html">icalproperty_impl</a></div><div class="ttdef"><b>Definition:</b> icalproperty.c:28</div></div>
-<div class="ttc" id="astructicaltime__span_html"><div class="ttname"><a href="structicaltime__span.html">icaltime_span</a></div><div class="ttdef"><b>Definition:</b> ical.h:132</div></div>
-<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> ical.h:141</div></div>
-<div class="ttc" id="astructpvl__elem__t_html"><div class="ttname"><a href="structpvl__elem__t.html">pvl_elem_t</a></div><div class="ttdef"><b>Definition:</b> ical.h:4962</div></div>
+<div class="ttc" id="astructicaldurationtype_html"><div class="ttname"><a href="structicaldurationtype.html">icaldurationtype</a></div><div class="ttdoc">A struct representing a duration.</div><div class="ttdef"><b>Definition:</b> icalduration.h:28</div></div>
+<div class="ttc" id="astructicaltime__span_html"><div class="ttname"><a href="structicaltime__span.html">icaltime_span</a></div><div class="ttdef"><b>Definition:</b> icaltime.h:88</div></div>
+<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> icaltime.h:97</div></div>
+<div class="ttc" id="astructpvl__elem__t_html"><div class="ttname"><a href="structpvl__elem__t.html">pvl_elem_t</a></div><div class="ttdef"><b>Definition:</b> pvl.h:26</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 18 2022 10:19:40 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 25 2022 08:55:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

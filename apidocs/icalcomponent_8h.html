@@ -105,7 +105,7 @@ Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_add_component</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *parent, <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *child)</td></tr>
 <tr class="separator:aefd9be4fd39138cb42fd1f46fa833b69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0f618a40a7b03ab8a7c4f1a36d05168"><td class="memItemLeft" align="right" valign="top"><a id="ad0f618a40a7b03ab8a7c4f1a36d05168" name="ad0f618a40a7b03ab8a7c4f1a36d05168"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_add_property</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component, <a class="el" href="structicalproperty__impl.html">icalproperty</a> *property)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_add_property</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component, icalproperty *property)</td></tr>
 <tr class="separator:ad0f618a40a7b03ab8a7c4f1a36d05168"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fabce8bb964d4944b4b547c711c66fa"><td class="memItemLeft" align="right" valign="top"><a id="a3fabce8bb964d4944b4b547c711c66fa" name="a3fabce8bb964d4944b4b547c711c66fa"></a>
 char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_as_ical_string</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component)</td></tr>
@@ -142,7 +142,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_count_pr
 <tr class="memdesc:a379c4880bf5ab8ccbf1d4af12aca232e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles through all recurrences of an event.  <a href="icalcomponent_8h.html#a379c4880bf5ab8ccbf1d4af12aca232e">More...</a><br /></td></tr>
 <tr class="separator:a379c4880bf5ab8ccbf1d4af12aca232e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addacbedbeccb2e2d31ae9a6963e19e49"><td class="memItemLeft" align="right" valign="top"><a id="addacbedbeccb2e2d31ae9a6963e19e49" name="addacbedbeccb2e2d31ae9a6963e19e49"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_foreach_tzid</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *comp, void(*callback)(<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param, void *data), void *callback_data)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_foreach_tzid</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *comp, void(*callback)(icalparameter *param, void *data), void *callback_data)</td></tr>
 <tr class="memdesc:addacbedbeccb2e2d31ae9a6963e19e49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the given function for each TZID parameter found in the component, and any subcomponents. <br /></td></tr>
 <tr class="separator:addacbedbeccb2e2d31ae9a6963e19e49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9147a2140676139e7535de4836dcd29"><td class="memItemLeft" align="right" valign="top"><a id="ae9147a2140676139e7535de4836dcd29" name="ae9147a2140676139e7535de4836dcd29"></a>
@@ -160,7 +160,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_c
 <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_current_component</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component)</td></tr>
 <tr class="separator:a5672514b8c61dc855dcede579db4bd1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba62def141349c9d47db5c614dbbebdd"><td class="memItemLeft" align="right" valign="top"><a id="aba62def141349c9d47db5c614dbbebdd" name="aba62def141349c9d47db5c614dbbebdd"></a>
-<a class="el" href="structicalproperty__impl.html">icalproperty</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_current_property</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component)</td></tr>
+icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_current_property</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component)</td></tr>
 <tr class="separator:aba62def141349c9d47db5c614dbbebdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45c397c62e1085bf05428d2f13ac7f62"><td class="memItemLeft" align="right" valign="top"><a id="a45c397c62e1085bf05428d2f13ac7f62" name="a45c397c62e1085bf05428d2f13ac7f62"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_description</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *comp)</td></tr>
@@ -184,7 +184,7 @@ struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><
 <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_first_component</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component, icalcomponent_kind kind)</td></tr>
 <tr class="separator:a164a3d10fe38ef6d49f7b6b433ec338d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c55584f183386820a1f2cd67d0d48de"><td class="memItemLeft" align="right" valign="top"><a id="a2c55584f183386820a1f2cd67d0d48de" name="a2c55584f183386820a1f2cd67d0d48de"></a>
-<a class="el" href="structicalproperty__impl.html">icalproperty</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_first_property</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component, icalproperty_kind kind)</td></tr>
+icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_first_property</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component, icalproperty_kind kind)</td></tr>
 <tr class="separator:a2c55584f183386820a1f2cd67d0d48de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a822e1ecadd06473da50dbcb52ebb759d"><td class="memItemLeft" align="right" valign="top"><a id="a822e1ecadd06473da50dbcb52ebb759d" name="a822e1ecadd06473da50dbcb52ebb759d"></a>
 <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_first_real_component</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *c)</td></tr>
@@ -203,7 +203,7 @@ icalproperty_method&#160;</td><td class="memItemRight" valign="bottom"><b>icalco
 <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_next_component</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component, icalcomponent_kind kind)</td></tr>
 <tr class="separator:ad3f6fc66fb3a26d7f5d0315685c051b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a853d9a8ade2a7e1e0493b8ef63d623bd"><td class="memItemLeft" align="right" valign="top"><a id="a853d9a8ade2a7e1e0493b8ef63d623bd" name="a853d9a8ade2a7e1e0493b8ef63d623bd"></a>
-<a class="el" href="structicalproperty__impl.html">icalproperty</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_next_property</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component, icalproperty_kind kind)</td></tr>
+icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_next_property</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component, icalproperty_kind kind)</td></tr>
 <tr class="separator:a853d9a8ade2a7e1e0493b8ef63d623bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8153538750dff89d13ed1b4ba6f5ccbf"><td class="memItemLeft" align="right" valign="top"><a id="a8153538750dff89d13ed1b4ba6f5ccbf" name="a8153538750dff89d13ed1b4ba6f5ccbf"></a>
 <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_parent</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component)</td></tr>
@@ -338,7 +338,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_remove_component</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *parent, <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *child)</td></tr>
 <tr class="separator:a6222aaf2d040fe425106fb651464bef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a588b15eb0425b007e1daec4a6a1885fe"><td class="memItemLeft" align="right" valign="top"><a id="a588b15eb0425b007e1daec4a6a1885fe" name="a588b15eb0425b007e1daec4a6a1885fe"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_remove_property</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component, <a class="el" href="structicalproperty__impl.html">icalproperty</a> *property)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_remove_property</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component, icalproperty *property)</td></tr>
 <tr class="separator:a588b15eb0425b007e1daec4a6a1885fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af749ddb4b0071fc967fe9110948a5474"><td class="memItemLeft" align="right" valign="top"><a id="af749ddb4b0071fc967fe9110948a5474" name="af749ddb4b0071fc967fe9110948a5474"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_set_comment</b> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *comp, const char *v)</td></tr>
@@ -403,17 +403,17 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_strip_e
 <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_vanew</b> (icalcomponent_kind kind,...)</td></tr>
 <tr class="memdesc:a6d04f3e1a9fac62b7b06c88eecd3b194"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
 <tr class="separator:a6d04f3e1a9fac62b7b06c88eecd3b194"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a611f811f8f86a6499077e6e03291a721"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalcomponent_8h.html#a611f811f8f86a6499077e6e03291a721">icalproperty_get_datetime_with_component</a> (<a class="el" href="structicalproperty__impl.html">icalproperty</a> *prop, <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *comp)</td></tr>
+<tr class="memitem:a611f811f8f86a6499077e6e03291a721"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalcomponent_8h.html#a611f811f8f86a6499077e6e03291a721">icalproperty_get_datetime_with_component</a> (icalproperty *prop, <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *comp)</td></tr>
 <tr class="memdesc:a611f811f8f86a6499077e6e03291a721"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a DATE or DATE-TIME property as an icaltime.  <a href="icalcomponent_8h.html#a611f811f8f86a6499077e6e03291a721">More...</a><br /></td></tr>
 <tr class="separator:a611f811f8f86a6499077e6e03291a721"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d9f076b73a18e740c426329a6b969c7"><td class="memItemLeft" align="right" valign="top"><a id="a3d9f076b73a18e740c426329a6b969c7" name="a3d9f076b73a18e740c426329a6b969c7"></a>
-<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_parent</b> (const <a class="el" href="structicalproperty__impl.html">icalproperty</a> *property)</td></tr>
+<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_parent</b> (const icalproperty *property)</td></tr>
 <tr class="memdesc:a3d9f076b73a18e740c426329a6b969c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the parent icalcomponent for the specified <code>property</code>. <br /></td></tr>
 <tr class="separator:a3d9f076b73a18e740c426329a6b969c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa996d31b8f96e451495b34777171242f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalcomponent_8h.html#aa996d31b8f96e451495b34777171242f">icalproperty_recurrence_is_excluded</a> (<a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *comp, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *dtstart, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *recurtime)</td></tr>
 <tr class="memdesc:aa996d31b8f96e451495b34777171242f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decides if a recurrence is acceptable.  <a href="icalcomponent_8h.html#aa996d31b8f96e451495b34777171242f">More...</a><br /></td></tr>
 <tr class="separator:aa996d31b8f96e451495b34777171242f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81bb4666b9d6bdbc62a4fe9ef682e0e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalcomponent_8h.html#a81bb4666b9d6bdbc62a4fe9ef682e0e2">icalproperty_set_parent</a> (<a class="el" href="structicalproperty__impl.html">icalproperty</a> *property, <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component)</td></tr>
+<tr class="memitem:a81bb4666b9d6bdbc62a4fe9ef682e0e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="icalcomponent_8h.html#a81bb4666b9d6bdbc62a4fe9ef682e0e2">icalproperty_set_parent</a> (icalproperty *property, <a class="el" href="structicalcomponent__impl.html">icalcomponent</a> *component)</td></tr>
 <tr class="memdesc:a81bb4666b9d6bdbc62a4fe9ef682e0e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the parent icalcomponent for the specified icalproperty <code>property</code>.  <a href="icalcomponent_8h.html#a81bb4666b9d6bdbc62a4fe9ef682e0e2">More...</a><br /></td></tr>
 <tr class="separator:a81bb4666b9d6bdbc62a4fe9ef682e0e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -752,9 +752,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_strip_e
 
 <p>Deeply clones an icalcomponent. Returns a pointer to the memory for the newly cloned icalcomponent. </p>
 <dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated:</a></b></dt><dd>Use <a class="el" href="icalcomponent_8h.html#a25071d92251c8b822eae28ee5c0729d8" title="Deeply clones an icalcomponent. Returns a pointer to the memory for the newly cloned icalcomponent.">icalcomponent_clone()</a> instead </dd></dl>
-<dl class="section since"><dt>Since</dt><dd>3.1.0 </dd></dl>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000004">Deprecated:</a></b></dt><dd>Use <a class="el" href="icalcomponent_8h.html#a25071d92251c8b822eae28ee5c0729d8" title="Deeply clones an icalcomponent. Returns a pointer to the memory for the newly cloned icalcomponent.">icalcomponent_clone()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated:</a></b></dt><dd>Use <a class="el" href="icalcomponent_8h.html#a25071d92251c8b822eae28ee5c0729d8" title="Deeply clones an icalcomponent. Returns a pointer to the memory for the newly cloned icalcomponent.">icalcomponent_clone()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -964,7 +962,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_strip_e
         <tr>
           <td class="memname">struct <a class="el" href="structicaltimetype.html">icaltimetype</a> icalproperty_get_datetime_with_component </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structicalproperty__impl.html">icalproperty</a> *&#160;</td>
+          <td class="paramtype">icalproperty *&#160;</td>
           <td class="paramname"><em>prop</em>, </td>
         </tr>
         <tr>
@@ -1056,7 +1054,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_strip_e
         <tr>
           <td class="memname">void icalproperty_set_parent </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structicalproperty__impl.html">icalproperty</a> *&#160;</td>
+          <td class="paramtype">icalproperty *&#160;</td>
           <td class="paramname"><em>property</em>, </td>
         </tr>
         <tr>
@@ -1081,7 +1079,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_strip_e
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 18 2022 10:19:40 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 25 2022 08:55:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

@@ -159,7 +159,7 @@ $(function() {
 <div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="preprocessor">#define ICAL_BY_SETPOS_SIZE     ICAL_BY_YEARDAY_SIZE          </span><span class="comment">/* 1 to N */</span><span class="preprocessor"></span></div>
 <div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="preprocessor">#define ICAL_BY_DAY_SIZE        7*(ICAL_BY_WEEKNO_SIZE-1)+1   </span><span class="comment">/* 1 to N */</span><span class="preprocessor"></span></div>
 <div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="keyword">struct </span><a class="code hl_struct" href="structicalrecurrencetype.html">icalrecurrencetype</a></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno"><a class="line" href="structicalrecurrencetype.html">  143</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structicalrecurrencetype.html">icalrecurrencetype</a></div>
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>{</div>
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    icalrecurrencetype_frequency freq;</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
@@ -183,11 +183,11 @@ $(function() {
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    <span class="keywordtype">short</span> by_second[<a class="code hl_define" href="icalrecur_8h.html#acec51b2d651f24e31b00627b60b12728">ICAL_BY_SECOND_SIZE</a>];</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <span class="keywordtype">short</span> by_minute[ICAL_BY_MINUTE_SIZE];</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keywordtype">short</span> by_hour[ICAL_BY_HOUR_SIZE];</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="keywordtype">short</span> <a class="code hl_variable" href="structicalrecurrencetype.html#acd409121a8b2e79e58ab445069003478">by_day</a>[ICAL_BY_DAY_SIZE];             </div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="structicalrecurrencetype.html#abf0eb04e3bb9028e18c9c4c1e0462b9d">  167</a></span>    <span class="keywordtype">short</span> <a class="code hl_variable" href="structicalrecurrencetype.html#abf0eb04e3bb9028e18c9c4c1e0462b9d">by_day</a>[ICAL_BY_DAY_SIZE];             </div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="keywordtype">short</span> by_month_day[ICAL_BY_MONTHDAY_SIZE];</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    <span class="keywordtype">short</span> by_year_day[ICAL_BY_YEARDAY_SIZE];</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    <span class="keywordtype">short</span> by_week_no[ICAL_BY_WEEKNO_SIZE];</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    <span class="keywordtype">short</span> <a class="code hl_variable" href="structicalrecurrencetype.html#a1fbb922e27987296768a4ba25b5a4a36">by_month</a>[ICAL_BY_MONTH_SIZE];         </div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno"><a class="line" href="structicalrecurrencetype.html#af3f6d789f51c7772879b6c8e3101af9e">  180</a></span>    <span class="keywordtype">short</span> <a class="code hl_variable" href="structicalrecurrencetype.html#af3f6d789f51c7772879b6c8e3101af9e">by_month</a>[ICAL_BY_MONTH_SIZE];         </div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <span class="keywordtype">short</span> by_set_pos[ICAL_BY_SETPOS_SIZE];</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <span class="comment">/* For RSCALE extension (RFC 7529) */</span></div>
@@ -311,17 +311,17 @@ $(function() {
 <div class="ttc" id="aicalrecur_8h_html_acec51b2d651f24e31b00627b60b12728"><div class="ttname"><a href="icalrecur_8h.html#acec51b2d651f24e31b00627b60b12728">ICAL_BY_SECOND_SIZE</a></div><div class="ttdeci">#define ICAL_BY_SECOND_SIZE</div><div class="ttdef"><b>Definition:</b> icalrecur.h:132</div></div>
 <div class="ttc" id="aicalrecur_8h_html_af830056b191d4e037813ff27c60932cf"><div class="ttname"><a href="icalrecur_8h.html#af830056b191d4e037813ff27c60932cf">icalrecur_iterator_set_range</a></div><div class="ttdeci">int icalrecur_iterator_set_range(icalrecur_iterator *impl, struct icaltimetype from, struct icaltimetype to)</div><div class="ttdef"><b>Definition:</b> icalrecur.c:3498</div></div>
 <div class="ttc" id="aicaltime_8h_html"><div class="ttname"><a href="icaltime_8h.html">icaltime.h</a></div><div class="ttdoc">struct icaltimetype is a pseudo-object that abstracts time handling.</div></div>
-<div class="ttc" id="astruct__icalarray_html"><div class="ttname"><a href="struct__icalarray.html">_icalarray</a></div><div class="ttdef"><b>Definition:</b> ical.h:1195</div></div>
+<div class="ttc" id="astruct__icalarray_html"><div class="ttname"><a href="struct__icalarray.html">_icalarray</a></div><div class="ttdef"><b>Definition:</b> icalarray.h:30</div></div>
 <div class="ttc" id="astructicalrecur__iterator__impl_html"><div class="ttname"><a href="structicalrecur__iterator__impl.html">icalrecur_iterator_impl</a></div><div class="ttdef"><b>Definition:</b> icalrecur.c:933</div></div>
-<div class="ttc" id="astructicalrecurrencetype_html"><div class="ttname"><a href="structicalrecurrencetype.html">icalrecurrencetype</a></div><div class="ttdef"><b>Definition:</b> ical.h:1600</div></div>
-<div class="ttc" id="astructicalrecurrencetype_html_a1fbb922e27987296768a4ba25b5a4a36"><div class="ttname"><a href="structicalrecurrencetype.html#a1fbb922e27987296768a4ba25b5a4a36">icalrecurrencetype::by_month</a></div><div class="ttdeci">short by_month[14]</div><div class="ttdoc">Encoded value.</div><div class="ttdef"><b>Definition:</b> ical.h:1636</div></div>
-<div class="ttc" id="astructicalrecurrencetype_html_acd409121a8b2e79e58ab445069003478"><div class="ttname"><a href="structicalrecurrencetype.html#acd409121a8b2e79e58ab445069003478">icalrecurrencetype::by_day</a></div><div class="ttdeci">short by_day[7 *(56 -1)+1]</div><div class="ttdoc">Encoded value.</div><div class="ttdef"><b>Definition:</b> ical.h:1623</div></div>
-<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> ical.h:141</div></div>
-<div class="ttc" id="astructicaltimetype_html_abfb15dfde907211cafd3cd6cafa5531d"><div class="ttname"><a href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">icaltimetype::month</a></div><div class="ttdeci">int month</div><div class="ttdef"><b>Definition:</b> ical.h:143</div></div>
+<div class="ttc" id="astructicalrecurrencetype_html"><div class="ttname"><a href="structicalrecurrencetype.html">icalrecurrencetype</a></div><div class="ttdef"><b>Definition:</b> icalrecur.h:144</div></div>
+<div class="ttc" id="astructicalrecurrencetype_html_abf0eb04e3bb9028e18c9c4c1e0462b9d"><div class="ttname"><a href="structicalrecurrencetype.html#abf0eb04e3bb9028e18c9c4c1e0462b9d">icalrecurrencetype::by_day</a></div><div class="ttdeci">short by_day[7 *(56 -1)+1]</div><div class="ttdoc">Encoded value.</div><div class="ttdef"><b>Definition:</b> icalrecur.h:167</div></div>
+<div class="ttc" id="astructicalrecurrencetype_html_af3f6d789f51c7772879b6c8e3101af9e"><div class="ttname"><a href="structicalrecurrencetype.html#af3f6d789f51c7772879b6c8e3101af9e">icalrecurrencetype::by_month</a></div><div class="ttdeci">short by_month[14]</div><div class="ttdoc">Encoded value.</div><div class="ttdef"><b>Definition:</b> icalrecur.h:180</div></div>
+<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> icaltime.h:97</div></div>
+<div class="ttc" id="astructicaltimetype_html_abfb15dfde907211cafd3cd6cafa5531d"><div class="ttname"><a href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">icaltimetype::month</a></div><div class="ttdeci">int month</div><div class="ttdef"><b>Definition:</b> icaltime.h:99</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 18 2022 10:19:40 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 25 2022 08:55:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

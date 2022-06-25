@@ -97,7 +97,7 @@ $(function() {
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    ICAL_BDB_SET</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>} icalset_kind;</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalsetiter.html">icalsetiter</a></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="structicalsetiter.html">   42</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalsetiter.html">icalsetiter</a></div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>{</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <a class="code hl_struct" href="structicalcompiter.html">icalcompiter</a> iter;  <span class="comment">/* icalcomponent_kind, pvl_elem iter */</span></div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <a class="code hl_struct" href="structicalgauge__impl.html">icalgauge</a> *gauge;</div>
@@ -106,7 +106,7 @@ $(function() {
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *tzid;   <span class="comment">/* the calendar&#39;s timezone id */</span></div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>} <a class="code hl_struct" href="structicalsetiter.html">icalsetiter</a>;</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">struct </span><a class="code hl_struct" href="structicalset__impl.html">icalset_impl</a></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="structicalset__impl.html">   51</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structicalset__impl.html">icalset_impl</a></div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>{</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    icalset_kind kind;</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordtype">size_t</span> size;</div>
@@ -153,15 +153,15 @@ $(function() {
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalset_8h.html#a2caa3e1d3c665fe107dde1e4be8c49c1">icalset_mark</a>(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set);</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>LIBICAL_ICALSS_EXPORT icalerrorenum <a class="code hl_function" href="icalset_8h.html#a2c852ee9d1ddd570809482ba56fee0e6">icalset_commit</a>(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set);</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> <a class="code hl_function" href="icalset_8h.html#a2c852ee9d1ddd570809482ba56fee0e6">icalset_commit</a>(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set);</div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>LIBICAL_ICALSS_EXPORT icalerrorenum icalset_add_component(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set, <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *comp);</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalset_add_component(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set, <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *comp);</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>LIBICAL_ICALSS_EXPORT icalerrorenum icalset_remove_component(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set, <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *comp);</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalset_remove_component(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set, <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *comp);</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">int</span> icalset_count_components(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set, icalcomponent_kind kind);</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>LIBICAL_ICALSS_EXPORT icalerrorenum <a class="code hl_function" href="icalset_8h.html#a0d4a88d44364f1da9e107f99926a7217">icalset_select</a>(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set, <a class="code hl_struct" href="structicalgauge__impl.html">icalgauge</a> *gauge);</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> <a class="code hl_function" href="icalset_8h.html#a0d4a88d44364f1da9e107f99926a7217">icalset_select</a>(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set, <a class="code hl_struct" href="structicalgauge__impl.html">icalgauge</a> *gauge);</div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
 <div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>LIBICAL_ICALSS_EXPORT <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *<a class="code hl_function" href="icalset_8h.html#a98ebedc03e491568cf62830be8459921">icalset_fetch</a>(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set, <span class="keyword">const</span> <span class="keywordtype">char</span> *uid);</div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
@@ -169,7 +169,7 @@ $(function() {
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>LIBICAL_ICALSS_EXPORT <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *icalset_fetch_match(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set, <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *c);</div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>LIBICAL_ICALSS_EXPORT icalerrorenum <a class="code hl_function" href="icalset_8h.html#afb2fbb4b1dae61bd4e2ad78c70daa1df">icalset_modify</a>(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set,</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> <a class="code hl_function" href="icalset_8h.html#afb2fbb4b1dae61bd4e2ad78c70daa1df">icalset_modify</a>(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set,</div>
 <div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>                                                   <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *oldc, <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *newc);</div>
 <div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>LIBICAL_ICALSS_EXPORT <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *<a class="code hl_function" href="icalset_8h.html#a420481c47762be041d21a8fc22a488c4">icalset_get_current_component</a>(<a class="code hl_struct" href="structicalset__impl.html">icalset</a> *set);</div>
@@ -211,16 +211,16 @@ $(function() {
 <div class="ttc" id="aicalset_8h_html_a98ebedc03e491568cf62830be8459921"><div class="ttname"><a href="icalset_8h.html#a98ebedc03e491568cf62830be8459921">icalset_fetch</a></div><div class="ttdeci">icalcomponent * icalset_fetch(icalset *set, const char *uid)</div><div class="ttdef"><b>Definition:</b> icalset.c:415</div></div>
 <div class="ttc" id="aicalset_8h_html_ad39065fe67efd5f3baf9f5af0379505e"><div class="ttname"><a href="icalset_8h.html#ad39065fe67efd5f3baf9f5af0379505e">icalset_new</a></div><div class="ttdeci">icalset * icalset_new(icalset_kind kind, const char *dsn, void *options)</div><div class="ttdoc">Generic icalset constructor.</div><div class="ttdef"><b>Definition:</b> icalset.c:231</div></div>
 <div class="ttc" id="aicalset_8h_html_afb2fbb4b1dae61bd4e2ad78c70daa1df"><div class="ttname"><a href="icalset_8h.html#afb2fbb4b1dae61bd4e2ad78c70daa1df">icalset_modify</a></div><div class="ttdeci">icalerrorenum icalset_modify(icalset *set, icalcomponent *oldc, icalcomponent *newc)</div><div class="ttdef"><b>Definition:</b> icalset.c:430</div></div>
-<div class="ttc" id="astructicalcompiter_html"><div class="ttname"><a href="structicalcompiter.html">icalcompiter</a></div><div class="ttdef"><b>Definition:</b> ical.h:5061</div></div>
+<div class="ttc" id="astructicalcompiter_html"><div class="ttname"><a href="structicalcompiter.html">icalcompiter</a></div><div class="ttdef"><b>Definition:</b> icalcomponent.h:29</div></div>
 <div class="ttc" id="astructicalcomponent__impl_html"><div class="ttname"><a href="structicalcomponent__impl.html">icalcomponent_impl</a></div><div class="ttdef"><b>Definition:</b> icalcomponent.c:28</div></div>
 <div class="ttc" id="astructicalgauge__impl_html"><div class="ttname"><a href="structicalgauge__impl.html">icalgauge_impl</a></div><div class="ttdef"><b>Definition:</b> icalgaugeimpl.h:47</div></div>
 <div class="ttc" id="astructicalrecur__iterator__impl_html"><div class="ttname"><a href="structicalrecur__iterator__impl.html">icalrecur_iterator_impl</a></div><div class="ttdef"><b>Definition:</b> icalrecur.c:933</div></div>
-<div class="ttc" id="astructicalset__impl_html"><div class="ttname"><a href="structicalset__impl.html">icalset_impl</a></div><div class="ttdef"><b>Definition:</b> icalss.h:78</div></div>
-<div class="ttc" id="astructicalsetiter_html"><div class="ttname"><a href="structicalsetiter.html">icalsetiter</a></div><div class="ttdef"><b>Definition:</b> icalss.h:70</div></div>
+<div class="ttc" id="astructicalset__impl_html"><div class="ttname"><a href="structicalset__impl.html">icalset_impl</a></div><div class="ttdef"><b>Definition:</b> icalset.h:52</div></div>
+<div class="ttc" id="astructicalsetiter_html"><div class="ttname"><a href="structicalsetiter.html">icalsetiter</a></div><div class="ttdef"><b>Definition:</b> icalset.h:43</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 18 2022 10:19:40 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 25 2022 08:55:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

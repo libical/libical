@@ -139,13 +139,9 @@ typedef enum icalrecurrencetype_weekday&#160;</td><td class="memItemRight" valig
 Enumerations</h2></td></tr>
 <tr class="memitem:a85aad1aeea58a53b5a0399a2fca38890"><td class="memItemLeft" align="right" valign="top"><a id="a85aad1aeea58a53b5a0399a2fca38890" name="a85aad1aeea58a53b5a0399a2fca38890"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>ical_invalid_rrule_handling</b> { <b>ICAL_RRULE_TREAT_AS_ERROR</b> = 0
 , <b>ICAL_RRULE_IGNORE_INVALID</b> = 1
-, <b>ICAL_RRULE_TREAT_AS_ERROR</b> = 0
-, <b>ICAL_RRULE_IGNORE_INVALID</b> = 1
  }</td></tr>
 <tr class="separator:a85aad1aeea58a53b5a0399a2fca38890"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a593dc289d9bb0313584701e0675cf303"><td class="memItemLeft" align="right" valign="top"><a id="a593dc289d9bb0313584701e0675cf303" name="a593dc289d9bb0313584701e0675cf303"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrence_array_max_values</b> { <b>ICAL_RECURRENCE_ARRAY_MAX</b> = 0x7f7f
-, <b>ICAL_RECURRENCE_ARRAY_MAX_BYTE</b> = 0x7f
-, <b>ICAL_RECURRENCE_ARRAY_MAX</b> = 0x7f7f
 , <b>ICAL_RECURRENCE_ARRAY_MAX_BYTE</b> = 0x7f
  }</td></tr>
 <tr class="separator:a593dc289d9bb0313584701e0675cf303"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,43 +155,16 @@ Enumerations</h2></td></tr>
 , <b>ICAL_MONTHLY_RECURRENCE</b> = 5
 , <b>ICAL_YEARLY_RECURRENCE</b> = 6
 , <b>ICAL_NO_RECURRENCE</b> = 7
-, <br />
-&#160;&#160;<b>ICAL_SECONDLY_RECURRENCE</b> = 0
-, <b>ICAL_MINUTELY_RECURRENCE</b> = 1
-, <b>ICAL_HOURLY_RECURRENCE</b> = 2
-, <b>ICAL_DAILY_RECURRENCE</b> = 3
-, <br />
-&#160;&#160;<b>ICAL_WEEKLY_RECURRENCE</b> = 4
-, <b>ICAL_MONTHLY_RECURRENCE</b> = 5
-, <b>ICAL_YEARLY_RECURRENCE</b> = 6
-, <b>ICAL_NO_RECURRENCE</b> = 7
 <br />
  }</td></tr>
 <tr class="separator:a203e6ca308804a67ff343837e7c11a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46e0128948e7c4c5c1e120061211ddea"><td class="memItemLeft" align="right" valign="top"><a id="a46e0128948e7c4c5c1e120061211ddea" name="a46e0128948e7c4c5c1e120061211ddea"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_skip</b> { <br />
-&#160;&#160;<b>ICAL_SKIP_BACKWARD</b> = 0
+<tr class="memitem:a46e0128948e7c4c5c1e120061211ddea"><td class="memItemLeft" align="right" valign="top"><a id="a46e0128948e7c4c5c1e120061211ddea" name="a46e0128948e7c4c5c1e120061211ddea"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_skip</b> { <b>ICAL_SKIP_BACKWARD</b> = 0
 , <b>ICAL_SKIP_FORWARD</b>
 , <b>ICAL_SKIP_OMIT</b>
 , <b>ICAL_SKIP_UNDEFINED</b>
-, <br />
-&#160;&#160;<b>ICAL_SKIP_BACKWARD</b> = 0
-, <b>ICAL_SKIP_FORWARD</b>
-, <b>ICAL_SKIP_OMIT</b>
-, <b>ICAL_SKIP_UNDEFINED</b>
-<br />
  }</td></tr>
 <tr class="separator:a46e0128948e7c4c5c1e120061211ddea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d3df238238f2689b2cc48b162a9507b"><td class="memItemLeft" align="right" valign="top"><a id="a0d3df238238f2689b2cc48b162a9507b" name="a0d3df238238f2689b2cc48b162a9507b"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_weekday</b> { <br />
-&#160;&#160;<b>ICAL_NO_WEEKDAY</b>
-, <b>ICAL_SUNDAY_WEEKDAY</b>
-, <b>ICAL_MONDAY_WEEKDAY</b>
-, <b>ICAL_TUESDAY_WEEKDAY</b>
-, <br />
-&#160;&#160;<b>ICAL_WEDNESDAY_WEEKDAY</b>
-, <b>ICAL_THURSDAY_WEEKDAY</b>
-, <b>ICAL_FRIDAY_WEEKDAY</b>
-, <b>ICAL_SATURDAY_WEEKDAY</b>
-, <br />
 &#160;&#160;<b>ICAL_NO_WEEKDAY</b>
 , <b>ICAL_SUNDAY_WEEKDAY</b>
 , <b>ICAL_MONDAY_WEEKDAY</b>
@@ -282,23 +251,22 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_mon
 int&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_rscale_is_supported</b> (void)</td></tr>
 <tr class="separator:a69fc2030e8776dc3184cb88ca4e2dd70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8941770a8f65ece2561aa8786f8575c0"><td class="memItemLeft" align="right" valign="top"><a id="a8941770a8f65ece2561aa8786f8575c0" name="a8941770a8f65ece2561aa8786f8575c0"></a>
-<a class="el" href="struct__icalarray.html">icalarray</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_rscale_supported_calendars</b> (void)</td></tr>
+<a class="el" href="icalarray_8h.html#ad36143942d5ac4709b68fff41615e598">icalarray</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_rscale_supported_calendars</b> (void)</td></tr>
 <tr class="separator:a8941770a8f65ece2561aa8786f8575c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Routines for dealing with recurring time. </p>
 <p >How to use:</p>
 <p >1) Get a rule and a start time from a component</p>
-<div class="fragment"><div class="line"><a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a> rrule;</div>
+<div class="fragment"><div class="line">icalproperty rrule;</div>
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicalrecurrencetype.html">icalrecurrencetype</a> recur;</div>
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> dtstart;</div>
 <div class="line"> </div>
 <div class="line">rrule = icalcomponent_get_first_property(comp,ICAL_RRULE_PROPERTY);</div>
 <div class="line">recur = icalproperty_get_rrule(rrule);</div>
 <div class="line">start = icalproperty_get_dtstart(dtstart);</div>
-<div class="ttc" id="astructicalproperty__impl_html"><div class="ttname"><a href="structicalproperty__impl.html">icalproperty_impl</a></div><div class="ttdef"><b>Definition:</b> icalproperty.c:28</div></div>
-<div class="ttc" id="astructicalrecurrencetype_html"><div class="ttname"><a href="structicalrecurrencetype.html">icalrecurrencetype</a></div><div class="ttdef"><b>Definition:</b> ical.h:1600</div></div>
-<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> ical.h:141</div></div>
+<div class="ttc" id="astructicalrecurrencetype_html"><div class="ttname"><a href="structicalrecurrencetype.html">icalrecurrencetype</a></div><div class="ttdef"><b>Definition:</b> icalrecur.h:144</div></div>
+<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> icaltime.h:97</div></div>
 </div><!-- fragment --><p >Or, just make them up:</p>
 <div class="fragment"><div class="line">recur = <a class="code hl_function" href="icalrecur_8h.html#a0e8ebcf355ba22299f553f8f5e657926">icalrecurrencetype_from_string</a>(<span class="stringliteral">&quot;FREQ=YEARLY;BYDAY=SU,WE&quot;</span>);</div>
 <div class="line">dtstart = <a class="code hl_function" href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a>(<span class="stringliteral">&quot;19970101T123000&quot;</span>)</div>
@@ -665,7 +633,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_rsc
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Encodes the <code>weekday</code> and <code>position</code> into a form, which can be stored to <a class="el" href="structicalrecurrencetype.html#acd409121a8b2e79e58ab445069003478" title="Encoded value.">icalrecurrencetype::by_day</a> array. Use <a class="el" href="icalrecur_8h.html#a96c160e7e6b16e0e369c540f2ee164c7" title="Decodes a day to a weekday.">icalrecurrencetype_day_day_of_week()</a> and <a class="el" href="icalrecur_8h.html#aa730e9ac327064456902076b718400f4" title="Decodes a day to a position of the weekday.">icalrecurrencetype_day_position()</a> to split the encoded value back into the parts. </p><dl class="section since"><dt>Since</dt><dd>3.1 </dd></dl>
+<p >Encodes the <code>weekday</code> and <code>position</code> into a form, which can be stored to <a class="el" href="structicalrecurrencetype.html#abf0eb04e3bb9028e18c9c4c1e0462b9d" title="Encoded value.">icalrecurrencetype::by_day</a> array. Use <a class="el" href="icalrecur_8h.html#a96c160e7e6b16e0e369c540f2ee164c7" title="Decodes a day to a weekday.">icalrecurrencetype_day_day_of_week()</a> and <a class="el" href="icalrecur_8h.html#aa730e9ac327064456902076b718400f4" title="Decodes a day to a position of the weekday.">icalrecurrencetype_day_position()</a> to split the encoded value back into the parts. </p><dl class="section since"><dt>Since</dt><dd>3.1 </dd></dl>
 
 </div>
 </div>
@@ -694,7 +662,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_rsc
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Encodes the <code>month</code> and the <code>is_leap</code> into a form, which can be stored to <a class="el" href="structicalrecurrencetype.html#a1fbb922e27987296768a4ba25b5a4a36" title="Encoded value.">icalrecurrencetype::by_month</a> array. Use <a class="el" href="icalrecur_8h.html#a37565d0a4c56c67bd08b556d58f59b5c">icalrecurrencetype_month_is_leap()</a> and icalrecurrencetype_month_month() to split the encoded value back into the parts </p><dl class="section since"><dt>Since</dt><dd>3.1 </dd></dl>
+<p >Encodes the <code>month</code> and the <code>is_leap</code> into a form, which can be stored to <a class="el" href="structicalrecurrencetype.html#af3f6d789f51c7772879b6c8e3101af9e" title="Encoded value.">icalrecurrencetype::by_month</a> array. Use <a class="el" href="icalrecur_8h.html#a37565d0a4c56c67bd08b556d58f59b5c">icalrecurrencetype_month_is_leap()</a> and icalrecurrencetype_month_month() to split the encoded value back into the parts </p><dl class="section since"><dt>Since</dt><dd>3.1 </dd></dl>
 
 </div>
 </div>
@@ -740,7 +708,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_rsc
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 18 2022 10:19:41 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 25 2022 08:55:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

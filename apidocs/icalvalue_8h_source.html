@@ -89,28 +89,28 @@ $(function() {
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#define ICAL_BOOLEAN_TRUE  1</span></div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#define ICAL_BOOLEAN_FALSE 0</span></div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *icalvalue_new(icalvalue_kind kind);</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *<a class="code hl_function" href="icalvalue_8h.html#ab56b7fc4448d25a22d3d446b45ca31a8">icalvalue_clone</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *value);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>LIBICAL_ICAL_EXPORT icalvalue *<a class="code hl_function" href="icalvalue_8h.html#ab56b7fc4448d25a22d3d446b45ca31a8">icalvalue_clone</a>(<span class="keyword">const</span> icalvalue *value);</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *icalvalue_new_from_string(icalvalue_kind kind, <span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_from_string(icalvalue_kind kind, <span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalvalue_free(<a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *value);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalvalue_free(icalvalue *value);</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> icalvalue_is_valid(<span class="keyword">const</span> <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *value);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> icalvalue_is_valid(<span class="keyword">const</span> icalvalue *value);</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalvalue_as_ical_string(<span class="keyword">const</span> <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *value);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalvalue_as_ical_string(<span class="keyword">const</span> icalvalue *value);</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">char</span> *icalvalue_as_ical_string_r(<span class="keyword">const</span> <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *value);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">char</span> *icalvalue_as_ical_string_r(<span class="keyword">const</span> icalvalue *value);</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_isa(<span class="keyword">const</span> <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *value);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_isa(<span class="keyword">const</span> icalvalue *value);</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> icalvalue_isa_value(<span class="keywordtype">void</span> *);</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>LIBICAL_ICAL_EXPORT icalparameter_xliccomparetype icalvalue_compare(<span class="keyword">const</span> <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *a,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                                                                    <span class="keyword">const</span> <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *b);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>LIBICAL_ICAL_EXPORT icalparameter_xliccomparetype icalvalue_compare(<span class="keyword">const</span> icalvalue *a,</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                                                                    <span class="keyword">const</span> icalvalue *b);</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(<a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *<a class="code hl_function" href="icalvalue_8h.html#a71a024314438b3fa83c2db66e618a09f">icalvalue_new_clone</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a> *value));</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalvalue *<a class="code hl_function" href="icalvalue_8h.html#a71a024314438b3fa83c2db66e618a09f">icalvalue_new_clone</a>(<span class="keyword">const</span> icalvalue *value));</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment">/* Special, non autogenerated value accessors */</span></div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
@@ -134,7 +134,7 @@ $(function() {
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalvalue_kind_to_string(<span class="keyword">const</span> icalvalue_kind kind);</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code hl_function" href="icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a">icalvalue_kind_is_valid</a>(<span class="keyword">const</span> icalvalue_kind kind);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a">   78</a></span>LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code hl_function" href="icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a">icalvalue_kind_is_valid</a>(<span class="keyword">const</span> icalvalue_kind kind);</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">int</span> <a class="code hl_function" href="icalvalue_8h.html#a47037dfa87d634a358c39055c01b9f79">icalvalue_encode_ical_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *szText,</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                                                     <span class="keywordtype">char</span> *szEncText, <span class="keywordtype">int</span> MaxBufferLen);</div>
@@ -151,13 +151,12 @@ $(function() {
 <div class="ttc" id="aicalvalue_8h_html_a71a024314438b3fa83c2db66e618a09f"><div class="ttname"><a href="icalvalue_8h.html#a71a024314438b3fa83c2db66e618a09f">icalvalue_new_clone</a></div><div class="ttdeci">icalvalue * icalvalue_new_clone(const icalvalue *value))</div><div class="ttdoc">Deeply clones an icalvalue.</div><div class="ttdef"><b>Definition:</b> icalvalue.c:160</div></div>
 <div class="ttc" id="aicalvalue_8h_html_ab56b7fc4448d25a22d3d446b45ca31a8"><div class="ttname"><a href="icalvalue_8h.html#ab56b7fc4448d25a22d3d446b45ca31a8">icalvalue_clone</a></div><div class="ttdeci">icalvalue * icalvalue_clone(const icalvalue *value)</div><div class="ttdoc">Deeply clones an icalvalue.</div><div class="ttdef"><b>Definition:</b> icalvalue.c:57</div></div>
 <div class="ttc" id="aicalvalue_8h_html_ad809218d40ebb1e356f00c563e34e3d6"><div class="ttname"><a href="icalvalue_8h.html#ad809218d40ebb1e356f00c563e34e3d6">icalvalue_decode_ical_string</a></div><div class="ttdeci">int icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen)</div><div class="ttdef"><b>Definition:</b> icalvalue.c:1510</div></div>
-<div class="ttc" id="aicalvalue_8h_html_ada00c51fccf5a71ec7e43fb6207b634a"><div class="ttname"><a href="icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a">icalvalue_kind_is_valid</a></div><div class="ttdeci">int icalvalue_kind_is_valid(const icalvalue_kind kind)</div><div class="ttdef"><b>Definition:</b> icalderivedvalue.c:951</div></div>
-<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> ical.h:141</div></div>
-<div class="ttc" id="astructicalvalue__impl_html"><div class="ttname"><a href="structicalvalue__impl.html">icalvalue_impl</a></div><div class="ttdef"><b>Definition:</b> icalvalueimpl.h:19</div></div>
+<div class="ttc" id="aicalvalue_8h_html_ada00c51fccf5a71ec7e43fb6207b634a"><div class="ttname"><a href="icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a">icalvalue_kind_is_valid</a></div><div class="ttdeci">int icalvalue_kind_is_valid(const icalvalue_kind kind)</div></div>
+<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> icaltime.h:97</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 18 2022 10:19:40 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 25 2022 08:55:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

@@ -72,7 +72,7 @@ $(function() {
 <h1><a class="anchor" id="autotoc_md10"></a>
 1 Introduction</h1>
 <p >Libical is an Open Source implementation of the iCalendar protocols and protocol data units. The iCalendar specification describes how calendar clients can communicate with calendar servers so users can store their calendar data and arrange meetings with other users.</p>
-<p >Libical implements <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a>, <a href="https://tools.ietf.org/html/rfc5546">RFC5546</a>, <a href="https://tools.ietf.org/html/rfc7529">RFC7529</a>; the CalDav scheduling extensions in <a href="https://tools.ietf.org/html/rfc6638">RFC6638</a>; the iCalendar extensions in <a href="https://tools.ietf.org/html/rfc7986">RFC7986</a>, <a href="https://tools.ietf.org/html/rfc9073">RFC9073</a>, <a href="https://tools.ietf.org/html/rfc9074">RFC9074</a>; and some of <a href="https://tools.ietf.org/html/rfc6047">RFC6047</a>.</p>
+<p >Libical implements multiple <a class="el" href="index.html#rfcs">RFC calendar standards</a>.</p>
 <p >This documentation assumes that you are familiar with the iCalendar standards RFC5545 and RFC5546. These specifications are available at the <a href="https://tools.ietf.org/">IETF Tools</a> website:</p>
 <h2><a class="anchor" id="autotoc_md11"></a>
 1.1 The libical project</h2>
@@ -121,7 +121,7 @@ $(function() {
 <p >Libical is an object-based, data-oriented library. Nearly all of the routines in the library are associated with an opaque data types and perform some operation on that data type. Although the library does not actually have classes, we will use those terms since the behavior of these associations of data and routines is very similar to a class.</p>
 <h3><a class="anchor" id="autotoc_md17"></a>
 3.1.1 Properties</h3>
-<p >Properties are represented with the <code>icalproperty</code> class and its many "derived" classes with one "derived" class per property type in <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a>. Again, there is no actual inheritance relations, but there are clusters of routines that make this term useful. A property is a container for a single value and a set of parameters.</p>
+<p >Properties are represented with the <code>icalproperty</code> class and its many "derived" classes with one "derived" class per property type in [RFC5545][]. Again, there is no actual inheritance relations, but there are clusters of routines that make this term useful. A property is a container for a single value and a set of parameters.</p>
 <h3><a class="anchor" id="autotoc_md18"></a>
 3.1.2 Components</h3>
 <p >In libical, components are represented with the <code>icalcomponent</code> class. <code>icalcomponent</code> is a container for a set of other components and properties.</p>
@@ -139,7 +139,7 @@ $(function() {
 <p >Libical is strongly typed, so every component, property, parameter, and value type has an enumeration, and some have an associated structure or union.</p>
 <h3><a class="anchor" id="autotoc_md23"></a>
 3.2.2 The parser</h3>
-<p >The libical parser offers a variety of ways to convert <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> text into a libical internal component structure. The parser can parse blocks of text as a string, or it can parse line-by-line.</p>
+<p >The libical parser offers a variety of ways to convert [RFC5545][] text into a libical internal component structure. The parser can parse blocks of text as a string, or it can parse line-by-line.</p>
 <h3><a class="anchor" id="autotoc_md24"></a>
 3.2.3 Error objects</h3>
 <p >Libical has a substantial error reporting system for both programming errors and component usage errors.</p>
@@ -154,8 +154,8 @@ $(function() {
 <p >Libical has been designed to follow the standards as closely as possible, so that the key objects in the standards are also key objects in the library. However, there are a few areas where the specifications are (arguably) irregular, and following them exactly would result in an unfriendly interface. These deviations make libical easier to use by maintaining a self-similar interface.</p>
 <h2><a class="anchor" id="autotoc_md28"></a>
 4.1 Pseudo Components</h2>
-<p >Libical defines components for groups of properties that look and act like components, but are not defined as components in the specification. <code>XDAYLIGHT</code> and <code>XSTANDARD</code> are notable examples. These pseudo components group properties within the <code>VTIMEZONE</code> components. For instance, the timezone properties associated with daylight savings time starts with <code>BEGIN:DAYLIGHT</code> and ends with <code>END:DAYLIGHT</code>, just like other components, but is not defined as a component in <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> (see <a href="https://tools.ietf.org/html/rfc5545#section-3.6.5&gt;">section 3.6.5</a>) In libical, this grouping is represented by the <code>XDAYLIGHT</code> component. Standard iCal components all start with the letter "V," while pseudo components start with "X."</p>
-<p >There are also pseudo components that are conceptually derived classes of <code>VALARM</code>. <a href="https://tools.ietf.org/html/rfc5546">RFC5546</a> defines what properties may be included in each component, and for <code>VALARM</code>, the set of properties it may have depends on the value of the <code>ACTION</code> property.</p>
+<p >Libical defines components for groups of properties that look and act like components, but are not defined as components in the specification. <code>XDAYLIGHT</code> and <code>XSTANDARD</code> are notable examples. These pseudo components group properties within the <code>VTIMEZONE</code> components. For instance, the timezone properties associated with daylight savings time starts with <code>BEGIN:DAYLIGHT</code> and ends with <code>END:DAYLIGHT</code>, just like other components, but is not defined as a component in [RFC5545][] (see <a href="https://tools.ietf.org/html/rfc5545#section-3.6.5&gt;">section 3.6.5</a>) In libical, this grouping is represented by the <code>XDAYLIGHT</code> component. Standard iCal components all start with the letter "V," while pseudo components start with "X."</p>
+<p >There are also pseudo components that are conceptually derived classes of <code>VALARM</code>. [RFC5546][] defines what properties may be included in each component, and for <code>VALARM</code>, the set of properties it may have depends on the value of the <code>ACTION</code> property.</p>
 <p >For instance, if a <code>VALARM</code> component has an <code>ACTION</code> property with the value of <code>AUDIO</code>, the component must also have an <code>ATTACH</code> property. However, if the <code>ACTION</code> value is <code>DISPLAY</code>, the component must have a <code>DESCRIPTION</code> property.</p>
 <p >To handle these various, complex restrictions, libical has pseudo components for each type of alarm: <code>XAUDIOALARM</code>, <code>XDISPLAYALARM</code>, <code>XEMAILALARM</code> and <code>XPROCEDUREALARM</code>.</p>
 <h2><a class="anchor" id="autotoc_md29"></a>
@@ -169,7 +169,7 @@ $(function() {
 </div><!-- fragment --><p >becomes in libical's internal representation</p>
 <div class="fragment"><div class="line">CATEGORIES: work</div>
 <div class="line">CATEGORIES: home</div>
-</div><!-- fragment --><p >Oddly, <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> allows some multi-valued properties (like <code>FREEBUSY</code>) to exist as both a multi-values property and as multiple single value properties, while others (like <code>CATEGORIES</code>) can only exist as single multi-valued properties. This makes the internal representation for <code>CATEGORIES</code> illegal. However when you convert a component to a string, the library will collect all of the <code>CATEGORIES</code> properties into one.</p>
+</div><!-- fragment --><p >Oddly, [RFC5545][] allows some multi-valued properties (like <code>FREEBUSY</code>) to exist as both a multi-values property and as multiple single value properties, while others (like <code>CATEGORIES</code>) can only exist as single multi-valued properties. This makes the internal representation for <code>CATEGORIES</code> illegal. However when you convert a component to a string, the library will collect all of the <code>CATEGORIES</code> properties into one.</p>
 <h1><a class="anchor" id="autotoc_md31"></a>
 5 Using libical</h1>
 <h2><a class="anchor" id="autotoc_md32"></a>
@@ -184,8 +184,8 @@ $(function() {
 5.1.1 Constructor Interfaces</h3>
 <p >Using constructor interfaces, you create each of the objects separately and then assemble them in to components:</p>
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *event;</div>
-<div class="line"><a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a> *prop;</div>
-<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a> *param;</div>
+<div class="line">icalproperty *prop;</div>
+<div class="line">icalparameter *param;</div>
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> atime;</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// create new VEVENT component</span></div>
@@ -206,9 +206,7 @@ $(function() {
 <div class="line">icalcomponent_add_property(event, prop);</div>
 <div class="ttc" id="aicalcomponent_8h_html_a727a14d0c14c66b4dbf1b58b2cb6ac2e"><div class="ttname"><a href="icalcomponent_8h.html#a727a14d0c14c66b4dbf1b58b2cb6ac2e">icalcomponent_new</a></div><div class="ttdeci">icalcomponent * icalcomponent_new(icalcomponent_kind kind)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> icalcomponent.c:103</div></div>
 <div class="ttc" id="astructicalcomponent__impl_html"><div class="ttname"><a href="structicalcomponent__impl.html">icalcomponent_impl</a></div><div class="ttdef"><b>Definition:</b> icalcomponent.c:28</div></div>
-<div class="ttc" id="astructicalparameter__impl_html"><div class="ttname"><a href="structicalparameter__impl.html">icalparameter_impl</a></div><div class="ttdef"><b>Definition:</b> icalparameterimpl.h:21</div></div>
-<div class="ttc" id="astructicalproperty__impl_html"><div class="ttname"><a href="structicalproperty__impl.html">icalproperty_impl</a></div><div class="ttdef"><b>Definition:</b> icalproperty.c:28</div></div>
-<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> ical.h:141</div></div>
+<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition:</b> icaltime.h:97</div></div>
 </div><!-- fragment --><p >Notice that libical uses a semi-object-oriented style of interface. Most things you work with are objects, that are instantiated with a constructor that has "new" in the name. Also note that, other than the object reference, most structure data is passed in to libical routines by value. Libical has some complex but very regular memory handling rules. These are detailed in section Memory Management.</p>
 <p >If any of the constructors fail, they will return 0. If you try to insert 0 into a property or component, or use a zero-valued object reference, libical will either silently ignore the error or will abort with an error message. This behavior is controlled by a compile time flag (<code>ICAL_ERRORS_ARE_FATAL</code>), and will abort by default.</p>
 <h3><a class="anchor" id="autotoc_md34"></a>
@@ -247,7 +245,7 @@ $(function() {
 <p ><em>Be sure to terminate every list with a <code>NULL</code> (or a *<code>(void 0)</code></em>, or your code will crash, if you are lucky*. The reason you can't use 0 itself is that depending on what platform you are on, <code>sizeof(int) ≠ sizeof(void*)</code>.</p>
 <h3><a class="anchor" id="autotoc_md35"></a>
 5.1.3 Parsing Text Files</h3>
-<p >The final way to create components will probably be the most common; you can create components from <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> compliant text. If you have the string in memory, use</p>
+<p >The final way to create components will probably be the most common; you can create components from [RFC5545][] compliant text. If you have the string in memory, use</p>
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* <a class="code hl_function" href="icalparser_8h.html#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a>(<span class="keywordtype">char</span>* str);</div>
 <div class="ttc" id="aicalparser_8h_html_a5e1268344c61e44a0ec18085688f07fd"><div class="ttname"><a href="icalparser_8h.html#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a></div><div class="ttdeci">icalcomponent * icalparser_parse_string(const char *str)</div><div class="ttdoc">Parses a string and returns the parsed icalcomponent.</div><div class="ttdef"><b>Definition:</b> icalparser.c:1336</div></div>
 </div><!-- fragment --><p >If the string contains only one component, the parser will return the component in libical form. If the string contains multiple components, the multiple components will be returned as the children of an <code>ICAL_XROOT_COMPONENT</code> component.</p>
@@ -410,7 +408,7 @@ $(function() {
 <div class="line"> </div>
 <div class="line"><a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* icalcompiter_deref(</div>
 <div class="line">    <a class="code hl_struct" href="structicalcompiter.html">icalcompiter</a>* i);</div>
-<div class="ttc" id="astructicalcompiter_html"><div class="ttname"><a href="structicalcompiter.html">icalcompiter</a></div><div class="ttdef"><b>Definition:</b> ical.h:5061</div></div>
+<div class="ttc" id="astructicalcompiter_html"><div class="ttname"><a href="structicalcompiter.html">icalcompiter</a></div><div class="ttdef"><b>Definition:</b> icalcomponent.h:29</div></div>
 </div><!-- fragment --><p >The <code>*_begin_*()</code> and <code>*_end_*()</code> routines return a new iterator that points to the beginning and end of the list of subcomponent for the given component, and the kind argument works like the kind argument for internal iterators.</p>
 <p >After creating an iterators, use <code>*_next()</code> and <code>*_prior()</code> to step forward and backward through the list and get the component that the iterator points to, and use <code>_deref()</code> to return the component that the iterator points to without moving the iterator. All routines will return 0 when they move to point off the end of the list.</p>
 <p >Here is an example of a loop using these routines:</p>
@@ -443,36 +441,36 @@ $(function() {
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md41"></a>
 5.2.5 Working with properties and parameters</h3>
 <p >Finding, iterating and removing properties works the same as it does for components, using the property-specific or parameter-specific interfaces:</p>
-<div class="fragment"><div class="line"><a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* icalcomponent_get_first_property(</div>
+<div class="fragment"><div class="line">icalproperty* icalcomponent_get_first_property(</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* component,</div>
 <div class="line">    icalproperty_kind kind);</div>
 <div class="line"> </div>
-<div class="line"><a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* icalcomponent_get_next_property(</div>
+<div class="line">icalproperty* icalcomponent_get_next_property(</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* component,</div>
 <div class="line">    icalproperty_kind kind);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> icalcomponent_add_property(</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* component,</div>
-<div class="line">    <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* property);</div>
+<div class="line">    icalproperty* property);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> icalcomponent_remove_property(</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* component,</div>
-<div class="line">    <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* property);</div>
+<div class="line">    icalproperty* property);</div>
 </div><!-- fragment --><p >For parameters:</p>
-<div class="fragment"><div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a>* icalproperty_get_first_parameter(</div>
-<div class="line">     <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* prop,</div>
+<div class="fragment"><div class="line">icalparameter* icalproperty_get_first_parameter(</div>
+<div class="line">     icalproperty* prop,</div>
 <div class="line">     icalparameter_kind kind);</div>
 <div class="line"> </div>
-<div class="line"><a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a>* icalproperty_get_next_parameter(</div>
-<div class="line">     <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* prop,</div>
+<div class="line">icalparameter* icalproperty_get_next_parameter(</div>
+<div class="line">     icalproperty* prop,</div>
 <div class="line">     icalparameter_kind kind);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> icalproperty_add_parameter(</div>
-<div class="line">     <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* prop,</div>
-<div class="line">     <a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a>* parameter);</div>
+<div class="line">     icalproperty* prop,</div>
+<div class="line">     icalparameter* parameter);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="icalproperty_8h.html#a68baed35b3b1af4ababf2c62b2ced68d">icalproperty_remove_parameter_by_kind</a>(</div>
-<div class="line">     <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* prop,</div>
+<div class="line">     icalproperty* prop,</div>
 <div class="line">     icalparameter_kind kind);</div>
 <div class="ttc" id="aicalproperty_8h_html_a68baed35b3b1af4ababf2c62b2ced68d"><div class="ttname"><a href="icalproperty_8h.html#a68baed35b3b1af4ababf2c62b2ced68d">icalproperty_remove_parameter_by_kind</a></div><div class="ttdeci">void icalproperty_remove_parameter_by_kind(icalproperty *prop, icalparameter_kind kind)</div><div class="ttdoc">Removes all parameters with the specified kind.</div><div class="ttdef"><b>Definition:</b> icalproperty.c:624</div></div>
 </div><!-- fragment --><p >Note that since there should be only one parameter of each type in a property, you will rarely need to use <code>icalparameter_get_next_parameter()</code>.</p>
@@ -482,26 +480,25 @@ $(function() {
 <p >The most common way to work with values to is to manipulate them from the properties that contain them. This involves fewer routine calls and intermediate variables than working with them independently, and it is type-safe.</p>
 <p >For each property, there are a <code>_get_()</code> and a <code>_set_()</code> routine that accesses the internal value. For instanace, for the <code>UID</code> property, the routines are:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> icalproperty_set_uid(</div>
-<div class="line">    <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* prop,</div>
+<div class="line">    icalproperty* prop,</div>
 <div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* v);</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* icalproperty_get_uid(</div>
-<div class="line">    <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* prop);</div>
+<div class="line">    icalproperty* prop);</div>
 </div><!-- fragment --><p >For multi-valued properties, like <code>ATTACH</code>, the value type is usually a struct or union that holds both possible types.</p>
 <p >If you want to work with the underlying value object, you can get and set it with:</p>
-<div class="fragment"><div class="line"><a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a>* icalproperty_get_value(</div>
-<div class="line">    <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* prop);</div>
+<div class="fragment"><div class="line">icalvalue* icalproperty_get_value(</div>
+<div class="line">    icalproperty* prop);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> icalproperty_set_value(</div>
-<div class="line">    <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* prop,</div>
-<div class="line">    <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a>* value);</div>
-<div class="ttc" id="astructicalvalue__impl_html"><div class="ttname"><a href="structicalvalue__impl.html">icalvalue_impl</a></div><div class="ttdef"><b>Definition:</b> icalvalueimpl.h:19</div></div>
+<div class="line">    icalproperty* prop,</div>
+<div class="line">    icalvalue* value);</div>
 </div><!-- fragment --><p ><code>icalproperty_get_value()</code> will return a reference that you can manipulate with other icalvalue routines. Most of the time, you will have to know what the type of the value is. For instance, if you know that the value is a <code>DATETIME</code> type, you can manipulate it with:</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> icalvalue_get_datetime(</div>
-<div class="line">    <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a>* value);</div>
+<div class="line">    icalvalue* value);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> icalvalue_set_datetime(</div>
-<div class="line">    <a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a>* value,</div>
+<div class="line">    icalvalue* value,</div>
 <div class="line">    <span class="keyword">struct</span> <a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> v);</div>
 </div><!-- fragment --><p >When working with an extension property or value (and <code>X-PROPERTY</code> or a property that has the parameter <code>VALUE=x-name</code>), the value type is always a string. To get and set the value, use:</p>
 <div class="fragment"><div class="line">void icalproperty_set_x(</div>
@@ -512,28 +509,28 @@ $(function() {
 <div class="line">    icalproperty* prop);</div>
 </div><!-- fragment --><p >All X properties have the type of <code>ICAL_X_PROPERTY</code>, so you will need these routines to get and set the name of the property:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">char</span>* icalproperty_get_x_name(</div>
-<div class="line">    <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* prop)</div>
+<div class="line">    icalproperty* prop)</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> icalproperty_set_x_name(</div>
-<div class="line">    <a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* prop,</div>
+<div class="line">    icalproperty* prop,</div>
 <div class="line">    <span class="keywordtype">char</span>* name);</div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md43"></a>
 5.2.7 Checking Component Validity</h3>
-<p ><a href="https://tools.ietf.org/html/rfc5546">RFC5546</a> defines rules for what properties must exist in a component to be used for transferring scheduling data. Most of these rules relate to the existence of properties relative to the <code>METHOD</code> property, which declares what operation a remote receiver should use to process a component. For instance, if the <code>METHOD</code> is <code>REQUEST</code> and the component is a <code>VEVENT</code>, the sender is probably asking the receiver to join in a meeting. In this case, RFC5546 says that the component must specify a start time (<code>DTSTART</code>) and list the receiver as an attendee (<code>ATTENDEE</code>).</p>
+<p >[RFC5546][] defines rules for what properties must exist in a component to be used for transferring scheduling data. Most of these rules relate to the existence of properties relative to the <code>METHOD</code> property, which declares what operation a remote receiver should use to process a component. For instance, if the <code>METHOD</code> is <code>REQUEST</code> and the component is a <code>VEVENT</code>, the sender is probably asking the receiver to join in a meeting. In this case, RFC5546 says that the component must specify a start time (<code>DTSTART</code>) and list the receiver as an attendee (<code>ATTENDEE</code>).</p>
 <p >Libical can check these restrictions with the routine:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57">icalrestriction_check</a>(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* comp);</div>
-<div class="ttc" id="aicalrestriction_8h_html_a36eeedfdce2344da44fd09d9e3f18b57"><div class="ttname"><a href="icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57">icalrestriction_check</a></div><div class="ttdeci">int icalrestriction_check(icalcomponent *comp)</div><div class="ttdoc">Checks if a given VCALENDAR meets all the restrictions imposed by the standard.</div><div class="ttdef"><b>Definition:</b> icalrestriction.c:418</div></div>
+<div class="ttc" id="aicalrestriction_8h_html_a36eeedfdce2344da44fd09d9e3f18b57"><div class="ttname"><a href="icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57">icalrestriction_check</a></div><div class="ttdeci">int icalrestriction_check(icalcomponent *comp)</div><div class="ttdoc">Checks if a given VCALENDAR meets all the restrictions imposed by the standard.</div></div>
 </div><!-- fragment --><p >This routine returns 0 if the component does not pass RFC5546 restrictions, or if the component is malformed. The component you pass in must be a <code>VCALENDAR</code>, with one or more children, like the examples in RFC5546.</p>
 <p >When this routine runs, it will insert new properties into the component to indicate any errors it finds. See section 6.5.3, <code>X-LIC-ERROR</code> for more information about these error properties.</p>
 <p >5.2.8 Converting Components to Text</p>
 <p >To create an RFC5545 compliant text representation of an object, use one of the <code>*_as_ical_string()</code> routines:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">char</span>* icalcomponent_as_ical_string(<a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* component)</div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">char</span>* icalproperty_as_ical_string(<a class="code hl_struct" href="structicalproperty__impl.html">icalproperty</a>* property)</div>
+<div class="line"><span class="keywordtype">char</span>* icalproperty_as_ical_string(icalproperty* property)</div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">char</span>* <a class="code hl_function" href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45">icalparameter_as_ical_string</a>(<a class="code hl_struct" href="structicalparameter__impl.html">icalparameter</a>* parameter)</div>
+<div class="line"><span class="keywordtype">char</span>* <a class="code hl_function" href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45">icalparameter_as_ical_string</a>(icalparameter* parameter)</div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">char</span>* icalvalue_as_ical_string(<a class="code hl_struct" href="structicalvalue__impl.html">icalvalue</a>* value)</div>
+<div class="line"><span class="keywordtype">char</span>* icalvalue_as_ical_string(icalvalue* value)</div>
 <div class="ttc" id="aicalparameter_8h_html_ab8222d0c7236fee6e6ae47a79955db45"><div class="ttname"><a href="icalparameter_8h.html#ab8222d0c7236fee6e6ae47a79955db45">icalparameter_as_ical_string</a></div><div class="ttdeci">char * icalparameter_as_ical_string(icalparameter *parameter)</div><div class="ttdoc">Converts icalparameter into a string representation.</div><div class="ttdef"><b>Definition:</b> icalparameter.c:164</div></div>
 </div><!-- fragment --><p >In most cases, you will only use <code>icalcomponent_as_ical_string()</code>, since it will cascade and convert all of the parameters, properties and values that are attached to the root component.</p>
 <p >Remember that the string returned by these routines is owned by the library, and will eventually be re-written. You should copy it if you want to preserve it.</p>
@@ -552,9 +549,9 @@ $(function() {
 <div class="line">  <span class="keywordtype">int</span> is_utc; <span class="comment">/* 1-&gt; time is in UTC timezone */</span></div>
 <div class="line">  <span class="keywordtype">int</span> <a class="code hl_variable" href="structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96">is_date</a>; <span class="comment">/* 1 -&gt; interpret this as date. */</span></div>
 <div class="line">};</div>
-<div class="ttc" id="astructicaltimetype_html_a48d5ac850b2675cd80bbcefe00d7ae96"><div class="ttname"><a href="structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96">icaltimetype::is_date</a></div><div class="ttdeci">int is_date</div><div class="ttdef"><b>Definition:</b> ical.h:149</div></div>
-<div class="ttc" id="astructicaltimetype_html_a4f64cd87ff0d4aba7bf318485b7374b8"><div class="ttname"><a href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">icaltimetype::year</a></div><div class="ttdeci">int year</div><div class="ttdef"><b>Definition:</b> ical.h:142</div></div>
-<div class="ttc" id="astructicaltimetype_html_abfb15dfde907211cafd3cd6cafa5531d"><div class="ttname"><a href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">icaltimetype::month</a></div><div class="ttdeci">int month</div><div class="ttdef"><b>Definition:</b> ical.h:143</div></div>
+<div class="ttc" id="astructicaltimetype_html_a48d5ac850b2675cd80bbcefe00d7ae96"><div class="ttname"><a href="structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96">icaltimetype::is_date</a></div><div class="ttdeci">int is_date</div><div class="ttdef"><b>Definition:</b> icaltime.h:105</div></div>
+<div class="ttc" id="astructicaltimetype_html_a4f64cd87ff0d4aba7bf318485b7374b8"><div class="ttname"><a href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">icaltimetype::year</a></div><div class="ttdeci">int year</div><div class="ttdef"><b>Definition:</b> icaltime.h:98</div></div>
+<div class="ttc" id="astructicaltimetype_html_abfb15dfde907211cafd3cd6cafa5531d"><div class="ttname"><a href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">icaltimetype::month</a></div><div class="ttdeci">int month</div><div class="ttdef"><b>Definition:</b> icaltime.h:99</div></div>
 </div><!-- fragment --><p >The <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code>, <code>minute</code> and <code>second</code> fields hold the broken-out time values. The <code>is_utc</code> field distinguishes between times in UTC and a local time zone. The <code>is_date</code> field indicates if the time should be interpreted only as a date. If it is a date, the hour, minute and second fields are assumed to be zero, regardless of their actual values.</p>
 <h3><a class="anchor" id="autotoc_md46"></a>
 5.3.2 Creating time structures</h3>
@@ -565,14 +562,14 @@ $(function() {
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> <a class="code hl_function" href="icaltime_8h.html#a86a8cb717a14ef07e75060e22711d401">icaltime_from_timet_with_zone</a>(</div>
 <div class="line">    icaltime_t v,</div>
 <div class="line">    int <a class="code hl_variable" href="structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96">is_date</a>,</div>
-<div class="line">    <a class="code hl_struct" href="struct__icaltimezone.html">icaltimezone</a>* <a class="code hl_variable" href="structicaltimetype.html#a541a0062b924c58de060fa49d7f37afe">zone</a>);</div>
+<div class="line">    <a class="code hl_struct" href="struct__icaltimezone.html">icaltimezone</a>* <a class="code hl_variable" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">zone</a>);</div>
 <div class="ttc" id="aicaltime_8h_html_a1b66b9f52a9823b95e4cd33f9dd9b8e5"><div class="ttname"><a href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a></div><div class="ttdeci">struct icaltimetype icaltime_from_string(const char *str)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> icaltime.c:330</div></div>
 <div class="ttc" id="aicaltime_8h_html_a86a8cb717a14ef07e75060e22711d401"><div class="ttname"><a href="icaltime_8h.html#a86a8cb717a14ef07e75060e22711d401">icaltime_from_timet_with_zone</a></div><div class="ttdeci">struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_date, const icaltimezone *zone)</div><div class="ttdoc">Constructor.</div></div>
 <div class="ttc" id="astruct__icaltimezone_html"><div class="ttname"><a href="struct__icaltimezone.html">_icaltimezone</a></div><div class="ttdef"><b>Definition:</b> icaltimezoneimpl.h:15</div></div>
-<div class="ttc" id="astructicaltimetype_html_a541a0062b924c58de060fa49d7f37afe"><div class="ttname"><a href="structicaltimetype.html#a541a0062b924c58de060fa49d7f37afe">icaltimetype::zone</a></div><div class="ttdeci">const icaltimezone * zone</div><div class="ttdef"><b>Definition:</b> ical.h:153</div></div>
+<div class="ttc" id="astructicaltimetype_html_aa60ce5ca11223d8d34702962fc7ac57c"><div class="ttname"><a href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">icaltimetype::zone</a></div><div class="ttdeci">const icaltimezone * zone</div><div class="ttdef"><b>Definition:</b> icaltime.h:109</div></div>
 </div><!-- fragment --><p ><code><a class="el" href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5" title="Constructor.">icaltime_from_string()</a></code> takes any RFC5545 compliant time string:</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> tt = <a class="code hl_function" href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a>(<span class="stringliteral">&quot;19970101T103000&quot;</span>);</div>
-</div><!-- fragment --><p ><code><a class="el" href="icaltime_8h.html#a86a8cb717a14ef07e75060e22711d401" title="Constructor.">icaltime_from_timet_with_zone()</a></code> takes a <code>icaltime_t</code> value, representing seconds past the POSIX epoch, a flag to indicate if the time is a date, and a time zone. Dates have an identical structure to a time, but the time portion (hours, minutes and seconds) is always 00:00:00. Dates act differently in sorting and comparison, and they have a different string representation in <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a>.</p>
+</div><!-- fragment --><p ><code><a class="el" href="icaltime_8h.html#a86a8cb717a14ef07e75060e22711d401" title="Constructor.">icaltime_from_timet_with_zone()</a></code> takes a <code>icaltime_t</code> value, representing seconds past the POSIX epoch, a flag to indicate if the time is a date, and a time zone. Dates have an identical structure to a time, but the time portion (hours, minutes and seconds) is always 00:00:00. Dates act differently in sorting and comparison, and they have a different string representation in [RFC5545][].</p>
 <h3><a class="anchor" id="autotoc_md47"></a>
 5.3.3 Time manipulating routines</h3>
 <p >The <code>null</code> time value is used to indicate that the data in the structure is not a valid time.</p>
@@ -624,7 +621,7 @@ $(function() {
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> <a class="code hl_function" href="icaltime_8h.html#a86a8cb717a14ef07e75060e22711d401">icaltime_from_timet_with_zone</a>(</div>
 <div class="line">    icaltime_t v,</div>
 <div class="line">    int <a class="code hl_variable" href="structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96">is_date</a>,</div>
-<div class="line">    <a class="code hl_struct" href="struct__icaltimezone.html">icaltimezone</a>* <a class="code hl_variable" href="structicaltimetype.html#a541a0062b924c58de060fa49d7f37afe">zone</a>);</div>
+<div class="line">    <a class="code hl_struct" href="struct__icaltimezone.html">icaltimezone</a>* <a class="code hl_variable" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">zone</a>);</div>
 <div class="line"> </div>
 <div class="line">icaltime_t <a class="code hl_function" href="icaltime_8h.html#a7b39742d0f786f41df391c62ee56ec10">icaltime_as_timet</a>(</div>
 <div class="line">    <span class="keyword">struct</span> <a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a>);</div>
@@ -670,14 +667,14 @@ $(function() {
 <div class="line"><span class="keywordtype">void</span> icaldirset_mark(</div>
 <div class="line">    <a class="code hl_struct" href="structicaldirset__impl.html">icaldirset</a>* store);</div>
 <div class="line"> </div>
-<div class="line">icalerrorenum icaldirset_commit(</div>
+<div class="line"><a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icaldirset_commit(</div>
 <div class="line">    <a class="code hl_struct" href="structicaldirset__impl.html">icaldirset</a>* store);</div>
 <div class="line"> </div>
-<div class="line">icalerrorenum <a class="code hl_function" href="icaldirset_8h.html#a123ff2d1b0887caafc027936bc9b921b">icaldirset_add_component</a>(</div>
+<div class="line"><a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> <a class="code hl_function" href="icaldirset_8h.html#a123ff2d1b0887caafc027936bc9b921b">icaldirset_add_component</a>(</div>
 <div class="line">    <a class="code hl_struct" href="structicaldirset__impl.html">icaldirset</a>* store,</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* comp);</div>
 <div class="line"> </div>
-<div class="line">icalerrorenum <a class="code hl_function" href="icaldirset_8h.html#ae3b06ab0380ffb7c0e4b7ce9251931ad">icaldirset_remove_component</a>(</div>
+<div class="line"><a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> <a class="code hl_function" href="icaldirset_8h.html#ae3b06ab0380ffb7c0e4b7ce9251931ad">icaldirset_remove_component</a>(</div>
 <div class="line">    <a class="code hl_struct" href="structicaldirset__impl.html">icaldirset</a>* store,</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* comp);</div>
 <div class="line"> </div>
@@ -685,7 +682,7 @@ $(function() {
 <div class="line">    <a class="code hl_struct" href="structicaldirset__impl.html">icaldirset</a>* store,</div>
 <div class="line">    icalcomponent_kind kind);</div>
 <div class="line"> </div>
-<div class="line">icalerrorenum icaldirset_select(</div>
+<div class="line"><a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icaldirset_select(</div>
 <div class="line">    <a class="code hl_struct" href="structicaldirset__impl.html">icaldirset</a>* store,</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* gauge);</div>
 <div class="line"> </div>
@@ -704,7 +701,7 @@ $(function() {
 <div class="line">    <a class="code hl_struct" href="structicaldirset__impl.html">icaldirset</a>* set,</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *c);</div>
 <div class="line"> </div>
-<div class="line">icalerrorenum icaldirset_modify(</div>
+<div class="line"><a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icaldirset_modify(</div>
 <div class="line">    <a class="code hl_struct" href="structicaldirset__impl.html">icaldirset</a>* store,</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *oldc,</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a> *newc);</div>
@@ -719,6 +716,7 @@ $(function() {
 <div class="line">    <a class="code hl_struct" href="structicaldirset__impl.html">icaldirset</a>* store);</div>
 <div class="ttc" id="aicaldirset_8h_html_a123ff2d1b0887caafc027936bc9b921b"><div class="ttname"><a href="icaldirset_8h.html#a123ff2d1b0887caafc027936bc9b921b">icaldirset_add_component</a></div><div class="ttdeci">icalerrorenum icaldirset_add_component(icalset *store, icalcomponent *comp)</div><div class="ttdef"><b>Definition:</b> icaldirset.c:288</div></div>
 <div class="ttc" id="aicaldirset_8h_html_ae3b06ab0380ffb7c0e4b7ce9251931ad"><div class="ttname"><a href="icaldirset_8h.html#ae3b06ab0380ffb7c0e4b7ce9251931ad">icaldirset_remove_component</a></div><div class="ttdeci">icalerrorenum icaldirset_remove_component(icalset *store, icalcomponent *comp)</div><div class="ttdef"><b>Definition:</b> icaldirset.c:375</div></div>
+<div class="ttc" id="aicalerror_8h_html_a601c122fcea522513b1b7732fa23e833"><div class="ttname"><a href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a></div><div class="ttdeci">icalerrorenum</div><div class="ttdoc">Represents the different types of errors that can be triggered in libical.</div><div class="ttdef"><b>Definition:</b> icalerror.h:67</div></div>
 <div class="ttc" id="astructicaldirset__impl_html"><div class="ttname"><a href="structicaldirset__impl.html">icaldirset_impl</a></div><div class="ttdef"><b>Definition:</b> icaldirsetimpl.h:22</div></div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md49"></a>
 5.4.1 Creating a new set</h3>
@@ -730,7 +728,7 @@ $(function() {
 <div class="line"><a class="code hl_struct" href="structicalset__impl.html">icalset</a>* icalset_new_heap(<span class="keywordtype">void</span>);</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_struct" href="structicalset__impl.html">icalset</a>* icalset_new_mysql(<span class="keyword">const</span> <span class="keywordtype">char</span>* path);</div>
-<div class="ttc" id="astructicalset__impl_html"><div class="ttname"><a href="structicalset__impl.html">icalset_impl</a></div><div class="ttdef"><b>Definition:</b> icalss.h:78</div></div>
+<div class="ttc" id="astructicalset__impl_html"><div class="ttname"><a href="structicalset__impl.html">icalset_impl</a></div><div class="ttdef"><b>Definition:</b> icalset.h:52</div></div>
 </div><!-- fragment --><p >You can also create a new set based on the derived class, For instance, with icalfileset:</p>
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structicalfileset__impl.html">icalfileset</a>* icalfileset_new(</div>
 <div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* path);</div>
@@ -746,13 +744,13 @@ $(function() {
 <h3><a class="anchor" id="autotoc_md50"></a>
 5.4.2 Adding, Finding and Removing Components</h3>
 <p >To add components to a set, use:</p>
-<div class="fragment"><div class="line">icalerrorenum icalfileset_add_component(</div>
+<div class="fragment"><div class="line"><a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_add_component(</div>
 <div class="line">    <a class="code hl_struct" href="structicalfileset__impl.html">icalfileset</a>* cluster,</div>
 <div class="line">    <a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* child);</div>
 </div><!-- fragment --><p >The fileset keeps an in-memory copy of the components, and this set must be written back to the file occasionally. There are two routines to manage this:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> icalfileset_mark(<a class="code hl_struct" href="structicalfileset__impl.html">icalfileset</a>* cluster);</div>
 <div class="line"> </div>
-<div class="line">icalerrorenum icalfileset_commit(<a class="code hl_struct" href="structicalfileset__impl.html">icalfileset</a>* cluster);</div>
+<div class="line"><a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_commit(<a class="code hl_struct" href="structicalfileset__impl.html">icalfileset</a>* cluster);</div>
 </div><!-- fragment --><p ><code>icalfileset_mark()</code> indicates that the in-memory components have changed. Calling the <code>_add_component()</code> routine will call <code>_mark()</code> automatically, but you may need to call it yourself if you have made a change to an existing component. The <code>_commit()</code> routine writes the data base to disk, but only if it is marked. The <code>_commit()</code> routine is called automatically when the icalfileset is freed.</p>
 <p >To iterate through the components in a set, use:</p>
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structicalcomponent__impl.html">icalcomponent</a>* icalfileset_get_first_component(<a class="code hl_struct" href="structicalfileset__impl.html">icalfileset</a>* cluster);</div>
@@ -764,7 +762,7 @@ $(function() {
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structicalgauge__impl.html">icalgauge</a>* icalgauge_new_from_sql(<span class="keyword">const</span> <span class="keywordtype">char</span>* sql);</div>
 <div class="ttc" id="astructicalgauge__impl_html"><div class="ttname"><a href="structicalgauge__impl.html">icalgauge_impl</a></div><div class="ttdef"><b>Definition:</b> icalgaugeimpl.h:47</div></div>
 </div><!-- fragment --><p >Then, you can add the gauge to the set with :</p>
-<div class="fragment"><div class="line">icalerrorenum icalfileset_select(</div>
+<div class="fragment"><div class="line"><a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_select(</div>
 <div class="line">    <a class="code hl_struct" href="structicalfileset__impl.html">icalfileset</a>* store,</div>
 <div class="line">    <a class="code hl_struct" href="structicalgauge__impl.html">icalgauge</a>* gauge);</div>
 </div><!-- fragment --><p >Here is an example that puts all of these routines together:</p>
@@ -911,13 +909,13 @@ comment string "HACK."</p>
 <div class="line">    <span class="keywordtype">int</span> second;</div>
 <div class="line">    <span class="keywordtype">int</span> is_utc;</div>
 <div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96">is_date</a>;</div>
-<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structicaltimetype.html#a541a0062b924c58de060fa49d7f37afe">zone</a>;</div>
+<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">zone</a>;</div>
 <div class="line">};</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 18 2022 10:19:41 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 25 2022 08:55:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

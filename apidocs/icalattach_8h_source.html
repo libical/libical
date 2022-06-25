@@ -84,14 +84,14 @@ $(function() {
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalattach__impl.html">icalattach_impl</a> <a class="code hl_struct" href="structicalattach__impl.html">icalattach</a>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="icalattach_8h.html#a56d5623c8bd51231d464b50cc69a72c5">   36</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalattach__impl.html">icalattach_impl</a> <a class="code hl_struct" href="structicalattach__impl.html">icalattach</a>;</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keyword">typedef</span> void (*icalattach_free_fn_t) (<span class="keywordtype">char</span> *data, <span class="keywordtype">void</span> *user_data);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">   46</a></span><span class="keyword">typedef</span> void (*<a class="code hl_typedef" href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">icalattach_free_fn_t</a>) (<span class="keywordtype">char</span> *data, <span class="keywordtype">void</span> *user_data);</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *<a class="code hl_function" href="icalattach_8h.html#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *url);</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>LIBICAL_ICAL_EXPORT <a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *<a class="code hl_function" href="icalattach_8h.html#a02add24fd5d06a4753df5e7b9e9ce94b">icalattach_new_from_data</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *data,</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>                                                         icalattach_free_fn_t free_fn,</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>                                                         <a class="code hl_typedef" href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">icalattach_free_fn_t</a> free_fn,</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>                                                         <span class="keywordtype">void</span> *free_fn_data);</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalattach_8h.html#aa442cd17e95dd605f5df40194d910002">icalattach_ref</a>(<a class="code hl_struct" href="structicalattach__impl.html">icalattach</a> *attach);</div>
@@ -106,6 +106,7 @@ $(function() {
 <div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALATTACH_H */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aicalattach_8h_html_a02add24fd5d06a4753df5e7b9e9ce94b"><div class="ttname"><a href="icalattach_8h.html#a02add24fd5d06a4753df5e7b9e9ce94b">icalattach_new_from_data</a></div><div class="ttdeci">icalattach * icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn, void *free_fn_data)</div><div class="ttdoc">Creates new icalattach object from data.</div><div class="ttdef"><b>Definition:</b> icalattach.c:53</div></div>
+<div class="ttc" id="aicalattach_8h_html_a331647f68081555d5dad37e6ebb96f41"><div class="ttname"><a href="icalattach_8h.html#a331647f68081555d5dad37e6ebb96f41">icalattach_free_fn_t</a></div><div class="ttdeci">void(* icalattach_free_fn_t)(char *data, void *user_data)</div><div class="ttdoc">Function to be called to free the data of an icalattach object.</div><div class="ttdef"><b>Definition:</b> icalattach.h:46</div></div>
 <div class="ttc" id="aicalattach_8h_html_a4f9e8fe048e58d1035f82ca47e51024f"><div class="ttname"><a href="icalattach_8h.html#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a></div><div class="ttdeci">void icalattach_unref(icalattach *attach)</div><div class="ttdoc">Decrements reference count of the icalattach.</div><div class="ttdef"><b>Definition:</b> icalattach.c:92</div></div>
 <div class="ttc" id="aicalattach_8h_html_a87aa30954aa1f901d90ab816abdfebd1"><div class="ttname"><a href="icalattach_8h.html#a87aa30954aa1f901d90ab816abdfebd1">icalattach_get_is_url</a></div><div class="ttdeci">int icalattach_get_is_url(icalattach *attach)</div><div class="ttdoc">Determines if attach is an URL.</div><div class="ttdef"><b>Definition:</b> icalattach.c:111</div></div>
 <div class="ttc" id="aicalattach_8h_html_aa442cd17e95dd605f5df40194d910002"><div class="ttname"><a href="icalattach_8h.html#aa442cd17e95dd605f5df40194d910002">icalattach_ref</a></div><div class="ttdeci">void icalattach_ref(icalattach *attach)</div><div class="ttdoc">Increments reference count of the icalattach.</div><div class="ttdef"><b>Definition:</b> icalattach.c:84</div></div>
@@ -116,7 +117,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 18 2022 10:19:40 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Sat Jun 25 2022 08:55:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>
