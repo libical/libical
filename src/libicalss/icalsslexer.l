@@ -15,22 +15,28 @@
 
 #include "icalssyacc.h"
 #include "icalgaugeimpl.h"
+#include "icalmemory.h"
 #include "assert.h"
 
-const char* input_buffer;
-const char* input_buffer_p;
+YYSTYPE sslval;
 
-int icalss_input(char* buf, int max_size)
+const char *input_buffer;
+const char *input_buffer_p;
+
+int icalss_input(const char *buf, int max_size)
 {
     int n;
     int l;
 
     l = strlen(input_buffer_p);
-    if (max_size<l) n = max_size;
-    else n = l;
+    if (max_size < l) {
+        n = max_size;
+    } else {
+        n = l;
+    }
 
-    if (n > 0){
-        memcpy(buf, input_buffer_p, n);
+    if (n > 0) {
+        memcpy((void *)buf, input_buffer_p, n);
         input_buffer_p += n;
         return n;
     } else {
