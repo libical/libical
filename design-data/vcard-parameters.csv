@@ -1,0 +1,28 @@
+"#Name ","C vcardparameter_kind Enum","C Type","Enumeration Values"
+"ENCODING","1","vcardparameter_encoding","X=20000;B;NONE=20099"
+"VALUE","2","vcardparameter_value","X=20100;URI;TEXT;DATE;TIME;DATE-TIME;DATE-AND-OR-TIME;TIMESTAMP;INTEGER;BOOLEAN;FLOAT;UTC-OFFSET;LANGUAGE-TAG;NONE=20199"
+"LANGUAGE","3","const char*",
+"CONTEXT","4","const char*",
+"PREF","5","int",
+"ALTID","6","const char*",
+"PID","7","const char*",
+"TYPE","8","vcardparameter_type","X=20200;WORK;HOME;NONE=20299"
+"MEDIATYPE","9","const char*",
+"CALSCALE","10","const char*",
+"SORT-AS","11","const char*",
+"GEO","12","const char*",
+"TZ","13","const char*",
+"X","14","const char*",
+
+"#libical Internal Properties"
+"X-LIC-ERRORTYPE","15","vcardparameter_xlicerrortype","X=20200;COMPONENT-PARSE-ERROR;PROPERTY-PARSE-ERROR;PARAMETER-NAME-PARSE-ERROR;PARAMETER-VALUE-PARSE-ERROR;VALUE-PARSE-ERROR;UNKNOWN-VCARD-PROP-ERROR;MIME-PARSE-ERROR;VCARD-PROP-PARSE-ERROR;NONE=20299"
+"X-LIC-COMPARETYPE","16","vcardparameter_xliccomparetype","X=20300;EQUAL;NOTEQUAL;LESS;GREATER;LESSEQUAL;GREATEREQUAL;REGEX;ISNULL;ISNOTNULL;NONE=20399"
+
+"#In practice any unknown parameter that is not an xparam is treated as an ianaparam"
+"NO","17",,
+"IANA","18","const char*",
+"ANY","0",,
+
+"#NOTE for updaters.  Preserve the vcardparameter_kind Enum values to aid forward compatibility"
+"# New Enum values for an existing vcardparameter_kind should be inserted before the corresponding NONE value"
+"# New vcardparamter_kind types should start their Enum value after the highest NONE value (currently 20399)"
