@@ -572,6 +572,8 @@ else()
   set(ENABLE_GTK_DOC False)
 endif()
 
+libical_option(ICAL_VCARD "Build vCard support" True)
+
 #
 # Compiler settings
 #
