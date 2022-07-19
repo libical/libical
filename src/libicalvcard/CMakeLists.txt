@@ -6,13 +6,60 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_BINARY_DIR}/src/libical
   ${CMAKE_SOURCE_DIR}/src/libical
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 if(ICU_FOUND)
   include_directories(${ICU_INCLUDE_DIRS})
 endif()
 
+set(ICALSCRIPTS ${CMAKE_SOURCE_DIR}/scripts/)
+set(BUILT_HEADERS) #list of derived headers we build
+set(BUILD_SOURCES) #list of derived implementations we build
+
+set(VALUEDEPS
+  ${ICALSCRIPTS}mkderivedvalues.pl
+  ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv
+)
+
+add_custom_command(
+  OUTPUT
+    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h
+  COMMAND
+    ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -p "vcard"
+      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.h.in
+      -h ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv >
+      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h
+  DEPENDS
+    ${VALUEDEPS}
+    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.h.in
+  COMMENT "Generate vcardderivedvalue.h"
+)
+list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h)
+
+add_custom_command(
+  OUTPUT
+    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c
+  COMMAND
+    ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -p "vcard"
+      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.c.in
+      -c ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv >
+      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c
+  DEPENDS
+    ${VALUEDEPS}
+    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.c.in
+  COMMENT "Generate vcardderivedvalue.c"
+)
+list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c)
+
 set(icalvcard_LIB_SRCS
+  ${BUILT_SOURCES}
+  ${BUILT_HEADERS}
+  libical_vcard_export.h
+  vcardvalue.c
+  vcardvalue.h
+  vcardvalueimpl.h
   vcard.c
   vcard.h
 )
@@ -71,8 +118,10 @@ endif()
 ########### install files ###############
 
 install(FILES
+  ${BUILT_HEADERS}
+  libical_vcard_export.h
+  vcardvalue.h
   vcard.h
-  libicalvcard_export.h
   DESTINATION
   ${INCLUDE_INSTALL_DIR}/libical
 )

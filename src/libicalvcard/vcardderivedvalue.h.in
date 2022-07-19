@@ -1,0 +1,20 @@
+/*======================================================================
+ FILE: vcardderivedvalue.h
+
+======================================================================*/
+
+#ifndef VCARDDERIVEDVALUE_H
+#define VCARDDERIVEDVALUE_H
+
+#include "libical_vcard_export.h"
+//#include "vcardtypes.h"
+
+typedef struct vcardvalue_impl vcardvalue;
+
+LIBICAL_VCARD_EXPORT void vcardvalue_set_x(vcardvalue *value, const char *v);
+LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new_x(const char *v);
+LIBICAL_VCARD_EXPORT const char *vcardvalue_get_x(const vcardvalue *value);
+
+LIBICAL_VCARD_EXPORT void vcardvalue_reset_kind(vcardvalue *value);
+
+<insert_code_here>
