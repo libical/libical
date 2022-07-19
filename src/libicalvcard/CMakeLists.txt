@@ -18,6 +18,41 @@ set(ICALSCRIPTS ${CMAKE_SOURCE_DIR}/scripts/)
 set(BUILT_HEADERS) #list of derived headers we build
 set(BUILD_SOURCES) #list of derived implementations we build
 
+set(PARAMETERDEPS
+  ${ICALSCRIPTS}/mkderivedparameters.pl
+  ${CMAKE_SOURCE_DIR}/design-data/vcard-parameters.csv
+)
+
+add_custom_command(
+  OUTPUT
+    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h
+  COMMAND
+    ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl -v
+      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.h.in
+      -h ${CMAKE_SOURCE_DIR}/design-data/vcard-parameters.csv >
+      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h
+  DEPENDS
+    ${PARAMETERDEPS}
+    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.h.in
+  COMMENT "Generate vcardderivedparameter.h"
+)
+list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h)
+
+add_custom_command(
+  OUTPUT
+    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c
+  COMMAND
+    ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl -v
+      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.c.in
+      -c ${CMAKE_SOURCE_DIR}/design-data/vcard-parameters.csv >
+      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c
+  DEPENDS
+    ${PARAMETERDEPS}
+    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.c.in
+  COMMENT "Generate vcardderivedparameter.c"
+)
+list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c)
+
 set(VALUEDEPS
   ${ICALSCRIPTS}mkderivedvalues.pl
   ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv
@@ -57,6 +92,9 @@ set(icalvcard_LIB_SRCS
   ${BUILT_SOURCES}
   ${BUILT_HEADERS}
   libical_vcard_export.h
+  vcardparameter.c
+  vcardparameter.h
+  vcardparameterimpl.h
   vcardvalue.c
   vcardvalue.h
   vcardvalueimpl.h
@@ -120,6 +158,7 @@ endif()
 install(FILES
   ${BUILT_HEADERS}
   libical_vcard_export.h
+  vcardparameter.h
   vcardvalue.h
   vcard.h
   DESTINATION

@@ -1,0 +1,15 @@
+/*======================================================================
+ FILE: vcardderivedparam.h
+
+======================================================================*/
+#ifndef VCARDDERIVEDPARAMETER_H
+#define VCARDDERIVEDPARAMETER_H
+
+#include "libical_vcard_export.h"
+
+typedef struct vcardparameter_impl vcardparameter;
+
+LIBICAL_VCARD_EXPORT const char *vcardparameter_enum_to_string(int e);
+LIBICAL_VCARD_EXPORT int vcardparameter_string_to_enum(const char *str);
+
+<insert_code_here>
