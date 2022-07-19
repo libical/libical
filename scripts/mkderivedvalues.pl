@@ -13,11 +13,18 @@ use lib '.';
 require 'readvaluesfile.pl';
 
 use Getopt::Std;
-getopts('chi:');
+getopts('chi:p:');
 
 #Options
 # c -> generate c code file
-# h-> generate header file
+# h -> generate header file
+# p -> object type prefix (e.g. "ical", "vcard")
+
+my $ucprefix = "ICAL";
+if ($opt_p) {
+    $ucprefix = uc($opt_p);
+}
+my $lcprefix = lc($ucprefix);
 
 # Open with value-types.txt
 
@@ -40,7 +47,7 @@ if ($opt_i) {
   }
 
   if ($opt_h) {
-    print "#endif /*ICALVALUE_H*/\n";
+    print "#endif /*${ucprefix}VALUE_H*/\n";
   }
 
 }
@@ -53,12 +60,15 @@ sub insert_code
     BOOLEAN        => 'int',
     CALADDRESS     => 'string',
     DATE           => 'time',
+    DATEANDORTIME  => 'time',
     DATETIME       => 'time',
     DATETIMEDATE   => 'time',
     DATETIMEPERIOD => 'period',
     DURATION       => 'duration',
     INTEGER        => 'int',
+    LANGUAGETAG    => 'string',
     TEXT           => 'string',
+    TIME           => 'string',
     URI            => 'string',
     UTCOFFSET      => 'int',
     QUERY          => 'string',
@@ -69,8 +79,8 @@ sub insert_code
 
     # First print out the value enumerations
     $idx = $h{'ANY'}->{"kindEnum"};
-    print "typedef enum icalvalue_kind {\n";
-    print "   ICAL_ANY_VALUE=$idx,\n";
+    print "typedef enum ${lcprefix}value_kind {\n";
+    print "   ${ucprefix}_ANY_VALUE=$idx,\n";
 
     foreach $value (sort keys %h) {
 
@@ -82,16 +92,16 @@ sub insert_code
 
       $idx = $h{$value}->{"kindEnum"};
 
-      print "    ICAL_${ucv}_VALUE=$idx,\n";
+      print "    ${ucprefix}_${ucv}_VALUE=$idx,\n";
     }
 
     $idx = $h{'NO'}->{"kindEnum"};
-    print "   ICAL_NO_VALUE=$idx\n} icalvalue_kind;\n\n";
+    print "   ${ucprefix}_NO_VALUE=$idx\n} ${lcprefix}value_kind;\n\n";
 
     # Now create enumerations for property values
     $lastidx = $idx = 10000;
 
-    print "#define ICALPROPERTY_FIRST_ENUM $idx\n\n";
+    print "#define ${ucprefix}PROPERTY_FIRST_ENUM $idx\n\n";
 
     foreach $value (sort keys %h) {
 
@@ -128,7 +138,7 @@ sub insert_code
 
           my $uce = join("", map {uc(lc($_));} split(/-/, $e));
 
-          print "    ICAL_${ucv}_${uce} = $idx";
+          print "    ${ucprefix}_${ucv}_${uce} = $idx";
         }
 
         $c_type =~ s/enum //;
@@ -138,7 +148,7 @@ sub insert_code
     }
 
     $lastidx++;
-    print "#define ICALPROPERTY_LAST_ENUM $lastidx\n";
+    print "#define ${ucprefix}PROPERTY_LAST_ENUM $lastidx\n";
   }
 
   if ($opt_c) {
@@ -146,7 +156,7 @@ sub insert_code
     # print out the value to string map
 
     my $count = scalar(keys %h) + 1;
-    print "static const struct icalvalue_kind_map value_map[$count]={\n";
+    print "static const struct ${lcprefix}value_kind_map value_map[$count]={\n";
 
     foreach $value (sort keys %h) {
 
@@ -154,10 +164,10 @@ sub insert_code
 
       my $ucv = join("", map {uc(lc($_));} split(/-/, $value));
 
-      print "    {ICAL_${ucv}_VALUE,\"$value\"},\n";
+      print "    {${ucprefix}_${ucv}_VALUE,\"$value\"},\n";
     }
 
-    print "    {ICAL_NO_VALUE,\"\"}\n};";
+    print "    {${ucprefix}_NO_VALUE,\"\"}\n};";
 
   }
 
@@ -200,22 +210,22 @@ sub insert_code
     if ($opt_c && $autogen) {
 
       print "\
-icalvalue *icalvalue_new_${lc}($type v)\
+${lcprefix}value *${lcprefix}value_new_${lc}($type v)\
 {\
-    struct icalvalue_impl *impl;\
+    struct ${lcprefix}value_impl *impl;\
 $pointer_check\
-    impl = icalvalue_new_impl(ICAL_${uc}_VALUE);\
-    icalvalue_set_${lc}((icalvalue *)impl, v);\
-    return (icalvalue*)impl;\
+    impl = ${lcprefix}value_new_impl(${ucprefix}_${uc}_VALUE);\
+    ${lcprefix}value_set_${lc}((${lcprefix}value *)impl, v);\
+    return (${lcprefix}value*)impl;\
 }\
 \
-void icalvalue_set_${lc}(icalvalue *value, $type v)\
+void ${lcprefix}value_set_${lc}(${lcprefix}value *value, $type v)\
 {\
-    struct icalvalue_impl *impl;\
+    struct ${lcprefix}value_impl *impl;\
     icalerror_check_arg_rv((value != 0), \"value\");\
 $pointer_check_rv\
-    icalerror_check_value_type(value, ICAL_${uc}_VALUE);\
-    impl = (struct icalvalue_impl *)value;\n";
+    icalerror_check_value_type(value, ${ucprefix}_${uc}_VALUE);\
+    impl = (struct ${lcprefix}value_impl *)value;\n";
 
       if ($union_data eq 'string') {
 
@@ -225,15 +235,15 @@ $pointer_check_rv\
 
       print "\
     impl->data.v_$union_data = $assign\
-    icalvalue_reset_kind(impl);\n}\n\n";
+    ${lcprefix}value_reset_kind(impl);\n}\n\n";
 
-      print "$type\ icalvalue_get_${lc}(const icalvalue *value)\n{\n";
+      print "$type\ ${lcprefix}value_get_${lc}(const ${lcprefix}value *value)\n{\n";
       if ($union_data eq 'string') {
         print "    icalerror_check_arg_rz((value != 0), \"value\");\n";
       } else {
         print "    icalerror_check_arg((value != 0), \"value\");\n";
         if ($union_data eq 'enum') {
-          print "    if (!value) {\n        return ICAL_${uc}_NONE;\n    }\n";
+          print "    if (!value) {\n        return ${ucprefix}_${uc}_NONE;\n    }\n";
         } elsif ($union_data eq 'int') {
           print "    if (!value) {\n        return 0;\n    }\n";
         } elsif ($union_data eq 'float') {
@@ -248,15 +258,15 @@ $pointer_check_rv\
           print "    if (!value) {\n        return icalreqstattype_from_string(\"0.0\");\n    }\n";
         }
       }
-      print "    icalerror_check_value_type(value, ICAL_${uc}_VALUE);\
-    return ((struct icalvalue_impl *)value)->data.v_${union_data};\n}\n";
+      print "    icalerror_check_value_type(value, ${ucprefix}_${uc}_VALUE);\
+    return ((struct ${lcprefix}value_impl *)value)->data.v_${union_data};\n}\n";
 
     } elsif ($opt_h && $autogen) {
 
       print "\n/* $value */\
-LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_${lc}($type v);\
-LIBICAL_ICAL_EXPORT $type icalvalue_get_${lc}(const icalvalue *value);\
-LIBICAL_ICAL_EXPORT void icalvalue_set_${lc}(icalvalue *value, ${type} v);\n";
+LIBICAL_${ucprefix}_EXPORT ${lcprefix}value *${lcprefix}value_new_${lc}($type v);\
+LIBICAL_${ucprefix}_EXPORT $type ${lcprefix}value_get_${lc}(const ${lcprefix}value *value);\
+LIBICAL_${ucprefix}_EXPORT void ${lcprefix}value_set_${lc}(${lcprefix}value *value, ${type} v);\n";
     }
 
   }
