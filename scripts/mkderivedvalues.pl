@@ -13,16 +13,17 @@ use lib '.';
 require 'readvaluesfile.pl';
 
 use Getopt::Std;
-getopts('chi:p:');
+getopts('chvi:');
 
 #Options
 # c -> generate c code file
 # h -> generate header file
-# p -> object type prefix (e.g. "ical", "vcard")
+# v -> generate VCARD values
+# i -> .c/.h "in" file (template)
 
 my $ucprefix = "ICAL";
-if ($opt_p) {
-    $ucprefix = uc($opt_p);
+if ($opt_v) {
+    $ucprefix = "VCARD"
 }
 my $lcprefix = lc($ucprefix);
 

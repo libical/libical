@@ -27,7 +27,7 @@ add_custom_command(
   OUTPUT
     ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h
   COMMAND
-    ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -p "vcard"
+    ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -v
       -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.h.in
       -h ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv >
       ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h
@@ -42,7 +42,7 @@ add_custom_command(
   OUTPUT
     ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c
   COMMAND
-    ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -p "vcard"
+    ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -v
       -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.c.in
       -c ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv >
       ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c
