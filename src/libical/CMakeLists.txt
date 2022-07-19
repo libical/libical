@@ -37,8 +37,8 @@ set(BUILD_SOURCES) #list of derived implementations we build
 
 set(PROPERTYDEPS
   ${ICALSCRIPTS}/mkderivedproperties.pl
-  ${PROJECT_SOURCE_DIR}/design-data/properties.csv
-  ${PROJECT_SOURCE_DIR}/design-data/value-types.csv
+  ${PROJECT_SOURCE_DIR}/design-data/ical-properties.csv
+  ${PROJECT_SOURCE_DIR}/design-data/ical-value-types.csv
 )
 
 add_custom_command(
@@ -47,8 +47,8 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl
       -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedproperty.h.in
-      -h ${PROJECT_SOURCE_DIR}/design-data/properties.csv
-      ${PROJECT_SOURCE_DIR}/design-data/value-types.csv >
+      -h ${PROJECT_SOURCE_DIR}/design-data/ical-properties.csv
+      ${PROJECT_SOURCE_DIR}/design-data/ical-value-types.csv >
       ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.h
   DEPENDS
     ${PROPERTYDEPS}
@@ -63,8 +63,8 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl
       -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedproperty.c.in
-      -c ${PROJECT_SOURCE_DIR}/design-data/properties.csv
-      ${PROJECT_SOURCE_DIR}/design-data/value-types.csv >
+      -c ${PROJECT_SOURCE_DIR}/design-data/ical-properties.csv
+      ${PROJECT_SOURCE_DIR}/design-data/ical-value-types.csv >
       ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.c
   DEPENDS
     ${PROPERTYDEPS}
@@ -75,7 +75,7 @@ list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.
 
 set(PARAMETERDEPS
   ${ICALSCRIPTS}/mkderivedparameters.pl
-  ${PROJECT_SOURCE_DIR}/design-data/parameters.csv
+  ${PROJECT_SOURCE_DIR}/design-data/ical-parameters.csv
 )
 
 add_custom_command(
@@ -84,7 +84,7 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl
       -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedparameter.h.in
-      -h ${PROJECT_SOURCE_DIR}/design-data/parameters.csv >
+      -h ${PROJECT_SOURCE_DIR}/design-data/ical-parameters.csv >
       ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.h
   DEPENDS
     ${PARAMETERDEPS}
@@ -99,7 +99,7 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl
       -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedparameter.c.in
-      -c ${PROJECT_SOURCE_DIR}/design-data/parameters.csv >
+      -c ${PROJECT_SOURCE_DIR}/design-data/ical-parameters.csv >
       ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.c
   DEPENDS
     ${PARAMETERDEPS}
@@ -110,7 +110,7 @@ list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter
 
 set(RESTRICTIONDEPS
   ${ICALSCRIPTS}/mkrestrictiontable.pl
-  ${PROJECT_SOURCE_DIR}/design-data/restrictions.csv
+  ${PROJECT_SOURCE_DIR}/design-data/ical-restrictions.csv
 )
 
 add_custom_command(
@@ -119,7 +119,7 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkrestrictiontable.pl
       -i ${PROJECT_SOURCE_DIR}/src/libical/icalrestriction.c.in
-      ${PROJECT_SOURCE_DIR}/design-data/restrictions.csv >
+      ${PROJECT_SOURCE_DIR}/design-data/ical-restrictions.csv >
       ${PROJECT_BINARY_DIR}/src/libical/icalrestriction.c
   DEPENDS
     ${RESTRICTIONDEPS}
@@ -130,7 +130,7 @@ list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libical/icalrestriction.c)
 
 set(VALUEDEPS
   ${ICALSCRIPTS}mkderivedvalues.pl
-  ${PROJECT_SOURCE_DIR}/design-data/value-types.csv
+  ${PROJECT_SOURCE_DIR}/design-data/ical-value-types.csv
 )
 
 add_custom_command(
@@ -139,7 +139,7 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl
       -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedvalue.h.in
-      -h ${PROJECT_SOURCE_DIR}/design-data/value-types.csv >
+      -h ${PROJECT_SOURCE_DIR}/design-data/ical-value-types.csv >
       ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.h
   DEPENDS
     ${VALUEDEPS}
@@ -154,7 +154,7 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl
       -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedvalue.c.in
-      -c ${PROJECT_SOURCE_DIR}/design-data/value-types.csv >
+      -c ${PROJECT_SOURCE_DIR}/design-data/ical-value-types.csv >
       ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.c
   DEPENDS
     ${VALUEDEPS}
