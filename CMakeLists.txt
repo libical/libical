@@ -564,6 +564,8 @@ if(ICAL_GLIB)
   endif()
 endif()
 
+libical_option(ICAL_VCARD "Build vCard support" True)
+
 #
 # Compiler settings
 #
