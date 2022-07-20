@@ -126,7 +126,7 @@ sub insert_code
             $first = 0;
           }
 
-          $e =~ /([a-zA-Z0-9\-]+)=?([0-9]+)?/;
+          $e =~ /([a-zA-Z0-9\-\._]+)=?([0-9]+)?/;
           $e = $1;
           if ($2) {
             $idx = $2;
@@ -137,7 +137,7 @@ sub insert_code
             $lastidx = $idx;
           }
 
-          my $uce = join("", map {uc(lc($_));} split(/-/, $e));
+          my $uce = join("", map {uc(lc($_));} split(/[\-\.]/, $e));
 
           print "    ${ucprefix}_${ucv}_${uce} = $idx";
         }
