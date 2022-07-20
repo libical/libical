@@ -1,4 +1,9 @@
 "#Name","C vcardvalue_kind Enum","C type& gen flag","Python","Component Values","Enum Values"
+"ANY","5000",,,,
+"NO","5099",,,,
+
+"#Standard property value data types","RFC 6350 Section 4",,,
+"#Non-standard property enumeration types",,,,
 "TEXT","5001","(a)const char*","string","unitary",
 "URI","5002","(a)const char*","string","unitary",
 "DATE","5003","(m)struct vcardtimetype","Time","unitary",
@@ -13,12 +18,12 @@
 "LANGUAGE-TAG","5012","(a)const char*","string","unitary",
 "X","5013","(m)const char*","string","unitary",
 
-"ANY","5000",,,,
-"NO","5014",,,,
-
 "#Non-standard property enumeration types",,,,
-"KIND","5015","(a)enum vcardproperty_kind","string","unitary","X=10000;INDIVIDUAL;GROUP;ORG;LOCATION;NONE=10099"
+"#KIND:APPLICATION from RFC 6473",,,,
+"#KIND:DEVICE from RFC 6869",,,,
+"KIND","5014","(a)enum vcardproperty_kind","string","unitary","X=10000;INDIVIDUAL;GROUP;ORG;LOCATION;APPLICATION;DEVICE;NONE=10099"
+"VERSION","5015","(a)enum vcardproperty_version","string","unitary","X=10100;3_0;4_0;NONE=10199"
 
 "#NOTE for updaters.  Preserve the vcardvalue_kind Enum values and property Enum values to aid forward compatibility"
 "# New Enum values for an existing vcardvalue_kind should be inserted before the corresponding NONE value"
-"# New vcardvalue_kind types should start their Enum value after the highest NONE value (currently 10099)"
+"# New vcardvalue_kind types should start their Enum value after the highest NONE value (currently 10199)"
