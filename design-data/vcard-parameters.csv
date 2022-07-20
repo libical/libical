@@ -1,28 +1,39 @@
 "#Name ","C vcardparameter_kind Enum","C Type","Enumeration Values"
-"ENCODING","1","vcardparameter_encoding","X=20000;B;NONE=20099"
-"VALUE","2","vcardparameter_value","X=20100;URI;TEXT;DATE;TIME;DATE-TIME;DATE-AND-OR-TIME;TIMESTAMP;INTEGER;BOOLEAN;FLOAT;UTC-OFFSET;LANGUAGE-TAG;NONE=20199"
-"LANGUAGE","3","const char*",
-"CONTEXT","4","const char*",
-"PREF","5","int",
-"ALTID","6","const char*",
-"PID","7","const char*",
-"TYPE","8","vcardparameter_type","X=20200;WORK;HOME;NONE=20299"
-"MEDIATYPE","9","const char*",
-"CALSCALE","10","const char*",
-"SORT-AS","11","const char*",
-"GEO","12","const char*",
-"TZ","13","const char*",
-"X","14","const char*",
+"ANY","0",,
+"NO","99",,
 
-"#libical Internal Properties"
-"X-LIC-ERRORTYPE","15","vcardparameter_xlicerrortype","X=20200;COMPONENT-PARSE-ERROR;PROPERTY-PARSE-ERROR;PARAMETER-NAME-PARSE-ERROR;PARAMETER-VALUE-PARSE-ERROR;VALUE-PARSE-ERROR;UNKNOWN-VCARD-PROP-ERROR;MIME-PARSE-ERROR;VCARD-PROP-PARSE-ERROR;NONE=20299"
-"X-LIC-COMPARETYPE","16","vcardparameter_xliccomparetype","X=20300;EQUAL;NOTEQUAL;LESS;GREATER;LESSEQUAL;GREATEREQUAL;REGEX;ISNULL;ISNOTNULL;NONE=20399"
+"#Standard property parameters","RFC 6350 Section 5",,,
+"LANGUAGE","1","const char*",
+"VALUE","2","vcardparameter_value","X=20000;TEXT;URI;DATE;TIME;DATE-TIME;DATE-AND-OR-TIME;TIMESTAMP;BOOLEAN;INTEGER;FLOAT;UTC-OFFSET;LANGUAGE-TAG;NONE=20099"
+"PREF","3","int",
+"ALTID","4","const char*",
+"PID","5","const char*",
+"TYPE","6","vcardparameter_type","X=20100;WORK;HOME;TEXT;VOICE;FAX;CELL;VIDEO;PAGER;TEXTPHONE;CONTACT;ACQUIANTANCE;FRIEND;MET;CO-WORKER;COLLEAGUE;CO-RESIDENT;NEIGHBOR;CHILD;SIBLING;SPOUSE;KIN;MUSE;CRUSH;DATE;SWEETHEART;ME;AGENT;EMERGENCY;NONE=20199"
+"MEDIATYPE","7","const char*",
+"CALSCALE","8","vcardparameter_calscale","X=20200;GREGORIAN;NONE=20299"
+"SORT-AS","9","const char*",
+"GEO","10","const char*",
+"TZ","11","const char*",
+"X","12","const char*",
 
 "#In practice any unknown parameter that is not an xparam is treated as an ianaparam"
-"NO","17",,
-"IANA","18","const char*",
-"ANY","0",,
+"IANA","13","const char*",
+
+"#libical Internal Properties"
+"X-LIC-ERRORTYPE","14","vcardparameter_xlicerrortype","X=20300;COMPONENT-PARSE-ERROR;PROPERTY-PARSE-ERROR;PARAMETER-NAME-PARSE-ERROR;PARAMETER-VALUE-PARSE-ERROR;VALUE-PARSE-ERROR;UNKNOWN-VCARD-PROP-ERROR;MIME-PARSE-ERROR;VCARD-PROP-PARSE-ERROR;NONE=20399"
+"X-LIC-COMPARETYPE","15","vcardparameter_xliccomparetype","X=20400;EQUAL;NOTEQUAL;LESS;GREATER;LESSEQUAL;GREATEREQUAL;REGEX;ISNULL;ISNOTNULL;NONE=20499"
+
+"#Deprecated property parameters","RFC 2425/2426",,,
+"ENCODING","16","vcardparameter_encoding","X=20500;B;NONE=20599"
+"CONTEXT","17","const char*",
+
+"#Open Mobile Alliance Extensions","RFC 6715 Section 3",,,
+"INDEX","18","int"
+"LEVEL","19","vcardparameter_level","X=20600;BEGINNER;AVERAGE;EXPERT;HIGH;MEDIUM;LOW;NONE=20699"
+
+"#RDAP Extensions","RFC 8605 Section 3.1",,,
+"CC","20","const char*"
 
 "#NOTE for updaters.  Preserve the vcardparameter_kind Enum values to aid forward compatibility"
 "# New Enum values for an existing vcardparameter_kind should be inserted before the corresponding NONE value"
-"# New vcardparamter_kind types should start their Enum value after the highest NONE value (currently 20399)"
+"# New vcardparamter_kind types should start their Enum value after the highest NONE value (currently 20699)"
