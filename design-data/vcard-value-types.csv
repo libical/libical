@@ -21,8 +21,8 @@
 "#Non-standard property enumeration types",,,,
 "#KIND:APPLICATION from RFC 6473",,,,
 "#KIND:DEVICE from RFC 6869",,,,
-"KIND","5014","(a)enum vcardproperty_kind","string","unitary","X=10000;INDIVIDUAL;GROUP;ORG;LOCATION;APPLICATION;DEVICE;NONE=10099"
-"VERSION","5015","(a)enum vcardproperty_version","string","unitary","X=10100;3_0;4_0;NONE=10199"
+"KIND","5014","(a)enum vcardproperty_kindenum","string","unitary","X=10000;INDIVIDUAL;GROUP;ORG;LOCATION;APPLICATION;DEVICE;NONE=10099"
+"VERSION","5015","(a)enum vcardproperty_version","string","unitary","X=10100;2_1;3_0;4_0;NONE=10199"
 
 "#NOTE for updaters.  Preserve the vcardvalue_kind Enum values and property Enum values to aid forward compatibility"
 "# New Enum values for an existing vcardvalue_kind should be inserted before the corresponding NONE value"
