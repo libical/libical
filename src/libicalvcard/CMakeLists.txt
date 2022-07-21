@@ -18,6 +18,44 @@ set(ICALSCRIPTS ${CMAKE_SOURCE_DIR}/scripts/)
 set(BUILT_HEADERS) #list of derived headers we build
 set(BUILD_SOURCES) #list of derived implementations we build
 
+set(PROPERTYDEPS
+  ${ICALSCRIPTS}/mkderivedproperties.pl
+  ${CMAKE_SOURCE_DIR}/design-data/vcard-properties.csv
+  ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv
+)
+
+add_custom_command(
+  OUTPUT
+    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h
+  COMMAND
+    ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl -v
+      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.h.in
+      -h ${CMAKE_SOURCE_DIR}/design-data/vcard-properties.csv
+      ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv >
+      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h
+  DEPENDS
+    ${PROPERTYDEPS}
+    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.h.in
+  COMMENT "Generate vcardderivedproperty.h"
+)
+list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h)
+
+add_custom_command(
+  OUTPUT
+    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.c
+  COMMAND
+    ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl -v
+      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.c.in
+      -c ${CMAKE_SOURCE_DIR}/design-data/vcard-properties.csv
+      ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv >
+      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.c
+  DEPENDS
+    ${PROPERTYDEPS}
+    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.c.in
+  COMMENT "Generate vcardderivedproperty.c"
+)
+list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.c)
+
 set(PARAMETERDEPS
   ${ICALSCRIPTS}/mkderivedparameters.pl
   ${CMAKE_SOURCE_DIR}/design-data/vcard-parameters.csv
@@ -92,6 +130,8 @@ set(icalvcard_LIB_SRCS
   ${BUILT_SOURCES}
   ${BUILT_HEADERS}
   libical_vcard_export.h
+  vcardproperty.c
+  vcardproperty.h
   vcardparameter.c
   vcardparameter.h
   vcardparameterimpl.h
@@ -158,6 +198,7 @@ endif()
 install(FILES
   ${BUILT_HEADERS}
   libical_vcard_export.h
+  vcardproperty.h
   vcardparameter.h
   vcardvalue.h
   vcard.h
