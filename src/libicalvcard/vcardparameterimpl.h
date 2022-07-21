@@ -6,7 +6,7 @@
 #ifndef VCARDPARAMETERIMPL_H
 #define VCARDPARAMETERIMPL_H
 
-//#include "vcardproperty.h"
+#include "vcardproperty.h"
 
 struct vcardparameter_impl
 {
@@ -15,8 +15,7 @@ struct vcardparameter_impl
     int size;
     const char *string;
     const char *x_name;
-//    vcardproperty *parent;
-void *parent;
+    vcardproperty *parent;
 
     int data;
 };
