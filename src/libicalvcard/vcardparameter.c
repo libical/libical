@@ -152,11 +152,11 @@ vcardparameter *vcardparameter_new_from_string(const char *str)
     return param;
 }
 
-char *vcardparameter_as_ical_string(vcardparameter *param)
+char *vcardparameter_as_vcard_string(vcardparameter *param)
 {
     char *buf;
 
-    buf = vcardparameter_as_ical_string_r(param);
+    buf = vcardparameter_as_vcard_string_r(param);
     icalmemory_add_tmp_buffer(buf);
     return buf;
 }
@@ -252,7 +252,7 @@ static void vcardparameter_append_encoded_value(char **buf, char **buf_ptr,
  * - QSAFE-CHAR   = any character except CTLs and DQUOTE
  * - SAFE-CHAR    = any character except CTLs, DQUOTE. ";", ":", ","
  */
-char *vcardparameter_as_ical_string_r(vcardparameter *param)
+char *vcardparameter_as_vcard_string_r(vcardparameter *param)
 {
     size_t buf_size = 1024;
     char *buf;
@@ -393,7 +393,7 @@ const char *vcardparameter_get_iana_name(vcardparameter *param)
 {
     return vcardparameter_get_xname(param);
 }
-#if 0
+
 void vcardparameter_set_parent(vcardparameter *param, vcardproperty *property)
 {
     icalerror_check_arg_rv((param != 0), "param");
@@ -407,7 +407,7 @@ vcardproperty *vcardparameter_get_parent(vcardparameter *param)
 
     return param->parent;
 }
-#endif
+
 int vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2)
 {
     vcardparameter_kind kind1;
