@@ -26,7 +26,7 @@ struct vcardproperty_impl
     pvl_list parameters;
     pvl_elem parameter_iterator;
     vcardvalue *value;
-//    vcard *parent;
+    vcard *parent;
 };
 
 void vcardproperty_add_parameters(vcardproperty *prop, va_list args)
@@ -119,7 +119,7 @@ vcardproperty *vcardproperty_new_clone(vcardproperty *old)
 {
     return vcardproperty_clone(old);
 }
-#if 0
+
 vcardproperty *vcardproperty_new_from_string(const char *str)
 {
     size_t buf_size = 1024;
@@ -165,17 +165,17 @@ vcardproperty *vcardproperty_new_from_string(const char *str)
         return prop;
     }
 }
-#endif
+
 void vcardproperty_free(vcardproperty *p)
 {
     vcardparameter *param;
 
     icalerror_check_arg_rv((p != 0), "prop");
-#if 0
+
     if (p->parent != 0) {
         return;
     }
-#endif
+
     if (p->value != 0) {
         vcardvalue_set_parent(p->value, 0);
         vcardvalue_free(p->value);
@@ -898,7 +898,7 @@ char *vcardproperty_get_property_name_r(const vcardproperty *prop)
 
     return buf;
 }
-#if 0
+
 void vcardproperty_set_parent(vcardproperty *property, vcard *card)
 {
     icalerror_check_arg_rv((property != 0), "property");
@@ -912,7 +912,7 @@ vcard *vcardproperty_get_parent(const vcardproperty *property)
 
     return property->parent;
 }
-
+#if 0
 static int param_compare(void *a, void *b)
 {
     /* XXX  Need to sort values for multi-valued parameters (e.g. MEMBER) */
