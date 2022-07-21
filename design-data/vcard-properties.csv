@@ -1,0 +1,83 @@
+,,
+"#Property Name","C vcardproperty_kind Enum","libvcard Value type","vCard default value",Property Flags
+
+"ANY","0","NO","NO"
+"NO","499","NO","NO"
+
+"#vCard Properties","RFC 6350 Section 6",
+"SOURCE","1","URI","URI"
+"KIND","2","KIND","KIND"
+"XML","3","TEXT","TEXT"
+"FN","4","TEXT","TEXT"
+"N","5","TEXT","TEXT",is_structured
+"NICKNAME","6","TEXT","TEXT",is_multivalued
+"PHOTO","7","URI","URI"
+"#BDAY","8","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
+"#ANNIVERSARY","9","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
+"BDAY","8","TEXT","TEXT"
+"ANNIVERSARY","9","TEXT","TEXT"
+"GENDER","10","TEXT","TEXT",is_structured
+"ADR","11","TEXT","TEXT",is_structured
+"TEL","12","TEXT","TEXT"
+"EMAIL","13","TEXT","TEXT"
+"IMPP","14","URI","URI"
+"LANGUAGE","15","LANGUAGE-TAG","LANGUAGE-TAG"
+"TZ","16","TEXT","TEXT"
+"GEO","17","URI","URI"
+"TITLE","18","TEXT","TEXT"
+"ROLE","19","TEXT","TEXT"
+"LOGO","20","URI","URI"
+"ORG","21","TEXT","TEXT",is_structured
+"MEMBER","22","URI","URI"
+"RELATED","23","URI","URI"
+"CATEGORIES","24","TEXT","TEXT",is_multivalued
+"NOTE","25","TEXT","TEXT"
+"PRODID","26","TEXT","TEXT"
+"#REV","27","TIMESTAMP","TIMESTAMP"
+"REV","27","TEXT","TEXT"
+"SOUND","28","URI","URI"
+"UID","29","URI","URI"
+"CLIENTPIDMAP","30","TEXT","TEXT",is_structured
+"URL","31","URI","URI"
+"VERSION","32","VERSION","VERSION"
+"KEY","33","URI","URI"
+"FBURL","34","URI","URI"
+"CALADRURI","35","URI","URI"
+"CALURI","36","URI","URI"
+"X","37","X","X",is_multivalued
+
+"#Deprecated Properties","RFC 2425/2426",,,
+"NAME","38","TEXT","TEXT"
+"LABEL","39","TEXT","TEXT"
+"MAILER","40","TEXT","TEXT"
+"AGENT","41","TEXT","TEXT"
+"SORT-STRING","42","TEXT","TEXT"
+"CLASS","43","TEXT","TEXT"
+
+"#libical Internal Properties",,
+"X-LIC-ERROR","44","TEXT","TEXT"
+"#X-LIC-CLUSTERCOUNT","45","STRING","STRING"
+"#X-LIC-MIMECONTENTTYPE","46","STRING","STRING"
+"#X-LIC-MIMECHARSET","47","STRING","STRING"
+"#X-LIC-MIMEENCODING","48","STRING","STRING"
+"#X-LIC-MIMEOPTINFO","49","STRING","STRING"
+"#X-LIC-MIMECID","50","STRING","STRING"
+"#X-LIC-MIMEFILENAME","51","STRING","STRING"
+"#X-LIC-CLASS","52","X-LIC-CLASS","X-LIC-CLASS"
+
+"#BIRTH/DEATH Extension Properties", "RFC 6474 Section 2",
+"BIRTHPLACE","53","TEXT","TEXT"
+"DEATHPLACE","54","TEXT","TEXT"
+"#DEATHDATE","55","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
+"DEATHDATE","55","TEXT","TEXT"
+
+"#Open Mobile Alliance Extension Properties", "RFC 6715 Section 2",
+"EXPERTISE","56","TEXT","TEXT"
+"HOBBY","57","TEXT","TEXT"
+"INTEREST","58","TEXT","TEXT"
+"ORG-DIRECTORY","59","URI","URI"
+
+"#RDAP Extension Properties", "RFC 8605 Section 2",
+"CONTACT-URI","60","URI","URI"
+
+"#NOTE for updaters.  Preserve the vcardproperty_kind Enum values to aid forward compatibility"
