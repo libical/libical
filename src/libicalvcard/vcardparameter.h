@@ -194,7 +194,7 @@ LIBICAL_VCARD_EXPORT void vcardparameter_free(vcardparameter *parameter);
  * vcardparameter_free(param);
  * ```
  */
-LIBICAL_VCARD_EXPORT char *vcardparameter_as_ical_string(vcardparameter *parameter);
+LIBICAL_VCARD_EXPORT char *vcardparameter_as_vcard_string(vcardparameter *parameter);
 
 /**
  * @brief Converts vcardparameter into an string representation according to RFC5445/RFC6868.
@@ -228,7 +228,7 @@ LIBICAL_VCARD_EXPORT char *vcardparameter_as_ical_string(vcardparameter *paramet
  * vcardparameter_free(param);
  * ```
  */
-LIBICAL_VCARD_EXPORT char *vcardparameter_as_ical_string_r(vcardparameter *parameter);
+LIBICAL_VCARD_EXPORT char *vcardparameter_as_vcard_string_r(vcardparameter *parameter);
 
 /**
  * Returns the vcardparameter_kind of parameter.
