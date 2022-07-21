@@ -6,17 +6,16 @@
 #ifndef VCARDVALUEIMPL_H
 #define VCARDVALUEIMPL_H
 
-//#include "vcardproperty.h"
+#include "vcardproperty.h"
 #include "vcardderivedvalue.h"
 
 struct vcardvalue_impl
 {
-    vcardvalue_kind kind;        /*this is the kind that is visible from the outside */
+    vcardvalue_kind kind;     /*this is the kind that is visible from the outside */
 
     char id[5];
     int size;
-//    vcardproperty *parent;
-void *parent;
+    vcardproperty *parent;
     char *x_value;
 
     union data

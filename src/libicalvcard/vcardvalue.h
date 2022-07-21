@@ -29,9 +29,9 @@ LIBICAL_VCARD_EXPORT void vcardvalue_free(vcardvalue *value);
 
 LIBICAL_VCARD_EXPORT int vcardvalue_is_valid(const vcardvalue *value);
 
-LIBICAL_VCARD_EXPORT const char *vcardvalue_as_ical_string(const vcardvalue *value);
+LIBICAL_VCARD_EXPORT const char *vcardvalue_as_vcard_string(const vcardvalue *value);
 
-LIBICAL_VCARD_EXPORT char *vcardvalue_as_ical_string_r(const vcardvalue *value);
+LIBICAL_VCARD_EXPORT char *vcardvalue_as_vcard_string_r(const vcardvalue *value);
 
 LIBICAL_VCARD_EXPORT vcardvalue_kind vcardvalue_isa(const vcardvalue *value);
 
