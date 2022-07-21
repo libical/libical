@@ -7,7 +7,6 @@
 #define VCARDDERIVEDVALUE_H
 
 #include "libical_vcard_export.h"
-//#include "vcardtypes.h"
 
 typedef struct vcardvalue_impl vcardvalue;
 
