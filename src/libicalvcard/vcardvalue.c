@@ -103,7 +103,7 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
 
     return new;
 }
-#if 0
+
 static char *icalmemory_strdup_and_dequote(const char *str)
 {
     const char *p;
@@ -242,10 +242,8 @@ static char *icalmemory_strdup_and_quote(const vcardvalue *value, const char *un
             /* unescaped COMMA is allowed in CATEGORIES property as its
                considered a list delimiter here, see:
                https://tools.ietf.org/html/rfc5545#section-3.8.1.2 */
-            if ((icalproperty_isa(value->parent) == VCARD_CATEGORIES_PROPERTY) ||
-                (icalproperty_isa(value->parent) == VCARD_RESOURCES_PROPERTY) ||
-                (icalproperty_isa(value->parent) == VCARD_POLLPROPERTIES_PROPERTY) ||
-                (icalproperty_isa(value->parent) == VCARD_LOCATIONTYPE_PROPERTY)) {
+            if ((vcardproperty_isa(value->parent) == VCARD_CATEGORIES_PROPERTY) ||
+                (vcardproperty_isa(value->parent) == VCARD_NICKNAME_PROPERTY)) {
                 icalmemory_append_char(&str, &str_p, &buf_sz, *p);
                 break;
             }
@@ -281,10 +279,10 @@ static char *icalmemory_strdup_and_quote(const vcardvalue *value, const char *un
  */
 static vcardvalue *vcardvalue_new_enum(vcardvalue_kind kind, int x_type, const char *str)
 {
-    int e = icalproperty_kind_and_string_to_enum(kind, str);
+    int e = vcardproperty_kind_and_string_to_enum(kind, str);
     struct vcardvalue_impl *value;
 
-    if (e != 0 && icalproperty_enum_belongs_to_property(icalproperty_value_kind_to_kind(kind), e)) {
+    if (e != 0 && vcardproperty_enum_belongs_to_property(vcardproperty_value_kind_to_kind(kind), e)) {
 
         value = vcardvalue_new_impl(kind);
         value->data.v_enum = e;
@@ -298,81 +296,9 @@ static vcardvalue *vcardvalue_new_enum(vcardvalue_kind kind, int x_type, const c
     return value;
 }
 
-/**
- * Extracts a simple floating point number as a substring.
- * The decimal separator (if any) of the double has to be '.'
- * The code is locale *independent* and does *not* change the locale.
- * It should be thread safe.
- */
-static int simple_str_to_doublestr(const char *from, char *result, int result_len, char **to)
-{
-    char *start = NULL, *end = NULL, *cur = (char *)from;
-
-#if !defined(HAVE_GETNUMBERFORMAT)
-    struct lconv *loc_data = localeconv();
-#endif
-    int i = 0;
-    double dtest;
-
-    /*sanity checks */
-    if (!from || !result) {
-        return 1;
-    }
-
-    /*skip the white spaces at the beginning */
-    while (*cur && isspace((int)*cur))
-        cur++;
-
-    start = cur;
-    /* copy the part that looks like a double into result.
-     * during the copy, we give ourselves a chance to convert the '.'
-     * into the decimal separator of the current locale.
-     */
-    while (*cur && (isdigit((int)*cur) || *cur == '.' || *cur == '+' || *cur == '-')) {
-        ++cur;
-    }
-    end = cur;
-    if (end - start + 1 > result_len) {
-        /*huh hoh, number is too big. getting out */
-        return 1;
-    }
-
-    /* copy the float number string into tmp_buf, and take
-     * care to have the (optional) decimal separator be the one
-     * of the current locale.
-     */
-#if !defined(HAVE_GETNUMBERFORMAT)
-    for (i = 0; i < end - start; ++i) {
-        if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0]
-            && loc_data->decimal_point[0] != '.') {
-            /*replace '.' by the digit separator of the current locale */
-            result[i] = loc_data->decimal_point[0];
-        } else {
-            result[i] = start[i];
-        }
-    }
-#else
-    GetNumberFormat(LOCALE_SYSTEM_DEFAULT, 0, start, NULL, result, result_len);
-#endif
-    if (to) {
-        *to = end;
-    }
-
-    /* now try to convert to a floating point number, to check for validity only */
-    if (sscanf(result, "%lf", &dtest) != 1) {
-        return 1;
-    }
-    return 0;
-}
-
-static void free_vcardvalue_attach_data(char *data, void *user_data)
-{
-    _unused(user_data);
-    free(data);
-}
-
 static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
-                                                       const char *str, icalproperty ** error)
+                                                         const char *str,
+                                                         vcardproperty ** error)
 {
     struct vcardvalue_impl *value = 0;
 
@@ -384,32 +310,6 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     switch (kind) {
 
-    case VCARD_ATTACH_VALUE:
-        {
-            icalattach *attach;
-
-            attach = icalattach_new_from_url(str);
-            if (!attach)
-                break;
-
-            value = vcardvalue_new_attach(attach);
-            icalattach_unref(attach);
-            break;
-        }
-
-    case VCARD_BINARY_VALUE:
-        {
-            icalattach *attach;
-
-            attach = icalattach_new_from_data(strdup(str), free_vcardvalue_attach_data, 0);
-            if (!attach)
-              break;
-
-            value = vcardvalue_new_attach(attach);
-
-            icalattach_unref(attach);
-            break;
-        }
     case VCARD_BOOLEAN_VALUE:
         {
             if (!strcmp(str, "TRUE")) {
@@ -418,55 +318,24 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                 value = vcardvalue_new_boolean(0);
             } else if (error != 0) {
                 char temp[TMP_BUF_SIZE];
-                icalparameter *errParam;
+                vcardparameter *errParam;
 
                 snprintf(temp, sizeof(temp),
                          "Could not parse %s as a %s property",
                          str, vcardvalue_kind_to_string(kind));
-                errParam = icalparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
-                icalparameter_free(errParam);
+                errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
+                *error = vcardproperty_vanew_xlicerror(temp, errParam, 0);
+                vcardparameter_free(errParam);
             }
             break;
         }
 
-    case VCARD_TRANSP_VALUE:
-        value = vcardvalue_new_enum(kind, (int)VCARD_TRANSP_X, str);
-        break;
-    case VCARD_METHOD_VALUE:
-        value = vcardvalue_new_enum(kind, (int)VCARD_METHOD_X, str);
-        break;
-    case VCARD_STATUS_VALUE:
-        value = vcardvalue_new_enum(kind, (int)VCARD_STATUS_X, str);
-        break;
-    case VCARD_ACTION_VALUE:
-        value = vcardvalue_new_enum(kind, (int)VCARD_ACTION_X, str);
+    case VCARD_VERSION_VALUE:
+        value = vcardvalue_new_enum(kind, (int)VCARD_VERSION_X, str);
         break;
 
-    case VCARD_QUERY_VALUE:
-        value = vcardvalue_new_query(str);
-        break;
-
-    case VCARD_CLASS_VALUE:
-        value = vcardvalue_new_enum(kind, (int)VCARD_CLASS_X, str);
-        break;
-    case VCARD_CMD_VALUE:
-        value = vcardvalue_new_enum(kind, VCARD_CMD_X, str);
-        break;
-    case VCARD_QUERYLEVEL_VALUE:
-        value = vcardvalue_new_enum(kind, VCARD_QUERYLEVEL_X, str);
-        break;
-    case VCARD_CARLEVEL_VALUE:
-        value = vcardvalue_new_enum(kind, VCARD_CARLEVEL_X, str);
-        break;
-    case VCARD_BUSYTYPE_VALUE:
-        value = vcardvalue_new_enum(kind, VCARD_BUSYTYPE_X, str);
-        break;
-    case VCARD_POLLMODE_VALUE:
-        value = vcardvalue_new_enum(kind, VCARD_POLLMODE_X, str);
-        break;
-    case VCARD_POLLCOMPLETION_VALUE:
-        value = vcardvalue_new_enum(kind, VCARD_POLLCOMPLETION_X, str);
+    case VCARD_KIND_VALUE:
+        value = vcardvalue_new_enum(kind, (int)VCARD_KIND_X, str);
         break;
 
     case VCARD_INTEGER_VALUE:
@@ -507,81 +376,17 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
             break;
         }
 
-    case VCARD_STRING_VALUE:
-        value = vcardvalue_new_string(str);
-        break;
-
-    case VCARD_VCARDADDRESS_VALUE:
-        value = vcardvalue_new_caladdress(str);
-        break;
-
     case VCARD_URI_VALUE:
         value = vcardvalue_new_uri(str);
         break;
 
-    case VCARD_GEO_VALUE:
-        {
-            char *cur = NULL;
-            struct icalgeotype geo;
-            memset(geo.lat, 0, VCARD_GEO_LEN);
-            memset(geo.lon, 0, VCARD_GEO_LEN);
-
-            if (simple_str_to_doublestr(str, geo.lat, VCARD_GEO_LEN, &cur)) {
-                goto geo_parsing_error;
-            }
-            /* skip white spaces */
-            while (cur && isspace((int)*cur)) {
-                ++cur;
-            }
-
-            /*there is a ';' between the latitude and longitude parts */
-            if (!cur || *cur != ';') {
-                goto geo_parsing_error;
-            }
-
-            ++cur;
-
-            /* skip white spaces */
-            while (cur && isspace((int)*cur)) {
-                ++cur;
-            }
-
-            if (simple_str_to_doublestr(cur, geo.lon, VCARD_GEO_LEN, &cur)) {
-                goto geo_parsing_error;
-            }
-            value = vcardvalue_new_geo(geo);
-            break;
-
-          geo_parsing_error:
-            if (error != 0) {
-                char temp[TMP_BUF_SIZE];
-                icalparameter *errParam;
-
-                snprintf(temp, sizeof(temp),
-                         "Could not parse %s as a %s property",
-                         str, vcardvalue_kind_to_string(kind));
-                errParam = icalparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
-                icalparameter_free(errParam);
-            }
-        }
-        break;
-
-    case VCARD_RECUR_VALUE:
-        {
-            struct icalrecurrencetype rt;
-
-            rt = icalrecurrencetype_from_string(str);
-            if (rt.freq != VCARD_NO_RECURRENCE) {
-                value = vcardvalue_new_recur(rt);
-            }
-            icalmemory_free_buffer(rt.rscale);
-            break;
-        }
-
     case VCARD_DATE_VALUE:
+    case VCARD_TIME_VALUE:
     case VCARD_DATETIME_VALUE:
+    case VCARD_DATEANDORTIME_VALUE:
+    case VCARD_TIMESTAMP_VALUE:
         {
+#if 0
             struct icaltimetype tt;
 
             tt = icaltime_from_string(str);
@@ -591,71 +396,15 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
                 vcardvalue_reset_kind(value);
             }
+#else
+            value = vcardvalue_new_text(str);
+#endif
             break;
         }
 
-    case VCARD_DATETIMEPERIOD_VALUE:
-        {
-            struct icaltimetype tt;
-            struct icalperiodtype p;
-
-            tt = icaltime_from_string(str);
-
-            if (!icaltime_is_null_time(tt)) {
-                value = vcardvalue_new_datetime(tt);
-                break;
-            }
-
-            p = icalperiodtype_from_string(str);
-            if (!icalperiodtype_is_null_period(p)) {
-                value = vcardvalue_new_period(p);
-            }
-
-            break;
-        }
-
-    case VCARD_DURATION_VALUE:
-        {
-            struct icaldurationtype dur = icaldurationtype_from_string(str);
-
-            if (!icaldurationtype_is_bad_duration(dur)) {       /* failed to parse */
-                value = vcardvalue_new_duration(dur);
-            }
-
-            break;
-        }
-
-    case VCARD_PERIOD_VALUE:
-        {
-            struct icalperiodtype p;
-
-            p = icalperiodtype_from_string(str);
-
-            if (!icalperiodtype_is_null_period(p)) {
-                value = vcardvalue_new_period(p);
-            }
-            break;
-        }
-
-    case VCARD_TRIGGER_VALUE:
-        {
-            struct icaltriggertype tr = icaltriggertype_from_string(str);
-
-            if (!icaltriggertype_is_bad_trigger(tr)) {
-                value = vcardvalue_new_trigger(tr);
-            }
-            break;
-        }
-
-    case VCARD_REQUESTSTATUS_VALUE:
-        {
-            struct icalreqstattype rst = icalreqstattype_from_string(str);
-
-            if (rst.code != VCARD_UNKNOWN_STATUS) {
-                value = vcardvalue_new_requeststatus(rst);
-            }
-            break;
-        }
+    case VCARD_LANGUAGETAG_VALUE:
+        value = vcardvalue_new_languagetag(str);
+        break;
 
     case VCARD_X_VALUE:
         {
@@ -669,15 +418,15 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
     default:
         {
             char temp[TMP_BUF_SIZE];
-            icalparameter *errParam;
+            vcardparameter *errParam;
 
             if (error != 0) {
 
                 snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
 
-                errParam = icalparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
-                icalparameter_free(errParam);
+                errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
+                *error = vcardproperty_vanew_xlicerror(temp, errParam, 0);
+                vcardparameter_free(errParam);
             }
 
             snprintf(temp, TMP_BUF_SIZE,
@@ -690,13 +439,13 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     if (error != 0 && *error == 0 && value == 0) {
         char temp[TMP_BUF_SIZE];
-        icalparameter *errParam;
+        vcardparameter *errParam;
 
         snprintf(temp, TMP_BUF_SIZE, "Failed to parse value: \'%s\'", str);
 
-        errParam = icalparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-        *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
-        icalparameter_free(errParam);
+        errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
+        *error = vcardproperty_vanew_xlicerror(temp, errParam, 0);
+        vcardparameter_free(errParam);
     }
 
     return value;
@@ -704,9 +453,9 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
 vcardvalue *vcardvalue_new_from_string(vcardvalue_kind kind, const char *str)
 {
-    return vcardvalue_new_from_string_with_error(kind, str, (icalproperty **) 0);
+    return vcardvalue_new_from_string_with_error(kind, str, (vcardproperty **) 0);
 }
-#endif
+
 void vcardvalue_free(vcardvalue *v)
 {
     icalerror_check_arg_rv((v != 0), "value");
@@ -744,7 +493,7 @@ void vcardvalue_free(vcardvalue *v)
     v->id[0] = 'X';
     icalmemory_free_buffer(v);
 }
-#if 0
+
 int vcardvalue_is_valid(const vcardvalue *value)
 {
     if (value == 0) {
@@ -754,19 +503,7 @@ int vcardvalue_is_valid(const vcardvalue *value)
     return 1;
 }
 
-static char *vcardvalue_binary_as_ical_string_r(const vcardvalue *value)
-{
-    char *str;
-
-    icalerror_check_arg_rz((value != 0), "value");
-
-    str = (char *)icalmemory_new_buffer(60);
-    snprintf(str, 60, "vcardvalue_binary_as_ical_string is not implemented yet");
-
-    return str;
-}
-
-static char *vcardvalue_boolean_as_ical_string_r(const vcardvalue *value)
+static char *vcardvalue_boolean_as_vcard_string_r(const vcardvalue *value)
 {
     int data;
     char *str;
@@ -783,7 +520,7 @@ static char *vcardvalue_boolean_as_ical_string_r(const vcardvalue *value)
 
 #define MAX_INT_DIGITS 12       /* Enough for 2^32 + sign */
 
-static char *vcardvalue_int_as_ical_string_r(const vcardvalue *value)
+static char *vcardvalue_int_as_vcard_string_r(const vcardvalue *value)
 {
     int data;
     char *str;
@@ -798,7 +535,7 @@ static char *vcardvalue_int_as_ical_string_r(const vcardvalue *value)
     return str;
 }
 
-static char *vcardvalue_utcoffset_as_ical_string_r(const vcardvalue *value)
+static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value)
 {
     int data, h, m, s;
     char sign;
@@ -831,7 +568,12 @@ static char *vcardvalue_utcoffset_as_ical_string_r(const vcardvalue *value)
     return str;
 }
 
-static char *vcardvalue_string_as_ical_string_r(const vcardvalue *value)
+static char *vcardvalue_text_as_vcard_string_r(const vcardvalue *value)
+{
+    return icalmemory_strdup_and_quote(value, value->data.v_string);
+}
+
+static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
 {
     const char *data;
     char *str = 0;
@@ -845,55 +587,7 @@ static char *vcardvalue_string_as_ical_string_r(const vcardvalue *value)
 
     return str;
 }
-
-static char *vcardvalue_recur_as_ical_string_r(const vcardvalue *value)
-{
-    struct icalrecurrencetype *recur = value->data.v_recur;
-
-    return icalrecurrencetype_as_string_r(recur);
-}
-
-static char *vcardvalue_text_as_ical_string_r(const vcardvalue *value)
-{
-    return icalmemory_strdup_and_quote(value, value->data.v_string);
-}
-
-static char *vcardvalue_attach_as_ical_string_r(const vcardvalue *value)
-{
-    icalattach *a;
-    char *str;
-
-    icalerror_check_arg_rz((value != 0), "value");
-
-    a = vcardvalue_get_attach(value);
-
-    if (icalattach_get_is_url(a)) {
-        const char *url;
-
-        url = icalattach_get_url(a);
-        str = icalmemory_new_buffer(strlen(url) + 1);
-        strcpy(str, url);
-        return str;
-    } else {
-        const char *data = 0;
-
-        data = (const char *)icalattach_get_data(a);
-        str = icalmemory_new_buffer(strlen(data) + 1);
-        strcpy(str, data);
-        return str;
-    }
-}
-
-static char *vcardvalue_duration_as_ical_string_r(const vcardvalue *value)
-{
-    struct icaldurationtype data;
-
-    icalerror_check_arg_rz((value != 0), "value");
-    data = vcardvalue_get_duration(value);
-
-    return icaldurationtype_as_ical_string_r(data);
-}
-
+#if 0
 static void print_time_to_string(char *str, const struct icaltimetype *data)
 {       /* this function is a candidate for a library-wide external function
            except it isn't used any place outside of vcardvalue.c.
@@ -925,7 +619,7 @@ void print_date_to_string(char *str, const struct icaltimetype *data)
     }
 }
 
-static char *vcardvalue_date_as_ical_string_r(const vcardvalue *value)
+static char *vcardvalue_date_as_vcard_string_r(const vcardvalue *value)
 {
     struct icaltimetype data;
     char *str;
@@ -958,7 +652,7 @@ void print_datetime_to_string(char *str, const struct icaltimetype *data)
     }
 }
 
-static char *vcardvalue_datetime_as_ical_string_r(const vcardvalue *value)
+static char *vcardvalue_datetime_as_vcard_string_r(const vcardvalue *value)
 {
     struct icaltimetype data;
     char *str;
@@ -980,8 +674,8 @@ static char *vcardvalue_datetime_as_ical_string_r(const vcardvalue *value)
 
     return str;
 }
-
-static char *vcardvalue_float_as_ical_string_r(const vcardvalue *value)
+#endif
+static char *vcardvalue_float_as_vcard_string_r(const vcardvalue *value)
 {
     float data;
     char *str;
@@ -1007,80 +701,16 @@ static char *vcardvalue_float_as_ical_string_r(const vcardvalue *value)
     return str;
 }
 
-static char *vcardvalue_geo_as_ical_string_r(const vcardvalue *value)
-{
-    struct icalgeotype data;
-    char *str;
-    char *old_locale;
-
-    icalerror_check_arg_rz((value != 0), "value");
-
-    data = vcardvalue_get_geo(value);
-
-    /* bypass current locale in order to make
-     * sure snprintf uses a '.' as a separator
-     * set locate to 'C' and keep old locale */
-    old_locale = icalmemory_strdup(setlocale(LC_NUMERIC, NULL));
-    (void)setlocale(LC_NUMERIC, "C");
-
-    str = (char *)icalmemory_new_buffer(80);
-
-    snprintf(str, 80, "%s;%s", data.lat, data.lon);
-
-    /* restore saved locale */
-    (void)setlocale(LC_NUMERIC, old_locale);
-    icalmemory_free_buffer(old_locale);
-
-    return str;
-}
-
-static char *vcardvalue_datetimeperiod_as_ical_string_r(const vcardvalue *value)
-{
-    struct icaldatetimeperiodtype dtp = vcardvalue_get_datetimeperiod(value);
-
-    icalerror_check_arg_rz((value != 0), "value");
-
-    if (!icaltime_is_null_time(dtp.time)) {
-        return icaltime_as_ical_string_r(dtp.time);
-    } else {
-        return icalperiodtype_as_ical_string_r(dtp.period);
-    }
-}
-
-static char *vcardvalue_period_as_ical_string_r(const vcardvalue *value)
-{
-    struct icalperiodtype data;
-
-    icalerror_check_arg_rz((value != 0), "value");
-    data = vcardvalue_get_period(value);
-
-    return icalperiodtype_as_ical_string_r(data);
-}
-
-static char *vcardvalue_trigger_as_ical_string_r(const vcardvalue *value)
-{
-    struct icaltriggertype data;
-
-    icalerror_check_arg_rz((value != 0), "value");
-    data = vcardvalue_get_trigger(value);
-
-    if (!icaltime_is_null_time(data.time)) {
-        return icaltime_as_ical_string_r(data.time);
-    } else {
-        return icaldurationtype_as_ical_string_r(data.duration);
-    }
-}
-
-const char *vcardvalue_as_ical_string(const vcardvalue *value)
+const char *vcardvalue_as_vcard_string(const vcardvalue *value)
 {
     char *buf;
 
-    buf = vcardvalue_as_ical_string_r(value);
+    buf = vcardvalue_as_vcard_string_r(value);
     icalmemory_add_tmp_buffer(buf);
     return buf;
 }
 
-char *vcardvalue_as_ical_string_r(const vcardvalue *value)
+char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 {
     if (value == 0) {
         return 0;
@@ -1088,75 +718,41 @@ char *vcardvalue_as_ical_string_r(const vcardvalue *value)
 
     switch (value->kind) {
 
-    case VCARD_ATTACH_VALUE:
-        return vcardvalue_attach_as_ical_string_r(value);
-
-    case VCARD_BINARY_VALUE:
-        return vcardvalue_binary_as_ical_string_r(value);
-
     case VCARD_BOOLEAN_VALUE:
-        return vcardvalue_boolean_as_ical_string_r(value);
+        return vcardvalue_boolean_as_vcard_string_r(value);
 
     case VCARD_INTEGER_VALUE:
-        return vcardvalue_int_as_ical_string_r(value);
+        return vcardvalue_int_as_vcard_string_r(value);
 
     case VCARD_UTCOFFSET_VALUE:
-        return vcardvalue_utcoffset_as_ical_string_r(value);
+        return vcardvalue_utcoffset_as_vcard_string_r(value);
 
     case VCARD_TEXT_VALUE:
-        return vcardvalue_text_as_ical_string_r(value);
+        return vcardvalue_text_as_vcard_string_r(value);
 
-    case VCARD_QUERY_VALUE:
-        return vcardvalue_string_as_ical_string_r(value);
-
-    case VCARD_STRING_VALUE:
     case VCARD_URI_VALUE:
-    case VCARD_VCARDADDRESS_VALUE:
-        return vcardvalue_string_as_ical_string_r(value);
+    case VCARD_LANGUAGETAG_VALUE:
+        return vcardvalue_string_as_vcard_string_r(value);
 
     case VCARD_DATE_VALUE:
-        return vcardvalue_date_as_ical_string_r(value);
+    case VCARD_TIME_VALUE:
+//        return vcardvalue_date_as_vcard_string_r(value);
     case VCARD_DATETIME_VALUE:
-        return vcardvalue_datetime_as_ical_string_r(value);
-    case VCARD_DURATION_VALUE:
-        return vcardvalue_duration_as_ical_string_r(value);
-
-    case VCARD_PERIOD_VALUE:
-        return vcardvalue_period_as_ical_string_r(value);
-    case VCARD_DATETIMEPERIOD_VALUE:
-        return vcardvalue_datetimeperiod_as_ical_string_r(value);
+    case VCARD_DATEANDORTIME_VALUE:
+    case VCARD_TIMESTAMP_VALUE:
+//        return vcardvalue_datetime_as_vcard_string_r(value);
+return vcardvalue_text_as_vcard_string_r(value);
 
     case VCARD_FLOAT_VALUE:
-        return vcardvalue_float_as_ical_string_r(value);
+        return vcardvalue_float_as_vcard_string_r(value);
 
-    case VCARD_GEO_VALUE:
-        return vcardvalue_geo_as_ical_string_r(value);
-
-    case VCARD_RECUR_VALUE:
-        return vcardvalue_recur_as_ical_string_r(value);
-
-    case VCARD_TRIGGER_VALUE:
-        return vcardvalue_trigger_as_ical_string_r(value);
-
-    case VCARD_REQUESTSTATUS_VALUE:
-        return icalreqstattype_as_string_r(value->data.v_requeststatus);
-
-    case VCARD_ACTION_VALUE:
-    case VCARD_CMD_VALUE:
-    case VCARD_QUERYLEVEL_VALUE:
-    case VCARD_CARLEVEL_VALUE:
-    case VCARD_METHOD_VALUE:
-    case VCARD_STATUS_VALUE:
-    case VCARD_TRANSP_VALUE:
-    case VCARD_CLASS_VALUE:
-    case VCARD_BUSYTYPE_VALUE:
-    case VCARD_POLLMODE_VALUE:
-    case VCARD_POLLCOMPLETION_VALUE:
+    case VCARD_KIND_VALUE:
+    case VCARD_VERSION_VALUE:
         if (value->x_value != 0) {
             return icalmemory_strdup(value->x_value);
         }
 
-        return icalproperty_enum_to_string_r(value->data.v_enum);
+        return vcardproperty_enum_to_string_r(value->data.v_enum);
 
     case VCARD_X_VALUE:
         if (value->x_value != 0)
@@ -1193,7 +789,7 @@ int vcardvalue_isa_value(void *value)
         return 0;
     }
 }
-
+#if 0
 static int vcardvalue_is_time(const vcardvalue *a)
 {
     vcardvalue_kind kind = vcardvalue_isa(a);
@@ -1210,7 +806,7 @@ static int vcardvalue_is_time(const vcardvalue *a)
  * not part of the returned enum.
  * FIXME We should probably add an error value to the enum.
  */
-icalparameter_xliccomparetype vcardvalue_compare(const vcardvalue *a, const vcardvalue *b)
+vcardparameter_xliccomparetype vcardvalue_compare(const vcardvalue *a, const vcardvalue *b)
 {
     icalerror_check_arg_rz((a != 0), "a");
     icalerror_check_arg_rz((b != 0), "b");
@@ -1308,8 +904,8 @@ icalparameter_xliccomparetype vcardvalue_compare(const vcardvalue *a, const vcar
             int r;
             char *temp1, *temp2;
 
-            temp1 = vcardvalue_as_ical_string_r(a);
-            temp2 = vcardvalue_as_ical_string_r(b);
+            temp1 = vcardvalue_as_vcard_string_r(a);
+            temp2 = vcardvalue_as_vcard_string_r(b);
             r = strcmp(temp1, temp2);
             icalmemory_free_buffer(temp1);
             icalmemory_free_buffer(temp2);
@@ -1388,90 +984,18 @@ if (1) {
         }
     }
 }
-#if 0
-void vcardvalue_set_parent(vcardvalue *value, icalproperty *property)
+
+void vcardvalue_set_parent(vcardvalue *value, vcardproperty *property)
 {
     icalerror_check_arg_rv((value != 0), "value");
 
     value->parent = property;
 }
 
-icalproperty *vcardvalue_get_parent(vcardvalue *value)
+vcardproperty *vcardvalue_get_parent(vcardvalue *value)
 {
     return value->parent;
 }
 
-int vcardvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBufferLen)
-{
-    char *ptr;
-    vcardvalue *value = 0;
-
-    if ((szText == 0) || (szEncText == 0))
-        return 0;
-
-    value = vcardvalue_new_from_string(VCARD_STRING_VALUE, szText);
-
-    if (value == 0)
-        return 0;
-
-    ptr = vcardvalue_text_as_ical_string_r(value);
-    if (ptr == 0)
-        return 0;
-
-    if ((int)strlen(ptr) >= nMaxBufferLen) {
-        vcardvalue_free(value);
-        icalmemory_free_buffer(ptr);
-        return 0;
-    }
-
-    strcpy(szEncText, ptr);
-    icalmemory_free_buffer(ptr);
-
-    vcardvalue_free((vcardvalue *) value);
-
-    return 1;
-}
-
-int vcardvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen)
-{
-    char *str, *str_p;
-    const char *p;
-    size_t buf_sz;
-
-    if ((szText == 0) || (szDecText == 0))
-        return 0;
-
-    buf_sz = strlen(szText) + 1;
-    str_p = str = (char *)icalmemory_new_buffer(buf_sz);
-
-    if (str_p == 0) {
-        return 0;
-    }
-
-    for (p = szText; *p != 0; p++) {
-        if (*p == '\\') {
-            icalmemory_append_char(&str, &str_p, &buf_sz, *(p + 1));
-            p++;
-        } else {
-            icalmemory_append_char(&str, &str_p, &buf_sz, *p);
-        }
-
-        if (str_p - str > nMaxBufferLen)
-            break;
-    }
-
-    icalmemory_append_char(&str, &str_p, &buf_sz, '\0');
-
-    if ((int)strlen(str) >= nMaxBufferLen) {
-        icalmemory_free_buffer(str);
-        return 0;
-    }
-
-    strcpy(szDecText, str);
-
-    icalmemory_free_buffer(str);
-    return 1;
-}
-#endif
 /* The remaining interfaces are 'new', 'set' and 'get' for each of the value
    types */
