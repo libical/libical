@@ -1,0 +1,14 @@
+/*======================================================================
+ FILE: vcardderivedproperty.h
+
+ ======================================================================*/
+
+#ifndef VCARDDERIVEDPROPERTY_H
+#define VCARDDERIVEDPROPERTY_H
+
+#include "vcardparameter.h"
+#include "vcardderivedvalue.h"
+
+typedef struct vcardproperty_impl vcardproperty;
+
+<insert_code_here>
