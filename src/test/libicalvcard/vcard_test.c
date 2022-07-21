@@ -1,14 +1,23 @@
 #include <stdio.h>
 
-#include "icalcomponent.h"
 #include "vcard.h"
 
 int main()
 {
-    icalcomponent *comp = vcard_hello_world();
-    if (icalcomponent_isa(comp) != ICAL_VEVENT_COMPONENT) {
-        fprintf(stderr, "Unexpected component\n");
+    vcard *card =
+        vcard_vanew(VCARD_VERSION_40,
+                    vcardproperty_new_fn("Mickey Mouse"),
+                    vcardproperty_new_kind(VCARD_KIND_INDIVIDUAL),
+                    vcardproperty_vanew_note("Test vCard",
+                                             vcardparameter_new_language("en"),
+                                             0),
+                    0);
+    if (card == NULL) {
+        fprintf(stderr, "Failed to create vCard\n");
         return -1;
     }
+
+    printf("%s\n", vcard_as_vcard_string(card));
+    vcard_free(card);
     return 0;
 }
