@@ -10,9 +10,9 @@
 #include "vcard.h"
 #include "icalerror.h"
 #include "icalmemory.h"
-//#include "icalparser.h"
+#include "vcardparser.h"
 #include "vcardproperty_p.h"
-//#include "icalrestriction.h"
+//#include "vcardrestriction.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -32,7 +32,7 @@ static void vcard_add_children(vcard *impl, va_list args)
 
     while ((vp = va_arg(args, void *)) != 0)
     {
-//        icalassert(vcardproperty_isa_property(vp) != 0);
+        icalassert(vcardproperty_isa_property(vp) != 0);
 
         vcard_add_property(impl, (vcardproperty *) vp);
     }
@@ -41,9 +41,6 @@ static void vcard_add_children(vcard *impl, va_list args)
 static vcard *vcard_new_impl(vcardproperty_version version)
 {
     vcard *card;
-
-    if (version == VCARD_VERSION_NONE)
-        return NULL;
 
     if ((card = (vcard *) icalmemory_new_buffer(sizeof(vcard))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -57,7 +54,8 @@ static vcard *vcard_new_impl(vcardproperty_version version)
     card->version = version;
     card->properties = pvl_newlist();
 
-    vcard_add_property(card, vcardproperty_new_version(version));
+    if (version && version != VCARD_VERSION_NONE)
+        vcard_add_property(card, vcardproperty_new_version(version));
 
     return card;
 }
@@ -277,7 +275,8 @@ vcardproperty *vcard_get_first_property(vcard *c, vcardproperty_kind kind)
     icalerror_check_arg_rz((c != 0), "card");
 
     for (c->property_iterator = pvl_head(c->properties);
-         c->property_iterator != 0; c->property_iterator = pvl_next(c->property_iterator)) {
+         c->property_iterator != 0;
+         c->property_iterator = pvl_next(c->property_iterator)) {
 
         vcardproperty *p = (vcardproperty *) pvl_data(c->property_iterator);
 
@@ -298,7 +297,8 @@ vcardproperty *vcard_get_next_property(vcard *c, vcardproperty_kind kind)
     }
 
     for (c->property_iterator = pvl_next(c->property_iterator);
-         c->property_iterator != 0; c->property_iterator = pvl_next(c->property_iterator)) {
+         c->property_iterator != 0;
+         c->property_iterator = pvl_next(c->property_iterator)) {
 
         vcardproperty *p = (vcardproperty *) pvl_data(c->property_iterator);
 
@@ -316,7 +316,7 @@ vcardproperty **vcard_get_properties(vcard *card, vcardproperty_kind kind);
 int vcard_check_restrictions(vcard *comp)
 {
     icalerror_check_arg_rz(comp != 0, "comp");
-//    return icalrestriction_check(comp);
+//    return vcardrestriction_check(comp);
     return 0;
 }
 
