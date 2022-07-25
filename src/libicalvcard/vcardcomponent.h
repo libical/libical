@@ -1,132 +1,151 @@
 /*======================================================================
- FILE: vcard.h
+ FILE: vcardcomponent.h
 
 ======================================================================*/
 
 /**
- *      @file vcard.h
+ *      @file vcardcomponent.h
  */
 
-#ifndef VCARD_H
-#define VCARD_H
+#ifndef VCARDCOMPONENT_H
+#define VCARDCOMPONENT_H
 
 #include "libical_vcard_export.h"
 #include "vcardproperty.h"
 #include "pvl.h"
 
-typedef struct vcard_impl vcard;
+typedef enum vcardcomponent_kind
+{
+    VCARD_NO_COMPONENT,
+    VCARD_ANY_COMPONENT, /* Used to select all components */
+    VCARD_XROOT_COMPONENT,
+    VCARD_VCARD_COMPONENT,
+    VCARD_NUM_COMPONENT_TYPES /* MUST be last (unless we can put NO_COMP last) */
+} vcardcomponent_kind;
+
+typedef struct vcardcomponent_impl vcardcomponent;
 
 /** @brief Constructor
  */
-LIBICAL_VCARD_EXPORT vcard *vcard_new(vcardproperty_version version);
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_new(vcardcomponent_kind kind);
 
 /**
  * @brief Deeply clones an vcard.
  * Returns a pointer to the memory for the newly cloned vcard.
  * @since 3.1.0
  */
-LIBICAL_VCARD_EXPORT vcard *vcard_clone(const vcard *card);
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_clone(const vcardcomponent *card);
 
 /** @brief Constructor
  */
-LIBICAL_VCARD_EXPORT vcard *vcard_new_from_string(const char *str);
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_new_from_string(const char *str);
 
 /** @brief Constructor
  */
-LIBICAL_VCARD_EXPORT vcard *vcard_vanew(vcardproperty_version version, ...);
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_vanew(vcardcomponent_kind kind, ...);
 
 /*** @brief Destructor
  */
-LIBICAL_VCARD_EXPORT void vcard_free(vcard *card);
+LIBICAL_VCARD_EXPORT void vcardcomponent_free(vcardcomponent *card);
 
-LIBICAL_VCARD_EXPORT char *vcard_as_vcard_string(vcard *card);
+LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string(vcardcomponent *card);
 
-LIBICAL_VCARD_EXPORT char *vcard_as_vcard_string_r(vcard *card);
+LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string_r(vcardcomponent *card);
 
-LIBICAL_VCARD_EXPORT int vcard_is_valid(vcard *card);
+LIBICAL_VCARD_EXPORT int vcardcomponent_is_valid(vcardcomponent *card);
 
 
 /***** Working with Properties *****/
 
-LIBICAL_VCARD_EXPORT void vcard_add_property(vcard *card,
-                                             vcardproperty *property);
+LIBICAL_VCARD_EXPORT void vcardcomponent_add_property(vcardcomponent *card,
+                                                      vcardproperty *property);
 
-LIBICAL_VCARD_EXPORT void vcard_remove_property(vcard *card,
-                                                vcardproperty *property);
+LIBICAL_VCARD_EXPORT void vcardcomponent_remove_property(vcardcomponent *card,
+                                                         vcardproperty *property);
 
-LIBICAL_VCARD_EXPORT int vcard_count_properties(vcard *card,
-                                                vcardproperty_kind kind);
+LIBICAL_VCARD_EXPORT int vcardcomponent_count_properties(vcardcomponent *card,
+                                                         vcardproperty_kind kind);
+
+/***** Working with Components *****/
+
+LIBICAL_VCARD_EXPORT void vcardcomponent_add_component(vcardcomponent *parent, vcardcomponent *child);
+
+LIBICAL_VCARD_EXPORT void vcardcomponent_remove_component(vcardcomponent *parent,
+                                                        vcardcomponent *child);
+
+LIBICAL_VCARD_EXPORT int vcardcomponent_count_components(vcardcomponent *component,
+                                                       vcardcomponent_kind kind);
+
+/**
+ *  This takes 2 VCARD components and merges the second one into the first.
+ *  comp_to_merge will no longer exist after calling this function.
+ */
+LIBICAL_VCARD_EXPORT void vcardcomponent_merge_component(vcardcomponent *comp,
+                                                       vcardcomponent *comp_to_merge);
+
+/* Iteration Routines. There are two forms of iterators, internal and
+external. The internal ones came first, and are almost completely
+sufficient, but they fail badly when you want to construct a loop that
+removes components from the container.*/
+
+/* Iterate through components */
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_current_component(vcardcomponent *component);
+
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_first_component(vcardcomponent *component,
+                                                                     vcardcomponent_kind kind);
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_next_component(vcardcomponent *component,
+                                                                    vcardcomponent_kind kind);
 
 /**
  * @brief Sets the parent vcard for the specified vcardproperty @p property.
  * @since 3.0
  */
 LIBICAL_VCARD_EXPORT void vcardproperty_set_parent(vcardproperty *property,
-                                                   vcard *card);
+                                                   vcardcomponent *card);
 
 /**
  * @brief Returns the parent vcard for the specified @p property.
  */
-LIBICAL_VCARD_EXPORT vcard *vcardproperty_get_parent(const vcardproperty *property);
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardproperty_get_parent(const vcardproperty *property);
 
 /* Iterate through the properties */
-LIBICAL_VCARD_EXPORT vcardproperty *vcard_get_current_property(vcard *card);
+LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_current_property(vcardcomponent *card);
 
-LIBICAL_VCARD_EXPORT vcardproperty *vcard_get_first_property(vcard *card,
-                                                             vcardproperty_kind kind);
-LIBICAL_VCARD_EXPORT vcardproperty *vcard_get_next_property(vcard *component,
-                                                                  vcardproperty_kind kind);
+LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_first_property(vcardcomponent *card,
+                                                                      vcardproperty_kind kind);
+LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_next_property(vcardcomponent *component,
+                                                                     vcardproperty_kind kind);
 
 /**
  *  This takes 2 VCARD components and merges the second one into the first.
  *  comp_to_merge will no longer exist after calling this function.
  */
-LIBICAL_VCARD_EXPORT void vcard_merge_card(vcard *card,
-                                           vcard *card_to_merge);
+LIBICAL_VCARD_EXPORT void vcardcomponent_merge_card(vcardcomponent *card,
+                                           vcardcomponent *card_to_merge);
 
 /***** Working with embedded error properties *****/
 
 /* Check the component against itip rules and insert error properties*/
 /* Working with embedded error properties */
-LIBICAL_VCARD_EXPORT int vcard_check_restrictions(vcard *card);
+LIBICAL_VCARD_EXPORT int vcardcomponent_check_restrictions(vcardcomponent *card);
 
 /** @brief Returns the number of errors encountered parsing the data.
  *
  * This function counts the number times the X-LIC-ERROR occurs
  * in the data structure.
  */
-LIBICAL_VCARD_EXPORT int vcard_count_errors(vcard *card);
+LIBICAL_VCARD_EXPORT int vcardcomponent_count_errors(vcardcomponent *card);
 
 /** @brief Removes all X-LIC-ERROR properties*/
-LIBICAL_VCARD_EXPORT void vcard_strip_errors(vcard *card);
+LIBICAL_VCARD_EXPORT void vcardcomponent_strip_errors(vcardcomponent *card);
 
 /** @brief Converts some X-LIC-ERROR properties into RETURN-STATUS properties*/
-LIBICAL_VCARD_EXPORT void vcard_convert_errors(vcard *card);
-#if 0
-/******************** Convenience routines **********************/
+LIBICAL_VCARD_EXPORT void vcardcomponent_convert_errors(vcardcomponent *card);
 
-/**     @brief Sets the DTSTART property to the given icaltime,
- *
- *      This method respects the icaltime type (DATE vs DATE-TIME) and
- *      timezone (or lack thereof).
- */
-LIBICAL_VCARD_EXPORT void vcard_set_dtstart(vcard *comp, struct icaltimetype v);
-
-/**     @brief Gets the DTSTART property as an icaltime
- *
- *      If DTSTART is a DATE-TIME with a timezone parameter and a
- *      corresponding VTIMEZONE is present in the card, the
- *      returned card will already be in the correct timezone;
- *      otherwise the caller is responsible for converting it.
- *
- *      FIXME this is useless until we can flag the failure
- */
-LIBICAL_VCARD_EXPORT struct icaltimetype vcard_get_dtstart(vcard *comp);
-#endif
 /**
  * @brief Normalizes (reorders and sorts the properties) the specified vcard @p comp.
  * @since 3.0
  */
-LIBICAL_VCARD_EXPORT void vcard_normalize(vcard *card);
+LIBICAL_VCARD_EXPORT void vcardcomponent_normalize(vcardcomponent *card);
 
-#endif /* !VCARD_H */
+#endif /* !VCARDCOMPONENT_H */
