@@ -126,6 +126,20 @@ add_custom_command(
 )
 list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c)
 
+if(WIN32)
+  set(TOPS "\"${CMAKE_SOURCE_DIR}\"")
+  set(TOPB "\"${CMAKE_BINARY_DIR}\"")
+else()
+  set(TOPS "${CMAKE_SOURCE_DIR}")
+  set(TOPB "${CMAKE_BINARY_DIR}")
+endif()
+
+add_custom_target(
+  vcard-header ALL
+  DEPENDS ${CMAKE_BINARY_DIR}/src/libicalvcard/vcard.h
+  COMMENT "Target to generate the aggregate vcard.h header"
+)
+
 set(icalvcard_LIB_SRCS
   ${BUILT_SOURCES}
   ${BUILT_HEADERS}
@@ -140,6 +154,19 @@ set(icalvcard_LIB_SRCS
   vcardvalue.c
   vcardvalue.h
   vcardvalueimpl.h
+)
+
+add_custom_command(
+  OUTPUT
+    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcard.h
+  COMMAND
+    ${CMAKE_COMMAND}
+      -DTOPS:FILEPATH=${TOPS}
+      -DTOPB:FILEPATH=${TOPB}
+      -DVCARD_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalvcard/vcard.h
+      -P ${CMAKE_CURRENT_SOURCE_DIR}/vcard_file.cmake
+  DEPENDS ${icalvcard_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/vcard_file.cmake
+  COMMENT "Generate the aggregate vcard.h header"
 )
 
 add_library(icalvcard ${LIBRARY_TYPE} ${icalvcard_LIB_SRCS})
