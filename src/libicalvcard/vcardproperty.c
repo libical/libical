@@ -7,11 +7,11 @@
 #include <config.h>
 #endif
 
-#include "vcardproperty_p.h"
-#include "vcard.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 //#include "vcardparser.h"
+#include "vcardcomponent.h"
+#include "vcardproperty_p.h"
 #include "vcardvalue.h"
 #include "pvl.h"
 
@@ -26,7 +26,7 @@ struct vcardproperty_impl
     pvl_list parameters;
     pvl_elem parameter_iterator;
     vcardvalue *value;
-    vcard *parent;
+    vcardcomponent *parent;
 };
 
 void vcardproperty_add_parameters(vcardproperty *prop, va_list args)
@@ -126,7 +126,7 @@ vcardproperty *vcardproperty_new_from_string(const char *str)
     char *buf;
     char *buf_ptr;
     vcardproperty *prop;
-    vcard *card;
+    vcardcomponent *card;
     int errors = 0;
 
     icalerror_check_arg_rz((str != 0), "str");
@@ -149,13 +149,13 @@ vcardproperty *vcardproperty_new_from_string(const char *str)
         return 0;
     }
 
-    errors = vcard_count_errors(card);
+    errors = vcardcomponent_count_errors(card);
 
-    prop = vcard_get_first_property(card, VCARD_ANY_PROPERTY);
+    prop = vcardcomponent_get_first_property(card, VCARD_ANY_PROPERTY);
 
-    vcard_remove_property(card, prop);
+    vcardcomponent_remove_property(card, prop);
 
-    vcard_free(card);
+    vcardcomponent_free(card);
     icalmemory_free_buffer(buf);
 
     if (errors > 0) {
@@ -899,14 +899,14 @@ char *vcardproperty_get_property_name_r(const vcardproperty *prop)
     return buf;
 }
 
-void vcardproperty_set_parent(vcardproperty *property, vcard *card)
+void vcardproperty_set_parent(vcardproperty *property, vcardcomponent *card)
 {
     icalerror_check_arg_rv((property != 0), "property");
 
     property->parent = card;
 }
 
-vcard *vcardproperty_get_parent(const vcardproperty *property)
+vcardcomponent *vcardproperty_get_parent(const vcardproperty *property)
 {
     icalerror_check_arg_rz((property != 0), "property");
 
