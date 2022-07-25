@@ -130,16 +130,16 @@ set(icalvcard_LIB_SRCS
   ${BUILT_SOURCES}
   ${BUILT_HEADERS}
   libical_vcard_export.h
-  vcardproperty.c
-  vcardproperty.h
+  vcardcomponent.c
+  vcardcomponent.h
   vcardparameter.c
   vcardparameter.h
   vcardparameterimpl.h
+  vcardproperty.c
+  vcardproperty.h
   vcardvalue.c
   vcardvalue.h
   vcardvalueimpl.h
-  vcard.c
-  vcard.h
 )
 
 add_library(icalvcard ${LIBRARY_TYPE} ${icalvcard_LIB_SRCS})
@@ -198,10 +198,10 @@ endif()
 install(FILES
   ${BUILT_HEADERS}
   libical_vcard_export.h
-  vcardproperty.h
+  vcardcomponent.h
   vcardparameter.h
+  vcardproperty.h
   vcardvalue.h
-  vcard.h
   DESTINATION
   ${INCLUDE_INSTALL_DIR}/libical
 )
