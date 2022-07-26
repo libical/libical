@@ -27,7 +27,10 @@ struct vcardparameter_kind_map
     vcardparameter_kind kind;
     const char *name;
 
+    unsigned int flags;
 };
+
+#define VCARD_PARAMETER_IS_MULTIVALUED (1U<<0)
 
 /* This map associates the enumerations for the VALUE parameter with
    the kinds of VALUEs. */
