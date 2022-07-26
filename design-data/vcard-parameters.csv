@@ -1,4 +1,4 @@
-"#Name ","C vcardparameter_kind Enum","C Type","Enumeration Values"
+"#Name ","C vcardparameter_kind Enum","C Type","Enumeration Values",Parameter Flags
 "ANY","0",,
 "NO","99",,
 
@@ -7,11 +7,11 @@
 "VALUE","2","vcardparameter_value","X=20000;TEXT;URI;DATE;TIME;DATE-TIME;DATE-AND-OR-TIME;TIMESTAMP;BOOLEAN;INTEGER;FLOAT;UTC-OFFSET;LANGUAGE-TAG;NONE=20099"
 "PREF","3","int",
 "ALTID","4","const char*",
-"PID","5","const char*",
-"TYPE","6","vcardparameter_type","X=20100;WORK;HOME;TEXT;VOICE;FAX;CELL;VIDEO;PAGER;TEXTPHONE;CONTACT;ACQUIANTANCE;FRIEND;MET;CO-WORKER;COLLEAGUE;CO-RESIDENT;NEIGHBOR;CHILD;SIBLING;SPOUSE;KIN;MUSE;CRUSH;DATE;SWEETHEART;ME;AGENT;EMERGENCY;NONE=20199"
+"PID","5","const char*",,is_multivalued
+"TYPE","6","vcardparameter_type","X=20100;WORK;HOME;TEXT;VOICE;FAX;CELL;VIDEO;PAGER;TEXTPHONE;CONTACT;ACQUIANTANCE;FRIEND;MET;CO-WORKER;COLLEAGUE;CO-RESIDENT;NEIGHBOR;CHILD;SIBLING;SPOUSE;KIN;MUSE;CRUSH;DATE;SWEETHEART;ME;AGENT;EMERGENCY;NONE=20199",is_multivalued
 "MEDIATYPE","7","const char*",
 "CALSCALE","8","vcardparameter_calscale","X=20200;GREGORIAN;NONE=20299"
-"SORT-AS","9","const char*",
+"SORT-AS","9","const char*",,is_multivalued
 "GEO","10","const char*",
 "TZ","11","const char*",
 "X","12","const char*",

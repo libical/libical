@@ -175,13 +175,33 @@ sub insert_code
       my $uc = join("", map {uc(lc($_));} split(/-/, $param));
 
       $count++;
-      $out .= "    {${ucprefix}_${uc}_PARAMETER, \"$param\"},\n";
+      $out .= "    {${ucprefix}_${uc}_PARAMETER, \"$param\"";
 
+      if ($opt_v) {
+          my @flags = @{$params{$param}->{'flags'}};
+          if (@flags) {
+              my $sep = ", ";
+              foreach $flag (@flags) {
+                  $flag =~ s/-//g;
+                  $flag  = uc($flag);
+                  $out .= "${sep}${ucprefix}_PARAMETER_${flag}";
+                  $sep = " | ";
+              }
+          } else {
+              $out .= ", 0";
+          }
+      }
+
+      $out .= "},\n";
     }
     $count += 1;
     print "static const struct ${lcprefix}parameter_kind_map parameter_map[$count] = {\n";
     print $out;
-    print "    { ${ucprefix}_NO_PARAMETER, \"\"}\n};\n\n";
+    if ($opt_v) {
+        print "    { ${ucprefix}_NO_PARAMETER, \"\", 0}\n};\n\n";
+    } else {
+        print "    { ${ucprefix}_NO_PARAMETER, \"\"}\n};\n\n";
+    }
 
     # Create the parameter value map
     $out   = "";
