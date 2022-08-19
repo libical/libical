@@ -633,12 +633,12 @@ parse_day			(ParsingData	*data,
   char *day_part, *p;
   DayCode day_code;
 
+  *day = *weekday = 0;
+
   if (!field) {
     *day = 1;
     return DAY_SIMPLE;
   }
-
-  *day = *weekday = 0;
 
   if (!strncmp (field, "last", 4)) {
     *weekday = parse_weekday (data, field + 4);
