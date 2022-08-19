@@ -156,18 +156,14 @@ static void	parse_coord			(char		*coord,
 
 void
 parse_olson_file		(char		*filename,
-				 GArray	       **zone_data,
-				 GHashTable    **rule_data,
-				 GHashTable    **link_data,
+				 GArray	       *zone_data,
+				 GHashTable    *rule_data,
+				 GHashTable    *link_data,
 				 int		*max_until_year)
 {
   ParsingData data;
   FILE *fp;
   int zone_continues = 0;
-
-  *zone_data = g_array_new (FALSE, FALSE, sizeof (ZoneData));
-  *rule_data = g_hash_table_new (g_str_hash, g_str_equal);
-  *link_data = g_hash_table_new (g_str_hash, g_str_equal);
 
   fp = fopen (filename, "r");
   if (!fp) {
@@ -176,9 +172,9 @@ parse_olson_file		(char		*filename,
   }
 
   data.filename = filename;
-  data.zone_data = *zone_data;
-  data.rule_data = *rule_data;
-  data.link_data = *link_data;
+  data.zone_data = zone_data;
+  data.rule_data = rule_data;
+  data.link_data = link_data;
   data.max_until_year = 0;
 
   for (data.line_number = 0; ; data.line_number++) {

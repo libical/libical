@@ -55,7 +55,7 @@ char*    VzicOlsonDir                   = OLSON_DIR;
 
 GList*	 VzicTimeZoneNames		= NULL;
 
-static void	convert_olson_file		(char		*olson_file);
+static void	convert_olson_files		(GPtrArray *olson_filenames);
 
 static void	usage				(void);
 
@@ -76,6 +76,7 @@ main				(int		 argc,
   char directory[PATHNAME_BUFFER_SIZE];
   char filename[PATHNAME_BUFFER_SIZE];
   GHashTable *zones_hash;
+  GPtrArray *olson_filenames;
 
   /*
    * Command-Line Option Parsing.
@@ -164,39 +165,45 @@ main				(int		 argc,
   }
 
   /*
-   * Convert the Olson timezone files.
+   * Decide which Olson timezone files to convert.
    */
-  convert_olson_file ("africa");
-  convert_olson_file ("antarctica");
-  convert_olson_file ("asia");
-  convert_olson_file ("australasia");
-  convert_olson_file ("europe");
-  convert_olson_file ("northamerica");
-  convert_olson_file ("southamerica");
+  olson_filenames = g_ptr_array_new();
+  g_ptr_array_add(olson_filenames, "africa");
+  g_ptr_array_add(olson_filenames, "antarctica");
+  g_ptr_array_add(olson_filenames, "asia");
+  g_ptr_array_add(olson_filenames, "australasia");
+  g_ptr_array_add(olson_filenames, "europe");
+  g_ptr_array_add(olson_filenames, "northamerica");
+  g_ptr_array_add(olson_filenames, "southamerica");
 
   /* These are backwards-compatibility and weird stuff. */
-  convert_olson_file ("backward");
-  convert_olson_file ("etcetera");
+  g_ptr_array_add(olson_filenames, "backward");
+  g_ptr_array_add(olson_filenames, "etcetera");
 #if 0
-  convert_olson_file ("leapseconds");
-  convert_olson_file ("pacificnew");
-  convert_olson_file ("solar87");
-  convert_olson_file ("solar88");
-  convert_olson_file ("solar89");
+  g_ptr_array_add(olson_filenames, "leapseconds");
+  g_ptr_array_add(olson_filenames, "pacificnew");
+  g_ptr_array_add(olson_filenames, "solar87");
+  g_ptr_array_add(olson_filenames, "solar88");
+  g_ptr_array_add(olson_filenames, "solar89");
 #endif
 
   /* This doesn't really do anything and it messes up vzic-dump.pl so we
      don't bother. */
 #if 0
-  convert_olson_file ("factory");
+  g_ptr_array_add(olson_filenames, "factory");
 #endif
 
   /* This is old System V stuff, which we don't currently support since it
      uses 'min' as a Rule FROM value which messes up our algorithm, making
      it too slow and use too much memory. */
 #if 0
-  convert_olson_file ("systemv");
+  g_ptr_array_add(olson_filenames, "systemv");
 #endif
+
+  /*
+   * Convert the Olson timezone files.
+   */
+  convert_olson_files(olson_filenames);
 
   /* Output the timezone names and coordinates in a zone.tab file, and
      the translatable strings to feed to gettext. */
@@ -207,32 +214,42 @@ main				(int		 argc,
     dump_time_zone_names (VzicTimeZoneNames, VzicOutputDir, zones_hash);
   }
 
+  g_ptr_array_free(olson_filenames, TRUE);
+
   return 0;
 }
 
 
 static void
-convert_olson_file		(char		*olson_file)
+convert_olson_files		(GPtrArray *olson_filenames)
 {
-  char input_filename[PATHNAME_BUFFER_SIZE];
-  GArray *zone_data;
-  GHashTable *rule_data, *link_data;
-  char dump_filename[PATHNAME_BUFFER_SIZE];
-  ZoneData *zone;
-  int i, max_until_year;
+  int i, max_until_year = 0;
 
-  sprintf (input_filename, "%s/%s", VzicOlsonDir, olson_file);
+  GArray *zone_data = g_array_new (FALSE, FALSE, sizeof (ZoneData));
+  GHashTable *rule_data = g_hash_table_new (g_str_hash, g_str_equal);
+  GHashTable *link_data = g_hash_table_new (g_str_hash, g_str_equal);
 
-  parse_olson_file (input_filename, &zone_data, &rule_data, &link_data,
-		    &max_until_year);
+  for (i = 0; i < olson_filenames->len; i++) {
+      const char *olson_filename = g_ptr_array_index(olson_filenames, i);
+      char input_filename[PATHNAME_BUFFER_SIZE];
+      char dump_filename[PATHNAME_BUFFER_SIZE];
+      int file_max_until_year;
 
-  if (VzicDumpOutput) {
-    sprintf (dump_filename, "%s/ZonesVzic/%s", VzicOutputDir, olson_file);
-    dump_zone_data (zone_data, dump_filename);
+      sprintf (input_filename, "%s/%s", VzicOlsonDir, olson_filename);
+      parse_olson_file (input_filename, zone_data, rule_data, link_data,
+              &file_max_until_year);
+      if (file_max_until_year > max_until_year)
+          max_until_year = file_max_until_year;
 
-    sprintf (dump_filename, "%s/RulesVzic/%s", VzicOutputDir, olson_file);
-    dump_rule_data (rule_data, dump_filename);
+      if (VzicDumpOutput) {
+          sprintf (dump_filename, "%s/ZonesVzic/%s", VzicOutputDir, olson_filename);
+          dump_zone_data (zone_data, dump_filename);
+
+          sprintf (dump_filename, "%s/RulesVzic/%s", VzicOutputDir, olson_filename);
+          dump_rule_data (rule_data, dump_filename);
+      }
   }
+
 
   output_vtimezone_files (VzicOutputDir, zone_data, rule_data, link_data,
 			  max_until_year);
