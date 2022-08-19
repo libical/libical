@@ -1746,7 +1746,7 @@ calculate_actual_time		(VzicTime	*vzictime,
     }
 
     g_date_clear (&date, 1);
-    days_in_month = g_date_days_in_month (vzictime->month + 1, vzictime->year);
+    days_in_month = g_date_get_days_in_month (vzictime->month + 1, vzictime->year);
 
   /* Note that the day_code refers to the date before we convert it to
      a wall-clock date and time. So we find the day it was referring to,
@@ -1755,7 +1755,7 @@ calculate_actual_time		(VzicTime	*vzictime,
       /* Find out what day the last day of the month is. */
       g_date_set_dmy (&date, days_in_month, vzictime->month + 1,
 		      vzictime->year);
-      weekday = g_date_weekday (&date) % 7;
+      weekday = g_date_get_weekday (&date) % 7;
 
       /* Calculate how many days we have to go back to get to day_weekday. */
       offset = (weekday + 7 - vzictime->day_weekday) % 7;
@@ -1765,7 +1765,7 @@ calculate_actual_time		(VzicTime	*vzictime,
       /* Find out what day day_number actually is. */
       g_date_set_dmy (&date, vzictime->day_number, vzictime->month + 1,
 		      vzictime->year);
-      weekday = g_date_weekday (&date) % 7;
+      weekday = g_date_get_weekday (&date) % 7;
 
       if (vzictime->day_code == DAY_WEEKDAY_ON_OR_AFTER)
 	offset = (vzictime->day_weekday + 7 - weekday) % 7;
@@ -1784,7 +1784,7 @@ calculate_actual_time		(VzicTime	*vzictime,
 
     if (vzictime->day_number <= 0) {
       vzictime->month--;
-      days_in_month = g_date_days_in_month (vzictime->month + 1, vzictime->year);
+      days_in_month = g_date_get_days_in_month (vzictime->month + 1, vzictime->year);
       vzictime->day_number += days_in_month;
     }
   }
@@ -1930,12 +1930,12 @@ fix_time_overflow			(int		*year,
 	*month = 11;
 	*year = *year - 1;
       }
-      *day = g_date_days_in_month (*month + 1, *year);
+      *day = g_date_get_days_in_month (*month + 1, *year);
     }
   } else if (day_offset == 1) {
     *day = *day + 1;
 
-    if (*day > g_date_days_in_month (*month + 1, *year)) {
+    if (*day > g_date_get_days_in_month (*month + 1, *year)) {
       *month = *month + 1;
       if (*month == 12) {
 	*month = 0;
