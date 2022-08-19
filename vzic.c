@@ -265,7 +265,7 @@ convert_olson_files		(GPtrArray *olson_filenames)
 static void
 usage				(void)
 {
-  fprintf (stderr, "Usage: vzic [--dump] [--dump-changes] [--no-rrules] [--no-rdates] [--pure] [--output-dir <directory>] [--url-prefix <url>] [--olson-dir <directory>]\n");
+  fprintf (stderr, "Usage: vzic [--dump] [--dump-changes] [--no-rrules] [--no-rdates] [--pure] [--gen-links] [--output-dir <directory>] [--url-prefix <url>] [--olson-dir <directory>]\n");
 
   exit (1);
 }

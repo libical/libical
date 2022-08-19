@@ -42,8 +42,6 @@
 /* The maximum number of fields on a line. */
 #define MAX_FIELDS	12
 
-#define CREATE_SYMLINK	1
-
 typedef enum
 {
   ZONE_ID		= 0,	/* The 'Zone' at the start of the line. */
@@ -498,46 +496,44 @@ parse_link_line			(ParsingData	*data)
 #endif
 
 #if CREATE_SYMLINK
-  {
-      int len = strnlen(to,254);
-      int dirs = 0;
-      int i;
-      for (i = 0; i < len; i++) {
-	  dirs += to[i] == '/' ? 1 : 0;
-      }
-      if (dirs >= 0) {
-	  char rel_from[255];
-	  char to_dir[255];
-	  char to_path[255];
-	  if (dirs == 0) {
-	      sprintf(rel_from, "%s.ics", from);
-	  } else if (dirs == 1) {
-	      sprintf(rel_from, "../%s.ics", from);
-	  } else if (dirs == 2) {
-	      sprintf(rel_from, "../../%s.ics", from);
-	  } else {
-	      return;
-	  }
-	  sprintf(to_path, "%s/%s.ics", VzicOutputDir, to);
-	  strncpy(to_dir, to_path, 254);
-	  ensure_directory_exists(dirname(to_dir));
-	  //printf("Creating symlink from %s to %s\n", rel_from, to_path);
-	  symlink(rel_from, to_path);
-      }
+  int len = strnlen(to,254);
+  int dirs = 0;
+  int i;
+  for (i = 0; i < len; i++) {
+    dirs += to[i] == '/' ? 1 : 0;
+  }
+  if (dirs >= 0) {
+    char rel_from[255];
+    char to_dir[255];
+    char to_path[255];
+    if (dirs == 0) {
+      sprintf(rel_from, "%s.ics", from);
+    } else if (dirs == 1) {
+      sprintf(rel_from, "../%s.ics", from);
+    } else if (dirs == 2) {
+      sprintf(rel_from, "../../%s.ics", from);
+    } else {
+      return;
+    }
+    sprintf(to_path, "%s/%s.ics", VzicOutputDir, to);
+    strncpy(to_dir, to_path, 254);
+    ensure_directory_exists(dirname(to_dir));
+    //printf("Creating symlink from %s to %s\n", rel_from, to_path);
+    symlink(rel_from, to_path);
   }
 #else
-  if (g_hash_table_lookup_extended (data->link_data, from,
-				    (gpointer) &old_from,
-				    (gpointer) &zone_list)) {
-    from = old_from;
-  } else {
-    from = g_strdup (from);
-    zone_list = NULL;
-  }
+    if (g_hash_table_lookup_extended (data->link_data, from,
+          (gpointer) &old_from,
+          (gpointer) &zone_list)) {
+      from = old_from;
+    } else {
+      from = g_strdup (from);
+      zone_list = NULL;
+    }
 
-  zone_list = g_list_prepend (zone_list, g_strdup (to));
+    zone_list = g_list_prepend (zone_list, g_strdup (to));
 
-  g_hash_table_insert (data->link_data, from, zone_list);
+    g_hash_table_insert (data->link_data, from, zone_list);
 #endif
 }
 

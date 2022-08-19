@@ -159,6 +159,7 @@ static int	rule_sort_func			(const void	*arg1,
 static void	output_zone			(char		*directory,
 						 ZoneData	*zone,
 						 char		*zone_name,
+						 const char		*alias_of,
 						 GHashTable	*rule_data);
 static gboolean	parse_zone_name			(char		*name,
 						 char	       **directory,
@@ -166,6 +167,7 @@ static gboolean	parse_zone_name			(char		*name,
 						 char	       **filename);
 static void	output_zone_to_files		(ZoneData	*zone,
 						 char		*zone_name,
+						 const char		*alias_of,
 						 GHashTable	*rule_data,
 						 FILE		*fp,
 						 FILE		*changes_fp);
@@ -196,6 +198,7 @@ static gboolean times_match			(VzicTime	*time1,
 						 int		 walloff2);
 static void	output_zone_components		(FILE		*fp,
 						 char		*name,
+						 const char		*alias_of,
 						 GArray		*changes);
 static void	set_previous_offsets		(GArray		*changes);
 static gboolean	check_for_recurrence		(FILE		*fp,
@@ -289,7 +292,7 @@ output_vtimezone_files		(char		*directory,
   /* Output each timezone. */
   for (i = 0; i < zone_data->len; i++) {
     zone = &g_array_index (zone_data, ZoneData, i);
-    output_zone (directory, zone, zone->zone_name, rule_data);
+    output_zone (directory, zone, zone->zone_name, NULL, rule_data);
 
     /* Look for any links from this zone. */
     links = g_hash_table_lookup (link_data, zone->zone_name);
@@ -300,7 +303,7 @@ output_vtimezone_files		(char		*directory,
       /* We ignore Links that don't have a '/' in them (things like 'EST5EDT').
        */
       if (strchr (link_to, '/')) {
-	output_zone (directory, zone, link_to, rule_data);
+        output_zone (directory, zone, link_to, zone->zone_name, rule_data);
       }
 
       links = links->next;
@@ -471,6 +474,7 @@ static void
 output_zone			(char		*directory,
 				 ZoneData	*zone,
 				 char		*zone_name,
+				 const char		*alias_of,
 				 GHashTable	*rule_data)
 {
   FILE *fp, *changes_fp = NULL;
@@ -555,7 +559,7 @@ output_zone			(char		*directory,
 
   fprintf (fp, "BEGIN:VCALENDAR\r\nPRODID:%s\r\nVERSION:2.0\r\n", ProductID);
 
-  output_zone_to_files (zone, zone_name, rule_data, fp, changes_fp);
+  output_zone_to_files (zone, zone_name, alias_of, rule_data, fp, changes_fp);
 
   if (ferror (fp)) {
     fprintf (stderr, "Error writing file: %s\n", filename);
@@ -645,6 +649,7 @@ parse_zone_name			(char		*name,
 static void
 output_zone_to_files		(ZoneData	*zone,
 				 char		*zone_name,
+				 const char		*alias_of,
 				 GHashTable	*rule_data,
 				 FILE		*fp,
 				 FILE		*changes_fp)
@@ -756,7 +761,7 @@ output_zone_to_files		(ZoneData	*zone,
 
   set_previous_offsets (changes);
 
-  output_zone_components (fp, zone_name, changes);
+  output_zone_components (fp, zone_name, alias_of, changes);
 
   if (VzicDumpChanges)
     dump_changes (changes_fp, zone_name, changes);
@@ -1117,6 +1122,7 @@ times_match				(VzicTime	*time1,
 static void
 output_zone_components			(FILE		*fp,
 					 char		*name,
+					 const char		*alias_of,
 					 GArray		*changes)
 {
   VzicTime *vzictime;
@@ -1127,6 +1133,10 @@ output_zone_components			(FILE		*fp,
   struct tm *tm = gmtime(&now);
 
   fprintf (fp, "BEGIN:VTIMEZONE\r\nTZID:%s%s\r\n", TZIDPrefixExpanded, name);
+
+  if (alias_of) {
+    fprintf(fp, "TZID-ALIAS-OF:%s%s\r\n", TZIDPrefixExpanded, alias_of);
+  }
 
   vzictime = &g_array_index (changes, VzicTime, changes->len - 1);
   if (vzictime->until) {

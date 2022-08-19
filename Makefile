@@ -28,6 +28,12 @@ TZID_PREFIX ?= /citadel.org/%D_1/
 # This is what libical-evolution uses.
 #TZID_PREFIX = /softwarestudio.org/Olson_%D_1/
 
+# This is used to indicate how timezone aliases (indicated by a Link line
+# in Olson files) should be generated: The default is to symbolically link
+# the Link zone file to its authorative zone. Alternatively, if set to 0,
+# a VTIMEZONE file is generated for each Link.
+CREATE_SYMLINK ?= 1
+
 
 # Set any -I include directories to find the libical header files, and the
 # libical library to link with. You only need these if you want to run the
@@ -45,7 +51,7 @@ LIBICAL_LDADD = -lical -lpthread
 GLIB_CFLAGS = `pkg-config --cflags glib-2.0`
 GLIB_LDADD = `pkg-config --libs glib-2.0`
 
-CFLAGS = -g -DOLSON_DIR=\"$(OLSON_DIR)\" -DPRODUCT_ID='"$(PRODUCT_ID)"' -DTZID_PREFIX='"$(TZID_PREFIX)"' $(GLIB_CFLAGS) $(LIBICAL_CFLAGS)
+CFLAGS = -g -DOLSON_DIR=\"$(OLSON_DIR)\" -DPRODUCT_ID='"$(PRODUCT_ID)"' -DTZID_PREFIX='"$(TZID_PREFIX)"' -DCREATE_SYMLINK=$(CREATE_SYMLINK) $(GLIB_CFLAGS) $(LIBICAL_CFLAGS)
 
 OBJECTS = vzic.o vzic-parse.o vzic-dump.o vzic-output.o
 
