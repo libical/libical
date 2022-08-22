@@ -300,11 +300,15 @@ output_vtimezone_files		(char		*directory,
     while (links) {
       link_to = links->data;
 
+#if IGNORE_TOP_LEVEL_LINK
       /* We ignore Links that don't have a '/' in them (things like 'EST5EDT').
        */
       if (strchr (link_to, '/')) {
+#endif
         output_zone (directory, zone, link_to, zone->zone_name, rule_data);
+#if IGNORE_TOP_LEVEL_LINK
       }
+#endif
 
       links = links->next;
     }

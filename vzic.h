@@ -60,6 +60,12 @@ extern GList*	VzicTimeZoneNames;
 #define CREATE_SYMLINK 1
 #endif
 
+/* Defines if timezone aliases at top-level ("e.g. EST5EDT")
+ * should be ignored. */
+#ifndef IGNORE_TOP_LEVEL_LINK
+#define IGNORE_TOP_LEVEL_LINK 1
+#endif
+
 /* Days can be expressed either as a simple month day number, 1-31, or a rule
    such as the last Sunday, or the first Monday on or after the 8th. */
 typedef enum
