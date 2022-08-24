@@ -9,7 +9,7 @@
 
 #include "icalerror.h"
 #include "icalmemory.h"
-//#include "vcardparser.h"
+#include "vcardparser.h"
 #include "vcardcomponent.h"
 #include "vcardproperty_p.h"
 #include "vcardvalue.h"
@@ -126,7 +126,7 @@ vcardproperty *vcardproperty_new_from_string(const char *str)
     char *buf;
     char *buf_ptr;
     vcardproperty *prop;
-    vcardcomponent *card;
+    vcardcomponent *comp;
     int errors = 0;
 
     icalerror_check_arg_rz((str != 0), "str");
@@ -141,21 +141,21 @@ vcardproperty *vcardproperty_new_from_string(const char *str)
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "\r\n");
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:VCARD\r\n");
 
-    card = NULL;//vcardparser_parse_string(buf);
+    comp = vcardparser_parse_string(buf);
 
-    if (card == 0) {
+    if (comp == 0) {
         icalerror_set_errno(ICAL_PARSE_ERROR);
         icalmemory_free_buffer(buf);
         return 0;
     }
 
-    errors = vcardcomponent_count_errors(card);
+    errors = vcardcomponent_count_errors(comp);
 
-    prop = vcardcomponent_get_first_property(card, VCARD_ANY_PROPERTY);
+    prop = vcardcomponent_get_first_property(comp, VCARD_ANY_PROPERTY);
 
-    vcardcomponent_remove_property(card, prop);
+    vcardcomponent_remove_property(comp, prop);
 
-    vcardcomponent_free(card);
+    vcardcomponent_free(comp);
     icalmemory_free_buffer(buf);
 
     if (errors > 0) {
