@@ -858,6 +858,29 @@ const char *vcardproperty_get_x_name(vcardproperty *prop)
     return prop->x_name;
 }
 
+void vcardproperty_set_group(vcardproperty *prop, const char *group)
+{
+    icalerror_check_arg_rv((group != 0), "group");
+    icalerror_check_arg_rv((prop != 0), "prop");
+
+    if (prop->group != 0) {
+        icalmemory_free_buffer(prop->group);
+    }
+
+    prop->group = icalmemory_strdup(group);
+
+    if (prop->group == 0) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+    }
+}
+
+const char *vcardproperty_get_group(vcardproperty *prop)
+{
+    icalerror_check_arg_rz((prop != 0), "prop");
+
+    return prop->group;
+}
+
 const char *vcardproperty_get_property_name(const vcardproperty *prop)
 {
     char *buf;
