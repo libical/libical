@@ -252,6 +252,23 @@ sub insert_code
     my $lc = lc($ucf);
     my $uc = uc($lc);
 
+    my $is_multivalued = 0;
+    if ($opt_v) {
+        my @flags = @{$params{$param}->{'flags'}};
+        if (@flags) {
+            foreach $flag (@flags) {
+                $flag =~ s/-//g;
+                $flag  = uc($flag);
+                if ($flag eq 'IS_MULTIVALUED') {
+                    $is_multivalued = 1;
+                    last;
+                }
+            }
+        }
+    }
+
+    my $singletype;
+    my $apitype;
     my $charorenum;
     my $set_code;
     my $pointer_check;
@@ -259,44 +276,67 @@ sub insert_code
     my $xrange;
 
     if ($type =~ /char/) {
-      $type =~ s/char\*/char \*/;
-      $charorenum =
-        "    icalerror_check_arg_rz((param != 0), \"param\");\n    return param->string;";
+        $type =~ s/char\*/char \*/;
 
-      $set_code = "((struct ${lcprefix}parameter_impl *)param)->string = icalmemory_strdup(v);";
+        if ($is_multivalued) {
+            $singletype = $type;
+            $type = "vcardstrarray *";
+            $apitype = "vcardstrarray";
+            $charorenum =
+                "    icalerror_check_arg_rz((param != 0), \"param\");\n    return param->values;";
 
-      $pointer_check   = "    icalerror_check_arg_rz((v != 0), \"v\");";
-      $pointer_check_v = "\n    icalerror_check_arg_rv((v != 0), \"v\");";
+            $set_code = "if (param->values != NULL) {\n        vcardstrarray_free(param->values);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->values = v;";
+
+        } else {
+            $charorenum =
+                "    icalerror_check_arg_rz((param != 0), \"param\");\n    return param->string;";
+
+            $set_code = "if (param->string != NULL) {\n        free((void *)param->string);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->string = icalmemory_strdup(v);";
+        }
+
+        $pointer_check   = "    icalerror_check_arg_rz((v != 0), \"v\");";
+        $pointer_check_v = "\n    icalerror_check_arg_rv((v != 0), \"v\");";
 
     } elsif ($type =~ /int/) {
 
-      $xrange = "    if (param != 0) {\n       return param->data;\n    } else {\n       return 0;\n    }";
-      $charorenum =
-        "    icalerror_check_arg((param != 0), \"param\");\n$xrange";
+        $xrange = "    if (param != 0) {\n       return param->data;\n    } else {\n       return 0;\n    }";
+        $charorenum =
+            "    icalerror_check_arg((param != 0), \"param\");\n$xrange";
 
-      $set_code = "((struct ${lcprefix}parameter_impl *)param)->data = v;";
+        $set_code = "((struct ${lcprefix}parameter_impl *)param)->data = v;";
 
     } else {
 
-      $xrange = "    if (param->string != 0) {\n        return ${ucprefix}_${uc}_X;\n    }\n"
-        if !exists $no_xname{$uc};
+        if ($is_multivalued) {
+            $singletype = "vcardenumarray_element *";
+            $type = "vcardenumarray *";
+            $apitype = "vcardenumarray";
+            $charorenum =
+                "    icalerror_check_arg_rz((param != 0), \"param\");\n    return param->values;";
 
-      $charorenum =
-"    icalerror_check_arg((param != 0), \"param\");\n    if (!param) {\n        return ${ucprefix}_${uc}_NONE;\n    }\n$xrange\n    return ($type)(param->data);";
+            $set_code = "if (param->values != NULL) {\n        vcardenumarray_free(param->values);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->values = v;";
 
-      $pointer_check =
-"    icalerror_check_arg_rz(v >= ${ucprefix}_${uc}_X, \"v\");\n    icalerror_check_arg_rz(v < ${ucprefix}_${uc}_NONE, \"v\");";
+        } else {
+            $xrange = "    if (param->string != 0) {\n        return ${ucprefix}_${uc}_X;\n    }\n"
+                if !exists $no_xname{$uc};
 
-      $pointer_check_v =
-"\n    icalerror_check_arg_rv(v >= ${ucprefix}_${uc}_X, \"v\");\n    icalerror_check_arg_rv(v < ${ucprefix}_${uc}_NONE, \"v\");";
+            $charorenum =
+                "    icalerror_check_arg((param != 0), \"param\");\n    if (!param) {\n        return ${ucprefix}_${uc}_NONE;\n    }\n$xrange\n    return ($type)(param->data);";
 
-      $set_code = "((struct ${lcprefix}parameter_impl *)param)->data = (int)v;";
+            $pointer_check =
+                "    icalerror_check_arg_rz(v >= ${ucprefix}_${uc}_X, \"v\");\n    icalerror_check_arg_rz(v < ${ucprefix}_${uc}_NONE, \"v\");";
 
+            $pointer_check_v =
+                "\n    icalerror_check_arg_rv(v >= ${ucprefix}_${uc}_X, \"v\");\n    icalerror_check_arg_rv(v < ${ucprefix}_${uc}_NONE, \"v\");";
+
+            $set_code = "((struct ${lcprefix}parameter_impl *)param)->data = (int)v;";
+        }
     }
 
     if ($opt_c) {
 
       print <<EOM;
+
 /* $param */
 ${lcprefix}parameter *${lcprefix}parameter_new_${lc}($type v)
 {
@@ -328,24 +368,50 @@ void ${lcprefix}parameter_set_${lc}(${lcprefix}parameter *param, ${type} v)
     icalerror_check_arg_rv((param != 0), "param");
     icalerror_clear_errno();
 
-    if (param->string != NULL) {
-        free((void *)param->string);
-    }
     $set_code
 }
-
 EOM
+
+      if ($is_multivalued) {
+          print <<EOM;
+
+void ${lcprefix}parameter_add_${lc}(${lcprefix}parameter *param, ${singletype} v)
+{$pointer_check_v
+    icalerror_check_arg_rv((param != 0), "param");
+    icalerror_clear_errno();
+
+    ${apitype} **values = &((struct ${lcprefix}parameter_impl *)param)->values;
+    if (*values == 0) *values = ${apitype}_new(5);
+    ${apitype}_add(*values, v);
+}
+
+void ${lcprefix}parameter_remove_${lc}(${lcprefix}parameter *param, ${singletype} v)
+{$pointer_check_v
+    icalerror_check_arg_rv((param != 0), "param");
+    icalerror_clear_errno();
+
+    ${apitype} *values = ((struct ${lcprefix}parameter_impl *)param)->values;
+    if (values != 0) ${apitype}_remove(values, v);
+}
+EOM
+      }
 
     } elsif ($opt_h) {
 
       print <<EOM;
+
 /* $param */
 LIBICAL_${ucprefix}_EXPORT ${lcprefix}parameter * ${lcprefix}parameter_new_${lc}($type v);
 LIBICAL_${ucprefix}_EXPORT ${type} ${lcprefix}parameter_get_${lc}(const ${lcprefix}parameter *value);
 LIBICAL_${ucprefix}_EXPORT void ${lcprefix}parameter_set_${lc}(${lcprefix}parameter *value, ${type} v);
-
 EOM
 
+      if ($is_multivalued) {
+      print <<EOM;
+LIBICAL_${ucprefix}_EXPORT void ${lcprefix}parameter_add_${lc}(${lcprefix}parameter *value, ${singletype} v);
+LIBICAL_${ucprefix}_EXPORT void ${lcprefix}parameter_remove_${lc}(${lcprefix}parameter *value, ${singletype} v);
+EOM
+      }
     }
 
     if ($opt_p) {
