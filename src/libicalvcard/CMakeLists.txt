@@ -146,11 +146,17 @@ set(icalvcard_LIB_SRCS
   libical_vcard_export.h
   vcardcomponent.c
   vcardcomponent.h
+  vcardenumarray.c
+  vcardenumarray.h
   vcardparameter.c
   vcardparameter.h
   vcardparameterimpl.h
+  vcardparser.c
+  vcardparser.h
   vcardproperty.c
   vcardproperty.h
+  vcardstrarray.c
+  vcardstrarray.h
   vcardvalue.c
   vcardvalue.h
   vcardvalueimpl.h
@@ -226,8 +232,11 @@ install(FILES
   ${BUILT_HEADERS}
   libical_vcard_export.h
   vcardcomponent.h
+  vcardenumarray.h
   vcardparameter.h
+  vcardparser.h
   vcardproperty.h
+  vcardstrarray.h
   vcardvalue.h
   DESTINATION
   ${INCLUDE_INSTALL_DIR}/libical
