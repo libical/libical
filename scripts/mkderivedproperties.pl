@@ -233,7 +233,8 @@ sub insert_code
 
     next if !$prop;
 
-    next if $prop eq 'NO' or $prop eq 'ANY';
+    next if $prop eq 'NO' or $prop eq 'ANY'
+        or $prop eq 'BEGIN' or $prop eq 'END';
 
     my ($uc, $lc, $lcvalue, $ucvalue, $type) = fudge_data($prop);
 
