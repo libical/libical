@@ -728,7 +728,11 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
         return vcardvalue_utcoffset_as_vcard_string_r(value);
 
     case VCARD_TEXT_VALUE:
-        return vcardvalue_text_as_vcard_string_r(value);
+        // XXX  Hack until we split structured values
+        if (vcardproperty_is_structured(vcardproperty_isa(value->parent)))
+            return vcardvalue_string_as_vcard_string_r(value);
+        else
+            return vcardvalue_text_as_vcard_string_r(value);
 
     case VCARD_URI_VALUE:
     case VCARD_LANGUAGETAG_VALUE:
@@ -741,7 +745,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
     case VCARD_DATEANDORTIME_VALUE:
     case VCARD_TIMESTAMP_VALUE:
 //        return vcardvalue_datetime_as_vcard_string_r(value);
-return vcardvalue_text_as_vcard_string_r(value);
+        return vcardvalue_string_as_vcard_string_r(value);
 
     case VCARD_FLOAT_VALUE:
         return vcardvalue_float_as_vcard_string_r(value);
