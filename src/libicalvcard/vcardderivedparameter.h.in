@@ -6,6 +6,8 @@
 #define VCARDDERIVEDPARAMETER_H
 
 #include "libical_vcard_export.h"
+#include "vcardenumarray.h"
+#include "vcardstrarray.h"
 
 typedef struct vcardparameter_impl vcardparameter;
 

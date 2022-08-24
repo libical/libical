@@ -28,6 +28,7 @@ LIBICAL_VCARD_EXPORT struct vcardparameter_impl *vcardparameter_new_impl(vcardpa
     strcpy(v->id, "para");
 
     v->kind = kind;
+    v->is_multivalued = vcardparameter_kind_is_multivalued(kind);
 
     return v;
 }
@@ -50,6 +51,12 @@ void vcardparameter_free(vcardparameter *param)
 
     if (param->string != 0) {
         icalmemory_free_buffer((void *)param->string);
+    }
+    else if (param->values != 0) {
+        if (vcardparameter_kind_is_enumerated(param->kind))
+            vcardenumarray_free(param->values);
+        else
+            vcardstrarray_free(param->values);
     }
 
     if (param->x_name != 0) {
@@ -269,9 +276,11 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     buf_ptr = buf;
 
     if (param->kind == VCARD_X_PARAMETER) {
-        icalmemory_append_string(&buf, &buf_ptr, &buf_size, vcardparameter_get_xname(param));
+        icalmemory_append_string(&buf, &buf_ptr,
+                                 &buf_size, vcardparameter_get_xname(param));
     } else if (param->kind == VCARD_IANA_PARAMETER) {
-        icalmemory_append_string(&buf, &buf_ptr, &buf_size, vcardparameter_get_iana_name(param));
+        icalmemory_append_string(&buf, &buf_ptr,
+                                 &buf_size, vcardparameter_get_iana_name(param));
     } else {
 
         kind_string = vcardparameter_kind_to_string(param->kind);
@@ -290,11 +299,38 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "=");
 
     if (param->string != 0) {
-        vcardparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, param->string);
+        vcardparameter_append_encoded_value(&buf, &buf_ptr,
+                                            &buf_size, param->string);
     } else if (param->data != 0) {
         const char *str = vcardparameter_enum_to_string(param->data);
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+    } else if (param->values != 0) {
+        int is_enumerated = vcardparameter_kind_is_enumerated(param->kind);
+        size_t i;
+        const char *sep = "";
+
+        for (i = 0; i < param->values->num_elements; i++) {
+            icalmemory_append_string(&buf, &buf_ptr, &buf_size, sep);
+
+            if (is_enumerated) {
+                const vcardenumarray_element *elem =
+                    vcardenumarray_element_at(param->values, i);
+                if (elem->xvalue != 0) {
+                    vcardparameter_append_encoded_value(&buf, &buf_ptr,
+                                                        &buf_size, elem->xvalue);
+                } else {
+                    const char *str = vcardparameter_enum_to_string(elem->val);
+
+                    icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+                }
+            } else {
+                const char *str = vcardstrarray_element_at(param->values, i);
+
+                icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+            }
+            sep = ",";
+        }
     } else {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         icalmemory_free_buffer(buf);
@@ -438,6 +474,13 @@ int vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2)
         }
     }
     return 1;
+}
+
+int vcardparameter_is_multivalued(vcardparameter *param)
+{
+    icalerror_check_arg_rz((param != 0), "param");
+
+    return param->is_multivalued;
 }
 
 /* Everything below this line is machine generated. Do not edit. */
