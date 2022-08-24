@@ -140,6 +140,11 @@ LIBICAL_VCARD_EXPORT vcardparameter *vcardparameter_new_from_string(const char *
 LIBICAL_VCARD_EXPORT vcardparameter *vcardparameter_new_from_value_string(vcardparameter_kind kind,
                                                                        const char *value);
 
+LIBICAL_VCARD_EXPORT void vcardparameter_set_value_from_string(vcardparameter *param,
+                                                               const char *val);
+LIBICAL_VCARD_EXPORT void vcardparameter_add_value_from_string(vcardparameter *param,
+                                                               const char *val);
+
 /**
  * @brief Frees an vcardparameter object.
  * @param parameter The vcardparameter to free
@@ -613,5 +618,10 @@ LIBICAL_VCARD_EXPORT vcardparameter_kind vcardparameter_string_to_kind(const cha
  * @since 3.0.4
  */
 LIBICAL_VCARD_EXPORT int vcardparameter_kind_is_valid(const vcardparameter_kind kind);
+
+LIBICAL_VCARD_EXPORT int vcardparameter_kind_is_multivalued(const vcardparameter_kind kind);
+LIBICAL_VCARD_EXPORT int vcardparameter_kind_is_enumerated(const vcardparameter_kind kind);
+
+LIBICAL_VCARD_EXPORT int vcardparameter_is_multivalued(vcardparameter *param);
 
 #endif

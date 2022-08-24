@@ -11,6 +11,8 @@
 #include "vcardderivedvalue.h"
 #include "vcardparameter.h"
 #include "vcardparameterimpl.h"
+#include "vcardenumarray.h"
+#include "vcardstrarray.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 //#include "icaltime.h"
@@ -53,6 +55,34 @@ struct vcardparameter_map
 
 <insert_code_here>
 
+int vcardparameter_kind_is_multivalued(const vcardparameter_kind kind)
+{
+    int i, num_params;
+
+    num_params = (int)(sizeof(parameter_map) / sizeof(parameter_map[0]));
+    for (i = 0; i < num_params; i++) {
+        if (parameter_map[i].kind == kind) {
+            return (parameter_map[i].flags & VCARD_PARAMETER_IS_MULTIVALUED);
+        }
+    }
+
+    return 0;
+}
+
+int vcardparameter_kind_is_enumerated(const vcardparameter_kind kind)
+{
+    int i, num_params;
+
+    num_params = (int)(sizeof(vcardparameter_map) / sizeof(vcardparameter_map[0]));
+    for (i = 0; i < num_params; i++) {
+        if (vcardparameter_map[i].kind == kind) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 int vcardparameter_kind_is_valid(const vcardparameter_kind kind)
 {
     int i = 0;
@@ -71,6 +101,7 @@ int vcardparameter_kind_is_valid(const vcardparameter_kind kind)
 
     return 0;
 }
+
 const char *vcardparameter_kind_to_string(vcardparameter_kind kind)
 {
     int i, num_params;
@@ -154,50 +185,48 @@ const char *vcardparameter_enum_to_string(int e)
     return 0;
 }
 
-int vcardparameter_string_to_enum(const char *str)
+int _vcardparameter_string_to_enum(const char *str, vcardparameter_kind *kind)
 {
     int i, num_params;
+    int found_kind = 0;
 
     icalerror_check_arg_rz(str != 0, "str");
 
     num_params = (int)(sizeof(vcardparameter_map) / sizeof(vcardparameter_map[0]));
     for (i = 0; i < num_params; i++) {
-        if (strcasecmp(str, vcardparameter_map[i].str) == 0) {
-            return vcardparameter_map[i].enumeration;
-        }
-    }
-
-    return 0;
-}
-
-vcardparameter *vcardparameter_new_from_value_string(vcardparameter_kind kind, const char *val)
-{
-    struct vcardparameter_impl *param = 0;
-    int found_kind = 0;
-    int i, num_params;
-
-    icalerror_check_arg_rz((val != 0), "val");
-
-    /* Search through the parameter map to find a matching kind */
-
-    param = vcardparameter_new_impl(kind);
-    if (!param) {
-        return 0;
-    }
-
-    num_params = (int)(sizeof(vcardparameter_map) / sizeof(vcardparameter_map[0]));
-    for (i = 0; i < num_params; i++) {
-        if (kind == vcardparameter_map[i].kind) {
+        if (!kind || (*kind == vcardparameter_map[i].kind)) {
             found_kind = 1;
-            if (strcasecmp(val, vcardparameter_map[i].str) == 0) {
-
-                param->data = (int)vcardparameter_map[i].enumeration;
-                return param;
+            if (strcasecmp(str, vcardparameter_map[i].str) == 0) {
+                return vcardparameter_map[i].enumeration;
             }
         }
     }
 
-    if (found_kind == 1) {
+    if (kind && !found_kind) *kind = 0;
+
+    return 0;
+}
+
+int vcardparameter_string_to_enum(const char *str)
+{
+    return _vcardparameter_string_to_enum(str, NULL);
+}
+
+void vcardparameter_set_value_from_string(vcardparameter *param,
+                                          const char *val)
+{
+    vcardparameter_kind kind = vcardparameter_isa(param);
+    int enumeration;
+
+    icalerror_check_arg_rv((param != 0), "param");
+    icalerror_check_arg_rv((val != 0), "val");
+
+    /* Search through the parameter map to find a matching kind */
+    enumeration = _vcardparameter_string_to_enum(val, &kind);
+    if (enumeration != 0) {
+        param->data = enumeration;
+
+    } else if (kind != 0) {
         /* The kind was in the parameter map, but the string did not
            match, so assume that it is an alternate value, like an
            X-value. */
@@ -205,11 +234,62 @@ vcardparameter *vcardparameter_new_from_value_string(vcardparameter_kind kind, c
         vcardparameter_set_xvalue(param, val);
 
     } else {
-
         /* If the kind was not found, then it must be a string type */
 
         ((struct vcardparameter_impl *)param)->string = icalmemory_strdup(val);
     }
+}
+
+void vcardparameter_add_value_from_string(vcardparameter *param,
+                                          const char *val)
+{
+    vcardparameter_kind kind = vcardparameter_isa(param);
+    int enumeration;
+
+    icalerror_check_arg_rv((param != 0 && param->is_multivalued != 0), "param");
+    icalerror_check_arg_rv((val != 0), "val");
+
+    /* Search through the parameter map to find a matching kind */
+    enumeration = _vcardparameter_string_to_enum(val, &kind);
+    if (kind != 0) {
+        vcardenumarray_element e = { enumeration, NULL };
+
+        if (enumeration == 0) {
+            /* The kind was in the parameter map, but the string did not
+               match, so assume that it is an alternate value, like an
+               X-value. */
+            e.xvalue = (char *) val;
+        }
+
+        if (param->values == 0) {
+            param->values = vcardenumarray_new(5);
+        }
+
+        vcardenumarray_add(param->values, &e);
+
+    } else {
+        /* If the kind was not found, then it must be a string type */
+        if (param->values == 0) {
+            param->values = vcardstrarray_new(5);
+        }
+
+        vcardstrarray_add(param->values, val);
+    }
+}
+
+vcardparameter *vcardparameter_new_from_value_string(vcardparameter_kind kind,
+                                                     const char *val)
+{
+    struct vcardparameter_impl *param = 0;
+
+    icalerror_check_arg_rz((val != 0), "val");
+
+    param = vcardparameter_new_impl(kind);
+    if (!param) {
+        return 0;
+    }
+
+    vcardparameter_set_value_from_string(param, val);
 
     return param;
 }
