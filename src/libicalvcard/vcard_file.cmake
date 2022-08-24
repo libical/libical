@@ -1,9 +1,8 @@
-# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
-# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering.
-# It is required to make the combined header ical.h properly.
+# It is required to make the combined header vcard.h properly.
 set(COMBINEDHEADERSVCARD
+  ${TOPS}/src/libicalvcard/vcardenumarray.h
+  ${TOPS}/src/libicalvcard/vcardstrarray.h
   ${TOPB}/src/libicalvcard/vcardderivedvalue.h
   ${TOPB}/src/libicalvcard/vcardderivedparameter.h
   ${TOPS}/src/libicalvcard/vcardvalue.h
@@ -11,9 +10,10 @@ set(COMBINEDHEADERSVCARD
   ${TOPB}/src/libicalvcard/vcardderivedproperty.h
   ${TOPS}/src/libicalvcard/vcardproperty.h
   ${TOPS}/src/libicalvcard/vcardcomponent.h
+  ${TOPS}/src/libicalvcard/vcardparser.h
 )
 
-file(WRITE ${VCARD_FILE_H_FILE} "#ifndef LIBICALVCARD_ICAL_H\n")
+file(WRITE  ${VCARD_FILE_H_FILE} "#ifndef LIBICALVCARD_ICAL_H\n")
 file(APPEND ${VCARD_FILE_H_FILE} "#define LIBICALVCARD_ICAL_H\n")
 file(APPEND ${VCARD_FILE_H_FILE} "#ifndef S_SPLINT_S\n")
 file(APPEND ${VCARD_FILE_H_FILE} "#ifdef __cplusplus\n")
