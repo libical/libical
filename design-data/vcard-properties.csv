@@ -1,7 +1,10 @@
 ,,
 "#Property Name","C vcardproperty_kind Enum","libvcard Value type","vCard default value",Property Flags
 
+"#libical Internal Properties",,
 "ANY","0","NO","NO"
+"BEGIN","497","TEXT","TEXT"
+"END","498","TEXT","TEXT"
 "NO","499","NO","NO"
 
 "#vCard Properties","RFC 6350 Section 6",
