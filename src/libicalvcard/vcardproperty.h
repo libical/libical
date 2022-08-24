@@ -122,6 +122,11 @@ LIBICAL_VCARD_EXPORT vcardproperty *vcardvalue_get_parent(vcardvalue *value);
 LIBICAL_VCARD_EXPORT void vcardproperty_set_x_name(vcardproperty *prop, const char *name);
 LIBICAL_VCARD_EXPORT const char *vcardproperty_get_x_name(vcardproperty *prop);
 
+/* Deal with grouped properties */
+
+LIBICAL_VCARD_EXPORT void vcardproperty_set_group(vcardproperty *prop, const char *group);
+LIBICAL_VCARD_EXPORT const char *vcardproperty_get_group(vcardproperty *prop);
+
 /** Returns the name of the property -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X
  *  property
