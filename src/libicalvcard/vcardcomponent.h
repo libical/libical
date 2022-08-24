@@ -20,6 +20,7 @@ typedef enum vcardcomponent_kind
     VCARD_ANY_COMPONENT,      /* Used to select all components */
     VCARD_XROOT_COMPONENT,    /* Used as container for multiple vCards */
     VCARD_VCARD_COMPONENT,
+    VCARD_X_COMPONENT,
     VCARD_NUM_COMPONENT_TYPES /* MUST be last (unless we can put NO_COMP last) */
 } vcardcomponent_kind;
 
@@ -54,6 +55,10 @@ LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string_r(vcardcomponent *card
 
 LIBICAL_VCARD_EXPORT int vcardcomponent_is_valid(vcardcomponent *card);
 
+LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component);
+
+LIBICAL_VCARD_EXPORT int vcardcomponent_isa_component(void *component);
+
 
 /***** Working with Properties *****/
 
@@ -75,6 +80,14 @@ LIBICAL_VCARD_EXPORT void vcardcomponent_remove_component(vcardcomponent *parent
 
 LIBICAL_VCARD_EXPORT int vcardcomponent_count_components(vcardcomponent *component,
                                                        vcardcomponent_kind kind);
+
+/* Kind conversion routines */
+
+LIBICAL_VCARD_EXPORT int vcardcomponent_kind_is_valid(const vcardcomponent_kind kind);
+
+LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_string_to_kind(const char *string);
+
+LIBICAL_VCARD_EXPORT const char *vcardcomponent_kind_to_string(vcardcomponent_kind kind);
 
 /**
  *  This takes 2 VCARD components and merges the second one into the first.
