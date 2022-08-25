@@ -11,6 +11,7 @@ set(COMBINEDHEADERSVCARD
   ${TOPS}/src/libicalvcard/vcardproperty.h
   ${TOPS}/src/libicalvcard/vcardcomponent.h
   ${TOPS}/src/libicalvcard/vcardparser.h
+  ${TOPS}/src/libicalvcard/vcardrestriction.h
 )
 
 file(WRITE  ${VCARD_FILE_H_FILE} "#ifndef LIBICALVCARD_ICAL_H\n")

@@ -9,7 +9,19 @@
 ################################################################################
 
 use Getopt::Std;
-getopts('i:');
+getopts('vi:');
+
+#Options
+# v -> generate VCARD restrictions
+# i -> .c "in" file (template)
+
+my $ucprefix = "ICAL";
+my $uckey = "METHOD";
+if ($opt_v) {
+    $ucprefix = "VCARD";
+    $uckey = "VERSION";
+}
+my $lcprefix = lc($ucprefix);
 
 # the argument should be the path to the restriction datafile, usually
 # design-data/restrictions.csv
@@ -51,14 +63,15 @@ sub insert_code
 
     s/\#.*$//;
 
-    my ($method, $targetcomp, $prop, $subcomp, $restr, $sub) = split(/,/, $_);
+    # $key is either iCalendar METHOD or vCard VERSION
+    my ($key, $targetcomp, $prop, $subcomp, $restr, $sub) = split(/,/, $_);
 
-    next if !$method;
+    next if !$key;
 
     if (!$sub) {
       $sub = "NULL";
     } else {
-      $sub = "icalrestriction_" . $sub;
+      $sub = "${lcprefix}restriction_" . $sub;
     }
     $restr =~ s/\s+$//;
 
@@ -70,19 +83,19 @@ sub insert_code
     }
 
     my @value = ($restr, $sub);
-    $prop_restr{$method}{$targetcomp}{$prop}{$subcomp} = \@value;
+    $prop_restr{$key}{$targetcomp}{$prop}{$subcomp} = \@value;
   }
 
   # Build the restriction table
-  print "static const icalrestriction_record icalrestriction_records[] = {\n";
+  print "static const ${lcprefix}restriction_record ${lcprefix}restriction_records[] = {\n";
 
-  for $method ( sort keys %prop_restr ) {
-    for $targetcomp ( sort keys %{ $prop_restr{$method} } ) {
-      for $prop ( sort keys %{ $prop_restr{$method}{$targetcomp} } ) {
-        for $subcomp ( sort keys %{ $prop_restr{$method}{$targetcomp}{$prop} } ) {
-          my ($restr, $sub) = @{$prop_restr{$method}{$targetcomp}{$prop}{$subcomp}};
+  for $key ( sort keys %prop_restr ) {
+    for $targetcomp ( sort keys %{ $prop_restr{$key} } ) {
+      for $prop ( sort keys %{ $prop_restr{$key}{$targetcomp} } ) {
+        for $subcomp ( sort keys %{ $prop_restr{$key}{$targetcomp}{$prop} } ) {
+          my ($restr, $sub) = @{$prop_restr{$key}{$targetcomp}{$prop}{$subcomp}};
           print(
-"    \{ICAL_METHOD_${method}, ICAL_${targetcomp}_COMPONENT, ICAL_${prop}_PROPERTY, ICAL_${subcomp}_COMPONENT, ICAL_RESTRICTION_${restr}, $sub},\n"
+"    \{${ucprefix}_${uckey}_${key}, ${ucprefix}_${targetcomp}_COMPONENT, ${ucprefix}_${prop}_PROPERTY, ${ucprefix}_${subcomp}_COMPONENT, ${ucprefix}_RESTRICTION_${restr}, $sub},\n"
           );
         }
       }
@@ -91,7 +104,7 @@ sub insert_code
 
   # Print the terminating line
   print
-    "    {ICAL_METHOD_NONE, ICAL_NO_COMPONENT, ICAL_NO_PROPERTY, ICAL_NO_COMPONENT, ICAL_RESTRICTION_NONE, NULL}\n";
+    "    {${ucprefix}_${uckey}_NONE, ${ucprefix}_NO_COMPONENT, ${ucprefix}_NO_PROPERTY, ${ucprefix}_NO_COMPONENT, ${ucprefix}_RESTRICTION_NONE, NULL}\n";
 
   print "};\n";
 
