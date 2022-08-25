@@ -3,6 +3,7 @@
 
 "#libical Internal Properties",,
 "ANY","0","NO","NO"
+"X-LIC-ERROR","496","TEXT","TEXT"
 "BEGIN","497","TEXT","TEXT"
 "END","498","TEXT","TEXT"
 "NO","499","NO","NO"
@@ -57,30 +58,19 @@
 "SORT-STRING","42","TEXT","TEXT"
 "CLASS","43","TEXT","TEXT"
 
-"#libical Internal Properties",,
-"X-LIC-ERROR","44","TEXT","TEXT"
-"#X-LIC-CLUSTERCOUNT","45","STRING","STRING"
-"#X-LIC-MIMECONTENTTYPE","46","STRING","STRING"
-"#X-LIC-MIMECHARSET","47","STRING","STRING"
-"#X-LIC-MIMEENCODING","48","STRING","STRING"
-"#X-LIC-MIMEOPTINFO","49","STRING","STRING"
-"#X-LIC-MIMECID","50","STRING","STRING"
-"#X-LIC-MIMEFILENAME","51","STRING","STRING"
-"#X-LIC-CLASS","52","X-LIC-CLASS","X-LIC-CLASS"
-
 "#BIRTH/DEATH Extension Properties", "RFC 6474 Section 2",
-"BIRTHPLACE","53","TEXT","TEXT"
-"DEATHPLACE","54","TEXT","TEXT"
-"#DEATHDATE","55","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
-"DEATHDATE","55","TEXT","TEXT"
+"BIRTHPLACE","44","TEXT","TEXT"
+"DEATHPLACE","45","TEXT","TEXT"
+"#DEATHDATE","46","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
+"DEATHDATE","47","TEXT","TEXT"
 
 "#Open Mobile Alliance Extension Properties", "RFC 6715 Section 2",
-"EXPERTISE","56","TEXT","TEXT"
-"HOBBY","57","TEXT","TEXT"
-"INTEREST","58","TEXT","TEXT"
-"ORG-DIRECTORY","59","URI","URI"
+"EXPERTISE","48","TEXT","TEXT"
+"HOBBY","49","TEXT","TEXT"
+"INTEREST","50","TEXT","TEXT"
+"ORG-DIRECTORY","51","URI","URI"
 
 "#RDAP Extension Properties", "RFC 8605 Section 2",
-"CONTACT-URI","60","URI","URI"
+"CONTACT-URI","52","URI","URI"
 
 "#NOTE for updaters.  Preserve the vcardproperty_kind Enum values to aid forward compatibility"
