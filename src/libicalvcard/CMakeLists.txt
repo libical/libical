@@ -91,6 +91,26 @@ add_custom_command(
 )
 list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c)
 
+set(RESTRICTIONDEPS
+  ${ICALSCRIPTS}/mkrestrictiontable.pl
+  ${CMAKE_SOURCE_DIR}/design-data/vcard-restrictions.csv
+)
+
+add_custom_command(
+  OUTPUT
+    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardrestriction.c
+  COMMAND
+    ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkrestrictiontable.pl -v
+      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardrestriction.c.in
+      ${CMAKE_SOURCE_DIR}/design-data/vcard-restrictions.csv >
+      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardrestriction.c
+  DEPENDS
+    ${RESTRICTIONDEPS}
+    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardrestriction.c.in
+  COMMENT "Generate vcardrestriction.c"
+)
+list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardrestriction.c)
+
 set(VALUEDEPS
   ${ICALSCRIPTS}mkderivedvalues.pl
   ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv
