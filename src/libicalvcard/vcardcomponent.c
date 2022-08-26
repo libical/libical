@@ -665,3 +665,147 @@ vcardcomponent_kind vcardcomponent_string_to_kind(const char *string)
 
     return VCARD_NO_COMPONENT;
 }
+
+static int strcmpsafe(const char *a, const char *b)
+{
+    return strcmp((a == NULL ? "" : a),
+                  (b == NULL ? "" : b));
+}
+
+static int prop_compare(void *a, void *b)
+{
+    vcardproperty *p1 = (vcardproperty*) a;
+    vcardproperty *p2 = (vcardproperty*) b;
+    vcardproperty_kind k1 = vcardproperty_isa(p1);
+    vcardproperty_kind k2 = vcardproperty_isa(p2);
+    int r = k1 - k2;
+
+    if (r == 0) {
+        if (k1 == VCARD_X_PROPERTY) {
+            r = strcmp(vcardproperty_get_x_name(p1),
+                       vcardproperty_get_x_name(p2));
+        }
+
+        if (r == 0) {
+            r = strcmpsafe(vcardproperty_get_value_as_string(p1),
+                           vcardproperty_get_value_as_string(p2));
+        }
+    }
+    /* Always sort VERSION first */
+    else if (k1 == VCARD_VERSION_PROPERTY) {
+        r = -1;
+    }
+    else if (k2 == VCARD_VERSION_PROPERTY) {
+        r = 1;
+    }
+
+    return r;
+}
+
+static int prop_kind_compare(vcardproperty_kind kind,
+                             vcardcomponent *c1, vcardcomponent *c2)
+{
+    vcardproperty *p1 = vcardcomponent_get_first_property(c1, kind);
+    vcardproperty *p2 = vcardcomponent_get_first_property(c2, kind);
+
+    if (p1 && p2) {
+        return strcmpsafe(vcardproperty_get_value_as_string(p1),
+                          vcardproperty_get_value_as_string(p2));
+    }
+    else if (p1) return -1;
+    else if (p2) return 1;
+
+    return 0;
+}
+
+static int comp_compare(void *a, void *b)
+{
+    vcardcomponent *c1 = (vcardcomponent*) a;
+    vcardcomponent *c2 = (vcardcomponent*) b;
+    vcardcomponent_kind k1 = vcardcomponent_isa(c1);
+    vcardcomponent_kind k2 = vcardcomponent_isa(c2);
+    int r = k1 - k2;
+
+    if (r == 0) {
+        int i;
+
+        if (k1 == VCARD_VCARD_COMPONENT) {
+            vcardproperty_kind prop_kinds[] = {
+                VCARD_VERSION_PROPERTY,
+                VCARD_N_PROPERTY,
+                VCARD_FN_PROPERTY,
+                VCARD_NICKNAME_PROPERTY,
+                VCARD_ORG_PROPERTY,
+                /* XXX  What else should we compare? */
+                VCARD_NO_PROPERTY
+            };
+
+            for (i = 0; r == 0 && prop_kinds[i] != VCARD_NO_PROPERTY; i++) {
+                r = prop_kind_compare(prop_kinds[i], c1, c2);
+            }
+        }
+        else {
+            r = strcmp(c1->x_name, c2->x_name);
+        }
+
+        if (r == 0) {
+            r = prop_kind_compare(VCARD_UID_PROPERTY, c1, c2);
+
+            if (r == 0) {
+                /* XXX  Anything else to compare? */
+            }
+        }
+    }
+
+    return r;
+}
+
+void vcardcomponent_normalize(vcardcomponent *comp)
+{
+    pvl_list sorted_props = pvl_newlist();
+    pvl_list sorted_comps = pvl_newlist();
+    vcardproperty *prop;
+    vcardcomponent *sub;
+
+    /* Normalize properties into sorted list */
+    while ((prop = pvl_pop(comp->properties)) != 0) {
+        int nparams, remove = 0;
+
+        vcardproperty_normalize(prop);
+
+        nparams = vcardproperty_count_parameters(prop);
+
+        /* Remove unparameterized properties having default values */
+        if (nparams == 0) {
+            switch (vcardproperty_isa(prop)) {
+            case VCARD_KIND_PROPERTY:
+                if (vcardproperty_get_kind(prop) == VCARD_KIND_INDIVIDUAL) {
+                    remove = 1;
+                }
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        if (remove) {
+            vcardproperty_set_parent(prop, 0); // MUST NOT have a parent to free
+            vcardproperty_free(prop);
+        } else {
+            pvl_insert_ordered(sorted_props, prop_compare, prop);
+        }
+    }
+
+    pvl_free(comp->properties);
+    comp->properties = sorted_props;
+
+    /* Normalize sub-components into sorted list */
+    while ((sub = pvl_pop(comp->components)) != 0) {
+        vcardcomponent_normalize(sub);
+        pvl_insert_ordered(sorted_comps, comp_compare, sub);
+    }
+
+    pvl_free(comp->components);
+    comp->components = sorted_comps;
+}
