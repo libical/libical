@@ -58,3 +58,23 @@ void vcardenumarray_free(vcardenumarray *array)
         vcardenumarray_remove_element_at(array, array->num_elements-1);
     icalarray_free(array);
 }
+
+static int enumcmp(const vcardenumarray_element *a, const vcardenumarray_element *b)
+{
+    /* Sort X- values alphabetically, but last */
+    if (a->xvalue) {
+        if (b->xvalue) return strcmp(a->xvalue, b->xvalue);
+        else return 1;
+    }
+    else if (b->xvalue) {
+        return -1;
+    }
+    else {
+        return a->val - b->val;
+    }
+}
+
+void vcardenumarray_sort(vcardenumarray *array)
+{
+    icalarray_sort(array, (int (*)(const void *, const void *)) &enumcmp);
+}

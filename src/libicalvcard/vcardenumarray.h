@@ -36,4 +36,6 @@ LIBICAL_VCARD_EXPORT void vcardenumarray_remove(vcardenumarray *array,
 
 LIBICAL_VCARD_EXPORT void vcardenumarray_free(vcardenumarray *array);
 
+LIBICAL_VCARD_EXPORT void vcardenumarray_sort(vcardenumarray *array);
+
 #endif /* VCARDENUMARRAY_H */
