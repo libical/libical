@@ -28,7 +28,7 @@ LIBICAL_VCARD_EXPORT struct vcardparameter_impl *vcardparameter_new_impl(vcardpa
     strcpy(v->id, "para");
 
     v->kind = kind;
-    v->is_multivalued = vcardparameter_kind_is_multivalued(kind);
+    v->value_kind = vcardparameter_kind_value_kind(kind, &v->is_multivalued);
 
     return v;
 }
@@ -53,10 +53,10 @@ void vcardparameter_free(vcardparameter *param)
         icalmemory_free_buffer((void *)param->string);
     }
     else if (param->values != 0) {
-        if (vcardparameter_kind_is_enumerated(param->kind))
-            vcardenumarray_free(param->values);
-        else
+        if (param->value_kind == VCARD_TEXT_VALUE)
             vcardstrarray_free(param->values);
+        else
+            vcardenumarray_free(param->values);
     }
 
     if (param->x_name != 0) {
@@ -302,18 +302,33 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
         vcardparameter_append_encoded_value(&buf, &buf_ptr,
                                             &buf_size, param->string);
     } else if (param->data != 0) {
-        const char *str = vcardparameter_enum_to_string(param->data);
+        const char *str;
+
+        if (param->value_kind == VCARD_INTEGER_VALUE) {
+            char *buf = icalmemory_tmp_buffer(21);
+
+            sprintf(buf, "%d", param->data);
+            str = buf;
+        }
+        else {
+            str = vcardparameter_enum_to_string(param->data);
+        }
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+
     } else if (param->values != 0) {
-        int is_enumerated = vcardparameter_kind_is_enumerated(param->kind);
         size_t i;
         const char *sep = "";
 
         for (i = 0; i < param->values->num_elements; i++) {
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, sep);
 
-            if (is_enumerated) {
+            if (param->value_kind == VCARD_TEXT_VALUE) {
+                const char *str = vcardstrarray_element_at(param->values, i);
+
+                icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+            }
+            else {
                 const vcardenumarray_element *elem =
                     vcardenumarray_element_at(param->values, i);
                 if (elem->xvalue != 0) {
@@ -324,10 +339,6 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
 
                     icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
                 }
-            } else {
-                const char *str = vcardstrarray_element_at(param->values, i);
-
-                icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
             }
             sep = ",";
         }
