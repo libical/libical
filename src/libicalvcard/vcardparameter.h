@@ -15,6 +15,7 @@
 
 #include "libical_vcard_export.h"
 #include "vcardderivedparameter.h"
+#include "vcardderivedvalue.h"
 
 /* Declared in vcardderivedparameter.h */
 /*typedef struct vcardparameter_impl vcardparameter;*/
@@ -619,8 +620,8 @@ LIBICAL_VCARD_EXPORT vcardparameter_kind vcardparameter_string_to_kind(const cha
  */
 LIBICAL_VCARD_EXPORT int vcardparameter_kind_is_valid(const vcardparameter_kind kind);
 
-LIBICAL_VCARD_EXPORT int vcardparameter_kind_is_multivalued(const vcardparameter_kind kind);
-LIBICAL_VCARD_EXPORT int vcardparameter_kind_is_enumerated(const vcardparameter_kind kind);
+LIBICAL_VCARD_EXPORT vcardvalue_kind vcardparameter_kind_value_kind(const vcardparameter_kind kind,
+                                                                    int *is_multivalued);
 
 LIBICAL_VCARD_EXPORT int vcardparameter_is_multivalued(vcardparameter *param);
 

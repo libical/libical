@@ -178,6 +178,17 @@ sub insert_code
       $out .= "    {${ucprefix}_${uc}_PARAMETER, \"$param\"";
 
       if ($opt_v) {
+          my $type  = $params{$param}->{"C"};
+          if ($type =~ /char/) {
+              $out .= ", ${ucprefix}_TEXT_VALUE";
+
+          } elsif ($type =~ /int/) {
+              $out .= ", ${ucprefix}_INTEGER_VALUE";
+
+          } else {
+              $out .= ", ${ucprefix}_X_VALUE";
+          }
+
           my @flags = @{$params{$param}->{'flags'}};
           if (@flags) {
               my $sep = ", ";
@@ -198,7 +209,7 @@ sub insert_code
     print "static const struct ${lcprefix}parameter_kind_map parameter_map[$count] = {\n";
     print $out;
     if ($opt_v) {
-        print "    { ${ucprefix}_NO_PARAMETER, \"\", 0}\n};\n\n";
+        print "    { ${ucprefix}_NO_PARAMETER, \"\", ${ucprefix}_NO_VALUE, 0}\n};\n\n";
     } else {
         print "    { ${ucprefix}_NO_PARAMETER, \"\"}\n};\n\n";
     }
