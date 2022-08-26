@@ -58,7 +58,7 @@
 "SORT-STRING","42","TEXT","TEXT"
 "CLASS","43","TEXT","TEXT"
 
-"#BIRTH/DEATH Extension Properties", "RFC 6474 Section 2",
+"#Birth/Death Extension Properties", "RFC 6474 Section 2",
 "BIRTHPLACE","44","TEXT","TEXT"
 "DEATHPLACE","45","TEXT","TEXT"
 "#DEATHDATE","46","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
