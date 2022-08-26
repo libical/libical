@@ -935,10 +935,9 @@ vcardcomponent *vcardproperty_get_parent(const vcardproperty *property)
 
     return property->parent;
 }
-#if 0
+
 static int param_compare(void *a, void *b)
 {
-    /* XXX  Need to sort values for multi-valued parameters (e.g. MEMBER) */
     return strcmp(vcardparameter_as_vcard_string((vcardparameter *) a),
                   vcardparameter_as_vcard_string((vcardparameter *) b));
 }
@@ -955,28 +954,30 @@ void vcardproperty_normalize(vcardproperty *prop)
 
         /* Remove parameters having default values */
         switch (vcardparameter_isa(param)) {
-        case ICAL_VALUE_PARAMETER:
+        case VCARD_VALUE_PARAMETER:
             /* Skip VALUE parameters for default property value types */
             switch (prop_kind) {
-            case ICAL_ATTACH_PROPERTY:
-                if (vcardparameter_get_value(param) == ICAL_VALUE_URI) {
+            case VCARD_TEL_PROPERTY:
+            case VCARD_TZ_PROPERTY:
+            case VCARD_BIRTHPLACE_PROPERTY:
+            case VCARD_DEATHPLACE_PROPERTY:
+                if (vcardparameter_get_value(param) == VCARD_VALUE_TEXT) {
                     remove = 1;
                 }
                 break;
 
-            case ICAL_DTEND_PROPERTY:
-            case ICAL_DUE_PROPERTY:
-            case ICAL_DTSTART_PROPERTY:
-            case ICAL_EXDATE_PROPERTY:
-            case ICAL_RDATE_PROPERTY:
-            case ICAL_RECURRENCEID_PROPERTY:
-                if (vcardparameter_get_value(param) == ICAL_VALUE_DATETIME) {
+            case VCARD_RELATED_PROPERTY:
+            case VCARD_UID_PROPERTY:
+            case VCARD_KEY_PROPERTY:
+                if (vcardparameter_get_value(param) == VCARD_VALUE_URI) {
                     remove = 1;
                 }
                 break;
 
-            case ICAL_DURATION_PROPERTY:
-                if (vcardparameter_get_value(param) == ICAL_VALUE_DURATION) {
+            case VCARD_BDAY_PROPERTY:
+            case VCARD_ANNIVERSARY_PROPERTY:
+            case VCARD_DEATHDATE_PROPERTY:
+                if (vcardparameter_get_value(param) == VCARD_VALUE_DATEANDORTIME) {
                     remove = 1;
                 }
                 break;
@@ -986,58 +987,38 @@ void vcardproperty_normalize(vcardproperty *prop)
             }
             break;
 
-        case ICAL_CUTYPE_PARAMETER:
-            if (vcardparameter_get_cutype(param) == ICAL_CUTYPE_INDIVIDUAL) {
+        case VCARD_CALSCALE_PARAMETER:
+            if (vcardparameter_get_calscale(param) == VCARD_CALSCALE_GREGORIAN) {
                 remove = 1;
             }
             break;
 
-        case ICAL_ENCODING_PARAMETER:
-            if (vcardparameter_get_encoding(param) == ICAL_ENCODING_8BIT) {
+        case VCARD_PREF_PARAMETER:
+            if (vcardparameter_get_pref(param) >= 100) {
                 remove = 1;
             }
             break;
 
-        case ICAL_FBTYPE_PARAMETER:
-            if (vcardparameter_get_fbtype(param) == ICAL_FBTYPE_BUSY) {
-                remove = 1;
+        case VCARD_TYPE_PARAMETER:
+            if (prop_kind == VCARD_TEL_PROPERTY) {
+                /* Is it just TYPE=VOICE ? */
+                vcardenumarray_element voice = { VCARD_TYPE_VOICE, NULL };
+
+                if (vcardenumarray_find(vcardparameter_get_type(param),
+                                        &voice) == 0) {
+                    remove = 1;
+                }
             }
+
+            if (!remove) vcardenumarray_sort(vcardparameter_get_type(param));
             break;
 
-        case ICAL_PARTSTAT_PARAMETER:
-            if (vcardparameter_get_partstat(param) == ICAL_PARTSTAT_NEEDSACTION) {
-                remove = 1;
-            }
+        case VCARD_PID_PARAMETER:
+            vcardstrarray_sort(vcardparameter_get_pid(param));
             break;
 
-        case ICAL_RELATED_PARAMETER:
-            if (vcardparameter_get_related(param) == ICAL_RELATED_START) {
-                remove = 1;
-            }
-            break;
-
-        case ICAL_RELTYPE_PARAMETER:
-            if (vcardparameter_get_reltype(param) == ICAL_RELTYPE_PARENT) {
-                remove = 1;
-            }
-            break;
-
-        case ICAL_ROLE_PARAMETER:
-            if (vcardparameter_get_role(param) == ICAL_ROLE_REQPARTICIPANT) {
-                remove = 1;
-            }
-            break;
-
-        case ICAL_RSVP_PARAMETER:
-            if (vcardparameter_get_rsvp(param) == ICAL_RSVP_FALSE) {
-                remove = 1;
-            }
-            break;
-
-        case ICAL_SCHEDULEAGENT_PARAMETER:
-            if (vcardparameter_get_scheduleagent(param) == ICAL_SCHEDULEAGENT_SERVER) {
-                remove = 1;
-            }
+        case VCARD_SORTAS_PARAMETER:
+            vcardstrarray_sort(vcardparameter_get_sortas(param));
             break;
 
         default:
@@ -1055,4 +1036,3 @@ void vcardproperty_normalize(vcardproperty *prop)
     pvl_free(prop->parameters);
     prop->parameters = sorted_params;
 }
-#endif
