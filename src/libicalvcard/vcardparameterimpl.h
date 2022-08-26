@@ -8,6 +8,7 @@
 
 #include "icalarray.h"
 #include "vcardproperty.h"
+#include "vcardderivedvalue.h"
 
 struct vcardparameter_impl
 {
@@ -17,8 +18,8 @@ struct vcardparameter_impl
     const char *x_name;
     vcardproperty *parent;
 
+    vcardvalue_kind value_kind;
     int is_multivalued;
-    int value_is_enum;
 
     int data;
     const char *string;
