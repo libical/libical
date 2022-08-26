@@ -47,6 +47,7 @@ int main(int argc, const char **argv)
     }
 
     vcardrestriction_check(card);
+    vcardcomponent_normalize(card);
     printf("%s\n", vcardcomponent_as_vcard_string(card));
     vcardcomponent_free(card);
 
