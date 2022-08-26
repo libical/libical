@@ -49,3 +49,14 @@ void vcardstrarray_free(vcardstrarray *array)
         vcardstrarray_remove_element_at(array, array->num_elements-1);
     icalarray_free(array);
 }
+
+static int strpcmp(const char **a, const char **b)
+{
+    return strcmp(*a, *b);
+}
+
+void vcardstrarray_sort(vcardstrarray *array)
+{
+    icalarray_sort(array, (int (*)(const void *, const void *)) &strpcmp);
+}
+

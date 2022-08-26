@@ -32,4 +32,6 @@ LIBICAL_VCARD_EXPORT void vcardstrarray_remove(vcardstrarray *array,
 
 LIBICAL_VCARD_EXPORT void vcardstrarray_free(vcardstrarray *array);
 
+LIBICAL_VCARD_EXPORT void vcardstrarray_sort(vcardstrarray *array);
+
 #endif /* VCARDSTRARRAY_H */
