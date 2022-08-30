@@ -249,6 +249,7 @@ endif()
 ########### install files ###############
 
 install(FILES
+  ${CMAKE_BINARY_DIR}/src/libicalvcard/vcard.h
   ${BUILT_HEADERS}
   libical_vcard_export.h
   vcardcomponent.h
