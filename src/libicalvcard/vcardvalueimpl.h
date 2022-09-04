@@ -20,6 +20,14 @@ struct vcardvalue_impl
 
     union data
     {
+        struct vcardstructuredtype v_structured;
+        /*char *v_name; */         /* use v_structured field[0-4] only */
+        /*char *v_nickname; */     /* use v_structured field[0] only */
+        /*char *v_gender; */       /* use v_structured field[0] only */
+        /*char *v_adr; */          /* use v_structured field[0-6] */
+        /*char *v_org; */          /* use v_structured field[0] only */
+        /*char *v_categories; */   /* use v_structured field[0] only */
+
         const char *v_string;
         /*char *v_text; */         /* use v_string */
         /*char *v_language_tag; */ /* use v_string */
