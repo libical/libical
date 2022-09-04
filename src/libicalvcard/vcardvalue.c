@@ -604,11 +604,8 @@ static void strarray_as_vcard_string_r(vcardstrarray *array, const char sep,
 {
     size_t i;
 
-    icalmemory_append_string(buf, buf_ptr, buf_size,
-                             vcardstrarray_element_at(array, 0));
-
-    for (i = 1; i < vcardstrarray_size(array); i++) {
-        icalmemory_append_char(buf, buf_ptr, buf_size, sep);
+    for (i = 0; i < vcardstrarray_size(array); i++) {
+        if (i) icalmemory_append_char(buf, buf_ptr, buf_size, sep);
         icalmemory_append_string(buf, buf_ptr, buf_size,
                                  vcardstrarray_element_at(array, i));
     }
@@ -636,22 +633,20 @@ static char *vcardvalue_structured_as_vcard_string_r(const vcardvalue *value)
 {
     vcardstrarray *array;
     char *buf, *buf_ptr;
-    size_t buf_size, i;
+    size_t buf_size;
+    unsigned i, num_fields;
 
     icalerror_check_arg_rz((value != 0), "value");
 
-    buf_size = VCARD_MAX_STRUCTURED_FIELDS * 25;  // arbitrary
+    num_fields = value->data.v_structured.num_fields;
+    buf_size = num_fields * 25;  // arbitrary
     buf_ptr = buf = icalmemory_new_buffer(buf_size);
 
-    array = value->data.v_structured.field[0];
-    strarray_as_vcard_string_r(array, ',', &buf, &buf_ptr, &buf_size);
-
-    for (i = 1; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
+    for (i = 0; i < num_fields; i++) {
         array = value->data.v_structured.field[i];
-        if (!array) break;
-
-        icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
-        strarray_as_vcard_string_r(array, ',', &buf, &buf_ptr, &buf_size);
+        if (i) icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
+        if (array)
+            strarray_as_vcard_string_r(array, ',', &buf, &buf_ptr, &buf_size);
     }
 
     return buf;
