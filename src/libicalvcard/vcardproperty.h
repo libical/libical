@@ -170,5 +170,6 @@ LIBICAL_VCARD_EXPORT int vcardproperty_enum_belongs_to_property(vcardproperty_ki
 LIBICAL_VCARD_EXPORT void vcardproperty_normalize(vcardproperty *prop);
 
 LIBICAL_VCARD_EXPORT int vcardproperty_is_structured(vcardproperty_kind pkind);
+LIBICAL_VCARD_EXPORT int vcardproperty_is_multivalued(vcardproperty_kind pkind);
 
 #endif /*VCARDPROPERTY_H */
