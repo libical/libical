@@ -69,6 +69,8 @@ sub insert_code
     INTEGER        => 'int',
     LANGUAGETAG    => 'string',
     TEXT           => 'string',
+    STRUCTURED     => 'structured',
+    TEXTLIST       => 'structured.field[0]',
     TIME           => 'string',
     URI            => 'string',
     UTCOFFSET      => 'int',
@@ -179,6 +181,7 @@ sub insert_code
     my $autogen = $h{$value}->{C}->[0];
     my $type    = $h{$value}->{C}->[1];
     $type =~ s/char\*/char \*/;
+    $type =~ s/array\*/array \*/;
 
     my $ucf = join("", map {ucfirst(lc($_));} split(/-/, $value));
 
@@ -234,12 +237,18 @@ $pointer_check_rv\
 "    if (impl->data.v_${union_data} != 0) {\n        icalmemory_free_buffer((void *)impl->data.v_${union_data});\n    }\n";
       }
 
+      elsif ($union_data eq 'structured.field[0]') {
+
+        print
+"    if (impl->data.v_${union_data} != 0) {\n        vcardstrarray_free(impl->data.v_${union_data});\n    }\n";
+      }
+
       print "\
     impl->data.v_$union_data = $assign\
     ${lcprefix}value_reset_kind(impl);\n}\n\n";
 
       print "$type\ ${lcprefix}value_get_${lc}(const ${lcprefix}value *value)\n{\n";
-      if ($union_data eq 'string') {
+      if ($union_data eq 'string' or $union_data eq 'structured.field[0]') {
         print "    icalerror_check_arg_rz((value != 0), \"value\");\n";
       } else {
         print "    icalerror_check_arg((value != 0), \"value\");\n";
