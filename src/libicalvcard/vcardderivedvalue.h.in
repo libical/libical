@@ -10,6 +10,21 @@
 
 #include "vcardstrarray.h"
 
+typedef enum vcard_n_field {
+    VCARD_N_FAMILY = 0,
+    VCARD_N_GIVEN,
+    VCARD_N_ADDITIONAL,
+    VCARD_N_HONORIFIC_PREFIX,
+    VCARD_N_HONORIFIC_SUFFIX,
+    VCARD_NUM_N_FIELDS
+} vcard_n_field;
+
+typedef enum vcard_gender_field {
+    VCARD_GENDER_SEX = 0,
+    VCARD_GENDER_TEXT,
+    VCARD_NUM_GENDER_FIELDS
+} vcard_gender_field;
+
 typedef enum vcard_adr_field {
     VCARD_ADR_PO_BOX = 0,
     VCARD_ADR_EXTENDED,
@@ -18,24 +33,19 @@ typedef enum vcard_adr_field {
     VCARD_ADR_REGION,
     VCARD_ADR_POSTAL_CODE,
     VCARD_ADR_COUNTRY,
+    VCARD_NUM_ADR_FIELDS
 } vcard_adr_field;
 
-typedef enum vcard_gender_field {
-    VCARD_GENDER_SEX = 0,
-    VCARD_GENDER_TEXT
-} vcard_gender_field;
-
-typedef enum vcard_n_field {
-    VCARD_N_FAMILY = 0,
-    VCARD_N_GIVEN,
-    VCARD_N_ADDITIONAL,
-    VCARD_N_HONORIFIC_PREFIX,
-    VCARD_N_HONORIFIC_SUFFIX
-} vcard_n_field;
-
-#define VCARD_MAX_STRUCTURED_FIELDS 7
+typedef enum vcard_clientpidmap_field {
+    VCARD_CLIENTPIDMAP_ID = 0,
+    VCARD_CLIENTPIDMAP_URI,
+    VCARD_NUM_CLIENTPIDMAP_FIELDS
+} vcard_clientidmap_field;
+ 
+#define VCARD_MAX_STRUCTURED_FIELDS VCARD_NUM_ADR_FIELDS
 
 struct vcardstructuredtype {
+    unsigned num_fields;
     vcardstrarray *field[VCARD_MAX_STRUCTURED_FIELDS];
 };
 
