@@ -513,6 +513,11 @@ static int _parse_prop_value(struct vcardparser_state *state)
         if (is_structured) {
             memset(&structured, 0, sizeof(struct vcardstructuredtype));
             structured.field[fieldnum++] = textlist;
+
+            if (prop_kind == VCARD_N_PROPERTY)
+                structured.num_fields = VCARD_NUM_N_FIELDS;
+            else
+                structured.num_fields = VCARD_MAX_STRUCTURED_FIELDS;
         }
     }
 
