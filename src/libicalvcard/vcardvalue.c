@@ -480,6 +480,17 @@ void vcardvalue_free(vcardvalue *v)
             break;
         }
 
+    case VCARD_TEXTLIST_VALUE:
+    case VCARD_STRUCTURED_VALUE:
+        {
+            int i;
+            for (i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
+                vcardstrarray *array = v->data.v_structured.field[i];
+                if (array) vcardstrarray_free(array);
+            }
+            break;
+        }
+
     default:
         {
             /* Nothing to do */
@@ -586,6 +597,64 @@ static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
     strcpy(str, data);
 
     return str;
+}
+
+static void strarray_as_vcard_string_r(vcardstrarray *array, const char sep,
+                                       char **buf, char **buf_ptr, size_t *buf_size)
+{
+    size_t i;
+
+    icalmemory_append_string(buf, buf_ptr, buf_size,
+                             vcardstrarray_element_at(array, 0));
+
+    for (i = 1; i < vcardstrarray_size(array); i++) {
+        icalmemory_append_char(buf, buf_ptr, buf_size, sep);
+        icalmemory_append_string(buf, buf_ptr, buf_size,
+                                 vcardstrarray_element_at(array, i));
+    }
+}
+
+static char *vcardvalue_textlist_as_vcard_string_r(const vcardvalue *value,
+                                                   const char sep)
+{
+    vcardstrarray *array;
+    char *buf, *buf_ptr;
+    size_t buf_size;
+
+    icalerror_check_arg_rz((value != 0), "value");
+
+    array = value->data.v_structured.field[0];
+    buf_size = vcardstrarray_size(array) * 25;  // arbitrary
+    buf_ptr = buf = icalmemory_new_buffer(buf_size);
+
+    strarray_as_vcard_string_r(array, sep, &buf, &buf_ptr, &buf_size);
+
+    return buf;
+}
+
+static char *vcardvalue_structured_as_vcard_string_r(const vcardvalue *value)
+{
+    vcardstrarray *array;
+    char *buf, *buf_ptr;
+    size_t buf_size, i;
+
+    icalerror_check_arg_rz((value != 0), "value");
+
+    buf_size = VCARD_MAX_STRUCTURED_FIELDS * 25;  // arbitrary
+    buf_ptr = buf = icalmemory_new_buffer(buf_size);
+
+    array = value->data.v_structured.field[0];
+    strarray_as_vcard_string_r(array, ',', &buf, &buf_ptr, &buf_size);
+
+    for (i = 1; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
+        array = value->data.v_structured.field[i];
+        if (!array) break;
+
+        icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
+        strarray_as_vcard_string_r(array, ',', &buf, &buf_ptr, &buf_size);
+    }
+
+    return buf;
 }
 #if 0
 static void print_time_to_string(char *str, const struct icaltimetype *data)
@@ -716,6 +785,9 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
         return 0;
     }
 
+    int is_structured =
+        vcardproperty_is_structured(vcardproperty_isa(value->parent));
+
     switch (value->kind) {
 
     case VCARD_BOOLEAN_VALUE:
@@ -729,10 +801,17 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     case VCARD_TEXT_VALUE:
         // XXX  Hack until we split structured values
-        if (vcardproperty_is_structured(vcardproperty_isa(value->parent)))
+        if (is_structured)
             return vcardvalue_string_as_vcard_string_r(value);
         else
             return vcardvalue_text_as_vcard_string_r(value);
+
+    case VCARD_TEXTLIST_VALUE:
+        return vcardvalue_textlist_as_vcard_string_r(value,
+                                                     is_structured ? ';' : ',');
+
+    case VCARD_STRUCTURED_VALUE:
+        return vcardvalue_structured_as_vcard_string_r(value);
 
     case VCARD_URI_VALUE:
     case VCARD_LANGUAGETAG_VALUE:

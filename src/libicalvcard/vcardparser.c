@@ -1,4 +1,7 @@
-/* vcardparser.c : fast vCard parser */
+/* vcardparser.c : fast vCard parser
+ *
+ * Based mostly on work by Bron Gondwana <brong@fastmailteam.com>
+ */
 
 #include <ctype.h>
 #include <stdio.h>
@@ -493,79 +496,26 @@ static int _parse_prop_name(struct vcardparser_state *state)
 
     return PE_NAME_EOF;
 }
-#if 0
-static int _parse_prop_multivalue(struct vcardparser_state *state,
-                                  char splitchar)
+
+static int _parse_prop_value(struct vcardparser_state *state)
 {
-    state->entry->multivaluesep = splitchar;
-    state->entry->v.values = icalarray_new(sizeof(char*), 10);
+    vcardproperty_kind prop_kind = vcardproperty_isa(state->prop);
+    int is_multivalued = vcardproperty_is_multivalued(prop_kind);
+    int is_structured  = vcardproperty_is_structured(prop_kind);
+    struct vcardstructuredtype structured;
+    vcardstrarray *textlist;
+    int fieldnum = 0;
+    vcardvalue *value;
 
-    NOTESTART();
+    if (is_multivalued || is_structured) {
+        textlist = vcardstrarray_new(2);
 
-    while (*state->p) {
-
-        /* Handle control characters and break for NUL char */
-        HANDLECTRL(state);
-
-        switch (*state->p) {
-        /* only one type of quoting */
-        case '\\':
-            /* seen in the wild - \n split by line wrapping */
-            if (state->p[1] == '\r') INC(1);
-            if (state->p[1] == '\n') {
-                if (state->p[2] != ' ' && state->p[2] != '\t')
-                    return PE_BACKQUOTE_EOF;
-                INC(2);
-            }
-            if (!state->p[1])
-                return PE_BACKQUOTE_EOF;
-            if (state->p[1] == 'n' || state->p[1] == 'N')
-                PUTC('\n');
-            else
-                PUTC(state->p[1]);
-            INC(2);
-            break;
-
-        case '\r':
-            INC(1);
-            break; /* just skip */
-        case '\n':
-            if (state->p[1] == ' ' || state->p[1] == '\t') {/* wrapped line */
-                INC(2);
-                break;
-            }
-            /* otherwise it's the end of the value */
-            INC(1);
-            goto out;
-
-        default:
-            if (*state->p == splitchar) {
-                icalarray_append(state->entry->v.values,
-                                 buf_dup_cstring(&state->buf));
-            }
-            else {
-                PUTC(*state->p);
-            }
-            INC(1);
-            break;
+        if (is_structured) {
+            memset(&structured, 0, sizeof(struct vcardstructuredtype));
+            structured.field[fieldnum++] = textlist;
         }
     }
 
-out:
-    /* reaching the end of the file isn't a failure here,
-     * it's just another type of end-of-value */
-    icalarray_append(state->entry->v.values, buf_dup_cstring(&state->buf));
-    return 0;
-}
-#endif
-static int _parse_prop_value(struct vcardparser_state *state)
-{
-//    char multivaluesep = 0;
-//    vcardproperty_kind prop_kind = vcardproperty_isa(state->prop);
-//    if (vcardproperty_is_structured(prop_kind)) multivaluesep = ';';
-
-//    if (multivaluesep) return _parse_prop_multivalue(state, multivaluesep);
-
     NOTESTART();
 
     while (*state->p) {
@@ -604,6 +554,22 @@ static int _parse_prop_value(struct vcardparser_state *state)
             /* otherwise it's the end of the value */
             INC(1);
             goto out;
+
+        case ',':
+        case ';':
+            if (is_multivalued || is_structured) {
+                vcardstrarray_append(textlist, buf_cstring(&state->buf));
+                buf_reset(&state->buf);
+
+                if (*state->p == ';' && is_multivalued && is_structured) {
+                    textlist = vcardstrarray_new(2);
+                    structured.field[fieldnum++] = textlist;
+                }
+                INC(1);
+                break;
+            }
+            /* or fall through, comma/semi-colon isn't special */
+            GCC_FALLTHROUGH
 
         default:
             PUTC(*state->p);
@@ -616,13 +582,24 @@ out:
     /* reaching the end of the file isn't a failure here,
      * it's just another type of end-of-value */
 
-    /* repair critical property values */
-    if (vcardproperty_isa(state->prop) == VCARD_VERSION_PROPERTY) {
-        buf_trim(&state->buf);
+    if (is_multivalued || is_structured) {
+        vcardstrarray_append(textlist, buf_cstring(&state->buf));
+
+        if (is_structured)
+            value = vcardvalue_new_structured(&structured);
+        else
+            value = vcardvalue_new_textlist(textlist);
+    }
+    else {
+        /* repair critical property values */
+        if (prop_kind == VCARD_VERSION_PROPERTY) {
+            buf_trim(&state->buf);
+        }
+
+        value = vcardvalue_new_from_string(state->value_kind,
+                                           buf_cstring(&state->buf));
     }
 
-    vcardvalue *value = vcardvalue_new_from_string(state->value_kind,
-                                                   buf_cstring(&state->buf));
     vcardproperty_set_value(state->prop, value);
     buf_reset(&state->buf);
 

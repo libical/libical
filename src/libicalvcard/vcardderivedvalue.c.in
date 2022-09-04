@@ -29,6 +29,40 @@ struct vcardvalue_kind_map
 
 <insert_code_here>
 
+vcardvalue *vcardvalue_new_structured(struct vcardstructuredtype *v)
+{
+    struct vcardvalue_impl *impl;
+    icalerror_check_arg_rz((v != 0), "v");
+
+    impl = vcardvalue_new_impl(VCARD_STRUCTURED_VALUE);
+    vcardvalue_set_structured((vcardvalue *)impl, v);
+    return (vcardvalue*)impl;
+}
+
+void vcardvalue_set_structured(vcardvalue *value, struct vcardstructuredtype *v)
+{
+    struct vcardvalue_impl *impl;
+    icalerror_check_arg_rv((value != 0), "value");
+    icalerror_check_arg_rv((v != 0), "v");
+
+    icalerror_check_value_type(value, VCARD_STRUCTURED_VALUE);
+    impl = (struct vcardvalue_impl *)value;
+
+    int i;
+    for (i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
+        impl->data.v_structured.field[i] = v->field[i];
+    }
+
+    vcardvalue_reset_kind(impl);
+}
+
+struct vcardstructuredtype *vcardvalue_get_structured(const vcardvalue *value)
+{
+    icalerror_check_arg((value != 0), "value");
+    icalerror_check_value_type(value, VCARD_STRUCTURED_VALUE);
+    return &((struct vcardvalue_impl *)value)->data.v_structured;
+}
+
 int vcardvalue_kind_is_valid(const vcardvalue_kind kind)
 {
     int i = 0;
