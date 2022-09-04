@@ -41,7 +41,7 @@
 "REV","27","TEXT","TEXT"
 "SOUND","28","URI","URI"
 "UID","29","URI","URI"
-"CLIENTPIDMAP","30","TEXT","TEXT",is_structured
+"CLIENTPIDMAP","30","TEXTLIST","TEXTLIST",is_structured
 "URL","31","URI","URI"
 "VERSION","32","VERSION","VERSION"
 "KEY","33","URI","URI"
