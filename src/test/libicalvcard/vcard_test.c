@@ -95,6 +95,13 @@ int main(int argc, const char **argv)
     prop = vcardproperty_new_fn("Mickey Mouse");
     vcardcomponent_add_property(card, prop);
 
+    /* Create and add CATEGORIES property */
+    sa = vcardstrarray_new(2);
+    vcardstrarray_append(sa, "zzz");
+    vcardstrarray_append(sa, "aaa");
+    prop = vcardproperty_new_categories(sa);
+    vcardcomponent_add_property(card, prop);
+
     vcardrestriction_check(card);
     printf("\n%s\n", vcardcomponent_as_vcard_string(card));
 

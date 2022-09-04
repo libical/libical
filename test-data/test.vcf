@@ -4,10 +4,10 @@ FN:Simon Perreault
 N:Perreault;Simon;;;ing. jr,M.Sc.
 BDAY:--0203
 ANNIVERSARY:20090808T1430-0500
-GENDER:M
+GENDER:M;manly
 LANG;PREF=1:fr
 LANG;PREF=2:en
-ORG;TYPE=work:Viagenie
+ORG;TYPE=work:Viagenie;Foo
 ADR;TYPE=work:;Suite D2-630;2875 Laurier;
  Quebec;QC;G1V 2M2;Canada
 TEL;VALUE=URI;TYPE=voice;PREF=100:tel:+1-418-656-9254;ext=102
@@ -19,6 +19,7 @@ TZ:-0500
 
 URL;TYPE=HOME:http://nomis80.org
 NOTE;LANGUAGE=en;PID=3,1.0:Test vCard
+CATEGORIES:foo,bar
 END:VCARD
 
 BEGIN:VCARD
