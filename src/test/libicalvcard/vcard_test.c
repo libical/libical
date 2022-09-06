@@ -96,7 +96,7 @@ int main(int argc, const char **argv)
     vcardcomponent_add_property(card, prop);
 
     /* Create and add N property */
-    struct vcardstructuredtype name = { VCARD_NUM_N_FIELDS, { 0 } };
+    vcardstructuredtype name = { VCARD_NUM_N_FIELDS, { 0 } };
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "Mouse");
     name.field[VCARD_N_FAMILY] = sa;
@@ -107,7 +107,7 @@ int main(int argc, const char **argv)
     vcardcomponent_add_property(card, prop);
 
     /* Create and add ADR property */
-    struct vcardstructuredtype address = { VCARD_NUM_ADR_FIELDS, { 0 } };
+    vcardstructuredtype address = { VCARD_NUM_ADR_FIELDS, { 0 } };
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "123 Main Street");
     vcardstrarray_append(sa, "Disney World");
