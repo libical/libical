@@ -18,7 +18,7 @@
 "LANGUAGE-TAG","5012","(a)const char*","string","unitary",
 "X","5013","(m)const char*","string","unitary",
 "TEXTLIST","5016","(a)vcardstrarray*","array","unitary",
-"STRUCTURED","5017","(m)struct vcardstructuredtype*","structured","unitary",
+"STRUCTURED","5017","(m)vcardstructuredtype*","structured","unitary",
 
 "#Non-standard property enumeration types",,,,
 "#KIND:APPLICATION from RFC 6473",,,,

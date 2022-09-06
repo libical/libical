@@ -20,7 +20,7 @@ struct vcardvalue_impl
 
     union data
     {
-        struct vcardstructuredtype v_structured;
+        vcardstructuredtype v_structured;
         /*char *v_name; */         /* use v_structured field[0-4] only */
         /*char *v_nickname; */     /* use v_structured field[0] only */
         /*char *v_gender; */       /* use v_structured field[0] only */
