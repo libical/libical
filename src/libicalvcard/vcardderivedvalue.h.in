@@ -44,10 +44,10 @@ typedef enum vcard_clientpidmap_field {
  
 #define VCARD_MAX_STRUCTURED_FIELDS VCARD_NUM_ADR_FIELDS
 
-struct vcardstructuredtype {
+typedef struct vcardstructuredtype {
     unsigned num_fields;
     vcardstrarray *field[VCARD_MAX_STRUCTURED_FIELDS];
-};
+} vcardstructuredtype;
 
 typedef struct vcardvalue_impl vcardvalue;
 
@@ -57,9 +57,9 @@ LIBICAL_VCARD_EXPORT const char *vcardvalue_get_x(const vcardvalue *value);
 
 LIBICAL_VCARD_EXPORT void vcardvalue_reset_kind(vcardvalue *value);
 
-LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new_structured(struct vcardstructuredtype *v);
+LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new_structured(vcardstructuredtype *v);
 LIBICAL_VCARD_EXPORT void vcardvalue_set_structured(vcardvalue *value,
-                                                    struct vcardstructuredtype *v);
-LIBICAL_VCARD_EXPORT struct vcardstructuredtype *vcardvalue_get_structured(const vcardvalue *value);
+                                                    vcardstructuredtype *v);
+LIBICAL_VCARD_EXPORT vcardstructuredtype *vcardvalue_get_structured(const vcardvalue *value);
 
 <insert_code_here>
