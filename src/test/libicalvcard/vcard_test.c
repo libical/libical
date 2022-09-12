@@ -134,6 +134,19 @@ int main(int argc, const char **argv)
     prop = vcardproperty_new_categories(sa);
     vcardcomponent_add_property(card, prop);
 
+    /* Create and add BDAY property */
+    vcardtimetype t = vcardtime_null_date();
+    t.year = 1928;
+    t.month = 11;
+    t.day = 18;
+    prop = vcardproperty_new_bday(t);
+    vcardcomponent_add_property(card, prop);
+
+    /* Create and add REV property */
+    t = vcardtime_current_utc_time();
+    prop = vcardproperty_new_rev(t);
+    vcardcomponent_add_property(card, prop);
+
     vcardrestriction_check(card);
     printf("\n%s\n", vcardcomponent_as_vcard_string(card));
 
@@ -142,6 +155,7 @@ int main(int argc, const char **argv)
     vcardproperty_set_version(prop, VCARD_VERSION_30);
 
     vcardrestriction_check(card);
+    vcardcomponent_normalize(card);
     printf("\n%s\n", vcardcomponent_as_vcard_string(card));
 
     vcardcomponent_free(card);

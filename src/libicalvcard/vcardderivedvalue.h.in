@@ -9,6 +9,7 @@
 #include "libical_vcard_export.h"
 
 #include "vcardstrarray.h"
+#include "vcardtime.h"
 
 typedef enum vcard_n_field {
     VCARD_N_FAMILY = 0,

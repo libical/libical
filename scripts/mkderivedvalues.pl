@@ -71,7 +71,8 @@ sub insert_code
     TEXT           => 'string',
     STRUCTURED     => 'structured',
     TEXTLIST       => 'structured.field[0]',
-    TIME           => 'string',
+    TIME           => 'time',
+    TIMESTAMP      => 'time',
     URI            => 'string',
     UTCOFFSET      => 'int',
     QUERY          => 'string',
@@ -259,7 +260,11 @@ $pointer_check_rv\
         } elsif ($union_data eq 'float') {
           print "    if (!value) {\n        return 0.0;\n     }\n";
         } elsif ($union_data eq 'time') {
-          print "    if (!value) {\n        return icaltime_null_time();\n    }\n";
+            if ($opt_v) {
+                print "    if (!value) {\n        return vcardtime_null_datetime();\n    }\n";
+            } else {
+                print "    if (!value) {\n        return icaltime_null_time();\n    }\n";
+            }
         } elsif ($union_data eq 'duration') {
           print "    if (!value) {\n        return icaldurationtype_null_duration();\n    }\n";
         } elsif ($union_data eq 'period') {
