@@ -57,10 +57,4 @@ LIBICAL_VCARD_EXPORT int vcardvalue_encode_ical_string(const char *szText,
 LIBICAL_VCARD_EXPORT int vcardvalue_decode_ical_string(const char *szText,
                                                        char *szDecText, int nMaxBufferLen);
 
-/* For the library only -- do not make visible */
-/// @cond
-//extern void print_date_to_string(char *str, const struct icaltimetype *data);
-//extern void print_datetime_to_string(char *str, const struct icaltimetype *data);
-/// @endcond
-
 #endif /*VCARDVALUE_H */

@@ -8,6 +8,7 @@
 
 #include "vcardproperty.h"
 #include "vcardderivedvalue.h"
+#include "vcardtime.h"
 
 struct vcardvalue_impl
 {
@@ -40,7 +41,7 @@ struct vcardvalue_impl
         /*int v_integer; */  /* use v_int */
         /*int v_utcoffset; *//* use v_int */
 
-//        struct vcardtimetype v_time;
+        vcardtimetype v_time;
         /*struct vcardtimetype v_date; */          /* use v_time */
         /*struct vcardtimetype v_time; */          /* use v_time */
         /*struct vcardtimetype v_datetime; */      /* use v_time */
@@ -55,4 +56,4 @@ struct vcardvalue_impl
     } data;
 };
 
-#endif
+#endif /* VCARDVALUEIMPL_H */
