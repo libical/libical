@@ -3,6 +3,7 @@
 set(COMBINEDHEADERSVCARD
   ${TOPS}/src/libicalvcard/vcardenumarray.h
   ${TOPS}/src/libicalvcard/vcardstrarray.h
+  ${TOPS}/src/libicalvcard/vcardtime.h
   ${TOPB}/src/libicalvcard/vcardderivedvalue.h
   ${TOPB}/src/libicalvcard/vcardderivedparameter.h
   ${TOPS}/src/libicalvcard/vcardvalue.h
