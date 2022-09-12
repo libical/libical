@@ -386,19 +386,15 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
     case VCARD_DATEANDORTIME_VALUE:
     case VCARD_TIMESTAMP_VALUE:
         {
-#if 0
-            struct icaltimetype tt;
+            struct vcardtimetype tt;
 
-            tt = icaltime_from_string(str);
-            if (!icaltime_is_null_time(tt)) {
+            tt = vcardtime_from_string(str, kind == VCARD_TIME_VALUE);
+            if (!vcardtime_is_null_datetime(tt)) {
                 value = vcardvalue_new_impl(kind);
                 value->data.v_time = tt;
 
                 vcardvalue_reset_kind(value);
             }
-#else
-            value = vcardvalue_new_text(str);
-#endif
             break;
         }
 
@@ -651,94 +647,7 @@ static char *vcardvalue_structured_as_vcard_string_r(const vcardvalue *value)
 
     return buf;
 }
-#if 0
-static void print_time_to_string(char *str, const struct icaltimetype *data)
-{       /* this function is a candidate for a library-wide external function
-           except it isn't used any place outside of vcardvalue.c.
-           see print_date_to_string() and print_datetime_to_string in vcardvalue.h */
-    char temp[20];
 
-    str[0] = '\0';
-
-    if (data != 0) {
-        if (icaltime_is_utc(*data)) {
-            snprintf(temp, sizeof(temp), "%02d%02d%02dZ", data->hour, data->minute, data->second);
-            strncat(str, temp, 7);
-        } else {
-            snprintf(temp, sizeof(temp), "%02d%02d%02d", data->hour, data->minute, data->second);
-            strncat(str, temp, 6);
-        }
-    }
-}
-
-void print_date_to_string(char *str, const struct icaltimetype *data)
-{
-    char temp[20];
-
-    str[0] = '\0';
-
-    if (data != 0) {
-        snprintf(temp, sizeof(temp), "%04d%02d%02d", data->year, data->month, data->day);
-        strncat(str, temp, 8);
-    }
-}
-
-static char *vcardvalue_date_as_vcard_string_r(const vcardvalue *value)
-{
-    struct icaltimetype data;
-    char *str;
-
-    icalerror_check_arg_rz((value != 0), "value");
-    data = vcardvalue_get_date(value);
-
-    str = (char *)icalmemory_new_buffer(9);
-
-    str[0] = '\0';
-    print_date_to_string(str, &data);
-
-    return str;
-}
-
-void print_datetime_to_string(char *str, const struct icaltimetype *data)
-{
-    char temp[20];
-
-    str[0] = '\0';
-
-    if (data != 0) {
-        print_date_to_string(str, data);
-        if (!data->is_date) {
-            strncat(str, "T", 19);
-            temp[0] = '\0';
-            print_time_to_string(temp, data);
-            strncat(str, temp, 19);
-        }
-    }
-}
-
-static char *vcardvalue_datetime_as_vcard_string_r(const vcardvalue *value)
-{
-    struct icaltimetype data;
-    char *str;
-    vcardvalue_kind kind = vcardvalue_isa(value);
-
-    icalerror_check_arg_rz((value != 0), "value");
-
-    if (!(kind == VCARD_DATE_VALUE || kind == VCARD_DATETIME_VALUE)) {
-        icalerror_set_errno(VCARD_BADARG_ERROR);
-        return 0;
-    }
-
-    data = vcardvalue_get_datetime(value);
-
-    str = (char *)icalmemory_new_buffer(20);
-
-    str[0] = 0;
-    print_datetime_to_string(str, &data);
-
-    return str;
-}
-#endif
 static char *vcardvalue_float_as_vcard_string_r(const vcardvalue *value)
 {
     float data;
@@ -814,12 +723,12 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     case VCARD_DATE_VALUE:
     case VCARD_TIME_VALUE:
-//        return vcardvalue_date_as_vcard_string_r(value);
+        return vcardtime_as_vcard_string_r(value->data.v_time, 0);
+
     case VCARD_DATETIME_VALUE:
     case VCARD_DATEANDORTIME_VALUE:
     case VCARD_TIMESTAMP_VALUE:
-//        return vcardvalue_datetime_as_vcard_string_r(value);
-        return vcardvalue_string_as_vcard_string_r(value);
+        return vcardtime_as_vcard_string_r(value->data.v_time, 1);
 
     case VCARD_FLOAT_VALUE:
         return vcardvalue_float_as_vcard_string_r(value);
