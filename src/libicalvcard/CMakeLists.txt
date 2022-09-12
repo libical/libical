@@ -177,6 +177,8 @@ set(icalvcard_LIB_SRCS
   vcardproperty.h
   vcardstrarray.c
   vcardstrarray.h
+  vcardtime.c
+  vcardtime.h
   vcardvalue.c
   vcardvalue.h
   vcardvalueimpl.h
@@ -252,6 +254,7 @@ install(FILES
   ${CMAKE_BINARY_DIR}/src/libicalvcard/vcard.h
   ${BUILT_HEADERS}
   libical_vcard_export.h
+  vcardtime.h
   vcardcomponent.h
   vcardenumarray.h
   vcardparameter.h
