@@ -148,6 +148,7 @@ int main(int argc, const char **argv)
     vcardcomponent_add_property(card, prop);
 
     vcardrestriction_check(card);
+    vcardcomponent_normalize(card);
     printf("\n%s\n", vcardcomponent_as_vcard_string(card));
 
     /* Change VERSION from 4.0 to 3.0 */
@@ -155,7 +156,6 @@ int main(int argc, const char **argv)
     vcardproperty_set_version(prop, VCARD_VERSION_30);
 
     vcardrestriction_check(card);
-    vcardcomponent_normalize(card);
     printf("\n%s\n", vcardcomponent_as_vcard_string(card));
 
     vcardcomponent_free(card);
