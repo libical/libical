@@ -1035,4 +1035,17 @@ void vcardproperty_normalize(vcardproperty *prop)
 
     pvl_free(prop->parameters);
     prop->parameters = sorted_params;
+
+    switch (prop_kind) {
+    case VCARD_CATEGORIES_PROPERTY:
+        vcardstrarray_sort(vcardproperty_get_categories(prop));
+        break;
+
+    case VCARD_NICKNAME_PROPERTY:
+        vcardstrarray_sort(vcardproperty_get_nickname(prop));
+        break;
+
+    default:
+        break;
+    }
 }
