@@ -5,6 +5,8 @@ Version 3.0.15 (UNRELEASED):
 ----------------------------
  * Add missing property parameters into libical-glib
  * Fix CMake option USE_32BIT_TIME_T actually uses a 32-bit time_t value
+ * Fix icaltime_as_timet, which returned incorrect results for years >= 2100,
+   to work properly between years 1902 and 10k.
  * Fix x-property comma handling and escaping
 
 Version 3.0.14 (05 February 2022):
