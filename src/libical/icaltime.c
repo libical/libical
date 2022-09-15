@@ -102,6 +102,7 @@ static icaltime_t icaltime_timegm(const struct tm *tm)
 static icaltime_t make_time(struct tm *tm, int tzm)
 {
     icaltime_t tim;
+    int febs;
 
     static int days[] = { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 };
 
@@ -136,12 +137,17 @@ static icaltime_t make_time(struct tm *tm, int tzm)
 
     tim = (icaltime_t) ((tm->tm_year - 70) * 365 + ((tm->tm_year - 1) / 4) - 17);
 
+    /* adjust: no leap days every 100 years, except every 400 years. */
+
+    febs = (tm->tm_year - 100) - ((tm->tm_mon <= 1) ? 1 : 0);
+    tim -= febs / 100;
+    tim += febs / 400;
+
     /* add number of days elapsed in the current year */
 
     tim += days[tm->tm_mon];
 
-    /* check and adjust for leap years (the leap year check only valid
-       during the 32-bit era */
+    /* check and adjust for leap years */
 
     if ((tm->tm_year & 3) == 0 && tm->tm_mon > 1)
         tim += 1;

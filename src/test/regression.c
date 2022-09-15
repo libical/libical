@@ -5234,6 +5234,29 @@ static void test_remove_tzid_from_due(void)
     icalcomponent_free(c);
 }
 
+void test_icaltime_as_timet(void) {
+
+    ok("icaltime_from_string translates 19020101T000000Z to -2145916800", icaltime_as_timet(icaltime_from_string("19020101T000000Z")) == -2145916800);
+    ok("icaltime_from_string translates 19290519T000000Z to -1281916800", icaltime_as_timet(icaltime_from_string("19290519T000000Z")) == -1281916800);
+    ok("icaltime_from_string translates 19561004T000000Z to -417916800", icaltime_as_timet(icaltime_from_string("19561004T000000Z")) == -417916800);
+    ok("icaltime_from_string translates 19700101T000000Z to 0", icaltime_as_timet(icaltime_from_string("19700101T000000Z")) == 0);
+    ok("icaltime_from_string translates 19700301T235959Z to 5183999", icaltime_as_timet(icaltime_from_string("19700301T235959Z")) == 5183999);
+    ok("icaltime_from_string translates 19970717T235959Z to 869183999", icaltime_as_timet(icaltime_from_string("19970717T235959Z")) == 869183999);
+    ok("icaltime_from_string translates 20241202T235959Z to 1733183999", icaltime_as_timet(icaltime_from_string("20241202T235959Z")) == 1733183999);
+    ok("icaltime_from_string translates 20371231T235959Z to 2145916799", icaltime_as_timet(icaltime_from_string("20371231T235959Z")) == 2145916799);
+#if (SIZEOF_ICALTIME_T > 4)
+    ok("icaltime_from_string translates 20520419T235959Z to 2597183999", icaltime_as_timet(icaltime_from_string("20520419T235959Z")) == 2597183999);
+    ok("icaltime_from_string translates 20790905T235959Z to 3461183999", icaltime_as_timet(icaltime_from_string("20790905T235959Z")) == 3461183999);
+    ok("icaltime_from_string translates 21000101T235959Z to 4102531199", icaltime_as_timet(icaltime_from_string("21000101T235959Z")) == 4102531199);
+    ok("icaltime_from_string translates 21000301T235959Z to 4107628799", icaltime_as_timet(icaltime_from_string("21000301T235959Z")) == 4107628799);
+    ok("icaltime_from_string translates 22370122T235959Z to 8427628799", icaltime_as_timet(icaltime_from_string("22370122T235959Z")) == 8427628799);
+    ok("icaltime_from_string translates 23731215T235959Z to 12747628799", icaltime_as_timet(icaltime_from_string("23731215T235959Z")) == 12747628799);
+    ok("icaltime_from_string translates 25101107T235959Z to 17067628799", icaltime_as_timet(icaltime_from_string("25101107T235959Z")) == 17067628799);
+    ok("icaltime_from_string translates 25821231T235959Z to 19344441599", icaltime_as_timet(icaltime_from_string("25821231T235959Z")) == 19344441599);
+    ok("icaltime_from_string translates 99991231T235959Z to 253402300799", icaltime_as_timet(icaltime_from_string("99991231T235959Z")) == 253402300799);
+#endif
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -5300,6 +5323,7 @@ int main(int argc, char *argv[])
 #endif
 
     test_run("Test time parser functions", test_time_parser, do_test, do_header);
+    test_run("Test icaltime_as_timet", test_icaltime_as_timet, do_test, do_header);
     test_run("Test time", test_time, do_test, do_header);
     test_run("Test calculation of DOY and WD", test_juldat_caldat, do_test, do_header);
     test_run("Test day of Year", test_doy, do_test, do_header);
