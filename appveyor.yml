@@ -20,7 +20,7 @@ skip_tags: false
 # Build worker image
 image:
   #- Visual Studio 2013 #disable since Ninja is not available
-  - Ubuntu
+  - Ubuntu2004
   - Visual Studio 2019
   - macos
 
