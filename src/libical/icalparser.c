@@ -409,8 +409,8 @@ static char *parser_get_next_value(char *line, char **end, icalvalue_kind kind)
                 continue;
             }
         }
-        /* ignore all , for query value. select dtstart, dtend etc ... */
-        else if (kind == ICAL_QUERY_VALUE) {
+        /* ignore all commas for query and x values. select dtstart, dtend etc ... */
+        else if (kind == ICAL_QUERY_VALUE || kind == ICAL_X_VALUE) {
             if (next != 0) {
                 p = next + 1;
                 continue;
