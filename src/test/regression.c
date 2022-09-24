@@ -5262,7 +5262,7 @@ void test_icaltime_as_timet(void) {
     ok("icaltime_from_string translates 19970717T235959Z to 869183999", icaltime_as_timet(icaltime_from_string("19970717T235959Z")) == 869183999);
     ok("icaltime_from_string translates 20241202T235959Z to 1733183999", icaltime_as_timet(icaltime_from_string("20241202T235959Z")) == 1733183999);
     ok("icaltime_from_string translates 20371231T235959Z to 2145916799", icaltime_as_timet(icaltime_from_string("20371231T235959Z")) == 2145916799);
-#if (SIZEOF_TIME_T > 4)
+#if (SIZEOF_ICALTIME_T > 4)
     ok("icaltime_from_string translates 20520419T235959Z to 2597183999", icaltime_as_timet(icaltime_from_string("20520419T235959Z")) == 2597183999);
     ok("icaltime_from_string translates 20790905T235959Z to 3461183999", icaltime_as_timet(icaltime_from_string("20790905T235959Z")) == 3461183999);
     ok("icaltime_from_string translates 21000101T235959Z to 4102531199", icaltime_as_timet(icaltime_from_string("21000101T235959Z")) == 4102531199);
