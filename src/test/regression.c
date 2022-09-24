@@ -5215,6 +5215,24 @@ test_icalvalue_resets_timezone_on_set(void)
 
 static void test_remove_tzid_from_due(void)
 {
+    icalproperty *xproperty = icalproperty_new_from_string("X-TEST-PROPERTY:test,test");
+    icalcomponent *c;
+
+    c = icalcomponent_vanew(
+            ICAL_VCALENDAR_COMPONENT,
+                icalcomponent_vanew(
+                    ICAL_VEVENT_COMPONENT,
+                    xproperty,
+                    0),
+            0);
+
+    str_is("icalproperty_as_ical_string()", "X-TEST-PROPERTY:test,test\r\n", icalproperty_as_ical_string(icalcomponent_get_first_property(icalcomponent_get_inner(c), ICAL_X_PROPERTY)));
+
+    icalcomponent_free(c);
+}
+
+static void test_comma_in_xproperty(void)
+{
     icalproperty *due = icalproperty_vanew_due(icaltime_from_string("20220120T120000"), 0);
     icalcomponent *c;
 
@@ -5394,6 +5412,7 @@ int main(int argc, char *argv[])
     test_run("Test icalvalue resets timezone on set", test_icalvalue_resets_timezone_on_set, do_test, do_header);
     test_run("Test removing TZID from DUE with icalcomponent_set_due", test_remove_tzid_from_due, do_test, do_header);
     test_run("Test geo precision", test_geo_props, do_test, do_header);
+    test_run("Test commas in x-property", test_comma_in_xproperty, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

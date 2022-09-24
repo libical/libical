@@ -303,7 +303,8 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
             if ((icalproperty_isa(value->parent) == ICAL_CATEGORIES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_RESOURCES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_POLLPROPERTIES_PROPERTY) ||
-                (icalproperty_isa(value->parent) == ICAL_LOCATIONTYPE_PROPERTY)) {
+                (icalproperty_isa(value->parent) == ICAL_LOCATIONTYPE_PROPERTY) ||
+                (icalproperty_isa(value->parent) == ICAL_X_PROPERTY)) {
                 icalmemory_append_char(&str, &str_p, &buf_sz, *p);
                 break;
             }
