@@ -433,7 +433,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-The parser object parameterizes the routine used to get input lines
+The parser object parametrizes the routine used to get input lines
 with `icalparser_set_gen_data()`and `icalparser_get_line()`. In this
 example, the routine `read_stream()` will fetch the next line from a
 stream, with the stream passed in as the `void*` parameter d. The parser

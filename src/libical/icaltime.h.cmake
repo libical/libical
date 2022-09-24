@@ -205,7 +205,7 @@ LIBICAL_ICAL_EXPORT icaltime_t icaltime_as_timet_with_zone(const struct icaltime
                                                        const icaltimezone *zone);
 
 /**
- * @brief Returns a string represention of the time, in RFC5545 format.
+ * @brief Returns a string representation of the time, in RFC5545 format.
  *
  * @par Ownership
  * The created string is owned by libical.
@@ -213,7 +213,7 @@ LIBICAL_ICAL_EXPORT icaltime_t icaltime_as_timet_with_zone(const struct icaltime
 LIBICAL_ICAL_EXPORT const char *icaltime_as_ical_string(const struct icaltimetype tt);
 
 /**
- * @brief Returns a string represention of the time, in RFC5545 format.
+ * @brief Returns a string representation of the time, in RFC5545 format.
  *
  * @par Ownership
  * The string is owned by the caller.
