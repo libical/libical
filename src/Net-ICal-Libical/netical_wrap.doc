@@ -390,4 +390,3 @@ icalperiodtype_is_null_period(p);
 
 icalperiodtype_is_valid_period(p);
         [ returns int  ]
-

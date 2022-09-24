@@ -431,4 +431,3 @@ icalcomponent_get_parent(), and if is it non-zero, it does not free
 the component.
 
 It is not hard, just more code, and something to watch out for.
-
