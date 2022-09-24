@@ -544,7 +544,7 @@ CODESPELL() {
 ##### END FUNCTIONS #####
 
 #TEMP=`getopt -o hmkpctbsnlgadu --long help,no-cmake-compat,no-krazy,no-codespell,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build -- "$@"`
-TEMP=`getopt hmkctbsnlgadux $*`
+TEMP=`getopt hmkpctbsnlgadux $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
