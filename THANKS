@@ -1,4 +1,4 @@
-Thanks to: 
+Thanks to:
 
 Allan Clark <allanc@atlas.platypus.bc.ca> for testing libical against
 UnixWare.
@@ -12,7 +12,7 @@ files and various utility functions.
 Russ Steinthal <rms39@columbia.edu> for several utility functions and
 comments.
 
-Ola Lundqvist <olalu526@student.liu.se> for the vCal test data file. 
+Ola Lundqvist <olalu526@student.liu.se> for the vCal test data file.
 
 Colin DuPlantis <colin@cp.net> for new functions in icalparser.c
 
@@ -32,7 +32,7 @@ miscellaneous patches and adjustments to the build system.
 Cornelius Schumacher <schumacher@kde.org> for many insightful
 suggestions and a few patches.
 
-Mark D. Anderson <mda@discerning.com> for discussions and ideas. 
+Mark D. Anderson <mda@discerning.com> for discussions and ideas.
 
 Martin Neimeier <nei@ibn.de> for correcting bugs in icalrecur.c
 
@@ -53,7 +53,7 @@ of the recurrence rule system.
 
 Jonathan Yue <jonathan.yue@cp.net> for  icalproperty_get_name()
 
-Jeff Mace <jhm18@psu.edu> for finding bugs in gauges. 
+Jeff Mace <jhm18@psu.edu> for finding bugs in gauges.
 
 John Gray <gray@agora-net.com> for routing memory leaks, porting to
 WIN32, and taking over leadership of the project.

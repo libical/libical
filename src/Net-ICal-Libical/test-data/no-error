@@ -23,4 +23,4 @@ UID:calsvr.example.com-873970198738777
 ATTACH:ftp://ftp.bar.com/pub/docs/foo.doc
 STATUS:CONFIRMED
 END:VEVENT
-END:VCALENDAR                              
+END:VCALENDAR

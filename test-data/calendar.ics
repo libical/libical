@@ -24,7 +24,7 @@ END:VCALENDAR
 BEGIN:VCALENDAR
 PRODID:-//ACME/DesktopCalendar//EN
 METHOD:REQUEST
-X-LIC-NOTE: #C2. The test user is the organizer. 
+X-LIC-NOTE: #C2. The test user is the organizer.
 VERSION:2.0
 BEGIN:VEVENT
 ORGANIZER:Mailto:A@example.com
@@ -48,7 +48,7 @@ END:VCALENDAR
 BEGIN:VCALENDAR
 PRODID:-//ACME/DesktopCalendar//EN
 METHOD:CREATED
-X-LIC-NOTE: #C3. Publish 
+X-LIC-NOTE: #C3. Publish
 VERSION:2.0
 BEGIN:VEVENT
 ORGANIZER:Mailto:B@example.com

@@ -4,8 +4,8 @@
 2.0.2 REPLYPENDING A timeout has occurred. The server is still working on the reply. Use CONTINUE to continue waiting for the reply or ABORT to terminate the command.
 2.0.3 ABORTED The  command currently underway was successfully aborted.
 2.0.4 WILLATTEMPT The specified Calendar is not here but an attempt will be made to deliver the request or reply to the Calendar anyway.
-2.0.5 TRUSTEDWILLQUEUE The request or reply will be queued and delivered to the target calendar when its iRIP server contacts this server and issues the SWITCH command. 
-2.0.6 WILLATTEMPT The specified Calendar is not here but an attempt will be made to deliver the request or reply to the Calendar anyway. 
+2.0.5 TRUSTEDWILLQUEUE The request or reply will be queued and delivered to the target calendar when its iRIP server contacts this server and issues the SWITCH command.
+2.0.6 WILLATTEMPT The specified Calendar is not here but an attempt will be made to deliver the request or reply to the Calendar anyway.
 2.0.7 QUEUED The message has been queued for delivery.
 2.0.8 QUEUEEMPTY There are no more queued messages.
 2.1 FALLBACK Success. Fallback taken  on one or more property  values.
@@ -19,7 +19,7 @@
 2.8 ONEEVENT Success. Repeating event ignored. Scheduled as a  single component.
 2.9 TRUNC Success. Truncated end date time to date boundary.
 2.10 ONETODO Success. Repeating VTODO ignored. Scheduled as a  single VTODO.
-2.11 TRUNCRRULE Success. Unbounded RRULE clipped at some finite  number of instances  
+2.11 TRUNCRRULE Success. Unbounded RRULE clipped at some finite  number of instances
 3.0 INVPROPNAME Invalid property name.
 3.1 INVPROPVAL Invalid property value.
 3.2 INVPARAM Invalid property parameter.
@@ -48,8 +48,8 @@
 8.3 DATETOOLARGE A DATETIME value was too far in the future to be represented on this Calendar.
 8.4 DATETOOSMALL A DATETIME value was too far in the past to be represented on this Calendar.
 9.0 INVALIDIRIPCOMMAND An unrecongnized command was received.
-9.1 UNEXPECTEDCOMMAND The command is not allowed for the server's current state. 
-10.1 REFERRAL Accompanied by an alternate address. 
+9.1 UNEXPECTEDCOMMAND The command is not allowed for the server's current state.
+10.1 REFERRAL Accompanied by an alternate address.
 10.2 SERVERSHUTDOWN The server is shutting down.
 10.3 SERVERSTOPPING FLOOD 2
 10.4 EXCEEDEDQUOTAS The operation would cause a resource to exceed the allocated quota
