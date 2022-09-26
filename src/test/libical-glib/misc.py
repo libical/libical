@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./misc.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./misc.py
 
 ###############################################################################
 #
@@ -7,16 +7,15 @@
 #
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 #
-#
-#
-#
 ###############################################################################
 
+''' Test Python bindings for libical miscellaneous types '''
+
+from gi.repository import ICalGLib
 import gi
 
 gi.require_version('ICalGLib', '3.0')
 
-from gi.repository import ICalGLib
 
 geo = ICalGLib.Geo.new(10.0, 20.0)
 assert geo.get_lat() == 10.0
@@ -25,21 +24,21 @@ geo_clone = geo.clone()
 assert geo.get_lat() == geo_clone.get_lat()
 assert geo.get_lon() == geo_clone.get_lon()
 geo_clone.set_lat(30.0)
-geo_clone.set_lon(40.0);
+geo_clone.set_lon(40.0)
 assert geo_clone.get_lat() == 30.0
 assert geo_clone.get_lon() == 40.0
 assert geo.get_lat() != geo_clone.get_lat()
 assert geo.get_lon() != geo_clone.get_lon()
 
-start = ICalGLib.Time.new_from_string("20190130T111213Z");
+start = ICalGLib.Time.new_from_string("20190130T111213Z")
 end = ICalGLib.Time.new_from_string("20190203T100908Z")
-span = ICalGLib.TimeSpan.new(start, end, 0);
+span = ICalGLib.TimeSpan.new(start, end, 0)
 assert span.get_start() == start.as_timet()
 assert span.get_end() == end.as_timet()
 assert span.get_is_busy() == 0
-start = ICalGLib.Time.new_from_string("20190330T131415Z");
+start = ICalGLib.Time.new_from_string("20190330T131415Z")
 end = ICalGLib.Time.new_from_string("20190403T070605Z")
-span = ICalGLib.TimeSpan.new(start, end, 1);
+span = ICalGLib.TimeSpan.new(start, end, 1)
 assert span.get_start() == start.as_timet()
 assert span.get_end() == end.as_timet()
 assert span.get_is_busy() == 1

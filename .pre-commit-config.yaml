@@ -18,10 +18,12 @@ repos:
   rev: v2.15.3
   hooks:
   - id: pylint
+    exclude: ^(src/python)
 - repo: https://github.com/pre-commit/mirrors-autopep8
   rev: v1.7.0
   hooks:
   - id: autopep8
+    exclude: ^(src/python)
 - repo: https://github.com/codespell-project/codespell
   rev: v2.2.1
   hooks:
