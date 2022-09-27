@@ -11,11 +11,9 @@
 
 ''' Test Python bindings for libical period '''
 
-from gi.repository import ICalGLib
 import gi
-
 gi.require_version('ICalGLib', '3.0')
-
+from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
 string = "19970101T183248Z/19970102T071625Z"
 

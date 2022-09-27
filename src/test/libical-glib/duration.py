@@ -11,10 +11,9 @@
 
 ''' Test Python bindings for libical duration '''
 
-from gi.repository import ICalGLib
 import gi
-
 gi.require_version('ICalGLib', '3.0')
+from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
 
 length = 1000000000

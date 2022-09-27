@@ -13,11 +13,9 @@
 
 ''' Test Python bindings for libical components '''
 
-from gi.repository import ICalGLib
 import gi
-
 gi.require_version('ICalGLib', '3.0')
-
+from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
 eventStr1 = \
     "BEGIN:VEVENT\n"                                \
@@ -175,9 +173,9 @@ def main():  # pylint: disable=too-many-statements,too-many-locals
     childComponent = parent.get_first_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
     for i in range(0, count):
         prefix = "test"
-        index = i+2
+        index = i + 2
         assert childComponent.get_summary() == prefix + str(index)
-        if i != count-1:
+        if i != count - 1:
             childComponent = parent.get_next_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
 
     # Traverse with external API.
@@ -185,9 +183,9 @@ def main():  # pylint: disable=too-many-statements,too-many-locals
     childComponent = iterator.deref()
     for i in range(0, count):
         prefix = "test"
-        index = i+2
+        index = i + 2
         assert childComponent.get_summary() == prefix + str(index)
-        if i != count-1:
+        if i != count - 1:
             childComponent = iterator.next()
 
     iterator = parent.end_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)

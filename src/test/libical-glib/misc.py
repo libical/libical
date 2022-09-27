@@ -11,11 +11,9 @@
 
 ''' Test Python bindings for libical miscellaneous types '''
 
-from gi.repository import ICalGLib
 import gi
-
 gi.require_version('ICalGLib', '3.0')
-
+from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
 geo = ICalGLib.Geo.new(10.0, 20.0)
 assert geo.get_lat() == 10.0

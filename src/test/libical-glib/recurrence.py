@@ -11,10 +11,9 @@
 
 ''' Test Python bindings for libical recurrence '''
 
-from gi.repository import ICalGLib
 import gi
-
 gi.require_version('ICalGLib', '3.0')
+from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
 weekday = ICalGLib.Recurrence.day_day_of_week(0)
 assert weekday == ICalGLib.RecurrenceWeekday.NO_WEEKDAY

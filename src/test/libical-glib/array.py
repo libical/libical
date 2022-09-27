@@ -11,10 +11,9 @@
 
 ''' Test Python bindings for libical arrays '''
 
-from gi.repository import ICalGLib
 import gi
-
 gi.require_version('ICalGLib', '3.0')
+from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
 array = ICalGLib.Timezone.array_new()
 

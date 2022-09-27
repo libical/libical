@@ -11,11 +11,9 @@
 
 ''' Comprehensive testing for Python libical bindings '''
 
-from gi.repository import ICalGLib
 import gi
-
 gi.require_version('ICalGLib', '3.0')
-
+from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
 eventStr1 = \
     "BEGIN:VEVENT\n"                                \

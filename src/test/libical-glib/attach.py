@@ -11,11 +11,9 @@
 
 ''' Test Python bindings for libical attachments '''
 
-from gi.repository import ICalGLib
 import gi
-
 gi.require_version('ICalGLib', '3.0')
-
+from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
 dummyUrl = "https://people.gnome.org/~engagement/logos/GnomeLogoVertical.svg"
 dummyData = "It's a super large attachment"
