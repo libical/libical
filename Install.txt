@@ -123,7 +123,14 @@ This C library can be built with bindings for these other languages:
   Turn this off by passing -DWITH_CXX_BINDINGS=False option to CMake.
   Don't mix ABI from C and C++ compilers.
 
-* There are Java, Perl, PHP and Python bindings but they are old and haven't
+* Python bindings are built using glib-introspection, which is enabled
+  by passing -DGOBJECT_INTROSPECTION=True to CMake.
+  Requires the GObject Introspection development package.
+
+  Don't forget to set (or append to, as needed) the GI_TYPELIB_PATH environment
+  variable to $PREFIX/lib/girepository-1.0 (or $PREFIX/lib64/girepository-1.0).
+
+* There are Java, Perl and PHP bindings but they are old and haven't
   been tested in a very long time.  Volunteers wanted.
 
 == Tweaking the Library Behavior ==

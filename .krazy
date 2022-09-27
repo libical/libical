@@ -16,8 +16,6 @@ SKIP /examples/
 
 #For now skip java
 SKIP /java/
-#For now skip python
-SKIP /python/
 SKIP \.cmake-format\.py
 #For now skip perl
 SKIP /Net-ICal-Libical/

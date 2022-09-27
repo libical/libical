@@ -689,7 +689,7 @@ MEMCONSIST_BUILD test1memc ""
 MEMCONSIST_BUILD test2memc "$CMAKEOPTS"
 MEMCONSIST_BUILD test3memc "$TZCMAKEOPTS"
 MEMCONSIST_BUILD test4memc "$UUCCMAKEOPTS"
-#FIXME: the python test scripts needs for introspection need some love
+#FIXME: the python test scripts for introspection need some love
 #MEMCONSIST_BUILD test5memc "$GLIBOPTS"
 
 #Address sanitizer

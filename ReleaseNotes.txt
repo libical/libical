@@ -7,6 +7,8 @@ Version 3.1.0 (NOT RELEASED YET):
  * Requires MSVC 2013 or higher (when building on Windows with MSVC)
  * Requires CMake v3.11.0 or higher
  * For the C++ bindings, requires a C++11 compliant compiler
+ * The old src/python code is removed in favor of the glib-introspection generated
+   Python bindings. Requires building with -DGOBJECT_INTROSPECTION=ON
  * New CMake option "LIBICAL_ENABLE_64BIT_ICALTIME_T" to use 64-bit time_t implementations
    on 32-bit systems (where available and supported.  Windows-only so far)
  * libical-glib requires glib 2.38 or higher

@@ -94,8 +94,7 @@ FILE_PATTERNS          = *.cpp \
                          *.dox
 RECURSIVE              = YES
 EXCLUDE                = @CMAKE_SOURCE_DIR@/src/java \
-                         @CMAKE_SOURCE_DIR@/src/php \
-                         @CMAKE_SOURCE_DIR@/src/python
+                         @CMAKE_SOURCE_DIR@/src/php
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */.svn/* \
                          */.git/* \
