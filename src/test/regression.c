@@ -4963,8 +4963,8 @@ static void test_comma_in_xproperty(void)
     icalcomponent_free(c);
 }
 
-void test_icaltime_as_timet(void) {
-
+void test_icaltime_as_timet(void)
+{
     ok("icaltime_from_string translates 19020101T000000Z to -2145916800", icaltime_as_timet(icaltime_from_string("19020101T000000Z")) == -2145916800);
     ok("icaltime_from_string translates 19290519T000000Z to -1281916800", icaltime_as_timet(icaltime_from_string("19290519T000000Z")) == -1281916800);
     ok("icaltime_from_string translates 19561004T000000Z to -417916800", icaltime_as_timet(icaltime_from_string("19561004T000000Z")) == -417916800);
@@ -4984,6 +4984,21 @@ void test_icaltime_as_timet(void) {
     ok("icaltime_from_string translates 25821231T235959Z to 19344441599", icaltime_as_timet(icaltime_from_string("25821231T235959Z")) == 19344441599);
     ok("icaltime_from_string translates 99991231T235959Z to 253402300799", icaltime_as_timet(icaltime_from_string("99991231T235959Z")) == 253402300799);
 #endif
+}
+
+void test_icalcomponent_with_lastmodified(void)
+{
+    icalcomponent *comp;
+    struct icaltimetype lm = icaltime_from_timet_with_zone(1661280150, 0, NULL);
+
+    comp = icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
+                               icalproperty_new_version("2.0"),
+                               icalproperty_new_prodid("PROD-ABC"),
+                               icalproperty_new_uid("1234abcd"),
+                               icalproperty_new_lastmodified(lm),
+                               icalproperty_new_name("name1"),
+                               0);
+    free(comp);
 }
 
 int main(int argc, char *argv[])
@@ -5130,6 +5145,7 @@ int main(int argc, char *argv[])
     test_run("Test icalvalue resets timezone on set", test_icalvalue_resets_timezone_on_set, do_test, do_header);
     test_run("Test removing TZID from DUE with icalcomponent_set_due", test_remove_tzid_from_due, do_test, do_header);
     test_run("Test commas in x-property", test_comma_in_xproperty, do_test, do_header);
+    test_run("Test icalcomponent_vanew with lastmodified property", test_icalcomponent_with_lastmodified, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
