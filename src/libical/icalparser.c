@@ -630,6 +630,7 @@ icalcomponent *icalparser_parse(icalparser *parser,
                                 icalparser_line_gen_func line_gen_func)
 {
     char *line;
+    unsigned int cnt = 0;
     icalcomponent *c = 0;
     icalcomponent *root = 0;
     icalerrorstate es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
@@ -640,6 +641,7 @@ icalcomponent *icalparser_parse(icalparser *parser,
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
 
     do {
+        cnt++;
         line = icalparser_get_line(parser, line_gen_func);
 
         if ((c = icalparser_add_line(parser, line)) != 0) {
@@ -679,7 +681,7 @@ icalcomponent *icalparser_parse(icalparser *parser,
             icalmemory_free_buffer(line);
             cont = 1;
         }
-    } while (cont);
+    } while (cont && cnt < TMP_BUF_SIZE);
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 
