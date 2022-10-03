@@ -331,19 +331,24 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
         assert(compare != -1);
 
         if (compare == 0) {
-#define TMP_BUF_SIZE 1024
+#if !defined(__COVERITY__)
+            /* Coverity doesn't think the memory allocated by icalparameter_new_xlicerrortype()
+             * is freed, even though it should be freed in icalproperty_free()
+             */
+            #define TMP_BUF_SIZE 1024
             char temp[TMP_BUF_SIZE];
             icalproperty *errProp;
-            icalparameter *errParam;
 
             snprintf(temp, TMP_BUF_SIZE,
                      "Failed iTIP restrictions for %s property. "
                      "Expected %s instances of the property and got %d",
                      icalenum_property_kind_to_string(kind), restr_string_map[restr], count);
-            errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
-            errProp = icalproperty_vanew_xlicerror(temp, errParam, 0);
+            errProp =
+                icalproperty_vanew_xlicerror(
+                    temp, icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP), 0);
             icalcomponent_add_property(comp, errProp);
             icalproperty_free(errProp);
+#endif
         }
 
         prop = icalcomponent_get_first_property(comp, kind);
@@ -353,15 +358,19 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
         }
 
         if (funcr != 0) {
+#if !defined(__COVERITY__)
+            /* Coverity doesn't think the memory allocated by icalparameter_new_xlicerrortype()
+             * is freed, even though it should be freed in icalproperty_free()
+             */
             icalproperty *errProp;
-            icalparameter *errParam;
 
-            errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
-            errProp = icalproperty_vanew_xlicerror(funcr, errParam, 0);
+            errProp =
+                icalproperty_vanew_xlicerror(
+                    funcr, icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP), 0);
             icalcomponent_add_property(comp, errProp);
             icalproperty_free(errProp);
-
             compare = 0;
+#endif
         }
 
         valid = valid && compare;

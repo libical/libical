@@ -1317,6 +1317,7 @@ yyparse ()
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
                   (unsigned long int) yystacksize));
 
+      /* coverity[OVERRUN] */
       if (yyss + yystacksize - 1 <= yyssp)
         YYABORT;
     }
@@ -1418,8 +1419,8 @@ yyreduce:
      users should not rely upon it.  Assigning to YYVAL
      unconditionally makes the parser a bit smaller, and it avoids a
      GCC warning that YYVAL may be used uninitialized.  */
+  /* coverity[uninit_use] */
   yyval = yyvsp[1-yylen];
-
 
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
