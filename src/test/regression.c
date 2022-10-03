@@ -2793,6 +2793,7 @@ void test_juldat_caldat() {
 
     failed = 0;
     for (i = 0; i < 10000; i++) {
+        /* coverity[dc.weak_crypto] */
         long y = rand() % 2582;
         int m = rand() % 12 + 1;
 
