@@ -12,8 +12,6 @@ SPDX-FileCopyrightText: 2018-2022, Markus Minichmayr <markus@tapkey.com>
 
 #include <stdint.h>
 
-#include "libical_ical_export.h"
-
 struct testmalloc_statistics {
     int malloc_cnt;
     int realloc_cnt;
@@ -33,29 +31,29 @@ struct testmalloc_statistics {
   * The number of allocations that can be made using this function can be limited via
   * testmalloc_set_max_successful_allocs().
   */
-LIBICAL_ICAL_EXPORT void *test_malloc(size_t size);
+extern void *test_malloc(size_t size);
 
 /** Resizes the specified buffer.
  * Can only be used with memory that has previously been allocated using test_malloc().
  */
-LIBICAL_ICAL_EXPORT void *test_realloc(void *p, size_t size);
+extern void *test_realloc(void *p, size_t size);
 
 /** Frees a block of memory that has previously been allocated via the test_malloc() function. Specifying memory that
  * has not been allocated via test_malloc() causes an assertion.
  */
-LIBICAL_ICAL_EXPORT void test_free(void *p);
+extern void test_free(void *p);
 
 /** Resets the memory management statistics and sets the number of successful
   * allocations limit to infinite.
   */
-LIBICAL_ICAL_EXPORT void testmalloc_reset();
+extern void testmalloc_reset();
 
 /** Sets the maximum number of malloc or realloc attempts that will succeed. If
   * the number is negative, no limit will be applied.
   */
-LIBICAL_ICAL_EXPORT void testmalloc_set_max_successful_allocs(int n);
+extern void testmalloc_set_max_successful_allocs(int n);
 
 /** Gets current memory allocation statistics. */
-LIBICAL_ICAL_EXPORT void testmalloc_get_statistics(struct testmalloc_statistics *statistics);
+extern void testmalloc_get_statistics(struct testmalloc_statistics *statistics);
 
 #endif /* !TESTMALLOC_H */
