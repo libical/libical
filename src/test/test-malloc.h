@@ -31,29 +31,29 @@ struct testmalloc_statistics {
   * The number of allocations that can be made using this function can be limited via
   * testmalloc_set_max_successful_allocs().
   */
-extern void *test_malloc(size_t size);
+void *test_malloc(size_t size);
 
 /** Resizes the specified buffer.
  * Can only be used with memory that has previously been allocated using test_malloc().
  */
-extern void *test_realloc(void *p, size_t size);
+void *test_realloc(void *p, size_t size);
 
 /** Frees a block of memory that has previously been allocated via the test_malloc() function. Specifying memory that
  * has not been allocated via test_malloc() causes an assertion.
  */
-extern void test_free(void *p);
+void test_free(void *p);
 
 /** Resets the memory management statistics and sets the number of successful
   * allocations limit to infinite.
   */
-extern void testmalloc_reset();
+void testmalloc_reset();
 
 /** Sets the maximum number of malloc or realloc attempts that will succeed. If
   * the number is negative, no limit will be applied.
   */
-extern void testmalloc_set_max_successful_allocs(int n);
+void testmalloc_set_max_successful_allocs(int n);
 
 /** Gets current memory allocation statistics. */
-extern void testmalloc_get_statistics(struct testmalloc_statistics *statistics);
+void testmalloc_get_statistics(struct testmalloc_statistics *statistics);
 
 #endif /* !TESTMALLOC_H */
