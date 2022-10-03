@@ -282,7 +282,7 @@ void create_new_component_with_va_args()
 
 static void print_span(int c, struct icaltime_span span)
 {
-    printf("span-->%d, %d\n", (int)span.start, (int)span.end);
+    printf("span-->%ld, %ld\n", (long)span.start, (long)span.end);
     if (span.start == 0) {
         printf("#%02d start: (empty)\n", c);
     } else {
@@ -355,7 +355,7 @@ void test_icalcomponent_get_span()
     if (VERBOSE)
         print_span(tnum++, span);
 
-    int_is("floating time", (int)span.start, (int)tm1);
+    int_is("floating time", (int)(long)span.start, (int)(long)tm1);
 
     icalcomponent_free(c);
 
@@ -439,7 +439,7 @@ void test_icalcomponent_get_span()
     if (VERBOSE)
         print_span(tnum++, span);
 
-    int_is("start == end", (int)span.start, (int)span.end);
+    int_is("start == end", (int)(long)span.start, (int)(long)span.end);
     icalcomponent_free(c);
 
     /** test 7
@@ -455,7 +455,7 @@ void test_icalcomponent_get_span()
     if (VERBOSE)
         print_span(tnum++, span);
 
-    int_is("UTC", (int)span.start, 973296000);
+    int_is("UTC", (int)(long)span.start, 973296000);
     icalcomponent_free(c);
 
     /** test 8
@@ -467,7 +467,7 @@ void test_icalcomponent_get_span()
                             (void *)0);
 
     span = icalcomponent_get_span(c);
-    int_is("UTC #2", (int)span.start, 973296000);
+    int_is("UTC #2", (int)(long)span.start, 973296000);
     if (VERBOSE)
         print_span(tnum++, span);
 
@@ -484,7 +484,7 @@ void test_icalcomponent_get_span()
     if (VERBOSE)
         print_span(tnum++, span);
 
-    int_is("start date only", (int)span.end, 973382399);
+    int_is("start date only", (int)(long)span.end, 973382399);
 
     icalcomponent_free(c);
 
