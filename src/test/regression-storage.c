@@ -305,6 +305,8 @@ void test_bdbset()
 
     return;     // for now... TODO fix these broken tests..
 
+#pragma clang diagnostic push /* remove when/if we remove the proceeding return statement */
+#pragma clang diagnostic ignored "-Wunreachable-code"
     start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     end = start;
     end.hour++;
@@ -452,6 +454,7 @@ void test_bdbset()
         }
         icalset_free(cout);
     }
+#pragma clang diagnostic pop
 }
 
 #endif
