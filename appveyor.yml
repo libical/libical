@@ -52,7 +52,8 @@ build_script:
   - mkdir build
   - cd build
   - cmd: cmake  --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DLIBICAL_BUILD_TESTING=True -DENABLE_GTK_DOC=True -DICAL_GLIB=False ..
-  - sh: if [ "`uname -s`" = "Darwin" ]; then BUILD_EXTRAS="False"; else BUILD_EXTRAS="True"; fi; cmake  --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=$CONFIGURATION -DLIBICAL_BUILD_TESTING=True -DENABLE_GTK_DOC=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=$BUILD_EXTRAS -DICAL_GLIB_VAPI=$BUILD_EXTRAS ..
+  - sh: if [ "`uname -s`" = "Darwin" ]; then cmake  --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=$CONFIGURATION -DLIBICAL_BUILD_TESTING=True -DENABLE_GTK_DOC=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=False -DICAL_GLIB_VAPI=False ..; else cmake  --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=False -DCMAKE_BUILD_TYPE=$CONFIGURATION -DLIBICAL_BUILD_TESTING=True -DENABLE_GTK_DOC=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB_VAPI=True ..; fi;
+
   - cmake --build .
   - cmd: cmake --build . --target install
   - sh: sudo cmake --build . --target install
