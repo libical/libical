@@ -9,7 +9,8 @@ Version 3.0.15 (UNRELEASED):
    to work properly between years 1902 and 10k.
  * Fix x-property comma handling and escaping
  * Built-in timezones updated to tzdata2022d (now with a VTIMEZONE for each time zone alias)
- * Fix a fuzzer issue
+ * Fix fuzzer issues
+ * Handle unreachable-code compile warnings with clang
 
 Version 3.0.14 (05 February 2022):
 ----------------------------------

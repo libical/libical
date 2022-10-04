@@ -183,8 +183,8 @@ char *make_mime(const char *to, const char *from, const char *subject,
     uname(&uts);
 
     srand((unsigned int)(time(0) << getpid()));
-    snprintf(content_id, TMPSIZE_SMALL, "%d-%d@%s", (int)time(0), rand(), uts.nodename);
-    snprintf(boundary, TMPSIZE_SMALL, "%d-%d-%s", (int)time(0), rand(), uts.nodename);
+    snprintf(content_id, TMPSIZE_SMALL, "%ld-%d@%s", (long)time(0), rand(), uts.nodename);
+    snprintf(boundary, TMPSIZE_SMALL, "%ld-%d-%s", (long)time(0), rand(), uts.nodename);
 //krazy:cond=style
     snprintf(mime_part_1, TMPSIZE, "Content-ID: %s\n\
 Content-type: text/plain\n\
