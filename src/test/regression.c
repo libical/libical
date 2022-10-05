@@ -4988,9 +4988,11 @@ void test_icaltime_as_timet(void)
 
 void test_icalcomponent_with_lastmodified(void)
 {
+    /* for https://github.com/libical/libical/issues/585 */
+
     icalcomponent *comp;
     struct icaltimetype lm = icaltime_from_timet_with_zone(1661280150, 0, NULL);
-
+#if 1
     comp = icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
                                icalproperty_new_version("2.0"),
                                icalproperty_new_prodid("PROD-ABC"),
@@ -4998,7 +5000,16 @@ void test_icalcomponent_with_lastmodified(void)
                                icalproperty_new_lastmodified(lm),
                                icalproperty_new_name("name1"),
                                0);
-    free(comp);
+    icalcomponent_free(comp);
+#else
+    comp = icalcomponent_new(ICAL_VCALENDAR_COMPONENT);
+    icalcomponent_add_property(comp, icalproperty_new_version("2.0"));
+    icalcomponent_add_property(comp, icalproperty_new_prodid("PROD-ABC"));
+    icalcomponent_add_property(comp, icalproperty_new_uid("1234abcd"));
+    icalcomponent_add_property(comp, icalproperty_new_lastmodified(lm));
+    icalcomponent_add_property(comp, icalproperty_new_name("name1"));
+    icalcomponent_free(comp);
+#endif
 }
 
 int main(int argc, char *argv[])
