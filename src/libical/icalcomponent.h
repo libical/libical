@@ -52,6 +52,8 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_clone(icalcomponent *compon
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_from_string(const char *str);
 
 /** @brief Constructor
+ *
+ * Make sure to pass NULL (not 0) as the final argument!
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...);
 
