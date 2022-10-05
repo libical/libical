@@ -486,7 +486,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                          "Could not parse %s as a %s property",
                          str, icalvalue_kind_to_string(kind));
                 errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
+                *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
                 icalparameter_free(errParam);
             }
             break;
@@ -622,7 +622,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                          "Could not parse %s as a %s property",
                          str, icalvalue_kind_to_string(kind));
                 errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
+                *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
                 icalparameter_free(errParam);
             }
         }
@@ -737,7 +737,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                 snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
 
                 errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = icalproperty_vanew_xlicerror(temp, errParam, 0);
+                *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
                 icalparameter_free(errParam);
             }
 

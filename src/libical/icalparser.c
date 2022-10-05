@@ -608,7 +608,7 @@ static void insert_error(icalcomponent *comp, const char *text,
 
     icalcomponent_add_property(
         comp,
-        icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), 0));
+        icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), (void *)0));
 }
 
 static int line_is_blank(char *line)

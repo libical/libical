@@ -336,7 +336,7 @@ void test_icalcomponent_get_span()
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/Los_Angeles"), 0),
+                                       icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
             icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
                                      icalparameter_new_tzid("America/Los_Angeles"), 0),
             (void *)0);
@@ -356,8 +356,8 @@ void test_icalcomponent_get_span()
      */
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL), 0),
-            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), 0),
+            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL), (void *)0),
+            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), (void *)0),
             (void *)0);
 
     span = icalcomponent_get_span(c);
@@ -375,9 +375,9 @@ void test_icalcomponent_get_span()
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/New_York"), 0),
+                                       icalparameter_new_tzid("America/New_York"), (void *)0),
             icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
-                                     icalparameter_new_tzid("America/New_York"), 0),
+                                     icalparameter_new_tzid("America/New_York"), (void *)0),
             (void *)0);
 
     span = icalcomponent_get_span(c);
@@ -398,10 +398,10 @@ void test_icalcomponent_get_span()
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/New_York"), 0),
+                                       icalparameter_new_tzid("America/New_York"), (void *)0),
             icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, bzone),
-                                     icalparameter_new_tzid("America/Los_Angeles"), 0),
-            (void *)0);
+                                     icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
+        (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)
@@ -422,7 +422,7 @@ void test_icalcomponent_get_span()
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/Los_Angeles"), 0),
+                                       icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
             icalproperty_new_duration(dur),
             (void *)0);
 

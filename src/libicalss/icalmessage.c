@@ -272,7 +272,7 @@ icalcomponent *icalmessage_new_delegate_request(icalcomponent *c,
     delegateeParam = icalparameter_new_delegatedfrom(icalproperty_get_attendee(attendee));
     icalcomponent_add_property(
         inner,
-        icalproperty_vanew_attendee(delegatee, delegateeParam, 0));
+        icalproperty_vanew_attendee(delegatee, delegateeParam, (void *)0));
     icalparameter_free(delegateeParam);
     return reply;
 }

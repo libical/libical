@@ -278,7 +278,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse(icalparser *parser,
  * @param data The pointer which will be passed to the line_gen_func as argument `d`
  *
  * If you use any of the icalparser_parser() or icalparser_get_line() functions,
- * the @a line_gen_func that they expect has a third `void* d` argument. This function
+ * the @a line_gen_func that they expect has a third `void *d` argument. This function
  * sets what will be passed to your @a line_gen_function as such argument.
  */
 LIBICAL_ICAL_EXPORT void icalparser_set_gen_data(icalparser *parser, void *data);

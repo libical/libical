@@ -29,7 +29,7 @@
 /*int sspm_parse_mime(struct sspm_part *parts,
                size_t max_parts,
                struct sspm_action_map *actions,
-               char* (*get_string)(char *s, size_t size, void* data),
+               char* (*get_string)(char *s, size_t size, void *data),
                void *get_string_data,
                struct sspm_header *first_header
     );

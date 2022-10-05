@@ -4779,9 +4779,9 @@ static void test_implicit_dtend_duration(void)
             ICAL_VCALENDAR_COMPONENT,
             icalcomponent_vanew(
                 ICAL_VEVENT_COMPONENT,
-                icalproperty_vanew_dtstart(start1, 0),
-                0),
-            0);
+                icalproperty_vanew_dtstart(start1, (void *)0),
+                (void *)0),
+            (void *)0);
     struct icaldurationtype d = icalcomponent_get_duration(c);
     struct icaltimetype end = icalcomponent_get_dtend(c),
         start = icaltime_from_string("20220108T101010Z");
@@ -4814,9 +4814,9 @@ static void test_implicit_dtend_duration(void)
             ICAL_VCALENDAR_COMPONENT,
                 icalcomponent_vanew(
                     ICAL_VTODO_COMPONENT,
-                    icalproperty_vanew_dtstart(start1, 0),
-                    0),
-            0);
+                    icalproperty_vanew_dtstart(start1, (void *)0),
+                    (void *)0),
+            (void *)0);
     icalcomponent_set_due(c, icaltime_from_string("20220109"));
     d = icalcomponent_get_duration(c);
     end = icalcomponent_get_dtend(c);
@@ -4944,7 +4944,7 @@ static void test_remove_tzid_from_due(void)
 
 static void test_comma_in_xproperty(void)
 {
-    icalproperty *due = icalproperty_vanew_due(icaltime_from_string("20220120T120000"), 0);
+    icalproperty *due = icalproperty_vanew_due(icaltime_from_string("20220120T120000"), (void *)0);
     icalcomponent *c;
 
     icalproperty_add_parameter(due, icalparameter_new_tzid("America/New_York"));
