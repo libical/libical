@@ -81,7 +81,7 @@
     <method name="i_cal_time_as_ical_string" corresponds="icaltime_as_ical_string_r" since="1.0">
         <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
         <returns type="gchar *" annotation="transfer full" comment="The string representation" />
-        <comment xml:space="preserve">Returns a string represention of the time, in RFC2445 format.</comment>
+        <comment xml:space="preserve">Returns a string representation of the time, in RFC2445 format.</comment>
     </method>
     <method name="i_cal_time_get_timezone" corresponds="(void *)icaltime_get_timezone" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>

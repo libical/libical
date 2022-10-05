@@ -216,4 +216,4 @@ class Time(Property):
             seconds = self.utc_seconds() - other.seconds()
             return Time(seconds)
         else:
-            raise TypeError, "subtraction with Time reqires Time or Duration"
+            raise TypeError, "subtraction with Time requires Time or Duration"

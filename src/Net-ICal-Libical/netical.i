@@ -197,7 +197,7 @@ struct icaltimetype icaltime_from_timet_with_zone(int v, int is_date, const char
    into a pointer */
 int icaltime_as_timet(struct icaltimetype);
 
-/* Returns a string represention of the time, in RFC2445 format. The
+/* Returns a string representation of the time, in RFC2445 format. The
    string is owned by libical */
 char* icaltime_as_ical_string(struct icaltimetype tt);
 

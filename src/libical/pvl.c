@@ -109,7 +109,7 @@ void pvl_free(pvl_list l)
  * @brief Creates a new list element, assigns a magic number, and assigns
  * the next and previous pointers.
  *
- * Passing in the next and previous points may seem odd, but it allos the user
+ * Passing in the next and previous points may seem odd, but it allows the user
  * to set them while keeping the internal data hidden. In nearly all cases,
  * the user is the pvl library itself.
  *

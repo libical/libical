@@ -1,6 +1,6 @@
 # GtkDoc.cmake
 #
-# Macros to support develper documentation build from sources with gtk-doc.
+# Macros to support developer documentation build from sources with gtk-doc.
 #
 # Note that every target and dependency should be defined before the macro is
 # called, because it uses information from those targets.

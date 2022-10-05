@@ -258,7 +258,7 @@ static char *get_next_line_start(char *line_start, size_t chars_left)
     return line_start + MAX_LINE_LEN - 1;
 }
 
-/** This splits the property into lines less than 75 octects long (as
+/** This splits the property into lines less than 75 octets long (as
  *  specified in RFC5545). It tries to split after a ';' if it can.
  *  It returns a tmp buffer.  NOTE: I'm not sure if it matters if we
  *  split a line in the middle of a UTF-8 character. It probably won't
