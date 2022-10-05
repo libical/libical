@@ -113,8 +113,6 @@ icalcomponent *icalcomponent_new(icalcomponent_kind kind)
     return icalcomponent_new_impl(kind);
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wvarargs"
 icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...)
 {
     va_list args;
@@ -131,7 +129,6 @@ icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...)
 
     return impl;
 }
-#pragma clang diagnostic pop
 
 icalcomponent *icalcomponent_new_from_string(const char *str)
 {
