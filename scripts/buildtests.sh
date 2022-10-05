@@ -138,7 +138,12 @@ CONFIGURE() {
   mkdir -p $BDIR
   cd $BDIR
   rm -rf *
-  cmake .. $2 || exit 1
+  if ( test `echo $2 | grep -ci Ninja` -gt 0 )
+  then
+    cmake .. $2 || exit 1
+  else
+    cmake -G "Unix Makefiles" .. $2 || exit 1
+  fi
 }
 
 #function CLEAN:
