@@ -93,7 +93,7 @@ Homebrew:
   libicu can be found at http://www.icu-project.org
 
   If CMake doesn't locate your libicu installation try setting the
-  ICU_ROOT or ICU_BASE environment variable to the top folder where
+  ICU_ROOT or ICU_BASE environment variables to the top folder where
   libicu is installed and run cmake again.
 
 * Berkeley DB storage.
@@ -109,6 +109,13 @@ Homebrew:
   need to have the GObject Introspection development package v0.6.7 or higher
   installed beforehand.
 
+  Requires the GObject Introspection development package:
+    Ubuntu: apt-get install gobject-introspection
+    Fedora: dnf install gobject-introspection
+    Mac: brew install gobject-introspection pygobject3
+    Windows: vcpkg install gobject-introspection (untested)
+    (see https://vcpkg.io/en/docs/users/buildsystems/cmake-integration.html)
+
 You can also force CMake to ignore any of the optional dependencies
 by passing the option -DCMAKE_DISABLE_FIND_PACKAGE_<PACKAGE>=True.
 For instance:
@@ -120,6 +127,14 @@ This C library can be built with bindings for these other languages:
 * C++. If a C++ compiler is found the buildsystem will create and install the C++ bindings API.
   Turn this off by passing -DWITH_CXX_BINDINGS=False option to CMake.
   Don't mix ABI from C and C++ compilers.
+
+* Python bindings are built using gobject-introspection, which is enabled
+  by passing -DGOBJECT_INTROSPECTION=True to CMake.
+
+  Requires the GObject Introspection development package (see above).
+
+  Don't forget to set (or append to, as needed) the GI_TYPELIB_PATH environment
+  variable to $PREFIX/lib/girepository-1.0 (or $PREFIX/lib64/girepository-1.0).
 
 * There are Java, Perl, PHP and Python bindings but they are old and haven't
   been tested in a very long time.  Volunteers wanted.
