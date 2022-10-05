@@ -172,7 +172,7 @@ function(_ICU_FIND)
       DOC "ICU ${program} executable"
       NO_PACKAGE_ROOT_PATH
       )
-    mark_as_advanced(cache_var)
+    mark_as_advanced("${cache_var}")
     set("${program_var}" "${${cache_var}}" PARENT_SCOPE)
   endforeach()
 
@@ -301,7 +301,7 @@ function(_ICU_FIND)
       HINTS ${icu_roots}
       PATH_SUFFIXES ${icu_data_suffixes}
       DOC "ICU ${data} data file")
-    mark_as_advanced(cache_var)
+    mark_as_advanced("${cache_var}")
     set("${data_var}" "${${cache_var}}" PARENT_SCOPE)
   endforeach()
 
@@ -331,7 +331,7 @@ endfunction()
 
 _ICU_FIND()
 
-#include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(ICU
                                   FOUND_VAR ICU_FOUND
                                   REQUIRED_VARS ICU_INCLUDE_DIR
