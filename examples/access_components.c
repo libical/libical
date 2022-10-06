@@ -219,14 +219,14 @@ icalcomponent* create_new_component_with_va_args()
                 icalproperty_vanew_organizer(
                     "mailto:mrbig@host.com",
                     icalparameter_new_role(ICAL_ROLE_CHAIR),
-                    0
+                    NULL
                     ),
                 icalproperty_vanew_attendee(
                     "mailto:employee-A@host.com",
                     icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
                     icalparameter_new_rsvp(1),
                     icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
-                    0
+                    NULL
                     ),
                 icalproperty_new_description("Project XYZ Review Meeting"),
 
@@ -237,12 +237,12 @@ icalcomponent* create_new_component_with_va_args()
                 icalproperty_vanew_dtstart(
                     atime,
                     icalparameter_new_tzid("US-Eastern"),
-                    0
+                    NULL
                     ),
                 icalproperty_vanew_dtend(
                     atime,
                     icalparameter_new_tzid("US-Eastern"),
-                    0
+                    NULL
                     ),
                 icalproperty_new_location("1CP Conference Room 4350"),
                 0

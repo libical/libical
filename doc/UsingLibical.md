@@ -347,7 +347,7 @@ and the property constructor can have a list of parameters.
 
 *Be sure to terminate every list with a `NULL` (or a *`(void 0)`*, or your code
 will crash, if you are lucky*. The reason you can't use 0 itself is that
-depending on what platform you are on, `sizeof(int) ≠ sizeof(void*)`.
+depending on what platform you are on, `sizeof(int) ≠ sizeof(void *)`.
 
 #### 5.1.3 Parsing Text Files
 
@@ -376,7 +376,7 @@ void icalparser_free(
 
 icalparser_get_line(
     icalparser *parser,
-    char* (*read_stream)(char *s, size_t size,  void* d));
+    char* (*read_stream)(char *s, size_t size,  void *d));
 
 icalparser_add_line(
     icalparser *parser,
@@ -451,7 +451,7 @@ is a convenience routine;
 ```c
 icalcomponent* icalparser_parse(
     icalparser *parser,
-    char* (*line_gen_func)(char *s, size_t size,  void* d));
+    char* (*line_gen_func)(char *s, size_t size,  void *d));
 ```
 
 To use this routine, you still must construct the parser object and

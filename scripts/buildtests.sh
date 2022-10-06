@@ -52,7 +52,11 @@ COMMAND_EXISTS () {
     command -v $1 >/dev/null 2>&1
     if ( test $? != 0 )
     then
-    echo "$1 is not in your PATH. Either install this program or skip the assocatied test"
+    echo "$1 is not in your PATH. Either install this program or skip the associated test"
+    if ( test "$2" )
+    then
+      echo "or disable this check by passing the $2 command-line option"
+    fi
     exit 1
   fi
 }
@@ -144,7 +148,12 @@ CONFIGURE() {
   mkdir -p $BDIR
   cd $BDIR
   rm -rf *
-  cmake --warn-uninitialized -Werror=dev .. $2 || exit 1
+  if ( test `echo $2 | grep -ci Ninja` -gt 0 )
+  then
+    cmake --warn-uninitialized -Werror=dev .. $2 || exit 1
+  else
+    cmake -G "Unix Makefiles" --warn-uninitialized -Werror=dev .. $2 || exit 1
+  fi
 }
 
 #function CLEAN:
@@ -311,7 +320,7 @@ CPPCHECK() {
     echo "===== CPPCHECK TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "cppcheck"
+  COMMAND_EXISTS "cppcheck" "-c"
   echo "===== START SETUP FOR CPPCHECK: $1 ======"
 
   #first build it
@@ -373,7 +382,7 @@ SPLINT() {
     echo "===== SPLINT TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "splint"
+  COMMAND_EXISTS "splint" "-s"
   echo "===== START SETUP FOR SPLINT: $1 ======"
 
   #first build it
@@ -459,7 +468,7 @@ CLANGTIDY() {
     echo "===== CLANG-TIDY TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "clang-tidy"
+  COMMAND_EXISTS "clang-tidy" "-t"
   echo "===== START CLANG-TIDY: $1 ====="
   cd $TOP
   SET_CLANG
@@ -480,7 +489,7 @@ CLANGSCAN() {
     echo "===== SCAN-BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "scan-build"
+  COMMAND_EXISTS "scan-build" "-b"
   echo "===== START SCAN-BUILD: $1 ====="
   cd $TOP
 
@@ -505,7 +514,7 @@ KRAZY() {
     echo "===== KRAZY TEST DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "krazy2all"
+  COMMAND_EXISTS "krazy2all" "-k"
   echo "===== START KRAZY ====="
   cd $TOP
   krazy2all 2>&1 | tee krazy.out
@@ -601,7 +610,7 @@ then
     exit 1
   fi
   # read the min required CMake version from the top-level CMake file
-  minCMakeVers=`grep -i cmake_minimum_required $TOP/CMakeLists.txt | grep VERSION | sed 's/^.*VERSION\s*//' | cut -d. -f1-2 | sed 's/\s*).*$//'`
+  minCMakeVers=`grep -i cmake_minimum_required $TOP/CMakeLists.txt | grep VERSION | sed 's/^.*VERSION\s*//' | cut -d. -f1-2 | sed 's/\s*).*$//' | awk '{print $NF}'`
   # adjust PATH
   X=`echo $minCMakeVers | cut -d. -f1`
   Y=`echo $minCMakeVers | cut -d. -f2`

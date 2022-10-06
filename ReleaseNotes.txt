@@ -54,8 +54,12 @@ Version 3.1.0 (NOT RELEASED YET):
     + struct icaltimezonetype
     + struct icaltimezonephase
 
-Version 3.0.15 (UNRELEASED):
+Version 3.0.16 (UNRELEASED):
 ----------------------------
+ *
+
+Version 3.0.15 (06 October 2022):
+---------------------------------
  * Add missing property parameters into libical-glib
  * Fix CMake option USE_32BIT_TIME_T actually uses a 32-bit time_t value
  * Fix icaltime_as_timet, which returned incorrect results for years >= 2100,
@@ -64,6 +68,7 @@ Version 3.0.15 (UNRELEASED):
  * Built-in timezones updated to tzdata2022d (now with a VTIMEZONE for each time zone alias)
  * Fix fuzzer issues
  * Handle unreachable-code compile warnings with clang
+ * Ensure all vanew_foo() calls finish with (void*)0 (not 0)
 
 Version 3.0.14 (05 February 2022):
 ----------------------------------

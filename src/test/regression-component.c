@@ -273,11 +273,11 @@ void create_new_component_with_va_args()
                                 (void *)0),
             (void *)0);
 
-    ok("creating a complex vcalendar", (calendar != NULL));
     if (VERBOSE && calendar)
         printf("%s\n", icalcomponent_as_ical_string(calendar));
 
     icalcomponent_free(calendar);
+    ok("creating a complex vcalendar", (calendar != NULL));
 }
 
 static void print_span(int c, struct icaltime_span span)
@@ -327,19 +327,19 @@ void test_icalcomponent_get_span()
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/Los_Angeles"), 0),
+                                       icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
             icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
                                      icalparameter_new_tzid("America/Los_Angeles"), 0),
             (void *)0);
 
     span = icalcomponent_get_span(c);
+    icalcomponent_free(c);
     if (VERBOSE)
         print_span(tnum++, span);
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     int_is("America/Los_Angeles", span.start, 973350000);
 #endif
-    icalcomponent_free(c);
 
     /** test 2
      *  We specify times as floating, the returned span is in UTC
@@ -347,8 +347,8 @@ void test_icalcomponent_get_span()
      */
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL), 0),
-            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), 0),
+            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL), (void *)0),
+            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), (void *)0),
             (void *)0);
 
     span = icalcomponent_get_span(c);
@@ -366,19 +366,19 @@ void test_icalcomponent_get_span()
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/New_York"), 0),
+                                       icalparameter_new_tzid("America/New_York"), (void *)0),
             icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
-                                     icalparameter_new_tzid("America/New_York"), 0),
+                                     icalparameter_new_tzid("America/New_York"), (void *)0),
             (void *)0);
 
     span = icalcomponent_get_span(c);
+    icalcomponent_free(c);
     if (VERBOSE)
         print_span(tnum++, span);
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     int_is("America/New_York", span.start, 973360800);
 #endif
-    icalcomponent_free(c);
 
     /** test 4
      *  We specify times in two different timezones, the returned span
@@ -389,19 +389,19 @@ void test_icalcomponent_get_span()
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/New_York"), 0),
+                                       icalparameter_new_tzid("America/New_York"), (void *)0),
             icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, bzone),
-                                     icalparameter_new_tzid("America/Los_Angeles"), 0),
-            (void *)0);
+                                     icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
+        (void *)0);
 
     span = icalcomponent_get_span(c);
+    icalcomponent_free(c);
     if (VERBOSE)
         print_span(tnum++, span);
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     int_is("America/New_York", span.start, 973360800);
 #endif
-    icalcomponent_free(c);
 
     /** test 5
      *  We specify start time in a timezone and a duration, the returned span
@@ -413,18 +413,18 @@ void test_icalcomponent_get_span()
     c = icalcomponent_vanew(
             ICAL_VEVENT_COMPONENT,
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/Los_Angeles"), 0),
+                                       icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
             icalproperty_new_duration(dur),
             (void *)0);
 
     span = icalcomponent_get_span(c);
+    icalcomponent_free(c);
     if (VERBOSE)
         print_span(tnum++, span);
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     int_is("America/Los_Angeles w/ duration", span.end, 973351800);
 #endif
-    icalcomponent_free(c);
 
     icalerror_set_errors_are_fatal(0);
     /** test 6

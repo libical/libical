@@ -58,10 +58,7 @@ struct icalproperty_enum_map
     const char *str;
 };
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wvarargs"
 <insert_code_here>
-#pragma clang diagnostic pop
 
 int icalproperty_kind_is_valid(const icalproperty_kind kind)
 {

@@ -105,10 +105,10 @@ icalcomponent *icalcomponent_new(icalcomponent_kind kind)
     return icalcomponent_new_impl(kind);
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wvarargs"
 icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...)
 {
+    /* See https://github.com/libical/libical/issues/585. Caller must pass NULL as final argument */
+
     va_list args;
 
     icalcomponent *impl = icalcomponent_new_impl(kind);
@@ -123,7 +123,6 @@ icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...)
 
     return impl;
 }
-#pragma clang diagnostic pop
 
 icalcomponent *icalcomponent_new_from_string(const char *str)
 {

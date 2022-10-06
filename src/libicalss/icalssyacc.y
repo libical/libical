@@ -232,7 +232,7 @@ static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
     assert(0);
     }
 
-    pvl_push(impl->from,(void*)ckind);
+    pvl_push(impl->from,(void *)ckind);
 
 }
 

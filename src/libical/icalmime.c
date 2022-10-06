@@ -226,7 +226,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_MIMEPARSEERROR);
             icalcomponent_add_property(
                  comp,
-                 icalproperty_vanew_xlicerror(temp, errParam, 0));
+                 icalproperty_vanew_xlicerror(temp, errParam, (void *)0));
             icalparameter_free(errParam);
         }
 

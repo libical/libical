@@ -270,7 +270,7 @@ static int _check_restriction(icalcomponent *comp,
                  "Expected %s instances of the %s and got %d",
                  kind, type, restr_string_map[restr], type, count);
         errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
-        errProp = icalproperty_vanew_xlicerror(temp, errParam, 0);
+        errProp = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
         icalcomponent_add_property(comp, errProp);
         icalproperty_free(errProp);
     }
@@ -284,7 +284,7 @@ static int _check_restriction(icalcomponent *comp,
         icalparameter *errParam;
 
         errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
-        errProp = icalproperty_vanew_xlicerror(funcr, errParam, 0);
+        errProp = icalproperty_vanew_xlicerror(funcr, errParam, (void *)0);
         icalcomponent_add_property(comp, errProp);
         icalproperty_free(errProp);
 
@@ -341,7 +341,7 @@ static int icalrestriction_check_component(icalproperty_method method,
         icalparameter *errParam;
 
         errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
-        errProp = icalproperty_vanew_xlicerror(errStr, errParam, 0);
+        errProp = icalproperty_vanew_xlicerror(errStr, errParam, (void *)0);
         icalcomponent_add_property(comp, errProp);
         icalproperty_free(errProp);
 

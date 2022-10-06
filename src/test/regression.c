@@ -525,11 +525,10 @@ void test_components()
                                     (void *)0),
                                 icalproperty_vanew_xlicerror(
                                     "This is only a test",
-                                    icalparameter_new_xlicerrortype(
-                                        ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
+                                    icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
                                     (void *)0),
-                                0),
-            0);
+                                (void *)0),
+            (void *)0);
 
     if (VERBOSE)
         printf("Original Component:\n%s\n\n", icalcomponent_as_ical_string(c));
@@ -542,7 +541,6 @@ void test_components()
         printf("Child Component:\n%s\n\n", icalcomponent_as_ical_string(child));
 
     str_is("test results of child component", icalcomponent_as_ical_string(child), good_child);
-
     icalcomponent_free(c);
 
     estate = icalerror_get_errors_are_fatal();
@@ -1148,12 +1146,9 @@ void test_restriction()
 			(void *)0);
 
     valid = icalrestriction_check(comp);
-
-    ok("icalrestriction_check() == 0", (valid == 0));
-
     (void)icalcomponent_as_ical_string(comp);
-
     icalcomponent_free(comp);
+    ok("icalrestriction_check() == 0", (valid == 0));
 }
 
 void test_calendar()
@@ -5070,9 +5065,9 @@ static void test_implicit_dtend_duration(void)
             ICAL_VCALENDAR_COMPONENT,
             icalcomponent_vanew(
                 ICAL_VEVENT_COMPONENT,
-                icalproperty_vanew_dtstart(start1, 0),
-                0),
-            0);
+                icalproperty_vanew_dtstart(start1, (void *)0),
+                (void *)0),
+            (void *)0);
     struct icaldurationtype d = icalcomponent_get_duration(c);
     struct icaltimetype end = icalcomponent_get_dtend(c),
         start = icaltime_from_string("20220108T101010Z");
@@ -5104,9 +5099,9 @@ static void test_implicit_dtend_duration(void)
             ICAL_VCALENDAR_COMPONENT,
                 icalcomponent_vanew(
                     ICAL_VTODO_COMPONENT,
-                    icalproperty_vanew_dtstart(start1, 0),
-                    0),
-            0);
+                    icalproperty_vanew_dtstart(start1, (void *)0),
+                    (void *)0),
+            (void *)0);
     icalcomponent_set_due(c, icaltime_from_string("20220109"));
     d = icalcomponent_get_duration(c);
     end = icalcomponent_get_dtend(c);
@@ -5234,7 +5229,7 @@ static void test_remove_tzid_from_due(void)
 
 static void test_comma_in_xproperty(void)
 {
-    icalproperty *due = icalproperty_vanew_due(icaltime_from_string("20220120T120000"), 0);
+    icalproperty *due = icalproperty_vanew_due(icaltime_from_string("20220120T120000"), (void *)0);
     icalcomponent *c;
 
     icalproperty_add_parameter(due, icalparameter_new_tzid("America/New_York"));
@@ -5253,8 +5248,8 @@ static void test_comma_in_xproperty(void)
     icalcomponent_free(c);
 }
 
-void test_icaltime_as_timet(void) {
-
+void test_icaltime_as_timet(void)
+{
     ok("icaltime_from_string translates 19020101T000000Z to -2145916800", icaltime_as_timet(icaltime_from_string("19020101T000000Z")) == -2145916800);
     ok("icaltime_from_string translates 19290519T000000Z to -1281916800", icaltime_as_timet(icaltime_from_string("19290519T000000Z")) == -1281916800);
     ok("icaltime_from_string translates 19561004T000000Z to -417916800", icaltime_as_timet(icaltime_from_string("19561004T000000Z")) == -417916800);
@@ -5274,6 +5269,22 @@ void test_icaltime_as_timet(void) {
     ok("icaltime_from_string translates 25821231T235959Z to 19344441599", icaltime_as_timet(icaltime_from_string("25821231T235959Z")) == 19344441599);
     ok("icaltime_from_string translates 99991231T235959Z to 253402300799", icaltime_as_timet(icaltime_from_string("99991231T235959Z")) == 253402300799);
 #endif
+}
+
+void test_icalcomponent_with_lastmodified(void)
+{
+    /* for https://github.com/libical/libical/issues/585 */
+
+    icalcomponent *comp;
+    struct icaltimetype lm = icaltime_from_timet_with_zone(1661280150, 0, NULL);
+    comp = icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
+                               icalproperty_new_version("2.0"),
+                               icalproperty_new_prodid("PROD-ABC"),
+                               icalproperty_new_uid("1234abcd"),
+                               icalproperty_new_lastmodified(lm),
+                               icalproperty_new_name("name1"),
+                               NULL); /* NOT 0! */
+    icalcomponent_free(comp);
 }
 
 int main(int argc, char *argv[])
@@ -5438,6 +5449,7 @@ int main(int argc, char *argv[])
     test_run("Test removing TZID from DUE with icalcomponent_set_due", test_remove_tzid_from_due, do_test, do_header);
     test_run("Test geo precision", test_geo_props, do_test, do_header);
     test_run("Test commas in x-property", test_comma_in_xproperty, do_test, do_header);
+    test_run("Test icalcomponent_vanew with lastmodified property", test_icalcomponent_with_lastmodified, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
