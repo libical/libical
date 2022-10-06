@@ -375,7 +375,7 @@ static const struct expand_split_map_struct expand_map[] = {
     {ICAL_NO_RECURRENCE,       { 0, 0, 0, 0, 0, 0, 0, 0, 0 }} //krazy:exclude=style
 };
 
-static struct recur_map
+static const struct recur_map
 {
     const char *str;
     size_t offset;

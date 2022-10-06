@@ -56,7 +56,7 @@ static pthread_mutex_t changes_mutex = PTHREAD_MUTEX_INITIALIZER;
 #define BUILTIN_TZID_PREFIX     "/freeassociation.sourceforge.net/"
 
 /* Known prefixes from the old versions of libical */
-static struct _compat_tzids {
+static const struct _compat_tzids {
     const char *tzid;
     int slashes;
 } glob_compat_tzids[] = {

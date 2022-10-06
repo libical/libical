@@ -104,7 +104,7 @@ static icaltime_t make_time(struct tm *tm, int tzm)
     icaltime_t tim;
     int febs;
 
-    static int days[] = { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 };
+    static const int days[] = { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 };
 
     /* check that month specification within range */
 
