@@ -1,8 +1,8 @@
 Release Highlights
 ==================
 
-Version 3.0.15 (UNRELEASED):
-----------------------------
+Version 3.0.15 (06 October 2022):
+---------------------------------
  * Add missing property parameters into libical-glib
  * Fix CMake option USE_32BIT_TIME_T actually uses a 32-bit time_t value
  * Fix icaltime_as_timet, which returned incorrect results for years >= 2100,
