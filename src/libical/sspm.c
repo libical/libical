@@ -63,7 +63,7 @@ struct mime_impl
 static void *sspm_make_multipart_part(struct mime_impl *impl, struct sspm_header *header);
 static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_header *parent_header);
 
-static struct major_content_type_map
+static const struct major_content_type_map
 {
     enum sspm_major_type type;
     const char *str;
@@ -81,7 +81,7 @@ static struct major_content_type_map
     {SSPM_UNKNOWN_MAJOR_TYPE, ""}
 };
 
-static struct minor_content_type_map
+static const struct minor_content_type_map
 {
     enum sspm_minor_type type;
     const char *str;
@@ -99,7 +99,7 @@ static struct minor_content_type_map
     {SSPM_UNKNOWN_MINOR_TYPE, ""}
 };
 
-static struct encoding_map
+static const struct encoding_map
 {
     enum sspm_encoding encoding;
     const char *str;
@@ -252,7 +252,7 @@ static void sspm_default_free_part(void *part)
     _unused(part);
 }
 
-static struct sspm_action_map sspm_action_map[] = {
+static const struct sspm_action_map sspm_action_map[] = {
     {SSPM_UNKNOWN_MAJOR_TYPE, SSPM_UNKNOWN_MINOR_TYPE, sspm_default_new_part, sspm_default_add_line,
      sspm_default_end_part, sspm_default_free_part},
 };
