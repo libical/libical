@@ -530,11 +530,10 @@ void test_components()
                                     (void *)0),
                                 icalproperty_vanew_xlicerror(
                                     "This is only a test",
-                                    icalparameter_new_xlicerrortype(
-                                        ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
+                                    icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
                                     (void *)0),
-                                0),
-            0);
+                                (void *)0),
+            (void *)0);
 
     if (VERBOSE)
         printf("Original Component:\n%s\n\n", icalcomponent_as_ical_string(c));
@@ -547,7 +546,6 @@ void test_components()
         printf("Child Component:\n%s\n\n", icalcomponent_as_ical_string(child));
 
     str_is("test results of child component", icalcomponent_as_ical_string(child), good_child);
-
     icalcomponent_free(c);
 
     estate = icalerror_get_errors_are_fatal();
@@ -1145,12 +1143,9 @@ void test_restriction()
                 icalproperty_new_location("1CP Conference Room 4350"), (void *)0), (void *)0);
 
     valid = icalrestriction_check(comp);
-
-    ok("icalrestriction_check() == 0", (valid == 0));
-
     (void)icalcomponent_as_ical_string(comp);
-
     icalcomponent_free(comp);
+    ok("icalrestriction_check() == 0", (valid == 0));
 }
 
 void test_calendar()
