@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['deprecated_20list_0',['Deprecated List',['../deprecated.html',1,'']]]
+  ['libical_20_2d_20an_20implementation_20of_20icalendar_20protocols_20and_20data_20formats_991',['Libical - an implementation of iCalendar protocols and data formats',['../index.html',1,'']]]
 ];
