@@ -125,7 +125,7 @@ static char *sspm_strdup(const char *str)
 static char *sspm_get_parameter(const char *line, const char *parameter)
 {
     char *p, *s, *q;
-    static char name[1024];
+    static ICAL_GLOBAL_VAR char name[1024];
 
     /* Find where the parameter name is in the line */
     p = strstr(line, parameter);
@@ -173,7 +173,7 @@ static char *sspm_get_parameter(const char *line, const char *parameter)
 
 static char *sspm_property_name(const char *line)
 {
-    static char name[1024];
+    static ICAL_GLOBAL_VAR char name[1024];
     char *c = strchr(line, ':');
 
     if (c != 0) {
@@ -187,7 +187,7 @@ static char *sspm_property_name(const char *line)
 
 static char *sspm_value(char *line)
 {
-    static char value[1024];
+    static ICAL_GLOBAL_VAR char value[1024];
 
     char *c, *s, *p;
 

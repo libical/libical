@@ -67,7 +67,7 @@ static const struct _compat_tzids {
 };
 
 /* The prefix to be used for tzid's generated from system tzdata */
-static char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
+static ICAL_GLOBAL_VAR char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
 
 /** This is the filename of the file containing the city names and
     coordinates of all the builtin timezones. */
@@ -112,17 +112,17 @@ struct _icaltimezonechange
 };
 
 /** An array of icaltimezones for the builtin timezones. */
-static icalarray *builtin_timezones = NULL;
+static ICAL_GLOBAL_VAR icalarray *builtin_timezones = NULL;
 
 /** This is the special UTC timezone, which isn't in builtin_timezones. */
-static icaltimezone utc_timezone = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+static ICAL_GLOBAL_VAR icaltimezone utc_timezone = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-static char *zone_files_directory = NULL;
+static ICAL_GLOBAL_VAR char *zone_files_directory = NULL;
 
 #if defined(USE_BUILTIN_TZDATA)
-static int use_builtin_tzdata = 1;
+static ICAL_GLOBAL_VAR int use_builtin_tzdata = 1;
 #else
-static int use_builtin_tzdata = 0;
+static ICAL_GLOBAL_VAR int use_builtin_tzdata = 0;
 #endif
 
 static void icaltimezone_reset(icaltimezone *zone);
@@ -477,7 +477,7 @@ static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
 {
     /* When we expand timezone changes we always expand at least up to this
        year, plus ICALTIMEZONE_EXTRA_COVERAGE. */
-    static int icaltimezone_minimum_expansion_year = -1;
+    static ICAL_GLOBAL_VAR int icaltimezone_minimum_expansion_year = -1;
 
     int changes_end_year;
 
@@ -2019,7 +2019,7 @@ static const char *get_zone_directory(void)
     wchar_t zoneinfodir[1000], dirname[1000];
 #endif
     int used_default;
-    static char *cache = NULL;
+    static ICAL_GLOBAL_VAR char *cache = NULL;
 
 #if !defined(_WIN32_WCE)
     unsigned char *dirslash, *zislash, *zislashp1;

@@ -89,7 +89,7 @@ typedef struct
 } tzinfo;
 
 /* fullpath to the system zoneinfo directory (where zone.tab lives) */
-static char s_zoneinfopath[MAXPATHLEN] = {0};
+static ICAL_GLOBAL_VAR char s_zoneinfopath[MAXPATHLEN] = {0};
 
 /* A few well-known locations for system zoneinfo; can be overridden with TZDIR environment */
 static const char *s_zoneinfo_search_paths[] = {

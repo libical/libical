@@ -43,7 +43,7 @@ typedef struct
 /**
  * @private
  */
-static buffer_ring *global_buffer_ring = 0;
+static ICAL_GLOBAL_VAR buffer_ring *global_buffer_ring = 0;
 #endif
 
 /**
@@ -265,27 +265,27 @@ char *icalmemory_strdup(const char *s)
 }
 
 #if defined(MEMORY_CONSISTENCY)
-static icalmemory_malloc_f global_icalmem_malloc = &test_malloc;
+static ICAL_GLOBAL_VAR icalmemory_malloc_f global_icalmem_malloc = &test_malloc;
 #elif defined(ICALMEMORY_DEFAULT_MALLOC) && !defined(S_SPLINT_S)
-static icalmemory_malloc_f global_icalmem_malloc = &ICALMEMORY_DEFAULT_MALLOC;
+static ICAL_GLOBAL_VAR icalmemory_malloc_f global_icalmem_malloc = &ICALMEMORY_DEFAULT_MALLOC;
 #else
-static icalmemory_malloc_f global_icalmem_malloc = NULL;
+static ICAL_GLOBAL_VAR icalmemory_malloc_f global_icalmem_malloc = NULL;
 #endif
 
 #if defined(MEMORY_CONSISTENCY)
-static icalmemory_realloc_f global_icalmem_realloc = &test_realloc;
+static ICAL_GLOBAL_VAR icalmemory_realloc_f global_icalmem_realloc = &test_realloc;
 #elif defined(ICALMEMORY_DEFAULT_REALLOC) && !defined(S_SPLINT_S)
-static icalmemory_realloc_f global_icalmem_realloc = &ICALMEMORY_DEFAULT_REALLOC;
+static ICAL_GLOBAL_VAR icalmemory_realloc_f global_icalmem_realloc = &ICALMEMORY_DEFAULT_REALLOC;
 #else
-static icalmemory_realloc_f global_icalmem_realloc = NULL;
+static ICAL_GLOBAL_VAR icalmemory_realloc_f global_icalmem_realloc = NULL;
 #endif
 
 #if defined(MEMORY_CONSISTENCY)
-static icalmemory_free_f global_icalmem_free = &test_free;
+static ICAL_GLOBAL_VAR icalmemory_free_f global_icalmem_free = &test_free;
 #elif defined(ICALMEMORY_DEFAULT_FREE) && !defined(S_SPLINT_S)
-static icalmemory_free_f global_icalmem_free = &ICALMEMORY_DEFAULT_FREE;
+static ICAL_GLOBAL_VAR icalmemory_free_f global_icalmem_free = &ICALMEMORY_DEFAULT_FREE;
 #else
-static icalmemory_free_f global_icalmem_free = NULL;
+static ICAL_GLOBAL_VAR icalmemory_free_f global_icalmem_free = NULL;
 #endif
 
 void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc,

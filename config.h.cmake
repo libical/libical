@@ -582,3 +582,6 @@ typedef ssize_t IO_SSIZE_T;
 #define ICALMEMORY_DEFAULT_MALLOC malloc
 #define ICALMEMORY_DEFAULT_REALLOC realloc
 #define ICALMEMORY_DEFAULT_FREE free
+
+/* ICAL_GLOBAL_VAR is applied to global variables, therefore allows specifying custom storage attributes. */
+#define ICAL_GLOBAL_VAR

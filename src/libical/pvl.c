@@ -43,8 +43,8 @@ static void pvl_global_unlock(void)
  * Globals incremented for each call to pvl_new_element(); each list gets a unique id.
  */
 
-static int pvl_elem_count = 0;
-static int pvl_list_count = 0;
+static ICAL_GLOBAL_VAR int pvl_elem_count = 0;
+static ICAL_GLOBAL_VAR int pvl_list_count = 0;
 
 /**
   struct pvl_list_t
