@@ -139,7 +139,7 @@
 static pthread_mutex_t invalid_rrule_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
-static ical_invalid_rrule_handling invalidRruleHandling = ICAL_RRULE_TREAT_AS_ERROR;
+static ICAL_GLOBAL_VAR ical_invalid_rrule_handling invalidRruleHandling = ICAL_RRULE_TREAT_AS_ERROR;
 
 #if defined(HAVE_LIBICU)
 #include <unicode/ucal.h>

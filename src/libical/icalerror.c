@@ -57,7 +57,7 @@ icalerrorenum *icalerrno_return(void)
 
 #else
 
-static icalerrorenum icalerrno_storage = ICAL_NO_ERROR;
+static ICAL_GLOBAL_VAR icalerrorenum icalerrno_storage = ICAL_NO_ERROR;
 
 icalerrorenum *icalerrno_return(void)
 {
@@ -66,7 +66,7 @@ icalerrorenum *icalerrno_return(void)
 
 #endif
 
-static int foo;
+static ICAL_GLOBAL_VAR int foo;
 
 void icalerror_stop_here(void)
 {
@@ -92,9 +92,9 @@ void icalerror_clear_errno(void)
 }
 
 #if ICAL_ERRORS_ARE_FATAL == 1
-static int icalerror_errors_are_fatal = 1;
+static ICAL_GLOBAL_VAR int icalerror_errors_are_fatal = 1;
 #else
-static int icalerror_errors_are_fatal = 0;
+static ICAL_GLOBAL_VAR int icalerror_errors_are_fatal = 0;
 #endif
 
 void icalerror_set_errors_are_fatal(int fatal)
@@ -127,7 +127,7 @@ struct icalerror_state
     icalerrorstate state;
 };
 
-static struct icalerror_state error_state_map[] = {
+static ICAL_GLOBAL_VAR struct icalerror_state error_state_map[] = {
     {ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT},
     {ICAL_NEWFAILED_ERROR, ICAL_ERROR_DEFAULT},
     {ICAL_ALLOCATION_ERROR, ICAL_ERROR_DEFAULT},

@@ -22,7 +22,7 @@
 static pthread_mutex_t unk_token_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
-static ical_unknown_token_handling unknownTokenHandling = ICAL_TREAT_AS_ERROR;
+static ICAL_GLOBAL_VAR ical_unknown_token_handling unknownTokenHandling = ICAL_TREAT_AS_ERROR;
 
 int icaltriggertype_is_null_trigger(struct icaltriggertype tr)
 {
