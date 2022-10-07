@@ -732,7 +732,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     for (i = 0; i < num_trans; i++) {
         int by_day = 0;
         time_t start;
-        enum icalrecurrencetype_weekday dow;
+        enum icalrecurrencetype_weekday dow = ICAL_NO_WEEKDAY;
 
         prev_idx = idx;
         idx = trans_idx[i];

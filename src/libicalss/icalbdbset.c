@@ -529,7 +529,7 @@ int icalbdbset_get_key(DBC *dbcp, DBT *key, DBT *data)
 int icalbdbset_delete(DB *dbp, DBT *key)
 {
     DB_TXN *tid;
-    int ret;
+    int ret = 0;
     int done = 0;
     int retry = 0;
 
