@@ -45,6 +45,7 @@ HELP() {
   echo " -d, --no-tsan-build      Don't run any TSAN-build (sanitize-threads) tests"
   echo " -u, --no-ubsan-build     Don't run any UBSAN-build (sanitize-undefined) tests"
   echo " -x, --no-memc-build      Don't run any MEMCONSIST-build (memory consistency) tests"
+  echo " -f, --no-fortify-build Don't run the FORTIFY-build tests (gcc12)"
   echo
 }
 
@@ -204,6 +205,31 @@ GCC_BUILD() {
   SET_GCC
   BUILD "$name" "$2"
   echo "===== END GCC BUILD: $1 ======"
+}
+
+#function FORTIFY_BUILD:
+# runs a build test using gcc (v12 or higher) with fortify CFLAGS
+# $1 = the name of the test (which will have "-fortify" appended to it)
+# $2 = CMake options
+FORTIFY_BUILD() {
+  name="$1-fortify"
+  if ( test $runfortifybuild -ne 1 )
+  then
+    echo "===== FORTIFY BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  COMMAND_EXISTS "gcc"
+  gccVersion=`gcc -dumpversion`
+  if ( test `expr $gccVersion + 0` -lt 12 )
+  then
+    echo "Sorry, gcc must be version 12 or higher to support fortify. Exiting..."
+    exit 1
+  fi
+  echo "===== START FORTIFY BUILD: $1 ======"
+  SET_GCC
+  export CFLAGS="-Og -gdwarf-5 -fno-optimize-sibling-calls -Wall -W -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -D_FORTIFY_SOURCE=3 -fPIC -grecord-gcc-switches -fno-allow-store-data-races -fstack-protector-strong -fstack-clash-protection -fcf-protection=full --param=ssp-buffer-size=1"
+  BUILD "$name" "$2"
+  echo "===== END FORTIFY BUILD: $1 ======"
 }
 
 #function NINJA_GCC_BUILD:
@@ -552,7 +578,7 @@ CODESPELL() {
 
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hmkpctbsnlgadu --long help,no-cmake-compat,no-krazy,no-codespell,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build -- "$@"`
+#TEMP=`getopt -o hmkpctbsnlgaduf --long help,no-cmake-compat,no-krazy,no-codespell,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build,no-fortify-build -- "$@"`
 TEMP=`getopt hmkpctbsnlgadux $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
@@ -571,24 +597,26 @@ runasanbuild=1
 runtsanbuild=1
 runubsanbuild=1
 runmemcbuild=1
+runfortifybuild=1
 runsplint=1
 while true; do
     case "$1" in
         -h|--help) HELP; exit 1;;
-        -m|--no-cmake-compat) cmakecompat=0;   shift;;
-        -k|--no-krazy)        runkrazy=0;      shift;;
-        -p|--no-codespell)    runcodespell=0;  shift;;
-        -c|--no-cppcheck)     runcppcheck=0;   shift;;
-        -t|--no-tidy)         runtidy=0;       shift;;
-        -b|--no-scan)         runscan=0;       shift;;
-        -s|--no-splint)       runsplint=0;     shift;;
-        -n|--no-ninja)        runninja=0;      shift;;
-        -l|--no-clang-build)  runclangbuild=0; shift;;
-        -g|--no-gcc-build)    rungccbuild=0;   shift;;
-        -a|--no-asan-build)   runasanbuild=0;  shift;;
-        -d|--no-tsan-build)   runtsanbuild=0;  shift;;
-        -u|--no-ubsan-build)  runubsanbuild=0; shift;;
-        -x|--no-memc-build)   runmemcbuild=0;  shift;;
+        -m|--no-cmake-compat)   cmakecompat=0;      shift;;
+        -k|--no-krazy)          runkrazy=0;         shift;;
+        -p|--no-codespell)      runcodespell=0;     shift;;
+        -c|--no-cppcheck)       runcppcheck=0;      shift;;
+        -t|--no-tidy)           runtidy=0;          shift;;
+        -b|--no-scan)           runscan=0;          shift;;
+        -s|--no-splint)         runsplint=0;        shift;;
+        -n|--no-ninja)          runninja=0;         shift;;
+        -l|--no-clang-build)    runclangbuild=0;    shift;;
+        -g|--no-gcc-build)      rungccbuild=0;      shift;;
+        -a|--no-asan-build)     runasanbuild=0;     shift;;
+        -d|--no-tsan-build)     runtsanbuild=0;     shift;;
+        -u|--no-ubsan-build)    runubsanbuild=0;    shift;;
+        -x|--no-memc-build)     runmemcbuild=0;     shift;;
+        -f|--no-fortify-build)  runfortifybuild=0;  shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
@@ -722,5 +750,12 @@ UBSAN_BUILD test2ubsan "$CMAKEOPTS"
 UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
 UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
 UBSAN_BUILD test5ubsan "$GLIBOPTS"
+
+#Fortify build
+FORTIFY_BUILD test1fortify "$DEFCMAKEOPTS"
+FORTIFY_BUILD test2tsan "$CMAKEOPTS"
+FORTIFY_BUILD test3tsan "$TZCMAKEOPTS"
+FORTIFY_BUILD test4tsan "$UUCCMAKEOPTS"
+FORTIFY_BUILD test5tsan "$GLIBOPTS"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"

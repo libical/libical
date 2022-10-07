@@ -2409,7 +2409,7 @@ void test_fblist()
         char *strp = out_str;
 
         for (i = 0; foo[i] != -1; i++) {
-            snprintf(strp, 79, "%1d", foo[i]);
+            snprintf(strp, 79-i, "%1d", foo[i]);
             strp++;
         }
         str_is("Checking freebusy validity", out_str, "1121110");
