@@ -56,7 +56,7 @@ Version 3.1.0 (NOT RELEASED YET):
 
 Version 3.0.16 (UNRELEASED):
 ----------------------------
- *
+ * Fix a regression in 3.0.15 that limited how many lines could be processed in one call to icalparser_parse()
 
 Version 3.0.15 (06 October 2022):
 ---------------------------------
@@ -66,7 +66,7 @@ Version 3.0.15 (06 October 2022):
    to work properly between years 1902 and 10k.
  * Fix x-property comma handling and escaping
  * Built-in timezones updated to tzdata2022d (now with a VTIMEZONE for each time zone alias)
- * Fix fuzzer issues
+ * Fix a fuzzer issue
  * Handle unreachable-code compile warnings with clang
  * Ensure all vanew_foo() calls finish with (void*)0 (not 0)
 
