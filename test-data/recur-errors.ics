@@ -1,6 +1,6 @@
 BEGIN:VEVENT
 DESCRIPTION
- :An example where the days generated makes a difference because of 
+ :An example where the days generated makes a difference because of
  WKST:
 DTSTART
  ;TZID=US-Eastern
@@ -11,8 +11,8 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :An example where the days generated makes a difference because of 
- WKST. Changing only WKST from MO to SU yields different results...  
+ :An example where the days generated makes a difference because of
+ WKST. Changing only WKST from MO to SU yields different results...
 DTSTART
  ;TZID=US-Eastern
  :19970805T090000
@@ -22,7 +22,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :The 3rd instance into the month of one of Tuesday\, Wednesday or 
+ :The 3rd instance into the month of one of Tuesday\, Wednesday or
  Thursday\, for the next 6 months:
 DTSTART
  ;TZID=US-Eastern

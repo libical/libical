@@ -1,12 +1,12 @@
 2001-04-04  Eric Busboom  <eric@civicknowledge.com>
 
-	* Component.py Added Calendar class. 
+	* Component.py Added Calendar class.
 
 	* Componeny.py Changed all component constructor so they cannot
 	take string arguments. Now, only NewComponent() can turn an iCal
 	string into a component.
 
-	
+
 2001-04-02  Eric Busboom  <eric@civicknowledge.com>
 
 	* Component.py removed arguments from the Event constructor, since
@@ -17,7 +17,7 @@
 	Period into their own files. Moved remaining classes to Derived
 	Properties.pm
 
-	
+
 2001-03-13  Eric Busboom  <eric@civicknowledge.com>
 
 	* Component.py Added Component.property()
@@ -56,13 +56,13 @@
 	instead of ":"
 
 2001-03-04  Patrick Lewis <plewis@inetarena.com>
-	
-	* Split Libical.py file into Component.py, Property.py, Collection.py, 
+
+	* Split Libical.py file into Component.py, Property.py, Collection.py,
 	and Store.py
 
 	* Added test_* functions to test.py
 
-	* Changed component bindings to return a Collection when objects can 
+	* Changed component bindings to return a Collection when objects can
 	have multiple values
 
 	* Changed Component object to allow for creation of an object without
@@ -77,7 +77,7 @@
 	to. Made changes in all derived Properties to accommodate the
 	change.
 
-	* Property Added __del__ 
+	* Property Added __del__
 
 	* Component Component.properties() now caches properties that it
 	constructs, so two calls to properties() to that get the same
@@ -97,11 +97,11 @@
 	* Component re-instituted Component.properties(). The routine now
 	adds a 'ref' key to the dict that holds the python pointer
 	string. The C hex value of the pointer is in the 'pid' key
-	
+
 
 2001-02-27  Patrick Lewis  <plewis@inetarena.com>
 
-	* Backed out changes to Component removing comp_p; 
+	* Backed out changes to Component removing comp_p;
 	  Component.comp_p should be restored
 
 2001-02-26  Eric Busboom  <eric@civicknowledge.com>
@@ -123,7 +123,7 @@
 	based on use of is_date, rather than length of string.
 
 	* Libical.py Removed call to _update_value in TIme::timezone
-	
+
 
 	* Libical.py changed update_value to _update_value
 

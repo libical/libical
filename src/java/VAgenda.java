@@ -10,7 +10,7 @@ public class VAgenda extends VComponent {
 	public VAgenda()
 	{
 		super(ICalComponentKind.ICAL_VAGENDA_COMPONENT);
-	}	
+	}
 
 	public VAgenda(long obj)
 	{

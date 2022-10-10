@@ -3,7 +3,7 @@ Section: libs
 Priority: optional
 Maintainer: Wilfried Goesgens <w.goesgens@outgesourced.org>
 Uploaders: Fathi Boudra <fabo@debian.org>
-Build-Depends: debhelper (>= 5.0.42), autotools-dev, tzdata, swig, 
+Build-Depends: debhelper (>= 5.0.42), autotools-dev, tzdata, swig,
  python-all-dev (>= 2.4.4), python-support (>= 0.5.6), python (>= 2.4.4)
 XS-Python-Version: all
 Standards-Version: 3.7.2
@@ -45,7 +45,7 @@ Description: iCalendar library implementation in C (runtime)
  and provides a C API for manipulating the component properties, parameters,
  and subcomponents.
  .
- This package contains the files necessary for running and debugging 
+ This package contains the files necessary for running and debugging
  applications that use the libical library.
 
 Package: python-libical

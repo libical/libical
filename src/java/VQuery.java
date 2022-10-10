@@ -10,7 +10,7 @@ public class VQuery extends VComponent {
 	public VQuery()
 	{
 		super(ICalComponentKind.ICAL_VQUERY_COMPONENT);
-	}	
+	}
 
 	public VQuery(long obj)
 	{

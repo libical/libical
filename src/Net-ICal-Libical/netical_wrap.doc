@@ -104,7 +104,7 @@ $ICAL_PARSE_ERROR = ICAL_PARSE_ERROR
 
 $ICAL_INTERNAL_ERROR = ICAL_INTERNAL_ERROR
         [ Constant: int  ]
-        Like assert --internal consist. prob 
+        Like assert --internal consist. prob
 
 $ICAL_FILE_ERROR = ICAL_FILE_ERROR
         [ Constant: int  ]
@@ -117,23 +117,23 @@ $ICAL_USAGE_ERROR = ICAL_USAGE_ERROR
 
 $ICAL_NO_ERROR = ICAL_NO_ERROR
         [ Constant: int  ]
-        Used for problems in input to icalerror_strerror() 
+        Used for problems in input to icalerror_strerror()
 
 $ICAL_UNKNOWN_ERROR = ICAL_UNKNOWN_ERROR
         [ Constant: int  ]
 
 $ICAL_ERROR_FATAL = ICAL_ERROR_FATAL
         [ Constant: int  ]
-        Not fata 
+        Not fata
 
 $ICAL_ERROR_NONFATAL = ICAL_ERROR_NONFATAL
         [ Constant: int  ]
-        Fatal 
+        Fatal
 
 $ICAL_ERROR_DEFAULT = ICAL_ERROR_DEFAULT
         [ Constant: int  ]
         Use the value of icalerror_errors_are_fatal Asked state for an unknown
-        error type 
+        error type
 
 $ICAL_ERROR_UNKNOWN = ICAL_ERROR_UNKNOWN
         [ Constant: int  ]
@@ -153,7 +153,7 @@ icalenum_string_to_property_kind(string);
 icalenum_value_kind_to_string(kind);
         [ returns char * ]
         icalvalue_kind icalenum_value_kind_by_prop(icalproperty_kind kind);
-        
+
 
 icalenum_parameter_kind_to_string(kind);
         [ returns char * ]
@@ -229,16 +229,16 @@ icaltimetype_second_get(struct icaltimetype *);
 icaltimetype_is_utc_set(struct icaltimetype *,int );
 icaltimetype_is_utc_get(struct icaltimetype *);
         [ Member data: returns int  ]
-        1-> time is in UTC timezone 
+        1-> time is in UTC timezone
 
 icaltimetype_is_date_set(struct icaltimetype *,int );
 icaltimetype_is_date_get(struct icaltimetype *);
         [ Member data: returns int  ]
-        1 -> interpret this as date. 
+        1 -> interpret this as date.
 
 $icaltimetype_zone = icaltimetype::zone
         [ Constant: char * ]
-        Ptr to Olsen placename. Libical does not own mem 
+        Ptr to Olsen placename. Libical does not own mem
 
 ----------
 

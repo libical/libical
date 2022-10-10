@@ -10,7 +10,7 @@ public class VToDo extends VComponent {
 	public VToDo()
 	{
 		super(ICalComponentKind.ICAL_VTODO_COMPONENT);
-	}	
+	}
 
 	public VToDo(long obj)
 	{

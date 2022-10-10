@@ -10,7 +10,7 @@ public class VCalendar extends VComponent {
 	public VCalendar()
 	{
 		super(ICalComponentKind.ICAL_VCALENDAR_COMPONENT);
-	}	
+	}
 
 	public VCalendar(long obj)
 	{

@@ -10,7 +10,7 @@ public class VEvent extends VComponent {
 	public VEvent()
 	{
 		super(ICalComponentKind.ICAL_VEVENT_COMPONENT);
-	}	
+	}
 
 	public VEvent(long obj)
 	{

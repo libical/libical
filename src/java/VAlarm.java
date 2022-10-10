@@ -11,7 +11,7 @@ public class VAlarm extends VComponent {
 	{
 		super(ICalComponentKind.ICAL_VALARM_COMPONENT);
 	}
-	
+
 	public VAlarm(long obj)
 	{
 		super(obj);
