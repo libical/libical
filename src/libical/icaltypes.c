@@ -17,7 +17,7 @@
 
 #define TMP_BUF_SIZE 1024
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 static pthread_mutex_t unk_token_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
@@ -174,13 +174,13 @@ ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
 {
     ical_unknown_token_handling myHandling;
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_lock(&unk_token_mutex);
 #endif
 
     myHandling = unknownTokenHandling;
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_unlock(&unk_token_mutex);
 #endif
 
@@ -189,13 +189,13 @@ ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
 
 void ical_set_unknown_token_handling_setting(ical_unknown_token_handling newSetting)
 {
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_lock(&unk_token_mutex);
 #endif
 
     unknownTokenHandling = newSetting;
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_unlock(&unk_token_mutex);
 #endif
 }

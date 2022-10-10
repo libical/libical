@@ -12,7 +12,7 @@
 #include <config.h>
 #endif
 
-#ifdef HAVE_PTHREAD_H
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 #include <assert.h>
 #endif
@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 
-#if defined(HAVE_PTHREAD_H) && defined(HAVE_PTHREAD) && defined(HAVE_PTHREAD_CREATE)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 
 #define N_THREADS 20
 
@@ -82,7 +82,7 @@ int main(void)
     set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
-#if defined(HAVE_PTHREAD_H) && defined(HAVE_PTHREAD) && defined(HAVE_PTHREAD_CREATE)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     test_get_component_threadsafety();
 #endif
 

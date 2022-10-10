@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 #if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
 // It seems the same thread can attempt to lock builtin_mutex multiple times
@@ -166,28 +166,28 @@ static const char *get_zone_directory(void);
 
 static void icaltimezone_builtin_lock(void)
 {
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_lock(&builtin_mutex);
 #endif
 }
 
 static void icaltimezone_builtin_unlock(void)
 {
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_unlock(&builtin_mutex);
 #endif
 }
 
 static void icaltimezone_changes_lock(void)
 {
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_lock(&changes_mutex);
 #endif
 }
 
 static void icaltimezone_changes_unlock(void)
 {
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_unlock(&changes_mutex);
 #endif
 }

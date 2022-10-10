@@ -22,7 +22,7 @@
 #include <execinfo.h>
 #endif
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 
 static pthread_key_t icalerrno_key;

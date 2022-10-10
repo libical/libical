@@ -134,7 +134,7 @@
 #include <stddef.h>     /* For offsetof() macro */
 #include <stdlib.h>
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 static pthread_mutex_t invalid_rrule_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
@@ -3642,13 +3642,13 @@ ical_invalid_rrule_handling ical_get_invalid_rrule_handling_setting(void)
 {
     ical_invalid_rrule_handling myHandling;
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_lock(&invalid_rrule_mutex);
 #endif
 
     myHandling = invalidRruleHandling;
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_unlock(&invalid_rrule_mutex);
 #endif
 
@@ -3657,13 +3657,13 @@ ical_invalid_rrule_handling ical_get_invalid_rrule_handling_setting(void)
 
 void ical_set_invalid_rrule_handling_setting(ical_invalid_rrule_handling newSetting)
 {
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_lock(&invalid_rrule_mutex);
 #endif
 
     invalidRruleHandling = newSetting;
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_unlock(&invalid_rrule_mutex);
 #endif
 }

@@ -107,6 +107,13 @@
 #  Build with the undefined sanitizer (requires gcc or clang)
 #  Default=false
 #
+# -DLIBICAL_SYNCMODE_THREADLOCAL=[true|false]
+#  Experimental: If set to true, global variables are marked as thread-local. This allows accessing
+#  libical from multiple threads without the need for synchronization. However, any global settings
+#  must be applied per thread.
+#  If set to false, the default synchronization mechanism is applied. That is, if the pthreads library
+#  is available, it will be used, otherwise no synchronization is applied.
+#  Default: false.
 
 cmake_minimum_required(VERSION 3.11.0) #first line, to shutup a cygwin warning
 project(libical C) #CXX is optional for the bindings
@@ -735,6 +742,9 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
     set(ICAL_GLIB False)
   endif()
 endif()
+
+mark_as_advanced(LIBICAL_SYNCMODE_THREADLOCAL)
+libical_option(LIBICAL_SYNCMODE_THREADLOCAL "Experimental: Mark global variables as thread-local." False)
 
 libical_option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
 if(ENABLE_LTO_BUILD)
