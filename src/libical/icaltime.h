@@ -199,7 +199,8 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy,
  * only pass an icaltime in UTC, since no conversion is done.  Even in that case,
  * it's probably better to just use icaltime_as_timet_with_zone().
  *
- * The return value is defined for dates starting with 1902-01-01 until 10000-01-01 (excl.).
+ * The return value is defined for dates ranging from 1902-01-01 (incl.) up to 10000-01-01 (excl.)
+ * if time_t has a size of 64 bit and up to 2038-01-18 (excl.) if it has a size of 32 bit.
  */
 LIBICAL_ICAL_EXPORT time_t icaltime_as_timet(const struct icaltimetype);
 
