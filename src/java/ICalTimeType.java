@@ -132,4 +132,3 @@ public class ICalTimeType
     private int	is_date;
     private String	zone = new String();	//   Converted from char*
 }
-

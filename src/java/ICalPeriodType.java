@@ -68,4 +68,3 @@ public class ICalPeriodType
 	private ICalTimeType		end = new ICalTimeType();
 	private ICalDurationType	duration = new ICalDurationType();
 }
-

@@ -21,4 +21,3 @@ set_target_properties(LibicalWrap PROPERTIES
 install(TARGETS LibicalWrap DESTINATION lib)
 
 ########### install files ###############
-

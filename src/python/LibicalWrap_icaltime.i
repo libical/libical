@@ -193,4 +193,3 @@ _swig_set_properties(icaltimetype, icaltimetype_props)
 %}
 
 // TODO: Add icaltime_span_* to icaltime_spantype
-

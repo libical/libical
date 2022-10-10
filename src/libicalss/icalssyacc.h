@@ -97,4 +97,3 @@ typedef union YYSTYPE
 #endif
 
 extern YYSTYPE sslval;
-

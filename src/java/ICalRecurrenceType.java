@@ -281,4 +281,3 @@ public class ICalRecurrenceType
 	public static final int ICAL_BY_MONTH_SIZE 		= 13;
 	public static final int ICAL_BY_SETPOS_SIZE 	= 367;
 }
-

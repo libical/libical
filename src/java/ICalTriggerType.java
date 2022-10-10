@@ -90,4 +90,3 @@ public class ICalTriggerType
 	private ICalTimeType		time = new ICalTimeType();
 	private ICalDurationType	duration = new ICalDurationType();
 }
-
