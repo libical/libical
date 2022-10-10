@@ -4960,6 +4960,11 @@ static void test_comma_in_xproperty(void)
 
 void test_icaltime_as_timet(void)
 {
+    icaltimetype tt;
+    time_t expectedTimeT;
+
+    ok("icaltime_from_string translates 19011231T235959Z to -1", icaltime_as_timet(icaltime_from_string("19011231T235959Z")) == -1);
+
     ok("icaltime_from_string translates 19020101T000000Z to -2145916800", icaltime_as_timet(icaltime_from_string("19020101T000000Z")) == -2145916800);
     ok("icaltime_from_string translates 19290519T000000Z to -1281916800", icaltime_as_timet(icaltime_from_string("19290519T000000Z")) == -1281916800);
     ok("icaltime_from_string translates 19561004T000000Z to -417916800", icaltime_as_timet(icaltime_from_string("19561004T000000Z")) == -417916800);
@@ -4978,7 +4983,34 @@ void test_icaltime_as_timet(void)
     ok("icaltime_from_string translates 25101107T235959Z to 17067628799", icaltime_as_timet(icaltime_from_string("25101107T235959Z")) == 17067628799);
     ok("icaltime_from_string translates 25821231T235959Z to 19344441599", icaltime_as_timet(icaltime_from_string("25821231T235959Z")) == 19344441599);
     ok("icaltime_from_string translates 99991231T235959Z to 253402300799", icaltime_as_timet(icaltime_from_string("99991231T235959Z")) == 253402300799);
+
+    tt = icaltime_from_string("99991231T235959Z");
+    icaltime_adjust(&tt, 0, 0, 0, 1);
+    ok("icaltime_from_string translates 100000101T000000Z to -1", icaltime_as_timet(tt) == -1);
+#else
+    ok("icaltime_from_string translates 20380118T000000Z to -1", icaltime_as_timet(icaltime_from_string("20380118T000000Z")) == -1);
 #endif
+
+    tt = icaltime_from_string("19020101T000000Z");
+    expectedTimeT = -2145916800;
+
+#if (SIZEOF_TIME_T > 4)
+    // Going through each day until 10000 takes ~250ms on a reasonably powered year 2020 business laptop.
+    while (tt.year < 10000)
+#else
+    while ((tt.year < 2038) || ((tt.year == 2038) && (tt.month == 1) && (tt.day <= 17)))
+#endif
+    {
+        time_t actualTimeT = icaltime_as_timet(tt);
+        if (actualTimeT != expectedTimeT) {
+            ok("icaltime_as_timet translates correctly", actualTimeT == expectedTimeT);
+        }
+
+        icaltime_adjust(&tt, 1, 0, 0, 0);
+        expectedTimeT += (24 * 60 * 60);
+    }
+
+    ok("icaltime_as_timet translates out of bounds correctly", icaltime_as_timet(tt) == -1);
 }
 
 void test_icalcomponent_with_lastmodified(void)
