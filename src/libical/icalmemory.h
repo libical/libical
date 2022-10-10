@@ -120,8 +120,8 @@ LIBICAL_ICAL_EXPORT void icalmemory_add_tmp_buffer(void *buf);
 /**
  * @brief Frees all memory used in the ring
  *
- * Frees all memory used in the ring. Depending on if HAVE_PTHREAD is set or
- * not, the ring buffer is allocated on a per-thread basis, meaning that if all
+ * Frees all memory used in the ring. If PTHREAD is used or thread-local mode is configured,
+ * the ring buffer is allocated on a per-thread basis, meaning that if all
  * rings are to be released, it must be called once in every thread.
  *
  * @par Usage

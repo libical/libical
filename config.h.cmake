@@ -583,5 +583,34 @@ typedef ssize_t IO_SSIZE_T;
 #define ICALMEMORY_DEFAULT_REALLOC realloc
 #define ICALMEMORY_DEFAULT_FREE free
 
-/* ICAL_GLOBAL_VAR is applied to global variables, therefore allows specifying custom storage attributes. */
+
+#cmakedefine LIBICAL_SYNCMODE_THREADLOCAL 1
+
+#define ICAL_SYNC_MODE_NONE 1
+#define ICAL_SYNC_MODE_PTHREAD 2
+#define ICAL_SYNC_MODE_THREADLOCAL 3
+
+#ifdef LIBICAL_SYNCMODE_THREADLOCAL
+#define ICAL_SYNC_MODE ICAL_SYNC_MODE_THREADLOCAL
+#elif HAVE_PTHREAD == 1
+#define ICAL_SYNC_MODE ICAL_SYNC_MODE_PTHREAD
+#else
+#define ICAL_SYNC_MODE ICAL_SYNC_MODE_NONE
+#endif
+
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_THREADLOCAL
+#if defined(_MSC_VER)
+#define ICAL_GLOBAL_VAR __declspec(thread)
+#endif
+#if defined(__GNUC__)
+#define ICAL_GLOBAL_VAR __thread
+#endif
+#ifndef ICAL_GLOBAL_VAR
+/* thread_local has been introduced with C11. Starting with C23 it will become a keyword and
+   we won't need to include threads.h then. */
+#include <threads.h>
+#define ICAL_GLOBAL_VAR thread_local
+#endif
+#else
 #define ICAL_GLOBAL_VAR
+#endif

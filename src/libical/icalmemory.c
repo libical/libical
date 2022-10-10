@@ -39,7 +39,7 @@ typedef struct
     void *ring[BUFFER_RING_SIZE];
 } buffer_ring;
 
-#if !defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE != ICAL_SYNC_MODE_PTHREAD
 /**
  * @private
  */
@@ -63,7 +63,7 @@ static void icalmemory_free_ring_byval(buffer_ring * br)
     icalmemory_free_buffer(br);
 }
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 
 static pthread_key_t ring_key;
@@ -116,7 +116,7 @@ static buffer_ring *buffer_ring_new(void)
     return (br);
 }
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 /**
  * @private
  */
@@ -156,7 +156,7 @@ static buffer_ring *get_buffer_ring_global(void)
  */
 static buffer_ring *get_buffer_ring(void)
 {
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     return (get_buffer_ring_pthread());
 #else
     return get_buffer_ring_global();
@@ -221,7 +221,7 @@ void icalmemory_free_ring(void)
         return;
 
     icalmemory_free_ring_byval(br);
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_setspecific(ring_key, 0);
 #else
     global_buffer_ring = 0;

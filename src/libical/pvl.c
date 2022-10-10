@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 /* To mute a ThreadSanitizer claim */
-#if defined(HAVE_PTHREAD) && defined(THREAD_SANITIZER)
+#if (ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD) && defined(THREAD_SANITIZER)
 #include <pthread.h>
 static pthread_mutex_t pvl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
