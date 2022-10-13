@@ -167,6 +167,7 @@ void test_cxx(void)
 
     int caughtException = 0;
     try {
+        icalerrno = ICAL_NO_ERROR;
         VComponent v = VComponent(string("HFHFHFHF"));
     } catch (icalerrorenum err) {
         if (err == ICAL_BADARG_ERROR) {
