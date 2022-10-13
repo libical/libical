@@ -4416,6 +4416,10 @@ void test_timezone_from_builtin(void)
     char *strcomp, *tzidprefix, *prevslash = NULL, *prevprevslash = NULL, *p;
     size_t len;
 
+    /* Builtins are not enabled, zone loading will fail. */
+    if (!icaltimezone_get_builtin_tzdata())
+        return;
+
     zone = icaltimezone_get_builtin_timezone("America/New_York");
     tzidprefix = strdup(icaltimezone_get_tzid (zone));
     p = tzidprefix;
