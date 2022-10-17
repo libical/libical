@@ -54,9 +54,12 @@ Version 3.1.0 (NOT RELEASED YET):
     + struct icaltimezonetype
     + struct icaltimezonephase
 
-Version 3.0.16 (UNRELEASED):
+Version 3.0.17 (UNRELEASED):
 ----------------------------
- * Fix a regression in 3.0.15 that limited how many lines could be processed in one call to icalparser_parse()
+
+Version 3.0.16 (17 October 2022):
+---------------------------------
+ * Fix regressions in 3.0.15 due to improperly tested fuzz fixes
  * Fix argument guards in icaltime_as_timet to match documentation and tests.
 
 Version 3.0.15 (06 October 2022):

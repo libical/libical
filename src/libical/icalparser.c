@@ -132,10 +132,8 @@ static char *parser_get_next_char(char c, char *str, int qm)
     char *p = str;
     char next_char = *p;
     char prev_char = 0;
-    unsigned int cnt = 0;
 
-    while ((cnt < TMP_BUF_SIZE) && (next_char != '\0')) {
-        cnt++;
+    while (next_char != '\0') {
         if ((prev_char != '\0') && (prev_char != '\\')) {
             if (qm == 1 && next_char == '"') {
                 /* Encountered a quote, toggle quote mode */
@@ -159,15 +157,13 @@ static char *make_segment(char *start, char *end)
 {
     char *buf, *tmp;
     ptrdiff_t size = (ptrdiff_t)(end - start);
-    ptrdiff_t cnt = 0;
 
     buf = icalmemory_new_buffer((size_t)(size + 1));
     strncpy(buf, start, size);
     *(buf + size) = 0;
 
     tmp = (buf + size);
-    while ((cnt < size) && (tmp >= buf) && ((*tmp == '\0') || iswspace((wint_t)*tmp))) {
-        cnt++;
+    while ((tmp >= buf) && ((*tmp == '\0') || iswspace((wint_t)*tmp))) {
         *tmp = 0;
         tmp--;
     }
