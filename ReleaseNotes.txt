@@ -1,8 +1,8 @@
 Release Highlights
 ==================
 
-Version 3.0.16 (UNRELEASED):
-----------------------------
+Version 3.0.16 (17 October 2022):
+---------------------------------
  * Fix regressions in 3.0.15 due to improperly tested fuzz fixes
  * Fix argument guards in icaltime_as_timet to match documentation and tests.
 
