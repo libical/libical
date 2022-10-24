@@ -101,10 +101,12 @@ else()
     set_target_properties(icalss-static PROPERTIES OUTPUT_NAME "icalss")
   endif()
 endif()
-set_target_properties(icalss PROPERTIES
-  VERSION ${LIBICAL_LIB_VERSION_STRING}
-  SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-)
+if(NOT ANDROID)
+  set_target_properties(icalss PROPERTIES
+    VERSION ${LIBICAL_LIB_VERSION_STRING}
+    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+  )
+endif()
 set_target_properties(icalss PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   set_target_properties(icalss-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
@@ -156,10 +158,12 @@ if(WITH_CXX_BINDINGS)
       set_target_properties(icalss_cxx-static PROPERTIES OUTPUT_NAME "icalss_cxx")
     endif()
   endif()
-  set_target_properties(icalss_cxx PROPERTIES
-    VERSION ${LIBICAL_LIB_VERSION_STRING}
-    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-  )
+  if(NOT ANDROID)
+    set_target_properties(icalss_cxx PROPERTIES
+      VERSION ${LIBICAL_LIB_VERSION_STRING}
+      SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+    )
+  endif()
   set_target_properties(icalss_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
   if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(icalss_cxx-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)

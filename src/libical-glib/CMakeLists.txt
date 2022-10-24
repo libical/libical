@@ -225,10 +225,12 @@ else()
     set_target_properties(ical-glib-static PROPERTIES OUTPUT_NAME "ical-glib")
   endif()
 endif()
-set_target_properties(ical-glib PROPERTIES
-  VERSION ${LIBICAL_LIB_VERSION_STRING}
-  SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-)
+if(NOT ANDROID)
+  set_target_properties(ical-glib PROPERTIES
+    VERSION ${LIBICAL_LIB_VERSION_STRING}
+    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+  )
+endif()
 set_target_properties(ical-glib PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   set_target_properties(ical-glib-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
