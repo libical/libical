@@ -311,10 +311,12 @@ else()
     set_target_properties(ical-static PROPERTIES OUTPUT_NAME "ical")
   endif()
 endif()
-set_target_properties(ical PROPERTIES
-  VERSION ${LIBICAL_LIB_VERSION_STRING}
-  SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-)
+if(NOT ANDROID)
+  set_target_properties(ical PROPERTIES
+    VERSION ${LIBICAL_LIB_VERSION_STRING}
+    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+  )
+endif()
 set_target_properties(ical PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   set_target_properties(ical-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
@@ -374,10 +376,12 @@ if(WITH_CXX_BINDINGS)
     endif()
   endif()
 
-  set_target_properties(ical_cxx PROPERTIES
-    VERSION ${LIBICAL_LIB_VERSION_STRING}
-    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-  )
+  if(NOT ANDROID)
+    set_target_properties(ical_cxx PROPERTIES
+      VERSION ${LIBICAL_LIB_VERSION_STRING}
+      SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+    )
+  endif()
   set_target_properties(ical_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
   if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(ical_cxx-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)

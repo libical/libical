@@ -89,6 +89,21 @@ Homebrew:
   catalog files can be found so the gtk entities are located, like so:
     export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
 
+== Building for Android ==
+
+% mkdir build
+% cd build
+$ export ANDROID_NDK=/path/to/android-ndk
+% cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
+        -DCMAKE_INSTALL_PREFIX=/install/path .. \
+        -DANDROID_ABI=[x86,x86_64,armeabi-v7a,arm64-v8a,...]
+        #see https://developer.android.com/ndk/guides/cmake for more options
+% make
+% make install
+
+For more information about building CMake projects on Android see
+https://developer.android.com/ndk/guides/cmake
+
 == Optional Dependencies ==
 * libicu "International Components for Unicode" development libraries.
   Highly recommended for RSCALE support.
