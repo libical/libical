@@ -3,6 +3,7 @@ Release Highlights
 
 Version 3.0.17 (UNRELEASED):
 ----------------------------
+ * Improved Android support
 
 Version 3.0.16 (17 October 2022):
 ---------------------------------
