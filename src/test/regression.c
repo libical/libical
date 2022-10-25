@@ -5211,6 +5211,7 @@ test_icalvalue_resets_timezone_on_set(void)
 
 static void test_comma_in_xproperty(void)
 {
+    // X-property value without explicit value type
     icalproperty *xproperty = icalproperty_new_from_string("X-TEST-PROPERTY:test,test");
     icalcomponent *c;
 
@@ -5223,6 +5224,21 @@ static void test_comma_in_xproperty(void)
             0);
 
     str_is("icalproperty_as_ical_string()", "X-TEST-PROPERTY:test,test\r\n", icalproperty_as_ical_string(icalcomponent_get_first_property(icalcomponent_get_inner(c), ICAL_X_PROPERTY)));
+
+    icalcomponent_free(c);
+
+    // X-property value with TEXT value type
+    xproperty = icalproperty_new_from_string("X-TEST-PROPERTY;VALUE=TEXT:test\\,test");
+
+    c = icalcomponent_vanew(
+            ICAL_VCALENDAR_COMPONENT,
+                icalcomponent_vanew(
+                    ICAL_VEVENT_COMPONENT,
+                    xproperty,
+                    0),
+            0);
+
+    str_is("icalproperty_as_ical_string()", "X-TEST-PROPERTY;VALUE=TEXT:test\\,test\r\n", icalproperty_as_ical_string(icalcomponent_get_first_property(icalcomponent_get_inner(c), ICAL_X_PROPERTY)));
 
     icalcomponent_free(c);
 }
