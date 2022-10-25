@@ -47,10 +47,10 @@ else()
   endif()
 endif()
 if(NOT ANDROID)
-    set_target_properties(icalvcal PROPERTIES
-      VERSION ${LIBICAL_LIB_VERSION_STRING}
-      SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-    )
+  set_target_properties(icalvcal PROPERTIES
+    VERSION ${LIBICAL_LIB_VERSION_STRING}
+    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+  )
 endif()
 set_target_properties(icalvcal PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
