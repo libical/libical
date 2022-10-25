@@ -4919,7 +4919,7 @@ test_icalvalue_resets_timezone_on_set(void)
     icalerror_clear_errno();
 }
 
-static void test_remove_tzid_from_due(void)
+static void test_comma_in_xproperty(void)
 {
     icalproperty *xproperty = icalproperty_new_from_string("X-TEST-PROPERTY:test,test");
     icalcomponent *c;
@@ -4937,7 +4937,7 @@ static void test_remove_tzid_from_due(void)
     icalcomponent_free(c);
 }
 
-static void test_comma_in_xproperty(void)
+static void test_remove_tzid_from_due(void)
 {
     icalproperty *due = icalproperty_vanew_due(icaltime_from_string("20220120T120000"), (void *)0);
     icalcomponent *c;
