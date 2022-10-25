@@ -57,11 +57,12 @@ Version 3.1.0 (NOT RELEASED YET):
 Version 3.0.17 (UNRELEASED):
 ----------------------------
  * Improved Android support
+ * Escape commas in x-property TEXT values
 
 Version 3.0.16 (17 October 2022):
 ---------------------------------
  * Fix regressions in 3.0.15 due to improperly tested fuzz fixes
- * Fix argument guards in icaltime_as_timet to match documentation and tests.
+ * Fix argument guards in icaltime_as_timet to match documentation and tests
 
 Version 3.0.15 (06 October 2022):
 ---------------------------------
