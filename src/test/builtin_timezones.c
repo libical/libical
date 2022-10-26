@@ -80,7 +80,7 @@ static void test_get_component_threadsafety(void)
 }
 #endif
 
-int main()
+int main(void)
 {
     icalarray *builtin_timezones;
     icaltimetype tt;

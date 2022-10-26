@@ -1921,7 +1921,7 @@ gchar *get_true_type(const gchar *type)
     return res;
 }
 
-static void initialize_default_value_table()
+static void initialize_default_value_table(void)
 {
     defaultValues = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
     (void)g_hash_table_insert(defaultValues, g_strdup("gboolean"), g_strdup("FALSE"));

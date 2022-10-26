@@ -1,7 +1,7 @@
 /* This is just to make the code in the example directory link properly. */
 #include <libical/ical.h>
 
-int main()
+int main(void)
 {
     return 1;
 }

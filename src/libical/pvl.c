@@ -76,7 +76,7 @@ typedef struct pvl_list_t
  * @return  Pointer to the new list, 0 if there is no available memory.
  */
 
-pvl_list pvl_newlist()
+pvl_list pvl_newlist(void)
 {
     struct pvl_list_t *L;
 

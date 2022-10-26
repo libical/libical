@@ -297,7 +297,7 @@ extern "C"
     LIBICAL_VCAL_EXPORT char *writeMemVObjects(char *s, int *len, VObject *list);
 
     LIBICAL_VCAL_EXPORT const char *lookupStr(const char *s);
-    LIBICAL_VCAL_EXPORT void cleanStrTbl();
+    LIBICAL_VCAL_EXPORT void cleanStrTbl(void);
 
     LIBICAL_VCAL_EXPORT void cleanVObject(VObject *o);
     LIBICAL_VCAL_EXPORT void cleanVObjects(VObject *list);

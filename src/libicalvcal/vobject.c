@@ -682,7 +682,7 @@ void unUseStr(const char *s)
     }
 }
 
-void cleanStrTbl()
+void cleanStrTbl(void)
 {
     int i;
     for (i=0; i<STRTBLSIZE;i++) {
