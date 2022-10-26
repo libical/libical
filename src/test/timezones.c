@@ -26,7 +26,7 @@
 
 #define MAX_FAILURE_RATE 1
 
-int main()
+int main(void)
 {
     icalarray *timezones;
     icaltimezone *zone, *utc_zone;

@@ -27,11 +27,12 @@
 
 static icaltimezone *zone, *utc;
 
-static void *test_tread()
+static void *test_tread(void *user_data)
 {
     struct icaltimetype itt;
     int ii;
 
+    _unused(user_data);
     itt = icaltime_from_string("19710203T040506");
     itt.zone = zone;
 
@@ -42,7 +43,7 @@ static void *test_tread()
     return NULL;
 }
 
-int main()
+int main(void)
 {
     pthread_t thread[2];
     int ii;

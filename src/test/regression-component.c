@@ -83,7 +83,7 @@ static const char *create_new_component_str =
     "LOCATION:1CP Conference Room 4350\r\n" "END:VEVENT\r\n" "END:VCALENDAR\r\n";
 
 /* Create a new component */
-void create_new_component()
+void create_new_component(void)
 {
     icalcomponent *calendar;
     icalcomponent *timezone;
@@ -213,7 +213,7 @@ void create_new_component()
 
 /* Create a new component, using the va_args list */
 
-void create_new_component_with_va_args()
+void create_new_component_with_va_args(void)
 {
     icalcomponent *calendar;
     struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
@@ -308,7 +308,7 @@ static void print_span(int c, struct icaltime_span span)
 /** Test icalcomponent_get_span()
  *
  */
-void test_icalcomponent_get_span()
+void test_icalcomponent_get_span(void)
 {
     time_t tm1 = 973378800;     /*Sat Nov  4 23:00:00 UTC 2000,
                                    Sat Nov  4 15:00:00 PST 2000 */

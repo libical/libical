@@ -301,7 +301,7 @@ int icaldurationtype_is_null_duration(struct icaldurationtype d)
    following the philosophy of unix errno. we set the is_neg
    to -1 to indicate that this is a bad duration.
 */
-struct icaldurationtype icaldurationtype_bad_duration()
+struct icaldurationtype icaldurationtype_bad_duration(void)
 {
     struct icaldurationtype d;
 

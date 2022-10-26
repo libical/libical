@@ -171,7 +171,7 @@ static char** get_required_attendees(icalcomponent* event)
     }
   */
 
-void test_values()
+void test_values(void)
 {
     icalvalue *v;
     icalvalue *copy;
@@ -280,7 +280,7 @@ void test_values()
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT);
 }
 
-void test_properties()
+void test_properties(void)
 {
     icalproperty *prop;
     icalparameter *param;
@@ -337,7 +337,7 @@ void test_properties()
         icalproperty_free(prop);
 }
 
-void test_utf8()
+void test_utf8(void)
 {
     icalcomponent *comp;
     icalproperty *prop;
@@ -414,7 +414,7 @@ void test_utf8()
     icalcomponent_free(comp);
 }
 
-void test_icaltime_compare_utc_zone()
+void test_icaltime_compare_utc_zone(void)
 {
     struct icaltimetype a;
     struct icaltimetype b;
@@ -431,7 +431,7 @@ void test_icaltime_compare_utc_zone()
     int_is("a < b", icaltime_compare(a, b), -1);
 }
 
-void test_parameters()
+void test_parameters(void)
 {
     icalparameter *p;
     int i;
@@ -506,7 +506,7 @@ const char *bad_child =
     "TZNAME:\\r\n"
     "TZNAME:\\r\n";
 
-void test_components()
+void test_components(void)
 {
     icalcomponent *c;
     icalcomponent *child;
@@ -596,7 +596,7 @@ int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int e
     return 0;
 }
 
-void test_component_foreach()
+void test_component_foreach(void)
 {
     const char *calStr =
         "BEGIN:VCALENDAR\n"
@@ -700,7 +700,7 @@ void test_component_foreach()
     }
 }
 
-void test_recur_iterator_set_start()
+void test_recur_iterator_set_start(void)
 {
     icaltimetype start = icaltime_from_string("20150526");
     struct icalrecurrencetype recurrence = icalrecurrencetype_from_string("FREQ=WEEKLY");
@@ -712,7 +712,7 @@ void test_recur_iterator_set_start()
     icalrecur_iterator_free(iterator);
 }
 
-void test_recur_iterator_on_jan_1()
+void test_recur_iterator_on_jan_1(void)
 {
     icaltimetype start = icaltime_from_string("20190101");
     struct icalrecurrencetype recurrence = icalrecurrencetype_from_string("FREQ=WEEKLY;WKST=SU;INTERVAL=2;BYDAY=MO,TU,WE,TH,FR");
@@ -726,7 +726,7 @@ void test_recur_iterator_on_jan_1()
     icalrecur_iterator_free(iterator);
 }
 
-void test_memory()
+void test_memory(void)
 {
     size_t bufsize = 256;
     int i;
@@ -902,7 +902,7 @@ void test_memory()
     }
 }
 
-void test_dirset()
+void test_dirset(void)
 {
     icalcomponent *c;
     icalgauge *gauge;
@@ -1022,7 +1022,7 @@ void test_dirset()
     icalset_free(cluster);
 }
 
-void test_compare()
+void test_compare(void)
 {
     icalvalue *v1, *v2;
 
@@ -1077,7 +1077,7 @@ void test_compare()
     icalvalue_free(v2);
 }
 
-void test_restriction()
+void test_restriction(void)
 {
     icalcomponent *comp;
     struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
@@ -1148,7 +1148,7 @@ void test_restriction()
     ok("icalrestriction_check() == 0", (valid == 0));
 }
 
-void test_calendar()
+void test_calendar(void)
 {
     icalcomponent *comp;
     icalset *c;
@@ -1225,7 +1225,7 @@ void print_occur(struct icalrecurrencetype recur, struct icaltimetype start)
     icalrecur_iterator_free(ritr);
 }
 
-void test_recur()
+void test_recur(void)
 {
     struct icalrecurrencetype rt;
     struct icaltimetype start;
@@ -1256,7 +1256,7 @@ void test_recur()
 /*    test_increment();*/
 }
 
-void test_expand_recurrence()
+void test_expand_recurrence(void)
 {
     time_t arr[10];
     time_t now = 931057385;
@@ -1289,7 +1289,7 @@ enum byrule
     BY_SET_POS
 };
 
-void icalrecurrencetype_test()
+void icalrecurrencetype_test(void)
 {
     icalvalue *v =
         icalvalue_new_from_string(
@@ -1319,7 +1319,7 @@ void icalrecurrencetype_test()
 }
 
 /* From Federico Mena Quintero <federico@ximian.com>    */
-void test_recur_parameter_bug()
+void test_recur_parameter_bug(void)
 {
     static const char test_icalcomp_str[] =
         "BEGIN:VEVENT\r\n"
@@ -1367,7 +1367,7 @@ void test_recur_parameter_bug()
     icalcomponent_free(icalcomp);
 }
 
-void test_duration()
+void test_duration(void)
 {
     struct icaldurationtype d;
 
@@ -1450,7 +1450,7 @@ void test_duration()
     str_is("P51DT5H", icaldurationtype_as_ical_string(d), "P51DT5H");
 }
 
-void test_period()
+void test_period(void)
 {
     struct icalperiodtype p;
     icalvalue *v;
@@ -1472,7 +1472,7 @@ void test_period()
     icalvalue_free(v);
 }
 
-void test_strings()
+void test_strings(void)
 {
     icalvalue *v;
 
@@ -1495,7 +1495,7 @@ void test_strings()
 }
 
 /* Check RFC6868 encoding of "unsafe" chars in parameter values, such as '\n' */
-void test_tzid_escape()
+void test_tzid_escape(void)
 {
     icalparameter *tzid;
     icalproperty *prop;
@@ -1514,7 +1514,7 @@ void test_tzid_escape()
     icalproperty_free(prop);
 }
 
-void test_requeststat()
+void test_requeststat(void)
 {
     icalcomponent *c;
     icalproperty *p;
@@ -1626,7 +1626,7 @@ void test_requeststat()
     icalcomponent_free(c);
 }
 
-void test_dtstart()
+void test_dtstart(void)
 {
     struct icaltimetype tt, tt2;
 
@@ -2011,7 +2011,7 @@ void do_test_time(const char *zone)
            0);
 }
 
-void test_iterators()
+void test_iterators(void)
 {
     icalcomponent *c, *inner, *next;
     icalcompiter i;
@@ -2129,7 +2129,7 @@ void test_iterators()
     icalcomponent_free(c);
 }
 
-void test_time()
+void test_time(void)
 {
     const char *zones[6] =
     {
@@ -2149,7 +2149,7 @@ void test_time()
     }
 }
 
-void test_icalset()
+void test_icalset(void)
 {
     icalcomponent *c;
 
@@ -2174,7 +2174,7 @@ void test_icalset()
     icalset_free(d);
 }
 
-void test_overlaps()
+void test_overlaps(void)
 {
     icalcomponent *cset, *c;
     icalset *set;
@@ -2251,7 +2251,7 @@ void test_overlaps()
         icalcomponent_free(c);
 }
 
-void test_fblist()
+void test_fblist(void)
 {
     icalspanlist *sl, *new_sl;
     icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
@@ -2387,7 +2387,7 @@ void test_fblist()
     icalset_free(set);
 }
 
-void test_convenience()
+void test_convenience(void)
 {
     icalcomponent *c;
     int duration;
@@ -2553,7 +2553,7 @@ void test_convenience()
     icalcomponent_free(c);
 }
 
-void test_time_parser()
+void test_time_parser(void)
 {
     struct icaltimetype tt;
 
@@ -2586,7 +2586,7 @@ void test_time_parser()
     icalerror_set_errors_are_fatal(1);
 }
 
-void test_recur_parser()
+void test_recur_parser(void)
 {
     struct icalrecurrencetype rt;
     icalvalue *v = NULL;
@@ -2629,7 +2629,7 @@ char *ical_strstr(const char *haystack, const char *needle)
     return strstr(haystack, needle);
 }
 
-void test_start_of_week()
+void test_start_of_week(void)
 {
     struct icaltimetype tt2;
     struct icaltimetype tt1 = icaltime_from_string("19900110");
@@ -2663,7 +2663,7 @@ void test_start_of_week()
     } while (tt1.year < 2010);
 }
 
-void test_doy()
+void test_doy(void)
 {
     struct icaltimetype tt1, tt2;
     short doy, doy2;
@@ -2760,7 +2760,7 @@ void test_doy()
     ok("day of year == 60", (doy == 60));
 }
 
-void test_x()
+void test_x(void)
 {
     static const char test_icalcomp_str[] =
         "BEGIN:VEVENT\r\n"
@@ -2807,7 +2807,7 @@ void test_x()
     icalcomponent_free(icalcomp);
 }
 
-void test_gauge_sql()
+void test_gauge_sql(void)
 {
     icalgauge *g;
     const char *str;
@@ -2860,7 +2860,7 @@ void test_gauge_sql()
     icalgauge_free(g);
 }
 
-void test_gauge_compare()
+void test_gauge_compare(void)
 {
     icalgauge *g;
     icalcomponent *c;
@@ -3160,7 +3160,7 @@ icalcomponent *make_component(int i)
     return c;
 }
 
-void test_fileset()
+void test_fileset(void)
 {
 #if defined(HAVE_UNLINK)
     icalset *fs;
@@ -3243,7 +3243,7 @@ void microsleep(int us)
 #endif /*Windows Sleep is useless for microsleeping */
 }
 
-void test_file_locks()
+void test_file_locks(void)
 {
 #if defined(HAVE_WAITPID) && defined(HAVE_FORK) && defined(HAVE_UNLINK)
     pid_t pid;
@@ -3376,7 +3376,7 @@ void test_file_locks()
 #endif
 }
 
-void test_action()
+void test_action(void)
 {
     icalcomponent *c;
     icalproperty *p;
@@ -3416,7 +3416,7 @@ void test_action()
     icalcomponent_free(c);
 }
 
-void test_trigger()
+void test_trigger(void)
 {
     struct icaltriggertype tr;
     icalcomponent *c;
@@ -3539,7 +3539,7 @@ void test_trigger()
     icalproperty_free(p);
 }
 
-void test_rdate()
+void test_rdate(void)
 {
     struct icaldatetimeperiodtype dtp;
     icalproperty *p;
@@ -3632,7 +3632,7 @@ void test_rdate()
     icalproperty_free(p);
 }
 
-void test_langbind()
+void test_langbind(void)
 {
     icalcomponent *c, *inner;
     icalproperty *p;
@@ -3707,7 +3707,7 @@ void test_langbind()
     icalcomponent_free(c);
 }
 
-void test_property_parse()
+void test_property_parse(void)
 {
     icalcomponent *c;
     icalproperty *p;
@@ -3746,7 +3746,7 @@ void test_property_parse()
     icalcomponent_free(c);
 }
 
-void test_value_parameter()
+void test_value_parameter(void)
 {
     icalcomponent *c;
     icalproperty *p;
@@ -3778,7 +3778,7 @@ void test_value_parameter()
     icalcomponent_free(c);
 }
 
-void test_empty_parameter()
+void test_empty_parameter(void)
 {
     icalcomponent *c;
     icalproperty *p;
@@ -3806,7 +3806,7 @@ void test_empty_parameter()
     icalcomponent_free(c);
 }
 
-void test_x_parameter()
+void test_x_parameter(void)
 {
     icalcomponent *c;
     icalproperty *p;
@@ -3842,7 +3842,7 @@ void test_x_parameter()
     icalcomponent_free(c);
 }
 
-void test_x_property()
+void test_x_property(void)
 {
     icalcomponent *c;
     icalproperty *p;
@@ -3867,7 +3867,7 @@ void test_x_property()
     icalcomponent_free(c);
 }
 
-void test_utcoffset()
+void test_utcoffset(void)
 {
     icalcomponent *c;
 
@@ -3884,7 +3884,7 @@ void test_utcoffset()
         icalcomponent_free(c);
 }
 
-void test_attach()
+void test_attach(void)
 {
     icalcomponent *c;
 
@@ -3904,7 +3904,7 @@ void test_attach()
         icalcomponent_free(c);
 }
 
-void test_attach_caldav()
+void test_attach_caldav(void)
 {
     icalcomponent *c;
     icalproperty *p;
@@ -3961,7 +3961,7 @@ void test_attach_caldav()
         icalcomponent_free(c);
 }
 
-void test_attach_url()
+void test_attach_url(void)
 {
     static const char test_icalcomp_str_attachwithurl[] =
         "BEGIN:VALARM\r\n" "ATTACH:foofile\r\n" "END:VALARM\r\n";
@@ -3990,7 +3990,7 @@ static void test_free_attach_data(char *data, void *user_data)
     (*pbeen_called)++;
 }
 
-void test_attach_data()
+void test_attach_data(void)
 {
     static const char test_icalcomp_str_attachwithdata[] =
         "BEGIN:VALARM\r\n" "ATTACH;VALUE=BINARY:foofile\r\n" "END:VALARM\r\n";

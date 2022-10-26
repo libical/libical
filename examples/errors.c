@@ -2,7 +2,7 @@
 
 #include <libical/ical.h>
 
-void program_errors()
+void program_errors(void)
 {
     /*Most routines will set icalerrno on errors. This is an
       enumeration defined in icalerror.h */
