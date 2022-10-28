@@ -89,12 +89,16 @@ foreach $new_file (`find -name "*.ics"`) {
     $new_contents_copy = $new_contents;
 
     # Strip the TZID from both contents.
-    $new_contents_copy =~ s/^TZID:\S+$//m;
+    $new_contents_copy =~ s/^TZID:\S+\r?$//m;
     $new_tzid = $&;
-    $master_contents =~ s/^TZID:\S+$//m;
+    $master_contents =~ s/^TZID:\S+\r?$//m;
     $master_tzid = $&;
 
-    #	print "Matched: $master_tzid\n";
+    # Strip LAST-MODIFIED
+    $new_contents_copy =~ s/^LAST-MODIFIED:\S+\r?$//m;
+    $master_contents   =~ s/^LAST-MODIFIED:\S+\r?$//m;
+
+    # print "Matched: $master_tzid\n";
 
     if ($new_contents_copy ne $master_contents) {
       print "$new_file has changed. Updating...\n";
