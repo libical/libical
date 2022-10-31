@@ -79,9 +79,39 @@ foreach $new_file (`find -name "*.ics"`) {
 
   $copy_to_master = 0;
 
-  # If the ics file exists in the master copy we have to compare them,
-  # otherwise we can just copy the new file into the master directory.
-  if (-e $master_file) {
+  if (-l $new_file) {
+
+    # This is a symlink, copy it in any case.
+
+    if (!-e $master_file) {
+      print "Creating new symlinkg $new_file...\n";
+      $copy_to_master = 1;
+    } elsif (-l $master_file) {
+      my $src = readlink($master_file);
+      my $dst = readlink($new_file);
+
+      if ($src eq $dst) {
+        $copy_to_master = 0;
+
+        # print "Symlink $new_file unchanged: $src.\n"
+      } else {
+        print "Updating symlink $new_file to $src...\n";
+        $copy_to_master = 1;
+      }
+
+    } else {
+      print "Changing $new_file to symlink...\n";
+      $copy_to_master = 1;
+    }
+
+  } elsif (-l $master_file) {
+    $copy_to_master = 1;
+    print "Changing $new_file from symlink to real file...\n";
+
+  } elsif (-e $master_file) {
+
+    # If the ics file exists in the master copy we have to compare them,
+    # otherwise we can just copy the new file into the master directory.
     open(MASTERZONEFILE, "$master_file")
       || die "Can't open file: $master_file";
     undef $/;
@@ -136,10 +166,23 @@ foreach $new_file (`find -name "*.ics"`) {
         make_path $directories or die "Failed to create path: $directories";
       }
 
-      open(MASTERZONEFILE, ">$master_file")
-        || die "Can't create file: $master_file";
-      print MASTERZONEFILE $new_contents;
-      close(MASTERZONEFILE);
+      if (-e $master_file) {
+
+        # delete old file so we don't have issues with symlinks
+        unlink($master_file);
+      }
+
+      if (-l $new_file) {
+        my $dst = readlink($new_file) || die "Can't read symlink $new_file.";
+
+        print "Creating symlink to $dst in $master_file.\n";
+        symlink $dst, $master_file || die "Can't create symlink $new_file.";
+      } else {
+        open(MASTERZONEFILE, ">$master_file")
+          || die "Can't create file: $master_file";
+        print MASTERZONEFILE $new_contents;
+        close(MASTERZONEFILE);
+      }
     }
   }
 
