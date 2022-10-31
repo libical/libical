@@ -922,6 +922,17 @@ static int match_begin_end_name(int end) {
     return 0;
     }
 
+static int hexdigit_decode(char c)
+{
+	if (c >= '0' && c <= '9')
+		return c - '0';
+	if (c >= 'A' && c <= 'F')
+		return c - 'A' + 10;
+	if (c >= 'a' && c <= 'f')
+		return c - 'a' + 10;
+	return -1;
+}
+
 static char* lexGetQuotedPrintable()
     {
     char cur;
@@ -931,39 +942,30 @@ static char* lexGetQuotedPrintable()
         cur = lexGetc();
         switch (cur) {
             case '=': {
-                int c = 0;
-                int next[2];
-                int i;
-                for (i = 0; i < 2; i++) {
-                    next[i] = lexGetc();
-                    if (next[i] >= '0' && next[i] <= '9')
-                        c = c * 16 + next[i] - '0';
-                    else if (next[i] >= 'A' && next[i] <= 'F')
-                        c = c * 16 + next[i] - 'A' + 10;
-                    else
-                        break;
+                int c = 0, d;
+                cur = lexGetc();
+                if (cur == '\n') {
+                    ++mime_lineNum;
+                    break;
                     }
-                if (i == 0) {
-                    /* single '=' follow by LINESEP is continuation sign? */
-                    if (next[0] == '\n') {
-                        ++mime_lineNum;
-                        }
-                    else {
-                        lexPushLookaheadc('=');
-                        goto EndString;
-                        }
+                d = hexdigit_decode(cur);
+                if (d < 0) {
+                    lexAppendc(cur);
+                    break;
                     }
-                else if (i == 1) {
-                    lexPushLookaheadc(next[1]);
-                    lexPushLookaheadc(next[0]);
-                    lexAppendc('=');
-                } else {
-                    lexAppendc(c);
+                c = d << 4;
+                cur = lexGetc();
+                d = hexdigit_decode(cur);
+                if (d < 0) {
+                    lexAppendc(cur);
+                    break;
                     }
+                lexAppendc(c | d);
                 break;
                 } /* '=' */
-            case '\n': {
-                lexPushLookaheadc('\n');
+            case '\n':
+            case ';': {
+                lexPushLookaheadc(cur);
                 goto EndString;
                 }
             case (char)EOF:
