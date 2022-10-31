@@ -126,10 +126,13 @@ foreach $new_file (`find -name "*.ics"`) {
   }
 
   if ($copy_to_master) {
-
-    #	print "Updating: $new_file\n";
-
     if ($DO_UPDATES) {
+
+      my ($filename, $directories) = fileparse $master_file;
+      if (!-d $directories) {
+        make_path $directories or die "Failed to create path: $directories";
+      }
+
       open(MASTERZONEFILE, ">$master_file")
         || die "Can't create file: $master_file";
       print MASTERZONEFILE $new_contents;
