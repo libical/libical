@@ -1,5 +1,8 @@
 #!/usr/bin/perl -w
 use Getopt::Long;
+use File::Basename qw( fileparse );
+use File::Path     qw( make_path );
+use File::Spec;
 
 #
 # Vzic - a program to convert Olson timezone database files into VZTIMEZONE
@@ -140,4 +143,23 @@ foreach $new_file (`find -name "*.ics"`) {
     }
   }
 
+}
+
+chdir $MASTER_ZONEINFO_DIR
+  || die "Can't cd to $MASTER_ZONEINFO_DIR";
+
+foreach $old_file (`find -name "*.ics"`) {
+
+  # Get rid of './' at start and whitespace at end.
+  $old_file =~ s/^\.\///;
+  $old_file =~ s/\s+$//;
+
+  $new_file = $NEW_ZONEINFO_DIR . "/$old_file";
+
+  # If the ics file exists in the master copy we have to compare them,
+  # otherwise we can just copy the new file into the master directory.
+  if (!-e $new_file) {
+    print "$old_file exists in the master but not the new zoneinfo. Deleting...\n";
+    unlink($old_file);
+  }
 }
