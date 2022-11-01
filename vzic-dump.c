@@ -382,7 +382,6 @@ dump_time_zone_names		(GList		*names,
 	       zone_desc->longitude[2],
 	       zone_name);
     } else {
-      g_print ("Zone description not found for: %s\n", zone_name);
       fprintf (fp, "%s\n", zone_name);
     }
 
