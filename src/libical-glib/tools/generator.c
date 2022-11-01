@@ -2238,6 +2238,7 @@ static gint generate_library(const gchar *apis_dir)
             printf("The node cannot be parsed into a structure.\n");
             xmlFreeDoc(doc);
             res = 1;
+            structure_free(structure);
             goto out;
         }
 
@@ -2259,6 +2260,7 @@ static gint generate_library(const gchar *apis_dir)
                            structure->name);
                     xmlFreeDoc(doc);
                     res = 1;
+                    structure_free(structure);
                     goto out;
                 }
             }
@@ -2277,6 +2279,7 @@ static gint generate_library(const gchar *apis_dir)
                 printf("Please supply a default value for enum %s\n", enumeration->name);
                 xmlFreeDoc(doc);
                 res = 1;
+                structure_free(structure);
                 goto out;
             }
         }
