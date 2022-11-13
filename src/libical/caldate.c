@@ -71,8 +71,7 @@
  *
  */
 
-long caldat( date )
-struct ut_instant * date;
+long caldat( struct ut_instant * date )
 {
 	double frac;
 	long jd;
@@ -145,8 +144,7 @@ struct ut_instant * date;
  *	50 Year canon of solar eclipses: 1986-2035
  */
 
-double juldat( date )
-struct ut_instant * date;
+double juldat( struct ut_instant * date )
 {
 	double frac, gyr;
 	long iy0, im0;

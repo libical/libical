@@ -58,7 +58,7 @@ extern "C"
     void test_header(const char *title, int test_set);
     void test_start(int);
     int test_end(void);
-    void test_run(const char *test_name, void (*test_fcn) (), int do_test, int headeronly);
+    void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int headeronly);
 
 #ifdef  __cplusplus
 }

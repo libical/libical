@@ -550,7 +550,7 @@ static int pushVObject(const char *prop)
     }
 
 /* This pops the recently built vCard off the stack and returns it. */
-static VObject* popVObject()
+static VObject* popVObject(void)
     {
     VObject *oldObj;
     if (ObjStackTop < 0) {
@@ -681,7 +681,7 @@ static int lexWithinMode(enum LexMode mode) {
     return 0;
     }
 
-static char lexGetc_()
+static char lexGetc_(void)
     {
     /* get next char from input, no buffering. */
     if (lexBuf.curPos == lexBuf.inputLen)
@@ -698,7 +698,7 @@ static char lexGetc_()
         }
     }
 
-static int lexGeta()
+static int lexGeta(void)
     {
     ++lexBuf.len;
     return (lexBuf.buf[lexBuf.getPtr] = lexGetc_());
@@ -710,7 +710,7 @@ static int lexGeta_(int i)
     return (lexBuf.buf[(lexBuf.getPtr+i)%MAX_LEX_LOOKAHEAD] = lexGetc_());
     }
 
-static void lexSkipLookahead() {
+static void lexSkipLookahead(void) {
     if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=((char) EOF)) {
         /* don't skip EOF. */
         lexBuf.getPtr = (lexBuf.getPtr + 1) % MAX_LEX_LOOKAHEAD;
@@ -718,7 +718,7 @@ static void lexSkipLookahead() {
         }
     }
 
-static int lexLookahead() {
+static int lexLookahead(void) {
     int c = (lexBuf.len)?
         lexBuf.buf[lexBuf.getPtr]:
         lexGeta();
@@ -744,7 +744,7 @@ static int lexLookahead() {
     return c;
     }
 
-static int lexGetc() {
+static int lexGetc(void) {
     int c = lexLookahead();
     if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=((char) EOF)) {
         /* EOF will remain in lookahead buffer */
@@ -754,14 +754,14 @@ static int lexGetc() {
     return c;
     }
 
-static void lexSkipLookaheadWord() {
+static void lexSkipLookaheadWord(void) {
     if (lexBuf.strsLen <= lexBuf.len) {
         lexBuf.len -= lexBuf.strsLen;
         lexBuf.getPtr = (lexBuf.getPtr + lexBuf.strsLen) % MAX_LEX_LOOKAHEAD;
         }
     }
 
-static void lexClearToken()
+static void lexClearToken(void)
     {
     lexBuf.strsLen = 0;
     }
@@ -779,11 +779,11 @@ static void lexAppendc(int c)
         }
     }
 
-static char* lexStr() {
+static char* lexStr(void) {
     return dupStr(lexBuf.strs,(size_t)lexBuf.strsLen+1);
     }
 
-static void lexSkipWhite() {
+static void lexSkipWhite(void) {
     int c = lexLookahead();
     while (c == ' ' || c == '\t') {
         lexSkipLookahead();
@@ -791,7 +791,7 @@ static void lexSkipWhite() {
         }
     }
 
-static char* lexGetWord() {
+static char* lexGetWord(void) {
     int c;
     lexSkipWhite();
     lexClearToken();
@@ -816,7 +816,7 @@ static void lexPushLookaheadc(int c) {
     lexBuf.len += 1;
     }
 
-static char* lexLookaheadWord() {
+static char* lexLookaheadWord(void) {
     /* this function can lookahead word with max size of MAX_LEX_LOOKAHEAD_0
      /  and thing bigger than that will stop the lookahead and return 0;
      / leading white spaces are not recoverable.
@@ -882,7 +882,7 @@ static void handleMoreRFC822LineBreak(int c) {
         }
     }
 
-static char* lexGet1Value() {
+static char* lexGet1Value(void) {
     int c;
     lexSkipWhite();
     c = lexLookahead();
@@ -950,7 +950,7 @@ void initLex(const char *inputstring, unsigned long inputlen, FILE *inputfile)
     lexBuf.strsLen = 0;
     }
 
-static void finiLex() {
+static void finiLex(void) {
     VObject* vobj, *topobj = 0;
     while(vobj = popVObject(), vobj) {
         topobj = vobj;
@@ -963,7 +963,7 @@ static void finiLex() {
 /* This parses and converts the base64 format for binary encoding into
  * a decoded buffer (allocated with new).  See RFC 1521.
  */
-static char * lexGetDataFromBase64()
+static char * lexGetDataFromBase64(void)
     {
     size_t bytesLen = 0, bytesMax = 0;
     int quadIx = 0, pad = 0;
@@ -1085,7 +1085,7 @@ static int match_begin_end_name(int end) {
     return 0;
     }
 
-static char* lexGetQuotedPrintable()
+static char* lexGetQuotedPrintable(void)
     {
     char cur;
 
@@ -1142,7 +1142,7 @@ EndString:
     return lexStr();
     } /* LexQuotedPrintable */
 
-int yylex() {
+int yylex(void) {
 
     int lexmode = LEXMODE();
     if (lexmode == L_VALUES) {
@@ -1259,7 +1259,7 @@ int yylex() {
 /***                                                    Public Functions                                                ****/
 /***************************************************************************/
 
-static VObject* Parse_MIMEHelper()
+static VObject* Parse_MIMEHelper(void)
     {
     ObjStackTop = -1;
     mime_numErrors = 0;

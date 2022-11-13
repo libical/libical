@@ -101,7 +101,7 @@ void update_attendees(icalcomponent* event)
 
 /* Here are some examples of manipulating properties */
 
-void test_properties()
+void test_properties(void)
 {
     icalproperty *prop;
     icalparameter *param;

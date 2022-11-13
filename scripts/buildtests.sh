@@ -358,6 +358,7 @@ CPPCHECK() {
   echo "===== START CPPCHECK: $1 ======"
   cd $TOP
   cppcheck --quiet --language=c \
+           --std=c99 \
            --force --error-exitcode=1 --inline-suppr \
            --enable=warning,performance,portability,information \
            --template='{file}:{line},{severity},{id},{message}' \

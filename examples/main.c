@@ -6,7 +6,7 @@
 
 #include <libical/ical.h>
 
-int main()
+int main(void)
 {
     return 1;
 }

@@ -67,7 +67,7 @@ static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void
     *num_recurs = *num_recurs + 1;
 }
 
-void test_recur_file()
+void test_recur_file(void)
 {
     icalset *cin = 0;
     struct icaltimetype next;

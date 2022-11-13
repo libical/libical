@@ -6,7 +6,7 @@
 
 #include "xml-parser.h"
 
-Structure *structure_new()
+Structure *structure_new(void)
 {
     Structure *structure;
 
@@ -65,7 +65,7 @@ void structure_free(Structure * structure)
     g_free(structure);
 }
 
-Declaration *declaration_new()
+Declaration *declaration_new(void)
 {
     Declaration *declaration = g_new0(Declaration, 1);
 
@@ -89,7 +89,7 @@ void declaration_free(Declaration * declaration)
     g_free(declaration);
 }
 
-Method *method_new()
+Method *method_new(void)
 {
     Method *method;
 
@@ -132,7 +132,7 @@ void method_free(Method * method)
     g_free(method);
 }
 
-Parameter *parameter_new()
+Parameter *parameter_new(void)
 {
     Parameter *parameter;
 
@@ -175,7 +175,7 @@ void parameter_free(Parameter * para)
     g_free(para);
 }
 
-Ret *ret_new()
+Ret *ret_new(void)
 {
     Ret *ret;
 
@@ -213,7 +213,7 @@ void ret_free(Ret * ret)
     g_free(ret);
 }
 
-Enumeration *enumeration_new()
+Enumeration *enumeration_new(void)
 {
     Enumeration *enumeration = g_new0(Enumeration, 1);
 

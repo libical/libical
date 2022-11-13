@@ -274,7 +274,7 @@ void test_fileset_extended(void)
    DB file), and keys for storage and retrieval.
 */
 
-void test_bdbset()
+void test_bdbset(void)
 {
     icalset *cout;
     int month = 0;

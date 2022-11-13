@@ -1956,7 +1956,7 @@ void ssfree (void * ptr )
 
 
 
-int sswrap()
+int sswrap(void)
 {
      return 1;
 }

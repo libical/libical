@@ -212,7 +212,7 @@ void *icalmemory_tmp_buffer(size_t size)
     return buf;
 }
 
-void icalmemory_free_ring()
+void icalmemory_free_ring(void)
 {
     buffer_ring *br;
 

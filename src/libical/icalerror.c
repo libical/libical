@@ -86,7 +86,7 @@ void icalerror_crash_here(void)
 #endif
 }
 
-void icalerror_clear_errno()
+void icalerror_clear_errno(void)
 {
     icalerrno = ICAL_NO_ERROR;
 }
@@ -102,7 +102,7 @@ void icalerror_set_errors_are_fatal(int fatal)
     icalerror_errors_are_fatal = (fatal != 0);
 }
 
-int icalerror_get_errors_are_fatal()
+int icalerror_get_errors_are_fatal(void)
 {
     return icalerror_errors_are_fatal;
 }

@@ -26,7 +26,7 @@ void do_something(icalcomponent *c);
 
 */
 
-icalcomponent* create_new_component()
+icalcomponent* create_new_component(void)
 {
     /* variable definitions */
     icalcomponent* calendar;
@@ -190,7 +190,7 @@ icalcomponent* create_new_component()
 /* Now, create the same component as in the previous routine, but use
 the constructor style. */
 
-icalcomponent* create_new_component_with_va_args()
+icalcomponent* create_new_component_with_va_args(void)
 {
     /* This is a similar set up to the last routine */
     icalcomponent* calendar;

@@ -581,6 +581,8 @@ endif()
 if(CMAKE_C_COMPILER_IS_CLANG)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Qunused-arguments")
 endif()
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_COMPILER_IS_CLANG False)
 set(CMAKE_CXX_COMPILER_IS_GCC False)
@@ -612,6 +614,8 @@ endif()
 if(CMAKE_CXX_COMPILER_IS_CLANG)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
 endif()
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #some test programs need to know if we are using 32-bit time
 if(SIZEOF_TIME_T EQUAL 4)
