@@ -565,7 +565,8 @@ if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   set(CMAKE_C_FLAGS
     "${CMAKE_C_FLAGS} -fvisibility=hidden \
     -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
-    -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type"
+    -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type \
+    -Wold-style-definition -Wstrict-prototypes"
   )
   libical_add_cflag(-Wunused-but-set-variable UNUSED_BUT_SET)
   libical_add_cflag(-Wlogical-op LOGICAL_OP)
