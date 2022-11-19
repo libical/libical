@@ -513,6 +513,8 @@ if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
   check_c_compiler_flag(-Wunreachable-code HAVE_GCC_UNREACHABLE_CODE)
   check_c_compiler_flag(-Wvarargs HAVE_GCC_VARARGS)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type")
+  #for more modern C
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wold-style-definition -Wstrict-prototypes")
   if(HAVE_GCC_UNUSED_BUT_SET)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-but-set-variable")
   endif()
