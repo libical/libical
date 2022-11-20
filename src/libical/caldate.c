@@ -190,8 +190,7 @@ double juldat( struct ut_instant * date )
 	return( date->j_date );
 }	/*	end of	double juldat( date )	*/
 
-void caldat_int( date )
-struct ut_instant_int * date;
+void caldat_int( struct ut_instant_int * date )
 {
 	long jd;
 	long ka;
@@ -238,8 +237,7 @@ struct ut_instant_int * date;
 			+ date->day - 30;
 }
 
-void juldat_int( date )
-struct ut_instant_int * date;
+void juldat_int( struct ut_instant_int * date )
 {
 	long iy0, im0;
 	long ia, ib;

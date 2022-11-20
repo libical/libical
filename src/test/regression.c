@@ -1259,7 +1259,7 @@ void test_recur(void)
 /*    test_increment();*/
 }
 
-void test_recur_encode_by_day()
+void test_recur_encode_by_day(void)
 {
     struct icalrecurrencetype rt;
     int ii;
@@ -1305,7 +1305,7 @@ void test_recur_encode_by_day()
     }
 }
 
-void test_recur_encode_by_month()
+void test_recur_encode_by_month(void)
 {
     struct icalrecurrencetype rt;
     int ii, jj;
@@ -2757,7 +2757,8 @@ static int test_juldat_caldat_instance(long year, int month, int day) {
  * output of the icaltime_day_of_week, icaltime_start_doy_week and icaltime_week_number functions
  * which are based on the functions to be tested.
  */
-void test_juldat_caldat() {
+void test_juldat_caldat(void)
+{
 
     int i;
     int failed = 0;

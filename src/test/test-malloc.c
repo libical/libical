@@ -159,7 +159,7 @@ void test_free(void *p) {
     global_testmalloc_statistics.blocks_allocated--;
 }
 
-void testmalloc_reset() {
+void testmalloc_reset(void) {
     memset(&global_testmalloc_statistics, 0, sizeof(global_testmalloc_statistics));
     global_testmalloc_remaining_attempts = -1;
 }

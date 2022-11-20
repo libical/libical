@@ -201,8 +201,8 @@ int test_end(void)
   * Bring all memory that is allocated as side effect into a stable state, so we can calculate
   * stable memory allocation statistics.
   */
-static void cleanup_nondeterministic_memory() {
-
+static void cleanup_nondeterministic_memory(void)
+{
     // icalerrno_return() allocates a buffer on it's first use per thread. Let's allocate it
     // now, so it doesn't disturb our test statistics.
     icalerrno_return();

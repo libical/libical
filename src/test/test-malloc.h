@@ -46,7 +46,7 @@ void test_free(void *p);
 /** Resets the memory management statistics and sets the number of successful
   * allocations limit to infinite.
   */
-void testmalloc_reset();
+void testmalloc_reset(void);
 
 /** Sets the maximum number of malloc or realloc attempts that will succeed. If
   * the number is negative, no limit will be applied.
