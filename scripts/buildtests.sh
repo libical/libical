@@ -31,21 +31,22 @@ HELP() {
   echo
   echo "Run build tests"
   echo "Options:"
-  echo " -m, --no-cmake-compat    Don't require CMake version compatibility"
-  echo " -k, --no-krazy           Don't run any Krazy tests"
-  echo " -c, --no-cppcheck        Don't run any cppcheck tests"
-  echo " -t, --no-tidy            Don't run any clang-tidy tests"
-  echo " -b, --no-scan            Don't run any scan-build tests"
-  echo " -s, --no-splint          Don't run any splint tests"
-  echo " -p, --no-codespell       Don't run any codespell tests"
-  echo " -n, --no-ninja           Don't run any build tests with ninja"
-  echo " -l, --no-clang-build     Don't run any clang-build tests"
-  echo " -g, --no-gcc-build       Don't run any gcc-build tests"
-  echo " -a, --no-asan-build      Don't run any ASAN-build (sanitize-address) tests"
-  echo " -d, --no-tsan-build      Don't run any TSAN-build (sanitize-threads) tests"
-  echo " -u, --no-ubsan-build     Don't run any UBSAN-build (sanitize-undefined) tests"
-  echo " -x, --no-memc-build      Don't run any MEMCONSIST-build (memory consistency) tests"
-  echo " -f, --no-fortify-build Don't run the FORTIFY-build tests (gcc12)"
+  echo " -m, --no-cmake-compat      Don't require CMake version compatibility"
+  echo " -k, --no-krazy             Don't run any Krazy tests"
+  echo " -c, --no-cppcheck          Don't run any cppcheck tests"
+  echo " -t, --no-tidy              Don't run any clang-tidy tests"
+  echo " -b, --no-scan              Don't run any scan-build tests"
+  echo " -s, --no-splint            Don't run any splint tests"
+  echo " -p, --no-codespell         Don't run any codespell tests"
+  echo " -n, --no-ninja             Don't run any build tests with ninja"
+  echo " -l, --no-clang-build       Don't run any clang-build tests"
+  echo " -g, --no-gcc-build         Don't run any gcc-build tests"
+  echo " -a, --no-asan-build        Don't run any ASAN-build (sanitize-address) tests"
+  echo " -d, --no-tsan-build        Don't run any TSAN-build (sanitize-threads) tests"
+  echo " -u, --no-ubsan-build       Don't run any UBSAN-build (sanitize-undefined) tests"
+  echo " -x, --no-memc-build        Don't run any MEMCONSIST-build (memory consistency) tests"
+  echo " -f, --no-fortify-build     Don't run the FORTIFY-build tests (gcc12)"
+  echo " -r, --no-threadlocal-build Don't run the THREADLOCAL-build tests"
   echo
 }
 
@@ -335,6 +336,23 @@ UBSAN_BUILD() {
   echo "===== END UBSAN BUILD: $1 ======"
 }
 
+#function THREADLOCAL_BUILD() {
+# runs a THREADLOCAL test
+# $1 = the name of the test (which will have "-threadlocal" appended to it)
+# $2 = CMake options
+THREADLOCAL_BUILD() {
+  name="$1-threadlocal"
+  if ( test $runthreadlocalbuild -ne 1 )
+  then
+    echo "===== THREADLOCAL BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START THREADLOCAL BUILD: $1 ======"
+  SET_GCC
+  BUILD "$name" "-DLIBICAL_SYNCMODE_THREADLOCAL=True $2"
+  echo "===== END THREADLOCAL BUILD: $1 ======"
+}
+
 #function CPPCHECK
 # runs a cppcheck test, which means: configure, compile, link and run cppcheck
 # $1 = the name of the test (which will have "-cppcheck" appended to it)
@@ -358,7 +376,6 @@ CPPCHECK() {
   echo "===== START CPPCHECK: $1 ======"
   cd $TOP
   cppcheck --quiet --language=c \
-           --std=c99 \
            --force --error-exitcode=1 --inline-suppr \
            --enable=warning,performance,portability,information \
            --template='{file}:{line},{severity},{id},{message}' \
@@ -579,8 +596,8 @@ CODESPELL() {
 
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hmkpctbsnlgaduf --long help,no-cmake-compat,no-krazy,no-codespell,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build,no-fortify-build -- "$@"`
-TEMP=`getopt hmkpctbsnlgadux $*`
+#TEMP=`getopt -o hmkpctbsnlgaduxfr --long help,no-cmake-compat,no-krazy,no-codespell,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build,no-fortify-build,no-threadlocal-build -- "$@"`
+TEMP=`getopt hmkpctbsnlgaduxfr $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
@@ -590,6 +607,7 @@ runkrazy=1
 runcodespell=1
 runcppcheck=1
 runtidy=1
+runsplint=1
 runscan=1
 runninja=1
 runclangbuild=1
@@ -599,25 +617,26 @@ runtsanbuild=1
 runubsanbuild=1
 runmemcbuild=1
 runfortifybuild=1
-runsplint=1
+runthreadlocalbuild=1
 while true; do
     case "$1" in
         -h|--help) HELP; exit 1;;
-        -m|--no-cmake-compat)   cmakecompat=0;      shift;;
-        -k|--no-krazy)          runkrazy=0;         shift;;
-        -p|--no-codespell)      runcodespell=0;     shift;;
-        -c|--no-cppcheck)       runcppcheck=0;      shift;;
-        -t|--no-tidy)           runtidy=0;          shift;;
-        -b|--no-scan)           runscan=0;          shift;;
-        -s|--no-splint)         runsplint=0;        shift;;
-        -n|--no-ninja)          runninja=0;         shift;;
-        -l|--no-clang-build)    runclangbuild=0;    shift;;
-        -g|--no-gcc-build)      rungccbuild=0;      shift;;
-        -a|--no-asan-build)     runasanbuild=0;     shift;;
-        -d|--no-tsan-build)     runtsanbuild=0;     shift;;
-        -u|--no-ubsan-build)    runubsanbuild=0;    shift;;
-        -x|--no-memc-build)     runmemcbuild=0;     shift;;
-        -f|--no-fortify-build)  runfortifybuild=0;  shift;;
+        -m|--no-cmake-compat)   cmakecompat=0;            shift;;
+        -k|--no-krazy)          runkrazy=0;               shift;;
+        -p|--no-codespell)      runcodespell=0;           shift;;
+        -c|--no-cppcheck)       runcppcheck=0;            shift;;
+        -t|--no-tidy)           runtidy=0;                shift;;
+        -b|--no-scan)           runscan=0;                shift;;
+        -s|--no-splint)         runsplint=0;              shift;;
+        -n|--no-ninja)          runninja=0;               shift;;
+        -l|--no-clang-build)    runclangbuild=0;          shift;;
+        -g|--no-gcc-build)      rungccbuild=0;            shift;;
+        -a|--no-asan-build)     runasanbuild=0;           shift;;
+        -d|--no-tsan-build)     runtsanbuild=0;           shift;;
+        -u|--no-ubsan-build)    runubsanbuild=0;          shift;;
+        -x|--no-memc-build)     runmemcbuild=0;           shift;;
+        -f|--no-fortify-build)  runfortifybuild=0;        shift;;
+        -r|--no-threadlocal-build) runthreadlocalbuild=0; shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
@@ -754,9 +773,16 @@ UBSAN_BUILD test5ubsan "$GLIBOPTS"
 
 #Fortify build
 FORTIFY_BUILD test1fortify "$DEFCMAKEOPTS"
-FORTIFY_BUILD test2tsan "$CMAKEOPTS"
-FORTIFY_BUILD test3tsan "$TZCMAKEOPTS"
-FORTIFY_BUILD test4tsan "$UUCCMAKEOPTS"
-FORTIFY_BUILD test5tsan "$GLIBOPTS"
+FORTIFY_BUILD test2fortify "$CMAKEOPTS"
+FORTIFY_BUILD test3fortify "$TZCMAKEOPTS"
+FORTIFY_BUILD test4fortify "$UUCCMAKEOPTS"
+FORTIFY_BUILD test5fortify "$GLIBOPTS"
+
+#Threadlocal
+THREADLOCAL_BUILD test1threadlocal "$DEFCMAKEOPTS"
+THREADLOCAL_BUILD test2threadlocal "$CMAKEOPTS"
+THREADLOCAL_BUILD test3threadlocal "$TZCMAKEOPTS"
+THREADLOCAL_BUILD test4threadlocal "$UUCCMAKEOPTS"
+THREADLOCAL_BUILD test5threadlocal "$GLIBOPTS"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"
