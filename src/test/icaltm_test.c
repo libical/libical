@@ -30,8 +30,8 @@ static void *test_tread(void *user_data)
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_THREADLOCAL
     // In thread-local mode all initialization must be done per thread, so we do it here, rather
     // than in main().
-    icaltimezone* zone = icaltimezone_get_builtin_timezone("America/New_York");
-    icaltimezone* utc = icaltimezone_get_utc_timezone();
+    icaltimezone *zone = icaltimezone_get_builtin_timezone("America/New_York");
+    icaltimezone *utc = icaltimezone_get_utc_timezone();
 #endif
 
     itt = icaltime_from_string("19710203T040506");
