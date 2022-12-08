@@ -327,7 +327,7 @@ LIBICAL_ICAL_EXPORT int icaltime_compare_date_only_tz(const struct icaltimetype 
 /** Adds or subtracts a number of days, hours, minutes and seconds. */
 /**     @brief Internal, shouldn't be part of the public API
  *
- *      Adds or subtracts a time from a icaltimetype. This time is given
+ *      Adds or subtracts a time from an icaltimetype. This time is given
  *      as a number of days, hours, minutes and seconds.
  *
  *      @note This function is exactly the same as

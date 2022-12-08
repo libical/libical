@@ -33,7 +33,7 @@ altrep2 = "This is an altrep 2"
 parameter2 = ICalGLib.Parameter.new_altrep(altrep2)
 stringProperty.add_parameter(parameter1)
 stringProperty.add_parameter(parameter2)
-stringProperty.set_parameter_from_string("ACTIONPARAM", "This is a action param")
+stringProperty.set_parameter_from_string("ACTIONPARAM", "This is an action param")
 
 assert stringProperty.count_parameters() == 3
 retrieved_parameter1 = stringProperty.get_first_parameter(ICalGLib.ParameterKind.ALTREP_PARAMETER)
@@ -41,7 +41,7 @@ assert retrieved_parameter1.as_ical_string() == parameter1.as_ical_string()
 retrieved_parameter2 = stringProperty.get_next_parameter(ICalGLib.ParameterKind.ALTREP_PARAMETER)
 assert retrieved_parameter2.as_ical_string() == parameter2.as_ical_string()
 retrieved_parameter3 = stringProperty.get_first_parameter(ICalGLib.ParameterKind.ACTIONPARAM_PARAMETER)
-assert retrieved_parameter3.as_ical_string() == "ACTIONPARAM=This is a action param"
+assert retrieved_parameter3.as_ical_string() == "ACTIONPARAM=This is an action param"
 
 stringProperty.remove_parameter_by_kind(ICalGLib.ParameterKind.CHARSET_PARAMETER)
 assert stringProperty.count_parameters() == 3

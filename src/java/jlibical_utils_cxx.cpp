@@ -98,8 +98,8 @@ void setCObjectPtr(JNIEnv *env, jobject surrogate, void* subject)
 }
 
 //-------------------------------------------------------
-// Return the pointer to the subject (as an VComponent*) from the given surrogate.
-// If the subject is not an VComponent type, or if the subject is NULL, then return NULL.
+// Return the pointer to the subject (as a VComponent*) from the given surrogate.
+// If the subject is not a VComponent type, or if the subject is NULL, then return NULL.
 //-------------------------------------------------------
 VComponent* getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType)
 {

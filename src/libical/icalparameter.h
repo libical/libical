@@ -209,7 +209,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_free(icalparameter *parameter);
 LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string(icalparameter *parameter);
 
 /**
- * @brief Converts icalparameter into an string representation according to RFC5445/RFC6868.
+ * @brief Converts icalparameter into a string representation according to RFC5445/RFC6868.
  * @param parameter The icalparameter to convert
  * @return A string representing the parameter
  * @sa icalparameter_as_ical_string()
@@ -614,7 +614,7 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_kind_to_string(icalparameter_kind 
 LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *string);
 
 /**
- * @brief Checks the validity of a icalparameter_kind
+ * @brief Checks the validity of an icalparameter_kind
  * @param kind The icalparameter_kind
  * @return 1 if @a kind is valid, 0 otherwise
  *

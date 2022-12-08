@@ -1101,7 +1101,7 @@ static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonech
     return middle;
 }
 
-/** @brief Adds (or subtracts) a time from a icaltimezonechange.
+/** @brief Adds (or subtracts) a time from an icaltimezonechange.
  *
  * NOTE: This function is exactly the same as icaltime_adjust() except
  * for the type of the first parameter.
