@@ -128,7 +128,7 @@ In libical, components are represented with the `icalcomponent` class.
 #### 3.1.3 Values
 
 Values are represented in a similar way to properties; a base class
-and many "derived " classes. A value is essentially a abstract handle
+and many "derived " classes. A value is essentially an abstract handle
 on a single fundamental type, a structure or a union.
 
 #### 3.1.4 Parameters

@@ -43,7 +43,7 @@ public:
     /** Constructs an ICalSpanList from an icalset */
     ICalSpanList(icalset *set, icaltimetype start, icaltimetype end);
 
-    /** Constructs an ICalSpanList from the VFREEBUSY chunk of a icalcomponent */
+    /** Constructs an ICalSpanList from the VFREEBUSY chunk of an icalcomponent */
     explicit ICalSpanList(icalcomponent *comp);
 
     /** Constructs an ICalSpanList from the VFREEBUSY chunk of a vcomponent */

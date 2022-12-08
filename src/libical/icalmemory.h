@@ -264,7 +264,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void *buf);
    normally allocated memory, or on buffers created from
    icalmemory_new_buffer, never with buffers created by
    icalmemory_tmp_buffer. If icalmemory_append_string has to resize a
-   buffer on the ring, the ring will loose track of it an you will
+   buffer on the ring, the ring will loose track of it and you will
    have memory problems. */
 
 /**

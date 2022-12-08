@@ -18,7 +18,7 @@ Scenarios.
 1 Open a connection to a store.
 
 2 Create a new calendar for which user Bob can read and user Alice can
-read an write.
+read and write.
 
 3 Create several new calendars
 

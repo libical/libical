@@ -112,7 +112,7 @@ static void convert_floating_time_to_utc(struct icaltimetype *itt)
     icaltime_t t;
 
     /* We assume the floating time is using the current Unix timezone.
-       So we convert to a icaltime_t using icalmktime(), and then back to a struct tm
+       So we convert to an icaltime_t using icalmktime(), and then back to a struct tm
        using icalgmtime_r, so it is the UTC time. */
     tmp_tm.tm_year = itt->year - 1900;
     tmp_tm.tm_mon = itt->month - 1;
@@ -122,7 +122,7 @@ static void convert_floating_time_to_utc(struct icaltimetype *itt)
     tmp_tm.tm_sec = itt->second;
     tmp_tm.tm_isdst = -1;
 
-    /* Convert to a icaltime_t. */
+    /* Convert to an icaltime_t. */
     t = icalmktime(&tmp_tm);
 
     /* Now convert back to a struct tm, but with a UTC time. */

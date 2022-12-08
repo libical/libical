@@ -79,7 +79,7 @@
   Next_day() differs from next_hour because it does not use the BYDAY
   array to select an appropriate day. Instead, it returns every day (
   incrementing by 1 if the frequency is not DAILY with INTERVAL!=1)
-  Any days that are not specified in an non-empty BYDAY array are
+  Any days that are not specified in a non-empty BYDAY array are
   filtered out later.
 
   Generally, the flow of these routine is for a next_* call a next_*

@@ -793,7 +793,7 @@ static void sspm_make_part(struct mime_impl *impl,
                 strcpy(data, line);
             }
 
-            /* add a end-of-string after the data, just in case binary
+            /* add an end-of-string after the data, just in case binary
                data from decode64 gets passed to a string handling
                routine in add_line  */
             data[*size + 1] = '\0';

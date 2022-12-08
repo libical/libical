@@ -215,7 +215,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_first_real_component(icalco
 /**     @brief Gets the timespan covered by this component, in UTC.
  *
  *      See icalcomponent_foreach_recurrence() for a better way to
- *      extract spans from an component.
+ *      extract spans from a component.
  *
  *      This method can be called on either a VCALENDAR or any real
  *      component. If the VCALENDAR contains no real component, but

@@ -219,7 +219,7 @@
         <parameter type="const gint" name="kind" comment="The kind"/>
         <parameter type="const gchar *" name="str" comment="A string"/>
         <returns type="gint" comment="The enum."/>
-        <comment xml:space="preserve">Converts a integer and string into an enum.</comment>
+        <comment xml:space="preserve">Converts an integer and string into an enum.</comment>
     </method>
     <method name="i_cal_property_status_from_string" corresponds="icalproperty_string_to_status" since="1.0">
         <parameter type="const gchar *" name="str" comment="A string"/>
