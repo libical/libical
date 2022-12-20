@@ -3,7 +3,7 @@
 exclude: ^(zoneinfo/)
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.3.0
+  rev: v4.4.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
@@ -18,12 +18,12 @@ repos:
 #  hooks:
 #  - id: clang-format
 - repo: https://github.com/PyCQA/pylint
-  rev: v2.15.6
+  rev: v2.15.9
   hooks:
   - id: pylint
     exclude: ^(.cmake-format.py)
 - repo: https://github.com/pre-commit/mirrors-autopep8
-  rev: v2.0.0
+  rev: v2.0.1
   hooks:
   - id: autopep8
     exclude: ^(.cmake-format.py)
@@ -44,6 +44,6 @@ repos:
     language: ruby
     files: \.(md|mdown|markdown)$
 - repo: https://github.com/fsfe/reuse-tool
-  rev: v1.0.0
+  rev: v1.1.0
   hooks:
   - id: reuse
