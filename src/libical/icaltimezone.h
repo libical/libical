@@ -199,6 +199,9 @@ LIBICAL_ICAL_EXPORT void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
  * @par Handling the default location the timezone files
  */
 
+/** Gets the directory to look for the zonefiles */
+LIBICAL_ICAL_EXPORT const char *get_zone_directory(void);
+
 /** Sets the directory to look for the zonefiles */
 LIBICAL_ICAL_EXPORT void set_zone_directory(const char *path);
 

@@ -5,6 +5,8 @@ Version 3.0.17 (UNRELEASED):
 ----------------------------
  * Improved Android support
  * Escape commas in x-property TEXT values
+ * New publicly available functions:
+     + get_zone_directory()
 
 Version 3.0.16 (17 October 2022):
 ---------------------------------

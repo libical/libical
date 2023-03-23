@@ -170,7 +170,7 @@ static void icaltimezone_parse_zone_tab(void);
 static char *icaltimezone_load_get_line_fn(char *s, size_t size, void *data);
 
 static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size);
-static const char *get_zone_directory(void);
+static const char *get_zone_directory_builtin(void);
 
 static void icaltimezone_builtin_lock(void)
 {
@@ -1686,7 +1686,7 @@ static void icaltimezone_parse_zone_tab(void)
         zonedir = icaltzutil_get_zone_directory();
         zonetab = ZONES_TAB_SYSTEM_FILENAME;
     } else {
-        zonedir = get_zone_directory();
+        zonedir = get_zone_directory_builtin();
         zonetab = ZONES_TAB_FILENAME;
     }
 
@@ -1837,7 +1837,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
         FILE *fp;
         icalparser *parser;
 
-        filename_len = strlen(get_zone_directory()) + strlen(zone->location) + 6;
+        filename_len = strlen(get_zone_directory_builtin()) + strlen(zone->location) + 6;
 
         filename = (char *)malloc(filename_len);
         if (!filename) {
@@ -1845,7 +1845,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
             goto out;
         }
 
-        snprintf(filename, filename_len, "%s/%s.ics", get_zone_directory(), zone->location);
+        snprintf(filename, filename_len, "%s/%s.ics", get_zone_directory_builtin(), zone->location);
 
         fp = fopen(filename, "r");
         free(filename);
@@ -2014,7 +2014,7 @@ static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size)
     }
 }
 
-static const char *get_zone_directory(void)
+static const char *get_zone_directory_builtin(void)
 {
 #if !defined(_WIN32)
     return zone_files_directory == NULL ? ZONEINFO_DIRECTORY : zone_files_directory;
@@ -2147,6 +2147,15 @@ static const char *get_zone_directory(void)
 #endif
     return ZONEINFO_DIRECTORY;
 #endif
+}
+
+const char *get_zone_directory(void)
+{
+    if (use_builtin_tzdata) {
+        return get_zone_directory_builtin();
+    } else {
+        return icaltzutil_get_zone_directory();
+    }
 }
 
 void set_zone_directory(const char *path)
