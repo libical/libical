@@ -22,7 +22,7 @@ image:
   #- Visual Studio 2013 #disable since Ninja is not available
   - Ubuntu2004
   - Visual Studio 2019
-  - macos
+  - macos-monterey
 
 # scripts that are called at very beginning, before repo cloning
 init:
