@@ -172,6 +172,10 @@
         <returns type="gchar *" comment="The name of vtimezone."/>
         <comment xml:space="preserve">Gets the name of the vtimezone in component.</comment>
     </method>
+    <method name="i_cal_timezone_get_zone_directory" corresponds="get_zone_directory" kind="others" since="3.0.17">
+        <returns type="const gchar *" comment="The path to look for the zonefiles"/>
+        <comment xml:space="preserve">Gets the directory to look for the zonefiles.</comment>
+    </method>
     <method name="i_cal_timezone_set_zone_directory" corresponds="set_zone_directory" kind="others" since="1.0">
         <parameter type="const gchar *" name="path" comment="The path to look for the zonefiles"/>
         <comment xml:space="preserve">Sets the directory to look for the zonefiles.</comment>
