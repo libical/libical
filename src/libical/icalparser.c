@@ -1335,6 +1335,28 @@ char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
 
 icalcomponent *icalparser_parse_string(const char *str)
 {
+    if (str == 0) {
+        return 0;
+    }
+  
+    // Ignore leading space / form-feeds / new-lines
+    const char *strStart = str;
+    while (isspace((unsigned char) *strStart) || *strStart == '\f' || *strStart == '\n' || *strStart == '\r') {
+      strStart++;
+    }
+  
+    // All spaces?
+    if (*strStart == 0) {
+      return 0;
+    }
+  
+    // basic validation
+    size_t beginSize = strlen("BEGIN");
+    int startIndex = strncasecmp(strStart, "BEGIN", beginSize);
+    if (startIndex != 0) {
+      return 0;
+    }
+  
     icalcomponent *c;
     struct slg_data d;
     icalparser *p;
@@ -1342,7 +1364,7 @@ icalcomponent *icalparser_parse_string(const char *str)
     icalerrorstate es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
 
     d.pos = 0;
-    d.str = str;
+    d.str = strStart;
 
     p = icalparser_new();
     if (!p)
