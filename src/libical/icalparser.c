@@ -1340,27 +1340,27 @@ icalcomponent *icalparser_parse_string(const char *str)
     icalparser *p;
 
     icalerrorstate es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
-  
+
     if (str == 0) {
-      goto error;
+        goto error;
     }
-  
+
     // Ignore leading space / form-feeds / new-lines
     const char *strStart = str;
     while (isspace((unsigned char) *strStart) || *strStart == '\f' || *strStart == '\n' || *strStart == '\r') {
-      strStart++;
+        strStart++;
     }
-  
+
     // All spaces?
     if (*strStart == 0) {
-      goto error;
+        goto error;
     }
-  
+
     // basic validation
     size_t beginSize = strlen("BEGIN");
     int startIndex = strncasecmp(strStart, "BEGIN", beginSize);
     if (startIndex != 0) {
-      goto error;
+        goto error;
     }
 
     d.pos = 0;
@@ -1381,9 +1381,9 @@ icalcomponent *icalparser_parse_string(const char *str)
     icalparser_free(p);
 
     return c;
-  
-  error:
-    icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
-    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-    return NULL;
+
+    error:
+        icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return NULL;
 }
