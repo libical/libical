@@ -8,7 +8,9 @@
 "PREF","3","int",
 "ALTID","4","const char*",
 "PID","5","const char*",,is_multivalued
-"TYPE","6","vcardparameter_type","X=20100;WORK;HOME;TEXT;VOICE;FAX;CELL;VIDEO;PAGER;TEXTPHONE;CONTACT;ACQUIANTANCE;FRIEND;MET;CO-WORKER;COLLEAGUE;CO-RESIDENT;NEIGHBOR;CHILD;SIBLING;SPOUSE;KIN;MUSE;CRUSH;DATE;SWEETHEART;ME;AGENT;EMERGENCY;NONE=20199",is_multivalued
+"#TYPE=MAIN-NUMBER from RFC 7852",,,,
+"#TYPE=BILLING.DELIVERY from draft-ietf-calext-jscontact",,,,
+"TYPE","6","vcardparameter_type","X=20100;WORK;HOME;TEXT;VOICE;FAX;CELL;VIDEO;PAGER;TEXTPHONE;CONTACT;ACQUIANTANCE;FRIEND;MET;CO-WORKER;COLLEAGUE;CO-RESIDENT;NEIGHBOR;CHILD;SIBLING;SPOUSE;KIN;MUSE;CRUSH;DATE;SWEETHEART;ME;AGENT;EMERGENCY;MAIN-NUMBER;BILLING;DELIVERY;NONE=20199",is_multivalued
 "MEDIATYPE","7","const char*",
 "CALSCALE","8","vcardparameter_calscale","X=20200;GREGORIAN;NONE=20299"
 "SORT-AS","9","const char*",,is_multivalued
@@ -33,6 +35,9 @@
 
 "#RDAP Extensions","RFC 8605 Section 3.1",,,
 "CC","20","const char*"
+
+"#JSContact Conversion", "draft-ietf-calext-jscontact-vcard Section 3.2.2",
+"JSPTR","21","const char*"
 
 "#NOTE for updaters.  Preserve the vcardparameter_kind Enum values to aid forward compatibility"
 "# New Enum values for an existing vcardparameter_kind should be inserted before the corresponding NONE value"
