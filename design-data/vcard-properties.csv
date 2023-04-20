@@ -69,4 +69,7 @@
 "#RDAP Extension Properties", "RFC 8605 Section 2",
 "CONTACT-URI","52","URI","URI"
 
+"#JSContact Conversion", "draft-ietf-calext-jscontact-vcard Section 3.2.1",
+"JSCONTACT-PROP","53","TEXT","TEXT"
+
 "#NOTE for updaters.  Preserve the vcardproperty_kind Enum values to aid forward compatibility"
