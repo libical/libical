@@ -17,6 +17,7 @@
 "GEO","10","const char*",
 "TZ","11","const char*",
 "X","12","const char*",
+"LABEL","22","const char*",
 
 "#In practice any unknown parameter that is not an xparam is treated as an ianaparam"
 "IANA","13","const char*",
