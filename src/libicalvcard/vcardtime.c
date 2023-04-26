@@ -266,11 +266,15 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
                 strcpy(fmt, "%1$4u");
             }
             else if (*month == '-') {
-                /* year "-" month */
-                ndig = num_digits(month+1);
+                /* year "-" month [ "-" day ] */
+                ndig = num_digits(++month);
 
                 if (ndig == 2) {
                     strcpy(fmt, "%1$4u-%2$2u");
+
+                    if (month[2] == '-') {
+                        strcat(fmt, "-%3$2u");
+                    }
                 }
             }
         }
@@ -358,6 +362,7 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
             else if (ndig == 2) {
                 /* minute */
                 strcpy(fmt, "-%2$2u");
+                t->second = 0;
             }
         }
     }
@@ -372,10 +377,15 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
         else if (ndig == 4) {
             /* hour minute */
             strcpy(fmt, "%1$2u%2$2u");
+            t->second = 0;
         }
         else if (ndig == 2) {
-            /* hour */
+            /* hour [ ":" minute ":" second ] */
             strcpy(fmt, "%1$2u");
+
+            if (str[2] == ':') {
+                strcat(fmt, ":%2$2u:%3$2u");
+            }
         }
     }
 
