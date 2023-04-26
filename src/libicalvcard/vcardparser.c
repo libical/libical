@@ -504,7 +504,6 @@ static int _parse_prop_value(struct vcardparser_state *state)
     int is_structured  = vcardproperty_is_structured(prop_kind);
     vcardstructuredtype structured;
     vcardstrarray *textlist;
-    int fieldnum = 0;
     vcardvalue *value;
 
     if (is_multivalued || is_structured) {
@@ -512,12 +511,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
 
         if (is_structured) {
             memset(&structured, 0, sizeof(vcardstructuredtype));
-            structured.field[fieldnum++] = textlist;
-
-            if (prop_kind == VCARD_N_PROPERTY)
-                structured.num_fields = VCARD_NUM_N_FIELDS;
-            else
-                structured.num_fields = VCARD_MAX_STRUCTURED_FIELDS;
+            structured.field[structured.num_fields++] = textlist;
         }
     }
 
@@ -568,7 +562,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
 
                 if (*state->p == ';' && is_multivalued && is_structured) {
                     textlist = vcardstrarray_new(2);
-                    structured.field[fieldnum++] = textlist;
+                    structured.field[structured.num_fields++] = textlist;
                 }
                 INC(1);
                 break;
