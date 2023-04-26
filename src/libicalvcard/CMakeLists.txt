@@ -206,9 +206,7 @@ elseif(STATIC_ONLY)
   add_library(icalvcard-static ALIAS icalvcard)
 endif()
 
-if(ICU_FOUND)
-  target_link_libraries(icalvcard ${ICU_LIBRARIES})
-endif()
+target_link_libraries(icalvcard ical)
 
 if ( MSVC )
     target_compile_options(icalvcard PRIVATE /W4 /WX)
