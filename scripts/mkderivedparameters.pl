@@ -185,6 +185,12 @@ sub insert_code
           } elsif ($type =~ /int/) {
               $out .= ", ${ucprefix}_INTEGER_VALUE";
 
+          } elsif ($type =~ /vcardtimetype/) {
+              $out .= ", ${ucprefix}_DATEANDORTIME_VALUE";
+
+          } elsif ($type =~ /vcardstructured/) {
+              $out .= ", ${ucprefix}_STRUCTURED_VALUE";
+
           } else {
               $out .= ", ${ucprefix}_X_VALUE";
           }
@@ -315,6 +321,22 @@ sub insert_code
             "    icalerror_check_arg((param != 0), \"param\");\n$xrange";
 
         $set_code = "((struct ${lcprefix}parameter_impl *)param)->data = v;";
+
+    } elsif ($type =~ /vcardtimetype/) {
+
+        $xrange = "    if (param != 0) {\n       return param->date;\n    } else {\n       return vcardtime_null_datetime();\n    }";
+        $charorenum =
+            "    icalerror_check_arg((param != 0), \"param\");\n$xrange";
+
+        $set_code = "((struct ${lcprefix}parameter_impl *)param)->date = v;";
+
+    } elsif ($type =~ /vcardstructuredtype/) {
+
+        $type =~ s/vcardstructuredtype\*/vcardstructuredtype \*/;
+        $charorenum =
+            "    icalerror_check_arg_rz((param != 0), \"param\");\n    return param->structured;";
+
+        $set_code = "if (param->structured != NULL) {\n        vcardstructured_free(param->structured);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->structured = v;";
 
     } else {
 

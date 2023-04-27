@@ -58,6 +58,9 @@ void vcardparameter_free(vcardparameter *param)
         else
             vcardenumarray_free(param->values);
     }
+    else if (param->structured != 0) {
+        vcardstructured_free(param->structured);
+    }
 
     if (param->x_name != 0) {
         icalmemory_free_buffer((void *)param->x_name);
@@ -492,6 +495,13 @@ int vcardparameter_is_multivalued(vcardparameter *param)
     icalerror_check_arg_rz((param != 0), "param");
 
     return param->is_multivalued;
+}
+
+int vcardparameter_is_structured(vcardparameter *param)
+{
+    icalerror_check_arg_rz((param != 0), "param");
+
+    return (param->value_kind == VCARD_STRUCTURED_VALUE);
 }
 
 /* Everything below this line is machine generated. Do not edit. */
