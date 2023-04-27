@@ -8,6 +8,8 @@
 #include "libical_vcard_export.h"
 #include "vcardenumarray.h"
 #include "vcardstrarray.h"
+#include "vcardstructured.h"
+#include "vcardtime.h"
 
 typedef struct vcardparameter_impl vcardparameter;
 

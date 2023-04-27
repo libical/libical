@@ -15,7 +15,6 @@
 #include "vcardstrarray.h"
 #include "icalerror.h"
 #include "icalmemory.h"
-//#include "icaltime.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -34,6 +33,7 @@ struct vcardparameter_kind_map
 };
 
 #define VCARD_PARAMETER_IS_MULTIVALUED (1U<<0)
+#define VCARD_PARAMETER_IS_STRUCTURED  (1U<<1)
 
 /* This map associates the enumerations for the VALUE parameter with
    the kinds of VALUEs. */
