@@ -9,6 +9,7 @@
 #include "libical_vcard_export.h"
 
 #include "vcardstrarray.h"
+#include "vcardstructured.h"
 #include "vcardtime.h"
 
 typedef enum vcard_n_field {
@@ -43,13 +44,6 @@ typedef enum vcard_clientpidmap_field {
     VCARD_NUM_CLIENTPIDMAP_FIELDS
 } vcard_clientidmap_field;
  
-#define VCARD_MAX_STRUCTURED_FIELDS VCARD_NUM_ADR_FIELDS
-
-typedef struct vcardstructuredtype {
-    unsigned num_fields;
-    vcardstrarray *field[VCARD_MAX_STRUCTURED_FIELDS];
-} vcardstructuredtype;
-
 typedef struct vcardvalue_impl vcardvalue;
 
 LIBICAL_VCARD_EXPORT void vcardvalue_set_x(vcardvalue *value, const char *v);
