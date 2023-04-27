@@ -72,4 +72,12 @@
 "#JSContact Conversion", "draft-ietf-calext-jscontact-vcard Section 3.2.1",
 "JSCONTACT-PROP","53","TEXT","TEXT"
 
+"#JSContact Extensions","draft-ietf-calext-vcard-jscontact-extensions",
+"CONTACT-CHANNEL-PREF","54","CONTACT-CHANNEL-PREF","CONTACT-CHANNEL-PREF"
+"CREATED","55","TIMESTAMP","TIMESTAMP"
+"GRAMMATICAL-GENDER","56","GRAMMATICAL-GENDER","GRAMMATICAL-GENDER"
+"LOCALE","57","TEXT","TEXT"
+"PRONOUNS","58","TEXT","TEXT"
+"SOCIALPROFILE","59","URI","URI"
+
 "#NOTE for updaters.  Preserve the vcardproperty_kind Enum values to aid forward compatibility"

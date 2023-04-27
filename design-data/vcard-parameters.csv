@@ -40,6 +40,15 @@
 "#JSContact Conversion", "draft-ietf-calext-jscontact-vcard Section 3.2.2",
 "JSPTR","21","const char*"
 
+"#JSContact Extensions","draft-ietf-calext-vcard-jscontact-extensions",,,
+"AUTHOR","23","const char*"
+"AUTHOR-NAME","24","const char*"
+"CREATED","25","vcardtimetype"
+"DERIVED","26","vcardparameter_derived","X=20600;TRUE;FALSE;NONE=20699"
+"RANKS","27","vcardstructuredtype*",,is_structured
+"PROP-ID","28","const char*"
+"SERVICE-TYPE","29","const char*"
+
 "#NOTE for updaters.  Preserve the vcardparameter_kind Enum values to aid forward compatibility"
 "# New Enum values for an existing vcardparameter_kind should be inserted before the corresponding NONE value"
 "# New vcardparamter_kind types should start their Enum value after the highest NONE value (currently 20699)"
