@@ -625,4 +625,6 @@ LIBICAL_VCARD_EXPORT vcardvalue_kind vcardparameter_kind_value_kind(const vcardp
 
 LIBICAL_VCARD_EXPORT int vcardparameter_is_multivalued(vcardparameter *param);
 
+LIBICAL_VCARD_EXPORT int vcardparameter_is_structured(vcardparameter *param);
+
 #endif
