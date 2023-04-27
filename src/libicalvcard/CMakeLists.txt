@@ -177,6 +177,8 @@ set(icalvcard_LIB_SRCS
   vcardproperty.h
   vcardstrarray.c
   vcardstrarray.h
+  vcardstructured.c
+  vcardstructured.h
   vcardtime.c
   vcardtime.h
   vcardvalue.c
@@ -259,6 +261,7 @@ install(FILES
   vcardparser.h
   vcardproperty.h
   vcardstrarray.h
+  vcardstructured.h
   vcardvalue.h
   DESTINATION
   ${INCLUDE_INSTALL_DIR}/libical
