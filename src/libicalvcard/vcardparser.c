@@ -39,7 +39,7 @@ enum parse_error {
     PE_PARAMVALUE_EOL,
     PE_QSTRING_EOF,
     PE_QSTRING_EOL,
-    PE_QSTRING_COMMA,
+    PE_QSTRING_EOV,
     PE_ILLEGAL_CHAR,
     PE_NUMERR /* last */
 };
@@ -199,7 +199,8 @@ static int _parse_param_name(struct vcardparser_state *state)
 }
 
 /* just leaves it on the buffer */
-static int _parse_param_quoted(struct vcardparser_state *state, int multivalued)
+static int _parse_param_quoted(struct vcardparser_state *state,
+                               int structured, int multivalued)
 {
     NOTESTART();
 
@@ -271,8 +272,14 @@ static int _parse_param_quoted(struct vcardparser_state *state, int multivalued)
 
         case ',':
             if (multivalued)
-                return PE_QSTRING_COMMA;
+                return PE_QSTRING_EOV;
             /* or fall through, comma isn't special */
+            GCC_FALLTHROUGH
+
+        case ';':
+            if (structured)
+                return PE_QSTRING_EOV;
+            /* or fall through, semi-colon isn't special */
             GCC_FALLTHROUGH
 
         default:
@@ -289,6 +296,16 @@ static int _parse_param_value(struct vcardparser_state *state)
 {
     int multivalued = vcardparameter_is_multivalued(state->param);
     int r;
+
+    vcardstructuredtype *structured = NULL;
+    vcardstrarray *field;
+
+    if (vcardparameter_is_structured(state->param)) {
+        structured = vcardstructured_new();
+        field = vcardstrarray_new(2);
+        structured->field[structured->num_fields++] = field;
+        vcardparameter_set_ranks(state->param, structured);
+    }
 
     while (*state->p) {
 
@@ -342,9 +359,21 @@ static int _parse_param_value(struct vcardparser_state *state)
         case '"':
             INC(1);
             while ((r = _parse_param_quoted(state,
-                                            multivalued)) == PE_QSTRING_COMMA) {
-                vcardparameter_add_value_from_string(state->param,
-                                                     buf_cstring(&state->buf));
+                                            structured != NULL,
+                                            multivalued)) == PE_QSTRING_EOV) {
+                if (structured) {
+                    vcardstrarray_append(field, buf_cstring(&state->buf));
+
+                    if (*state->p == ';') {
+                        field = vcardstrarray_new(2);
+                        structured->field[structured->num_fields++] = field;
+                    }
+                }
+                else {
+                    vcardparameter_add_value_from_string(state->param,
+                                                         buf_cstring(&state->buf));
+                }
+
                 buf_reset(&state->buf);
                 INC(1);
             }
@@ -354,7 +383,10 @@ static int _parse_param_value(struct vcardparser_state *state)
         case ':':
         case ';':
             /* done - end of parameter */
-            if (multivalued) {
+            if (structured) {
+                vcardstrarray_append(field, buf_cstring(&state->buf));
+            }
+            else if (multivalued) {
                 vcardparameter_add_value_from_string(state->param,
                                                      buf_cstring(&state->buf));
             }

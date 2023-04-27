@@ -21,9 +21,11 @@ struct vcardparameter_impl
     vcardvalue_kind value_kind;
     int is_multivalued;
 
-    int data;
-    const char *string;
-    icalarray *values;
+    int data;            /* int or enum */
+    const char *string;  /* string */
+    icalarray *values;   /* array of enums or strings */
+    vcardtimetype date;  /* date, time, date-time, date-and-or-time, timestamp */
+    vcardstructuredtype *structured;
 };
 
 #endif /* VCARDPARAMETER_IMPL */
