@@ -14,10 +14,10 @@ typedef struct vcardtimetype
     int utcoffset;      /* -720 to +840 minutes (-12:00 to +14:00) */
 } vcardtimetype;
 
-#define vcardtimetype_null_timestamp vcardtimetype_null_datetime
+#define vcardtime_null_date()       vcardtime_null_datetime()
+#define vcardtime_null_time()       vcardtime_null_datetime()
+#define vcardtime_null_timestamp()  vcardtime_null_datetime()
 
-LIBICAL_VCARD_EXPORT vcardtimetype vcardtime_null_date(void);
-LIBICAL_VCARD_EXPORT vcardtimetype vcardtime_null_time(void);
 LIBICAL_VCARD_EXPORT vcardtimetype vcardtime_null_datetime(void);
 LIBICAL_VCARD_EXPORT vcardtimetype vcardtime_current_utc_time(void);
 

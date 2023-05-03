@@ -7,23 +7,9 @@
 #include "icalmemory.h"
 #include "vcardtime.h"
 
-vcardtimetype vcardtime_null_date(void)
-{
-    vcardtimetype t = { 0, 0, 0, -1, -1, -1, -1 };
-
-    return t;
-}
-
-vcardtimetype vcardtime_null_time(void)
-{
-    vcardtimetype t = { -1, -1, -1, 0, 0, 0, -1 };
-
-    return t;
-}
-
 vcardtimetype vcardtime_null_datetime(void)
 {
-    vcardtimetype t = { 0, 0, 0, 0, 0, 0, -1 };
+    vcardtimetype t = { -1, -1, -1, -1, -1, -1, -1 };
 
     return t;
 }
