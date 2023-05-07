@@ -345,6 +345,11 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
             }
             sep = ",";
         }
+    } else if (vcardtime_is_valid_time(param->date)) {
+        const char *str = vcardtime_as_vcard_string(param->date, 1);
+
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+
     } else {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         icalmemory_free_buffer(buf);
