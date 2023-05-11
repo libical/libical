@@ -60,3 +60,15 @@ void vcardstrarray_sort(vcardstrarray *array)
     icalarray_sort(array, (int (*)(const void *, const void *)) &strpcmp);
 }
 
+void vcardstrarray_as_vcard_string_r(vcardstrarray *array, const char sep,
+                                     char **buf, char **buf_ptr, size_t *buf_size)
+{
+    size_t i;
+
+    for (i = 0; i < vcardstrarray_size(array); i++) {
+        if (i) icalmemory_append_char(buf, buf_ptr, buf_size, sep);
+        icalmemory_append_string(buf, buf_ptr, buf_size,
+                                 vcardstrarray_element_at(array, i));
+    }
+}
+
