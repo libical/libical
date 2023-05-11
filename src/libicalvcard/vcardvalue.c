@@ -11,7 +11,6 @@
 #include "vcardvalueimpl.h"
 #include "icalerror.h"
 #include "icalmemory.h"
-//#include "icaltime.h"
 
 #include <ctype.h>
 #include <locale.h>
@@ -603,18 +602,6 @@ static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
     return str;
 }
 
-static void strarray_as_vcard_string_r(vcardstrarray *array, const char sep,
-                                       char **buf, char **buf_ptr, size_t *buf_size)
-{
-    size_t i;
-
-    for (i = 0; i < vcardstrarray_size(array); i++) {
-        if (i) icalmemory_append_char(buf, buf_ptr, buf_size, sep);
-        icalmemory_append_string(buf, buf_ptr, buf_size,
-                                 vcardstrarray_element_at(array, i));
-    }
-}
-
 static char *vcardvalue_textlist_as_vcard_string_r(const vcardvalue *value,
                                                    const char sep)
 {
@@ -628,30 +615,7 @@ static char *vcardvalue_textlist_as_vcard_string_r(const vcardvalue *value,
     buf_size = vcardstrarray_size(array) * 25;  // arbitrary
     buf_ptr = buf = icalmemory_new_buffer(buf_size);
 
-    strarray_as_vcard_string_r(array, sep, &buf, &buf_ptr, &buf_size);
-
-    return buf;
-}
-
-static char *vcardvalue_structured_as_vcard_string_r(const vcardvalue *value)
-{
-    vcardstrarray *array;
-    char *buf, *buf_ptr;
-    size_t buf_size;
-    unsigned i, num_fields;
-
-    icalerror_check_arg_rz((value != 0), "value");
-
-    num_fields = value->data.v_structured.num_fields;
-    buf_size = num_fields * 25;  // arbitrary
-    buf_ptr = buf = icalmemory_new_buffer(buf_size);
-
-    for (i = 0; i < num_fields; i++) {
-        array = value->data.v_structured.field[i];
-        if (i) icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
-        if (array)
-            strarray_as_vcard_string_r(array, ',', &buf, &buf_ptr, &buf_size);
-    }
+    vcardstrarray_as_vcard_string_r(array, sep, &buf, &buf_ptr, &buf_size);
 
     return buf;
 }
@@ -723,7 +687,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
                                                      is_structured ? ';' : ',');
 
     case VCARD_STRUCTURED_VALUE:
-        return vcardvalue_structured_as_vcard_string_r(value);
+        return vcardstructured_as_vcard_string_r((vcardstructuredtype *) &value->data.v_structured);
 
     case VCARD_URI_VALUE:
     case VCARD_LANGUAGETAG_VALUE:
