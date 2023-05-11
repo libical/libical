@@ -15,7 +15,7 @@ typedef icalarray vcardstrarray;
 #define vcardstrarray_element_at(array, position)               \
     *((const char **) icalarray_element_at(array, position))
 
-#define vcardstrarray_size(array) array->num_elements
+#define vcardstrarray_size(array) (array)->num_elements
 
 LIBICAL_VCARD_EXPORT ssize_t vcardstrarray_find(vcardstrarray *array,
                                                 const char *needle);
@@ -35,5 +35,11 @@ LIBICAL_VCARD_EXPORT void vcardstrarray_remove(vcardstrarray *array,
 LIBICAL_VCARD_EXPORT void vcardstrarray_free(vcardstrarray *array);
 
 LIBICAL_VCARD_EXPORT void vcardstrarray_sort(vcardstrarray *array);
+
+LIBICAL_VCARD_EXPORT void vcardstrarray_as_vcard_string_r(vcardstrarray *array,
+                                                          const char sep,
+                                                          char **buf,
+                                                          char **buf_ptr,
+                                                          size_t *buf_size);
 
 #endif /* VCARDSTRARRAY_H */
