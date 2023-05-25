@@ -58,6 +58,7 @@ Version 3.0.17 (UNRELEASED):
 ----------------------------
  * Improved Android support
  * Escape commas in x-property TEXT values
+ * Built-in timezones updated to tzdata2023c
  * New publicly available functions:
      + get_zone_directory()
 

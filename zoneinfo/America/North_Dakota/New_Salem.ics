@@ -2,8 +2,8 @@ BEGIN:VCALENDAR
 PRODID:-//citadel.org//NONSGML Citadel calendar//EN
 VERSION:2.0
 BEGIN:VTIMEZONE
-TZID:/citadel.org/20220930_1/America/North_Dakota/New_Salem
-LAST-MODIFIED:20220930T135922Z
+TZID:/citadel.org/20230525_1/America/North_Dakota/New_Salem
+LAST-MODIFIED:20230525T135641Z
 X-LIC-LOCATION:America/North_Dakota/New_Salem
 BEGIN:DAYLIGHT
 TZNAME:CDT

@@ -2,9 +2,9 @@ BEGIN:VCALENDAR
 PRODID:-//citadel.org//NONSGML Citadel calendar//EN
 VERSION:2.0
 BEGIN:VTIMEZONE
-TZID:/citadel.org/20220930_1/Australia/Yancowinna
-TZID-ALIAS-OF:/citadel.org/20220930_1/Australia/Broken_Hill
-LAST-MODIFIED:20220930T135922Z
+TZID:/citadel.org/20230525_1/Australia/Yancowinna
+TZID-ALIAS-OF:/citadel.org/20230525_1/Australia/Broken_Hill
+LAST-MODIFIED:20230525T135641Z
 X-LIC-LOCATION:Australia/Yancowinna
 BEGIN:STANDARD
 TZNAME:ACST

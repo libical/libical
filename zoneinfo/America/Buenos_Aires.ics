@@ -2,9 +2,9 @@ BEGIN:VCALENDAR
 PRODID:-//citadel.org//NONSGML Citadel calendar//EN
 VERSION:2.0
 BEGIN:VTIMEZONE
-TZID:/citadel.org/20220930_1/America/Buenos_Aires
-TZID-ALIAS-OF:/citadel.org/20220930_1/America/Argentina/Buenos_Aires
-LAST-MODIFIED:20220930T135922Z
+TZID:/citadel.org/20230525_1/America/Buenos_Aires
+TZID-ALIAS-OF:/citadel.org/20230525_1/America/Argentina/Buenos_Aires
+LAST-MODIFIED:20230525T135641Z
 X-LIC-LOCATION:America/Buenos_Aires
 BEGIN:STANDARD
 TZNAME:-03
