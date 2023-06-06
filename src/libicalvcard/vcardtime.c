@@ -24,11 +24,6 @@ vcardtimetype vcardtime_current_utc_time(void)
     return tt;
 }
 
-int vcardtime_is_null_datetime(const vcardtimetype t)
-{
-    return (t.second + t.minute + t.hour + t.day + t.month + t.year == 0);
-}
-
 int vcardtime_is_time(const vcardtimetype t)
 {
     return (t.year == -1 && t.month == -1 && t.day == -1);
@@ -37,6 +32,11 @@ int vcardtime_is_time(const vcardtimetype t)
 int vcardtime_is_date(const vcardtimetype t)
 {
     return (t.hour == -1 && t.minute == -1 && t.second == -1);
+}
+
+int vcardtime_is_null_datetime(const vcardtimetype t)
+{
+    return (vcardtime_is_time(t) && vcardtime_is_date(t));
 }
 
 int vcardtime_is_datetime(const vcardtimetype t)
