@@ -48,6 +48,7 @@
 "RANKS","27","vcardstructuredtype*",,is_structured
 "PROP-ID","28","const char*"
 "SERVICE-TYPE","29","const char*"
+"USERNAME","30","const char*"
 
 "#NOTE for updaters.  Preserve the vcardparameter_kind Enum values to aid forward compatibility"
 "# New Enum values for an existing vcardparameter_kind should be inserted before the corresponding NONE value"
