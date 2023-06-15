@@ -355,22 +355,31 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_UTCOFFSET_VALUE:
         {
-            int t, utcoffset, hours, minutes, seconds;
+            const char *fmt = "%1[+-]%02u%02u%n";
+            const char sign[2];
+            unsigned hour, min;
+            int n, len = strlen(str);
 
-            /* treat the UTCOFSET string as a decimal number, disassemble its digits
-               and reconstruct it as sections */
-            t = strtol(str, 0, 10);
-            /* add phantom seconds field */
-            if (strlen(str) < 7) {
-                t *= 100;
+            if (len == 6) {
+                fmt = "%1[+-]%02u:%02u%n";
             }
-            hours = (t / 10000);
-            minutes = (t - hours * 10000) / 100;
-            seconds = (t - hours * 10000 - minutes * 100);
-            utcoffset = hours * 3600 + minutes * 60 + seconds;
 
-            value = vcardvalue_new_utcoffset(utcoffset);
+            if (3 == sscanf(str, fmt, sign, &hour, &min, &n) && n == len) {
+                int utcoffset = hour * 3600 + min * 60;
 
+                if (*sign == '-') utcoffset = -utcoffset;
+                value = vcardvalue_new_utcoffset(utcoffset);
+            } else if (error != 0) {
+                char temp[TMP_BUF_SIZE];
+                vcardparameter *errParam;
+
+                snprintf(temp, sizeof(temp),
+                         "Could not parse %s as a %s property",
+                         str, vcardvalue_kind_to_string(kind));
+                errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
+                *error = vcardproperty_vanew_xlicerror(temp, errParam, 0);
+                vcardparameter_free(errParam);
+            }
             break;
         }
 
