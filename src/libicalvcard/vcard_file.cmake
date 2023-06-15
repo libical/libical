@@ -5,6 +5,7 @@ set(COMBINEDHEADERSVCARD
   ${TOPS}/src/libicalvcard/vcardstrarray.h
   ${TOPS}/src/libicalvcard/vcardstructured.h
   ${TOPS}/src/libicalvcard/vcardtime.h
+  ${TOPS}/src/libicalvcard/vcardtypes.h
   ${TOPB}/src/libicalvcard/vcardderivedvalue.h
   ${TOPB}/src/libicalvcard/vcardderivedparameter.h
   ${TOPS}/src/libicalvcard/vcardvalue.h
