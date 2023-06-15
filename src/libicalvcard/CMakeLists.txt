@@ -181,6 +181,7 @@ set(icalvcard_LIB_SRCS
   vcardstructured.h
   vcardtime.c
   vcardtime.h
+  vcardtypes.h
   vcardvalue.c
   vcardvalue.h
   vcardvalueimpl.h
@@ -255,6 +256,7 @@ install(FILES
   ${BUILT_HEADERS}
   libical_vcard_export.h
   vcardtime.h
+  vcardtypes.h
   vcardcomponent.h
   vcardenumarray.h
   vcardparameter.h

@@ -65,6 +65,97 @@ vcardstructuredtype *vcardvalue_get_structured(const vcardvalue *value)
     return &((struct vcardvalue_impl *)value)->data.v_structured;
 }
 
+vcardvalue *vcardvalue_new_geo(struct vcardgeotype v)
+{
+    struct vcardvalue_impl *impl = vcardvalue_new_impl(VCARD_GEO_VALUE);
+
+    vcardvalue_set_geo((vcardvalue *) impl, v);
+
+    return (vcardvalue *) impl;
+}
+
+void vcardvalue_set_geo(vcardvalue *value, struct vcardgeotype v)
+{
+    icalerror_check_arg_rv((value != 0), "value");
+
+    if (v.uri) {
+        value->kind = VCARD_URI_VALUE;
+        vcardvalue_set_uri(value, v.uri);
+    } else {
+        vcardstructuredtype geo = {
+            2,  { vcardstrarray_new(1), vcardstrarray_new(1) }
+        };
+
+        vcardstrarray_append(geo.field[0], v.coords.lat);
+        vcardstrarray_append(geo.field[0], v.coords.lon);
+        vcardvalue_set_structured(value, &geo);
+    }
+}
+
+struct vcardgeotype vcardvalue_get_geo(const vcardvalue *impl)
+{
+    struct vcardgeotype geo = { 0 };
+
+    icalerror_check_arg_rx((impl != 0), "value", geo);
+
+    if (impl->kind == VCARD_URI_VALUE) {
+        geo.uri = impl->data.v_string;
+    } else if (impl->kind == VCARD_STRUCTURED_VALUE) {
+        geo.coords.lat =
+            vcardstrarray_element_at(impl->data.v_structured.field[0], 0);
+        geo.coords.lon =
+            vcardstrarray_element_at(impl->data.v_structured.field[1], 0);
+    } else {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+    }
+
+    return geo;
+}
+
+vcardvalue *vcardvalue_new_tz(struct vcardtztype v)
+{
+    struct vcardvalue_impl *impl = vcardvalue_new_impl(VCARD_TZ_VALUE);
+
+    vcardvalue_set_tz((vcardvalue *) impl, v);
+
+    return (vcardvalue *) impl;
+}
+
+void vcardvalue_set_tz(vcardvalue *value, struct vcardtztype v)
+{
+    icalerror_check_arg_rv((value != 0), "value");
+
+    if (v.tzid) {
+        value->kind = VCARD_TEXT_VALUE;
+        vcardvalue_set_text(value, v.tzid);
+    } else if (v.uri) {
+        value->kind = VCARD_URI_VALUE;
+        vcardvalue_set_uri(value, v.uri);
+    } else {
+        value->kind = VCARD_UTCOFFSET_VALUE;
+        vcardvalue_set_utcoffset(value, v.utcoffset);
+    }
+}
+
+struct vcardtztype vcardvalue_get_tz(const vcardvalue *impl)
+{
+    struct vcardtztype tz = { 0 };
+
+    icalerror_check_arg_rx((impl != 0), "value", tz);
+
+    if (impl->kind == VCARD_TEXT_VALUE) {
+        tz.tzid = impl->data.v_string;
+    } else if (impl->kind == VCARD_URI_VALUE) {
+        tz.uri = impl->data.v_string;
+    } else if (impl->kind == VCARD_UTCOFFSET_VALUE) {
+        tz.utcoffset = impl->data.v_int;
+    } else {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+    }
+
+    return tz;
+}
+
 int vcardvalue_kind_is_valid(const vcardvalue_kind kind)
 {
     int i = 0;
