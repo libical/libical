@@ -56,6 +56,7 @@ struct vcardparser_state {
     const char *base;
     const char *itemstart;
     const char *p;
+    const vcardproperty *version;
 
     /* current items */
     vcardcomponent *root;
@@ -490,7 +491,21 @@ static int _parse_prop_name(struct vcardparser_state *state)
                 vcardproperty_set_group(state->prop, group);
 
             /* set default value kind */
-            state->value_kind = vcardproperty_kind_to_value_kind(kind);
+            if (kind == VCARD_GEO_PROPERTY) {
+                if (vcardproperty_get_version(state->version) == VCARD_VERSION_40) {
+                    state->value_kind = VCARD_URI_VALUE;
+                } else {
+                    state->value_kind = VCARD_STRUCTURED_VALUE;
+                }
+            } else if (kind == VCARD_TZ_PROPERTY) {
+                if (vcardproperty_get_version(state->version) == VCARD_VERSION_40) {
+                    state->value_kind = VCARD_TEXT_VALUE;
+                } else {
+                    state->value_kind = VCARD_UTCOFFSET_VALUE;
+                }
+            } else {
+                state->value_kind = vcardproperty_kind_to_value_kind(kind);
+            }
 
             buf_reset(&state->buf);
 
@@ -533,7 +548,8 @@ static int _parse_prop_value(struct vcardparser_state *state)
 {
     vcardproperty_kind prop_kind = vcardproperty_isa(state->prop);
     int is_multivalued = vcardproperty_is_multivalued(prop_kind);
-    int is_structured  = vcardproperty_is_structured(prop_kind);
+    int is_structured  = (state->value_kind == VCARD_STRUCTURED_VALUE) ||
+        vcardproperty_is_structured(prop_kind);
     vcardstructuredtype structured;
     vcardstrarray *textlist;
     vcardvalue *value;
@@ -592,7 +608,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
                 vcardstrarray_append(textlist, buf_cstring(&state->buf));
                 buf_reset(&state->buf);
 
-                if (*state->p == ';' && is_multivalued && is_structured) {
+                if (*state->p == ';' && is_structured) {
                     textlist = vcardstrarray_new(2);
                     structured.field[structured.num_fields++] = textlist;
                 }
@@ -625,11 +641,14 @@ out:
         /* repair critical property values */
         if (prop_kind == VCARD_VERSION_PROPERTY) {
             buf_trim(&state->buf);
+            state->version = state->prop;
         }
 
         value = vcardvalue_new_from_string(state->value_kind,
                                            buf_cstring(&state->buf));
     }
+
+    if (!value) return PE_ILLEGAL_CHAR;
 
     vcardproperty_set_value(state->prop, value);
     buf_reset(&state->buf);

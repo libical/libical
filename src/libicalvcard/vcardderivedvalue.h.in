@@ -11,6 +11,7 @@
 #include "vcardstrarray.h"
 #include "vcardstructured.h"
 #include "vcardtime.h"
+#include "vcardtypes.h"
 
 typedef enum vcard_n_field {
     VCARD_N_FAMILY = 0,
@@ -56,5 +57,13 @@ LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new_structured(vcardstructuredtype *
 LIBICAL_VCARD_EXPORT void vcardvalue_set_structured(vcardvalue *value,
                                                     vcardstructuredtype *v);
 LIBICAL_VCARD_EXPORT vcardstructuredtype *vcardvalue_get_structured(const vcardvalue *value);
+
+LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new_geo(vcardgeotype v);
+LIBICAL_VCARD_EXPORT void vcardvalue_set_geo(vcardvalue *value, vcardgeotype v);
+LIBICAL_VCARD_EXPORT vcardgeotype vcardvalue_get_geo(const vcardvalue *value);
+
+LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new_tz(vcardtztype v);
+LIBICAL_VCARD_EXPORT void vcardvalue_set_tz(vcardvalue *value, vcardtztype v);
+LIBICAL_VCARD_EXPORT vcardtztype vcardvalue_get_tz(const vcardvalue *value);
 
 <insert_code_here>
