@@ -69,7 +69,8 @@ LIBICAL_VCARD_EXPORT void vcardcomponent_remove_property(vcardcomponent *card,
                                                          vcardproperty *property);
 
 LIBICAL_VCARD_EXPORT int vcardcomponent_count_properties(vcardcomponent *card,
-                                                         vcardproperty_kind kind);
+                                                         vcardproperty_kind kind,
+                                                         int ignore_alts);
 
 /***** Working with Components *****/
 
