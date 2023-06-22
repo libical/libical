@@ -215,7 +215,7 @@ static int vcardrestriction_check_component(vcardproperty_version version,
             vcardproperty *prop =
                 vcardcomponent_get_first_property(comp, prop_kind);
 
-            count = vcardcomponent_count_properties(comp, prop_kind);
+            count = vcardcomponent_count_properties(comp, prop_kind, 1);
 
             compare = _check_restriction(comp, record, count, prop);
 
