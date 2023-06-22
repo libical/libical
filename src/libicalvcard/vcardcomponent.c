@@ -313,19 +313,37 @@ void vcardcomponent_remove_property(vcardcomponent *comp, vcardproperty *propert
 }
 
 int vcardcomponent_count_properties(vcardcomponent *comp,
-                                    vcardproperty_kind kind)
+                                    vcardproperty_kind kind,
+                                    int ignore_alts)
 {
     int count = 0;
     pvl_elem itr;
+    vcardstrarray *altids = NULL;
 
     icalerror_check_arg_rz((comp != 0), "component");
 
+    if (ignore_alts) altids = vcardstrarray_new(2);
+
     for (itr = pvl_head(comp->properties); itr != 0; itr = pvl_next(itr)) {
-        if (kind == VCARD_ANY_PROPERTY ||
-            kind == vcardproperty_isa((vcardproperty *) pvl_data(itr))) {
+        vcardproperty *prop = (vcardproperty *) pvl_data(itr);
+
+        if (kind == VCARD_ANY_PROPERTY || kind == vcardproperty_isa(prop)) {
+            if (ignore_alts) {
+                /* Like-properties having the same ALTID only get counted once */
+                vcardparameter *param =
+                    vcardproperty_get_first_parameter(prop,
+                                                      VCARD_ALTID_PARAMETER);
+                const char *altid = param ? vcardparameter_get_altid(param) : "";
+
+                if (vcardstrarray_find(altids, altid) != -1) continue;
+
+                vcardstrarray_append(altids, altid);
+            }
             count++;
         }
     }
+
+    if (ignore_alts) vcardstrarray_free(altids);
 
     return count;
 }
