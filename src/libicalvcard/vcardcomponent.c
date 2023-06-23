@@ -827,3 +827,50 @@ void vcardcomponent_normalize(vcardcomponent *comp)
     pvl_free(comp->components);
     comp->components = sorted_comps;
 }
+
+/******************** Convenience routines **********************/
+
+enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *card)
+{
+    vcardproperty *prop;
+
+    icalerror_check_arg_rz(card != 0, "card");
+
+    prop = vcardcomponent_get_first_property(card, VCARD_VERSION_PROPERTY);
+
+    if (prop == 0) {
+        return 0;
+    }
+
+    return vcardproperty_get_version(prop);
+}
+
+const char *vcardcomponent_get_uid(vcardcomponent *card)
+{
+    vcardproperty *prop;
+
+    icalerror_check_arg_rz(card != 0, "card");
+
+    prop = vcardcomponent_get_first_property(card, VCARD_UID_PROPERTY);
+
+    if (prop == 0) {
+        return 0;
+    }
+
+    return vcardproperty_get_uid(prop);
+}
+
+const char *vcardcomponent_get_fn(vcardcomponent *card)
+{
+    vcardproperty *prop;
+
+    icalerror_check_arg_rz(card != 0, "card");
+
+    prop = vcardcomponent_get_first_property(card, VCARD_FN_PROPERTY);
+
+    if (prop == 0) {
+        return 0;
+    }
+
+    return vcardproperty_get_fn(prop);
+}
