@@ -94,8 +94,7 @@ vcardcomponent *vcardcomponent_vanew(vcardcomponent_kind kind, ...)
 
 vcardcomponent *vcardcomponent_new_from_string(const char *str)
 {
-//    return vcardparser_parse_string(str);
-return (void*) str;
+    return vcardparser_parse_string(str);
 }
 
 vcardcomponent *vcardcomponent_clone(const vcardcomponent *old)
