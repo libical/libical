@@ -868,7 +868,7 @@ static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_hea
         /* Error. Multipart headers must have a boundary */
 
         sspm_set_error(parent_header, SSPM_NO_BOUNDARY_ERROR, 0);
-        /* read all of the reamining lines */
+        /* read all of the remaining lines */
         while (sspm_get_next_line(impl) != 0) {
         }
 

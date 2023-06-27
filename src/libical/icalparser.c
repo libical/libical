@@ -541,7 +541,7 @@ char *icalparser_get_line(icalparser *parser,
             if (parser->temp[0] == '\0') {
 
                 if (line[0] != '\0') {
-                    /* There is data in the output, so fall trhough and process it */
+                    /* There is data in the output, so fall through and process it */
                     break;
                 } else {
                     /* No data in output; return and signal that there

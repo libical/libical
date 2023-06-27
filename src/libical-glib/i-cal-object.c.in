@@ -326,7 +326,7 @@ static void i_cal_object_init(ICalObject *iobject)
 
 /**
  * i_cal_object_construct: (skip)
- * @object_type: a GType of an #ICalObject descendat to construct
+ * @object_type: a GType of an #ICalObject descendant to construct
  * @native: a native libical structure
  * @native_destroy_func: a function to be called on @native when it should be freed
  * @is_global_memory: whether @native is a global shared memory structure

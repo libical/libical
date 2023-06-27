@@ -3,7 +3,7 @@ TODOs for libical
 -----------------
 fix Coverity Scan issues
 
-libical treats properties with multiple values incorrecty -- it always
+libical treats properties with multiple values incorrectly -- it always
 separates multiple values into multiple properties. This is not
 acceptable for CATEGORIES and RESOURCES.
 

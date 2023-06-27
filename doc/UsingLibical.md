@@ -1342,7 +1342,7 @@ but does not format properly in output.
 +-------------------------------------+---------------------------------------------------------+
 | void icalcomponent_convert_errors() | Convert some error properties into                      |
 +-------------------------------------+---------------------------------------------------------+
-|                                     | REQUESTS-STATUS proprties to indicate the inability to  |
+|                                     | REQUESTS-STATUS properties to indicate the inability to  |
 +-------------------------------------+---------------------------------------------------------+
 |                                     | process the component as an iTIP request.               |
 +-------------------------------------+---------------------------------------------------------+
