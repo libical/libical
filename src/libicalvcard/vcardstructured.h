@@ -5,7 +5,7 @@
 
 #include "vcardstrarray.h"
 
-#define VCARD_MAX_STRUCTURED_FIELDS 10  // ADR currently uses 7
+#define VCARD_MAX_STRUCTURED_FIELDS 20  // Extended ADR currently uses 18
 
 typedef struct vcardstructuredtype {
     unsigned num_fields;
