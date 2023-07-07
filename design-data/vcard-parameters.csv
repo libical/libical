@@ -9,7 +9,7 @@
 "ALTID","4","const char*",
 "PID","5","const char*",,is_multivalued
 "#TYPE=MAIN-NUMBER from RFC 7852",,,,
-"#TYPE=BILLING.DELIVERY from draft-ietf-calext-jscontact",,,,
+"#TYPE=BILLING,DELIVERY from draft-ietf-calext-vcard-jscontact-extensions",,,,
 "TYPE","6","vcardparameter_type","X=20100;WORK;HOME;TEXT;VOICE;FAX;CELL;VIDEO;PAGER;TEXTPHONE;CONTACT;ACQUIANTANCE;FRIEND;MET;CO-WORKER;COLLEAGUE;CO-RESIDENT;NEIGHBOR;CHILD;SIBLING;SPOUSE;KIN;MUSE;CRUSH;DATE;SWEETHEART;ME;AGENT;EMERGENCY;MAIN-NUMBER;BILLING;DELIVERY;NONE=20199",is_multivalued
 "MEDIATYPE","7","const char*",
 "CALSCALE","8","vcardparameter_calscale","X=20200;GREGORIAN;NONE=20299"
@@ -45,7 +45,7 @@
 "AUTHOR-NAME","24","const char*"
 "CREATED","25","vcardtimetype"
 "DERIVED","26","vcardparameter_derived","X=20600;TRUE;FALSE;NONE=20699"
-"RANKS","27","vcardstructuredtype*",,is_structured
+"FMT","27","vcardstructuredtype*",,is_structured
 "PROP-ID","28","const char*"
 "SERVICE-TYPE","29","const char*"
 "USERNAME","30","const char*"

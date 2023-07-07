@@ -341,10 +341,6 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         value = vcardvalue_new_enum(kind, (int)VCARD_GRAMGENDER_X, str);
         break;
 
-    case VCARD_CONTACTBY_VALUE:
-        value = vcardvalue_new_enum(kind, (int)VCARD_CONTACTBY_X, str);
-        break;
-
     case VCARD_INTEGER_VALUE:
         value = vcardvalue_new_integer(atoi(str));
         break;
@@ -717,7 +713,6 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
     case VCARD_KIND_VALUE:
     case VCARD_VERSION_VALUE:
     case VCARD_GRAMGENDER_VALUE:
-    case VCARD_CONTACTBY_VALUE:
     if (value->x_value != 0) {
             return icalmemory_strdup(value->x_value);
         }
