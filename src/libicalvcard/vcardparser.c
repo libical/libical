@@ -305,7 +305,7 @@ static int _parse_param_value(struct vcardparser_state *state)
         structured = vcardstructured_new();
         field = vcardstrarray_new(2);
         structured->field[structured->num_fields++] = field;
-        vcardparameter_set_fmt(state->param, structured);
+        vcardparameter_set_jscomps(state->param, structured);
     }
 
     while (*state->p) {
