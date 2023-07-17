@@ -19,6 +19,9 @@ typedef enum vcard_n_field {
     VCARD_N_ADDITIONAL,
     VCARD_N_PREFIX,
     VCARD_N_SUFFIX,
+    /* draft-ietf-calext-jscontact-vcard */
+    VCARD_N_SECONDARY,
+    VCARD_N_GENERATION,
     VCARD_NUM_N_FIELDS
 } vcard_n_field;
 
@@ -36,6 +39,7 @@ typedef enum vcard_adr_field {
     VCARD_ADR_REGION,
     VCARD_ADR_POSTAL_CODE,
     VCARD_ADR_COUNTRY,
+    /* draft-ietf-calext-jscontact-vcard */
     VCARD_ADR_ROOM,
     VCARD_ADR_APARTMENT,
     VCARD_ADR_FLOOR,
