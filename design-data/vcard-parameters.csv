@@ -45,7 +45,7 @@
 "AUTHOR-NAME","24","const char*"
 "CREATED","25","vcardtimetype"
 "DERIVED","26","vcardparameter_derived","X=20600;TRUE;FALSE;NONE=20699"
-"FMT","27","vcardstructuredtype*",,is_structured
+"JSCOMPS","27","vcardstructuredtype*",,is_structured
 "PROP-ID","28","const char*"
 "SERVICE-TYPE","29","const char*"
 "USERNAME","30","const char*"
