@@ -176,7 +176,7 @@ char *vcardparameter_as_vcard_string(vcardparameter *param)
  *
  * QSAFE-CHAR   = WSP / %x21 / %x23-7E / NON-US-ASCII
  * ; any character except CTLs and DQUOTE
- * SAFE-CHAR    = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E / NON-US-ASCII
+ * SAFE-CHAR    = WSP / %x21 / %x23-39 / %x3C-7E / NON-US-ASCII
  * ; any character except CTLs, DQUOTE. ";", ":", ","
  * WSP      = SPACE / HTAB
  * NON-US-ASCII       = %x80-F8
@@ -194,8 +194,7 @@ static int vcardparameter_is_safe_char(unsigned char character, int quoted)
         return 1;
     }
     else if (!quoted &&
-             ((character >= 0x23 && character <= 0x2b) ||
-              (character >= 0x2d && character <= 0x39) ||
+             ((character >= 0x23 && character <= 0x39) ||
               (character >= 0x3c && character <= 0x7e))) {
         return 1;
     }
@@ -348,7 +347,7 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     } else if (vcardparameter_is_structured(param)) {
         char *str = vcardstructured_as_vcard_string_r(param->structured);
 
-        icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+        vcardparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, str);
         icalmemory_free_buffer(str);
     } else if (vcardtime_is_valid_time(param->date)) {
         const char *str = vcardtime_as_vcard_string(param->date, 1);
