@@ -16,6 +16,8 @@ LIBICAL_VCARD_EXPORT vcardstructuredtype *vcardstructured_new();
 
 LIBICAL_VCARD_EXPORT char *vcardstructured_as_vcard_string_r(vcardstructuredtype *s);
 
+LIBICAL_VCARD_EXPORT vcardstructuredtype *vcardstructured_from_string(const char *s);
+
 LIBICAL_VCARD_EXPORT void vcardstructured_free(vcardstructuredtype *s);
 
 #endif /* VCARDSTRUCTURED_H */
