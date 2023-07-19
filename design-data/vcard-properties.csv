@@ -70,7 +70,7 @@
 "CONTACT-URI","52","URI","URI"
 
 "#JSContact Conversion", "draft-ietf-calext-jscontact-vcard Section 3.2.1",
-"JSCONTACT-PROP","53","TEXT","TEXT"
+"JSPROP","53","TEXT","TEXT"
 
 "#JSContact Extensions","draft-ietf-calext-vcard-jscontact-extensions",
 "CREATED","54","TIMESTAMP","TIMESTAMP"
