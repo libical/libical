@@ -547,9 +547,9 @@ static int _parse_prop_name(struct vcardparser_state *state)
 static int _parse_prop_value(struct vcardparser_state *state)
 {
     vcardproperty_kind prop_kind = vcardproperty_isa(state->prop);
-    int is_multivalued = vcardproperty_is_multivalued(prop_kind);
-    int is_structured  = (state->value_kind == VCARD_STRUCTURED_VALUE) ||
-        vcardproperty_is_structured(prop_kind);
+    int is_multivalued = (state->value_kind == VCARD_TEXTLIST_VALUE) ||
+        vcardproperty_is_multivalued(prop_kind);
+    int is_structured  = (state->value_kind == VCARD_STRUCTURED_VALUE);
     vcardstructuredtype structured;
     vcardstrarray *textlist;
     vcardvalue *value;
