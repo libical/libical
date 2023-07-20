@@ -319,7 +319,7 @@ static const char *vcardproperty_get_value_kind(vcardproperty *prop)
         kind = vcardparameter_value_to_value_kind(vcardparameter_get_value(val_param));
     }
 
-    if (kind == VCARD_NO_VALUE) {
+    if (kind == VCARD_NO_VALUE && vcardproperty_isa(prop) != VCARD_X_PROPERTY) {
         vcardvalue *value = vcardproperty_get_value(prop);
 
         kind = vcardvalue_isa(value);
