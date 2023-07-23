@@ -74,7 +74,7 @@
 
 "#JSContact Extensions","draft-ietf-calext-vcard-jscontact-extensions",
 "CREATED","54","TIMESTAMP","TIMESTAMP"
-"DEFLANGUAGE","55","TEXT","TEXT"
+"LANGUAGE","55","TEXT","TEXT"
 "GRAMGENDER","56","GRAMGENDER","GRAMGENDER"
 "PRONOUNS","57","TEXT","TEXT"
 "SOCIALPROFILE","58","URI","URI"
