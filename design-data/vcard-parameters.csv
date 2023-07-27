@@ -49,7 +49,9 @@
 "PROP-ID","28","const char*"
 "SERVICE-TYPE","29","const char*"
 "USERNAME","30","const char*"
+"PHONETIC","31","vcardparameter_phonetic","X=20700;IPA;PINY;JYUT;SCRIPT;NONE=20799"
+"SCRIPT","32","const char*"
 
 "#NOTE for updaters.  Preserve the vcardparameter_kind Enum values to aid forward compatibility"
 "# New Enum values for an existing vcardparameter_kind should be inserted before the corresponding NONE value"
-"# New vcardparamter_kind types should start their Enum value after the highest NONE value (currently 20699)"
+"# New vcardparamter_kind types should start their Enum value after the highest NONE value (currently 20799)"
