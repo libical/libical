@@ -9,7 +9,7 @@ ssize_t vcardstrarray_find(vcardstrarray *array,
     size_t i;
 
     for (i = 0; i < array->num_elements; i++) {
-        if (!strcmp(needle, icalarray_element_at(array, i))) return i;
+        if (!strcmp(needle, vcardstrarray_element_at(array, i))) return i;
     }
 
     return -1;
