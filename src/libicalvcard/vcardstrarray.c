@@ -67,8 +67,14 @@ void vcardstrarray_as_vcard_string_r(vcardstrarray *array, const char sep,
 
     for (i = 0; i < vcardstrarray_size(array); i++) {
         if (i) icalmemory_append_char(buf, buf_ptr, buf_size, sep);
-        icalmemory_append_string(buf, buf_ptr, buf_size,
-                                 vcardstrarray_element_at(array, i));
+        const char *p, *str = vcardstrarray_element_at(array, i);
+
+        for (p = str; *p; p++) {
+            if (*p == ',' || *p == ';') {
+                icalmemory_append_char(buf, buf_ptr, buf_size, '\\');
+            }
+            icalmemory_append_char(buf, buf_ptr, buf_size, *p);
+        }
     }
 }
 
