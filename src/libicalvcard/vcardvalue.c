@@ -681,11 +681,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
         return vcardvalue_utcoffset_as_vcard_string_r(value);
 
     case VCARD_TEXT_VALUE:
-        // XXX  Hack until we split structured values
-        if (is_structured)
-            return vcardvalue_string_as_vcard_string_r(value);
-        else
-            return vcardvalue_text_as_vcard_string_r(value);
+        return vcardvalue_text_as_vcard_string_r(value);
 
     case VCARD_TEXTLIST_VALUE:
         return vcardvalue_textlist_as_vcard_string_r(value,
