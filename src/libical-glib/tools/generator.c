@@ -2159,6 +2159,51 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
     return res;
 }
 
+static void generate_checks_file(const gchar *filename, GList *structures /* Structure * */)
+{
+    FILE *file;
+    GString *calls;
+    GList *link, *link2, *link3;
+
+    file = fopen(filename, "wt");
+    if (!file) {
+        g_warning("Failed to open '%s' for writing", filename);
+        return;
+    }
+
+    calls = g_string_new ("");
+
+    fprintf(file, "#include \"libical-glib/libical-glib.h\"\n");
+
+    for (link = structures; link; link = g_list_next(link)) {
+        Structure *str = link->data;
+
+        for (link2 = str->enumerations; link2; link2 = g_list_next (link2)) {
+            Enumeration *enumeration = link2->data;
+            if (g_str_equal(enumeration->nativeName, "CUSTOM"))
+                continue;
+            fprintf(file, "static void test_%s(%s value)\n", enumeration->name, enumeration->nativeName);
+            fprintf(file, "{\n"
+                          "    switch(value){\n");
+            for (link3 = enumeration->elements; link3; link3 = g_list_next (link3)) {
+                const gchar *nativeName = link3->data;
+                fprintf(file, "    case %s: break;\n", nativeName);
+	    }
+            fprintf(file, "    }\n"
+                          "}\n");
+            g_string_append_printf (calls, "    test_%s((%s) %s);\n", enumeration->name, enumeration->nativeName, enumeration->defaultNative ? enumeration->defaultNative : "0");
+        }
+    }
+    fprintf(file, "int main(void)\n"
+                  "{\n"
+                  "%s"
+                  "    return 0;\n"
+                  "}\n", calls->str);
+    fclose(file);
+
+    g_string_free (calls, TRUE);
+}
+
 static gint generate_library(const gchar *apis_dir)
 {
     xmlDoc *doc;
@@ -2300,6 +2345,7 @@ static gint generate_library(const gchar *apis_dir)
         generate_header_and_source(structure, (char *)"");
     }
 
+    generate_checks_file("ical-glib-build-check.c", structures);
  out:
     g_dir_close(dir);
     g_hash_table_destroy(type2kind);
