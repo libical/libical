@@ -108,6 +108,7 @@
 	    <element name="ICAL_METHOD_MODIFY"/>
 	    <element name="ICAL_METHOD_GENERATEUID"/>
 	    <element name="ICAL_METHOD_DELETE"/>
+	    <element name="ICAL_METHOD_POLLSTATUS"/>
 	    <element name="ICAL_METHOD_NONE"/>
 	</enum>
 	<enum name="ICalPropertyParticipanttype" native_name="icalproperty_participanttype" default_native="I_CAL_PARTICIPANTTYPE_NONE">
