@@ -6,7 +6,7 @@
 
 -->
 <structure namespace="ICal" name="Parser" native="icalparser" destroy_func="icalparser_free">
-    <enum name="ICalParserState" native_name="icalparserstate" default_native="I_CAL_PARSER_ERROR">
+    <enum name="ICalParserState" native_name="icalparser_state" default_native="I_CAL_PARSER_ERROR">
         <element name="ICALPARSER_ERROR"/>
         <element name="ICALPARSER_SUCCESS"/>
         <element name="ICALPARSER_BEGIN_COMP"/>
