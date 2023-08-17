@@ -65,6 +65,7 @@
         <element name="ICAL_NAME_PROPERTY"/>
         <element name="ICAL_ORGANIZER_PROPERTY"/>
         <element name="ICAL_OWNER_PROPERTY"/>
+        <element name="ICAL_PARTICIPANTTYPE_PROPERTY"/>
         <element name="ICAL_PERCENTCOMPLETE_PROPERTY"/>
         <element name="ICAL_PERMISSION_PROPERTY"/>
         <element name="ICAL_POLLCOMPLETION_PROPERTY"/>
@@ -982,6 +983,21 @@
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
         <returns type="const gchar *" annotation="transfer none" comment="Get the owner of #ICalProperty."/>
         <comment>Gets the owner of #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_property_new_participanttype" corresponds="icalproperty_new_participanttype" kind="constructor" since="3.1">
+        <parameter type="ICalPropertyParticipanttype" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PARTICIPANTTYPE_PROPERTY holding value @v of type #ICalPropertyParticipanttype</comment>
+    </method>
+    <method name="i_cal_property_get_participanttype" corresponds="icalproperty_get_participanttype" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="ICalPropertyParticipanttype" comment="The value of the @prop of type #ICalPropertyParticipanttype"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PARTICIPANTTYPE_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_participanttype" corresponds="icalproperty_set_participanttype" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="ICalPropertyParticipanttype" name="v" comment="The value of type #ICalPropertyParticipanttype to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PARTICIPANTTYPE_PROPERTY</comment>
     </method>
     <method name="i_cal_property_new_percentcomplete" corresponds="icalproperty_new_percentcomplete" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The percentcomplete"/>

@@ -26,6 +26,7 @@
 	    <element name="ICAL_GEO_VALUE"/>
 	    <element name="ICAL_INTEGER_VALUE"/>
 	    <element name="ICAL_METHOD_VALUE"/>
+	    <element name="ICAL_PARTICIPANTTYPE_VALUE"/>
 	    <element name="ICAL_PERIOD_VALUE"/>
 	    <element name="ICAL_POLLCOMPLETION_VALUE"/>
 	    <element name="ICAL_POLLMODE_VALUE"/>
@@ -108,6 +109,21 @@
 	    <element name="ICAL_METHOD_GENERATEUID"/>
 	    <element name="ICAL_METHOD_DELETE"/>
 	    <element name="ICAL_METHOD_NONE"/>
+	</enum>
+	<enum name="ICalPropertyParticipanttype" native_name="icalproperty_participanttype" default_native="I_CAL_PARTICIPANTTYPE_NONE">
+	    "/>
+	    <element name="ICAL_PARTICIPANTTYPE_X"/>
+	    <element name="ICAL_PARTICIPANTTYPE_ACTIVE"/>
+	    <element name="ICAL_PARTICIPANTTYPE_INACTIVE"/>
+	    <element name="ICAL_PARTICIPANTTYPE_SPONSOR"/>
+	    <element name="ICAL_PARTICIPANTTYPE_CONTACT"/>
+	    <element name="ICAL_PARTICIPANTTYPE_BOOKINGCONTACT"/>
+	    <element name="ICAL_PARTICIPANTTYPE_EMERGENCYCONTACT"/>
+	    <element name="ICAL_PARTICIPANTTYPE_PUBLICITYCONTACT"/>
+	    <element name="ICAL_PARTICIPANTTYPE_PLANNERCONTACT"/>
+	    <element name="ICAL_PARTICIPANTTYPE_PERFORMER"/>
+	    <element name="ICAL_PARTICIPANTTYPE_SPEAKER"/>
+	    <element name="ICAL_PARTICIPANTTYPE_NONE"/>
 	</enum>
 	<enum name="ICalPropertyPollcompletion" native_name="icalproperty_pollcompletion" default_native="I_CAL_POLLCOMPLETION_NONE">
 	    <element name="ICAL_POLLCOMPLETION_X"/>
@@ -433,6 +449,21 @@
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
 		<returns type="ICalPropertyMethod" comment="The method within #ICalValue"/>
 		<comment>Gets the method of #ICalValue.</comment>
+	</method>
+	<method name="i_cal_value_new_participanttype" corresponds="icalvalue_new_participanttype" kind="constructor" since="3.1">
+		<parameter type="ICalPropertyParticipanttype" name="v" comment="An initial value for the new #ICalValue"/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue." />
+		<comment xml:space="preserve">Creates a new #ICalValue of kind %I_CAL_PARTICIPANTTYPE_VALUE holding value @v of type #ICalPropertyParticipanttype</comment>
+	</method>
+	<method name="i_cal_value_get_participanttype" corresponds="icalvalue_get_participanttype" kind="get" since="3.1">
+		<parameter type="const ICalValue *" name="val" comment="An #ICalValue to be queried"/>
+		<returns type="ICalPropertyParticipanttype" comment="The value of the @val of type #ICalPropertyParticipanttype"/>
+		<comment xml:space="preserve">Gets value of the @val of kind %I_CAL_PARTICIPANTTYPE_VALUE</comment>
+	</method>
+	<method name="i_cal_value_set_participanttype" corresponds="icalvalue_set_participanttype" kind="set" since="3.1">
+		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
+		<parameter type="ICalPropertyParticipanttype" name="v" comment="The value of type #ICalPropertyParticipanttype to be set"/>
+		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_PARTICIPANTTYPE_VALUE</comment>
 	</method>
 	<method name="i_cal_value_set_caladdress" corresponds="icalvalue_set_caladdress" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
