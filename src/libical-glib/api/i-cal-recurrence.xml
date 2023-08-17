@@ -32,7 +32,9 @@
         <element name="ICAL_SKIP_OMIT"/>
         <element name="ICAL_SKIP_UNDEFINED"/>
 	</enum>
-    <enum name="ICalRecurrenceArrayMaxValues" native_name="enum icalrecurrence_array_max_values" default_native="I_CAL_RECURRENCE_ARRAY_MAX">
+    <!-- Mark "enum icalrecurrence_array_max_values" as "CUSTOM", to not have it checked
+         in build time due to the below reason. -->
+    <enum name="ICalRecurrenceArrayMaxValues" native_name="CUSTOM" default_native="I_CAL_RECURRENCE_ARRAY_MAX">
 	<element name="ICAL_RECURRENCE_ARRAY_MAX"/>
 	<!-- Skip this one, it confuses git generator (no name for the first,
 	     because it's all part of this one. Furthermore, this one is not

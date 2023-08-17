@@ -167,6 +167,7 @@
         <element name="ICAL_RELTYPE_CHILD"/>
         <element name="ICAL_RELTYPE_SIBLING"/>
         <element name="ICAL_RELTYPE_POLL"/>
+        <element name="ICAL_RELTYPE_SNOOZE"/>
         <element name="ICAL_RELTYPE_NONE"/>
     </enum>
     <enum name="ICalParameterRequired" native_name="icalparameter_required" default_native="I_CAL_REQUIRED_NONE">
