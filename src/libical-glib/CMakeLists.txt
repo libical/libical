@@ -96,6 +96,7 @@ add_custom_command (
     ${LIBICAL_GLIB_SOURCES}
     ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
     ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
+    ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c
   COMMAND
     ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
   DEPENDS ${ical-glib-src-generator_EXE} ${xml_files}
@@ -142,6 +143,20 @@ if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     -DLIBICAL_GLIB_COMPILATION
   )
   target_link_libraries(ical-glib-static ${GLIB_LIBRARIES})
+endif()
+
+include(CheckCCompilerFlag)
+
+check_c_compiler_flag(-Wswitch-enum c_flag_Wswitch_enum_supported)
+check_c_compiler_flag(-Wswitch c_flag_Wswitch_supported)
+if(c_flag_Wswitch_enum_supported AND c_flag_Wswitch_supported)
+  add_executable(ical-glib-build-check ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c)
+  add_dependencies(ical-glib-build-check ical-glib)
+  target_link_libraries(ical-glib-build-check PRIVATE ical-glib ${GLIB_LIBRARIES})
+  target_compile_options(ical-glib-build-check PRIVATE ${GLIB_CFLAGS}
+    -DLIBICAL_GLIB_UNSTABLE_API=1 -Wswitch-enum -Wswitch)
+else()
+  message(WARNING "compiler does not support both -Wswitch-enum and -Wswitch, skipping libical-glib-build-check")
 endif()
 
 # GObject Introspection
