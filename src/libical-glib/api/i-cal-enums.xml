@@ -38,6 +38,12 @@
         <element name="ICAL_VPOLL_COMPONENT"/>
         <element name="ICAL_VVOTER_COMPONENT"/>
         <element name="ICAL_XVOTE_COMPONENT"/>
+        <element name="ICAL_VPATCH_COMPONENT"/>
+        <element name="ICAL_XPATCH_COMPONENT"/>
+        <element name="ICAL_PARTICIPANT_COMPONENT"/>
+        <element name="ICAL_VLOCATION_COMPONENT"/>
+        <element name="ICAL_VRESOURCE_COMPONENT"/>
+        <element name="ICAL_NUM_COMPONENT_TYPES"/>
     </enum>
     <enum name="ICalRequestStatus" native_name="icalrequeststatus" default_native="I_CAL_UNKNOWN_STATUS">
         <element name="ICAL_UNKNOWN_STATUS"/>
