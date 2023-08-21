@@ -31,6 +31,7 @@
 	    <element name="ICAL_POLLCOMPLETION_VALUE"/>
 	    <element name="ICAL_POLLMODE_VALUE"/>
 	    <element name="ICAL_PROXIMITY_VALUE"/>
+	    <element name="ICAL_RESOURCETYPE_VALUE"/>
 	    <element name="ICAL_QUERY_VALUE"/>
 	    <element name="ICAL_QUERYLEVEL_VALUE"/>
 	    <element name="ICAL_RECUR_VALUE"/>
@@ -153,6 +154,14 @@
 	    <element name="ICAL_QUERYLEVEL_CALQL1"/>
 	    <element name="ICAL_QUERYLEVEL_CALQLNONE"/>
 	    <element name="ICAL_QUERYLEVEL_NONE"/>
+	</enum>
+	<enum name="ICalPropertyResourcetype" native_name="icalproperty_resourcetype" default_native="I_CAL_RESOURCETYPE_NONE">
+	    <element name="ICAL_RESOURCETYPE_X"/>
+	    <element name="ICAL_RESOURCETYPE_ROOM"/>
+	    <element name="ICAL_RESOURCETYPE_PROJECTOR"/>
+	    <element name="ICAL_RESOURCETYPE_REMOTECONFERENCEAUDIO"/>
+	    <element name="ICAL_RESOURCETYPE_REMOTECONFERENCEVIDEO"/>
+	    <element name="ICAL_RESOURCETYPE_NONE"/>
 	</enum>
 	<enum name="ICalPropertyStatus" native_name="icalproperty_status" default_native="I_CAL_STATUS_NONE">
 	    <element name="ICAL_STATUS_X"/>
@@ -489,6 +498,21 @@
 		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
 		<parameter type="ICalPropertyProximity" name="v" comment="The value of type #ICalPropertyProximity to be set"/>
 		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_PROXIMITY_VALUE</comment>
+	</method>
+	<method name="i_cal_value_new_resourcetype" corresponds="icalvalue_new_resourcetype" kind="constructor" since="3.1">
+		<parameter type="ICalPropertyResourcetype" name="v" comment="An initial value for the new #ICalValue"/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue." />
+		<comment xml:space="preserve">Creates a new #ICalValue of kind %I_CAL_RESOURCETYPE_VALUE holding value @v of type #ICalPropertyResourcetype</comment>
+	</method>
+	<method name="i_cal_value_get_resourcetype" corresponds="icalvalue_get_resourcetype" kind="get" since="3.1">
+		<parameter type="const ICalValue *" name="val" comment="An #ICalValue to be queried"/>
+		<returns type="ICalPropertyResourcetype" comment="The value of the @val of type #ICalPropertyResourcetype"/>
+		<comment xml:space="preserve">Gets value of the @val of kind %I_CAL_RESOURCETYPE_VALUE</comment>
+	</method>
+	<method name="i_cal_value_set_resourcetype" corresponds="icalvalue_set_resourcetype" kind="set" since="3.1">
+		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
+		<parameter type="ICalPropertyResourcetype" name="v" comment="The value of type #ICalPropertyResourcetype to be set"/>
+		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_RESOURCETYPE_VALUE</comment>
 	</method>
 	<method name="i_cal_value_set_caladdress" corresponds="icalvalue_set_caladdress" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
