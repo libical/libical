@@ -111,6 +111,7 @@
         <element name="ICAL_STATUS_PROPERTY"/>
         <element name="ICAL_STORESEXPANDED_PROPERTY"/>
         <element name="ICAL_STRUCTUREDDATA_PROPERTY"/>
+        <element name="ICAL_STYLEDDESCRIPTION_PROPERTY"/>
         <element name="ICAL_SUMMARY_PROPERTY"/>
         <element name="ICAL_TARGET_PROPERTY"/>
         <element name="ICAL_TASKMODE_PROPERTY"/>
@@ -1695,6 +1696,21 @@
         <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
         <parameter type="ICalAttach *" name="v" annotation="transfer none" comment="The value of type #ICalAttach to be set"/>
         <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_STRUCTUREDDATA_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_new_styleddescription" corresponds="icalproperty_new_styleddescription" kind="constructor" since="3.1">
+        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_STYLEDDESCRIPTION_PROPERTY holding value @v</comment>
+    </method>
+    <method name="i_cal_property_get_styleddescription" corresponds="icalproperty_get_styleddescription" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="const gchar *" comment="The value of the @prop"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_STYLEDDESCRIPTION_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_styleddescription" corresponds="icalproperty_set_styleddescription" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="const gchar *" name="v" comment="The value to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_STYLEDDESCRIPTION_PROPERTY</comment>
     </method>
     <method name="i_cal_property_new_summary" corresponds="icalproperty_new_summary" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The summary"/>
