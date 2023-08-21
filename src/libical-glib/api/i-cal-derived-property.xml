@@ -110,6 +110,7 @@
         <element name="ICAL_SOURCE_PROPERTY"/>
         <element name="ICAL_STATUS_PROPERTY"/>
         <element name="ICAL_STORESEXPANDED_PROPERTY"/>
+        <element name="ICAL_STRUCTUREDDATA_PROPERTY"/>
         <element name="ICAL_SUMMARY_PROPERTY"/>
         <element name="ICAL_TARGET_PROPERTY"/>
         <element name="ICAL_TASKMODE_PROPERTY"/>
@@ -1675,6 +1676,25 @@
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
         <returns type="const gchar *" annotation="transfer none" comment="Get the storesexpanded of #ICalProperty."/>
         <comment>Gets the storesexpanded of #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_property_new_structureddata" corresponds="CUSTOM" kind="constructor" since="3.1">
+        <parameter type="ICalAttach *" name="v" annotation="transfer none" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_STRUCTUREDDATA_PROPERTY holding value @v of type #ICalAttach</comment>
+        <custom>	ICalProperty *property;
+	g_return_val_if_fail (I_CAL_IS_ATTACH (v), NULL);
+	property = i_cal_property_new_full (icalproperty_new_structureddata (i_cal_object_get_native ((ICalObject *)v)), NULL);
+	return property;</custom>
+    </method>
+    <method name="i_cal_property_get_structureddata" corresponds="icalproperty_get_structureddata" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="ICalAttach *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The value of the @prop of type #ICalAttach"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_STRUCTUREDDATA_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_structureddata" corresponds="icalproperty_set_structureddata" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="ICalAttach *" name="v" annotation="transfer none" comment="The value of type #ICalAttach to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_STRUCTUREDDATA_PROPERTY</comment>
     </method>
     <method name="i_cal_property_new_summary" corresponds="icalproperty_new_summary" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The summary"/>
