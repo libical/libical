@@ -75,6 +75,7 @@
         <element name="ICAL_POLLWINNER_PROPERTY"/>
         <element name="ICAL_PRIORITY_PROPERTY"/>
         <element name="ICAL_PRODID_PROPERTY"/>
+        <element name="ICAL_PROXIMITY_PROPERTY"/>
         <element name="ICAL_QUERY_PROPERTY"/>
         <element name="ICAL_QUERYLEVEL_PROPERTY"/>
         <element name="ICAL_QUERYID_PROPERTY"/>
@@ -1133,6 +1134,21 @@
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
         <returns type="const gchar *" annotation="transfer none" comment="Get the prodid of #ICalProperty."/>
         <comment>Gets the prodid of #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_property_new_proximity" corresponds="icalproperty_new_proximity" kind="constructor" since="3.1">
+        <parameter type="ICalPropertyProximity" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PROXIMITY_PROPERTY holding value @v of type #ICalPropertyProximity</comment>
+    </method>
+    <method name="i_cal_property_get_proximity" corresponds="icalproperty_get_proximity" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="ICalPropertyProximity" comment="The value of the @prop of type #ICalPropertyProximity"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PROXIMITY_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_proximity" corresponds="icalproperty_set_proximity" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="ICalPropertyProximity" name="v" comment="The value of type #ICalPropertyProximity to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PROXIMITY_PROPERTY</comment>
     </method>
     <method name="i_cal_property_new_query" corresponds="icalproperty_new_query" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The query"/>
