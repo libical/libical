@@ -58,6 +58,7 @@
         <element name="ICAL_ITIPVERSION_PROPERTY"/>
         <element name="ICAL_LASTMODIFIED_PROPERTY"/>
         <element name="ICAL_LOCATION_PROPERTY"/>
+        <element name="ICAL_LOCATIONTYPE_PROPERTY"/>
         <element name="ICAL_MAXCOMPONENTSIZE_PROPERTY"/>
         <element name="ICAL_MAXDATE_PROPERTY"/>
         <element name="ICAL_MAXRESULTS_PROPERTY"/>
@@ -887,6 +888,21 @@
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
         <returns type="const gchar *" annotation="transfer none" comment="Get the location of #ICalProperty."/>
         <comment>Gets the location of #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_property_new_locationtype" corresponds="icalproperty_new_locationtype" kind="constructor" since="3.1">
+        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_LOCATIONTYPE_PROPERTY holding value @v</comment>
+    </method>
+    <method name="i_cal_property_get_locationtype" corresponds="icalproperty_get_locationtype" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="const gchar *" comment="The value of the @prop"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_LOCATIONTYPE_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_locationtype" corresponds="icalproperty_set_locationtype" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="const gchar *" name="v" comment="The value to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_LOCATIONTYPE_PROPERTY</comment>
     </method>
     <method name="i_cal_property_new_maxcomponentsize" corresponds="icalproperty_new_maxcomponentsize" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The maxcomponentsize"/>
