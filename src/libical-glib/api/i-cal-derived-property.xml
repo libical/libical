@@ -70,6 +70,11 @@
         <element name="ICAL_ORGANIZER_PROPERTY"/>
         <element name="ICAL_OWNER_PROPERTY"/>
         <element name="ICAL_PARTICIPANTTYPE_PROPERTY"/>
+        <element name="ICAL_PATCHDELETE_PROPERTY"/>
+        <element name="ICAL_PATCHORDER_PROPERTY"/>
+        <element name="ICAL_PATCHPARAMETER_PROPERTY"/>
+        <element name="ICAL_PATCHTARGET_PROPERTY"/>
+        <element name="ICAL_PATCHVERSION_PROPERTY"/>
         <element name="ICAL_PERCENTCOMPLETE_PROPERTY"/>
         <element name="ICAL_PERMISSION_PROPERTY"/>
         <element name="ICAL_POLLCOMPLETION_PROPERTY"/>
@@ -1068,6 +1073,81 @@
         <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
         <parameter type="ICalPropertyParticipanttype" name="v" comment="The value of type #ICalPropertyParticipanttype to be set"/>
         <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PARTICIPANTTYPE_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_new_patchdelete" corresponds="icalproperty_new_patchdelete" kind="constructor" since="3.1">
+        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PATCHDELETE_PROPERTY holding value @v</comment>
+    </method>
+    <method name="i_cal_property_get_patchdelete" corresponds="icalproperty_get_patchdelete" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="const gchar *" comment="The value of the @prop"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PATCHDELETE_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_patchdelete" corresponds="icalproperty_set_patchdelete" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="const gchar *" name="v" comment="The value to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PATCHDELETE_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_new_patchorder" corresponds="icalproperty_new_patchorder" kind="constructor" since="3.1">
+        <parameter type="gint" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PATCHORDER_PROPERTY holding value @v</comment>
+    </method>
+    <method name="i_cal_property_get_patchorder" corresponds="icalproperty_get_patchorder" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="gint" comment="The value of the @prop"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PATCHORDER_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_patchorder" corresponds="icalproperty_set_patchorder" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="gint" name="v" comment="The value to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PATCHORDER_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_new_patchparameter" corresponds="icalproperty_new_patchparameter" kind="constructor" since="3.1">
+        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PATCHPARAMETER_PROPERTY holding value @v</comment>
+    </method>
+    <method name="i_cal_property_get_patchparameter" corresponds="icalproperty_get_patchparameter" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="const gchar *" comment="The value of the @prop"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PATCHPARAMETER_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_patchparameter" corresponds="icalproperty_set_patchparameter" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="const gchar *" name="v" comment="The value to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PATCHPARAMETER_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_new_patchtarget" corresponds="icalproperty_new_patchtarget" kind="constructor" since="3.1">
+        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PATCHTARGET_PROPERTY holding value @v</comment>
+    </method>
+    <method name="i_cal_property_get_patchtarget" corresponds="icalproperty_get_patchtarget" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="const gchar *" comment="The value of the @prop"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PATCHTARGET_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_patchtarget" corresponds="icalproperty_set_patchtarget" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="const gchar *" name="v" comment="The value to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PATCHTARGET_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_new_patchversion" corresponds="icalproperty_new_patchversion" kind="constructor" since="3.1">
+        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PATCHVERSION_PROPERTY holding value @v</comment>
+    </method>
+    <method name="i_cal_property_get_patchversion" corresponds="icalproperty_get_patchversion" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="const gchar *" comment="The value of the @prop"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PATCHVERSION_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_patchversion" corresponds="icalproperty_set_patchversion" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="const gchar *" name="v" comment="The value to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PATCHVERSION_PROPERTY</comment>
     </method>
     <method name="i_cal_property_new_percentcomplete" corresponds="icalproperty_new_percentcomplete" kind="constructor" since="1.0">
         <parameter type="gint" name="v" comment="The percentcomplete"/>
