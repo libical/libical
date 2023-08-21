@@ -91,6 +91,7 @@
         <element name="ICAL_REPLYURL_PROPERTY"/>
         <element name="ICAL_REQUESTSTATUS_PROPERTY"/>
         <element name="ICAL_RESOURCES_PROPERTY"/>
+        <element name="ICAL_RESOURCETYPE_PROPERTY"/>
         <element name="ICAL_RESPONSE_PROPERTY"/>
         <element name="ICAL_RESTRICTION_PROPERTY"/>
         <element name="ICAL_RRULE_PROPERTY"/>
@@ -1374,6 +1375,21 @@
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
         <returns type="const gchar *" annotation="transfer none" comment="Get the resources of #ICalProperty."/>
         <comment>Gets the resources of #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_property_new_resourcetype" corresponds="icalproperty_new_resourcetype" kind="constructor" since="3.1">
+        <parameter type="ICalPropertyResourcetype" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_RESOURCETYPE_PROPERTY holding value @v of type #ICalPropertyResourcetype</comment>
+    </method>
+    <method name="i_cal_property_get_resourcetype" corresponds="icalproperty_get_resourcetype" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="ICalPropertyResourcetype" comment="The value of the @prop of type #ICalPropertyResourcetype"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_RESOURCETYPE_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_resourcetype" corresponds="icalproperty_set_resourcetype" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="ICalPropertyResourcetype" name="v" comment="The value of type #ICalPropertyResourcetype to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_RESOURCETYPE_PROPERTY</comment>
     </method>
     <method name="i_cal_property_new_response" corresponds="icalproperty_new_response" kind="constructor" since="2.0">
         <parameter type="gint" name="v" comment="The response"/>
