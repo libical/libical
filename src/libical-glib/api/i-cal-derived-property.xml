@@ -107,6 +107,7 @@
         <element name="ICAL_RRULE_PROPERTY"/>
         <element name="ICAL_SCOPE_PROPERTY"/>
         <element name="ICAL_SEQUENCE_PROPERTY"/>
+        <element name="ICAL_SOURCE_PROPERTY"/>
         <element name="ICAL_STATUS_PROPERTY"/>
         <element name="ICAL_STORESEXPANDED_PROPERTY"/>
         <element name="ICAL_SUMMARY_PROPERTY"/>
@@ -1629,6 +1630,21 @@
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
         <returns type="gint" comment="Get the sequence of #ICalProperty."/>
         <comment>Gets the sequence of #ICalProperty.</comment>
+    </method>
+    <method name="i_cal_property_new_source" corresponds="icalproperty_new_source" kind="constructor" since="3.1">
+        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
+        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_SOURCE_PROPERTY holding value @v</comment>
+    </method>
+    <method name="i_cal_property_get_source" corresponds="icalproperty_get_source" kind="get" since="3.1">
+        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
+        <returns type="const gchar *" comment="The value of the @prop"/>
+        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_SOURCE_PROPERTY</comment>
+    </method>
+    <method name="i_cal_property_set_source" corresponds="icalproperty_set_source" kind="set" since="3.1">
+        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
+        <parameter type="const gchar *" name="v" comment="The value to be set"/>
+        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_SOURCE_PROPERTY</comment>
     </method>
     <method name="i_cal_property_new_status" corresponds="icalproperty_new_status" kind="constructor" since="1.0">
         <parameter type="ICalPropertyStatus" name="v" comment="The status"/>
