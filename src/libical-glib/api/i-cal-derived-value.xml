@@ -30,6 +30,7 @@
 	    <element name="ICAL_PERIOD_VALUE"/>
 	    <element name="ICAL_POLLCOMPLETION_VALUE"/>
 	    <element name="ICAL_POLLMODE_VALUE"/>
+	    <element name="ICAL_PROXIMITY_VALUE"/>
 	    <element name="ICAL_QUERY_VALUE"/>
 	    <element name="ICAL_QUERYLEVEL_VALUE"/>
 	    <element name="ICAL_RECUR_VALUE"/>
@@ -138,6 +139,14 @@
 	    <element name="ICAL_POLLMODE_X"/>
 	    <element name="ICAL_POLLMODE_BASIC"/>
 	    <element name="ICAL_POLLMODE_NONE"/>
+	</enum>
+	<enum name="ICalPropertyProximity" native_name="icalproperty_proximity" default_native="I_CAL_PROXIMITY_NONE">
+	    <element name="ICAL_PROXIMITY_X"/>
+	    <element name="ICAL_PROXIMITY_ARRIVE"/>
+	    <element name="ICAL_PROXIMITY_DEPART"/>
+	    <element name="ICAL_PROXIMITY_CONNECT"/>
+	    <element name="ICAL_PROXIMITY_DISCONNECT"/>
+	    <element name="ICAL_PROXIMITY_NONE"/>
 	</enum>
 	<enum name="ICalPropertyQuerylevel" native_name="icalproperty_querylevel" default_native="I_CAL_QUERYLEVEL_NONE">
 	    <element name="ICAL_QUERYLEVEL_X"/>
@@ -465,6 +474,21 @@
 		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
 		<parameter type="ICalPropertyParticipanttype" name="v" comment="The value of type #ICalPropertyParticipanttype to be set"/>
 		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_PARTICIPANTTYPE_VALUE</comment>
+	</method>
+	<method name="i_cal_value_new_proximity" corresponds="icalvalue_new_proximity" kind="constructor" since="3.1">
+		<parameter type="ICalPropertyProximity" name="v" comment="An initial value for the new #ICalValue"/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue." />
+		<comment xml:space="preserve">Creates a new #ICalValue of kind %I_CAL_PROXIMITY_VALUE holding value @v of type #ICalPropertyProximity</comment>
+	</method>
+	<method name="i_cal_value_get_proximity" corresponds="icalvalue_get_proximity" kind="get" since="3.1">
+		<parameter type="const ICalValue *" name="val" comment="An #ICalValue to be queried"/>
+		<returns type="ICalPropertyProximity" comment="The value of the @val of type #ICalPropertyProximity"/>
+		<comment xml:space="preserve">Gets value of the @val of kind %I_CAL_PROXIMITY_VALUE</comment>
+	</method>
+	<method name="i_cal_value_set_proximity" corresponds="icalvalue_set_proximity" kind="set" since="3.1">
+		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
+		<parameter type="ICalPropertyProximity" name="v" comment="The value of type #ICalPropertyProximity to be set"/>
+		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_PROXIMITY_VALUE</comment>
 	</method>
 	<method name="i_cal_value_set_caladdress" corresponds="icalvalue_set_caladdress" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
