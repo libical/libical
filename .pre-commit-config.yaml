@@ -18,7 +18,7 @@ repos:
 #  hooks:
 #  - id: clang-format
 - repo: https://github.com/PyCQA/pylint
-  rev: v3.0.0a6
+  rev: v3.0.0a7
   hooks:
   - id: pylint
     exclude: ^(.cmake-format.py)
@@ -44,6 +44,6 @@ repos:
     language: ruby
     files: \.(md|mdown|markdown)$
 - repo: https://github.com/fsfe/reuse-tool
-  rev: v1.1.2
+  rev: v2.1.0
   hooks:
   - id: reuse
