@@ -209,6 +209,9 @@ void vcardparameter_set_value_from_string(vcardparameter *param,
     if (param->value_kind == VCARD_INTEGER_VALUE) {
         param->data = atoi(val);
 
+    } else if (param->value_kind == VCARD_DATEANDORTIME_VALUE) {
+        ((struct vcardparameter_impl *)param)->date = vcardtime_from_string(val, 0);
+
     } else if (param->value_kind == VCARD_TEXT_VALUE) {
         ((struct vcardparameter_impl *)param)->string = icalmemory_strdup(val);
 
