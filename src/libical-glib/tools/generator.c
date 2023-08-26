@@ -2171,7 +2171,7 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
         return;
     }
 
-    calls = g_string_new ("");
+    calls = g_string_new("");
 
     fprintf(file, "#include \"libical-glib/libical-glib.h\"\n");
 
@@ -2180,18 +2180,21 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
 
         for (link2 = str->enumerations; link2; link2 = g_list_next (link2)) {
             Enumeration *enumeration = link2->data;
-            if (g_str_equal(enumeration->nativeName, "CUSTOM"))
+            if (g_str_equal(enumeration->nativeName, "CUSTOM")) {
                 continue;
+            }
             fprintf(file, "static void test_%s(%s value)\n", enumeration->name, enumeration->nativeName);
             fprintf(file, "{\n"
                           "    switch(value){\n");
             for (link3 = enumeration->elements; link3; link3 = g_list_next (link3)) {
                 const gchar *nativeName = link3->data;
                 fprintf(file, "    case %s: break;\n", nativeName);
-	    }
+            }
             fprintf(file, "    }\n"
                           "}\n");
-            g_string_append_printf (calls, "    test_%s((%s) %s);\n", enumeration->name, enumeration->nativeName, enumeration->defaultNative ? enumeration->defaultNative : "0");
+            g_string_append_printf(calls, "    test_%s((%s) %s);\n",
+                                   enumeration->name, enumeration->nativeName,
+                                   enumeration->defaultNative ? enumeration->defaultNative : "0");
         }
     }
     fprintf(file, "int main(void)\n"
@@ -2201,7 +2204,7 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
                   "}\n", calls->str);
     fclose(file);
 
-    g_string_free (calls, TRUE);
+    g_string_free(calls, TRUE);
 }
 
 static gint generate_library(const gchar *apis_dir)
