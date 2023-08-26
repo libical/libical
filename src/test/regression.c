@@ -5347,7 +5347,6 @@ int main(int argc, char *argv[])
     extern int optopt;
 #endif
 #if defined(HAVE_GETOPT)
-    int errflg = 0;
     int c;
 #endif
 /*    char* program_name = strrchr(argv[0],'/'); */
@@ -5391,7 +5390,8 @@ int main(int argc, char *argv[])
         }
         case '?':
         {
-            errflg++;
+            printf("\nUnsupported command line option encountered\n");
+            exit(0);
         }
         }
     }
