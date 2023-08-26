@@ -31,7 +31,6 @@ void send_message(icalcomponent *reply, const char *this_user)
 int main(int argc, char *argv[])
 {
     icalcomponent *c, *next_c = NULL;
-    int i = 0;
     int dont_remove;
     icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
 
@@ -62,7 +61,6 @@ int main(int argc, char *argv[])
 
         inner = icalcomponent_get_first_real_component(c);
 
-        i++;
         reply = 0;
         dont_remove = 0;
 
