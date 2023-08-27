@@ -195,6 +195,7 @@ struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const int
     utc_zone = icaltimezone_get_utc_timezone();
 
     /* Convert the icaltime_t to a struct tm in UTC time. We can trust gmtime for this. */
+    memset(&t, 0, sizeof(struct tm));
     if (!icalgmtime_r(&tm, &t))
         return is_date ? icaltime_null_date () : icaltime_null_time ();
 

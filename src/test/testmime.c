@@ -202,6 +202,7 @@ int main(int argc, char *argv[])
         } d;
 
         size = 0;
+        memset(array, 0, sizeof(array));
         for (i = 0; i < 1024 && !feof(f); ++i) {
             if (fgets(temp, 1024, f) != NULL) {
                 array[i] = strdup(temp);
@@ -289,7 +290,7 @@ int main(int argc, char *argv[])
     }
 
     if (opt.sleepy != 0) {
-        sleep((unsigned int)opt.sleepy);
+        (void)sleep((unsigned int)opt.sleepy);
     }
 
     if (opt.input_file != 0) {

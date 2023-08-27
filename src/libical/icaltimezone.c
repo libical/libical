@@ -1404,7 +1404,6 @@ static struct icaltimetype tm_to_icaltimetype(struct tm *tm)
 
     memset(&itt, 0, sizeof(struct icaltimetype));
 
-    /* cppcheck-suppress ctuuninitvar */
     itt.second = tm->tm_sec;
     itt.minute = tm->tm_min;
     itt.hour = tm->tm_hour;
@@ -1425,6 +1424,7 @@ static int get_offset(icaltimezone *zone)
     int offset;
     const icaltime_t now = icaltime(NULL);
 
+    memset(&local, 0, sizeof(struct tm));
     if (!icalgmtime_r(&now, &local))
         return 0;
 

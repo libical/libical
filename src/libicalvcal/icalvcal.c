@@ -126,6 +126,7 @@ static void convert_floating_time_to_utc(struct icaltimetype *itt)
     t = icalmktime(&tmp_tm);
 
     /* Now convert back to a struct tm, but with a UTC time. */
+    memset(&utc_tm, 0, sizeof(struct tm));
     if (!icalgmtime_r(&t, &utc_tm)) {
         *itt = itt->is_date ? icaltime_null_date () : icaltime_null_time ();
         return;
