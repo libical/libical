@@ -5056,9 +5056,9 @@ int main(int argc, char *argv[])
     extern int optopt;
 #endif
 #if defined(HAVE_GETOPT)
+    int errflg = 0;
     int c;
 #endif
-/*    char* program_name = strrchr(argv[0],'/'); */
     int do_test = 0;
     int do_header = 0;
     int failed_count = 0;
@@ -5088,10 +5088,14 @@ int main(int argc, char *argv[])
         }
         case '?':
         {
-            printf("\nUnsupported command line option encountered\n");
-            exit(0);
+            errflg++;
         }
         }
+    }
+
+    if (errflg > 0) {
+        fprintf(stderr, "Usage: %s [-v|-q|-l]\n", strrchr(argv[0],'/'));
+        exit(1);
     }
 
     if (optind < argc) {
