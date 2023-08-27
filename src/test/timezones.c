@@ -94,6 +94,7 @@ int main(void)
         /* check time conversion for the next 365 days */
         for (day = 0, curr_time = start_time; day < 365; day++, curr_time += 24 * 60 * 60) {
             /* determine date/time with glibc */
+            memset(&curr_tm, 0, sizeof(struct tm));
             localtime_r(&curr_time, &curr_tm);
             /* determine date/time with libical */
             curr_tt = icaltime_from_timet_with_zone(curr_time, 0, utc_zone);
@@ -114,6 +115,7 @@ int main(void)
             if (verbose || curr_failed != failed) {
                 struct tm utc_tm;
 
+                memset(&utc_tm, 0, sizeof(struct tm));
                 if (!gmtime_r(&curr_time, &utc_tm))
                     memset(&utc_tm, 0, sizeof(utc_tm));
 
