@@ -2204,7 +2204,7 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
                   "}\n", calls->str);
     fclose(file);
 
-    g_string_free(calls, TRUE);
+    (void)g_string_free(calls, TRUE);
 }
 
 static gint generate_library(const gchar *apis_dir)
