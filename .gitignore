@@ -2,4 +2,4 @@
 *~
 *.rej
 *.orig
-/build
+build/
