@@ -9,7 +9,7 @@ Copyright: Copyright Contributors to the libical project
 License: LGPL-2.1-only OR MPL-2.0
 
 #tool configuration files
-Files: .clang-tidy .cmake-format.py .codespellrc .dir-locals.el .gitignore .krazy .mdlrc .mdlrc.rb .pre-commit-config.yaml .pylintrc .pep8 .travis.yml appveyor.yml
+Files: .clang-tidy .cmake-format.py .codespellrc .dir-locals.el .gitignore .krazy .mdlrc .mdlrc.rb .pre-commit-config.yaml .pylintrc .pep8 .travis.yml appveyor.yml .github/workflows/build.yml
 Copyright: Copyright Contributors to the libical project
 License: BSD-3-Clause
 
