@@ -18,7 +18,7 @@
 
   icaldirset groups components in to clusters based on their DTSTAMP
   time -- all components that start in the same month are grouped
-  together in a single file. All files in a sotre are kept in a single
+  together in a single file. All files in a store are kept in a single
   directory.
 
   The primary interfaces are icaldirset__get_first_component and
