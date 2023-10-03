@@ -837,7 +837,7 @@ you want to preserve it.
 #### 5.3.1 Time structure
 
 Libical defines its own time structure for storing all dates and times.
-It would have been nice to re-use the C library's struct `tm`, but that
+It would have been nice to reuse the C library's struct `tm`, but that
 structure does not differentiate between dates and times, and between
 local time and UTC. The libical structure is:
 

@@ -206,7 +206,7 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
 
             rel = icalvalue_compare(icalproperty_get_value(p), icalproperty_get_value(targetprop));
 
-            /* Now see if the comparison is equavalent to the comparison
+            /* Now see if the comparison is equivalent to the comparison
                specified in the gauge */
 
             if (rel == compare) {
