@@ -28,6 +28,8 @@
 #define MAXIMUM_ALLOWED_MULTIPLE_VALUES 500
 #define MAXIMUM_ALLOWED_ERRORS 100 // Limit the number of errors created by insert_error
 
+static enum icalparser_ctrl icalparser_ctrl_g = ICALPARSER_CTRL_KEEP;
+
 struct icalparser_impl
 {
     int buffer_full;    /* flag indicates that temp is smaller that
@@ -701,6 +703,47 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         return 0;
     }
 
+    if (icalparser_ctrl_g != ICALPARSER_CTRL_KEEP) {
+	static const unsigned char is_icalctrl[256] = {
+	    1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1,
+	    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	};
+
+        char *c, *d;
+        for (c = d = line; *c; c++) {
+            if (!is_icalctrl[(unsigned char)*c]) {
+                *d++ = *c;
+            } else if (icalparser_ctrl_g == ICALPARSER_CTRL_OMIT) {
+                // omit CTRL character
+            } else {
+                icalcomponent *tail = pvl_data(pvl_tail(parser->components));
+                if (tail) {
+                    insert_error(
+                            parser, tail, line,
+                            "Content line contains invalid CONTROL characters",
+                            ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
+                }
+                parser->state = ICALPARSER_ERROR;
+                return 0;
+            }
+        }
+        *d = '\0';
+    }
+
     /* Begin by getting the property name at the start of the line. The
        property name may end up being "BEGIN" or "END" in which case it
        is not really a property, but the marker for the start or end of
@@ -1359,4 +1402,14 @@ icalcomponent *icalparser_parse_string(const char *str)
     icalparser_free(p);
 
     return c;
+}
+
+enum icalparser_ctrl icalparser_get_ctrl(void)
+{
+    return icalparser_ctrl_g;
+}
+
+void icalparser_set_ctrl(enum icalparser_ctrl ctrl)
+{
+    icalparser_ctrl_g = ctrl;
 }
