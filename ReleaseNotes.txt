@@ -23,6 +23,7 @@ Version 3.1.0 (NOT RELEASED YET):
  * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
  * Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
+ * icalparser_ctrl setting defines how to handle invalid CONTROL characters during parsing
  * New publicly available functions:
     + icalrecurrencetype_encode_day
     + icalrecurrencetype_encode_month
@@ -39,6 +40,8 @@ Version 3.1.0 (NOT RELEASED YET):
     + icalcomponent_get_component_name_r
     + ical_set_invalid_rrule_handling_setting
     + ical_get_invalid_rrule_handling_setting
+    + icalparser_get_ctrl
+    + icalparser_set_ctrl
  * Deprecated functions:
     + caldat (replaced by internal function icaldat_int())
     + juldat (replaced by internal function juldat_int())
