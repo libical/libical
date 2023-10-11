@@ -216,3 +216,8 @@ if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
     setprops(icalrecurtest)
   endif()
 endif()
+
+########### next target ###############
+
+set(icalparser_ctrl_test_SRCS icalparser_ctrl_test.c)
+testme(parser_ctrl "${icalparser_ctrl_test_SRCS}")
