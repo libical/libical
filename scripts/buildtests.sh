@@ -322,6 +322,7 @@ CPPCHECK() {
            --std=c99 \
            --force --error-exitcode=1 --inline-suppr \
            --enable=warning,performance,portability,information \
+           --disable=missingInclude \
            --template='{file}:{line},{severity},{id},{message}' \
            -D sleep="" \
            -D localtime_r="" \
@@ -342,8 +343,7 @@ CPPCHECK() {
            -I $TOP/src/libicalss \
            -I $TOP/src/libicalvcal \
            $TOP/src $BDIR/src/libical/icalderived* 2>&1 | \
-      grep -v 'Found a statement that begins with numeric constant' | \
-      grep -v 'cannot find all the include files' | \
+      grep -v 'will no longer implicitly enable' | \
       grep -v Net-ICal | \
       grep -v icalssyacc\.c  | \
       grep -v icalsslexer\.c | \
