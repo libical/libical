@@ -1481,7 +1481,7 @@ static void icalvcal_traverse_objects(VObject *object,
                                       icalproperty *last_prop, icalvcal_defaults *defaults)
 {
     VObjectIterator iterator;
-    const char *name = "[No Name]";
+    const char *name;
     icalcomponent *subc = 0;
     int i;
 
