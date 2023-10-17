@@ -12,7 +12,7 @@ typedef struct vcardstructuredtype {
     vcardstrarray *field[VCARD_MAX_STRUCTURED_FIELDS];
 } vcardstructuredtype;
 
-LIBICAL_VCARD_EXPORT vcardstructuredtype *vcardstructured_new();
+LIBICAL_VCARD_EXPORT vcardstructuredtype *vcardstructured_new(void);
 
 LIBICAL_VCARD_EXPORT char *vcardstructured_as_vcard_string_r(vcardstructuredtype *s);
 
