@@ -8,7 +8,7 @@
 #define LIBICAL_VCARD_NO_EXPORT
 #else
 #if defined(_MSC_VER) || defined(__CYGWIN__)
-#if defined(libical_ical_EXPORTS)
+#if defined(libical_vcard_EXPORTS)
        /* We are building this library */
 #define LIBICAL_VCARD_EXPORT __declspec(dllexport)
 #else

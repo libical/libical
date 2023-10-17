@@ -1,4 +1,4 @@
-add_definitions(-Dlibicalvcard_EXPORTS)
+add_definitions(-Dlibical_vcard_EXPORTS)
 
 include_directories(
   ${CMAKE_BINARY_DIR}
