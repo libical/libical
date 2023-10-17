@@ -6,7 +6,7 @@
 #include "icalmemory.h"
 #include "vcardstructured.h"
 
-vcardstructuredtype *vcardstructured_new()
+vcardstructuredtype *vcardstructured_new(void)
 {
     vcardstructuredtype *s;
 

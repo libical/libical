@@ -18,7 +18,7 @@
 
 #define TMP_BUF_SIZE 1024
 
-LIBICAL_ICAL_EXPORT struct vcardvalue_impl *vcardvalue_new_impl(vcardvalue_kind kind)
+LIBICAL_VCARD_EXPORT struct vcardvalue_impl *vcardvalue_new_impl(vcardvalue_kind kind)
 {
     struct vcardvalue_impl *v;
 
