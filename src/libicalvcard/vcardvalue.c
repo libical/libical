@@ -193,18 +193,18 @@ static char *icalmemory_strdup_and_dequote(const char *str)
  * TSAFE-CHAR = %x20-21 / %x23-2B / %x2D-39 / %x3C-5B / %x5D-7E / NON-US-ASCII
  * As such, \t\r\b\f are not allowed, not even escaped
  */
-static char *icalmemory_strdup_and_quote(const vcardvalue *value, const char *unquoted_str)
+static char *icalmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_sz,
+                                         const char *unquoted_str, int is_param)
 {
-    char *str;
-    char *str_p;
     const char *p;
-    size_t buf_sz;
 
-    buf_sz = strlen(unquoted_str) + 1;
+    if (!*str) {
+        *buf_sz = strlen(unquoted_str) + 1;
 
-    str_p = str = (char *)icalmemory_new_buffer(buf_sz);
+        *str_p = *str = (char *)icalmemory_new_buffer(*buf_sz);
+    }
 
-    if (str_p == 0) {
+    if (*str_p == 0) {
         return 0;
     }
 
@@ -212,13 +212,14 @@ static char *icalmemory_strdup_and_quote(const vcardvalue *value, const char *un
 
         switch (*p) {
         case '\n':{
-                icalmemory_append_string(&str, &str_p, &buf_sz, "\\n");
+                icalmemory_append_string(str, str_p, buf_sz,
+                                         is_param ? "\n" : "\\n");
                 break;
             }
 
 /*issue74: \t is not escaped, but embedded literally.*/
         case '\t':{
-                icalmemory_append_string(&str, &str_p, &buf_sz, "\t");
+                icalmemory_append_string(str, str_p, buf_sz, "\t");
                 break;
             }
 
@@ -238,26 +239,17 @@ static char *icalmemory_strdup_and_quote(const vcardvalue *value, const char *un
 
         case ';':
         case ',':
-            /* unescaped COMMA is allowed in CATEGORIES property as its
-               considered a list delimiter here, see:
-               https://tools.ietf.org/html/rfc5545#section-3.8.1.2 */
-            if ((vcardproperty_isa(value->parent) == VCARD_CATEGORIES_PROPERTY) ||
-                (vcardproperty_isa(value->parent) == VCARD_NICKNAME_PROPERTY)) {
-                icalmemory_append_char(&str, &str_p, &buf_sz, *p);
-                break;
-            }
-            /* falls through */
 /*issue74, we don't escape double quotes
         case '"':
 */
         case '\\':{
-                icalmemory_append_char(&str, &str_p, &buf_sz, '\\');
-                icalmemory_append_char(&str, &str_p, &buf_sz, *p);
+                icalmemory_append_char(str, str_p, buf_sz, '\\');
+                icalmemory_append_char(str, str_p, buf_sz, *p);
                 break;
             }
 
         default:{
-                icalmemory_append_char(&str, &str_p, &buf_sz, *p);
+                icalmemory_append_char(str, str_p, buf_sz, *p);
             }
         }
     }
@@ -266,8 +258,8 @@ static char *icalmemory_strdup_and_quote(const vcardvalue *value, const char *un
        check *str_p != 0, but that would be an uninitialized memory
        read. */
 
-    icalmemory_append_char(&str, &str_p, &buf_sz, '\0');
-    return str;
+    icalmemory_append_char(str, str_p, buf_sz, '\0');
+    return *str;
 }
 
 /*
@@ -589,7 +581,12 @@ static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value)
 
 static char *vcardvalue_text_as_vcard_string_r(const vcardvalue *value)
 {
-    return icalmemory_strdup_and_quote(value, value->data.v_string);
+    char *str = NULL;
+    char *str_p;
+    size_t buf_sz;
+
+    return icalmemory_strdup_and_quote(&str, &str_p, &buf_sz,
+                                       value->data.v_string, 0);
 }
 
 static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
@@ -607,22 +604,75 @@ static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
     return str;
 }
 
+static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *buf_sz,
+                                             vcardstrarray *array, const char sep,
+                                             int is_param)
+{
+    size_t i;
+
+    for (i = 0; i < vcardstrarray_size(array); i++) {
+        if (i) {
+            *str_p -= 1;  // backup to \0
+            icalmemory_append_char(str, str_p, buf_sz, sep);
+        }
+
+        icalmemory_strdup_and_quote(str, str_p, buf_sz,
+                                    vcardstrarray_element_at(array, i), is_param);
+    }
+}
+
+char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array, const char sep)
+{
+    char *buf = NULL;
+    char *buf_ptr;
+    size_t buf_size;
+
+    _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size,
+                                     (vcardstrarray *) array, sep, 0);
+
+    return buf;
+}
+
+char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, int is_param)
+{
+    char *buf;
+    char *buf_ptr;
+    size_t buf_size = 1;
+    size_t i;
+
+    buf_ptr = buf = (char *)icalmemory_new_buffer(buf_size);
+
+    for (i = 0; i < s->num_fields; i++) {
+        vcardstrarray *array = s->field[i];
+
+        if (i) {
+            buf_ptr -= 1;  // backup to \0
+            icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
+        }
+
+        if (array)
+            _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size,
+                                             array, ',', is_param);
+        else
+            icalmemory_append_char(&buf, &buf_ptr, &buf_size, '\0');
+    }
+
+    return buf;
+}
+
 static char *vcardvalue_textlist_as_vcard_string_r(const vcardvalue *value,
                                                    const char sep)
 {
-    vcardstrarray *array;
-    char *buf, *buf_ptr;
-    size_t buf_size;
-
     icalerror_check_arg_rz((value != 0), "value");
 
-    array = value->data.v_structured.field[0];
-    buf_size = vcardstrarray_size(array) * 25;  // arbitrary
-    buf_ptr = buf = icalmemory_new_buffer(buf_size);
+    return vcardstrarray_as_vcard_string_r(value->data.v_structured.field[0], sep);
+}
 
-    vcardstrarray_as_vcard_string_r(array, sep, &buf, &buf_ptr, &buf_size);
+static char *vcardvalue_structured_as_vcard_string_r(const vcardvalue *value)
+{
+    icalerror_check_arg_rz((value != 0), "value");
 
-    return buf;
+    return vcardstructured_as_vcard_string_r(&value->data.v_structured, 0);
 }
 
 static char *vcardvalue_float_as_vcard_string_r(const vcardvalue *value)
@@ -688,7 +738,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
                                                      is_structured ? ';' : ',');
 
     case VCARD_STRUCTURED_VALUE:
-        return vcardstructured_as_vcard_string_r((vcardstructuredtype *) &value->data.v_structured);
+        return vcardvalue_structured_as_vcard_string_r(value);
 
     case VCARD_URI_VALUE:
     case VCARD_LANGUAGETAG_VALUE:
@@ -716,8 +766,14 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
         return vcardproperty_enum_to_string_r(value->data.v_enum);
 
     case VCARD_X_VALUE:
-        if (value->x_value != 0)
-            return icalmemory_strdup_and_quote(value, value->x_value);
+        if (value->x_value != 0) {
+            char *str = NULL;
+            char *str_p;
+            size_t buf_sz;
+
+            return icalmemory_strdup_and_quote(&str, &str_p, &buf_sz,
+                                               value->x_value, 0);
+        }
 
         /* FALLTHRU */
 
