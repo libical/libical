@@ -36,10 +36,7 @@ LIBICAL_VCARD_EXPORT void vcardstrarray_free(vcardstrarray *array);
 
 LIBICAL_VCARD_EXPORT void vcardstrarray_sort(vcardstrarray *array);
 
-LIBICAL_VCARD_EXPORT void vcardstrarray_as_vcard_string_r(vcardstrarray *array,
-                                                          const char sep,
-                                                          char **buf,
-                                                          char **buf_ptr,
-                                                          size_t *buf_size);
+LIBICAL_VCARD_EXPORT char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array,
+                                                           const char sep);
 
 #endif /* VCARDSTRARRAY_H */
