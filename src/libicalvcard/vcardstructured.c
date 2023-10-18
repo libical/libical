@@ -21,28 +21,6 @@ vcardstructuredtype *vcardstructured_new(void)
     return s;
 }
 
-char *vcardstructured_as_vcard_string_r(vcardstructuredtype *s)
-{
-    vcardstrarray *array;
-    char *buf, *buf_ptr;
-    size_t buf_size;
-    unsigned i, num_fields;
-
-    num_fields = s->num_fields;
-    buf_size = num_fields * 25;  // arbitrary
-    buf_ptr = buf = icalmemory_new_buffer(buf_size);
-
-    for (i = 0; i < num_fields; i++) {
-        array = s->field[i];
-        if (i) icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
-        if (array)
-            vcardstrarray_as_vcard_string_r(array, ',',
-                                            &buf, &buf_ptr, &buf_size);
-    }
-
-    return buf;
-}
-
 vcardstructuredtype *vcardstructured_from_string(const char *s)
 {
     vcardstructuredtype *st = vcardstructured_new();
