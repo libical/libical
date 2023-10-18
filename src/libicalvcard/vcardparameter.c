@@ -345,7 +345,7 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
             sep = ",";
         }
     } else if (vcardparameter_is_structured(param)) {
-        char *str = vcardstructured_as_vcard_string_r(param->structured);
+        char *str = vcardstructured_as_vcard_string_r(param->structured, 1);
 
         vcardparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, str);
         icalmemory_free_buffer(str);
