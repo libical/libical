@@ -42,7 +42,7 @@
  * - For the first line the start time is -infinity.
  * - For the last line the end time is +infinity.
  * - The end time of each line is also the start time of the next.
- * 
+ *
  * We create an array of time changes which occur in this period, including
  * the one implied by the Zone line itself (though this is later taken out
  * if it is found to be at exactly the same time as the first Rule).
@@ -1041,7 +1041,7 @@ expand_tzname				(char		*zone_name,
 }
 
 
-/* Compares 2 VzicTimes, returning strcmp()-like values, i.e. 0 if equal, 
+/* Compares 2 VzicTimes, returning strcmp()-like values, i.e. 0 if equal,
    1 if the 1st is after the 2nd and -1 if the 1st is before the 2nd. */
 static int
 compare_times				(VzicTime	*time1,
@@ -1595,7 +1595,7 @@ check_for_rdates		(FILE		*fp,
     }
 
     /* We have a match. */
-    
+
     tmp_vzictime = *vzictime;
     calculate_actual_time (&tmp_vzictime, TIME_WALL, vzictime->prev_stdoff,
 			   vzictime->prev_walloff);

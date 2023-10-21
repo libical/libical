@@ -1,0 +1,26 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+ci:
+    autoupdate_schedule: monthly
+
+exclude: ^(tzdata2019c/|tzdata2020d/|tzdata2021a/|tzdata2022d/|tzdata2023c/)
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.5.0
+  hooks:
+  - id: trailing-whitespace
+  - id: end-of-file-fixer
+  - id: check-added-large-files
+  - id: check-case-conflict
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.2.6
+  hooks:
+  - id: codespell
+- repo: https://github.com/markdownlint/markdownlint
+  rev: v0.12.0
+  hooks:
+  - id: markdownlint
+    entry: mdl
+    language: ruby
+    files: \.(md|mdown|markdown)$

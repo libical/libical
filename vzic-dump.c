@@ -406,4 +406,3 @@ dump_time_zone_names		(GList		*names,
   if (VzicDumpZoneTranslatableStrings)
     fclose (strings_fp);
 }
-

@@ -30,7 +30,7 @@ TZID_PREFIX ?= /citadel.org/%D_1/
 
 # This is used to indicate how timezone aliases (indicated by a Link line
 # in Olson files) should be generated: The default is to symbolically link
-# the Link zone file to its authorative zone. Alternatively, if set to 0,
+# the Link zone file to its authoritative zone. Alternatively, if set to 0,
 # a VTIMEZONE file is generated for each Link.
 CREATE_SYMLINK ?= 1
 
@@ -102,5 +102,3 @@ clean:
 	-rm -rf vzic $(OBJECTS) *~ ChangesVzic RulesVzic ZonesVzic RulesPerl ZonesPerl test-vzic test-vzic.o
 
 .PHONY: clean perl-dump test-parse
-
-

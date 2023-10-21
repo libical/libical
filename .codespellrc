@@ -1,0 +1,7 @@
+[codespell]
+skip = ./build-*,.git, /tzdata*
+interactive = 3
+ignore-words-list = damon
+uri-ignore-words-list = damon
+#ignore camelCase, regardless. also mixed case words with correct spelling
+ignore-regex = \b([a-z]+[A-Z0-9][a-z0-9]*|Damon|Devine|Nome|IST|TAST)\b

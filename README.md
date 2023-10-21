@@ -1,53 +1,44 @@
+# VZIC README
 
-
-VZIC README
-===========
-
-This is 'vzic', a program to convert the IANA (formerly Olson)
+This is `vzic`, a program to convert the IANA (formerly Olson)
 timezone database files into VTIMEZONE files compatible with the
 iCalendar specification (RFC2445).
 
-(The name is based on the 'zic' program which converts the IANA files into
+(The name is based on the `zic` program which converts the IANA files into
 time zone information files used by several Unix C libraries, including
 glibc. See zic(8) and tzfile(5).)
 
+## REQUIREMENTS
 
-
-REQUIREMENTS
-============
-
-You need the IANA (formely known as Olson) timezone database files (tzdata),
+You need the IANA (formerly known as Olson) timezone database files (tzdata),
 which  can be found at:
 
-  http://www.iana.org/time-zones
+  <http://www.iana.org/time-zones>
 
 Vzic also uses the GLib library (for hash tables, dynamic arrays, and date
 calculations). You need version 2.0 or higher. You can get this from:
 
-  http://www.gtk.org
+  <http://www.gtk.org>
 
+## PREPARATIONS
 
-PREPARATIONS
-============
 gunzip and untar the tzdata file:
+
+```bash
   % mkdir tzdata2014g
   % cd  tzdata2014g; tar xvfz ../tzdata2014g.tar.gz; cd ..
+```
 
-
-BUILDING
-========
+## BUILDING
 
 Edit the Makefile to set the OLSON_DIR (in this case to tzdata2014g),
 PRODUCT_ID and TZID_PREFIX variables.
 
-Then run 'make -B'.
+Then run `make -B`.
 
+## RUNNING
 
-
-RUNNING
-=======
-
-Run './vzic'
+Run `./vzic`
 
 The output is placed in the zoneinfo subdirectory by default,
 but you can use the --output-dir options to set another toplevel output
@@ -65,10 +56,7 @@ NOTE: We don't convert all the IANA files. We skip 'backward', 'etcetera',
 and 'systemv', since these don't really provide any useful timezones.
 See vzic.c.
 
-
-
-MERGING CHANGES INTO A MASTER SET OF VTIMEZONES
-===============================================
+## MERGING CHANGES INTO A MASTER SET OF VTIMEZONES
 
 The IANA timezone files are updated fairly often, so we need to build new
 sets of VTIMEZONE files. Though we have to be careful to ensure that the TZID
@@ -96,10 +84,7 @@ diff the new zones.tab versus the current zones.tab
 Note that some timezones are renamed or removed occasionally, so applications
 should be able to cope with this.
 
-
-
-COMPATIBILITY NOTES
-===================
+## COMPATIBILITY NOTES
 
 It seems that Microsoft Outlook is very picky about the iCalendar files it
 will accept. (I've been testing with Outlook 2000. I hope the other versions
@@ -138,11 +123,9 @@ are no worse.) Here's a few problems we've had with the VTIMEZONEs:
  o Outlook can only handle one RDATE or a pair of RRULEs. So we had to remove
    all historical data.
 
+## TESTING
 
-TESTING
-=======
-
-Do a 'make test-vzic', then run ./test-vzic.
+Do a `make test-vzic`, then run `./test-vzic`.
 
 The test-vzic program compares our libical code and VTIMEZONE data against
 the Unix functions like mktime(). It steps over a period of time (1970-2037)
@@ -159,43 +142,41 @@ so I converted this to VTIMEZONE files and installed it into the libical
 timezone data directory before testing. (You need to use '--pure' when
 creating the VTIMEZONE files as well.)
 
+### Testing the Parsing Code
 
-Testing the Parsing Code
-------------------------
+Run `make test-parse`.
 
-Run 'make test-parse'.
-
-This runs 'vzic --dump' and 'perl-dump' and compares the output. The diff
+This runs `vzic --dump` and `perl-dump` and compares the output. The diff
 commands should not produce any output.
 
-'vzic --dump' dumps all the parsed data out in the original Olson format,
+`vzic --dump` dumps all the parsed data out in the original Olson format,
 but without comments. The files are written into the ZonesVzic and RulesVzic
 subdirectories of the zoneinfo directory.
 
-'make perl-dump' runs the vzic-dump.pl perl script which outputs the files
-in the same format as 'vzic --dump' in the ZonesPerl and RulesPerl
+`make perl-dump` runs the vzic-dump.pl perl script which outputs the files
+in the same format as `vzic --dump` in the ZonesPerl and RulesPerl
 subdirectories. The perl script doesn't actually parse the fields; it only
 strips comments and massages the fields so we have the same output format.
 
 Currently they both produce exactly the same output so we know the parsing
 code is OK.
 
+### Testing the VTIMEZONE Files
 
-Testing the VTIMEZONE Files
----------------------------
+Run `make test-changes`.
 
-Run 'make test-changes'.
-
-This runs 'vzic --dump-changes' and 'test-vzic --dump-changes' and compares
+This runs `vzic --dump-changes` and `test-vzic --dump-changes` and compares
 the output. The diff command should not produce any output.
 
 Both commands output timezone changes for each zone up to a specific year
 (2030) into files for each timezone. It outputs the timezone changes in a
 list in this format:
 
+```text
   Timezone Name        Date and Time of Change in UTC   New Offset from UTC
 
-  America/Dawson	26 Oct 1986	 2:00:00	-0800
+  America/Dawson       26 Oct 1986 2:00:00              -0800
+```
 
 Unfortunately there are some differences here, but they all happen before
 1970 so it doesn't matter too much. It looks like the libical code has
@@ -203,7 +184,4 @@ problems determining things like 'last Sunday of the month' before 1970.
 This is because it uses mktime() etc. which can't really handle dates
 before 1970.
 
-
-
 Damon Chaplin <damon@gnome.org>, 25 Oct 2003.
-

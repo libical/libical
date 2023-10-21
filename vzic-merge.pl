@@ -82,7 +82,7 @@ foreach $new_file (`find -name "*.ics"`) {
 	$master_contents = <MASTERZONEFILE>;
 	$/ = $input_record_separator;
 	close (MASTERZONEFILE);
-	
+
 	$new_contents_copy = $new_contents;
 
 	# Strip the TZID from both contents.
@@ -129,4 +129,3 @@ foreach $new_file (`find -name "*.ics"`) {
     }
 
 }
-

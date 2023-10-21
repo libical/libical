@@ -219,4 +219,3 @@ sub ReadRuleLine {
 
 #    print $rules_fh "$rule\t$name\t$from\t$to\t$type\t$in\t$on\t$at\t$save\t$letter_s\n";
 }
-

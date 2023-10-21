@@ -22,7 +22,7 @@
 
 2003-10-25  Damon Chaplin  <damon@gnome.org>
 
-	* vzic-output.c: 
+	* vzic-output.c:
 	* Makefile: moved the PRODUCT_ID and TZID_PREFIX settings to the
 	Makefile and changed the default so people don't accidentally use
 	the same IDs as Evolution.
@@ -31,7 +31,7 @@
 	of 24:00:00. This is a bit of a kludge to avoid problems, since
 	24:00:00 is not a valid iCalendar time. Since 24:00:00 is only used
 	for a few timezones in the 1930s it doesn't matter too much.
-	
+
 	To write a correct fix we'd need to review all the code that deals
 	with times to see if it would be affected, e.g. a time of 24:00 on
 	one day should be considered equal to 0:00 the next day.

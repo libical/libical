@@ -277,7 +277,7 @@ parse_fields			(ParsingData	*data)
 	    *s++ = ch;
 	  }
 	  p++;
-	}	  
+	}
       } else {
 	*s++ = ch;
       }
@@ -652,7 +652,7 @@ parse_day			(ParsingData	*data,
 	day_part = p + 2;
 	break;
       }
-      
+
       fprintf (stderr, "%s:%i: Invalid day: %s\n%s\n", data->filename,
 	       data->line_number, field, data->line);
       exit (1);
@@ -944,4 +944,3 @@ parse_coord			(char		*coord,
   result[1] = minutes;
   result[2] = seconds;
 }
-
