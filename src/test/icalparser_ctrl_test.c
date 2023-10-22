@@ -18,6 +18,10 @@
 
 #include "libical/ical.h"
 
+#if defined(NDEBUG)
+#undef NDEBUG
+#endif
+
 static void assert_ctrl(enum icalparser_ctrl ctrl,
                         const char *data,
                         const char *want_desc,
