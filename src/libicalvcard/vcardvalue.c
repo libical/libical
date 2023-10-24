@@ -103,10 +103,10 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
     return new;
 }
 
-static char *icalmemory_strdup_and_dequote(const char *str)
+static char *icalmemory_strdup_and_dequote(const char **str, const char *sep)
 {
     const char *p;
-    char *out = (char *)icalmemory_new_buffer(sizeof(char) * strlen(str) + 1);
+    char *out = (char *)icalmemory_new_buffer(sizeof(char) * strlen(*str) + 1);
     char *pout;
     int wroteNull = 0;
 
@@ -116,11 +116,11 @@ static char *icalmemory_strdup_and_dequote(const char *str)
 
     pout = out;
 
-    /* Stop the loop when encountering a terminator in the source string
+    /* Stop the loop when encountering a terminator/separator in the source string
        or if a null has been written to the destination. This prevents
        reading past the end of the source string if the last character
        is a backslash. */
-    for (p = str; !wroteNull && *p != 0; p++) {
+    for (p = *str; !wroteNull && *p != 0; p++) {
 
         if (*p == '\\') {
             p++;
@@ -174,12 +174,16 @@ static char *icalmemory_strdup_and_dequote(const char *str)
                     *pout = ' ';
                 }
             }
+        } else if (sep && strchr(sep, *p)) {
+            break;
         } else {
             *pout = *p;
         }
 
         pout++;
     }
+
+    *str = p;
 
     *pout = '\0';
 
@@ -373,10 +377,51 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_TEXT_VALUE:
         {
-            char *dequoted_str = icalmemory_strdup_and_dequote(str);
+            char *dequoted_str = icalmemory_strdup_and_dequote(&str, NULL);
 
             value = vcardvalue_new_text(dequoted_str);
             icalmemory_free_buffer(dequoted_str);
+            break;
+        }
+
+    case VCARD_TEXTLIST_VALUE:
+        {
+            vcardstrarray *array = vcardstrarray_new(2);
+
+            do {
+                char *dequoted_str = icalmemory_strdup_and_dequote(&str, ",");
+
+                vcardstrarray_append(array, dequoted_str);
+                icalmemory_free_buffer(dequoted_str);
+
+            } while (*str++ != '\0');
+
+            value = vcardvalue_new_textlist(array);
+            break;
+        }
+
+    case VCARD_STRUCTURED_VALUE:
+        {
+            vcardstructuredtype st = { 0 };//vcardstructured_new();
+            vcardstrarray *field = vcardstrarray_new(2);
+
+            st.field[st.num_fields++] = field;
+
+            do {
+                char *dequoted_str = icalmemory_strdup_and_dequote(&str, ",;");
+
+                vcardstrarray_append(field, dequoted_str);
+                icalmemory_free_buffer(dequoted_str);
+
+                if (*str == ';') {
+                    /* end of field */
+                    field = vcardstrarray_new(2);
+                    st.field[st.num_fields++] = field;
+                }
+
+            } while (*str++ != '\0');
+
+            value = vcardvalue_new_structured(&st);
             break;
         }
 
@@ -408,7 +453,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_X_VALUE:
         {
-            char *dequoted_str = icalmemory_strdup_and_dequote(str);
+            char *dequoted_str = icalmemory_strdup_and_dequote(&str, NULL);
 
             value = vcardvalue_new_x(dequoted_str);
             icalmemory_free_buffer(dequoted_str);
