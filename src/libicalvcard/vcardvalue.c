@@ -103,7 +103,7 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
     return new;
 }
 
-static char *icalmemory_strdup_and_dequote(const char **str, const char *sep)
+static char *vcardmemory_strdup_and_dequote(const char **str, const char *sep)
 {
     const char *p;
     char *out = (char *)icalmemory_new_buffer(sizeof(char) * strlen(*str) + 1);
@@ -193,11 +193,14 @@ static char *icalmemory_strdup_and_dequote(const char **str, const char *sep)
 /*
  * Returns a quoted copy of a string
  * @todo This is not RFC5545 compliant.
- * The RFC only allows:
- * TSAFE-CHAR = %x20-21 / %x23-2B / %x2D-39 / %x3C-5B / %x5D-7E / NON-US-ASCII
- * As such, \t\r\b\f are not allowed, not even escaped
+ * RFC 6350 allows:
+ *   TEXT-CHAR = "\\" / "\," / "\n" / WSP / NON-ASCII / %x21-2B / %x2D-5B / %x5D-7E
+ * but we use the more restrictive (for ADR and N):
+ *   component = "\\" / "\," / "\;" / "\n" / WSP / NON-ASCII /
+                 %x21-2B / %x2D-3A / %x3C-5B / %x5D-7E
+ * As such, \b, \f, \r are not allowed, not even escaped
  */
-static char *icalmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_sz,
+static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_sz,
                                          const char *unquoted_str, int is_param)
 {
     const char *p;
@@ -215,46 +218,29 @@ static char *icalmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_s
     for (p = unquoted_str; *p != 0; p++) {
 
         switch (*p) {
-        case '\n':{
-                icalmemory_append_string(str, str_p, buf_sz,
-                                         is_param ? "\n" : "\\n");
-                break;
-            }
+        case '\b':
+        case '\f':
+        case '\r':
+            /* ignore */
+            break;
 
-/*issue74: \t is not escaped, but embedded literally.*/
-        case '\t':{
-                icalmemory_append_string(str, str_p, buf_sz, "\t");
-                break;
-            }
-
-/*issue74: \r, \b and \f are not whitespace and are trashed.*/
-        case '\r':{
-                /*icalmemory_append_string(&str,&str_p,&buf_sz,"\\r"); */
-                break;
-            }
-        case '\b':{
-                /*icalmemory_append_string(&str,&str_p,&buf_sz,"\\b"); */
-                break;
-            }
-        case '\f':{
-                /*icalmemory_append_string(&str,&str_p,&buf_sz,"\\f"); */
-                break;
-            }
-
-        case ';':
+        case '\\':
         case ',':
-/*issue74, we don't escape double quotes
-        case '"':
-*/
-        case '\\':{
-                icalmemory_append_char(str, str_p, buf_sz, '\\');
-                icalmemory_append_char(str, str_p, buf_sz, *p);
-                break;
-            }
+        case ';':
+            /* escape */
+            icalmemory_append_char(str, str_p, buf_sz, '\\');
+            icalmemory_append_char(str, str_p, buf_sz, *p);
+            break;
 
-        default:{
-                icalmemory_append_char(str, str_p, buf_sz, *p);
-            }
+        case '\n':
+            /* If encoding a parameter value, embed literally
+               (parameter encoding is done elsewhere), otherwise escape */
+            icalmemory_append_string(str, str_p, buf_sz, is_param ? "\n" : "\\n");
+            break;
+
+        default:
+            icalmemory_append_char(str, str_p, buf_sz, *p);
+            break;
         }
     }
 
@@ -377,7 +363,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_TEXT_VALUE:
         {
-            char *dequoted_str = icalmemory_strdup_and_dequote(&str, NULL);
+            char *dequoted_str = vcardmemory_strdup_and_dequote(&str, NULL);
 
             value = vcardvalue_new_text(dequoted_str);
             icalmemory_free_buffer(dequoted_str);
@@ -389,7 +375,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
             vcardstrarray *array = vcardstrarray_new(2);
 
             do {
-                char *dequoted_str = icalmemory_strdup_and_dequote(&str, ",");
+                char *dequoted_str = vcardmemory_strdup_and_dequote(&str, ",");
 
                 vcardstrarray_append(array, dequoted_str);
                 icalmemory_free_buffer(dequoted_str);
@@ -408,7 +394,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
             st.field[st.num_fields++] = field;
 
             do {
-                char *dequoted_str = icalmemory_strdup_and_dequote(&str, ",;");
+                char *dequoted_str = vcardmemory_strdup_and_dequote(&str, ",;");
 
                 vcardstrarray_append(field, dequoted_str);
                 icalmemory_free_buffer(dequoted_str);
@@ -453,7 +439,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_X_VALUE:
         {
-            char *dequoted_str = icalmemory_strdup_and_dequote(&str, NULL);
+            char *dequoted_str = vcardmemory_strdup_and_dequote(&str, NULL);
 
             value = vcardvalue_new_x(dequoted_str);
             icalmemory_free_buffer(dequoted_str);
@@ -630,7 +616,7 @@ static char *vcardvalue_text_as_vcard_string_r(const vcardvalue *value)
     char *str_p;
     size_t buf_sz;
 
-    return icalmemory_strdup_and_quote(&str, &str_p, &buf_sz,
+    return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
                                        value->data.v_string, 0);
 }
 
@@ -661,7 +647,7 @@ static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *b
             icalmemory_append_char(str, str_p, buf_sz, sep);
         }
 
-        icalmemory_strdup_and_quote(str, str_p, buf_sz,
+        vcardmemory_strdup_and_quote(str, str_p, buf_sz,
                                     vcardstrarray_element_at(array, i), is_param);
     }
 }
@@ -816,7 +802,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
             char *str_p;
             size_t buf_sz;
 
-            return icalmemory_strdup_and_quote(&str, &str_p, &buf_sz,
+            return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
                                                value->x_value, 0);
         }
 
