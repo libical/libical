@@ -16,11 +16,11 @@
 #include <config.h>
 #endif
 
-#include "libical/ical.h"
-
 #if defined(NDEBUG)
 #undef NDEBUG
 #endif
+
+#include "libical/ical.h"
 
 static void assert_ctrl(enum icalparser_ctrl ctrl,
                         const char *data,
