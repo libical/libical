@@ -223,11 +223,8 @@ static void vcardparameter_append_encoded_value(char **buf, char **buf_ptr,
 
     /* Copy the parameter value */
     for (p = value; *p; p++) {
-        if (vcardparameter_is_safe_char((unsigned char)*p, qm)) {
-            icalmemory_append_char(buf, buf_ptr, buf_size, *p);
-        } else {
-            /* Encode unsafe characters per RFC6868, otherwise replace with SP */
-            switch (*p) {
+        /* Encode unsafe characters per RFC6868, otherwise replace with SP */
+        switch (*p) {
             case '\n':
                 icalmemory_append_string(buf, buf_ptr, buf_size, "^n");
                 break;
@@ -241,9 +238,13 @@ static void vcardparameter_append_encoded_value(char **buf, char **buf_ptr,
                 break;
 
             default:
-                icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
+                if (vcardparameter_is_safe_char((unsigned char)*p, qm)) {
+                    icalmemory_append_char(buf, buf_ptr, buf_size, *p);
+                }
+                else {
+                    icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
+                }
                 break;
-            }
         }
     }
 
