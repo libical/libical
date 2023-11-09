@@ -1500,7 +1500,7 @@ void test_tzid_escape(void)
     icalparameter *tzid;
     icalproperty *prop;
 
-    tzid = icalparameter_new_tzid("Timezone\nwith a newline");
+    tzid = icalparameter_new_tzid("Timezone\nwith a newline and\"mo^re");
     prop = icalproperty_new_dtstart(icaltime_from_day_of_year(26, 2009));
     icalproperty_add_parameter(prop, tzid);
 
@@ -1509,7 +1509,7 @@ void test_tzid_escape(void)
 
     str_is("test encoding of 'Timezone\\nwith a newline'",
            icalproperty_as_ical_string(prop),
-           "DTSTART;VALUE=DATE;TZID=Timezone^nwith a newline:20090126\r\n");
+           "DTSTART;VALUE=DATE;TZID=Timezone^nwith a newline and^'mo^^re:20090126\r\n");
 
     icalproperty_free(prop);
 }
