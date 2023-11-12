@@ -1998,13 +1998,19 @@ static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size)
         icalerrprintf("Warning: Strange timezone offset: H:%i M:%i S:%i\n",
                 hours, minutes, seconds);
     }
-
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-truncation"
+#endif
     if (seconds == 0) {
         snprintf(buffer, buffer_size, "%s%02i%02i", sign, hours, minutes);
     } else {
         snprintf(buffer, buffer_size, "%s%02i%02i%02i", sign, hours, minutes, seconds);
     }
 }
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 static const char *get_zone_directory_builtin(void)
 {
