@@ -980,10 +980,13 @@ static void print_time_to_string(char *str, const struct icaltimetype *data)
 {       /* this function is a candidate for a library-wide external function
            except it isn't used any place outside of icalvalue.c.
            see print_date_to_string() and print_datetime_to_string in icalvalue.h */
-    char temp[20];
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+    char temp[8];
 
     str[0] = '\0';
-
     if (data != 0) {
         if (icaltime_is_utc(*data)) {
             snprintf(temp, sizeof(temp), "%02d%02d%02dZ", data->hour, data->minute, data->second);
@@ -993,11 +996,18 @@ static void print_time_to_string(char *str, const struct icaltimetype *data)
             strncat(str, temp, 6);
         }
     }
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 }
 
 void print_date_to_string(char *str, const struct icaltimetype *data)
 {
-    char temp[20];
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+    char temp[9];
 
     str[0] = '\0';
 
@@ -1005,6 +1015,9 @@ void print_date_to_string(char *str, const struct icaltimetype *data)
         snprintf(temp, sizeof(temp), "%04d%02d%02d", data->year, data->month, data->day);
         strncat(str, temp, 8);
     }
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 }
 
 static char *icalvalue_date_as_ical_string_r(const icalvalue *value)
@@ -1025,10 +1038,13 @@ static char *icalvalue_date_as_ical_string_r(const icalvalue *value)
 
 void print_datetime_to_string(char *str, const struct icaltimetype *data)
 {
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
     char temp[20];
 
     str[0] = '\0';
-
     if (data != 0) {
         print_date_to_string(str, data);
         if (!data->is_date) {
@@ -1038,6 +1054,9 @@ void print_datetime_to_string(char *str, const struct icaltimetype *data)
             strncat(str, temp, 19);
         }
     }
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 }
 
 static char *icalvalue_datetime_as_ical_string_r(const icalvalue *value)

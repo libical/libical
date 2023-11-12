@@ -1206,7 +1206,7 @@ static void sspm_append_hex(struct sspm_buffer *buf, char ch)
 {
     char tmp[4];
 
-    snprintf(tmp, sizeof(tmp), "=%02X", (unsigned int)ch);
+    snprintf(tmp, sizeof(tmp), "=%02X", (unsigned char)ch);
 
     sspm_append_string(buf, tmp);
 }
