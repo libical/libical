@@ -1998,7 +1998,7 @@ static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size)
         icalerrprintf("Warning: Strange timezone offset: H:%i M:%i S:%i\n",
                 hours, minutes, seconds);
     }
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-truncation"
 #endif
@@ -2008,7 +2008,7 @@ static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size)
         snprintf(buffer, buffer_size, "%s%02i%02i%02i", sign, hours, minutes, seconds);
     }
 }
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 

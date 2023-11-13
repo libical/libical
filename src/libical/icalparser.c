@@ -157,7 +157,7 @@ static char *parser_get_next_char(char c, char *str, int qm)
 /** Makes a new tmp buffer out of a substring. */
 static char *make_segment(char *start, char *end)
 {
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
@@ -175,7 +175,7 @@ static char *make_segment(char *start, char *end)
     }
 
     return buf;
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 }
@@ -1371,12 +1371,12 @@ char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
         size = buf_size - 1;
     }
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
     strncpy(out, data->pos, size);
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 

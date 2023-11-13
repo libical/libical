@@ -977,7 +977,7 @@ static void print_time_to_string(char *str, const struct icaltimetype *data)
 {       /* this function is a candidate for a library-wide external function
            except it isn't used any place outside of icalvalue.c.
            see print_date_to_string() and print_datetime_to_string in icalvalue.h */
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
@@ -993,14 +993,14 @@ static void print_time_to_string(char *str, const struct icaltimetype *data)
             strncat(str, temp, 6);
         }
     }
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 }
 
 void print_date_to_string(char *str, const struct icaltimetype *data)
 {
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
@@ -1012,7 +1012,7 @@ void print_date_to_string(char *str, const struct icaltimetype *data)
         snprintf(temp, sizeof(temp), "%04d%02d%02d", data->year, data->month, data->day);
         strncat(str, temp, 8);
     }
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 }
@@ -1035,7 +1035,7 @@ static char *icalvalue_date_as_ical_string_r(const icalvalue *value)
 
 void print_datetime_to_string(char *str, const struct icaltimetype *data)
 {
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
@@ -1051,7 +1051,7 @@ void print_datetime_to_string(char *str, const struct icaltimetype *data)
             strncat(str, temp, 19);
         }
     }
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 }
