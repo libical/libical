@@ -16,6 +16,10 @@
 #include <config.h>
 #endif
 
+#if defined(NDEBUG)
+#undef NDEBUG
+#endif
+
 #include "regression.h"
 #include "libical/astime.h"
 #include "test-malloc.h"
