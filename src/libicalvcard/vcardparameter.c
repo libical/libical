@@ -329,7 +329,8 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
             if (param->value_kind == VCARD_TEXT_VALUE) {
                 const char *str = vcardstrarray_element_at(param->values, i);
 
-                icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+                vcardparameter_append_encoded_value(&buf, &buf_ptr,
+                        &buf_size, str);
             }
             else {
                 const vcardenumarray_element *elem =
