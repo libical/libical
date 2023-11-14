@@ -57,4 +57,7 @@ LIBICAL_VCARD_EXPORT int vcardvalue_encode_ical_string(const char *szText,
 LIBICAL_VCARD_EXPORT int vcardvalue_decode_ical_string(const char *szText,
                                                        char *szDecText, int nMaxBufferLen);
 
+/* Duplicate and dequote a TEXT value */
+LIBICAL_VCARD_EXPORT char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep);
+
 #endif /*VCARDVALUE_H */
