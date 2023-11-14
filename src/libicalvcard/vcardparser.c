@@ -550,6 +550,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
     int is_multivalued = (state->value_kind == VCARD_TEXTLIST_VALUE) ||
         vcardproperty_is_multivalued(prop_kind);
     int is_structured  = (state->value_kind == VCARD_STRUCTURED_VALUE);
+    const char *text_sep = NULL;
     vcardstructuredtype structured;
     vcardstrarray *textlist;
     vcardvalue *value;
@@ -560,6 +561,12 @@ static int _parse_prop_value(struct vcardparser_state *state)
         if (is_structured) {
             memset(&structured, 0, sizeof(vcardstructuredtype));
             structured.field[structured.num_fields++] = textlist;
+            text_sep = ";,";
+        } else if ((state->value_kind == VCARD_TEXTLIST_VALUE) &&
+                   vcardproperty_is_structured(prop_kind)) {
+            text_sep = ";";
+        } else {
+            text_sep = ",";
         }
     }
 
@@ -571,25 +578,25 @@ static int _parse_prop_value(struct vcardparser_state *state)
         HANDLECTRL(state);
 
         switch (*state->p) {
-        /* only one type of quoting */
         case '\\':
             /* seen in the wild - \n split by line wrapping */
-            if (state->p[1] == '\r') INC(1);
-            if (state->p[1] == '\n') {
-                if (state->p[2] != ' ' && state->p[2] != '\t')
-                    return PE_BACKQUOTE_EOF;
-                INC(2);
+            while (strchr("\r\n", state->p[1])) {
+                if (state->p[1] == '\r') {
+                    INC(1);
+                }
+                if (state->p[1] == '\n') {
+                    if (state->p[2] != ' ' && state->p[2] != '\t')
+                        return PE_BACKQUOTE_EOF;
+                    INC(2);
+                }
             }
             if (!state->p[1])
                 return PE_BACKQUOTE_EOF;
-
-            if (state->p[1] == 'n' || state->p[1] == 'N')
-                PUTC('\n');
-            else
-                PUTC(state->p[1]);
+            /* preserve escape sequences */
+            PUTC('\\');
+            PUTC(state->p[1]);
             INC(2);
             break;
-
         case '\r':
             INC(1);
             break; /* just skip */
@@ -604,9 +611,13 @@ static int _parse_prop_value(struct vcardparser_state *state)
 
         case ',':
         case ';':
-            if (is_multivalued || is_structured) {
-                vcardstrarray_append(textlist, buf_cstring(&state->buf));
+            if (is_structured || (is_multivalued && strchr(text_sep, *state->p))) {
+                const char *str = buf_cstring(&state->buf);
+                char *dequot_str =
+                    vcardvalue_strdup_and_dequote_text(&str, text_sep);
+                vcardstrarray_append(textlist, dequot_str);
                 buf_reset(&state->buf);
+                free(dequot_str);
 
                 if (*state->p == ';' && is_structured) {
                     textlist = vcardstrarray_new(2);
@@ -630,7 +641,12 @@ out:
      * it's just another type of end-of-value */
 
     if (is_multivalued || is_structured) {
-        vcardstrarray_append(textlist, buf_cstring(&state->buf));
+        const char *str = buf_cstring(&state->buf);
+        char *dequot_str =
+            vcardvalue_strdup_and_dequote_text(&str, text_sep);
+        vcardstrarray_append(textlist, dequot_str);
+        buf_reset(&state->buf);
+        free(dequot_str);
 
         if (is_structured)
             value = vcardvalue_new_structured(&structured);

@@ -14,6 +14,12 @@ add_executable(vcard_test vcard_test.c)
 add_dependencies(vcard_test ical icalvcard)
 target_link_libraries(vcard_test ical icalvcard)
 
+add_executable(vcard_test_encode vcard_test_encode.c)
+add_dependencies(vcard_test_encode icalvcard)
+target_link_libraries(vcard_test_encode icalvcard)
+
 add_test(NAME vcard_hello_world
   COMMAND vcard_test ${CMAKE_SOURCE_DIR}/test-data/test.vcf
 )
+
+add_test(NAME vcard_encode COMMAND vcard_test_encode)

@@ -103,7 +103,7 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
     return new;
 }
 
-static char *vcardmemory_strdup_and_dequote(const char **str, const char *sep)
+char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
 {
     const char *p;
     char *out = (char *)icalmemory_new_buffer(sizeof(char) * strlen(*str) + 1);
@@ -363,7 +363,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_TEXT_VALUE:
         {
-            char *dequoted_str = vcardmemory_strdup_and_dequote(&str, NULL);
+            char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, NULL);
 
             value = vcardvalue_new_text(dequoted_str);
             icalmemory_free_buffer(dequoted_str);
@@ -375,7 +375,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
             vcardstrarray *array = vcardstrarray_new(2);
 
             do {
-                char *dequoted_str = vcardmemory_strdup_and_dequote(&str, ",");
+                char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",");
 
                 vcardstrarray_append(array, dequoted_str);
                 icalmemory_free_buffer(dequoted_str);
@@ -394,7 +394,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
             st.field[st.num_fields++] = field;
 
             do {
-                char *dequoted_str = vcardmemory_strdup_and_dequote(&str, ",;");
+                char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",;");
 
                 vcardstrarray_append(field, dequoted_str);
                 icalmemory_free_buffer(dequoted_str);
@@ -439,7 +439,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_X_VALUE:
         {
-            char *dequoted_str = vcardmemory_strdup_and_dequote(&str, NULL);
+            char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, NULL);
 
             value = vcardvalue_new_x(dequoted_str);
             icalmemory_free_buffer(dequoted_str);
