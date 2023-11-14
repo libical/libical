@@ -88,12 +88,59 @@ static void test_prop_multivalued(void)
     vcardcomponent_free(card);
 }
 
+static void test_param_singlevalued(void)
+{
+    static const char *input =
+"BEGIN:VCARD\r\n"
+"VERSION:3.0\r\n"
+"X-PROP;TZ=^^^',^x^n:foo\r\n"
+"END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+
+    vcardproperty *prop = vcardcomponent_get_first_property(card,
+            VCARD_X_PROPERTY);
+    vcardparameter *param = vcardproperty_get_first_parameter(prop,
+            VCARD_TZ_PARAMETER);
+
+    assert_str_equals("^\",^x\n", vcardparameter_get_tz(param));
+    // quote and escape "^x" to "^^x"
+    assert_str_equals("TZ=\"^^^',^^x^n\"",
+            vcardparameter_as_vcard_string(param));
+}
+
+static void test_param_multivalued(void)
+{
+    static const char *input =
+"BEGIN:VCARD\r\n"
+"VERSION:3.0\r\n"
+"N;SORT-AS=^n^^^',^^:foo;bar,baz;;"
+"END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+
+    vcardproperty *prop = vcardcomponent_get_first_property(card,
+            VCARD_N_PROPERTY);
+    vcardparameter *param = vcardproperty_get_first_parameter(prop,
+            VCARD_SORTAS_PARAMETER);
+    vcardstrarray *sortas = vcardparameter_get_sortas(param);
+
+    assert(2 == sortas->num_elements);
+    assert_str_equals("\n^\"", vcardstrarray_element_at(sortas, 0));
+    assert_str_equals("^", vcardstrarray_element_at(sortas, 1));
+    assert_str_equals("SORT-AS=^n^^^',^^",
+            vcardparameter_as_vcard_string(param));
+}
+
 int main(int argc __attribute__((unused)),
          char **argv __attribute((unused)))
 {
     test_prop_text();
     test_prop_structured();
     test_prop_multivalued();
+
+    test_param_singlevalued();
+    test_param_multivalued();
 
     return 0;
 }
