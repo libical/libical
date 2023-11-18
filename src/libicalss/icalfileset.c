@@ -311,42 +311,41 @@ int icalfileset_unlock(icalfileset *set)
 #endif
 }
 
-#if !defined(_WIN32)
-static char *shell_quote(const char *s)
+/* Lifted from https://stackoverflow.com/questions/29079011/copy-file-function-in-c */
+static int file_copy(char fileSource[], char fileDestination[])
 {
-    char *result;
-    char *p;
+    char c[1024]; // or any other constant you like
+    FILE *stream_R, *stream_W;
 
-    p = result = malloc(strlen(s) * 5 + 1);
-    while (*s) {
-        if (*s == '\'') {
-            *p++ = '\'';
-            *p++ = '"';
-            *p++ = *s++;
-            *p++ = '"';
-            *p++ = '\'';
-        } else {
-            *p++ = *s++;
+    if ((stream_R = fopen(fileSource, "r")) == (FILE *)NULL) {
+        return -1;
+    }
+    if ((stream_W = fopen(fileDestination, "w")) == (FILE *)NULL) {
+        fclose(stream_R);
+        return -1;
+    }
+
+    while (!feof(stream_R)) {
+        size_t bytes = fread(c, 1, sizeof(c), stream_R);
+        if (bytes) {
+            (void)fwrite(c, 1, bytes, stream_W);
         }
     }
-    *p = '\0';
-    return result;
-}
 
-#endif
+    //close streams
+    fclose(stream_R);
+    fclose(stream_W);
+
+    return 0;
+}
 
 icalerrorenum icalfileset_commit(icalset *set)
 {
-    char tmp[MAXPATHLEN];
+    char backupFile[MAXPATHLEN];
     char *str;
     icalcomponent *c;
     size_t write_size = 0;
     icalfileset *fset = (icalfileset *) set;
-
-#if defined(_WIN32_WCE)
-    wchar_t *wtmp = 0;
-    PROCESS_INFORMATION pi;
-#endif
 
     icalerror_check_arg_re((fset != 0), "set", ICAL_BADARG_ERROR);
 
@@ -357,30 +356,13 @@ icalerrorenum icalfileset_commit(icalset *set)
     }
 
     if (fset->options.safe_saves == 1) {
-#if !defined(_WIN32)
-        char *quoted_file = shell_quote(fset->path);
-
-        snprintf(tmp, MAXPATHLEN, "cp '%s' '%s.bak'", fset->path, fset->path);
-        free(quoted_file);
-#else
-        snprintf(tmp, MAXPATHLEN, "copy %s %s.bak", fset->path, fset->path);
-#endif
-
-#if !defined(_WIN32_WCE)
-        if (system(tmp) < 0) {
-#else
-
-        wtmp = wce_mbtowc(tmp);
-
-        if (CreateProcess(wtmp, L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)) {
-#endif
+        strncpy(backupFile, fset->path, MAXPATHLEN - 4);
+        strncat(backupFile, ".bak", MAXPATHLEN - 1);
+        if (file_copy(fset->path, backupFile) != 0) {
             icalerror_set_errno(ICAL_FILE_ERROR);
             return ICAL_FILE_ERROR;
         }
     }
-#if defined(_WIN32_WCE)
-    free(wtmp);
-#endif
 
     if (lseek(fset->fd, 0, SEEK_SET) < 0) {
         icalerror_set_errno(ICAL_FILE_ERROR);
