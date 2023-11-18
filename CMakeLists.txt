@@ -84,7 +84,7 @@
 #  Build with the thread sanitizer (requires gcc or clang)
 #
 
-cmake_minimum_required(VERSION 3.1.0) #first line, to shutup a cygwin warning
+cmake_minimum_required(VERSION 3.5.0) #first line, to shutup a cygwin warning
 project(libical C) #CXX is optional for the bindings
 
 cmake_policy(SET CMP0003 NEW)
