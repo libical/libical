@@ -79,6 +79,10 @@
 #  Set to build the test suite
 #  Default=true
 #
+# -DLIBICAL_BUILD_EXAMPLES=[true|false]
+#  Set to build the examples
+#  Default=true
+#
 
 # ## DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!!
 ## Special CMake Options for Developers
@@ -782,7 +786,9 @@ add_subdirectory(design-data)
 add_subdirectory(scripts)
 add_subdirectory(test-data)
 add_subdirectory(src)
-add_subdirectory(examples)
+if(LIBICAL_BUILD_EXAMPLES)
+  add_subdirectory(examples)
+endif()
 if(USE_BUILTIN_TZDATA)
   # use our zoneinfo if cmake is passed -DUSE_BUILTIN_TZDATA
   add_subdirectory(zoneinfo)

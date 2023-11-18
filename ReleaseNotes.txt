@@ -59,7 +59,10 @@ Version 3.1.0 (NOT RELEASED YET):
 
 Version 3.0.18 (UNRELEASED):
 ----------------------------
-* Escape ^ (U+005E) character in parameter values according to RFC 6868
+ * Requires CMake v3.5.0 or higher
+ * Escape ^ (U+005E) character in parameter values according to RFC 6868
+ * New CMake option LIBICAL_BUILD_EXAMPLES to disable building the examples
+
 
 Version 3.0.17 (14 October 2023):
 ---------------------------------
