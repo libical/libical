@@ -5,6 +5,7 @@
 
 #include <ctype.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -40,6 +41,7 @@ enum parse_error {
     PE_QSTRING_EOF,
     PE_QSTRING_EOL,
     PE_QSTRING_EOV,
+    PE_VALUE_INVALID,
     PE_ILLEGAL_CHAR,
     PE_NUMERR /* last */
 };
@@ -53,6 +55,7 @@ struct buf {
 
 struct vcardparser_state {
     struct buf buf;
+    struct buf errbuf;
     const char *base;
     const char *itemstart;
     const char *p;
@@ -75,11 +78,18 @@ struct vcardparser_errorpos {
     int errorchar;
 };
 
+#define BUF_GROW 128
+
 void buf_init(struct buf *buf, size_t size)
 {
     buf->len = 0;
     buf->alloc = size;
     buf->s = icalmemory_new_buffer(buf->alloc);
+}
+
+static size_t buf_len(struct buf *buf)
+{
+    return buf->len;
 }
 
 static void buf_reset(struct buf *buf)
@@ -131,6 +141,30 @@ static void buf_trim(struct buf *buf)
         if (isspace(*s)) continue;
         buf->s[buf->len++] = *s;
     }
+}
+
+static void buf_vprintf(struct buf *buf, const char *fmt, va_list args)
+{
+    va_list ap;
+    size_t size, n;
+
+    /* Copy args in case we have to try again */
+    va_copy(ap, args);
+
+    size = buf->alloc - buf->len;
+    n = vsnprintf(buf->s + buf->len, size, fmt, args);
+
+    if (n >= size) {
+        /* Grow the buffer and try again */
+        size = n + BUF_GROW;
+        buf->alloc += size;
+        buf->s = icalmemory_resize_buffer(buf->s, buf->alloc);
+
+        n = vsnprintf(buf->s + buf->len, size, fmt, ap);
+    }
+    va_end(ap);
+
+    buf->len += n;
 }
 
 #define NOTESTART() state->itemstart = state->p
@@ -438,8 +472,31 @@ static int _parse_param_value(struct vcardparser_state *state)
     return PE_PARAMVALUE_EOF;
 }
 
+static void _parse_error(struct vcardparser_state *state,
+                         enum vcardparameter_xlicerrortype type,
+                         const char *fmt, ...)
+{
+    va_list ap;
+
+    va_start(ap, fmt);
+    buf_reset(&state->errbuf);
+    buf_vprintf(&state->errbuf, fmt, ap);
+    va_end(ap);
+
+    if (state->prop) vcardproperty_free(state->prop);
+
+    state->prop =
+        vcardproperty_vanew_xlicerror(buf_cstring(&state->errbuf),
+                                      vcardparameter_new_xlicerrortype(type),
+                                      (void *) 0);
+    buf_reset(&state->buf);
+}
+
 static int _parse_prop_params(struct vcardparser_state *state)
 {
+    vcardproperty_kind prop_kind = vcardproperty_isa(state->prop);
+    const char *group = vcardproperty_get_group(state->prop);
+
     do {
         int r;
 
@@ -449,13 +506,32 @@ static int _parse_prop_params(struct vcardparser_state *state)
 
         /* get the name */
         r = _parse_param_name(state);
-        if (r) return r;
+        if (r) {
+            _parse_error(state,
+                         VCARD_XLICERRORTYPE_PARAMETERNAMEPARSEERROR,
+                         "%s '%s' in %s%s%s property. Removing entire property",
+                         vcardparser_errstr(r), buf_cstring(&state->buf),
+                         group ? group : "", group ? "." : "",
+                         vcardproperty_kind_to_string(prop_kind));
+            return r;
+        }
+
+        vcardproperty_add_parameter(state->prop, state->param);
 
         /* now get the value */
         r = _parse_param_value(state);
-        if (r) return r;
+        if (r) {
+            vcardparameter_kind param_kind = vcardparameter_isa(state->param);
 
-        vcardproperty_add_parameter(state->prop, state->param);
+            _parse_error(state,
+                         VCARD_XLICERRORTYPE_PARAMETERVALUEPARSEERROR,
+                         "%s for %s in %s%s%s property. Removing entire property",
+                         vcardparser_errstr(r),
+                         vcardparameter_kind_to_string(param_kind),
+                         group ? group : "", group ? "." : "",
+                         vcardproperty_kind_to_string(prop_kind));
+            return r;
+        }
 
     } while (*state->p == ';');  /* another parameter to parse */
 
@@ -467,6 +543,7 @@ static int _parse_prop_name(struct vcardparser_state *state)
     const char *name;
     char *group = NULL;
     vcardproperty_kind kind;
+    int r = 0;
 
     NOTESTART();
 
@@ -510,12 +587,19 @@ static int _parse_prop_name(struct vcardparser_state *state)
             buf_reset(&state->buf);
 
             /* no INC - we need to see this char up a layer */
-            return 0;
+            return r;
 
         case '.':
-            if (group)
-                return PE_PROP_MULTIGROUP;
-            group = icalmemory_tmp_copy(buf_cstring(&state->buf));
+            if (group) {
+                char *tmp =
+                    icalmemory_tmp_buffer(strlen(group) + buf_len(&state->buf) + 2);
+                sprintf(tmp, "%s.%s", group, buf_cstring(&state->buf));
+                group = tmp;
+                r = PE_PROP_MULTIGROUP;
+            }
+            else {
+                group = icalmemory_tmp_copy(buf_cstring(&state->buf));
+            }
             buf_reset(&state->buf);
             INC(1);
             break;
@@ -664,7 +748,7 @@ out:
                                            buf_cstring(&state->buf));
     }
 
-    if (!value) return PE_ILLEGAL_CHAR;
+    if (!value) return PE_VALUE_INVALID;
 
     vcardproperty_set_value(state->prop, value);
     buf_reset(&state->buf);
@@ -672,18 +756,94 @@ out:
     return 0;
 }
 
-static int _parse_prop(struct vcardparser_state *state)
+static void _parse_eatline(struct vcardparser_state *state)
+{
+    while (*state->p) {
+
+        /* Handle control characters and break for NUL char */
+        HANDLECTRL(state);
+
+        switch (*state->p) {
+        case '\n':
+            if (state->p[1] == ' ' || state->p[1] == '\t') {/* wrapped line */
+                INC(2);
+                break;
+            }
+            /* otherwise it's the end of the line */
+            INC(1);
+            return;
+
+        default:
+            INC(1);
+            break;
+        }
+    }
+}
+
+static void _parse_prop(struct vcardparser_state *state)
 {
     int r = _parse_prop_name(state);
-    if (r) return r;
+    if (r) {
+        if (r == PE_PROP_MULTIGROUP) {
+            vcardproperty_kind prop_kind = vcardproperty_isa(state->prop);
+
+            _parse_error(state,
+                         VCARD_XLICERRORTYPE_PROPERTYPARSEERROR,
+                         "%s '%s.%s'. Removing entire property",
+                         vcardparser_errstr(r),
+                         vcardproperty_get_group(state->prop),
+                         vcardproperty_kind_to_string(prop_kind));
+            _parse_eatline(state);
+        }
+        else if (r == PE_NAME_INVALID) {
+            _parse_error(state,
+                         VCARD_XLICERRORTYPE_PROPERTYPARSEERROR,
+                         "%s '%s'. Removing entire property",
+                         vcardparser_errstr(r), buf_cstring(&state->buf));
+            _parse_eatline(state);
+        }
+        else {
+            _parse_error(state,
+                         VCARD_XLICERRORTYPE_PROPERTYPARSEERROR,
+                         "%s '%s'. Ignoring property",
+                         vcardparser_errstr(r), buf_cstring(&state->buf));
+        }
+        return;
+    }
 
     if (*state->p == ';') {
         r = _parse_prop_params(state);
-        if (r) return r;
+        if (r) {
+            /* errors handled in _parse_prop_params() */
+            return;
+        }
     }
 
     INC(1); /* skip ':' */
-    return _parse_prop_value(state);
+    r = _parse_prop_value(state);
+    if (r) {
+        vcardproperty_kind prop_kind = vcardproperty_isa(state->prop);
+        const char *group = vcardproperty_get_group(state->prop);
+
+        if (r == PE_VALUE_INVALID) {
+            _parse_error(state,
+                         VCARD_XLICERRORTYPE_VALUEPARSEERROR,
+                         "Error parsing '%s' as %s value in %s%s%s property."
+                         " Removing entire property",
+                         buf_cstring(&state->buf),
+                         vcardvalue_kind_to_string(state->value_kind),
+                         group ? group : "", group ? "." : "",
+                         vcardproperty_kind_to_string(prop_kind));
+        }
+        else {
+            _parse_error(state,
+                         VCARD_XLICERRORTYPE_VALUEPARSEERROR,
+                         "%s in %s%s%s property. Removing entire property",
+                         vcardparser_errstr(r),
+                         group ? group : "", group ? "." : "",
+                         vcardproperty_kind_to_string(prop_kind));
+        }
+    }
 }
 
 static int _parse_vcard(struct vcardparser_state *state,
@@ -701,8 +861,7 @@ static int _parse_vcard(struct vcardparser_state *state,
             continue;
         }
 
-        r = _parse_prop(state);
-        if (r) break;
+        _parse_prop(state);
 
         if (vcardproperty_isa(state->prop) == VCARD_BEGIN_PROPERTY) {
             const char *val =
@@ -767,7 +926,7 @@ static int vcardparser_parse(struct vcardparser_state *state, int only_one)
 
     state->p = state->base;
 
-    buf_init(&state->buf, 100);
+    buf_init(&state->buf, BUF_GROW);
 
     /* don't parse trailing non-whitespace */
     return _parse_vcard(state, state->root, only_one);
@@ -778,6 +937,8 @@ static int vcardparser_parse(struct vcardparser_state *state, int only_one)
 static void _free_state(struct vcardparser_state *state)
 {
     buf_free(&state->buf);
+    buf_free(&state->errbuf);
+
     if (state->root) vcardcomponent_free(state->root);
 
     memset(state, 0, sizeof(struct vcardparser_state));
@@ -787,36 +948,8 @@ static void vcardparser_free(struct vcardparser_state *state)
 {
     _free_state(state);
 }
-#if 0
-void vcardparser_fillpos(struct vcardparser_state *state,
-                         struct vcardparser_errorpos *pos)
-{
-    int l = 1;
-    int c = 0;
-    const char *p;
 
-    memset(pos, 0, sizeof(struct vcardparser_errorpos));
-
-    pos->errorpos = state->p - state->base;
-    pos->startpos = state->itemstart - state->base;
-
-    for (p = state->base; p < state->p; p++) {
-        if (*p == '\n') {
-            l++;
-            c = 0;
-        }
-        else {
-            c++;
-        }
-        if (p == state->itemstart) {
-            pos->startline = l;
-            pos->startchar = c;
-        }
-    }
-
-    pos->errorline = l;
-    pos->errorchar = c;
-}
+/* PUBLIC API */
 
 const char *vcardparser_errstr(int err)
 {
@@ -839,6 +972,8 @@ const char *vcardparser_errstr(int err)
         return "End of data while parsing property name";
     case PE_NAME_EOL:
         return "End of line while parsing property name";
+    case PE_NAME_INVALID:
+        return "Invalid property name";
     case PE_PARAMVALUE_EOF:
         return "End of data while parsing parameter value";
     case PE_PARAMVALUE_EOL:
@@ -847,13 +982,13 @@ const char *vcardparser_errstr(int err)
         return "End of data while parsing quoted value";
     case PE_QSTRING_EOL:
         return "End of line while parsing quoted value";
+    case PE_VALUE_INVALID:
+        return "Invalid value for property";
     case PE_ILLEGAL_CHAR:
         return "Illegal character in vCard";
     }
     return "Unknown error";
 }
-#endif
-/* PUBLIC API */
 
 vcardcomponent *vcardparser_parse_string(const char *str)
 {
