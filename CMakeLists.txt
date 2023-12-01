@@ -227,6 +227,7 @@ if(STATIC_ONLY)
     -DLIBICAL_ICAL_STATIC_DEFINE
     -DLIBICAL_ICALSS_STATIC_DEFINE
     -DLIBICAL_VCAL_STATIC_DEFINE
+    -DLIBICAL_VCARD_STATIC_DEFINE
   )
 endif()
 
@@ -559,6 +560,8 @@ if(ICAL_GLIB)
       "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
   endif()
 endif()
+
+libical_option(ICAL_VCARD "Build vCard support" True)
 
 #
 # Compiler settings

@@ -170,16 +170,25 @@ sub read_parameters_file
     }
     my $data_type   = $column[2];
     my $enum_string = $column[3];
+    my $flags       = $column[4];
 
     my @enums;
     if ($enum_string) {
       @enums = split(/;/, $enum_string);
     }
 
+    my @flags;
+    if ($flags ne "") {
+      @flags = split(/;/, $flags);
+    } else {
+      @flags = ();
+    }
+
     $h{$parameter_name} = {
       C        => $data_type,
       kindEnum => $enumConst,
-      enums    => [@enums]
+      enums    => [@enums],
+      flags    => [@flags]
     };
   }
 
