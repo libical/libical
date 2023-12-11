@@ -320,7 +320,8 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
 
 static const char *sscanf_time(const char *str, vcardtimetype *t)
 {
-    char fmt[21] = "";  /* 4 numeric arguments by position + NUL */
+    char fmt[27] = "";  /* "%1$2u:%2$2u:%3$2u.%4$u%5$n" + NUL */
+    unsigned secfrac;
     size_t ndig;
     int nchar;
 
@@ -366,11 +367,15 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
             t->second = 0;
         }
         else if (ndig == 2) {
-            /* hour [ ":" minute ":" second ] */
+            /* hour [ ":" minute ":" second [ "." secfrac ] ] */
             strcpy(fmt, "%1$2u");
 
             if (str[2] == ':') {
                 strcat(fmt, ":%2$2u:%3$2u");
+
+                if (str[8] == '.') {
+                    strcat(fmt, ".%4$u");
+                }
             }
         }
     }
@@ -380,8 +385,8 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
         return NULL;
     }
 
-    strcat(fmt, "%4$n");
-    sscanf(str, fmt, &t->hour, &t->minute, &t->second, &nchar);
+    strcat(fmt, "%5$n");
+    sscanf(str, fmt, &t->hour, &t->minute, &t->second, &secfrac, &nchar);
     str += nchar;
 
     if (t->hour != -1 && *str) {
