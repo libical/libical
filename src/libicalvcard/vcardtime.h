@@ -11,6 +11,7 @@ typedef struct vcardtimetype
     int hour;           /* 00-23 */
     int minute;         /* 00-59 */
     int second;         /* 00-58/59/60 depending on leap second */
+    /* vCard v3 allows fractional sec, but v4 does not.  We parse and ignore */
     int utcoffset;      /* -720 to +840 minutes (-12:00 to +14:00) */
 } vcardtimetype;
 
