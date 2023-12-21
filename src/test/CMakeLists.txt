@@ -191,6 +191,7 @@ if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
     set(icalrecurtest_SRCS icalrecur_test.c)
     add_executable(icalrecurtest ${icalrecurtest_SRCS})
     target_link_libraries(icalrecurtest ical icalss icalvcal)
+    set_property(TARGET icalrecurtest PROPERTY LINKER_LANGUAGE CXX)
     set(test_cmd "${CMAKE_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
 
     #test rscale capable rrules
