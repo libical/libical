@@ -107,6 +107,8 @@ static void test_param_singlevalued(void)
     // quote and escape "^x" to "^^x"
     assert_str_equals("TZ=\"^^^',^^x^n\"",
             vcardparameter_as_vcard_string(param));
+
+    vcardcomponent_free(card);
 }
 
 static void test_param_multivalued(void)
@@ -130,6 +132,8 @@ static void test_param_multivalued(void)
     assert_str_equals("^", vcardstrarray_element_at(sortas, 1));
     assert_str_equals("SORT-AS=^n^^^',^^",
             vcardparameter_as_vcard_string(param));
+
+    vcardcomponent_free(card);
 }
 
 int main(int argc __attribute__((unused)),
