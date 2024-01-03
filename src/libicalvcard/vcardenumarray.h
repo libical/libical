@@ -20,7 +20,7 @@ typedef struct {
 #define vcardenumarray_element_at(array, position)                      \
     ((const vcardenumarray_element *) icalarray_element_at(array, position))
 
-#define vcardenumarray_size(array) array->num_elements
+#define vcardenumarray_size(array) (array)->num_elements
 
 LIBICAL_VCARD_EXPORT ssize_t vcardenumarray_find(vcardenumarray *array,
                                                  vcardenumarray_element *needle);
