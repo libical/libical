@@ -388,7 +388,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_STRUCTURED_VALUE:
         {
-            vcardstructuredtype st = { 0 };//vcardstructured_new();
+            vcardstructuredtype st = { 0 };
             vcardstrarray *field = vcardstrarray_new(2);
 
             st.field[st.num_fields++] = field;
@@ -1020,16 +1020,29 @@ vcardparameter_xliccomparetype vcardvalue_compare(const vcardvalue *a, const vca
 
 void vcardvalue_reset_kind(vcardvalue *value)
 {
-    if ((value->kind == VCARD_DATETIME_VALUE || value->kind == VCARD_DATE_VALUE) &&
-1) {
-//        !icaltime_is_null_time(value->data.v_time)) {
+    switch (value->kind) {
 
-//        if (icaltime_is_date(value->data.v_time)) {
-if (1) {
+    case VCARD_DATE_VALUE:
+    case VCARD_TIME_VALUE:
+    case VCARD_DATETIME_VALUE:
+    case VCARD_DATEANDORTIME_VALUE:
+    case VCARD_TIMESTAMP_VALUE:
+        if (vcardtime_is_timestamp(value->data.v_time)) {
+            value->kind = VCARD_TIMESTAMP_VALUE;
+        }
+        else if (vcardtime_is_time(value->data.v_time)) {
+            value->kind = VCARD_TIME_VALUE;
+        }
+        else if (vcardtime_is_date(value->data.v_time)) {
             value->kind = VCARD_DATE_VALUE;
-        } else {
+        }
+        else {
             value->kind = VCARD_DATETIME_VALUE;
         }
+        break;
+
+    default:
+        break;
     }
 }
 
