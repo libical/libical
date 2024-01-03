@@ -15,7 +15,7 @@ typedef icalarray vcardstrarray;
 #define vcardstrarray_element_at(array, position)               \
     *((const char **) icalarray_element_at(array, position))
 
-#define vcardstrarray_size(array) (array)->num_elements
+#define vcardstrarray_size(array) ((array)->num_elements)
 
 LIBICAL_VCARD_EXPORT ssize_t vcardstrarray_find(vcardstrarray *array,
                                                 const char *needle);
