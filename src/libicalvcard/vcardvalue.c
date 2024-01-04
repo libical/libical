@@ -334,9 +334,9 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
     case VCARD_UTCOFFSET_VALUE:
         {
             const char *fmt = "%1[+-]%02u%02u%n";
-            const char sign[2];
+            char sign[2] = "";
             unsigned hour, min;
-            int n, len = strlen(str);
+            int n, len = (int) strlen(str);
 
             if (len == 6) {
                 fmt = "%1[+-]%02u:%02u%n";
