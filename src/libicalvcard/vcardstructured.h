@@ -2,7 +2,6 @@
 #define VCARDSTRUCTURED_H
 
 #include "libical_vcard_export.h"
-
 #include "vcardstrarray.h"
 
 #define VCARD_MAX_STRUCTURED_FIELDS 20  // Extended ADR currently uses 18

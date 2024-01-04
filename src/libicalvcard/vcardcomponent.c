@@ -7,12 +7,12 @@
 #include <config.h>
 #endif
 
-#include "icalerror.h"
-#include "icalmemory.h"
 #include "vcardcomponent.h"
 #include "vcardparser.h"
 #include "vcardproperty_p.h"
 #include "vcardrestriction.h"
+#include "icalerror.h"
+#include "icalmemory.h"
 
 #include <assert.h>
 #include <stdlib.h>

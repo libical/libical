@@ -1,7 +1,11 @@
-#include <string.h>
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
-#include "icalmemory.h"
 #include "vcardstrarray.h"
+#include "icalmemory.h"
+
+#include <string.h>
 
 ssize_t vcardstrarray_find(vcardstrarray *array,
                            const char *needle)
