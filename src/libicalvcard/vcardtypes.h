@@ -6,8 +6,6 @@
 typedef struct vcardgeotype {
     const char *uri;
     struct {
-        //        double lat;
-        //        double lon;
         const char *lat;
         const char *lon;
     } coords;

@@ -6,9 +6,9 @@
 #ifndef VCARDPARAMETERIMPL_H
 #define VCARDPARAMETERIMPL_H
 
-#include "icalarray.h"
 #include "vcardproperty.h"
 #include "vcardderivedvalue.h"
+#include "icalarray.h"
 
 struct vcardparameter_impl
 {

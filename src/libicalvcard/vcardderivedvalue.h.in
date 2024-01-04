@@ -7,7 +7,6 @@
 #define VCARDDERIVEDVALUE_H
 
 #include "libical_vcard_export.h"
-
 #include "vcardstrarray.h"
 #include "vcardstructured.h"
 #include "vcardtime.h"
