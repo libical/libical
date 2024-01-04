@@ -305,19 +305,21 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
         vcardparameter_append_encoded_value(&buf, &buf_ptr,
                                             &buf_size, param->string);
     } else if (param->data != 0) {
+        char *intbuf = NULL;
         const char *str;
 
         if (param->value_kind == VCARD_INTEGER_VALUE) {
-            char *buf = icalmemory_tmp_buffer(21);
+            intbuf = icalmemory_tmp_buffer(21);
 
-            sprintf(buf, "%d", param->data);
-            str = buf;
+            sprintf(intbuf, "%d", param->data);
+            str = intbuf;
         }
         else {
             str = vcardparameter_enum_to_string(param->data);
         }
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+        icalmemory_free_buffer(intbuf);
 
     } else if (param->values != 0) {
         size_t i;
