@@ -59,7 +59,7 @@ typedef enum vcard_clientpidmap_field {
     VCARD_CLIENTPIDMAP_URI,
     VCARD_NUM_CLIENTPIDMAP_FIELDS
 } vcard_clientidmap_field;
- 
+
 typedef struct vcardvalue_impl vcardvalue;
 
 LIBICAL_VCARD_EXPORT void vcardvalue_set_x(vcardvalue *value, const char *v);
