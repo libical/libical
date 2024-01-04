@@ -212,7 +212,7 @@ endif()
 target_link_libraries(icalvcard ical)
 
 if ( MSVC )
-    target_compile_options(icalvcard PRIVATE /W4 /WX)
+  target_compile_options(icalvcard PRIVATE /W4 /WX)
 else()
   target_compile_options(icalvcard PRIVATE -Wall -Wextra -Werror)
 endif()
