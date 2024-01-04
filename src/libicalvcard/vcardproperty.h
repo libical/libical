@@ -7,7 +7,7 @@
 #define VCARDPROPERTY_H
 
 #include "libical_vcard_export.h"
-#include "vcardderivedproperty.h"       /* To get vcardproperty_kind enumerations */
+#include "vcardderivedproperty.h"    /* To get vcardproperty_kind enumerations */
 
 #include <stdarg.h>     /* for va_... */
 

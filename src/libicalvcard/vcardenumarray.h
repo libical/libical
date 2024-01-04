@@ -1,11 +1,10 @@
 #ifndef VCARDENUMARRAY_H
 #define VCARDENUMARRAY_H
 
-#include <stdlib.h>
-
 #include "libical_vcard_export.h"
-
 #include "icalarray.h"
+
+#include <stdlib.h>
 
 typedef icalarray vcardenumarray;
 
