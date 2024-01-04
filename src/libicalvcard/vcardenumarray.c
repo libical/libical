@@ -18,7 +18,7 @@ ssize_t vcardenumarray_find(vcardenumarray *array,
         if (e->val == needle->val &&
             !!e->xvalue == !!needle->xvalue &&
             (!e->xvalue || !strcmp(e->xvalue, needle->xvalue))) {
-            return i;
+            return (ssize_t) i;
         }
     }
 
