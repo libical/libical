@@ -1,7 +1,11 @@
-#include <string.h>
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
-#include "icalmemory.h"
 #include "vcardenumarray.h"
+#include "icalmemory.h"
+
+#include <string.h>
 
 ssize_t vcardenumarray_find(vcardenumarray *array,
                             vcardenumarray_element *needle)

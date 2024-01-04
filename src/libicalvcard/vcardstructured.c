@@ -1,10 +1,14 @@
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "vcardstructured.h"
+#include "icalerror.h"
+#include "icalmemory.h"
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "icalerror.h"
-#include "icalmemory.h"
-#include "vcardstructured.h"
 
 vcardstructuredtype *vcardstructured_new(void)
 {

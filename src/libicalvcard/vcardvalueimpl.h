@@ -6,8 +6,8 @@
 #ifndef VCARDVALUEIMPL_H
 #define VCARDVALUEIMPL_H
 
-#include "vcardproperty.h"
 #include "vcardderivedvalue.h"
+#include "vcardproperty.h"
 #include "vcardtime.h"
 
 struct vcardvalue_impl

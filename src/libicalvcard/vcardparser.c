@@ -3,18 +3,22 @@
  * Based mostly on work by Bron Gondwana <brong@fastmailteam.com>
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "vcardparser.h"
+#include "vcardcomponent.h"
+#include "vcardparameter.h"
+#include "vcardproperty.h"
+#include "vcardvalue.h"
+#include "icalmemory.h"
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "icalmemory.h"
-#include "vcardcomponent.h"
-#include "vcardparser.h"
-#include "vcardparameter.h"
-#include "vcardproperty.h"
-#include "vcardvalue.h"
 
 #define DEBUG 0
 

@@ -1,11 +1,10 @@
 #ifndef VCARDSTRARRAY_H
 #define VCARDSTRARRAY_H
 
-#include <stdlib.h>
-
 #include "libical_vcard_export.h"
-
 #include "icalarray.h"
+
+#include <stdlib.h>
 
 typedef icalarray vcardstrarray;
 

@@ -1,11 +1,15 @@
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "vcardtime.h"
+#include "icalmemory.h"
+
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
-#include "icalmemory.h"
-#include "vcardtime.h"
 
 vcardtimetype vcardtime_null_datetime(void)
 {
