@@ -37,8 +37,8 @@ set(BUILD_SOURCES) #list of derived implementations we build
 
 set(PROPERTYDEPS
   ${ICALSCRIPTS}/mkderivedproperties.pl
-  ${CMAKE_SOURCE_DIR}/design-data/properties.csv
-  ${CMAKE_SOURCE_DIR}/design-data/value-types.csv
+  ${CMAKE_SOURCE_DIR}/design-data/ical-properties.csv
+  ${CMAKE_SOURCE_DIR}/design-data/ical-value-types.csv
 )
 
 add_custom_command(
@@ -47,8 +47,8 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl
       -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.h.in
-      -h ${CMAKE_SOURCE_DIR}/design-data/properties.csv
-      ${CMAKE_SOURCE_DIR}/design-data/value-types.csv >
+      -h ${CMAKE_SOURCE_DIR}/design-data/ical-properties.csv
+      ${CMAKE_SOURCE_DIR}/design-data/ical-value-types.csv >
       ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.h
   DEPENDS
     ${PROPERTYDEPS}
@@ -63,8 +63,8 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl
       -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.c.in
-      -c ${CMAKE_SOURCE_DIR}/design-data/properties.csv
-      ${CMAKE_SOURCE_DIR}/design-data/value-types.csv >
+      -c ${CMAKE_SOURCE_DIR}/design-data/ical-properties.csv
+      ${CMAKE_SOURCE_DIR}/design-data/ical-value-types.csv >
       ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.c
   DEPENDS
     ${PROPERTYDEPS}
@@ -75,7 +75,7 @@ list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.c)
 
 set(PARAMETERDEPS
   ${ICALSCRIPTS}/mkderivedparameters.pl
-  ${CMAKE_SOURCE_DIR}/design-data/parameters.csv
+  ${CMAKE_SOURCE_DIR}/design-data/ical-parameters.csv
 )
 
 add_custom_command(
@@ -84,7 +84,7 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl
       -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.h.in
-      -h ${CMAKE_SOURCE_DIR}/design-data/parameters.csv >
+      -h ${CMAKE_SOURCE_DIR}/design-data/ical-parameters.csv >
       ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.h
   DEPENDS
     ${PARAMETERDEPS}
@@ -99,7 +99,7 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl
       -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.c.in
-      -c ${CMAKE_SOURCE_DIR}/design-data/parameters.csv >
+      -c ${CMAKE_SOURCE_DIR}/design-data/ical-parameters.csv >
       ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.c
   DEPENDS
     ${PARAMETERDEPS}
@@ -110,7 +110,7 @@ list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.c
 
 set(RESTRICTIONDEPS
   ${ICALSCRIPTS}/mkrestrictiontable.pl
-  ${CMAKE_SOURCE_DIR}/design-data/restrictions.csv
+  ${CMAKE_SOURCE_DIR}/design-data/ical-restrictions.csv
 )
 
 add_custom_command(
@@ -119,7 +119,7 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkrestrictiontable.pl
       -i ${CMAKE_SOURCE_DIR}/src/libical/icalrestriction.c.in
-      ${CMAKE_SOURCE_DIR}/design-data/restrictions.csv >
+      ${CMAKE_SOURCE_DIR}/design-data/ical-restrictions.csv >
       ${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c
   DEPENDS
     ${RESTRICTIONDEPS}
@@ -130,7 +130,7 @@ list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c)
 
 set(VALUEDEPS
   ${ICALSCRIPTS}mkderivedvalues.pl
-  ${CMAKE_SOURCE_DIR}/design-data/value-types.csv
+  ${CMAKE_SOURCE_DIR}/design-data/ical-value-types.csv
 )
 
 add_custom_command(
@@ -139,7 +139,7 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl
       -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.h.in
-      -h ${CMAKE_SOURCE_DIR}/design-data/value-types.csv >
+      -h ${CMAKE_SOURCE_DIR}/design-data/ical-value-types.csv >
       ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h
   DEPENDS
     ${VALUEDEPS}
@@ -154,7 +154,7 @@ add_custom_command(
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl
       -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.c.in
-      -c ${CMAKE_SOURCE_DIR}/design-data/value-types.csv >
+      -c ${CMAKE_SOURCE_DIR}/design-data/ical-value-types.csv >
       ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.c
   DEPENDS
     ${VALUEDEPS}

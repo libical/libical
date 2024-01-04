@@ -1,0 +1,82 @@
+,,
+"#Property Name","C vcardproperty_kind Enum","libvcard Value type","vCard default value",Property Flags
+
+"#libical Internal Properties",,
+"ANY","0","NO","NO"
+"X-LIC-ERROR","496","TEXT","TEXT"
+"BEGIN","497","TEXT","TEXT"
+"END","498","TEXT","TEXT"
+"NO","499","NO","NO"
+
+"#vCard Properties","RFC 6350 Section 6",
+"SOURCE","1","URI","URI"
+"KIND","2","KIND","KIND"
+"XML","3","TEXT","TEXT"
+"FN","4","TEXT","TEXT"
+"N","5","STRUCTURED","STRUCTURED",is_structured;is_multivalued
+"NICKNAME","6","TEXTLIST","TEXTLIST",is_multivalued
+"PHOTO","7","URI","URI"
+"BDAY","8","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
+"ANNIVERSARY","9","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
+"GENDER","10","TEXTLIST","TEXTLIST",is_structured
+"ADR","11","STRUCTURED","STRUCTURED",is_structured;is_multivalued
+"TEL","12","TEXT","TEXT"
+"EMAIL","13","TEXT","TEXT"
+"IMPP","14","URI","URI"
+"LANG","15","LANGUAGE-TAG","LANGUAGE-TAG"
+"TZ","16","TZ","TZ"
+"GEO","17","GEO","GEO"
+"TITLE","18","TEXT","TEXT"
+"ROLE","19","TEXT","TEXT"
+"LOGO","20","URI","URI"
+"ORG","21","TEXTLIST","TEXTLIST",is_structured
+"MEMBER","22","URI","URI"
+"RELATED","23","URI","URI"
+"CATEGORIES","24","TEXTLIST","TEXTLIST",is_multivalued
+"NOTE","25","TEXT","TEXT"
+"PRODID","26","TEXT","TEXT"
+"REV","27","TIMESTAMP","TIMESTAMP"
+"SOUND","28","URI","URI"
+"UID","29","URI","URI"
+"CLIENTPIDMAP","30","TEXTLIST","TEXTLIST",is_structured
+"URL","31","URI","URI"
+"VERSION","32","VERSION","VERSION"
+"KEY","33","URI","URI"
+"FBURL","34","URI","URI"
+"CALADRURI","35","URI","URI"
+"CALURI","36","URI","URI"
+"X","37","X","X",is_multivalued
+
+"#Deprecated Properties","RFC 2425/2426",,,
+"NAME","38","TEXT","TEXT"
+"LABEL","39","TEXT","TEXT"
+"MAILER","40","TEXT","TEXT"
+"AGENT","41","TEXT","TEXT"
+"SORT-STRING","42","TEXT","TEXT"
+"CLASS","43","TEXT","TEXT"
+
+"#Birth/Death Extension Properties", "RFC 6474 Section 2",
+"BIRTHPLACE","44","TEXT","TEXT"
+"DEATHPLACE","45","TEXT","TEXT"
+"DEATHDATE","46","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
+
+"#Open Mobile Alliance Extension Properties", "RFC 6715 Section 2",
+"EXPERTISE","48","TEXT","TEXT"
+"HOBBY","49","TEXT","TEXT"
+"INTEREST","50","TEXT","TEXT"
+"ORG-DIRECTORY","51","URI","URI"
+
+"#RDAP Extension Properties", "RFC 8605 Section 2",
+"CONTACT-URI","52","URI","URI"
+
+"#JSContact Conversion", "draft-ietf-calext-jscontact-vcard Section 3.2.1",
+"JSPROP","53","TEXT","TEXT"
+
+"#JSContact Extensions","draft-ietf-calext-vcard-jscontact-extensions",
+"CREATED","54","TIMESTAMP","TIMESTAMP"
+"LANGUAGE","55","TEXT","TEXT"
+"GRAMGENDER","56","GRAMGENDER","GRAMGENDER"
+"PRONOUNS","57","TEXT","TEXT"
+"SOCIALPROFILE","58","URI","URI"
+
+"#NOTE for updaters.  Preserve the vcardproperty_kind Enum values to aid forward compatibility"

@@ -1,0 +1,330 @@
+/*======================================================================
+ FILE: vcardderivedproperty.c
+
+ ======================================================================*/
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "vcardderivedproperty.h"
+#include "vcardproperty.h"
+#include "vcardproperty_p.h"
+#include "icalerror.h"
+#include "icalmemory.h"
+
+#include <string.h>
+
+/* This map associates the property kinds with:
+   - the string representation of the property name;
+   - the VALUE kind that libical uses internally;
+   - the RFC 5545 VALUE kind that the property uses as a default (or NONE);
+   - an array of RFC 5545 VALUE kinds that are legal for the property;
+   - a bitmask of flags that further describe the property
+*/
+
+struct vcardproperty_map
+{
+    vcardproperty_kind kind;
+    const char *name;
+    vcardvalue_kind libical_value;
+    vcardvalue_kind default_value;
+
+    /* The size of this array needs to be 1 greater than the maximum number
+       of component values in any multi-typed value (e.g. DATE-TIME-PERIOD).
+       This size SHOULD be calculated by the generating perl script(s). */
+    vcardvalue_kind valid_values[4];
+
+    unsigned int flags;
+};
+
+#define VCARD_PROPERTY_IS_STRUCTURED  (1U<<0)
+#define VCARD_PROPERTY_IS_MULTIVALUED (1U<<1)
+
+/* This map associates the property enumerations with the king of
+   property that they are used in and the string representation of the
+   enumeration */
+
+struct vcardproperty_enum_map
+{
+    vcardproperty_kind prop;
+    int prop_enum;
+    const char *str;
+};
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wvarargs"
+<insert_code_here>
+#pragma clang diagnostic pop
+
+int vcardproperty_kind_is_valid(const vcardproperty_kind kind)
+{
+    int i = 0;
+    int num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+
+    if (kind == VCARD_ANY_PROPERTY) {
+        return 0;
+    }
+
+    num_props--;
+    do {
+        if (property_map[i].kind == kind) {
+            return 1;
+        }
+    } while (i++ < num_props);
+
+    return 0;
+}
+
+const char *vcardproperty_kind_to_string(vcardproperty_kind kind)
+{
+    int i, num_props;
+
+    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+    for (i = 0; i< num_props; i++) {
+        if (property_map[i].kind == kind) {
+            return property_map[i].name;
+        }
+    }
+
+    return 0;
+}
+
+vcardproperty_kind vcardproperty_string_to_kind(const char *string)
+{
+    int i, num_props;
+
+    if (string == 0) {
+        return VCARD_NO_PROPERTY;
+    }
+
+    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+    for (i = 0; i < num_props; i++) {
+        if (property_map[i].name && (strcasecmp(property_map[i].name, string) == 0)) {
+            return property_map[i].kind;
+        }
+    }
+
+    if (strncasecmp(string, "X-", 2) == 0) {
+        return VCARD_X_PROPERTY;
+    }
+
+    return VCARD_NO_PROPERTY;
+}
+
+vcardproperty_kind vcardproperty_value_kind_to_kind(vcardvalue_kind kind)
+{
+    int i, num_props;
+
+    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+    for (i = 0; i < num_props; i++) {
+        if (property_map[i].libical_value == kind) {
+            return property_map[i].kind;
+        }
+    }
+
+    return VCARD_NO_PROPERTY;
+}
+
+vcardvalue_kind vcardproperty_kind_to_value_kind(vcardproperty_kind kind)
+{
+    int i, num_props;
+
+    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+    for (i = 0; i < num_props; i++) {
+        const struct vcardproperty_map *map = &property_map[i];
+
+        if (map->kind == kind) {
+            /* Return default value type if possible,
+               otherwise return first legal value type */
+            return (map->default_value != VCARD_NO_VALUE) ?
+                map->default_value : map->valid_values[0];
+        }
+    }
+
+    return VCARD_NO_VALUE;
+}
+
+int vcardproperty_value_kind_is_valid(vcardproperty_kind pkind,
+                                     vcardvalue_kind vkind)
+{
+    int i, j;
+    int num_props;
+
+    if (vkind == VCARD_NO_VALUE)
+        return 0;
+
+    if (pkind == VCARD_X_PROPERTY)
+        return 1;
+
+    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+    for (i = 0; i < num_props; i++) {
+        const struct vcardproperty_map *map = &property_map[i];
+
+        if (map->kind == pkind) {
+            const vcardvalue_kind *valid = map->valid_values;
+            for (j = 0; valid[j] != VCARD_NO_VALUE; j++) {
+                if (valid[j] == vkind) {
+                    return 1;
+                }
+            }
+            break;
+        }
+    }
+
+    return 0;
+}
+
+int vcardproperty_is_structured(vcardproperty_kind pkind)
+{
+    int i, num_props;
+
+    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+    for (i = 0; i < num_props; i++) {
+        const struct vcardproperty_map *map = &property_map[i];
+
+        if (map->kind == pkind) {
+            return (map->flags & VCARD_PROPERTY_IS_STRUCTURED);
+        }
+    }
+
+    return 0;
+}
+
+int vcardproperty_is_multivalued(vcardproperty_kind pkind)
+{
+    int i, num_props;
+
+    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+    for (i = 0; i < num_props; i++) {
+        const struct vcardproperty_map *map = &property_map[i];
+
+        if (map->kind == pkind) {
+            return (map->flags & VCARD_PROPERTY_IS_MULTIVALUED);
+        }
+    }
+
+    return 0;
+}
+#if 0
+int vcardproperty_value_kind_is_multivalued(vcardproperty_kind pkind,
+                                           vcardvalue_kind *vkind)
+{
+    int i, num_props;
+
+    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+    for (i = 0; i < num_props; i++) {
+        const struct vcardproperty_map *map = &property_map[i];
+
+        if (map->kind == pkind) {
+            if ((map->flags & VCARD_PROPERTY_IS_STRUCTURED) &&
+                *vkind == map->default_value) {
+                /* Normalize structured property VALUE type for proper parsing */
+                *vkind = map->libical_value;
+            }
+            if ((map->flags & VCARD_PROPERTY_IS_MULTIVALUED)) {
+                /* Property is defined as multi-valued.
+                   Make sure the VALUE type is also defined as multi-valued. */
+                switch (*vkind) {
+                case VCARD_DATE_VALUE:
+                case VCARD_DATETIME_VALUE:
+                case VCARD_DATETIMEDATE_VALUE:
+                case VCARD_DATETIMEPERIOD_VALUE:
+                case VCARD_DURATION_VALUE:
+                case VCARD_FLOAT_VALUE:
+                case VCARD_INTEGER_VALUE:
+                case VCARD_PERIOD_VALUE:
+                case VCARD_TEXT_VALUE:
+              //case VCARD_TIME_VALUE:
+                case VCARD_X_VALUE:
+                    return 1;
+                    break;
+
+                default:
+                    break;
+                }
+            }
+
+            break;
+        }
+    }
+
+    return 0;
+}
+#endif
+int vcardproperty_value_kind_is_default(vcardproperty_kind pkind,
+                                       vcardvalue_kind vkind)
+{
+    int i, num_props;
+
+    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+    for (i = 0; i < num_props; i++) {
+        const struct vcardproperty_map *map = &property_map[i];
+
+        if (map->kind == pkind) {
+            return ((vkind == map->default_value) ||
+                    ((map->flags & VCARD_PROPERTY_IS_STRUCTURED) &&
+                     (vkind == map->libical_value)));
+        }
+    }
+
+    return 0;
+}
+
+const char *vcardproperty_enum_to_string(int e)
+{
+    icalerror_check_arg_rz(e >= VCARDPROPERTY_FIRST_ENUM, "e");
+    icalerror_check_arg_rz(e <= VCARDPROPERTY_LAST_ENUM, "e");
+
+    return enum_map[e - VCARDPROPERTY_FIRST_ENUM].str;
+}
+
+char *vcardproperty_enum_to_string_r(int e)
+{
+    return icalmemory_strdup(vcardproperty_enum_to_string(e));
+}
+
+int vcardproperty_kind_and_string_to_enum(const int kind, const char *str)
+{
+    vcardproperty_kind pkind;
+    int i;
+
+    icalerror_check_arg_rz(str != 0, "str");
+
+    if ((pkind = vcardproperty_value_kind_to_kind(kind)) == VCARD_NO_PROPERTY)
+        return 0;
+
+    while (*str == ' ') {
+        str++;
+    }
+
+    for (i = VCARDPROPERTY_FIRST_ENUM; i != VCARDPROPERTY_LAST_ENUM; i++) {
+        if (enum_map[i - VCARDPROPERTY_FIRST_ENUM].prop == pkind)
+            break;
+    }
+    if (i == VCARDPROPERTY_LAST_ENUM)
+        return 0;
+
+    for (; i != VCARDPROPERTY_LAST_ENUM; i++) {
+        if (enum_map[i - VCARDPROPERTY_FIRST_ENUM].prop == pkind &&
+            strcasecmp(enum_map[i - VCARDPROPERTY_FIRST_ENUM].str, str) == 0) {
+            return enum_map[i - VCARDPROPERTY_FIRST_ENUM].prop_enum;
+        }
+    }
+
+    return 0;
+}
+
+int vcardproperty_enum_belongs_to_property(vcardproperty_kind kind, int e)
+{
+    int i;
+
+    for (i = VCARDPROPERTY_FIRST_ENUM; i != VCARDPROPERTY_LAST_ENUM; i++) {
+        if (enum_map[i - VCARDPROPERTY_FIRST_ENUM].prop_enum == e &&
+            enum_map[i - VCARDPROPERTY_FIRST_ENUM].prop == kind) {
+            return 1;
+        }
+    }
+
+    return 0;
+}

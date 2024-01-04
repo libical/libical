@@ -88,6 +88,11 @@ if(ICAL_GLIB AND HAVE_INTROSPECTION)
   add_subdirectory(libical-glib)
 endif()
 
+########## libicalvcard tests #########
+if(ICAL_VCARD)
+  add_subdirectory(libicalvcard)
+endif()
+
 ########### next target ###############
 
 set(copycluster_SRCS copycluster.c)
