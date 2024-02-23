@@ -371,7 +371,7 @@ static int simple_str_to_doublestr(const char *from, char *result, int result_le
 #if !defined(HAVE_GETNUMBERFORMAT)
     struct lconv *loc_data = localeconv();
 #endif
-    int i = 0;
+    int i = 0, len;
     double dtest;
 
     /*sanity checks */
@@ -392,17 +392,18 @@ static int simple_str_to_doublestr(const char *from, char *result, int result_le
         ++cur;
     }
     end = cur;
-    if (end - start + 1 > result_len) {
-        /*huh hoh, number is too big. getting out */
-        return 1;
+    len = end - start;
+    if (len + 1 >= result_len) {
+        /* huh hoh, number is too big. truncate it */
+        len = result_len - 1;
     }
 
-    /* copy the float number string into tmp_buf, and take
+    /* copy the float number string into result, and take
      * care to have the (optional) decimal separator be the one
      * of the current locale.
      */
 #if !defined(HAVE_GETNUMBERFORMAT)
-    for (i = 0; i < end - start; ++i) {
+    for (i = 0; i < len; ++i) {
         if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0]
             && loc_data->decimal_point[0] != '.') {
             /*replace '.' by the digit separator of the current locale */
