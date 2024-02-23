@@ -1010,8 +1010,8 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = @CMAKE_SOURCE_DIR@/src/java \
-                         @CMAKE_SOURCE_DIR@/src/php
+EXCLUDE                = @PROJECT_SOURCE_DIR@/src/java \
+                         @PROJECT_SOURCE_DIR@/src/php
 EXCLUDE_SYMLINKS       = NO
 
 # If the value of the INPUT tag contains directories, you can use the
@@ -1065,7 +1065,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = @CMAKE_SOURCE_DIR@/doc
+IMAGE_PATH             = @PROJECT_SOURCE_DIR@/doc
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program

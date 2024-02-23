@@ -122,11 +122,11 @@ list(APPEND LIBICAL_GLIB_SOURCES
 )
 
 include_directories(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_BINARY_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_BINARY_DIR}/src/libical
-  ${CMAKE_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_BINARY_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_BINARY_DIR}/src/libical
+  ${PROJECT_SOURCE_DIR}/src/libical
 )
 
 add_library(ical-glib ${LIBRARY_TYPE} ${LIBICAL_GLIB_SOURCES})
@@ -179,21 +179,21 @@ if(HAVE_INTROSPECTION)
   set(GObjectIntrospection_SCANNER_ARGS
     --add-include-path=${CMAKE_CURRENT_BINARY_DIR}
     --add-include-path=${CMAKE_CURRENT_SOURCE_DIR}
-    --add-include-path=${CMAKE_BINARY_DIR}/src
-    --add-include-path=${CMAKE_BINARY_DIR}/src/libical
-    --add-include-path=${CMAKE_SOURCE_DIR}/src
-    --add-include-path=${CMAKE_SOURCE_DIR}/src/libical
+    --add-include-path=${PROJECT_BINARY_DIR}/src
+    --add-include-path=${PROJECT_BINARY_DIR}/src/libical
+    --add-include-path=${PROJECT_SOURCE_DIR}/src
+    --add-include-path=${PROJECT_SOURCE_DIR}/src/libical
     --library-path=${LIBRARY_OUTPUT_PATH}
     --identifier-prefix=ICal
     --pkg-export libical-glib
     --c-include=libical-glib/libical-glib.h
     --cflags-begin
-    -I${CMAKE_BINARY_DIR}/src
-    -I${CMAKE_BINARY_DIR}/src/libical
-    -I${CMAKE_BINARY_DIR}/src/libical-glib
+    -I${PROJECT_BINARY_DIR}/src
+    -I${PROJECT_BINARY_DIR}/src/libical
+    -I${PROJECT_BINARY_DIR}/src/libical-glib
     -I${LIBRARY_OUTPUT_PATH}
-    -I${CMAKE_SOURCE_DIR}/src
-    -I${CMAKE_SOURCE_DIR}/src/libical
+    -I${PROJECT_SOURCE_DIR}/src
+    -I${PROJECT_SOURCE_DIR}/src/libical
     --cflags-end
     --verbose
   )
@@ -207,9 +207,9 @@ if(HAVE_INTROSPECTION)
     -DLIBICAL_GLIB_COMPILATION
     -I${CMAKE_CURRENT_BINARY_DIR}
     -I${CMAKE_CURRENT_SOURCE_DIR}
-    -I${CMAKE_BINARY_DIR}/src/libical
-    -I${CMAKE_SOURCE_DIR}/src/libical
-    -I${CMAKE_BINARY_DIR}/src/libical-glib
+    -I${PROJECT_BINARY_DIR}/src/libical
+    -I${PROJECT_SOURCE_DIR}/src/libical
+    -I${PROJECT_BINARY_DIR}/src/libical-glib
   )
   set(ICalGLib_${LIB_VERSION}_gir_LIBS ical-glib)
   set(ICalGLib_${LIB_VERSION}_gir_FILES ${LIBICAL_GLIB_GIR_SOURCES})
@@ -221,7 +221,7 @@ endif()
 
 if(ICAL_GLIB_VAPI)
   add_custom_target(vala ALL COMMENT "Target to run vala")
-  set(gir_fullname ${CMAKE_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
+  set(gir_fullname ${PROJECT_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
   set(metadata_fullname ${CMAKE_CURRENT_BINARY_DIR}/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.metadata)
   set(vapi_file ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.vapi)
 
@@ -235,7 +235,7 @@ if(ICAL_GLIB_VAPI)
     COMMAND ${VAPIGEN}
       --vapidir=${CMAKE_CURRENT_SOURCE_DIR}
       --vapidir=${CMAKE_CURRENT_BINARY_DIR}
-      --girdir=${CMAKE_BINARY_DIR}/src/libical-glib
+      --girdir=${PROJECT_BINARY_DIR}/src/libical-glib
       --pkg gio-2.0
       --library libical-glib
       --metadatadir=${CMAKE_CURRENT_SOURCE_DIR}
