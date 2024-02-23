@@ -4,27 +4,27 @@
 add_definitions(-Dlibical_icalss_EXPORTS)
 
 include_directories(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_BINARY_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_BINARY_DIR}/src/libical
-  ${CMAKE_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_BINARY_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_BINARY_DIR}/src/libical
+  ${PROJECT_SOURCE_DIR}/src/libical
 )
 if(BDB_FOUND)
   include_directories(${BDB_INCLUDE_DIR})
 endif()
 
 if(WIN32)
-  set(TOPS "\"${CMAKE_SOURCE_DIR}\"")
-  set(TOPB "\"${CMAKE_BINARY_DIR}\"")
+  set(TOPS "\"${PROJECT_SOURCE_DIR}\"")
+  set(TOPB "\"${PROJECT_BINARY_DIR}\"")
 else()
-  set(TOPS "${CMAKE_SOURCE_DIR}")
-  set(TOPB "${CMAKE_BINARY_DIR}")
+  set(TOPS "${PROJECT_SOURCE_DIR}")
+  set(TOPB "${PROJECT_BINARY_DIR}")
 endif()
 
 add_custom_target(
   icalss-header ALL
-  DEPENDS ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+  DEPENDS ${PROJECT_BINARY_DIR}/src/libicalss/icalss.h
   COMMENT "Target to generate the aggregate libicalss header"
 )
 
@@ -70,12 +70,12 @@ endif()
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+    ${PROJECT_BINARY_DIR}/src/libicalss/icalss.h
   COMMAND
   ${CMAKE_COMMAND}
     -DTOPS:FILEPATH=${TOPS}
     -DTOPB:FILEPATH=${TOPB}
-    -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+    -DICAL_FILE_H_FILE:FILEPATH=${PROJECT_BINARY_DIR}/src/libicalss/icalss.h
     -DBDB_FOUND=${BDB_FOUND}
     -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   DEPENDS ${icalss_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
@@ -194,7 +194,7 @@ endif()
 ########### install files ###############
 
 install(FILES
-  ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+  ${PROJECT_BINARY_DIR}/src/libicalss/icalss.h
   icalcalendar.h
   icalclassify.h
   icalcluster.h
