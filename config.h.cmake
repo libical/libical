@@ -20,9 +20,6 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 /* Define to 1 if you have the <endian.h> header file. */
 #cmakedefine HAVE_ENDIAN_H 1
 
-/* Define to 1 if you have the `GetNumberFormat' function. */
-#cmakedefine HAVE_GETNUMBERFORMAT 1
-
 /* Define to 1 if you have the `gmtime_r' function. */
 #cmakedefine HAVE_GMTIME_R 1
 
