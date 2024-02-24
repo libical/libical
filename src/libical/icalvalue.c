@@ -368,9 +368,7 @@ static int simple_str_to_doublestr(const char *from, char *result, int result_le
 {
     char *start = NULL, *end = NULL, *cur = (char *)from;
 
-#if !defined(HAVE_GETNUMBERFORMAT)
     struct lconv *loc_data = localeconv();
-#endif
     int i = 0, len;
     double dtest;
 
@@ -402,7 +400,6 @@ static int simple_str_to_doublestr(const char *from, char *result, int result_le
      * care to have the (optional) decimal separator be the one
      * of the current locale.
      */
-#if !defined(HAVE_GETNUMBERFORMAT)
     for (i = 0; i < len; ++i) {
         if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0]
             && loc_data->decimal_point[0] != '.') {
@@ -412,9 +409,6 @@ static int simple_str_to_doublestr(const char *from, char *result, int result_le
             result[i] = start[i];
         }
     }
-#else
-    GetNumberFormat(LOCALE_SYSTEM_DEFAULT, 0, start, NULL, result, result_len);
-#endif
     if (to) {
         *to = end;
     }
