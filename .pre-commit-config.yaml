@@ -47,3 +47,4 @@ repos:
   rev: v3.0.1
   hooks:
   - id: reuse
+    args: [--suppress-deprecation]
