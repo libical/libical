@@ -15,8 +15,6 @@ if(BDB_FOUND)
   include_directories(${BDB_INCLUDE_DIR})
 endif()
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
-
 set(TEST_DATADIR "\"${CMAKE_SOURCE_DIR}/test-data\"")
 add_definitions(-DTEST_DATADIR=${TEST_DATADIR} -DTEST_ZONEDIR="${CMAKE_SOURCE_DIR}/zoneinfo")
 
@@ -181,7 +179,7 @@ if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
     set(icalrecurtest_SRCS icalrecur_test.c)
     add_executable(icalrecurtest ${icalrecurtest_SRCS})
     target_link_libraries(icalrecurtest ical icalss icalvcal)
-    set(test_cmd "${CMAKE_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
+    set(test_cmd "${CMAKE_BINARY_DIR}/bin/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
 
     if(ICU_FOUND)
       #test rscale capable rrules
