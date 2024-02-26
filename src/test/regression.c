@@ -23,6 +23,10 @@
 #include <config.h>
 #endif
 
+#if defined(NDEBUG)
+#undef NDEBUG
+#endif
+
 #include "regression.h"
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
