@@ -1253,6 +1253,11 @@ static void writeAttrValue(OFile *fp, VObject *o)
 
 static void writeGroup(OFile *fp, VObject *o)
 {
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+
     char buf1[256];
     char buf2[256];
     strncpy(buf1,NAME_OF(o),sizeof(buf1)-1);
@@ -1266,6 +1271,10 @@ static void writeGroup(OFile *fp, VObject *o)
         strcpy(buf1,buf2);
         }
     appendsOFile(fp,buf1);
+
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 static int inList(const char **list, const char *s)
