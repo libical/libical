@@ -4,7 +4,7 @@
 ci:
     autoupdate_schedule: monthly
 
-exclude: ^(tzdata2019c/|tzdata2020d/|tzdata2021a/|tzdata2022d/|tzdata2023c/)
+exclude: ^(tzdata20.*/)
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.5.0
