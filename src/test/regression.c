@@ -299,7 +299,8 @@ void test_properties(void)
                                       icalparameter_new_cn("A Common Name 1"),
                                       icalparameter_new_cn("A Common Name 2"),
                                       icalparameter_new_cn("A Common Name 3"),
-                                      icalparameter_new_cn("A Common Name 4"), (void *)0);
+                                      icalparameter_new_cn("A Common Name 4"),
+                                      (void *)0);
 
     for (param = icalproperty_get_first_parameter(prop, ICAL_ANY_PARAMETER);
          param != 0;
@@ -521,23 +522,24 @@ void test_components(void)
             icalproperty_new_version("2.0"),
             icalproperty_new_prodid("-//RDU Software//NONSGML HandCal//EN"),
             icalproperty_vanew_comment("A Comment",
-                icalparameter_new_cn("A Common Name 1"), (void *)0),
-            icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                                icalproperty_new_version("2.0"),
-                                icalproperty_new_description("This is an event"),
-                                icalproperty_vanew_comment(
-                                    "Another Comment",
-                                    icalparameter_new_cn("A Common Name 1"),
-                                    icalparameter_new_cn("A Common Name 2"),
-                                    icalparameter_new_cn("A Common Name 3"),
-                                    icalparameter_new_cn("A Common Name 4"),
+                icalparameter_new_cn("A Common Name 1"),
+                                     (void *)0),
+                icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+                                    icalproperty_new_version("2.0"),
+                                    icalproperty_new_description("This is an event"),
+                                    icalproperty_vanew_comment(
+                                        "Another Comment",
+                                        icalparameter_new_cn("A Common Name 1"),
+                                        icalparameter_new_cn("A Common Name 2"),
+                                        icalparameter_new_cn("A Common Name 3"),
+                                        icalparameter_new_cn("A Common Name 4"),
+                                        (void *)0),
+                                    icalproperty_vanew_xlicerror(
+                                        "This is only a test",
+                                        icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
+                                        (void *)0),
                                     (void *)0),
-                                icalproperty_vanew_xlicerror(
-                                    "This is only a test",
-                                    icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_COMPONENTPARSEERROR),
-                                    (void *)0),
-                                (void *)0),
-            (void *)0);
+                (void *)0);
 
     if (VERBOSE)
         printf("Original Component:\n%s\n\n", icalcomponent_as_ical_string(c));
@@ -1136,15 +1138,12 @@ void test_restriction(void)
                 icalproperty_new_class(ICAL_CLASS_PUBLIC),
                 icalproperty_new_created(atime),
                 icalproperty_new_summary("XYZ Project Review"),
-                /*              icalproperty_new_dtstart(
-                                atime,
-                                icalparameter_new_tzid("America/New_York"),
-                                0
-                                ), */
                 icalproperty_vanew_dtend(atime,
                                          icalparameter_new_tzid("America/New_York"),
                                          (void *)0),
-                icalproperty_new_location("1CP Conference Room 4350"), (void *)0), (void *)0);
+                icalproperty_new_location("1CP Conference Room 4350"),
+                (void *)0),
+            (void *)0);
 
     valid = icalrestriction_check(comp);
     (void)icalcomponent_as_ical_string(comp);
@@ -2195,7 +2194,7 @@ void test_overlaps(void)
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
                             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1 - hh, 0, NULL), (void *)0),
                             icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2 - hh, 0, NULL), (void *)0),
-                            0);
+                            (void *)0);
 
     cset = icalclassify_find_overlaps(set, c);
 #if ADD_TESTS_REQUIRING_INVESTIGATION
@@ -2216,7 +2215,7 @@ void test_overlaps(void)
             ICAL_VEVENT_COMPONENT,
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1 - hh, 0, NULL), (void *)0),
             icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), (void *)0),
-            0);
+            (void *)0);
 
     cset = icalclassify_find_overlaps(set, c);
 
@@ -2236,7 +2235,7 @@ void test_overlaps(void)
             ICAL_VEVENT_COMPONENT,
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1 + 5 * hh, 0, NULL), (void *)0),
             icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2 + 5 * hh, 0, NULL), (void *)0),
-            0);
+            (void *)0);
 
     cset = icalclassify_find_overlaps(set, c);
 #if ADD_TESTS_REQUIRING_INVESTIGATION
@@ -2494,7 +2493,8 @@ void test_convenience(void)
     icalcomponent_free(c);
 
     c = icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
-                            icalcomponent_vanew(ICAL_VEVENT_COMPONENT, (void *)0), (void *)0);
+                            icalcomponent_vanew(ICAL_VEVENT_COMPONENT, (void *)0),
+                            (void *)0);
 
     icalcomponent_set_dtstart(c, icaltime_from_string("19970801T120000Z"));
     icalcomponent_set_dtend(c, icaltime_from_string("19970801T133000Z"));
@@ -2513,7 +2513,8 @@ void test_convenience(void)
     icalcomponent_free(c);
 
     c = icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
-                            icalcomponent_vanew(ICAL_VEVENT_COMPONENT, (void *)0), (void *)0);
+                            icalcomponent_vanew(ICAL_VEVENT_COMPONENT, (void *)0),
+                            (void *)0);
 
     icalcomponent_set_dtstart(c, icaltime_from_string("19970801T120000Z"));
     icalcomponent_set_duration(c, icaldurationtype_from_string("PT1H30M"));
@@ -2532,7 +2533,8 @@ void test_convenience(void)
     icalcomponent_free(c);
 
     c = icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
-                            icalcomponent_vanew(ICAL_VEVENT_COMPONENT, (void *)0), (void *)0);
+                            icalcomponent_vanew(ICAL_VEVENT_COMPONENT, (void *)0),
+                            (void *)0);
 
     tt = icaltime_from_string("19970801T120000");
     (void)icaltime_set_timezone(&tt, icaltimezone_get_builtin_timezone("Europe/Rome"));
@@ -2876,7 +2878,7 @@ void test_gauge_compare(void)
             ICAL_VCALENDAR_COMPONENT,
             icalcomponent_vanew(
                 ICAL_VEVENT_COMPONENT,
-                icalproperty_new_dtstart(icaltime_from_string("20000101T000002")), 0),
+                icalproperty_new_dtstart(icaltime_from_string("20000101T000002")), (void *)0),
             (void *)0);
 
     str = "SELECT * FROM VEVENT WHERE DTSTART = '20000101T000002'";
@@ -3013,7 +3015,7 @@ void test_gauge_compare(void)
             ICAL_VCALENDAR_COMPONENT,
             icalcomponent_vanew(
                 ICAL_VEVENT_COMPONENT,
-                icalproperty_new_dtstart(icaltime_from_string("20000102T000000")), 0),
+                icalproperty_new_dtstart(icaltime_from_string("20000102T000000")), (void *)0),
             (void *)0);
 
     str = "SELECT * FROM VEVENT WHERE DTSTART > '20000101T000000' and DTSTART < '20000103T000000'";
@@ -3157,7 +3159,8 @@ icalcomponent *make_component(int i)
     c = icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
                             icalproperty_new_method(ICAL_METHOD_REQUEST),
                             icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                                                icalproperty_new_dtstart(t), (void *)0), (void *)0);
+                                                icalproperty_new_dtstart(t), (void *)0),
+                            (void *)0);
 
     assert(c != 0);
 
@@ -4938,8 +4941,8 @@ static void test_comma_in_xproperty(void)
                 icalcomponent_vanew(
                     ICAL_VEVENT_COMPONENT,
                     xproperty,
-                    0),
-            0);
+                    (void *)0),
+            (void *)0);
 
     str_is("icalproperty_as_ical_string()", "X-TEST-PROPERTY:test,test\r\n", icalproperty_as_ical_string(icalcomponent_get_first_property(icalcomponent_get_inner(c), ICAL_X_PROPERTY)));
 
@@ -4953,8 +4956,8 @@ static void test_comma_in_xproperty(void)
                 icalcomponent_vanew(
                     ICAL_VEVENT_COMPONENT,
                     xproperty,
-                    0),
-            0);
+                    (void *)0),
+            (void *)0);
 
     str_is("icalproperty_as_ical_string()", "X-TEST-PROPERTY;VALUE=TEXT:test\\,test\r\n", icalproperty_as_ical_string(icalcomponent_get_first_property(icalcomponent_get_inner(c), ICAL_X_PROPERTY)));
 
@@ -4973,8 +4976,8 @@ static void test_remove_tzid_from_due(void)
                 icalcomponent_vanew(
                     ICAL_VTODO_COMPONENT,
                     due,
-                    0),
-            0);
+                    (void *)0),
+            (void  *)0);
 
     icalcomponent_set_due(c, icaltime_from_string("20220120"));
     str_is("icalproperty_as_ical_string()", "DUE;VALUE=DATE:20220120\r\n", icalproperty_as_ical_string(icalcomponent_get_first_property(icalcomponent_get_inner(c), ICAL_DUE_PROPERTY)));
@@ -5049,7 +5052,7 @@ void test_icalcomponent_with_lastmodified(void)
                                icalproperty_new_uid("1234abcd"),
                                icalproperty_new_lastmodified(lm),
                                icalproperty_new_name("name1"),
-                               NULL); /* NOT 0! */
+                               (void *)0);
     icalcomponent_free(comp);
 }
 

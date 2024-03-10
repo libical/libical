@@ -346,7 +346,8 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
             errProp =
                 icalproperty_vanew_xlicerror(
                     temp,
-                    icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP), (void *)0);
+                    icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP),
+                    (void *)0);
             icalcomponent_add_property(comp, errProp);
             icalproperty_free(errProp);
 #endif
@@ -368,7 +369,8 @@ static int icalrestriction_check_component(icalproperty_method method, icalcompo
             errProp =
                 icalproperty_vanew_xlicerror(
                     funcr,
-                    icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP), (void *)0);
+                    icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP),
+                    (void *)0);
             icalcomponent_add_property(comp, errProp);
             icalproperty_free(errProp);
             compare = 0;
