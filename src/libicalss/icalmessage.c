@@ -106,8 +106,8 @@ static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
             icalcomponent_vanew(
                 ICAL_VEVENT_COMPONENT,
                 icalproperty_new_dtstamp(icaltime_from_timet_with_zone(time(0), 0, NULL)),
-                0),
-            0);
+                (void *)0),
+            (void *)0);
 
     icalcomponent *inner = icalmessage_get_inner(reply);
 

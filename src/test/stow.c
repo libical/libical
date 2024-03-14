@@ -301,8 +301,8 @@ icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
                 icalproperty_clone(
                     icalcomponent_get_first_property(inner, ICAL_UID_PROPERTY)),
                 icalproperty_new_attendee(attendee),
-                0),
-            0);
+                (void *)0),
+            (void *)0);
 
     /* Convert errors into request-status properties and transfers
        them to the reply component */

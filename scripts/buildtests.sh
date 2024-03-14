@@ -297,7 +297,8 @@ ASAN_BUILD() {
     return
   fi
   echo "===== START ASAN BUILD: $1 ======"
-  SET_CLANG
+  SET_GCC # I'm using ld.gold (vs ld.bfd), which doesn't play well with clang and asan=>use gcc
+  #SET_CLANG currently has linking problems using ld.gold
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
 }
@@ -376,24 +377,17 @@ CPPCHECK() {
   echo "===== START CPPCHECK: $1 ======"
   cd $TOP
   cppcheck --quiet --language=c \
+           --std=c99 \
+           --library=posix \
            --force --error-exitcode=1 --inline-suppr \
            --enable=warning,performance,portability,information \
            --disable=missingInclude \
            --template='{file}:{line},{severity},{id},{message}' \
-           -D sleep="" \
-           -D localtime_r="" \
-           -D gmtime_r="" \
-           -D size_t="unsigned long" \
+           --checkers-report=cppcheck-report.txt \
            -D bswap32="" \
            -D PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=0 \
            -D MIN="" \
            -D _unused="(void)" \
-           -D _deprecated="(void)" \
-           -D ICALMEMORY_DEFAULT_FREE="free" \
-           -D ICALMEMORY_DEFAULT_MALLOC="malloc" \
-           -D ICALMEMORY_DEFAULT_REALLOC="realloc" \
-           -D F_OK=0 \
-           -D R_OK=0 \
            -U YYSTYPE \
            -U PVL_USE_MACROS \
            -I $BDIR \
@@ -410,7 +404,7 @@ CPPCHECK() {
       grep -v vcc\.c | grep -v vcc\.y | \
       grep -v _cxx\. | tee cppcheck.out
   CPPCHECK_WARNINGS cppcheck.out
-  rm -f cppcheck.out
+  rm -f cppcheck.out cppcheck-report.txt
   CLEAN
   echo "===== END CPPCHECK: $1 ======"
 }
@@ -783,6 +777,5 @@ THREADLOCAL_BUILD test1threadlocal "$DEFCMAKEOPTS"
 THREADLOCAL_BUILD test2threadlocal "$CMAKEOPTS"
 THREADLOCAL_BUILD test3threadlocal "$TZCMAKEOPTS"
 THREADLOCAL_BUILD test4threadlocal "$UUCCMAKEOPTS"
-THREADLOCAL_BUILD test5threadlocal "$GLIBOPTS"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"

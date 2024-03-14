@@ -329,7 +329,7 @@ void test_icalcomponent_get_span(void)
             icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
                                        icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
             icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
-                                     icalparameter_new_tzid("America/Los_Angeles"), 0),
+                                     icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
             (void *)0);
 
     span = icalcomponent_get_span(c);
