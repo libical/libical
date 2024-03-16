@@ -1006,9 +1006,9 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = @CMAKE_SOURCE_DIR@/src/java \
-                         @CMAKE_SOURCE_DIR@/src/php \
-                         @CMAKE_SOURCE_DIR@/src/python
+EXCLUDE                = @PROJECT_SOURCE_DIR@/src/java \
+                         @PROJECT_SOURCE_DIR@/src/php \
+                         @PROJECT_SOURCE_DIR@/src/python
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -1068,7 +1068,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = @CMAKE_SOURCE_DIR@/doc
+IMAGE_PATH             = @PROJECT_SOURCE_DIR@/doc
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
