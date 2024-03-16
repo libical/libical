@@ -1,11 +1,3 @@
-
- Libical is Copyright (C) 2010-2017 Klaralvdalens Datakonsult AB.
-
- You may use, distribute and copy Libical under the terms of the
- GNU Lesser General Public License version 2.1, which is displayed below.
-
--------------------------------------------------------------------------
-
                   GNU LESSER GENERAL PUBLIC LICENSE
                        Version 2.1, February 1999
 
