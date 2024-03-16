@@ -62,6 +62,7 @@ Version 3.0.18 (UNRELEASED):
  * Requires CMake v3.5.0 or higher
  * Escape ^ (U+005E) character in parameter values according to RFC 6868
  * New CMake option LIBICAL_BUILD_EXAMPLES to disable building the examples
+ * Should be able to use the project as a submodule
 
 Version 3.0.17 (14 October 2023):
 ---------------------------------
