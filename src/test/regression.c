@@ -5348,6 +5348,73 @@ void test_icalcomponent_with_lastmodified(void)
     icalcomponent_free(comp);
 }
 
+static void verify_comp_attendee(icalcomponent *comp)
+{
+    icalproperty *prop;
+
+    #define get_param(_kind, _suffix) icalparameter_get_ ## _suffix(icalproperty_get_first_parameter(prop, _kind))
+
+    prop = icalcomponent_get_first_property(comp, ICAL_ATTENDEE_PROPERTY);
+    str_is("value", icalproperty_get_attendee(prop), "mailto:att1");
+    str_is("member", get_param(ICAL_MEMBER_PARAMETER, member), "member");
+    ok("cutype", get_param(ICAL_CUTYPE_PARAMETER, cutype) == ICAL_CUTYPE_INDIVIDUAL);
+    ok("role", get_param(ICAL_ROLE_PARAMETER, role) == ICAL_ROLE_CHAIR);
+    ok("partstat", get_param(ICAL_PARTSTAT_PARAMETER, partstat) == ICAL_PARTSTAT_NEEDSACTION);
+    ok("rsvp", (get_param(ICAL_RSVP_PARAMETER, rsvp) == ICAL_RSVP_FALSE));
+    str_is("delegatedfrom", get_param(ICAL_DELEGATEDFROM_PARAMETER, delegatedfrom), "mailto:delgfrom");
+    str_is("delegatedto", get_param(ICAL_DELEGATEDTO_PARAMETER, delegatedto), "mailto:delgto");
+    str_is("sentby", get_param(ICAL_SENTBY_PARAMETER, sentby), "mailto:sentby");
+    str_is("cn", get_param(ICAL_CN_PARAMETER, cn), "First attendee");
+    str_is("language", get_param(ICAL_LANGUAGE_PARAMETER, language), "en_US");
+
+    #undef get_param
+}
+
+void test_attendees(void)
+{
+    icalcomponent *comp, *clone;
+    icalproperty *prop;
+    icalparameter *param;
+    const char *str;
+
+    comp = icalcomponent_new_vevent();
+    prop = icalproperty_new(ICAL_ATTENDEE_PROPERTY);
+    icalproperty_set_attendee(prop, "mailto:att1");
+    #define set_param(_kind, _suffix, _value) \
+        param = icalparameter_new(_kind); \
+        icalproperty_add_parameter (prop, param); \
+        icalparameter_set_ ## _suffix (param, _value);
+    set_param(ICAL_MEMBER_PARAMETER, member, "member");
+    set_param(ICAL_CUTYPE_PARAMETER, cutype, ICAL_CUTYPE_INDIVIDUAL);
+    set_param(ICAL_ROLE_PARAMETER, role, ICAL_ROLE_CHAIR);
+    set_param(ICAL_PARTSTAT_PARAMETER, partstat, ICAL_PARTSTAT_NEEDSACTION);
+    set_param(ICAL_RSVP_PARAMETER, rsvp, ICAL_RSVP_FALSE);
+    set_param(ICAL_DELEGATEDFROM_PARAMETER, delegatedfrom, "mailto:delgfrom");
+    set_param(ICAL_DELEGATEDTO_PARAMETER, delegatedto, "mailto:delgto");
+    set_param(ICAL_SENTBY_PARAMETER, sentby, "mailto:sentby");
+    set_param(ICAL_CN_PARAMETER, cn, "First attendee");
+    set_param(ICAL_LANGUAGE_PARAMETER, language, "en_US");
+    #undef set_param
+
+    icalcomponent_add_property(comp, prop);
+    verify_comp_attendee(comp);
+
+    str = icalcomponent_as_ical_string(comp);
+    icalcomponent_free(comp);
+    comp = icalcomponent_new_from_string(str);
+    verify_comp_attendee(comp);
+
+    clone = icalcomponent_new_clone(comp);
+    verify_comp_attendee(clone);
+    icalcomponent_free(comp);
+
+    str = icalcomponent_as_ical_string(clone);
+    comp = icalcomponent_new_from_string(str);
+    verify_comp_attendee(comp);
+    icalcomponent_free(clone);
+    icalcomponent_free(comp);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -5515,6 +5582,7 @@ int main(int argc, char *argv[])
     test_run("Test geo precision", test_geo_props, do_test, do_header);
     test_run("Test commas in x-property", test_comma_in_xproperty, do_test, do_header);
     test_run("Test icalcomponent_vanew with lastmodified property", test_icalcomponent_with_lastmodified, do_test, do_header);
+    test_run("Test attendees", test_attendees, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
