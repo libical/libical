@@ -1,7 +1,7 @@
 include_directories(
-  ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src/libical
-  ${CMAKE_SOURCE_DIR}/src/libicalss
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/libical
+  ${PROJECT_SOURCE_DIR}/src/libicalss
 )
 
 ########### next target ###############

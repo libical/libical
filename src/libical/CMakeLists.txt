@@ -7,8 +7,8 @@ configure_file(
 )
 
 include_directories(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_BINARY_DIR}/src
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_BINARY_DIR}/src
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
 )
@@ -20,142 +20,142 @@ endif()
 set(PACKAGE_DATA_DIR "${CMAKE_INSTALL_PREFIX}/share/libical")
 add_definitions(-DPACKAGE_DATA_DIR="${PACKAGE_DATA_DIR}")
 
-set(ICALSCRIPTS ${CMAKE_SOURCE_DIR}/scripts/)
+set(ICALSCRIPTS ${PROJECT_SOURCE_DIR}/scripts/)
 set(BUILT_HEADERS) #list of derived headers we build
 set(BUILD_SOURCES) #list of derived implementations we build
 
 set(PROPERTYDEPS
   ${ICALSCRIPTS}/mkderivedproperties.pl
-  ${CMAKE_SOURCE_DIR}/design-data/properties.csv
-  ${CMAKE_SOURCE_DIR}/design-data/value-types.csv
+  ${PROJECT_SOURCE_DIR}/design-data/properties.csv
+  ${PROJECT_SOURCE_DIR}/design-data/value-types.csv
 )
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.h
+    ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.h
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl
-      -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.h.in
-      -h ${CMAKE_SOURCE_DIR}/design-data/properties.csv
-      ${CMAKE_SOURCE_DIR}/design-data/value-types.csv >
-      ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.h
+      -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedproperty.h.in
+      -h ${PROJECT_SOURCE_DIR}/design-data/properties.csv
+      ${PROJECT_SOURCE_DIR}/design-data/value-types.csv >
+      ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.h
   DEPENDS
     ${PROPERTYDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.h.in
+    ${PROJECT_SOURCE_DIR}/src/libical/icalderivedproperty.h.in
 )
-list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.h)
+list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.h)
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.c
+    ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.c
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl
-      -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.c.in
-      -c ${CMAKE_SOURCE_DIR}/design-data/properties.csv
-      ${CMAKE_SOURCE_DIR}/design-data/value-types.csv >
-      ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.c
+      -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedproperty.c.in
+      -c ${PROJECT_SOURCE_DIR}/design-data/properties.csv
+      ${PROJECT_SOURCE_DIR}/design-data/value-types.csv >
+      ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.c
   DEPENDS
     ${PROPERTYDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libical/icalderivedproperty.c.in
+    ${PROJECT_SOURCE_DIR}/src/libical/icalderivedproperty.c.in
 )
-list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedproperty.c)
+list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.c)
 
 set(PARAMETERDEPS
   ${ICALSCRIPTS}/mkderivedparameters.pl
-  ${CMAKE_SOURCE_DIR}/design-data/parameters.csv
+  ${PROJECT_SOURCE_DIR}/design-data/parameters.csv
 )
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.h
+    ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.h
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl
-      -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.h.in
-      -h ${CMAKE_SOURCE_DIR}/design-data/parameters.csv >
-      ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.h
+      -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedparameter.h.in
+      -h ${PROJECT_SOURCE_DIR}/design-data/parameters.csv >
+      ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.h
   DEPENDS
     ${PARAMETERDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.h.in
+    ${PROJECT_SOURCE_DIR}/src/libical/icalderivedparameter.h.in
 )
-list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.h)
+list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.h)
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.c
+    ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.c
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl
-      -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.c.in
-      -c ${CMAKE_SOURCE_DIR}/design-data/parameters.csv >
-      ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.c
+      -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedparameter.c.in
+      -c ${PROJECT_SOURCE_DIR}/design-data/parameters.csv >
+      ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.c
   DEPENDS
     ${PARAMETERDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libical/icalderivedparameter.c.in
+    ${PROJECT_SOURCE_DIR}/src/libical/icalderivedparameter.c.in
 )
-list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedparameter.c)
+list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.c)
 
 set(RESTRICTIONDEPS
   ${ICALSCRIPTS}/mkrestrictiontable.pl
-  ${CMAKE_SOURCE_DIR}/design-data/restrictions.csv
+  ${PROJECT_SOURCE_DIR}/design-data/restrictions.csv
 )
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c
+    ${PROJECT_BINARY_DIR}/src/libical/icalrestriction.c
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkrestrictiontable.pl
-      -i ${CMAKE_SOURCE_DIR}/src/libical/icalrestriction.c.in
-      ${CMAKE_SOURCE_DIR}/design-data/restrictions.csv >
-      ${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c
+      -i ${PROJECT_SOURCE_DIR}/src/libical/icalrestriction.c.in
+      ${PROJECT_SOURCE_DIR}/design-data/restrictions.csv >
+      ${PROJECT_BINARY_DIR}/src/libical/icalrestriction.c
   DEPENDS
     ${RESTRICTIONDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libical/icalrestriction.c.in
+    ${PROJECT_SOURCE_DIR}/src/libical/icalrestriction.c.in
 )
-list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalrestriction.c)
+list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libical/icalrestriction.c)
 
 set(VALUEDEPS
   ${ICALSCRIPTS}mkderivedvalues.pl
-  ${CMAKE_SOURCE_DIR}/design-data/value-types.csv
+  ${PROJECT_SOURCE_DIR}/design-data/value-types.csv
 )
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h
+    ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.h
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl
-      -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.h.in
-      -h ${CMAKE_SOURCE_DIR}/design-data/value-types.csv >
-      ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h
+      -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedvalue.h.in
+      -h ${PROJECT_SOURCE_DIR}/design-data/value-types.csv >
+      ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.h
   DEPENDS
     ${VALUEDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.h.in
+    ${PROJECT_SOURCE_DIR}/src/libical/icalderivedvalue.h.in
 )
-list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h)
+list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.h)
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.c
+    ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.c
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl
-      -i ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.c.in
-      -c ${CMAKE_SOURCE_DIR}/design-data/value-types.csv >
-      ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.c
+      -i ${PROJECT_SOURCE_DIR}/src/libical/icalderivedvalue.c.in
+      -c ${PROJECT_SOURCE_DIR}/design-data/value-types.csv >
+      ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.c
   DEPENDS
     ${VALUEDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libical/icalderivedvalue.c.in
+    ${PROJECT_SOURCE_DIR}/src/libical/icalderivedvalue.c.in
 )
-list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.c)
+list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.c)
 
 if(WIN32)
-  set(TOPS "\"${CMAKE_SOURCE_DIR}\"")
-  set(TOPB "\"${CMAKE_BINARY_DIR}\"")
+  set(TOPS "\"${PROJECT_SOURCE_DIR}\"")
+  set(TOPB "\"${PROJECT_BINARY_DIR}\"")
 else()
-  set(TOPS "${CMAKE_SOURCE_DIR}")
-  set(TOPB "${CMAKE_BINARY_DIR}")
+  set(TOPS "${PROJECT_SOURCE_DIR}")
+  set(TOPB "${PROJECT_BINARY_DIR}")
 endif()
 
 add_custom_target(
   ical-header ALL
-  DEPENDS ${CMAKE_BINARY_DIR}/src/libical/ical.h
+  DEPENDS ${PROJECT_BINARY_DIR}/src/libical/ical.h
 )
 
 # GObject Introspection
@@ -174,7 +174,7 @@ if(HAVE_INTROSPECTION)
     --pkg-export libical
     --identifier-prefix=ical
     -I${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_BINARY_DIR}/src/libical/ical.h
+    ${PROJECT_BINARY_DIR}/src/libical/ical.h
   )
   set(ICal_${LIB_VERSION}_gir_LIBRARY "ical")
   set(ICal_${LIB_VERSION}_gir_INCLUDES GObject-2.0)
@@ -246,12 +246,12 @@ set(ical_LIB_SRCS
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libical/ical.h
+    ${PROJECT_BINARY_DIR}/src/libical/ical.h
   COMMAND
     ${CMAKE_COMMAND}
       -DTOPS:FILEPATH=${TOPS}
       -DTOPB:FILEPATH=${TOPB}
-      -DICAL_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libical/ical.h
+      -DICAL_FILE_H_FILE:FILEPATH=${PROJECT_BINARY_DIR}/src/libical/ical.h
       -P ${CMAKE_CURRENT_SOURCE_DIR}/ical_file.cmake
   DEPENDS ${ical_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/ical_file.cmake
 )
@@ -382,7 +382,7 @@ endif()
 ########### install files ###############
 
 install(FILES
-  ${CMAKE_BINARY_DIR}/src/libical/ical.h
+  ${PROJECT_BINARY_DIR}/src/libical/ical.h
   icalarray.h
   icalattach.h
   icalcomponent.h
