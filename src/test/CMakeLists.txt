@@ -26,6 +26,7 @@ add_definitions(-DTEST_DATADIR=${TEST_DATADIR} -DTEST_ZONEDIR="${PROJECT_SOURCE_
 # Set properties for the test
 macro(setprops _name)
   if(UNIX)
+    file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
     set_tests_properties(${_name} PROPERTIES
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/bin"
     )
