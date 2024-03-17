@@ -7,6 +7,7 @@ Version 3.0.18 (UNRELEASED):
  * Escape ^ (U+005E) character in parameter values according to RFC 6868
  * New CMake option LIBICAL_BUILD_EXAMPLES to disable building the examples
  * Should be able to use the project as a submodule
+ * Built-in timezones updated to tzdata2024a
 
 Version 3.0.17 (14 October 2023):
 ---------------------------------
