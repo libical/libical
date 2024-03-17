@@ -1,6 +1,5 @@
 # Libical
 
-[![Appveyor status](https://ci.appveyor.com/api/projects/status/github/libical/libical?branch=master?svg=true)](https://ci.appveyor.com/api/projects/status/github/libical/libical)
 [![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
 
 ## Introduction
