@@ -1,5 +1,6 @@
 # Libical
 
+[![Github workflow](https://github.com/libical/libical/actions/workflows/build.yml/badge.svg)](https://github.com/libical/libical)
 [![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
 
 ## Introduction
