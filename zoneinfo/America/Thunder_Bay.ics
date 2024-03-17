@@ -2,9 +2,9 @@ BEGIN:VCALENDAR
 PRODID:-//citadel.org//NONSGML Citadel calendar//EN
 VERSION:2.0
 BEGIN:VTIMEZONE
-TZID:/citadel.org/20230525_1/America/Thunder_Bay
-TZID-ALIAS-OF:/citadel.org/20230525_1/America/Toronto
-LAST-MODIFIED:20230525T135641Z
+TZID:/citadel.org/20240317_1/America/Thunder_Bay
+TZID-ALIAS-OF:/citadel.org/20240317_1/America/Toronto
+LAST-MODIFIED:20240317T125125Z
 X-LIC-LOCATION:America/Thunder_Bay
 BEGIN:DAYLIGHT
 TZNAME:EDT
